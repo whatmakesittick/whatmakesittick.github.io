@@ -99,7 +99,12 @@ export function parseMeta(value: unknown, folder: string, code: LanguageCode): E
 }
 
 function readJson(file: string): unknown {
-  return JSON.parse(readFileSync(file, 'utf8'));
+  try {
+    return JSON.parse(readFileSync(file, 'utf8'));
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    throw new Error(`${file}: ${reason}`, { cause: error });
+  }
 }
 
 export function localeFile(directory: string, code: LanguageCode): string {

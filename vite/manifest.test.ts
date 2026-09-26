@@ -1,5 +1,8 @@
-import { describe, expect, it } from 'vitest';
-import { parseManifest, parseMeta } from './manifest.ts';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterEach, describe, expect, it } from 'vitest';
+import { loadExplainers, parseManifest, parseMeta } from './manifest.ts';
 
 const valid = {
   slug: 'engine',
@@ -10,6 +13,18 @@ const valid = {
   locales: ['en', 'uk'],
   social: { image: 'social/og-image.png', alt: 'An engine' },
 };
+
+const roots: string[] = [];
+
+function createRoot(): string {
+  const root = mkdtempSync(join(tmpdir(), 'explainers-'));
+  roots.push(root);
+  return root;
+}
+
+afterEach(() => {
+  for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
+});
 
 describe('parseManifest', () => {
   it('reads a complete manifest', () => {
@@ -46,5 +61,15 @@ describe('parseMeta', () => {
   it('asks for every meta field', () => {
     expect(() => parseMeta({ meta: { ...meta, summary: '' } }, 'engine', 'uk')).toThrow('summary');
     expect(() => parseMeta({}, 'engine', 'uk')).toThrow('locales/uk.json needs a "meta" block');
+  });
+});
+
+describe('loadExplainers', () => {
+  it('names the file that is not valid JSON', () => {
+    const root = createRoot();
+    const directory = join(root, 'explainers', 'broken');
+    mkdirSync(directory, { recursive: true });
+    writeFileSync(join(directory, 'explainer.json'), '{ "slug": ');
+    expect(() => loadExplainers(root)).toThrow(`${join(directory, 'explainer.json')}: `);
   });
 });
