@@ -50,6 +50,7 @@
     "categories": {
       "engines": "Двигуни",
       "drivetrain": "Трансмісія",
+      "aircraft": "Авіація",
       "electrical": "Електрика",
       "home": "Дім",
       "tools": "Інструменти"

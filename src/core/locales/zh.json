@@ -50,6 +50,7 @@
     "categories": {
       "engines": "发动机",
       "drivetrain": "传动系统",
+      "aircraft": "航空器",
       "electrical": "电气",
       "home": "家居",
       "tools": "工具"

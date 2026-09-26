@@ -27,11 +27,12 @@ function entry(
 
 const gearbox = entry('gearbox', 'drivetrain', { en: meta('Gearbox') });
 const engine = entry('engine', 'engines', { en: meta('Engine'), uk: meta('Двигун') });
+const helicopter = entry('helicopter', 'aircraft', { en: meta('Helicopter') });
 
 describe('catalogue', () => {
   it('groups explainers in category order and skips empty categories', () => {
-    const groups = groupByCategory([gearbox, engine]);
-    expect(groups.map((group) => group.category)).toEqual(['engines', 'drivetrain']);
+    const groups = groupByCategory([helicopter, gearbox, engine]);
+    expect(groups.map((group) => group.category)).toEqual(['engines', 'drivetrain', 'aircraft']);
   });
 
   it('shows the current language and falls back to the default one', () => {

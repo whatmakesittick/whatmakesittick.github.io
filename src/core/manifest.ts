@@ -1,6 +1,13 @@
 import type { LanguageCode } from './i18n/languages.ts';
 
-export const CATEGORIES = ['engines', 'drivetrain', 'electrical', 'home', 'tools'] as const;
+export const CATEGORIES = [
+  'engines',
+  'drivetrain',
+  'aircraft',
+  'electrical',
+  'home',
+  'tools',
+] as const;
 
 export type Category = (typeof CATEGORIES)[number];
 

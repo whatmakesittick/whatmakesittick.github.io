@@ -50,6 +50,7 @@
     "categories": {
       "engines": "Motoren",
       "drivetrain": "Antriebsstrang",
+      "aircraft": "Luftfahrt",
       "electrical": "Elektrik",
       "home": "Haushalt",
       "tools": "Werkzeuge"

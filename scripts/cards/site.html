@@ -101,22 +101,22 @@
       .categories {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px;
         margin: 40px 0 0;
         padding: 0;
         list-style: none;
       }
 
       .categories li {
-        padding: 5px 12px;
+        padding: 5px 10px;
         border: 1px solid rgb(255 255 255 / 0.16);
         border-radius: 999px;
         color: var(--muted);
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 500;
       }
 
-      .categories li:first-child {
+      .categories li.live {
         border-color: var(--accent);
         color: var(--text);
       }
@@ -145,8 +145,9 @@
       <h1>What makes it tick</h1>
       <p class="subtitle">How everyday machines work, taken apart in 3D and slowed right down.</p>
       <ul class="categories">
-        <li>Engines</li>
+        <li class="live">Engines</li>
         <li>Drivetrain</li>
+        <li class="live">Aircraft</li>
         <li>Electrical</li>
         <li>Home</li>
         <li>Tools</li>

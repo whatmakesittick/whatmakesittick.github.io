@@ -50,6 +50,7 @@
     "categories": {
       "engines": "Motores",
       "drivetrain": "Transmisión",
+      "aircraft": "Aeronaves",
       "electrical": "Electricidad",
       "home": "Hogar",
       "tools": "Herramientas"

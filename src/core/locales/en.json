@@ -50,6 +50,7 @@
     "categories": {
       "engines": "Engines",
       "drivetrain": "Drivetrain",
+      "aircraft": "Aircraft",
       "electrical": "Electrical",
       "home": "Home",
       "tools": "Tools"
