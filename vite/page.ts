@@ -8,6 +8,7 @@ import {
   LICENSE_URL,
   REPOSITORY_URL,
   SITE_NAME,
+  SITE_URL,
   SOCIAL_IMAGE_SIZE,
   explainerSourceUrl,
   explainerUrl,
@@ -65,6 +66,7 @@ function structuredData(explainer: LoadedExplainer, image: string): string {
 export function siteValues(sourceUrl: string): TemplateValues {
   return {
     siteName: escapeHtml(SITE_NAME),
+    siteUrl: escapeHtml(`${SITE_URL}/`),
     repositoryUrl: escapeHtml(REPOSITORY_URL),
     licenseUrl: escapeHtml(LICENSE_URL),
     sourceUrl: escapeHtml(sourceUrl),

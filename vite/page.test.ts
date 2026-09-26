@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { LoadedExplainer } from './manifest.ts';
-import { catalogueEntries, renderEntry, renderPage } from './page.ts';
+import { catalogueEntries, renderEntry, renderPage, siteValues } from './page.ts';
 
 const meta = {
   title: 'How a "thing" works',
@@ -93,5 +93,15 @@ describe('catalogueEntries', () => {
     const [entry] = catalogueEntries([explainer]);
     expect(entry.meta.uk?.title).toBe('Як працює річ');
     expect(entry.manifest.slug).toBe('thing');
+  });
+});
+
+describe('siteValues', () => {
+  it('fills the site address and name for the catalogue head', () => {
+    expect(siteValues('https://example.com/source')).toMatchObject({
+      siteUrl: 'https://whatmakesittick.github.io/',
+      siteName: 'What makes it tick',
+      sourceUrl: 'https://example.com/source',
+    });
   });
 });
