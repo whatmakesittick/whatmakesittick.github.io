@@ -1,10 +1,11 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { basename, join, relative, resolve, sep } from 'node:path';
 import sirv from 'sirv';
 import type { Plugin, ViteDevServer } from 'vite';
 import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY, loadExplainers } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { renderCatalogueModule, renderEntry, renderPage, siteValues } from './page.ts';
+import { prunePageFolders, writePageFolder } from './pageFolders.ts';
 import { REPOSITORY_URL } from './site.ts';
 import { expandPartials, fillTemplate } from './template.ts';
 import type { TemplateValues } from './template.ts';
@@ -15,18 +16,12 @@ const PARTIALS_DIRECTORY = join(CORE_DIRECTORY, 'partials');
 const PARTIAL_EXTENSION = '.html';
 const SITE_ENTRY = 'index.html';
 const PAGE_ENTRY = 'main.ts';
-const IGNORE_FILE = '.gitignore';
-const IGNORE_EVERYTHING = '*\n';
+const WATCHED_DIRECTORIES = [EXPLAINERS_DIRECTORY, CORE_DIRECTORY];
 const PAGE_SOURCES = /(?:explainer\.json|\.html|locales[\\/]\w+\.json)$/;
 const MOVED_PERMANENTLY = 301;
 const PLUGIN_NAME = 'explainer-pages';
 const CATALOGUE_MODULE = 'virtual:explainer-catalogue';
 const RESOLVED_CATALOGUE_MODULE = `\0${CATALOGUE_MODULE}`;
-
-function writeIfChanged(file: string, content: string): void {
-  if (existsSync(file) && readFileSync(file, 'utf8') === content) return;
-  writeFileSync(file, content);
-}
 
 function readPartials(root: string): TemplateValues {
   const directory = join(root, PARTIALS_DIRECTORY);
@@ -52,12 +47,15 @@ function generatePages(root: string): LoadedExplainer[] {
   const template = readFileSync(join(root, PAGE_TEMPLATE), 'utf8');
   const partials = readPartials(root);
   for (const explainer of explainers) {
-    const directory = join(root, explainer.manifest.slug);
-    mkdirSync(directory, { recursive: true });
-    writeIfChanged(join(directory, IGNORE_FILE), IGNORE_EVERYTHING);
-    writeIfChanged(join(directory, SITE_ENTRY), renderPage(template, partials, explainer));
-    writeIfChanged(join(directory, PAGE_ENTRY), renderEntry(explainer.manifest));
+    writePageFolder(root, explainer.manifest.slug, {
+      [SITE_ENTRY]: renderPage(template, partials, explainer),
+      [PAGE_ENTRY]: renderEntry(explainer.manifest),
+    });
   }
+  prunePageFolders(
+    root,
+    explainers.map(({ manifest }) => manifest.slug),
+  );
   return explainers;
 }
 
@@ -70,10 +68,15 @@ function rollupInputs(root: string, explainers: LoadedExplainer[]): Record<strin
   };
 }
 
+function isWatchedPath(root: string, path: string): boolean {
+  const relativePath = relative(root, path);
+  return WATCHED_DIRECTORIES.some(
+    (directory) => relativePath === directory || relativePath.startsWith(directory + sep),
+  );
+}
+
 function isPageSource(root: string, file: string): boolean {
-  const path = relative(root, file);
-  const watched = [EXPLAINERS_DIRECTORY + sep, CORE_DIRECTORY + sep];
-  return watched.some((prefix) => path.startsWith(prefix)) && PAGE_SOURCES.test(path);
+  return isWatchedPath(root, file) && PAGE_SOURCES.test(file);
 }
 
 function redirectToTrailingSlash(server: ViteDevServer, slugs: () => string[]): void {
@@ -146,8 +149,7 @@ export function explainerPages(): Plugin {
     configureServer(server) {
       redirectToTrailingSlash(server, () => explainers.map(({ manifest }) => manifest.slug));
       servePublicFiles(server, explainers);
-      const regenerate = (file: string) => {
-        if (!isPageSource(root, file)) return;
+      const regenerate = () => {
         try {
           explainers = generatePages(root);
         } catch (error) {
@@ -156,8 +158,16 @@ export function explainerPages(): Plugin {
         }
         reloadPages(server);
       };
-      server.watcher.on('change', regenerate);
-      server.watcher.on('add', regenerate);
+      const onFile = (file: string) => {
+        if (isPageSource(root, file)) regenerate();
+      };
+      const onRemovedDirectory = (directory: string) => {
+        if (isWatchedPath(root, directory)) regenerate();
+      };
+      server.watcher.on('add', onFile);
+      server.watcher.on('change', onFile);
+      server.watcher.on('unlink', onFile);
+      server.watcher.on('unlinkDir', onRemovedDirectory);
     },
 
     generateBundle() {

@@ -24,8 +24,11 @@ at `/<slug>/`.
 Generated at build and dev time, never committed: `<slug>/index.html` and
 `<slug>/main.ts` for every explainer, produced by the `explainerPages` Vite plugin
 from `src/core/page.html` and the explainer manifest. Each generated folder gets a
-`.gitignore` containing `*`, and ESLint and Prettier skip `/*/index.html` and
-`/*/main.ts`, so a root folder holding those two files is always a generated page.
+`.gitignore` containing `*` and an empty `.explainer-page` marker, and ESLint and
+Prettier skip `/*/index.html` and `/*/main.ts`, so a root folder holding those two
+files is always a generated page. Generation removes marked folders whose explainer
+is gone, never removes an unmarked folder and refuses to write into one that holds
+files it did not write.
 
 ## Explainer package
 
@@ -175,12 +178,12 @@ group for everything that is not a part.
 `config` hook, writes the generated pages and registers them, with the root
 `index.html`, as Rollup inputs. In dev it serves each explainer's `public/` under
 `/<slug>/` with `sirv` and regenerates the pages when a manifest, chapters, locale,
-template or partial changes. A failed regeneration is logged and shown in the error
-overlay, and the next change retries it. At build it emits the same files into
-`dist/<slug>/`. It also fills `<!-- partial:name -->` markers and `{{token}}`
-values in the root `index.html`, and serves `virtual:explainer-catalogue`: every
-manifest with the `meta` block of each shipped language, so the catalogue never
-bundles an explainer's full copy.
+template or partial is added, changed or removed. A failed regeneration is logged
+and shown in the error overlay, and the next change retries it. At build it emits
+the same files into `dist/<slug>/`. It also fills `<!-- partial:name -->` markers
+and `{{token}}` values in the root `index.html`, and serves
+`virtual:explainer-catalogue`: every manifest with the `meta` block of each shipped
+language, so the catalogue never bundles an explainer's full copy.
 
 ## Translations
 
