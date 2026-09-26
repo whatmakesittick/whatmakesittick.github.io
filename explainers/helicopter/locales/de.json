@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "title": "So fliegt ein Hubschrauber",
+    "eyebrow": "Der Hubschrauberrotor in Zeitlupe",
+    "tagline": "Ein Hubschrauber hält sich mit Flügeln in der Luft, die sich drehen. Verstellt man die Rotorblätter, steigt oder sinkt er, kippt man die drehende Rotorscheibe, fliegt er vorwärts, und ein kleiner Rotor am Heck verhindert, dass sich die ganze Maschine im Kreis dreht.",
+    "description": "Ein interaktiver Blick in Zeitlupe darauf, wie ein Hubschrauber fliegt: ein drehender Flügel, der Auftrieb erzeugt, die kollektive Blattverstellung, Drehmoment und Heckrotor sowie das vorlaufende und das rücklaufende Blatt im Vorwärtsflug.",
+    "summary": "Auftrieb am Rotor, kollektive Blattverstellung, der Heckrotor und der Vorwärtsflug."
+  },
+  "stage": {
+    "label": "Interaktives Hubschraubermodell",
+    "gauge": "Live-Werte des Rotors"
+  },
+  "controls": {
+    "label": "Hubschrauber-Bedienelemente",
+    "flightMode": "Flug",
+    "speedDescriptions": {
+      "verySlow": "sehr langsam",
+      "slowMotion": "Zeitlupe",
+      "nearReal": "fast echtes Tempo"
+    },
+    "views": {
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      },
+      "flow": {
+        "name": "Luftströmung",
+        "short": "Strömung",
+        "hint": "Luftströmung (F)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Rotorwinkel",
+    "phases": "Zu einer halben Umdrehung springen",
+    "speed": "Rotordrehzahl",
+    "jump": {
+      "advancing": "Zur vorlaufenden Hälfte springen",
+      "retreating": "Zur rücklaufenden Hälfte springen"
+    },
+    "value": {
+      "advancing": "{{angle}}, markiertes Blatt läuft vor",
+      "retreating": "{{angle}}, markiertes Blatt läuft zurück"
+    }
+  },
+  "phases": {
+    "advancing": "Vorlaufend",
+    "retreating": "Rücklaufend"
+  },
+  "flightModes": {
+    "hover": "Schweben",
+    "forward": "Vorwärts"
+  },
+  "tendencies": {
+    "descend": "Sinkt",
+    "hover": "Schwebt",
+    "climb": "Steigt"
+  },
+  "readouts": {
+    "azimuth": "Rotorwinkel",
+    "half": "Markiertes Blatt",
+    "rotorSpeed": "Rotordrehzahl",
+    "tipSpeed": "Blattspitze",
+    "bladePitch": "Blattwinkel"
+  },
+  "parts": {
+    "mainRotor": "Hauptrotor",
+    "markedBlade": "Markiertes Blatt",
+    "swashplate": "Taumelscheibe",
+    "fuselage": "Rumpf",
+    "tailBoom": "Heckausleger",
+    "tailRotor": "Heckrotor",
+    "skids": "Kufen"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "rpm": "{{value}} U/min",
+    "metresPerSecond": "{{value}} m/s",
+    "percent": "{{value}} %"
+  },
+  "sections": {
+    "overview": {
+      "title": "Ein Flügel, der sich dreht",
+      "p1": "Sie sehen einen leichten Hubschrauber. Die langen, schmalen Blätter oben bilden den <strong>Hauptrotor</strong>, und jedes Blatt ist ein Flügel. Leicht schräg gegen die Luft gestellt, drückt es beim Vorbeiziehen Luft nach unten, und die Luft drückt das Blatt nach oben. Dieser Druck ist der <strong>Auftrieb</strong>.",
+      "p2": "Ein Flugzeug bringt Luft über seine Flügel, indem es über die Startbahn rast. Ein Hubschrauber dreht stattdessen seine Flügel. So bewegen sie sich durch die Luft, auch wenn der Hubschrauber auf der Stelle steht. Deshalb kann er senkrecht starten, über einem Punkt schweben und seitwärts oder rückwärts fliegen.",
+      "p3": "Ein Triebwerk treibt den Rotor über ein Getriebe und eine senkrechte Welle an, den <strong>Rotormast</strong>. Ein echter Hauptrotor dreht sich einige hundert Mal pro Minute, und seine Blattspitzen bewegen sich mit etwa 200 m/s, also mit über 700 km/h. Das Modell läuft in Zeitlupe, und ein Blatt hat eine farbige Spitze, damit Sie es auf seinem Weg verfolgen können.",
+      "p4": "Ziehen Sie am Modell, um es von allen Seiten zu sehen, und scrollen Sie darüber, um zu zoomen. Beim Weiterlesen folgt die Ansicht dem Text."
+    },
+    "collective": {
+      "title": "Mehr Anstellwinkel, mehr Auftrieb",
+      "p1": "Ein Hubschrauberrotor dreht sich fast immer gleich schnell. Um den Auftrieb zu ändern, verstellt der Pilot deshalb den Winkel der Blätter. Dieser Winkel heißt <strong>Blattwinkel</strong> oder Anstellwinkel. Ein Blatt mit größerem Winkel trifft steiler auf die Luft, drückt mehr Luft nach unten und erzeugt mehr Auftrieb.",
+      "p2": "Mit der linken Hand bedient der Pilot den <strong>Kollektivhebel</strong>. Zieht er ihn nach oben, schiebt er die <strong>Taumelscheibe</strong> nach oben, zwei Ringe um den Rotormast. Stangen von der Taumelscheibe verdrehen alle Blätter gleichzeitig um denselben Betrag, rundherum. Deshalb heißt diese Verstellung kollektiv.",
+      "control": {
+        "label": "Kollektivhebel",
+        "down": "Unten",
+        "up": "Oben",
+        "pitch": "Blattwinkel",
+        "result": "Ergebnis"
+      },
+      "p3": "Steht der Hebel tief, liefert der Rotor weniger Auftrieb, als der Hubschrauber wiegt, und er sinkt. Etwa in der Mitte gleicht der Auftrieb das Gewicht aus, und der Hubschrauber schwebt. Zieht man den Hebel weiter hoch, steigt er. Ein größerer Blattwinkel bedeutet aber auch mehr Luftwiderstand an den Blättern. Das Triebwerk muss also mehr Leistung liefern, damit der Rotor gleich schnell bleibt.",
+      "p4": "Bewegen Sie den Hebel und beobachten Sie, wie die Taumelscheibe am Mast entlanggleitet und sich die Blätter verdrehen. Mit wachsendem Auftrieb biegen sich die Blätter außerdem ein wenig nach oben. Den Winkel, den sie dabei bilden, nennt man Konuswinkel."
+    },
+    "torque": {
+      "title": "Wozu der Heckrotor da ist",
+      "p1": "Um den Rotor zu drehen, muss das Triebwerk eine Verdrehkraft aufbringen, ein <strong>Drehmoment</strong>. Jede Kraft hat eine gleich große Gegenkraft, also spürt der Rumpf dieselbe Verdrehung in die andere Richtung. Von oben gesehen dreht sich dieser Rotor gegen den Uhrzeigersinn. Ohne Gegenmaßnahme würde sich der Rumpf im Uhrzeigersinn drehen.",
+      "p2": "Der <strong>Heckrotor</strong> verhindert das. Er sitzt am Ende des langen <strong>Heckauslegers</strong> und bläst Luft zur Seite. Sein Schub wirkt am Ende des Auslegers wie ein Schraubenschlüssel an einer Schraube und gleicht die Verdrehung durch den Hauptrotor aus. Je länger der Ausleger, desto weniger Schub ist nötig.",
+      "p3": "Eine Welle im Ausleger treibt den Heckrotor vom Hauptgetriebe aus an, deshalb drehen sich beide immer gemeinsam. In diesem Modell dreht sich der Heckrotor fünfmal für jede Umdrehung des Hauptrotors.",
+      "p4": "Mit den <strong>Pedalen</strong> verstellt der Pilot den Blattwinkel des Heckrotors. Mehr Schub schwenkt die Nase in die eine Richtung, weniger Schub lässt das Drehmoment sie in die andere schwenken. So dreht sich ein Hubschrauber auf der Stelle.",
+      "p5": "Manche Hubschrauber verzichten auf den Heckrotor und nutzen zwei Hauptrotoren, die sich gegenläufig drehen, übereinander oder einer vorn und einer hinten. So heben sich ihre Drehmomente gegenseitig auf."
+    },
+    "forward": {
+      "title": "Vorlaufend und rücklaufend",
+      "p1": "Für den Vorwärtsflug drückt der Pilot den Steuerknüppel für die <strong>zyklische</strong> Verstellung nach vorn. Er neigt die Taumelscheibe, sodass der Blattwinkel jedes Blatts nun bei jeder Umdrehung einmal größer und wieder kleiner wird. Die drehende Rotorscheibe kippt nach vorn, ein Teil ihres Auftriebs zieht den Hubschrauber jetzt voran, und die ganze Maschine fliegt leicht mit der Nase nach unten.",
+      "p2": "Jetzt trifft die Luft auf beiden Seiten des Rotors unterschiedlich auf. Auf der einen Seite schwingt das Blatt nach vorn, dem Fahrtwind entgegen: das <strong>vorlaufende Blatt</strong>. Auf der anderen Seite schwingt es nach hinten, mit dem Fahrtwind: das <strong>rücklaufende Blatt</strong>. Vom Heck aus gezählt läuft das markierte Blatt von 0° bis 180° vor und von 180° bis 360° zurück.",
+      "p3": "Angenommen, die Blattspitzen bewegen sich mit 200 m/s und der Hubschrauber fliegt mit 50 m/s. Dann trifft die vorlaufende Spitze mit 250 m/s auf die Luft, die rücklaufende nur mit 150 m/s. Der Auftrieb wächst mit dem Quadrat der Anströmgeschwindigkeit. Ohne Ausgleich würde die vorlaufende Seite also viel mehr Auftrieb liefern und den Hubschrauber auf die Seite kippen.",
+      "p4": "Die zyklische Verstellung gleicht das aus. Sie gibt dem vorlaufenden Blatt einen kleineren und dem rücklaufenden einen größeren Blattwinkel, sodass beide Seiten etwa gleich viel Auftrieb liefern. Achten Sie auf das markierte Blatt: Sein Blattwinkel sinkt auf der vorlaufenden Seite und steigt auf der rücklaufenden, einmal bei jeder Umdrehung.",
+      "showHover": "Schweben zeigen",
+      "showForward": "Vorwärtsflug zeigen",
+      "p5": "Daraus ergibt sich eine Grenze. Je schneller der Hubschrauber fliegt, desto langsamer strömt die Luft über das rücklaufende Blatt und desto größer muss sein Blattwinkel werden, bis die Strömung abreißt. Das ist der Hauptgrund, warum gewöhnliche Hubschrauber selten viel schneller als 300 km/h fliegen.",
+      "aside": "Die Zahlen stammen aus einem kleinen Modell eines Vierblattrotors mit 5 m Radius. Die Blattwinkel sind vereinfacht: gut für Verläufe und Größenverhältnisse, nicht für exakte Werte."
+    }
+  }
+}

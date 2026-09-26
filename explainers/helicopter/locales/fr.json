@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "title": "Comment vole un hélicoptère",
+    "eyebrow": "Le rotor d’hélicoptère, au ralenti",
+    "tagline": "Un hélicoptère tient en l’air grâce à des ailes qui tournent. Changez l’angle des pales et il monte ou descend, inclinez le disque en rotation et il avance, tandis qu’un petit rotor à l’arrière empêche toute la machine de tourner sur elle-même.",
+    "description": "Un regard interactif et ralenti sur le vol d’un hélicoptère : une aile tournante qui produit de la portance, le pas collectif, le couple et le rotor anticouple, puis la pale avançante et la pale reculante en vol d’avancement.",
+    "summary": "La portance du rotor, le pas collectif, le rotor anticouple et le vol d’avancement."
+  },
+  "stage": {
+    "label": "Modèle interactif d’hélicoptère",
+    "gauge": "Mesures du rotor en direct"
+  },
+  "controls": {
+    "label": "Commandes de l’hélicoptère",
+    "flightMode": "Vol",
+    "speedDescriptions": {
+      "verySlow": "très lent",
+      "slowMotion": "lent",
+      "nearReal": "proche de la vitesse réelle"
+    },
+    "views": {
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      },
+      "flow": {
+        "name": "Flux d’air",
+        "short": "Flux",
+        "hint": "Flux d’air (F)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Angle du rotor",
+    "phases": "Aller à un demi-tour",
+    "speed": "Vitesse du rotor",
+    "jump": {
+      "advancing": "Aller au côté avançant",
+      "retreating": "Aller au côté reculant"
+    },
+    "value": {
+      "advancing": "{{angle}}, pale repérée avançante",
+      "retreating": "{{angle}}, pale repérée reculante"
+    }
+  },
+  "phases": {
+    "advancing": "Avançante",
+    "retreating": "Reculante"
+  },
+  "flightModes": {
+    "hover": "Stationnaire",
+    "forward": "En avant"
+  },
+  "tendencies": {
+    "descend": "Descend",
+    "hover": "Reste stationnaire",
+    "climb": "Monte"
+  },
+  "readouts": {
+    "azimuth": "Angle du rotor",
+    "half": "Pale repérée",
+    "rotorSpeed": "Vitesse du rotor",
+    "tipSpeed": "Vitesse en bout de pale",
+    "bladePitch": "Pas de la pale"
+  },
+  "parts": {
+    "mainRotor": "Rotor principal",
+    "markedBlade": "Pale repérée",
+    "swashplate": "Plateau cyclique",
+    "fuselage": "Fuselage",
+    "tailBoom": "Poutre de queue",
+    "tailRotor": "Rotor anticouple",
+    "skids": "Patins"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "rpm": "{{value}} tr/min",
+    "metresPerSecond": "{{value}} m/s",
+    "percent": "{{value}} %"
+  },
+  "sections": {
+    "overview": {
+      "title": "Une aile qui tourne",
+      "p1": "Vous avez sous les yeux un hélicoptère léger. Les longues pales fines, sur le dessus, forment le <strong>rotor principal</strong>, et chaque pale est une aile. Légèrement inclinée face à l’air, elle pousse l’air vers le bas en avançant, et l’air la pousse vers le haut. Cette poussée, c’est la <strong>portance</strong>.",
+      "p2": "Un avion fait passer l’air sur ses ailes en fonçant sur une piste. Un hélicoptère, lui, fait tourner ses ailes : elles continuent de fendre l’air même quand l’appareil reste immobile. C’est pourquoi il peut décoller à la verticale, rester en vol stationnaire au-dessus d’un point et voler de côté ou en marche arrière.",
+      "p3": "Un moteur entraîne le rotor par une boîte de transmission et un arbre vertical appelé <strong>mât</strong>. Un vrai rotor principal fait quelques centaines de tours par minute, et le bout de ses pales file à environ 200 m/s, soit plus de 700 km/h. Le modèle tourne très lentement, et une pale a le bout coloré pour que vous puissiez la suivre.",
+      "p4": "Faites glisser le modèle pour en faire le tour, et faites défiler par-dessus pour zoomer. Au fil de votre lecture, la vue suit le texte."
+    },
+    "collective": {
+      "title": "Plus de pas, plus de portance",
+      "p1": "Le rotor d’un hélicoptère tourne presque toujours à la même vitesse. Pour changer la portance, le pilote modifie plutôt l’angle des pales. Cet angle, c’est le <strong>pas</strong> de la pale. Une pale avec plus de pas attaque l’air sous un angle plus fort, pousse plus d’air vers le bas et porte davantage.",
+      "p2": "De la main gauche, le pilote tient le levier de <strong>pas collectif</strong>. En le levant, il fait monter le <strong>plateau cyclique</strong>, une paire d’anneaux autour du mât. Des biellettes relient le plateau aux pales et les font toutes pivoter du même angle à la fois, sur tout le tour. D’où le nom de collectif.",
+      "control": {
+        "label": "Levier de pas collectif",
+        "down": "Bas",
+        "up": "Haut",
+        "pitch": "Pas des pales",
+        "result": "Résultat"
+      },
+      "p3": "Levier en bas, le rotor porte moins que le poids de l’hélicoptère, qui descend. Vers le milieu, la portance égale le poids et l’hélicoptère reste en vol stationnaire. Levez encore le levier et il monte. Plus de pas veut aussi dire plus de traînée sur les pales : le moteur doit fournir plus de puissance pour garder le rotor à la même vitesse.",
+      "p4": "Déplacez le levier et regardez le plateau cyclique coulisser le long du mât et les pales pivoter. Les pales se relèvent aussi un peu à mesure que la portance augmente : c’est la conicité."
+    },
+    "torque": {
+      "title": "Pourquoi un rotor à l’arrière ?",
+      "p1": "Faire tourner le rotor demande au moteur un effort de torsion, un <strong>couple</strong>. Or toute action entraîne une réaction égale et opposée : la cellule de l’hélicoptère subit la même torsion, dans l’autre sens. Vu d’en haut, ce rotor tourne dans le sens inverse des aiguilles d’une montre. Livré à lui-même, le fuselage tournerait dans le sens des aiguilles d’une montre.",
+      "p2": "Le <strong>rotor anticouple</strong> l’en empêche. Placé au bout de la longue <strong>poutre de queue</strong>, il souffle de l’air sur le côté. Sa poussée agit au bout de la poutre comme une clé sur un boulon et équilibre la torsion du rotor principal. Plus la poutre est longue, plus la poussée nécessaire est faible.",
+      "p3": "Un arbre qui court le long de la poutre entraîne le rotor anticouple depuis la boîte de transmission principale : les deux tournent donc toujours ensemble. Dans ce modèle, le rotor anticouple fait cinq tours pour chaque tour du rotor principal.",
+      "p4": "Les <strong>palonniers</strong> du pilote modifient le pas des pales du rotor anticouple. Plus de poussée fait pivoter le nez d’un côté ; moins de poussée laisse le couple le faire pivoter de l’autre. C’est ainsi qu’un hélicoptère tourne sur place.",
+      "p5": "Certains hélicoptères se passent de rotor anticouple et utilisent deux rotors principaux qui tournent en sens inverse, l’un au-dessus de l’autre ou un à chaque bout, pour que leurs couples s’annulent."
+    },
+    "forward": {
+      "title": "Pale avançante, pale reculante",
+      "p1": "Pour avancer, le pilote pousse le <strong>manche cyclique</strong>. Celui-ci incline le plateau cyclique : le pas de chaque pale augmente puis diminue une fois par tour. Le disque en rotation bascule vers l’avant, une partie de sa portance entraîne désormais l’hélicoptère, et l’appareil tout entier vole le nez légèrement baissé.",
+      "p2": "Les deux côtés du rotor ne rencontrent plus le même air. D’un côté, la pale va vers l’avant, face au vent du vol : c’est la <strong>pale avançante</strong>. De l’autre, elle revient vers l’arrière, dans le sens de ce vent : c’est la <strong>pale reculante</strong>. En comptant depuis la queue, la pale repérée avance de 0° à 180° et recule de 180° à 360°.",
+      "p3": "Supposons que le bout des pales file à 200 m/s et que l’hélicoptère vole à 50 m/s. Le bout de la pale avançante rencontre l’air à 250 m/s, celui de la pale reculante à seulement 150 m/s. La portance croît avec le carré de la vitesse de l’air : livré à lui-même, le côté avançant porterait bien plus et ferait basculer l’hélicoptère sur le côté.",
+      "p4": "Le cyclique rétablit l’équilibre. Il donne moins de pas à la pale avançante et plus à la pale reculante, si bien que les deux côtés portent à peu près autant. Observez la pale repérée : son pas baisse du côté avançant et remonte du côté reculant, une fois par tour.",
+      "showHover": "Montrer le vol stationnaire",
+      "showForward": "Montrer le vol d’avancement",
+      "p5": "Cela fixe une limite. Plus l’hélicoptère vole vite, plus l’air est lent sur la pale reculante et plus il lui faut de pas, jusqu’au décrochage. C’est la principale raison pour laquelle les hélicoptères classiques dépassent rarement de beaucoup 300 km/h.",
+      "aside": "Les chiffres viennent d’un petit modèle de rotor à quatre pales de 5 m de rayon. Les angles de pas sont simplifiés : fiables pour les formes et les proportions, pas pour les valeurs exactes."
+    }
+  }
+}
