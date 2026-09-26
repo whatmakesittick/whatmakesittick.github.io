@@ -11,17 +11,16 @@ export const PUBLIC_DIRECTORY = 'public';
 export const LOCALES_DIRECTORY = 'locales';
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const RESERVED_SLUGS = new Set([
+const PROJECT_FOLDERS = [
   'assets',
   'dist',
   'explainers',
-  'icons',
   'node_modules',
   'public',
   'scripts',
   'src',
   'vite',
-]);
+];
 
 export interface LoadedExplainer {
   manifest: ExplainerManifest;
@@ -47,11 +46,11 @@ function readString(fields: Fields, key: string, folder: string): string {
   return value;
 }
 
-function readSlug(fields: Fields, folder: string): string {
+function readSlug(fields: Fields, folder: string, reserved: ReadonlySet<string>): string {
   const slug = readString(fields, 'slug', folder);
   if (slug !== folder) fail(folder, `"slug" must match the folder name "${folder}"`);
   if (!SLUG_PATTERN.test(slug)) fail(folder, `"slug" must be lowercase words joined by dashes`);
-  if (RESERVED_SLUGS.has(slug)) fail(folder, `"slug" "${slug}" is reserved`);
+  if (reserved.has(slug)) fail(folder, `"slug" "${slug}" is reserved`);
   return slug;
 }
 
@@ -78,10 +77,20 @@ function readSocial(fields: Fields, folder: string): ExplainerManifest['social']
   return { image: readString(social, 'image', folder), alt: readString(social, 'alt', folder) };
 }
 
-export function parseManifest(value: unknown, folder: string): ExplainerManifest {
+export function reservedSlugs(root: string): ReadonlySet<string> {
+  const publicDirectory = join(root, PUBLIC_DIRECTORY);
+  const published = existsSync(publicDirectory) ? readdirSync(publicDirectory) : [];
+  return new Set([...PROJECT_FOLDERS, ...published]);
+}
+
+export function parseManifest(
+  value: unknown,
+  folder: string,
+  reserved: ReadonlySet<string>,
+): ExplainerManifest {
   if (!isFields(value)) fail(folder, 'must be a JSON object');
   return {
-    slug: readSlug(value, folder),
+    slug: readSlug(value, folder, reserved),
     category: readCategory(value, folder),
     cover: readString(value, 'cover', folder),
     entry: readString(value, 'entry', folder),
@@ -122,9 +131,13 @@ function requiredFiles(manifest: ExplainerManifest, directory: string): string[]
   ];
 }
 
-function loadExplainer(root: string, folder: string): LoadedExplainer {
+function loadExplainer(
+  root: string,
+  folder: string,
+  reserved: ReadonlySet<string>,
+): LoadedExplainer {
   const directory = join(root, EXPLAINERS_DIRECTORY, folder);
-  const manifest = parseManifest(readJson(join(directory, MANIFEST_FILE)), folder);
+  const manifest = parseManifest(readJson(join(directory, MANIFEST_FILE)), folder, reserved);
   const missing = requiredFiles(manifest, directory).find((file) => !existsSync(file));
   if (missing) fail(folder, `missing file ${missing}`);
   const metas = Object.fromEntries(
@@ -145,9 +158,10 @@ function loadExplainer(root: string, folder: string): LoadedExplainer {
 export function loadExplainers(root: string): LoadedExplainer[] {
   const explainersDirectory = join(root, EXPLAINERS_DIRECTORY);
   if (!existsSync(explainersDirectory)) return [];
+  const reserved = reservedSlugs(root);
   return readdirSync(explainersDirectory, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .filter((entry) => existsSync(join(explainersDirectory, entry.name, MANIFEST_FILE)))
-    .map((entry) => loadExplainer(root, entry.name))
+    .map((entry) => loadExplainer(root, entry.name, reserved))
     .sort((a, b) => a.manifest.slug.localeCompare(b.manifest.slug));
 }

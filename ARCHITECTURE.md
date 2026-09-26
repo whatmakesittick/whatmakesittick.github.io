@@ -63,7 +63,8 @@ explainers/engine/
 ```
 
 The slug must match the folder and must not clash with a root folder
-(`assets`, `src`, `public` and the like). `category` is one of `CATEGORIES` in
+(`assets`, `src`, `public` and the like) or with a name published from the root
+`public/` (`icons`, `social`). `category` is one of `CATEGORIES` in
 `src/core/manifest.ts`. `cover` and `social.image` are paths inside `public/`;
 the social image is 1200 × 630. The plugin validates all of this and fails the
 build with the manifest's path in the message.

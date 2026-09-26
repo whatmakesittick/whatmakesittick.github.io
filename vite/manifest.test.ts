@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { loadExplainers, parseManifest, parseMeta } from './manifest.ts';
+import { loadExplainers, parseManifest, parseMeta, reservedSlugs } from './manifest.ts';
 
 const valid = {
   slug: 'engine',
@@ -14,6 +14,7 @@ const valid = {
   social: { image: 'social/og-image.png', alt: 'An engine' },
 };
 
+const reserved = new Set(['assets', 'social']);
 const roots: string[] = [];
 
 function createRoot(): string {
@@ -28,26 +29,27 @@ afterEach(() => {
 
 describe('parseManifest', () => {
   it('reads a complete manifest', () => {
-    expect(parseManifest(valid, 'engine')).toEqual(valid);
+    expect(parseManifest(valid, 'engine', reserved)).toEqual(valid);
   });
 
   it('requires the slug to match its folder', () => {
-    expect(() => parseManifest(valid, 'gearbox')).toThrow('must match the folder name');
+    expect(() => parseManifest(valid, 'gearbox', reserved)).toThrow('must match the folder name');
   });
 
   it.each([
-    ['a reserved slug', { slug: 'assets' }, 'assets', 'is reserved'],
+    ['a project folder slug', { slug: 'assets' }, 'assets', 'is reserved'],
+    ['a public folder slug', { slug: 'social' }, 'social', '"slug" "social" is reserved'],
     ['an unknown category', { category: 'toys' }, 'engine', '"category" must be one of'],
     ['an unknown language', { locales: ['en', 'xx'] }, 'engine', 'unknown language'],
     ['no English', { locales: ['uk'] }, 'engine', 'must include "en"'],
     ['no social image', { social: undefined }, 'engine', '"social" must name'],
     ['an empty entry', { entry: ' ' }, 'engine', '"entry" must be a string'],
   ])('rejects %s', (_case, change, folder, message) => {
-    expect(() => parseManifest({ ...valid, ...change }, folder)).toThrow(message);
+    expect(() => parseManifest({ ...valid, ...change }, folder, reserved)).toThrow(message);
   });
 
   it('names the manifest in its errors', () => {
-    expect(() => parseManifest([], 'engine')).toThrow('explainers/engine/explainer.json');
+    expect(() => parseManifest([], 'engine', reserved)).toThrow('explainers/engine/explainer.json');
   });
 });
 
@@ -61,6 +63,17 @@ describe('parseMeta', () => {
   it('asks for every meta field', () => {
     expect(() => parseMeta({ meta: { ...meta, summary: '' } }, 'engine', 'uk')).toThrow('summary');
     expect(() => parseMeta({}, 'engine', 'uk')).toThrow('locales/uk.json needs a "meta" block');
+  });
+});
+
+describe('reservedSlugs', () => {
+  it('reserves the project folders and every name published from public/', () => {
+    const root = createRoot();
+    mkdirSync(join(root, 'public', 'social'), { recursive: true });
+    writeFileSync(join(root, 'public', 'favicon.svg'), '<svg />');
+    expect([...reservedSlugs(root)]).toEqual(
+      expect.arrayContaining(['src', 'social', 'favicon.svg']),
+    );
   });
 });
 
