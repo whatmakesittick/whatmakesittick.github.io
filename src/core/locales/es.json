@@ -1,0 +1,58 @@
+{
+  "page": {
+    "skipLink": "Saltar a la explicación"
+  },
+  "header": {
+    "language": "Idioma",
+    "source": "GitHub",
+    "sourceLabel": "Código fuente en GitHub"
+  },
+  "stage": {
+    "label": "Modelo interactivo",
+    "gauge": "Datos en tiempo real"
+  },
+  "controls": {
+    "label": "Controles",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "more": "Más controles",
+    "speed": "Velocidad",
+    "speedValue": "{{value}}, {{description}}",
+    "viewOptions": "Opciones de vista",
+    "resetCamera": "Restablecer cámara",
+    "resetCameraHint": "Restablecer cámara (R)"
+  },
+  "keyboard": {
+    "keys": {
+      "space": "Espacio",
+      "drag": "Arrastrar",
+      "scroll": "Desplazar o pellizcar"
+    },
+    "playPause": "Reproducir o pausar",
+    "speed": "Subir o bajar la velocidad",
+    "resetCamera": "Restablecer la cámara",
+    "zoom": "Acercar y alejar"
+  },
+  "footer": {
+    "source": "Código fuente",
+    "license": "Licencia MIT",
+    "builtWith": "Hecho con Three.js",
+    "copyright": "© {{year}} {{title}}. Hecho con ♥ por <a href=\"https://github.com/veelenga\">veelenga</a>"
+  },
+  "catalogue": {
+    "title": "What makes it tick",
+    "eyebrow": "Explicaciones interactivas",
+    "tagline": "Cómo funcionan las máquinas de cada día, desmontadas en 3D y a cámara lenta para que veas trabajar cada pieza.",
+    "skipLink": "Ir a las explicaciones",
+    "listLabel": "Explicaciones por categoría",
+    "explore": "Explorar",
+    "moreSoon": "Pronto habrá más explicaciones.",
+    "categories": {
+      "engines": "Motores",
+      "drivetrain": "Transmisión",
+      "electrical": "Electricidad",
+      "home": "Hogar",
+      "tools": "Herramientas"
+    }
+  }
+}

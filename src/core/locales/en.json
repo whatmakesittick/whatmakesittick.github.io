@@ -1,0 +1,58 @@
+{
+  "page": {
+    "skipLink": "Skip to the explanation"
+  },
+  "header": {
+    "language": "Language",
+    "source": "GitHub",
+    "sourceLabel": "Source code on GitHub"
+  },
+  "stage": {
+    "label": "Interactive model",
+    "gauge": "Live readings"
+  },
+  "controls": {
+    "label": "Controls",
+    "play": "Play",
+    "pause": "Pause",
+    "more": "More controls",
+    "speed": "Speed",
+    "speedValue": "{{value}}, {{description}}",
+    "viewOptions": "View options",
+    "resetCamera": "Reset camera",
+    "resetCameraHint": "Reset camera (R)"
+  },
+  "keyboard": {
+    "keys": {
+      "space": "Space",
+      "drag": "Drag",
+      "scroll": "Scroll or pinch"
+    },
+    "playPause": "Play or pause",
+    "speed": "Speed up or slow down",
+    "resetCamera": "Reset the camera",
+    "zoom": "Zoom in and out"
+  },
+  "footer": {
+    "source": "Source",
+    "license": "MIT license",
+    "builtWith": "Built with Three.js",
+    "copyright": "© {{year}} {{title}}. Built with ♥ by <a href=\"https://github.com/veelenga\">veelenga</a>"
+  },
+  "catalogue": {
+    "title": "What makes it tick",
+    "eyebrow": "Interactive explainers",
+    "tagline": "How everyday machines work, taken apart in 3D and slowed right down so you can watch every part do its job.",
+    "skipLink": "Skip to the explainers",
+    "listLabel": "Explainers by category",
+    "explore": "Explore",
+    "moreSoon": "More explainers are on the way.",
+    "categories": {
+      "engines": "Engines",
+      "drivetrain": "Drivetrain",
+      "electrical": "Electrical",
+      "home": "Home",
+      "tools": "Tools"
+    }
+  }
+}
