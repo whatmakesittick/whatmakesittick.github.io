@@ -1,0 +1,103 @@
+.scene-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.scene-root canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  outline: none;
+}
+
+.scene-label-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scene-label {
+  --scene-label-accent: var(--accent, #f5a524);
+  --scene-label-leader: 34px;
+  --scene-label-angle: -32deg;
+  --scene-label-shift: 0px;
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  animation: scene-label-in 260ms ease-out;
+}
+
+.scene-label--left {
+  --scene-label-angle: -148deg;
+}
+
+.scene-label__dot {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--scene-label-accent);
+  box-shadow: 0 0 0 3px rgb(245 165 36 / 22%);
+}
+
+.scene-label__leader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--scene-label-leader);
+  height: 1px;
+  background: linear-gradient(90deg, var(--scene-label-accent), rgb(245 165 36 / 45%));
+  transform: rotate(var(--scene-label-angle));
+  transform-origin: 0 50%;
+}
+
+.scene-label__text {
+  position: absolute;
+  top: calc(var(--scene-label-shift) - 18px);
+  transform: translateY(-50%);
+  padding: 4px 10px;
+  border: 1px solid rgb(245 165 36 / 55%);
+  border-radius: 999px;
+  background: rgb(20 24 30 / 88%);
+  color: var(--text, #e6e9ee);
+  font:
+    500 12px/1.2 ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 35%);
+  backdrop-filter: blur(6px);
+}
+
+.scene-label--right .scene-label__text {
+  left: 28px;
+}
+
+.scene-label--left .scene-label__text {
+  right: 28px;
+}
+
+@keyframes scene-label-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-label {
+    animation: none;
+  }
+}
