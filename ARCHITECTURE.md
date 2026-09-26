@@ -1,9 +1,9 @@
 # Architecture
 
-One website, many explainers. This repository is the app: the page shell, the 3D
-toolkit, the store contract, translations plumbing, the catalogue and the build.
-An explainer is a content package in its own repository, checked out as a git
-submodule under `explainers/<slug>/`, and built into a page at `/<slug>/`.
+One website, many explainers, one repository. `src/core` is the app: the page
+shell, the 3D toolkit, the store contract, translations plumbing and the build.
+`src/site` is the catalogue. An explainer is a content package under
+`explainers/<slug>/`, built into a page at `/<slug>/`.
 
 ## Repository layout
 
@@ -13,9 +13,9 @@ submodule under `explainers/<slug>/`, and built into a page at `/<slug>/`.
 | `src/core/` | Everything an explainer builds on (see below) |
 | `src/core/page.html` | The explainer page template: masthead, stage, gauge, dock, prose column, footer |
 | `src/core/locales/*.json` | Shell strings only: controls, footer, header chrome, keyboard, catalogue |
-| `explainers/<slug>/` | One submodule per explainer, see "Explainer package" |
+| `explainers/<slug>/` | One folder per explainer, see "Explainer package" |
 | `scripts/` | Social images and other tooling |
-| `.github/workflows/` | `ci.yml` on pull requests, `deploy.yml` on `main`; both check out submodules |
+| `.github/workflows/` | `ci.yml` on pull requests, `deploy.yml` on `main` |
 
 Generated at build and dev time, never committed: `<slug>/index.html` and
 `<slug>/main.ts` for every explainer, produced by the `explainerPages` Vite plugin
@@ -37,9 +37,9 @@ explainers/engine/
   public/             cover image and other static files, served under /<slug>/
 ```
 
-The explainer imports the toolkit through the `@core/*` alias, which the site
-resolves to `src/core/*`. Explainer repositories carry no build tooling; the site
-lints, tests and builds them.
+The explainer imports the toolkit through the `@core/*` alias, which resolves to
+`src/core/*`. Explainers carry no tooling of their own; the repository's lint,
+tests and build cover them.
 
 ## Contract
 
