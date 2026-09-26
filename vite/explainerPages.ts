@@ -19,6 +19,7 @@ const IGNORE_FILE = '.gitignore';
 const IGNORE_EVERYTHING = '*\n';
 const PAGE_SOURCES = /(?:explainer\.json|\.html|locales[\\/]\w+\.json)$/;
 const MOVED_PERMANENTLY = 301;
+const PLUGIN_NAME = 'explainer-pages';
 const CATALOGUE_MODULE = 'virtual:explainer-catalogue';
 const RESOLVED_CATALOGUE_MODULE = `\0${CATALOGUE_MODULE}`;
 
@@ -86,6 +87,25 @@ function redirectToTrailingSlash(server: ViteDevServer, slugs: () => string[]): 
   });
 }
 
+function reloadPages(server: ViteDevServer): void {
+  const { moduleGraph } = server.environments.client;
+  const catalogue = moduleGraph.getModuleById(RESOLVED_CATALOGUE_MODULE);
+  if (catalogue) moduleGraph.invalidateModule(catalogue);
+  server.ws.send({ type: 'full-reload' });
+}
+
+function reportFailure(server: ViteDevServer, error: unknown): void {
+  const failure = error instanceof Error ? error : new Error(String(error));
+  server.config.logger.error(`[${PLUGIN_NAME}] ${failure.message}`, {
+    timestamp: true,
+    error: failure,
+  });
+  server.ws.send({
+    type: 'error',
+    err: { message: failure.message, stack: failure.stack ?? '', plugin: PLUGIN_NAME },
+  });
+}
+
 function servePublicFiles(server: ViteDevServer, explainers: LoadedExplainer[]): void {
   for (const { manifest, directory } of explainers) {
     const files = sirv(join(directory, PUBLIC_DIRECTORY), { dev: true });
@@ -98,7 +118,7 @@ export function explainerPages(): Plugin {
   let explainers: LoadedExplainer[] = [];
 
   return {
-    name: 'explainer-pages',
+    name: PLUGIN_NAME,
 
     config(config, env) {
       root = resolve(config.root ?? process.cwd());
@@ -128,11 +148,13 @@ export function explainerPages(): Plugin {
       servePublicFiles(server, explainers);
       const regenerate = (file: string) => {
         if (!isPageSource(root, file)) return;
-        explainers = generatePages(root);
-        const { moduleGraph } = server.environments.client;
-        const catalogue = moduleGraph.getModuleById(RESOLVED_CATALOGUE_MODULE);
-        if (catalogue) moduleGraph.invalidateModule(catalogue);
-        server.ws.send({ type: 'full-reload' });
+        try {
+          explainers = generatePages(root);
+        } catch (error) {
+          reportFailure(server, error);
+          return;
+        }
+        reloadPages(server);
       };
       server.watcher.on('change', regenerate);
       server.watcher.on('add', regenerate);

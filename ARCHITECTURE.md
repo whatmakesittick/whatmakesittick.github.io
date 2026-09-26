@@ -175,7 +175,8 @@ group for everything that is not a part.
 `config` hook, writes the generated pages and registers them, with the root
 `index.html`, as Rollup inputs. In dev it serves each explainer's `public/` under
 `/<slug>/` with `sirv` and regenerates the pages when a manifest, chapters, locale,
-template or partial changes. At build it emits the same files into
+template or partial changes. A failed regeneration is logged and shown in the error
+overlay, and the next change retries it. At build it emits the same files into
 `dist/<slug>/`. It also fills `<!-- partial:name -->` markers and `{{token}}`
 values in the root `index.html`, and serves `virtual:explainer-catalogue`: every
 manifest with the `meta` block of each shipped language, so the catalogue never
