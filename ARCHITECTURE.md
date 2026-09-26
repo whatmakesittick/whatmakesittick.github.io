@@ -7,15 +7,15 @@ shell, the 3D toolkit, the store contract, translations plumbing and the build.
 
 ## Repository layout
 
-| Path | Owns |
-| --- | --- |
-| `index.html`, `src/site/` | Catalogue page: cards per explainer grouped by category, language dropdown |
-| `src/core/` | Everything an explainer builds on (see below) |
-| `src/core/page.html` | The explainer page template: masthead, stage, gauge, dock, prose column, footer |
-| `src/core/locales/*.json` | Shell strings only: controls, footer, header chrome, keyboard, catalogue |
-| `explainers/<slug>/` | One folder per explainer, see "Explainer package" |
-| `scripts/` | Social images and other tooling |
-| `.github/workflows/` | `ci.yml` on pull requests, `deploy.yml` on `main` |
+| Path                      | Owns                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------- |
+| `index.html`, `src/site/` | Catalogue page: cards per explainer grouped by category, language dropdown      |
+| `src/core/`               | Everything an explainer builds on (see below)                                   |
+| `src/core/page.html`      | The explainer page template: masthead, stage, gauge, dock, prose column, footer |
+| `src/core/locales/*.json` | Shell strings only: controls, footer, header chrome, keyboard, catalogue        |
+| `explainers/<slug>/`      | One folder per explainer, see "Explainer package"                               |
+| `scripts/`                | Social images and other tooling                                                 |
+| `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`                               |
 
 Generated at build and dev time, never committed: `<slug>/index.html` and
 `<slug>/main.ts` for every explainer, produced by the `explainerPages` Vite plugin
@@ -47,9 +47,9 @@ tests and build cover them.
 
 ```ts
 interface PlaybackState {
-  phase: number;            // position in the cycle, 0 ≤ phase < timeline.cycle
+  phase: number; // position in the cycle, 0 ≤ phase < timeline.cycle
   playing: boolean;
-  speed: number;            // in the explainer's speed unit, e.g. rpm
+  speed: number; // in the explainer's speed unit, e.g. rpm
   preset: string;
   pausedByPreset: boolean;
   cameraResetToken: number;
@@ -60,7 +60,9 @@ interface PlaybackActions {
   tick(deltaSeconds: number): void;
   setPhase(phase: number): void;
   step(delta: number): void;
-  play(): void; pause(): void; togglePlaying(): void;
+  play(): void;
+  pause(): void;
+  togglePlaying(): void;
   setSpeed(speed: number): void;
   setView(view: Record<string, boolean>): void;
   toggleView(key: string): void;
@@ -69,26 +71,32 @@ interface PlaybackActions {
 }
 
 interface Timeline {
-  cycle: number;                      // 720 for a four-stroke engine
-  step: number;                       // scrubber step
-  labelKey: string;                   // "Crank angle"
+  cycle: number; // 720 for a four-stroke engine
+  step: number; // scrubber step
+  labelKey: string; // "Crank angle"
   formatPhase(phase: number): string; // "402°"
-  rate(speed: number): number;        // phase units per second at this speed
+  rate(speed: number): number; // phase units per second at this speed
   phases: { id: string; start: number; end: number; labelKey: string; tone: string }[];
-  speed: { min: number; max: number; step: number; labelKey: string; format(speed: number): string };
+  speed: {
+    min: number;
+    max: number;
+    step: number;
+    labelKey: string;
+    format(speed: number): string;
+  };
 }
 
 interface Explainer<S extends PlaybackState = PlaybackState> {
   id: string;
   timeline: Timeline;
-  createStore(): ExplainerStore<S>;                 // zustand vanilla + subscribeWithSelector
+  createStore(): ExplainerStore<S>; // zustand vanilla + subscribeWithSelector
   dock: {
-    choices: Choice<S>[];                            // segmented controls: fuel, cylinders
-    toggles: ViewToggle[];                           // icon buttons bound to view flags
+    choices: Choice<S>[]; // segmented controls: fuel, cylinders
+    toggles: ViewToggle[]; // icon buttons bound to view flags
   };
-  readouts: Readout<S>[];                            // gauge rows: label, value, optional meter and tone
+  readouts: Readout<S>[]; // gauge rows: label, value, optional meter and tone
   actions?: Record<string, (store: ExplainerStore<S>, value: string) => void>; // [data-action] buttons in chapters
-  shortcuts?: Record<string, (store: ExplainerStore<S>) => void>;              // extra keys
+  shortcuts?: Record<string, (store: ExplainerStore<S>) => void>; // extra keys
   mountScene(shell: SceneShell, store: ExplainerStore<S>): () => void;
   mountUi?(root: Document, store: ExplainerStore<S>): void;
 }
