@@ -66,6 +66,8 @@ function readLocales(fields: Fields, folder: string): LanguageCode[] {
   if (!Array.isArray(locales)) fail(folder, '"locales" must be a list of language codes');
   const codes = locales.filter((code): code is LanguageCode => isLanguageCode(String(code)));
   if (codes.length !== locales.length) fail(folder, '"locales" has an unknown language code');
+  const repeated = codes.find((code, index) => codes.indexOf(code) !== index);
+  if (repeated) fail(folder, `"locales" lists "${repeated}" more than once`);
   if (!codes.includes(DEFAULT_LANGUAGE))
     fail(folder, `"locales" must include "${DEFAULT_LANGUAGE}"`);
   return codes;

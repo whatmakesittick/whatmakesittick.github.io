@@ -42,6 +42,12 @@ describe('parseManifest', () => {
     ['an unknown category', { category: 'toys' }, 'engine', '"category" must be one of'],
     ['an unknown language', { locales: ['en', 'xx'] }, 'engine', 'unknown language'],
     ['no English', { locales: ['uk'] }, 'engine', 'must include "en"'],
+    [
+      'a repeated language',
+      { locales: ['en', 'uk', 'en'] },
+      'engine',
+      'explainers/engine/explainer.json: "locales" lists "en" more than once',
+    ],
     ['no social image', { social: undefined }, 'engine', '"social" must name'],
     ['an empty entry', { entry: ' ' }, 'engine', '"entry" must be a string'],
   ])('rejects %s', (_case, change, folder, message) => {
