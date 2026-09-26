@@ -1,0 +1,304 @@
+{
+  "meta": {
+    "title": "How an engine works",
+    "eyebrow": "The four-stroke engine, opened up",
+    "tagline": "Everyone has heard an engine idle. Almost nobody has seen the small, precisely timed fire it lights hundreds of times a minute. Here is one, slowed right down.",
+    "description": "An interactive, slowed-down look inside a four-stroke engine: strokes, valves, ignition, the crank, compression, petrol against diesel and the inline four.",
+    "summary": "An interactive, slowed-down look inside a four-stroke engine: strokes, valves, ignition, the crank, compression, petrol against diesel and the inline four."
+  },
+  "stage": {
+    "label": "Interactive engine model",
+    "gauge": "Cycle dial and live readings"
+  },
+  "controls": {
+    "label": "Engine controls",
+    "crankAngle": "Crank angle",
+    "angleValue": {
+      "intake": "{{angle}}, intake stroke",
+      "compression": "{{angle}}, compression stroke",
+      "power": "{{angle}}, power stroke",
+      "exhaust": "{{angle}}, exhaust stroke"
+    },
+    "jumpToStrokeGroup": "Jump to a stroke",
+    "jumpToStroke": {
+      "intake": "Jump to the intake stroke",
+      "compression": "Jump to the compression stroke",
+      "power": "Jump to the power stroke",
+      "exhaust": "Jump to the exhaust stroke"
+    },
+    "speedDescriptions": {
+      "verySlow": "very slow",
+      "slowMotion": "slow motion",
+      "halfIdle": "half idle",
+      "nearIdle": "near idle"
+    },
+    "fuel": "Fuel",
+    "cylinders": "Cylinders",
+    "views": {
+      "cutaway": {
+        "name": "Cutaway",
+        "short": "Cutaway",
+        "hint": "Cutaway (C)"
+      },
+      "gas": {
+        "name": "Gas colours",
+        "short": "Gas",
+        "hint": "Gas colours (G)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      },
+      "flow": {
+        "name": "Gas flow",
+        "short": "Flow",
+        "hint": "Gas flow (F)"
+      }
+    }
+  },
+  "strokes": {
+    "intake": "Intake",
+    "compression": "Compression",
+    "power": "Power",
+    "exhaust": "Exhaust"
+  },
+  "engine": {
+    "types": {
+      "petrol": "Petrol",
+      "diesel": "Diesel"
+    },
+    "layouts": {
+      "single": "One cylinder",
+      "inline4": "Inline four"
+    }
+  },
+  "deadCentres": {
+    "top": "TDC",
+    "bottom": "BDC",
+    "before": "{{degrees}} before {{centre}}",
+    "after": "{{degrees}} after {{centre}}",
+    "early": "{{degrees}} early",
+    "late": "{{degrees}} late"
+  },
+  "dial": {
+    "label": "Cycle dial. One full circle is two turns of the crank, 720 degrees, coloured by stroke, with the valve opening windows inside.",
+    "legend": {
+      "label": "Dial legend",
+      "intakeOpen": "Intake open",
+      "exhaustOpen": "Exhaust open",
+      "spark": "Spark",
+      "injection": "Injection"
+    }
+  },
+  "readouts": {
+    "crankAngle": "Crank angle",
+    "stroke": "Stroke",
+    "engineSpeed": "Engine speed",
+    "pressure": "Pressure",
+    "pistonSpeed": "Piston speed"
+  },
+  "sections": {
+    "overview": {
+      "title": "A push, turned into a spin",
+      "p1": "You are looking at one cylinder of a car engine, cut open. A <strong>piston</strong> slides up and down inside a tube. Above it sit two <strong>valves</strong> and, depending on the fuel, a spark plug or an injector. Below it a <strong>connecting rod</strong> links the piston to the <strong>crankshaft</strong>, the shaft that eventually turns the wheels.",
+      "p2": "The whole idea fits in one sentence: burn fuel in a sealed space, let the hot gas push the piston down, and turn that push into rotation. Everything else in the engine exists to repeat this cleanly, over and over.",
+      "p3": "It repeats as a cycle of four steps called <strong>strokes</strong>. The dial in the corner shows where the engine is in that cycle. The model runs in slow motion: a real car engine idles at around 800 turns a minute and can spin eight times faster than that.",
+      "p4": "Drag the model to look around it and scroll over it to zoom. As you read on, the view follows the text."
+    },
+    "strokes": {
+      "title": "Four strokes",
+      "p1": "A stroke is one trip of the piston from the top of the cylinder to the bottom, or back. The top is called <strong>top dead centre</strong> (TDC) and the bottom <strong>bottom dead centre</strong> (BDC): dead, because the piston stops there for an instant before it changes direction.",
+      "intake": {
+        "body": "The piston moves down with the intake valve open, and the growing space draws in fresh charge. A petrol engine takes in air already mixed with fuel. A diesel takes in plain air.",
+        "show": "Show intake"
+      },
+      "compression": {
+        "body": "Both valves shut and the piston rises, squeezing the charge into a tenth of its volume or less. Squeezing a gas heats it, so the charge is several hundred degrees hot before anything has burned.",
+        "show": "Show compression"
+      },
+      "power": {
+        "body": "Near the top, the charge is lit. A petrol engine fires a spark. A diesel sprays fuel into air that is already hot enough to light it. The burning gas expands and shoves the piston down. This is the only stroke that makes power.",
+        "show": "Show power"
+      },
+      "exhaust": {
+        "body": "The exhaust valve opens and the rising piston pushes the burnt gas out, leaving the cylinder ready to start again.",
+        "show": "Show exhaust"
+      },
+      "p2": "Keep an eye on the gas: fresh charge comes in cool, turns hotter as it is squeezed, flares orange as it burns and leaves grey."
+    },
+    "cycle": {
+      "title": "Two turns for every push",
+      "p1": "Each stroke takes half a turn of the crankshaft, so the four strokes take two full turns: <strong>720 degrees</strong>. That is why the dial counts to 720 rather than 360.",
+      "p2": "The piston reaches the top twice in every cycle: once at 0°, between exhaust and intake, and once at 360°, when the charge is fired. The piston cannot tell the two apart. Only the valves and the spark know which is which.",
+      "p3": "Only one stroke in four pushes. Drawing in air, squeezing it and pushing out exhaust all cost work, and for those three strokes the engine has to be carried. The momentum of the moving parts does some of that, and the <strong>flywheel</strong> does the rest: a heavy disc on the end of the crankshaft that soaks up energy during the power stroke and hands it back during the other three.",
+      "p4": "That is why a one-cylinder engine feels lumpy: one hard shove every second turn, and nothing in between. Lawnmowers use a heavy flywheel to smooth it out. Cars add more cylinders, which we will come to."
+    },
+    "valves": {
+      "title": "Valves and cams",
+      "p1": "Each valve is a mushroom-shaped plug. A spring holds it shut against its seat, and a <strong>cam</strong> pushes it open: an egg-shaped lobe on a spinning shaft. As the bump comes round it presses the valve down into the cylinder. As it passes, the spring pulls the valve shut again.",
+      "p2": "Each valve opens once per cycle, and a cycle is two turns of the crank. So the <strong>camshaft turns at half crank speed</strong>, driven by a belt or chain. Watch the cams: one turn for every two of the crank.",
+      "p3": "Valves that opened and closed exactly at the dead centres would make the engine breathe badly. Gas has weight and takes time to get moving, so the timing is stretched. The exhaust valve opens <strong>early</strong>, well before bottom dead centre, so the still-pressurised gas can blow out on its own. The intake valve closes <strong>late</strong>, well after bottom dead centre, because the incoming air is still rushing in even as the piston starts back up.",
+      "p4": "Around the top, between exhaust and intake, both valves are open at once for a moment. This <strong>valve overlap</strong> lets the outgoing exhaust help draw the fresh charge in behind it.",
+      "caption": "Valve lift over one cycle for the current engine. The strip wraps around: its right edge joins its left edge, and the shaded bands are where both valves are open."
+    },
+    "ignition": {
+      "title": "Lighting the charge",
+      "p1": "Burning is not instant. In a petrol engine, a flame starts at the spark plug and spreads across the chamber in a few thousandths of a second, which is a real slice of a turn. The push is most useful just after top dead centre, so the spark has to jump early: <strong>roughly 10 to 40 degrees before top dead centre</strong>.",
+      "p2": "How early depends on speed. The flame needs about the same time whatever the engine is doing, but at higher revs the crank turns through more degrees in that time, so the spark is advanced as the engine speeds up. Fire too early and the pressure fights the rising piston. Fire too late and it chases a piston that is already on its way down.",
+      "p3": "A diesel has no spark plug. Compression heats the air past <strong>about 700 °C</strong>, and shortly before top dead centre the injector sprays fuel into it. The fuel takes a moment to vaporise and catch, a short <strong>ignition delay</strong>, and then burns about as fast as it is injected. The burn is stretched out over the injection instead of racing across the chamber in one flame front.",
+      "p4": "The graph shows the result. Petrol pressure climbs to a sharp peak just after the top. Diesel starts from a much higher squeeze, and its burn holds the pressure up while the piston starts down.",
+      "caption": "Cylinder pressure through compression and power, compared with the air outside. Intake and exhaust stay close to 1× and are left out. The bold curve is the engine on screen, and the line follows it live."
+    },
+    "crank": {
+      "title": "From push to spin",
+      "p1": "The connecting rod joins the piston to an offset pin on the crankshaft, the <strong>crank pin</strong>. As the pin swings round in a circle, the rod turns the piston's straight push into rotation, the way your leg turns a bicycle pedal.",
+      "p2": "The piston does not move in a smooth sine wave. The rod tilts as the pin swings out to the side, which pulls the piston further down than the pin's own drop. At 90 degrees of crank the piston is already past halfway: about 50 of its 86 mm. So it moves <strong>faster near top dead centre than near bottom dead centre</strong>, and it reaches top speed before the crank has turned 90 degrees.",
+      "p3": "At 3,000 rpm that top speed is about 14 m/s, and the piston stops dead and reverses twice every turn. Heavy <strong>counterweights</strong> opposite the crank pin balance the spinning mass of the pin and rod, so the engine does not shake itself apart.",
+      "caption": "Piston position and speed over one turn of the crank. The dashed lines show what a rod that never tilted would do."
+    },
+    "compression": {
+      "title": "How hard to squeeze",
+      "p1": "The <strong>compression ratio</strong> compares the space above the piston at bottom dead centre with the space left at top dead centre. At 10 : 1, the charge is squeezed into a tenth of the room it had.",
+      "p2": "A higher ratio lets the burning gas expand further, so more of its heat turns into push: more work from the same fuel. So why not squeeze harder? A petrol engine compresses fuel and air together, and squeezing heats them. Go too far and pockets of mixture light themselves before the flame arrives, a sharp <strong>knock</strong> that can crack pistons. That keeps petrol engines at <strong>roughly 9 to 13 : 1</strong>.",
+      "p3": "A diesel squeezes only air, so there is nothing to light early, and it needs the heat: the air must be hot enough to ignite the fuel. Diesels run at <strong>about 14 to 22 : 1</strong>.",
+      "control": {
+        "label": "Compression ratio",
+        "petrolBand": "petrol",
+        "dieselBand": "diesel",
+        "clearance": "Gap above the piston",
+        "pressure": "Pressure before burning"
+      },
+      "p4": "The model pauses at top dead centre here, so you can watch the gap above the piston shrink as you raise the ratio."
+    },
+    "fuel": {
+      "title": "Petrol or diesel",
+      "p1": "Both engines run the same four strokes. They differ in how the fuel gets in and what lights it.",
+      "table": {
+        "feature": "Feature",
+        "fuelIn": {
+          "label": "Fuel gets in",
+          "petrol": "Mixed with the air on its way in, or sprayed in during intake",
+          "diesel": "Injected straight into hot air at the end of compression"
+        },
+        "lighting": {
+          "label": "What lights it",
+          "petrol": "A spark",
+          "diesel": "The heat of compression"
+        },
+        "ratio": {
+          "label": "Compression ratio",
+          "petrol": "9 to 13 : 1",
+          "diesel": "14 to 22 : 1"
+        },
+        "power": {
+          "label": "Power is set by",
+          "petrol": "A throttle that limits the air",
+          "diesel": "How much fuel is injected"
+        },
+        "topSpeed": {
+          "label": "Typical top speed",
+          "petrol": "6,000 to 7,000 rpm",
+          "diesel": "4,000 to 5,000 rpm"
+        }
+      },
+      "p2": "A diesel is <strong>more efficient</strong> for three reasons. It squeezes harder, so each drop of fuel does more work. It runs lean, with far more air than the fuel needs. And it has no throttle, so it never wastes effort sucking air past a half-closed flap.",
+      "p3": "A petrol engine <strong>revs higher and runs smoother</strong>. Its mixture is ready to burn the moment the spark fires, and the flame is quick. Its lower pressures allow lighter parts that are happy to spin fast. A diesel waits for its fuel to mix and catch, and when it does the pressure jumps, which is the source of its familiar clatter.",
+      "showPetrol": "Show petrol",
+      "showDiesel": "Show diesel",
+      "aside": "A hybrid pairs an engine like this with an electric motor that helps it along, lets it switch off when it is not needed and recovers energy when braking. That is a chapter this explainer does not have yet."
+    },
+    "inline4": {
+      "title": "Four cylinders",
+      "p1": "One cylinder gives one shove every two turns. Four cylinders sharing a crankshaft, each at a different point in the cycle, give a shove every half turn: <strong>a power stroke every 180 degrees</strong> instead of every 720. The push on the crank is far steadier, so the flywheel can be much lighter.",
+      "p2": "The crank pins are arranged so pistons 1 and 4 move together, and 2 and 3 move together in the opposite direction. When the outer pair rises the inner pair falls, so their main up-and-down forces cancel out.",
+      "p3": "Pistons that move together are never on the same stroke. When piston 1 fires, piston 4 is at the top too, finishing its exhaust. The cylinders fire in the order <strong>{{firingOrder}}</strong>, which alternates between the ends of the crankshaft and spreads the pulses evenly along it.",
+      "caption": "Each row is one cylinder over a full cycle, coloured by stroke. The power strokes step along by 180 degrees."
+    },
+    "controls": {
+      "title": "Controls",
+      "p1": "Everything on the page works from the keyboard as well.",
+      "aside": "Numbers come from a small model of a half-litre cylinder with an 86 mm bore, an 86 mm stroke and a 145 mm connecting rod. Pressures are simplified: good for shapes and proportions, not for exact figures."
+    }
+  },
+  "keyboard": {
+    "jumpToStroke": "Jump to intake, compression, power or exhaust",
+    "step": "Step the crank 2°, or 15° with <kbd>Shift</kbd>",
+    "cutaway": "Cutaway on or off",
+    "gas": "Gas colours on or off",
+    "labels": "All labels on or off",
+    "flow": "Gas flow arrows on or off",
+    "engineType": "Switch between petrol and diesel",
+    "layout": "Switch between one cylinder and the inline four",
+    "orbit": "Orbit around the engine"
+  },
+  "diagrams": {
+    "valveTiming": {
+      "intake": "Intake",
+      "exhaust": "Exhaust",
+      "opens": "opens {{offset}}",
+      "closes": "closes {{offset}}",
+      "overlap": "overlap",
+      "spark": "spark",
+      "sparkAt": "spark {{offset}}",
+      "injection": "injection",
+      "injectionAt": "injection {{offset}}",
+      "title": {
+        "petrol": "Valve timing for the petrol engine.",
+        "diesel": "Valve timing for the diesel engine."
+      },
+      "summary": "The intake valve opens {{intakeOpens}} and closes {{intakeCloses}}. The exhaust valve opens {{exhaustOpens}} and closes {{exhaustCloses}}. Both are open together for {{overlap}} degrees around top dead centre."
+    },
+    "pressure": {
+      "peak": "peak {{value}}",
+      "summary": {
+        "petrol": "Cylinder pressure through the compression and power strokes, petrol and diesel compared, petrol highlighted.",
+        "diesel": "Cylinder pressure through the compression and power strokes, petrol and diesel compared, diesel highlighted."
+      },
+      "peakSummary": {
+        "petrol": "Petrol peaks at about {{value}} outside air.",
+        "diesel": "Diesel peaks at about {{value}} outside air."
+      }
+    },
+    "pistonMotion": {
+      "distanceTitle": "Distance below the top, mm",
+      "speedTitle": "Speed at {{rpm}}, m/s",
+      "halfStroke": "half stroke",
+      "quarterTurn": "{{distance}} at {{angle}}",
+      "peak": "peak at {{angle}}",
+      "realPiston": "Real piston",
+      "uprightRod": "Rod that never tilts",
+      "description": "Piston distance from the top and piston speed over one turn of the crank, compared with a rod that never tilts. The piston is past halfway at 90 degrees and reaches top speed before 90 degrees."
+    },
+    "firingOrder": {
+      "sequence": "Firing order",
+      "cylinder": "Cylinder",
+      "chipsLabel": "Current stroke of each cylinder",
+      "description": "Strokes of each cylinder of an inline four over one cycle. Power strokes follow each other every 180 degrees in the order {{order}}."
+    }
+  },
+  "parts": {
+    "piston": "Piston",
+    "connectingRod": "Connecting rod",
+    "crankshaft": "Crankshaft",
+    "flywheel": "Flywheel",
+    "cylinder": "Cylinder",
+    "combustionChamber": "Combustion chamber",
+    "intakeValve": "Intake valve",
+    "exhaustValve": "Exhaust valve",
+    "intakeCam": "Intake cam",
+    "exhaustCam": "Exhaust cam",
+    "intakePort": "Intake port",
+    "exhaustPort": "Exhaust port",
+    "sparkPlug": "Spark plug",
+    "injector": "Fuel injector"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "rpm": "{{value}} rpm",
+    "metresPerSecond": "{{value}} m/s",
+    "millimetres": "{{value}} mm",
+    "times": "{{value}}×",
+    "ratio": "{{value}} : 1"
+  }
+}

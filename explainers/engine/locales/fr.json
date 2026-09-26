@@ -1,0 +1,304 @@
+{
+  "meta": {
+    "title": "Comment fonctionne un moteur",
+    "eyebrow": "Le moteur à quatre temps, à cœur ouvert",
+    "tagline": "Tout le monde a déjà entendu un moteur tourner au ralenti. Presque personne n’a vu la petite flamme, réglée avec précision, qu’il allume des centaines de fois par minute. La voici, ralentie à l’extrême.",
+    "description": "Une visite interactive, au ralenti, à l’intérieur d’un moteur à quatre temps : les temps, les soupapes, l’allumage, le vilebrequin, la compression, l’essence face au diesel et le quatre-cylindres en ligne.",
+    "summary": "Une visite interactive, au ralenti, à l’intérieur d’un moteur à quatre temps : les temps, les soupapes, l’allumage, le vilebrequin, la compression, l’essence face au diesel et le quatre-cylindres en ligne."
+  },
+  "stage": {
+    "label": "Modèle interactif du moteur",
+    "gauge": "Cadran du cycle et mesures en direct"
+  },
+  "controls": {
+    "label": "Commandes du moteur",
+    "crankAngle": "Angle du vilebrequin",
+    "angleValue": {
+      "intake": "{{angle}}, temps d’admission",
+      "compression": "{{angle}}, temps de compression",
+      "power": "{{angle}}, temps de combustion-détente",
+      "exhaust": "{{angle}}, temps d’échappement"
+    },
+    "jumpToStrokeGroup": "Aller à un temps",
+    "jumpToStroke": {
+      "intake": "Aller au temps d’admission",
+      "compression": "Aller au temps de compression",
+      "power": "Aller au temps de combustion-détente",
+      "exhaust": "Aller au temps d’échappement"
+    },
+    "speedDescriptions": {
+      "verySlow": "très lent",
+      "slowMotion": "lent",
+      "halfIdle": "moitié du ralenti",
+      "nearIdle": "proche du ralenti"
+    },
+    "fuel": "Carburant",
+    "cylinders": "Cylindres",
+    "views": {
+      "cutaway": {
+        "name": "Vue en coupe",
+        "short": "Coupe",
+        "hint": "Vue en coupe (C)"
+      },
+      "gas": {
+        "name": "Couleurs des gaz",
+        "short": "Gaz",
+        "hint": "Couleurs des gaz (G)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      },
+      "flow": {
+        "name": "Flux des gaz",
+        "short": "Flux",
+        "hint": "Flux des gaz (F)"
+      }
+    }
+  },
+  "strokes": {
+    "intake": "Admission",
+    "compression": "Compression",
+    "power": "Combustion",
+    "exhaust": "Échappement"
+  },
+  "engine": {
+    "types": {
+      "petrol": "Essence",
+      "diesel": "Diesel"
+    },
+    "layouts": {
+      "single": "Un cylindre",
+      "inline4": "Quatre en ligne"
+    }
+  },
+  "deadCentres": {
+    "top": "PMH",
+    "bottom": "PMB",
+    "before": "{{degrees}} avant le {{centre}}",
+    "after": "{{degrees}} après le {{centre}}",
+    "early": "{{degrees}} d’avance",
+    "late": "{{degrees}} de retard"
+  },
+  "dial": {
+    "label": "Cadran du cycle. Un tour complet du cadran vaut deux tours de vilebrequin, soit 720 degrés. Les couleurs indiquent le temps en cours, et les plages d’ouverture des soupapes figurent à l’intérieur.",
+    "legend": {
+      "label": "Légende du cadran",
+      "intakeOpen": "Admission ouverte",
+      "exhaustOpen": "Échappement ouvert",
+      "spark": "Étincelle",
+      "injection": "Injection"
+    }
+  },
+  "readouts": {
+    "crankAngle": "Angle du vilebrequin",
+    "stroke": "Temps",
+    "engineSpeed": "Régime moteur",
+    "pressure": "Pression",
+    "pistonSpeed": "Vitesse du piston"
+  },
+  "sections": {
+    "overview": {
+      "title": "Une poussée qui devient rotation",
+      "p1": "Vous avez sous les yeux un cylindre de moteur de voiture, vu en coupe. Un <strong>piston</strong> monte et descend dans un tube. Au-dessus se trouvent deux <strong>soupapes</strong> et, selon le carburant, une bougie d’allumage ou un injecteur. En dessous, une <strong>bielle</strong> relie le piston au <strong>vilebrequin</strong>, l’arbre qui finit par faire tourner les roues.",
+      "p2": "Toute l’idée tient en une phrase : brûler du carburant dans un espace clos, laisser le gaz chaud pousser le piston vers le bas, et transformer cette poussée en rotation. Tout le reste du moteur n’existe que pour répéter cela proprement, encore et encore.",
+      "p3": "Tout cela se répète selon un cycle de quatre étapes, appelées <strong>temps</strong>. Le cadran, dans le coin, indique où en est le moteur dans ce cycle. Le modèle tourne très lentement : au ralenti, un vrai moteur de voiture tourne à environ 800 tours par minute, et il peut aller huit fois plus vite.",
+      "p4": "Faites glisser le modèle pour en faire le tour, et faites défiler par-dessus pour zoomer. Au fil de votre lecture, la vue suit le texte."
+    },
+    "strokes": {
+      "title": "Quatre temps",
+      "p1": "Un temps, c’est un trajet du piston du haut du cylindre jusqu’en bas, ou l’inverse. Le haut s’appelle le <strong>point mort haut</strong> (PMH) et le bas le <strong>point mort bas</strong> (PMB). « Mort », parce que le piston s’y arrête un instant avant de repartir dans l’autre sens.",
+      "intake": {
+        "body": "Le piston descend, soupape d’admission ouverte, et l’espace qui s’agrandit aspire des gaz frais. Un moteur essence aspire de l’air déjà mélangé au carburant. Un diesel aspire de l’air pur.",
+        "show": "Voir l’admission"
+      },
+      "compression": {
+        "body": "Les deux soupapes se ferment et le piston remonte. Il comprime les gaz dans un dixième de leur volume, voire moins. Comprimer un gaz le chauffe : les gaz atteignent plusieurs centaines de degrés avant même que quoi que ce soit ait brûlé.",
+        "show": "Voir la compression"
+      },
+      "power": {
+        "body": "Près du haut, on enflamme les gaz. Un moteur essence fait jaillir une étincelle. Un diesel pulvérise du carburant dans un air déjà assez chaud pour l’enflammer. Les gaz qui brûlent se détendent et repoussent le piston vers le bas : c’est la combustion-détente. C’est le seul temps qui fournit de l’énergie, d’où son autre nom de temps moteur.",
+        "show": "Voir la combustion"
+      },
+      "exhaust": {
+        "body": "La soupape d’échappement s’ouvre et le piston, en remontant, chasse les gaz brûlés. Le cylindre est prêt à recommencer.",
+        "show": "Voir l’échappement"
+      },
+      "p2": "Surveillez les gaz : frais à l’entrée, ils chauffent en étant comprimés, s’embrasent en orange en brûlant et ressortent gris."
+    },
+    "cycle": {
+      "title": "Deux tours pour une poussée",
+      "p1": "Chaque temps prend un demi-tour de vilebrequin, donc les quatre temps prennent deux tours complets : <strong>720 degrés</strong>. Voilà pourquoi le cadran compte jusqu’à 720 et non 360.",
+      "p2": "Le piston atteint le haut deux fois par cycle : une fois à 0°, entre l’échappement et l’admission, et une fois à 360°, au moment où les gaz s’enflamment. Le piston ne peut pas distinguer les deux. Seules les soupapes et l’étincelle font la différence.",
+      "p3": "Un seul temps sur quatre pousse. Aspirer l’air, le comprimer et chasser les gaz brûlés, tout cela demande du travail, et pendant ces trois temps il faut entraîner le moteur. L’élan des pièces en mouvement y contribue, et le <strong>volant moteur</strong> fait le reste : un disque lourd, au bout du vilebrequin, qui emmagasine de l’énergie pendant le temps moteur et la restitue pendant les trois autres.",
+      "p4": "Voilà pourquoi un monocylindre tourne de façon saccadée : une forte poussée tous les deux tours, et rien entre les deux. Les tondeuses à gazon lissent cela avec un volant lourd. Les voitures ajoutent des cylindres, nous y reviendrons."
+    },
+    "valves": {
+      "title": "Soupapes et cames",
+      "p1": "Chaque soupape est un bouchon en forme de champignon. Un ressort la maintient fermée contre son siège, et une <strong>came</strong> l’ouvre en la poussant : un bossage en forme d’œuf, porté par un arbre qui tourne. Quand la bosse arrive, elle enfonce la soupape dans le cylindre. Une fois la bosse passée, le ressort referme la soupape.",
+      "p2": "Chaque soupape s’ouvre une fois par cycle, et un cycle dure deux tours de vilebrequin. L’<strong>arbre à cames tourne donc deux fois moins vite que le vilebrequin</strong>, entraîné par une courroie ou une chaîne. Observez les cames : un tour pour deux tours de vilebrequin.",
+      "p3": "Des soupapes qui s’ouvriraient et se fermeraient pile aux points morts feraient mal respirer le moteur. Les gaz ont une masse et mettent du temps à se mettre en mouvement, alors on étire le calage. La soupape d’échappement s’ouvre <strong>en avance</strong>, bien avant le point mort bas, pour que les gaz encore sous pression s’échappent d’eux-mêmes. La soupape d’admission se ferme <strong>en retard</strong>, bien après le point mort bas, car l’air continue de s’engouffrer alors même que le piston commence à remonter.",
+      "p4": "Autour du haut, entre l’échappement et l’admission, les deux soupapes restent ouvertes en même temps pendant un court instant. Ce <strong>croisement des soupapes</strong> permet aux gaz brûlés qui sortent d’aspirer derrière eux les gaz frais.",
+      "caption": "Levée des soupapes sur un cycle, pour le moteur affiché. La bande boucle sur elle-même : son bord droit rejoint son bord gauche. Les zones ombrées montrent où les deux soupapes sont ouvertes."
+    },
+    "ignition": {
+      "title": "L’allumage",
+      "p1": "La combustion n’est pas instantanée. Dans un moteur essence, une flamme naît à la bougie et traverse la chambre en quelques millièmes de seconde, ce qui représente une vraie fraction de tour. La poussée est la plus utile juste après le point mort haut, donc l’étincelle doit jaillir en avance : <strong>environ 10 à 40 degrés avant le point mort haut</strong>.",
+      "p2": "Cette avance dépend du régime. La flamme a besoin d’à peu près le même temps quoi que fasse le moteur, mais à haut régime le vilebrequin parcourt plus de degrés pendant ce temps. On augmente donc l’avance à l’allumage quand le moteur accélère. Trop tôt, et la pression s’oppose au piston qui monte. Trop tard, et elle court après un piston déjà en train de redescendre.",
+      "p3": "Un diesel n’a pas de bougie. La compression chauffe l’air au-delà de <strong>700 °C environ</strong>, et peu avant le point mort haut, l’injecteur y pulvérise le carburant. Le carburant met un instant à se vaporiser et à s’enflammer, un court <strong>délai d’inflammation</strong>, puis il brûle à peu près au rythme où il est injecté. La combustion s’étale sur toute l’injection, au lieu de traverser la chambre d’un seul front de flamme.",
+      "p4": "Le graphique montre le résultat. En essence, la pression grimpe jusqu’à un pic net juste après le haut. Le diesel part d’une compression bien plus forte, et sa combustion maintient la pression pendant que le piston commence à descendre.",
+      "caption": "Pression dans le cylindre pendant la compression et la combustion-détente, comparée à celle de l’air extérieur. L’admission et l’échappement restent proches de 1× et ne sont pas représentés. La courbe en gras correspond au moteur affiché, et le trait la suit en direct."
+    },
+    "crank": {
+      "title": "De la poussée à la rotation",
+      "p1": "La bielle relie le piston à un axe décalé sur le vilebrequin : le <strong>maneton</strong>. Quand le maneton décrit son cercle, la bielle transforme la poussée rectiligne du piston en rotation, comme votre jambe fait tourner la pédale d’un vélo.",
+      "p2": "Le piston ne suit pas une courbe sinusoïdale parfaite. La bielle s’incline quand le maneton part sur le côté, ce qui tire le piston plus bas que la seule descente du maneton. À 90 degrés de vilebrequin, le piston a déjà dépassé la mi-course : environ 50 de ses 86 mm. Il va donc <strong>plus vite près du point mort haut que près du point mort bas</strong>, et atteint sa vitesse maximale avant que le vilebrequin ait tourné de 90 degrés.",
+      "p3": "À 3 000 tr/min, cette vitesse maximale avoisine 14 m/s, et le piston s’arrête net puis repart en sens inverse deux fois par tour. De lourds <strong>contrepoids</strong>, placés à l’opposé du maneton, équilibrent la masse en rotation du maneton et de la bielle, pour éviter que le moteur ne se détruise à force de vibrer.",
+      "caption": "Position et vitesse du piston sur un tour de vilebrequin. Les pointillés montrent ce que ferait une bielle qui ne s’inclinerait jamais."
+    },
+    "compression": {
+      "title": "Jusqu’où comprimer ?",
+      "p1": "Le <strong>taux de compression</strong> compare le volume au-dessus du piston au point mort bas avec celui qui reste au point mort haut. À 10 : 1, les gaz sont comprimés dans un dixième de l’espace qu’ils occupaient.",
+      "p2": "Un taux plus élevé permet aux gaz qui brûlent de se détendre davantage : une plus grande part de leur chaleur devient poussée, et on tire plus de travail du même carburant. Alors pourquoi ne pas comprimer plus ? Un moteur essence comprime ensemble le carburant et l’air, et la compression les chauffe. Si l’on va trop loin, des poches de mélange s’enflamment toutes seules avant l’arrivée de la flamme. C’est le <strong>cliquetis</strong>, un claquement sec qui peut fissurer les pistons. Les moteurs essence restent donc <strong>autour de 9 à 13 : 1</strong>.",
+      "p3": "Un diesel ne comprime que de l’air : rien ne risque de s’enflammer trop tôt. Et il a besoin de cette chaleur, car l’air doit être assez chaud pour enflammer le carburant. Les diesels fonctionnent <strong>autour de 14 à 22 : 1</strong>.",
+      "control": {
+        "label": "Taux de compression",
+        "petrolBand": "essence",
+        "dieselBand": "diesel",
+        "clearance": "Espace au-dessus du piston",
+        "pressure": "Pression avant combustion"
+      },
+      "p4": "Ici, le modèle s’arrête au point mort haut : vous pouvez voir l’espace au-dessus du piston se réduire quand vous augmentez le taux."
+    },
+    "fuel": {
+      "title": "Essence ou diesel",
+      "p1": "Les deux moteurs suivent les mêmes quatre temps. Ils diffèrent par la façon dont le carburant entre et par ce qui l’enflamme.",
+      "table": {
+        "feature": "Caractéristique",
+        "fuelIn": {
+          "label": "Arrivée du carburant",
+          "petrol": "Mélangé à l’air avant d’entrer, ou pulvérisé pendant l’admission",
+          "diesel": "Injecté directement dans l’air chaud en fin de compression"
+        },
+        "lighting": {
+          "label": "Ce qui l’enflamme",
+          "petrol": "Une étincelle",
+          "diesel": "La chaleur de la compression"
+        },
+        "ratio": {
+          "label": "Taux de compression",
+          "petrol": "9 à 13 : 1",
+          "diesel": "14 à 22 : 1"
+        },
+        "power": {
+          "label": "La puissance dépend de",
+          "petrol": "Un papillon des gaz qui limite l’air",
+          "diesel": "La quantité de carburant injectée"
+        },
+        "topSpeed": {
+          "label": "Régime maximal typique",
+          "petrol": "6 000 à 7 000 tr/min",
+          "diesel": "4 000 à 5 000 tr/min"
+        }
+      },
+      "p2": "Un diesel a un <strong>meilleur rendement</strong>, pour trois raisons. Il comprime davantage, donc chaque goutte de carburant fournit plus de travail. Il fonctionne en mélange pauvre, avec bien plus d’air que le carburant n’en demande. Et il n’a pas de papillon des gaz, donc il ne gaspille jamais d’effort à aspirer l’air à travers un volet à moitié fermé.",
+      "p3": "Un moteur essence <strong>monte plus haut en régime et tourne plus rond</strong>. Son mélange est prêt à brûler dès que l’étincelle jaillit, et la flamme est rapide. Ses pressions plus faibles permettent des pièces plus légères, qui supportent bien de tourner vite. Un diesel attend que son carburant se mélange et s’enflamme, et à ce moment-là la pression fait un bond : c’est l’origine de son claquement si familier.",
+      "showPetrol": "Voir l’essence",
+      "showDiesel": "Voir le diesel",
+      "aside": "Un hybride associe un moteur comme celui-ci à un moteur électrique qui l’aide, lui permet de s’arrêter quand on n’en a pas besoin et récupère de l’énergie au freinage. C’est un chapitre que cette explication n’a pas encore."
+    },
+    "inline4": {
+      "title": "Quatre cylindres",
+      "p1": "Un seul cylindre donne une poussée tous les deux tours. Quatre cylindres qui partagent un vilebrequin, chacun à un moment différent du cycle, donnent une poussée tous les demi-tours : <strong>un temps moteur tous les 180 degrés</strong>, au lieu de tous les 720. La poussée sur le vilebrequin est bien plus régulière, et le volant moteur peut être beaucoup plus léger.",
+      "p2": "Les manetons sont disposés de sorte que les pistons 1 et 4 bougent ensemble, et les pistons 2 et 3 ensemble, en sens inverse. Quand la paire extérieure monte, la paire intérieure descend : leurs principales forces verticales s’annulent.",
+      "p3": "Des pistons qui bougent ensemble ne sont jamais sur le même temps. Quand le cylindre 1 s’allume, le piston 4 est lui aussi en haut et termine son échappement. L’ordre d’allumage est <strong>{{firingOrder}}</strong> : il alterne entre les deux bouts du vilebrequin et répartit les à-coups de façon égale sur toute sa longueur.",
+      "caption": "Chaque ligne représente un cylindre sur un cycle complet, colorée selon le temps. Les temps moteur se décalent de 180 degrés d’une ligne à l’autre."
+    },
+    "controls": {
+      "title": "Commandes",
+      "p1": "Tout ce qui se trouve sur la page fonctionne aussi au clavier.",
+      "aside": "Les chiffres viennent d’un petit modèle de cylindre d’un demi-litre, avec un alésage de 86 mm, une course de 86 mm et une bielle de 145 mm. Les pressions sont simplifiées : fiables pour les formes et les proportions, pas pour les valeurs exactes."
+    }
+  },
+  "keyboard": {
+    "jumpToStroke": "Aller à l’admission, la compression, la combustion ou l’échappement",
+    "step": "Faire tourner le vilebrequin par pas de 2°, ou de 15° avec <kbd>Maj</kbd>",
+    "cutaway": "Activer ou désactiver la vue en coupe",
+    "gas": "Activer ou désactiver les couleurs des gaz",
+    "labels": "Activer ou désactiver toutes les étiquettes",
+    "flow": "Activer ou désactiver les flèches de flux des gaz",
+    "engineType": "Basculer entre essence et diesel",
+    "layout": "Basculer entre un cylindre et le quatre-cylindres en ligne",
+    "orbit": "Tourner autour du moteur"
+  },
+  "diagrams": {
+    "valveTiming": {
+      "intake": "Admission",
+      "exhaust": "Échappement",
+      "opens": "ouverture à {{offset}}",
+      "closes": "fermeture à {{offset}}",
+      "overlap": "croisement",
+      "spark": "étincelle",
+      "sparkAt": "étincelle à {{offset}}",
+      "injection": "injection",
+      "injectionAt": "injection à {{offset}}",
+      "title": {
+        "petrol": "Diagramme de distribution du moteur essence.",
+        "diesel": "Diagramme de distribution du moteur diesel."
+      },
+      "summary": "La soupape d’admission s’ouvre {{intakeOpens}} et se ferme {{intakeCloses}}. La soupape d’échappement s’ouvre {{exhaustOpens}} et se ferme {{exhaustCloses}}. Les deux restent ouvertes ensemble pendant {{overlap}} degrés autour du point mort haut."
+    },
+    "pressure": {
+      "peak": "pic à {{value}}",
+      "summary": {
+        "petrol": "Pression dans le cylindre pendant la compression et la combustion-détente, essence et diesel comparés, avec l’essence mise en avant.",
+        "diesel": "Pression dans le cylindre pendant la compression et la combustion-détente, essence et diesel comparés, avec le diesel mis en avant."
+      },
+      "peakSummary": {
+        "petrol": "Le moteur essence culmine à environ {{value}} la pression de l’air extérieur.",
+        "diesel": "Le diesel culmine à environ {{value}} la pression de l’air extérieur."
+      }
+    },
+    "pistonMotion": {
+      "distanceTitle": "Distance depuis le haut, mm",
+      "speedTitle": "Vitesse à {{rpm}}, m/s",
+      "halfStroke": "mi-course",
+      "quarterTurn": "{{distance}} à {{angle}}",
+      "peak": "pic à {{angle}}",
+      "realPiston": "Piston réel",
+      "uprightRod": "Bielle toujours verticale",
+      "description": "Distance du piston depuis le haut et vitesse du piston sur un tour de vilebrequin, comparées à une bielle qui resterait toujours verticale. Le piston a dépassé la mi-course à 90 degrés et atteint sa vitesse maximale avant 90 degrés."
+    },
+    "firingOrder": {
+      "sequence": "Ordre d’allumage",
+      "cylinder": "Cylindre",
+      "chipsLabel": "Temps en cours de chaque cylindre",
+      "description": "Temps de chaque cylindre d’un quatre-cylindres en ligne sur un cycle. Les temps moteur se succèdent tous les 180 degrés, dans l’ordre {{order}}."
+    }
+  },
+  "parts": {
+    "piston": "Piston",
+    "connectingRod": "Bielle",
+    "crankshaft": "Vilebrequin",
+    "flywheel": "Volant moteur",
+    "cylinder": "Cylindre",
+    "combustionChamber": "Chambre de combustion",
+    "intakeValve": "Soupape d’admission",
+    "exhaustValve": "Soupape d’échappement",
+    "intakeCam": "Came d’admission",
+    "exhaustCam": "Came d’échappement",
+    "intakePort": "Conduit d’admission",
+    "exhaustPort": "Conduit d’échappement",
+    "sparkPlug": "Bougie d’allumage",
+    "injector": "Injecteur"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "rpm": "{{value}} tr/min",
+    "metresPerSecond": "{{value}} m/s",
+    "millimetres": "{{value}} mm",
+    "times": "{{value}}×",
+    "ratio": "{{value}} : 1"
+  }
+}

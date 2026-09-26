@@ -1,0 +1,511 @@
+<section class="chapter" data-preset="overview" aria-labelledby="overview-title">
+  <p class="chapter-index">01</p>
+  <h2 id="overview-title" data-i18n="sections.overview.title">A push, turned into a spin</h2>
+  <p data-i18n-html="sections.overview.p1">
+    You are looking at one cylinder of a car engine, cut open. A
+    <strong>piston</strong> slides up and down inside a tube. Above it sit two
+    <strong>valves</strong> and, depending on the fuel, a spark plug or an injector. Below it a
+    <strong>connecting rod</strong> links the piston to the <strong>crankshaft</strong>, the shaft
+    that eventually turns the wheels.
+  </p>
+  <p data-i18n="sections.overview.p2">
+    The whole idea fits in one sentence: burn fuel in a sealed space, let the hot gas push the
+    piston down, and turn that push into rotation. Everything else in the engine exists to repeat
+    this cleanly, over and over.
+  </p>
+  <p data-i18n-html="sections.overview.p3">
+    It repeats as a cycle of four steps called <strong>strokes</strong>. The dial in the corner
+    shows where the engine is in that cycle. The model runs in slow motion: a real car engine idles
+    at around 800 turns a minute and can spin eight times faster than that.
+  </p>
+  <p data-i18n="sections.overview.p4">
+    Drag the model to look around it and scroll over it to zoom. As you read on, the view follows
+    the text.
+  </p>
+</section>
+
+<section class="chapter" data-preset="strokes" aria-labelledby="strokes-title">
+  <p class="chapter-index">02</p>
+  <h2 id="strokes-title" data-i18n="sections.strokes.title">Four strokes</h2>
+  <p data-i18n-html="sections.strokes.p1">
+    A stroke is one trip of the piston from the top of the cylinder to the bottom, or back. The top
+    is called <strong>top dead centre</strong> (TDC) and the bottom
+    <strong>bottom dead centre</strong> (BDC): dead, because the piston stops there for an instant
+    before it changes direction.
+  </p>
+  <ol class="stroke-list">
+    <li data-stroke="intake">
+      <h3 data-i18n="strokes.intake">Intake</h3>
+      <p data-i18n="sections.strokes.intake.body">
+        The piston moves down with the intake valve open, and the growing space draws in fresh
+        charge. A petrol engine takes in air already mixed with fuel. A diesel takes in plain air.
+      </p>
+      <button
+        type="button"
+        class="chip"
+        data-action="jump-stroke"
+        data-value="intake"
+        data-i18n="sections.strokes.intake.show"
+      >
+        Show intake
+      </button>
+    </li>
+    <li data-stroke="compression">
+      <h3 data-i18n="strokes.compression">Compression</h3>
+      <p data-i18n="sections.strokes.compression.body">
+        Both valves shut and the piston rises, squeezing the charge into a tenth of its volume or
+        less. Squeezing a gas heats it, so the charge is several hundred degrees hot before anything
+        has burned.
+      </p>
+      <button
+        type="button"
+        class="chip"
+        data-action="jump-stroke"
+        data-value="compression"
+        data-i18n="sections.strokes.compression.show"
+      >
+        Show compression
+      </button>
+    </li>
+    <li data-stroke="power">
+      <h3 data-i18n="strokes.power">Power</h3>
+      <p data-i18n="sections.strokes.power.body">
+        Near the top, the charge is lit. A petrol engine fires a spark. A diesel sprays fuel into
+        air that is already hot enough to light it. The burning gas expands and shoves the piston
+        down. This is the only stroke that makes power.
+      </p>
+      <button
+        type="button"
+        class="chip"
+        data-action="jump-stroke"
+        data-value="power"
+        data-i18n="sections.strokes.power.show"
+      >
+        Show power
+      </button>
+    </li>
+    <li data-stroke="exhaust">
+      <h3 data-i18n="strokes.exhaust">Exhaust</h3>
+      <p data-i18n="sections.strokes.exhaust.body">
+        The exhaust valve opens and the rising piston pushes the burnt gas out, leaving the cylinder
+        ready to start again.
+      </p>
+      <button
+        type="button"
+        class="chip"
+        data-action="jump-stroke"
+        data-value="exhaust"
+        data-i18n="sections.strokes.exhaust.show"
+      >
+        Show exhaust
+      </button>
+    </li>
+  </ol>
+  <p data-i18n="sections.strokes.p2">
+    Keep an eye on the gas: fresh charge comes in cool, turns hotter as it is squeezed, flares
+    orange as it burns and leaves grey.
+  </p>
+</section>
+
+<section class="chapter" data-preset="cycle" aria-labelledby="cycle-title">
+  <p class="chapter-index">03</p>
+  <h2 id="cycle-title" data-i18n="sections.cycle.title">Two turns for every push</h2>
+  <p data-i18n-html="sections.cycle.p1">
+    Each stroke takes half a turn of the crankshaft, so the four strokes take two full turns:
+    <strong>720 degrees</strong>. That is why the dial counts to 720 rather than 360.
+  </p>
+  <p data-i18n="sections.cycle.p2">
+    The piston reaches the top twice in every cycle: once at 0°, between exhaust and intake, and
+    once at 360°, when the charge is fired. The piston cannot tell the two apart. Only the valves
+    and the spark know which is which.
+  </p>
+  <p data-i18n-html="sections.cycle.p3">
+    Only one stroke in four pushes. Drawing in air, squeezing it and pushing out exhaust all cost
+    work, and for those three strokes the engine has to be carried. The momentum of the moving parts
+    does some of that, and the <strong>flywheel</strong> does the rest: a heavy disc on the end of
+    the crankshaft that soaks up energy during the power stroke and hands it back during the other
+    three.
+  </p>
+  <p data-i18n="sections.cycle.p4">
+    That is why a one-cylinder engine feels lumpy: one hard shove every second turn, and nothing in
+    between. Lawnmowers use a heavy flywheel to smooth it out. Cars add more cylinders, which we
+    will come to.
+  </p>
+</section>
+
+<section class="chapter" data-preset="valves" aria-labelledby="valves-title">
+  <p class="chapter-index">04</p>
+  <h2 id="valves-title" data-i18n="sections.valves.title">Valves and cams</h2>
+  <p data-i18n-html="sections.valves.p1">
+    Each valve is a mushroom-shaped plug. A spring holds it shut against its seat, and a
+    <strong>cam</strong> pushes it open: an egg-shaped lobe on a spinning shaft. As the bump comes
+    round it presses the valve down into the cylinder. As it passes, the spring pulls the valve shut
+    again.
+  </p>
+  <p data-i18n-html="sections.valves.p2">
+    Each valve opens once per cycle, and a cycle is two turns of the crank. So the
+    <strong>camshaft turns at half crank speed</strong>, driven by a belt or chain. Watch the cams:
+    one turn for every two of the crank.
+  </p>
+  <p data-i18n-html="sections.valves.p3">
+    Valves that opened and closed exactly at the dead centres would make the engine breathe badly.
+    Gas has weight and takes time to get moving, so the timing is stretched. The exhaust valve opens
+    <strong>early</strong>, well before bottom dead centre, so the still-pressurised gas can blow
+    out on its own. The intake valve closes <strong>late</strong>, well after bottom dead centre,
+    because the incoming air is still rushing in even as the piston starts back up.
+  </p>
+  <p data-i18n-html="sections.valves.p4">
+    Around the top, between exhaust and intake, both valves are open at once for a moment. This
+    <strong>valve overlap</strong> lets the outgoing exhaust help draw the fresh charge in behind
+    it.
+  </p>
+  <figure class="diagram">
+    <div class="diagram-canvas" data-diagram="valve-timing"></div>
+    <figcaption data-i18n="sections.valves.caption">
+      Valve lift over one cycle for the current engine. The strip wraps around: its right edge joins
+      its left edge, and the shaded bands are where both valves are open.
+    </figcaption>
+  </figure>
+</section>
+
+<section class="chapter" data-preset="ignition" aria-labelledby="ignition-title">
+  <p class="chapter-index">05</p>
+  <h2 id="ignition-title" data-i18n="sections.ignition.title">Lighting the charge</h2>
+  <p data-i18n-html="sections.ignition.p1">
+    Burning is not instant. In a petrol engine, a flame starts at the spark plug and spreads across
+    the chamber in a few thousandths of a second, which is a real slice of a turn. The push is most
+    useful just after top dead centre, so the spark has to jump early:
+    <strong>roughly 10 to 40 degrees before top dead centre</strong>.
+  </p>
+  <p data-i18n="sections.ignition.p2">
+    How early depends on speed. The flame needs about the same time whatever the engine is doing,
+    but at higher revs the crank turns through more degrees in that time, so the spark is advanced
+    as the engine speeds up. Fire too early and the pressure fights the rising piston. Fire too late
+    and it chases a piston that is already on its way down.
+  </p>
+  <p data-i18n-html="sections.ignition.p3">
+    A diesel has no spark plug. Compression heats the air past
+    <strong>about 700 °C</strong>, and shortly before top dead centre the injector sprays fuel into
+    it. The fuel takes a moment to vaporise and catch, a short <strong>ignition delay</strong>, and
+    then burns about as fast as it is injected. The burn is stretched out over the injection instead
+    of racing across the chamber in one flame front.
+  </p>
+  <p data-i18n="sections.ignition.p4">
+    The graph shows the result. Petrol pressure climbs to a sharp peak just after the top. Diesel
+    starts from a much higher squeeze, and its burn holds the pressure up while the piston starts
+    down.
+  </p>
+  <figure class="diagram">
+    <div class="diagram-canvas" data-diagram="pressure"></div>
+    <figcaption data-i18n="sections.ignition.caption">
+      Cylinder pressure through compression and power, compared with the air outside. Intake and
+      exhaust stay close to 1× and are left out. The bold curve is the engine on screen, and the
+      line follows it live.
+    </figcaption>
+  </figure>
+</section>
+
+<section class="chapter" data-preset="crank" aria-labelledby="crank-title">
+  <p class="chapter-index">06</p>
+  <h2 id="crank-title" data-i18n="sections.crank.title">From push to spin</h2>
+  <p data-i18n-html="sections.crank.p1">
+    The connecting rod joins the piston to an offset pin on the crankshaft, the
+    <strong>crank pin</strong>. As the pin swings round in a circle, the rod turns the piston's
+    straight push into rotation, the way your leg turns a bicycle pedal.
+  </p>
+  <p data-i18n-html="sections.crank.p2">
+    The piston does not move in a smooth sine wave. The rod tilts as the pin swings out to the side,
+    which pulls the piston further down than the pin's own drop. At 90 degrees of crank the piston
+    is already past halfway: about 50 of its 86 mm. So it moves
+    <strong>faster near top dead centre than near bottom dead centre</strong>, and it reaches top
+    speed before the crank has turned 90 degrees.
+  </p>
+  <p data-i18n-html="sections.crank.p3">
+    At 3,000 rpm that top speed is about 14 m/s, and the piston stops dead and reverses twice every
+    turn. Heavy <strong>counterweights</strong> opposite the crank pin balance the spinning mass of
+    the pin and rod, so the engine does not shake itself apart.
+  </p>
+  <figure class="diagram">
+    <div class="diagram-canvas" data-diagram="piston-motion"></div>
+    <figcaption data-i18n="sections.crank.caption">
+      Piston position and speed over one turn of the crank. The dashed lines show what a rod that
+      never tilted would do.
+    </figcaption>
+  </figure>
+</section>
+
+<section class="chapter" data-preset="compression" aria-labelledby="compression-title">
+  <p class="chapter-index">07</p>
+  <h2 id="compression-title" data-i18n="sections.compression.title">How hard to squeeze</h2>
+  <p data-i18n-html="sections.compression.p1">
+    The <strong>compression ratio</strong> compares the space above the piston at bottom dead centre
+    with the space left at top dead centre. At 10 : 1, the charge is squeezed into a tenth of the
+    room it had.
+  </p>
+  <p data-i18n-html="sections.compression.p2">
+    A higher ratio lets the burning gas expand further, so more of its heat turns into push: more
+    work from the same fuel. So why not squeeze harder? A petrol engine compresses fuel and air
+    together, and squeezing heats them. Go too far and pockets of mixture light themselves before
+    the flame arrives, a sharp <strong>knock</strong> that can crack pistons. That keeps petrol
+    engines at <strong>roughly 9 to 13 : 1</strong>.
+  </p>
+  <p data-i18n-html="sections.compression.p3">
+    A diesel squeezes only air, so there is nothing to light early, and it needs the heat: the air
+    must be hot enough to ignite the fuel. Diesels run at
+    <strong>about 14 to 22 : 1</strong>.
+  </p>
+  <div class="compression-control">
+    <div class="compression-header">
+      <label for="compression-ratio" data-i18n="sections.compression.control.label">
+        Compression ratio
+      </label>
+      <output class="number" for="compression-ratio" data-readout="compression-ratio">
+        10.0 : 1
+      </output>
+    </div>
+    <div class="compression-track">
+      <input
+        id="compression-ratio"
+        type="range"
+        class="range compression-range"
+        data-control="compression"
+      />
+      <div class="compression-bands" aria-hidden="true">
+        <span
+          class="compression-band"
+          data-band="petrol"
+          data-i18n="sections.compression.control.petrolBand"
+        >
+          petrol
+        </span>
+        <span
+          class="compression-band"
+          data-band="diesel"
+          data-i18n="sections.compression.control.dieselBand"
+        >
+          diesel
+        </span>
+      </div>
+    </div>
+    <dl class="compression-readouts">
+      <div>
+        <dt data-i18n="sections.compression.control.clearance">Gap above the piston</dt>
+        <dd class="number" data-readout="clearance">9.6 mm</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.compression.control.pressure">Pressure before burning</dt>
+        <dd class="number" data-readout="compression-pressure">20×</dd>
+      </div>
+    </dl>
+  </div>
+  <p data-i18n="sections.compression.p4">
+    The model pauses at top dead centre here, so you can watch the gap above the piston shrink as
+    you raise the ratio.
+  </p>
+</section>
+
+<section class="chapter" data-preset="fuel" aria-labelledby="fuel-title">
+  <p class="chapter-index">08</p>
+  <h2 id="fuel-title" data-i18n="sections.fuel.title">Petrol or diesel</h2>
+  <p data-i18n="sections.fuel.p1">
+    Both engines run the same four strokes. They differ in how the fuel gets in and what lights it.
+  </p>
+  <div class="table-wrap">
+    <table class="comparison">
+      <thead>
+        <tr>
+          <th scope="col">
+            <span class="visually-hidden" data-i18n="sections.fuel.table.feature"> Feature </span>
+          </th>
+          <th scope="col" data-i18n="engine.types.petrol">Petrol</th>
+          <th scope="col" data-i18n="engine.types.diesel">Diesel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row" data-i18n="sections.fuel.table.fuelIn.label">Fuel gets in</th>
+          <td data-i18n="sections.fuel.table.fuelIn.petrol">
+            Mixed with the air on its way in, or sprayed in during intake
+          </td>
+          <td data-i18n="sections.fuel.table.fuelIn.diesel">
+            Injected straight into hot air at the end of compression
+          </td>
+        </tr>
+        <tr>
+          <th scope="row" data-i18n="sections.fuel.table.lighting.label">What lights it</th>
+          <td data-i18n="sections.fuel.table.lighting.petrol">A spark</td>
+          <td data-i18n="sections.fuel.table.lighting.diesel">The heat of compression</td>
+        </tr>
+        <tr>
+          <th scope="row" data-i18n="sections.fuel.table.ratio.label">Compression ratio</th>
+          <td class="number" data-i18n="sections.fuel.table.ratio.petrol">9 to 13 : 1</td>
+          <td class="number" data-i18n="sections.fuel.table.ratio.diesel">14 to 22 : 1</td>
+        </tr>
+        <tr>
+          <th scope="row" data-i18n="sections.fuel.table.power.label">Power is set by</th>
+          <td data-i18n="sections.fuel.table.power.petrol">A throttle that limits the air</td>
+          <td data-i18n="sections.fuel.table.power.diesel">How much fuel is injected</td>
+        </tr>
+        <tr>
+          <th scope="row" data-i18n="sections.fuel.table.topSpeed.label">Typical top speed</th>
+          <td class="number" data-i18n="sections.fuel.table.topSpeed.petrol">6,000 to 7,000 rpm</td>
+          <td class="number" data-i18n="sections.fuel.table.topSpeed.diesel">4,000 to 5,000 rpm</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p data-i18n-html="sections.fuel.p2">
+    A diesel is <strong>more efficient</strong> for three reasons. It squeezes harder, so each drop
+    of fuel does more work. It runs lean, with far more air than the fuel needs. And it has no
+    throttle, so it never wastes effort sucking air past a half-closed flap.
+  </p>
+  <p data-i18n-html="sections.fuel.p3">
+    A petrol engine <strong>revs higher and runs smoother</strong>. Its mixture is ready to burn the
+    moment the spark fires, and the flame is quick. Its lower pressures allow lighter parts that are
+    happy to spin fast. A diesel waits for its fuel to mix and catch, and when it does the pressure
+    jumps, which is the source of its familiar clatter.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="engine-type"
+      data-value="petrol"
+      data-i18n="sections.fuel.showPetrol"
+    >
+      Show petrol
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="engine-type"
+      data-value="diesel"
+      data-i18n="sections.fuel.showDiesel"
+    >
+      Show diesel
+    </button>
+  </p>
+  <p class="aside" data-i18n="sections.fuel.aside">
+    A hybrid pairs an engine like this with an electric motor that helps it along, lets it switch
+    off when it is not needed and recovers energy when braking. That is a chapter this explainer
+    does not have yet.
+  </p>
+</section>
+
+<section class="chapter" data-preset="inline4" aria-labelledby="inline4-title">
+  <p class="chapter-index">09</p>
+  <h2 id="inline4-title" data-i18n="sections.inline4.title">Four cylinders</h2>
+  <p data-i18n-html="sections.inline4.p1">
+    One cylinder gives one shove every two turns. Four cylinders sharing a crankshaft, each at a
+    different point in the cycle, give a shove every half turn:
+    <strong>a power stroke every 180 degrees</strong> instead of every 720. The push on the crank is
+    far steadier, so the flywheel can be much lighter.
+  </p>
+  <p data-i18n="sections.inline4.p2">
+    The crank pins are arranged so pistons 1 and 4 move together, and 2 and 3 move together in the
+    opposite direction. When the outer pair rises the inner pair falls, so their main up-and-down
+    forces cancel out.
+  </p>
+  <p data-firing-order>
+    Pistons that move together are never on the same stroke. When piston 1 fires, piston 4 is at the
+    top too, finishing its exhaust. The cylinders fire in the order
+    <strong>1-3-4-2</strong>, which alternates between the ends of the crankshaft and spreads the
+    pulses evenly along it.
+  </p>
+  <figure class="diagram">
+    <div class="diagram-canvas" data-diagram="firing-order"></div>
+    <figcaption data-i18n="sections.inline4.caption">
+      Each row is one cylinder over a full cycle, coloured by stroke. The power strokes step along
+      by 180 degrees.
+    </figcaption>
+  </figure>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="layout"
+      data-value="single"
+      data-i18n="engine.layouts.single"
+    >
+      One cylinder
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="layout"
+      data-value="inline4"
+      data-i18n="engine.layouts.inline4"
+    >
+      Inline four
+    </button>
+  </p>
+</section>
+
+<section class="chapter keyboard-only" data-preset="controls" aria-labelledby="controls-title">
+  <p class="chapter-index">10</p>
+  <h2 id="controls-title" data-i18n="sections.controls.title">Controls</h2>
+  <p data-i18n="sections.controls.p1">Everything on the page works from the keyboard as well.</p>
+  <div class="table-wrap">
+    <table class="shortcuts">
+      <tbody>
+        <tr>
+          <th scope="row"><kbd data-i18n="keyboard.keys.space">Space</kbd></th>
+          <td data-i18n="keyboard.playPause">Play or pause</td>
+        </tr>
+        <tr>
+          <th scope="row"><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd></th>
+          <td data-i18n="keyboard.jumpToStroke">Jump to intake, compression, power or exhaust</td>
+        </tr>
+        <tr>
+          <th scope="row"><kbd>←</kbd> <kbd>→</kbd></th>
+          <td data-i18n-html="keyboard.step">Step the crank 2°, or 15° with <kbd>Shift</kbd></td>
+        </tr>
+        <tr>
+          <th scope="row"><kbd>↑</kbd> <kbd>↓</kbd></th>
+          <td data-i18n="keyboard.speed">Speed up or slow down</td>
+        </tr>
+        <tr>
+          <th scope="row"><kbd>C</kbd></th>
+          <td data-i18n="keyboard.cutaway">Cutaway on or off</td>
+        </tr>
+        <tr>
+          <th scope="row"><kbd>G</kbd></th>
+          <td data-i18n="keyboard.gas">Gas colours on or off</td>
+        </tr>
+        <tr>
+          <th scope="row"><kbd>L</kbd></th>
+          <td data-i18n="keyboard.labels">All labels on or off</td>
+        </tr>
+        <tr>
+          <th scope="row"><kbd>F</kbd></th>
+          <td data-i18n="keyboard.flow">Gas flow arrows on or off</td>
+        </tr>
+        <tr>
+          <th scope="row"><kbd>E</kbd></th>
+          <td data-i18n="keyboard.engineType">Switch between petrol and diesel</td>
+        </tr>
+        <tr>
+          <th scope="row"><kbd>M</kbd></th>
+          <td data-i18n="keyboard.layout">Switch between one cylinder and the inline four</td>
+        </tr>
+        <tr>
+          <th scope="row"><kbd>R</kbd></th>
+          <td data-i18n="keyboard.resetCamera">Reset the camera</td>
+        </tr>
+        <tr>
+          <th scope="row" data-i18n="keyboard.keys.drag">Drag</th>
+          <td data-i18n="keyboard.orbit">Orbit around the engine</td>
+        </tr>
+        <tr>
+          <th scope="row" data-i18n="keyboard.keys.scroll">Scroll or pinch</th>
+          <td data-i18n="keyboard.zoom">Zoom in and out</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="aside" data-i18n="sections.controls.aside">
+    Numbers come from a small model of a half-litre cylinder with an 86 mm bore, an 86 mm stroke and
+    a 145 mm connecting rod. Pressures are simplified: good for shapes and proportions, not for
+    exact figures.
+  </p>
+</section>

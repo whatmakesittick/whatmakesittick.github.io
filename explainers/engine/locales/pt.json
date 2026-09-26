@@ -1,0 +1,304 @@
+{
+  "meta": {
+    "title": "Como funciona um motor",
+    "eyebrow": "O motor de quatro tempos, por dentro",
+    "tagline": "Todo mundo já ouviu um motor em marcha lenta. Quase ninguém viu o pequeno fogo que ele acende, sempre na hora certa, centenas de vezes por minuto. Aqui está ele, em câmera bem lenta.",
+    "description": "Um passeio interativo e em câmera lenta por dentro de um motor de quatro tempos: os tempos, as válvulas, a ignição, o virabrequim, a compressão, gasolina contra diesel e o quatro cilindros em linha.",
+    "summary": "Um passeio interativo e em câmera lenta por dentro de um motor de quatro tempos: os tempos, as válvulas, a ignição, o virabrequim, a compressão, gasolina contra diesel e o quatro cilindros em linha."
+  },
+  "stage": {
+    "label": "Modelo interativo do motor",
+    "gauge": "Mostrador do ciclo e leituras ao vivo"
+  },
+  "controls": {
+    "label": "Controles do motor",
+    "crankAngle": "Ângulo do virabrequim",
+    "angleValue": {
+      "intake": "{{angle}}, tempo de admissão",
+      "compression": "{{angle}}, tempo de compressão",
+      "power": "{{angle}}, tempo de combustão",
+      "exhaust": "{{angle}}, tempo de escape"
+    },
+    "jumpToStrokeGroup": "Ir para um tempo",
+    "jumpToStroke": {
+      "intake": "Ir para o tempo de admissão",
+      "compression": "Ir para o tempo de compressão",
+      "power": "Ir para o tempo de combustão",
+      "exhaust": "Ir para o tempo de escape"
+    },
+    "speedDescriptions": {
+      "verySlow": "muito devagar",
+      "slowMotion": "câmera lenta",
+      "halfIdle": "metade da marcha lenta",
+      "nearIdle": "quase marcha lenta"
+    },
+    "fuel": "Combustível",
+    "cylinders": "Cilindros",
+    "views": {
+      "cutaway": {
+        "name": "Vista em corte",
+        "short": "Corte",
+        "hint": "Vista em corte (C)"
+      },
+      "gas": {
+        "name": "Cores do gás",
+        "short": "Gás",
+        "hint": "Cores do gás (G)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      },
+      "flow": {
+        "name": "Fluxo do gás",
+        "short": "Fluxo",
+        "hint": "Fluxo do gás (F)"
+      }
+    }
+  },
+  "strokes": {
+    "intake": "Admissão",
+    "compression": "Compressão",
+    "power": "Combustão",
+    "exhaust": "Escape"
+  },
+  "engine": {
+    "types": {
+      "petrol": "Gasolina",
+      "diesel": "Diesel"
+    },
+    "layouts": {
+      "single": "Um cilindro",
+      "inline4": "Quatro em linha"
+    }
+  },
+  "deadCentres": {
+    "top": "PMS",
+    "bottom": "PMI",
+    "before": "{{degrees}} antes do {{centre}}",
+    "after": "{{degrees}} depois do {{centre}}",
+    "early": "{{degrees}} antes",
+    "late": "{{degrees}} depois"
+  },
+  "dial": {
+    "label": "Mostrador do ciclo. Um círculo completo equivale a duas voltas do virabrequim, 720 graus, com uma cor para cada tempo e, por dentro, os intervalos em que as válvulas ficam abertas.",
+    "legend": {
+      "label": "Legenda do mostrador",
+      "intakeOpen": "Admissão aberta",
+      "exhaustOpen": "Escape aberto",
+      "spark": "Faísca",
+      "injection": "Injeção"
+    }
+  },
+  "readouts": {
+    "crankAngle": "Ângulo do virabrequim",
+    "stroke": "Tempo",
+    "engineSpeed": "Rotação do motor",
+    "pressure": "Pressão",
+    "pistonSpeed": "Velocidade do pistão"
+  },
+  "sections": {
+    "overview": {
+      "title": "Um empurrão que vira giro",
+      "p1": "Você está vendo um cilindro do motor de um carro, aberto ao meio. Um <strong>pistão</strong> sobe e desce dentro de um tubo. Acima dele ficam duas <strong>válvulas</strong> e, conforme o combustível, uma vela de ignição ou um bico injetor. Abaixo dele, uma <strong>biela</strong> liga o pistão ao <strong>virabrequim</strong>, o eixo que, no fim das contas, faz as rodas girarem.",
+      "p2": "A ideia toda cabe em uma frase: queimar combustível num espaço fechado, deixar o gás quente empurrar o pistão para baixo e transformar esse empurrão em giro. Todo o resto do motor existe para repetir isso sem falhas, de novo e de novo.",
+      "p3": "Isso se repete num ciclo de quatro etapas chamadas <strong>tempos</strong>. O mostrador no canto indica em que ponto do ciclo o motor está. O modelo roda em câmera lenta: um motor de carro de verdade fica em marcha lenta a umas 800 voltas por minuto e pode girar oito vezes mais rápido que isso.",
+      "p4": "Arraste o modelo para ver de outros ângulos e role sobre ele para dar zoom. Conforme você lê, a vista acompanha o texto."
+    },
+    "strokes": {
+      "title": "Quatro tempos",
+      "p1": "Um tempo é um percurso do pistão, do alto do cilindro até embaixo, ou de volta. O ponto mais alto se chama <strong>ponto morto superior</strong> (PMS) e o mais baixo, <strong>ponto morto inferior</strong> (PMI): morto, porque o pistão fica parado ali por um instante antes de mudar de direção.",
+      "intake": {
+        "body": "O pistão desce com a válvula de admissão aberta, e o espaço que cresce puxa uma carga fresca para dentro. O motor a gasolina aspira ar já misturado com combustível. O diesel aspira só ar.",
+        "show": "Ver admissão"
+      },
+      "compression": {
+        "body": "As duas válvulas se fecham e o pistão sobe, espremendo a carga em um décimo do volume, ou menos. Comprimir um gás o aquece, então a carga chega a várias centenas de graus antes que qualquer coisa queime.",
+        "show": "Ver compressão"
+      },
+      "power": {
+        "body": "Perto do topo, a carga pega fogo. O motor a gasolina solta uma faísca. O diesel borrifa combustível num ar que já está quente o bastante para acendê-lo. O gás em combustão se expande e empurra o pistão para baixo com força. É o único tempo que realmente move o motor.",
+        "show": "Ver combustão"
+      },
+      "exhaust": {
+        "body": "A válvula de escape se abre e o pistão, ao subir, empurra o gás queimado para fora. O cilindro fica pronto para começar tudo de novo.",
+        "show": "Ver escape"
+      },
+      "p2": "Fique de olho no gás: a carga fresca entra fria, esquenta ao ser comprimida, acende em laranja ao queimar e sai cinza."
+    },
+    "cycle": {
+      "title": "Duas voltas para cada empurrão",
+      "p1": "Cada tempo leva meia volta do virabrequim, então os quatro tempos levam duas voltas completas: <strong>720 graus</strong>. É por isso que o mostrador conta até 720, e não até 360.",
+      "p2": "O pistão chega ao topo duas vezes em cada ciclo: uma em 0°, entre o escape e a admissão, e outra em 360°, quando a carga pega fogo. O pistão não sabe distinguir uma da outra. Só as válvulas e a faísca sabem qual é qual.",
+      "p3": "Só um tempo em quatro empurra. Aspirar o ar, comprimi-lo e expulsar os gases queimados custa trabalho, e nesses três tempos o motor precisa ser levado adiante. O embalo das peças em movimento cuida de parte disso, e o <strong>volante do motor</strong> faz o resto: um disco pesado na ponta do virabrequim que acumula energia durante o tempo de combustão e a devolve nos outros três.",
+      "p4": "É por isso que um motor de um cilindro trabalha aos trancos: um empurrão forte a cada duas voltas, e nada no meio. Cortadores de grama usam um volante pesado para suavizar isso. Os carros usam mais cilindros, e já vamos chegar lá."
+    },
+    "valves": {
+      "title": "Válvulas e cames",
+      "p1": "Cada válvula é uma tampa em forma de cogumelo. Uma mola a mantém fechada contra a sede, e um <strong>came</strong> a empurra para abrir: um ressalto em forma de ovo num eixo que gira. Quando a parte saliente chega, ela empurra a válvula para baixo, para dentro do cilindro. Quando passa, a mola puxa a válvula de volta e a fecha.",
+      "p2": "Cada válvula abre uma vez por ciclo, e um ciclo são duas voltas do virabrequim. Por isso o <strong>comando de válvulas gira na metade da rotação do virabrequim</strong>, movido por uma correia ou corrente. Observe os cames: uma volta para cada duas do virabrequim.",
+      "p3": "Válvulas que abrissem e fechassem exatamente nos pontos mortos fariam o motor respirar mal. O gás tem peso e leva tempo para entrar em movimento, então as aberturas são estendidas. A válvula de escape abre <strong>cedo</strong>, bem antes do ponto morto inferior, para que o gás ainda sob pressão saia sozinho. A válvula de admissão fecha <strong>tarde</strong>, bem depois do ponto morto inferior, porque o ar continua entrando com força mesmo quando o pistão já começa a subir.",
+      "p4": "Perto do topo, entre o escape e a admissão, as duas válvulas ficam abertas ao mesmo tempo por um instante. Esse <strong>cruzamento de válvulas</strong> deixa o gás que sai ajudar a puxar a carga fresca logo atrás dele.",
+      "caption": "Levantamento das válvulas ao longo de um ciclo, no motor exibido. O gráfico dá a volta: a borda direita continua na esquerda, e as áreas sombreadas mostram quando as duas válvulas estão abertas."
+    },
+    "ignition": {
+      "title": "Como a carga pega fogo",
+      "p1": "A queima não é instantânea. Num motor a gasolina, a chama nasce na vela de ignição e se espalha pela câmara em poucos milésimos de segundo, o que já é um bom pedaço de uma volta. O empurrão rende mais logo depois do ponto morto superior, então a faísca precisa saltar antes: <strong>algo entre 10 e 40 graus antes do ponto morto superior</strong>.",
+      "p2": "Quanto antes, depende da rotação. A chama precisa de mais ou menos o mesmo tempo, não importa o que o motor esteja fazendo, mas em rotações altas o virabrequim gira mais graus nesse tempo. Por isso o avanço de ignição aumenta conforme o motor acelera. Com faísca cedo demais, a pressão briga com o pistão que sobe. Tarde demais, ela corre atrás de um pistão que já está descendo.",
+      "p3": "O diesel não tem vela de ignição. A compressão aquece o ar a mais de <strong>uns 700 °C</strong>, e pouco antes do ponto morto superior o bico injetor borrifa combustível nele. O combustível leva um instante para vaporizar e pegar fogo, um curto <strong>atraso de ignição</strong>, e depois queima mais ou menos no ritmo em que é injetado. A queima se estende ao longo da injeção, em vez de atravessar a câmara numa única frente de chama.",
+      "p4": "O gráfico mostra o resultado. Na gasolina, a pressão sobe até um pico agudo logo depois do topo. O diesel parte de uma compressão bem maior, e sua queima segura a pressão alta enquanto o pistão começa a descer.",
+      "caption": "Pressão no cilindro durante a compressão e a combustão, comparada com a do ar externo. Admissão e escape ficam perto de 1× e não aparecem. A curva em negrito é o motor na tela, e a linha o acompanha ao vivo."
+    },
+    "crank": {
+      "title": "Do empurrão ao giro",
+      "p1": "A biela liga o pistão a um pino fora do centro do virabrequim, o <strong>moente</strong>. Enquanto o moente gira em círculo, a biela transforma o empurrão em linha reta do pistão em rotação, do mesmo jeito que sua perna gira o pedal de uma bicicleta.",
+      "p2": "O pistão não se move numa onda senoidal certinha. A biela se inclina quando o moente vai para o lado, e isso puxa o pistão mais para baixo do que o próprio moente desceu. Com o virabrequim em 90 graus, o pistão já passou da metade: cerca de 50 dos seus 86 mm. Por isso ele se move <strong>mais rápido perto do ponto morto superior do que perto do ponto morto inferior</strong>, e chega à velocidade máxima antes de o virabrequim girar 90 graus.",
+      "p3": "A 3.000 rpm, essa velocidade máxima é de cerca de 14 m/s, e o pistão para por completo e muda de sentido duas vezes a cada volta. <strong>Contrapesos</strong> pesados, do lado oposto ao moente, equilibram a massa girante do moente e da biela, para que o motor não se desmanche de tanto vibrar.",
+      "caption": "Posição e velocidade do pistão ao longo de uma volta do virabrequim. As linhas tracejadas mostram o que faria uma biela que nunca se inclinasse."
+    },
+    "compression": {
+      "title": "Quanto comprimir",
+      "p1": "A <strong>taxa de compressão</strong> compara o espaço acima do pistão no ponto morto inferior com o espaço que sobra no ponto morto superior. Numa taxa de 10:1, a carga é espremida em um décimo do espaço que tinha.",
+      "p2": "Uma taxa maior deixa o gás em combustão se expandir mais, então uma parte maior do seu calor vira empurrão: mais trabalho com o mesmo combustível. Então por que não comprimir mais? O motor a gasolina comprime combustível e ar juntos, e comprimir esquenta. Se exagerar, bolsões de mistura se acendem sozinhos antes que a chama chegue, uma <strong>detonação</strong> seca, a famosa batida de pino, que pode trincar pistões. Por isso os motores a gasolina ficam em <strong>cerca de 9:1 a 13:1</strong>.",
+      "p3": "O diesel comprime só ar, então não há nada para acender antes da hora, e ele precisa desse calor: o ar tem que estar quente o bastante para inflamar o combustível. Os motores diesel trabalham com <strong>cerca de 14:1 a 22:1</strong>.",
+      "control": {
+        "label": "Taxa de compressão",
+        "petrolBand": "gasolina",
+        "dieselBand": "diesel",
+        "clearance": "Espaço acima do pistão",
+        "pressure": "Pressão antes da queima"
+      },
+      "p4": "Aqui o modelo para no ponto morto superior, para você ver o espaço acima do pistão diminuir conforme aumenta a taxa."
+    },
+    "fuel": {
+      "title": "Gasolina ou diesel",
+      "p1": "Os dois motores fazem os mesmos quatro tempos. A diferença está em como o combustível entra e no que o acende.",
+      "table": {
+        "feature": "Característica",
+        "fuelIn": {
+          "label": "Como o combustível entra",
+          "petrol": "Misturado ao ar no caminho, ou injetado durante a admissão",
+          "diesel": "Injetado direto no ar quente, no fim da compressão"
+        },
+        "lighting": {
+          "label": "O que acende",
+          "petrol": "Uma faísca",
+          "diesel": "O calor da compressão"
+        },
+        "ratio": {
+          "label": "Taxa de compressão",
+          "petrol": "9:1 a 13:1",
+          "diesel": "14:1 a 22:1"
+        },
+        "power": {
+          "label": "A potência é controlada por",
+          "petrol": "Uma borboleta que limita o ar",
+          "diesel": "A quantidade de combustível injetada"
+        },
+        "topSpeed": {
+          "label": "Rotação máxima típica",
+          "petrol": "6.000 a 7.000 rpm",
+          "diesel": "4.000 a 5.000 rpm"
+        }
+      },
+      "p2": "O diesel é <strong>mais eficiente</strong> por três motivos. Ele comprime mais, então cada gota de combustível rende mais trabalho. Ele trabalha com mistura pobre, com muito mais ar do que o combustível precisa. E não tem borboleta, então nunca gasta esforço puxando ar por uma passagem meio fechada.",
+      "p3": "O motor a gasolina <strong>gira mais alto e trabalha mais suave</strong>. A mistura está pronta para queimar no instante em que a faísca salta, e a chama é rápida. As pressões menores permitem peças mais leves, que giram rápido sem problema. O diesel espera o combustível se misturar e pegar fogo, e quando isso acontece a pressão dá um salto. É daí que vem aquele barulho áspero e batido que todo mundo conhece.",
+      "showPetrol": "Ver gasolina",
+      "showDiesel": "Ver diesel",
+      "aside": "Um carro híbrido combina um motor como este com um motor elétrico, que dá uma ajuda, deixa o motor a combustão desligar quando não é necessário e recupera energia nas frenagens. Esse capítulo ainda não existe nesta explicação."
+    },
+    "inline4": {
+      "title": "Quatro cilindros",
+      "p1": "Um cilindro dá um empurrão a cada duas voltas. Quatro cilindros no mesmo virabrequim, cada um num ponto diferente do ciclo, dão um empurrão a cada meia volta: <strong>um tempo de combustão a cada 180 graus</strong>, em vez de a cada 720. A força sobre o virabrequim fica muito mais constante, e o volante pode ser bem mais leve.",
+      "p2": "Os moentes são dispostos de modo que os pistões 1 e 4 se movem juntos, e o 2 e o 3 também, no sentido oposto. Quando o par de fora sobe, o par de dentro desce, e as principais forças de sobe e desce se anulam.",
+      "p3": "Pistões que se movem juntos nunca estão no mesmo tempo. Quando há combustão no cilindro 1, o pistão 4 também está no topo, terminando o escape. A ordem de ignição é <strong>{{firingOrder}}</strong>, que alterna entre as pontas do virabrequim e distribui os pulsos por igual ao longo dele.",
+      "caption": "Cada linha é um cilindro ao longo de um ciclo completo, com uma cor para cada tempo. Os tempos de combustão avançam de 180 em 180 graus."
+    },
+    "controls": {
+      "title": "Controles",
+      "p1": "Tudo na página também funciona pelo teclado.",
+      "aside": "Os números vêm de um pequeno modelo de um cilindro de meio litro, com 86 mm de diâmetro, 86 mm de curso e biela de 145 mm. As pressões são simplificadas: servem para formas e proporções, não para valores exatos."
+    }
+  },
+  "keyboard": {
+    "jumpToStroke": "Ir para admissão, compressão, combustão ou escape",
+    "step": "Girar o virabrequim 2°, ou 15° com <kbd>Shift</kbd>",
+    "cutaway": "Ligar ou desligar a vista em corte",
+    "gas": "Ligar ou desligar as cores do gás",
+    "labels": "Ligar ou desligar todos os rótulos",
+    "flow": "Ligar ou desligar as setas de fluxo do gás",
+    "engineType": "Alternar entre gasolina e diesel",
+    "layout": "Alternar entre um cilindro e quatro em linha",
+    "orbit": "Girar em volta do motor"
+  },
+  "diagrams": {
+    "valveTiming": {
+      "intake": "Admissão",
+      "exhaust": "Escape",
+      "opens": "abre {{offset}}",
+      "closes": "fecha {{offset}}",
+      "overlap": "cruzamento",
+      "spark": "faísca",
+      "sparkAt": "faísca {{offset}}",
+      "injection": "injeção",
+      "injectionAt": "injeção {{offset}}",
+      "title": {
+        "petrol": "Abertura das válvulas no motor a gasolina.",
+        "diesel": "Abertura das válvulas no motor diesel."
+      },
+      "summary": "A válvula de admissão abre {{intakeOpens}} e fecha {{intakeCloses}}. A válvula de escape abre {{exhaustOpens}} e fecha {{exhaustCloses}}. As duas ficam abertas juntas por {{overlap}} graus em torno do ponto morto superior."
+    },
+    "pressure": {
+      "peak": "pico de {{value}}",
+      "summary": {
+        "petrol": "Pressão no cilindro durante os tempos de compressão e combustão, comparando gasolina e diesel, com a gasolina em destaque.",
+        "diesel": "Pressão no cilindro durante os tempos de compressão e combustão, comparando gasolina e diesel, com o diesel em destaque."
+      },
+      "peakSummary": {
+        "petrol": "Na gasolina, o pico chega a cerca de {{value}} a pressão do ar externo.",
+        "diesel": "No diesel, o pico chega a cerca de {{value}} a pressão do ar externo."
+      }
+    },
+    "pistonMotion": {
+      "distanceTitle": "Distância abaixo do topo, mm",
+      "speedTitle": "Velocidade a {{rpm}}, m/s",
+      "halfStroke": "meio curso",
+      "quarterTurn": "{{distance}} em {{angle}}",
+      "peak": "pico em {{angle}}",
+      "realPiston": "Pistão real",
+      "uprightRod": "Biela que nunca inclina",
+      "description": "Distância do pistão até o topo e velocidade do pistão ao longo de uma volta do virabrequim, comparadas com uma biela que nunca se inclina. O pistão já passou da metade aos 90 graus e chega à velocidade máxima antes dos 90 graus."
+    },
+    "firingOrder": {
+      "sequence": "Ordem de ignição",
+      "cylinder": "Cilindro",
+      "chipsLabel": "Tempo atual de cada cilindro",
+      "description": "Tempos de cada cilindro de um motor quatro em linha ao longo de um ciclo. Os tempos de combustão se sucedem a cada 180 graus, na ordem {{order}}."
+    }
+  },
+  "parts": {
+    "piston": "Pistão",
+    "connectingRod": "Biela",
+    "crankshaft": "Virabrequim",
+    "flywheel": "Volante do motor",
+    "cylinder": "Cilindro",
+    "combustionChamber": "Câmara de combustão",
+    "intakeValve": "Válvula de admissão",
+    "exhaustValve": "Válvula de escape",
+    "intakeCam": "Came de admissão",
+    "exhaustCam": "Came de escape",
+    "intakePort": "Duto de admissão",
+    "exhaustPort": "Duto de escape",
+    "sparkPlug": "Vela de ignição",
+    "injector": "Bico injetor"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "rpm": "{{value}} rpm",
+    "metresPerSecond": "{{value}} m/s",
+    "millimetres": "{{value}} mm",
+    "times": "{{value}}×",
+    "ratio": "{{value}}:1"
+  }
+}
