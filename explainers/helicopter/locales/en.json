@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "title": "How a helicopter flies",
+    "eyebrow": "The helicopter rotor, slowed down",
+    "tagline": "A helicopter holds itself up on wings that spin. Change the angle of the blades and it climbs or sinks, tip the spinning disc and it flies forward, and a small rotor at the tail stops the whole machine from turning round.",
+    "description": "An interactive, slowed-down look at how a helicopter flies: a spinning wing that makes lift, collective pitch, torque and the tail rotor, and the advancing and retreating blade in forward flight.",
+    "summary": "Rotor lift, collective pitch, the tail rotor and forward flight."
+  },
+  "stage": {
+    "label": "Interactive helicopter model",
+    "gauge": "Live rotor readings"
+  },
+  "controls": {
+    "label": "Helicopter controls",
+    "flightMode": "Flight",
+    "speedDescriptions": {
+      "verySlow": "very slow",
+      "slowMotion": "slow motion",
+      "nearReal": "close to real speed"
+    },
+    "views": {
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      },
+      "flow": {
+        "name": "Airflow",
+        "short": "Airflow",
+        "hint": "Airflow (F)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Rotor angle",
+    "phases": "Jump to a half turn",
+    "speed": "Rotor speed",
+    "jump": {
+      "advancing": "Jump to the advancing half",
+      "retreating": "Jump to the retreating half"
+    },
+    "value": {
+      "advancing": "{{angle}}, marked blade advancing",
+      "retreating": "{{angle}}, marked blade retreating"
+    }
+  },
+  "phases": {
+    "advancing": "Advancing",
+    "retreating": "Retreating"
+  },
+  "flightModes": {
+    "hover": "Hover",
+    "forward": "Forward"
+  },
+  "tendencies": {
+    "descend": "Sinks",
+    "hover": "Hovers",
+    "climb": "Climbs"
+  },
+  "readouts": {
+    "azimuth": "Rotor angle",
+    "half": "Marked blade",
+    "rotorSpeed": "Rotor speed",
+    "tipSpeed": "Tip speed",
+    "bladePitch": "Blade pitch"
+  },
+  "parts": {
+    "mainRotor": "Main rotor",
+    "markedBlade": "Marked blade",
+    "swashplate": "Swashplate",
+    "fuselage": "Fuselage",
+    "tailBoom": "Tail boom",
+    "tailRotor": "Tail rotor",
+    "skids": "Skids"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "rpm": "{{value}} rpm",
+    "metresPerSecond": "{{value}} m/s",
+    "percent": "{{value}}%"
+  },
+  "sections": {
+    "overview": {
+      "title": "A wing that spins",
+      "p1": "You are looking at a light helicopter. The long, thin blades on top form the <strong>main rotor</strong>, and each blade is a wing. Tilted slightly into the air, it pushes air down as it moves, and the air pushes the blade up. That push is <strong>lift</strong>.",
+      "p2": "An aeroplane gets air flowing over its wings by racing down a runway. A helicopter spins its wings instead, so they keep moving through the air even while the helicopter stays still. That is why it can take off straight up, hover over one spot and fly sideways or backwards.",
+      "p3": "An engine turns the rotor through a gearbox and a vertical shaft called the <strong>mast</strong>. A real main rotor turns a few hundred times a minute, and its tips move at around 200 m/s, over 700 km/h. The model runs in slow motion, and one blade has a coloured tip so you can follow it round.",
+      "p4": "Drag the model to look around it and scroll over it to zoom. As you read on, the view follows the text."
+    },
+    "collective": {
+      "title": "More pitch, more lift",
+      "p1": "A helicopter rotor turns at almost the same speed all the time. To change the lift, the pilot changes the angle of the blades instead. That angle is the blade's <strong>pitch</strong>. A blade with more pitch meets the air at a steeper angle, pushes more air down and lifts more.",
+      "p2": "The pilot's left hand holds the <strong>collective</strong> lever. Raising it pushes up the <strong>swashplate</strong>, a pair of rings around the mast. Rods from the swashplate twist every blade by the same amount at once, all the way round. That is why it is called collective.",
+      "control": {
+        "label": "Collective lever",
+        "down": "Down",
+        "up": "Up",
+        "pitch": "Blade pitch",
+        "result": "Result"
+      },
+      "p3": "With the lever low, the rotor lifts less than the helicopter weighs, and it sinks. Around the middle the lift matches the weight and the helicopter hovers. Raise the lever further and it climbs. More pitch also means more drag on the blades, so the engine has to give more power to keep the rotor at the same speed.",
+      "p4": "Move the lever and watch the swashplate slide along the mast and the blades twist. The blades also bend upward a little as the lift grows, which is called coning."
+    },
+    "torque": {
+      "title": "Why there is a tail rotor",
+      "p1": "Spinning the rotor takes a twist, or <strong>torque</strong>, from the engine. Every push has an equal push back, so the body of the helicopter feels the same twist the other way. Seen from above, this rotor turns anticlockwise. Left alone, the fuselage would spin clockwise.",
+      "p2": "The <strong>tail rotor</strong> stops that. It sits at the end of the long <strong>tail boom</strong> and blows air sideways. Its push acts on the end of the boom like a spanner on a bolt, and it balances the twist of the main rotor. The longer the boom, the smaller the push needed.",
+      "p3": "A shaft along the boom drives the tail rotor from the main gearbox, so the two always turn together. In this model the tail rotor turns five times for every turn of the main rotor.",
+      "p4": "The pilot's <strong>pedals</strong> change the pitch of the tail rotor blades. More push swings the nose one way; less push lets the torque swing it the other. That is how a helicopter turns on the spot.",
+      "p5": "Some helicopters skip the tail rotor and use two main rotors turning in opposite directions, one above the other or one at each end, so their twists cancel out."
+    },
+    "forward": {
+      "title": "Advancing and retreating",
+      "p1": "To fly forward, the pilot pushes the <strong>cyclic</strong> stick. It tilts the swashplate, so each blade's pitch now rises and falls once on every turn. The spinning disc tips forward, part of its lift now pulls the helicopter ahead, and the whole machine flies a little nose down.",
+      "p2": "Now the two sides of the rotor meet different air. On one side the blade swings forward, into the wind of flight: this is the <strong>advancing blade</strong>. On the other side it swings backward, away from that wind: the <strong>retreating blade</strong>. Counting from the tail, the marked blade advances from 0° to 180° and retreats from 180° to 360°.",
+      "p3": "Say the tips move at 200 m/s and the helicopter flies at 50 m/s. The advancing tip meets the air at 250 m/s, the retreating tip at only 150 m/s. Lift grows with the square of the airspeed, so left alone the advancing side would lift far more and roll the helicopter over.",
+      "p4": "The cyclic evens this out. It gives the advancing blade less pitch and the retreating blade more, so both sides lift about the same. Watch the marked blade: its pitch dips on the advancing side and rises on the retreating side, once on every turn.",
+      "showHover": "Show a hover",
+      "showForward": "Show forward flight",
+      "p5": "That sets a limit. The faster the helicopter flies, the slower the air over the retreating blade, and the more pitch it needs, until it stalls. This is the main reason ordinary helicopters rarely fly much faster than 300 km/h.",
+      "aside": "Numbers come from a small model of a four-blade rotor with a 5 m radius. Pitch angles are simplified: good for shapes and proportions, not for exact figures."
+    }
+  }
+}

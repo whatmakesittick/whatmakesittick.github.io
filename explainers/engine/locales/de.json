@@ -1,0 +1,304 @@
+{
+  "meta": {
+    "title": "So funktioniert ein Motor",
+    "eyebrow": "Der Viertaktmotor von innen",
+    "tagline": "Jeder hat schon einmal einen Motor im Leerlauf gehört. Kaum jemand hat das kleine, genau getaktete Feuer gesehen, das darin Hunderte Male pro Minute aufflammt. Hier sehen Sie es, stark verlangsamt.",
+    "description": "Ein interaktiver Blick in Zeitlupe ins Innere eines Viertaktmotors: Takte, Ventile, Zündung, Kurbeltrieb, Verdichtung, Benzin gegen Diesel und der Reihenvierzylinder.",
+    "summary": "Ein interaktiver Blick in Zeitlupe ins Innere eines Viertaktmotors: Takte, Ventile, Zündung, Kurbeltrieb, Verdichtung, Benzin gegen Diesel und der Reihenvierzylinder."
+  },
+  "stage": {
+    "label": "Interaktives Motormodell",
+    "gauge": "Zyklusanzeige und Live-Messwerte"
+  },
+  "controls": {
+    "label": "Bedienelemente",
+    "crankAngle": "Kurbelwinkel",
+    "angleValue": {
+      "intake": "{{angle}}, Ansaugtakt",
+      "compression": "{{angle}}, Verdichtungstakt",
+      "power": "{{angle}}, Arbeitstakt",
+      "exhaust": "{{angle}}, Ausstoßtakt"
+    },
+    "jumpToStrokeGroup": "Zu einem Takt springen",
+    "jumpToStroke": {
+      "intake": "Zum Ansaugtakt springen",
+      "compression": "Zum Verdichtungstakt springen",
+      "power": "Zum Arbeitstakt springen",
+      "exhaust": "Zum Ausstoßtakt springen"
+    },
+    "speedDescriptions": {
+      "verySlow": "sehr langsam",
+      "slowMotion": "Zeitlupe",
+      "halfIdle": "halber Leerlauf",
+      "nearIdle": "fast Leerlauf"
+    },
+    "fuel": "Kraftstoff",
+    "cylinders": "Zylinder",
+    "views": {
+      "cutaway": {
+        "name": "Schnittansicht",
+        "short": "Schnitt",
+        "hint": "Schnittansicht (C)"
+      },
+      "gas": {
+        "name": "Gasfarben",
+        "short": "Gas",
+        "hint": "Gasfarben (G)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      },
+      "flow": {
+        "name": "Gasströmung",
+        "short": "Strömung",
+        "hint": "Gasströmung (F)"
+      }
+    }
+  },
+  "strokes": {
+    "intake": "Ansaugen",
+    "compression": "Verdichten",
+    "power": "Arbeiten",
+    "exhaust": "Ausstoßen"
+  },
+  "engine": {
+    "types": {
+      "petrol": "Benzin",
+      "diesel": "Diesel"
+    },
+    "layouts": {
+      "single": "Ein Zylinder",
+      "inline4": "Reihenvierer"
+    }
+  },
+  "deadCentres": {
+    "top": "OT",
+    "bottom": "UT",
+    "before": "{{degrees}} vor {{centre}}",
+    "after": "{{degrees}} nach {{centre}}",
+    "early": "{{degrees}} früher",
+    "late": "{{degrees}} später"
+  },
+  "dial": {
+    "label": "Zyklusanzeige. Ein voller Kreis sind zwei Kurbelwellenumdrehungen oder 720 Grad, eingefärbt nach Takt. Innen sind die Öffnungszeiten der Ventile eingezeichnet.",
+    "legend": {
+      "label": "Legende der Anzeige",
+      "intakeOpen": "Einlass offen",
+      "exhaustOpen": "Auslass offen",
+      "spark": "Zündung",
+      "injection": "Einspritzung"
+    }
+  },
+  "readouts": {
+    "crankAngle": "Kurbelwinkel",
+    "stroke": "Takt",
+    "engineSpeed": "Drehzahl",
+    "pressure": "Druck",
+    "pistonSpeed": "Kolbengeschwindigkeit"
+  },
+  "sections": {
+    "overview": {
+      "title": "Aus Druck wird Drehung",
+      "p1": "Sie sehen einen Zylinder eines Automotors, aufgeschnitten. Ein <strong>Kolben</strong> gleitet in einem Rohr auf und ab. Darüber sitzen zwei <strong>Ventile</strong> und, je nach Kraftstoff, eine Zündkerze oder eine Einspritzdüse. Darunter verbindet ein <strong>Pleuel</strong> den Kolben mit der <strong>Kurbelwelle</strong>, der Welle, die am Ende die Räder antreibt.",
+      "p2": "Die ganze Idee passt in einen Satz: Kraftstoff in einem geschlossenen Raum verbrennen, das heiße Gas den Kolben nach unten drücken lassen und diesen Druck in eine Drehung verwandeln. Alles andere im Motor ist nur dazu da, das sauber zu wiederholen, immer und immer wieder.",
+      "p3": "Das wiederholt sich in einem Zyklus aus vier Schritten, den <strong>Takten</strong>. Die Anzeige in der Ecke zeigt, wo im Zyklus der Motor gerade steht. Das Modell läuft in Zeitlupe: Ein echter Automotor dreht im Leerlauf mit etwa 800 Umdrehungen pro Minute und kann noch achtmal so schnell drehen.",
+      "p4": "Ziehen Sie am Modell, um es von allen Seiten zu sehen, und scrollen Sie darüber, um zu zoomen. Beim Weiterlesen folgt die Ansicht dem Text."
+    },
+    "strokes": {
+      "title": "Vier Takte",
+      "p1": "Ein Takt ist ein Weg des Kolbens vom oberen Ende des Zylinders nach unten oder zurück. Oben liegt der <strong>obere Totpunkt</strong> (OT), unten der <strong>untere Totpunkt</strong> (UT). Tot, weil der Kolben dort einen Augenblick stillsteht, bevor er die Richtung wechselt.",
+      "intake": {
+        "body": "Der Kolben fährt bei offenem Einlassventil nach unten, und der wachsende Raum saugt frische Füllung an. Ein Benzinmotor saugt Luft an, die schon mit Kraftstoff gemischt ist. Ein Diesel saugt reine Luft an.",
+        "show": "Ansaugtakt zeigen"
+      },
+      "compression": {
+        "body": "Beide Ventile sind zu, und der Kolben steigt. Er presst die Füllung auf ein Zehntel ihres Volumens oder weniger zusammen. Gas wird beim Zusammenpressen heiß. So hat die Füllung schon mehrere hundert Grad, bevor überhaupt etwas brennt.",
+        "show": "Verdichtungstakt zeigen"
+      },
+      "power": {
+        "body": "Kurz vor dem oberen Ende wird die Füllung gezündet. Beim Benzinmotor springt ein Funke über. Ein Diesel spritzt Kraftstoff in Luft, die schon heiß genug ist, um ihn zu entzünden. Das brennende Gas dehnt sich aus und drückt den Kolben nach unten. Nur dieser Takt liefert Kraft.",
+        "show": "Arbeitstakt zeigen"
+      },
+      "exhaust": {
+        "body": "Das Auslassventil öffnet, und der steigende Kolben schiebt das verbrannte Gas hinaus. Danach ist der Zylinder bereit für die nächste Runde.",
+        "show": "Ausstoßtakt zeigen"
+      },
+      "p2": "Achten Sie auf das Gas: Die frische Füllung kommt kühl herein, wird beim Verdichten heißer, leuchtet beim Verbrennen orange auf und geht grau hinaus."
+    },
+    "cycle": {
+      "title": "Zwei Umdrehungen für jeden Stoß",
+      "p1": "Jeder Takt dauert eine halbe Umdrehung der Kurbelwelle, alle vier Takte also zwei volle Umdrehungen: <strong>720 Grad</strong>. Deshalb zählt die Anzeige bis 720 und nicht bis 360.",
+      "p2": "Der Kolben erreicht in jedem Zyklus zweimal den oberen Totpunkt: einmal bei 0°, zwischen Ausstoßen und Ansaugen, und einmal bei 360°, wenn die Füllung gezündet wird. Für den Kolben sind beide gleich. Nur die Ventile und die Zündung wissen, welcher gerade dran ist.",
+      "p3": "Nur einer von vier Takten drückt. Ansaugen, Verdichten und Ausstoßen kosten Arbeit, und über diese drei Takte muss der Motor hinweggetragen werden. Einen Teil davon übernimmt der Schwung der bewegten Teile, den Rest das <strong>Schwungrad</strong>: eine schwere Scheibe am Ende der Kurbelwelle. Sie nimmt im Arbeitstakt Energie auf und gibt sie in den anderen drei Takten wieder ab.",
+      "p4": "Deshalb läuft ein Einzylinder so unrund: ein kräftiger Stoß bei jeder zweiten Umdrehung, dazwischen nichts. Rasenmäher gleichen das mit einem schweren Schwungrad aus. Autos bekommen mehr Zylinder, dazu kommen wir noch."
+    },
+    "valves": {
+      "title": "Ventile und Nocken",
+      "p1": "Jedes Ventil ist ein pilzförmiger Stopfen. Eine Ventilfeder hält es auf seinem Sitz geschlossen, und ein <strong>Nocken</strong> drückt es auf: eine eiförmige Erhebung auf einer drehenden Welle. Kommt die Erhebung herum, drückt sie das Ventil nach unten in den Zylinder. Ist sie vorbei, zieht die Feder das Ventil wieder zu.",
+      "p2": "Jedes Ventil öffnet einmal pro Zyklus, und ein Zyklus sind zwei Kurbelwellenumdrehungen. Deshalb <strong>dreht die Nockenwelle mit halber Kurbelwellendrehzahl</strong>, angetrieben über einen Riemen oder eine Kette. Beobachten Sie die Nocken: eine Umdrehung auf zwei der Kurbelwelle.",
+      "p3": "Würden die Ventile genau in den Totpunkten öffnen und schließen, bekäme der Motor schlecht Luft. Gas hat Gewicht und kommt nur langsam in Schwung, deshalb werden die Steuerzeiten gestreckt. Das Auslassventil öffnet <strong>früh</strong>, deutlich vor dem unteren Totpunkt, damit das noch unter Druck stehende Gas von selbst hinausströmt. Das Einlassventil schließt <strong>spät</strong>, deutlich nach dem unteren Totpunkt, weil die Luft noch hereinströmt, während der Kolben schon wieder steigt.",
+      "p4": "Um den oberen Totpunkt herum, zwischen Ausstoßen und Ansaugen, sind kurz beide Ventile gleichzeitig offen. Durch diese <strong>Ventilüberschneidung</strong> zieht das abströmende Abgas die frische Füllung hinter sich herein.",
+      "caption": "Ventilhub über einen Zyklus für den aktuellen Motor. Der Streifen ist ringförmig: Sein rechter Rand schließt an den linken an. In den schattierten Bereichen sind beide Ventile offen."
+    },
+    "ignition": {
+      "title": "Die Zündung",
+      "p1": "Verbrennen braucht Zeit. Im Benzinmotor entsteht an der Zündkerze eine Flamme und breitet sich in wenigen Tausendstelsekunden über den Brennraum aus. Das ist ein spürbares Stück einer Umdrehung. Am meisten nützt der Druck kurz nach dem oberen Totpunkt, also muss der Funke früher überspringen: <strong>etwa 10 bis 40 Grad vor dem oberen Totpunkt</strong>.",
+      "p2": "Wie früh, hängt von der Drehzahl ab. Die Flamme braucht immer ungefähr gleich lang, egal was der Motor gerade tut. Bei höherer Drehzahl dreht sich die Kurbelwelle in dieser Zeit aber um mehr Grad weiter. Deshalb setzt die Zündung mit steigender Drehzahl immer früher ein. Kommt der Funke zu früh, arbeitet der Druck gegen den steigenden Kolben. Kommt er zu spät, läuft der Druck einem Kolben hinterher, der schon auf dem Weg nach unten ist.",
+      "p3": "Ein Diesel hat keine Zündkerze. Die Verdichtung heizt die Luft auf <strong>rund 700 °C</strong> und mehr auf, und kurz vor dem oberen Totpunkt spritzt die Einspritzdüse Kraftstoff hinein. Der Kraftstoff braucht einen Moment, um zu verdampfen und zu zünden, den kurzen <strong>Zündverzug</strong>. Danach verbrennt er etwa so schnell, wie er eingespritzt wird. Die Verbrennung zieht sich über die ganze Einspritzung hin, statt als eine Flammenfront durch den Brennraum zu rasen.",
+      "p4": "Die Grafik zeigt das Ergebnis. Beim Benziner steigt der Druck kurz nach dem oberen Totpunkt zu einer scharfen Spitze. Der Diesel startet von einem viel höheren Verdichtungsdruck, und seine Verbrennung hält den Druck hoch, während der Kolben schon nach unten geht.",
+      "caption": "Zylinderdruck beim Verdichten und Arbeiten, im Vergleich zur Außenluft. Ansaugen und Ausstoßen bleiben nahe bei 1× und fehlen hier. Die kräftige Kurve ist der Motor auf dem Bildschirm, und die Linie läuft live mit."
+    },
+    "crank": {
+      "title": "Vom Druck zur Drehung",
+      "p1": "Das Pleuel verbindet den Kolben mit einem versetzten Zapfen an der Kurbelwelle, dem <strong>Hubzapfen</strong>. Während der Zapfen im Kreis herumläuft, macht das Pleuel aus dem geraden Druck des Kolbens eine Drehung, so wie Ihr Bein ein Fahrradpedal antreibt.",
+      "p2": "Der Kolben folgt keiner sauberen Sinuskurve. Das Pleuel kippt, wenn der Zapfen zur Seite ausschwenkt, und zieht den Kolben dadurch weiter nach unten, als der Zapfen selbst sinkt. Bei 90 Grad Kurbelwinkel hat der Kolben schon mehr als die Hälfte geschafft: etwa 50 seiner 86 mm. Er bewegt sich also <strong>nahe dem oberen Totpunkt schneller als nahe dem unteren</strong> und erreicht seine Höchstgeschwindigkeit, bevor sich die Kurbelwelle um 90 Grad gedreht hat.",
+      "p3": "Bei 3.000 U/min liegt diese Höchstgeschwindigkeit bei etwa 14 m/s, und der Kolben bleibt bei jeder Umdrehung zweimal kurz stehen und kehrt um. Schwere <strong>Gegengewichte</strong> gegenüber dem Hubzapfen gleichen die kreisende Masse von Zapfen und Pleuel aus, damit sich der Motor nicht selbst zerlegt.",
+      "caption": "Position und Geschwindigkeit des Kolbens über eine Kurbelwellenumdrehung. Die gestrichelten Linien zeigen, wie sich ein Pleuel verhalten würde, das nie kippt."
+    },
+    "compression": {
+      "title": "Wie stark verdichten?",
+      "p1": "Das <strong>Verdichtungsverhältnis</strong> vergleicht den Raum über dem Kolben im unteren Totpunkt mit dem Raum, der im oberen Totpunkt übrig bleibt. Bei 10 : 1 wird die Füllung auf ein Zehntel ihres Platzes zusammengepresst.",
+      "p2": "Bei einem höheren Verhältnis kann sich das brennende Gas weiter ausdehnen, und mehr von seiner Wärme wird zu Druck auf den Kolben: mehr Arbeit aus demselben Kraftstoff. Warum also nicht noch stärker verdichten? Ein Benzinmotor verdichtet Kraftstoff und Luft gemeinsam, und dabei werden beide heiß. Treibt man es zu weit, entzünden sich Teile des Gemischs von selbst, bevor die Flamme sie erreicht. Dieses harte <strong>Klopfen</strong> kann Kolben zerstören. Deshalb bleiben Benzinmotoren bei <strong>etwa 9 bis 13 : 1</strong>.",
+      "p3": "Ein Diesel verdichtet nur Luft. Es gibt also nichts, das sich zu früh entzünden könnte, und er braucht die Hitze: Die Luft muss heiß genug sein, um den Kraftstoff zu entzünden. Dieselmotoren arbeiten mit <strong>etwa 14 bis 22 : 1</strong>.",
+      "control": {
+        "label": "Verdichtungsverhältnis",
+        "petrolBand": "Benzin",
+        "dieselBand": "Diesel",
+        "clearance": "Raum über dem Kolben",
+        "pressure": "Druck vor der Verbrennung"
+      },
+      "p4": "Hier hält das Modell im oberen Totpunkt an. So sehen Sie, wie der Raum über dem Kolben schrumpft, wenn Sie das Verhältnis erhöhen."
+    },
+    "fuel": {
+      "title": "Benzin oder Diesel",
+      "p1": "Beide Motoren arbeiten mit denselben vier Takten. Sie unterscheiden sich darin, wie der Kraftstoff hineinkommt und was ihn entzündet.",
+      "table": {
+        "feature": "Merkmal",
+        "fuelIn": {
+          "label": "Kraftstoffzufuhr",
+          "petrol": "Auf dem Weg hinein mit der Luft gemischt oder beim Ansaugen eingespritzt",
+          "diesel": "Am Ende der Verdichtung direkt in die heiße Luft eingespritzt"
+        },
+        "lighting": {
+          "label": "Zündung",
+          "petrol": "Ein Zündfunke",
+          "diesel": "Die Hitze der Verdichtung"
+        },
+        "ratio": {
+          "label": "Verdichtungsverhältnis",
+          "petrol": "9 bis 13 : 1",
+          "diesel": "14 bis 22 : 1"
+        },
+        "power": {
+          "label": "Leistungsregelung",
+          "petrol": "Eine Drosselklappe, die die Luft begrenzt",
+          "diesel": "Die eingespritzte Kraftstoffmenge"
+        },
+        "topSpeed": {
+          "label": "Typische Höchstdrehzahl",
+          "petrol": "6.000 bis 7.000 U/min",
+          "diesel": "4.000 bis 5.000 U/min"
+        }
+      },
+      "p2": "Ein Diesel arbeitet aus drei Gründen <strong>effizienter</strong>. Er verdichtet stärker, sodass jeder Tropfen Kraftstoff mehr Arbeit leistet. Er läuft mager, mit viel mehr Luft, als der Kraftstoff braucht. Und er hat keine Drosselklappe, verschwendet also nie Kraft damit, Luft an einer halb geschlossenen Klappe vorbeizusaugen.",
+      "p3": "Ein Benzinmotor <strong>dreht höher und läuft ruhiger</strong>. Sein Gemisch ist brennbereit, sobald der Funke überspringt, und die Flamme ist schnell. Dank niedrigerer Drücke genügen leichtere Teile, die gern schnell drehen. Ein Diesel muss warten, bis sich sein Kraftstoff vermischt und entzündet. Dann springt der Druck schlagartig an, und daher kommt sein bekanntes Nageln.",
+      "showPetrol": "Benziner zeigen",
+      "showDiesel": "Diesel zeigen",
+      "aside": "Ein Hybrid kombiniert einen solchen Motor mit einem Elektromotor. Der hilft ihm, lässt ihn abschalten, wenn er nicht gebraucht wird, und gewinnt beim Bremsen Energie zurück. Dieses Kapitel fehlt hier noch."
+    },
+    "inline4": {
+      "title": "Vier Zylinder",
+      "p1": "Ein Zylinder liefert alle zwei Umdrehungen einen Stoß. Vier Zylinder an einer gemeinsamen Kurbelwelle, jeder an einer anderen Stelle im Zyklus, liefern jede halbe Umdrehung einen Stoß: <strong>alle 180 Grad ein Arbeitstakt</strong> statt alle 720. Die Kraft auf die Kurbelwelle ist viel gleichmäßiger, und das Schwungrad kann deutlich leichter sein.",
+      "p2": "Die Hubzapfen sind so angeordnet, dass sich die Kolben 1 und 4 gemeinsam bewegen und die Kolben 2 und 3 gemeinsam in die Gegenrichtung. Steigt das äußere Paar, sinkt das innere. So heben sich ihre großen Auf- und Abwärtskräfte gegenseitig auf.",
+      "p3": "Kolben, die sich gemeinsam bewegen, sind nie im selben Takt. Wenn Kolben 1 zündet, ist auch Kolben 4 oben und beendet gerade seinen Ausstoßtakt. Die Zylinder zünden in der Reihenfolge <strong>{{firingOrder}}</strong>. Diese Zündfolge springt zwischen den Enden der Kurbelwelle hin und her und verteilt die Stöße gleichmäßig über ihre Länge.",
+      "caption": "Jede Zeile ist ein Zylinder über einen vollen Zyklus, eingefärbt nach Takt. Die Arbeitstakte rücken jeweils um 180 Grad weiter."
+    },
+    "controls": {
+      "title": "Bedienung",
+      "p1": "Alles auf dieser Seite funktioniert auch mit der Tastatur.",
+      "aside": "Die Zahlen stammen aus einem kleinen Modell eines Halbliter-Zylinders mit 86 mm Bohrung, 86 mm Hub und einem 145 mm langen Pleuel. Die Drücke sind vereinfacht: gut für Verläufe und Proportionen, nicht für exakte Werte."
+    }
+  },
+  "keyboard": {
+    "jumpToStroke": "Zu Ansaugen, Verdichten, Arbeiten oder Ausstoßen springen",
+    "step": "Kurbelwelle um 2° drehen, mit <kbd>Umschalt</kbd> um 15°",
+    "cutaway": "Schnittansicht ein oder aus",
+    "gas": "Gasfarben ein oder aus",
+    "labels": "Alle Beschriftungen ein oder aus",
+    "flow": "Strömungspfeile ein oder aus",
+    "engineType": "Zwischen Benzin und Diesel wechseln",
+    "layout": "Zwischen einem Zylinder und dem Reihenvierer wechseln",
+    "orbit": "Um den Motor kreisen"
+  },
+  "diagrams": {
+    "valveTiming": {
+      "intake": "Einlass",
+      "exhaust": "Auslass",
+      "opens": "öffnet {{offset}}",
+      "closes": "schließt {{offset}}",
+      "overlap": "Überschneidung",
+      "spark": "Zündung",
+      "sparkAt": "Zündung {{offset}}",
+      "injection": "Einspritzung",
+      "injectionAt": "Einspritzung {{offset}}",
+      "title": {
+        "petrol": "Ventilsteuerzeiten des Benzinmotors.",
+        "diesel": "Ventilsteuerzeiten des Dieselmotors."
+      },
+      "summary": "Das Einlassventil öffnet {{intakeOpens}} und schließt {{intakeCloses}}. Das Auslassventil öffnet {{exhaustOpens}} und schließt {{exhaustCloses}}. Um den oberen Totpunkt herum sind beide {{overlap}} Grad lang gleichzeitig offen."
+    },
+    "pressure": {
+      "peak": "Spitze {{value}}",
+      "summary": {
+        "petrol": "Zylinderdruck beim Verdichten und Arbeiten, Benzin und Diesel im Vergleich, Benzin hervorgehoben.",
+        "diesel": "Zylinderdruck beim Verdichten und Arbeiten, Benzin und Diesel im Vergleich, Diesel hervorgehoben."
+      },
+      "peakSummary": {
+        "petrol": "Beim Benziner ist der Spitzendruck etwa {{value}} so hoch wie der Luftdruck draußen.",
+        "diesel": "Beim Diesel ist der Spitzendruck etwa {{value}} so hoch wie der Luftdruck draußen."
+      }
+    },
+    "pistonMotion": {
+      "distanceTitle": "Abstand zum OT, mm",
+      "speedTitle": "Geschwindigkeit bei {{rpm}}, m/s",
+      "halfStroke": "halber Hub",
+      "quarterTurn": "{{distance}} bei {{angle}}",
+      "peak": "Spitze bei {{angle}}",
+      "realPiston": "Echter Kolben",
+      "uprightRod": "Pleuel, das nie kippt",
+      "description": "Abstand des Kolbens vom oberen Totpunkt und Kolbengeschwindigkeit über eine Kurbelwellenumdrehung, verglichen mit einem Pleuel, das nie kippt. Bei 90 Grad hat der Kolben schon mehr als den halben Weg geschafft, und seine Höchstgeschwindigkeit erreicht er vor 90 Grad."
+    },
+    "firingOrder": {
+      "sequence": "Zündfolge",
+      "cylinder": "Zylinder",
+      "chipsLabel": "Aktueller Takt jedes Zylinders",
+      "description": "Takte jedes Zylinders eines Reihenvierzylinders über einen Zyklus. Die Arbeitstakte folgen alle 180 Grad aufeinander, in der Reihenfolge {{order}}."
+    }
+  },
+  "parts": {
+    "piston": "Kolben",
+    "connectingRod": "Pleuel",
+    "crankshaft": "Kurbelwelle",
+    "flywheel": "Schwungrad",
+    "cylinder": "Zylinder",
+    "combustionChamber": "Brennraum",
+    "intakeValve": "Einlassventil",
+    "exhaustValve": "Auslassventil",
+    "intakeCam": "Einlassnocken",
+    "exhaustCam": "Auslassnocken",
+    "intakePort": "Einlasskanal",
+    "exhaustPort": "Auslasskanal",
+    "sparkPlug": "Zündkerze",
+    "injector": "Einspritzdüse"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "rpm": "{{value}} U/min",
+    "metresPerSecond": "{{value}} m/s",
+    "millimetres": "{{value}} mm",
+    "times": "{{value}}×",
+    "ratio": "{{value}} : 1"
+  }
+}

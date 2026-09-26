@@ -1,0 +1,12 @@
+{
+  "slug": "engine",
+  "category": "engines",
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "Cutaway 3D model of an inline four diesel engine with labelled parts, beside the title How an engine works"
+  }
+}

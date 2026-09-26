@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "title": "Como um helicóptero voa",
+    "eyebrow": "O rotor do helicóptero, em câmera lenta",
+    "tagline": "Um helicóptero se sustenta no ar com asas que giram. Mude o ângulo das pás e ele sobe ou desce, incline o disco que gira e ele avança, e um pequeno rotor na cauda impede que a máquina inteira fique rodando.",
+    "description": "Um passeio interativo e em câmera lenta por como um helicóptero voa: uma asa que gira e gera sustentação, o passo coletivo, o torque e o rotor de cauda, e a pá que avança e a pá que recua no voo para a frente.",
+    "summary": "Sustentação do rotor, passo coletivo, rotor de cauda e voo para a frente."
+  },
+  "stage": {
+    "label": "Modelo interativo do helicóptero",
+    "gauge": "Leituras do rotor ao vivo"
+  },
+  "controls": {
+    "label": "Controles do helicóptero",
+    "flightMode": "Voo",
+    "speedDescriptions": {
+      "verySlow": "muito devagar",
+      "slowMotion": "câmera lenta",
+      "nearReal": "perto da velocidade real"
+    },
+    "views": {
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      },
+      "flow": {
+        "name": "Fluxo de ar",
+        "short": "Fluxo",
+        "hint": "Fluxo de ar (F)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Ângulo do rotor",
+    "phases": "Ir para meia volta",
+    "speed": "Rotação do rotor",
+    "jump": {
+      "advancing": "Ir para a metade em que a pá avança",
+      "retreating": "Ir para a metade em que a pá recua"
+    },
+    "value": {
+      "advancing": "{{angle}}, pá marcada avançando",
+      "retreating": "{{angle}}, pá marcada recuando"
+    }
+  },
+  "phases": {
+    "advancing": "Avançando",
+    "retreating": "Recuando"
+  },
+  "flightModes": {
+    "hover": "Pairado",
+    "forward": "Para a frente"
+  },
+  "tendencies": {
+    "descend": "Desce",
+    "hover": "Paira",
+    "climb": "Sobe"
+  },
+  "readouts": {
+    "azimuth": "Ângulo do rotor",
+    "half": "Pá marcada",
+    "rotorSpeed": "Rotação do rotor",
+    "tipSpeed": "Velocidade da ponta",
+    "bladePitch": "Passo da pá"
+  },
+  "parts": {
+    "mainRotor": "Rotor principal",
+    "markedBlade": "Pá marcada",
+    "swashplate": "Prato oscilante",
+    "fuselage": "Fuselagem",
+    "tailBoom": "Cone de cauda",
+    "tailRotor": "Rotor de cauda",
+    "skids": "Esquis"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "rpm": "{{value}} rpm",
+    "metresPerSecond": "{{value}} m/s",
+    "percent": "{{value}}%"
+  },
+  "sections": {
+    "overview": {
+      "title": "Uma asa que gira",
+      "p1": "Você está vendo um helicóptero leve. As pás longas e finas lá em cima formam o <strong>rotor principal</strong>, e cada pá é uma asa. Levemente inclinada contra o ar, ela empurra o ar para baixo enquanto se move, e o ar empurra a pá para cima. Esse empurrão é a <strong>sustentação</strong>.",
+      "p2": "Um avião faz o ar passar pelas asas correndo pela pista. O helicóptero, em vez disso, gira as asas, e assim elas continuam se movendo pelo ar mesmo com o helicóptero parado. É por isso que ele consegue decolar na vertical, pairar sobre um ponto e voar de lado ou de ré.",
+      "p3": "Um motor gira o rotor por meio de uma caixa de transmissão e de um eixo vertical chamado <strong>mastro</strong>. Um rotor principal de verdade dá algumas centenas de voltas por minuto, e suas pontas se movem a cerca de 200 m/s, mais de 700 km/h. O modelo roda em câmera lenta, e uma das pás tem a ponta colorida para você acompanhá-la na volta.",
+      "p4": "Arraste o modelo para ver de outros ângulos e role sobre ele para dar zoom. Conforme você lê, a vista acompanha o texto."
+    },
+    "collective": {
+      "title": "Mais passo, mais sustentação",
+      "p1": "O rotor de um helicóptero gira quase sempre na mesma rotação. Para mudar a sustentação, o piloto muda o ângulo das pás. Esse ângulo é o <strong>passo</strong> da pá. Uma pá com mais passo encontra o ar num ângulo mais inclinado, empurra mais ar para baixo e sustenta mais.",
+      "p2": "A mão esquerda do piloto fica na alavanca do <strong>coletivo</strong>. Ao levantá-la, ele empurra para cima o <strong>prato oscilante</strong>, um par de anéis em volta do mastro. Hastes que saem do prato oscilante torcem todas as pás na mesma medida ao mesmo tempo, em toda a volta. Por isso o nome coletivo.",
+      "control": {
+        "label": "Alavanca do coletivo",
+        "down": "Baixo",
+        "up": "Alto",
+        "pitch": "Passo da pá",
+        "result": "Resultado"
+      },
+      "p3": "Com a alavanca baixa, o rotor sustenta menos do que o helicóptero pesa, e ele desce. Perto do meio, a sustentação iguala o peso e o helicóptero paira. Levante mais a alavanca e ele sobe. Mais passo também significa mais arrasto nas pás, então o motor precisa dar mais potência para manter o rotor na mesma rotação.",
+      "p4": "Mexa a alavanca e veja o prato oscilante deslizar pelo mastro e as pás torcerem. As pás também se curvam um pouco para cima conforme a sustentação cresce, o que se chama conicidade."
+    },
+    "torque": {
+      "title": "Por que existe um rotor de cauda",
+      "p1": "Girar o rotor exige do motor uma torção, o <strong>torque</strong>. Toda ação tem uma reação igual, então o corpo do helicóptero sente a mesma torção no sentido contrário. Visto de cima, este rotor gira no sentido anti-horário. Sem nada para impedir, a fuselagem giraria no sentido horário.",
+      "p2": "O <strong>rotor de cauda</strong> impede isso. Ele fica na ponta do longo <strong>cone de cauda</strong> e sopra ar para o lado. O empurrão dele atua na ponta do cone como uma chave de boca num parafuso e equilibra a torção do rotor principal. Quanto mais longo o cone, menor o empurrão necessário.",
+      "p3": "Um eixo ao longo do cone leva força da transmissão principal ao rotor de cauda, então os dois sempre giram juntos. Neste modelo, o rotor de cauda dá cinco voltas a cada volta do rotor principal.",
+      "p4": "Os <strong>pedais</strong> do piloto mudam o passo das pás do rotor de cauda. Mais empurrão vira o nariz para um lado; menos empurrão deixa o torque virá-lo para o outro. É assim que um helicóptero gira no mesmo lugar.",
+      "p5": "Alguns helicópteros dispensam o rotor de cauda e usam dois rotores principais girando em sentidos opostos, um acima do outro ou um em cada ponta, para que as torções se anulem."
+    },
+    "forward": {
+      "title": "A pá que avança e a pá que recua",
+      "p1": "Para voar para a frente, o piloto empurra o manche <strong>cíclico</strong>. Ele inclina o prato oscilante, e o passo de cada pá passa a subir e descer uma vez a cada volta. O disco que gira se inclina para a frente, parte da sustentação passa a puxar o helicóptero adiante, e a máquina inteira voa com o nariz um pouco abaixado.",
+      "p2": "Agora os dois lados do rotor encontram ar diferente. De um lado, a pá se move para a frente, contra o vento do voo: é a <strong>pá que avança</strong>. Do outro lado, ela se move para trás, a favor desse vento: é a <strong>pá que recua</strong>. Contando a partir da cauda, a pá marcada avança de 0° a 180° e recua de 180° a 360°.",
+      "p3": "Digamos que as pontas se movam a 200 m/s e o helicóptero voe a 50 m/s. A ponta que avança encontra o ar a 250 m/s; a que recua, a apenas 150 m/s. A sustentação cresce com o quadrado da velocidade do ar, então, sem correção, o lado que avança sustentaria muito mais e faria o helicóptero tombar de lado.",
+      "p4": "O cíclico equilibra isso. Ele dá menos passo à pá que avança e mais à pá que recua, para que os dois lados sustentem mais ou menos o mesmo. Observe a pá marcada: o passo dela diminui do lado que avança e aumenta do lado que recua, uma vez a cada volta.",
+      "showHover": "Mostrar voo pairado",
+      "showForward": "Mostrar voo para a frente",
+      "p5": "Isso impõe um limite. Quanto mais rápido o helicóptero voa, mais lento fica o ar sobre a pá que recua e mais passo ela precisa, até entrar em estol. Esse é o principal motivo de helicópteros comuns raramente passarem muito de 300 km/h.",
+      "aside": "Os números vêm de um pequeno modelo de rotor de quatro pás com 5 m de raio. Os ângulos de passo são simplificados: bons para formas e proporções, não para valores exatos."
+    }
+  }
+}

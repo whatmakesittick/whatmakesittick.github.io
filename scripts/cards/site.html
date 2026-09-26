@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>What makes it tick: social card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap"
+    />
+    <style>
+      :root {
+        --background: #0b0d10;
+        --text: #e6e9ee;
+        --prose: #c3c9d2;
+        --muted: #8b929c;
+        --accent: #f5a524;
+      }
+
+      body {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        margin: 0;
+        overflow: hidden;
+        color: var(--text);
+        background: var(--background);
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .shot {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 640px;
+        height: 630px;
+        overflow: hidden;
+      }
+
+      .shot img {
+        position: absolute;
+        top: -51px;
+        left: 45px;
+        width: 862px;
+      }
+
+      .shot::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse 160px 300px at 100% 0, var(--background) 75%, transparent),
+          linear-gradient(to right, var(--background) 20px, transparent 90px),
+          linear-gradient(to top, var(--background), transparent 40px),
+          linear-gradient(to bottom, var(--background), transparent 30px);
+      }
+
+      .copy {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 72px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 500px;
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin: 0 0 26px;
+        color: var(--accent);
+        font-size: 24px;
+        font-weight: 500;
+      }
+
+      .eyebrow img {
+        width: 44px;
+        height: 44px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 80px;
+        font-weight: 700;
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+      }
+
+      .subtitle {
+        margin: 26px 0 0;
+        color: var(--prose);
+        font-size: 28px;
+        line-height: 1.4;
+      }
+
+      .categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 40px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .categories li {
+        padding: 5px 10px;
+        border: 1px solid rgb(255 255 255 / 0.16);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 15px;
+        font-weight: 500;
+      }
+
+      .categories li.live {
+        border-color: var(--accent);
+        color: var(--text);
+      }
+
+      .url {
+        position: absolute;
+        bottom: 40px;
+        left: 72px;
+        margin: 0;
+        color: var(--muted);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 20px;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shot">
+      <img src="../../explainers/engine/public/cover.webp" alt="" />
+    </div>
+    <main class="copy">
+      <p class="eyebrow">
+        <img src="../../public/favicon.svg" alt="" />
+        Interactive explainers
+      </p>
+      <h1>What makes it tick</h1>
+      <p class="subtitle">How everyday machines work, taken apart in 3D and slowed right down.</p>
+      <ul class="categories">
+        <li class="live">Engines</li>
+        <li>Drivetrain</li>
+        <li class="live">Aircraft</li>
+        <li>Electrical</li>
+        <li>Home</li>
+        <li>Tools</li>
+      </ul>
+    </main>
+    <p class="url">whatmakesittick.github.io</p>
+    <script>
+      Promise.all([
+        document.fonts.ready,
+        ...[...document.images].map((image) => image.decode()),
+      ]).then(() => document.body.setAttribute('data-ready', ''));
+    </script>
+  </body>
+</html>

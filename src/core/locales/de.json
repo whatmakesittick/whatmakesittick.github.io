@@ -1,0 +1,59 @@
+{
+  "page": {
+    "skipLink": "Direkt zur Erklärung"
+  },
+  "header": {
+    "language": "Sprache",
+    "source": "GitHub",
+    "sourceLabel": "Quellcode auf GitHub"
+  },
+  "stage": {
+    "label": "Interaktives Modell",
+    "gauge": "Live-Messwerte"
+  },
+  "controls": {
+    "label": "Bedienelemente",
+    "play": "Abspielen",
+    "pause": "Pausieren",
+    "more": "Weitere Einstellungen",
+    "speed": "Tempo",
+    "speedValue": "{{value}}, {{description}}",
+    "viewOptions": "Ansichtsoptionen",
+    "resetCamera": "Kamera zurücksetzen",
+    "resetCameraHint": "Kamera zurücksetzen (R)"
+  },
+  "keyboard": {
+    "keys": {
+      "space": "Leertaste",
+      "drag": "Ziehen",
+      "scroll": "Scrollen oder Pinch-Geste"
+    },
+    "playPause": "Abspielen oder pausieren",
+    "speed": "Schneller oder langsamer",
+    "resetCamera": "Kamera zurücksetzen",
+    "zoom": "Hinein- und herauszoomen"
+  },
+  "footer": {
+    "source": "Quellcode",
+    "license": "MIT-Lizenz",
+    "builtWith": "Erstellt mit Three.js",
+    "copyright": "© {{year}} {{title}}. Mit ♥ gemacht von <a href=\"https://github.com/veelenga\">veelenga</a>"
+  },
+  "catalogue": {
+    "title": "What makes it tick",
+    "eyebrow": "Interaktive Erklärungen",
+    "tagline": "Wie Alltagsmaschinen funktionieren: in 3D zerlegt und verlangsamt, damit man jedes Teil bei der Arbeit sieht.",
+    "skipLink": "Zu den Erklärungen springen",
+    "listLabel": "Erklärungen nach Kategorie",
+    "explore": "Entdecken",
+    "moreSoon": "Weitere Erklärungen sind in Arbeit.",
+    "categories": {
+      "engines": "Motoren",
+      "drivetrain": "Antriebsstrang",
+      "aircraft": "Luftfahrt",
+      "electrical": "Elektrik",
+      "home": "Haushalt",
+      "tools": "Werkzeuge"
+    }
+  }
+}

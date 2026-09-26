@@ -1,0 +1,304 @@
+{
+  "meta": {
+    "title": "Cómo funciona un motor",
+    "eyebrow": "El motor de cuatro tiempos, por dentro",
+    "tagline": "Todo el mundo ha oído un motor al ralentí. Casi nadie ha visto el pequeño fuego, sincronizado al detalle, que enciende cientos de veces por minuto. Aquí lo tienes, a cámara muy lenta.",
+    "description": "Una mirada interactiva y a cámara lenta al interior de un motor de cuatro tiempos: los tiempos, las válvulas, el encendido, el cigüeñal, la compresión, gasolina frente a diésel y el cuatro cilindros en línea.",
+    "summary": "Una mirada interactiva y a cámara lenta al interior de un motor de cuatro tiempos: los tiempos, las válvulas, el encendido, el cigüeñal, la compresión, gasolina frente a diésel y el cuatro cilindros en línea."
+  },
+  "stage": {
+    "label": "Modelo interactivo del motor",
+    "gauge": "Dial del ciclo y datos en tiempo real"
+  },
+  "controls": {
+    "label": "Controles del motor",
+    "crankAngle": "Ángulo del cigüeñal",
+    "angleValue": {
+      "intake": "{{angle}}, tiempo de admisión",
+      "compression": "{{angle}}, tiempo de compresión",
+      "power": "{{angle}}, tiempo de expansión",
+      "exhaust": "{{angle}}, tiempo de escape"
+    },
+    "jumpToStrokeGroup": "Ir a un tiempo",
+    "jumpToStroke": {
+      "intake": "Ir al tiempo de admisión",
+      "compression": "Ir al tiempo de compresión",
+      "power": "Ir al tiempo de expansión",
+      "exhaust": "Ir al tiempo de escape"
+    },
+    "speedDescriptions": {
+      "verySlow": "muy lento",
+      "slowMotion": "a cámara lenta",
+      "halfIdle": "mitad del ralentí",
+      "nearIdle": "casi al ralentí"
+    },
+    "fuel": "Combustible",
+    "cylinders": "Cilindros",
+    "views": {
+      "cutaway": {
+        "name": "Vista en corte",
+        "short": "Corte",
+        "hint": "Vista en corte (C)"
+      },
+      "gas": {
+        "name": "Colores del gas",
+        "short": "Gas",
+        "hint": "Colores del gas (G)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      },
+      "flow": {
+        "name": "Flujo de gas",
+        "short": "Flujo",
+        "hint": "Flujo de gas (F)"
+      }
+    }
+  },
+  "strokes": {
+    "intake": "Admisión",
+    "compression": "Compresión",
+    "power": "Expansión",
+    "exhaust": "Escape"
+  },
+  "engine": {
+    "types": {
+      "petrol": "Gasolina",
+      "diesel": "Diésel"
+    },
+    "layouts": {
+      "single": "Un cilindro",
+      "inline4": "Cuatro en línea"
+    }
+  },
+  "deadCentres": {
+    "top": "PMS",
+    "bottom": "PMI",
+    "before": "{{degrees}} antes del {{centre}}",
+    "after": "{{degrees}} después del {{centre}}",
+    "early": "{{degrees}} antes",
+    "late": "{{degrees}} después"
+  },
+  "dial": {
+    "label": "Dial del ciclo. Un círculo completo son dos vueltas del cigüeñal, 720 grados, con un color para cada tiempo y, en el interior, los intervalos en que se abren las válvulas.",
+    "legend": {
+      "label": "Leyenda del dial",
+      "intakeOpen": "Admisión abierta",
+      "exhaustOpen": "Escape abierto",
+      "spark": "Chispa",
+      "injection": "Inyección"
+    }
+  },
+  "readouts": {
+    "crankAngle": "Ángulo del cigüeñal",
+    "stroke": "Tiempo",
+    "engineSpeed": "Revoluciones",
+    "pressure": "Presión",
+    "pistonSpeed": "Velocidad del pistón"
+  },
+  "sections": {
+    "overview": {
+      "title": "Un empujón convertido en giro",
+      "p1": "Estás viendo, en corte, un cilindro del motor de un automóvil. Un <strong>pistón</strong> sube y baja dentro de un tubo. Encima hay dos <strong>válvulas</strong> y, según el combustible, una bujía o un inyector. Debajo, una <strong>biela</strong> une el pistón al <strong>cigüeñal</strong>, el eje que acaba haciendo girar las ruedas.",
+      "p2": "Toda la idea cabe en una frase: quemar combustible en un espacio cerrado, dejar que el gas caliente empuje el pistón hacia abajo y convertir ese empuje en giro. Todo lo demás que hay en el motor sirve para repetir esto de forma limpia, una y otra vez.",
+      "p3": "Se repite en un ciclo de cuatro pasos llamados <strong>tiempos</strong>. El dial de la esquina muestra en qué punto del ciclo está el motor. El modelo va a cámara lenta: un motor de automóvil real gira al ralentí a unas 800 vueltas por minuto y puede ir ocho veces más rápido.",
+      "p4": "Arrastra el modelo para verlo desde otros ángulos y desplázate sobre él para acercarte o alejarte. A medida que avanzas en la lectura, la vista acompaña al texto."
+    },
+    "strokes": {
+      "title": "Cuatro tiempos",
+      "p1": "Cada tiempo es un recorrido del pistón desde lo alto del cilindro hasta abajo, o de vuelta. El punto más alto se llama <strong>punto muerto superior</strong> (PMS) y el más bajo, <strong>punto muerto inferior</strong> (PMI). Son puntos muertos porque el pistón se detiene ahí un instante antes de cambiar de sentido.",
+      "intake": {
+        "body": "El pistón baja con la válvula de admisión abierta, y el espacio que se agranda aspira carga fresca. Un motor de gasolina aspira aire ya mezclado con combustible. Un diésel aspira solo aire.",
+        "show": "Ver admisión"
+      },
+      "compression": {
+        "body": "Las dos válvulas se cierran y el pistón sube, comprimiendo la carga hasta una décima parte de su volumen, o menos. Comprimir un gas lo calienta, así que la carga está a varios cientos de grados antes de que haya ardido nada.",
+        "show": "Ver compresión"
+      },
+      "power": {
+        "body": "Cerca del punto más alto, la carga se enciende. Un motor de gasolina hace saltar una chispa. Un diésel inyecta combustible en un aire que ya está lo bastante caliente para encenderlo. El gas en combustión se expande y empuja el pistón con fuerza hacia abajo. Es el único tiempo que produce potencia.",
+        "show": "Ver expansión"
+      },
+      "exhaust": {
+        "body": "La válvula de escape se abre y el pistón, al subir, expulsa los gases quemados y deja el cilindro listo para empezar de nuevo.",
+        "show": "Ver escape"
+      },
+      "p2": "Fíjate en el gas: la carga fresca entra fría, se calienta al comprimirse, se ilumina de naranja al arder y sale gris."
+    },
+    "cycle": {
+      "title": "Dos vueltas por cada empujón",
+      "p1": "Cada tiempo ocupa media vuelta del cigüeñal, así que los cuatro tiempos suman dos vueltas completas: <strong>720 grados</strong>. Por eso el dial cuenta hasta 720 y no hasta 360.",
+      "p2": "El pistón llega arriba dos veces en cada ciclo: una a 0°, entre el escape y la admisión, y otra a 360°, cuando se enciende la carga. El pistón no distingue una de otra. Solo las válvulas y la chispa saben cuál es cuál.",
+      "p3": "Solo uno de cada cuatro tiempos empuja. Aspirar aire, comprimirlo y expulsar los gases de escape cuesta trabajo, y durante esos tres tiempos algo tiene que mantener el motor girando. El impulso de las piezas en movimiento aporta una parte, y el <strong>volante de inercia</strong> pone el resto: un disco pesado en el extremo del cigüeñal que absorbe energía durante el tiempo de expansión y la devuelve durante los otros tres.",
+      "p4": "Por eso un motor de un solo cilindro va a sacudidas: un empujón fuerte cada dos vueltas y nada en medio. Las cortadoras de césped usan un volante pesado para suavizarlo. Los automóviles añaden más cilindros, algo que veremos más adelante."
+    },
+    "valves": {
+      "title": "Válvulas y levas",
+      "p1": "Cada válvula es un tapón con forma de hongo. Un muelle la mantiene cerrada contra su asiento, y una <strong>leva</strong> la empuja para abrirla: un saliente con forma de huevo sobre un eje que gira. Cuando el saliente llega, empuja la válvula hacia abajo, dentro del cilindro. Cuando pasa de largo, el muelle vuelve a cerrarla.",
+      "p2": "Cada válvula se abre una vez por ciclo, y un ciclo son dos vueltas del cigüeñal. Por eso el <strong>árbol de levas gira a la mitad de velocidad que el cigüeñal</strong>, movido por una correa o una cadena. Mira las levas: dan una vuelta por cada dos del cigüeñal.",
+      "p3": "Si las válvulas se abrieran y cerraran justo en los puntos muertos, el motor respiraría mal. El gas tiene peso y tarda en ponerse en movimiento, así que los intervalos de apertura se alargan. La válvula de escape se abre <strong>con adelanto</strong>, bastante antes del punto muerto inferior, para que el gas, todavía a presión, salga por sí solo. La válvula de admisión se cierra <strong>con retraso</strong>, bastante después del punto muerto inferior, porque el aire sigue entrando con fuerza aunque el pistón ya haya empezado a subir.",
+      "p4": "Cerca del punto más alto, entre el escape y la admisión, las dos válvulas están abiertas a la vez durante un momento. Este <strong>cruce de válvulas</strong> permite que los gases de escape, al salir, ayuden a arrastrar la carga fresca tras ellos.",
+      "caption": "Apertura de las válvulas a lo largo de un ciclo en el motor seleccionado. La franja es continua: su borde derecho enlaza con el izquierdo, y las bandas sombreadas marcan dónde están abiertas las dos válvulas."
+    },
+    "ignition": {
+      "title": "Encender la carga",
+      "p1": "La combustión no es instantánea. En un motor de gasolina, la llama nace en la bujía y se extiende por la cámara en unas milésimas de segundo, que equivalen a un buen trozo de vuelta. El empuje se aprovecha mejor justo después del punto muerto superior, así que la chispa tiene que saltar con adelanto: <strong>entre 10 y 40 grados antes del punto muerto superior, aproximadamente</strong>.",
+      "p2": "Cuánto adelanto depende de las revoluciones. La llama tarda más o menos lo mismo haga lo que haga el motor, pero a más revoluciones el cigüeñal recorre más grados en ese intervalo, así que el avance de encendido crece a medida que el motor sube de vueltas. Si la chispa salta demasiado pronto, la presión frena al pistón que sube. Si salta demasiado tarde, persigue a un pistón que ya va de bajada.",
+      "p3": "Un diésel no tiene bujía. La compresión calienta el aire por encima de <strong>unos 700 °C</strong>, y poco antes del punto muerto superior el inyector pulveriza combustible en él. El combustible tarda un momento en vaporizarse y prender, un breve <strong>retraso de encendido</strong>, y después arde más o menos al ritmo al que se inyecta. La combustión se reparte a lo largo de la inyección, en lugar de cruzar la cámara a toda velocidad en un solo frente de llama.",
+      "p4": "El gráfico muestra el resultado. En el motor de gasolina, la presión sube hasta un pico agudo justo después del punto más alto. El diésel parte de una compresión mucho mayor, y su combustión mantiene la presión alta mientras el pistón empieza a bajar.",
+      "caption": "Presión en el cilindro durante la compresión y la expansión, comparada con la del aire exterior. La admisión y el escape se quedan cerca de 1× y no se muestran. La curva gruesa corresponde al motor en pantalla, y la línea lo sigue en tiempo real."
+    },
+    "crank": {
+      "title": "Del empujón al giro",
+      "p1": "La biela une el pistón a un eje corto y descentrado del cigüeñal, la <strong>muñequilla</strong>. Mientras la muñequilla describe un círculo, la biela convierte el empuje en línea recta del pistón en giro, igual que tu pierna hace girar el pedal de una bicicleta.",
+      "p2": "El pistón no se mueve siguiendo una onda sinusoidal perfecta. La biela se inclina cuando la muñequilla sale hacia un lado, y eso tira del pistón más abajo de lo que baja la propia muñequilla. Con el cigüeñal a 90 grados, el pistón ya ha pasado de la mitad: unos 50 de sus 86 mm. Por eso se mueve <strong>más rápido cerca del punto muerto superior que cerca del punto muerto inferior</strong>, y alcanza su velocidad máxima antes de que el cigüeñal haya girado 90 grados.",
+      "p3": "A 3000 rpm, esa velocidad máxima es de unos 14 m/s, y el pistón se detiene en seco y cambia de sentido dos veces en cada vuelta. Unos pesados <strong>contrapesos</strong>, opuestos a la muñequilla, equilibran la masa que gira de la muñequilla y la biela, para que el motor no se desmonte de tanto vibrar.",
+      "caption": "Posición y velocidad del pistón durante una vuelta del cigüeñal. Las líneas discontinuas muestran lo que haría una biela que nunca se inclinara."
+    },
+    "compression": {
+      "title": "Cuánto comprimir",
+      "p1": "La <strong>relación de compresión</strong> compara el espacio que hay sobre el pistón en el punto muerto inferior con el que queda en el punto muerto superior. Con 10:1, la carga se comprime hasta ocupar una décima parte del espacio que tenía.",
+      "p2": "Una relación más alta deja que el gas en combustión se expanda más, así que una mayor parte de su calor se convierte en empuje: más trabajo con el mismo combustible. Entonces, ¿por qué no comprimir más? Un motor de gasolina comprime juntos el combustible y el aire, y al comprimirlos se calientan. Si te pasas, algunas bolsas de mezcla se encienden solas antes de que llegue la llama. Es la <strong>detonación</strong>, o picado: un golpe seco que puede agrietar los pistones. Por eso los motores de gasolina se mueven <strong>entre 9 y 13:1, aproximadamente</strong>.",
+      "p3": "Un diésel solo comprime aire, así que no hay nada que pueda encenderse demasiado pronto, y además necesita ese calor: el aire tiene que estar lo bastante caliente para encender el combustible. Los motores diésel trabajan <strong>entre 14 y 22:1, aproximadamente</strong>.",
+      "control": {
+        "label": "Relación de compresión",
+        "petrolBand": "gasolina",
+        "dieselBand": "diésel",
+        "clearance": "Espacio sobre el pistón",
+        "pressure": "Presión antes de la combustión"
+      },
+      "p4": "Aquí el modelo se detiene en el punto muerto superior, para que veas cómo se reduce el espacio sobre el pistón al subir la relación."
+    },
+    "fuel": {
+      "title": "Gasolina o diésel",
+      "p1": "Los dos motores siguen los mismos cuatro tiempos. Se diferencian en cómo entra el combustible y en qué lo enciende.",
+      "table": {
+        "feature": "Característica",
+        "fuelIn": {
+          "label": "Cómo entra el combustible",
+          "petrol": "Mezclado con el aire mientras entra, o inyectado durante la admisión",
+          "diesel": "Inyectado directamente en el aire caliente al final de la compresión"
+        },
+        "lighting": {
+          "label": "Qué lo enciende",
+          "petrol": "Una chispa",
+          "diesel": "El calor de la compresión"
+        },
+        "ratio": {
+          "label": "Relación de compresión",
+          "petrol": "De 9 a 13:1",
+          "diesel": "De 14 a 22:1"
+        },
+        "power": {
+          "label": "Qué regula la potencia",
+          "petrol": "Una mariposa que limita el aire",
+          "diesel": "La cantidad de combustible inyectado"
+        },
+        "topSpeed": {
+          "label": "Revoluciones máximas típicas",
+          "petrol": "De 6000 a 7000 rpm",
+          "diesel": "De 4000 a 5000 rpm"
+        }
+      },
+      "p2": "Un diésel es <strong>más eficiente</strong> por tres razones. Comprime más, así que cada gota de combustible rinde más trabajo. Funciona con mezcla pobre, con mucho más aire del que necesita el combustible. Y no tiene mariposa, así que nunca malgasta esfuerzo aspirando aire a través de una válvula medio cerrada.",
+      "p3": "Un motor de gasolina <strong>sube más de vueltas y funciona con más suavidad</strong>. Su mezcla está lista para arder en cuanto salta la chispa, y la llama es rápida. Sus presiones más bajas permiten piezas más ligeras, que giran rápido sin problema. Un diésel espera a que el combustible se mezcle y prenda, y cuando lo hace la presión se dispara: de ahí su característico traqueteo.",
+      "showPetrol": "Ver gasolina",
+      "showDiesel": "Ver diésel",
+      "aside": "Un híbrido combina un motor como este con un motor eléctrico que lo ayuda, le permite apagarse cuando no hace falta y recupera energía al frenar. Es un capítulo que esta guía todavía no tiene."
+    },
+    "inline4": {
+      "title": "Cuatro cilindros",
+      "p1": "Un cilindro da un empujón cada dos vueltas. Cuatro cilindros que comparten cigüeñal, cada uno en un punto distinto del ciclo, dan un empujón cada media vuelta: <strong>un tiempo de expansión cada 180 grados</strong> en lugar de cada 720. El empuje sobre el cigüeñal es mucho más regular, así que el volante de inercia puede ser mucho más ligero.",
+      "p2": "Las muñequillas están colocadas de modo que los pistones 1 y 4 se mueven juntos, y el 2 y el 3 también, pero en sentido contrario. Cuando la pareja exterior sube, la interior baja, así que sus principales fuerzas de subida y bajada se anulan.",
+      "p3": "Los pistones que se mueven juntos nunca están en el mismo tiempo. Cuando se enciende el pistón 1, el 4 también está arriba, terminando su escape. El orden de encendido es <strong>{{firingOrder}}</strong>: alterna entre los extremos del cigüeñal y reparte los impulsos de forma uniforme a lo largo de él.",
+      "caption": "Cada fila es un cilindro durante un ciclo completo, con un color para cada tiempo. Los tiempos de expansión avanzan de 180 en 180 grados."
+    },
+    "controls": {
+      "title": "Controles",
+      "p1": "Todo en la página también funciona con el teclado.",
+      "aside": "Las cifras salen de un modelo sencillo de un cilindro de medio litro, con 86 mm de diámetro, 86 mm de carrera y una biela de 145 mm. Las presiones están simplificadas: sirven para ver formas y proporciones, no para dar cifras exactas."
+    }
+  },
+  "keyboard": {
+    "jumpToStroke": "Ir a admisión, compresión, expansión o escape",
+    "step": "Mover el cigüeñal 2°, o 15° con <kbd>Mayús</kbd>",
+    "cutaway": "Activar o desactivar la vista en corte",
+    "gas": "Activar o desactivar los colores del gas",
+    "labels": "Activar o desactivar todas las etiquetas",
+    "flow": "Activar o desactivar las flechas del flujo de gas",
+    "engineType": "Cambiar entre gasolina y diésel",
+    "layout": "Cambiar entre un cilindro y cuatro en línea",
+    "orbit": "Girar alrededor del motor"
+  },
+  "diagrams": {
+    "valveTiming": {
+      "intake": "Admisión",
+      "exhaust": "Escape",
+      "opens": "abre {{offset}}",
+      "closes": "cierra {{offset}}",
+      "overlap": "cruce",
+      "spark": "chispa",
+      "sparkAt": "chispa {{offset}}",
+      "injection": "inyección",
+      "injectionAt": "inyección {{offset}}",
+      "title": {
+        "petrol": "Distribución de las válvulas en el motor de gasolina.",
+        "diesel": "Distribución de las válvulas en el motor diésel."
+      },
+      "summary": "La válvula de admisión se abre {{intakeOpens}} y se cierra {{intakeCloses}}. La válvula de escape se abre {{exhaustOpens}} y se cierra {{exhaustCloses}}. Las dos están abiertas a la vez durante {{overlap}} grados alrededor del punto muerto superior."
+    },
+    "pressure": {
+      "peak": "máx. {{value}}",
+      "summary": {
+        "petrol": "Presión en el cilindro durante los tiempos de compresión y expansión, comparando gasolina y diésel, con la gasolina resaltada.",
+        "diesel": "Presión en el cilindro durante los tiempos de compresión y expansión, comparando gasolina y diésel, con el diésel resaltado."
+      },
+      "peakSummary": {
+        "petrol": "En gasolina, el pico ronda {{value}} la presión del aire exterior.",
+        "diesel": "En diésel, el pico ronda {{value}} la presión del aire exterior."
+      }
+    },
+    "pistonMotion": {
+      "distanceTitle": "Distancia desde el PMS, mm",
+      "speedTitle": "Velocidad a {{rpm}}, m/s",
+      "halfStroke": "media carrera",
+      "quarterTurn": "{{distance}} a {{angle}}",
+      "peak": "máx. a {{angle}}",
+      "realPiston": "Pistón real",
+      "uprightRod": "Biela que nunca se inclina",
+      "description": "Distancia del pistón al punto muerto superior y velocidad del pistón durante una vuelta del cigüeñal, comparadas con una biela que nunca se inclina. A 90 grados el pistón ya ha pasado de la mitad, y alcanza su velocidad máxima antes de los 90 grados."
+    },
+    "firingOrder": {
+      "sequence": "Orden de encendido",
+      "cylinder": "Cilindro",
+      "chipsLabel": "Tiempo actual de cada cilindro",
+      "description": "Tiempos de cada cilindro de un motor de cuatro en línea durante un ciclo. Los tiempos de expansión se suceden cada 180 grados en el orden {{order}}."
+    }
+  },
+  "parts": {
+    "piston": "Pistón",
+    "connectingRod": "Biela",
+    "crankshaft": "Cigüeñal",
+    "flywheel": "Volante de inercia",
+    "cylinder": "Cilindro",
+    "combustionChamber": "Cámara de combustión",
+    "intakeValve": "Válvula de admisión",
+    "exhaustValve": "Válvula de escape",
+    "intakeCam": "Leva de admisión",
+    "exhaustCam": "Leva de escape",
+    "intakePort": "Conducto de admisión",
+    "exhaustPort": "Conducto de escape",
+    "sparkPlug": "Bujía",
+    "injector": "Inyector"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "rpm": "{{value}} rpm",
+    "metresPerSecond": "{{value}} m/s",
+    "millimetres": "{{value}} mm",
+    "times": "{{value}}×",
+    "ratio": "{{value}}:1"
+  }
+}

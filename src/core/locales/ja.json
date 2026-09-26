@@ -1,0 +1,59 @@
+{
+  "page": {
+    "skipLink": "解説へ移動"
+  },
+  "header": {
+    "language": "言語",
+    "source": "GitHub",
+    "sourceLabel": "GitHubのソースコード"
+  },
+  "stage": {
+    "label": "操作できるモデル",
+    "gauge": "リアルタイムの計測値"
+  },
+  "controls": {
+    "label": "操作",
+    "play": "再生",
+    "pause": "一時停止",
+    "more": "その他の操作",
+    "speed": "回転数",
+    "speedValue": "{{value}}、{{description}}",
+    "viewOptions": "表示オプション",
+    "resetCamera": "視点をリセット",
+    "resetCameraHint": "視点をリセット（R）"
+  },
+  "keyboard": {
+    "keys": {
+      "space": "スペース",
+      "drag": "ドラッグ",
+      "scroll": "スクロール／ピンチ"
+    },
+    "playPause": "再生／一時停止",
+    "speed": "回転を速く／遅くする",
+    "resetCamera": "視点をリセット",
+    "zoom": "拡大・縮小"
+  },
+  "footer": {
+    "source": "ソースコード",
+    "license": "MITライセンス",
+    "builtWith": "Three.jsで制作",
+    "copyright": "© {{year}} {{title}}。<a href=\"https://github.com/veelenga\">veelenga</a>が♥を込めて制作"
+  },
+  "catalogue": {
+    "title": "What makes it tick",
+    "eyebrow": "インタラクティブな解説",
+    "tagline": "身近な機械のしくみを3Dで分解し、スローモーションで一つひとつの部品の動きを見せます。",
+    "skipLink": "解説一覧へ移動",
+    "listLabel": "カテゴリ別の解説",
+    "explore": "見てみる",
+    "moreSoon": "新しい解説を準備中です。",
+    "categories": {
+      "engines": "エンジン",
+      "drivetrain": "駆動系",
+      "aircraft": "航空機",
+      "electrical": "電気",
+      "home": "家庭",
+      "tools": "工具"
+    }
+  }
+}

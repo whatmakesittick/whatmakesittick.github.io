@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "title": "Cómo vuela un helicóptero",
+    "eyebrow": "El rotor del helicóptero, a cámara lenta",
+    "tagline": "Un helicóptero se sostiene sobre alas que giran. Cambia el ángulo de las palas y sube o baja, inclina el disco que gira y avanza, y un pequeño rotor en la cola evita que toda la máquina dé vueltas sobre sí misma.",
+    "description": "Una mirada interactiva y a cámara lenta a cómo vuela un helicóptero: un ala que gira y produce sustentación, el paso colectivo, el par y el rotor de cola, y la pala que avanza y la que retrocede en vuelo de avance.",
+    "summary": "La sustentación del rotor, el paso colectivo, el rotor de cola y el vuelo de avance."
+  },
+  "stage": {
+    "label": "Modelo interactivo del helicóptero",
+    "gauge": "Lecturas del rotor en directo"
+  },
+  "controls": {
+    "label": "Controles del helicóptero",
+    "flightMode": "Vuelo",
+    "speedDescriptions": {
+      "verySlow": "muy lento",
+      "slowMotion": "a cámara lenta",
+      "nearReal": "casi a velocidad real"
+    },
+    "views": {
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      },
+      "flow": {
+        "name": "Flujo de aire",
+        "short": "Aire",
+        "hint": "Flujo de aire (F)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Ángulo del rotor",
+    "phases": "Ir a media vuelta",
+    "speed": "Velocidad del rotor",
+    "jump": {
+      "advancing": "Ir a la media vuelta de avance",
+      "retreating": "Ir a la media vuelta de retroceso"
+    },
+    "value": {
+      "advancing": "{{angle}}, la pala marcada avanza",
+      "retreating": "{{angle}}, la pala marcada retrocede"
+    }
+  },
+  "phases": {
+    "advancing": "Avanza",
+    "retreating": "Retrocede"
+  },
+  "flightModes": {
+    "hover": "Estacionario",
+    "forward": "Avance"
+  },
+  "tendencies": {
+    "descend": "Desciende",
+    "hover": "Se mantiene",
+    "climb": "Asciende"
+  },
+  "readouts": {
+    "azimuth": "Ángulo del rotor",
+    "half": "Pala marcada",
+    "rotorSpeed": "Velocidad del rotor",
+    "tipSpeed": "Velocidad en la punta",
+    "bladePitch": "Paso de la pala"
+  },
+  "parts": {
+    "mainRotor": "Rotor principal",
+    "markedBlade": "Pala marcada",
+    "swashplate": "Plato cíclico",
+    "fuselage": "Fuselaje",
+    "tailBoom": "Botalón de cola",
+    "tailRotor": "Rotor de cola",
+    "skids": "Patines"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "rpm": "{{value}} rpm",
+    "metresPerSecond": "{{value}} m/s",
+    "percent": "{{value}} %"
+  },
+  "sections": {
+    "overview": {
+      "title": "Un ala que gira",
+      "p1": "Estás viendo un helicóptero ligero. Las palas largas y finas de arriba forman el <strong>rotor principal</strong>, y cada pala es un ala. Ligeramente inclinada contra el aire, empuja el aire hacia abajo al moverse, y el aire empuja la pala hacia arriba. Ese empuje es la <strong>sustentación</strong>.",
+      "p2": "Un avión consigue que el aire pase por sus alas corriendo por una pista. Un helicóptero, en cambio, hace girar sus alas, así que siguen moviéndose en el aire aunque el helicóptero esté quieto. Por eso puede despegar en vertical, quedarse suspendido sobre un punto y volar de lado o hacia atrás.",
+      "p3": "Un motor hace girar el rotor a través de una caja de transmisión y de un eje vertical llamado <strong>mástil</strong>. Un rotor principal real da unos cientos de vueltas por minuto, y sus puntas se mueven a unos 200 m/s, más de 700 km/h. El modelo va a cámara lenta, y una de las palas tiene la punta de color para que puedas seguirla en su giro.",
+      "p4": "Arrastra el modelo para verlo desde otros ángulos y desplázate sobre él para acercarte o alejarte. A medida que avanzas en la lectura, la vista acompaña al texto."
+    },
+    "collective": {
+      "title": "Más paso, más sustentación",
+      "p1": "El rotor de un helicóptero gira casi siempre a la misma velocidad. Para cambiar la sustentación, el piloto cambia el ángulo de las palas. Ese ángulo es el <strong>paso</strong> de la pala. Una pala con más paso ataca el aire con un ángulo más pronunciado, empuja más aire hacia abajo y sustenta más.",
+      "p2": "La mano izquierda del piloto sujeta la palanca del <strong>colectivo</strong>. Al subirla, empuja hacia arriba el <strong>plato cíclico</strong>, un par de anillos alrededor del mástil. Unas varillas que salen del plato giran todas las palas lo mismo a la vez, en toda la vuelta. Por eso se llama colectivo.",
+      "control": {
+        "label": "Palanca del colectivo",
+        "down": "Abajo",
+        "up": "Arriba",
+        "pitch": "Paso de la pala",
+        "result": "Resultado"
+      },
+      "p3": "Con la palanca baja, el rotor sustenta menos de lo que pesa el helicóptero, y este desciende. Hacia la mitad, la sustentación iguala al peso y el helicóptero se mantiene en vuelo estacionario. Sube más la palanca y asciende. Más paso también significa más resistencia en las palas, así que el motor tiene que dar más potencia para mantener el rotor a la misma velocidad.",
+      "p4": "Mueve la palanca y observa cómo el plato cíclico se desliza por el mástil y las palas giran sobre sí mismas. Las palas también se curvan un poco hacia arriba a medida que crece la sustentación: es lo que se llama conicidad."
+    },
+    "torque": {
+      "title": "Por qué hay un rotor de cola",
+      "p1": "Hacer girar el rotor exige un esfuerzo de giro, o <strong>par</strong>, del motor. A toda acción le corresponde una reacción igual, así que el cuerpo del helicóptero siente el mismo par en sentido contrario. Visto desde arriba, este rotor gira en sentido antihorario. Si nada lo impidiera, el fuselaje giraría en sentido horario.",
+      "p2": "El <strong>rotor de cola</strong> lo impide. Está al final del largo <strong>botalón de cola</strong> y sopla aire hacia un lado. Su empuje actúa sobre el extremo del botalón como una llave sobre una tuerca, y equilibra el par del rotor principal. Cuanto más largo es el botalón, menos empuje hace falta.",
+      "p3": "Un eje que recorre el botalón transmite el giro de la caja de transmisión principal al rotor de cola, así que los dos giran siempre a la vez. En este modelo, el rotor de cola da cinco vueltas por cada vuelta del rotor principal.",
+      "p4": "Los <strong>pedales</strong> del piloto cambian el paso de las palas del rotor de cola. Más empuje hace girar el morro hacia un lado; menos empuje deja que el par lo haga girar hacia el otro. Así es como un helicóptero gira sobre sí mismo.",
+      "p5": "Algunos helicópteros prescinden del rotor de cola y usan dos rotores principales que giran en sentidos opuestos, uno encima del otro o uno en cada extremo, de modo que sus pares se anulan."
+    },
+    "forward": {
+      "title": "La pala que avanza y la que retrocede",
+      "p1": "Para volar hacia delante, el piloto empuja la palanca del <strong>cíclico</strong>. Esta inclina el plato cíclico, de modo que el paso de cada pala sube y baja una vez en cada vuelta. El disco que gira se inclina hacia delante, parte de su sustentación tira ahora del helicóptero hacia delante, y toda la máquina vuela con el morro un poco bajo.",
+      "p2": "Ahora los dos lados del rotor encuentran un aire distinto. En un lado la pala avanza, contra el viento del vuelo: es la <strong>pala que avanza</strong>. En el otro lado se mueve hacia atrás, alejándose de ese viento: es la <strong>pala que retrocede</strong>. Contando desde la cola, la pala marcada avanza de 0° a 180° y retrocede de 180° a 360°.",
+      "p3": "Supón que las puntas se mueven a 200 m/s y que el helicóptero vuela a 50 m/s. La punta que avanza encuentra el aire a 250 m/s; la que retrocede, a solo 150 m/s. La sustentación crece con el cuadrado de la velocidad del aire, así que, sin nada que lo corrija, el lado que avanza sustentaría mucho más y haría volcar el helicóptero.",
+      "p4": "El cíclico lo compensa. Da menos paso a la pala que avanza y más a la que retrocede, de modo que los dos lados sustentan más o menos lo mismo. Fíjate en la pala marcada: su paso baja en el lado que avanza y sube en el lado que retrocede, una vez en cada vuelta.",
+      "showHover": "Ver vuelo estacionario",
+      "showForward": "Ver vuelo de avance",
+      "p5": "Eso impone un límite. Cuanto más rápido vuela el helicóptero, más lento pasa el aire por la pala que retrocede y más paso necesita, hasta que entra en pérdida. Es la razón principal por la que los helicópteros convencionales rara vez superan con holgura los 300 km/h.",
+      "aside": "Las cifras salen de un pequeño modelo de un rotor de cuatro palas con 5 m de radio. Los ángulos de paso están simplificados: sirven para ver formas y proporciones, no para obtener cifras exactas."
+    }
+  }
+}

@@ -1,0 +1,161 @@
+<section class="chapter" data-preset="overview" aria-labelledby="overview-title">
+  <p class="chapter-index">01</p>
+  <h2 id="overview-title" data-i18n="sections.overview.title">A wing that spins</h2>
+  <p data-i18n-html="sections.overview.p1">
+    You are looking at a light helicopter. The long, thin blades on top form the
+    <strong>main rotor</strong>, and each blade is a wing. Tilted slightly into the air, it pushes
+    air down as it moves, and the air pushes the blade up. That push is <strong>lift</strong>.
+  </p>
+  <p data-i18n="sections.overview.p2">
+    An aeroplane gets air flowing over its wings by racing down a runway. A helicopter spins its
+    wings instead, so they keep moving through the air even while the helicopter stays still. That
+    is why it can take off straight up, hover over one spot and fly sideways or backwards.
+  </p>
+  <p data-i18n-html="sections.overview.p3">
+    An engine turns the rotor through a gearbox and a vertical shaft called the
+    <strong>mast</strong>. A real main rotor turns a few hundred times a minute, and its tips move
+    at around 200 m/s, over 700 km/h. The model runs in slow motion, and one blade has a coloured
+    tip so you can follow it round.
+  </p>
+  <p data-i18n="sections.overview.p4">
+    Drag the model to look around it and scroll over it to zoom. As you read on, the view follows
+    the text.
+  </p>
+</section>
+
+<section class="chapter" data-preset="collective" aria-labelledby="collective-title">
+  <p class="chapter-index">02</p>
+  <h2 id="collective-title" data-i18n="sections.collective.title">More pitch, more lift</h2>
+  <p data-i18n-html="sections.collective.p1">
+    A helicopter rotor turns at almost the same speed all the time. To change the lift, the pilot
+    changes the angle of the blades instead. That angle is the blade's <strong>pitch</strong>. A
+    blade with more pitch meets the air at a steeper angle, pushes more air down and lifts more.
+  </p>
+  <p data-i18n-html="sections.collective.p2">
+    The pilot's left hand holds the <strong>collective</strong> lever. Raising it pushes up the
+    <strong>swashplate</strong>, a pair of rings around the mast. Rods from the swashplate twist
+    every blade by the same amount at once, all the way round. That is why it is called collective.
+  </p>
+  <div class="collective-control">
+    <div class="collective-header">
+      <label for="collective-lever" data-i18n="sections.collective.control.label">
+        Collective lever
+      </label>
+      <output class="number" for="collective-lever" data-readout="collective-lever">50%</output>
+    </div>
+    <input
+      id="collective-lever"
+      type="range"
+      class="range collective-range"
+      data-control="collective"
+    />
+    <div class="collective-scale" aria-hidden="true">
+      <span data-i18n="sections.collective.control.down">Down</span>
+      <span data-i18n="sections.collective.control.up">Up</span>
+    </div>
+    <dl class="collective-readouts">
+      <div>
+        <dt data-i18n="sections.collective.control.pitch">Blade pitch</dt>
+        <dd class="number" data-readout="collective-pitch">6.0°</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.collective.control.result">Result</dt>
+        <dd data-readout="collective-result" data-tendency="hover">Hovers</dd>
+      </div>
+    </dl>
+  </div>
+  <p data-i18n="sections.collective.p3">
+    With the lever low, the rotor lifts less than the helicopter weighs, and it sinks. Around the
+    middle the lift matches the weight and the helicopter hovers. Raise the lever further and it
+    climbs. More pitch also means more drag on the blades, so the engine has to give more power to
+    keep the rotor at the same speed.
+  </p>
+  <p data-i18n="sections.collective.p4">
+    Move the lever and watch the swashplate slide along the mast and the blades twist. The blades
+    also bend upward a little as the lift grows, which is called coning.
+  </p>
+</section>
+
+<section class="chapter" data-preset="torque" aria-labelledby="torque-title">
+  <p class="chapter-index">03</p>
+  <h2 id="torque-title" data-i18n="sections.torque.title">Why there is a tail rotor</h2>
+  <p data-i18n-html="sections.torque.p1">
+    Spinning the rotor takes a twist, or <strong>torque</strong>, from the engine. Every push has an
+    equal push back, so the body of the helicopter feels the same twist the other way. Seen from
+    above, this rotor turns anticlockwise. Left alone, the fuselage would spin clockwise.
+  </p>
+  <p data-i18n-html="sections.torque.p2">
+    The <strong>tail rotor</strong> stops that. It sits at the end of the long
+    <strong>tail boom</strong> and blows air sideways. Its push acts on the end of the boom like a
+    spanner on a bolt, and it balances the twist of the main rotor. The longer the boom, the smaller
+    the push needed.
+  </p>
+  <p data-i18n="sections.torque.p3">
+    A shaft along the boom drives the tail rotor from the main gearbox, so the two always turn
+    together. In this model the tail rotor turns five times for every turn of the main rotor.
+  </p>
+  <p data-i18n-html="sections.torque.p4">
+    The pilot's <strong>pedals</strong> change the pitch of the tail rotor blades. More push swings
+    the nose one way; less push lets the torque swing it the other. That is how a helicopter turns
+    on the spot.
+  </p>
+  <p data-i18n="sections.torque.p5">
+    Some helicopters skip the tail rotor and use two main rotors turning in opposite directions, one
+    above the other or one at each end, so their twists cancel out.
+  </p>
+</section>
+
+<section class="chapter" data-preset="forward" aria-labelledby="forward-title">
+  <p class="chapter-index">04</p>
+  <h2 id="forward-title" data-i18n="sections.forward.title">Advancing and retreating</h2>
+  <p data-i18n-html="sections.forward.p1">
+    To fly forward, the pilot pushes the <strong>cyclic</strong> stick. It tilts the swashplate, so
+    each blade's pitch now rises and falls once on every turn. The spinning disc tips forward, part
+    of its lift now pulls the helicopter ahead, and the whole machine flies a little nose down.
+  </p>
+  <p data-i18n-html="sections.forward.p2">
+    Now the two sides of the rotor meet different air. On one side the blade swings forward, into
+    the wind of flight: this is the <strong>advancing blade</strong>. On the other side it swings
+    backward, away from that wind: the <strong>retreating blade</strong>. Counting from the tail,
+    the marked blade advances from 0° to 180° and retreats from 180° to 360°.
+  </p>
+  <p data-i18n="sections.forward.p3">
+    Say the tips move at 200 m/s and the helicopter flies at 50 m/s. The advancing tip meets the air
+    at 250 m/s, the retreating tip at only 150 m/s. Lift grows with the square of the airspeed, so
+    left alone the advancing side would lift far more and roll the helicopter over.
+  </p>
+  <p data-i18n="sections.forward.p4">
+    The cyclic evens this out. It gives the advancing blade less pitch and the retreating blade
+    more, so both sides lift about the same. Watch the marked blade: its pitch dips on the advancing
+    side and rises on the retreating side, once on every turn.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="flight-mode"
+      data-value="hover"
+      data-i18n="sections.forward.showHover"
+    >
+      Show a hover
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="flight-mode"
+      data-value="forward"
+      data-i18n="sections.forward.showForward"
+    >
+      Show forward flight
+    </button>
+  </p>
+  <p data-i18n="sections.forward.p5">
+    That sets a limit. The faster the helicopter flies, the slower the air over the retreating
+    blade, and the more pitch it needs, until it stalls. This is the main reason ordinary
+    helicopters rarely fly much faster than 300 km/h.
+  </p>
+  <p class="aside" data-i18n="sections.forward.aside">
+    Numbers come from a small model of a four-blade rotor with a 5 m radius. Pitch angles are
+    simplified: good for shapes and proportions, not for exact figures.
+  </p>
+</section>
