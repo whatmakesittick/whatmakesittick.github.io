@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0d10" />
+    <meta name="description" content="{{description}}" data-i18n-attr="content:meta.description" />
+    <title data-i18n="meta.title">{{title}}</title>
+    <link rel="canonical" href="{{url}}" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{url}}" />
+    <meta property="og:site_name" content="{{siteName}}" />
+    <meta property="og:title" content="{{title}}" data-i18n-attr="content:meta.title" />
+    <meta
+      property="og:description"
+      content="{{description}}"
+      data-i18n-attr="content:meta.description"
+    />
+    <meta property="og:image" content="{{image}}" />
+    <meta property="og:image:type" content="{{imageType}}" />
+    <meta property="og:image:width" content="{{imageWidth}}" />
+    <meta property="og:image:height" content="{{imageHeight}}" />
+    <meta property="og:image:alt" content="{{imageAlt}}" />
+    {{localeTags}}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{title}}" data-i18n-attr="content:meta.title" />
+    <meta
+      name="twitter:description"
+      content="{{description}}"
+      data-i18n-attr="content:meta.description"
+    />
+    <meta name="twitter:image" content="{{image}}" />
+    <meta name="twitter:image:alt" content="{{imageAlt}}" />
+    <script type="application/ld+json">
+      {{structuredData}}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#explainer" data-i18n="page.skipLink">Skip to the explanation</a>
+
+    <div class="page">
+      <header class="masthead">
+        <div class="masthead-row">
+          <p class="eyebrow" data-i18n="meta.eyebrow">{{eyebrow}}</p>
+          <!-- partial:header-actions -->
+        </div>
+        <h1 data-i18n="meta.title">{{title}}</h1>
+        <p class="tagline" data-i18n="meta.tagline">{{tagline}}</p>
+      </header>
+
+      <section
+        class="stage"
+        data-stage
+        aria-label="Interactive model"
+        data-i18n-attr="aria-label:stage.label"
+      >
+        <div id="scene"></div>
+
+        <aside
+          class="gauge glass"
+          data-gauge
+          aria-label="Live readings"
+          data-i18n-attr="aria-label:stage.gauge"
+        >
+          <dl class="readouts" data-readouts></dl>
+        </aside>
+
+        <div
+          class="dock glass"
+          data-dock
+          role="group"
+          aria-label="Controls"
+          data-i18n-attr="aria-label:controls.label"
+        >
+          <div class="dock-main">
+            <button
+              type="button"
+              class="play-button"
+              data-control="play"
+              aria-label="Pause"
+              aria-keyshortcuts="Space"
+            >
+              <svg class="icon icon-play" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M8 5.2v13.6a.8.8 0 0 0 1.2.7l10.4-6.8a.8.8 0 0 0 0-1.4L9.2 4.5a.8.8 0 0 0-1.2.7Z"
+                />
+              </svg>
+              <svg class="icon icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="6" y="5" width="4.2" height="14" rx="1.2" />
+                <rect x="13.8" y="5" width="4.2" height="14" rx="1.2" />
+              </svg>
+            </button>
+
+            <p class="dock-status" aria-hidden="true">
+              <span class="number" data-status="phase"></span>
+              <span class="tone-text" data-status="name"></span>
+            </p>
+
+            <div class="scrubber">
+              <label class="visually-hidden" for="phase" data-scrubber-label></label>
+              <input id="phase" type="range" data-control="scrubber" value="0" />
+              <div class="phase-buttons" role="group" data-phase-buttons></div>
+            </div>
+
+            <button
+              type="button"
+              class="icon-button dock-more"
+              data-control="more"
+              aria-expanded="false"
+              aria-controls="dock-extra"
+              aria-label="More controls"
+              data-i18n-attr="aria-label:controls.more"
+            >
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
+                <circle cx="15" cy="7" r="2.2" />
+                <circle cx="9" cy="17" r="2.2" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="dock-extra" id="dock-extra">
+            <div class="field speed-field" data-speed-field>
+              <label class="field-label" for="speed" data-speed-label>Speed</label>
+              <input id="speed" type="range" class="range" data-control="speed" />
+              <output class="field-value number" for="speed" data-speed-value></output>
+            </div>
+
+            <button
+              type="button"
+              class="icon-button"
+              data-control="reset-camera"
+              aria-label="Reset camera"
+              aria-keyshortcuts="R"
+              title="Reset camera (R)"
+              data-i18n-attr="aria-label:controls.resetCamera;title:controls.resetCameraHint"
+            >
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3" />
+                <path d="M4.5 4v4h4" />
+              </svg>
+            </button>
+
+            <select
+              class="language-select dock-language"
+              data-language-select
+              aria-label="Language"
+              data-i18n-attr="aria-label:header.language"
+            ></select>
+          </div>
+        </div>
+      </section>
+
+      <main id="explainer" class="prose">{{chapters}}</main>
+
+      <!-- partial:footer -->
+    </div>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
