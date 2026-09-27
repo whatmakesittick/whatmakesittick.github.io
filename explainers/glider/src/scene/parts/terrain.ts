@@ -1,10 +1,10 @@
 import { BufferAttribute, Color, Group, Mesh, MeshStandardMaterial, PlaneGeometry } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { anchorAt } from '@core/scene/parts';
 import { FIELD } from '../../model';
 import { FIELDS, TERRAIN, TERRAIN_COLORS } from '../constants';
 import { CREST_HEIGHT, ridgeShare, terrainHeight } from '../terrain';
-import { anchorAt } from './context';
 import type { PartContext } from './context';
 
 export interface TerrainPart {

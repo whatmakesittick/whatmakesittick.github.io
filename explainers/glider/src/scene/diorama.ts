@@ -2,6 +2,7 @@ import { Group, Vector3 } from 'three';
 import type { Box3, Object3D } from 'three';
 import { clamp } from '@core/math';
 import type { MaterialLibrary } from '@core/scene/materials';
+import { anchorAt } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import type { FramingSlopes } from '@core/scene/lens';
 import type { SceneTextures } from '@core/scene/textures';
@@ -29,7 +30,6 @@ import {
 import { AirflowPart } from './parts/airflow';
 import type { AirLifts } from './parts/airflow';
 import { CloudsPart } from './parts/clouds';
-import { anchorAt } from './parts/context';
 import type { PartContext } from './parts/context';
 import { ForceArrows } from './parts/forces';
 import type { ForceShares } from './parts/forces';

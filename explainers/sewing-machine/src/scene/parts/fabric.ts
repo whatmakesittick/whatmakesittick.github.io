@@ -1,10 +1,10 @@
 import { BoxGeometry, BufferAttribute, Group, Mesh } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
+import { anchorAt } from '@core/scene/parts';
 import { FABRIC, FABRIC_BOTTOM, FABRIC_TOP } from '../../model';
 import { FABRIC_SHEET } from '../constants';
 import { TRANSLUCENT_COLORS } from '../finishes';
 import type { TranslucentMaterial } from '../translucency';
-import { anchorAt } from './context';
 import type { PartContext } from './context';
 
 export interface FabricPart {

@@ -2,11 +2,12 @@ import type { Object3D } from 'three';
 import { Group } from 'three';
 import { toRadians } from '@core/math';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
+import { anchorAt } from '@core/scene/parts';
 import { TENSIONS } from '../../model';
 import type { Tension } from '../../model';
 import { HEAD, TENSION } from '../constants';
 import { box, cylinderAlongZ } from '../geometry/primitives';
-import { anchorAt, partMesh } from './context';
+import { partMesh } from './context';
 import type { PartContext } from './context';
 
 export interface TensionDiscsPart {

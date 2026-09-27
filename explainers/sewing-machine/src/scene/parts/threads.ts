@@ -1,6 +1,7 @@
 import { Group, MeshStandardMaterial } from 'three';
 import type { Object3D } from 'three';
 import { lerp } from '@core/math';
+import { anchorAt } from '@core/scene/parts';
 import {
   LOOP_GEOMETRY,
   LOOP_POINT_COUNT,
@@ -34,7 +35,6 @@ import { PathBuffer } from '../geometry/pathBuffer';
 import { ThreadTube } from '../geometry/threadTube';
 import { FINISHES } from '../finishes';
 import type { LeverEye } from './takeUpLever';
-import { anchorAt } from './context';
 import type { PartContext } from './context';
 
 export interface ThreadFrame {
