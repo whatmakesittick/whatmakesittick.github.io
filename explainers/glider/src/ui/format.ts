@@ -1,5 +1,5 @@
-import { formatFixed } from '@core/format';
-import { currentLanguage, t } from '@core/i18n';
+import { formatFixed, formatSigned } from '@core/format';
+import { t } from '@core/i18n';
 import { formatClock, phaseAt } from '../model';
 import type { GliderType, PhaseId } from '../model';
 
@@ -33,27 +33,12 @@ export function describeTimeLapse(speed: number): string {
 
 const RATE_DIGITS = 1;
 const KILOMETRES_PER_GLIDE_RATIO = 1;
-const signedFormats = new Map<string, Intl.NumberFormat>();
 
 export const GLIDER_KEYS: Record<GliderType, string> = {
   trainer: 'controls.gliderOptions.trainer',
   racer15: 'controls.gliderOptions.racer15',
   racer18: 'controls.gliderOptions.racer18',
 };
-
-function signedFormat(): Intl.NumberFormat {
-  const language = currentLanguage();
-  let format = signedFormats.get(language);
-  if (!format) {
-    format = new Intl.NumberFormat(language, {
-      signDisplay: 'exceptZero',
-      minimumFractionDigits: RATE_DIGITS,
-      maximumFractionDigits: RATE_DIGITS,
-    });
-    signedFormats.set(language, format);
-  }
-  return format;
-}
 
 export function formatMetres(metres: number): string {
   return t('units.m', { value: formatFixed(metres, 0) });
@@ -68,7 +53,7 @@ export function formatRate(metresPerSecond: number): string {
 }
 
 export function formatSignedRate(metresPerSecond: number): string {
-  return t('units.ms', { value: signedFormat().format(metresPerSecond) });
+  return t('units.ms', { value: formatSigned(metresPerSecond, RATE_DIGITS) });
 }
 
 export function formatRatio(ratio: number): string {
