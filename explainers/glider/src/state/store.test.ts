@@ -57,6 +57,22 @@ describe('glider store', () => {
     });
   });
 
+  it('turns the forces off again in the chapters about the air', () => {
+    const store = createGliderStore();
+    (['thermal', 'cloud', 'ridge', 'wave'] as const).forEach((chapter) => {
+      store.getState().applyPreset('glide');
+      store.getState().applyPreset(chapter);
+      expect(store.getState().view).toMatchObject({ forces: false, air: true });
+    });
+  });
+
+  it('keeps the forces the reader switches on within a chapter', () => {
+    const store = createGliderStore();
+    store.getState().applyPreset('ridge');
+    store.getState().toggleView('forces');
+    expect(store.getState().view.forces).toBe(true);
+  });
+
   it('pauses just under the cloud and resumes at the ridge', () => {
     const store = createGliderStore({ playing: true });
     store.getState().applyPreset('cloud');

@@ -52,7 +52,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   thermal: {
     camera: 'thermal',
     speed: 15,
-    view: { air: true },
+    view: { air: true, forces: false },
     startAt: 60,
     labels: ['field', 'thermal'],
     highlight: ['thermal', 'field'],
@@ -60,7 +60,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   cloud: {
     camera: 'cloud',
     speed: 15,
-    view: { air: true },
+    view: { air: true, forces: false },
     pauseAt: 430,
     labels: ['cumulus', 'thermal'],
     highlight: ['cumulus'],
@@ -68,7 +68,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   ridge: {
     camera: 'ridge',
     speed: 30,
-    view: { air: true },
+    view: { air: true, forces: false },
     startAt: 1010,
     labels: ['ridge', 'wind'],
     highlight: ['ridge', 'wind'],
@@ -76,7 +76,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   wave: {
     camera: 'wave',
     speed: 60,
-    view: { air: true },
+    view: { air: true, forces: false },
     startAt: 1300,
     labels: ['rotor', 'wave', 'lenticular'],
     highlight: ['wave', 'lenticular', 'rotor'],
