@@ -183,6 +183,7 @@ export const GAS = {
   lightRange: 120,
   heatLightIntensity: 40,
   sparkLightIntensity: 25,
+  dimmedOpacity: 0.35,
 } as const;
 
 export const FLOW = {
