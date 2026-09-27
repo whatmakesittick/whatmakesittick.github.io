@@ -262,3 +262,5 @@ export const AIR_TONES = {
 } as const;
 
 export const RENDER_ORDER = { column: 1, lines: 2, particles: 3 } as const;
+
+export const HAZE_DIM = { saturation: 0.3, brightness: 0.8 } as const;

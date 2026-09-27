@@ -1,5 +1,5 @@
 import type { SceneOptions } from '@core/scene/shell';
-import { SCENE_LIMITS, SKY_COLOR } from './constants';
+import { HAZE_DIM, SCENE_LIMITS, SKY_COLOR } from './constants';
 
 export const SCENE_OPTIONS: SceneOptions = {
   background: SKY_COLOR,
@@ -11,4 +11,5 @@ export const SCENE_OPTIONS: SceneOptions = {
     distance: { min: SCENE_LIMITS.cameraMinDistance, max: SCENE_LIMITS.cameraMaxDistance },
     maxPolarAngle: SCENE_LIMITS.maxPolarAngle,
   },
+  highlight: { dim: HAZE_DIM },
 };

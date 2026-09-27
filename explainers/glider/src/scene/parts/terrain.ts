@@ -1,9 +1,12 @@
-import { BufferAttribute, Color, Group, Mesh, MeshStandardMaterial, PlaneGeometry } from 'three';
-import type { BufferGeometry, Object3D } from 'three';
+import { BufferAttribute, Color, Group, Mesh, PlaneGeometry } from 'three';
+import type { BufferGeometry, MeshStandardMaterial, Object3D } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { UNDIMMED_GROUP } from '@core/scene/materials';
+import type { MaterialFinish } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import { FIELD } from '../../model';
 import { FIELDS, TERRAIN, TERRAIN_COLORS } from '../constants';
+import { TERRAIN_FINISHES } from '../finishes';
 import { CREST_HEIGHT, ridgeShare, terrainHeight } from '../terrain';
 import type { PartContext } from './context';
 
@@ -19,7 +22,6 @@ const FOREST_FROM = 0.04;
 const HASH_SEEDS = { x: 12.9898, z: 78.233, scale: 43758.5453 } as const;
 const RIDGE_LABEL = { x: -34, z: 34, lift: 1.5 } as const;
 const FIELD_LABEL_LIFT = 0.5;
-const UNTINTED = '#ffffff';
 
 const COLORS = {
   grass: new Color(TERRAIN_COLORS.grass),
@@ -135,21 +137,13 @@ function fieldsGeometry(): BufferGeometry {
   return merged;
 }
 
-function landMaterial(context: PartContext, color?: string): MeshStandardMaterial {
-  return context.tracker.track(
-    new MeshStandardMaterial({
-      color: color ?? UNTINTED,
-      vertexColors: color === undefined,
-      flatShading: true,
-      metalness: 0,
-      roughness: 1,
-    }),
-  );
+function landMaterial(context: PartContext, finish: MaterialFinish): MeshStandardMaterial {
+  return context.materials.get(UNDIMMED_GROUP, finish);
 }
 
 export function createTerrain(context: PartContext): TerrainPart {
   const object = new Group();
-  const painted = landMaterial(context);
+  const painted = landMaterial(context, TERRAIN_FINISHES.painted);
   const farGround = context.tracker.track(flatPlane(TERRAIN.farGround, TERRAIN.farGround));
   farGround.translate(0, TERRAIN.sink, 0);
   const darkField = context.tracker.track(flatPlane(FIELDS.darkFieldWidth, FIELDS.darkFieldDepth));
@@ -157,8 +151,8 @@ export function createTerrain(context: PartContext): TerrainPart {
   object.add(
     new Mesh(context.tracker.track(landGeometry()), painted),
     new Mesh(context.tracker.track(fieldsGeometry()), painted),
-    new Mesh(farGround, landMaterial(context, TERRAIN_COLORS.farGround)),
-    new Mesh(darkField, landMaterial(context, TERRAIN_COLORS.darkField)),
+    new Mesh(farGround, landMaterial(context, TERRAIN_FINISHES.farGround)),
+    new Mesh(darkField, landMaterial(context, TERRAIN_FINISHES.darkField)),
   );
   const ridgeY = terrainHeight(RIDGE_LABEL.x, RIDGE_LABEL.z) + RIDGE_LABEL.lift;
   return {

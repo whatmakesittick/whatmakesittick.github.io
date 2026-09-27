@@ -1,4 +1,4 @@
-import { Group, Mesh, MeshStandardMaterial, Object3D } from 'three';
+import { Group, Mesh, Object3D } from 'three';
 import type { PartId } from '../../state';
 import { FORCE_ARROWS } from '../constants';
 import { FORCE_FINISHES } from '../finishes';
@@ -60,7 +60,7 @@ export class ForceArrows {
   }
 
   private createArrow(context: PartContext, id: ForceId, parent: Object3D): Arrow {
-    const material = context.tracker.track(new MeshStandardMaterial(FORCE_FINISHES[id]));
+    const material = context.materials.get(id, FORCE_FINISHES[id]);
     const shaft = new Mesh(context.tracker.track(unitShaft(FORCE_ARROWS)), material);
     const head = new Mesh(context.tracker.track(arrowHead(FORCE_ARROWS)), material);
     const anchor = new Object3D();
