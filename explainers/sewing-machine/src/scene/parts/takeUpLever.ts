@@ -1,7 +1,6 @@
 import type { Object3D } from 'three';
 import { Group, TorusGeometry } from 'three';
-import { toRadians } from '@core/math';
-import { lerp } from '../../model';
+import { lerp, toRadians } from '@core/math';
 import { TAKE_UP, TAKE_UP_EYE_Z } from '../constants';
 import { box, cylinderAlongZ } from '../geometry/primitives';
 import { anchorAt, partMesh } from './context';

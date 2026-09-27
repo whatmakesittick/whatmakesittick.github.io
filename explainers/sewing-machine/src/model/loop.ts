@@ -1,9 +1,9 @@
+import { lerp, smoothstep } from '@core/math';
 import { wrapPhase } from '@core/store';
 import { PHASE_RANGES, STITCH_CYCLE } from './cycle';
 import { FABRIC_TOP, PLATE_BOTTOM, THREAD_RADIUS, stitchProfile } from './fabric';
 import type { Tension } from './fabric';
 import { BOBBIN_CASE, HOOK, HOOK_POINT_HEIGHT, hookPlanPoint, hookRotation } from './hook';
-import { lerp, smoothstep } from './math';
 import { NEEDLE, needleEyeHeight } from './needle';
 
 export interface Point3 {

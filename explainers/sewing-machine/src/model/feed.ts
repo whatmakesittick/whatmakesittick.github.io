@@ -1,6 +1,6 @@
+import { clamp, lerp, smoothstep } from '@core/math';
 import { wrapPhase } from '@core/store';
 import { STITCH_CYCLE } from './cycle';
-import { clamp, lerp, smoothstep } from './math';
 
 export const STITCH_LENGTH = { min: 1, max: 5, step: 0.5, default: 2.5 } as const;
 

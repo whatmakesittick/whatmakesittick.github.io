@@ -1,5 +1,6 @@
 import { Group, MeshStandardMaterial } from 'three';
 import type { Object3D } from 'three';
+import { lerp } from '@core/math';
 import {
   LOOP_GEOMETRY,
   LOOP_POINT_COUNT,
@@ -9,7 +10,6 @@ import {
   THREAD_RADIUS,
   createLoopPoints,
   hookPlanPoint,
-  lerp,
   stitchProfile,
   tightenShare,
   writeLoopPoints,
