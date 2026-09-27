@@ -45,7 +45,6 @@ function presentPreset(store: GliderStore, targets: SceneTargets, animate: boole
 export function bindStore(store: GliderStore, targets: SceneTargets): () => void {
   const { glider, labelVisibility } = targets;
   glider.build(store.getState());
-  labelVisibility.setAnchors(glider.labelAnchors());
   presentPreset(store, targets, false);
 
   const unsubscribers = [

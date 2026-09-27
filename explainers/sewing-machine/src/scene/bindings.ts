@@ -36,7 +36,6 @@ function presentPreset(store: SewingStore, targets: SceneTargets, animate: boole
 export function bindStore(store: SewingStore, targets: SceneTargets): () => void {
   const { sewing, labelVisibility } = targets;
   sewing.build(store.getState());
-  labelVisibility.setAnchors(sewing.labelAnchors());
   presentPreset(store, targets, false);
 
   const unsubscribers = [
