@@ -1,4 +1,4 @@
-import { LabelVisibility } from '@core/scene/labelVisibility';
+import { createLabelVisibility } from '@core/scene/presetBinder';
 import type { SceneShell } from '@core/scene/shell';
 import type { GliderStore } from '../state';
 import { bindStore } from './bindings';
@@ -11,16 +11,12 @@ export { SCENE_OPTIONS } from './sceneOptions';
 export function mountGliderScene(shell: SceneShell, store: GliderStore): () => void {
   const restoreKeyLight = warmKeyLight(shell.lighting.key);
   const glider = new GliderController(shell);
-  const labelVisibility = new LabelVisibility(shell.labels, shell.rig.camera, LABEL_PRIORITY);
-  const removeResize = shell.viewport.onResize((size) => labelVisibility.setViewport(size));
+  const removeFrame = shell.onFrame(() => glider.update(store.getState()));
+  const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
   const unbind = bindStore(store, { glider, labelVisibility, ...shell });
-  const removeFrame = shell.onFrame(() => {
-    glider.update(store.getState());
-    labelVisibility.update();
-  });
   return () => {
     removeFrame();
-    removeResize();
+    labelVisibility.dispose();
     unbind();
     glider.dispose();
     restoreKeyLight();

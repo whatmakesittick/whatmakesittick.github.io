@@ -1,13 +1,12 @@
-import type { Object3D } from 'three';
-import type { CameraPose } from '@core/scene/frameBox';
-import type { FramingSlopes } from '@core/scene/lens';
+import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
 import { FLIGHT_CYCLE } from '../model';
 import type { GliderType } from '../model';
 import type { CameraView, GliderState, ViewOptions } from '../state';
-import { poseForView } from './cameraViews';
+import { cameraViews } from './cameraViews';
 import { FLOOR_HEIGHT } from './constants';
 import { Diorama } from './diorama';
+import type { RegionId } from './regions';
 
 export type GliderControllerDependencies = Pick<
   SceneShell,
@@ -20,12 +19,18 @@ function shortestStep(from: number, to: number): number {
 }
 
 export class GliderController {
+  readonly views: CameraViews<CameraView, RegionId>;
   private readonly dependencies: GliderControllerDependencies;
   private diorama: Diorama | null = null;
   private lastPhase = 0;
 
   constructor(dependencies: GliderControllerDependencies) {
     this.dependencies = dependencies;
+    this.views = new CameraViews(dependencies.rig, {
+      views: cameraViews(() => this.diorama?.chaseTarget() ?? null),
+      region: (id) => this.diorama?.region(id) ?? null,
+      anchor: () => this.diorama?.gliderAnchor ?? null,
+    });
   }
 
   build(state: GliderState): void {
@@ -38,7 +43,7 @@ export class GliderController {
     this.update(state);
     scene.add(diorama.root);
     labels.attach(diorama.labelAnchors());
-    rig.setBounds(diorama.region('reach'), FLOOR_HEIGHT);
+    rig.setBounds(diorama.region('overview'), FLOOR_HEIGHT);
   }
 
   applyView(view: ViewOptions): void {
@@ -55,20 +60,6 @@ export class GliderController {
     this.diorama?.update({ phase: state.phase, flightSeconds });
     const { rig } = this.dependencies;
     this.diorama?.keepGliderVisibleFrom(rig.camera.position, rig.framing());
-  }
-
-  labelAnchors(): ReadonlyMap<string, Object3D> {
-    return this.diorama?.labelAnchors() ?? new Map();
-  }
-
-  followAnchor(view: CameraView): Object3D | null {
-    return view === 'chase' ? (this.diorama?.gliderAnchor ?? null) : null;
-  }
-
-  pose(view: CameraView, slopes: FramingSlopes): CameraPose | null {
-    const diorama = this.diorama;
-    if (!diorama) return null;
-    return poseForView(view, diorama.chaseTarget(), slopes);
   }
 
   dispose(): void {

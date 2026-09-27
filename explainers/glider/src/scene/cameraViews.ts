@@ -1,19 +1,12 @@
 import { Vector3 } from 'three';
 import { toRadians } from '@core/math';
-import { frameBox } from '@core/scene/frameBox';
+import type { CustomView, FramedView, ViewSpec } from '@core/scene/cameraViews';
 import type { CameraPose } from '@core/scene/frameBox';
 import type { FramingSlopes } from '@core/scene/lens';
 import type { CameraView } from '../state';
-import { regionBox } from './regions';
 import type { RegionId } from './regions';
 
 type FixedView = Exclude<CameraView, 'chase'>;
-
-interface ViewSpec {
-  region: RegionId;
-  direction: readonly [number, number, number];
-  margin: number;
-}
 
 export interface ChaseTarget {
   position: Vector3;
@@ -22,7 +15,7 @@ export interface ChaseTarget {
   reachBelow: number;
 }
 
-const VIEWS: Record<FixedView, ViewSpec> = {
+const FIXED_VIEWS: Record<FixedView, FramedView<RegionId>> = {
   overview: { region: 'overview', direction: [-0.35, 0.32, 1], margin: 1.02 },
   thermal: { region: 'thermal', direction: [-0.35, 0.45, 1], margin: 1.05 },
   cloud: { region: 'cloud', direction: [0.15, -0.2, 1], margin: 1.02 },
@@ -61,13 +54,15 @@ function chasePose(target: ChaseTarget, slopes: FramingSlopes): CameraPose {
   };
 }
 
-export function poseForView(
-  view: CameraView,
-  chase: ChaseTarget,
-  slopes: FramingSlopes,
-): CameraPose {
-  if (view === 'chase') return chasePose(chase, slopes);
-  const spec = VIEWS[view];
-  const direction = new Vector3(...spec.direction).normalize();
-  return frameBox(regionBox(spec.region), direction, slopes, spec.margin);
+export function cameraViews(
+  chaseTarget: () => ChaseTarget | null,
+): Record<CameraView, ViewSpec<RegionId>> {
+  const chase: CustomView = {
+    pose: (slopes) => {
+      const target = chaseTarget();
+      return target ? chasePose(target, slopes) : null;
+    },
+    follow: true,
+  };
+  return { ...FIXED_VIEWS, chase };
 }

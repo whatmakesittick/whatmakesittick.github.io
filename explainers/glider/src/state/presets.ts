@@ -1,4 +1,4 @@
-import type { Preset as PlaybackPreset } from '@core/explainer';
+import type { ScenePreset } from '@core/scene/presetBinder';
 
 export type PresetId = 'overview' | 'glide' | 'thermal' | 'cloud' | 'ridge' | 'wave';
 
@@ -26,10 +26,7 @@ export type ViewOptions = {
   labels: boolean;
 };
 
-export interface Preset extends PlaybackPreset {
-  camera: CameraView;
-  labels: readonly PartId[];
-  highlight: readonly PartId[];
+export interface Preset extends ScenePreset<PartId, CameraView> {
   view?: Partial<ViewOptions>;
 }
 

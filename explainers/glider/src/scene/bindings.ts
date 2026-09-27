@@ -1,21 +1,13 @@
-import type { CameraRig } from '@core/scene/camera';
-import type { Highlighter } from '@core/scene/highlight';
-import type { LabelVisibility } from '@core/scene/labelVisibility';
+import { bindPresets } from '@core/scene/presetBinder';
+import type { LabelPolicy, PresetTargets } from '@core/scene/presetBinder';
 import { PRESETS } from '../state';
-import type { GliderState, GliderStore, PartId, Preset } from '../state';
+import type { GliderStore, PartId, Preset } from '../state';
 import type { GliderController } from './gliderController';
 import { GLIDER_PARTS, PART_IDS } from './partInfo';
 
-export interface SceneTargets {
+export interface SceneTargets extends PresetTargets {
   glider: GliderController;
-  rig: CameraRig;
-  highlighter: Highlighter;
-  labelVisibility: LabelVisibility;
-}
-
-function showLabels(state: GliderState, labelVisibility: LabelVisibility): void {
-  const presetLabels = new Set<PartId>(PRESETS[state.preset].labels);
-  labelVisibility.setWanted(state.view.labels ? new Set(PART_IDS) : presetLabels, presetLabels);
+  labelVisibility: LabelPolicy;
 }
 
 function emphasis(preset: Preset): readonly PartId[] {
@@ -24,48 +16,22 @@ function emphasis(preset: Preset): readonly PartId[] {
   return highlight.length === 0 || aboutGlider ? highlight : [...highlight, ...GLIDER_PARTS];
 }
 
-function framePreset(store: GliderStore, targets: SceneTargets, animate: boolean): void {
-  const state = store.getState();
-  const view = PRESETS[state.preset].camera;
-  targets.glider.update(state);
-  targets.rig.follow(targets.glider.followAnchor(view));
-  const pose = targets.glider.pose(view, targets.rig.framing());
-  if (!pose) return;
-  if (animate) targets.rig.tweenTo(pose);
-  else targets.rig.jumpTo(pose);
-}
-
-function presentPreset(store: GliderStore, targets: SceneTargets, animate: boolean): void {
-  const state = store.getState();
-  framePreset(store, targets, animate);
-  targets.highlighter.setHighlight(emphasis(PRESETS[state.preset]));
-  showLabels(state, targets.labelVisibility);
-}
-
 export function bindStore(store: GliderStore, targets: SceneTargets): () => void {
   const { glider, labelVisibility } = targets;
   glider.build(store.getState());
-  presentPreset(store, targets, false);
-
   const unsubscribers = [
-    store.subscribe(
-      (state) => state.view,
-      (view) => {
-        glider.applyView(view);
-        showLabels(store.getState(), labelVisibility);
-      },
-    ),
+    bindPresets(targets, store, {
+      presets: PRESETS,
+      views: glider.views,
+      parts: PART_IDS,
+      labels: labelVisibility,
+      prepare: (state) => glider.update(state),
+      onView: (view) => glider.applyView(view),
+      highlight: emphasis,
+    }),
     store.subscribe(
       (state) => state.glider,
       (type) => glider.setGlider(type),
-    ),
-    store.subscribe(
-      (state) => state.preset,
-      () => presentPreset(store, targets, true),
-    ),
-    store.subscribe(
-      (state) => state.cameraResetToken,
-      () => framePreset(store, targets, true),
     ),
   ];
   return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
