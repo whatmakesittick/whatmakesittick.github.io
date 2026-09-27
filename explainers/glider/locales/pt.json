@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "title": "Como voa um planador",
+    "eyebrow": "Um voo a vela, acelerado",
+    "tagline": "Um planador não tem motor e está sempre afundando no ar, mas mesmo assim sobe quando encontra ar que sobe mais rápido do que ele afunda: térmicas, vento empurrado encosta acima e as ondas que se formam atrás das montanhas.",
+    "description": "Um voo a vela interativo e acelerado em um planador moderno: por que ele não cai, como térmicas e nuvens revelam o ar que sobe e como a ascendente de encosta e as ondas de montanha o levam mais alto.",
+    "summary": "Ficar no ar sem motor: planeio, térmicas, nuvens, encostas e ondas."
+  },
+  "stage": {
+    "label": "Modelo interativo do planador",
+    "gauge": "Dados de voo ao vivo"
+  },
+  "controls": {
+    "label": "Controles do planador",
+    "glider": "Planador",
+    "gliderOptions": {
+      "trainer": "Instrução",
+      "racer15": "Competição 15 m",
+      "racer18": "Competição 18 m"
+    },
+    "views": {
+      "forces": {
+        "name": "Forças",
+        "short": "Forças",
+        "hint": "Forças (F)"
+      },
+      "air": {
+        "name": "Movimento do ar",
+        "short": "Ar",
+        "hint": "Movimento do ar (A)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Tempo de voo",
+    "phases": "Ir para uma parte do voo",
+    "speed": "Aceleração",
+    "value": "{{time}} de voo, {{phase}}",
+    "speedValue": "{{value}} vezes mais rápido que na realidade",
+    "phase": {
+      "thermal": "Térmica",
+      "glide": "Planeio",
+      "ridge": "Encosta",
+      "wave": "Onda",
+      "final": "Volta"
+    },
+    "during": {
+      "thermal": "subindo na térmica",
+      "glide": "planando até a encosta",
+      "ridge": "voando ao longo da encosta",
+      "wave": "subindo na onda",
+      "final": "planando de volta"
+    },
+    "jump": {
+      "thermal": "Ir para a subida na térmica",
+      "glide": "Ir para o planeio até a encosta",
+      "ridge": "Ir para o voo de encosta",
+      "wave": "Ir para a subida na onda",
+      "final": "Ir para o planeio de volta"
+    }
+  },
+  "readouts": {
+    "height": "Altura",
+    "airspeed": "Velocidade",
+    "lift": "Ar subindo",
+    "sink": "Afundamento próprio",
+    "climb": "Subida líquida"
+  },
+  "parts": {
+    "wing": "Asa",
+    "fuselage": "Fuselagem",
+    "tail": "Cauda",
+    "lift": "Sustentação",
+    "weight": "Peso",
+    "drag": "Arrasto",
+    "field": "Campo quente",
+    "thermal": "Térmica",
+    "cumulus": "Cúmulo",
+    "wind": "Vento",
+    "ridge": "Crista",
+    "rotor": "Nuvem de rotor",
+    "wave": "Onda de montanha",
+    "lenticular": "Nuvem lenticular"
+  },
+  "units": {
+    "m": "{{value}} m",
+    "km": "{{value}} km",
+    "kmh": "{{value}} km/h",
+    "ms": "{{value}} m/s",
+    "ratio": "1 : {{value}}",
+    "times": "{{value}}×",
+    "celsius": "{{value}} °C"
+  },
+  "sections": {
+    "overview": {
+      "title": "Voar sem motor",
+      "p1": "Você está vendo um planador. Ele tem asas longas, manche e pedais como um avião, mas não tem motor. Um guincho ou um avião rebocador o leva a algo entre 300 e 1200 m de altura, e dali em diante ele fica por conta própria. Como nada o empurra, <strong>ele está sempre afundando no ar</strong>, só que devagar.",
+      "p2": "Então o único jeito de subir é encontrar ar que suba mais rápido do que o planador afunda. Em ar calmo, um planador moderno afunda só uns 0,5 m/s; assim, um ar que sobe a 2 m/s o leva para cima a 1,5 m/s. Os pilotos encontram ar subindo sobre o chão aquecido pelo sol, em encostas de montanha com vento e nas ondas que se formam atrás das montanhas. Pulando de uma área para outra, um planador vai muito longe: o recorde mundial de distância livre é de 3.009 km.",
+      "p3": "O modelo voa um circuito de 45 minutos, acelerado. O planador sobe numa térmica sobre um campo quente até uma nuvem, plana até uma crista, sobe ao longo da encosta e depois na onda acima dela, e volta em alta velocidade. O cenário está comprimido e o planador foi desenhado muito maior do que na realidade, mas as alturas, velocidades e taxas de subida dos mostradores são reais. As alturas contam a partir do fundo do vale.",
+      "p4": "Arraste o modelo para ver de outros ângulos e role sobre ele para dar zoom. Conforme você lê, a vista acompanha o texto."
+    },
+    "glide": {
+      "title": "Por que ele não cai",
+      "p1": "Três forças atuam sobre um planador em voo, desenhadas como setas na cena. O peso o puxa direto para baixo. O arrasto, o empurrão do ar, o segura para trás. A sustentação vem das asas. Cada asa encontra o ar num pequeno ângulo e o desvia para baixo, e, ao empurrar o ar para baixo, a asa é empurrada para cima. O ar que passa por cima também acelera, então a pressão acima da asa fica menor do que embaixo. São duas formas de ver o mesmo efeito.",
+      "p2": "Sem motor, o planador desce por uma rampa suave. Como sua trajetória se inclina para baixo, uma pequena parte do peso o puxa para a frente ao longo dela. A gravidade é o seu motor, e a altura, o seu combustível. A distância que ele percorre para a altura que perde é a sua <strong>razão de planeio</strong>. Com 1 : 50, ele avança 50 m para cada metro que desce; então, a partir de 1000 m de altura, em ar calmo, percorre 50 km.",
+      "control": {
+        "label": "Velocidade",
+        "slow": "Devagar",
+        "fast": "Rápido",
+        "sink": "Afundamento",
+        "ratio": "Razão de planeio",
+        "distance": "Alcance a partir de 1000 m"
+      },
+      "p3": "Escolha um planador acima. O de instrução é um Schleicher ASK 21, um biplace com asas de 17 m, que plana a 1 : 34. Os de competição são o Jonker JS3 com asas de 15 m ou 18 m, a 1 : 50 e 1 : 57. O segredo são as asas longas e finas: elas geram sustentação com muito pouco arrasto. Para comparar, um grande avião de passageiros consegue algo entre 1 : 15 e 1 : 20, uma asa-delta cerca de 1 : 15 e um parapente cerca de 1 : 10.",
+      "p4": "Agora mexa no controle de velocidade. Voar mais rápido custa altura: acima da velocidade de melhor planeio, uns 105 km/h para um JS3 leve, o afundamento cresce mais rápido do que a velocidade. Mesmo assim, o JS3 de 18 m afunda só uns 1,4 m/s a 200 km/h, o que ainda dá 1 : 40. O peso não muda a rampa. Com até uns 200 L de água nas asas, o JS3 plana pela mesma rampa, só que mais rápido: sua velocidade de melhor planeio sobe para uns 120 km/h."
+    },
+    "thermal": {
+      "title": "Ar quente sobe",
+      "p1": "O sol não aquece o chão por igual. Campos escuros, cidades e encostas voltadas para o sol esquentam mais rápido do que a grama ou o chão úmido, e aquecem o ar acima deles. O ar quente é mais leve que o ar mais frio ao redor, então se solta e sobe, numa coluna contínua ou numa fileira de bolhas. Os pilotos de planador chamam esse ar que sobe de térmica.",
+      "p2": "Uma térmica costuma ter de 150 a 300 m de largura. Ela sobe mais rápido no meio e se inclina com o vento. Abaixo de 1 m/s é fraca, de 1 a 2,5 m/s é média e a partir de 3 m/s é forte. A nossa sobe a uns 2,7 m/s sobre o campo escuro, inclinada na direção da crista.",
+      "p3": "Para ficar dentro dela, o piloto voa em círculos, inclinado uns 45° a 90 km/h. Cada volta leva uns 16 s e tem uns 127 m de diâmetro, fechada o bastante para ficar perto do centro, onde a subida é mais forte. O normal é inclinar entre 30 e 45°. Mais do que isso, o planador afunda mais rápido, então os pilotos raramente vão muito além.",
+      "p4": "Mesmo dentro da térmica o planador continua afundando, só que mais devagar do que o ar à sua volta sobe. <strong>A subida líquida é a subida do ar menos o afundamento do planador.</strong> Os mostradores exibem os três: ar subindo, afundamento próprio e subida líquida, aqui uns 2,2 m/s. Assim o nosso planador vai de 500 m a 1500 m em sete minutos e meio."
+    },
+    "cloud": {
+      "title": "As nuvens mostram onde o ar sobe",
+      "p1": "O ar que sobe esfria cerca de 1 °C a cada 100 m. O ar também carrega vapor d’água invisível. O seu ponto de orvalho é a temperatura em que esse vapor vira gotinhas minúsculas. Enquanto uma térmica sobe, sua temperatura cai depressa e seu ponto de orvalho só um pouco, até os dois se encontrarem. Ali o vapor se condensa e <strong>um cúmulo</strong> cresce em cima da térmica.",
+      "p2": "A base plana da nuvem marca a altura em que isso acontece, e todas as nuvens daquele dia têm a base mais ou menos na mesma altura. Uma regra prática dá essa altura: cerca de 125 m para cada grau de diferença entre a temperatura no chão e o ponto de orvalho. No nosso dia a diferença é de 12 °C, então a base fica a 1500 m. Experimente o controle.",
+      "control": {
+        "label": "Temperatura no chão menos ponto de orvalho",
+        "humid": "Úmido",
+        "dry": "Seco",
+        "base": "Base das nuvens, aproximada"
+      },
+      "p3": "Nem toda térmica tem nuvem. Num dia seco, o ar nunca esfria até o ponto de orvalho e as térmicas ficam invisíveis. Essas térmicas azuis podem ser igualmente fortes. Em outros dias, as nuvens se alinham com o vento em longas fileiras chamadas ruas de nuvens, espaçadas cerca de três vezes a altura das nuvens. Um planador pode seguir uma rua por um longo trecho quase sem circular.",
+      "p4": "Nuvem demais é má notícia. Quando as nuvens se espalham, fazem sombra no chão e as térmicas enfraquecem ou morrem. Sob uma boa nuvem, os pilotos procuram a parte mais escura e mais bem definida da base, onde a subida costuma ser melhor, e saem logo abaixo dela. A vista pausa quando o nosso planador se aproxima da base. Clique em reproduzir para continuar."
+    },
+    "ridge": {
+      "title": "Vento contra a montanha",
+      "p1": "Quando o vento encontra uma crista longa, não consegue atravessá-la, então é empurrado encosta acima, pelo lado virado para ele. Essa faixa de ar subindo é a <strong>ascendente de encosta</strong>, e ela continua acima da crista. Uma crista longa funciona melhor. Em volta de um morro isolado, o ar quase sempre passa pelos lados.",
+      "p2": "O nosso planador chega logo acima da crista, que fica a 1100 m do fundo do vale. É ali que a subida é melhor. Ele voa de um lado para o outro ao longo da encosta a 90 km/h e, em cada ponta, sempre vira para longe da encosta, nunca na direção dela. Aqui o ar sobe a uns 1,5 m/s, então o planador sobe a cerca de 1 m/s, de 1150 m a 1400 m.",
+      "p3": "A ascendente de encosta precisa de um vento constante de uns 28 km/h ou mais, soprando quase de frente para a encosta, com até 30 a 45° de desvio. O nosso sopra a 30 km/h. A subida pode chegar a duas ou três vezes a altura da crista. Ela não precisa de sol, só de vento, então continua funcionando no fim da tarde, quando as térmicas perdem força.",
+      "p4": "Uma crista longa e reta é uma estrada para planadores. Ao longo das cristas dos Apalaches, no leste dos Estados Unidos, pilotos bateram recordes mundiais voando ao longo das montanhas e voltando. Veja na cena o ar subindo pela encosta e o planador virando para longe dela a cada curva."
+    },
+    "wave": {
+      "title": "Surfando a onda de montanha",
+      "p1": "O vento que atravessa uma montanha nem sempre se acalma do outro lado. Se o ar é estável, ele passa a subir e descer atrás da montanha, como a água de um riacho passando por cima de uma pedra. As cristas das ondas podem ficar de 3 a 30 km umas das outras, e ficam paradas sobre o chão enquanto o vento passa por elas. Essa é a <strong>onda de montanha</strong>, e ela pode levar um planador muito mais alto do que qualquer térmica.",
+      "p2": "Sob a primeira crista fica o rotor, uma faixa de ar agitado e revolto, às vezes marcada por uma nuvem de rotor esfarrapada. Acima dele, o escoamento é suave. No alto de uma onda pode se formar uma nuvem lenticular, em forma de lente. Ela fica no mesmo lugar, mesmo com o vento passando direto por ela.",
+      "p3": "O nosso planador passa da encosta para o lado ascendente da onda, vira de frente para o vento e fica parado sobre o mesmo ponto do chão. O ar sobe a uns 2,8 m/s e o planador a uns 2,3 m/s, de 1400 m a 2500 m em oito minutos. É uma onda suave. Subidas de onda de 1,5 a 6 m/s são comuns, e em 2 de setembro de 2018 o planador Perlan 2 subiu em ondas sobre a Argentina até 22.657 m (74.334 ft), o recorde mundial de altitude em planador.",
+      "p4": "Os pilotos que sobem muito em onda respiram oxigênio de um cilindro, porque lá em cima o ar é rarefeito. Na volta, o nosso planador cruza o lado descendente da onda, onde o ar desce a uns 2,5 m/s e o mostrador de ar subindo fica abaixo de zero. Em ar que desce vale a pena voar rápido, então ele passa a 200 km/h, cai para uns 1560 m em quatro minutos e depois volta planando com calma sobre o vale."
+    }
+  }
+}

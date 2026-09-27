@@ -1,6 +1,6 @@
 import type { Mutate, StoreApi } from 'zustand/vanilla';
 import type { LabelSide } from './scene/labelLayout';
-import type { SceneShell } from './scene/shell';
+import type { SceneOptions, SceneShell } from './scene/shell';
 
 export type ViewFlags = Record<string, boolean>;
 
@@ -56,6 +56,7 @@ export interface SpeedScale {
 
 export interface Timeline {
   cycle: number;
+  loop?: boolean;
   step: number;
   nudge: { fine: number; coarse: number };
   labelKey: string;
@@ -71,6 +72,7 @@ export interface Preset {
   view?: Partial<ViewFlags>;
   speed?: number;
   pauseAt?: number;
+  startAt?: number;
 }
 
 export interface ChoiceOption {
@@ -133,8 +135,13 @@ export interface Explainer<S extends Playback = Playback> {
   readouts: readonly Readout<S>[];
   actions?: Readonly<Record<string, ChapterAction<S>>>;
   shortcuts?: Readonly<Record<string, (state: S) => void>>;
+  scene?: SceneOptions;
   mountScene(shell: SceneShell, store: ExplainerStore<S>): () => void;
   mountUi?(root: Document, store: ExplainerStore<S>): void;
+}
+
+export function isLooping(timeline: Pick<Timeline, 'loop'>): boolean {
+  return timeline.loop ?? true;
 }
 
 export function defineExplainer<S extends Playback>(explainer: Explainer<S>): Explainer<S> {

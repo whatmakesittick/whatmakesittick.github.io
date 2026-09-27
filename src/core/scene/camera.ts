@@ -1,5 +1,5 @@
-import { PerspectiveCamera, Sphere } from 'three';
-import type { Box3 } from 'three';
+import { PerspectiveCamera, Sphere, Vector3 } from 'three';
+import type { Box3, Object3D } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
   CAMERA_DAMPING,
@@ -17,19 +17,29 @@ import type { FramingSlopes, ViewportSize } from './lens';
 
 const TARGET_FLOOR_MARGIN = 1;
 
+export interface CameraOptions {
+  near?: number;
+  far?: number;
+  maxPolarAngle?: number;
+}
+
 export class CameraRig {
-  readonly camera = new PerspectiveCamera(CAMERA_FOV, 1, CAMERA_NEAR, CAMERA_FAR);
+  readonly camera: PerspectiveCamera;
   readonly controls: OrbitControls;
   private tween: CameraTween | null = null;
+  private anchor: Object3D | null = null;
+  private readonly anchorPosition = new Vector3();
   private floorHeight = -Infinity;
   private boundsRadius = 1;
   private viewport: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
 
-  constructor(domElement: HTMLElement) {
+  constructor(domElement: HTMLElement, options: CameraOptions = {}) {
+    const { near = CAMERA_NEAR, far = CAMERA_FAR, maxPolarAngle = CAMERA_MAX_POLAR } = options;
+    this.camera = new PerspectiveCamera(CAMERA_FOV, 1, near, far);
     this.controls = new OrbitControls(this.camera, domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = CAMERA_DAMPING;
-    this.controls.maxPolarAngle = CAMERA_MAX_POLAR;
+    this.controls.maxPolarAngle = maxPolarAngle;
     this.controls.screenSpacePanning = true;
     this.controls.addEventListener('start', this.cancelTween);
   }
@@ -50,19 +60,27 @@ export class CameraRig {
     this.updateDistanceLimits();
   }
 
+  follow(anchor: Object3D | null): void {
+    this.anchor = anchor;
+    this.syncAnchor();
+  }
+
   jumpTo(pose: CameraPose): void {
     this.cancelTween();
     this.apply(pose);
     this.controls.update();
+    this.syncAnchor();
   }
 
   tweenTo(pose: CameraPose): void {
     const from = { position: this.camera.position, target: this.controls.target };
     this.tween = new CameraTween(from, pose);
     this.controls.enableDamping = false;
+    this.syncAnchor();
   }
 
   update(deltaSeconds: number): void {
+    this.followAnchor();
     if (this.tween) this.advanceTween(deltaSeconds);
     this.controls.update(deltaSeconds);
     this.keepTargetAboveFloor();
@@ -78,6 +96,23 @@ export class CameraRig {
     this.tween = null;
     this.controls.enableDamping = true;
   };
+
+  private syncAnchor(): void {
+    this.anchor?.getWorldPosition(this.anchorPosition);
+  }
+
+  private followAnchor(): void {
+    if (!this.anchor) return;
+    const position = this.anchor.getWorldPosition(new Vector3());
+    this.shift(position.clone().sub(this.anchorPosition));
+    this.anchorPosition.copy(position);
+  }
+
+  private shift(delta: Vector3): void {
+    this.camera.position.add(delta);
+    this.controls.target.add(delta);
+    this.tween?.shift(delta);
+  }
 
   private advanceTween(deltaSeconds: number): void {
     const tween = this.tween;

@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "title": "Comment vole un planeur",
+    "eyebrow": "Un vol à voile en accéléré",
+    "tagline": "Un planeur n’a pas de moteur et descend sans cesse dans l’air, pourtant il monte en trouvant de l’air qui s’élève plus vite qu’il ne descend : les thermiques, le vent poussé le long d’une montagne et les ondes qui se forment derrière elle.",
+    "description": "Un vol à voile interactif et accéléré à bord d’un planeur moderne : pourquoi il ne tombe pas, comment thermiques et nuages trahissent l’air qui monte, et comment l’ascendance de pente et les ondes de montagne l’emportent plus haut.",
+    "summary": "Tenir l’air sans moteur : plané, thermiques, nuages, pentes et ondes."
+  },
+  "stage": {
+    "label": "Modèle interactif de planeur",
+    "gauge": "Mesures de vol en direct"
+  },
+  "controls": {
+    "label": "Commandes du planeur",
+    "glider": "Planeur",
+    "gliderOptions": {
+      "trainer": "Biplace école",
+      "racer15": "Course 15 m",
+      "racer18": "Course 18 m"
+    },
+    "views": {
+      "forces": {
+        "name": "Forces",
+        "short": "Forces",
+        "hint": "Forces (F)"
+      },
+      "air": {
+        "name": "Mouvements de l’air",
+        "short": "Air",
+        "hint": "Mouvements de l’air (A)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Temps de vol",
+    "phases": "Aller à une étape du vol",
+    "speed": "Accéléré",
+    "value": "{{time}} de vol, {{phase}}",
+    "speedValue": "{{value}} fois plus vite que la réalité",
+    "phase": {
+      "thermal": "Thermique",
+      "glide": "Plané",
+      "ridge": "Pente",
+      "wave": "Onde",
+      "final": "Retour"
+    },
+    "during": {
+      "thermal": "en montée dans le thermique",
+      "glide": "en plané vers la crête",
+      "ridge": "en vol de pente le long de la crête",
+      "wave": "en montée dans l’onde",
+      "final": "en plané vers la maison"
+    },
+    "jump": {
+      "thermal": "Aller à la montée en thermique",
+      "glide": "Aller au plané vers la crête",
+      "ridge": "Aller au vol de pente",
+      "wave": "Aller à la montée en onde",
+      "final": "Aller au plané du retour"
+    }
+  },
+  "readouts": {
+    "height": "Hauteur",
+    "airspeed": "Vitesse",
+    "lift": "Air ascendant",
+    "sink": "Taux de chute",
+    "climb": "Montée nette"
+  },
+  "parts": {
+    "wing": "Aile",
+    "fuselage": "Fuselage",
+    "tail": "Empennage",
+    "lift": "Portance",
+    "weight": "Poids",
+    "drag": "Traînée",
+    "field": "Champ chaud",
+    "thermal": "Thermique",
+    "cumulus": "Cumulus",
+    "wind": "Vent",
+    "ridge": "Crête",
+    "rotor": "Nuage de rotor",
+    "wave": "Onde de montagne",
+    "lenticular": "Nuage lenticulaire"
+  },
+  "units": {
+    "m": "{{value}} m",
+    "km": "{{value}} km",
+    "kmh": "{{value}} km/h",
+    "ms": "{{value}} m/s",
+    "ratio": "1 : {{value}}",
+    "times": "{{value}}×",
+    "celsius": "{{value}} °C"
+  },
+  "sections": {
+    "overview": {
+      "title": "Voler sans moteur",
+      "p1": "Vous avez sous les yeux un planeur. Il a de longues ailes, un manche et un palonnier comme un avion, mais pas de moteur. Un treuil ou un avion remorqueur le hisse entre 300 et 1200 m, puis il se débrouille seul. Comme rien ne le pousse, <strong>il descend sans cesse dans l’air</strong>, simplement très lentement.",
+      "p2": "Pour monter, il lui faut donc de l’air qui s’élève plus vite qu’il ne descend. En air calme, un planeur moderne ne descend que d’environ 0,5 m/s : dans de l’air qui monte à 2 m/s, il s’élève donc à 1,5 m/s. Les pilotes trouvent de l’air ascendant au-dessus du sol chauffé par le soleil, sur les pentes de montagne exposées au vent et dans les ondes qui se forment derrière les montagnes. En sautant de l’un à l’autre, un planeur peut aller très loin : le record du monde de distance libre est de 3 009 km.",
+      "p3": "Le modèle vole une boucle de 45 minutes, en accéléré. Le planeur monte dans un thermique au-dessus d’un champ chaud jusqu’à un nuage, plane jusqu’à une crête, monte le long de la pente puis dans l’onde au-dessus, et rentre à vive allure. Le décor est resserré et le planeur dessiné bien plus grand que nature, mais les hauteurs, les vitesses et les taux de montée affichés sont réels. Les hauteurs se comptent depuis le fond de la vallée.",
+      "p4": "Faites glisser le modèle pour en faire le tour, et faites défiler par-dessus pour zoomer. Au fil de votre lecture, la vue suit le texte."
+    },
+    "glide": {
+      "title": "Pourquoi il ne tombe pas",
+      "p1": "Trois forces agissent sur un planeur en vol, dessinées par des flèches dans la scène. Le poids le tire tout droit vers le bas. La traînée, la poussée de l’air, le freine. La portance vient des ailes. Chaque aile attaque l’air sous un petit angle et le dévie vers le bas ; en poussant l’air vers le bas, l’aile est poussée vers le haut. L’air qui passe au-dessus accélère aussi, si bien que la pression au-dessus de l’aile est plus faible qu’en dessous. Ce sont deux façons de décrire le même effet.",
+      "p2": "Sans moteur, le planeur suit une pente douce vers le bas. Comme sa trajectoire s’incline, une petite partie de son poids le tire vers l’avant le long de cette trajectoire. La gravité est son moteur, et l’altitude son carburant. La distance parcourue pour la hauteur perdue, c’est sa <strong>finesse</strong>. À 1 : 50, il avance de 50 m pour chaque mètre perdu : depuis 1000 m de haut, en air calme, il parcourt 50 km.",
+      "control": {
+        "label": "Vitesse",
+        "slow": "Lent",
+        "fast": "Rapide",
+        "sink": "Taux de chute",
+        "ratio": "Finesse",
+        "distance": "Distance depuis 1000 m"
+      },
+      "p3": "Choisissez un planeur ci-dessus. Le biplace école est un Schleicher ASK 21, aux ailes de 17 m, avec une finesse de 1 : 34. Les planeurs de course sont des Jonker JS3 de 15 m ou de 18 m d’envergure, à 1 : 50 et 1 : 57. Le secret, ce sont de longues ailes fines : elles produisent de la portance avec très peu de traînée. À titre de comparaison, un gros avion de ligne atteint à peu près 1 : 15 à 1 : 20, un deltaplane environ 1 : 15 et un parapente environ 1 : 10.",
+      "p4": "Déplacez maintenant le curseur de vitesse. Voler plus vite coûte de la hauteur : au-delà de la vitesse de meilleure finesse, environ 105 km/h pour un JS3 léger, le taux de chute augmente plus vite que la vitesse. Malgré tout, le JS3 de 18 m ne descend que d’environ 1,4 m/s à 200 km/h, soit encore 1 : 40. Le poids ne change pas la pente. Avec jusqu’à environ 200 L d’eau dans les ailes, le JS3 suit la même pente, simplement plus vite : sa vitesse de meilleure finesse passe à environ 120 km/h."
+    },
+    "thermal": {
+      "title": "L’air chaud monte",
+      "p1": "Le soleil ne chauffe pas le sol de façon égale. Les champs sombres, les villes et les pentes tournées vers le soleil se réchauffent plus vite que l’herbe ou le sol humide, et réchauffent l’air au-dessus d’eux. L’air chaud est plus léger que l’air plus frais qui l’entoure : il se détache et monte, en colonne régulière ou en chapelet de bulles. Les pilotes de planeur appellent cet air ascendant un thermique.",
+      "p2": "Un thermique mesure en général 150 à 300 m de large. Il monte plus vite en son centre et se penche avec le vent. En dessous de 1 m/s, il est faible ; de 1 à 2,5 m/s, il est moyen ; à partir de 3 m/s, il est fort. Le nôtre monte à environ 2,7 m/s au-dessus du champ sombre, penché vers la crête.",
+      "p3": "Pour y rester, le pilote spirale, incliné d’environ 45° à 90 km/h. Un tour prend environ 16 s et fait environ 127 m de diamètre, assez serré pour rester près du centre, là où ça monte le plus. Les pilotes s’inclinent normalement de 30 à 45°. Au-delà, le planeur descend plus vite, alors ils vont rarement beaucoup plus loin.",
+      "p4": "Même dans le thermique, le planeur continue de descendre, simplement moins vite que l’air autour de lui ne monte. <strong>La montée nette, c’est la montée de l’air moins la chute du planeur.</strong> Les mesures affichent les trois : air ascendant, taux de chute et montée nette, ici environ 2,2 m/s. Notre planeur passe ainsi de 500 m à 1500 m en sept minutes et demie."
+    },
+    "cloud": {
+      "title": "Les nuages montrent où ça monte",
+      "p1": "L’air qui monte se refroidit d’environ 1 °C tous les 100 m. L’air contient aussi de la vapeur d’eau invisible. Son point de rosée est la température à laquelle cette vapeur se change en minuscules gouttelettes. Quand un thermique monte, sa température baisse vite et son point de rosée à peine, jusqu’à ce qu’ils se rejoignent. Là, la vapeur se condense et <strong>un cumulus</strong> se forme au sommet du thermique.",
+      "p2": "La base plate du nuage marque la hauteur où cela se produit, et tous les nuages du jour ont leur base à peu près à la même hauteur. Une règle simple la donne : environ 125 m par degré d’écart entre la température au sol et le point de rosée. Ce jour-là, l’écart est de 12 °C, donc la base est à 1500 m. Essayez le curseur.",
+      "control": {
+        "label": "Température au sol moins point de rosée",
+        "humid": "Humide",
+        "dry": "Sec",
+        "base": "Base des nuages, environ"
+      },
+      "p3": "Tous les thermiques n’ont pas de nuage. Par temps sec, l’air ne se refroidit jamais jusqu’à son point de rosée, et les thermiques restent invisibles. Ces thermiques purs peuvent être tout aussi forts. D’autres jours, les nuages s’alignent avec le vent en longues rangées, les rues de nuages, espacées d’environ trois fois la hauteur des nuages. Un planeur peut suivre une rue très loin en spiralant peu.",
+      "p4": "Trop de nuages, c’est mauvais signe. Quand ils s’étalent, ils font de l’ombre au sol, et les thermiques faiblissent ou meurent. Sous un bon nuage, les pilotes visent la partie la plus sombre et la mieux dessinée de la base, où ça monte souvent le mieux, et le quittent juste en dessous. La vue s’arrête quand notre planeur approche de la base. Appuyez sur lecture pour continuer."
+    },
+    "ridge": {
+      "title": "Le vent contre la montagne",
+      "p1": "Quand le vent rencontre une longue crête, il ne peut pas la traverser : il est poussé vers le haut, le long de la pente qui lui fait face. Cette bande d’air ascendant, c’est l’<strong>ascendance de pente</strong>, et elle monte jusqu’au-dessus de la crête. Une longue crête fonctionne le mieux. Autour d’une colline isolée, l’air passe surtout par les côtés.",
+      "p2": "Notre planeur arrive juste au-dessus de la crête, qui culmine à 1100 m au-dessus du fond de la vallée. C’est là que ça porte le mieux. Il fait des allers-retours le long de la pente à 90 km/h et, à chaque bout, tourne toujours du côté opposé à la pente, jamais vers elle. Ici l’air monte à environ 1,5 m/s, donc le planeur monte à environ 1 m/s, de 1150 m à 1400 m.",
+      "p3": "L’ascendance de pente demande un vent régulier d’environ 28 km/h ou plus, qui souffle presque de face sur la pente, à 30 à 45° près. Le nôtre souffle à 30 km/h. L’ascendance peut atteindre deux à trois fois la hauteur de la crête. Elle n’a pas besoin de soleil, seulement de vent, et continue donc jusqu’en soirée, quand les thermiques faiblissent.",
+      "p4": "Une longue crête bien droite est une autoroute pour les planeurs. Le long des crêtes des Appalaches, dans l’est des États-Unis, des pilotes ont établi des records du monde en suivant les montagnes à l’aller puis au retour. Regardez l’air remonter la pente dans la scène, et le planeur virer à l’opposé de la pente à chaque demi-tour."
+    },
+    "wave": {
+      "title": "Surfer sur l’onde de montagne",
+      "p1": "Le vent qui franchit une montagne ne se calme pas toujours derrière elle. Quand l’air est stable, il se met à onduler sous le vent, comme l’eau d’un ruisseau qui passe sur un rocher. Les crêtes d’onde peuvent être espacées de 3 à 30 km, et elles restent immobiles au-dessus du sol pendant que le vent les traverse. C’est l’<strong>onde de montagne</strong>, et elle peut emporter un planeur bien plus haut que n’importe quel thermique.",
+      "p2": "Sous la première crête se trouve le rotor, une bande d’air agité et tourbillonnant, parfois signalée par un nuage de rotor déchiqueté. Au-dessus, l’écoulement est lisse. Au sommet d’une onde peut se former un nuage lenticulaire, en forme de lentille. Il reste en place, même si le vent le traverse de part en part.",
+      "p3": "Notre planeur quitte la crête pour la partie ascendante de l’onde, se tourne face au vent et reste suspendu au-dessus du même point du sol. L’air monte à environ 2,8 m/s et le planeur à environ 2,3 m/s, de 1400 m à 2500 m en huit minutes. C’est une onde douce. Des ascendances d’onde de 1,5 à 6 m/s sont courantes, et le 2 septembre 2018, le planeur Perlan 2 est monté dans des ondes au-dessus de l’Argentine jusqu’à 22 657 m (74 334 ft), le record du monde d’altitude en planeur.",
+      "p4": "Les pilotes qui montent haut dans l’onde respirent de l’oxygène en bouteille, car l’air y est raréfié. Sur le chemin du retour, notre planeur traverse le côté descendant de l’onde, où l’air descend à environ 2,5 m/s et où la mesure d’air ascendant passe sous zéro. Dans l’air descendant, mieux vaut voler vite : il le traverse donc à 200 km/h, descend à environ 1560 m en quatre minutes, puis rentre tranquillement en planant au-dessus de la vallée."
+    }
+  }
+}

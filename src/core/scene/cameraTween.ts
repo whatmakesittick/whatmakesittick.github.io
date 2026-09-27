@@ -29,6 +29,13 @@ export class CameraTween {
     return this.elapsed >= CAMERA_TWEEN_SECONDS;
   }
 
+  shift(delta: Vector3): void {
+    [this.from, this.to].forEach((pose) => {
+      pose.position.add(delta);
+      pose.target.add(delta);
+    });
+  }
+
   advance(deltaSeconds: number): CameraPose {
     this.elapsed = Math.min(CAMERA_TWEEN_SECONDS, this.elapsed + deltaSeconds);
     return this.poseAt(easeInOutCubic(this.elapsed / CAMERA_TWEEN_SECONDS));

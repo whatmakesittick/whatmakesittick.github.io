@@ -1,7 +1,8 @@
-import { Color, Scene } from 'three';
+import { Color, Fog, Scene } from 'three';
 import type { PartInfo } from '../explainer';
 import { THEME } from '../theme';
 import { CameraRig } from './camera';
+import type { CameraOptions } from './camera';
 import { MAX_FRAME_SECONDS } from './constants';
 import { Highlighter } from './highlight';
 import { LabelLayer } from './labels';
@@ -17,6 +18,19 @@ import { createViewport } from './viewport';
 import type { Viewport } from './viewport';
 
 export type FrameUpdate = (deltaSeconds: number) => void;
+
+export interface FogOptions {
+  color: string;
+  near: number;
+  far: number;
+}
+
+export interface SceneOptions {
+  background?: string;
+  fog?: FogOptions;
+  stage?: boolean;
+  camera?: CameraOptions;
+}
 
 export interface SceneShell {
   viewport: Viewport;
@@ -37,21 +51,28 @@ export interface SceneHost {
   dispose(): void;
 }
 
+function createScene(options: SceneOptions): Scene {
+  const scene = new Scene();
+  scene.background = new Color(options.background ?? THEME.background);
+  if (options.fog) scene.fog = new Fog(options.fog.color, options.fog.near, options.fog.far);
+  return scene;
+}
+
 export function createSceneHost(
   container: HTMLElement,
   parts: Readonly<Record<string, PartInfo>>,
+  options: SceneOptions = {},
 ): SceneHost {
   const viewport = createViewport(container);
-  const scene = new Scene();
-  scene.background = new Color(THEME.background);
+  const scene = createScene(options);
   const lighting = createLighting(scene, viewport.renderer);
   const textures = createSceneTextures();
   const stage = new Stage(textures.shadow);
-  scene.add(stage.group);
+  if (options.stage ?? true) scene.add(stage.group);
   const materials = new MaterialLibrary();
   const highlighter = new Highlighter(materials, [...Object.keys(parts), STRUCTURE_GROUP]);
   const labels = new LabelLayer(parts);
-  const rig = new CameraRig(viewport.renderer.domElement);
+  const rig = new CameraRig(viewport.renderer.domElement, options.camera);
   viewport.onResize((size) => {
     rig.setViewport(size);
     labels.setViewport(size);

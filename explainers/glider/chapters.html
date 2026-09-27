@@ -1,0 +1,247 @@
+<section class="chapter" data-preset="overview" aria-labelledby="overview-title">
+  <p class="chapter-index">01</p>
+  <h2 id="overview-title" data-i18n="sections.overview.title">Flying with no engine</h2>
+  <p data-i18n-html="sections.overview.p1">
+    You are looking at a glider, also called a sailplane. It has long wings, a stick and pedals like
+    an aeroplane, but no engine. A winch or a tow plane launches it to between 300 and 1200 m up,
+    and from then on it is on its own. With nothing to push it along, it is
+    <strong>always sinking through the air</strong>, just slowly.
+  </p>
+  <p data-i18n="sections.overview.p2">
+    So the only way up is air that rises faster than the glider sinks. In calm air a modern glider
+    sinks as little as 0.5 m/s, so air rising at 2 m/s carries it up at 1.5 m/s. Pilots find rising
+    air over sun-warmed ground, on windy mountain slopes and in waves downwind of mountains. Hopping
+    from one to the next, a glider can go a very long way: the world record for free distance is
+    3,009 km.
+  </p>
+  <p data-i18n="sections.overview.p3">
+    The model flies one 45-minute loop as a time-lapse. The glider climbs in a thermal over a warm
+    field up to a cloud, glides to a mountain ridge, climbs along the ridge and then in the wave
+    above it, and races home. The scene is squeezed and the glider drawn far larger than life, but
+    the heights, speeds and climb rates in the readouts are real. Heights count from the valley
+    floor.
+  </p>
+  <p data-i18n="sections.overview.p4">
+    Drag the model to look around it and scroll over it to zoom. As you read on, the view follows
+    the text.
+  </p>
+</section>
+
+<section class="chapter" data-preset="glide" aria-labelledby="glide-title">
+  <p class="chapter-index">02</p>
+  <h2 id="glide-title" data-i18n="sections.glide.title">Why it does not fall</h2>
+  <p data-i18n="sections.glide.p1">
+    A glider in flight feels three forces, drawn as arrows in the scene. Weight pulls it straight
+    down. Drag, the push of the air, holds it back. Lift comes from the wings. Each wing meets the
+    air at a small angle and turns it downward, and as the wing pushes air down, the air pushes the
+    wing up. The air over the top also speeds up, so the pressure above the wing is lower than below
+    it. These are two views of the same effect.
+  </p>
+  <p data-i18n-html="sections.glide.p2">
+    With no engine, the glider flies a gentle downhill slope. Because its path tilts down, a small
+    part of its weight pulls it forward along the path. Gravity is its engine, and height is its
+    fuel. How far it goes for the height it loses is its <strong>glide ratio</strong>. At 1 : 50 it
+    travels 50 m forward for every metre down, so from 1000 m up in still air it covers 50 km.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="glider"
+      data-value="trainer"
+      data-i18n="controls.gliderOptions.trainer"
+    >
+      Trainer
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="glider"
+      data-value="racer15"
+      data-i18n="controls.gliderOptions.racer15"
+    >
+      15 m racer
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="glider"
+      data-value="racer18"
+      data-i18n="controls.gliderOptions.racer18"
+    >
+      18 m racer
+    </button>
+  </p>
+  <div class="polar-control">
+    <div class="polar-header">
+      <label for="polar-speed" data-i18n="sections.glide.control.label">Airspeed</label>
+      <output class="number" for="polar-speed" data-readout="polar-speed">105 km/h</output>
+    </div>
+    <input id="polar-speed" type="range" class="range polar-range" data-control="polar-speed" />
+    <div class="polar-scale" aria-hidden="true">
+      <span data-i18n="sections.glide.control.slow">Slow</span>
+      <span data-i18n="sections.glide.control.fast">Fast</span>
+    </div>
+    <dl class="polar-readouts">
+      <div>
+        <dt data-i18n="sections.glide.control.sink">Sink rate</dt>
+        <dd class="number" data-readout="polar-sink">0.5 m/s</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.glide.control.ratio">Glide ratio</dt>
+        <dd class="number" data-readout="polar-ratio">1 : 56</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.glide.control.distance">Range from 1000 m up</dt>
+        <dd class="number" data-readout="polar-distance">56 km</dd>
+      </div>
+    </dl>
+  </div>
+  <p data-i18n="sections.glide.p3">
+    Choose a glider above. The trainer is a Schleicher ASK 21, a two-seater with 17 m wings, and it
+    glides at 1 : 34. The racers are the Jonker JS3 with 15 m or 18 m wings, at 1 : 50 and 1 : 57.
+    Long, slender wings are the secret: they make lift with very little drag. For comparison, a big
+    airliner manages roughly 1 : 15 to 1 : 20, a hang glider about 1 : 15 and a paraglider about 1 :
+    10.
+  </p>
+  <p data-i18n="sections.glide.p4">
+    Now move the airspeed slider. Flying faster costs height: past the best glide speed, about 105
+    km/h for a light JS3, the sink rate grows faster than the speed. Even so, the 18 m JS3 sinks
+    only about 1.4 m/s at 200 km/h, which is still 1 : 40. Weight does not change the slope. With up
+    to about 200 L of water in its wings, the JS3 glides the same slope, only faster: its best glide
+    speed rises to about 120 km/h.
+  </p>
+</section>
+
+<section class="chapter" data-preset="thermal" aria-labelledby="thermal-title">
+  <p class="chapter-index">03</p>
+  <h2 id="thermal-title" data-i18n="sections.thermal.title">Warm air rises</h2>
+  <p data-i18n="sections.thermal.p1">
+    The sun does not heat the ground evenly. Dark fields, towns and slopes facing the sun warm up
+    faster than grass or wet ground, and they warm the air above them. Warm air is lighter than the
+    cooler air around it, so it breaks away and rises, as a steady column or a string of bubbles.
+    Glider pilots call this rising air a thermal.
+  </p>
+  <p data-i18n="sections.thermal.p2">
+    A thermal is typically 150 to 300 m across. It rises fastest in the middle and leans over with
+    the wind. Under 1 m/s is a weak thermal, 1 to 2.5 m/s is average and 3 m/s or more is strong.
+    Ours rises at about 2.7 m/s over the dark field, leaning toward the ridge.
+  </p>
+  <p data-i18n="sections.thermal.p3">
+    To stay inside, the pilot circles, banked at about 45° at 90 km/h. One circle takes about 16 s
+    and is about 127 m across, tight enough to stay near the strong middle. Pilots normally bank
+    between 30 and 45°. Any steeper and the glider sinks faster, so they rarely go much beyond that.
+  </p>
+  <p data-i18n-html="sections.thermal.p4">
+    The glider is still sinking inside the thermal, only more slowly than the air around it rises.
+    <strong>Net climb is the rise of the air minus the sink of the glider.</strong> The readouts
+    show all three: rising air, glider sink and net climb, about 2.2 m/s here. That takes our glider
+    from 500 m to 1500 m in seven and a half minutes.
+  </p>
+</section>
+
+<section class="chapter" data-preset="cloud" aria-labelledby="cloud-title">
+  <p class="chapter-index">04</p>
+  <h2 id="cloud-title" data-i18n="sections.cloud.title">Clouds show where the lift is</h2>
+  <p data-i18n-html="sections.cloud.p1">
+    Rising air cools by about 1 °C for every 100 m. Air also carries invisible water vapour. Its dew
+    point is the temperature at which that vapour turns into tiny droplets. As a thermal climbs, its
+    temperature falls fast and its dew point only a little, so the two meet. There the vapour
+    condenses, and <strong>a cumulus cloud</strong> grows on top of the thermal.
+  </p>
+  <p data-i18n="sections.cloud.p2">
+    The cloud's flat base marks the height where that happens, and every cloud that day has its base
+    at about the same height. A rule of thumb gives it: about 125 m for every degree between the
+    temperature at the ground and the dew point. Our day has a gap of 12 °C, so the base sits at
+    1500 m. Try the slider.
+  </p>
+  <div class="cloud-control">
+    <div class="cloud-header">
+      <label for="spread" data-i18n="sections.cloud.control.label"
+        >Ground temperature minus dew point</label
+      >
+      <output class="number" for="spread" data-readout="spread">12 °C</output>
+    </div>
+    <input id="spread" type="range" class="range cloud-range" data-control="spread" />
+    <div class="cloud-scale" aria-hidden="true">
+      <span data-i18n="sections.cloud.control.humid">Humid</span>
+      <span data-i18n="sections.cloud.control.dry">Dry</span>
+    </div>
+    <dl class="cloud-readouts">
+      <div>
+        <dt data-i18n="sections.cloud.control.base">Cloud base, roughly</dt>
+        <dd class="number" data-readout="cloud-base">1500 m</dd>
+      </div>
+    </dl>
+  </div>
+  <p data-i18n="sections.cloud.p3">
+    Not every thermal has a cloud. On a dry day the air never cools to its dew point, so the
+    thermals stay invisible. These blue thermals can be just as strong. On other days clouds line up
+    with the wind in long rows called cloud streets, about three times the cloud height apart. A
+    glider can follow a street a long way with little circling.
+  </p>
+  <p data-i18n="sections.cloud.p4">
+    Too much cloud is bad news. When clouds spread out, they shade the ground, and the thermals
+    weaken or die. Under a good cloud, pilots head for the darkest, firmest part of the base, where
+    the lift is often best, and leave just below it. The view pauses as our glider nears the base.
+    Press play to carry on.
+  </p>
+</section>
+
+<section class="chapter" data-preset="ridge" aria-labelledby="ridge-title">
+  <p class="chapter-index">05</p>
+  <h2 id="ridge-title" data-i18n="sections.ridge.title">Wind against a mountain</h2>
+  <p data-i18n-html="sections.ridge.p1">
+    When wind meets a long ridge, it cannot pass through, so it is pushed up the slope that faces
+    it. That band of rising air is <strong>ridge lift</strong>, and it carries on up above the
+    crest. A long ridge works best. Around a single hill, the air mostly flows round the sides
+    instead.
+  </p>
+  <p data-i18n="sections.ridge.p2">
+    Our glider arrives just above the crest, which stands 1100 m above the valley floor. That is
+    where the lift is best. It flies back and forth along the face at 90 km/h and always turns away
+    from the slope at each end, never toward it. The air here rises at about 1.5 m/s, so the glider
+    climbs at about 1 m/s, from 1150 m to 1400 m.
+  </p>
+  <p data-i18n="sections.ridge.p3">
+    Ridge lift needs a steady wind of about 28 km/h or more, blowing within 30 to 45° of straight at
+    the slope. Ours blows at 30 km/h. The lift can reach two to three times the height of the ridge.
+    It needs no sun, only wind, so it keeps working into the evening, when thermals fade.
+  </p>
+  <p data-i18n="sections.ridge.p4">
+    A long, straight ridge is a highway for gliders. Along the ridges of the Appalachians in the
+    eastern United States, pilots have set world records flying out along the mountains and back
+    again. Watch the air stream up the face in the scene, and the glider bank away from the slope at
+    every turn.
+  </p>
+</section>
+
+<section class="chapter" data-preset="wave" aria-labelledby="wave-title">
+  <p class="chapter-index">06</p>
+  <h2 id="wave-title" data-i18n="sections.wave.title">Riding the mountain wave</h2>
+  <p data-i18n-html="sections.wave.p1">
+    Wind that crosses a mountain does not always settle down behind it. When the air is stable, it
+    bobs up and down on the far side, like water flowing over a rock in a stream. The crests can be
+    3 to 30 km apart, and they stand still over the ground while the wind blows through them. This
+    is <strong>mountain wave</strong>, and it can lift a glider far higher than any thermal.
+  </p>
+  <p data-i18n="sections.wave.p2">
+    Under the first crest lies the rotor, a band of rough, tumbling air, sometimes marked by a
+    ragged rotor cloud. Above it the flow is smooth. At the top of a wave, a lens-shaped lenticular
+    cloud can form. It stays in place, even though the wind blows straight through it.
+  </p>
+  <p data-i18n="sections.wave.p3">
+    Our glider moves from the ridge into the rising side of the wave, turns to face the wind and
+    hangs over the same spot on the ground. The air rises at about 2.8 m/s, and the glider climbs at
+    about 2.3 m/s, from 1400 m to 2500 m in eight minutes. That is a gentle wave. Wave lift of 1.5
+    to 6 m/s is common, and on 2 September 2018 the Perlan 2 glider rode waves over Argentina to
+    22,657 m (74,334 ft), the world altitude record for gliders.
+  </p>
+  <p data-i18n="sections.wave.p4">
+    Pilots who climb high in wave breathe from an oxygen bottle, because the air up there is thin.
+    On the way home, our glider crosses the sinking side of the wave, where the air falls at about
+    2.5 m/s and the rising air readout drops below zero. In sinking air it pays to fly fast, so it
+    races through at 200 km/h, drops to about 1560 m in four minutes, then glides calmly home across
+    the valley.
+  </p>
+</section>
