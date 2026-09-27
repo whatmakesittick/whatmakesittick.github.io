@@ -28,6 +28,9 @@ const presets: Record<string, TestPreset> = {
   intro: { view: { grid: true, labels: false }, speed: 5 },
   hold: { pauseAt: 25 },
   paint: { colour: 'green' },
+  seek: { startAt: 60 },
+  holdPastEnd: { pauseAt: 125 },
+  seekBehindStart: { startAt: -10 },
 };
 
 interface Extension {
@@ -107,6 +110,34 @@ describe('createExplainerStore', () => {
     store.getState().pause();
     store.getState().applyPreset('paint');
     expect(store.getState().playing).toBe(false);
+  });
+
+  it('seeks to a preset start and keeps playing', () => {
+    const store = createTestStore({ phase: 10 });
+    store.getState().applyPreset('seek');
+    expect(store.getState()).toMatchObject({ phase: 60, playing: true, pausedByPreset: false });
+  });
+
+  it('seeks to a preset start and keeps a pause made by hand', () => {
+    const store = createTestStore();
+    store.getState().pause();
+    store.getState().applyPreset('seek');
+    expect(store.getState()).toMatchObject({ phase: 60, playing: false });
+  });
+
+  it('resumes after a preset pause when the next preset only seeks', () => {
+    const store = createTestStore();
+    store.getState().applyPreset('hold');
+    store.getState().applyPreset('seek');
+    expect(store.getState()).toMatchObject({ phase: 60, playing: true, pausedByPreset: false });
+  });
+
+  it('wraps preset phases into the cycle', () => {
+    const store = createTestStore();
+    store.getState().applyPreset('holdPastEnd');
+    expect(store.getState().phase).toBe(25);
+    store.getState().applyPreset('seekBehindStart');
+    expect(store.getState().phase).toBe(90);
   });
 
   it('exposes the extension actions and counts camera resets', () => {

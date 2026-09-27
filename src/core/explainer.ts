@@ -71,6 +71,7 @@ export interface Preset {
   view?: Partial<ViewFlags>;
   speed?: number;
   pauseAt?: number;
+  startAt?: number;
 }
 
 export interface ChoiceOption {

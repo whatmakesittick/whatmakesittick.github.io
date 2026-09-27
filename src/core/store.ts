@@ -99,7 +99,7 @@ export function createExplainerStore<E extends object, P extends Preset>(
             ...options.presetState?.(preset, state),
             view: mergeView(state.view, preset.view),
             speed: preset.speed ?? state.speed,
-            phase: preset.pauseAt ?? state.phase,
+            phase: wrap(preset.pauseAt ?? preset.startAt ?? state.phase),
             ...playbackForPreset(state, preset),
           } as Partial<Playback & E>);
         },
