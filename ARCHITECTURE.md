@@ -42,8 +42,8 @@ explainers/engine/
   src/style.css       styles for the explainer's own widgets and tones
   src/model/          pure simulation, unit tested
   src/state/          store extension and presets
-  src/timeline.ts     the Timeline: cycle, phases, speed range, formatting
-  src/scene/          part geometry, assembly, controller, camera views, store bindings
+  src/timeline.ts     the Timeline: cycle, loop, phases, speed range, formatting
+  src/scene/          geometry, assembly or diorama, controller, camera views, store bindings
   src/ui/             dock choices and toggles, readouts, chapter actions, widgets
   public/             cover image, social card and other static files, served under /<slug>/
 ```
@@ -79,7 +79,7 @@ tests and build cover them.
 
 ```ts
 interface PlaybackState {
-  phase: number; // position in the cycle, 0 ≤ phase < timeline.cycle
+  phase: number; // position in the cycle, 0 ≤ phase < timeline.cycle (≤ cycle without loop)
   playing: boolean;
   speed: number; // in the explainer's speed unit, e.g. rpm
   preset: string;
@@ -104,7 +104,8 @@ interface PlaybackActions {
 }
 
 interface Timeline {
-  cycle: number; // 720 for a four-stroke engine
+  cycle: number; // 720 for a four-stroke engine, 2700 seconds for a glider flight
+  loop?: boolean; // true by default; false stops at the end instead of wrapping
   step: number; // scrubber step
   nudge: { fine: number; coarse: number }; // arrow keys, coarse with Shift
   labelKey: string; // scrubber label, "Crank angle"
@@ -120,6 +121,14 @@ interface Preset {
   view?: Partial<Record<string, boolean>>;
   speed?: number;
   pauseAt?: number; // pauses there; the next preset without it resumes
+  startAt?: number; // seeks there and keeps the playing state
+}
+
+interface SceneOptions {
+  background?: string; // CSS colour, THEME.background by default
+  fog?: { color: string; near: number; far: number };
+  stage?: boolean; // grid floor and contact shadow, true by default
+  camera?: { near?: number; far?: number; maxPolarAngle?: number }; // planes, orbit limit in radians
 }
 
 interface Explainer<S extends Playback = Playback> {
@@ -135,6 +144,7 @@ interface Explainer<S extends Playback = Playback> {
   readouts: Readout<S>[]; // gauge rows: { id, labelKey, numeric, value, tone?, meter? }
   actions?: Record<string, { run(state: S, value: string): void; current?(state: S): string }>;
   shortcuts?: Record<string, (state: S) => void>; // extra keys
+  scene?: SceneOptions; // sky, fog, stage and camera limits
   mountScene(shell: SceneShell, store: ExplainerStore<S>): () => void;
   mountUi?(root: Document, store: ExplainerStore<S>): void;
 }
@@ -147,15 +157,24 @@ for its own fields and actions, and an optional `presetState` that maps a preset
 to its own fields. The engine store adds `engineType`, `layout`,
 `compressionRatio`, `setEngineType`, `setLayout` and `setCompressionRatio`.
 
+A timeline loops by default: the phase wraps around the cycle and the scrubber
+stops one step short of it, which suits a mechanism turning through a rotation.
+With `loop: false` the timeline is a run with an end, such as a flight measured in
+seconds: the phase is clamped to `[0, cycle]`, playback pauses at the end, play at
+the end starts over from 0, the scrubber reaches the end and the last phase stays
+current there. A preset's `pauseAt` and `startAt` are wrapped or clamped the same
+way; `startAt` moves a chapter to its moment in the run without stopping playback.
+
 Core mounts the shell (`src/core/mount.ts`): the dock (play, scrubber with phase
 bands, status, speed slider, choices, toggles, reset camera, more), the gauge
 readouts, language, footer, `mountUi`, chapter actions, the keyboard (space,
 arrows, digits for phases, R, choice and toggle shortcuts, explainer shortcuts),
-reading-line sections and the safe area. Then it calls `mountScene` with a
-`SceneShell`: viewport, scene, camera rig, label layer, highlighter, materials,
-textures, stage, lighting and `onFrame(update)`. Core owns the frame loop: each
-frame it ticks the store, runs the explainer's frame updates, eases the
-highlighter and the camera, renders and lays out the labels.
+reading-line sections and the safe area. Then it builds the scene host from the
+explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
+scene, camera rig, label layer, highlighter, materials, textures, stage, lighting
+and `onFrame(update)`. Core owns the frame loop: each frame it ticks the store,
+runs the explainer's frame updates, eases the highlighter and the camera, renders
+and lays out the labels.
 
 A choice's `shortcut` cycles through its options. Chapter buttons use
 `data-action="<name>" data-value="<value>"`; actions with `current` keep
@@ -164,14 +183,38 @@ touch screens.
 
 ## Scene toolkit
 
-`src/core/scene` holds what any mechanism needs: viewport and CSS2D label
-renderer, camera rig with tweens and orbit controls, `frameBox` for fitting a box
-into the safe area, label layer with overlap layout, highlighter, material
-library, textures, lighting, stage grid and shadow, frame loop and lens. The
+`src/core/scene` holds what any explainer needs: viewport and CSS2D label
+renderer, camera rig with tweens, orbit controls and `follow(anchor)`, `frameBox`
+for fitting a box into the safe area, label layer with overlap layout,
+highlighter, material library, textures, lighting with its `key`, `fill` and `rim`
+lights, stage grid and shadow, `PointCloud` for particles, frame loop and lens. The
 material library caches one material per emphasis group and finish, where a
 finish is a plain `MeshStandardMaterialParameters` object the explainer owns. The
 highlighter dims every group except the highlighted parts; `structure` is the
-group for everything that is not a part.
+group for everything that is not a part. Dimming scales the opacity a material
+was created or registered with, so a translucent cloud or column of air stays
+translucent when it is restored.
+
+The explainer's `scene` options shape the world around it. A mechanism keeps the
+defaults: dark background, grid floor with a contact shadow, an orbit that stops
+level with the target. A diorama such as a glider over terrain turns the stage
+off, sets a sky colour and fog, widens the camera planes and raises
+`maxPolarAngle` past a right angle so the camera can dip below the target and
+look up.
+
+| Camera call      | Effect                                                                          |
+| ---------------- | ------------------------------------------------------------------------------- |
+| `jumpTo(pose)`   | Places the camera at once                                                       |
+| `tweenTo(pose)`  | Eases the camera there; any orbit or zoom by the user cancels the tween         |
+| `follow(anchor)` | Every frame moves the camera, its target and any tween by the anchor's movement |
+| `follow(null)`   | Stops following; the camera stays where it is                                   |
+
+Following keeps the framing fixed relative to a moving object while the user can
+still orbit and zoom. A pose passed to `jumpTo` or `tweenTo` counts from the
+anchor's position at the moment of the call, so frame it around the anchor's
+current position. `PointCloud` is a fixed-size buffer of coloured points drawn
+with `createPointMaterial`: set points with `setPoint` and `setColor`, then call
+`commit` once per frame.
 
 ## Build
 
