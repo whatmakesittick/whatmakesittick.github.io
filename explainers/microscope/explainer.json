@@ -1,0 +1,12 @@
+{
+  "slug": "microscope",
+  "tags": ["tools", "optics", "physics"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "Low-poly 3D cutaway of a light microscope with green rays of light running from the lamp through the condenser, objective and eyepiece into an eye, beside the title How a microscope works"
+  }
+}
