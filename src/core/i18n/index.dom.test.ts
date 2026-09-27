@@ -9,11 +9,11 @@ const loadUkrainian = vi.fn(() => Promise.resolve(ukrainian));
 
 describe('i18n', () => {
   beforeAll(async () => {
-    window.history.replaceState(null, '', '/?lang=uk');
+    window.history.replaceState(null, '', '/glider/?lang=uk');
     await initI18n({ en: () => Promise.resolve(english), uk: loadUkrainian });
   });
 
-  it('starts in the detected language with its core and explainer copy', () => {
+  it('reads the language query on a page without a language folder', () => {
     expect(currentLanguage()).toBe('uk');
     expect(t('demo.hello')).toBe('Привіт');
     expect(t('controls.play')).toBe(coreUkrainian.controls.play);

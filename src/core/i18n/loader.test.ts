@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { createDictionaryLoader, loadersByLanguage } from './loader';
+import { createDictionaryLoader, loadersByLanguage, shippedLanguages } from './loader';
 import type { Dictionary } from './resources';
 
 const resolve = (dictionary: Dictionary) => vi.fn(() => Promise.resolve(dictionary));
@@ -44,5 +44,11 @@ describe('loadersByLanguage', () => {
     expect(loadersByLanguage({ '../locales/de.json': de, '../locales/it.json': it })).toEqual({
       de,
     });
+  });
+});
+
+describe('shippedLanguages', () => {
+  it('lists the languages with a loader in the site order', () => {
+    expect(shippedLanguages({ uk: resolve({}), en: resolve({}) })).toEqual(['en', 'uk']);
   });
 });

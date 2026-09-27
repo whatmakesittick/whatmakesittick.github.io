@@ -1,4 +1,4 @@
-import { isLanguageCode } from './languages';
+import { LANGUAGES, isLanguageCode } from './languages';
 import type { LanguageCode } from './languages';
 import { mergeDictionaries } from './resources';
 import type { Dictionary, LocaleLoader, LocaleLoaders } from './resources';
@@ -14,6 +14,10 @@ export function loadersByLanguage(files: Readonly<Record<string, LocaleLoader>>)
     if (code && isLanguageCode(code)) loaders[code] = load;
   }
   return loaders;
+}
+
+export function shippedLanguages(locales: LocaleLoaders): LanguageCode[] {
+  return LANGUAGES.map((language) => language.code).filter((code) => locales[code]);
 }
 
 function loadFrom(source: LocaleLoaders, code: LanguageCode): Promise<Dictionary> {

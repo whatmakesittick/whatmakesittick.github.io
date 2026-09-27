@@ -6,14 +6,17 @@ import { DEFAULT_LANGUAGE, LANGUAGES, isLanguageCode } from './languages';
 import type { LanguageCode } from './languages';
 import { createDictionaryLoader, loadersByLanguage } from './loader';
 import type { DictionaryLoader } from './loader';
+import { LANGUAGE_QUERY_KEY } from './paths';
 import type { Dictionary, LocaleLoaders } from './resources';
 
 export { DEFAULT_LANGUAGE, LANGUAGES } from './languages';
 export type { Language, LanguageCode } from './languages';
+export { shippedLanguages } from './loader';
+export { LANGUAGE_QUERY_KEY } from './paths';
 export type { Dictionary, LocaleLoader, LocaleLoaders } from './resources';
 
 const STORAGE_KEY = 'language';
-export const LANGUAGE_QUERY_KEY = 'lang';
+const BASE_SEGMENTS = import.meta.env.BASE_URL.split('/').filter(Boolean).length;
 
 const CORE_LOCALES: LocaleLoaders = {
   ...loadersByLanguage(
@@ -24,6 +27,7 @@ const CORE_LOCALES: LocaleLoaders = {
   [DEFAULT_LANGUAGE]: () => Promise.resolve(en),
 };
 
+const detector = new LanguageDetector();
 let loadDictionary: DictionaryLoader = createDictionaryLoader([CORE_LOCALES]);
 let requestedLanguage: LanguageCode = DEFAULT_LANGUAGE;
 
@@ -35,13 +39,14 @@ async function addLanguage(code: LanguageCode): Promise<void> {
 export async function initI18n(locales: LocaleLoaders = {}): Promise<void> {
   loadDictionary = createDictionaryLoader([CORE_LOCALES, locales]);
   const fallback = await loadDictionary(DEFAULT_LANGUAGE);
-  await i18next.use(LanguageDetector).init({
+  await i18next.use(detector).init({
     ...TRANSLATION_OPTIONS,
     resources: { [DEFAULT_LANGUAGE]: { [NAMESPACE]: fallback } },
     supportedLngs: LANGUAGES.map((language) => language.code),
     nonExplicitSupportedLngs: true,
     detection: {
-      order: ['querystring', 'localStorage', 'navigator'],
+      order: ['path', 'querystring', 'localStorage', 'navigator'],
+      lookupFromPathIndex: BASE_SEGMENTS,
       lookupQuerystring: LANGUAGE_QUERY_KEY,
       lookupLocalStorage: STORAGE_KEY,
       caches: ['localStorage'],
@@ -61,6 +66,10 @@ export async function setLanguage(code: LanguageCode): Promise<void> {
   requestedLanguage = code;
   await addLanguage(code);
   if (code === requestedLanguage) await i18next.changeLanguage(code);
+}
+
+export function rememberLanguage(code: LanguageCode): void {
+  detector.cacheUserLanguage(code);
 }
 
 export function onLanguageChanged(listener: (code: LanguageCode) => void): () => void {

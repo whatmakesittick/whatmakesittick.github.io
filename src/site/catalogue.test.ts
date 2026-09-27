@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { CatalogueEntry, ExplainerManifest, ExplainerMeta } from '@core/manifest';
-import { groupByCategory, localizedMeta } from './catalogue';
+import { groupByCategory, localizedMeta, pageLanguage } from './catalogue';
 
 function meta(title: string): ExplainerMeta {
   return { title, eyebrow: '', tagline: '', description: '', summary: `${title} summary` };
@@ -38,5 +38,10 @@ describe('catalogue', () => {
   it('shows the current language and falls back to the default one', () => {
     expect(localizedMeta(engine, 'uk', 'en')?.title).toBe('Двигун');
     expect(localizedMeta(gearbox, 'uk', 'en')?.title).toBe('Gearbox');
+  });
+
+  it('links a card to its page in the current language when the explainer ships it', () => {
+    expect(pageLanguage(engine, 'uk', 'en')).toBe('uk');
+    expect(pageLanguage(engine, 'ja', 'en')).toBe('en');
   });
 });

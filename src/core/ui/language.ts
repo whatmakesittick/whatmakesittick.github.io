@@ -3,10 +3,12 @@ import {
   LANGUAGE_QUERY_KEY,
   currentLanguage,
   onLanguageChanged,
+  rememberLanguage,
   setLanguage,
 } from '../i18n';
 import type { LanguageCode } from '../i18n';
 import { translateDom } from '../i18n/dom';
+import { languageUrl } from '../i18n/paths';
 import { html, queryAll } from './dom';
 import { parseOption } from './parse';
 
@@ -19,10 +21,20 @@ function languageOptions(): HTMLOptionElement[] {
   );
 }
 
-function bindSelect(select: HTMLSelectElement): void {
+function openLanguagePage(code: LanguageCode): void {
+  rememberLanguage(code);
+  window.location.assign(languageUrl(window.location.href, import.meta.env.BASE_URL, code));
+}
+
+function chooseLanguage(code: LanguageCode, pageLanguages: readonly LanguageCode[]): void {
+  if (pageLanguages.includes(code)) openLanguagePage(code);
+  else void setLanguage(code);
+}
+
+function bindSelect(select: HTMLSelectElement, pageLanguages: readonly LanguageCode[]): void {
   select.replaceChildren(...languageOptions());
   select.addEventListener('change', () => {
-    void setLanguage(parseOption(select.value, LANGUAGE_CODES));
+    chooseLanguage(parseOption(select.value, LANGUAGE_CODES), pageLanguages);
   });
 }
 
@@ -40,9 +52,9 @@ function applyLanguage(root: Document, selects: HTMLSelectElement[], code: Langu
   syncQueryString(code);
 }
 
-export function mountLanguage(root: Document): void {
+export function mountLanguage(root: Document, pageLanguages: readonly LanguageCode[]): void {
   const selects = queryAll<HTMLSelectElement>(root, SELECT_SELECTOR);
-  selects.forEach(bindSelect);
+  selects.forEach((select) => bindSelect(select, pageLanguages));
   applyLanguage(root, selects, currentLanguage());
   onLanguageChanged((code) => applyLanguage(root, selects, code));
 }

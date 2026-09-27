@@ -1,7 +1,7 @@
 import './style.css';
 import './scene/scene.css';
 import type { Explainer, ExplainerStore, Playback } from './explainer';
-import { initI18n } from './i18n';
+import { initI18n, shippedLanguages } from './i18n';
 import type { LocaleLoaders } from './i18n';
 import { createSceneHost } from './scene/shell';
 import { mountActions } from './ui/actions';
@@ -45,7 +45,7 @@ export async function mountExplainer<S extends Playback>(
   respectReducedMotion(store);
   mountDock(document, store, explainer);
   mountReadouts(document, store, explainer.readouts);
-  mountLanguage(document);
+  mountLanguage(document, shippedLanguages(locales));
   mountFooter(document, TITLE_KEY);
   explainer.mountUi?.(document, store);
   mountActions(document, store, explainer.actions);

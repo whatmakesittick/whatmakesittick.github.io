@@ -1,6 +1,8 @@
 import { DEFAULT_LANGUAGE, currentLanguage, onLanguageChanged, t } from '@core/i18n';
+import type { LanguageCode } from '@core/i18n';
+import { languagePath } from '@core/i18n/paths';
 import { html, requireElement, svg } from '@core/ui/dom';
-import { groupByCategory, localizedMeta } from './catalogue';
+import { groupByCategory, localizedMeta, pageLanguage } from './catalogue';
 import type { CategoryGroup } from './catalogue';
 import type { CatalogueEntry } from '@core/manifest';
 
@@ -11,6 +13,11 @@ function explainerPath(entry: CatalogueEntry, file = ''): string {
   return `${import.meta.env.BASE_URL}${entry.manifest.slug}/${file}`;
 }
 
+function explainerPage(entry: CatalogueEntry, code: LanguageCode): string {
+  const language = pageLanguage(entry, code, DEFAULT_LANGUAGE);
+  return `${import.meta.env.BASE_URL}${languagePath(language, entry.manifest.slug)}`;
+}
+
 function arrowIcon(): SVGSVGElement {
   return svg('svg', { class: 'icon', viewBox: ICON_VIEW_BOX, 'aria-hidden': 'true' }, [
     svg('path', { d: ARROW_PATH }),
@@ -18,7 +25,8 @@ function arrowIcon(): SVGSVGElement {
 }
 
 function createCard(entry: CatalogueEntry): HTMLElement | undefined {
-  const meta = localizedMeta(entry, currentLanguage(), DEFAULT_LANGUAGE);
+  const code = currentLanguage();
+  const meta = localizedMeta(entry, code, DEFAULT_LANGUAGE);
   if (!meta) return undefined;
   const cover = html('img', {
     src: explainerPath(entry, entry.manifest.cover),
@@ -27,7 +35,7 @@ function createCard(entry: CatalogueEntry): HTMLElement | undefined {
     decoding: 'async',
   });
   return html('li', {}, [
-    html('a', { class: 'card', href: explainerPath(entry) }, [
+    html('a', { class: 'card', href: explainerPage(entry, code) }, [
       html('span', { class: 'card-cover' }, [cover]),
       html('span', { class: 'card-body' }, [
         html('span', { class: 'card-eyebrow' }, [meta.eyebrow]),
