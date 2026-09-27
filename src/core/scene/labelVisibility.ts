@@ -4,6 +4,8 @@ import type { LabelLayer } from './labels';
 import { NO_SAFE_AREA } from './lens';
 import type { ViewportSize } from './lens';
 
+export type LabelSource = Pick<LabelLayer, 'show' | 'anchors'>;
+
 interface Margins {
   top: number;
   side: number;
@@ -42,20 +44,19 @@ function isInside(point: Vector2, size: ViewportSize, margins: Margins): boolean
 }
 
 export class LabelVisibility {
-  private readonly labels: LabelLayer;
+  private readonly labels: LabelSource;
   private readonly camera: Camera;
   private readonly states: readonly LabelState[];
   private readonly world = new Vector3();
   private readonly cameraPosition = new Vector3();
   private readonly cameraRotation = new Quaternion();
   private readonly visible = new Set<string>();
-  private anchors: ReadonlyMap<string, Object3D> = new Map();
   private ordered: LabelState[] = [];
   private pinned: ReadonlySet<string> = new Set();
   private size: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
   private stale = true;
 
-  constructor(labels: LabelLayer, camera: Camera, priority: readonly string[]) {
+  constructor(labels: LabelSource, camera: Camera, priority: readonly string[]) {
     this.labels = labels;
     this.camera = camera;
     this.states = priority.map((id) => ({
@@ -65,10 +66,6 @@ export class LabelVisibility {
       crowded: false,
       shown: false,
     }));
-  }
-
-  setAnchors(anchors: ReadonlyMap<string, Object3D>): void {
-    this.anchors = anchors;
   }
 
   setWanted(wanted: ReadonlySet<string>, pinned: ReadonlySet<string>): void {
@@ -142,7 +139,7 @@ export class LabelVisibility {
   }
 
   private project(state: LabelState): boolean {
-    const anchor = this.anchors.get(state.id);
+    const anchor = this.labels.anchors().get(state.id);
     if (!anchor || !isShown(anchor)) return false;
     const projected = anchor.getWorldPosition(this.world).project(this.camera);
     if (projected.z > 1) return false;

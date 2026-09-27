@@ -1,4 +1,4 @@
-import type { Preset as PlaybackPreset } from '@core/explainer';
+import type { ScenePreset } from '@core/scene/presetBinder';
 import { COLLECTIVE_RANGE } from '../model';
 import type { FlightMode } from '../model';
 
@@ -14,10 +14,7 @@ export type ViewOptions = {
   flow: boolean;
 };
 
-export interface Preset extends PlaybackPreset {
-  camera: CameraView;
-  labels: readonly PartId[];
-  highlight: readonly PartId[];
+export interface Preset extends ScenePreset<PartId, CameraView> {
   view?: Partial<ViewOptions>;
   flightMode?: FlightMode;
   collective?: number;

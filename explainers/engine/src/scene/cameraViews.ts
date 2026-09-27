@@ -1,21 +1,13 @@
-import { Vector3 } from 'three';
-import type { Box3 } from 'three';
-import { frameBox } from '@core/scene/frameBox';
-import type { CameraPose } from '@core/scene/frameBox';
-import type { FramingSlopes } from '@core/scene/lens';
+import type { Direction, FramedView } from '@core/scene/cameraViews';
 import type { EngineLayout } from '../model';
 import type { CameraView } from '../state';
 import type { RegionId } from './assemblyRegions';
 
-type Direction = readonly [number, number, number];
-
-interface ViewSpec {
-  region: RegionId;
-  direction: Record<EngineLayout, Direction>;
-  margin: number;
+interface LayoutView extends FramedView<RegionId> {
+  direction: Readonly<Record<EngineLayout, Direction>>;
 }
 
-const VIEWS: Record<CameraView, ViewSpec> = {
+export const VIEWS: Record<CameraView, LayoutView> = {
   overview: {
     region: 'all',
     direction: { single: [0.62, 0.36, 1], inline4: [1, 0.46, 0.82] },
@@ -47,14 +39,3 @@ const VIEWS: Record<CameraView, ViewSpec> = {
     margin: 1.22,
   },
 };
-
-export function poseForView(
-  view: CameraView,
-  layout: EngineLayout,
-  region: (id: RegionId) => Box3,
-  slopes: FramingSlopes,
-): CameraPose {
-  const spec = VIEWS[view];
-  const direction = new Vector3(...spec.direction[layout]).normalize();
-  return frameBox(region(spec.region), direction, slopes, spec.margin);
-}

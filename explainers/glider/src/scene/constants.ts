@@ -14,6 +14,8 @@ export const SCENE_LIMITS = {
   fogFar: 2600,
   cameraNear: 1,
   cameraFar: 6000,
+  cameraMinDistance: 35,
+  cameraMaxDistance: 1040,
   maxPolarAngle: Math.PI * 0.62,
 } as const;
 

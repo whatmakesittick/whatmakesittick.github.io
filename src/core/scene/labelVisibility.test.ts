@@ -1,7 +1,6 @@
 import { Object3D, PerspectiveCamera } from 'three';
 import { describe, expect, it } from 'vitest';
 import { LabelVisibility } from './labelVisibility';
-import type { LabelLayer } from './labels';
 import { NO_SAFE_AREA } from './lens';
 import type { ViewportSize } from './lens';
 
@@ -23,10 +22,12 @@ function createHarness(ids: readonly string[]): Harness {
   camera.position.set(0, 0, CAMERA_DISTANCE);
   camera.updateMatrixWorld();
   let shown: string[] = [];
-  const labels = { show: (visible: ReadonlySet<string>) => (shown = [...visible]) };
-  const visibility = new LabelVisibility(labels as unknown as LabelLayer, camera, ids);
   const anchors = new Map(ids.map((id) => [id, new Object3D()]));
-  visibility.setAnchors(anchors);
+  const labels = {
+    show: (visible: ReadonlySet<string>) => (shown = [...visible]),
+    anchors: () => anchors,
+  };
+  const visibility = new LabelVisibility(labels, camera, ids);
   visibility.setViewport(SIZE);
   const moveTo = (id: string, xPx: number, yPx = CENTRE_PX) => {
     const toWorld = (px: number) => (px - CENTRE_PX) / PIXELS_PER_UNIT;

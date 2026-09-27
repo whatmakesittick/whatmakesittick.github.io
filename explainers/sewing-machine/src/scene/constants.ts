@@ -1,6 +1,7 @@
 import { FABRIC_TOP, HOOK, HOOK_POINT_HEIGHT, NEEDLE } from '../model';
 
 export const SCENE_UNITS_PER_MM = 0.05;
+export const CAMERA_DISTANCE_MM = { min: 50, max: 1490 } as const;
 
 export const BED = { height: 60, top: -0.4, cornerRadius: 6 } as const;
 export const FREE_ARM = { left: -75, right: 70, halfDepth: 36 } as const;

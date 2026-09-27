@@ -8,6 +8,7 @@ export const SCENE_OPTIONS: SceneOptions = {
   camera: {
     near: SCENE_LIMITS.cameraNear,
     far: SCENE_LIMITS.cameraFar,
+    distance: { min: SCENE_LIMITS.cameraMinDistance, max: SCENE_LIMITS.cameraMaxDistance },
     maxPolarAngle: SCENE_LIMITS.maxPolarAngle,
   },
 };

@@ -1,5 +1,5 @@
-import { Box3, Vector3 } from 'three';
-import type { Matrix4 } from 'three';
+import { localRegions } from '@core/scene/regions';
+import type { RegionSpec } from '@core/scene/regions';
 import { ROTOR } from '../model';
 import { HUB, MAST, SKIDS, TAIL_ROTOR } from './constants';
 
@@ -14,33 +14,32 @@ const TAIL_BOX = { front: -4.9, bottom: 0.85, top: 2.85, near: -0.95, far: 0.35 
 const TAIL_END = TAIL_ROTOR.centerX - TAIL_ROTOR.radius;
 const DISC_TOP = HUB.height + DISC_CLEARANCE;
 
-const LOCAL_REGIONS: Record<RegionId, Box3> = {
-  all: new Box3(
-    new Vector3(TAIL_END, 0, -ROTOR.radiusMetres),
-    new Vector3(ROTOR.radiusMetres, DISC_TOP, ROTOR.radiusMetres),
-  ),
-  airframe: new Box3(
-    new Vector3(TAIL_END, 0, -ROTOR.radiusMetres * AIRFRAME_REACH.side),
-    new Vector3(
-      ROTOR.radiusMetres * AIRFRAME_REACH.front,
-      DISC_TOP,
-      ROTOR.radiusMetres * AIRFRAME_REACH.side,
-    ),
-  ),
-  plan: new Box3(
-    new Vector3(TAIL_END, SKIDS.tubeRadius, -ROTOR.radiusMetres),
-    new Vector3(ROTOR.radiusMetres, DISC_TOP, ROTOR.radiusMetres),
-  ),
-  hub: new Box3(
-    new Vector3(-HUB_REACH, MAST.bottom - HUB_BELOW, -HUB_REACH),
-    new Vector3(HUB_REACH, DISC_TOP, HUB_REACH),
-  ),
-  tail: new Box3(
-    new Vector3(TAIL_END, TAIL_BOX.bottom, TAIL_BOX.near),
-    new Vector3(TAIL_BOX.front, TAIL_BOX.top, TAIL_BOX.far),
-  ),
+const LOCAL_REGIONS: Record<RegionId, RegionSpec> = {
+  all: {
+    x: [TAIL_END, ROTOR.radiusMetres],
+    y: [0, DISC_TOP],
+    z: [-ROTOR.radiusMetres, ROTOR.radiusMetres],
+  },
+  airframe: {
+    x: [TAIL_END, ROTOR.radiusMetres * AIRFRAME_REACH.front],
+    y: [0, DISC_TOP],
+    z: [-ROTOR.radiusMetres * AIRFRAME_REACH.side, ROTOR.radiusMetres * AIRFRAME_REACH.side],
+  },
+  plan: {
+    x: [TAIL_END, ROTOR.radiusMetres],
+    y: [SKIDS.tubeRadius, DISC_TOP],
+    z: [-ROTOR.radiusMetres, ROTOR.radiusMetres],
+  },
+  hub: {
+    x: [-HUB_REACH, HUB_REACH],
+    y: [MAST.bottom - HUB_BELOW, DISC_TOP],
+    z: [-HUB_REACH, HUB_REACH],
+  },
+  tail: {
+    x: [TAIL_END, TAIL_BOX.front],
+    y: [TAIL_BOX.bottom, TAIL_BOX.top],
+    z: [TAIL_BOX.near, TAIL_BOX.far],
+  },
 };
 
-export function regionBox(id: RegionId, rootMatrix: Matrix4): Box3 {
-  return LOCAL_REGIONS[id].clone().applyMatrix4(rootMatrix);
-}
+export const regionBox = localRegions(LOCAL_REGIONS);

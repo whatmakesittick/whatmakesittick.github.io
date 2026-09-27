@@ -1,11 +1,11 @@
-import type { CameraPose } from '@core/scene/frameBox';
-import type { FramingSlopes } from '@core/scene/lens';
+import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
 import { FORWARD_SHARE } from '../model';
 import type { CameraView, HelicopterState, ViewOptions } from '../state';
-import { poseForView } from './cameraViews';
+import { VIEWS } from './cameraViews';
 import { SETTLE_RATE } from './constants';
 import { HelicopterAssembly } from './helicopterAssembly';
+import type { RegionId } from './regions';
 
 export type HelicopterControllerDependencies = Pick<
   SceneShell,
@@ -22,12 +22,17 @@ function approach(current: number, target: number, blend: number): number {
 }
 
 export class HelicopterController {
+  readonly views: CameraViews<CameraView, RegionId>;
   private readonly dependencies: HelicopterControllerDependencies;
   private assembly: HelicopterAssembly | null = null;
   private settled: Settled = { collective: 0, forward: 0 };
 
   constructor(dependencies: HelicopterControllerDependencies) {
     this.dependencies = dependencies;
+    this.views = new CameraViews(dependencies.rig, {
+      views: VIEWS,
+      region: (id) => this.assembly?.region(id) ?? null,
+    });
   }
 
   build(state: HelicopterState): void {
@@ -62,12 +67,6 @@ export class HelicopterController {
       deltaSeconds,
       ...this.settled,
     });
-  }
-
-  pose(view: CameraView, slopes: FramingSlopes): CameraPose | null {
-    const assembly = this.assembly;
-    if (!assembly) return null;
-    return poseForView(view, (id) => assembly.region(id), slopes);
   }
 
   dispose(): void {

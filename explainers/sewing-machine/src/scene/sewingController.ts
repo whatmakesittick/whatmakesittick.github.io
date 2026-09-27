@@ -1,9 +1,8 @@
-import type { Object3D } from 'three';
-import type { CameraPose } from '@core/scene/frameBox';
-import type { FramingSlopes } from '@core/scene/lens';
+import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
 import type { CameraView, SewingState, ViewOptions } from '../state';
-import { poseForView } from './cameraViews';
+import { VIEWS } from './cameraViews';
+import type { RegionId } from './regions';
 import { SewingAssembly } from './sewingAssembly';
 
 export type SewingControllerDependencies = Pick<
@@ -12,11 +11,16 @@ export type SewingControllerDependencies = Pick<
 >;
 
 export class SewingController {
+  readonly views: CameraViews<CameraView, RegionId>;
   private readonly dependencies: SewingControllerDependencies;
   private assembly: SewingAssembly | null = null;
 
   constructor(dependencies: SewingControllerDependencies) {
     this.dependencies = dependencies;
+    this.views = new CameraViews(dependencies.rig, {
+      views: VIEWS,
+      region: (id) => this.assembly?.region(id) ?? null,
+    });
   }
 
   build(state: SewingState): void {
@@ -28,8 +32,9 @@ export class SewingController {
     this.update(state);
     scene.add(assembly.root);
     labels.attach(assembly.labelAnchors());
-    stage.fit(assembly.region('all'), assembly.floorHeight());
-    rig.setBounds(assembly.region('reach'), assembly.floorHeight());
+    const bounds = assembly.region('all');
+    stage.fit(bounds, assembly.floorHeight());
+    rig.setBounds(bounds, assembly.floorHeight());
   }
 
   applyView(view: ViewOptions): void {
@@ -42,16 +47,6 @@ export class SewingController {
       stitchLength: state.stitchLength,
       tension: state.tension,
     });
-  }
-
-  labelAnchors(): ReadonlyMap<string, Object3D> {
-    return this.assembly?.labelAnchors() ?? new Map();
-  }
-
-  pose(view: CameraView, slopes: FramingSlopes): CameraPose | null {
-    const assembly = this.assembly;
-    if (!assembly) return null;
-    return poseForView(view, (id) => assembly.region(id), slopes);
   }
 
   dispose(): void {

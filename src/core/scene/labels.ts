@@ -54,6 +54,7 @@ export class LabelLayer {
   private readonly parts: Readonly<Record<string, PartInfo>>;
   private readonly labels = new Map<string, CSS2DObject>();
   private readonly placements = new Map<string, Placement>();
+  private attached: ReadonlyMap<string, Object3D> = new Map();
   private readonly stopTranslating: () => void;
   private safe: SafeArea = NO_SAFE_AREA;
 
@@ -80,6 +81,11 @@ export class LabelLayer {
       if (anchor) anchor.add(label);
       else label.removeFromParent();
     });
+    this.attached = new Map([...anchors].filter(([id]) => this.labels.has(id)));
+  }
+
+  anchors(): ReadonlyMap<string, Object3D> {
+    return this.attached;
   }
 
   show(ids: ReadonlySet<string>): void {
