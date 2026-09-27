@@ -17,10 +17,16 @@ import type { FramingSlopes, ViewportSize } from './lens';
 
 const TARGET_FLOOR_MARGIN = 1;
 
+export interface CameraDistance {
+  min?: number;
+  max?: number;
+}
+
 export interface CameraOptions {
   near?: number;
   far?: number;
   maxPolarAngle?: number;
+  distance?: CameraDistance;
 }
 
 export class CameraRig {
@@ -33,10 +39,13 @@ export class CameraRig {
   private readonly followShift = new Vector3();
   private floorHeight = -Infinity;
   private boundsRadius = 1;
+  private readonly sceneDistance: CameraDistance;
+  private distanceOverride: CameraDistance = {};
   private viewport: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
 
   constructor(domElement: HTMLElement, options: CameraOptions = {}) {
     const { near = CAMERA_NEAR, far = CAMERA_FAR, maxPolarAngle = CAMERA_MAX_POLAR } = options;
+    this.sceneDistance = options.distance ?? {};
     this.camera = new PerspectiveCamera(CAMERA_FOV, 1, near, far);
     this.controls = new OrbitControls(this.camera, domElement);
     this.controls.enableDamping = true;
@@ -59,6 +68,11 @@ export class CameraRig {
   setBounds(bounds: Box3, floorHeight: number): void {
     this.boundsRadius = bounds.getBoundingSphere(new Sphere()).radius;
     this.floorHeight = floorHeight;
+    this.updateDistanceLimits();
+  }
+
+  setDistanceLimits(limits: CameraDistance): void {
+    this.distanceOverride = limits;
     this.updateDistanceLimits();
   }
 
@@ -129,10 +143,19 @@ export class CameraRig {
   }
 
   private updateDistanceLimits(): void {
+    const derived = this.boundsDistance();
+    const { sceneDistance, distanceOverride } = this;
+    this.controls.minDistance = distanceOverride.min ?? sceneDistance.min ?? derived.min;
+    this.controls.maxDistance = distanceOverride.max ?? sceneDistance.max ?? derived.max;
+  }
+
+  private boundsDistance(): Required<CameraDistance> {
     const { vertical, horizontal } = this.framing();
     const fitDistance = this.boundsRadius / Math.sin(Math.atan(Math.min(vertical, horizontal)));
-    this.controls.minDistance = this.boundsRadius * CAMERA_MIN_DISTANCE_FACTOR;
-    this.controls.maxDistance = fitDistance * CAMERA_MAX_DISTANCE_FACTOR;
+    return {
+      min: this.boundsRadius * CAMERA_MIN_DISTANCE_FACTOR,
+      max: fitDistance * CAMERA_MAX_DISTANCE_FACTOR,
+    };
   }
 
   private keepTargetAboveFloor(): void {
