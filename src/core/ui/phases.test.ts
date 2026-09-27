@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Timeline } from '../explainer';
-import { phaseAt, phaseBands, phaseShortcut, scrubberMax } from './phases';
+import { phaseAt, phaseBands, phaseColumns, phaseShortcut, scrubberMax } from './phases';
 
 const phase = (id: string, start: number, end: number) => ({
   id,
@@ -45,6 +45,18 @@ describe('phases', () => {
         'var(--a) 0 calc(25% - var(--track-gap)), transparent 0 calc(25% + var(--track-gap)), ' +
         'var(--b) 0 calc(50% - var(--track-gap)), transparent 0 calc(50% + var(--track-gap)), ' +
         'var(--c) 0)',
+    );
+  });
+
+  it('sizes one column per phase by its share of the cycle', () => {
+    const column = (share: number) => `minmax(var(--phase-min-width, 0px), ${share}fr)`;
+    expect(phaseColumns(timeline)).toBe([column(25), column(25), column(50)].join(' '));
+  });
+
+  it('rounds column shares that do not divide the cycle evenly', () => {
+    const thirds = { cycle: 3, phases: [phase('a', 0, 1), phase('b', 1, 3)] };
+    expect(phaseColumns(thirds)).toBe(
+      'minmax(var(--phase-min-width, 0px), 33.33fr) minmax(var(--phase-min-width, 0px), 66.67fr)',
     );
   });
 

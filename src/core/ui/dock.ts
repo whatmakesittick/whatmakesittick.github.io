@@ -2,10 +2,13 @@ import type { Explainer, ExplainerStore, Playback } from '../explainer';
 import { t } from '../i18n';
 import { requireElement } from './dom';
 import { bindChoice, createChoice } from './choices';
+import { phaseColumns } from './phases';
 import { bindPhaseButtons, bindPhaseStatus, bindScrubber, createPhaseButtons } from './scrubber';
 import { bindSpeedSlider } from './speedSlider';
 import { watchLocalized } from './subscribe';
 import { bindViewToggles, createViewToggles } from './viewToggles';
+
+const PHASE_COLUMNS_PROPERTY = '--phase-columns';
 
 function bindPlayButton(button: HTMLButtonElement, store: ExplainerStore): void {
   button.addEventListener('click', () => store.getState().togglePlaying());
@@ -41,6 +44,7 @@ function mountPlayback<S extends Playback>(
   const phaseGroup = find('[data-phase-buttons]');
   const phaseButtons = createPhaseButtons(timeline);
   phaseGroup.replaceChildren(...phaseButtons);
+  phaseGroup.style.setProperty(PHASE_COLUMNS_PROPERTY, phaseColumns(timeline));
   phaseGroup.dataset.i18nAttr = `aria-label:${timeline.phasesLabelKey}`;
   find('[data-scrubber-label]').dataset.i18n = timeline.labelKey;
   find('[data-speed-label]').dataset.i18n = timeline.speed.labelKey;

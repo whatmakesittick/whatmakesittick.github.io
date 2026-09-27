@@ -2,7 +2,7 @@ import './style.css';
 import './scene/scene.css';
 import type { Explainer, ExplainerStore, Playback } from './explainer';
 import { initI18n } from './i18n';
-import type { LocaleBundle } from './i18n';
+import type { LocaleLoaders } from './i18n';
 import { createSceneHost } from './scene/shell';
 import { mountActions } from './ui/actions';
 import { mountDock } from './ui/dock';
@@ -38,7 +38,7 @@ function mountScene<S extends Playback>(
 
 export async function mountExplainer<S extends Playback>(
   explainer: Explainer<S>,
-  locales: LocaleBundle,
+  locales: LocaleLoaders,
 ): Promise<() => void> {
   await initI18n(locales);
   const store = explainer.createStore();

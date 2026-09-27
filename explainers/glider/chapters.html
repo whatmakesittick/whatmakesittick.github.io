@@ -73,17 +73,17 @@
       18 m racer
     </button>
   </p>
-  <div class="polar-control">
-    <div class="polar-header">
+  <div class="range-widget">
+    <div class="range-widget__header">
       <label for="polar-speed" data-i18n="sections.glide.control.label">Airspeed</label>
       <output class="number" for="polar-speed" data-readout="polar-speed">105 km/h</output>
     </div>
-    <input id="polar-speed" type="range" class="range polar-range" data-control="polar-speed" />
-    <div class="polar-scale" aria-hidden="true">
+    <input id="polar-speed" type="range" class="range" data-control="polar-speed" />
+    <div class="range-widget__scale" aria-hidden="true">
       <span data-i18n="sections.glide.control.slow">Slow</span>
       <span data-i18n="sections.glide.control.fast">Fast</span>
     </div>
-    <dl class="polar-readouts">
+    <dl class="range-widget__readouts">
       <div>
         <dt data-i18n="sections.glide.control.sink">Sink rate</dt>
         <dd class="number" data-readout="polar-sink">0.5 m/s</dd>
@@ -156,19 +156,19 @@
     temperature at the ground and the dew point. Our day has a gap of 12 °C, so the base sits at
     1500 m. Try the slider.
   </p>
-  <div class="cloud-control">
-    <div class="cloud-header">
+  <div class="range-widget">
+    <div class="range-widget__header">
       <label for="spread" data-i18n="sections.cloud.control.label"
         >Ground temperature minus dew point</label
       >
       <output class="number" for="spread" data-readout="spread">12 °C</output>
     </div>
-    <input id="spread" type="range" class="range cloud-range" data-control="spread" />
-    <div class="cloud-scale" aria-hidden="true">
+    <input id="spread" type="range" class="range" data-control="spread" />
+    <div class="range-widget__scale" aria-hidden="true">
       <span data-i18n="sections.cloud.control.humid">Humid</span>
       <span data-i18n="sections.cloud.control.dry">Dry</span>
     </div>
-    <dl class="cloud-readouts">
+    <dl class="range-widget__readouts">
       <div>
         <dt data-i18n="sections.cloud.control.base">Cloud base, roughly</dt>
         <dd class="number" data-readout="cloud-base">1500 m</dd>

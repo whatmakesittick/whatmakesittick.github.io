@@ -98,17 +98,23 @@ export function renderPage(
   });
 }
 
+function localeLoader(localesRoot: string, code: LanguageCode): string {
+  return code === DEFAULT_LANGUAGE
+    ? `  ${code}: () => Promise.resolve(${code}),`
+    : `  ${code}: () => import('${localesRoot}/${code}.json').then((module) => module.default),`;
+}
+
 export function renderEntry(manifest: LoadedExplainer['manifest']): string {
   const explainerRoot = `../explainers/${manifest.slug}`;
-  const locales = manifest.locales.map(
-    (code) => `import ${code} from '${explainerRoot}/locales/${code}.json';`,
-  );
+  const localesRoot = `${explainerRoot}/locales`;
   return [
     `import { mountExplainer } from '${MOUNT_MODULE}';`,
     `import explainer from '${explainerRoot}/${manifest.entry}';`,
-    ...locales,
+    `import ${DEFAULT_LANGUAGE} from '${localesRoot}/${DEFAULT_LANGUAGE}.json';`,
     '',
-    `await mountExplainer(explainer, { ${manifest.locales.join(', ')} });`,
+    'await mountExplainer(explainer, {',
+    ...manifest.locales.map((code) => localeLoader(localesRoot, code)),
+    '});',
     '',
   ].join('\n');
 }

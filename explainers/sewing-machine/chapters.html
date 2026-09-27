@@ -141,22 +141,17 @@
     stopped and the feed dogs have dropped away. How far the fabric moves on each turn is the
     <strong>stitch length</strong>. It is usually 2.5 mm, or 4 stitches per cm.
   </p>
-  <div class="stitch-control">
-    <div class="stitch-header">
+  <div class="range-widget">
+    <div class="range-widget__header">
       <label for="stitch-length" data-i18n="sections.feed.control.label">Stitch length</label>
       <output class="number" for="stitch-length" data-readout="stitch-length">2.5 mm</output>
     </div>
-    <input
-      id="stitch-length"
-      type="range"
-      class="range stitch-range"
-      data-control="stitch-length"
-    />
-    <div class="stitch-scale" aria-hidden="true">
+    <input id="stitch-length" type="range" class="range" data-control="stitch-length" />
+    <div class="range-widget__scale" aria-hidden="true">
       <span data-i18n="sections.feed.control.short">Short</span>
       <span data-i18n="sections.feed.control.long">Long</span>
     </div>
-    <dl class="stitch-readouts">
+    <dl class="range-widget__readouts">
       <div>
         <dt data-i18n="sections.feed.control.density">Stitches per cm</dt>
         <dd class="number" data-readout="stitch-density">4</dd>
