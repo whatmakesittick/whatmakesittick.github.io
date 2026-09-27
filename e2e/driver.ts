@@ -44,19 +44,22 @@ async function expectLanguage(page: Page, language: LanguageCode): Promise<void>
   await expect(page.locator('html')).toHaveAttribute('lang', language);
 }
 
+async function visit(page: Page, path: string, language: LanguageCode): Promise<void> {
+  await page.goto(pageUrl(path, language), { waitUntil: 'networkidle' });
+  await expectLanguage(page, language);
+}
+
 export async function openExplainer(
   page: Page,
   slug: string,
   language: LanguageCode,
 ): Promise<void> {
-  await page.goto(pageUrl(`/${slug}/`, language));
-  await expectLanguage(page, language);
+  await visit(page, `/${slug}/`, language);
   await expect(page.locator(SCENE_CANVAS)).toBeAttached();
 }
 
 export async function openCatalogue(page: Page, language: LanguageCode): Promise<Locator> {
-  await page.goto(pageUrl('/', language));
-  await expectLanguage(page, language);
+  await visit(page, '/', language);
   const cards = page.locator(CARD);
   await expect(cards.first()).toBeVisible();
   return cards;
