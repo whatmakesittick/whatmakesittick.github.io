@@ -1,11 +1,20 @@
+import { isLooping } from '../explainer';
 import type { Phase, Timeline } from '../explainer';
 
 const DIGIT_SHORTCUT_LIMIT = 9;
 const PERCENT = 100;
 
-export function phaseAt(timeline: Pick<Timeline, 'phases'>, phase: number): Phase {
+export function phaseAt(
+  timeline: Pick<Timeline, 'phases' | 'cycle' | 'loop'>,
+  phase: number,
+): Phase {
   const { phases } = timeline;
+  if (!isLooping(timeline) && phase >= timeline.cycle) return phases[phases.length - 1];
   return phases.find((candidate) => phase >= candidate.start && phase < candidate.end) ?? phases[0];
+}
+
+export function scrubberMax(timeline: Pick<Timeline, 'cycle' | 'step' | 'loop'>): number {
+  return isLooping(timeline) ? timeline.cycle - timeline.step : timeline.cycle;
 }
 
 export function phaseShortcut(index: number): string | undefined {

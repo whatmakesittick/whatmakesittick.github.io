@@ -1,7 +1,7 @@
 import type { ExplainerStore, Timeline } from '../explainer';
 import { t } from '../i18n';
 import { html, setAttributes, setPressed, setText } from './dom';
-import { phaseAt, phaseBands, phaseShortcut } from './phases';
+import { phaseAt, phaseBands, phaseShortcut, scrubberMax } from './phases';
 import { watch, watchLocalized } from './subscribe';
 import { TEXT_REFRESH_INTERVAL_MS, throttle } from './throttle';
 
@@ -13,7 +13,7 @@ export function bindScrubber(
   store: ExplainerStore,
   timeline: Timeline,
 ): void {
-  setAttributes(input, { min: 0, max: timeline.cycle - timeline.step, step: timeline.step });
+  setAttributes(input, { min: 0, max: scrubberMax(timeline), step: timeline.step });
   input.style.setProperty(BANDS_PROPERTY, phaseBands(timeline));
 
   input.addEventListener('pointerdown', () => store.getState().pause());

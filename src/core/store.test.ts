@@ -20,6 +20,8 @@ const timeline: Timeline = {
   speed: { min: 1, max: 20, step: 1, labelKey: 's', format: String, describe: String },
 };
 
+const oneShot: Timeline = { ...timeline, loop: false };
+
 interface TestPreset extends Preset {
   colour?: string;
 }
@@ -38,10 +40,13 @@ interface Extension {
   paint(colour: string): void;
 }
 
-function createTestStore(overrides: Partial<Playback & Extension> = {}) {
+function createTestStore(
+  overrides: Partial<Playback & Extension> = {},
+  storeTimeline: Timeline = timeline,
+) {
   return createExplainerStore<Extension, TestPreset>(
     {
-      timeline,
+      timeline: storeTimeline,
       presets,
       defaults: { preset: 'intro', speed: 10, view: { grid: false, labels: true } },
       extend: (set) => ({ colour: 'white', paint: (colour) => set({ colour }) }),
@@ -56,6 +61,14 @@ describe('createExplainerStore', () => {
     const store = createTestStore({ phase: 90 });
     store.getState().tick(1);
     expect(store.getState().phase).toBe(10);
+  });
+
+  it('wraps seeking around the cycle', () => {
+    const store = createTestStore();
+    store.getState().setPhase(130);
+    expect(store.getState().phase).toBe(30);
+    store.getState().setPhase(-10);
+    expect(store.getState().phase).toBe(90);
   });
 
   it('holds still when paused', () => {
@@ -151,5 +164,55 @@ describe('createExplainerStore', () => {
     const store = createTestStore();
     expect(() => store.getState().applyPreset('missing')).toThrow('Unknown preset');
     expect(() => store.getState().jumpToPhase('missing')).toThrow('Unknown phase');
+  });
+});
+
+describe('createExplainerStore with a timeline that stops at the end', () => {
+  it('stops at the end instead of wrapping around', () => {
+    const store = createTestStore({ phase: 90 }, oneShot);
+    store.getState().tick(1);
+    expect(store.getState()).toMatchObject({ phase: 100, playing: false });
+  });
+
+  it('keeps playing before the end', () => {
+    const store = createTestStore({ phase: 40 }, oneShot);
+    store.getState().tick(1);
+    expect(store.getState()).toMatchObject({ phase: 60, playing: true });
+  });
+
+  it('restarts from the beginning when played at the end', () => {
+    const store = createTestStore({ phase: 100, playing: false }, oneShot);
+    store.getState().play();
+    expect(store.getState()).toMatchObject({ phase: 0, playing: true });
+    store.getState().setPhase(100);
+    store.getState().pause();
+    store.getState().togglePlaying();
+    expect(store.getState()).toMatchObject({ phase: 0, playing: true });
+  });
+
+  it('resumes from the same phase when played before the end', () => {
+    const store = createTestStore({ phase: 40, playing: false }, oneShot);
+    store.getState().togglePlaying();
+    expect(store.getState()).toMatchObject({ phase: 40, playing: true });
+  });
+
+  it('clamps seeking and stepping to the timeline', () => {
+    const store = createTestStore({}, oneShot);
+    store.getState().setPhase(150);
+    expect(store.getState().phase).toBe(100);
+    store.getState().setPhase(-5);
+    expect(store.getState().phase).toBe(0);
+    store.getState().step(-5);
+    expect(store.getState().phase).toBe(0);
+    store.getState().step(200);
+    expect(store.getState().phase).toBe(100);
+  });
+
+  it('clamps preset phases to the timeline', () => {
+    const store = createTestStore({}, oneShot);
+    store.getState().applyPreset('holdPastEnd');
+    expect(store.getState().phase).toBe(100);
+    store.getState().applyPreset('seekBehindStart');
+    expect(store.getState().phase).toBe(0);
   });
 });

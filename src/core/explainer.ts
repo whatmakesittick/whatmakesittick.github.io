@@ -56,6 +56,7 @@ export interface SpeedScale {
 
 export interface Timeline {
   cycle: number;
+  loop?: boolean;
   step: number;
   nudge: { fine: number; coarse: number };
   labelKey: string;
@@ -136,6 +137,10 @@ export interface Explainer<S extends Playback = Playback> {
   shortcuts?: Readonly<Record<string, (state: S) => void>>;
   mountScene(shell: SceneShell, store: ExplainerStore<S>): () => void;
   mountUi?(root: Document, store: ExplainerStore<S>): void;
+}
+
+export function isLooping(timeline: Pick<Timeline, 'loop'>): boolean {
+  return timeline.loop ?? true;
 }
 
 export function defineExplainer<S extends Playback>(explainer: Explainer<S>): Explainer<S> {

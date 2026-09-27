@@ -1,5 +1,6 @@
 import { createStore } from 'zustand/vanilla';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { isLooping } from './explainer';
 import type {
   ExplainerStore,
   Playback,
@@ -26,6 +27,10 @@ export interface ExplainerStoreOptions<E extends object, P extends Preset> {
 
 export function wrapPhase(phase: number, cycle: number): number {
   return ((phase % cycle) + cycle) % cycle;
+}
+
+export function clampPhase(phase: number, cycle: number): number {
+  return Math.min(cycle, Math.max(0, phase));
 }
 
 function mergeView(view: ViewFlags, changes: Partial<ViewFlags> = {}): ViewFlags {
@@ -56,7 +61,11 @@ export function createExplainerStore<E extends object, P extends Preset>(
   overrides: Partial<Playback & E> = {},
 ): ExplainerStore<Playback & E> {
   const { timeline, presets, defaults } = options;
-  const wrap = (phase: number) => wrapPhase(phase, timeline.cycle);
+  const looping = isLooping(timeline);
+  const place = (phase: number) =>
+    looping ? wrapPhase(phase, timeline.cycle) : clampPhase(phase, timeline.cycle);
+  const hasEnded = (phase: number) => !looping && phase >= timeline.cycle;
+  const restartIfEnded = (phase: number) => (hasEnded(phase) ? 0 : phase);
   const clampSpeed = (speed: number) =>
     Math.min(timeline.speed.max, Math.max(timeline.speed.min, speed));
   const phaseStart = (id: string) => {
@@ -68,6 +77,9 @@ export function createExplainerStore<E extends object, P extends Preset>(
   return createStore<Playback & E>()(
     subscribeWithSelector((set, get) => {
       const patch = (partial: Partial<Playback>) => set(partial as Partial<Playback & E>);
+      const play = () =>
+        patch({ phase: restartIfEnded(get().phase), playing: true, pausedByPreset: false });
+      const pause = () => patch({ playing: false, pausedByPreset: false });
       const playback: Playback = {
         phase: 0,
         playing: true,
@@ -78,15 +90,16 @@ export function createExplainerStore<E extends object, P extends Preset>(
         tick: (deltaSeconds) => {
           const { playing, speed, phase } = get();
           if (!playing) return;
-          patch({ phase: wrap(phase + timeline.rate(speed) * deltaSeconds) });
+          const next = place(phase + timeline.rate(speed) * deltaSeconds);
+          patch({ phase: next, playing: !hasEnded(next) });
         },
-        setPhase: (phase) => patch({ phase: wrap(phase) }),
-        step: (delta) => patch({ phase: wrap(get().phase + delta), playing: false }),
+        setPhase: (phase) => patch({ phase: place(phase) }),
+        step: (delta) => patch({ phase: place(get().phase + delta), playing: false }),
         jumpToPhase: (id) => patch({ phase: phaseStart(id), playing: false }),
         setSpeed: (speed) => patch({ speed: clampSpeed(speed) }),
-        play: () => patch({ playing: true, pausedByPreset: false }),
-        pause: () => patch({ playing: false, pausedByPreset: false }),
-        togglePlaying: () => patch({ playing: !get().playing, pausedByPreset: false }),
+        play,
+        pause,
+        togglePlaying: () => (get().playing ? pause() : play()),
 
         setView: (view) => patch({ view: mergeView(get().view, view) }),
         toggleView: (key) => patch({ view: { ...get().view, [key]: !get().view[key] } }),
@@ -99,7 +112,7 @@ export function createExplainerStore<E extends object, P extends Preset>(
             ...options.presetState?.(preset, state),
             view: mergeView(state.view, preset.view),
             speed: preset.speed ?? state.speed,
-            phase: wrap(preset.pauseAt ?? preset.startAt ?? state.phase),
+            phase: place(preset.pauseAt ?? preset.startAt ?? state.phase),
             ...playbackForPreset(state, preset),
           } as Partial<Playback & E>);
         },
