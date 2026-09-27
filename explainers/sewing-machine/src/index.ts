@@ -1,6 +1,6 @@
 import './style.css';
 import { defineExplainer } from '@core/explainer';
-import { mountSewingScene } from './scene';
+import { SCENE_OPTIONS, mountSewingScene } from './scene';
 import { PART_INFO } from './scene/partInfo';
 import { PRESETS, createSewingStore } from './state';
 import type { SewingStoreState } from './state';
@@ -22,6 +22,7 @@ export default defineExplainer<SewingStoreState>({
   dock: { choices: SEWING_CHOICES, toggles: VIEW_TOGGLES },
   readouts: SEWING_READOUTS,
   actions: CHAPTER_ACTIONS,
+  scene: SCENE_OPTIONS,
   mountScene: mountSewingScene,
   mountUi: mountSewingUi,
 });
