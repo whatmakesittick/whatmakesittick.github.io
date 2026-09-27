@@ -3,11 +3,12 @@ import type { Camera, Scene } from 'three';
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import { MAX_PIXEL_RATIO, TONE_MAPPING_EXPOSURE } from './constants';
 import type { SafeArea, ViewportSize } from './lens';
+import { Listeners } from './listeners';
 
 export interface Viewport {
   renderer: WebGLRenderer;
   element: HTMLElement;
-  onResize(listener: (size: ViewportSize) => void): void;
+  onResize(listener: (size: ViewportSize) => void): () => void;
   render(scene: Scene, camera: Camera): void;
   dispose(): void;
 }
@@ -54,7 +55,7 @@ export function createViewport(container: HTMLElement): Viewport {
   element.append(renderer.domElement, labels.domElement);
   container.append(element);
 
-  const listeners: ((size: ViewportSize) => void)[] = [];
+  const listeners = new Listeners<[size: ViewportSize]>();
   let size: ViewportSize = { width: 1, height: 1, safe: readSafeArea(container, 1, 1) };
   const resize = () => {
     const width = Math.max(1, element.clientWidth);
@@ -63,7 +64,7 @@ export function createViewport(container: HTMLElement): Viewport {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO));
     renderer.setSize(width, height, false);
     labels.setSize(width, height);
-    listeners.forEach((listener) => listener(size));
+    listeners.notify(size);
   };
   const observer = new ResizeObserver(resize);
   observer.observe(container);
@@ -75,8 +76,8 @@ export function createViewport(container: HTMLElement): Viewport {
     renderer,
     element,
     onResize: (listener) => {
-      listeners.push(listener);
       listener(size);
+      return listeners.add(listener);
     },
     render: (scene, camera) => {
       renderer.render(scene, camera);
@@ -85,6 +86,7 @@ export function createViewport(container: HTMLElement): Viewport {
     dispose: () => {
       observer.disconnect();
       safeAreaObserver.disconnect();
+      listeners.clear();
       renderer.dispose();
       element.remove();
     },

@@ -12,13 +12,15 @@ export function mountGliderScene(shell: SceneShell, store: GliderStore): () => v
   const restoreKeyLight = warmKeyLight(shell.lighting.key);
   const glider = new GliderController(shell);
   const labelVisibility = new LabelVisibility(shell.labels, shell.rig.camera, LABEL_PRIORITY);
-  shell.viewport.onResize((size) => labelVisibility.setViewport(size));
+  const removeResize = shell.viewport.onResize((size) => labelVisibility.setViewport(size));
   const unbind = bindStore(store, { glider, labelVisibility, ...shell });
-  shell.onFrame(() => {
+  const removeFrame = shell.onFrame(() => {
     glider.update(store.getState());
     labelVisibility.update();
   });
   return () => {
+    removeFrame();
+    removeResize();
     unbind();
     glider.dispose();
     restoreKeyLight();

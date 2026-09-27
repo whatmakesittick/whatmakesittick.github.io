@@ -8,13 +8,15 @@ import { SewingController } from './sewingController';
 export function mountSewingScene(shell: SceneShell, store: SewingStore): () => void {
   const sewing = new SewingController(shell);
   const labelVisibility = new LabelVisibility(shell.labels, shell.rig.camera, LABEL_PRIORITY);
-  shell.viewport.onResize((size) => labelVisibility.setViewport(size));
+  const removeResize = shell.viewport.onResize((size) => labelVisibility.setViewport(size));
   const unbind = bindStore(store, { sewing, labelVisibility, ...shell });
-  shell.onFrame(() => {
+  const removeFrame = shell.onFrame(() => {
     sewing.update(store.getState());
     labelVisibility.update();
   });
   return () => {
+    removeFrame();
+    removeResize();
     unbind();
     sewing.dispose();
   };

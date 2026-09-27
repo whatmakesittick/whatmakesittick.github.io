@@ -8,6 +8,7 @@ import { Highlighter } from './highlight';
 import { LabelLayer } from './labels';
 import { createLighting } from './lighting';
 import type { Lighting } from './lighting';
+import { Listeners } from './listeners';
 import { startLoop } from './loop';
 import type { Loop } from './loop';
 import { MaterialLibrary, STRUCTURE_GROUP } from './materials';
@@ -42,7 +43,7 @@ export interface SceneShell {
   textures: SceneTextures;
   stage: Stage;
   lighting: Lighting;
-  onFrame(update: FrameUpdate): void;
+  onFrame(update: FrameUpdate): () => void;
 }
 
 export interface SceneHost {
@@ -77,7 +78,7 @@ export function createSceneHost(
     rig.setViewport(size);
     labels.setViewport(size);
   });
-  const updates: FrameUpdate[] = [];
+  const updates = new Listeners<[deltaSeconds: number]>();
   let loop: Loop | undefined;
 
   const shell: SceneShell = {
@@ -90,13 +91,13 @@ export function createSceneHost(
     textures,
     stage,
     lighting,
-    onFrame: (update) => updates.push(update),
+    onFrame: (update) => updates.add(update),
   };
 
   const renderFrame = (tick: FrameUpdate, deltaSeconds: number) => {
     const step = Math.min(deltaSeconds, MAX_FRAME_SECONDS);
     tick(step);
-    updates.forEach((update) => update(step));
+    updates.notify(step);
     highlighter.update(step);
     rig.update(step);
     viewport.render(scene, rig.camera);
@@ -111,6 +112,7 @@ export function createSceneHost(
     },
     dispose: () => {
       loop?.stop();
+      updates.clear();
       labels.dispose();
       rig.dispose();
       stage.dispose();
