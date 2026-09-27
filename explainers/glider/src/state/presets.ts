@@ -55,7 +55,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: { air: true, forces: false },
     startAt: 60,
     labels: ['field', 'thermal'],
-    highlight: ['thermal', 'field'],
+    highlight: ['thermal'],
   },
   cloud: {
     camera: 'cloud',
@@ -71,7 +71,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: { air: true, forces: false },
     startAt: 1010,
     labels: ['ridge', 'wind'],
-    highlight: ['ridge', 'wind'],
+    highlight: ['wind'],
   },
   wave: {
     camera: 'wave',
