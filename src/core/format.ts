@@ -22,3 +22,11 @@ export function formatFixed(value: number, fractionDigits: number): string {
     maximumFractionDigits: fractionDigits,
   }).format(value);
 }
+
+export function formatSigned(value: number, fractionDigits: number): string {
+  return numberFormat({
+    signDisplay: 'exceptZero',
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(value);
+}
