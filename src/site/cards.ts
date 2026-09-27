@@ -45,19 +45,20 @@ function createCard(entry: CatalogueEntry, choose: ChooseTag): CardView | undefi
     loading: 'lazy',
     decoding: 'async',
   });
-  const link = html('a', { class: 'card', href: explainerPage(entry, code) }, [
+  const href = explainerPage(entry, code);
+  const link = html('a', { class: 'card', href }, [
     html('span', { class: 'card-cover' }, [cover]),
     html('span', { class: 'card-body' }, [
       html('span', { class: 'card-eyebrow' }, [meta.eyebrow]),
       html('h2', { class: 'card-title' }, [meta.title]),
       html('span', { class: 'card-summary' }, [meta.summary]),
-      html('span', { class: 'card-action' }, [t('catalogue.explore'), arrowIcon()]),
     ]),
   ]);
-  const element = html('li', { class: 'card-item' }, [
-    link,
+  const footer = html('div', { class: 'card-footer' }, [
+    html('a', { class: 'card-action', href }, [t('catalogue.explore'), arrowIcon()]),
     createCardTags(entry.manifest.tags, choose),
   ]);
+  const element = html('li', { class: 'card-item' }, [link, footer]);
   return { entry, element };
 }
 
