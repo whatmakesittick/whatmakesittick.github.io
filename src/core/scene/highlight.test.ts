@@ -32,6 +32,14 @@ describe('Highlighter', () => {
     expect(library.emphasisOf('tail')).toBe(1);
   });
 
+  it('reports whether a frame changed any emphasis', () => {
+    const highlighter = new Highlighter(new MaterialLibrary(), ['wing', 'tail']);
+    highlighter.setHighlight(['wing']);
+    expect(highlighter.update(SETTLED_SECONDS)).toBe(true);
+    settle(highlighter);
+    expect(highlighter.update(SETTLED_SECONDS)).toBe(false);
+  });
+
   it('never targets an undimmed group', () => {
     const library = new MaterialLibrary({ undimmed: ['sky'] });
     const backdrop = library.get(UNDIMMED_GROUP, FINISH);

@@ -112,6 +112,7 @@ export class MaterialLibrary {
   private readonly extras = new Map<string, Set<Material>>();
   private readonly emphasis = new Map<string, number>();
   private readonly bases = new WeakMap<Material, ToneBase>();
+  private readonly groups = new WeakMap<Material, string>();
 
   constructor(options: MaterialLibraryOptions = {}) {
     this.style = { ...DIM_STYLE, ...options.dim };
@@ -133,6 +134,7 @@ export class MaterialLibrary {
       material = createMaterial(finish);
       this.emphasise(material, this.emphasisOf(group));
       byFinish.set(finish, material);
+      this.groups.set(material, group);
     }
     return material;
   }
@@ -144,7 +146,12 @@ export class MaterialLibrary {
       this.extras.set(group, set);
     }
     set.add(material);
+    this.groups.set(material, group);
     this.emphasise(material, this.emphasisOf(group));
+  }
+
+  groupOf(material: Material): string | undefined {
+    return this.groups.get(material);
   }
 
   clearRegistered(): void {

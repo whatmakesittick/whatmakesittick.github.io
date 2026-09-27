@@ -199,8 +199,8 @@ reading-line sections and the safe area. Then it builds the scene host from the
 explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
 scene, camera rig, label layer, highlighter, materials, textures, stage, lighting
 and `onFrame(update)`. Core owns the frame loop: each frame it ticks the store,
-runs the explainer's frame updates, eases the highlighter and the camera, renders
-and lays out the labels. `onFrame` and `viewport.onResize` return a function that
+runs the explainer's frame updates, eases the highlighter and the camera, hides
+the labels whose anchor is out of sight, renders and lays out the labels. `onFrame` and `viewport.onResize` return a function that
 removes the listener; the unmount that `mountScene` returns calls it.
 
 A choice's `shortcut` cycles through its options. Chapter buttons use
@@ -235,7 +235,32 @@ style with `opacity` below 1 also fades dimmed parts, for a cutaway that must sh
 what sits behind a dimmed wall. The library reads a material's colour, glow and
 opacity once, the first time it sees it: a part that changes its own opacity
 swaps between materials, and a glow the material starts without, such as a
-spark, stays the part's to drive.
+spark, stays the part's to drive. `groupOf(material)` returns the group a material
+was made or registered for.
+
+Every explainer gets label occlusion: the shell hides a label whose anchor sits
+behind solid geometry, so a label never floats over the casing that covers its
+part. `LabelOcclusion` in `labelOcclusion.ts` casts a ray from the camera to the
+anchor of each label the layer shows and hides the label when a solid mesh sits in
+front of the anchor. The ray looks through a material that is transparent with an
+opacity below 1 (a cutaway plate, a cloud, the thermal column, gas, a dimmed part
+that fades), through points, lines and sprites, through the stage, through a mesh
+that opts out of frustum culling because its bounds are not kept up to date, such
+as a thread, and through the labelled part itself. A mesh belongs to the part whose
+group its material has in the material library, the same grouping the highlighter
+dims by, so the explainers mark nothing extra. `OCCLUSION_RULE` in `occlusion.ts`
+keeps a label steady: a blocker must sit 3 % of the anchor's distance in front of
+it to hide the label and 1.5 % to keep it hidden, and the new verdict must hold for
+0.6 s to hide the label and 0.15 s to show it again, so a part that swings past or
+a grazing edge does not make it blink. The pass runs at most every fourth frame
+and only when the camera, a shown anchor or the highlight moved, when the shown
+labels or the anchors change, or while a verdict is pending; a label that starts
+showing gets its verdict before its first frame. `OcclusionRays` builds a bounds
+tree with `three-mesh-bvh` for a mesh of 64 triangles or more the first time a ray
+reaches it, one tree per pass, and leaves the geometry untouched. The layer keeps
+what the policy asked for in `wanted()` and shows it minus the occluded labels;
+`LabelVisibility` reads `isOccluded(id)`, so an occluded label does not crowd out
+a label near it.
 
 The explainer's `scene` options shape the world around it. A mechanism keeps the
 defaults: dark background, grid floor with a contact shadow, an orbit that stops

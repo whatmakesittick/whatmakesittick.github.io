@@ -55,6 +55,9 @@ export class LabelLayer {
   private readonly labels = new Map<string, CSS2DObject>();
   private readonly placements = new Map<string, Placement>();
   private attached: ReadonlyMap<string, Object3D> = new Map();
+  private requested: ReadonlySet<string> = new Set();
+  private occluded: ReadonlySet<string> = new Set();
+  private changes = 0;
   private readonly stopTranslating: () => void;
   private safe: SafeArea = NO_SAFE_AREA;
 
@@ -82,15 +85,39 @@ export class LabelLayer {
       else label.removeFromParent();
     });
     this.attached = new Map([...anchors].filter(([id]) => this.labels.has(id)));
+    this.changes += 1;
+  }
+
+  get revision(): number {
+    return this.changes;
   }
 
   anchors(): ReadonlyMap<string, Object3D> {
     return this.attached;
   }
 
+  wanted(): ReadonlySet<string> {
+    return this.requested;
+  }
+
   show(ids: ReadonlySet<string>): void {
+    this.requested = new Set(ids);
+    this.changes += 1;
+    this.applyVisibility();
+  }
+
+  isOccluded(id: string): boolean {
+    return this.occluded.has(id);
+  }
+
+  setOccluded(ids: ReadonlySet<string>): void {
+    this.occluded = new Set(ids);
+    this.applyVisibility();
+  }
+
+  private applyVisibility(): void {
     this.labels.forEach((label, id) => {
-      label.visible = ids.has(id);
+      label.visible = this.requested.has(id) && !this.occluded.has(id);
     });
   }
 

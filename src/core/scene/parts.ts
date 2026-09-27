@@ -6,3 +6,10 @@ export function anchorAt(parent: Object3D, x: number, y: number, z: number): Obj
   parent.add(anchor);
   return anchor;
 }
+
+export function isShown(object: Object3D): boolean {
+  for (let node: Object3D | null = object; node; node = node.parent) {
+    if (!node.visible) return false;
+  }
+  return true;
+}

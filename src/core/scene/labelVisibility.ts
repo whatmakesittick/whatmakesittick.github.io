@@ -1,10 +1,11 @@
 import { Quaternion, Vector2, Vector3 } from 'three';
-import type { Camera, Object3D } from 'three';
+import type { Camera } from 'three';
 import type { LabelLayer } from './labels';
 import { NO_SAFE_AREA } from './lens';
 import type { ViewportSize } from './lens';
+import { isShown } from './parts';
 
-export type LabelSource = Pick<LabelLayer, 'show' | 'anchors'>;
+export type LabelSource = Pick<LabelLayer, 'show' | 'anchors' | 'isOccluded'>;
 
 interface Margins {
   top: number;
@@ -16,6 +17,7 @@ interface LabelState {
   id: string;
   point: Vector2;
   onScreen: boolean;
+  occluded: boolean;
   crowded: boolean;
   shown: boolean;
 }
@@ -25,13 +27,6 @@ const ENTER_INSIDE_PX: Margins = { top: 44, side: 20, bottom: 20 };
 const CROWD = { hideWithinPx: 30, showBeyondPx: 52 } as const;
 const NDC_SPAN = 2;
 const STILL = { distanceSq: 1e-10, angle: 1e-6 } as const;
-
-function isShown(object: Object3D): boolean {
-  for (let node: Object3D | null = object; node; node = node.parent) {
-    if (!node.visible) return false;
-  }
-  return true;
-}
 
 function isInside(point: Vector2, size: ViewportSize, margins: Margins): boolean {
   const { width, height, safe } = size;
@@ -63,6 +58,7 @@ export class LabelVisibility {
       id,
       point: new Vector2(),
       onScreen: false,
+      occluded: false,
       crowded: false,
       shown: false,
     }));
@@ -88,7 +84,7 @@ export class LabelVisibility {
   }
 
   update(): void {
-    const recrowd = this.stale || this.cameraMoved();
+    const recrowd = this.refreshOcclusion() || this.stale || this.cameraMoved();
     let changed = this.stale;
     for (let index = 0; index < this.ordered.length; index++) {
       const state = this.ordered[index];
@@ -100,6 +96,17 @@ export class LabelVisibility {
       changed = true;
     }
     if (changed) this.publish();
+  }
+
+  private refreshOcclusion(): boolean {
+    let changed = false;
+    this.ordered.forEach((state) => {
+      const occluded = this.labels.isOccluded(state.id);
+      if (occluded === state.occluded) return;
+      state.occluded = occluded;
+      changed = true;
+    });
+    return changed;
   }
 
   private cameraMoved(): boolean {
@@ -132,7 +139,8 @@ export class LabelVisibility {
     const clearance = state.shown ? CROWD.hideWithinPx : CROWD.showBeyondPx;
     for (let earlier = 0; earlier < index; earlier++) {
       const other = this.ordered[earlier];
-      const kept = other.onScreen && (this.pinned.has(other.id) || !other.crowded);
+      const kept =
+        other.onScreen && !other.occluded && (this.pinned.has(other.id) || !other.crowded);
       if (kept && other.point.distanceTo(state.point) < clearance) return true;
     }
     return false;
