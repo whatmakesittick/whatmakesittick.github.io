@@ -1,6 +1,6 @@
 {
   "slug": "engine",
-  "category": "engines",
+  "tags": ["engines", "mechanics", "vehicles"],
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

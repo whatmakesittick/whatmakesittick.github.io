@@ -16,7 +16,7 @@ const ukrainianMeta = { ...meta, title: 'Як працює річ', description:
 const explainer: LoadedExplainer = {
   manifest: {
     slug: 'thing',
-    category: 'tools',
+    tags: ['tools'],
     cover: 'cover.webp',
     entry: 'src/index.ts',
     chapters: 'chapters.html',
@@ -41,6 +41,7 @@ const template = [
   '<meta content="{{image}}" type="{{imageType}}" />',
   '{{localeTags}}',
   '<a href="{{sourceUrl}}">{{siteName}}</a>',
+  '<a class="catalogue" href="{{catalogueUrl}}">{{siteName}}</a>',
   '<script type="application/ld+json">{{structuredData}}</script>',
   '<main>',
   '  {{chapters}}',
@@ -96,6 +97,11 @@ describe('renderPage', () => {
     expect(html).toContain('<footer>https://github.com/whatmakesittick/');
   });
 
+  it('links back to the catalogue in the language of the page', () => {
+    expect(html).toContain('<a class="catalogue" href="/">');
+    expect(ukrainian).toContain('<a class="catalogue" href="/uk/">');
+  });
+
   it('inlines the chapters at the placeholder indentation', () => {
     expect(html).toContain('<main>\n  <section class="chapter" data-preset="intro">\n    <h2');
   });
@@ -148,8 +154,9 @@ describe('renderCatalogue', () => {
   const catalogueTemplate = template.replace('{{chapters}}', '').replace('{{entry}}', '/main.ts');
   const gearbox: LoadedExplainer = {
     ...explainer,
-    manifest: { ...explainer.manifest, slug: 'gearbox', category: 'drivetrain', locales: ['en'] },
+    manifest: { ...explainer.manifest, slug: 'gearbox', tags: ['mechanics'], locales: ['en'] },
     metas: { en: { ...meta, title: 'How a gearbox works' } },
+    dates: { published: '2026-02-01T09:00:00+02:00', modified: '2026-02-01T09:00:00+02:00' },
   };
   const html = renderCatalogue(catalogueTemplate, partials, [explainer, gearbox], language('uk'));
 
@@ -159,6 +166,7 @@ describe('renderCatalogue', () => {
     expect(html).toContain('content="Як працюють машини"');
     expect(html).toContain('<link rel="canonical" href="https://whatmakesittick.github.io/uk/"');
     expect(html).toContain('content="https://whatmakesittick.github.io/social/og-image.png"');
+    expect(html).toContain('<a class="catalogue" href="/uk/">');
   });
 
   it('lists the catalogue in every language', () => {
@@ -167,7 +175,7 @@ describe('renderCatalogue', () => {
     expect(hreflangs(html)).toContain('ja https://whatmakesittick.github.io/ja/');
   });
 
-  it('describes the site and lists the explainers in catalogue order as structured data', () => {
+  it('describes the site and lists the explainers newest first as structured data', () => {
     expect(structuredData(html)).toMatchObject({
       '@graph': [
         { '@type': 'WebSite', url: 'https://whatmakesittick.github.io/uk/', inLanguage: 'uk' },
@@ -211,10 +219,21 @@ describe('renderEntry', () => {
 });
 
 describe('catalogueEntries', () => {
-  it('exposes the manifest and the meta of every language', () => {
+  it('exposes the manifest, the meta of every language and the publish date', () => {
     const [entry] = catalogueEntries([explainer]);
     expect(entry.meta.uk?.title).toBe('Як працює річ');
     expect(entry.manifest.slug).toBe('thing');
+    expect(entry.published).toBe(explainer.dates.published);
+  });
+
+  it('lists the newest explainer first', () => {
+    const older = {
+      ...explainer,
+      manifest: { ...explainer.manifest, slug: 'older' },
+      dates: { published: '2025-12-01T09:00:00+02:00', modified: '2025-12-01T09:00:00+02:00' },
+    };
+    const slugs = catalogueEntries([older, explainer]).map((entry) => entry.manifest.slug);
+    expect(slugs).toEqual(['thing', 'older']);
   });
 });
 

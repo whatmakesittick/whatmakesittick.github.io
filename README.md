@@ -6,9 +6,12 @@ while the text walks through how it works. Eight languages.
 
 Live site: https://whatmakesittick.github.io/
 
-| Explainer                                                        | Category |
-| ---------------------------------------------------------------- | -------- |
-| [How an engine works](https://whatmakesittick.github.io/engine/) | Engines  |
+| Explainer                                                                       | Tags                               |
+| ------------------------------------------------------------------------------- | ---------------------------------- |
+| [How a glider flies](https://whatmakesittick.github.io/glider/)                 | Aircraft, flight, physics, weather |
+| [How a sewing machine works](https://whatmakesittick.github.io/sewing-machine/) | Home, mechanics, tools             |
+| [How a helicopter flies](https://whatmakesittick.github.io/helicopter/)         | Aircraft, flight, mechanics        |
+| [How an engine works](https://whatmakesittick.github.io/engine/)                | Engines, mechanics, vehicles       |
 
 ## Develop
 
@@ -37,7 +40,7 @@ Playwright Chromium. Pass a card name, such as `engine`, to render only that one
    ```json
    {
      "slug": "gearbox",
-     "category": "drivetrain",
+     "tags": ["mechanics", "vehicles"],
      "cover": "cover.webp",
      "entry": "src/index.ts",
      "chapters": "chapters.html",
@@ -46,7 +49,8 @@ Playwright Chromium. Pass a card name, such as `engine`, to render only that one
    }
    ```
 
-   Categories are listed in `src/core/manifest.ts`.
+   Tags come from the vocabulary in `src/core/manifest.ts`; a new tag also needs a
+   label under `catalogue.tags` in every core locale.
 
 2. Write `chapters.html`: one `<section class="chapter" data-preset="…">` per
    chapter, with `data-i18n` keys for the copy.

@@ -1,11 +1,22 @@
 import { DEFAULT_LANGUAGE, currentLanguage, onLanguageChanged, t } from '@core/i18n';
 import type { LanguageCode } from '@core/i18n';
 import { languagePath } from '@core/i18n/paths';
-import { html, requireElement, svg } from '@core/ui/dom';
-import { groupByCategory, localizedMeta, pageLanguage } from './catalogue';
-import type { CategoryGroup } from './catalogue';
+import { compareNewestFirst } from '@core/manifest';
 import type { CatalogueEntry } from '@core/manifest';
+import { html, requireElement, svg } from '@core/ui/dom';
+import { localizedMeta, pageLanguage } from './catalogue';
+import { createCardTags, createTagFilter, showSelection } from './tagChips';
+import type { ChooseTag } from './tagChips';
+import { filterByTag, readTagQuery, toggleTag, usedTags, writeTagQuery } from './tagFilter';
+import type { TagSelection } from './tagFilter';
 
+interface CardView {
+  entry: CatalogueEntry;
+  element: HTMLElement;
+}
+
+const CATALOGUE_SELECTOR = '[data-catalogue]';
+const FILTER_SELECTOR = '.tag-filter';
 const ARROW_PATH = 'M5 12h14M13 6l6 6-6 6';
 const ICON_VIEW_BOX = '0 0 24 24';
 
@@ -24,7 +35,7 @@ function arrowIcon(): SVGSVGElement {
   ]);
 }
 
-function createCard(entry: CatalogueEntry): HTMLElement | undefined {
+function createCard(entry: CatalogueEntry, choose: ChooseTag): CardView | undefined {
   const code = currentLanguage();
   const meta = localizedMeta(entry, code, DEFAULT_LANGUAGE);
   if (!meta) return undefined;
@@ -34,42 +45,80 @@ function createCard(entry: CatalogueEntry): HTMLElement | undefined {
     loading: 'lazy',
     decoding: 'async',
   });
-  return html('li', {}, [
-    html('a', { class: 'card', href: explainerPage(entry, code) }, [
-      html('span', { class: 'card-cover' }, [cover]),
-      html('span', { class: 'card-body' }, [
-        html('span', { class: 'card-eyebrow' }, [meta.eyebrow]),
-        html('h3', { class: 'card-title' }, [meta.title]),
-        html('span', { class: 'card-summary' }, [meta.summary]),
-        html('span', { class: 'card-action' }, [t('catalogue.explore'), arrowIcon()]),
-      ]),
+  const link = html('a', { class: 'card', href: explainerPage(entry, code) }, [
+    html('span', { class: 'card-cover' }, [cover]),
+    html('span', { class: 'card-body' }, [
+      html('span', { class: 'card-eyebrow' }, [meta.eyebrow]),
+      html('h2', { class: 'card-title' }, [meta.title]),
+      html('span', { class: 'card-summary' }, [meta.summary]),
+      html('span', { class: 'card-action' }, [t('catalogue.explore'), arrowIcon()]),
     ]),
   ]);
+  const element = html('li', { class: 'card-item' }, [
+    link,
+    createCardTags(entry.manifest.tags, choose),
+  ]);
+  return { entry, element };
 }
 
 function createPlaceholder(): HTMLElement {
   return html('li', { class: 'card-placeholder' }, [t('catalogue.moreSoon')]);
 }
 
-function createGroup(group: CategoryGroup, isLast: boolean): HTMLElement {
-  const cards = group.entries.map(createCard).filter((card) => card !== undefined);
-  if (isLast) cards.push(createPlaceholder());
-  const headingId = `category-${group.category}`;
-  return html('section', { class: 'category', 'aria-labelledby': headingId }, [
-    html('h2', { class: 'category-title', id: headingId }, [
-      t(`catalogue.categories.${group.category}`),
-    ]),
-    html('ul', { class: 'cards' }, cards),
+function createCards(entries: readonly CatalogueEntry[], choose: ChooseTag): CardView[] {
+  return entries.map((entry) => createCard(entry, choose)).filter((card) => card !== undefined);
+}
+
+function createGrid(cards: readonly CardView[]): HTMLElement {
+  return html('ul', { class: 'cards' }, [
+    ...cards.map(({ element }) => element),
+    createPlaceholder(),
   ]);
 }
 
+function showCards(cards: readonly CardView[], visible: readonly CatalogueEntry[]): void {
+  const shown = new Set(visible);
+  cards.forEach(({ entry, element }) => (element.hidden = !shown.has(entry)));
+}
+
+function storeSelection(selection: TagSelection): void {
+  const url = new URL(window.location.href);
+  url.search = writeTagQuery(url.search, selection);
+  if (url.href !== window.location.href) window.history.replaceState(window.history.state, '', url);
+}
+
+function revealFilter(container: HTMLElement): void {
+  const filter = container.querySelector(FILTER_SELECTOR);
+  if (filter && filter.getBoundingClientRect().top < 0) filter.scrollIntoView({ block: 'start' });
+}
+
 export function mountCards(root: Document, entries: readonly CatalogueEntry[]): void {
-  const container = requireElement(root, '[data-catalogue]');
-  const groups = groupByCategory(entries);
-  const render = () =>
-    container.replaceChildren(
-      ...groups.map((group, index) => createGroup(group, index === groups.length - 1)),
-    );
+  const container = requireElement(root, CATALOGUE_SELECTOR);
+  const sorted = [...entries].sort(compareNewestFirst);
+  const tags = usedTags(sorted);
+  let selection = readTagQuery(window.location.search, tags);
+  let cards: CardView[] = [];
+
+  const show = () => {
+    showSelection(container, selection);
+    showCards(cards, filterByTag(sorted, selection));
+  };
+  const choose: ChooseTag = (choice) => {
+    selection = toggleTag(selection, choice);
+    storeSelection(selection);
+    show();
+  };
+  const chooseFromCard: ChooseTag = (choice) => {
+    choose(choice);
+    revealFilter(container);
+  };
+  const render = () => {
+    cards = createCards(sorted, chooseFromCard);
+    container.replaceChildren(createTagFilter(tags, choose), createGrid(cards));
+    show();
+  };
+
   render();
+  storeSelection(selection);
   onLanguageChanged(render);
 }

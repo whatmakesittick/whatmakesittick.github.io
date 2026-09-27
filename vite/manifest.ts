@@ -3,8 +3,8 @@ import { join } from 'node:path';
 import { DEFAULT_LANGUAGE, LANGUAGES, isLanguageCode } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import type { Dictionary } from '../src/core/i18n/resources.ts';
-import { CATEGORIES, META_KEYS } from '../src/core/manifest.ts';
-import type { Category, ExplainerManifest, ExplainerMeta } from '../src/core/manifest.ts';
+import { META_KEYS, TAGS } from '../src/core/manifest.ts';
+import type { ExplainerManifest, ExplainerMeta, Tag } from '../src/core/manifest.ts';
 import { readPageDates } from './dates.ts';
 import type { PageDates } from './dates.ts';
 
@@ -59,11 +59,18 @@ function readSlug(fields: Fields, folder: string, reserved: ReadonlySet<string>)
   return slug;
 }
 
-function readCategory(fields: Fields, folder: string): Category {
-  const category = readString(fields, 'category', folder);
-  const match = CATEGORIES.find((candidate) => candidate === category);
-  if (!match) fail(folder, `"category" must be one of ${CATEGORIES.join(', ')}`);
-  return match;
+function isTag(value: unknown): value is Tag {
+  return TAGS.some((tag) => tag === value);
+}
+
+function readTags(fields: Fields, folder: string): Tag[] {
+  const tags = fields.tags;
+  if (!Array.isArray(tags) || tags.length === 0) fail(folder, '"tags" must list at least one tag');
+  const known = tags.filter(isTag);
+  if (known.length !== tags.length) fail(folder, `"tags" must be among ${TAGS.join(', ')}`);
+  const repeated = known.find((tag, index) => known.indexOf(tag) !== index);
+  if (repeated) fail(folder, `"tags" lists "${repeated}" more than once`);
+  return known;
 }
 
 function readLocales(fields: Fields, folder: string): LanguageCode[] {
@@ -99,7 +106,7 @@ export function parseManifest(
   if (!isFields(value)) fail(folder, 'must be a JSON object');
   return {
     slug: readSlug(value, folder, reserved),
-    category: readCategory(value, folder),
+    tags: readTags(value, folder),
     cover: readString(value, 'cover', folder),
     entry: readString(value, 'entry', folder),
     chapters: readString(value, 'chapters', folder),

@@ -1,6 +1,7 @@
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
-import { CATEGORIES } from '../src/core/manifest.ts';
+import { languagePath } from '../src/core/i18n/paths.ts';
+import { compareNewestFirst } from '../src/core/manifest.ts';
 import type { CatalogueEntry } from '../src/core/manifest.ts';
 import { alternateLinks, imageType, jsonLd, localeTags } from './head.ts';
 import type { PageLanguage } from './i18n.ts';
@@ -28,6 +29,7 @@ export const CORE_ALIAS = '@core';
 export const MOUNT_MODULE = `${CORE_ALIAS}/mount`;
 export const PAGE_ENTRY = 'main.ts';
 
+const ROOT_PATH = '/';
 const CATALOGUE_TAGLINE_KEY = 'catalogue.tagline';
 const CATALOGUE_TITLE_KEY = 'catalogue.title';
 
@@ -44,6 +46,7 @@ function languageValues(code: LanguageCode, route: PageRoute): TemplateValues {
   return {
     lang: code,
     url: escapeHtml(pageUrl(code, route.page)),
+    catalogueUrl: escapeHtml(`${ROOT_PATH}${languagePath(code, CATALOGUE_ROUTE.page)}`),
     localeTags: localeTags(code, route),
     alternateLinks: alternateLinks(route),
   };
@@ -89,9 +92,12 @@ export function renderPage(
   return translateHtml(html, translate);
 }
 
+function catalogueEntry({ manifest, metas, dates }: LoadedExplainer): CatalogueEntry {
+  return { manifest, meta: metas, published: dates.published };
+}
+
 function catalogueOrder(explainers: readonly LoadedExplainer[]): LoadedExplainer[] {
-  const rank = (explainer: LoadedExplainer) => CATEGORIES.indexOf(explainer.manifest.category);
-  return [...explainers].sort((a, b) => rank(a) - rank(b));
+  return [...explainers].sort((a, b) => compareNewestFirst(catalogueEntry(a), catalogueEntry(b)));
 }
 
 function listedPage(explainer: LoadedExplainer, code: LanguageCode): ListedPage {
@@ -143,7 +149,7 @@ export function renderEntry(manifest: LoadedExplainer['manifest']): string {
 }
 
 export function catalogueEntries(explainers: readonly LoadedExplainer[]): CatalogueEntry[] {
-  return explainers.map(({ manifest, metas }) => ({ manifest, meta: metas }));
+  return catalogueOrder(explainers).map(catalogueEntry);
 }
 
 export function renderCatalogueModule(explainers: readonly LoadedExplainer[]): string {

@@ -1,15 +1,19 @@
 import type { LanguageCode } from './i18n/languages.ts';
 
-export const CATEGORIES = [
+export const TAGS = [
+  'mechanics',
   'engines',
-  'drivetrain',
+  'vehicles',
   'aircraft',
-  'electrical',
+  'flight',
+  'physics',
+  'weather',
   'home',
   'tools',
+  'optics',
 ] as const;
 
-export type Category = (typeof CATEGORIES)[number];
+export type Tag = (typeof TAGS)[number];
 
 export interface SocialImage {
   image: string;
@@ -18,7 +22,7 @@ export interface SocialImage {
 
 export interface ExplainerManifest {
   slug: string;
-  category: Category;
+  tags: Tag[];
   cover: string;
   entry: string;
   chapters: string;
@@ -45,4 +49,10 @@ export const META_KEYS: readonly (keyof ExplainerMeta)[] = [
 export interface CatalogueEntry {
   manifest: ExplainerManifest;
   meta: Partial<Record<LanguageCode, ExplainerMeta>>;
+  published: string;
+}
+
+export function compareNewestFirst(a: CatalogueEntry, b: CatalogueEntry): number {
+  const age = Date.parse(b.published) - Date.parse(a.published);
+  return age || a.manifest.slug.localeCompare(b.manifest.slug);
 }

@@ -10,7 +10,7 @@ at `/<slug>/`.
 
 | Path                      | Owns                                                                            |
 | ------------------------- | ------------------------------------------------------------------------------- |
-| `index.html`, `src/site/` | Catalogue page: cards per explainer grouped by category, language dropdown      |
+| `index.html`, `src/site/` | Catalogue page: cards newest first, a tag filter, language dropdown             |
 | `src/core/`               | Everything an explainer builds on (see below)                                   |
 | `src/core/page.html`      | The explainer page template: masthead, stage, gauge, dock, prose column, footer |
 | `src/core/partials/`      | Markup shared by the template and the catalogue: header actions, footer         |
@@ -37,7 +37,7 @@ explainer.
 
 ```
 explainers/engine/
-  explainer.json      slug, category, cover, entry, chapters, locales, social
+  explainer.json      slug, tags, cover, entry, chapters, locales, social
   chapters.html       the prose column: <section class="chapter" data-preset="…"> blocks
   locales/en.json …   everything the explainer says, including meta.title, meta.eyebrow,
                       meta.tagline, meta.description, meta.summary
@@ -56,7 +56,7 @@ explainers/engine/
 ```json
 {
   "slug": "engine",
-  "category": "engines",
+  "tags": ["engines", "mechanics", "vehicles"],
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",
@@ -67,8 +67,11 @@ explainers/engine/
 
 The slug must match the folder and must not clash with a root folder
 (`assets`, `src`, `public` and the like) or with a name published from the root
-`public/` (`icons`, `social`). `category` is one of `CATEGORIES` in
-`src/core/manifest.ts`. `cover` and `social.image` are paths inside `public/`;
+`public/` (`icons`, `social`). `tags` lists at least one tag, none twice, each
+from `TAGS` in `src/core/manifest.ts`: mechanics, engines, vehicles, aircraft,
+flight, physics, weather, home, tools and optics. Every tag has a label under
+`catalogue.tags.<id>` in all eight core locales, which a test enforces, so a new
+tag goes into `TAGS` and every core locale together. `cover` and `social.image` are paths inside `public/`;
 the social image is 1200 × 630. The plugin validates all of this and fails the
 build with the manifest's path in the message.
 
@@ -367,7 +370,8 @@ or the root `index.html` is added, changed or removed. A failed regeneration is
 logged and shown in the error overlay, and the next change retries it. At build it
 emits the same files into `dist/<slug>/`. It also serves
 `virtual:explainer-catalogue`: every manifest with the `meta` block of each shipped
-language, so the catalogue never bundles an explainer's full copy.
+language and its publish date, newest first, so the catalogue never bundles an
+explainer's full copy.
 
 Every page is prerendered in every language it ships. English stays at `/<slug>/`
 and `/`; any other language lives at `/<lang>/<slug>/` and `/<lang>/`, where the
@@ -377,7 +381,8 @@ build and the runtime. A page is rendered in two steps:
 
 1. `vite/page.ts` expands the `<!-- partial:name -->` markers and fills the
    `{{token}}` values of `src/core/page.html` or the root `index.html`: `lang`, the
-   translated title, description, eyebrow and tagline, the canonical URL of the page
+   translated title, description, eyebrow and tagline, the catalogue path in the
+   page's language (`catalogueUrl`, `/` or `/<lang>/`), the canonical URL of the page
    itself, `og:locale` with the other languages as alternates, the Open Graph and
    Twitter tags, one `<link rel="alternate" hreflang>` per language variant plus
    `x-default` for the English page, and the JSON-LD.
@@ -415,8 +420,38 @@ the author, and `datePublished` and `dateModified`. `vite/dates.ts` reads them w
 git: the first and the last commit that touched `explainers/<slug>/`. Without git
 history, or in a shallow clone, both fall back to the build date, which is why the
 workflows check out with `fetch-depth: 0`. The catalogue carries a `@graph` of a
-`WebSite` and an `ItemList` of the explainers in catalogue order, each linked to its
+`WebSite` and an `ItemList` of the explainers in catalogue order, newest first, each linked to its
 page in the catalogue's language, or in English when the explainer does not ship it.
+
+## Catalogue
+
+`src/site` renders the catalogue at runtime into `[data-catalogue]`: a row of
+tag chips and one flat grid of cards, newest first by `compareNewestFirst` from
+`src/core/manifest.ts`, the same order the build uses for the `ItemList`. Each
+card is an `a.card` with the cover, eyebrow, title, summary and action, and its
+tags as small chips laid over the bottom of the cover. The chips sit beside the
+link in the card's `li`, never inside it, so each one is a button of its own.
+
+The filter row offers "All" and every tag at least one explainer uses, in
+vocabulary order. It selects one tag at a time: a tag chip, in the row or on a
+card, selects its tag, and pressing the selected chip again clears the filter, as
+does "All". Every chip keeps `aria-pressed` in sync, and cards without the tag are
+hidden rather than rebuilt, so focus stays on the chip. The pure part lives in
+`src/site/tagFilter.ts`: `usedTags`, `filterByTag`, `toggleTag` and the query
+helpers. The selection is kept in the URL as `?tag=<id>` with `replaceState`, so a
+filtered view can be shared; it is read on load on the English and every language
+page, and a tag the catalogue does not offer is dropped from the URL. The language
+dropdown and the language redirect keep the query, since `languageUrl` drops only
+`lang`.
+
+Every page links back to the catalogue: the explainer masthead shows the site name
+as a link above the eyebrow, and the shared footer has an "All explainers" link
+(`footer.catalogue`). Both carry `data-catalogue-link`. The build fills their
+`href` with the catalogue in the page's language, and at runtime
+`mountCatalogueLinks` from `src/core/ui/catalogueLink.ts` points them at
+`catalogueHref` from `src/core/i18n/paths.ts`, which adds the base path and keeps a
+`?lang=` query, so an English page translated by the query opens the English
+catalogue in the same language.
 
 ## Translations
 

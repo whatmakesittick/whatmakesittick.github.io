@@ -34,6 +34,7 @@
     "zoom": "Acercar y alejar"
   },
   "footer": {
+    "catalogue": "Todas las explicaciones",
     "source": "Código fuente",
     "license": "Licencia MIT",
     "builtWith": "Hecho con Three.js",
@@ -44,16 +45,22 @@
     "eyebrow": "Explicaciones interactivas",
     "tagline": "Cómo funcionan las máquinas de cada día, desmontadas en 3D y a cámara lenta para que veas trabajar cada pieza.",
     "skipLink": "Ir a las explicaciones",
-    "listLabel": "Explicaciones por categoría",
+    "listLabel": "Explicaciones",
     "explore": "Explorar",
     "moreSoon": "Pronto habrá más explicaciones.",
-    "categories": {
+    "filterLabel": "Filtrar por etiqueta",
+    "allTags": "Todas",
+    "tags": {
+      "mechanics": "Mecánica",
       "engines": "Motores",
-      "drivetrain": "Transmisión",
+      "vehicles": "Vehículos",
       "aircraft": "Aeronaves",
-      "electrical": "Electricidad",
+      "flight": "Vuelo",
+      "physics": "Física",
+      "weather": "Meteorología",
       "home": "Hogar",
-      "tools": "Herramientas"
+      "tools": "Herramientas",
+      "optics": "Óptica"
     }
   }
 }

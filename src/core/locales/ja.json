@@ -34,6 +34,7 @@
     "zoom": "拡大・縮小"
   },
   "footer": {
+    "catalogue": "すべての解説",
     "source": "ソースコード",
     "license": "MITライセンス",
     "builtWith": "Three.jsで制作",
@@ -44,16 +45,22 @@
     "eyebrow": "インタラクティブな解説",
     "tagline": "身近な機械のしくみを3Dで分解し、スローモーションで一つひとつの部品の動きを見せます。",
     "skipLink": "解説一覧へ移動",
-    "listLabel": "カテゴリ別の解説",
+    "listLabel": "解説",
     "explore": "見てみる",
     "moreSoon": "新しい解説を準備中です。",
-    "categories": {
+    "filterLabel": "タグで絞り込む",
+    "allTags": "すべて",
+    "tags": {
+      "mechanics": "機構",
       "engines": "エンジン",
-      "drivetrain": "駆動系",
+      "vehicles": "乗り物",
       "aircraft": "航空機",
-      "electrical": "電気",
-      "home": "家庭",
-      "tools": "工具"
+      "flight": "飛行",
+      "physics": "物理",
+      "weather": "気象",
+      "home": "暮らし",
+      "tools": "道具",
+      "optics": "光学"
     }
   }
 }

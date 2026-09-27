@@ -34,6 +34,7 @@
     "zoom": "Zoom in and out"
   },
   "footer": {
+    "catalogue": "All explainers",
     "source": "Source",
     "license": "MIT license",
     "builtWith": "Built with Three.js",
@@ -44,16 +45,22 @@
     "eyebrow": "Interactive explainers",
     "tagline": "How everyday machines work, taken apart in 3D and slowed right down so you can watch every part do its job.",
     "skipLink": "Skip to the explainers",
-    "listLabel": "Explainers by category",
+    "listLabel": "Explainers",
     "explore": "Explore",
     "moreSoon": "More explainers are on the way.",
-    "categories": {
+    "filterLabel": "Filter by tag",
+    "allTags": "All",
+    "tags": {
+      "mechanics": "Mechanics",
       "engines": "Engines",
-      "drivetrain": "Drivetrain",
+      "vehicles": "Vehicles",
       "aircraft": "Aircraft",
-      "electrical": "Electrical",
+      "flight": "Flight",
+      "physics": "Physics",
+      "weather": "Weather",
       "home": "Home",
-      "tools": "Tools"
+      "tools": "Tools",
+      "optics": "Optics"
     }
   }
 }
