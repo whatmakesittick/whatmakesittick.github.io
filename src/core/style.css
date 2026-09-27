@@ -603,7 +603,10 @@ a:hover {
 }
 
 .phase-buttons {
+  --phase-min-width: max-content;
+
   display: grid;
+  grid-template-columns: var(--phase-columns, none);
   grid-auto-columns: minmax(0, 1fr);
   grid-auto-flow: column;
   gap: 2px;
