@@ -1,5 +1,5 @@
 import type { SceneOptions } from '@core/scene/shell';
-import { CAMERA_DISTANCE_MM, SCENE_UNITS_PER_MM } from './constants';
+import { CAMERA_DISTANCE_MM, SCENE_UNITS_PER_MM, SEE_THROUGH_DIM } from './constants';
 
 export const SCENE_OPTIONS: SceneOptions = {
   camera: {
@@ -8,4 +8,5 @@ export const SCENE_OPTIONS: SceneOptions = {
       max: CAMERA_DISTANCE_MM.max * SCENE_UNITS_PER_MM,
     },
   },
+  highlight: { dim: SEE_THROUGH_DIM },
 };

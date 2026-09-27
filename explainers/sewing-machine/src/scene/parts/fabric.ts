@@ -1,10 +1,9 @@
-import { BoxGeometry, BufferAttribute, Group, Mesh } from 'three';
+import { BoxGeometry, BufferAttribute, Group, Mesh, MeshStandardMaterial } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import { FABRIC, FABRIC_BOTTOM, FABRIC_TOP } from '../../model';
 import { FABRIC_SHEET } from '../constants';
 import { TRANSLUCENT_COLORS } from '../finishes';
-import type { TranslucentMaterial } from '../translucency';
 import type { PartContext } from './context';
 
 export interface FabricPart {
@@ -17,7 +16,13 @@ export interface FabricPart {
 const RGBA = 4;
 const ALPHA = 3;
 const LAYER_RENDER_ORDER = 2;
-const FABRIC_SURFACE = { metalness: 0, roughness: 0.92, vertexColors: true } as const;
+const FABRIC_SURFACE = {
+  metalness: 0,
+  roughness: 0.92,
+  vertexColors: true,
+  transparent: true,
+  depthWrite: false,
+} as const;
 const LABEL_POSITION = { x: FABRIC_SHEET.right - 2, z: -22 } as const;
 
 function fade(z: number): number {
@@ -39,27 +44,41 @@ function layerGeometry(bottom: number): BufferGeometry {
   return geometry;
 }
 
+interface LayerLook {
+  whole: MeshStandardMaterial;
+  cutaway: MeshStandardMaterial;
+}
+
+function layerMaterial(context: PartContext, color: string, opacity: number): MeshStandardMaterial {
+  const material = context.tracker.track(
+    new MeshStandardMaterial({ color, ...FABRIC_SURFACE, opacity }),
+  );
+  context.materials.register('fabric', material);
+  return material;
+}
+
+function layerLook(context: PartContext, color: string): LayerLook {
+  return {
+    whole: layerMaterial(context, color, FABRIC_SHEET.opacity.whole),
+    cutaway: layerMaterial(context, color, FABRIC_SHEET.opacity.cutaway),
+  };
+}
+
 export function createFabric(context: PartContext): FabricPart {
   const object = new Group();
   const sheet = new Group();
-  const layers: TranslucentMaterial[] = [
-    TRANSLUCENT_COLORS.fabricBottom,
-    TRANSLUCENT_COLORS.fabricTop,
-  ].map((color, index) => {
-    const layer = context.translucency.create(
-      context.tracker,
-      'fabric',
-      { color, ...FABRIC_SURFACE },
-      FABRIC_SHEET.opacity.whole,
-    );
+  const looks = [TRANSLUCENT_COLORS.fabricBottom, TRANSLUCENT_COLORS.fabricTop].map((color) =>
+    layerLook(context, color),
+  );
+  const layers = looks.map((look, index) => {
     const mesh = new Mesh(
       context.tracker.track(layerGeometry(FABRIC_BOTTOM + index * FABRIC.layerThickness)),
-      layer.material,
+      look.whole,
     );
     mesh.renderOrder = LAYER_RENDER_ORDER + index;
-    sheet.add(mesh);
-    return layer;
+    return mesh;
   });
+  sheet.add(...layers);
   object.add(sheet);
   return {
     object,
@@ -68,9 +87,8 @@ export function createFabric(context: PartContext): FabricPart {
       sheet.position.z = -millimetres;
     },
     setCutaway: (cutaway) => {
-      const opacity = cutaway ? FABRIC_SHEET.opacity.cutaway : FABRIC_SHEET.opacity.whole;
-      layers.forEach((layer) => {
-        layer.opacity = opacity;
+      layers.forEach((layer, index) => {
+        layer.material = cutaway ? looks[index].cutaway : looks[index].whole;
       });
     },
   };
