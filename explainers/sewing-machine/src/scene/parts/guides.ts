@@ -1,8 +1,9 @@
 import { Group, TorusGeometry } from 'three';
 import type { BufferGeometry } from 'three';
+import { box } from '@core/scene/geometry/box';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { HEAD, THREAD_GUIDES } from '../constants';
-import { box, cylinderAlongZ, verticalCylinder } from '../geometry/primitives';
+import { cylinderAlongZ, verticalCylinder } from '../geometry/primitives';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 

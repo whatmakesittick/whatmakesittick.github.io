@@ -1,11 +1,11 @@
 import { Group } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
+import { extrudePlan, planHole, planShape } from '@core/scene/geometry/extrude';
 import { anchorAt } from '@core/scene/parts';
 import { BOBBIN_CASE, HOOK } from '../../model';
 import { BOBBIN_SHAPE, CASE_SHAPE } from '../constants';
-import { extrudePlan } from '../geometry/extrude';
 import { verticalCylinder } from '../geometry/primitives';
-import { circlePoints, hookSectorPoints, planHole, planShape } from '../geometry/shapes';
+import { circlePoints, hookSectorPoints } from '../geometry/shapes';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 

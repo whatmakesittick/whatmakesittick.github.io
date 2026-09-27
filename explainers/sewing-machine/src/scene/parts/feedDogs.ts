@@ -1,11 +1,11 @@
 import { Group, Shape, Vector2 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
+import { box } from '@core/scene/geometry/box';
+import { extrudeProfileAlongX } from '@core/scene/geometry/extrude';
 import { anchorAt } from '@core/scene/parts';
 import { FEED_DOG_TIP, PLATE_BOTTOM } from '../../model';
 import type { FeedDogPosition } from '../../model';
 import { FEED_DOGS } from '../constants';
-import { extrudeProfileAlongX } from '../geometry/extrude';
-import { box } from '../geometry/primitives';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 

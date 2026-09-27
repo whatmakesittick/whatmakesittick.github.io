@@ -1,11 +1,11 @@
 import { Group } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { toRadians } from '@core/math';
+import { box } from '@core/scene/geometry/box';
+import { extrudePlan, roundedRectHole, roundedRectShape } from '@core/scene/geometry/extrude';
 import { anchorAt } from '@core/scene/parts';
 import { HEAD, PRESSER } from '../constants';
-import { extrudePlan } from '../geometry/extrude';
-import { box, cylinderAlongX, verticalCylinder } from '../geometry/primitives';
-import { roundedRectHole, roundedRectShape } from '../geometry/shapes';
+import { cylinderAlongX, verticalCylinder } from '../geometry/primitives';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 

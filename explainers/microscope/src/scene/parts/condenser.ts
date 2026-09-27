@@ -1,10 +1,10 @@
 import { Group } from 'three';
 import type { Mesh, Object3D } from 'three';
+import { box } from '@core/scene/geometry/box';
 import { anchorAt } from '@core/scene/parts';
 import { OBJECTIVE_IDS, STATIONS, irisOpening } from '../../model';
 import type { ObjectiveId } from '../../model';
 import { CONDENSER, CONDENSER_BRACKET, CONDENSER_LABEL_HEIGHT, IRIS, SEGMENTS } from '../constants';
-import { boxBetween } from '../geometry/box';
 import { cutSection, innerWall, ringSection } from '../geometry/lathe';
 import { backHalfRing } from '../geometry/ring';
 import { FINISHES } from '../finishes';
@@ -43,7 +43,14 @@ function housing(context: PartContext): CutShell {
 
 function bracket(context: PartContext): Mesh {
   const { halfWidth, bottom, top, back } = CONDENSER_BRACKET;
-  const geometry = boxBetween([-halfWidth, bottom, back], [halfWidth, top, -CONDENSER.inner]);
+  const geometry = box({
+    minX: -halfWidth,
+    maxX: halfWidth,
+    minY: bottom,
+    maxY: top,
+    minZ: back,
+    maxZ: -CONDENSER.inner,
+  });
   return partMesh(context, geometry, 'condenser', 'stage');
 }
 

@@ -1,6 +1,10 @@
 import { Group, Path } from 'three';
 import type { BufferGeometry, Mesh, Object3D, Texture } from 'three';
 import { FULL_TURN } from '@core/math';
+import { box } from '@core/scene/geometry/box';
+import type { BoxBounds } from '@core/scene/geometry/box';
+import { extrudePlan, planShape } from '@core/scene/geometry/extrude';
+import type { PlanPoint } from '@core/scene/geometry/extrude';
 import { anchorAt } from '@core/scene/parts';
 import { STATIONS } from '../../model';
 import { HALF_TURN, QUARTER_TURN } from '../../turns';
@@ -14,10 +18,6 @@ import {
   STAGE_CLIP,
   STAGE_TOP,
 } from '../constants';
-import { boxBetween } from '../geometry/box';
-import type { Corner } from '../geometry/box';
-import { extrudeUpward, outlineShape } from '../geometry/extrude';
-import type { PlanePoint } from '../geometry/extrude';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 import { createImageDisc, setDiscRadius } from './imageDisc';
@@ -32,41 +32,41 @@ export interface StagePart {
 const HOLE_STEPS = 24;
 const STAGE_BOTTOM = STAGE_TOP - STAGE.thickness;
 
-function plateCorners(): PlanePoint[] {
+function plateCorners(): PlanPoint[] {
   const { halfWidth, back, front } = STAGE;
   return [
-    [-halfWidth, back],
-    [halfWidth, back],
-    [halfWidth, front],
-    [-halfWidth, front],
+    { x: -halfWidth, z: back },
+    { x: halfWidth, z: back },
+    { x: halfWidth, z: front },
+    { x: -halfWidth, z: front },
   ];
 }
 
 function wholePlate(): BufferGeometry {
-  const shape = outlineShape(plateCorners());
+  const shape = planShape(plateCorners());
   shape.holes.push(new Path().absarc(0, 0, STAGE.holeRadius, 0, FULL_TURN, true));
-  return extrudeUpward(shape, STAGE_BOTTOM, STAGE_TOP);
+  return extrudePlan(shape, STAGE_BOTTOM, STAGE_TOP);
 }
 
-function backOfHole(): PlanePoint[] {
+function backOfHole(): PlanPoint[] {
   return Array.from({ length: HOLE_STEPS + 1 }, (_, index) => {
     const angle = -QUARTER_TURN - (index / HOLE_STEPS) * HALF_TURN;
-    return [STAGE.holeRadius * Math.cos(angle), STAGE.holeRadius * Math.sin(angle)] as const;
+    return { x: STAGE.holeRadius * Math.cos(angle), z: STAGE.holeRadius * Math.sin(angle) };
   });
 }
 
 function cutPlate(): BufferGeometry {
   const { halfWidth, back, front, notchHalfWidth } = STAGE;
-  const outline: PlanePoint[] = [
-    [-halfWidth, back],
-    [halfWidth, back],
-    [halfWidth, -notchHalfWidth],
-    [0, -notchHalfWidth],
+  const outline: PlanPoint[] = [
+    { x: -halfWidth, z: back },
+    { x: halfWidth, z: back },
+    { x: halfWidth, z: -notchHalfWidth },
+    { x: 0, z: -notchHalfWidth },
     ...backOfHole(),
-    [0, front],
-    [-halfWidth, front],
+    { x: 0, z: front },
+    { x: -halfWidth, z: front },
   ];
-  return extrudeUpward(outlineShape(outline), STAGE_BOTTOM, STAGE_TOP);
+  return extrudePlan(planShape(outline), STAGE_BOTTOM, STAGE_TOP);
 }
 
 function clips(context: PartContext): Mesh[] {
@@ -75,10 +75,14 @@ function clips(context: PartContext): Mesh[] {
   return [1, -1].map((side) =>
     partMesh(
       context,
-      boxBetween(
-        [-halfWidth, top, side * offset - length / 2],
-        [halfWidth, top + thickness, side * offset + length / 2],
-      ),
+      box({
+        minX: -halfWidth,
+        maxX: halfWidth,
+        minY: top,
+        maxY: top + thickness,
+        minZ: side * offset - length / 2,
+        maxZ: side * offset + length / 2,
+      }),
       'stage',
       'chrome',
     ),
@@ -87,12 +91,19 @@ function clips(context: PartContext): Mesh[] {
 
 function carrier(context: PartContext): Mesh {
   const { halfWidth, bottom, top, back, front } = STAGE_CARRIER;
-  const geometry = boxBetween([-halfWidth, bottom, back], [halfWidth, top, front]);
+  const geometry = box({
+    minX: -halfWidth,
+    maxX: halfWidth,
+    minY: bottom,
+    maxY: top,
+    minZ: back,
+    maxZ: front,
+  });
   return partMesh(context, geometry, 'stage', 'stage');
 }
 
-function glassPlate(context: PartContext, min: Corner, max: Corner): Mesh {
-  const plate = partMesh(context, boxBetween(min, max), 'specimen', 'slideGlass');
+function glassPlate(context: PartContext, bounds: BoxBounds): Mesh {
+  const plate = partMesh(context, box(bounds), 'specimen', 'slideGlass');
   plate.renderOrder = RENDER_ORDER.glass;
   return plate;
 }
@@ -100,16 +111,22 @@ function glassPlate(context: PartContext, min: Corner, max: Corner): Mesh {
 function slideAndCoverslip(context: PartContext): Mesh[] {
   const coverslipTop = STATIONS.specimen + COVERSLIP.thickness;
   return [
-    glassPlate(
-      context,
-      [-SLIDE.halfWidth, STAGE_TOP, -SLIDE.halfLength],
-      [SLIDE.halfWidth, STATIONS.specimen, SLIDE.halfLength],
-    ),
-    glassPlate(
-      context,
-      [-COVERSLIP.half, STATIONS.specimen, -COVERSLIP.half],
-      [COVERSLIP.half, coverslipTop, COVERSLIP.half],
-    ),
+    glassPlate(context, {
+      minX: -SLIDE.halfWidth,
+      maxX: SLIDE.halfWidth,
+      minY: STAGE_TOP,
+      maxY: STATIONS.specimen,
+      minZ: -SLIDE.halfLength,
+      maxZ: SLIDE.halfLength,
+    }),
+    glassPlate(context, {
+      minX: -COVERSLIP.half,
+      maxX: COVERSLIP.half,
+      minY: STATIONS.specimen,
+      maxY: coverslipTop,
+      minZ: -COVERSLIP.half,
+      maxZ: COVERSLIP.half,
+    }),
   ];
 }
 

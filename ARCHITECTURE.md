@@ -221,7 +221,11 @@ labels that are on screen and clear of higher-priority ones, with a margin so
 they do not flicker at the edge; `anchorAt` in `parts.ts` adds an empty object at
 a point on a part for a label to follow; `geometry/airfoil.ts` extrudes an airfoil
 blade section with `bladeGeometry`; `geometry/lathe.ts` turns a spline profile
-into a solid with `sampleProfile` and `latheAlongX`. The
+into a solid with `sampleProfile` and `latheAlongX`; `geometry/extrude.ts` raises
+a plan outline in x and z between two heights with `extrudePlan`, runs a side
+profile in z and y along the x axis with `extrudeProfileAlongX`, and draws the
+outlines with `roundedRectShape`, `roundedRectHole`, `planShape` and `planHole`;
+`geometry/box.ts` makes an axis-aligned `box` from its bounds. The
 material library caches one material per emphasis group and finish, where a
 finish is a plain `MeshStandardMaterialParameters` object the explainer owns;
 `register` adds a material the explainer made itself, such as points, lines or a

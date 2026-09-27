@@ -1,12 +1,13 @@
 import type { Object3D } from 'three';
 import { Group } from 'three';
 import { toRadians } from '@core/math';
+import { box } from '@core/scene/geometry/box';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import { TENSIONS } from '../../model';
 import type { Tension } from '../../model';
 import { HEAD, TENSION } from '../constants';
-import { box, cylinderAlongZ } from '../geometry/primitives';
+import { cylinderAlongZ } from '../geometry/primitives';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 

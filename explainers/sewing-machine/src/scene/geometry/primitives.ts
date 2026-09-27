@@ -1,23 +1,7 @@
-import { BoxGeometry, CylinderGeometry } from 'three';
+import { CylinderGeometry } from 'three';
 import type { BufferGeometry } from 'three';
 
 const RADIAL_SEGMENTS = 24;
-
-export interface Bounds {
-  minX: number;
-  maxX: number;
-  minY: number;
-  maxY: number;
-  minZ: number;
-  maxZ: number;
-}
-
-export function box(bounds: Bounds): BufferGeometry {
-  const { minX, maxX, minY, maxY, minZ, maxZ } = bounds;
-  const geometry = new BoxGeometry(maxX - minX, maxY - minY, maxZ - minZ);
-  geometry.translate((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
-  return geometry;
-}
 
 export function verticalCylinder(
   radius: number,

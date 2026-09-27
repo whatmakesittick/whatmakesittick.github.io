@@ -1,9 +1,17 @@
 import { BoxGeometry } from 'three';
 import type { BufferGeometry } from 'three';
 
-export type Corner = readonly [x: number, y: number, z: number];
+export interface BoxBounds {
+  minX: number;
+  maxX: number;
+  minY: number;
+  maxY: number;
+  minZ: number;
+  maxZ: number;
+}
 
-export function boxBetween([minX, minY, minZ]: Corner, [maxX, maxY, maxZ]: Corner): BufferGeometry {
+export function box(bounds: BoxBounds): BufferGeometry {
+  const { minX, maxX, minY, maxY, minZ, maxZ } = bounds;
   const geometry = new BoxGeometry(maxX - minX, maxY - minY, maxZ - minZ);
   geometry.translate((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
   return geometry;
