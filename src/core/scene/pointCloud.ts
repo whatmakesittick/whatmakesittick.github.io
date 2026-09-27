@@ -58,4 +58,8 @@ export class PointCloud {
     this.geometry.getAttribute('position').needsUpdate = true;
     this.geometry.getAttribute('color').needsUpdate = true;
   }
+
+  dispose(): void {
+    this.geometry.dispose();
+  }
 }

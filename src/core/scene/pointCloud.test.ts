@@ -1,6 +1,6 @@
 import { AdditiveBlending, NormalBlending, Texture } from 'three';
 import type { BufferAttribute } from 'three';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { PointCloud, createPointMaterial } from './pointCloud';
 
 const OVERLAY = 2;
@@ -23,6 +23,18 @@ describe('PointCloud', () => {
     const material = createPointMaterial(new Texture(), 1);
     expect(new PointCloud(1, material).points.renderOrder).toBe(0);
     expect(new PointCloud(1, material, OVERLAY).points.renderOrder).toBe(OVERLAY);
+  });
+
+  it('frees its own geometry on disposal and leaves the material to the caller', () => {
+    const material = createPointMaterial(new Texture(), 1);
+    const cloud = new PointCloud(1, material);
+    const geometryDisposed = vi.fn();
+    const materialDisposed = vi.fn();
+    cloud.points.geometry.addEventListener('dispose', geometryDisposed);
+    material.addEventListener('dispose', materialDisposed);
+    cloud.dispose();
+    expect(geometryDisposed).toHaveBeenCalledOnce();
+    expect(materialDisposed).not.toHaveBeenCalled();
   });
 
   it('makes a translucent point material with the chosen blending', () => {

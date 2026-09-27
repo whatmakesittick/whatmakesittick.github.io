@@ -74,7 +74,9 @@ export class ThermalPart {
       createPointMaterial(context.textures.dot, PARTICLES.thermal.size),
     );
     context.materials.register('thermal', material);
-    this.air = new PointCloud(PARTICLES.thermal.count, material, RENDER_ORDER.particles);
+    this.air = context.tracker.track(
+      new PointCloud(PARTICLES.thermal.count, material, RENDER_ORDER.particles),
+    );
     this.particles = Array.from({ length: PARTICLES.thermal.count }, (_, index) =>
       seedParticle(index / PARTICLES.thermal.count),
     );

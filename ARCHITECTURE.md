@@ -214,7 +214,8 @@ still orbit and zoom. A pose passed to `jumpTo` or `tweenTo` counts from the
 anchor's position at the moment of the call, so frame it around the anchor's
 current position. `PointCloud` is a fixed-size buffer of coloured points drawn
 with `createPointMaterial`: set points with `setPoint` and `setColor`, then call
-`commit` once per frame.
+`commit` once per frame. `dispose` frees its buffers; the material stays the
+caller's to dispose.
 
 ## Build
 
