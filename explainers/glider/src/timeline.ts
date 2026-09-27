@@ -33,7 +33,6 @@ function flightSecondsPerSecond(timeLapse: number): number {
 
 export const GLIDER_TIMELINE: Timeline = {
   cycle: FLIGHT_CYCLE,
-  loop: true,
   step: SCRUBBER_STEP_SECONDS,
   nudge: { fine: FINE_STEP_SECONDS, coarse: COARSE_STEP_SECONDS },
   labelKey: 'timeline.label',
