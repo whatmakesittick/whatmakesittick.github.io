@@ -220,3 +220,5 @@ export const SPARK = {
   holdSeconds: 0.07,
   flickerMin: 0.65,
 } as const;
+
+export const SEE_THROUGH_DIM = { opacity: 0.6 } as const;

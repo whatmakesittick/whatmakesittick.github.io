@@ -1,6 +1,6 @@
 import './style.css';
 import { defineExplainer } from '@core/explainer';
-import { mountEngineScene } from './scene';
+import { SCENE_OPTIONS, mountEngineScene } from './scene';
 import { PART_INFO } from './scene/partInfo';
 import { PRESETS, createEngineStore } from './state';
 import type { EngineStoreState } from './state';
@@ -22,6 +22,7 @@ export default defineExplainer<EngineStoreState>({
   dock: { choices: ENGINE_CHOICES, toggles: VIEW_TOGGLES },
   readouts: ENGINE_READOUTS,
   actions: CHAPTER_ACTIONS,
+  scene: SCENE_OPTIONS,
   mountScene: mountEngineScene,
   mountUi: mountEngineUi,
 });
