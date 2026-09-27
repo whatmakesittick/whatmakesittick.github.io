@@ -37,6 +37,16 @@ function translucent(opacity: number): MeshBasicMaterial {
 }
 
 describe('MaterialLibrary', () => {
+  it('knows the group of every material it made or registered', () => {
+    const library = new MaterialLibrary();
+    const made = library.get('part', METAL);
+    const registered = translucent(0.4);
+    library.register('glass', registered);
+    expect(library.groupOf(made)).toBe('part');
+    expect(library.groupOf(registered)).toBe('glass');
+    expect(library.groupOf(translucent(0.4))).toBeUndefined();
+  });
+
   it('desaturates and darkens a dimmed colour by the dim style', () => {
     const library = new MaterialLibrary();
     const material = library.get('part', GLOW);

@@ -171,6 +171,7 @@ describe('createLabelVisibility', () => {
         labels: {
           show: (ids) => (shown = sorted(ids)),
           anchors: () => new Map([['wheel', anchor]]),
+          isOccluded: () => false,
         },
         rig: { camera },
         viewport: {

@@ -5,6 +5,7 @@ import { CameraRig } from './camera';
 import type { CameraOptions } from './camera';
 import { MAX_FRAME_SECONDS } from './constants';
 import { Highlighter } from './highlight';
+import { LabelOcclusion } from './labelOcclusion';
 import { LabelLayer } from './labels';
 import { createLighting } from './lighting';
 import type { Lighting } from './lighting';
@@ -76,6 +77,12 @@ export function createSceneHost(
   const highlighter = new Highlighter(materials, [...Object.keys(parts), STRUCTURE_GROUP]);
   const labels = new LabelLayer(parts);
   const rig = new CameraRig(viewport.renderer.domElement, options.camera);
+  const occlusion = new LabelOcclusion(labels, {
+    scene,
+    camera: rig.camera,
+    partOf: (material) => materials.groupOf(material),
+    ignored: [stage.group],
+  });
   viewport.onResize((size) => {
     rig.setViewport(size);
     labels.setViewport(size);
@@ -100,8 +107,9 @@ export function createSceneHost(
     const step = Math.min(deltaSeconds, MAX_FRAME_SECONDS);
     tick(step);
     updates.notify(step);
-    highlighter.update(step);
+    if (highlighter.update(step)) occlusion.invalidate();
     rig.update(step);
+    occlusion.update(step);
     viewport.render(scene, rig.camera);
     labels.layout(viewport.element);
   };

@@ -25,14 +25,17 @@ export class Highlighter {
     });
   }
 
-  update(deltaSeconds: number): void {
+  update(deltaSeconds: number): boolean {
     const blend = 1 - Math.exp(-EMPHASIS_RATE * deltaSeconds);
+    let changed = false;
     this.targets.forEach((target, group) => {
       const value = this.current.get(group) ?? FULL_EMPHASIS;
       const next =
         Math.abs(target - value) < SETTLE_EPSILON ? target : value + (target - value) * blend;
+      if (next !== value) changed = true;
       this.current.set(group, next);
       this.library.setEmphasis(group, next);
     });
+    return changed;
   }
 }

@@ -13,6 +13,7 @@ const CENTRE_PX = SIZE.width / 2;
 interface Harness {
   visibility: LabelVisibility;
   anchors: Map<string, Object3D>;
+  occluded: Set<string>;
   shown(): string[];
   moveTo(id: string, xPx: number, yPx?: number): void;
 }
@@ -23,9 +24,11 @@ function createHarness(ids: readonly string[]): Harness {
   camera.updateMatrixWorld();
   let shown: string[] = [];
   const anchors = new Map(ids.map((id) => [id, new Object3D()]));
+  const occluded = new Set<string>();
   const labels = {
     show: (visible: ReadonlySet<string>) => (shown = [...visible]),
     anchors: () => anchors,
+    isOccluded: (id: string) => occluded.has(id),
   };
   const visibility = new LabelVisibility(labels, camera, ids);
   visibility.setViewport(SIZE);
@@ -33,7 +36,7 @@ function createHarness(ids: readonly string[]): Harness {
     const toWorld = (px: number) => (px - CENTRE_PX) / PIXELS_PER_UNIT;
     anchors.get(id)?.position.set(toWorld(xPx), -toWorld(yPx), 0);
   };
-  return { visibility, anchors, shown: () => shown, moveTo };
+  return { visibility, anchors, occluded, shown: () => shown, moveTo };
 }
 
 describe('LabelVisibility', () => {
@@ -86,6 +89,22 @@ describe('LabelVisibility', () => {
     moveTo('b', CENTRE_PX + 10);
     visibility.setWanted(new Set(['a', 'b']), new Set(['b']));
     expect(shown()).toEqual(['b']);
+  });
+
+  it('lets an occluded label neither crowd others nor lose its own turn', () => {
+    const { visibility, occluded, shown, moveTo } = createHarness(['a', 'b']);
+    moveTo('a', CENTRE_PX);
+    moveTo('b', CENTRE_PX + 20);
+    visibility.setWanted(new Set(['a', 'b']), new Set());
+    expect(shown()).toEqual(['a']);
+
+    occluded.add('a');
+    visibility.update();
+    expect(shown()).toEqual(['a', 'b']);
+
+    occluded.delete('a');
+    visibility.update();
+    expect(shown()).toEqual(['a']);
   });
 
   it('hides labels whose anchor or a parent is hidden', () => {

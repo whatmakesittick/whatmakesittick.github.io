@@ -17,9 +17,10 @@ at `/<slug>/`.
 | `src/core/locales/*.json` | Shell strings only: controls, footer, header chrome, keyboard, catalogue        |
 | `explainers/<slug>/`      | One folder per explainer, see "Explainer package"                               |
 | `vite/`                   | The `explainerPages` plugin: manifests, language pages, crawl files, catalogue  |
+| `e2e/`                    | Browser smoke test run by Playwright against the production build               |
 | `public/`                 | Site-wide static files: favicon, icons, web manifest, catalogue link preview    |
 | `scripts/`                | Social images: `social-images.sh` renders `scripts/cards/*.html`                |
-| `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`                               |
+| `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`, `smoke.yml` by hand          |
 
 Generated at build and dev time, never committed: `<slug>/index.html` and
 `<slug>/main.ts` for every explainer, `<lang>/index.html` for the catalogue and
@@ -199,8 +200,8 @@ reading-line sections and the safe area. Then it builds the scene host from the
 explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
 scene, camera rig, label layer, highlighter, materials, textures, stage, lighting
 and `onFrame(update)`. Core owns the frame loop: each frame it ticks the store,
-runs the explainer's frame updates, eases the highlighter and the camera, renders
-and lays out the labels. `onFrame` and `viewport.onResize` return a function that
+runs the explainer's frame updates, eases the highlighter and the camera, hides
+the labels whose anchor is out of sight, renders and lays out the labels. `onFrame` and `viewport.onResize` return a function that
 removes the listener; the unmount that `mountScene` returns calls it.
 
 A choice's `shortcut` cycles through its options. Chapter buttons use
@@ -235,7 +236,32 @@ style with `opacity` below 1 also fades dimmed parts, for a cutaway that must sh
 what sits behind a dimmed wall. The library reads a material's colour, glow and
 opacity once, the first time it sees it: a part that changes its own opacity
 swaps between materials, and a glow the material starts without, such as a
-spark, stays the part's to drive.
+spark, stays the part's to drive. `groupOf(material)` returns the group a material
+was made or registered for.
+
+Every explainer gets label occlusion: the shell hides a label whose anchor sits
+behind solid geometry, so a label never floats over the casing that covers its
+part. `LabelOcclusion` in `labelOcclusion.ts` casts a ray from the camera to the
+anchor of each label the layer shows and hides the label when a solid mesh sits in
+front of the anchor. The ray looks through a material that is transparent with an
+opacity below 1 (a cutaway plate, a cloud, the thermal column, gas, a dimmed part
+that fades), through points, lines and sprites, through the stage, through a mesh
+that opts out of frustum culling because its bounds are not kept up to date, such
+as a thread, and through the labelled part itself. A mesh belongs to the part whose
+group its material has in the material library, the same grouping the highlighter
+dims by, so the explainers mark nothing extra. `OCCLUSION_RULE` in `occlusion.ts`
+keeps a label steady: a blocker must sit 3 % of the anchor's distance in front of
+it to hide the label and 1.5 % to keep it hidden, and the new verdict must hold for
+0.6 s to hide the label and 0.15 s to show it again, so a part that swings past or
+a grazing edge does not make it blink. The pass runs at most every fourth frame
+and only when the camera, a shown anchor or the highlight moved, when the shown
+labels or the anchors change, or while a verdict is pending; a label that starts
+showing gets its verdict before its first frame. `OcclusionRays` builds a bounds
+tree with `three-mesh-bvh` for a mesh of 64 triangles or more the first time a ray
+reaches it, one tree per pass, and leaves the geometry untouched. The layer keeps
+what the policy asked for in `wanted()` and shows it minus the occluded labels;
+`LabelVisibility` reads `isOccluded(id)`, so an occluded label does not crowd out
+a label near it.
 
 The explainer's `scene` options shape the world around it. A mechanism keeps the
 defaults: dark background, grid floor with a contact shadow, an orbit that stops
@@ -492,3 +518,14 @@ Vitest for pure modules, happy-dom for `*.dom.test.ts` files, no comments by
 default, no all-caps text, `data-i18n`, `data-i18n-html` and `data-i18n-attr` for
 copy, tokens in `src/core/style.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
 (`vite/`, `src/core/manifest.ts`) import with explicit `.ts` extensions.
+
+`npm run test:e2e` runs the Playwright smoke test in `e2e/` against `vite preview`
+of `dist/`, so build first and run `npx playwright install chromium` once. Chromium
+draws WebGL in software, so the test sticks to what catches a broken page. At
+desktop and iPhone 13 sizes, the phone at one device pixel per point, it opens every
+explainer in English, walks its chapters and stops the scrubber mid-cycle, then loads
+its last language once at `/<lang>/<slug>/`; one explainer is also opened through an
+old `?lang=` link, and the catalogue in English and in the last site language. It
+fails on page or console errors, untranslated copy, overflow, empty readouts, labels
+over the dock or broken cards. A run takes about three minutes; CI runs it only by
+hand, from the Smoke test workflow, and keeps the report when it fails.

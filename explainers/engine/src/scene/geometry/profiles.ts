@@ -1,4 +1,5 @@
 import { Path, Shape, Vector2 } from 'three';
+import { clamp } from '@core/math';
 import { CURVE_SEGMENTS } from '../constants';
 
 export interface Opening {
@@ -90,7 +91,7 @@ export function roundedCorner(
 ): Vector2[] {
   const toPrevious = previous.clone().sub(corner).normalize();
   const toNext = next.clone().sub(corner).normalize();
-  const halfAngle = Math.acos(Math.min(1, Math.max(-1, toPrevious.dot(toNext)))) / 2;
+  const halfAngle = Math.acos(clamp(toPrevious.dot(toNext), -1, 1)) / 2;
   const tangentDistance = radius / Math.tan(halfAngle);
   const start = corner.clone().addScaledVector(toPrevious, tangentDistance);
   const end = corner.clone().addScaledVector(toNext, tangentDistance);

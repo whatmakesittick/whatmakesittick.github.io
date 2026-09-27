@@ -4,3 +4,5 @@ package-lock.json
 /*/index.html
 /*/main.ts
 /*/*/index.html
+test-results
+playwright-report
