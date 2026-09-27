@@ -164,7 +164,9 @@ export function opticalLayout(
   };
 }
 
-export function stationBounds(layout: OpticalLayout): Record<PhaseId, PathRange> {
+export type StationBounds = Record<PhaseId, PathRange>;
+
+export function stationBounds(layout: OpticalLayout): StationBounds {
   const edges = [
     FILAMENT,
     layout.condenserEntry,
@@ -177,13 +179,13 @@ export function stationBounds(layout: OpticalLayout): Record<PhaseId, PathRange>
   ];
   return Object.fromEntries(
     PHASE_IDS.map((id, index) => [id, { start: edges[index], end: edges[index + 1] }]),
-  ) as Record<PhaseId, PathRange>;
+  ) as StationBounds;
 }
 
-export function axialPosition(position: number, layout: OpticalLayout): number {
+export function axialPosition(position: number, bounds: StationBounds): number {
   const id = phaseAt(position);
   const nominal = PHASE_RANGES[id];
-  const actual = stationBounds(layout)[id];
+  const actual = bounds[id];
   const share = (position - nominal.start) / (nominal.end - nominal.start);
   return lerp(actual.start, actual.end, share);
 }

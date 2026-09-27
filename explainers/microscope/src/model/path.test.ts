@@ -94,10 +94,10 @@ describe('stations', () => {
   });
 
   it('squeezes the specimen stretch to the working distance of each objective', () => {
-    const layout = opticalLayout('x100', 'x10');
-    expect(axialPosition(PHASE_RANGES.specimen.start, layout)).toBeCloseTo(136, 9);
-    expect(axialPosition(PHASE_RANGES.specimen.end, layout)).toBeCloseTo(136.3, 9);
-    expect(axialPosition(PHASE_RANGES.tube.start, layout)).toBeCloseTo(SHOULDER, 9);
+    const bounds = stationBounds(opticalLayout('x100', 'x10'));
+    expect(axialPosition(PHASE_RANGES.specimen.start, bounds)).toBeCloseTo(136, 9);
+    expect(axialPosition(PHASE_RANGES.specimen.end, bounds)).toBeCloseTo(136.3, 9);
+    expect(axialPosition(PHASE_RANGES.tube.start, bounds)).toBeCloseTo(SHOULDER, 9);
   });
 
   it.each(OBJECTIVE_IDS)('runs the specimen stretch inside the light cone of %s', (objective) => {
