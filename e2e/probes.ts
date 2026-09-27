@@ -1,20 +1,10 @@
 import type { Page } from '@playwright/test';
+import type { Box, SceneLabel } from './geometry.ts';
 
-export interface Box {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-}
-
-export interface SceneLabel {
-  text: string;
-  box: Box;
-}
-
-export interface FrameWait {
-  frames: number;
-  milliseconds: number;
+export interface SceneTimeWait {
+  sceneMilliseconds: number;
+  maxFrameMilliseconds: number;
+  limitMilliseconds: number;
 }
 
 interface TranslatedText {
@@ -34,10 +24,6 @@ const KEY_SEPARATOR = ':';
 const READOUT_VALUE = '[data-readout] dd';
 const SCENE_LABEL = '.scene-label';
 const DOCK = '[data-dock]';
-
-export function boxesIntersect(a: Box, b: Box): boolean {
-  return a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
-}
 
 function isUntranslated(value: string | undefined, key: string): boolean {
   const shown = value?.trim() ?? '';
@@ -118,12 +104,22 @@ export function visibleSceneLabels(page: Page): Promise<SceneLabel[]> {
   );
 }
 
-export function waitForFrames(page: Page, wait: FrameWait): Promise<void> {
-  return page.evaluate(async ({ frames, milliseconds }) => {
-    const elapsed = new Promise((resolve) => setTimeout(resolve, milliseconds));
-    for (let frame = 0; frame < frames; frame += 1) {
-      await new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-    await elapsed;
-  }, wait);
+export function waitForSceneTime(page: Page, wait: SceneTimeWait): Promise<boolean> {
+  return page.evaluate(
+    ({ sceneMilliseconds, maxFrameMilliseconds, limitMilliseconds }) =>
+      new Promise<boolean>((resolve) => {
+        const started = performance.now();
+        let last = started;
+        let elapsed = 0;
+        const tick = (now: number) => {
+          elapsed += Math.min(maxFrameMilliseconds, Math.max(0, now - last));
+          last = now;
+          if (elapsed >= sceneMilliseconds) resolve(true);
+          else if (now - started >= limitMilliseconds) resolve(false);
+          else requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      }),
+    wait,
+  );
 }

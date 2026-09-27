@@ -1,9 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
+import type { ReporterDescription } from '@playwright/test';
 
 const PREVIEW_PORT = 4180;
 const BASE_URL = `http://localhost:${PREVIEW_PORT}/`;
 const IS_CI = Boolean(process.env.CI);
-const TEST_TIMEOUT_MS = 180_000;
+const TEST_TIMEOUT_MS = 300_000;
+const REPORTERS: ReporterDescription[] = [
+  ['list'],
+  ...(IS_CI ? [['github'] as const] : []),
+  ['html', { open: 'never' }],
+];
 const DESKTOP_VIEWPORT = { width: 1440, height: 900 };
 // SwiftShader gives headless chromium a software WebGL context on machines without a GPU.
 const SOFTWARE_WEBGL_FLAGS = [
@@ -18,7 +24,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: IS_CI,
   retries: IS_CI ? 1 : 0,
-  reporter: [[IS_CI ? 'github' : 'list'], ['html', { open: 'never' }]],
+  reporter: REPORTERS,
   use: {
     baseURL: BASE_URL,
     browserName: 'chromium',

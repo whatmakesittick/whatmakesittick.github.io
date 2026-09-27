@@ -1,14 +1,9 @@
 import type { Locator, Page } from '@playwright/test';
 import { openCatalogue, openExplainer, scrubTo, showChapter, visibleChapters } from './driver.ts';
 import { expect, test } from './fixtures.ts';
-import {
-  boxesIntersect,
-  dockBox,
-  emptyReadouts,
-  hasHorizontalOverflow,
-  untranslatedCopy,
-} from './probes.ts';
-import type { SceneLabel } from './probes.ts';
+import { boxesIntersect } from './geometry.ts';
+import type { SceneLabel } from './geometry.ts';
+import { dockBox, emptyReadouts, hasHorizontalOverflow, untranslatedCopy } from './probes.ts';
 import { CATALOGUE_LANGUAGES, discoverExplainers } from './site.ts';
 
 const EXPLAINERS = discoverExplainers();
