@@ -1,21 +1,5 @@
 import { t } from './index';
-
-const TEXT_ATTRIBUTE = 'data-i18n';
-const HTML_ATTRIBUTE = 'data-i18n-html';
-const ATTRIBUTES_ATTRIBUTE = 'data-i18n-attr';
-const PAIR_SEPARATOR = ';';
-const KEY_SEPARATOR = ':';
-
-function translateAttributes(element: Element, spec: string): void {
-  spec
-    .split(PAIR_SEPARATOR)
-    .map((pair) => pair.trim())
-    .filter(Boolean)
-    .forEach((pair) => {
-      const [attribute, key] = pair.split(KEY_SEPARATOR).map((part) => part.trim());
-      if (attribute && key) element.setAttribute(attribute, t(key));
-    });
-}
+import { ATTRIBUTES_ATTRIBUTE, HTML_ATTRIBUTE, TEXT_ATTRIBUTE, parseAttributeKeys } from './markup';
 
 export function translateDom(root: ParentNode): void {
   root.querySelectorAll<HTMLElement>(`[${TEXT_ATTRIBUTE}]`).forEach((element) => {
@@ -25,6 +9,8 @@ export function translateDom(root: ParentNode): void {
     element.innerHTML = t(element.getAttribute(HTML_ATTRIBUTE) ?? '');
   });
   root.querySelectorAll<HTMLElement>(`[${ATTRIBUTES_ATTRIBUTE}]`).forEach((element) => {
-    translateAttributes(element, element.getAttribute(ATTRIBUTES_ATTRIBUTE) ?? '');
+    parseAttributeKeys(element.getAttribute(ATTRIBUTES_ATTRIBUTE) ?? '').forEach(
+      ([attribute, key]) => element.setAttribute(attribute, t(key)),
+    );
   });
 }

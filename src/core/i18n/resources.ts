@@ -1,4 +1,4 @@
-import type { LanguageCode } from './languages';
+import type { LanguageCode } from './languages.ts';
 
 export type Dictionary = { [key: string]: string | Dictionary };
 export type LocaleLoader = () => Promise<Dictionary>;

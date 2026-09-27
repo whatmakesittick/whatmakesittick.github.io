@@ -1,49 +1,43 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{lang}}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0b0d10" />
-    <meta
-      name="description"
-      content="How everyday machines work, taken apart in 3D and slowed right down so you can watch every part do its job."
-      data-i18n-attr="content:catalogue.tagline"
-    />
-    <title data-i18n="catalogue.title">What makes it tick</title>
-    <link rel="canonical" href="{{siteUrl}}" />
+    <meta name="description" content="{{description}}" data-i18n-attr="content:catalogue.tagline" />
+    <title data-i18n="catalogue.title">{{title}}</title>
+    <link rel="canonical" href="{{url}}" />
+    {{alternateLinks}}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="{{siteUrl}}" />
+    <meta property="og:url" content="{{url}}" />
     <meta property="og:site_name" content="{{siteName}}" />
-    <meta property="og:title" content="{{siteName}}" />
+    <meta property="og:title" content="{{title}}" data-i18n-attr="content:catalogue.title" />
     <meta
       property="og:description"
-      content="How everyday machines work, taken apart in 3D and slowed right down so you can watch every part do its job."
+      content="{{description}}"
       data-i18n-attr="content:catalogue.tagline"
     />
-    <meta property="og:image" content="{{siteUrl}}social/og-image.png" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta
-      property="og:image:alt"
-      content="Cutaway 3D model of an inline four engine with labelled parts, beside the title What makes it tick"
-    />
-    <meta property="og:locale" content="en_GB" />
+    <meta property="og:image" content="{{image}}" />
+    <meta property="og:image:type" content="{{imageType}}" />
+    <meta property="og:image:width" content="{{imageWidth}}" />
+    <meta property="og:image:height" content="{{imageHeight}}" />
+    <meta property="og:image:alt" content="{{imageAlt}}" />
+    {{localeTags}}
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{{siteName}}" />
+    <meta name="twitter:title" content="{{title}}" data-i18n-attr="content:catalogue.title" />
     <meta
       name="twitter:description"
-      content="How everyday machines work, taken apart in 3D and slowed right down so you can watch every part do its job."
+      content="{{description}}"
       data-i18n-attr="content:catalogue.tagline"
     />
-    <meta name="twitter:image" content="{{siteUrl}}social/og-image.png" />
-    <meta
-      name="twitter:image:alt"
-      content="Cutaway 3D model of an inline four engine with labelled parts, beside the title What makes it tick"
-    />
+    <meta name="twitter:image" content="{{image}}" />
+    <meta name="twitter:image:alt" content="{{imageAlt}}" />
+    <script type="application/ld+json">
+      {{structuredData}}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

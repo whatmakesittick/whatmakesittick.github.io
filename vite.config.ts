@@ -6,6 +6,7 @@ const TEST_ROOTS = ['src', 'explainers/*/src', 'vite'];
 const TEST_SUFFIX = '.test.ts';
 const DOM_TEST_SUFFIX = '.dom.test.ts';
 const testFiles = (suffix: string) => TEST_ROOTS.map((root) => `${root}/**/*${suffix}`);
+const SHARED_MODULES = /[\\/](?:node_modules|src[\\/]core)[\\/]|^\0vite\//;
 
 export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
@@ -20,7 +21,7 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             { name: 'three', test: /node_modules[\\/]three[\\/]/ },
-            { name: 'shared', minShareCount: 2 },
+            { name: 'shared', test: SHARED_MODULES, minShareCount: 2 },
           ],
         },
       },

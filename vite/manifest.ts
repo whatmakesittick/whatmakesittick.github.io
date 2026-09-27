@@ -1,9 +1,12 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { DEFAULT_LANGUAGE, isLanguageCode } from '../src/core/i18n/languages.ts';
+import { DEFAULT_LANGUAGE, LANGUAGES, isLanguageCode } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
+import type { Dictionary } from '../src/core/i18n/resources.ts';
 import { CATEGORIES, META_KEYS } from '../src/core/manifest.ts';
 import type { Category, ExplainerManifest, ExplainerMeta } from '../src/core/manifest.ts';
+import { readPageDates } from './dates.ts';
+import type { PageDates } from './dates.ts';
 
 export const EXPLAINERS_DIRECTORY = 'explainers';
 export const MANIFEST_FILE = 'explainer.json';
@@ -27,7 +30,9 @@ export interface LoadedExplainer {
   directory: string;
   meta: ExplainerMeta;
   metas: Partial<Record<LanguageCode, ExplainerMeta>>;
+  dictionaries: Partial<Record<LanguageCode, Dictionary>>;
   chapters: string;
+  dates: PageDates;
 }
 
 type Fields = Record<string, unknown>;
@@ -82,7 +87,8 @@ function readSocial(fields: Fields, folder: string): ExplainerManifest['social']
 export function reservedSlugs(root: string): ReadonlySet<string> {
   const publicDirectory = join(root, PUBLIC_DIRECTORY);
   const published = existsSync(publicDirectory) ? readdirSync(publicDirectory) : [];
-  return new Set([...PROJECT_FOLDERS, ...published]);
+  const languages = LANGUAGES.map((language) => language.code);
+  return new Set([...PROJECT_FOLDERS, ...languages, ...published]);
 }
 
 export function parseManifest(
@@ -109,7 +115,7 @@ export function parseMeta(value: unknown, folder: string, code: LanguageCode): E
   return Object.fromEntries(entries) as ExplainerMeta;
 }
 
-function readJson(file: string): unknown {
+export function readJson(file: string): unknown {
   try {
     return JSON.parse(readFileSync(file, 'utf8'));
   } catch (error) {
@@ -142,18 +148,20 @@ function loadExplainer(
   const manifest = parseManifest(readJson(join(directory, MANIFEST_FILE)), folder, reserved);
   const missing = requiredFiles(manifest, directory).find((file) => !existsSync(file));
   if (missing) fail(folder, `missing file ${missing}`);
+  const dictionaries = Object.fromEntries(
+    manifest.locales.map((code) => [code, readJson(localeFile(directory, code))]),
+  ) as Record<LanguageCode, Dictionary>;
   const metas = Object.fromEntries(
-    manifest.locales.map((code) => [
-      code,
-      parseMeta(readJson(localeFile(directory, code)), folder, code),
-    ]),
+    manifest.locales.map((code) => [code, parseMeta(dictionaries[code], folder, code)]),
   ) as Record<LanguageCode, ExplainerMeta>;
   return {
     manifest,
     directory,
     meta: metas[DEFAULT_LANGUAGE],
     metas,
+    dictionaries,
     chapters: readFileSync(join(directory, manifest.chapters), 'utf8'),
+    dates: readPageDates(directory),
   };
 }
 

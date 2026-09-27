@@ -3,10 +3,15 @@ import {
   LANGUAGE_QUERY_KEY,
   currentLanguage,
   onLanguageChanged,
+  preferredLanguages,
+  rememberLanguage,
   setLanguage,
 } from '../i18n';
 import type { LanguageCode } from '../i18n';
 import { translateDom } from '../i18n/dom';
+import { languageUrl, pathFromBase } from '../i18n/paths';
+import { languagePageToOpen } from '../i18n/redirect';
+import type { Visit } from '../i18n/redirect';
 import { html, queryAll } from './dom';
 import { parseOption } from './parse';
 
@@ -19,10 +24,36 @@ function languageOptions(): HTMLOptionElement[] {
   );
 }
 
-function bindSelect(select: HTMLSelectElement): void {
+function languagePageUrl(code: LanguageCode): string {
+  return languageUrl(window.location.href, import.meta.env.BASE_URL, code);
+}
+
+function openLanguagePage(code: LanguageCode): void {
+  rememberLanguage(code);
+  window.location.assign(languagePageUrl(code));
+}
+
+function currentVisit(pageLanguages: readonly LanguageCode[]): Visit {
+  const { pathname, search } = window.location;
+  const path = pathFromBase(pathname, import.meta.env.BASE_URL);
+  return { path, search, pageLanguages, ...preferredLanguages() };
+}
+
+export function openPreferredLanguagePage(pageLanguages: readonly LanguageCode[]): boolean {
+  const code = languagePageToOpen(currentVisit(pageLanguages));
+  if (code) window.location.replace(languagePageUrl(code));
+  return code !== undefined;
+}
+
+function chooseLanguage(code: LanguageCode, pageLanguages: readonly LanguageCode[]): void {
+  if (pageLanguages.includes(code)) openLanguagePage(code);
+  else void setLanguage(code);
+}
+
+function bindSelect(select: HTMLSelectElement, pageLanguages: readonly LanguageCode[]): void {
   select.replaceChildren(...languageOptions());
   select.addEventListener('change', () => {
-    void setLanguage(parseOption(select.value, LANGUAGE_CODES));
+    chooseLanguage(parseOption(select.value, LANGUAGE_CODES), pageLanguages);
   });
 }
 
@@ -40,9 +71,9 @@ function applyLanguage(root: Document, selects: HTMLSelectElement[], code: Langu
   syncQueryString(code);
 }
 
-export function mountLanguage(root: Document): void {
+export function mountLanguage(root: Document, pageLanguages: readonly LanguageCode[]): void {
   const selects = queryAll<HTMLSelectElement>(root, SELECT_SELECTOR);
-  selects.forEach(bindSelect);
+  selects.forEach((select) => bindSelect(select, pageLanguages));
   applyLanguage(root, selects, currentLanguage());
   onLanguageChanged((code) => applyLanguage(root, selects, code));
 }

@@ -1,7 +1,7 @@
 import './style.css';
 import './scene/scene.css';
 import type { Explainer, ExplainerStore, Playback } from './explainer';
-import { initI18n } from './i18n';
+import { initI18n, shippedLanguages } from './i18n';
 import type { LocaleLoaders } from './i18n';
 import { createSceneHost } from './scene/shell';
 import { mountActions } from './ui/actions';
@@ -9,7 +9,7 @@ import { mountDock } from './ui/dock';
 import { requireElement } from './ui/dom';
 import { mountFooter } from './ui/footer';
 import { mountKeyboard } from './ui/keyboard';
-import { mountLanguage } from './ui/language';
+import { mountLanguage, openPreferredLanguagePage } from './ui/language';
 import { respectReducedMotion } from './ui/motion';
 import { mountReadouts } from './ui/readouts';
 import { mountSafeArea } from './ui/safeArea';
@@ -41,11 +41,13 @@ export async function mountExplainer<S extends Playback>(
   locales: LocaleLoaders,
 ): Promise<() => void> {
   await initI18n(locales);
+  const languages = shippedLanguages(locales);
+  if (openPreferredLanguagePage(languages)) return () => {};
   const store = explainer.createStore();
   respectReducedMotion(store);
   mountDock(document, store, explainer);
   mountReadouts(document, store, explainer.readouts);
-  mountLanguage(document);
+  mountLanguage(document, languages);
   mountFooter(document, TITLE_KEY);
   explainer.mountUi?.(document, store);
   mountActions(document, store, explainer.actions);

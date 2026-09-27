@@ -22,3 +22,8 @@ export const DEFAULT_LANGUAGE: LanguageCode = 'en';
 export function isLanguageCode(code: string): code is LanguageCode {
   return LANGUAGES.some((language) => language.code === code);
 }
+
+export function baseLanguage(code: string): LanguageCode | undefined {
+  const [base] = code.split('-');
+  return isLanguageCode(base) ? base : undefined;
+}
