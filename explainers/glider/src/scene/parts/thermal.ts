@@ -1,6 +1,7 @@
 import { Color, CylinderGeometry, Group, Object3D } from 'three';
 import type { BufferGeometry } from 'three';
 import { FULL_TURN } from '@core/math';
+import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { createPointMaterial, PointCloud } from '@core/scene/pointCloud';
 import { FIELD, THERMAL_CIRCLE, thermalAxisX } from '../../model';
 import {
@@ -68,12 +69,12 @@ export class ThermalPart {
   private readonly particles: Particle[];
 
   constructor(context: PartContext) {
-    const column = partMesh(context, columnGeometry(), 'thermal', 'column');
+    const column = partMesh(context, columnGeometry(), UNDIMMED_GROUP, 'column');
     column.renderOrder = RENDER_ORDER.column;
     const material = context.tracker.track(
       createPointMaterial(context.textures.dot, PARTICLES.thermal.size),
     );
-    context.materials.register('thermal', material);
+    context.materials.register(UNDIMMED_GROUP, material);
     this.air = context.tracker.track(
       new PointCloud(PARTICLES.thermal.count, material, RENDER_ORDER.particles),
     );
