@@ -1,3 +1,4 @@
+import { clamp } from '@core/math';
 import {
   CYCLE_DEGREES,
   FIRING_TDC,
@@ -114,7 +115,7 @@ function fill(angle: number): number {
 function compression(angle: number, spec: EngineSpec): number {
   if (!isInClosedPhase(angle, spec)) return 0;
   const normalized = (motoredPressure(angle, spec) - 1) / (peakMotoredPressure(spec) - 1);
-  return Math.min(1, Math.max(0, normalized));
+  return clamp(normalized, 0, 1);
 }
 
 function phase(angle: number, spec: EngineSpec, heatLevel: number): GasPhase {

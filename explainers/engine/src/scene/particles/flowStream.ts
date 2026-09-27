@@ -1,5 +1,6 @@
 import { Vector3 } from 'three';
 import type { Color, PointsMaterial } from 'three';
+import { smoothstep } from '@core/math';
 import { PointCloud } from '@core/scene/pointCloud';
 import { FLOW, PORT, RENDER_ORDER } from '../constants';
 import type { ValveDimensions } from '../dimensions';
@@ -29,11 +30,6 @@ const scratch = new Vector3();
 
 function randomSigned(): number {
   return Math.random() * 2 - 1;
-}
-
-function smoothstep(edge0: number, edge1: number, value: number): number {
-  const t = Math.min(1, Math.max(0, (value - edge0) / (edge1 - edge0)));
-  return t * t * (3 - 2 * t);
 }
 
 function wrap(value: number): number {
@@ -92,7 +88,7 @@ export class FlowStream {
 
   private fade(progress: number): number {
     const fraction = progress / TOTAL;
-    return smoothstep(0, FLOW.fadeIn, fraction) * (1 - smoothstep(1 - FLOW.fadeOut, 1, fraction));
+    return smoothstep(fraction, 0, FLOW.fadeIn) * (1 - smoothstep(fraction, 1 - FLOW.fadeOut, 1));
   }
 
   private place(particle: Particle, chamberDepth: number): void {
