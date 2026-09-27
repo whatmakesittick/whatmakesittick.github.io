@@ -1,39 +1,19 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { basename, join, relative, resolve, sep } from 'node:path';
+import { join, relative, resolve, sep } from 'node:path';
 import sirv from 'sirv';
 import type { Plugin, ViteDevServer } from 'vite';
-import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY, loadExplainers } from './manifest.ts';
+import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
-import { renderCatalogueModule, renderEntry, renderPage, siteValues } from './page.ts';
-import { prunePageFolders, writePageFolder } from './pageFolders.ts';
-import { REPOSITORY_URL } from './site.ts';
-import { expandPartials, fillTemplate } from './template.ts';
-import type { TemplateValues } from './template.ts';
+import { renderCatalogueModule } from './page.ts';
+import { CORE_DIRECTORY, SITE_ENTRY, generateSite, renderSiteEntry } from './sitePages.ts';
+import type { Site } from './sitePages.ts';
 
-const CORE_DIRECTORY = join('src', 'core');
-const PAGE_TEMPLATE = join(CORE_DIRECTORY, 'page.html');
-const PARTIALS_DIRECTORY = join(CORE_DIRECTORY, 'partials');
-const PARTIAL_EXTENSION = '.html';
-const SITE_ENTRY = 'index.html';
-const PAGE_ENTRY = 'main.ts';
 const WATCHED_DIRECTORIES = [EXPLAINERS_DIRECTORY, CORE_DIRECTORY];
 const PAGE_SOURCES = /(?:explainer\.json|\.html|locales[\\/]\w+\.json)$/;
 const MOVED_PERMANENTLY = 301;
 const PLUGIN_NAME = 'explainer-pages';
 const CATALOGUE_MODULE = 'virtual:explainer-catalogue';
 const RESOLVED_CATALOGUE_MODULE = `\0${CATALOGUE_MODULE}`;
-
-function readPartials(root: string): TemplateValues {
-  const directory = join(root, PARTIALS_DIRECTORY);
-  return Object.fromEntries(
-    readdirSync(directory)
-      .filter((file) => file.endsWith(PARTIAL_EXTENSION))
-      .map((file) => [
-        basename(file, PARTIAL_EXTENSION),
-        readFileSync(join(directory, file), 'utf8'),
-      ]),
-  );
-}
 
 function listFiles(directory: string): string[] {
   if (!existsSync(directory)) return [];
@@ -42,29 +22,10 @@ function listFiles(directory: string): string[] {
     .map((entry) => join(entry.parentPath, entry.name));
 }
 
-function generatePages(root: string): LoadedExplainer[] {
-  const explainers = loadExplainers(root);
-  const template = readFileSync(join(root, PAGE_TEMPLATE), 'utf8');
-  const partials = readPartials(root);
-  for (const explainer of explainers) {
-    writePageFolder(root, explainer.manifest.slug, {
-      [SITE_ENTRY]: renderPage(template, partials, explainer),
-      [PAGE_ENTRY]: renderEntry(explainer.manifest),
-    });
-  }
-  prunePageFolders(
-    root,
-    explainers.map(({ manifest }) => manifest.slug),
-  );
-  return explainers;
-}
-
-function rollupInputs(root: string, explainers: LoadedExplainer[]): Record<string, string> {
+function rollupInputs(root: string, folders: readonly string[]): Record<string, string> {
   return {
     main: join(root, SITE_ENTRY),
-    ...Object.fromEntries(
-      explainers.map(({ manifest }) => [manifest.slug, join(root, manifest.slug, SITE_ENTRY)]),
-    ),
+    ...Object.fromEntries(folders.map((folder) => [folder, join(root, folder, SITE_ENTRY)])),
   };
 }
 
@@ -76,13 +37,14 @@ function isWatchedPath(root: string, path: string): boolean {
 }
 
 function isPageSource(root: string, file: string): boolean {
+  if (resolve(file) === join(root, SITE_ENTRY)) return true;
   return isWatchedPath(root, file) && PAGE_SOURCES.test(file);
 }
 
-function redirectToTrailingSlash(server: ViteDevServer, slugs: () => string[]): void {
+function redirectToTrailingSlash(server: ViteDevServer, folders: () => string[]): void {
   server.middlewares.use((request, response, next) => {
     const [path, query] = (request.url ?? '').split('?');
-    const isPage = slugs().some((slug) => path === `${server.config.base}${slug}`);
+    const isPage = folders().some((folder) => path === `${server.config.base}${folder}`);
     if (!isPage) return next();
     response.statusCode = MOVED_PERMANENTLY;
     response.setHeader('Location', `${path}/${query ? `?${query}` : ''}`);
@@ -118,7 +80,7 @@ function servePublicFiles(server: ViteDevServer, explainers: LoadedExplainer[]):
 
 export function explainerPages(): Plugin {
   let root = process.cwd();
-  let explainers: LoadedExplainer[] = [];
+  let site: Site | undefined;
 
   return {
     name: PLUGIN_NAME,
@@ -126,8 +88,8 @@ export function explainerPages(): Plugin {
     config(config, env) {
       root = resolve(config.root ?? process.cwd());
       if (env.mode === 'test' || env.isPreview) return;
-      explainers = generatePages(root);
-      return { build: { rolldownOptions: { input: rollupInputs(root, explainers) } } };
+      site = generateSite(root);
+      return { build: { rolldownOptions: { input: rollupInputs(root, site.folders) } } };
     },
 
     resolveId(id) {
@@ -135,23 +97,24 @@ export function explainerPages(): Plugin {
     },
 
     load(id) {
-      return id === RESOLVED_CATALOGUE_MODULE ? renderCatalogueModule(explainers) : undefined;
+      if (id !== RESOLVED_CATALOGUE_MODULE) return undefined;
+      return renderCatalogueModule(site?.explainers ?? []);
     },
 
     transformIndexHtml: {
       order: 'pre',
       handler(html, context) {
-        if (resolve(context.filename) !== join(root, SITE_ENTRY)) return html;
-        return fillTemplate(expandPartials(html, readPartials(root)), siteValues(REPOSITORY_URL));
+        const isSiteEntry = resolve(context.filename) === join(root, SITE_ENTRY);
+        return isSiteEntry && site ? renderSiteEntry(html, site.sources) : html;
       },
     },
 
     configureServer(server) {
-      redirectToTrailingSlash(server, () => explainers.map(({ manifest }) => manifest.slug));
-      servePublicFiles(server, explainers);
+      redirectToTrailingSlash(server, () => site?.folders ?? []);
+      servePublicFiles(server, site?.explainers ?? []);
       const regenerate = () => {
         try {
-          explainers = generatePages(root);
+          site = generateSite(root);
         } catch (error) {
           reportFailure(server, error);
           return;
@@ -171,7 +134,7 @@ export function explainerPages(): Plugin {
     },
 
     generateBundle() {
-      for (const { manifest, directory } of explainers) {
+      for (const { manifest, directory } of site?.explainers ?? []) {
         const publicDirectory = join(directory, PUBLIC_DIRECTORY);
         for (const file of listFiles(publicDirectory)) {
           const path = relative(publicDirectory, file).split(sep).join('/');

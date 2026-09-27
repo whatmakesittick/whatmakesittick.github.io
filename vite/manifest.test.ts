@@ -81,6 +81,10 @@ describe('reservedSlugs', () => {
       expect.arrayContaining(['src', 'social', 'favicon.svg']),
     );
   });
+
+  it('reserves every language code for the language folders', () => {
+    expect([...reservedSlugs(createRoot())]).toEqual(expect.arrayContaining(['uk', 'ja']));
+  });
 });
 
 describe('loadExplainers', () => {

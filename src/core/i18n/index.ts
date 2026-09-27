@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import en from '../locales/en.json';
+import { NAMESPACE, TRANSLATION_OPTIONS } from './config';
 import { DEFAULT_LANGUAGE, LANGUAGES, isLanguageCode } from './languages';
 import type { LanguageCode } from './languages';
 import { createDictionaryLoader, loadersByLanguage } from './loader';
@@ -11,7 +12,6 @@ export { DEFAULT_LANGUAGE, LANGUAGES } from './languages';
 export type { Language, LanguageCode } from './languages';
 export type { Dictionary, LocaleLoader, LocaleLoaders } from './resources';
 
-const NAMESPACE = 'translation';
 const STORAGE_KEY = 'language';
 export const LANGUAGE_QUERY_KEY = 'lang';
 
@@ -36,8 +36,8 @@ export async function initI18n(locales: LocaleLoaders = {}): Promise<void> {
   loadDictionary = createDictionaryLoader([CORE_LOCALES, locales]);
   const fallback = await loadDictionary(DEFAULT_LANGUAGE);
   await i18next.use(LanguageDetector).init({
+    ...TRANSLATION_OPTIONS,
     resources: { [DEFAULT_LANGUAGE]: { [NAMESPACE]: fallback } },
-    fallbackLng: DEFAULT_LANGUAGE,
     supportedLngs: LANGUAGES.map((language) => language.code),
     nonExplicitSupportedLngs: true,
     detection: {
@@ -46,7 +46,6 @@ export async function initI18n(locales: LocaleLoaders = {}): Promise<void> {
       lookupLocalStorage: STORAGE_KEY,
       caches: ['localStorage'],
     },
-    interpolation: { escapeValue: false },
   });
   await setLanguage(currentLanguage());
 }

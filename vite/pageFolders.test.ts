@@ -36,6 +36,13 @@ describe('writePageFolder', () => {
     expect(existsSync(join(root, 'engine', MARKER_FILE))).toBe(true);
   });
 
+  it('writes a nested page inside a generated language folder', () => {
+    writePageFolder(root, 'uk/engine', { 'index.html': '<html></html>' });
+    writePageFolder(root, 'uk', { 'index.html': '<html></html>' });
+    expect(existsSync(join(root, 'uk', 'engine', MARKER_FILE))).toBe(true);
+    expect(existsSync(join(root, 'uk', MARKER_FILE))).toBe(true);
+  });
+
   it('refuses a folder it did not create', () => {
     const directory = createFolder('docs', { 'guide.md': '# Guide' });
     expect(() => writePageFolder(root, 'docs', files)).toThrow('Cannot generate docs/');
@@ -50,6 +57,18 @@ describe('prunePageFolders', () => {
     prunePageFolders(root, ['engine']);
     expect(existsSync(join(root, 'engine'))).toBe(true);
     expect(existsSync(join(root, 'gearbox'))).toBe(false);
+  });
+
+  it('removes nested generated folders that are no longer listed', () => {
+    writePageFolder(root, 'uk', files);
+    writePageFolder(root, 'uk/engine', files);
+    writePageFolder(root, 'uk/gearbox', files);
+    writePageFolder(root, 'de', files);
+    writePageFolder(root, 'de/engine', files);
+    prunePageFolders(root, ['uk', 'uk/engine']);
+    expect(existsSync(join(root, 'uk', 'engine'))).toBe(true);
+    expect(existsSync(join(root, 'uk', 'gearbox'))).toBe(false);
+    expect(existsSync(join(root, 'de'))).toBe(false);
   });
 
   it('keeps folders without a marker', () => {
