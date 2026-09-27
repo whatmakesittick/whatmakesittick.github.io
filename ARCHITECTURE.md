@@ -46,7 +46,7 @@ explainers/engine/
   src/model/          pure simulation, unit tested
   src/state/          store extension and presets
   src/timeline.ts     the Timeline: cycle, loop, phases, speed range, formatting
-  src/scene/          geometry, assembly or diorama, controller, camera views, store bindings
+  src/scene/          geometry, assembly or diorama, controller, regions, camera view table
   src/ui/             dock choices and toggles, readouts, chapter actions, widgets
   public/             cover image, social card and other static files, served under /<slug>/
 ```
@@ -131,11 +131,22 @@ interface Preset {
   startAt?: number; // seeks there and keeps the playing state
 }
 
+interface ScenePreset extends Preset {
+  camera: string; // camera view id
+  highlight: string[]; // parts the highlighter keeps bright
+  labels: string[]; // parts labelled in this chapter
+}
+
 interface SceneOptions {
   background?: string; // CSS colour, THEME.background by default
   fog?: { color: string; near: number; far: number };
   stage?: boolean; // grid floor and contact shadow, true by default
-  camera?: { near?: number; far?: number; maxPolarAngle?: number }; // planes, orbit limit in radians
+  camera?: {
+    near?: number; // camera planes
+    far?: number;
+    maxPolarAngle?: number; // orbit limit in radians
+    distance?: { min?: number; max?: number }; // zoom limits in world units
+  };
 }
 
 interface Explainer<S extends Playback = Playback> {
@@ -156,6 +167,9 @@ interface Explainer<S extends Playback = Playback> {
   mountUi?(root: Document, store: ExplainerStore<S>): void;
 }
 ```
+
+An explainer's presets extend `ScenePreset` from `src/core/scene/presetBinder.ts`,
+which the preset binder reads (see "Scene toolkit").
 
 `Playback` is `PlaybackState & PlaybackActions`. `createExplainerStore` in
 `src/core/store.ts` implements every playback action generically from the
@@ -215,14 +229,18 @@ defaults: dark background, grid floor with a contact shadow, an orbit that stops
 level with the target. A diorama such as a glider over terrain turns the stage
 off, sets a sky colour and fog, widens the camera planes and raises
 `maxPolarAngle` past a right angle so the camera can dip below the target and
-look up.
+look up. The zoom range comes from the bounds a controller gives
+`rig.setBounds`: from 0.3 of their radius to 1.8 times the distance that fits
+them. `camera.distance` sets `min` or `max` in world units instead; the sewing
+machine and the glider use it.
 
-| Camera call      | Effect                                                                          |
-| ---------------- | ------------------------------------------------------------------------------- |
-| `jumpTo(pose)`   | Places the camera at once                                                       |
-| `tweenTo(pose)`  | Eases the camera there; any orbit or zoom by the user cancels the tween         |
-| `follow(anchor)` | Every frame moves the camera, its target and any tween by the anchor's movement |
-| `follow(null)`   | Stops following; the camera stays where it is                                   |
+| Camera call                 | Effect                                                                          |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| `jumpTo(pose)`              | Places the camera at once                                                       |
+| `tweenTo(pose)`             | Eases the camera there; any orbit or zoom by the user cancels the tween         |
+| `follow(anchor)`            | Every frame moves the camera, its target and any tween by the anchor's movement |
+| `follow(null)`              | Stops following; the camera stays where it is                                   |
+| `setDistanceLimits(limits)` | Zoom limits for one view over the scene ones; `{}` restores them                |
 
 Following keeps the framing fixed relative to a moving object while the user can
 still orbit and zoom. A pose passed to `jumpTo` or `tweenTo` counts from the
@@ -231,6 +249,41 @@ current position. `PointCloud` is a fixed-size buffer of coloured points drawn
 with `createPointMaterial`: set points with `setPoint` and `setColor`, then call
 `commit` once per frame. `dispose` frees its buffers; the material stays the
 caller's to dispose.
+
+`CameraViews` in `cameraViews.ts` turns a table of views into camera moves. A
+`FramedView` fits a region along a direction with a margin; the direction may be
+a record of variants, one per engine layout. A `CustomView` computes its own
+pose, like the glider's chase view. `follow: true` makes the camera follow the
+anchor the controller gives, and `distance` sets zoom limits while the view is
+current. `region(id)` returns `null` while nothing is built, and framing then
+leaves the camera alone. `regions.ts` writes a region as a `RegionSpec` of `x`,
+`y` and `z` extents: `regionFromSpec` turns one into a box, and `localRegions`
+looks a region up by id and moves it into its root's space.
+
+A scene binds its presets to the store with `bindPresets(shell, store, options)`
+from `presetBinder.ts`. It presents the first preset at once, eases to each new
+one, reframes the current view when the reader resets the camera, and on a view
+change calls `onView` and updates the labels: every part while `view.labels` is
+on, the preset's labels otherwise, and those stay pinned either way.
+
+| Option      | Role                                                                    |
+| ----------- | ----------------------------------------------------------------------- |
+| `presets`   | The explainer's `ScenePreset` records                                   |
+| `views`     | The controller's `CameraViews`                                          |
+| `parts`     | Every label id                                                          |
+| `labels`    | Optional label policy; by default the label layer shows the wanted ones |
+| `variant`   | Optional variant of the view directions, the engine's layout            |
+| `prepare`   | Optional step before framing, so a `startAt` preset frames a fresh pose |
+| `onView`    | Applies the view toggles to the scene                                   |
+| `highlight` | Optional parts to highlight in place of the preset's                    |
+
+`createLabelVisibility(shell, priority)` wraps `LabelVisibility` as a label
+policy: it follows the viewport size, updates every frame and `dispose` removes
+both listeners. It reads the anchors from the label layer, whose `anchors()`
+returns the ones the last `attach` used. What only one explainer binds stays in
+its `bindings.ts`: the engine rebuilds on a new layout and applies the
+compression ratio, subscribed before `bindPresets` so a rebuilt engine is framed;
+the glider swaps its glider type.
 
 ## UI toolkit
 
