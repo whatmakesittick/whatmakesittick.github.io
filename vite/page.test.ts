@@ -73,15 +73,17 @@ describe('renderPage', () => {
 });
 
 describe('renderEntry', () => {
-  it('mounts the explainer with every shipped locale', () => {
+  it('bundles the English locale and loads every other shipped locale on demand', () => {
     expect(renderEntry(explainer.manifest)).toBe(
       [
         "import { mountExplainer } from '@core/mount';",
         "import explainer from '../explainers/thing/src/index.ts';",
         "import en from '../explainers/thing/locales/en.json';",
-        "import uk from '../explainers/thing/locales/uk.json';",
         '',
-        'await mountExplainer(explainer, { en, uk });',
+        'await mountExplainer(explainer, {',
+        '  en: () => Promise.resolve(en),',
+        "  uk: () => import('../explainers/thing/locales/uk.json').then((module) => module.default),",
+        '});',
         '',
       ].join('\n'),
     );

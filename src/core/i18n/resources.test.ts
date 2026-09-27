@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mergeBundles, mergeDictionaries } from './resources';
+import { mergeDictionaries } from './resources';
 
 describe('mergeDictionaries', () => {
   it('merges nested keys and lets the override win', () => {
@@ -16,12 +16,5 @@ describe('mergeDictionaries', () => {
     const base = { controls: { play: 'Play' } };
     mergeDictionaries(base, { controls: { play: 'Start' } });
     expect(base.controls.play).toBe('Play');
-  });
-});
-
-describe('mergeBundles', () => {
-  it('keeps languages that only one side ships', () => {
-    const merged = mergeBundles({ en: { a: 'A' }, uk: { a: 'А' } }, { en: { b: 'B' } });
-    expect(merged).toEqual({ en: { a: 'A', b: 'B' }, uk: { a: 'А' } });
   });
 });
