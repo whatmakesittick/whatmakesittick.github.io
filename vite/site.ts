@@ -9,7 +9,7 @@ export const AUTHOR = { name: 'Vitalii Elenhaupt', url: 'https://github.com/veel
 export const SOCIAL_IMAGE_SIZE = { width: 1200, height: 630 } as const;
 export const SITE_SOCIAL = {
   image: 'social/og-image.png',
-  alt: 'Cutaway 3D model of an inline four engine with labelled parts, beside the title What makes it tick',
+  alt: 'Four 3D models with labelled parts in a grid, a cutaway inline four engine, a glider over a green ridge, a helicopter and a sewing machine, beside the title What makes it tick',
 } as const;
 
 export function siteUrl(path = ''): string {

@@ -30,31 +30,57 @@
         -webkit-font-smoothing: antialiased;
       }
 
-      .shot {
+      .covers {
         position: absolute;
-        top: 0;
-        right: 0;
-        width: 640px;
-        height: 630px;
+        top: 117px;
+        right: 40px;
+        display: grid;
+        grid-template-columns: repeat(2, 256px);
+        grid-auto-rows: 192px;
+        gap: 12px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .cover {
+        position: relative;
         overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 0.12);
+        border-radius: 14px;
+        background: var(--background);
+        box-shadow: 0 18px 40px rgb(0 0 0 / 0.45);
       }
 
-      .shot img {
+      .cover img {
         position: absolute;
-        top: -51px;
-        left: 45px;
-        width: 862px;
+        top: var(--top);
+        left: var(--left);
+        width: var(--width);
       }
 
-      .shot::after {
+      .cover.faded::after {
         content: '';
         position: absolute;
         inset: 0;
-        background:
-          radial-gradient(ellipse 160px 300px at 100% 0, var(--background) 75%, transparent),
-          linear-gradient(to right, var(--background) 20px, transparent 90px),
-          linear-gradient(to top, var(--background), transparent 40px),
-          linear-gradient(to bottom, var(--background), transparent 30px);
+        background: radial-gradient(
+          ellipse 90px 70px at 100% 0,
+          var(--background) 60%,
+          transparent
+        );
+      }
+
+      .cover span {
+        position: absolute;
+        z-index: 1;
+        bottom: 10px;
+        left: 10px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        color: var(--text);
+        background: rgb(11 13 16 / 0.78);
+        font-size: 14px;
+        font-weight: 500;
       }
 
       .copy {
@@ -134,9 +160,24 @@
     </style>
   </head>
   <body>
-    <div class="shot">
-      <img src="../../explainers/engine/public/cover.webp" alt="" />
-    </div>
+    <ul class="covers">
+      <li class="cover faded" style="--width: 341px; --left: 0; --top: -46px">
+        <img src="../../explainers/engine/public/cover.webp" alt="" />
+        <span>Engine</span>
+      </li>
+      <li class="cover" style="--width: 459px; --left: -89px; --top: -44px">
+        <img src="../../explainers/glider/public/cover.webp" alt="" />
+        <span>Glider</span>
+      </li>
+      <li class="cover" style="--width: 373px; --left: 0; --top: -24px">
+        <img src="../../explainers/helicopter/public/cover.webp" alt="" />
+        <span>Helicopter</span>
+      </li>
+      <li class="cover" style="--width: 341px; --left: -7px; --top: -48px">
+        <img src="../../explainers/sewing-machine/public/cover.webp" alt="" />
+        <span>Sewing machine</span>
+      </li>
+    </ul>
     <main class="copy">
       <p class="eyebrow">
         <img src="../../public/favicon.svg" alt="" />
@@ -149,7 +190,7 @@
         <li>Drivetrain</li>
         <li class="live">Aircraft</li>
         <li>Electrical</li>
-        <li>Home</li>
+        <li class="live">Home</li>
         <li>Tools</li>
       </ul>
     </main>
