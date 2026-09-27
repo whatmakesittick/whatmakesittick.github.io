@@ -1,4 +1,4 @@
-const FULL_TURN = Math.PI * 2;
+import { FULL_TURN } from '@core/math';
 
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));

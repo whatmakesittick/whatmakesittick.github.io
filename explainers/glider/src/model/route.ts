@@ -1,4 +1,4 @@
-import { toRadians } from '@core/math';
+import { FULL_TURN, toRadians } from '@core/math';
 import { wrapAngle } from './math';
 import { Route, arc, line, rampedShare } from './path';
 import type { Pose } from './path';
@@ -27,7 +27,6 @@ const BANK_WINDOW_SECONDS = 4;
 const GRAVITY = 9.81;
 const LEVEL_PITCH_SPEED = 90;
 const FAST_PITCH = { speed: 200, pitch: toRadians(-6) } as const;
-const FULL_TURN = Math.PI * 2;
 const ENTRY_ANGLE = Math.PI / 2;
 const ORIGIN: Pose = { x: 0, z: 0, heading: 0 };
 

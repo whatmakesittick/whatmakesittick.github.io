@@ -3,9 +3,10 @@ import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../theme';
 import { COLUMN } from './constants';
 
-const PAINT_GLOW = 0.35;
+const SOFT_GLOW = 0.35;
+const WIND_GLOW = 0.3;
 const ARROW_GLOW = 0.45;
-const CLOUD_GLOW = 0.35;
+const DRAG_TONE = '#f5c451';
 
 export const FINISHES = {
   gelcoat: { color: '#f4f2ec', metalness: 0.05, roughness: 0.3 },
@@ -15,12 +16,12 @@ export const FINISHES = {
     metalness: 0.2,
     roughness: 0.45,
     emissive: THEME.accent,
-    emissiveIntensity: PAINT_GLOW,
+    emissiveIntensity: SOFT_GLOW,
   },
   cumulus: {
     color: '#fbf8f2',
     emissive: '#d9d5cc',
-    emissiveIntensity: CLOUD_GLOW,
+    emissiveIntensity: SOFT_GLOW,
     metalness: 0,
     roughness: 0.95,
     flatShading: true,
@@ -30,7 +31,7 @@ export const FINISHES = {
   column: {
     color: THEME.thermal,
     emissive: THEME.thermal,
-    emissiveIntensity: 0.35,
+    emissiveIntensity: SOFT_GLOW,
     metalness: 0,
     roughness: 1,
     transparent: true,
@@ -43,7 +44,7 @@ export const FINISHES = {
     metalness: 0.1,
     roughness: 0.5,
     emissive: '#9fb7cf',
-    emissiveIntensity: 0.3,
+    emissiveIntensity: WIND_GLOW,
   },
 } as const satisfies Record<string, MaterialFinish>;
 
@@ -52,5 +53,5 @@ export type Finish = keyof typeof FINISHES;
 export const FORCE_FINISHES = {
   lift: { color: THEME.glide, emissive: THEME.glide, emissiveIntensity: ARROW_GLOW },
   weight: { color: THEME.sinking, emissive: THEME.sinking, emissiveIntensity: ARROW_GLOW },
-  drag: { color: '#f5c451', emissive: '#f5c451', emissiveIntensity: ARROW_GLOW },
+  drag: { color: DRAG_TONE, emissive: DRAG_TONE, emissiveIntensity: ARROW_GLOW },
 } as const satisfies Record<string, MaterialFinish>;

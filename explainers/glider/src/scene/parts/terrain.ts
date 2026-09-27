@@ -19,6 +19,7 @@ const FOREST_FROM = 0.04;
 const HASH_SEEDS = { x: 12.9898, z: 78.233, scale: 43758.5453 } as const;
 const RIDGE_LABEL = { x: -34, z: 34, lift: 1.5 } as const;
 const FIELD_LABEL_LIFT = 0.5;
+const UNTINTED = '#ffffff';
 
 const COLORS = {
   grass: new Color(TERRAIN_COLORS.grass),
@@ -137,7 +138,7 @@ function fieldsGeometry(): BufferGeometry {
 function landMaterial(context: PartContext, color?: string): MeshStandardMaterial {
   return context.tracker.track(
     new MeshStandardMaterial({
-      color: color ?? '#ffffff',
+      color: color ?? UNTINTED,
       vertexColors: color === undefined,
       flatShading: true,
       metalness: 0,

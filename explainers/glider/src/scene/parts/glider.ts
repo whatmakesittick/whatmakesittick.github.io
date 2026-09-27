@@ -36,7 +36,7 @@ interface WingGeometry {
 
 const MIRROR = -1;
 const CANOPY_CENTER = Math.PI * 1.5;
-const ATTITUDE_ORDER = 'YZX';
+export const ATTITUDE_ORDER = 'YZX';
 const FUSELAGE_LABEL = { x: 1.6, side: 0.54 } as const;
 
 function bodyGeometry(profile: readonly Vector2[]): BufferGeometry {

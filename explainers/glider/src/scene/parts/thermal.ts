@@ -1,5 +1,6 @@
 import { Color, CylinderGeometry, Group, Object3D } from 'three';
 import type { BufferGeometry } from 'three';
+import { FULL_TURN } from '@core/math';
 import { createPointMaterial, PointCloud } from '@core/scene/pointCloud';
 import { FIELD, THERMAL_CIRCLE, thermalAxisX } from '../../model';
 import {
@@ -24,7 +25,6 @@ const COLUMN_TOP = CLOUD_BASE_Y;
 const DRIFT_PER_UNIT = THERMAL_CIRCLE.driftPerMetre * METRES_PER_UNIT;
 const LABEL_HEIGHT_SHARE = 0.55;
 const RISING = new Color(AIR_TONES.rising);
-const FULL_TURN = Math.PI * 2;
 
 function columnRadius(y: number): number {
   return COLUMN.bottomRadius + (COLUMN.topRadius - COLUMN.bottomRadius) * (y / COLUMN_TOP);

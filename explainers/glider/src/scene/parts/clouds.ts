@@ -1,6 +1,7 @@
 import { CircleGeometry, Group, IcosahedronGeometry, SphereGeometry } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { FULL_TURN } from '@core/math';
 import { CUMULUS_BASE, FIELD, FLIGHT_CYCLE, thermalAxisX } from '../../model';
 import { CLOUD_BASE_Y, CUMULUS, LENTICULAR, ROTOR_CLOUD } from '../constants';
 import { anchorAt, partMesh } from './context';
@@ -13,7 +14,6 @@ export interface CloudAnchors {
 }
 
 const HALF_TURN = Math.PI;
-const FULL_TURN = Math.PI * 2;
 const ROTOR_SEEDS = { angle: 2.399, reach: 0.618 } as const;
 const CHURN_PER_SECOND = (FULL_TURN * ROTOR_CLOUD.turnsPerLoop) / FLIGHT_CYCLE;
 
