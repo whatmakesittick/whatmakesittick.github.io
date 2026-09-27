@@ -8,10 +8,10 @@
   --tone: var(--air);
 }
 
-[data-tendency='descend'] {
+.range-widget__readouts [data-tendency='descend'] {
   color: var(--air);
 }
 
-[data-tendency='climb'] {
+.range-widget__readouts [data-tendency='climb'] {
   color: var(--accent);
 }
