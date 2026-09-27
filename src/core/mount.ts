@@ -23,7 +23,11 @@ function mountScene<S extends Playback>(
   store: ExplainerStore<S>,
   explainer: Explainer<S>,
 ): () => void {
-  const host = createSceneHost(requireElement(root, SCENE_SELECTOR), explainer.parts);
+  const host = createSceneHost(
+    requireElement(root, SCENE_SELECTOR),
+    explainer.parts,
+    explainer.scene,
+  );
   const unmount = explainer.mountScene(host.shell, store);
   host.start((deltaSeconds) => store.getState().tick(deltaSeconds));
   return () => {

@@ -17,19 +17,27 @@ import type { FramingSlopes, ViewportSize } from './lens';
 
 const TARGET_FLOOR_MARGIN = 1;
 
+export interface CameraOptions {
+  near?: number;
+  far?: number;
+  maxPolarAngle?: number;
+}
+
 export class CameraRig {
-  readonly camera = new PerspectiveCamera(CAMERA_FOV, 1, CAMERA_NEAR, CAMERA_FAR);
+  readonly camera: PerspectiveCamera;
   readonly controls: OrbitControls;
   private tween: CameraTween | null = null;
   private floorHeight = -Infinity;
   private boundsRadius = 1;
   private viewport: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
 
-  constructor(domElement: HTMLElement) {
+  constructor(domElement: HTMLElement, options: CameraOptions = {}) {
+    const { near = CAMERA_NEAR, far = CAMERA_FAR, maxPolarAngle = CAMERA_MAX_POLAR } = options;
+    this.camera = new PerspectiveCamera(CAMERA_FOV, 1, near, far);
     this.controls = new OrbitControls(this.camera, domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = CAMERA_DAMPING;
-    this.controls.maxPolarAngle = CAMERA_MAX_POLAR;
+    this.controls.maxPolarAngle = maxPolarAngle;
     this.controls.screenSpacePanning = true;
     this.controls.addEventListener('start', this.cancelTween);
   }

@@ -1,6 +1,6 @@
 import type { Mutate, StoreApi } from 'zustand/vanilla';
 import type { LabelSide } from './scene/labelLayout';
-import type { SceneShell } from './scene/shell';
+import type { SceneOptions, SceneShell } from './scene/shell';
 
 export type ViewFlags = Record<string, boolean>;
 
@@ -135,6 +135,7 @@ export interface Explainer<S extends Playback = Playback> {
   readouts: readonly Readout<S>[];
   actions?: Readonly<Record<string, ChapterAction<S>>>;
   shortcuts?: Readonly<Record<string, (state: S) => void>>;
+  scene?: SceneOptions;
   mountScene(shell: SceneShell, store: ExplainerStore<S>): () => void;
   mountUi?(root: Document, store: ExplainerStore<S>): void;
 }
