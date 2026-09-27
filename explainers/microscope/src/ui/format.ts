@@ -4,6 +4,7 @@ import { phaseAt } from '../model';
 import type { EyepieceId, ObjectiveId, PhaseId } from '../model';
 
 const APERTURE_DIGITS = 2;
+const DETAIL_DIGITS = 2;
 const FINE_FIELD_DIGITS = 2;
 const COARSE_FIELD_DIGITS = 1;
 const FINE_FIELD_BELOW_MM = 1;
@@ -70,6 +71,10 @@ export function formatAperture(aperture: number): string {
 
 export function formatMicrometres(micrometres: number, digits: number): string {
   return t('units.um', { value: formatFixed(micrometres, digits) });
+}
+
+export function formatDetail(micrometres: number): string {
+  return formatMicrometres(micrometres, DETAIL_DIGITS);
 }
 
 export function formatFocus(micrometres: number): string {
