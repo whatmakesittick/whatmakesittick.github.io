@@ -1,5 +1,5 @@
-import { PerspectiveCamera, Sphere } from 'three';
-import type { Box3 } from 'three';
+import { PerspectiveCamera, Sphere, Vector3 } from 'three';
+import type { Box3, Object3D } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
   CAMERA_DAMPING,
@@ -27,6 +27,8 @@ export class CameraRig {
   readonly camera: PerspectiveCamera;
   readonly controls: OrbitControls;
   private tween: CameraTween | null = null;
+  private anchor: Object3D | null = null;
+  private readonly anchorPosition = new Vector3();
   private floorHeight = -Infinity;
   private boundsRadius = 1;
   private viewport: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
@@ -58,19 +60,27 @@ export class CameraRig {
     this.updateDistanceLimits();
   }
 
+  follow(anchor: Object3D | null): void {
+    this.anchor = anchor;
+    this.syncAnchor();
+  }
+
   jumpTo(pose: CameraPose): void {
     this.cancelTween();
     this.apply(pose);
     this.controls.update();
+    this.syncAnchor();
   }
 
   tweenTo(pose: CameraPose): void {
     const from = { position: this.camera.position, target: this.controls.target };
     this.tween = new CameraTween(from, pose);
     this.controls.enableDamping = false;
+    this.syncAnchor();
   }
 
   update(deltaSeconds: number): void {
+    this.followAnchor();
     if (this.tween) this.advanceTween(deltaSeconds);
     this.controls.update(deltaSeconds);
     this.keepTargetAboveFloor();
@@ -86,6 +96,23 @@ export class CameraRig {
     this.tween = null;
     this.controls.enableDamping = true;
   };
+
+  private syncAnchor(): void {
+    this.anchor?.getWorldPosition(this.anchorPosition);
+  }
+
+  private followAnchor(): void {
+    if (!this.anchor) return;
+    const position = this.anchor.getWorldPosition(new Vector3());
+    this.shift(position.clone().sub(this.anchorPosition));
+    this.anchorPosition.copy(position);
+  }
+
+  private shift(delta: Vector3): void {
+    this.camera.position.add(delta);
+    this.controls.target.add(delta);
+    this.tween?.shift(delta);
+  }
 
   private advanceTween(deltaSeconds: number): void {
     const tween = this.tween;

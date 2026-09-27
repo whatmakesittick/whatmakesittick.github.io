@@ -1,6 +1,13 @@
+import { Object3D, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { CameraRig } from './camera';
-import { CAMERA_FAR, CAMERA_MAX_POLAR, CAMERA_NEAR } from './constants';
+import { CAMERA_FAR, CAMERA_MAX_POLAR, CAMERA_NEAR, CAMERA_TWEEN_SECONDS } from './constants';
+import type { CameraPose } from './frameBox';
+
+const FRAME_SECONDS = 1 / 60;
+const CLOSE_UP: CameraPose = { position: new Vector3(0, 3, 4), target: new Vector3(0, 0, 0) };
+const SIDE_VIEW: CameraPose = { position: new Vector3(4, 1, 0), target: new Vector3(0, 1, 0) };
+const MOVE = new Vector3(3, 1, -2);
 
 function fakeCanvas(): HTMLElement {
   const root = new EventTarget();
@@ -9,6 +16,18 @@ function fakeCanvas(): HTMLElement {
     ownerDocument: root,
     getRootNode: () => root,
   }) as unknown as HTMLElement;
+}
+
+function expectPose(rig: CameraRig, pose: CameraPose, offset = new Vector3()): void {
+  expect(rig.camera.position.distanceTo(pose.position.clone().add(offset))).toBeCloseTo(0);
+  expect(rig.controls.target.distanceTo(pose.target.clone().add(offset))).toBeCloseTo(0);
+}
+
+function followingRig(anchor: Object3D): CameraRig {
+  const rig = new CameraRig(fakeCanvas());
+  rig.follow(anchor);
+  rig.jumpTo(CLOSE_UP);
+  return rig;
 }
 
 describe('CameraRig', () => {
@@ -26,5 +45,59 @@ describe('CameraRig', () => {
     expect(rig.camera.far).toBe(9000);
     expect(rig.controls.maxPolarAngle).toBe(2);
     rig.dispose();
+  });
+
+  it('keeps the framing fixed relative to a moving anchor', () => {
+    const anchor = new Object3D();
+    const rig = followingRig(anchor);
+    anchor.position.copy(MOVE);
+    rig.update(FRAME_SECONDS);
+    expectPose(rig, CLOSE_UP, MOVE);
+  });
+
+  it('follows an anchor that moves with its parent', () => {
+    const parent = new Object3D();
+    const anchor = new Object3D();
+    parent.add(anchor);
+    const rig = followingRig(anchor);
+    parent.position.copy(MOVE);
+    rig.update(FRAME_SECONDS);
+    expectPose(rig, CLOSE_UP, MOVE);
+  });
+
+  it('carries a camera tween along with the anchor', () => {
+    const anchor = new Object3D();
+    const rig = followingRig(anchor);
+    rig.tweenTo(SIDE_VIEW);
+    anchor.position.copy(MOVE);
+    rig.update(CAMERA_TWEEN_SECONDS);
+    expectPose(rig, SIDE_VIEW, MOVE);
+  });
+
+  it('takes a new pose as it is at the moment it is given', () => {
+    const anchor = new Object3D();
+    const rig = followingRig(anchor);
+    anchor.position.copy(MOVE);
+    rig.jumpTo(SIDE_VIEW);
+    rig.update(FRAME_SECONDS);
+    expectPose(rig, SIDE_VIEW);
+  });
+
+  it('does not shift when the same anchor is followed again', () => {
+    const anchor = new Object3D();
+    const rig = followingRig(anchor);
+    anchor.position.copy(MOVE);
+    rig.follow(anchor);
+    rig.update(FRAME_SECONDS);
+    expectPose(rig, CLOSE_UP);
+  });
+
+  it('stops following once the anchor is cleared', () => {
+    const anchor = new Object3D();
+    const rig = followingRig(anchor);
+    rig.follow(null);
+    anchor.position.copy(MOVE);
+    rig.update(FRAME_SECONDS);
+    expectPose(rig, CLOSE_UP);
   });
 });
