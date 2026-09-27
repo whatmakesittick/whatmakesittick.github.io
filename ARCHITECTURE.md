@@ -8,27 +8,30 @@ at `/<slug>/`.
 
 ## Repository layout
 
-| Path                      | Owns                                                                             |
-| ------------------------- | -------------------------------------------------------------------------------- |
-| `index.html`, `src/site/` | Catalogue page: cards per explainer grouped by category, language dropdown       |
-| `src/core/`               | Everything an explainer builds on (see below)                                    |
-| `src/core/page.html`      | The explainer page template: masthead, stage, gauge, dock, prose column, footer  |
-| `src/core/partials/`      | Markup shared by the template and the catalogue: header actions, footer          |
-| `src/core/locales/*.json` | Shell strings only: controls, footer, header chrome, keyboard, catalogue         |
-| `explainers/<slug>/`      | One folder per explainer, see "Explainer package"                                |
-| `vite/`                   | The `explainerPages` plugin: manifests, page generation, public files, catalogue |
-| `public/`                 | Site-wide static files: favicon, icons, web manifest, catalogue link preview     |
-| `scripts/`                | Social images: `social-images.sh` renders `scripts/cards/*.html`                 |
-| `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`                                |
+| Path                      | Owns                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------- |
+| `index.html`, `src/site/` | Catalogue page: cards per explainer grouped by category, language dropdown      |
+| `src/core/`               | Everything an explainer builds on (see below)                                   |
+| `src/core/page.html`      | The explainer page template: masthead, stage, gauge, dock, prose column, footer |
+| `src/core/partials/`      | Markup shared by the template and the catalogue: header actions, footer         |
+| `src/core/locales/*.json` | Shell strings only: controls, footer, header chrome, keyboard, catalogue        |
+| `explainers/<slug>/`      | One folder per explainer, see "Explainer package"                               |
+| `vite/`                   | The `explainerPages` plugin: manifests, language pages, crawl files, catalogue  |
+| `public/`                 | Site-wide static files: favicon, icons, web manifest, catalogue link preview    |
+| `scripts/`                | Social images: `social-images.sh` renders `scripts/cards/*.html`                |
+| `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`                               |
 
 Generated at build and dev time, never committed: `<slug>/index.html` and
-`<slug>/main.ts` for every explainer, produced by the `explainerPages` Vite plugin
-from `src/core/page.html` and the explainer manifest. Each generated folder gets a
-`.gitignore` containing `*` and an empty `.explainer-page` marker, and ESLint and
-Prettier skip `/*/index.html` and `/*/main.ts`, so a root folder holding those two
-files is always a generated page. Generation removes marked folders whose explainer
-is gone, never removes an unmarked folder and refuses to write into one that holds
-files it did not write.
+`<slug>/main.ts` for every explainer, `<lang>/index.html` for the catalogue and
+`<lang>/<slug>/index.html` for every other language an explainer ships, produced by
+the `explainerPages` Vite plugin from `src/core/page.html`, the root `index.html` and
+the explainer manifest. Each generated folder gets a `.gitignore` containing `*` and
+an empty `.explainer-page` marker. Prettier skips `/*/index.html`, `/*/*/index.html`
+and `/*/main.ts`, and ESLint skips the generated `main.ts`, so a root folder holding
+those files is always a generated page. Generation removes marked folders whose page is gone, never removes
+an unmarked folder and refuses to write into one that holds files it did not write.
+Language codes are reserved slugs, so a language folder never clashes with an
+explainer.
 
 ## Explainer package
 
@@ -279,20 +282,64 @@ phase has no room for it, its chip is a little wider than its band.
 ## Build
 
 `vite/explainerPages.ts` reads every `explainers/*/explainer.json` in the
-`config` hook, writes the generated pages and registers them, with the root
-`index.html`, as Rollup inputs. In dev it serves each explainer's `public/` under
-`/<slug>/` with `sirv` and regenerates the pages when a manifest, chapters, locale,
-template or partial is added, changed or removed. A failed regeneration is logged
-and shown in the error overlay, and the next change retries it. At build it emits
-the same files into `dist/<slug>/`. It also fills `<!-- partial:name -->` markers
-and `{{token}}` values in the root `index.html`, and serves
+`config` hook, writes the generated pages (`vite/sitePages.ts`) and registers them,
+with the root `index.html`, as Rollup inputs. In dev it serves each explainer's
+`public/` under `/<slug>/` with `sirv`, redirects a page path without its trailing
+slash and regenerates the pages when a manifest, chapters, locale, template, partial
+or the root `index.html` is added, changed or removed. A failed regeneration is
+logged and shown in the error overlay, and the next change retries it. At build it
+emits the same files into `dist/<slug>/`. It also serves
 `virtual:explainer-catalogue`: every manifest with the `meta` block of each shipped
 language, so the catalogue never bundles an explainer's full copy.
+
+Every page is prerendered in every language it ships. English stays at `/<slug>/`
+and `/`; any other language lives at `/<lang>/<slug>/` and `/<lang>/`, where the
+catalogue exists in every site language and an explainer in the languages its
+manifest lists. `languagePath` in `src/core/i18n/paths.ts` owns this scheme for the
+build and the runtime. A page is rendered in two steps:
+
+1. `vite/page.ts` expands the `<!-- partial:name -->` markers and fills the
+   `{{token}}` values of `src/core/page.html` or the root `index.html`: `lang`, the
+   translated title, description, eyebrow and tagline, the canonical URL of the page
+   itself, `og:locale` with the other languages as alternates, the Open Graph and
+   Twitter tags, one `<link rel="alternate" hreflang>` per language variant plus
+   `x-default` for the English page, and the JSON-LD.
+2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
+   every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
+   element, in that order, the way `translateDom` does at runtime. The markers stay,
+   so the runtime can still switch languages. `vite/i18n.ts` builds an i18next
+   instance per page from the same resources the runtime loads, the core locale
+   merged with the explainer locale and English as the fallback, and the same
+   options from `src/core/i18n/config.ts`, so interpolation and placeholders behave
+   identically.
+
+Only the HTML is per language. Every language page of an explainer loads the same
+`/<slug>/main.ts`, and every catalogue page loads `/src/site/main.ts`, so the
+scripts, styles and images are shared. The `shared` chunk is limited to
+`src/core`, `node_modules` and Vite's helpers: with several pages per explainer,
+"used by two pages" no longer means "used by two explainers".
 
 The generated `<slug>/main.ts` imports the explainer's `en.json` and passes
 `mountExplainer` a loader per shipped language: `en` resolves the bundled copy,
 every other language is a dynamic `import()`, so Vite emits one chunk per language
 and the page chunk carries English only.
+
+### Crawl files and structured data
+
+`vite/crawl.ts` builds `sitemap.xml` and `robots.txt` from the manifests: they are
+emitted at build and served by the dev server, never committed. The sitemap lists
+every page in every language, each with `xhtml:link` alternates for all its language
+variants and `x-default`, and a `lastmod` for explainer pages. `robots.txt` allows
+every crawler and points at the sitemap.
+
+`vite/structuredData.ts` writes the JSON-LD. An explainer page is a `WebPage` and
+`TechArticle` with its translated title and description, its own URL, `inLanguage`,
+the author, and `datePublished` and `dateModified`. `vite/dates.ts` reads them with
+git: the first and the last commit that touched `explainers/<slug>/`. Without git
+history, or in a shallow clone, both fall back to the build date, which is why the
+workflows check out with `fetch-depth: 0`. The catalogue carries a `@graph` of a
+`WebSite` and an `ItemList` of the explainers in catalogue order, each linked to its
+page in the catalogue's language, or in English when the explainer does not ship it.
 
 ## Translations
 
@@ -309,6 +356,17 @@ it ships must have the same keys, placeholders and markup, which a test enforces
 per explainer. The catalogue reads `meta.title`, `meta.eyebrow` and `meta.summary`
 of every explainer from `virtual:explainer-catalogue`, and the page head uses
 `meta.title` and `meta.description`.
+
+The build prerenders each language (see "Build"), so the HTML a crawler fetches is
+already in the page's language. Detection prefers the `/<lang>/` path prefix, then
+the `?lang=` query, kept for old links and translated at runtime, then the stored
+choice and the browser language. The language dropdown opens the same page in the
+chosen language with a full navigation, to `/<lang>/<slug>/` or to the English page
+for `en`, so the URL, the head and the content always agree. It stores the choice
+first, so picking English on an English URL is not overridden by an earlier
+language. A language the page does not ship switches in place instead. Catalogue
+cards link to the explainer in the current language when it ships it, and to the
+English page otherwise.
 
 ## Conventions
 
