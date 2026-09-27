@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "title": "Cómo funciona un microscopio",
+    "eyebrow": "Sigue la luz de la lámpara al ojo",
+    "tagline": "Un microscopio desvía la luz dos veces, primero en el objetivo, que forma dentro del tubo una imagen real e invertida, y luego en el ocular, que la amplía de nuevo, pero el detalle más fino que puede mostrar lo fijan la luz y la apertura del objetivo, no cuánto aumenta.",
+    "description": "Un recorrido interactivo y a cámara lenta por el interior de un microscopio óptico, siguiendo la luz desde la lámpara hasta el ojo: cómo las lentes desvían la luz, cómo el objetivo y el ocular aumentan en dos etapas, por qué más aumento deja de servir y cómo el enfoque y el diafragma cambian la imagen.",
+    "summary": "Lentes, aumento en dos etapas y el detalle más pequeño que puede mostrar la luz."
+  },
+  "stage": {
+    "label": "Modelo interactivo del microscopio",
+    "gauge": "Lecturas ópticas en directo"
+  },
+  "controls": {
+    "label": "Controles del microscopio",
+    "objective": "Objetivo",
+    "objectiveOptions": {
+      "x4": "4×",
+      "x10": "10×",
+      "x40": "40×",
+      "x100": "100× con aceite"
+    },
+    "eyepiece": "Ocular",
+    "eyepieceOptions": {
+      "x10": "10×",
+      "x125": "12,5×",
+      "x15": "15×"
+    },
+    "views": {
+      "rays": {
+        "name": "Rayos de luz",
+        "short": "Rayos",
+        "hint": "Rayos de luz (Y)"
+      },
+      "cutaway": {
+        "name": "Vista en corte",
+        "short": "Corte",
+        "hint": "Vista en corte (C)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Recorrido de la luz",
+    "phases": "Saltar a una parte del recorrido de la luz",
+    "speed": "Velocidad de la cámara lenta",
+    "value": "{{position}} de recorrido, {{phase}}",
+    "speedValue": "{{value}} mm de recorrido por segundo",
+    "phase": {
+      "lamp": "Lámpara",
+      "condenser": "Condensador",
+      "specimen": "Muestra",
+      "objective": "Objetivo",
+      "tube": "Tubo",
+      "eyepiece": "Ocular",
+      "eye": "Ojo"
+    },
+    "during": {
+      "lamp": "en la lámpara",
+      "condenser": "a través del condensador",
+      "specimen": "en la muestra",
+      "objective": "en el objetivo",
+      "tube": "subiendo por el tubo",
+      "eyepiece": "en el ocular",
+      "eye": "en el ojo"
+    },
+    "jump": {
+      "lamp": "Saltar a la lámpara",
+      "condenser": "Saltar al condensador",
+      "specimen": "Saltar a la muestra",
+      "objective": "Saltar al objetivo",
+      "tube": "Saltar al tubo",
+      "eyepiece": "Saltar al ocular",
+      "eye": "Saltar al ojo"
+    }
+  },
+  "readouts": {
+    "magnification": "Aumento",
+    "aperture": "Apertura numérica",
+    "resolution": "Detalle más pequeño",
+    "field": "Campo de visión"
+  },
+  "parts": {
+    "lamp": "Lámpara",
+    "fieldDiaphragm": "Diafragma de campo",
+    "condenser": "Condensador",
+    "irisDiaphragm": "Diafragma iris",
+    "stage": "Platina",
+    "specimen": "Muestra",
+    "objective": "Objetivo",
+    "nosepiece": "Revólver",
+    "tube": "Tubo",
+    "intermediateImage": "Imagen intermedia",
+    "eyepiece": "Ocular",
+    "eye": "Ojo",
+    "retina": "Retina",
+    "focusKnob": "Tornillo de enfoque"
+  },
+  "units": {
+    "mm": "{{value}} mm",
+    "um": "{{value}} µm",
+    "nm": "{{value}} nm",
+    "times": "{{value}}×",
+    "mmPerSecond": "{{value}} mm/s"
+  },
+  "sections": {
+    "overview": {
+      "title": "La luz, desviada dos veces",
+      "p1": "Estás viendo un microscopio óptico, como los de los laboratorios escolares. Se llama microscopio compuesto porque <strong>aumenta en dos etapas</strong>. El objetivo, la pequeña lente justo encima del portaobjetos, forma una imagen ampliada dentro del tubo. El ocular, la lente por la que miras, vuelve a ampliar esa imagen. La idea es antigua: en 1665, Robert Hooke observó un trozo de corcho con uno de los primeros microscopios compuestos y llamó células a los diminutos huecos que vio.",
+      "p2": "La luz sube por el centro del instrumento. Una lámpara en la base ilumina el condensador, una lente bajo la platina que dirige la luz hacia la muestra, colocada sobre un portaobjetos de vidrio. Desde allí, la luz entra en el objetivo, sube por el tubo y atraviesa el ocular. La última lente de su camino es la de tu propio ojo, que la enfoca sobre la retina, al fondo. Cada lente desvía la luz, y entre todas convierten una mota demasiado pequeña para el ojo en una imagen que llena tu vista.",
+      "p3": "El modelo muestra el microscopio abierto por la mitad, para que veas el vidrio de dentro, y dibuja la luz como rayos. Parten de dos puntos de la muestra, uno en el centro y otro en el borde, y llegan hasta el ojo. La luz real hace este viaje demasiado rápido para seguirla, así que el bucle envía un pulso de luz por el camino a cámara lenta. La barra de avance cuenta los milímetros recorridos desde la lámpara.",
+      "p4": "Arrastra el modelo para verlo desde otros ángulos y desplázate sobre él para acercarte o alejarte. A medida que avanzas en la lectura, la vista acompaña al texto. Activa las etiquetas para ver el nombre de cada pieza."
+    },
+    "lens": {
+      "title": "Qué le hace una lente a la luz",
+      "p1": "En el vidrio, la luz viaja a solo unos dos tercios de su velocidad en el aire. Cuando un rayo llega al vidrio de forma oblicua, ese frenazo lo hace girar y entra en el vidrio más derecho. Al salir, vuelve a girar hacia el otro lado. Este cambio de dirección se llama <strong>refracción</strong>. Cuánto frena un material a la luz lo indica su índice de refracción. En el vidrio común es de unos 1,52.",
+      "p2": "Una lente es un trozo de vidrio con caras curvas. Una lente convergente es más gruesa en el centro que en el borde, así que desvía cada rayo hacia el centro. Los rayos que llegan paralelos se juntan todos en un punto, el foco. La distancia de la lente a ese punto es la distancia focal, y una distancia focal corta significa una lente que desvía mucho la luz. Una sola lente potente ya da mucho de sí: los diminutos microscopios de una sola lente de Anton van Leeuwenhoek aumentaban hasta unas 270 veces.",
+      "p3": "Coloca ahora un objeto pequeño un poco más lejos de la lente que su distancia focal. Los rayos que salen de cada punto del objeto se separan, atraviesan la lente y vuelven a juntarse en un punto al otro lado. Todos esos puntos forman una imagen real: los rayos se juntan allí de verdad, y una hoja de papel colocada en ese sitio mostraría la imagen. Está invertida, porque los rayos que salen de la parte de arriba del objeto cruzan el eje central de la lente y llegan abajo. Cuanto más cerca del foco está el objeto, más lejos se forma la imagen y más grande es.",
+      "p4": "El condensador, bajo la platina, tiene otra tarea. No aumenta nada. Recoge la luz de la lámpara y la concentra en un cono que ilumina la muestra de manera uniforme. Su diafragma iris, una abertura que se puede ensanchar o estrechar, fija lo ancho que es ese cono. Más abajo, el diafragma de campo limita la luz a la zona que ves, lo que reduce la luz parásita. El modelo simplifica la iluminación: su condensador enfoca la lámpara directamente sobre la muestra. En 1893, August Köhler, de Zeiss, ideó un montaje mejor, que da una luz uniforme sin que se vea en la vista la imagen del filamento de la lámpara."
+    },
+    "objective": {
+      "title": "El objetivo forma una imagen real",
+      "p1": "El objetivo es el pequeño tubo de lentes justo encima del portaobjetos. Su distancia focal es muy corta, y la muestra queda justo por fuera de su foco. Así que, como en el capítulo anterior, la imagen se forma lejos, al otro lado, y mucho más grande. En un microscopio clásico el tubo mide 160 mm, y la imagen se forma 10 mm por debajo de su borde superior, justo donde va el ocular. Muchos microscopios más nuevos usan una segunda lente en el tubo para formar la imagen, pero esta queda en el mismo sitio.",
+      "p2": "Esta <strong>imagen intermedia</strong> es real. Los rayos se cruzan allí de verdad, así que flota en el aire dentro del tubo. Está boca abajo y con la izquierda y la derecha cambiadas, y ampliada según el número grabado en el objetivo: un objetivo de 40× la hace 40 veces más ancha que la muestra. El ocular mira esta imagen, no la muestra en sí. Prueba los cuatro objetivos.",
+      "p3": "Cada objetivo lleva dos números, su aumento y su apertura numérica: 4×/0,10, 10×/0,25, 40×/0,65 y 100×/1,25. Cuanto más potente es el objetivo, más tiene que acercarse al portaobjetos. Esa separación, la distancia de trabajo, se reduce de unos 25 mm con 4× a unos 0,6 mm con 40× y solo 0,13 mm con 100×. La zona de la muestra que ves también se encoge. Un ocular normal tiene un número de campo de 20 mm, el ancho de la abertura redonda que lleva dentro. La zona es ese ancho dividido entre el aumento del objetivo: 5 mm con 4×, 2 mm con 10×, 0,5 mm con 40× y 0,2 mm con 100×.",
+      "p4": "Gira el revólver y el siguiente objetivo se coloca en su sitio. Los objetivos son parfocales: cada uno está hecho para que la muestra quede nítida 45 mm por debajo del hombro donde se enrosca. Por eso, al cambiar, la imagen sigue casi enfocada y basta con girar un poco el tornillo micrométrico. El objetivo de 100× es la excepción. Necesita una gota de aceite entre su lente frontal y el portaobjetos, y el penúltimo capítulo explica por qué."
+    },
+    "eyepiece": {
+      "title": "El ocular y el ojo",
+      "p1": "El ocular es una lupa para la imagen intermedia. Está colocado de modo que la imagen quede justo en su foco. Así, los rayos de cada punto de la imagen salen del ocular paralelos entre sí, como si vinieran de algo muy lejano. Tu ojo puede estar relajado, igual que cuando miras una colina a lo lejos.",
+      "p2": "Lo que ves es una <strong>imagen virtual</strong>. Allí no se reúne ninguna luz. Es solo el lugar del que parecen venir los rayos cuando los prolongas hacia atrás: una imagen enorme, muy lejos. El modelo dibuja esas prolongaciones con líneas discontinuas. Un ocular aumenta 250 mm divididos entre su distancia focal. Esos 250 mm son lo más cerca que un ojo medio puede enfocar, la mejor vista que tienes sin ayuda. Por eso un ocular de 10× tiene una distancia focal de 25 mm. Prueba los oculares.",
+      "total": "Aumento total",
+      "p3": "La última lente es la tuya. El cristalino de tu ojo recoge cada haz de rayos paralelos y lo enfoca en un punto de la retina, la capa sensible a la luz del fondo del ojo. Esa es la imagen final, y vuelve a ser real: los rayos se juntan allí de verdad. Tu ojo debe estar en el punto ocular, unos 10 mm por encima del ocular. Los oculares para quienes llevan gafas lo alejan hasta 20 o 25 mm.",
+      "p4": "Los dos aumentos se multiplican. Un objetivo de 10× con un ocular de 10× da 100×, un objetivo de 40× da 400× y el objetivo de 100× con aceite da 1000×. El ocular habitual es el de 10×, y los de 12,5× y 15× también son comunes. Pero un ocular solo amplía la imagen que formó el objetivo. No puede añadir detalles que el objetivo no captó. Con el objetivo de 100× y el ocular de 15× llegas a 1500×, más de lo que resulta útil, como muestra el capítulo siguiente."
+    },
+    "limit": {
+      "title": "Por qué más aumento deja de ayudar",
+      "p1": "La luz es una onda, y las ondas se abren al pasar junto a algo muy pequeño. Por eso cada detalle fino de la muestra desvía un poco de luz hacia los lados, y cuanto más fino es el detalle, mayor es el ángulo. Para mostrar un detalle, el objetivo tiene que captar esa luz desviada. Si la luz no entra en la lente, el detalle nunca llega a la imagen, y ningún aumento puede recuperarlo.",
+      "p2": "Lo ancho que es el cono de luz que puede captar el objetivo lo indica su <strong>apertura numérica</strong>, el segundo número que lleva grabado. En 1873, Ernst Abbe demostró que es ella la que marca el límite. Hoy la regla se escribe así: la longitud de onda de la luz dividida entre el doble de la apertura numérica. Con luz verde de 550 nm, el objetivo de 10×, con una apertura de 0,25, muestra detalles de hasta unos 1,1 µm. Prueba el control: la luz violeta muestra detalles más finos que la roja.",
+      "control": {
+        "label": "Longitud de onda de la luz",
+        "violet": "Violeta",
+        "red": "Rojo",
+        "detail": "Detalle más pequeño",
+        "useful": "Aumento útil hasta"
+      },
+      "p3": "El aire pone un techo a la apertura: un objetivo en seco llega como mucho a unos 0,95. El objetivo de 100× lo supera con una gota de aceite de inmersión. El aceite tiene un índice de refracción de 1,515, casi el mismo que el vidrio, así que incluso los rayos más inclinados pasan del fino cubreobjetos a la lente sin desviarse. Así la apertura sube a 1,25, y los mejores objetivos llegan a 1,40. El detalle más fino que puede mostrar un microscopio óptico ronda entonces los 0,2 a 0,3 µm.",
+      "p4": "Así que el aumento solo ayuda hasta cierto punto. Una regla práctica sitúa el aumento útil entre 500 y 1000 veces la apertura numérica, es decir, hasta unos 1250× con el objetivo de 100× con aceite. Más allá, la imagen crece pero no aparece ningún detalle nuevo. Es lo que se llama aumento vacío. Por eso también la mayoría de los virus son demasiado pequeños para resolverlos con luz: miden desde unos 20 nm hasta unos cientos. Los microscopios electrónicos usan electrones, cuyas ondas son mucho más cortas, y muestran de forma rutinaria detalles de unos 0,1 nm."
+    },
+    "focus": {
+      "title": "Enfoque y luz",
+      "p1": "En un microscopio como este, se enfoca moviendo la platina, no las lentes. El tornillo macrométrico la mueve deprisa y a lo largo de mucha distancia. El micrométrico la mueve muy poco: de 0,1 a 0,3 mm por vuelta, o unos 1 a 2,5 µm por cada marca de su escala. Llevas la muestra justo a la distancia adecuada bajo el objetivo, la que coloca la imagen intermedia en el ocular.",
+      "p2": "Con mucho aumento, la capa nítida de la muestra es muy fina. Esta <strong>profundidad de campo</strong> es de unos 8,5 µm con el objetivo de 10× y de solo unos 0,7 µm con el de 100× con aceite. Todo lo que queda por encima o por debajo de esa capa se ve borroso. Prueba el control y mira cómo la imagen se enfoca y se desenfoca; luego cambia de objetivo y vuelve a probar.",
+      "control": {
+        "label": "Enfoque fino",
+        "down": "Platina abajo",
+        "up": "Platina arriba",
+        "caption": "Lo que ve el ojo por el ocular",
+        "depth": "Profundidad de campo"
+      },
+      "p3": "El diafragma iris del condensador también cambia la imagen. Si lo cierras, el cono de luz se estrecha: la imagen gana contraste y profundidad de campo, pero pierde sus detalles más finos, porque la luz ya no llena el objetivo. Ábrelo del todo para ver los detalles más finos, a cambio de más deslumbramiento y menos contraste. Los fabricantes recomiendan dejarlo abierto en su mayor parte.",
+      "p4": "Una última sorpresa: la imagen se mueve al revés. La imagen del objetivo está boca abajo y con los lados cambiados, y el ocular no le da la vuelta. Así que, cuando empujas el portaobjetos hacia la derecha, la imagen se va hacia la izquierda, y cuando lo alejas de ti, la imagen viene hacia ti. Hace falta un poco de práctica."
+    }
+  }
+}

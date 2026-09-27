@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "title": "Comment fonctionne un microscope",
+    "eyebrow": "Suivez la lumière, de la lampe jusqu’à l’œil",
+    "tagline": "Un microscope dévie la lumière deux fois, d’abord dans l’objectif, qui forme dans le tube une image réelle et renversée, puis dans l’oculaire, qui l’agrandit encore, mais le plus fin détail qu’il peut montrer dépend de la lumière et de l’ouverture de l’objectif, pas du grossissement.",
+    "description": "Une visite interactive et au ralenti d’un microscope optique, en suivant la lumière de la lampe jusqu’à l’œil : comment les lentilles dévient la lumière, comment l’objectif et l’oculaire grossissent en deux étapes, pourquoi grossir davantage finit par ne plus servir et comment la mise au point et le diaphragme changent l’image.",
+    "summary": "Les lentilles, le grossissement en deux étapes et le plus petit détail que la lumière peut montrer."
+  },
+  "stage": {
+    "label": "Modèle interactif de microscope",
+    "gauge": "Mesures optiques en direct"
+  },
+  "controls": {
+    "label": "Commandes du microscope",
+    "objective": "Objectif",
+    "objectiveOptions": {
+      "x4": "4×",
+      "x10": "10×",
+      "x40": "40×",
+      "x100": "100× à huile"
+    },
+    "eyepiece": "Oculaire",
+    "eyepieceOptions": {
+      "x10": "10×",
+      "x125": "12,5×",
+      "x15": "15×"
+    },
+    "views": {
+      "rays": {
+        "name": "Rayons lumineux",
+        "short": "Rayons",
+        "hint": "Rayons lumineux (Y)"
+      },
+      "cutaway": {
+        "name": "Vue en coupe",
+        "short": "Coupe",
+        "hint": "Vue en coupe (C)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Trajet de la lumière",
+    "phases": "Aller à une étape du trajet de la lumière",
+    "speed": "Vitesse du ralenti",
+    "value": "{{position}} le long du trajet, {{phase}}",
+    "speedValue": "{{value}} mm de trajet par seconde",
+    "phase": {
+      "lamp": "Lampe",
+      "condenser": "Condenseur",
+      "specimen": "Préparation",
+      "objective": "Objectif",
+      "tube": "Tube",
+      "eyepiece": "Oculaire",
+      "eye": "Œil"
+    },
+    "during": {
+      "lamp": "dans la lampe",
+      "condenser": "à travers le condenseur",
+      "specimen": "dans la préparation",
+      "objective": "dans l’objectif",
+      "tube": "en montant dans le tube",
+      "eyepiece": "dans l’oculaire",
+      "eye": "dans l’œil"
+    },
+    "jump": {
+      "lamp": "Aller à la lampe",
+      "condenser": "Aller au condenseur",
+      "specimen": "Aller à la préparation",
+      "objective": "Aller à l’objectif",
+      "tube": "Aller au tube",
+      "eyepiece": "Aller à l’oculaire",
+      "eye": "Aller à l’œil"
+    }
+  },
+  "readouts": {
+    "magnification": "Grossissement",
+    "aperture": "Ouverture numérique",
+    "resolution": "Plus petit détail",
+    "field": "Champ de vision"
+  },
+  "parts": {
+    "lamp": "Lampe",
+    "fieldDiaphragm": "Diaphragme de champ",
+    "condenser": "Condenseur",
+    "irisDiaphragm": "Diaphragme iris",
+    "stage": "Platine",
+    "specimen": "Préparation",
+    "objective": "Objectif",
+    "nosepiece": "Revolver",
+    "tube": "Tube",
+    "intermediateImage": "Image intermédiaire",
+    "eyepiece": "Oculaire",
+    "eye": "Œil",
+    "retina": "Rétine",
+    "focusKnob": "Vis de mise au point"
+  },
+  "units": {
+    "mm": "{{value}} mm",
+    "um": "{{value}} µm",
+    "nm": "{{value}} nm",
+    "times": "{{value}}×",
+    "mmPerSecond": "{{value}} mm/s"
+  },
+  "sections": {
+    "overview": {
+      "title": "La lumière, déviée deux fois",
+      "p1": "Vous avez sous les yeux un microscope optique, comme ceux des salles de sciences. On l’appelle microscope composé, car il <strong>grossit en deux étapes</strong>. L’objectif, la petite lentille juste au-dessus de la lame, forme une image agrandie dans le tube. L’oculaire, la lentille dans laquelle vous regardez, agrandit encore cette image. L’idée est ancienne : en 1665, Robert Hooke observa du liège avec l’un des premiers microscopes composés et appela « cellules » les minuscules cavités qu’il y voyait.",
+      "p2": "La lumière monte par le centre de l’instrument. Une lampe dans le pied éclaire le condenseur, une lentille sous la platine qui dirige la lumière vers la préparation posée sur une lame de verre. De là, la lumière entre dans l’objectif, remonte le tube et traverse l’oculaire. La dernière lentille sur son chemin est celle de votre propre œil, qui la fait converger sur la rétine, tout au fond. Chaque lentille dévie la lumière, et ensemble elles transforment un point bien trop petit pour l’œil nu en une image qui remplit votre vue.",
+      "p3": "Le modèle montre le microscope coupé en deux, pour que vous voyiez le verre à l’intérieur, et dessine la lumière sous forme de rayons. Ils partent de deux points de la préparation, l’un au centre et l’autre au bord, et vont jusqu’à l’œil. La vraie lumière fait ce trajet bien trop vite pour qu’on la suive : la boucle envoie donc une impulsion de lumière le long du chemin, au ralenti. La barre de progression indique les millimètres parcourus depuis la lampe.",
+      "p4": "Faites glisser le modèle pour en faire le tour, et faites défiler par-dessus pour zoomer. Au fil de votre lecture, la vue suit le texte. Activez les étiquettes pour voir le nom de chaque pièce."
+    },
+    "lens": {
+      "title": "Ce qu’une lentille fait à la lumière",
+      "p1": "Dans le verre, la lumière ne va qu’à environ deux tiers de sa vitesse dans l’air. Quand un rayon arrive de biais sur du verre, ce ralentissement le fait tourner : il s’enfonce plus droit dans le verre. En sortant, il tourne de nouveau, dans l’autre sens. Cette déviation s’appelle la <strong>réfraction</strong>. La mesure du ralentissement de la lumière dans une matière est son indice de réfraction. Pour un verre ordinaire, il vaut environ 1,52.",
+      "p2": "Une lentille est un morceau de verre aux faces bombées. Une lentille convergente est plus épaisse au centre qu’au bord, si bien qu’elle dévie chaque rayon vers le milieu. Les rayons qui arrivent parallèles se rejoignent tous en un point, le foyer. La distance entre la lentille et ce point est la distance focale, et une courte distance focale signifie une lentille qui dévie fortement la lumière. Une seule lentille puissante fait déjà beaucoup : les minuscules microscopes à une lentille d’Antoni van Leeuwenhoek grossissaient jusqu’à environ 270 fois.",
+      "p3": "Placez maintenant un petit objet un peu plus loin de la lentille que sa distance focale. Les rayons partis de chaque point de l’objet s’écartent, traversent la lentille et se rejoignent en un point de l’autre côté. Tous ces points forment une image réelle : les rayons s’y rejoignent vraiment, et une feuille de papier placée à cet endroit montrerait l’image. Elle est à l’envers, car les rayons venus du haut de l’objet croisent l’axe central de la lentille et arrivent en bas. Plus l’objet est près du foyer, plus l’image se forme loin et plus elle est grande.",
+      "p4": "Le condenseur, sous la platine, a un autre rôle. Il ne grossit rien. Il rassemble la lumière de la lampe et la concentre en un cône qui éclaire la préparation de façon uniforme. Son diaphragme iris, une ouverture que l’on peut élargir ou resserrer, règle la largeur de ce cône. Plus bas, le diaphragme de champ limite la lumière à la zone que vous voyez, ce qui réduit la lumière parasite. Le modèle simplifie l’éclairage : son condenseur fait converger la lumière de la lampe directement sur la préparation. En 1893, August Köhler, de chez Zeiss, a mis au point un meilleur réglage, qui donne une lumière uniforme sans image du filament de la lampe dans la vue."
+    },
+    "objective": {
+      "title": "L’objectif forme une image réelle",
+      "p1": "L’objectif est le petit tube de lentilles juste au-dessus de la lame. Sa distance focale est très courte, et la préparation se trouve juste au-delà de son foyer. Comme au chapitre précédent, l’image se forme donc loin de l’autre côté, et bien plus grande. Sur un microscope classique, le tube mesure 160 mm, et l’image se forme 10 mm sous son bord supérieur, juste là où se place l’oculaire. Beaucoup de microscopes récents forment l’image avec une seconde lentille dans le tube, mais elle se trouve au même endroit.",
+      "p2": "Cette <strong>image intermédiaire</strong> est réelle. Les rayons s’y croisent vraiment : elle flotte dans l’air à l’intérieur du tube. Elle est à l’envers et inversée de gauche à droite, et agrandie selon le nombre gravé sur l’objectif : un objectif 40× la rend 40 fois plus large que la préparation. L’oculaire regarde cette image, pas la préparation elle-même. Essayez les quatre objectifs.",
+      "p3": "Chaque objectif porte deux nombres, son grossissement et son ouverture numérique : 4×/0,10, 10×/0,25, 40×/0,65 et 100×/1,25. Plus l’objectif est puissant, plus il doit s’approcher de la lame. Cet écart, la distance de travail, passe d’environ 25 mm à 4× à environ 0,6 mm à 40×, et à seulement 0,13 mm à 100×. La zone de la lame que vous voyez rétrécit aussi. Un oculaire courant a un indice de champ de 20 mm, la largeur de l’ouverture ronde qu’il contient. La zone vue est cette largeur divisée par le grossissement de l’objectif : 5 mm à 4×, 2 mm à 10×, 0,5 mm à 40× et 0,2 mm à 100×.",
+      "p4": "Tournez le revolver et l’objectif suivant vient se placer. Les objectifs sont parfocaux : chacun est conçu pour que la préparation soit nette 45 mm sous l’épaulement où il se visse. Quand vous changez d’objectif, l’image reste donc presque nette, et un petit tour de vis micrométrique suffit. L’objectif 100× fait exception. Il lui faut une goutte d’huile entre sa lentille frontale et la lame, et l’avant-dernier chapitre explique pourquoi."
+    },
+    "eyepiece": {
+      "title": "L’oculaire et l’œil",
+      "p1": "L’oculaire est une loupe pour l’image intermédiaire. Il est placé de sorte que l’image se trouve exactement à son foyer. Les rayons issus de chaque point de l’image quittent alors l’oculaire parallèles entre eux, comme s’ils venaient de très loin. Votre œil peut ainsi rester détendu, comme lorsque vous regardez une colline au loin.",
+      "p2": "Ce que vous voyez est une <strong>image virtuelle</strong>. Aucune lumière ne s’y rassemble. C’est seulement l’endroit d’où les rayons semblent venir quand on les prolonge vers l’arrière : une image immense, très loin. Le modèle dessine ces prolongements en pointillés. Un oculaire grossit de 250 mm divisés par sa distance focale. Ces 250 mm sont la distance la plus courte à laquelle un œil moyen voit net, la meilleure vue possible sans aide. Un oculaire 10× a donc une distance focale de 25 mm. Essayez les oculaires.",
+      "total": "Grossissement total",
+      "p3": "La dernière lentille est la vôtre. Le cristallin de votre œil prend chaque faisceau de rayons parallèles et le fait converger en un point sur la rétine, la couche sensible à la lumière au fond de l’œil. C’est l’image finale, et elle est de nouveau réelle : les rayons s’y rejoignent vraiment. Votre œil doit se placer au point oculaire, à environ 10 mm au-dessus de l’oculaire. Les oculaires pour porteurs de lunettes le repoussent entre 20 et 25 mm.",
+      "p4": "Les deux grossissements se multiplient. Un objectif 10× avec un oculaire 10× donne 100×, un objectif 40× donne 400×, et l’objectif 100× à huile donne 1000×. L’oculaire habituel est le 10×, et les 12,5× et 15× sont courants aussi. Mais un oculaire ne fait qu’agrandir l’image formée par l’objectif. Il ne peut pas ajouter de détails que l’objectif n’a pas captés. Avec l’objectif 100× et l’oculaire 15×, vous atteignez 1500×, plus qu’il n’est utile, comme le montre le chapitre suivant."
+    },
+    "limit": {
+      "title": "Pourquoi grossir davantage finit par ne plus servir",
+      "p1": "La lumière est une onde, et les ondes s’étalent quand elles passent près de quelque chose de très petit. Chaque détail fin de la préparation dévie donc un peu de lumière sur le côté, et plus le détail est fin, plus l’angle est large. Pour montrer un détail, l’objectif doit capter cette lumière déviée. Si elle passe à côté de la lentille, le détail n’arrive jamais dans l’image, et aucun grossissement ne peut le faire revenir.",
+      "p2": "La largeur du cône de lumière que l’objectif peut capter est donnée par son <strong>ouverture numérique</strong>, le second nombre gravé dessus. En 1873, Ernst Abbe a montré que c’est elle qui fixe la limite. Aujourd’hui, on écrit la règle ainsi : la longueur d’onde de la lumière divisée par deux fois l’ouverture numérique. En lumière verte de 550 nm, l’objectif 10×, d’ouverture 0,25, montre des détails jusqu’à environ 1,1 µm. Essayez le curseur : la lumière violette montre des détails plus fins que la rouge.",
+      "control": {
+        "label": "Longueur d’onde de la lumière",
+        "violet": "Violet",
+        "red": "Rouge",
+        "detail": "Plus petit détail",
+        "useful": "Grossissement utile jusqu’à"
+      },
+      "p3": "L’air impose un plafond à l’ouverture : un objectif à sec atteint au mieux environ 0,95. L’objectif 100× le dépasse grâce à une goutte d’huile d’immersion. L’huile a un indice de réfraction de 1,515, presque celui du verre, si bien que même les rayons les plus obliques passent de la fine lamelle à la lentille sans être déviés. L’ouverture monte ainsi à 1,25, et les meilleurs objectifs atteignent 1,40. Le plus fin détail qu’un microscope optique puisse montrer est alors d’environ 0,2 à 0,3 µm.",
+      "p4": "Grossir n’aide donc que jusqu’à un certain point. Une règle pratique place le grossissement utile entre 500 et 1000 fois l’ouverture numérique, soit jusqu’à environ 1250× pour l’objectif 100× à huile. Au-delà, l’image grandit mais aucun nouveau détail n’apparaît. C’est ce qu’on appelle le grossissement vide. C’est aussi pourquoi la plupart des virus sont trop petits pour être résolus avec la lumière : ils mesurent d’environ 20 nm à quelques centaines. Les microscopes électroniques utilisent des électrons, dont les ondes sont bien plus courtes, et montrent couramment des détails d’environ 0,1 nm."
+    },
+    "focus": {
+      "title": "Mise au point et lumière",
+      "p1": "Sur un microscope comme celui-ci, on fait la mise au point en déplaçant la platine, pas les lentilles. La vis macrométrique la déplace vite, sur une grande distance. La vis micrométrique la déplace très peu : de 0,1 à 0,3 mm par tour, soit environ 1 à 2,5 µm par graduation. Vous amenez la préparation juste à la bonne distance sous l’objectif, celle qui place l’image intermédiaire au niveau de l’oculaire.",
+      "p2": "À fort grossissement, la tranche nette de la préparation est très mince. Cette <strong>profondeur de champ</strong> est d’environ 8,5 µm avec l’objectif 10× et de seulement 0,7 µm environ avec l’objectif 100× à huile. Tout ce qui se trouve au-dessus ou au-dessous de cette tranche devient flou. Essayez le curseur et regardez l’image devenir nette puis floue, puis changez d’objectif et recommencez.",
+      "control": {
+        "label": "Mise au point fine",
+        "down": "Platine vers le bas",
+        "up": "Platine vers le haut",
+        "caption": "Ce que l’œil voit dans l’oculaire",
+        "depth": "Profondeur de champ"
+      },
+      "p3": "Le diaphragme iris du condenseur change aussi l’image. Fermez-le et le cône de lumière se resserre : l’image gagne en contraste et en profondeur de champ, mais perd ses détails les plus fins, car la lumière ne remplit plus l’objectif. Ouvrez-le en grand pour les détails les plus fins, au prix de plus d’éblouissement et de moins de contraste. Les fabricants conseillent de le laisser ouvert en grande partie.",
+      "p4": "Une dernière surprise : l’image bouge dans le mauvais sens. L’image de l’objectif est à l’envers et inversée de gauche à droite, et l’oculaire ne la retourne pas. Quand vous poussez la lame vers la droite, l’image part vers la gauche, et quand vous l’éloignez de vous, l’image vient vers vous. Il faut un peu d’entraînement."
+    }
+  }
+}
