@@ -44,16 +44,20 @@
     "eyebrow": "交互式图解",
     "tagline": "日常机器是如何工作的：在 3D 中拆开，放慢速度，让你看清每个零件的作用。",
     "skipLink": "跳到图解列表",
-    "listLabel": "按类别浏览图解",
+    "listLabel": "图解",
     "explore": "查看",
     "moreSoon": "更多图解即将推出。",
-    "categories": {
+    "tags": {
+      "mechanics": "机械",
       "engines": "发动机",
-      "drivetrain": "传动系统",
+      "vehicles": "车辆",
       "aircraft": "航空器",
-      "electrical": "电气",
+      "flight": "飞行",
+      "physics": "物理",
+      "weather": "气象",
       "home": "家居",
-      "tools": "工具"
+      "tools": "工具",
+      "optics": "光学"
     }
   }
 }

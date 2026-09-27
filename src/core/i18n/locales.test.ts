@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { ExplainerManifest } from '../manifest';
-import { META_KEYS } from '../manifest';
+import { META_KEYS, TAGS } from '../manifest';
 import { DEFAULT_LANGUAGE, LANGUAGES } from './languages';
 import type { Dictionary } from './resources';
 
 const PLACEHOLDER = /\{\{\w+\}\}/g;
 const TAG = /<\/?\w+/g;
 const LOCALE_PATH = /\/([^/]+)\/locales\/([a-z]+)\.json$/;
+const TAG_LABELS_PREFIX = 'catalogue.tags.';
 
 function flatten(dictionary: Dictionary, prefix = ''): Map<string, string> {
   const entries = new Map<string, string>();
@@ -57,6 +58,11 @@ const manifests = import.meta.glob<ExplainerManifest>('/explainers/*/explainer.j
 
 describe('core locales', () => {
   const english = coreLocales?.get(DEFAULT_LANGUAGE) ?? {};
+
+  it('labels every tag of the vocabulary and nothing else', () => {
+    const labels = [...flatten(english).keys()].filter((key) => key.startsWith(TAG_LABELS_PREFIX));
+    expect(labels.sort()).toEqual(TAGS.map((tag) => `${TAG_LABELS_PREFIX}${tag}`).sort());
+  });
 
   it.each(LANGUAGES.map((language) => language.code))('%s matches the English keys', (code) => {
     const dictionary = coreLocales?.get(code);

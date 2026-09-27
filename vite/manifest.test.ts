@@ -6,7 +6,7 @@ import { loadExplainers, parseManifest, parseMeta, reservedSlugs } from './manif
 
 const valid = {
   slug: 'engine',
-  category: 'engines',
+  tags: ['engines', 'mechanics'],
   cover: 'cover.webp',
   entry: 'src/index.ts',
   chapters: 'chapters.html',
@@ -39,7 +39,10 @@ describe('parseManifest', () => {
   it.each([
     ['a project folder slug', { slug: 'assets' }, 'assets', 'is reserved'],
     ['a public folder slug', { slug: 'social' }, 'social', '"slug" "social" is reserved'],
-    ['an unknown category', { category: 'toys' }, 'engine', '"category" must be one of'],
+    ['no tags', { tags: [] }, 'engine', '"tags" must list at least one tag'],
+    ['tags that are not a list', { tags: 'engines' }, 'engine', '"tags" must list at least one'],
+    ['an unknown tag', { tags: ['engines', 'toys'] }, 'engine', '"tags" must be among mechanics'],
+    ['a repeated tag', { tags: ['home', 'home'] }, 'engine', '"tags" lists "home" more than once'],
     ['an unknown language', { locales: ['en', 'xx'] }, 'engine', 'unknown language'],
     ['no English', { locales: ['uk'] }, 'engine', 'must include "en"'],
     [

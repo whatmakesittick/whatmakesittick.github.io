@@ -16,7 +16,7 @@ const ukrainianMeta = { ...meta, title: 'Як працює річ', description:
 const explainer: LoadedExplainer = {
   manifest: {
     slug: 'thing',
-    category: 'tools',
+    tags: ['tools'],
     cover: 'cover.webp',
     entry: 'src/index.ts',
     chapters: 'chapters.html',
@@ -148,7 +148,7 @@ describe('renderCatalogue', () => {
   const catalogueTemplate = template.replace('{{chapters}}', '').replace('{{entry}}', '/main.ts');
   const gearbox: LoadedExplainer = {
     ...explainer,
-    manifest: { ...explainer.manifest, slug: 'gearbox', category: 'drivetrain', locales: ['en'] },
+    manifest: { ...explainer.manifest, slug: 'gearbox', tags: ['mechanics'], locales: ['en'] },
     metas: { en: { ...meta, title: 'How a gearbox works' } },
   };
   const html = renderCatalogue(catalogueTemplate, partials, [explainer, gearbox], language('uk'));
@@ -167,7 +167,7 @@ describe('renderCatalogue', () => {
     expect(hreflangs(html)).toContain('ja https://whatmakesittick.github.io/ja/');
   });
 
-  it('describes the site and lists the explainers in catalogue order as structured data', () => {
+  it('describes the site and lists the explainers as structured data', () => {
     expect(structuredData(html)).toMatchObject({
       '@graph': [
         { '@type': 'WebSite', url: 'https://whatmakesittick.github.io/uk/', inLanguage: 'uk' },
@@ -177,13 +177,13 @@ describe('renderCatalogue', () => {
           itemListElement: [
             {
               position: 1,
-              name: 'How a gearbox works',
-              url: 'https://whatmakesittick.github.io/gearbox/',
+              name: 'Як працює річ',
+              url: 'https://whatmakesittick.github.io/uk/thing/',
             },
             {
               position: 2,
-              name: 'Як працює річ',
-              url: 'https://whatmakesittick.github.io/uk/thing/',
+              name: 'How a gearbox works',
+              url: 'https://whatmakesittick.github.io/gearbox/',
             },
           ],
         },

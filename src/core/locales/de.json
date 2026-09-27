@@ -44,16 +44,20 @@
     "eyebrow": "Interaktive Erklärungen",
     "tagline": "Wie Alltagsmaschinen funktionieren: in 3D zerlegt und verlangsamt, damit man jedes Teil bei der Arbeit sieht.",
     "skipLink": "Zu den Erklärungen springen",
-    "listLabel": "Erklärungen nach Kategorie",
+    "listLabel": "Erklärungen",
     "explore": "Entdecken",
     "moreSoon": "Weitere Erklärungen sind in Arbeit.",
-    "categories": {
+    "tags": {
+      "mechanics": "Mechanik",
       "engines": "Motoren",
-      "drivetrain": "Antriebsstrang",
+      "vehicles": "Fahrzeuge",
       "aircraft": "Luftfahrt",
-      "electrical": "Elektrik",
+      "flight": "Fliegen",
+      "physics": "Physik",
+      "weather": "Wetter",
       "home": "Haushalt",
-      "tools": "Werkzeuge"
+      "tools": "Werkzeuge",
+      "optics": "Optik"
     }
   }
 }

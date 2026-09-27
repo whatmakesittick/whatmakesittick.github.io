@@ -44,16 +44,20 @@
     "eyebrow": "Explicações interativas",
     "tagline": "Como funcionam as máquinas do dia a dia, desmontadas em 3D e em câmera lenta para você ver cada peça trabalhar.",
     "skipLink": "Ir para as explicações",
-    "listLabel": "Explicações por categoria",
+    "listLabel": "Explicações",
     "explore": "Explorar",
     "moreSoon": "Mais explicações estão a caminho.",
-    "categories": {
+    "tags": {
+      "mechanics": "Mecânica",
       "engines": "Motores",
-      "drivetrain": "Transmissão",
+      "vehicles": "Veículos",
       "aircraft": "Aeronaves",
-      "electrical": "Elétrica",
+      "flight": "Voo",
+      "physics": "Física",
+      "weather": "Meteorologia",
       "home": "Casa",
-      "tools": "Ferramentas"
+      "tools": "Ferramentas",
+      "optics": "Óptica"
     }
   }
 }

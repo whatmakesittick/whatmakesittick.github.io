@@ -38,26 +38,6 @@
   padding-bottom: clamp(48px, 8vh, 96px);
 }
 
-.category + .category {
-  margin-top: 48px;
-}
-
-.category-title {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  margin: 0 0 18px;
-  color: var(--muted);
-  font: 500 0.8125rem var(--font-mono);
-  letter-spacing: 0.04em;
-}
-
-.category-title::after {
-  content: '';
-  flex: 1;
-  border-top: 1px solid var(--line);
-}
-
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr));

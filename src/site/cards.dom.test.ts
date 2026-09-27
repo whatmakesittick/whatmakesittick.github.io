@@ -10,7 +10,7 @@ function meta(title: string): ExplainerMeta {
 const entry: CatalogueEntry = {
   manifest: {
     slug: 'engine',
-    category: 'engines',
+    tags: ['engines', 'mechanics'],
     cover: 'cover.webp',
     entry: 'src/index.ts',
     chapters: 'chapters.html',

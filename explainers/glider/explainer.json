@@ -1,6 +1,6 @@
 {
   "slug": "glider",
-  "category": "aircraft",
+  "tags": ["aircraft", "flight", "physics", "weather"],
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

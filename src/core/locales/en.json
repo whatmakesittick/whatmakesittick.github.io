@@ -44,16 +44,20 @@
     "eyebrow": "Interactive explainers",
     "tagline": "How everyday machines work, taken apart in 3D and slowed right down so you can watch every part do its job.",
     "skipLink": "Skip to the explainers",
-    "listLabel": "Explainers by category",
+    "listLabel": "Explainers",
     "explore": "Explore",
     "moreSoon": "More explainers are on the way.",
-    "categories": {
+    "tags": {
+      "mechanics": "Mechanics",
       "engines": "Engines",
-      "drivetrain": "Drivetrain",
+      "vehicles": "Vehicles",
       "aircraft": "Aircraft",
-      "electrical": "Electrical",
+      "flight": "Flight",
+      "physics": "Physics",
+      "weather": "Weather",
       "home": "Home",
-      "tools": "Tools"
+      "tools": "Tools",
+      "optics": "Optics"
     }
   }
 }

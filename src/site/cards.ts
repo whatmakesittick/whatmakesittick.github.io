@@ -2,8 +2,7 @@ import { DEFAULT_LANGUAGE, currentLanguage, onLanguageChanged, t } from '@core/i
 import type { LanguageCode } from '@core/i18n';
 import { languagePath } from '@core/i18n/paths';
 import { html, requireElement, svg } from '@core/ui/dom';
-import { groupByCategory, localizedMeta, pageLanguage } from './catalogue';
-import type { CategoryGroup } from './catalogue';
+import { localizedMeta, pageLanguage } from './catalogue';
 import type { CatalogueEntry } from '@core/manifest';
 
 const ARROW_PATH = 'M5 12h14M13 6l6 6-6 6';
@@ -39,7 +38,7 @@ function createCard(entry: CatalogueEntry): HTMLElement | undefined {
       html('span', { class: 'card-cover' }, [cover]),
       html('span', { class: 'card-body' }, [
         html('span', { class: 'card-eyebrow' }, [meta.eyebrow]),
-        html('h3', { class: 'card-title' }, [meta.title]),
+        html('h2', { class: 'card-title' }, [meta.title]),
         html('span', { class: 'card-summary' }, [meta.summary]),
         html('span', { class: 'card-action' }, [t('catalogue.explore'), arrowIcon()]),
       ]),
@@ -51,25 +50,14 @@ function createPlaceholder(): HTMLElement {
   return html('li', { class: 'card-placeholder' }, [t('catalogue.moreSoon')]);
 }
 
-function createGroup(group: CategoryGroup, isLast: boolean): HTMLElement {
-  const cards = group.entries.map(createCard).filter((card) => card !== undefined);
-  if (isLast) cards.push(createPlaceholder());
-  const headingId = `category-${group.category}`;
-  return html('section', { class: 'category', 'aria-labelledby': headingId }, [
-    html('h2', { class: 'category-title', id: headingId }, [
-      t(`catalogue.categories.${group.category}`),
-    ]),
-    html('ul', { class: 'cards' }, cards),
-  ]);
+function createGrid(entries: readonly CatalogueEntry[]): HTMLElement {
+  const cards = entries.map(createCard).filter((card) => card !== undefined);
+  return html('ul', { class: 'cards' }, [...cards, createPlaceholder()]);
 }
 
 export function mountCards(root: Document, entries: readonly CatalogueEntry[]): void {
   const container = requireElement(root, '[data-catalogue]');
-  const groups = groupByCategory(entries);
-  const render = () =>
-    container.replaceChildren(
-      ...groups.map((group, index) => createGroup(group, index === groups.length - 1)),
-    );
+  const render = () => container.replaceChildren(createGrid(entries));
   render();
   onLanguageChanged(render);
 }

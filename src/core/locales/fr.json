@@ -44,16 +44,20 @@
     "eyebrow": "Explications interactives",
     "tagline": "Comment fonctionnent les machines du quotidien, démontées en 3D et ralenties pour voir chaque pièce à l’œuvre.",
     "skipLink": "Aller aux explications",
-    "listLabel": "Explications par catégorie",
+    "listLabel": "Explications",
     "explore": "Explorer",
     "moreSoon": "D’autres explications arrivent bientôt.",
-    "categories": {
+    "tags": {
+      "mechanics": "Mécanique",
       "engines": "Moteurs",
-      "drivetrain": "Transmission",
+      "vehicles": "Véhicules",
       "aircraft": "Aviation",
-      "electrical": "Électricité",
+      "flight": "Vol",
+      "physics": "Physique",
+      "weather": "Météo",
       "home": "Maison",
-      "tools": "Outils"
+      "tools": "Outils",
+      "optics": "Optique"
     }
   }
 }
