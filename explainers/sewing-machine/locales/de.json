@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "title": "So funktioniert eine Nähmaschine",
+    "eyebrow": "Der Doppelsteppstich in Zeitlupe",
+    "tagline": "Eine Nähmaschine verschlingt zwei Fäden mitten im Stoff, einen Stich pro Umdrehung des Handrads. In Zeitlupe sehen Sie, wie Nadel, Greifer und Transporteur jeweils ihren Teil beitragen.",
+    "description": "Ein interaktiver Blick in Zeitlupe in eine Nähmaschine: wie die Nadel eine Schlinge bildet, wie der Greifer sie um die Spule führt, wie die Fadenspannung den Knoten setzt und wie der Transporteur den Stoff bewegt.",
+    "summary": "Die Nadelschlinge, der Umlaufgreifer, die Fadenspannung und der Transport."
+  },
+  "stage": {
+    "label": "Interaktives Nähmaschinenmodell",
+    "gauge": "Live-Werte des Stichs"
+  },
+  "controls": {
+    "label": "Nähmaschinen-Bedienelemente",
+    "tension": "Fadenspannung",
+    "tensionOptions": {
+      "loose": "Locker",
+      "balanced": "Ausgewogen",
+      "tight": "Fest"
+    },
+    "stitchLength": "Stichlänge",
+    "stitchLengthOptions": {
+      "short": "Kurz",
+      "medium": "Mittel",
+      "long": "Lang"
+    },
+    "views": {
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      },
+      "cutaway": {
+        "name": "Schnittansicht",
+        "short": "Schnitt",
+        "hint": "Schnittansicht (C)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Handradwinkel",
+    "phases": "Zu einem Schritt des Stichs springen",
+    "speed": "Nähgeschwindigkeit",
+    "value": "Handrad bei {{angle}}, {{phase}}",
+    "speedValue": "ein Stich alle {{value}} s",
+    "phase": {
+      "feed": "Transport",
+      "pierce": "Einstich",
+      "loop": "Schlinge",
+      "wrap": "Umlauf",
+      "set": "Anziehen"
+    },
+    "jump": {
+      "feed": "Zum Stofftransport springen",
+      "pierce": "Zum Einstich springen",
+      "loop": "Zur Schlingenbildung springen",
+      "wrap": "Zum Umlauf um die Spule springen",
+      "set": "Zum Anziehen des Stichs springen"
+    }
+  },
+  "readouts": {
+    "needle": "Nadelhöhe",
+    "hook": "Greiferwinkel",
+    "loop": "Schlingenlänge",
+    "feed": "Stoffvorschub"
+  },
+  "parts": {
+    "needle": "Nadel",
+    "needleBar": "Nadelstange",
+    "presserFoot": "Nähfuß",
+    "throatPlate": "Stichplatte",
+    "feedDogs": "Transporteur",
+    "hook": "Umlaufgreifer",
+    "bobbinCase": "Spulenkapsel",
+    "bobbin": "Spule",
+    "takeUpLever": "Fadenhebel",
+    "tensionDiscs": "Spannungsscheiben",
+    "spool": "Garnrolle",
+    "handwheel": "Handrad",
+    "fabric": "Stoff",
+    "topThread": "Oberfaden",
+    "bobbinThread": "Unterfaden"
+  },
+  "units": {
+    "mm": "{{value}} mm",
+    "degrees": "{{value}}°",
+    "spm": "{{value}} Stiche/min"
+  },
+  "sections": {
+    "overview": {
+      "title": "Zwei Fäden, ein Knoten",
+      "p1": "Sie sehen eine Haushaltsnähmaschine. Die Maschine näht einen <strong>Doppelsteppstich</strong>, für den sie zwei Fäden braucht. Der Oberfaden kommt von oben von der <strong>Garnrolle</strong>. Der andere wartet unter dem Stoff, aufgewickelt auf einer kleinen <strong>Spule</strong>. Bei jedem Stich verschlingt die Maschine die beiden Fäden mitten im Stoff.",
+      "p2": "Alles wird von einer einzigen Hauptwelle angetrieben, die Sie mit dem <strong>Handrad</strong> auch von Hand drehen können. Eine Umdrehung des Handrads ergibt einen Stich. Während dieser Umdrehung bewegt die <strong>Nadelstange</strong> die Nadel auf und ab, und der <strong>Fadenhebel</strong> zieht am Oberfaden. Unten dreht sich der <strong>Umlaufgreifer</strong>, und der <strong>Transporteur</strong> schiebt den Stoff weiter.",
+      "p3": "Eine Haushaltsmaschine näht etwa 800 bis 1000 Stiche pro Minute, eine Industriemaschine mehrere tausend. Das ist viel zu schnell für das Auge, deshalb läuft das Modell in Zeitlupe. Der Handradwinkel zählt ab 0°, wenn die Nadel ganz oben steht.",
+      "p4": "Ziehen Sie am Modell, um es von allen Seiten zu sehen, und scrollen Sie darüber, um zu zoomen. Beim Weiterlesen folgt die Ansicht dem Text."
+    },
+    "needle": {
+      "title": "Die Nadel bildet eine Schlinge",
+      "p1": "Eine Maschinennadel hat ihr Öhr nahe der Spitze. Vorn läuft eine lange <strong>Rinne</strong> entlang, in der der Faden liegt, wenn die Nadel durch den Stoff geht. Hinten hat sie eine kurze Aussparung, die <strong>Hohlkehle</strong>. Dort läuft der Greifer vorbei.",
+      "p2": "Die Nadel durchsticht beide Stofflagen und erreicht bei 180° ihren tiefsten Punkt. Dann geht sie wieder nach oben. Auf der Seite der Hohlkehle hält der Stoff den Faden fest, sodass er nicht mitkommt. Wenn die Nadel etwa 2 mm gestiegen ist, wölbt sich der Faden deshalb neben ihr zu einer kleinen <strong>Schlinge</strong> auf.",
+      "p3": "Bei etwa 205° läuft die Greiferspitze dicht hinter der Nadel vorbei, durch die Hohlkehle. Sie fährt in die Schlinge und fängt sie. Von hier an führt der Greifer den Oberfaden, nicht mehr die Nadel.",
+      "p4": "Die Ansicht hält in diesem Moment an, damit Sie die Greiferspitze in der Schlinge sehen. Klicken Sie auf Abspielen, um weiterzumachen."
+    },
+    "bobbin": {
+      "title": "Um die Spule herum",
+      "p1": "Der Umlaufgreifer dreht sich zweimal für jede Umdrehung des Handrads. In ihm sitzt die <strong>Spulenkapsel</strong>, und darin die Spule mit dem zweiten Faden. Der Greifer dreht sich um die Kapsel herum, die Kapsel selbst aber steht still.",
+      "p2": "Sobald seine Spitze die Schlinge hat, führt der Greifer sie um die Spulenkapsel herum. Unterwegs wird die Schlinge immer weiter. Sie läuft einmal ganz um die Kapsel herum und damit auch ganz um den Unterfaden, der aus ihr kommt.",
+      "p3": "Deshalb darf sich die Spulenkapsel nicht mit dem Greifer drehen. Sonst würde sie die Schlinge mitnehmen, und die Schlinge käme nie vorbei. Weil die Kapsel an ihrem Platz bleibt, kann die Schlinge ganz um sie herumgleiten und auf der anderen Seite abrutschen.",
+      "p4": "Jetzt sind Ober- und Unterfaden ineinander verschlungen wie zwei Glieder einer Kette. Diese Verschlingung ist das Herz des Doppelsteppstichs. Nun muss sie nur noch festgezogen werden."
+    },
+    "tension": {
+      "title": "Festziehen",
+      "p1": "Wenn die Schlinge vom Greifer gleitet, steigt der Fadenhebel. Er zieht die Schlinge aus dem Greifer nach oben in den Stoff. Die beiden Fäden verschlingen sich in der Mitte des Stoffs, und der Stich sitzt.",
+      "p2": "Jeder Faden wird auf seinem Weg gebremst. Der Oberfaden läuft zwischen zwei <strong>Spannungsscheiben</strong>, die ihn zusammendrücken. Der Unterfaden gleitet unter einer kleinen <strong>Spannungsfeder</strong> an der Spulenkapsel hindurch. Wo der Knoten landet, hängt davon ab, wie sich diese beiden Züge zueinander verhalten.",
+      "p3": "Sind beide Züge gleich stark, versteckt sich der Knoten in der Mitte des Stoffs. Das ist ein ausgewogener Stich. Bei zu viel Oberfadenspannung wird der Knoten bis an die Oberseite gezogen, sodass der Oberfaden gerade oben aufliegt und der Unterfaden bei jedem Stich oben sichtbar wird. Bei zu wenig bleibt der Knoten auf der Unterseite. Probieren Sie die drei Spannungen oben aus und beobachten Sie, wie der Knoten wandert.",
+      "result": {
+        "loose": "Der Knoten landet auf der Unterseite des Stoffs.",
+        "balanced": "Der Knoten sitzt in der Mitte des Stoffs.",
+        "tight": "Der Knoten wird bis an die Oberseite gezogen. Der Unterfaden ist bei jedem Stich oben sichtbar."
+      }
+    },
+    "feed": {
+      "title": "Den Stoff bewegen",
+      "p1": "Der Stoff gleitet über die <strong>Stichplatte</strong>, die flache Platte unter der Nadel. Der <strong>Nähfuß</strong> drückt ihn von oben an. Darunter macht der Transporteur bei jedem Stich vier Bewegungen: durch die Platte nach oben, nach hinten, nach unten und wieder nach vorn. Nur solange er oben ist, nimmt er den Stoff nach hinten mit.",
+      "p2": "Der Transport bewegt den Stoff nur, solange die Nadel draußen ist. Der Transporteur hebt sich und schiebt zu Beginn jeder Umdrehung, während die Nadel noch hoch steht. Wenn die Nadel herunterkommt, steht der Stoff schon still, und der Transporteur ist abgetaucht. Wie weit sich der Stoff pro Umdrehung bewegt, ist die <strong>Stichlänge</strong>. Meist sind es 2,5 mm, also 4 Stiche pro cm.",
+      "p3": "Ziehen Sie den Regler, um die Stichlänge zu ändern. Der Transporteur macht längere oder kürzere Schritte, und die Stiche rücken auseinander oder zusammen. Nadel und Greifer machen bei jeder Umdrehung genau dieselbe Arbeit.",
+      "control": {
+        "label": "Stichlänge",
+        "short": "Kurz",
+        "long": "Lang",
+        "density": "Stiche pro cm",
+        "travel": "Vorschub pro Stich"
+      }
+    }
+  }
+}

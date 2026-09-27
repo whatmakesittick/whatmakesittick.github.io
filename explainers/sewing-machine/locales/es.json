@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "title": "Cómo funciona una máquina de coser",
+    "eyebrow": "El pespunte, a cámara lenta",
+    "tagline": "Una máquina de coser traba dos hilos dentro de la tela, una puntada por cada vuelta del volante. Si la ralentizas al máximo, puedes ver cómo la aguja, el garfio y los dientes de arrastre hacen cada uno su parte.",
+    "description": "Una mirada interactiva y a cámara lenta al interior de una máquina de coser: cómo la aguja forma un lazo, cómo el garfio lo lleva alrededor de la canilla, cómo la tensión fija el nudo y cómo los dientes de arrastre mueven la tela.",
+    "summary": "El lazo de la aguja, el garfio rotativo, la tensión del hilo y el arrastre."
+  },
+  "stage": {
+    "label": "Modelo interactivo de la máquina de coser",
+    "gauge": "Lecturas de la puntada en directo"
+  },
+  "controls": {
+    "label": "Controles de la máquina de coser",
+    "tension": "Tensión",
+    "tensionOptions": {
+      "loose": "Floja",
+      "balanced": "Equilibrada",
+      "tight": "Fuerte"
+    },
+    "stitchLength": "Longitud de puntada",
+    "stitchLengthOptions": {
+      "short": "Corta",
+      "medium": "Media",
+      "long": "Larga"
+    },
+    "views": {
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      },
+      "cutaway": {
+        "name": "Vista en corte",
+        "short": "Corte",
+        "hint": "Vista en corte (C)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Ángulo del volante",
+    "phases": "Ir a un paso de la puntada",
+    "speed": "Velocidad de costura",
+    "value": "Volante a {{angle}}, {{phase}}",
+    "speedValue": "una puntada cada {{value}} s",
+    "phase": {
+      "feed": "Arrastre",
+      "pierce": "Perforación",
+      "loop": "Lazo",
+      "wrap": "Vuelta",
+      "set": "Apriete"
+    },
+    "jump": {
+      "feed": "Ir al arrastre de la tela",
+      "pierce": "Ir a la perforación de la tela",
+      "loop": "Ir a la formación del lazo",
+      "wrap": "Ir a la vuelta alrededor de la canilla",
+      "set": "Ir al apriete de la puntada"
+    }
+  },
+  "readouts": {
+    "needle": "Altura de la aguja",
+    "hook": "Ángulo del garfio",
+    "loop": "Largo del lazo",
+    "feed": "Avance de la tela"
+  },
+  "parts": {
+    "needle": "Aguja",
+    "needleBar": "Barra de aguja",
+    "presserFoot": "Prensatelas",
+    "throatPlate": "Placa de aguja",
+    "feedDogs": "Dientes de arrastre",
+    "hook": "Garfio rotativo",
+    "bobbinCase": "Caja de la canilla",
+    "bobbin": "Canilla",
+    "takeUpLever": "Tirahilos",
+    "tensionDiscs": "Discos de tensión",
+    "spool": "Carrete",
+    "handwheel": "Volante",
+    "fabric": "Tela",
+    "topThread": "Hilo superior",
+    "bobbinThread": "Hilo de la canilla"
+  },
+  "units": {
+    "mm": "{{value}} mm",
+    "degrees": "{{value}}°",
+    "spm": "{{value}} ppm"
+  },
+  "sections": {
+    "overview": {
+      "title": "Dos hilos, un nudo",
+      "p1": "Estás viendo una máquina de coser doméstica. Cose en <strong>pespunte</strong>, una puntada que usa dos hilos. El hilo superior baja desde el <strong>carrete</strong>. El otro espera debajo de la tela, enrollado en una pequeña <strong>canilla</strong>. En cada puntada, la máquina traba los dos hilos dentro de la tela.",
+      "p2": "Todo lo mueve un único eje principal, que puedes girar a mano con el <strong>volante</strong>. Una vuelta del volante hace una puntada. En esa vuelta, la <strong>barra de aguja</strong> baja y sube la aguja, y el <strong>tirahilos</strong> tira del hilo superior. Abajo, el <strong>garfio rotativo</strong> gira y los <strong>dientes de arrastre</strong> hacen avanzar la tela.",
+      "p3": "Una máquina doméstica cose unas 800 a 1000 puntadas por minuto, y una industrial, varios miles. Es demasiado rápido para seguirlo con la vista, así que el modelo va a cámara lenta. El ángulo del volante se cuenta desde 0°, cuando la aguja está en su punto más alto.",
+      "p4": "Arrastra el modelo para verlo desde otros ángulos y desplázate sobre él para acercarte o alejarte. A medida que avanzas en la lectura, la vista acompaña al texto."
+    },
+    "needle": {
+      "title": "La aguja forma un lazo",
+      "p1": "Una aguja de máquina tiene el ojo cerca de la punta. Por delante la recorre una <strong>ranura</strong> larga, y el hilo va alojado en ella mientras la aguja atraviesa la tela. Por detrás tiene un pequeño rebaje llamado <strong>escotadura</strong>. Por ahí pasa el garfio.",
+      "p2": "La aguja atraviesa las dos capas de tela y llega a su punto más bajo a 180°. Luego empieza a subir. Del lado de la escotadura, la tela agarra el hilo y lo retiene. Así que, cuando la aguja ha subido unos 2 mm, el hilo se abomba junto a ella y forma un pequeño <strong>lazo</strong>.",
+      "p3": "Hacia los 205°, la punta del garfio rotativo pasa justo por detrás de la aguja, por la escotadura. Se mete en el lazo y lo atrapa. A partir de aquí, quien lleva el hilo superior es el garfio, no la aguja.",
+      "p4": "La vista se detiene en ese momento para que veas la punta del garfio dentro del lazo. Pulsa reproducir para continuar."
+    },
+    "bobbin": {
+      "title": "Alrededor de la canilla",
+      "p1": "El garfio rotativo da dos vueltas por cada vuelta del volante. Dentro de él va la <strong>caja de la canilla</strong>, y dentro de esta, la canilla con el segundo hilo. El garfio gira alrededor de la caja, pero la caja se queda quieta.",
+      "p2": "En cuanto su punta tiene el lazo, el garfio lo lleva alrededor de la caja de la canilla. Por el camino, el lazo se abre cada vez más. Pasa por completo alrededor de la caja y, con ello, alrededor del hilo de la canilla que sale de ella.",
+      "p3": "Por eso la caja de la canilla no debe girar con el garfio. Si lo hiciera, arrastraría el lazo consigo y el lazo nunca podría pasar. Como la caja se queda en su sitio, el lazo puede rodearla por completo y salir por el otro lado.",
+      "p4": "Ahora el hilo superior y el de la canilla están enlazados, como dos eslabones de una cadena. Este enlace es lo que traba el pespunte. Solo falta apretarlo."
+    },
+    "tension": {
+      "title": "Apretar la puntada",
+      "p1": "Cuando el lazo se suelta del garfio, el tirahilos sube. Tira del lazo para sacarlo del garfio y meterlo en la tela. Los dos hilos se traban en el medio de la tela y la puntada queda hecha.",
+      "p2": "Cada hilo encuentra resistencia en su camino. El hilo superior pasa entre un par de <strong>discos de tensión</strong> que lo aprietan. El hilo de la canilla sale por debajo de un pequeño <strong>resorte de la canilla</strong>, en la caja de la canilla. Dónde acaba el nudo depende de cómo se comparan esos dos tirones.",
+      "p3": "Cuando los dos tirones se igualan, el nudo queda oculto en el medio de la tela. Es una puntada equilibrada. Con demasiada tensión arriba, el nudo sube hasta la cara superior, así que el hilo superior queda recto sobre ella y el hilo de la canilla asoma en cada puntada. Con muy poca, el nudo queda en la cara inferior. Prueba las tres tensiones de arriba y mira cómo se mueve el nudo.",
+      "result": {
+        "loose": "El nudo queda en la cara inferior de la tela.",
+        "balanced": "El nudo queda en el medio de la tela.",
+        "tight": "El nudo sube hasta la cara superior. El hilo de la canilla asoma en cada puntada."
+      }
+    },
+    "feed": {
+      "title": "Mover la tela",
+      "p1": "La tela se desliza sobre la <strong>placa de aguja</strong>, la placa plana que hay bajo la aguja. El <strong>prensatelas</strong> la sujeta desde arriba. Debajo, los dientes de arrastre hacen cuatro movimientos en cada puntada: suben a través de la placa, van hacia atrás, bajan y vuelven hacia delante. Solo arrastran la tela hacia atrás mientras están arriba.",
+      "p2": "El arrastre solo mueve la tela mientras la aguja está fuera de ella. Los dientes suben y empujan al principio de cada vuelta, cuando la aguja todavía está arriba. Cuando la aguja baja, la tela ya se ha parado y los dientes se han escondido. Lo que avanza la tela en cada vuelta es la <strong>longitud de puntada</strong>. Suele ser de 2,5 mm, es decir, 4 puntadas por cm.",
+      "p3": "Arrastra el control deslizante para cambiar la longitud de puntada. Los dientes dan pasos más largos o más cortos, y las puntadas se separan o se juntan. La aguja y el garfio hacen el mismo trabajo en cada vuelta.",
+      "control": {
+        "label": "Longitud de puntada",
+        "short": "Corta",
+        "long": "Larga",
+        "density": "Puntadas por cm",
+        "travel": "Avance por puntada"
+      }
+    }
+  }
+}

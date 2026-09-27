@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "title": "How a sewing machine works",
+    "eyebrow": "The lockstitch, slowed down",
+    "tagline": "A sewing machine locks two threads together inside the fabric, one stitch for every turn of the handwheel. Slow it right down and you can watch the needle, the hook and the feed dogs each do their part.",
+    "description": "An interactive, slowed-down look inside a sewing machine: how the needle makes a loop, how the hook carries it around the bobbin, how tension sets the knot and how the feed dogs move the fabric.",
+    "summary": "The needle loop, the rotary hook, thread tension and the feed."
+  },
+  "stage": {
+    "label": "Interactive sewing machine model",
+    "gauge": "Live stitch readings"
+  },
+  "controls": {
+    "label": "Sewing machine controls",
+    "tension": "Tension",
+    "tensionOptions": {
+      "loose": "Loose",
+      "balanced": "Balanced",
+      "tight": "Tight"
+    },
+    "stitchLength": "Stitch length",
+    "stitchLengthOptions": {
+      "short": "Short",
+      "medium": "Medium",
+      "long": "Long"
+    },
+    "views": {
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      },
+      "cutaway": {
+        "name": "Cutaway",
+        "short": "Cutaway",
+        "hint": "Cutaway (C)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Handwheel angle",
+    "phases": "Jump to a step of the stitch",
+    "speed": "Sewing speed",
+    "value": "Handwheel at {{angle}}, {{phase}}",
+    "speedValue": "one stitch every {{value}} s",
+    "phase": {
+      "feed": "Feed",
+      "pierce": "Pierce",
+      "loop": "Loop",
+      "wrap": "Wrap",
+      "set": "Set"
+    },
+    "jump": {
+      "feed": "Jump to feeding the fabric",
+      "pierce": "Jump to piercing the fabric",
+      "loop": "Jump to the loop forming",
+      "wrap": "Jump to wrapping the bobbin",
+      "set": "Jump to setting the stitch"
+    }
+  },
+  "readouts": {
+    "needle": "Needle height",
+    "hook": "Hook angle",
+    "loop": "Loop length",
+    "feed": "Fabric moved"
+  },
+  "parts": {
+    "needle": "Needle",
+    "needleBar": "Needle bar",
+    "presserFoot": "Presser foot",
+    "throatPlate": "Throat plate",
+    "feedDogs": "Feed dogs",
+    "hook": "Rotary hook",
+    "bobbinCase": "Bobbin case",
+    "bobbin": "Bobbin",
+    "takeUpLever": "Take-up lever",
+    "tensionDiscs": "Tension discs",
+    "spool": "Spool",
+    "handwheel": "Handwheel",
+    "fabric": "Fabric",
+    "topThread": "Top thread",
+    "bobbinThread": "Bobbin thread"
+  },
+  "units": {
+    "mm": "{{value}} mm",
+    "degrees": "{{value}}°",
+    "spm": "{{value}} spm"
+  },
+  "sections": {
+    "overview": {
+      "title": "Two threads, one knot",
+      "p1": "You are looking at a home sewing machine. It sews a <strong>lockstitch</strong>, which uses two threads. The top thread comes down from the <strong>spool</strong>. The other waits under the fabric, wound on a small <strong>bobbin</strong>. On every stitch the machine locks the two threads together inside the fabric.",
+      "p2": "Everything is driven by one main shaft, which you can turn by hand with the <strong>handwheel</strong>. One turn of the handwheel makes one stitch. In that turn the <strong>needle bar</strong> moves the needle down and up, and the <strong>take-up lever</strong> pulls on the top thread. Down below, the <strong>rotary hook</strong> spins and the <strong>feed dogs</strong> push the fabric along.",
+      "p3": "A home machine sews around 800 to 1000 stitches a minute, and an industrial one several thousand. That is far too fast to follow, so the model runs in slow motion. The handwheel angle counts from 0°, when the needle is at its highest point.",
+      "p4": "Drag the model to look around it and scroll over it to zoom. As you read on, the view follows the text."
+    },
+    "needle": {
+      "title": "The needle makes a loop",
+      "p1": "A machine needle has its eye near the point. A long <strong>groove</strong> runs down the front, and the thread lies in it as the needle goes through the fabric. On the back there is a short cut-out called the <strong>scarf</strong>. That is where the hook passes.",
+      "p2": "The needle pierces both layers of fabric and reaches its lowest point at 180°. Then it starts back up. On the scarf side, the fabric grips the thread and holds it back. So after the needle rises about 2 mm, the thread bulges out beside it into a small <strong>loop</strong>.",
+      "p3": "At about 205°, the point of the rotary hook passes right behind the needle, through the scarf. It slips into the loop and catches it. From here on, the hook carries the top thread, not the needle.",
+      "p4": "The view pauses at that moment, so you can see the hook point inside the loop. Press play to carry on."
+    },
+    "bobbin": {
+      "title": "Around the bobbin",
+      "p1": "The rotary hook turns twice for every turn of the handwheel. Inside it sits the <strong>bobbin case</strong>, and inside that the bobbin with the second thread. The hook spins around the case, but the case stays still.",
+      "p2": "Once its point has the loop, the hook carries it around the bobbin case. The loop stretches wider and wider as it goes. It passes right around the case, and so right around the bobbin thread that comes out of it.",
+      "p3": "That is why the bobbin case must not turn with the hook. If it did, it would carry the loop round with it, and the loop could never get past. Because the case stays put, the loop can slide all the way around it and off the other side.",
+      "p4": "Now the top thread and the bobbin thread are linked, like two rings of a chain. This link is the lock in lockstitch. All that is left is to pull it tight."
+    },
+    "tension": {
+      "title": "Pulling it tight",
+      "p1": "As the loop slides off the hook, the take-up lever rises. It pulls the loop up out of the hook and into the fabric. The two threads lock in the middle of the fabric, and the stitch is set.",
+      "p2": "Each thread is held back on its way in. The top thread runs between a pair of <strong>tension discs</strong> that squeeze it. The bobbin thread slides under a small <strong>bobbin spring</strong> on the bobbin case. Where the knot ends up depends on how these two pulls compare.",
+      "p3": "When the pulls match, the knot hides in the middle of the fabric. This is a balanced stitch. Too much top tension pulls the knot up to the top surface, so the top thread lies straight along the top and the bobbin thread shows through at every stitch. Too little leaves the knot on the underside. Try the three tensions above and watch the knot move.",
+      "result": {
+        "loose": "The knot ends up on the underside of the fabric.",
+        "balanced": "The knot sits in the middle of the fabric.",
+        "tight": "The knot is pulled up to the top surface. The bobbin thread shows through at every stitch."
+      }
+    },
+    "feed": {
+      "title": "Moving the fabric",
+      "p1": "The fabric slides over the <strong>throat plate</strong>, the flat plate under the needle. The <strong>presser foot</strong> holds it down from above. Below, the feed dogs make four moves on every stitch: up through the plate, back, down, and forward again. They carry the fabric back only while they are up.",
+      "p2": "The feed moves the fabric only while the needle is out of it. The feed dogs rise and push at the start of each turn, while the needle is still high. When the needle comes down, the fabric has stopped and the feed dogs have dropped away. How far the fabric moves on each turn is the <strong>stitch length</strong>. It is usually 2.5 mm, or 4 stitches per cm.",
+      "p3": "Drag the slider to change the stitch length. The feed dogs take longer or shorter steps, and the stitches spread out or move closer together. The needle and the hook do the same work on every turn.",
+      "control": {
+        "label": "Stitch length",
+        "short": "Short",
+        "long": "Long",
+        "density": "Stitches per cm",
+        "travel": "Fabric moved per stitch"
+      }
+    }
+  }
+}

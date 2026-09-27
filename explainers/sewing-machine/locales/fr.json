@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "title": "Comment fonctionne une machine à coudre",
+    "eyebrow": "Le point noué, au ralenti",
+    "tagline": "Une machine à coudre noue deux fils au cœur du tissu, un point à chaque tour de volant. Ralentissez-la et vous verrez l’aiguille, le crochet et les griffes jouer chacun leur rôle.",
+    "description": "Un regard interactif et ralenti à l’intérieur d’une machine à coudre : comment l’aiguille forme une boucle, comment le crochet l’emmène autour de la canette, comment la tension place le nœud et comment les griffes font avancer le tissu.",
+    "summary": "La boucle de l’aiguille, le crochet rotatif, la tension du fil et l’entraînement."
+  },
+  "stage": {
+    "label": "Modèle interactif de machine à coudre",
+    "gauge": "Mesures du point en direct"
+  },
+  "controls": {
+    "label": "Commandes de la machine à coudre",
+    "tension": "Tension",
+    "tensionOptions": {
+      "loose": "Faible",
+      "balanced": "Équilibrée",
+      "tight": "Forte"
+    },
+    "stitchLength": "Longueur de point",
+    "stitchLengthOptions": {
+      "short": "Court",
+      "medium": "Moyen",
+      "long": "Long"
+    },
+    "views": {
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      },
+      "cutaway": {
+        "name": "Vue en coupe",
+        "short": "Coupe",
+        "hint": "Vue en coupe (C)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Angle du volant",
+    "phases": "Aller à une étape du point",
+    "speed": "Vitesse de couture",
+    "value": "Volant à {{angle}}, {{phase}}",
+    "speedValue": "un point toutes les {{value}} s",
+    "phase": {
+      "feed": "Entraînement",
+      "pierce": "Piqûre",
+      "loop": "Boucle",
+      "wrap": "Tour",
+      "set": "Serrage"
+    },
+    "jump": {
+      "feed": "Aller à l’entraînement du tissu",
+      "pierce": "Aller à la piqûre du tissu",
+      "loop": "Aller à la formation de la boucle",
+      "wrap": "Aller au tour de la canette",
+      "set": "Aller au serrage du point"
+    }
+  },
+  "readouts": {
+    "needle": "Hauteur de l’aiguille",
+    "hook": "Angle du crochet",
+    "loop": "Longueur de la boucle",
+    "feed": "Avance du tissu"
+  },
+  "parts": {
+    "needle": "Aiguille",
+    "needleBar": "Barre à aiguille",
+    "presserFoot": "Pied presseur",
+    "throatPlate": "Plaque à aiguille",
+    "feedDogs": "Griffes d’entraînement",
+    "hook": "Crochet rotatif",
+    "bobbinCase": "Boîte à canette",
+    "bobbin": "Canette",
+    "takeUpLever": "Releveur de fil",
+    "tensionDiscs": "Disques de tension",
+    "spool": "Bobine",
+    "handwheel": "Volant",
+    "fabric": "Tissu",
+    "topThread": "Fil supérieur",
+    "bobbinThread": "Fil de canette"
+  },
+  "units": {
+    "mm": "{{value}} mm",
+    "degrees": "{{value}}°",
+    "spm": "{{value}} points/min"
+  },
+  "sections": {
+    "overview": {
+      "title": "Deux fils, un nœud",
+      "p1": "Vous avez sous les yeux une machine à coudre domestique. Elle coud au <strong>point noué</strong>, qui utilise deux fils. Le fil supérieur descend de la <strong>bobine</strong>. L’autre attend sous le tissu, enroulé sur une petite <strong>canette</strong>. À chaque point, la machine noue les deux fils ensemble au cœur du tissu.",
+      "p2": "Tout est entraîné par un seul arbre principal, que vous pouvez tourner à la main avec le <strong>volant</strong>. Un tour de volant fait un point. Pendant ce tour, la <strong>barre à aiguille</strong> fait descendre et remonter l’aiguille, et le <strong>releveur de fil</strong> tire sur le fil supérieur. En dessous, le <strong>crochet rotatif</strong> tourne et les <strong>griffes d’entraînement</strong> font avancer le tissu.",
+      "p3": "Une machine domestique coud environ 800 à 1 000 points par minute, et une machine industrielle plusieurs milliers. C’est bien trop rapide pour être suivi à l’œil, alors le modèle tourne au ralenti. L’angle du volant se compte à partir de 0°, quand l’aiguille est tout en haut.",
+      "p4": "Faites glisser le modèle pour en faire le tour, et faites défiler par-dessus pour zoomer. Au fil de votre lecture, la vue suit le texte."
+    },
+    "needle": {
+      "title": "L’aiguille forme une boucle",
+      "p1": "Une aiguille de machine a son chas près de la pointe. Une longue <strong>rainure</strong> court sur le devant, et le fil s’y loge quand l’aiguille traverse le tissu. Au dos se trouve une courte entaille appelée <strong>dégagement</strong>. C’est là que passe le crochet.",
+      "p2": "L’aiguille perce les deux épaisseurs de tissu et atteint sa position la plus basse à 180°. Puis elle remonte. Du côté du dégagement, le tissu serre le fil et le retient. Ainsi, quand l’aiguille est remontée d’environ 2 mm, le fil se gonfle à côté d’elle en une petite <strong>boucle</strong>.",
+      "p3": "Vers 205°, la pointe du crochet rotatif passe juste derrière l’aiguille, dans le dégagement. Elle se glisse dans la boucle et l’attrape. À partir de là, c’est le crochet qui emporte le fil supérieur, et non plus l’aiguille.",
+      "p4": "La vue s’arrête à cet instant, pour que vous voyiez la pointe du crochet dans la boucle. Appuyez sur lecture pour continuer."
+    },
+    "bobbin": {
+      "title": "Autour de la canette",
+      "p1": "Le crochet rotatif fait deux tours pour chaque tour de volant. À l’intérieur se trouve la <strong>boîte à canette</strong>, et dans celle-ci la canette avec le second fil. Le crochet tourne autour de la boîte, mais la boîte, elle, reste immobile.",
+      "p2": "Dès que sa pointe tient la boucle, le crochet l’emmène autour de la boîte à canette. En chemin, la boucle s’élargit de plus en plus. Elle passe tout autour de la boîte, et donc tout autour du fil de canette qui en sort.",
+      "p3": "Voilà pourquoi la boîte à canette ne doit pas tourner avec le crochet. Sinon, elle entraînerait la boucle avec elle, et la boucle ne pourrait jamais passer. Comme la boîte reste en place, la boucle peut en faire tout le tour et ressortir de l’autre côté.",
+      "p4": "Le fil supérieur et le fil de canette sont maintenant enlacés, comme deux maillons d’une chaîne. C’est ce nœud qui donne son nom au point noué. Il ne reste plus qu’à le serrer."
+    },
+    "tension": {
+      "title": "Serrer le point",
+      "p1": "Quand la boucle glisse hors du crochet, le releveur de fil monte. Il tire la boucle hors du crochet et la remonte dans le tissu. Les deux fils se nouent au milieu du tissu, et le point est formé.",
+      "p2": "Chaque fil est freiné en chemin. Le fil supérieur passe entre deux <strong>disques de tension</strong> qui le serrent. Le fil de canette glisse sous un petit <strong>ressort de canette</strong>, fixé sur la boîte à canette. L’endroit où finit le nœud dépend de l’équilibre entre ces deux tractions.",
+      "p3": "Quand les deux tractions s’équilibrent, le nœud se cache au milieu du tissu. C’est un point équilibré. Avec trop de tension en haut, le nœud remonte jusqu’à la surface du dessus, si bien que le fil supérieur s’étend tout droit sur le dessus et que le fil de canette apparaît à chaque point. Avec trop peu, le nœud reste sur le dessous. Essayez les trois tensions ci-dessus et regardez le nœud se déplacer.",
+      "result": {
+        "loose": "Le nœud se retrouve sur le dessous du tissu.",
+        "balanced": "Le nœud se trouve au milieu du tissu.",
+        "tight": "Le nœud remonte jusqu’à la surface du dessus. Le fil de canette apparaît à chaque point."
+      }
+    },
+    "feed": {
+      "title": "Faire avancer le tissu",
+      "p1": "Le tissu glisse sur la <strong>plaque à aiguille</strong>, la plaque plate sous l’aiguille. Le <strong>pied presseur</strong> le maintient par-dessus. En dessous, les griffes d’entraînement font quatre mouvements à chaque point : elles montent à travers la plaque, reculent, descendent, puis reviennent vers l’avant. Elles n’entraînent le tissu vers l’arrière que lorsqu’elles sont en haut.",
+      "p2": "L’entraînement ne déplace le tissu que lorsque l’aiguille en est sortie. Les griffes montent et poussent au début de chaque tour, quand l’aiguille est encore haute. Quand l’aiguille redescend, le tissu s’est arrêté et les griffes se sont effacées. La distance parcourue par le tissu à chaque tour, c’est la <strong>longueur de point</strong>. Elle est d’habitude de 2,5 mm, soit 4 points par cm.",
+      "p3": "Faites glisser le curseur pour changer la longueur de point. Les griffes font des pas plus longs ou plus courts, et les points s’espacent ou se resserrent. L’aiguille et le crochet font exactement le même travail à chaque tour.",
+      "control": {
+        "label": "Longueur de point",
+        "short": "Court",
+        "long": "Long",
+        "density": "Points par cm",
+        "travel": "Avance par point"
+      }
+    }
+  }
+}
