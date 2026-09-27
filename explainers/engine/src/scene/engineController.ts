@@ -1,10 +1,10 @@
-import type { FramingSlopes } from '@core/scene/lens';
-import type { CameraPose } from '@core/scene/frameBox';
+import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
 import { CYCLE_DEGREES } from '../model';
 import { currentSpec } from '../state';
 import type { CameraView, EngineState, ViewOptions } from '../state';
-import { poseForView } from './cameraViews';
+import type { RegionId } from './assemblyRegions';
+import { VIEWS } from './cameraViews';
 import { EngineAssembly } from './engineAssembly';
 
 export type EngineControllerDependencies = Pick<
@@ -21,12 +21,17 @@ function signedDegrees(from: number, to: number): number {
 }
 
 export class EngineController {
+  readonly views: CameraViews<CameraView, RegionId>;
   private readonly dependencies: EngineControllerDependencies;
   private assembly: EngineAssembly | null = null;
   private previousAngle = 0;
 
   constructor(dependencies: EngineControllerDependencies) {
     this.dependencies = dependencies;
+    this.views = new CameraViews(dependencies.rig, {
+      views: VIEWS,
+      region: (id) => this.assembly?.region(id) ?? null,
+    });
   }
 
   rebuild(state: EngineState): void {
@@ -60,12 +65,6 @@ export class EngineController {
     const deltaDegrees = signedDegrees(this.previousAngle, state.phase);
     this.previousAngle = state.phase;
     this.assembly.update({ angle: state.phase, deltaDegrees, deltaSeconds });
-  }
-
-  pose(view: CameraView, slopes: FramingSlopes): CameraPose | null {
-    const assembly = this.assembly;
-    if (!assembly) return null;
-    return poseForView(view, assembly.layout.id, (id) => assembly.region(id), slopes);
   }
 
   dispose(): void {

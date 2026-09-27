@@ -1,4 +1,4 @@
-import type { Preset as PlaybackPreset } from '@core/explainer';
+import type { ScenePreset } from '@core/scene/presetBinder';
 import type { EngineLayout, EngineType } from '../model';
 
 export type PresetId =
@@ -38,11 +38,8 @@ export type ViewOptions = {
   flow: boolean;
 };
 
-export interface Preset extends PlaybackPreset {
+export interface Preset extends ScenePreset<PartId, CameraView> {
   id: PresetId;
-  camera: CameraView;
-  labels: readonly PartId[];
-  highlight: readonly PartId[];
   layout?: EngineLayout;
   engineType?: EngineType;
   view?: Partial<ViewOptions>;
