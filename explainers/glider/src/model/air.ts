@@ -1,4 +1,4 @@
-import { sinkRate, speedForSink } from './polar';
+import { GLIDERS, sinkRate, speedForSink } from './polar';
 import type { GliderType } from './polar';
 import { climbAt, heightAt, windowAverage } from './story';
 import type { Leg } from './story';
@@ -12,11 +12,12 @@ export interface FlightState {
 }
 
 export function legSink(leg: Leg, type: GliderType): number {
-  return leg.kind === 'climb' ? sinkRate(type, leg.airspeed) : leg.air - leg.climb;
+  if (leg.kind === 'climb') return sinkRate(type, leg.airspeed);
+  return Math.max(leg.air - leg.climb, GLIDERS[type].polar.minSink.sink);
 }
 
 export function legLift(leg: Leg, type: GliderType): number {
-  return leg.kind === 'climb' ? leg.climb + sinkRate(type, leg.airspeed) : leg.air;
+  return leg.climb + legSink(leg, type);
 }
 
 export function flightState(phase: number, type: GliderType): FlightState {
