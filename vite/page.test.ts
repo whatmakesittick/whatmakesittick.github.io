@@ -27,6 +27,7 @@ const explainer: LoadedExplainer = {
   meta,
   metas: { en: meta, uk: ukrainianMeta },
   dictionaries: {},
+  dates: { published: '2026-01-10T09:00:00+02:00', modified: '2026-03-10T09:00:00+02:00' },
   chapters:
     '<section class="chapter" data-preset="intro">\n  <h2 data-i18n="sections.intro">Intro</h2>\n</section>',
 };
@@ -99,8 +100,13 @@ describe('renderPage', () => {
     expect(html).toContain('<main>\n  <section class="chapter" data-preset="intro">\n    <h2');
   });
 
-  it('describes the page as structured data', () => {
-    expect(structuredData(html)).toMatchObject({ headline: meta.title, inLanguage: 'en' });
+  it('describes the page as structured data with its dates', () => {
+    expect(structuredData(html)).toMatchObject({
+      headline: meta.title,
+      inLanguage: 'en',
+      datePublished: explainer.dates.published,
+      dateModified: explainer.dates.modified,
+    });
   });
 
   it('loads the shared entry of the explainer from every language page', () => {
@@ -140,7 +146,12 @@ describe('renderPage', () => {
 
 describe('renderCatalogue', () => {
   const catalogueTemplate = template.replace('{{chapters}}', '').replace('{{entry}}', '/main.ts');
-  const html = renderCatalogue(catalogueTemplate, partials, language('uk'));
+  const gearbox: LoadedExplainer = {
+    ...explainer,
+    manifest: { ...explainer.manifest, slug: 'gearbox', category: 'drivetrain', locales: ['en'] },
+    metas: { en: { ...meta, title: 'How a gearbox works' } },
+  };
+  const html = renderCatalogue(catalogueTemplate, partials, [explainer, gearbox], language('uk'));
 
   it('renders the catalogue in the language of its folder', () => {
     expect(html).toContain('<html lang="uk">');
@@ -156,11 +167,27 @@ describe('renderCatalogue', () => {
     expect(hreflangs(html)).toContain('ja https://whatmakesittick.github.io/ja/');
   });
 
-  it('describes the site as structured data', () => {
+  it('describes the site and lists the explainers in catalogue order as structured data', () => {
     expect(structuredData(html)).toMatchObject({
-      '@type': 'WebSite',
-      url: 'https://whatmakesittick.github.io/uk/',
-      inLanguage: 'uk',
+      '@graph': [
+        { '@type': 'WebSite', url: 'https://whatmakesittick.github.io/uk/', inLanguage: 'uk' },
+        {
+          '@type': 'ItemList',
+          numberOfItems: 2,
+          itemListElement: [
+            {
+              position: 1,
+              name: 'How a gearbox works',
+              url: 'https://whatmakesittick.github.io/gearbox/',
+            },
+            {
+              position: 2,
+              name: 'Як працює річ',
+              url: 'https://whatmakesittick.github.io/uk/thing/',
+            },
+          ],
+        },
+      ],
     });
   });
 });

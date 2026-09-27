@@ -57,7 +57,7 @@ function readSources(root: string): Sources {
   };
 }
 
-function catalogueFolders(sources: Sources): PageFolder[] {
+function catalogueFolders(sources: Sources, explainers: LoadedExplainer[]): PageFolder[] {
   return CATALOGUE_ROUTE.languages
     .filter((code) => code !== DEFAULT_LANGUAGE)
     .map((code) => ({
@@ -66,6 +66,7 @@ function catalogueFolders(sources: Sources): PageFolder[] {
         [SITE_ENTRY]: renderCatalogue(
           sources.siteTemplate,
           sources.partials,
+          explainers,
           pageLanguage(sources.core, code),
         ),
       },
@@ -94,7 +95,7 @@ export function generateSite(root: string): Site {
   const explainers = loadExplainers(root);
   const sources = readSources(root);
   const folders = [
-    ...catalogueFolders(sources),
+    ...catalogueFolders(sources, explainers),
     ...explainers.flatMap((explainer) => explainerFolders(sources, explainer)),
   ];
   for (const { path, files } of folders) writePageFolder(root, path, files);
@@ -103,6 +104,7 @@ export function generateSite(root: string): Site {
   return { explainers, sources, folders: paths };
 }
 
-export function renderSiteEntry(html: string, sources: Sources): string {
-  return renderCatalogue(html, sources.partials, pageLanguage(sources.core, DEFAULT_LANGUAGE));
+export function renderSiteEntry(html: string, { sources, explainers }: Site): string {
+  const language = pageLanguage(sources.core, DEFAULT_LANGUAGE);
+  return renderCatalogue(html, sources.partials, explainers, language);
 }

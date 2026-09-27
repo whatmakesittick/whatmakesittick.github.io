@@ -118,7 +118,7 @@ export function explainerPages(): Plugin {
       order: 'pre',
       handler(html, context) {
         const isSiteEntry = resolve(context.filename) === join(root, SITE_ENTRY);
-        return isSiteEntry && site ? renderSiteEntry(html, site.sources) : html;
+        return isSiteEntry && site ? renderSiteEntry(html, site) : html;
       },
     },
 

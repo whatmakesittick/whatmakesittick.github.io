@@ -5,6 +5,8 @@ import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import type { Dictionary } from '../src/core/i18n/resources.ts';
 import { CATEGORIES, META_KEYS } from '../src/core/manifest.ts';
 import type { Category, ExplainerManifest, ExplainerMeta } from '../src/core/manifest.ts';
+import { readPageDates } from './dates.ts';
+import type { PageDates } from './dates.ts';
 
 export const EXPLAINERS_DIRECTORY = 'explainers';
 export const MANIFEST_FILE = 'explainer.json';
@@ -30,6 +32,7 @@ export interface LoadedExplainer {
   metas: Partial<Record<LanguageCode, ExplainerMeta>>;
   dictionaries: Partial<Record<LanguageCode, Dictionary>>;
   chapters: string;
+  dates: PageDates;
 }
 
 type Fields = Record<string, unknown>;
@@ -158,6 +161,7 @@ function loadExplainer(
     metas,
     dictionaries,
     chapters: readFileSync(join(directory, manifest.chapters), 'utf8'),
+    dates: readPageDates(directory),
   };
 }
 

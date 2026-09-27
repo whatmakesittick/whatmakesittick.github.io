@@ -3,7 +3,7 @@ import { ROBOTS_FILE, SITEMAP_FILE, crawlFiles, renderRobots, renderSitemap } fr
 
 const routes = [
   { page: '', languages: ['en', 'uk'] as const },
-  { page: 'glider', languages: ['en', 'uk'] as const },
+  { page: 'glider', languages: ['en', 'uk'] as const, modified: '2026-03-10T09:00:00+02:00' },
 ];
 
 function entries(xml: string): string[] {
@@ -33,6 +33,12 @@ describe('renderSitemap', () => {
     expect(ukrainianGlider).toContain(
       'hreflang="x-default" href="https://whatmakesittick.github.io/glider/"',
     );
+  });
+
+  it('dates the pages that know when they last changed', () => {
+    const [catalogue, , glider] = entries(xml);
+    expect(catalogue).not.toContain('<lastmod>');
+    expect(glider).toContain('<lastmod>2026-03-10T09:00:00+02:00</lastmod>');
   });
 
   it('declares the sitemap and xhtml namespaces', () => {

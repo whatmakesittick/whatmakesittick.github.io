@@ -1,5 +1,6 @@
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
+import { CATEGORIES } from '../src/core/manifest.ts';
 import type { CatalogueEntry } from '../src/core/manifest.ts';
 import { alternateLinks, imageType, jsonLd, localeTags } from './head.ts';
 import type { PageLanguage } from './i18n.ts';
@@ -18,6 +19,7 @@ import {
   siteUrl,
 } from './site.ts';
 import { catalogueData, explainerData } from './structuredData.ts';
+import type { ListedPage } from './structuredData.ts';
 import { escapeHtml, expandPartials, fillTemplate } from './template.ts';
 import type { TemplateValues } from './template.ts';
 import { translateHtml } from './translateHtml.ts';
@@ -80,18 +82,31 @@ export function renderPage(
     description: escapeHtml(meta.description),
     eyebrow: escapeHtml(meta.eyebrow),
     tagline: escapeHtml(meta.tagline),
-    structuredData: jsonLd(explainerData(meta, facts)),
+    structuredData: jsonLd(explainerData(meta, facts, explainer.dates)),
     chapters: explainer.chapters,
     entry: `/${manifest.slug}/${PAGE_ENTRY}`,
   });
   return translateHtml(html, translate);
 }
 
+function catalogueOrder(explainers: readonly LoadedExplainer[]): LoadedExplainer[] {
+  const rank = (explainer: LoadedExplainer) => CATEGORIES.indexOf(explainer.manifest.category);
+  return [...explainers].sort((a, b) => rank(a) - rank(b));
+}
+
+function listedPage(explainer: LoadedExplainer, code: LanguageCode): ListedPage {
+  const { manifest, metas, meta } = explainer;
+  const language = manifest.locales.includes(code) ? code : DEFAULT_LANGUAGE;
+  return { name: (metas[language] ?? meta).title, url: pageUrl(language, manifest.slug) };
+}
+
 export function renderCatalogue(
   template: string,
   partials: TemplateValues,
+  explainers: readonly LoadedExplainer[],
   { code, translate }: PageLanguage,
 ): string {
+  const pages = catalogueOrder(explainers).map((explainer) => listedPage(explainer, code));
   const image = siteUrl(SITE_SOCIAL.image);
   const description = translate(CATALOGUE_TAGLINE_KEY);
   const facts = { code, url: pageUrl(code, CATALOGUE_ROUTE.page), image };
@@ -101,7 +116,7 @@ export function renderCatalogue(
     ...socialValues(image, SITE_SOCIAL.alt),
     title: escapeHtml(translate(CATALOGUE_TITLE_KEY)),
     description: escapeHtml(description),
-    structuredData: jsonLd(catalogueData(description, facts)),
+    structuredData: jsonLd(catalogueData(description, facts, pages)),
   });
   return translateHtml(html, translate);
 }

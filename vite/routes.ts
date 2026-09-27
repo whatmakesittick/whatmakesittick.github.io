@@ -7,6 +7,7 @@ import { pageUrl } from './site.ts';
 export interface PageRoute {
   page: string;
   languages: readonly LanguageCode[];
+  modified?: string;
 }
 
 export interface Alternate {
@@ -23,7 +24,8 @@ export const CATALOGUE_ROUTE: PageRoute = {
 };
 
 export function explainerRoute(explainer: LoadedExplainer): PageRoute {
-  return { page: explainer.manifest.slug, languages: explainer.manifest.locales };
+  const { manifest, dates } = explainer;
+  return { page: manifest.slug, languages: manifest.locales, modified: dates.modified };
 }
 
 export function siteRoutes(explainers: readonly LoadedExplainer[]): PageRoute[] {

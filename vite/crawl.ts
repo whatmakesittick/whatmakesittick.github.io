@@ -26,18 +26,16 @@ function alternateLinks(route: PageRoute): string[] {
   );
 }
 
+function lastModified(route: PageRoute): string[] {
+  return route.modified ? [`<lastmod>${escapeHtml(route.modified)}</lastmod>`] : [];
+}
+
 function urlEntries(route: PageRoute): string[] {
-  const links = alternateLinks(route);
-  return route.languages.map((code) =>
-    [
-      '<url>',
-      indent(
-        [`<loc>${escapeHtml(pageUrl(code, route.page))}</loc>`, ...links].join('\n'),
-        XML_INDENT,
-      ),
-      '</url>',
-    ].join('\n'),
-  );
+  const details = [...lastModified(route), ...alternateLinks(route)];
+  return route.languages.map((code) => {
+    const location = `<loc>${escapeHtml(pageUrl(code, route.page))}</loc>`;
+    return ['<url>', indent([location, ...details].join('\n'), XML_INDENT), '</url>'].join('\n');
+  });
 }
 
 export function renderSitemap(routes: readonly PageRoute[]): string {
