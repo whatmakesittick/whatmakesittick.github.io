@@ -108,17 +108,24 @@ export function waitForSceneTime(page: Page, wait: SceneTimeWait): Promise<boole
   return page.evaluate(
     ({ sceneMilliseconds, maxFrameMilliseconds, limitMilliseconds }) =>
       new Promise<boolean>((resolve) => {
-        const started = performance.now();
-        let last = started;
+        let last = performance.now();
         let elapsed = 0;
+        let frame = 0;
+        const limit = setTimeout(() => {
+          cancelAnimationFrame(frame);
+          resolve(false);
+        }, limitMilliseconds);
         const tick = (now: number) => {
           elapsed += Math.min(maxFrameMilliseconds, Math.max(0, now - last));
           last = now;
-          if (elapsed >= sceneMilliseconds) resolve(true);
-          else if (now - started >= limitMilliseconds) resolve(false);
-          else requestAnimationFrame(tick);
+          if (elapsed < sceneMilliseconds) {
+            frame = requestAnimationFrame(tick);
+            return;
+          }
+          clearTimeout(limit);
+          resolve(true);
         };
-        requestAnimationFrame(tick);
+        frame = requestAnimationFrame(tick);
       }),
     wait,
   );
