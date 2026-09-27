@@ -1,7 +1,7 @@
-import { queryAll, requireElement, setText } from '@core/ui/dom';
+import { queryAll } from '@core/ui/dom';
 import { parseOption } from '@core/ui/parse';
-import { configureRange, rangeFraction, showRangeValue, toPercent } from '@core/ui/range';
-import { watch, watchShallowLocalized } from '@core/ui/subscribe';
+import { rangeFraction, toPercent } from '@core/ui/range';
+import { mountRangeWidget } from '@core/ui/rangeWidget';
 import {
   COMPRESSION_RATIO_RANGE,
   ENGINE_TYPES,
@@ -26,32 +26,25 @@ function paintTypicalBands(bands: HTMLElement[]): void {
   }
 }
 
+function markActiveBand(bands: HTMLElement[], type: EngineType): void {
+  bands.forEach((band) => (band.dataset.active = String(band.dataset.band === type)));
+}
+
 export function mountCompressionControl(root: Document, store: EngineStore): void {
-  const input = requireElement<HTMLInputElement>(root, '[data-control="compression"]');
-  const ratio = requireElement(root, '[data-readout="compression-ratio"]');
-  const clearance = requireElement(root, '[data-readout="clearance"]');
-  const pressure = requireElement(root, '[data-readout="compression-pressure"]');
   const bands = queryAll(root, '[data-band]');
-
-  configureRange(input, COMPRESSION_RATIO_RANGE);
   paintTypicalBands(bands);
-  input.addEventListener('input', () => store.getState().setCompressionRatio(Number(input.value)));
 
-  watchShallowLocalized(
-    store,
-    (state) => [state.engineType, state.compressionRatio] as const,
-    () => {
-      const spec = currentSpec(store.getState());
-      const ratioText = formatRatio(spec.compressionRatio);
-      showRangeValue(input, spec.compressionRatio, ratioText);
-      setText(ratio, ratioText);
-      setText(clearance, formatMillimetres(clearanceHeight(spec)));
-      setText(pressure, formatPressure(peakMotoredPressure(spec)));
+  mountRangeWidget(root, store, {
+    control: 'compression',
+    range: COMPRESSION_RATIO_RANGE,
+    select: (state) => [state.engineType, state.compressionRatio] as const,
+    value: ([, ratio]) => ratio,
+    format: ([, ratio]) => formatRatio(ratio),
+    set: (state, ratio) => state.setCompressionRatio(ratio),
+    readouts: {
+      clearance: (_, state) => formatMillimetres(clearanceHeight(currentSpec(state))),
+      'compression-pressure': (_, state) => formatPressure(peakMotoredPressure(currentSpec(state))),
     },
-  );
-  watch(
-    store,
-    (state) => state.engineType,
-    (type) => bands.forEach((band) => (band.dataset.active = String(band.dataset.band === type))),
-  );
+    after: ([type]) => markActiveBand(bands, type),
+  });
 }

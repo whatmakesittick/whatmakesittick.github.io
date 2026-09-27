@@ -254,8 +254,8 @@
     must be hot enough to ignite the fuel. Diesels run at
     <strong>about 14 to 22 : 1</strong>.
   </p>
-  <div class="compression-control">
-    <div class="compression-header">
+  <div class="range-widget">
+    <div class="range-widget__header">
       <label for="compression-ratio" data-i18n="sections.compression.control.label">
         Compression ratio
       </label>
@@ -264,12 +264,7 @@
       </output>
     </div>
     <div class="compression-track">
-      <input
-        id="compression-ratio"
-        type="range"
-        class="range compression-range"
-        data-control="compression"
-      />
+      <input id="compression-ratio" type="range" class="range" data-control="compression" />
       <div class="compression-bands" aria-hidden="true">
         <span
           class="compression-band"
@@ -287,7 +282,7 @@
         </span>
       </div>
     </div>
-    <dl class="compression-readouts">
+    <dl class="range-widget__readouts">
       <div>
         <dt data-i18n="sections.compression.control.clearance">Gap above the piston</dt>
         <dd class="number" data-readout="clearance">9.6 mm</dd>
