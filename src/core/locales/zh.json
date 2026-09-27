@@ -34,6 +34,7 @@
     "zoom": "放大或缩小"
   },
   "footer": {
+    "catalogue": "全部图解",
     "source": "源代码",
     "license": "MIT 许可证",
     "builtWith": "使用 Three.js 构建",

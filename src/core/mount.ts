@@ -5,6 +5,7 @@ import { initI18n, shippedLanguages } from './i18n';
 import type { LocaleLoaders } from './i18n';
 import { createSceneHost } from './scene/shell';
 import { mountActions } from './ui/actions';
+import { mountCatalogueLinks } from './ui/catalogueLink';
 import { mountDock } from './ui/dock';
 import { requireElement } from './ui/dom';
 import { mountFooter } from './ui/footer';
@@ -48,6 +49,7 @@ export async function mountExplainer<S extends Playback>(
   mountDock(document, store, explainer);
   mountReadouts(document, store, explainer.readouts);
   mountLanguage(document, languages);
+  mountCatalogueLinks(document);
   mountFooter(document, TITLE_KEY);
   explainer.mountUi?.(document, store);
   mountActions(document, store, explainer.actions);

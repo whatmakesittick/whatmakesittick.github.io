@@ -34,6 +34,7 @@
     "zoom": "拡大・縮小"
   },
   "footer": {
+    "catalogue": "すべての解説",
     "source": "ソースコード",
     "license": "MITライセンス",
     "builtWith": "Three.jsで制作",

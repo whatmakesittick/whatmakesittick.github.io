@@ -41,6 +41,7 @@ const template = [
   '<meta content="{{image}}" type="{{imageType}}" />',
   '{{localeTags}}',
   '<a href="{{sourceUrl}}">{{siteName}}</a>',
+  '<a class="catalogue" href="{{catalogueUrl}}">{{siteName}}</a>',
   '<script type="application/ld+json">{{structuredData}}</script>',
   '<main>',
   '  {{chapters}}',
@@ -94,6 +95,11 @@ describe('renderPage', () => {
   it('links the source folder and fills the shared partials', () => {
     expect(html).toContain('/tree/main/explainers/thing">What makes it tick</a>');
     expect(html).toContain('<footer>https://github.com/whatmakesittick/');
+  });
+
+  it('links back to the catalogue in the language of the page', () => {
+    expect(html).toContain('<a class="catalogue" href="/">');
+    expect(ukrainian).toContain('<a class="catalogue" href="/uk/">');
   });
 
   it('inlines the chapters at the placeholder indentation', () => {
@@ -160,6 +166,7 @@ describe('renderCatalogue', () => {
     expect(html).toContain('content="Як працюють машини"');
     expect(html).toContain('<link rel="canonical" href="https://whatmakesittick.github.io/uk/"');
     expect(html).toContain('content="https://whatmakesittick.github.io/social/og-image.png"');
+    expect(html).toContain('<a class="catalogue" href="/uk/">');
   });
 
   it('lists the catalogue in every language', () => {

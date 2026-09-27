@@ -34,6 +34,7 @@
     "zoom": "Hinein- und herauszoomen"
   },
   "footer": {
+    "catalogue": "Alle Erklärungen",
     "source": "Quellcode",
     "license": "MIT-Lizenz",
     "builtWith": "Erstellt mit Three.js",

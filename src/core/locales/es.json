@@ -34,6 +34,7 @@
     "zoom": "Acercar y alejar"
   },
   "footer": {
+    "catalogue": "Todas las explicaciones",
     "source": "Código fuente",
     "license": "Licencia MIT",
     "builtWith": "Hecho con Three.js",

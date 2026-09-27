@@ -29,6 +29,15 @@ export function pathFromBase(pathname: string, base: string): string {
   return pathname.startsWith(base) ? pathname.slice(base.length) : pathname;
 }
 
+export function catalogueHref(href: string, base: string): string {
+  const url = new URL(href);
+  const { code = DEFAULT_LANGUAGE } = splitLanguagePath(pathFromBase(url.pathname, base));
+  const language = url.searchParams.get(LANGUAGE_QUERY_KEY);
+  const query =
+    language === null ? '' : `?${new URLSearchParams({ [LANGUAGE_QUERY_KEY]: language })}`;
+  return `${base}${languagePath(code)}${query}`;
+}
+
 export function languageUrl(href: string, base: string, code: LanguageCode): string {
   const url = new URL(href);
   const { page } = splitLanguagePath(pathFromBase(url.pathname, base));

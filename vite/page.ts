@@ -1,5 +1,6 @@
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
+import { languagePath } from '../src/core/i18n/paths.ts';
 import { compareNewestFirst } from '../src/core/manifest.ts';
 import type { CatalogueEntry } from '../src/core/manifest.ts';
 import { alternateLinks, imageType, jsonLd, localeTags } from './head.ts';
@@ -28,6 +29,7 @@ export const CORE_ALIAS = '@core';
 export const MOUNT_MODULE = `${CORE_ALIAS}/mount`;
 export const PAGE_ENTRY = 'main.ts';
 
+const ROOT_PATH = '/';
 const CATALOGUE_TAGLINE_KEY = 'catalogue.tagline';
 const CATALOGUE_TITLE_KEY = 'catalogue.title';
 
@@ -44,6 +46,7 @@ function languageValues(code: LanguageCode, route: PageRoute): TemplateValues {
   return {
     lang: code,
     url: escapeHtml(pageUrl(code, route.page)),
+    catalogueUrl: escapeHtml(`${ROOT_PATH}${languagePath(code, CATALOGUE_ROUTE.page)}`),
     localeTags: localeTags(code, route),
     alternateLinks: alternateLinks(route),
   };
