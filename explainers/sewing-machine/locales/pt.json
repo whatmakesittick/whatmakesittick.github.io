@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "title": "Como funciona uma máquina de costura",
+    "eyebrow": "O ponto fixo, em câmera lenta",
+    "tagline": "Uma máquina de costura prende duas linhas dentro do tecido, um ponto a cada volta do volante. Desacelere bem e você verá a agulha, a lançadeira e os dentes transportadores fazerem, cada um, a sua parte.",
+    "description": "Um passeio interativo e em câmera lenta por dentro de uma máquina de costura: como a agulha forma uma laçada, como a lançadeira a leva em volta da bobina, como a tensão ajusta o nó e como os dentes transportadores movem o tecido.",
+    "summary": "A laçada da agulha, a lançadeira rotativa, a tensão da linha e o transporte."
+  },
+  "stage": {
+    "label": "Modelo interativo da máquina de costura",
+    "gauge": "Leituras do ponto ao vivo"
+  },
+  "controls": {
+    "label": "Controles da máquina de costura",
+    "tension": "Tensão",
+    "tensionOptions": {
+      "loose": "Frouxa",
+      "balanced": "Equilibrada",
+      "tight": "Apertada"
+    },
+    "stitchLength": "Comprimento do ponto",
+    "stitchLengthOptions": {
+      "short": "Curto",
+      "medium": "Médio",
+      "long": "Longo"
+    },
+    "views": {
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      },
+      "cutaway": {
+        "name": "Vista em corte",
+        "short": "Corte",
+        "hint": "Vista em corte (C)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Ângulo do volante",
+    "phases": "Ir para uma etapa do ponto",
+    "speed": "Velocidade de costura",
+    "value": "Volante em {{angle}}, {{phase}}",
+    "speedValue": "um ponto a cada {{value}} s",
+    "phase": {
+      "feed": "Transporte",
+      "pierce": "Perfuração",
+      "loop": "Laçada",
+      "wrap": "Volta",
+      "set": "Aperto"
+    },
+    "jump": {
+      "feed": "Ir para o transporte do tecido",
+      "pierce": "Ir para a perfuração do tecido",
+      "loop": "Ir para a formação da laçada",
+      "wrap": "Ir para a volta em torno da bobina",
+      "set": "Ir para o aperto do ponto"
+    }
+  },
+  "readouts": {
+    "needle": "Altura da agulha",
+    "hook": "Ângulo da lançadeira",
+    "loop": "Tamanho da laçada",
+    "feed": "Avanço do tecido"
+  },
+  "parts": {
+    "needle": "Agulha",
+    "needleBar": "Barra da agulha",
+    "presserFoot": "Calcador",
+    "throatPlate": "Chapa da agulha",
+    "feedDogs": "Dentes transportadores",
+    "hook": "Lançadeira rotativa",
+    "bobbinCase": "Caixa da bobina",
+    "bobbin": "Bobina",
+    "takeUpLever": "Estica-fio",
+    "tensionDiscs": "Discos de tensão",
+    "spool": "Carretel",
+    "handwheel": "Volante",
+    "fabric": "Tecido",
+    "topThread": "Linha de cima",
+    "bobbinThread": "Linha da bobina"
+  },
+  "units": {
+    "mm": "{{value}} mm",
+    "degrees": "{{value}}°",
+    "spm": "{{value}} ppm"
+  },
+  "sections": {
+    "overview": {
+      "title": "Duas linhas, um nó",
+      "p1": "Você está vendo uma máquina de costura doméstica. Ela costura em <strong>ponto fixo</strong>, que usa duas linhas. A linha de cima desce do <strong>carretel</strong>. A outra espera embaixo do tecido, enrolada numa pequena <strong>bobina</strong>. A cada ponto, a máquina prende as duas linhas uma na outra dentro do tecido.",
+      "p2": "Tudo é movido por um único eixo principal, que você pode girar com a mão pelo <strong>volante</strong>. Uma volta do volante faz um ponto. Nessa volta, a <strong>barra da agulha</strong> leva a agulha para baixo e para cima, e o <strong>estica-fio</strong> puxa a linha de cima. Lá embaixo, a <strong>lançadeira rotativa</strong> gira e os <strong>dentes transportadores</strong> empurram o tecido.",
+      "p3": "Uma máquina doméstica costura cerca de 800 a 1.000 pontos por minuto, e uma industrial, vários milhares. É rápido demais para acompanhar, por isso o modelo roda em câmera lenta. O ângulo do volante conta a partir de 0°, quando a agulha está na posição mais alta.",
+      "p4": "Arraste o modelo para ver de outros ângulos e role sobre ele para dar zoom. Conforme você lê, a vista acompanha o texto."
+    },
+    "needle": {
+      "title": "A agulha forma uma laçada",
+      "p1": "A agulha de máquina tem o olho perto da ponta. Um <strong>canal</strong> longo desce pela frente dela, e a linha fica dentro dele enquanto a agulha atravessa o tecido. Atrás há um recorte curto chamado <strong>rebaixo</strong>. É por ali que a lançadeira passa.",
+      "p2": "A agulha atravessa as duas camadas de tecido e chega à posição mais baixa em 180°. Depois começa a subir. Do lado do rebaixo, o tecido segura a linha e não a deixa subir junto. Assim, quando a agulha sobe cerca de 2 mm, a linha se estufa ao lado dela e forma uma pequena <strong>laçada</strong>.",
+      "p3": "Por volta de 205°, o bico da lançadeira rotativa passa bem atrás da agulha, pelo rebaixo. Ele entra na laçada e a captura. Daqui em diante, quem leva a linha de cima é a lançadeira, não a agulha.",
+      "p4": "A vista pausa nesse momento para você ver o bico da lançadeira dentro da laçada. Clique em reproduzir para continuar."
+    },
+    "bobbin": {
+      "title": "Em volta da bobina",
+      "p1": "A lançadeira rotativa dá duas voltas a cada volta do volante. Dentro dela fica a <strong>caixa da bobina</strong>, e dentro desta, a bobina com a segunda linha. A lançadeira gira em volta da caixa, mas a caixa fica parada.",
+      "p2": "Assim que o bico pega a laçada, a lançadeira a leva em volta da caixa da bobina. Pelo caminho, a laçada vai se abrindo cada vez mais. Ela passa inteira em volta da caixa e, com isso, em volta da linha da bobina que sai dela.",
+      "p3": "Por isso a caixa da bobina não pode girar junto com a lançadeira. Se girasse, levaria a laçada junto, e a laçada nunca conseguiria passar. Como a caixa fica parada, a laçada consegue dar a volta inteira nela e sair pelo outro lado.",
+      "p4": "Agora a linha de cima e a linha da bobina estão entrelaçadas, como dois elos de uma corrente. É esse entrelaçamento que prende o ponto fixo. Só falta apertar."
+    },
+    "tension": {
+      "title": "Apertando o ponto",
+      "p1": "Quando a laçada se solta da lançadeira, o estica-fio sobe. Ele puxa a laçada para fora da lançadeira e para dentro do tecido. As duas linhas se prendem no meio do tecido, e o ponto está feito.",
+      "p2": "Cada linha é freada no caminho. A linha de cima passa entre um par de <strong>discos de tensão</strong> que a apertam. A linha da bobina sai por baixo de uma pequena <strong>mola da bobina</strong>, presa à caixa da bobina. Onde o nó vai parar depende de como esses dois puxões se comparam.",
+      "p3": "Quando os dois puxões se equilibram, o nó fica escondido no meio do tecido. Esse é um ponto equilibrado. Com tensão demais em cima, o nó é puxado até o lado de cima, então a linha de cima fica reta por cima e a linha da bobina aparece em cada ponto. Com tensão de menos, o nó fica no lado de baixo. Experimente as três tensões acima e veja o nó se mover.",
+      "result": {
+        "loose": "O nó fica no lado de baixo do tecido.",
+        "balanced": "O nó fica no meio do tecido.",
+        "tight": "O nó é puxado até o lado de cima. A linha da bobina aparece em cada ponto."
+      }
+    },
+    "feed": {
+      "title": "Movendo o tecido",
+      "p1": "O tecido desliza sobre a <strong>chapa da agulha</strong>, a placa plana sob a agulha. O <strong>calcador</strong> o segura por cima. Embaixo, os dentes transportadores fazem quatro movimentos a cada ponto: sobem pela chapa, vão para trás, descem e voltam para a frente. Eles só levam o tecido para trás enquanto estão em cima.",
+      "p2": "O transporte só move o tecido enquanto a agulha está fora dele. Os dentes sobem e empurram no começo de cada volta, com a agulha ainda no alto. Quando a agulha desce, o tecido já parou e os dentes já baixaram. O quanto o tecido anda a cada volta é o <strong>comprimento do ponto</strong>. Normalmente é de 2,5 mm, ou 4 pontos por cm.",
+      "p3": "Arraste o controle deslizante para mudar o comprimento do ponto. Os dentes dão passos mais longos ou mais curtos, e os pontos se afastam ou se aproximam. A agulha e a lançadeira fazem o mesmo trabalho em todas as voltas.",
+      "control": {
+        "label": "Comprimento do ponto",
+        "short": "Curto",
+        "long": "Longo",
+        "density": "Pontos por cm",
+        "travel": "Avanço por ponto"
+      }
+    }
+  }
+}
