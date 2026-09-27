@@ -1,5 +1,5 @@
-import { FULL_TURN } from '@core/math';
-import { RIDGE_CREST_X, clamp, smoothstep } from '../model';
+import { FULL_TURN, clamp, smoothstep } from '@core/math';
+import { RIDGE_CREST_X } from '../model';
 import { METRES_PER_UNIT, TERRAIN } from './constants';
 
 const WINDWARD_CURVE = 1.2;

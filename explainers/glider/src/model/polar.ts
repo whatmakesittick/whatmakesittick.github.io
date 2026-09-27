@@ -1,4 +1,4 @@
-import { clamp } from './math';
+import { clamp } from '@core/math';
 
 export const GLIDER_TYPES = ['trainer', 'racer15', 'racer18'] as const;
 export type GliderType = (typeof GLIDER_TYPES)[number];

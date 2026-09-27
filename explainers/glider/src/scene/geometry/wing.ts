@@ -1,6 +1,6 @@
 import type { BufferGeometry } from 'three';
+import { lerp } from '@core/math';
 import { bladeGeometry } from '@core/scene/geometry/airfoil';
-import { lerp } from '../../model';
 
 export interface WingPlan {
   rootChord: number;

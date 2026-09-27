@@ -1,4 +1,4 @@
-import { clamp } from './math';
+import { clamp } from '@core/math';
 
 export const SPREAD = { min: 2, max: 20, step: 1, default: 12 } as const;
 

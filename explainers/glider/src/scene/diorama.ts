@@ -1,12 +1,12 @@
 import { Group, Vector3 } from 'three';
 import type { Box3, Object3D } from 'three';
+import { clamp } from '@core/math';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import type { FramingSlopes } from '@core/scene/lens';
 import type { SceneTextures } from '@core/scene/textures';
 import {
   GLIDERS,
-  clamp,
   PHASE_RANGES,
   bankAt,
   flightState,

@@ -1,5 +1,4 @@
-import { FULL_TURN, toRadians } from '@core/math';
-import { wrapAngle } from './math';
+import { FULL_TURN, toRadians, wrapAngle } from '@core/math';
 import { Route, arc, line, rampedShare } from './path';
 import type { Pose } from './path';
 import { kmhToMetresPerSecond } from './polar';

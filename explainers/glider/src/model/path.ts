@@ -1,4 +1,4 @@
-import { clamp } from './math';
+import { clamp } from '@core/math';
 
 export interface Pose {
   x: number;

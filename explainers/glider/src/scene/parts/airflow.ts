@@ -7,9 +7,9 @@ import {
   LineSegments,
 } from 'three';
 import type { PointsMaterial } from 'three';
+import { lerp } from '@core/math';
 import { createPointMaterial, PointCloud } from '@core/scene/pointCloud';
 import type { ResourceTracker } from '@core/scene/resources';
-import { lerp } from '../../model';
 import { METRES_PER_UNIT, PARTICLES, RENDER_ORDER, RIDGE_FLOW, WAVE } from '../constants';
 import {
   SLOPE_STEP,

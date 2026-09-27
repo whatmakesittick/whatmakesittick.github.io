@@ -1,5 +1,5 @@
+import { lerp } from '@core/math';
 import { wrapPhase } from '@core/store';
-import { lerp } from './math';
 
 export const FLIGHT_CYCLE = 2700;
 export const TRANSITION_SECONDS = 30;
