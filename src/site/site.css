@@ -97,6 +97,10 @@
     border-color 0.2s ease;
 }
 
+.card-item[hidden] {
+  display: none;
+}
+
 .card-item:hover,
 .card-item:focus-within {
   border-color: rgb(245 165 36 / 0.5);
