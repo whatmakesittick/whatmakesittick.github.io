@@ -3,7 +3,7 @@ import type { LanguageCode } from '@core/i18n';
 import { languagePath } from '@core/i18n/paths';
 import { compareNewestFirst } from '@core/manifest';
 import type { CatalogueEntry } from '@core/manifest';
-import { html, requireElement, svg } from '@core/ui/dom';
+import { html, requireElement } from '@core/ui/dom';
 import { localizedMeta, pageLanguage } from './catalogue';
 import { createCardTags, createTagFilter, showSelection } from './tagChips';
 import type { ChooseTag } from './tagChips';
@@ -17,8 +17,6 @@ interface CardView {
 
 const CATALOGUE_SELECTOR = '[data-catalogue]';
 const FILTER_SELECTOR = '.tag-filter';
-const ARROW_PATH = 'M5 12h14M13 6l6 6-6 6';
-const ICON_VIEW_BOX = '0 0 24 24';
 
 function explainerPath(entry: CatalogueEntry, file = ''): string {
   return `${import.meta.env.BASE_URL}${entry.manifest.slug}/${file}`;
@@ -27,12 +25,6 @@ function explainerPath(entry: CatalogueEntry, file = ''): string {
 function explainerPage(entry: CatalogueEntry, code: LanguageCode): string {
   const language = pageLanguage(entry, code, DEFAULT_LANGUAGE);
   return `${import.meta.env.BASE_URL}${languagePath(language, entry.manifest.slug)}`;
-}
-
-function arrowIcon(): SVGSVGElement {
-  return svg('svg', { class: 'icon', viewBox: ICON_VIEW_BOX, 'aria-hidden': 'true' }, [
-    svg('path', { d: ARROW_PATH }),
-  ]);
 }
 
 function createCard(entry: CatalogueEntry, choose: ChooseTag): CardView | undefined {
@@ -51,13 +43,12 @@ function createCard(entry: CatalogueEntry, choose: ChooseTag): CardView | undefi
       html('span', { class: 'card-eyebrow' }, [meta.eyebrow]),
       html('h2', { class: 'card-title' }, [meta.title]),
       html('span', { class: 'card-summary' }, [meta.summary]),
-      html('span', { class: 'card-action' }, [t('catalogue.explore'), arrowIcon()]),
     ]),
   ]);
-  const element = html('li', { class: 'card-item' }, [
-    link,
+  const footer = html('div', { class: 'card-footer' }, [
     createCardTags(entry.manifest.tags, choose),
   ]);
+  const element = html('li', { class: 'card-item' }, [link, footer]);
   return { entry, element };
 }
 
