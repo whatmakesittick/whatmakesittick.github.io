@@ -29,6 +29,8 @@ export class CameraRig {
   private tween: CameraTween | null = null;
   private anchor: Object3D | null = null;
   private readonly anchorPosition = new Vector3();
+  private readonly followedPosition = new Vector3();
+  private readonly followShift = new Vector3();
   private floorHeight = -Infinity;
   private boundsRadius = 1;
   private viewport: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
@@ -103,8 +105,8 @@ export class CameraRig {
 
   private followAnchor(): void {
     if (!this.anchor) return;
-    const position = this.anchor.getWorldPosition(new Vector3());
-    this.shift(position.clone().sub(this.anchorPosition));
+    const position = this.anchor.getWorldPosition(this.followedPosition);
+    this.shift(this.followShift.subVectors(position, this.anchorPosition));
     this.anchorPosition.copy(position);
   }
 
