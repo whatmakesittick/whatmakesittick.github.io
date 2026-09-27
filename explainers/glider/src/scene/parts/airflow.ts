@@ -8,6 +8,7 @@ import {
 } from 'three';
 import type { PointsMaterial } from 'three';
 import { createPointMaterial, PointCloud } from '@core/scene/pointCloud';
+import type { ResourceTracker } from '@core/scene/resources';
 import { lerp } from '../../model';
 import { METRES_PER_UNIT, PARTICLES, RENDER_ORDER, RIDGE_FLOW, WAVE } from '../constants';
 import {
@@ -54,10 +55,15 @@ class StreamParticles {
   private readonly drifters: Drifter[];
   private readonly spec: StreamSpec;
 
-  constructor(spec: StreamSpec, material: PointsMaterial, drifters: Drifter[]) {
+  constructor(
+    spec: StreamSpec,
+    material: PointsMaterial,
+    drifters: Drifter[],
+    tracker: ResourceTracker,
+  ) {
     this.spec = spec;
     this.drifters = drifters;
-    this.cloud = new PointCloud(drifters.length, material, RENDER_ORDER.particles);
+    this.cloud = tracker.track(new PointCloud(drifters.length, material, RENDER_ORDER.particles));
   }
 
   update(speed: number, deltaSeconds: number): void {
@@ -178,6 +184,7 @@ export class AirflowPart {
       },
       pointMaterial(context, 'wind', PARTICLES.ridge.size),
       ridgeDrifters(),
+      context.tracker,
     );
     this.wave = new StreamParticles(
       {
@@ -189,6 +196,7 @@ export class AirflowPart {
       },
       pointMaterial(context, 'wave', PARTICLES.wave.size),
       waveDrifters(),
+      context.tracker,
     );
     this.object.add(
       this.ridge.cloud.points,

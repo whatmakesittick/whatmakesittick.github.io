@@ -1,4 +1,5 @@
 import { Color } from 'three';
+import { FULL_TURN } from '@core/math';
 import { AIR_TONES, PARTICLES, TERRAIN, WAVE } from './constants';
 import { CREST_HEIGHT, ridgeShare, terrainHeight } from './terrain';
 
@@ -6,7 +7,6 @@ const NEUTRAL = new Color(AIR_TONES.neutral);
 const RISING = new Color(AIR_TONES.rising);
 const SINKING = new Color(AIR_TONES.sinking);
 export const SLOPE_STEP = 0.5;
-const FULL_TURN = Math.PI * 2;
 
 export const WINDWARD_SLOPE = CREST_HEIGHT / TERRAIN.windwardRun;
 export const WAVE_STEEPEST = (WAVE.peakAmplitude * FULL_TURN) / WAVE.wavelength;

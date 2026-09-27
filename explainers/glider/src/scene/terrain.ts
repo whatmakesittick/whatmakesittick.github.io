@@ -1,10 +1,10 @@
+import { FULL_TURN } from '@core/math';
 import { RIDGE_CREST_X, clamp, smoothstep } from '../model';
 import { METRES_PER_UNIT, TERRAIN } from './constants';
 
 const WINDWARD_CURVE = 1.2;
 const LEE_CURVE = 1.4;
 const HILL_TEXTURE = { base: 0.6, swing: 0.4, depthRatio: 1.7 } as const;
-const FULL_TURN = Math.PI * 2;
 
 export const CREST_HEIGHT = TERRAIN.crestHeight / METRES_PER_UNIT;
 

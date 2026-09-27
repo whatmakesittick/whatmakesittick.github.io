@@ -10,7 +10,7 @@ export const PART_INFO: Record<PartId, PartInfo> = {
   drag: { labelKey: 'parts.drag', side: 'left' },
   field: { labelKey: 'parts.field', side: 'left' },
   thermal: { labelKey: 'parts.thermal', side: 'right' },
-  cumulus: { labelKey: 'parts.cumulus', side: 'right' },
+  cumulus: { labelKey: 'parts.cumulus', side: 'left' },
   wind: { labelKey: 'parts.wind', side: 'left' },
   ridge: { labelKey: 'parts.ridge', side: 'right' },
   rotor: { labelKey: 'parts.rotor', side: 'left' },

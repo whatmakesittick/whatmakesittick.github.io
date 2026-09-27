@@ -53,6 +53,8 @@ export class GliderController {
     const flightSeconds = shortestStep(this.lastPhase, state.phase);
     this.lastPhase = state.phase;
     this.diorama?.update({ phase: state.phase, flightSeconds });
+    const { rig } = this.dependencies;
+    this.diorama?.keepGliderVisibleFrom(rig.camera.position, rig.framing());
   }
 
   labelAnchors(): ReadonlyMap<string, Object3D> {

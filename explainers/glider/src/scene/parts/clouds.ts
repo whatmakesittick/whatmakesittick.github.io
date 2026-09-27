@@ -1,6 +1,7 @@
 import { CircleGeometry, Group, IcosahedronGeometry, SphereGeometry } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { FULL_TURN } from '@core/math';
 import { CUMULUS_BASE, FIELD, FLIGHT_CYCLE, thermalAxisX } from '../../model';
 import { CLOUD_BASE_Y, CUMULUS, LENTICULAR, ROTOR_CLOUD } from '../constants';
 import { anchorAt, partMesh } from './context';
@@ -13,7 +14,6 @@ export interface CloudAnchors {
 }
 
 const HALF_TURN = Math.PI;
-const FULL_TURN = Math.PI * 2;
 const ROTOR_SEEDS = { angle: 2.399, reach: 0.618 } as const;
 const CHURN_PER_SECOND = (FULL_TURN * ROTOR_CLOUD.turnsPerLoop) / FLIGHT_CYCLE;
 
@@ -45,13 +45,15 @@ function puffDome(radius: number): BufferGeometry {
 }
 
 function cumulusGeometry(): BufferGeometry {
-  return merged(
+  const geometry = merged(
     CUMULUS.puffs.map(([x, y, z, radius]) => {
       const puff = puffDome(radius);
       puff.translate(x, y, z);
       return puff;
     }),
   );
+  geometry.scale(CUMULUS.alongWind, 1, CUMULUS.acrossWind);
+  return geometry;
 }
 
 function rotorGeometry(): BufferGeometry {
@@ -105,7 +107,7 @@ export class CloudsPart {
     const rotorLabelZ = ROTOR_CLOUD.halfLength * ROTOR_CLOUD.labelShare;
     const lenticularLabelX = -LENTICULAR.plates[0].length * LENTICULAR.labelShare;
     this.anchors = {
-      cumulus: anchorAt(cumulus, 0, CUMULUS.labelHeight, CUMULUS.labelReach),
+      cumulus: anchorAt(cumulus, -CUMULUS.labelReach, CUMULUS.labelHeight, 0),
       rotor: anchorAt(this.object, ROTOR_CLOUD.x, ROTOR_CLOUD.y, rotorLabelZ),
       lenticular: anchorAt(lenticular, lenticularLabelX, 0, 0),
     };

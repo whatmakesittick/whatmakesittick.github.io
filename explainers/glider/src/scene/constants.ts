@@ -1,9 +1,11 @@
 import { toRadians } from '@core/math';
-import { CUMULUS_BASE } from '../model';
+import { CUMULUS_BASE, GLIDERS, GLIDER_TYPES } from '../model';
+import { THEME } from '../theme';
 
 export const METRES_PER_UNIT = 20;
-export const GLIDER_UNITS_PER_METRE = 0.55;
+export const GLIDER_UNITS_PER_METRE = 1.35;
 export const FLOOR_HEIGHT = 0;
+export const GLIDER_PRESENCE = { minFrameShare: 0.21, maxScale: 2 } as const;
 
 export const AIRFOIL_SAMPLES = 10;
 
@@ -39,7 +41,7 @@ export const FUSELAGE = {
   profileSamples: 26,
   radialSegments: 18,
   heightScale: 1.15,
-  girth: 1.35,
+  girth: 1.6,
   canopyStart: 1.05,
   canopyEnd: 2.62,
   canopyInflate: 1.03,
@@ -54,7 +56,7 @@ export const WING = {
   rootY: 0.32,
   rootChordShare: 1.35,
   tipChordShare: 0.65,
-  chordEmphasis: 1.5,
+  chordEmphasis: 2,
   thickness: 0.15,
   dihedral: toRadians(3),
   tipShare: 0.9,
@@ -84,14 +86,14 @@ export const TAIL = {
 } as const;
 
 export const FORCE_ARROWS = {
-  weightLength: 8,
-  dragEmphasis: 34,
-  shaftRadius: 0.28,
-  headRadius: 0.7,
-  headLength: 1.6,
-  dragDrop: -0.55,
+  weightLength: 9.9,
+  dragEmphasis: 26,
+  shaftRadius: 0.34,
+  headRadius: 0.85,
+  headLength: 2,
+  dragDrop: -0.7,
   radialSegments: 12,
-  labelLift: 0.4,
+  labelLift: 0.6,
 } as const;
 
 export const TERRAIN = {
@@ -117,9 +119,9 @@ export const FIELDS = {
   maxSize: 38,
   hedge: 0.9,
   lift: 0.08,
-  darkFieldWidth: 62,
-  darkFieldDepth: 54,
-  darkFieldMargin: 6,
+  darkFieldWidth: 144,
+  darkFieldDepth: 130,
+  darkFieldMargin: 8,
   darkFieldLift: 0.14,
   regions: [
     { from: -320, to: -84 },
@@ -139,8 +141,8 @@ export const TERRAIN_COLORS = {
 } as const;
 
 export const COLUMN = {
-  bottomRadius: 21,
-  topRadius: 27,
+  bottomRadius: 54,
+  topRadius: 63,
   radialSegments: 28,
   heightSegments: 6,
   opacity: 0.2,
@@ -148,32 +150,37 @@ export const COLUMN = {
 
 export const CUMULUS = {
   puffs: [
-    [0, 0, 0, 25],
-    [22, 0, 9, 18],
-    [-21, 0, -8, 18],
-    [8, 0, -22, 17],
-    [-9, 0, 21, 17],
-    [30, 0, -16, 14],
-    [-30, 0, 16, 14],
-    [38, 0, 5, 10],
-    [-36, 0, -9, 10],
-    [6, 13, 3, 17],
-    [-8, 10, -6, 16],
-    [17, 8, -5, 13],
+    [0, 0, 0, 47],
+    [41, 0, 17, 34],
+    [-40, 0, -14, 34],
+    [14, 0, -41, 31],
+    [-17, 0, 40, 31],
+    [55, 0, -30, 26],
+    [-55, 0, 30, 26],
+    [71, 0, 10, 19],
+    [-67, 0, -17, 19],
+    [11, 24, 6, 31],
+    [-14, 19, -11, 30],
+    [31, 14, -10, 24],
   ],
-  clearance: 3.6,
   downwind: 5,
-  labelHeight: 8,
-  labelReach: 28,
+  alongWind: 0.85,
+  acrossWind: 0.7,
+  labelHeight: 14,
+  labelReach: 54,
   widthSegments: 12,
   heightSegments: 6,
 } as const;
 
-export const CLOUD_BASE_Y = CUMULUS_BASE / METRES_PER_UNIT + CUMULUS.clearance;
+const WINGTIP_BANK = toRadians(48);
+const LARGEST_SPAN = Math.max(...GLIDER_TYPES.map((type) => GLIDERS[type].span));
+const WINGTIP_RISE = (LARGEST_SPAN / 2) * GLIDER_UNITS_PER_METRE * Math.sin(WINGTIP_BANK);
+
+export const CLOUD_BASE_Y = CUMULUS_BASE / METRES_PER_UNIT + WINGTIP_RISE;
 
 export const ROTOR_CLOUD = {
   x: 104,
-  y: 50,
+  y: 58,
   halfLength: 18,
   radius: 8,
   puffCount: 24,
@@ -248,6 +255,10 @@ export const PARTICLES = {
   slopeForFullTone: 0.6,
 } as const;
 
-export const AIR_TONES = { rising: '#8aeef7', sinking: '#ff9068', neutral: '#f2f6fa' } as const;
+export const AIR_TONES = {
+  rising: THEME.rising,
+  sinking: THEME.sinking,
+  neutral: '#f2f6fa',
+} as const;
 
 export const RENDER_ORDER = { column: 1, lines: 2, particles: 3 } as const;

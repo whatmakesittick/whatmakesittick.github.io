@@ -1,4 +1,4 @@
-import { toRadians } from '@core/math';
+import { FULL_TURN, toRadians } from '@core/math';
 import { wrapAngle } from './math';
 import { Route, arc, line, rampedShare } from './path';
 import type { Pose } from './path';
@@ -15,19 +15,18 @@ interface Ramps {
   rampOut?: number;
 }
 
-export const THERMAL_CIRCLE = { radius: 20, turns: 28.5, driftPerMetre: 0.011 } as const;
+export const THERMAL_CIRCLE = { radius: 48, turns: 28.5, driftPerMetre: 0.011 } as const;
 export const RIDGE_CREST_X = 0;
 export const WAVE_HOLD_X = 60;
 
 const FIELD_X = -160;
-const RIDGE_BEATS = { closestX: -8, length: 74, turnRadius: 9, count: 8, rampIn: 0.08 } as const;
+const RIDGE_BEATS = { closestX: -14, length: 116, turnRadius: 14, count: 8, rampIn: 0.08 } as const;
 const WAVE_TRANSIT = { seconds: 100, rampOut: 0.35 } as const;
 const HOME_RAMP_IN = 0.05;
 const BANK_WINDOW_SECONDS = 4;
 const GRAVITY = 9.81;
 const LEVEL_PITCH_SPEED = 90;
 const FAST_PITCH = { speed: 200, pitch: toRadians(-6) } as const;
-const FULL_TURN = Math.PI * 2;
 const ENTRY_ANGLE = Math.PI / 2;
 const ORIGIN: Pose = { x: 0, z: 0, heading: 0 };
 
@@ -56,7 +55,9 @@ function ridgeRoute(start: Pose): Route {
 
 const RIDGE_START = ridgeStart();
 
-export const FIELD = { x: FIELD_X, z: RIDGE_START.z + THERMAL_CIRCLE.radius } as const;
+const PLAN_FIELD_Z = RIDGE_START.z + THERMAL_CIRCLE.radius;
+
+export const FIELD = { x: FIELD_X, z: -PLAN_FIELD_Z } as const;
 
 export function thermalAxisX(height: number): number {
   return FIELD.x + THERMAL_CIRCLE.driftPerMetre * height;
@@ -67,7 +68,7 @@ function thermalPose(time: number): Pose {
   const angle = ENTRY_ANGLE + FULL_TURN * THERMAL_CIRCLE.turns * ((time - start) / (end - start));
   return {
     x: thermalAxisX(heightAt(time)) + THERMAL_CIRCLE.radius * Math.cos(angle),
-    z: FIELD.z + THERMAL_CIRCLE.radius * Math.sin(angle),
+    z: PLAN_FIELD_Z + THERMAL_CIRCLE.radius * Math.sin(angle),
     heading: angle + Math.PI / 2,
   };
 }
@@ -108,10 +109,14 @@ const TRACK: readonly TrackSegment[] = [
   routeSegment(PHASE_RANGES.final, HOME_ROUTE, { rampIn: HOME_RAMP_IN }),
 ];
 
+function planToWorld(pose: Pose): Pose {
+  return { x: pose.x, z: -pose.z, heading: -pose.heading };
+}
+
 export function poseAt(phase: number): Pose {
   const time = flightTime(phase);
   const segment = TRACK.find((candidate) => time < candidate.end) ?? TRACK[TRACK.length - 1];
-  return segment.pose(time);
+  return planToWorld(segment.pose(time));
 }
 
 export function turnRateAt(phase: number): number {

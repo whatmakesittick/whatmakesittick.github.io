@@ -159,11 +159,12 @@ to its own fields. The engine store adds `engineType`, `layout`,
 
 A timeline loops by default: the phase wraps around the cycle and the scrubber
 stops one step short of it, which suits a mechanism turning through a rotation.
-With `loop: false` the timeline is a run with an end, such as a flight measured in
-seconds: the phase is clamped to `[0, cycle]`, playback pauses at the end, play at
-the end starts over from 0, the scrubber reaches the end and the last phase stays
-current there. A preset's `pauseAt` and `startAt` are wrapped or clamped the same
-way; `startAt` moves a chapter to its moment in the run without stopping playback.
+With `loop: false` the timeline is a one-shot run with an end, such as a lightning
+strike or a rocket launch: the phase is clamped to `[0, cycle]`, playback pauses
+at the end, play at the end starts over from 0, the scrubber reaches the end and
+the last phase stays current there. A preset's `pauseAt` and `startAt` are
+wrapped or clamped the same way; `startAt` moves a chapter to its moment in the
+run without stopping playback.
 
 Core mounts the shell (`src/core/mount.ts`): the dock (play, scrubber with phase
 bands, status, speed slider, choices, toggles, reset camera, more), the gauge
@@ -214,7 +215,8 @@ still orbit and zoom. A pose passed to `jumpTo` or `tweenTo` counts from the
 anchor's position at the moment of the call, so frame it around the anchor's
 current position. `PointCloud` is a fixed-size buffer of coloured points drawn
 with `createPointMaterial`: set points with `setPoint` and `setColor`, then call
-`commit` once per frame.
+`commit` once per frame. `dispose` frees its buffers; the material stays the
+caller's to dispose.
 
 ## Build
 

@@ -3,6 +3,7 @@ import type { PartId } from '../../state';
 import { FORCE_ARROWS } from '../constants';
 import { FORCE_FINISHES } from '../finishes';
 import { arrowHead, unitShaft } from '../geometry/primitives';
+import { ATTITUDE_ORDER } from './glider';
 import type { Attitude } from './glider';
 import type { PartContext } from './context';
 
@@ -20,7 +21,6 @@ interface Arrow {
   anchor: Object3D;
 }
 
-const ATTITUDE_ORDER = 'YZX';
 const POINT_DOWN = Math.PI;
 const POINT_BACK = Math.PI / 2;
 

@@ -1,6 +1,6 @@
-import type { BufferGeometry, Material, Texture } from 'three';
-
-type Disposable = BufferGeometry | Material | Texture;
+interface Disposable {
+  dispose(): void;
+}
 
 export class ResourceTracker {
   private readonly resources = new Set<Disposable>();

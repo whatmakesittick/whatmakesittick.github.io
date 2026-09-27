@@ -14,15 +14,15 @@ interface RegionSpec {
 
 const REGIONS: Record<RegionId, RegionSpec> = {
   reach: { x: [-90, 90], y: [0, 120], z: [-40, 40] },
-  overview: { x: [-185, 170], y: [0, 190], z: [-50, 40] },
-  thermal: { x: [FIELD.x - 28, FIELD.x + 46], y: [0, 92], z: [FIELD.z - 24, FIELD.z + 24] },
+  overview: { x: [-222, 170], y: [0, 190], z: [-80, 55] },
+  thermal: { x: [FIELD.x - 44, FIELD.x + 66], y: [0, 90], z: [FIELD.z - 16, FIELD.z + 16] },
   cloud: {
-    x: [CUMULUS_CENTER.x - 40, CUMULUS_CENTER.x + 36],
-    y: [CUMULUS_CENTER.y - 34, CUMULUS_CENTER.y + 22],
-    z: [CUMULUS_CENTER.z - 24, CUMULUS_CENTER.z + 24],
+    x: [CUMULUS_CENTER.x - 60, CUMULUS_CENTER.x + 26],
+    y: [CUMULUS_CENTER.y - 36, CUMULUS_CENTER.y + 22],
+    z: [CUMULUS_CENTER.z - 16, CUMULUS_CENTER.z + 16],
   },
-  ridge: { x: [-70, 4], y: [0, 82], z: [-34, 34] },
-  wave: { x: [36, 150], y: [40, 162], z: [-30, 10] },
+  ridge: { x: [-66, 4], y: [20, 76], z: [-50, 50] },
+  wave: { x: [40, 140], y: [44, 160], z: [-34, 10] },
 };
 
 export function regionBox(id: RegionId): Box3 {
