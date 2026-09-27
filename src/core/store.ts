@@ -1,6 +1,7 @@
 import { createStore } from 'zustand/vanilla';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { isLooping } from './explainer';
+import { clamp } from './math';
 import type {
   ExplainerStore,
   Playback,
@@ -30,7 +31,7 @@ export function wrapPhase(phase: number, cycle: number): number {
 }
 
 export function clampPhase(phase: number, cycle: number): number {
-  return Math.min(cycle, Math.max(0, phase));
+  return clamp(phase, 0, cycle);
 }
 
 function mergeView(view: ViewFlags, changes: Partial<ViewFlags> = {}): ViewFlags {
@@ -66,8 +67,7 @@ export function createExplainerStore<E extends object, P extends Preset>(
     looping ? wrapPhase(phase, timeline.cycle) : clampPhase(phase, timeline.cycle);
   const hasEnded = (phase: number) => !looping && phase >= timeline.cycle;
   const restartIfEnded = (phase: number) => (hasEnded(phase) ? 0 : phase);
-  const clampSpeed = (speed: number) =>
-    Math.min(timeline.speed.max, Math.max(timeline.speed.min, speed));
+  const clampSpeed = (speed: number) => clamp(speed, timeline.speed.min, timeline.speed.max);
   const phaseStart = (id: string) => {
     const phase = timeline.phases.find((candidate) => candidate.id === id);
     if (!phase) throw new Error(`Unknown phase "${id}"`);

@@ -1,3 +1,5 @@
+import { clamp } from '@core/math';
+
 export type EngineType = 'petrol' | 'diesel';
 export type IgnitionKind = 'spark' | 'compression';
 export type IntakeCharge = 'mixture' | 'air';
@@ -71,9 +73,6 @@ export const ENGINE_SPECS: Record<EngineType, EngineSpec> = { petrol: PETROL, di
 export const ENGINE_TYPES: readonly EngineType[] = ['petrol', 'diesel'];
 
 export function withCompressionRatio(spec: EngineSpec, compressionRatio: number): EngineSpec {
-  const clamped = Math.min(
-    COMPRESSION_RATIO_RANGE.max,
-    Math.max(COMPRESSION_RATIO_RANGE.min, compressionRatio),
-  );
+  const clamped = clamp(compressionRatio, COMPRESSION_RATIO_RANGE.min, COMPRESSION_RATIO_RANGE.max);
   return { ...spec, compressionRatio: clamped };
 }
