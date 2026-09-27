@@ -167,42 +167,27 @@
 }
 
 .card-footer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 12px;
-  align-items: center;
-  justify-content: space-between;
   padding: 0 20px 18px;
-}
-
-.card-action {
-  display: inline-flex;
-  gap: 6px;
-  align-items: center;
-  color: var(--text);
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.card-action .icon {
-  width: 16px;
-  height: 16px;
-  color: var(--accent);
-  transition: transform 0.2s ease;
-}
-
-.card-item:hover .card-action .icon {
-  transform: translateX(3px);
 }
 
 .card-tags {
   display: flex;
-  flex-wrap: wrap;
   gap: 6px;
-  margin: 0 0 0 auto;
+  min-width: 0;
+  margin: 0;
   padding: 0;
+  overflow-x: auto;
   list-style: none;
+  scrollbar-width: none;
+}
+
+.card-tags::-webkit-scrollbar {
+  display: none;
+}
+
+.card-tags .tag-chip {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .card-tags .tag-chip {
