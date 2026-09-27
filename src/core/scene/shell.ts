@@ -12,6 +12,7 @@ import { Listeners } from './listeners';
 import { startLoop } from './loop';
 import type { Loop } from './loop';
 import { MaterialLibrary, STRUCTURE_GROUP } from './materials';
+import type { MaterialLibraryOptions } from './materials';
 import { Stage } from './stage';
 import { createSceneTextures } from './textures';
 import type { SceneTextures } from './textures';
@@ -31,6 +32,7 @@ export interface SceneOptions {
   fog?: FogOptions;
   stage?: boolean;
   camera?: CameraOptions;
+  highlight?: MaterialLibraryOptions;
 }
 
 export interface SceneShell {
@@ -70,7 +72,7 @@ export function createSceneHost(
   const textures = createSceneTextures();
   const stage = new Stage(textures.shadow);
   if (options.stage ?? true) scene.add(stage.group);
-  const materials = new MaterialLibrary();
+  const materials = new MaterialLibrary(options.highlight);
   const highlighter = new Highlighter(materials, [...Object.keys(parts), STRUCTURE_GROUP]);
   const labels = new LabelLayer(parts);
   const rig = new CameraRig(viewport.renderer.domElement, options.camera);
