@@ -17,6 +17,7 @@ at `/<slug>/`.
 | `src/core/locales/*.json` | Shell strings only: controls, footer, header chrome, keyboard, catalogue         |
 | `explainers/<slug>/`      | One folder per explainer, see "Explainer package"                                |
 | `vite/`                   | The `explainerPages` plugin: manifests, page generation, public files, catalogue |
+| `e2e/`                    | Browser smoke test run by Playwright against the production build                |
 | `public/`                 | Site-wide static files: favicon, icons, web manifest, catalogue link preview     |
 | `scripts/`                | Social images: `social-images.sh` renders `scripts/cards/*.html`                 |
 | `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`                                |
@@ -317,3 +318,10 @@ Vitest for pure modules, happy-dom for `*.dom.test.ts` files, no comments by
 default, no all-caps text, `data-i18n`, `data-i18n-html` and `data-i18n-attr` for
 copy, tokens in `src/core/style.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
 (`vite/`, `src/core/manifest.ts`) import with explicit `.ts` extensions.
+
+`npm run test:e2e` runs the Playwright smoke test in `e2e/` against `vite preview`
+of `dist/`, so build first and run `npx playwright install chromium` once. It opens
+every explainer in English and in its last language, and the catalogue, at desktop
+and iPhone 13 sizes, walks the chapters and the scrubber, and fails on page or
+console errors, untranslated copy, overflow, empty readouts, labels over the dock or
+broken cards. CI runs it on every pull request.
