@@ -7,6 +7,6 @@ export const THEME = {
   ridge: '#8bd47f',
   wave: '#c792ea',
   final: '#94a3b8',
-  rising: '#4fd1c5',
-  sinking: '#ff7a59',
+  rising: '#8aeef7',
+  sinking: '#ff9068',
 } as const;

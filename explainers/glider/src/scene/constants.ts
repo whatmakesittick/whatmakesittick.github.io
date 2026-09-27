@@ -1,5 +1,6 @@
 import { toRadians } from '@core/math';
 import { CUMULUS_BASE, GLIDERS, GLIDER_TYPES } from '../model';
+import { THEME } from '../theme';
 
 export const METRES_PER_UNIT = 20;
 export const GLIDER_UNITS_PER_METRE = 1.35;
@@ -254,6 +255,10 @@ export const PARTICLES = {
   slopeForFullTone: 0.6,
 } as const;
 
-export const AIR_TONES = { rising: '#8aeef7', sinking: '#ff9068', neutral: '#f2f6fa' } as const;
+export const AIR_TONES = {
+  rising: THEME.rising,
+  sinking: THEME.sinking,
+  neutral: '#f2f6fa',
+} as const;
 
 export const RENDER_ORDER = { column: 1, lines: 2, particles: 3 } as const;
