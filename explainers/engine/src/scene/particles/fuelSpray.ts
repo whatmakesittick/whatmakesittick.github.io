@@ -1,8 +1,8 @@
 import { Color, Vector3 } from 'three';
 import type { PointsMaterial } from 'three';
+import { PointCloud } from '@core/scene/pointCloud';
 import { toRadians } from '../../model';
-import { SPRAY } from '../constants';
-import { PointCloud } from './pointCloud';
+import { RENDER_ORDER, SPRAY } from '../constants';
 
 interface Droplet {
   jet: Vector3;
@@ -43,7 +43,7 @@ export class FuelSpray {
     this.nozzle = nozzle.clone();
     this.reach = bore * SPRAY.reachPerBore;
     const count = SPRAY.jets * SPRAY.particlesPerJet;
-    this.cloud = new PointCloud(count, material);
+    this.cloud = new PointCloud(count, material, RENDER_ORDER.overlay);
     this.droplets = Array.from({ length: count }, (_, index) => ({
       jet: jetDirection(index % SPRAY.jets),
       progress: Math.random(),

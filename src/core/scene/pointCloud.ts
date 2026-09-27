@@ -1,7 +1,7 @@
 import { BufferAttribute, BufferGeometry, NormalBlending, Points, PointsMaterial } from 'three';
 import type { Blending, Texture } from 'three';
-import { RENDER_ORDER } from '../constants';
 
+const DEFAULT_RENDER_ORDER = 0;
 const RGBA = 4;
 const ALPHA = 3;
 const XYZ = 3;
@@ -28,7 +28,7 @@ export class PointCloud {
   readonly colors: Float32Array;
   private readonly geometry: BufferGeometry;
 
-  constructor(count: number, material: PointsMaterial) {
+  constructor(count: number, material: PointsMaterial, renderOrder = DEFAULT_RENDER_ORDER) {
     this.positions = new Float32Array(count * XYZ);
     this.colors = new Float32Array(count * RGBA);
     this.geometry = new BufferGeometry();
@@ -36,7 +36,7 @@ export class PointCloud {
     this.geometry.setAttribute('color', new BufferAttribute(this.colors, RGBA));
     this.points = new Points(this.geometry, material);
     this.points.frustumCulled = false;
-    this.points.renderOrder = RENDER_ORDER.overlay;
+    this.points.renderOrder = renderOrder;
   }
 
   setPoint(index: number, x: number, y: number, z: number): void {

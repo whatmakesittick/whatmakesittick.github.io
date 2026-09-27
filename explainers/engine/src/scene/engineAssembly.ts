@@ -1,6 +1,7 @@
 import { AdditiveBlending, Box3, Group } from 'three';
 import type { Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
+import { createPointMaterial } from '@core/scene/pointCloud';
 import { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
 import type { EngineLayout, EngineSpec } from '../model';
@@ -20,7 +21,6 @@ import type { CamshaftPart } from './parts/camshaft';
 import type { PartContext } from './parts/context';
 import { createCrankshaft } from './parts/crankshaft';
 import type { CrankshaftPart } from './parts/crankshaft';
-import { createPointMaterial } from './particles/pointCloud';
 import { createStaticStructure } from './staticStructure';
 import type { StaticStructure } from './staticStructure';
 export interface AssemblyConfig {

@@ -1,10 +1,10 @@
 import { Vector3 } from 'three';
 import type { Color, PointsMaterial } from 'three';
-import { FLOW, PORT } from '../constants';
+import { PointCloud } from '@core/scene/pointCloud';
+import { FLOW, PORT, RENDER_ORDER } from '../constants';
 import type { ValveDimensions } from '../dimensions';
 import { portCenterline, samplePath } from '../parts/portPath';
 import type { PathSample } from '../geometry/sweep';
-import { PointCloud } from './pointCloud';
 
 export type FlowDirection = 'in' | 'out';
 
@@ -62,7 +62,7 @@ export class FlowStream {
     this.color = color;
     this.boreRadius = boreRadius;
     this.samples = samplePath(portCenterline(valve), PORT.pathSamples);
-    this.cloud = new PointCloud(count, material);
+    this.cloud = new PointCloud(count, material, RENDER_ORDER.overlay);
     this.particles = Array.from({ length: count }, (_, index) => ({
       progress: (index / count) * TOTAL,
       across: randomSigned(),
