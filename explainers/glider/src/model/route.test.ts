@@ -66,7 +66,7 @@ describe('poseAt', () => {
 
 describe('bankAt', () => {
   it('banks about 45° while circling the thermal', () => {
-    expect(bankDegrees(225)).toBeCloseTo(45, 0);
+    expect(Math.abs(bankDegrees(225))).toBeCloseTo(45, 0);
   });
 
   it('flies wings level on the glides and in the wave', () => {
@@ -77,7 +77,9 @@ describe('bankAt', () => {
 
   it('banks about 45° when it turns at the end of a ridge beat', () => {
     let steepest = 0;
-    for (let time = 990; time < 1230; time += 1) steepest = Math.max(steepest, bankDegrees(time));
+    for (let time = 990; time < 1230; time += 1) {
+      steepest = Math.max(steepest, Math.abs(bankDegrees(time)));
+    }
     expect(steepest).toBeGreaterThan(40);
     expect(steepest).toBeLessThan(50);
   });

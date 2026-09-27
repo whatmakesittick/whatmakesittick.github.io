@@ -22,7 +22,7 @@ interface Particle {
 
 const COLUMN_TOP = CLOUD_BASE_Y;
 const DRIFT_PER_UNIT = THERMAL_CIRCLE.driftPerMetre * METRES_PER_UNIT;
-const LABEL_HEIGHT_SHARE = 0.68;
+const LABEL_HEIGHT_SHARE = 0.55;
 const RISING = new Color(AIR_TONES.rising);
 const FULL_TURN = Math.PI * 2;
 

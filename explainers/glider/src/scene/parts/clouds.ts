@@ -45,13 +45,15 @@ function puffDome(radius: number): BufferGeometry {
 }
 
 function cumulusGeometry(): BufferGeometry {
-  return merged(
+  const geometry = merged(
     CUMULUS.puffs.map(([x, y, z, radius]) => {
       const puff = puffDome(radius);
       puff.translate(x, y, z);
       return puff;
     }),
   );
+  geometry.scale(CUMULUS.alongWind, 1, CUMULUS.acrossWind);
+  return geometry;
 }
 
 function rotorGeometry(): BufferGeometry {
@@ -105,7 +107,7 @@ export class CloudsPart {
     const rotorLabelZ = ROTOR_CLOUD.halfLength * ROTOR_CLOUD.labelShare;
     const lenticularLabelX = -LENTICULAR.plates[0].length * LENTICULAR.labelShare;
     this.anchors = {
-      cumulus: anchorAt(cumulus, 0, CUMULUS.labelHeight, CUMULUS.labelReach),
+      cumulus: anchorAt(cumulus, -CUMULUS.labelReach, CUMULUS.labelHeight, 0),
       rotor: anchorAt(this.object, ROTOR_CLOUD.x, ROTOR_CLOUD.y, rotorLabelZ),
       lenticular: anchorAt(lenticular, lenticularLabelX, 0, 0),
     };

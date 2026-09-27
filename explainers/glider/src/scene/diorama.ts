@@ -2,8 +2,11 @@ import { Group, Vector3 } from 'three';
 import type { Box3, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
+import type { FramingSlopes } from '@core/scene/lens';
 import type { SceneTextures } from '@core/scene/textures';
 import {
+  GLIDERS,
+  clamp,
   PHASE_RANGES,
   bankAt,
   flightState,
@@ -16,7 +19,13 @@ import {
 import type { FlightState, GliderType, PhaseId } from '../model';
 import type { PartId, ViewOptions } from '../state';
 import type { ChaseTarget } from './cameraViews';
-import { FORCE_ARROWS, METRES_PER_UNIT, WAVE } from './constants';
+import {
+  FORCE_ARROWS,
+  GLIDER_PRESENCE,
+  GLIDER_UNITS_PER_METRE,
+  METRES_PER_UNIT,
+  WAVE,
+} from './constants';
 import { AirflowPart } from './parts/airflow';
 import type { AirLifts } from './parts/airflow';
 import { CloudsPart } from './parts/clouds';
@@ -44,6 +53,8 @@ export interface DioramaFrame {
 }
 
 type Lifts = AirLifts & { thermal: number };
+
+const scratch = new Vector3();
 
 function phaseLift(phase: PhaseId, type: GliderType): number {
   return legLift(legAt(PHASE_RANGES[phase].start), type);
@@ -136,10 +147,19 @@ export class Diorama {
     this.clouds.update(phase);
   }
 
+  keepGliderVisibleFrom(viewpoint: Vector3, slopes: FramingSlopes): void {
+    const distance = this.glider.object.getWorldPosition(scratch).distanceTo(viewpoint);
+    const frameWidth = 2 * distance * slopes.horizontal;
+    const presence = (GLIDER_PRESENCE.minFrameShare * frameWidth) / this.span();
+    this.glider.setPresence(clamp(presence, 1, GLIDER_PRESENCE.maxScale));
+  }
+
   chaseTarget(): ChaseTarget {
     return {
       position: this.glider.object.getWorldPosition(new Vector3()),
       heading: this.heading,
+      span: this.span(),
+      reachBelow: (FORCE_ARROWS.weightLength + FORCE_ARROWS.labelLift) * GLIDER_UNITS_PER_METRE,
     };
   }
 
@@ -156,6 +176,10 @@ export class Diorama {
     this.glider.dispose();
     this.materials.clearRegistered();
     this.tracker.dispose();
+  }
+
+  private span(): number {
+    return GLIDERS[this.type].span * GLIDER_UNITS_PER_METRE;
   }
 
   private placeGlider(phase: number): void {

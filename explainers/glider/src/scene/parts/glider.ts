@@ -141,6 +141,10 @@ export class GliderModel {
     this.anchors.wing.position.z = this.wingLabelZ();
   }
 
+  setPresence(scale: number): void {
+    this.object.scale.setScalar(GLIDER_UNITS_PER_METRE * scale);
+  }
+
   setAttitude({ heading, pitch, bank }: Attitude): void {
     this.body.rotation.set(bank, -heading, pitch);
   }

@@ -5,6 +5,7 @@ import { COLUMN } from './constants';
 
 const PAINT_GLOW = 0.35;
 const ARROW_GLOW = 0.45;
+const CLOUD_GLOW = 0.35;
 
 export const FINISHES = {
   gelcoat: { color: '#f4f2ec', metalness: 0.05, roughness: 0.3 },
@@ -16,7 +17,14 @@ export const FINISHES = {
     emissive: THEME.accent,
     emissiveIntensity: PAINT_GLOW,
   },
-  cumulus: { color: '#fbf8f2', metalness: 0, roughness: 0.95, flatShading: true },
+  cumulus: {
+    color: '#fbf8f2',
+    emissive: '#d9d5cc',
+    emissiveIntensity: CLOUD_GLOW,
+    metalness: 0,
+    roughness: 0.95,
+    flatShading: true,
+  },
   rotor: { color: '#c3c8cf', metalness: 0, roughness: 1, flatShading: true },
   lenticular: { color: '#f3f6fa', metalness: 0, roughness: 0.7 },
   column: {
