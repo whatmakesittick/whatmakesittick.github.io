@@ -1,4 +1,5 @@
 import { DoubleSide, Group, Mesh, MeshStandardMaterial, Object3D } from 'three';
+import { lerp } from '@core/math';
 import { GAS, RENDER_ORDER } from '../constants';
 import { verticalCylinder } from '../geometry/primitives';
 import type { GasAppearance } from '../gasAppearance';
@@ -53,7 +54,7 @@ export function chamberFactory(context: PartContext): (z: number) => ChamberPart
         material.color.copy(appearance.color);
         material.emissive.copy(appearance.emissive);
         material.emissiveIntensity = appearance.emissiveIntensity;
-        material.opacity = appearance.opacity * emphasis;
+        material.opacity = appearance.opacity * lerp(GAS.dimmedOpacity, 1, emphasis);
         labelAnchor.position.set(radius * LABEL_RADIUS_FRACTION, bottom + height / 2, 0);
       },
     };

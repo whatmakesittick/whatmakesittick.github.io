@@ -1,12 +1,14 @@
 import { DoubleSide } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../theme';
-import { COLUMN } from './constants';
+import { COLUMN, TERRAIN_COLORS } from './constants';
 
 const SOFT_GLOW = 0.35;
 const WIND_GLOW = 0.3;
 const ARROW_GLOW = 0.45;
 const DRAG_TONE = '#f5c451';
+const UNTINTED = '#ffffff';
+const LAND_SURFACE = { flatShading: true, metalness: 0, roughness: 1 } as const;
 
 export const FINISHES = {
   gelcoat: { color: '#f4f2ec', metalness: 0.05, roughness: 0.3 },
@@ -54,4 +56,10 @@ export const FORCE_FINISHES = {
   lift: { color: THEME.glide, emissive: THEME.glide, emissiveIntensity: ARROW_GLOW },
   weight: { color: THEME.sinking, emissive: THEME.sinking, emissiveIntensity: ARROW_GLOW },
   drag: { color: DRAG_TONE, emissive: DRAG_TONE, emissiveIntensity: ARROW_GLOW },
+} as const satisfies Record<string, MaterialFinish>;
+
+export const TERRAIN_FINISHES = {
+  painted: { ...LAND_SURFACE, color: UNTINTED, vertexColors: true },
+  farGround: { ...LAND_SURFACE, color: TERRAIN_COLORS.farGround },
+  darkField: { ...LAND_SURFACE, color: TERRAIN_COLORS.darkField },
 } as const satisfies Record<string, MaterialFinish>;

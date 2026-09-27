@@ -1,13 +1,45 @@
-import { MeshStandardMaterial } from 'three';
-import type { Material, MeshStandardMaterialParameters } from 'three';
+import { Color, MeshStandardMaterial, SRGBColorSpace } from 'three';
+import type { Material, MeshStandardMaterialParameters, RGB } from 'three';
+import { lerp } from '../math';
 
 export type MaterialFinish = Readonly<MeshStandardMaterialParameters>;
 
+export interface DimStyle {
+  saturation: number;
+  brightness: number;
+  emissive: number;
+  opacity: number;
+}
+
+export interface MaterialLibraryOptions {
+  dim?: Partial<DimStyle>;
+  undimmed?: readonly string[];
+}
+
 export const STRUCTURE_GROUP = 'structure';
+export const UNDIMMED_GROUP = 'backdrop';
+
+export const DIM_STYLE: Readonly<DimStyle> = {
+  saturation: 0.25,
+  brightness: 0.45,
+  emissive: 0.2,
+  opacity: 1,
+};
 
 const FULL_EMPHASIS = 0.999;
+const LUMA = { r: 0.2126, g: 0.7152, b: 0.0722 } as const;
 
-interface OpacityBase {
+type TintedMaterial = Material & { color: Color };
+type GlowingMaterial = Material & { emissiveIntensity: number };
+
+interface Tint {
+  color: Color;
+  srgb: RGB;
+}
+
+interface ToneBase {
+  tint?: Tint;
+  emissiveIntensity: number;
   opacity: number;
   transparent: boolean;
 }
@@ -16,20 +48,79 @@ export function createMaterial(finish: MaterialFinish): MeshStandardMaterial {
   return new MeshStandardMaterial(finish);
 }
 
-function applyOpacity(material: Material, base: OpacityBase, emphasis: number): void {
+function isTinted(material: Material): material is TintedMaterial {
+  return 'color' in material && material.color instanceof Color;
+}
+
+function isGlowing(material: Material): material is GlowingMaterial {
+  return 'emissiveIntensity' in material && typeof material.emissiveIntensity === 'number';
+}
+
+function captureTint(material: Material): Tint | undefined {
+  if (!isTinted(material)) return undefined;
+  const color = material.color.clone();
+  return { color, srgb: color.getRGB({ r: 0, g: 0, b: 0 }, SRGBColorSpace) };
+}
+
+function captureTone(material: Material): ToneBase {
+  return {
+    tint: captureTint(material),
+    emissiveIntensity: isGlowing(material) ? material.emissiveIntensity : 0,
+    opacity: material.opacity,
+    transparent: material.transparent,
+  };
+}
+
+function applyColor(material: Material, base: ToneBase, style: DimStyle, emphasis: number): void {
+  if (!base.tint || !isTinted(material)) return;
+  if (emphasis >= FULL_EMPHASIS) {
+    material.color.copy(base.tint.color);
+    return;
+  }
+  const { r, g, b } = base.tint.srgb;
+  const grey = LUMA.r * r + LUMA.g * g + LUMA.b * b;
+  const saturation = lerp(style.saturation, 1, emphasis);
+  const brightness = lerp(style.brightness, 1, emphasis);
+  const tone = (channel: number) => lerp(grey, channel, saturation) * brightness;
+  material.color.setRGB(tone(r), tone(g), tone(b), SRGBColorSpace);
+}
+
+function applyGlow(material: Material, base: ToneBase, style: DimStyle, emphasis: number): void {
+  if (base.emissiveIntensity === 0 || !isGlowing(material)) return;
+  material.emissiveIntensity = base.emissiveIntensity * lerp(style.emissive, 1, emphasis);
+}
+
+function applyOpacity(material: Material, base: ToneBase, style: DimStyle, emphasis: number): void {
   const transparent = base.transparent || emphasis < FULL_EMPHASIS;
   if (material.transparent !== transparent) {
     material.transparent = transparent;
     material.needsUpdate = true;
   }
-  material.opacity = base.opacity * emphasis;
+  material.opacity = base.opacity * lerp(style.opacity, 1, emphasis);
+}
+
+function applyTone(material: Material, base: ToneBase, style: DimStyle, emphasis: number): void {
+  applyColor(material, base, style, emphasis);
+  applyGlow(material, base, style, emphasis);
+  if (style.opacity < 1) applyOpacity(material, base, style, emphasis);
 }
 
 export class MaterialLibrary {
+  private readonly style: DimStyle;
+  private readonly undimmed: ReadonlySet<string>;
   private readonly finishes = new Map<string, Map<MaterialFinish, MeshStandardMaterial>>();
   private readonly extras = new Map<string, Set<Material>>();
   private readonly emphasis = new Map<string, number>();
-  private readonly bases = new WeakMap<Material, OpacityBase>();
+  private readonly bases = new WeakMap<Material, ToneBase>();
+
+  constructor(options: MaterialLibraryOptions = {}) {
+    this.style = { ...DIM_STYLE, ...options.dim };
+    this.undimmed = new Set([UNDIMMED_GROUP, ...(options.undimmed ?? [])]);
+  }
+
+  canDim(group: string): boolean {
+    return !this.undimmed.has(group);
+  }
 
   get(group: string, finish: MaterialFinish): MeshStandardMaterial {
     let byFinish = this.finishes.get(group);
@@ -78,13 +169,13 @@ export class MaterialLibrary {
   }
 
   private emphasise(material: Material, emphasis: number): void {
-    applyOpacity(material, this.baseOf(material), emphasis);
+    applyTone(material, this.baseOf(material), this.style, emphasis);
   }
 
-  private baseOf(material: Material): OpacityBase {
+  private baseOf(material: Material): ToneBase {
     let base = this.bases.get(material);
     if (!base) {
-      base = { opacity: material.opacity, transparent: material.transparent };
+      base = captureTone(material);
       this.bases.set(material, base);
     }
     return base;

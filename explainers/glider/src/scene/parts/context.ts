@@ -1,14 +1,14 @@
 import { Mesh } from 'three';
 import type { BufferGeometry } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
-import type { STRUCTURE_GROUP } from '@core/scene/materials';
+import type { STRUCTURE_GROUP, UNDIMMED_GROUP } from '@core/scene/materials';
 import type { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
 import type { PartId } from '../../state';
 import { FINISHES } from '../finishes';
 import type { Finish } from '../finishes';
 
-export type EmphasisGroup = PartId | typeof STRUCTURE_GROUP;
+export type EmphasisGroup = PartId | typeof STRUCTURE_GROUP | typeof UNDIMMED_GROUP;
 
 export interface PartContext {
   materials: MaterialLibrary;

@@ -145,7 +145,7 @@ export const COLUMN = {
   topRadius: 63,
   radialSegments: 28,
   heightSegments: 6,
-  opacity: 0.2,
+  opacity: 0.12,
 } as const;
 
 export const CUMULUS = {
@@ -247,7 +247,7 @@ export const WIND_ARROWS = {
 } as const;
 
 export const PARTICLES = {
-  thermal: { count: 300, size: 1.8, opacity: 0.9, fade: 0.12, spread: 0.92 },
+  thermal: { count: 300, size: 1.8, opacity: 0.7, fade: 0.12, spread: 0.92 },
   ridge: { count: 420, size: 2.4, opacity: 0.9, fade: 0.1 },
   wave: { count: 520, size: 3.2, opacity: 0.9, fade: 0.08 },
   lineOpacity: 0.5,
@@ -262,3 +262,5 @@ export const AIR_TONES = {
 } as const;
 
 export const RENDER_ORDER = { column: 1, lines: 2, particles: 3 } as const;
+
+export const HAZE_DIM = { saturation: 0.3, brightness: 0.8 } as const;

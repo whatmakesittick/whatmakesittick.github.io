@@ -20,8 +20,6 @@ export const PART_INFO: Record<PartId, PartInfo> = {
 
 export const PART_IDS = Object.keys(PART_INFO) as PartId[];
 
-export const GLIDER_PARTS: readonly PartId[] = ['wing', 'fuselage', 'tail'];
-
 export const LABEL_PRIORITY: readonly PartId[] = [
   'lift',
   'weight',

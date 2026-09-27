@@ -1,4 +1,4 @@
-import { Group, Mesh } from 'three';
+import { Group, Mesh, MeshStandardMaterial } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import { PLATE_BOTTOM } from '../../model';
@@ -7,7 +7,6 @@ import { TRANSLUCENT_COLORS } from '../finishes';
 import { extrudePlan } from '../geometry/extrude';
 import { box } from '../geometry/primitives';
 import { roundedRectHole, roundedRectShape } from '../geometry/shapes';
-import type { TranslucentMaterial } from '../translucency';
 import type { PartContext } from './context';
 
 export interface ThroatPlatePart {
@@ -20,6 +19,12 @@ const PLATE_RENDER_ORDER = 1;
 const SLOT_CORNER = 0.8;
 const PLATE_SURFACE = { metalness: 0.85, roughness: 0.3 } as const;
 const LABEL_SPOT = { x: -16, z: 14 } as const;
+const OPAQUE = 1;
+
+interface PlateLook {
+  plate: MeshStandardMaterial;
+  guide: MeshStandardMaterial;
+}
 
 function plateGeometry(): BufferGeometry {
   const { left, right, back, front, cornerRadius, holeHalfWidth, holeHalfLength } = PLATE;
@@ -58,31 +63,48 @@ function guideGeometry(x: number): BufferGeometry {
   });
 }
 
+function plateMaterial(context: PartContext, color: string, opacity: number): MeshStandardMaterial {
+  const transparent = opacity < OPAQUE;
+  const material = context.tracker.track(
+    new MeshStandardMaterial({
+      color,
+      ...PLATE_SURFACE,
+      opacity,
+      transparent,
+      depthWrite: !transparent,
+    }),
+  );
+  context.materials.register('throatPlate', material);
+  return material;
+}
+
+function plateLook(context: PartContext, opacity: number): PlateLook {
+  return {
+    plate: plateMaterial(context, TRANSLUCENT_COLORS.plate, opacity),
+    guide: plateMaterial(context, TRANSLUCENT_COLORS.plateGuide, opacity),
+  };
+}
+
 export function createThroatPlate(context: PartContext): ThroatPlatePart {
   const object = new Group();
-  const create = (color: string) =>
-    context.translucency.create(
-      context.tracker,
-      'throatPlate',
-      { color, ...PLATE_SURFACE },
-      PLATE_OPACITY.whole,
-    );
-  const plate = create(TRANSLUCENT_COLORS.plate);
-  const guide = create(TRANSLUCENT_COLORS.plateGuide);
-  const materials: TranslucentMaterial[] = [plate, guide];
-  const plateMesh = new Mesh(context.tracker.track(plateGeometry()), plate.material);
+  const looks = {
+    whole: plateLook(context, PLATE_OPACITY.whole),
+    cutaway: plateLook(context, PLATE_OPACITY.cutaway),
+  };
+  const plateMesh = new Mesh(context.tracker.track(plateGeometry()), looks.whole.plate);
   plateMesh.renderOrder = PLATE_RENDER_ORDER;
-  object.add(plateMesh);
-  PLATE.guides.forEach((x) =>
-    object.add(new Mesh(context.tracker.track(guideGeometry(x)), guide.material)),
+  const guideMeshes = PLATE.guides.map(
+    (x) => new Mesh(context.tracker.track(guideGeometry(x)), looks.whole.guide),
   );
+  object.add(plateMesh, ...guideMeshes);
   return {
     object,
     labelAnchor: anchorAt(object, LABEL_SPOT.x, 0, LABEL_SPOT.z),
     setCutaway: (cutaway) => {
-      const opacity = cutaway ? PLATE_OPACITY.cutaway : PLATE_OPACITY.whole;
-      materials.forEach((material) => {
-        material.opacity = opacity;
+      const look = cutaway ? looks.cutaway : looks.whole;
+      plateMesh.material = look.plate;
+      guideMeshes.forEach((mesh) => {
+        mesh.material = look.guide;
       });
     },
   };

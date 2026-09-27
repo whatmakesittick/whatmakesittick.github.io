@@ -11,5 +11,4 @@ export const CAMERA_MAX_POLAR = Math.PI * 0.5;
 export const CAMERA_MIN_DISTANCE_FACTOR = 0.3;
 export const CAMERA_MAX_DISTANCE_FACTOR = 1.8;
 
-export const DIMMED_OPACITY = 0.35;
 export const EMPHASIS_RATE = 6;

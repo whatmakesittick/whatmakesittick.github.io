@@ -44,7 +44,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: { air: false, forces: true },
     startAt: 520,
     labels: ['wing', 'lift', 'weight', 'drag'],
-    highlight: ['wing'],
+    highlight: ['wing', 'lift', 'weight', 'drag'],
   },
   thermal: {
     camera: 'thermal',

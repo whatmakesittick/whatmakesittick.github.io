@@ -279,4 +279,6 @@ export const ROW_END = FABRIC_SHEET.back + FABRIC_SHEET.fade / 2;
 
 export const PLATE_OPACITY = { whole: 1, cutaway: 0.22 } as const;
 
+export const SEE_THROUGH_DIM = { opacity: 0.4 } as const;
+
 export const THREAD_SHAPE = { sides: 6, upperRadius: 0.45 } as const;

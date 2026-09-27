@@ -183,6 +183,7 @@ export const GAS = {
   lightRange: 120,
   heatLightIntensity: 40,
   sparkLightIntensity: 25,
+  dimmedOpacity: 0.35,
 } as const;
 
 export const FLOW = {
@@ -219,3 +220,5 @@ export const SPARK = {
   holdSeconds: 0.07,
   flickerMin: 0.65,
 } as const;
+
+export const SEE_THROUGH_DIM = { opacity: 0.6 } as const;

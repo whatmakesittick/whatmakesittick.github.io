@@ -147,6 +147,7 @@ interface SceneOptions {
     maxPolarAngle?: number; // orbit limit in radians
     distance?: { min?: number; max?: number }; // zoom limits in world units
   };
+  highlight?: { dim?: Partial<DimStyle>; undimmed?: string[] }; // how dimmed parts look, groups that never dim
 }
 
 interface Explainer<S extends Playback = Playback> {
@@ -218,11 +219,20 @@ a point on a part for a label to follow; `geometry/airfoil.ts` extrudes an airfo
 blade section with `bladeGeometry`; `geometry/lathe.ts` turns a spline profile
 into a solid with `sampleProfile` and `latheAlongX`. The
 material library caches one material per emphasis group and finish, where a
-finish is a plain `MeshStandardMaterialParameters` object the explainer owns. The
-highlighter dims every group except the highlighted parts; `structure` is the
-group for everything that is not a part. Dimming scales the opacity a material
-was created or registered with, so a translucent cloud or column of air stays
-translucent when it is restored.
+finish is a plain `MeshStandardMaterialParameters` object the explainer owns;
+`register` adds a material the explainer made itself, such as points, lines or a
+sprite. The highlighter dims every group except the highlighted parts;
+`structure` is the group for everything that is not a part, and `backdrop`
+(`UNDIMMED_GROUP`) is the group that never dims, for ground and sky. Dimming works
+on tone, not opacity: it mixes a material's colour toward its own grey, darkens it
+and scales its glow, down to the `DimStyle` at full dim (`DIM_STYLE`: saturation
+0.25, brightness 0.45, emissive 0.2). Opacity and transparency stay the
+material's own, so a translucent cloud or column of air keeps its translucency. A
+style with `opacity` below 1 also fades dimmed parts, for a cutaway that must show
+what sits behind a dimmed wall. The library reads a material's colour, glow and
+opacity once, the first time it sees it: a part that changes its own opacity
+swaps between materials, and a glow the material starts without, such as a
+spark, stays the part's to drive.
 
 The explainer's `scene` options shape the world around it. A mechanism keeps the
 defaults: dark background, grid floor with a contact shadow, an orbit that stops
@@ -233,6 +243,9 @@ look up. The zoom range comes from the bounds a controller gives
 `rig.setBounds`: from 0.3 of their radius to 1.8 times the distance that fits
 them. `camera.distance` sets `min` or `max` in world units instead; the sewing
 machine and the glider use it.
+`highlight` tunes the dimming: the glider darkens only a little, so white
+clouds and gelcoat read as shaded against the sky, and the engine and the sewing
+machine fade dimmed parts so their cutaways show what is behind.
 
 | Camera call                 | Effect                                                                          |
 | --------------------------- | ------------------------------------------------------------------------------- |

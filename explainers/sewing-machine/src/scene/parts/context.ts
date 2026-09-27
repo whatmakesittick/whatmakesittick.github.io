@@ -6,14 +6,12 @@ import type { ResourceTracker } from '@core/scene/resources';
 import type { PartId } from '../../state';
 import { FINISHES } from '../finishes';
 import type { Finish } from '../finishes';
-import type { Translucency } from '../translucency';
 
 export type EmphasisGroup = PartId | typeof STRUCTURE_GROUP;
 
 export interface PartContext {
   materials: MaterialLibrary;
   tracker: ResourceTracker;
-  translucency: Translucency;
 }
 
 export function partMesh(

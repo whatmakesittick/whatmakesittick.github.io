@@ -34,7 +34,6 @@ import { createThroatPlate } from './parts/throatPlate';
 import type { ThroatPlatePart } from './parts/throatPlate';
 import { regionBox } from './regions';
 import type { RegionId } from './regions';
-import { Translucency } from './translucency';
 
 export interface AssemblyFrame {
   angle: number;
@@ -47,7 +46,6 @@ const FLOOR_HEIGHT = 0;
 export class SewingAssembly {
   readonly root = new Group();
   private readonly tracker = new ResourceTracker();
-  private readonly translucency = new Translucency();
   private readonly materials: MaterialLibrary;
   private readonly body: BodyPart;
   private readonly handwheel: HandwheelPart;
@@ -65,11 +63,7 @@ export class SewingAssembly {
 
   constructor(materials: MaterialLibrary) {
     this.materials = materials;
-    const context: PartContext = {
-      materials,
-      tracker: this.tracker,
-      translucency: this.translucency,
-    };
+    const context: PartContext = { materials, tracker: this.tracker };
     this.body = createBody(context);
     this.handwheel = createHandwheel(context);
     this.tensionDiscs = createTensionDiscs(context);
@@ -154,7 +148,6 @@ export class SewingAssembly {
       travel,
       tension,
     });
-    this.translucency.sync(this.materials);
   }
 
   labelAnchors(): ReadonlyMap<string, Object3D> {
@@ -173,6 +166,7 @@ export class SewingAssembly {
   dispose(): void {
     this.root.removeFromParent();
     this.threads.dispose();
+    this.materials.clearRegistered();
     this.tracker.dispose();
   }
 }
