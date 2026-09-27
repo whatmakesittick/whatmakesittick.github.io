@@ -27,6 +27,8 @@ the engine.
 - `npm test` runs the unit tests: store, models, label layout, locales, the page plugin.
 - `npm run lint` checks types, style and formatting.
 - `npm run build` writes the whole site to `dist/`; `npm run preview` serves it.
+- `npm run test:e2e` runs the browser smoke test against the build in `dist/`; run
+  `npx playwright install chromium` once before the first run.
 - `docker compose up --build` builds the site and serves it on http://localhost:8080.
 
 `scripts/social-images.sh` renders the icons and the link preview cards from
@@ -70,7 +72,8 @@ The build generates `/<slug>/index.html` and adds a card to the catalogue. See
 
 Every push to `main` runs `.github/workflows/deploy.yml`: a build with
 `BASE_PATH=/` and a deploy to GitHub Pages. Pull requests run lint, tests and a
-build in `.github/workflows/ci.yml`.
+build in `.github/workflows/ci.yml`. The browser smoke test runs only by hand, from
+the Smoke test workflow in `.github/workflows/smoke.yml`.
 
 ## License
 

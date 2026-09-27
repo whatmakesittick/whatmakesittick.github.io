@@ -17,9 +17,10 @@ at `/<slug>/`.
 | `src/core/locales/*.json` | Shell strings only: controls, footer, header chrome, keyboard, catalogue        |
 | `explainers/<slug>/`      | One folder per explainer, see "Explainer package"                               |
 | `vite/`                   | The `explainerPages` plugin: manifests, language pages, crawl files, catalogue  |
+| `e2e/`                    | Browser smoke test run by Playwright against the production build               |
 | `public/`                 | Site-wide static files: favicon, icons, web manifest, catalogue link preview    |
 | `scripts/`                | Social images: `social-images.sh` renders `scripts/cards/*.html`                |
-| `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`                               |
+| `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`, `smoke.yml` by hand          |
 
 Generated at build and dev time, never committed: `<slug>/index.html` and
 `<slug>/main.ts` for every explainer, `<lang>/index.html` for the catalogue and
@@ -517,3 +518,14 @@ Vitest for pure modules, happy-dom for `*.dom.test.ts` files, no comments by
 default, no all-caps text, `data-i18n`, `data-i18n-html` and `data-i18n-attr` for
 copy, tokens in `src/core/style.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
 (`vite/`, `src/core/manifest.ts`) import with explicit `.ts` extensions.
+
+`npm run test:e2e` runs the Playwright smoke test in `e2e/` against `vite preview`
+of `dist/`, so build first and run `npx playwright install chromium` once. Chromium
+draws WebGL in software, so the test sticks to what catches a broken page. At
+desktop and iPhone 13 sizes, the phone at one device pixel per point, it opens every
+explainer in English, walks its chapters and stops the scrubber mid-cycle, then loads
+its last language once at `/<lang>/<slug>/`; one explainer is also opened through an
+old `?lang=` link, and the catalogue in English and in the last site language. It
+fails on page or console errors, untranslated copy, overflow, empty readouts, labels
+over the dock or broken cards. A run takes about three minutes; CI runs it only by
+hand, from the Smoke test workflow, and keeps the report when it fails.
