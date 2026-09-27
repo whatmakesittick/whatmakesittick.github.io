@@ -2,11 +2,12 @@ import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import en from '../locales/en.json';
 import { NAMESPACE, TRANSLATION_OPTIONS } from './config';
-import { DEFAULT_LANGUAGE, LANGUAGES, isLanguageCode } from './languages';
+import { DEFAULT_LANGUAGE, LANGUAGES, baseLanguage } from './languages';
 import type { LanguageCode } from './languages';
 import { createDictionaryLoader, loadersByLanguage } from './loader';
 import type { DictionaryLoader } from './loader';
 import { LANGUAGE_QUERY_KEY } from './paths';
+import type { PreferredLanguages } from './redirect';
 import type { Dictionary, LocaleLoaders } from './resources';
 
 export { DEFAULT_LANGUAGE, LANGUAGES } from './languages';
@@ -16,6 +17,8 @@ export { LANGUAGE_QUERY_KEY } from './paths';
 export type { Dictionary, LocaleLoader, LocaleLoaders } from './resources';
 
 const STORAGE_KEY = 'language';
+const STORED_SOURCE = 'localStorage';
+const BROWSER_SOURCE = 'navigator';
 const BASE_SEGMENTS = import.meta.env.BASE_URL.split('/').filter(Boolean).length;
 
 const CORE_LOCALES: LocaleLoaders = {
@@ -45,11 +48,11 @@ export async function initI18n(locales: LocaleLoaders = {}): Promise<void> {
     supportedLngs: LANGUAGES.map((language) => language.code),
     nonExplicitSupportedLngs: true,
     detection: {
-      order: ['path', 'querystring', 'localStorage', 'navigator'],
+      order: ['path', 'querystring', STORED_SOURCE, BROWSER_SOURCE],
       lookupFromPathIndex: BASE_SEGMENTS,
       lookupQuerystring: LANGUAGE_QUERY_KEY,
       lookupLocalStorage: STORAGE_KEY,
-      caches: ['localStorage'],
+      caches: [STORED_SOURCE],
     },
   });
   await setLanguage(currentLanguage());
@@ -58,8 +61,18 @@ export async function initI18n(locales: LocaleLoaders = {}): Promise<void> {
 export const t = i18next.t.bind(i18next);
 
 export function currentLanguage(): LanguageCode {
-  const [base] = (i18next.language ?? DEFAULT_LANGUAGE).split('-');
-  return isLanguageCode(base) ? base : DEFAULT_LANGUAGE;
+  return baseLanguage(i18next.language ?? DEFAULT_LANGUAGE) ?? DEFAULT_LANGUAGE;
+}
+
+function detectedFrom(source: string): LanguageCode | undefined {
+  return [detector.detect([source])]
+    .flat()
+    .map((code) => (code ? baseLanguage(code) : undefined))
+    .find((code) => code !== undefined);
+}
+
+export function preferredLanguages(): PreferredLanguages {
+  return { stored: detectedFrom(STORED_SOURCE), browser: detectedFrom(BROWSER_SOURCE) };
 }
 
 export async function setLanguage(code: LanguageCode): Promise<void> {

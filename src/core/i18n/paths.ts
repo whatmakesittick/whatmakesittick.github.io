@@ -25,10 +25,14 @@ export function splitLanguagePath(path: string): LanguagePath {
     : { code: undefined, page: segments.join(SEGMENT_SEPARATOR) };
 }
 
+export function pathFromBase(pathname: string, base: string): string {
+  return pathname.startsWith(base) ? pathname.slice(base.length) : pathname;
+}
+
 export function languageUrl(href: string, base: string, code: LanguageCode): string {
   const url = new URL(href);
-  const path = url.pathname.startsWith(base) ? url.pathname.slice(base.length) : url.pathname;
-  url.pathname = `${base}${languagePath(code, splitLanguagePath(path).page)}`;
+  const { page } = splitLanguagePath(pathFromBase(url.pathname, base));
+  url.pathname = `${base}${languagePath(code, page)}`;
   url.searchParams.delete(LANGUAGE_QUERY_KEY);
   return url.href;
 }

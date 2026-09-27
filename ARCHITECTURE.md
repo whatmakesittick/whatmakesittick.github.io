@@ -360,7 +360,12 @@ of every explainer from `virtual:explainer-catalogue`, and the page head uses
 The build prerenders each language (see "Build"), so the HTML a crawler fetches is
 already in the page's language. Detection prefers the `/<lang>/` path prefix, then
 the `?lang=` query, kept for old links and translated at runtime, then the stored
-choice and the browser language. The language dropdown opens the same page in the
+choice and the browser language. On an English URL without `?lang=`, when the stored
+choice or the browser picks another language the page ships, `languagePageToOpen` in
+`src/core/i18n/redirect.ts` sends the reader to that language page with
+`location.replace` before anything mounts, so the back button still works. A
+language page never redirects, so the English page redirects at most once, and a
+crawler with an English browser and nothing stored stays on the English page. The language dropdown opens the same page in the
 chosen language with a full navigation, to `/<lang>/<slug>/` or to the English page
 for `en`, so the URL, the head and the content always agree. It stores the choice
 first, so picking English on an English URL is not overridden by an earlier
