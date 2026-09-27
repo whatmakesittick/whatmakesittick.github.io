@@ -36,24 +36,19 @@
     <strong>swashplate</strong>, a pair of rings around the mast. Rods from the swashplate twist
     every blade by the same amount at once, all the way round. That is why it is called collective.
   </p>
-  <div class="collective-control">
-    <div class="collective-header">
+  <div class="range-widget">
+    <div class="range-widget__header">
       <label for="collective-lever" data-i18n="sections.collective.control.label">
         Collective lever
       </label>
       <output class="number" for="collective-lever" data-readout="collective-lever">50%</output>
     </div>
-    <input
-      id="collective-lever"
-      type="range"
-      class="range collective-range"
-      data-control="collective"
-    />
-    <div class="collective-scale" aria-hidden="true">
+    <input id="collective-lever" type="range" class="range" data-control="collective" />
+    <div class="range-widget__scale" aria-hidden="true">
       <span data-i18n="sections.collective.control.down">Down</span>
       <span data-i18n="sections.collective.control.up">Up</span>
     </div>
-    <dl class="collective-readouts">
+    <dl class="range-widget__readouts">
       <div>
         <dt data-i18n="sections.collective.control.pitch">Blade pitch</dt>
         <dd class="number" data-readout="collective-pitch">6.0°</dd>
