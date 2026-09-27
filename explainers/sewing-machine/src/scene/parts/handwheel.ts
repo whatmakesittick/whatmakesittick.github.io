@@ -1,9 +1,10 @@
 import type { Object3D } from 'three';
 import { Group, TorusGeometry } from 'three';
 import { toRadians } from '@core/math';
+import { anchorAt } from '@core/scene/parts';
 import { HANDWHEEL } from '../constants';
 import { box, cylinderAlongX } from '../geometry/primitives';
-import { anchorAt, partMesh } from './context';
+import { partMesh } from './context';
 import type { PartContext } from './context';
 
 export interface HandwheelPart {

@@ -1,11 +1,12 @@
 import { Group } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
+import { anchorAt } from '@core/scene/parts';
 import { BOBBIN_CASE, HOOK } from '../../model';
 import { BOBBIN_SHAPE, CASE_SHAPE } from '../constants';
 import { extrudePlan } from '../geometry/extrude';
 import { verticalCylinder } from '../geometry/primitives';
 import { circlePoints, hookSectorPoints, planHole, planShape } from '../geometry/shapes';
-import { anchorAt, partMesh } from './context';
+import { partMesh } from './context';
 import type { PartContext } from './context';
 
 export interface BobbinPart {

@@ -1,5 +1,6 @@
 import { LatheGeometry, SplineCurve, Vector2 } from 'three';
 import type { BufferGeometry } from 'three';
+import { FULL_TURN } from '../../math';
 
 export type ProfilePoint = readonly [axial: number, radius: number];
 
@@ -8,7 +9,7 @@ export interface LatheArc {
   length: number;
 }
 
-const FULL_ARC: LatheArc = { start: 0, length: Math.PI * 2 };
+const FULL_ARC: LatheArc = { start: 0, length: FULL_TURN };
 
 export function sampleProfile(points: readonly ProfilePoint[], samples: number): Vector2[] {
   const ascending = [...points].sort((a, b) => a[0] - b[0]);

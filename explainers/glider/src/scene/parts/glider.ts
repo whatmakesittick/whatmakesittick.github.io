@@ -1,13 +1,14 @@
 import { ExtrudeGeometry, Group, Mesh, Shape, Vector2 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
+import { latheAlongX, sampleProfile } from '@core/scene/geometry/lathe';
+import { anchorAt } from '@core/scene/parts';
 import { GLIDERS } from '../../model';
 import type { GliderType } from '../../model';
 import { FINISHES } from '../finishes';
 import { FUSELAGE, GLIDER_UNITS_PER_METRE, TAIL, WING } from '../constants';
-import { latheAlongX, sampleProfile } from '../geometry/lathe';
 import { wingPanel } from '../geometry/wing';
 import type { WingPlan } from '../geometry/wing';
-import { anchorAt, partMesh } from './context';
+import { partMesh } from './context';
 import type { PartContext } from './context';
 
 export interface GliderAnchors {

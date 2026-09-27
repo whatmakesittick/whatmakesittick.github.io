@@ -1,9 +1,10 @@
 import { CylinderGeometry, Group, TorusGeometry } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
+import { anchorAt } from '@core/scene/parts';
 import { NEEDLE } from '../../model';
 import { GROOVE_Z, NEEDLE_BAR_SHAPE, NEEDLE_SHAPE } from '../constants';
 import { box, cylinderAlongX, verticalCylinder } from '../geometry/primitives';
-import { anchorAt, partMesh } from './context';
+import { partMesh } from './context';
 import type { PartContext } from './context';
 
 export interface NeedlePart {

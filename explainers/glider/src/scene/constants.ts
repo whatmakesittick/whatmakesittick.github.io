@@ -7,8 +7,6 @@ export const GLIDER_UNITS_PER_METRE = 1.35;
 export const FLOOR_HEIGHT = 0;
 export const GLIDER_PRESENCE = { minFrameShare: 0.21, maxScale: 2 } as const;
 
-export const AIRFOIL_SAMPLES = 10;
-
 export const SKY_COLOR = '#79a3cf';
 
 export const SCENE_LIMITS = {

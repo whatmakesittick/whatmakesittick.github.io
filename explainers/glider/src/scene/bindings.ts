@@ -1,9 +1,9 @@
 import type { CameraRig } from '@core/scene/camera';
 import type { Highlighter } from '@core/scene/highlight';
+import type { LabelVisibility } from '@core/scene/labelVisibility';
 import { PRESETS } from '../state';
 import type { GliderState, GliderStore, PartId, Preset } from '../state';
 import type { GliderController } from './gliderController';
-import type { LabelVisibility } from './labelVisibility';
 import { GLIDER_PARTS, PART_IDS } from './partInfo';
 
 export interface SceneTargets {

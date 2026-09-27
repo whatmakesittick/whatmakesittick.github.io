@@ -2,9 +2,10 @@ import { CircleGeometry, Group, IcosahedronGeometry, SphereGeometry } from 'thre
 import type { BufferGeometry, Object3D } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { FULL_TURN } from '@core/math';
+import { anchorAt } from '@core/scene/parts';
 import { CUMULUS_BASE, FIELD, FLIGHT_CYCLE, thermalAxisX } from '../../model';
 import { CLOUD_BASE_Y, CUMULUS, LENTICULAR, ROTOR_CLOUD } from '../constants';
-import { anchorAt, partMesh } from './context';
+import { partMesh } from './context';
 import type { PartContext } from './context';
 
 export interface CloudAnchors {

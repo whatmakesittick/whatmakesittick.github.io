@@ -1,3 +1,5 @@
+import { clamp } from '@core/math';
+
 export const FLIGHT_MODES = ['hover', 'forward'] as const;
 export type FlightMode = (typeof FLIGHT_MODES)[number];
 
@@ -10,7 +12,7 @@ export const VERTICAL_TENDENCIES = ['descend', 'hover', 'climb'] as const;
 export type VerticalTendency = (typeof VERTICAL_TENDENCIES)[number];
 
 export function clampCollective(collective: number): number {
-  return Math.min(COLLECTIVE_RANGE.max, Math.max(COLLECTIVE_RANGE.min, collective));
+  return clamp(collective, COLLECTIVE_RANGE.min, COLLECTIVE_RANGE.max);
 }
 
 export function verticalTendency(collective: number): VerticalTendency {

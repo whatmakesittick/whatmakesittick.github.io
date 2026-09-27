@@ -134,7 +134,6 @@ export const TAIL_ROTOR = {
   gearboxRadius: 0.11,
 } as const;
 
-export const AIRFOIL_SAMPLES = 10;
 export const RADIAL_SEGMENTS = 32;
 
 export const DOWNWASH = {

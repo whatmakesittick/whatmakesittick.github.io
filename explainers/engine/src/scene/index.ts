@@ -6,8 +6,11 @@ import { EngineController } from './engineController';
 export function mountEngineScene(shell: SceneShell, store: EngineStore): () => void {
   const engine = new EngineController(shell);
   const unbind = bindStore(store, { engine, ...shell });
-  shell.onFrame((deltaSeconds) => engine.update(store.getState(), deltaSeconds));
+  const removeFrame = shell.onFrame((deltaSeconds) =>
+    engine.update(store.getState(), deltaSeconds),
+  );
   return () => {
+    removeFrame();
     unbind();
     engine.dispose();
   };

@@ -74,7 +74,11 @@ build with the manifest's path in the message.
 
 The explainer imports the toolkit through the `@core/*` alias, which resolves to
 `src/core/*`. Explainers carry no tooling of their own; the repository's lint,
-tests and build cover them.
+tests and build cover them. A helper that a second explainer needs moves to core
+instead of being copied: `@core/math` has `clamp`, `lerp`, `smoothstep`,
+`wrapAngle`, `FULL_TURN` and the degree conversions, and `@core/scene` has the
+shared scene helpers listed under "Scene toolkit". The package keeps its own
+data: dimensions, finishes, segment counts and part geometry.
 
 ## Contract
 
@@ -178,7 +182,8 @@ explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport
 scene, camera rig, label layer, highlighter, materials, textures, stage, lighting
 and `onFrame(update)`. Core owns the frame loop: each frame it ticks the store,
 runs the explainer's frame updates, eases the highlighter and the camera, renders
-and lays out the labels.
+and lays out the labels. `onFrame` and `viewport.onResize` return a function that
+removes the listener; the unmount that `mountScene` returns calls it.
 
 A choice's `shortcut` cycles through its options. Chapter buttons use
 `data-action="<name>" data-value="<value>"`; actions with `current` keep
@@ -191,7 +196,13 @@ touch screens.
 renderer, camera rig with tweens, orbit controls and `follow(anchor)`, `frameBox`
 for fitting a box into the safe area, label layer with overlap layout,
 highlighter, material library, textures, lighting with its `key`, `fill` and `rim`
-lights, stage grid and shadow, `PointCloud` for particles, frame loop and lens. The
+lights, stage grid and shadow, `PointCloud` for particles, frame loop and lens.
+Shared scene helpers sit beside them: `LabelVisibility` shows only the wanted
+labels that are on screen and clear of higher-priority ones, with a margin so
+they do not flicker at the edge; `anchorAt` in `parts.ts` adds an empty object at
+a point on a part for a label to follow; `geometry/airfoil.ts` extrudes an airfoil
+blade section with `bladeGeometry`; `geometry/lathe.ts` turns a spline profile
+into a solid with `sampleProfile` and `latheAlongX`. The
 material library caches one material per emphasis group and finish, where a
 finish is a plain `MeshStandardMaterialParameters` object the explainer owns. The
 highlighter dims every group except the highlighted parts; `structure` is the

@@ -1,11 +1,12 @@
 import { Group } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { toRadians } from '@core/math';
+import { anchorAt } from '@core/scene/parts';
 import { HEAD, PRESSER } from '../constants';
 import { extrudePlan } from '../geometry/extrude';
 import { box, cylinderAlongX, verticalCylinder } from '../geometry/primitives';
 import { roundedRectHole, roundedRectShape } from '../geometry/shapes';
-import { anchorAt, partMesh } from './context';
+import { partMesh } from './context';
 import type { PartContext } from './context';
 
 export interface PresserFootPart {

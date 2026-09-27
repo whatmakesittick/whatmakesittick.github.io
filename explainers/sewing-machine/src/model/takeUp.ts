@@ -1,6 +1,6 @@
+import { lerp, smoothstep } from '@core/math';
 import { wrapPhase } from '@core/store';
 import { STITCH_CYCLE } from './cycle';
-import { lerp, smoothstep } from './math';
 
 const TAKE_UP_TIMING = {
   dwellEnd: 20,

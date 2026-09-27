@@ -1,8 +1,8 @@
 import { Group, Object3D } from 'three';
 import type { BufferGeometry } from 'three';
 import { toRadians } from '@core/math';
+import { bladeGeometry } from '@core/scene/geometry/airfoil';
 import { FIN, TAIL_ROTOR } from '../constants';
-import { bladeGeometry } from '../geometry/airfoil';
 import { lateralCylinder } from '../geometry/primitives';
 import { partMesh } from './context';
 import type { PartContext } from './context';

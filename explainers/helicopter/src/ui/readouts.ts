@@ -1,4 +1,5 @@
 import type { Readout } from '@core/explainer';
+import { clamp } from '@core/math';
 import {
   BLADE_PITCH_DEGREES,
   CYCLIC_PITCH_DEGREES,
@@ -18,7 +19,7 @@ export function markedBladePitch(state: HelicopterState): number {
 }
 
 function pitchShare(state: HelicopterState): number {
-  return Math.min(1, Math.max(0, markedBladePitch(state) / STEEPEST_PITCH));
+  return clamp(markedBladePitch(state) / STEEPEST_PITCH, 0, 1);
 }
 
 export const HELICOPTER_READOUTS: readonly Readout<HelicopterStoreState>[] = [

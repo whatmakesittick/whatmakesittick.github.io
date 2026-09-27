@@ -1,9 +1,10 @@
 import type { Object3D } from 'three';
 import { Group } from 'three';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
+import { anchorAt } from '@core/scene/parts';
 import { ARM, SPOOL, SPOOL_BOTTOM, SPOOL_TOP } from '../constants';
 import { verticalCylinder } from '../geometry/primitives';
-import { anchorAt, partMesh } from './context';
+import { partMesh } from './context';
 import type { PartContext } from './context';
 
 export interface SpoolPart {

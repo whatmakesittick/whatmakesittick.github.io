@@ -1,8 +1,9 @@
 import { Group } from 'three';
 import type { Object3D } from 'three';
+import { anchorAt } from '@core/scene/parts';
 import { WIND_ARROWS } from '../constants';
 import { arrowHead, unitShaft } from '../geometry/primitives';
-import { anchorAt, partMesh } from './context';
+import { partMesh } from './context';
 import type { PartContext } from './context';
 
 export interface WindArrowsPart {
