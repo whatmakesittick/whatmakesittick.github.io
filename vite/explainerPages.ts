@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
 import sirv from 'sirv';
 import type { Plugin, ViteDevServer } from 'vite';
+import { crawlFiles } from './crawl.ts';
 import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { renderCatalogueModule } from './page.ts';
@@ -49,6 +50,18 @@ function redirectToTrailingSlash(server: ViteDevServer, folders: () => string[])
     response.statusCode = MOVED_PERMANENTLY;
     response.setHeader('Location', `${path}/${query ? `?${query}` : ''}`);
     response.end();
+  });
+}
+
+function serveCrawlFiles(server: ViteDevServer, explainers: () => LoadedExplainer[]): void {
+  server.middlewares.use((request, response, next) => {
+    const [path] = (request.url ?? '').split('?');
+    const file = crawlFiles(explainers()).find(
+      ({ fileName }) => path === `${server.config.base}${fileName}`,
+    );
+    if (!file) return next();
+    response.setHeader('Content-Type', file.contentType);
+    response.end(file.source);
   });
 }
 
@@ -112,6 +125,7 @@ export function explainerPages(): Plugin {
     configureServer(server) {
       redirectToTrailingSlash(server, () => site?.folders ?? []);
       servePublicFiles(server, site?.explainers ?? []);
+      serveCrawlFiles(server, () => site?.explainers ?? []);
       const regenerate = () => {
         try {
           site = generateSite(root);
@@ -134,7 +148,11 @@ export function explainerPages(): Plugin {
     },
 
     generateBundle() {
-      for (const { manifest, directory } of site?.explainers ?? []) {
+      const explainers = site?.explainers ?? [];
+      for (const { fileName, source } of crawlFiles(explainers)) {
+        this.emitFile({ type: 'asset', fileName, source });
+      }
+      for (const { manifest, directory } of explainers) {
         const publicDirectory = join(directory, PUBLIC_DIRECTORY);
         for (const file of listFiles(publicDirectory)) {
           const path = relative(publicDirectory, file).split(sep).join('/');
