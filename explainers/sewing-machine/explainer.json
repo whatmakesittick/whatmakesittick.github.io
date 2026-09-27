@@ -1,0 +1,12 @@
+{
+  "slug": "sewing-machine",
+  "category": "home",
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "Low-poly 3D model of a sewing machine with the bed cut open to show the rotary hook under the needle, beside the title How a sewing machine works"
+  }
+}
