@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "title": "Cómo vuela un planeador",
+    "eyebrow": "Un vuelo a vela, acelerado",
+    "tagline": "Un planeador no tiene motor y siempre va bajando a través del aire, pero aun así sube cuando encuentra aire que asciende más rápido de lo que él desciende: las térmicas, el viento que trepa por una montaña y las ondas que se forman detrás de ella.",
+    "description": "Un vuelo a vela interactivo y acelerado en un planeador moderno: por qué no se cae, cómo las térmicas y las nubes delatan el aire que sube, y cómo la ascendencia de ladera y las ondas de montaña lo llevan más alto.",
+    "summary": "Mantenerse en el aire sin motor: planeo, térmicas, nubes, laderas y ondas."
+  },
+  "stage": {
+    "label": "Modelo interactivo del planeador",
+    "gauge": "Datos de vuelo en directo"
+  },
+  "controls": {
+    "label": "Controles del planeador",
+    "glider": "Planeador",
+    "gliderOptions": {
+      "trainer": "Escuela",
+      "racer15": "Competición 15 m",
+      "racer18": "Competición 18 m"
+    },
+    "views": {
+      "forces": {
+        "name": "Fuerzas",
+        "short": "Fuerzas",
+        "hint": "Fuerzas (F)"
+      },
+      "air": {
+        "name": "Movimiento del aire",
+        "short": "Aire",
+        "hint": "Movimiento del aire (A)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Tiempo de vuelo",
+    "phases": "Saltar a una parte del vuelo",
+    "speed": "Cámara rápida",
+    "value": "{{time}} de vuelo, {{phase}}",
+    "speedValue": "{{value}} veces más rápido que en la realidad",
+    "phase": {
+      "thermal": "Térmica",
+      "glide": "Planeo",
+      "ridge": "Ladera",
+      "wave": "Onda",
+      "final": "Regreso"
+    },
+    "during": {
+      "thermal": "subiendo en la térmica",
+      "glide": "planeando hacia la ladera",
+      "ridge": "volando a lo largo de la ladera",
+      "wave": "subiendo en la onda",
+      "final": "planeando de regreso"
+    },
+    "jump": {
+      "thermal": "Saltar a la subida en la térmica",
+      "glide": "Saltar al planeo hacia la ladera",
+      "ridge": "Saltar al vuelo de ladera",
+      "wave": "Saltar a la subida en la onda",
+      "final": "Saltar al planeo de regreso"
+    }
+  },
+  "readouts": {
+    "height": "Altura",
+    "airspeed": "Velocidad",
+    "lift": "Aire ascendente",
+    "sink": "Descenso propio",
+    "climb": "Ascenso neto"
+  },
+  "parts": {
+    "wing": "Ala",
+    "fuselage": "Fuselaje",
+    "tail": "Cola",
+    "lift": "Sustentación",
+    "weight": "Peso",
+    "drag": "Resistencia",
+    "field": "Campo cálido",
+    "thermal": "Térmica",
+    "cumulus": "Cúmulo",
+    "wind": "Viento",
+    "ridge": "Cresta",
+    "rotor": "Nube de rotor",
+    "wave": "Onda de montaña",
+    "lenticular": "Nube lenticular"
+  },
+  "units": {
+    "m": "{{value}} m",
+    "km": "{{value}} km",
+    "kmh": "{{value}} km/h",
+    "ms": "{{value}} m/s",
+    "ratio": "1 : {{value}}",
+    "times": "{{value}}×",
+    "celsius": "{{value}} °C"
+  },
+  "sections": {
+    "overview": {
+      "title": "Volar sin motor",
+      "p1": "Lo que ves es un planeador, también llamado velero. Tiene alas largas, una palanca y pedales como un avión, pero no tiene motor. Un torno o una avioneta remolcadora lo sube a entre 300 y 1200 m, y a partir de ahí se las arregla solo. Como nada lo empuja, <strong>siempre va bajando a través del aire</strong>, solo que despacio.",
+      "p2": "Así que la única forma de subir es encontrar aire que ascienda más rápido de lo que baja el planeador. En aire en calma, un planeador moderno baja apenas unos 0,5 m/s, así que un aire que sube a 2 m/s lo eleva a 1,5 m/s. Los pilotos encuentran aire ascendente sobre el suelo calentado por el sol, en laderas de montaña con viento y en las ondas que se forman detrás de las montañas. Saltando de una zona a otra, un planeador puede llegar muy lejos: el récord mundial de distancia libre es de 3009 km.",
+      "p3": "El modelo vuela un circuito de 45 minutos en cámara rápida. El planeador sube en una térmica sobre un campo cálido hasta una nube, planea hasta una cresta, sube a lo largo de la ladera y luego en la onda que hay encima, y vuelve a toda velocidad. El paisaje está comprimido y el planeador se ve mucho más grande de lo que es, pero las alturas, velocidades y ritmos de ascenso de los indicadores son reales. Las alturas se miden desde el fondo del valle.",
+      "p4": "Arrastra el modelo para verlo desde otros ángulos y desplázate sobre él para acercarte o alejarte. A medida que avanzas en la lectura, la vista acompaña al texto."
+    },
+    "glide": {
+      "title": "Por qué no se cae",
+      "p1": "Sobre un planeador en vuelo actúan tres fuerzas, dibujadas como flechas en la escena. El peso tira de él hacia abajo. La resistencia, el empuje del aire, lo frena. La sustentación viene de las alas. Cada ala corta el aire con un pequeño ángulo y lo desvía hacia abajo, y al empujar el aire hacia abajo, el aire empuja el ala hacia arriba. Además, el aire que pasa por encima se acelera, así que la presión sobre el ala es menor que debajo. Son dos formas de ver el mismo efecto.",
+      "p2": "Sin motor, el planeador recorre una suave pendiente hacia abajo. Como su trayectoria se inclina, una pequeña parte de su peso tira de él hacia delante a lo largo de ella. La gravedad es su motor, y la altura, su combustible. La distancia que recorre por la altura que pierde es su <strong>relación de planeo</strong>. Con 1 : 50 avanza 50 m por cada metro que baja, así que desde 1000 m de altura, en aire en calma, recorre 50 km.",
+      "control": {
+        "label": "Velocidad",
+        "slow": "Lento",
+        "fast": "Rápido",
+        "sink": "Tasa de descenso",
+        "ratio": "Relación de planeo",
+        "distance": "Alcance desde 1000 m"
+      },
+      "p3": "Elige un planeador arriba. El de escuela es un Schleicher ASK 21, un biplaza con alas de 17 m, y planea a 1 : 34. Los de competición son el Jonker JS3 con alas de 15 m o de 18 m, a 1 : 50 y 1 : 57. El secreto está en las alas largas y finas: generan sustentación con muy poca resistencia. Para comparar, un gran avión de pasajeros logra más o menos entre 1 : 15 y 1 : 20, un ala delta unos 1 : 15 y un parapente unos 1 : 10.",
+      "p4": "Ahora mueve el control de velocidad. Volar más rápido cuesta altura: por encima de la velocidad de mejor planeo, unos 105 km/h para un JS3 ligero, la tasa de descenso crece más deprisa que la velocidad. Aun así, el JS3 de 18 m baja solo unos 1,4 m/s a 200 km/h, que sigue siendo 1 : 40. El peso no cambia la pendiente. Con hasta unos 200 L de agua en las alas, el JS3 planea por la misma pendiente, solo que más rápido: su velocidad de mejor planeo sube a unos 120 km/h."
+    },
+    "thermal": {
+      "title": "El aire caliente sube",
+      "p1": "El sol no calienta el suelo por igual. Los campos oscuros, las ciudades y las laderas orientadas al sol se calientan antes que la hierba o el suelo húmedo, y calientan el aire que tienen encima. El aire caliente pesa menos que el aire más fresco que lo rodea, así que se despega y sube, en una columna continua o en una ristra de burbujas. Los pilotos de planeador llaman térmica a este aire que sube.",
+      "p2": "Una térmica suele medir entre 150 y 300 m de ancho. Sube más rápido en el centro y se inclina con el viento. Por debajo de 1 m/s es débil, de 1 a 2,5 m/s es normal y a partir de 3 m/s es fuerte. La nuestra sube a unos 2,7 m/s sobre el campo oscuro, inclinada hacia la cresta.",
+      "p3": "Para quedarse dentro, el piloto gira en círculos, inclinado unos 45° a 90 km/h. Cada vuelta dura unos 16 s y mide unos 127 m de diámetro, lo bastante cerrada para seguir cerca del centro, donde más sube el aire. Lo normal es inclinarse entre 30 y 45°. Más allá, el planeador baja más rápido, así que los pilotos rara vez pasan mucho de ahí.",
+      "p4": "Dentro de la térmica el planeador sigue bajando, solo que más despacio de lo que sube el aire a su alrededor. <strong>El ascenso neto es lo que sube el aire menos lo que baja el planeador.</strong> Los indicadores muestran los tres: aire ascendente, descenso propio y ascenso neto, aquí unos 2,2 m/s. Así nuestro planeador pasa de 500 m a 1500 m en siete minutos y medio."
+    },
+    "cloud": {
+      "title": "Las nubes señalan dónde sube el aire",
+      "p1": "El aire que sube se enfría alrededor de 1 °C cada 100 m. Además, el aire lleva vapor de agua invisible. Su punto de rocío es la temperatura a la que ese vapor se convierte en gotitas diminutas. Mientras una térmica sube, su temperatura baja deprisa y su punto de rocío solo un poco, hasta que se encuentran. Ahí el vapor se condensa y se forma <strong>un cúmulo</strong> encima de la térmica.",
+      "p2": "La base plana de la nube marca la altura a la que ocurre, y todas las nubes de ese día tienen la base más o menos a la misma altura. Una regla práctica permite calcularla: unos 125 m por cada grado de diferencia entre la temperatura en el suelo y el punto de rocío. Nuestro día tiene una diferencia de 12 °C, así que la base está a 1500 m. Prueba el control.",
+      "control": {
+        "label": "Temperatura en el suelo menos punto de rocío",
+        "humid": "Húmedo",
+        "dry": "Seco",
+        "base": "Base de las nubes, aproximada"
+      },
+      "p3": "No todas las térmicas tienen nube. En un día seco, el aire nunca se enfría hasta su punto de rocío y las térmicas quedan invisibles. Estas térmicas azules pueden ser igual de fuertes. Otros días, las nubes se alinean con el viento en largas filas llamadas calles de nubes, separadas unas tres veces la altura de las nubes. Un planeador puede seguir una calle durante mucho trecho casi sin girar.",
+      "p4": "Demasiadas nubes son una mala noticia. Cuando se extienden, dan sombra al suelo y las térmicas se debilitan o mueren. Bajo una buena nube, los pilotos buscan la parte más oscura y mejor definida de la base, donde el aire suele subir mejor, y la dejan justo por debajo. La vista se detiene cuando nuestro planeador se acerca a la base. Pulsa reproducir para continuar."
+    },
+    "ridge": {
+      "title": "Viento contra la montaña",
+      "p1": "Cuando el viento se topa con una cresta larga, no puede atravesarla, así que sube empujado por la ladera que tiene enfrente. Esa franja de aire que sube es la <strong>ascendencia de ladera</strong>, y llega hasta por encima de la cresta. Una cresta larga funciona mejor. Alrededor de una colina aislada, el aire casi siempre pasa por los lados.",
+      "p2": "Nuestro planeador llega justo por encima de la cresta, que se alza 1100 m sobre el fondo del valle. Ahí es donde mejor sube el aire. Vuela de un lado a otro a lo largo de la ladera a 90 km/h y, en cada extremo, gira siempre hacia fuera de la ladera, nunca hacia ella. Aquí el aire sube a unos 1,5 m/s, así que el planeador sube a alrededor de 1 m/s, de 1150 m a 1400 m.",
+      "p3": "La ascendencia de ladera necesita un viento constante de unos 28 km/h o más, que sople casi de frente a la ladera, con un margen de 30 a 45°. El nuestro sopla a 30 km/h. La ascendencia puede llegar a dos o tres veces la altura de la cresta. No necesita sol, solo viento, así que sigue funcionando al atardecer, cuando las térmicas se apagan.",
+      "p4": "Una cresta larga y recta es una autopista para planeadores. A lo largo de las crestas de los Apalaches, en el este de Estados Unidos, algunos pilotos han batido récords mundiales volando a lo largo de las montañas y regresando. Observa en la escena cómo el aire sube por la ladera y cómo el planeador se aleja de ella en cada viraje."
+    },
+    "wave": {
+      "title": "Cabalgar la onda de montaña",
+      "p1": "El viento que cruza una montaña no siempre se calma detrás de ella. Si el aire es estable, sube y baja al otro lado, como el agua de un arroyo que pasa sobre una roca. Las crestas de la onda pueden estar a entre 3 y 30 km unas de otras, y se quedan quietas sobre el suelo mientras el viento las atraviesa. Esto es la <strong>onda de montaña</strong>, y puede subir un planeador mucho más alto que cualquier térmica.",
+      "p2": "Bajo la primera cresta está el rotor, una franja de aire revuelto y agitado, a veces marcada por una nube de rotor deshilachada. Por encima, el flujo es suave. En lo alto de una onda puede formarse una nube lenticular, con forma de lente. Se queda en su sitio, aunque el viento la atraviese de lado a lado.",
+      "p3": "Nuestro planeador pasa de la ladera a la parte ascendente de la onda, se pone de cara al viento y se queda suspendido sobre el mismo punto del suelo. El aire sube a unos 2,8 m/s y el planeador a unos 2,3 m/s, de 1400 m a 2500 m en ocho minutos. Es una onda suave. Son habituales ascendencias de onda de 1,5 a 6 m/s, y el 2 de septiembre de 2018 el planeador Perlan 2 subió en ondas sobre Argentina hasta 22 657 m (74 334 ft), el récord mundial de altitud en planeador.",
+      "p4": "Los pilotos que suben mucho en onda respiran oxígeno de una botella, porque allí arriba el aire está enrarecido. De regreso, nuestro planeador cruza el lado descendente de la onda, donde el aire baja a unos 2,5 m/s y el indicador de aire ascendente cae por debajo de cero. En aire que baja conviene volar rápido, así que lo cruza a 200 km/h, desciende hasta unos 1560 m en cuatro minutos y luego vuelve planeando con calma sobre el valle."
+    }
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "title": "So fliegt ein Segelflugzeug",
+    "eyebrow": "Ein Segelflug im Zeitraffer",
+    "tagline": "Ein Segelflugzeug hat keinen Motor und sinkt ständig durch die Luft, und doch steigt es, weil es Luft findet, die schneller steigt, als es selbst sinkt: warme Thermik, Wind, der an einem Berg hochgedrückt wird, und die Wellen, die sich dahinter bilden.",
+    "description": "Ein interaktiver Segelflug im Zeitraffer mit einem modernen Segelflugzeug: warum es nicht herunterfällt, wie Thermik und Wolken steigende Luft verraten und wie Hangaufwind und Leewellen es höher tragen.",
+    "summary": "Oben bleiben ohne Motor: Gleiten, Thermik, Wolken, Hang und Welle."
+  },
+  "stage": {
+    "label": "Interaktives Modell eines Segelflugzeugs",
+    "gauge": "Live-Flugdaten"
+  },
+  "controls": {
+    "label": "Steuerung des Segelflugzeugs",
+    "glider": "Flugzeug",
+    "gliderOptions": {
+      "trainer": "Schulflugzeug",
+      "racer15": "15-m-Renner",
+      "racer18": "18-m-Renner"
+    },
+    "views": {
+      "forces": {
+        "name": "Kräfte",
+        "short": "Kräfte",
+        "hint": "Kräfte (F)"
+      },
+      "air": {
+        "name": "Luftbewegung",
+        "short": "Luft",
+        "hint": "Luftbewegung (A)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Flugzeit",
+    "phases": "Zu einem Flugabschnitt springen",
+    "speed": "Zeitraffer",
+    "value": "Flugzeit {{time}}, {{phase}}",
+    "speedValue": "{{value}}-mal schneller als in Wirklichkeit",
+    "phase": {
+      "thermal": "Thermik",
+      "glide": "Gleitflug",
+      "ridge": "Hang",
+      "wave": "Welle",
+      "final": "Heimweg"
+    },
+    "during": {
+      "thermal": "steigt in der Thermik",
+      "glide": "gleitet zum Hang",
+      "ridge": "segelt am Hang entlang",
+      "wave": "steigt in der Welle",
+      "final": "gleitet nach Hause"
+    },
+    "jump": {
+      "thermal": "Zum Steigen in der Thermik springen",
+      "glide": "Zum Gleitflug zum Hang springen",
+      "ridge": "Zum Hangflug springen",
+      "wave": "Zum Steigen in der Welle springen",
+      "final": "Zum Heimflug springen"
+    }
+  },
+  "readouts": {
+    "height": "Höhe",
+    "airspeed": "Fahrt",
+    "lift": "Steigende Luft",
+    "sink": "Eigensinken",
+    "climb": "Nettosteigen"
+  },
+  "parts": {
+    "wing": "Flügel",
+    "fuselage": "Rumpf",
+    "tail": "Leitwerk",
+    "lift": "Auftrieb",
+    "weight": "Gewicht",
+    "drag": "Widerstand",
+    "field": "Warmes Feld",
+    "thermal": "Thermik",
+    "cumulus": "Kumuluswolke",
+    "wind": "Wind",
+    "ridge": "Bergrücken",
+    "rotor": "Rotorwolke",
+    "wave": "Leewelle",
+    "lenticular": "Lentikulariswolke"
+  },
+  "units": {
+    "m": "{{value}} m",
+    "km": "{{value}} km",
+    "kmh": "{{value}} km/h",
+    "ms": "{{value}} m/s",
+    "ratio": "1 : {{value}}",
+    "times": "{{value}}×",
+    "celsius": "{{value}} °C"
+  },
+  "sections": {
+    "overview": {
+      "title": "Fliegen ohne Motor",
+      "p1": "Sie sehen ein Segelflugzeug. Es hat lange Flügel, einen Steuerknüppel und Pedale wie ein Motorflugzeug, aber keinen Motor. Eine Winde oder ein Schleppflugzeug bringt es auf 300 bis 1200 m Höhe, danach ist es auf sich allein gestellt. Weil nichts es antreibt, <strong>sinkt es ständig durch die Luft</strong>, nur eben langsam.",
+      "p2": "Nach oben geht es also nur mit Luft, die schneller steigt, als das Segelflugzeug sinkt. In ruhiger Luft sinkt ein modernes Segelflugzeug nur etwa 0,5 m/s. Steigt die Luft mit 2 m/s, trägt sie es also mit 1,5 m/s nach oben. Steigende Luft finden Piloten über sonnenwarmem Boden, an windigen Berghängen und in Wellen hinter Bergen. Von einem Aufwind zum nächsten kommt ein Segelflugzeug sehr weit: Der Weltrekord im freien Streckenflug liegt bei 3009 km.",
+      "p3": "Das Modell fliegt eine 45-minütige Runde im Zeitraffer. Das Segelflugzeug kreist in einer Thermik über einem warmen Feld bis unter eine Wolke, gleitet zu einem Bergrücken, steigt am Hang und dann in der Welle darüber und fliegt schnell nach Hause. Die Landschaft ist gestaucht und das Flugzeug viel größer gezeichnet als in Wirklichkeit, aber Höhen, Geschwindigkeiten und Steigwerte in den Anzeigen sind echt. Die Höhen zählen ab dem Talboden.",
+      "p4": "Ziehen Sie am Modell, um es von allen Seiten zu sehen, und scrollen Sie darüber, um zu zoomen. Beim Weiterlesen folgt die Ansicht dem Text."
+    },
+    "glide": {
+      "title": "Warum es nicht herunterfällt",
+      "p1": "Auf ein fliegendes Segelflugzeug wirken drei Kräfte, in der Szene als Pfeile gezeichnet. Das Gewicht zieht es senkrecht nach unten. Der Widerstand, der Druck der Luft, bremst es. Der Auftrieb kommt von den Flügeln. Jeder Flügel trifft unter einem kleinen Winkel auf die Luft und lenkt sie nach unten ab. Drückt der Flügel Luft nach unten, drückt die Luft den Flügel nach oben. Über der Oberseite strömt die Luft außerdem schneller, deshalb ist der Druck über dem Flügel geringer als darunter. Das sind zwei Sichtweisen auf denselben Effekt.",
+      "p2": "Ohne Motor fliegt das Segelflugzeug auf einer sanft abfallenden Bahn. Weil die Bahn leicht nach unten geneigt ist, zieht ein kleiner Teil seines Gewichts es entlang der Bahn nach vorn. Die Schwerkraft ist sein Motor, die Höhe sein Treibstoff. Wie weit es für die verlorene Höhe kommt, gibt die <strong>Gleitzahl</strong> an. Bei 1 : 50 fliegt es für jeden Meter Höhe 50 m weit, aus 1000 m Höhe in ruhiger Luft also 50 km.",
+      "control": {
+        "label": "Fluggeschwindigkeit",
+        "slow": "Langsam",
+        "fast": "Schnell",
+        "sink": "Sinkrate",
+        "ratio": "Gleitzahl",
+        "distance": "Reichweite aus 1000 m Höhe"
+      },
+      "p3": "Wählen Sie oben ein Flugzeug. Das Schulflugzeug ist eine Schleicher ASK 21, ein Doppelsitzer mit 17 m Spannweite, und gleitet mit 1 : 34. Die Renner sind die Jonker JS3 mit 15 m oder 18 m Spannweite, mit 1 : 50 und 1 : 57. Das Geheimnis sind lange, schlanke Flügel: Sie erzeugen Auftrieb mit sehr wenig Widerstand. Zum Vergleich: Ein großes Verkehrsflugzeug schafft etwa 1 : 15 bis 1 : 20, ein Hängegleiter rund 1 : 15 und ein Gleitschirm rund 1 : 10.",
+      "p4": "Bewegen Sie nun den Regler für die Fluggeschwindigkeit. Schneller fliegen kostet Höhe: Oberhalb der Geschwindigkeit des besten Gleitens, bei einer leichten JS3 etwa 105 km/h, wächst die Sinkrate schneller als die Geschwindigkeit. Trotzdem sinkt die 18-m-JS3 bei 200 km/h nur etwa 1,4 m/s, das sind immer noch 1 : 40. Das Gewicht ändert die Gleitbahn nicht. Mit bis zu etwa 200 l Wasser in den Flügeln gleitet die JS3 dieselbe Bahn, nur schneller: Ihre Geschwindigkeit des besten Gleitens steigt auf etwa 120 km/h."
+    },
+    "thermal": {
+      "title": "Warme Luft steigt",
+      "p1": "Die Sonne erwärmt den Boden ungleichmäßig. Dunkle Felder, Städte und Hänge, die zur Sonne zeigen, werden schneller warm als Wiesen oder nasser Boden und heizen die Luft darüber auf. Warme Luft ist leichter als die kühlere Luft ringsum. Deshalb löst sie sich und steigt auf, als stetige Säule oder als Kette von Blasen. Segelflieger nennen diese steigende Luft Thermik.",
+      "p2": "Eine Thermik ist meist 150 bis 300 m breit. In der Mitte steigt sie am stärksten, und im Wind neigt sie sich zur Seite. Unter 1 m/s gilt sie als schwach, 1 bis 2,5 m/s sind Durchschnitt, ab 3 m/s ist sie stark. Unsere steigt über dem dunklen Feld mit etwa 2,7 m/s und neigt sich zum Bergrücken hin.",
+      "p3": "Um in ihr zu bleiben, kreist der Pilot mit etwa 45° Schräglage bei 90 km/h. Ein Kreis dauert etwa 16 s und hat einen Durchmesser von etwa 127 m, eng genug, um nahe an der starken Mitte zu bleiben. Üblich sind 30 bis 45° Schräglage. Noch steiler sinkt das Flugzeug schneller, deshalb gehen Piloten selten viel weiter.",
+      "p4": "Auch in der Thermik sinkt das Segelflugzeug, nur langsamer, als die Luft um es herum steigt. <strong>Das Nettosteigen ist das Steigen der Luft minus das Sinken des Flugzeugs.</strong> Die Anzeigen zeigen alle drei Werte: steigende Luft, Eigensinken und Nettosteigen, hier etwa 2,2 m/s. So kommt unser Segelflugzeug in siebeneinhalb Minuten von 500 m auf 1500 m."
+    },
+    "cloud": {
+      "title": "Wolken zeigen, wo es steigt",
+      "p1": "Steigende Luft kühlt sich pro 100 m um etwa 1 °C ab. Luft enthält außerdem unsichtbaren Wasserdampf. Ihr Taupunkt ist die Temperatur, bei der dieser Dampf zu winzigen Tröpfchen wird. Während eine Thermik steigt, fällt ihre Temperatur schnell, ihr Taupunkt aber nur wenig, bis sich beide treffen. Dort kondensiert der Dampf, und <strong>eine Kumuluswolke</strong> wächst oben auf der Thermik.",
+      "p2": "Die flache Unterseite der Wolke markiert die Höhe, in der das geschieht, und alle Wolken des Tages haben ihre Basis etwa in derselben Höhe. Eine Faustregel liefert sie: etwa 125 m für jedes Grad Unterschied zwischen der Temperatur am Boden und dem Taupunkt. An unserem Tag beträgt der Unterschied 12 °C, also liegt die Basis bei 1500 m. Probieren Sie den Regler aus.",
+      "control": {
+        "label": "Bodentemperatur minus Taupunkt",
+        "humid": "Feucht",
+        "dry": "Trocken",
+        "base": "Wolkenbasis, ungefähr"
+      },
+      "p3": "Nicht jede Thermik hat eine Wolke. An einem trockenen Tag kühlt die Luft nie bis zum Taupunkt ab, und die Thermik bleibt unsichtbar. Diese Blauthermik kann genauso stark sein. An anderen Tagen reihen sich die Wolken in Windrichtung zu langen Wolkenstraßen auf, im Abstand von etwa der dreifachen Wolkenhöhe. Entlang einer solchen Straße kommt ein Segelflugzeug weit, ohne viel zu kreisen.",
+      "p4": "Zu viele Wolken sind schlecht. Breiten sie sich aus, beschatten sie den Boden, und die Thermik wird schwächer oder schläft ganz ein. Unter einer guten Wolke fliegen Piloten den dunkelsten, am klarsten umrissenen Teil der Basis an, wo es oft am besten steigt, und verlassen die Thermik knapp darunter. Die Ansicht hält an, wenn sich unser Segelflugzeug der Basis nähert. Klicken Sie auf Abspielen, um weiterzumachen."
+    },
+    "ridge": {
+      "title": "Wind gegen den Berg",
+      "p1": "Trifft Wind auf einen langen Bergrücken, kann er nicht hindurch und wird den Hang hinaufgedrückt, der ihm zugewandt ist. Dieses Band steigender Luft ist der <strong>Hangaufwind</strong>, und es reicht bis über den Kamm hinaus. Am besten funktioniert ein langer Bergrücken. Um einen einzelnen Hügel strömt die Luft meist einfach seitlich herum.",
+      "p2": "Unser Segelflugzeug kommt knapp über dem Kamm an, der 1100 m über dem Talboden liegt. Dort ist der Aufwind am besten. Es fliegt mit 90 km/h am Hang hin und her und dreht an jedem Ende immer vom Hang weg, nie zu ihm hin. Die Luft steigt hier mit etwa 1,5 m/s, also steigt das Flugzeug mit etwa 1 m/s, von 1150 m auf 1400 m.",
+      "p3": "Hangaufwind braucht einen stetigen Wind von etwa 28 km/h oder mehr, der möglichst quer auf den Hang trifft, höchstens 30 bis 45° schräg. Unser Wind weht mit 30 km/h. Der Aufwind kann bis zur zwei- bis dreifachen Höhe des Bergrückens reichen. Er braucht keine Sonne, nur Wind, und trägt deshalb bis in den Abend, wenn die Thermik nachlässt.",
+      "p4": "Ein langer, gerader Bergrücken ist eine Autobahn für Segelflugzeuge. Entlang der Bergketten der Appalachen im Osten der Vereinigten Staaten haben Piloten Weltrekorde aufgestellt, indem sie die Berge entlang und wieder zurück flogen. Achten Sie in der Szene darauf, wie die Luft den Hang hinaufströmt und wie das Flugzeug bei jeder Wende vom Hang wegkurvt."
+    },
+    "wave": {
+      "title": "Auf der Leewelle reiten",
+      "p1": "Wind, der über einen Berg streicht, beruhigt sich dahinter nicht immer. Ist die Luft stabil, schwingt sie hinter dem Berg auf und ab, wie Wasser, das in einem Bach über einen Stein fließt. Die Wellenberge können 3 bis 30 km auseinanderliegen und stehen still über dem Boden, während der Wind durch sie hindurchweht. Das ist die <strong>Leewelle</strong>, und sie kann ein Segelflugzeug weit höher tragen als jede Thermik.",
+      "p2": "Unter dem ersten Wellenberg liegt der Rotor, ein Band rauer, wirbelnder Luft, manchmal markiert durch eine zerfetzte Rotorwolke. Darüber strömt die Luft glatt. Oben auf einer Welle kann sich eine linsenförmige Lentikulariswolke bilden. Sie bleibt an ihrem Platz, obwohl der Wind geradewegs durch sie hindurchweht.",
+      "p3": "Unser Segelflugzeug wechselt vom Hang in den steigenden Teil der Welle, dreht in den Wind und hängt über demselben Punkt am Boden. Die Luft steigt mit etwa 2,8 m/s, das Flugzeug mit etwa 2,3 m/s, in acht Minuten von 1400 m auf 2500 m. Das ist eine sanfte Welle. Wellenaufwind von 1,5 bis 6 m/s ist üblich, und am 2. September 2018 stieg das Segelflugzeug Perlan 2 in Wellen über Argentinien auf 22.657 m (74.334 ft), den Höhenweltrekord für Segelflugzeuge.",
+      "p4": "Piloten, die in der Welle hoch steigen, atmen Sauerstoff aus einer Flasche, denn die Luft dort oben ist dünn. Auf dem Heimweg kreuzt unser Segelflugzeug die sinkende Seite der Welle. Dort fällt die Luft mit etwa 2,5 m/s, und die Anzeige für steigende Luft rutscht unter null. In sinkender Luft lohnt es sich, schnell zu fliegen. Also rast es mit 200 km/h hindurch, sinkt in vier Minuten auf etwa 1560 m und gleitet dann ruhig über das Tal nach Hause."
+    }
+  }
+}
