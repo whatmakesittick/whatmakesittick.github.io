@@ -30,7 +30,7 @@ function createCard(entry: CatalogueEntry): HTMLElement | undefined {
   if (!meta) return undefined;
   const cover = html('img', {
     src: explainerPath(entry, entry.manifest.cover),
-    alt: '',
+    alt: meta.title,
     loading: 'lazy',
     decoding: 'async',
   });
