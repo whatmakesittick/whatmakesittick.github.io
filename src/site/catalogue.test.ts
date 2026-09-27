@@ -18,6 +18,7 @@ function entry(slug: string, metas: CatalogueEntry['meta']): CatalogueEntry {
       social: { image: 'social/og-image.png', alt: 'Card' },
     },
     meta: metas,
+    published: '2026-03-10T09:00:00Z',
   };
 }
 

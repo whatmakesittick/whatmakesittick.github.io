@@ -47,6 +47,8 @@
     "listLabel": "Пояснення",
     "explore": "Дослідити",
     "moreSoon": "Нові пояснення вже в роботі.",
+    "filterLabel": "Фільтр за тегами",
+    "allTags": "Усі",
     "tags": {
       "mechanics": "Механіка",
       "engines": "Двигуни",

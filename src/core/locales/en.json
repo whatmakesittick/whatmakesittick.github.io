@@ -47,6 +47,8 @@
     "listLabel": "Explainers",
     "explore": "Explore",
     "moreSoon": "More explainers are on the way.",
+    "filterLabel": "Filter by tag",
+    "allTags": "All",
     "tags": {
       "mechanics": "Mechanics",
       "engines": "Engines",

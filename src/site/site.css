@@ -38,6 +38,43 @@
   padding-bottom: clamp(48px, 8vh, 96px);
 }
 
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 28px;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.tag-chip:hover,
+.tag-chip:focus-visible {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.tag-chip[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: rgb(245 165 36 / 0.14);
+  color: var(--text);
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr));
@@ -45,6 +82,16 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.card-item {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.card-item:hover,
+.card-item:focus-within {
+  transform: translateY(-2px);
 }
 
 .card {
@@ -58,16 +105,13 @@
   box-shadow: var(--shadow);
   color: var(--text);
   text-decoration: none;
-  transition:
-    border-color 0.2s ease,
-    transform 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
-.card:hover,
+.card-item:hover .card,
 .card:focus-visible {
   border-color: rgb(245 165 36 / 0.5);
   color: var(--text);
-  transform: translateY(-2px);
 }
 
 .card-cover {
@@ -88,7 +132,7 @@
   transition: transform 0.4s ease;
 }
 
-.card:hover .card-cover img {
+.card-item:hover .card-cover img {
   transform: scale(1.03);
 }
 
@@ -137,8 +181,37 @@
   transition: transform 0.2s ease;
 }
 
-.card:hover .card-action .icon {
+.card-item:hover .card-action .icon {
   transform: translateX(3px);
+}
+
+.card-tags {
+  position: absolute;
+  inset: 1px 1px auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  gap: 6px;
+  aspect-ratio: 4 / 3;
+  margin: 0;
+  padding: 12px;
+  list-style: none;
+  pointer-events: none;
+}
+
+.card-tags .tag-chip {
+  min-height: 26px;
+  padding: 2px 10px;
+  border-color: rgb(255 255 255 / 0.14);
+  background: rgb(11 13 16 / 0.78);
+  color: var(--prose);
+  font-size: 0.75rem;
+  pointer-events: auto;
+}
+
+.card-tags .tag-chip[aria-pressed='true'] {
+  border-color: var(--accent);
+  color: var(--text);
 }
 
 .card-placeholder {
@@ -151,4 +224,14 @@
   color: var(--muted);
   font-size: 0.9375rem;
   text-align: center;
+}
+
+@media (pointer: coarse) {
+  .tag-filter .tag-chip {
+    min-height: 40px;
+  }
+
+  .card-tags .tag-chip {
+    min-height: 32px;
+  }
 }

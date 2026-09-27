@@ -49,4 +49,10 @@ export const META_KEYS: readonly (keyof ExplainerMeta)[] = [
 export interface CatalogueEntry {
   manifest: ExplainerManifest;
   meta: Partial<Record<LanguageCode, ExplainerMeta>>;
+  published: string;
+}
+
+export function compareNewestFirst(a: CatalogueEntry, b: CatalogueEntry): number {
+  const age = Date.parse(b.published) - Date.parse(a.published);
+  return age || a.manifest.slug.localeCompare(b.manifest.slug);
 }

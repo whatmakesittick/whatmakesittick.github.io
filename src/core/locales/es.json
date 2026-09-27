@@ -47,6 +47,8 @@
     "listLabel": "Explicaciones",
     "explore": "Explorar",
     "moreSoon": "Pronto habrá más explicaciones.",
+    "filterLabel": "Filtrar por etiqueta",
+    "allTags": "Todas",
     "tags": {
       "mechanics": "Mecánica",
       "engines": "Motores",

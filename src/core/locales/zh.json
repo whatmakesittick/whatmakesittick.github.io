@@ -47,6 +47,8 @@
     "listLabel": "图解",
     "explore": "查看",
     "moreSoon": "更多图解即将推出。",
+    "filterLabel": "按标签筛选",
+    "allTags": "全部",
     "tags": {
       "mechanics": "机械",
       "engines": "发动机",

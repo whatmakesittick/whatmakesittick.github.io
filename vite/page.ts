@@ -1,5 +1,6 @@
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
+import { compareNewestFirst } from '../src/core/manifest.ts';
 import type { CatalogueEntry } from '../src/core/manifest.ts';
 import { alternateLinks, imageType, jsonLd, localeTags } from './head.ts';
 import type { PageLanguage } from './i18n.ts';
@@ -88,6 +89,14 @@ export function renderPage(
   return translateHtml(html, translate);
 }
 
+function catalogueEntry({ manifest, metas, dates }: LoadedExplainer): CatalogueEntry {
+  return { manifest, meta: metas, published: dates.published };
+}
+
+function catalogueOrder(explainers: readonly LoadedExplainer[]): LoadedExplainer[] {
+  return [...explainers].sort((a, b) => compareNewestFirst(catalogueEntry(a), catalogueEntry(b)));
+}
+
 function listedPage(explainer: LoadedExplainer, code: LanguageCode): ListedPage {
   const { manifest, metas, meta } = explainer;
   const language = manifest.locales.includes(code) ? code : DEFAULT_LANGUAGE;
@@ -100,7 +109,7 @@ export function renderCatalogue(
   explainers: readonly LoadedExplainer[],
   { code, translate }: PageLanguage,
 ): string {
-  const pages = explainers.map((explainer) => listedPage(explainer, code));
+  const pages = catalogueOrder(explainers).map((explainer) => listedPage(explainer, code));
   const image = siteUrl(SITE_SOCIAL.image);
   const description = translate(CATALOGUE_TAGLINE_KEY);
   const facts = { code, url: pageUrl(code, CATALOGUE_ROUTE.page), image };
@@ -137,7 +146,7 @@ export function renderEntry(manifest: LoadedExplainer['manifest']): string {
 }
 
 export function catalogueEntries(explainers: readonly LoadedExplainer[]): CatalogueEntry[] {
-  return explainers.map(({ manifest, metas }) => ({ manifest, meta: metas }));
+  return catalogueOrder(explainers).map(catalogueEntry);
 }
 
 export function renderCatalogueModule(explainers: readonly LoadedExplainer[]): string {

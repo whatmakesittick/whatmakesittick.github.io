@@ -150,6 +150,7 @@ describe('renderCatalogue', () => {
     ...explainer,
     manifest: { ...explainer.manifest, slug: 'gearbox', tags: ['mechanics'], locales: ['en'] },
     metas: { en: { ...meta, title: 'How a gearbox works' } },
+    dates: { published: '2026-02-01T09:00:00+02:00', modified: '2026-02-01T09:00:00+02:00' },
   };
   const html = renderCatalogue(catalogueTemplate, partials, [explainer, gearbox], language('uk'));
 
@@ -167,7 +168,7 @@ describe('renderCatalogue', () => {
     expect(hreflangs(html)).toContain('ja https://whatmakesittick.github.io/ja/');
   });
 
-  it('describes the site and lists the explainers as structured data', () => {
+  it('describes the site and lists the explainers newest first as structured data', () => {
     expect(structuredData(html)).toMatchObject({
       '@graph': [
         { '@type': 'WebSite', url: 'https://whatmakesittick.github.io/uk/', inLanguage: 'uk' },
@@ -177,13 +178,13 @@ describe('renderCatalogue', () => {
           itemListElement: [
             {
               position: 1,
-              name: 'Як працює річ',
-              url: 'https://whatmakesittick.github.io/uk/thing/',
+              name: 'How a gearbox works',
+              url: 'https://whatmakesittick.github.io/gearbox/',
             },
             {
               position: 2,
-              name: 'How a gearbox works',
-              url: 'https://whatmakesittick.github.io/gearbox/',
+              name: 'Як працює річ',
+              url: 'https://whatmakesittick.github.io/uk/thing/',
             },
           ],
         },
@@ -211,10 +212,21 @@ describe('renderEntry', () => {
 });
 
 describe('catalogueEntries', () => {
-  it('exposes the manifest and the meta of every language', () => {
+  it('exposes the manifest, the meta of every language and the publish date', () => {
     const [entry] = catalogueEntries([explainer]);
     expect(entry.meta.uk?.title).toBe('Як працює річ');
     expect(entry.manifest.slug).toBe('thing');
+    expect(entry.published).toBe(explainer.dates.published);
+  });
+
+  it('lists the newest explainer first', () => {
+    const older = {
+      ...explainer,
+      manifest: { ...explainer.manifest, slug: 'older' },
+      dates: { published: '2025-12-01T09:00:00+02:00', modified: '2025-12-01T09:00:00+02:00' },
+    };
+    const slugs = catalogueEntries([older, explainer]).map((entry) => entry.manifest.slug);
+    expect(slugs).toEqual(['thing', 'older']);
   });
 });
 
