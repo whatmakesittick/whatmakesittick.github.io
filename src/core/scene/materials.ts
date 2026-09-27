@@ -7,23 +7,29 @@ export const STRUCTURE_GROUP = 'structure';
 
 const FULL_EMPHASIS = 0.999;
 
+interface OpacityBase {
+  opacity: number;
+  transparent: boolean;
+}
+
 export function createMaterial(finish: MaterialFinish): MeshStandardMaterial {
   return new MeshStandardMaterial(finish);
 }
 
-function applyOpacity(material: Material, emphasis: number): void {
-  const transparent = emphasis < FULL_EMPHASIS;
+function applyOpacity(material: Material, base: OpacityBase, emphasis: number): void {
+  const transparent = base.transparent || emphasis < FULL_EMPHASIS;
   if (material.transparent !== transparent) {
     material.transparent = transparent;
     material.needsUpdate = true;
   }
-  material.opacity = emphasis;
+  material.opacity = base.opacity * emphasis;
 }
 
 export class MaterialLibrary {
   private readonly finishes = new Map<string, Map<MaterialFinish, MeshStandardMaterial>>();
   private readonly extras = new Map<string, Set<Material>>();
   private readonly emphasis = new Map<string, number>();
+  private readonly bases = new WeakMap<Material, OpacityBase>();
 
   get(group: string, finish: MaterialFinish): MeshStandardMaterial {
     let byFinish = this.finishes.get(group);
@@ -34,7 +40,7 @@ export class MaterialLibrary {
     let material = byFinish.get(finish);
     if (!material) {
       material = createMaterial(finish);
-      applyOpacity(material, this.emphasisOf(group));
+      this.emphasise(material, this.emphasisOf(group));
       byFinish.set(finish, material);
     }
     return material;
@@ -47,7 +53,7 @@ export class MaterialLibrary {
       this.extras.set(group, set);
     }
     set.add(material);
-    applyOpacity(material, this.emphasisOf(group));
+    this.emphasise(material, this.emphasisOf(group));
   }
 
   clearRegistered(): void {
@@ -61,13 +67,26 @@ export class MaterialLibrary {
   setEmphasis(group: string, value: number): void {
     if (this.emphasisOf(group) === value) return;
     this.emphasis.set(group, value);
-    this.finishes.get(group)?.forEach((material) => applyOpacity(material, value));
-    this.extras.get(group)?.forEach((material) => applyOpacity(material, value));
+    this.finishes.get(group)?.forEach((material) => this.emphasise(material, value));
+    this.extras.get(group)?.forEach((material) => this.emphasise(material, value));
   }
 
   dispose(): void {
     this.finishes.forEach((byFinish) => byFinish.forEach((material) => material.dispose()));
     this.finishes.clear();
     this.extras.clear();
+  }
+
+  private emphasise(material: Material, emphasis: number): void {
+    applyOpacity(material, this.baseOf(material), emphasis);
+  }
+
+  private baseOf(material: Material): OpacityBase {
+    let base = this.bases.get(material);
+    if (!base) {
+      base = { opacity: material.opacity, transparent: material.transparent };
+      this.bases.set(material, base);
+    }
+    return base;
   }
 }
