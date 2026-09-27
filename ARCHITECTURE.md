@@ -216,6 +216,64 @@ current position. `PointCloud` is a fixed-size buffer of coloured points drawn
 with `createPointMaterial`: set points with `setPoint` and `setColor`, then call
 `commit` once per frame.
 
+## UI toolkit
+
+Core is a component and primitive toolkit. An explainer composes the components in
+its markup and may add its own elements and styles beside them. A component binds
+to markup that already exists in `chapters.html` through data hooks and never
+builds the widget's DOM, so anything an explainer puts inside or around it stays
+its own. Package CSS may extend the core classes; they are a base, not a closed
+design.
+
+`mountRangeWidget(root, store, options)` in `src/core/ui/rangeWidget.ts` drives a
+slider with a value and readouts:
+
+```html
+<div class="range-widget">
+  <div class="range-widget__header">
+    <label for="stitch-length" data-i18n="…">Stitch length</label>
+    <output class="number" for="stitch-length">2.5 mm</output>
+  </div>
+  <input id="stitch-length" type="range" class="range" data-control="stitch-length" />
+  <div class="range-widget__scale" aria-hidden="true">…</div>
+  <dl class="range-widget__readouts">
+    <div>
+      <dt data-i18n="…">Stitches per cm</dt>
+      <dd data-readout="stitch-density">4</dd>
+    </div>
+  </dl>
+</div>
+```
+
+| Option     | Role                                                                       |
+| ---------- | -------------------------------------------------------------------------- |
+| `control`  | The slider's `data-control` value                                          |
+| `range`    | `min`, `max` and `step` of the slider                                      |
+| `select`   | A tuple from the store, compared shallowly; a change re-renders the widget |
+| `value`    | The slider position for the selected tuple                                 |
+| `format`   | Text for the `<output for>` and the slider's `aria-valuetext`              |
+| `set`      | Writes the slider position to the store on input                           |
+| `readouts` | Optional `data-readout` id to text, looked up inside the widget            |
+| `after`    | Optional hook with the tuple, the state and the widget element, run last   |
+
+The widget re-renders on mount, when the tuple changes and when the language
+changes. It needs the slider and the `.range-widget` around it; the output, the
+scale and the readouts are optional. `after` covers what the component does not:
+the helicopter sets `data-tendency` on its result, the engine lights the
+typical-ratio band under its slider. The glider sets `--readout-min-width` on
+`.range-widget` to fit three readouts in a row. On a touch screen the slider is
+44px tall. A control the component does not fit is
+written from the same primitives: `configureRange`, `showRangeValue`,
+`rangeFraction` and `toPercent` in `range.ts`, `watch`, `watchLocalized` and
+`watchShallowLocalized` in `subscribe.ts`, `requireElement`, `queryAll` and
+`setText` in `dom.ts`.
+
+The dock's jump chips sit under the scrubber's coloured bands. `phaseColumns` in
+`src/core/ui/phases.ts` gives each phase a grid column sized by its share of the
+cycle, and the dock sets it as `--phase-columns`. `--phase-min-width` on
+`.phase-buttons` is `max-content`, so a chip never cuts its label: where a short
+phase has no room for it, its chip is a little wider than its band.
+
 ## Build
 
 `vite/explainerPages.ts` reads every `explainers/*/explainer.json` in the
@@ -229,20 +287,31 @@ and `{{token}}` values in the root `index.html`, and serves
 `virtual:explainer-catalogue`: every manifest with the `meta` block of each shipped
 language, so the catalogue never bundles an explainer's full copy.
 
+The generated `<slug>/main.ts` imports the explainer's `en.json` and passes
+`mountExplainer` a loader per shipped language: `en` resolves the bundled copy,
+every other language is a dynamic `import()`, so Vite emits one chunk per language
+and the page chunk carries English only.
+
 ## Translations
 
-i18next with `en` as fallback. Resources are the deep merge of core locales and
-the explainer's locales for the same language; an explainer key wins over a core
-key, which is how the engine names its stage and dock. An explainer must ship
-`en.json`; any other language it ships must have the same keys, placeholders and
-markup, which a test enforces per explainer. The catalogue reads `meta.title`,
-`meta.eyebrow` and `meta.summary` of every explainer, and the page head uses
+i18next with `en` as fallback. Core and explainer copy in `en` ships with the page;
+every other language is a separate chunk, loaded for the detected language before
+the page mounts and for a new language when the reader picks it. `initI18n` takes
+the explainer's `LocaleLoaders`, one `() => Promise<Dictionary>` per language, and
+loads the core locales the same way. A language's resources are the deep merge of
+the core and the explainer dictionaries; an explainer key wins over a core key,
+which is how the engine names its stage and dock. Each language loads once;
+`setLanguage` switches after the load, and a language the explainer does not ship
+falls back to its `en` copy. An explainer must ship `en.json`; any other language
+it ships must have the same keys, placeholders and markup, which a test enforces
+per explainer. The catalogue reads `meta.title`, `meta.eyebrow` and `meta.summary`
+of every explainer from `virtual:explainer-catalogue`, and the page head uses
 `meta.title` and `meta.description`.
 
 ## Conventions
 
 Kept from the engine: TypeScript strict, ESLint and Prettier over the repository,
-Vitest for pure modules, no comments by default, no all-caps text, `data-i18n`,
-`data-i18n-html` and `data-i18n-attr` for copy, tokens in `src/core/style.css`
-mirrored by `src/core/theme.ts`. Modules shared with the Vite config
+Vitest for pure modules, happy-dom for `*.dom.test.ts` files, no comments by
+default, no all-caps text, `data-i18n`, `data-i18n-html` and `data-i18n-attr` for
+copy, tokens in `src/core/style.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
 (`vite/`, `src/core/manifest.ts`) import with explicit `.ts` extensions.
