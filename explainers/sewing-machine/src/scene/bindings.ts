@@ -1,8 +1,8 @@
 import type { CameraRig } from '@core/scene/camera';
 import type { Highlighter } from '@core/scene/highlight';
+import type { LabelVisibility } from '@core/scene/labelVisibility';
 import { PRESETS } from '../state';
 import type { PartId, SewingState, SewingStore } from '../state';
-import type { LabelVisibility } from './labelVisibility';
 import { PART_IDS } from './partInfo';
 import type { SewingController } from './sewingController';
 

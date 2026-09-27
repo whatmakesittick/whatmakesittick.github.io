@@ -1,8 +1,8 @@
+import { LabelVisibility } from '@core/scene/labelVisibility';
 import type { SceneShell } from '@core/scene/shell';
 import type { GliderStore } from '../state';
 import { bindStore } from './bindings';
 import { GliderController } from './gliderController';
-import { LabelVisibility } from './labelVisibility';
 import { warmKeyLight } from './lighting';
 import { LABEL_PRIORITY } from './partInfo';
 

@@ -1,7 +1,7 @@
+import { LabelVisibility } from '@core/scene/labelVisibility';
 import type { SceneShell } from '@core/scene/shell';
 import type { SewingStore } from '../state';
 import { bindStore } from './bindings';
-import { LabelVisibility } from './labelVisibility';
 import { LABEL_PRIORITY } from './partInfo';
 import { SewingController } from './sewingController';
 

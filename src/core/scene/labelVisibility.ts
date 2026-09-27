@@ -1,8 +1,8 @@
 import { Quaternion, Vector2, Vector3 } from 'three';
 import type { Camera, Object3D } from 'three';
-import type { LabelLayer } from '@core/scene/labels';
-import { NO_SAFE_AREA } from '@core/scene/lens';
-import type { ViewportSize } from '@core/scene/lens';
+import type { LabelLayer } from './labels';
+import { NO_SAFE_AREA } from './lens';
+import type { ViewportSize } from './lens';
 
 interface Margins {
   top: number;
