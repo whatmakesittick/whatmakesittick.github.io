@@ -1,9 +1,9 @@
 import { BoxGeometry, CylinderGeometry, Group, Object3D, SphereGeometry, Vector3 } from 'three';
 import type { BufferGeometry, Mesh } from 'three';
 import { toRadians } from '@core/math';
+import { bladeGeometry } from '@core/scene/geometry/airfoil';
 import { CYCLIC_PITCH_DEGREES, ROTOR, bladeAzimuth, bladeFlap, bladePitch } from '../../model';
 import { HUB, MAIN_BLADE, MAST, PITCH_LINK, SWASHPLATE } from '../constants';
-import { bladeGeometry } from '../geometry/airfoil';
 import { unitRod, verticalCylinder } from '../geometry/primitives';
 import { partMesh } from './context';
 import type { PartContext } from './context';

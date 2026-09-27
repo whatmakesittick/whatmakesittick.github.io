@@ -1,6 +1,5 @@
 import { ExtrudeGeometry, Shape, Vector2 } from 'three';
 import type { BufferGeometry } from 'three';
-import { AIRFOIL_SAMPLES } from '../constants';
 
 export interface BladeSection {
   chord: number;
@@ -10,6 +9,8 @@ export interface BladeSection {
 const NACA_SPREAD = 5;
 const NACA_COEFFICIENTS = [0.2969, -0.126, -0.3516, 0.2843, -0.1036] as const;
 const PITCH_AXIS_FRACTION = 0.25;
+
+export const DEFAULT_AIRFOIL_SAMPLES = 10;
 
 function halfThickness(fraction: number, thicknessRatio: number): number {
   const [root, linear, square, cube, quartic] = NACA_COEFFICIENTS;
@@ -22,13 +23,13 @@ function halfThickness(fraction: number, thicknessRatio: number): number {
   return NACA_SPREAD * thicknessRatio * polynomial;
 }
 
-function airfoilShape({ chord, thickness }: BladeSection): Shape {
+function airfoilShape({ chord, thickness }: BladeSection, samples: number): Shape {
   const leadingEdge = chord * PITCH_AXIS_FRACTION;
   const point = (fraction: number, side: number) =>
     new Vector2(leadingEdge - fraction * chord, side * chord * halfThickness(fraction, thickness));
   const fractions = Array.from(
-    { length: AIRFOIL_SAMPLES + 1 },
-    (_, index) => (1 - Math.cos((Math.PI * index) / AIRFOIL_SAMPLES)) / 2,
+    { length: samples + 1 },
+    (_, index) => (1 - Math.cos((Math.PI * index) / samples)) / 2,
   );
   const upper = fractions.map((fraction) => point(fraction, 1));
   const lower = fractions
@@ -38,8 +39,13 @@ function airfoilShape({ chord, thickness }: BladeSection): Shape {
   return new Shape([...upper, ...lower]);
 }
 
-export function bladeGeometry(section: BladeSection, from: number, to: number): BufferGeometry {
-  const geometry = new ExtrudeGeometry(airfoilShape(section), {
+export function bladeGeometry(
+  section: BladeSection,
+  from: number,
+  to: number,
+  samples = DEFAULT_AIRFOIL_SAMPLES,
+): BufferGeometry {
+  const geometry = new ExtrudeGeometry(airfoilShape(section, samples), {
     depth: to - from,
     bevelEnabled: false,
   });

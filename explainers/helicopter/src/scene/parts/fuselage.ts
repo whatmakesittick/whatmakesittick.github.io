@@ -1,7 +1,7 @@
 import { CapsuleGeometry, Group, Object3D } from 'three';
 import type { BufferGeometry, Vector2 } from 'three';
+import { latheAlongX, sampleProfile } from '@core/scene/geometry/lathe';
 import { COWLING, FUSELAGE, RADIAL_SEGMENTS } from '../constants';
-import { latheAlongX, sampleProfile } from '../geometry/lathe';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 
