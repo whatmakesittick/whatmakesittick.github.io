@@ -68,17 +68,17 @@
 }
 
 .seat-readouts {
-  grid-template-columns: minmax(0, 1fr);
-  gap: 8px;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 8px 12px;
 }
 
 .seat-readouts > div {
   --tone: var(--muted);
 
   display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1fr);
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
   align-items: baseline;
-  gap: 12px;
   padding: 8px 12px;
   border-left: 3px solid var(--tone);
   border-radius: 8px;
