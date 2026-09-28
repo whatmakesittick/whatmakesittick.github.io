@@ -2,7 +2,7 @@
   "meta": {
     "title": "Cómo funciona un panel solar",
     "eyebrow": "Panel solar",
-    "tagline": "Una fina lámina de silicio convierte la luz del sol en electricidad, electrón a electrón, del amanecer al atardecer.",
+    "tagline": "Una fina capa de silicio convierte la luz del sol en electricidad, electrón a electrón, del amanecer al atardecer.",
     "description": "Mira por dentro un panel solar de tejado en 3D durante un día despejado: cómo la luz libera electrones en el silicio, cómo las células en serie suman tensión y cómo un inversor alimenta la casa.",
     "summary": "El recorrido del sol, las capas del panel, la unión de silicio, las células en serie, el inversor."
   },
@@ -24,9 +24,9 @@
         "hint": "Célula ampliada (M)"
       },
       "flow": {
-        "name": "Flujo de electrones",
+        "name": "Flujo de corriente",
         "short": "Flujo",
-        "hint": "Flujo de electrones (F)"
+        "hint": "Flujo de corriente (F)"
       },
       "labels": {
         "name": "Etiquetas",
@@ -119,7 +119,7 @@
   "layers": {
     "material": {
       "glass": "Vidrio templado bajo en hierro",
-      "encapsulant": "Lámina de plástico transparente, casi siempre EVA",
+      "encapsulant": "Película de plástico transparente, casi siempre EVA",
       "cell": "Células de silicio e hilos finos",
       "backsheet": "Película de plástico resistente",
       "frame": "Aluminio anodizado",
@@ -158,29 +158,27 @@
     "mm": "{{value}} mm",
     "ev": "{{value}} eV",
     "percent": "{{value}} %",
-    "minPerSecond": "{{value}} min/s",
-    "passes": "pasa de largo",
-    "ofTotal": "{{count}} de {{total}}"
+    "passes": "no se absorbe"
   },
   "sections": {
     "overview": {
       "title": "Electricidad del sol, sin una sola pieza móvil",
-      "p1": "Estás viendo la azotea de una casa en un día despejado de primavera. Tres <strong>paneles solares</strong> se alinean sobre un soporte inclinado, mirando al sur. El sol sale por el este, sube hasta el mediodía y se pone por el oeste. El indicador sigue la luz que llega a los paneles y la potencia que producen: nada antes del amanecer, un máximo hacia el mediodía, nada después de la puesta de sol. En un día despejado como este, un panel produce entre 2,3 y 2,7 kWh, más o menos. En un día normal de marzo en esta latitud, con nubes y todo, produce aproximadamente entre 1,8 y 2,1 kWh.",
-      "p2": "El panel del extremo izquierdo de la fila es el que desmontamos en estos capítulos. Es un panel de tejado típico de principios de la década de 2020, el JinkoSolar Tiger Neo de 420 W. Mide 1722 × 1134 mm y pesa 22 kg. Bajo 3,2 mm de vidrio hay 108 <strong>medias células</strong> de silicio, en una cuadrícula de 6 de ancho y 18 de alto. El panel no tiene piezas móviles y no almacena nada. Solo produce electricidad mientras le da la luz. Los paneles más nuevos tienen células más grandes y vidrio por las dos caras, pero funcionan igual.",
-      "p3": "La etiqueta dice 420 W. Es la <strong>potencia nominal</strong> del panel, medida con un sol de prueba de 1000 W/m² y las células a 25 °C. En esa prueba convierte en electricidad el 21,5 por ciento de la luz. Un tejado real es menos generoso. Aquí, a 40° norte y al mediodía de un día despejado de primavera, llegan al panel unos 970 W/m², y las células se calientan muy por encima de 25 °C. Así que da unos 380 W, el 90 por ciento de lo que dice su etiqueta. El calor cuesta potencia, como verás en el último capítulo.",
-      "p4": "Un panel hace <strong>tres tareas</strong>. Capta la luz. Usa esa luz para liberar electrones dentro de su silicio. Luego reúne esos electrones en una corriente. Una caja en la pared, el inversor, convierte esa corriente en la que usa una casa. Los capítulos siguientes recorren esos pasos uno a uno. Arrastra la línea de tiempo para mover el sol y cambia la velocidad de reproducción para que el día pase más rápido o más despacio. Arrastra el modelo para girarlo. Activa el recorrido del sol, la célula ampliada, el flujo de electrones o las etiquetas para ver más."
+      "p1": "Estás viendo la azotea de una casa en un día despejado de primavera. Tres <strong>paneles solares</strong> se alinean sobre un soporte inclinado, mirando al sur. El sol sale por el este, sube hasta el mediodía y se pone por el oeste. El indicador sigue la luz que llega a los paneles y la potencia que producen: nada antes del amanecer, un máximo hacia el mediodía, nada después de la puesta de sol. En un día despejado como este, un panel produce entre 2,3 y 2,7 kWh, más o menos. En un día medio de marzo en esta latitud, contando las nubes, produce aproximadamente entre 1,8 y 2,1 kWh.",
+      "p2": "El panel del extremo oeste de la fila es el que desmontamos en estos capítulos. Es un panel de tejado típico de principios de la década de 2020, el JinkoSolar Tiger Neo de 420 W. Mide 1722 × 1134 mm y pesa 22 kg. Bajo 3,2 mm de vidrio hay 108 <strong>medias células</strong> de silicio, en una cuadrícula de 6 de ancho y 18 de alto. El panel no tiene piezas móviles y no almacena nada. Solo produce electricidad mientras le da la luz. Los paneles más nuevos tienen células más grandes y vidrio por las dos caras, pero funcionan igual.",
+      "p3": "La etiqueta dice 420 W. Es la <strong>potencia nominal</strong> del panel, medida con un sol de prueba de 1000 W/m² y las células a 25 °C. En esa prueba convierte en electricidad el 21,5 por ciento de la luz. Un tejado real es menos generoso. Aquí, a 40° norte y al mediodía de un día despejado de primavera, llegan al panel unos 970 W/m², y las células se calientan muy por encima de 25 °C. Así que da unos 380 W, el 90 por ciento de lo que dice su etiqueta. El calor le resta potencia, como verás en el último capítulo.",
+      "p4": "Un panel se encarga de <strong>tres tareas</strong>. Capta la luz. Usa esa luz para liberar electrones dentro de su silicio. Luego reúne esos electrones en una corriente. Una caja en la pared, el inversor, convierte esa corriente en la que usa una casa. Los capítulos siguientes recorren esos pasos uno a uno. Arrastra la línea de tiempo para mover el sol y cambia la velocidad de reproducción para que el día pase más rápido o más despacio. Arrastra el modelo para girarlo. Activa el recorrido del sol, la célula ampliada, el flujo de corriente o las etiquetas para ver más."
     },
     "sun": {
       "title": "De cara al sol del mediodía",
       "p1": "El modelo muestra el <strong>equinoccio</strong>, el día de marzo o de septiembre en que el día y la noche duran casi lo mismo. A 40° norte, más o menos la latitud de Madrid, Filadelfia o Pekín, el sol sale justo por el este a las 06:00, hora solar, y se pone justo por el oeste a las 18:00. La hora solar sigue al propio sol, así que el mediodía es el momento en que está más alto. Hoy llega a 50° sobre el horizonte sur. Los paneles miran al sur y se inclinan hacia ese sol del mediodía.",
       "p2": "La luz que llega inclinada a una superficie se reparte sobre más área, así que cada metro cuadrado recibe menos. Apunta una linterna de frente a una pared y luego inclínala: la mancha de luz crece y se atenúa. Es la <strong>ley del coseno</strong>, y por eso importa tanto el ángulo entre el sol y el panel. Al mediodía, la luz llega a este panel casi de frente. A primera y a última hora del día entra muy de lado y se diluye.",
       "p3": "El aire también cuenta. Al mediodía, la luz del sol atraviesa 1,3 veces la cantidad de aire que cruzaría con el sol justo encima. Ese número se llama <strong>masa de aire</strong>. Cerca del amanecer y del atardecer, la luz recorre un camino mucho más largo por el aire. El aire dispersa gran parte del azul: por eso el sol bajo se ve naranja y rojo. Además, llega mucha menos energía. Al mediodía, a este panel le llegan unos 970 W/m². Tumbado en la azotea, o de pie como una pared, recibiría menos.",
-      "p4": "En el equinoccio, la mejor inclinación coincide con la latitud, 40°, y los 35° de este panel son casi igual de buenos. Los paneles de un tejado no siguen al sol: en una casa, los motores rara vez compensan lo que cuestan y lo que pesan. Además, parte de la luz llega de todo el cielo, no solo del disco del sol. Esta <strong>luz difusa</strong> explica que las nubes reduzcan la producción, pero no la detengan. El modelo muestra un cielo despejado de libro de texto, sin nubes y sin sombras proyectadas. Mueve la inclinación o salta a tres momentos del día.",
+      "p4": "En el equinoccio, la mejor inclinación coincide con la latitud, 40°, y los 35° de este panel son casi igual de buenos. Los paneles de un tejado no siguen al sol: en una casa, los motores rara vez compensan lo que cuestan y lo que pesan. Además, parte de la luz llega de todo el cielo, no solo del disco del sol. Esta <strong>luz difusa</strong> explica que las nubes reduzcan la producción, pero no la detengan. El modelo muestra un cielo despejado de libro de texto, sin nubes y sin sombras proyectadas. Cambia la inclinación o salta a tres momentos del día.",
       "control": {
         "label": "Inclinación del panel",
         "flat": "Tumbado en la azotea",
         "upright": "De pie como una pared",
-        "incidence": "Desvío del sol respecto al frente",
+        "incidence": "Ángulo de incidencia",
         "irradiance": "Luz sobre el panel ahora",
         "day": "Día entero con esta inclinación",
         "flatDay": "Día entero si estuviera tumbado"
@@ -189,8 +187,8 @@
     "layers": {
       "title": "Un sándwich que es casi todo vidrio",
       "p1": "Separa las capas del panel y encontrarás un sándwich, construido de delante hacia atrás. Arriba hay 3,2 mm de <strong>vidrio templado bajo en hierro</strong>. Los fabricantes lo eligen porque es barato, resistente, estable y muy transparente. El templado lo hace lo bastante fuerte para aguantar la nieve. El vidrio lleva su propia capa antirreflectante, así que su superficie refleja menos luz y llega más a las células. Aquí y en la célula ampliada, las capas finas se dibujan mucho más gruesas de lo que son.",
-      "p2": "Bajo el vidrio hay una lámina transparente y pegajosa, el <strong>encapsulante</strong>. Suele ser un plástico llamado EVA. En la fábrica se calienta todo el conjunto, y la lámina une las capas en un solo bloque sellado, sin aire ni agua dentro. Después vienen las células: obleas de silicio de alrededor de un séptimo de milímetro de grosor. Sobre ellas corren hilos finos que se llevan la corriente. Este panel usa muchos hilos redondos y finos en lugar de unas pocas tiras planas. Bajo las células hay una segunda lámina de encapsulante.",
-      "p3": "La parte de atrás del panel es una película de plástico resistente: la <strong>lámina trasera</strong>. Mantiene fuera la humedad y aísla el cableado. Un marco de aluminio anodizado rodea los bordes, da rigidez al panel y ofrece a las abrazaderas de montaje un sitio donde agarrarse. Detrás está la caja de conexiones, donde el cableado interno se une a los cables de salida. También guarda tres diodos de bypass, que se explican en el capítulo del cableado. En peso, el panel es vidrio en unas tres cuartas partes. El silicio, que hace todo el trabajo, es solo una pequeña parte.",
+      "p2": "Bajo el vidrio hay una película transparente y pegajosa, el <strong>encapsulante</strong>. Suele ser un plástico llamado EVA. En la fábrica se calienta todo el conjunto, y la película une las capas en un solo bloque sellado, sin aire ni agua dentro. Después vienen las células: obleas de silicio de alrededor de un séptimo de milímetro de grosor. Sobre ellas corren hilos finos que se llevan la corriente. Este panel usa muchos hilos redondos y finos en lugar de unas pocas tiras planas. Bajo las células hay una segunda película de encapsulante.",
+      "p3": "La parte de atrás del panel es una película de plástico resistente: la <strong>lámina trasera</strong>. Mantiene fuera la humedad y aísla el cableado. Un marco de aluminio anodizado rodea los bordes, da rigidez al panel y ofrece a las abrazaderas de montaje un sitio donde agarrarse. Detrás está la caja de conexiones, donde el cableado interno se une a los cables de salida. También guarda tres diodos de bypass, que se explican en el capítulo del cableado. Unas tres cuartas partes del peso del panel son vidrio. El silicio, que hace todo el trabajo, es solo una pequeña parte.",
       "p4": "Las células se ven casi negras. El silicio desnudo es brillante y devuelve mucha luz. Por eso la superficie de cada célula se talla en forma de pirámides diminutas y se cubre con una capa fina de <strong>nitruro de silicio</strong>. El grosor de esa capa está ajustado para que refleje muy poco, y también decide el color que ves. Negro no significa mejor: la versión totalmente negra de este panel tiene una potencia nominal un poco menor. Separa las capas y elige una para ver de qué está hecha y para qué sirve.",
       "control": {
         "label": "Separa las capas",
@@ -198,14 +196,14 @@
         "exploded": "Separado"
       },
       "thickness": "Grosor",
-      "material": "Hecho de",
+      "material": "Material",
       "job": "Su función"
     },
     "junction": {
       "title": "Un fotón, un electrón",
       "p1": "La luz llega en paquetitos de energía llamados <strong>fotones</strong>. Cuando el silicio absorbe uno, puede arrancar un electrón del enlace que lo sujetaba. Ahora el electrón puede moverse libremente por el cristal. Deja atrás un hueco, y el hueco también se mueve, como una burbuja en el agua. Un fotón libera como mucho un electrón. A pleno sol, una media célula libera unos 4 × 10¹⁹ electrones cada segundo. La célula ampliada sobre el panel muestra un corte de una célula mientras trabaja.",
       "p2": "Un fotón necesita al menos 1,12 eV para liberar un electrón. Ese umbral es la <strong>banda prohibida</strong> del silicio. Cuanto más azul es la luz, más energía lleva cada fotón: 3,1 eV a 400 nm, 2,1 eV a 600 nm y 1,24 eV a 1000 nm. Más allá de unos 1100 nm, los fotones son demasiado débiles y pasan de largo. Eso es cerca del 19 por ciento de la energía de la luz solar y un tercio de sus fotones. Los fotones más azules traen más de lo que necesitan, y lo que sobra se convierte en calor: cerca del 30 por ciento de la luz solar. Estas dos pérdidas son la razón principal de que una célula de un solo material no pueda pasar de alrededor del 33 por ciento.",
-      "p3": "Cada color se absorbe a su propia profundidad. La luz azul, a 400 nm, se absorbe en los primeros 0,1 µm. La luz roja, a 680 nm, llega a unos 4,5 µm. El infrarrojo a 1000 nm recorre 156 µm, más que el grosor de toda la oblea, de 140 µm. Por eso la célula recurre a la <strong>captura de luz</strong>: las pirámides hacen entrar la luz en diagonal, y la parte trasera de la célula la refleja para darle una segunda oportunidad. El silicio tiene un techo del 29,4 por ciento, y la mejor célula de silicio ha llegado al 28,1 por ciento. Un panel nuevo típico alcanza entre el 22 y el 23 por ciento.",
+      "p3": "Cada color se absorbe a su propia profundidad. La luz azul, a 400 nm, se absorbe en los primeros 0,1 µm. La luz roja, a 680 nm, llega a unos 4,5 µm. El infrarrojo a 1000 nm llega a 156 µm: más que toda la oblea, que mide 140 µm. Por eso la célula recurre a la <strong>captura de luz</strong>: las pirámides hacen entrar la luz en diagonal, y la parte trasera de la célula la refleja para darle una segunda oportunidad. El silicio tiene un techo del 29,4 por ciento, y la mejor célula de silicio ha llegado al 28,1 por ciento. Un panel nuevo típico alcanza alrededor del 22 al 23 por ciento.",
       "p4": "Los electrones y los huecos liberados deben separarse antes de volver a encontrarse. La célula está construida con una capa que deja salir a los electrones pero bloquea los huecos, y otra que hace lo contrario. Estas capas funcionan como <strong>puertas de un solo sentido</strong>, así que los electrones se acumulan en un lado y los huecos en el otro. Ese desequilibrio es la tensión, unos 0,7 V por célula. En esta célula de tipo n, los electrones salen por detrás, y los huecos por los dedos de plata de la cara frontal. El corte muestra un solo dedo y ningún hilo colector. Recorre los colores de la luz y mira dónde se detiene cada uno.",
       "control": {
         "label": "Color de la luz",
@@ -223,32 +221,32 @@
     },
     "wiring": {
       "title": "La célula más débil marca el ritmo",
-      "p1": "Una célula da solo unos 0,7 V, demasiado poco para alimentar nada. Por eso las células se conectan <strong>en serie</strong>, una tras otra, y sus tensiones se suman. Este panel tiene 54 posiciones de célula en fila, que dan 38,1 V sin nada conectado y 31,5 V en su mejor punto de trabajo. La misma corriente pasa por todas las posiciones, unos 13,3 A a plena potencia con el sol de prueba. Los electrones, en cambio, apenas avanzan: un milímetro por segundo o menos. Lo que viaja rápido es la energía.",
-      "p2": "Una cadena es tan fuerte como su eslabón más débil. Si una célula queda a la sombra, produce menos corriente y frena a todas las demás de su fila. Las células al sol pueden incluso forzar corriente a través de ella en sentido contrario, y su potencia se convierte en calor en esa única célula: un punto caliente. Por eso la caja de conexiones lleva tres <strong>diodos de bypass</strong>, cada uno a cargo de un tercio del panel. A pleno sol no hacen nada. Cuando la sombra frena demasiado un tercio, su diodo se activa y deja que la corriente lo esquive, con una pérdida de unos 0,4 V. Así, una célula totalmente a la sombra cuesta alrededor de un tercio de la potencia, no toda.",
-      "p3": "Este panel usa <strong>células de medio corte</strong>. Las dos mitades de cada célula van conectadas una junto a otra, en paralelo, así que las 108 medias células siguen formando 54 posiciones en serie. La tensión no cambia, y cada mitad lleva la mitad de la corriente, así que se pierde menos potencia en forma de calor en los hilos. La gran ventaja llega cuando la sombra sube desde el borde inferior. Cada tercio del panel tiene una cadena superior y otra inferior, y las superiores siguen trabajando, con alrededor de la mitad de la potencia. Un panel más antiguo de 60 células, dibujado aquí del mismo tamaño, no conserva casi nada, porque sus tres tercios llegan hasta la sombra.",
-      "p4": "La gráfica representa la corriente del panel frente a su tensión. Sin nada conectado, la tensión es máxima y no pasa corriente. Si unes los dos cables, la corriente es máxima y la tensión cae a cero. La potencia es la corriente multiplicada por la tensión, y alcanza su máximo en un punto del codo de la curva, el <strong>punto de máxima potencia</strong>. El inversor mantiene ahí el panel. La sombra añade escalones a la curva y puede darle más de un pico. En un panel real, el cableado va por detrás de las células; aquí cada cadena es una línea de color en la cara frontal. Elige una disposición y deja que la sombra suba.",
+      "p1": "Una célula da solo unos 0,7 V, demasiado poco para alimentar nada. Por eso las células se conectan <strong>en serie</strong>, como los eslabones de una cadena, y sus tensiones se suman. Este panel tiene 54 posiciones de célula, una tras otra, que dan 38,1 V sin nada conectado y 31,5 V en su mejor punto de trabajo. La misma corriente pasa por todas las posiciones, unos 13,3 A a plena potencia con el sol de prueba. Los electrones, en cambio, apenas avanzan: un milímetro por segundo o menos. Lo que viaja rápido es la energía.",
+      "p2": "Una cadena es tan fuerte como su eslabón más débil. Si una célula queda a la sombra, produce menos corriente y frena a todas las demás. Las células al sol pueden incluso forzar corriente a través de ella en sentido contrario, y toda esa potencia acaba como calor en esa única célula: un punto caliente. Por eso la caja de conexiones lleva tres <strong>diodos de bypass</strong>, cada uno a cargo de un tercio del panel. A pleno sol no están activos. Cuando la sombra frena demasiado uno de esos tercios, su diodo se activa. La corriente rodea ese tercio y pierde unos 0,4 V. Así, una célula totalmente a la sombra cuesta alrededor de un tercio de la potencia, no toda.",
+      "p3": "Este panel usa <strong>células de medio corte</strong>: cada célula está cortada en dos. La mitad superior y la mitad inferior del panel van conectadas una junto a otra, en paralelo, así que sus 108 medias células siguen formando 54 posiciones en serie. La tensión no cambia, y cada media célula lleva la mitad de la corriente, así que los hilos pierden menos potencia en forma de calor. La gran ventaja llega cuando la sombra ya cubre todo el borde inferior. Cada tercio del panel tiene una cadena superior y otra inferior, y las superiores siguen trabajando, con alrededor de la mitad de la potencia. Un panel más antiguo de 60 células, dibujado aquí del mismo tamaño, no conserva casi nada, porque la sombra alcanza a sus tres tercios.",
+      "p4": "La gráfica representa la corriente del panel frente a su tensión. Sin nada conectado, la tensión es máxima y no pasa corriente. Si unes los dos cables, la corriente es máxima y la tensión es cero. La potencia es la corriente multiplicada por la tensión, y alcanza su máximo en el codo de la curva, en el <strong>punto de máxima potencia</strong>. La sombra añade a la curva escalones y picos de más. En un panel real, el cableado va por detrás de las células; aquí cada cadena es una línea de color en la cara frontal. La sombra entra en diagonal, así que primero se oscurece una esquina. Elige una disposición, deja que la sombra suba y mira cómo los tercios se apagan uno tras otro.",
       "control": {
         "label": "Sombra que sube por el panel",
         "clear": "Despejado",
         "covered": "Totalmente cubierto",
-        "caption": "Corriente frente a tensión para todo el panel. El punto es donde lo hace trabajar el inversor. La curva tenue es el panel sin sombra.",
+        "caption": "Corriente frente a tensión para todo el panel. El punto es donde lo hace trabajar el inversor. El rectángulo bajo el punto es la potencia, voltios por amperios. La curva tenue es el panel sin sombra.",
         "cells": "Células a la sombra",
         "diodes": "Diodos de bypass activos",
         "power": "Potencia ahora",
-        "loss": "Perdido por la sombra"
+        "loss": "Pérdida por sombra"
       },
       "cellsValue": "{{count}} de {{total}}",
       "diodesValue": "{{count}} de {{total}}"
     },
     "inverter": {
       "title": "Del tejado al enchufe",
-      "p1": "El panel produce corriente continua, CC, que va siempre en un solo sentido. Una casa funciona con corriente alterna, CA, que cambia de sentido muchas veces por segundo. La caja de la pared, el <strong>inversor</strong>, convierte una en la otra. No genera energía ni la guarda. Entrega alrededor del 96 por ciento de lo que recibe, y el resto se pierde como un poco de calor. Los puntos ámbar muestran el flujo: corriente continua del panel al inversor, y después corriente alterna hasta el contador y dentro de la casa.",
+      "p1": "El panel produce corriente continua, CC, que va siempre en un solo sentido. Una casa funciona con corriente alterna, CA, que cambia de sentido muchas veces por segundo. La caja de la pared, el <strong>inversor</strong>, convierte una en la otra. No genera energía ni la guarda. Entrega alrededor del 96 por ciento de lo que recibe, y el resto se convierte en un poco de calor. Los puntos ámbar muestran adónde va la energía: corriente continua del panel al inversor, y después corriente alterna hasta el contador y de ahí a la casa.",
       "p2": "El inversor también mantiene el panel en su mejor punto. El punto de máxima potencia se mueve todo el día: la tensión cambia con la temperatura de las células, y la corriente con la luz. Así que el inversor lo busca a tientas, un truco llamado <strong>seguimiento del punto de máxima potencia</strong>. Mueve un poco la tensión y comprueba la potencia. Si la potencia sube, vuelve a moverla en la misma dirección. Si baja, da marcha atrás. Como quien sube una colina entre la niebla, siempre se mantiene cerca de la cima.",
-      "p3": "El calor es el enemigo de un panel. Por cada grado por encima de 25 °C, este panel pierde el 0,29 por ciento de su potencia. Esa cifra es su <strong>coeficiente de temperatura</strong>. Los paneles PERC, más antiguos, pierden el 0,35 por ciento. En un día de sol, las células alcanzan entre 45 y 65 °C, más o menos. Es la razón principal de que este mediodía despejado de primavera dé unos 380 W y no 420. Un tejado caluroso de verano cuesta todavía más. Así que un día frío y despejado gana a uno caluroso: los paneles funcionan con luz, no con calor. El aire del modelo sigue un día templado de primavera.",
-      "p4": "La energía de un día despejado de primavera podría hacer funcionar una nevera casi 2 días, o cargar un portátil unas 40 veces. En un año, en esta latitud, un panel produce entre 600 y 700 kWh, más o menos. Cada kilovatio de paneles da unos 1000 kWh al año en Londres o Berlín, y 1800 en Phoenix. La <strong>garantía</strong> promete el 87,4 por ciento de la potencia después de 30 años. Un panel devuelve la energía que costó fabricarlo en alrededor de un año. Contando toda su vida, supone unos 40 g de CO₂ por kWh. En 2025, la energía solar produjo cerca del 8,7 por ciento de la electricidad del mundo. Mueve la temperatura o deja que siga el día.",
+      "p3": "El calor es el enemigo de un panel. Por cada grado por encima de 25 °C, este panel pierde el 0,29 por ciento de su potencia. Esa cifra es su <strong>coeficiente de temperatura</strong>. Los paneles PERC, más antiguos, pierden el 0,35 por ciento. En un día de sol, las células alcanzan unos 45 a 65 °C. Esa es la razón principal de que este mediodía despejado de primavera dé unos 380 W, no 420. En un tejado caluroso de verano se pierde todavía más. Así que un día frío y despejado gana a uno caluroso: los paneles funcionan con luz, no con calor. En el modelo, la temperatura del aire es la de un día templado de primavera.",
+      "p4": "La energía de un día despejado de primavera podría hacer funcionar una nevera unos dos días, o cargar un portátil unas 50 veces. En un año, en esta latitud, un panel produce alrededor de 600 a 700 kWh. Cada kilovatio de paneles da unos 1000 kWh al año en Londres o Berlín, y 1800 en Phoenix. La <strong>garantía</strong> promete el 87,4 por ciento de la potencia después de 30 años. Un panel devuelve la energía que costó fabricarlo en alrededor de un año. Contando toda su vida, supone unos 40 g de CO₂ por kWh. En 2025, la energía solar produjo cerca del 8,7 por ciento de la electricidad del mundo. Cambia la temperatura o deja que varíe a lo largo del día.",
       "control": {
         "label": "Temperatura de la célula",
-        "cold": "Helada",
+        "cold": "Bajo cero",
         "hot": "Tejado caluroso de verano",
         "loss": "Potencia frente a una célula a 25 °C",
         "voltage": "Tensión en circuito abierto",
@@ -256,7 +254,7 @@
       },
       "dc": "Entra en el inversor",
       "ac": "Sale hacia la casa",
-      "today": "Energía producida hoy",
+      "today": "Energía producida hasta ahora",
       "powers": "Cargas de portátil con la energía de hoy"
     }
   }

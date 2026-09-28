@@ -3,8 +3,8 @@
     "title": "So funktioniert ein Solarmodul",
     "eyebrow": "Solarmodul",
     "tagline": "Eine dünne Scheibe Silizium macht aus Sonnenlicht Strom, ein befreites Elektron nach dem anderen, von Sonnenaufgang bis Sonnenuntergang.",
-    "description": "Ein Blick in ein Solarmodul auf dem Dach in 3D, einen klaren Tag lang: wie Sonnenlicht im Silizium Elektronen freisetzt, wie Zellen in Reihe eine Spannung aufbauen und wie ein Wechselrichter das Haus versorgt.",
-    "summary": "Der Weg der Sonne, der Schichtaufbau, der Übergang in der Siliziumzelle, Zellen in Reihe, der Wechselrichter."
+    "description": "Schauen Sie in 3D in ein Solarmodul auf dem Dach, einen klaren Tag lang: wie Sonnenlicht im Silizium Elektronen freisetzt, wie Zellen in Reihe eine Spannung aufbauen und wie ein Wechselrichter das Haus versorgt.",
+    "summary": "Der Weg der Sonne, der Schichtaufbau, der pn-Übergang, Zellen in Reihe, der Wechselrichter."
   },
   "stage": {
     "label": "Interaktives Modell eines Solarmoduls",
@@ -19,14 +19,14 @@
         "hint": "Sonnenbahn (S)"
       },
       "slice": {
-        "name": "Zelle vergrößert",
+        "name": "Vergrößerte Zelle",
         "short": "Zelle",
-        "hint": "Zelle vergrößert (M)"
+        "hint": "Vergrößerte Zelle (M)"
       },
       "flow": {
-        "name": "Elektronenfluss",
+        "name": "Stromfluss",
         "short": "Fluss",
-        "hint": "Elektronenfluss (F)"
+        "hint": "Stromfluss (F)"
       },
       "labels": {
         "name": "Beschriftungen",
@@ -112,7 +112,7 @@
     "pyramids": "Pyramidenstruktur",
     "arCoating": "Antireflexschicht",
     "emitter": "Emitter",
-    "junction": "Übergangszone",
+    "junction": "pn-Übergang",
     "base": "Siliziumbasis",
     "rearContact": "Rückkontakt"
   },
@@ -123,14 +123,14 @@
       "cell": "Siliziumzellen und dünne Drähte",
       "backsheet": "Robuste Kunststofffolie",
       "frame": "Eloxiertes Aluminium",
-      "junctionBox": "Dichte Dose mit drei Bypass-Dioden"
+      "junctionBox": "Abgedichtete Dose mit drei Bypass-Dioden"
     },
     "job": {
       "glass": "Lässt Licht herein, hält Hagel und Regen ab",
-      "encapsulant": "Klebt den Stapel zusammen und hält Luft und Wasser fern",
+      "encapsulant": "Verklebt die Schichten miteinander und hält Luft und Wasser fern",
       "cell": "Macht aus Licht Strom",
       "backsheet": "Dichtet die Rückseite ab und isoliert die Leitungen",
-      "frame": "Versteift die Ränder und hält die Montageklemmen",
+      "frame": "Versteift die Ränder und bietet den Montageklemmen Halt",
       "junctionBox": "Führt den Strom hinaus zu den Kabeln"
     }
   },
@@ -158,17 +158,15 @@
     "mm": "{{value}} mm",
     "ev": "{{value}} eV",
     "percent": "{{value}} %",
-    "minPerSecond": "{{value}} min/s",
-    "passes": "gar nicht, geht glatt hindurch",
-    "ofTotal": "{{count}} von {{total}}"
+    "passes": "geht glatt hindurch"
   },
   "sections": {
     "overview": {
       "title": "Strom aus Sonnenlicht, ganz ohne bewegliche Teile",
-      "p1": "Sie sehen das Flachdach eines Hauses an einem klaren Frühlingstag. Drei <strong>Solarmodule</strong> stehen in einer Reihe auf einem schrägen Gestell und sind nach Süden ausgerichtet. Die Sonne geht im Osten auf, steigt bis zum Mittag und geht im Westen unter. Die Anzeige folgt dem Licht auf den Modulen und der Leistung, die sie liefern: nichts vor Sonnenaufgang, ein Höchstwert um die Mittagszeit, nichts nach Sonnenuntergang. An einem klaren Tag wie diesem erzeugt ein Modul etwa 2,3 bis 2,7 kWh. An einem durchschnittlichen Märztag auf diesem Breitengrad, mit echtem Wetter, sind es etwa 1,8 bis 2,1 kWh.",
-      "p2": "Das Modul am linken Ende der Reihe nehmen diese Kapitel auseinander. Es ist ein typisches Dachmodul der frühen 2020er-Jahre, das JinkoSolar Tiger Neo mit 420 W. Es misst 1722 × 1134 mm und wiegt 22 kg. Unter 3,2 mm Glas liegen 108 <strong>Halbzellen</strong> aus Silizium, 6 nebeneinander und 18 übereinander. Das Modul hat keine beweglichen Teile und speichert nichts. Es erzeugt nur Strom, solange Licht darauf fällt. Neuere Module haben größere Zellen und Glas auf beiden Seiten, funktionieren aber genauso.",
-      "p3": "Auf dem Typenschild stehen 420 W. Das ist die <strong>Nennleistung</strong> des Moduls, gemessen unter einer Testsonne von 1000 W/m², wobei die Zellen auf 25 °C gehalten werden. In diesem Test wandelt es 21,5 Prozent des Lichts in Strom um. Ein echtes Dach ist weniger freundlich. Hier, auf 40° nördlicher Breite, erreichen an einem klaren Frühlingsmittag etwa 970 W/m² das Modul, und die Zellen werden viel wärmer als 25 °C. Deshalb liefert es etwa 380 W, 90 Prozent seiner Nennleistung. Wärme kostet Leistung, wie das letzte Kapitel zeigt.",
-      "p4": "Ein Modul erledigt <strong>drei Aufgaben</strong>. Es fängt Licht ein. Mit diesem Licht setzt es in seinem Silizium Elektronen frei. Dann sammelt es diese Elektronen zu einem Strom. Ein Kasten an der Wand, der Wechselrichter, macht daraus den Strom, den ein Haus nutzt. Die Kapitel weiter unten nehmen sich je einen Schritt vor. Ziehen Sie den Regler der Zeitleiste, um die Sonne zu bewegen, und ändern Sie die Wiedergabegeschwindigkeit, damit der Tag schneller oder langsamer vergeht. Ziehen Sie das Modell, um es zu drehen. Schalten Sie Sonnenbahn, vergrößerte Zelle, Elektronenfluss oder Beschriftungen ein, um mehr zu sehen."
+      "p1": "Sie sehen das Flachdach eines Hauses an einem klaren Frühlingstag. Drei <strong>Solarmodule</strong> stehen in einer Reihe auf einem schrägen Gestell und sind nach Süden ausgerichtet. Die Sonne geht im Osten auf, steigt bis zum Mittag und geht im Westen unter. Die Anzeige folgt dem Licht auf den Modulen und der Leistung, die sie liefern: nichts vor Sonnenaufgang, ein Höchstwert um die Mittagszeit, nichts nach Sonnenuntergang. An einem klaren Tag wie diesem erzeugt ein Modul etwa 2,3 bis 2,7 kWh. Rechnet man das echte Wetter mit ein, sind es an einem durchschnittlichen Märztag auf diesem Breitengrad etwa 1,8 bis 2,1 kWh.",
+      "p2": "In diesen Kapiteln nehmen wir das Modul am westlichen Ende der Reihe auseinander. Es ist ein typisches Dachmodul der frühen 2020er-Jahre, das JinkoSolar Tiger Neo mit 420 W. Es misst 1722 × 1134 mm und wiegt 22 kg. Unter 3,2 mm Glas liegen 108 <strong>Halbzellen</strong> aus Silizium, 6 nebeneinander und 18 übereinander. Das Modul hat keine beweglichen Teile und speichert nichts. Es erzeugt nur Strom, solange Licht darauf fällt. Neuere Module haben größere Zellen und Glas auf beiden Seiten, funktionieren aber genauso.",
+      "p3": "Auf dem Typenschild stehen 420 W. Das ist die <strong>Nennleistung</strong> des Moduls, gemessen unter einer Testsonne mit 1000 W/m² und bei 25 °C Zelltemperatur. In diesem Test wandelt es 21,5 Prozent des Lichts in Strom um. Auf einem echten Dach sieht es schlechter aus. Hier, auf 40° nördlicher Breite, erreichen an einem klaren Frühlingsmittag etwa 970 W/m² das Modul, und die Zellen werden viel wärmer als 25 °C. Deshalb liefert es etwa 380 W, 90 Prozent seiner Nennleistung. Wärme kostet Leistung, wie das letzte Kapitel zeigt.",
+      "p4": "Ein Modul erledigt <strong>drei Aufgaben</strong>. Es fängt Licht ein. Mit diesem Licht setzt es in seinem Silizium Elektronen frei. Dann sammelt es diese Elektronen zu einem Strom. Ein Kasten an der Wand, der Wechselrichter, macht daraus den Strom, den ein Haus nutzt. Die Kapitel weiter unten nehmen sich je einen Schritt vor. Ziehen Sie den Regler der Zeitleiste, um die Sonne zu bewegen, und ändern Sie die Wiedergabegeschwindigkeit, damit der Tag schneller oder langsamer vergeht. Ziehen Sie das Modell, um es zu drehen. Schalten Sie Sonnenbahn, vergrößerte Zelle, Stromfluss oder Beschriftungen ein, um mehr zu sehen."
     },
     "sun": {
       "title": "Zur Mittagssonne geneigt",
@@ -195,7 +193,7 @@
       "control": {
         "label": "Schichten auseinanderziehen",
         "assembled": "Zusammengebaut",
-        "exploded": "Auseinandergezogen"
+        "exploded": "Zerlegt"
       },
       "thickness": "Dicke",
       "material": "Besteht aus",
@@ -205,8 +203,8 @@
       "title": "Ein Photon, ein Elektron",
       "p1": "Licht kommt in winzigen Energiepaketen, den <strong>Photonen</strong>. Schluckt das Silizium ein Photon, kann dieses ein Elektron aus seiner Bindung lösen. Das Elektron kann nun frei durch den Kristall wandern. Zurück bleibt eine Lücke, ein sogenanntes Loch, und auch das Loch wandert, wie eine Blase im Wasser. Ein Photon befreit höchstens ein Elektron. In voller Sonne setzt eine Halbzelle jede Sekunde etwa 4 × 10¹⁹ Elektronen frei. Die vergrößerte Zelle über dem Modul zeigt einen Schnitt durch eine Zelle bei der Arbeit.",
       "p2": "Ein Photon braucht mindestens 1,12 eV, um ein Elektron zu befreien. Das ist die <strong>Bandlücke</strong> von Silizium. Je blauer das Licht, desto mehr Energie trägt jedes Photon: 3,1 eV bei 400 nm, 2,1 eV bei 600 nm, 1,24 eV bei 1000 nm. Jenseits von etwa 1100 nm sind die Photonen zu schwach und gehen glatt hindurch. Das sind etwa 19 Prozent der Energie im Sonnenlicht und ein Drittel seiner Photonen. Blauere Photonen bringen mehr mit, als sie brauchen, und der Überschuss wird zu Wärme, etwa 30 Prozent des Sonnenlichts. Diese beiden Verluste sind der Hauptgrund, warum eine Zelle aus einem einzigen Material nicht über etwa 33 Prozent hinauskommt.",
-      "p3": "Jede Farbe wird in ihrer eigenen Tiefe geschluckt. Blaues Licht mit 400 nm ist schon in den ersten 0,1 µm absorbiert. Rotes Licht mit 680 nm kommt etwa 4,5 µm weit. Infrarot mit 1000 nm dringt 156 µm tief ein, tiefer als die ganze 140 µm dicke Scheibe. Deshalb setzt die Zelle auf <strong>Lichteinfang</strong>: Die Pyramiden lenken das Licht schräg hinein, und die Rückseite der Zelle wirft es für einen zweiten Durchgang zurück. Die Grenze für Silizium liegt bei 29,4 Prozent, und die beste Siliziumzelle hat 28,1 Prozent erreicht. Ein typisches neues Modul schafft etwa 22 bis 23 Prozent.",
-      "p4": "Befreite Elektronen und Löcher müssen sortiert werden, bevor sie wieder zueinanderfinden. Die Zelle hat eine Schicht, die Elektronen hinauslässt, aber Löcher blockiert, und eine andere, die es umgekehrt macht. Diese Schichten wirken wie <strong>Einbahntüren</strong>, und so sammeln sich die Elektronen auf der einen Seite und die Löcher auf der anderen. Dieses Ungleichgewicht ist die Spannung, etwa 0,7 V pro Zelle. In dieser n-Typ-Zelle gehen die Elektronen hinten hinaus, die Löcher vorn durch die Silberfinger. Der Schnitt zeigt einen einzigen Finger und keinen Sammeldraht. Schieben Sie den Regler durch die Farben des Lichts und sehen Sie, wo jede Farbe geschluckt wird.",
+      "p3": "Jede Farbe wird in ihrer eigenen Tiefe geschluckt. Blaues Licht mit 400 nm ist schon in den ersten 0,1 µm absorbiert. Rotes Licht mit 680 nm kommt etwa 4,5 µm weit. Infrarot mit 1000 nm dringt 156 µm tief ein, tiefer als die ganze 140 µm dicke Scheibe. Deshalb setzt die Zelle auf <strong>Lichteinfang</strong>: Die Pyramiden lenken das Licht schräg hinein, und die Rückseite der Zelle wirft es für einen zweiten Durchgang zurück. Mehr als 29,4 Prozent Wirkungsgrad sind mit Silizium nicht möglich. Die beste Siliziumzelle hat 28,1 Prozent erreicht. Ein typisches neues Modul schafft etwa 22 bis 23 Prozent.",
+      "p4": "Befreite Elektronen und Löcher müssen sortiert werden, bevor sie wieder zueinanderfinden. Die Zelle hat eine Schicht, die Elektronen hinauslässt, aber Löcher blockiert, und eine andere, die es umgekehrt macht. Diese Schichten wirken wie <strong>Einbahnstraßen</strong>, und so sammeln sich die Elektronen auf der einen Seite und die Löcher auf der anderen. Dieses Ungleichgewicht ist die Spannung, etwa 0,7 V pro Zelle. In dieser n-Typ-Zelle gehen die Elektronen hinten hinaus, die Löcher vorn durch die Silberfinger. Der Schnitt zeigt einen einzigen Finger und keinen Sammeldraht. Schieben Sie den Regler durch die Farben des Lichts und sehen Sie, wo jede Farbe geschluckt wird.",
       "control": {
         "label": "Farbe des Lichts",
         "ultraviolet": "Ultraviolett",
@@ -214,7 +212,7 @@
         "caption": "Sonnenlicht am Boden nach Farben. Bernsteinfarben ist, was Silizium nutzen kann, rot die Energie, die als Wärme verloren geht, grau das Licht, das glatt hindurchgeht.",
         "energy": "Energie eines Photons",
         "band": "Farbbereich",
-        "depth": "Absorbiert nach",
+        "depth": "Eindringtiefe",
         "heat": "Übrig als Wärme"
       },
       "pairs": "Freigesetzte Elektronen pro Sekunde in einer Halbzelle, gerade jetzt",
@@ -223,15 +221,15 @@
     },
     "wiring": {
       "title": "Die schwächste Zelle gibt den Takt vor",
-      "p1": "Eine Zelle liefert nur etwa 0,7 V, viel zu wenig, um etwas zu betreiben. Deshalb werden die Zellen <strong>in Reihe</strong> geschaltet, eine hinter der anderen, und ihre Spannungen addieren sich. Dieses Modul hat 54 Zellpositionen hintereinander. Das ergibt 38,1 V, wenn nichts angeschlossen ist, und 31,5 V am besten Arbeitspunkt. Durch jede Position fließt derselbe Strom, bei voller Leistung in der Testsonne etwa 13,3 A. Die Elektronen selbst kriechen nur dahin, etwa einen Millimeter pro Sekunde oder langsamer. Schnell unterwegs ist die Energie.",
-      "p2": "Eine Kette ist nur so stark wie ihr schwächstes Glied. Liegt eine Zelle im Schatten, liefert sie weniger Strom und bremst alle Zellen ihres Strangs. Die sonnigen Zellen können sogar Strom rückwärts durch sie hindurchzwingen und ihre Leistung in dieser einen Zelle in Wärme verwandeln: ein Hotspot. Deshalb enthält die Anschlussdose drei <strong>Bypass-Dioden</strong>, die jeweils ein Drittel des Moduls schützen. In voller Sonne bleiben sie aus. Bremst Schatten ein Drittel zu stark, schaltet dessen Diode ein und leitet den Strom daran vorbei. Dabei gehen nur etwa 0,4 V verloren. Eine ganz verschattete Zelle kostet dann etwa ein Drittel der Leistung, nicht alles.",
-      "p3": "Dieses Modul nutzt <strong>halbierte Zellen</strong>. Die beiden Hälften jeder Zelle sind nebeneinander geschaltet, also parallel. So ergeben die 108 Halbzellen weiterhin 54 Positionen in Reihe. Die Spannung bleibt gleich, und jede Hälfte führt den halben Strom, darum geht in den Drähten weniger Leistung als Wärme verloren. Der große Gewinn kommt, wenn Schatten von der Unterkante heraufkriecht. Jedes Drittel des Moduls hat einen oberen und einen unteren Strang, und die oberen Stränge arbeiten weiter, mit etwa der halben Leistung. Ein älteres Modul mit 60 Zellen, hier in derselben Größe gezeichnet, behält fast nichts, weil alle drei Drittel bis in den Schatten reichen.",
-      "p4": "Das Diagramm zeigt den Strom des Moduls über seiner Spannung. Ist nichts angeschlossen, ist die Spannung am höchsten, und es fließt kein Strom. Verbinden Sie die beiden Leitungen miteinander, dann ist der Strom am höchsten, und die Spannung fällt auf null. Die Leistung ist das Produkt aus beiden. Sie ist an einer Stelle im Knick der Kurve am größten, dem <strong>Punkt maximaler Leistung</strong>. Der Wechselrichter hält das Modul dort. Schatten bringt Stufen in die Kurve und kann ihr mehr als einen Gipfel geben. In einem echten Modul laufen die Leitungen hinter den Zellen; hier ist jeder Strang eine farbige Linie auf der Vorderseite. Wählen Sie eine Bauweise und lassen Sie den Schatten heraufkriechen.",
+      "p1": "Eine Zelle liefert nur etwa 0,7 V, viel zu wenig, um etwas zu betreiben. Deshalb werden die Zellen <strong>in Reihe</strong> geschaltet, wie die Glieder einer Kette, und ihre Spannungen addieren sich. Dieses Modul hat 54 Zellpositionen, eine hinter der anderen. Das ergibt 38,1 V, wenn nichts angeschlossen ist, und 31,5 V am besten Arbeitspunkt. Durch jede Position fließt derselbe Strom, bei voller Leistung unter der Testsonne etwa 13,3 A. Die Elektronen selbst kriechen nur dahin, etwa einen Millimeter pro Sekunde oder langsamer. Schnell unterwegs ist die Energie.",
+      "p2": "Eine Kette ist nur so stark wie ihr schwächstes Glied. Liegt eine Zelle im Schatten, liefert sie weniger Strom und bremst alle anderen. Die sonnigen Zellen können sogar Strom rückwärts durch sie hindurchzwingen und ihre Leistung in dieser einen Zelle in Wärme verwandeln: ein Hotspot. Deshalb enthält die Anschlussdose drei <strong>Bypass-Dioden</strong>, die jeweils ein Drittel des Moduls schützen. In voller Sonne bleiben sie aus. Bremst Schatten eines dieser Drittel zu stark, schaltet sich dessen Diode ein. Der Strom fließt dann an diesem Drittel vorbei und verliert dabei etwa 0,4 V. Eine ganz verschattete Zelle kostet so etwa ein Drittel der Leistung, nicht alles.",
+      "p3": "Dieses Modul nutzt <strong>halbierte Zellen</strong>: Jede Zelle ist in zwei Hälften geteilt. Die obere und die untere Hälfte des Moduls sind parallel geschaltet, und so ergeben die 108 Halbzellen weiterhin 54 Positionen in Reihe. Die Spannung bleibt gleich, und jede Halbzelle führt nur den halben Strom, darum verlieren die Drähte weniger Leistung als Wärme. Der große Gewinn kommt, sobald Schatten die ganze Unterkante bedeckt. Jedes Drittel des Moduls hat einen oberen und einen unteren Strang, und die oberen Stränge arbeiten weiter, mit etwa der halben Leistung. Ein älteres Modul mit 60 Zellen, hier in derselben Größe gezeichnet, behält fast nichts: Alle drei seiner Drittel reichen bis in den Schatten.",
+      "p4": "Das Diagramm zeigt den Strom des Moduls über seiner Spannung. Ist nichts angeschlossen, ist die Spannung am höchsten, und es fließt kein Strom. Verbinden Sie die beiden Leitungen, dann ist der Strom am höchsten und die Spannung null. Die Leistung ist das Produkt aus beiden. Sie erreicht ihr Maximum an einer Stelle im Knick der Kurve: dem <strong>Punkt maximaler Leistung</strong>, kurz MPP. Schatten bringt Stufen und zusätzliche Gipfel in die Kurve. In einem echten Modul laufen die Leitungen hinter den Zellen; hier ist jeder Strang eine farbige Linie auf der Vorderseite. Der Schatten fällt schräg ein, darum wird zuerst eine Ecke dunkel. Wählen Sie eine Bauweise, lassen Sie den Schatten heraufkriechen und sehen Sie zu, wie ein Drittel nach dem anderen ausfällt.",
       "control": {
         "label": "Schatten kriecht das Modul hinauf",
         "clear": "Frei",
         "covered": "Ganz bedeckt",
-        "caption": "Strom über Spannung für das ganze Modul. Der Punkt zeigt, wo der Wechselrichter es betreibt. Die blasse Kurve ist das Modul ohne Schatten.",
+        "caption": "Strom über Spannung für das ganze Modul. Der Punkt zeigt, wo der Wechselrichter es betreibt. Das Rechteck unter dem Punkt ist die Leistung, Volt mal Ampere. Die blasse Kurve ist das Modul ohne Schatten.",
         "cells": "Zellen im Schatten",
         "diodes": "Aktive Bypass-Dioden",
         "power": "Leistung jetzt",
@@ -242,10 +240,10 @@
     },
     "inverter": {
       "title": "Vom Dach bis zur Steckdose",
-      "p1": "Das Modul erzeugt Gleichstrom, DC, der nur in eine Richtung fließt. Ein Haus läuft mit Wechselstrom, AC, der viele Male pro Sekunde die Richtung wechselt. Der Kasten an der Wand, der <strong>Wechselrichter</strong>, wandelt das eine in das andere um. Er erzeugt keine Leistung und speichert auch keine. Er gibt etwa 96 Prozent dessen weiter, was hereinkommt, und verliert den Rest als ein wenig Wärme. Die bernsteinfarbenen Punkte zeigen den Fluss: Gleichstrom vom Modul zum Wechselrichter, dann Wechselstrom weiter zum Zähler und ins Haus.",
+      "p1": "Das Modul erzeugt Gleichstrom, DC, der nur in eine Richtung fließt. Ein Haus läuft mit Wechselstrom, AC, der viele Male pro Sekunde die Richtung wechselt. Der Kasten an der Wand, der <strong>Wechselrichter</strong>, wandelt das eine in das andere um. Er erzeugt keinen Strom und speichert auch keinen. Er gibt etwa 96 Prozent dessen weiter, was hereinkommt. Der Rest geht als etwas Wärme verloren. Die bernsteinfarbenen Punkte zeigen, wohin die Energie fließt: Gleichstrom vom Modul zum Wechselrichter, dann Wechselstrom weiter zum Zähler und ins Haus.",
       "p2": "Der Wechselrichter hält das Modul auch an seinem besten Punkt. Dieser Punkt maximaler Leistung wandert den ganzen Tag: Die Spannung ändert sich mit der Zelltemperatur, der Strom mit dem Licht. Also tastet sich der Wechselrichter heran. Fachleute nennen das <strong>MPP-Tracking</strong>. Er verstellt die Spannung ein kleines Stück und prüft die Leistung. Ist sie gestiegen, verstellt er weiter in dieselbe Richtung. Ist sie gefallen, kehrt er um. Wie ein Wanderer, der im Nebel einen Hügel hinaufsteigt, bleibt er immer nah am Gipfel.",
-      "p3": "Wärme ist der Feind eines Moduls. Für jedes Grad über 25 °C verliert dieses Modul 0,29 Prozent seiner Leistung. Diese Zahl ist sein <strong>Temperaturkoeffizient</strong>. Ältere PERC-Module verlieren 0,35 Prozent. An einem sonnigen Tag erreichen die Zellen etwa 45 bis 65 °C. Das ist der Hauptgrund, warum dieser klare Frühlingsmittag etwa 380 W bringt und nicht 420. Ein heißes Dach im Sommer kostet noch mehr. Ein kalter, klarer Tag schlägt also einen heißen: Module laufen mit Licht, nicht mit Wärme. Die Luft im Modell folgt einem milden Frühlingstag.",
-      "p4": "Die Energie eines klaren Frühlingstags könnte einen Kühlschrank fast 2 Tage lang betreiben oder einen Laptop etwa 40-mal aufladen. In einem Jahr erzeugt das Modul auf diesem Breitengrad etwa 600 bis 700 kWh. Jedes Kilowatt Modulleistung liefert im Jahr etwa 1000 kWh in London oder Berlin und 1800 in Phoenix. Die <strong>Garantie</strong> verspricht nach 30 Jahren noch 87,4 Prozent der Leistung. Ein Modul holt die Energie für seine Herstellung in etwa einem Jahr wieder herein und verursacht über seine Lebensdauer etwa 40 g CO₂ pro kWh. 2025 erzeugte Solarenergie etwa 8,7 Prozent des weltweiten Stroms. Verstellen Sie die Temperatur oder lassen Sie sie dem Tag folgen.",
+      "p3": "Wärme ist der Feind eines Moduls. Für jedes Grad über 25 °C verliert dieses Modul 0,29 Prozent seiner Leistung. Diese Zahl ist sein <strong>Temperaturkoeffizient</strong>. Ältere PERC-Module verlieren 0,35 Prozent. An einem sonnigen Tag erreichen die Zellen etwa 45 bis 65 °C. Das ist der Hauptgrund, warum dieser klare Frühlingsmittag etwa 380 W bringt, nicht 420. Ein heißes Dach im Sommer kostet noch mehr. Ein kalter, klarer Tag ist also besser als ein heißer: Module laufen mit Licht, nicht mit Wärme. Die Lufttemperatur im Modell entspricht einem milden Frühlingstag.",
+      "p4": "Die Energie eines klaren Frühlingstags könnte einen Kühlschrank etwa zwei Tage lang betreiben oder einen Laptop rund 50-mal aufladen. In einem Jahr erzeugt ein Modul auf diesem Breitengrad etwa 600 bis 700 kWh. Jedes Kilowatt Modulleistung liefert im Jahr etwa 1000 kWh in London oder Berlin und 1800 in Phoenix. Die <strong>Garantie</strong> verspricht nach 30 Jahren noch 87,4 Prozent der Leistung. Ein Modul holt die Energie für seine Herstellung in etwa einem Jahr wieder herein. Über seine Lebensdauer verursacht es etwa 40 g CO₂ pro kWh. 2025 kamen etwa 8,7 Prozent des weltweiten Stroms aus Solarenergie. Verstellen Sie die Temperatur oder lassen Sie sie dem Tag folgen.",
       "control": {
         "label": "Zelltemperatur",
         "cold": "Eiskalt",
