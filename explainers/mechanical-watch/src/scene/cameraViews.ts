@@ -58,11 +58,11 @@ export function anchorPose(
   const distance = mm(framing.spanMm) / 2 / slope;
   const elevation = toRadians(framing.elevationDeg);
   const azimuth = toRadians(framing.azimuthDeg);
-  const level = distance * Math.cos(elevation);
+  const inPlane = distance * Math.cos(elevation);
   const offset = new Vector3(
-    level * Math.sin(azimuth),
+    inPlane * Math.sin(azimuth),
+    inPlane * Math.cos(azimuth),
     distance * Math.sin(elevation),
-    level * Math.cos(azimuth),
   );
   return { position: target.clone().add(offset), target };
 }

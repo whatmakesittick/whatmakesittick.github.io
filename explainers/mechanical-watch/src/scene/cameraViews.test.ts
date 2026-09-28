@@ -40,7 +40,7 @@ describe('camera views', () => {
     expect(direction('dialSide')[2]).toBeLessThan(0);
   });
 
-  it('frames the picked wheel from above and behind and follows it', () => {
+  it('frames the picked wheel from behind the movement, a little above it, and follows it', () => {
     const wheel = anchorAt(20, -60, 12);
     const view = cameraViews({ ...NO_ANCHORS, wheel: () => wheel }).wheel as CustomView;
     const pose = view.pose(SLOPES);
@@ -50,6 +50,8 @@ describe('camera views', () => {
     expect(pose!.position.y).toBeGreaterThan(pose!.target.y);
     expect(pose!.position.z).toBeGreaterThan(pose!.target.z);
     expect(pose!.position.x).toBeGreaterThan(pose!.target.x);
+    const offset = pose!.position.clone().sub(pose!.target);
+    expect(offset.z).toBeGreaterThan(offset.y);
     const distance = pose!.position.distanceTo(pose!.target);
     expect(distance).toBeCloseTo(mm(ANCHORED_VIEWS.wheel.spanMm) / 2 / SLOPES.vertical);
   });
