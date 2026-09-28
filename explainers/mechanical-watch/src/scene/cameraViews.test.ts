@@ -49,7 +49,7 @@ describe('camera views', () => {
     expect(pose!.target.distanceTo(wheel.position)).toBeCloseTo(0);
     expect(pose!.position.y).toBeGreaterThan(pose!.target.y);
     expect(pose!.position.z).toBeGreaterThan(pose!.target.z);
-    expect(pose!.position.x).toBeGreaterThan(pose!.target.x);
+    expect(pose!.position.x).toBeLessThan(pose!.target.x);
     const offset = pose!.position.clone().sub(pose!.target);
     expect(offset.z).toBeGreaterThan(offset.y);
     const distance = pose!.position.distanceTo(pose!.target);
@@ -61,7 +61,7 @@ describe('camera views', () => {
     const view = cameraViews({ ...NO_ANCHORS, fork: () => fork }).escapement as CustomView;
     const pose = view.pose(SLOPES);
     expect(view.follow).toBe(false);
-    expect(pose!.position.x).toBeLessThan(pose!.target.x);
+    expect(pose!.position.x).toBeGreaterThan(pose!.target.x);
     expect(pose!.position.z).toBeGreaterThan(pose!.target.z);
   });
 
