@@ -18,9 +18,14 @@ describe('watch timeline', () => {
     expect(tick.end - tick.start).toBeCloseTo(10.26, 1);
   });
 
-  it('plays in real time at the fastest stop and 256 times slower at the slowest', () => {
+  it('plays in real time at the top stop and 256 times slower at the bottom', () => {
     const { rate, speed } = WATCH_TIMELINE;
-    expect(rate(speed.min)).toBeCloseTo(1440);
-    expect(rate(speed.max)).toBeCloseTo(1440 / 256);
+    expect(rate(speed.max)).toBeCloseTo(1440);
+    expect(rate(speed.min)).toBeCloseTo(1440 / 256);
+  });
+
+  it('plays faster at every higher stop', () => {
+    const { rate, speed } = WATCH_TIMELINE;
+    expect(rate(speed.min + speed.step)).toBeGreaterThan(rate(speed.min));
   });
 });

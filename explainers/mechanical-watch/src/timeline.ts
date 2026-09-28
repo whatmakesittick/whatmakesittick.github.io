@@ -1,6 +1,12 @@
 import type { Phase, Timeline } from '@core/explainer';
 import { PHASE_IDS } from './ids';
-import { CYCLE_DEG, DEFAULT_AMPLITUDE, phaseDegreesPerSecond, phaseRanges } from './model';
+import {
+  CYCLE_DEG,
+  DEFAULT_AMPLITUDE,
+  REAL_TIME_SPEED,
+  phaseDegreesPerSecond,
+  phaseRanges,
+} from './model';
 import {
   JUMP_KEYS,
   PHASE_KEYS,
@@ -11,7 +17,7 @@ import {
 } from './ui/format';
 import { PHASE_TONES } from './ui/palette';
 
-export const SPEED_RANGE = { min: 0, max: 8, step: 1, default: 5 } as const;
+export const SPEED_RANGE = { min: 0, max: REAL_TIME_SPEED, step: 1, default: 3 } as const;
 
 const SCRUBBER_STEP_DEG = 0.5;
 const FINE_STEP_DEG = 1;

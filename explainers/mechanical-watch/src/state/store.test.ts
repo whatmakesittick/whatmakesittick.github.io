@@ -20,7 +20,7 @@ function othersThan(...kept: PresetId[]): PresetId[] {
 
 describe('watch store', () => {
   it('plays four full swings a second in real time', () => {
-    const store = createWatchStore({ phase: 0, speed: 0, playing: true });
+    const store = createWatchStore({ phase: 0, speed: 8, playing: true });
     store.getState().tick(0.05);
     expect(store.getState().phase).toBeCloseTo(72);
   });
@@ -32,7 +32,7 @@ describe('watch store', () => {
   });
 
   it('counts a swing each time the loop wraps and takes it back when scrubbed back', () => {
-    const store = createWatchStore({ phase: 350, speed: 0, playing: true });
+    const store = createWatchStore({ phase: 350, speed: 8, playing: true });
     store.getState().tick(0.01);
     expect(store.getState()).toMatchObject({ cycles: 1 });
     expect(store.getState().phase).toBeCloseTo(4.4);
@@ -55,7 +55,7 @@ describe('watch store', () => {
       wheel: 'centreWheel',
       beatRate: 'vph28800',
       cycles: 0,
-      speed: 5,
+      speed: 3,
       view: { dial: true, bridges: true, energy: false, labels: false },
     });
   });
@@ -92,7 +92,7 @@ describe('watch store', () => {
   it('pauses the escapement chapter with a tooth locked and resumes at the next chapter', () => {
     const store = createWatchStore({ playing: true });
     store.getState().applyPreset('escapement');
-    expect(store.getState()).toMatchObject({ playing: false, pausedByPreset: true, speed: 7 });
+    expect(store.getState()).toMatchObject({ playing: false, pausedByPreset: true, speed: 1 });
     expect(store.getState().phase).toBeCloseTo(momentPhase('lock', 280));
     expect(phaseAt(store.getState().phase, 280)).toBe('swingIn');
     store.getState().applyPreset('balance');

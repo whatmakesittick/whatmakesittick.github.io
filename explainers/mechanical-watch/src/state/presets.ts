@@ -19,14 +19,14 @@ export interface Preset extends ScenePreset<PartId, CameraView> {
 export const PRESETS: Record<PresetId, Preset> = {
   overview: {
     camera: 'movement',
-    speed: 0,
+    speed: 8,
     view: { dial: true, bridges: true, energy: true },
     labels: ['balanceWheel', 'barrel', 'escapeWheel', 'crown'],
     highlight: [],
   },
   mainspring: {
     camera: 'barrel',
-    speed: 3,
+    speed: 5,
     view: { bridges: false, energy: false },
     controls: ['reserve'],
     labels: ['mainspring', 'barrel', 'barrelArbor', 'ratchetWheel', 'crownWheel', 'click', 'crown'],
@@ -44,7 +44,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   },
   train: {
     camera: 'wheel',
-    speed: 2,
+    speed: 6,
     view: { bridges: false, energy: true },
     controls: ['wheel'],
     labels: ['barrel', 'centreWheel', 'thirdWheel', 'fourthWheel', 'escapeWheel', 'jewels'],
@@ -53,7 +53,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   },
   escapement: {
     camera: 'escapement',
-    speed: 7,
+    speed: 1,
     view: { bridges: false, energy: false },
     pauseAt: momentPhase('lock', DEFAULT_AMPLITUDE),
     labels: [
@@ -76,7 +76,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   },
   balance: {
     camera: 'balance',
-    speed: 5,
+    speed: 3,
     view: { bridges: true, energy: false },
     startAt: 0,
     controls: ['reserve', 'regulator'],
@@ -85,7 +85,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   },
   hands: {
     camera: 'dialSide',
-    speed: 0,
+    speed: 8,
     view: { dial: false, bridges: true },
     controls: ['beatRate'],
     labels: ['cannonPinion', 'minuteWheel', 'hourWheel', 'fourthWheel'],

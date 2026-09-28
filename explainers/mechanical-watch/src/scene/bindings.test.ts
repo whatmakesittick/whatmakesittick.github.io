@@ -47,7 +47,7 @@ describe('scene bindings', () => {
 
   it('passes the swing count as the loop wraps', () => {
     const { received, targets } = fakeTargets();
-    const store = createWatchStore({ phase: 350, speed: 0, playing: true });
+    const store = createWatchStore({ phase: 350, speed: 8, playing: true });
     bindStore(store, targets);
     store.getState().tick(0.01);
     expect(received.at(-1)).toMatchObject({ cycles: 1 });

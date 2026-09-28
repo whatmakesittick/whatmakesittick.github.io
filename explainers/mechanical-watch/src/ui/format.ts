@@ -4,6 +4,7 @@ import type { PhaseId } from '../ids';
 import {
   ADVANCE_PER_BEAT_DEG,
   DEFAULT_AMPLITUDE,
+  REAL_TIME_SPEED,
   SECONDS_PER_HOUR,
   SECONDS_PER_MINUTE,
   formatTimeOnDial,
@@ -13,7 +14,6 @@ import {
 
 export const NO_VALUE = '–';
 
-const REAL_TIME_SPEED = 0;
 const REAL_TIME_FORMAT = '×1';
 const SLOWER_PREFIX = '1/';
 const MULTIPLY_SIGN = '×';
