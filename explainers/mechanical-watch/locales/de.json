@@ -1,0 +1,228 @@
+{
+  "meta": {
+    "title": "So funktioniert eine mechanische Uhr",
+    "eyebrow": "Mechanische Uhr",
+    "tagline": "Eine aufgewickelte Feder, ein Räderwerk und eine Unruh, die bestimmt, wie lange eine Sekunde dauert.",
+    "description": "Ein Blick in eine mechanische Uhr mit Handaufzug in 3D: wie Feder, Räderwerk, Ankerhemmung und schwingende Unruh 42 Stunden lang die Zeit messen.",
+    "summary": "Zugfeder, Räderwerk, Ankerhemmung, Unruh und Spirale, Zeiger."
+  },
+  "stage": {
+    "label": "Interaktives Modell einer mechanischen Uhr",
+    "gauge": "Live-Werte des Uhrwerks"
+  },
+  "controls": {
+    "label": "Steuerung der Uhr",
+    "wheelOptions": {
+      "barrel": "Federhaus",
+      "centreWheel": "Minutenrad",
+      "thirdWheel": "Kleinbodenrad",
+      "fourthWheel": "Sekundenrad",
+      "escapeWheel": "Ankerrad"
+    },
+    "momentOptions": {
+      "lock": "Verriegelt",
+      "unlock": "Auslösen",
+      "impulse": "Antrieb",
+      "drop": "Fall",
+      "free": "Wieder frei"
+    },
+    "beatRateOptions": {
+      "vph18000": "18.000 vph",
+      "vph21600": "21.600 vph",
+      "vph28800": "28.800 vph",
+      "vph36000": "36.000 vph"
+    },
+    "views": {
+      "dial": {
+        "name": "Gehäuse und Zifferblatt",
+        "short": "Zifferblatt",
+        "hint": "Gehäuse und Zifferblatt (D)"
+      },
+      "bridges": {
+        "name": "Brücken",
+        "short": "Brücken",
+        "hint": "Brücken (B)"
+      },
+      "energy": {
+        "name": "Energiefluss",
+        "short": "Energie",
+        "hint": "Energiefluss (E)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Schwingung der Unruh",
+    "phases": "Zu einem Moment springen",
+    "speed": "Wiedergabe",
+    "value": "{{angle}} in der Schwingung, {{phase}}",
+    "realTime": "Echtzeit",
+    "slower": "{{factor}}-mal langsamer als in Wirklichkeit",
+    "phase": {
+      "swingIn": "Schwung zur Mitte",
+      "tick": "Tick",
+      "swingOut": "Ausschwingen",
+      "swingBack": "Rückschwung",
+      "tock": "Tack",
+      "swingHome": "Rückkehr zum Start"
+    },
+    "during": {
+      "swingIn": "die Unruh schwingt frei zur Mitte",
+      "tick": "der Anker gibt einen Zahn frei und treibt die Unruh an",
+      "swingOut": "die Spirale bremst die Unruh bis zum Stillstand",
+      "swingBack": "die Spirale zieht die Unruh zur Mitte zurück",
+      "tock": "der Anker gibt den nächsten Zahn frei und treibt die Unruh in die andere Richtung",
+      "swingHome": "die Unruh schwingt frei zu ihrem Ausgangspunkt zurück"
+    },
+    "jump": {
+      "swingIn": "Zum Schwung zur Mitte springen",
+      "tick": "Zum Tick springen",
+      "swingOut": "Zum Ausschwingen springen",
+      "swingBack": "Zum Rückschwung springen",
+      "tock": "Zum Tack springen",
+      "swingHome": "Zur Rückkehr zum Start springen"
+    }
+  },
+  "readouts": {
+    "balance": "Winkel der Unruh",
+    "amplitude": "Amplitude",
+    "time": "Angezeigte Zeit",
+    "reserve": "Gangreserve",
+    "rate": "Gangabweichung pro Tag",
+    "timeValue": "{{value}} auf dem Zifferblatt"
+  },
+  "parts": {
+    "case": "Gehäuse",
+    "dial": "Zifferblatt",
+    "hourHand": "Stundenzeiger",
+    "minuteHand": "Minutenzeiger",
+    "secondHand": "Sekundenzeiger",
+    "crown": "Krone",
+    "stem": "Aufzugswelle",
+    "windingPinion": "Aufzugstrieb",
+    "crownWheel": "Kronrad",
+    "ratchetWheel": "Sperrrad",
+    "click": "Sperrklinke",
+    "barrel": "Federhaus",
+    "barrelArbor": "Federkern",
+    "mainspring": "Zugfeder",
+    "mainplate": "Werkplatte",
+    "barrelBridge": "Federhausbrücke",
+    "trainBridge": "Räderwerkbrücke",
+    "balanceCock": "Unruhkloben",
+    "jewels": "Lagersteine",
+    "centreWheel": "Minutenrad",
+    "thirdWheel": "Kleinbodenrad",
+    "fourthWheel": "Sekundenrad",
+    "escapeWheel": "Ankerrad",
+    "palletFork": "Anker",
+    "entryPallet": "Eingangspalette",
+    "exitPallet": "Ausgangspalette",
+    "bankingPins": "Begrenzungsstifte",
+    "roller": "Doppelrolle",
+    "impulseJewel": "Hebelstein",
+    "balanceWheel": "Unruh",
+    "hairspring": "Spiralfeder",
+    "stud": "Spiralklötzchen",
+    "regulator": "Rückerzeiger",
+    "shockJewel": "Stoßsicherung",
+    "cannonPinion": "Viertelrohr",
+    "minuteWheel": "Wechselrad",
+    "hourWheel": "Stundenrad"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "ms": "{{value}} ms",
+    "hours": "{{value}} h",
+    "mm": "{{value}} mm",
+    "secondsPerDay": "{{value}} s/Tag",
+    "rpm": "{{value}} U/min",
+    "turns": "{{value}} Umdrehungen",
+    "mNm": "{{value}} mN·m",
+    "joules": "{{value}} J",
+    "microJoules": "{{value}} µJ"
+  },
+  "sections": {
+    "overview": {
+      "title": "Acht Schläge pro Sekunde aus einer aufgewickelten Feder",
+      "p1": "Sie sehen eine mechanische Uhr, die wie auf einem Uhrenständer auf der Kante steht. Das Gehäuse trägt ein Zifferblatt, drei Zeiger und seitlich eine Krone zum Aufziehen. Die eigentliche Arbeit geschieht hinter dem Zifferblatt, in dem Teil, den Uhrmacher das <strong>Uhrwerk</strong> nennen. Es hat keine Batterie und keinen Chip. Alles läuft mit einer aufgewickelten Stahlfeder, einer Kette kleiner Räder und einem winzigen Rad, das hin und her schwingt.",
+      "p2": "Das Uhrwerk erledigt <strong>drei Aufgaben</strong>. Zuerst speichert es Energie: Wer die Krone dreht, zieht die Zugfeder auf. Dann gibt es diese Energie in kleinen, gleichmäßigen Schritten wieder ab. Dafür sorgen Hemmung und Unruh. Zuletzt zählt es die Schritte und zeigt sie über Räderwerk und Zeiger als Zeit an. Die Ansicht Energiefluss zeigt, wie die Kraft von der Feder über die Räder zur Unruh gelangt. Jedes der folgenden Kapitel nimmt sich einen dieser Teile vor.",
+      "p3": "Die Räder einer mechanischen Uhr bewegen sich in kleinen Schritten. Die Unruh lässt das Ankerrad jeweils um einen halben Zahn weiter, und alle anderen Räder folgen. Jede Freigabe ist ein <strong>Schlag</strong>, den Sie als Tick oder Tack hören. Diese Uhr macht 28.800 Schläge pro Stunde: 8 pro Sekunde, 691.200 am Tag. Die Unruh schwingt 4-mal pro Sekunde hin und her. Jede volle Schwingung dauert 250 ms und enthält zwei Schläge: das Tick, wenn sie die Mitte in der einen Richtung passiert, und das Tack auf dem Rückweg. Die Zeitleiste unter dem Modell folgt einer vollen Schwingung.",
+      "p4": "Die Zahlen in diesen Kapiteln stammen von einem Werk mit <strong>Handaufzug</strong> wie dem ETA 2801-2, das man über die Krone aufzieht. Es misst 25,6 mm im Durchmesser, ist 3,35 mm hoch und hat 17 Steine. Das Modell folgt einem Lehrbuchaufbau derselben Art. Es rückt die Ebenen auseinander, damit Sie jede einzeln sehen. Ziehen Sie am Modell, um es zu drehen, und schauen Sie sich die Zifferblattseite an. In Echtzeit ist die Unruh nur ein Flimmern. Verlangsamen Sie also die Wiedergabe und sehen Sie ihr beim Schwingen zu."
+    },
+    "mainspring": {
+      "title": "Zweiundvierzig Stunden in einer Stahlfeder",
+      "p1": "Die Energie steckt in der <strong>Zugfeder</strong>, einem langen Stahlband, das in einer Trommel namens Federhaus aufgerollt ist. Wer die Krone dreht, dreht die Aufzugswelle. Kleine Triebe geben die Bewegung an das Kronrad und das Sperrrad weiter. Das Sperrrad sitzt auf dem Federkern in der Mitte des Federhauses. Der Kern wickelt das innere Ende der Feder enger auf, während das Federhaus stillsteht. Eine kleine Sperrklinke rastet in die vorbeiziehenden Zähne des Sperrrads ein, sodass die Feder den Kern nicht zurückdrehen kann.",
+      "p2": "Ausgestreckt ist diese Feder 420 mm lang, aber nur 0,125 mm dick und 1,23 mm hoch. Ihre Drehkraft, das <strong>Drehmoment</strong>, beträgt voll aufgezogen etwa 11,3 mN·m. Einen Tag später ist es auf etwa 9,1 mN·m gefallen, rund 19 Prozent weniger. Die Kraft, von der die Uhr lebt, ist also nie ganz gleich. Ein voller Aufzug speichert etwa ein Drittel Joule. Die Uhr verbraucht diese Energie sparsam, mit rund 2 bis 3 Mikrowatt.",
+      "p3": "Beim Abwickeln dreht die Feder das Federhaus, und die Zähne an seinem Rand treiben die Räder an. Ein voller Aufzug lässt dieses Werk 42 Stunden laufen. Das ist seine <strong>Gangreserve</strong>. Im Lehrbuch-Räderwerk des Modells dreht sich das Federhaus alle 8 Stunden einmal. Ein voller Aufzug entspricht also etwa fünfeinviertel Umdrehungen der Feder. Schieben Sie den Regler in Richtung leer: Die Windungen wandern nach außen an die Wand des Federhauses, das Drehmoment sinkt, und die Unruh schwingt weniger weit.",
+      "p4": "Bei einer Uhr mit Handaufzug hält die Sperrklinke die Feder. Ist die Feder voll aufgezogen, lässt sich die Krone einfach nicht weiterdrehen. Eine Automatikuhr wird von einer schwingenden Masse aufgezogen, die nicht merkt, wann Schluss ist. Deshalb endet ihre Zugfeder in einer <strong>Schleppfeder</strong>, die an der Wand des Federhauses entlangrutscht, damit nichts überdreht wird. Die Automatikversion dieses Werks, das ETA 2824-2, ist 4,6 mm statt 3,35 mm hoch und läuft 38 Stunden. Ziehen Sie das Modell wieder voll auf, um neu zu beginnen.",
+      "control": {
+        "label": "Verbleibende Gangreserve",
+        "empty": "Abgelaufen",
+        "full": "Voll aufgezogen",
+        "torque": "Drehmoment der Zugfeder",
+        "turns": "Verbleibende Umdrehungen der Feder",
+        "amplitude": "Amplitude der Unruh",
+        "energy": "Noch gespeicherte Energie",
+        "wind": "Voll aufziehen"
+      }
+    },
+    "train": {
+      "title": "Schneller mit jedem Rad",
+      "p1": "Vom Federhaus läuft die Kraft durch eine Kette von Rädern, das <strong>Räderwerk</strong>. Jedes große Rad treibt ein kleines Trieb auf der nächsten Welle an, sodass jede Stufe schneller dreht als die vorige. Die Feder ist langsam und stark, die Hemmung braucht aber schnelle, leichte Bewegungen. Deshalb übersetzt das Räderwerk ins Schnelle, nicht ins Langsame. Am Ende ist aus dem langsamen Kriechen des Federhauses eine Drehzahl von 12 Umdrehungen pro Minute am Ankerrad geworden.",
+      "p2": "Uhrmacher nennen ein kleines angetriebenes Zahnrad ein <strong>Trieb</strong>. Das Modell nutzt ein Räderwerk aus dem Lehrbuch. Die 80 Zähne des Federhauses treiben ein Trieb mit 10 Zähnen an, das sich dadurch 8-mal so schnell dreht. Die nächsten Stufen multiplizieren die Drehzahl mit 8, mit 7,5 und mit 12. So dreht sich das Minutenrad einmal pro Stunde, das Sekundenrad einmal pro Minute und das Ankerrad 12-mal pro Minute. Jeder seiner 20 Zähne ergibt zwei Schläge: 12 × 20 × 2 sind 480 Schläge pro Minute oder 28.800 pro Stunde.",
+      "p3": "In diesem Lehrbuchaufbau sitzt das <strong>Minutenrad</strong> in der Mitte des Werks und dreht sich einmal pro Stunde, deshalb trägt es den Minutenzeiger. Das Sekundenrad dreht sich einmal pro Minute und trägt die kleine Sekunde bei der Sechs. Das Ankerrad macht im Schnitt 12 Umdrehungen pro Minute, steht aber meistens still und bewegt sich in kurzen Sprüngen von 9°, einem pro Schlag. Wählen Sie unten ein Rad, und die Kamera folgt ihm.",
+      "p4": "Die Zapfen der Räder laufen in <strong>Lagersteinen</strong>. Das sind winzige Lager aus synthetischem Rubin, die in der Fabrik hergestellt werden, also keine Edelsteine. Zwischen Stahlzapfen und Rubin entsteht nur ein Bruchteil der Reibung von Metall auf Metall, und der Zapfen wird zusätzlich geölt. Dieses Werk hat 17 Steine. Die Automatikversion hat 25, doch die 8 zusätzlichen sitzen im Aufzug und tragen nichts zur Zeitmessung bei. Mehr Steine bedeuten also keine bessere Uhr. Die bernsteinfarbenen Punkte zeigen den Weg der Kraft vom Federhaus zur Unruh.",
+      "teeth": "Zähne von Rad und Trieb",
+      "turn": "Eine Umdrehung alle",
+      "ratio": "Übersetzung gegenüber dem Rad davor",
+      "turnValue": {
+        "hours": "{{value}} h",
+        "minutes": "{{value}} min",
+        "seconds": "{{value}} s"
+      }
+    },
+    "escapement": {
+      "title": "Immer nur einen halben Zahn weiter",
+      "p1": "Die Feder drückt ständig auf das Ankerrad. Ohne Bremse würde es im Nu davonwirbeln. Der <strong>Anker</strong> hält es zurück. Zwei Rubinsteine am Anker, die Eingangs- und die Ausgangspalette, greifen über zweieinhalb Zähne. Zwischen den Schlägen blockiert einer von ihnen einen Zahn. Seine Ruhefläche ist schräg gestellt, das nennt man Zug. Dadurch zieht der Druck des Zahns den Anker hinein und hält ihn an einem Begrenzungsstift. Das Rad ist verriegelt.",
+      "p2": "Dann schwingt die Unruh zurück. Ein Rubinstift auf ihrer Rolle, der Hebelstein, fährt in die Gabel des Ankers. Er schiebt den Anker, bis die Palette vom Zahn rutscht, und das Rad ist ausgelöst. Nun gleitet der Zahn über das schräge Ende der Palette und stößt den Anker, der wiederum den Stift anstößt. Dieser Stoß ist der <strong>Antrieb</strong>. Der kolbenförmige Zahn und die Palette haben beide eine schräge Fläche und teilen sich die Arbeit. Danach fällt das Rad frei, bis die andere Palette den nächsten Zahn verriegelt. Das Rad hat sich um 9° gedreht. Gehen Sie den Ablauf mit den Schaltflächen unten Schritt für Schritt durch.",
+      "p3": "Der Stift berührt den Anker nur während der 50° der Schwingung rund um die Mitte, dem sogenannten Hebungswinkel. Schwingt die Unruh etwa 280° nach jeder Seite, dauert dieser Kontakt etwa 7 ms von jedem 125 ms langen Schlag. Etwa 94 Prozent der Zeit schwingt die Unruh frei, während der Zug den Anker an seinem Begrenzungsstift festhält. Deshalb spricht man von einer <strong>freien</strong> Hemmung. Ein Stoß könnte den Anker bewegen, während der Stift nicht in der Gabel steckt. Dann trifft ein Sicherheitsstift am Anker auf die Sicherheitsrolle und hält ihn auf.",
+      "p4": "Das <strong>Tick</strong>, das Sie hören, ist kein einzelner Laut, sondern drei schnelle Aufschläge. Zuerst trifft der Stift auf den Anker. Dann landet ein Zahn auf der schrägen Fläche einer Palette. Am lautesten ist der dritte: Ein Zahn rastet ein, während der Anker gegen seinen Begrenzungsstift schlägt. Das Tack klingt auf dem Rückweg genauso. Thomas Mudge erfand diese Ankerhemmung in den 1750er-Jahren. Seit etwa 1900 nutzt sie fast jede mechanische Uhr. Ziehen Sie die Zeitleiste langsam durch das Tick und sehen Sie zu, wie das Rad wartet, springt und stehen bleibt.",
+      "fork": "Ankerwinkel",
+      "wheel": "Ankerrad in diesem Schlag",
+      "contact": "Kontaktzeit in diesem Schlag",
+      "wheelValue": "{{done}}° von {{total}}°"
+    },
+    "balance": {
+      "title": "Das Rad, das bestimmt, wie lange eine Sekunde dauert",
+      "p1": "Die <strong>Unruh</strong> ist ein Ring von 10,6 mm Durchmesser, der sich auf nur 0,08 mm dünnen Zapfen hin und her dreht. Eine Spiralfeder zieht sie stets zur Mitte zurück. Die Unruh schwingt darüber hinaus und pendelt in die andere Richtung, wie ein Kind auf einer Schaukel. Nur zwei Dinge bestimmen, wie lange eine Schwingung dauert. Das eine ist der Reif: wie schwer er ist und wie weit außen sein Gewicht sitzt. Das andere ist die Steifigkeit der Spirale. Mehr Gewicht weit außen macht die Schwingung langsamer, eine steifere Spirale macht sie schneller. Hier dauert eine volle Schwingung 250 ms. Christiaan Huygens entwarf 1675 eine spiralförmige Unruhfeder.",
+      "p2": "Wie weit die Unruh schwingt, nennt man ihre <strong>Amplitude</strong>. Bei aufgezogener Uhr sind es etwa 280° nach jeder Seite, also mehr als eine volle Umdrehung von einer Seite zur anderen. Sellita, das Werke nach derselben Konstruktion baut, erlaubt voll aufgezogen höchstens 315° und einen Tag später mindestens 200°. Über etwa 335° würde der Hebelstein ganz herumschwingen und hinten an den Anker schlagen. In der Unruh stecken etwa 12 µJ, und jeder Schlag füllt davon nur wenige Prozent nach.",
+      "p3": "Um den Gang einzustellen, verschiebt ein Uhrmacher den <strong>Rückerzeiger</strong>. Seine zwei winzigen Anschläge, ein Rückerstift und ein kleiner Schuh, umfassen die äußere Windung der Spirale. Sie legen fest, wie viel von ihr frei federn kann. Wird diese wirksame Länge kürzer, geht die Uhr schneller. Wird sie länger, geht die Uhr langsamer. Schon kleine Änderungen zählen: Mit einer nur 1 Prozent steiferen Spirale würde die Uhr etwa 7 Minuten am Tag vorgehen. Verschieben Sie den Regler leicht und sehen Sie, wie wenig es braucht, damit die Uhr um Minuten pro Tag abweicht.",
+      "p4": "Wärme, Magnetismus und Stöße stören die Unruh. Spiralfedern aus Nivarox ändern sich mit der Temperatur kaum. Diese Legierung wurde in den 1930er-Jahren eigens für sie entwickelt. Spiralfedern aus Silizium sind nicht magnetisch. Gegen Stöße sitzen die Lagersteine der Unruhzapfen in einer <strong>Stoßsicherung</strong>. Eine Feder lässt den Stein ausweichen, der dicke Absatz der Welle fängt den Schlag ab, und danach zentriert die Feder den Zapfen wieder. Incabloc aus den frühen 1930er-Jahren ist eine solche Sicherung. In dieser Werkfamilie bekommen nur die besseren Qualitätsstufen Incabloc. Die anderen haben ETAs eigenes System Etachocs.",
+      "control": {
+        "label": "Rückerzeiger",
+        "slow": "Langsamer (längere Spirale)",
+        "fast": "Schneller (kürzere Spirale)",
+        "rate": "Gangabweichung pro Tag",
+        "period": "Eine Schwingung dauert",
+        "length": "Wirksame Spirallänge",
+        "energy": "Energie in der Unruh"
+      }
+    },
+    "hands": {
+      "title": "Von Schlägen zu Stunden",
+      "p1": "Schauen Sie jetzt auf die Zifferblattseite. Unter dem Zifferblatt sorgt ein kleiner Satz Räder, das <strong>Zeigerwerk</strong>, dafür, dass sich der Stundenzeiger einmal dreht, während der Minutenzeiger zwölf Runden macht. In diesem Lehrbuchaufbau treibt das Viertelrohr mit 10 Zähnen das Wechselrad mit 30 Zähnen an. Dessen Trieb mit 8 Zähnen treibt das Stundenrad mit 32 Zähnen an. Das ergibt 3 mal 4, also 12 zu 1. Das Viertelrohr hält nur durch Reibung. Deshalb drehen sich beim Stellen der Uhr die Zeiger, während das Räderwerk stillsteht.",
+      "p2": "Das Sekundenrad trägt den Zeiger der <strong>kleinen Sekunde</strong> bei der Sechs. Er bewegt sich 6° pro Sekunde, nicht gleichmäßig, sondern in 8 winzigen Schritten, einem pro Schlag. Die Schritte sind so klein und schnell, dass der Sekundenzeiger einer mechanischen Uhr zu gleiten scheint. Das ETA 2801-2 selbst ist anders gebaut. Sein Sekundenrad sitzt in der Mitte des Werks und treibt einen Zentralsekundenzeiger an. Der Minutenzeiger sitzt auf einem Rohr darum herum.",
+      "p3": "Nicht jede Uhr schlägt 8-mal pro Sekunde. Vor den 1970er-Jahren waren 18.000 Schläge pro Stunde üblich, heute sind 21.600 verbreitet. Grand Seiko erreichte 1968 die 36.000, und Zeniths El Primero folgte 1969. Eine höhere <strong>Frequenz</strong> macht den Gang unempfindlicher gegen Stöße und Lagewechsel. Der Preis ist Energie. Bei gleicher Unruh und gleicher Schwingungsweite wächst die Energie der Unruh mit dem Quadrat der Frequenz. Die Feder läuft also früher ab, oder die Teile verschleißen schneller. Wechseln Sie die Frequenz und vergleichen Sie die Zahlen unten.",
+      "p4": "Wie genau ist genau? Ein zertifizierter <strong>Chronometer</strong> muss in den Tests der COSC im Mittel zwischen −4 und +6 Sekunden am Tag liegen. Das ist eines von sieben Kriterien, die am nackten Werk geprüft werden: über 15 Tage, in 5 Lagen und bei 3 Temperaturen. METAS prüft die fertige Uhr im Gehäuse, sogar nachdem sie einem Magnetfeld von 15.000 Gauß ausgesetzt war. Erlaubt sind dort 0 bis +5 Sekunden am Tag, bei einem Werk dieser Größe 0 bis +6. Für Quarz liegt die Grenze der COSC bei etwa ±0,07 Sekunden am Tag. Trotzdem waren 2025 unter den Schweizer Uhrenexporten 5,2 Millionen mechanische Uhren. Sie machten 86 Prozent des gesamten Exportwerts aus.",
+      "beatsPerSecond": "Schläge pro Sekunde",
+      "beatsPerDay": "Schläge pro Tag",
+      "steps": "Schritte des Sekundenzeigers pro Sekunde",
+      "escape": "Drehzahl des Ankerrads"
+    }
+  }
+}

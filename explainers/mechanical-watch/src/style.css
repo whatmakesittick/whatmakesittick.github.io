@@ -1,0 +1,141 @@
+:root {
+  --swing: #4cc3ff;
+  --swing-far: #4fd1c5;
+  --tick: #f5a524;
+  --tock: #ff9f43;
+  --brass: #d4a54a;
+  --steel: #b7bec7;
+  --ruby: #e0325a;
+  --good: #8bd47f;
+  --warn: #ff7eb6;
+  --amber: #ffd166;
+}
+
+.reserve-control,
+.regulator-control,
+.section-readouts {
+  --readout-min-width: 8rem;
+}
+
+.reserve-control .range-widget__readouts,
+.regulator-control .range-widget__readouts,
+.beat-readouts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wheel-readouts,
+.escapement-readouts {
+  container-type: inline-size;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@container (max-width: 22rem) {
+  .wheel-readouts > div,
+  .escapement-readouts > div {
+    display: flex;
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .wheel-readouts dd,
+  .escapement-readouts dd {
+    margin: 0;
+    white-space: nowrap;
+  }
+}
+
+.section-readouts {
+  margin-top: 16px;
+}
+
+.reserve-control .range {
+  --range-color: var(--brass);
+}
+
+.regulator-control .range {
+  --range-color: var(--swing);
+}
+
+.regulator-control[data-rate-band='good'] [data-readout='regulator-rate'] {
+  color: var(--good);
+}
+
+.regulator-control[data-rate-band='warn'] [data-readout='regulator-rate'] {
+  color: var(--warn);
+}
+
+.chip[data-action='wind'] {
+  --tone: var(--brass);
+}
+
+.chip[data-action='wind'][aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.chip[data-action='wheel'][data-value='barrel'] {
+  --tone: var(--brass);
+}
+
+.chip[data-action='wheel'][data-value='centreWheel'] {
+  --tone: var(--amber);
+}
+
+.chip[data-action='wheel'][data-value='thirdWheel'] {
+  --tone: var(--tock);
+}
+
+.chip[data-action='wheel'][data-value='fourthWheel'] {
+  --tone: var(--swing-far);
+}
+
+.chip[data-action='wheel'][data-value='escapeWheel'] {
+  --tone: var(--swing);
+}
+
+.chip[data-action='moment'][data-value='lock'] {
+  --tone: var(--steel);
+}
+
+.chip[data-action='moment'][data-value='unlock'] {
+  --tone: var(--tick);
+}
+
+.chip[data-action='moment'][data-value='impulse'] {
+  --tone: var(--tock);
+}
+
+.chip[data-action='moment'][data-value='drop'] {
+  --tone: var(--ruby);
+}
+
+.chip[data-action='moment'][data-value='free'] {
+  --tone: var(--swing);
+}
+
+.chip[data-action='beatRate'][data-value='vph18000'] {
+  --tone: var(--swing-far);
+}
+
+.chip[data-action='beatRate'][data-value='vph21600'] {
+  --tone: var(--swing);
+}
+
+.chip[data-action='beatRate'][data-value='vph28800'] {
+  --tone: var(--tick);
+}
+
+.chip[data-action='beatRate'][data-value='vph36000'] {
+  --tone: var(--tock);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action='wind'],
+  .chip[data-action='wheel'],
+  .chip[data-action='moment'],
+  .chip[data-action='beatRate'] {
+    height: 44px;
+  }
+}
