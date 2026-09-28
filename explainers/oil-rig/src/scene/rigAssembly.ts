@@ -4,7 +4,7 @@ import { clamp } from '@core/math';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, RegionId, ViewOptions } from '../ids';
-import { DRILL_FLOOR_Y, depthToY } from '../model/scale';
+import { DRILL_FLOOR_Y, SEABED_Y, depthToY } from '../model/scale';
 import { SEABED_DEPTH_M, TOTAL_DEPTH_M, riserLanded } from '../model/wellPlan';
 import type { Assembly, AssemblyResources } from './assembly';
 import { DRILLING_DRAFT_M, FLOW, STAND_LENGTH_M, TOP_DRIVE } from './constants';
@@ -18,7 +18,9 @@ import { createRuler } from './parts/rock/ruler';
 import { SeaPart } from './parts/sea/sea';
 import { createClouds } from './parts/sea/clouds';
 import { createSky } from './parts/sea/sky';
+import { BOP_TOP, WELLHEAD_TOP } from './parts/well/bop';
 import { DrillStringPart } from './parts/well/drillString';
+import type { Span } from './parts/well/drillString';
 import { WellPart } from './parts/well/well';
 import { regionBox } from './regions';
 
@@ -161,7 +163,10 @@ export class RigAssembly implements Assembly {
     this.rig.topDrive.setQuill(quillY);
     this.rig.flame.setVisible(finished);
     this.string.setVisible(!finished);
-    if (!finished) this.string.place({ quillY, bitDepth: depth, seaOffset: this.seaOffset });
+    if (!finished) {
+      const hidden = this.stackSpan(depth, landed);
+      this.string.place({ quillY, bitDepth: depth, seaOffset: this.seaOffset, hidden });
+    }
     this.mud.configure({
       quillY,
       bitDepth: depth,
@@ -172,6 +177,12 @@ export class RigAssembly implements Assembly {
       shown: state.view.mud && state.view.cutaway && !finished,
     });
     this.oil.configure(this.seaOffset, finished);
+  }
+
+  private stackSpan(depth: number, landed: boolean): Span | null {
+    if (depth <= SEABED_DEPTH_M) return null;
+    const top = landed ? BOP_TOP : WELLHEAD_TOP;
+    return { low: SEABED_Y + this.seaOffset, high: top + this.seaOffset };
   }
 
   private collectAnchors(): Map<PartId, Object3D> {

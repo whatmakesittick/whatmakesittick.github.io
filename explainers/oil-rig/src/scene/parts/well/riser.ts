@@ -28,8 +28,7 @@ const RISER_OUTER = tubularRadius(RISER.inches);
 const RISER_INNER = RISER_OUTER - tubeWall(RISER.inches);
 const BUOYANCY_OUTER = tubularRadius(RISER.buoyancyInches);
 const BUOYANCY_INNER = RISER.lineOffset + RISER.lineRadius + RISER.moduleClearance;
-const LABEL_Y = -60;
-const LABEL_SHARE = 0.72;
+const LABEL_ABOVE_STACK = 12;
 const WIRE_SEGMENTS = 4;
 
 function pieces(ring: Ring, arc: TubeArc): Painted[] {
@@ -174,7 +173,8 @@ export class RiserPart {
     this.front.add(partMesh(context, whole, 'riser', 'riser'));
     this.blockObject.add(partMesh(context, section, 'riser', 'riser'), this.front);
     this.rigObject.add(partMesh(context, mergePainted(rigPieces()), 'riser', 'riser'));
-    this.anchor = anchorAt(this.blockObject, BUOYANCY_OUTER * LABEL_SHARE, LABEL_Y, ANCHOR_LIFT);
+    const labelY = BOP_TOP + LABEL_ABOVE_STACK;
+    this.anchor = anchorAt(this.blockObject, RISER_OUTER, labelY, ANCHOR_LIFT);
   }
 
   setVisible(visible: boolean): void {

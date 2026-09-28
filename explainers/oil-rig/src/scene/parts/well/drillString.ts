@@ -21,10 +21,16 @@ import { instancedMesh, partMesh } from '../context';
 import type { PartContext } from '../context';
 import { BIT_HEIGHT, pdcBitGeometry, rollerConeBitGeometry } from './bits';
 
+export interface Span {
+  low: number;
+  high: number;
+}
+
 export interface StringPlacement {
   quillY: number;
   bitDepth: number;
   seaOffset: number;
+  hidden: Span | null;
 }
 
 const RGB = 3;
@@ -34,7 +40,8 @@ const STABILIZER_BLADES = 3;
 const STABILIZER_TWIST = 0.6;
 const STABILIZER_WIDTH = 0.28;
 const MAX_JOINTS = 220;
-const PIPE_LABEL_ABOVE = 12;
+const PIPE_LABEL_ABOVE = 2.5;
+const PIPE_LABEL_CLEARANCE = 4;
 const COLLAR_LABEL_SHARE = 0.5;
 const TOP_OF_STAND = TOP_DRIVE.quillLow + STAND_LENGTH_M;
 
@@ -86,6 +93,12 @@ function stabilizer(): BufferGeometry {
     [sleeve, PAINT.darkSteel],
     ...blades.map((blade) => [blade, PAINT.steel] as const),
   ]);
+}
+
+function pipeLabelY(wanted: number, quillY: number, hidden: Span | null): number {
+  const y = Math.min(wanted, quillY);
+  if (!hidden || y < hidden.low || y > hidden.high) return y;
+  return Math.min(hidden.high + PIPE_LABEL_CLEARANCE, quillY);
 }
 
 function collarInches(holeInches: number): number {
@@ -152,7 +165,7 @@ export class DrillStringPart {
     this.object.visible = visible;
   }
 
-  place({ quillY, bitDepth, seaOffset }: StringPlacement): void {
+  place({ quillY, bitDepth, seaOffset, hidden }: StringPlacement): void {
     const hole = holeAt(bitDepth);
     const bitY = wellY(bitDepth, seaOffset);
     const bitTop = bitY + BIT_HEIGHT * hole.radius;
@@ -166,7 +179,7 @@ export class DrillStringPart {
     this.placeJoints(bitDepth, seaOffset, quillY, collarTop);
     this.anchors.drillPipe.position.set(
       PIPE_RADIUS,
-      Math.min(collarTop + PIPE_LABEL_ABOVE, quillY),
+      pipeLabelY(collarTop + PIPE_LABEL_ABOVE, quillY, hidden),
       PIPE_RADIUS,
     );
     this.anchors.drillCollars.position.set(
