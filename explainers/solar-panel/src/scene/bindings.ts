@@ -18,6 +18,7 @@ import {
   stringStatesOf,
 } from '../state';
 import type { Preset, SolarPanelState, SolarPanelStore, SolarPanelStoreState } from '../state';
+import { HERO_PANEL_PARTS } from './constants';
 import type { SolarPanelController } from './controller';
 import { PART_IDS } from './partInfo';
 
@@ -73,7 +74,8 @@ class DoubleBufferedAssemblyState {
 }
 
 function highlightOf(preset: Preset, state: SolarPanelState): readonly string[] {
-  return presetHighlight(preset, state.layer);
+  const highlight = presetHighlight(preset, state.layer);
+  return highlight.includes('panel') ? [...highlight, ...HERO_PANEL_PARTS] : highlight;
 }
 
 function highlightSelectedLayer(store: SolarPanelStore, targets: SceneTargets): () => void {

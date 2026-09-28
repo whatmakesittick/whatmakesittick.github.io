@@ -1,20 +1,8 @@
-import { Box3, Vector3 } from 'three';
-import type { CustomView, Direction, FramedView, ViewSpec } from '@core/scene/cameraViews';
-import { frameBox } from '@core/scene/frameBox';
-import type { CameraPose } from '@core/scene/frameBox';
-import type { FramingSlopes } from '@core/scene/lens';
+import type { Box3 } from 'three';
+import type { CustomView, FramedView, ViewSpec } from '@core/scene/cameraViews';
 import type { RegionId } from '../ids';
-import {
-  SKY_RADIUS_CM,
-  SOLAR_NOON_MIN,
-  SUN_DISC_RADIUS_CM,
-  SUNRISE_MIN,
-  SUNSET_MIN,
-  SUN_ARC_RADIUS_CM,
-  TERRACE,
-  sunDirection,
-} from '../model';
 import type { CameraView } from '../state';
+import { skyViewPose } from './geometry/skyView';
 
 type FramedViewId = Exclude<CameraView, 'sky'>;
 
@@ -22,15 +10,7 @@ export type RegionLookup = (id: RegionId) => Box3 | null;
 
 export const WIDE_DISTANCE = { min: 60, max: 4000 } as const;
 export const CLOSE_DISTANCE = { min: 20, max: 2500 } as const;
-
-export const SKY_VIEW = {
-  direction: [0.25, 0.32, -1] as Direction,
-  margin: 1.06,
-  maxDistance: SKY_RADIUS_CM * 0.92,
-  arcStepMin: 15,
-  aimShare: 0.45,
-  aimSharePerSlope: 1.5,
-} as const;
+export const SKY_DISTANCE = { min: 20, max: 7500 } as const;
 
 const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
   roof: { region: 'house', direction: [0.55, 0.45, 1], margin: 1.05, distance: WIDE_DISTANCE },
@@ -50,37 +30,13 @@ const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
   },
 };
 
-function sunPosition(minute: number, centre: Vector3): Vector3 {
-  const [x, y, z] = sunDirection(minute);
-  return new Vector3(x, y, z).multiplyScalar(SUN_ARC_RADIUS_CM).add(centre);
-}
-
-export function sunArcBox(centre: Vector3): Box3 {
-  const box = new Box3();
-  for (let minute = SUNRISE_MIN; minute <= SUNSET_MIN; minute += SKY_VIEW.arcStepMin) {
-    box.expandByPoint(sunPosition(minute, centre));
-  }
-  return box.expandByScalar(SUN_DISC_RADIUS_CM);
-}
-
-export function skyPose(array: Box3, slopes: FramingSlopes): CameraPose {
-  const centre = array.getCenter(new Vector3());
-  const ground = centre.clone().setY(TERRACE.y);
-  const direction = new Vector3(...SKY_VIEW.direction).normalize();
-  const framed = frameBox(sunArcBox(ground).union(array), direction, slopes, SKY_VIEW.margin);
-  const distance = Math.min(framed.position.distanceTo(framed.target), SKY_VIEW.maxDistance);
-  const share = Math.min(SKY_VIEW.aimShare, slopes.vertical * SKY_VIEW.aimSharePerSlope);
-  const target = centre.lerp(sunPosition(SOLAR_NOON_MIN, ground), share);
-  return { target, position: target.clone().addScaledVector(direction, distance) };
-}
-
 function skyView(region: RegionLookup): CustomView {
   return {
     pose: (slopes) => {
       const array = region('array');
-      return array ? skyPose(array, slopes) : null;
+      return array ? skyViewPose(array, slopes) : null;
     },
-    distance: WIDE_DISTANCE,
+    distance: SKY_DISTANCE,
   };
 }
 
