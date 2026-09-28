@@ -119,6 +119,7 @@
               data-control="play"
               aria-label="Pause"
               aria-keyshortcuts="Space"
+              data-i18n-attr="aria-label:controls.pause"
             >
               <svg class="icon icon-play" viewBox="0 0 24 24" aria-hidden="true">
                 <path
@@ -161,7 +162,9 @@
 
           <div class="dock-extra" id="dock-extra">
             <div class="field speed-field" data-speed-field>
-              <label class="field-label" for="speed" data-speed-label>Speed</label>
+              <label class="field-label" for="speed" data-speed-label data-i18n="controls.speed">
+                Speed
+              </label>
               <input id="speed" type="range" class="range" data-control="speed" />
               <output class="field-value number" for="speed" data-speed-value></output>
             </div>
