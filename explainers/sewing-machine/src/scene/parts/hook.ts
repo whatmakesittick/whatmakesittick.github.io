@@ -2,13 +2,14 @@ import { Group } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { lerp, toRadians } from '@core/math';
+import { box } from '@core/scene/geometry/box';
+import { extrudePlan, planShape } from '@core/scene/geometry/extrude';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import { HOOK } from '../../model';
 import { HOOK_BODY, LOWER_SHAFT } from '../constants';
-import { extrudePlan } from '../geometry/extrude';
-import { box, cylinderAlongX, verticalCylinder } from '../geometry/primitives';
-import { aroundHook, hookSectorPoints, planShape } from '../geometry/shapes';
+import { cylinderAlongX, verticalCylinder } from '../geometry/primitives';
+import { aroundHook, hookSectorPoints } from '../geometry/shapes';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 

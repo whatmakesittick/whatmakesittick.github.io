@@ -8,6 +8,7 @@ Live site: https://whatmakesittick.github.io/
 
 | Explainer                                                                       | Tags                               |
 | ------------------------------------------------------------------------------- | ---------------------------------- |
+| [How a microscope works](https://whatmakesittick.github.io/microscope/)         | Tools, optics, physics             |
 | [How a glider flies](https://whatmakesittick.github.io/glider/)                 | Aircraft, flight, physics, weather |
 | [How a sewing machine works](https://whatmakesittick.github.io/sewing-machine/) | Home, mechanics, tools             |
 | [How a helicopter flies](https://whatmakesittick.github.io/helicopter/)         | Aircraft, flight, mechanics        |

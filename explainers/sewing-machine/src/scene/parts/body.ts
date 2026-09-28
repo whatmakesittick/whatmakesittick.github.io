@@ -1,6 +1,8 @@
 import { Group, Shape, Vector2 } from 'three';
 import type { Mesh } from 'three';
 import { toRadians } from '@core/math';
+import { box } from '@core/scene/geometry/box';
+import { extrudePlan, extrudeProfileAlongX, roundedRectShape } from '@core/scene/geometry/extrude';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import {
   ARM,
@@ -14,9 +16,7 @@ import {
   PLATE,
   WINDOW,
 } from '../constants';
-import { extrudePlan, extrudeProfileAlongX } from '../geometry/extrude';
-import { box, cylinderAlongZ } from '../geometry/primitives';
-import { roundedRectShape } from '../geometry/shapes';
+import { cylinderAlongZ } from '../geometry/primitives';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 

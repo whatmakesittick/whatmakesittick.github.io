@@ -1,12 +1,11 @@
 import { Group, Mesh, MeshStandardMaterial } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
+import { box } from '@core/scene/geometry/box';
+import { extrudePlan, roundedRectHole, roundedRectShape } from '@core/scene/geometry/extrude';
 import { anchorAt } from '@core/scene/parts';
 import { PLATE_BOTTOM } from '../../model';
 import { PLATE, PLATE_OPACITY } from '../constants';
 import { TRANSLUCENT_COLORS } from '../finishes';
-import { extrudePlan } from '../geometry/extrude';
-import { box } from '../geometry/primitives';
-import { roundedRectHole, roundedRectShape } from '../geometry/shapes';
 import type { PartContext } from './context';
 
 export interface ThroatPlatePart {

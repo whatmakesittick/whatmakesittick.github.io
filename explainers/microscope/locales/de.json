@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "title": "So funktioniert ein Mikroskop",
+    "eyebrow": "Dem Licht folgen, von der Lampe bis ins Auge",
+    "tagline": "Ein Mikroskop bricht das Licht zweimal, erst im Objektiv, das im Tubus ein reelles, umgekehrtes Bild erzeugt, und dann im Okular, das dieses Bild noch einmal vergrößert, doch wie fein die Details sind, die es zeigen kann, bestimmen das Licht und die Apertur des Objektivs, nicht die Vergrößerung.",
+    "description": "Ein interaktiver Blick in ein Lichtmikroskop in Zeitlupe, entlang des Lichtwegs von der Lampe bis ins Auge: wie Linsen Licht brechen, wie Objektiv und Okular in zwei Stufen vergrößern, warum mehr Vergrößerung irgendwann nichts mehr bringt und wie Fokus und Blende das Bild verändern.",
+    "summary": "Linsen, Vergrößerung in zwei Stufen und das feinste Detail, das Licht zeigen kann."
+  },
+  "stage": {
+    "label": "Interaktives Mikroskopmodell",
+    "gauge": "Optische Werte live"
+  },
+  "controls": {
+    "label": "Steuerung des Mikroskops",
+    "objective": "Objektiv",
+    "objectiveOptions": {
+      "x4": "4×",
+      "x10": "10×",
+      "x40": "40×",
+      "x100": "100× Öl"
+    },
+    "eyepiece": "Okular",
+    "eyepieceOptions": {
+      "x10": "10×",
+      "x125": "12,5×",
+      "x15": "15×"
+    },
+    "views": {
+      "rays": {
+        "name": "Lichtstrahlen",
+        "short": "Strahlen",
+        "hint": "Lichtstrahlen (Y)"
+      },
+      "cutaway": {
+        "name": "Schnittansicht",
+        "short": "Schnitt",
+        "hint": "Schnittansicht (C)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Lichtweg",
+    "phases": "Zu einem Abschnitt des Lichtwegs springen",
+    "speed": "Tempo der Zeitlupe",
+    "value": "{{position}} entlang des Lichtwegs, {{phase}}",
+    "speedValue": "{{value}} mm Lichtweg pro Sekunde",
+    "phase": {
+      "lamp": "Lampe",
+      "condenser": "Kondensor",
+      "specimen": "Präparat",
+      "objective": "Objektiv",
+      "tube": "Tubus",
+      "eyepiece": "Okular",
+      "eye": "Auge"
+    },
+    "during": {
+      "lamp": "in der Lampe",
+      "condenser": "durch den Kondensor",
+      "specimen": "am Präparat",
+      "objective": "im Objektiv",
+      "tube": "den Tubus hinauf",
+      "eyepiece": "im Okular",
+      "eye": "im Auge"
+    },
+    "jump": {
+      "lamp": "Zur Lampe springen",
+      "condenser": "Zum Kondensor springen",
+      "specimen": "Zum Präparat springen",
+      "objective": "Zum Objektiv springen",
+      "tube": "Zum Tubus springen",
+      "eyepiece": "Zum Okular springen",
+      "eye": "Zum Auge springen"
+    }
+  },
+  "readouts": {
+    "magnification": "Vergrößerung",
+    "aperture": "Numerische Apertur",
+    "resolution": "Kleinstes Detail",
+    "field": "Sehfeld"
+  },
+  "parts": {
+    "lamp": "Lampe",
+    "fieldDiaphragm": "Leuchtfeldblende",
+    "condenser": "Kondensor",
+    "irisDiaphragm": "Irisblende",
+    "stage": "Objekttisch",
+    "specimen": "Präparat",
+    "objective": "Objektiv",
+    "nosepiece": "Objektivrevolver",
+    "tube": "Tubus",
+    "intermediateImage": "Zwischenbild",
+    "eyepiece": "Okular",
+    "eye": "Auge",
+    "retina": "Netzhaut",
+    "focusKnob": "Fokustrieb"
+  },
+  "units": {
+    "mm": "{{value}} mm",
+    "um": "{{value}} µm",
+    "nm": "{{value}} nm",
+    "times": "{{value}}×",
+    "mmPerSecond": "{{value}} mm/s"
+  },
+  "sections": {
+    "overview": {
+      "title": "Licht, zweimal gebrochen",
+      "p1": "Sie sehen ein Lichtmikroskop, wie es in Schullaboren steht. Man nennt es zusammengesetztes Mikroskop, weil es <strong>in zwei Stufen vergrößert</strong>. Das Objektiv, die kleine Linse direkt über dem Objektträger, erzeugt im Tubus ein vergrößertes Bild. Das Okular, in das Sie hineinschauen, vergrößert dieses Bild noch einmal. Die Idee ist alt: 1665 betrachtete Robert Hooke Kork durch ein frühes zusammengesetztes Mikroskop und nannte die winzigen Hohlräume, die er sah, Zellen.",
+      "p2": "Das Licht wandert mitten durch das Gerät nach oben. Eine Lampe im Fuß leuchtet in den Kondensor, eine Linse unter dem Objekttisch, die das Licht auf das Präparat auf dem gläsernen Objektträger lenkt. Von dort gelangt das Licht ins Objektiv, läuft den Tubus hinauf und durch das Okular. Die letzte Linse auf seinem Weg sitzt in Ihrem eigenen Auge und bündelt es auf die Netzhaut ganz hinten. Jede Linse bricht das Licht, und zusammen machen sie aus einem Pünktchen, das für das bloße Auge viel zu klein ist, ein Bild, das Ihr ganzes Blickfeld füllt.",
+      "p3": "Das Modell zeigt das Mikroskop aufgeschnitten, damit Sie das Glas im Inneren sehen, und zeichnet das Licht als Strahlen. Sie beginnen an zwei Punkten des Präparats, einem in der Mitte und einem am Rand, und laufen bis ins Auge. Echtes Licht legt diesen Weg viel zu schnell zurück, um ihm zu folgen, deshalb schickt die Schleife einen Lichtpuls in Zeitlupe über die Strecke. Die Zeitleiste zählt die Millimeter entlang des Wegs ab der Lampe.",
+      "p4": "Ziehen Sie am Modell, um es von allen Seiten zu sehen, und scrollen Sie darüber, um zu zoomen. Beim Weiterlesen folgt die Ansicht dem Text. Schalten Sie die Beschriftungen ein, um die Namen der Teile zu sehen."
+    },
+    "lens": {
+      "title": "Was eine Linse mit Licht macht",
+      "p1": "In Glas ist das Licht nur etwa zwei Drittel so schnell wie in Luft. Trifft ein Strahl schräg auf Glas, lenkt ihn das Abbremsen ab, sodass er steiler ins Glas hineinläuft. Beim Austritt knickt er wieder in die andere Richtung ab. Diese Ablenkung heißt <strong>Brechung</strong>. Wie stark ein Stoff das Licht bremst, gibt seine Brechzahl an. Bei gewöhnlichem Glas liegt sie bei etwa 1,52.",
+      "p2": "Eine Linse ist ein Stück Glas mit gewölbten Flächen. Eine Sammellinse ist in der Mitte dicker als am Rand, deshalb lenkt sie jeden Strahl zur Mitte hin. Strahlen, die parallel ankommen, treffen sich alle in einem Punkt, dem Brennpunkt. Der Abstand von der Linse bis zu diesem Punkt ist die Brennweite, und eine kurze Brennweite bedeutet eine Linse, die Licht stark bricht. Schon eine einzige starke Linse leistet viel: Die winzigen Einlinsenmikroskope von Antoni van Leeuwenhoek vergrößerten bis etwa 270-fach.",
+      "p3": "Stellen Sie nun einen kleinen Gegenstand etwas weiter von der Linse entfernt auf, als ihre Brennweite beträgt. Die Strahlen von jedem seiner Punkte laufen auseinander, gehen durch die Linse und treffen sich auf der anderen Seite wieder in einem Punkt. All diese Punkte ergeben ein reelles Bild: Die Strahlen treffen sich dort wirklich, und ein Blatt Papier an dieser Stelle würde das Bild zeigen. Es steht auf dem Kopf, weil die Strahlen vom oberen Ende des Gegenstands die Mittellinie der Linse kreuzen und unten ankommen. Je näher der Gegenstand am Brennpunkt liegt, desto weiter weg entsteht das Bild und desto größer ist es.",
+      "p4": "Der Kondensor unter dem Objekttisch hat eine andere Aufgabe. Er vergrößert nichts. Er sammelt das Licht der Lampe und bündelt es zu einem Kegel, der das Präparat gleichmäßig ausleuchtet. Seine Irisblende, eine Öffnung, die sich weiter oder enger stellen lässt, bestimmt, wie breit dieser Kegel ist. Weiter unten begrenzt die Leuchtfeldblende das Licht auf den Ausschnitt, den Sie sehen, und hält so Streulicht fern. Das Modell hält die Beleuchtung einfach: Der Kondensor bildet die Lampe direkt auf das Präparat ab. 1893 entwickelte August Köhler von Zeiss eine bessere Anordnung, die gleichmäßiges Licht gibt, ohne dass der Glühfaden der Lampe im Bild zu sehen ist."
+    },
+    "objective": {
+      "title": "Das Objektiv erzeugt ein reelles Bild",
+      "p1": "Das Objektiv ist das kleine Röhrchen voller Linsen direkt über dem Objektträger. Seine Brennweite ist sehr kurz, und das Präparat liegt knapp außerhalb seines Brennpunkts. Wie im letzten Kapitel entsteht das Bild deshalb weit entfernt auf der anderen Seite und viel größer. Bei einem klassischen Mikroskop ist der Tubus 160 mm lang, und das Bild entsteht 10 mm unter seinem oberen Rand, genau dort, wo das Okular sitzt. Viele neuere Mikroskope erzeugen das Bild mit einer zweiten Linse im Tubus, aber es liegt an derselben Stelle.",
+      "p2": "Dieses <strong>Zwischenbild</strong> ist reell. Die Strahlen kreuzen sich dort wirklich, es schwebt also mitten in der Luft im Tubus. Es steht auf dem Kopf und ist seitenverkehrt, und es ist um die Zahl auf dem Objektiv vergrößert: Ein 40×-Objektiv macht es 40-mal breiter als das Präparat. Das Okular betrachtet dieses Bild, nicht das Präparat selbst. Probieren Sie die vier Objektive aus.",
+      "p3": "Jedes Objektiv trägt zwei Zahlen, seine Vergrößerung und seine numerische Apertur: 4×/0,10, 10×/0,25, 40×/0,65 und 100×/1,25. Je stärker das Objektiv, desto näher muss es an den Objektträger heran. Dieser Spalt, der Arbeitsabstand, schrumpft von etwa 25 mm bei 4× auf etwa 0,6 mm bei 40× und nur 0,13 mm bei 100×. Auch der Ausschnitt, den Sie sehen, wird kleiner. Ein übliches Okular hat eine Sehfeldzahl von 20 mm, so breit ist die runde Öffnung in seinem Inneren. Der Ausschnitt ist diese Breite geteilt durch die Vergrößerung des Objektivs: 5 mm bei 4×, 2 mm bei 10×, 0,5 mm bei 40× und 0,2 mm bei 100×.",
+      "p4": "Drehen Sie den Objektivrevolver, und das nächste Objektiv schwenkt ein. Die Objektive sind parfokal: Jedes ist so gebaut, dass das Präparat 45 mm unter der Schulter, an der es eingeschraubt ist, scharf erscheint. Beim Wechseln bleibt das Bild deshalb fast scharf, und ein kleiner Dreh am Feintrieb genügt. Das 100×-Objektiv ist die Ausnahme. Es braucht einen Tropfen Öl zwischen seiner Frontlinse und dem Objektträger. Warum, erklärt das übernächste Kapitel."
+    },
+    "eyepiece": {
+      "title": "Das Okular und das Auge",
+      "p1": "Das Okular ist eine Lupe für das Zwischenbild. Es sitzt so, dass das Bild genau in seinem Brennpunkt liegt. Dann verlassen die Strahlen jedes Bildpunkts das Okular parallel zueinander, als kämen sie von etwas sehr weit Entferntem. So kann Ihr Auge entspannt bleiben, wie beim Blick auf einen fernen Hügel.",
+      "p2": "Was Sie sehen, ist ein <strong>virtuelles Bild</strong>. Dort sammelt sich kein Licht. Es ist nur der Ort, von dem die Strahlen zu kommen scheinen, wenn man sie zurückverfolgt: ein riesiges Bild in weiter Ferne. Das Modell zeichnet diese zurückverfolgten Linien gestrichelt. Ein Okular vergrößert um 250 mm geteilt durch seine Brennweite. Diese 250 mm sind der kürzeste Abstand, auf den ein durchschnittliches Auge scharf stellen kann, also die beste Sicht ohne Hilfsmittel. Ein 10×-Okular hat daher eine Brennweite von 25 mm. Probieren Sie die Okulare aus.",
+      "total": "Gesamtvergrößerung",
+      "p3": "Die letzte Linse ist Ihre eigene. Die Linse Ihres Auges nimmt jedes parallele Strahlenbündel auf und bündelt es zu einem Punkt auf der Netzhaut, der lichtempfindlichen Schicht hinten im Auge. Das ist das endgültige Bild, und es ist wieder reell: Die Strahlen treffen sich dort wirklich. Ihr Auge gehört in den Augenpunkt, etwa 10 mm über dem Okular. Okulare für Brillenträger rücken ihn auf 20 bis 25 mm hinaus.",
+      "p4": "Die beiden Vergrößerungen werden multipliziert. Ein 10×-Objektiv mit einem 10×-Okular ergibt 100×, ein 40×-Objektiv 400× und das 100×-Ölobjektiv 1000×. Das übliche Okular ist 10×, verbreitet sind auch 12,5× und 15×. Aber ein Okular vergrößert nur das Bild, das das Objektiv erzeugt hat. Details, die das Objektiv nicht eingefangen hat, kann es nicht hinzufügen. Mit dem 100×-Objektiv und dem 15×-Okular kommen Sie auf 1500×, mehr als sinnvoll ist, wie das nächste Kapitel zeigt."
+    },
+    "limit": {
+      "title": "Warum mehr Vergrößerung irgendwann nichts bringt",
+      "p1": "Licht ist eine Welle, und Wellen breiten sich aus, wenn sie an etwas sehr Kleinem vorbeikommen. Jedes feine Detail des Präparats lenkt deshalb etwas Licht zur Seite ab, und je feiner das Detail, desto größer der Winkel. Um ein Detail zu zeigen, muss das Objektiv dieses abgelenkte Licht einfangen. Geht das Licht an der Linse vorbei, gelangt das Detail nie ins Bild, und keine Vergrößerung holt es zurück.",
+      "p2": "Wie breit der Lichtkegel ist, den das Objektiv einfangen kann, gibt seine <strong>numerische Apertur</strong> an, die zweite Zahl darauf. 1873 zeigte Ernst Abbe, dass sie die Grenze setzt. Heute schreibt man die Regel so: Wellenlänge des Lichts geteilt durch die doppelte numerische Apertur. In grünem Licht von 550 nm zeigt das 10×-Objektiv mit einer Apertur von 0,25 Details bis hinab zu etwa 1,1 µm. Probieren Sie den Regler: Violettes Licht zeigt feinere Details als rotes.",
+      "control": {
+        "label": "Wellenlänge des Lichts",
+        "violet": "Violett",
+        "red": "Rot",
+        "detail": "Kleinstes Detail",
+        "useful": "Sinnvolle Vergrößerung bis"
+      },
+      "p3": "Luft setzt der Apertur eine Obergrenze: Ein Trockenobjektiv erreicht höchstens etwa 0,95. Das 100×-Objektiv überwindet sie mit einem Tropfen Immersionsöl. Das Öl hat eine Brechzahl von 1,515, fast so viel wie Glas, deshalb gehen selbst die schrägsten Strahlen vom dünnen Deckglas in die Linse über, ohne abgelenkt zu werden. So steigt die Apertur auf 1,25, und die besten Objektive erreichen 1,40. Das feinste Detail, das ein Lichtmikroskop zeigen kann, liegt dann bei etwa 0,2 bis 0,3 µm.",
+      "p4": "Vergrößerung hilft also nur bis zu einem gewissen Punkt. Als Faustregel reicht der sinnvolle Bereich vom 500- bis zum 1000-Fachen der numerischen Apertur, beim 100×-Ölobjektiv also bis etwa 1250×. Darüber hinaus wird das Bild größer, aber es erscheinen keine neuen Details. Das nennt man leere Vergrößerung. Deshalb sind auch die meisten Viren zu klein, um sie mit Licht aufzulösen: Sie messen von etwa 20 nm bis zu einigen hundert. Elektronenmikroskope arbeiten mit Elektronen, deren Wellen viel kürzer sind, und zeigen routinemäßig Details von etwa 0,1 nm."
+    },
+    "focus": {
+      "title": "Fokus und Licht",
+      "p1": "Bei einem Mikroskop wie diesem stellen Sie scharf, indem Sie den Objekttisch bewegen, nicht die Linsen. Der Grobtrieb bewegt ihn schnell über eine weite Strecke. Der Feintrieb bewegt ihn nur sehr wenig: 0,1 bis 0,3 mm pro Umdrehung oder etwa 1 bis 2,5 µm pro Teilstrich seiner Skala. Sie bringen das Präparat in genau den richtigen Abstand unter dem Objektiv, bei dem das Zwischenbild am Okular entsteht.",
+      "p2": "Bei starker Vergrößerung ist die scharfe Schicht des Präparats sehr dünn. Diese <strong>Schärfentiefe</strong> beträgt mit dem 10×-Objektiv etwa 8,5 µm und mit dem 100×-Ölobjektiv nur etwa 0,7 µm. Alles über oder unter der scharfen Schicht verschwimmt. Bewegen Sie den Regler und sehen Sie, wie das Bild scharf und wieder unscharf wird. Wechseln Sie dann das Objektiv und versuchen Sie es noch einmal.",
+      "control": {
+        "label": "Feintrieb",
+        "down": "Tisch runter",
+        "up": "Tisch hoch",
+        "caption": "Was das Auge durch das Okular sieht",
+        "depth": "Schärfentiefe"
+      },
+      "p3": "Auch die Irisblende im Kondensor verändert das Bild. Schließen Sie sie, wird der Lichtkegel schmaler: Das Bild gewinnt an Kontrast und Schärfentiefe, verliert aber seine feinsten Details, weil das Licht das Objektiv nicht mehr ausfüllt. Öffnen Sie sie weit, bekommen Sie die feinsten Details, aber mehr Streulicht und weniger Kontrast. Die Hersteller empfehlen, sie größtenteils offen zu lassen.",
+      "p4": "Zum Schluss eine Überraschung: Das Bild bewegt sich falsch herum. Das Bild des Objektivs steht auf dem Kopf und ist seitenverkehrt, und das Okular dreht es nicht zurück. Schieben Sie den Objektträger nach rechts, wandert das Bild nach links, und schieben Sie ihn von sich weg, kommt das Bild auf Sie zu. Das braucht ein wenig Übung."
+    }
+  }
+}

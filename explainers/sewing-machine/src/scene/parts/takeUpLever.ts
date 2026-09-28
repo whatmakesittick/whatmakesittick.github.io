@@ -1,9 +1,10 @@
 import type { Object3D } from 'three';
 import { Group, TorusGeometry } from 'three';
 import { lerp, toRadians } from '@core/math';
+import { box } from '@core/scene/geometry/box';
 import { anchorAt } from '@core/scene/parts';
 import { TAKE_UP, TAKE_UP_EYE_Z } from '../constants';
-import { box, cylinderAlongZ } from '../geometry/primitives';
+import { cylinderAlongZ } from '../geometry/primitives';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 

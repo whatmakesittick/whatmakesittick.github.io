@@ -1,0 +1,43 @@
+:root {
+  --lamp: #f5c451;
+  --condenser: #ff9f43;
+  --specimen: #ff7eb6;
+  --objective: #4cc3ff;
+  --tube: #4fd1c5;
+  --eyepiece: #c792ea;
+  --eye: #8bd47f;
+}
+
+.resolution-control .range {
+  --range-color: var(--wavelength, var(--accent));
+}
+
+.magnification-readouts {
+  margin-top: 16px;
+}
+
+.eyepiece-view {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.eyepiece-view canvas {
+  width: min(100%, 320px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.eyepiece-view figcaption {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+@media (pointer: coarse) {
+  .chip[data-action='objective'],
+  .chip[data-action='eyepiece'] {
+    height: 44px;
+  }
+}
