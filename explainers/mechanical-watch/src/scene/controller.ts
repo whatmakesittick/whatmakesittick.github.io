@@ -10,7 +10,7 @@ import { cameraViews } from './cameraViews';
 
 export type WatchControllerDependencies = Pick<
   SceneShell,
-  'scene' | 'materials' | 'textures' | 'labels' | 'rig'
+  'scene' | 'materials' | 'textures' | 'labels' | 'stage' | 'rig'
 >;
 
 export class WatchController {
@@ -32,7 +32,7 @@ export class WatchController {
   }
 
   build(state: AssemblyState): void {
-    const { scene, materials, textures, labels, rig } = this.dependencies;
+    const { scene, materials, textures, labels, stage, rig } = this.dependencies;
     this.dispose();
     const assembly = createAssembly({ materials, textures }, state);
     this.assembly = assembly;
@@ -40,6 +40,7 @@ export class WatchController {
     labels.attach(assembly.labelAnchors());
     const bounds = assembly.region('scene');
     rig.setBounds(bounds, bounds.min.y);
+    stage.fit(bounds, bounds.min.y);
   }
 
   setState(state: AssemblyState): void {
