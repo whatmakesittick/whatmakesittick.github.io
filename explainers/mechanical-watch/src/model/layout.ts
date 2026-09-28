@@ -1,6 +1,6 @@
 import { toRadians } from '@core/math';
 import type { WheelId } from '../ids';
-import { MOTION_WORKS, TRAIN, WINDING, wheelSpec } from './train';
+import { MOTION_WORKS, WINDING, wheelSpec } from './train';
 
 export interface Point {
   readonly x: number;
@@ -49,7 +49,6 @@ export const REGULATOR = {
 export const MAINSPRING = {
   arborRadiusMm: 1.2,
   wallRadiusMm: 5.55,
-  usedDevelopmentShare: 0.52,
 } as const;
 
 export const CLICK_CENTRE: Point = { x: 8.0, y: 6.4 };
@@ -140,5 +139,3 @@ export function wheelOuterReach(id: WheelId): number {
   const centre = WHEEL_CENTRES[id];
   return Math.hypot(centre.x, centre.y) + wheelSpec(id).radiusMm;
 }
-
-export const TRAIN_ORDER: readonly WheelId[] = TRAIN.map((wheel) => wheel.id);

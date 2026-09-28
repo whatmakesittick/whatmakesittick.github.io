@@ -118,6 +118,24 @@ describe('time on the dial', () => {
     expect(quarterHour.hour - before.hour).toBeCloseTo(7.5);
     expect(Math.sign(before.minuteWheel)).toBe(-Math.sign(before.cannonPinion));
   });
+
+  it('steps the seconds hand with the fourth wheel, once per beat', () => {
+    const atRest = motionWorksAngles(0, 0, AMPLITUDE);
+    const beforeTick = motionWorksAngles(80, 0, AMPLITUDE);
+    const afterTick = motionWorksAngles(100, 0, AMPLITUDE);
+    const afterCycle = motionWorksAngles(0, 1, AMPLITUDE);
+    expect(beforeTick.second - atRest.second).toBeCloseTo(0);
+    expect(afterTick.second - atRest.second).toBeCloseTo(0.75);
+    expect(afterCycle.second - atRest.second).toBeCloseTo(1.5);
+    expect(motionWorksAngles(0, 4 * 60, AMPLITUDE).second - atRest.second).toBeCloseTo(360);
+  });
+
+  it('starts the hands at the start time on the dial', () => {
+    const hands = motionWorksAngles(0, 0, AMPLITUDE);
+    expect(hands.minute).toBeCloseTo((9.5 / 60) * 360);
+    expect(hands.hour).toBeCloseTo(((10 + 9.5 / 60) / 12) * 360);
+    expect(hands.second).toBeCloseTo(180);
+  });
 });
 
 describe('winding', () => {
@@ -136,7 +154,10 @@ describe('winding', () => {
     expect(wound.innerRadiusMm).toBeLessThan(down.innerRadiusMm);
     expect(wound.outerRadiusMm).toBeLessThan(MAINSPRING.wallRadiusMm);
     expect(down.coils).toBeGreaterThan(14);
-    expect(wound.coils).toBeGreaterThan(down.coils);
+    expect(wound.coils - down.coils).toBeCloseTo(ARBOR_TURNS_FULL_WIND, 6);
+    expect(mainspringCoil(POWER_RESERVE_HOURS / 2).coils - down.coils).toBeLessThan(
+      ARBOR_TURNS_FULL_WIND,
+    );
   });
 });
 

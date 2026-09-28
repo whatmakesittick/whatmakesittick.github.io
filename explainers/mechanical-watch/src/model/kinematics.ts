@@ -1,6 +1,6 @@
 import { clamp, toDegrees, toRadians } from '@core/math';
 import type { MomentId, PhaseId, WheelId } from '../ids';
-import { PHASE_IDS, WHEEL_IDS } from '../ids';
+import { PHASE_IDS } from '../ids';
 import {
   ADVANCE_PER_BEAT_DEG,
   LIFT_ANGLE_DEG,
@@ -17,6 +17,7 @@ import {
   POWER_RESERVE_HOURS,
   TRAIN,
   WINDING,
+  motionWorksRatio,
 } from './train';
 
 export const CYCLE_DEG = 360;
@@ -26,6 +27,7 @@ export const TOCK_CENTRE_DEG = 270;
 export const BEATS_PER_CYCLE = 2;
 export const ADVANCE_PER_CYCLE_DEG = ADVANCE_PER_BEAT_DEG * BEATS_PER_CYCLE;
 export const START_TIME_ON_DIAL_S = 10 * 3600 + 9 * 60 + 30;
+export const DEFAULT_AMPLITUDE_DEG = 280;
 export const SECONDS_PER_MINUTE = 60;
 export const SECONDS_PER_HOUR = 3600;
 export const SECONDS_PER_HALF_DAY = 43_200;
@@ -134,15 +136,21 @@ function turnShare(seconds: number, period: number): number {
   return ((seconds % period) / period) * CYCLE_DEG;
 }
 
-export function motionWorksAngles(phase: number, cycles: number): MotionWorksAngles {
-  const seconds = timeOnDialSeconds(phase, cycles);
-  const minute = turnShare(seconds, SECONDS_PER_HOUR);
-  const hour = turnShare(seconds, SECONDS_PER_HALF_DAY);
+export function motionWorksAngles(
+  phase: number,
+  cycles: number,
+  amplitude: number = DEFAULT_AMPLITUDE_DEG,
+): MotionWorksAngles {
+  const wheels = wheelAngles(phase, cycles, amplitude);
+  const minute = turnShare(START_TIME_ON_DIAL_S, SECONDS_PER_HOUR) + wheels.centreWheel;
+  const hour =
+    turnShare(START_TIME_ON_DIAL_S, SECONDS_PER_HALF_DAY) + wheels.centreWheel / motionWorksRatio();
+  const second = turnShare(START_TIME_ON_DIAL_S, SECONDS_PER_MINUTE) + wheels.fourthWheel;
   const { cannonPinion, minuteWheel } = MOTION_WORKS;
   return {
     hour,
     minute,
-    second: turnShare(seconds, SECONDS_PER_MINUTE),
+    second,
     cannonPinion: minute,
     minuteWheel: -minute * (cannonPinion.leaves / minuteWheel.teeth),
     hourWheel: hour,
@@ -182,14 +190,32 @@ export function runDownInnerRadiusMm(): number {
   return Math.sqrt(wallRadiusMm * wallRadiusMm - springSectionAreaMm2() / Math.PI);
 }
 
+function coilsFromInnerRadius(innerRadiusMm: number): number {
+  const area = springSectionAreaMm2() / Math.PI;
+  const outer = Math.sqrt(innerRadiusMm * innerRadiusMm + area);
+  return (outer - innerRadiusMm) / MAINSPRING_BLADE.thicknessMm;
+}
+
+function innerRadiusFromCoils(coils: number): number {
+  const area = springSectionAreaMm2() / Math.PI;
+  const packed = coils * MAINSPRING_BLADE.thicknessMm;
+  return (area - packed * packed) / (2 * packed);
+}
+
+export function fullWindInnerRadiusMm(): number {
+  const runDownCoils = coilsFromInnerRadius(runDownInnerRadiusMm());
+  return Math.max(
+    MAINSPRING.arborRadiusMm,
+    innerRadiusFromCoils(runDownCoils + ARBOR_TURNS_FULL_WIND),
+  );
+}
+
 export function mainspringCoil(reserveHours: number): CoilExtent {
   const wound = clamp(reserveHours / POWER_RESERVE_HOURS, 0, 1);
-  const { arborRadiusMm, usedDevelopmentShare } = MAINSPRING;
   const runDown = runDownInnerRadiusMm();
-  const innerRadiusMm = runDown - wound * usedDevelopmentShare * (runDown - arborRadiusMm);
+  const innerRadiusMm = runDown - wound * (runDown - fullWindInnerRadiusMm());
   const outerRadiusMm = Math.sqrt(innerRadiusMm * innerRadiusMm + springSectionAreaMm2() / Math.PI);
-  const coils = (outerRadiusMm - innerRadiusMm) / MAINSPRING_BLADE.thicknessMm;
-  return { innerRadiusMm, outerRadiusMm, coils };
+  return { innerRadiusMm, outerRadiusMm, coils: coilsFromInnerRadius(innerRadiusMm) };
 }
 
 export function cycleCountAfter(previousPhase: number, nextPhase: number, cycles: number): number {
@@ -209,5 +235,3 @@ export function tickContactMs(phase: number, amplitude: number): number {
   const since = clamp(phase - range.start, 0, range.end - range.start);
   return (since / CYCLE_DEG) * OSCILLATION_PERIOD_S * 1000;
 }
-
-export const WHEELS_FROM_BARREL: readonly WheelId[] = WHEEL_IDS;
