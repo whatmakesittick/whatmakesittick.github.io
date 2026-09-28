@@ -95,12 +95,20 @@ function lapsTravelled(state: AtpSynthaseState, deltaSeconds: number): number {
 }
 
 function countLaps(store: AtpSynthaseStore): AtpSynthaseStore {
-  const advance = store.getState().tick;
-  let ticking = false;
+  const { tick: advance, jumpToPhase: jump } = store.getState();
+  let lapKept = false;
+  const keepingLap = (move: () => void) => {
+    lapKept = true;
+    try {
+      move();
+    } finally {
+      lapKept = false;
+    }
+  };
   store.subscribe(
     (state) => state.phase,
     (phase, previous) => {
-      if (ticking) return;
+      if (lapKept) return;
       const { laps } = store.getState();
       const next = lapCountAfter(previous, phase, laps);
       if (next !== laps) store.setState({ laps: next });
@@ -110,11 +118,10 @@ function countLaps(store: AtpSynthaseStore): AtpSynthaseStore {
     tick: (deltaSeconds) => {
       const before = store.getState();
       const wraps = lapsTravelled(before, deltaSeconds);
-      ticking = true;
-      advance(deltaSeconds);
-      ticking = false;
+      keepingLap(() => advance(deltaSeconds));
       if (wraps !== 0) store.setState({ laps: before.laps + wraps });
     },
+    jumpToPhase: (id) => keepingLap(() => jump(id)),
   });
   return store;
 }

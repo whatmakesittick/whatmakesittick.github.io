@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { OXYGEN_RANGE } from './ranges';
 import type { PresetId } from './presets';
-import { bladeCountOf, createAtpSynthaseStore, motorCountOf } from './store';
+import { atpMadeOf, bladeCountOf, createAtpSynthaseStore, motorCountOf } from './store';
 
 const CHAPTERS: readonly PresetId[] = [
   'overview',
@@ -84,6 +84,39 @@ describe('ATP synthase store', () => {
     const store = createAtpSynthaseStore({ playing: true, phase: 30 });
     store.getState().jumpToPhase('thirdAtp');
     expect(store.getState()).toMatchObject({ phase: 240, playing: false });
+  });
+
+  it('stays in the same lap when jumping to an ATP, forward or back', () => {
+    const store = createAtpSynthaseStore({ phase: 10, laps: 4, playing: true });
+    store.getState().jumpToPhase('thirdAtp');
+    expect(store.getState()).toMatchObject({ phase: 240, laps: 4 });
+    expect(atpMadeOf(store.getState())).toBe(14);
+    store.getState().jumpToPhase('firstAtp');
+    expect(store.getState()).toMatchObject({ phase: 0, laps: 4 });
+    expect(atpMadeOf(store.getState())).toBe(12);
+  });
+
+  it('still counts a lap back when stepping or scrubbing back past 0°', () => {
+    const store = createAtpSynthaseStore({ phase: 10, laps: 4, playing: false });
+    store.getState().step(-20);
+    expect(store.getState()).toMatchObject({ phase: 350, laps: 3 });
+    store.getState().step(20);
+    expect(store.getState()).toMatchObject({ phase: 10, laps: 4 });
+    store.getState().setPhase(300);
+    expect(store.getState().laps).toBe(3);
+    store.getState().setPhase(200);
+    expect(store.getState().laps).toBe(3);
+    store.getState().setPhase(340);
+    expect(store.getState().laps).toBe(3);
+    store.getState().setPhase(20);
+    expect(store.getState().laps).toBe(4);
+  });
+
+  it('counts laps again after a jump', () => {
+    const store = createAtpSynthaseStore({ phase: 10, laps: 4, playing: false });
+    store.getState().jumpToPhase('thirdAtp');
+    store.getState().setPhase(10);
+    expect(store.getState().laps).toBe(5);
   });
 
   it('keeps the oxygen inside its range', () => {
