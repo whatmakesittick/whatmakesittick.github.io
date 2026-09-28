@@ -1,7 +1,7 @@
 import { bindPresets } from '@core/scene/presetBinder';
 import type { LabelPolicy, PresetTargets } from '@core/scene/presetBinder';
 import type { AssemblyState } from '../ids';
-import { DEFAULT_AMPLITUDE } from '../model';
+import { DEFAULT_AMPLITUDE_DEG } from '../model';
 import {
   DEFAULT_VIEW,
   PRESETS,
@@ -23,7 +23,7 @@ function blankState(): AssemblyState {
   return {
     phase: 0,
     cycles: 0,
-    amplitude: DEFAULT_AMPLITUDE,
+    amplitude: DEFAULT_AMPLITUDE_DEG,
     reserve: RESERVE_RANGE.default,
     regulator: REGULATOR_RANGE.default,
     view: DEFAULT_VIEW,

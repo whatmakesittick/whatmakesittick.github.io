@@ -1,7 +1,7 @@
 import type { ScenePreset } from '@core/scene/presetBinder';
 import type { PartId, ViewOptions, WheelId } from '../ids';
 import { WHEEL_IDS } from '../ids';
-import { DEFAULT_AMPLITUDE, momentPhase } from '../model';
+import { DEFAULT_AMPLITUDE_DEG, momentPhase } from '../model';
 
 export type PresetId = 'overview' | 'mainspring' | 'train' | 'escapement' | 'balance' | 'hands';
 
@@ -54,7 +54,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'escapement',
     speed: 1,
     view: { bridges: false, energy: false },
-    pauseAt: momentPhase('lock', DEFAULT_AMPLITUDE),
+    pauseAt: momentPhase('lock', DEFAULT_AMPLITUDE_DEG),
     labels: [
       'escapeWheel',
       'palletFork',

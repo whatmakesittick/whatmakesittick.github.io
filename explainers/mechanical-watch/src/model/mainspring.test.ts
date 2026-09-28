@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  DEFAULT_AMPLITUDE,
   RESERVE_AFTER_A_DAY_HOURS,
   amplitude,
   averagePowerMicroW,
@@ -35,7 +34,6 @@ describe('mainspring torque', () => {
 describe('balance amplitude', () => {
   it('swings 280° at full wind', () => {
     expect(amplitude(POWER_RESERVE_HOURS)).toBeCloseTo(280);
-    expect(DEFAULT_AMPLITUDE).toBe(280);
   });
 
   it('falls to about 251° after a day and about 186° when run down', () => {

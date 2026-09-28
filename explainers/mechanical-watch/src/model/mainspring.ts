@@ -1,9 +1,7 @@
 import { FULL_TURN, clamp, lerp } from '@core/math';
-import { SECONDS_PER_HOUR } from './kinematics';
+import { DEFAULT_AMPLITUDE_DEG, SECONDS_PER_HOUR } from './kinematics';
 import { BARREL_HOURS_PER_TURN, MAINSPRING_TORQUE_MNM, POWER_RESERVE_HOURS } from './train';
 
-export const FULL_WIND_AMPLITUDE_DEG = 280;
-export const DEFAULT_AMPLITUDE = FULL_WIND_AMPLITUDE_DEG;
 export const RESERVE_AFTER_A_DAY_HOURS = POWER_RESERVE_HOURS - 24;
 
 const JOULES_PER_MILLINEWTON_METRE_RADIAN = 1e-3;
@@ -39,7 +37,7 @@ export function torqueMNm(reserveHours: number): number {
 
 export function amplitude(reserveHours: number): number {
   return (
-    FULL_WIND_AMPLITUDE_DEG * Math.sqrt(torqueMNm(reserveHours) / MAINSPRING_TORQUE_MNM.fullWind)
+    DEFAULT_AMPLITUDE_DEG * Math.sqrt(torqueMNm(reserveHours) / MAINSPRING_TORQUE_MNM.fullWind)
   );
 }
 

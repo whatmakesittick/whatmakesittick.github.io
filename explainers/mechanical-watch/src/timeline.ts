@@ -2,7 +2,7 @@ import type { Phase, Timeline } from '@core/explainer';
 import { PHASE_IDS } from './ids';
 import {
   CYCLE_DEG,
-  DEFAULT_AMPLITUDE,
+  DEFAULT_AMPLITUDE_DEG,
   REAL_TIME_SPEED,
   phaseDegreesPerSecond,
   phaseRanges,
@@ -22,7 +22,7 @@ export const SPEED_RANGE = { min: 0, max: REAL_TIME_SPEED, step: 1, default: 3 }
 const SCRUBBER_STEP_DEG = 0.5;
 const FINE_STEP_DEG = 1;
 const COARSE_STEP_DEG = 30;
-const PHASE_RANGES = phaseRanges(DEFAULT_AMPLITUDE);
+const PHASE_RANGES = phaseRanges(DEFAULT_AMPLITUDE_DEG);
 
 const SWING_PHASES: readonly Phase[] = PHASE_IDS.map((id) => ({
   id,

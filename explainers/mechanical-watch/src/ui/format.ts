@@ -3,7 +3,7 @@ import { t } from '@core/i18n';
 import type { PhaseId } from '../ids';
 import {
   ADVANCE_PER_BEAT_DEG,
-  DEFAULT_AMPLITUDE,
+  DEFAULT_AMPLITUDE_DEG,
   REAL_TIME_SPEED,
   SECONDS_PER_HOUR,
   SECONDS_PER_MINUTE,
@@ -71,7 +71,7 @@ export function formatPhase(phase: number): string {
 export function describePhase(phase: number): string {
   return t('timeline.value', {
     angle: formatPhase(phase),
-    phase: t(DURING_KEYS[phaseAt(phase, DEFAULT_AMPLITUDE)]),
+    phase: t(DURING_KEYS[phaseAt(phase, DEFAULT_AMPLITUDE_DEG)]),
   });
 }
 

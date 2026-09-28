@@ -1,5 +1,6 @@
 import type { Readout } from '@core/explainer';
 import {
+  DEFAULT_AMPLITUDE_DEG,
   POWER_RESERVE_HOURS,
   balanceAngle,
   isInContact,
@@ -32,7 +33,8 @@ export const WATCH_READOUTS: readonly Readout<WatchStoreState>[] = [
     labelKey: 'readouts.balance',
     numeric: true,
     value: (state) => formatSignedDegrees(balanceAngle(state.phase, amplitudeOf(state))),
-    tone: (state) => (isInContact(state.phase, amplitudeOf(state)) ? CONTACT_TONE : NEUTRAL_TONE),
+    tone: (state) =>
+      isInContact(state.phase, DEFAULT_AMPLITUDE_DEG) ? CONTACT_TONE : NEUTRAL_TONE,
   },
   {
     id: 'amplitude',

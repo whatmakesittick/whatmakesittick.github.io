@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createWatchStore } from '../state';
+import { WATCH_TIMELINE } from '../timeline';
 import type { WatchStoreState } from '../state';
 import { WATCH_READOUTS } from './readouts';
 
@@ -29,6 +30,14 @@ describe('gauge readouts', () => {
     expect(tone?.(stateWith({ phase: 90 }))).toBe('var(--tick)');
     expect(tone?.(stateWith({ phase: 270 }))).toBe('var(--tick)');
     expect(tone?.(stateWith({ phase: 30 }))).toBe('var(--text)');
+  });
+
+  it('lights the balance angle only inside the timeline tick, even when run down', () => {
+    const { tone } = readout('balance');
+    const tick = WATCH_TIMELINE.phases.find((phase) => phase.id === 'tick')!;
+    expect(tone?.(stateWith({ reserve: 0, phase: tick.start - 1 }))).toBe('var(--text)');
+    expect(tone?.(stateWith({ reserve: 0, phase: tick.start + 1 }))).toBe('var(--tick)');
+    expect(tone?.(stateWith({ reserve: 0, phase: tick.end + 1 }))).toBe('var(--text)');
   });
 
   it('fills the amplitude and reserve meters from the spring', () => {
