@@ -117,8 +117,9 @@
   margin-top: 0;
 }
 
-.mud-control[data-planned] .chip[data-action='mudPlan'] {
+.chip[data-action='mudPlan'][aria-disabled='true'] {
   opacity: 0.55;
+  cursor: default;
 }
 
 .chip[data-action='bit'][data-value='rollerCone'] {

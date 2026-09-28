@@ -12,6 +12,7 @@ const MARKUP = `
     <dd data-readout="pore-pressure"></dd>
     <dd data-readout="fracture-pressure"></dd>
     <dd data-readout="mud-state"></dd>
+    <button type="button" class="chip" data-action="mudPlan"></button>
   </div>
 `;
 const START_M = 2500;
@@ -34,6 +35,14 @@ describe('mud control', () => {
     expect(draw).toHaveBeenCalledTimes(painted);
     store.getState().setPhase(START_M + DEPTH_BUCKET_M);
     expect(draw).toHaveBeenCalledTimes(painted + 1);
+  });
+
+  it('disables the plan chip while the mud follows the plan', () => {
+    const { store } = mountAt(START_M);
+    const chip = document.querySelector('[data-action="mudPlan"]');
+    expect(chip?.getAttribute('aria-disabled')).toBe('true');
+    store.getState().setMudWeight(1.5);
+    expect(chip?.getAttribute('aria-disabled')).toBe('false');
   });
 
   it('repaints when the reader changes the mud weight', () => {

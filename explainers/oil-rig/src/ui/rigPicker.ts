@@ -73,9 +73,11 @@ const SEMI = {
   pontoonHalf: 21,
   pontoonTop: 10,
   pontoonBottom: 15,
-  fairlead: 2,
-  spread: 40,
+  anchor: 47,
+  fairleadPull: { outShare: 0.6, downShare: 0.2 },
+  touchdownShare: 0.8,
 } as const;
+const RISER_WIDTH_SHARE = 0.5;
 const DRILLSHIP = {
   stern: 34,
   bow: 38,
@@ -208,14 +210,41 @@ function spar(context: CanvasRenderingContext2D, column: Column): void {
   derrick(context, column, surface - SPAR.deckTop * s);
 }
 
+function riser(context: CanvasRenderingContext2D, { x, reach }: Column, top: number): void {
+  const width = context.lineWidth;
+  context.lineWidth = width * RISER_WIDTH_SHARE;
+  line(context, x, top, x, reach);
+  context.lineWidth = width;
+}
+
+function catenaryMoorings(context: CanvasRenderingContext2D, column: Column, fairlead: number) {
+  const { x, reach, scale: s } = column;
+  const { columnOuter, anchor, fairleadPull, touchdownShare } = SEMI;
+  const pullX = columnOuter + (anchor - columnOuter) * fairleadPull.outShare;
+  const pullY = fairlead + (reach - fairlead) * fairleadPull.downShare;
+  const touchdownX = columnOuter + (anchor - columnOuter) * touchdownShare;
+  SIDES.forEach((side) => {
+    context.beginPath();
+    context.moveTo(x + side * columnOuter * s, fairlead);
+    context.bezierCurveTo(
+      x + side * pullX * s,
+      pullY,
+      x + side * touchdownX * s,
+      reach,
+      x + side * anchor * s,
+      reach,
+    );
+    context.stroke();
+  });
+}
+
 function semi(context: CanvasRenderingContext2D, column: Column): void {
-  const { x, surface, reach, scale: s } = column;
+  const { surface, scale: s } = column;
   const pontoonTop = surface + SEMI.pontoonTop * s;
   const pontoonBottom = surface + SEMI.pontoonBottom * s;
   const deckBottom = surface - SEMI.deckBottom * s;
-  const fairlead = { half: SEMI.columnOuter, y: surface + SEMI.fairlead * s };
-  mirroredLines(context, column, fairlead, { half: SEMI.spread, y: reach });
-  line(context, x, pontoonBottom, x, reach);
+  catenaryMoorings(context, column, pontoonTop);
+  riser(context, column, pontoonBottom);
   block(context, column, SEMI.pontoonHalf, pontoonTop, pontoonBottom);
   mirroredBlocks(context, column, SEMI.columnInner, SEMI.columnOuter, deckBottom, pontoonTop);
   block(context, column, SEMI.deckHalf, surface - SEMI.deckTop * s, deckBottom);
@@ -223,9 +252,9 @@ function semi(context: CanvasRenderingContext2D, column: Column): void {
 }
 
 function drillship(context: CanvasRenderingContext2D, column: Column): void {
-  const { x, surface, reach, scale: s } = column;
+  const { x, surface, scale: s } = column;
   const keel = surface + DRILLSHIP.keel * s;
-  line(context, x, keel, x, reach);
+  riser(context, column, keel);
   context.beginPath();
   context.moveTo(x - DRILLSHIP.stern * s, surface - DRILLSHIP.sternRise * s);
   context.lineTo(x + DRILLSHIP.bow * s, surface - DRILLSHIP.bowRise * s);

@@ -12,7 +12,7 @@ import type { OilRigStore } from '../state';
 import { formatBar, formatDensity, formatMudState, formatOptional } from './format';
 import { MudWindowGraph, depthBucket } from './mudWindowGraph';
 
-const PLANNED_ATTRIBUTE = 'data-planned';
+const PLAN_CHIP = '.chip[data-action="mudPlan"]';
 
 function rockPressure(depth: number, pressure: (depth: number) => number): string {
   return formatOptional(whenInRock(depth, pressure), formatBar);
@@ -22,6 +22,7 @@ export function mountMudControl(root: Document, store: OilRigStore): void {
   const graph = new MudWindowGraph(
     requireElement<HTMLCanvasElement>(root, '[data-view="mud-window"]'),
   );
+  const planChip = requireElement(root, PLAN_CHIP);
   mountRangeWidget(root, store, {
     control: 'mud-weight',
     range: MUD_WEIGHT_RANGE,
@@ -45,7 +46,7 @@ export function mountMudControl(root: Document, store: OilRigStore): void {
     },
     after: ([mudWeight, depth, state, riser, planned], _state, widget) => {
       widget.dataset.mudState = state;
-      widget.toggleAttribute(PLANNED_ATTRIBUTE, planned);
+      planChip.setAttribute('aria-disabled', String(planned));
       graph.draw({ mudWeight, bitDepth: depth, riser, state });
     },
   });
