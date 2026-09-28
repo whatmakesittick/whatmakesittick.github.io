@@ -1,7 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { FINAL_DEPTH_M } from './journey';
-import { LAYER_STOP_IDS, layerStopAt, layerStopDepth, sectionStartDepth } from './stops';
-import { SEABED_DEPTH_M, sectionAt } from './wellPlan';
+import { ROCKS, layerById, porosityAt } from './rocks';
+import {
+  LAYER_STOP_IDS,
+  layerStopAt,
+  layerStopDepth,
+  rockSampleDepth,
+  sectionStartDepth,
+} from './stops';
+import { temperatureAtC } from './temperature';
+import { SEABED_DEPTH_M, layerAt, sectionAt } from './wellPlan';
+
+const BASE = layerById('base');
+const SOURCE_ROCK = layerById('sourceRock');
 
 describe('chapter stops', () => {
   it('starts each hole section just below the shoe above it', () => {
@@ -27,5 +38,20 @@ describe('chapter stops', () => {
     LAYER_STOP_IDS.forEach((id) => expect(layerStopAt(layerStopDepth(id))).toBe(id));
     expect(layerStopAt(3000)).toBeNull();
     expect(layerStopAt(500)).toBeNull();
+  });
+
+  it('shows the source rock below the hole only at its stop', () => {
+    const stop = layerStopDepth('sourceRock');
+    expect(layerAt(stop)?.id).toBe('base');
+    expect(rockSampleDepth(stop)).toBe(SOURCE_ROCK.top);
+    expect(porosityAt(rockSampleDepth(stop))).toBe(ROCKS.sourceRock.porosity);
+    expect(temperatureAtC(rockSampleDepth(stop))).toBeCloseTo(114, 0);
+  });
+
+  it('shows the base rock at the bit anywhere else under the reservoir', () => {
+    const depth = BASE.top + 100;
+    expect(layerStopAt(depth)).toBeNull();
+    expect(rockSampleDepth(depth)).toBe(depth);
+    expect(porosityAt(rockSampleDepth(depth))).toBe(ROCKS.base.porosity);
   });
 });

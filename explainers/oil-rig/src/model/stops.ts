@@ -8,7 +8,7 @@ export const SECTION_IDS: readonly SectionId[] = SECTIONS.map((section) => secti
 export const LAYER_STOP_IDS = ['seal', 'gasCap', 'oil', 'water', 'sourceRock'] as const;
 export type LayerStopId = (typeof LAYER_STOP_IDS)[number];
 
-const RESERVOIR = layerById('reservoir');
+const SOURCE_ROCK = layerById('sourceRock');
 
 const LAYER_STOP_DEPTHS: Record<LayerStopId, number> = {
   seal: layerById('seal').top,
@@ -30,8 +30,12 @@ export function layerStopDepth(id: LayerStopId): number {
 }
 
 export function layerStopAt(depth: number): LayerStopId | null {
-  if (depth >= RESERVOIR.bottom) return 'sourceRock';
+  if (depth >= LAYER_STOP_DEPTHS.sourceRock) return 'sourceRock';
   const fluid = fluidAt(depth);
   if (fluid) return FLUID_STOPS[fluid];
   return layerAt(depth)?.id === 'seal' ? 'seal' : null;
+}
+
+export function rockSampleDepth(depth: number): number {
+  return layerStopAt(depth) === 'sourceRock' ? SOURCE_ROCK.top : depth;
 }
