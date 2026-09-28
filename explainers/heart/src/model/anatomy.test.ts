@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { VALVE_IDS } from '../ids';
+import { PHASE_IDS, VALVE_IDS } from '../ids';
+import type { ValveId, ValveState } from '../ids';
 import {
   AV_VALVES_CLOSE_MS,
   AV_VALVES_OPEN_MS,
   SEMILUNAR_CLOSE_MS,
+  PHASE_RANGES,
   SEMILUNAR_OPEN_MS,
   SOUNDS,
   VALVE_TRANSITION_MS,
@@ -11,8 +13,15 @@ import {
   rightVentriclePressure,
   valveClosesAt,
   valveOpensAt,
+  valveState,
 } from './cycle';
 import { PEAK_PRESSURE_MMHG, valveFacts, valveMoment, valveMotion } from './anatomy';
+
+const OPEN_IN_STATE: Readonly<Record<ValveState, readonly ValveId[]>> = {
+  avOpen: ['tricuspid', 'mitral'],
+  allClosed: [],
+  semilunarOpen: ['pulmonary', 'aortic'],
+};
 
 describe('chamber pressures', () => {
   it('peaks at about 120 mmHg in the left ventricle and a fifth of that in the right', () => {
@@ -71,7 +80,7 @@ describe('valve facts', () => {
     const afterS1 = SOUNDS.s1.start + 5;
     const pulmonaryClose = valveClosesAt('pulmonary');
     expect(valveMoment('mitral', afterS1)).toBe('s1');
-    expect(valveMoment('tricuspid', afterS1)).toBe('s1');
+    expect(valveMoment('tricuspid', valveClosesAt('tricuspid') + 5)).toBe('s1');
     expect(valveMoment('aortic', afterS1)).toBe('shut');
     expect(valveMoment('aortic', SOUNDS.s2.start + 5)).toBe('s2');
     expect(valveMoment('pulmonary', pulmonaryClose - VALVE_TRANSITION_MS.close / 2)).toBe(
@@ -79,5 +88,26 @@ describe('valve facts', () => {
     );
     expect(valveMoment('pulmonary', pulmonaryClose + 5)).toBe('s2');
     expect(valveMoment('mitral', SOUNDS.s1.end + 20)).toBe('shut');
+  });
+
+  it('never calls a valve open while the gauge says it is shut, or the other way round', () => {
+    PHASE_IDS.forEach((phase) => {
+      const start = PHASE_RANGES[phase].start;
+      const open = OPEN_IN_STATE[valveState(start)];
+      VALVE_IDS.forEach((valve) => {
+        const moment = valveMoment(valve, start);
+        const forbidden = open.includes(valve) ? ['shut', 's1', 's2'] : ['open', 'opening'];
+        expect(forbidden, `${valve} at ${phase}`).not.toContain(moment);
+      });
+    });
+  });
+
+  it('starts a valve opening or closing on the very moment its phase begins', () => {
+    expect(valveMoment('aortic', SEMILUNAR_OPEN_MS)).toBe('opening');
+    expect(valveMoment('pulmonary', SEMILUNAR_OPEN_MS)).toBe('opening');
+    expect(valveMoment('mitral', AV_VALVES_OPEN_MS)).toBe('opening');
+    expect(valveMoment('tricuspid', AV_VALVES_OPEN_MS)).toBe('opening');
+    expect(valveMoment('tricuspid', AV_VALVES_CLOSE_MS)).toBe('closing');
+    expect(valveMoment('pulmonary', SEMILUNAR_CLOSE_MS)).toBe('closing');
   });
 });

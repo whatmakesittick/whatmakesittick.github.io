@@ -1,5 +1,5 @@
-import type { ChamberId, HeartSound, ValveId } from '../ids';
-import { heartSound, valveClosesAt, valveOpening, valveOpensAt } from './cycle';
+import type { ChamberId, HeartSound, ValveId, ValveState } from '../ids';
+import { heartSound, valveClosesAt, valveOpening, valveOpensAt, valveState } from './cycle';
 import { VALVES } from './layout';
 
 export interface ValveFacts {
@@ -22,6 +22,12 @@ export const PEAK_PRESSURE_MMHG: Readonly<Record<ChamberId, number>> = {
   leftVentricle: 120,
 };
 
+const OPEN_IN_STATE: Readonly<Record<ValveState, readonly ValveId[]>> = {
+  avOpen: ['tricuspid', 'mitral'],
+  allClosed: [],
+  semilunarOpen: ['pulmonary', 'aortic'],
+};
+
 const CLOSING_SOUND: Readonly<Record<ValveId, HeartSound>> = {
   tricuspid: 's1',
   mitral: 's1',
@@ -38,10 +44,15 @@ export function valveFacts(valve: ValveId): ValveFacts {
   };
 }
 
+function isOpenInPhase(valve: ValveId, time: number): boolean {
+  return OPEN_IN_STATE[valveState(time)].includes(valve);
+}
+
 export function valveMotion(valve: ValveId, time: number): ValveMotion {
   const opening = valveOpening(valve, time);
-  if (opening >= 1) return 'open';
-  if (opening <= 0) return 'shut';
+  const openInPhase = isOpenInPhase(valve, time);
+  if (opening >= 1) return openInPhase ? 'open' : 'closing';
+  if (opening <= 0) return openInPhase ? 'opening' : 'shut';
   return valveOpening(valve, time + MOTION_STEP_MS) > opening ? 'opening' : 'closing';
 }
 

@@ -3,8 +3,10 @@ import { initI18n } from '@core/i18n';
 import { mountActions } from '@core/ui/actions';
 import chapters from '../../chapters.html?raw';
 import en from '../../locales/en.json';
+import { PHASE_IDS, VALVE_IDS } from '../ids';
+import type { ValveId, ValveState } from '../ids';
 import { WAVE_MOMENTS } from '../model';
-import { createHeartStore } from '../state';
+import { createHeartStore, valveStateOf } from '../state';
 import type { HeartStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
 import { mountHeartUi } from '.';
@@ -29,6 +31,12 @@ function pressed(action: string, value: string): string | null | undefined {
     .querySelector(`[data-action="${action}"][data-value="${value}"]`)
     ?.getAttribute('aria-pressed');
 }
+
+const OPEN_IN_STATE: Readonly<Record<ValveState, readonly ValveId[]>> = {
+  avOpen: ['tricuspid', 'mitral'],
+  allClosed: [],
+  semilunarOpen: ['pulmonary', 'aortic'],
+};
 
 describe('chapter widgets', () => {
   let store: HeartStore;
@@ -77,6 +85,20 @@ describe('chapter widgets', () => {
     expect(readout('valve-now')).toBe(en.valves.now.shut);
     store.getState().setPhase(400);
     expect(readout('valve-now')).toBe(en.valves.now.open);
+  });
+
+  it('never contradicts the gauge about a valve when a jump chip lands on a phase', () => {
+    const shut = [en.valves.now.shut, en.valves.sound.s1, en.valves.sound.s2];
+    const open = [en.valves.now.open, en.valves.now.opening];
+    PHASE_IDS.forEach((phase) => {
+      store.getState().jumpToPhase(phase);
+      const gauge = valveStateOf(store.getState());
+      VALVE_IDS.forEach((valve) => {
+        click('valve', valve);
+        const forbidden = OPEN_IN_STATE[gauge].includes(valve) ? shut : open;
+        expect(forbidden, `${valve} at ${phase}`).not.toContain(readout('valve-now'));
+      });
+    });
   });
 
   it('reads the pressures and the flow off the curves at the moment in the beat', () => {
