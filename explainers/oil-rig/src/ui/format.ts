@@ -4,6 +4,8 @@ import type { BitId, MudState } from '../ids';
 import { phaseAt } from '../model';
 import type { FlowState, PhaseId, RigTypeId } from '../model';
 
+export const NO_VALUE = '–';
+
 const PERCENT = 100;
 const DENSITY_DIGITS = 2;
 const TENTHS = 10;
