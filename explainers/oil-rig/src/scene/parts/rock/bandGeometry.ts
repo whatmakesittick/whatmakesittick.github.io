@@ -29,6 +29,7 @@ const BACK: Vec3 = [0, 0, -1];
 const DOWN: Vec3 = [0, -1, 0];
 const SLOPE_STEP = 0.5;
 const SLOT = slotHalfWidth();
+const SLOT_REACH = SLOT + HOLE.plugOverlap;
 
 const faceUv = ([x, y]: Vec3): Uv => [x, y];
 const sideUv = ([, y, z]: Vec3): Uv => [z, y];
@@ -101,8 +102,8 @@ class BandBuilder {
       const high = this.surfaced && from === crestTop ? this.top(0, face) : depthToY(from);
       const low = depthToY(to);
       if (interval.radius < SLOT) {
-        this.slotQuad(interval.radius, SLOT, low, high, face);
-        this.slotQuad(-SLOT, -interval.radius, low, high, face);
+        this.slotQuad(interval.radius, SLOT_REACH, low, high, face);
+        this.slotQuad(-SLOT_REACH, -interval.radius, low, high, face);
       }
       const reach = interval.radius + HOLE.plugOverlap;
       const plug = this.slotQuad(-reach, reach, low, high, face);
@@ -132,7 +133,7 @@ class BandBuilder {
     const from = Math.max(this.band.top(0), TOTAL_DEPTH_M);
     const to = this.band.bottom(0);
     if (to <= from) return;
-    this.slotQuad(-SLOT, SLOT, depthToY(to), depthToY(from), face);
+    this.slotQuad(-SLOT_REACH, SLOT_REACH, depthToY(to), depthToY(from), face);
   }
 
   private faceStrip(xs: number[], z: number, normal: Vec3): void {
