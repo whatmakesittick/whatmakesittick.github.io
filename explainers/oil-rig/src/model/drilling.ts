@@ -1,3 +1,4 @@
+import { clamp } from '@core/math';
 import type { BitId, LayerId } from '../ids';
 import { LAYERS, SECTIONS, STAND_LENGTH_M, isCased, riserLanded, sectionAt } from './wellPlan';
 
@@ -91,7 +92,7 @@ export function buoyancyFactor(mudWeight: number): number {
 }
 
 export function drillStringWeightT(depth: number, mudWeight: number): number {
-  const collars = Math.min(Math.max(0, depth), DRILL_COLLAR_LENGTH_M);
+  const collars = clamp(depth, 0, DRILL_COLLAR_LENGTH_M);
   const pipe = Math.max(0, depth - DRILL_COLLAR_LENGTH_M);
   const airKg = pipe * DRILL_PIPE_KG_PER_M + collars * DRILL_COLLAR_KG_PER_M;
   return (airKg * buoyancyFactor(mudWeight)) / KG_PER_TONNE;

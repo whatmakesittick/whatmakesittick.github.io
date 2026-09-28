@@ -1,4 +1,4 @@
-import { FULL_TURN } from '@core/math';
+import { FULL_TURN, clamp } from '@core/math';
 import { SEAWATER_DENSITY } from './pressure';
 
 export const DRILLING_DRAFT_M = 21;
@@ -32,7 +32,7 @@ const MIN_WATER_DEPTH: Record<Footing, number> = { seabed: 0, floating: DRILLING
 
 function pontoonVolume(draft: number): number {
   const { count, length, width, height } = PONTOON;
-  return count * length * width * Math.min(Math.max(0, draft), height);
+  return count * length * width * clamp(draft, 0, height);
 }
 
 function columnVolume(draft: number): number {

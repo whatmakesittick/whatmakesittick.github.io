@@ -1,6 +1,6 @@
 import { FULL_TURN } from '@core/math';
 import type { FluidId, LayerId } from '../ids';
-import { LAYERS, RESERVOIR_FLUIDS, ROCKS, fluidAt, layerAt, packGrains } from '../model';
+import { ROCKS, layerAt, packGrains, poreFluidAt } from '../model';
 import type { GrainPacking } from '../model';
 import { CANVAS_COLORS } from './canvasColors';
 import { CanvasSurface } from './canvasSurface';
@@ -54,22 +54,21 @@ const HIGHLIGHT = { offset: 0.3, radius: 0.35 } as const;
 
 const SEA_SCENE: PoreScene = { porosity: 1, fluid: 'water', grain: null };
 
-function layerScene(layer: LayerId, fluid: FluidId): PoreScene {
-  return { porosity: ROCKS[layer].porosity, fluid, grain: GRAIN_OF_LAYER[layer] };
-}
+const SCENES = new Map<string, PoreScene>();
 
-const LAYER_SCENES = new Map<LayerId, PoreScene>(
-  LAYERS.map((layer) => [layer.id, layerScene(layer.id, ROCKS[layer.id].fluid)]),
-);
-const RESERVOIR_SCENES = new Map<FluidId, PoreScene>(
-  RESERVOIR_FLUIDS.map((leg) => [leg.id, layerScene('reservoir', leg.id)]),
-);
+function layerScene(layer: LayerId, fluid: FluidId): PoreScene {
+  const key = `${layer}:${fluid}`;
+  const cached = SCENES.get(key);
+  if (cached) return cached;
+  const scene = { porosity: ROCKS[layer].porosity, fluid, grain: GRAIN_OF_LAYER[layer] };
+  SCENES.set(key, scene);
+  return scene;
+}
 
 export function poreSceneAt(depth: number): PoreScene {
   const layer = layerAt(depth);
-  if (!layer) return SEA_SCENE;
-  const fluid = fluidAt(depth);
-  return (fluid && RESERVOIR_SCENES.get(fluid)) || LAYER_SCENES.get(layer.id) || SEA_SCENE;
+  const fluid = poreFluidAt(depth);
+  return layer && fluid ? layerScene(layer.id, fluid) : SEA_SCENE;
 }
 
 function paintGloss(context: CanvasRenderingContext2D, x: number, y: number, radius: number): void {
