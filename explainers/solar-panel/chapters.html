@@ -1,0 +1,521 @@
+<section class="chapter" data-preset="overview" aria-labelledby="overview-title">
+  <p class="chapter-index">01</p>
+  <h2 id="overview-title" data-i18n="sections.overview.title">
+    Electricity from sunlight, with no moving parts
+  </h2>
+  <p data-i18n-html="sections.overview.p1">
+    You are looking at the flat roof of a house on a clear spring day. Three
+    <strong>solar panels</strong> stand in a row on a tilted frame, facing south. The sun rises in
+    the east, climbs until noon and sets in the west. The gauge follows the light on the panels and
+    the power they make: nothing before sunrise, a peak near noon, nothing after sunset. On a clear
+    day like this one, one panel makes about 2.3 to 2.7 kWh. On an average March day at this
+    latitude, with real weather, it makes about 1.8 to 2.1 kWh.
+  </p>
+  <p data-i18n-html="sections.overview.p2">
+    The panel at the left end of the row is the one these chapters open up. It is a typical rooftop
+    panel of the early 2020s, the JinkoSolar Tiger Neo 420 W. It measures 1722 × 1134 mm and weighs
+    22 kg. Under 3.2 mm of glass sit 108 <strong>half cells</strong> of silicon, in a grid 6 across
+    and 18 tall. The panel has no moving parts and stores nothing. It makes electricity only while
+    light falls on it. Newer panels have bigger cells and glass on both sides, but they work the
+    same way.
+  </p>
+  <p data-i18n-html="sections.overview.p3">
+    The label says 420 W. That is the panel's <strong>rated power</strong>, measured in a test sun
+    of 1000 W/m², with the cells held at 25 °C. In that test it turns 21.5 percent of the light into
+    electricity. A real roof is less kind. Here, at 40° north on a clear spring noon, about 970 W/m²
+    reaches the panel, and the cells run far warmer than 25 °C. So it gives about 380 W, 90 percent
+    of its label. Heat costs power, as the last chapter shows.
+  </p>
+  <p data-i18n-html="sections.overview.p4">
+    A panel does <strong>three jobs</strong>. It catches light. It uses that light to free electrons
+    inside its silicon. Then it collects those electrons into a current. A box on the wall, the
+    inverter, turns that current into the kind a house uses. Each chapter below looks at one step.
+    Drag the timeline to move the sun, and change the playback speed to make the day pass faster or
+    slower. Drag the model to turn it. Switch on the sun path, the magnified cell, the electron flow
+    or the labels to see more.
+  </p>
+</section>
+
+<section class="chapter" data-preset="sun" aria-labelledby="sun-title">
+  <p class="chapter-index">02</p>
+  <h2 id="sun-title" data-i18n="sections.sun.title">Leaning toward the noon sun</h2>
+  <p data-i18n-html="sections.sun.p1">
+    The model shows the <strong>equinox</strong>, the day in March or September when day and night
+    are about equally long. At 40° north, about the latitude of Madrid, Philadelphia or Beijing, the
+    sun rises due east at 06:00 solar time and sets due west at 18:00. Solar time follows the sun
+    itself, so noon is the moment it stands highest. Today that is 50° above the southern horizon.
+    The panels face south and lean back toward that noon sun.
+  </p>
+  <p data-i18n-html="sections.sun.p2">
+    Light that hits a surface at a slant spreads over more area, so each square metre gets less.
+    Shine a torch straight at a wall, then tilt it: the spot grows and dims. This is the
+    <strong>cosine law</strong>, and it is why the angle between the sun and the panel matters so
+    much. At noon the sunlight meets this panel almost straight on. Early and late in the day it
+    comes in at a steep slant and spreads thin.
+  </p>
+  <p data-i18n-html="sections.sun.p3">
+    The air matters too. At noon the sunlight crosses 1.3 times as much air as it would with the sun
+    straight overhead. That number is called the <strong>air mass</strong>. Near sunrise and sunset
+    the light takes a far longer path through the air. The air scatters away much of the blue, so a
+    low sun looks orange and red, and far less energy gets through. At noon about 970 W/m² reaches
+    this panel. Lying flat on the roof, or standing upright like a wall, it would get less.
+  </p>
+  <p data-i18n-html="sections.sun.p4">
+    On the equinox the best tilt matches the latitude, 40°, and this panel's 35° is almost as good.
+    Roof panels do not follow the sun: on a house, motors are rarely worth their cost and weight.
+    Some light also comes from the whole sky, not just from the sun's disc. This
+    <strong>diffuse light</strong> is why clouds cut the output but do not stop it. The model shows
+    a textbook clear sky, with no clouds and no cast shadows. Drag the tilt, or jump to three
+    moments of the day.
+  </p>
+  <div class="range-widget tilt-control">
+    <div class="range-widget__header">
+      <label for="tilt" data-i18n="sections.sun.control.label">Panel tilt</label>
+      <output class="number" for="tilt" data-readout="tilt">35°</output>
+    </div>
+    <input id="tilt" type="range" class="range" data-control="tilt" />
+    <div class="range-widget__scale" aria-hidden="true">
+      <span data-i18n="sections.sun.control.flat">Flat on the roof</span>
+      <span data-i18n="sections.sun.control.upright">Upright like a wall</span>
+    </div>
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.sun.control.incidence">Sun off straight-on</dt>
+        <dd class="number" data-readout="tilt-incidence">12°</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.sun.control.irradiance">Light on the panel now</dt>
+        <dd class="number" data-readout="tilt-irradiance">812 W/m²</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.sun.control.day">Whole day at this tilt</dt>
+        <dd class="number" data-readout="tilt-day">2.3 kWh</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.sun.control.flatDay">Whole day if laid flat</dt>
+        <dd class="number" data-readout="tilt-flatDay">1.9 kWh</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="sunrise"
+      data-i18n="controls.momentOptions.sunrise"
+    >
+      Just after sunrise
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="noon"
+      data-i18n="controls.momentOptions.noon"
+    >
+      Solar noon
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="sunset"
+      data-i18n="controls.momentOptions.sunset"
+    >
+      Just before sunset
+    </button>
+  </p>
+</section>
+
+<section class="chapter" data-preset="layers" aria-labelledby="layers-title">
+  <p class="chapter-index">03</p>
+  <h2 id="layers-title" data-i18n="sections.layers.title">A sandwich that is mostly glass</h2>
+  <p data-i18n-html="sections.layers.p1">
+    Pull the panel apart and you find a sandwich, built up from the front. On top is 3.2 mm of
+    <strong>tempered low-iron glass</strong>. Panel makers choose it because it is cheap, strong,
+    stable and very clear. Tempering makes it tough enough to carry snow. The glass has its own
+    anti-reflection coating, so less light bounces off its surface and more of it reaches the cells.
+    Here and in the magnified cell, the thin layers are drawn far thicker than life.
+  </p>
+  <p data-i18n-html="sections.layers.p2">
+    Under the glass lies a clear, sticky film, the <strong>encapsulant</strong>. It is usually a
+    plastic called EVA. In the factory the whole stack is heated, and the film bonds the layers into
+    one sealed block with no air or water inside. Then come the cells: silicon wafers about a
+    seventh of a millimetre thick. Thin wires run across them to carry the current away. This panel
+    uses many thin round wires instead of a few flat strips. Under the cells lies a second film of
+    encapsulant.
+  </p>
+  <p data-i18n-html="sections.layers.p3">
+    The back of the panel is a tough plastic film called the <strong>backsheet</strong>. It keeps
+    out damp and insulates the wiring. An anodised aluminium frame wraps the edges, stiffens the
+    panel and gives the mounting clamps something to grip. On the back sits the junction box, where
+    the wiring comes out to the cables. It also holds three bypass diodes, which the wiring chapter
+    explains. By weight the panel is about three quarters glass. The silicon that does all the work
+    is only a small part of it.
+  </p>
+  <p data-i18n-html="sections.layers.p4">
+    The cells look almost black. Bare silicon is shiny and throws back a lot of light. So the
+    surface of each cell is etched into tiny pyramids and given a thin coat of
+    <strong>silicon nitride</strong>. The thickness of that coat is tuned so it reflects very
+    little, and it also sets the colour you see. Black does not mean better: the all-black version
+    of this panel is rated a little lower. Pull the layers apart, then pick one to see what it is
+    made of and what it does.
+  </p>
+  <div class="range-widget explode-control">
+    <div class="range-widget__header">
+      <label for="explode" data-i18n="sections.layers.control.label">Pull the layers apart</label>
+      <output class="number" for="explode" data-readout="explode">60%</output>
+    </div>
+    <input id="explode" type="range" class="range" data-control="explode" />
+    <div class="range-widget__scale" aria-hidden="true">
+      <span data-i18n="sections.layers.control.assembled">Assembled</span>
+      <span data-i18n="sections.layers.control.exploded">Spread out</span>
+    </div>
+  </div>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="layer"
+      data-value="glass"
+      data-i18n="controls.layerOptions.glass"
+    >
+      Glass
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="layer"
+      data-value="encapsulant"
+      data-i18n="controls.layerOptions.encapsulant"
+    >
+      Encapsulant
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="layer"
+      data-value="cell"
+      data-i18n="controls.layerOptions.cell"
+    >
+      Cells
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="layer"
+      data-value="backsheet"
+      data-i18n="controls.layerOptions.backsheet"
+    >
+      Backsheet
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="layer"
+      data-value="frame"
+      data-i18n="controls.layerOptions.frame"
+    >
+      Frame
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="layer"
+      data-value="junctionBox"
+      data-i18n="controls.layerOptions.junctionBox"
+    >
+      Junction box
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts layer-readouts">
+    <div>
+      <dt data-i18n="sections.layers.thickness">Thickness</dt>
+      <dd class="number" data-readout="layer-thickness">3.2 mm</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.layers.material">Made of</dt>
+      <dd data-readout="layer-material">Tempered low-iron glass</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.layers.job">Its job</dt>
+      <dd data-readout="layer-job">Lets light in, keeps hail and rain out</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="junction" aria-labelledby="junction-title">
+  <p class="chapter-index">04</p>
+  <h2 id="junction-title" data-i18n="sections.junction.title">One photon, one electron</h2>
+  <p data-i18n-html="sections.junction.p1">
+    Light comes in tiny packets of energy called <strong>photons</strong>. When silicon absorbs one,
+    it can shake an electron loose from the bond that held it. The electron is now free to wander
+    through the crystal. It leaves behind a gap called a hole, and the hole wanders too, like a
+    bubble in water. One photon frees at most one electron. In full sun, one half cell frees about 4
+    × 10¹⁹ electrons every second. The magnified cell above the panel shows a slice of one cell at
+    work.
+  </p>
+  <p data-i18n-html="sections.junction.p2">
+    A photon needs at least 1.12 eV to free an electron. That is silicon's
+    <strong>band gap</strong>. The bluer the light, the more energy each photon carries: 3.1 eV at
+    400 nm, 2.1 eV at 600 nm, 1.24 eV at 1000 nm. Beyond about 1100 nm, photons are too weak and
+    pass straight through. That is about 19 percent of the energy in sunlight and a third of its
+    photons. Bluer photons bring more than they need, and the extra turns into heat, about 30
+    percent of sunlight. These two losses are the main reason a cell made of one material cannot get
+    past about 33 percent.
+  </p>
+  <p data-i18n-html="sections.junction.p3">
+    Each colour is caught at its own depth. Blue light at 400 nm is absorbed within the first 0.1
+    µm. Red light at 680 nm reaches about 4.5 µm. Infrared at 1000 nm goes 156 µm, deeper than the
+    whole 140 µm wafer. So the cell relies on <strong>light trapping</strong>: the pyramids send the
+    light in at a slant, and the back of the cell reflects it for a second pass. Silicon's ceiling
+    is 29.4 percent, and the best silicon cell has reached 28.1 percent. A typical new panel reaches
+    about 22 to 23 percent.
+  </p>
+  <p data-i18n-html="sections.junction.p4">
+    Freed electrons and holes must be sorted before they meet again. The cell is built with one
+    layer that lets electrons out but blocks holes, and another that does the opposite. These layers
+    act as <strong>one-way doors</strong>, so electrons pile up on one side and holes on the other.
+    That imbalance is the voltage, about 0.7 V per cell. In this n-type cell the electrons leave
+    through the back, and the holes through the silver fingers on the front. The slice shows one
+    finger and no busbar. Slide through the colours of light and watch where each one stops.
+  </p>
+  <div class="range-widget wavelength-control">
+    <div class="range-widget__header">
+      <label for="wavelength" data-i18n="sections.junction.control.label"
+        >Colour of the light</label
+      >
+      <output class="number" for="wavelength" data-readout="wavelength">600 nm</output>
+    </div>
+    <input id="wavelength" type="range" class="range" data-control="wavelength" />
+    <div class="range-widget__scale" aria-hidden="true">
+      <span data-i18n="sections.junction.control.ultraviolet">Ultraviolet</span>
+      <span data-i18n="sections.junction.control.infrared">Infrared</span>
+    </div>
+    <figure class="spectrum-view">
+      <canvas data-view="spectrum" width="640" height="300" aria-hidden="true"></canvas>
+      <figcaption data-i18n="sections.junction.control.caption">
+        Sunlight at the ground by colour. Amber is what silicon can use, red is energy lost as heat,
+        grey passes straight through.
+      </figcaption>
+    </figure>
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.junction.control.energy">Energy of one photon</dt>
+        <dd class="number" data-readout="wavelength-energy">2.07 eV</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.junction.control.band">This colour is</dt>
+        <dd data-readout="wavelength-band">orange</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.junction.control.depth">Absorbed within</dt>
+        <dd class="number" data-readout="wavelength-depth">2.4 µm</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.junction.control.heat">Left over as heat</dt>
+        <dd class="number" data-readout="wavelength-heat">0.95 eV</dd>
+      </div>
+    </dl>
+  </div>
+  <dl class="range-widget__readouts section-readouts junction-readouts">
+    <div>
+      <dt data-i18n="sections.junction.pairs">
+        Electrons set free per second in one half cell right now
+      </dt>
+      <dd class="number" data-readout="junction-pairs">4.3 × 10¹⁹</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.junction.tooWeak">Sunlight too weak to use</dt>
+      <dd class="number" data-readout="junction-tooWeak">19%</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.junction.heat">Sunlight lost as heat in the cell</dt>
+      <dd class="number" data-readout="junction-heat">32%</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="wiring" aria-labelledby="wiring-title">
+  <p class="chapter-index">05</p>
+  <h2 id="wiring-title" data-i18n="sections.wiring.title">The weakest cell sets the pace</h2>
+  <p data-i18n-html="sections.wiring.p1">
+    One cell gives only about 0.7 V, far too little to run anything. So the cells are wired
+    <strong>in series</strong>, one after another, and their voltages add up. This panel has 54
+    positions in a line, which gives 38.1 V with nothing connected and 31.5 V at its best working
+    point. The same current flows through every position, about 13.3 A at full power in the test
+    sun. The electrons themselves only drift, about a millimetre per second or less. What moves fast
+    is the energy.
+  </p>
+  <p data-i18n-html="sections.wiring.p2">
+    A chain is only as strong as its weakest link. If one cell is shaded, it makes less current and
+    holds back every cell in its line. The sunny cells can even force current through it backwards,
+    turning their power into heat in that one cell: a hot spot. So the junction box holds three
+    <strong>bypass diodes</strong>, each guarding a third of the panel. In full sun they stay off.
+    When shade holds a third back too much, its diode switches on and lets the current flow around
+    it, losing about 0.4 V. One fully shaded cell then costs about a third of the power, not all of
+    it.
+  </p>
+  <p data-i18n-html="sections.wiring.p3">
+    This panel uses <strong>half-cut cells</strong>. The two halves of each cell are wired side by
+    side, in parallel, so the 108 half cells still make 54 positions in series. The voltage stays
+    the same, and each half carries half the current, so less power is lost as heat in the wires.
+    The big gain comes when shade creeps up from the bottom edge. Each third of the panel has an
+    upper and a lower string, and the upper strings keep working, with about half the power. An
+    older 60-cell panel, drawn here at the same size, keeps almost none, because all three of its
+    thirds reach into the shade.
+  </p>
+  <p data-i18n-html="sections.wiring.p4">
+    The chart plots the panel's current against its voltage. With nothing connected, the voltage is
+    highest and no current flows. Join the two wires together, and the current is highest while the
+    voltage drops to zero. Power is the two multiplied, and it peaks at one spot on the bend of the
+    curve, the <strong>maximum power point</strong>. The inverter holds the panel there. Shade puts
+    steps in the curve and can give it more than one peak. In a real panel the wiring runs behind
+    the cells; here each string is a coloured line on the front. Pick a layout and let the shadow
+    creep up.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="layout"
+      data-value="halfCut"
+      data-i18n="controls.layoutOptions.halfCut"
+    >
+      108 half cells
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="layout"
+      data-value="fullCell"
+      data-i18n="controls.layoutOptions.fullCell"
+    >
+      60 full cells
+    </button>
+  </p>
+  <div class="range-widget shade-control">
+    <div class="range-widget__header">
+      <label for="shade" data-i18n="sections.wiring.control.label"
+        >Shadow creeping up the panel</label
+      >
+      <output class="number" for="shade" data-readout="shade">0%</output>
+    </div>
+    <input id="shade" type="range" class="range" data-control="shade" />
+    <div class="range-widget__scale" aria-hidden="true">
+      <span data-i18n="sections.wiring.control.clear">Clear</span>
+      <span data-i18n="sections.wiring.control.covered">Fully covered</span>
+    </div>
+    <figure class="iv-view">
+      <canvas data-view="iv-curve" width="640" height="320" aria-hidden="true"></canvas>
+      <figcaption data-i18n="sections.wiring.control.caption">
+        Current against voltage for the whole panel. The dot is where the inverter runs it. The
+        faint curve is the panel without shade.
+      </figcaption>
+    </figure>
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.wiring.control.cells">Cells in shadow</dt>
+        <dd class="number" data-readout="shade-cells">0 of 108</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.wiring.control.diodes">Bypass diodes working</dt>
+        <dd class="number" data-readout="shade-diodes">0 of 3</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.wiring.control.power">Power now</dt>
+        <dd class="number" data-readout="shade-power">312 W</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.wiring.control.loss">Lost to the shadow</dt>
+        <dd class="number" data-readout="shade-loss">0%</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="chapter" data-preset="inverter" aria-labelledby="inverter-title">
+  <p class="chapter-index">06</p>
+  <h2 id="inverter-title" data-i18n="sections.inverter.title">From the roof to the wall socket</h2>
+  <p data-i18n-html="sections.inverter.p1">
+    The panel makes direct current, DC, which flows one way only. A house runs on alternating
+    current, AC, which swings back and forth many times a second. The box on the wall, the
+    <strong>inverter</strong>, turns one into the other. It neither makes power nor stores it. It
+    passes on about 96 percent of what comes in and loses the rest as a little heat. The amber dots
+    show the flow: direct current from the panel to the inverter, then alternating current on to the
+    meter and into the house.
+  </p>
+  <p data-i18n-html="sections.inverter.p2">
+    The inverter also keeps the panel at its best. The maximum power point moves all day: the
+    voltage shifts with the cell temperature, and the current with the light. So the inverter feels
+    its way there, a trick called <strong>maximum power point tracking</strong>. It nudges the
+    voltage a little and checks the power. If the power rose, it nudges again the same way. If it
+    fell, it turns back. Like a walker climbing a hill in fog, it stays close to the top.
+  </p>
+  <p data-i18n-html="sections.inverter.p3">
+    Heat is a panel's enemy. For every degree above 25 °C, this panel loses 0.29 percent of its
+    power. That figure is its <strong>temperature coefficient</strong>. Older PERC panels lose 0.35
+    percent. On a sunny day the cells run at about 45 to 65 °C, the main reason this clear spring
+    noon gives about 380 W and not 420. A hot summer roof costs even more. So a cold, clear day
+    beats a hot one: panels run on light, not heat. The model's air follows a mild spring day.
+  </p>
+  <p data-i18n-html="sections.inverter.p4">
+    The energy from one clear spring day could run a fridge for nearly 2 days, or charge a laptop
+    about 40 times. In a year at this latitude it makes about 600 to 700 kWh. Each kilowatt of
+    panels yields about 1000 kWh a year in London or Berlin and 1800 in Phoenix. The
+    <strong>warranty</strong> promises 87.4 percent of the power after 30 years. A panel repays the
+    energy used to make it in about a year and emits about 40 g of CO₂ per kWh over its life. In
+    2025 solar made about 8.7 percent of the world's electricity. Drag the temperature, or let it
+    follow the day.
+  </p>
+  <div class="range-widget temperature-control">
+    <div class="range-widget__header">
+      <label for="temperature" data-i18n="sections.inverter.control.label">Cell temperature</label>
+      <output class="number" for="temperature" data-readout="temperature">41 °C</output>
+    </div>
+    <input id="temperature" type="range" class="range" data-control="temperature" />
+    <div class="range-widget__scale" aria-hidden="true">
+      <span data-i18n="sections.inverter.control.cold">Freezing</span>
+      <span data-i18n="sections.inverter.control.hot">Hot summer roof</span>
+    </div>
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.inverter.control.loss">Power versus a 25 °C cell</dt>
+        <dd class="number" data-readout="temperature-loss">−4.8%</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.inverter.control.voltage">Open-circuit voltage</dt>
+        <dd class="number" data-readout="temperature-voltage">37.1 V</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="followDay"
+      data-i18n="sections.inverter.control.follow"
+    >
+      Follow the day again
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts inverter-readouts">
+    <div>
+      <dt data-i18n="sections.inverter.dc">Into the inverter</dt>
+      <dd class="number" data-readout="inverter-dc">312 W</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.inverter.ac">Out to the house</dt>
+      <dd class="number" data-readout="inverter-ac">303 W</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.inverter.today">Energy so far today</dt>
+      <dd class="number" data-readout="inverter-today">1.24 kWh</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.inverter.powers">Laptop charges from today's energy</dt>
+      <dd class="number" data-readout="inverter-powers">23</dd>
+    </div>
+  </dl>
+</section>
