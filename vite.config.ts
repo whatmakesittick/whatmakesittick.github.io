@@ -7,6 +7,7 @@ const TEST_SUFFIX = '.test.ts';
 const DOM_TEST_SUFFIX = '.dom.test.ts';
 const testFiles = (suffix: string) => TEST_ROOTS.map((root) => `${root}/**/*${suffix}`);
 const SHARED_MODULES = /[\\/](?:node_modules|src[\\/]core)[\\/]|^\0vite\//;
+const FONT_FILE = /\.woff2?$/;
 
 export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
@@ -16,6 +17,7 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 700,
+    assetsInlineLimit: (filePath) => (FONT_FILE.test(filePath) ? false : undefined),
     rolldownOptions: {
       output: {
         codeSplitting: {
