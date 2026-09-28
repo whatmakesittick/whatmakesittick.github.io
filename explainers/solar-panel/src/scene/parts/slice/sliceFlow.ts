@@ -52,7 +52,7 @@ const EXIT_HEIGHT = -um(SLICE_VIEW.exitUm);
 const EDGE = um(SLICE_FLOW.edgeMarginUm);
 const HOLE_COLOR = new Color(THEME.hole);
 const WHITE = new Color('#ffffff');
-const HOT_CORE = 0.55;
+const HOT_CORE = 0.35;
 const ELECTRON_COLOR = new Color(THEME.electron);
 
 export class SliceFlowPart {
