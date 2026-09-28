@@ -442,7 +442,6 @@ export const FLOW = {
   loss: { count: 150, speed: 5 },
   oil: { count: 1100, speed: 24, size: 1.6 },
   inflow: { count: 220, speed: 2.4, size: 1.4 },
-  cuttingsEvery: 4,
   seed: 7,
 } as const;
 

@@ -34,7 +34,6 @@ export const PAINT = {
   containerRed: '#b5483b',
   mark: '#f4f4f0',
   topDrive: '#c9412f',
-  hose: '#2b2b2b',
   conductor: '#4b5661',
   surfaceCasing: '#6f8092',
   intermediateCasing: '#9fb2c4',
@@ -53,7 +52,6 @@ export const FINISHES = {
   paintedMetal: { color: '#ffffff', vertexColors: true, metalness: 0.5, roughness: 0.42 },
   steel: { color: THEME.steel, metalness: 0.62, roughness: 0.4 },
   instanced: { color: '#ffffff', metalness: 0.45, roughness: 0.45 },
-  darkSteel: { color: PAINT.darkSteel, metalness: 0.55, roughness: 0.45 },
   pipe: {
     color: '#ffffff',
     vertexColors: true,
