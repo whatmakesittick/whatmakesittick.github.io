@@ -1,6 +1,7 @@
 import type { CanvasTexture } from 'three';
 import type { LayoutId } from '../../../ids';
 import { LAYOUTS, MODULE } from '../../../model';
+import { BUSBARS } from '../../constants';
 import { PAINT } from '../../finishes';
 import { GRID, LAMINATE, cellHeight, cellRects } from '../../geometry/moduleLayout';
 import { canvasTexture } from '../canvas';
@@ -11,11 +12,23 @@ const FINGERS_PER_CELL_HEIGHT_CM = 2.4;
 const FINGER_LINE = 1;
 const SHEEN = { top: 'rgba(90, 120, 200, 0.10)', bottom: 'rgba(0, 0, 0, 0.18)' } as const;
 const MODULE_TEXTURE_HEIGHT = 1024;
-const MODULE_BUSBARS = 10;
-const MODULE_BUSBAR_LINE = 1;
+const BUSBAR_LINE = 1;
+const BUSBAR_TINT = 'rgba(213, 217, 222, 0.5)';
 const RIBBON = { margin: 0.6, width: 0.4 } as const;
 
-function paintCellFace(fingers: number): Painter {
+function paintBusbars(
+  context: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  count: number,
+): void {
+  context.fillStyle = BUSBAR_TINT;
+  for (let bar = 0; bar < count; bar += 1) {
+    context.fillRect(((bar + 1 / 2) / count) * width, 0, BUSBAR_LINE, height);
+  }
+}
+
+function paintCellFace(fingers: number, busbars: number): Painter {
   return (context, width, height) => {
     context.fillStyle = PAINT.cell;
     context.fillRect(0, 0, width, height);
@@ -29,6 +42,7 @@ function paintCellFace(fingers: number): Painter {
       const y = ((index + 0.5) / fingers) * height;
       context.fillRect(0, y, width, FINGER_LINE);
     }
+    paintBusbars(context, width, height, busbars);
   };
 }
 
@@ -39,7 +53,11 @@ export function cellFaceTexture(
 ): CanvasTexture {
   const height = Math.round((CELL_TEXTURE_WIDTH * cellHeightCm) / cellWidthCm);
   const fingers = Math.round(cellHeightCm * FINGERS_PER_CELL_HEIGHT_CM);
-  const texture = canvasTexture(CELL_TEXTURE_WIDTH, height, paintCellFace(fingers));
+  const texture = canvasTexture(
+    CELL_TEXTURE_WIDTH,
+    height,
+    paintCellFace(fingers, BUSBARS[layout].count),
+  );
   texture.name = `cell-${layout}`;
   return texture;
 }
@@ -51,7 +69,10 @@ function paintModuleFace(context: CanvasRenderingContext2D, width: number, heigh
   const toY = (y: number) => (MODULE.height - (MODULE.height - LAMINATE.height) / 2 - y) * scaleY;
   context.fillStyle = PAINT.backsheet;
   context.fillRect(0, 0, width, height);
-  const face = paintCellFace(Math.round(FINGERS_PER_CELL_HEIGHT_CM * cellHeight(LAYOUTS.halfCut)));
+  const face = paintCellFace(
+    Math.round(FINGERS_PER_CELL_HEIGHT_CM * cellHeight(LAYOUTS.halfCut)),
+    BUSBARS.halfCut.count,
+  );
   cellRects(LAYOUTS.halfCut).forEach((rect) => {
     const left = toX(rect.x[0]);
     const top = toY(rect.y[1]);
@@ -60,15 +81,6 @@ function paintModuleFace(context: CanvasRenderingContext2D, width: number, heigh
     context.save();
     context.translate(left, top);
     face(context, cellWidth, cellHeight);
-    context.fillStyle = PAINT.busbar;
-    for (let bar = 0; bar < MODULE_BUSBARS; bar += 1) {
-      context.fillRect(
-        ((bar + 0.5) / MODULE_BUSBARS) * cellWidth,
-        0,
-        MODULE_BUSBAR_LINE,
-        cellHeight,
-      );
-    }
     context.restore();
   });
   context.fillStyle = PAINT.ribbon;

@@ -1,5 +1,5 @@
 import { BoxGeometry, Color, Group, InstancedMesh, Matrix4 } from 'three';
-import type { MeshStandardMaterial, Object3D } from 'three';
+import type { Mesh, MeshStandardMaterial, Object3D } from 'three';
 import { lerp } from '@core/math';
 import { anchorAt } from '@core/scene/parts';
 import type { LayoutId } from '../../../ids';
@@ -41,6 +41,7 @@ interface LayoutVariant {
   rects: CellRect[];
   cells: InstancedMesh;
   face: Group;
+  busbars: Mesh;
   overlay: StringOverlayPart;
   front: MeshStandardMaterial;
 }
@@ -140,6 +141,12 @@ export class CellSheetPart {
     });
   }
 
+  setDetail(close: boolean): void {
+    LAYOUT_IDS.forEach((id) => {
+      this.variants[id].busbars.visible = close;
+    });
+  }
+
   setOverlayVisible(visible: boolean): void {
     LAYOUT_IDS.forEach((id) => {
       this.variants[id].overlay.object.visible = visible;
@@ -178,14 +185,15 @@ export class CellSheetPart {
     });
     const face = new Group();
     const overlay = new StringOverlayPart(context, layout);
+    const busbars = partMesh(context, busbarGeometry(layout), 'busbar', 'busbar');
     face.add(
-      partMesh(context, busbarGeometry(layout), 'busbar', 'busbar'),
+      busbars,
       partMesh(context, ribbonGeometry(layout), 'ribbon', 'ribbon'),
       overlay.object,
     );
     this.object.add(cells);
     this.face.add(face);
-    return { layout, rects, cells, face, overlay, front };
+    return { layout, rects, cells, face, busbars, overlay, front };
   }
 
   private placeAnchors(): Record<'cell' | 'busbar' | 'ribbon' | 'bypassDiode', Object3D> {

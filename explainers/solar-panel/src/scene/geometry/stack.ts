@@ -1,5 +1,5 @@
 import { lerp, toRadians } from '@core/math';
-import { CELL, HINGE, MODULE, MODULE_SPEC, mm } from '../../model';
+import { HINGE, MODULE, MODULE_SPEC, mm } from '../../model';
 import { FRAME_LIP_THICKNESS_CM } from './moduleLayout';
 
 export const STACK_LAYER_IDS = [
@@ -12,15 +12,13 @@ export const STACK_LAYER_IDS = [
 
 export type StackLayerId = (typeof STACK_LAYER_IDS)[number];
 
-const MICROMETRES_PER_MM = 1000;
-const ENCAPSULANT_CM = 0.05;
-const BACKSHEET_CM = 0.035;
+const DEPTH_SAFE_CM = { backsheet: 0.1, encapsulant: 0.15, cellSheet: 0.08 } as const;
 
 const THICKNESS: Readonly<Record<StackLayerId, { closed: number; open: number }>> = {
-  backsheet: { closed: BACKSHEET_CM, open: 2 },
-  rearEncapsulant: { closed: ENCAPSULANT_CM, open: 2.5 },
-  cellSheet: { closed: mm(CELL.thicknessUm / MICROMETRES_PER_MM), open: 2 },
-  frontEncapsulant: { closed: ENCAPSULANT_CM, open: 2.5 },
+  backsheet: { closed: DEPTH_SAFE_CM.backsheet, open: 2 },
+  rearEncapsulant: { closed: DEPTH_SAFE_CM.encapsulant, open: 2.5 },
+  cellSheet: { closed: DEPTH_SAFE_CM.cellSheet, open: 2 },
+  frontEncapsulant: { closed: DEPTH_SAFE_CM.encapsulant, open: 2.5 },
   glass: { closed: mm(MODULE_SPEC.glassMm), open: 4 },
 };
 

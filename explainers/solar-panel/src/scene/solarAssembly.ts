@@ -6,7 +6,7 @@ import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, RegionId, ViewOptions } from '../ids';
 import { MODULE, sunDirection } from '../model';
 import type { Assembly, AssemblyResources } from './assembly';
-import { CELL_VIEW_DIRECTION, FLOW, RAYS, SLICE_FLOW } from './constants';
+import { CELL_VIEW_DIRECTION, DETAIL_DISTANCE_CM, FLOW, RAYS, SLICE_FLOW } from './constants';
 import { cutSide, photonPath } from './geometry/sliceMotion';
 import type { CutSide } from './geometry/sliceMotion';
 import { ArrayPart } from './parts/array/array';
@@ -83,6 +83,7 @@ export class SolarAssembly implements Assembly {
   private readonly faceTargets = rayTargets();
   private state: AssemblyState | null = null;
   private side: CutSide = -1;
+  private close: boolean | null = null;
 
   constructor(resources: AssemblyResources, state: AssemblyState) {
     this.materials = resources.materials;
@@ -151,6 +152,11 @@ export class SolarAssembly implements Assembly {
 
   update(deltaSeconds: number, cameraDistance: number): void {
     const pointSize = clamp(cameraDistance * FLOW.sizePerDistance, FLOW.minSize, FLOW.maxSize);
+    const close = cameraDistance < DETAIL_DISTANCE_CM;
+    if (close !== this.close) {
+      this.close = close;
+      this.array.hero.setDetail(close);
+    }
     this.sun.update(deltaSeconds);
     this.meter.update(deltaSeconds);
     this.cables.update(deltaSeconds, pointSize);

@@ -12,6 +12,7 @@ import { finishMesh, partMesh } from '../context';
 import type { PartContext } from '../context';
 
 const FACE_LIFT_CM = 0.01;
+const BACKSHEET_GAP_CM = 0.3;
 
 export function createPlainModule(context: PartContext, face: MaterialFinish): Group {
   const layers = stackLayout(0);
@@ -22,7 +23,12 @@ export function createPlainModule(context: PartContext, face: MaterialFinish): G
   const module = new Group();
   module.add(
     partMesh(context, moduleFrameGeometry(), STRUCTURE_GROUP, 'frame'),
-    partMesh(context, block(x, y, [back, cellFront - FACE_LIFT_CM]), STRUCTURE_GROUP, 'backsheet'),
+    partMesh(
+      context,
+      block(x, y, [back, cellFront - BACKSHEET_GAP_CM]),
+      STRUCTURE_GROUP,
+      'backsheet',
+    ),
     finishMesh(context, block(x, y, [cellFront - FACE_LIFT_CM, cellFront]), STRUCTURE_GROUP, face),
     partMesh(
       context,

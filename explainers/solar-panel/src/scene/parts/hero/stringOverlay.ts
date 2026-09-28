@@ -11,8 +11,15 @@ import { diodeWire, diodeX, diodeY, stringPaths } from '../../geometry/strings';
 import { finishMesh, registered, registeredMesh } from '../context';
 import type { PartContext } from '../context';
 
+const LINE_OFFSET = -3;
+
 function lineMaterial(color: string): MeshBasicMaterial {
-  return new MeshBasicMaterial({ color });
+  return new MeshBasicMaterial({
+    color,
+    polygonOffset: true,
+    polygonOffsetFactor: LINE_OFFSET,
+    polygonOffsetUnits: LINE_OFFSET,
+  });
 }
 
 function diodeSymbol(x: number, y: number): ShapeGeometry {

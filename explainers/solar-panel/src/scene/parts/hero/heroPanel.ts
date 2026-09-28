@@ -167,6 +167,10 @@ export class HeroPanelPart {
     this.cells.setWarmth(share * CELL_WARMTH.maxGlow);
   }
 
+  setDetail(close: boolean): void {
+    this.cells.setDetail(close);
+  }
+
   setOverlayVisible(visible: boolean): void {
     this.cells.setOverlayVisible(visible);
   }
