@@ -1,0 +1,276 @@
+{
+  "meta": {
+    "title": "Comment fonctionne le cœur",
+    "eyebrow": "Cœur humain",
+    "tagline": "Un muscle de la taille de votre poing se contracte environ une fois par seconde et pousse le sang dans deux circuits, avec quatre portes à sens unique pour qu’il avance toujours dans le bon sens.",
+    "description": "Un cœur en 3D qui bat au ralenti et s’ouvre en coupe : cavités, valves, courbe de pression, stimulateur naturel et ce qui change quand vous courez.",
+    "summary": "Quatre cavités, quatre valves, la courbe de pression, le stimulateur intérieur et ce qui se passe quand vous courez.",
+    "socialAlt": "Modèle 3D low poly d’un cœur humain ouvert en coupe pour montrer ses quatre cavités et ses valves, avec l’aorte et le tronc pulmonaire au-dessus, à côté du titre « Comment fonctionne le cœur »"
+  },
+  "stage": {
+    "label": "Modèle interactif du cœur",
+    "gauge": "Mesures du cœur en direct"
+  },
+  "controls": {
+    "label": "Commandes du cœur",
+    "views": {
+      "cutaway": {
+        "name": "Vue en coupe",
+        "short": "Coupe",
+        "hint": "Vue en coupe (C)"
+      },
+      "flow": {
+        "name": "Circulation du sang",
+        "short": "Sang",
+        "hint": "Circulation du sang (F)"
+      },
+      "conduction": {
+        "name": "Système électrique",
+        "short": "Signal",
+        "hint": "Système électrique (E)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    },
+    "chamberOptions": {
+      "rightAtrium": "Oreillette droite",
+      "rightVentricle": "Ventricule droit",
+      "leftAtrium": "Oreillette gauche",
+      "leftVentricle": "Ventricule gauche"
+    },
+    "valveOptions": {
+      "tricuspid": "Tricuspide",
+      "pulmonary": "Pulmonaire",
+      "mitral": "Mitrale",
+      "aortic": "Aortique"
+    },
+    "waveOptions": {
+      "p": "Onde P",
+      "qrs": "QRS",
+      "t": "Onde T"
+    },
+    "fitnessOptions": {
+      "typical": "Adulte ordinaire",
+      "athlete": "Sportif d’endurance"
+    }
+  },
+  "timeline": {
+    "label": "Moment du battement",
+    "phases": "Aller à un moment du battement",
+    "speed": "Lecture",
+    "value": "{{time}} après le début du battement, {{phase}}",
+    "realTime": "Temps réel",
+    "slower": "{{factor}} fois plus lent qu’en réalité",
+    "phase": {
+      "atria": "Contraction des oreillettes",
+      "squeeze": "Montée de pression",
+      "eject": "Sortie du sang",
+      "relax": "Chute de pression",
+      "fill": "Remplissage rapide",
+      "rest": "Remplissage lent"
+    },
+    "during": {
+      "atria": "les oreillettes finissent de remplir les ventricules",
+      "squeeze": "les ventricules se contractent, toutes valves fermées",
+      "eject": "le sang sort par l’aorte et le tronc pulmonaire",
+      "relax": "les ventricules se relâchent, toutes valves fermées",
+      "fill": "le sang afflue dans les ventricules",
+      "rest": "les ventricules se remplissent lentement"
+    },
+    "jump": {
+      "atria": "Aller à la contraction des oreillettes",
+      "squeeze": "Aller à la montée de pression",
+      "eject": "Aller à la sortie du sang",
+      "relax": "Aller à la chute de pression",
+      "fill": "Aller au remplissage rapide",
+      "rest": "Aller au remplissage lent"
+    }
+  },
+  "readouts": {
+    "lvPressure": "Pression du ventricule gauche",
+    "aorticPressure": "Pression dans l’aorte",
+    "lvVolume": "Volume du ventricule gauche",
+    "valves": "Valves",
+    "signal": "Signal électrique"
+  },
+  "parts": {
+    "rightAtrium": "Oreillette droite",
+    "rightVentricle": "Ventricule droit",
+    "leftAtrium": "Oreillette gauche",
+    "leftVentricle": "Ventricule gauche",
+    "septum": "Septum",
+    "wall": "Muscle cardiaque",
+    "apex": "Pointe du cœur",
+    "tricuspidValve": "Valve tricuspide",
+    "pulmonaryValve": "Valve pulmonaire",
+    "mitralValve": "Valve mitrale",
+    "aorticValve": "Valve aortique",
+    "chordae": "Cordages et muscles papillaires",
+    "aorta": "Aorte",
+    "archBranches": "Artères de la tête et des bras",
+    "pulmonaryTrunk": "Tronc pulmonaire",
+    "pulmonaryArteries": "Artères pulmonaires",
+    "superiorVenaCava": "Veine cave supérieure",
+    "inferiorVenaCava": "Veine cave inférieure",
+    "pulmonaryVeins": "Veines pulmonaires",
+    "coronaries": "Artères coronaires",
+    "sinusNode": "Nœud sinusal",
+    "avNode": "Nœud AV",
+    "bundleBranches": "Branches du faisceau de His",
+    "purkinjeFibres": "Fibres de Purkinje",
+    "venousBlood": "Sang pauvre en oxygène",
+    "arterialBlood": "Sang riche en oxygène"
+  },
+  "valves": {
+    "state": {
+      "avOpen": "Mitrale et tricuspide ouvertes",
+      "allClosed": "Les quatre fermées",
+      "semilunarOpen": "Aortique et pulmonaire ouvertes"
+    },
+    "now": {
+      "open": "ouverte",
+      "shut": "fermée",
+      "opening": "en train de s’ouvrir",
+      "closing": "en train de se fermer"
+    },
+    "between": {
+      "tricuspid": "l’oreillette droite et le ventricule droit",
+      "pulmonary": "le ventricule droit et le tronc pulmonaire",
+      "mitral": "l’oreillette gauche et le ventricule gauche",
+      "aortic": "le ventricule gauche et l’aorte"
+    },
+    "sound": {
+      "s1": "le premier bruit du cœur",
+      "s2": "le deuxième bruit du cœur"
+    }
+  },
+  "chambers": {
+    "receives": {
+      "rightAtrium": "du corps, par les deux veines caves",
+      "rightVentricle": "de l’oreillette droite",
+      "leftAtrium": "des poumons, par les quatre veines pulmonaires",
+      "leftVentricle": "de l’oreillette gauche"
+    },
+    "sends": {
+      "rightAtrium": "vers le ventricule droit",
+      "rightVentricle": "vers les poumons, par le tronc pulmonaire",
+      "leftAtrium": "vers le ventricule gauche",
+      "leftVentricle": "vers tout le corps, par l’aorte"
+    },
+    "wall": {
+      "rightAtrium": "fine",
+      "rightVentricle": "environ un tiers de celle du ventricule gauche",
+      "leftAtrium": "fine",
+      "leftVentricle": "6 à 9 mm"
+    },
+    "role": {
+      "rightAtrium": "recueillir le sang du corps et finir de remplir le ventricule droit",
+      "rightVentricle": "pomper le sang en douceur à travers les poumons",
+      "leftAtrium": "recueillir le sang des poumons et finir de remplir le ventricule gauche",
+      "leftVentricle": "pomper le sang avec force dans tout le corps"
+    }
+  },
+  "signal": {
+    "sinusNode": "Nœud sinusal",
+    "atria": "Oreillettes",
+    "avNode": "Retenu au nœud AV",
+    "bundle": "Faisceau de His",
+    "branches": "Branches du faisceau",
+    "purkinje": "Fibres de Purkinje",
+    "ventricles": "Parois des ventricules",
+    "recovering": "Ventricules en récupération",
+    "quiet": "Calme jusqu’au prochain battement"
+  },
+  "units": {
+    "ms": "{{value}} ms",
+    "mmHg": "{{value}} mmHg",
+    "ml": "{{value}} mL",
+    "mlPerSecond": "{{value}} mL/s",
+    "mv": "{{value}} mV",
+    "mm": "{{value}} mm",
+    "mmRange": "{{from}} à {{to}} mm",
+    "perMinute": "{{value}} par minute",
+    "litres": "{{value}} L",
+    "litresPerMinute": "{{value}} L/min",
+    "seconds": "{{value}} s",
+    "percent": "{{value}} %",
+    "resting": "Au repos"
+  },
+  "sections": {
+    "overview": {
+      "title": "Deux pompes dans un muscle gros comme le poing",
+      "p1": "Serrez le poing. Votre <strong>cœur</strong> a à peu près cette taille : environ 12 cm de long, 8 de large et 6 d’épaisseur, pour 250 à 350 g environ. Il se trouve au milieu de la poitrine, derrière le sternum, entre les deux poumons. Il est incliné : environ deux tiers de son volume se trouvent à gauche de l’axe du corps, et sa pointe, l’apex, est tournée vers le bas et vers la gauche. Au repos, un cœur en bonne santé bat environ 60 à 100 fois par minute. Dans une étude menée sur 92 000 adultes équipés d’un bracelet connecté, la moyenne tournait autour de 65.",
+      "p2": "Dans un exemple typique, chaque battement chasse environ 70 mL de sang. Au repos, cela fait environ 5 litres par minute, soit à peu près tout le sang que contient votre corps. En moyenne, votre sang fait donc le tour complet du corps environ une fois par minute, et votre cœur bat environ 100 000 fois par jour. En réalité, le cœur, ce sont <strong>deux pompes</strong> côte à côte. Le côté droit envoie le sang dans les poumons, où il se charge en oxygène. Le côté gauche l’envoie ensuite dans tout le reste du corps.",
+      "p3": "Chaque pompe a deux cavités. Une <strong>oreillette</strong> reçoit le sang qui arrive, et un ventricule le chasse. Quatre valves à sens unique font avancer le sang dans le bon sens. Le modèle montre un seul battement au repos, à 75 battements par minute, très ralenti. Il prend quelques raccourcis. Le sang pauvre en oxygène est dessiné en bleu, comme dans la plupart des livres d’anatomie, mais en réalité il est rouge foncé. Les oreillettes se trouvent plutôt derrière les ventricules qu’au-dessus. Et les vaisseaux s’arrêtent à une largeur de main du cœur. Faites glisser la barre du temps pour parcourir le battement. Faites glisser le modèle pour le tourner.",
+      "p4": "On entend souvent dire que le cœur ne se repose jamais. En fait, il se repose à chaque battement. Au repos, les ventricules ne passent qu’environ deux cinquièmes de chaque battement à se contracter. Pendant les trois cinquièmes restants, le muscle se relâche et le cœur se remplit à nouveau. Cette phase de relâchement s’appelle la <strong>diastole</strong>, et la contraction, la systole. Il n’existe pas non plus de pouls normal unique. Dans l’étude des bracelets connectés, le rythme au repos allait d’environ 40 à plus de 100. Entre deux personnes en bonne santé, l’écart de pouls normal pouvait atteindre 70 battements par minute."
+    },
+    "chambers": {
+      "title": "Quatre cavités, deux pressions",
+      "p1": "Le modèle est maintenant coupé à plat et vu de face. C’est la vue des manuels, qui montre les quatre cavités d’un seul coup d’œil. Le cœur vous fait face : son côté droit est donc à votre gauche. Le sang qui a cédé son oxygène revient du corps par deux grosses veines, les veines caves. Elles se jettent dans l’<strong>oreillette droite</strong>. De là, le sang passe dans le ventricule droit, qui le pousse vers les poumons, tout proches. Il faut peu de force pour cela : sa pression culmine à environ 25 mmHg.",
+      "p2": "Le sang revient des poumons chargé d’oxygène, par quatre veines pulmonaires qui arrivent dans l’oreillette gauche. De là, il passe dans le <strong>ventricule gauche</strong>, la cavité la plus puissante. Celle-ci doit envoyer le sang dans tout le corps, du cerveau jusqu’aux orteils. Sa pression monte jusqu’à environ 120 mmHg, soit environ cinq fois celle du côté droit. Sa paroi est donc environ trois fois plus épaisse que celle du ventricule droit, en général 6 à 9 mm. La différence se voit bien sur la coupe.",
+      "p3": "Une paroi musculaire, le <strong>septum</strong>, sépare les deux côtés : le sang riche et le sang pauvre en oxygène ne se mélangent pas. Les deux ventricules déplacent la même quantité, environ 70 mL par battement dans un exemple typique. Si un côté pompait un tout petit peu plus pendant longtemps, le sang s’accumulerait derrière l’autre. L’essentiel du remplissage se fait tout seul : le sang traverse les oreillettes et coule dans les ventricules relâchés. À la fin, les oreillettes se contractent et ajoutent un petit complément, jusqu’à environ un cinquième au repos, davantage quand le cœur s’emballe. Touchez une cavité pour voir d’où vient son sang et où il va.",
+      "p4": "Comment chaque côté sait-il combien pomper ? Rien ne le lui dicte. Le muscle cardiaque suit une règle simple, le <strong>mécanisme de Frank-Starling</strong> : plus un ventricule se remplit, plus il se contracte fort. Le sang supplémentaire étire les cellules musculaires. Étirées, elles tirent plus fort, et le ventricule expulse ce surplus. Ce qui entre ressort donc, battement après battement. Cette règle est inscrite dans le muscle lui-même. Les sportifs d’endurance en profitent bien plus que les personnes non entraînées : leur cœur se remplit davantage, donc il pompe davantage.",
+      "receives": "Le sang arrive",
+      "sends": "Le sang repart",
+      "wall": "Épaisseur de la paroi",
+      "pressure": "Pression maximale",
+      "role": "Son rôle"
+    },
+    "valves": {
+      "title": "Quatre portes à sens unique",
+      "p1": "Entre chaque oreillette et son ventricule se trouve une valve faite de fines membranes, les feuillets. À droite, c’est la valve tricuspide, avec trois feuillets. À gauche, c’est la <strong>valve mitrale</strong>, avec deux. Quand le ventricule se contracte, la pression qui monte referme les feuillets. De fins cordons, les cordages tendineux, relient leurs bords à de petits muscles de la paroi du ventricule, les muscles papillaires. Ils se tendent pendant la contraction. Ainsi, les feuillets ne peuvent pas se retourner dans l’oreillette comme un parapluie par grand vent.",
+      "p2": "Les sorties ont un autre type de valve. La valve pulmonaire ouvre la route des poumons, la <strong>valve aortique</strong> celle du corps. Chacune a trois feuillets en forme de petites poches. Quand le sang jaillit, les poches se plaquent contre la paroi. Quand le ventricule se relâche et que le sang commence à refluer, il remplit les poches. Elles se referment d’un coup et se rejoignent au centre. Le modèle montre les quatre valves dans une seule coupe, pour plus de clarté. Dans un vrai cœur, la valve pulmonaire est plus haute et plus en avant.",
+      "p3": "Aucune valve n’a de muscle à elle. Chacune s’ouvre quand la pression est plus forte derrière elle que devant, et se ferme quand c’est l’inverse. En claquant, les valves produisent les <strong>bruits du cœur</strong>, le « toum-ta » que le médecin entend au stéthoscope. Toum, le premier bruit, c’est la fermeture des valves mitrale et tricuspide, au début de la contraction. Ta, le second, c’est la fermeture des valves aortique et pulmonaire, à la fin. Ces bruits viennent donc des valves, pas du muscle. Touchez une valve : la caméra la suit pendant tout le battement.",
+      "p4": "Écoutez bien : chaque bruit est en réalité double. La valve mitrale se ferme environ 40 ms avant la tricuspide, un écart trop court pour l’entendre au stéthoscope. La valve aortique, elle aussi, se ferme juste avant la valve pulmonaire. Cet écart, appelé <strong>dédoublement</strong> du deuxième bruit, varie avec la respiration, et même quand vous changez de position. Un cœur d’adulte en bonne santé ne produit que ces deux bruits. Un troisième bruit est normal chez l’enfant. Chez l’adulte, c’est souvent le signe d’une maladie.",
+      "between": "Située entre",
+      "leaflets": "Feuillets",
+      "opens": "S’ouvre à",
+      "closes": "Se ferme à",
+      "now": "En ce moment"
+    },
+    "cycle": {
+      "title": "Un battement, étape par étape",
+      "p1": "Le graphique suit le côté gauche pendant un battement. Au départ, le ventricule est relâché et déjà bien rempli. Les oreillettes se contractent et le complètent jusqu’à environ 120 mL. Puis le ventricule commence à se contracter. La valve mitrale se ferme, et pendant un instant les quatre valves sont closes. Le sang ne peut aller nulle part : le volume ne change pas, mais la pression grimpe d’environ 10 à environ 80 mmHg. Cette phase porte un nom savant, la <strong>contraction isovolumétrique</strong> : une contraction à volume constant.",
+      "p2": "Vers 80 mmHg, la pression du ventricule dépasse celle de l’aorte, et la valve aortique s’ouvre. Le sang jaillit à une vitesse qui peut atteindre environ 1 m/s, et la pression culmine vers 120 mmHg. En un peu moins de 0,3 s, le ventricule chasse environ 70 mL, et environ 50 mL restent à l’intérieur. Chaque battement ne vide donc qu’un peu plus de la moitié du ventricule, environ 55 à 65 %. Cette part s’appelle la <strong>fraction d’éjection</strong>. Les courbes sont des formes typiques de manuel, pas les mesures d’une vraie personne, et les cœurs mesurés contiennent souvent davantage.",
+      "p3": "Quand la contraction faiblit, le sang commence à refluer et la valve aortique claque. C’est elle qui creuse la petite encoche de la courbe aortique. Les quatre valves sont de nouveau fermées, et la pression chute pendant 0,07 s au plus. Dès qu’elle passe sous celle de l’oreillette, la valve mitrale s’ouvre et le sang afflue, vite d’abord, puis lentement. L’aorte est élastique : elle se dilate à chaque poussée et se resserre entre deux. Sa pression ne descend donc qu’à environ 80. Ce maximum et ce minimum forment votre <strong>tension artérielle</strong> : 120 sur 80, ou « 12/8 » comme on dit souvent.",
+      "p4": "Le muscle cardiaque a son propre réseau sanguin : les <strong>artères coronaires</strong>, qui courent à sa surface. Mais un muscle qui se contracte comprime ses propres vaisseaux. L’essentiel de ce sang circule donc entre les battements, quand le muscle se relâche. Or, quand le cœur accélère, c’est surtout la phase de relâchement qui raccourcit. À 75 battements par minute, le cœur reste relâché environ 33 secondes par minute. À 150, il n’en a plus qu’environ 22. Doubler le rythme réduit donc d’environ un tiers le temps dont le cœur dispose pour se nourrir. Cela compte surtout quand les artères coronaires sont rétrécies.",
+      "caption": "Pression dans le ventricule gauche, l’aorte et l’oreillette gauche au cours d’un battement, avec le volume du ventricule gauche en dessous. La ligne indique où en est le modèle.",
+      "ventricle": "Ventricule gauche",
+      "aorta": "Aorte",
+      "atrium": "Oreillette gauche",
+      "flow": "Débit à travers la valve aortique"
+    },
+    "conduction": {
+      "title": "Une étincelle qui naît à l’intérieur",
+      "p1": "Chaque battement naît dans le cœur lui-même, pas dans le cerveau. En haut de la paroi de l’oreillette droite se trouve un petit amas de cellules spéciales, le <strong>nœud sinusal</strong>. Livré à lui-même, il déclencherait environ 100 battements par minute. Mais le nerf vague le freine toute la journée et le ramène à 60 à 80 au repos. Les nerfs et les hormones comme l’adrénaline ne font qu’accélérer ou ralentir ce rythme. Même la respiration s’en mêle. Chaque inspiration desserre un instant le frein du nerf vague. Si vous êtes en bonne santé, votre pouls accélère donc un peu à chaque inspiration et ralentit à chaque expiration.",
+      "p2": "Chaque fois que le nœud se déclenche, une onde électrique parcourt les deux oreillettes en environ 90 ms, et elles se contractent. Sur le tracé, c’est la petite bosse appelée onde P. Puis l’onde rencontre un anneau de tissu fibreux qu’elle ne peut pas traverser, sauf par une seule porte : le <strong>nœud AV</strong>, pour nœud auriculo-ventriculaire. C’est la partie la plus lente du circuit, environ 0,05 m/s. Il retient le signal environ un dixième de seconde. Ainsi, les oreillettes finissent de se vider avant que les ventricules ne se contractent.",
+      "p3": "Après le nœud, le signal descend par le faisceau de His et ses deux branches, une de chaque côté du septum, à environ 2 m/s. Un éventail de fibres, les <strong>fibres de Purkinje</strong>, le répand ensuite sur les parois internes à environ 4 m/s, environ 80 fois plus vite que dans le nœud. Toute la paroi des ventricules est activée en moins d’un dixième de seconde : c’est le grand pic du tracé, appelé QRS. Le signal atteint d’abord la pointe, si bien que la contraction pousse le sang vers le haut, vers les sorties. Puis les parois récupèrent, et cela se voit sur le tracé : c’est l’onde T.",
+      "p4": "Un <strong>cœur greffé</strong> montre à quel point le cœur se débrouille seul. Il arrive sans aucun nerf relié, et pourtant il bat. Sans nerf vague pour le freiner, il bat plus vite que la normale au repos. À l’effort, il accélère quand même, mais plus lentement, à mesure que l’adrénaline et d’autres hormones proches lui arrivent par le sang. Chez 40 à 70 % des patients, certains nerfs repoussent, des mois ou des années plus tard. Le cœur a aussi des stimulateurs de secours. Si le nœud sinusal tombe en panne, le nœud AV prend le relais, à environ 40 à 60 battements par minute.",
+      "caption": "Le tracé électrique d’un battement, tel qu’un électrocardiogramme l’enregistrerait sur la peau. La ligne indique où en est le modèle.",
+      "where": "Où est le signal",
+      "since": "Depuis le déclenchement du nœud",
+      "trace": "Tracé en ce moment"
+    },
+    "circulation": {
+      "title": "Deux circuits, et ce que la course change",
+      "p1": "Suivez une goutte de sang. Le ventricule droit l’envoie par les artères pulmonaires dans les poumons, où elle se charge en oxygène. Elle revient par les veines pulmonaires dans le côté gauche, qui la renvoie par l’aorte vers le corps. Puis elle regagne le côté droit par les veines caves. Il y a donc <strong>deux circuits</strong> à la suite, la petite et la grande circulation, et le cœur fait tourner les deux à la fois. Une artère, c’est un vaisseau qui éloigne le sang du cœur, riche en oxygène ou non : les artères pulmonaires transportent du sang pauvre en oxygène. Au repos, une goutte fait le tour en environ une minute.",
+      "p2": "Poussez maintenant le curseur de l’effort. Chez un adulte de 25 ans, le rythme passe d’environ 75 à près de 190 battements par minute, et chaque battement chasse davantage de sang. Le rythme multiplié par le volume de chaque battement donne le <strong>débit cardiaque</strong>, le sang pompé chaque minute. Il passe d’environ 5 litres au repos à environ 20 lors d’un effort intense. La contraction raccourcit un peu, mais le temps de remplissage fond bien plus. Quand le rythme double, la contraction perd moins d’un tiers de sa durée, et le remplissage environ deux tiers. Regardez la part bleue du graphique rétrécir.",
+      "p3": "Tout ce travail a un coût. Le cœur se nourrit par ses artères coronaires : environ 250 mL de sang par minute au repos, soit environ 5 % de ce qu’il pompe. Il consomme environ un dixième de l’oxygène utilisé par votre corps. Sa <strong>puissance de pompage</strong> reste pourtant modeste : environ 1 W pour le côté gauche. Au cours d’une vie, il bat environ 3 milliards de fois. C’est beaucoup pour un mammifère. Toutes espèces confondues, une vie de mammifère compte en gros un milliard de battements, à un facteur dix près. Le cœur d’une baleine bleue en plongée ne bat que 2 à 8 fois par minute.",
+      "p4": "L’entraînement d’endurance transforme le cœur. Le ventricule gauche devient plus spacieux, environ 55 mm de large chez les athlètes hommes contre environ 48 mm chez les personnes non entraînées, et sa paroi s’épaissit légèrement. Ce <strong>cœur d’athlète</strong> est une adaptation saine. Chaque battement déplace plus de sang, et le rythme au repos descend vers 50, près de 30 chez les cyclistes d’élite. À fond, ce cœur peut pomper près de 30 litres par minute. Le record est d’environ 42, avec environ 210 mL par battement. Pourtant, son rythme maximal n’est pas plus élevé que celui des autres. Touchez le sportif d’endurance pour comparer. Et « 220 moins votre âge » n’est qu’une estimation grossière, qui peut se tromper d’environ 10 battements dans un sens ou dans l’autre.",
+      "control": {
+        "label": "Intensité de l’effort",
+        "rest": "Assis, immobile",
+        "max": "Sprint à fond",
+        "caption": "Un battement au repos en haut, un battement à cet effort en bas. Le rouge, c’est la contraction ; le bleu, le temps qui reste pour se remplir.",
+        "rate": "Fréquence cardiaque",
+        "stroke": "Sang par battement",
+        "output": "Sang par minute",
+        "filling": "Temps de remplissage par battement",
+        "trip": "Une goutte fait le tour du corps en"
+      }
+    }
+  }
+}
