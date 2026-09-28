@@ -170,9 +170,19 @@ export const RAYS = {
   opacity: 0.3,
 } as const;
 
+export const FACE_RELIEF = {
+  sink: 0.1,
+  screen: 0.05,
+  stripe: 0.15,
+  led: 0.5,
+  window: 0.15,
+  lcd: 0.25,
+  cover: 0.6,
+} as const;
+
 export const INVERTER_BODY = {
   radius: 1.6,
-  bracket: { inset: 3, depth: 1.2 },
+  finInset: 3,
   display: { width: 12, height: 6.5, y: 9, texture: { width: 256, height: 128 } },
   led: { size: 1.4, y: 3, z: 6 },
   stripe: { height: 1.2, y: -14 },
@@ -185,7 +195,7 @@ export const METER_BODY = {
   window: { width: 14, height: 9, y: 6 },
   screen: { width: 9, height: 3, y: 7 },
   led: { size: 1, y: 2.5, z: 5 },
-  cover: { height: 10, y: -9 },
+  cover: { height: 10, y: -9, inset: 1 },
 } as const;
 
 export const SLICE_VIEW = {

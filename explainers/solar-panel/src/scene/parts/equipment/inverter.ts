@@ -3,7 +3,7 @@ import type { CanvasTexture, Mesh, Object3D } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { anchorAt } from '@core/scene/parts';
 import { INVERTER } from '../../../model';
-import { ANCHOR_LIFT_CM, INVERTER_BODY } from '../../constants';
+import { ANCHOR_LIFT_CM, FACE_RELIEF, INVERTER_BODY } from '../../constants';
 import { FINISHES } from '../../finishes';
 import { around, block } from '../../geometry/blocks';
 import { mergeParts } from '../../geometry/merge';
@@ -50,7 +50,7 @@ function fins() {
       const y = BOTTOM_Y + inset + ((height - 2 * inset) * index) / (count - 1);
       pieces.push(
         block(
-          [WALL_X + INVERTER_BODY.bracket.inset, FRONT_X - INVERTER_BODY.bracket.inset],
+          [WALL_X + INVERTER_BODY.finInset, FRONT_X - INVERTER_BODY.finInset],
           around(y, thickness),
           side > 0 ? [face, face + depth] : [face - depth, face],
         ),
@@ -84,12 +84,16 @@ export class InverterPart {
     this.display = context.tracker.track(powerDisplayTexture());
     const screen = new PlaneGeometry(display.width, display.height);
     screen.rotateY(QUARTER_TURN);
-    screen.translate(FRONT_X + 0.05, INVERTER.position.y + display.y, INVERTER.position.z);
+    screen.translate(
+      FRONT_X + FACE_RELIEF.screen,
+      INVERTER.position.y + display.y,
+      INVERTER.position.z,
+    );
     const screenMaterial = new MeshBasicMaterial({ map: this.display, toneMapped: false });
     this.led = finishMesh(
       context,
       block(
-        [FRONT_X - 0.2, FRONT_X + 0.5],
+        [FRONT_X - FACE_RELIEF.sink, FRONT_X + FACE_RELIEF.led],
         around(INVERTER.position.y + led.y, led.size),
         around(INVERTER.position.z + led.z, led.size),
       ),
@@ -103,7 +107,7 @@ export class InverterPart {
       partMesh(
         context,
         block(
-          [FRONT_X - 0.1, FRONT_X + 0.15],
+          [FRONT_X - FACE_RELIEF.sink, FRONT_X + FACE_RELIEF.stripe],
           around(INVERTER.position.y + stripe.y, stripe.height),
           around(INVERTER.position.z, INVERTER.size.width - 2 * INVERTER_BODY.radius),
         ),

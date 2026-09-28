@@ -3,7 +3,7 @@ import type { Mesh, Object3D } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { anchorAt } from '@core/scene/parts';
 import { METER, MODULE_SPEC } from '../../../model';
-import { ANCHOR_LIFT_CM, METER_BODY } from '../../constants';
+import { ANCHOR_LIFT_CM, FACE_RELIEF, METER_BODY } from '../../constants';
 import { FINISHES } from '../../finishes';
 import { around, block } from '../../geometry/blocks';
 import { finishMesh, partMesh } from '../context';
@@ -39,7 +39,7 @@ function body(): RoundedBoxGeometry {
 
 function facePanel(width: number, height: number, y: number, lift: number) {
   return block(
-    [FRONT_X - 0.1, FRONT_X + lift],
+    [FRONT_X - FACE_RELIEF.sink, FRONT_X + lift],
     around(METER.position.y + y, height),
     around(METER.position.z, width),
   );
@@ -59,7 +59,7 @@ export class MeterPart {
     this.led = finishMesh(
       context,
       block(
-        [FRONT_X, FRONT_X + 0.4],
+        [FRONT_X - FACE_RELIEF.sink, FRONT_X + FACE_RELIEF.led],
         around(METER.position.y + led.y, led.size),
         around(METER.position.z + led.z, led.size),
       ),
@@ -68,16 +68,21 @@ export class MeterPart {
     );
     this.object.add(
       partMesh(context, body(), 'meter', 'meter'),
-      partMesh(context, facePanel(window.width, window.height, window.y, 0.15), 'meter', 'window'),
       partMesh(
         context,
-        facePanel(screen.width, screen.height, screen.y, 0.25),
+        facePanel(window.width, window.height, window.y, FACE_RELIEF.window),
         'meter',
-        'meterCover',
+        'window',
       ),
       partMesh(
         context,
-        facePanel(METER.size.width - 2, cover.height, cover.y, 0.6),
+        facePanel(screen.width, screen.height, screen.y, FACE_RELIEF.lcd),
+        'meter',
+        'lcd',
+      ),
+      partMesh(
+        context,
+        facePanel(METER.size.width - 2 * cover.inset, cover.height, cover.y, FACE_RELIEF.cover),
         'meter',
         'meterCover',
       ),

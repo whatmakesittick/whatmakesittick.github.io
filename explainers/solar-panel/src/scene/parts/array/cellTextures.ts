@@ -39,7 +39,7 @@ function paintCellFace(fingers: number, busbars: number): Painter {
     context.fillRect(0, 0, width, height);
     context.fillStyle = PAINT.fingerLine;
     for (let index = 0; index < fingers; index += 1) {
-      const y = ((index + 0.5) / fingers) * height;
+      const y = ((index + 1 / 2) / fingers) * height;
       context.fillRect(0, y, width, FINGER_LINE);
     }
     paintBusbars(context, width, height, busbars);

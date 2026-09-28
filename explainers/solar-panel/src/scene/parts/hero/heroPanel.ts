@@ -38,6 +38,7 @@ const LABEL_HEIGHT = {
   frame: 0.28,
 } as const;
 const GLASS_LABEL_X = 0.28;
+const MIN_OUTLINE_POINTS = 3;
 
 function slab(): ReturnType<typeof block> {
   return block(LAMINATE_X, LAMINATE_Y, [0, 1]);
@@ -142,8 +143,9 @@ export class HeroPanelPart {
   setShade(shade: number): void {
     this.cells.setShade(shade);
     const outline = shadePolygon(shade);
-    this.shadeBand.mesh.visible = outline.length > 2;
-    if (outline.length > 2) {
+    const shaded = outline.length >= MIN_OUTLINE_POINTS;
+    this.shadeBand.mesh.visible = shaded;
+    if (shaded) {
       this.shadeBand.swap(
         new ShapeGeometry(new Shape(outline.map(({ x, y }) => new Vector2(x, y)))),
       );

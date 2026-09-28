@@ -76,6 +76,7 @@ const LABEL_X: Readonly<Record<SlicePartId, number>> = {
 const QUARTER_TURN = Math.PI / 2;
 const EIGHTH_TURN = Math.PI / 4;
 const PYRAMID_SIDES = 4;
+const XYZ = 3;
 
 export class SliceBlockPart {
   readonly object = new Group();
@@ -161,7 +162,7 @@ export class SliceBlockPart {
       'position',
       new Float32BufferAttribute(
         [corner.x, corner.y, face, corner.x, corner.y, face + SLICE_LIFT_CM],
-        3,
+        XYZ,
       ),
     );
     const size = SLICE_VIEW.marker;
@@ -183,7 +184,7 @@ export class SliceBlockPart {
           corner.y - size,
           face,
         ],
-        3,
+        XYZ,
       ),
     );
     return [

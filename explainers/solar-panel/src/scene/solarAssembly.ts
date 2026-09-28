@@ -47,6 +47,31 @@ function sameFlags(previous: readonly boolean[], next: readonly boolean[]): bool
   return previous.length === next.length && previous.every((flag, index) => flag === next[index]);
 }
 
+type FlagKey = 'deadStrings' | 'activeDiodes';
+
+class StateChanges {
+  private readonly previous: AssemblyState | null;
+  private readonly next: AssemblyState;
+
+  constructor(previous: AssemblyState | null, next: AssemblyState) {
+    this.previous = previous;
+    this.next = next;
+  }
+
+  any(...keys: (keyof AssemblyState)[]): boolean {
+    const previous = this.previous;
+    return !previous || keys.some((key) => previous[key] !== this.next[key]);
+  }
+
+  flags(key: FlagKey): boolean {
+    return !this.previous || this.any('layout') || !sameFlags(this.previous[key], this.next[key]);
+  }
+
+  view(key: ViewKey): boolean {
+    return !this.previous || this.previous.view[key] !== this.next.view[key];
+  }
+}
+
 function rayTargets(): Vector3[] {
   const targets: Vector3[] = [];
   const width = MODULE.width * (1 - 2 * RAYS.inset);
@@ -120,34 +145,12 @@ export class SolarAssembly implements Assembly {
   }
 
   setState(state: AssemblyState): void {
-    const previous = this.state;
+    const changes = new StateChanges(this.state, state);
     this.state = snapshot(state);
-    const changed = <K extends keyof AssemblyState>(key: K) =>
-      !previous || previous[key] !== state[key];
-    const viewChanged = (key: ViewKey) => !previous || previous.view[key] !== state.view[key];
-    if (changed('tilt')) this.applyTilt(state.tilt);
-    if (changed('tilt') || changed('explode'))
-      this.array.hero.setExplode(state.explode, state.tilt);
-    if (changed('minute')) this.applyMinute(state.minute);
-    if (changed('minute') || changed('tilt')) {
-      this.aimRays(state);
-      this.aimPhotons(state);
-    }
-    if (changed('wavelength')) this.sliceFlow.setWavelength(state.wavelength);
-    if (changed('irradiance')) this.sliceFlow.setIrradiance(state.irradiance);
-    if (changed('layout')) this.array.hero.setLayout(state.layout);
-    if (changed('shade')) this.array.hero.setShade(state.shade);
-    if (changed('layout') || !previous || !sameFlags(previous.deadStrings, state.deadStrings)) {
-      this.array.hero.setDeadStrings(state.deadStrings);
-    }
-    if (changed('layout') || !previous || !sameFlags(previous.activeDiodes, state.activeDiodes)) {
-      this.array.hero.setActiveDiodes(state.activeDiodes);
-    }
-    if (changed('cellTemperature')) this.array.hero.setCellTemperature(state.cellTemperature);
-    if (changed('power')) this.applyPower(state.power);
-    if (viewChanged('sun')) this.sun.setPathVisible(state.view.sun);
-    if (viewChanged('slice')) this.slice.object.visible = state.view.slice;
-    if (viewChanged('flow')) this.applyFlow(state.view.flow);
+    this.applyPose(changes, state);
+    this.applyPanel(changes, state);
+    this.applySignals(changes, state);
+    this.applyViews(changes, state.view);
   }
 
   update(deltaSeconds: number, cameraDistance: number): void {
@@ -203,6 +206,37 @@ export class SolarAssembly implements Assembly {
     this.root.removeFromParent();
     this.materials.clearRegistered();
     this.tracker.dispose();
+  }
+
+  private applyPose(changes: StateChanges, state: AssemblyState): void {
+    if (changes.any('tilt')) this.applyTilt(state.tilt);
+    if (changes.any('tilt', 'explode')) this.array.hero.setExplode(state.explode, state.tilt);
+    if (changes.any('minute')) this.applyMinute(state.minute);
+    if (changes.any('minute', 'tilt')) {
+      this.aimRays(state);
+      this.aimPhotons(state);
+    }
+  }
+
+  private applyPanel(changes: StateChanges, state: AssemblyState): void {
+    const hero = this.array.hero;
+    if (changes.any('layout')) hero.setLayout(state.layout);
+    if (changes.any('shade')) hero.setShade(state.shade);
+    if (changes.flags('deadStrings')) hero.setDeadStrings(state.deadStrings);
+    if (changes.flags('activeDiodes')) hero.setActiveDiodes(state.activeDiodes);
+    if (changes.any('cellTemperature')) hero.setCellTemperature(state.cellTemperature);
+  }
+
+  private applySignals(changes: StateChanges, state: AssemblyState): void {
+    if (changes.any('wavelength')) this.sliceFlow.setWavelength(state.wavelength);
+    if (changes.any('irradiance')) this.sliceFlow.setIrradiance(state.irradiance);
+    if (changes.any('power')) this.applyPower(state.power);
+  }
+
+  private applyViews(changes: StateChanges, view: ViewOptions): void {
+    if (changes.view('sun')) this.sun.setPathVisible(view.sun);
+    if (changes.view('slice')) this.slice.object.visible = view.slice;
+    if (changes.view('flow')) this.applyFlow(view.flow);
   }
 
   private applyTilt(tilt: number): void {

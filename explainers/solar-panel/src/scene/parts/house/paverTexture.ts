@@ -10,6 +10,9 @@ const SPECKLES = 900;
 const SPECKLE_ALPHA = 0.06;
 const TILE_SHADE = 0.05;
 const SEED = 17;
+const SPECKLE_SPLIT = 0.5;
+const CHANNEL_MAX = 255;
+const SPECKLE_PX = 1.5;
 
 export const PAVER_TILES_PER_TEXTURE = TILES;
 
@@ -39,9 +42,9 @@ export function paverTexture(): CanvasTexture {
       }
     }
     for (let index = 0; index < SPECKLES; index += 1) {
-      const shade = random() > 0.5 ? 255 : 0;
+      const shade = random() > SPECKLE_SPLIT ? CHANNEL_MAX : 0;
       context.fillStyle = `rgba(${shade}, ${shade}, ${shade}, ${SPECKLE_ALPHA})`;
-      context.fillRect(random() * width, random() * width, 1.5, 1.5);
+      context.fillRect(random() * width, random() * width, SPECKLE_PX, SPECKLE_PX);
     }
   });
 }

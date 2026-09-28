@@ -175,6 +175,7 @@ export const FINISHES = {
   meter: { color: PAINT.meter, roughness: 0.5, metalness: 0.05 },
   meterCover: { color: PAINT.meterCover, roughness: 0.55, metalness: 0.05 },
   window: { color: PAINT.window, roughness: 0.15, metalness: 0.2 },
+  lcd: { color: PAINT.screen, roughness: 0.3, metalness: 0 },
   brand: { color: PAINT.brand, roughness: 0.5, metalness: 0 },
   ledOff: { color: PAINT.ledOff, roughness: 0.4, metalness: 0 },
   ledGreen: {
