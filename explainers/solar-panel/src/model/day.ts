@@ -29,7 +29,7 @@ export const SUN_MOMENTS: Record<SunMomentId, number> = {
   sunset: 750,
 };
 
-const AMBIENT = { meanC: 16, swingC: 6, warmestMinute: 900 } as const;
+const AMBIENT = { meanC: 15, swingC: 5, warmestMinute: 900 } as const;
 
 export function minuteOfDay(phase: number): number {
   return DAY_START_MIN + phase;

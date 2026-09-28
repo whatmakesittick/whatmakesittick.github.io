@@ -54,7 +54,7 @@ describe('minuteOfDay', () => {
 
 describe('ambientTemperatureC', () => {
   it('is warmest mid afternoon and coolest before dawn', () => {
-    expect(ambientTemperatureC(900)).toBeCloseTo(22);
+    expect(ambientTemperatureC(900)).toBeCloseTo(20);
     expect(ambientTemperatureC(180)).toBeCloseTo(10);
     expect(ambientTemperatureC(720)).toBeGreaterThan(ambientTemperatureC(SUNRISE_MIN));
   });

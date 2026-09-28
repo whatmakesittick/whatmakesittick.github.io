@@ -8,6 +8,7 @@ export const DECLINATION_DEG = 0;
 export const MINUTES_PER_HOUR_ANGLE_DEG = 4;
 export const SOLAR_CONSTANT_W_M2 = 1353;
 export const DIFFUSE_SHARE = 0.1;
+export const GROUND_ALBEDO = 0.2;
 
 const RIGHT_ANGLE_DEG = 90;
 const FULL_TURN_DEG = 360;
@@ -75,16 +76,25 @@ export function directNormalIrradiance(elevationDeg: number): number {
 export interface IrradianceParts {
   direct: number;
   diffuse: number;
+  ground: number;
   total: number;
 }
 
-export function irradianceParts(minute: number, tiltDeg: number): IrradianceParts {
+export function globalHorizontalIrradiance(minute: number): number {
   const elevation = sunElevationDeg(minute);
   const normal = directNormalIrradiance(elevation);
-  const skyView = (1 + Math.cos(toRadians(tiltDeg))) / 2;
+  return normal * Math.sin(toRadians(Math.max(0, elevation))) + DIFFUSE_SHARE * normal;
+}
+
+export function irradianceParts(minute: number, tiltDeg: number): IrradianceParts {
+  const normal = directNormalIrradiance(sunElevationDeg(minute));
+  const tilt = toRadians(tiltDeg);
+  const skyView = (1 + Math.cos(tilt)) / 2;
+  const groundView = (1 - Math.cos(tilt)) / 2;
   const direct = normal * incidenceCosine(minute, tiltDeg);
-  const diffuse = DIFFUSE_SHARE * normal * Math.sin(toRadians(Math.max(0, elevation))) * skyView;
-  return { direct, diffuse, total: direct + diffuse };
+  const diffuse = DIFFUSE_SHARE * normal * skyView;
+  const ground = globalHorizontalIrradiance(minute) * GROUND_ALBEDO * groundView;
+  return { direct, diffuse, ground, total: direct + diffuse + ground };
 }
 
 export function planeOfArrayIrradiance(minute: number, tiltDeg: number): number {

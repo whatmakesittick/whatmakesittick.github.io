@@ -4,6 +4,7 @@ import {
   LATITUDE_DEG,
   airMass,
   directNormalIrradiance,
+  globalHorizontalIrradiance,
   hourAngleDeg,
   incidenceAngleDeg,
   incidenceCosine,
@@ -67,14 +68,16 @@ describe('clear sky', () => {
     expect(airMass(50)).toBeCloseTo(1.3, 1);
   });
 
-  it('gives about nine hundred watts per square metre at noon on the tilted panel', () => {
-    const noon = planeOfArrayIrradiance(SOLAR_NOON_MIN, TILT);
-    expect(noon).toBeGreaterThan(900);
-    expect(noon).toBeLessThan(980);
-    expect(planeOfArrayIrradiance(SOLAR_NOON_MIN, 0)).toBeLessThan(noon);
-    expect(planeOfArrayIrradiance(SOLAR_NOON_MIN, RIGHT_ANGLE)).toBeLessThan(
-      planeOfArrayIrradiance(SOLAR_NOON_MIN, 0),
-    );
+  it('matches the facts sheet table at noon for the roof, a flat panel and a wall', () => {
+    expect(planeOfArrayIrradiance(SOLAR_NOON_MIN, TILT)).toBeCloseTo(973, -1);
+    expect(planeOfArrayIrradiance(SOLAR_NOON_MIN, 0)).toBeCloseTo(764, -1);
+    expect(planeOfArrayIrradiance(SOLAR_NOON_MIN, RIGHT_ANGLE)).toBeCloseTo(687, -1);
+    expect(globalHorizontalIrradiance(SOLAR_NOON_MIN)).toBeCloseTo(764, -1);
+  });
+
+  it('matches the facts sheet table in the morning', () => {
+    expect(planeOfArrayIrradiance(SOLAR_NOON_MIN - 180, TILT)).toBeCloseTo(636, -1);
+    expect(planeOfArrayIrradiance(SOLAR_NOON_MIN - 300, TILT)).toBeCloseTo(167, -1);
   });
 
   it('is dark before sunrise and after sunset', () => {
@@ -83,10 +86,12 @@ describe('clear sky', () => {
     expect(irradianceParts(SUNSET_MIN + 10, TILT).total).toBe(0);
   });
 
-  it('adds a small diffuse share to the direct beam', () => {
+  it('adds a small diffuse share and a ground bounce to the direct beam', () => {
     const parts = irradianceParts(SOLAR_NOON_MIN, TILT);
     expect(parts.diffuse).toBeGreaterThan(0);
     expect(parts.diffuse).toBeLessThan(parts.direct * 0.15);
-    expect(parts.total).toBeCloseTo(parts.direct + parts.diffuse);
+    expect(parts.ground).toBeLessThan(parts.diffuse);
+    expect(parts.total).toBeCloseTo(parts.direct + parts.diffuse + parts.ground);
+    expect(irradianceParts(SOLAR_NOON_MIN, 0).ground).toBe(0);
   });
 });
