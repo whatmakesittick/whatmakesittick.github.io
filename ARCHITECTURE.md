@@ -482,7 +482,11 @@ pages" no longer means "used by two explainers".
 The generated `<slug>/main.ts` imports the explainer's `en.json` and passes
 `mountExplainer` a loader per shipped language: `en` resolves the bundled copy,
 every other language is a dynamic `import()`, so Vite emits one chunk per language
-and the page chunk carries English only.
+and the page chunk carries English only. Vite preloads static imports only, so at
+build `vite/preloads.ts` puts a `<link rel="modulepreload">` before the module
+scripts of every page in another language for each language chunk it loads on
+start: the explainer's locale and the core locale, or the core locale alone on a
+catalogue page. The dev server goes without them.
 
 ### Crawl files and structured data
 

@@ -6,6 +6,7 @@ import { crawlFiles } from './crawl.ts';
 import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { renderCatalogueModule } from './page.ts';
+import { languagePreloads } from './preloads.ts';
 import {
   CORE_DIRECTORY,
   NOT_FOUND_ENTRY,
@@ -99,7 +100,11 @@ function servePublicFiles(server: ViteDevServer, explainers: LoadedExplainer[]):
   }
 }
 
-export function explainerPages(): Plugin {
+export function explainerPages(): Plugin[] {
+  return [pagesPlugin(), languagePreloads()];
+}
+
+function pagesPlugin(): Plugin {
   let root = process.cwd();
   let site: Site | undefined;
 
