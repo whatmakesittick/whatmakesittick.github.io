@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "title": "So funktioniert eine Bohrinsel",
+    "eyebrow": "Mit dem Bohrmeißel vom Deck bis zum Öl",
+    "tagline": "Eine schwimmende Bohrinsel liegt ruhig über der Bohrung, dreht kilometertief unten einen Meißel an einem Strang aus Stahlrohren und hält das Gestein mit schwerer Spülung in Schach, bis sie Öl erreicht, das in den Poren von Sandstein unter einem Bogen aus Schieferton sitzt.",
+    "description": "Ein interaktiver Blick auf eine Offshore-Bohrinsel, der dem Bohrmeißel vom Deck bis zum Öl folgt: warum eine schwimmende Bohrinsel ruhig liegt, wie Bohrgestänge und Verrohrung arbeiten, wie die Bohrspülung das Gestein zurückhält, warum sich Öl in einer Falle sammelt und warum eine fertige Bohrung von selbst fließt.",
+    "summary": "Schwimmende Bohrinseln, Bohrgestänge, Spülungsdruck und die Falle, die das Öl hält."
+  },
+  "stage": {
+    "label": "Interaktives Modell einer Bohrinsel",
+    "gauge": "Bohrlochwerte live"
+  },
+  "controls": {
+    "label": "Steuerung der Bohrinsel",
+    "bit": "Bohrmeißel",
+    "bitOptions": {
+      "pdc": "Meißel mit festen Schneiden",
+      "rollerCone": "Rollenmeißel"
+    },
+    "sectionOptions": {
+      "conductor": "36-Zoll-Bohrloch",
+      "surface": "26-Zoll-Bohrloch",
+      "intermediate": "17½-Zoll-Bohrloch",
+      "production": "12¼-Zoll-Bohrloch",
+      "reservoir": "8½-Zoll-Bohrloch"
+    },
+    "layerOptions": {
+      "seal": "Deckgestein",
+      "gasCap": "Gaskappe",
+      "oil": "Öl",
+      "water": "Wasser unter dem Öl",
+      "sourceRock": "Muttergestein"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Schnittansicht",
+        "short": "Schnitt",
+        "hint": "Schnittansicht (C)"
+      },
+      "mud": {
+        "name": "Spülungsfluss",
+        "short": "Spülung",
+        "hint": "Spülungsfluss (M)"
+      },
+      "flow": {
+        "name": "Fertige Bohrung",
+        "short": "Fertig",
+        "hint": "Fertige Bohrung (F)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Meißeltiefe",
+    "phases": "Zu einem Abschnitt der Bohrung springen",
+    "speed": "Bohrgeschwindigkeit",
+    "value": "{{depth}} unter dem Bohrboden, {{phase}}",
+    "speedValue": "{{value}} m Bohrloch pro Sekunde",
+    "phase": {
+      "deck": "An Deck",
+      "sea": "Durchs Meer",
+      "topHole": "Oberer Abschnitt",
+      "overburden": "Tiefes Gestein",
+      "seal": "Das Deckgestein",
+      "reservoir": "Die Lagerstätte",
+      "bottom": "Endteufe"
+    },
+    "during": {
+      "deck": "beim Verlassen des Bohrbodens",
+      "sea": "auf dem Weg durchs Meer",
+      "topHole": "beim Bohren des oberen Abschnitts",
+      "overburden": "beim Bohren durch tiefes Gestein",
+      "seal": "beim Bohren durch das Deckgestein",
+      "reservoir": "beim Bohren durch die Lagerstätte",
+      "bottom": "beim Bohren bis zur Endteufe"
+    },
+    "jump": {
+      "deck": "Zum Deck springen",
+      "sea": "Zum Meer springen",
+      "topHole": "Zum oberen Abschnitt springen",
+      "overburden": "Zum tiefen Gestein springen",
+      "seal": "Zum Deckgestein springen",
+      "reservoir": "Zur Lagerstätte springen",
+      "bottom": "Zur Endteufe springen"
+    }
+  },
+  "readouts": {
+    "belowSeabed": "Unter dem Meeresboden",
+    "pressure": "Spülungsdruck am Meißel",
+    "temperature": "Temperatur am Meißel",
+    "day": "Bohrdauer",
+    "dayValue": "Tag {{day}}"
+  },
+  "parts": {
+    "derrick": "Bohrturm",
+    "topDrive": "Kraftdrehkopf",
+    "drillFloor": "Bohrboden",
+    "helideck": "Hubschrauberdeck",
+    "crane": "Kran",
+    "flareBoom": "Fackelausleger",
+    "column": "Säule",
+    "pontoon": "Ponton",
+    "thruster": "Strahlruder",
+    "mooring": "Ankerleine",
+    "moonpool": "Moonpool",
+    "riser": "Riser",
+    "bop": "Blowout-Preventer",
+    "wellhead": "Bohrlochkopf",
+    "conductor": "Standrohr",
+    "surfaceCasing": "Ankerrohrtour",
+    "intermediateCasing": "Zwischenrohrtour",
+    "drillPipe": "Bohrgestänge",
+    "drillCollars": "Schwerstangen",
+    "bit": "Bohrmeißel",
+    "annulus": "Rückfluss",
+    "seabed": "Meeresboden",
+    "claystone": "Tonstein",
+    "aquifer": "Wasserführender Sandstein",
+    "seal": "Deckgestein",
+    "gasCap": "Gaskappe",
+    "oil": "Öl",
+    "oilWaterContact": "Öl-Wasser-Kontakt",
+    "sourceRock": "Muttergestein",
+    "tubing": "Förderstrang",
+    "perforations": "Perforationen",
+    "flare": "Fackel"
+  },
+  "rigs": {
+    "jackUp": "Hubinsel",
+    "jacket": "Stahljacket",
+    "tlp": "Spannbeinplattform",
+    "spar": "Spar-Plattform",
+    "semi": "Halbtaucher",
+    "drillship": "Bohrschiff"
+  },
+  "mud": {
+    "state": {
+      "safe": "Sicher",
+      "light": "Zu leicht: ein Kick",
+      "heavy": "Zu schwer: Das Gestein reißt"
+    }
+  },
+  "flow": {
+    "state": {
+      "natural": "Fließt von selbst",
+      "assisted": "Braucht Pumpe oder Gaslift"
+    }
+  },
+  "units": {
+    "m": "{{value}} m",
+    "mm": "{{value}} mm",
+    "bar": "{{value}} bar",
+    "celsius": "{{value}} °C",
+    "tonnes": "{{value}} t",
+    "percent": "{{value}} %",
+    "density": "{{value}} g/cm³",
+    "metresPerSecond": "{{value}} m/s",
+    "year": "Jahr {{value}}"
+  },
+  "sections": {
+    "overview": {
+      "title": "Ein vier Kilometer tiefes Loch, gebohrt von einem schwimmenden Schiff",
+      "p1": "Sie sehen eine Offshore-Bohrinsel, weit draußen auf dem Meer. Die Bohrinsel steht nicht auf dem Meeresboden. Ein <strong>Halbtaucher</strong> wie dieser ist eine Plattform, die auf riesigen hohlen Rümpfen unter Wasser schwimmt. Hier ist das Meer 1000 m tief, und die Bohrinsel bohrt ein Loch, das 4500 m unter ihrem Bohrboden endet, tief im Gestein. Bohrinseln wie diese suchen unter dem Meer nach Öl und Gas. Etwa ein Viertel des Erdöls der Welt stammt heute aus Feldern auf See.",
+      "p2": "Die Bohrinsel ist eine schwimmende Bohrmaschine. Ein Stahlturm, der Bohrturm, ragt etwa 60 m über den Bohrboden auf. Er hält einen Strang aus Stahlrohren mit einem Bohrmeißel am Ende und dreht ihn. Das Gestänge reicht durch das Meer bis ins Gestein. Eine schwere Flüssigkeit, die Bohrspülung, wird durch das Gestänge nach unten gepumpt und hält das Bohrloch unter Kontrolle. Während das Loch tiefer wird, kleidet die Mannschaft es Abschnitt für Abschnitt mit Stahlrohren und Zement aus. Eine Bohrinsel wie diese hat Betten für 130 bis 200 Menschen, und die Arbeit läuft Tag und Nacht.",
+      "p3": "Die Animation folgt dem Bohrmeißel vom Bohrboden bis zum Grund der Bohrung. Die Zeitleiste zählt Meter unter dem Bohrboden, so wie Bohrleute die Tiefe messen. Der Bohrboden liegt 25 m über dem Meer, also erreicht der Meißel den Meeresboden bei 1025 m. Unter dem Meer ist das Gestein aufgeschnitten wie ein Stück Kuchen und zeigt die Schichten und die Bohrung. Die Zeichnung staucht Meer und Gestein, damit die ganze Bohrung auf den Bildschirm passt, und sie zeichnet die Rohre achtmal breiter als in Wirklichkeit, damit Sie sie sehen können. Das Bild ist also nicht maßstabsgetreu, aber die Tiefenskala an der Schnittfläche stimmt.",
+      "p4": "Ziehen Sie am Modell, um es von allen Seiten zu sehen, und scrollen Sie darüber, um zu zoomen. Beim Weiterlesen folgt die Ansicht dem Text. Die Messwerte verraten, was der Meißel unterwegs antrifft: wie tief er unter dem Meeresboden ist, den Spülungsdruck und die Temperatur um ihn herum und wie viele Tage die Bohrung bisher gedauert hat. Schalten Sie die Beschriftungen ein, um die Namen der Teile zu sehen."
+    },
+    "float": {
+      "title": "Warum sie nicht umkippt",
+      "p1": "Die Kamera ist jetzt an der Wasserlinie. Die Bohrinsel schwimmt auf zwei langen hohlen Rümpfen, den Pontons, jeder 110 m lang und unter Wasser verborgen. Aus ihnen ragen vier quadratische Säulen auf, durchstoßen die Oberfläche und tragen das Deck, einen Stahlkasten von 78 m Breite. Darauf stehen der Bohrturm, die Kräne, die Unterkünfte und ein Hubschrauberdeck. In der Mitte des Decks liegt der Moonpool, eine Öffnung, durch die das Rohr ins Meer hinuntergeht. Ankerleinen und Strahlruder halten die Bohrinsel an ihrem Platz.",
+      "p2": "Die Bohrinsel schwimmt aus demselben Grund wie ein Boot. Ein schwimmender Körper sinkt so weit ein, bis das verdrängte Wasser so viel wiegt wie er selbst. Beim Bohren verdrängt diese Bohrinsel etwa 51.000 Tonnen Meerwasser. Um festzulegen, wie tief sie schwimmt, pumpt die Mannschaft Meerwasser in Tanks in den Pontons oder pumpt es heraus. Zwischen zwei Einsätzen liegt die Bohrinsel hoch im Wasser, nur etwa 9,5 m tief. Zum Bohren wird sie <strong>mit Ballastwasser abgesenkt</strong>, auf etwa 21 m, sodass die Pontons tief liegen und nur die schlanken Säulen die Oberfläche durchstoßen. Probieren Sie den Regler aus.",
+      "p3": "Wellen bewegen das Wasser in Kreisen, die mit der Tiefe schnell kleiner werden. Eine halbe Wellenlänge tief bleiben nur noch etwa 4 Prozent der Bewegung übrig. Doch die Dünung auf offener See ist langwellig, und so tief liegen die Pontons nicht. In einer langen Dünung bewegt sich das Wasser um sie herum noch fast halb so stark wie an der Oberfläche. Die Tiefe erledigt also nur die halbe Arbeit, die schlanken Säulen erledigen die andere Hälfte. Eine vorbeiziehende Welle ändert kaum, wie viel von der Bohrinsel unter Wasser ist, und hebt sie deshalb kaum an. Weil die Säulen weit auseinander an den Ecken stehen, bewahren sie die Bohrinsel außerdem vor dem Kippen. Neigt sie sich, tauchen die Säulen auf der tieferen Seite weiter ein und drücken sie wieder hoch.",
+      "control": {
+        "label": "Ballastwasser",
+        "transit": "Zwischen Einsätzen",
+        "drilling": "Bohren",
+        "displacement": "Verdrängtes Wasser",
+        "airGap": "Deck über den Wellen",
+        "motion": "Wellenbewegung an den Pontons"
+      },
+      "p4": "Schwimmen heißt auch treiben, also muss die Bohrinsel über der Bohrung gehalten werden. Acht Leinen aus Kette und Drahtseil führen von den Säulen zu Ankern am Meeresboden. Das funktioniert bis etwa 1500 m Wassertiefe. Auch Strahlruder unter den Pontons können sie halten, gesteuert von einem Computer, der sich an Satelliten und an Baken am Meeresboden orientiert. Andere Tiefen verlangen andere Anlagen. Eine Hubinsel steht auf Beinen auf dem Meeresboden, bei bis zu 150 m Wassertiefe. Ein Stahljacket hat 412 m erreicht, eine Spannbeinplattform 1584 m und eine Spar-Plattform etwa 2400 m. Die größte Wassertiefe, in der je gebohrt wurde, 3628 m, erreichte ein Bohrschiff. Probieren Sie den Tiefenregler aus.",
+      "picker": {
+        "label": "Wassertiefe",
+        "shallow": "Flach",
+        "deep": "Ultratief",
+        "caption": "Welche Anlagen in dieser Wassertiefe arbeiten können",
+        "pressure": "Druck am Meeresboden",
+        "rigs": "Geeignete Anlagen"
+      }
+    },
+    "drill": {
+      "title": "Einen Meißel aus vier Kilometern Entfernung drehen",
+      "p1": "Die Kamera fährt jetzt neben dem Bohrmeißel mit nach unten. Alles über dem Meißel hängt am Bohrturm. Oben im Bohrturm packt der <strong>Kraftdrehkopf</strong>, ein Satz starker Motoren am Haken, das Gestänge und dreht es, und der ganze Strang dreht sich mit. Das Gestänge besteht aus Rohren von etwa 9,4 m Länge, die zu je dreien zu Gestängezügen von etwa 28 m verschraubt werden. Jedes Mal, wenn ein Zug abgebohrt ist, lässt der Kraftdrehkopf los, fährt wieder nach oben und nimmt den nächsten auf. Zoomen Sie heraus, um zu sehen, wie er alle 28 m zurückklettert.",
+      "p2": "Eine Bohrung entsteht in Abschnitten, jeder enger als der vorige, wie ein Teleskop. Das erste Loch misst 36 Zoll (914 mm) und reicht nur 75 m in den Meeresboden. Das Standrohr, ein Stahlrohr von 30 Zoll, wird hineingesenkt und einzementiert. Dann folgen Löcher von 26, 17½ und 12¼ Zoll, jedes mit <strong>Futterrohren aus Stahl</strong> und Zement ausgekleidet, bevor das nächste beginnt. Die Verrohrung hält das Loch offen und dichtet das Gestein dahinter ab. Jede Rohrtour muss durch die vorige passen, deshalb misst das letzte Loch mit 8½ Zoll nur 216 mm. Tippen Sie auf die Schaltflächen, um zu jedem Abschnitt zu springen.",
+      "hole": "Bohrlochdurchmesser",
+      "string": "Gestänge im Loch",
+      "weight": "Last am Haken",
+      "p3": "Die Bohrinsel drückt das Gestänge nicht nach unten. Der Strang hängt am Haken und wird von seinem eigenen Gewicht gestreckt, denn ein kilometerlanges Rohr von nur 140 mm Durchmesser würde sich verbiegen, wenn man es schöbe. Der Bohrmeister senkt ihn ab, bis nur ein Teil des Gewichts der Schwerstangen auf dem Meißel ruht, etwa 3 bis 20 Tonnen. Der Kraftdrehkopf dreht ihn mit etwa 80 bis 140 Umdrehungen pro Minute. Ein Rollenmeißel zerdrückt das Gestein unter gezahnten Kegeln, die über den Grund des Lochs rollen. Ein Meißel mit festen Schneiden hat keine beweglichen Teile: Scheiben aus künstlichem Diamant auf seinen Schneidleisten hobeln das Gestein ab. Meißel mit festen Schneiden bohren heute mehr als 90 Prozent aller Meter, die weltweit gebohrt werden.",
+      "p4": "Bohren ist langsame Arbeit. In weichem Gestein schafft der Meißel einige Dutzend Meter pro Stunde, in hartem Gestein nur wenige Meter pro Stunde. Ist ein Meißel verschlissen, muss der ganze Strang heraus, Zug um Zug, und mit einem neuen Meißel wieder hinein. Aus 3000 m Tiefe dauert dieser Aus- und Einbau etwa einen halben Tag. Das Einbauen und Zementieren jeder Rohrtour dauert jeweils noch etwa zwei Tage. Beobachten Sie den Tageszähler, während der Meißel nach unten wandert, und wechseln Sie den Meißel, um zu sehen, wie sich die Zeit ändert. Im Modell erreicht die Bohrung um Tag 30 die Endteufe. Echte Bohrungen in so tiefem Wasser dauern meist ein bis drei Monate."
+    },
+    "mud": {
+      "title": "Die Spülung hat drei Aufgaben",
+      "p1": "Die Kamera ist jetzt am Meeresboden, 1000 m tief, wo es dunkel und etwa 4 °C kalt ist. Hier beginnt die Bohrung. Auf dem Bohrlochkopf sitzt der <strong>Blowout-Preventer</strong>, ein etwa 17 m hoher Stapel von Ventilen. Darüber führt der Riser, ein Stahlrohr von 533 mm Durchmesser, bis hinauf zur Bohrinsel. Das Bohrgestänge verläuft in der Mitte. Die wandernden Punkte sind die Bohrspülung. Sie fließt im Gestänge nach unten, tritt am Meißel aus und steigt im Spalt um das Gestänge, dem Ringraum, wieder zur Bohrinsel auf.",
+      "p2": "Bohrspülung ist eine dicke Flüssigkeit, die mit Baryt beschwert wird, einem dichten, zu Pulver gemahlenen Mineral. Ihre erste Aufgabe ist es, das Gestein zurückzuhalten. In der Tiefe stehen Wasser, Öl oder Gas in den winzigen Hohlräumen des Gesteins unter hohem Druck, und die Spülungssäule im Bohrloch drückt dagegen. Ihre zweite Aufgabe ist es, das Bohrklein, die vom Meißel abgetragenen Gesteinssplitter, zur Bohrinsel zu tragen, wo Rüttelsiebe es aussieben. Ihre dritte ist es, den Meißel zu kühlen und zu säubern. Zunächst folgt die Spülung dem Bohrplan und wird mit jedem Abschnitt schwerer. Mit dem Regler können Sie sie leichter oder schwerer machen.",
+      "control": {
+        "label": "Spülungsdichte",
+        "light": "Wie Wasser",
+        "heavy": "Doppelt so schwer",
+        "caption": "Druck über der Tiefe: Die Spülung muss über dem Druck in den Poren des Gesteins bleiben und unter dem Druck, der das Gestein aufreißt",
+        "pressure": "Spülungsdruck am Meißel",
+        "pore": "Porendruck",
+        "fracture": "Aufreißdruck",
+        "state": "Status",
+        "plan": "Zurück zum Plan"
+      },
+      "p3": "Die Spülung muss innerhalb eines Fensters bleiben. Ihr Druck in bar ist ihre Dichte in g/cm³ mal 0,0981 mal die Tiefe in Metern. Liegt er unter dem Porendruck, dem Druck der Flüssigkeit im Gestein, dringt Gas, Öl oder Wasser ins Bohrloch ein: ein <strong>Kick</strong>. Liegt er über dem Aufreißdruck, reißt das Gestein auf und schluckt die Spülung. Unter 1000 m Wasser ist das Fenster schmal. Meerwasser wiegt weniger als halb so viel wie Gestein, also trägt das Gestein unter dem Meeresboden weniger Last und reißt leichter. Nahe am Meeresboden schließt sich das Fenster fast. Deshalb werden die ersten beiden Abschnitte ohne Riser gebohrt, mit Meerwasser oder einer leichten Spülung, die zusammen mit dem Bohrklein am Meeresboden austritt.",
+      "p4": "Gelangt doch ein Kick hinein, kann der Blowout-Preventer die Bohrung verschließen. Seine Backen schließen in weniger als einer Minute und halten bis zu 1034 bar. Er ist die letzte Verteidigungslinie, keine Garantie: Seine Scherbacken können die dicken Verbinder zwischen den Rohren nicht durchtrennen. In der Lagerstätte reicht das Fenster im Modell von etwa 1,24 bis 1,57 g/cm³, und der Plan sieht 1,40 vor. Bewegen Sie den Regler und beobachten Sie den Status und das Diagramm. Ist die Spülung zu leicht, steigen Gasblasen im Rückfluss auf. Ist sie zu schwer, breiten sich Risse vom Bohrloch aus."
+    },
+    "rock": {
+      "title": "Warum das Öl dort ist",
+      "p1": "Sehen Sie sich jetzt die Schnittfläche des Gesteins an. Die oberen Schichten liegen flach, doch tief unten wölben sich zwei Schichten unter der Bohrinsel zu einem Bogen auf. Oben auf dem Bogen liegt das Deckgestein, eine dicke Schicht Schieferton, die fast nichts durchlässt. Darunter liegt die Lagerstätte, ein Sandstein mit Gas oben, Öl in der Mitte und Wasser darunter. Weit darunter, am Boden des Blocks, liegt der dunkle Schieferton, in dem das Öl entstand.",
+      "p2": "Die Geschichte beginnt mit Plankton, winzigen Lebewesen, die vor Jahrmillionen im Meer trieben. Als sie starben, sanken einige in Schlamm, der so wenig Sauerstoff enthielt, dass sie nicht verwesten. Immer tiefer begraben, wurde aus diesem Schlamm ein dunkler Schieferton voller ihrer Überreste: das <strong>Muttergestein</strong>. Dort übernahm die Wärme das langsame Garen: Bei etwa 60 bis 120 °C wurden die Überreste über Jahrmillionen zu Öl. Öl ist leichter als Wasser, also kroch es durch die wassergefüllten Poren des Gesteins darüber nach oben, bis eine dichte Schicht es aufhielt. Tippen Sie auf die Schaltflächen, um jede Schicht zu besuchen.",
+      "pores": {
+        "caption": "Öl sitzt in den winzigen Lücken zwischen Sandkörnern, nicht in einer Höhle"
+      },
+      "temperature": "Gesteinstemperatur hier",
+      "porosity": "Raum zwischen den Körnern",
+      "p3": "Eine Falle ist ein Bogen aus porösem Gestein unter einem Deckgestein, wie eine umgedrehte Schüssel. Öl und Gas sammeln sich in ihrem Scheitel und ordnen sich nach Gewicht: Gas oben, dann Öl, dann Wasser. Hier endet das Öl am Öl-Wasser-Kontakt, 4220 m unter dem Bohrboden. Das Öl liegt nicht in einer Höhle oder einem See. Es füllt die winzigen Zwischenräume zwischen den Sandkörnern, etwa 22 Prozent dieses Sandsteins. Hier unten hat das Gestein etwa 96 °C, und die Flüssigkeit in seinen Poren steht unter etwa 505 bar. Das ist mehr als normal für diese Tiefe. Als der dicke Schieferton begraben wurde, konnte das Wasser nicht entweichen, und so trägt es einen Teil des Gewichts des Gesteins darüber.",
+      "p4": "Niemand kann so tief hinuntersehen. Messschiffe schicken Schall in den Meeresboden und zeichnen die Echos auf. Die Echos zeigen die Formen der Schichten und wo eine Falle liegen könnte, aber sie können nicht beweisen, was die Poren füllt. Nur eine Bohrung kann beweisen, dass dort Öl ist. 2024 fand nur etwa jede vierte der großen Explorationsbohrungen Öl oder Gas, dessen Förderung sich lohnt. Tippen Sie auf die Schaltflächen und beobachten Sie die Nahansicht der Körner. Gas, Öl und Wasser füllen dieselben Zwischenräume im Sandstein, während das Deckgestein fast keine hat."
+    },
+    "flow": {
+      "title": "Das erste Öl",
+      "p1": "Der Meißel hat die Endteufe erreicht, und die Ansicht zeigt jetzt die fertige Bohrung. Das Bohrgestänge ist ausgebaut. Futterrohre aus Stahl kleiden das Loch bis ganz unten aus, einzementiert. Darin hängt der <strong>Förderstrang</strong>, ein engeres Rohr, das das Öl zur Bohrinsel hinaufführt. Unten im Öl haben Perforationskanonen, die in die Bohrung abgesenkt wurden, Ladungen durch die Verrohrung und den Zement ins Gestein geschossen. Diese Löcher, die Perforationen, lassen das Öl herein.",
+      "p2": "Warum steigt das Öl von selbst auf? Die Flüssigkeit in der Lagerstätte steht unter Druck, hier etwa 505 bar. Das ist mehr, als eine Säule Salzwasser bis hinauf zur Oberfläche wiegen würde. Öl ist leichter als Wasser, etwa 0,85 g/cm³, also wiegt eine Ölsäule von der Lagerstätte bis zur Bohrinsel noch weniger, etwa 346 bar. Die Differenz drückt das Öl oben heraus, und es bleibt noch <strong>Druck übrig</strong>. Probieren Sie den Regler aus, um zu sehen, wie sich das ändert, wenn das Feld altert.",
+      "control": {
+        "label": "Förderjahre",
+        "first": "Erstes Öl",
+        "late": "Spätphase",
+        "reservoir": "Druck in der Lagerstätte",
+        "column": "Gewicht der Ölsäule",
+        "wellhead": "Oben übrig",
+        "state": "Die Bohrung"
+      },
+      "p3": "Zuerst wird die Bohrung getestet. Öl und Gas fließen zur Bohrinsel hinauf, wo die Mannschaft misst, wie viel herauskommt. Der Fackelausleger verbrennt, was nach oben kommt, denn eine Bohrinsel hat keine Pipeline, in die sie es schicken könnte. Die Flamme an der Spitze des Auslegers zeigt den Test an. Lohnt sich die Förderung, kann die Bohrung später ein Eruptionskreuz, einen Baum aus Ventilen, am Meeresboden bekommen und über Pipelines mit einer Förderplattform verbunden werden oder mit einem Schiff, das das Öl in seinem Rumpf lagert, bis Tanker es abholen.",
+      "p4": "Während Öl herausfließt, sinkt der Druck in der Lagerstätte. Das Modell hält es einfach: Der Druck fällt jedes Jahr um 1,4 Prozent seines Anfangswerts. Echte Felder verhalten sich sehr unterschiedlich. Bleibt oben zu wenig Druck übrig, hört das Öl auf, von selbst zu fließen. Dann hält eine Pumpe in der Bohrung die Förderung in Gang, oder ein Gaslift, der Gas in den Förderstrang pumpt, um die Säule leichter zu machen. Trotzdem gibt ein Feld im Durchschnitt nur etwa ein Drittel seines Öls her. Bewegen Sie den Regler und beobachten Sie, wie der Druck, der oben übrig bleibt, Jahr für Jahr schrumpft."
+    }
+  }
+}

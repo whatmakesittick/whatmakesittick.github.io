@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "title": "Como funciona uma plataforma de petróleo",
+    "eyebrow": "Siga a broca do convés até o óleo",
+    "tagline": "Uma sonda flutuante se mantém firme sobre o poço, gira uma broca quilômetros abaixo na ponta de uma coluna de tubos de aço e segura a rocha com um fluido pesado até chegar ao óleo guardado nos poros de um arenito, sob um arco de folhelho.",
+    "description": "Um olhar interativo sobre uma sonda de perfuração marítima que acompanha a broca do convés até o óleo: por que uma sonda flutuante fica estável, como funcionam a coluna de perfuração e o revestimento, como o fluido de perfuração segura a rocha, por que o óleo se acumula em uma armadilha e por que um poço pronto produz sozinho.",
+    "summary": "Sondas flutuantes, tubos de perfuração, pressão do fluido e a armadilha que guarda o óleo."
+  },
+  "stage": {
+    "label": "Modelo interativo de sonda de perfuração",
+    "gauge": "Leituras do poço ao vivo"
+  },
+  "controls": {
+    "label": "Controles da sonda",
+    "bit": "Broca",
+    "bitOptions": {
+      "pdc": "Broca de cortadores fixos",
+      "rollerCone": "Broca tricônica"
+    },
+    "sectionOptions": {
+      "conductor": "Poço de 36 pol",
+      "surface": "Poço de 26 pol",
+      "intermediate": "Poço de 17½ pol",
+      "production": "Poço de 12¼ pol",
+      "reservoir": "Poço de 8½ pol"
+    },
+    "layerOptions": {
+      "seal": "Rocha selante",
+      "gasCap": "Capa de gás",
+      "oil": "Óleo",
+      "water": "Água abaixo do óleo",
+      "sourceRock": "Rocha geradora"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Vista em corte",
+        "short": "Corte",
+        "hint": "Vista em corte (C)"
+      },
+      "mud": {
+        "name": "Circulação do fluido",
+        "short": "Fluido",
+        "hint": "Circulação do fluido (M)"
+      },
+      "flow": {
+        "name": "Poço pronto",
+        "short": "Pronto",
+        "hint": "Poço pronto (F)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Profundidade da broca",
+    "phases": "Ir para uma etapa do poço",
+    "speed": "Velocidade de perfuração",
+    "value": "{{depth}} abaixo do piso de perfuração, {{phase}}",
+    "speedValue": "{{value}} m de poço por segundo",
+    "phase": {
+      "deck": "No convés",
+      "sea": "Pelo mar",
+      "topHole": "Topo do poço",
+      "overburden": "Rocha profunda",
+      "seal": "A rocha selante",
+      "reservoir": "O reservatório",
+      "bottom": "Profundidade final"
+    },
+    "during": {
+      "deck": "saindo do piso de perfuração",
+      "sea": "descendo pelo mar",
+      "topHole": "perfurando o topo do poço",
+      "overburden": "perfurando rocha profunda",
+      "seal": "atravessando a rocha selante",
+      "reservoir": "atravessando o reservatório",
+      "bottom": "seguindo até a profundidade final"
+    },
+    "jump": {
+      "deck": "Ir para o convés",
+      "sea": "Ir para o mar",
+      "topHole": "Ir para o topo do poço",
+      "overburden": "Ir para a rocha profunda",
+      "seal": "Ir para a rocha selante",
+      "reservoir": "Ir para o reservatório",
+      "bottom": "Ir para a profundidade final"
+    }
+  },
+  "readouts": {
+    "belowSeabed": "Abaixo do fundo do mar",
+    "pressure": "Pressão do fluido na broca",
+    "temperature": "Temperatura na broca",
+    "day": "Tempo no poço",
+    "dayValue": "Dia {{day}}"
+  },
+  "parts": {
+    "derrick": "Torre de perfuração",
+    "topDrive": "Top drive",
+    "drillFloor": "Piso de perfuração",
+    "helideck": "Heliponto",
+    "crane": "Guindaste",
+    "flareBoom": "Lança do queimador",
+    "column": "Coluna",
+    "pontoon": "Flutuador",
+    "thruster": "Propulsor",
+    "mooring": "Linha de ancoragem",
+    "moonpool": "Moonpool",
+    "riser": "Riser",
+    "bop": "Preventor de erupção",
+    "wellhead": "Cabeça de poço",
+    "conductor": "Condutor",
+    "surfaceCasing": "Revestimento de superfície",
+    "intermediateCasing": "Revestimento intermediário",
+    "drillPipe": "Tubo de perfuração",
+    "drillCollars": "Comandos",
+    "bit": "Broca",
+    "annulus": "Retorno do fluido",
+    "seabed": "Fundo do mar",
+    "claystone": "Argilito",
+    "aquifer": "Arenito com água",
+    "seal": "Rocha selante",
+    "gasCap": "Capa de gás",
+    "oil": "Óleo",
+    "oilWaterContact": "Contato óleo-água",
+    "sourceRock": "Rocha geradora",
+    "tubing": "Coluna de produção",
+    "perforations": "Canhoneados",
+    "flare": "Queimador"
+  },
+  "rigs": {
+    "jackUp": "Autoelevatória",
+    "jacket": "Jaqueta de aço",
+    "tlp": "Plataforma de pernas atirantadas",
+    "spar": "Spar",
+    "semi": "Semissubmersível",
+    "drillship": "Navio-sonda"
+  },
+  "mud": {
+    "state": {
+      "safe": "Seguro",
+      "light": "Leve demais: um kick",
+      "heavy": "Pesado demais: a rocha fratura"
+    }
+  },
+  "flow": {
+    "state": {
+      "natural": "Produz sozinho",
+      "assisted": "Precisa de bomba ou gas lift"
+    }
+  },
+  "units": {
+    "m": "{{value}} m",
+    "mm": "{{value}} mm",
+    "bar": "{{value}} bar",
+    "celsius": "{{value}} °C",
+    "tonnes": "{{value}} t",
+    "percent": "{{value}}%",
+    "density": "{{value}} g/cm³",
+    "metresPerSecond": "{{value}} m/s",
+    "year": "Ano {{value}}"
+  },
+  "sections": {
+    "overview": {
+      "title": "Um poço de quatro quilômetros de profundidade, perfurado de um navio que flutua",
+      "p1": "Você está olhando para uma sonda de perfuração marítima, em alto-mar. Ela não fica apoiada no fundo do mar. É uma <strong>plataforma semissubmersível</strong>, que flutua sobre enormes cascos ocos debaixo d'água. Aqui o mar tem 1.000 m de profundidade, e a sonda perfura um poço que termina 4.500 m abaixo do seu piso de perfuração, bem dentro da rocha. Sondas como esta procuram petróleo e gás debaixo do mar. Hoje, cerca de um quarto do petróleo do mundo vem de campos marítimos.",
+      "p2": "A sonda é uma máquina de perfurar que flutua. A torre de perfuração, uma estrutura de aço, se ergue cerca de 60 m acima do piso de perfuração. Ela sustenta uma coluna de tubos de aço com uma broca na ponta e a faz girar. Os tubos descem pelo mar e entram na rocha. Um fluido pesado, o fluido de perfuração, ou lama, é bombeado pelos tubos para manter o poço sob controle. À medida que o poço fica mais fundo, a equipe o reveste com tubos de aço e cimento, trecho por trecho. Uma sonda como esta tem camas para 130 a 200 pessoas, e o trabalho segue dia e noite.",
+      "p3": "O ciclo acompanha a broca do piso de perfuração até o fundo do poço. A barra de progresso conta os metros abaixo do piso de perfuração, do jeito que os sondadores medem a profundidade. O piso fica 25 m acima do mar, então a broca chega ao fundo do mar a 1.025 m. Abaixo do mar, a rocha aparece cortada como uma fatia de bolo, mostrando as camadas e o poço. O desenho comprime o mar e a rocha para que o poço inteiro caiba na tela, e desenha os tubos oito vezes mais largos do que na realidade para que você consiga vê-los. Por isso a imagem não está em escala, mas a régua na face cortada é fiel.",
+      "p4": "Arraste o modelo para ver de outros ângulos e role sobre ele para dar zoom. Conforme você lê, a vista acompanha o texto. As leituras mostram o que a broca encontra no caminho: a que distância ela está abaixo do fundo do mar, a pressão do fluido e a temperatura ao redor dela, e quantos dias o poço já levou. Ative os rótulos para ver o nome de cada peça."
+    },
+    "float": {
+      "title": "Por que ela não tomba",
+      "p1": "A câmera agora está na linha d'água. A sonda flutua sobre dois cascos longos e ocos chamados flutuadores, cada um com 110 m de comprimento, escondidos debaixo d'água. Deles sobem quatro colunas quadradas, que atravessam a superfície e sustentam o convés, uma caixa de aço com 78 m de largura. Em cima ficam a torre de perfuração, os guindastes, as acomodações e um heliponto. No meio do convés fica o moonpool, uma abertura por onde os tubos descem para o mar. Linhas de ancoragem e propulsores mantêm a sonda no lugar.",
+      "p2": "Ela flutua pelo mesmo motivo que um barco. Um corpo flutuante afunda até que a água que ele desloca pese tanto quanto ele. Durante a perfuração, esta sonda desloca cerca de 51.000 toneladas de água do mar. Para escolher o quanto ela afunda, o seu calado, a equipe bombeia água do mar para tanques nos flutuadores, ou a bombeia para fora. Em trânsito entre um trabalho e outro, a sonda fica alta, com cerca de 9,5 m de calado. Para perfurar, ela é <strong>lastreada</strong> até cerca de 21 m, de modo que os flutuadores ficam fundos e só as colunas finas cruzam a superfície. Experimente o controle.",
+      "p3": "As ondas movem a água em círculos que diminuem rapidamente com a profundidade. A meio comprimento de onda de profundidade, sobra só cerca de 4% do movimento. Mas as ondulações do oceano são longas, e os flutuadores não estão tão fundos. Numa ondulação longa, a água ao redor deles ainda se move quase metade do que se move na superfície. Então a profundidade faz só metade do trabalho, e as colunas finas fazem a outra metade. Uma onda que passa quase não muda o quanto da sonda está debaixo d'água, por isso quase não a levanta. Afastadas nos cantos, as colunas também impedem que a sonda tombe. Quando ela se inclina, as colunas do lado mais baixo afundam mais e a empurram de volta para cima.",
+      "control": {
+        "label": "Água de lastro",
+        "transit": "Em trânsito",
+        "drilling": "Perfurando",
+        "displacement": "Água deslocada",
+        "airGap": "Convés acima das ondas",
+        "motion": "Movimento das ondas nos flutuadores"
+      },
+      "p4": "Flutuar também significa ficar à deriva, então a sonda precisa ser mantida sobre o poço. Oito linhas de amarras e cabos de aço vão das colunas até âncoras no fundo do mar, o que funciona em lâminas d'água de até cerca de 1.500 m. Propulsores sob os flutuadores também podem segurá-la, comandados por um computador que acompanha satélites e balizas no fundo do mar. Outras profundidades pedem outras plataformas. Uma autoelevatória fica apoiada sobre pernas no fundo do mar, em até 150 m de água. Uma jaqueta de aço já chegou a 412 m, uma plataforma de pernas atirantadas a 1.584 m e uma spar a cerca de 2.400 m. A maior lâmina d'água já perfurada, 3.628 m, foi alcançada por um navio-sonda. Experimente o controle de lâmina d'água.",
+      "picker": {
+        "label": "Lâmina d'água",
+        "shallow": "Rasa",
+        "deep": "Ultraprofunda",
+        "caption": "Quais plataformas podem trabalhar nesta lâmina d'água",
+        "pressure": "Pressão no fundo do mar",
+        "rigs": "Plataformas que chegam lá"
+      }
+    },
+    "drill": {
+      "title": "Girar uma broca a quatro quilômetros de distância",
+      "p1": "A câmera agora acompanha a broca na descida. Tudo acima da broca fica pendurado na torre. Lá em cima, o <strong>top drive</strong>, um conjunto de motores potentes pendurado no gancho, prende os tubos e os faz girar, e a coluna inteira gira junto. Os tubos vêm em juntas de cerca de 9,4 m, enroscadas de três em três em seções de cerca de 28 m. Cada vez que uma seção termina de descer, o top drive a solta, volta a subir e pega a próxima. Afaste o zoom para vê-lo subir de novo a cada 28 m.",
+      "p2": "Um poço é perfurado em fases, cada uma mais estreita que a anterior, como uma luneta. O primeiro trecho tem 36 polegadas (914 mm) de diâmetro e entra só 75 m no fundo do mar. O condutor, um tubo de aço de 30 polegadas, é descido nele e cimentado no lugar. Depois vêm trechos de 26, 17½ e 12¼ polegadas, cada um protegido por um <strong>revestimento de aço</strong> cimentado antes de começar o próximo. O revestimento mantém o poço aberto e isola a rocha atrás dele. Cada coluna de revestimento precisa passar por dentro da anterior, por isso o último trecho, de 8½ polegadas, tem só 216 mm de diâmetro. Use os botões para ir a cada fase.",
+      "hole": "Diâmetro do poço",
+      "string": "Tubos no poço",
+      "weight": "Pendurado no gancho",
+      "p3": "A sonda não empurra os tubos para baixo. A coluna fica pendurada no gancho, esticada pelo próprio peso, porque um tubo de quilômetros de comprimento e só 140 mm de diâmetro se dobraria se fosse empurrado. O sondador desce a coluna até que só parte do peso dos comandos, tubos grossos e pesados, fique apoiada na broca, cerca de 3 a 20 toneladas. O top drive a gira a cerca de 80 a 140 voltas por minuto. Uma broca tricônica esmaga a rocha sob cones dentados que rolam pelo fundo do poço. Uma broca de cortadores fixos não tem partes móveis: pastilhas de diamante sintético nas suas lâminas raspam a rocha. Hoje as brocas de cortadores fixos perfuram mais de 90% de todos os metros perfurados no mundo.",
+      "p4": "Perfurar é um trabalho lento. A broca avança dezenas de metros por hora em rocha mole, mas só alguns metros por hora em rocha dura. Quando uma broca se desgasta, a coluna inteira precisa sair, seção por seção, e voltar com uma broca nova. A partir de 3.000 m, essa manobra leva cerca de meio dia. Descer e cimentar cada coluna de revestimento acrescenta mais uns dois dias. Observe o contador de dias enquanto a broca desce e troque de broca para ver como o tempo muda. No modelo, o poço chega à profundidade final por volta do dia 30. Poços reais nesta lâmina d'água costumam levar de um a três meses."
+    },
+    "mud": {
+      "title": "O fluido tem três funções",
+      "p1": "A câmera agora está no fundo do mar, a 1.000 m de profundidade, onde é escuro e faz cerca de 4 °C. É aqui que o poço começa. Sobre a cabeça de poço fica o <strong>preventor de erupção</strong>, uma pilha de válvulas com cerca de 17 m de altura. Acima dele, o riser, um tubo de aço de 533 mm de largura, sobe até a sonda. Os tubos de perfuração descem pelo meio. Os pontos em movimento são o fluido de perfuração. Ele desce por dentro dos tubos, sai pela broca e volta para a sonda pelo espaço ao redor dos tubos, chamado espaço anular.",
+      "p2": "O fluido de perfuração é um líquido espesso, deixado pesado com barita, um mineral denso moído até virar pó. Sua primeira função é segurar a rocha. Lá embaixo, os pequenos espaços na rocha guardam água, óleo ou gás sob grande pressão, e a coluna de fluido no poço empurra de volta. A segunda função é levar os cascalhos, os pedaços de rocha cortados pela broca, até a sonda, onde peneiras vibratórias os separam. A terceira é resfriar e limpar a broca. No início, o fluido segue o plano de perfuração e fica mais pesado a cada fase. O controle permite deixá-lo mais leve ou mais pesado.",
+      "control": {
+        "label": "Peso do fluido",
+        "light": "Como água",
+        "heavy": "Duas vezes mais pesado",
+        "caption": "Pressão por profundidade: o fluido precisa ficar acima da pressão nos poros da rocha e abaixo da pressão que fratura a rocha",
+        "pressure": "Pressão do fluido na broca",
+        "pore": "Pressão de poros",
+        "fracture": "Pressão de fratura",
+        "state": "Situação",
+        "plan": "Voltar ao plano"
+      },
+      "p3": "O fluido precisa ficar dentro de uma janela. Sua pressão em bar é a densidade em g/cm³ vezes 0,0981 vezes a profundidade em metros. Se ela for menor que a pressão de poros, a pressão do fluido na rocha, gás, óleo ou água entram no poço: um <strong>kick</strong>. Se for maior que a pressão de fratura, a rocha se rompe e engole o fluido. Sob 1.000 m de lâmina d'água, a janela é estreita. A água do mar pesa menos da metade do que a rocha, então a rocha abaixo do fundo do mar carrega menos peso e se rompe com mais facilidade. Perto do fundo do mar, a janela quase se fecha. Por isso as duas primeiras fases são perfuradas sem riser, com água do mar ou um fluido leve que sai direto no fundo do mar junto com os cascalhos.",
+      "p4": "Se um kick entrar mesmo assim, o preventor de erupção pode fechar o poço. Suas gavetas fecham em menos de um minuto e aguentam até 1.034 bar. Ele é a última barreira, não uma garantia: suas gavetas cisalhantes não conseguem cortar as juntas grossas entre os tubos. No reservatório, a janela do modelo vai de cerca de 1,24 a 1,57 g/cm³, e o plano usa 1,40. Mova o controle e observe a situação e o gráfico. Leve demais, e bolhas de gás sobem no retorno do fluido. Pesado demais, e rachaduras se espalham a partir do poço."
+    },
+    "rock": {
+      "title": "Por que o óleo está ali",
+      "p1": "Agora olhe para a face cortada da rocha. As camadas de cima são planas, mas lá embaixo duas camadas se curvam para cima num arco sob a sonda. O topo do arco é a rocha selante, uma camada grossa de folhelho que quase nada atravessa. Abaixo dela fica o reservatório, um arenito que guarda gás no topo, óleo no meio e água embaixo. Bem mais abaixo, no fundo do bloco, fica o folhelho escuro onde o óleo começou.",
+      "p2": "A história começa com o plâncton, pequenos seres vivos que flutuavam no mar há milhões de anos. Quando eles morriam, alguns afundavam numa lama com tão pouco oxigênio que não apodreciam. Enterrada cada vez mais fundo, essa lama virou um folhelho escuro cheio dos seus restos, a <strong>rocha geradora</strong>. Ali o calor fez um cozimento lento: entre cerca de 60 e 120 °C, ao longo de milhões de anos, os restos se transformaram em óleo. O óleo é mais leve que a água, então subiu pelos poros cheios de água da rocha acima até que uma camada quase impermeável o deteve. Use os botões para visitar cada camada.",
+      "pores": {
+        "caption": "O óleo fica nos pequenos espaços entre os grãos de areia, não numa caverna"
+      },
+      "temperature": "Temperatura da rocha aqui",
+      "porosity": "Espaço entre os grãos",
+      "p3": "Uma armadilha é um arco de rocha porosa sob uma rocha selante, como uma tigela de cabeça para baixo. O óleo e o gás se juntam no topo e se separam pelo peso: gás em cima, depois óleo, depois água. Aqui o óleo termina no contato óleo-água, a 4.220 m abaixo do piso de perfuração. O óleo não está numa caverna nem num lago. Ele preenche os pequenos espaços entre os grãos de areia, cerca de 22% deste arenito. Aqui embaixo a rocha está a cerca de 96 °C, e o fluido nos seus poros está a cerca de 505 bar. Isso é mais que o normal para esta profundidade. Quando o folhelho grosso foi soterrado, a água não conseguiu escapar, e por isso ela sustenta parte do peso da rocha acima.",
+      "p4": "Ninguém consegue ver tão fundo. Navios de pesquisa mandam som para dentro do fundo do mar e registram os ecos. Eles mapeiam a forma das camadas e mostram onde pode haver uma armadilha, mas não provam o que preenche os poros. Só um poço pode provar que há óleo ali. Em 2024, só cerca de 1 em cada 4 grandes poços exploratórios encontrou óleo ou gás que valesse a pena produzir. Use os botões e observe a imagem ampliada dos grãos. Gás, óleo e água preenchem os mesmos espaços no arenito, enquanto a rocha selante quase não tem nenhum."
+    },
+    "flow": {
+      "title": "Primeiro óleo",
+      "p1": "A broca chegou à profundidade final, e a vista agora mostra o poço pronto. A coluna de perfuração saiu. O revestimento de aço cobre o poço até o fundo, cimentado no lugar. Dentro dele fica pendurada a <strong>coluna de produção</strong>, um tubo mais estreito que leva o óleo até a sonda. Lá embaixo, no óleo, canhões descidos no poço dispararam cargas através do revestimento e do cimento até a rocha. Esses furos, os canhoneados, deixam o óleo entrar.",
+      "p2": "Por que o óleo sobe sozinho? O fluido no reservatório está sob pressão, aqui cerca de 505 bar. Isso é mais do que pesaria uma coluna de água salgada até a superfície. O óleo é mais leve que a água, cerca de 0,85 g/cm³, então uma coluna de óleo do reservatório até a sonda pesa ainda menos, cerca de 346 bar. A diferença empurra o óleo para fora no topo com <strong>pressão de sobra</strong>. Experimente o controle para ver como isso muda à medida que o campo envelhece.",
+      "control": {
+        "label": "Anos de produção",
+        "first": "Primeiro óleo",
+        "late": "Fim da vida",
+        "reservoir": "Pressão no reservatório",
+        "column": "Peso da coluna de óleo",
+        "wellhead": "Sobra no topo",
+        "state": "O poço"
+      },
+      "p3": "Primeiro o poço é testado. Óleo e gás sobem até a sonda, onde a equipe mede quanto sai. A lança do queimador queima o que chega, porque uma sonda de perfuração não tem um oleoduto para onde mandar. A chama na ponta da lança marca o teste. Se valer a pena produzir, o poço pode depois receber uma árvore de natal molhada, um conjunto de válvulas no fundo do mar, e ser ligado por dutos a uma plataforma de produção, ou a um navio que guarda o óleo no casco até que petroleiros o levem.",
+      "p4": "Conforme o óleo sai, a pressão no reservatório cai. O modelo simplifica: a pressão cai 1,4% do valor inicial a cada ano. Campos reais variam muito. Quando sobra pouca pressão no topo, o óleo para de fluir sozinho. Aí uma bomba no poço, ou o gas lift, que injeta gás na coluna de produção para deixar a coluna de fluido mais leve, mantém o óleo vindo. Mesmo assim, um campo entrega em média só cerca de um terço do seu óleo. Mova o controle e veja a sobra no topo diminuir ano a ano."
+    }
+  }
+}
