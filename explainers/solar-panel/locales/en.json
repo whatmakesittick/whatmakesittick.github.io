@@ -24,9 +24,9 @@
         "hint": "Magnified cell (M)"
       },
       "flow": {
-        "name": "Electron flow",
+        "name": "Current flow",
         "short": "Flow",
-        "hint": "Electron flow (F)"
+        "hint": "Current flow (F)"
       },
       "labels": {
         "name": "Labels",
@@ -158,17 +158,15 @@
     "mm": "{{value}} mm",
     "ev": "{{value}} eV",
     "percent": "{{value}}%",
-    "minPerSecond": "{{value}} min/s",
-    "passes": "passes straight through",
-    "ofTotal": "{{count}} of {{total}}"
+    "passes": "not absorbed"
   },
   "sections": {
     "overview": {
       "title": "Electricity from sunlight, with no moving parts",
       "p1": "You are looking at the flat roof of a house on a clear spring day. Three <strong>solar panels</strong> stand in a row on a tilted frame, facing south. The sun rises in the east, climbs until noon and sets in the west. The gauge follows the light on the panels and the power they make: nothing before sunrise, a peak near noon, nothing after sunset. On a clear day like this one, one panel makes about 2.3 to 2.7 kWh. On an average March day at this latitude, with real weather, it makes about 1.8 to 2.1 kWh.",
-      "p2": "The panel at the left end of the row is the one these chapters open up. It is a typical rooftop panel of the early 2020s, the JinkoSolar Tiger Neo 420 W. It measures 1722 × 1134 mm and weighs 22 kg. Under 3.2 mm of glass sit 108 <strong>half cells</strong> of silicon, in a grid 6 across and 18 tall. The panel has no moving parts and stores nothing. It makes electricity only while light falls on it. Newer panels have bigger cells and glass on both sides, but they work the same way.",
+      "p2": "The panel at the west end of the row is the one these chapters open up. It is a typical rooftop panel of the early 2020s, the JinkoSolar Tiger Neo 420 W. It measures 1722 × 1134 mm and weighs 22 kg. Under 3.2 mm of glass sit 108 <strong>half cells</strong> of silicon, in a grid 6 across and 18 tall. The panel has no moving parts and stores nothing. It makes electricity only while light falls on it. Newer panels have bigger cells and glass on both sides, but they work the same way.",
       "p3": "The label says 420 W. That is the panel's <strong>rated power</strong>, measured in a test sun of 1000 W/m², with the cells held at 25 °C. In that test it turns 21.5 percent of the light into electricity. A real roof is less kind. Here, at 40° north on a clear spring noon, about 970 W/m² reaches the panel, and the cells run far warmer than 25 °C. So it gives about 380 W, 90 percent of its label. Heat costs power, as the last chapter shows.",
-      "p4": "A panel does <strong>three jobs</strong>. It catches light. It uses that light to free electrons inside its silicon. Then it collects those electrons into a current. A box on the wall, the inverter, turns that current into the kind a house uses. Each chapter below looks at one step. Drag the timeline to move the sun, and change the playback speed to make the day pass faster or slower. Drag the model to turn it. Switch on the sun path, the magnified cell, the electron flow or the labels to see more."
+      "p4": "A panel does <strong>three jobs</strong>. It catches light. It uses that light to free electrons inside its silicon. Then it collects those electrons into a current. A box on the wall, the inverter, turns that current into the kind a house uses. Each chapter below looks at one step. Drag the timeline to move the sun, and change the playback speed to make the day pass faster or slower. Drag the model to turn it. Switch on the sun path, the magnified cell, the current flow or the labels to see more."
     },
     "sun": {
       "title": "Leaning toward the noon sun",
@@ -180,7 +178,7 @@
         "label": "Panel tilt",
         "flat": "Flat on the roof",
         "upright": "Upright like a wall",
-        "incidence": "Sun off straight-on",
+        "incidence": "Sun's angle from straight on",
         "irradiance": "Light on the panel now",
         "day": "Whole day at this tilt",
         "flatDay": "Whole day if laid flat"
@@ -223,15 +221,15 @@
     },
     "wiring": {
       "title": "The weakest cell sets the pace",
-      "p1": "One cell gives only about 0.7 V, far too little to run anything. So the cells are wired <strong>in series</strong>, one after another, and their voltages add up. This panel has 54 cell positions in a row, which gives 38.1 V with nothing connected and 31.5 V at its best working point. The same current flows through every position, about 13.3 A at full power in the test sun. The electrons themselves only drift, about a millimetre per second or less. What moves fast is the energy.",
-      "p2": "A chain is only as strong as its weakest link. If one cell is shaded, it makes less current and holds back every cell in its line. The sunny cells can even force current through it backwards, turning their power into heat in that one cell: a hot spot. So the junction box holds three <strong>bypass diodes</strong>, each guarding a third of the panel. In full sun they stay off. When shade holds a third back too much, its diode switches on and lets the current flow around it, losing about 0.4 V. One fully shaded cell then costs about a third of the power, not all of it.",
-      "p3": "This panel uses <strong>half-cut cells</strong>. The two halves of each cell are wired side by side, in parallel, so the 108 half cells still make 54 positions in series. The voltage stays the same, and each half carries half the current, so less power is lost as heat in the wires. The big gain comes when shade creeps up from the bottom edge. Each third of the panel has an upper and a lower string, and the upper strings keep working, with about half the power. An older 60-cell panel, drawn here at the same size, keeps almost none, because all three of its thirds reach into the shade.",
-      "p4": "The chart plots the panel's current against its voltage. With nothing connected, the voltage is highest and no current flows. Join the two wires together, and the current is highest while the voltage drops to zero. Power is the two multiplied, and it peaks at one spot on the bend of the curve, the <strong>maximum power point</strong>. The inverter holds the panel there. Shade puts steps in the curve and can give it more than one peak. In a real panel the wiring runs behind the cells; here each string is a coloured line on the front. Pick a layout and let the shadow creep up.",
+      "p1": "One cell gives only about 0.7 V, far too little to run anything. So the cells are wired <strong>in series</strong>, like links in a chain, and their voltages add up. This panel has 54 cell positions, one after another, which gives 38.1 V with nothing connected and 31.5 V at its best working point. The same current flows through every position, about 13.3 A at full power in the test sun. The electrons themselves only drift, about a millimetre per second or less. What moves fast is the energy.",
+      "p2": "A chain is only as strong as its weakest link. If one cell is shaded, it makes less current and holds back all the others. The sunny cells can even force current through it backwards, turning their power into heat in that one cell: a hot spot. So the junction box holds three <strong>bypass diodes</strong>, each guarding a third of the panel. In full sun they stay off. When shade holds back one of those thirds too far, its diode switches on. The current flows around that third and loses about 0.4 V. One fully shaded cell then costs about a third of the power, not all of it.",
+      "p3": "This panel uses <strong>half-cut cells</strong>, each cut in two. The panel's upper and lower halves are wired side by side, in parallel, so its 108 half cells still make 54 positions in series. The voltage stays the same, and each half cell carries half the current, so the wires waste less power as heat. The big gain comes once shade covers the whole bottom edge. Each third of the panel has an upper and a lower string, and the upper strings keep working, with about half the power. An older 60-cell panel, drawn here at the same size, keeps almost none: all three of its thirds reach into the shade.",
+      "p4": "The chart plots the panel's current against its voltage. With nothing connected, the voltage is highest and no current flows. Join the two wires, and the current is highest at zero voltage. Power is the two multiplied, and it peaks on the bend of the curve, at the <strong>maximum power point</strong>. Shade puts steps and extra peaks in the curve. In a real panel the wiring runs behind the cells; here each string is a coloured line on the front. The shadow comes in at a slant, so one corner goes dark first. Pick a layout, let the shadow creep up and watch each third drop out in turn.",
       "control": {
         "label": "Shadow creeping up the panel",
         "clear": "Clear",
         "covered": "Fully covered",
-        "caption": "Current against voltage for the whole panel. The dot is where the inverter runs it. The faint curve is the panel without shade.",
+        "caption": "Current against voltage for the whole panel. The dot is where the inverter runs it. The box under the dot is the power, volts times amps. The faint curve is the panel without shade.",
         "cells": "Cells in shadow",
         "diodes": "Bypass diodes working",
         "power": "Power now",
@@ -242,10 +240,10 @@
     },
     "inverter": {
       "title": "From the roof to the wall socket",
-      "p1": "The panel makes direct current, DC, which flows one way only. A house runs on alternating current, AC, which swings back and forth many times a second. The box on the wall, the <strong>inverter</strong>, turns one into the other. It neither makes power nor stores it. It passes on about 96 percent of what comes in and loses the rest as a little heat. The amber dots show the flow: direct current from the panel to the inverter, then alternating current on to the meter and into the house.",
+      "p1": "The panel makes direct current, DC, which flows one way only. A house runs on alternating current, AC, which swings back and forth many times a second. The box on the wall, the <strong>inverter</strong>, turns one into the other. It neither makes power nor stores it. It passes on about 96 percent of what comes in and loses the rest as a little heat. The amber dots show where the energy goes: direct current from the panel to the inverter, then alternating current on to the meter and into the house.",
       "p2": "The inverter also keeps the panel at its best. The maximum power point moves all day: the voltage shifts with the cell temperature, and the current with the light. So the inverter feels its way there, a trick called <strong>maximum power point tracking</strong>. It nudges the voltage a little and checks the power. If the power rose, it nudges again the same way. If it fell, it turns back. Like a walker climbing a hill in fog, it stays close to the top.",
-      "p3": "Heat is a panel's enemy. For every degree above 25 °C, this panel loses 0.29 percent of its power. That figure is its <strong>temperature coefficient</strong>. Older PERC panels lose 0.35 percent. On a sunny day the cells run at about 45 to 65 °C, the main reason this clear spring noon gives about 380 W and not 420. A hot summer roof costs even more. So a cold, clear day beats a hot one: panels run on light, not heat. The model's air follows a mild spring day.",
-      "p4": "A clear spring day's energy could run a fridge for nearly 2 days, or charge a laptop about 40 times. In a year at this latitude, one panel makes about 600 to 700 kWh. Each kilowatt of panels yields about 1000 kWh a year in London or Berlin and 1800 in Phoenix. The <strong>warranty</strong> promises 87.4 percent of the power after 30 years. A panel repays the energy used to make it in about a year. Over its whole life, it causes about 40 g of CO₂ per kWh. In 2025 solar made about 8.7 percent of the world's electricity. Drag the temperature, or let it follow the day.",
+      "p3": "Heat is a panel's enemy. For every degree above 25 °C, this panel loses 0.29 percent of its power. That figure is its <strong>temperature coefficient</strong>. Older PERC panels lose 0.35 percent. On a sunny day the cells run at about 45 to 65 °C. That is the main reason this clear spring noon gives about 380 W, not 420. A hot summer roof costs even more. So a cold, clear day beats a hot one: panels run on light, not heat. The model's air follows a mild spring day.",
+      "p4": "A clear spring day's energy could run a fridge for about two days, or charge a laptop about 50 times. In a year at this latitude, one panel makes about 600 to 700 kWh. Each kilowatt of panels yields about 1000 kWh a year in London or Berlin and 1800 in Phoenix. The <strong>warranty</strong> promises 87.4 percent of the power after 30 years. A panel repays the energy used to make it in about a year. Over its whole life, it causes about 40 g of CO₂ per kWh. In 2025 solar made about 8.7 percent of the world's electricity. Drag the temperature, or let it follow the day.",
       "control": {
         "label": "Cell temperature",
         "cold": "Freezing",
