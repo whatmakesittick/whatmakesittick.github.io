@@ -26,6 +26,6 @@ describe('derived heart values', () => {
     expect(heartRateOf({ fitness: 'typical', effort: 1 })).toBe(190);
     expect(heartRateOf({ fitness: 'athlete', effort: 0 })).toBe(50);
     expect(outputOf({ fitness: 'typical', effort: 0 })).toBeCloseTo(5.25);
-    expect(outputOf({ fitness: 'athlete', effort: 1 })).toBeGreaterThan(30);
+    expect(outputOf({ fitness: 'athlete', effort: 1 })).toBeCloseTo(27.75);
   });
 });

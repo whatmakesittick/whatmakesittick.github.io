@@ -51,9 +51,9 @@ export function valveStateOf(state: TimeState): ValveState {
 }
 
 export function heartRateOf(state: EffortState): number {
-  return heartRate(state.fitness, state.effort);
+  return heartRate(state.effort, state.fitness);
 }
 
 export function outputOf(state: EffortState): number {
-  return cardiacOutput(state.fitness, state.effort);
+  return cardiacOutput(state.effort, state.fitness);
 }

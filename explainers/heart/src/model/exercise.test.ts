@@ -32,31 +32,36 @@ describe('exercise', () => {
   it('climbs in a straight line from the resting to the top heart rate', () => {
     FITNESS_IDS.forEach((fitness) => {
       const { restRate, maxRate } = FITNESS_PROFILES[fitness];
-      expect(heartRate(fitness, 0)).toBe(restRate);
-      expect(heartRate(fitness, 1)).toBe(maxRate);
-      expect(heartRate(fitness, 0.5)).toBeCloseTo((restRate + maxRate) / 2);
+      expect(heartRate(0, fitness)).toBe(restRate);
+      expect(heartRate(1, fitness)).toBe(maxRate);
+      expect(heartRate(0.5, fitness)).toBeCloseTo((restRate + maxRate) / 2);
     });
   });
 
   it('raises the stroke early and holds it from half effort', () => {
     FITNESS_IDS.forEach((fitness) => {
       const { restStroke, maxStroke } = FITNESS_PROFILES[fitness];
-      expect(strokeVolume(fitness, 0)).toBe(restStroke);
-      expect(strokeVolume(fitness, 0.25)).toBeCloseTo(restStroke + 0.75 * (maxStroke - restStroke));
-      expect(strokeVolume(fitness, 0.5)).toBe(maxStroke);
-      expect(strokeVolume(fitness, 1)).toBe(maxStroke);
+      expect(strokeVolume(0, fitness)).toBe(restStroke);
+      expect(strokeVolume(0.25, fitness)).toBeCloseTo(restStroke + 0.75 * (maxStroke - restStroke));
+      expect(strokeVolume(0.5, fitness)).toBe(maxStroke);
+      expect(strokeVolume(1, fitness)).toBe(maxStroke);
     });
   });
 
   it('moves about 5 litres a minute at rest in both hearts', () => {
-    expect(cardiacOutput('typical', 0)).toBeCloseTo(5.25);
-    expect(cardiacOutput('athlete', 0)).toBeCloseTo(5.25);
+    expect(cardiacOutput(0, 'typical')).toBeCloseTo(5.25);
+    expect(cardiacOutput(0, 'athlete')).toBeCloseTo(5);
   });
 
-  it('reaches about 20 litres a minute flat out, and about 30 in the athlete', () => {
-    expect(cardiacOutput('typical', 1)).toBeCloseTo(19.95);
-    expect(cardiacOutput('athlete', 1)).toBeCloseTo(32.3);
+  it('reaches about 21 litres a minute flat out, and about 28 in the athlete', () => {
+    expect(cardiacOutput(1, 'typical')).toBeCloseTo(20.9);
+    expect(cardiacOutput(1, 'athlete')).toBeCloseTo(27.75);
     expect(ATHLETE.maxStroke).toBeGreaterThan(TYPICAL.maxStroke);
+    expect(ATHLETE.maxRate).toBeLessThanOrEqual(TYPICAL.maxRate);
+  });
+
+  it('gives the resting athlete about 790 ms to fill each beat', () => {
+    expect(diastoleLength(ATHLETE.restRate)).toBeCloseTo(796, 0);
   });
 
   it('squeezes from S1 to S2 and fills for the rest of the resting beat', () => {
@@ -74,7 +79,7 @@ describe('exercise', () => {
   });
 
   it('sends a drop round the body in about a minute at rest', () => {
-    expect(roundTripSeconds(cardiacOutput('typical', 0))).toBeCloseTo(57.1, 1);
-    expect(roundTripSeconds(cardiacOutput('typical', 1))).toBeCloseTo(15, 0);
+    expect(roundTripSeconds(cardiacOutput(0, 'typical'))).toBeCloseTo(57.1, 1);
+    expect(roundTripSeconds(cardiacOutput(1, 'typical'))).toBeCloseTo(14.4, 1);
   });
 });
