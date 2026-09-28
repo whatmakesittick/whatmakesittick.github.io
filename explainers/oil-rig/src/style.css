@@ -32,6 +32,29 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.draft-control .range-widget__readouts,
+.section-readouts {
+  container-type: inline-size;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@container (max-width: 22rem) {
+  .draft-control .range-widget__readouts > div,
+  .section-readouts > div {
+    display: flex;
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .draft-control .range-widget__readouts dd,
+  .section-readouts dd {
+    margin: 0;
+    white-space: nowrap;
+  }
+}
+
 .draft-control .range,
 .depth-picker .range {
   --range-color: var(--sea);
@@ -104,9 +127,12 @@
 }
 
 .mud-control:is([data-mud-state='light'], [data-mud-state='heavy']) [data-readout='mud-state'],
-.mud-control:is([data-mud-state='light'], [data-mud-state='heavy']) .range-widget__header output,
-.depletion-control[data-flow-state='assisted'] [data-readout='flow-state'] {
+.mud-control:is([data-mud-state='light'], [data-mud-state='heavy']) .range-widget__header output {
   color: var(--danger);
+}
+
+.depletion-control[data-flow-state='assisted'] [data-readout='flow-state'] {
+  color: var(--accent);
 }
 
 .mud-control .chip-row {
