@@ -9,7 +9,9 @@
   },
   "stage": {
     "label": "Interaktives Modell",
-    "gauge": "Live-Messwerte"
+    "gauge": "Live-Messwerte",
+    "expand": "Modell im Vollbild ansehen",
+    "collapse": "Zurück zum Artikel"
   },
   "controls": {
     "label": "Bedienelemente",

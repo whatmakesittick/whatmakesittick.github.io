@@ -9,7 +9,9 @@
   },
   "stage": {
     "label": "Modelo interativo",
-    "gauge": "Leituras ao vivo"
+    "gauge": "Leituras ao vivo",
+    "expand": "Ver o modelo em tela cheia",
+    "collapse": "Voltar ao artigo"
   },
   "controls": {
     "label": "Controles",

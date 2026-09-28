@@ -9,7 +9,9 @@
   },
   "stage": {
     "label": "操作できるモデル",
-    "gauge": "リアルタイムの計測値"
+    "gauge": "リアルタイムの計測値",
+    "expand": "モデルを全画面で表示",
+    "collapse": "記事に戻る"
   },
   "controls": {
     "label": "操作",

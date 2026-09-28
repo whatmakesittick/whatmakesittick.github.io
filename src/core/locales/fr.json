@@ -9,7 +9,9 @@
   },
   "stage": {
     "label": "Modèle interactif",
-    "gauge": "Mesures en direct"
+    "gauge": "Mesures en direct",
+    "expand": "Afficher le modèle en plein écran",
+    "collapse": "Revenir à l’article"
   },
   "controls": {
     "label": "Commandes",

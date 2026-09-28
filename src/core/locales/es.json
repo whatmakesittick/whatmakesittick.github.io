@@ -9,7 +9,9 @@
   },
   "stage": {
     "label": "Modelo interactivo",
-    "gauge": "Datos en tiempo real"
+    "gauge": "Datos en tiempo real",
+    "expand": "Ver el modelo a pantalla completa",
+    "collapse": "Volver al artículo"
   },
   "controls": {
     "label": "Controles",

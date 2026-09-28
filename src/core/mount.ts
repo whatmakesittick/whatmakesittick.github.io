@@ -15,6 +15,7 @@ import { respectReducedMotion } from './ui/motion';
 import { mountReadouts } from './ui/readouts';
 import { mountSafeArea } from './ui/safeArea';
 import { mountSections } from './ui/sections';
+import { mountStageExpansion, stageShortcuts } from './ui/stageExpansion';
 
 const TITLE_KEY = 'meta.title';
 const SCENE_SELECTOR = '#scene';
@@ -53,8 +54,14 @@ export async function mountExplainer<S extends Playback>(
   mountFooter(document, TITLE_KEY);
   explainer.mountUi?.(document, store);
   mountActions(document, store, explainer.actions);
-  mountKeyboard(document, store, explainer);
-  mountSections(document, store, Object.keys(explainer.presets));
+  const stage = mountStageExpansion(document);
+  const unmountKeyboard = mountKeyboard(document, store, explainer, stageShortcuts(stage));
+  mountSections(document, store, Object.keys(explainer.presets), stage);
   mountSafeArea(document);
-  return mountScene(document, store, explainer);
+  const unmountScene = mountScene(document, store, explainer);
+  return () => {
+    unmountScene();
+    unmountKeyboard();
+    stage.dispose();
+  };
 }

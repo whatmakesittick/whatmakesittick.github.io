@@ -13,3 +13,7 @@ export function parseAttributeKeys(spec: string): AttributeKey[] {
     return attribute && key ? [[attribute, key] as const] : [];
   });
 }
+
+export function formatAttributeKeys(pairs: readonly AttributeKey[]): string {
+  return pairs.map((pair) => pair.join(KEY_SEPARATOR)).join(PAIR_SEPARATOR);
+}

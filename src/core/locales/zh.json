@@ -9,7 +9,9 @@
   },
   "stage": {
     "label": "交互式模型",
-    "gauge": "实时读数"
+    "gauge": "实时读数",
+    "expand": "全屏查看模型",
+    "collapse": "返回文章"
   },
   "controls": {
     "label": "控制",

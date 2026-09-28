@@ -160,6 +160,11 @@ a:hover {
 }
 
 .stage {
+  --stage-button-size: 36px;
+  --stage-button-top: max(var(--stage-inset), env(safe-area-inset-top));
+  --stage-button-right: max(var(--stage-inset), env(safe-area-inset-right));
+  --stage-overlay-gap: 8px;
+
   grid-area: stage;
   position: sticky;
   top: 0;
@@ -437,7 +442,7 @@ a:hover {
 
 .gauge {
   position: absolute;
-  top: var(--stage-inset);
+  top: calc(var(--stage-button-top) + var(--stage-button-size) + var(--stage-overlay-gap));
   right: var(--stage-inset);
   z-index: 3;
   display: flex;
@@ -498,6 +503,62 @@ a:hover {
   background: var(--meter-fill, var(--accent));
   transform: scaleX(0);
   transform-origin: left center;
+}
+
+/* Full screen toggle */
+
+.stage-expand {
+  position: absolute;
+  top: var(--stage-button-top);
+  right: var(--stage-button-right);
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: var(--stage-button-size);
+  height: var(--stage-button-size);
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: rgb(13 16 21 / 0.55);
+  color: var(--text);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.stage-expand:hover {
+  border-color: var(--accent);
+  background: rgb(13 16 21 / 0.8);
+}
+
+.stage-expand[aria-pressed='true'] .icon-expand,
+.stage-expand[aria-pressed='false'] .icon-collapse {
+  display: none;
+}
+
+:root[data-stage-expanded] .stage {
+  --stage-height: 100dvh;
+
+  position: fixed;
+  inset: 0;
+  border: 0;
+}
+
+:root[data-stage-expanded] .page > :not(.stage),
+:root[data-stage-expanded] .skip-link {
+  visibility: hidden;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .page > :not(.stage) {
+    transition:
+      opacity 200ms ease,
+      visibility 200ms;
+  }
 }
 
 /* Controls dock */
@@ -1205,6 +1266,10 @@ kbd {
 }
 
 @media (pointer: coarse) {
+  .stage {
+    --stage-button-size: 44px;
+  }
+
   .dock {
     --control-height: 40px;
   }
