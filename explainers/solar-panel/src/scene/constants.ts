@@ -66,18 +66,20 @@ export const DOOR = {
 } as const;
 
 export const FACE_LAYERS = {
-  busbar: [0.02, 0.05],
-  ribbon: [0.02, 0.08],
-  string: [0.12, 0.15],
-  wire: [0.16, 0.19],
-  plate: [0.2, 0.3],
-  symbol: [0.3, 0.33],
+  busbar: [0.03, 0.06],
+  ribbon: [0.03, 0.1],
+  string: [0.16, 0.2],
+  wire: [0.21, 0.24],
+  plate: [0.25, 0.34],
+  symbol: [0.34, 0.37],
 } as const;
 
 export const BUSBARS = {
   halfCut: { count: 10, width: 0.12 },
   fullCell: { count: 4, width: 0.18 },
 } as const;
+
+export const DETAIL_DISTANCE_CM = 900;
 
 export const BUS_RIBBON = { width: 0.4, margin: 0.6, inset: 1 } as const;
 
@@ -219,7 +221,7 @@ export const CELL_VIEW_DIRECTION = [-0.45, 0.4, 1] as const;
 export const SLICE_FLOW = {
   faceGap: 0.5,
   siliconIndex: 3.9,
-  photon: { pool: 26, trail: 8, spacing: 0.9, speed: 40, size: 4.2, maxRate: 9 },
+  photon: { pool: 30, trail: 10, spacing: 0.6, speed: 40, size: 3.6, halo: 3, maxRate: 12 },
   carrier: { pool: 64, speed: 10, size: 5.4, fade: 0.45, wiggle: 0.7, wiggleRate: 7 },
   edgeMarginUm: 20,
   depthJitter: 0.18,

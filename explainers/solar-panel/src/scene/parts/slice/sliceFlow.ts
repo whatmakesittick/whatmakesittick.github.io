@@ -1,4 +1,4 @@
-import { Color, Group, NormalBlending } from 'three';
+import { AdditiveBlending, Color, Group, NormalBlending, SRGBColorSpace } from 'three';
 import type { PointsMaterial } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
@@ -51,18 +51,24 @@ const OUTSIDE_LENGTH = um(SLICE_VIEW.entryUm);
 const EXIT_HEIGHT = -um(SLICE_VIEW.exitUm);
 const EDGE = um(SLICE_FLOW.edgeMarginUm);
 const HOLE_COLOR = new Color(THEME.hole);
+const WHITE = new Color('#ffffff');
+const HOT_CORE = 0.55;
 const ELECTRON_COLOR = new Color(THEME.electron);
 
 export class SliceFlowPart {
   readonly object = new Group();
   private readonly photonCloud: PointCloud;
+  private readonly haloCloud: PointCloud;
   private readonly carrierCloud: PointCloud;
   private readonly photonMaterial: PointsMaterial;
+  private readonly haloMaterial: PointsMaterial;
   private readonly carrierMaterial: PointsMaterial;
   private readonly photons: Photon[];
   private readonly carriers: Carrier[];
   private readonly random = seededRandom(SLICE_FLOW.seed);
   private readonly photonColor = new Color();
+  private readonly photonCore = new Color();
+  private readonly trailColor = new Color();
   private path: PhotonPath | null = null;
   private wavelength = 0;
   private rate = 0;
@@ -75,7 +81,12 @@ export class SliceFlowPart {
     this.photonMaterial = registered(
       context,
       UNDIMMED_GROUP,
-      createPointMaterial(context.textures.glow, photon.size, NormalBlending),
+      createPointMaterial(context.textures.dot, photon.size, NormalBlending),
+    );
+    this.haloMaterial = registered(
+      context,
+      UNDIMMED_GROUP,
+      createPointMaterial(context.textures.glow, photon.size * photon.halo, AdditiveBlending),
     );
     this.carrierMaterial = registered(
       context,
@@ -84,6 +95,9 @@ export class SliceFlowPart {
     );
     this.photonCloud = context.tracker.track(
       new PointCloud(photon.pool * photon.trail, this.photonMaterial, RENDER_ORDER.particles),
+    );
+    this.haloCloud = context.tracker.track(
+      new PointCloud(photon.pool, this.haloMaterial, RENDER_ORDER.particles),
     );
     this.carrierCloud = context.tracker.track(
       new PointCloud(carrier.pool, this.carrierMaterial, RENDER_ORDER.particles),
@@ -105,7 +119,7 @@ export class SliceFlowPart {
       fading: 0,
       phase: 0,
     }));
-    this.object.add(this.photonCloud.points, this.carrierCloud.points);
+    this.object.add(this.haloCloud.points, this.photonCloud.points, this.carrierCloud.points);
     this.setSide(-1);
   }
 
@@ -116,7 +130,8 @@ export class SliceFlowPart {
   setWavelength(nanometres: number): void {
     this.wavelength = nanometres;
     const [r, g, b] = wavelengthColor(nanometres);
-    this.photonColor.setRGB(r, g, b);
+    this.photonColor.setRGB(r, g, b, SRGBColorSpace);
+    this.photonCore.copy(this.photonColor).lerp(WHITE, HOT_CORE);
   }
 
   setIrradiance(wattsPerSquareMetre: number): void {
@@ -136,6 +151,7 @@ export class SliceFlowPart {
     if (!this.object.visible) return;
     this.time += deltaSeconds;
     this.photonMaterial.size = SLICE_FLOW.photon.size * scale;
+    this.haloMaterial.size = SLICE_FLOW.photon.size * SLICE_FLOW.photon.halo * scale;
     this.carrierMaterial.size = SLICE_FLOW.carrier.size * scale;
     this.spawn(deltaSeconds);
     this.movePhotons(deltaSeconds);
@@ -184,26 +200,41 @@ export class SliceFlowPart {
 
   private movePhotons(deltaSeconds: number): void {
     const { trail, spacing, speed } = SLICE_FLOW.photon;
-    const { r, g, b } = this.photonColor;
     this.photons.forEach((photon, index) => {
       if (photon.active) {
         photon.travelled += speed * deltaSeconds;
         const head = this.photonPoint(photon, photon.travelled);
         if (head.h <= photon.stop) this.finish(photon, head);
       }
+      this.placeHalo(photon, index);
       for (let step = 0; step < trail; step += 1) {
         const slot = index * trail + step;
         const distance = photon.travelled - step * spacing;
         if (!photon.active || distance < 0) {
-          this.photonCloud.setColor(slot, r, g, b, HIDDEN_ALPHA);
+          this.photonCloud.setColor(slot, 0, 0, 0, HIDDEN_ALPHA);
           continue;
         }
         const point = this.photonPoint(photon, distance);
+        const { r, g, b } = this.trailColor
+          .copy(this.photonCore)
+          .lerp(this.photonColor, step / trail);
         this.photonCloud.setPoint(slot, point.x, this.plane, point.h);
         this.photonCloud.setColor(slot, r, g, b, 1 - step / trail);
       }
     });
     this.photonCloud.commit();
+    this.haloCloud.commit();
+  }
+
+  private placeHalo(photon: Photon, index: number): void {
+    if (!photon.active) {
+      this.haloCloud.setColor(index, 0, 0, 0, HIDDEN_ALPHA);
+      return;
+    }
+    const head = this.photonPoint(photon, photon.travelled);
+    const { r, g, b } = this.photonColor;
+    this.haloCloud.setPoint(index, head.x, this.plane, head.h);
+    this.haloCloud.setColor(index, r, g, b, 1);
   }
 
   private finish(photon: Photon, at: SectionPoint): void {
