@@ -52,7 +52,7 @@ export const DEFAULT_EVENT: EventId = 'm100';
 export const DEFAULT_TRAINING: TrainingId = 'untrained';
 
 const TRAINING_PRESET: PresetId = 'training';
-const SINGLE_MOTOR = 1;
+export const SINGLE_MOTOR = 1;
 
 const CHAPTER_CONTROL_DEFAULTS: ChapterControls = {
   ring: DEFAULT_RING,
