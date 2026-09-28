@@ -16,7 +16,7 @@ export interface Section {
 
 export const SECTIONS: readonly Section[] = [
   { id: 'conductor', holeInches: 36, casingInches: 30, shoeDepth: 1100, plannedMudWeight: 1.03 },
-  { id: 'surface', holeInches: 26, casingInches: 20, shoeDepth: 2025, plannedMudWeight: 1.05 },
+  { id: 'surface', holeInches: 26, casingInches: 20, shoeDepth: 2025, plannedMudWeight: 1.08 },
   {
     id: 'intermediate',
     holeInches: 17.5,
