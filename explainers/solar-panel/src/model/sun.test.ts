@@ -83,6 +83,8 @@ describe('clear sky', () => {
   it('is dark before sunrise and after sunset', () => {
     expect(directNormalIrradiance(0)).toBe(0);
     expect(planeOfArrayIrradiance(SUNRISE_MIN - 10, TILT)).toBe(0);
+    expect(planeOfArrayIrradiance(SUNRISE_MIN, TILT)).toBe(0);
+    expect(planeOfArrayIrradiance(SUNSET_MIN, TILT)).toBe(0);
     expect(irradianceParts(SUNSET_MIN + 10, TILT).total).toBe(0);
   });
 

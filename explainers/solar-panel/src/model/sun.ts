@@ -11,6 +11,7 @@ export const DIFFUSE_SHARE = 0.1;
 export const GROUND_ALBEDO = 0.2;
 
 const RIGHT_ANGLE_DEG = 90;
+const HORIZON_EPSILON_DEG = 1e-9;
 const FULL_TURN_DEG = 360;
 const KASTEN_YOUNG = { a: 0.50572, b: 96.07995, c: -1.6364 } as const;
 const MEINEL = { base: 0.7, exponent: 0.678 } as const;
@@ -69,7 +70,7 @@ export function airMass(elevationDeg: number): number {
 }
 
 export function directNormalIrradiance(elevationDeg: number): number {
-  if (elevationDeg <= 0) return 0;
+  if (elevationDeg <= HORIZON_EPSILON_DEG) return 0;
   return SOLAR_CONSTANT_W_M2 * MEINEL.base ** (airMass(elevationDeg) ** MEINEL.exponent);
 }
 
