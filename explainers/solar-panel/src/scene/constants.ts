@@ -1,6 +1,20 @@
+import type { PartId } from '../ids';
 import { BULKHEAD, HOUSE_WALL_BOTTOM_CM, PARAPET, TERRACE } from '../model';
 
 export const ANCHOR_LIFT_CM = 2;
+
+export const HERO_PANEL_PARTS: readonly PartId[] = [
+  'panel',
+  'frame',
+  'glass',
+  'encapsulant',
+  'cell',
+  'ribbon',
+  'busbar',
+  'backsheet',
+  'junctionBox',
+  'bypassDiode',
+];
 
 export const FLOOR = { thickness: 2, tile: 50, joint: 0.8 } as const;
 

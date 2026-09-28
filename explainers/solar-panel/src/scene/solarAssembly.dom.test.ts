@@ -8,6 +8,7 @@ import type { SceneTextures } from '@core/scene/textures';
 import { PART_IDS } from '../ids';
 import type { AnchorId, AssemblyState, RegionId } from '../ids';
 import { DAY_START_MIN, SOLAR_NOON_MIN, SUNRISE_MIN } from '../model';
+import { HERO_PANEL_PARTS } from './constants';
 import { SolarAssembly } from './solarAssembly';
 
 const STATE: AssemblyState = {
@@ -180,6 +181,25 @@ describe('SolarAssembly', () => {
     console.log(`triangles ${triangles}, draw calls ${drawCalls}`);
     expect(triangles).toBeLessThan(TRIANGLE_BUDGET);
     expect(drawCalls).toBeLessThan(DRAW_CALL_BUDGET);
+  });
+
+  it('draws the hero panel only with the groups a panel highlight expands to', () => {
+    const solar = build();
+    const library = materials;
+    if (!library) throw new Error('No material library');
+    const heroGroups = new Set<string>();
+    const hero = solar.anchor('panel').parent;
+    if (!hero) throw new Error('No hero panel');
+    hero.traverse((object) => {
+      if (!(object instanceof Mesh)) return;
+      const list = Array.isArray(object.material) ? object.material : [object.material];
+      list.forEach((material) => {
+        const group = library.groupOf(material);
+        if (group) heroGroups.add(group);
+      });
+    });
+    const allowed = new Set<string>([...HERO_PANEL_PARTS, 'connector']);
+    heroGroups.forEach((group) => expect(allowed.has(group), group).toBe(true));
   });
 
   it('disposes its geometries and leaves no material registered', () => {
