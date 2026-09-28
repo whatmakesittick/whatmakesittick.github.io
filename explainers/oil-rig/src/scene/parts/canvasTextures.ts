@@ -1,11 +1,10 @@
 import { CanvasTexture, RepeatWrapping, SRGBColorSpace } from 'three';
+import { seededRandom } from '../geometry/random';
 
 export type RockPattern = 'clay' | 'sand' | 'shale' | 'interbedded';
 
 type Painter = (context: CanvasRenderingContext2D, size: number, random: () => number) => void;
 
-const SEED_MULTIPLIER = 48271;
-const SEED_MODULUS = 2147483647;
 const ANISOTROPY = 4;
 const BASE_TONE = '#ffffff';
 
@@ -30,14 +29,6 @@ const LABEL_PAINT = {
   radius: 20,
   padding: 12,
 } as const;
-
-export function seededRandom(seed: number): () => number {
-  let state = seed % SEED_MODULUS || 1;
-  return () => {
-    state = (state * SEED_MULTIPLIER) % SEED_MODULUS;
-    return state / SEED_MODULUS;
-  };
-}
 
 function canvasTexture(
   width: number,

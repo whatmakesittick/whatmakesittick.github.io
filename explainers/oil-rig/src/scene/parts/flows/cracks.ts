@@ -2,7 +2,7 @@ import { Group, Vector2 } from 'three';
 import type { BufferGeometry } from 'three';
 import { CRACKS } from '../../constants';
 import { MeshBuilder } from '../../geometry/meshBuilder';
-import { seededRandom } from '../canvasTextures';
+import { seededRandom } from '../../geometry/random';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
 

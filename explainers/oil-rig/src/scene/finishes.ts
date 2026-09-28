@@ -187,5 +187,3 @@ export const BAND_TONES = {
   base: '#7e766c',
   sourceRock: '#3d3633',
 } as const;
-
-export const CUT_FACE_LIGHTEN = 0.35;

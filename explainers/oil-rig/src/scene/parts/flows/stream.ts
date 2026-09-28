@@ -1,7 +1,7 @@
 import { Color } from 'three';
 import type { ColorRepresentation, PointsMaterial } from 'three';
 import { createPointMaterial, PointCloud } from '@core/scene/pointCloud';
-import { seededRandom } from '../canvasTextures';
+import { seededRandom } from '../../geometry/random';
 import type { EmphasisGroup, PartContext } from '../context';
 
 export interface Particle {

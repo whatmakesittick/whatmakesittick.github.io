@@ -5,7 +5,7 @@ import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { SEABED_Y } from '../../../model/scale';
 import { MOUND } from '../../constants';
 import { merge } from '../../geometry/merge';
-import { seededRandom } from '../canvasTextures';
+import { seededRandom } from '../../geometry/random';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
 

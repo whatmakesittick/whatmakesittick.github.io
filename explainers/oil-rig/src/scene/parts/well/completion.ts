@@ -13,7 +13,7 @@ import { mergePainted } from '../../geometry/merge';
 import { testLineRoute } from '../../geometry/testLine';
 import { BACK_HALF, tubeGeometry } from '../../geometry/tubes';
 import { holeAt, isCasedSection, tubeWall, wellY } from '../../geometry/wellColumn';
-import { seededRandom } from '../canvasTextures';
+import { seededRandom } from '../../geometry/random';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
 
