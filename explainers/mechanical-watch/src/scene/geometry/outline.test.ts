@@ -9,6 +9,7 @@ import {
   signedArea,
   smoothOutline,
   subtractCircle,
+  withoutRepeats,
 } from './outline';
 
 const SQUARE = [
@@ -73,6 +74,11 @@ describe('outline', () => {
       expect(point.x).toBeLessThanOrEqual(4 + TOLERANCE);
     });
     expect(signedArea(rounded)).toBeLessThan(16);
+  });
+
+  it('drops repeated neighbours', () => {
+    const points = [SQUARE[0], SQUARE[0], ...SQUARE.slice(1)];
+    expect(withoutRepeats(points)).toHaveLength(4);
   });
 
   it('passes a smooth outline through every control point', () => {

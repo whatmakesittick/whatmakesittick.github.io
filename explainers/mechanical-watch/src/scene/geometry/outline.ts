@@ -221,6 +221,13 @@ function filletCorner(
   });
 }
 
+export function withoutRepeats(points: readonly Vec2[]): Vec2[] {
+  return points.filter((point, index) => {
+    const next = points[(index + 1) % points.length];
+    return distance(point, next) > EPSILON;
+  });
+}
+
 export function roundCorners(
   polygon: readonly Vec2[],
   radius: number,
@@ -228,12 +235,13 @@ export function roundCorners(
   segments: number,
 ): Vec2[] {
   const minTurn = toRadians(minTurnDeg);
-  return polygon.flatMap((point, index) => {
+  const rounded = polygon.flatMap((point, index) => {
     const previous = polygon[(index - 1 + polygon.length) % polygon.length];
     const next = polygon[(index + 1) % polygon.length];
     if (Math.abs(cornerTurn(previous, point, next)) < minTurn) return [point];
     return filletCorner(previous, point, next, radius, segments);
   });
+  return withoutRepeats(rounded);
 }
 
 export function offsetPolyline(points: readonly Vec2[], halfWidth: number): Vec2[] {

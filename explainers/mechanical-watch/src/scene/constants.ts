@@ -208,7 +208,7 @@ export const FORK = {
   shoulderHalfWidth: 0.3,
   bankingHalfLength: 0.16,
   slotHalfWidth: 0.225,
-  hornHalfWidth: 0.56,
+  hornHalfWidth: 0.46,
   jewelClearance: 0.02,
   hornSamples: 8,
   guardPin: { radius: 0.05, level: [2.02, 2.12] as Span, tipFromBalance: 0.36 },
