@@ -124,6 +124,30 @@ describe('chapter widgets', () => {
     expect(readout('junction-pairs')).toBe('0');
   });
 
+  it('shows the shadow creeping up the panel and what the diodes do', () => {
+    expect(readout('shade')).toBe('0%');
+    expect(readout('shade-cells')).toBe('0 of 108');
+    expect(readout('shade-diodes')).toBe('0 of 3');
+    expect(readout('shade-power')).toBe('375 W');
+    expect(readout('shade-loss')).toBe('0%');
+    slide('shade', 0.5);
+    expect(readout('shade')).toBe('50%');
+    expect(readout('shade-cells')).toBe('54 of 108');
+    expect(readout('shade-loss')).toMatch(/^5\d%$/);
+    click('layout', 'fullCell');
+    expect(pressed('layout', 'fullCell')).toBe('true');
+    expect(readout('shade-cells')).toBe('30 of 60');
+    expect(readout('shade-power')).toMatch(/^\d W$/);
+    expect(readout('shade-loss')).toBe('100%');
+  });
+
+  it('keeps the diodes off while the shadow covers every third of the panel alike', () => {
+    click('layout', 'fullCell');
+    slide('shade', 0.05);
+    expect(readout('shade-cells')).toBe('6 of 60');
+    expect(readout('shade-diodes')).toBe('0 of 3');
+  });
+
   it('stops updating once disposed', () => {
     dispose();
     store.getState().setTilt(80);

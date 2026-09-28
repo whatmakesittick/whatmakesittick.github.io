@@ -4,6 +4,7 @@ import type { Disposer } from './disposers';
 import { mountExplodeControl } from './explodeControl';
 import { mountJunctionReadouts } from './junctionReadouts';
 import { mountLayerReadouts } from './layerReadouts';
+import { mountShadeControl } from './shadeControl';
 import { mountTiltControl } from './tiltControl';
 import { mountWavelengthControl } from './wavelengthControl';
 
@@ -18,5 +19,6 @@ export function mountSolarPanelUi(root: Document, store: SolarPanelStore): Dispo
     mountLayerReadouts(root, store),
     mountWavelengthControl(root, store),
     mountJunctionReadouts(root, store),
+    mountShadeControl(root, store),
   ]);
 }
