@@ -15,7 +15,7 @@ import {
 } from './beatPlot';
 import type { Plot, Scale } from './beatPlot';
 import { CachedLayer, layerKey } from './cachedLayer';
-import { CANVAS_COLORS } from './canvasColors';
+import { CANVAS_COLORS, WAVE_BANDS } from './canvasColors';
 import { CanvasSurface, canvasFont } from './canvasSurface';
 import type { CanvasFrame } from './canvasSurface';
 
@@ -96,7 +96,7 @@ function paintWaves(context: CanvasRenderingContext2D, layout: EcgLayout, labels
   WAVE_IDS.forEach((wave, index) => {
     const { start, end } = WAVE_SPANS[wave];
     const left = xOfTime(plot, start);
-    context.fillStyle = CANVAS_COLORS.waveBand;
+    context.fillStyle = WAVE_BANDS[wave];
     context.fillRect(left, plot.top, xOfTime(plot, end) - left, plot.bottom - plot.top);
     const label = labels.waves[index];
     context.fillStyle = CANVAS_COLORS.lit;
