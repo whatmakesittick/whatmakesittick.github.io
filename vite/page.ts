@@ -101,7 +101,7 @@ export function renderPage(
   const html = render(template, partials, {
     ...siteValues(explainerSourceUrl(manifest.slug)),
     ...languageValues(code, route),
-    ...socialValues(image, manifest.social.alt),
+    ...socialValues(image, meta.socialAlt ?? manifest.social.alt),
     ...explainerHeadValues(explainer, meta, language),
     title: escapeHtml(meta.title),
     description: escapeHtml(meta.description),

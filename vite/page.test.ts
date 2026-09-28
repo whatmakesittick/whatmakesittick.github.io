@@ -11,7 +11,12 @@ const meta = {
   description: 'A look inside <things>',
   summary: 'Short',
 };
-const ukrainianMeta = { ...meta, title: 'Як працює річ', description: 'Погляд усередину' };
+const ukrainianMeta = {
+  ...meta,
+  title: 'Як працює річ',
+  description: 'Погляд усередину',
+  socialAlt: 'Річ у розрізі',
+};
 
 const explainer: LoadedExplainer = {
   manifest: {
@@ -46,6 +51,7 @@ const template = [
   '<link rel="canonical" href="{{url}}" />',
   '{{alternateLinks}}',
   '<meta content="{{image}}" type="{{imageType}}" />',
+  '<meta property="og:image:alt" content="{{imageAlt}}" />',
   '{{localeTags}}',
   '<a href="{{sourceUrl}}">{{siteName}}</a>',
   '<a class="catalogue" href="{{catalogueUrl}}">{{siteName}}</a>',
@@ -110,6 +116,14 @@ describe('renderPage', () => {
     );
     expect(html).toContain('<meta property="og:locale" content="en_GB"');
     expect(html).toContain('<meta property="og:locale:alternate" content="uk_UA"');
+  });
+
+  it('describes the social image in the language of the page', () => {
+    expect(ukrainian).toContain('<meta property="og:image:alt" content="Річ у розрізі"');
+  });
+
+  it('falls back to the manifest alt text when the locale has none', () => {
+    expect(html).toContain('<meta property="og:image:alt" content="A thing"');
   });
 
   it('links the source folder and fills the shared partials', () => {

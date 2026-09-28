@@ -39,6 +39,7 @@ export interface ExplainerMeta {
   tagline: string;
   description: string;
   summary: string;
+  socialAlt?: string;
 }
 
 export const META_KEYS: readonly (keyof ExplainerMeta)[] = [

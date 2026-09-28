@@ -41,7 +41,8 @@ explainers/engine/
   explainer.json      slug, tags, cover, entry, chapters, locales, social
   chapters.html       the prose column: <section class="chapter" data-preset="…"> blocks
   locales/en.json …   everything the explainer says, including meta.title, meta.eyebrow,
-                      meta.tagline, meta.description, meta.summary
+                      meta.tagline, meta.description, meta.summary and the optional
+                      meta.socialAlt
   src/index.ts        export default defineExplainer({ … }), imports src/style.css
   src/style.css       styles for the explainer's own widgets and tones
   src/model/          pure simulation, unit tested
@@ -73,7 +74,8 @@ from `TAGS` in `src/core/manifest.ts`: mechanics, engines, vehicles, aircraft,
 flight, physics, weather, home, tools, optics, energy, earth and biology. Every tag has a label under
 `catalogue.tags.<id>` in all eight core locales, which a test enforces, so a new
 tag goes into `TAGS` and every core locale together. `cover` and `social.image` are paths inside `public/`;
-the social image is 1200 × 630. The plugin validates all of this and fails the
+the social image is 1200 × 630. The page head describes it with `meta.socialAlt` from the
+page's locale when the locale has it, and with `social.alt` otherwise. The plugin validates all of this and fails the
 build with the manifest's path in the message.
 
 The explainer imports the toolkit through the `@core/*` alias, which resolves to
