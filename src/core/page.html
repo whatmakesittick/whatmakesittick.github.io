@@ -190,7 +190,22 @@
         </div>
       </section>
 
-      <main id="explainer" class="prose">{{chapters}}</main>
+      <main id="explainer" class="prose">
+        {{chapters}}
+
+        <nav class="more-explainers" aria-labelledby="more-explainers-title">
+          <h2
+            id="more-explainers-title"
+            class="more-explainers-title"
+            data-i18n="page.moreExplainers"
+          >
+            More explainers
+          </h2>
+          <ul class="more-explainers-list">
+            {{moreExplainers}}
+          </ul>
+        </nav>
+      </main>
 
       <!-- partial:footer -->
     </div>

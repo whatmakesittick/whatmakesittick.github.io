@@ -1,11 +1,20 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
+import type { CatalogueCard } from '../src/site/catalogue.ts';
 import { loadCoreDictionaries, mergeLocales, pageLanguage } from './i18n.ts';
 import type { Dictionaries } from './i18n.ts';
 import { loadExplainers } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
-import { PAGE_ENTRY, renderCatalogue, renderEntry, renderNotFound, renderPage } from './page.ts';
+import { pickMoreExplainers } from './moreExplainers.ts';
+import {
+  PAGE_ENTRY,
+  catalogueCards,
+  renderCatalogue,
+  renderEntry,
+  renderNotFound,
+  renderPage,
+} from './page.ts';
 import { prunePageFolders, writePageFolder } from './pageFolders.ts';
 import type { PageFiles } from './pageFolders.ts';
 import { CATALOGUE_ROUTE, pageFolder } from './routes.ts';
@@ -74,9 +83,14 @@ function catalogueFolders(sources: Sources, explainers: LoadedExplainer[]): Page
     }));
 }
 
-function explainerFolders(sources: Sources, explainer: LoadedExplainer): PageFolder[] {
+function explainerFolders(
+  sources: Sources,
+  explainer: LoadedExplainer,
+  cards: readonly CatalogueCard[],
+): PageFolder[] {
   const { manifest } = explainer;
   const dictionaries = mergeLocales(sources.core, explainer.dictionaries);
+  const moreExplainers = pickMoreExplainers(cards, manifest);
   const entry = { [PAGE_ENTRY]: renderEntry(manifest) };
   return manifest.locales.map((code) => ({
     path: pageFolder(code, manifest.slug),
@@ -86,6 +100,7 @@ function explainerFolders(sources: Sources, explainer: LoadedExplainer): PageFol
         sources.partials,
         explainer,
         pageLanguage(dictionaries, code),
+        moreExplainers,
       ),
       ...(code === DEFAULT_LANGUAGE ? entry : {}),
     },
@@ -95,9 +110,10 @@ function explainerFolders(sources: Sources, explainer: LoadedExplainer): PageFol
 export function generateSite(root: string): Site {
   const explainers = loadExplainers(root);
   const sources = readSources(root);
+  const cards = catalogueCards(explainers);
   const folders = [
     ...catalogueFolders(sources, explainers),
-    ...explainers.flatMap((explainer) => explainerFolders(sources, explainer)),
+    ...explainers.flatMap((explainer) => explainerFolders(sources, explainer, cards)),
   ];
   for (const { path, files } of folders) writePageFolder(root, path, files);
   const paths = folders.map(({ path }) => path);

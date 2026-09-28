@@ -8,6 +8,7 @@ import { renderCatalogueGrid } from '../src/site/catalogueMarkup.ts';
 import { alternateLinks, imageType, jsonLd, localeTags } from './head.ts';
 import type { PageLanguage } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
+import { renderMoreExplainers } from './moreExplainers.ts';
 import { CATALOGUE_ROUTE, explainerRoute } from './routes.ts';
 import type { PageRoute } from './routes.ts';
 import {
@@ -138,6 +139,7 @@ export function renderPage(
   partials: TemplateValues,
   explainer: LoadedExplainer,
   language: PageLanguage,
+  moreExplainers: readonly CatalogueCard[],
 ): string {
   const { code, translate } = language;
   const { manifest } = explainer;
@@ -158,6 +160,7 @@ export function renderPage(
     structuredData: jsonLd(explainerData(meta, facts, explainer.dates)),
     chapters: explainer.chapters,
     entry: `/${manifest.slug}/${PAGE_ENTRY}`,
+    moreExplainers: renderMoreExplainers(moreExplainers, { code, base: ROOT_PATH }),
   });
   return translateHtml(html, translate);
 }

@@ -70,6 +70,7 @@ const template = [
   '<main>',
   '  {{chapters}}',
   '</main>',
+  '<ul>{{moreExplainers}}</ul>',
   '<!-- partial:footer -->',
   '<script type="module" src="{{entry}}"></script>',
   '</html>',
@@ -123,9 +124,21 @@ function hreflangs(html: string): string[] {
   );
 }
 
+const pump: LoadedExplainer = {
+  ...explainer,
+  manifest: { ...explainer.manifest, slug: 'pump' },
+  metas: { en: { ...meta, title: 'How a pump works' }, uk: { ...meta, title: 'Як працює насос' } },
+};
+const kettle: LoadedExplainer = {
+  ...explainer,
+  manifest: { ...explainer.manifest, slug: 'kettle', locales: ['en'] },
+  metas: { en: { ...meta, title: 'How a kettle works' } },
+};
+
 describe('renderPage', () => {
-  const html = renderPage(template, partials, explainer, language('en'));
-  const ukrainian = renderPage(template, partials, explainer, language('uk'));
+  const more = catalogueCards([pump, kettle]);
+  const html = renderPage(template, partials, explainer, language('en'), more);
+  const ukrainian = renderPage(template, partials, explainer, language('uk'), more);
 
   it('escapes the explainer copy into the head', () => {
     expect(html).toContain('<title>How a &quot;thing&quot; works · What makes it tick</title>');
@@ -263,6 +276,15 @@ describe('renderPage', () => {
     expect(ukrainian).toContain('<h2 data-i18n="sections.intro">Вступ</h2>');
   });
 
+  it('links more explainers in the language of the page or in English', () => {
+    const links = (page: string) =>
+      [...page.matchAll(/<a class="more-explainer" href="([^"]+)">.*?title">([^<]+)</g)].map(
+        ([, href, title]) => `${href} ${title}`,
+      );
+    expect(links(ukrainian)).toEqual(['/kettle/ How a kettle works', '/uk/pump/ Як працює насос']);
+    expect(links(html)).toEqual(['/kettle/ How a kettle works', '/pump/ How a pump works']);
+  });
+
   it('lists every language variant and the English page as the default', () => {
     const expected = [
       'en https://whatmakesittick.github.io/thing/',
@@ -279,6 +301,7 @@ describe('renderCatalogue', () => {
     .replace(articleTags, '')
     .replace(coverTag, '')
     .replace('{{chapters}}', '{{catalogue}}')
+    .replace('{{moreExplainers}}', '')
     .replace('{{entry}}', '/main.ts');
   const gearbox: LoadedExplainer = {
     ...explainer,

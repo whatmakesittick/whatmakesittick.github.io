@@ -552,6 +552,16 @@ as a link above the eyebrow, and the shared footer has an "All explainers" link
 `?lang=` query, so an English page translated by the query opens the English
 catalogue in the same language.
 
+Explainers also link to each other. After the chapters, every explainer page ends
+with "More explainers" (`page.moreExplainers`): three other explainers as small
+cards with the cover and the title in the page's language, each linked like a
+catalogue card, to its page in that language when it ships it and to the English
+page otherwise. `pickMoreExplainers` in `vite/moreExplainers.ts` ranks the others
+by how many tags they share with the page, the newest first among equals. The
+build fills the list into the `{{moreExplainers}}` hook of `src/core/page.html`
+with the cover and link helpers of `src/site/catalogueMarkup.ts`; the runtime
+leaves it alone.
+
 ## Translations
 
 i18next with `en` as fallback. Core and explainer copy in `en` ships with the page;
