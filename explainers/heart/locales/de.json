@@ -1,0 +1,276 @@
+{
+  "meta": {
+    "title": "So funktioniert das Herz",
+    "eyebrow": "Menschliches Herz",
+    "tagline": "Ein faustgroßer Muskel zieht sich etwa einmal pro Sekunde zusammen und pumpt Blut durch zwei Kreisläufe. Vier Klappen lassen es dabei nur in eine Richtung durch.",
+    "description": "Ein schlagendes Herz in 3D, verlangsamt und aufgeschnitten: Vorhöfe, Kammern, Klappen, die Druckkurve, der eigene Taktgeber und was beim Laufen passiert.",
+    "summary": "Vorhöfe und Kammern, vier Klappen, die Druckkurve, der Taktgeber im Herzen und was beim Laufen passiert.",
+    "socialAlt": "Low-Poly-3D-Modell eines menschlichen Herzens, aufgeschnitten, sodass Vorhöfe, Kammern und Klappen zu sehen sind, darüber Aorta und Lungenarterienstamm, neben dem Titel „So funktioniert das Herz“"
+  },
+  "stage": {
+    "label": "Interaktives Modell des Herzens",
+    "gauge": "Live-Werte des Herzens"
+  },
+  "controls": {
+    "label": "Steuerung des Herzmodells",
+    "views": {
+      "cutaway": {
+        "name": "Aufgeschnitten",
+        "short": "Schnitt",
+        "hint": "Aufgeschnitten (C)"
+      },
+      "flow": {
+        "name": "Blutfluss",
+        "short": "Fluss",
+        "hint": "Blutfluss (F)"
+      },
+      "conduction": {
+        "name": "Reizleitung",
+        "short": "Signal",
+        "hint": "Reizleitung (E)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    },
+    "chamberOptions": {
+      "rightAtrium": "Rechter Vorhof",
+      "rightVentricle": "Rechte Kammer",
+      "leftAtrium": "Linker Vorhof",
+      "leftVentricle": "Linke Kammer"
+    },
+    "valveOptions": {
+      "tricuspid": "Trikuspidalklappe",
+      "pulmonary": "Pulmonalklappe",
+      "mitral": "Mitralklappe",
+      "aortic": "Aortenklappe"
+    },
+    "waveOptions": {
+      "p": "P-Welle",
+      "qrs": "QRS-Komplex",
+      "t": "T-Welle"
+    },
+    "fitnessOptions": {
+      "typical": "Durchschnittlicher Erwachsener",
+      "athlete": "Ausdauersportler"
+    }
+  },
+  "timeline": {
+    "label": "Moment im Herzschlag",
+    "phases": "Zu einem Moment im Herzschlag springen",
+    "speed": "Wiedergabe",
+    "value": "{{time}} nach Schlagbeginn, {{phase}}",
+    "realTime": "Echtzeit",
+    "slower": "{{factor}}-mal langsamer als in Wirklichkeit",
+    "phase": {
+      "atria": "Vorhöfe füllen nach",
+      "squeeze": "Druck steigt",
+      "eject": "Blut strömt aus",
+      "relax": "Druck fällt",
+      "fill": "Schnelle Füllung",
+      "rest": "Langsame Füllung"
+    },
+    "during": {
+      "atria": "die Vorhöfe füllen die Kammern auf",
+      "squeeze": "die Kammern spannen sich bei geschlossenen Klappen an",
+      "eject": "das Blut strömt in die Aorta und den Lungenarterienstamm",
+      "relax": "die Kammern entspannen sich bei geschlossenen Klappen",
+      "fill": "das Blut strömt in die Kammern",
+      "rest": "die Kammern füllen sich langsam"
+    },
+    "jump": {
+      "atria": "Zum Nachfüllen durch die Vorhöfe springen",
+      "squeeze": "Zum Druckaufbau springen",
+      "eject": "Zum Auswurf springen",
+      "relax": "Zum Druckabfall springen",
+      "fill": "Zur schnellen Füllung springen",
+      "rest": "Zur langsamen Füllung springen"
+    }
+  },
+  "readouts": {
+    "lvPressure": "Druck in der linken Kammer",
+    "aorticPressure": "Druck in der Aorta",
+    "lvVolume": "Blut in der linken Kammer",
+    "valves": "Klappen",
+    "signal": "Elektrisches Signal"
+  },
+  "parts": {
+    "rightAtrium": "Rechter Vorhof",
+    "rightVentricle": "Rechte Kammer",
+    "leftAtrium": "Linker Vorhof",
+    "leftVentricle": "Linke Kammer",
+    "septum": "Kammerscheidewand",
+    "wall": "Herzmuskel",
+    "apex": "Herzspitze",
+    "tricuspidValve": "Trikuspidalklappe",
+    "pulmonaryValve": "Pulmonalklappe",
+    "mitralValve": "Mitralklappe",
+    "aorticValve": "Aortenklappe",
+    "chordae": "Sehnenfäden und Papillarmuskeln",
+    "aorta": "Aorta",
+    "archBranches": "Arterien zu Kopf und Armen",
+    "pulmonaryTrunk": "Lungenarterienstamm",
+    "pulmonaryArteries": "Lungenarterien",
+    "superiorVenaCava": "Obere Hohlvene",
+    "inferiorVenaCava": "Untere Hohlvene",
+    "pulmonaryVeins": "Lungenvenen",
+    "coronaries": "Herzkranzgefäße",
+    "sinusNode": "Sinusknoten",
+    "avNode": "AV-Knoten",
+    "bundleBranches": "Kammerschenkel",
+    "purkinjeFibres": "Purkinje-Fasern",
+    "venousBlood": "Sauerstoffarmes Blut",
+    "arterialBlood": "Sauerstoffreiches Blut"
+  },
+  "valves": {
+    "state": {
+      "avOpen": "Mitral- und Trikuspidalklappe offen",
+      "allClosed": "Alle vier geschlossen",
+      "semilunarOpen": "Aorten- und Pulmonalklappe offen"
+    },
+    "now": {
+      "open": "offen",
+      "shut": "geschlossen",
+      "opening": "öffnet sich",
+      "closing": "schließt sich"
+    },
+    "between": {
+      "tricuspid": "dem rechten Vorhof und der rechten Kammer",
+      "pulmonary": "der rechten Kammer und dem Lungenarterienstamm",
+      "mitral": "dem linken Vorhof und der linken Kammer",
+      "aortic": "der linken Kammer und der Aorta"
+    },
+    "sound": {
+      "s1": "der erste Herzton",
+      "s2": "der zweite Herzton"
+    }
+  },
+  "chambers": {
+    "receives": {
+      "rightAtrium": "dem Körper, über die beiden Hohlvenen",
+      "rightVentricle": "dem rechten Vorhof",
+      "leftAtrium": "der Lunge, über die vier Lungenvenen",
+      "leftVentricle": "dem linken Vorhof"
+    },
+    "sends": {
+      "rightAtrium": "die rechte Kammer",
+      "rightVentricle": "die Lunge, über den Lungenarterienstamm",
+      "leftAtrium": "die linke Kammer",
+      "leftVentricle": "den ganzen Körper, über die Aorta"
+    },
+    "wall": {
+      "rightAtrium": "dünn",
+      "rightVentricle": "etwa ein Drittel der linken",
+      "leftAtrium": "dünn",
+      "leftVentricle": "6 bis 9 mm"
+    },
+    "role": {
+      "rightAtrium": "Blut aus dem Körper sammeln und die rechte Kammer auffüllen",
+      "rightVentricle": "Blut sanft durch die Lunge pumpen",
+      "leftAtrium": "Blut aus der Lunge sammeln und die linke Kammer auffüllen",
+      "leftVentricle": "Blut kräftig durch den ganzen Körper pumpen"
+    }
+  },
+  "signal": {
+    "sinusNode": "Sinusknoten",
+    "atria": "Vorhöfe",
+    "avNode": "AV-Knoten, kurze Pause",
+    "bundle": "His-Bündel",
+    "branches": "Kammerschenkel",
+    "purkinje": "Purkinje-Fasern",
+    "ventricles": "Kammerwände",
+    "recovering": "Kammern erholen sich",
+    "quiet": "Ruhe bis zum nächsten Schlag"
+  },
+  "units": {
+    "ms": "{{value}} ms",
+    "mmHg": "{{value}} mmHg",
+    "ml": "{{value}} ml",
+    "mlPerSecond": "{{value}} ml/s",
+    "mv": "{{value}} mV",
+    "mm": "{{value}} mm",
+    "mmRange": "{{from}} bis {{to}} mm",
+    "perMinute": "{{value}} pro Minute",
+    "litres": "{{value}} l",
+    "litresPerMinute": "{{value}} l/min",
+    "seconds": "{{value}} s",
+    "percent": "{{value}} %",
+    "resting": "In Ruhe"
+  },
+  "sections": {
+    "overview": {
+      "title": "Zwei Pumpen in einem faustgroßen Muskel",
+      "p1": "Ballen Sie eine Faust. Etwa so groß ist Ihr <strong>Herz</strong>. Es misst rund 12 mal 8 mal 6 cm und wiegt etwa 250 bis 350 g. Es liegt in der Mitte der Brust, hinter dem Brustbein und zwischen den Lungenflügeln. Es sitzt schräg, sodass etwa zwei Drittel links der Mittellinie liegen. Seine Spitze zeigt nach unten und nach links. In Ruhe schlägt ein gesundes Herz etwa 60- bis 100-mal pro Minute. In einer Studie mit 92.000 Erwachsenen, die Fitnesstracker trugen, lag der Durchschnitt bei etwa 65.",
+      "p2": "In einem typischen Beispiel pumpt das Herz bei jedem Schlag etwa 70 ml Blut aus. In Ruhe sind das etwa 5 Liter pro Minute, ungefähr so viel Blut, wie Ihr ganzer Körper enthält. Im Schnitt dreht Ihr Blut also etwa einmal pro Minute eine volle Runde durch den Körper. Und Ihr Herz schlägt rund 100.000-mal am Tag. Eigentlich besteht es aus <strong>zwei Pumpen</strong> nebeneinander. Die rechte Seite schickt das Blut durch die Lunge, wo es Sauerstoff aufnimmt. Die linke Seite schickt es weiter durch den übrigen Körper.",
+      "p3": "Jede Pumpe hat zwei Räume. Ein <strong>Vorhof</strong> nimmt das ankommende Blut auf, eine Kammer pumpt es hinaus. Vier Klappen sorgen dafür, dass das Blut nur vorwärts fließt. Das Modell zeigt einen Herzschlag in Ruhe, bei 75 Schlägen pro Minute, stark verlangsamt. Dabei vereinfacht es einiges. Sauerstoffarmes Blut ist blau gezeichnet, wie in den meisten Anatomiebüchern. In Wirklichkeit ist es dunkelrot. Die Vorhöfe liegen eher hinter den Kammern als darüber. Die Gefäße enden eine Handbreit vom Herzen entfernt. Ziehen Sie den Regler der Zeitleiste, um durch den Herzschlag zu gehen. Ziehen Sie das Modell, um es zu drehen.",
+      "p4": "Vielleicht haben Sie gehört, dass das Herz nie ausruht. Tatsächlich ruht es bei jedem Schlag. Wenn Sie ruhig sitzen, verbringen die Kammern nur etwa zwei Fünftel jedes Schlags damit, sich zusammenzuziehen. In den übrigen drei Fünfteln entspannt sich der Muskel, und das Herz füllt sich wieder. Diese Entspannungsphase heißt <strong>Diastole</strong>, das Zusammenziehen heißt Systole. Einen einzigen normalen Puls gibt es übrigens auch nicht. In der Trackerstudie reichte der Ruhepuls von etwa 40 bis über 100. Bei zwei gesunden Menschen konnte der normale Wert um bis zu 70 Schläge pro Minute auseinanderliegen."
+    },
+    "chambers": {
+      "title": "Vier Räume, zweierlei Druck",
+      "p1": "Das Modell ist jetzt entlang einer Ebene von vorn aufgeschnitten. Diese Lehrbuchansicht zeigt alle vier Räume auf einmal. Das Herz schaut Sie an, seine rechte Seite liegt also links von Ihnen. Blut, das seinen Sauerstoff abgegeben hat, kommt über zwei große Venen aus dem Körper zurück, die Hohlvenen. Sie münden in den <strong>rechten Vorhof</strong>. Von dort fließt das Blut in die rechte Kammer, die es in die Lunge gleich nebenan pumpt. Das kostet wenig Kraft: Der Druck in der rechten Kammer steigt nur auf etwa 25 mmHg.",
+      "p2": "Aus der Lunge kommt das Blut reich an Sauerstoff zurück, über vier Lungenvenen in den linken Vorhof. Von dort fließt es in die <strong>linke Kammer</strong>, den stärksten Raum. Diese Kammer muss das Blut durch den ganzen Körper pumpen, vom Gehirn bis in die Zehen. Der Druck in ihr erreicht etwa 120 mmHg, rund das Fünffache der rechten Seite. Deshalb ist ihre Wand etwa dreimal so dick wie die der rechten Kammer, meist 6 bis 9 mm. Im Schnitt sehen Sie den Unterschied.",
+      "p3": "Eine Muskelwand, die <strong>Kammerscheidewand</strong>, trennt die beiden Seiten. So vermischen sich sauerstoffreiches und sauerstoffarmes Blut nicht. Beide Kammern pumpen gleich viel, in einem typischen Beispiel etwa 70 ml pro Schlag. Pumpte eine Seite auf Dauer auch nur etwas mehr, würde sich das Blut vor der anderen stauen. Der größte Teil der Füllung geschieht von allein: Das Blut fließt durch die Vorhöfe in die entspannten Kammern. Am Ende ziehen sich die Vorhöfe zusammen und füllen ein wenig nach, in Ruhe bis zu etwa einem Fünftel, bei schnellem Herzschlag mehr. Tippen Sie auf einen Raum, um zu sehen, woher sein Blut kommt und wohin es fließt.",
+      "p4": "Woher weiß jede Seite, wie viel sie pumpen muss? Niemand muss es ihr sagen. Der Herzmuskel folgt einer einfachen Regel, dem <strong>Frank-Starling-Mechanismus</strong>: Je voller eine Kammer ist, desto kräftiger zieht sie sich zusammen. Zusätzliches Blut dehnt die Muskelzellen. Gedehnte Zellen ziehen mit mehr Kraft, und die Kammer pumpt den Überschuss wieder hinaus. Was hineinfließt, fließt also Schlag für Schlag wieder heraus. Die Regel steckt im Muskel selbst. Ausdauersportler nutzen sie viel stärker als Untrainierte: Das Herz eines Sportlers füllt sich stärker und pumpt deshalb mehr.",
+      "receives": "Blut kommt aus",
+      "sends": "Blut fließt weiter in",
+      "wall": "Wandstärke",
+      "pressure": "Spitzendruck",
+      "role": "Aufgabe"
+    },
+    "valves": {
+      "title": "Vier Türen, eine Richtung",
+      "p1": "Zwischen jedem Vorhof und seiner Kammer sitzt eine Klappe aus dünnen Segeln. Rechts ist es die Trikuspidalklappe mit drei Segeln. Links ist es die <strong>Mitralklappe</strong> mit zwei. Wenn sich die Kammer zusammenzieht, drückt der steigende Druck die Segel zu. Dünne Sehnenfäden verbinden ihre Ränder mit kleinen Muskeln in der Kammerwand, den Papillarmuskeln. Diese spannen sich beim Zusammenziehen an. So können die Segel nicht in den Vorhof durchschlagen wie ein Regenschirm, den der Wind umstülpt.",
+      "p2": "An den Ausgängen sitzt eine andere Art von Klappe. Die Pulmonalklappe öffnet den Weg zur Lunge, die <strong>Aortenklappe</strong> den Weg in den Körper. Jede hat drei kleine Taschen, daher der Name Taschenklappe. Solange das Blut hinausströmt, liegen die Taschen flach an der Wand. Entspannt sich die Kammer und will das Blut zurückfallen, füllt es die Taschen. Die Taschen blähen sich, schnappen zu und treffen sich in der Mitte. Das Modell zeigt alle vier Klappen der Übersicht halber in einem Schnitt. In einem echten Herzen liegt die Pulmonalklappe höher und weiter vorn.",
+      "p3": "Keine Klappe hat eigene Muskeln. Jede öffnet sich, wenn der Druck hinter ihr höher ist als vor ihr, und schließt sich, wenn es umgekehrt ist. Beim Zuschlagen entstehen die <strong>Herztöne</strong>, das bekannte Ba-dumm, das man mit dem Stethoskop hört. Der erste Ton entsteht, wenn sich Mitral- und Trikuspidalklappe zu Beginn des Zusammenziehens schließen. Der zweite entsteht, wenn sich Aorten- und Pulmonalklappe an seinem Ende schließen. Die Töne kommen also von den Klappen, nicht vom Muskel. Tippen Sie auf eine Klappe, und die Kamera folgt ihr durch den Herzschlag.",
+      "p4": "Genau genommen besteht jeder Ton aus zweien. Die Mitralklappe schließt etwa 40 ms vor der Trikuspidalklappe. Diese Lücke ist zu kurz, um sie mit dem Stethoskop zu hören. Auch die Aortenklappe schließt kurz vor der Pulmonalklappe. Diese Lücke, die <strong>Spaltung</strong> des zweiten Herztons, ändert sich mit dem Atmen und sogar, wenn Sie die Körperlage wechseln. Ein gesundes erwachsenes Herz macht nur diese zwei Töne. Ein dritter Ton ist bei Kindern normal, bei Erwachsenen aber oft ein Zeichen für eine Krankheit.",
+      "between": "Liegt zwischen",
+      "leaflets": "Segel oder Taschen",
+      "opens": "Öffnet bei",
+      "closes": "Schließt bei",
+      "now": "Im Moment"
+    },
+    "cycle": {
+      "title": "Ein Herzschlag, Schritt für Schritt",
+      "p1": "Das Diagramm verfolgt die linke Seite durch einen Herzschlag. Am Anfang ist die Kammer entspannt und schon größtenteils gefüllt. Die Vorhöfe ziehen sich zusammen und füllen sie auf etwa 120 ml auf. Dann beginnt die Kammer, sich zusammenzuziehen. Die Mitralklappe schließt sich, und für einen Moment sind alle vier Klappen zu. Das Blut kann nirgendwohin. Also bleibt das Volumen gleich, während der Druck von etwa 10 auf etwa 80 mmHg hochschießt. Diese Phase heißt Anspannungsphase oder <strong>isovolumetrische Kontraktion</strong>: Zusammenziehen bei gleichem Volumen.",
+      "p2": "Bei etwa 80 mmHg übersteigt der Druck in der Kammer den in der Aorta, und die Aortenklappe schwingt auf. Das Blut schießt mit bis zu etwa 1 m/s hinaus, und der Druck erreicht etwa 120 mmHg. In knapp 0,3 s pumpt die Kammer etwa 70 ml aus, etwa 50 ml bleiben zurück. Jeder Schlag leert sie also nur zu etwas mehr als der Hälfte, zu etwa 55 bis 65 Prozent. Dieser Anteil heißt <strong>Auswurffraktion</strong>. Die Kurven sind typische Lehrbuchformen, keine Messung an einem bestimmten Menschen. Echte Herzen fassen oft mehr.",
+      "p3": "Lässt die Anspannung nach, will das Blut zurückfallen, und die Aortenklappe schnappt zu. Das erzeugt die kleine Kerbe in der Aortenkurve. Wieder sind alle vier Klappen geschlossen, während der Druck fällt, für 0,07 s oder weniger. Sobald er unter den Druck im Vorhof sinkt, öffnet sich die Mitralklappe. Das Blut strömt ein, erst schnell, dann langsam. Die elastische Aorta dehnt sich bei jedem Stoß und federt dazwischen zurück. Deshalb fällt der Druck in ihr nur auf etwa 80. Dieser Höchst- und Tiefstwert ist Ihr <strong>Blutdruck</strong>: 120 zu 80.",
+      "p4": "Der Herzmuskel hat eine eigene Blutversorgung: die <strong>Herzkranzgefäße</strong> auf seiner Oberfläche. Doch ein Muskel, der sich zusammenzieht, drückt auf seine eigenen Gefäße. Deshalb fließt der größte Teil dieses Bluts zwischen den Schlägen, wenn der Muskel entspannt ist. Ein schnellerer Herzschlag geht vor allem auf Kosten der Entspannung. Bei 75 Schlägen pro Minute ist das Herz etwa 33 Sekunden jeder Minute entspannt. Bei 150 bleiben nur etwa 22. Ein doppelt so schneller Puls kürzt die Zeit, in der sich das Herz selbst versorgt, also um etwa ein Drittel. Das zählt vor allem, wenn die Herzkranzgefäße verengt sind.",
+      "caption": "Druck in der linken Kammer, der Aorta und dem linken Vorhof während eines Herzschlags, darunter das Volumen der linken Kammer. Die Linie zeigt, wo das Modell gerade ist.",
+      "ventricle": "Linke Kammer",
+      "aorta": "Aorta",
+      "atrium": "Linker Vorhof",
+      "flow": "Fluss durch die Aortenklappe"
+    },
+    "conduction": {
+      "title": "Der Funke kommt von innen",
+      "p1": "Jeder Herzschlag beginnt im Herzen selbst, nicht im Gehirn. Oben in der Wand des rechten Vorhofs sitzt ein kleines Feld besonderer Zellen, der <strong>Sinusknoten</strong>. Sich selbst überlassen, würde er etwa 100-mal pro Minute feuern. Doch der Vagusnerv bremst ihn den ganzen Tag, auf einen Ruhepuls von 60 bis 80. Nerven und Hormone wie Adrenalin drehen den Takt nur hoch oder herunter. Sogar das Atmen tut das: Jedes Einatmen lockert kurz die Bremse des Vagus. Deshalb wird ein gesunder Puls beim Einatmen etwas schneller und beim Ausatmen wieder langsamer.",
+      "p2": "Jedes Mal, wenn der Knoten feuert, läuft eine elektrische Welle in etwa 90 ms über beide Vorhöfe, und sie ziehen sich zusammen. In der Kurve ist das der kleine Buckel namens P-Welle. Dann trifft die Welle auf einen Ring aus festem Gewebe, den sie nicht überqueren kann. Es gibt nur ein Tor: den <strong>AV-Knoten</strong>, kurz für Atrioventrikularknoten. Er ist der langsamste Teil des Systems, mit etwa 0,05 m/s. Er hält das Signal etwa eine Zehntelsekunde lang auf. So haben die Vorhöfe Zeit, sich zu entleeren, bevor die Kammern loslegen.",
+      "p3": "Hinter dem Knoten läuft das Signal mit etwa 2 m/s durch das His-Bündel und seine zwei Schenkel, je einen auf jeder Seite der Kammerscheidewand. Ein Fächer aus Fasern, die <strong>Purkinje-Fasern</strong>, verteilt es dann mit etwa 4 m/s über die Innenwände, rund 80-mal schneller als im Knoten. Die ganze Kammerwand feuert in weniger als einer Zehntelsekunde: Das ist die hohe Zacke in der Kurve, der QRS-Komplex. Das Signal erreicht zuerst die Herzspitze. So drückt die Kammer das Blut nach oben zu den Ausgängen. Danach erholen sich die Wände, und das zeigt die Kurve als T-Welle.",
+      "p4": "Ein <strong>transplantiertes Herz</strong> zeigt, wie sehr sich das Herz selbst steuert. Bei der Transplantation werden keine Nerven angeschlossen, und trotzdem schlägt es. Ohne den bremsenden Vagus schlägt es in Ruhe schneller als normal. Bei Belastung steigt sein Puls trotzdem, nur träger: Adrenalin und ähnliche Hormone erreichen es über das Blut. Bei 40 bis 70 Prozent der Patienten wachsen Monate bis Jahre später einige Nerven nach. Das Herz hat außerdem Ersatztaktgeber. Fällt der Sinusknoten aus, übernimmt der AV-Knoten mit etwa 40 bis 60 Schlägen pro Minute.",
+      "caption": "Die elektrische Kurve eines Herzschlags, so wie ein Elektrokardiogramm sie an der Haut aufzeichnen würde. Die Linie zeigt, wo das Modell gerade ist.",
+      "where": "Wo das Signal gerade ist",
+      "since": "Seit der Knoten gefeuert hat",
+      "trace": "Ausschlag im Moment"
+    },
+    "circulation": {
+      "title": "Zwei Kreisläufe und was beim Laufen anders wird",
+      "p1": "Folgen Sie einem Tropfen Blut. Die rechte Kammer schickt ihn durch die Lungenarterien in die Lunge, wo er Sauerstoff aufnimmt. Über die Lungenvenen kehrt er zur linken Seite zurück, und die schickt ihn durch die Aorta in den Körper. Über die Hohlvenen kommt er dann zur rechten Seite zurück. Es gibt also <strong>zwei Kreisläufe</strong> hintereinander, den Lungenkreislauf und den Körperkreislauf. Das Herz treibt beide gleichzeitig an. Arterien sind einfach die Gefäße, die Blut vom Herzen wegführen. Mit Sauerstoff hat das nichts zu tun: Die Lungenarterien führen sauerstoffarmes Blut. In Ruhe braucht ein Tropfen etwa eine Minute für die ganze Runde.",
+      "p2": "Schieben Sie jetzt die Belastung hoch. Bei 25-Jährigen steigt der Puls von etwa 75 auf bis zu etwa 190 Schläge pro Minute, und jeder Schlag pumpt mehr aus. Puls mal Blut pro Schlag ergibt das <strong>Herzzeitvolumen</strong>, also das Blut, das pro Minute gepumpt wird. Es steigt von etwa 5 Litern in Ruhe auf etwa 20 bei harter Belastung. Das Zusammenziehen wird etwas kürzer, die Zeit zum Füllen schrumpft aber viel stärker. Verdoppelt sich der Puls, verliert das Zusammenziehen weniger als ein Drittel seiner Zeit, das Füllen etwa zwei Drittel. Achten Sie darauf, wie der blaue Teil im Diagramm schrumpft.",
+      "p3": "All diese Arbeit hat ihren Preis. Das Herz versorgt sich über seine Herzkranzgefäße selbst, in Ruhe mit etwa 250 ml Blut pro Minute. Das sind rund 5 Prozent dessen, was es pumpt. Es verbraucht etwa ein Zehntel des Sauerstoffs, den Ihr Körper aufnimmt. Seine <strong>Pumpleistung</strong> ist dagegen bescheiden: etwa 1 W für die linke Seite. Im Lauf eines Lebens schlägt es rund 3 Milliarden Mal. Das ist viel für ein Säugetier. Über alle Säugetiere hinweg sind es grob eine Milliarde Schläge pro Leben, höchstens zehnmal mehr oder weniger. Das Herz eines tauchenden Blauwals schlägt nur 2- bis 8-mal pro Minute.",
+      "p4": "Ausdauertraining formt das Herz um. Die linke Kammer wird geräumiger, bei männlichen Sportlern etwa 55 mm im Durchmesser gegenüber etwa 48 mm bei Untrainierten, und ihre Wand wird etwas dicker. Dieses <strong>Sportlerherz</strong> ist eine gesunde Anpassung. Jeder Schlag bewegt mehr Blut, und der Ruhepuls sinkt auf etwa 50, bei Spitzen-Radsportlern auf fast 30. Unter voller Last kann es fast 30 Liter pro Minute pumpen. Der Rekord liegt bei etwa 42, mit etwa 210 ml pro Schlag. Trotzdem ist sein Höchstpuls nicht höher als bei allen anderen. Tippen Sie zum Vergleich auf den Ausdauersportler. Und 220 minus Lebensalter ist nur eine grobe Schätzung, die um etwa 10 Schläge nach oben oder unten danebenliegen kann.",
+      "control": {
+        "label": "Wie stark sich der Körper anstrengt",
+        "rest": "Ruhig sitzen",
+        "max": "Vollgas-Sprint",
+        "caption": "Oben ein Herzschlag in Ruhe, unten einer bei dieser Belastung. Rot ist das Zusammenziehen, blau die Zeit, die zum Füllen bleibt.",
+        "rate": "Puls",
+        "stroke": "Blut pro Schlag",
+        "output": "Blut pro Minute",
+        "filling": "Füllzeit pro Schlag",
+        "trip": "Ein Tropfen braucht für eine Runde"
+      }
+    }
+  }
+}
