@@ -774,3 +774,30 @@ export const PURKINJE = {
   sagMm: 6,
   depthMm: 6,
 } as const;
+
+export const LABELS = {
+  liftMm: 3,
+  septum: [0, -32, 0] as Point,
+  wall: [48, -38, 0] as Point,
+  bundleBranches: [-6, -40, 1] as Point,
+  purkinjeFibres: [30, -52, -10] as Point,
+  surface: {
+    rightAtrium: { view: 'right', at: [8, 26] },
+    rightVentricle: { view: 'front', at: [-16, -30] },
+    leftAtrium: { view: 'left', at: [-2, 30] },
+    leftVentricle: { view: 'left', at: [6, -34] },
+    septum: { view: 'front', at: [13, -28] },
+    wall: { view: 'front', at: [34, -46] },
+  } satisfies Record<string, SurfaceMark>,
+  vesselShare: {
+    aorta: 0.3,
+    archBranches: 0.5,
+    pulmonaryTrunk: 0.45,
+    pulmonaryArteries: 0.5,
+    superiorVenaCava: 0.3,
+    inferiorVenaCava: 0.7,
+    pulmonaryVeins: 0.6,
+    venousBlood: 0.45,
+    arterialBlood: 0.08,
+  },
+} as const;

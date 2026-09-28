@@ -1,24 +1,16 @@
 import { Group } from 'three';
 import type { Box3, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
-import { anchorAt } from '@core/scene/parts';
 import { regionFromSpec } from '@core/scene/regions';
 import { ResourceTracker } from '@core/scene/resources';
-import { PART_IDS } from '../ids';
 import type { AnchorId, AssemblyState, PartId, RegionId, ViewOptions } from '../ids';
 import {
-  APEX,
-  AV_NODE,
-  CHAMBERS,
-  SINUS_NODE,
-  VALVES,
   atrialFullness,
   atrialGlow,
   ventricularGlow,
   ventricularSqueeze,
   wrapTime,
 } from '../model';
-import type { Point } from '../model';
 import type { Assembly, AssemblyResources } from './assembly';
 import {
   BLOOD,
@@ -28,7 +20,6 @@ import {
   EPICARDIUM,
   OUTER_CONTRACTION,
   PORTAL_FADE_MM,
-  PULMONARY_RING,
   SHAPE_SPEC,
 } from './constants';
 import { contraction } from './geometry/contraction';
@@ -38,6 +29,7 @@ import type { Portal } from './geometry/vesselPath';
 import { heartShapes } from './geometry/heartShape';
 import type { PartContext } from './parts/context';
 import { CoronariesPart, coronaryRoutes } from './parts/heart/coronaries';
+import { LabelAnchors } from './parts/labels';
 import { MyocardiumPart } from './parts/heart/myocardium';
 import { epicardiumPainter } from './geometry/epicardium';
 import { VesselsPart } from './parts/vessels/vessels';
@@ -46,7 +38,8 @@ import { BloodFlowPart } from './parts/blood/bloodFlow';
 import { ConductionPart } from './parts/conduction/conduction';
 import { REGIONS } from './regions';
 
-const ANCHOR_LIFT_MM = 3;
+const LAD_ROUTE = 0;
+const LAD_LABEL_SHARE = 0.4;
 
 type ViewKey = keyof ViewOptions;
 
@@ -73,20 +66,6 @@ function snapshot(state: AssemblyState): AssemblyState {
   return { ...state, view: { ...state.view } };
 }
 
-const ANCHOR_POINTS: Readonly<Record<AnchorId, Point>> = {
-  apex: APEX,
-  tricuspid: VALVES.tricuspid.centre,
-  pulmonary: PULMONARY_RING,
-  mitral: VALVES.mitral.centre,
-  aortic: VALVES.aortic.centre,
-  sinusNode: SINUS_NODE.centre,
-  avNode: AV_NODE,
-  rightAtrium: CHAMBERS.rightAtrium.centre,
-  rightVentricle: CHAMBERS.rightVentricle.centre,
-  leftAtrium: CHAMBERS.leftAtrium.centre,
-  leftVentricle: CHAMBERS.leftVentricle.centre,
-};
-
 function pinnedMotion(profile: ContractionProfile, portals: readonly Portal[]): Contraction {
   const free = contraction(CONTRACTION_FRAME, profile);
   return {
@@ -105,8 +84,7 @@ export class HeartAssembly implements Assembly {
   private readonly valves: ValvesPart;
   private readonly blood: BloodFlowPart;
   private readonly conduction: ConductionPart;
-  private readonly anchors = new Map<AnchorId, Object3D>();
-  private readonly labels = new Map<PartId, Object3D>();
+  private readonly labels: LabelAnchors;
   private state: AssemblyState | null = null;
 
   constructor(resources: AssemblyResources, state: AssemblyState) {
@@ -140,7 +118,16 @@ export class HeartAssembly implements Assembly {
       this.blood.object,
       this.conduction.object,
     );
-    this.buildAnchors();
+    this.labels = new LabelAnchors(
+      this.root,
+      {
+        envelope: shapes.envelope,
+        chordae: this.valves.chordae.anchor,
+        coronary:
+          routes[LAD_ROUTE].points[Math.floor(routes[LAD_ROUTE].points.length * LAD_LABEL_SHARE)],
+      },
+      motion.outer,
+    );
     this.setState(state);
   }
 
@@ -154,12 +141,14 @@ export class HeartAssembly implements Assembly {
       this.myocardium.setContraction(squeeze, emptying);
       this.coronaries.setContraction(squeeze, emptying);
       this.valves.setTime(state.time, squeeze, emptying);
+      this.labels.setContraction(squeeze, emptying);
       if (previous) this.advanceBlood(previous.time, state.time);
     }
     if (changes.view('cutaway')) {
       this.myocardium.setCutaway(state.view.cutaway);
       this.vessels.setCutaway(state.view.cutaway);
       this.coronaries.setCutaway(state.view.cutaway);
+      this.labels.setCutaway(state.view.cutaway);
     }
     if (changes.view('flow')) this.blood.setShown(state.view.flow);
     if (changes.view('conduction')) this.conduction.setShown(state.view.conduction);
@@ -196,11 +185,11 @@ export class HeartAssembly implements Assembly {
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {
-    return this.labels;
+    return this.labels.labels;
   }
 
   anchor(id: AnchorId): Object3D {
-    const anchor = this.anchors.get(id);
+    const anchor = this.labels.anchors.get(id);
     if (!anchor) throw new Error(`Unknown anchor ${id}`);
     return anchor;
   }
@@ -214,16 +203,5 @@ export class HeartAssembly implements Assembly {
     this.root.removeFromParent();
     this.materials.clearRegistered();
     this.tracker.dispose();
-  }
-
-  private buildAnchors(): void {
-    for (const id of Object.keys(ANCHOR_POINTS) as AnchorId[]) {
-      const [x, y, z] = ANCHOR_POINTS[id];
-      this.anchors.set(id, anchorAt(this.root, x, y, z));
-    }
-    for (const id of PART_IDS) {
-      const [x, y, z] = CHAMBERS.leftVentricle.centre;
-      this.labels.set(id, anchorAt(this.root, x, y, z + ANCHOR_LIFT_MM));
-    }
   }
 }
