@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "title": "Comment fonctionne une montre mécanique",
+    "eyebrow": "Montre mécanique",
+    "tagline": "Un ressort enroulé, un rouage et un balancier qui décide de la durée d’une seconde.",
+    "description": "Une montre mécanique à remontage manuel en 3D : comment ressort, rouage, échappement à ancre et balancier donnent l’heure pendant 42 heures.",
+    "summary": "Ressort de barillet, rouage, échappement à ancre, balancier-spiral, aiguilles."
+  },
+  "stage": {
+    "label": "Modèle interactif de montre mécanique",
+    "gauge": "Mesures du mouvement en direct"
+  },
+  "controls": {
+    "label": "Commandes de la montre",
+    "wheelOptions": {
+      "barrel": "Barillet",
+      "centreWheel": "Roue de centre",
+      "thirdWheel": "Roue de moyenne",
+      "fourthWheel": "Roue de seconde",
+      "escapeWheel": "Roue d’échappement"
+    },
+    "momentOptions": {
+      "lock": "Verrouillé",
+      "unlock": "Dégagement",
+      "impulse": "Impulsion",
+      "drop": "Chute",
+      "free": "De nouveau libre"
+    },
+    "beatRateOptions": {
+      "vph18000": "18 000 vph",
+      "vph21600": "21 600 vph",
+      "vph28800": "28 800 vph",
+      "vph36000": "36 000 vph"
+    },
+    "views": {
+      "dial": {
+        "name": "Boîte et cadran",
+        "short": "Cadran",
+        "hint": "Boîte et cadran (D)"
+      },
+      "bridges": {
+        "name": "Ponts",
+        "short": "Ponts",
+        "hint": "Ponts (B)"
+      },
+      "energy": {
+        "name": "Chemin de l’énergie",
+        "short": "Énergie",
+        "hint": "Chemin de l’énergie (E)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Oscillation du balancier",
+    "phases": "Aller à un moment",
+    "speed": "Lecture",
+    "value": "{{angle}} dans l’oscillation, {{phase}}",
+    "speedValue": "{{speed}}",
+    "realTime": "Temps réel",
+    "slower": "{{factor}} fois plus lent que la réalité",
+    "phase": {
+      "swingIn": "Élan vers le centre",
+      "tick": "Tic",
+      "swingOut": "Élan vers l’extérieur",
+      "swingBack": "Retour vers le centre",
+      "tock": "Tac",
+      "swingHome": "Retour au départ"
+    },
+    "during": {
+      "swingIn": "le balancier file librement vers le centre",
+      "tick": "l’ancre libère une dent et pousse le balancier",
+      "swingOut": "le spiral freine le balancier jusqu’à l’arrêt",
+      "swingBack": "le spiral ramène le balancier vers le centre",
+      "tock": "l’ancre libère la dent suivante et pousse le balancier dans l’autre sens",
+      "swingHome": "le balancier revient librement à son point de départ"
+    },
+    "jump": {
+      "swingIn": "Aller à l’élan vers le centre",
+      "tick": "Aller au tic",
+      "swingOut": "Aller à l’élan vers l’extérieur",
+      "swingBack": "Aller au retour vers le centre",
+      "tock": "Aller au tac",
+      "swingHome": "Aller au retour au départ"
+    }
+  },
+  "readouts": {
+    "balance": "Angle du balancier",
+    "amplitude": "Amplitude",
+    "time": "Heure affichée",
+    "reserve": "Réserve de marche",
+    "rate": "Marche diurne",
+    "timeValue": "{{value}} au cadran"
+  },
+  "parts": {
+    "case": "Boîte",
+    "dial": "Cadran",
+    "hourHand": "Aiguille des heures",
+    "minuteHand": "Aiguille des minutes",
+    "secondHand": "Aiguille des secondes",
+    "crown": "Couronne",
+    "stem": "Tige de remontoir",
+    "windingPinion": "Pignon de remontoir",
+    "crownWheel": "Roue de couronne",
+    "ratchetWheel": "Rochet",
+    "click": "Cliquet",
+    "barrel": "Barillet",
+    "barrelArbor": "Arbre de barillet",
+    "mainspring": "Ressort de barillet",
+    "mainplate": "Platine",
+    "barrelBridge": "Pont de barillet",
+    "trainBridge": "Pont de rouage",
+    "balanceCock": "Coq",
+    "jewels": "Rubis",
+    "centreWheel": "Roue de centre",
+    "thirdWheel": "Roue de moyenne",
+    "fourthWheel": "Roue de seconde",
+    "escapeWheel": "Roue d’échappement",
+    "palletFork": "Ancre",
+    "entryPallet": "Levée d’entrée",
+    "exitPallet": "Levée de sortie",
+    "bankingPins": "Goupilles de limitation",
+    "roller": "Double plateau",
+    "impulseJewel": "Ellipse",
+    "balanceWheel": "Balancier",
+    "hairspring": "Spiral",
+    "stud": "Piton",
+    "regulator": "Raquette",
+    "shockJewel": "Pare-chocs",
+    "cannonPinion": "Chaussée",
+    "minuteWheel": "Roue de minuterie",
+    "hourWheel": "Roue des heures"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "ms": "{{value}} ms",
+    "s": "{{value}} s",
+    "hours": "{{value}} h",
+    "minutes": "{{value}} min",
+    "mm": "{{value}} mm",
+    "secondsPerDay": "{{value}} s/jour",
+    "vph": "{{value}} vph",
+    "hz": "{{value}} Hz",
+    "rpm": "{{value}} tr/min",
+    "percent": "{{value}} %",
+    "turns": "{{value}} tours",
+    "mNm": "{{value}} mN·m",
+    "joules": "{{value}} J",
+    "microJoules": "{{value}} µJ"
+  },
+  "sections": {
+    "overview": {
+      "title": "Huit battements par seconde, grâce à un ressort",
+      "p1": "Vous avez sous les yeux une montre mécanique, posée sur la tranche comme sur un présentoir. La boîte porte un cadran, trois aiguilles et, sur le côté, une couronne pour le remontage. Le vrai travail se fait derrière le cadran, dans la partie que les horlogers appellent le <strong>mouvement</strong>. Il n’a ni pile ni puce. Tout fonctionne grâce à un ressort d’acier enroulé, une chaîne de petites roues et une minuscule roue qui oscille d’avant en arrière.",
+      "p2": "Le mouvement remplit <strong>trois tâches</strong>. D’abord, il stocke l’énergie : tourner la couronne arme le ressort de barillet. Ensuite, il libère cette énergie par petits pas réguliers, et c’est le travail de l’échappement et du balancier. Enfin, il compte ces pas et les affiche sous forme d’heure, grâce à un rouage et aux aiguilles. Le chemin de l’énergie montre la force qui va du ressort au balancier en passant par les roues, et chaque chapitre ci-dessous s’arrête sur l’une de ces parties.",
+      "p3": "Tout bouge uniquement parce que le balancier laisse avancer la roue d’échappement d’une demi-dent à la fois. Chaque libération est un <strong>battement</strong>, que vous entendez comme un tic ou un tac. Cette montre bat 28 800 fois par heure : 8 fois par seconde, 691 200 fois par jour. Le balancier fait 4 allers-retours par seconde. Chaque oscillation complète dure 250 ms et contient deux battements : le tic quand il passe le centre dans un sens, le tac quand il revient. La ligne de temps sous le modèle suit une oscillation complète.",
+      "p4": "Les chiffres de ces chapitres sont ceux d’un mouvement à <strong>remontage manuel</strong> comme l’ETA 2801-2, que l’on remonte en tournant la couronne : 25,6 mm de diamètre, 3,35 mm d’épaisseur et 17 rubis. Le modèle reprend une disposition classique de manuel d’horlogerie, du même type, et il étire l’empilement des pièces pour que vous voyiez chaque étage. Faites glisser le modèle pour le tourner et regarder le côté cadran. En temps réel, le balancier n’est qu’un flou : ralentissez la lecture et regardez-le osciller."
+    },
+    "mainspring": {
+      "title": "Quarante-deux heures dans un ressort d’acier",
+      "p1": "L’énergie se trouve dans le <strong>ressort de barillet</strong>, une longue lame d’acier enroulée dans un tambour appelé barillet. Tourner la couronne fait tourner la tige et, par de petits pignons, la roue de couronne puis le rochet, fixé sur l’arbre au centre du barillet. L’arbre enroule plus serré l’extrémité intérieure du ressort, pendant que le barillet reste immobile. Un petit cliquet tombe dans les dents du rochet à mesure qu’elles passent, si bien que le ressort ne peut pas faire tourner l’arbre en arrière.",
+      "p2": "Déroulé, ce ressort mesure 420 mm de long, mais seulement 0,125 mm d’épaisseur et 1,23 mm de haut. Sa force de rotation, le <strong>couple</strong>, vaut environ 11,3 mN·m quand il est armé à fond. Un jour plus tard, il est tombé à environ 9,1 mN·m, soit quelque 19 % de moins : la poussée qui fait marcher la montre n’est donc jamais tout à fait constante. Un remontage complet stocke environ un tiers de joule, que la montre dépense lentement, à seulement 2 à 3 microwatts environ.",
+      "p3": "En se détendant, le ressort fait tourner le barillet, dont la denture entraîne les roues. Un remontage complet fait marcher ce mouvement 42 heures : c’est sa <strong>réserve de marche</strong>. Dans le rouage de manuel du modèle, le barillet fait un tour toutes les 8 heures, donc un remontage complet représente environ cinq tours et quart du ressort. Faites glisser le curseur vers le vide : la spirale s’écarte vers la paroi du barillet, le couple baisse et le balancier oscille moins loin.",
+      "p4": "Dans une montre à remontage manuel, le cliquet retient le ressort, et une fois armé à fond, la couronne s’arrête simplement de tourner. Une montre automatique est remontée par une masse oscillante qui ne sent pas quand s’arrêter : son ressort se termine donc par une <strong>bride glissante</strong>, qui glisse le long de la paroi du barillet au lieu de trop tendre le ressort. La version automatique de ce mouvement, l’ETA 2824-2, mesure 4,6 mm d’épaisseur au lieu de 3,35 mm et marche 38 heures. Remontez le modèle à fond pour recommencer.",
+      "control": {
+        "label": "Réserve de marche restante",
+        "empty": "Désarmé",
+        "full": "Armé à fond",
+        "torque": "Couple du ressort",
+        "turns": "Tours restants dans le ressort",
+        "amplitude": "Amplitude du balancier",
+        "energy": "Énergie encore stockée",
+        "wind": "Remonter à fond"
+      }
+    },
+    "train": {
+      "title": "Multiplier, pas démultiplier",
+      "p1": "Depuis le barillet, la force traverse une chaîne de roues appelée <strong>rouage</strong>. Chaque roue est grande et entraîne un petit pignon sur l’axe suivant, si bien que chaque étage tourne plus vite que le précédent. Le ressort est lent et puissant, alors que l’échappement a besoin d’un mouvement rapide et léger : le rouage multiplie donc la vitesse au lieu de la réduire. À son extrémité, la lente rotation du barillet est devenue 12 tours par minute à la roue d’échappement.",
+      "p2": "Les horlogers appellent <strong>pignon</strong> une petite roue menée, et ses dents des ailes. Le modèle utilise un rouage de manuel. Les 80 dents du barillet entraînent un pignon de 10 ailes, soit une multiplication par 8, puis les étages suivants multiplient par 8, 7,5 et 12. Ainsi, la roue de centre fait un tour par heure, la roue de seconde un tour par minute et la roue d’échappement 12 tours par minute. Chacune de ses 20 dents donne deux battements : 12 × 20 × 2 font 480 battements par minute, soit 28 800 par heure.",
+      "p3": "Dans cette disposition de manuel, la <strong>roue de centre</strong> se trouve au milieu du mouvement et fait un tour par heure : c’est elle qui porte l’aiguille des minutes. La roue de seconde fait un tour par minute et porte la petite seconde à 6 heures. La roue d’échappement fait en moyenne 12 tours par minute, mais elle reste immobile la plupart du temps et avance par petits sauts de 9°, un par battement. Choisissez une roue ci-dessous et la caméra la suit.",
+      "p4": "Les pivots des roues tournent dans des <strong>rubis</strong>, de minuscules paliers en rubis synthétique fabriqués en usine, et non des pierres précieuses. Un pivot d’acier dans un rubis ne subit qu’une fraction du frottement du métal sur le métal, et il est lubrifié en plus. Ce mouvement compte 17 rubis. Sa version automatique en a 25, mais les 8 de plus servent au remontage et n’apportent rien à la mesure du temps : plus de rubis ne fait pas une meilleure montre. Les points ambrés suivent l’énergie du barillet jusqu’au balancier.",
+      "teeth": "Dents de la roue et ailes du pignon",
+      "turn": "Un tour toutes les",
+      "ratio": "Multiplication depuis la roue précédente",
+      "turnValue": {
+        "hours": "{{value}} h",
+        "minutes": "{{value}} min",
+        "seconds": "{{value}} s"
+      }
+    },
+    "escapement": {
+      "title": "Lâcher une demi-dent à la fois",
+      "p1": "Le ressort pousse sans cesse sur la roue d’échappement, et laissée seule, elle s’emballerait en un instant. L’<strong>ancre</strong> la retient. Deux pierres en rubis sur l’ancre, les levées d’entrée et de sortie, enjambent deux dents et demie, et entre deux battements l’une d’elles bloque une dent. Sa face de repos est inclinée, c’est le tirage : la pression de la dent attire l’ancre et la plaque contre une goupille de limitation. La roue est verrouillée.",
+      "p2": "Puis le balancier revient. Une cheville en rubis sur son plateau, l’ellipse, entre dans la fourchette de l’ancre et la pousse jusqu’à ce que la levée glisse hors de la dent : la roue est dégagée. La dent glisse alors sur l’extrémité inclinée de la levée et pousse l’ancre, qui pousse à son tour l’ellipse. Cette poussée est l’<strong>impulsion</strong>, partagée entre le plan incliné de la dent en forme de massue et la levée. La roue chute librement, la dent suivante se verrouille sur l’autre levée, et la roue a tourné de 9°. Suivez chaque étape avec les boutons ci-dessous.",
+      "p3": "L’ellipse ne touche l’ancre que pendant les 50° d’oscillation autour du centre, ce qu’on appelle l’angle de levée. Quand le balancier oscille d’environ 280° de chaque côté, ce contact dure environ 7 ms sur chaque battement de 125 ms. Environ 94 % du temps, le balancier oscille librement, tandis que le tirage maintient l’ancre contre sa goupille de limitation. C’est un échappement <strong>libre</strong>. Si un choc tente de déplacer l’ancre pendant que l’ellipse est loin, un dard sur l’ancre bute contre le petit plateau et l’arrête.",
+      "p4": "Le <strong>tic</strong> que vous entendez n’est pas un son mais trois chocs rapides : l’ellipse qui frappe l’ancre, une dent qui arrive sur le plan incliné d’une levée et, plus fort que tout, une dent qui se verrouille quand l’ancre heurte sa goupille de limitation. Le tac est pareil au retour. Thomas Mudge a inventé cet échappement à ancre dans les années 1750, et depuis 1900 environ presque toutes les montres mécaniques en utilisent un. Faites glisser lentement la ligne de temps à travers le tic et regardez la roue attendre, sauter et s’arrêter.",
+      "fork": "Angle de l’ancre",
+      "wheel": "Roue d’échappement pour ce battement",
+      "contact": "Temps de contact pour ce battement",
+      "wheelValue": "{{done}}° sur {{total}}°"
+    },
+    "balance": {
+      "title": "La roue qui décide de la durée d’une seconde",
+      "p1": "Le <strong>balancier</strong> est un anneau de 10,6 mm de diamètre qui tourne d’avant en arrière sur des pivots de seulement 0,08 mm d’épaisseur. Un spiral le ramène sans cesse vers le centre, si bien qu’il dépasse ce point et repart dans l’autre sens, comme un enfant sur une balançoire. Deux choses seulement fixent la durée d’une oscillation : la masse de la serge et la raideur du spiral. Une serge plus lourde oscille plus lentement, un spiral plus raide plus vite, et ici une oscillation complète dure 250 ms. Christiaan Huygens a conçu un spiral en 1675.",
+      "p2": "La distance que parcourt le balancier est son <strong>amplitude</strong> : environ 280° de chaque côté quand la montre est remontée, donc plus d’un tour complet d’un bout à l’autre. Sellita, qui fabrique des mouvements sur la même conception, autorise au plus 315° au remontage complet et au moins 200° un jour plus tard. Au-delà d’environ 335°, l’ellipse ferait le tour et frapperait l’arrière de l’ancre. Le balancier porte environ 12 µJ, et chaque battement n’en recharge que quelques pour cent.",
+      "p3": "Pour régler la marche, l’horloger déplace la <strong>raquette</strong>. Ses deux minuscules butées, une goupille et une clé, enserrent la spire extérieure du spiral et fixent la longueur qui reste libre de fléchir. Raccourcissez cette longueur utile et la montre avance, allongez-la et elle ralentit. Les petites variations comptent : un spiral à peine 1 % plus raide ferait avancer la montre d’environ 7 minutes par jour. Poussez un peu le curseur et voyez combien il en faut peu pour dérégler la montre de plusieurs minutes par jour.",
+      "p4": "La chaleur, le magnétisme et les chocs perturbent tous le balancier. Les spiraux en Nivarox, un alliage mis au point pour eux en 1933, changent à peine avec la température, et les spiraux en silicium ne sont pas magnétiques. Contre les chocs, les rubis qui tiennent les pivots du balancier sont montés dans un <strong>pare-chocs</strong> : un ressort laisse le rubis se déplacer, l’épaulement épais de l’axe encaisse le coup, puis le ressort recentre le pivot. Incabloc, du début des années 1930, est l’un de ces systèmes. Dans cette famille, seules les meilleures qualités en sont équipées ; les autres utilisent l’Etachocs d’ETA.",
+      "control": {
+        "label": "Raquette",
+        "slow": "Plus lent (spiral plus long)",
+        "fast": "Plus rapide (spiral plus court)",
+        "rate": "Marche diurne",
+        "period": "Une oscillation dure",
+        "length": "Longueur utile du spiral",
+        "energy": "Énergie du balancier"
+      }
+    },
+    "hands": {
+      "title": "Des battements aux heures",
+      "p1": "Regardez maintenant le côté cadran. Sous le cadran, un petit ensemble de roues appelé <strong>minuterie</strong> fait faire un tour à l’aiguille des heures pendant que celle des minutes en fait douze. Dans cette disposition de manuel, la chaussée, avec 10 ailes, entraîne la roue de minuterie de 30 dents, dont le pignon de 8 ailes entraîne la roue des heures de 32 dents : 3 fois 4 donnent 12 pour 1. La chaussée ne tient que par friction : quand vous mettez la montre à l’heure, les aiguilles tournent et le rouage reste immobile.",
+      "p2": "La roue de seconde porte l’aiguille de la <strong>petite seconde</strong>, à 6 heures. Elle avance de 6° par seconde, non pas en continu mais en 8 minuscules pas, un par battement, et c’est pourquoi l’aiguille des secondes d’une montre mécanique semble glisser. L’ETA 2801-2 lui-même est construit autrement : sa roue de seconde est au centre du mouvement et entraîne une seconde centrale, et l’aiguille des minutes est portée par un tube autour d’elle.",
+      "p3": "Toutes les montres ne battent pas 8 fois par seconde. Avant les années 1970, 18 000 battements par heure étaient la norme, et 21 600 sont courants aujourd’hui. Grand Seiko a atteint 36 000 en 1968, et l’El Primero de Zenith en 1969. Une <strong>fréquence</strong> plus élevée rend la marche plus stable face aux chocs et aux changements de position. Le prix à payer est l’énergie : avec le même balancier et la même amplitude, l’énergie croît comme le carré de la fréquence, donc le ressort se vide plus vite ou les pièces s’usent davantage. Changez de fréquence et regardez l’aiguille des secondes.",
+      "p4": "Précis, mais à quel point ? Un <strong>chronomètre</strong> certifié doit afficher en moyenne entre −4 et +6 secondes par jour aux tests du COSC, l’un de sept critères contrôlés sur le mouvement nu pendant 15 jours, dans 5 positions et à 3 températures. Le METAS teste la montre complète, même après un champ magnétique de 15 000 gauss, et admet 0 à +5 secondes par jour, ou 0 à +6 pour un mouvement de cette taille. Pour le quartz, la limite du COSC est de ±0,07 seconde par jour. Pourtant, en 2025, la Suisse a exporté 5,2 millions de montres mécaniques, qui ont représenté 86 % de la valeur de ses exportations horlogères.",
+      "beatsPerSecond": "Battements par seconde",
+      "beatsPerDay": "Battements par jour",
+      "steps": "Pas de l’aiguille des secondes par seconde",
+      "escape": "Vitesse de la roue d’échappement"
+    }
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "title": "Como funciona um relógio mecânico",
+    "eyebrow": "Relógio mecânico",
+    "tagline": "Uma mola enrolada, um trem de engrenagens e um balanço que decide quanto dura um segundo.",
+    "description": "Um relógio mecânico de corda manual em 3D: como a mola, o trem de engrenagens, o escape de âncora e o balanço marcam o tempo por 42 horas.",
+    "summary": "Mola real, trem de engrenagens, escape de âncora, balanço e espiral, ponteiros."
+  },
+  "stage": {
+    "label": "Modelo interativo de relógio mecânico",
+    "gauge": "Leituras do movimento ao vivo"
+  },
+  "controls": {
+    "label": "Controles do relógio",
+    "wheelOptions": {
+      "barrel": "Tambor",
+      "centreWheel": "Roda central",
+      "thirdWheel": "Terceira roda",
+      "fourthWheel": "Quarta roda",
+      "escapeWheel": "Roda de escape"
+    },
+    "momentOptions": {
+      "lock": "Travado",
+      "unlock": "Destravando",
+      "impulse": "Impulso",
+      "drop": "Queda",
+      "free": "Livre de novo"
+    },
+    "beatRateOptions": {
+      "vph18000": "18.000 vph",
+      "vph21600": "21.600 vph",
+      "vph28800": "28.800 vph",
+      "vph36000": "36.000 vph"
+    },
+    "views": {
+      "dial": {
+        "name": "Caixa e mostrador",
+        "short": "Mostrador",
+        "hint": "Caixa e mostrador (D)"
+      },
+      "bridges": {
+        "name": "Pontes",
+        "short": "Pontes",
+        "hint": "Pontes (B)"
+      },
+      "energy": {
+        "name": "Caminho da energia",
+        "short": "Energia",
+        "hint": "Caminho da energia (E)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Oscilação do balanço",
+    "phases": "Ir para um momento",
+    "speed": "Reprodução",
+    "value": "{{angle}} da oscilação, {{phase}}",
+    "speedValue": "{{speed}}",
+    "realTime": "Tempo real",
+    "slower": "{{factor}} vezes mais lento que na vida real",
+    "phase": {
+      "swingIn": "Rumo ao centro",
+      "tick": "Tic",
+      "swingOut": "Para fora",
+      "swingBack": "De volta ao centro",
+      "tock": "Tac",
+      "swingHome": "Volta ao início"
+    },
+    "during": {
+      "swingIn": "o balanço oscila livre rumo ao centro",
+      "tick": "a âncora libera um dente e empurra o balanço",
+      "swingOut": "a espiral freia o balanço até ele parar",
+      "swingBack": "a espiral puxa o balanço de volta ao centro",
+      "tock": "a âncora libera o dente seguinte e empurra o balanço no outro sentido",
+      "swingHome": "o balanço volta livre ao ponto de partida"
+    },
+    "jump": {
+      "swingIn": "Ir para o trecho rumo ao centro",
+      "tick": "Ir para o tic",
+      "swingOut": "Ir para o trecho para fora",
+      "swingBack": "Ir para a volta ao centro",
+      "tock": "Ir para o tac",
+      "swingHome": "Ir para a volta ao início"
+    }
+  },
+  "readouts": {
+    "balance": "Ângulo do balanço",
+    "amplitude": "Amplitude",
+    "time": "Hora mostrada",
+    "reserve": "Reserva de marcha",
+    "rate": "Desvio diário",
+    "timeValue": "{{value}} no mostrador"
+  },
+  "parts": {
+    "case": "Caixa",
+    "dial": "Mostrador",
+    "hourHand": "Ponteiro das horas",
+    "minuteHand": "Ponteiro dos minutos",
+    "secondHand": "Ponteiro dos segundos",
+    "crown": "Coroa",
+    "stem": "Haste de corda",
+    "windingPinion": "Pinhão de corda",
+    "crownWheel": "Roda da coroa",
+    "ratchetWheel": "Roda de catraca",
+    "click": "Lingueta",
+    "barrel": "Tambor",
+    "barrelArbor": "Eixo do tambor",
+    "mainspring": "Mola real",
+    "mainplate": "Platina",
+    "barrelBridge": "Ponte do tambor",
+    "trainBridge": "Ponte do trem",
+    "balanceCock": "Ponte do balanço",
+    "jewels": "Rubis",
+    "centreWheel": "Roda central",
+    "thirdWheel": "Terceira roda",
+    "fourthWheel": "Quarta roda",
+    "escapeWheel": "Roda de escape",
+    "palletFork": "Âncora",
+    "entryPallet": "Paleta de entrada",
+    "exitPallet": "Paleta de saída",
+    "bankingPins": "Pinos de limite",
+    "roller": "Prato duplo",
+    "impulseJewel": "Rubi de impulso",
+    "balanceWheel": "Balanço",
+    "hairspring": "Espiral",
+    "stud": "Pitão",
+    "regulator": "Raquete",
+    "shockJewel": "Sistema antichoque",
+    "cannonPinion": "Pinhão canhão",
+    "minuteWheel": "Roda de minutos",
+    "hourWheel": "Roda das horas"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "ms": "{{value}} ms",
+    "s": "{{value}} s",
+    "hours": "{{value}} h",
+    "minutes": "{{value}} min",
+    "mm": "{{value}} mm",
+    "secondsPerDay": "{{value}} s/dia",
+    "vph": "{{value}} vph",
+    "hz": "{{value}} Hz",
+    "rpm": "{{value}} rpm",
+    "percent": "{{value}}%",
+    "turns": "{{value}} voltas",
+    "mNm": "{{value}} mN·m",
+    "joules": "{{value}} J",
+    "microJoules": "{{value}} µJ"
+  },
+  "sections": {
+    "overview": {
+      "title": "Oito batidas por segundo, vindas de uma mola",
+      "p1": "Você está olhando para um relógio mecânico, em pé sobre a borda como em um expositor. A caixa tem um mostrador, três ponteiros e, na lateral, uma coroa para dar corda. O trabalho de verdade acontece atrás do mostrador, na parte que os relojoeiros chamam de <strong>movimento</strong>. Ele não tem bateria nem chip. Tudo funciona com uma mola de aço enrolada, uma cadeia de pequenas rodas e uma roda minúscula que oscila para lá e para cá.",
+      "p2": "O movimento faz <strong>três trabalhos</strong>. Primeiro, guarda energia: girar a coroa enrola a mola real. Depois, libera essa energia em passos pequenos e regulares, que é o trabalho do escape e do balanço. Por fim, conta esses passos e os mostra como horas, por meio de um trem de engrenagens e dos ponteiros. O caminho da energia mostra a força indo da mola ao balanço, passando pelas rodas, e cada capítulo abaixo trata de uma dessas partes.",
+      "p3": "Tudo se move só porque o balanço deixa a roda de escape avançar meio dente de cada vez. Cada liberação é uma <strong>batida</strong>, que você ouve como um tic ou um tac. Este relógio dá 28.800 batidas por hora: 8 por segundo, 691.200 por dia. O balanço vai e volta 4 vezes por segundo. Cada oscilação completa dura 250 ms e contém duas batidas: o tic quando ele passa pelo centro num sentido e o tac quando volta. A linha do tempo sob o modelo acompanha uma oscilação completa.",
+      "p4": "Os números destes capítulos são os de um movimento de <strong>corda manual</strong> como o ETA 2801-2, que recebe corda quando você gira a coroa: 25,6 mm de diâmetro, 3,35 mm de espessura e 17 rubis. O modelo segue um arranjo de livro didático do mesmo tipo, e estica a pilha de peças para que você veja cada camada. Arraste o modelo para girá-lo e ver o lado do mostrador. Em tempo real, o balanço é só um borrão: diminua a velocidade da reprodução e veja-o oscilar."
+    },
+    "mainspring": {
+      "title": "Quarenta e duas horas numa espiral de aço",
+      "p1": "A energia mora na <strong>mola real</strong>, uma longa fita de aço enrolada dentro de um tambor. Girar a coroa gira a haste e, por meio de pequenos pinhões, a roda da coroa e a roda de catraca, presa ao eixo central do tambor. O eixo enrola mais apertado a ponta interna da mola, enquanto o tambor fica parado. Uma pequena lingueta cai entre os dentes da catraca à medida que eles passam, e assim a mola não consegue girar o eixo para trás.",
+      "p2": "Esticada, essa mola tem 420 mm de comprimento, mas só 0,125 mm de espessura e 1,23 mm de altura. Sua força de giro, o <strong>torque</strong>, é de cerca de 11,3 mN·m com a corda completa. Um dia depois, caiu para cerca de 9,1 mN·m, uns 19 por cento a menos, então o empurrão que faz o relógio andar nunca é bem constante. Uma corda completa guarda cerca de um terço de joule, e o relógio gasta isso devagar, a apenas uns 2 a 3 microwatts.",
+      "p3": "Ao se desenrolar, a mola gira o tambor, e os dentes na borda dele movem as rodas. Uma corda completa faz este movimento funcionar por 42 horas: é a sua <strong>reserva de marcha</strong>. No trem de livro didático do modelo, o tambor dá uma volta a cada 8 horas, então uma corda completa equivale a cerca de cinco voltas e um quarto da mola. Arraste o controle rumo ao vazio: a espiral se afasta até a parede do tambor, o torque cai e o balanço oscila menos.",
+      "p4": "Num relógio de corda manual, a lingueta segura a mola, e quando ela está cheia a coroa simplesmente para de girar. Um relógio automático recebe corda de uma massa oscilante que não sabe quando parar, então a mola dele termina numa <strong>brida deslizante</strong>, que escorrega pela parede do tambor em vez de forçar a mola. A versão automática deste movimento, o ETA 2824-2, tem 4,6 mm de espessura em vez de 3,35 mm e funciona por 38 horas. Dê corda completa ao modelo para começar de novo.",
+      "control": {
+        "label": "Reserva de marcha restante",
+        "empty": "Sem corda",
+        "full": "Corda completa",
+        "torque": "Torque da mola real",
+        "turns": "Voltas restantes na mola",
+        "amplitude": "Amplitude do balanço",
+        "energy": "Energia ainda guardada",
+        "wind": "Dar corda completa"
+      }
+    },
+    "train": {
+      "title": "Multiplicar, não reduzir",
+      "p1": "Do tambor, a força passa por uma cadeia de rodas chamada <strong>trem de engrenagens</strong>. Cada roda é grande e move um pinhão pequeno no eixo seguinte, então cada etapa gira mais rápido que a anterior. A mola é lenta e forte, enquanto o escape precisa de um movimento rápido e leve, por isso o trem multiplica a velocidade em vez de reduzi-la. No fim, o avanço lento do tambor virou 12 voltas por minuto na roda de escape.",
+      "p2": "Os relojoeiros chamam de <strong>pinhão</strong> uma pequena engrenagem movida. O modelo usa um trem de livro didático. Os 80 dentes do tambor movem um pinhão de 10 dentes, uma multiplicação por 8, e as etapas seguintes multiplicam por 8, 7,5 e 12. Assim, a roda central dá uma volta por hora, a quarta roda uma por minuto e a roda de escape 12 por minuto. Cada um dos seus 20 dentes dá duas batidas: 12 × 20 × 2 dá 480 batidas por minuto, ou 28.800 por hora.",
+      "p3": "Neste arranjo de livro didático, a <strong>roda central</strong> fica no meio do movimento e dá uma volta por hora, por isso carrega o ponteiro dos minutos. A quarta roda dá uma volta por minuto e carrega o pequeno ponteiro de segundos às seis horas. A roda de escape faz em média 12 voltas por minuto, mas passa a maior parte do tempo parada e avança em saltos curtos de 9°, um por batida. Escolha uma roda abaixo e a câmera a acompanha.",
+      "p4": "Os pivôs das rodas giram em <strong>rubis</strong>, mancais minúsculos de rubi sintético feitos em fábrica, e não pedras preciosas. Um pivô de aço num rubi tem só uma fração do atrito de metal contra metal, e ainda é lubrificado. Este movimento tem 17 rubis. A versão automática tem 25, mas os 8 a mais ficam no sistema de corda e não fazem nada pela marcação do tempo, então mais rubis não significam um relógio melhor. Os pontos âmbar acompanham a energia do tambor até o balanço.",
+      "teeth": "Dentes da roda e do pinhão",
+      "turn": "Uma volta a cada",
+      "ratio": "Multiplicação em relação à roda anterior",
+      "turnValue": {
+        "hours": "{{value}} h",
+        "minutes": "{{value}} min",
+        "seconds": "{{value}} s"
+      }
+    },
+    "escapement": {
+      "title": "Soltando meio dente de cada vez",
+      "p1": "A mola empurra a roda de escape o tempo todo, e sozinha a roda sairia girando num instante. A <strong>âncora</strong> a segura. Duas pedras de rubi na âncora, as paletas de entrada e de saída, abrangem dois dentes e meio, e entre uma batida e outra uma delas bloqueia um dente. A face de travamento é inclinada, o que se chama tração: a pressão do dente puxa a âncora para dentro e a mantém contra um pino de limite. A roda está travada.",
+      "p2": "Então o balanço volta. Um pino de rubi no seu prato, o rubi de impulso, entra no garfo da âncora e a empurra até a paleta escorregar para fora do dente: a roda está destravada. O dente desliza pela ponta inclinada da paleta e empurra a âncora, e a âncora empurra o pino. Esse empurrão é o <strong>impulso</strong>, dividido entre a rampa do dente em forma de clava e a paleta. A roda cai livre, o dente seguinte trava na outra paleta, e a roda girou 9°. Percorra tudo passo a passo com os botões abaixo.",
+      "p3": "O pino só toca a âncora durante os 50° de oscilação em torno do centro, o chamado ângulo de levantamento. Quando o balanço oscila cerca de 280° para cada lado, esse contato dura uns 7 ms de cada batida de 125 ms. Em cerca de 94 por cento do tempo o balanço oscila livre, enquanto a tração mantém a âncora parada contra o seu pino de limite. É um escape <strong>livre</strong>. Se um impacto tenta mover a âncora enquanto o pino está longe, um dardo da âncora bate no prato de segurança e a detém.",
+      "p4": "O <strong>tic</strong> que você ouve são três impactos rápidos, não um: o pino batendo na âncora, um dente chegando à face inclinada de uma paleta e, o mais alto, um dente travando enquanto a âncora bate no seu pino de limite. O tac é igual na volta. Thomas Mudge inventou este escape de âncora na década de 1750, e desde cerca de 1900 quase todo relógio mecânico usa um. Arraste devagar a linha do tempo pelo tic e veja a roda esperar, saltar e parar.",
+      "fork": "Ângulo da âncora",
+      "wheel": "Roda de escape nesta batida",
+      "contact": "Tempo de contato nesta batida",
+      "wheelValue": "{{done}}° de {{total}}°"
+    },
+    "balance": {
+      "title": "A roda que decide quanto dura um segundo",
+      "p1": "O <strong>balanço</strong> é um anel de 10,6 mm de diâmetro que gira para lá e para cá sobre pivôs de apenas 0,08 mm de espessura. Uma espiral sempre o puxa de volta ao centro, então ele passa do ponto e oscila para o outro lado, como uma criança num balanço de parquinho. Só duas coisas definem quanto dura uma oscilação: a massa do aro e a rigidez da espiral. Um aro mais pesado oscila mais devagar, uma espiral mais rígida mais depressa, e aqui uma oscilação completa dura 250 ms. Christiaan Huygens projetou uma espiral para o balanço em 1675.",
+      "p2": "O quanto o balanço oscila é a sua <strong>amplitude</strong>: cerca de 280° para cada lado com o relógio carregado, ou seja, mais de uma volta completa de um extremo ao outro. A Sellita, que fabrica movimentos com o mesmo projeto, admite no máximo 315° com a corda completa e no mínimo 200° um dia depois. Acima de uns 335°, o rubi de impulso daria a volta e bateria nas costas da âncora. O balanço carrega cerca de 12 µJ, e cada batida repõe só uns poucos por cento disso.",
+      "p3": "Para ajustar a marcha, o relojoeiro move a <strong>raquete</strong>. Seus dois batentes minúsculos, um pino e uma pequena chave, abraçam a espira externa da espiral e definem quanto dela fica livre para flexionar. Encurte esse comprimento útil e o relógio adianta; alongue e ele atrasa. Pequenas mudanças contam: uma espiral só 1 por cento mais rígida adiantaria cerca de 7 minutos por dia. Mexa um pouco no controle e veja como basta pouco para desviar o relógio em minutos por dia.",
+      "p4": "Calor, magnetismo e impactos perturbam o balanço. As espirais de Nivarox, uma liga criada para elas em 1933, quase não mudam com a temperatura, e as espirais de silício não são magnéticas. Contra impactos, os rubis que seguram os pivôs do balanço ficam num <strong>sistema antichoque</strong>: uma mola deixa o rubi se deslocar, o ombro grosso do eixo recebe o golpe e a mola centraliza o pivô de novo. O Incabloc, do início da década de 1930, é um desses sistemas. Nesta família, só as versões superiores o recebem; as outras usam o Etachocs, da própria ETA.",
+      "control": {
+        "label": "Raquete",
+        "slow": "Mais lento (espiral mais longa)",
+        "fast": "Mais rápido (espiral mais curta)",
+        "rate": "Desvio diário",
+        "period": "Uma oscilação leva",
+        "length": "Comprimento útil da espiral",
+        "energy": "Energia no balanço"
+      }
+    },
+    "hands": {
+      "title": "Das batidas às horas",
+      "p1": "Agora olhe o lado do mostrador. Sob o mostrador, um pequeno conjunto de rodas chamado <strong>minuteria</strong> faz o ponteiro das horas dar uma volta enquanto o dos minutos dá doze. Neste arranjo de livro didático, o pinhão canhão, de 10 dentes, move a roda de minutos de 30 dentes, e o pinhão dela, de 8 dentes, move a roda das horas de 32 dentes: 3 vezes 4 dá 12 para 1. O pinhão canhão fica preso só por atrito, então, quando você acerta a hora, os ponteiros giram e o trem fica parado.",
+      "p2": "A quarta roda carrega o <strong>pequeno ponteiro de segundos</strong> às seis horas. Ele avança 6° por segundo, não de forma contínua, mas em 8 passos minúsculos, um por batida, e é por isso que o ponteiro de segundos de um relógio mecânico parece deslizar. O próprio ETA 2801-2 é construído de outro jeito: a roda de segundos fica no centro do movimento e move um ponteiro de segundos central, e o ponteiro dos minutos vai num tubo em volta dela.",
+      "p3": "Nem todo relógio bate 8 vezes por segundo. Antes da década de 1970, o normal eram 18.000 batidas por hora, e hoje 21.600 é comum. A Grand Seiko chegou a 36.000 em 1968, e a Zenith, com o El Primero, em 1969. Uma <strong>frequência</strong> mais alta deixa a marcha mais estável diante de impactos e mudanças de posição. O preço é energia: com o mesmo balanço e a mesma amplitude, a energia cresce com o quadrado da frequência, então a mola acaba antes ou as peças se desgastam mais. Troque a frequência e observe o ponteiro de segundos.",
+      "p4": "Preciso quanto? Um <strong>cronômetro</strong> certificado precisa ficar, em média, entre −4 e +6 segundos por dia nos testes do COSC, um de sete critérios verificados no movimento sem caixa durante 15 dias, em 5 posições e 3 temperaturas. O METAS testa o relógio completo, mesmo depois de um campo magnético de 15.000 gauss, e admite de 0 a +5 segundos por dia, ou de 0 a +6 para um movimento deste tamanho. Para o quartzo, o limite do COSC é de ±0,07 segundo por dia. Ainda assim, em 2025 a Suíça exportou 5,2 milhões de relógios mecânicos, que valeram 86 por cento de suas exportações de relógios.",
+      "beatsPerSecond": "Batidas por segundo",
+      "beatsPerDay": "Batidas por dia",
+      "steps": "Passos do ponteiro de segundos por segundo",
+      "escape": "Velocidade da roda de escape"
+    }
+  }
+}

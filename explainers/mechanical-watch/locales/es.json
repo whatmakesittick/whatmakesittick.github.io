@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "title": "Cómo funciona un reloj mecánico",
+    "eyebrow": "Reloj mecánico",
+    "tagline": "Un muelle enrollado, un tren de ruedas y un volante que decide cuánto dura un segundo.",
+    "description": "Un reloj mecánico de cuerda manual en 3D: cómo un muelle, un tren de ruedas, un escape de áncora y un volante marcan la hora durante 42 horas.",
+    "summary": "Muelle real, tren de engranajes, escape de áncora, volante y espiral, agujas."
+  },
+  "stage": {
+    "label": "Modelo interactivo de reloj mecánico",
+    "gauge": "Lecturas del movimiento en directo"
+  },
+  "controls": {
+    "label": "Controles del reloj",
+    "wheelOptions": {
+      "barrel": "Barrilete",
+      "centreWheel": "Rueda central",
+      "thirdWheel": "Tercera rueda",
+      "fourthWheel": "Cuarta rueda",
+      "escapeWheel": "Rueda de escape"
+    },
+    "momentOptions": {
+      "lock": "Bloqueado",
+      "unlock": "Desbloqueo",
+      "impulse": "Impulso",
+      "drop": "Caída",
+      "free": "Libre de nuevo"
+    },
+    "beatRateOptions": {
+      "vph18000": "18 000 vph",
+      "vph21600": "21 600 vph",
+      "vph28800": "28 800 vph",
+      "vph36000": "36 000 vph"
+    },
+    "views": {
+      "dial": {
+        "name": "Caja y esfera",
+        "short": "Esfera",
+        "hint": "Caja y esfera (D)"
+      },
+      "bridges": {
+        "name": "Puentes",
+        "short": "Puentes",
+        "hint": "Puentes (B)"
+      },
+      "energy": {
+        "name": "Camino de la energía",
+        "short": "Energía",
+        "hint": "Camino de la energía (E)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Oscilación del volante",
+    "phases": "Saltar a un momento",
+    "speed": "Reproducción",
+    "value": "{{angle}} de la oscilación, {{phase}}",
+    "speedValue": "{{speed}}",
+    "realTime": "Tiempo real",
+    "slower": "{{factor}} veces más lento que en la realidad",
+    "phase": {
+      "swingIn": "Hacia el centro",
+      "tick": "Tic",
+      "swingOut": "Hacia fuera",
+      "swingBack": "De vuelta al centro",
+      "tock": "Tac",
+      "swingHome": "Vuelta al inicio"
+    },
+    "during": {
+      "swingIn": "el volante oscila libre hacia el centro",
+      "tick": "el áncora libera un diente y empuja el volante",
+      "swingOut": "la espiral frena el volante hasta detenerlo",
+      "swingBack": "la espiral devuelve el volante hacia el centro",
+      "tock": "el áncora libera el diente siguiente y empuja el volante en sentido contrario",
+      "swingHome": "el volante vuelve libre a su punto de partida"
+    },
+    "jump": {
+      "swingIn": "Saltar al tramo hacia el centro",
+      "tick": "Saltar al tic",
+      "swingOut": "Saltar al tramo hacia fuera",
+      "swingBack": "Saltar a la vuelta al centro",
+      "tock": "Saltar al tac",
+      "swingHome": "Saltar a la vuelta al inicio"
+    }
+  },
+  "readouts": {
+    "balance": "Ángulo del volante",
+    "amplitude": "Amplitud",
+    "time": "Hora marcada",
+    "reserve": "Reserva de marcha",
+    "rate": "Desvío diario",
+    "timeValue": "{{value}} en la esfera"
+  },
+  "parts": {
+    "case": "Caja",
+    "dial": "Esfera",
+    "hourHand": "Aguja de las horas",
+    "minuteHand": "Aguja de los minutos",
+    "secondHand": "Aguja de los segundos",
+    "crown": "Corona",
+    "stem": "Tija de cuerda",
+    "windingPinion": "Piñón de cuerda",
+    "crownWheel": "Rueda de corona",
+    "ratchetWheel": "Rueda de trinquete",
+    "click": "Trinquete",
+    "barrel": "Barrilete",
+    "barrelArbor": "Eje del barrilete",
+    "mainspring": "Muelle real",
+    "mainplate": "Platina",
+    "barrelBridge": "Puente del barrilete",
+    "trainBridge": "Puente del tren de rodaje",
+    "balanceCock": "Puente del volante",
+    "jewels": "Rubíes",
+    "centreWheel": "Rueda central",
+    "thirdWheel": "Tercera rueda",
+    "fourthWheel": "Cuarta rueda",
+    "escapeWheel": "Rueda de escape",
+    "palletFork": "Áncora",
+    "entryPallet": "Paleta de entrada",
+    "exitPallet": "Paleta de salida",
+    "bankingPins": "Pasadores de tope",
+    "roller": "Doble plato",
+    "impulseJewel": "Rubí de impulso",
+    "balanceWheel": "Volante",
+    "hairspring": "Espiral",
+    "stud": "Pitón",
+    "regulator": "Raqueta",
+    "shockJewel": "Sistema antichoque",
+    "cannonPinion": "Piñón cañón",
+    "minuteWheel": "Rueda de minutería",
+    "hourWheel": "Rueda de horas"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "ms": "{{value}} ms",
+    "s": "{{value}} s",
+    "hours": "{{value}} h",
+    "minutes": "{{value}} min",
+    "mm": "{{value}} mm",
+    "secondsPerDay": "{{value}} s/día",
+    "vph": "{{value}} vph",
+    "hz": "{{value}} Hz",
+    "rpm": "{{value}} rpm",
+    "percent": "{{value}} %",
+    "turns": "{{value}} vueltas",
+    "mNm": "{{value}} mN·m",
+    "joules": "{{value}} J",
+    "microJoules": "{{value}} µJ"
+  },
+  "sections": {
+    "overview": {
+      "title": "Ocho tics por segundo, gracias a un muelle",
+      "p1": "Estás viendo un reloj mecánico, apoyado de canto como en un expositor. La caja lleva una esfera, tres agujas y, en el lateral, una corona para darle cuerda. El trabajo de verdad ocurre detrás de la esfera, en la parte que los relojeros llaman el <strong>movimiento</strong>. No tiene pila ni chip. Todo funciona con un muelle de acero enrollado, una cadena de ruedas pequeñas y una rueda diminuta que oscila de un lado a otro.",
+      "p2": "El movimiento hace <strong>tres trabajos</strong>. Primero almacena energía: al girar la corona se arma el muelle real. Después suelta esa energía en pasos pequeños y regulares, que es el trabajo del escape y del volante. Por último cuenta esos pasos y los muestra como hora, mediante un tren de ruedas y las agujas. El camino de la energía muestra la fuerza que va del muelle al volante a través de las ruedas, y cada capítulo de abajo se ocupa de una de estas partes.",
+      "p3": "Todo se mueve solo porque el volante deja avanzar la rueda de escape medio diente cada vez. Cada liberación es una <strong>alternancia</strong>, un golpe que oyes como tic o tac. Este reloj da 28 800 alternancias por hora: 8 cada segundo, 691 200 al día. El volante va y viene 4 veces por segundo. Cada oscilación completa dura 250 ms y contiene dos alternancias: el tic al pasar por el centro en un sentido y el tac al volver. La línea de tiempo bajo el modelo sigue una oscilación completa.",
+      "p4": "Las cifras de estos capítulos son las de un movimiento de <strong>cuerda manual</strong> como el ETA 2801-2, al que se da cuerda girando la corona: 25,6 mm de diámetro, 3,35 mm de grosor y 17 rubíes. El modelo sigue una disposición de libro de texto del mismo tipo, y estira la pila de piezas para que veas cada capa. Arrastra el modelo para girarlo y mira el lado de la esfera. A velocidad real el volante es un borrón: ralentiza la reproducción y míralo oscilar."
+    },
+    "mainspring": {
+      "title": "Cuarenta y dos horas en una espiral de acero",
+      "p1": "La energía vive en el <strong>muelle real</strong>, una larga lámina de acero enrollada dentro de un tambor llamado barrilete. Al girar la corona gira la tija y, a través de piñones pequeños, la rueda de corona y la rueda de trinquete, montada en el eje central del barrilete. El eje enrolla más apretado el extremo interior del muelle mientras el barrilete se queda quieto. Un pequeño trinquete cae entre los dientes de la rueda a medida que pasan, así que el muelle no puede hacer girar el eje hacia atrás.",
+      "p2": "Estirado, este muelle mide 420 mm de largo, pero solo 0,125 mm de grosor y 1,23 mm de alto. Su fuerza de giro, el <strong>par</strong>, es de unos 11,3 mN·m con la cuerda completa. Un día después ha bajado a unos 9,1 mN·m, alrededor de un 19 por ciento menos, así que el empuje con el que funciona el reloj nunca es del todo constante. Una cuerda completa almacena más o menos un tercio de julio, y el reloj lo gasta despacio, a solo unos 2 o 3 microvatios.",
+      "p3": "Al desenrollarse, el muelle hace girar el barrilete, y los dientes de su borde mueven las ruedas. Una cuerda completa hace funcionar este movimiento 42 horas: es su <strong>reserva de marcha</strong>. En el tren de libro de texto del modelo, el barrilete da una vuelta cada 8 horas, así que una cuerda completa equivale a unas cinco vueltas y cuarto del muelle. Arrastra el control hacia vacío: la espiral se abre hacia la pared del barrilete, el par cae y el volante oscila menos.",
+      "p4": "En un reloj de cuerda manual el trinquete retiene el muelle, y cuando está lleno la corona simplemente deja de girar. Un reloj automático se carga con una masa oscilante que no sabe cuándo parar, así que su muelle termina en una <strong>brida deslizante</strong>, que resbala por la pared del barrilete en vez de forzar el muelle. La versión automática de este movimiento, el ETA 2824-2, mide 4,6 mm de grosor en lugar de 3,35 mm y funciona 38 horas. Dale cuerda completa al modelo para empezar de nuevo.",
+      "control": {
+        "label": "Reserva de marcha restante",
+        "empty": "Sin cuerda",
+        "full": "Cuerda completa",
+        "torque": "Par del muelle real",
+        "turns": "Vueltas que quedan en el muelle",
+        "amplitude": "Amplitud del volante",
+        "energy": "Energía aún almacenada",
+        "wind": "Dar cuerda completa"
+      }
+    },
+    "train": {
+      "title": "Multiplicar, no reducir",
+      "p1": "Desde el barrilete, la fuerza recorre una cadena de ruedas llamada <strong>tren de rodaje</strong>. Cada rueda es grande y mueve un piñón pequeño en el eje siguiente, de modo que cada paso gira más rápido que el anterior. El muelle es lento y fuerte, mientras que el escape necesita un movimiento rápido y ligero, así que el tren multiplica la velocidad en vez de reducirla. Al final, el lento avance del barrilete se ha convertido en 12 vueltas por minuto en la rueda de escape.",
+      "p2": "Los relojeros llaman <strong>piñón</strong> a un engranaje pequeño que recibe el movimiento. El modelo usa un tren de libro de texto. Los 80 dientes del barrilete mueven un piñón de 10 dientes, una multiplicación por 8, y los pasos siguientes multiplican por 8, 7,5 y 12. Así, la rueda central da una vuelta por hora, la cuarta rueda una por minuto y la rueda de escape 12 por minuto. Cada uno de sus 20 dientes da dos alternancias: 12 × 20 × 2 son 480 alternancias por minuto, o 28 800 por hora.",
+      "p3": "En esta disposición de libro de texto, la <strong>rueda central</strong> está en el centro del movimiento y da una vuelta por hora, así que lleva el minutero. La cuarta rueda da una vuelta por minuto y lleva el pequeño segundero a las seis. La rueda de escape da 12 vueltas por minuto de media, pero pasa quieta la mayor parte del tiempo y avanza a saltos cortos de 9°, uno por alternancia. Elige una rueda abajo y la cámara la seguirá.",
+      "p4": "Los pivotes de las ruedas giran en <strong>rubíes</strong>, cojinetes diminutos de rubí sintético hechos en fábrica, no piedras preciosas. Un pivote de acero en un rubí tiene solo una fracción del rozamiento de metal contra metal, y además está lubricado. Este movimiento tiene 17 rubíes. Su hermano automático tiene 25, pero los 8 de más están en el sistema de carga y no aportan nada a la medida del tiempo, así que más rubíes no significan un reloj mejor. Los puntos ámbar siguen la energía del barrilete al volante.",
+      "teeth": "Dientes de la rueda y del piñón",
+      "turn": "Una vuelta cada",
+      "ratio": "Multiplicación respecto a la rueda anterior",
+      "turnValue": {
+        "hours": "{{value}} h",
+        "minutes": "{{value}} min",
+        "seconds": "{{value}} s"
+      }
+    },
+    "escapement": {
+      "title": "Soltar medio diente cada vez",
+      "p1": "El muelle empuja la rueda de escape todo el tiempo, y sola saldría girando en un instante. El <strong>áncora</strong> la retiene. Dos piedras de rubí en el áncora, las paletas de entrada y de salida, abarcan dos dientes y medio, y entre una alternancia y otra una de ellas bloquea un diente. Su cara de reposo está inclinada, lo que se llama tracción: la presión del diente tira del áncora hacia dentro y la sujeta contra un pasador de tope. La rueda está bloqueada.",
+      "p2": "Entonces vuelve el volante. Una clavija de rubí en su plato, el rubí de impulso, entra en la horquilla del áncora y la empuja hasta que la paleta se desliza fuera del diente: la rueda queda desbloqueada. El diente resbala por el extremo inclinado de la paleta y empuja el áncora, y el áncora empuja la clavija. Ese empujón es el <strong>impulso</strong>, repartido entre la rampa del diente en forma de maza y la paleta. La rueda cae libre, el diente siguiente se bloquea en la otra paleta y la rueda ha girado 9°. Recórrelo paso a paso con los botones de abajo.",
+      "p3": "La clavija solo toca el áncora durante los 50° de oscilación alrededor del centro, el llamado ángulo de levantamiento. Cuando el volante oscila unos 280° hacia cada lado, ese contacto dura unos 7 ms de cada alternancia de 125 ms. Cerca del 94 por ciento del tiempo el volante oscila libre, mientras la tracción mantiene el áncora quieta contra su pasador de tope. Es un escape <strong>libre</strong>. Si un golpe intenta mover el áncora cuando la clavija está lejos, un dardo del áncora choca con el plato de seguridad y la detiene.",
+      "p4": "El <strong>tic</strong> que oyes son tres golpes rápidos, no uno: la clavija que golpea el áncora, un diente que llega a la cara inclinada de una paleta y, el más fuerte, un diente que se bloquea mientras el áncora choca con su pasador de tope. El tac es igual a la vuelta. Thomas Mudge inventó este escape de áncora en la década de 1750, y desde hacia 1900 casi todos los relojes mecánicos lo usan. Arrastra despacio la línea de tiempo por el tic y verás la rueda esperar, saltar y parar.",
+      "fork": "Ángulo del áncora",
+      "wheel": "Rueda de escape en esta alternancia",
+      "contact": "Tiempo de contacto en esta alternancia",
+      "wheelValue": "{{done}}° de {{total}}°"
+    },
+    "balance": {
+      "title": "La rueda que decide cuánto dura un segundo",
+      "p1": "El <strong>volante</strong> es un anillo de 10,6 mm de diámetro que gira de un lado a otro sobre pivotes de solo 0,08 mm de grosor. Una espiral lo devuelve siempre hacia el centro, así que se pasa de largo y oscila hacia el otro lado, como un niño en un columpio. Solo dos cosas fijan cuánto dura una oscilación: la masa de la llanta y la rigidez de la espiral. Una llanta más pesada oscila más despacio, una espiral más rígida más deprisa, y aquí una oscilación completa dura 250 ms. Christiaan Huygens diseñó una espiral para volante en 1675.",
+      "p2": "Lo lejos que llega el volante es su <strong>amplitud</strong>: unos 280° hacia cada lado con el reloj cargado, es decir, más de una vuelta completa de un extremo a otro. Sellita, que fabrica movimientos con el mismo diseño, admite como máximo 315° con la cuerda completa y como mínimo 200° un día después. Por encima de unos 335°, el rubí de impulso daría la vuelta y golpearía la parte trasera del áncora. El volante lleva unos 12 µJ, y cada alternancia repone solo un pequeño porcentaje.",
+      "p3": "Para ajustar la marcha, el relojero mueve la <strong>raqueta</strong>. Sus dos topes diminutos, un pasador y una pequeña llave, abrazan la espira exterior de la espiral y fijan cuánta parte de ella puede flexionarse. Acorta esa longitud útil y el reloj adelanta; alárgala y atrasa. Los cambios pequeños importan: una espiral solo un 1 por ciento más rígida adelantaría unos 7 minutos al día. Mueve un poco el control y verás lo poco que hace falta para desviar el reloj varios minutos al día.",
+      "p4": "El calor, el magnetismo y los golpes alteran el volante. Las espirales de Nivarox, una aleación creada para ellas en 1933, apenas cambian con la temperatura, y las espirales de silicio no son magnéticas. Contra los golpes, los rubíes que sujetan los pivotes del volante van en un <strong>sistema antichoque</strong>: un muelle deja que el rubí se desplace, el hombro grueso del eje recibe el golpe y el muelle vuelve a centrar el pivote. Incabloc, de principios de la década de 1930, es uno de estos sistemas. En esta familia solo lo llevan las calidades superiores; las demás usan el Etachocs propio de ETA.",
+      "control": {
+        "label": "Raqueta",
+        "slow": "Más lento (espiral más larga)",
+        "fast": "Más rápido (espiral más corta)",
+        "rate": "Desvío diario",
+        "period": "Una oscilación dura",
+        "length": "Longitud útil de la espiral",
+        "energy": "Energía en el volante"
+      }
+    },
+    "hands": {
+      "title": "De las alternancias a las horas",
+      "p1": "Ahora mira el lado de la esfera. Bajo la esfera, un pequeño grupo de ruedas llamado <strong>minutería</strong> hace que la aguja de las horas dé una vuelta mientras el minutero da doce. En esta disposición de libro de texto, el piñón cañón, de 10 dientes, mueve la rueda de minutería de 30 dientes, y su piñón de 8 dientes mueve la rueda de horas de 32 dientes: 3 por 4 da 12 a 1. El piñón cañón solo se sujeta por fricción, así que al poner el reloj en hora las agujas giran y el tren se queda quieto.",
+      "p2": "La cuarta rueda lleva el <strong>pequeño segundero</strong> a las seis. Avanza 6° por segundo, no de forma continua sino en 8 pasos diminutos, uno por alternancia, y por eso el segundero de un reloj mecánico parece deslizarse. El propio ETA 2801-2 está construido de otra manera: su rueda de segundos está en el centro del movimiento y mueve un segundero central, y el minutero va montado en un tubo a su alrededor.",
+      "p3": "No todos los relojes dan 8 alternancias por segundo. Antes de la década de 1970 lo habitual eran 18 000 por hora, y hoy son comunes 21 600. Grand Seiko llegó a 36 000 en 1968, y Zenith con su El Primero en 1969. Una <strong>frecuencia</strong> más alta mantiene la marcha más estable frente a golpes y cambios de posición. El precio es la energía: con el mismo volante y la misma amplitud, la energía crece con el cuadrado de la frecuencia, así que el muelle se agota antes o las piezas se desgastan más. Cambia la frecuencia y mira el segundero.",
+      "p4": "¿Qué significa ser preciso? Un <strong>cronómetro</strong> certificado debe desviarse de media entre −4 y +6 segundos al día en las pruebas del COSC, uno de siete criterios que se comprueban en el movimiento desnudo durante 15 días, en 5 posiciones y a 3 temperaturas. El METAS prueba el reloj terminado, incluso tras un campo magnético de 15 000 gauss, y admite de 0 a +5 segundos al día, o de 0 a +6 para un movimiento de este tamaño. Para el cuarzo, el límite del COSC es de ±0,07 segundos al día. Aun así, en 2025 Suiza exportó 5,2 millones de relojes mecánicos, que supusieron el 86 por ciento del valor de sus exportaciones de relojes.",
+      "beatsPerSecond": "Alternancias por segundo",
+      "beatsPerDay": "Alternancias al día",
+      "steps": "Pasos del segundero por segundo",
+      "escape": "Velocidad de la rueda de escape"
+    }
+  }
+}
