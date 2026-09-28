@@ -2,18 +2,20 @@ import { lerp } from '@core/math';
 import { between } from './random';
 import type { Random } from './random';
 
+export type Tint = readonly [red: number, green: number, blue: number];
+
 export interface Field {
   readonly width: number;
   readonly height: number;
   readonly heights: Float32Array;
-  readonly tones: Float32Array;
+  readonly tints: Float32Array;
 }
 
 export interface Dome {
   readonly x: number;
   readonly y: number;
   readonly radius: number;
-  readonly tone: number;
+  readonly tint: Tint;
 }
 
 export interface Tail {
@@ -29,6 +31,7 @@ export interface FaceForm {
   readonly size: number;
   readonly headsPerSide: number;
   readonly radiusShare: number;
+  readonly radiusVariation: number;
   readonly jitterShare: number;
 }
 
@@ -47,39 +50,44 @@ export interface EdgeForm {
 }
 
 export const TONE = {
-  gap: 0.56,
+  gap: 0.66,
   head: 1,
-  headVariation: 0.08,
-  headRim: 0.8,
+  headVariation: 0.1,
+  warmth: 0.07,
+  headRim: 0.86,
   tail: 0.66,
   tailLift: 0.3,
   core: 0.3,
 } as const;
 
+const RGB = 3;
 const RGBA = 4;
 const BYTE = 255;
 const HALF = 0.5;
 const PIXEL_CENTRE = 0.5;
 const TWO_PI = Math.PI * 2;
+const TAIL_TINT: Tint = [TONE.tail, TONE.tail, TONE.tail];
 
 function wrap(value: number, size: number): number {
   return ((value % size) + size) % size;
 }
 
-export function createField(width: number, height: number, tone: number): Field {
-  return {
-    width,
-    height,
-    heights: new Float32Array(width * height),
-    tones: new Float32Array(width * height).fill(tone),
-  };
+export function grey(tone: number): Tint {
+  return [tone, tone, tone];
 }
 
-function raise(field: Field, column: number, row: number, height: number, tone: number): void {
+export function createField(width: number, height: number, tint: Tint): Field {
+  const tints = new Float32Array(width * height * RGB);
+  for (let pixel = 0; pixel < width * height; pixel += 1) tints.set(tint, pixel * RGB);
+  return { width, height, heights: new Float32Array(width * height), tints };
+}
+
+function raise(field: Field, column: number, row: number, height: number, tint: Tint, shade = 1) {
   const index = row * field.width + column;
   if (height <= field.heights[index]) return;
   field.heights[index] = height;
-  field.tones[index] = tone;
+  const offset = index * RGB;
+  tint.forEach((channel, axis) => (field.tints[offset + axis] = channel * shade));
 }
 
 export function paintDome(field: Field, dome: Dome, wrapRows: boolean): void {
@@ -94,8 +102,8 @@ export function paintDome(field: Field, dome: Dome, wrapRows: boolean): void {
       const share = (dx * dx + dy * dy) / (dome.radius * dome.radius);
       if (share >= 1) continue;
       const height = Math.sqrt(1 - share);
-      const tone = dome.tone * lerp(TONE.headRim, 1, height);
-      raise(field, wrap(column, field.width), wrap(row, field.height), height, tone);
+      const shade = lerp(TONE.headRim, 1, height);
+      raise(field, wrap(column, field.width), wrap(row, field.height), height, dome.tint, shade);
     }
   }
 }
@@ -106,42 +114,46 @@ export function paintTail(field: Field, tail: Tail): void {
   for (let row = Math.max(0, Math.floor(bottom)); row < Math.min(field.height, top); row += 1) {
     const travelled = Math.abs(row + PIXEL_CENTRE - tail.from);
     const centre = tail.x + tail.wave * Math.sin((TWO_PI * travelled) / tail.waveLength);
-    for (
-      let column = Math.floor(centre) - reach;
-      column <= Math.floor(centre) + reach;
-      column += 1
-    ) {
+    const first = Math.floor(centre) - reach;
+    for (let column = first; column <= first + reach * 2; column += 1) {
       const share = Math.abs(column + PIXEL_CENTRE - centre) / tail.halfWidth;
       if (share >= 1) continue;
-      raise(field, wrap(column, field.width), row, TONE.tailLift * (1 - share * share), TONE.tail);
+      raise(field, wrap(column, field.width), row, TONE.tailLift * (1 - share * share), TAIL_TINT);
     }
   }
 }
 
-function headTone(random: Random): number {
-  return TONE.head - between(random, 0, TONE.headVariation);
+export function headTint(random: Random): Tint {
+  const brightness = TONE.head - between(random, 0, TONE.headVariation);
+  const warmth = between(random, -TONE.warmth, TONE.warmth);
+  return [brightness * (1 + warmth), brightness, brightness * (1 - warmth)];
 }
 
 export function faceField(form: FaceForm, random: Random): Field {
-  const field = createField(form.size, form.size, TONE.gap);
+  const field = createField(form.size, form.size, grey(TONE.gap));
   const spacing = form.size / form.headsPerSide;
   const jitter = spacing * form.jitterShare;
+  const variation = form.radiusVariation;
   for (let row = 0; row < form.headsPerSide; row += 1) {
+    const stagger = (row % 2) * HALF;
     for (let column = 0; column < form.headsPerSide; column += 1) {
-      const dome = {
-        x: (column + HALF) * spacing + between(random, -jitter, jitter),
-        y: (row + HALF) * spacing + between(random, -jitter, jitter),
-        radius: spacing * form.radiusShare,
-        tone: headTone(random),
-      };
-      paintDome(field, dome, true);
+      paintDome(
+        field,
+        {
+          x: (column + HALF + stagger) * spacing + between(random, -jitter, jitter),
+          y: (row + HALF) * spacing + between(random, -jitter, jitter),
+          radius: spacing * form.radiusShare * between(random, 1 - variation, 1 + variation),
+          tint: headTint(random),
+        },
+        true,
+      );
     }
   }
   return field;
 }
 
 export function edgeField(form: EdgeForm, random: Random): Field {
-  const field = createField(form.size, form.size, TONE.core);
+  const field = createField(form.size, form.size, grey(TONE.core));
   const perNm = form.size / form.thicknessNm;
   const middle = form.size * HALF;
   const spacing = form.size / form.headsPerTile;
@@ -150,7 +162,7 @@ export function edgeField(form: EdgeForm, random: Random): Field {
   [-1, 1].forEach((side) => {
     for (let head = 0; head < form.headsPerTile; head += 1) {
       const x = (head + HALF) * spacing + between(random, -1, 1) * spacing * form.jitterShare;
-      paintDome(field, { x, y: middle + side * headOffset, radius, tone: headTone(random) }, false);
+      paintDome(field, { x, y: middle + side * headOffset, radius, tint: headTint(random) }, false);
       [-1, 1].forEach((pair) =>
         paintTail(field, {
           x: x + pair * form.tailOffsetNm * perNm,
@@ -171,6 +183,10 @@ function heightAt(field: Field, column: number, row: number): number {
   return field.heights[clampedRow * field.width + wrap(column, field.width)];
 }
 
+function toByte(value: number): number {
+  return Math.round(Math.min(1, Math.max(0, value)) * BYTE);
+}
+
 export function normalPixels(field: Field, strength: number): Uint8Array {
   const pixels = new Uint8Array(field.width * field.height * RGBA);
   for (let row = 0; row < field.height; row += 1) {
@@ -179,21 +195,22 @@ export function normalPixels(field: Field, strength: number): Uint8Array {
       const dy = (heightAt(field, column, row + 1) - heightAt(field, column, row - 1)) * strength;
       const length = Math.hypot(dx, dy, 1);
       const index = (row * field.width + column) * RGBA;
-      pixels[index] = Math.round(((-dx / length) * HALF + HALF) * BYTE);
-      pixels[index + 1] = Math.round(((-dy / length) * HALF + HALF) * BYTE);
-      pixels[index + 2] = Math.round(((1 / length) * HALF + HALF) * BYTE);
+      pixels[index] = toByte((-dx / length) * HALF + HALF);
+      pixels[index + 1] = toByte((-dy / length) * HALF + HALF);
+      pixels[index + 2] = toByte((1 / length) * HALF + HALF);
       pixels[index + 3] = BYTE;
     }
   }
   return pixels;
 }
 
-export function tonePixels(field: Field): Uint8Array {
+export function tintPixels(field: Field): Uint8Array {
   const pixels = new Uint8Array(field.width * field.height * RGBA);
-  field.tones.forEach((tone, pixel) => {
-    const grey = Math.round(Math.min(1, Math.max(0, tone)) * BYTE);
-    pixels.fill(grey, pixel * RGBA, pixel * RGBA + RGBA - 1);
-    pixels[pixel * RGBA + RGBA - 1] = BYTE;
-  });
+  for (let pixel = 0; pixel < field.width * field.height; pixel += 1) {
+    for (let axis = 0; axis < RGB; axis += 1) {
+      pixels[pixel * RGBA + axis] = toByte(field.tints[pixel * RGB + axis]);
+    }
+    pixels[pixel * RGBA + RGB] = BYTE;
+  }
   return pixels;
 }

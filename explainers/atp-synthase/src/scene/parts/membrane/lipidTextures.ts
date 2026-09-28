@@ -11,7 +11,7 @@ import {
 import type { ColorSpace, Wrapping } from 'three';
 import { MEMBRANE, spanLength } from '../../../model/scale';
 import { MEMBRANE_FORM } from '../../constants';
-import { edgeField, faceField, normalPixels, tonePixels } from '../../geometry/lipidField';
+import { edgeField, faceField, normalPixels, tintPixels } from '../../geometry/lipidField';
 import type { Field } from '../../geometry/lipidField';
 import { seededRandom } from '../../geometry/random';
 import type { Random } from '../../geometry/random';
@@ -43,7 +43,7 @@ function dataTexture(
 function surface(field: Field, wrapT: Wrapping): LipidSurface {
   const size = field.width;
   return {
-    map: dataTexture(tonePixels(field), size, SRGBColorSpace, wrapT),
+    map: dataTexture(tintPixels(field), size, SRGBColorSpace, wrapT),
     normalMap: dataTexture(
       normalPixels(field, MEMBRANE_FORM.normalStrength),
       size,
@@ -59,6 +59,7 @@ function faceSurface(random: Random): LipidSurface {
       size: MEMBRANE_FORM.textureSize,
       headsPerSide: MEMBRANE_FORM.faceHeadsPerTile,
       radiusShare: MEMBRANE_FORM.headRadiusShare,
+      radiusVariation: MEMBRANE_FORM.headRadiusVariation,
       jitterShare: MEMBRANE_FORM.headJitterShare,
     },
     random,
