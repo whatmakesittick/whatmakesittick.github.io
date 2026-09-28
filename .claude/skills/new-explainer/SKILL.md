@@ -70,7 +70,7 @@ Cover: a Playwright shot of the stage at 1600 × 900 and device scale 2 with the
 
 ## 8. Browser QA
 
-Run the dev server and a Playwright script that walks the six chapters at their seek points on desktop 1440 × 900 and iPhone 13 with a coarse pointer, in English and two other languages, with chromium args `--use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist` and Google Fonts blocked. Check: no page or console errors, no untranslated keys, no labels over the dock, readouts that change with the scrubber, sliders and chips that change their readouts, no horizontal overflow. Build contact sheets and look at them, then send them to the user.
+Run the dev server and a Playwright script that walks the six chapters at their seek points on desktop 1440 × 900 and iPhone 13 with a coarse pointer, in English and two other languages, with chromium args `--use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist`. Check: no page or console errors, no untranslated keys, no labels over the dock, readouts that change with the scrubber, sliders and chips that change their readouts, no horizontal overflow. Build contact sheets and look at them, then send them to the user.
 
 ## 9. Finish
 
