@@ -425,7 +425,8 @@ The dock's jump chips sit under the scrubber's coloured bands. `phaseColumns` in
 `src/core/ui/phases.ts` gives each phase a grid column sized by its share of the
 cycle, and the dock sets it as `--phase-columns`. `--phase-min-width` on
 `.phase-buttons` is `max-content`, so a chip never cuts its label: where a short
-phase has no room for it, its chip is a little wider than its band.
+phase has no room for it, its chip is a little wider than its band. A chip's
+accessible name is its visible label; `jumpLabelKey` becomes its `title`.
 
 ## Build
 

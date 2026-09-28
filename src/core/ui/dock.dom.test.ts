@@ -68,4 +68,12 @@ describe('mountDock', () => {
     store.getState().pause();
     expect(play?.dataset.i18nAttr).toBe('aria-label:controls.play');
   });
+
+  it('names each phase chip by its visible label and hints the jump in its title', () => {
+    mountDock(document, createStore(), explainer);
+    const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-phase-buttons] button')];
+    expect(chips.map((chip) => chip.dataset.i18n)).toEqual(['phase.in', 'phase.out']);
+    expect(chips.map((chip) => chip.dataset.i18nAttr)).toEqual(['title:jump.in', 'title:jump.out']);
+    expect(chips.some((chip) => chip.hasAttribute('aria-label'))).toBe(false);
+  });
 });

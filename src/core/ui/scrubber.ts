@@ -37,7 +37,7 @@ export function createPhaseButtons(timeline: Timeline): HTMLButtonElement[] {
       'data-phase': phase.id,
       'aria-keyshortcuts': phaseShortcut(index),
       'data-i18n': phase.labelKey,
-      'data-i18n-attr': `aria-label:${phase.jumpLabelKey}`,
+      'data-i18n-attr': `title:${phase.jumpLabelKey}`,
       style: `${TONE_PROPERTY}: ${phase.tone}`,
     }),
   );
