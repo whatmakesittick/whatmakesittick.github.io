@@ -1,0 +1,12 @@
+{
+  "slug": "oil-rig",
+  "tags": ["energy", "earth", "physics"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "Low-poly 3D cutaway of a floating oil rig above layered rock, with the well running down through the rock to the oil, beside the title How an oil rig works"
+  }
+}
