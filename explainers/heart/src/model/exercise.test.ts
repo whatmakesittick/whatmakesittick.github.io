@@ -64,6 +64,10 @@ describe('exercise', () => {
     expect(diastoleLength(ATHLETE.restRate)).toBeCloseTo(796, 0);
   });
 
+  it('gives the typical heart about a tenth of a second to fill each beat flat out', () => {
+    expect(Math.round(diastoleLength(TYPICAL.maxRate))).toBe(108);
+  });
+
   it('squeezes from S1 to S2 and fills for the rest of the resting beat', () => {
     expect(REST_SYSTOLE_MS).toBe(SEMILUNAR_CLOSE_MS - AV_VALVES_CLOSE_MS);
     expect(systoleLength(TYPICAL.restRate)).toBeCloseTo(REST_SYSTOLE_MS);
