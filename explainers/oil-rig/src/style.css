@@ -1,0 +1,15 @@
+:root {
+  --deck: #f5c451;
+  --sea: #4cc3ff;
+  --top-hole: #8bd47f;
+  --overburden: #c9a27e;
+  --seal: #c792ea;
+  --reservoir: #ff9f43;
+  --bottom: #ff7eb6;
+  --mud: #b08a5a;
+  --danger: #ff6b5e;
+}
+
+.readout[data-readout='pressure'] .readout-meter > span:not(.meter) {
+  color: var(--tone, var(--text));
+}
