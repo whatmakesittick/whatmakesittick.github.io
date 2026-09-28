@@ -1,7 +1,7 @@
 import type { SceneOptions } from '@core/scene/shell';
 
 const CELL_BACKGROUND = '#0a0f1c';
-const FOG = { color: CELL_BACKGROUND, near: 900, far: 3600 } as const;
+const FOG = { color: CELL_BACKGROUND, near: 1200, far: 4800 } as const;
 const CAMERA = {
   near: 1,
   far: 8000,
