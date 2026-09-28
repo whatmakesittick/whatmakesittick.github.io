@@ -160,7 +160,7 @@ export const CROWN_WHEEL = {
 } as const;
 
 export const WINDING_PINION = {
-  span: [9.2, 9.9] as const,
+  span: [9.24, 9.94] as const,
   faceTeeth: { inner: 0.45, outer: 0.72, height: 0.08 },
 } as const;
 
@@ -274,8 +274,8 @@ export const REGULATOR_ARM = {
   pinArmDeg: 200,
   pinArmWidth: 0.34,
   pointerDeg: 20,
-  pointerLength: 5.0,
-  pointerWidth: 0.34,
+  pointerLength: 3.6,
+  pointerWidth: 0.28,
   curbPin: { radius: 0.035, offset: 0.075, span: [3.74, 3.99] as Span },
 } as const;
 

@@ -13,6 +13,7 @@ export const PAINT = {
   paleBrass: '#e6cf96',
   steel: '#cdd2d8',
   brightSteel: '#e4e8ec',
+  marker: '#f2f4f6',
   darkSteel: '#9aa2ab',
   blued: THEME.bluedSteel,
   ruby: THEME.ruby,
@@ -76,9 +77,9 @@ export const FINISHES = {
     envMapIntensity: METAL_REFLECTION,
   },
   dialMarker: {
-    color: PAINT.brightSteel,
-    metalness: 0.9,
-    roughness: 0.24,
+    color: PAINT.marker,
+    metalness: 0.85,
+    roughness: 0.3,
     envMapIntensity: POLISH_REFLECTION,
   },
   energy: {

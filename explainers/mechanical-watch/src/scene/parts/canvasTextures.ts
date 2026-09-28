@@ -13,12 +13,12 @@ const CHANNEL_MAX = 255;
 
 const STRIPES = { size: 256, arcs: 90, arcAlpha: 0.06, low: 0.8, high: 1, curve: 1.6 } as const;
 const PERLAGE = { size: 512, cells: 4, spokes: 3, low: 0.87, high: 1, rim: 0.04 } as const;
-const GRAINING = { size: 512, rings: 150, low: 0.8, high: 1, jitter: 0.12 } as const;
+const GRAINING = { size: 1024, rings: 70, low: 0.9, high: 1, jitter: 0.04 } as const;
 const SUNBURST = { size: 512, rays: 360, low: 0.78, high: 1 } as const;
 
 const DIAL_PAINT = {
-  edge: '#e4dfd4',
-  centre: '#f8f6f1',
+  edge: '#e9e2d2',
+  centre: '#fbf8f0',
   track: { outer: 13.05, minute: 12.55, five: 12.2, line: 0.045, fiveLine: 0.1 },
   subDial: { rings: 34, ringAlpha: 0.1, tick: 0.34, fiveTick: 0.62, line: 0.035, fiveLine: 0.07 },
   subDialNumbers: { radius: 2.28, size: 0.62 },

@@ -16,7 +16,7 @@ export interface Surfaces {
 const STRIPE_WIDTH_MM = 1.7;
 const STRIPE_ANGLE = Math.PI / 3;
 const PERLAGE_TILE_MM = 3.0;
-const DIAL_ROUGHNESS = 0.5;
+const DIAL_ROUGHNESS = 0.62;
 const PLATE_ROUGHNESS = 0.4;
 const BRIDGE_ROUGHNESS = 0.3;
 const DIAL_BASE = '#ffffff';

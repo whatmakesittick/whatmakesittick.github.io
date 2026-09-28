@@ -12,13 +12,13 @@ import {
   ROLLER,
   SEGMENTS,
 } from '../../constants';
-import { FINISHES, rubyMaterial } from '../../finishes';
+import { rubyMaterial } from '../../finishes';
 import { extrudeOutline, latheZ } from '../../geometry/extrude';
 import type { LathePoint } from '../../geometry/extrude';
 import { merge } from '../../geometry/merge';
 import { circlePoints, polarDeg, subtractCircle } from '../../geometry/outline';
 import { block, disc, ring } from '../../geometry/solids';
-import { finishMesh, partMesh, registeredMesh } from '../context';
+import { partMesh, registeredMesh } from '../context';
 import type { PartContext } from '../context';
 
 const ORIGIN = { x: 0, y: 0 };
@@ -34,6 +34,10 @@ function rimGeometry(): BufferGeometry {
     SEGMENTS.plate,
   );
   return extrudeOutline(outer, BALANCE_WHEEL.rim[0], BALANCE_WHEEL.rim[1], [inner], RIM_BEVEL);
+}
+
+function wheelGeometry(): BufferGeometry {
+  return merge([rimGeometry(), armsGeometry()]);
 }
 
 function armsGeometry(): BufferGeometry {
@@ -99,9 +103,8 @@ export class BalancePart {
 
   constructor(context: PartContext, frame: Object3D) {
     this.object.position.set(BALANCE_CENTRE.x, BALANCE_CENTRE.y, 0);
-    const glucydur = context.surfaces.grained(BALANCE.radiusMm, FINISHES.glucydur);
     this.object.add(
-      finishMesh(context, merge([rimGeometry(), armsGeometry()]), 'balanceWheel', glucydur),
+      partMesh(context, wheelGeometry(), 'balanceWheel', 'glucydur'),
       partMesh(context, staffGeometry(), 'balanceWheel', 'brightSteel'),
       partMesh(context, rollerGeometry(), 'roller', 'brightSteel'),
       partMesh(context, colletGeometry(), 'hairspring', 'brightSteel'),

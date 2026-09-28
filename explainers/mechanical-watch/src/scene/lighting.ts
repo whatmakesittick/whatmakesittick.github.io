@@ -11,7 +11,7 @@ type LightName = 'key' | 'fill' | 'rim';
 
 const BENCH_LIGHT: Record<LightName, LightSetting> = {
   key: { color: '#fff1dc', intensity: 3.2, position: [-70, 110, 150] },
-  fill: { color: '#c7dbff', intensity: 0.9, position: [60, 30, -140] },
+  fill: { color: '#eef2ff', intensity: 1.4, position: [40, 60, -140] },
   rim: { color: '#a9c8ff', intensity: 1.3, position: [150, 70, -30] },
 };
 

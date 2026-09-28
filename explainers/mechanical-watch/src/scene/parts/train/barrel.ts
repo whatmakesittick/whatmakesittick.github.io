@@ -9,10 +9,10 @@ import { ANCHOR_LIFT_MM, BARREL_DRUM, SEGMENTS, WHEEL_LABELS, WHEEL_TOOTH } from
 import { FINISHES } from '../../finishes';
 import { extrudeOutline } from '../../geometry/extrude';
 import { formProfile } from '../../geometry/gear';
-import { merge } from '../../geometry/merge';
+import { mergeGrouped } from '../../geometry/merge';
 import { annularSector, circlePoints, polarDeg } from '../../geometry/outline';
 import { ring } from '../../geometry/solids';
-import { finishMesh } from '../context';
+import { layeredMesh } from '../context';
 import type { PartContext } from '../context';
 
 const ORIGIN = { x: 0, y: 0 };
@@ -41,11 +41,11 @@ export function barrelGeometry(phase: number): BufferGeometry {
     teethTop,
     [circlePoints({ ...ORIGIN, r: wallInner }, SEGMENTS.disc)],
   );
-  return merge([
-    teeth,
-    ring(ORIGIN, journalRadius, wallInner + 0.01, floor, SEGMENTS.disc),
-    extrudeOutline(openSector(wallInner, wallOuter), wall[0], wall[1]),
-    extrudeOutline(openSector(journalRadius, wallOuter), lid[0], lid[1]),
+  return mergeGrouped([
+    { geometry: teeth },
+    { geometry: ring(ORIGIN, journalRadius, wallInner, floor, SEGMENTS.disc) },
+    { geometry: extrudeOutline(openSector(wallInner, wallOuter), wall[0], wall[1]) },
+    { geometry: extrudeOutline(openSector(journalRadius, wallOuter), lid[0], lid[1]) },
   ]);
 }
 
@@ -58,7 +58,9 @@ export class BarrelPart {
     const centre = WHEEL_CENTRES.barrel;
     this.object.position.set(centre.x, centre.y, 0);
     const finish = context.surfaces.grained(BARREL_DRUM.wallOuter, FINISHES.brass);
-    this.object.add(finishMesh(context, barrelGeometry(phase), 'barrel', finish));
+    this.object.add(
+      layeredMesh(context, barrelGeometry(phase), 'barrel', [finish, FINISHES.brass]),
+    );
     frame.add(this.object);
     const top = BARREL_DRUM.lid[1] + ANCHOR_LIFT_MM;
     const labelAt = polarDeg(centre, WHEEL_LABELS.barrel.radius, WHEEL_LABELS.barrel.deg);

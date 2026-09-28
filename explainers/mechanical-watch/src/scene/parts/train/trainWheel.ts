@@ -15,14 +15,13 @@ import {
   WHEEL_TOOTH,
 } from '../../constants';
 import type { TrainWheelForm } from '../../constants';
-import { FINISHES } from '../../finishes';
 import { extrudeOutline } from '../../geometry/extrude';
 import { formProfile, gearModule } from '../../geometry/gear';
 import { merge } from '../../geometry/merge';
 import { polarDeg } from '../../geometry/outline';
 import { arbor, disc } from '../../geometry/solids';
 import { clubToothProfile, crossingHoles } from '../../geometry/wheel';
-import { finishMesh, partMesh } from '../context';
+import { partMesh } from '../context';
 import type { PartContext } from '../context';
 import type { WheelPhase } from './phases';
 
@@ -78,9 +77,8 @@ export class TrainWheelPart {
     if (id === 'escapeWheel') {
       this.object.add(partMesh(context, merge([wheel, pinion]), id, 'brightSteel'));
     } else {
-      const grained = context.surfaces.grained(wheelSpec(id).radiusMm, FINISHES.brass);
       this.object.add(
-        finishMesh(context, wheel, id, grained),
+        partMesh(context, wheel, id, 'brass'),
         partMesh(context, pinion, id, 'steel'),
       );
     }

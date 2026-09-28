@@ -7,7 +7,6 @@ import type { Point } from '../../../model/layout';
 import { LEVELS } from '../../../model/scale';
 import { MOTION_WORKS } from '../../../model/train';
 import { ANCHOR_LIFT_MM, MOTION, PINION_LEAF, SEGMENTS, WHEEL_TOOTH } from '../../constants';
-import { FINISHES } from '../../finishes';
 import { extrudeOutline } from '../../geometry/extrude';
 import { formProfile, gearModule } from '../../geometry/gear';
 import { merge } from '../../geometry/merge';
@@ -16,7 +15,7 @@ import { circlePoints, polarDeg } from '../../geometry/outline';
 import { disc, ring } from '../../geometry/solids';
 import { crossingHoles } from '../../geometry/wheel';
 import type { SpokeStyle } from '../../geometry/wheel';
-import { finishMesh, partMesh } from '../context';
+import { partMesh } from '../context';
 import type { PartContext } from '../context';
 
 const ORIGIN: Point = { x: 0, y: 0 };
@@ -119,22 +118,10 @@ export class MotionWorksPart {
     const minuteParts = minuteWheelGeometry();
     this.cannon.add(partMesh(context, cannonGeometry(), 'cannonPinion', 'steel'));
     this.minute.add(
-      finishMesh(
-        context,
-        minuteParts.wheel,
-        'minuteWheel',
-        context.surfaces.grained(minuteWheel.radiusMm, FINISHES.brass),
-      ),
+      partMesh(context, minuteParts.wheel, 'minuteWheel', 'brass'),
       partMesh(context, minuteParts.pinion, 'minuteWheel', 'steel'),
     );
-    this.hour.add(
-      finishMesh(
-        context,
-        hourWheelGeometry(),
-        'hourWheel',
-        context.surfaces.grained(hourWheel.radiusMm, FINISHES.brass),
-      ),
-    );
+    this.hour.add(partMesh(context, hourWheelGeometry(), 'hourWheel', 'brass'));
     this.minute.position.set(MINUTE_WHEEL_CENTRE.x, MINUTE_WHEEL_CENTRE.y, 0);
     frame.add(this.cannon, this.minute, this.hour);
     const below = (z: number) => z - ANCHOR_LIFT_MM;
