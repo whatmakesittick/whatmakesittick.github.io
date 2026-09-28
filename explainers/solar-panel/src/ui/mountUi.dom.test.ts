@@ -74,9 +74,33 @@ describe('chapter widgets', () => {
     expect(pressed('moment', 'noon')).toBe('false');
   });
 
+  it('pulls the layers apart from the slider', () => {
+    expect(readout('explode')).toBe('0%');
+    slide('explode', 0.6);
+    expect(store.getState().explode).toBe(0.6);
+    expect(readout('explode')).toBe('60%');
+  });
+
+  it('describes each layer of the panel', () => {
+    expect(readout('layer-thickness')).toBe('3.2 mm');
+    expect(readout('layer-material')).toBe(en.layers.material.glass);
+    expect(readout('layer-job')).toBe(en.layers.job.glass);
+    click('layer', 'cell');
+    expect(readout('layer-thickness')).toBe('0.14 mm');
+    expect(readout('layer-material')).toBe(en.layers.material.cell);
+    expect(pressed('layer', 'cell')).toBe('true');
+    click('layer', 'frame');
+    expect(readout('layer-thickness')).toBe('30 mm');
+    click('layer', 'encapsulant');
+    expect(readout('layer-thickness')).toBe('–');
+    expect(readout('layer-job')).toBe(en.layers.job.encapsulant);
+  });
+
   it('stops updating once disposed', () => {
     dispose();
     store.getState().setTilt(80);
+    store.getState().setLayer('backsheet');
     expect(readout('tilt')).toBe('35°');
+    expect(readout('layer-material')).toBe(en.layers.material.glass);
   });
 });
