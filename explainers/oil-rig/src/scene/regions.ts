@@ -4,7 +4,16 @@ import type { Extent, RegionSpec } from '@core/scene/regions';
 import type { RegionId } from '../ids';
 import { DRILL_FLOOR_Y, SEABED_Y, depthToY } from '../model/scale';
 import { BLOCK_BOTTOM_DEPTH_M, LAYERS, RESERVOIR_FLUIDS, TOTAL_DEPTH_M } from '../model/wellPlan';
-import { BLOCK, DERRICK, DERRICK_TOP, FLAME, HULL, STRING, THRUSTER, TOP_DRIVE } from './constants';
+import {
+  BLOCK,
+  DERRICK,
+  DERRICK_TOP,
+  FLAME,
+  HULL,
+  STAND_LENGTH_M,
+  THRUSTER,
+  TOP_DRIVE,
+} from './constants';
 import { archDrop } from './geometry/strata';
 import { flareTipPoint } from './geometry/testLine';
 import { BOP_TOP } from './parts/well/bop';
@@ -83,7 +92,7 @@ export function regionSpec(id: RegionId, offset: number): RegionSpec {
         x: [-MARGIN.floorHalf, MARGIN.floorHalf],
         y: [
           DRILL_FLOOR_Y - MARGIN.floorBelow,
-          DRILL_FLOOR_Y + TOP_DRIVE.quillLow + STRING.standLength + MARGIN.topDriveHeight,
+          DRILL_FLOOR_Y + TOP_DRIVE.quillLow + STAND_LENGTH_M + MARGIN.topDriveHeight,
         ],
         z: [-MARGIN.floorHalf, MARGIN.floorHalf],
       };

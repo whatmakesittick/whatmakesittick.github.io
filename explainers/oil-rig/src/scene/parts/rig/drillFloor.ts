@@ -7,7 +7,7 @@ import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import { DRILL_FLOOR_Y, tubularRadius } from '../../../model/scale';
 import { SECTIONS } from '../../../model/wellPlan';
-import { DECK_ITEMS, DRILL_FLOOR, HULL, STRING } from '../../constants';
+import { DECK_ITEMS, DRILL_FLOOR, HULL, STAND_LENGTH_M } from '../../constants';
 import { PAINT } from '../../finishes';
 import { barGeometry, barMatrix, unitRod } from '../../geometry/bars';
 import type { Point } from '../../geometry/bars';
@@ -128,7 +128,7 @@ function doghouse(): (readonly [BufferGeometry, ColorRepresentation])[] {
 function setbackRods(): Rod[] {
   const { rows, columns, radius, spacing, lean } = DECK_ITEMS.setback;
   const bottom = DRILL_FLOOR_Y + ROTARY_RAISE;
-  const top = bottom + STRING.standLength;
+  const top = bottom + STAND_LENGTH_M;
   return [1, -1].flatMap((side) =>
     Array.from({ length: rows * columns }, (_, index): Rod => {
       const x = SETBACK_CLUSTER.x + (index % columns) * spacing;

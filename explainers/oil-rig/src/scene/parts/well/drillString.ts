@@ -12,7 +12,7 @@ import { FULL_TURN } from '@core/math';
 import { anchorAt } from '@core/scene/parts';
 import type { BitId } from '../../../ids';
 import { tubularRadius } from '../../../model/scale';
-import { STRING, SEGMENTS, TOP_DRIVE } from '../../constants';
+import { SEGMENTS, STAND_LENGTH_M, STRING, TOP_DRIVE } from '../../constants';
 import { PAINT } from '../../finishes';
 import { barGeometry } from '../../geometry/bars';
 import { mergePainted } from '../../geometry/merge';
@@ -36,7 +36,7 @@ const STABILIZER_WIDTH = 0.28;
 const MAX_JOINTS = 220;
 const PIPE_LABEL_ABOVE = 12;
 const COLLAR_LABEL_SHARE = 0.5;
-const TOP_OF_STAND = TOP_DRIVE.quillLow + STRING.standLength;
+const TOP_OF_STAND = TOP_DRIVE.quillLow + STAND_LENGTH_M;
 
 const PIPE_RADIUS = tubularRadius(STRING.pipeInches);
 const JOINT_RADIUS = tubularRadius(STRING.toolJointInches);
@@ -211,10 +211,10 @@ export class DrillStringPart {
   }
 
   private placeJoints(bitDepth: number, offset: number, quillY: number, collarTop: number): void {
-    const phase = ((bitDepth % STRING.standLength) + STRING.standLength) % STRING.standLength;
+    const phase = ((bitDepth % STAND_LENGTH_M) + STAND_LENGTH_M) % STAND_LENGTH_M;
     const first = -TOP_OF_STAND + phase;
     let count = 0;
-    for (let depth = first; count < MAX_JOINTS; depth += STRING.standLength) {
+    for (let depth = first; count < MAX_JOINTS; depth += STAND_LENGTH_M) {
       const y = wellY(depth, offset);
       if (y <= collarTop) break;
       if (y >= quillY - STRING.toolJointHeight) continue;

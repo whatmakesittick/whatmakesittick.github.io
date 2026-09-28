@@ -99,8 +99,9 @@ export const DERRICK = {
 
 export const DERRICK_TOP = DRILL_FLOOR_Y + DERRICK.height;
 
+export const STAND_LENGTH_M = 28;
+
 export const STRING = {
-  standLength: 28,
   pipeInches: 5.5,
   toolJointInches: 7,
   collarInches: 8,

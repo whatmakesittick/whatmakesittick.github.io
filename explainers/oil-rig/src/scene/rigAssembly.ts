@@ -7,7 +7,7 @@ import type { AnchorId, AssemblyState, PartId, RegionId, ViewOptions } from '../
 import { DRILL_FLOOR_Y, depthToY } from '../model/scale';
 import { SEABED_DEPTH_M, TOTAL_DEPTH_M, riserLanded } from '../model/wellPlan';
 import type { Assembly, AssemblyResources } from './assembly';
-import { DRILLING_DRAFT_M, FLOW, STRING, TOP_DRIVE } from './constants';
+import { DRILLING_DRAFT_M, FLOW, STAND_LENGTH_M, TOP_DRIVE } from './constants';
 import type { PartContext } from './parts/context';
 import { MudFlowPart } from './parts/flows/mudFlow';
 import { OilFlowPart } from './parts/flows/oilFlow';
@@ -21,13 +21,17 @@ import { DrillStringPart } from './parts/well/drillString';
 import { WellPart } from './parts/well/well';
 import { regionBox } from './regions';
 
-const PARKED_QUILL =
-  DRILL_FLOOR_Y + TOP_DRIVE.quillLow + STRING.standLength * TOP_DRIVE.parkedShare;
+const PARKED_QUILL = DRILL_FLOOR_Y + TOP_DRIVE.quillLow + STAND_LENGTH_M * TOP_DRIVE.parkedShare;
 
 type ViewKey = keyof ViewOptions;
 
 function viewChanged(previous: AssemblyState | null, next: AssemblyState, key: ViewKey): boolean {
   return !previous || previous.view[key] !== next.view[key];
+}
+
+function snapshot(state: AssemblyState): AssemblyState {
+  const { bitDepth, draft, mudWeight, mudState, bit, view } = state;
+  return { bitDepth, draft, mudWeight, mudState, bit, view: { ...view } };
 }
 
 export class RigAssembly implements Assembly {
@@ -84,7 +88,7 @@ export class RigAssembly implements Assembly {
 
   setState(state: AssemblyState): void {
     const previous = this.state;
-    this.state = state;
+    this.state = snapshot(state);
     if (!previous || previous.draft !== state.draft) this.applyDraft(state.draft);
     if (viewChanged(previous, state, 'cutaway')) this.applyCutaway(state.view.cutaway);
     if (!previous || previous.bit !== state.bit) this.string.setBit(state.bit);
