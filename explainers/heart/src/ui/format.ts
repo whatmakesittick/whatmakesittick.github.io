@@ -86,7 +86,7 @@ export function formatSeconds(seconds: number): string {
   return t('units.seconds', { value: whole(seconds) });
 }
 
-export function formatPercent(share: number): string {
+function formatPercent(share: number): string {
   return t('units.percent', { value: whole(share * PERCENT) });
 }
 

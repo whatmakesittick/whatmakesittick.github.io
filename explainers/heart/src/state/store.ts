@@ -38,7 +38,7 @@ export const DEFAULT_VIEW: ViewState = {
   conduction: false,
   labels: false,
 };
-export const START_SPEED = PRESETS.overview.speed ?? SPEED_RANGE.default;
+const START_SPEED = PRESETS.overview.speed ?? SPEED_RANGE.default;
 
 const CHAPTER_CONTROL_DEFAULTS: ChapterControls = {
   chamber: DEFAULT_CHAMBER,

@@ -12,8 +12,8 @@ import {
 } from './palette';
 
 export const PRESSURE_FULL_SCALE_MMHG = 140;
-export const VOLUME_FULL_SCALE_ML = 140;
-export const EJECTING_MMHG = 80;
+const VOLUME_FULL_SCALE_ML = 140;
+const EJECTING_MMHG = 80;
 
 function ventriclePressure(state: HeartStoreState): number {
   return pressuresOf(state).leftVentricle;

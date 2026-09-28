@@ -19,7 +19,7 @@ export const FITNESS_PROFILES: Readonly<Record<FitnessId, FitnessProfile>> = {
 };
 
 export const REST_SYSTOLE_MS = SEMILUNAR_CLOSE_MS - AV_VALVES_CLOSE_MS;
-export const BLOOD_VOLUME_L = 5;
+const BLOOD_VOLUME_L = 5;
 
 const STROKE_PLATEAU_EFFORT = 0.5;
 const MS_PER_MINUTE = 60_000;

@@ -27,11 +27,7 @@ const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
   whole: { region: 'scene', direction: [-0.3, 0.2, 1], margin: 1.05 },
 };
 
-export function anchorPose(
-  anchor: Object3D,
-  framing: AnchorFraming,
-  slopes: FramingSlopes,
-): CameraPose {
+function anchorPose(anchor: Object3D, framing: AnchorFraming, slopes: FramingSlopes): CameraPose {
   const target = anchor.getWorldPosition(new Vector3());
   const slope = Math.min(slopes.vertical, slopes.horizontal);
   const distance = mm(framing.spanMm) / 2 / slope;
