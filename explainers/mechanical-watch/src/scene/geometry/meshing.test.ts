@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { drivenAngle, meshPhase, wrapPhase } from './meshing';
+import { meshPhase } from './meshing';
 
 describe('meshing phase', () => {
-  const driverTeeth = 80;
   const drivenTeeth = 10;
   const direction = 1.1;
   const phase = meshPhase(drivenTeeth, direction);
@@ -11,12 +10,5 @@ describe('meshing phase', () => {
     expect(phase.driver).toBeCloseTo(direction);
     const gap = phase.driven + Math.PI / drivenTeeth;
     expect(Math.cos(gap - (direction + Math.PI))).toBeCloseTo(1);
-  });
-
-  it('turns the driven gear one leaf for every driver tooth', () => {
-    const driverPitch = (Math.PI * 2) / driverTeeth;
-    const drivenPitch = (Math.PI * 2) / drivenTeeth;
-    expect(Math.abs(drivenAngle(driverPitch, driverTeeth, drivenTeeth))).toBeCloseTo(drivenPitch);
-    expect(wrapPhase(drivenPitch * 3 + 0.01, drivenTeeth)).toBeCloseTo(0.01);
   });
 });

@@ -45,7 +45,7 @@ function coilShape(reserve: number): CoilShape {
 
 const RUN_DOWN = coilShape(0);
 
-export const MAINSPRING_BASE_SWEEP =
+const MAINSPRING_BASE_SWEEP =
   MAINSPRING_RIBBON.restInnerTail + RUN_DOWN.outerTail + RUN_DOWN.coilSweep;
 
 export const ARBOR_HOOK_ANGLE = WALL_HOOK + MAINSPRING_BASE_SWEEP;

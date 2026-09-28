@@ -97,10 +97,6 @@ function specs(): Readonly<Record<RegionId, RegionSpec>> {
 
 const SPECS = specs();
 
-export function regionSpec(id: RegionId): RegionSpec {
-  return SPECS[id];
-}
-
 export function regionBox(id: RegionId, rootMatrix: Matrix4): Box3 {
   return regionFromSpec(SPECS[id]).applyMatrix4(rootMatrix);
 }

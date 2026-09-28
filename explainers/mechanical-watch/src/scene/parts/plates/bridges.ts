@@ -38,7 +38,7 @@ function pillars(points: readonly Vec2[], radius: number, top: number): GroupedP
   }));
 }
 
-export function barrelBridgeOutline(): Vec2[] {
+function barrelBridgeOutline(): Vec2[] {
   const {
     barrelRadius,
     centreRadius,

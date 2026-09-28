@@ -74,7 +74,7 @@ function seated(seat: JewelSeat): BufferGeometry {
 
 const { centreWheel, thirdWheel, fourthWheel, escapeWheel } = WHEEL_CENTRES;
 
-export const PLATE_SEATS: readonly JewelSeat[] = [
+const PLATE_SEATS: readonly JewelSeat[] = [
   { at: centreWheel, z: 0 },
   { at: thirdWheel, z: 0 },
   { at: fourthWheel, z: 0 },
@@ -84,7 +84,7 @@ export const PLATE_SEATS: readonly JewelSeat[] = [
   { at: BALANCE_CENTRE, z: 0 },
 ];
 
-export const BRIDGE_SEATS: readonly JewelSeat[] = [
+const BRIDGE_SEATS: readonly JewelSeat[] = [
   { at: centreWheel, z: BRIDGE_LEVEL.barrel[1] },
   { at: thirdWheel, z: BRIDGE_LEVEL.train[1] },
   { at: fourthWheel, z: BRIDGE_LEVEL.train[1] },

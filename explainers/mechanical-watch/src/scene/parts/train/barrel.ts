@@ -31,7 +31,7 @@ function openSector(inner: number, outer: number) {
   );
 }
 
-export function barrelGeometry(phase: number): BufferGeometry {
+function barrelGeometry(phase: number): BufferGeometry {
   const spec = wheelSpec('barrel');
   const { floor, wall, lid, wallInner, wallOuter, journalRadius } = BARREL_DRUM;
   const [teethBottom, teethTop] = LEVELS.barrelTeeth;

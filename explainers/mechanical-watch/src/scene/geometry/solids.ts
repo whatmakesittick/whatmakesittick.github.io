@@ -36,7 +36,7 @@ export function ring(
   return extrudeOutline(outline, span[0], span[1], [hole]);
 }
 
-export function arborProfile(form: ArborForm): LathePoint[] {
+function arborProfile(form: ArborForm): LathePoint[] {
   const [bottom, top] = form.span;
   const { radius, pivotRadius, pivotLength } = form;
   const shoulder = radius - pivotRadius;
