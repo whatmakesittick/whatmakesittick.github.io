@@ -14,7 +14,7 @@ import {
 import type { Texture } from 'three';
 import { smoothstep } from '@core/math';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
-import { SUN_DISC_RADIUS_CM, sunDirection, sunElevationDeg } from '../../../model';
+import { sunDirection, sunElevationDeg } from '../../../model';
 import { THEME } from '../../../theme';
 import { RAYS, RENDER_ORDER, SUN_DISC, SUN_GLOW } from '../../constants';
 import { sunPosition } from '../../geometry/sunArc';
@@ -58,6 +58,7 @@ export class SunPart {
         map: context.tracker.track(sunDiscTexture()),
         transparent: true,
         depthWrite: false,
+        sizeAttenuation: false,
         toneMapped: false,
         fog: false,
       }),
@@ -69,15 +70,16 @@ export class SunPart {
         map: context.textures.glow,
         transparent: true,
         depthWrite: false,
+        sizeAttenuation: false,
         blending: AdditiveBlending,
         toneMapped: false,
         fog: false,
       }),
     );
     const disc = new Sprite(this.disc);
-    disc.scale.setScalar(SUN_DISC_RADIUS_CM * 2);
+    disc.scale.setScalar(SUN_DISC.screenScale);
     const halo = new Sprite(this.glow);
-    halo.scale.setScalar(SUN_GLOW.size);
+    halo.scale.setScalar(SUN_GLOW.screenScale);
     halo.renderOrder = RENDER_ORDER.glow;
     this.sun.add(halo, disc);
     this.path.add(createSunPath(context));
