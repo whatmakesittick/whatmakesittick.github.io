@@ -1,0 +1,12 @@
+{
+  "slug": "mechanical-watch",
+  "tags": ["mechanics", "physics"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "Low-poly 3D cutaway of a hand-wound watch movement with its balance wheel, gear train and mainspring barrel, beside the title How a mechanical watch works"
+  }
+}
