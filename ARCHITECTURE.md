@@ -70,7 +70,7 @@ The slug must match the folder and must not clash with a root folder
 (`assets`, `src`, `public` and the like) or with a name published from the root
 `public/` (`icons`, `social`). `tags` lists at least one tag, none twice, each
 from `TAGS` in `src/core/manifest.ts`: mechanics, engines, vehicles, aircraft,
-flight, physics, weather, home, tools, optics, energy and earth. Every tag has a label under
+flight, physics, weather, home, tools, optics, energy, earth and biology. Every tag has a label under
 `catalogue.tags.<id>` in all eight core locales, which a test enforces, so a new
 tag goes into `TAGS` and every core locale together. `cover` and `social.image` are paths inside `public/`;
 the social image is 1200 × 630. The plugin validates all of this and fails the
