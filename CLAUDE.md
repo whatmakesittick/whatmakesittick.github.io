@@ -1,6 +1,6 @@
 # Working in this repository
 
-- Node 24: `source ~/.nvm/nvm.sh && nvm use 24` before any npm command.
+- Node: `source ~/.nvm/nvm.sh && nvm use` before any npm command; the version comes from `.nvmrc`.
 - Read `ARCHITECTURE.md` before touching `src/core` or adding an explainer; it is the contract.
 - Before every commit: `npx prettier --write <paths>`, `npx eslint <paths>`, `npx tsc --noEmit -p tsconfig.json`, `npx vitest run <paths>`. Before a PR: `npm run lint`, `npm test`, `npm run build`.
 - The build runs the site check in `vite/siteCheck.ts`: description limits per language, the JavaScript budget, the head tags and the crawl files. When it fails, fix the page, not the rule.
