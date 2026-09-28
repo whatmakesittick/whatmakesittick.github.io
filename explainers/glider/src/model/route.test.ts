@@ -1,13 +1,11 @@
 import { toDegrees } from '@core/math';
 import { describe, expect, it } from 'vitest';
-import { flightState } from './air';
 import {
   FIELD,
   RIDGE_CREST_X,
   THERMAL_CIRCLE,
   WAVE_HOLD_X,
   bankAt,
-  circleSeconds,
   pitchFor,
   poseAt,
   thermalAxisX,
@@ -15,13 +13,12 @@ import {
 import { FLIGHT_CYCLE, heightAt } from './story';
 
 const SAMPLE_SECONDS = 0.5;
-const SPEED_ALLOWANCE = 1.1;
-const CIRCLE_SPEED = (2 * Math.PI * THERMAL_CIRCLE.radius) / circleSeconds();
-const MAX_SAMPLE_TRAVEL = CIRCLE_SPEED * SAMPLE_SECONDS * SPEED_ALLOWANCE;
+const MAX_UNITS_PER_SECOND = 3;
+const MAX_SAMPLE_TRAVEL = MAX_UNITS_PER_SECOND * SAMPLE_SECONDS;
 const UPWIND = -1;
 
 function bankDegrees(phase: number): number {
-  return toDegrees(bankAt(phase, flightState(phase, 'racer18').airspeed));
+  return toDegrees(bankAt(phase));
 }
 
 function distance(a: { x: number; z: number }, b: { x: number; z: number }): number {
@@ -29,7 +26,7 @@ function distance(a: { x: number; z: number }, b: { x: number; z: number }): num
 }
 
 describe('poseAt', () => {
-  it('moves without jumps through the whole loop', () => {
+  it('moves at a steady pace without jumps through the whole loop', () => {
     for (let time = 0; time < FLIGHT_CYCLE; time += SAMPLE_SECONDS) {
       expect(distance(poseAt(time), poseAt(time + SAMPLE_SECONDS))).toBeLessThan(MAX_SAMPLE_TRAVEL);
     }
@@ -82,12 +79,6 @@ describe('bankAt', () => {
     }
     expect(steepest).toBeGreaterThan(40);
     expect(steepest).toBeLessThan(50);
-  });
-});
-
-describe('circleSeconds', () => {
-  it('takes about 16 s for one circle', () => {
-    expect(circleSeconds()).toBeCloseTo(16, 0);
   });
 });
 
