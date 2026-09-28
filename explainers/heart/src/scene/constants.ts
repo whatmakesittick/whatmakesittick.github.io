@@ -1,0 +1,575 @@
+import type { ChamberId, PartId } from '../ids';
+import { APEX, CHAMBERS, PULMONARY_VEIN_MOUTHS, VALVES, VESSEL_MOUTHS } from '../model';
+import type { Point } from '../model';
+import { THEME } from '../theme';
+import type { ContractionFrame, ContractionProfile } from './geometry/contraction';
+import type { ShapeSpec } from './geometry/heartShape';
+import type { SurfaceMark } from './geometry/surfacePath';
+import type { VesselRoute } from './geometry/vesselPath';
+
+export type Blob =
+  | {
+      readonly kind: 'cylinder';
+      readonly from: Point;
+      readonly to: Point;
+      readonly radius: number;
+    }
+  | {
+      readonly kind: 'ellipsoid';
+      readonly centre: Point;
+      readonly radii: Point;
+      readonly axis?: Point;
+    }
+  | {
+      readonly kind: 'cone';
+      readonly from: Point;
+      readonly to: Point;
+      readonly fromRadius: number;
+      readonly toRadius: number;
+      readonly squash?: Point;
+    };
+
+export interface CavityPiece {
+  readonly chamber: ChamberId;
+  readonly blob: Blob;
+  readonly wall?: number;
+}
+
+function shifted(point: Point, offset: Point): Point {
+  return [point[0] + offset[0], point[1] + offset[1], point[2] + offset[2]];
+}
+
+export const PULMONARY_RING_SHIFT: Point = [0, 6, 9];
+export const PULMONARY_RING: Point = shifted(VALVES.pulmonary.centre, PULMONARY_RING_SHIFT);
+
+export const VESSEL_WALL_MM = 1.8;
+export const VESSEL_SEAM_MM = 0.15;
+export const PORTAL_OVERLAP_MM = 2.5;
+export const COLLAR_BEYOND_MM = 6;
+
+const RING_INSET_MM = 0.8;
+const OUTFLOW_WALL_MM = 2.5;
+const ringRadius = (radius: number) => radius - RING_INSET_MM;
+const tricuspid = VALVES.tricuspid;
+const mitral = VALVES.mitral;
+const aortic = VALVES.aortic;
+
+export const CAVITY_PIECES: readonly CavityPiece[] = [
+  {
+    chamber: 'rightAtrium',
+    blob: { kind: 'ellipsoid', centre: CHAMBERS.rightAtrium.centre, radii: [18.5, 17.5, 16.5] },
+  },
+  {
+    chamber: 'rightAtrium',
+    blob: { kind: 'ellipsoid', centre: [-25, 11, 0], radii: [17, 5.5, 15] },
+  },
+  {
+    chamber: 'rightAtrium',
+    blob: {
+      kind: 'cylinder',
+      from: [-23.5, 7, 1.5],
+      to: tricuspid.centre,
+      radius: ringRadius(tricuspid.radius),
+    },
+  },
+  {
+    chamber: 'rightVentricle',
+    blob: {
+      kind: 'cylinder',
+      from: tricuspid.centre,
+      to: [-22, -3, 2.5],
+      radius: ringRadius(tricuspid.radius),
+    },
+  },
+  {
+    chamber: 'rightVentricle',
+    blob: { kind: 'ellipsoid', centre: [-22, -5.5, 3], radii: [17.5, 5.5, 15] },
+  },
+  {
+    chamber: 'rightVentricle',
+    blob: {
+      kind: 'ellipsoid',
+      centre: [-22, -28, 4],
+      radii: [17, 29.5, 16],
+      axis: [-0.25, 1, 0],
+    },
+  },
+  {
+    chamber: 'rightVentricle',
+    blob: { kind: 'cone', from: [-14, -44, 6], to: [-5, -64, 6], fromRadius: 10, toRadius: 3.5 },
+  },
+  {
+    chamber: 'rightVentricle',
+    wall: OUTFLOW_WALL_MM,
+    blob: { kind: 'cone', from: [-15, -10, 12], to: [-8, 8, 22], fromRadius: 8.5, toRadius: 9 },
+  },
+  {
+    chamber: 'rightVentricle',
+    wall: OUTFLOW_WALL_MM,
+    blob: {
+      kind: 'cylinder',
+      from: [-8, 8, 22],
+      to: PULMONARY_RING,
+      radius: ringRadius(VALVES.pulmonary.radius),
+    },
+  },
+  {
+    chamber: 'leftAtrium',
+    blob: { kind: 'ellipsoid', centre: [26, 29, -8], radii: [18, 16.5, 14] },
+  },
+  {
+    chamber: 'leftAtrium',
+    blob: { kind: 'ellipsoid', centre: [34, 27, -6], radii: [14, 15, 14] },
+  },
+  {
+    chamber: 'leftAtrium',
+    blob: { kind: 'ellipsoid', centre: [24, 11.5, -2.5], radii: [17, 5.5, 15] },
+  },
+  {
+    chamber: 'leftAtrium',
+    blob: {
+      kind: 'cylinder',
+      from: [22, 7, -1.5],
+      to: mitral.centre,
+      radius: ringRadius(mitral.radius),
+    },
+  },
+  {
+    chamber: 'leftVentricle',
+    blob: {
+      kind: 'cylinder',
+      from: mitral.centre,
+      to: [21, -3, -1],
+      radius: ringRadius(mitral.radius),
+    },
+  },
+  {
+    chamber: 'leftVentricle',
+    blob: { kind: 'ellipsoid', centre: [23, -5.5, -1], radii: [18, 5.5, 16] },
+  },
+  {
+    chamber: 'leftVentricle',
+    blob: { kind: 'ellipsoid', centre: [23, -16, 0], radii: [18, 15, 17.5] },
+  },
+  {
+    chamber: 'leftVentricle',
+    blob: {
+      kind: 'ellipsoid',
+      centre: [24, -36, 0],
+      radii: [19, 37, 18],
+      axis: [-0.1, 1, -0.03],
+    },
+  },
+  {
+    chamber: 'leftVentricle',
+    blob: { kind: 'cone', from: [26, -58, 3], to: [28, -73, 5], fromRadius: 9, toRadius: 3.5 },
+  },
+  {
+    chamber: 'leftVentricle',
+    wall: OUTFLOW_WALL_MM,
+    blob: { kind: 'cone', from: [8, -10, -3], to: [0, 2, -4], fromRadius: 7, toRadius: 5.8 },
+  },
+  {
+    chamber: 'leftVentricle',
+    wall: OUTFLOW_WALL_MM,
+    blob: {
+      kind: 'cone',
+      from: [0, 2, -4],
+      to: aortic.centre,
+      fromRadius: 5.8,
+      toRadius: ringRadius(aortic.radius),
+    },
+  },
+];
+
+export const OUTER_BLOBS: readonly Blob[] = [
+  {
+    kind: 'cone',
+    from: [2, -14, 4],
+    to: [27, -74, 6],
+    fromRadius: 40,
+    toRadius: 10,
+    squash: [1, 1, 0.75],
+  },
+  { kind: 'ellipsoid', centre: [-6, -24, 20], radii: [27, 28, 16] },
+  { kind: 'ellipsoid', centre: [-2, 27, -9], radii: [16, 12, 11] },
+  { kind: 'ellipsoid', centre: [-21, 36, 13], radii: [4.5, 10, 5], axis: [1, 0.3, 0.35] },
+  { kind: 'ellipsoid', centre: [24, 29, 16], radii: [4, 9, 4.5], axis: [-1, 0.45, 0.3] },
+];
+
+export type VesselName =
+  | 'aorta'
+  | 'brachiocephalic'
+  | 'leftCarotid'
+  | 'leftSubclavian'
+  | 'pulmonaryTrunk'
+  | 'leftPulmonaryArtery'
+  | 'rightPulmonaryArtery'
+  | 'superiorVenaCava'
+  | 'inferiorVenaCava'
+  | 'pulmonaryVein0'
+  | 'pulmonaryVein1'
+  | 'pulmonaryVein2'
+  | 'pulmonaryVein3';
+
+export type Blood = 'arterial' | 'venous';
+
+export interface VesselSpec {
+  readonly part: PartId;
+  readonly blood: Blood;
+  readonly route: VesselRoute;
+  readonly portalMm?: number;
+  readonly chamber?: ChamberId;
+  readonly carves?: readonly ChamberId[];
+}
+
+const ARCH_TOP: Point = [5, 90, -16];
+const PULMONARY_SPLIT: Point = [18, 62, 14];
+
+const PULMONARY_VEIN_RADIUS_MM = 5.5;
+
+function veinRoute(index: number, points: readonly Point[]): VesselRoute {
+  return {
+    points: [PULMONARY_VEIN_MOUTHS[index].point, ...points],
+    radius: PULMONARY_VEIN_RADIUS_MM,
+  };
+}
+
+export const VESSELS: Readonly<Record<VesselName, VesselSpec>> = {
+  aorta: {
+    part: 'aorta',
+    blood: 'arterial',
+    chamber: 'leftVentricle',
+    carves: ['rightAtrium', 'leftAtrium'],
+    portalMm: 40,
+    route: {
+      points: [
+        VESSEL_MOUTHS.aorta.point,
+        [2, 33, -8],
+        [-2, 46, -8],
+        [-5, 60, -7],
+        [-4, 76, -8],
+        ARCH_TOP,
+        [17, 91, -26],
+        [24, 80, -36],
+        [24, 62, -43],
+        [22, 30, -46],
+        [20, -20, -46],
+        [19, -100, -44],
+      ],
+      radius: 13,
+      rootRadius: ringRadius(aortic.radius) + VESSEL_WALL_MM,
+      flareMm: 14,
+    },
+  },
+  brachiocephalic: {
+    part: 'archBranches',
+    blood: 'arterial',
+    route: {
+      points: [
+        [-3, 86, -11],
+        [-8, 104, -10],
+        [-12, 130, -8],
+      ],
+      radius: 5.5,
+    },
+  },
+  leftCarotid: {
+    part: 'archBranches',
+    blood: 'arterial',
+    route: {
+      points: [
+        [6, 94, -17],
+        [7, 110, -17],
+        [8, 130, -17],
+      ],
+      radius: 4.5,
+    },
+  },
+  leftSubclavian: {
+    part: 'archBranches',
+    blood: 'arterial',
+    route: {
+      points: [
+        [15, 93, -25],
+        [21, 108, -27],
+        [28, 130, -29],
+      ],
+      radius: 5,
+    },
+  },
+  pulmonaryTrunk: {
+    part: 'pulmonaryTrunk',
+    blood: 'venous',
+    chamber: 'rightVentricle',
+    portalMm: 12,
+    route: {
+      points: [PULMONARY_RING, [0, 44, 19], [9, 54, 16], PULMONARY_SPLIT],
+      radius: 12,
+      rootRadius: ringRadius(VALVES.pulmonary.radius) + VESSEL_WALL_MM,
+      flareMm: 10,
+    },
+  },
+  leftPulmonaryArtery: {
+    part: 'pulmonaryArteries',
+    blood: 'venous',
+    route: {
+      points: [PULMONARY_SPLIT, [31, 63, 0], [48, 63, -12], [80, 62, -22]],
+      radius: 9,
+    },
+  },
+  rightPulmonaryArtery: {
+    part: 'pulmonaryArteries',
+    blood: 'venous',
+    route: {
+      points: [
+        PULMONARY_SPLIT,
+        [14, 60, -8],
+        [2, 59, -30],
+        [-22, 59, -27],
+        [-45, 58, -24],
+        [-80, 57, -20],
+      ],
+      radius: 9,
+    },
+  },
+  superiorVenaCava: {
+    part: 'superiorVenaCava',
+    blood: 'venous',
+    chamber: 'rightAtrium',
+    portalMm: 16,
+    route: {
+      points: [VESSEL_MOUTHS.superiorVenaCava.point, [-28, 58, -1], [-27, 80, -3], [-26, 130, -5]],
+      radius: 10,
+    },
+  },
+  inferiorVenaCava: {
+    part: 'inferiorVenaCava',
+    blood: 'venous',
+    chamber: 'rightAtrium',
+    portalMm: 26,
+    route: {
+      points: [
+        VESSEL_MOUTHS.inferiorVenaCava.point,
+        [-31, 5, -20],
+        [-29, -4, -34],
+        [-24, -30, -44],
+        [-20, -100, -48],
+      ],
+      radius: 11,
+    },
+  },
+  pulmonaryVein0: {
+    part: 'pulmonaryVeins',
+    blood: 'arterial',
+    chamber: 'leftAtrium',
+    portalMm: 16,
+    route: veinRoute(0, [
+      [56, 38, -12],
+      [80, 44, -18],
+    ]),
+  },
+  pulmonaryVein1: {
+    part: 'pulmonaryVeins',
+    blood: 'arterial',
+    chamber: 'leftAtrium',
+    portalMm: 16,
+    route: veinRoute(1, [
+      [56, 16, -14],
+      [80, 10, -20],
+    ]),
+  },
+  pulmonaryVein2: {
+    part: 'pulmonaryVeins',
+    blood: 'arterial',
+    chamber: 'leftAtrium',
+    portalMm: 16,
+    route: veinRoute(2, [
+      [4, 43, -32],
+      [-4, 46, -46],
+      [-12, 48, -60],
+    ]),
+  },
+  pulmonaryVein3: {
+    part: 'pulmonaryVeins',
+    blood: 'arterial',
+    chamber: 'leftAtrium',
+    portalMm: 16,
+    route: veinRoute(3, [
+      [12, 30, -34],
+      [4, 30, -48],
+      [-2, 30, -60],
+    ]),
+  },
+};
+
+export const ATRIAL_CARVE_MM = 2.5;
+
+export interface CoronarySpec {
+  readonly marks: readonly SurfaceMark[];
+  readonly radius: readonly [from: number, to: number];
+  readonly groove: boolean;
+}
+
+const front = (x: number, y: number): SurfaceMark => ({ view: 'front', at: [x, y] });
+const back = (x: number, y: number): SurfaceMark => ({ view: 'back', at: [x, y] });
+const leftSide = (z: number, y: number): SurfaceMark => ({ view: 'left', at: [z, y] });
+const rightSide = (z: number, y: number): SurfaceMark => ({ view: 'right', at: [z, y] });
+const below = (x: number, z: number): SurfaceMark => ({ view: 'below', at: [x, z] });
+
+export const CORONARIES: readonly CoronarySpec[] = [
+  {
+    marks: [
+      front(2, 27),
+      front(10, 23),
+      front(11, 8),
+      front(12, -15),
+      front(16, -40),
+      front(21, -62),
+      below(29, 8),
+    ],
+    radius: [2.4, 1.4],
+    groove: true,
+  },
+  {
+    marks: [
+      front(10, 23),
+      front(22, 17),
+      front(34, 12),
+      leftSide(14, 8),
+      leftSide(-6, 4),
+      back(40, 0),
+      back(28, -4),
+    ],
+    radius: [2.2, 1.5],
+    groove: true,
+  },
+  {
+    marks: [
+      front(-7, 26),
+      front(-18, 14),
+      front(-30, 6),
+      rightSide(16, 3),
+      rightSide(-3, 0),
+      back(-36, -4),
+      back(-22, -8),
+    ],
+    radius: [2.3, 1.6],
+    groove: true,
+  },
+  {
+    marks: [front(12, -2), front(24, -10), front(36, -22), front(44, -36)],
+    radius: [1.5, 0.9],
+    groove: false,
+  },
+  {
+    marks: [front(15, -33), front(27, -43), front(37, -56)],
+    radius: [1.4, 0.9],
+    groove: false,
+  },
+  {
+    marks: [front(-35, 3), front(-38, -20), front(-30, -42), front(-18, -58)],
+    radius: [1.5, 0.9],
+    groove: false,
+  },
+];
+
+export const GROOVE = { radiusMm: 3.4, liftMm: 1.3, smoothness: 3, sampleMm: 6 } as const;
+
+export const CORONARY_DETAIL = {
+  embed: 0.35,
+  radialSegments: 8,
+  segmentMm: 2.5,
+} as const;
+
+export const EPICARDIUM = {
+  muscle: THEME.muscle,
+  fat: THEME.fat,
+  fatShare: 0.28,
+  fatNearMm: 0.4,
+  fatFarMm: 2.4,
+  occlusionSteps: [1.5, 3.5, 7] as const,
+  occlusionStrength: 0.9,
+  occlusionFloor: 0.55,
+} as const;
+
+export const VESSEL_DETAIL = {
+  segmentMm: 2.5,
+  radialPerMm: 2.2,
+  minRadialSegments: 12,
+  plugInsetMm: 0.4,
+  saturation: 0.72,
+  brightness: 0.92,
+  lumenBrightness: 0.42,
+  rimShade: 0.85,
+  collarLipMm: 1.1,
+  collarMm: 4,
+  lumenFadeMm: 14,
+  jointSegments: 28,
+  jointMarginMm: 0.6,
+} as const;
+
+export const SHAPE = {
+  cavitySmoothness: 7,
+  envelopeSmoothness: 12,
+  collarSmoothness: 5,
+  carveSmoothness: 4,
+  envelopeResolution: 100,
+  cavityResolution: 76,
+  gridMarginMm: 8,
+} as const;
+
+export const CONTRACTION_FRAME: ContractionFrame = {
+  baseY: mitral.centre[1],
+  ventricleRampMm: 16,
+  atriumRampMm: 10,
+  septumBlendMm: 7,
+  rightAxisOffsetMm: 10,
+  atriumReach: 1.05,
+  atriumFadeMm: 8,
+};
+
+export const OUTER_CONTRACTION: ContractionProfile = {
+  radial: 0.06,
+  rightRadial: 0.14,
+  longitudinal: 0.07,
+  atrial: 0.1,
+};
+
+export const CAVITY_CONTRACTION: ContractionProfile = {
+  radial: 0.3,
+  rightRadial: 0.28,
+  longitudinal: 0.1,
+  atrial: 0.2,
+};
+
+export const PORTAL_FADE_MM = 12;
+
+export const APEX_POINT: Point = APEX;
+
+export const CAP = {
+  bandMm: 1.6,
+  bandShare: 0.35,
+  lipMm: 0.35,
+  cellMm: 0.6,
+  muscle: THEME.muscle,
+  deep: THEME.muscleDeep,
+  glow: THEME.node,
+  glowStrength: 0.35,
+} as const;
+
+export const SHAPE_SPEC: ShapeSpec = {
+  pieces: CAVITY_PIECES,
+  extras: OUTER_BLOBS,
+  vessels: Object.values(VESSELS),
+  cavitySmoothness: SHAPE.cavitySmoothness,
+  envelopeSmoothness: SHAPE.envelopeSmoothness,
+  collarSmoothness: SHAPE.collarSmoothness,
+  coronaries: CORONARIES,
+  groove: GROOVE,
+  carveSmoothness: SHAPE.carveSmoothness,
+  vesselWall: VESSEL_WALL_MM,
+  seam: VESSEL_SEAM_MM,
+  collarBeyond: COLLAR_BEYOND_MM,
+  atrialCarve: ATRIAL_CARVE_MM,
+};
