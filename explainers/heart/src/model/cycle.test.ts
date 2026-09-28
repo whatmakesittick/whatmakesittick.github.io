@@ -181,6 +181,7 @@ describe('cycle', () => {
     }
     expect(valveOpening('mitral', AV_VALVES_OPEN_MS + 15)).toBeCloseTo(0.5, 5);
     expect(valveOpening('mitral', AV_VALVES_CLOSE_MS - 10)).toBeCloseTo(0.5, 5);
+    expect(valveOpening('tricuspid', AV_VALVES_CLOSE_MS + 10)).toBeCloseTo(0.5, 5);
     expect(valveOpening('pulmonary', 255)).toBeCloseTo(0.5, 5);
     expect(valveOpening('pulmonary', 530)).toBeCloseTo(0.5, 5);
     for (const valve of VALVE_IDS) {

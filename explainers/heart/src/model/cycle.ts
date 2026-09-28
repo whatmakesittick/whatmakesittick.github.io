@@ -31,6 +31,7 @@ export const RAPID_FILLING: Span = { start: AV_VALVES_OPEN_MS, end: 720 };
 export const DIASTASIS: Span = { start: RAPID_FILLING.end, end: BEAT_MS };
 export const T_WAVE: Span = { start: 350, end: 515 };
 export const PULMONARY_OFFSET = { open: 0, close: 20 } as const;
+export const TRICUSPID_OFFSET = { open: 0, close: 20 } as const;
 export const SOUNDS: Readonly<Record<HeartSound, Span>> = {
   s1: { start: AV_VALVES_CLOSE_MS, end: 260 },
   s2: { start: SEMILUNAR_CLOSE_MS, end: 580 },
@@ -321,7 +322,10 @@ interface Gate {
 }
 
 const VALVE_GATES: Readonly<Record<ValveId, Gate>> = {
-  tricuspid: { openAt: AV_VALVES_OPEN_MS, closeAt: AV_VALVES_CLOSE_MS },
+  tricuspid: {
+    openAt: AV_VALVES_OPEN_MS + TRICUSPID_OFFSET.open,
+    closeAt: AV_VALVES_CLOSE_MS + TRICUSPID_OFFSET.close,
+  },
   mitral: { openAt: AV_VALVES_OPEN_MS, closeAt: AV_VALVES_CLOSE_MS },
   aortic: { openAt: SEMILUNAR_OPEN_MS, closeAt: SEMILUNAR_CLOSE_MS },
   pulmonary: {
