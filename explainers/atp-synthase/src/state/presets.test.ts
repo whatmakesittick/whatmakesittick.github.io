@@ -47,7 +47,7 @@ describe('chapter presets', () => {
     Object.values(PRESETS).forEach((preset) => expect(preset.view?.labels).toBeUndefined());
   });
 
-  it('pins a label for every chapter control it keeps', () => {
+  it('lists the chapter controls each chapter keeps', () => {
     expect(PRESETS.rotor.controls).toEqual(['ring']);
     expect(PRESETS.gradient.controls).toEqual(['oxygen']);
     expect(PRESETS.sprint.controls).toEqual(['event']);
