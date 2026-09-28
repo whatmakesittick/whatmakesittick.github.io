@@ -26,8 +26,15 @@ export function timeOf(state: TimeState): number {
   return state.phase;
 }
 
-export function pressuresOf(state: TimeState): Pressures {
-  const time = timeOf(state);
+function rememberLast<T>(compute: (time: number) => T): (time: number) => T {
+  let last: { time: number; value: T } | null = null;
+  return (time) => {
+    if (last?.time !== time) last = { time, value: compute(time) };
+    return last.value;
+  };
+}
+
+function pressuresAt(time: number): Pressures {
   return {
     leftVentricle: leftVentriclePressure(time),
     aorta: aorticPressure(time),
@@ -36,6 +43,12 @@ export function pressuresOf(state: TimeState): Pressures {
     pulmonaryArtery: pulmonaryArteryPressure(time),
     rightAtrium: rightAtrialPressure(time),
   };
+}
+
+const latestPressures = rememberLast(pressuresAt);
+
+export function pressuresOf(state: TimeState): Readonly<Pressures> {
+  return latestPressures(timeOf(state));
 }
 
 export function volumeOf(state: TimeState): number {

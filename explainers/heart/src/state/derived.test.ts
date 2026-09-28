@@ -14,6 +14,13 @@ describe('derived heart values', () => {
     expect(peak.rightVentricle).toBeLessThan(30);
   });
 
+  it('works out the pressures once for each moment in the beat', () => {
+    const first = pressuresOf({ phase: 300 });
+    expect(pressuresOf({ phase: 300 })).toBe(first);
+    expect(pressuresOf({ phase: 301 })).not.toBe(first);
+    expect(pressuresOf({ phase: 300 })).toEqual(first);
+  });
+
   it('holds the ventricle at 120 mL while all four valves are shut', () => {
     expect(volumeOf({ phase: 200 })).toBeCloseTo(120);
     expect(valveStateOf({ phase: 200 })).toBe('allClosed');
