@@ -1,5 +1,5 @@
 import type { BitId, LayerId } from '../ids';
-import { LAYERS, SECTIONS, isCased, riserLanded, sectionAt } from './wellPlan';
+import { LAYERS, SECTIONS, STAND_LENGTH_M, isCased, riserLanded, sectionAt } from './wellPlan';
 
 export const BIT_IDS = ['pdc', 'rollerCone'] as const satisfies readonly BitId[];
 export const DEFAULT_BIT: BitId = 'pdc';
@@ -41,10 +41,6 @@ export const CASING_RUN_HOURS = 2 * HOURS_PER_DAY;
 export const RISER_LANDING_HOURS = 3 * HOURS_PER_DAY;
 export const TRIP_METRES_PER_HOUR = 300;
 export const TRIP_HANDLING_HOURS = 2;
-
-export const JOINT_LENGTH_M = 9.4;
-export const JOINTS_PER_STAND = 3;
-export const STAND_LENGTH_M = 28;
 
 export const DRILL_PIPE_KG_PER_M = 37.1;
 export const DRILL_COLLAR_KG_PER_M = 223;

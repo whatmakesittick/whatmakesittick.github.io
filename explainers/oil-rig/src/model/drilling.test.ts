@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
   CASING_RUN_HOURS,
   RATE_OF_PENETRATION,
-  STAND_LENGTH_M,
   campaignDay,
   campaignHours,
   drillStringWeightT,
@@ -10,7 +9,7 @@ import {
   roundTripHours,
   standsInHole,
 } from './drilling';
-import { RISER_LANDED_DEPTH_M, SEABED_DEPTH_M, TOTAL_DEPTH_M } from './wellPlan';
+import { RISER_LANDED_DEPTH_M, SEABED_DEPTH_M, STAND_LENGTH_M, TOTAL_DEPTH_M } from './wellPlan';
 
 describe('drilling the well', () => {
   it('drills tens of metres an hour in soft rock and a few in hard rock', () => {
