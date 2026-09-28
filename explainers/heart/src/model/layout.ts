@@ -20,10 +20,10 @@ export interface VesselMouth {
 }
 
 export const CHAMBERS: Readonly<Record<ChamberId, ChamberLayout>> = {
-  rightAtrium: { centre: [-27, 27, 0], radii: [19, 19, 17], wall: 3 },
-  rightVentricle: { centre: [-22, -26, 4], radii: [19, 34, 17], wall: 4 },
-  leftAtrium: { centre: [24, 29, -4], radii: [20, 18, 17], wall: 3 },
-  leftVentricle: { centre: [20, -32, 0], radii: [21, 40, 21], wall: 11 },
+  rightAtrium: { centre: [-27, 27, 0], radii: [19, 19, 17], wall: 2 },
+  rightVentricle: { centre: [-22, -26, 4], radii: [19, 34, 17], wall: 3 },
+  leftAtrium: { centre: [24, 29, -4], radii: [20, 18, 17], wall: 2 },
+  leftVentricle: { centre: [20, -32, 0], radii: [21, 40, 21], wall: 9 },
 };
 
 export const APEX: Point = [30, -84, 6];

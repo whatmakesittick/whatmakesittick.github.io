@@ -19,29 +19,29 @@ export interface Span {
 export const BEAT_MS = 800;
 export const RESTING_RATE_PER_MINUTE = 75;
 
-export const P_WAVE: Span = { start: 0, end: 80 };
-export const ATRIAL_CONTRACTION: Span = { start: 30, end: 170 };
+export const P_WAVE: Span = { start: 0, end: 90 };
+export const ATRIAL_CONTRACTION: Span = { start: 50, end: 170 };
 export const QRS: Span = { start: 150, end: 230 };
 export const AV_VALVES_CLOSE_MS = 190;
 export const SEMILUNAR_OPEN_MS = 240;
-export const SEMILUNAR_CLOSE_MS = 510;
+export const SEMILUNAR_CLOSE_MS = 520;
 export const AV_VALVES_OPEN_MS = 590;
 export const EJECTION: Span = { start: SEMILUNAR_OPEN_MS, end: SEMILUNAR_CLOSE_MS };
-export const RAPID_FILLING: Span = { start: AV_VALVES_OPEN_MS, end: 740 };
+export const RAPID_FILLING: Span = { start: AV_VALVES_OPEN_MS, end: 720 };
 export const DIASTASIS: Span = { start: RAPID_FILLING.end, end: BEAT_MS };
-export const T_WAVE: Span = { start: 380, end: 520 };
-export const PULMONARY_OFFSET = { open: -10, close: 20 } as const;
+export const T_WAVE: Span = { start: 350, end: 515 };
+export const PULMONARY_OFFSET = { open: 0, close: 20 } as const;
 export const SOUNDS: Readonly<Record<HeartSound, Span>> = {
   s1: { start: AV_VALVES_CLOSE_MS, end: 260 },
-  s2: { start: SEMILUNAR_CLOSE_MS, end: 570 },
+  s2: { start: SEMILUNAR_CLOSE_MS, end: 580 },
 };
 export const VALVE_TRANSITION_MS = { open: 30, close: 20 } as const;
 
 export const END_DIASTOLIC_ML = 120;
 export const END_SYSTOLIC_ML = 50;
 export const STROKE_ML = END_DIASTOLIC_ML - END_SYSTOLIC_ML;
-export const BEFORE_KICK_ML = 100;
-export const AFTER_RAPID_FILL_ML = 96;
+export const BEFORE_KICK_ML = 105;
+export const AFTER_RAPID_FILL_ML = 102;
 export const EJECTION_FRACTION = STROKE_ML / END_DIASTOLIC_ML;
 
 export const PHASE_RANGES: Readonly<Record<PhaseId, Span>> = {
@@ -53,12 +53,12 @@ export const PHASE_RANGES: Readonly<Record<PhaseId, Span>> = {
   rest: DIASTASIS,
 };
 
-export const WAVE_MOMENTS: Readonly<Record<WaveId, number>> = { p: 40, qrs: 178, t: 450 };
+export const WAVE_MOMENTS: Readonly<Record<WaveId, number>> = { p: 45, qrs: 178, t: 435 };
 
 export const CONDUCTION_TIMING: Readonly<Record<ConductionId, Span>> = {
   sinusNode: { start: 0, end: 10 },
-  atria: { start: 0, end: 80 },
-  avNode: { start: 80, end: 150 },
+  atria: { start: 0, end: 90 },
+  avNode: { start: 90, end: 150 },
   bundle: { start: 150, end: 162 },
   branches: { start: 162, end: 175 },
   purkinje: { start: 175, end: 190 },
@@ -82,13 +82,13 @@ const OPEN_THRESHOLD = 0.5;
 const DIASTOLIC_LEFT_VENTRICLE = monotoneCurve(
   [
     [0, 7],
-    [30, 7],
-    [100, 12],
+    [50, 7],
+    [110, 12],
     [150, 10],
     [AV_VALVES_CLOSE_MS, ISOVOLUMIC_START_MMHG],
     [AV_VALVES_OPEN_MS, RELAXED_MMHG],
     [640, 4],
-    [740, 6],
+    [720, 6],
     [800, 7],
   ],
   BEAT_MS,
@@ -99,12 +99,12 @@ const AORTIC = monotoneCurve(
     [240, 80],
     [340, 120],
     [430, 110],
-    [510, 100],
-    [522, 95],
-    [536, 101],
-    [600, 96],
-    [700, 90],
-    [800, 85],
+    [520, 100],
+    [532, 95],
+    [546, 101],
+    [600, 97],
+    [700, 91],
+    [800, 86],
     [100, 82],
     [190, 80.5],
   ],
@@ -114,14 +114,15 @@ const AORTIC = monotoneCurve(
 const LEFT_ATRIUM = monotoneCurve(
   [
     [0, 6],
-    [100, 11],
+    [50, 6],
+    [120, 11],
     [170, 7],
     [200, 8],
     [260, 6],
     [400, 8],
     [590, 10],
     [650, 6],
-    [740, 6],
+    [720, 6],
     [800, 6],
   ],
   BEAT_MS,
@@ -130,12 +131,12 @@ const LEFT_ATRIUM = monotoneCurve(
 const RIGHT_VENTRICLE = monotoneCurve(
   [
     [0, 3],
-    [100, 6],
+    [120, 6],
     [190, 5],
-    [230, 10],
+    [240, 10],
     [330, 25],
-    [530, 13],
-    [600, 3],
+    [540, 13],
+    [610, 3],
     [700, 3],
     [800, 3],
   ],
@@ -144,10 +145,10 @@ const RIGHT_VENTRICLE = monotoneCurve(
 
 const PULMONARY_ARTERY = monotoneCurve(
   [
-    [230, 10],
+    [240, 10],
     [330, 25],
-    [530, 13],
-    [545, 11],
+    [540, 13],
+    [555, 11],
     [700, 12],
     [800, 11.5],
     [100, 10.5],
@@ -158,13 +159,13 @@ const PULMONARY_ARTERY = monotoneCurve(
 const RIGHT_ATRIUM = monotoneCurve(
   [
     [0, 3],
-    [100, 6],
+    [120, 6],
     [170, 2],
     [200, 4],
     [400, 4],
     [590, 6],
     [650, 2],
-    [740, 3],
+    [720, 3],
     [800, 3],
   ],
   BEAT_MS,
@@ -178,7 +179,7 @@ const ATRIAL_FULLNESS = monotoneCurve(
     [590, 1],
     [700, 0.45],
     [800, 0.45],
-    [30, 0.45],
+    [50, 0.45],
   ],
   BEAT_MS,
 );
@@ -190,11 +191,11 @@ interface Gaussian {
 }
 
 const ECG_WAVES: readonly Gaussian[] = [
-  { centre: 40, sigma: 16, amplitude: 0.15 },
+  { centre: 45, sigma: 18, amplitude: 0.15 },
   { centre: 160, sigma: 6, amplitude: -0.12 },
   { centre: 178, sigma: 9, amplitude: 1.2 },
   { centre: 200, sigma: 8, amplitude: -0.3 },
-  { centre: 450, sigma: 30, amplitude: 0.3 },
+  { centre: 435, sigma: 30, amplitude: 0.3 },
 ];
 
 export function wrapTime(time: number): number {
@@ -218,7 +219,7 @@ const LEFT_VENTRICLE_VOLUME = monotoneCurve(
   [
     [0, BEFORE_KICK_ML],
     [ATRIAL_CONTRACTION.start, BEFORE_KICK_ML],
-    [100, 110],
+    [110, 114],
     [ATRIAL_CONTRACTION.end, END_DIASTOLIC_ML],
     [EJECTION.start, END_DIASTOLIC_ML],
     [270, 116],
@@ -226,12 +227,12 @@ const LEFT_VENTRICLE_VOLUME = monotoneCurve(
     [330, 90],
     [360, 77],
     [400, 65],
-    [450, 56],
+    [450, 57],
     [EJECTION.end, END_SYSTOLIC_ML],
     [RAPID_FILLING.start, END_SYSTOLIC_ML],
     [620, 58],
-    [650, 72],
-    [690, 86],
+    [650, 74],
+    [690, 94],
     [RAPID_FILLING.end, AFTER_RAPID_FILL_ML],
     [BEAT_MS, BEFORE_KICK_ML],
   ],

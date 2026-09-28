@@ -83,7 +83,7 @@ describe('layout', () => {
 
   it('derives boxes and rings from the layout', () => {
     expect(chamberBox('leftVentricle')).toEqual({ x: [-1, 41], y: [-72, 8], z: [-21, 21] });
-    expect(chamberOuterBox('leftVentricle').x).toEqual([-12, 52]);
+    expect(chamberOuterBox('leftVentricle').x).toEqual([-10, 50]);
     expect(valveRing('mitral')).toEqual({ centre: [21, 2, -1], radius: 14 });
   });
 });

@@ -88,12 +88,12 @@ describe('cycle', () => {
   });
 
   it('fills the ventricle to 120 mL and empties it to 50', () => {
-    expect(leftVentricleVolume(0)).toBe(100);
+    expect(leftVentricleVolume(0)).toBe(105);
     expect(leftVentricleVolume(AV_VALVES_CLOSE_MS)).toBe(END_DIASTOLIC_ML);
     expect(leftVentricleVolume(SEMILUNAR_OPEN_MS)).toBe(END_DIASTOLIC_ML);
     expect(leftVentricleVolume(SEMILUNAR_CLOSE_MS)).toBeCloseTo(END_SYSTOLIC_ML, 5);
     expect(leftVentricleVolume(AV_VALVES_OPEN_MS)).toBe(END_SYSTOLIC_ML);
-    expect(leftVentricleVolume(740)).toBeCloseTo(96, 5);
+    expect(leftVentricleVolume(720)).toBeCloseTo(102, 5);
     expect(EJECTION_FRACTION).toBeCloseTo(0.583, 3);
   });
 
@@ -111,7 +111,7 @@ describe('cycle', () => {
   it('squeezes the ventricle fully at the end of ejection', () => {
     expect(ventricularSqueeze(AV_VALVES_CLOSE_MS)).toBe(0);
     expect(ventricularSqueeze(SEMILUNAR_CLOSE_MS)).toBeCloseTo(1, 5);
-    expect(ventricularSqueeze(0)).toBeCloseTo(2 / 7, 5);
+    expect(ventricularSqueeze(0)).toBeCloseTo(15 / 70, 5);
   });
 
   it('fills the atria while the ventricles squeeze and empties them with the kick', () => {
@@ -139,8 +139,8 @@ describe('cycle', () => {
       expect(aorticPressure(time)).toBeGreaterThanOrEqual(78);
       expect(aorticPressure(time)).toBeLessThanOrEqual(121);
     }
-    expect(aorticPressure(522)).toBeLessThan(aorticPressure(510));
-    expect(aorticPressure(536)).toBeGreaterThan(aorticPressure(522));
+    expect(aorticPressure(532)).toBeLessThan(aorticPressure(520));
+    expect(aorticPressure(546)).toBeGreaterThan(aorticPressure(532));
   });
 
   it('keeps the right side at a fifth of the pressure', () => {
@@ -160,8 +160,8 @@ describe('cycle', () => {
     expect(valveState(560)).toBe('allClosed');
     expect(valveOpening('mitral', AV_VALVES_OPEN_MS + 15)).toBeCloseTo(0.5, 5);
     expect(valveOpening('mitral', AV_VALVES_CLOSE_MS - 10)).toBeCloseTo(0.5, 5);
-    expect(valveOpening('pulmonary', 245)).toBeCloseTo(0.5, 5);
-    expect(valveOpening('pulmonary', 520)).toBeCloseTo(0.5, 5);
+    expect(valveOpening('pulmonary', 255)).toBeCloseTo(0.5, 5);
+    expect(valveOpening('pulmonary', 530)).toBeCloseTo(0.5, 5);
     for (const valve of VALVE_IDS) {
       for (let time = 0; time < BEAT_MS; time += 1) {
         expect(valveOpening(valve, time)).toBeGreaterThanOrEqual(0);
@@ -195,6 +195,7 @@ describe('cycle', () => {
     expect(conductionSite(5)).toBe('sinusNode');
     expect(conductionSite(40)).toBe('atria');
     expect(conductionSite(120)).toBe('avNode');
+    expect(conductionSite(85)).toBe('atria');
     expect(conductionSite(155)).toBe('bundle');
     expect(conductionSite(170)).toBe('branches');
     expect(conductionSite(180)).toBe('purkinje');
@@ -202,17 +203,17 @@ describe('cycle', () => {
     expect(conductionSite(300)).toBe('ventricles');
     expect(conductionSite(450)).toBe('recovering');
     expect(conductionSite(700)).toBe('quiet');
-    expect(activation('atria', 40)).toBeCloseTo(0.5, 5);
+    expect(activation('atria', 45)).toBeCloseTo(0.5, 5);
     expect(activation('ventricles', 100)).toBe(0);
     expect(activation('ventricles', 300)).toBe(1);
   });
 
   it('glows the walls while they are depolarised', () => {
-    expect(atrialGlow(80)).toBe(1);
+    expect(atrialGlow(90)).toBe(1);
     expect(atrialGlow(200)).toBeCloseTo(0.5, 5);
     expect(atrialGlow(300)).toBe(0);
     expect(ventricularGlow(300)).toBe(1);
-    expect(ventricularGlow(450)).toBeCloseTo(0.5, 5);
+    expect(ventricularGlow(432.5)).toBeCloseTo(0.5, 5);
     expect(ventricularGlow(600)).toBe(0);
   });
 });
