@@ -48,6 +48,8 @@ describe('solar panel formats', () => {
   it('shows the sun height only while it is up', () => {
     expect(formatSunElevation(38.2)).toBe('38° up');
     expect(formatSunElevation(-4)).toBe('–');
+    expect(formatSunElevation(1e-15)).toBe('–');
+    expect(formatSunElevation(0.6)).toBe('1° up');
   });
 
   it('shows the energy of the day in kilowatt hours', () => {
