@@ -7,11 +7,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=JetBrains+Mono:wght@500&display=swap"
     />
     <style>
       :root {
         --background: #0b0d10;
+        --glow: #1a2230;
         --text: #e6e9ee;
         --prose: #c3c9d2;
         --muted: #8b929c;
@@ -19,180 +20,136 @@
       }
 
       body {
-        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-sizing: border-box;
         width: 1200px;
         height: 630px;
         margin: 0;
+        padding: 64px 72px;
         overflow: hidden;
         color: var(--text);
-        background: var(--background);
+        background: radial-gradient(
+          ellipse 70% 60% at 50% 0%,
+          var(--glow) 0%,
+          var(--background) 70%
+        );
         font-family: 'Inter', sans-serif;
         -webkit-font-smoothing: antialiased;
       }
 
-      .covers {
-        position: absolute;
-        top: 117px;
-        right: 40px;
-        display: grid;
-        grid-template-columns: repeat(2, 256px);
-        grid-auto-rows: 192px;
-        gap: 12px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .cover {
-        position: relative;
-        overflow: hidden;
-        border: 1px solid rgb(255 255 255 / 0.12);
-        border-radius: 14px;
-        background: var(--background);
-        box-shadow: 0 18px 40px rgb(0 0 0 / 0.45);
-      }
-
-      .cover img {
-        position: absolute;
-        top: var(--top);
-        left: var(--left);
-        width: var(--width);
-      }
-
-      .cover.faded::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(
-          ellipse 90px 70px at 100% 0,
-          var(--background) 60%,
-          transparent
-        );
-      }
-
-      .cover span {
-        position: absolute;
-        z-index: 1;
-        bottom: 10px;
-        left: 10px;
-        padding: 4px 10px;
-        border-radius: 999px;
-        color: var(--text);
-        background: rgb(11 13 16 / 0.78);
-        font-size: 14px;
-        font-weight: 500;
-      }
-
-      .copy {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 72px;
+      .title {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        width: 500px;
-      }
-
-      .eyebrow {
-        display: flex;
         align-items: center;
-        gap: 14px;
-        margin: 0 0 26px;
-        color: var(--accent);
-        font-size: 24px;
-        font-weight: 500;
+        gap: 26px;
+        padding-top: 24px;
+        text-align: center;
       }
 
-      .eyebrow img {
-        width: 44px;
-        height: 44px;
+      .mark {
+        width: 132px;
+        height: 132px;
       }
 
       h1 {
         margin: 0;
-        font-size: 80px;
+        font-size: 72px;
         font-weight: 700;
-        line-height: 1.02;
+        line-height: 1;
         letter-spacing: -0.035em;
       }
 
+      h1 span {
+        color: var(--accent);
+      }
+
       .subtitle {
-        margin: 26px 0 0;
+        margin: 0;
         color: var(--prose);
-        font-size: 28px;
-        line-height: 1.4;
-      }
-
-      .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin: 40px 0 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .tags li {
-        padding: 5px 10px;
-        border: 1px solid rgb(255 255 255 / 0.16);
-        border-radius: 999px;
-        color: var(--prose);
-        font-size: 15px;
+        font-size: 30px;
         font-weight: 500;
+        line-height: 1.3;
+      }
+
+      .footer {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .timeline {
+        position: relative;
+        display: flex;
+        flex-grow: 1;
+        gap: 4px;
+        height: 10px;
+      }
+
+      .timeline span {
+        flex-grow: var(--grow);
+        background: var(--color);
+      }
+
+      .timeline span:first-of-type {
+        border-radius: 5px 0 0 5px;
+      }
+
+      .timeline span:last-of-type {
+        border-radius: 0 5px 5px 0;
+      }
+
+      .knob {
+        position: absolute;
+        top: -11px;
+        left: 41%;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--text);
+        box-shadow: 0 4px 14px rgb(0 0 0 / 0.5);
       }
 
       .url {
-        position: absolute;
-        bottom: 40px;
-        left: 72px;
         margin: 0;
         color: var(--muted);
         font-family: 'JetBrains Mono', monospace;
         font-size: 20px;
         font-weight: 500;
+        white-space: nowrap;
       }
     </style>
   </head>
   <body>
-    <ul class="covers">
-      <li class="cover faded" style="--width: 341px; --left: 0; --top: -46px">
-        <img src="../../explainers/engine/public/cover.webp" alt="" />
-        <span>Engine</span>
-      </li>
-      <li class="cover" style="--width: 459px; --left: -89px; --top: -44px">
-        <img src="../../explainers/glider/public/cover.webp" alt="" />
-        <span>Glider</span>
-      </li>
-      <li class="cover" style="--width: 373px; --left: 0; --top: -24px">
-        <img src="../../explainers/helicopter/public/cover.webp" alt="" />
-        <span>Helicopter</span>
-      </li>
-      <li class="cover" style="--width: 341px; --left: -7px; --top: -48px">
-        <img src="../../explainers/sewing-machine/public/cover.webp" alt="" />
-        <span>Sewing machine</span>
-      </li>
-    </ul>
-    <main class="copy">
-      <p class="eyebrow">
-        <img src="../../public/favicon.svg" alt="" />
-        Interactive explainers
-      </p>
-      <h1>What makes it tick</h1>
-      <p class="subtitle">How everyday machines work, taken apart in 3D and slowed right down.</p>
-      <ul class="tags">
-        <li>Mechanics</li>
-        <li>Engines</li>
-        <li>Vehicles</li>
-        <li>Aircraft</li>
-        <li>Flight</li>
-        <li>Physics</li>
-        <li>Weather</li>
-        <li>Home</li>
-        <li>Tools</li>
-      </ul>
+    <main class="title">
+      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="17" cy="37" r="8" fill="none" stroke="#f5a524" stroke-width="4" />
+        <circle cx="17" cy="37" r="2.2" fill="#f5a524" />
+        <path
+          d="M20.6 45.2 L30.8 59.7 L53 14.6 L51 13.4 L29.2 44.3 L24.4 41.8 Z"
+          fill="#f5a524"
+          stroke="#f5a524"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <h1>What makes it <span>tick</span></h1>
+      <p class="subtitle">Interactive 3D explainers of how things work</p>
     </main>
-    <p class="url">whatmakesittick.github.io</p>
+    <footer class="footer">
+      <div class="timeline">
+        <span style="--grow: 5; --color: #f5c451"></span>
+        <span style="--grow: 2; --color: #ff9f43"></span>
+        <span style="--grow: 1; --color: #ff7eb6"></span>
+        <span style="--grow: 3; --color: #4cc3ff"></span>
+        <span style="--grow: 7; --color: #4fd1c5"></span>
+        <span style="--grow: 3; --color: #c792ea"></span>
+        <span style="--grow: 2; --color: #8bd47f"></span>
+        <div class="knob"></div>
+      </div>
+      <p class="url">whatmakesittick.github.io</p>
+    </footer>
     <script>
       Promise.all([
         document.fonts.ready,
