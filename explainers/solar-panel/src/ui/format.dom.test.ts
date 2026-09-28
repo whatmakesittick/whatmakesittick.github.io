@@ -8,6 +8,7 @@ import {
   formatDepth,
   formatEnergyToday,
   formatHeat,
+  formatNanometres,
   formatPhase,
   formatScientific,
   formatSignedPercent,
@@ -35,6 +36,11 @@ describe('solar panel formats', () => {
     expect(describePhase(0)).toBe(`05:00 solar time, ${timeline.during.dawn}`);
     expect(describePhase(420)).toBe(`12:00 solar time, ${timeline.during.noon}`);
     expect(describePhase(750)).toBe(`17:30 solar time, ${timeline.during.dusk}`);
+  });
+
+  it('prints wavelengths without a thousands separator', () => {
+    expect(formatNanometres(600)).toBe('600 nm');
+    expect(formatNanometres(1100)).toBe('1100 nm');
   });
 
   it('gives the playback in minutes of the day per second', () => {

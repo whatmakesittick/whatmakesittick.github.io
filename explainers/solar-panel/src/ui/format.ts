@@ -1,5 +1,5 @@
 import { formatFixed, formatNumber, formatSigned } from '@core/format';
-import { t } from '@core/i18n';
+import { currentLanguage, t } from '@core/i18n';
 import type { LayerId, PhaseId } from '../ids';
 import {
   DAY_CYCLE_MIN,
@@ -125,8 +125,19 @@ export function formatAxisAmps(amps: number): string {
   return t('units.amps', { value: formatNumber(amps) });
 }
 
+const ungroupedFormats = new Map<string, Intl.NumberFormat>();
+
+function formatUngrouped(value: number): string {
+  const language = currentLanguage();
+  const cached = ungroupedFormats.get(language);
+  if (cached) return cached.format(value);
+  const format = new Intl.NumberFormat(language, { useGrouping: false });
+  ungroupedFormats.set(language, format);
+  return format.format(value);
+}
+
 export function formatNanometres(nanometres: number): string {
-  return t('units.nm', { value: formatNumber(nanometres) });
+  return t('units.nm', { value: formatUngrouped(nanometres) });
 }
 
 export function formatElectronVolts(electronVolts: number): string {
