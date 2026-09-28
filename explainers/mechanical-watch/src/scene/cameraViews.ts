@@ -40,7 +40,6 @@ const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
     distance: CLOSE_DISTANCE,
   },
   dialSide: { region: 'dial', direction: [0.2, 0.25, -1], margin: 1.05, distance: CLOSE_DISTANCE },
-  edge: { region: 'movement', direction: [1, 0.15, 0.2], margin: 1.1, distance: CLOSE_DISTANCE },
 };
 
 export const ANCHORED_VIEWS: Record<AnchoredViewId, AnchorFraming> = {

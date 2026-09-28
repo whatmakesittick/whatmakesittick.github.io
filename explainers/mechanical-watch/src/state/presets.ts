@@ -5,8 +5,7 @@ import { DEFAULT_AMPLITUDE, momentPhase } from '../model';
 
 export type PresetId = 'overview' | 'mainspring' | 'train' | 'escapement' | 'balance' | 'hands';
 
-export type CameraView =
-  'movement' | 'barrel' | 'wheel' | 'escapement' | 'balance' | 'dialSide' | 'edge';
+export type CameraView = 'movement' | 'barrel' | 'wheel' | 'escapement' | 'balance' | 'dialSide';
 
 export type ChapterControl = 'reserve' | 'regulator' | 'wheel' | 'beatRate';
 

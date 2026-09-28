@@ -25,7 +25,7 @@ describe('camera views', () => {
   it('lets the overview zoom out further than the close views', () => {
     const views = cameraViews(NO_ANCHORS);
     expect(views.movement.distance).toEqual({ min: 40, max: 1200 });
-    (['barrel', 'wheel', 'escapement', 'balance', 'dialSide', 'edge'] as const).forEach((id) =>
+    (['barrel', 'wheel', 'escapement', 'balance', 'dialSide'] as const).forEach((id) =>
       expect(views[id].distance, id).toEqual({ min: 3, max: 600 }),
     );
   });
