@@ -466,7 +466,8 @@ and the page chunk carries English only.
 `vite/crawl.ts` builds `sitemap.xml` and `robots.txt` from the manifests: they are
 emitted at build and served by the dev server, never committed. The sitemap lists
 every page in every language, each with `xhtml:link` alternates for all its language
-variants and `x-default`, and a `lastmod` for explainer pages. `robots.txt` allows
+variants and `x-default`, and a `lastmod`: an explainer page's `dateModified`, and for
+the catalogue the newest `dateModified` among the explainers. `robots.txt` allows
 every crawler and points at the sitemap.
 
 `vite/structuredData.ts` writes the JSON-LD, a `@graph` on every page that starts with

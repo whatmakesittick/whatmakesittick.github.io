@@ -28,8 +28,22 @@ export function explainerRoute(explainer: LoadedExplainer): PageRoute {
   return { page: manifest.slug, languages: manifest.locales, modified: dates.modified };
 }
 
+function newestModified(explainers: readonly LoadedExplainer[]): string | undefined {
+  return explainers
+    .map(({ dates }) => dates.modified)
+    .reduce<string | undefined>(
+      (newest, date) => (newest && Date.parse(newest) >= Date.parse(date) ? newest : date),
+      undefined,
+    );
+}
+
+export function catalogueRoute(explainers: readonly LoadedExplainer[]): PageRoute {
+  const modified = newestModified(explainers);
+  return modified ? { ...CATALOGUE_ROUTE, modified } : CATALOGUE_ROUTE;
+}
+
 export function siteRoutes(explainers: readonly LoadedExplainer[]): PageRoute[] {
-  return [CATALOGUE_ROUTE, ...explainers.map(explainerRoute)];
+  return [catalogueRoute(explainers), ...explainers.map(explainerRoute)];
 }
 
 export function pageFolder(code: LanguageCode, page: string): string {
