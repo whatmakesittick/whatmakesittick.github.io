@@ -572,8 +572,8 @@ export const CAP = {
   cellMm: 0.6,
   muscle: THEME.muscle,
   deep: THEME.muscleDeep,
-  glow: THEME.node,
-  glowStrength: 0.35,
+  glow: '#ff7a4d',
+  glowStrength: 0.16,
 } as const;
 
 export const SHAPE_SPEC: ShapeSpec = {
@@ -718,4 +718,59 @@ export const BLOOD = {
   minSize: 3.5,
   maxSize: 9,
   renderOrder: 2,
+} as const;
+
+export const CONDUCTION = {
+  colour: THEME.node,
+  glowStrength: 1.6,
+  sampleMm: 2,
+  radialSegments: 8,
+  nodeSegments: 16,
+  sinusAxis: [0.25, 1, 0.1] as const,
+  avRadiusMm: 2.6,
+  bundleRadiusMm: 1.3,
+  branchRadiusMm: 1.1,
+  septalLiftMm: 0.2,
+  pulse: { riseMs: 6, fadeMs: 45, rest: 0.18 },
+} as const;
+
+export interface PurkinjeFan {
+  readonly side: 'left' | 'right';
+  readonly start: Point;
+  readonly ends: readonly Point[];
+}
+
+export const PURKINJE_FANS: readonly PurkinjeFan[] = [
+  {
+    side: 'left',
+    start: [16, -62, -2],
+    ends: [
+      [38, -30, -8],
+      [40, -12, -8],
+      [34, -48, -12],
+      [26, -66, -10],
+      [10, -44, -14],
+      [8, -20, -12],
+      [24, -26, -16],
+    ],
+  },
+  {
+    side: 'right',
+    start: [-14, -60, -2],
+    ends: [
+      [-34, -30, -6],
+      [-36, -12, -6],
+      [-26, -46, -8],
+      [-10, -30, -10],
+      [-22, -20, -12],
+    ],
+  },
+];
+
+export const PURKINJE = {
+  liftMm: 0.5,
+  radius: [0.55, 0.3] as const,
+  radialSegments: 5,
+  sagMm: 6,
+  depthMm: 6,
 } as const;

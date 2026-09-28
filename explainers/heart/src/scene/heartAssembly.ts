@@ -13,6 +13,8 @@ import {
   SINUS_NODE,
   VALVES,
   atrialFullness,
+  atrialGlow,
+  ventricularGlow,
   ventricularSqueeze,
   wrapTime,
 } from '../model';
@@ -41,6 +43,7 @@ import { epicardiumPainter } from './geometry/epicardium';
 import { VesselsPart } from './parts/vessels/vessels';
 import { ValvesPart } from './parts/valves/valves';
 import { BloodFlowPart } from './parts/blood/bloodFlow';
+import { ConductionPart } from './parts/conduction/conduction';
 import { REGIONS } from './regions';
 
 const ANCHOR_LIFT_MM = 3;
@@ -101,6 +104,7 @@ export class HeartAssembly implements Assembly {
   private readonly coronaries: CoronariesPart;
   private readonly valves: ValvesPart;
   private readonly blood: BloodFlowPart;
+  private readonly conduction: ConductionPart;
   private readonly anchors = new Map<AnchorId, Object3D>();
   private readonly labels = new Map<PartId, Object3D>();
   private state: AssemblyState | null = null;
@@ -127,12 +131,14 @@ export class HeartAssembly implements Assembly {
     this.coronaries = new CoronariesPart(context, routes, motion.outer);
     this.valves = new ValvesPart(context, shapes.sides, motion.cavity);
     this.blood = new BloodFlowPart(context, motion.cavity);
+    this.conduction = new ConductionPart(context, shapes.sides, motion.cavity);
     this.root.add(
       this.myocardium.object,
       this.vessels.object,
       this.coronaries.object,
       this.valves.object,
       this.blood.object,
+      this.conduction.object,
     );
     this.buildAnchors();
     this.setState(state);
@@ -156,6 +162,9 @@ export class HeartAssembly implements Assembly {
       this.coronaries.setCutaway(state.view.cutaway);
     }
     if (changes.view('flow')) this.blood.setShown(state.view.flow);
+    if (changes.view('conduction')) this.conduction.setShown(state.view.conduction);
+    if (changes.any('time') || changes.view('conduction'))
+      this.applyConduction(state, squeeze, emptying);
     if (changes.view('flow') || changes.view('cutaway')) {
       this.vessels.setGlass(state.view.flow && !state.view.cutaway);
     }
@@ -170,6 +179,15 @@ export class HeartAssembly implements Assembly {
   update(_deltaSeconds: number, cameraDistance: number): boolean {
     this.blood.setCameraDistance(cameraDistance);
     return false;
+  }
+
+  private applyConduction(state: AssemblyState, squeeze: number, emptying: number): void {
+    const shown = state.view.conduction;
+    if (shown) this.conduction.setTime(state.time, squeeze, emptying);
+    this.myocardium.setGlow(
+      shown ? atrialGlow(state.time) : 0,
+      shown ? ventricularGlow(state.time) : 0,
+    );
   }
 
   private advanceBlood(from: number, to: number): void {
