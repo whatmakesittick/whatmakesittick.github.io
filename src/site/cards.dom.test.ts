@@ -1,46 +1,45 @@
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { initI18n } from '@core/i18n';
-import type { CatalogueEntry, ExplainerMeta, Tag } from '@core/manifest';
+import { initI18n, t } from '@core/i18n';
+import type { Tag } from '@core/manifest';
+import type { CardMeta, CatalogueCard } from './catalogue';
+import { renderCatalogueGrid } from './catalogueMarkup';
 import { mountCards } from './cards';
 
-function meta(title: string): ExplainerMeta {
-  return { title, eyebrow: '', tagline: '', description: '', summary: '' };
+function meta(title: string): CardMeta {
+  return { title, eyebrow: '', summary: '' };
 }
 
 function entry(
   slug: string,
   tags: Tag[],
   published: string,
-  metas: CatalogueEntry['meta'],
-): CatalogueEntry {
+  metas: CatalogueCard['meta'],
+): CatalogueCard {
   return {
-    manifest: {
-      slug,
-      tags,
-      cover: 'cover.webp',
-      entry: 'src/index.ts',
-      chapters: 'chapters.html',
-      locales: ['en', 'uk'],
-      social: { image: 'social/og-image.png', alt: 'Card' },
-    },
+    manifest: { slug, tags, cover: 'cover.webp', locales: ['en', 'uk'] },
     meta: metas,
     published,
   };
 }
 
-const engine = entry('engine', ['engines', 'mechanics'], '2026-01-10T09:00:00Z', {
-  en: meta('How an engine works'),
-  uk: meta('Як працює двигун'),
-});
 const glider = entry('glider', ['aircraft', 'flight'], '2026-06-10T09:00:00Z', {
   en: meta('How a glider flies'),
   uk: meta('Як літає планер'),
 });
+const engine = entry('engine', ['engines', 'mechanics'], '2026-01-10T09:00:00Z', {
+  en: meta('How an engine works'),
+  uk: meta('Як працює двигун'),
+});
+const cards = [glider, engine];
 
-function mount(path: string): void {
+function mount(path: string, prerendered = ''): void {
   window.history.replaceState(null, '', path);
-  document.body.innerHTML = '<main data-catalogue></main>';
-  mountCards(document, [engine, glider]);
+  document.body.innerHTML = `<main data-catalogue>${prerendered}</main>`;
+  mountCards(document, cards);
+}
+
+function prerender(code: 'en' | 'uk'): string {
+  return renderCatalogueGrid(cards, { code, base: '/', translate: (key) => t(key, { lng: code }) });
 }
 
 function visibleTitles(): string[] {
@@ -79,7 +78,7 @@ describe('catalogue cards', () => {
     expect(document.querySelector('a.card')?.getAttribute('href')).toBe('/uk/glider/');
   });
 
-  it('lists the newest explainer first', () => {
+  it('lists the explainers in the order it is given', () => {
     expect(visibleTitles()).toEqual(['Як літає планер', 'Як працює двигун']);
   });
 
@@ -130,5 +129,27 @@ describe('tag filter', () => {
     chip('.tag-filter', 'Усі').click();
     expect(pressedChips()).toEqual(['Усі']);
     expect(window.location.search).toBe('');
+  });
+});
+
+describe('prerendered catalogue', () => {
+  it('keeps the prerendered cards and chips of the current language', () => {
+    mount('/uk/', prerender('uk'));
+    const card = document.querySelector('.card-item');
+    chip('.tag-filter', 'Політ').click();
+    expect(document.querySelector('.card-item')).toBe(card);
+    expect(visibleTitles()).toEqual(['Як літає планер']);
+    expect(pressedChips()).toEqual(['Політ']);
+  });
+
+  it('filters the prerendered cards by the tag in the URL on load', () => {
+    mount('/uk/?tag=mechanics', prerender('uk'));
+    expect(visibleTitles()).toEqual(['Як працює двигун']);
+  });
+
+  it('renders the cards again when the page language differs from the prerendered one', () => {
+    mount('/uk/', prerender('en'));
+    expect(visibleTitles()).toEqual(['Як літає планер', 'Як працює двигун']);
+    expect(document.querySelector('a.card')?.getAttribute('href')).toBe('/uk/glider/');
   });
 });

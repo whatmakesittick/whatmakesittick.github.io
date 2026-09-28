@@ -84,11 +84,11 @@ export class HelicopterAssembly {
     this.downwash.setVisible(visible);
   }
 
-  update(frame: AssemblyFrame): void {
+  update(frame: AssemblyFrame): boolean {
     this.body.rotation.z = -toRadians(FORWARD_BODY_PITCH_DEGREES * frame.forward);
     this.mainRotor.setPose(frame);
     this.tailRotor.setAngle(tailRotorAngle(frame.azimuth));
-    this.downwash.update(frame);
+    return this.downwash.update(frame);
   }
 
   labelAnchors(): ReadonlyMap<string, Object3D> {

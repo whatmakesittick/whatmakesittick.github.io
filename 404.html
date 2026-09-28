@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="{{lang}}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0d10" />
+    <meta name="robots" content="noindex" />
+    <title data-i18n="page.metaTitle" data-i18n-values="title:notFound.title">
+      {{documentTitle}}
+    </title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <style>
+      @import '/src/core/style.css';
+      @import '/src/site/site.css';
+    </style>
+  </head>
+  <body>
+    <div class="catalogue-page">
+      <main class="masthead not-found">
+        <a class="site-link" href="{{catalogueUrl}}">
+          <img class="site-link-icon" src="/favicon.svg" alt="" width="22" height="22" />
+          <span>{{siteName}}</span>
+        </a>
+        <h1 data-i18n="notFound.title">Page not found</h1>
+        <p class="tagline" data-i18n="notFound.text">
+          This page does not exist or has moved. Every explainer is on the front page.
+        </p>
+        <a class="not-found-link" href="{{catalogueUrl}}" data-i18n="footer.catalogue">
+          All explainers
+        </a>
+      </main>
+
+      <!-- partial:footer -->
+    </div>
+  </body>
+</html>

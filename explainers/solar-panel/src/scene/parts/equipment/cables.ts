@@ -134,8 +134,9 @@ export class CablesPart {
     this.acFlow.setShown(shown);
   }
 
-  update(deltaSeconds: number, pointSize: number): void {
-    this.dcFlow.update(deltaSeconds, pointSize);
-    this.acFlow.update(deltaSeconds, pointSize);
+  update(deltaSeconds: number, pointSize: number): boolean {
+    const direct = this.dcFlow.update(deltaSeconds, pointSize);
+    const alternating = this.acFlow.update(deltaSeconds, pointSize);
+    return direct || alternating;
   }
 }

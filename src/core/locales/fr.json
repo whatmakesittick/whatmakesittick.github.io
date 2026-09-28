@@ -1,6 +1,8 @@
 {
   "page": {
-    "skipLink": "Aller directement à l’explication"
+    "skipLink": "Aller directement à l’explication",
+    "metaTitle": "{{title}} · What makes it tick",
+    "moreExplainers": "Autres explications"
   },
   "header": {
     "language": "Langue",
@@ -11,7 +13,8 @@
     "label": "Modèle interactif",
     "gauge": "Mesures en direct",
     "expand": "Afficher le modèle en plein écran",
-    "collapse": "Revenir à l’article"
+    "collapse": "Revenir à l’article",
+    "coverAlt": "{{title}} : image fixe du modèle 3D interactif"
   },
   "controls": {
     "label": "Commandes",
@@ -40,12 +43,13 @@
     "source": "Code source",
     "license": "Licence MIT",
     "builtWith": "Réalisé avec Three.js",
-    "copyright": "© {{year}} {{title}}. Réalisé avec ♥ par <a href=\"https://github.com/veelenga\">veelenga</a>"
+    "copyright": "© {{year}} {{title}}. Réalisé avec ♥ par <a href=\"https://github.com/veelenga\">veelenga</a>",
+    "languages": "Langues"
   },
   "catalogue": {
     "title": "What makes it tick",
     "eyebrow": "Explications interactives",
-    "tagline": "Des explications interactives en 3D sur le fonctionnement des choses. Machines et phénomènes naturels, démontés et ralentis pour voir chaque pièce à l’œuvre.",
+    "tagline": "Explications interactives en 3D sur le fonctionnement des choses. Machines et phénomènes naturels, démontés et ralentis pour voir chaque pièce à l’œuvre.",
     "skipLink": "Aller aux explications",
     "listLabel": "Explications",
     "moreSoon": "D’autres explications arrivent bientôt.",
@@ -65,6 +69,11 @@
       "energy": "Énergie",
       "earth": "Terre",
       "biology": "Biologie"
-    }
+    },
+    "metaTitle": "What makes it tick : explications interactives en 3D du fonctionnement des choses"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "text": "Cette page n’existe pas ou a été déplacée. Toutes les explications sont sur la page d’accueil."
   }
 }

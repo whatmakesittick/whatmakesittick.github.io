@@ -86,9 +86,9 @@ export class MicroscopeAssembly {
     this.repaintSpecimen();
   }
 
-  update(position: number, deltaSeconds: number, cameraDistance: number): void {
-    this.parts.nosepiece.update(deltaSeconds);
+  update(position: number, deltaSeconds: number, cameraDistance: number): boolean {
     this.parts.light.update(position, cameraDistance);
+    return this.parts.nosepiece.update(deltaSeconds);
   }
 
   labelAnchors(): ReadonlyMap<string, Object3D> {

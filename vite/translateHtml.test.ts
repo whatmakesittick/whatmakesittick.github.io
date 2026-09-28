@@ -7,14 +7,23 @@ const translations: Record<string, string> = {
   label: 'Menu "today"',
   hint: 'Pick one',
   nested: '<span data-i18n-attr="title:hint">Nested</span>',
+  headline: '{{name}} · Menu',
 };
 
-const translate = (key: string) => translations[key] ?? key;
+const translate = (key: string, values: Record<string, string> = {}) =>
+  (translations[key] ?? key).replace('{{name}}', values.name ?? '');
 
 describe('translateHtml', () => {
   it('writes text keys as escaped text and keeps the marker', () => {
     expect(translateHtml('<h1 data-i18n="title">Old</h1>', translate)).toBe(
       '<h1 data-i18n="title">Fish &amp; &quot;chips&quot; &lt;b&gt;</h1>',
+    );
+  });
+
+  it('fills the placeholders of a text key with the translation of other keys', () => {
+    const html = '<title data-i18n="headline" data-i18n-values="name:label">Old</title>';
+    expect(translateHtml(html, translate)).toBe(
+      '<title data-i18n="headline" data-i18n-values="name:label">Menu &quot;today&quot; · Menu</title>',
     );
   });
 

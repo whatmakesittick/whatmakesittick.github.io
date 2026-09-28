@@ -189,8 +189,8 @@ export class WatchAssembly implements Assembly {
     if (viewChanged(previous, state, 'energy')) this.energy.setVisible(state.view.energy);
   }
 
-  update(deltaSeconds: number, cameraDistance: number): void {
-    this.energy.update(deltaSeconds, cameraDistance);
+  update(deltaSeconds: number, cameraDistance: number): boolean {
+    return this.energy.update(deltaSeconds, cameraDistance);
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {

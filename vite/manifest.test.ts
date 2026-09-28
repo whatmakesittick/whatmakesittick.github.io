@@ -69,6 +69,15 @@ describe('parseMeta', () => {
     expect(parseMeta({ meta, other: {} }, 'engine', 'en')).toEqual(meta);
   });
 
+  it('reads the optional alt text of the social image', () => {
+    const socialAlt = 'Ein Motor';
+    expect(parseMeta({ meta: { ...meta, socialAlt } }, 'engine', 'de').socialAlt).toBe(socialAlt);
+    expect(parseMeta({ meta }, 'engine', 'de').socialAlt).toBeUndefined();
+    expect(() => parseMeta({ meta: { ...meta, socialAlt: ' ' } }, 'engine', 'de')).toThrow(
+      'socialAlt',
+    );
+  });
+
   it('asks for every meta field', () => {
     expect(() => parseMeta({ meta: { ...meta, summary: '' } }, 'engine', 'uk')).toThrow('summary');
     expect(() => parseMeta({}, 'engine', 'uk')).toThrow('locales/uk.json needs a "meta" block');

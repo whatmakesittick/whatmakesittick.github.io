@@ -13,6 +13,7 @@ export const MANIFEST_FILE = 'explainer.json';
 export const PUBLIC_DIRECTORY = 'public';
 export const LOCALES_DIRECTORY = 'locales';
 
+const SOCIAL_ALT_KEY = 'socialAlt';
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const PROJECT_FOLDERS = [
   'assets',
@@ -49,6 +50,10 @@ function readString(fields: Fields, key: string, folder: string): string {
   const value = fields[key];
   if (typeof value !== 'string' || value.trim() === '') fail(folder, `"${key}" must be a string`);
   return value;
+}
+
+function readOptionalString(fields: Fields, key: string, folder: string): string | undefined {
+  return fields[key] === undefined ? undefined : readString(fields, key, folder);
 }
 
 function readSlug(fields: Fields, folder: string, reserved: ReadonlySet<string>): string {
@@ -119,7 +124,9 @@ export function parseMeta(value: unknown, folder: string, code: LanguageCode): E
   const meta = isFields(value) ? value.meta : undefined;
   if (!isFields(meta)) fail(folder, `${LOCALES_DIRECTORY}/${code}.json needs a "meta" block`);
   const entries = META_KEYS.map((key) => [key, readString(meta, key, folder)]);
-  return Object.fromEntries(entries) as ExplainerMeta;
+  const required = Object.fromEntries(entries) as ExplainerMeta;
+  const socialAlt = readOptionalString(meta, SOCIAL_ALT_KEY, folder);
+  return socialAlt === undefined ? required : { ...required, socialAlt };
 }
 
 export function readJson(file: string): unknown {

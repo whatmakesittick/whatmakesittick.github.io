@@ -1,5 +1,5 @@
 declare module 'virtual:explainer-catalogue' {
-  import type { CatalogueEntry } from '@core/manifest';
+  import type { CatalogueCard } from './catalogue';
 
-  export const entries: CatalogueEntry[];
+  export const entries: CatalogueCard[];
 }

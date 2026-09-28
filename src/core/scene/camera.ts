@@ -14,6 +14,7 @@ import { CameraTween } from './cameraTween';
 import type { CameraPose } from './frameBox';
 import { NO_SAFE_AREA, applyLens, framingSlopes } from './lens';
 import type { FramingSlopes, ViewportSize } from './lens';
+import { Listeners } from './listeners';
 
 const TARGET_FLOOR_MARGIN = 1;
 
@@ -42,6 +43,7 @@ export class CameraRig {
   private readonly sceneDistance: CameraDistance;
   private distanceOverride: CameraDistance = {};
   private viewport: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
+  private readonly changes = new Listeners<[]>();
 
   constructor(domElement: HTMLElement, options: CameraOptions = {}) {
     const { near = CAMERA_NEAR, far = CAMERA_FAR, maxPolarAngle = CAMERA_MAX_POLAR } = options;
@@ -53,6 +55,11 @@ export class CameraRig {
     this.controls.maxPolarAngle = maxPolarAngle;
     this.controls.screenSpacePanning = true;
     this.controls.addEventListener('start', this.cancelTween);
+    this.controls.addEventListener('change', this.notifyChange);
+  }
+
+  onChange(listener: () => void): () => void {
+    return this.changes.add(listener);
   }
 
   setViewport(size: ViewportSize): void {
@@ -69,16 +76,19 @@ export class CameraRig {
     this.boundsRadius = bounds.getBoundingSphere(new Sphere()).radius;
     this.floorHeight = floorHeight;
     this.updateDistanceLimits();
+    this.notifyChange();
   }
 
   setDistanceLimits(limits: CameraDistance): void {
     this.distanceOverride = limits;
     this.updateDistanceLimits();
+    this.notifyChange();
   }
 
   follow(anchor: Object3D | null): void {
     this.anchor = anchor;
     this.syncAnchor();
+    this.notifyChange();
   }
 
   jumpTo(pose: CameraPose): void {
@@ -93,6 +103,7 @@ export class CameraRig {
     this.tween = new CameraTween(from, pose);
     this.controls.enableDamping = false;
     this.syncAnchor();
+    this.notifyChange();
   }
 
   update(deltaSeconds: number): void {
@@ -104,8 +115,12 @@ export class CameraRig {
 
   dispose(): void {
     this.controls.removeEventListener('start', this.cancelTween);
+    this.controls.removeEventListener('change', this.notifyChange);
+    this.changes.clear();
     this.controls.dispose();
   }
+
+  private readonly notifyChange = (): void => this.changes.notify();
 
   private readonly cancelTween = (): void => {
     if (!this.tween) return;

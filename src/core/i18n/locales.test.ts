@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ExplainerManifest } from '../manifest';
-import { META_KEYS, TAGS } from '../manifest';
+import { META_KEYS, TAGS, descriptionLimit } from '../manifest';
 import { DEFAULT_LANGUAGE, LANGUAGES } from './languages';
 import type { Dictionary } from './resources';
 
@@ -57,6 +57,14 @@ const manifests = import.meta.glob<ExplainerManifest>('/explainers/*/explainer.j
 });
 
 describe('core locales', () => {
+  it.each(LANGUAGES.map((language) => language.code))(
+    '%s tagline fits a search snippet',
+    (code) => {
+      const tagline = flatten(coreLocales?.get(code) ?? {}).get('catalogue.tagline') ?? '';
+      expect(tagline.length, tagline).toBeLessThanOrEqual(descriptionLimit(code));
+    },
+  );
+
   const english = coreLocales?.get(DEFAULT_LANGUAGE) ?? {};
 
   it('labels every tag of the vocabulary and nothing else', () => {
@@ -90,5 +98,10 @@ describe.each(Object.values(manifests).map((manifest) => [manifest.slug, manifes
       '%s matches the English keys',
       (code) => expectSameShape(locales.get(code) ?? {}, english),
     );
+
+    it.each(manifest.locales)('%s description fits a search snippet', (code) => {
+      const description = flatten(locales.get(code) ?? {}).get('meta.description') ?? '';
+      expect(description.length, description).toBeLessThanOrEqual(descriptionLimit(code));
+    });
   },
 );

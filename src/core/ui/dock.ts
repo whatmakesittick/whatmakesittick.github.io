@@ -9,6 +9,8 @@ import { watchLocalized } from './subscribe';
 import { bindViewToggles, createViewToggles } from './viewToggles';
 
 const PHASE_COLUMNS_PROPERTY = '--phase-columns';
+const PLAY_KEY = 'controls.play';
+const PAUSE_KEY = 'controls.pause';
 
 function bindPlayButton(button: HTMLButtonElement, store: ExplainerStore): void {
   button.addEventListener('click', () => store.getState().togglePlaying());
@@ -16,8 +18,10 @@ function bindPlayButton(button: HTMLButtonElement, store: ExplainerStore): void 
     store,
     (state) => state.playing,
     (playing) => {
+      const key = playing ? PAUSE_KEY : PLAY_KEY;
       button.dataset.playing = String(playing);
-      button.setAttribute('aria-label', t(playing ? 'controls.pause' : 'controls.play'));
+      button.dataset.i18nAttr = `aria-label:${key}`;
+      button.setAttribute('aria-label', t(key));
     },
   );
 }
@@ -90,4 +94,5 @@ export function mountDock<S extends Playback>(
   mountExtras(dock, store, explainer);
   bindCameraReset(requireElement<HTMLButtonElement>(dock, '[data-control="reset-camera"]'), store);
   bindDisclosure(dock, requireElement<HTMLButtonElement>(dock, '[data-control="more"]'));
+  dock.style.removeProperty('visibility');
 }

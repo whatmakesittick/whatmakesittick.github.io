@@ -37,9 +37,11 @@ export class SolarPanelController {
     this.assembly?.setState(state);
   }
 
-  update(deltaSeconds: number): void {
+  update(deltaSeconds: number): boolean {
     const { camera, controls } = this.dependencies.rig;
-    this.assembly?.update(deltaSeconds, camera.position.distanceTo(controls.target));
+    return (
+      this.assembly?.update(deltaSeconds, camera.position.distanceTo(controls.target)) ?? false
+    );
   }
 
   dispose(): void {

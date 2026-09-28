@@ -3,6 +3,7 @@ import i18next from 'i18next';
 import { NAMESPACE, TRANSLATION_OPTIONS } from '../src/core/i18n/config.ts';
 import { LANGUAGES } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
+import type { TranslationValues } from '../src/core/i18n/markup.ts';
 import { mergeDictionaries } from '../src/core/i18n/resources.ts';
 import type { Dictionary } from '../src/core/i18n/resources.ts';
 import { readJson } from './manifest.ts';
@@ -10,7 +11,7 @@ import { readJson } from './manifest.ts';
 export const CORE_LOCALES_DIRECTORY = join('src', 'core', 'locales');
 
 export type Dictionaries = Partial<Record<LanguageCode, Dictionary>>;
-export type Translate = (key: string) => string;
+export type Translate = (key: string, values?: TranslationValues) => string;
 
 export interface PageLanguage {
   code: LanguageCode;
@@ -52,5 +53,5 @@ export function pageLanguage(dictionaries: Dictionaries, code: LanguageCode): Pa
     lng: code,
     resources: resources(dictionaries),
   });
-  return { code, translate: (key) => instance.t(key) };
+  return { code, translate: (key, values) => instance.t(key, values) };
 }

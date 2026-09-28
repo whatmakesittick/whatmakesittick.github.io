@@ -121,10 +121,11 @@ export class SynthaseAssembly implements Assembly {
     this.applyMotion();
   }
 
-  update(deltaSeconds: number, _cameraDistance: number): void {
-    if (!this.blur.update(deltaSeconds, this.state.degreesPerSecond)) return;
+  update(deltaSeconds: number, _cameraDistance: number): boolean {
+    if (!this.blur.update(deltaSeconds, this.state.degreesPerSecond)) return false;
     this.hero.rotor.setRingShown(!this.blur.ringBlurred);
     if (this.state.view.flow) this.placeFlow();
+    return true;
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {

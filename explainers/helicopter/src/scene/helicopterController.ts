@@ -3,7 +3,7 @@ import type { SceneShell } from '@core/scene/shell';
 import { FORWARD_SHARE } from '../model';
 import type { CameraView, HelicopterState, ViewOptions } from '../state';
 import { VIEWS } from './cameraViews';
-import { SETTLE_RATE } from './constants';
+import { SETTLED_SHARE, SETTLE_RATE } from './constants';
 import { HelicopterAssembly } from './helicopterAssembly';
 import type { RegionId } from './regions';
 
@@ -18,7 +18,8 @@ interface Settled {
 }
 
 function approach(current: number, target: number, blend: number): number {
-  return current + (target - current) * blend;
+  const next = current + (target - current) * blend;
+  return Math.abs(target - next) < SETTLED_SHARE ? target : next;
 }
 
 export class HelicopterController {
@@ -54,19 +55,26 @@ export class HelicopterController {
     this.assembly?.setFlowVisible(view.flow);
   }
 
-  update(state: HelicopterState, deltaSeconds: number): void {
-    if (!this.assembly) return;
+  update(state: HelicopterState, deltaSeconds: number): boolean {
+    if (!this.assembly) return false;
     const blend = 1 - Math.exp(-SETTLE_RATE * deltaSeconds);
-    this.settled = {
-      collective: approach(this.settled.collective, state.collective, blend),
-      forward: approach(this.settled.forward, FORWARD_SHARE[state.flightMode], blend),
+    const target: Settled = {
+      collective: state.collective,
+      forward: FORWARD_SHARE[state.flightMode],
     };
-    this.assembly.update({
+    this.settled = {
+      collective: approach(this.settled.collective, target.collective, blend),
+      forward: approach(this.settled.forward, target.forward, blend),
+    };
+    const flowing = this.assembly.update({
       azimuth: state.phase,
       rpm: state.speed,
       deltaSeconds,
       ...this.settled,
     });
+    const settling =
+      this.settled.collective !== target.collective || this.settled.forward !== target.forward;
+    return flowing || settling;
   }
 
   dispose(): void {

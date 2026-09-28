@@ -1,4 +1,5 @@
 import { EMPHASIS_RATE } from './constants';
+import { Listeners } from './listeners';
 import type { MaterialLibrary } from './materials';
 
 const SETTLE_EPSILON = 0.002;
@@ -10,6 +11,7 @@ export class Highlighter {
   private readonly groups: readonly string[];
   private readonly targets = new Map<string, number>();
   private readonly current = new Map<string, number>();
+  private readonly changes = new Listeners<[]>();
 
   constructor(library: MaterialLibrary, groups: readonly string[]) {
     this.library = library;
@@ -23,6 +25,11 @@ export class Highlighter {
       const emphasised = !dimOthers || highlighted.has(group);
       this.targets.set(group, emphasised ? FULL_EMPHASIS : DIMMED_EMPHASIS);
     });
+    this.changes.notify();
+  }
+
+  onChange(listener: () => void): () => void {
+    return this.changes.add(listener);
   }
 
   update(deltaSeconds: number): boolean {

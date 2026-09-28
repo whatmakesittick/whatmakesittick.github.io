@@ -3,7 +3,8 @@
     "title": "Cómo vuela un planeador",
     "eyebrow": "Un vuelo a vela, acelerado",
     "tagline": "Un planeador no tiene motor y siempre va bajando a través del aire, pero aun así sube cuando encuentra aire que asciende más rápido de lo que él desciende: las térmicas, el viento que trepa por una montaña y las ondas que se forman detrás de ella.",
-    "description": "Un vuelo a vela interactivo y acelerado en un planeador moderno: por qué no se cae, cómo las térmicas y las nubes delatan el aire que sube, y cómo la ascendencia de ladera y las ondas de montaña lo llevan más alto.",
+    "description": "Un vuelo a vela interactivo y acelerado: por qué el planeador no cae, cómo térmicas y nubes delatan el aire que sube y cómo laderas y ondas lo elevan.",
+    "socialAlt": "Modelo 3D low poly de un planeador blanco con las puntas de las alas naranjas, volando ante una cresta de montaña verde, junto al título «Cómo vuela un planeador»",
     "summary": "Mantenerse en el aire sin motor: planeo, térmicas, nubes, laderas y ondas."
   },
   "stage": {

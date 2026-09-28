@@ -11,6 +11,7 @@ at `/<slug>/`.
 | Path                      | Owns                                                                            |
 | ------------------------- | ------------------------------------------------------------------------------- |
 | `index.html`, `src/site/` | Catalogue page: cards newest first, a tag filter, language dropdown             |
+| `404.html`                | The page GitHub Pages serves for a missing path, filled by the build            |
 | `src/core/`               | Everything an explainer builds on (see below)                                   |
 | `src/core/page.html`      | The explainer page template: masthead, stage, gauge, dock, prose column, footer |
 | `src/core/partials/`      | Markup shared by the template and the catalogue: header actions, footer         |
@@ -19,7 +20,7 @@ at `/<slug>/`.
 | `vite/`                   | The `explainerPages` plugin: manifests, language pages, crawl files, catalogue  |
 | `e2e/`                    | Browser smoke test run by Playwright against the production build               |
 | `public/`                 | Site-wide static files: favicon, icons, web manifest, catalogue link preview    |
-| `scripts/`                | Social images: `social-images.sh` renders `scripts/cards/*.html`                |
+| `scripts/`                | `social-images.sh` renders the icons, `favicon.ico` and `scripts/cards/*.html`  |
 | `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`, `smoke.yml` by hand          |
 
 Generated at build and dev time, never committed: `<slug>/index.html` and
@@ -41,7 +42,8 @@ explainers/engine/
   explainer.json      slug, tags, cover, entry, chapters, locales, social
   chapters.html       the prose column: <section class="chapter" data-preset="…"> blocks
   locales/en.json …   everything the explainer says, including meta.title, meta.eyebrow,
-                      meta.tagline, meta.description, meta.summary
+                      meta.tagline, meta.description, meta.summary and the optional
+                      meta.socialAlt
   src/index.ts        export default defineExplainer({ … }), imports src/style.css
   src/style.css       styles for the explainer's own widgets and tones
   src/model/          pure simulation, unit tested
@@ -73,7 +75,8 @@ from `TAGS` in `src/core/manifest.ts`: mechanics, engines, vehicles, aircraft,
 flight, physics, weather, home, tools, optics, energy, earth and biology. Every tag has a label under
 `catalogue.tags.<id>` in all eight core locales, which a test enforces, so a new
 tag goes into `TAGS` and every core locale together. `cover` and `social.image` are paths inside `public/`;
-the social image is 1200 × 630. The plugin validates all of this and fails the
+the social image is 1200 × 630. The page head describes it with `meta.socialAlt` from the
+page's locale when the locale has it, and with `social.alt` otherwise. The plugin validates all of this and fails the
 build with the manifest's path in the message.
 
 The explainer imports the toolkit through the `@core/*` alias, which resolves to
@@ -199,10 +202,21 @@ the keyboard (space, arrows, digits for phases, R, X and Escape for full screen,
 choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
 safe area. Then it builds the scene host from the
 explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
-scene, camera rig, label layer, highlighter, materials, textures, stage, lighting
-and `onFrame(update)`. Core owns the frame loop: each frame it ticks the store,
-runs the explainer's frame updates, eases the highlighter and the camera, hides
-the labels whose anchor is out of sight, renders and lays out the labels. `onFrame` and `viewport.onResize` return a function that
+scene, camera rig, label layer, highlighter, materials, textures, stage, lighting,
+`onFrame(update)` and `invalidate()`. Before the first frame the host compiles
+every material in the scene with `renderer.compileAsync`, so the shaders build in
+parallel while the page stays responsive; three's shader error checks run in dev
+only, since their queries stall the first frame. Core owns the frame loop and
+draws on demand: a frame runs only when something asked for one. In a frame it
+ticks the store, runs the explainer's frame updates, eases the highlighter and the
+camera, hides the labels whose anchor is out of sight, renders and lays out the
+labels. A store change, a camera move (orbit, zoom, damping, a tween), a resize, a
+label change, a highlight fade or `invalidate()` asks for the next frame, so a
+playing explainer draws every frame and a paused, still one draws nothing. A frame
+update returns `true` while something it draws keeps moving on its own, such as
+flowing particles or a settling ease, and the loop then draws the next frame too;
+an explainer that changes the scene outside a frame and outside the store calls
+`invalidate()`. `onFrame` and `viewport.onResize` return a function that
 removes the listener; the unmount that `mountScene` returns calls it.
 
 The round button in the stage's top-right corner shows the model full screen
@@ -277,7 +291,9 @@ it to hide the label and 1.5 % to keep it hidden, and the new verdict must hold 
 a grazing edge does not make it blink. The pass runs at most every fourth frame
 and only when the camera, a shown anchor or the highlight moved, when the shown
 labels or the anchors change, or while a verdict is pending; a label that starts
-showing gets its verdict before its first frame. `OcclusionRays` builds a bounds
+showing gets its verdict before its first frame. `update` returns `true` while a
+verdict is pending or the last pass saw motion, and the shell keeps asking for
+frames until it settles. `OcclusionRays` builds a bounds
 tree with `three-mesh-bvh` for a mesh of 64 triangles or more the first time a ray
 reaches it, one tree per pass, and leaves the geometry untouched. The layer keeps
 what the policy asked for in `wanted()` and shows it minus the occluded labels;
@@ -339,6 +355,11 @@ on, the preset's labels otherwise, and those stay pinned either way.
 | `prepare`   | Optional step before framing, so a `startAt` preset frames a fresh pose |
 | `onView`    | Applies the view toggles to the scene                                   |
 | `highlight` | Optional parts to highlight in place of the preset's                    |
+
+The label layer places each label from its anchor projected with the camera and
+from the size of its text, which a `ResizeObserver` measures when the text first
+shows and whenever it changes with the language or a font; layout never reads the
+DOM, so a frame forces no style or layout work. A new size asks for a frame.
 
 `createLabelVisibility(shell, priority)` wraps `LabelVisibility` as a label
 policy: it follows the viewport size, updates every frame and `dispose` removes
@@ -404,7 +425,10 @@ The dock's jump chips sit under the scrubber's coloured bands. `phaseColumns` in
 `src/core/ui/phases.ts` gives each phase a grid column sized by its share of the
 cycle, and the dock sets it as `--phase-columns`. `--phase-min-width` on
 `.phase-buttons` is `max-content`, so a chip never cuts its label: where a short
-phase has no room for it, its chip is a little wider than its band.
+phase has no room for it, its chip is a little wider than its band. A chip's
+accessible name is its visible label; `jumpLabelKey` becomes its `title`. The dock
+stays hidden until `mountDock` has added the explainer's choices and toggles, so it
+never grows in front of the reader.
 
 ## Build
 
@@ -416,9 +440,10 @@ slash and regenerates the pages when a manifest, chapters, locale, template, par
 or the root `index.html` is added, changed or removed. A failed regeneration is
 logged and shown in the error overlay, and the next change retries it. At build it
 emits the same files into `dist/<slug>/`. It also serves
-`virtual:explainer-catalogue`: every manifest with the `meta` block of each shipped
-language and its publish date, newest first, so the catalogue never bundles an
-explainer's full copy.
+`virtual:explainer-catalogue`: newest first, one card per explainer with its slug,
+tags, cover, languages, publish date and the title, eyebrow and summary of each
+shipped language. The build prerenders the catalogue from the same list, and the
+catalogue bundles only what a card shows.
 
 Every page is prerendered in every language it ships. English stays at `/<slug>/`
 and `/`; any other language lives at `/<lang>/<slug>/` and `/<lang>/`, where the
@@ -428,56 +453,120 @@ build and the runtime. A page is rendered in two steps:
 
 1. `vite/page.ts` expands the `<!-- partial:name -->` markers and fills the
    `{{token}}` values of `src/core/page.html` or the root `index.html`: `lang`, the
-   translated title, description, eyebrow and tagline, the catalogue path in the
+   translated title, description, eyebrow and tagline, the document title
+   (`documentTitle`: `page.metaTitle` with the explainer's title, "How a solar panel works ·
+   What makes it tick", or `catalogue.metaTitle`), the catalogue path in the
    page's language (`catalogueUrl`, `/` or `/<lang>/`), the canonical URL of the page
    itself, `og:locale` with the other languages as alternates, the Open Graph and
-   Twitter tags, one `<link rel="alternate" hreflang>` per language variant plus
-   `x-default` for the English page, and the JSON-LD.
+   Twitter tags (`og:type` is `article` on an explainer page, with its dates as
+   `article:published_time` and `article:modified_time`, and `website` on the catalogue), one `<link rel="alternate" hreflang>` per language variant plus
+   `x-default` for the English page, the JSON-LD, and the cover with its alt text
+   (`stage.coverAlt` with the title) in a `<noscript>` inside `#scene`, so a reader or
+   crawler without scripts sees the model as a still image. The footer's
+   `{{languageLinks}}` lists one `<a hreflang lang>` per language the page ships, with the
+   native language names from `src/core/i18n/languages.ts` and `aria-current="page"` on the
+   page's own language, so the HTML links every language version without scripts.
+   On a catalogue page the grid itself is prerendered too (see "Catalogue").
+   The head's `{{languageRedirect}}` holds the inline language redirect on an English page
+   (see "Translations") and nothing elsewhere.
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
-   element, in that order, the way `translateDom` does at runtime. The markers stay,
+   element, in that order, the way `translateDom` does at runtime. A `data-i18n` element
+   may carry `data-i18n-values="name:key"`, which fills the `{{name}}` placeholder with the
+   translation of `key`; the `<title>` composes the explainer's title this way, so an
+   in-place language switch sets the same composed title. The markers stay,
    so the runtime can still switch languages. `vite/i18n.ts` builds an i18next
    instance per page from the same resources the runtime loads, the core locale
    merged with the explainer locale and English as the fallback, and the same
    options from `src/core/i18n/config.ts`, so interpolation and placeholders behave
    identically.
 
+The root `404.html` is filled the same way in English, like the root `index.html` in
+`transformIndexHtml`, and is a Rollup input, so it is emitted as `dist/404.html`, which
+GitHub Pages serves for every missing path; the dev server serves it at `/404.html`. It
+has the masthead with the site link, `notFound.title` and `notFound.text`, a link to the
+catalogue and the shared footer, whose language links lead to the catalogue in every
+language. It carries `<meta name="robots" content="noindex">`, no canonical link and no
+script, stays out of the sitemap, and imports the core and catalogue styles inside an
+inline `<style>`, which Vite inlines, so the page needs no other request and never joins
+the `shared` chunk.
+
 Only the HTML is per language. Every language page of an explainer loads the same
 `/<slug>/main.ts`, and every catalogue page loads `/src/site/main.ts`, so the
-scripts, styles and images are shared. The `shared` chunk is limited to
-`src/core`, `node_modules` and Vite's helpers: with several pages per explainer,
-"used by two pages" no longer means "used by two explainers".
+scripts, styles and images are shared. Code used by two pages is split into
+three chunks. `three` is Three.js. `scene` is `src/core/scene`, `three-mesh-bvh` and
+every core module that imports them, such as `mount.ts`: `dependsOn` in
+`vite/chunks.ts` follows a module's static imports. `shared` is the rest of
+`src/core`, `node_modules` and Vite's helpers, so it never imports `scene` or
+`three`, and the catalogue loads neither. Both groups are limited to `src/core`,
+`node_modules` and Vite's helpers: with several pages per explainer, "used by two
+pages" no longer means "used by two explainers".
 
 The generated `<slug>/main.ts` imports the explainer's `en.json` and passes
 `mountExplainer` a loader per shipped language: `en` resolves the bundled copy,
 every other language is a dynamic `import()`, so Vite emits one chunk per language
-and the page chunk carries English only.
+and the page chunk carries English only. Vite preloads static imports only, so at
+build `vite/preloads.ts` puts a `<link rel="modulepreload">` before the module
+scripts of every page in another language for each language chunk it loads on
+start: the explainer's locale and the core locale, or the core locale alone on a
+catalogue page. The dev server goes without them.
 
 ### Crawl files and structured data
 
 `vite/crawl.ts` builds `sitemap.xml` and `robots.txt` from the manifests: they are
 emitted at build and served by the dev server, never committed. The sitemap lists
 every page in every language, each with `xhtml:link` alternates for all its language
-variants and `x-default`, and a `lastmod` for explainer pages. `robots.txt` allows
-every crawler and points at the sitemap.
+variants and `x-default`, and a `lastmod`: an explainer page's `dateModified`, and for
+the catalogue the newest `dateModified` among the explainers. `robots.txt` allows
+every crawler and points at the sitemap. `public/favicon.ico` holds the favicon at 16 and
+32 pixels for browsers and crawlers that ask for it: `scripts/social-images.sh` renders
+`public/favicon.svg` at both sizes and `scripts/favicon-ico.ts` packs the PNG files with
+`encodeIco` from `vite/ico.ts`. Every page links it after the SVG icon.
 
-`vite/structuredData.ts` writes the JSON-LD. An explainer page is a `WebPage` and
+`vite/structuredData.ts` writes the JSON-LD, a `@graph` on every page that starts with
+the same `WebSite` node, whose `@id` is `https://whatmakesittick.github.io/#website`; every
+page points at it with `isPartOf`. An explainer page is a `WebPage` and
 `TechArticle` with its translated title and description, its own URL, `inLanguage`,
-the author, and `datePublished` and `dateModified`. `vite/dates.ts` reads them with
+the author, `datePublished` and `dateModified`, and as `image` the social image
+(1200 × 630) and the cover (932 × 699). A `BreadcrumbList` leads from the catalogue in the
+page's language to the explainer. `vite/dates.ts` reads them with
 git: the first and the last commit that touched `explainers/<slug>/`. Without git
 history, or in a shallow clone, both fall back to the build date, which is why the
-workflows check out with `fetch-depth: 0`. The catalogue carries a `@graph` of a
-`WebSite` and an `ItemList` of the explainers in catalogue order, newest first, each linked to its
-page in the catalogue's language, or in English when the explainer does not ship it.
+workflows check out with `fetch-depth: 0`. Each catalogue page is a `CollectionPage` in
+its language whose `mainEntity` is an `ItemList` of the explainers in catalogue order,
+newest first, each linked to its page in the catalogue's language, or in English when the
+explainer does not ship it.
+
+### Site check
+
+`vite/siteCheckPlugin.ts` reads `dist/` after every build and fails it when a page breaks a
+rule in `vite/siteCheck.ts`: the `lang` of the page, a title with the site name, a
+description within `descriptionLimit` of its language, the canonical URL, hreflang links with
+`x-default` and the page itself, one JSON-LD block that parses, one `h1`, no external
+stylesheet and no Google Fonts host, a gzipped JavaScript budget (`JS_BUDGET_GZIP`, summed
+over the module scripts and preloads of the page and their static imports), no three.js chunk
+on a catalogue page, a `modulepreload` on every translated page, one card per explainer on the
+catalogue, the noscript cover and the more-explainers links on an explainer page, a sitemap
+that lists exactly the built pages, `robots.txt`, a `noindex` 404 page without scripts and a
+real `favicon.ico`. When it fails, fix the page rather than the rule, and raise a budget only
+with a measurement.
 
 ## Catalogue
 
-`src/site` renders the catalogue at runtime into `[data-catalogue]`: a row of
-tag chips and one flat grid of cards, newest first by `compareNewestFirst` from
-`src/core/manifest.ts`, the same order the build uses for the `ItemList`. Each
-card is an `a.card` with the cover, eyebrow, title, summary and action, and its
-tags as small chips laid over the bottom of the cover. The chips sit beside the
-link in the card's `li`, never inside it, so each one is a button of its own.
+The catalogue is prerendered into `[data-catalogue]`: a row of tag chips and one
+flat grid of cards, newest first by `compareNewestFirst` from
+`src/core/manifest.ts`, the same order the build uses for the `ItemList`.
+`renderCatalogueGrid` in `src/site/catalogueMarkup.ts` writes it as a string
+without touching the DOM, so the build and the runtime share one renderer:
+`vite/page.ts` fills the grid of every catalogue page in its language, and at
+runtime `src/site` hydrates it, binding the chips to the cards already there. The
+grid carries its language in `data-language`; the runtime renders it again only
+when that is not the page's language, as after an old `?lang=` link. Each card is
+an `a.card` with the cover, eyebrow, title and summary, and its tags as small
+chips below. The chips sit beside the link in the card's `li`, never inside it, so
+each one is a button of its own. Every cover is 932 × 699 and says so in its
+`width` and `height`; the first three load at once with `fetchpriority="high"`,
+the rest lazily.
 
 The filter row offers "All" and every tag at least one explainer uses, in
 vocabulary order. It selects one tag at a time: a tag chip, in the row or on a
@@ -488,8 +577,8 @@ hidden rather than rebuilt, so focus stays on the chip. The pure part lives in
 helpers. The selection is kept in the URL as `?tag=<id>` with `replaceState`, so a
 filtered view can be shared; it is read on load on the English and every language
 page, and a tag the catalogue does not offer is dropped from the URL. The language
-dropdown and the language redirect keep the query, since `languageUrl` drops only
-`lang`.
+dropdown keeps the query, since `languageUrl` drops only `lang`, and so does the
+language redirect.
 
 Every page links back to the catalogue: the explainer masthead shows the site name
 as a link above the eyebrow, and the shared footer has an "All explainers" link
@@ -499,6 +588,16 @@ as a link above the eyebrow, and the shared footer has an "All explainers" link
 `catalogueHref` from `src/core/i18n/paths.ts`, which adds the base path and keeps a
 `?lang=` query, so an English page translated by the query opens the English
 catalogue in the same language.
+
+Explainers also link to each other. After the chapters, every explainer page ends
+with "More explainers" (`page.moreExplainers`): three other explainers as small
+cards with the cover and the title in the page's language, each linked like a
+catalogue card, to its page in that language when it ships it and to the English
+page otherwise. `pickMoreExplainers` in `vite/moreExplainers.ts` ranks the others
+by how many tags they share with the page, the newest first among equals. The
+build fills the list into the `{{moreExplainers}}` hook of `src/core/page.html`
+with the cover and link helpers of `src/site/catalogueMarkup.ts`; the runtime
+leaves it alone.
 
 ## Translations
 
@@ -514,21 +613,31 @@ falls back to its `en` copy. An explainer must ship `en.json`; any other languag
 it ships must have the same keys, placeholders and markup, which a test enforces
 per explainer. The catalogue reads `meta.title`, `meta.eyebrow` and `meta.summary`
 of every explainer from `virtual:explainer-catalogue`, and the page head uses
-`meta.title` and `meta.description`.
+`meta.title` and `meta.description`, with `page.metaTitle` around the title in the
+`<title>`.
 
 The build prerenders each language (see "Build"), so the HTML a crawler fetches is
 already in the page's language. Detection prefers the `/<lang>/` path prefix, then
 the `?lang=` query, kept for old links and translated at runtime, then the stored
-choice and the browser language. On an English URL without `?lang=`, when the stored
-choice or the browser picks another language the page ships, `languagePageToOpen` in
-`src/core/i18n/redirect.ts` sends the reader to that language page with
-`location.replace` before anything mounts, so the back button still works. A
-language page never redirects, so the English page redirects at most once, and a
-crawler with an English browser and nothing stored stays on the English page. The language dropdown opens the same page in the
+choice and the browser language. Detection never stores what it finds, so a visit
+to a shared `/uk/` link does not change later visits; only the language dropdown
+writes the stored choice. On an English URL without `?lang=`, when the stored
+choice or the browser picks another language the page ships, the page opens that
+language page with `location.replace` from an inline script at the top of its
+head, before any style, font or module loads, so the reader never sees the English
+page first and the back button still works. The script is
+`src/core/i18n/redirectScript.ts`, bundled and minified by `vite/redirectScript.ts`
+with the site's base path to under 1 kB; it reads the page's languages from its
+own `data-languages` attribute and decides with `languagePageUrl` and
+`languagePageToOpen` from `src/core/i18n/redirect.ts`. A test runs the bundled
+script itself. A language page carries no redirect, so the English page redirects
+at most once, and a crawler with an English browser and nothing stored stays on
+the English page. The language dropdown opens the same page in the
 chosen language with a full navigation, to `/<lang>/<slug>/` or to the English page
 for `en`, so the URL, the head and the content always agree. It stores the choice
 first, so picking English on an English URL is not overridden by an earlier
-language. A language the page does not ship switches in place instead. Catalogue
+language; the footer's language links store the language they open in the same way
+(`mountFooter`). A language the page does not ship switches in place instead. Catalogue
 cards link to the explainer in the current language when it ships it, and to the
 English page otherwise.
 
@@ -536,9 +645,15 @@ English page otherwise.
 
 Kept from the engine: TypeScript strict, ESLint and Prettier over the repository,
 Vitest for pure modules, happy-dom for `*.dom.test.ts` files, no comments by
-default, no all-caps text, `data-i18n`, `data-i18n-html` and `data-i18n-attr` for
-copy, tokens in `src/core/style.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
+default, no all-caps text, `data-i18n`, `data-i18n-html`, `data-i18n-attr` and
+`data-i18n-values` for copy, tokens in `src/core/style.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
 (`vite/`, `src/core/manifest.ts`) import with explicit `.ts` extensions.
+
+Fonts are self-hosted. `src/core/style.css` imports Inter (variable) and JetBrains
+Mono 400 and 500 from Fontsource, so Vite emits hashed woff2 files and each page
+downloads only the `unicode-range` subsets its text uses. Chinese and Japanese pages
+keep Inter for Latin glyphs and use the system CJK fonts for the rest. No page loads
+fonts from a third party.
 
 `npm run test:e2e` runs the Playwright smoke test in `e2e/` against `vite preview`
 of `dist/`, so build first and run `npx playwright install chromium` once. Chromium

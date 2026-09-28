@@ -2,13 +2,15 @@
 <html lang="{{lang}}">
   <head>
     <meta charset="UTF-8" />
+    {{languageRedirect}}
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0b0d10" />
     <meta name="description" content="{{description}}" data-i18n-attr="content:catalogue.tagline" />
-    <title data-i18n="catalogue.title">{{title}}</title>
+    <title data-i18n="catalogue.metaTitle">{{documentTitle}}</title>
     <link rel="canonical" href="{{url}}" />
     {{alternateLinks}}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta property="og:type" content="website" />
@@ -38,12 +40,13 @@
     <script type="application/ld+json">
       {{structuredData}}
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
-    />
+    <noscript>
+      <style>
+        .language-select {
+          display: none;
+        }
+      </style>
+    </noscript>
   </head>
   <body>
     <a class="skip-link" href="#catalogue" data-i18n="catalogue.skipLink">
@@ -69,7 +72,9 @@
         data-catalogue
         aria-label="Explainers"
         data-i18n-attr="aria-label:catalogue.listLabel"
-      ></main>
+      >
+        {{catalogue}}
+      </main>
 
       <!-- partial:footer -->
     </div>

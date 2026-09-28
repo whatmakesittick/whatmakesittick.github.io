@@ -1,9 +1,21 @@
 import { t } from './index';
-import { ATTRIBUTES_ATTRIBUTE, HTML_ATTRIBUTE, TEXT_ATTRIBUTE, parseAttributeKeys } from './markup';
+import {
+  ATTRIBUTES_ATTRIBUTE,
+  HTML_ATTRIBUTE,
+  TEXT_ATTRIBUTE,
+  VALUES_ATTRIBUTE,
+  parseAttributeKeys,
+  translateValues,
+} from './markup';
+
+function translateText(element: HTMLElement, key: string): string {
+  const values = translateValues(element.getAttribute(VALUES_ATTRIBUTE) ?? '', (name) => t(name));
+  return t(key, values);
+}
 
 export function translateDom(root: ParentNode): void {
   root.querySelectorAll<HTMLElement>(`[${TEXT_ATTRIBUTE}]`).forEach((element) => {
-    element.textContent = t(element.getAttribute(TEXT_ATTRIBUTE) ?? '');
+    element.textContent = translateText(element, element.getAttribute(TEXT_ATTRIBUTE) ?? '');
   });
   root.querySelectorAll<HTMLElement>(`[${HTML_ATTRIBUTE}]`).forEach((element) => {
     element.innerHTML = t(element.getAttribute(HTML_ATTRIBUTE) ?? '');

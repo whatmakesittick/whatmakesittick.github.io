@@ -25,7 +25,7 @@ const HELIDECK_PAINT = {
 const LABEL_PAINT = {
   fill: 'rgba(250, 248, 240, 0.92)',
   text: '#1f2328',
-  font: '600 44px "Inter", "Helvetica Neue", Arial, sans-serif',
+  font: '600 44px "Inter Variable", "Helvetica Neue", Arial, sans-serif',
   radius: 20,
   padding: 12,
 } as const;

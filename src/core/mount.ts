@@ -10,14 +10,14 @@ import { mountDock } from './ui/dock';
 import { requireElement } from './ui/dom';
 import { mountFooter } from './ui/footer';
 import { mountKeyboard } from './ui/keyboard';
-import { mountLanguage, openPreferredLanguagePage } from './ui/language';
+import { mountLanguage } from './ui/language';
 import { respectReducedMotion } from './ui/motion';
 import { mountReadouts } from './ui/readouts';
 import { mountSafeArea } from './ui/safeArea';
 import { mountSections } from './ui/sections';
 import { mountStageExpansion, stageShortcuts } from './ui/stageExpansion';
 
-const TITLE_KEY = 'meta.title';
+const SITE_NAME_KEY = 'catalogue.title';
 const SCENE_SELECTOR = '#scene';
 
 function mountScene<S extends Playback>(
@@ -31,7 +31,7 @@ function mountScene<S extends Playback>(
     explainer.scene,
   );
   const unmount = explainer.mountScene(host.shell, store);
-  host.start((deltaSeconds) => store.getState().tick(deltaSeconds));
+  host.start(store);
   return () => {
     unmount();
     host.dispose();
@@ -44,14 +44,13 @@ export async function mountExplainer<S extends Playback>(
 ): Promise<() => void> {
   await initI18n(locales);
   const languages = shippedLanguages(locales);
-  if (openPreferredLanguagePage(languages)) return () => {};
   const store = explainer.createStore();
   respectReducedMotion(store);
   mountDock(document, store, explainer);
   mountReadouts(document, store, explainer.readouts);
   mountLanguage(document, languages);
   mountCatalogueLinks(document);
-  mountFooter(document, TITLE_KEY);
+  mountFooter(document, SITE_NAME_KEY);
   explainer.mountUi?.(document, store);
   mountActions(document, store, explainer.actions);
   const stage = mountStageExpansion(document);

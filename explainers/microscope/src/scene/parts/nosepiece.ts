@@ -92,11 +92,13 @@ export class Nosepiece {
     this.applyCut();
   }
 
-  update(deltaSeconds: number): void {
+  update(deltaSeconds: number): boolean {
     const step = wrapAngle(turnFor(this.active) - this.angle);
+    const turning = Math.abs(step) >= SETTLED_RADIANS;
     const blend = 1 - Math.exp(-NOSEPIECE.turnRate * deltaSeconds);
-    this.angle += Math.abs(step) < SETTLED_RADIANS ? step : step * blend;
+    this.angle += turning ? step * blend : step;
     this.spinner.rotation.y = this.angle;
+    return turning;
   }
 
   snap(): void {

@@ -1,5 +1,5 @@
 import { Color } from 'three';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Highlighter } from './highlight';
 import { MaterialLibrary, STRUCTURE_GROUP, UNDIMMED_GROUP } from './materials';
 
@@ -30,6 +30,16 @@ describe('Highlighter', () => {
     highlighter.setHighlight([]);
     settle(highlighter);
     expect(library.emphasisOf('tail')).toBe(1);
+  });
+
+  it('tells its listeners when the highlight changes', () => {
+    const highlighter = new Highlighter(new MaterialLibrary(), ['wing', 'tail']);
+    const listener = vi.fn();
+    const remove = highlighter.onChange(listener);
+    highlighter.setHighlight(['wing']);
+    remove();
+    highlighter.setHighlight([]);
+    expect(listener).toHaveBeenCalledTimes(1);
   });
 
   it('reports whether a frame changed any emphasis', () => {

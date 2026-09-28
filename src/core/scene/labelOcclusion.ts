@@ -68,6 +68,7 @@ export class LabelOcclusion {
   private readonly target = new Vector3();
   private revision = Number.NaN;
   private dirty = false;
+  private settling = false;
   private framesSinceRun = 0;
   private elapsedSeconds = 0;
 
@@ -81,15 +82,22 @@ export class LabelOcclusion {
     this.dirty = true;
   }
 
-  update(deltaSeconds: number): void {
+  update(deltaSeconds: number): boolean {
     this.framesSinceRun += 1;
     this.elapsedSeconds += deltaSeconds;
-    if (this.isDue()) this.run();
+    if (this.isChecking()) {
+      this.settling = this.isDue();
+      if (this.settling) this.run();
+    }
+    return this.settling || this.dirty;
+  }
+
+  private isChecking(): boolean {
+    return this.labels.revision !== this.revision || this.framesSinceRun >= RUN_EVERY_FRAMES;
   }
 
   private isDue(): boolean {
     const changed = this.labels.revision !== this.revision;
-    if (!changed && this.framesSinceRun < RUN_EVERY_FRAMES) return false;
     const moved = this.motion.moved(this.camera, this.wantedAnchors());
     return changed || moved || this.dirty || this.hasPending();
   }

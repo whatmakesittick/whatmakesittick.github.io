@@ -1,22 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import type { CatalogueEntry, ExplainerMeta } from '@core/manifest';
 import { localizedMeta, pageLanguage } from './catalogue';
+import type { CardMeta, CatalogueCard } from './catalogue';
 
-function meta(title: string): ExplainerMeta {
-  return { title, eyebrow: '', tagline: '', description: '', summary: `${title} summary` };
+function meta(title: string): CardMeta {
+  return { title, eyebrow: '', summary: `${title} summary` };
 }
 
-function entry(slug: string, metas: CatalogueEntry['meta']): CatalogueEntry {
+function entry(slug: string, metas: CatalogueCard['meta']): CatalogueCard {
   return {
-    manifest: {
-      slug,
-      tags: ['mechanics'],
-      cover: 'cover.webp',
-      entry: 'src/index.ts',
-      chapters: 'chapters.html',
-      locales: ['en', 'uk'],
-      social: { image: 'social/og-image.png', alt: 'Card' },
-    },
+    manifest: { slug, tags: ['mechanics'], cover: 'cover.webp', locales: ['en', 'uk'] },
     meta: metas,
     published: '2026-03-10T09:00:00Z',
   };

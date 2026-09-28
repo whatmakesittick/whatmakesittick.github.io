@@ -57,11 +57,12 @@ export class FlowDots {
     this.refresh();
   }
 
-  update(deltaSeconds: number, pointSize: number): void {
-    if (!this.cloud.points.visible || this.speed === 0) return;
+  update(deltaSeconds: number, pointSize: number): boolean {
+    if (!this.cloud.points.visible || this.speed === 0) return false;
     this.material.size = pointSize;
     this.travelled = (this.travelled + (this.speed * deltaSeconds) / this.length) % 1;
     this.place();
+    return true;
   }
 
   private refresh(): void {

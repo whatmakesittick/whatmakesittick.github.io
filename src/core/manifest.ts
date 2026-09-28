@@ -39,6 +39,14 @@ export interface ExplainerMeta {
   tagline: string;
   description: string;
   summary: string;
+  socialAlt?: string;
+}
+
+const SNIPPET_LIMIT = 155;
+const SNIPPET_LIMITS: Partial<Record<LanguageCode, number>> = { zh: 80, ja: 100 };
+
+export function descriptionLimit(code: LanguageCode): number {
+  return SNIPPET_LIMITS[code] ?? SNIPPET_LIMIT;
 }
 
 export const META_KEYS: readonly (keyof ExplainerMeta)[] = [

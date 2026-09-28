@@ -3,7 +3,8 @@
     "title": "How ATP synthase works",
     "eyebrow": "ATP synthase",
     "tagline": "The spinning motor in your cells that recharges the fuel for every stride.",
-    "description": "An interactive 3D model of ATP synthase, the rotary motor in your mitochondria. See protons turn its rotor, watch it build three ATP for every turn, and find out what it means for a sprint, a marathon and your training.",
+    "description": "An interactive 3D model of ATP synthase, the motor in your mitochondria. Watch protons spin it to build ATP and see what that means for your training.",
+    "socialAlt": "Low-poly 3D model of ATP synthase standing in a patch of the inner mitochondrial membrane, with its rotor ring, crooked axle and six-part head, beside the title How ATP synthase works",
     "summary": "Proton push, the rotor ring, the three seats, sprint versus marathon, training."
   },
   "stage": {

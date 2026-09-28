@@ -3,7 +3,8 @@
     "title": "So funktioniert die ATP-Synthase",
     "eyebrow": "ATP-Synthase",
     "tagline": "Der rotierende Motor in Ihren Zellen, der den Treibstoff für jeden Schritt wieder auflädt.",
-    "description": "Ein interaktives 3D-Modell der ATP-Synthase, des Rotationsmotors in Ihren Mitochondrien. Sehen Sie, wie Protonen seinen Rotor drehen und wie er bei jeder Umdrehung drei ATP baut. Und erfahren Sie, was das für einen Sprint, einen Marathon und Ihr Training bedeutet.",
+    "description": "Ein interaktives 3D-Modell der ATP-Synthase, des Motors Ihrer Mitochondrien: wie sie drei ATP pro Umdrehung baut und was das für Ihr Training heißt.",
+    "socialAlt": "Low-Poly-3D-Modell der ATP-Synthase in einem Stück innerer Mitochondrienmembran, mit Rotorring, krummer Achse und sechsteiligem Kopf, neben dem Titel „So funktioniert die ATP-Synthase“",
     "summary": "Protonendruck, der Rotorring, die drei Bindungsstellen, Sprint gegen Marathon, Training."
   },
   "stage": {

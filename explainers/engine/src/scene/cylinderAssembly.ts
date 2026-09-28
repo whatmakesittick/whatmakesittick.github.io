@@ -171,6 +171,10 @@ export class CylinderAssembly {
     });
   }
 
+  get sparking(): boolean {
+    return this.sparkTrigger.lit;
+  }
+
   update(frame: CylinderFrame): void {
     const angle = cylinderAngle(frame.engineAngle, this.placement.slot);
     const crownHeight = this.updateMechanism(angle);
