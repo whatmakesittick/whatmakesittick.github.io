@@ -14,17 +14,10 @@ export interface Preset extends ScenePreset<PartId, CameraView> {
   explode?: number;
   controls?: readonly ChapterControl[];
   highlightsSelectedLayer?: boolean;
-  highlightsWorkingDiodes?: boolean;
-}
-
-export interface HighlightContext {
-  layer: LayerId;
-  diodeWorking: boolean;
 }
 
 const MORNING_START_PHASE = 210;
 const LAYERS_EXPLODE = 0.6;
-const BYPASS_DIODE: PartId = 'bypassDiode';
 
 const SLICE_PARTS: readonly PartId[] = [
   'pyramids',
@@ -36,7 +29,7 @@ const SLICE_PARTS: readonly PartId[] = [
   'finger',
 ];
 
-const WIRING_PARTS: readonly PartId[] = ['cell', 'ribbon', 'busbar', 'junctionBox', BYPASS_DIODE];
+const WIRING_PARTS: readonly PartId[] = ['cell', 'ribbon', 'busbar', 'junctionBox', 'bypassDiode'];
 
 export const PRESETS: Record<PresetId, Preset> = {
   overview: {
@@ -81,7 +74,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     controls: ['shade', 'layout'],
     labels: WIRING_PARTS,
     highlight: WIRING_PARTS,
-    highlightsWorkingDiodes: true,
   },
   inverter: {
     camera: 'inverter',
@@ -93,10 +85,6 @@ export const PRESETS: Record<PresetId, Preset> = {
   },
 };
 
-export function presetHighlight(preset: Preset, context: HighlightContext): readonly PartId[] {
-  if (preset.highlightsSelectedLayer) return [context.layer];
-  if (preset.highlightsWorkingDiodes && !context.diodeWorking) {
-    return preset.highlight.filter((id) => id !== BYPASS_DIODE);
-  }
-  return preset.highlight;
+export function presetHighlight(preset: Preset, layer: LayerId): readonly PartId[] {
+  return preset.highlightsSelectedLayer ? [layer] : preset.highlight;
 }

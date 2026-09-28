@@ -151,22 +151,12 @@ describe('solar panel store', () => {
 
 describe('chapter highlight', () => {
   it('highlights the layer the reader picked', () => {
-    expect(presetHighlight(PRESETS.layers, { layer: 'backsheet', diodeWorking: false })).toEqual([
-      'backsheet',
-    ]);
-  });
-
-  it('brightens the bypass diodes only while one of them works', () => {
-    const idle = presetHighlight(PRESETS.wiring, { layer: 'glass', diodeWorking: false });
-    const working = presetHighlight(PRESETS.wiring, { layer: 'glass', diodeWorking: true });
-    expect(idle).not.toContain('bypassDiode');
-    expect(idle).toContain('cell');
-    expect(working).toContain('bypassDiode');
+    expect(presetHighlight(PRESETS.layers, 'backsheet')).toEqual(['backsheet']);
   });
 
   it('keeps the chapter highlight elsewhere', () => {
-    const context = { layer: 'cell', diodeWorking: true } as const;
-    expect(presetHighlight(PRESETS.inverter, context)).toBe(PRESETS.inverter.highlight);
-    expect(presetHighlight(PRESETS.overview, context)).toEqual([]);
+    expect(presetHighlight(PRESETS.wiring, 'cell')).toBe(PRESETS.wiring.highlight);
+    expect(PRESETS.wiring.highlight).toContain('bypassDiode');
+    expect(presetHighlight(PRESETS.overview, 'cell')).toEqual([]);
   });
 });
