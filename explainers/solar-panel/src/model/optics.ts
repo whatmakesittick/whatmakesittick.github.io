@@ -68,8 +68,8 @@ export const AM15G_TOTAL_W_M2 = 1000.4;
 
 export const SPECTRUM_SHARES = {
   ultraviolet: 0.046,
-  visible: 0.43,
-  nearInfrared: 0.332,
+  visible: 0.428,
+  nearInfrared: 0.331,
   belowGap: 0.192,
   belowGapPhotons: 0.365,
   thermalised: 0.317,
