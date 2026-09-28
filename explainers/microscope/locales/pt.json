@@ -3,7 +3,7 @@
     "title": "Como funciona um microscópio",
     "eyebrow": "Siga a luz da lâmpada até o olho",
     "tagline": "Um microscópio desvia a luz duas vezes, primeiro na objetiva, que forma dentro do tubo uma imagem real e invertida, e depois na ocular, que a amplia de novo, mas o menor detalhe que ele consegue mostrar é definido pela luz e pela abertura da objetiva, não pelo aumento.",
-    "description": "Um passeio interativo e em câmera lenta por dentro de um microscópio óptico, seguindo a luz da lâmpada até o olho: como as lentes desviam a luz, como a objetiva e a ocular aumentam em duas etapas, por que mais aumento deixa de ajudar e como o foco e o diafragma mudam a imagem.",
+    "description": "Um passeio interativo por um microscópio, da lâmpada ao olho: como as lentes desviam a luz, o aumento em duas etapas e os seus limites.",
     "summary": "Lentes, aumento em duas etapas e o menor detalhe que a luz consegue mostrar."
   },
   "stage": {
