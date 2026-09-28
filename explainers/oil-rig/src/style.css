@@ -18,10 +18,6 @@
   --fracture-line: var(--bottom);
 }
 
-.readout[data-readout='pressure'] .readout-meter > span:not(.meter) {
-  color: var(--tone, var(--text));
-}
-
 .draft-control,
 .depth-picker,
 .mud-control,
