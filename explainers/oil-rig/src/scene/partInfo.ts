@@ -1,0 +1,80 @@
+import type { PartInfo } from '@core/explainer';
+import type { LabelSide } from '@core/scene/labelLayout';
+import { PART_IDS } from '../ids';
+import type { PartId } from '../ids';
+
+const LABEL_SIDES: Record<PartId, LabelSide> = {
+  derrick: 'right',
+  topDrive: 'left',
+  drillFloor: 'right',
+  helideck: 'left',
+  crane: 'right',
+  flareBoom: 'right',
+  column: 'right',
+  pontoon: 'left',
+  thruster: 'left',
+  mooring: 'right',
+  moonpool: 'left',
+  riser: 'right',
+  bop: 'left',
+  wellhead: 'right',
+  conductor: 'left',
+  surfaceCasing: 'left',
+  intermediateCasing: 'left',
+  drillPipe: 'right',
+  drillCollars: 'left',
+  bit: 'right',
+  annulus: 'left',
+  seabed: 'left',
+  claystone: 'right',
+  aquifer: 'left',
+  seal: 'right',
+  gasCap: 'left',
+  oil: 'right',
+  oilWaterContact: 'left',
+  sourceRock: 'right',
+  tubing: 'left',
+  perforations: 'right',
+  flare: 'right',
+};
+
+export const PART_INFO: Record<PartId, PartInfo> = Object.fromEntries(
+  PART_IDS.map((id) => [id, { labelKey: `parts.${id}`, side: LABEL_SIDES[id] }]),
+) as Record<PartId, PartInfo>;
+
+export { PART_IDS };
+
+export const LABEL_PRIORITY: readonly PartId[] = [
+  'pontoon',
+  'column',
+  'derrick',
+  'thruster',
+  'mooring',
+  'helideck',
+  'moonpool',
+  'bit',
+  'topDrive',
+  'drillPipe',
+  'drillCollars',
+  'surfaceCasing',
+  'riser',
+  'bop',
+  'annulus',
+  'wellhead',
+  'seal',
+  'gasCap',
+  'oil',
+  'oilWaterContact',
+  'aquifer',
+  'sourceRock',
+  'tubing',
+  'flare',
+  'perforations',
+  'drillFloor',
+  'crane',
+  'flareBoom',
+  'conductor',
+  'intermediateCasing',
+  'seabed',
+  'claystone',
+];
