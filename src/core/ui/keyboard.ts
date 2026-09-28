@@ -5,6 +5,9 @@ import { phaseShortcut } from './phases';
 type KeyHandler<S extends Playback> = (state: S, event: KeyboardEvent) => void;
 type KeyBindings<S extends Playback> = Record<string, KeyHandler<S>>;
 
+export type ShellKeyHandler = () => boolean;
+export type ShellKeys = Readonly<Record<string, ShellKeyHandler>>;
+
 const EDITABLE_SELECTOR =
   'input, textarea, select, [contenteditable]:not([contenteditable="false"])';
 const ACTIVATABLE_SELECTOR = 'button, a[href], summary, [role="button"]';
@@ -59,13 +62,19 @@ export function mountKeyboard<S extends Playback>(
   root: Document,
   store: ExplainerStore<S>,
   explainer: Explainer<S>,
-): void {
+  shellKeys: ShellKeys = {},
+): () => void {
   const bindings = keyBindings(explainer);
-  root.addEventListener('keydown', (event) => {
-    if (shouldIgnore(event)) return;
-    const handler = bindings[event.key.toLowerCase()];
-    if (!handler) return;
-    event.preventDefault();
-    handler(store.getState(), event);
-  });
+  const handle = (event: KeyboardEvent): boolean => {
+    const key = event.key.toLowerCase();
+    if (shellKeys[key]?.()) return true;
+    const handler = bindings[key];
+    handler?.(store.getState(), event);
+    return handler !== undefined;
+  };
+  const onKeyDown = (event: KeyboardEvent) => {
+    if (!shouldIgnore(event) && handle(event)) event.preventDefault();
+  };
+  root.addEventListener('keydown', onKeyDown);
+  return () => root.removeEventListener('keydown', onKeyDown);
 }
