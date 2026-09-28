@@ -52,7 +52,7 @@ const TURN_VALUE_KEYS = {
   seconds: 'sections.train.turnValue.seconds',
 } as const;
 
-function toTenths(value: number): number {
+export function toTenths(value: number): number {
   return Math.round(value * TENTHS) / TENTHS;
 }
 

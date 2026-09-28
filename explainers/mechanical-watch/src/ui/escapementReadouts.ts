@@ -11,14 +11,9 @@ import { amplitudeOf } from '../state';
 import type { WatchState, WatchStore } from '../state';
 import { disposeAll } from './disposers';
 import type { Disposer } from './disposers';
-import { formatEscapeAdvance, formatMilliseconds, formatSignedDegrees } from './format';
+import { formatEscapeAdvance, formatMilliseconds, formatSignedDegrees, toTenths } from './format';
 
-const TENTHS = 10;
 const TENTH_DIGITS = 1;
-
-function toTenths(value: number): number {
-  return Math.round(value * TENTHS) / TENTHS;
-}
 
 function forkAngleOf(state: WatchState): number {
   return toTenths(forkAngle(balanceAngle(state.phase, amplitudeOf(state))));
