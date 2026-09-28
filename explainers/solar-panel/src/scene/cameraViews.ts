@@ -44,7 +44,7 @@ const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
   },
   inverter: {
     region: 'inverter',
-    direction: [0.3, 0.2, 1],
+    direction: [1, 0.35, 0.45],
     margin: 1.4,
     distance: CLOSE_DISTANCE,
   },
