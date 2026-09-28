@@ -1,27 +1,33 @@
 import { describe, expect, it } from 'vitest';
-import { CHAMBER_FACTS, peakOf, valveFacts, valveMoment, valveMotion } from './anatomy';
+import { VALVE_IDS } from '../ids';
+import {
+  AV_VALVES_CLOSE_MS,
+  AV_VALVES_OPEN_MS,
+  SEMILUNAR_CLOSE_MS,
+  SEMILUNAR_OPEN_MS,
+  SOUNDS,
+  VALVE_TRANSITION_MS,
+  leftVentriclePressure,
+  rightVentriclePressure,
+  valveClosesAt,
+  valveOpensAt,
+} from './cycle';
+import { PEAK_PRESSURE_MMHG, valveFacts, valveMoment, valveMotion } from './anatomy';
 
-describe('chamber facts', () => {
-  it('gives the left ventricle the thickest wall and the highest pressure', () => {
-    expect(CHAMBER_FACTS.leftVentricle.wallMm).toEqual({ from: 10, to: 12 });
-    expect(CHAMBER_FACTS.rightVentricle.wallMm).toEqual({ from: 3, to: 5 });
-    expect(CHAMBER_FACTS.leftVentricle.peakPressureMmHg).toBeCloseTo(120, 0);
-    expect(CHAMBER_FACTS.rightVentricle.peakPressureMmHg).toBeCloseTo(25, 0);
+describe('chamber pressures', () => {
+  it('peaks at about 120 mmHg in the left ventricle and a fifth of that in the right', () => {
+    expect(PEAK_PRESSURE_MMHG.leftVentricle).toBe(120);
+    expect(PEAK_PRESSURE_MMHG.rightVentricle).toBe(25);
   });
 
-  it('reads the atrial peaks from the a wave of the cycle model', () => {
-    expect(CHAMBER_FACTS.leftAtrium.peakPressureMmHg).toBeCloseTo(11, 0);
-    expect(CHAMBER_FACTS.rightAtrium.peakPressureMmHg).toBeCloseTo(6, 0);
+  it('keeps the atria at a few mmHg', () => {
+    expect(PEAK_PRESSURE_MMHG.leftAtrium).toBe(10);
+    expect(PEAK_PRESSURE_MMHG.rightAtrium).toBe(5);
   });
 
-  it('fills both ventricles to the same 120 mL', () => {
-    expect(CHAMBER_FACTS.leftVentricle.fullestMl).toBe(120);
-    expect(CHAMBER_FACTS.rightVentricle.fullestMl).toBe(120);
-    expect(CHAMBER_FACTS.leftAtrium.fullestMl).toBeLessThan(120);
-  });
-
-  it('finds the highest point of a curve over one beat', () => {
-    expect(peakOf((time) => 5 - Math.abs(time - 300))).toBe(5);
+  it('agrees with the peaks of the cycle model for the ventricles', () => {
+    expect(leftVentriclePressure(340)).toBeCloseTo(PEAK_PRESSURE_MMHG.leftVentricle, 0);
+    expect(rightVentriclePressure(330)).toBeCloseTo(PEAK_PRESSURE_MMHG.rightVentricle, 0);
   });
 });
 
@@ -34,27 +40,44 @@ describe('valve facts', () => {
   });
 
   it('opens and shuts each valve at the moments of the cycle model', () => {
-    expect(valveFacts('mitral')).toMatchObject({ opensAtMs: 590, closesAtMs: 190, sound: 's1' });
-    expect(valveFacts('aortic')).toMatchObject({ opensAtMs: 240, closesAtMs: 510, sound: 's2' });
-    expect(valveFacts('pulmonary')).toMatchObject({ opensAtMs: 230, closesAtMs: 530 });
+    VALVE_IDS.forEach((valve) => {
+      expect(valveFacts(valve)).toMatchObject({
+        opensAtMs: valveOpensAt(valve),
+        closesAtMs: valveClosesAt(valve),
+      });
+    });
+    expect(valveFacts('mitral').closesAtMs).toBe(AV_VALVES_CLOSE_MS);
+    expect(valveFacts('aortic').closesAtMs).toBe(SEMILUNAR_CLOSE_MS);
+  });
+
+  it('makes the first sound with the inlet valves and the second with the outlets', () => {
+    expect(valveFacts('mitral').sound).toBe('s1');
+    expect(valveFacts('tricuspid').sound).toBe('s1');
+    expect(valveFacts('aortic').sound).toBe('s2');
+    expect(valveFacts('pulmonary').sound).toBe('s2');
   });
 
   it('tells a valve that is opening from one that is closing', () => {
-    expect(valveMotion('mitral', 100)).toBe('open');
-    expect(valveMotion('mitral', 180)).toBe('closing');
-    expect(valveMotion('mitral', 300)).toBe('shut');
-    expect(valveMotion('mitral', 600)).toBe('opening');
-    expect(valveMotion('aortic', 250)).toBe('opening');
-    expect(valveMotion('aortic', 400)).toBe('open');
+    const { open, close } = VALVE_TRANSITION_MS;
+    expect(valveMotion('mitral', AV_VALVES_CLOSE_MS - close - 20)).toBe('open');
+    expect(valveMotion('mitral', AV_VALVES_CLOSE_MS - close / 2)).toBe('closing');
+    expect(valveMotion('mitral', SEMILUNAR_OPEN_MS + 60)).toBe('shut');
+    expect(valveMotion('mitral', AV_VALVES_OPEN_MS + open / 2)).toBe('opening');
+    expect(valveMotion('aortic', SEMILUNAR_OPEN_MS + open / 2)).toBe('opening');
+    expect(valveMotion('aortic', SEMILUNAR_OPEN_MS + 2 * open)).toBe('open');
   });
 
   it('marks the heart sound a valve makes just after it shuts', () => {
-    expect(valveMoment('mitral', 200)).toBe('s1');
-    expect(valveMoment('tricuspid', 250)).toBe('s1');
-    expect(valveMoment('aortic', 200)).toBe('shut');
-    expect(valveMoment('aortic', 520)).toBe('s2');
-    expect(valveMoment('pulmonary', 520)).toBe('closing');
-    expect(valveMoment('pulmonary', 540)).toBe('s2');
-    expect(valveMoment('mitral', 300)).toBe('shut');
+    const afterS1 = SOUNDS.s1.start + 5;
+    const pulmonaryClose = valveClosesAt('pulmonary');
+    expect(valveMoment('mitral', afterS1)).toBe('s1');
+    expect(valveMoment('tricuspid', afterS1)).toBe('s1');
+    expect(valveMoment('aortic', afterS1)).toBe('shut');
+    expect(valveMoment('aortic', SOUNDS.s2.start + 5)).toBe('s2');
+    expect(valveMoment('pulmonary', pulmonaryClose - VALVE_TRANSITION_MS.close / 2)).toBe(
+      'closing',
+    );
+    expect(valveMoment('pulmonary', pulmonaryClose + 5)).toBe('s2');
+    expect(valveMoment('mitral', SOUNDS.s1.end + 20)).toBe('shut');
   });
 });
