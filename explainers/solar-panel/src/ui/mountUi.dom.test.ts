@@ -96,6 +96,34 @@ describe('chapter widgets', () => {
     expect(readout('layer-job')).toBe(en.layers.job.encapsulant);
   });
 
+  it('follows one colour of light into the silicon', () => {
+    expect(readout('wavelength')).toBe('600 nm');
+    expect(readout('wavelength-energy')).toBe('2.07 eV');
+    expect(readout('wavelength-band')).toBe('orange');
+    expect(readout('wavelength-depth')).toBe('2.4 µm');
+    expect(readout('wavelength-heat')).toBe('0.95 eV');
+    slide('wavelength', 400);
+    expect(readout('wavelength-energy')).toBe('3.10 eV');
+    expect(readout('wavelength-band')).toBe('violet');
+    expect(readout('wavelength-depth')).toBe('0.11 µm');
+    slide('wavelength', 1000);
+    expect(readout('wavelength-energy')).toBe('1.24 eV');
+    expect(readout('wavelength-depth')).toBe('156 µm');
+    expect(readout('wavelength-band')).toBe('near infrared');
+    slide('wavelength', 1200);
+    expect(readout('wavelength-depth')).toBe(en.units.passes);
+    expect(readout('wavelength-heat')).toBe('–');
+    expect(readout('wavelength-band')).toBe('infrared');
+  });
+
+  it('counts the electrons set free with the light on the panel', () => {
+    expect(readout('junction-pairs')).toBe('4.3 × 10¹⁹');
+    expect(readout('junction-tooWeak')).toBe('19%');
+    expect(readout('junction-heat')).toBe('32%');
+    store.getState().setPhase(30);
+    expect(readout('junction-pairs')).toBe('0');
+  });
+
   it('stops updating once disposed', () => {
     dispose();
     store.getState().setTilt(80);
