@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { VALVE_IDS } from '../ids';
+import { PHASE_IDS, VALVE_IDS } from '../ids';
+import type { PhaseId, ValveState } from '../ids';
 import {
   AV_VALVES_CLOSE_MS,
   AV_VALVES_OPEN_MS,
@@ -21,6 +22,7 @@ import {
   ecgMillivolts,
   ecgWave,
   heartSound,
+  isValveOpen,
   leftAtrialPressure,
   leftVentricleFlow,
   leftVentriclePressure,
@@ -37,6 +39,15 @@ import {
   ventricularSqueeze,
   wrapTime,
 } from './cycle';
+
+const PHASE_VALVE_STATES_AT_START: Readonly<Record<PhaseId, ValveState>> = {
+  atria: 'avOpen',
+  squeeze: 'allClosed',
+  eject: 'semilunarOpen',
+  relax: 'allClosed',
+  fill: 'avOpen',
+  rest: 'avOpen',
+};
 
 const CURVES = [
   leftVentricleVolume,
@@ -132,6 +143,13 @@ describe('cycle', () => {
     expect(leftVentriclePressure(700)).toBeLessThan(8);
   });
 
+  it('keeps the ventricle below the atrium whenever the mitral valve is open', () => {
+    for (let time = 0; time < BEAT_MS; time += 1) {
+      if (!isValveOpen('mitral', time) || time > 160) continue;
+      expect(leftVentriclePressure(time)).toBeLessThanOrEqual(leftAtrialPressure(time) + 0.15);
+    }
+  });
+
   it('keeps the aorta between 80 and 120 with a notch after the valve shuts', () => {
     expect(aorticPressure(SEMILUNAR_OPEN_MS)).toBeCloseTo(80, 5);
     expect(peak(aorticPressure).value).toBeCloseTo(120, 5);
@@ -146,8 +164,8 @@ describe('cycle', () => {
   it('keeps the right side at a fifth of the pressure', () => {
     expect(peak(rightVentriclePressure).value).toBeCloseTo(25, 5);
     expect(peak(pulmonaryArteryPressure).value).toBeCloseTo(25, 5);
-    expect(peak(leftAtrialPressure).value).toBeCloseTo(11, 5);
-    expect(peak(rightAtrialPressure).value).toBeCloseTo(6, 5);
+    expect(peak(leftAtrialPressure).value).toBeCloseTo(10.4, 5);
+    expect(peak(rightAtrialPressure).value).toBeCloseTo(5, 5);
   });
 
   it('opens and shuts the valves in the textbook order', () => {
@@ -158,6 +176,9 @@ describe('cycle', () => {
     expect(valveState(300)).toBe('semilunarOpen');
     expect(valveState(650)).toBe('avOpen');
     expect(valveState(560)).toBe('allClosed');
+    for (const id of PHASE_IDS) {
+      expect(valveState(PHASE_RANGES[id].start)).toBe(PHASE_VALVE_STATES_AT_START[id]);
+    }
     expect(valveOpening('mitral', AV_VALVES_OPEN_MS + 15)).toBeCloseTo(0.5, 5);
     expect(valveOpening('mitral', AV_VALVES_CLOSE_MS - 10)).toBeCloseTo(0.5, 5);
     expect(valveOpening('pulmonary', 255)).toBeCloseTo(0.5, 5);

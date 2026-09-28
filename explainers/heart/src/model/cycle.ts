@@ -81,15 +81,15 @@ const OPEN_THRESHOLD = 0.5;
 
 const DIASTOLIC_LEFT_VENTRICLE = monotoneCurve(
   [
-    [0, 7],
-    [50, 7],
-    [110, 12],
+    [0, 5.5],
+    [50, 5.5],
+    [120, 9.8],
     [150, 10],
     [AV_VALVES_CLOSE_MS, ISOVOLUMIC_START_MMHG],
     [AV_VALVES_OPEN_MS, RELAXED_MMHG],
     [640, 4],
-    [720, 6],
-    [800, 7],
+    [720, 5.5],
+    [800, 5.5],
   ],
   BEAT_MS,
 );
@@ -115,9 +115,10 @@ const LEFT_ATRIUM = monotoneCurve(
   [
     [0, 6],
     [50, 6],
-    [120, 11],
-    [170, 7],
-    [200, 8],
+    [120, 10.4],
+    [160, 10.1],
+    [190, 9],
+    [215, 9.5],
     [260, 6],
     [400, 8],
     [590, 10],
@@ -159,11 +160,11 @@ const PULMONARY_ARTERY = monotoneCurve(
 const RIGHT_ATRIUM = monotoneCurve(
   [
     [0, 3],
-    [120, 6],
+    [120, 5],
     [170, 2],
     [200, 4],
     [400, 4],
-    [590, 6],
+    [590, 5],
     [650, 2],
     [720, 3],
     [800, 3],
@@ -356,10 +357,17 @@ export function openValves(time: number): ValveId[] {
   return VALVE_IDS.filter((valve) => isValveOpen(valve, time));
 }
 
+const PHASE_VALVE_STATES: Readonly<Record<PhaseId, ValveState>> = {
+  atria: 'avOpen',
+  squeeze: 'allClosed',
+  eject: 'semilunarOpen',
+  relax: 'allClosed',
+  fill: 'avOpen',
+  rest: 'avOpen',
+};
+
 export function valveState(time: number): ValveState {
-  if (isValveOpen('mitral', time) || isValveOpen('tricuspid', time)) return 'avOpen';
-  if (isValveOpen('aortic', time) || isValveOpen('pulmonary', time)) return 'semilunarOpen';
-  return 'allClosed';
+  return PHASE_VALVE_STATES[phaseAt(time)];
 }
 
 export function heartSound(time: number): HeartSound | null {
