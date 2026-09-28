@@ -70,27 +70,52 @@ function labelsNow(): Labels {
   };
 }
 
-function paintSlice(context: CanvasRenderingContext2D, plot: Plot, nanometres: number): void {
-  const left = xOf(plot, nanometres);
-  const width = xOf(plot, nanometres + SLICE_NM) - left;
-  const irradiance = spectralIrradiance(nanometres);
-  const kept = keptShareOfPhoton(nanometres + SLICE_NM / 2);
-  if (kept === 0) {
-    context.fillStyle = CANVAS_COLORS.weak;
-    context.fillRect(left, yOf(plot, irradiance), width, plot.bottom - yOf(plot, irradiance));
-    return;
-  }
-  const usableTop = yOf(plot, irradiance * kept);
-  context.fillStyle = CANVAS_COLORS.usable;
-  context.fillRect(left, usableTop, width, plot.bottom - usableTop);
-  context.fillStyle = CANVAS_COLORS.heat;
-  context.fillRect(left, yOf(plot, irradiance), width, usableTop - yOf(plot, irradiance));
+type Height = (nanometres: number) => number;
+
+const NOTHING: Height = () => 0;
+
+function usableHeight(nanometres: number): number {
+  return spectralIrradiance(nanometres) * keptShareOfPhoton(nanometres + SLICE_NM / 2);
+}
+
+function sliceStarts(from: number, to: number): number[] {
+  const starts: number[] = [];
+  for (let nanometres = from; nanometres < to; nanometres += SLICE_NM) starts.push(nanometres);
+  return starts;
+}
+
+function fillBand(
+  context: CanvasRenderingContext2D,
+  plot: Plot,
+  [from, to]: readonly [number, number],
+  [upper, lower]: readonly [Height, Height],
+  color: string,
+): void {
+  const starts = sliceStarts(from, to);
+  const end = (start: number) => xOf(plot, Math.min(start + SLICE_NM, to));
+  context.beginPath();
+  context.moveTo(xOf(plot, from), yOf(plot, lower(from)));
+  starts.forEach((start) => {
+    const y = yOf(plot, upper(start));
+    context.lineTo(xOf(plot, start), y);
+    context.lineTo(end(start), y);
+  });
+  starts.reverse().forEach((start) => {
+    const y = yOf(plot, lower(start));
+    context.lineTo(end(start), y);
+    context.lineTo(xOf(plot, start), y);
+  });
+  context.closePath();
+  context.fillStyle = color;
+  context.fill();
 }
 
 function paintSpectrum(context: CanvasRenderingContext2D, plot: Plot): void {
-  for (let nanometres = SPECTRUM_START_NM; nanometres < SPECTRUM_END_NM; nanometres += SLICE_NM) {
-    paintSlice(context, plot, nanometres);
-  }
+  const absorbed = [SPECTRUM_START_NM, BAND_GAP_NM] as const;
+  fillBand(context, plot, absorbed, [usableHeight, NOTHING], CANVAS_COLORS.usable);
+  fillBand(context, plot, absorbed, [spectralIrradiance, usableHeight], CANVAS_COLORS.heat);
+  const weak = [BAND_GAP_NM, SPECTRUM_END_NM] as const;
+  fillBand(context, plot, weak, [spectralIrradiance, NOTHING], CANVAS_COLORS.weak);
 }
 
 function paintStrip(context: CanvasRenderingContext2D, plot: Plot): void {
