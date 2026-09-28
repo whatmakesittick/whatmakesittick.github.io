@@ -77,6 +77,10 @@ function listFormat(): Intl.ListFormat {
   return format;
 }
 
+export function formatOptional<T>(value: T | null, format: (value: T) => string): string {
+  return value === null ? NO_VALUE : format(value);
+}
+
 function toTenths(value: number): number {
   return Math.round(value * TENTHS) / TENTHS;
 }

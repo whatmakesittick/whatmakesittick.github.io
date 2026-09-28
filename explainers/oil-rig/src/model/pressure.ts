@@ -38,6 +38,10 @@ export function isInRock(depth: number): boolean {
   return depth > SEABED_DEPTH_M;
 }
 
+export function whenInRock<T>(depth: number, measure: (depth: number) => T): T | null {
+  return isInRock(depth) ? measure(depth) : null;
+}
+
 export function porePressureBar(depth: number): number {
   if (!isInRock(depth)) return seaPressureBar(depthBelowSea(depth));
   return SEABED_PRESSURE_BAR + hydrostaticBar(poreDensityAt(depth), depthBelowSeabed(depth));

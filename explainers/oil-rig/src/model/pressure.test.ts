@@ -10,6 +10,7 @@ import {
   overburdenBar,
   porePressureBar,
   seaPressureBar,
+  whenInRock,
 } from './pressure';
 import { layerById } from './rocks';
 import { RISER_LANDED_DEPTH_M, SEABED_DEPTH_M, TOTAL_DEPTH_M, sectionAt } from './wellPlan';
@@ -33,6 +34,11 @@ describe('pressure in the sea', () => {
     expect(porePressureBar(SEABED_DEPTH_M)).toBeCloseTo(SEABED_PRESSURE_BAR);
     expect(overburdenBar(SEABED_DEPTH_M)).toBeCloseTo(SEABED_PRESSURE_BAR);
     expect(porePressureBar(0)).toBe(0);
+  });
+
+  it('measures rock only below the seabed', () => {
+    expect(whenInRock(SEABED_DEPTH_M - 1, porePressureBar)).toBeNull();
+    expect(whenInRock(3000, porePressureBar)).toBe(porePressureBar(3000));
   });
 });
 

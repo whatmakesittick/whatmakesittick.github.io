@@ -4,6 +4,7 @@ import {
   BIT_IDS,
   LAYER_STOP_IDS,
   SECTION_IDS,
+  isInRock,
   layerStopAt,
   layerStopDepth,
   sectionAt,
@@ -11,7 +12,7 @@ import {
 } from '../model';
 import type { OilRigStoreState } from '../state';
 
-const NO_STOP = '';
+const NOTHING_CURRENT = '';
 
 function seek(state: OilRigStoreState, depth: number): void {
   state.pause();
@@ -25,11 +26,11 @@ export const CHAPTER_ACTIONS: Record<string, ChapterAction<OilRigStoreState>> = 
   },
   section: {
     run: (state, value) => seek(state, sectionStartDepth(parseOption(value, SECTION_IDS))),
-    current: (state) => sectionAt(state.phase).id,
+    current: (state) => (isInRock(state.phase) ? sectionAt(state.phase).id : NOTHING_CURRENT),
   },
   layer: {
     run: (state, value) => seek(state, layerStopDepth(parseOption(value, LAYER_STOP_IDS))),
-    current: (state) => layerStopAt(state.phase) ?? NO_STOP,
+    current: (state) => layerStopAt(state.phase) ?? NOTHING_CURRENT,
   },
   mudPlan: {
     run: (state) => state.setMudWeight(null),

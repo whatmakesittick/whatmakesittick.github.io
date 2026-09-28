@@ -2,21 +2,21 @@ import { requireElement } from '@core/ui/dom';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import {
   fracturePressureBar,
-  isInRock,
   mudPressureBar,
   mudState,
   porePressureBar,
   riserLanded,
+  whenInRock,
 } from '../model';
 import { MUD_WEIGHT_RANGE, effectiveMudWeight } from '../state';
 import type { OilRigStore } from '../state';
-import { NO_VALUE, formatBar, formatDensity, formatMudState } from './format';
+import { formatBar, formatDensity, formatMudState, formatOptional } from './format';
 import { MudWindowGraph } from './mudWindowGraph';
 
 const PLANNED_ATTRIBUTE = 'data-planned';
 
 function rockPressure(depth: number, pressure: (depth: number) => number): string {
-  return isInRock(depth) ? formatBar(pressure(depth)) : NO_VALUE;
+  return formatOptional(whenInRock(depth, pressure), formatBar);
 }
 
 export function mountMudControl(root: Document, store: OilRigStore): void {
