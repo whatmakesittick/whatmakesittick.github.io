@@ -22,7 +22,7 @@ export const SCENE_OPTIONS: SceneOptions = {
 };
 
 export function mountHeartScene(shell: SceneShell, store: HeartStore): () => void {
-  const heart = new HeartController(shell);
+  const heart = new HeartController(shell, () => store.getState().valve);
   const removeFrame = shell.onFrame((deltaSeconds) => heart.update(deltaSeconds));
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
   const unbind = bindStore(store, { heart, labelVisibility, ...shell });
