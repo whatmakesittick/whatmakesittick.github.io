@@ -37,7 +37,7 @@ Write the spec as a working document next to the facts sheet, with these section
 8. part ids and label keys
 9. chapter actions
 10. chapter widgets as exact markup
-11. the complete locale key list
+11. the complete locale key list, including `meta.description` and `meta.socialAlt`
 12. the chapter outline for the writer
 13. the assembly contract
 14. scene notes
@@ -54,11 +54,11 @@ Every identifier and i18n key is fixed in the spec, so agents never have to agre
 
 Create the worktrees from the feature branch after the frozen files are committed and run `npm ci` in each. Add the writer's two paths to `.git/info/exclude` so the builder can keep temporary copies of `chapters.html` and `locales/en.json` untracked; tell the writer to stage with `git add -f`. Remove the exclude lines at integration. The modeller views its work through a throwaway preview package it never commits.
 
-Every agent prompt states: Node 24 through nvm; never push, rebase or touch the stash; atomic conventional commits without trailers; no comments; no all-caps words; named constants and small functions; the checks to run before each commit; report every deviation from the spec in the final message. The writer's prompt adds the copy rules from `CLAUDE.md`: natural, easy-to-follow text in every language and no dashes as punctuation, with a per-language native-reader pass and a dash count before the final commit. When a frozen file must change, the coordinator changes it and tells the agents, because agents cannot rebase or cherry-pick from their sandboxes. In the first hour, ask the modeller for one screenshot from each side and check handedness against the real thing (which side a crown, a door or a control sits on when seen from the front, which way each part turns), because a mirrored layout found at the end costs a whole modelling round.
+Every agent prompt states: Node 24 through nvm; never push, rebase or touch the stash; atomic conventional commits without trailers; no comments; no all-caps words; named constants and small functions; the checks to run before each commit; report every deviation from the spec in the final message. The writer's prompt adds the copy rules from `CLAUDE.md`: natural, easy-to-follow text in every language and no dashes as punctuation, with a per-language native-reader pass and a dash count before the final commit. It also sets the page head rules: `meta.description` fits a search result, at most 155 characters (80 in zh, 100 in ja), and every locale ships `meta.socialAlt`, the `social.alt` from `explainer.json` verbatim in English and translated elsewhere with that locale's `meta.title`. When a frozen file must change, the coordinator changes it and tells the agents, because agents cannot rebase or cherry-pick from their sandboxes. In the first hour, ask the modeller for one screenshot from each side and check handedness against the real thing (which side a crown, a door or a control sits on when seen from the front, which way each part turns), because a mirrored layout found at the end costs a whole modelling round.
 
 ## 5. Review and fixes
 
-When the builder and writer finish, spawn a read-only reviewer over the package and the copy: physics against the facts sheet, the contract, widgets, accessibility, locales, how naturally each translation reads and its dash count, and the canvases from screenshots. Split its findings: a fixer agent takes the code items in the main checkout; the writer, resumed, takes the copy items in its worktree; the coordinator takes the frozen files. Nobody else edits `chapters.html` or the locales, so the two never collide.
+When the builder and writer finish, spawn a read-only reviewer over the package and the copy: physics against the facts sheet, the contract, widgets, accessibility, locales, how naturally each translation reads, its dash count and its description lengths, and the canvases from screenshots. Split its findings: a fixer agent takes the code items in the main checkout; the writer, resumed, takes the copy items in its worktree; the coordinator takes the frozen files. Nobody else edits `chapters.html` or the locales, so the two never collide.
 
 ## 6. Integrate
 
