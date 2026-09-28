@@ -5,13 +5,14 @@ import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { SEABED_Y } from '../../../model/scale';
 import { MOUND } from '../../constants';
 import { merge } from '../../geometry/merge';
-import { seededRandom } from '../../geometry/random';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
 
 const HALF_TURN = Math.PI;
 const QUARTER_TURN = Math.PI / 2;
 const SINK = 0.05;
+const SEAM = 1e-3;
+const HASH = { x: 12.9898, z: 78.233, scale: 43758.5453 } as const;
 
 function height(radius: number): number {
   const rising = smoothstep(radius, MOUND.inner, MOUND.peak);
@@ -26,17 +27,19 @@ function profile(): Vector2[] {
   });
 }
 
+function bump(x: number, z: number): number {
+  const value = Math.sin(x * HASH.x + z * HASH.z) * HASH.scale;
+  return value - Math.floor(value) - 1 / 2;
+}
+
 function roughen(geometry: BufferGeometry): BufferGeometry {
-  const random = seededRandom(MOUND.seed);
   const position = geometry.getAttribute('position');
   for (let index = 0; index < position.count; index++) {
     const lift = position.getY(index) + SINK;
-    const onSeam = Math.abs(position.getZ(index)) < 1e-3;
+    const onSeam = Math.abs(position.getZ(index)) < SEAM;
     if (lift <= 0 || onSeam) continue;
-    position.setY(
-      index,
-      position.getY(index) + (random() - 1 / 2) * MOUND.jitter * 2 * clamp(lift, 0, 1),
-    );
+    const offset = bump(position.getX(index), position.getZ(index)) * MOUND.jitter * 2;
+    position.setY(index, position.getY(index) + offset * clamp(lift, 0, 1));
   }
   geometry.computeVertexNormals();
   return geometry;
