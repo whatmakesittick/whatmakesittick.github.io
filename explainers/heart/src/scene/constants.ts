@@ -777,6 +777,7 @@ export const PURKINJE = {
 
 export const LABELS = {
   liftMm: 3,
+  trunkAboveRingMm: 12,
   septum: [0, -32, 0] as Point,
   wall: [48, -38, 0] as Point,
   bundleBranches: [-6, -40, 1] as Point,

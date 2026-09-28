@@ -20,6 +20,7 @@ export interface LabelSources {
   readonly envelope: Field;
   readonly chordae: Vector3;
   readonly coronary: Vector3;
+  readonly hiddenCoronary: Vector3;
 }
 
 type Placement = { readonly cut: Point; readonly whole: Point };
@@ -38,6 +39,17 @@ function alongVessel(name: VesselName, share: number): Point {
   const curve = routeCurve(VESSELS[name].route);
   const point = pointAtDistance(curve, curve.getLength() * share);
   return [point.x, point.y, point.z];
+}
+
+function aboveRing(valve: 'pulmonary' | 'aortic', distance: number): Point {
+  const centre = ringCentre(valve);
+  const [nx, ny, nz] = VALVES[valve].normal;
+  const size = Math.hypot(nx, ny, nz);
+  return [
+    centre[0] + (nx / size) * distance,
+    centre[1] + (ny / size) * distance,
+    centre[2] + (nz / size) * distance,
+  ];
 }
 
 export class LabelAnchors {
@@ -76,14 +88,20 @@ export class LabelAnchors {
       chordae: fixed([sources.chordae.x, sources.chordae.y, sources.chordae.z]),
       aorta: fixed(alongVessel('aorta', LABELS.vesselShare.aorta)),
       archBranches: fixed(alongVessel('brachiocephalic', LABELS.vesselShare.archBranches)),
-      pulmonaryTrunk: fixed(alongVessel('pulmonaryTrunk', LABELS.vesselShare.pulmonaryTrunk)),
+      pulmonaryTrunk: {
+        whole: lifted(alongVessel('pulmonaryTrunk', LABELS.vesselShare.pulmonaryTrunk), lift),
+        cut: aboveRing('pulmonary', LABELS.trunkAboveRingMm),
+      },
       pulmonaryArteries: fixed(
         alongVessel('leftPulmonaryArtery', LABELS.vesselShare.pulmonaryArteries),
       ),
       superiorVenaCava: fixed(alongVessel('superiorVenaCava', LABELS.vesselShare.superiorVenaCava)),
       inferiorVenaCava: fixed(alongVessel('inferiorVenaCava', LABELS.vesselShare.inferiorVenaCava)),
       pulmonaryVeins: fixed(alongVessel('pulmonaryVein0', LABELS.vesselShare.pulmonaryVeins)),
-      coronaries: fixed([sources.coronary.x, sources.coronary.y, sources.coronary.z]),
+      coronaries: {
+        whole: [sources.coronary.x, sources.coronary.y, sources.coronary.z],
+        cut: [sources.hiddenCoronary.x, sources.hiddenCoronary.y, sources.hiddenCoronary.z],
+      },
       sinusNode: fixed(SINUS_NODE.centre),
       avNode: fixed(AV_NODE),
       bundleBranches: fixed(LABELS.bundleBranches),

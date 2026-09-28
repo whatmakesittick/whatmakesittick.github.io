@@ -39,6 +39,7 @@ import { ConductionPart } from './parts/conduction/conduction';
 import { REGIONS } from './regions';
 
 const LAD_ROUTE = 0;
+const CIRCUMFLEX_ROUTE = 1;
 const LAD_LABEL_SHARE = 0.4;
 
 type ViewKey = keyof ViewOptions;
@@ -125,6 +126,7 @@ export class HeartAssembly implements Assembly {
         chordae: this.valves.chordae.anchor,
         coronary:
           routes[LAD_ROUTE].points[Math.floor(routes[LAD_ROUTE].points.length * LAD_LABEL_SHARE)],
+        hiddenCoronary: routes[CIRCUMFLEX_ROUTE].points[routes[CIRCUMFLEX_ROUTE].points.length - 1],
       },
       motion.outer,
     );
