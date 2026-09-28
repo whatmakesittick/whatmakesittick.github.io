@@ -8,7 +8,6 @@ import { BLADE_COUNTS, HUMAN_BLADE_COUNT, bladeAzimuth, wrapDegrees } from '../.
 import { C_RING } from '../../../model/scale';
 import { ringLayout } from '../../geometry/ringLayout';
 import { polar } from '../../geometry/solids';
-import { HERO_LOOK } from './look';
 import { RotorPart } from './rotor';
 
 const BLADE_TOLERANCE_NM = 0.2;
@@ -19,7 +18,7 @@ function buildRotor(bladeCount = HUMAN_BLADE_COUNT): RotorPart {
     tracker: new ResourceTracker(),
     textures: createSceneTextures(),
   };
-  return new RotorPart(context, HERO_LOOK, bladeCount);
+  return new RotorPart(context, bladeCount);
 }
 
 function azimuthOf(point: Vector3): number {
@@ -27,7 +26,8 @@ function azimuthOf(point: Vector3): number {
 }
 
 function shownRingWidth(rotor: RotorPart): number {
-  const ring = rotor.object.children.find((child, index) => index > 0 && child.visible);
+  const holder = rotor.object.children[1];
+  const ring = holder.children.find((child) => child.visible);
   if (!ring) throw new Error('No ring is shown');
   return new Box3().setFromObject(ring).getSize(new Vector3()).x;
 }

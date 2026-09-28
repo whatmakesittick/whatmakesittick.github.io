@@ -3,8 +3,13 @@ import type { Vector3 } from 'three';
 import { AXLE, C_RING, GATE, HEAD, PERIPHERAL_STALK, spanMiddle } from '../../../model/scale';
 import { ringLayout } from '../../geometry/ringLayout';
 import { polar } from '../../geometry/solids';
-import type { MotorPartId } from './look';
+import type { PartId } from '../../../ids';
 import { stalkShift } from './stator';
+
+export type MotorPartId = Extract<
+  PartId,
+  'cRing' | 'centralStalk' | 'subunitA' | 'peripheralStalk' | 'alphaSubunits' | 'betaSubunits'
+>;
 
 const FRONT_DEG = 270;
 const LABEL = {

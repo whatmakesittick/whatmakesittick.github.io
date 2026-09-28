@@ -1,7 +1,6 @@
 import { Group } from 'three';
 import type { PartContext } from '../context';
 import { HeadPart } from './head';
-import type { MotorLook } from './look';
 import { RotorPart } from './rotor';
 import { StatorPart } from './stator';
 
@@ -11,10 +10,10 @@ export class MotorPart {
   readonly stator: StatorPart;
   readonly head: HeadPart;
 
-  constructor(context: PartContext, look: MotorLook, bladeCount: number) {
-    this.rotor = new RotorPart(context, look, bladeCount);
-    this.stator = new StatorPart(context, look, bladeCount);
-    this.head = new HeadPart(context, look);
+  constructor(context: PartContext, bladeCount: number) {
+    this.rotor = new RotorPart(context, bladeCount);
+    this.stator = new StatorPart(context, bladeCount);
+    this.head = new HeadPart(context);
     this.object.add(this.rotor.object, this.stator.object, this.head.object);
   }
 

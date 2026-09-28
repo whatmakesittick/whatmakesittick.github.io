@@ -3,17 +3,17 @@ import type { BufferGeometry, Mesh } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { toRadians } from '@core/math';
 import { BETA_INDICES } from '../../../ids';
+import type { PartId } from '../../../ids';
 import { ALPHA_AZIMUTH_DEG, BETA_AZIMUTH_DEG } from '../../../model/rotor';
 import { HEAD, spanLength, spanMiddle } from '../../../model/scale';
-import { LOBE } from '../../constants';
+import { DETAIL, LOBE } from '../../constants';
 import type { Detail } from '../../constants';
 import { bendEndsInward } from '../../geometry/bend';
 import { mergeParts } from '../../geometry/merge';
 import { latheY } from '../../geometry/solids';
 import { finishMesh } from '../context';
-import type { EmphasisGroup, PartContext } from '../context';
-import type { MotorFinishes } from '../../finishes';
-import type { MotorLook, MotorPartId } from './look';
+import type { PartContext } from '../context';
+import { FINISHES } from '../../finishes';
 
 const HALF = 0.5;
 
@@ -31,25 +31,13 @@ export function lobeGeometry(azimuthDeg: number, detail: Detail): BufferGeometry
   return lobe.rotateY(toRadians(azimuthDeg));
 }
 
-function lobesGeometry(azimuths: readonly number[], detail: Detail): BufferGeometry {
+export function lobesGeometry(azimuths: readonly number[], detail: Detail): BufferGeometry {
   return mergeParts(azimuths.map((azimuth) => lobeGeometry(azimuth, detail)));
 }
 
-interface LobeSet {
-  readonly azimuths: readonly number[];
-  readonly part: MotorPartId;
-  readonly solid: keyof MotorFinishes;
-  readonly glass: keyof MotorFinishes;
-}
-
-const LOBE_SETS: readonly LobeSet[] = [
-  { azimuths: ALPHA_AZIMUTH_DEG, part: 'alphaSubunits', solid: 'alpha', glass: 'alphaGlass' },
-  { azimuths: BETA_LOBE_AZIMUTHS, part: 'betaSubunits', solid: 'beta', glass: 'betaGlass' },
-];
-
 interface Lobes {
   readonly mesh: Mesh;
-  readonly group: EmphasisGroup;
+  readonly group: PartId;
   readonly solid: MaterialFinish;
   readonly glass: MaterialFinish;
 }
@@ -59,9 +47,12 @@ export class HeadPart {
   private readonly context: PartContext;
   private readonly lobes: readonly Lobes[];
 
-  constructor(context: PartContext, look: MotorLook) {
+  constructor(context: PartContext) {
     this.context = context;
-    this.lobes = LOBE_SETS.map((set) => this.buildLobes(set, look));
+    this.lobes = [
+      this.buildLobes(ALPHA_AZIMUTH_DEG, 'alphaSubunits', FINISHES.alpha, FINISHES.alphaGlass),
+      this.buildLobes(BETA_LOBE_AZIMUTHS, 'betaSubunits', FINISHES.beta, FINISHES.betaGlass),
+    ];
     this.lobes.forEach(({ mesh }) => this.object.add(mesh));
   }
 
@@ -71,15 +62,13 @@ export class HeadPart {
     });
   }
 
-  private buildLobes(set: LobeSet, look: MotorLook): Lobes {
-    const group = look.group(set.part);
-    const solid = look.finishes[set.solid];
-    const geometry = lobesGeometry(set.azimuths, look.detail);
-    return {
-      mesh: finishMesh(this.context, geometry, group, solid),
-      group,
-      solid,
-      glass: look.finishes[set.glass],
-    };
+  private buildLobes(
+    azimuths: readonly number[],
+    group: PartId,
+    solid: MaterialFinish,
+    glass: MaterialFinish,
+  ): Lobes {
+    const geometry = lobesGeometry(azimuths, DETAIL.hero);
+    return { mesh: finishMesh(this.context, geometry, group, solid), group, solid, glass };
   }
 }

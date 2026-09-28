@@ -3,7 +3,7 @@ import type { BufferGeometry } from 'three';
 import { toRadians } from '@core/math';
 import { axleBulgeAzimuth, bladeAzimuth } from '../../../model/rotor';
 import { AXLE, C_RING, spanLength } from '../../../model/scale';
-import { AXLE_FORM, BLADE } from '../../constants';
+import { AXLE_FORM, BLADE, DETAIL } from '../../constants';
 import type { Detail } from '../../constants';
 import { coiledPair } from '../../geometry/coil';
 import { mergeParts } from '../../geometry/merge';
@@ -13,7 +13,7 @@ import { capsuleBetween, latheY, polar, sphereAt } from '../../geometry/solids';
 import { finishMesh } from '../context';
 import type { PartContext } from '../context';
 import { Variants } from '../variants';
-import type { MotorLook } from './look';
+import { FINISHES } from '../../finishes';
 
 function bladeParts(layout: RingLayout, blade: number, detail: Detail): BufferGeometry[] {
   const azimuth = bladeAzimuth(blade, 0, layout.bladeCount);
@@ -97,20 +97,15 @@ export function axleGeometry(detail: Detail): BufferGeometry {
 export class RotorPart {
   readonly object = new Group();
   private readonly context: PartContext;
-  private readonly look: MotorLook;
-  private readonly rings: Variants<number>;
+  private readonly rings = new Group();
+  private readonly variants: Variants<number>;
 
-  constructor(context: PartContext, look: MotorLook, bladeCount: number) {
+  constructor(context: PartContext, bladeCount: number) {
     this.context = context;
-    this.look = look;
-    this.rings = new Variants(this.object, (count) => this.buildRing(count));
+    this.variants = new Variants(this.rings, (count) => this.buildRing(count));
     this.object.add(
-      finishMesh(
-        context,
-        axleGeometry(look.detail),
-        look.group('centralStalk'),
-        look.finishes.axle,
-      ),
+      finishMesh(context, axleGeometry(DETAIL.hero), 'centralStalk', FINISHES.axle),
+      this.rings,
     );
     this.setBladeCount(bladeCount);
   }
@@ -120,17 +115,19 @@ export class RotorPart {
   }
 
   setBladeCount(bladeCount: number): void {
-    this.rings.show(bladeCount);
+    this.variants.show(bladeCount);
+  }
+
+  setRingShown(shown: boolean): void {
+    this.rings.visible = shown;
   }
 
   private buildRing(bladeCount: number): Group {
     const layout = ringLayout(bladeCount);
-    const { detail, finishes } = this.look;
-    const group = this.look.group('cRing');
     const ring = new Group();
     ring.add(
-      finishMesh(this.context, ringGeometry(layout, detail), group, finishes.ring),
-      finishMesh(this.context, carboxylGeometry(layout, detail), group, finishes.carboxyl),
+      finishMesh(this.context, ringGeometry(layout, DETAIL.hero), 'cRing', FINISHES.ring),
+      finishMesh(this.context, carboxylGeometry(layout, DETAIL.hero), 'cRing', FINISHES.carboxyl),
     );
     return ring;
   }

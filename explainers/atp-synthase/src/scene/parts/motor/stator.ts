@@ -4,7 +4,7 @@ import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
 import { smoothstep, toRadians } from '@core/math';
 import { PICKUP_AZIMUTH_DEG, RELEASE_AZIMUTH_DEG } from '../../../model/rotor';
 import { GATE, OSCP, PERIPHERAL_STALK, spanLength } from '../../../model/scale';
-import { CHANNEL_FORM, GATE_FORM, OSCP_FORM, STALK_FORM } from '../../constants';
+import { CHANNEL_FORM, DETAIL, GATE_FORM, OSCP_FORM, STALK_FORM } from '../../constants';
 import type { Detail, ProfilePoint } from '../../constants';
 import { coiledPair } from '../../geometry/coil';
 import { mergeParts } from '../../geometry/merge';
@@ -14,7 +14,7 @@ import { capsuleBetween, latheY, polar } from '../../geometry/solids';
 import { finishMesh } from '../context';
 import type { PartContext } from '../context';
 import { Variants } from '../variants';
-import type { MotorLook } from './look';
+import { FINISHES } from '../../finishes';
 
 const TWO = 2;
 const QUARTER_TURN = Math.PI / 2;
@@ -105,20 +105,13 @@ export function oscpGeometry(detail: Detail): BufferGeometry {
 export class StatorPart {
   readonly object = new Group();
   private readonly context: PartContext;
-  private readonly look: MotorLook;
   private readonly variants: Variants<number>;
 
-  constructor(context: PartContext, look: MotorLook, bladeCount: number) {
+  constructor(context: PartContext, bladeCount: number) {
     this.context = context;
-    this.look = look;
     this.variants = new Variants(this.object, (count) => this.build(count));
     this.object.add(
-      finishMesh(
-        context,
-        oscpGeometry(look.detail),
-        look.group('peripheralStalk'),
-        look.finishes.stator,
-      ),
+      finishMesh(context, oscpGeometry(DETAIL.hero), 'peripheralStalk', FINISHES.stator),
     );
     this.setBladeCount(bladeCount);
   }
@@ -129,17 +122,15 @@ export class StatorPart {
 
   private build(bladeCount: number): Group {
     const layout = ringLayout(bladeCount);
-    const { detail, finishes } = this.look;
-    const gate = this.look.group('subunitA');
     const variant = new Group();
     variant.add(
-      finishMesh(this.context, gateGeometry(layout, detail), gate, finishes.gate),
-      finishMesh(this.context, channelsGeometry(layout, detail), gate, finishes.channel),
+      finishMesh(this.context, gateGeometry(layout, DETAIL.hero), 'subunitA', FINISHES.gate),
+      finishMesh(this.context, channelsGeometry(layout, DETAIL.hero), 'subunitA', FINISHES.channel),
       finishMesh(
         this.context,
-        stalkGeometry(layout, detail),
-        this.look.group('peripheralStalk'),
-        finishes.stator,
+        stalkGeometry(layout, DETAIL.hero),
+        'peripheralStalk',
+        FINISHES.stator,
       ),
     );
     return variant;
