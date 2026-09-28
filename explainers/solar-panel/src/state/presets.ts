@@ -34,7 +34,7 @@ const WIRING_PARTS: readonly PartId[] = ['cell', 'ribbon', 'busbar', 'junctionBo
 export const PRESETS: Record<PresetId, Preset> = {
   overview: {
     camera: 'roof',
-    speed: 15,
+    speed: 16,
     view: { sun: true, slice: false },
     startAt: MORNING_START_PHASE,
     labels: ['sun', 'panel', 'inverter', 'roof'],
@@ -77,7 +77,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   },
   inverter: {
     camera: 'inverter',
-    speed: 15,
+    speed: 16,
     view: { flow: true },
     controls: ['temperature'],
     labels: ['inverter', 'meter', 'dcCable', 'acCable', 'connector'],

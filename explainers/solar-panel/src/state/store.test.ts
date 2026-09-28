@@ -27,7 +27,7 @@ describe('solar panel store', () => {
   it('starts on the overview at 08:30 with the panel at 35° and the sun path on', () => {
     expect(createSolarPanelStore().getState()).toMatchObject({
       phase: 210,
-      speed: 15,
+      speed: 16,
       tilt: 35,
       explode: 0,
       layer: 'glass',
@@ -39,16 +39,16 @@ describe('solar panel store', () => {
     });
   });
 
-  it('plays fifteen minutes of the day every second by default, as the overview asks', () => {
+  it('plays sixteen minutes of the day every second by default, as the overview asks', () => {
     const store = createSolarPanelStore({ phase: 100, playing: true });
     store.getState().tick(1.5);
-    expect(store.getState().phase).toBeCloseTo(122.5);
+    expect(store.getState().phase).toBeCloseTo(124);
   });
 
   it('jumps from dusk back to dawn', () => {
     const store = createSolarPanelStore({ phase: 835, playing: true });
     store.getState().tick(1);
-    expect(store.getState().phase).toBeCloseTo(10);
+    expect(store.getState().phase).toBeCloseTo(11);
   });
 
   it('keeps every slider inside its range', () => {
@@ -128,7 +128,7 @@ describe('solar panel store', () => {
   it('seeks 08:30 for the overview and noon for the junction', () => {
     const store = createSolarPanelStore({ phase: 700, playing: true });
     store.getState().applyPreset('overview');
-    expect(store.getState()).toMatchObject({ phase: 210, playing: true, speed: 15 });
+    expect(store.getState()).toMatchObject({ phase: 210, playing: true, speed: 16 });
     store.getState().applyPreset('junction');
     expect(store.getState()).toMatchObject({ phase: 420, speed: 2 });
     expect(store.getState().view).toMatchObject({ slice: true, flow: true });
