@@ -30,7 +30,7 @@ function connectorGeometry(): CylinderGeometry[] {
 export class JunctionBoxPart {
   readonly object = new Group();
   readonly boxes = new Group();
-  readonly anchors: Readonly<Record<'junctionBox' | 'connector', Object3D>>;
+  readonly anchor: Object3D;
   private readonly lead: TubeMesh;
 
   constructor(context: PartContext) {
@@ -43,15 +43,7 @@ export class JunctionBoxPart {
       finishMesh(context, mergeParts(connectorGeometry()), 'connector', FINISHES.connector),
     );
     const lid = -JUNCTION_BOX.depth - JUNCTION_BOX.lid.depth;
-    this.anchors = {
-      junctionBox: anchorAt(this.boxes, 0, JUNCTION_BOX.y, lid),
-      connector: anchorAt(
-        this.object,
-        LEAD_X,
-        CONNECTOR.top - CONNECTOR.length / 2,
-        LEAD.tuck - CONNECTOR.nut.radius,
-      ),
-    };
+    this.anchor = anchorAt(this.boxes, 0, JUNCTION_BOX.y, lid);
   }
 
   setBack(back: number): void {

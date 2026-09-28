@@ -22,6 +22,7 @@ const BOTTOM_Y = INVERTER.position.y - INVERTER.size.height / 2;
 
 export const INVERTER_GLANDS = {
   y: BOTTOM_Y - INVERTER_BODY.glands.length,
+  plugY: BOTTOM_Y - INVERTER_BODY.plugs.length,
   x: WALL_X + INVERTER.size.depth / 2,
   dc: INVERTER_BODY.glands.dc.map((offset) => INVERTER.position.z + offset),
   ac: INVERTER_BODY.glands.ac.map((offset) => INVERTER.position.z + offset),
@@ -60,19 +61,31 @@ function fins() {
   return mergeParts(pieces);
 }
 
-function glands() {
+function hanging(radius: number, length: number, z: number, drop = 0): CylinderGeometry {
+  const cylinder = new CylinderGeometry(radius, radius, length, GLAND_SEGMENTS);
+  cylinder.translate(INVERTER_GLANDS.x, BOTTOM_Y - drop - length / 2, z);
+  return cylinder;
+}
+
+function acGlands() {
   const { radius, length } = INVERTER_BODY.glands;
-  const pieces = [...INVERTER_GLANDS.dc, ...INVERTER_GLANDS.ac].map((z) => {
-    const gland = new CylinderGeometry(radius, radius, length, GLAND_SEGMENTS);
-    gland.translate(INVERTER_GLANDS.x, BOTTOM_Y - length / 2, z);
-    return gland;
-  });
-  return mergeParts(pieces);
+  return mergeParts(INVERTER_GLANDS.ac.map((z) => hanging(radius, length, z)));
+}
+
+function dcPlugs() {
+  const { radius, length, nut } = INVERTER_BODY.plugs;
+  return mergeParts(
+    INVERTER_GLANDS.dc.flatMap((z) => [
+      hanging(radius, length, z),
+      hanging(nut.radius, nut.length, z, (length - nut.length) / 2),
+    ]),
+  );
 }
 
 export class InverterPart {
   readonly object = new Group();
   readonly anchor: Object3D;
+  readonly connector: Object3D;
   private readonly display: CanvasTexture;
   private readonly led: Mesh;
   private readonly context: PartContext;
@@ -103,7 +116,8 @@ export class InverterPart {
     this.object.add(
       partMesh(context, body(), 'inverter', 'inverter'),
       partMesh(context, fins(), 'inverter', 'inverterFront'),
-      partMesh(context, glands(), 'inverter', 'connector'),
+      partMesh(context, acGlands(), 'inverter', 'darkSteel'),
+      partMesh(context, dcPlugs(), 'connector', 'connector'),
       partMesh(
         context,
         block(
@@ -122,6 +136,13 @@ export class InverterPart {
       FRONT_X + ANCHOR_LIFT_CM,
       INVERTER.position.y,
       INVERTER.position.z,
+    );
+    const { plugs } = INVERTER_BODY;
+    this.connector = anchorAt(
+      this.object,
+      INVERTER_GLANDS.x + plugs.nut.radius + ANCHOR_LIFT_CM,
+      BOTTOM_Y - plugs.length / 2,
+      (INVERTER_GLANDS.dc[0] + INVERTER_GLANDS.dc[1]) / 2,
     );
   }
 

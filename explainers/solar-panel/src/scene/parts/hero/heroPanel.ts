@@ -26,8 +26,7 @@ export type HeroAnchorId =
   | 'busbar'
   | 'backsheet'
   | 'junctionBox'
-  | 'bypassDiode'
-  | 'connector';
+  | 'bypassDiode';
 
 const LAMINATE_X = [-LAMINATE.width / 2, LAMINATE.width / 2] as const;
 const LAMINATE_Y = [FRAME_WALL_CM, MODULE.height - FRAME_WALL_CM] as const;
@@ -108,8 +107,7 @@ export class HeroPanelPart {
       ribbon: this.cells.anchors.ribbon,
       busbar: this.cells.anchors.busbar,
       bypassDiode: this.cells.anchors.bypassDiode,
-      junctionBox: this.junction.anchors.junctionBox,
-      connector: this.junction.anchors.connector,
+      junctionBox: this.junction.anchor,
     };
     this.setExplode(0, 0);
     this.setShade(0);

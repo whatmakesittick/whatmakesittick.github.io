@@ -289,6 +289,7 @@ export class SolarAssembly implements Assembly {
       ...(Object.entries(hero) as [PartId, Object3D][]),
       ...(Object.entries(this.slice.anchors) as [PartId, Object3D][]),
       ['inverter', this.inverter.anchor],
+      ['connector', this.inverter.connector],
       ['meter', this.meter.anchor],
       ['dcCable', this.cables.anchors.dcCable],
       ['acCable', this.cables.anchors.acCable],

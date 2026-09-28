@@ -188,6 +188,7 @@ export const INVERTER_BODY = {
   stripe: { height: 1.2, y: -14 },
   fins: { count: 7, depth: 1.4, thickness: 0.6, inset: 5 },
   glands: { radius: 1.1, length: 2.4, dc: [-11, -6], ac: [6, 11] },
+  plugs: { radius: 1.05, length: 4.6, nut: { radius: 1.45, length: 1 } },
 } as const;
 
 export const METER_BODY = {

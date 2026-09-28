@@ -40,8 +40,8 @@ function dcRoute(start: Vector3): Vector3[] {
     new Vector3(trayX, floorY, runZ),
     new Vector3(trayX, floorY, DC_Z),
     new Vector3(wallX, wallFoot, DC_Z),
-    new Vector3(wallX, INVERTER_GLANDS.y - glandRise, DC_Z),
-    new Vector3(INVERTER_GLANDS.x, INVERTER_GLANDS.y, DC_Z),
+    new Vector3(wallX, INVERTER_GLANDS.plugY - glandRise, DC_Z),
+    new Vector3(INVERTER_GLANDS.x, INVERTER_GLANDS.plugY, DC_Z),
   ];
 }
 
