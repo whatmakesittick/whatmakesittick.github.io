@@ -29,7 +29,7 @@ const timeline: Timeline = {
 const explainer = { timeline, dock: { choices: [], toggles: [] } } as unknown as Explainer;
 
 const DOCK = `
-  <div data-dock>
+  <div data-dock style="visibility: hidden">
     <button data-control="play"></button>
     <span data-status="phase"></span>
     <span data-status="name"></span>
@@ -58,6 +58,12 @@ function createStore() {
 describe('mountDock', () => {
   beforeEach(() => {
     document.body.innerHTML = DOCK;
+  });
+
+  it('shows the dock once its controls are in place', () => {
+    mountDock(document, createStore(), explainer);
+    const dock = document.querySelector<HTMLElement>('[data-dock]');
+    expect(dock?.style.visibility).toBe('');
   });
 
   it('keeps the play button label key in step with playback', () => {

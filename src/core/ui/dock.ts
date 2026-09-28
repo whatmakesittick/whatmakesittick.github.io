@@ -94,4 +94,5 @@ export function mountDock<S extends Playback>(
   mountExtras(dock, store, explainer);
   bindCameraReset(requireElement<HTMLButtonElement>(dock, '[data-control="reset-camera"]'), store);
   bindDisclosure(dock, requireElement<HTMLButtonElement>(dock, '[data-control="more"]'));
+  dock.style.removeProperty('visibility');
 }

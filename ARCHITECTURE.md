@@ -426,7 +426,9 @@ The dock's jump chips sit under the scrubber's coloured bands. `phaseColumns` in
 cycle, and the dock sets it as `--phase-columns`. `--phase-min-width` on
 `.phase-buttons` is `max-content`, so a chip never cuts its label: where a short
 phase has no room for it, its chip is a little wider than its band. A chip's
-accessible name is its visible label; `jumpLabelKey` becomes its `title`.
+accessible name is its visible label; `jumpLabelKey` becomes its `title`. The dock
+stays hidden until `mountDock` has added the explainer's choices and toggles, so it
+never grows in front of the reader.
 
 ## Build
 
