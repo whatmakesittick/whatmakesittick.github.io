@@ -7,6 +7,7 @@ import { LAYOUTS, SUN_MOMENTS, shadedCellCount } from '../model';
 import { createSolarPanelStore } from '../state';
 import type { SolarPanelStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
+import { NO_VALUE } from './format';
 import { mountSolarPanelUi } from '.';
 
 function readout(id: string): string | null | undefined {
@@ -169,6 +170,8 @@ describe('chapter widgets', () => {
     expect(store.getState().temperature).toBeNull();
     expect(readout('temperature')).toBe('54 °C');
     expect(follow?.getAttribute('aria-disabled')).toBe('true');
+    store.getState().setPhase(10);
+    expect(readout('temperature-voltage')).toBe(NO_VALUE);
   });
 
   it('follows the power through the inverter and adds up the day', () => {

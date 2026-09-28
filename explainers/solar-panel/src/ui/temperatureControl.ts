@@ -5,7 +5,7 @@ import { temperatureFactor, vocAt } from '../model';
 import { TEMPERATURE_RANGE, cellTemperatureOf, irradianceOf } from '../state';
 import type { SolarPanelState, SolarPanelStore } from '../state';
 import type { Disposer } from './disposers';
-import { formatCelsius, formatSignedPercent, formatVolts } from './format';
+import { NO_VALUE, formatCelsius, formatSignedPercent, formatVolts } from './format';
 
 const FOLLOW_CHIP = '.chip[data-action="followDay"]';
 const TENTHS = 10;
@@ -15,8 +15,10 @@ function shownTemperature(state: SolarPanelState): number {
   return Math.round(celsius);
 }
 
-function shownVoc(state: SolarPanelState): number {
-  return Math.round(vocAt(irradianceOf(state), cellTemperatureOf(state)) * TENTHS) / TENTHS;
+function shownVoc(state: SolarPanelState): number | null {
+  const irradiance = irradianceOf(state);
+  if (irradiance <= 0) return null;
+  return Math.round(vocAt(irradiance, cellTemperatureOf(state)) * TENTHS) / TENTHS;
 }
 
 export function mountTemperatureControl(root: Document, store: SolarPanelStore): Disposer {
@@ -31,7 +33,7 @@ export function mountTemperatureControl(root: Document, store: SolarPanelStore):
     set: (state, celsius) => state.setTemperature(celsius),
     readouts: {
       'temperature-loss': ([celsius]) => formatSignedPercent(temperatureFactor(celsius) - 1),
-      'temperature-voltage': ([, , voc]) => formatVolts(voc),
+      'temperature-voltage': ([, , voc]) => (voc === null ? NO_VALUE : formatVolts(voc)),
     },
     after: ([, followsDay]) => {
       followChip.setAttribute('aria-disabled', String(followsDay));
