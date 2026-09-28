@@ -9,6 +9,7 @@ export const NO_VALUE = '–';
 const PERCENT = 100;
 const DENSITY_DIGITS = 2;
 const TENTHS = 10;
+const RIG_LIST_STYLE: Intl.ListFormatOptions = { type: 'conjunction', style: 'long' };
 
 export const PHASE_KEYS: Record<PhaseId, string> = {
   deck: 'timeline.phase.deck',
@@ -71,7 +72,7 @@ function listFormat(): Intl.ListFormat {
   const language = currentLanguage();
   const cached = listFormats.get(language);
   if (cached) return cached;
-  const format = new Intl.ListFormat(language, { style: 'short', type: 'unit' });
+  const format = new Intl.ListFormat(language, RIG_LIST_STYLE);
   listFormats.set(language, format);
   return format;
 }
