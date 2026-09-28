@@ -1,22 +1,22 @@
 import { describe, expect, it } from 'vitest';
+import { slowMotionFactor } from '@core/playback';
 import { START_TIME_ON_DIAL_S } from './kinematics';
 import {
   REAL_TIME_SPEED,
   cycleCountAfter,
   formatTimeOnDial,
   phaseDegreesPerSecond,
-  slowMotionFactor,
 } from './oscillations';
 
 describe('slow motion', () => {
   it('plays four swings a second in real time at the top stop', () => {
-    expect(slowMotionFactor(REAL_TIME_SPEED)).toBe(1);
+    expect(slowMotionFactor(REAL_TIME_SPEED, REAL_TIME_SPEED)).toBe(1);
     expect(phaseDegreesPerSecond(REAL_TIME_SPEED)).toBeCloseTo(1440);
   });
 
   it('halves the pace at every stop down to 1/256', () => {
     expect(phaseDegreesPerSecond(7)).toBeCloseTo(720);
-    expect(slowMotionFactor(0)).toBe(256);
+    expect(slowMotionFactor(0, REAL_TIME_SPEED)).toBe(256);
     expect(phaseDegreesPerSecond(0)).toBeCloseTo(1440 / 256);
   });
 });

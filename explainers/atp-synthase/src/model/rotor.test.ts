@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { slowMotionFactor } from '@core/playback';
 import { BETA_INDICES, SITE_STATES } from '../ids';
 import {
   ATP_PER_TURN,
@@ -22,7 +23,6 @@ import {
   protonsThrough,
   siteMotion,
   siteState,
-  slowdownFactor,
   stepIndex,
   stepProgress,
 } from './rotor';
@@ -51,8 +51,8 @@ describe('rotor steps', () => {
   it('runs at 100 turns a second in real time and halves per speed step', () => {
     expect(degreesPerSecond(REAL_TIME_SPEED)).toBe(36_000);
     expect(degreesPerSecond(REAL_TIME_SPEED - 1)).toBe(18_000);
-    expect(slowdownFactor(0)).toBe(1024);
-    expect(slowdownFactor(REAL_TIME_SPEED)).toBe(1);
+    expect(slowMotionFactor(0, REAL_TIME_SPEED)).toBe(1024);
+    expect(slowMotionFactor(REAL_TIME_SPEED, REAL_TIME_SPEED)).toBe(1);
   });
 });
 

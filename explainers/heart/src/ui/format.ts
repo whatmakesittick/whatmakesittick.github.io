@@ -1,9 +1,10 @@
 import { formatFixed, formatNumber } from '@core/format';
 import { t } from '@core/i18n';
+import { slowMotionFactor } from '@core/playback';
 import { PHASE_IDS } from '../ids';
 import type { ChamberId, ConductionSite, HeartSound, PhaseId, ValveId, ValveState } from '../ids';
 import type { ValveMoment } from '../model';
-import { REAL_TIME_SPEED, phaseAt, slowMotionFactor } from '../model';
+import { REAL_TIME_SPEED, phaseAt } from '../model';
 
 const REAL_TIME_FORMAT = '×1';
 const SLOWER_PREFIX = '1/';
@@ -42,12 +43,14 @@ export function describePhase(phase: number): string {
 
 export function formatSpeed(speed: number): string {
   if (speed === REAL_TIME_SPEED) return REAL_TIME_FORMAT;
-  return `${SLOWER_PREFIX}${formatNumber(slowMotionFactor(speed))}`;
+  return `${SLOWER_PREFIX}${formatNumber(slowMotionFactor(speed, REAL_TIME_SPEED))}`;
 }
 
 export function describeSpeed(speed: number): string {
   if (speed === REAL_TIME_SPEED) return t('timeline.realTime');
-  return t('timeline.slower', { factor: formatNumber(slowMotionFactor(speed)) });
+  return t('timeline.slower', {
+    factor: formatNumber(slowMotionFactor(speed, REAL_TIME_SPEED)),
+  });
 }
 
 export function formatMmHg(mmHg: number): string {
