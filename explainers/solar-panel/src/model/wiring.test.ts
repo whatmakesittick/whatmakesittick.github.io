@@ -156,4 +156,13 @@ describe('strings and diodes', () => {
     expect(night.activeDiodes).toEqual([false, false, false]);
     expect(night.curve).toEqual([]);
   });
+
+  it('reports no flow once the shaded panel makes almost nothing', () => {
+    [halfCut, fullCell].forEach((layout) => {
+      const analysis = analyseShade(layout, 0.8, 973, 54);
+      expect(analysis.maximum.power).toBeGreaterThan(0);
+      expect(analysis.activeDiodes.some(Boolean)).toBe(false);
+      expect(analysis.deadStrings.every(Boolean)).toBe(true);
+    });
+  });
 });

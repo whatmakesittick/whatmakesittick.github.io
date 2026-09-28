@@ -14,6 +14,7 @@ import { KELVIN_OFFSET, thermalVoltageV } from './power';
 
 export const IV_SAMPLES = 120;
 export const DEAD_STRING_SHARE = 0.1;
+export const IDLE_POWER_SHARE = 0.01;
 export const DE_SOTO_BAND_GAP_SLOPE = -0.0002677;
 
 const SWEEP_SAMPLES = 600;
@@ -280,13 +281,18 @@ function noFlow(layout: ModuleLayout): GroupStates {
   };
 }
 
+function isIdle(maximum: OperatingPoint, clearMaximum: OperatingPoint): boolean {
+  return maximum.power <= IDLE_POWER_SHARE * clearMaximum.power;
+}
+
 export function groupStates(
   circuit: ModuleCircuit,
   maximum: OperatingPoint,
-  healthyStringCurrent: number,
+  clearMaximum: OperatingPoint,
 ): GroupStates {
   const { layout, groups } = circuit;
-  if (groups.length === 0 || maximum.power <= 0) return noFlow(layout);
+  if (groups.length === 0 || isIdle(maximum, clearMaximum)) return noFlow(layout);
+  const healthyStringCurrent = clearMaximum.current / layout.stringsPerGroup;
   const deadBelow = DEAD_STRING_SHARE * healthyStringCurrent;
   const activeDiodes = groups.map(
     (group) => maximum.current > group.bypassCurrent + DIODE_TOLERANCE_A,
@@ -308,12 +314,11 @@ export function analyseShade(
   const shaded = moduleCircuit(layout, shade, irradiance, cellTemperatureC);
   const clearMaximum = maximumPowerPoint(clear.sweep);
   const maximum = maximumPowerPoint(shaded.sweep);
-  const healthyStringCurrent = clearMaximum.current / layout.stringsPerGroup;
   return {
     curve: ivCurve(shaded),
     clearCurve: ivCurve(clear),
     maximum,
     clearMaximum,
-    ...groupStates(shaded, maximum, healthyStringCurrent),
+    ...groupStates(shaded, maximum, clearMaximum),
   };
 }
