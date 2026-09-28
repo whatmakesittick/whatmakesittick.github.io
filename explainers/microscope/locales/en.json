@@ -4,6 +4,7 @@
     "eyebrow": "Follow the light from lamp to eye",
     "tagline": "A microscope bends light twice, once in the objective to make a real, upside-down image inside the tube and again in the eyepiece to enlarge it, yet the finest detail it can show is set by the light and the objective's aperture, not by how much it magnifies.",
     "description": "An interactive look inside a microscope, from lamp to eye: how lenses bend light, how it magnifies in two stages and why more magnification stops helping.",
+    "socialAlt": "Low-poly 3D cutaway of a light microscope with green rays of light running from the lamp through the condenser, objective and eyepiece into an eye, beside the title How a microscope works",
     "summary": "Lenses, two-stage magnification and the smallest detail light can show."
   },
   "stage": {

@@ -4,6 +4,7 @@
     "eyebrow": "Suivez la lumière, de la lampe jusqu’à l’œil",
     "tagline": "Un microscope dévie la lumière deux fois, d’abord dans l’objectif, qui forme dans le tube une image réelle et renversée, puis dans l’oculaire, qui l’agrandit encore, mais le plus fin détail qu’il peut montrer dépend de la lumière et de l’ouverture de l’objectif, pas du grossissement.",
     "description": "Une visite interactive du microscope, de la lampe à l’œil : comment les lentilles dévient la lumière, le grossissement en deux étapes et ses limites.",
+    "socialAlt": "Vue en coupe 3D low poly d’un microscope optique, avec des rayons de lumière verts qui vont de la lampe à l’œil en traversant le condenseur, l’objectif et l’oculaire, à côté du titre « Comment fonctionne un microscope »",
     "summary": "Les lentilles, le grossissement en deux étapes et le plus petit détail que la lumière peut montrer."
   },
   "stage": {
