@@ -7,7 +7,7 @@ import {
   STANDARD_TEST,
   cellCount,
   cellsOf,
-  shadedShareOfRow,
+  shadedShareOfCell,
 } from './module';
 import { BAND_GAP_EV } from './optics';
 import { KELVIN_OFFSET, thermalVoltageV } from './power';
@@ -134,7 +134,7 @@ export function cellParameters(
 }
 
 export function bandShading(layout: ModuleLayout, shade: number): Shading {
-  return (cell) => shadedShareOfRow(layout, cell.row, shade);
+  return (cell) => shadedShareOfCell(layout, cell.column, cell.row, shade);
 }
 
 function toShading(layout: ModuleLayout, shade: Shade): Shading {

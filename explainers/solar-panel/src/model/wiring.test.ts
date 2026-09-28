@@ -18,6 +18,10 @@ function oneCellAtTheBottom(layout: ModuleLayout, share: number) {
   return (cell: CellPosition) => (cell.column === 0 && cell.row === layout.rows - 1 ? share : 0);
 }
 
+function bottomRow(layout: ModuleLayout, share: number) {
+  return (cell: CellPosition) => (cell.row === layout.rows - 1 ? share : 0);
+}
+
 function keptShare(layout: ModuleLayout, shade: Parameters<typeof analyseShade>[1]): number {
   const analysis = analyseShade(layout, shade, 1000, 25);
   return analysis.maximum.power / analysis.clearMaximum.power;
@@ -92,19 +96,25 @@ describe('shading (facts section 7)', () => {
   });
 
   it('keeps half the power with the bottom row shaded on the half cut panel and almost none on the full cell one', () => {
-    expect(keptShare(halfCut, 1 / halfCut.rows)).toBeCloseTo(0.503, 1);
-    expect(keptShare(fullCell, 1 / fullCell.rows)).toBeLessThan(0.05);
+    expect(keptShare(halfCut, bottomRow(halfCut, 1))).toBeCloseTo(0.503, 1);
+    expect(keptShare(fullCell, bottomRow(fullCell, 1))).toBeLessThan(0.05);
   });
 
   it('matches the partly shaded bottom row', () => {
-    expect(keptShare(halfCut, 0.5 / halfCut.rows)).toBeCloseTo(0.767, 1);
-    expect(keptShare(fullCell, 0.5 / fullCell.rows)).toBeCloseTo(0.577, 1);
+    expect(keptShare(halfCut, bottomRow(halfCut, 0.5))).toBeCloseTo(0.767, 1);
+    expect(keptShare(fullCell, bottomRow(fullCell, 0.5))).toBeCloseTo(0.577, 1);
   });
 
-  it('shades a band from the bottom of the panel', () => {
-    const shading = bandShading(halfCut, 0.5 / halfCut.rows);
-    expect(shading({ column: 3, row: 17, group: 1, string: 3 })).toBeCloseTo(0.5);
-    expect(shading({ column: 3, row: 16, group: 1, string: 3 })).toBe(0);
+  it('creeps in from the bottom left corner along a tilted edge', () => {
+    const shading = bandShading(halfCut, 0.03);
+    expect(shading({ column: 0, row: 17, group: 0, string: 1 })).toBeGreaterThan(0.2);
+    expect(shading({ column: 1, row: 17, group: 0, string: 1 })).toBe(0);
+    expect(shading({ column: 0, row: 16, group: 0, string: 1 })).toBe(0);
+    expect(keptShare(halfCut, 0.03)).toBeGreaterThan(0.8);
+    expect(keptShare(halfCut, 0.09)).toBeCloseTo(0.65, 1);
+    expect(keptShare(fullCell, 0.09)).toBeCloseTo(0.65, 1);
+    expect(keptShare(halfCut, 0.35)).toBeCloseTo(0.503, 1);
+    expect(keptShare(fullCell, 0.35)).toBeLessThan(0.05);
   });
 });
 
@@ -116,7 +126,7 @@ describe('strings and diodes', () => {
   });
 
   it('keeps the upper strings of the half cut panel running under a low shadow', () => {
-    const analysis = analyseShade(halfCut, 0.5, 900, 45);
+    const analysis = analyseShade(halfCut, 0.35, 900, 45);
     expect(analysis.activeDiodes).toEqual([false, false, false]);
     expect(analysis.deadStrings).toEqual([false, true, false, true, false, true]);
   });

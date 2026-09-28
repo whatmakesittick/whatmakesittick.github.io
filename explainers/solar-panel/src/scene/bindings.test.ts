@@ -54,7 +54,7 @@ describe('scene bindings', () => {
     const { received, targets } = fakeTargets();
     const store = createSolarPanelStore({ phase: SUN_MOMENTS.noon });
     bindStore(store, targets);
-    store.getState().setShade(0.5);
+    store.getState().setShade(0.35);
     expect(received.at(-1)?.deadStrings).toEqual([false, true, false, true, false, true]);
     expect(received.at(-1)?.power).toBeLessThan(200);
     store.getState().setTemperature(70);

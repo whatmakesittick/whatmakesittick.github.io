@@ -137,16 +137,43 @@ export function groupOfString(layout: ModuleLayout, string: number): number {
   return Math.floor(string / layout.stringsPerGroup);
 }
 
-export function shadedShareOfRow(layout: ModuleLayout, row: number, shade: number): number {
+export const SHADE_EDGE_DROP = 1 / 3;
+
+export function shadeEdgeHeight(shade: number, xShare: number): number {
+  return shade * (1 + SHADE_EDGE_DROP) - SHADE_EDGE_DROP * xShare;
+}
+
+function averageClamped(fromValue: number, toValue: number): number {
+  const low = Math.min(fromValue, toValue);
+  const high = Math.max(fromValue, toValue);
+  if (high <= 0) return 0;
+  if (low >= 1) return 1;
+  if (high === low) return clamp(low, 0, 1);
+  const inner = (Math.min(high, 1) ** 2 - Math.max(low, 0) ** 2) / 2;
+  const above = Math.max(0, high - 1);
+  return (inner + above) / (high - low);
+}
+
+export function shadedShareOfCell(
+  layout: ModuleLayout,
+  column: number,
+  row: number,
+  shade: number,
+): number {
   const rowHeight = 1 / layout.rows;
-  const bottomEdge = 1 - (row + 1) * rowHeight;
-  return clamp((shade - bottomEdge) / rowHeight, 0, 1);
+  const bottom = 1 - (row + 1) * rowHeight;
+  const left = column / layout.columns;
+  const right = (column + 1) / layout.columns;
+  const coverAt = (xShare: number) => (shadeEdgeHeight(shade, xShare) - bottom) / rowHeight;
+  return averageClamped(coverAt(left), coverAt(right));
 }
 
 export function shadedCellCount(layout: ModuleLayout, shade: number): number {
   let count = 0;
   for (let row = 0; row < layout.rows; row += 1) {
-    if (shadedShareOfRow(layout, row, shade) > 0) count += layout.columns;
+    for (let column = 0; column < layout.columns; column += 1) {
+      if (shadedShareOfCell(layout, column, row, shade) > 0) count += 1;
+    }
   }
   return count;
 }

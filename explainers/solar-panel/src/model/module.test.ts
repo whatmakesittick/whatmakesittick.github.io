@@ -9,8 +9,10 @@ import {
   cellsOf,
   diodeCount,
   groupOfString,
+  SHADE_EDGE_DROP,
+  shadeEdgeHeight,
   shadedCellCount,
-  shadedShareOfRow,
+  shadedShareOfCell,
   stringCount,
 } from './module';
 
@@ -58,19 +60,39 @@ describe('layouts', () => {
 });
 
 describe('shade band', () => {
-  it('covers the bottom row first and partially', () => {
-    const layout = LAYOUTS.halfCut;
-    expect(shadedShareOfRow(layout, 17, 0)).toBe(0);
-    expect(shadedShareOfRow(layout, 17, 1 / 36)).toBeCloseTo(0.5);
-    expect(shadedShareOfRow(layout, 17, 1 / 18)).toBeCloseTo(1);
-    expect(shadedShareOfRow(layout, 16, 1 / 18)).toBeCloseTo(0);
-    expect(shadedShareOfRow(layout, 0, 1)).toBeCloseTo(1);
+  const layout = LAYOUTS.halfCut;
+
+  it('has a top edge that drops one half cell per column from left to right', () => {
+    expect(shadeEdgeHeight(0, 0)).toBe(0);
+    expect(shadeEdgeHeight(0, 1)).toBeCloseTo(-SHADE_EDGE_DROP);
+    expect(shadeEdgeHeight(1, 1)).toBeCloseTo(1);
+    expect(shadeEdgeHeight(1, 0)).toBeGreaterThan(1);
+  });
+
+  it('shades the bottom left cell first and the whole bottom row by a third', () => {
+    expect(shadedShareOfCell(layout, 0, 17, 0)).toBe(0);
+    expect(shadedShareOfCell(layout, 0, 17, 0.03)).toBeGreaterThan(0.2);
+    expect(shadedShareOfCell(layout, 1, 17, 0.03)).toBe(0);
+    expect(shadedShareOfCell(layout, 0, 17, 0.09)).toBeCloseTo(1);
+    expect(shadedShareOfCell(layout, 2, 17, 0.08)).toBe(0);
+    expect(shadedShareOfCell(layout, 5, 17, 0.3)).toBeCloseTo(1);
+    expect(shadedShareOfCell(layout, 0, 16, 0.03)).toBe(0);
+    expect(shadedShareOfCell(layout, 0, 0, 1)).toBeCloseTo(1);
+    expect(shadedShareOfCell(layout, 5, 0, 1)).toBeCloseTo(1);
+  });
+
+  it('covers the whole bottom row while the upper strings stay clear', () => {
+    for (let column = 0; column < layout.columns; column += 1) {
+      expect(shadedShareOfCell(layout, column, 17, 0.35)).toBeCloseTo(1);
+      expect(shadedShareOfCell(layout, column, 8, 0.35)).toBe(0);
+    }
   });
 
   it('counts the cells the shadow touches', () => {
-    expect(shadedCellCount(LAYOUTS.halfCut, 0)).toBe(0);
-    expect(shadedCellCount(LAYOUTS.halfCut, 0.01)).toBe(6);
-    expect(shadedCellCount(LAYOUTS.halfCut, 0.5)).toBe(54);
+    expect(shadedCellCount(layout, 0)).toBe(0);
+    expect(shadedCellCount(layout, 0.02)).toBe(1);
+    expect(shadedCellCount(layout, 0.35)).toBeGreaterThan(30);
+    expect(shadedCellCount(layout, 0.35)).toBeLessThan(54);
     expect(shadedCellCount(LAYOUTS.fullCell, 1)).toBe(60);
   });
 });

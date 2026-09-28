@@ -3,7 +3,7 @@ import { initI18n } from '@core/i18n';
 import { mountActions } from '@core/ui/actions';
 import chapters from '../../chapters.html?raw';
 import en from '../../locales/en.json';
-import { SUN_MOMENTS } from '../model';
+import { LAYOUTS, SUN_MOMENTS, shadedCellCount } from '../model';
 import { createSolarPanelStore } from '../state';
 import type { SolarPanelStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
@@ -130,22 +130,26 @@ describe('chapter widgets', () => {
     expect(readout('shade-diodes')).toBe('0 of 3');
     expect(readout('shade-power')).toBe('375 W');
     expect(readout('shade-loss')).toBe('0%');
-    slide('shade', 0.5);
-    expect(readout('shade')).toBe('50%');
-    expect(readout('shade-cells')).toBe('54 of 108');
-    expect(readout('shade-loss')).toMatch(/^5\d%$/);
+    slide('shade', 0.35);
+    expect(readout('shade')).toBe('35%');
+    expect(readout('shade-cells')).toBe(`${shadedCellCount(LAYOUTS.halfCut, 0.35)} of 108`);
+    expect(readout('shade-diodes')).toBe('0 of 3');
+    expect(readout('shade-loss')).toMatch(/^(49|5\d)%$/);
     click('layout', 'fullCell');
     expect(pressed('layout', 'fullCell')).toBe('true');
-    expect(readout('shade-cells')).toBe('30 of 60');
-    expect(readout('shade-power')).toMatch(/^\d W$/);
-    expect(readout('shade-loss')).toBe('100%');
+    expect(readout('shade-cells')).toBe(`${shadedCellCount(LAYOUTS.fullCell, 0.35)} of 60`);
+    expect(readout('shade-power')).toMatch(/^\d\d? W$/);
+    expect(readout('shade-loss')).toMatch(/^9\d%$/);
   });
 
-  it('keeps the diodes off while the shadow covers every third of the panel alike', () => {
+  it('switches one diode on once the corner cell is covered', () => {
     click('layout', 'fullCell');
-    slide('shade', 0.05);
-    expect(readout('shade-cells')).toBe('6 of 60');
+    slide('shade', 0.03);
+    expect(readout('shade-cells')).toBe('1 of 60');
     expect(readout('shade-diodes')).toBe('0 of 3');
+    slide('shade', 0.09);
+    expect(readout('shade-diodes')).toBe('1 of 3');
+    expect(readout('shade-loss')).toMatch(/^3\d%$/);
   });
 
   it('shows what the cell temperature does to the power and the voltage', () => {

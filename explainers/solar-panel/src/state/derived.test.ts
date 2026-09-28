@@ -42,8 +42,8 @@ describe('derived panel values', () => {
     expect(powerOf(stateWith({ phase: 830 }))).toBe(0);
   });
 
-  it('halves the power of the half cut panel when the bottom half is shaded', () => {
-    const shaded = stateWith({ phase: NOON, shade: 0.5 });
+  it('halves the power of the half cut panel when the bottom row is in shadow', () => {
+    const shaded = stateWith({ phase: NOON, shade: 0.35 });
     expect(shadeFactorOf(shaded)).toBeCloseTo(0.5, 1);
     expect(powerOf(shaded)).toBeCloseTo(powerOf(stateWith({ phase: NOON })) * 0.5, -1);
     expect(shadeFactorOf(stateWith({ phase: NOON }))).toBe(1);
@@ -56,7 +56,7 @@ describe('derived panel values', () => {
   });
 
   it('drops the lower strings under a low shadow and keeps all running in full sun', () => {
-    expect(stringStatesOf(stateWith({ phase: NOON, shade: 0.5 })).deadStrings).toEqual([
+    expect(stringStatesOf(stateWith({ phase: NOON, shade: 0.35 })).deadStrings).toEqual([
       false,
       true,
       false,
