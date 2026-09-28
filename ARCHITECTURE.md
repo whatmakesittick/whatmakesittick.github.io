@@ -437,7 +437,9 @@ build and the runtime. A page is rendered in two steps:
    itself, `og:locale` with the other languages as alternates, the Open Graph and
    Twitter tags (`og:type` is `article` on an explainer page, with its dates as
    `article:published_time` and `article:modified_time`, and `website` on the catalogue), one `<link rel="alternate" hreflang>` per language variant plus
-   `x-default` for the English page, and the JSON-LD.
+   `x-default` for the English page, the JSON-LD, and the cover with its alt text
+   (`stage.coverAlt` with the title) in a `<noscript>` inside `#scene`, so a reader or
+   crawler without scripts sees the model as a still image.
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
    element, in that order, the way `translateDom` does at runtime. A `data-i18n` element

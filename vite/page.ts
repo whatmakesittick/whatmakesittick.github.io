@@ -9,6 +9,7 @@ import type { LoadedExplainer } from './manifest.ts';
 import { CATALOGUE_ROUTE, explainerRoute } from './routes.ts';
 import type { PageRoute } from './routes.ts';
 import {
+  COVER_SIZE,
   LICENSE_URL,
   REPOSITORY_URL,
   SITE_NAME,
@@ -34,6 +35,7 @@ const CATALOGUE_TAGLINE_KEY = 'catalogue.tagline';
 const CATALOGUE_TITLE_KEY = 'catalogue.title';
 const CATALOGUE_DOCUMENT_TITLE_KEY = 'catalogue.metaTitle';
 const PAGE_DOCUMENT_TITLE_KEY = 'page.metaTitle';
+const COVER_ALT_KEY = 'stage.coverAlt';
 
 export function siteValues(sourceUrl: string): TemplateValues {
   return {
@@ -73,6 +75,19 @@ function explainerHeadValues(
     documentTitle: escapeHtml(translate(PAGE_DOCUMENT_TITLE_KEY, { title: meta.title })),
     published: escapeHtml(dates.published),
     modified: escapeHtml(dates.modified),
+  };
+}
+
+function coverValues(
+  { manifest }: LoadedExplainer,
+  meta: ExplainerMeta,
+  { translate }: PageLanguage,
+): TemplateValues {
+  return {
+    coverUrl: escapeHtml(`/${manifest.slug}/${manifest.cover}`),
+    coverWidth: String(COVER_SIZE.width),
+    coverHeight: String(COVER_SIZE.height),
+    coverAlt: escapeHtml(translate(COVER_ALT_KEY, { title: meta.title })),
   };
 }
 
@@ -117,6 +132,7 @@ export function renderPage(
     ...languageValues(code, route),
     ...socialValues(image, meta.socialAlt ?? manifest.social.alt),
     ...explainerHeadValues(explainer, meta, language),
+    ...coverValues(explainer, meta, language),
     title: escapeHtml(meta.title),
     description: escapeHtml(meta.description),
     eyebrow: escapeHtml(meta.eyebrow),

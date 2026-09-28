@@ -42,6 +42,9 @@ const articleTags = [
   '<meta property="article:modified_time" content="{{modified}}" />',
 ].join('\n');
 
+const coverTag =
+  '<noscript><img src="{{coverUrl}}" width="{{coverWidth}}" height="{{coverHeight}}" alt="{{coverAlt}}" /></noscript>';
+
 const template = [
   '<html lang="{{lang}}">',
   '<title>{{documentTitle}}</title>',
@@ -56,6 +59,7 @@ const template = [
   '<a href="{{sourceUrl}}">{{siteName}}</a>',
   '<a class="catalogue" href="{{catalogueUrl}}">{{siteName}}</a>',
   '<script type="application/ld+json">{{structuredData}}</script>',
+  coverTag,
   '<main>',
   '  {{chapters}}',
   '</main>',
@@ -74,6 +78,7 @@ const english: Record<string, string> = {
 const translations: Record<string, string> = {
   'sections.intro': 'Вступ',
   'page.metaTitle': '{{title}} · Що змушує цокати',
+  'stage.coverAlt': '{{title}}: знімок моделі',
   'catalogue.title': 'Що змушує цокати',
   'catalogue.metaTitle': 'Що змушує цокати: як усе працює',
   'catalogue.tagline': 'Як працюють машини',
@@ -136,6 +141,12 @@ describe('renderPage', () => {
 
   it('falls back to the manifest alt text when the locale has none', () => {
     expect(html).toContain('<meta property="og:image:alt" content="A thing"');
+  });
+
+  it('shows the cover in place of the model without scripts', () => {
+    expect(ukrainian).toContain(
+      '<noscript><img src="/thing/cover.webp" width="932" height="699" alt="Як працює річ: знімок моделі" /></noscript>',
+    );
   });
 
   it('links the source folder and fills the shared partials', () => {
@@ -250,6 +261,7 @@ describe('renderPage', () => {
 describe('renderCatalogue', () => {
   const catalogueTemplate = template
     .replace(articleTags, '')
+    .replace(coverTag, '')
     .replace('{{chapters}}', '')
     .replace('{{entry}}', '/main.ts');
   const gearbox: LoadedExplainer = {

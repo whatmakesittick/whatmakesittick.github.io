@@ -64,7 +64,17 @@
         aria-label="Interactive model"
         data-i18n-attr="aria-label:stage.label"
       >
-        <div id="scene"></div>
+        <div id="scene">
+          <noscript>
+            <img
+              class="stage-cover"
+              src="{{coverUrl}}"
+              width="{{coverWidth}}"
+              height="{{coverHeight}}"
+              alt="{{coverAlt}}"
+            />
+          </noscript>
+        </div>
 
         <button
           type="button"
