@@ -79,8 +79,8 @@ export class LabelLayer {
   private occluded: ReadonlySet<string> = new Set();
   private changes = 0;
   private readonly stopTranslating: () => void;
-  private size: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
-  private readonly sizes = new Map<string, TextSize>();
+  private viewport: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
+  private readonly textSizes = new Map<string, TextSize>();
   private readonly texts = new Map<Element, string>();
   private readonly observer = new ResizeObserver((entries) => this.remeasure(entries));
   private readonly listeners = new Listeners<[]>();
@@ -113,8 +113,8 @@ export class LabelLayer {
     entries.forEach((entry) => {
       const id = this.texts.get(entry.target);
       const size = measuredSize(entry);
-      if (id === undefined || !size || sameSize(this.sizes.get(id), size)) return;
-      this.sizes.set(id, size);
+      if (id === undefined || !size || sameSize(this.textSizes.get(id), size)) return;
+      this.textSizes.set(id, size);
       changed = true;
     });
     if (changed) this.listeners.notify();
@@ -173,7 +173,7 @@ export class LabelLayer {
   }
 
   setViewport(size: ViewportSize): void {
-    this.size = size;
+    this.viewport = size;
   }
 
   layout(camera: Camera): void {
@@ -181,10 +181,10 @@ export class LabelLayer {
     this.labels.forEach((label, id) => {
       const anchor = isShown(label) ? this.screenPoint(label, camera) : undefined;
       if (!anchor) return;
-      const { width, height } = this.sizes.get(id) ?? UNMEASURED;
+      const { width, height } = this.textSizes.get(id) ?? UNMEASURED;
       boxes.push({ id, anchor, width, height, preferred: this.parts[id].side });
     });
-    const { width, height, safe } = this.size;
+    const { width, height, safe } = this.viewport;
     const placements = layoutLabels(boxes, { width, height, bottomInset: safe.bottom });
     placements.forEach((placement, id) => this.place(id, placement));
   }
@@ -192,7 +192,7 @@ export class LabelLayer {
   private screenPoint(label: CSS2DObject, camera: Camera): Point | undefined {
     const ndc = this.projected.setFromMatrixPosition(label.matrixWorld).project(camera);
     if (Math.abs(ndc.z) > CLIP_RANGE) return undefined;
-    const { width, height } = this.size;
+    const { width, height } = this.viewport;
     return { x: ((ndc.x + 1) / 2) * width, y: ((1 - ndc.y) / 2) * height };
   }
 
