@@ -10,9 +10,11 @@ export interface SlabForm {
   readonly faceTile: number;
 }
 
-export const SLAB_SURFACES = ['edge', 'edge', 'face', 'face', 'edge', 'edge'] as const;
+export const SLAB_SURFACES = ['edge', 'face'] as const;
 
 export type SlabSurface = (typeof SLAB_SURFACES)[number];
+
+const BOX_SIDES: readonly SlabSurface[] = ['edge', 'edge', 'face', 'face', 'edge', 'edge'];
 
 const FACING = 0.5;
 
@@ -35,5 +37,26 @@ export function slabGeometry(form: SlabForm): BufferGeometry {
       uv.setXY(vertex, x / thickness, across);
     }
   }
+  return groupBySurface(geometry);
+}
+
+function groupBySurface(geometry: BufferGeometry): BufferGeometry {
+  const index = geometry.index;
+  if (!index) return geometry;
+  const sides = geometry.groups.map((group, side) => ({ ...group, surface: BOX_SIDES[side] }));
+  const order: number[] = [];
+  geometry.clearGroups();
+  SLAB_SURFACES.forEach((surface, materialIndex) => {
+    const start = order.length;
+    sides
+      .filter((side) => side.surface === surface)
+      .forEach((side) => {
+        for (let item = side.start; item < side.start + side.count; item += 1) {
+          order.push(index.getX(item));
+        }
+      });
+    geometry.addGroup(start, order.length - start, materialIndex);
+  });
+  geometry.setIndex(order);
   return geometry;
 }
