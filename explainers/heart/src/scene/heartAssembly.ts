@@ -37,6 +37,7 @@ import { CoronariesPart, coronaryRoutes } from './parts/heart/coronaries';
 import { MyocardiumPart } from './parts/heart/myocardium';
 import { epicardiumPainter } from './geometry/epicardium';
 import { VesselsPart } from './parts/vessels/vessels';
+import { ValvesPart } from './parts/valves/valves';
 import { REGIONS } from './regions';
 
 const ANCHOR_LIFT_MM = 3;
@@ -95,6 +96,7 @@ export class HeartAssembly implements Assembly {
   private readonly myocardium: MyocardiumPart;
   private readonly vessels: VesselsPart;
   private readonly coronaries: CoronariesPart;
+  private readonly valves: ValvesPart;
   private readonly anchors = new Map<AnchorId, Object3D>();
   private readonly labels = new Map<PartId, Object3D>();
   private state: AssemblyState | null = null;
@@ -119,7 +121,13 @@ export class HeartAssembly implements Assembly {
     );
     this.vessels = new VesselsPart(context);
     this.coronaries = new CoronariesPart(context, routes, motion.outer);
-    this.root.add(this.myocardium.object, this.vessels.object, this.coronaries.object);
+    this.valves = new ValvesPart(context, shapes.sides, motion.cavity);
+    this.root.add(
+      this.myocardium.object,
+      this.vessels.object,
+      this.coronaries.object,
+      this.valves.object,
+    );
     this.buildAnchors();
     this.setState(state);
   }
@@ -132,6 +140,7 @@ export class HeartAssembly implements Assembly {
       const emptying = 1 - atrialFullness(state.time);
       this.myocardium.setContraction(squeeze, emptying);
       this.coronaries.setContraction(squeeze, emptying);
+      this.valves.setTime(state.time, squeeze, emptying);
     }
     if (changes.view('cutaway')) {
       this.myocardium.setCutaway(state.view.cutaway);

@@ -1,9 +1,10 @@
-import type { ChamberId, PartId } from '../ids';
+import type { ChamberId, PartId, ValveId } from '../ids';
 import { APEX, CHAMBERS, PULMONARY_VEIN_MOUTHS, VALVES, VESSEL_MOUTHS } from '../model';
 import type { Point } from '../model';
 import { THEME } from '../theme';
 import type { ContractionFrame, ContractionProfile } from './geometry/contraction';
 import type { ShapeSpec } from './geometry/heartShape';
+import type { LeafletShape, LeafletSpec } from './geometry/leaflet';
 import type { SurfaceMark } from './geometry/surfacePath';
 import type { VesselRoute } from './geometry/vesselPath';
 
@@ -582,3 +583,106 @@ export const SHAPE_SPEC: ShapeSpec = {
   collarBeyond: COLLAR_BEYOND_MM,
   atrialCarve: ATRIAL_CARVE_MM,
 };
+
+export interface PapillarySpec {
+  readonly tip: Point;
+  readonly toward: Point;
+}
+
+export interface ValveDesign {
+  readonly leaflets: readonly LeafletSpec[];
+  readonly shape: LeafletShape;
+  readonly papillaries: readonly PapillarySpec[];
+  readonly chordsPerLeaflet: number;
+}
+
+const HALF_TURN = Math.PI;
+const QUARTER_TURN = Math.PI / 2;
+
+function evenlySplit(count: number, start: number): LeafletSpec[] {
+  const span = (Math.PI * 2) / count;
+  return Array.from({ length: count }, (_, index) => ({
+    from: start + index * span,
+    to: start + (index + 1) * span,
+  }));
+}
+
+const ATRIOVENTRICULAR_SHAPE: LeafletShape = {
+  kind: 'flap',
+  commissureHeight: 0,
+  wallInset: 0,
+  columns: 14,
+  rows: 7,
+  coaptationDepth: 3,
+  belly: 2.5,
+  openTilt: 0.22,
+  openBulge: 1.5,
+  edgeRise: 0,
+};
+
+const SEMILUNAR_SHAPE: LeafletShape = {
+  kind: 'cusp',
+  columns: 14,
+  rows: 8,
+  coaptationDepth: 6,
+  belly: 3.5,
+  openTilt: 0,
+  openBulge: 0.6,
+  edgeRise: 0,
+  commissureHeight: 8,
+  wallInset: 1.4,
+};
+
+export const VALVE_DESIGN: Readonly<Record<ValveId, ValveDesign>> = {
+  mitral: {
+    leaflets: [
+      { from: QUARTER_TURN, to: QUARTER_TURN + HALF_TURN },
+      { from: QUARTER_TURN + HALF_TURN, to: QUARTER_TURN + 2 * HALF_TURN },
+    ],
+    shape: { ...ATRIOVENTRICULAR_SHAPE, columns: 18 },
+    papillaries: [
+      { tip: [31, -21, -6], toward: [0.45, -1, -0.25] },
+      { tip: [13, -24, -8], toward: [-0.2, -1, -0.45] },
+    ],
+    chordsPerLeaflet: 7,
+  },
+  tricuspid: {
+    leaflets: evenlySplit(3, Math.PI / 3),
+    shape: ATRIOVENTRICULAR_SHAPE,
+    papillaries: [
+      { tip: [-30, -19, -5], toward: [-0.4, -1, -0.2] },
+      { tip: [-19, -26, -8], toward: [0.05, -1, -0.4] },
+      { tip: [-10, -17, -5], toward: [0.45, -1, -0.15] },
+    ],
+    chordsPerLeaflet: 5,
+  },
+  aortic: {
+    leaflets: evenlySplit(3, Math.PI / 6),
+    shape: SEMILUNAR_SHAPE,
+    papillaries: [],
+    chordsPerLeaflet: 0,
+  },
+  pulmonary: {
+    leaflets: evenlySplit(3, Math.PI / 6),
+    shape: SEMILUNAR_SHAPE,
+    papillaries: [],
+    chordsPerLeaflet: 0,
+  },
+};
+
+export const VALVE_DETAIL = {
+  ringTubeMm: 1.1,
+  ringRadialSegments: 10,
+  ringSegments: 64,
+  chordRadiusMm: 0.32,
+  chordSegments: 5,
+  chordEdgeInset: 0.97,
+  chordMargin: 0.08,
+  papillaryRadius: [4.6, 0.6] as const,
+  papillaryWallMm: 1.5,
+  papillaryStepMm: 0.5,
+  papillarySegments: 12,
+  papillaryRings: 6,
+  pulseGlow: 0.9,
+  pulseColour: THEME.valve,
+} as const;
