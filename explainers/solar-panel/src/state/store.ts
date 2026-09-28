@@ -47,6 +47,7 @@ type ChapterControls = Pick<SolarPanelFields, ResetControl>;
 export const DEFAULT_VIEW: ViewState = { sun: true, slice: false, flow: true, labels: false };
 export const DEFAULT_LAYER: LayerId = 'glass';
 export const DEFAULT_LAYOUT: LayoutId = 'halfCut';
+export const START_PHASE = PRESETS.overview.startAt ?? 0;
 
 const CHAPTER_CONTROL_DEFAULTS: ChapterControls = {
   explode: EXPLODE_RANGE.default,
@@ -97,6 +98,6 @@ export function createSolarPanelStore(
       }),
       presetState: chapterControls,
     },
-    overrides,
+    { phase: START_PHASE, ...overrides },
   );
 }

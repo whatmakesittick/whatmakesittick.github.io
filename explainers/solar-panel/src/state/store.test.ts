@@ -24,9 +24,9 @@ function othersThan(...kept: PresetId[]): PresetId[] {
 }
 
 describe('solar panel store', () => {
-  it('starts on the overview at 05:00 with the panel at 35° and the sun path on', () => {
+  it('starts on the overview at 08:30 with the panel at 35° and the sun path on', () => {
     expect(createSolarPanelStore().getState()).toMatchObject({
-      phase: 0,
+      phase: 210,
       speed: 10,
       tilt: 35,
       explode: 0,
