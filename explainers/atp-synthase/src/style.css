@@ -1,0 +1,170 @@
+:root {
+  --first-atp: #9be15d;
+  --second-atp: #4cc3ff;
+  --third-atp: #c792ea;
+  --open: #4fd1c5;
+  --loose: #ffb347;
+  --tight: #ff5d8f;
+  --proton: #ffe066;
+  --electron: #7ee0ff;
+  --oxygen: #ff7a7a;
+  --atp: #9be15d;
+  --adp: #a9b4c6;
+  --phosphate: #ffb347;
+  --lipid: #c9a27a;
+  --lipid-head: #e8c9a0;
+  --rotor: #81b29a;
+  --axle: #3d9be9;
+  --alpha: #e07a5f;
+  --beta: #f2cc8f;
+  --stator: #9b8fd6;
+  --gate: #b388eb;
+  --pump: #6c8ea4;
+  --aerobic: #4fd1c5;
+  --anaerobic: #ff9f43;
+}
+
+.oxygen-control,
+.section-readouts {
+  --readout-min-width: 8rem;
+}
+
+.section-readouts {
+  margin: 16px 0 24px;
+}
+
+.oxygen-control .range {
+  --range-color: var(--oxygen);
+}
+
+.oxygen-control .range-widget__header {
+  flex-wrap: wrap;
+}
+
+.oxygen-control .range-widget__readouts,
+.ring-readouts,
+.training-readouts {
+  container-type: inline-size;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.event-readouts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@container (max-width: 22rem) {
+  .oxygen-control .range-widget__readouts > div,
+  .ring-readouts > div,
+  .training-readouts > div {
+    display: flex;
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .oxygen-control .range-widget__readouts dd,
+  .ring-readouts dd,
+  .training-readouts dd {
+    margin: 0;
+    white-space: nowrap;
+  }
+}
+
+.seat-readouts {
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 8px 12px;
+}
+
+.seat-readouts > div {
+  --tone: var(--muted);
+
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  padding: 8px 12px;
+  border-left: 3px solid var(--tone);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--tone) 10%, transparent);
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.seat-readouts > div[data-state='open'] {
+  --tone: var(--open);
+}
+
+.seat-readouts > div[data-state='loose'] {
+  --tone: var(--loose);
+}
+
+.seat-readouts > div[data-state='tight'] {
+  --tone: var(--tight);
+}
+
+.seat-readouts dd {
+  margin: 0;
+  color: var(--tone);
+  transition: color 0.3s ease;
+}
+
+.energy-split {
+  --aerobic-share: 15%;
+
+  display: flex;
+  gap: 2px;
+  height: 12px;
+  margin-top: 18px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--wash);
+}
+
+.energy-split__aerobic {
+  flex: 0 0 var(--aerobic-share);
+  background: var(--aerobic);
+  transition: flex-basis 0.4s ease;
+}
+
+.energy-split__anaerobic {
+  flex: 1 1 0;
+  background: var(--anaerobic);
+}
+
+.event-readouts [data-readout='event-aerobic'] {
+  color: var(--aerobic);
+}
+
+.event-readouts [data-readout='event-anaerobic'] {
+  color: var(--anaerobic);
+}
+
+.chip[data-action='ring'] {
+  --tone: var(--rotor);
+}
+
+.chip[data-action='event'] {
+  --tone: var(--aerobic);
+}
+
+.chip[data-action='training'][data-value='untrained'] {
+  --tone: var(--metal-light);
+}
+
+.chip[data-action='training'][data-value='tenWeeks'] {
+  --tone: var(--second-atp);
+}
+
+.chip[data-action='training'][data-value='years'] {
+  --tone: var(--first-atp);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action='ring'],
+  .chip[data-action='event'],
+  .chip[data-action='training'] {
+    height: 44px;
+  }
+}

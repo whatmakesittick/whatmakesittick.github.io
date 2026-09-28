@@ -1,0 +1,185 @@
+{
+  "meta": {
+    "title": "So funktioniert die ATP-Synthase",
+    "eyebrow": "ATP-Synthase",
+    "tagline": "Der rotierende Motor in Ihren Zellen, der den Treibstoff für jeden Schritt wieder auflädt.",
+    "description": "Ein interaktives 3D-Modell der ATP-Synthase, des Rotationsmotors in Ihren Mitochondrien. Sehen Sie, wie Protonen seinen Rotor drehen und wie er bei jeder Umdrehung drei ATP baut. Und erfahren Sie, was das für einen Sprint, einen Marathon und Ihr Training bedeutet.",
+    "summary": "Protonendruck, der Rotorring, die drei Bindungsstellen, Sprint gegen Marathon, Training."
+  },
+  "stage": {
+    "label": "Interaktives Modell der ATP-Synthase",
+    "gauge": "Live-Werte des Motors"
+  },
+  "controls": {
+    "label": "Steuerung des Motors",
+    "views": {
+      "membrane": {
+        "name": "Membran",
+        "short": "Membran",
+        "hint": "Membran (M)"
+      },
+      "cutaway": {
+        "name": "Durchsichtiger Kopf",
+        "short": "Innen",
+        "hint": "Durchsichtiger Kopf (C)"
+      },
+      "flow": {
+        "name": "Protonen und Moleküle",
+        "short": "Fluss",
+        "hint": "Protonen und Moleküle (F)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    },
+    "ringOptions": {
+      "animal": "Mensch und andere Tiere: 8",
+      "yeast": "Hefe und E. coli: 10",
+      "chloroplast": "Spinatblätter: 14"
+    },
+    "eventOptions": {
+      "m100": "100 m",
+      "m200": "200 m",
+      "m400": "400 m",
+      "m800": "800 m",
+      "m1500": "1500 m",
+      "m5000": "5000 m",
+      "marathon": "Marathon"
+    },
+    "trainingOptions": {
+      "untrained": "Untrainiert",
+      "tenWeeks": "Nach 10 Wochen",
+      "years": "Jahre Ausdauertraining"
+    }
+  },
+  "timeline": {
+    "label": "Rotorwinkel",
+    "phases": "Zu einem ATP springen",
+    "speed": "Wiedergabe",
+    "value": "{{angle}}, {{phase}}",
+    "realTime": "Echtzeit, etwa {{value}} Umdrehungen pro Sekunde",
+    "slower": "{{factor}}-mal langsamer als in Wirklichkeit",
+    "phase": {
+      "firstAtp": "Erstes ATP",
+      "secondAtp": "Zweites ATP",
+      "thirdAtp": "Drittes ATP"
+    },
+    "during": {
+      "firstAtp": "das erste ATP dieser Runde entsteht",
+      "secondAtp": "das zweite ATP dieser Runde entsteht",
+      "thirdAtp": "das dritte ATP dieser Runde entsteht"
+    },
+    "jump": {
+      "firstAtp": "Zum ersten ATP springen",
+      "secondAtp": "Zum zweiten ATP springen",
+      "thirdAtp": "Zum dritten ATP springen"
+    }
+  },
+  "readouts": {
+    "angle": "Rotorwinkel",
+    "atp": "Gebildetes ATP",
+    "protons": "Durchgeschleuste Protonen",
+    "perAtp": "Protonen pro ATP"
+  },
+  "parts": {
+    "membrane": "Innere Membran",
+    "cRing": "Rotorring",
+    "subunitA": "Protonentor (Untereinheit a)",
+    "centralStalk": "Krumme Achse",
+    "peripheralStalk": "Seitenarm",
+    "alphaSubunits": "α-Untereinheiten",
+    "betaSubunits": "β-Untereinheiten",
+    "openSite": "Offene Bindungsstelle",
+    "looseSite": "Lockere Bindungsstelle",
+    "tightSite": "Feste Bindungsstelle",
+    "adpPhosphate": "ADP und Phosphat",
+    "atp": "Neues ATP",
+    "protons": "Protonen",
+    "pumps": "Protonenpumpen",
+    "electrons": "Elektronen aus der Nahrung",
+    "oxygen": "Sauerstoff",
+    "matrix": "Matrix",
+    "intermembraneSpace": "Intermembranraum",
+    "neighbourMotors": "Weitere Motoren"
+  },
+  "sites": {
+    "doing": {
+      "open": "Offen: nimmt ADP und Phosphat auf",
+      "loose": "Locker: schließt sich und bildet ATP",
+      "tight": "Fest: öffnet sich und gibt das ATP frei"
+    }
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "litresPerMinute": "{{value}} l pro Minute",
+    "kilograms": "{{value}} kg",
+    "times": "×{{value}}",
+    "percent": "{{value}} %",
+    "percentRange": "{{low}} bis {{high}} %"
+  },
+  "sections": {
+    "overview": {
+      "title": "Jeder Schritt wird mit ATP bezahlt",
+      "p1": "Sie drücken sich aus dem Startblock ab oder gehen am steilen Anstieg aus dem Sattel. Jedes Mal, wenn sich eine Muskelfaser zusammenzieht, verbraucht sie ein kleines Molekül namens <strong>ATP</strong>, die Energiewährung jeder Zelle. Ihre Muskeln speichern nur genug ATP für ein, zwei Sekunden Vollgas. Trotzdem geht es ihnen nie aus. Selbst am Ende der härtesten Belastung sinkt der Vorrat um höchstens ein Drittel. Ihr Körper baut ATP einfach so schnell nach, wie Sie es verbrauchen.",
+      "p2": "Der Trick heißt <strong>Recycling</strong>. Jedes ATP wird verbraucht, indem es in ADP und Phosphat zerfällt. Danach wird es wieder aufgebaut, immer und immer wieder. Ihr ganzer Körper enthält zu jedem Zeitpunkt nur grob 50 bis 100 g ATP. Trotzdem baut er jeden Tag Dutzende Kilogramm davon neu auf, bei aktiven Menschen grob das eigene Körpergewicht. Ein Marathon kostet etwa 50 bis 60 kg ATP, mehr als die meisten Läufer wiegen. In Ruhe übernimmt die Maschine, die Sie hier sehen, etwa 90 Prozent dieses Wiederaufbaus.",
+      "p3": "Diese Maschine ist die <strong>ATP-Synthase</strong>, ein Rotationsmotor aus Protein. Der Motor sitzt in den Falten der inneren Membran Ihrer Mitochondrien, den sogenannten Cristae. Mitochondrien sind die Kraftwerke Ihrer Zellen. Der Kopf des Motors ragt in die Matrix, den Raum innerhalb dieser Membran. Echte Motoren stehen paarweise, in langen Reihen entlang der gebogenen Kanten der Falten. Das Modell zeigt nur einen. Jeder Motor ist etwa 24 nm hoch, und ein Nanometer ist ein Millionstel Millimeter. Etwa 3.000 davon, übereinandergestapelt, wären so lang, wie ein menschliches Haar breit ist.",
+      "p4": "Der Motor hat vier Hauptteile. Ein Kopf aus sechs Teilen, drei namens α und drei namens β, stellt das ATP her. Durch seine Mitte läuft eine krumme Achse nach oben. Unten dreht sich ein Ring aus 8 Schaufeln in der Membran. Ring und Achse bilden zusammen den <strong>Rotor</strong>. Ein Seitenarm hält den Kopf fest. Das Modell zeigt einfache Formen, läuft verlangsamt und dreht sich gleichmäßig. Ziehen Sie an der Zeitleiste unter dem Modell, um den Rotor von Hand zu drehen. Ziehen Sie am Modell, um es von allen Seiten anzusehen."
+    },
+    "gradient": {
+      "title": "Warum Sie außer Atem kommen",
+      "p1": "Mitten in einem langen Anstieg atmen Sie schnell und tief. Diese Luft ist für Ihre Mitochondrien bestimmt. Ihre Nahrung wird zerlegt, und ihre Elektronen landen bei einem Trägermolekül namens NADH. An den flachen Stellen der Falten reicht die <strong>Atmungskette</strong> diese Elektronen an drei Protonenpumpen weiter. Jede Pumpe nutzt die Energie der Elektronen, um Protonen aus der Matrix hinauszudrücken. Für jedes NADH gehen 10 Protonen hinaus. Das Modell zeigt die Pumpen vereinfacht und nicht maßstabsgetreu.",
+      "p2": "<strong>Sauerstoff</strong> ist die letzte Station der Elektronen. An der letzten Pumpe nimmt der Sauerstoff sie auf und wird zu Wasser. Ohne Sauerstoff kommen die Elektronen nicht weiter, und die Pumpen stehen still. Deshalb atmen Sie so schwer: Jeder Atemzug hält die Pumpen am Laufen. Ihre Arbeit baut einen Protonendruck von etwa 200 mV auf, vor allem als elektrische Spannung. Und das über einer Membran, die nur etwa 4 bis 5 nm dick ist. Die Protonen drängen zurück in die Matrix, und ihr Hauptweg zurück führt durch die ATP-Synthase.",
+      "p3": "Ziehen Sie den Regler, um einzustellen, wie viel Sauerstoff Sie aufnehmen. Je mehr Sauerstoff, desto mehr ATP können diese Motoren herstellen. Wiegen Sie 70 kg, verbrauchen Sie im Sitzen etwa 0,25 l pro Minute. Das ergibt etwa 40 kg ATP am Tag. Bei voller Belastung setzt Ihre <strong>VO2max</strong> die Grenze: die größte Menge Sauerstoff, die Sie pro Minute und Kilogramm Körpergewicht nutzen können. Bei jungen Erwachsenen liegt sie bei etwa 48 ml pro kg und Minute für Männer und 38 für Frauen. Spitzenathleten im Ausdauersport erreichen 70 bis 85. Der höchste veröffentlichte Wert ist 96,7. Er stammt von einem Radsportler, der Juniorenweltmeister war, und liegt am rechten Ende des Reglers.",
+      "p4": "Was bringt jeder Atemzug? Etwa 5 ATP pro Sauerstoffmolekül oder etwa 2,5 pro NADH. Wird ein Glukosemolekül mit Sauerstoff verbrannt, entstehen etwa 30 ATP. Ohne Sauerstoff zerlegt die <strong>Glykolyse</strong> die Glukose nur zum Teil und liefert gerade einmal 2 ATP. Stammt der Zucker aus dem Glykogen im Muskel, sind es 3. Mit Sauerstoff holen Sie also ein Vielfaches aus jedem Gramm Zucker heraus, und das meiste zusätzliche ATP stammt aus diesen Motoren.",
+      "control": {
+        "label": "Ihre Sauerstoffaufnahme",
+        "rest": "Im Sitzen",
+        "record": "Rekord-VO2max",
+        "perMinute": "Gebildetes ATP pro Minute",
+        "perHour": "Gebildetes ATP pro Stunde",
+        "vsRest": "Im Vergleich zum Sitzen"
+      }
+    },
+    "rotor": {
+      "title": "Acht Protonen pro Runde",
+      "p1": "Denken Sie an die Eingänge eines Stadions vor einem großen Spiel. Niemand geht einfach geradeaus hinein: Jeder Fan schiebt ein Drehkreuz weiter, und die Menge hält es in Bewegung. Protonen stehen vor einem ähnlichen Tor. Durch die fettige Membran kommen sie allein nicht hindurch. Neben dem Rotorring sitzt die <strong>Untereinheit a</strong>, das Protonentor. In ihr liegen zwei Halbkanäle, die gegeneinander versetzt sind. Einen geraden Tunnel durch die Membran gibt es also nicht.",
+      "p2": "Ein Proton kommt aus dem Intermembranraum durch den Eingangs-Halbkanal herauf und landet auf einer Schaufel. Jede Schaufel trägt ein <strong>Glutamat</strong>, eine Aminosäure in der Mitte der Membran, die ein Proton halten kann. Der Ring dreht sich, und das Proton fährt fast eine ganze Runde durch das fettige Innere der Membran mit. Kommt seine Schaufel wieder am Tor an, steigt das Proton durch den Ausgangs-Halbkanal in die Matrix aus. Von der Matrix aus gesehen dreht sich der Ring gegen den Uhrzeigersinn.",
+      "p3": "Beim Menschen hat der Ring 8 Schaufeln, also passieren pro Runde 8 Protonen. Eine Runde liefert 3 ATP, also kostet jedes ATP etwa 2,7 Protonen. Die Zahl der Schaufeln bestimmt diesen <strong>Preis</strong>. Vergleichen Sie unten andere Ringe: Hefe und E. coli haben 10 Schaufeln, Spinatblätter 14. Auch ihre Runden liefern nur 3 ATP, ihr ATP ist also teurer. Ihr kleiner Ring stellt pro Proton das günstigste ATP der Natur her.",
+      "p4": "Dazu kommen die Kosten, ADP und Phosphat hineinzubringen und das neue ATP hinaus in die Zelle zu schaffen. Damit liegt der volle Preis bei etwa 3,7 Protonen. Im Modell dreht sich der Ring gleichmäßig. Der echte Rotor bewegt sich dagegen in <strong>Schritten</strong>. Er hält an, springt weiter und macht ab und zu sogar einen Schritt zurück. Jedes Proton, das die Runde mitfährt und in die Matrix aussteigt, schiebt den Ring um eine Schaufel weiter, in die Richtung, in der ATP entsteht.",
+      "blades": "Protonen pro Runde",
+      "perAtp": "Protonen pro ATP",
+      "per100": "ATP aus 100 Protonen"
+    },
+    "head": {
+      "title": "Drei Bindungsstellen, je ein ATP",
+      "p1": "Auf dem Rad drehen Ihre Beine die Kurbel, während der Rahmen um sie herum still bleibt. Der obere Teil dieses Motors funktioniert genauso. Die krumme Achse dreht sich im Kopf, und der <strong>Seitenarm</strong> hält den Kopf fest, wie der Rahmen um die Kurbel. Der Kopf dreht sich also nie mit. Weil die Achse gebogen ist, drückt sie beim Drehen nacheinander auf jeden Teil des Kopfes. So öffnet auch eine Nockenwelle die Ventile eines Verbrennungsmotors.",
+      "p2": "Jedes der drei β-Teile hat eine <strong>Bindungsstelle</strong>, an der ATP entsteht. Zu jedem Zeitpunkt sind die drei Stellen in drei verschiedenen Zuständen. Jeder 120°-Schritt der Achse bringt jede Stelle einen Zustand weiter. Die offene Stelle nimmt ADP und Phosphat auf und wird locker. Die lockere Stelle schließt sich fest und presst beide zu ATP zusammen. Die feste Stelle öffnet sich und gibt ihr neues ATP frei. Eine Runde liefert also 3 ATP. Echte Stellen durchlaufen dazwischen auch halb geschlossene Zustände. Die Zeilen unten verfolgen die Stellen live.",
+      "p3": "Wohin geht die Energie? Nicht in eine besondere Bindung, denn eine Bindung zu lösen kostet immer Energie. ATP ist Energie wert, weil die ganze Reaktion, die Spaltung von ATP in ADP und Phosphat, bei stabileren Produkten endet. In der Zelle sind das etwa 50 bis 60 kJ pro Mol. Der Protonendruck wird dafür aufgewendet, dass die Stellen zupacken und loslassen. Erst halten die Stellen ADP und Phosphat fest, bis beide sich verbinden. Dann lassen sie das fertige ATP los. Das ist die Idee des <strong>Bindungswechsels</strong>.",
+      "p4": "Paul Boyer hat diesen Mechanismus ausgearbeitet, und John Walker hat die Struktur aufgeklärt, die ihn stützt. Die beiden teilten sich den <strong>Nobelpreis</strong> für Chemie 1997 mit Jens Skou, der für seine Arbeit an der Natrium-Kalium-Pumpe ausgezeichnet wurde, einer ganz anderen Maschine. Die echten Schritte sind noch feiner unterteilt. Beim Kopf des menschlichen Enzyms zerfällt jeder 120°-Schritt in 65°, 25° und 30°. Gemessen wurde das im Rückwärtslauf, wenn er ATP spaltet. Die bakterielle Version dreht mit etwa 40 pN·nm Drehmoment und gehört zu den effizientesten Motoren, die man kennt.",
+      "seat1": "Bindungsstelle 1",
+      "seat2": "Bindungsstelle 2",
+      "seat3": "Bindungsstelle 3"
+    },
+    "sprint": {
+      "title": "Warum ein Sprint nicht auf den Motor warten kann",
+      "p1": "Der Startschuss fällt, und ein Sprinter schießt aus dem Block. Das Modell läuft jetzt mit der geschätzten echten Geschwindigkeit des Motors. In arbeitenden Mitochondrien dreht er sich etwa 100-mal pro Sekunde, also mit etwa 6.000 U/min, und bildet etwa 300 ATP pro Sekunde. Sehen Sie, wie der Zähler steigt. Der Turbolader eines Formel-1-Autos darf 2026 bis zu 150.000 U/min drehen, etwa 25-mal schneller. Und doch ist dieser Motor für einen Sprinter die <strong>Kriechspur</strong>.",
+      "p2": "Im Sprint verbrauchen Ihre Muskeln ATP schneller, als alle ihre Motoren es herstellen können. Zwei schnellere Systeme füllen die Lücke. <strong>Kreatinphosphat</strong>, ein kleiner Speicher im Muskel, lädt ATP fast sofort wieder auf. Nach 10 bis 15 Sekunden Vollgas ist es aber weitgehend aufgebraucht. Die Glykolyse läuft schnell und ohne Sauerstoff, liefert aber wenig ATP pro Glukose. Alle drei Systeme arbeiten gleichzeitig. Die Systeme überlappen sich, statt nacheinander anzuspringen.",
+      "p3": "Wählen Sie eine Disziplin und sehen Sie, wie viel ihrer Energie mit Sauerstoff aus diesem Motor kommt. Über 100 m sind es nur etwa 10 bis 20 Prozent, und die Messmethoden sind sich nicht einig. Über 200 m sind es etwa 30 Prozent, über 400 m etwa 40 bis 45, über 800 m etwa zwei Drittel und über 1500 m etwa 80 bis 85. Über 5000 m sind es etwa 90 Prozent, im Marathon etwa 99. Der <strong>Kipppunkt</strong>, an dem Sauerstoff die Hälfte liefert, kommt nach etwa 75 bis 80 Sekunden Vollgas. Die 400 m und 800 m sind also keine anaeroben Disziplinen, auch wenn sie oft so genannt werden.",
+      "p4": "Ein Marathon hat das umgekehrte Problem. Die Motoren haben genug Zeit, aber der Treibstoff wird knapp. Sie speichern nur etwa 400 g Kohlenhydrate: grob 90 g in der Leber und 310 g in den Beinmuskeln. Gehen diese Vorräte zur Neige, begegnet über 40 Prozent der Marathonläufer der <strong>Mann mit dem Hammer</strong>. Die Fettspeicher sind viel größer, doch Fett verbrennen Sie bestenfalls mit etwa einem halben Gramm pro Minute. Im Muskel versorgt das die Pumpen zu langsam, und die Motoren kommen beim Renntempo nicht mehr mit.",
+      "aerobic": "Aus diesem Motor, mit Sauerstoff",
+      "anaerobic": "Aus Speichern und Glykolyse, ohne Sauerstoff"
+    },
+    "training": {
+      "title": "Training schafft Platz für mehr Motoren",
+      "p1": "Beginnen Sie einen <strong>Trainingsblock</strong> mit ruhigen Ausfahrten oder Dauerläufen, und Ihre Muskeln verändern sich schon nach wenigen Wochen. Sechs Wochen Ausdauertraining bringen etwa 40 bis 55 Prozent mehr Mitochondrien. Der Großteil des Zuwachses entsteht, weil die vorhandenen Mitochondrien größer werden, nicht durch neue. Dafür zählt vor allem, wie viel Sie trainieren. Wie hart Sie trainieren, zählt mehr dafür, wie gut die Mitochondrien arbeiten. Größere Mitochondrien enthalten mehr innere Membran, und mehr Membran bedeutet mehr Platz für diese Motoren.",
+      "p2": "Welchen <strong>Anteil</strong> eines Muskels machen Mitochondrien aus? In einem untrainierten Oberschenkelmuskel sind es etwa 4 bis 5 Prozent. Bei trainierten Ausdauersportlern sind es etwa 7 bis 11 Prozent. Ihr Herz, das nie einen Ruhetag hat, besteht zu etwa einem Viertel aus Mitochondrien. Doch die Menge ist nicht alles. Fittere Menschen holen auch aus jedem einzelnen Mitochondrium mehr heraus, selbst bei gleicher Menge. Training hilft also doppelt: Sie bekommen mehr Mitochondrien, und jedes davon arbeitet besser.",
+      "p3": "Einige Wochen Training bringen mehr Mitochondrien, doch die Falten darin bleiben genauso dicht gepackt. Erst jahrelanges Training ändert das. Bei Ausdauersportlern liegen die <strong>Cristae</strong> etwa 23 Prozent dichter, also bietet jedes Mitochondrium mehr Membran für Motoren. Niemand hat die Motoren vor und nach einer Trainingsphase gezählt. Deshalb zeichnet das Modell die Motoren im Verhältnis zur gemessenen Faltenmembran. Vergleichen Sie unten einen untrainierten Muskel, 10 Wochen Training und jahrelanges Training.",
+      "p4": "Hören Sie mit dem Training auf, schwindet der Gewinn schnell. Dieses <strong>Detraining</strong> kostet Sie in etwa zwei Wochen die Hälfte davon. Bleiben Sie also dran. Wenn Sie das nächste Mal am Berg schwer atmen, denken Sie daran, wofür dieser Atemzug da ist. Tief in Ihrem Muskel sorgt er dafür, dass die Pumpen Protonen hinausdrücken, dass die Protonen auf den Ringen zurückfahren und dass sich diese Motoren weiterdrehen: drei ATP pro Runde.",
+      "share": "Mitochondrien im Oberschenkelmuskel",
+      "membrane": "Faltenmembran für Motoren",
+      "motors": "Motoren im Modell"
+    }
+  }
+}

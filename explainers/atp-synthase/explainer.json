@@ -1,0 +1,12 @@
+{
+  "slug": "atp-synthase",
+  "tags": ["biology", "energy"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "Low-poly 3D model of ATP synthase standing in a patch of the inner mitochondrial membrane, with its rotor ring, crooked axle and six-part head, beside the title How ATP synthase works"
+  }
+}

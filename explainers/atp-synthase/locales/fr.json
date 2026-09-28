@@ -1,0 +1,185 @@
+{
+  "meta": {
+    "title": "Comment fonctionne l’ATP synthase",
+    "eyebrow": "ATP synthase",
+    "tagline": "Le petit moteur qui tourne dans vos cellules et recharge le carburant de chaque foulée.",
+    "description": "Un modèle 3D interactif de l’ATP synthase, le moteur rotatif de vos mitochondries. Voyez les protons faire tourner son rotor, regardez-le fabriquer trois ATP à chaque tour, et découvrez ce que cela change pour un sprint, un marathon et votre entraînement.",
+    "summary": "Poussée des protons, anneau du rotor, trois sites, sprint contre marathon, entraînement."
+  },
+  "stage": {
+    "label": "Modèle interactif de l’ATP synthase",
+    "gauge": "Mesures du moteur en direct"
+  },
+  "controls": {
+    "label": "Commandes du moteur",
+    "views": {
+      "membrane": {
+        "name": "Membrane",
+        "short": "Membrane",
+        "hint": "Membrane (M)"
+      },
+      "cutaway": {
+        "name": "Tête transparente",
+        "short": "Intérieur",
+        "hint": "Tête transparente (C)"
+      },
+      "flow": {
+        "name": "Protons et molécules",
+        "short": "Flux",
+        "hint": "Protons et molécules (F)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    },
+    "ringOptions": {
+      "animal": "Humains et autres animaux : 8",
+      "yeast": "Levure et E. coli : 10",
+      "chloroplast": "Feuilles d’épinard : 14"
+    },
+    "eventOptions": {
+      "m100": "100 m",
+      "m200": "200 m",
+      "m400": "400 m",
+      "m800": "800 m",
+      "m1500": "1 500 m",
+      "m5000": "5 000 m",
+      "marathon": "Marathon"
+    },
+    "trainingOptions": {
+      "untrained": "Non entraîné",
+      "tenWeeks": "Après 10 semaines",
+      "years": "Des années d’endurance"
+    }
+  },
+  "timeline": {
+    "label": "Angle du rotor",
+    "phases": "Aller à un ATP",
+    "speed": "Lecture",
+    "value": "{{angle}}, {{phase}}",
+    "realTime": "Temps réel, environ {{value}} tours par seconde",
+    "slower": "{{factor}} fois plus lent qu’en réalité",
+    "phase": {
+      "firstAtp": "Premier ATP",
+      "secondAtp": "Deuxième ATP",
+      "thirdAtp": "Troisième ATP"
+    },
+    "during": {
+      "firstAtp": "le moteur fabrique le premier ATP du tour",
+      "secondAtp": "le moteur fabrique le deuxième ATP du tour",
+      "thirdAtp": "le moteur fabrique le troisième ATP du tour"
+    },
+    "jump": {
+      "firstAtp": "Aller au premier ATP",
+      "secondAtp": "Aller au deuxième ATP",
+      "thirdAtp": "Aller au troisième ATP"
+    }
+  },
+  "readouts": {
+    "angle": "Angle du rotor",
+    "atp": "ATP fabriqués",
+    "protons": "Protons passés",
+    "perAtp": "Protons par ATP"
+  },
+  "parts": {
+    "membrane": "Membrane interne",
+    "cRing": "Anneau du rotor",
+    "subunitA": "Porte à protons (sous-unité a)",
+    "centralStalk": "Axe coudé",
+    "peripheralStalk": "Bras latéral",
+    "alphaSubunits": "Sous-unités α",
+    "betaSubunits": "Sous-unités β",
+    "openSite": "Site ouvert",
+    "looseSite": "Site lâche",
+    "tightSite": "Site serré",
+    "adpPhosphate": "ADP et phosphate",
+    "atp": "Nouvel ATP",
+    "protons": "Protons",
+    "pumps": "Pompes à protons",
+    "electrons": "Électrons issus des aliments",
+    "oxygen": "Oxygène",
+    "matrix": "Matrice",
+    "intermembraneSpace": "Espace intermembranaire",
+    "neighbourMotors": "Autres moteurs"
+  },
+  "sites": {
+    "doing": {
+      "open": "Ouvert : accueille l’ADP et le phosphate",
+      "loose": "Lâche : se resserre pour fabriquer l’ATP",
+      "tight": "Serré : s’ouvre pour libérer l’ATP"
+    }
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "litresPerMinute": "{{value}} L par minute",
+    "kilograms": "{{value}} kg",
+    "times": "×{{value}}",
+    "percent": "{{value}} %",
+    "percentRange": "{{low}} à {{high}} %"
+  },
+  "sections": {
+    "overview": {
+      "title": "Chaque foulée se paie en ATP",
+      "p1": "Vous jaillissez des starting-blocks, ou vous vous mettez en danseuse dans une côte raide. Chaque fois qu’une fibre musculaire se contracte, elle dépense une petite molécule appelée <strong>ATP</strong>, la monnaie énergétique de toutes les cellules. Vos muscles n’en stockent que de quoi tenir une seconde ou deux d’effort maximal. Pourtant, ils ne tombent jamais à court. Même à la fin de l’effort le plus dur, le niveau baisse d’un tiers au plus. Votre corps refait tout simplement l’ATP aussi vite que vous le dépensez.",
+      "p2": "Le secret, c’est le <strong>recyclage</strong>. Chaque molécule d’ATP se dépense en se scindant en ADP et en phosphate, puis elle est reconstruite, encore et encore. Votre corps entier ne contient qu’environ 50 à 100 g d’ATP à un instant donné. Pourtant, il en refait des dizaines de kilos par jour, à peu près votre propre poids si vous êtes actif. Un marathon demande environ 50 à 60 kg d’ATP, plus que ce que pèsent la plupart des coureurs. Au repos, environ 90 % de toute cette reconstruction se fait dans la machine que vous avez sous les yeux.",
+      "p3": "Cette machine, c’est l’<strong>ATP synthase</strong>, un moteur rotatif fait de protéines. Elle se loge dans les replis de la membrane interne de vos mitochondries, qu’on appelle les crêtes. Les mitochondries sont les centrales énergétiques de vos cellules. La tête du moteur dépasse dans la matrice, l’espace situé à l’intérieur de cette membrane. Les vrais moteurs vont par paires, en longues rangées le long des bords courbes des crêtes. Le modèle n’en montre qu’un. Chaque moteur mesure environ 24 nm de haut, et un nanomètre vaut un millionième de millimètre. Environ 3 000 moteurs empilés bout à bout couvriraient l’épaisseur d’un cheveu.",
+      "p4": "L’ATP synthase compte quatre parties principales. Une tête de six pièces, trois appelées α et trois appelées β, fabrique l’ATP. Un axe coudé la traverse par le milieu. En bas, un anneau de 8 pales tourne dans la membrane. Ensemble, l’anneau et l’axe forment le <strong>rotor</strong>. Un bras latéral maintient la tête immobile. Le modèle simplifie les formes, tourne au ralenti et sans à-coups. Faites glisser la ligne de temps sous le modèle pour faire tourner le rotor à la main, et faites pivoter le modèle pour le voir sous tous les angles."
+    },
+    "gradient": {
+      "title": "Pourquoi vous respirez fort",
+      "p1": "À mi-pente d’une longue montée, vous respirez vite et fort. Cet air est destiné à vos mitochondries. Les aliments que vous mangez sont décomposés, et leurs électrons sont confiés à une molécule de transport appelée NADH. Sur les parties plates des crêtes, la <strong>chaîne respiratoire</strong> fait passer ces électrons par trois pompes à protons. Chaque pompe utilise l’énergie des électrons pour chasser des protons hors de la matrice. Pour chaque NADH, 10 protons sortent. Le modèle dessine les pompes de façon simplifiée, sans respecter l’échelle.",
+      "p2": "L’<strong>oxygène</strong> est le dernier arrêt des électrons. À la dernière pompe, l’oxygène les prend et devient de l’eau. Sans oxygène, les électrons n’ont nulle part où aller, et les pompes s’arrêtent. Voilà pourquoi vous respirez fort : chaque respiration maintient les pompes en marche. Leur travail crée une poussée d’environ 200 mV, surtout sous forme de tension électrique, à travers une membrane épaisse d’environ 4 à 5 nm seulement. Les protons se pressent pour rentrer dans la matrice, et leur principal chemin de retour passe par l’ATP synthase.",
+      "p3": "Faites glisser le curseur pour régler la quantité d’oxygène que vous absorbez. Plus il y a d’oxygène, plus ces moteurs peuvent fabriquer d’ATP. Si vous pesez 70 kg, assis au repos, vous consommez environ 0,25 L par minute, soit environ 40 kg d’ATP par jour. Au maximum de l’effort, la limite est votre <strong>VO2max</strong> : la quantité maximale d’oxygène que vous pouvez utiliser par minute et par kilo de poids. Chez les jeunes adultes, elle plafonne vers 48 mL par kg et par minute pour les hommes, et 38 pour les femmes. Les champions d’endurance atteignent 70 à 85. La plus haute valeur publiée, 96,7, est celle d’un cycliste champion du monde junior, tout à droite du curseur.",
+      "p4": "Que rapporte chaque respiration ? Environ 5 ATP par molécule d’oxygène, ou environ 2,5 par NADH. Brûler une molécule de glucose avec de l’oxygène donne environ 30 ATP. Sans oxygène, la <strong>glycolyse</strong> ne dégrade le glucose qu’en partie et ne fournit que 2 ATP, ou 3 quand le sucre vient du glycogène stocké dans le muscle. L’oxygène tire donc plusieurs fois plus de chaque gramme de sucre, et l’essentiel de cet ATP supplémentaire vient de ces moteurs.",
+      "control": {
+        "label": "Oxygène absorbé",
+        "rest": "Assis au repos",
+        "record": "Record de VO2max",
+        "perMinute": "ATP fabriqué par minute",
+        "perHour": "ATP fabriqué par heure",
+        "vsRest": "Par rapport au repos"
+      }
+    },
+    "rotor": {
+      "title": "Huit protons par tour",
+      "p1": "Imaginez les entrées d’un stade avant un grand match. Personne n’entre tout droit : chaque supporter pousse un tourniquet, et la foule le fait tourner sans arrêt. Les protons se heurtent à une porte de ce genre. Ils ne peuvent pas traverser seuls la couche grasse de la membrane. Contre l’anneau du rotor se trouve la <strong>sous-unité a</strong>, la porte à protons. Elle contient deux demi-canaux qui ne sont pas alignés. Il n’existe donc aucun tunnel direct.",
+      "p2": "Un proton monte par le demi-canal d’entrée depuis l’espace intermembranaire et se pose sur une pale. Chaque pale porte un <strong>glutamate</strong>, un acide aminé placé au milieu de la membrane, qui peut retenir un proton. L’anneau tourne, et le proton fait presque un tour complet au cœur de la couche grasse. Quand sa pale revient devant la porte, le proton la quitte par le demi-canal de sortie et passe dans la matrice. Vu depuis la matrice, l’anneau tourne dans le sens inverse des aiguilles d’une montre.",
+      "p3": "Chez l’humain, l’anneau compte 8 pales, donc 8 protons passent à chaque tour. Un tour fabrique 3 ATP, si bien que chaque ATP coûte environ 2,7 protons. C’est le nombre de pales qui fixe ce <strong>prix</strong>. Choisissez un anneau ci-dessous pour comparer : la levure et E. coli ont 10 pales, les feuilles d’épinard en ont 14. Leur tour ne donne toujours que 3 ATP, donc leur ATP coûte plus cher. Votre petit anneau fabrique l’ATP le moins cher de la nature, par proton.",
+      "p4": "Si l’on compte aussi le coût pour faire entrer l’ADP et le phosphate, puis pour envoyer le nouvel ATP vers la cellule, le prix total est d’environ 3,7 protons. Le modèle montre un anneau qui tourne sans à-coups, mais le vrai rotor avance <strong>pas à pas</strong>. Il marque une pause, fait un bond, et recule même de temps en temps. Chaque proton qui fait le tour puis passe dans la matrice pousse l’anneau d’une pale de plus, dans le sens qui fabrique l’ATP.",
+      "blades": "Protons par tour",
+      "perAtp": "Protons par ATP",
+      "per100": "ATP pour 100 protons"
+    },
+    "head": {
+      "title": "Trois sites, un ATP chacun",
+      "p1": "À vélo, vos jambes font tourner le pédalier pendant que le cadre reste immobile autour. Le haut de ce moteur fonctionne de la même façon. L’axe coudé tourne à l’intérieur de la tête, et le <strong>bras latéral</strong> tient la tête immobile, comme le cadre autour du pédalier. La tête ne tourne donc jamais. Comme l’axe est courbé, il appuie tour à tour sur chaque partie de la tête en tournant, comme un arbre à cames qui ouvre les soupapes d’un moteur.",
+      "p2": "Chacune des trois pièces β porte un <strong>site</strong> où se fabrique l’ATP. À chaque instant, les trois sites sont dans trois états différents. Chaque pas de 120° de l’axe fait passer chaque site à l’état suivant. Le site ouvert accueille l’ADP et le phosphate, puis devient lâche. Le site lâche se resserre et les assemble en ATP. Le site serré s’ouvre et libère son ATP tout neuf. Un tour fabrique donc 3 ATP. En réalité, les sites passent aussi par des états à moitié fermés. Les lignes ci-dessous suivent les sites en direct.",
+      "p3": "Où va l’énergie ? Pas dans une liaison chimique spéciale : rompre une liaison coûte toujours de l’énergie. Si l’ATP fournit de l’énergie, c’est parce que la réaction entière, la coupure de l’ATP en ADP et phosphate, donne des produits plus stables. Dans une cellule, cela vaut environ 50 à 60 kJ par mole. La poussée des protons sert à faire serrer, puis relâcher, les sites : ils serrent l’ADP et le phosphate jusqu’à ce qu’ils s’unissent, puis lâchent l’ATP terminé. C’est le mécanisme du <strong>changement de liaison</strong>.",
+      "p4": "Paul Boyer a compris ce mécanisme, et John Walker a déterminé la structure qui l’a étayé. Ils ont partagé le <strong>prix Nobel</strong> de chimie 1997 avec Jens Skou, récompensé pour ses travaux sur la pompe sodium-potassium, une tout autre machine. Les vrais pas se découpent encore plus finement. La tête de l’enzyme humaine, mesurée en marche arrière pendant qu’elle décompose de l’ATP, fait chaque pas de 120° en 65°, 25° et 30°. La version bactérienne tourne avec un couple d’environ 40 pN·nm et compte parmi les moteurs les plus efficaces que l’on connaisse.",
+      "seat1": "Site 1",
+      "seat2": "Site 2",
+      "seat3": "Site 3"
+    },
+    "sprint": {
+      "title": "Pourquoi un sprint ne peut pas attendre le moteur",
+      "p1": "Le coup de pistolet part, et un sprinteur jaillit des starting-blocks. Le modèle tourne maintenant à la vitesse réelle estimée du moteur. Dans des mitochondries au travail, il fait environ 100 tours par seconde, soit environ 6 000 tr/min, et fabrique environ 300 ATP par seconde. Regardez le compteur grimper. Un turbo de Formule 1 de 2026 peut tourner jusqu’à 150 000 tr/min, environ 25 fois plus vite. Pourtant, pour un sprinteur, ce moteur est la <strong>voie lente</strong>.",
+      "p2": "Pendant un sprint, vos muscles dépensent l’ATP plus vite que tous leurs moteurs ne peuvent le fabriquer. Deux systèmes plus rapides comblent l’écart. La <strong>phosphocréatine</strong>, une petite réserve du muscle, recharge l’ATP presque instantanément, mais elle est en grande partie épuisée en 10 à 15 secondes d’effort maximal. La glycolyse va vite sans oxygène, mais elle tire peu d’ATP de chaque glucose. Les trois systèmes travaillent en même temps. Ils se chevauchent au lieu de s’enclencher l’un après l’autre.",
+      "p3": "Choisissez une épreuve pour voir quelle part de son énergie vient de ce moteur, grâce à l’oxygène. Sur 100 m, ce n’est qu’environ 10 à 20 %, et les méthodes ne s’accordent pas. Le 200 m tourne autour de 30 %, le 400 m autour de 40 à 45 %, le 800 m autour des deux tiers et le 1 500 m autour de 80 à 85 %. Le 5 000 m est à environ 90 %, le marathon à environ 99 %. Le <strong>point de bascule</strong>, où l’oxygène fournit la moitié, arrive après environ 75 à 80 secondes d’effort maximal. Le 400 m et le 800 m ne sont donc pas des épreuves anaérobies, contrairement à une idée répandue.",
+      "p4": "Le marathon pose le problème inverse. Les moteurs ont tout leur temps, mais le carburant vient à manquer. Vous ne stockez qu’environ 400 g de glucides : à peu près 90 g dans le foie et 310 g dans les muscles des jambes. Plus de 40 % des marathoniens <strong>se heurtent au mur</strong> quand ces réserves s’épuisent. Les réserves de graisse sont bien plus grandes, mais vous en brûlez au mieux environ un demi-gramme par minute. Dans le muscle, cela alimente les pompes trop lentement, et les moteurs ne suivent plus l’allure de course.",
+      "aerobic": "De ce moteur, avec oxygène",
+      "anaerobic": "Des réserves et de la glycolyse, sans oxygène"
+    },
+    "training": {
+      "title": "L’entraînement fait de la place pour plus de moteurs",
+      "p1": "Lancez un <strong>bloc d’entraînement</strong> de sorties à vélo ou de footings réguliers, et vos muscles commencent à changer en quelques semaines. Six semaines d’entraînement en endurance donnent environ 40 à 55 % de mitochondries en plus. L’essentiel de ce gain vient du grossissement des mitochondries que vous avez déjà, plutôt que de la fabrication de nouvelles. Pour cela, c’est le volume d’entraînement qui compte le plus. L’intensité, elle, compte davantage pour la qualité de leur travail. Des mitochondries plus grosses contiennent plus de membrane interne, et plus de membrane laisse plus de place à ces moteurs.",
+      "p2": "Quelle <strong>part</strong> d’un muscle est faite de mitochondries ? Dans un muscle de cuisse non entraîné, environ 4 à 5 %. Chez les athlètes d’endurance entraînés, environ 7 à 11 %. Votre cœur, qui ne prend jamais de jour de repos, est composé d’environ un quart de mitochondries. Mais la quantité ne dit pas tout. Les personnes plus en forme tirent aussi plus de travail de chaque mitochondrie, même à quantité égale. L’entraînement aide donc deux fois : vous avez plus de mitochondries, et chacune travaille mieux.",
+      "p3": "Quelques semaines d’entraînement ajoutent des mitochondries, mais leurs replis intérieurs restent tout aussi serrés. Seules des années d’entraînement changent cela. Chez les athlètes d’endurance, les <strong>crêtes</strong> sont environ 23 % plus serrées, si bien que chaque mitochondrie offre plus de membrane aux moteurs. Personne n’a compté les moteurs avant et après un entraînement. Le modèle dessine donc des moteurs en proportion de la membrane des crêtes mesurée. Choisissez un niveau ci-dessous pour comparer un muscle non entraîné, 10 semaines d’entraînement et des années.",
+      "p4": "Arrêtez de vous entraîner, et le gain s’efface vite. Ce <strong>désentraînement</strong> en fait disparaître la moitié en environ deux semaines. Alors gardez le rythme des séances. La prochaine fois que vous soufflerez fort dans une côte, rappelez-vous à quoi sert ce souffle. Au cœur de vos muscles, il permet aux pompes de chasser les protons, aux protons de revenir sur les anneaux, et à ces moteurs de tourner, trois ATP à chaque tour.",
+      "share": "Mitochondries dans le muscle de la cuisse",
+      "membrane": "Membrane des crêtes pour les moteurs",
+      "motors": "Moteurs dans le modèle"
+    }
+  }
+}
