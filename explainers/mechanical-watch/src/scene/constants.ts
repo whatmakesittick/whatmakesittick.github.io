@@ -212,7 +212,7 @@ export const FORK = {
   jewelClearance: 0.02,
   hornSamples: 8,
   guardPin: { radius: 0.05, level: [2.02, 2.12] as Span, tipFromBalance: 0.36 },
-  staff: { radius: 0.12, pivotRadius: 0.045, span: [-0.2, 2.75] as Span },
+  staff: { radius: 0.12, pivotRadius: 0.045, pivotLength: 0.3, span: [-0.2, 2.75] as Span },
 } as const;
 
 export const BANKING_PIN = {
