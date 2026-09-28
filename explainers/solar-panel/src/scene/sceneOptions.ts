@@ -4,7 +4,7 @@ import { skyPalette } from './parts/sky/palette';
 
 const CAMERA = {
   near: 1,
-  far: 6000,
+  far: 9000,
   maxPolarAngle: Math.PI * 0.52,
   distance: { min: 20, max: 4000 },
 } as const;
