@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { heartRateOf, outputOf, pressuresOf, timeOf, valveStateOf, volumeOf } from './derived';
+import { pressuresOf, timeOf, valveStateOf, volumeOf } from './derived';
 
 describe('derived heart values', () => {
   it('reads the moment in the beat from the phase', () => {
@@ -19,13 +19,5 @@ describe('derived heart values', () => {
     expect(valveStateOf({ phase: 200 })).toBe('allClosed');
     expect(valveStateOf({ phase: 400 })).toBe('semilunarOpen');
     expect(valveStateOf({ phase: 700 })).toBe('avOpen');
-  });
-
-  it('turns the effort into a heart rate and an output', () => {
-    expect(heartRateOf({ fitness: 'typical', effort: 0 })).toBe(75);
-    expect(heartRateOf({ fitness: 'typical', effort: 1 })).toBe(190);
-    expect(heartRateOf({ fitness: 'athlete', effort: 0 })).toBe(50);
-    expect(outputOf({ fitness: 'typical', effort: 0 })).toBeCloseTo(5.25);
-    expect(outputOf({ fitness: 'athlete', effort: 1 })).toBeCloseTo(27.75);
   });
 });

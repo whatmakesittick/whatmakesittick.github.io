@@ -2,8 +2,6 @@ import type { PlaybackState } from '@core/explainer';
 import type { ValveState } from '../ids';
 import {
   aorticPressure,
-  cardiacOutput,
-  heartRate,
   leftAtrialPressure,
   leftVentriclePressure,
   leftVentricleVolume,
@@ -12,10 +10,8 @@ import {
   rightVentriclePressure,
   valveState,
 } from '../model';
-import type { HeartFields } from './store';
 
 type TimeState = Pick<PlaybackState, 'phase'>;
-type EffortState = Pick<HeartFields, 'effort' | 'fitness'>;
 
 export interface Pressures {
   leftVentricle: number;
@@ -48,12 +44,4 @@ export function volumeOf(state: TimeState): number {
 
 export function valveStateOf(state: TimeState): ValveState {
   return valveState(timeOf(state));
-}
-
-export function heartRateOf(state: EffortState): number {
-  return heartRate(state.effort, state.fitness);
-}
-
-export function outputOf(state: EffortState): number {
-  return cardiacOutput(state.effort, state.fitness);
 }
