@@ -1,3 +1,5 @@
+![What makes it tick](https://raw.githubusercontent.com/whatmakesittick/.github/main/brand/readme-hero.png)
+
 # What makes it tick
 
 Interactive 3D explainers of how things work, all in one site. Each explainer
