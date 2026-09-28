@@ -28,8 +28,8 @@ import type { PartContext } from '../context';
 
 const POLISHED = 1;
 const OUTLINE_SAMPLES = 10;
-const BARREL_LABEL = { x: 0.9, y: 9.6 };
-const TRAIN_LABEL = { x: 3.6, y: -7.4 };
+const BARREL_LABEL = { x: -0.9, y: 9.6 };
+const TRAIN_LABEL = { x: -3.6, y: -7.4 };
 
 function pillars(points: readonly Vec2[], radius: number, top: number): GroupedPart[] {
   return points.map((point) => ({

@@ -1,8 +1,11 @@
 import { CROWN_WHEEL_CENTRE, WHEEL_CENTRES } from '../../../model/layout';
-import { WINDING } from '../../../model/train';
+import { windingAngles } from '../../../model/kinematics';
+import { POWER_RESERVE_HOURS, WINDING } from '../../../model/train';
 import { SAW_TOOTH_CENTRE_SHARE } from '../../constants';
 import { toothPitch } from '../../geometry/gear';
 import { meshPhase } from '../../geometry/meshing';
+
+export const WINDING_SENSE = Math.sign(windingAngles(POWER_RESERVE_HOURS).arbor);
 
 export interface WindingPhases {
   readonly ratchet: number;
@@ -16,7 +19,7 @@ export function windingPhases(): WindingPhases {
   const ratchetPitch = toothPitch(WINDING.ratchetTeeth);
   const crownPitch = toothPitch(WINDING.crownWheelTeeth);
   return {
-    ratchet: phase.driver - ratchetPitch * SAW_TOOTH_CENTRE_SHARE,
-    crownWheel: phase.driven - crownPitch * SAW_TOOTH_CENTRE_SHARE,
+    ratchet: phase.driver - WINDING_SENSE * ratchetPitch * SAW_TOOTH_CENTRE_SHARE,
+    crownWheel: phase.driven - WINDING_SENSE * crownPitch * SAW_TOOTH_CENTRE_SHARE,
   };
 }

@@ -10,13 +10,11 @@ import {
   balanceAngle,
   forkAngle,
   motionWorksAngles,
-  timeOnDialSeconds,
   wheelAngles,
   windingAngles,
 } from '../model/kinematics';
 import { BALANCE_CENTRE, CROWN_WHEEL_CENTRE, WHEEL_CENTRES } from '../model/layout';
 import { LEVELS, UNITS_PER_MM } from '../model/scale';
-import { MOTION_WORKS } from '../model/train';
 import type { RegionId } from '../ids';
 import type { Assembly, AssemblyResources } from './assembly';
 import {
@@ -74,10 +72,6 @@ const TRAIN_WHEEL_IDS: readonly TrainWheelId[] = [
   'fourthWheel',
   'escapeWheel',
 ];
-const DEGREES_PER_HOUR = 360;
-const SECONDS_PER_HOUR = 3600;
-const HOURS_ON_DIAL = 12;
-const SECONDS_START = motionWorksAngles(0, 0).second;
 const CENTRE = { x: 0, y: 0 };
 
 function snapshot(state: AssemblyState): AssemblyState {
@@ -226,18 +220,11 @@ export class WatchAssembly implements Assembly {
     this.balance.setAngle(theta);
     this.hairspring.setBalanceAngle(theta);
     this.fork.setAngle(-forkAngle(theta));
-    const hands = motionWorksAngles(state.phase, state.cycles);
+    const hands = motionWorksAngles(state.phase, state.cycles, state.amplitude);
     this.hands.hourHand.setAngle(hands.hour);
     this.hands.minuteHand.setAngle(hands.minute);
-    this.hands.secondHand.setAngle(SECONDS_START + angles.fourthWheel);
-    const minutes =
-      (timeOnDialSeconds(state.phase, state.cycles) / SECONDS_PER_HOUR) * DEGREES_PER_HOUR;
-    const { cannonPinion, minuteWheel } = MOTION_WORKS;
-    this.motionWorks.setAngles({
-      cannonPinion: minutes,
-      minuteWheel: (-minutes * cannonPinion.leaves) / minuteWheel.teeth,
-      hourWheel: minutes / HOURS_ON_DIAL,
-    });
+    this.hands.secondHand.setAngle(hands.second);
+    this.motionWorks.setAngles(hands);
   }
 
   private applyReserve(reserve: number): void {

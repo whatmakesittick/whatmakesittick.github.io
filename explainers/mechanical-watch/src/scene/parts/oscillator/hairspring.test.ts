@@ -25,8 +25,8 @@ describe('hairspring', () => {
     const rest = ends(0).inner;
     const turned = ends(90).inner;
     expect(Math.cos(turned - rest - Math.PI / 2)).toBeCloseTo(1, 5);
-    const open = hairspringSegments(280)[1].sweep;
-    const closed = hairspringSegments(-280)[1].sweep;
-    expect(closed - open).toBeCloseTo((560 * Math.PI) / 180, 5);
+    const swungOne = hairspringSegments(280)[1].sweep;
+    const swungOther = hairspringSegments(-280)[1].sweep;
+    expect(Math.abs(swungOne - swungOther)).toBeCloseTo((560 * Math.PI) / 180, 5);
   });
 });

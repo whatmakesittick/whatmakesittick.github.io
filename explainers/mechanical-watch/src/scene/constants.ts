@@ -1,4 +1,5 @@
 import type { WheelId } from '../ids';
+import { DIRECTIONS_DEG } from '../model/layout';
 import { LEVELS } from '../model/scale';
 import type { Span } from '../model/scale';
 import type { ToothForm } from './geometry/gear';
@@ -94,11 +95,11 @@ export const TRAIN_WHEELS: Readonly<Record<Exclude<WheelId, 'barrel'>, TrainWhee
 };
 
 export const WHEEL_LABELS: Readonly<Record<WheelId, { radius: number; deg: number }>> = {
-  barrel: { radius: 6.05, deg: 10 },
-  centreWheel: { radius: 3.5, deg: 170 },
-  thirdWheel: { radius: 2.9, deg: 0 },
-  fourthWheel: { radius: 3.2, deg: 300 },
-  escapeWheel: { radius: 2.3, deg: 250 },
+  barrel: { radius: 6.05, deg: 170 },
+  centreWheel: { radius: 3.5, deg: 10 },
+  thirdWheel: { radius: 2.9, deg: 180 },
+  fourthWheel: { radius: 3.2, deg: 240 },
+  escapeWheel: { radius: 2.3, deg: 290 },
 };
 
 export const ESCAPE_TOOTH: ClubToothForm = {
@@ -118,16 +119,17 @@ export const BARREL_DRUM = {
   wallOuter: 5.8,
   journalRadius: 0.62,
   sectorDeg: 110,
-  sectorCentreDeg: 200,
+  sectorCentreDeg: -20,
 } as const;
 
 export const MAINSPRING_RIBBON = {
   span: [0.385, 1.615] as Span,
   drawnThicknessShare: 0.8,
   wallGap: 0.04,
-  hookDeg: 330,
-  restInnerTail: 1.4,
-  outerTailPerMm: 2.2,
+  hookDeg: 210,
+  restInnerTail: 3.6,
+  minInnerTail: 1.0,
+  outerTailPerMm: 1.6,
   minOuterTail: 0.25,
   coilSamples: 1500,
   innerTailSamples: 140,
@@ -182,11 +184,11 @@ export const CROWN_KNOB = {
 
 export const CLICK = {
   tipRadius: 4.38,
-  tipDeg: 20,
+  tipDeg: 160,
   armWidth: 0.42,
   hubRadius: 0.42,
   level: [3.0, 3.34] as Span,
-  spring: { anchor: { x: 8.25, y: 8.89 }, width: 0.08, bow: 0.45, level: [3.02, 3.26] as Span },
+  spring: { anchor: { x: -8.25, y: 8.89 }, width: 0.08, bow: 0.45, level: [3.02, 3.26] as Span },
   screwRadius: 0.36,
 } as const;
 
@@ -227,10 +229,12 @@ export const ROLLER = {
   collar: { radius: 0.3, level: [2.0, 2.56] as Span },
 } as const;
 
+const FACING_BACK_DEG = 180;
+
 export const IMPULSE_JEWEL = {
   radius: 0.13,
   level: [2.15, 2.53] as Span,
-  restDeg: 330,
+  restDeg: DIRECTIONS_DEG.leverLine + FACING_BACK_DEG,
 } as const;
 
 export const BALANCE_WHEEL = {
@@ -257,9 +261,11 @@ export const BALANCE_WHEEL = {
 
 export const HAIRSPRING_RIBBON = {
   halfWidth: 0.03,
-  terminalStartDeg: 185,
-  terminalEndDeg: 214,
-  studDeg: 220,
+  hand: -1,
+  terminalStartDeg: -5,
+  terminalEndDeg: -34,
+  studDeg: -40,
+  labelDeg: -12,
   colletRadius: 0.42,
   colletHole: 0.2,
   spiralSamples: 800,
@@ -271,9 +277,9 @@ export const HAIRSPRING_RIBBON = {
 export const REGULATOR_ARM = {
   level: [3.98, 4.12] as Span,
   ring: { inner: 0.72, outer: 1.0 },
-  pinArmDeg: 200,
+  pinArmDeg: -20,
   pinArmWidth: 0.34,
-  pointerDeg: 20,
+  pointerDeg: 160,
   pointerLength: 3.6,
   pointerWidth: 0.28,
   curbPin: { radius: 0.035, offset: 0.075, span: [3.74, 3.99] as Span },
@@ -304,7 +310,7 @@ export const BALANCE_COCK = {
     { x: 0, y: 1.15 },
     { x: -0.82, y: 0.82 },
   ],
-  footDeg: 105,
+  footDeg: 75,
   footDistance: 6.7,
   footSpread: 0.62,
   footRadius: 0.85,
@@ -335,60 +341,60 @@ export const BARREL_BRIDGE = {
   barrelRadius: 6.0,
   centreRadius: 1.7,
   pillars: [
-    { x: -2.5, y: 8.5 },
-    { x: 7.0, y: 0.3 },
+    { x: 2.5, y: 8.5 },
+    { x: -7.0, y: 0.3 },
   ],
   pillarRadius: 0.72,
   pillarPostRadius: 0.4,
   crownWheelClearance: 2.58,
-  window: { inner: 1.75, outer: 5.45, fromDeg: 150, toDeg: 250 },
+  window: { inner: 1.75, outer: 5.45, fromDeg: -70, toDeg: 30 },
   arborHole: 0.66,
   screws: [
-    { x: -2.5, y: 8.5 },
-    { x: 7.0, y: 0.3 },
-    { x: -1.08, y: 0.63 },
+    { x: 2.5, y: 8.5 },
+    { x: -7.0, y: 0.3 },
+    { x: 1.08, y: 0.63 },
   ],
 } as const;
 
 export const TRAIN_BRIDGE = {
   outline: [
-    { x: 7.2, y: -7.9 },
-    { x: 6.6, y: -9.3 },
-    { x: 4.0, y: -9.3 },
-    { x: 1.2, y: -8.0 },
-    { x: -1.6, y: -9.6 },
-    { x: -2.5, y: -10.55 },
-    { x: -3.95, y: -9.95 },
-    { x: -3.7, y: -8.7 },
-    { x: -1.25, y: -6.7 },
-    { x: -0.95, y: -5.4 },
-    { x: 0.95, y: -3.05 },
-    { x: 2.25, y: -2.5 },
-    { x: 3.15, y: -3.3 },
-    { x: 3.1, y: -4.7 },
-    { x: 5.0, y: -6.55 },
+    { x: -7.2, y: -7.9 },
+    { x: -6.6, y: -9.3 },
+    { x: -4.0, y: -9.3 },
+    { x: -1.2, y: -8.0 },
+    { x: 1.6, y: -9.6 },
+    { x: 2.5, y: -10.55 },
+    { x: 3.95, y: -9.95 },
+    { x: 3.7, y: -8.7 },
+    { x: 1.25, y: -6.7 },
+    { x: 0.95, y: -5.4 },
+    { x: -0.95, y: -3.05 },
+    { x: -2.25, y: -2.5 },
+    { x: -3.15, y: -3.3 },
+    { x: -3.1, y: -4.7 },
+    { x: -5.0, y: -6.55 },
   ],
   lowArmOutline: [
-    { x: -0.45, y: -6.35 },
-    { x: -1.65, y: -4.2 },
-    { x: -2.5, y: -2.8 },
-    { x: -3.6, y: -2.15 },
-    { x: -4.75, y: -1.45 },
-    { x: -5.4, y: -2.0 },
-    { x: -4.9, y: -2.62 },
-    { x: -3.6, y: -3.3 },
-    { x: -2.85, y: -4.15 },
-    { x: -1.45, y: -6.2 },
+    { x: 0.45, y: -6.35 },
+    { x: 1.65, y: -4.2 },
+    { x: 2.5, y: -2.8 },
+    { x: 3.6, y: -2.15 },
+    { x: 4.75, y: -1.45 },
+    { x: 5.4, y: -2.0 },
+    { x: 4.9, y: -2.62 },
+    { x: 3.6, y: -3.3 },
+    { x: 2.85, y: -4.15 },
+    { x: 1.45, y: -6.2 },
   ],
   feet: [
-    { x: 6.2, y: -8.3 },
-    { x: -3.0, y: -9.6 },
+    { x: -6.2, y: -8.3 },
+    { x: 3.0, y: -9.6 },
   ],
   pillarPostRadius: 0.42,
   screws: [
-    { x: 6.2, y: -8.3 },
-    { x: -3.0, y: -9.6 },
-    { x: 1.3, y: -5.2 },
+    { x: -6.2, y: -8.3 },
+    { x: 3.0, y: -9.6 },
+    { x: -1.3, y: -5.2 },
   ],
 } as const;
 
@@ -408,7 +414,7 @@ export const JEWEL_SINK = {
 export const ENGRAVING = {
   text: '17 jewels',
   radius: 5.35,
-  deg: 116,
+  deg: 64,
   size: { width: 3.0, height: 0.75 },
   texture: { width: 512, height: 128 },
   font: '600 76px "Helvetica Neue", Arial, sans-serif',
@@ -433,7 +439,7 @@ export const CASE_RING = {
   backRadius: 14.6,
   shoulderInset: 0.1,
   tube: { inner: 0.52, outer: 0.78, start: 13.5, end: 15.5 },
-  labelDeg: -50,
+  labelDeg: 230,
 } as const;
 
 export const DIAL_FACE = {
@@ -442,8 +448,8 @@ export const DIAL_FACE = {
   subDialRadius: 3.4,
   textureSize: 2048,
   feet: [
-    { x: 10.8, y: 3.2 },
-    { x: -9.6, y: -5.8 },
+    { x: -10.8, y: 3.2 },
+    { x: 9.6, y: -5.8 },
   ],
   footRadius: 0.22,
   marker: { inner: 10.2, outer: 11.9, width: 0.42, twinGap: 0.34, height: 0.12 },

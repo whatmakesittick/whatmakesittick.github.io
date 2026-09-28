@@ -3,7 +3,13 @@ import { regionFromSpec } from '@core/scene/regions';
 import type { RegionSpec } from '@core/scene/regions';
 import type { RegionId } from '../ids';
 import { WHEEL_IDS } from '../ids';
-import { BALANCE, BALANCE_CENTRE, MINUTE_WHEEL_CENTRE, WHEEL_CENTRES } from '../model/layout';
+import {
+  BALANCE,
+  BALANCE_CENTRE,
+  CROWN_SIDE,
+  MINUTE_WHEEL_CENTRE,
+  WHEEL_CENTRES,
+} from '../model/layout';
 import type { Point } from '../model/layout';
 import {
   CASE_HEIGHT_MM,
@@ -22,6 +28,7 @@ import { BALANCE_COCK, ROLLER, SHOCK_SETTING, TRAIN_WHEELS } from './constants';
 const MARGIN_MM = 0.2;
 const BARREL_REACH_MM = 6.2;
 const MOTION_REACH_MM = 2.0;
+const CROWN_END_X = CROWN_SIDE < 0 ? CROWN_SPAN_X_MM[0] : CROWN_SPAN_X_MM[1];
 
 interface Extent2 {
   readonly x: Span;
@@ -59,7 +66,10 @@ function specs(): Readonly<Record<RegionId, RegionSpec>> {
   return {
     scene: box(
       {
-        x: [-CASE_OUTER_RADIUS_MM, CROWN_SPAN_X_MM[1]],
+        x: [
+          Math.min(-CASE_OUTER_RADIUS_MM, CROWN_END_X),
+          Math.max(CASE_OUTER_RADIUS_MM, CROWN_END_X),
+        ],
         y: [-CASE_OUTER_RADIUS_MM, CASE_OUTER_RADIUS_MM],
       },
       CASE_HEIGHT_MM,
@@ -67,7 +77,10 @@ function specs(): Readonly<Record<RegionId, RegionSpec>> {
     movement: box(square(MOVEMENT_RADIUS_MM), [LEVELS.mainplate[0], SHOCK_SETTING.lyre.span[1]]),
     barrel: box(
       {
-        x: [barrel.x - BARREL_REACH_MM, CROWN_SPAN_X_MM[1]],
+        x: [
+          Math.min(barrel.x - BARREL_REACH_MM, CROWN_END_X),
+          Math.max(barrel.x + BARREL_REACH_MM, CROWN_END_X),
+        ],
         y: [-CROWN_RADIUS_MM, barrel.y + BARREL_REACH_MM],
       },
       [LEVELS.barrelDrum[0], LEVELS.ratchetWheel[1]],

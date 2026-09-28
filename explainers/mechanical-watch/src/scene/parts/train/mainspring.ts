@@ -11,6 +11,7 @@ import { chained } from '../../geometry/spiral';
 import type { SpiralSegment } from '../../geometry/spiral';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
+import { WINDING_SENSE } from '../winding/windingPhases';
 
 const FULL_CIRCLE = Math.PI * 2;
 const PITCH = MAINSPRING_BLADE.thicknessMm;
@@ -43,21 +44,40 @@ function coilShape(reserve: number): CoilShape {
   return { outerTail, coilSweep: FULL_CIRCLE * (coil.coils - 1), inner, outer };
 }
 
+function tails(shape: CoilShape, total: number): { outer: number; inner: number } {
+  const budget = total - shape.coilSweep;
+  const outer = Math.min(shape.outerTail, budget - MAINSPRING_RIBBON.minInnerTail);
+  return { outer, inner: budget - outer };
+}
+
 const RUN_DOWN = coilShape(0);
 
 const MAINSPRING_BASE_SWEEP =
   MAINSPRING_RIBBON.restInnerTail + RUN_DOWN.outerTail + RUN_DOWN.coilSweep;
 
-export const ARBOR_HOOK_ANGLE = WALL_HOOK + MAINSPRING_BASE_SWEEP;
+export const ARBOR_HOOK_ANGLE = WALL_HOOK + WINDING_SENSE * MAINSPRING_BASE_SWEEP;
 
 export function mainspringSegments(reserve: number, arborDeg: number): SpiralSegment[] {
   const shape = coilShape(reserve);
-  const total = MAINSPRING_BASE_SWEEP + toRadians(arborDeg);
-  const innerTail = total - shape.outerTail - shape.coilSweep;
+  const total = MAINSPRING_BASE_SWEEP + WINDING_SENSE * toRadians(arborDeg);
+  const tail = tails(shape, total);
+  const sweep = (magnitude: number) => WINDING_SENSE * magnitude;
   return chained({ radius: WALL_HOOK_RADIUS, angle: WALL_HOOK }, [
-    { toRadius: shape.outer, sweep: shape.outerTail, samples: MAINSPRING_RIBBON.outerTailSamples },
-    { toRadius: shape.inner, sweep: shape.coilSweep, samples: MAINSPRING_RIBBON.coilSamples },
-    { toRadius: ARBOR_HOOK_RADIUS, sweep: innerTail, samples: MAINSPRING_RIBBON.innerTailSamples },
+    {
+      toRadius: shape.outer,
+      sweep: sweep(tail.outer),
+      samples: MAINSPRING_RIBBON.outerTailSamples,
+    },
+    {
+      toRadius: shape.inner,
+      sweep: sweep(shape.coilSweep),
+      samples: MAINSPRING_RIBBON.coilSamples,
+    },
+    {
+      toRadius: ARBOR_HOOK_RADIUS,
+      sweep: sweep(tail.inner),
+      samples: MAINSPRING_RIBBON.innerTailSamples,
+    },
   ]);
 }
 

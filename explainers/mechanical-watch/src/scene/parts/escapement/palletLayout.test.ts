@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { forkAngle } from '../../../model/kinematics';
+import { DIRECTIONS_DEG } from '../../../model/layout';
 import { BANKING_PIN, ESCAPE_TOOTH, IMPULSE_JEWEL } from '../../constants';
 import type { Vec2 } from '../../geometry/outline';
 import { distance, rotateAbout } from '../../geometry/outline';
@@ -84,7 +85,8 @@ describe('pallet fork layout', () => {
       STAFF,
       (-BANKING_DEG * Math.PI) / 180,
     );
-    const exitDeg = (Math.atan2(exit.y - ESCAPE.y, exit.x - ESCAPE.x) * 180) / Math.PI + 150;
+    const exitDeg =
+      (Math.atan2(exit.y - ESCAPE.y, exit.x - ESCAPE.x) * 180) / Math.PI + DIRECTIONS_DEG.leverLine;
     expect(Math.abs(restingToothDeg() - exitDeg)).toBeLessThan(2);
   });
 

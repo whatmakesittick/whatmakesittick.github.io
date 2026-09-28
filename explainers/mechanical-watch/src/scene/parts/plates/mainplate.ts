@@ -10,7 +10,7 @@ import { layeredMesh } from '../context';
 import type { PartContext } from '../context';
 
 const ORIGIN = { x: 0, y: 0 };
-const LABEL_AT = { x: 3.2, y: -11.6 };
+const LABEL_AT = { x: -3.2, y: -11.6 };
 
 function plateGeometry(): BufferGeometry {
   const [bottom, top] = MAINPLATE.span;

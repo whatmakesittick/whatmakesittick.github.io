@@ -52,6 +52,15 @@ describe('gear profile', () => {
     expect(Math.max(...radii)).toBeCloseTo(0.9, 6);
     expect(Math.min(...radii)).toBeCloseTo(0.6, 6);
   });
+  it('mirrors saw teeth so the steep faces stay on the requested angles', () => {
+    const form = { depth: 0.28, hook: 0, land: 0.14 };
+    const offset = 0.2;
+    const mirrored = sawProfile(60, 4.5, form, offset, -1);
+    expect(signedArea(mirrored)).toBeGreaterThan(0);
+    const tips = mirrored.filter((point) => radius(point) > 4.6);
+    const angles = tips.map((point) => Math.atan2(point.y, point.x));
+    expect(angles.some((angle) => Math.abs(Math.cos(angle - offset) - 1) < 1e-9)).toBe(true);
+  });
 
   it('draws saw teeth between their root and tip circles', () => {
     const saw = sawProfile(60, 4.5, { depth: 0.28, hook: 0.05, land: 0.14 });

@@ -20,6 +20,7 @@ import {
 } from '../../geometry/outline';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
+import { WINDING_SENSE } from './windingPhases';
 
 const BARREL = WHEEL_CENTRES.barrel;
 const TIP = polarDeg(BARREL, CLICK.tipRadius, CLICK.tipDeg);
@@ -89,7 +90,7 @@ function tipLiftSlope(): number {
 export function ratchetRadiusUnderClick(ratchetDeg: number, phase: number): number {
   const pitch = toothPitch(WINDING.ratchetTeeth);
   const land = pitch * (1 - WINDING_SAW.land);
-  const local = toRadians(CLICK.tipDeg - ratchetDeg) - phase;
+  const local = WINDING_SENSE * (toRadians(CLICK.tipDeg - ratchetDeg) - phase);
   const within = ((local % pitch) + pitch) % pitch;
   if (within >= land) return RATCHET_ROOT;
   return RATCHET_TIP - ((RATCHET_TIP - RATCHET_ROOT) * within) / land;

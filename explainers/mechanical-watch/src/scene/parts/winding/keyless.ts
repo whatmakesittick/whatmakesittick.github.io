@@ -2,7 +2,7 @@ import { Group, LatheGeometry, Vector2 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { toRadians } from '@core/math';
 import { anchorAt } from '@core/scene/parts';
-import { WINDING_PINION_CENTRE } from '../../../model/layout';
+import { CROWN_SIDE, WINDING_PINION_CENTRE } from '../../../model/layout';
 import {
   CROWN_RADIUS_MM,
   CROWN_SPAN_X_MM,
@@ -33,9 +33,15 @@ const NECK_STEP = { share: 0.92, length: 0.12 } as const;
 const FLUTE_MARGIN = 0.1;
 const FACE_TOOTH_SHARE = 0.5;
 const CROWN_FACE_SHARE = 0.5;
+const PINION_LABEL_OFFSET = 0.3;
 
-function alongX(geometry: BufferGeometry): BufferGeometry {
+const CROWN_INNER = Math.min(...CROWN_SPAN_X_MM.map(Math.abs));
+const CROWN_OUTER = Math.max(...CROWN_SPAN_X_MM.map(Math.abs));
+const STEM_START = Math.abs(STEM_START_X_MM);
+
+export function toCrownSide(geometry: BufferGeometry): BufferGeometry {
   geometry.rotateY(QUARTER_TURN);
+  if (CROWN_SIDE < 0) geometry.rotateZ(Math.PI);
   return geometry;
 }
 
@@ -44,8 +50,8 @@ function stemGeometry(): BufferGeometry {
   const grooveStart = groove.at - groove.width / 2;
   const grooveEnd = groove.at + groove.width / 2;
   const profile: LathePoint[] = [
-    [0, STEM_START_X_MM],
-    [radius, STEM_START_X_MM],
+    [0, STEM_START],
+    [radius, STEM_START],
     [radius, grooveStart],
     [groove.radius, grooveStart],
     [groove.radius, grooveEnd],
@@ -53,7 +59,7 @@ function stemGeometry(): BufferGeometry {
     [radius, end],
     [0, end],
   ];
-  return alongX(latheZ(profile, SEGMENTS.arbor));
+  return toCrownSide(latheZ(profile, SEGMENTS.arbor));
 }
 
 function faceTooth(index: number, pitch: number): BufferGeometry {
@@ -77,11 +83,11 @@ function pinionGeometry(): BufferGeometry {
     tooth.translate(0, 0, end);
     return tooth;
   });
-  return alongX(merge([extrudeOutline(leaves, start, end), ...teeth]));
+  return toCrownSide(merge([extrudeOutline(leaves, start, end), ...teeth]));
 }
 
 function crownProfile(): Vector2[] {
-  const [start, end] = CROWN_SPAN_X_MM;
+  const [start, end] = [CROWN_INNER, CROWN_OUTER];
   const { neckRadius, neckEnd, bodyEnd, endRadius, faceDome } = CROWN_KNOB;
   const points: LathePoint[] = [
     [0, start],
@@ -115,7 +121,7 @@ function crownGeometry(): BufferGeometry {
   }
   geometry.computeVertexNormals();
   geometry.rotateX(QUARTER_TURN);
-  return alongX(geometry);
+  return toCrownSide(geometry);
 }
 
 export class KeylessPart {
@@ -135,14 +141,24 @@ export class KeylessPart {
       WINDING.windingPinionRadiusMm +
       WINDING_TOOTH.addendum *
         gearModule(WINDING.windingPinionLeaves, WINDING.windingPinionRadiusMm);
-    const crownEnd = anchorAt(frame, CROWN_SPAN_X_MM[1] + ANCHOR_LIFT_MM, 0, STEM_AXIS_Z_MM);
+    const crownEnd = anchorAt(
+      frame,
+      CROWN_SIDE * (CROWN_OUTER + ANCHOR_LIFT_MM),
+      0,
+      STEM_AXIS_Z_MM,
+    );
     this.anchor = crownEnd;
     this.labels = {
       crown: crownEnd,
-      stem: anchorAt(frame, STEM_LABEL_X, 0, STEM_AXIS_Z_MM + STEM.radius + ANCHOR_LIFT_MM),
+      stem: anchorAt(
+        frame,
+        CROWN_SIDE * STEM_LABEL_X,
+        0,
+        STEM_AXIS_Z_MM + STEM.radius + ANCHOR_LIFT_MM,
+      ),
       windingPinion: anchorAt(
         frame,
-        WINDING_PINION_CENTRE.x + 0.3,
+        WINDING_PINION_CENTRE.x + CROWN_SIDE * PINION_LABEL_OFFSET,
         0,
         STEM_AXIS_Z_MM + pinionTop + ANCHOR_LIFT_MM,
       ),

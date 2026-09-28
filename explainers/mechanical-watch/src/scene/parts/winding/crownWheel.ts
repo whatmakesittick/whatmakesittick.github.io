@@ -12,9 +12,10 @@ import { polarDeg } from '../../geometry/outline';
 import { disc, ring } from '../../geometry/solids';
 import { finishMesh, partMesh } from '../context';
 import type { PartContext } from '../context';
+import { WINDING_SENSE } from './windingPhases';
 
 const ORIGIN = { x: 0, y: 0 };
-const LABEL_DEG = 20;
+const LABEL_DEG = 160;
 const RADIAL_FROM_EXTRUSION = new Matrix4().set(0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1);
 
 function contrateTooth(angle: number): BufferGeometry {
@@ -62,6 +63,7 @@ export class CrownWheelPart {
       WINDING.crownWheelRadiusMm,
       WINDING_SAW,
       phase,
+      WINDING_SENSE,
     );
     const finish = context.surfaces.sunray(WINDING.crownWheelRadiusMm);
     this.object.add(

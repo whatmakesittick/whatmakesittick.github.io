@@ -24,7 +24,7 @@ import type { PartContext } from '../context';
 const ORIGIN = { x: 0, y: 0 };
 const RIM_BEVEL = { size: 0.05, segments: 2 };
 const JEWEL_LABEL_LIFT = 0.1;
-const LABEL_RIM_DEG = 160;
+const LABEL_RIM_DEG = 20;
 const CRESCENT_OFFSET = 0.04;
 
 function rimGeometry(): BufferGeometry {

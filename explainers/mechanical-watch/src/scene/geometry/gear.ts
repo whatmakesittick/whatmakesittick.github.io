@@ -124,16 +124,23 @@ export interface SawForm {
   readonly land: number;
 }
 
-export function sawProfile(teeth: number, pitchRadius: number, form: SawForm, offset = 0): Vec2[] {
+export function sawProfile(
+  teeth: number,
+  pitchRadius: number,
+  form: SawForm,
+  offset = 0,
+  hand = 1,
+): Vec2[] {
   const pitch = toothPitch(teeth);
   const tip = pitchRadius + form.depth / 2;
   const root = pitchRadius - form.depth / 2;
-  return Array.from({ length: teeth }, (_, tooth) => {
-    const start = offset + tooth * pitch;
+  const points = Array.from({ length: teeth }, (_, tooth) => {
+    const start = offset * hand + tooth * pitch;
     return [
       polar(ORIGIN, root, start),
       polar(ORIGIN, tip, start - pitch * form.hook),
       polar(ORIGIN, root, start + pitch * (1 - form.land)),
     ];
   }).flat();
+  return hand > 0 ? points : points.map((point) => ({ x: point.x, y: -point.y })).reverse();
 }

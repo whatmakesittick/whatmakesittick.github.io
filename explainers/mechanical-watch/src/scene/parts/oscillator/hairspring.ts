@@ -21,8 +21,8 @@ const TERMINAL_SWEEP = toRadians(
   HAIRSPRING_RIBBON.terminalEndDeg - HAIRSPRING_RIBBON.terminalStartDeg,
 );
 const STUD_SWEEP = toRadians(HAIRSPRING_RIBBON.studDeg - HAIRSPRING_RIBBON.terminalEndDeg);
-const REST_INNER = TERMINAL_START - REST_SWEEP - INNER_KINK;
-const LABEL_DEG = (HAIRSPRING_RIBBON.terminalStartDeg + HAIRSPRING_RIBBON.terminalEndDeg) / 2 - 8;
+const HAND = HAIRSPRING_RIBBON.hand;
+const REST_INNER = TERMINAL_START - HAND * (REST_SWEEP + INNER_KINK);
 
 const SECTION: RibbonSection = {
   halfWidth: HAIRSPRING_RIBBON.halfWidth,
@@ -35,12 +35,12 @@ export function hairspringSegments(balanceDeg: number): SpiralSegment[] {
   return chained({ radius: HAIRSPRING_RIBBON.colletRadius, angle: REST_INNER + turn }, [
     {
       toRadius: HAIRSPRING.innerRadiusMm,
-      sweep: INNER_KINK,
+      sweep: HAND * INNER_KINK,
       samples: HAIRSPRING_RIBBON.innerSamples,
     },
     {
       toRadius: HAIRSPRING.outerRadiusMm,
-      sweep: REST_SWEEP - turn,
+      sweep: HAND * REST_SWEEP - turn,
       samples: HAIRSPRING_RIBBON.spiralSamples,
     },
     {
@@ -69,7 +69,7 @@ export class HairspringPart {
     this.object.position.set(BALANCE_CENTRE.x, BALANCE_CENTRE.y, 0);
     this.object.add(mesh);
     frame.add(this.object);
-    const at = polarDeg(BALANCE_CENTRE, HAIRSPRING.outerRadiusMm, LABEL_DEG);
+    const at = polarDeg(BALANCE_CENTRE, HAIRSPRING.outerRadiusMm, HAIRSPRING_RIBBON.labelDeg);
     this.label = anchorAt(frame, at.x, at.y, LEVELS.hairspring[1] + ANCHOR_LIFT_MM);
     this.setBalanceAngle(0);
   }

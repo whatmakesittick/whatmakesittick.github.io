@@ -5,7 +5,9 @@ import { anchorAt } from '@core/scene/parts';
 import { MINUTE_WHEEL_CENTRE } from '../../../model/layout';
 import type { Point } from '../../../model/layout';
 import { LEVELS } from '../../../model/scale';
-import { MOTION_WORKS } from '../../../model/train';
+import { motionWorksAngles } from '../../../model/kinematics';
+import type { MotionWorksAngles } from '../../../model/kinematics';
+import { MOTION_WORKS, motionWorksRatio } from '../../../model/train';
 import { ANCHOR_LIFT_MM, MOTION, PINION_LEAF, SEGMENTS, WHEEL_TOOTH } from '../../constants';
 import { extrudeOutline } from '../../geometry/extrude';
 import { formProfile, gearModule } from '../../geometry/gear';
@@ -22,8 +24,10 @@ const ORIGIN: Point = { x: 0, y: 0 };
 const TO_MINUTE = Math.atan2(MINUTE_WHEEL_CENTRE.y, MINUTE_WHEEL_CENTRE.x);
 const CANNON_MESH = meshPhase(MOTION_WORKS.minuteWheel.teeth, TO_MINUTE);
 const HOUR_MESH = meshPhase(MOTION_WORKS.hourWheel.teeth, TO_MINUTE + Math.PI);
+const START = motionWorksAngles(0, 0);
+const HOUR_WHEEL_LEAD = toRadians(START.hour - START.minute / motionWorksRatio());
 const LABEL_REACH = { minute: 0.7, hour: 0.8 } as const;
-const HOUR_LABEL_DEG = -53;
+const HOUR_LABEL_DEG = 233;
 
 function crossedWheel(
   teeth: number,
@@ -87,7 +91,7 @@ function hourWheelGeometry(): BufferGeometry {
   const wheel = crossedWheel(
     hourWheel.teeth,
     hourWheel.radiusMm,
-    HOUR_MESH.driven,
+    HOUR_MESH.driven - HOUR_WHEEL_LEAD,
     MOTION.hourSpokes,
     LEVELS.hourWheel,
   );
@@ -101,12 +105,7 @@ function hourWheelGeometry(): BufferGeometry {
   return merge([wheel, pipe]);
 }
 
-export interface MotionWorksAnglesDeg {
-  readonly cannonPinion: number;
-  readonly minuteWheel: number;
-  readonly hourWheel: number;
-}
-
+type WheelAngles = Pick<MotionWorksAngles, 'cannonPinion' | 'minuteWheel' | 'hourWheel'>;
 export class MotionWorksPart {
   readonly labels: Readonly<Record<'cannonPinion' | 'minuteWheel' | 'hourWheel', Object3D>>;
   private readonly cannon = new Group();
@@ -130,15 +129,15 @@ export class MotionWorksPart {
       cannonPinion: anchorAt(frame, 0, 0, below(LEVELS.cannonPinionTube[0])),
       minuteWheel: anchorAt(
         frame,
-        MINUTE_WHEEL_CENTRE.x - minuteWheel.radiusMm * LABEL_REACH.minute,
+        MINUTE_WHEEL_CENTRE.x + minuteWheel.radiusMm * LABEL_REACH.minute,
         MINUTE_WHEEL_CENTRE.y,
-        below(MOTION.minutePinion[0]),
+        below(LEVELS.minuteWheel[0]),
       ),
       hourWheel: anchorAt(frame, hourLabel.x, hourLabel.y, below(LEVELS.hourWheel[0])),
     };
   }
 
-  setAngles(angles: MotionWorksAnglesDeg): void {
+  setAngles(angles: WheelAngles): void {
     this.cannon.rotation.z = toRadians(angles.cannonPinion);
     this.minute.rotation.z = toRadians(angles.minuteWheel);
     this.hour.rotation.z = toRadians(angles.hourWheel);

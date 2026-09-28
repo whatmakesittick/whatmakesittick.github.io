@@ -12,11 +12,18 @@ import { slottedHead } from '../../geometry/screw';
 import { crossingHoles } from '../../geometry/wheel';
 import { finishMesh, partMesh } from '../context';
 import type { PartContext } from '../context';
+import { WINDING_SENSE } from './windingPhases';
 
-const LABEL_DEG = 80;
+const LABEL_DEG = 100;
 
 function ratchetGeometry(phase: number) {
-  const outline = sawProfile(WINDING.ratchetTeeth, WINDING.ratchetRadiusMm, WINDING_SAW, phase);
+  const outline = sawProfile(
+    WINDING.ratchetTeeth,
+    WINDING.ratchetRadiusMm,
+    WINDING_SAW,
+    phase,
+    WINDING_SENSE,
+  );
   const rimInner = WINDING.ratchetRadiusMm - WINDING_SAW.depth / 2 - RATCHET.rimWidth;
   const holes = crossingHoles({ ...RATCHET.spokes, rimInner }, SEGMENTS.outline);
   return extrudeOutline(outline, RATCHET.level[0], RATCHET.level[1], holes);

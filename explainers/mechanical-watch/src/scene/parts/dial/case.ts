@@ -14,6 +14,7 @@ import { merge } from '../../geometry/merge';
 import { polarDeg } from '../../geometry/outline';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
+import { toCrownSide } from '../winding/keyless';
 
 const ROUND_SAMPLES = 8;
 const FLANK_BULGE = 0.1;
@@ -104,7 +105,7 @@ function tubeGeometry(): BufferGeometry {
     ],
     SEGMENTS.hub,
   );
-  geometry.rotateY(QUARTER_TURN);
+  toCrownSide(geometry);
   geometry.translate(0, 0, STEM_AXIS_Z_MM);
   return geometry;
 }
