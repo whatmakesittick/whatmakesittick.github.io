@@ -1,8 +1,8 @@
 # What makes it tick
 
-Interactive, scroll-driven 3D explainers of everyday machines, all in one site.
-Each explainer takes a mechanism apart, slows it down and lets you turn it around
-while the text walks through how it works. Eight languages.
+Interactive 3D explainers of how things work, all in one site. Each explainer
+takes a machine or a natural phenomenon apart, slows it down and lets you turn it
+around while the text walks through how it works. Eight languages.
 
 Live site: https://whatmakesittick.github.io/
 
