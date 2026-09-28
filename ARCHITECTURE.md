@@ -514,6 +514,20 @@ its language whose `mainEntity` is an `ItemList` of the explainers in catalogue 
 newest first, each linked to its page in the catalogue's language, or in English when the
 explainer does not ship it.
 
+### Site check
+
+`vite/siteCheckPlugin.ts` reads `dist/` after every build and fails it when a page breaks a
+rule in `vite/siteCheck.ts`: the `lang` of the page, a title with the site name, a
+description within `descriptionLimit` of its language, the canonical URL, hreflang links with
+`x-default` and the page itself, one JSON-LD block that parses, one `h1`, no external
+stylesheet and no Google Fonts host, a gzipped JavaScript budget (`JS_BUDGET_GZIP`, summed
+over the module scripts and preloads of the page and their static imports), no three.js chunk
+on a catalogue page, a `modulepreload` on every translated page, one card per explainer on the
+catalogue, the noscript cover and the more-explainers links on an explainer page, a sitemap
+that lists exactly the built pages, `robots.txt`, a `noindex` 404 page without scripts and a
+real `favicon.ico`. When it fails, fix the page rather than the rule, and raise a budget only
+with a measurement.
+
 ## Catalogue
 
 The catalogue is prerendered into `[data-catalogue]`: a row of tag chips and one

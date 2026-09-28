@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config';
 import { dependsOn } from './vite/chunks.ts';
 import type { ModuleGraph } from './vite/chunks.ts';
 import { explainerPages } from './vite/explainerPages.ts';
+import { siteCheck } from './vite/siteCheckPlugin.ts';
 
 const TEST_ROOTS = ['src', 'explainers/*/src', 'vite'];
 const TEST_SUFFIX = '.test.ts';
@@ -17,7 +18,7 @@ const needsScene = (id: string, graph: ModuleGraph) =>
 
 export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
-  plugins: [explainerPages()],
+  plugins: [explainerPages(), siteCheck()],
   resolve: {
     alias: { '@core': fileURLToPath(new URL('./src/core', import.meta.url)) },
   },
