@@ -62,8 +62,8 @@
   --swatch: var(--atria);
 }
 
-.cycle-readouts > div:has([data-readout='cycle-flow']) {
-  --swatch: var(--filling);
+.cycle-readouts > div:has([data-readout='cycle-flow']) dt::before {
+  content: none;
 }
 
 .effort-control .range {
