@@ -12,11 +12,11 @@ import {
 } from '../model';
 
 export const NO_VALUE = '–';
+export const MICROMETRES_PER_MM = 1000;
 
 const CLOCK_DIGITS = 2;
 const CLOCK_PAD = '0';
 const PERCENT = 100;
-const MICROMETRES_PER_MM = 1000;
 const LOWEST_SHOWN_SUN_DEG = 0.5;
 const TENS = 10;
 const SCIENTIFIC_SEPARATOR = ' × 10';

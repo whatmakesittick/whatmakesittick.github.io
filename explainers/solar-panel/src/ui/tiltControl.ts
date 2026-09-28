@@ -5,8 +5,6 @@ import type { SolarPanelState, SolarPanelStore } from '../state';
 import type { Disposer } from './disposers';
 import { NO_VALUE, formatDegrees, formatIrradiance, formatKilowattHours } from './format';
 
-const FLAT_TILT_DEG = 0;
-
 function incidenceOf(state: SolarPanelState): number | null {
   const minute = minuteOf(state);
   if (!isSunUp(minute) || incidenceCosine(minute, state.tilt) <= 0) return null;
@@ -26,7 +24,7 @@ export function mountTiltControl(root: Document, store: SolarPanelStore): Dispos
         incidence === null ? NO_VALUE : formatDegrees(incidence),
       'tilt-irradiance': ([, irradiance]) => formatIrradiance(irradiance),
       'tilt-day': ([tilt]) => formatKilowattHours(dailyEnergyWh(tilt)),
-      'tilt-flatDay': () => formatKilowattHours(dailyEnergyWh(FLAT_TILT_DEG)),
+      'tilt-flatDay': () => formatKilowattHours(dailyEnergyWh(TILT_RANGE.min)),
     },
   });
 }

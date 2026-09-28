@@ -4,9 +4,7 @@ import type { LayerId } from '../ids';
 import { CELL, MODULE_SPEC } from '../model';
 import type { SolarPanelStore } from '../state';
 import type { Disposer } from './disposers';
-import { formatLayerJob, formatLayerMaterial, formatThickness } from './format';
-
-const MICROMETRES_PER_MM = 1000;
+import { MICROMETRES_PER_MM, formatLayerJob, formatLayerMaterial, formatThickness } from './format';
 
 export const LAYER_THICKNESS_MM: Record<LayerId, number | null> = {
   glass: MODULE_SPEC.glassMm,
