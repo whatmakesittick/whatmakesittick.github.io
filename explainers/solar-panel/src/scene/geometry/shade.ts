@@ -1,32 +1,6 @@
-import { clamp } from '@core/math';
-import type { ModuleLayout } from '../../model';
-import { MODULE } from '../../model';
-import { SHADE_EDGE_DROP } from '../constants';
+import { MODULE, shadeEdgeHeight } from '../../model';
 import { CELL_GAP_CM, FRAME_WALL_CM, GRID, LAMINATE } from './moduleLayout';
 import type { PlanePoint } from './strip';
-
-const SAMPLES_PER_CELL = 16;
-
-export function shadeEdgeFraction(shade: number, xShare: number): number {
-  return shade * (1 + SHADE_EDGE_DROP) - SHADE_EDGE_DROP * xShare;
-}
-
-export function cellShadeShare(
-  layout: ModuleLayout,
-  column: number,
-  row: number,
-  shade: number,
-): number {
-  if (shade <= 0) return 0;
-  const bottom = 1 - (row + 1) / layout.rows;
-  const height = 1 / layout.rows;
-  let covered = 0;
-  for (let sample = 0; sample < SAMPLES_PER_CELL; sample += 1) {
-    const xShare = (column + (sample + 1 / 2) / SAMPLES_PER_CELL) / layout.columns;
-    covered += clamp((shadeEdgeFraction(shade, xShare) - bottom) / height, 0, 1);
-  }
-  return covered / SAMPLES_PER_CELL;
-}
 
 const SPAN = {
   x: GRID.x[1] - GRID.x[0] + CELL_GAP_CM,
@@ -64,8 +38,8 @@ export function shadePolygon(shade: number): PlanePoint[] {
   const raw: PlanePoint[] = [
     { x: left, y: bottom },
     { x: right, y: bottom },
-    { x: right, y: heightOf(shadeEdgeFraction(shade, shareOf(right))) },
-    { x: left, y: heightOf(shadeEdgeFraction(shade, shareOf(left))) },
+    { x: right, y: heightOf(shadeEdgeHeight(shade, shareOf(right))) },
+    { x: left, y: heightOf(shadeEdgeHeight(shade, shareOf(left))) },
   ];
   return clipBelow(clipBelow(raw, top, true), bottom, false);
 }

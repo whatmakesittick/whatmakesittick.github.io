@@ -264,5 +264,3 @@ export const SLICE_FLOW = {
   maxScale: 3,
   seed: 5,
 } as const;
-
-export const SHADE_EDGE_DROP = 1 / 3;
