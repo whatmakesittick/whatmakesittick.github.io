@@ -2,16 +2,15 @@ import { requireElement } from '@core/ui/dom';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import {
   fracturePressureBar,
-  mudPressureBar,
-  mudState,
+  mudColumnBar,
   porePressureBar,
   riserLanded,
   whenInRock,
 } from '../model';
-import { MUD_WEIGHT_RANGE, effectiveMudWeight } from '../state';
+import { MUD_WEIGHT_RANGE, effectiveMudWeight, mudStateOf } from '../state';
 import type { OilRigStore } from '../state';
 import { formatBar, formatDensity, formatMudState, formatOptional } from './format';
-import { MudWindowGraph } from './mudWindowGraph';
+import { MudWindowGraph, depthBucket } from './mudWindowGraph';
 
 const PLANNED_ATTRIBUTE = 'data-planned';
 
@@ -27,21 +26,27 @@ export function mountMudControl(root: Document, store: OilRigStore): void {
     control: 'mud-weight',
     range: MUD_WEIGHT_RANGE,
     select: (state) =>
-      [effectiveMudWeight(state), Math.round(state.phase), state.mudWeight === null] as const,
+      [
+        effectiveMudWeight(state),
+        depthBucket(state.phase),
+        mudStateOf(state),
+        riserLanded(state.phase),
+        state.mudWeight === null,
+      ] as const,
     value: ([mudWeight]) => mudWeight,
     format: ([mudWeight]) => formatDensity(mudWeight),
     set: (state, mudWeight) => state.setMudWeight(mudWeight),
     readouts: {
-      'mud-pressure': ([mudWeight, depth]) => formatBar(mudPressureBar(depth, mudWeight)),
+      'mud-pressure': ([mudWeight, depth, , riser]) =>
+        formatBar(mudColumnBar(depth, mudWeight, riser)),
       'pore-pressure': ([, depth]) => rockPressure(depth, porePressureBar),
       'fracture-pressure': ([, depth]) => rockPressure(depth, fracturePressureBar),
-      'mud-state': ([mudWeight, depth]) => formatMudState(mudState(depth, mudWeight)),
+      'mud-state': ([, , state]) => formatMudState(state),
     },
-    after: ([mudWeight, depth, planned], _state, widget) => {
-      const state = mudState(depth, mudWeight);
+    after: ([mudWeight, depth, state, riser, planned], _state, widget) => {
       widget.dataset.mudState = state;
       widget.toggleAttribute(PLANNED_ATTRIBUTE, planned);
-      graph.draw({ mudWeight, bitDepth: depth, riser: riserLanded(depth), state });
+      graph.draw({ mudWeight, bitDepth: depth, riser, state });
     },
   });
 }

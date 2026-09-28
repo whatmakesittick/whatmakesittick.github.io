@@ -36,10 +36,14 @@ const PRESSURE_MAX_BAR = 800;
 const PRESSURE_TICKS_BAR = [0, 200, 400, 600, 800] as const;
 const DEPTH_TICKS_M = [0, 1000, 2000, 3000, 4000] as const;
 const SAMPLE_STEP_M = 25;
-const DEPTH_BUCKET_M = 10;
+export const DEPTH_BUCKET_M = 10;
 const LINE = { grid: 1, curve: 1.8, mud: 2.4 } as const;
 const MARKER = { radius: 4.5, ring: 1.5, dash: [4, 4] } as const;
 const SEABED_DASH = [6, 4];
+
+export function depthBucket(depth: number): number {
+  return Math.round(depth / DEPTH_BUCKET_M) * DEPTH_BUCKET_M;
+}
 
 function xOf(plot: Plot, bar: number): number {
   return plot.left + ((plot.right - plot.left) * bar) / PRESSURE_MAX_BAR;
@@ -244,7 +248,7 @@ function sameSight(a: MudSight | null, b: MudSight): boolean {
     a.mudWeight === b.mudWeight &&
     a.riser === b.riser &&
     a.state === b.state &&
-    Math.round(a.bitDepth / DEPTH_BUCKET_M) === Math.round(b.bitDepth / DEPTH_BUCKET_M)
+    depthBucket(a.bitDepth) === depthBucket(b.bitDepth)
   );
 }
 
