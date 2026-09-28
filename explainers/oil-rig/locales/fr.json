@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "title": "Comment fonctionne une plateforme pétrolière",
+    "eyebrow": "Suivez le forage, du pont jusqu’au pétrole",
+    "tagline": "Une plateforme flottante reste stable au-dessus du puits, fait tourner un trépan situé des kilomètres plus bas au bout d’un train de tiges d’acier et tient la roche en respect avec une boue lourde, jusqu’à atteindre le pétrole logé dans les pores d’un grès, sous une voûte de schiste argileux.",
+    "description": "Une visite interactive d’une plateforme de forage en mer, en suivant le trépan du pont jusqu’au pétrole : pourquoi une plateforme flottante reste stable, comment fonctionnent le train de tiges et le tubage, comment la boue de forage tient la roche en respect, pourquoi le pétrole s’accumule dans un piège et pourquoi un puits terminé produit tout seul.",
+    "summary": "Plateformes flottantes, tiges de forage, pression de la boue et le piège qui retient le pétrole."
+  },
+  "stage": {
+    "label": "Modèle interactif de plateforme pétrolière",
+    "gauge": "Mesures du puits en direct"
+  },
+  "controls": {
+    "label": "Commandes de la plateforme",
+    "bit": "Trépan",
+    "bitOptions": {
+      "pdc": "Trépan à taillants fixes",
+      "rollerCone": "Trépan tricône"
+    },
+    "sectionOptions": {
+      "conductor": "Trou de 36 pouces",
+      "surface": "Trou de 26 pouces",
+      "intermediate": "Trou de 17½ pouces",
+      "production": "Trou de 12¼ pouces",
+      "reservoir": "Trou de 8½ pouces"
+    },
+    "layerOptions": {
+      "seal": "Roche couverture",
+      "gasCap": "Calotte de gaz",
+      "oil": "Pétrole",
+      "water": "Eau sous le pétrole",
+      "sourceRock": "Roche mère"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Vue en coupe",
+        "short": "Coupe",
+        "hint": "Vue en coupe (C)"
+      },
+      "mud": {
+        "name": "Circulation de la boue",
+        "short": "Boue",
+        "hint": "Circulation de la boue (M)"
+      },
+      "flow": {
+        "name": "Puits terminé",
+        "short": "Terminé",
+        "hint": "Puits terminé (F)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Profondeur du trépan",
+    "phases": "Aller à une étape du puits",
+    "speed": "Vitesse de forage",
+    "value": "{{depth}} sous le plancher de forage, {{phase}}",
+    "speedValue": "{{value}} m de trou par seconde",
+    "phase": {
+      "deck": "Sur le pont",
+      "sea": "Dans la mer",
+      "topHole": "Trou de surface",
+      "overburden": "Roche profonde",
+      "seal": "La couverture",
+      "reservoir": "Le réservoir",
+      "bottom": "Profondeur finale"
+    },
+    "during": {
+      "deck": "en quittant le plancher de forage",
+      "sea": "en descendant dans la mer",
+      "topHole": "en forant le trou de surface",
+      "overburden": "en forant la roche profonde",
+      "seal": "en traversant la couverture",
+      "reservoir": "en traversant le réservoir",
+      "bottom": "en forant jusqu’à la profondeur finale"
+    },
+    "jump": {
+      "deck": "Aller au pont",
+      "sea": "Aller à la mer",
+      "topHole": "Aller au trou de surface",
+      "overburden": "Aller à la roche profonde",
+      "seal": "Aller à la couverture",
+      "reservoir": "Aller au réservoir",
+      "bottom": "Aller à la profondeur finale"
+    }
+  },
+  "readouts": {
+    "belowSeabed": "Sous le fond marin",
+    "pressure": "Pression de la boue au trépan",
+    "temperature": "Température au trépan",
+    "day": "Durée du forage",
+    "dayValue": "Jour {{day}}"
+  },
+  "parts": {
+    "derrick": "Derrick",
+    "topDrive": "Top drive",
+    "drillFloor": "Plancher de forage",
+    "helideck": "Hélipont",
+    "crane": "Grue",
+    "flareBoom": "Bras de torchère",
+    "column": "Colonne",
+    "pontoon": "Flotteur",
+    "thruster": "Propulseur",
+    "mooring": "Ligne d’ancrage",
+    "moonpool": "Moon pool",
+    "riser": "Riser",
+    "bop": "Obturateur anti-éruption",
+    "wellhead": "Tête de puits",
+    "conductor": "Tube conducteur",
+    "surfaceCasing": "Tubage de surface",
+    "intermediateCasing": "Tubage intermédiaire",
+    "drillPipe": "Tiges de forage",
+    "drillCollars": "Masses-tiges",
+    "bit": "Trépan",
+    "annulus": "Espace annulaire",
+    "seabed": "Fond marin",
+    "claystone": "Argilite",
+    "aquifer": "Grès aquifère",
+    "seal": "Roche couverture",
+    "gasCap": "Calotte de gaz",
+    "oil": "Pétrole",
+    "oilWaterContact": "Contact huile-eau",
+    "sourceRock": "Roche mère",
+    "tubing": "Colonne de production",
+    "perforations": "Perforations",
+    "flare": "Torchère"
+  },
+  "rigs": {
+    "jackUp": "Plateforme auto-élévatrice",
+    "jacket": "Jacket en acier",
+    "tlp": "Plateforme à lignes tendues",
+    "spar": "Spar",
+    "semi": "Semi-submersible",
+    "drillship": "Navire de forage"
+  },
+  "mud": {
+    "state": {
+      "safe": "Sûr",
+      "light": "Trop légère : une venue",
+      "heavy": "Trop lourde : la roche se fracture"
+    }
+  },
+  "flow": {
+    "state": {
+      "natural": "Coule tout seul",
+      "assisted": "Besoin d’une pompe ou d’un gas lift"
+    }
+  },
+  "units": {
+    "m": "{{value}} m",
+    "mm": "{{value}} mm",
+    "bar": "{{value}} bar",
+    "celsius": "{{value}} °C",
+    "tonnes": "{{value}} t",
+    "percent": "{{value}} %",
+    "density": "{{value}} g/cm³",
+    "metresPerSecond": "{{value}} m/s",
+    "year": "Année {{value}}"
+  },
+  "sections": {
+    "overview": {
+      "title": "Un trou de quatre kilomètres de profondeur, foré depuis un navire qui flotte",
+      "p1": "Vous avez sous les yeux une plateforme de forage en mer. Elle ne repose pas sur le fond marin : c’est une <strong>semi-submersible</strong>, une plateforme qui flotte sur d’énormes coques creuses immergées. Ici, la mer a 1 000 m de fond, et la plateforme fore un puits qui s’arrête à 4 500 m sous son plancher de forage. Environ un quart du pétrole mondial vient aujourd’hui de gisements en mer.",
+      "p2": "Le derrick de la plateforme, une tour d’acier d’environ 60 m de haut, fait tourner un train de tiges d’acier muni d’un trépan, qui descend à travers la mer jusque dans la roche. Une boue de forage lourde, pompée dans les tiges, garde le trou sous contrôle, et l’équipe revêt le trou de tubes d’acier et de ciment, section après section. Ces plateformes comptent de 130 à 200 lits, et le travail continue jour et nuit.",
+      "p3": "La boucle suit la descente du trépan, et la ligne de temps compte les mètres sous le plancher de forage, comme le font les foreurs. Le plancher se trouve à 25 m au-dessus de la mer, donc le fond marin est à 1 025 m. Sous la mer, la roche est découpée comme une part de gâteau. Le dessin n’est pas à l’échelle : il écrase la mer et la roche pour tenir à l’écran et dessine les tuyaux huit fois plus larges qu’en réalité. La règle graduée sur la face coupée, elle, est exacte.",
+      "p4": "Faites glisser le modèle pour en faire le tour, et faites défiler par-dessus pour zoomer. Au fil de votre lecture, la vue suit le texte. Les indicateurs montrent ce que le trépan rencontre : sa profondeur sous le fond marin, la pression de la boue et la température autour de lui, et le nombre de jours déjà passés sur le puits. Activez les étiquettes pour voir le nom de chaque pièce."
+    },
+    "float": {
+      "title": "Pourquoi elle ne chavire pas",
+      "p1": "La caméra est maintenant au niveau de la ligne de flottaison. La plateforme flotte sur deux coques creuses, les flotteurs, longs chacun de 110 m. Quatre colonnes carrées s’en élèvent à travers la surface et portent le pont, un caisson d’acier de 78 m de côté, avec le derrick, les grues, les quartiers d’habitation et un hélipont. Au milieu s’ouvre le moon pool, une ouverture par laquelle les tiges descendent dans la mer. Des lignes d’ancrage et des propulseurs maintiennent la plateforme en place.",
+      "p2": "Elle flotte pour la même raison qu’un bateau : elle s’enfonce jusqu’à ce que l’eau qu’elle déplace pèse autant qu’elle. En forage, cette plateforme déplace environ 51 000 tonnes d’eau de mer. L’équipe règle sa hauteur de flottaison en pompant de l’eau de mer dans les ballasts des flotteurs, ou en l’en retirant. Entre deux chantiers, elle flotte haut, avec environ 9,5 m de tirant d’eau. Pour forer, elle est <strong>ballastée</strong> jusqu’à environ 21 m, si bien que seules les fines colonnes traversent la surface. Essayez le curseur.",
+      "p3": "Les vagues font tourner l’eau en cercles qui rétrécissent avec la profondeur : à une demi-longueur d’onde sous la surface, il ne reste qu’environ 4 % du mouvement. Mais la houle est longue, et l’eau autour des flotteurs garde encore près de la moitié du mouvement de la surface. La profondeur ne fait donc que la moitié du travail. Les fines colonnes font le reste : une vague qui passe change à peine le volume immergé de la plateforme, si bien qu’elle la soulève à peine. Écartées les unes des autres, elles l’empêchent aussi de chavirer, car les colonnes du côté bas s’enfoncent davantage et la repoussent vers le haut.",
+      "control": {
+        "label": "Eau de ballast",
+        "transit": "Entre deux chantiers",
+        "drilling": "En forage",
+        "displacement": "Eau déplacée",
+        "airGap": "Pont au-dessus des vagues",
+        "motion": "Mouvement des vagues aux flotteurs"
+      },
+      "p4": "La plateforme doit aussi rester au-dessus du puits. Huit lignes de chaîne et de câble la relient à des ancres sur le fond, ce qui fonctionne jusqu’à environ 1 500 m d’eau. Sinon, des propulseurs pilotés par ordinateur la tiennent en place, guidés par des satellites et des balises posées sur le fond. D’autres profondeurs demandent d’autres plateformes. Une plateforme auto-élévatrice repose sur le fond, jusqu’à 150 m d’eau. Un jacket en acier a atteint 412 m, une plateforme à lignes tendues 1 584 m et un spar environ 2 400 m. Le record revient à un navire de forage : 3 628 m d’eau. Essayez le curseur de profondeur.",
+      "picker": {
+        "label": "Profondeur d’eau",
+        "shallow": "Peu profond",
+        "deep": "Ultra-profond",
+        "caption": "Les plateformes capables de travailler à cette profondeur d’eau",
+        "pressure": "Pression sur le fond marin",
+        "rigs": "Plateformes qui l’atteignent"
+      }
+    },
+    "drill": {
+      "title": "Faire tourner un trépan à quatre kilomètres de distance",
+      "p1": "La caméra accompagne maintenant le trépan. Tout ce qui se trouve au-dessus est suspendu au derrick, où le <strong>top drive</strong>, un bloc de moteurs puissants accroché au crochet, saisit les tiges et fait tourner tout le train. Les tiges mesurent environ 9,4 m et sont vissées par trois pour former des longueurs d’environ 28 m. Quand une longueur a été forée, le top drive la lâche, remonte et saisit la suivante. Dézoomez pour le voir remonter tous les 28 m.",
+      "p2": "Un puits se fore par sections, chacune plus étroite que la précédente, comme une longue-vue. Le premier trou mesure 36 pouces (914 mm) de diamètre et ne s’enfonce que de 75 m dans le fond marin ; on y cimente un tube d’acier de 30 pouces, le tube conducteur. Suivent des trous de 26, 17½ et 12¼ pouces, chacun revêtu d’un <strong>tubage en acier</strong> et de ciment, qui tiennent le trou ouvert et isolent la roche. Chaque colonne de tubage doit passer dans la précédente, si bien que le dernier trou, de 8½ pouces, ne mesure que 216 mm. Essayez les boutons des sections.",
+      "hole": "Diamètre du trou",
+      "string": "Tiges dans le trou",
+      "weight": "Suspendu au crochet",
+      "p3": "La plateforme ne pousse jamais les tiges : longues de plusieurs kilomètres et larges de seulement 140 mm, elles plieraient. Le train est suspendu au crochet, tendu par son propre poids. Seule une partie du poids des lourdes masses-tiges repose sur le trépan, environ 3 à 20 tonnes, pendant que le top drive le fait tourner à environ 80 à 140 tours par minute. Un trépan tricône écrase la roche sous des molettes dentées. Un trépan à taillants fixes n’a aucune pièce mobile : des pastilles de diamant synthétique rabotent la roche. Depuis 2015 environ, ces trépans forent plus de 90 % de la longueur des puits dans le monde.",
+      "p4": "Forer est lent : des dizaines de mètres par heure dans la roche tendre, quelques mètres seulement dans la roche dure. Quand un trépan est usé, tout le train remonte, longueur par longueur, puis redescend avec un trépan neuf, ce qui prend environ une demi-journée depuis 3 000 m. Dans le modèle, descendre et cimenter chaque colonne de tubage ajoute environ deux jours, et le puits atteint sa profondeur finale vers le jour 30. Sous une telle profondeur d’eau, les vrais puits prennent en général d’un à trois mois. Surveillez le compteur de jours, et changez de trépan pour comparer."
+    },
+    "mud": {
+      "title": "Les trois grands rôles de la boue",
+      "p1": "La caméra est maintenant sur le fond marin, à 1 000 m de profondeur, où il fait noir et environ 4 °C. Sur la tête de puits se dresse l’<strong>obturateur anti-éruption</strong>, un empilement de vannes d’environ 17 m de haut. Au-dessus, le riser, un tube d’acier de 533 mm de diamètre, monte jusqu’à la plateforme autour des tiges de forage. Les points qui bougent représentent la boue de forage. Elle descend à l’intérieur des tiges, sort par le trépan et remonte par l’espace qui entoure les tiges, appelé espace annulaire.",
+      "p2": "La boue est un fluide épais, alourdi avec de la barytine en poudre, un minéral dense. Son premier rôle est de repousser l’eau, le pétrole ou le gaz retenus sous forte pression dans les pores de la roche. Son deuxième est de remonter les déblais, les éclats de roche arrachés par le trépan, jusqu’à la plateforme, où des tamis vibrants les séparent de la boue. Son troisième est de refroidir et de nettoyer le trépan. Au départ, la boue suit le programme de forage. Utilisez le curseur pour la rendre plus légère ou plus lourde et provoquer une venue ou une fracture.",
+      "control": {
+        "label": "Densité de la boue",
+        "light": "Comme l’eau",
+        "heavy": "Deux fois plus lourde",
+        "caption": "Pression selon la profondeur : la boue doit rester au-dessus de la pression dans les pores de la roche et au-dessous de la pression qui la fracture",
+        "pressure": "Pression de la boue au trépan",
+        "pore": "Pression de pore",
+        "fracture": "Pression de fracturation",
+        "state": "État",
+        "plan": "Revenir au programme"
+      },
+      "p3": "La pression de la boue, en bar, vaut sa densité en g/cm³ multipliée par 0,0981 puis par la profondeur en mètres, et elle doit rester dans une fenêtre. Sous la pression de pore, du gaz, du pétrole ou de l’eau pénètre dans le puits : c’est une <strong>venue</strong>. Au-dessus de la pression de fracturation, la pression à laquelle la roche se fend, la roche avale la boue. L’eau de mer est plus de deux fois moins lourde que la roche, si bien que sous 1 000 m d’eau la fenêtre est étroite. C’est l’une des raisons pour lesquelles les deux premières sections sont forées sans riser, à l’eau de mer ou avec une boue légère qui se répand sur le fond marin.",
+      "p4": "Si une venue se produit, l’obturateur anti-éruption peut fermer le puits : ses mâchoires se ferment en moins d’une minute et tiennent jusqu’à 1 034 bar. C’est une dernière ligne de défense, pas une garantie, car ses mâchoires cisaillantes ne peuvent pas couper les raccords épais qui relient les tiges. Au niveau du réservoir, la fenêtre du modèle va d’environ 1,24 à 1,57 g/cm³, et le programme prévoit 1,40. Déplacez le curseur et observez l’état et le graphique : trop légère, la boue laisse remonter des bulles de gaz dans l’espace annulaire ; trop lourde, elle fait partir des fissures du trou."
+    },
+    "rock": {
+      "title": "Pourquoi le pétrole est là",
+      "p1": "Regardez maintenant la face coupée de la roche. Les couches du haut sont plates, mais en profondeur deux couches se bombent en une voûte sous la plateforme. Le haut de la voûte est la roche couverture, un épais schiste argileux qui ne laisse presque rien passer. Dessous se trouve le réservoir, un grès qui contient du gaz en haut, du pétrole au milieu et de l’eau en dessous. Tout en bas du bloc se trouve le schiste argileux sombre où le pétrole est né.",
+      "p2": "L’histoire commence avec le plancton, de minuscules êtres vivants qui dérivaient dans la mer il y a des millions d’années. Certains ont coulé dans une vase si pauvre en oxygène qu’ils n’ont pas pourri. Enfouie toujours plus profond, la vase est devenue un schiste argileux sombre, plein de leurs restes : la <strong>roche mère</strong>. Entre environ 60 et 120 °C, pendant des millions d’années, la chaleur a transformé ces restes en pétrole. Plus léger que l’eau, le pétrole est monté lentement à travers les pores remplis d’eau de la roche située au-dessus, jusqu’à ce qu’une couche étanche l’arrête. Essayez les boutons pour visiter chaque couche.",
+      "pores": {
+        "caption": "Le pétrole occupe les minuscules espaces entre les grains de sable, pas une grotte"
+      },
+      "temperature": "Température de la roche ici",
+      "porosity": "Espace entre les grains",
+      "p3": "Un piège est une voûte de roche poreuse sous une roche couverture, comme un bol retourné. Le pétrole et le gaz s’accumulent à son sommet, rangés selon leur poids : le gaz en haut, puis le pétrole, puis l’eau. Le pétrole s’arrête au contact huile-eau, à 4 220 m sous le plancher de forage. Il n’est pas dans une grotte : il remplit les minuscules espaces entre les grains de sable, environ 22 % de ce grès. La roche est à environ 95 à 100 °C. Ses pores sont à environ 500 bar, plus que la normale, car l’eau piégée par le schiste argileux porte une partie du poids de la roche.",
+      "p4": "Personne ne peut voir aussi profond. Des navires de prospection envoient du son dans le fond marin ; les échos dessinent les couches et montrent où un piège pourrait se trouver, mais ils ne peuvent pas prouver ce qui remplit les pores. Seul un puits le peut : en 2024, seul un grand puits d’exploration sur quatre environ a trouvé du pétrole ou du gaz exploitable. Essayez les boutons et observez le gros plan des grains. Le gaz, le pétrole et l’eau occupent les mêmes espaces dans le grès, alors que la roche couverture n’en a presque pas."
+    },
+    "flow": {
+      "title": "Premier pétrole",
+      "p1": "Le trépan a atteint la profondeur finale, et la vue montre le puits terminé. Le train de tiges a disparu, et un tubage en acier, cimenté en place, revêt le trou jusqu’en bas. À l’intérieur est suspendue la <strong>colonne de production</strong>, un tube plus étroit qui fait remonter le pétrole jusqu’à la plateforme. Au niveau du pétrole, des canons de perforation ont tiré des charges à travers le tubage et le ciment jusque dans la roche ; ces trous, les perforations, laissent entrer le pétrole.",
+      "p2": "Pourquoi le pétrole monte-t-il tout seul ? Le fluide du réservoir est sous pression, ici environ 504 bar, plus que le poids d’une colonne d’eau salée montant jusqu’à la surface. Le pétrole est plus léger que l’eau, environ 0,85 g/cm³, donc une colonne de pétrole allant du réservoir jusqu’à la plateforme pèse encore moins, environ 345 bar. La différence pousse le pétrole dehors en haut, avec de la <strong>pression à revendre</strong>. Essayez le curseur pour voir comment cela change quand le gisement vieillit.",
+      "control": {
+        "label": "Années de production",
+        "first": "Premier pétrole",
+        "late": "Fin de vie",
+        "reservoir": "Pression dans le réservoir",
+        "column": "Poids de la colonne de pétrole",
+        "wellhead": "Ce qui reste en haut",
+        "state": "Le puits"
+      },
+      "p3": "D’abord, le puits est testé. Le pétrole et le gaz remontent jusqu’à la plateforme, où l’équipe les mesure, puis la torchère les brûle, car une plateforme de forage n’a pas d’oléoduc pour les évacuer. La flamme au bout du bras de torchère signale l’essai. Un puits qui vaut la peine d’être exploité peut ensuite recevoir un arbre de vannes posé sur le fond marin et des conduites vers une plateforme de production, ou vers un navire qui stocke le pétrole jusqu’à ce que des pétroliers viennent le chercher.",
+      "p4": "À mesure que le pétrole sort, la pression du réservoir baisse. Dans ce modèle simple, elle perd chaque année 1,4 % de sa valeur de départ ; les vrais gisements varient beaucoup. Quand il reste trop peu de pression en haut, le pétrole cesse de couler tout seul. Une pompe dans le puits ou le gas lift, du gaz injecté dans la colonne de production pour alléger le fluide, permet alors de continuer à produire. Même ainsi, un gisement ne livre en moyenne qu’environ un tiers de son pétrole. Déplacez le curseur et regardez diminuer ce qui reste en haut."
+    }
+  }
+}

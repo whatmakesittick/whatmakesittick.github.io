@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "title": "How an oil rig works",
+    "eyebrow": "Follow the drill from the deck to the oil",
+    "tagline": "A floating rig stays steady over the well, turns a bit kilometres below on a string of steel pipe and keeps the rock in check with heavy mud until it reaches oil held in the pores of sandstone under an arch of shale.",
+    "description": "An interactive look at an offshore drilling rig that follows the drill bit from the deck to the oil: why a floating rig stays steady, how the drill string and the casing work, how drilling mud holds back the rock, why oil gathers in a trap and why a finished well flows on its own.",
+    "summary": "Floating rigs, drill pipe, mud pressure and the trap that holds the oil."
+  },
+  "stage": {
+    "label": "Interactive oil rig model",
+    "gauge": "Live well readings"
+  },
+  "controls": {
+    "label": "Oil rig controls",
+    "bit": "Drill bit",
+    "bitOptions": {
+      "pdc": "Fixed-cutter bit",
+      "rollerCone": "Roller-cone bit"
+    },
+    "sectionOptions": {
+      "conductor": "36 in hole",
+      "surface": "26 in hole",
+      "intermediate": "17½ in hole",
+      "production": "12¼ in hole",
+      "reservoir": "8½ in hole"
+    },
+    "layerOptions": {
+      "seal": "Seal",
+      "gasCap": "Gas cap",
+      "oil": "Oil",
+      "water": "Water below the oil",
+      "sourceRock": "Source rock"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Cutaway",
+        "short": "Cutaway",
+        "hint": "Cutaway (C)"
+      },
+      "mud": {
+        "name": "Mud flow",
+        "short": "Mud",
+        "hint": "Mud flow (M)"
+      },
+      "flow": {
+        "name": "Finished well",
+        "short": "Finished",
+        "hint": "Finished well (F)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Bit depth",
+    "phases": "Jump to a stage of the well",
+    "speed": "Drilling speed",
+    "value": "{{depth}} below the drill floor, {{phase}}",
+    "speedValue": "{{value}} m of hole every second",
+    "phase": {
+      "deck": "On deck",
+      "sea": "Through the sea",
+      "topHole": "Top hole",
+      "overburden": "Deep rock",
+      "seal": "The seal",
+      "reservoir": "The reservoir",
+      "bottom": "Total depth"
+    },
+    "during": {
+      "deck": "leaving the drill floor",
+      "sea": "going down through the sea",
+      "topHole": "drilling the top hole",
+      "overburden": "drilling through deep rock",
+      "seal": "drilling through the seal",
+      "reservoir": "drilling through the reservoir",
+      "bottom": "drilling on to total depth"
+    },
+    "jump": {
+      "deck": "Jump to the deck",
+      "sea": "Jump to the sea",
+      "topHole": "Jump to the top hole",
+      "overburden": "Jump to the deep rock",
+      "seal": "Jump to the seal",
+      "reservoir": "Jump to the reservoir",
+      "bottom": "Jump to total depth"
+    }
+  },
+  "readouts": {
+    "belowSeabed": "Below the seabed",
+    "pressure": "Mud pressure at the bit",
+    "temperature": "Temperature at the bit",
+    "day": "Time on the well",
+    "dayValue": "Day {{day}}"
+  },
+  "parts": {
+    "derrick": "Derrick",
+    "topDrive": "Top drive",
+    "drillFloor": "Drill floor",
+    "helideck": "Helideck",
+    "crane": "Crane",
+    "flareBoom": "Flare boom",
+    "column": "Column",
+    "pontoon": "Pontoon",
+    "thruster": "Thruster",
+    "mooring": "Mooring line",
+    "moonpool": "Moonpool",
+    "riser": "Riser",
+    "bop": "Blowout preventer",
+    "wellhead": "Wellhead",
+    "conductor": "Conductor",
+    "surfaceCasing": "Surface casing",
+    "intermediateCasing": "Intermediate casing",
+    "drillPipe": "Drill pipe",
+    "drillCollars": "Drill collars",
+    "bit": "Drill bit",
+    "annulus": "Annulus",
+    "seabed": "Seabed",
+    "claystone": "Claystone",
+    "aquifer": "Water sandstone",
+    "seal": "Seal rock",
+    "gasCap": "Gas cap",
+    "oil": "Oil",
+    "oilWaterContact": "Oil–water contact",
+    "sourceRock": "Source rock",
+    "tubing": "Production tubing",
+    "perforations": "Perforations",
+    "flare": "Flare"
+  },
+  "rigs": {
+    "jackUp": "Jack-up",
+    "jacket": "Steel jacket",
+    "tlp": "Tension-leg platform",
+    "spar": "Spar",
+    "semi": "Semi-submersible",
+    "drillship": "Drillship"
+  },
+  "mud": {
+    "state": {
+      "safe": "Safe",
+      "light": "Too light: a kick",
+      "heavy": "Too heavy: the rock cracks"
+    }
+  },
+  "flow": {
+    "state": {
+      "natural": "Flows on its own",
+      "assisted": "Needs a pump or gas lift"
+    }
+  },
+  "units": {
+    "m": "{{value}} m",
+    "mm": "{{value}} mm",
+    "bar": "{{value}} bar",
+    "celsius": "{{value}} °C",
+    "tonnes": "{{value}} t",
+    "percent": "{{value}}%",
+    "density": "{{value}} g/cm³",
+    "metresPerSecond": "{{value}} m/s",
+    "year": "Year {{value}}"
+  },
+  "sections": {
+    "overview": {
+      "title": "A hole four kilometres deep, drilled from a ship that floats",
+      "p1": "You are looking at an offshore drilling rig. It does not stand on the seabed: it is a <strong>semi-submersible</strong>, a platform that floats on huge hollow hulls under the water. Here the sea is 1,000 m deep, and the rig is drilling a well that ends 4,500 m below its drill floor. About a quarter of the world's oil now comes from offshore fields.",
+      "p2": "The rig's derrick, a steel tower about 60 m tall, turns a string of steel pipe with a drill bit at the end, down through the sea and into the rock. Heavy drilling mud pumped down the pipe keeps the hole under control, and the crew lines the hole with steel pipe and cement, section by section. Rigs like this have beds for 130 to 200 people, and the work goes on day and night.",
+      "p3": "The loop follows the bit down, and the timeline counts metres below the drill floor, as drillers do. The floor sits 25 m above the sea, so the seabed is at 1,025 m. Below the sea the rock is cut open like a slice of cake. The drawing is not to scale: it squeezes the sea and the rock to fit the screen and draws the pipes eight times wider than life. The ruler on the cut face is true.",
+      "p4": "Drag the model to look around it and scroll over it to zoom. As you read on, the view follows the text. The readouts show what the bit meets: its depth below the seabed, the mud pressure and temperature around it, and how many days the well has taken. Turn on the labels to see the name of each part."
+    },
+    "float": {
+      "title": "Why it does not tip over",
+      "p1": "The camera is now at the waterline. The rig floats on two hollow hulls called pontoons, each 110 m long. Four square columns rise from them through the surface and hold up the deck, a steel box 78 m across, with the derrick, cranes, living quarters and a helideck. In the middle is the moonpool, an opening where the pipe goes down into the sea. Mooring lines and thrusters keep the rig in place.",
+      "p2": "It floats for the same reason a boat does: it sinks until the water it pushes aside weighs as much as it does. While drilling, this rig pushes aside about 51,000 tonnes of seawater. The crew sets how deep it floats by pumping seawater into or out of tanks in the pontoons. Moving between jobs, it rides high, about 9.5 m deep. For drilling it is <strong>ballasted down</strong> to about 21 m, so only the slim columns cross the surface. Try the slider.",
+      "p3": "Waves move the water in circles that shrink with depth: half a wavelength down, only about 4 percent of the motion is left. But swells are long, and the water around the pontoons still moves almost half as much as at the surface. So depth does only half the job. The slim columns do the rest: a passing wave hardly changes how much of the rig is under water, so it barely lifts it. Set far apart, they also resist tipping, because the columns on the low side sink deeper and push back up.",
+      "control": {
+        "label": "Ballast water",
+        "transit": "Moving between jobs",
+        "drilling": "Drilling",
+        "displacement": "Water pushed aside",
+        "airGap": "Deck above the waves",
+        "motion": "Wave motion at the pontoons"
+      },
+      "p4": "The rig must also stay over the well. Eight lines of chain and wire run to seabed anchors, which works in water up to about 1,500 m deep. Or computer-steered thrusters hold it, guided by satellites and seabed beacons. Other depths call for other rigs. A jack-up stands on the seabed in up to 150 m of water. A steel jacket has reached 412 m, a tension-leg platform 1,584 m and a spar about 2,400 m. A drillship holds the record: 3,628 m of water. Try the depth slider.",
+      "picker": {
+        "label": "Water depth",
+        "shallow": "Shallow",
+        "deep": "Ultra-deep",
+        "caption": "Which rigs can work in this depth of water",
+        "pressure": "Pressure at the seabed",
+        "rigs": "Rigs that reach it"
+      }
+    },
+    "drill": {
+      "title": "Turning a bit from four kilometres away",
+      "p1": "The camera now rides beside the bit. Everything above it hangs from the derrick, where the <strong>top drive</strong>, a set of powerful motors on the hook, grips the pipe and turns the whole string. The pipe comes in joints about 9.4 m long, screwed together in threes into stands of about 28 m. When a stand has been drilled down, the top drive lets go, climbs back up and picks up the next. Zoom out to see it climb back every 28 m.",
+      "p2": "A well is drilled in sections, each narrower than the last, like a telescope. The first hole is 36 in (914 mm) across and goes only 75 m into the seabed, and a 30 in steel pipe, the conductor, is cemented into it. Holes of 26, 17½ and 12¼ in follow, each lined with <strong>steel casing</strong> and cement, which hold the hole open and seal off the rock. Each string must fit through the last, so the final hole, 8½ in, is only 216 mm across. Try the section chips.",
+      "hole": "Hole diameter",
+      "string": "Pipe in the hole",
+      "weight": "Hanging from the hook",
+      "p3": "The rig never pushes the pipe: kilometres long and only 140 mm across, it would bend. The string hangs from the hook, pulled straight by its weight. Only part of the heavy collars' weight rests on the bit, about 3 to 20 tonnes, while the top drive turns it at about 80 to 140 turns a minute. A roller-cone bit crushes rock under toothed cones. A fixed-cutter bit has no moving parts: man-made diamond discs shave the rock. Since about 2015 they have drilled over 90 percent of the world's wells by length.",
+      "p4": "Drilling is slow: tens of metres an hour in soft rock, only a few in hard rock. When a bit wears out, the whole string comes out stand by stand and goes back in with a new one, which from 3,000 m takes about half a day. In the model, running and cementing each casing string adds about two days, and the well reaches total depth around day 30. Real wells in water this deep usually take one to three months. Watch the day counter, and switch bits to compare."
+    },
+    "mud": {
+      "title": "Mud's three main jobs",
+      "p1": "The camera is now at the seabed, 1,000 m down, where it is dark and about 4 °C. On the wellhead sits the <strong>blowout preventer</strong>, a stack of valves about 17 m tall. Above it the riser, a steel pipe 533 mm wide, climbs to the rig around the drill pipe. The moving dots are the drilling mud. It flows down inside the pipe, out through the bit and back up the gap around the pipe, called the annulus.",
+      "p2": "Mud is a thick fluid made heavy with powdered barite, a dense mineral. Its first job is to press back against the water, oil or gas held under great pressure in the rock's pores. Its second is to carry the cuttings, the chips cut by the bit, up to the rig, where shaking screens sieve them out. Its third is to cool and clean the bit. At first the mud follows the drilling plan. Use the slider to make it lighter or heavier and cause a kick or a crack.",
+      "control": {
+        "label": "Mud weight",
+        "light": "Like water",
+        "heavy": "Twice as heavy",
+        "caption": "Pressure against depth: the mud must stay above the pressure in the rock's pores and below the pressure that cracks the rock",
+        "pressure": "Mud pressure at the bit",
+        "pore": "Pore pressure",
+        "fracture": "Cracking pressure",
+        "state": "Status",
+        "plan": "Back to the plan"
+      },
+      "p3": "The mud's pressure in bar is its density in g/cm³ times 0.0981 times the depth in metres, and it must stay inside a window. Below the pore pressure, gas, oil or water pushes in: a <strong>kick</strong>. Above the cracking pressure, the pressure at which the rock splits, the rock swallows the mud. Seawater is less than half as heavy as rock, so under 1,000 m of water the window is narrow. That is one reason the first two sections are drilled without a riser, with seawater or light mud that spills onto the seabed.",
+      "p4": "If a kick gets in, the blowout preventer can close the well: its rams shut in under a minute and hold up to 1,034 bar. It is a last line of defence, not a guarantee, because its cutting rams cannot cut through the thick joints between pipes. At the reservoir the model's window is about 1.24 to 1.57 g/cm³, and the plan uses 1.40. Move the slider and watch the status and the chart: too light, and gas bubbles rise in the annulus; too heavy, and cracks spread from the hole."
+    },
+    "rock": {
+      "title": "Why the oil is there",
+      "p1": "Now look at the cut face of the rock. The upper layers lie flat, but deep down two layers arch up under the rig. The top of the arch is the seal, a thick shale that lets almost nothing through. Under it lies the reservoir, a sandstone holding gas at the top, oil in the middle and water below. At the bottom of the block lies the dark shale where the oil began.",
+      "p2": "The story starts with plankton, tiny living things that drifted in the sea millions of years ago. Some sank into mud so short of oxygen that they did not rot. Buried ever deeper, the mud became a dark shale full of their remains, the <strong>source rock</strong>. Between about 60 and 120 °C, over millions of years, heat turned the remains into oil. Oil is lighter than water, so it crept up through the water-filled pores of the rock above until a tight layer stopped it. Try the chips to visit each layer.",
+      "pores": {
+        "caption": "Oil sits in the tiny gaps between sand grains, not in a cave"
+      },
+      "temperature": "Rock temperature here",
+      "porosity": "Space between the grains",
+      "p3": "A trap is an arch of porous rock under a seal, like an upturned bowl. Oil and gas gather in its crest, sorted by weight: gas on top, then oil, then water. The oil ends at the oil–water contact, 4,220 m below the drill floor. It is not in a cave but fills the tiny spaces between sand grains, about 22 percent of this sandstone. The rock is about 95 to 100 °C. Its pores hold about 500 bar, above normal, because water trapped by the shale carries part of the rock's weight.",
+      "p4": "Nobody can see this far down. Survey ships send sound into the seabed, and the echoes map the layers and show where a trap might be, but they cannot prove what fills the pores. Only a well can: in 2024 only about 1 in 4 big exploration wells found oil or gas worth producing. Try the chips and watch the close-up of the grains. Gas, oil and water fill the same spaces in the sandstone, while the seal has almost none."
+    },
+    "flow": {
+      "title": "First oil",
+      "p1": "The bit has reached total depth, and the view shows the finished well. The drill string is gone, and steel casing, cemented in place, lines the hole all the way down. Inside hangs the <strong>production tubing</strong>, a narrower pipe that carries the oil up to the rig. Down in the oil, perforating guns have fired charges through the casing and cement into the rock, and these holes, the perforations, let the oil in.",
+      "p2": "Why does the oil rise on its own? The fluid in the reservoir is under pressure, here about 504 bar, more than a column of salty water up to the surface would weigh. Oil is lighter than water, about 0.85 g/cm³, so a column of oil from the reservoir up to the rig weighs even less, about 345 bar. The difference pushes the oil out at the top with <strong>pressure to spare</strong>. Try the slider to see how this changes as the field ages.",
+      "control": {
+        "label": "Years of production",
+        "first": "First oil",
+        "late": "Late life",
+        "reservoir": "Pressure in the reservoir",
+        "column": "Weight of the oil column",
+        "wellhead": "Left over at the top",
+        "state": "The well"
+      },
+      "p3": "First the well is tested. Oil and gas flow up to the rig, where the crew measures them, and the flare boom burns them, because a drilling rig has no pipeline to send them to. The flame at the tip of the boom marks the test. A well worth producing can later get a tree of valves on the seabed and pipelines to a production platform, or to a ship that stores the oil until tankers take it away.",
+      "p4": "As oil comes out, the reservoir pressure falls. In this simple model it drops by 1.4 percent of its starting value each year; real fields vary a lot. When too little pressure is left at the top, the oil stops flowing on its own. Then a pump in the well or gas lift, gas pumped into the tubing to lighten the column, keeps it coming. Even so, a field gives up only about a third of its oil on average. Move the slider and watch what is left at the top shrink."
+    }
+  }
+}

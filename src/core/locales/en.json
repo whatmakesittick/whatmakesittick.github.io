@@ -61,7 +61,9 @@
       "weather": "Weather",
       "home": "Home",
       "tools": "Tools",
-      "optics": "Optics"
+      "optics": "Optics",
+      "energy": "Energy",
+      "earth": "Earth"
     }
   }
 }

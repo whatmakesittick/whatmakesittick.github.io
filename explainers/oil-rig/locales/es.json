@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "title": "Cómo funciona una plataforma petrolífera",
+    "eyebrow": "Sigue la barrena desde la cubierta hasta el petróleo",
+    "tagline": "Una plataforma flotante se mantiene estable sobre el pozo, hace girar una barrena kilómetros más abajo con una sarta de tubos de acero y contiene la roca con lodo pesado hasta llegar al petróleo, guardado en los poros de una arenisca bajo un arco de lutita.",
+    "description": "Una mirada interactiva a una plataforma de perforación en alta mar que sigue la barrena desde la cubierta hasta el petróleo: por qué una plataforma flotante se mantiene estable, cómo funcionan la sarta de perforación y la tubería de revestimiento, cómo el lodo de perforación contiene la roca, por qué el petróleo se acumula en una trampa y por qué un pozo terminado fluye por sí solo.",
+    "summary": "Plataformas flotantes, tubería de perforación, presión del lodo y la trampa que guarda el petróleo."
+  },
+  "stage": {
+    "label": "Modelo interactivo de plataforma petrolífera",
+    "gauge": "Lecturas del pozo en directo"
+  },
+  "controls": {
+    "label": "Controles de la plataforma petrolífera",
+    "bit": "Barrena",
+    "bitOptions": {
+      "pdc": "Barrena de cortadores fijos",
+      "rollerCone": "Barrena tricónica"
+    },
+    "sectionOptions": {
+      "conductor": "Agujero de 36 pulgadas",
+      "surface": "Agujero de 26 pulgadas",
+      "intermediate": "Agujero de 17½ pulgadas",
+      "production": "Agujero de 12¼ pulgadas",
+      "reservoir": "Agujero de 8½ pulgadas"
+    },
+    "layerOptions": {
+      "seal": "Roca sello",
+      "gasCap": "Casquete de gas",
+      "oil": "Petróleo",
+      "water": "Agua bajo el petróleo",
+      "sourceRock": "Roca madre"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Vista en corte",
+        "short": "Corte",
+        "hint": "Vista en corte (C)"
+      },
+      "mud": {
+        "name": "Flujo de lodo",
+        "short": "Lodo",
+        "hint": "Flujo de lodo (M)"
+      },
+      "flow": {
+        "name": "Pozo terminado",
+        "short": "Terminado",
+        "hint": "Pozo terminado (F)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Profundidad de la barrena",
+    "phases": "Saltar a una etapa del pozo",
+    "speed": "Velocidad de perforación",
+    "value": "{{depth}} bajo la mesa de perforación, {{phase}}",
+    "speedValue": "{{value}} m de pozo por segundo",
+    "phase": {
+      "deck": "En cubierta",
+      "sea": "Por el mar",
+      "topHole": "Tramo superior",
+      "overburden": "Roca profunda",
+      "seal": "El sello",
+      "reservoir": "El yacimiento",
+      "bottom": "Profundidad final"
+    },
+    "during": {
+      "deck": "saliendo de la mesa de perforación",
+      "sea": "bajando por el mar",
+      "topHole": "perforando el tramo superior",
+      "overburden": "perforando la roca profunda",
+      "seal": "atravesando el sello",
+      "reservoir": "atravesando el yacimiento",
+      "bottom": "perforando hasta la profundidad final"
+    },
+    "jump": {
+      "deck": "Saltar a la cubierta",
+      "sea": "Saltar al mar",
+      "topHole": "Saltar al tramo superior",
+      "overburden": "Saltar a la roca profunda",
+      "seal": "Saltar al sello",
+      "reservoir": "Saltar al yacimiento",
+      "bottom": "Saltar a la profundidad final"
+    }
+  },
+  "readouts": {
+    "belowSeabed": "Bajo el fondo marino",
+    "pressure": "Presión del lodo en la barrena",
+    "temperature": "Temperatura en la barrena",
+    "day": "Tiempo en el pozo",
+    "dayValue": "Día {{day}}"
+  },
+  "parts": {
+    "derrick": "Torre de perforación",
+    "topDrive": "Top drive",
+    "drillFloor": "Mesa de perforación",
+    "helideck": "Helipuerto",
+    "crane": "Grúa",
+    "flareBoom": "Brazo del quemador",
+    "column": "Columna",
+    "pontoon": "Pontón",
+    "thruster": "Propulsor",
+    "mooring": "Línea de fondeo",
+    "moonpool": "Moon pool",
+    "riser": "Riser",
+    "bop": "Preventor de reventones",
+    "wellhead": "Cabezal de pozo",
+    "conductor": "Tubo conductor",
+    "surfaceCasing": "Revestimiento de superficie",
+    "intermediateCasing": "Revestimiento intermedio",
+    "drillPipe": "Tubería de perforación",
+    "drillCollars": "Portamechas",
+    "bit": "Barrena",
+    "annulus": "Espacio anular",
+    "seabed": "Fondo marino",
+    "claystone": "Arcillita",
+    "aquifer": "Arenisca con agua",
+    "seal": "Roca sello",
+    "gasCap": "Casquete de gas",
+    "oil": "Petróleo",
+    "oilWaterContact": "Contacto agua-petróleo",
+    "sourceRock": "Roca madre",
+    "tubing": "Tubería de producción",
+    "perforations": "Disparos",
+    "flare": "Llama del quemador"
+  },
+  "rigs": {
+    "jackUp": "Autoelevable",
+    "jacket": "Jacket de acero",
+    "tlp": "Plataforma de piernas tensionadas",
+    "spar": "Spar",
+    "semi": "Semisumergible",
+    "drillship": "Buque de perforación"
+  },
+  "mud": {
+    "state": {
+      "safe": "Seguro",
+      "light": "Demasiado ligero: una surgencia",
+      "heavy": "Demasiado pesado: la roca se fractura"
+    }
+  },
+  "flow": {
+    "state": {
+      "natural": "Fluye por sí solo",
+      "assisted": "Necesita una bomba o levantamiento por gas"
+    }
+  },
+  "units": {
+    "m": "{{value}} m",
+    "mm": "{{value}} mm",
+    "bar": "{{value}} bar",
+    "celsius": "{{value}} °C",
+    "tonnes": "{{value}} t",
+    "percent": "{{value}} %",
+    "density": "{{value}} g/cm³",
+    "metresPerSecond": "{{value}} m/s",
+    "year": "Año {{value}}"
+  },
+  "sections": {
+    "overview": {
+      "title": "Un pozo de cuatro kilómetros, perforado desde un barco que flota",
+      "p1": "Estás viendo una plataforma de perforación en alta mar. No se apoya en el fondo marino: es una <strong>semisumergible</strong>, una plataforma que flota sobre enormes cascos huecos bajo el agua. Aquí el mar tiene 1000 m de profundidad, y la plataforma perfora un pozo que termina 4500 m por debajo de su mesa de perforación. Hoy, cerca de una cuarta parte del petróleo del mundo sale de yacimientos en alta mar.",
+      "p2": "La torre de perforación, una estructura de acero de unos 60 m de alto, hace girar una sarta de tubos de acero con una barrena en la punta, que baja a través del mar hasta la roca. El lodo de perforación, un fluido pesado que se bombea por dentro de la tubería, mantiene el pozo bajo control, y el equipo reviste el pozo con tubos de acero y cemento, tramo a tramo. Las plataformas como esta tienen camas para 130 a 200 personas, y el trabajo sigue día y noche.",
+      "p3": "El bucle sigue la barrena hacia abajo, y la línea de tiempo cuenta los metros por debajo de la mesa de perforación, como hacen los perforadores. La mesa está 25 m por encima del mar, así que el fondo marino queda a 1025 m. Bajo el mar, la roca aparece cortada como una porción de pastel. El dibujo no está a escala: comprime el mar y la roca para que quepan en la pantalla y dibuja los tubos ocho veces más anchos que en la realidad. La regla de la cara del corte es exacta.",
+      "p4": "Arrastra el modelo para verlo desde otros ángulos y desplázate sobre él para acercarte o alejarte. A medida que avanzas en la lectura, la vista acompaña al texto. Las lecturas muestran lo que encuentra la barrena: su profundidad bajo el fondo marino, la presión del lodo y la temperatura a su alrededor, y cuántos días lleva el pozo. Activa las etiquetas para ver el nombre de cada pieza."
+    },
+    "float": {
+      "title": "Por qué no vuelca",
+      "p1": "La cámara está ahora a la altura del agua. La plataforma flota sobre dos cascos huecos llamados pontones, de 110 m de largo cada uno. De ellos se elevan cuatro columnas cuadradas que atraviesan la superficie y sostienen la cubierta, una caja de acero de 78 m de ancho con la torre de perforación, las grúas, la zona de alojamiento y un helipuerto. En el centro está el moon pool, una abertura por la que la tubería baja al mar. Líneas de fondeo y propulsores mantienen la plataforma en su sitio.",
+      "p2": "Flota por la misma razón que un barco: se hunde hasta que el agua que desplaza pesa tanto como ella. Mientras perfora, esta plataforma desplaza unas 51 000 toneladas de agua de mar. La tripulación decide a qué profundidad flota bombeando agua de mar hacia los tanques de los pontones o sacándola de ellos. Cuando se traslada de un trabajo a otro, flota alta, con solo unos 9,5 m bajo el agua. Para perforar se <strong>lastra hasta unos 21 m</strong>, de modo que solo las columnas delgadas cruzan la superficie. Prueba el control.",
+      "p3": "Las olas mueven el agua en círculos que se encogen con la profundidad: a media longitud de onda de profundidad solo queda alrededor del 4 % del movimiento. Pero el mar de fondo forma olas largas, y el agua que rodea los pontones todavía se mueve casi la mitad que en la superficie. Así que la profundidad solo hace la mitad del trabajo. Las columnas delgadas hacen el resto: una ola que pasa apenas cambia cuánto de la plataforma queda bajo el agua, así que casi no la levanta. Como están muy separadas, también impiden que vuelque, porque las columnas del lado bajo se hunden más y la empujan hacia arriba.",
+      "control": {
+        "label": "Agua de lastre",
+        "transit": "Traslado entre trabajos",
+        "drilling": "Perforando",
+        "displacement": "Agua desplazada",
+        "airGap": "Cubierta sobre las olas",
+        "motion": "Movimiento de las olas en los pontones"
+      },
+      "p4": "Además, la plataforma tiene que mantenerse sobre el pozo. Ocho líneas de cadena y cable van hasta anclas en el fondo marino, algo que funciona en aguas de hasta unos 1500 m. También pueden sujetarla propulsores gobernados por un sistema informático y guiados por satélites y balizas en el fondo marino. Otras profundidades piden otras plataformas. Una autoelevable se apoya en el fondo marino en hasta 150 m de agua. Un jacket de acero ha llegado a 412 m, una plataforma de piernas tensionadas a 1584 m y un spar a unos 2400 m. El récord lo tiene un buque de perforación: 3628 m de agua. Prueba el control de profundidad.",
+      "picker": {
+        "label": "Profundidad del agua",
+        "shallow": "Poco profunda",
+        "deep": "Ultraprofunda",
+        "caption": "Qué plataformas pueden trabajar a esta profundidad",
+        "pressure": "Presión en el fondo marino",
+        "rigs": "Plataformas que llegan"
+      }
+    },
+    "drill": {
+      "title": "Hacer girar una barrena a cuatro kilómetros de distancia",
+      "p1": "Ahora la cámara viaja junto a la barrena. Todo lo que hay por encima cuelga de la torre de perforación, donde el <strong>top drive</strong>, un conjunto de potentes motores colgado del gancho, sujeta la tubería y hace girar toda la sarta. La tubería viene en tubos de unos 9,4 m, que se enroscan de tres en tres en paradas de unos 28 m. Cuando se ha perforado una parada, el top drive la suelta, vuelve a subir y toma la siguiente. Aleja la vista para verlo subir de nuevo cada 28 m.",
+      "p2": "Un pozo se perfora por tramos, cada uno más estrecho que el anterior, como las piezas de un catalejo. El primer agujero mide 36 pulgadas (914 mm) de ancho y solo entra 75 m en el fondo marino, y en él se cementa un tubo de acero de 30 pulgadas, el tubo conductor. Después vienen agujeros de 26, 17½ y 12¼ pulgadas, cada uno revestido con <strong>tubería de revestimiento</strong> de acero y cemento, que mantienen el agujero abierto y aíslan la roca. Cada tubería debe pasar por dentro de la anterior, así que el último agujero, de 8½ pulgadas, mide solo 216 mm. Prueba los botones de los tramos.",
+      "hole": "Diámetro del agujero",
+      "string": "Tubería en el pozo",
+      "weight": "Colgando del gancho",
+      "p3": "La plataforma nunca empuja la tubería: con kilómetros de largo y solo 140 mm de ancho, se doblaría. La sarta cuelga del gancho, estirada por su propio peso. Solo parte del peso de los pesados portamechas descansa sobre la barrena, unas 3 a 20 toneladas, mientras el top drive la hace girar a unas 80 a 140 vueltas por minuto. Una barrena tricónica tritura la roca bajo conos dentados. Una barrena de cortadores fijos no tiene piezas móviles: discos de diamante artificial van rebanando la roca. Desde alrededor de 2015, estas barrenas perforan más del 90 % de la longitud de los pozos del mundo.",
+      "p4": "Perforar es lento: decenas de metros por hora en roca blanda, solo unos pocos en roca dura. Cuando una barrena se desgasta, hay que sacar toda la sarta parada a parada y volver a bajarla con una nueva, algo que desde 3000 m lleva cerca de medio día. En el modelo, bajar y cementar cada tubería de revestimiento añade unos dos días, y el pozo llega a la profundidad final hacia el día 30. Los pozos reales en aguas así de profundas suelen tardar de uno a tres meses. Observa el contador de días y cambia de barrena para comparar."
+    },
+    "mud": {
+      "title": "Las tres tareas principales del lodo",
+      "p1": "La cámara está ahora en el fondo marino, a 1000 m de profundidad, donde todo está oscuro y hace unos 4 °C. Sobre el cabezal de pozo se asienta el <strong>preventor de reventones</strong>, una pila de válvulas de unos 17 m de alto. Encima, el riser, un tubo de acero de 533 mm de ancho, sube hasta la plataforma alrededor de la tubería de perforación. Los puntos que se mueven son el lodo de perforación. Baja por dentro de la tubería, sale por la barrena y vuelve a subir por el hueco que rodea la tubería, llamado espacio anular.",
+      "p2": "El lodo es un fluido espeso al que se da peso con barita en polvo, un mineral denso. Su primera tarea es empujar contra el agua, el petróleo o el gas que se guardan a gran presión en los poros de la roca. La segunda es subir los recortes, los trocitos de roca que corta la barrena, hasta la plataforma, donde unas cribas vibratorias los separan. La tercera es enfriar y limpiar la barrena. Al principio, el lodo sigue el plan de perforación. Usa el control para hacerlo más ligero o más pesado y provocar una surgencia o una grieta.",
+      "control": {
+        "label": "Densidad del lodo",
+        "light": "Como el agua",
+        "heavy": "El doble de pesado",
+        "caption": "Presión frente a profundidad: el lodo debe quedar por encima de la presión en los poros de la roca y por debajo de la presión que fractura la roca",
+        "pressure": "Presión del lodo en la barrena",
+        "pore": "Presión de poro",
+        "fracture": "Presión de fractura",
+        "state": "Estado",
+        "plan": "Volver al plan"
+      },
+      "p3": "La presión del lodo en bar es su densidad en g/cm³ por 0,0981 por la profundidad en metros, y tiene que mantenerse dentro de una ventana. Por debajo de la presión de poro, el gas, el petróleo o el agua entran en el pozo: una <strong>surgencia</strong>. Por encima de la presión de fractura, la presión a la que la roca se parte, la roca se traga el lodo. El agua de mar pesa menos de la mitad que la roca, así que bajo 1000 m de agua la ventana es estrecha. Esa es una de las razones por las que los dos primeros tramos se perforan sin riser, con agua de mar o un lodo ligero que sale al fondo marino.",
+      "p4": "Si una surgencia llega a entrar, el preventor de reventones puede cerrar el pozo: sus arietes se cierran en menos de un minuto y aguantan hasta 1034 bar. Es la última línea de defensa, no una garantía, porque sus arietes de corte no pueden cortar las gruesas uniones entre tubos. En el yacimiento, la ventana del modelo va de unos 1,24 a 1,57 g/cm³, y el plan usa 1,40. Mueve el control y observa el estado y el gráfico: si el lodo es demasiado ligero, suben burbujas de gas por el espacio anular; si es demasiado pesado, se abren grietas desde el agujero."
+    },
+    "rock": {
+      "title": "Por qué hay petróleo ahí",
+      "p1": "Ahora mira la cara cortada de la roca. Las capas de arriba están planas, pero en lo hondo dos capas se curvan formando un arco bajo la plataforma. La parte alta del arco es el sello, una lutita gruesa que casi no deja pasar nada. Debajo está el yacimiento, una arenisca con gas arriba, petróleo en medio y agua debajo. En el fondo del bloque está la lutita oscura donde empezó el petróleo.",
+      "p2": "La historia empieza con el plancton, seres diminutos que flotaban en el mar hace millones de años. Parte de ellos se hundió en un fango con tan poco oxígeno que no llegaron a pudrirse. Enterrado cada vez más hondo, el fango se convirtió en una lutita oscura llena de sus restos: la <strong>roca madre</strong>. Entre unos 60 y 120 °C, a lo largo de millones de años, el calor transformó esos restos en petróleo. El petróleo pesa menos que el agua, así que fue subiendo por los poros llenos de agua de la roca de encima hasta que una capa impermeable lo detuvo. Prueba los botones para visitar cada capa.",
+      "pores": {
+        "caption": "El petróleo ocupa los diminutos huecos entre los granos de arena, no una cueva"
+      },
+      "temperature": "Temperatura de la roca aquí",
+      "porosity": "Espacio entre los granos",
+      "p3": "Una trampa es un arco de roca porosa bajo un sello, como un cuenco boca abajo. El petróleo y el gas se juntan en su cresta, ordenados por peso: el gas arriba, luego el petróleo, luego el agua. El petróleo termina en el contacto agua-petróleo, a 4220 m bajo la mesa de perforación. No está en una cueva, sino que llena los diminutos huecos entre los granos de arena, alrededor del 22 % de esta arenisca. La roca está a unos 95 a 100 °C. Sus poros están a unos 500 bar, más de lo normal, porque el agua atrapada por la lutita soporta parte del peso de la roca.",
+      "p4": "Nadie puede ver tan abajo. Los barcos de prospección envían sonido al fondo marino, y los ecos dibujan las capas y muestran dónde podría haber una trampa, pero no pueden demostrar qué llena los poros. Solo un pozo puede hacerlo: en 2024, solo alrededor de 1 de cada 4 grandes pozos de exploración encontró petróleo o gas que valiera la pena producir. Prueba los botones y observa el primer plano de los granos. El gas, el petróleo y el agua llenan los mismos huecos de la arenisca, mientras que el sello casi no tiene."
+    },
+    "flow": {
+      "title": "Primer petróleo",
+      "p1": "La barrena ha llegado a la profundidad final, y la vista muestra el pozo terminado. La sarta de perforación ya no está, y la tubería de revestimiento de acero, cementada en su sitio, cubre el agujero hasta el fondo. Dentro cuelga la <strong>tubería de producción</strong>, un tubo más estrecho que sube el petróleo hasta la plataforma. Abajo, en la zona de petróleo, unos cañones de disparo han lanzado cargas a través del revestimiento y el cemento hasta la roca, y estos orificios, llamados disparos, dejan entrar el petróleo.",
+      "p2": "¿Por qué sube el petróleo por sí solo? El fluido del yacimiento está a presión, aquí unos 504 bar, más de lo que pesaría una columna de agua salada hasta la superficie. El petróleo pesa menos que el agua, unos 0,85 g/cm³, así que una columna de petróleo desde el yacimiento hasta la plataforma pesa todavía menos, unos 345 bar. La diferencia empuja el petróleo hacia fuera por arriba con <strong>presión de sobra</strong>. Prueba el control para ver cómo cambia esto a medida que el campo envejece.",
+      "control": {
+        "label": "Años de producción",
+        "first": "Primer petróleo",
+        "late": "Campo maduro",
+        "reservoir": "Presión en el yacimiento",
+        "column": "Peso de la columna de petróleo",
+        "wellhead": "Lo que sobra arriba",
+        "state": "El pozo"
+      },
+      "p3": "Primero se prueba el pozo. El petróleo y el gas suben hasta la plataforma, donde el equipo los mide, y el brazo del quemador los quema, porque una plataforma de perforación no tiene ningún oleoducto por el que enviarlos. La llama en la punta del brazo señala la prueba. A un pozo que valga la pena producir se le puede poner más adelante un árbol de válvulas en el fondo marino y tuberías hasta una plataforma de producción, o hasta un barco que guarda el petróleo hasta que se lo llevan los petroleros.",
+      "p4": "A medida que sale el petróleo, la presión del yacimiento baja. En este modelo simple cae un 1,4 % de su valor inicial cada año; los campos reales varían mucho. Cuando queda muy poca presión arriba, el petróleo deja de fluir por sí solo. Entonces una bomba en el pozo o el levantamiento artificial por gas, que inyecta gas en la tubería de producción para aligerar la columna, hace que siga saliendo. Aun así, un campo entrega de media solo cerca de un tercio de su petróleo. Mueve el control y observa cómo se reduce lo que sobra arriba."
+    }
+  }
+}

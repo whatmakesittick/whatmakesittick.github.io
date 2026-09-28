@@ -1,0 +1,199 @@
+:root {
+  --deck: #f5c451;
+  --sea: #4cc3ff;
+  --top-hole: #8bd47f;
+  --overburden: #c9a27e;
+  --seal: #c792ea;
+  --reservoir: #ff9f43;
+  --bottom: #ff7eb6;
+  --mud: #b08a5a;
+  --gas: #ffe08a;
+  --brine: #3f7fb8;
+  --hull: #d94f3d;
+  --rock: #6f6a63;
+  --safe: var(--top-hole);
+  --danger: var(--hull);
+  --mud-line: var(--gas);
+  --pore-line: var(--sea);
+  --fracture-line: var(--bottom);
+}
+
+.draft-control,
+.depth-picker,
+.mud-control,
+.depletion-control,
+.section-readouts,
+.rock-readouts {
+  --readout-min-width: 8rem;
+}
+
+.mud-control .range-widget__readouts,
+.depletion-control .range-widget__readouts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.draft-control .range-widget__readouts,
+.section-readouts {
+  container-type: inline-size;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@container (max-width: 22rem) {
+  .draft-control .range-widget__readouts > div,
+  .section-readouts > div {
+    display: flex;
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .draft-control .range-widget__readouts dd,
+  .section-readouts dd {
+    margin: 0;
+    white-space: nowrap;
+  }
+}
+
+.draft-control .range,
+.depth-picker .range {
+  --range-color: var(--sea);
+}
+
+.mud-control .range {
+  --range-color: var(--mud);
+}
+
+.depletion-control .range {
+  --range-color: var(--reservoir);
+}
+
+.section-readouts,
+.rock-readouts {
+  margin-top: 16px;
+}
+
+.rig-picker,
+.mud-window,
+.pores-view {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.rig-picker canvas,
+.mud-window canvas,
+.pores-view canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-small);
+}
+
+.pores-view {
+  margin-top: 20px;
+}
+
+.pores-view canvas {
+  width: min(100%, 480px);
+  border: 1px solid var(--line);
+}
+
+.rig-picker figcaption,
+.mud-window figcaption,
+.pores-view figcaption {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.mud-control [data-readout='mud-pressure'] {
+  color: var(--mud-line);
+}
+
+.mud-control [data-readout='pore-pressure'] {
+  color: var(--pore-line);
+}
+
+.mud-control [data-readout='fracture-pressure'] {
+  color: var(--fracture-line);
+}
+
+.mud-control [data-readout='mud-state'],
+.depletion-control [data-readout='flow-state'] {
+  color: var(--safe);
+  font-weight: 600;
+}
+
+.mud-control:is([data-mud-state='light'], [data-mud-state='heavy']) [data-readout='mud-state'],
+.mud-control:is([data-mud-state='light'], [data-mud-state='heavy']) .range-widget__header output {
+  color: var(--danger);
+}
+
+.depletion-control[data-flow-state='assisted'] [data-readout='flow-state'] {
+  color: var(--accent);
+}
+
+.mud-control .chip-row {
+  margin-top: 0;
+}
+
+.chip[data-action='mudPlan'][aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.chip[data-action='bit'][data-value='rollerCone'] {
+  --tone: var(--overburden);
+}
+
+.chip[data-action='section'][data-value='conductor'],
+.chip[data-action='section'][data-value='surface'] {
+  --tone: var(--top-hole);
+}
+
+.chip[data-action='section'][data-value='intermediate'] {
+  --tone: var(--overburden);
+}
+
+.chip[data-action='section'][data-value='production'] {
+  --tone: var(--seal);
+}
+
+.chip[data-action='section'][data-value='reservoir'] {
+  --tone: var(--reservoir);
+}
+
+.chip[data-action='layer'][data-value='seal'] {
+  --tone: var(--seal);
+}
+
+.chip[data-action='layer'][data-value='gasCap'] {
+  --tone: var(--gas);
+}
+
+.chip[data-action='layer'][data-value='oil'] {
+  --tone: var(--reservoir);
+}
+
+.chip[data-action='layer'][data-value='water'] {
+  --tone: var(--brine);
+}
+
+.chip[data-action='layer'][data-value='sourceRock'] {
+  --tone: var(--rock);
+}
+
+.chip[data-action='mudPlan'] {
+  --tone: var(--mud);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action='bit'],
+  .chip[data-action='section'],
+  .chip[data-action='layer'],
+  .chip[data-action='mudPlan'] {
+    height: 44px;
+  }
+}
