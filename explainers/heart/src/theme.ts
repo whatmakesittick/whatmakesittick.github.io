@@ -6,7 +6,7 @@ export const THEME = {
   squeeze: '#ff7f6b',
   eject: '#ff4d5e',
   relax: '#c48cff',
-  fill: '#5b9cff',
+  filling: '#5b9cff',
   rest: '#5fd0c0',
   muscle: '#b83a44',
   muscleDeep: '#7d2431',

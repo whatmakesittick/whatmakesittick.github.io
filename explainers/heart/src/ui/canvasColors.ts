@@ -1,4 +1,3 @@
-import { PHASE_IDS } from '../ids';
 import type { PhaseId } from '../ids';
 import { THEME } from '../theme';
 
@@ -12,9 +11,14 @@ export function withAlpha(hex: string, alpha: number): string {
   return `rgb(${red} ${green} ${blue} / ${alpha})`;
 }
 
-export const PHASE_COLORS: Readonly<Record<PhaseId, string>> = Object.fromEntries(
-  PHASE_IDS.map((id) => [id, THEME[id]]),
-) as Record<PhaseId, string>;
+export const PHASE_COLORS: Readonly<Record<PhaseId, string>> = {
+  atria: THEME.atria,
+  squeeze: THEME.squeeze,
+  eject: THEME.eject,
+  relax: THEME.relax,
+  fill: THEME.filling,
+  rest: THEME.rest,
+};
 
 export const CANVAS_COLORS = {
   grid: 'rgb(255 255 255 / 0.06)',
@@ -26,10 +30,10 @@ export const CANVAS_COLORS = {
   ventricle: THEME.eject,
   aorta: THEME.valve,
   atrium: THEME.atria,
-  volume: THEME.fill,
+  volume: THEME.filling,
   trace: THEME.node,
   waveBand: withAlpha(THEME.node, 0.08),
   squeeze: THEME.eject,
-  fill: THEME.fill,
+  fill: THEME.filling,
   barText: THEME.background,
 } as const;

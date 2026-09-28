@@ -36,7 +36,7 @@ describe('gauge readouts', () => {
     expect(readout('lvPressure').meter?.share(peak)).toBeCloseTo(120 / 140, 1);
     expect(readout('aorticPressure').meter?.share(peak)).toBeCloseTo(120 / 140, 1);
     expect(readout('lvVolume').meter?.share(stateAt(200))).toBeCloseTo(120 / 140);
-    expect(readout('lvVolume').meter?.fill).toBe('var(--fill)');
+    expect(readout('lvVolume').meter?.fill).toBe('var(--filling)');
   });
 
   it('moves every meter with the moment in the beat', () => {

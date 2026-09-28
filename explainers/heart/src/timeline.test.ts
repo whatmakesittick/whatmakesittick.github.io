@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PHASE_IDS } from './ids';
+import { PHASE_TONES } from './ui/palette';
 import { HEART_TIMELINE, SPEED_RANGE } from './timeline';
 
 describe('heart timeline', () => {
@@ -15,7 +16,7 @@ describe('heart timeline', () => {
 
   it('colours each phase with its own tone', () => {
     expect(HEART_TIMELINE.phases.map((phase) => phase.tone)).toEqual(
-      PHASE_IDS.map((id) => `var(--${id})`),
+      PHASE_IDS.map((id) => PHASE_TONES[id]),
     );
   });
 
