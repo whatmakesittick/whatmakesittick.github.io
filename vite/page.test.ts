@@ -88,10 +88,22 @@ function language(code: LanguageCode): PageLanguage {
   return { code, translate: (key, values) => interpolate(table[key] ?? key, values) };
 }
 
-function structuredData(html: string): unknown {
+type GraphNode = Record<string, unknown>;
+
+function structuredData(html: string): GraphNode[] {
   const start = html.indexOf('application/ld+json">') + 'application/ld+json">'.length;
-  return JSON.parse(html.slice(start, html.indexOf('</script>', start)));
+  return JSON.parse(html.slice(start, html.indexOf('</script>', start)))['@graph'];
 }
+
+function graphNode(html: string, type: string): GraphNode | undefined {
+  return structuredData(html).find((node) => [node['@type']].flat().includes(type));
+}
+
+const WEBSITE = {
+  '@type': 'WebSite',
+  '@id': 'https://whatmakesittick.github.io/#website',
+  url: 'https://whatmakesittick.github.io/',
+};
 
 function hreflangs(html: string): string[] {
   return [...html.matchAll(/hreflang="([^"]+)" href="([^"]+)"/g)].map(
@@ -150,12 +162,53 @@ describe('renderPage', () => {
   });
 
   it('describes the page as structured data with its dates', () => {
-    expect(structuredData(html)).toMatchObject({
+    expect(graphNode(html, 'TechArticle')).toMatchObject({
       headline: meta.title,
       inLanguage: 'en',
       datePublished: explainer.dates.published,
       dateModified: explainer.dates.modified,
     });
+  });
+
+  it('offers the social image and the cover with their sizes', () => {
+    expect(graphNode(html, 'TechArticle')?.image).toEqual([
+      {
+        '@type': 'ImageObject',
+        url: 'https://whatmakesittick.github.io/thing/social/card.png',
+        width: 1200,
+        height: 630,
+      },
+      {
+        '@type': 'ImageObject',
+        url: 'https://whatmakesittick.github.io/thing/cover.webp',
+        width: 932,
+        height: 699,
+      },
+    ]);
+  });
+
+  it('places the page in the site and under the catalogue of its language', () => {
+    const article = graphNode(ukrainian, 'TechArticle');
+    const breadcrumbs = graphNode(ukrainian, 'BreadcrumbList');
+    expect(graphNode(ukrainian, 'WebSite')).toMatchObject(WEBSITE);
+    expect(article).toMatchObject({
+      isPartOf: { '@id': WEBSITE['@id'] },
+      breadcrumb: { '@id': breadcrumbs?.['@id'] },
+    });
+    expect(breadcrumbs?.itemListElement).toEqual([
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Що змушує цокати',
+        item: 'https://whatmakesittick.github.io/uk/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Як працює річ',
+        item: 'https://whatmakesittick.github.io/uk/thing/',
+      },
+    ]);
   });
 
   it('loads the shared entry of the explainer from every language page', () => {
@@ -172,7 +225,7 @@ describe('renderPage', () => {
     );
     expect(ukrainian).toContain('<meta property="og:locale" content="uk_UA"');
     expect(ukrainian).toContain('<meta property="og:locale:alternate" content="en_GB"');
-    expect(structuredData(ukrainian)).toMatchObject({
+    expect(graphNode(ukrainian, 'TechArticle')).toMatchObject({
       headline: 'Як працює річ',
       url: 'https://whatmakesittick.github.io/uk/thing/',
       inLanguage: 'uk',
@@ -223,25 +276,32 @@ describe('renderCatalogue', () => {
     expect(hreflangs(html)).toContain('ja https://whatmakesittick.github.io/ja/');
   });
 
-  it('describes the site and lists the explainers newest first as structured data', () => {
-    expect(structuredData(html)).toMatchObject({
-      '@graph': [
-        { '@type': 'WebSite', url: 'https://whatmakesittick.github.io/uk/', inLanguage: 'uk' },
+  it('describes the catalogue as a collection page of the site', () => {
+    const list = graphNode(html, 'ItemList');
+    expect(graphNode(html, 'WebSite')).toMatchObject(WEBSITE);
+    expect(graphNode(html, 'CollectionPage')).toMatchObject({
+      name: 'Що змушує цокати',
+      description: 'Як працюють машини',
+      url: 'https://whatmakesittick.github.io/uk/',
+      inLanguage: 'uk',
+      isPartOf: { '@id': WEBSITE['@id'] },
+      mainEntity: { '@id': list?.['@id'] },
+    });
+  });
+
+  it('lists the explainers newest first as structured data', () => {
+    expect(graphNode(html, 'ItemList')).toMatchObject({
+      numberOfItems: 2,
+      itemListElement: [
         {
-          '@type': 'ItemList',
-          numberOfItems: 2,
-          itemListElement: [
-            {
-              position: 1,
-              name: 'How a gearbox works',
-              url: 'https://whatmakesittick.github.io/gearbox/',
-            },
-            {
-              position: 2,
-              name: 'Як працює річ',
-              url: 'https://whatmakesittick.github.io/uk/thing/',
-            },
-          ],
+          position: 1,
+          name: 'How a gearbox works',
+          url: 'https://whatmakesittick.github.io/gearbox/',
+        },
+        {
+          position: 2,
+          name: 'Як працює річ',
+          url: 'https://whatmakesittick.github.io/uk/thing/',
         },
       ],
     });

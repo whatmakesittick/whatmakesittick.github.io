@@ -20,7 +20,7 @@ import {
   siteUrl,
 } from './site.ts';
 import { catalogueData, explainerData } from './structuredData.ts';
-import type { ListedPage } from './structuredData.ts';
+import type { ExplainerFacts, ListedPage } from './structuredData.ts';
 import { escapeHtml, expandPartials, fillTemplate } from './template.ts';
 import type { TemplateValues } from './template.ts';
 import { translateHtml } from './translateHtml.ts';
@@ -76,6 +76,20 @@ function explainerHeadValues(
   };
 }
 
+function explainerFacts(
+  { manifest }: LoadedExplainer,
+  { code, translate }: PageLanguage,
+  image: string,
+): ExplainerFacts {
+  return {
+    code,
+    url: pageUrl(code, manifest.slug),
+    image,
+    cover: `${explainerUrl(manifest.slug)}${manifest.cover}`,
+    catalogue: { name: translate(CATALOGUE_TITLE_KEY), url: pageUrl(code, CATALOGUE_ROUTE.page) },
+  };
+}
+
 function catalogueHeadValues({ translate }: PageLanguage): TemplateValues {
   return {
     documentTitle: escapeHtml(translate(CATALOGUE_DOCUMENT_TITLE_KEY)),
@@ -97,7 +111,7 @@ export function renderPage(
   const meta = explainer.metas[code] ?? explainer.meta;
   const route = explainerRoute(explainer);
   const image = `${explainerUrl(manifest.slug)}${manifest.social.image}`;
-  const facts = { code, url: pageUrl(code, route.page), image };
+  const facts = explainerFacts(explainer, language, image);
   const html = render(template, partials, {
     ...siteValues(explainerSourceUrl(manifest.slug)),
     ...languageValues(code, route),
@@ -137,6 +151,7 @@ export function renderCatalogue(
   const { code, translate } = language;
   const pages = catalogueOrder(explainers).map((explainer) => listedPage(explainer, code));
   const image = siteUrl(SITE_SOCIAL.image);
+  const title = translate(CATALOGUE_TITLE_KEY);
   const description = translate(CATALOGUE_TAGLINE_KEY);
   const facts = { code, url: pageUrl(code, CATALOGUE_ROUTE.page), image };
   const html = render(template, partials, {
@@ -144,9 +159,9 @@ export function renderCatalogue(
     ...languageValues(code, CATALOGUE_ROUTE),
     ...socialValues(image, SITE_SOCIAL.alt),
     ...catalogueHeadValues(language),
-    title: escapeHtml(translate(CATALOGUE_TITLE_KEY)),
+    title: escapeHtml(title),
     description: escapeHtml(description),
-    structuredData: jsonLd(catalogueData(description, facts, pages)),
+    structuredData: jsonLd(catalogueData({ name: title, description }, facts, pages)),
   });
   return translateHtml(html, translate);
 }

@@ -469,14 +469,19 @@ every page in every language, each with `xhtml:link` alternates for all its lang
 variants and `x-default`, and a `lastmod` for explainer pages. `robots.txt` allows
 every crawler and points at the sitemap.
 
-`vite/structuredData.ts` writes the JSON-LD. An explainer page is a `WebPage` and
+`vite/structuredData.ts` writes the JSON-LD, a `@graph` on every page that starts with
+the same `WebSite` node, whose `@id` is `https://whatmakesittick.github.io/#website`; every
+page points at it with `isPartOf`. An explainer page is a `WebPage` and
 `TechArticle` with its translated title and description, its own URL, `inLanguage`,
-the author, and `datePublished` and `dateModified`. `vite/dates.ts` reads them with
+the author, `datePublished` and `dateModified`, and as `image` the social image
+(1200 × 630) and the cover (932 × 699). A `BreadcrumbList` leads from the catalogue in the
+page's language to the explainer. `vite/dates.ts` reads them with
 git: the first and the last commit that touched `explainers/<slug>/`. Without git
 history, or in a shallow clone, both fall back to the build date, which is why the
-workflows check out with `fetch-depth: 0`. The catalogue carries a `@graph` of a
-`WebSite` and an `ItemList` of the explainers in catalogue order, newest first, each linked to its
-page in the catalogue's language, or in English when the explainer does not ship it.
+workflows check out with `fetch-depth: 0`. Each catalogue page is a `CollectionPage` in
+its language whose `mainEntity` is an `ItemList` of the explainers in catalogue order,
+newest first, each linked to its page in the catalogue's language, or in English when the
+explainer does not ship it.
 
 ## Catalogue
 
