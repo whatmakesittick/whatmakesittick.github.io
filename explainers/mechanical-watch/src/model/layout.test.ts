@@ -4,6 +4,8 @@ import {
   BALANCE,
   BALANCE_CENTRE,
   BANKING_PINS,
+  CLICK_CENTRE,
+  CROWN_SIDE,
   CROWN_WHEEL_CENTRE,
   HAIRSPRING,
   LEVER,
@@ -22,6 +24,13 @@ describe('wheel centres', () => {
   it('puts the fourth wheel on the six o clock line', () => {
     expect(Math.abs(WHEEL_CENTRES.fourthWheel.x)).toBeLessThan(1e-9);
     expect(WHEEL_CENTRES.fourthWheel.y).toBeLessThan(-5);
+  });
+
+  it('puts the crown side at negative x so it sits at three o clock seen from the dial', () => {
+    expect(CROWN_SIDE).toBe(-1);
+    expect(CROWN_WHEEL_CENTRE.x).toBeLessThan(0);
+    expect(CLICK_CENTRE.x).toBeLessThan(0);
+    expect(BALANCE_CENTRE.x).toBeGreaterThan(0);
   });
 
   it('meshes every wheel with the next pinion exactly', () => {

@@ -141,9 +141,10 @@ describe('time on the dial', () => {
 describe('winding', () => {
   it('turns the arbor over the reserve and the crown wheel twice as fast', () => {
     const full = windingAngles(POWER_RESERVE_HOURS);
-    expect(full.arbor).toBeCloseTo(ARBOR_TURNS_FULL_WIND * 360);
-    expect(Math.abs(full.crownWheel)).toBeCloseTo(2 * full.arbor);
-    expect(windingAngles(0).arbor).toBe(0);
+    expect(full.arbor).toBeCloseTo(-ARBOR_TURNS_FULL_WIND * 360);
+    expect(Math.sign(full.arbor)).toBe(TRAIN[0].sense);
+    expect(Math.abs(full.crownWheel)).toBeCloseTo(2 * Math.abs(full.arbor));
+    expect(windingAngles(0).arbor).toBeCloseTo(0);
   });
 
   it('rests the coil against the wall when run down and pulls it toward the arbor when wound', () => {

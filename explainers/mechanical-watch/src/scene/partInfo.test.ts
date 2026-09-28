@@ -23,15 +23,16 @@ describe('part labels', () => {
     expect(LABEL_PRIORITY.at(-1)).toBe('case');
   });
 
-  it('labels the parts left of the centre line on the left', () => {
-    expect(BALANCE_CENTRE.x).toBeLessThan(0);
-    expect(WHEEL_CENTRES.escapeWheel.x).toBeLessThan(0);
-    expect(MINUTE_WHEEL_CENTRE.x).toBeLessThan(0);
-    (['balanceWheel', 'escapeWheel', 'palletFork', 'minuteWheel'] as const).forEach((id) =>
-      expect(PART_INFO[id].side, id).toBe('left'),
+  it('labels the parts on the crown side on the left', () => {
+    expect(BALANCE_CENTRE.x).toBeGreaterThan(0);
+    expect(WHEEL_CENTRES.escapeWheel.x).toBeGreaterThan(0);
+    expect(MINUTE_WHEEL_CENTRE.x).toBeGreaterThan(0);
+    expect(WHEEL_CENTRES.barrel.x).toBeLessThan(0);
+    (['balanceWheel', 'escapeWheel', 'palletFork', 'minuteWheel', 'centreWheel'] as const).forEach(
+      (id) => expect(PART_INFO[id].side, id).toBe('right'),
     );
-    (['barrel', 'thirdWheel', 'crown', 'centreWheel'] as const).forEach((id) =>
-      expect(PART_INFO[id].side, id).toBe('right'),
+    (['barrel', 'thirdWheel', 'crown', 'ratchetWheel'] as const).forEach((id) =>
+      expect(PART_INFO[id].side, id).toBe('left'),
     );
   });
 });

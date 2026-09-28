@@ -169,7 +169,7 @@ export function arborTurns(reserveHours: number): number {
 }
 
 export function windingAngles(reserveHours: number): WindingAngles {
-  const arbor = arborTurns(reserveHours) * CYCLE_DEG;
+  const arbor = -arborTurns(reserveHours) * CYCLE_DEG;
   const crownWheel = -arbor * (WINDING.ratchetTeeth / WINDING.crownWheelTeeth);
   const stem = -crownWheel * (WINDING.crownWheelTeeth / WINDING.windingPinionLeaves);
   return { arbor, ratchetWheel: arbor, crownWheel, stem };

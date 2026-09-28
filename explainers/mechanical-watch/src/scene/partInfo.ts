@@ -4,20 +4,17 @@ import { PART_IDS } from '../ids';
 import type { PartId } from '../ids';
 
 const LEFT_SIDE_PARTS: ReadonlySet<PartId> = new Set<PartId>([
-  'escapeWheel',
-  'palletFork',
-  'entryPallet',
-  'exitPallet',
-  'bankingPins',
-  'roller',
-  'impulseJewel',
-  'balanceWheel',
-  'hairspring',
-  'stud',
-  'regulator',
-  'shockJewel',
-  'balanceCock',
-  'minuteWheel',
+  'crown',
+  'stem',
+  'windingPinion',
+  'crownWheel',
+  'ratchetWheel',
+  'click',
+  'barrel',
+  'barrelArbor',
+  'mainspring',
+  'barrelBridge',
+  'thirdWheel',
 ]);
 
 function labelSide(id: PartId): LabelSide {

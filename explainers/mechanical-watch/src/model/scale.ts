@@ -54,8 +54,8 @@ export const LEVELS = {
 export type LevelId = keyof typeof LEVELS;
 
 export const STEM_AXIS_Z_MM = 1.0;
-export const STEM_START_X_MM = 9.2;
-export const CROWN_SPAN_X_MM: Span = [15.4, 17.4];
+export const STEM_START_X_MM = -9.2;
+export const CROWN_SPAN_X_MM: Span = [-17.4, -15.4];
 export const CROWN_RADIUS_MM = 1.9;
 
 export function levelMiddle(id: LevelId): number {

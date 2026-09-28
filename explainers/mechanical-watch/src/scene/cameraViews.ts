@@ -28,23 +28,23 @@ const CLOSE_DISTANCE = { min: 3, max: 600 } as const;
 const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
   movement: {
     region: 'movement',
-    direction: [0.35, 0.3, 1],
+    direction: [-0.35, 0.3, 1],
     margin: 1.05,
     distance: OVERVIEW_DISTANCE,
   },
-  barrel: { region: 'barrel', direction: [0.2, 0.35, 1], margin: 1.1, distance: CLOSE_DISTANCE },
+  barrel: { region: 'barrel', direction: [-0.2, 0.35, 1], margin: 1.1, distance: CLOSE_DISTANCE },
   balance: {
     region: 'balance',
-    direction: [-0.3, 0.45, 1],
+    direction: [0.3, 0.45, 1],
     margin: 1.08,
     distance: CLOSE_DISTANCE,
   },
-  dialSide: { region: 'dial', direction: [0.2, 0.25, -1], margin: 1.05, distance: CLOSE_DISTANCE },
+  dialSide: { region: 'dial', direction: [-0.2, 0.25, -1], margin: 1.05, distance: CLOSE_DISTANCE },
 };
 
 export const ANCHORED_VIEWS: Record<AnchoredViewId, AnchorFraming> = {
-  wheel: { spanMm: 9, elevationDeg: 55, azimuthDeg: 20 },
-  escapement: { spanMm: 7, elevationDeg: 50, azimuthDeg: -25 },
+  wheel: { spanMm: 9, elevationDeg: 55, azimuthDeg: -20 },
+  escapement: { spanMm: 7, elevationDeg: 50, azimuthDeg: 25 },
 };
 
 export function anchorPose(

@@ -2,9 +2,11 @@ import { describe, expect, it } from 'vitest';
 import {
   CASE_HEIGHT_MM,
   CASE_INNER_RADIUS_MM,
+  CROWN_SPAN_X_MM,
   DIAL_RADIUS_MM,
   LEVELS,
   MOVEMENT_RADIUS_MM,
+  STEM_START_X_MM,
   UNITS_PER_MM,
   levelHeight,
   levelMiddle,
@@ -53,6 +55,14 @@ describe('LEVELS', () => {
   it('reads the middle and height of a level', () => {
     expect(levelMiddle('mainplate')).toBeCloseTo(-0.45);
     expect(levelHeight('mainplate')).toBeCloseTo(0.9);
+  });
+});
+
+describe('crown side', () => {
+  it('places the stem and crown at negative x', () => {
+    expect(STEM_START_X_MM).toBeLessThan(0);
+    expect(CROWN_SPAN_X_MM[0]).toBeLessThan(CROWN_SPAN_X_MM[1]);
+    expect(CROWN_SPAN_X_MM[1]).toBeLessThan(-CASE_INNER_RADIUS_MM);
   });
 });
 

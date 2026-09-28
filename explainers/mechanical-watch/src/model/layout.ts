@@ -8,11 +8,11 @@ export interface Point {
 }
 
 export const DIRECTIONS_DEG = {
-  barrelFromCentre: 60,
-  thirdFromCentre: 300,
-  escapeFromFourth: 130,
-  leverLine: 150,
-  minuteWheelFromCentre: 200,
+  barrelFromCentre: 120,
+  thirdFromCentre: 240,
+  escapeFromFourth: 50,
+  leverLine: 30,
+  minuteWheelFromCentre: 340,
 } as const;
 
 export const LEVER = {
@@ -51,8 +51,9 @@ export const MAINSPRING = {
   wallRadiusMm: 5.55,
 } as const;
 
-export const CLICK_CENTRE: Point = { x: 8.0, y: 6.4 };
-export const CROWN_WHEEL_FROM_BARREL_DEG = -29;
+export const CLICK_CENTRE: Point = { x: -8.0, y: 6.4 };
+export const CROWN_WHEEL_FROM_BARREL_DEG = 209;
+export const CROWN_SIDE = -1;
 
 function polar(from: Point, distance: number, degrees: number): Point {
   const angle = toRadians(degrees);
