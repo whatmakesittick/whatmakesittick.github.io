@@ -61,7 +61,9 @@
       "weather": "气象",
       "home": "家居",
       "tools": "工具",
-      "optics": "光学"
+      "optics": "光学",
+      "energy": "能源",
+      "earth": "地球"
     }
   }
 }

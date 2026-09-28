@@ -61,7 +61,9 @@
       "weather": "Wetter",
       "home": "Haushalt",
       "tools": "Werkzeuge",
-      "optics": "Optik"
+      "optics": "Optik",
+      "energy": "Energie",
+      "earth": "Erde"
     }
   }
 }

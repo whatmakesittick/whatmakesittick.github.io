@@ -61,7 +61,9 @@
       "weather": "Meteorologia",
       "home": "Casa",
       "tools": "Ferramentas",
-      "optics": "Óptica"
+      "optics": "Óptica",
+      "energy": "Energia",
+      "earth": "Terra"
     }
   }
 }
