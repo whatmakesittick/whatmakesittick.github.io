@@ -279,7 +279,7 @@ function tickLabels(): string[] {
 }
 
 function plotOf(context: CanvasRenderingContext2D, frame: CanvasFrame, labels: string[]): Plot {
-  context.font = canvasFont(LAYOUT.font);
+  context.font = canvasFont(frame, LAYOUT.font);
   return {
     left: widestText(context, labels) + 2 * LAYOUT.tickGap,
     right: frame.width - LAYOUT.rightPad,
@@ -309,7 +309,6 @@ function paintSea(context: CanvasRenderingContext2D, plot: Plot, seabed: number)
 }
 
 function paintTicks(context: CanvasRenderingContext2D, plot: Plot, labels: string[]): void {
-  context.font = canvasFont(LAYOUT.font);
   context.textAlign = 'right';
   context.textBaseline = 'middle';
   context.lineWidth = 1;

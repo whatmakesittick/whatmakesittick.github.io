@@ -36,7 +36,15 @@ interface TickLabels {
 
 type PressureAt = (depth: number) => number;
 
-const LAYOUT = { right: 14, top: 24, bottom: 10, font: 11, tickGap: 6, labelGap: 8 } as const;
+const LAYOUT = {
+  right: 14,
+  top: 24,
+  bottom: 10,
+  font: 11,
+  tickGap: 6,
+  labelGap: 6,
+  edgeInset: 3,
+} as const;
 const PRESSURE_MAX_BAR = 800;
 const PRESSURE_TICKS_BAR = [0, 200, 400, 600, 800] as const;
 const DEPTH_TICKS_M = [0, 1000, 2000, 3000, 4000] as const;
@@ -70,7 +78,7 @@ function tickLabels(): TickLabels {
 }
 
 function plotOf(context: CanvasRenderingContext2D, frame: CanvasFrame, labels: TickLabels): Plot {
-  context.font = canvasFont(LAYOUT.font);
+  context.font = canvasFont(frame, LAYOUT.font);
   return {
     left: widestText(context, labels.depth) + 2 * LAYOUT.tickGap,
     right: frame.width - LAYOUT.right,
@@ -123,7 +131,6 @@ function paintBands(context: CanvasRenderingContext2D, plot: Plot): void {
 }
 
 function paintGrid(context: CanvasRenderingContext2D, plot: Plot, labels: TickLabels): void {
-  context.font = canvasFont(LAYOUT.font);
   context.lineWidth = LINE.grid;
   context.textBaseline = 'middle';
   context.textAlign = 'right';
@@ -154,7 +161,9 @@ function paintPressureLabels(
     const isLast = index === lastIndex;
     const label = labels[index];
     const width = context.measureText(label).width;
-    const x = xOf(plot, PRESSURE_TICKS_BAR[index]);
+    const x = isLast
+      ? plot.right + LAYOUT.right - LAYOUT.edgeInset
+      : xOf(plot, PRESSURE_TICKS_BAR[index]);
     const left = isLast ? x - width : x - width / 2;
     if (left + width + LAYOUT.labelGap > freeUntil) continue;
     context.textAlign = isLast ? 'right' : 'center';
@@ -198,7 +207,13 @@ function paintSeabed(context: CanvasRenderingContext2D, plot: Plot): void {
   strokeDashedAcross(context, plot, yOf(plot, SEABED_DEPTH_M), SEABED_DASH);
 }
 
-function paintBackdrop(context: CanvasRenderingContext2D, plot: Plot, labels: TickLabels): void {
+function paintBackdrop(
+  context: CanvasRenderingContext2D,
+  frame: CanvasFrame,
+  plot: Plot,
+  labels: TickLabels,
+): void {
+  context.font = canvasFont(frame, LAYOUT.font);
   paintBands(context, plot);
   paintGrid(context, plot, labels);
   context.save();
@@ -249,7 +264,8 @@ function paintMarker(context: CanvasRenderingContext2D, plot: Plot, sight: MudSi
 
 function backdropKey(frame: CanvasFrame, plot: Plot, labels: TickLabels): string {
   const box = [plot.left, plot.right, plot.top, plot.bottom];
-  return [frame.ratio, ...box, ...labels.depth, ...labels.pressure].join(KEY_SEPARATOR);
+  const texts = [frame.fontFamily, ...labels.depth, ...labels.pressure];
+  return [frame.ratio, ...box, ...texts].join(KEY_SEPARATOR);
 }
 
 class Backdrop {
@@ -272,7 +288,7 @@ class Backdrop {
     const context = this.canvas.getContext('2d');
     if (!context) return;
     context.setTransform(frame.ratio, 0, 0, frame.ratio, 0, 0);
-    paintBackdrop(context, plot, labels);
+    paintBackdrop(context, frame, plot, labels);
     this.key = key;
   }
 }

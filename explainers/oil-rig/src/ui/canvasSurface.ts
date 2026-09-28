@@ -4,6 +4,7 @@ export interface CanvasFrame {
   width: number;
   height: number;
   ratio: number;
+  fontFamily: string;
 }
 
 export type Painter = (context: CanvasRenderingContext2D, frame: CanvasFrame) => void;
@@ -12,10 +13,11 @@ export interface CanvasSurfaceOptions {
   onFontsReady?(): void;
 }
 
-export const CANVAS_FONT_FAMILY = "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif";
+const FALLBACK_FONT_FAMILY = 'system-ui, sans-serif';
+const VISIBILITY_MARGIN = '200px';
 
-export function canvasFont(sizePx: number): string {
-  return `${sizePx}px ${CANVAS_FONT_FAMILY}`;
+export function canvasFont(frame: CanvasFrame, sizePx: number): string {
+  return `${sizePx}px ${frame.fontFamily}`;
 }
 
 export function widestText(context: CanvasRenderingContext2D, texts: readonly string[]): number {
@@ -30,45 +32,92 @@ function pixelRatio(): number {
   return Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO);
 }
 
+function resolutionQuery(): MediaQueryList {
+  return window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+}
+
+function watchPixelRatio(onChange: () => void): () => void {
+  let query = resolutionQuery();
+  const handle = () => {
+    query.removeEventListener('change', handle);
+    query = resolutionQuery();
+    query.addEventListener('change', handle);
+    onChange();
+  };
+  query.addEventListener('change', handle);
+  return () => query.removeEventListener('change', handle);
+}
+
 export class CanvasSurface {
   private readonly canvas: HTMLCanvasElement;
   private readonly aspect: number;
-  private readonly observer: ResizeObserver;
+  private readonly resizeObserver: ResizeObserver;
+  private readonly visibilityObserver: IntersectionObserver;
+  private readonly stopWatchingPixelRatio: () => void;
   private width: number;
   private painter: Painter | null = null;
+  private onScreen = false;
+  private stale = false;
 
   constructor(canvas: HTMLCanvasElement, options: CanvasSurfaceOptions = {}) {
     this.canvas = canvas;
     this.aspect = canvas.height / canvas.width;
     this.width = canvas.clientWidth || canvas.width;
-    this.observer = new ResizeObserver(() => this.resize());
-    this.observer.observe(canvas);
+    this.resizeObserver = new ResizeObserver(() => this.resize());
+    this.resizeObserver.observe(canvas);
+    this.visibilityObserver = new IntersectionObserver((entries) => this.updateOnScreen(entries), {
+      rootMargin: VISIBILITY_MARGIN,
+    });
+    this.visibilityObserver.observe(canvas);
+    this.stopWatchingPixelRatio = watchPixelRatio(() => this.requestRender());
     whenFontsReady(() => {
       options.onFontsReady?.();
-      this.render();
+      this.requestRender();
     });
   }
 
   paint(painter: Painter): void {
     this.painter = painter;
-    this.render();
+    this.requestRender();
   }
 
   dispose(): void {
-    this.observer.disconnect();
+    this.resizeObserver.disconnect();
+    this.visibilityObserver.disconnect();
+    this.stopWatchingPixelRatio();
+  }
+
+  private updateOnScreen(entries: readonly IntersectionObserverEntry[]): void {
+    this.onScreen = entries.at(-1)?.isIntersecting ?? this.onScreen;
+    if (this.onScreen && this.stale) this.render();
   }
 
   private resize(): void {
     const width = this.canvas.clientWidth;
     if (width === 0 || width === this.width) return;
     this.width = width;
-    this.render();
+    this.requestRender();
+  }
+
+  private requestRender(): void {
+    this.stale = true;
+    if (this.onScreen) this.render();
+  }
+
+  private frame(): CanvasFrame {
+    return {
+      width: this.width,
+      height: this.width * this.aspect,
+      ratio: pixelRatio(),
+      fontFamily: getComputedStyle(this.canvas).fontFamily || FALLBACK_FONT_FAMILY,
+    };
   }
 
   private render(): void {
     const context = this.canvas.getContext('2d');
     if (!context || !this.painter) return;
-    const frame = { width: this.width, height: this.width * this.aspect, ratio: pixelRatio() };
+    this.stale = false;
+    const frame = this.frame();
     this.fitBacking(frame);
     context.setTransform(1, 0, 0, 1, 0, 0);
     context.clearRect(0, 0, this.canvas.width, this.canvas.height);
