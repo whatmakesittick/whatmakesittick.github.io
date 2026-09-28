@@ -132,7 +132,7 @@ export class MotionWorksPart {
         frame,
         MINUTE_WHEEL_CENTRE.x - minuteWheel.radiusMm * LABEL_REACH.minute,
         MINUTE_WHEEL_CENTRE.y,
-        below(LEVELS.minuteWheel[0]),
+        below(MOTION.minutePinion[0]),
       ),
       hourWheel: anchorAt(frame, hourLabel.x, hourLabel.y, below(LEVELS.hourWheel[0])),
     };
