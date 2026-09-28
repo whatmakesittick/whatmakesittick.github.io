@@ -64,9 +64,15 @@ function socialValues(image: string, alt: string): TemplateValues {
   };
 }
 
-function explainerHeadValues(meta: ExplainerMeta, { translate }: PageLanguage): TemplateValues {
+function explainerHeadValues(
+  { dates }: LoadedExplainer,
+  meta: ExplainerMeta,
+  { translate }: PageLanguage,
+): TemplateValues {
   return {
     documentTitle: escapeHtml(translate(PAGE_DOCUMENT_TITLE_KEY, { title: meta.title })),
+    published: escapeHtml(dates.published),
+    modified: escapeHtml(dates.modified),
   };
 }
 
@@ -96,7 +102,7 @@ export function renderPage(
     ...siteValues(explainerSourceUrl(manifest.slug)),
     ...languageValues(code, route),
     ...socialValues(image, manifest.social.alt),
-    ...explainerHeadValues(meta, language),
+    ...explainerHeadValues(explainer, meta, language),
     title: escapeHtml(meta.title),
     description: escapeHtml(meta.description),
     eyebrow: escapeHtml(meta.eyebrow),

@@ -32,10 +32,16 @@ const explainer: LoadedExplainer = {
     '<section class="chapter" data-preset="intro">\n  <h2 data-i18n="sections.intro">Intro</h2>\n</section>',
 };
 
+const articleTags = [
+  '<meta property="article:published_time" content="{{published}}" />',
+  '<meta property="article:modified_time" content="{{modified}}" />',
+].join('\n');
+
 const template = [
   '<html lang="{{lang}}">',
   '<title>{{documentTitle}}</title>',
   '<meta property="og:title" content="{{title}}" />',
+  articleTags,
   '<meta content="{{description}}" />',
   '<link rel="canonical" href="{{url}}" />',
   '{{alternateLinks}}',
@@ -120,6 +126,15 @@ describe('renderPage', () => {
     expect(html).toContain('<main>\n  <section class="chapter" data-preset="intro">\n    <h2');
   });
 
+  it('dates the article for link previews', () => {
+    expect(html).toContain(
+      '<meta property="article:published_time" content="2026-01-10T09:00:00+02:00"',
+    );
+    expect(html).toContain(
+      '<meta property="article:modified_time" content="2026-03-10T09:00:00+02:00"',
+    );
+  });
+
   it('describes the page as structured data with its dates', () => {
     expect(structuredData(html)).toMatchObject({
       headline: meta.title,
@@ -166,7 +181,10 @@ describe('renderPage', () => {
 });
 
 describe('renderCatalogue', () => {
-  const catalogueTemplate = template.replace('{{chapters}}', '').replace('{{entry}}', '/main.ts');
+  const catalogueTemplate = template
+    .replace(articleTags, '')
+    .replace('{{chapters}}', '')
+    .replace('{{entry}}', '/main.ts');
   const gearbox: LoadedExplainer = {
     ...explainer,
     manifest: { ...explainer.manifest, slug: 'gearbox', tags: ['mechanics'], locales: ['en'] },

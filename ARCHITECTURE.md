@@ -433,7 +433,8 @@ build and the runtime. A page is rendered in two steps:
    What makes it tick", or `catalogue.metaTitle`), the catalogue path in the
    page's language (`catalogueUrl`, `/` or `/<lang>/`), the canonical URL of the page
    itself, `og:locale` with the other languages as alternates, the Open Graph and
-   Twitter tags, one `<link rel="alternate" hreflang>` per language variant plus
+   Twitter tags (`og:type` is `article` on an explainer page, with its dates as
+   `article:published_time` and `article:modified_time`, and `website` on the catalogue), one `<link rel="alternate" hreflang>` per language variant plus
    `x-default` for the English page, and the JSON-LD.
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
