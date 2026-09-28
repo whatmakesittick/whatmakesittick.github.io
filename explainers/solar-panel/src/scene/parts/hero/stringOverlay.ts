@@ -11,7 +11,7 @@ import { diodeWire, diodeX, diodeY, stringPaths } from '../../geometry/strings';
 import { finishMesh, registered, registeredMesh } from '../context';
 import type { PartContext } from '../context';
 
-const LINE_OFFSET = -3;
+const LINE_OFFSET = -1;
 
 function lineMaterial(color: string): MeshBasicMaterial {
   return new MeshBasicMaterial({
