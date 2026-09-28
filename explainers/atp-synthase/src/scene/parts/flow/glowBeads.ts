@@ -41,9 +41,9 @@ export class GlowBeads {
     this.commit();
   }
 
-  set(index: number, pose: BeadPose): void {
+  set(index: number, pose: BeadPose, presence = 1): void {
     const { x, y, z } = pose.position;
-    const scale = pose.scale;
+    const scale = pose.scale * presence;
     this.matrix.makeScale(scale, scale, scale).setPosition(x, y, z);
     this.cores.setMatrixAt(index, this.matrix);
     this.halos.setPoint(index, x, y, z);

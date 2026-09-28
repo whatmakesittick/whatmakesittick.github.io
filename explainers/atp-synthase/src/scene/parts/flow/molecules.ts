@@ -23,6 +23,7 @@ import { FINISHES } from '../../finishes';
 import {
   adpLabelBeta,
   atpLabelBeta,
+  atpLeavingPoint,
   poseSeatMolecules,
   seatMolecules,
   seatPoint,
@@ -38,6 +39,10 @@ const ADP_BEADS = 2;
 const ATP_BEADS = 3;
 const QUARTER_TURN_DEG = 90;
 const BETA_COUNT = BETA_INDICES.length;
+const FULL_PRESENCE = 1;
+const HELD_LABEL_BETA: BetaIndex = 0;
+const HELD_ATP_SHARE = 0.45;
+const HELD_ATP_SPOT = atpLeavingPoint(HELD_LABEL_BETA, HELD_ATP_SHARE);
 
 function bodyGeometry(): BufferGeometry {
   const { base, sugar } = GLYPH_FORM;
@@ -79,6 +84,7 @@ export class MoleculesPart {
   private readonly euler = new Euler();
   private readonly position = new Vector3();
   private readonly scale = new Vector3();
+  private presence = FULL_PRESENCE;
 
   constructor(context: PartContext) {
     this.adp = this.glyph(context, 'adpPhosphate', FINISHES.adenosine, ADP_BEADS + 1);
@@ -97,15 +103,26 @@ export class MoleculesPart {
     };
   }
 
-  place(rotorDeg: number): void {
+  place(rotorDeg: number, presence: number): void {
+    this.presence = presence;
     for (const beta of BETA_INDICES) {
       this.placeSeat(beta, poseSeatMolecules(beta, rotorDeg, this.seats[beta]));
     }
     this.markChanged(this.adp);
     this.markChanged(this.atp);
     this.flashes.commit();
+    if (presence < FULL_PRESENCE) this.holdLabels();
+    else this.followLabels(rotorDeg);
+  }
+
+  private followLabels(rotorDeg: number): void {
     copyPoint(this.labels.atp.position, this.seats[atpLabelBeta(rotorDeg)].atp.position);
     copyPoint(this.labels.adpPhosphate.position, seatPoint(adpLabelBeta(rotorDeg)));
+  }
+
+  private holdLabels(): void {
+    copyPoint(this.labels.atp.position, HELD_ATP_SPOT);
+    copyPoint(this.labels.adpPhosphate.position, seatPoint(HELD_LABEL_BETA));
   }
 
   private markChanged(glyph: Glyph): void {
@@ -122,7 +139,7 @@ export class MoleculesPart {
     const { x, y, z } = seatPoint(beta);
     const { r, g, b } = this.flashTint;
     this.flashes.setPoint(beta, x, y, z);
-    this.flashes.setColor(beta, r, g, b, seat.flash * GLYPH_FORM.flashAlpha);
+    this.flashes.setColor(beta, r, g, b, seat.flash * GLYPH_FORM.flashAlpha * this.presence);
   }
 
   private placeGlyph(
@@ -143,7 +160,7 @@ export class MoleculesPart {
   private compose(pose: GlyphPose, yaw: number): void {
     const { x, y, z } = pose.position;
     this.rotation.setFromEuler(this.euler.set(pose.turn, yaw, 0));
-    this.scale.setScalar(pose.scale);
+    this.scale.setScalar(pose.scale * this.presence);
     this.matrix.compose(this.position.set(x, y, z), this.rotation, this.scale);
   }
 

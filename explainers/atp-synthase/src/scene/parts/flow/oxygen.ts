@@ -57,22 +57,22 @@ export class OxygenPart {
     this.label = anchorAt(this.object, dock.x, dock.y, dock.z);
   }
 
-  place(clockDeg: number, bladeCount: number): void {
+  place(clockDeg: number, bladeCount: number, presence: number): void {
     const progress = streamProgress(clockDeg, oxygenPeriodDeg(bladeCount), TRAVEL_DEG, 0);
     poseOxygen(progress, this.pose);
-    this.compose(this.pose.pair);
+    this.compose(this.pose.pair, presence);
     for (let index = 0; index < SIDES.length; index += 1) {
       this.setAtom(this.atoms, index, SIDES[index] * OXYGEN_FORM.bondHalf, 0);
     }
-    this.placeWater(this.pose.waters[0], 0);
-    this.placeWater(this.pose.waters[1], 1);
+    this.placeWater(this.pose.waters[0], 0, presence);
+    this.placeWater(this.pose.waters[1], 1, presence);
     this.atoms.instanceMatrix.needsUpdate = true;
     this.hydrogens.instanceMatrix.needsUpdate = true;
   }
 
-  private placeWater(water: GlyphPose, index: number): void {
+  private placeWater(water: GlyphPose, index: number, presence: number): void {
     const { hydrogen } = OXYGEN_FORM;
-    this.compose(water);
+    this.compose(water, presence);
     this.setAtom(this.atoms, WATER_FIRST_ATOM + index, 0, 0);
     for (let side = 0; side < SIDES.length; side += 1) {
       this.setAtom(
@@ -89,10 +89,10 @@ export class OxygenPart {
     mesh.setMatrixAt(index, this.atom);
   }
 
-  private compose(pose: GlyphPose): void {
+  private compose(pose: GlyphPose, presence: number): void {
     const { x, y, z } = pose.position;
     this.rotation.setFromEuler(this.euler.set(pose.turn, pose.turn, 0));
-    this.scale.setScalar(pose.scale);
+    this.scale.setScalar(pose.scale * presence);
     this.matrix.compose(this.position.set(x, y, z), this.rotation, this.scale);
   }
 }

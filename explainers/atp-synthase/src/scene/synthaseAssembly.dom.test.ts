@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { Group, InstancedMesh, Mesh, Vector3 } from 'three';
+import { Group, InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
 import type { Material, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
+import type { MaterialFinish } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
 import type { SceneTextures } from '@core/scene/textures';
@@ -14,6 +15,7 @@ import {
   betaInState,
 } from '../model/rotor';
 import { UNITS_PER_NM } from '../model/scale';
+import { CROWD } from './constants';
 import { FINISHES } from './finishes';
 import { seatPoint } from './flow/molecules';
 import { SynthaseAssembly } from './synthaseAssembly';
@@ -37,6 +39,17 @@ const CAMERA_DISTANCE = 500;
 const TRIANGLE_BUDGET = 200_000;
 const DRAW_CALL_BUDGET = 60;
 const FLOW_PARTS: readonly PartId[] = ['atp', 'adpPhosphate', 'protons', 'electrons', 'oxygen'];
+const REAL_SPEED: AssemblyState = { ...STATE, degreesPerSecond: REAL_DEGREES_PER_SECOND };
+const CROWD_COUNT = CROWD.below.count + CROWD.above.count;
+const STROBING_FLOW: readonly (readonly [PartId, MaterialFinish])[] = [
+  ['atp', FINISHES.atp],
+  ['atp', FINISHES.phosphate],
+  ['adpPhosphate', FINISHES.adenosine],
+  ['adpPhosphate', FINISHES.phosphate],
+  ['electrons', FINISHES.electron],
+  ['oxygen', FINISHES.oxygen],
+  ['oxygen', FINISHES.hydrogen],
+];
 
 let assembly: SynthaseAssembly | null = null;
 let textures: SceneTextures | null = null;
@@ -71,6 +84,31 @@ function meshesWith(root: Object3D, material: Material): Mesh[] {
     if (object instanceof Mesh && object.material === material) found.push(object);
   });
   return found;
+}
+
+function shownInstances(root: Object3D, material: Material): number {
+  const matrix = new Matrix4();
+  let shown = 0;
+  meshesWith(root, material).forEach((mesh) => {
+    if (!(mesh instanceof InstancedMesh)) return;
+    for (let index = 0; index < mesh.count; index += 1) {
+      mesh.getMatrixAt(index, matrix);
+      if (matrix.determinant() !== 0) shown += 1;
+    }
+  });
+  return shown;
+}
+
+function shownStrobingFlow(root: Object3D): number {
+  return STROBING_FLOW.reduce(
+    (sum, [id, finish]) => sum + shownInstances(root, library().get(id, finish)),
+    0,
+  );
+}
+
+function settle(synthase: SynthaseAssembly, state: AssemblyState): void {
+  synthase.setState(state);
+  for (let frame = 0; frame < BLUR_FRAMES; frame += 1) synthase.update(FRAME, CAMERA_DISTANCE);
 }
 
 function budget(root: Object3D): { triangles: number; drawCalls: number } {
@@ -203,14 +241,38 @@ describe('SynthaseAssembly', () => {
   it('blurs the ring and its riding protons at real speed and clears it when slow', () => {
     const synthase = build();
     const blades = library().get('cRing', FINISHES.ring);
-    synthase.setState({ ...STATE, degreesPerSecond: REAL_DEGREES_PER_SECOND });
-    for (let frame = 0; frame < BLUR_FRAMES; frame += 1) synthase.update(FRAME, CAMERA_DISTANCE);
+    settle(synthase, REAL_SPEED);
     expect(meshesWith(synthase.root, blades).some(isShown)).toBe(false);
     expect(library().get('cRing', FINISHES.blur).opacity).toBeGreaterThan(0.5);
-    synthase.setState({ ...STATE, degreesPerSecond: 0 });
-    for (let frame = 0; frame < BLUR_FRAMES; frame += 1) synthase.update(FRAME, CAMERA_DISTANCE);
+    settle(synthase, STATE);
     expect(meshesWith(synthase.root, blades).some(isShown)).toBe(true);
     expect(library().get('cRing', FINISHES.blur).opacity).toBe(0);
+  });
+
+  it('fades the strobing flow out with the blur, keeps the crowd and brings the flow back', () => {
+    const synthase = build();
+    const protons = library().get('protons', FINISHES.proton);
+    expect(shownStrobingFlow(synthase.root)).toBeGreaterThan(0);
+    expect(shownInstances(synthase.root, protons)).toBeGreaterThan(CROWD_COUNT);
+    settle(synthase, REAL_SPEED);
+    expect(shownStrobingFlow(synthase.root)).toBe(0);
+    expect(shownInstances(synthase.root, protons)).toBe(CROWD_COUNT);
+    settle(synthase, STATE);
+    expect(shownStrobingFlow(synthase.root)).toBeGreaterThan(0);
+    expect(shownInstances(synthase.root, protons)).toBeGreaterThan(CROWD_COUNT);
+  });
+
+  it('holds the flow labels still while the flow is faded', () => {
+    const synthase = build();
+    const flowLabels = (['atp', 'adpPhosphate'] as const).map((id) => anchorOf(synthase, id));
+    settle(synthase, REAL_SPEED);
+    const held = flowLabels.map((anchor) => worldPosition(synthase, anchor));
+    ROTOR_ANGLES.forEach((rotorDeg) => {
+      synthase.setState({ ...REAL_SPEED, rotorDeg });
+      flowLabels.forEach((anchor, index) =>
+        expect(worldPosition(synthase, anchor).distanceTo(held[index]), `${rotorDeg}`).toBe(0),
+      );
+    });
   });
 
   it('leaves the scene and frees its resources when disposed', () => {

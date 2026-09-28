@@ -39,12 +39,12 @@ export class ElectronsPart {
     this.label = anchorAt(this.object, x, y, z);
   }
 
-  place(clockDeg: number, bladeCount: number): void {
+  place(clockDeg: number, bladeCount: number, presence: number): void {
     const period = electronPeriodDeg(bladeCount);
     for (let slot = 0; slot < this.beads.count; slot += 1) {
       const progress = streamProgress(clockDeg, period, TRAVEL_DEG, slot);
       if (progress === null) this.beads.hide(slot);
-      else this.beads.set(slot, poseElectron(progress, this.pose));
+      else this.beads.set(slot, poseElectron(progress, this.pose), presence);
     }
     this.beads.commit();
   }

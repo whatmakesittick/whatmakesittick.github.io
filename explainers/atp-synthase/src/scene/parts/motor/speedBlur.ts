@@ -52,6 +52,10 @@ export class SpeedBlurPart {
     return this.amount;
   }
 
+  get flowPresence(): number {
+    return 1 - this.amount;
+  }
+
   setBladeCount(bladeCount: number): void {
     this.sleeveVariants.show(bladeCount);
     this.protonVariants.show(bladeCount);

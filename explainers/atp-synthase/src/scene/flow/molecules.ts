@@ -10,7 +10,7 @@ import {
 } from '../../model/rotor';
 import { SITE } from '../../model/scale';
 import { MOLECULE_PATH } from '../constants';
-import { beadPose, copyPoint, hide, polarPoint, setLerp } from './points';
+import { beadPose, copyPoint, hide, point, polarPoint, setLerp } from './points';
 import type { BeadPose, Point3 } from './points';
 
 export interface GlyphPose extends BeadPose {
@@ -56,6 +56,11 @@ const SPOTS = BETA_INDICES.map(seatSpots);
 
 export function seatPoint(beta: BetaIndex): Readonly<Point3> {
   return SPOTS[beta].seat;
+}
+
+export function atpLeavingPoint(beta: BetaIndex, share: number): Point3 {
+  const { seat, atpExit } = SPOTS[beta];
+  return setLerp(point(), seat, atpExit, share);
 }
 
 function glyphPose(): GlyphPose {

@@ -25,6 +25,7 @@ export interface ProtonMotion {
   bladeCount: number;
   ringBlurred: boolean;
   calm: number;
+  presence: number;
 }
 
 interface RingPaths {
@@ -110,7 +111,8 @@ export class ProtonsPart {
       for (let index = 0; index < slots; index += 1, slot += 1) {
         const progress = streamProgress(motion.clockDeg, period, PUMPED_FLOW.travelDeg, index);
         if (progress === null) this.beads.hide(slot);
-        else this.beads.set(slot, posePumped(PUMP_LANES[pump], progress, this.pose));
+        else
+          this.beads.set(slot, posePumped(PUMP_LANES[pump], progress, this.pose), motion.presence);
       }
     }
     for (; slot < this.crowdStart; slot += 1) this.beads.hide(slot);

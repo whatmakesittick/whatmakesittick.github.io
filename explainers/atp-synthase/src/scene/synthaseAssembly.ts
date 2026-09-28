@@ -71,6 +71,7 @@ export class SynthaseAssembly implements Assembly {
     bladeCount: 0,
     ringBlurred: false,
     calm: 0,
+    presence: 1,
   };
 
   constructor(resources: AssemblyResources, state: AssemblyState) {
@@ -177,10 +178,11 @@ export class SynthaseAssembly implements Assembly {
     motion.bladeCount = bladeCount;
     motion.ringBlurred = this.blur.ringBlurred;
     motion.calm = this.blur.calm;
+    motion.presence = this.blur.flowPresence;
     this.protons.place(motion);
-    this.molecules.place(rotorDeg);
-    this.electrons.place(clockDeg, bladeCount);
-    this.oxygen.place(clockDeg, bladeCount);
+    this.molecules.place(rotorDeg, motion.presence);
+    this.electrons.place(clockDeg, bladeCount, motion.presence);
+    this.oxygen.place(clockDeg, bladeCount, motion.presence);
   }
 
   private collectLabels(): void {
