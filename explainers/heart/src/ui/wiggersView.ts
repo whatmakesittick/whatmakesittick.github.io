@@ -166,7 +166,8 @@ export class WiggersView {
   private readonly surface: CanvasSurface;
   private readonly backdrop = new CachedLayer();
   private painted: number | null = null;
-  private language = '';
+  private language = currentLanguage();
+  private labels = labelsNow();
 
   constructor(canvas: HTMLCanvasElement) {
     this.surface = new CanvasSurface(canvas, { onFontsReady: () => this.backdrop.invalidate() });
@@ -175,10 +176,11 @@ export class WiggersView {
   draw(time: number): void {
     const language = currentLanguage();
     if (this.painted === time && language === this.language) return;
+    if (language !== this.language) this.labels = labelsNow();
     this.painted = time;
     this.language = language;
+    const { labels } = this;
     this.surface.paint((context, frame) => {
-      const labels = labelsNow();
       context.font = canvasFont(frame, LAYOUT.font);
       const layout = wiggersLayout(frame.width, frame.height, gutterOf(context, labels));
       const key = layerKey(frame, [...labels.pressure, ...labels.volume, ...labels.time]);

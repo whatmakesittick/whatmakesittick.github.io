@@ -131,7 +131,8 @@ export class EcgView {
   private readonly surface: CanvasSurface;
   private readonly backdrop = new CachedLayer();
   private painted: number | null = null;
-  private language = '';
+  private language = currentLanguage();
+  private labels = labelsNow();
 
   constructor(canvas: HTMLCanvasElement) {
     this.surface = new CanvasSurface(canvas, { onFontsReady: () => this.backdrop.invalidate() });
@@ -140,10 +141,11 @@ export class EcgView {
   draw(time: number): void {
     const language = currentLanguage();
     if (this.painted === time && language === this.language) return;
+    if (language !== this.language) this.labels = labelsNow();
     this.painted = time;
     this.language = language;
+    const { labels } = this;
     this.surface.paint((context, frame) => {
-      const labels = labelsNow();
       const layout = ecgLayout(frame.width, frame.height);
       const key = layerKey(frame, [...labels.waves, ...labels.time]);
       this.backdrop.draw(context, frame, key, (layer) =>
