@@ -1,0 +1,138 @@
+:root {
+  --atria: #f0a35e;
+  --squeeze: #ff7f6b;
+  --eject: #ff4d5e;
+  --relax: #c48cff;
+  --fill: #5b9cff;
+  --rest: #5fd0c0;
+  --muscle: #b83a44;
+  --muscle-deep: #7d2431;
+  --cavity: #5a1b26;
+  --valve: #f1d5c2;
+  --arterial: #ff5a5a;
+  --venous: #6f8cff;
+  --node: #ffd166;
+  --fat: #e9c46a;
+  --bone: #d9d3c7;
+}
+
+.effort-control,
+.section-readouts {
+  --readout-min-width: 8rem;
+}
+
+.section-readouts {
+  margin-block: 16px;
+}
+
+.chamber-readouts,
+.valve-readouts,
+.cycle-readouts,
+.conduction-readouts,
+.effort-control .range-widget__readouts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.chamber-readouts > div:not(:has([data-readout='chamber-wall'], [data-readout='chamber-pressure'])),
+.valve-readouts > div:has([data-readout='valve-between']),
+.conduction-readouts > div:has([data-readout='conduction-where']),
+.effort-control .range-widget__readouts > div:last-child {
+  grid-column: 1 / -1;
+}
+
+.cycle-readouts dt::before {
+  content: '';
+  display: inline-block;
+  width: 0.625em;
+  height: 0.625em;
+  margin-inline-end: 0.4em;
+  border-radius: 2px;
+  background: var(--swatch);
+}
+
+.cycle-readouts > div:has([data-readout='cycle-ventricle']) {
+  --swatch: var(--eject);
+}
+
+.cycle-readouts > div:has([data-readout='cycle-aorta']) {
+  --swatch: var(--valve);
+}
+
+.cycle-readouts > div:has([data-readout='cycle-atrium']) {
+  --swatch: var(--atria);
+}
+
+.cycle-readouts > div:has([data-readout='cycle-flow']) {
+  --swatch: var(--fill);
+}
+
+.effort-control .range {
+  --range-color: var(--eject);
+}
+
+.wiggers-view,
+.ecg-view,
+.beat-split-view {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.wiggers-view canvas,
+.ecg-view canvas,
+.beat-split-view canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-small);
+}
+
+.wiggers-view figcaption,
+.ecg-view figcaption,
+.beat-split-view figcaption {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.chip[data-action='chamber'][data-value^='right'],
+.chip[data-action='valve'][data-value='tricuspid'],
+.chip[data-action='valve'][data-value='pulmonary'] {
+  --tone: var(--venous);
+}
+
+.chip[data-action='chamber'][data-value^='left'],
+.chip[data-action='valve'][data-value='mitral'],
+.chip[data-action='valve'][data-value='aortic'] {
+  --tone: var(--arterial);
+}
+
+.chip[data-action='wave'][data-value='p'] {
+  --tone: var(--atria);
+}
+
+.chip[data-action='wave'][data-value='qrs'] {
+  --tone: var(--eject);
+}
+
+.chip[data-action='wave'][data-value='t'] {
+  --tone: var(--relax);
+}
+
+.chip[data-action='fitness'][data-value='typical'] {
+  --tone: var(--rest);
+}
+
+.chip[data-action='fitness'][data-value='athlete'] {
+  --tone: var(--atria);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action='chamber'],
+  .chip[data-action='valve'],
+  .chip[data-action='wave'],
+  .chip[data-action='fitness'] {
+    height: 44px;
+  }
+}
