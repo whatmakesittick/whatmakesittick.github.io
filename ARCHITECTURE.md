@@ -356,6 +356,11 @@ on, the preset's labels otherwise, and those stay pinned either way.
 | `onView`    | Applies the view toggles to the scene                                   |
 | `highlight` | Optional parts to highlight in place of the preset's                    |
 
+The label layer places each label from its anchor projected with the camera and
+from the size of its text, which a `ResizeObserver` measures when the text first
+shows and whenever it changes with the language or a font; layout never reads the
+DOM, so a frame forces no style or layout work. A new size asks for a frame.
+
 `createLabelVisibility(shell, priority)` wraps `LabelVisibility` as a label
 policy: it follows the viewport size, updates every frame and `dispose` removes
 both listeners. It reads the anchors from the label layer, whose `anchors()`

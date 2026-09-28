@@ -1,15 +1,24 @@
+import { Vector3 } from 'three';
+import type { Camera, Object3D } from 'three';
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
-import type { Object3D } from 'three';
 import type { PartInfo } from '../explainer';
 import { onLanguageChanged, t } from '../i18n';
 import { layoutLabels, TEXT_OFFSET_PX, TEXT_RISE_PX } from './labelLayout';
-import type { LabelBox, LabelSide, Placement } from './labelLayout';
-import type { SafeArea, ViewportSize } from './lens';
+import type { LabelBox, LabelSide, Placement, Point } from './labelLayout';
+import { NO_SAFE_AREA } from './lens';
+import type { ViewportSize } from './lens';
 import { Listeners } from './listeners';
+import { isShown } from './parts';
+
+interface TextSize {
+  width: number;
+  height: number;
+}
 
 const TEXT_SELECTOR = '.scene-label__text';
 const DEGREES_PER_RADIAN = 180 / Math.PI;
-const NO_SAFE_AREA: SafeArea = { top: 0, right: 0, bottom: 0, left: 0 };
+const UNMEASURED: TextSize = { width: 0, height: 0 };
+const CLIP_RANGE = 1;
 const SIDE_CLASS: Record<LabelSide, string> = {
   left: 'scene-label--left',
   right: 'scene-label--right',
@@ -37,6 +46,16 @@ function textElement(element: HTMLElement): HTMLElement | null {
   return element.querySelector<HTMLElement>(TEXT_SELECTOR);
 }
 
+function measuredSize(entry: ResizeObserverEntry): TextSize | undefined {
+  const [box] = entry.borderBoxSize;
+  if (!box || box.inlineSize === 0 || box.blockSize === 0) return undefined;
+  return { width: box.inlineSize, height: box.blockSize };
+}
+
+function sameSize(a: TextSize | undefined, b: TextSize): boolean {
+  return a?.width === b.width && a.height === b.height;
+}
+
 function labelElement(info: PartInfo): HTMLElement {
   const element = document.createElement('div');
   element.className = `scene-label scene-label--${info.side}`;
@@ -60,8 +79,12 @@ export class LabelLayer {
   private occluded: ReadonlySet<string> = new Set();
   private changes = 0;
   private readonly stopTranslating: () => void;
-  private safe: SafeArea = NO_SAFE_AREA;
+  private size: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
+  private readonly sizes = new Map<string, TextSize>();
+  private readonly texts = new Map<Element, string>();
+  private readonly observer = new ResizeObserver((entries) => this.remeasure(entries));
   private readonly listeners = new Listeners<[]>();
+  private readonly projected = new Vector3();
 
   constructor(parts: Readonly<Record<string, PartInfo>>) {
     this.parts = parts;
@@ -69,6 +92,7 @@ export class LabelLayer {
       const label = new CSS2DObject(labelElement(info));
       label.visible = false;
       this.labels.set(id, label);
+      this.observeText(id, label.element);
     });
     this.stopTranslating = onLanguageChanged(() => this.translate());
   }
@@ -77,12 +101,30 @@ export class LabelLayer {
     return this.listeners.add(listener);
   }
 
+  private observeText(id: string, element: HTMLElement): void {
+    const text = textElement(element);
+    if (!text) return;
+    this.texts.set(text, id);
+    this.observer.observe(text, { box: 'border-box' });
+  }
+
+  private remeasure(entries: readonly ResizeObserverEntry[]): void {
+    let changed = false;
+    entries.forEach((entry) => {
+      const id = this.texts.get(entry.target);
+      const size = measuredSize(entry);
+      if (id === undefined || !size || sameSize(this.sizes.get(id), size)) return;
+      this.sizes.set(id, size);
+      changed = true;
+    });
+    if (changed) this.listeners.notify();
+  }
+
   private translate(): void {
     this.labels.forEach((label, id) => {
       const text = textElement(label.element);
       if (text) text.textContent = t(this.parts[id].labelKey);
     });
-    this.listeners.notify();
   }
 
   attach(anchors: ReadonlyMap<string, Object3D>): void {
@@ -131,30 +173,27 @@ export class LabelLayer {
   }
 
   setViewport(size: ViewportSize): void {
-    this.safe = size.safe;
+    this.size = size;
   }
 
-  layout(container: HTMLElement): void {
-    const bounds = container.getBoundingClientRect();
+  layout(camera: Camera): void {
     const boxes: LabelBox[] = [];
     this.labels.forEach((label, id) => {
-      const text = textElement(label.element);
-      if (!label.visible || !text) return;
-      const rect = label.element.getBoundingClientRect();
-      boxes.push({
-        id,
-        anchor: { x: rect.left - bounds.left, y: rect.top - bounds.top },
-        width: text.offsetWidth,
-        height: text.offsetHeight,
-        preferred: this.parts[id].side,
-      });
+      const anchor = isShown(label) ? this.screenPoint(label, camera) : undefined;
+      if (!anchor) return;
+      const { width, height } = this.sizes.get(id) ?? UNMEASURED;
+      boxes.push({ id, anchor, width, height, preferred: this.parts[id].side });
     });
-    const placements = layoutLabels(boxes, {
-      width: bounds.width,
-      height: bounds.height,
-      bottomInset: this.safe.bottom,
-    });
+    const { width, height, safe } = this.size;
+    const placements = layoutLabels(boxes, { width, height, bottomInset: safe.bottom });
     placements.forEach((placement, id) => this.place(id, placement));
+  }
+
+  private screenPoint(label: CSS2DObject, camera: Camera): Point | undefined {
+    const ndc = this.projected.setFromMatrixPosition(label.matrixWorld).project(camera);
+    if (Math.abs(ndc.z) > CLIP_RANGE) return undefined;
+    const { width, height } = this.size;
+    return { x: ((ndc.x + 1) / 2) * width, y: ((1 - ndc.y) / 2) * height };
   }
 
   private place(id: string, placement: Placement): void {
@@ -166,6 +205,7 @@ export class LabelLayer {
 
   dispose(): void {
     this.stopTranslating();
+    this.observer.disconnect();
     this.listeners.clear();
     this.labels.forEach((label) => {
       label.removeFromParent();

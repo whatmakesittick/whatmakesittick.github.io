@@ -147,7 +147,7 @@ export function createSceneHost(
     if (!needsRender) return;
     needsRender = false;
     viewport.render(scene, rig.camera);
-    labels.layout(viewport.element);
+    labels.layout(rig.camera);
   };
 
   const run = (playback: PlaybackSource) => {
