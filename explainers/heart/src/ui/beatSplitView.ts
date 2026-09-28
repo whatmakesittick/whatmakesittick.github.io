@@ -47,6 +47,9 @@ const EVERY_RATE = FITNESS_IDS.flatMap((fitness) => {
   const { restRate, maxRate } = FITNESS_PROFILES[fitness];
   return [restRate, maxRate];
 });
+const LONGEST_BEAT_MS = Math.max(
+  ...FITNESS_IDS.map((fitness) => beatLength(FITNESS_PROFILES[fitness].restRate)),
+);
 
 export function beatRates(fitness: FitnessId, effort: number): readonly number[] {
   return [FITNESS_PROFILES[fitness].restRate, heartRate(effort, fitness)];
@@ -67,8 +70,7 @@ export function beatSplitRows(
   gutter: number,
   rates: readonly number[],
 ): BeatRow[] {
-  const [restRate] = rates;
-  const pixelsPerMs = (width - gutter - LAYOUT.right) / beatLength(restRate);
+  const pixelsPerMs = (width - gutter - LAYOUT.right) / LONGEST_BEAT_MS;
   const rowHeight =
     (height - LAYOUT.top - LAYOUT.bottom - LAYOUT.rowGap * (rates.length - 1)) / rates.length;
   return rates.map((rate, index) => ({

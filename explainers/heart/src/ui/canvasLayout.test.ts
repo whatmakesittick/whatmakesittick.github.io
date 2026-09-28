@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { FITNESS_PROFILES, REST_SYSTOLE_MS, beatLength } from '../model';
 import { TIME_TICKS_MS, sampleBeat, shownTimeTicks, xOfTime, yOfValue } from './beatPlot';
 import { beatRates, beatSplitRows } from './beatSplitView';
+import type { BeatRow } from './beatSplitView';
 import { ecgLayout, waveLabelX } from './ecgView';
 import { wiggersLayout } from './wiggersView';
 
@@ -68,16 +69,19 @@ describe('electrocardiogram canvas', () => {
 });
 
 describe('beat split canvas', () => {
-  it('fills the track with the resting beat and draws the effort beat to the same scale', () => {
-    const [rest, hard] = beatSplitRows(640, 160, 100, beatRates('typical', 1));
-    const trackEnd = rest.segments[1].left + rest.segments[1].width;
-    expect(rest.segments[0].left).toBe(100);
-    expect(trackEnd).toBeCloseTo(628);
-    const hardEnd = hard.segments[1].left + hard.segments[1].width;
-    expect((hardEnd - 100) / (trackEnd - 100)).toBeCloseTo(
-      beatLength(FITNESS_PROFILES.typical.maxRate) / beatLength(FITNESS_PROFILES.typical.restRate),
+  it('fills the track with the slowest resting beat and draws every beat to that scale', () => {
+    const trackShare = (row: BeatRow) =>
+      (row.segments[1].left + row.segments[1].width - 100) / (628 - 100);
+    const [athleteRest] = beatSplitRows(640, 160, 100, beatRates('athlete', 0));
+    const [typicalRest, hard] = beatSplitRows(640, 160, 100, beatRates('typical', 1));
+    const slowest = beatLength(FITNESS_PROFILES.athlete.restRate);
+    expect(athleteRest.segments[0].left).toBe(100);
+    expect(trackShare(athleteRest)).toBeCloseTo(1);
+    expect(trackShare(typicalRest)).toBeCloseTo(
+      beatLength(FITNESS_PROFILES.typical.restRate) / slowest,
     );
-    expect(hard.top).toBeGreaterThan(rest.top + rest.height);
+    expect(trackShare(hard)).toBeCloseTo(beatLength(FITNESS_PROFILES.typical.maxRate) / slowest);
+    expect(hard.top).toBeGreaterThan(typicalRest.top + typicalRest.height);
   });
 
   it('splits the resting beat into the squeeze and the time left to fill', () => {
