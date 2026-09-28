@@ -29,13 +29,13 @@ export class SpanEditor {
   moveTo(y: number): void {
     const position = this.geometry.getAttribute('position') as BufferAttribute;
     const uv = this.geometry.getAttribute('uv') as BufferAttribute | undefined;
-    this.spans.forEach((span) => {
+    for (const span of this.spans) {
       const edge = clamp(y, span.low, span.high);
-      span.vertices.forEach((vertex) => {
+      for (const vertex of span.vertices) {
         position.setY(vertex, edge);
         if (uv && this.uvFollowsY) uv.setY(vertex, edge);
-      });
-    });
+      }
+    }
     this.flag(position, XYZ);
     if (uv && this.uvFollowsY) this.flag(uv, UV);
   }

@@ -3,6 +3,7 @@ import type { BufferGeometry } from 'three';
 
 export type Point = readonly [x: number, y: number, z: number];
 
+const DEFAULT_SEGMENTS = 8;
 const UP = new Vector3(0, 1, 0);
 const start = new Vector3();
 const end = new Vector3();
@@ -36,11 +37,16 @@ export function barGeometry(from: Point, to: Point, width: number, depth = width
   return unitBox().applyMatrix4(barMatrix(from, to, width, new Matrix4(), depth));
 }
 
-export function rodGeometry(from: Point, to: Point, radius: number, segments = 8): BufferGeometry {
+export function rodGeometry(
+  from: Point,
+  to: Point,
+  radius: number,
+  segments = DEFAULT_SEGMENTS,
+): BufferGeometry {
   const rod = new CylinderGeometry(1 / 2, 1 / 2, 1, segments);
   return rod.applyMatrix4(barMatrix(from, to, radius * 2, new Matrix4()));
 }
 
-export function unitRod(segments = 8): BufferGeometry {
+export function unitRod(segments = DEFAULT_SEGMENTS): BufferGeometry {
   return new CylinderGeometry(1 / 2, 1 / 2, 1, segments);
 }

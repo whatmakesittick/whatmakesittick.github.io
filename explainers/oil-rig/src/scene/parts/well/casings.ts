@@ -54,6 +54,7 @@ const SHADES: readonly ColorRepresentation[] = [
 ];
 
 const LABEL_DEPTH_SHARE = [0.5, 0.35, 0.6] as const;
+const DEFAULT_LABEL_SHARE = 1 / 2;
 
 function halfTube(span: TubeSpan): BufferGeometry {
   return tubeGeometry({
@@ -110,7 +111,7 @@ function innerRadius(inches: number): number {
   return tubularRadius(inches) - tubeWall(inches);
 }
 
-function previousWall(intervals: HoleInterval[], index: number): number {
+function previousWall(intervals: readonly HoleInterval[], index: number): number {
   for (let previous = index - 1; previous >= 0; previous--) {
     const section = intervals[previous].section;
     if (isCasedSection(section)) return innerRadius(section.casingInches);
@@ -141,7 +142,11 @@ export class CasingsPart {
     if (this.liner) this.liner.visible = finished;
   }
 
-  private addString(context: PartContext, interval: HoleInterval, intervals: HoleInterval[]) {
+  private addString(
+    context: PartContext,
+    interval: HoleInterval,
+    intervals: readonly HoleInterval[],
+  ) {
     const { section, index } = interval;
     const part = SECTION_PARTS[section.id];
     const group: EmphasisGroup = part ?? STRUCTURE_GROUP;
@@ -159,7 +164,12 @@ export class CasingsPart {
     this.object.add(object);
     this.strings.push({ shoe: section.shoeDepth, object });
     if (part)
-      this.anchors[part] = this.anchorFor(object, spec, LABEL_DEPTH_SHARE[index] ?? 0.5, index);
+      this.anchors[part] = this.anchorFor(
+        object,
+        spec,
+        LABEL_DEPTH_SHARE[index] ?? DEFAULT_LABEL_SHARE,
+        index,
+      );
   }
 
   private anchorFor(object: Group, spec: StringSpec, share: number, index: number): Object3D {
@@ -168,7 +178,7 @@ export class CasingsPart {
     return anchorAt(object, side * tubularRadius(spec.inches), depthToY(depth), ANCHOR_LIFT);
   }
 
-  private createLiner(context: PartContext, intervals: HoleInterval[]): Group | null {
+  private createLiner(context: PartContext, intervals: readonly HoleInterval[]): Group | null {
     const lastCased = [...intervals].reverse().find((interval) => isCasedSection(interval.section));
     const last = intervals[intervals.length - 1];
     if (!lastCased || lastCased === last) return null;

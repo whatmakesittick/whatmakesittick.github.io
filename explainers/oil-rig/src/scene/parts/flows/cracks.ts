@@ -89,7 +89,7 @@ export class CracksPart {
 
   place(y: number, holeRadius: number): void {
     this.object.position.y = y;
-    this.sides.forEach((group, side) => (group.position.x = side * holeRadius));
+    for (const [side, group] of this.sides) group.position.x = side * holeRadius;
   }
 
   setVisible(visible: boolean): void {

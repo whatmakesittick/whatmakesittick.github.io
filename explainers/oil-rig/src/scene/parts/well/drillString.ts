@@ -16,7 +16,7 @@ import { SEGMENTS, STAND_LENGTH_M, STRING, TOP_DRIVE } from '../../constants';
 import { PAINT } from '../../finishes';
 import { barGeometry } from '../../geometry/bars';
 import { mergePainted } from '../../geometry/merge';
-import { holeAt, wellY } from '../../geometry/wellColumn';
+import { collarRadius as collarRadiusFor, holeAt, wellY } from '../../geometry/wellColumn';
 import { instancedMesh, partMesh } from '../context';
 import type { PartContext } from '../context';
 import { BIT_HEIGHT, pdcBitGeometry, rollerConeBitGeometry } from './bits';
@@ -101,10 +101,6 @@ function pipeLabelY(wanted: number, quillY: number, hidden: Span | null): number
   return Math.min(hidden.high + PIPE_LABEL_CLEARANCE, quillY);
 }
 
-function collarInches(holeInches: number): number {
-  return holeInches < STRING.slimHoleInches ? STRING.slimCollarInches : STRING.collarInches;
-}
-
 export class DrillStringPart {
   readonly object = new Group();
   readonly anchors: { drillPipe: Object3D; drillCollars: Object3D; bit: Object3D };
@@ -170,7 +166,7 @@ export class DrillStringPart {
     const bitY = wellY(bitDepth, seaOffset);
     const bitTop = bitY + BIT_HEIGHT * hole.radius;
     const collarTop = Math.min(wellY(bitDepth - STRING.collarLength, seaOffset), quillY);
-    const collarRadius = tubularRadius(collarInches(hole.section.holeInches));
+    const collarRadius = collarRadiusFor(hole.section.holeInches);
     this.bit.position.y = bitY;
     this.bit.scale.setScalar(hole.radius);
     this.stretch(this.collars, bitTop, Math.max(collarTop, bitTop), collarRadius);
@@ -210,8 +206,8 @@ export class DrillStringPart {
     high: number,
   ): void {
     const size = radius * STRING.stabilizerShare;
-    STRING.stabilizerDepths.forEach((above, index) => {
-      const y = wellY(bitDepth - above, offset);
+    for (let index = 0; index < STRING.stabilizerDepths.length; index++) {
+      const y = wellY(bitDepth - STRING.stabilizerDepths[index], offset);
       const inside = y > low && y < high;
       this.position.set(0, y, 0);
       this.scale.set(inside ? size : 0, inside ? STRING.stabilizerHeight : 0, inside ? size : 0);
@@ -219,7 +215,7 @@ export class DrillStringPart {
         index,
         this.matrix.compose(this.position, this.turn, this.scale),
       );
-    });
+    }
     this.stabilizers.instanceMatrix.needsUpdate = true;
   }
 

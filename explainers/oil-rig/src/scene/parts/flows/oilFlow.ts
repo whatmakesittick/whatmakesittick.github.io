@@ -98,7 +98,9 @@ export class OilFlowPart {
     this.main.advance((FLOW.oil.speed * deltaSeconds) / this.total, 1);
     const tubingRadius = tubularRadius(WELL_TUBES.tubingInches);
     const tubingLength = this.lengths[0];
-    this.main.particles.forEach((particle, index) => {
+    const mainParticles = this.main.particles;
+    for (let index = 0; index < mainParticles.length; index++) {
+      const particle = mainParticles[index];
       const distance = particle.progress * this.total;
       const point = this.pointAt(distance, this.scratch);
       const inTubing = distance <= tubingLength;
@@ -109,21 +111,23 @@ export class OilFlowPart {
         : point.z + (particle.depth - 1 / 2) * spread;
       const alpha = Math.min(1, (1 - particle.progress) / FADE_TAIL);
       this.main.put(index, x, point.y, z, alpha);
-    });
+    }
     this.main.commit();
   }
 
   private flowIn(deltaSeconds: number): void {
     const endY = depthToY(TUBING_END_DEPTH);
     this.inflow.advance((FLOW.inflow.speed * deltaSeconds) / INFLOW_PATH, 1);
-    this.inflow.particles.forEach((particle, index) => {
+    const inflowParticles = this.inflow.particles;
+    for (let index = 0; index < inflowParticles.length; index++) {
+      const particle = inflowParticles[index];
       const tunnel = this.tunnels[index % this.tunnels.length];
       const across = Math.min(particle.progress / INFLOW_ACROSS, 1);
       const upward = Math.max(0, (particle.progress - INFLOW_ACROSS) / (1 - INFLOW_ACROSS));
       const x = tunnel.side * lerp(tunnel.outer, tunnel.inner * (particle.lane - 1 / 2), across);
       const y = lerp(tunnel.y, endY, upward) + this.seaOffset;
       this.inflow.put(index, x, y, INFLOW_LIFT, 1 - upward);
-    });
+    }
     this.inflow.commit();
   }
 }

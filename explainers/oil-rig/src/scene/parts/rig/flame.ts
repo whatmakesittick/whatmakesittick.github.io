@@ -73,10 +73,11 @@ export class FlamePart {
 
   update(time: number): void {
     if (!this.object.visible) return;
-    const pulse = FLAME.flicker.reduce(
-      (sum, wave, index) => sum + wave.depth * Math.sin(wave.rate * time + PHASES[index]),
-      0,
-    );
+    let pulse = 0;
+    for (let index = 0; index < FLAME.flicker.length; index++) {
+      const wave = FLAME.flicker[index];
+      pulse += wave.depth * Math.sin(wave.rate * time + PHASES[index]);
+    }
     this.flicker.scale.set(1 - pulse / 2, 1 + pulse, 1 - pulse / 2);
     this.flicker.rotation.z = SWAY * Math.sin(FLAME.flicker[2].rate * time);
     this.glow.scale.setScalar(FLAME.glowSize * (1 + pulse));

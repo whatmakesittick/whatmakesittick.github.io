@@ -35,14 +35,16 @@ export class MarineSnowPart {
     const bottom = SEABED_Y + SNOW.seabedGap;
     this.stream.setSize(pointSize);
     this.stream.advance((SNOW.speed * deltaSeconds) / (top - bottom), 1);
-    this.stream.particles.forEach((particle, index) => {
+    const particles = this.stream.particles;
+    for (let index = 0; index < particles.length; index++) {
+      const particle = particles[index];
       const sway = Math.sin(time * SNOW.swayRate + this.spread[index]) * SNOW.sway;
       const x = lerp(-BLOCK.halfWidth, BLOCK.halfWidth, particle.lane) + sway;
       const z = lerp(BLOCK.back, BLOCK.cutZ, particle.depth);
       const y = lerp(top, bottom, particle.progress);
       const fade = Math.min(particle.progress, 1 - particle.progress) * SNOW.edgeFade;
       this.stream.put(index, x, y, z, Math.min(fade, 1) * SNOW.alpha);
-    });
+    }
     this.stream.commit();
   }
 }

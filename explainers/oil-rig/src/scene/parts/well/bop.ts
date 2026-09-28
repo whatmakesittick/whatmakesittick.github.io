@@ -113,7 +113,7 @@ function frame(bottom: number, top: number, half: number): Painted[] {
   ]);
   const rails = Array.from(
     { length: FRAME_LEVELS },
-    (_, level) => bottom + ((top - bottom) * (level + 0.5)) / FRAME_LEVELS,
+    (_, level) => bottom + ((top - bottom) * (level + 1 / 2)) / FRAME_LEVELS,
   ).flatMap((y) =>
     corners.map(([x, , z], index): Painted => {
       const [nx, , nz] = corners[(index + 1) % corners.length];

@@ -4,7 +4,14 @@ import type { MudState } from '../../../ids';
 import { SEABED_Y, tubularRadius, yToDepth } from '../../../model/scale';
 import { SEABED_DEPTH_M } from '../../../model/wellPlan';
 import { CRACKS, FLOW, RENDER_ORDER, RISER, STRING } from '../../constants';
-import { annulusWall, holeAt, lastSetCasing, tubeWall, wellY } from '../../geometry/wellColumn';
+import {
+  annulusWall,
+  collarRadius,
+  holeAt,
+  lastSetCasing,
+  tubeWall,
+  wellY,
+} from '../../geometry/wellColumn';
 import type { HoleInterval } from '../../geometry/wellColumn';
 import type { PartContext } from '../context';
 import { BIT_HEIGHT } from '../well/bits';
@@ -63,6 +70,7 @@ export class MudFlowPart {
   private readonly bubbles: Stream;
   private readonly loss: Stream;
   private readonly cracks: CracksPart;
+  private readonly streams: readonly Stream[];
   private frame: MudFrame | null = null;
   private column: Column | null = null;
 
@@ -93,6 +101,7 @@ export class MudFlowPart {
     );
     this.loss = stream(FLOW.loss.count, 'annulus', TONES.loss, 1, FLOW.seed + 3);
     this.cracks = new CracksPart(context);
+    this.streams = [this.down, this.up, this.bubbles, this.loss];
     this.object.add(
       this.down.points,
       this.up.points,
@@ -117,11 +126,7 @@ export class MudFlowPart {
         wellY(frame.bitDepth - STRING.collarLength, frame.seaOffset),
         frame.quillY,
       ),
-      collarRadius: tubularRadius(
-        hole.section.holeInches < STRING.slimHoleInches
-          ? STRING.slimCollarInches
-          : STRING.collarInches,
-      ),
+      collarRadius: collarRadius(hole.section.holeInches),
       holeRadius: hole.radius,
       exitY: frame.landed ? RISER.diverter.bottom : exit,
       seabedY,
@@ -138,7 +143,7 @@ export class MudFlowPart {
   update(deltaSeconds: number, time: number, pointSize: number): void {
     const { frame, column } = this;
     if (!frame || !column || !this.object.visible) return;
-    [this.down, this.up, this.bubbles, this.loss].forEach((stream) => stream.setSize(pointSize));
+    for (const stream of this.streams) stream.setSize(pointSize);
     this.flowDown(deltaSeconds, frame, column);
     this.flowUp(deltaSeconds, frame, column);
     if (frame.state === 'light') this.rise(deltaSeconds, time, frame, column);
@@ -157,12 +162,14 @@ export class MudFlowPart {
   private flowDown(deltaSeconds: number, frame: MudFrame, column: Column): void {
     const length = Math.max(frame.quillY - column.bitTop, 1);
     this.down.advance((FLOW.down.speed * deltaSeconds) / length, 1);
-    this.down.particles.forEach((particle, index) => {
+    const downParticles = this.down.particles;
+    for (let index = 0; index < downParticles.length; index++) {
+      const particle = downParticles[index];
       const y = lerp(frame.quillY, column.bitTop, particle.progress);
       const radius = this.innerRadius(y, column);
       const x = (particle.lane - 1 / 2) * radius * DOWN_SPREAD;
       this.down.put(index, x, y, radius + STREAM_LIFT, 1);
-    });
+    }
     this.down.commit();
   }
 
@@ -190,16 +197,18 @@ export class MudFlowPart {
     const span = frame.landed ? 1 : 1 + FLOW.plume.share;
     this.up.advance((FLOW.up.speed * boost * deltaSeconds) / length, span);
     const heavy = frame.state === 'heavy';
-    this.up.particles.forEach((particle, index) => {
+    const upParticles = this.up.particles;
+    for (let index = 0; index < upParticles.length; index++) {
+      const particle = upParticles[index];
       if (particle.progress > 1) {
         this.plume(index, (particle.progress - 1) / FLOW.plume.share, column);
-        return;
+        continue;
       }
       const y = lerp(column.bitY, column.exitY, particle.progress);
       const lost = heavy && particle.lane > FLOW.up.heavyShare;
       const alpha = lost ? Math.max(0, 1 - (y - column.bitY) / HEAVY_FADE) : 1;
       this.annulusPoint(this.up, index, y, frame, column, alpha);
-    });
+    }
     this.up.commit();
   }
 
@@ -215,23 +224,27 @@ export class MudFlowPart {
     const top = frame.landed ? column.exitY : column.seaY;
     const length = Math.max(top - column.bitY, 1);
     this.bubbles.advance((FLOW.bubbles.speed * deltaSeconds) / length, 1);
-    this.bubbles.particles.forEach((particle, index) => {
+    const bubblesParticles = this.bubbles.particles;
+    for (let index = 0; index < bubblesParticles.length; index++) {
+      const particle = bubblesParticles[index];
       const y = lerp(column.bitY, top, particle.progress);
       const wobble = Math.sin(time * BUBBLE_RATE + particle.angle) * FLOW.bubbles.wobble;
       if (y > column.exitY) {
         const alpha = 1 - particle.progress;
         this.bubbles.put(index, wobble * SEA_DRIFT, y, particle.depth * SEA_SPREAD, alpha);
-        return;
+        continue;
       }
       this.annulusPoint(this.bubbles, index, y, frame, column, 1, wobble);
-    });
+    }
     this.bubbles.commit();
   }
 
   private leak(deltaSeconds: number, column: Column): void {
     const paths = this.cracks.paths;
     this.loss.advance((FLOW.loss.speed * deltaSeconds) / CRACKS.length[1], 1);
-    this.loss.particles.forEach((particle, index) => {
+    const lossParticles = this.loss.particles;
+    for (let index = 0; index < lossParticles.length; index++) {
+      const particle = lossParticles[index];
       const path = paths[index % paths.length];
       const points = path.points;
       const along = particle.progress * (points.length - 1);
@@ -248,7 +261,7 @@ export class MudFlowPart {
         CRACKS.lift + LOSS_LIFT,
         alpha,
       );
-    });
+    }
     this.loss.commit();
   }
 }

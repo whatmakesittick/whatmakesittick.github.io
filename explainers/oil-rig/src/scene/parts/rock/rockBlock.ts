@@ -110,7 +110,7 @@ export class RockPart {
   }
 
   setHoleBottom(y: number): void {
-    this.meshes.forEach(({ editor }) => editor.moveTo(y));
+    for (const { editor } of this.meshes) editor.moveTo(y);
   }
 
   private textures(context: PartContext): Record<RockPattern, Texture> {

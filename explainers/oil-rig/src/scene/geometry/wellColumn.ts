@@ -1,6 +1,6 @@
 import { depthToY, tubularRadius } from '../../model/scale';
 import { DRILL_FLOOR_ABOVE_SEA_M, SECTIONS, SEABED_DEPTH_M } from '../../model/wellPlan';
-import { CASING_WALL_INCHES, DEFAULT_WALL_INCHES, WELL_TUBES } from '../constants';
+import { CASING_WALL_INCHES, DEFAULT_WALL_INCHES, STRING, WELL_TUBES } from '../constants';
 import type { Section } from '../../model/wellPlan';
 
 export interface HoleInterval {
@@ -15,14 +15,16 @@ export function isCasedSection(section: Section): boolean {
   return section.casingInches > 0;
 }
 
-export function holeIntervals(): HoleInterval[] {
-  return SECTIONS.map((section, index) => ({
-    section,
-    index,
-    top: index === 0 ? SEABED_DEPTH_M : SECTIONS[index - 1].shoeDepth,
-    bottom: section.shoeDepth,
-    radius: tubularRadius(section.holeInches),
-  }));
+const INTERVALS: readonly HoleInterval[] = SECTIONS.map((section, index) => ({
+  section,
+  index,
+  top: index === 0 ? SEABED_DEPTH_M : SECTIONS[index - 1].shoeDepth,
+  bottom: section.shoeDepth,
+  radius: tubularRadius(section.holeInches),
+}));
+
+export function holeIntervals(): readonly HoleInterval[] {
+  return INTERVALS;
 }
 
 export function slotHalfWidth(): number {
@@ -30,8 +32,13 @@ export function slotHalfWidth(): number {
 }
 
 export function holeAt(depth: number): HoleInterval {
-  const intervals = holeIntervals();
-  return intervals.find((interval) => depth <= interval.bottom) ?? intervals[intervals.length - 1];
+  for (const interval of INTERVALS) if (depth <= interval.bottom) return interval;
+  return INTERVALS[INTERVALS.length - 1];
+}
+
+export function collarRadius(holeInches: number): number {
+  const slim = holeInches < STRING.slimHoleInches;
+  return tubularRadius(slim ? STRING.slimCollarInches : STRING.collarInches);
 }
 
 export function wellY(depth: number, seaOffset: number): number {
@@ -52,9 +59,11 @@ export function casingInner(casingInches: number): number {
 }
 
 export function lastSetCasing(bitDepth: number): HoleInterval | undefined {
-  return holeIntervals()
-    .filter((interval) => isCasedSection(interval.section) && bitDepth > interval.bottom)
-    .pop();
+  for (let index = INTERVALS.length - 1; index >= 0; index--) {
+    const interval = INTERVALS[index];
+    if (isCasedSection(interval.section) && bitDepth > interval.bottom) return interval;
+  }
+  return undefined;
 }
 
 export function annulusWall(depth: number, lastSet: HoleInterval | undefined): number {
