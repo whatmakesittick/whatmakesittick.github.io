@@ -4,6 +4,7 @@ import {
   fracturePressureBar,
   hydrostaticBar,
   isInRock,
+  mudColumnBar,
   mudPressureBar,
   mudState,
   mudWindow,
@@ -15,6 +16,7 @@ import {
 } from './pressure';
 import { layerById } from './rocks';
 import {
+  DRILL_FLOOR_ABOVE_SEA_M,
   RISER_LANDED_DEPTH_M,
   SEABED_DEPTH_M,
   TOTAL_DEPTH_M,
@@ -88,6 +90,24 @@ describe('mud pressure at the bit', () => {
     const depth = RISER_LANDED_DEPTH_M - 25;
     expect(mudPressureBar(depth, 1.2)).toBeCloseTo(
       SEABED_PRESSURE_BAR + hydrostaticBar(1.2, depth - SEABED_DEPTH_M),
+    );
+  });
+
+  it('kinks where the riser lands, from seawater above the seabed to mud from the drill floor', () => {
+    const mudWeight = 1.2;
+    const before = RISER_LANDED_DEPTH_M - 1;
+    const after = RISER_LANDED_DEPTH_M + 1;
+    const inTheWater = SEABED_DEPTH_M - 100;
+    expect(mudColumnBar(inTheWater, mudWeight, false)).toBeCloseTo(
+      seaPressureBar(inTheWater - DRILL_FLOOR_ABOVE_SEA_M),
+    );
+    expect(mudPressureBar(before, mudWeight)).toBeCloseTo(
+      SEABED_PRESSURE_BAR + hydrostaticBar(mudWeight, before - SEABED_DEPTH_M),
+    );
+    expect(mudPressureBar(after, mudWeight)).toBeCloseTo(hydrostaticBar(mudWeight, after));
+    const riserColumn = hydrostaticBar(mudWeight, SEABED_DEPTH_M) - SEABED_PRESSURE_BAR;
+    expect(mudPressureBar(after, mudWeight) - mudPressureBar(before, mudWeight)).toBeCloseTo(
+      riserColumn + hydrostaticBar(mudWeight, after - before),
     );
   });
 

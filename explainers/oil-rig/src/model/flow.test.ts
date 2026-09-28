@@ -16,7 +16,7 @@ describe('first oil', () => {
     expect(INITIAL_RESERVOIR_PRESSURE_BAR).toBeCloseTo(505, -1);
   });
 
-  it('holds up a column of oil weighing about 346 bar', () => {
+  it('holds up a column of oil weighing about 345 bar', () => {
     expect(OIL_COLUMN_BAR).toBeCloseTo(345, 0);
   });
 

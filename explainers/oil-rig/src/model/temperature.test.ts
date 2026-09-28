@@ -23,7 +23,7 @@ describe('temperature', () => {
     expect(rockTemperatureC(SEABED_DEPTH_M + 1000)).toBeCloseTo(34);
   });
 
-  it('puts the oil leg near 96 °C and the source rock near 117 °C, inside the oil window', () => {
+  it('puts the top of the oil leg near 95 °C and the source rock near 117 °C, inside the oil window', () => {
     const oil = fluidLeg('oil');
     const oilTop = oil.top;
     expect(rockTemperatureC(oilTop)).toBeCloseTo(95, 0);

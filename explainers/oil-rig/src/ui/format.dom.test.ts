@@ -17,6 +17,13 @@ describe('rig list', () => {
     });
   });
 
+  it('joins the rig names with commas and a final "and" in English', async () => {
+    await setLanguage('en');
+    const { spar, semi, drillship } = en.rigs;
+    expect(formatRigs(DEEP_WATER_RIGS)).toBe(`${spar}, ${semi}, and ${drillship}`);
+    expect(formatRigs(['drillship'])).toBe(drillship);
+  });
+
   it.each([
     ['zh', zh],
     ['ja', ja],
