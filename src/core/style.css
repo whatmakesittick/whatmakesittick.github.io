@@ -255,6 +255,34 @@ a:hover {
   flex: none;
 }
 
+.footer-language-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px 16px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-language {
+  display: inline-block;
+  padding: 4px 0;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.footer-language:hover,
+.footer-language:focus-visible {
+  color: var(--accent);
+}
+
+.footer-language[aria-current='page'] {
+  color: var(--prose);
+  font-weight: 600;
+}
+
 .footer-copyright {
   margin: 0;
 }

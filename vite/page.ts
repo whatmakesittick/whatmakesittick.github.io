@@ -1,4 +1,4 @@
-import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
+import { DEFAULT_LANGUAGE, LANGUAGES } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { languagePath } from '../src/core/i18n/paths.ts';
 import { compareNewestFirst } from '../src/core/manifest.ts';
@@ -46,13 +46,28 @@ export function siteValues(sourceUrl: string): TemplateValues {
   };
 }
 
+function pagePath(code: LanguageCode, page: string): string {
+  return `${ROOT_PATH}${languagePath(code, page)}`;
+}
+
+export function languageLinks(route: PageRoute, current?: LanguageCode): string {
+  return LANGUAGES.filter(({ code }) => route.languages.includes(code))
+    .map(({ code, label }) => {
+      const currentPage = code === current ? ' aria-current="page"' : '';
+      const href = escapeHtml(pagePath(code, route.page));
+      return `<li><a class="footer-language" href="${href}" hreflang="${code}" lang="${code}"${currentPage}>${escapeHtml(label)}</a></li>`;
+    })
+    .join('\n');
+}
+
 function languageValues(code: LanguageCode, route: PageRoute): TemplateValues {
   return {
     lang: code,
     url: escapeHtml(pageUrl(code, route.page)),
-    catalogueUrl: escapeHtml(`${ROOT_PATH}${languagePath(code, CATALOGUE_ROUTE.page)}`),
+    catalogueUrl: escapeHtml(pagePath(code, CATALOGUE_ROUTE.page)),
     localeTags: localeTags(code, route),
     alternateLinks: alternateLinks(route),
+    languageLinks: languageLinks(route, code),
   };
 }
 

@@ -439,7 +439,10 @@ build and the runtime. A page is rendered in two steps:
    `article:published_time` and `article:modified_time`, and `website` on the catalogue), one `<link rel="alternate" hreflang>` per language variant plus
    `x-default` for the English page, the JSON-LD, and the cover with its alt text
    (`stage.coverAlt` with the title) in a `<noscript>` inside `#scene`, so a reader or
-   crawler without scripts sees the model as a still image.
+   crawler without scripts sees the model as a still image. The footer's
+   `{{languageLinks}}` lists one `<a hreflang lang>` per language the page ships, with the
+   native language names from `src/core/i18n/languages.ts` and `aria-current="page"` on the
+   page's own language, so the HTML links every language version without scripts.
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
    element, in that order, the way `translateDom` does at runtime. A `data-i18n` element
@@ -545,7 +548,8 @@ crawler with an English browser and nothing stored stays on the English page. Th
 chosen language with a full navigation, to `/<lang>/<slug>/` or to the English page
 for `en`, so the URL, the head and the content always agree. It stores the choice
 first, so picking English on an English URL is not overridden by an earlier
-language. A language the page does not ship switches in place instead. Catalogue
+language; the footer's language links store the language they open in the same way
+(`mountFooter`). A language the page does not ship switches in place instead. Catalogue
 cards link to the explainer in the current language when it ships it, and to the
 English page otherwise.
 

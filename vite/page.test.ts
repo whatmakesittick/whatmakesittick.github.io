@@ -68,7 +68,7 @@ const template = [
   '</html>',
 ].join('\n');
 
-const partials = { footer: '<footer>{{licenseUrl}}</footer>' };
+const partials = { footer: '<footer>{{licenseUrl}}<ul>{{languageLinks}}</ul></footer>' };
 
 const english: Record<string, string> = {
   'page.metaTitle': '{{title}} · What makes it tick',
@@ -157,6 +157,15 @@ describe('renderPage', () => {
   it('links back to the catalogue in the language of the page', () => {
     expect(html).toContain('<a class="catalogue" href="/">');
     expect(ukrainian).toContain('<a class="catalogue" href="/uk/">');
+  });
+
+  it('links every language version of the page from the footer', () => {
+    expect(ukrainian).toContain(
+      [
+        '<li><a class="footer-language" href="/thing/" hreflang="en" lang="en">English</a></li>',
+        '<li><a class="footer-language" href="/uk/thing/" hreflang="uk" lang="uk" aria-current="page">Українська</a></li>',
+      ].join('\n'),
+    );
   });
 
   it('inlines the chapters at the placeholder indentation', () => {
@@ -280,6 +289,14 @@ describe('renderCatalogue', () => {
     expect(html).toContain('<link rel="canonical" href="https://whatmakesittick.github.io/uk/"');
     expect(html).toContain('content="https://whatmakesittick.github.io/social/og-image.png"');
     expect(html).toContain('<a class="catalogue" href="/uk/">');
+  });
+
+  it('links the catalogue in every site language from the footer', () => {
+    const links = [...html.matchAll(/class="footer-language" href="([^"]+)"/g)].map(
+      ([, href]) => href,
+    );
+    expect(links).toEqual(['/', '/zh/', '/es/', '/uk/', '/pt/', '/fr/', '/de/', '/ja/']);
+    expect(html).toContain('href="/uk/" hreflang="uk" lang="uk" aria-current="page"');
   });
 
   it('lists the catalogue in every language', () => {
