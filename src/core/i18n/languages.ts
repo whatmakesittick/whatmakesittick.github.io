@@ -1,10 +1,12 @@
+export const LANGUAGE_CODES = ['en', 'zh', 'es', 'uk', 'pt', 'fr', 'de', 'ja'] as const;
+
+export type LanguageCode = (typeof LANGUAGE_CODES)[number];
+
 export interface Language {
-  code: 'en' | 'zh' | 'es' | 'uk' | 'pt' | 'fr' | 'de' | 'ja';
+  code: LanguageCode;
   label: string;
   locale: string;
 }
-
-export type LanguageCode = Language['code'];
 
 export const LANGUAGES: readonly Language[] = [
   { code: 'en', label: 'English', locale: 'en_GB' },
@@ -20,7 +22,7 @@ export const LANGUAGES: readonly Language[] = [
 export const DEFAULT_LANGUAGE: LanguageCode = 'en';
 
 export function isLanguageCode(code: string): code is LanguageCode {
-  return LANGUAGES.some((language) => language.code === code);
+  return (LANGUAGE_CODES as readonly string[]).includes(code);
 }
 
 export function baseLanguage(code: string): LanguageCode | undefined {

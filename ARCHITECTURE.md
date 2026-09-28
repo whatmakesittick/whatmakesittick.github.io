@@ -464,6 +464,8 @@ build and the runtime. A page is rendered in two steps:
    native language names from `src/core/i18n/languages.ts` and `aria-current="page"` on the
    page's own language, so the HTML links every language version without scripts.
    On a catalogue page the grid itself is prerendered too (see "Catalogue").
+   The head's `{{languageRedirect}}` holds the inline language redirect on an English page
+   (see "Translations") and nothing elsewhere.
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
    element, in that order, the way `translateDom` does at runtime. A `data-i18n` element
@@ -572,8 +574,8 @@ hidden rather than rebuilt, so focus stays on the chip. The pure part lives in
 helpers. The selection is kept in the URL as `?tag=<id>` with `replaceState`, so a
 filtered view can be shared; it is read on load on the English and every language
 page, and a tag the catalogue does not offer is dropped from the URL. The language
-dropdown and the language redirect keep the query, since `languageUrl` drops only
-`lang`.
+dropdown keeps the query, since `languageUrl` drops only `lang`, and so does the
+language redirect.
 
 Every page links back to the catalogue: the explainer masthead shows the site name
 as a link above the eyebrow, and the shared footer has an "All explainers" link
@@ -617,11 +619,17 @@ the `?lang=` query, kept for old links and translated at runtime, then the store
 choice and the browser language. Detection never stores what it finds, so a visit
 to a shared `/uk/` link does not change later visits; only the language dropdown
 writes the stored choice. On an English URL without `?lang=`, when the stored
-choice or the browser picks another language the page ships, `languagePageToOpen` in
-`src/core/i18n/redirect.ts` sends the reader to that language page with
-`location.replace` before anything mounts, so the back button still works. A
-language page never redirects, so the English page redirects at most once, and a
-crawler with an English browser and nothing stored stays on the English page. The language dropdown opens the same page in the
+choice or the browser picks another language the page ships, the page opens that
+language page with `location.replace` from an inline script at the top of its
+head, before any style, font or module loads, so the reader never sees the English
+page first and the back button still works. The script is
+`src/core/i18n/redirectScript.ts`, bundled and minified by `vite/redirectScript.ts`
+with the site's base path to under 1 kB; it reads the page's languages from its
+own `data-languages` attribute and decides with `languagePageUrl` and
+`languagePageToOpen` from `src/core/i18n/redirect.ts`. A test runs the bundled
+script itself. A language page carries no redirect, so the English page redirects
+at most once, and a crawler with an English browser and nothing stored stays on
+the English page. The language dropdown opens the same page in the
 chosen language with a full navigation, to `/<lang>/<slug>/` or to the English page
 for `en`, so the URL, the head and the content always agree. It stores the choice
 first, so picking English on an English URL is not overridden by an earlier

@@ -7,7 +7,7 @@ import type { LanguageCode } from './languages';
 import { createDictionaryLoader, loadersByLanguage } from './loader';
 import type { DictionaryLoader } from './loader';
 import { LANGUAGE_QUERY_KEY } from './paths';
-import type { PreferredLanguages } from './redirect';
+import { LANGUAGE_STORAGE_KEY } from './redirect';
 import type { Dictionary, LocaleLoaders } from './resources';
 
 export { DEFAULT_LANGUAGE, LANGUAGES } from './languages';
@@ -16,7 +16,6 @@ export { shippedLanguages } from './loader';
 export { LANGUAGE_QUERY_KEY } from './paths';
 export type { Dictionary, LocaleLoader, LocaleLoaders } from './resources';
 
-const STORAGE_KEY = 'language';
 const STORED_SOURCE = 'localStorage';
 const BROWSER_SOURCE = 'navigator';
 const BASE_SEGMENTS = import.meta.env.BASE_URL.split('/').filter(Boolean).length;
@@ -51,7 +50,7 @@ export async function initI18n(locales: LocaleLoaders = {}): Promise<void> {
       order: ['path', 'querystring', STORED_SOURCE, BROWSER_SOURCE],
       lookupFromPathIndex: BASE_SEGMENTS,
       lookupQuerystring: LANGUAGE_QUERY_KEY,
-      lookupLocalStorage: STORAGE_KEY,
+      lookupLocalStorage: LANGUAGE_STORAGE_KEY,
       caches: [],
     },
   });
@@ -62,17 +61,6 @@ export const t = i18next.t.bind(i18next);
 
 export function currentLanguage(): LanguageCode {
   return baseLanguage(i18next.language ?? DEFAULT_LANGUAGE) ?? DEFAULT_LANGUAGE;
-}
-
-function detectedFrom(source: string): LanguageCode | undefined {
-  return [detector.detect([source])]
-    .flat()
-    .map((code) => (code ? baseLanguage(code) : undefined))
-    .find((code) => code !== undefined);
-}
-
-export function preferredLanguages(): PreferredLanguages {
-  return { stored: detectedFrom(STORED_SOURCE), browser: detectedFrom(BROWSER_SOURCE) };
 }
 
 export async function setLanguage(code: LanguageCode): Promise<void> {

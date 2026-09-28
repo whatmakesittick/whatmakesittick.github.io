@@ -4,12 +4,14 @@ import type { PageLanguage } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import {
   catalogueCards,
+  redirectValues,
   renderCatalogue,
   renderEntry,
   renderNotFound,
   renderPage,
   siteValues,
 } from './page.ts';
+import { REDIRECT_SCRIPT } from './redirectScript.ts';
 
 const meta = {
   title: 'How a "thing" works',
@@ -453,5 +455,19 @@ describe('siteValues', () => {
       licenseUrl: 'https://github.com/whatmakesittick/whatmakesittick.github.io/blob/main/LICENSE',
       sourceUrl: 'https://example.com/source',
     });
+  });
+});
+
+describe('redirectValues', () => {
+  const route = { page: 'thing', languages: ['en', 'uk'] as const };
+
+  it('gives the English page the language redirect with the languages it ships', () => {
+    expect(redirectValues('en', route).languageRedirect).toBe(
+      `<script data-languages="en uk">${REDIRECT_SCRIPT}</script>`,
+    );
+  });
+
+  it('leaves a language page without a redirect', () => {
+    expect(redirectValues('uk', route).languageRedirect).toBe('');
   });
 });

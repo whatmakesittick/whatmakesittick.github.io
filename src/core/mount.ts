@@ -10,7 +10,7 @@ import { mountDock } from './ui/dock';
 import { requireElement } from './ui/dom';
 import { mountFooter } from './ui/footer';
 import { mountKeyboard } from './ui/keyboard';
-import { mountLanguage, openPreferredLanguagePage } from './ui/language';
+import { mountLanguage } from './ui/language';
 import { respectReducedMotion } from './ui/motion';
 import { mountReadouts } from './ui/readouts';
 import { mountSafeArea } from './ui/safeArea';
@@ -44,7 +44,6 @@ export async function mountExplainer<S extends Playback>(
 ): Promise<() => void> {
   await initI18n(locales);
   const languages = shippedLanguages(locales);
-  if (openPreferredLanguagePage(languages)) return () => {};
   const store = explainer.createStore();
   respectReducedMotion(store);
   mountDock(document, store, explainer);

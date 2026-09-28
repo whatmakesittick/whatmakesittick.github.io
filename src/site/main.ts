@@ -4,7 +4,7 @@ import { entries } from 'virtual:explainer-catalogue';
 import { LANGUAGES, initI18n } from '@core/i18n';
 import { mountCatalogueLinks } from '@core/ui/catalogueLink';
 import { mountFooter } from '@core/ui/footer';
-import { mountLanguage, openPreferredLanguagePage } from '@core/ui/language';
+import { mountLanguage } from '@core/ui/language';
 import { mountCards } from './cards';
 
 const TITLE_KEY = 'catalogue.title';
@@ -18,4 +18,4 @@ function mountCatalogue(): void {
 }
 
 await initI18n();
-if (!openPreferredLanguagePage(CATALOGUE_LANGUAGES)) mountCatalogue();
+mountCatalogue();

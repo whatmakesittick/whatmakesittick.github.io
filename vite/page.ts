@@ -1,6 +1,7 @@
 import { DEFAULT_LANGUAGE, LANGUAGES } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { languagePath } from '../src/core/i18n/paths.ts';
+import { PAGE_LANGUAGES_SEPARATOR } from '../src/core/i18n/redirect.ts';
 import { compareNewestFirst } from '../src/core/manifest.ts';
 import type { CatalogueEntry, ExplainerMeta } from '../src/core/manifest.ts';
 import type { CardMeta, CatalogueCard } from '../src/site/catalogue.ts';
@@ -11,6 +12,7 @@ import type { LoadedExplainer } from './manifest.ts';
 import { renderMoreExplainers } from './moreExplainers.ts';
 import { CATALOGUE_ROUTE, explainerRoute } from './routes.ts';
 import type { PageRoute } from './routes.ts';
+import { REDIRECT_SCRIPT } from './redirectScript.ts';
 import {
   COVER_SIZE,
   LICENSE_URL,
@@ -130,6 +132,12 @@ function catalogueHeadValues({ translate }: PageLanguage): TemplateValues {
   };
 }
 
+export function redirectValues(code: LanguageCode, route: PageRoute): TemplateValues {
+  if (code !== DEFAULT_LANGUAGE) return { languageRedirect: '' };
+  const languages = escapeHtml(route.languages.join(PAGE_LANGUAGES_SEPARATOR));
+  return { languageRedirect: `<script data-languages="${languages}">${REDIRECT_SCRIPT}</script>` };
+}
+
 function render(template: string, partials: TemplateValues, values: TemplateValues): string {
   return fillTemplate(expandPartials(template, partials), values);
 }
@@ -150,6 +158,7 @@ export function renderPage(
   const html = render(template, partials, {
     ...siteValues(explainerSourceUrl(manifest.slug)),
     ...languageValues(code, route),
+    ...redirectValues(code, route),
     ...socialValues(image, meta.socialAlt ?? manifest.social.alt),
     ...explainerHeadValues(explainer, meta, language),
     ...coverValues(explainer, meta, language),
@@ -194,6 +203,7 @@ export function renderCatalogue(
   const html = render(template, partials, {
     ...siteValues(REPOSITORY_URL),
     ...languageValues(code, CATALOGUE_ROUTE),
+    ...redirectValues(code, CATALOGUE_ROUTE),
     ...socialValues(image, SITE_SOCIAL.alt),
     ...catalogueHeadValues(language),
     title: escapeHtml(title),
