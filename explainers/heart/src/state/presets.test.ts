@@ -43,7 +43,7 @@ describe('chapter presets', () => {
   it('lists the chapter controls each chapter keeps', () => {
     expect(PRESETS.chambers.controls).toEqual(['chamber']);
     expect(PRESETS.valves.controls).toEqual(['valve']);
-    expect(PRESETS.circulation.controls).toEqual(['effort']);
+    expect(PRESETS.circulation.controls).toEqual(['effort', 'fitness']);
     ['overview', 'cycle', 'conduction'].forEach((id) =>
       expect(PRESETS[id as keyof typeof PRESETS].controls, id).toBeUndefined(),
     );

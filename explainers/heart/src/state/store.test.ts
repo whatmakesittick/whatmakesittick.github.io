@@ -19,6 +19,7 @@ describe('heart store', () => {
       chamber: 'leftVentricle',
       valve: 'mitral',
       effort: 0,
+      fitness: 'typical',
       view: { cutaway: false, flow: true, conduction: false, labels: false },
     });
   });
@@ -41,11 +42,16 @@ describe('heart store', () => {
     expect(store.getState().effort).toBe(EFFORT_RANGE.min);
   });
 
-  it('picks a chamber and a valve', () => {
+  it('picks a chamber, a valve and a fitness', () => {
     const store = createHeartStore();
     store.getState().setChamber('rightAtrium');
     store.getState().setValve('aortic');
-    expect(store.getState()).toMatchObject({ chamber: 'rightAtrium', valve: 'aortic' });
+    store.getState().setFitness('athlete');
+    expect(store.getState()).toMatchObject({
+      chamber: 'rightAtrium',
+      valve: 'aortic',
+      fitness: 'athlete',
+    });
   });
 
   it('keeps each chapter control in its chapter and resets it elsewhere', () => {
@@ -55,6 +61,7 @@ describe('heart store', () => {
       { id: 'chambers', set: () => state().setChamber('rightAtrium'), read: () => state().chamber },
       { id: 'valves', set: () => state().setValve('pulmonary'), read: () => state().valve },
       { id: 'circulation', set: () => state().setEffort(0.6), read: () => state().effort },
+      { id: 'circulation', set: () => state().setFitness('athlete'), read: () => state().fitness },
     ] as const;
     cases.forEach(({ id, set, read }) => {
       state().applyPreset(id);

@@ -16,6 +16,7 @@ import {
   formatPerMinute,
   formatPhase,
   formatReceives,
+  formatRole,
   formatSeconds,
   formatSends,
   formatSignal,
@@ -65,11 +66,6 @@ describe('heart formats', () => {
     expect(formatMillivolts(-0.0001)).toBe('0.00 mV');
   });
 
-  it('gives a wall as a range of millimetres', () => {
-    expect(formatWall({ from: 10, to: 12 })).toBe('10 to 12 mm');
-    expect(formatWall({ from: 3, to: 3 })).toBe('3 mm');
-  });
-
   it('prints the exercise readouts', () => {
     expect(formatPerMinute(75)).toBe('75 per minute');
     expect(formatLitres(5.25)).toBe('5.3 L');
@@ -88,6 +84,8 @@ describe('heart formats', () => {
     expect(formatSignal('avNode')).toBe(en.signal.avNode);
     expect(formatReceives('leftAtrium')).toBe(en.chambers.receives.leftAtrium);
     expect(formatSends('leftVentricle')).toBe(en.chambers.sends.leftVentricle);
+    expect(formatWall('rightVentricle')).toBe(en.chambers.wall.rightVentricle);
+    expect(formatRole('leftAtrium')).toBe(en.chambers.role.leftAtrium);
     expect(formatBetween('mitral')).toBe(en.valves.between.mitral);
   });
 

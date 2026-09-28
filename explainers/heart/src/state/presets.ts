@@ -1,12 +1,13 @@
 import type { ScenePreset } from '@core/scene/presetBinder';
 import { VALVE_PARTS } from '../ids';
 import type { ChamberId, PartId, ValveId, ViewOptions } from '../ids';
+import type { FitnessId } from '../model';
 
 export type PresetId = 'overview' | 'chambers' | 'valves' | 'cycle' | 'conduction' | 'circulation';
 
 export type CameraView = 'front' | 'section' | 'valve' | 'left' | 'septum' | 'whole';
 
-export type ChapterControl = 'chamber' | 'valve' | 'effort';
+export type ChapterControl = 'chamber' | 'valve' | 'effort' | 'fitness';
 
 export type Selection = 'chamber' | 'valve';
 
@@ -23,6 +24,7 @@ export interface Preset extends ScenePreset<PartId, CameraView> {
 
 export const DEFAULT_CHAMBER: ChamberId = 'leftVentricle';
 export const DEFAULT_VALVE: ValveId = 'mitral';
+export const DEFAULT_FITNESS: FitnessId = 'typical';
 
 const BEAT_START_MS = 0;
 const VALVES_WITH_CORDS: ReadonlySet<ValveId> = new Set<ValveId>(['mitral', 'tricuspid']);
@@ -101,7 +103,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'whole',
     speed: 3,
     view: { cutaway: false, flow: true, conduction: false },
-    controls: ['effort'],
+    controls: ['effort', 'fitness'],
     labels: [
       'aorta',
       'archBranches',

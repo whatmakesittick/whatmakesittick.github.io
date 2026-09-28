@@ -2,7 +2,7 @@ import { formatFixed, formatNumber } from '@core/format';
 import { t } from '@core/i18n';
 import { PHASE_IDS } from '../ids';
 import type { ChamberId, ConductionSite, HeartSound, PhaseId, ValveId, ValveState } from '../ids';
-import type { ValveMoment, WallRange } from '../model';
+import type { ValveMoment } from '../model';
 import { REAL_TIME_SPEED, phaseAt, slowMotionFactor } from '../model';
 
 const REAL_TIME_FORMAT = '×1';
@@ -65,11 +65,6 @@ export function formatMillivolts(millivolts: number): string {
   return t('units.mv', { value: formatFixed(millivolts, MILLIVOLT_DIGITS) });
 }
 
-export function formatWall({ from, to }: WallRange): string {
-  if (from === to) return t('units.mm', { value: formatNumber(from) });
-  return t('units.mmRange', { from: formatNumber(from), to: formatNumber(to) });
-}
-
 export function formatCount(count: number): string {
   return formatNumber(count);
 }
@@ -108,6 +103,14 @@ export function formatReceives(chamber: ChamberId): string {
 
 export function formatSends(chamber: ChamberId): string {
   return t(`chambers.sends.${chamber}`);
+}
+
+export function formatWall(chamber: ChamberId): string {
+  return t(`chambers.wall.${chamber}`);
+}
+
+export function formatRole(chamber: ChamberId): string {
+  return t(`chambers.role.${chamber}`);
 }
 
 export function formatBetween(valve: ValveId): string {

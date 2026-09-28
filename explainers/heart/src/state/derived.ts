@@ -15,7 +15,7 @@ import {
 import type { HeartFields } from './store';
 
 type TimeState = Pick<PlaybackState, 'phase'>;
-type EffortState = Pick<HeartFields, 'effort'>;
+type EffortState = Pick<HeartFields, 'effort' | 'fitness'>;
 
 export interface Pressures {
   leftVentricle: number;
@@ -51,9 +51,9 @@ export function valveStateOf(state: TimeState): ValveState {
 }
 
 export function heartRateOf(state: EffortState): number {
-  return heartRate(state.effort);
+  return heartRate(state.fitness, state.effort);
 }
 
 export function outputOf(state: EffortState): number {
-  return cardiacOutput(state.effort);
+  return cardiacOutput(state.fitness, state.effort);
 }
