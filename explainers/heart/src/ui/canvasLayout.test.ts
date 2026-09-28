@@ -72,7 +72,7 @@ describe('beat split canvas', () => {
   it('fills the track with the slowest resting beat and draws every beat to that scale', () => {
     const trackShare = (row: BeatRow) =>
       (row.segments[1].left + row.segments[1].width - 100) / (628 - 100);
-    const [athleteRest] = beatSplitRows(640, 160, 100, beatRates('athlete', 0));
+    const [, athleteRest] = beatSplitRows(640, 160, 100, beatRates('athlete', 0));
     const [typicalRest, hard] = beatSplitRows(640, 160, 100, beatRates('typical', 1));
     const slowest = beatLength(FITNESS_PROFILES.athlete.restRate);
     expect(athleteRest.segments[0].left).toBe(100);
@@ -92,7 +92,7 @@ describe('beat split canvas', () => {
   });
 
   it('starts from the resting rate of the picked fitness', () => {
-    expect(beatRates('athlete', 0)).toEqual([50, 50]);
+    expect(beatRates('athlete', 0)).toEqual([75, 50]);
     expect(beatRates('typical', 0.5)).toEqual([75, 132.5]);
   });
 });

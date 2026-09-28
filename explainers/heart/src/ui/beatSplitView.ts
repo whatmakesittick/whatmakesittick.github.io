@@ -51,8 +51,10 @@ const LONGEST_BEAT_MS = Math.max(
   ...FITNESS_IDS.map((fitness) => beatLength(FITNESS_PROFILES[fitness].restRate)),
 );
 
+const REFERENCE_FITNESS: FitnessId = 'typical';
+
 export function beatRates(fitness: FitnessId, effort: number): readonly number[] {
-  return [FITNESS_PROFILES[fitness].restRate, heartRate(effort, fitness)];
+  return [FITNESS_PROFILES[REFERENCE_FITNESS].restRate, heartRate(effort, fitness)];
 }
 
 function segmentsOf(rate: number, left: number, pixelsPerMs: number): BeatSegment[] {
