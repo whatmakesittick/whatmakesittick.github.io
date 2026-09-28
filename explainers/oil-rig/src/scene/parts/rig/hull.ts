@@ -130,29 +130,34 @@ function braceNode(at: Point, axis: 'x' | 'z'): BufferGeometry {
   return rodGeometry(from, to, BRACING.nodeRadius, SEGMENTS.round);
 }
 
+function paintedRod(from: Point, to: Point, radius: number): (readonly [BufferGeometry, string])[] {
+  const band = HULL.waterline.halfBand;
+  if (to[1] <= band) return [[rodGeometry(from, to, radius, SEGMENTS.round), PAINT.hullRed]];
+  const share = (band - from[1]) / (to[1] - from[1]);
+  const split: Point = [
+    from[0] + (to[0] - from[0]) * share,
+    band,
+    from[2] + (to[2] - from[2]) * share,
+  ];
+  return [
+    [rodGeometry(from, split, radius, SEGMENTS.round), PAINT.hullRed],
+    [rodGeometry(split, to, radius, SEGMENTS.round), PAINT.hullGrey],
+  ];
+}
+
 function bracingGeometry(): BufferGeometry {
   const inner = HULL.column.offset - HULL.column.size / 2;
   const x = HULL.column.offset;
   const { horizontalY, diagonalLowY, diagonalTopZ, radius } = BRACING;
   const top = HULL.deck.underside;
   const parts = [-1, 1].flatMap((sx) => [
-    rodGeometry(
-      [sx * x, horizontalY, -inner],
-      [sx * x, horizontalY, inner],
-      radius,
-      SEGMENTS.round,
-    ),
-    rodGeometry([sx * x, diagonalLowY, inner], [sx * x, top, diagonalTopZ], radius, SEGMENTS.round),
-    rodGeometry(
-      [sx * x, diagonalLowY, -inner],
-      [sx * x, top, -diagonalTopZ],
-      radius,
-      SEGMENTS.round,
-    ),
-    braceNode([sx * x, horizontalY, inner], 'z'),
-    braceNode([sx * x, horizontalY, -inner], 'z'),
+    ...paintedRod([sx * x, horizontalY, -inner], [sx * x, horizontalY, inner], radius),
+    ...paintedRod([sx * x, diagonalLowY, inner], [sx * x, top, diagonalTopZ], radius),
+    ...paintedRod([sx * x, diagonalLowY, -inner], [sx * x, top, -diagonalTopZ], radius),
+    [braceNode([sx * x, horizontalY, inner], 'z'), PAINT.hullRed] as const,
+    [braceNode([sx * x, horizontalY, -inner], 'z'), PAINT.hullRed] as const,
   ]);
-  return merge(parts);
+  return mergePainted(parts);
 }
 
 export function createHull(context: PartContext): HullPart {
@@ -161,7 +166,7 @@ export function createHull(context: PartContext): HullPart {
   object.add(
     partMesh(context, pontoons, 'pontoon', 'hull'),
     partMesh(context, columnsGeometry(), 'column', 'painted'),
-    partMesh(context, bracingGeometry(), STRUCTURE_GROUP, 'hull'),
+    partMesh(context, bracingGeometry(), STRUCTURE_GROUP, 'painted'),
   );
   const pontoonFront = HULL.pontoon.offset + HULL.pontoon.width / 2;
   const columnFront = HULL.column.offset + HULL.column.size / 2;
