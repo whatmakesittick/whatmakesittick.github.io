@@ -20,7 +20,7 @@ at `/<slug>/`.
 | `vite/`                   | The `explainerPages` plugin: manifests, language pages, crawl files, catalogue  |
 | `e2e/`                    | Browser smoke test run by Playwright against the production build               |
 | `public/`                 | Site-wide static files: favicon, icons, web manifest, catalogue link preview    |
-| `scripts/`                | Social images: `social-images.sh` renders `scripts/cards/*.html`                |
+| `scripts/`                | `social-images.sh` renders the icons, `favicon.ico` and `scripts/cards/*.html`  |
 | `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`, `smoke.yml` by hand          |
 
 Generated at build and dev time, never committed: `<slug>/index.html` and
@@ -484,7 +484,10 @@ emitted at build and served by the dev server, never committed. The sitemap list
 every page in every language, each with `xhtml:link` alternates for all its language
 variants and `x-default`, and a `lastmod`: an explainer page's `dateModified`, and for
 the catalogue the newest `dateModified` among the explainers. `robots.txt` allows
-every crawler and points at the sitemap.
+every crawler and points at the sitemap. `public/favicon.ico` holds the favicon at 16 and
+32 pixels for browsers and crawlers that ask for it: `scripts/social-images.sh` renders
+`public/favicon.svg` at both sizes and `scripts/favicon-ico.ts` packs the PNG files with
+`encodeIco` from `vite/ico.ts`. Every page links it after the SVG icon.
 
 `vite/structuredData.ts` writes the JSON-LD, a `@graph` on every page that starts with
 the same `WebSite` node, whose `@id` is `https://whatmakesittick.github.io/#website`; every

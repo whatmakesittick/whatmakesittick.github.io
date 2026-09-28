@@ -23,6 +23,14 @@ for size in 192 512; do
 done
 oxipng --opt 4 --strip safe "$icons"/*.png
 
+favicon_images=$(mktemp -d)
+trap 'rm -rf "$favicon_images"' EXIT
+for size in 16 32; do
+  rsvg-convert --width "$size" --height "$size" --output "$favicon_images/$size.png" "$favicon"
+done
+oxipng --opt 4 --strip safe "$favicon_images"/*.png
+node scripts/favicon-ico.ts public/favicon.ico "$favicon_images/16.png" "$favicon_images/32.png"
+
 for template in scripts/cards/*.html; do
   name=$(basename "$template" .html)
   if [ $# -gt 0 ] && [ "$1" != "$name" ]; then
