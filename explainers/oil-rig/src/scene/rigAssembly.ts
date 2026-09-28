@@ -16,6 +16,7 @@ import { quillHeight } from './parts/rig/standCycle';
 import { RockPart } from './parts/rock/rockBlock';
 import { createRuler } from './parts/rock/ruler';
 import { SeaPart } from './parts/sea/sea';
+import { createClouds } from './parts/sea/clouds';
 import { createSky } from './parts/sea/sky';
 import { DrillStringPart } from './parts/well/drillString';
 import { WellPart } from './parts/well/well';
@@ -67,6 +68,7 @@ export class RigAssembly implements Assembly {
     this.block.add(this.sea.object, this.rock.object, this.ruler, this.well.blockObject);
     this.root.add(
       createSky(context),
+      createClouds(context),
       this.rig.object,
       this.well.rigObject,
       this.block,

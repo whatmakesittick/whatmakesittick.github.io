@@ -20,13 +20,27 @@ export const SKY = {
   radius: 2600,
   widthSegments: 32,
   heightSegments: 24,
-  zenith: '#5f9ed8',
-  horizon: '#d6e8f4',
-  shallow: '#2f6f9c',
-  deep: '#0a2238',
-  horizonBand: 0.08,
-  deepBand: 0.45,
-  skyBand: 0.4,
+  zenith: '#2f78c4',
+  horizon: '#c4def0',
+  shallow: '#2b7bb0',
+  deep: '#0d2c49',
+  horizonBand: 0.06,
+  deepBand: 0.5,
+  skyBand: 0.22,
+} as const;
+
+export const CLOUDS = {
+  distance: [1800, 2350] as const,
+  height: [70, 170] as const,
+  width: [150, 300] as const,
+  count: 16,
+  puffs: 6,
+  squash: 0.42,
+  top: '#ffffff',
+  bottom: '#c3cfdb',
+  widthSegments: 9,
+  heightSegments: 4,
+  seed: 21,
 } as const;
 
 export const BLOCK = { halfWidth: 200, back: -150, front: 150, cutZ: 0 } as const;
@@ -40,6 +54,10 @@ export const SEA = {
   ],
   topShade: '#3b8fc0',
   bottomShade: '#0d3453',
+  edgeDamp: 30,
+  outerReach: 420,
+  outerCell: 30,
+  foam: { inner: 8.5, outer: 15.5, alpha: 0.75, lift: 0.35, segments: 32 },
 } as const;
 
 export const HULL = {
@@ -244,7 +262,7 @@ export const MOORING = {
   reach: 300,
   drop: 186,
   fadeShare: 0.72,
-  wireRadius: 0.26,
+  wireRadius: 0.4,
   wireSegments: 48,
   link: { length: 1.15, width: 0.72, bar: 0.14, pitch: 0.82 },
   chainAlongLine: 22,

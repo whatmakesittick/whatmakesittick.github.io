@@ -1,12 +1,13 @@
 import {
   BufferAttribute,
-  CircleGeometry,
   Color,
   Group,
   MeshBasicMaterial,
   PlaneGeometry,
+  RingGeometry,
 } from 'three';
 import type { BufferGeometry, Material, Mesh } from 'three';
+import { smoothstep } from '@core/math';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { SEABED_Y } from '../../../model/scale';
 import { BLOCK, HULL, RENDER_ORDER, SEA } from '../../constants';
@@ -17,9 +18,10 @@ import type { PartContext } from '../context';
 import { CORNERS } from '../rig/hull';
 
 const RGB = 3;
+const RGBA = 4;
 const XYZ = 3;
 const QUARTER_TURN = Math.PI / 2;
-const FOAM = { radius: 17, lift: 0.3, opacity: 0.55, segments: 24 } as const;
+const WHITE = new Color('#ffffff');
 
 interface Wave {
   amplitude: number;
@@ -27,6 +29,13 @@ interface Wave {
   cos: number;
   sin: number;
   speed: number;
+}
+
+interface Rect {
+  minX: number;
+  maxX: number;
+  minZ: number;
+  maxZ: number;
 }
 
 const WAVES: readonly Wave[] = SEA.waves.map((wave) => ({
@@ -46,13 +55,62 @@ export function waveHeight(x: number, z: number, time: number): number {
   return height;
 }
 
-function surfaceGeometry(): PlaneGeometry {
-  const width = BLOCK.halfWidth * 2;
-  const depth = BLOCK.front - BLOCK.back;
-  const plane = new PlaneGeometry(width, depth, width / SEA.cell, depth / SEA.cell);
+function distanceOutside(x: number, z: number): number {
+  const dx = Math.max(Math.abs(x) - BLOCK.halfWidth, 0);
+  const dz = Math.max(z - BLOCK.front, BLOCK.back - z, 0);
+  return Math.hypot(dx, dz);
+}
+
+function distanceInside(x: number, z: number): number {
+  return Math.min(BLOCK.halfWidth - Math.abs(x), BLOCK.front - z, z - BLOCK.back);
+}
+
+function flatPlane(rect: Rect, cell: number): PlaneGeometry {
+  const width = rect.maxX - rect.minX;
+  const depth = rect.maxZ - rect.minZ;
+  const plane = new PlaneGeometry(
+    width,
+    depth,
+    Math.max(1, Math.round(width / cell)),
+    Math.max(1, Math.round(depth / cell)),
+  );
   plane.rotateX(-QUARTER_TURN);
-  plane.translate(0, 0, (BLOCK.front + BLOCK.back) / 2);
+  plane.translate((rect.minX + rect.maxX) / 2, 0, (rect.minZ + rect.maxZ) / 2);
   return plane;
+}
+
+function surfaceGeometry(): PlaneGeometry {
+  const rect = {
+    minX: -BLOCK.halfWidth,
+    maxX: BLOCK.halfWidth,
+    minZ: BLOCK.back,
+    maxZ: BLOCK.front,
+  };
+  return flatPlane(rect, SEA.cell);
+}
+
+function fadeOutward(plane: PlaneGeometry): PlaneGeometry {
+  const position = plane.getAttribute('position');
+  const colors = new Float32Array(position.count * RGBA);
+  for (let index = 0; index < position.count; index++) {
+    const distance = distanceOutside(position.getX(index), position.getZ(index));
+    const fade = 1 - smoothstep(distance, 0, SEA.outerReach);
+    colors.set([WHITE.r, WHITE.g, WHITE.b, fade], index * RGBA);
+  }
+  plane.setAttribute('color', new BufferAttribute(colors, RGBA));
+  return plane;
+}
+
+function outerGeometry(): BufferGeometry {
+  const { halfWidth, back, front } = BLOCK;
+  const reach = SEA.outerReach;
+  const strips: Rect[] = [
+    { minX: -halfWidth - reach, maxX: halfWidth + reach, minZ: back - reach, maxZ: back },
+    { minX: -halfWidth - reach, maxX: halfWidth + reach, minZ: front, maxZ: front + reach },
+    { minX: -halfWidth - reach, maxX: -halfWidth, minZ: back, maxZ: front },
+    { minX: halfWidth, maxX: halfWidth + reach, minZ: back, maxZ: front },
+  ];
+  return merge(strips.map((rect) => fadeOutward(flatPlane(rect, SEA.outerCell))));
 }
 
 function shade(plane: PlaneGeometry): PlaneGeometry {
@@ -97,14 +155,25 @@ function wallGeometry(closed: boolean): BufferGeometry {
   return merge(walls);
 }
 
+function foamRing(x: number, z: number): BufferGeometry {
+  const { inner, outer, alpha, lift, segments } = SEA.foam;
+  const ring = new RingGeometry(inner, outer, segments, 1);
+  const position = ring.getAttribute('position');
+  const colors = new Float32Array(position.count * RGBA);
+  for (let index = 0; index < position.count; index++) {
+    const radius = Math.hypot(position.getX(index), position.getY(index));
+    const share = (radius - inner) / (outer - inner);
+    colors.set([WHITE.r, WHITE.g, WHITE.b, alpha * (1 - share)], index * RGBA);
+  }
+  ring.setAttribute('color', new BufferAttribute(colors, RGBA));
+  ring.rotateX(-QUARTER_TURN);
+  ring.translate(x, lift, z);
+  return ring;
+}
+
 function foamGeometry(): BufferGeometry {
-  const discs = CORNERS.map(([sx, sz]) => {
-    const disc = new CircleGeometry(FOAM.radius, FOAM.segments);
-    disc.rotateX(-QUARTER_TURN);
-    disc.translate(sx * HULL.column.offset, FOAM.lift, sz * HULL.column.offset);
-    return disc;
-  });
-  return merge(discs, true);
+  const offset = HULL.column.offset;
+  return merge(CORNERS.map(([sx, sz]) => foamRing(sx * offset, sz * offset)));
 }
 
 export class SeaPart {
@@ -115,6 +184,7 @@ export class SeaPart {
   private readonly clearSea: Material;
   private readonly solidSea: Material;
   private readonly base: Float32Array;
+  private readonly damping: Float32Array;
 
   constructor(context: PartContext) {
     this.clearSea = context.materials.get(UNDIMMED_GROUP, FINISHES.sea);
@@ -123,10 +193,13 @@ export class SeaPart {
     this.surface.frustumCulled = false;
     this.surface.renderOrder = RENDER_ORDER.sea;
     this.base = Float32Array.from(this.surface.geometry.getAttribute('position').array);
+    this.damping = this.edgeDamping();
+    const outer = finishMesh(context, outerGeometry(), UNDIMMED_GROUP, FINISHES.seaOuter);
+    outer.renderOrder = RENDER_ORDER.sea;
     this.clearWater = finishMesh(context, wallGeometry(false), UNDIMMED_GROUP, FINISHES.water);
     this.clearWater.renderOrder = RENDER_ORDER.water;
     this.solidWater = finishMesh(context, wallGeometry(true), UNDIMMED_GROUP, FINISHES.waterOpaque);
-    this.object.add(this.surface, this.clearWater, this.solidWater, this.foam(context));
+    this.object.add(this.surface, outer, this.clearWater, this.solidWater, this.foam(context));
   }
 
   setCutaway(cutaway: boolean): void {
@@ -138,17 +211,28 @@ export class SeaPart {
   update(time: number): void {
     const position = this.surface.geometry.getAttribute('position') as BufferAttribute;
     const array = position.array as Float32Array;
-    for (let offset = 0; offset < array.length; offset += XYZ) {
-      array[offset + 1] = waveHeight(this.base[offset], this.base[offset + 2], time);
+    for (let offset = 0, vertex = 0; offset < array.length; offset += XYZ, vertex++) {
+      const x = this.base[offset];
+      const z = this.base[offset + 2];
+      array[offset + 1] = waveHeight(x, z, time) * this.damping[vertex];
     }
     position.needsUpdate = true;
   }
 
+  private edgeDamping(): Float32Array {
+    const count = this.base.length / XYZ;
+    const damping = new Float32Array(count);
+    for (let vertex = 0; vertex < count; vertex++) {
+      const inside = distanceInside(this.base[vertex * XYZ], this.base[vertex * XYZ + 2]);
+      damping[vertex] = smoothstep(inside, 0, SEA.edgeDamp);
+    }
+    return damping;
+  }
+
   private foam(context: PartContext): Mesh {
     const material = new MeshBasicMaterial({
-      map: context.textures.glow,
+      vertexColors: true,
       transparent: true,
-      opacity: FOAM.opacity,
       depthWrite: false,
     });
     const foam = registeredMesh(context, foamGeometry(), UNDIMMED_GROUP, material);
