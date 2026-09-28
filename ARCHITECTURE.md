@@ -614,7 +614,9 @@ of every explainer from `virtual:explainer-catalogue`, and the page head uses
 The build prerenders each language (see "Build"), so the HTML a crawler fetches is
 already in the page's language. Detection prefers the `/<lang>/` path prefix, then
 the `?lang=` query, kept for old links and translated at runtime, then the stored
-choice and the browser language. On an English URL without `?lang=`, when the stored
+choice and the browser language. Detection never stores what it finds, so a visit
+to a shared `/uk/` link does not change later visits; only the language dropdown
+writes the stored choice. On an English URL without `?lang=`, when the stored
 choice or the browser picks another language the page ships, `languagePageToOpen` in
 `src/core/i18n/redirect.ts` sends the reader to that language page with
 `location.replace` before anything mounts, so the back button still works. A

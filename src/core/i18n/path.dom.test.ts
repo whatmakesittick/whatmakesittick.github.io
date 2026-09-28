@@ -18,6 +18,10 @@ describe('language from the path', () => {
     expect(t('demo.hello')).toBe('こんにちは');
   });
 
+  it('keeps the stored choice instead of the language it detects', () => {
+    expect(window.localStorage.getItem(STORAGE_KEY)).toBe('de');
+  });
+
   it('remembers a chosen language for pages without a language folder', () => {
     rememberLanguage('en');
     expect(window.localStorage.getItem(STORAGE_KEY)).toBe('en');

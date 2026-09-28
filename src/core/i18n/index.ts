@@ -52,7 +52,7 @@ export async function initI18n(locales: LocaleLoaders = {}): Promise<void> {
       lookupFromPathIndex: BASE_SEGMENTS,
       lookupQuerystring: LANGUAGE_QUERY_KEY,
       lookupLocalStorage: STORAGE_KEY,
-      caches: [STORED_SOURCE],
+      caches: [],
     },
   });
   await setLanguage(currentLanguage());
@@ -82,7 +82,7 @@ export async function setLanguage(code: LanguageCode): Promise<void> {
 }
 
 export function rememberLanguage(code: LanguageCode): void {
-  detector.cacheUserLanguage(code);
+  detector.cacheUserLanguage(code, [STORED_SOURCE]);
 }
 
 export function onLanguageChanged(listener: (code: LanguageCode) => void): () => void {
