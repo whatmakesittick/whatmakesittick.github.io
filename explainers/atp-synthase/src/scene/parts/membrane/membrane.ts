@@ -1,7 +1,7 @@
 import type { Mesh, Object3D } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
-import { MEMBRANE } from '../../../model/scale';
+import { MEMBRANE, azimuthPoint } from '../../../model/scale';
 import { THEME } from '../../../theme';
 import { MEMBRANE_FORM } from '../../constants';
 import { SLAB_SURFACES, slabGeometry } from '../../geometry/slab';
@@ -12,7 +12,7 @@ import { lipidSurfaces } from './lipidTextures';
 import type { LipidSurface } from './lipidTextures';
 
 const LIPID_ROUGHNESS = 0.8;
-const LABEL_AT = { x: 7.5, z: 7 } as const;
+const LABEL_AT = azimuthPoint(10, 12, MEMBRANE.bilayer[1]);
 
 function lipidFinish(color: string, surface: LipidSurface): MaterialFinish {
   return {
@@ -54,7 +54,7 @@ export class MembranePart {
       SLAB_SURFACES.map((surface) => finishes[surface]),
     );
     frame.add(this.object);
-    this.label = anchorAt(frame, LABEL_AT.x, MEMBRANE.bilayer[1], LABEL_AT.z);
+    this.label = anchorAt(frame, LABEL_AT.x, LABEL_AT.y, LABEL_AT.z);
   }
 
   setVisible(visible: boolean): void {
