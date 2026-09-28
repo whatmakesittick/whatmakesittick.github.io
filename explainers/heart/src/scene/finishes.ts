@@ -7,6 +7,7 @@ const CUT_ROUGHNESS = 0.72;
 const VESSEL_ROUGHNESS = 0.5;
 const NODE_GLOW = 1;
 const BLACK = '#000000';
+const VESSEL_GLASS_OPACITY = 0.55;
 
 export function desaturate(hex: string, saturation: number, brightness: number): string {
   const color = new Color(hex);
@@ -28,6 +29,13 @@ export const FINISHES = {
   ring: tissue(desaturate(THEME.valve, 0.9, 0.86), 0.5),
   chorda: tissue('#f6ece2', 0.5),
   vessel: { ...tissue('#ffffff', VESSEL_ROUGHNESS), vertexColors: true },
+  vesselGlass: {
+    ...tissue('#ffffff', VESSEL_ROUGHNESS),
+    vertexColors: true,
+    transparent: true,
+    opacity: VESSEL_GLASS_OPACITY,
+    depthWrite: false,
+  },
   coronary: tissue(desaturate(THEME.arterial, 0.85, 0.85), 0.45),
   node: {
     color: desaturate(THEME.node, 1, 0.7),

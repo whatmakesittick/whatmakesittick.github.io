@@ -3,11 +3,17 @@ import type { BufferGeometry } from 'three';
 import { capGeometry } from './cap';
 import { nestLoops } from './contour';
 import { mergeParts } from './merge';
+import { TUBE_LAYER } from './tube';
 import { FRONTAL_PLANE, insertPlane, planeLoops, sideFilter, subsetGeometry } from './planeCut';
 
+export interface VesselLayers {
+  readonly wall: BufferGeometry;
+  readonly lumen: BufferGeometry;
+}
+
 export interface VesselHalves {
-  readonly front: BufferGeometry;
-  readonly back: BufferGeometry;
+  readonly front: VesselLayers;
+  readonly back: VesselLayers;
 }
 
 const XYZ = 3;
@@ -31,7 +37,27 @@ function rimCap(back: BufferGeometry, colour: Color): BufferGeometry | null {
     colour.toArray(rimColours, vertex * XYZ);
   }
   geometry.setAttribute('color', new BufferAttribute(rimColours, XYZ));
+  geometry.setAttribute(
+    'layer',
+    new BufferAttribute(new Float32Array(count).fill(TUBE_LAYER.wall), 1),
+  );
   return geometry;
+}
+
+function byLayer(geometry: BufferGeometry, layer: number): BufferGeometry {
+  const layers = geometry.getAttribute('layer').array;
+  const subset = subsetGeometry(geometry, (corners) => layers[corners[0]] === layer);
+  subset.deleteAttribute('layer');
+  return subset;
+}
+
+function layered(geometry: BufferGeometry): VesselLayers {
+  const layers = {
+    wall: byLayer(geometry, TUBE_LAYER.wall),
+    lumen: byLayer(geometry, TUBE_LAYER.lumen),
+  };
+  geometry.dispose();
+  return layers;
 }
 
 export function vesselHalves(geometry: BufferGeometry, rimColour: string): VesselHalves {
@@ -41,5 +67,5 @@ export function vesselHalves(geometry: BufferGeometry, rimColour: string): Vesse
   cut.dispose();
   const rim = rimCap(backSurface, new Color(rimColour));
   const back = rim ? mergeParts([backSurface, rim]) : backSurface;
-  return { front, back };
+  return { front: layered(front), back: layered(back) };
 }

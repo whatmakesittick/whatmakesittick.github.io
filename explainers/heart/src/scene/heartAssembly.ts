@@ -14,10 +14,12 @@ import {
   VALVES,
   atrialFullness,
   ventricularSqueeze,
+  wrapTime,
 } from '../model';
 import type { Point } from '../model';
 import type { Assembly, AssemblyResources } from './assembly';
 import {
+  BLOOD,
   CAVITY_CONTRACTION,
   CONTRACTION_FRAME,
   CORONARIES,
@@ -38,6 +40,7 @@ import { MyocardiumPart } from './parts/heart/myocardium';
 import { epicardiumPainter } from './geometry/epicardium';
 import { VesselsPart } from './parts/vessels/vessels';
 import { ValvesPart } from './parts/valves/valves';
+import { BloodFlowPart } from './parts/blood/bloodFlow';
 import { REGIONS } from './regions';
 
 const ANCHOR_LIFT_MM = 3;
@@ -97,6 +100,7 @@ export class HeartAssembly implements Assembly {
   private readonly vessels: VesselsPart;
   private readonly coronaries: CoronariesPart;
   private readonly valves: ValvesPart;
+  private readonly blood: BloodFlowPart;
   private readonly anchors = new Map<AnchorId, Object3D>();
   private readonly labels = new Map<PartId, Object3D>();
   private state: AssemblyState | null = null;
@@ -122,35 +126,55 @@ export class HeartAssembly implements Assembly {
     this.vessels = new VesselsPart(context);
     this.coronaries = new CoronariesPart(context, routes, motion.outer);
     this.valves = new ValvesPart(context, shapes.sides, motion.cavity);
+    this.blood = new BloodFlowPart(context, motion.cavity);
     this.root.add(
       this.myocardium.object,
       this.vessels.object,
       this.coronaries.object,
       this.valves.object,
+      this.blood.object,
     );
     this.buildAnchors();
     this.setState(state);
   }
 
   setState(state: AssemblyState): void {
-    const changes = new StateChanges(this.state, state);
+    const previous = this.state;
+    const changes = new StateChanges(previous, state);
     this.state = snapshot(state);
+    const squeeze = ventricularSqueeze(state.time);
+    const emptying = 1 - atrialFullness(state.time);
     if (changes.any('time')) {
-      const squeeze = ventricularSqueeze(state.time);
-      const emptying = 1 - atrialFullness(state.time);
       this.myocardium.setContraction(squeeze, emptying);
       this.coronaries.setContraction(squeeze, emptying);
       this.valves.setTime(state.time, squeeze, emptying);
+      if (previous) this.advanceBlood(previous.time, state.time);
     }
     if (changes.view('cutaway')) {
       this.myocardium.setCutaway(state.view.cutaway);
       this.vessels.setCutaway(state.view.cutaway);
       this.coronaries.setCutaway(state.view.cutaway);
     }
+    if (changes.view('flow')) this.blood.setShown(state.view.flow);
+    if (changes.view('flow') || changes.view('cutaway')) {
+      this.vessels.setGlass(state.view.flow && !state.view.cutaway);
+    }
+    if (
+      state.view.flow &&
+      (changes.any('time') || changes.view('flow') || changes.view('cutaway'))
+    ) {
+      this.blood.place(state.time, squeeze, emptying, state.view.cutaway);
+    }
   }
 
-  update(): boolean {
+  update(_deltaSeconds: number, cameraDistance: number): boolean {
+    this.blood.setCameraDistance(cameraDistance);
     return false;
+  }
+
+  private advanceBlood(from: number, to: number): void {
+    const elapsed = wrapTime(to - from);
+    if (elapsed > 0 && elapsed <= BLOOD.maxStepMs) this.blood.advance(elapsed, to);
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {

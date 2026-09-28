@@ -12,7 +12,7 @@ import {
 import type { VesselName, VesselSpec } from '../../constants';
 import { FINISHES, desaturate } from '../../finishes';
 import { vesselHalves } from '../../geometry/vesselMesh';
-import { hollowTube } from '../../geometry/tube';
+import { TUBE_LAYER, hollowTube } from '../../geometry/tube';
 import { radiusAt, routeCurve } from '../../geometry/vesselPath';
 import { mergeParts } from '../../geometry/merge';
 import { partMesh } from '../context';
@@ -34,6 +34,10 @@ function jointGeometry(centre: Vector3, radius: number, colour: string): BufferG
   const tint = new Color(colour);
   for (let vertex = 0; vertex < count; vertex += 1) tint.toArray(colours, vertex * XYZ);
   sphere.setAttribute('color', new BufferAttribute(colours, XYZ));
+  sphere.setAttribute(
+    'layer',
+    new BufferAttribute(new Float32Array(count).fill(TUBE_LAYER.wall), 1),
+  );
   return sphere;
 }
 
@@ -91,8 +95,14 @@ function vesselGeometry(name: VesselName, vessel: VesselSpec): BufferGeometry {
 export class VesselsPart {
   readonly object = new Group();
   private readonly fronts: Mesh[] = [];
+  private readonly walls: { mesh: Mesh; part: PartId }[] = [];
+  private readonly lumens: Mesh[] = [];
+  private cutaway = false;
+  private glass = false;
+  private readonly context: PartContext;
 
   constructor(context: PartContext) {
+    this.context = context;
     const byPart = new Map<PartId, { geometries: BufferGeometry[]; rim: string }>();
     for (const [name, vessel] of Object.entries(VESSELS) as [VesselName, VesselSpec][]) {
       const entry = byPart.get(vessel.part) ?? { geometries: [], rim: tintFor(vessel).rim };
@@ -108,15 +118,39 @@ export class VesselsPart {
       const merged = geometries.length > 1 ? mergeParts(geometries) : geometries[0];
       const { front, back } = vesselHalves(merged, rim);
       merged.dispose();
-      const frontMesh = partMesh(context, front, part, FINISHES.vessel);
-      this.fronts.push(frontMesh);
-      this.object.add(frontMesh, partMesh(context, back, part, FINISHES.vessel));
+      const frontWall = partMesh(context, front.wall, part, FINISHES.vessel);
+      const frontLumen = partMesh(context, front.lumen, part, FINISHES.vessel);
+      const backWall = partMesh(context, back.wall, part, FINISHES.vessel);
+      const backLumen = partMesh(context, back.lumen, part, FINISHES.vessel);
+      this.fronts.push(frontWall, frontLumen);
+      this.walls.push({ mesh: frontWall, part }, { mesh: backWall, part });
+      this.lumens.push(frontLumen, backLumen);
+      context.materials.get(part, FINISHES.vesselGlass);
+      this.object.add(frontWall, frontLumen, backWall, backLumen);
     }
   }
 
   setCutaway(cutaway: boolean): void {
+    this.cutaway = cutaway;
+    this.refresh();
+  }
+
+  setGlass(glass: boolean): void {
+    this.glass = glass;
+    const finish = glass ? FINISHES.vesselGlass : FINISHES.vessel;
+    this.walls.forEach(({ mesh, part }) => {
+      mesh.material = this.context.materials.get(part, finish);
+    });
+    this.refresh();
+  }
+
+  private refresh(): void {
     this.fronts.forEach((mesh) => {
-      mesh.visible = !cutaway;
+      mesh.visible = !this.cutaway;
+    });
+    this.lumens.forEach((mesh) => {
+      if (this.glass) mesh.visible = false;
+      else if (!this.fronts.includes(mesh)) mesh.visible = true;
     });
   }
 }

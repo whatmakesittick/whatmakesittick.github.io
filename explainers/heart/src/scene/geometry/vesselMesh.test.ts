@@ -18,15 +18,16 @@ describe('vessel halves', () => {
       plugs: { start: true, end: true },
     });
     const { front, back } = vesselHalves(geometry, '#aa0000');
-    const zs = (mesh: typeof front) => {
+    const zs = (mesh: typeof front.wall) => {
       const positions = mesh.getAttribute('position').array;
       const values: number[] = [];
       for (let offset = 2; offset < positions.length; offset += 3) values.push(positions[offset]);
       return values;
     };
-    expect(Math.min(...zs(front))).toBeGreaterThanOrEqual(-1e-3);
-    expect(Math.max(...zs(back))).toBeLessThanOrEqual(1e-3);
-    const rimVertices = zs(back).filter((z) => Math.abs(z + 0.05) < 1e-4).length;
+    expect(Math.min(...zs(front.wall))).toBeGreaterThanOrEqual(-1e-3);
+    expect(Math.max(...zs(back.lumen))).toBeLessThanOrEqual(1e-3);
+    const rimVertices = zs(back.wall).filter((z) => Math.abs(z + 0.05) < 1e-4).length;
     expect(rimVertices).toBeGreaterThan(8);
+    expect(front.lumen.getAttribute('position').count).toBeGreaterThan(0);
   });
 });

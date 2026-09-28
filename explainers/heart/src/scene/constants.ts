@@ -1,5 +1,13 @@
 import type { ChamberId, PartId, ValveId } from '../ids';
-import { APEX, CHAMBERS, PULMONARY_VEIN_MOUTHS, VALVES, VESSEL_MOUTHS } from '../model';
+import {
+  APEX,
+  BEAT_MS,
+  CHAMBERS,
+  PULMONARY_VEIN_MOUTHS,
+  STROKE_ML,
+  VALVES,
+  VESSEL_MOUTHS,
+} from '../model';
 import type { Point } from '../model';
 import { THEME } from '../theme';
 import type { ContractionFrame, ContractionProfile } from './geometry/contraction';
@@ -685,4 +693,29 @@ export const VALVE_DETAIL = {
   papillaryRings: 6,
   pulseGlow: 0.9,
   pulseColour: THEME.valve,
+} as const;
+
+const MS_PER_SECOND = 1000;
+
+export const BLOOD = {
+  count: 900,
+  venousSeed: 11,
+  arterialSeed: 23,
+  route: { depthMm: 4, chamberSpread: 0.55, vesselSpread: 0.62 },
+  flow: {
+    mmPerMsPerMl: 0.0016,
+    meanFlow: STROKE_ML / (BEAT_MS / MS_PER_SECOND),
+    referenceRadius: 6,
+    minimumRadius: 3,
+    complianceMm: 70,
+  },
+  swirlMm: 2.2,
+  swirlRate: (Math.PI * 2) / 900,
+  fadeMm: 10,
+  cutawayShowZ: 0.5,
+  maxStepMs: 120,
+  sizePerDistance: 0.014,
+  minSize: 3.5,
+  maxSize: 9,
+  renderOrder: 2,
 } as const;

@@ -28,16 +28,21 @@ interface Ring {
   readonly inner: number;
 }
 
+export const TUBE_LAYER = { wall: 0, lumen: 1 } as const;
+
 class MeshBuilder {
   readonly positions: number[] = [];
   readonly normals: number[] = [];
   readonly colours: number[] = [];
+  readonly layers: number[] = [];
   readonly index: number[] = [];
+  layer: number = TUBE_LAYER.wall;
 
   vertex(position: Vector3, normal: Vector3, colour: Color): number {
     this.positions.push(position.x, position.y, position.z);
     this.normals.push(normal.x, normal.y, normal.z);
     this.colours.push(colour.r, colour.g, colour.b);
+    this.layers.push(this.layer);
     return this.positions.length / XYZ - 1;
   }
 
@@ -50,6 +55,7 @@ class MeshBuilder {
     geometry.setAttribute('position', new BufferAttribute(new Float32Array(this.positions), XYZ));
     geometry.setAttribute('normal', new BufferAttribute(new Float32Array(this.normals), XYZ));
     geometry.setAttribute('color', new BufferAttribute(new Float32Array(this.colours), XYZ));
+    geometry.setAttribute('layer', new BufferAttribute(new Float32Array(this.layers), 1));
     geometry.setIndex(this.index);
     return geometry;
   }
@@ -190,12 +196,13 @@ export function hollowTube(spec: HollowTubeSpec): BufferGeometry {
   const wall = new Color(spec.wallColour);
   const lumen = new Color(spec.lumenColour);
   const all = rings(spec);
-  surfaceRows(builder, all, spec, () => wall, false);
-  surfaceRows(builder, all, spec, lumenColourAt(spec, lumen), true);
   const first = all[0];
   const last = all[all.length - 1];
+  surfaceRows(builder, all, spec, () => wall, false);
   annulus(builder, first, spec, spec.lumenFade ? new Color(spec.lumenFade.colour) : wall, -1);
   annulus(builder, last, spec, wall, 1);
+  builder.layer = TUBE_LAYER.lumen;
+  surfaceRows(builder, all, spec, lumenColourAt(spec, lumen), true);
   if (spec.plugs.start) plug(builder, first, spec, lumen, -1);
   if (spec.plugs.end) plug(builder, last, spec, lumen, 1);
   return builder.build();
