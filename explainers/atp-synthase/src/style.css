@@ -37,6 +37,10 @@
   --range-color: var(--oxygen);
 }
 
+.oxygen-control .range-widget__header {
+  flex-wrap: wrap;
+}
+
 .oxygen-control .range-widget__readouts,
 .ring-readouts,
 .training-readouts {
