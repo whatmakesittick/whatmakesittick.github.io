@@ -1,10 +1,10 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import type { ShadeAnalysis } from '../model';
 import { LAYOUTS, cellCount, diodeCount, shadedAreaShare, shadedCellCount } from '../model';
 import { SHADE_RANGE, powerOf, shadeAnalysisOf } from '../state';
 import type { SolarPanelStore } from '../state';
-import type { Disposer } from './disposers';
 import { formatPercent, formatShadedCells, formatWatts, formatWorkingDiodes } from './format';
 import { IvCurveView } from './ivCurveView';
 

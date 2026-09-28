@@ -1,10 +1,10 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { cardiacOutput, diastoleLength, heartRate, roundTripSeconds, strokeVolume } from '../model';
 import { EFFORT_RANGE } from '../state';
 import type { HeartStore } from '../state';
 import { BeatSplitView } from './beatSplitView';
-import type { Disposer } from './disposers';
 import {
   formatEffort,
   formatLitres,

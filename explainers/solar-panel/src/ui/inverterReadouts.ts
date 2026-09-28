@@ -1,10 +1,10 @@
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import { acEnergyWh, acPowerW, laptopCharges } from '../model';
 import { energyOf, powerOf } from '../state';
 import type { SolarPanelState, SolarPanelStore } from '../state';
-import { disposeAll } from './disposers';
-import type { Disposer } from './disposers';
 import { formatCount, formatKilowattHours, formatWatts } from './format';
 
 const ENERGY_STEP_WH = 10;

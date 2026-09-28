@@ -1,9 +1,9 @@
+import type { Disposer } from '@core/ui/disposers';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { OIL_COLUMN_BAR, flowState, reservoirPressureBar, wellheadPressureBar } from '../model';
 import { PRODUCTION_YEARS_RANGE } from '../state';
 import type { OilRigStore } from '../state';
 import { formatBar, formatFlowState, formatYear } from './format';
-import type { Disposer } from './disposers';
 
 export function mountDepletionControl(root: Document, store: OilRigStore): Disposer {
   return mountRangeWidget(root, store, {

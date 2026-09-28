@@ -1,8 +1,8 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import { beatRateFacts } from '../model';
 import type { WatchStore } from '../state';
-import type { Disposer } from './disposers';
 import { formatCount, formatRpm } from './format';
 
 export function mountBeatRateReadouts(root: Document, store: WatchStore): Disposer {

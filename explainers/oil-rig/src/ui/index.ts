@@ -1,8 +1,8 @@
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import type { OilRigStore } from '../state';
 import { mountDepletionControl } from './depletionControl';
 import { mountDepthPicker } from './depthPicker';
-import { disposeAll } from './disposers';
-import type { Disposer } from './disposers';
 import { mountDraftControl } from './draftControl';
 import { mountMudControl } from './mudControl';
 import { mountRockReadouts } from './rockReadouts';

@@ -1,10 +1,10 @@
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import { conductionSite, ecgMillivolts } from '../model';
 import { timeOf } from '../state';
 import type { HeartState, HeartStore } from '../state';
-import { disposeAll } from './disposers';
-import type { Disposer } from './disposers';
 import { EcgView } from './ecgView';
 import { formatMillivolts, formatMs, formatSignal, roundMillivolts } from './format';
 import { readoutElement } from './readoutElement';

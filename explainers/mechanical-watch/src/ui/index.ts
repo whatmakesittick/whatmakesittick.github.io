@@ -1,7 +1,7 @@
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import type { WatchStore } from '../state';
 import { mountBeatRateReadouts } from './beatRateReadouts';
-import { disposeAll } from './disposers';
-import type { Disposer } from './disposers';
 import { mountEscapementReadouts } from './escapementReadouts';
 import { mountRegulatorControl } from './regulatorControl';
 import { mountReserveControl } from './reserveControl';

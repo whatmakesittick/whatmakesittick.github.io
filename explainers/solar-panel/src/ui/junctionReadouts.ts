@@ -1,10 +1,10 @@
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import { belowGapShare, pairsPerSecondPerHalfCell, thermalisedShare } from '../model';
 import { irradianceOf } from '../state';
 import type { SolarPanelState, SolarPanelStore } from '../state';
-import { disposeAll } from './disposers';
-import type { Disposer } from './disposers';
 import { formatPercent, formatScientific } from './format';
 
 const SHOWN_DIGITS = 2;

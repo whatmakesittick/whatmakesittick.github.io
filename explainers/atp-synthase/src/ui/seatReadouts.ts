@@ -1,10 +1,10 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchShallowLocalized } from '@core/ui/subscribe';
 import { BETA_INDICES } from '../ids';
 import type { BetaIndex, SiteState } from '../ids';
 import { siteState } from '../model';
 import type { AtpSynthaseState, AtpSynthaseStore } from '../state';
-import type { Disposer } from './disposers';
 import { describeSite } from './format';
 
 interface SeatRow {

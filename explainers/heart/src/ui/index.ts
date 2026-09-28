@@ -1,9 +1,9 @@
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import type { HeartStore } from '../state';
 import { mountChamberReadouts } from './chamberReadouts';
 import { mountConductionReadouts } from './conductionReadouts';
 import { mountCycleReadouts } from './cycleReadouts';
-import { disposeAll } from './disposers';
-import type { Disposer } from './disposers';
 import { mountEffortControl } from './effortControl';
 import { mountValveReadouts } from './valveReadouts';
 

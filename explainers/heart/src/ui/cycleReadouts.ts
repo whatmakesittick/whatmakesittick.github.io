@@ -1,10 +1,10 @@
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import { aorticFlow } from '../model';
 import { pressuresOf, timeOf } from '../state';
 import type { HeartState, HeartStore } from '../state';
-import { disposeAll } from './disposers';
-import type { Disposer } from './disposers';
 import { formatMlPerSecond, formatMmHg } from './format';
 import { readoutElement } from './readoutElement';
 import { WiggersView } from './wiggersView';

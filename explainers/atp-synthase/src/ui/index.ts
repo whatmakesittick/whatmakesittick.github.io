@@ -1,6 +1,6 @@
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import type { AtpSynthaseStore } from '../state';
-import { disposeAll } from './disposers';
-import type { Disposer } from './disposers';
 import { mountEventReadouts } from './eventReadouts';
 import { mountOxygenControl } from './oxygenControl';
 import { mountRingReadouts } from './ringReadouts';

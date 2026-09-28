@@ -1,8 +1,8 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import { trainingLevel } from '../model';
 import type { AtpSynthaseStore } from '../state';
-import type { Disposer } from './disposers';
 import { formatCount, formatPercent, formatTimes } from './format';
 
 export function mountTrainingReadouts(root: Document, store: AtpSynthaseStore): Disposer {

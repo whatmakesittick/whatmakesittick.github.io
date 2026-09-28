@@ -1,10 +1,10 @@
 import { clamp } from '@core/math';
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { temperatureFactor, vocAt } from '../model';
 import { TEMPERATURE_RANGE, cellTemperatureOf, irradianceOf } from '../state';
 import type { SolarPanelState, SolarPanelStore } from '../state';
-import type { Disposer } from './disposers';
 import { NO_VALUE, formatCelsius, formatSignedPercent, formatVolts } from './format';
 
 const FOLLOW_CHIP = '.chip[data-action="followDay"]';

@@ -1,3 +1,4 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { rigsFor, seaPressureBar } from '../model';
@@ -5,7 +6,6 @@ import { WATER_DEPTH_RANGE } from '../state';
 import type { OilRigStore } from '../state';
 import { formatBar, formatMetres, formatRigs } from './format';
 import { RigPicker } from './rigPicker';
-import type { Disposer } from './disposers';
 
 export function mountDepthPicker(root: Document, store: OilRigStore): Disposer {
   const picker = new RigPicker(requireElement<HTMLCanvasElement>(root, '[data-view="rigs"]'));

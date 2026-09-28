@@ -426,6 +426,8 @@ Helpers that more than one explainer's widgets share:
 - `CanvasSurface` in `src/core/ui/canvasSurface.ts` sizes a chart canvas to its CSS width and
   the pixel ratio, paints it only while it is near the screen and reads its font once per size
   and language; `canvasFont` and `widestText` lay out its labels.
+- `disposeAll` in `src/core/ui/disposers.ts` folds a list of `Disposer` functions into one, so a
+  mount can hand back a single unmount.
 
 The dock's jump chips sit under the scrubber's coloured bands. `phaseColumns` in
 `src/core/ui/phases.ts` gives each phase a grid column sized by its share of the

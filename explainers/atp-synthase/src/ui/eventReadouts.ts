@@ -1,8 +1,8 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import { aerobicShare, anaerobicShare, middleOf } from '../model';
 import type { AtpSynthaseStore } from '../state';
-import type { Disposer } from './disposers';
 import { formatPercentRange } from './format';
 
 const AEROBIC_SHARE_PROPERTY = '--aerobic-share';
