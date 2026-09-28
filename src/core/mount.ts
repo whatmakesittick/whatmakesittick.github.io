@@ -17,7 +17,7 @@ import { mountSafeArea } from './ui/safeArea';
 import { mountSections } from './ui/sections';
 import { mountStageExpansion, stageShortcuts } from './ui/stageExpansion';
 
-const TITLE_KEY = 'meta.title';
+const SITE_NAME_KEY = 'catalogue.title';
 const SCENE_SELECTOR = '#scene';
 
 function mountScene<S extends Playback>(
@@ -50,7 +50,7 @@ export async function mountExplainer<S extends Playback>(
   mountReadouts(document, store, explainer.readouts);
   mountLanguage(document, languages);
   mountCatalogueLinks(document);
-  mountFooter(document, TITLE_KEY);
+  mountFooter(document, SITE_NAME_KEY);
   explainer.mountUi?.(document, store);
   mountActions(document, store, explainer.actions);
   const stage = mountStageExpansion(document);
