@@ -47,6 +47,7 @@ import { RegulatorPart } from './parts/oscillator/regulator';
 import { createShockJewel } from './parts/oscillator/shockJewel';
 import { createStud } from './parts/oscillator/stud';
 import { createBridges } from './parts/plates/bridges';
+import { createEngraving } from './parts/plates/engraving';
 import { JewelsPart } from './parts/plates/jewels';
 import { createMainplate } from './parts/plates/mainplate';
 import { createScrews } from './parts/plates/screws';
@@ -282,6 +283,7 @@ export class WatchAssembly implements Assembly {
   private buildStatic(context: PartContext): void {
     const frame = this.movement;
     const bridges = createBridges(context, this.bridgeLayer);
+    createEngraving(context, this.bridgeLayer);
     const bridgeScrews = createScrews(context, [
       ...withZ(BARREL_BRIDGE.screws, BRIDGE_LEVEL.barrel[1]),
       ...withZ(TRAIN_BRIDGE.screws, BRIDGE_LEVEL.train[1]),

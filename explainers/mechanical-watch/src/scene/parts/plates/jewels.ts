@@ -1,14 +1,22 @@
 import { BufferAttribute, Color } from 'three';
 import type { BufferGeometry, Material, Object3D } from 'three';
 import { smoothstep } from '@core/math';
+import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import { BALANCE_CENTRE, PALLET_STAFF, WHEEL_CENTRES } from '../../../model/layout';
 import type { Point } from '../../../model/layout';
-import { ANCHOR_LIFT_MM, BALANCE_COCK, BRIDGE_LEVEL, JEWEL_DISC, SEGMENTS } from '../../constants';
+import {
+  ANCHOR_LIFT_MM,
+  BALANCE_COCK,
+  BRIDGE_LEVEL,
+  JEWEL_DISC,
+  JEWEL_SINK,
+  SEGMENTS,
+} from '../../constants';
 import { PAINT, rubyMaterial } from '../../finishes';
 import { latheZ } from '../../geometry/extrude';
 import { merge } from '../../geometry/merge';
-import { registeredMesh } from '../context';
+import { partMesh, registeredMesh } from '../context';
 import type { PartContext } from '../context';
 
 interface JewelSeat {
@@ -85,6 +93,25 @@ export const BRIDGE_SEATS: readonly JewelSeat[] = [
   { at: BALANCE_CENTRE, z: BALANCE_COCK.arm[0], under: true },
 ];
 
+function sinkGeometry(seat: JewelSeat): BufferGeometry {
+  const inner = JEWEL_DISC.hole.radius;
+  const outer = inner + JEWEL_SINK.width;
+  const sink = latheZ(
+    [
+      [outer, seat.z - JEWEL_SINK.depth],
+      [outer, seat.z + JEWEL_SINK.lip / 2],
+      [inner, seat.z + JEWEL_SINK.lip],
+    ],
+    SEGMENTS.jewel,
+  );
+  sink.translate(seat.at.x, seat.at.y, 0);
+  return sink;
+}
+
+function sinks(seats: readonly JewelSeat[]): BufferGeometry {
+  return merge(seats.filter((seat) => !seat.cap && !seat.under).map(sinkGeometry));
+}
+
 const LABEL_BRIDGE = BRIDGE_SEATS[2];
 const LABEL_PLATE = {
   x: PALLET_STAFF.x,
@@ -98,9 +125,15 @@ export class JewelsPart {
 
   constructor(context: PartContext, plateFrame: Object3D, bridgeFrame: Object3D) {
     const material: Material = rubyMaterial(true);
-    plateFrame.add(registeredMesh(context, merge(PLATE_SEATS.map(seated)), 'jewels', material));
+    plateFrame.add(
+      registeredMesh(context, merge(PLATE_SEATS.map(seated)), 'jewels', material),
+      partMesh(context, sinks(PLATE_SEATS), STRUCTURE_GROUP, 'polishedBrass'),
+    );
     this.bridges = registeredMesh(context, merge(BRIDGE_SEATS.map(seated)), 'jewels', material);
-    bridgeFrame.add(this.bridges);
+    bridgeFrame.add(
+      this.bridges,
+      partMesh(context, sinks(BRIDGE_SEATS), STRUCTURE_GROUP, 'polishedBrass'),
+    );
     this.label = anchorAt(plateFrame, 0, 0, 0);
     this.setBridgesShown(true);
   }

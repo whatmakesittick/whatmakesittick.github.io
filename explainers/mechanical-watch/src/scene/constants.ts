@@ -399,6 +399,23 @@ export const JEWEL_DISC = {
   light: '#ff8aa6',
 } as const;
 
+export const JEWEL_SINK = {
+  width: 0.16,
+  lip: 0.012,
+  depth: 0.02,
+} as const;
+
+export const ENGRAVING = {
+  text: '17 jewels',
+  radius: 5.35,
+  deg: 116,
+  size: { width: 3.0, height: 0.75 },
+  texture: { width: 512, height: 128 },
+  font: '600 76px "Helvetica Neue", Arial, sans-serif',
+  fill: '#f0cf7a',
+  shadow: '#5a4217',
+} as const;
+
 export const SCREW_HEAD = {
   radius: 0.36,
   height: 0.16,
