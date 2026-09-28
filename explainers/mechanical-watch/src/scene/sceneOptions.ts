@@ -1,6 +1,6 @@
 import type { SceneOptions } from '@core/scene/shell';
 
-const GRAPHITE = '#15171b';
+const BACKGROUND = '#16181c';
 const CAMERA = {
   near: 0.5,
   far: 4000,
@@ -10,7 +10,7 @@ const CAMERA = {
 const GENTLE_DIM = { saturation: 0.45, brightness: 0.62, emissive: 0.35 } as const;
 
 export const SCENE_OPTIONS: SceneOptions = {
-  background: GRAPHITE,
+  background: BACKGROUND,
   stage: true,
   camera: CAMERA,
   highlight: { dim: GENTLE_DIM },
