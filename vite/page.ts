@@ -36,6 +36,7 @@ const CATALOGUE_TITLE_KEY = 'catalogue.title';
 const CATALOGUE_DOCUMENT_TITLE_KEY = 'catalogue.metaTitle';
 const PAGE_DOCUMENT_TITLE_KEY = 'page.metaTitle';
 const COVER_ALT_KEY = 'stage.coverAlt';
+const NOT_FOUND_TITLE_KEY = 'notFound.title';
 
 export function siteValues(sourceUrl: string): TemplateValues {
   return {
@@ -193,6 +194,22 @@ export function renderCatalogue(
     title: escapeHtml(title),
     description: escapeHtml(description),
     structuredData: jsonLd(catalogueData({ name: title, description }, facts, pages)),
+  });
+  return translateHtml(html, translate);
+}
+
+export function renderNotFound(
+  template: string,
+  partials: TemplateValues,
+  { code, translate }: PageLanguage,
+): string {
+  const title = translate(NOT_FOUND_TITLE_KEY);
+  const html = render(template, partials, {
+    ...siteValues(REPOSITORY_URL),
+    lang: code,
+    catalogueUrl: escapeHtml(pagePath(code, CATALOGUE_ROUTE.page)),
+    languageLinks: languageLinks(CATALOGUE_ROUTE),
+    documentTitle: escapeHtml(translate(PAGE_DOCUMENT_TITLE_KEY, { title })),
   });
   return translateHtml(html, translate);
 }

@@ -5,7 +5,7 @@ import { loadCoreDictionaries, mergeLocales, pageLanguage } from './i18n.ts';
 import type { Dictionaries } from './i18n.ts';
 import { loadExplainers } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
-import { PAGE_ENTRY, renderCatalogue, renderEntry, renderPage } from './page.ts';
+import { PAGE_ENTRY, renderCatalogue, renderEntry, renderNotFound, renderPage } from './page.ts';
 import { prunePageFolders, writePageFolder } from './pageFolders.ts';
 import type { PageFiles } from './pageFolders.ts';
 import { CATALOGUE_ROUTE, pageFolder } from './routes.ts';
@@ -13,6 +13,7 @@ import type { TemplateValues } from './template.ts';
 
 export const CORE_DIRECTORY = join('src', 'core');
 export const SITE_ENTRY = 'index.html';
+export const NOT_FOUND_ENTRY = '404.html';
 
 const PAGE_TEMPLATE = join(CORE_DIRECTORY, 'page.html');
 const PARTIALS_DIRECTORY = join(CORE_DIRECTORY, 'partials');
@@ -107,4 +108,8 @@ export function generateSite(root: string): Site {
 export function renderSiteEntry(html: string, { sources, explainers }: Site): string {
   const language = pageLanguage(sources.core, DEFAULT_LANGUAGE);
   return renderCatalogue(html, sources.partials, explainers, language);
+}
+
+export function renderNotFoundEntry(html: string, { sources }: Site): string {
+  return renderNotFound(html, sources.partials, pageLanguage(sources.core, DEFAULT_LANGUAGE));
 }

@@ -2,7 +2,14 @@ import { describe, expect, it } from 'vitest';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import type { PageLanguage } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
-import { catalogueEntries, renderCatalogue, renderEntry, renderPage, siteValues } from './page.ts';
+import {
+  catalogueEntries,
+  renderCatalogue,
+  renderEntry,
+  renderNotFound,
+  renderPage,
+  siteValues,
+} from './page.ts';
 
 const meta = {
   title: 'How a "thing" works',
@@ -334,6 +341,35 @@ describe('renderCatalogue', () => {
         },
       ],
     });
+  });
+});
+
+describe('renderNotFound', () => {
+  const notFoundTemplate = [
+    '<html lang="{{lang}}">',
+    '<title data-i18n="page.metaTitle" data-i18n-values="title:notFound.title">{{documentTitle}}</title>',
+    '<a class="site" href="{{catalogueUrl}}">{{siteName}}</a>',
+    '<h1 data-i18n="notFound.title">Old</h1>',
+    '<!-- partial:footer -->',
+    '</html>',
+  ].join('\n');
+  const notFound: PageLanguage = {
+    code: 'en',
+    translate: (key, values) =>
+      interpolate({ ...english, 'notFound.title': 'Page not found' }[key] ?? key, values),
+  };
+  const html = renderNotFound(notFoundTemplate, partials, notFound);
+
+  it('names the missing page in the title and the heading', () => {
+    expect(html).toContain('>Page not found · What makes it tick</title>');
+    expect(html).toContain('<h1 data-i18n="notFound.title">Page not found</h1>');
+  });
+
+  it('leads back to the English catalogue and to the catalogue in every language', () => {
+    expect(html).toContain('<a class="site" href="/">What makes it tick</a>');
+    expect(html).toContain('<footer>https://github.com/whatmakesittick/');
+    expect(html.match(/class="footer-language"/g)).toHaveLength(8);
+    expect(html).not.toContain('aria-current');
   });
 });
 

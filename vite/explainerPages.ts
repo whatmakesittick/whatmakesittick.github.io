@@ -6,7 +6,14 @@ import { crawlFiles } from './crawl.ts';
 import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { renderCatalogueModule } from './page.ts';
-import { CORE_DIRECTORY, SITE_ENTRY, generateSite, renderSiteEntry } from './sitePages.ts';
+import {
+  CORE_DIRECTORY,
+  NOT_FOUND_ENTRY,
+  SITE_ENTRY,
+  generateSite,
+  renderNotFoundEntry,
+  renderSiteEntry,
+} from './sitePages.ts';
 import type { Site } from './sitePages.ts';
 
 const WATCHED_DIRECTORIES = [EXPLAINERS_DIRECTORY, CORE_DIRECTORY];
@@ -26,6 +33,7 @@ function listFiles(directory: string): string[] {
 function rollupInputs(root: string, folders: readonly string[]): Record<string, string> {
   return {
     main: join(root, SITE_ENTRY),
+    notFound: join(root, NOT_FOUND_ENTRY),
     ...Object.fromEntries(folders.map((folder) => [folder, join(root, folder, SITE_ENTRY)])),
   };
 }
@@ -117,8 +125,11 @@ export function explainerPages(): Plugin {
     transformIndexHtml: {
       order: 'pre',
       handler(html, context) {
-        const isSiteEntry = resolve(context.filename) === join(root, SITE_ENTRY);
-        return isSiteEntry && site ? renderSiteEntry(html, site) : html;
+        if (!site) return html;
+        const file = resolve(context.filename);
+        if (file === join(root, SITE_ENTRY)) return renderSiteEntry(html, site);
+        if (file === join(root, NOT_FOUND_ENTRY)) return renderNotFoundEntry(html, site);
+        return html;
       },
     },
 

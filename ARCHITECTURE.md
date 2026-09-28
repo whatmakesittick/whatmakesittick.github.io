@@ -11,6 +11,7 @@ at `/<slug>/`.
 | Path                      | Owns                                                                            |
 | ------------------------- | ------------------------------------------------------------------------------- |
 | `index.html`, `src/site/` | Catalogue page: cards newest first, a tag filter, language dropdown             |
+| `404.html`                | The page GitHub Pages serves for a missing path, filled by the build            |
 | `src/core/`               | Everything an explainer builds on (see below)                                   |
 | `src/core/page.html`      | The explainer page template: masthead, stage, gauge, dock, prose column, footer |
 | `src/core/partials/`      | Markup shared by the template and the catalogue: header actions, footer         |
@@ -454,6 +455,16 @@ build and the runtime. A page is rendered in two steps:
    merged with the explainer locale and English as the fallback, and the same
    options from `src/core/i18n/config.ts`, so interpolation and placeholders behave
    identically.
+
+The root `404.html` is filled the same way in English, like the root `index.html` in
+`transformIndexHtml`, and is a Rollup input, so it is emitted as `dist/404.html`, which
+GitHub Pages serves for every missing path; the dev server serves it at `/404.html`. It
+has the masthead with the site link, `notFound.title` and `notFound.text`, a link to the
+catalogue and the shared footer, whose language links lead to the catalogue in every
+language. It carries `<meta name="robots" content="noindex">`, no canonical link and no
+script, stays out of the sitemap, and imports the core and catalogue styles inside an
+inline `<style>`, which Vite inlines, so the page needs no other request and never joins
+the `shared` chunk.
 
 Only the HTML is per language. Every language page of an explainer loads the same
 `/<slug>/main.ts`, and every catalogue page loads `/src/site/main.ts`, so the
