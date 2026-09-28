@@ -207,6 +207,51 @@ export function cylinder(from: Vec3, to: Vec3, radius: number): Field {
   };
 }
 
+export function sweptTube(points: readonly Vec3[], radii: readonly number[]): Field {
+  const count = points.length - 1;
+  const starts = new Float64Array(count * 3);
+  const spans = new Float64Array(count * 3);
+  const lengths = new Float64Array(count);
+  for (let segment = 0; segment < count; segment += 1) {
+    for (let axis = 0; axis < 3; axis += 1) {
+      starts[segment * 3 + axis] = points[segment][axis];
+      spans[segment * 3 + axis] = points[segment + 1][axis] - points[segment][axis];
+    }
+    const sx = spans[segment * 3];
+    const sy = spans[segment * 3 + 1];
+    const sz = spans[segment * 3 + 2];
+    lengths[segment] = sx * sx + sy * sy + sz * sz || 1;
+  }
+  const widest = Math.max(...radii);
+  const box = mergeBoxes(points.map((point) => boxAround(point, [widest, widest, widest])));
+  return {
+    centre: [
+      (box.min[0] + box.max[0]) / 2,
+      (box.min[1] + box.max[1]) / 2,
+      (box.min[2] + box.max[2]) / 2,
+    ],
+    reach: length3(box.max[0] - box.min[0], box.max[1] - box.min[1], box.max[2] - box.min[2]) / 2,
+    box,
+    distance(x, y, z) {
+      let nearest = Number.POSITIVE_INFINITY;
+      for (let segment = 0; segment < count; segment += 1) {
+        const offset = segment * 3;
+        const px = x - starts[offset];
+        const py = y - starts[offset + 1];
+        const pz = z - starts[offset + 2];
+        const sx = spans[offset];
+        const sy = spans[offset + 1];
+        const sz = spans[offset + 2];
+        const share = Math.min(Math.max((px * sx + py * sy + pz * sz) / lengths[segment], 0), 1);
+        const radius = radii[segment] + (radii[segment + 1] - radii[segment]) * share;
+        const gap = length3(px - sx * share, py - sy * share, pz - sz * share) - radius;
+        if (gap < nearest) nearest = gap;
+      }
+      return nearest;
+    },
+  };
+}
+
 export function capsule(from: Vec3, to: Vec3, radius: number): Field {
   return roundCone(from, to, radius, radius);
 }

@@ -1,7 +1,7 @@
 import { CatmullRomCurve3, Vector3 } from 'three';
 import type { Point } from '../../model';
 import type { Vec3 } from './field';
-import { roundCone } from './field';
+import { sweptTube } from './field';
 import type { Field } from './field';
 
 export interface VesselRoute {
@@ -65,23 +65,16 @@ export function portalAt(route: VesselRoute, distanceMm: number, inset = 0): Por
   };
 }
 
-export function routeField(route: VesselRoute, untilMm: number, inset: number): Field[] {
+export function routeField(route: VesselRoute, untilMm: number, inset: number): Field {
   const curve = routeCurve(route);
-  const steps = Math.max(1, Math.ceil(untilMm / (SAMPLE_MM * 4)));
-  const pieces: Field[] = [];
-  for (let step = 0; step < steps; step += 1) {
-    const from = (untilMm * step) / steps;
-    const to = (untilMm * (step + 1)) / steps;
-    const a = pointAtDistance(curve, from);
-    const b = pointAtDistance(curve, to);
-    pieces.push(
-      roundCone(
-        [a.x, a.y, a.z],
-        [b.x, b.y, b.z],
-        radiusAt(route, from) - inset,
-        radiusAt(route, to) - inset,
-      ),
-    );
+  const steps = Math.max(1, Math.ceil(untilMm / SAMPLE_MM));
+  const points: Vec3[] = [];
+  const radii: number[] = [];
+  for (let step = 0; step <= steps; step += 1) {
+    const distance = (untilMm * step) / steps;
+    const point = pointAtDistance(curve, distance);
+    points.push([point.x, point.y, point.z]);
+    radii.push(radiusAt(route, distance) - inset);
   }
-  return pieces;
+  return sweptTube(points, radii);
 }

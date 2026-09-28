@@ -34,12 +34,10 @@ describe('vessel routes', () => {
     expect(portal.beyond[0][1]).toBeCloseTo(10, 0);
   });
 
-  it('builds a solid tube field along the route', () => {
-    const pieces = routeField(ROUTE, 20, 0);
-    expect(pieces.length).toBeGreaterThan(1);
-    const inside = Math.min(...pieces.map((piece) => piece.distance(0, 15, 0)));
-    const outside = Math.min(...pieces.map((piece) => piece.distance(15, 15, 0)));
-    expect(inside).toBeLessThan(0);
-    expect(outside).toBeGreaterThan(0);
+  it('builds a smooth tube field along the route', () => {
+    const tube = routeField(ROUTE, 20, 0);
+    expect(tube.distance(0, 15, 0)).toBeLessThan(0);
+    expect(tube.distance(15, 15, 0)).toBeGreaterThan(0);
+    expect(tube.distance(radiusAt(ROUTE, 15), 15, 0)).toBeCloseTo(0, 1);
   });
 });

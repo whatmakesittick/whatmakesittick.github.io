@@ -11,6 +11,7 @@ import {
   smoothMax,
   smoothMin,
   squashed,
+  sweptTube,
   union,
 } from './field';
 
@@ -39,6 +40,21 @@ describe('signed distance fields', () => {
     expect(can.distance(0, 12, 0)).toBeCloseTo(2, 5);
     expect(can.distance(6, 5, 0)).toBeCloseTo(2, 5);
     expect(can.distance(0, 5, 0)).toBeLessThan(0);
+  });
+
+  it('sweeps a tapering tube along a polyline without bulges at the joints', () => {
+    const tube = sweptTube(
+      [
+        [0, 0, 0],
+        [0, 10, 0],
+        [0, 20, 0],
+      ],
+      [4, 3, 2],
+    );
+    expect(tube.distance(4, 0, 0)).toBeCloseTo(0, 5);
+    expect(tube.distance(3, 10, 0)).toBeCloseTo(0, 5);
+    expect(tube.distance(2.5, 15, 0)).toBeCloseTo(0, 1);
+    expect(tube.distance(0, 25, 0)).toBeCloseTo(3, 5);
   });
 
   it('keeps boxes that enclose every shape', () => {

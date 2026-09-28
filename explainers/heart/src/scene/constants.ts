@@ -39,7 +39,7 @@ function shifted(point: Point, offset: Point): Point {
   return [point[0] + offset[0], point[1] + offset[1], point[2] + offset[2]];
 }
 
-export const PULMONARY_RING_SHIFT: Point = [0, 6, 9];
+export const PULMONARY_RING_SHIFT: Point = [0, 6, 13];
 export const PULMONARY_RING: Point = shifted(VALVES.pulmonary.centre, PULMONARY_RING_SHIFT);
 
 export const VESSEL_WALL_MM = 1.8;
@@ -49,7 +49,16 @@ export const COLLAR_BEYOND_MM = 6;
 
 const RING_INSET_MM = 0.8;
 const OUTFLOW_WALL_MM = 2.5;
+const NECK_OVERLAP_MM = 1;
 const ringRadius = (radius: number) => radius - RING_INSET_MM;
+const pastRing = (centre: Point, normal: Point, distance: number): Point => {
+  const size = Math.hypot(...normal);
+  return [
+    centre[0] + (normal[0] / size) * distance,
+    centre[1] + (normal[1] / size) * distance,
+    centre[2] + (normal[2] / size) * distance,
+  ];
+};
 const tricuspid = VALVES.tricuspid;
 const mitral = VALVES.mitral;
 const aortic = VALVES.aortic;
@@ -68,7 +77,7 @@ export const CAVITY_PIECES: readonly CavityPiece[] = [
     blob: {
       kind: 'cylinder',
       from: [-23.5, 7, 1.5],
-      to: tricuspid.centre,
+      to: pastRing(tricuspid.centre, tricuspid.normal, NECK_OVERLAP_MM),
       radius: ringRadius(tricuspid.radius),
     },
   },
@@ -76,7 +85,7 @@ export const CAVITY_PIECES: readonly CavityPiece[] = [
     chamber: 'rightVentricle',
     blob: {
       kind: 'cylinder',
-      from: tricuspid.centre,
+      from: pastRing(tricuspid.centre, tricuspid.normal, -NECK_OVERLAP_MM),
       to: [-22, -3, 2.5],
       radius: ringRadius(tricuspid.radius),
     },
@@ -130,7 +139,7 @@ export const CAVITY_PIECES: readonly CavityPiece[] = [
     blob: {
       kind: 'cylinder',
       from: [22, 7, -1.5],
-      to: mitral.centre,
+      to: pastRing(mitral.centre, mitral.normal, NECK_OVERLAP_MM),
       radius: ringRadius(mitral.radius),
     },
   },
@@ -138,7 +147,7 @@ export const CAVITY_PIECES: readonly CavityPiece[] = [
     chamber: 'leftVentricle',
     blob: {
       kind: 'cylinder',
-      from: mitral.centre,
+      from: pastRing(mitral.centre, mitral.normal, -NECK_OVERLAP_MM),
       to: [21, -3, -1],
       radius: ringRadius(mitral.radius),
     },
@@ -245,9 +254,9 @@ export const VESSELS: Readonly<Record<VesselName, VesselSpec>> = {
     route: {
       points: [
         VESSEL_MOUTHS.aorta.point,
-        [2, 33, -8],
-        [-2, 46, -8],
-        [-5, 60, -7],
+        [2, 33, -5],
+        [-2, 46, -6],
+        [-5, 60, -6],
         [-4, 76, -8],
         ARCH_TOP,
         [17, 91, -26],
@@ -304,7 +313,7 @@ export const VESSELS: Readonly<Record<VesselName, VesselSpec>> = {
     chamber: 'rightVentricle',
     portalMm: 12,
     route: {
-      points: [PULMONARY_RING, [0, 44, 19], [9, 54, 16], PULMONARY_SPLIT],
+      points: [PULMONARY_RING, [0, 44, 22], [9, 54, 18], PULMONARY_SPLIT],
       radius: 12,
       rootRadius: ringRadius(VALVES.pulmonary.radius) + VESSEL_WALL_MM,
       flareMm: 10,

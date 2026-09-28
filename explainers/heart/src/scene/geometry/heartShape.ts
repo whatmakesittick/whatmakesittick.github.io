@@ -105,7 +105,7 @@ function reachOf(vessel: VesselSpec, spec: ShapeSpec): number {
 }
 
 function vesselField(vessel: VesselSpec, spec: ShapeSpec, inset: number): Field {
-  return union(routeField(vessel.route, reachOf(vessel, spec), inset));
+  return routeField(vessel.route, reachOf(vessel, spec), inset);
 }
 
 function channels(spec: ShapeSpec, chamber: ChamberId): Field[] {
