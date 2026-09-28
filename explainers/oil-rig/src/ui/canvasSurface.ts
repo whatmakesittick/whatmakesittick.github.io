@@ -8,6 +8,10 @@ export interface CanvasFrame {
 
 export type Painter = (context: CanvasRenderingContext2D, frame: CanvasFrame) => void;
 
+export interface CanvasSurfaceOptions {
+  onFontsReady?(): void;
+}
+
 export const CANVAS_FONT_FAMILY = "Inter, system-ui, -apple-system, 'Segoe UI', sans-serif";
 
 export function canvasFont(sizePx: number): string {
@@ -16,6 +20,10 @@ export function canvasFont(sizePx: number): string {
 
 export function widestText(context: CanvasRenderingContext2D, texts: readonly string[]): number {
   return Math.max(...texts.map((text) => context.measureText(text).width));
+}
+
+function whenFontsReady(callback: () => void): void {
+  if ('fonts' in document) void document.fonts.ready.then(callback);
 }
 
 function pixelRatio(): number {
@@ -29,12 +37,16 @@ export class CanvasSurface {
   private width: number;
   private painter: Painter | null = null;
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, options: CanvasSurfaceOptions = {}) {
     this.canvas = canvas;
     this.aspect = canvas.height / canvas.width;
     this.width = canvas.clientWidth || canvas.width;
     this.observer = new ResizeObserver(() => this.resize());
     this.observer.observe(canvas);
+    whenFontsReady(() => {
+      options.onFontsReady?.();
+      this.render();
+    });
   }
 
   paint(painter: Painter): void {
