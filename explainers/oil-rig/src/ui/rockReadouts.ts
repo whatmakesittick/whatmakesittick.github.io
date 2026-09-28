@@ -1,5 +1,5 @@
 import { requireElement, setText } from '@core/ui/dom';
-import { watch, watchLocalized } from '@core/ui/subscribe';
+import { watchLocalized } from '@core/ui/subscribe';
 import { porosityAt, rockSampleDepth, temperatureAtC, whenInRock } from '../model';
 import type { OilRigStore } from '../state';
 import { formatCelsius, formatOptional, formatPercent } from './format';
@@ -13,7 +13,7 @@ export function mountRockReadouts(root: Document, store: OilRigStore): void {
   const pores = new PoresView(requireElement<HTMLCanvasElement>(root, '[data-view="pores"]'));
   const temperature = requireElement(root, '[data-readout="rock-temperature"]');
   const porosity = requireElement(root, '[data-readout="rock-porosity"]');
-  watch(
+  watchLocalized(
     store,
     (state) => poreSceneAt(rockSampleDepth(state.phase)),
     (scene) => pores.draw(scene),

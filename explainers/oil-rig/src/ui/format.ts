@@ -112,6 +112,10 @@ export function formatMillimetres(millimetres: number): string {
   return t('units.mm', { value: formatFixed(Math.round(millimetres), 0) });
 }
 
+export function formatScaleLength(millimetres: number): string {
+  return t('units.mm', { value: formatNumber(millimetres) });
+}
+
 export function formatBar(bar: number): string {
   return t('units.bar', { value: formatFixed(Math.round(bar), 0) });
 }
