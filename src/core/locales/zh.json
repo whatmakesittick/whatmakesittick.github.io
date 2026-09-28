@@ -1,6 +1,8 @@
 {
   "page": {
-    "skipLink": "跳到讲解部分"
+    "skipLink": "跳到讲解部分",
+    "metaTitle": "{{title}} · What makes it tick",
+    "moreExplainers": "More explainers"
   },
   "header": {
     "language": "语言",
@@ -11,7 +13,8 @@
     "label": "交互式模型",
     "gauge": "实时读数",
     "expand": "全屏查看模型",
-    "collapse": "返回文章"
+    "collapse": "返回文章",
+    "coverAlt": "{{title}}: a still image of the interactive 3D model"
   },
   "controls": {
     "label": "控制",
@@ -40,7 +43,8 @@
     "source": "源代码",
     "license": "MIT 许可证",
     "builtWith": "使用 Three.js 构建",
-    "copyright": "© {{year}} {{title}}。由 <a href=\"https://github.com/veelenga\">veelenga</a> 用 ♥ 制作"
+    "copyright": "© {{year}} {{title}}。由 <a href=\"https://github.com/veelenga\">veelenga</a> 用 ♥ 制作",
+    "languages": "Languages"
   },
   "catalogue": {
     "title": "What makes it tick",
@@ -65,6 +69,11 @@
       "energy": "能源",
       "earth": "地球",
       "biology": "生物"
-    }
+    },
+    "metaTitle": "What makes it tick: interactive 3D explainers of how things work"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "This page does not exist or has moved. Every explainer is on the front page."
   }
 }

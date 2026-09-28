@@ -1,6 +1,8 @@
 {
   "page": {
-    "skipLink": "解説へ移動"
+    "skipLink": "解説へ移動",
+    "metaTitle": "{{title}} · What makes it tick",
+    "moreExplainers": "More explainers"
   },
   "header": {
     "language": "言語",
@@ -11,7 +13,8 @@
     "label": "操作できるモデル",
     "gauge": "リアルタイムの計測値",
     "expand": "モデルを全画面で表示",
-    "collapse": "記事に戻る"
+    "collapse": "記事に戻る",
+    "coverAlt": "{{title}}: a still image of the interactive 3D model"
   },
   "controls": {
     "label": "操作",
@@ -40,7 +43,8 @@
     "source": "ソースコード",
     "license": "MITライセンス",
     "builtWith": "Three.jsで制作",
-    "copyright": "© {{year}} {{title}}。<a href=\"https://github.com/veelenga\">veelenga</a>が♥を込めて制作"
+    "copyright": "© {{year}} {{title}}。<a href=\"https://github.com/veelenga\">veelenga</a>が♥を込めて制作",
+    "languages": "Languages"
   },
   "catalogue": {
     "title": "What makes it tick",
@@ -65,6 +69,11 @@
       "energy": "エネルギー",
       "earth": "地球",
       "biology": "生物"
-    }
+    },
+    "metaTitle": "What makes it tick: interactive 3D explainers of how things work"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "This page does not exist or has moved. Every explainer is on the front page."
   }
 }
