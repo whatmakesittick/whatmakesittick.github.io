@@ -94,7 +94,7 @@
     "aorticPressure": "Druck in der Aorta",
     "lvVolume": "Blut in der linken Kammer",
     "valves": "Klappen",
-    "signal": "Elektrisches Signal"
+    "signal": "Signal"
   },
   "parts": {
     "rightAtrium": "Rechter Vorhof",
@@ -176,13 +176,13 @@
   "signal": {
     "sinusNode": "Sinusknoten",
     "atria": "Vorhöfe",
-    "avNode": "AV-Knoten, kurze Pause",
+    "avNode": "AV-Knoten, Pause",
     "bundle": "His-Bündel",
     "branches": "Kammerschenkel",
     "purkinje": "Purkinje-Fasern",
     "ventricles": "Kammerwände",
-    "recovering": "Kammern erholen sich",
-    "quiet": "Ruhe bis zum nächsten Schlag"
+    "recovering": "Erholung",
+    "quiet": "Ruhe"
   },
   "units": {
     "ms": "{{value}} ms",

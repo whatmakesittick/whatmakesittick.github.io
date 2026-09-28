@@ -94,7 +94,7 @@
     "aorticPressure": "大動脈の圧",
     "lvVolume": "左心室の血液量",
     "valves": "弁",
-    "signal": "電気信号"
+    "signal": "信号"
   },
   "parts": {
     "rightAtrium": "右心房",
@@ -176,13 +176,13 @@
   "signal": {
     "sinusNode": "洞結節",
     "atria": "心房",
-    "avNode": "房室結節で待機中",
+    "avNode": "房室結節で待機",
     "bundle": "ヒス束",
     "branches": "右脚と左脚",
     "purkinje": "プルキンエ線維",
     "ventricles": "心室の壁",
-    "recovering": "心室が回復中",
-    "quiet": "次の拍動まで静か"
+    "recovering": "回復中",
+    "quiet": "休止中"
   },
   "units": {
     "ms": "{{value}}ms",

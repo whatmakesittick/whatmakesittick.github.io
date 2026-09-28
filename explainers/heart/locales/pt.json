@@ -94,7 +94,7 @@
     "aorticPressure": "Pressão na aorta",
     "lvVolume": "Volume do ventrículo esquerdo",
     "valves": "Válvulas",
-    "signal": "Sinal elétrico"
+    "signal": "Sinal"
   },
   "parts": {
     "rightAtrium": "Átrio direito",
@@ -176,13 +176,13 @@
   "signal": {
     "sinusNode": "Nó sinusal",
     "atria": "Átrios",
-    "avNode": "Retido no nó AV",
+    "avNode": "Nó AV, em espera",
     "bundle": "Feixe de His",
-    "branches": "Ramos do feixe",
+    "branches": "Ramos do feixe de His",
     "purkinje": "Fibras de Purkinje",
-    "ventricles": "Paredes dos ventrículos",
-    "recovering": "Ventrículos se recuperando",
-    "quiet": "Em silêncio até o próximo batimento"
+    "ventricles": "Paredes ventriculares",
+    "recovering": "Recuperação",
+    "quiet": "Em silêncio"
   },
   "units": {
     "ms": "{{value}} ms",

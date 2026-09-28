@@ -94,7 +94,7 @@
     "aorticPressure": "主动脉压力",
     "lvVolume": "左心室容积",
     "valves": "瓣膜",
-    "signal": "电信号"
+    "signal": "信号"
   },
   "parts": {
     "rightAtrium": "右心房",
@@ -176,13 +176,13 @@
   "signal": {
     "sinusNode": "窦房结",
     "atria": "心房",
-    "avNode": "房室结，暂停中",
+    "avNode": "房室结，等待中",
     "bundle": "希氏束",
     "branches": "束支",
     "purkinje": "浦肯野纤维",
     "ventricles": "心室壁",
-    "recovering": "心室，正在恢复",
-    "quiet": "暂无，等待下一次心跳"
+    "recovering": "恢复中",
+    "quiet": "静息"
   },
   "units": {
     "ms": "{{value}}毫秒",

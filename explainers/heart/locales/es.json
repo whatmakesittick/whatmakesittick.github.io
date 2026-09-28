@@ -94,7 +94,7 @@
     "aorticPressure": "Presión en la aorta",
     "lvVolume": "Volumen del ventrículo izquierdo",
     "valves": "Válvulas",
-    "signal": "Señal eléctrica"
+    "signal": "Señal"
   },
   "parts": {
     "rightAtrium": "Aurícula derecha",
@@ -176,13 +176,13 @@
   "signal": {
     "sinusNode": "Nódulo sinusal",
     "atria": "Aurículas",
-    "avNode": "Retenida en el nódulo AV",
+    "avNode": "Nódulo AV, en espera",
     "bundle": "Haz de His",
     "branches": "Ramas del haz",
     "purkinje": "Fibras de Purkinje",
-    "ventricles": "Paredes de los ventrículos",
-    "recovering": "Los ventrículos se recuperan",
-    "quiet": "En calma hasta el próximo latido"
+    "ventricles": "Paredes ventriculares",
+    "recovering": "Recuperación",
+    "quiet": "En calma"
   },
   "units": {
     "ms": "{{value}} ms",

@@ -94,7 +94,7 @@
     "aorticPressure": "Pression dans l’aorte",
     "lvVolume": "Volume du ventricule gauche",
     "valves": "Valves",
-    "signal": "Signal électrique"
+    "signal": "Signal"
   },
   "parts": {
     "rightAtrium": "Oreillette droite",
@@ -176,13 +176,13 @@
   "signal": {
     "sinusNode": "Nœud sinusal",
     "atria": "Oreillettes",
-    "avNode": "Retenu au nœud AV",
+    "avNode": "Nœud AV, en attente",
     "bundle": "Faisceau de His",
     "branches": "Branches du faisceau",
     "purkinje": "Fibres de Purkinje",
-    "ventricles": "Parois des ventricules",
-    "recovering": "Ventricules en récupération",
-    "quiet": "Calme jusqu’au prochain battement"
+    "ventricles": "Parois ventriculaires",
+    "recovering": "Récupération",
+    "quiet": "Calme"
   },
   "units": {
     "ms": "{{value}} ms",

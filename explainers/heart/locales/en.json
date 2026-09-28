@@ -94,7 +94,7 @@
     "aorticPressure": "Aortic pressure",
     "lvVolume": "Left ventricle volume",
     "valves": "Valves",
-    "signal": "Electrical signal"
+    "signal": "Signal"
   },
   "parts": {
     "rightAtrium": "Right atrium",
@@ -176,13 +176,13 @@
   "signal": {
     "sinusNode": "Sinus node",
     "atria": "Atria",
-    "avNode": "Held at the AV node",
+    "avNode": "AV node, waiting",
     "bundle": "Bundle of His",
     "branches": "Bundle branches",
     "purkinje": "Purkinje fibres",
     "ventricles": "Ventricle walls",
-    "recovering": "Ventricles recovering",
-    "quiet": "Quiet until the next beat"
+    "recovering": "Recovering",
+    "quiet": "Quiet"
   },
   "units": {
     "ms": "{{value}} ms",
