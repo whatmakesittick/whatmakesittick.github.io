@@ -1,3 +1,4 @@
+import { onLanguageChanged } from '@core/i18n';
 import { MAX_PIXEL_RATIO } from '@core/scene/constants';
 
 export interface CanvasFrame {
@@ -54,7 +55,9 @@ export class CanvasSurface {
   private readonly resizeObserver: ResizeObserver;
   private readonly visibilityObserver: IntersectionObserver;
   private readonly stopWatchingPixelRatio: () => void;
+  private readonly stopWatchingLanguage: () => void;
   private width: number;
+  private fontFamily: string | null = null;
   private painter: Painter | null = null;
   private onScreen = false;
   private stale = false;
@@ -70,6 +73,7 @@ export class CanvasSurface {
     });
     this.visibilityObserver.observe(canvas);
     this.stopWatchingPixelRatio = watchPixelRatio(() => this.requestRender());
+    this.stopWatchingLanguage = onLanguageChanged(() => this.forgetFont());
     whenFontsReady(() => {
       options.onFontsReady?.();
       this.requestRender();
@@ -85,6 +89,7 @@ export class CanvasSurface {
     this.resizeObserver.disconnect();
     this.visibilityObserver.disconnect();
     this.stopWatchingPixelRatio();
+    this.stopWatchingLanguage();
   }
 
   private updateOnScreen(entries: readonly IntersectionObserverEntry[]): void {
@@ -96,7 +101,17 @@ export class CanvasSurface {
     const width = this.canvas.clientWidth;
     if (width === 0 || width === this.width) return;
     this.width = width;
+    this.forgetFont();
     this.requestRender();
+  }
+
+  private forgetFont(): void {
+    this.fontFamily = null;
+  }
+
+  private font(): string {
+    this.fontFamily ??= getComputedStyle(this.canvas).fontFamily || FALLBACK_FONT_FAMILY;
+    return this.fontFamily;
   }
 
   private requestRender(): void {
@@ -109,7 +124,7 @@ export class CanvasSurface {
       width: this.width,
       height: this.width * this.aspect,
       ratio: pixelRatio(),
-      fontFamily: getComputedStyle(this.canvas).fontFamily || FALLBACK_FONT_FAMILY,
+      fontFamily: this.font(),
     };
   }
 
