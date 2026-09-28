@@ -15,21 +15,28 @@ export interface Section {
 }
 
 export const SECTIONS: readonly Section[] = [
-  { id: 'conductor', holeInches: 36, casingInches: 30, shoeDepth: 1105, plannedMudWeight: 1.03 },
+  { id: 'conductor', holeInches: 36, casingInches: 30, shoeDepth: 1100, plannedMudWeight: 1.03 },
   { id: 'surface', holeInches: 26, casingInches: 20, shoeDepth: 2025, plannedMudWeight: 1.05 },
   {
     id: 'intermediate',
     holeInches: 17.5,
     casingInches: 13.375,
-    shoeDepth: 3600,
+    shoeDepth: 3000,
     plannedMudWeight: 1.2,
   },
   {
     id: 'production',
     holeInches: 12.25,
     casingInches: 9.625,
+    shoeDepth: 3950,
+    plannedMudWeight: 1.36,
+  },
+  {
+    id: 'reservoir',
+    holeInches: 8.5,
+    casingInches: 0,
     shoeDepth: TOTAL_DEPTH_M,
-    plannedMudWeight: 1.45,
+    plannedMudWeight: 1.4,
   },
 ];
 
@@ -80,6 +87,10 @@ export function fluidAt(depth: number): FluidId | undefined {
 
 export function depthBelowSeabed(depth: number): number {
   return depth - SEABED_DEPTH_M;
+}
+
+export function isCased(section: Section): boolean {
+  return section.casingInches > 0;
 }
 
 export function riserLanded(bitDepth: number): boolean {

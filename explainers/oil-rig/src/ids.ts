@@ -42,7 +42,7 @@ export type AnchorId = 'bit' | 'topDrive' | 'bop' | 'reservoir';
 
 export type BitId = 'pdc' | 'rollerCone';
 
-export type SectionId = 'conductor' | 'surface' | 'intermediate' | 'production';
+export type SectionId = 'conductor' | 'surface' | 'intermediate' | 'production' | 'reservoir';
 
 export type LayerId =
   'seabed' | 'claystone' | 'aquifer' | 'shaleSands' | 'seal' | 'reservoir' | 'base' | 'sourceRock';

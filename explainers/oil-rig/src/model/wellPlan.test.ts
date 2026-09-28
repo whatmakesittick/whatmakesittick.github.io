@@ -7,6 +7,7 @@ import {
   TOTAL_DEPTH_M,
   depthBelowSeabed,
   fluidAt,
+  isCased,
   layerAt,
   riserLanded,
   sectionAt,
@@ -17,9 +18,11 @@ describe('the well plan', () => {
     for (let i = 1; i < SECTIONS.length; i++) {
       expect(SECTIONS[i].shoeDepth).toBeGreaterThan(SECTIONS[i - 1].shoeDepth);
       expect(SECTIONS[i].holeInches).toBeLessThan(SECTIONS[i - 1].casingInches);
+      expect(isCased(SECTIONS[i - 1])).toBe(true);
       expect(SECTIONS[i].plannedMudWeight).toBeGreaterThanOrEqual(SECTIONS[i - 1].plannedMudWeight);
     }
     expect(SECTIONS[SECTIONS.length - 1].shoeDepth).toBe(TOTAL_DEPTH_M);
+    expect(isCased(SECTIONS[SECTIONS.length - 1])).toBe(false);
   });
 
   it('stacks layers without gaps from the seabed down', () => {
@@ -37,7 +40,8 @@ describe('the well plan', () => {
   it('answers what is at a depth', () => {
     expect(sectionAt(0).id).toBe('conductor');
     expect(sectionAt(3000).id).toBe('intermediate');
-    expect(sectionAt(TOTAL_DEPTH_M + 1).id).toBe('production');
+    expect(sectionAt(4100).id).toBe('reservoir');
+    expect(sectionAt(TOTAL_DEPTH_M + 1).id).toBe('reservoir');
     expect(layerAt(SEABED_DEPTH_M - 1)).toBeUndefined();
     expect(layerAt(4100)?.id).toBe('reservoir');
     expect(fluidAt(4100)).toBe('oil');
