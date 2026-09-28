@@ -1,0 +1,457 @@
+<section class="chapter" data-preset="overview" aria-labelledby="overview-title">
+  <p class="chapter-index">01</p>
+  <h2 id="overview-title" data-i18n="sections.overview.title">
+    Eight beats a second, from a coiled spring
+  </h2>
+  <p data-i18n-html="sections.overview.p1">
+    You are looking at a mechanical watch, standing on its edge like a watch on a display stand. The
+    case holds a dial, three hands and a crown on the side for winding. The real work happens behind
+    the dial, in the part watchmakers call the <strong>movement</strong>. It has no battery and no
+    chip. Everything runs on a coiled steel spring, a chain of small wheels and a tiny wheel that
+    swings back and forth.
+  </p>
+  <p data-i18n-html="sections.overview.p2">
+    The movement does <strong>three jobs</strong>. First it stores energy: turning the crown winds
+    up the mainspring. Then it lets that energy out in small, even steps, which is the work of the
+    escapement and the balance. Last it counts the steps and shows them as time, through a train of
+    wheels and the hands. The energy path traces the power from the spring through the wheels to the
+    balance, and each chapter below takes one of these parts in turn.
+  </p>
+  <p data-i18n-html="sections.overview.p3">
+    Everything moves only because the balance lets the escape wheel go half a tooth at a time. Each
+    release is one <strong>beat</strong>, and you hear it as a tick or a tock. This watch makes
+    28,800 beats an hour: 8 every second, 691,200 a day. The balance swings back and forth 4 times a
+    second. Each full swing takes 250 ms and holds two beats: the tick as it passes the centre one
+    way and the tock as it comes back. The timeline under the model follows one full swing.
+  </p>
+  <p data-i18n-html="sections.overview.p4">
+    The numbers in these chapters are those of a <strong>hand-wound</strong> movement like the ETA
+    2801-2, wound by turning the crown: 25.6 mm across and 3.35 mm thick, with 17 jewels. The model
+    is a textbook layout of the same kind, and it stretches the stack of parts so you can see each
+    layer. Drag the model to turn it and look at the dial side. At real time the balance is a blur:
+    slow the playback down and watch it swing.
+  </p>
+</section>
+
+<section class="chapter" data-preset="mainspring" aria-labelledby="mainspring-title">
+  <p class="chapter-index">02</p>
+  <h2 id="mainspring-title" data-i18n="sections.mainspring.title">
+    Forty-two hours in a coil of steel
+  </h2>
+  <p data-i18n-html="sections.mainspring.p1">
+    The energy lives in the <strong>mainspring</strong>, a long steel strip coiled up inside a drum
+    called the barrel. Turning the crown turns the stem and, through small pinions, the crown wheel
+    and the ratchet wheel on the barrel's central arbor. The arbor winds the inner end of the spring
+    tighter while the barrel stands still. A little click drops into the ratchet's teeth as they
+    pass, so the spring cannot turn the arbor back.
+  </p>
+  <p data-i18n-html="sections.mainspring.p2">
+    Stretched out, this spring is 420 mm long, yet only 0.125 mm thick and 1.23 mm high. Its turning
+    force, the <strong>torque</strong>, is about 11.3 mN·m when fully wound. A day later it has
+    fallen to about 9.1 mN·m, some 19 percent less, so the push the watch runs on is never quite
+    constant. A full wind stores about a third of a joule, and the watch spends it slowly, at only
+    about 2 to 3 microwatts.
+  </p>
+  <p data-i18n-html="sections.mainspring.p3">
+    As the spring unwinds, it turns the barrel, and the teeth around the barrel's rim drive the
+    wheels. One full wind runs this movement for 42 hours, its <strong>power reserve</strong>. In
+    the model's textbook gearing the barrel turns once every 8 hours, so a full wind is about five
+    and a quarter turns of the spring. Drag the slider toward empty: the coil creeps out to the
+    barrel wall, the torque drops and the balance swings less far.
+  </p>
+  <div class="range-widget reserve-control">
+    <div class="range-widget__header">
+      <label for="reserve" data-i18n="sections.mainspring.control.label">Power reserve left</label>
+      <output class="number" for="reserve" data-readout="reserve">42 h</output>
+    </div>
+    <input id="reserve" type="range" class="range" data-control="reserve" />
+    <div class="range-widget__scale" aria-hidden="true">
+      <span data-i18n="sections.mainspring.control.empty">Run down</span>
+      <span data-i18n="sections.mainspring.control.full">Fully wound</span>
+    </div>
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.mainspring.control.torque">Mainspring torque</dt>
+        <dd class="number" data-readout="reserve-torque">11.3 mN·m</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.mainspring.control.turns">Turns left in the spring</dt>
+        <dd class="number" data-readout="reserve-turns">5.25</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.mainspring.control.amplitude">Balance amplitude</dt>
+        <dd class="number" data-readout="reserve-amplitude">280°</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.mainspring.control.energy">Energy still stored</dt>
+        <dd class="number" data-readout="reserve-energy">0.31 J</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="wind"
+      data-i18n="sections.mainspring.control.wind"
+    >
+      Wind it fully
+    </button>
+  </p>
+  <p data-i18n-html="sections.mainspring.p4">
+    In a hand-wound watch the click holds the spring, and when it is full the crown simply stops
+    turning. An automatic watch is wound by a swinging weight that cannot feel when to stop, so its
+    spring ends in a <strong>slipping bridle</strong>, which slides around the barrel wall instead
+    of overwinding. The automatic version of this movement, the ETA 2824-2, is 4.6 mm thick instead
+    of 3.35 mm and runs for 38 hours. Wind the model fully to start again.
+  </p>
+</section>
+
+<section class="chapter" data-preset="train" aria-labelledby="train-title">
+  <p class="chapter-index">03</p>
+  <h2 id="train-title" data-i18n="sections.train.title">Gearing up, not down</h2>
+  <p data-i18n-html="sections.train.p1">
+    From the barrel, the power runs through a chain of wheels called the
+    <strong>going train</strong>. Each wheel is large and drives a small pinion on the next arbor,
+    so every step turns faster than the one before. The spring is slow and strong, while the
+    escapement needs quick, light motion, so the train gears up, not down. By its end, the barrel's
+    slow creep has become 12 turns a minute at the escape wheel.
+  </p>
+  <p data-i18n-html="sections.train.p2">
+    Watchmakers call a small driven gear a <strong>pinion</strong> and its teeth leaves. The model
+    uses a textbook train. The barrel's 80 teeth drive a pinion of 10 leaves, a speed-up of 8, and
+    the next steps multiply by 8, 7.5 and 12. So the centre wheel turns once an hour, the fourth
+    wheel once a minute and the escape wheel 12 times a minute. Each of its 20 teeth gives two
+    beats: 12 × 20 × 2 makes 480 beats a minute, or 28,800 an hour.
+  </p>
+  <p data-i18n-html="sections.train.p3">
+    In this textbook layout the <strong>centre wheel</strong> sits in the middle of the movement and
+    turns once an hour, so it carries the minute hand. The fourth wheel turns once a minute and
+    carries the small seconds hand at six o'clock. The escape wheel averages 12 turns a minute, yet
+    it stands still most of the time and moves in short jumps of 9°, one per beat. Pick a wheel
+    below and the camera follows it.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="wheel"
+      data-value="barrel"
+      data-i18n="controls.wheelOptions.barrel"
+    >
+      Barrel
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="wheel"
+      data-value="centreWheel"
+      data-i18n="controls.wheelOptions.centreWheel"
+    >
+      Centre wheel
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="wheel"
+      data-value="thirdWheel"
+      data-i18n="controls.wheelOptions.thirdWheel"
+    >
+      Third wheel
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="wheel"
+      data-value="fourthWheel"
+      data-i18n="controls.wheelOptions.fourthWheel"
+    >
+      Fourth wheel
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="wheel"
+      data-value="escapeWheel"
+      data-i18n="controls.wheelOptions.escapeWheel"
+    >
+      Escape wheel
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts wheel-readouts">
+    <div>
+      <dt data-i18n="sections.train.teeth">Teeth and pinion leaves</dt>
+      <dd class="number" data-readout="wheel-teeth">80 / 10</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.train.turn">One turn every</dt>
+      <dd class="number" data-readout="wheel-turn">1 h</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.train.ratio">Speed-up from the wheel before</dt>
+      <dd class="number" data-readout="wheel-ratio">× 8</dd>
+    </div>
+  </dl>
+  <p data-i18n-html="sections.train.p4">
+    The pivots of the wheels turn in <strong>jewels</strong>, tiny bearings of synthetic ruby made
+    in a factory, not gems. A steel pivot in ruby has only a fraction of the friction of metal on
+    metal, and it is oiled as well. This movement has 17 jewels. Its automatic sister has 25, but
+    the extra 8 sit in the winding works and do nothing for the timekeeping, so more jewels do not
+    mean a better watch. The amber dots trace the power from the barrel to the balance.
+  </p>
+</section>
+
+<section class="chapter" data-preset="escapement" aria-labelledby="escapement-title">
+  <p class="chapter-index">04</p>
+  <h2 id="escapement-title" data-i18n="sections.escapement.title">
+    Letting go half a tooth at a time
+  </h2>
+  <p data-i18n-html="sections.escapement.p1">
+    The spring pushes on the escape wheel all the time, and on its own the wheel would spin away in
+    a moment. The <strong>pallet fork</strong> holds it back. Two ruby stones on the fork, the entry
+    and exit pallets, reach over two and a half teeth, and between beats one of them blocks a tooth.
+    Its locking face is set at a slant, called draw, so the tooth's pressure pulls the fork in and
+    holds it against a banking pin. The wheel is locked.
+  </p>
+  <p data-i18n-html="sections.escapement.p2">
+    Then the balance swings back. A ruby pin on its roller, the impulse jewel, enters the slot in
+    the fork and nudges it until the stone slides off the tooth: the wheel is unlocked. The tooth
+    slides along the sloped end of the stone and kicks the fork, and the fork kicks the pin. That
+    push is the
+    <strong>impulse</strong>, shared between the slope of the club-shaped tooth and the stone. The
+    wheel drops free, the next tooth locks on the other stone, and the wheel has turned 9°. Step
+    through it with the chips below.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="lock"
+      data-i18n="controls.momentOptions.lock"
+    >
+      Locked
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="unlock"
+      data-i18n="controls.momentOptions.unlock"
+    >
+      Unlocking
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="impulse"
+      data-i18n="controls.momentOptions.impulse"
+    >
+      Impulse
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="drop"
+      data-i18n="controls.momentOptions.drop"
+    >
+      Drop
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="free"
+      data-i18n="controls.momentOptions.free"
+    >
+      Free again
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts escapement-readouts">
+    <div>
+      <dt data-i18n="sections.escapement.fork">Fork angle</dt>
+      <dd class="number" data-readout="escapement-fork">+5.0°</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.escapement.wheel">Escape wheel this beat</dt>
+      <dd class="number" data-readout="escapement-wheel">0.0° of 9°</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.escapement.contact">Time in contact this beat</dt>
+      <dd class="number" data-readout="escapement-contact">0.0 ms</dd>
+    </div>
+  </dl>
+  <p data-i18n-html="sections.escapement.p3">
+    The pin touches the fork only during the 50° of swing around the centre, called the lift angle.
+    When the balance swings about 280° each way, that contact lasts about 7 ms of each 125 ms beat.
+    For about 94 percent of the time the balance swings free, while draw keeps the fork parked on
+    its banking pin. This is a <strong>detached</strong> escapement. If a knock tries to move the
+    fork while the pin is away, a guard pin on the fork hits the safety roller and stops it.
+  </p>
+  <p data-i18n-html="sections.escapement.p4">
+    The <strong>tick</strong> you hear is three quick impacts, not one: the pin striking the fork, a
+    tooth landing on the sloped face of a stone and, loudest, a tooth locking as the fork hits its
+    banking pin. The tock is the same on the way back. Thomas Mudge invented this lever escapement
+    in the 1750s, and since about 1900 almost every mechanical watch has used one. Drag the timeline
+    slowly through the tick and watch the wheel wait, jump and stop.
+  </p>
+</section>
+
+<section class="chapter" data-preset="balance" aria-labelledby="balance-title">
+  <p class="chapter-index">05</p>
+  <h2 id="balance-title" data-i18n="sections.balance.title">
+    The wheel that decides how long a second lasts
+  </h2>
+  <p data-i18n-html="sections.balance.p1">
+    The <strong>balance</strong> is a ring 10.6 mm across that turns back and forth on pivots just
+    0.08 mm thick. A spiral hairspring always pulls it back toward the centre, so it overshoots and
+    swings the other way, like a child on a swing. Only two things set how long a swing takes: the
+    rim's mass and the spring's stiffness. A heavier rim swings slower, a stiffer spring faster, and
+    here one full swing takes 250 ms. Christiaan Huygens designed a spiral balance spring in 1675.
+  </p>
+  <p data-i18n-html="sections.balance.p2">
+    How far the balance swings is its <strong>amplitude</strong>: about 280° each way when the watch
+    is wound, so more than a full turn from one side to the other. Sellita, which builds movements
+    on the same design, allows at most 315° at full wind and at least 200° a day later. Above about
+    335° the impulse jewel would swing right round and knock the back of the fork. The balance
+    carries about 12 µJ, and each beat tops up only a few percent of it.
+  </p>
+  <p data-i18n-html="sections.balance.p3">
+    To set the rate, a watchmaker moves the <strong>regulator index</strong>. Its two tiny stops, a
+    curb pin and a boot, hold the outer coil of the hairspring and set how much of it is free to
+    flex. Shorten that working length and the watch runs faster; lengthen it and the watch slows
+    down. Small changes matter: a hairspring just 1 percent stiffer would gain about 7 minutes a
+    day. Nudge the slider and see how little it takes to put the watch out by minutes a day.
+  </p>
+  <div class="range-widget regulator-control">
+    <div class="range-widget__header">
+      <label for="regulator" data-i18n="sections.balance.control.label">Regulator index</label>
+      <output class="number" for="regulator" data-readout="regulator">0</output>
+    </div>
+    <input id="regulator" type="range" class="range" data-control="regulator" />
+    <div class="range-widget__scale" aria-hidden="true">
+      <span data-i18n="sections.balance.control.slow">Slower (longer spring)</span>
+      <span data-i18n="sections.balance.control.fast">Faster (shorter spring)</span>
+    </div>
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.balance.control.rate">Daily rate</dt>
+        <dd class="number" data-readout="regulator-rate">+0.0 s/day</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.balance.control.period">One swing takes</dt>
+        <dd class="number" data-readout="regulator-period">250.00 ms</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.balance.control.length">Hairspring in play</dt>
+        <dd class="number" data-readout="regulator-length">188.5 mm</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.balance.control.energy">Energy in the balance</dt>
+        <dd class="number" data-readout="regulator-energy">12.1 µJ</dd>
+      </div>
+    </dl>
+  </div>
+  <p data-i18n-html="sections.balance.p4">
+    Heat, magnetism and knocks all disturb the balance. Hairsprings of Nivarox, an alloy developed
+    for them in 1933, hardly change with temperature, and silicon hairsprings are not magnetic. For
+    knocks, the jewels that hold the balance pivots sit in a <strong>shock setting</strong>: a
+    spring lets the jewel shift, the thick shoulder of the staff takes the blow, and the spring
+    centres the pivot again. Incabloc, from the early 1930s, is one such setting. In this family
+    only the better grades get it; the others use ETA's own Etachocs.
+  </p>
+</section>
+
+<section class="chapter" data-preset="hands" aria-labelledby="hands-title">
+  <p class="chapter-index">06</p>
+  <h2 id="hands-title" data-i18n="sections.hands.title">From beats to hours</h2>
+  <p data-i18n-html="sections.hands.p1">
+    Now look at the dial side. Under the dial, a small set of gears called the
+    <strong>motion works</strong> makes the hour hand turn once while the minute hand turns twelve
+    times. In this textbook layout the cannon pinion, with 10 leaves, drives the 30-tooth minute
+    wheel, and its 8-leaf pinion drives the 32-tooth hour wheel: 3 times 4 makes 12 to 1. The cannon
+    pinion grips by friction only, so when you set the time the hands turn and the train stays
+    still.
+  </p>
+  <p data-i18n-html="sections.hands.p2">
+    The fourth wheel carries the <strong>small seconds</strong> hand at six o'clock. It moves 6° a
+    second, not smoothly but in 8 tiny steps, one for each beat, which is why the seconds hand of a
+    mechanical watch seems to glide. The ETA 2801-2 itself is built differently: its seconds wheel
+    sits in the centre of the movement and drives a centre seconds hand, and the minute hand rides
+    on a tube around it.
+  </p>
+  <p data-i18n-html="sections.hands.p3">
+    Not every watch beats 8 times a second. Before the 1970s, 18,000 beats an hour was usual, and
+    21,600 is common today. Grand Seiko reached 36,000 in 1968 and Zenith's El Primero in 1969. A
+    faster <strong>beat rate</strong> keeps the rate steadier against knocks and changes of
+    position. The cost is energy: with the same balance and swing, the energy grows with the square
+    of the frequency, so the spring runs down sooner or parts wear faster. Switch the rates and
+    watch the seconds hand.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="beatRate"
+      data-value="vph18000"
+      data-i18n="controls.beatRateOptions.vph18000"
+    >
+      18,000 vph
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="beatRate"
+      data-value="vph21600"
+      data-i18n="controls.beatRateOptions.vph21600"
+    >
+      21,600 vph
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="beatRate"
+      data-value="vph28800"
+      data-i18n="controls.beatRateOptions.vph28800"
+    >
+      28,800 vph
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="beatRate"
+      data-value="vph36000"
+      data-i18n="controls.beatRateOptions.vph36000"
+    >
+      36,000 vph
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts beat-readouts">
+    <div>
+      <dt data-i18n="sections.hands.beatsPerSecond">Beats per second</dt>
+      <dd class="number" data-readout="beat-perSecond">8</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.hands.beatsPerDay">Beats per day</dt>
+      <dd class="number" data-readout="beat-perDay">691,200</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.hands.steps">Second-hand steps per second</dt>
+      <dd class="number" data-readout="beat-steps">8</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.hands.escape">Escape wheel speed</dt>
+      <dd class="number" data-readout="beat-escape">12 rpm</dd>
+    </div>
+  </dl>
+  <p data-i18n-html="sections.hands.p4">
+    How accurate is accurate? A certified <strong>chronometer</strong> must average between −4 and
+    +6 seconds a day in COSC's tests, one of seven criteria checked on the bare movement over 15
+    days, in 5 positions and at 3 temperatures. METAS tests the cased watch, even after a magnetic
+    field of 15,000 gauss, and allows 0 to +5 seconds a day, or 0 to +6 for a movement this size.
+    For quartz, COSC's limit is ±0.07 seconds a day. Yet in 2025 Switzerland exported 5.2 million
+    mechanical watches, worth 86 percent of all its watch exports.
+  </p>
+</section>
