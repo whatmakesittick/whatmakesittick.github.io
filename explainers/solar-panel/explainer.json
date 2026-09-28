@@ -1,0 +1,12 @@
+{
+  "slug": "solar-panel",
+  "tags": ["energy", "physics", "home"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "Low-poly 3D model of a flat roof terrace with three solar panels on a tilted frame under the arc of the sun, beside the title How a solar panel works"
+  }
+}
