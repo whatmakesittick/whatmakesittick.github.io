@@ -58,7 +58,7 @@ export const WAVE_MOMENTS: Readonly<Record<WaveId, number>> = { p: 45, qrs: 178,
 export const CONDUCTION_TIMING: Readonly<Record<ConductionId, Span>> = {
   sinusNode: { start: 0, end: 10 },
   atria: { start: 0, end: 90 },
-  avNode: { start: 90, end: 150 },
+  avNode: { start: 50, end: 150 },
   bundle: { start: 150, end: 162 },
   branches: { start: 162, end: 175 },
   purkinje: { start: 175, end: 190 },
