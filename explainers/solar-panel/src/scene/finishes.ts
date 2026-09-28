@@ -3,7 +3,6 @@ import { THEME } from '../theme';
 
 const GLOSS_REFLECTION = 1.6;
 const METAL_REFLECTION = 1.3;
-const LAMP_GLOW = 0.6;
 const GLASS_REFLECTION = 2.2;
 const CELL_REFLECTION = 0.8;
 const DIODE_GLOW = 1.4;
@@ -97,7 +96,7 @@ export const FINISHES = {
   lamp: {
     color: PAINT.lamp,
     emissive: PAINT.lampGlow,
-    emissiveIntensity: LAMP_GLOW,
+    emissiveIntensity: 0,
     roughness: 0.4,
     metalness: 0,
   },

@@ -4,7 +4,7 @@ import type { Box3, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, RegionId, ViewOptions } from '../ids';
-import { MODULE, sunDirection } from '../model';
+import { MODULE, sunDirection, sunElevationDeg } from '../model';
 import type { Assembly, AssemblyResources } from './assembly';
 import { CELL_VIEW_DIRECTION, DETAIL_DISTANCE_CM, FLOW, RAYS, SLICE_FLOW } from './constants';
 import { cutSide, photonPath } from './geometry/sliceMotion';
@@ -224,6 +224,7 @@ export class SolarAssembly implements Assembly {
     const [x, y, z] = sunDirection(minute);
     this.sky.setSky(palette, new Vector3(x, y, z));
     this.sun.setMinute(minute, palette);
+    this.house.lights.setSunElevation(sunElevationDeg(minute));
   }
 
   private aimRays(state: AssemblyState): void {

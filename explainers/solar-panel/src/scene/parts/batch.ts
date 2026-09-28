@@ -15,6 +15,12 @@ export class FinishBatch {
     return this;
   }
 
+  take(finish: Finish): BufferGeometry[] {
+    const pieces = this.pieces.get(finish) ?? [];
+    this.pieces.delete(finish);
+    return pieces;
+  }
+
   build(context: PartContext, group: EmphasisGroup): Group {
     const object = new Group();
     this.pieces.forEach((geometries, finish) => {

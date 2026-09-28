@@ -47,6 +47,14 @@ export const VENT_PIPE = {
   segments: 14,
 } as const;
 
+export const NIGHT_LIGHTS = {
+  darkAboveDeg: 4,
+  fullBelowDeg: -6,
+  window: 0.45,
+  lamp: 1.6,
+  color: '#ffcf8a',
+} as const;
+
 export const BULKHEAD_ROOF = {
   thickness: 8,
   overhang: 4,

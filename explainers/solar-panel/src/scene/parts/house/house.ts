@@ -13,6 +13,7 @@ import { addBulkhead } from './bulkhead';
 import { createGround } from './ground';
 import { addParapet } from './parapet';
 import { PAVER_TILES_PER_TEXTURE, paverTexture } from './paverTexture';
+import { NightLightsPart } from './nightLights';
 import { addWalls } from './walls';
 
 const ROOF_LABEL = { x: 200, z: 120 } as const;
@@ -21,6 +22,7 @@ const FLOOR_ROUGHNESS = 0.9;
 export interface HousePart {
   readonly object: Group;
   readonly roof: Object3D;
+  readonly lights: NightLightsPart;
 }
 
 function addVentPipe(batch: FinishBatch): void {
@@ -54,8 +56,14 @@ export function createHouse(context: PartContext): HousePart {
   addParapet(batch);
   addBulkhead(batch);
   addVentPipe(batch);
+  const lights = new NightLightsPart(context, batch.take('windowGlass'), batch.take('lamp'));
   const object = new Group();
-  object.add(batch.build(context, STRUCTURE_GROUP), createFloor(context), createGround(context));
+  object.add(
+    batch.build(context, STRUCTURE_GROUP),
+    lights.object,
+    createFloor(context),
+    createGround(context),
+  );
   const roof = anchorAt(object, ROOF_LABEL.x, TERRACE.y + ANCHOR_LIFT_CM, ROOF_LABEL.z);
-  return { object, roof };
+  return { object, roof, lights };
 }
