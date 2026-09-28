@@ -39,6 +39,11 @@
   grid-column: 1 / -1;
 }
 
+.junction-readouts [data-readout='junction-pairs'] {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
 .section-readouts {
   margin-block: 16px;
 }
