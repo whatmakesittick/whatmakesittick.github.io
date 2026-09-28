@@ -1,0 +1,261 @@
+{
+  "meta": {
+    "title": "Como funciona um painel solar",
+    "eyebrow": "Painel solar",
+    "tagline": "Uma fatia fina de silício transforma a luz do sol em eletricidade, um elétron liberado de cada vez, do nascer ao pôr do sol.",
+    "description": "Veja por dentro, em 3D, um painel solar de telhado ao longo de um dia de céu limpo: como a luz do sol libera elétrons no silício, como células em série criam uma tensão e como um inversor abastece a casa.",
+    "summary": "O caminho do sol, as camadas do painel, a junção de silício, as células em série, o inversor."
+  },
+  "stage": {
+    "label": "Modelo interativo de painel solar",
+    "gauge": "Leituras do painel ao vivo"
+  },
+  "controls": {
+    "label": "Controles do painel solar",
+    "views": {
+      "sun": {
+        "name": "Caminho do sol",
+        "short": "Sol",
+        "hint": "Caminho do sol (S)"
+      },
+      "slice": {
+        "name": "Célula ampliada",
+        "short": "Célula",
+        "hint": "Célula ampliada (M)"
+      },
+      "flow": {
+        "name": "Fluxo de corrente",
+        "short": "Fluxo",
+        "hint": "Fluxo de corrente (F)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    },
+    "momentOptions": {
+      "sunrise": "Logo após o nascer do sol",
+      "noon": "Meio-dia solar",
+      "sunset": "Pouco antes do pôr do sol"
+    },
+    "layerOptions": {
+      "glass": "Vidro",
+      "encapsulant": "Encapsulante",
+      "cell": "Células",
+      "backsheet": "Folha traseira",
+      "frame": "Moldura",
+      "junctionBox": "Caixa de junção"
+    },
+    "layoutOptions": {
+      "halfCut": "108 meias células",
+      "fullCell": "60 células inteiras"
+    }
+  },
+  "timeline": {
+    "label": "Hora do dia",
+    "phases": "Ir para um momento do dia",
+    "speed": "Reprodução",
+    "value": "{{time}} no horário solar, {{phase}}",
+    "speedValue": "{{minutes}} min/s",
+    "speedDescription": "A cada segundo passam {{minutes}} minutos do dia, e o dia inteiro leva {{seconds}} segundos",
+    "phase": {
+      "dawn": "Amanhecer",
+      "morning": "Manhã",
+      "noon": "Sol alto",
+      "afternoon": "Tarde",
+      "dusk": "Anoitecer"
+    },
+    "during": {
+      "dawn": "o céu clareia e o sol nasce",
+      "morning": "o sol sobe e a potência aumenta",
+      "noon": "o sol está alto e a potência chega ao máximo",
+      "afternoon": "o sol desce e a potência cai",
+      "dusk": "o sol se põe e o painel para de gerar"
+    },
+    "jump": {
+      "dawn": "Ir para o amanhecer",
+      "morning": "Ir para a manhã",
+      "noon": "Ir para o sol alto",
+      "afternoon": "Ir para a tarde",
+      "dusk": "Ir para o anoitecer"
+    }
+  },
+  "readouts": {
+    "sun": "Altura do sol",
+    "sunValue": "{{value}} de altura",
+    "irradiance": "Luz no painel",
+    "power": "Potência do painel",
+    "temperature": "Temperatura da célula",
+    "energy": "Energia gerada",
+    "energyValue": "{{value}} hoje"
+  },
+  "parts": {
+    "sun": "Sol",
+    "roof": "Terraço",
+    "panel": "Painel solar",
+    "frame": "Moldura de alumínio",
+    "glass": "Vidro frontal",
+    "encapsulant": "Encapsulante",
+    "cell": "Célula de silício",
+    "ribbon": "Fita de ligação",
+    "busbar": "Fios coletores",
+    "finger": "Dedo de prata",
+    "backsheet": "Folha traseira",
+    "junctionBox": "Caixa de junção",
+    "bypassDiode": "Diodo de bypass",
+    "connector": "Conector",
+    "dcCable": "Cabo CC",
+    "acCable": "Cabo CA",
+    "inverter": "Inversor",
+    "meter": "Medidor",
+    "pyramids": "Textura de pirâmides",
+    "arCoating": "Camada antirreflexo",
+    "emitter": "Emissor",
+    "junction": "Junção",
+    "base": "Base de silício",
+    "rearContact": "Contato traseiro"
+  },
+  "layers": {
+    "material": {
+      "glass": "Vidro temperado com pouco ferro",
+      "encapsulant": "Filme plástico transparente, em geral EVA",
+      "cell": "Células de silício e fios finos",
+      "backsheet": "Filme plástico resistente",
+      "frame": "Alumínio anodizado",
+      "junctionBox": "Caixa vedada com três diodos de bypass"
+    },
+    "job": {
+      "glass": "Deixa a luz entrar e barra o granizo e a chuva",
+      "encapsulant": "Cola as camadas e barra o ar e a água",
+      "cell": "Transforma luz em corrente",
+      "backsheet": "Veda a parte de trás e isola a fiação",
+      "frame": "Deixa as bordas rígidas e recebe os grampos de fixação",
+      "junctionBox": "Leva a corrente até os cabos"
+    }
+  },
+  "bands": {
+    "ultraviolet": "ultravioleta",
+    "violet": "violeta",
+    "blue": "azul",
+    "green": "verde",
+    "yellow": "amarelo",
+    "orange": "laranja",
+    "red": "vermelho",
+    "nearInfrared": "infravermelho próximo",
+    "infrared": "infravermelho"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "wattsPerSquareMetre": "{{value}} W/m²",
+    "watts": "{{value}} W",
+    "kilowattHours": "{{value}} kWh",
+    "celsius": "{{value}} °C",
+    "volts": "{{value}} V",
+    "amps": "{{value}} A",
+    "nm": "{{value}} nm",
+    "um": "{{value}} µm",
+    "mm": "{{value}} mm",
+    "ev": "{{value}} eV",
+    "percent": "{{value}}%",
+    "passes": "não é absorvida"
+  },
+  "sections": {
+    "overview": {
+      "title": "Eletricidade da luz do sol, sem nenhuma peça móvel",
+      "p1": "Você está vendo o terraço de uma casa num dia de primavera de céu limpo. Três <strong>painéis solares</strong> estão enfileirados sobre uma estrutura inclinada, virados para o sul. O sol nasce no leste, sobe até o meio-dia e se põe no oeste. As leituras ao vivo acompanham a luz que chega aos painéis e a potência que eles geram: nada antes do nascer do sol, um pico perto do meio-dia, nada depois do pôr do sol. Num dia de céu limpo como este, um painel gera cerca de 2,3 a 2,7 kWh. Num dia médio de março nesta latitude, já contando as nuvens, ele gera cerca de 1,8 a 2,1 kWh.",
+      "p2": "O painel na ponta oeste da fileira é o que estes capítulos vão abrir. É um painel de telhado típico do começo dos anos 2020, o JinkoSolar Tiger Neo de 420 W. Ele mede 1722 × 1134 mm e pesa 22 kg. Sob 3,2 mm de vidro ficam 108 <strong>meias células</strong> de silício, numa grade de 6 na largura por 18 na altura. O painel não tem peças móveis e não armazena nada. Ele só gera eletricidade enquanto recebe luz. Painéis mais novos têm células maiores e vidro dos dois lados, mas funcionam do mesmo jeito.",
+      "p3": "A etiqueta diz 420 W. Essa é a <strong>potência nominal</strong> do painel, medida sob um sol de teste de 1000 W/m², com as células mantidas a 25 °C. Nesse teste, ele transforma 21,5 por cento da luz em eletricidade. Um telhado de verdade é menos generoso. Aqui, a 40° norte, num meio-dia de primavera de céu limpo, chegam cerca de 970 W/m² ao painel, e as células ficam bem mais quentes que 25 °C. Por isso ele entrega cerca de 380 W, 90 por cento do que diz a etiqueta. O calor rouba potência, como mostra o último capítulo.",
+      "p4": "Um painel faz <strong>três tarefas</strong>. Ele capta a luz. Usa essa luz para liberar elétrons dentro do silício. Depois reúne esses elétrons numa corrente. Uma caixa na parede, o inversor, transforma essa corrente no tipo que uma casa usa. Cada capítulo abaixo trata de uma etapa. Arraste a linha do tempo para mover o sol e mude a velocidade da reprodução para o dia passar mais rápido ou mais devagar. Arraste o modelo para girá-lo. Ligue o caminho do sol, a célula ampliada, o fluxo de corrente ou os rótulos para ver mais."
+    },
+    "sun": {
+      "title": "Inclinado para o sol do meio-dia",
+      "p1": "O modelo mostra o <strong>equinócio</strong>, o dia de março ou de setembro em que o dia e a noite duram quase o mesmo tempo. A 40° norte, mais ou menos a latitude de Madri, Filadélfia ou Pequim, o sol nasce bem no leste às 06:00, no horário solar, e se põe bem no oeste às 18:00. O horário solar segue o próprio sol, então meio-dia é o momento em que ele fica mais alto. Neste dia, ele chega a 50° acima do horizonte sul. Os painéis ficam virados para o sul e inclinados para trás, na direção desse sol do meio-dia.",
+      "p2": "A luz que bate inclinada numa superfície se espalha por uma área maior, então cada metro quadrado recebe menos. Aponte uma lanterna direto para a parede e depois incline o facho: a mancha de luz cresce e fica mais fraca. Essa é a <strong>lei do cosseno</strong>, e é por isso que o ângulo entre o sol e o painel importa tanto. Ao meio-dia, a luz chega a este painel quase de frente. No começo e no fim do dia, ela chega bem inclinada e se espalha até ficar fraca.",
+      "p3": "O ar também conta. Ao meio-dia, a luz do sol atravessa 1,3 vez a quantidade de ar que atravessaria com o sol a pino. Esse número se chama <strong>massa de ar</strong>. Perto do nascer e do pôr do sol, a luz faz um caminho muito mais longo pelo ar. O ar espalha boa parte do azul, por isso o sol baixo parece laranja e vermelho, e passa muito menos energia. Ao meio-dia, chegam cerca de 970 W/m² a este painel. Deitado no terraço, ou de pé como uma parede, ele receberia menos.",
+      "p4": "No equinócio, a melhor inclinação é igual à latitude, 40°, e os 35° deste painel são quase tão bons. Painéis de telhado não seguem o sol: numa casa, motores raramente compensam o custo e o peso. Parte da luz também vem do céu inteiro, e não só do disco do sol. Essa <strong>luz difusa</strong> explica por que as nuvens reduzem a geração, mas não a interrompem. O modelo mostra um céu limpo de livro didático, sem nuvens e sem sombras projetadas. Mude a inclinação ou pule para três momentos do dia.",
+      "control": {
+        "label": "Inclinação do painel",
+        "flat": "Deitado no terraço",
+        "upright": "De pé como uma parede",
+        "incidence": "Ângulo de incidência",
+        "irradiance": "Luz no painel agora",
+        "day": "Dia inteiro nesta inclinação",
+        "flatDay": "Dia inteiro se ficasse deitado"
+      }
+    },
+    "layers": {
+      "title": "Um sanduíche quase todo de vidro",
+      "p1": "Desmonte o painel e você vai encontrar um sanduíche de camadas, da frente para trás. Em cima ficam 3,2 mm de <strong>vidro temperado com pouco ferro</strong>. Os fabricantes o escolhem porque ele é barato, resistente, estável e muito transparente. A têmpera o deixa forte o bastante para aguentar o peso da neve. O vidro tem sua própria camada antirreflexo, então menos luz é refletida pela superfície e mais luz chega às células. Aqui e na célula ampliada, as camadas finas aparecem muito mais grossas do que são.",
+      "p2": "Embaixo do vidro há um filme transparente e grudento, o <strong>encapsulante</strong>. Em geral, é um plástico chamado EVA. Na fábrica, o conjunto todo é aquecido, e o filme une as camadas num bloco vedado, sem ar nem água por dentro. Depois vêm as células: lâminas de silício com cerca de um sétimo de milímetro de espessura. Fios finos passam por cima delas para recolher a corrente. Este painel usa muitos fios finos e redondos em vez de poucas fitas planas. Embaixo das células há outro filme de encapsulante.",
+      "p3": "A parte de trás do painel é um filme plástico resistente chamado <strong>folha traseira</strong>. Ela barra a umidade e isola a fiação. Uma moldura de alumínio anodizado envolve as bordas, deixa o painel mais rígido e dá aos grampos de fixação um lugar para se prender. Atrás fica a caixa de junção, onde a fiação sai para os cabos. Ela também guarda três diodos de bypass, que o capítulo da fiação explica. Cerca de três quartos do peso do painel são de vidro. O silício, que faz todo o trabalho, é só uma pequena parte.",
+      "p4": "As células parecem quase pretas. O silício sem revestimento é brilhante e reflete muita luz. Por isso, a superfície de cada célula ganha uma textura de pirâmides minúsculas e uma camada fina de <strong>nitreto de silício</strong>. A espessura dessa camada é ajustada para refletir muito pouco, e é ela também que define a cor que você vê. Preto não quer dizer melhor: a versão toda preta deste painel tem potência nominal um pouco menor. Separe as camadas e escolha uma para ver do que ela é feita e para que serve.",
+      "control": {
+        "label": "Separe as camadas",
+        "assembled": "Montado",
+        "exploded": "Separado"
+      },
+      "thickness": "Espessura",
+      "material": "Material",
+      "job": "Função"
+    },
+    "junction": {
+      "title": "Um fóton, um elétron",
+      "p1": "A luz chega em pacotinhos de energia chamados <strong>fótons</strong>. Quando o silício absorve um, ele pode liberar um elétron da ligação que o prendia. Agora o elétron fica livre para vagar pelo cristal. Ele deixa para trás um espaço vazio, chamado lacuna, e a lacuna também se move, como uma bolha na água. Um fóton libera no máximo um elétron. Sob sol pleno, uma meia célula libera cerca de 4 × 10¹⁹ elétrons por segundo. A célula ampliada acima do painel mostra uma fatia de uma célula em ação.",
+      "p2": "Um fóton precisa de pelo menos 1,12 eV para liberar um elétron. Esse limite é o <strong>gap de energia</strong> do silício. Quanto mais azul a luz, mais energia cada fóton leva: 3,1 eV a 400 nm, 2,1 eV a 600 nm, 1,24 eV a 1000 nm. Acima de cerca de 1100 nm, os fótons são fracos demais e atravessam direto. Isso corresponde a cerca de 19 por cento da energia da luz do sol e a um terço dos seus fótons. Fótons mais azuis trazem mais do que precisam, e a sobra vira calor, cerca de 30 por cento da luz do sol. Essas duas perdas são o principal motivo de uma célula feita de um só material não passar de cerca de 33 por cento.",
+      "p3": "Cada cor é absorvida numa profundidade própria. A luz azul, de 400 nm, não passa dos primeiros 0,1 µm. A luz vermelha, de 680 nm, chega a cerca de 4,5 µm. O infravermelho de 1000 nm vai a 156 µm, mais fundo que a lâmina inteira de 140 µm. Por isso a célula depende do <strong>aprisionamento de luz</strong>: as pirâmides fazem a luz entrar inclinada, e o fundo da célula a reflete para uma segunda passagem. O limite do silício é 29,4 por cento, e a melhor célula de silício já chegou a 28,1 por cento. Um painel novo típico chega a cerca de 22 a 23 por cento.",
+      "p4": "Os elétrons liberados e as lacunas precisam ser separados antes de se encontrarem de novo. A célula é feita com uma camada que deixa os elétrons saírem, mas bloqueia as lacunas, e outra que faz o contrário. Essas camadas funcionam como <strong>portas de mão única</strong>, então os elétrons se acumulam de um lado e as lacunas do outro. Esse desequilíbrio é a tensão, cerca de 0,7 V por célula. Nesta célula do tipo n, os elétrons saem por trás, e as lacunas pelos dedos de prata da frente. A fatia mostra um só dedo e nenhum fio coletor. Percorra as cores da luz e veja onde cada uma para.",
+      "control": {
+        "label": "Cor da luz",
+        "ultraviolet": "Ultravioleta",
+        "infrared": "Infravermelho",
+        "caption": "A luz do sol que chega ao chão, separada por cor. O âmbar é o que o silício consegue usar, o vermelho é a energia perdida como calor e o cinza atravessa direto.",
+        "energy": "Energia de um fóton",
+        "band": "Cor",
+        "depth": "Absorvida em",
+        "heat": "Sobra como calor"
+      },
+      "pairs": "Elétrons liberados por segundo numa meia célula agora",
+      "tooWeak": "Luz do sol fraca demais para usar",
+      "heat": "Luz do sol perdida como calor na célula"
+    },
+    "wiring": {
+      "title": "A célula mais fraca dita o ritmo",
+      "p1": "Uma célula dá só cerca de 0,7 V, pouco demais para alimentar qualquer coisa. Por isso as células são conectadas <strong>em série</strong>, como os elos de uma corrente, e as tensões se somam. Este painel tem 54 posições de célula, uma depois da outra, o que dá 38,1 V sem nada conectado e 31,5 V no seu melhor ponto de trabalho. A mesma corrente passa por todas as posições, cerca de 13,3 A em potência máxima sob o sol de teste. Os elétrons em si andam devagar, a cerca de um milímetro por segundo ou menos. O que viaja rápido é a energia.",
+      "p2": "Como numa corrente de elos, quem manda é o elo mais fraco. Se uma célula fica na sombra, ela produz menos corrente e segura todas as outras. As células ao sol podem até forçar corrente por ela no sentido contrário, transformando a potência delas em calor nessa única célula: um ponto quente. Por isso a caixa de junção tem três <strong>diodos de bypass</strong>, cada um protegendo um terço do painel. Sob sol pleno, eles ficam desligados. Quando a sombra segura demais um desses terços, o diodo correspondente liga. A corrente contorna esse terço e perde cerca de 0,4 V. Uma célula totalmente na sombra custa então cerca de um terço da potência, e não tudo.",
+      "p3": "Este painel usa <strong>células cortadas ao meio</strong>. As metades de cima e de baixo do painel são conectadas lado a lado, em paralelo, então as suas 108 meias células continuam formando 54 posições em série. A tensão fica igual, e cada meia célula leva metade da corrente, então os fios desperdiçam menos potência em forma de calor. O grande ganho aparece quando a sombra cobre toda a borda de baixo. Cada terço do painel tem um grupo de cima e um grupo de baixo, e os grupos de cima continuam trabalhando, com cerca de metade da potência. Um painel mais antigo de 60 células, desenhado aqui no mesmo tamanho, quase não gera nada: a sombra alcança os seus três terços.",
+      "p4": "O gráfico mostra a corrente do painel em função da tensão. Sem nada conectado, a tensão é máxima e não passa corrente. Junte os dois fios e a corrente vai ao máximo, com a tensão em zero. A potência é uma multiplicada pela outra, e ela chega ao pico na dobra da curva, no <strong>ponto de máxima potência</strong>. A sombra cria degraus e picos extras na curva. Num painel de verdade, a fiação passa atrás das células; aqui, cada grupo aparece como uma linha colorida na frente. A sombra entra inclinada, então um canto escurece primeiro. Escolha uma disposição, deixe a sombra subir e veja cada terço deixar de funcionar, um de cada vez.",
+      "control": {
+        "label": "Sombra subindo pelo painel",
+        "clear": "Sem sombra",
+        "covered": "Todo coberto",
+        "caption": "Corrente em função da tensão para o painel inteiro. O ponto mostra onde o inversor o faz trabalhar. O retângulo sob o ponto é a potência, volts vezes ampères. A curva esmaecida é o painel sem sombra.",
+        "cells": "Células na sombra",
+        "diodes": "Diodos de bypass ligados",
+        "power": "Potência agora",
+        "loss": "Perda pela sombra"
+      },
+      "cellsValue": "{{count}} de {{total}}",
+      "diodesValue": "{{count}} de {{total}}"
+    },
+    "inverter": {
+      "title": "Do telhado à tomada",
+      "p1": "O painel gera corrente contínua, CC, que corre num só sentido. Uma casa funciona com corrente alternada, CA, que vai e volta muitas vezes por segundo. A caixa na parede, o <strong>inversor</strong>, transforma uma na outra. Ele não gera energia nem a armazena. Ele repassa cerca de 96 por cento do que entra, e o resto vira um pouco de calor. Os pontos âmbar mostram para onde vai a energia: corrente contínua do painel até o inversor, depois corrente alternada até o medidor e para dentro da casa.",
+      "p2": "O inversor também mantém o painel no seu melhor. O ponto de máxima potência muda o dia todo: a tensão varia com a temperatura das células, e a corrente com a luz. Por isso o inversor vai tateando até lá, um truque chamado <strong>rastreamento do ponto de máxima potência</strong>. Ele muda um pouco a tensão e confere a potência. Se a potência subiu, ele muda de novo no mesmo sentido. Se caiu, ele volta. Como alguém subindo um morro na neblina, ele fica sempre perto do topo.",
+      "p3": "O calor é inimigo do painel. A cada grau acima de 25 °C, este painel perde 0,29 por cento da potência. Esse número é o seu <strong>coeficiente de temperatura</strong>. Painéis PERC, mais antigos, perdem 0,35 por cento. Num dia de sol, as células ficam entre 45 e 65 °C, mais ou menos. É principalmente por isso que o painel dá cerca de 380 W neste meio-dia de primavera, e não 420. Num telhado quente de verão, a perda é ainda maior. Então um dia frio de céu limpo ganha de um dia quente: painéis funcionam com luz, não com calor. No modelo, a temperatura do ar é a de um dia ameno de primavera.",
+      "p4": "A energia de um dia de primavera de céu limpo poderia manter uma geladeira funcionando por uns dois dias, ou carregar um notebook cerca de 50 vezes. Em um ano, nesta latitude, um painel gera cerca de 600 a 700 kWh. Cada quilowatt de painéis rende cerca de 1000 kWh por ano em Londres ou Berlim e 1800 em Phoenix. A <strong>garantia</strong> promete 87,4 por cento da potência depois de 30 anos. Um painel devolve a energia gasta para fabricá-lo em cerca de um ano. Ao longo de toda a vida útil, ele responde por cerca de 40 g de CO₂ por kWh. Em 2025, a energia solar gerou cerca de 8,7 por cento da eletricidade do mundo. Mude a temperatura ou deixe que ela siga o dia.",
+      "control": {
+        "label": "Temperatura da célula",
+        "cold": "Abaixo de zero",
+        "hot": "Telhado quente de verão",
+        "loss": "Potência em relação a 25 °C",
+        "voltage": "Tensão de circuito aberto",
+        "follow": "Voltar a seguir o dia"
+      },
+      "dc": "Entrando no inversor",
+      "ac": "Saindo para a casa",
+      "today": "Energia gerada até agora",
+      "powers": "Cargas de notebook com a energia de hoje"
+    }
+  }
+}

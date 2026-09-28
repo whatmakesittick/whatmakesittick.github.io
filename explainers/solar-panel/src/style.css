@@ -1,0 +1,154 @@
+:root {
+  --dawn: #ff8fa3;
+  --morning: #ffc46b;
+  --noon: #f5a524;
+  --afternoon: #ffb347;
+  --dusk: #b48cff;
+  --sun: #ffd166;
+  --sky: #7fb8ff;
+  --silicon: #1f2f6b;
+  --glass-tint: #a8d8ff;
+  --electron: #4cc3ff;
+  --hole: #ff6b6b;
+  --copper: #d98c4a;
+  --frame: #c9ced6;
+  --good: #8bd47f;
+  --warn: #ff7eb6;
+}
+
+.tilt-control,
+.wavelength-control,
+.shade-control,
+.temperature-control,
+.section-readouts {
+  --readout-min-width: 8rem;
+}
+
+.tilt-control .range-widget__readouts,
+.wavelength-control .range-widget__readouts,
+.shade-control .range-widget__readouts,
+.temperature-control .range-widget__readouts,
+.layer-readouts,
+.junction-readouts,
+.inverter-readouts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.layer-readouts > div:last-child,
+.junction-readouts > div:first-child {
+  grid-column: 1 / -1;
+}
+
+.junction-readouts [data-readout='junction-pairs'] {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.section-readouts {
+  margin-block: 16px;
+}
+
+.tilt-control .range {
+  --range-color: var(--sun);
+}
+
+.explode-control .range {
+  --range-color: var(--glass-tint);
+}
+
+.wavelength-control .range {
+  --range-color: var(--electron);
+}
+
+.shade-control .range {
+  --range-color: var(--frame);
+}
+
+.temperature-control .range {
+  --range-color: var(--warn);
+}
+
+.spectrum-view,
+.iv-view {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.spectrum-view canvas,
+.iv-view canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-small);
+}
+
+.spectrum-view figcaption,
+.iv-view figcaption {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.chip[data-action='moment'][data-value='sunrise'] {
+  --tone: var(--dawn);
+}
+
+.chip[data-action='moment'][data-value='noon'] {
+  --tone: var(--noon);
+}
+
+.chip[data-action='moment'][data-value='sunset'] {
+  --tone: var(--dusk);
+}
+
+.chip[data-action='layer'][data-value='glass'] {
+  --tone: var(--glass-tint);
+}
+
+.chip[data-action='layer'][data-value='encapsulant'] {
+  --tone: var(--sky);
+}
+
+.chip[data-action='layer'][data-value='cell'] {
+  --tone: var(--electron);
+}
+
+.chip[data-action='layer'][data-value='backsheet'] {
+  --tone: var(--muted);
+}
+
+.chip[data-action='layer'][data-value='frame'] {
+  --tone: var(--frame);
+}
+
+.chip[data-action='layer'][data-value='junctionBox'] {
+  --tone: var(--copper);
+}
+
+.chip[data-action='layout'][data-value='halfCut'] {
+  --tone: var(--electron);
+}
+
+.chip[data-action='layout'][data-value='fullCell'] {
+  --tone: var(--copper);
+}
+
+.chip[data-action='followDay'] {
+  --tone: var(--good);
+}
+
+.chip[data-action='followDay'][aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@media (pointer: coarse) {
+  .chip[data-action='moment'],
+  .chip[data-action='layer'],
+  .chip[data-action='layout'],
+  .chip[data-action='followDay'] {
+    height: 44px;
+  }
+}

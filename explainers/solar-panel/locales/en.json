@@ -1,0 +1,261 @@
+{
+  "meta": {
+    "title": "How a solar panel works",
+    "eyebrow": "Solar panel",
+    "tagline": "A thin slice of silicon turns sunlight into electricity, one loosened electron at a time, from sunrise to sunset.",
+    "description": "See inside a rooftop solar panel in 3D over one clear day: how sunlight frees electrons in silicon, how cells in series build a voltage and how an inverter feeds the house.",
+    "summary": "The sun's path, the layer stack, the silicon junction, cells in series, the inverter."
+  },
+  "stage": {
+    "label": "Interactive solar panel model",
+    "gauge": "Live panel readings"
+  },
+  "controls": {
+    "label": "Solar panel controls",
+    "views": {
+      "sun": {
+        "name": "Sun path",
+        "short": "Sun",
+        "hint": "Sun path (S)"
+      },
+      "slice": {
+        "name": "Magnified cell",
+        "short": "Cell",
+        "hint": "Magnified cell (M)"
+      },
+      "flow": {
+        "name": "Current flow",
+        "short": "Flow",
+        "hint": "Current flow (F)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      }
+    },
+    "momentOptions": {
+      "sunrise": "Just after sunrise",
+      "noon": "Solar noon",
+      "sunset": "Just before sunset"
+    },
+    "layerOptions": {
+      "glass": "Glass",
+      "encapsulant": "Encapsulant",
+      "cell": "Cells",
+      "backsheet": "Backsheet",
+      "frame": "Frame",
+      "junctionBox": "Junction box"
+    },
+    "layoutOptions": {
+      "halfCut": "108 half cells",
+      "fullCell": "60 full cells"
+    }
+  },
+  "timeline": {
+    "label": "Time of day",
+    "phases": "Jump to a time of day",
+    "speed": "Playback",
+    "value": "{{time}} solar time, {{phase}}",
+    "speedValue": "{{minutes}} min/s",
+    "speedDescription": "{{minutes}} minutes of the day pass every second, the whole day in {{seconds}} seconds",
+    "phase": {
+      "dawn": "Dawn",
+      "morning": "Morning",
+      "noon": "High sun",
+      "afternoon": "Afternoon",
+      "dusk": "Dusk"
+    },
+    "during": {
+      "dawn": "the sky brightens and the sun comes up",
+      "morning": "the sun climbs and the power rises",
+      "noon": "the sun is high and the power peaks",
+      "afternoon": "the sun sinks and the power falls",
+      "dusk": "the sun sets and the panel goes quiet"
+    },
+    "jump": {
+      "dawn": "Jump to dawn",
+      "morning": "Jump to the morning",
+      "noon": "Jump to high sun",
+      "afternoon": "Jump to the afternoon",
+      "dusk": "Jump to dusk"
+    }
+  },
+  "readouts": {
+    "sun": "Sun height",
+    "sunValue": "{{value}} up",
+    "irradiance": "Light on the panel",
+    "power": "Panel power",
+    "temperature": "Cell temperature",
+    "energy": "Energy made",
+    "energyValue": "{{value}} today"
+  },
+  "parts": {
+    "sun": "Sun",
+    "roof": "Roof terrace",
+    "panel": "Solar panel",
+    "frame": "Aluminium frame",
+    "glass": "Front glass",
+    "encapsulant": "Encapsulant",
+    "cell": "Silicon cell",
+    "ribbon": "Cell ribbon",
+    "busbar": "Busbar wires",
+    "finger": "Silver finger",
+    "backsheet": "Backsheet",
+    "junctionBox": "Junction box",
+    "bypassDiode": "Bypass diode",
+    "connector": "Connector",
+    "dcCable": "DC cable",
+    "acCable": "AC cable",
+    "inverter": "Inverter",
+    "meter": "Meter",
+    "pyramids": "Pyramid texture",
+    "arCoating": "Anti-reflection coating",
+    "emitter": "Emitter",
+    "junction": "Junction",
+    "base": "Silicon base",
+    "rearContact": "Rear contact"
+  },
+  "layers": {
+    "material": {
+      "glass": "Tempered low-iron glass",
+      "encapsulant": "Clear plastic film, usually EVA",
+      "cell": "Silicon cells and thin wires",
+      "backsheet": "Tough plastic film",
+      "frame": "Anodised aluminium",
+      "junctionBox": "Sealed box with three bypass diodes"
+    },
+    "job": {
+      "glass": "Lets light in, keeps hail and rain out",
+      "encapsulant": "Glues the stack together and seals out air and water",
+      "cell": "Turns light into current",
+      "backsheet": "Seals the back and insulates the wiring",
+      "frame": "Stiffens the edges and takes the mounting clamps",
+      "junctionBox": "Brings the current out to the cables"
+    }
+  },
+  "bands": {
+    "ultraviolet": "ultraviolet",
+    "violet": "violet",
+    "blue": "blue",
+    "green": "green",
+    "yellow": "yellow",
+    "orange": "orange",
+    "red": "red",
+    "nearInfrared": "near infrared",
+    "infrared": "infrared"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "wattsPerSquareMetre": "{{value}} W/m²",
+    "watts": "{{value}} W",
+    "kilowattHours": "{{value}} kWh",
+    "celsius": "{{value}} °C",
+    "volts": "{{value}} V",
+    "amps": "{{value}} A",
+    "nm": "{{value}} nm",
+    "um": "{{value}} µm",
+    "mm": "{{value}} mm",
+    "ev": "{{value}} eV",
+    "percent": "{{value}}%",
+    "passes": "not absorbed"
+  },
+  "sections": {
+    "overview": {
+      "title": "Electricity from sunlight, with no moving parts",
+      "p1": "You are looking at the flat roof of a house on a clear spring day. Three <strong>solar panels</strong> stand in a row on a tilted frame, facing south. The sun rises in the east, climbs until noon and sets in the west. The gauge follows the light on the panels and the power they make: nothing before sunrise, a peak near noon, nothing after sunset. On a clear day like this one, one panel makes about 2.3 to 2.7 kWh. On an average March day at this latitude, with real weather, it makes about 1.8 to 2.1 kWh.",
+      "p2": "The panel at the west end of the row is the one these chapters open up. It is a typical rooftop panel of the early 2020s, the JinkoSolar Tiger Neo 420 W. It measures 1722 × 1134 mm and weighs 22 kg. Under 3.2 mm of glass sit 108 <strong>half cells</strong> of silicon, in a grid 6 across and 18 tall. The panel has no moving parts and stores nothing. It makes electricity only while light falls on it. Newer panels have bigger cells and glass on both sides, but they work the same way.",
+      "p3": "The label says 420 W. That is the panel's <strong>rated power</strong>, measured in a test sun of 1000 W/m², with the cells held at 25 °C. In that test it turns 21.5 percent of the light into electricity. A real roof is less kind. Here, at 40° north on a clear spring noon, about 970 W/m² reaches the panel, and the cells run far warmer than 25 °C. So it gives about 380 W, 90 percent of its label. Heat costs power, as the last chapter shows.",
+      "p4": "A panel does <strong>three jobs</strong>. It catches light. It uses that light to free electrons inside its silicon. Then it collects those electrons into a current. A box on the wall, the inverter, turns that current into the kind a house uses. Each chapter below looks at one step. Drag the timeline to move the sun, and change the playback speed to make the day pass faster or slower. Drag the model to turn it. Switch on the sun path, the magnified cell, the current flow or the labels to see more."
+    },
+    "sun": {
+      "title": "Leaning toward the noon sun",
+      "p1": "The model shows the <strong>equinox</strong>, the day in March or September when day and night are about equally long. At 40° north, about the latitude of Madrid, Philadelphia or Beijing, the sun rises due east at 06:00 solar time and sets due west at 18:00. Solar time follows the sun itself, so noon is the moment it stands highest. Today that is 50° above the southern horizon. The panels face south and lean back toward that noon sun.",
+      "p2": "Light that hits a surface at a slant spreads over more area, so each square metre gets less. Shine a torch straight at a wall, then tilt it: the spot grows and dims. This is the <strong>cosine law</strong>, and it is why the angle between the sun and the panel matters so much. At noon the sunlight meets this panel almost straight on. Early and late in the day it comes in at a steep slant and spreads thin.",
+      "p3": "The air matters too. At noon the sunlight crosses 1.3 times as much air as it would with the sun straight overhead. That number is called the <strong>air mass</strong>. Near sunrise and sunset the light takes a far longer path through the air. The air scatters away much of the blue, so a low sun looks orange and red, and far less energy gets through. At noon about 970 W/m² reaches this panel. Lying flat on the roof, or standing upright like a wall, it would get less.",
+      "p4": "On the equinox the best tilt matches the latitude, 40°, and this panel's 35° is almost as good. Roof panels do not follow the sun: on a house, motors are rarely worth their cost and weight. Some light also comes from the whole sky, not just from the sun's disc. This <strong>diffuse light</strong> is why clouds cut the output but do not stop it. The model shows a textbook clear sky, with no clouds and no cast shadows. Drag the tilt, or jump to three moments of the day.",
+      "control": {
+        "label": "Panel tilt",
+        "flat": "Flat on the roof",
+        "upright": "Upright like a wall",
+        "incidence": "Sun's angle from straight on",
+        "irradiance": "Light on the panel now",
+        "day": "Whole day at this tilt",
+        "flatDay": "Whole day if laid flat"
+      }
+    },
+    "layers": {
+      "title": "A sandwich that is mostly glass",
+      "p1": "Pull the panel apart and you find a sandwich, built up from the front. On top is 3.2 mm of <strong>tempered low-iron glass</strong>. Panel makers choose it because it is cheap, strong, stable and very clear. Tempering makes it tough enough to carry snow. The glass has its own anti-reflection coating, so less light bounces off its surface and more of it reaches the cells. Here and in the magnified cell, the thin layers are drawn far thicker than life.",
+      "p2": "Under the glass lies a clear, sticky film, the <strong>encapsulant</strong>. It is usually a plastic called EVA. In the factory the whole stack is heated, and the film bonds the layers into one sealed block with no air or water inside. Then come the cells: silicon wafers about a seventh of a millimetre thick. Thin wires run across them to carry the current away. This panel uses many thin round wires instead of a few flat strips. Under the cells lies a second film of encapsulant.",
+      "p3": "The back of the panel is a tough plastic film called the <strong>backsheet</strong>. It keeps out damp and insulates the wiring. An anodised aluminium frame wraps the edges, stiffens the panel and gives the mounting clamps something to grip. On the back sits the junction box, where the wiring comes out to the cables. It also holds three bypass diodes, which the wiring chapter explains. By weight the panel is about three quarters glass. The silicon that does all the work is only a small part of it.",
+      "p4": "The cells look almost black. Bare silicon is shiny and throws back a lot of light. So the surface of each cell is etched into tiny pyramids and given a thin coat of <strong>silicon nitride</strong>. The thickness of that coat is tuned so it reflects very little, and it also sets the colour you see. Black does not mean better: the all-black version of this panel is rated a little lower. Pull the layers apart, then pick one to see what it is made of and what it does.",
+      "control": {
+        "label": "Pull the layers apart",
+        "assembled": "Assembled",
+        "exploded": "Spread out"
+      },
+      "thickness": "Thickness",
+      "material": "Made of",
+      "job": "Its job"
+    },
+    "junction": {
+      "title": "One photon, one electron",
+      "p1": "Light comes in tiny packets of energy called <strong>photons</strong>. When silicon absorbs one, it can shake an electron loose from the bond that held it. The electron is now free to wander through the crystal. It leaves behind a gap called a hole, and the hole wanders too, like a bubble in water. One photon frees at most one electron. In full sun, one half cell frees about 4 × 10¹⁹ electrons every second. The magnified cell above the panel shows a slice of one cell at work.",
+      "p2": "A photon needs at least 1.12 eV to free an electron. That is silicon's <strong>band gap</strong>. The bluer the light, the more energy each photon carries: 3.1 eV at 400 nm, 2.1 eV at 600 nm, 1.24 eV at 1000 nm. Beyond about 1100 nm, photons are too weak and pass straight through. That is about 19 percent of the energy in sunlight and a third of its photons. Bluer photons bring more than they need, and the extra turns into heat, about 30 percent of sunlight. These two losses are the main reason a cell made of one material cannot get past about 33 percent.",
+      "p3": "Each colour is caught at its own depth. Blue light at 400 nm is absorbed within the first 0.1 µm. Red light at 680 nm reaches about 4.5 µm. Infrared at 1000 nm goes 156 µm, deeper than the whole 140 µm wafer. So the cell relies on <strong>light trapping</strong>: the pyramids send the light in at a slant, and the back of the cell reflects it for a second pass. Silicon's ceiling is 29.4 percent, and the best silicon cell has reached 28.1 percent. A typical new panel reaches about 22 to 23 percent.",
+      "p4": "Freed electrons and holes must be sorted before they meet again. The cell is built with one layer that lets electrons out but blocks holes, and another that does the opposite. These layers act as <strong>one-way doors</strong>, so electrons pile up on one side and holes on the other. That imbalance is the voltage, about 0.7 V per cell. In this n-type cell the electrons leave through the back, and the holes through the silver fingers on the front. The slice shows one finger and no busbar. Slide through the colours of light and watch where each one stops.",
+      "control": {
+        "label": "Colour of the light",
+        "ultraviolet": "Ultraviolet",
+        "infrared": "Infrared",
+        "caption": "Sunlight at the ground by colour. Amber is what silicon can use, red is energy lost as heat, grey passes straight through.",
+        "energy": "Energy of one photon",
+        "band": "This colour is",
+        "depth": "Absorbed within",
+        "heat": "Left over as heat"
+      },
+      "pairs": "Electrons set free per second in one half cell right now",
+      "tooWeak": "Sunlight too weak to use",
+      "heat": "Sunlight lost as heat in the cell"
+    },
+    "wiring": {
+      "title": "The weakest cell sets the pace",
+      "p1": "One cell gives only about 0.7 V, far too little to run anything. So the cells are wired <strong>in series</strong>, like links in a chain, and their voltages add up. This panel has 54 cell positions, one after another, which gives 38.1 V with nothing connected and 31.5 V at its best working point. The same current flows through every position, about 13.3 A at full power in the test sun. The electrons themselves only drift, about a millimetre per second or less. What moves fast is the energy.",
+      "p2": "A chain is only as strong as its weakest link. If one cell is shaded, it makes less current and holds back all the others. The sunny cells can even force current through it backwards, turning their power into heat in that one cell: a hot spot. So the junction box holds three <strong>bypass diodes</strong>, each guarding a third of the panel. In full sun they stay off. When shade holds back one of those thirds too far, its diode switches on. The current flows around that third and loses about 0.4 V. One fully shaded cell then costs about a third of the power, not all of it.",
+      "p3": "This panel uses <strong>half-cut cells</strong>, each cut in two. The panel's upper and lower halves are wired side by side, in parallel, so its 108 half cells still make 54 positions in series. The voltage stays the same, and each half cell carries half the current, so the wires waste less power as heat. The big gain comes once shade covers the whole bottom edge. Each third of the panel has an upper and a lower string, and the upper strings keep working, with about half the power. An older 60-cell panel, drawn here at the same size, keeps almost none: all three of its thirds reach into the shade.",
+      "p4": "The chart plots the panel's current against its voltage. With nothing connected, the voltage is highest and no current flows. Join the two wires, and the current is highest at zero voltage. Power is the two multiplied, and it peaks on the bend of the curve, at the <strong>maximum power point</strong>. Shade puts steps and extra peaks in the curve. In a real panel the wiring runs behind the cells; here each string is a coloured line on the front. The shadow comes in at a slant, so one corner goes dark first. Pick a layout, let the shadow creep up and watch each third drop out in turn.",
+      "control": {
+        "label": "Shadow creeping up the panel",
+        "clear": "Clear",
+        "covered": "Fully covered",
+        "caption": "Current against voltage for the whole panel. The dot is where the inverter runs it. The box under the dot is the power, volts times amps. The faint curve is the panel without shade.",
+        "cells": "Cells in shadow",
+        "diodes": "Bypass diodes working",
+        "power": "Power now",
+        "loss": "Lost to the shadow"
+      },
+      "cellsValue": "{{count}} of {{total}}",
+      "diodesValue": "{{count}} of {{total}}"
+    },
+    "inverter": {
+      "title": "From the roof to the wall socket",
+      "p1": "The panel makes direct current, DC, which flows one way only. A house runs on alternating current, AC, which swings back and forth many times a second. The box on the wall, the <strong>inverter</strong>, turns one into the other. It neither makes power nor stores it. It passes on about 96 percent of what comes in and loses the rest as a little heat. The amber dots show where the energy goes: direct current from the panel to the inverter, then alternating current on to the meter and into the house.",
+      "p2": "The inverter also keeps the panel at its best. The maximum power point moves all day: the voltage shifts with the cell temperature, and the current with the light. So the inverter feels its way there, a trick called <strong>maximum power point tracking</strong>. It nudges the voltage a little and checks the power. If the power rose, it nudges again the same way. If it fell, it turns back. Like a walker climbing a hill in fog, it stays close to the top.",
+      "p3": "Heat is a panel's enemy. For every degree above 25 °C, this panel loses 0.29 percent of its power. That figure is its <strong>temperature coefficient</strong>. Older PERC panels lose 0.35 percent. On a sunny day the cells run at about 45 to 65 °C. That is the main reason this clear spring noon gives about 380 W, not 420. A hot summer roof costs even more. So a cold, clear day beats a hot one: panels run on light, not heat. The model's air follows a mild spring day.",
+      "p4": "A clear spring day's energy could run a fridge for about two days, or charge a laptop about 50 times. In a year at this latitude, one panel makes about 600 to 700 kWh. Each kilowatt of panels yields about 1000 kWh a year in London or Berlin and 1800 in Phoenix. The <strong>warranty</strong> promises 87.4 percent of the power after 30 years. A panel repays the energy used to make it in about a year. Over its whole life, it causes about 40 g of CO₂ per kWh. In 2025 solar made about 8.7 percent of the world's electricity. Drag the temperature, or let it follow the day.",
+      "control": {
+        "label": "Cell temperature",
+        "cold": "Freezing",
+        "hot": "Hot summer roof",
+        "loss": "Power versus a 25 °C cell",
+        "voltage": "Open-circuit voltage",
+        "follow": "Follow the day again"
+      },
+      "dc": "Into the inverter",
+      "ac": "Out to the house",
+      "today": "Energy so far today",
+      "powers": "Laptop charges from today's energy"
+    }
+  }
+}

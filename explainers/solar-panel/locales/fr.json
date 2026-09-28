@@ -1,0 +1,261 @@
+{
+  "meta": {
+    "title": "Comment fonctionne un panneau solaire",
+    "eyebrow": "Panneau solaire",
+    "tagline": "Une fine tranche de silicium transforme la lumière du soleil en électricité, électron par électron, du lever au coucher du soleil.",
+    "description": "Explorez en 3D un panneau solaire de toit au fil d’une journée sans nuages : comment la lumière libère des électrons dans le silicium, comment des cellules en série créent une tension et comment un onduleur alimente la maison.",
+    "summary": "La course du soleil, les couches du panneau, la jonction dans le silicium, les cellules en série, l’onduleur."
+  },
+  "stage": {
+    "label": "Modèle interactif de panneau solaire",
+    "gauge": "Mesures du panneau en direct"
+  },
+  "controls": {
+    "label": "Commandes du panneau solaire",
+    "views": {
+      "sun": {
+        "name": "Course du soleil",
+        "short": "Soleil",
+        "hint": "Course du soleil (S)"
+      },
+      "slice": {
+        "name": "Cellule agrandie",
+        "short": "Cellule",
+        "hint": "Cellule agrandie (M)"
+      },
+      "flow": {
+        "name": "Flux de courant",
+        "short": "Flux",
+        "hint": "Flux de courant (F)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    },
+    "momentOptions": {
+      "sunrise": "Juste après le lever",
+      "noon": "Midi solaire",
+      "sunset": "Juste avant le coucher"
+    },
+    "layerOptions": {
+      "glass": "Verre",
+      "encapsulant": "Encapsulant",
+      "cell": "Cellules",
+      "backsheet": "Film arrière",
+      "frame": "Cadre",
+      "junctionBox": "Boîte de jonction"
+    },
+    "layoutOptions": {
+      "halfCut": "108 demi-cellules",
+      "fullCell": "60 cellules entières"
+    }
+  },
+  "timeline": {
+    "label": "Heure de la journée",
+    "phases": "Aller à un moment de la journée",
+    "speed": "Lecture",
+    "value": "{{time}} en heure solaire, {{phase}}",
+    "speedValue": "{{minutes}} min/s",
+    "speedDescription": "{{minutes}} minutes de la journée défilent chaque seconde, la journée entière en {{seconds}} secondes",
+    "phase": {
+      "dawn": "Aube",
+      "morning": "Matin",
+      "noon": "Mi-journée",
+      "afternoon": "Après-midi",
+      "dusk": "Crépuscule"
+    },
+    "during": {
+      "dawn": "le ciel s’éclaire et le soleil se lève",
+      "morning": "le soleil monte et la puissance augmente",
+      "noon": "le soleil est haut et la puissance culmine",
+      "afternoon": "le soleil descend et la puissance baisse",
+      "dusk": "le soleil se couche et le panneau s’endort"
+    },
+    "jump": {
+      "dawn": "Aller à l’aube",
+      "morning": "Aller au matin",
+      "noon": "Aller à la mi-journée",
+      "afternoon": "Aller à l’après-midi",
+      "dusk": "Aller au crépuscule"
+    }
+  },
+  "readouts": {
+    "sun": "Hauteur du soleil",
+    "sunValue": "{{value}} de hauteur",
+    "irradiance": "Lumière sur le panneau",
+    "power": "Puissance du panneau",
+    "temperature": "Température des cellules",
+    "energy": "Énergie produite",
+    "energyValue": "{{value}} aujourd’hui"
+  },
+  "parts": {
+    "sun": "Soleil",
+    "roof": "Toit-terrasse",
+    "panel": "Panneau solaire",
+    "frame": "Cadre en aluminium",
+    "glass": "Verre avant",
+    "encapsulant": "Encapsulant",
+    "cell": "Cellule en silicium",
+    "ribbon": "Ruban de connexion",
+    "busbar": "Fils collecteurs",
+    "finger": "Doigt en argent",
+    "backsheet": "Film arrière",
+    "junctionBox": "Boîte de jonction",
+    "bypassDiode": "Diode de dérivation",
+    "connector": "Connecteur",
+    "dcCable": "Câble CC",
+    "acCable": "Câble CA",
+    "inverter": "Onduleur",
+    "meter": "Compteur",
+    "pyramids": "Texture en pyramides",
+    "arCoating": "Couche antireflet",
+    "emitter": "Émetteur",
+    "junction": "Jonction",
+    "base": "Base en silicium",
+    "rearContact": "Contact arrière"
+  },
+  "layers": {
+    "material": {
+      "glass": "Verre trempé extra-clair",
+      "encapsulant": "Film plastique transparent, souvent de l’EVA",
+      "cell": "Cellules en silicium et fils fins",
+      "backsheet": "Film plastique résistant",
+      "frame": "Aluminium anodisé",
+      "junctionBox": "Boîte étanche avec trois diodes de dérivation"
+    },
+    "job": {
+      "glass": "Laisse entrer la lumière, arrête la grêle et la pluie",
+      "encapsulant": "Colle l’empilement et le protège de l’air et de l’eau",
+      "cell": "Transforme la lumière en courant",
+      "backsheet": "Ferme l’arrière et isole le câblage",
+      "frame": "Rigidifie les bords et reçoit les brides de fixation",
+      "junctionBox": "Fait sortir le courant vers les câbles"
+    }
+  },
+  "bands": {
+    "ultraviolet": "ultraviolet",
+    "violet": "violet",
+    "blue": "bleu",
+    "green": "vert",
+    "yellow": "jaune",
+    "orange": "orange",
+    "red": "rouge",
+    "nearInfrared": "proche infrarouge",
+    "infrared": "infrarouge"
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "wattsPerSquareMetre": "{{value}} W/m²",
+    "watts": "{{value}} W",
+    "kilowattHours": "{{value}} kWh",
+    "celsius": "{{value}} °C",
+    "volts": "{{value}} V",
+    "amps": "{{value}} A",
+    "nm": "{{value}} nm",
+    "um": "{{value}} µm",
+    "mm": "{{value}} mm",
+    "ev": "{{value}} eV",
+    "percent": "{{value}} %",
+    "passes": "aucune, la lumière traverse"
+  },
+  "sections": {
+    "overview": {
+      "title": "Du soleil à l’électricité, sans aucune pièce mobile",
+      "p1": "Vous voici sur le toit plat d’une maison, par une journée de printemps sans nuages. Trois <strong>panneaux solaires</strong> se dressent en rang sur un support incliné, face au sud. Le soleil se lève à l’est, monte jusqu’à midi, puis se couche à l’ouest. La jauge suit la lumière reçue par les panneaux et la puissance qu’ils produisent : rien avant le lever du soleil, un pic vers midi, rien après son coucher. Par une journée claire comme celle-ci, un panneau produit environ 2,3 à 2,7 kWh. Un jour de mars moyen à cette latitude, météo comprise, il produit plutôt 1,8 à 2,1 kWh.",
+      "p2": "Le panneau situé à l’extrémité ouest de la rangée est celui que nous allons ouvrir au fil des chapitres. C’est un panneau de toit typique du début des années 2020, le JinkoSolar Tiger Neo de 420 W. Il mesure 1 722 × 1 134 mm et pèse 22 kg. Sous 3,2 mm de verre se trouvent 108 <strong>demi-cellules</strong> en silicium, disposées en grille, 6 en largeur et 18 en hauteur. Le panneau n’a aucune pièce mobile et ne stocke rien. Il ne produit de l’électricité que lorsque la lumière l’éclaire. Les panneaux plus récents ont des cellules plus grandes et du verre des deux côtés, mais ils fonctionnent de la même façon.",
+      "p3": "L’étiquette annonce 420 W. C’est la <strong>puissance crête</strong> du panneau, mesurée sous un éclairage de test de 1 000 W/m², avec les cellules maintenues à 25 °C. Dans ces conditions, il transforme 21,5 % de la lumière en électricité. Un vrai toit est moins clément. Ici, à 40° de latitude nord, par un midi de printemps sans nuages, environ 970 W/m² arrivent sur le panneau, et les cellules chauffent bien au-delà de 25 °C. Il fournit donc environ 380 W, soit 90 % de la valeur affichée. La chaleur fait perdre de la puissance, comme le montre le dernier chapitre.",
+      "p4": "Un panneau remplit <strong>trois tâches</strong>. Il capte la lumière. Il s’en sert pour libérer des électrons dans son silicium. Puis il rassemble ces électrons en un courant. Un boîtier fixé au mur, l’onduleur, transforme ce courant en celui qu’utilise une maison. Chaque chapitre ci-dessous s’arrête sur une étape. Faites glisser la barre du temps pour déplacer le soleil, et changez la vitesse de lecture pour accélérer ou ralentir la journée. Faites glisser le modèle pour le tourner. Affichez la course du soleil, la cellule agrandie, le flux de courant ou les étiquettes pour en voir davantage."
+    },
+    "sun": {
+      "title": "Incliné vers le soleil de midi",
+      "p1": "Le modèle montre l’<strong>équinoxe</strong>, cette date de mars ou de septembre où le jour et la nuit ont presque la même durée. À 40° de latitude nord, à peu près celle de Madrid, de Philadelphie ou de Pékin, le soleil se lève plein est à 06:00 en heure solaire et se couche plein ouest à 18:00. L’heure solaire suit le soleil lui-même : midi est l’instant où il est le plus haut. Ce jour-là, il culmine à 50° au-dessus de l’horizon sud. Les panneaux font face au sud et se penchent vers ce soleil de midi.",
+      "p2": "Une lumière qui arrive en biais s’étale sur une plus grande surface, et chaque mètre carré en reçoit moins. Braquez une lampe de poche droit sur un mur, puis inclinez-la : la tache grandit et pâlit. C’est la <strong>loi du cosinus</strong>, et c’est pour cela que l’angle entre le soleil et le panneau compte autant. À midi, la lumière frappe ce panneau presque de face. Tôt le matin et tard le soir, elle arrive très en biais et se dilue.",
+      "p3": "L’air compte aussi. À midi, la lumière traverse 1,3 fois plus d’air que si le soleil était juste au-dessus de vous. Ce nombre s’appelle la <strong>masse d’air</strong>. Près du lever et du coucher, la lumière parcourt un chemin bien plus long dans l’air. L’air diffuse une grande partie du bleu : le soleil bas paraît orange et rouge. Et beaucoup moins d’énergie arrive jusqu’au sol. À midi, environ 970 W/m² atteignent ce panneau. Posé à plat sur le toit, ou dressé comme un mur, il en recevrait moins.",
+      "p4": "À l’équinoxe, la meilleure inclinaison est égale à la latitude, 40°, et les 35° de ce panneau font presque aussi bien. Les panneaux de toit ne suivent pas le soleil : sur une maison, un système motorisé vaut rarement son prix et son poids. Une partie de la lumière vient aussi de tout le ciel, pas seulement du disque solaire. Cette <strong>lumière diffuse</strong> explique pourquoi les nuages réduisent la production sans l’arrêter. Le modèle montre un ciel parfaitement dégagé, comme dans les manuels, sans nuages ni ombres portées. Réglez l’inclinaison, ou sautez à trois moments de la journée.",
+      "control": {
+        "label": "Inclinaison du panneau",
+        "flat": "À plat sur le toit",
+        "upright": "Vertical comme un mur",
+        "incidence": "Angle d’incidence du soleil",
+        "irradiance": "Lumière sur le panneau en ce moment",
+        "day": "Journée entière à cette inclinaison",
+        "flatDay": "Journée entière à plat"
+      }
+    },
+    "layers": {
+      "title": "Un sandwich fait surtout de verre",
+      "p1": "Démontez le panneau : vous découvrez un sandwich, couche après couche depuis l’avant. Sur le dessus, 3,2 mm de <strong>verre trempé extra-clair</strong>, pauvre en fer. Les fabricants le choisissent parce qu’il est bon marché, solide, stable et très transparent. La trempe le rend assez robuste pour porter la neige. Le verre a son propre traitement antireflet : moins de lumière rebondit sur sa surface, et davantage atteint les cellules. Ici comme dans la cellule agrandie, les couches fines sont dessinées bien plus épaisses qu’en réalité.",
+      "p2": "Sous le verre se trouve un film transparent et collant, l’<strong>encapsulant</strong>. C’est le plus souvent un plastique appelé EVA. En usine, on chauffe tout l’empilement, et le film soude les couches en un seul bloc étanche, sans air ni eau à l’intérieur. Viennent ensuite les cellules : des plaquettes de silicium d’environ un septième de millimètre d’épaisseur. Des fils fins les parcourent pour emporter le courant. Ce panneau utilise de nombreux fils ronds et fins au lieu de quelques rubans plats. Sous les cellules, on trouve un second film d’encapsulant.",
+      "p3": "Au dos, une feuille de plastique résistant ferme le panneau : c’est le <strong>film arrière</strong>, souvent appelé backsheet. Il protège de l’humidité et isole le câblage. Un cadre en aluminium anodisé entoure les bords, rigidifie le panneau et offre une prise aux brides de fixation. À l’arrière est fixée la boîte de jonction, où le câblage interne rejoint les câbles de sortie. Elle abrite aussi trois diodes de dérivation, présentées dans le chapitre sur le câblage. En poids, le panneau est fait aux trois quarts de verre. Le silicium, qui fait tout le travail, n’en représente qu’une petite part.",
+      "p4": "Les cellules paraissent presque noires. Le silicium nu est brillant et renvoie beaucoup de lumière. On grave donc la surface de chaque cellule en minuscules pyramides, puis on la recouvre d’une fine couche de <strong>nitrure de silicium</strong>. L’épaisseur de cette couche est réglée pour refléter très peu, et c’est elle aussi qui donne la couleur que vous voyez. Noir ne veut pas dire meilleur : la version entièrement noire de ce panneau affiche une puissance un peu plus faible. Écartez les couches, puis choisissez-en une pour voir de quoi elle est faite et à quoi elle sert.",
+      "control": {
+        "label": "Écarter les couches",
+        "assembled": "Assemblé",
+        "exploded": "Éclaté"
+      },
+      "thickness": "Épaisseur",
+      "material": "Matériau",
+      "job": "Son rôle"
+    },
+    "junction": {
+      "title": "Un photon, un électron",
+      "p1": "La lumière arrive en minuscules paquets d’énergie appelés <strong>photons</strong>. Quand le silicium en absorbe un, ce photon peut arracher un électron à la liaison qui le retenait. L’électron est alors libre d’errer dans le cristal. Il laisse derrière lui un vide, appelé trou, et le trou se déplace lui aussi, comme une bulle dans l’eau. Un photon libère au plus un électron. En plein soleil, une demi-cellule libère environ 4 × 10¹⁹ électrons chaque seconde. La cellule agrandie au-dessus du panneau montre une tranche de cellule au travail.",
+      "p2": "Pour libérer un électron, un photon doit apporter au moins 1,12 eV. C’est la <strong>bande interdite</strong> du silicium, son seuil d’énergie. Plus la lumière est bleue, plus chaque photon porte d’énergie : 3,1 eV à 400 nm, 2,1 eV à 600 nm, 1,24 eV à 1000 nm. Au-delà d’environ 1100 nm, les photons sont trop faibles et traversent sans s’arrêter. Cela représente environ 19 % de l’énergie du soleil et un tiers de ses photons. Les photons plus bleus apportent plus que nécessaire. Ce surplus se change en chaleur : environ 30 % de l’énergie solaire est perdue ainsi. Ce sont surtout ces deux pertes qui empêchent une cellule faite d’un seul matériau de dépasser environ 33 %.",
+      "p3": "Chaque couleur est arrêtée à sa propre profondeur. La lumière bleue de 400 nm est absorbée sur une épaisseur de 0,1 µm à peine. La lumière rouge de 680 nm descend jusqu’à environ 4,5 µm. L’infrarouge de 1000 nm parcourt 156 µm, plus que toute l’épaisseur de la plaquette de 140 µm. La cellule compte donc sur le <strong>piégeage de la lumière</strong> : les pyramides font entrer la lumière en biais, et le dos de la cellule la renvoie pour un second passage. Le rendement du silicium plafonne à 29,4 %, et la meilleure cellule a atteint 28,1 %. Un panneau neuf typique a un rendement d’environ 22 à 23 %.",
+      "p4": "Les électrons et les trous libérés doivent être triés avant de se rejoindre. La cellule comporte une couche qui laisse sortir les électrons mais bloque les trous, et une autre qui fait l’inverse. Ces couches agissent comme des <strong>portes à sens unique</strong> : les électrons s’accumulent d’un côté, les trous de l’autre. C’est ce déséquilibre qui crée la tension, environ 0,7 V par cellule. Dans cette cellule de type n, les électrons sortent par l’arrière, et les trous par les doigts en argent de la face avant. La tranche montre un seul doigt et pas de fil collecteur. Faites défiler les couleurs de la lumière et regardez où chacune s’arrête.",
+      "control": {
+        "label": "Couleur de la lumière",
+        "ultraviolet": "Ultraviolet",
+        "infrared": "Infrarouge",
+        "caption": "La lumière du soleil au sol, couleur par couleur. L’ambre est ce que le silicium peut utiliser, le rouge l’énergie perdue en chaleur, le gris ce qui traverse sans s’arrêter.",
+        "energy": "Énergie d’un photon",
+        "band": "Couleur",
+        "depth": "Profondeur d’absorption",
+        "heat": "Surplus perdu en chaleur"
+      },
+      "pairs": "Électrons libérés chaque seconde dans une demi-cellule, en ce moment",
+      "tooWeak": "Lumière trop faible pour servir",
+      "heat": "Lumière perdue en chaleur dans la cellule"
+    },
+    "wiring": {
+      "title": "La cellule la plus faible donne le rythme",
+      "p1": "Une cellule ne donne qu’environ 0,7 V, bien trop peu pour faire marcher quoi que ce soit. On relie donc les cellules <strong>en série</strong>, comme les maillons d’une chaîne, et leurs tensions s’additionnent. Ce panneau compte 54 positions de cellules, l’une après l’autre, ce qui donne 38,1 V quand rien n’est branché et 31,5 V à son meilleur point de fonctionnement. Le même courant traverse chaque position, environ 13,3 A à pleine puissance sous l’éclairage de test. Les électrons eux-mêmes ne font que dériver, à environ un millimètre par seconde ou moins. Ce qui va vite, c’est l’énergie.",
+      "p2": "Une chaîne ne vaut que par son maillon le plus faible. Si une cellule est à l’ombre, elle produit moins de courant et freine toutes les autres. Les cellules ensoleillées peuvent même forcer le courant à la traverser à l’envers, et leur puissance se change en chaleur dans cette seule cellule : c’est un point chaud. La boîte de jonction abrite donc trois <strong>diodes de dérivation</strong>, chacune chargée d’un tiers du panneau. En plein soleil, elles restent inactives. Quand l’ombre freine trop l’un de ces tiers, sa diode entre en jeu. Le courant contourne alors ce tiers et perd environ 0,4 V. Une cellule entièrement à l’ombre ne coûte donc qu’environ un tiers de la puissance, pas la totalité.",
+      "p3": "Ce panneau utilise des <strong>cellules coupées en deux</strong>. La moitié haute et la moitié basse du panneau sont câblées côte à côte, en parallèle, si bien que ses 108 demi-cellules forment toujours 54 positions en série. La tension reste la même, et chaque demi-cellule porte la moitié du courant : les fils perdent moins de puissance en chaleur. Le vrai gain apparaît dès que l’ombre couvre tout le bord inférieur. Chaque tiers du panneau a une chaîne du haut et une chaîne du bas, et les chaînes du haut continuent de travailler, avec environ la moitié de la puissance. Un ancien panneau de 60 cellules, dessiné ici à la même taille, ne garde presque rien : ses trois tiers plongent tous dans l’ombre.",
+      "p4": "Le graphique trace le courant du panneau en fonction de sa tension. Quand rien n’est branché, la tension est maximale et aucun courant ne passe. Reliez les deux fils entre eux, et le courant devient maximal quand la tension est nulle. La puissance est le produit des deux, et elle culmine dans le coude de la courbe, au <strong>point de puissance maximale</strong>. L’ombre dessine des marches dans la courbe et peut lui ajouter d’autres sommets. Dans un vrai panneau, le câblage passe derrière les cellules ; ici, chaque chaîne est une ligne colorée sur la face avant. L’ombre arrive en biais, si bien qu’un coin s’assombrit d’abord. Choisissez une disposition, laissez l’ombre monter et regardez chaque tiers décrocher à son tour.",
+      "control": {
+        "label": "Ombre qui monte sur le panneau",
+        "clear": "Dégagé",
+        "covered": "Entièrement couvert",
+        "caption": "Courant en fonction de la tension pour tout le panneau. Le point montre où l’onduleur le fait travailler. Le rectangle sous le point représente la puissance, volts fois ampères. La courbe pâle montre le panneau sans ombre.",
+        "cells": "Cellules à l’ombre",
+        "diodes": "Diodes de dérivation actives",
+        "power": "Puissance actuelle",
+        "loss": "Perte due à l’ombre"
+      },
+      "cellsValue": "{{count}} sur {{total}}",
+      "diodesValue": "{{count}} sur {{total}}"
+    },
+    "inverter": {
+      "title": "Du toit à la prise de courant",
+      "p1": "Le panneau produit du courant continu, le CC, qui circule dans un seul sens. Une maison fonctionne au courant alternatif, le CA, qui change de sens de nombreuses fois par seconde. Le boîtier fixé au mur, l’<strong>onduleur</strong>, transforme l’un en l’autre. Il ne crée pas d’énergie et n’en stocke pas. Il transmet environ 96 % de ce qui entre, et le reste part en un peu de chaleur. Les points ambrés montrent où va l’énergie : du courant continu du panneau jusqu’à l’onduleur, puis du courant alternatif vers le compteur et dans la maison.",
+      "p2": "L’onduleur veille aussi à tirer le meilleur du panneau. Le point de puissance maximale bouge toute la journée : la tension varie avec la température des cellules, et le courant avec la lumière. L’onduleur cherche donc ce point à tâtons, une astuce appelée <strong>suivi du point de puissance maximale</strong>. Il modifie un peu la tension et vérifie la puissance. Si elle a augmenté, il recommence dans le même sens. Si elle a baissé, il fait demi-tour. Comme un randonneur qui gravit une colline dans le brouillard, il reste près du sommet.",
+      "p3": "La chaleur est l’ennemie du panneau. Pour chaque degré au-dessus de 25 °C, ce panneau perd 0,29 % de sa puissance. Ce chiffre est son <strong>coefficient de température</strong>. Les anciens panneaux PERC perdent 0,35 %. Par une journée ensoleillée, les cellules montent entre 45 et 65 °C environ. C’est la principale raison pour laquelle ce midi de printemps sans nuages donne environ 380 W, et non 420. Sur un toit brûlant en été, la perte est plus forte encore. Une journée froide et claire vaut donc mieux qu’une journée chaude : les panneaux fonctionnent à la lumière, pas à la chaleur. Dans le modèle, la température de l’air est celle d’une douce journée de printemps.",
+      "p4": "L’énergie d’une journée de printemps sans nuages pourrait faire tourner un réfrigérateur pendant à peu près deux jours, ou recharger un ordinateur portable environ 50 fois. En un an, à cette latitude, un panneau produit environ 600 à 700 kWh. Chaque kilowatt de panneaux fournit environ 1 000 kWh par an à Londres ou à Berlin, et 1 800 à Phoenix. La <strong>garantie</strong> promet 87,4 % de la puissance au bout de 30 ans. Un panneau rembourse l’énergie de sa fabrication en un an environ. Sur toute sa durée de vie, il est responsable d’environ 40 g de CO₂ par kWh. En 2025, le solaire a produit environ 8,7 % de l’électricité mondiale. Réglez la température, ou laissez-la suivre la journée.",
+      "control": {
+        "label": "Température des cellules",
+        "cold": "Glacial",
+        "hot": "Toit brûlant en été",
+        "loss": "Puissance par rapport à une cellule à 25 °C",
+        "voltage": "Tension à vide",
+        "follow": "Revenir au fil de la journée"
+      },
+      "dc": "Vers l’onduleur",
+      "ac": "Vers la maison",
+      "today": "Énergie produite aujourd’hui",
+      "powers": "Recharges d’ordinateur portable grâce à l’énergie du jour"
+    }
+  }
+}
