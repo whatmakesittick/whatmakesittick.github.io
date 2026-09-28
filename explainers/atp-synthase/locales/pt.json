@@ -1,0 +1,190 @@
+{
+  "meta": {
+    "title": "Como funciona a ATP sintase",
+    "eyebrow": "ATP sintase",
+    "tagline": "O motor giratório das suas células que recarrega o combustível de cada passada.",
+    "description": "Um modelo 3D interativo da ATP sintase, o motor rotativo das suas mitocôndrias. Veja os prótons girarem o rotor, acompanhe o ATP sendo feito de três em três e descubra o que isso significa para um sprint, uma maratona e o seu treino.",
+    "summary": "O empurrão dos prótons, o anel do rotor, os três sítios, sprint contra maratona, treino."
+  },
+  "stage": {
+    "label": "Modelo interativo da ATP sintase",
+    "gauge": "Leituras do motor ao vivo"
+  },
+  "controls": {
+    "label": "Controles do motor",
+    "views": {
+      "membrane": {
+        "name": "Membrana",
+        "short": "Membrana",
+        "hint": "Membrana (M)"
+      },
+      "cutaway": {
+        "name": "Cabeça transparente",
+        "short": "Por dentro",
+        "hint": "Cabeça transparente (C)"
+      },
+      "flow": {
+        "name": "Prótons e moléculas",
+        "short": "Fluxo",
+        "hint": "Prótons e moléculas (F)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    },
+    "ringOptions": {
+      "animal": "Humanos e outros animais: 8",
+      "yeast": "Levedura e E. coli: 10",
+      "chloroplast": "Folhas de espinafre: 14"
+    },
+    "eventOptions": {
+      "m100": "100 m",
+      "m200": "200 m",
+      "m400": "400 m",
+      "m800": "800 m",
+      "m1500": "1500 m",
+      "m5000": "5000 m",
+      "marathon": "Maratona"
+    },
+    "trainingOptions": {
+      "untrained": "Sem treino",
+      "tenWeeks": "Após 10 semanas",
+      "years": "Anos de treino de endurance"
+    }
+  },
+  "timeline": {
+    "label": "Ângulo do rotor",
+    "phases": "Ir para um ATP",
+    "speed": "Reprodução",
+    "value": "{{angle}}, {{phase}}",
+    "realTime": "Tempo real, cerca de {{value}} voltas por segundo",
+    "slower": "{{factor}} vezes mais lento que na vida real",
+    "phase": {
+      "firstAtp": "Primeiro ATP",
+      "secondAtp": "Segundo ATP",
+      "thirdAtp": "Terceiro ATP"
+    },
+    "during": {
+      "firstAtp": "fazendo o primeiro ATP desta volta",
+      "secondAtp": "fazendo o segundo ATP desta volta",
+      "thirdAtp": "fazendo o terceiro ATP desta volta"
+    },
+    "jump": {
+      "firstAtp": "Ir para o primeiro ATP",
+      "secondAtp": "Ir para o segundo ATP",
+      "thirdAtp": "Ir para o terceiro ATP"
+    }
+  },
+  "readouts": {
+    "angle": "Ângulo do rotor",
+    "atp": "ATP produzido",
+    "protons": "Prótons que passaram",
+    "perAtp": "Prótons por ATP"
+  },
+  "parts": {
+    "membrane": "Membrana interna",
+    "cRing": "Anel do rotor",
+    "subunitA": "Portão de prótons (subunidade a)",
+    "centralStalk": "Eixo curvo",
+    "peripheralStalk": "Braço lateral",
+    "alphaSubunits": "Subunidades α",
+    "betaSubunits": "Subunidades β",
+    "openSite": "Sítio aberto",
+    "looseSite": "Sítio frouxo",
+    "tightSite": "Sítio apertado",
+    "adpPhosphate": "ADP e fosfato",
+    "atp": "ATP novo",
+    "protons": "Prótons",
+    "pumps": "Bombas de prótons",
+    "electrons": "Elétrons dos alimentos",
+    "oxygen": "Oxigênio",
+    "matrix": "Matriz",
+    "intermembraneSpace": "Espaço intermembranas",
+    "neighbourMotors": "Mais motores"
+  },
+  "sites": {
+    "name": {
+      "open": "Aberto",
+      "loose": "Frouxo",
+      "tight": "Apertado"
+    },
+    "doing": {
+      "open": "Aberto: recebe ADP e fosfato",
+      "loose": "Frouxo: fecha para fazer ATP",
+      "tight": "Apertado: abre para soltar o ATP"
+    }
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "litresPerMinute": "{{value}} L por minuto",
+    "kilograms": "{{value}} kg",
+    "times": "×{{value}}",
+    "percent": "{{value}}%",
+    "percentRange": "{{low}} a {{high}}%"
+  },
+  "sections": {
+    "overview": {
+      "title": "Cada passada é paga em ATP",
+      "p1": "Pense na saída do bloco num sprint, ou em ficar de pé nos pedais numa subida íngreme. Cada vez que uma fibra muscular se contrai, ela gasta uma pequena molécula chamada <strong>ATP</strong>, a moeda de energia de toda célula. Seus músculos guardam ATP para apenas um ou dois segundos de esforço máximo. Ainda assim, o ATP nunca acaba. Até no fim do esforço mais duro, o nível cai no máximo um terço. Seu corpo simplesmente refaz o ATP na mesma velocidade em que você o gasta.",
+      "p2": "O segredo é a <strong>reciclagem</strong>. Cada ATP é gasto ao se partir em ADP e fosfato, e depois é refeito, de novo e de novo. Seu corpo inteiro guarda só algo entre 50 e 100 g de ATP a cada momento. Mesmo assim, ele refaz dezenas de quilos por dia, mais ou menos o seu peso se você é ativo. Uma maratona consome cerca de 50 a 60 kg de ATP, mais do que pesa a maioria dos corredores. Em repouso, cerca de 90 por cento de toda essa reconstrução acontece na máquina que você está vendo.",
+      "p3": "Essa máquina é a <strong>ATP sintase</strong>, um motor rotativo feito de proteína. Ela fica nas dobras da membrana interna das suas mitocôndrias, as usinas de energia das suas células. Essas dobras se chamam cristas. A cabeça do motor se projeta para a matriz, o espaço dentro dessa membrana. Os motores de verdade ficam em pares, em longas fileiras nas bordas curvas das dobras. O modelo mostra só um. Cada motor tem cerca de 24 nm de altura, e um nanômetro é um milionésimo de milímetro. Uns 3.000 deles empilhados equivaleriam à espessura de um fio de cabelo.",
+      "p4": "Ela tem quatro partes principais. Uma cabeça de seis peças, três chamadas α e três chamadas β, fabrica o ATP. Um eixo curvo sobe pelo meio dela. Embaixo, um anel de 8 pás gira dentro da membrana, e juntos o anel e o eixo formam o <strong>rotor</strong>. Um braço lateral segura a cabeça parada. O modelo usa formas simples, roda em câmera lenta e aparece girando de forma contínua. Arraste a linha do tempo sob o modelo para girar o rotor à mão, e arraste o modelo para vê-lo de qualquer lado."
+    },
+    "gradient": {
+      "title": "Por que você fica ofegante",
+      "p1": "No meio de uma subida longa, você respira rápido e fundo. Esse ar é para as suas mitocôndrias. O corpo quebra os alimentos e entrega os elétrons deles a uma molécula transportadora chamada NADH. Nas partes planas das dobras, a <strong>cadeia transportadora de elétrons</strong> passa esses elétrons por três bombas de prótons. Cada bomba usa a energia dos elétrons para empurrar prótons para fora da matriz. Para cada NADH, 10 prótons saem. O modelo desenha as bombas de forma simplificada e fora de escala.",
+      "p2": "O <strong>oxigênio</strong> é a última parada dos elétrons. Na última bomba, o oxigênio recebe os elétrons e vira água. Sem oxigênio, os elétrons não têm para onde ir, e as bombas param. Por isso você fica ofegante: cada respiração mantém as bombas trabalhando. Esse trabalho cria um empurrão de cerca de 200 mV, quase todo em forma de voltagem elétrica, através de uma membrana de apenas uns 4 a 5 nm de espessura. Os prótons se amontoam para voltar à matriz, e o principal caminho de volta passa pela ATP sintase.",
+      "p3": "Arraste o controle para escolher quanto oxigênio você absorve. Quanto mais oxigênio, mais ATP esses motores conseguem fazer. Em repouso, sentado, você usa cerca de 0,25 L por minuto, o que dá cerca de 40 kg de ATP por dia. No esforço máximo, o limite é o seu <strong>VO2máx</strong>, o máximo de oxigênio que você consegue usar em um minuto para cada quilo do seu peso. Jovens adultos chegam a cerca de 48 mL por kg por minuto nos homens e 38 nas mulheres. Campeões de endurance ficam entre 70 e 85. O maior valor publicado é 96,7, de um ciclista campeão mundial júnior, na ponta direita do controle.",
+      "p4": "Quanto rende cada respiração? Cerca de 5 ATP por molécula de oxigênio, ou cerca de 2,5 por NADH. Queimar uma glicose com oxigênio rende cerca de 30 ATP. Sem oxigênio, a <strong>glicólise</strong> quebra a glicose só em parte e faz apenas 2 ATP, ou 3 quando o açúcar vem do glicogênio guardado no músculo. Assim, com oxigênio você tira muito mais de cada grama de açúcar, e a maior parte desse ATP extra vem desses motores.",
+      "control": {
+        "label": "Oxigênio que você absorve",
+        "rest": "Em repouso",
+        "record": "Recorde de VO2máx",
+        "perMinute": "ATP produzido por minuto",
+        "perHour": "ATP produzido por hora",
+        "vsRest": "Comparado com o repouso"
+      }
+    },
+    "rotor": {
+      "title": "Oito prótons por volta",
+      "p1": "Imagine os portões de um estádio antes de um clássico. Ninguém entra direto: cada torcedor empurra uma catraca, e a multidão a mantém girando. Os prótons encontram um portão assim. Eles não conseguem atravessar sozinhos a membrana gordurosa. Ao lado do anel do rotor fica a <strong>subunidade a</strong>, o portão de prótons. Ela tem dois semicanais que não se alinham, então não existe um túnel reto de um lado ao outro.",
+      "p2": "Um próton sobe pelo semicanal de entrada, vindo do espaço intermembranas, e pousa numa pá. Cada pá carrega um <strong>glutamato</strong>, um aminoácido no meio da membrana que consegue segurar um próton. O anel gira, e o próton dá quase uma volta inteira pelo miolo gorduroso da membrana. Quando a pá volta ao portão, o próton desembarca pelo semicanal de saída e entra na matriz. Visto da matriz, o anel gira no sentido anti-horário.",
+      "p3": "Nos humanos, o anel tem 8 pás, então passam 8 prótons a cada volta. Uma volta faz 3 ATP, então cada ATP custa cerca de 2,7 prótons. O número de pás define esse <strong>preço</strong>. Toque nos botões para comparar outros anéis: a levedura e a E. coli usam 10 pás, e as folhas de espinafre usam 14. Nesses anéis, cada volta continua rendendo só 3 ATP, então o ATP sai mais caro. O seu anel pequeno faz o ATP mais barato da natureza, por próton.",
+      "p4": "Contando o custo de trazer ADP e fosfato para dentro e mandar o ATP novo para o resto da célula, o preço total fica em cerca de 3,7 prótons. O modelo mostra o anel girando de forma contínua, mas o rotor real se move em <strong>passos</strong>. Ele para, dá um salto e, de vez em quando, até volta um passo. Cada próton que dá a volta e desembarca na matriz empurra o anel uma pá adiante, no sentido que produz ATP.",
+      "blades": "Prótons por volta",
+      "perAtp": "Prótons por ATP",
+      "per100": "ATP com 100 prótons"
+    },
+    "head": {
+      "title": "Três sítios, um ATP cada",
+      "p1": "Na bike, suas pernas giram o pedivela enquanto o quadro fica parado em volta dele. A parte de cima deste motor funciona do mesmo jeito. O eixo curvo gira dentro da cabeça, e o <strong>braço lateral</strong> segura a cabeça parada, como o quadro em volta do pedivela. Por isso a cabeça nunca gira. Como o eixo é curvo, ele pressiona cada parte da cabeça, uma de cada vez, enquanto gira, como o comando de válvulas de um motor de carro.",
+      "p2": "Cada uma das três peças β tem um <strong>sítio</strong> onde o ATP é feito, e a cada momento os três sítios estão em três estados diferentes. Cada passo de 120° do eixo leva cada sítio ao estado seguinte. O sítio aberto recebe ADP e fosfato e fica frouxo. O sítio frouxo se fecha, fica apertado e espreme os dois até virarem ATP. O sítio apertado se abre e solta o ATP novo. Assim, uma volta faz 3 ATP. Os sítios reais também passam por estados meio fechados no caminho. As linhas abaixo acompanham os sítios ao vivo.",
+      "p3": "Para onde vai a energia? Não para uma ligação química especial: quebrar qualquer ligação custa energia. O ATP vale energia porque a reação inteira, que parte o ATP em ADP e fosfato, termina em produtos mais estáveis. Numa célula, isso vale cerca de 50 a 60 kJ por mol. O empurrão dos prótons é gasto em fazer os sítios agarrarem e soltarem: agarrar ADP e fosfato até eles se unirem, e depois soltar o ATP pronto. Essa é a ideia da <strong>mudança de ligação</strong>: o que muda é a força com que cada sítio segura as moléculas.",
+      "p4": "Paul Boyer desvendou esse mecanismo, e John Walker determinou a estrutura que apoiou essa ideia. Os dois dividiram o <strong>Prêmio Nobel</strong> de Química de 1997 com Jens Skou, premiado por outra bomba. Os passos reais se dividem em partes ainda menores. A cabeça humana, medida girando ao contrário e quebrando ATP, faz cada passo de 120° em 65°, 25° e 30°. A versão bacteriana gira com um torque de cerca de 40 pN·nm e é um dos motores mais eficientes já conhecidos.",
+      "seat1": "Sítio 1",
+      "seat2": "Sítio 2",
+      "seat3": "Sítio 3"
+    },
+    "sprint": {
+      "title": "Por que um sprint não pode esperar pelo motor",
+      "p1": "É dada a largada, e um velocista dispara do bloco de partida. Agora o modelo roda na velocidade real estimada do motor. Nas mitocôndrias em atividade, ele gira cerca de 100 vezes por segundo, uns 6.000 rpm, e faz uns 300 ATP por segundo. Veja o contador subir. Um turbo de Fórmula 1 de 2026 pode girar a até 150.000 rpm, cerca de 25 vezes mais rápido. Mesmo assim, para um velocista, este motor é a <strong>faixa lenta</strong>.",
+      "p2": "Num sprint, seus músculos gastam ATP mais rápido do que todos os seus motores conseguem produzir. Dois sistemas mais rápidos cobrem a diferença. A <strong>fosfocreatina</strong>, uma pequena reserva no músculo, recarrega o ATP quase na hora, mas fica quase esgotada em 10 a 15 segundos de esforço máximo. A glicólise funciona rápido sem oxigênio, mas faz pouco ATP com cada glicose. Os três sistemas trabalham ao mesmo tempo. Eles se sobrepõem, em vez de entrar em ação um depois do outro.",
+      "p3": "Toque numa prova para ver quanto da energia dela vem deste motor, com oxigênio. Nos 100 m, é só cerca de 10 a 20 por cento, e os métodos discordam. Os 200 m ficam em cerca de 30 por cento, os 400 m em cerca de 40 a 45, os 800 m em cerca de dois terços e os 1500 m em cerca de 80 a 85. Os 5000 m ficam em cerca de 90 por cento, e a maratona em cerca de 99. O <strong>ponto de virada</strong>, em que o oxigênio cobre metade, chega depois de cerca de 75 a 80 segundos de esforço máximo. Por isso, os 400 m e os 800 m não são as provas anaeróbicas que muitos dizem.",
+      "p4": "A maratona tem o problema oposto. Os motores têm tempo de sobra, mas falta combustível. Você guarda só cerca de 400 g de carboidrato: uns 90 g no fígado e 310 g nos músculos das pernas. Mais de 40 por cento dos maratonistas <strong>batem no muro</strong> quando esse estoque fica baixo. A reserva de gordura é bem maior, mas você queima gordura a no máximo cerca de meio grama por minuto. Dentro do músculo, isso alimenta as bombas devagar demais, e os motores não acompanham o ritmo de prova.",
+      "aerobic": "Deste motor, com oxigênio",
+      "anaerobic": "Das reservas e da glicólise, sem oxigênio"
+    },
+    "training": {
+      "title": "O treino abre espaço para mais motores",
+      "p1": "Faça um <strong>bloco de treino</strong> de pedaladas ou corridas em ritmo constante, e em poucas semanas seus músculos começam a mudar. Seis semanas de treino de endurance rendem cerca de 40 a 55 por cento a mais de mitocôndrias. A maior parte desse ganho vem de deixar maiores as mitocôndrias que você já tem, e não de fabricar novas. Para isso, o que mais conta é quanto você treina. Já a intensidade conta mais para o quanto elas funcionam bem. Mitocôndrias maiores têm mais membrana interna, e mais membrana significa mais espaço para esses motores.",
+      "p2": "Que <strong>proporção</strong> de um músculo é feita de mitocôndrias? Num músculo da coxa sem treino, cerca de 4 a 5 por cento. Em atletas de endurance treinados, cerca de 7 a 11 por cento. Seu coração, que nunca tem dia de descanso, tem cerca de um quarto de mitocôndrias. Mas a quantidade não é tudo. Pessoas mais em forma também tiram mais trabalho de cada mitocôndria, mesmo com a mesma quantidade. Assim, o treino ajuda duas vezes: você ganha mais mitocôndrias, e cada uma funciona melhor.",
+      "p3": "Semanas de treino acrescentam mitocôndrias, mas as dobras dentro delas continuam tão compactas quanto antes. Só anos de treino mudam isso. Em atletas de endurance, as <strong>cristas</strong> ficam cerca de 23 por cento mais compactas, então cada mitocôndria guarda mais membrana para motores. Ninguém contou os motores antes e depois do treino. Por isso, o modelo desenha os motores em proporção à área de membrana das dobras que foi medida. Toque nos botões para comparar um músculo sem treino, 10 semanas de treino e anos de treino.",
+      "p4": "Pare de treinar, e o ganho some rápido. Com esse <strong>destreino</strong>, metade do ganho vai embora em cerca de duas semanas. Então mantenha os treinos em dia. Na próxima vez que ficar ofegante numa subida, pense no motivo dessa respiração. Lá no fundo do seu músculo, ela mantém as bombas empurrando prótons para fora, os prótons voltando para dentro montados nos anéis, e esses motores girando, três ATP por volta.",
+      "share": "Mitocôndrias no músculo da coxa",
+      "membrane": "Membrana das dobras para motores",
+      "motors": "Motores no modelo"
+    }
+  }
+}
