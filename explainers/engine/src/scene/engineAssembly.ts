@@ -122,6 +122,10 @@ export class EngineAssembly {
     });
   }
 
+  get sparking(): boolean {
+    return this.cylinders.some((cylinder) => cylinder.sparking);
+  }
+
   update(frame: AssemblyFrame): void {
     this.crankshaft.setAngle(frame.angle);
     this.camshafts.forEach((camshaft) => camshaft.setAngle(frame.angle));

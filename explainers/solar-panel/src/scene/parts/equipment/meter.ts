@@ -100,12 +100,13 @@ export class MeterPart {
     this.rate = Math.max(0, watts / MODULE_SPEC.powerW) * BLINKS_PER_SECOND_AT_FULL;
   }
 
-  update(deltaSeconds: number): void {
+  update(deltaSeconds: number): boolean {
     this.phase = (this.phase + deltaSeconds * this.rate) % 1;
     const lit = this.rate > 0 && this.phase < BLINK_SHARE;
     this.led.material = this.context.materials.get(
       'meter',
       lit ? FINISHES.ledRed : FINISHES.ledOff,
     );
+    return this.rate > 0;
   }
 }

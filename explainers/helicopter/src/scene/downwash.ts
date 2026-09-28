@@ -61,8 +61,8 @@ export class Downwash {
     this.points.visible = visible;
   }
 
-  update(frame: DownwashFrame): void {
-    if (!this.points.visible) return;
+  update(frame: DownwashFrame): boolean {
+    if (!this.points.visible) return false;
     const step = (fallSpeed(frame.rpm, frame.collective) * frame.deltaSeconds) / FALL;
     this.particles.forEach((particle, index) => {
       particle.progress += step;
@@ -70,6 +70,7 @@ export class Downwash {
       this.place(index, particle, frame.forward);
     });
     this.cloud.commit();
+    return step > 0;
   }
 
   private place(index: number, particle: Particle, forward: number): void {

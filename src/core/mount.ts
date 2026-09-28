@@ -31,7 +31,7 @@ function mountScene<S extends Playback>(
     explainer.scene,
   );
   const unmount = explainer.mountScene(host.shell, store);
-  host.start((deltaSeconds) => store.getState().tick(deltaSeconds));
+  host.start(store);
   return () => {
     unmount();
     host.dispose();

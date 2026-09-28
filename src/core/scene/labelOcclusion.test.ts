@@ -122,6 +122,20 @@ describe('LabelOcclusion', () => {
     expect([...labels.occluded]).toEqual([]);
   });
 
+  it('asks for frames until a pending verdict settles', () => {
+    const { labels, frames, wall, anchor, occlusion } = createHarness();
+    const blocker = wall(new MeshBasicMaterial());
+    labels.show([PART]);
+    frames(LONGEST_DELAY_FRAMES);
+    expect(occlusion.update(FRAME_SECONDS)).toBe(false);
+    blocker.visible = false;
+    anchor.position.x = 0.001;
+    frames(RUN_EVERY_FRAMES);
+    expect(occlusion.update(FRAME_SECONDS)).toBe(true);
+    frames(LONGEST_DELAY_FRAMES);
+    expect(occlusion.update(FRAME_SECONDS)).toBe(false);
+  });
+
   it('looks again after an invalidate even while nothing moves', () => {
     const { labels, frames, wall, occlusion } = createHarness();
     const glass = new MeshBasicMaterial({ transparent: true, opacity: 0.5 });

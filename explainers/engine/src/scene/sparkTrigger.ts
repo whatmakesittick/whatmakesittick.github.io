@@ -5,6 +5,10 @@ import { SPARK } from './constants';
 export class SparkTrigger {
   private holdRemaining = 0;
 
+  get lit(): boolean {
+    return this.holdRemaining > 0;
+  }
+
   update(angle: number, deltaDegrees: number, deltaSeconds: number, spec: EngineSpec): number {
     if (spec.ignition !== 'spark') return 0;
     const previous = angle - deltaDegrees;

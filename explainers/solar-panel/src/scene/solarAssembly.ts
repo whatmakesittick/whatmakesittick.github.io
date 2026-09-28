@@ -153,20 +153,23 @@ export class SolarAssembly implements Assembly {
     this.applyViews(changes, state.view);
   }
 
-  update(deltaSeconds: number, cameraDistance: number): void {
+  update(deltaSeconds: number, cameraDistance: number): boolean {
     const pointSize = clamp(cameraDistance * FLOW.sizePerDistance, FLOW.minSize, FLOW.maxSize);
     const close = cameraDistance < DETAIL_DISTANCE_CM;
     if (close !== this.close) {
       this.close = close;
       this.array.hero.setDetail(close);
     }
-    this.sun.update(deltaSeconds);
-    this.meter.update(deltaSeconds);
-    this.cables.update(deltaSeconds, pointSize);
-    if (this.slice.object.visible) {
-      const scale = clamp(cameraDistance / SLICE_FLOW.referenceDistance, 1, SLICE_FLOW.maxScale);
-      this.sliceFlow.update(deltaSeconds, scale);
-    }
+    const rays = this.sun.update(deltaSeconds);
+    const blinking = this.meter.update(deltaSeconds);
+    const flowing = this.cables.update(deltaSeconds, pointSize);
+    return this.updateSlice(deltaSeconds, cameraDistance) || rays || blinking || flowing;
+  }
+
+  private updateSlice(deltaSeconds: number, cameraDistance: number): boolean {
+    if (!this.slice.object.visible) return false;
+    const scale = clamp(cameraDistance / SLICE_FLOW.referenceDistance, 1, SLICE_FLOW.maxScale);
+    return this.sliceFlow.update(deltaSeconds, scale);
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {

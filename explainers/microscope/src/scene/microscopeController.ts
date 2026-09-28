@@ -49,9 +49,10 @@ export class MicroscopeController {
     this.assembly?.setWavelength(wavelength);
   }
 
-  update(state: MicroscopeState, deltaSeconds: number): void {
+  update(state: MicroscopeState, deltaSeconds: number): boolean {
     const { camera, controls } = this.dependencies.rig;
-    this.assembly?.update(state.phase, deltaSeconds, camera.position.distanceTo(controls.target));
+    const distance = camera.position.distanceTo(controls.target);
+    return this.assembly?.update(state.phase, deltaSeconds, distance) ?? false;
   }
 
   dispose(): void {

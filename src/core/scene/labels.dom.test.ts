@@ -1,5 +1,5 @@
 import { Object3D } from 'three';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { LabelLayer } from './labels';
 
 const PARTS = {
@@ -47,6 +47,17 @@ describe('LabelLayer', () => {
     expect([...layer.wanted()]).toEqual(['wheel', 'spoke']);
     layer.setOccluded(new Set());
     expect(visible('wheel')).toBe(true);
+    layer.dispose();
+  });
+
+  it('tells its listeners when the labels change', () => {
+    const layer = new LabelLayer(PARTS);
+    const listener = vi.fn();
+    layer.onChange(listener);
+    layer.attach(new Map([['wheel', new Object3D()]]));
+    layer.show(new Set(['wheel']));
+    layer.setOccluded(new Set(['wheel']));
+    expect(listener).toHaveBeenCalledTimes(3);
     layer.dispose();
   });
 

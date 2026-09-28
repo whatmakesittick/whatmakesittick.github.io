@@ -1,5 +1,5 @@
 import { Box3, Object3D, Vector3 } from 'three';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { CameraRig } from './camera';
 import type { CameraOptions } from './camera';
 import { CAMERA_FAR, CAMERA_MAX_POLAR, CAMERA_NEAR, CAMERA_TWEEN_SECONDS } from './constants';
@@ -136,5 +136,22 @@ describe('CameraRig', () => {
     anchor.position.copy(MOVE);
     rig.update(FRAME_SECONDS);
     expectPose(rig, CLOSE_UP);
+  });
+
+  it('tells its listeners while the camera moves and stops once it settles', () => {
+    const rig = boundedRig();
+    rig.jumpTo(CLOSE_UP);
+    const listener = vi.fn();
+    rig.onChange(listener);
+    rig.tweenTo(SIDE_VIEW);
+    expect(listener).toHaveBeenCalledTimes(1);
+    for (let time = 0; time <= CAMERA_TWEEN_SECONDS; time += FRAME_SECONDS)
+      rig.update(FRAME_SECONDS);
+    const moves = listener.mock.calls.length;
+    expect(moves).toBeGreaterThan(1);
+    rig.update(FRAME_SECONDS);
+    rig.update(FRAME_SECONDS);
+    expect(listener).toHaveBeenCalledTimes(moves);
+    rig.dispose();
   });
 });

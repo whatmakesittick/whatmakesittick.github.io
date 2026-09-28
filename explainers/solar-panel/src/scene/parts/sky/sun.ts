@@ -117,8 +117,10 @@ export class SunPart {
     this.rays.instanceMatrix.needsUpdate = true;
   }
 
-  update(deltaSeconds: number): void {
-    if (this.rays.visible) this.dashes.offset.y -= RAYS.speed * deltaSeconds;
+  update(deltaSeconds: number): boolean {
+    if (!this.rays.visible) return false;
+    this.dashes.offset.y -= RAYS.speed * deltaSeconds;
+    return true;
   }
 
   private updateRayVisibility(): void {

@@ -4,6 +4,7 @@ export const HOVER_HEIGHT = 1.6;
 export const BODY_PIVOT_HEIGHT = 1.3;
 export const FORWARD_BODY_PITCH_DEGREES = 6;
 export const SETTLE_RATE = 4;
+export const SETTLED_SHARE = 1e-4;
 
 export const FUSELAGE = {
   axisHeight: 1.2,

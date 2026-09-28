@@ -147,8 +147,8 @@ export class SliceFlowPart {
     this.object.visible = shown;
   }
 
-  update(deltaSeconds: number, scale: number): void {
-    if (!this.object.visible) return;
+  update(deltaSeconds: number, scale: number): boolean {
+    if (!this.object.visible) return false;
     this.time += deltaSeconds;
     this.photonMaterial.size = SLICE_FLOW.photon.size * scale;
     this.haloMaterial.size = SLICE_FLOW.photon.size * SLICE_FLOW.photon.halo * scale;
@@ -156,6 +156,7 @@ export class SliceFlowPart {
     this.spawn(deltaSeconds);
     this.movePhotons(deltaSeconds);
     this.moveCarriers(deltaSeconds);
+    return true;
   }
 
   private spawn(deltaSeconds: number): void {

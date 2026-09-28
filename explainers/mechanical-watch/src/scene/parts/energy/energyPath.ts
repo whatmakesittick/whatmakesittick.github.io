@@ -65,11 +65,12 @@ export class EnergyPathPart {
     this.object.visible = visible;
   }
 
-  update(deltaSeconds: number, cameraDistance: number): void {
-    if (!this.object.visible) return;
+  update(deltaSeconds: number, cameraDistance: number): boolean {
+    if (!this.object.visible) return false;
     this.travelled += deltaSeconds * ENERGY_FLOW.speedMmPerSecond;
     this.scale = clamp(cameraDistance / ENERGY_FLOW.referenceDistance, 1, ENERGY_FLOW.maxScale);
     this.place();
+    return true;
   }
 
   private place(): void {

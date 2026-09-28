@@ -202,13 +202,21 @@ the keyboard (space, arrows, digits for phases, R, X and Escape for full screen,
 choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
 safe area. Then it builds the scene host from the
 explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
-scene, camera rig, label layer, highlighter, materials, textures, stage, lighting
-and `onFrame(update)`. Before the first frame the host compiles every material in
-the scene with `renderer.compileAsync`, so the shaders build in parallel while the
-page stays responsive; three's shader error checks run in dev only, since their
-queries stall the first frame. Core owns the frame loop: each frame it ticks the store,
-runs the explainer's frame updates, eases the highlighter and the camera, hides
-the labels whose anchor is out of sight, renders and lays out the labels. `onFrame` and `viewport.onResize` return a function that
+scene, camera rig, label layer, highlighter, materials, textures, stage, lighting,
+`onFrame(update)` and `invalidate()`. Before the first frame the host compiles
+every material in the scene with `renderer.compileAsync`, so the shaders build in
+parallel while the page stays responsive; three's shader error checks run in dev
+only, since their queries stall the first frame. Core owns the frame loop and
+draws on demand: a frame runs only when something asked for one. In a frame it
+ticks the store, runs the explainer's frame updates, eases the highlighter and the
+camera, hides the labels whose anchor is out of sight, renders and lays out the
+labels. A store change, a camera move (orbit, zoom, damping, a tween), a resize, a
+label change, a highlight fade or `invalidate()` asks for the next frame, so a
+playing explainer draws every frame and a paused, still one draws nothing. A frame
+update returns `true` while something it draws keeps moving on its own, such as
+flowing particles or a settling ease, and the loop then draws the next frame too;
+an explainer that changes the scene outside a frame and outside the store calls
+`invalidate()`. `onFrame` and `viewport.onResize` return a function that
 removes the listener; the unmount that `mountScene` returns calls it.
 
 The round button in the stage's top-right corner shows the model full screen
@@ -283,7 +291,9 @@ it to hide the label and 1.5 % to keep it hidden, and the new verdict must hold 
 a grazing edge does not make it blink. The pass runs at most every fourth frame
 and only when the camera, a shown anchor or the highlight moved, when the shown
 labels or the anchors change, or while a verdict is pending; a label that starts
-showing gets its verdict before its first frame. `OcclusionRays` builds a bounds
+showing gets its verdict before its first frame. `update` returns `true` while a
+verdict is pending or the last pass saw motion, and the shell keeps asking for
+frames until it settles. `OcclusionRays` builds a bounds
 tree with `three-mesh-bvh` for a mesh of 64 triangles or more the first time a ray
 reaches it, one tree per pass, and leaves the geometry untouched. The layer keeps
 what the policy asked for in `wanted()` and shows it minus the occluded labels;

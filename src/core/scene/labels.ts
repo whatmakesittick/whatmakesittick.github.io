@@ -5,6 +5,7 @@ import { onLanguageChanged, t } from '../i18n';
 import { layoutLabels, TEXT_OFFSET_PX, TEXT_RISE_PX } from './labelLayout';
 import type { LabelBox, LabelSide, Placement } from './labelLayout';
 import type { SafeArea, ViewportSize } from './lens';
+import { Listeners } from './listeners';
 
 const TEXT_SELECTOR = '.scene-label__text';
 const DEGREES_PER_RADIAN = 180 / Math.PI;
@@ -60,6 +61,7 @@ export class LabelLayer {
   private changes = 0;
   private readonly stopTranslating: () => void;
   private safe: SafeArea = NO_SAFE_AREA;
+  private readonly listeners = new Listeners<[]>();
 
   constructor(parts: Readonly<Record<string, PartInfo>>) {
     this.parts = parts;
@@ -71,11 +73,16 @@ export class LabelLayer {
     this.stopTranslating = onLanguageChanged(() => this.translate());
   }
 
+  onChange(listener: () => void): () => void {
+    return this.listeners.add(listener);
+  }
+
   private translate(): void {
     this.labels.forEach((label, id) => {
       const text = textElement(label.element);
       if (text) text.textContent = t(this.parts[id].labelKey);
     });
+    this.listeners.notify();
   }
 
   attach(anchors: ReadonlyMap<string, Object3D>): void {
@@ -86,6 +93,7 @@ export class LabelLayer {
     });
     this.attached = new Map([...anchors].filter(([id]) => this.labels.has(id)));
     this.changes += 1;
+    this.listeners.notify();
   }
 
   get revision(): number {
@@ -119,6 +127,7 @@ export class LabelLayer {
     this.labels.forEach((label, id) => {
       label.visible = this.requested.has(id) && !this.occluded.has(id);
     });
+    this.listeners.notify();
   }
 
   setViewport(size: ViewportSize): void {
@@ -157,6 +166,7 @@ export class LabelLayer {
 
   dispose(): void {
     this.stopTranslating();
+    this.listeners.clear();
     this.labels.forEach((label) => {
       label.removeFromParent();
       label.element.remove();

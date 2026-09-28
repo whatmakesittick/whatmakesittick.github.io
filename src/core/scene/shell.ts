@@ -9,7 +9,6 @@ import { LabelOcclusion } from './labelOcclusion';
 import { LabelLayer } from './labels';
 import { createLighting } from './lighting';
 import type { Lighting } from './lighting';
-import { Listeners } from './listeners';
 import { startLoop } from './loop';
 import type { Loop } from './loop';
 import { MaterialLibrary, STRUCTURE_GROUP } from './materials';
@@ -20,7 +19,7 @@ import type { SceneTextures } from './textures';
 import { createViewport } from './viewport';
 import type { Viewport } from './viewport';
 
-export type FrameUpdate = (deltaSeconds: number) => void;
+export type FrameUpdate = (deltaSeconds: number) => boolean | void;
 
 export interface FogOptions {
   color: string;
@@ -47,12 +46,26 @@ export interface SceneShell {
   stage: Stage;
   lighting: Lighting;
   onFrame(update: FrameUpdate): () => void;
+  invalidate(): void;
+}
+
+export interface PlaybackSource {
+  getState(): { tick(deltaSeconds: number): void };
+  subscribe(listener: () => void): () => void;
 }
 
 export interface SceneHost {
   shell: SceneShell;
-  start(tick: FrameUpdate): void;
+  start(playback: PlaybackSource): void;
   dispose(): void;
+}
+
+function runUpdates(updates: ReadonlySet<FrameUpdate>, deltaSeconds: number): boolean {
+  let moving = false;
+  updates.forEach((update) => {
+    if (update(deltaSeconds) === true) moving = true;
+  });
+  return moving;
 }
 
 function createScene(options: SceneOptions): Scene {
@@ -83,13 +96,26 @@ export function createSceneHost(
     partOf: (material) => materials.groupOf(material),
     ignored: [stage.group],
   });
-  viewport.onResize((size) => {
-    rig.setViewport(size);
-    labels.setViewport(size);
-  });
-  const updates = new Listeners<[deltaSeconds: number]>();
+  const updates = new Set<FrameUpdate>();
   let loop: Loop | undefined;
+  let needsRender = true;
   let disposed = false;
+  let stopPlayback = () => {};
+
+  const invalidate = () => {
+    needsRender = true;
+    loop?.request();
+  };
+  const removers = [
+    viewport.onResize((size) => {
+      rig.setViewport(size);
+      labels.setViewport(size);
+      invalidate();
+    }),
+    rig.onChange(invalidate),
+    labels.onChange(invalidate),
+    highlighter.onChange(invalidate),
+  ];
 
   const shell: SceneShell = {
     viewport,
@@ -101,32 +127,48 @@ export function createSceneHost(
     textures,
     stage,
     lighting,
-    onFrame: (update) => updates.add(update),
+    onFrame: (update) => {
+      updates.add(update);
+      return () => updates.delete(update);
+    },
+    invalidate,
   };
 
-  const renderFrame = (tick: FrameUpdate, deltaSeconds: number) => {
+  const renderFrame = (playback: PlaybackSource, deltaSeconds: number) => {
     const step = Math.min(deltaSeconds, MAX_FRAME_SECONDS);
-    tick(step);
-    updates.notify(step);
-    if (highlighter.update(step)) occlusion.invalidate();
+    playback.getState().tick(step);
+    if (runUpdates(updates, step)) invalidate();
+    if (highlighter.update(step)) {
+      occlusion.invalidate();
+      invalidate();
+    }
     rig.update(step);
-    occlusion.update(step);
+    if (occlusion.update(step)) loop?.request();
+    if (!needsRender) return;
+    needsRender = false;
     viewport.render(scene, rig.camera);
     labels.layout(viewport.element);
   };
 
+  const run = (playback: PlaybackSource) => {
+    if (disposed) return;
+    loop?.stop();
+    stopPlayback();
+    loop = startLoop((deltaSeconds) => renderFrame(playback, deltaSeconds));
+    stopPlayback = playback.subscribe(invalidate);
+    invalidate();
+  };
+
   return {
     shell,
-    start: (tick) => {
-      void viewport.renderer.compileAsync(scene, rig.camera).then(() => {
-        if (disposed) return;
-        loop?.stop();
-        loop = startLoop((deltaSeconds) => renderFrame(tick, deltaSeconds));
-      });
+    start: (playback) => {
+      void viewport.renderer.compileAsync(scene, rig.camera).then(() => run(playback));
     },
     dispose: () => {
       disposed = true;
       loop?.stop();
+      stopPlayback();
+      removers.forEach((remove) => remove());
       updates.clear();
       labels.dispose();
       rig.dispose();

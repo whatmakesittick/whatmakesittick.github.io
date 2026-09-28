@@ -1,4 +1,5 @@
 export interface Loop {
+  request(): void;
   stop(): void;
 }
 
@@ -7,33 +8,46 @@ const MILLISECONDS_PER_SECOND = 1000;
 export function startLoop(frame: (deltaSeconds: number) => void): Loop {
   let handle = 0;
   let last = 0;
-  let running = false;
+  let scheduled = false;
+  let resting = true;
+  let stopped = false;
 
-  const tick = (now: number) => {
-    const deltaSeconds = (now - last) / MILLISECONDS_PER_SECOND;
+  const run = (now: number) => {
+    scheduled = false;
+    const deltaSeconds = Math.max(0, (now - last) / MILLISECONDS_PER_SECOND);
     last = now;
-    frame(Math.max(0, deltaSeconds));
-    handle = requestAnimationFrame(tick);
+    frame(deltaSeconds);
+    resting = !scheduled;
   };
-  const resume = () => {
-    if (running) return;
-    running = true;
-    last = performance.now();
-    handle = requestAnimationFrame(tick);
+  const schedule = () => {
+    scheduled = true;
+    handle = requestAnimationFrame(run);
   };
-  const pause = () => {
-    running = false;
+  const request = () => {
+    if (stopped || scheduled) return;
+    if (resting) last = performance.now();
+    resting = false;
+    if (!document.hidden) schedule();
+  };
+  const onVisibilityChange = () => {
+    if (!document.hidden) {
+      if (!resting) {
+        resting = true;
+        request();
+      }
+      return;
+    }
     cancelAnimationFrame(handle);
+    scheduled = false;
   };
-  const onVisibilityChange = () => (document.hidden ? pause() : resume());
 
   document.addEventListener('visibilitychange', onVisibilityChange);
-  frame(0);
-  if (!document.hidden) resume();
 
   return {
+    request,
     stop: () => {
-      pause();
+      stopped = true;
+      cancelAnimationFrame(handle);
       document.removeEventListener('visibilitychange', onVisibilityChange);
     },
   };

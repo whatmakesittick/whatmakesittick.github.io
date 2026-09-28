@@ -60,11 +60,12 @@ export class EngineController {
     this.assembly?.setView(view);
   }
 
-  update(state: EngineState, deltaSeconds: number): void {
-    if (!this.assembly) return;
+  update(state: EngineState, deltaSeconds: number): boolean {
+    if (!this.assembly) return false;
     const deltaDegrees = signedDegrees(this.previousAngle, state.phase);
     this.previousAngle = state.phase;
     this.assembly.update({ angle: state.phase, deltaDegrees, deltaSeconds });
+    return this.assembly.sparking;
   }
 
   dispose(): void {

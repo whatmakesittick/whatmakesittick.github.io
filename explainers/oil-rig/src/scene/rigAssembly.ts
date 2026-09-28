@@ -108,7 +108,7 @@ export class RigAssembly implements Assembly {
     if (this.depthChanged(previous, state)) this.applyDepth(state);
   }
 
-  update(deltaSeconds: number, cameraDistance: number): void {
+  update(deltaSeconds: number, cameraDistance: number): boolean {
     this.time += deltaSeconds;
     const pointSize = clamp(cameraDistance * FLOW.sizePerDistance, FLOW.minSize, FLOW.maxSize);
     this.sea.update(this.time);
@@ -117,6 +117,7 @@ export class RigAssembly implements Assembly {
     this.rig.flame.update(this.time);
     this.mud.update(deltaSeconds, this.time, pointSize);
     this.oil.update(deltaSeconds, pointSize);
+    return true;
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {
