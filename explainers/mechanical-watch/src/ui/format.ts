@@ -2,6 +2,7 @@ import { formatFixed, formatNumber, formatSigned } from '@core/format';
 import { t } from '@core/i18n';
 import type { PhaseId } from '../ids';
 import {
+  ADVANCE_PER_BEAT_DEG,
   DEFAULT_AMPLITUDE,
   SECONDS_PER_HOUR,
   SECONDS_PER_MINUTE,
@@ -148,7 +149,10 @@ export function formatTeeth(teeth: number, leaves: number | null): string {
 }
 
 export function formatEscapeAdvance(degrees: number): string {
-  return t('sections.escapement.wheelValue', { done: formatFixed(degrees, 1) });
+  return t('sections.escapement.wheelValue', {
+    done: formatFixed(degrees, 1),
+    total: formatNumber(ADVANCE_PER_BEAT_DEG),
+  });
 }
 
 export function formatDialTime(seconds: number): string {
