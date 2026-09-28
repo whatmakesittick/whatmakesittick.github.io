@@ -73,6 +73,10 @@ export function formatCount(count: number): string {
   return formatNumber(count);
 }
 
+export function formatDecimal(value: number): string {
+  return formatNumber(value);
+}
+
 export function formatPerAtp(protons: number): string {
   return formatFixed(protons, PER_ATP_DIGITS);
 }

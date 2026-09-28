@@ -2,7 +2,14 @@ import type { ExplainerStore, Playback, PlaybackState } from '@core/explainer';
 import { clamp } from '@core/math';
 import { createExplainerStore } from '@core/store';
 import type { EventId, RingId, TrainingId, ViewOptions } from '../ids';
-import { BLADE_COUNTS, FULL_TURN_DEG, lapCountAfter, trainingLevel } from '../model';
+import {
+  BLADE_COUNTS,
+  FULL_TURN_DEG,
+  atpMade,
+  lapCountAfter,
+  protonsThrough,
+  trainingLevel,
+} from '../model';
 import { ATP_TIMELINE, SPEED_RANGE } from '../timeline';
 import { PRESETS } from './presets';
 import type { ChapterControl, Preset, PresetId } from './presets';
@@ -56,6 +63,14 @@ const CHAPTER_CONTROL_DEFAULTS: ChapterControls = {
 
 export function bladeCountOf(state: Pick<AtpSynthaseFields, 'ring'>): number {
   return BLADE_COUNTS[state.ring];
+}
+
+export function atpMadeOf(state: Pick<AtpSynthaseState, 'phase' | 'laps'>): number {
+  return Math.max(0, atpMade(state.phase, state.laps));
+}
+
+export function protonsThroughOf(state: Pick<AtpSynthaseState, 'phase' | 'laps' | 'ring'>): number {
+  return Math.max(0, protonsThrough(state.phase, state.laps, bladeCountOf(state)));
 }
 
 export function motorCountOf(state: Pick<AtpSynthaseFields, 'preset' | 'training'>): number {
