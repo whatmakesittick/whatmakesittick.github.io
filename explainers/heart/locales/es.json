@@ -1,0 +1,276 @@
+{
+  "meta": {
+    "title": "Cómo funciona el corazón",
+    "eyebrow": "Corazón humano",
+    "tagline": "Un músculo del tamaño de tu puño se contrae más o menos una vez por segundo y empuja la sangre por dos circuitos, con cuatro puertas de un solo sentido para que siempre avance hacia donde debe.",
+    "description": "Un corazón en 3D que late a cámara lenta y que puedes abrir: cavidades, válvulas, la curva de presión, su propio marcapasos y qué cambia al correr.",
+    "summary": "Cuatro cavidades, cuatro válvulas, la curva de presión, el marcapasos interno y lo que pasa cuando corres.",
+    "socialAlt": "Modelo 3D low poly de un corazón humano abierto para mostrar sus cuatro cavidades y sus válvulas, con la aorta y el tronco pulmonar arriba, junto al título «Cómo funciona el corazón»"
+  },
+  "stage": {
+    "label": "Modelo interactivo del corazón",
+    "gauge": "Lecturas del corazón en directo"
+  },
+  "controls": {
+    "label": "Controles del corazón",
+    "views": {
+      "cutaway": {
+        "name": "Vista en corte",
+        "short": "Corte",
+        "hint": "Vista en corte (C)"
+      },
+      "flow": {
+        "name": "Flujo de sangre",
+        "short": "Flujo",
+        "hint": "Flujo de sangre (F)"
+      },
+      "conduction": {
+        "name": "Sistema eléctrico",
+        "short": "Señal",
+        "hint": "Sistema eléctrico (E)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      }
+    },
+    "chamberOptions": {
+      "rightAtrium": "Aurícula derecha",
+      "rightVentricle": "Ventrículo derecho",
+      "leftAtrium": "Aurícula izquierda",
+      "leftVentricle": "Ventrículo izquierdo"
+    },
+    "valveOptions": {
+      "tricuspid": "Tricúspide",
+      "pulmonary": "Pulmonar",
+      "mitral": "Mitral",
+      "aortic": "Aórtica"
+    },
+    "waveOptions": {
+      "p": "Onda P",
+      "qrs": "QRS",
+      "t": "Onda T"
+    },
+    "fitnessOptions": {
+      "typical": "Adulto típico",
+      "athlete": "Deportista de resistencia"
+    }
+  },
+  "timeline": {
+    "label": "Momento del latido",
+    "phases": "Saltar a un momento del latido",
+    "speed": "Reproducción",
+    "value": "{{time}} tras el inicio del latido, {{phase}}",
+    "realTime": "Tiempo real",
+    "slower": "{{factor}} veces más lento que en la realidad",
+    "phase": {
+      "atria": "Las aurículas empujan",
+      "squeeze": "Sube la presión",
+      "eject": "Sale la sangre",
+      "relax": "Baja la presión",
+      "fill": "Llenado rápido",
+      "rest": "Llenado lento"
+    },
+    "during": {
+      "atria": "las aurículas terminan de llenar los ventrículos",
+      "squeeze": "los ventrículos se contraen con todas las válvulas cerradas",
+      "eject": "la sangre sale por la aorta y el tronco pulmonar",
+      "relax": "los ventrículos se relajan con todas las válvulas cerradas",
+      "fill": "la sangre entra de golpe en los ventrículos",
+      "rest": "los ventrículos se llenan despacio"
+    },
+    "jump": {
+      "atria": "Saltar al empujón de las aurículas",
+      "squeeze": "Saltar a la subida de presión",
+      "eject": "Saltar a la salida de la sangre",
+      "relax": "Saltar a la bajada de presión",
+      "fill": "Saltar al llenado rápido",
+      "rest": "Saltar al llenado lento"
+    }
+  },
+  "readouts": {
+    "lvPressure": "Presión del ventrículo izquierdo",
+    "aorticPressure": "Presión en la aorta",
+    "lvVolume": "Volumen del ventrículo izquierdo",
+    "valves": "Válvulas",
+    "signal": "Señal eléctrica"
+  },
+  "parts": {
+    "rightAtrium": "Aurícula derecha",
+    "rightVentricle": "Ventrículo derecho",
+    "leftAtrium": "Aurícula izquierda",
+    "leftVentricle": "Ventrículo izquierdo",
+    "septum": "Tabique",
+    "wall": "Músculo cardíaco",
+    "apex": "Punta",
+    "tricuspidValve": "Válvula tricúspide",
+    "pulmonaryValve": "Válvula pulmonar",
+    "mitralValve": "Válvula mitral",
+    "aorticValve": "Válvula aórtica",
+    "chordae": "Cuerdas tendinosas y músculos papilares",
+    "aorta": "Aorta",
+    "archBranches": "Arterias hacia la cabeza y los brazos",
+    "pulmonaryTrunk": "Tronco pulmonar",
+    "pulmonaryArteries": "Arterias pulmonares",
+    "superiorVenaCava": "Vena cava superior",
+    "inferiorVenaCava": "Vena cava inferior",
+    "pulmonaryVeins": "Venas pulmonares",
+    "coronaries": "Arterias coronarias",
+    "sinusNode": "Nódulo sinusal",
+    "avNode": "Nódulo AV",
+    "bundleBranches": "Ramas del haz de His",
+    "purkinjeFibres": "Fibras de Purkinje",
+    "venousBlood": "Sangre pobre en oxígeno",
+    "arterialBlood": "Sangre rica en oxígeno"
+  },
+  "valves": {
+    "state": {
+      "avOpen": "Mitral y tricúspide abiertas",
+      "allClosed": "Las cuatro cerradas",
+      "semilunarOpen": "Aórtica y pulmonar abiertas"
+    },
+    "now": {
+      "open": "abierta",
+      "shut": "cerrada",
+      "opening": "abriéndose",
+      "closing": "cerrándose"
+    },
+    "between": {
+      "tricuspid": "la aurícula derecha y el ventrículo derecho",
+      "pulmonary": "el ventrículo derecho y el tronco pulmonar",
+      "mitral": "la aurícula izquierda y el ventrículo izquierdo",
+      "aortic": "el ventrículo izquierdo y la aorta"
+    },
+    "sound": {
+      "s1": "el primer ruido del corazón",
+      "s2": "el segundo ruido del corazón"
+    }
+  },
+  "chambers": {
+    "receives": {
+      "rightAtrium": "el cuerpo, por las dos venas cavas",
+      "rightVentricle": "la aurícula derecha",
+      "leftAtrium": "los pulmones, por las cuatro venas pulmonares",
+      "leftVentricle": "la aurícula izquierda"
+    },
+    "sends": {
+      "rightAtrium": "el ventrículo derecho",
+      "rightVentricle": "los pulmones, por el tronco pulmonar",
+      "leftAtrium": "el ventrículo izquierdo",
+      "leftVentricle": "todo el cuerpo, por la aorta"
+    },
+    "wall": {
+      "rightAtrium": "fina",
+      "rightVentricle": "alrededor de un tercio del grosor de la izquierda",
+      "leftAtrium": "fina",
+      "leftVentricle": "de 6 a 9 mm de grosor"
+    },
+    "role": {
+      "rightAtrium": "recoger la sangre del cuerpo y terminar de llenar el ventrículo derecho",
+      "rightVentricle": "bombear la sangre con suavidad hacia los pulmones",
+      "leftAtrium": "recoger la sangre de los pulmones y terminar de llenar el ventrículo izquierdo",
+      "leftVentricle": "bombear la sangre con fuerza a todo el cuerpo"
+    }
+  },
+  "signal": {
+    "sinusNode": "Nódulo sinusal",
+    "atria": "Aurículas",
+    "avNode": "Retenida en el nódulo AV",
+    "bundle": "Haz de His",
+    "branches": "Ramas del haz",
+    "purkinje": "Fibras de Purkinje",
+    "ventricles": "Paredes de los ventrículos",
+    "recovering": "Los ventrículos se recuperan",
+    "quiet": "En calma hasta el próximo latido"
+  },
+  "units": {
+    "ms": "{{value}} ms",
+    "mmHg": "{{value}} mmHg",
+    "ml": "{{value}} mL",
+    "mlPerSecond": "{{value}} mL/s",
+    "mv": "{{value}} mV",
+    "mm": "{{value}} mm",
+    "mmRange": "de {{from}} a {{to}} mm",
+    "perMinute": "{{value}} por minuto",
+    "litres": "{{value}} L",
+    "litresPerMinute": "{{value}} L/min",
+    "seconds": "{{value}} s",
+    "percent": "{{value}} %",
+    "resting": "En reposo"
+  },
+  "sections": {
+    "overview": {
+      "title": "Dos bombas en un músculo del tamaño de un puño",
+      "p1": "Cierra el puño. Tu <strong>corazón</strong> tiene más o menos ese tamaño: unos 12 por 8 por 6 cm, y pesa entre 250 y 350 g, aproximadamente. Se encuentra en el centro del pecho, detrás del esternón y entre los pulmones. Está inclinado, así que cerca de dos tercios quedan a la izquierda de la línea media, y su punta, el ápex, mira hacia abajo y a la izquierda. En reposo, un corazón sano late entre 60 y 100 veces por minuto. En un estudio con 92 000 adultos que llevaban pulseras de actividad, la media fue de unos 65.",
+      "p2": "En un ejemplo típico, cada latido expulsa unos 70 mL de sangre. En reposo, eso suma unos 5 litros por minuto, más o menos toda la sangre que tiene tu cuerpo. Así que, de media, tu sangre da una vuelta completa al cuerpo más o menos una vez por minuto, y tu corazón late unas 100 000 veces al día. En realidad, el corazón son <strong>dos bombas</strong>, una junto a la otra. El lado derecho envía la sangre a los pulmones para que recoja oxígeno. El lado izquierdo la envía después al resto del cuerpo.",
+      "p3": "Cada bomba tiene dos cavidades. Una <strong>aurícula</strong> recoge la sangre que llega, y un ventrículo la empuja hacia fuera. Cuatro válvulas de un solo sentido hacen que la sangre avance siempre hacia delante. El modelo muestra un latido en reposo, a 75 latidos por minuto, muy ralentizado. Y se toma algunas licencias. La sangre pobre en oxígeno está pintada de azul, como en la mayoría de los libros de anatomía, pero en realidad es de un rojo oscuro. En un cuerpo real, las aurículas quedan más detrás de los ventrículos que encima. Los vasos, además, se cortan a un palmo del corazón. Arrastra la línea de tiempo para recorrer el latido y arrastra el modelo para girarlo.",
+      "p4": "Quizá hayas oído que el corazón nunca descansa. En realidad descansa en cada latido. En reposo, los ventrículos pasan solo unos dos quintos de cada latido contrayéndose. Durante los otros tres quintos, el músculo se relaja mientras el corazón vuelve a llenarse. Esa fase de relajación se llama <strong>diástole</strong>, y la contracción se llama sístole. Tampoco existe un único pulso normal. En aquel estudio con pulseras, el pulso en reposo iba de unos 40 a más de 100 latidos por minuto. Y lo normal para una persona sana podía diferir hasta en 70 latidos de lo normal para otra."
+    },
+    "chambers": {
+      "title": "Cuatro cavidades, dos presiones",
+      "p1": "Ahora el modelo aparece cortado de frente por un plano, como en los libros de texto, para que veas las cuatro cavidades a la vez. Está de cara a ti, así que el lado derecho del corazón queda a tu izquierda. La sangre que ya ha cedido su oxígeno vuelve del cuerpo por dos grandes venas, las venas cavas. Estas desembocan en la <strong>aurícula derecha</strong>. De ahí, la sangre pasa al ventrículo derecho, que la empuja hacia los pulmones, justo al lado. Para eso hace falta poca fuerza: su presión máxima ronda los 25 mmHg.",
+      "p2": "La sangre vuelve de los pulmones cargada de oxígeno y entra en la aurícula izquierda por cuatro venas pulmonares. De ahí pasa al <strong>ventrículo izquierdo</strong>, la cavidad más fuerte. Esta tiene que empujar la sangre por todo el cuerpo, del cerebro a los dedos de los pies. Su presión máxima ronda los 120 mmHg, unas cinco veces la del lado derecho. Por eso su pared es unas tres veces más gruesa que la del ventrículo derecho: suele medir de 6 a 9 mm. En el corte se ve bien la diferencia.",
+      "p3": "Una pared muscular, el <strong>tabique</strong>, separa los dos lados, así que la sangre rica en oxígeno y la pobre en oxígeno no se mezclan. Los dos ventrículos mueven la misma cantidad, unos 70 mL por latido en un ejemplo típico. Si un lado bombeara aunque fuera un poco más durante un tiempo, la sangre se acumularía detrás del otro. La mayor parte del llenado se produce sin ayuda: la sangre pasa por las aurículas hasta los ventrículos relajados. Al final, las aurículas se contraen y dan un pequeño empujón extra. En reposo aporta hasta una quinta parte, más o menos, y más cuando el corazón va acelerado. Toca una cavidad para ver de dónde le llega la sangre y adónde la envía.",
+      "p4": "¿Cómo sabe cada lado cuánto tiene que bombear? Nadie tiene que decírselo. El músculo cardíaco sigue una regla sencilla, el <strong>mecanismo de Frank-Starling</strong>: cuanto más se llena un ventrículo, con más fuerza se contrae. La sangre extra estira las células del músculo, las células estiradas tiran con más fuerza y el ventrículo expulsa lo que sobra. Así, lo que entra vuelve a salir, latido tras latido. La regla forma parte del propio músculo. Los deportistas de resistencia la aprovechan mucho más que las personas no entrenadas: su corazón se llena más, así que bombea más.",
+      "receives": "La sangre llega desde",
+      "sends": "La sangre sale hacia",
+      "wall": "Pared",
+      "pressure": "Presión máxima",
+      "role": "Su trabajo"
+    },
+    "valves": {
+      "title": "Cuatro puertas de un solo sentido",
+      "p1": "Entre cada aurícula y su ventrículo hay una válvula hecha de láminas finas llamadas valvas. A la derecha está la válvula tricúspide, con tres valvas. A la izquierda está la <strong>válvula mitral</strong>, con dos. Cuando el ventrículo se contrae, la presión sube y cierra las valvas. Unos cordones finos, las cuerdas tendinosas, atan sus bordes a unos pequeños músculos de la pared del ventrículo, los músculos papilares. Estos se tensan durante la contracción, así que las valvas no pueden volcarse hacia la aurícula, como un paraguas que el viento pone del revés.",
+      "p2": "Las salidas tienen otro tipo de válvula. La válvula pulmonar abre el paso hacia los pulmones, y la <strong>válvula aórtica</strong>, hacia el resto del cuerpo. Cada una tiene tres valvas con forma de pequeños bolsillos. Mientras la sangre sale a chorro, los bolsillos quedan pegados a la pared. Cuando el ventrículo se relaja y la sangre empieza a volver hacia atrás, llena los bolsillos, que se cierran de golpe y se juntan en el centro. El modelo muestra las cuatro válvulas en un solo corte para que se vean bien. En un corazón real, la válvula pulmonar está más arriba y más adelante.",
+      "p3": "Ninguna válvula tiene músculo propio. Cada una se abre cuando la presión de detrás es mayor que la de delante, y se cierra cuando ocurre lo contrario. Al cerrarse de golpe, producen los <strong>ruidos del corazón</strong>, el pum-pum que oye un médico con el estetoscopio. El primer ruido llega cuando se cierran la mitral y la tricúspide, al empezar la contracción. El segundo, cuando se cierran la aórtica y la pulmonar, al terminar. Así que los ruidos vienen de las válvulas, no del músculo. Toca una válvula y la cámara la seguirá durante todo el latido.",
+      "p4": "Si escuchas con atención, cada ruido es en realidad doble. La válvula mitral se cierra unos 40 ms antes que la tricúspide, una diferencia demasiado corta para oírla con un estetoscopio. La válvula aórtica también se cierra justo antes que la pulmonar. Esa diferencia, llamada <strong>desdoblamiento</strong> del segundo ruido, cambia al respirar e incluso al cambiar de postura. Un corazón adulto sano solo produce estos dos ruidos. Un tercer ruido es normal en los niños, pero en los adultos a menudo es señal de enfermedad.",
+      "between": "Está entre",
+      "leaflets": "Valvas",
+      "opens": "Se abre a los",
+      "closes": "Se cierra a los",
+      "now": "Ahora"
+    },
+    "cycle": {
+      "title": "Un latido, paso a paso",
+      "p1": "La gráfica sigue al lado izquierdo durante un latido. Empieza con el ventrículo relajado y ya lleno en buena parte. Las aurículas se contraen y lo completan hasta unos 120 mL. Después, el ventrículo empieza a contraerse. La válvula mitral se cierra y, durante un instante, las cuatro válvulas están cerradas. La sangre no tiene adónde ir, así que el volumen no cambia mientras la presión se dispara, de unos 10 a unos 80 mmHg. Esta fase tiene un nombre largo, <strong>contracción isovolumétrica</strong>: contraerse sin cambiar de volumen.",
+      "p2": "Hacia los 80 mmHg, la presión del ventrículo supera a la de la aorta y la válvula aórtica se abre. La sangre sale a chorro, a cerca de 1 m/s en su momento más rápido, y la presión llega a un máximo de unos 120 mmHg. En algo menos de 0,3 s, el ventrículo expulsa unos 70 mL, y dentro quedan unos 50 mL. Así que cada latido vacía solo algo más de la mitad, entre el 55 y el 65 por ciento, aproximadamente. Esa proporción es la <strong>fracción de eyección</strong>. Las curvas son formas típicas de libro de texto, no la medida de una persona concreta, y los corazones reales suelen contener más.",
+      "p3": "Cuando la contracción pierde fuerza, la sangre empieza a volver hacia atrás y la válvula aórtica se cierra de golpe. Eso crea la pequeña muesca de la curva de la aorta. Las cuatro válvulas vuelven a estar cerradas mientras la presión cae, durante 0,07 s o menos. Cuando queda por debajo de la presión de la aurícula, la válvula mitral se abre y la sangre entra a chorro, primero rápido y luego despacio. La aorta es elástica: se estira con cada empujón y recupera su forma entre uno y otro, así que su presión solo baja hasta unos 80. Ese máximo y ese mínimo son tu <strong>presión arterial</strong>: 120/80.",
+      "p4": "El músculo del corazón tiene su propio riego: las <strong>arterias coronarias</strong>, que recorren su superficie. Pero un músculo que se contrae aprieta sus propios vasos, así que la mayor parte de esa sangre fluye entre latido y latido, mientras el músculo se relaja. Un latido más rápido recorta sobre todo la parte relajada. A 75 latidos por minuto, el corazón pasa relajado unos 33 segundos de cada minuto. A 150, solo unos 22. Así que duplicar el ritmo recorta más o menos en un tercio el tiempo que el corazón tiene para alimentarse. Eso importa sobre todo cuando las coronarias están estrechadas.",
+      "caption": "Presión en el ventrículo izquierdo, la aorta y la aurícula izquierda durante un latido, con el volumen del ventrículo izquierdo debajo. La línea marca dónde está ahora el modelo.",
+      "ventricle": "Ventrículo izquierdo",
+      "aorta": "Aorta",
+      "atrium": "Aurícula izquierda",
+      "flow": "Flujo por la válvula aórtica"
+    },
+    "conduction": {
+      "title": "Una chispa que nace dentro",
+      "p1": "Cada latido empieza en el propio corazón, no en el cerebro. En lo alto de la pared de la aurícula derecha hay un pequeño grupo de células especiales, el <strong>nódulo sinusal</strong>. Por sí solo, dispararía unas 100 veces por minuto. Pero el nervio vago lo frena todo el día, hasta un ritmo en reposo de 60 a 80. Los nervios y las hormonas, como la adrenalina, solo suben o bajan ese ritmo. Hasta la respiración lo hace: cada vez que inspiras, el vago afloja un momento. Por eso un pulso sano se acelera un poco al tomar aire y se frena al soltarlo.",
+      "p2": "Cada vez que el nódulo dispara, una onda eléctrica recorre las dos aurículas en unos 90 ms, y estas se contraen. En el trazado es la pequeña joroba llamada onda P. Luego la onda llega a un anillo de tejido duro que no puede cruzar, salvo por una puerta: el <strong>nódulo AV</strong>, abreviatura de nódulo auriculoventricular. Allí la señal va más despacio que en ninguna otra parte del sistema, a unos 0,05 m/s. El nódulo la retiene alrededor de una décima de segundo, para que las aurículas terminen de vaciarse antes de que empiecen los ventrículos.",
+      "p3": "Tras el nódulo, la señal baja por el haz de His y sus dos ramas, una a cada lado del tabique, a unos 2 m/s. Después, un abanico de fibras, las <strong>fibras de Purkinje</strong>, la reparte por las paredes interiores a unos 4 m/s, unas 80 veces más rápido que en el nódulo. Toda la pared de los ventrículos se activa en menos de una décima de segundo: es el pico alto del trazado, llamado QRS. La señal llega primero a la punta, así que la contracción empuja la sangre hacia arriba, hacia las salidas. Luego las paredes se recuperan, y eso aparece en el trazado como la onda T.",
+      "p4": "Un <strong>corazón trasplantado</strong> muestra hasta qué punto el corazón funciona por su cuenta. Llega sin ningún nervio conectado, y aun así late. Sin el vago que lo frene, en reposo late más rápido de lo normal. Con el ejercicio también se acelera, solo que más despacio, a medida que la sangre le trae adrenalina y otras hormonas parecidas. Con los meses o los años, entre el 40 y el 70 por ciento de los pacientes recuperan parte de esos nervios. El corazón también tiene marcapasos de reserva. Si el nódulo sinusal falla, el nódulo AV toma el relevo con un ritmo de unos 40 a 60 latidos por minuto.",
+      "caption": "El trazado eléctrico de un latido, tal como lo registraría un electrocardiograma en la piel. La línea marca dónde está ahora el modelo.",
+      "where": "Dónde está la señal",
+      "since": "Desde que disparó el nódulo",
+      "trace": "Trazado ahora"
+    },
+    "circulation": {
+      "title": "Dos circuitos, y lo que cambia al correr",
+      "p1": "Sigue una gota de sangre. El ventrículo derecho la envía por las arterias pulmonares hasta los pulmones, donde recoge oxígeno. Vuelve por las venas pulmonares al lado izquierdo, que la manda por la aorta al resto del cuerpo. Después regresa por las venas cavas al lado derecho. Son <strong>dos circuitos</strong> seguidos, y el corazón mueve los dos a la vez. Una arteria es cualquier vaso que saca la sangre del corazón, lleve o no oxígeno: las arterias pulmonares llevan sangre pobre en oxígeno. En reposo, una gota da la vuelta completa en más o menos un minuto.",
+      "p2": "Ahora sube el esfuerzo con el control. El ritmo pasa de unos 75 a cerca de 190 latidos por minuto en una persona de 25 años, y cada latido expulsa más sangre. Si multiplicas el ritmo por la sangre de cada latido, obtienes el <strong>gasto cardíaco</strong>, la sangre bombeada cada minuto. Sube de unos 5 litros en reposo a unos 20 con un ejercicio intenso. La contracción se acorta un poco, pero el tiempo de llenado se reduce mucho más. Cuando el ritmo se duplica, la contracción pierde menos de un tercio de su tiempo, y el llenado, unos dos tercios. Mira cómo se encoge la parte azul de la gráfica.",
+      "p3": "Todo ese trabajo tiene un precio. El corazón se alimenta por sus arterias coronarias: en reposo, unos 250 mL de sangre por minuto, alrededor del 5 por ciento de lo que bombea. Consume más o menos una décima parte del oxígeno que usa tu cuerpo. Su <strong>potencia de bombeo</strong> es modesta, eso sí: alrededor de 1 W en el lado izquierdo. A lo largo de una vida late unos 3000 millones de veces. Es mucho para un mamífero. En el conjunto de los mamíferos, una vida suma unos mil millones de latidos, con un margen de diez veces arriba o abajo. El corazón de una ballena azul que bucea late solo de 2 a 8 veces por minuto.",
+      "p4": "El entrenamiento de resistencia cambia la forma del corazón. El ventrículo izquierdo se vuelve más espacioso, unos 55 mm de ancho en los deportistas varones frente a unos 48 mm en las personas no entrenadas, y su pared se engrosa un poco. Este <strong>corazón de deportista</strong> es un cambio sano. Cada latido mueve más sangre y el pulso en reposo baja a unos 50 por minuto, cerca de 30 en ciclistas de élite. A tope, puede bombear cerca de 30 litros por minuto. El récord ronda los 42, con unos 210 mL por latido. Aun así, su ritmo máximo no es más alto que el de nadie. Elige al deportista para comparar. Y la regla de 220 menos tu edad es solo una estimación, que puede fallar en unos 10 latidos arriba o abajo.",
+      "control": {
+        "label": "Cuánto trabaja el cuerpo",
+        "rest": "Sentado y quieto",
+        "max": "Esprint a tope",
+        "caption": "Arriba, un latido en reposo; abajo, un latido con este esfuerzo. El rojo es la contracción, y el azul, el tiempo que queda para llenarse.",
+        "rate": "Frecuencia cardíaca",
+        "stroke": "Sangre por latido",
+        "output": "Sangre por minuto",
+        "filling": "Tiempo de llenado por latido",
+        "trip": "Una gota da la vuelta al cuerpo en"
+      }
+    }
+  }
+}
