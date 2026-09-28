@@ -1,6 +1,6 @@
 import { DirectionalLight } from 'three';
 import { describe, expect, it } from 'vitest';
-import { enableClipping, heartLight } from './lighting';
+import { heartLight } from './lighting';
 
 function shellLights() {
   return {
@@ -39,13 +39,5 @@ describe('heart light', () => {
       expect(light.color.getHexString()).toBe('ffffff');
     });
     expect(lights.key.position.toArray()).toEqual([1, 2, 3]);
-  });
-
-  it('turns local clipping on and back off', () => {
-    const renderer = { localClippingEnabled: false };
-    const restore = enableClipping(renderer);
-    expect(renderer.localClippingEnabled).toBe(true);
-    restore();
-    expect(renderer.localClippingEnabled).toBe(false);
   });
 });

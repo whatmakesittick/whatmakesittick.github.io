@@ -1,4 +1,4 @@
-import type { DirectionalLight, WebGLRenderer } from 'three';
+import type { DirectionalLight } from 'three';
 import type { Lighting } from '@core/scene/lighting';
 
 interface LightSetting {
@@ -34,12 +34,4 @@ export function heartLight(lighting: Pick<Lighting, LightName>): () => void {
     apply(lighting[name], HEART_LIGHT[name]),
   );
   return () => restorers.forEach((restore) => restore());
-}
-
-export function enableClipping(renderer: Pick<WebGLRenderer, 'localClippingEnabled'>): () => void {
-  const previous = renderer.localClippingEnabled;
-  renderer.localClippingEnabled = true;
-  return () => {
-    renderer.localClippingEnabled = previous;
-  };
 }
