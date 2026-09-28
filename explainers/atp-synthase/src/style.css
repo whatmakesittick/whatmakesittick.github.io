@@ -137,16 +137,8 @@
   color: var(--anaerobic);
 }
 
-.chip[data-action='ring'][data-value='animal'] {
-  --tone: var(--tight);
-}
-
-.chip[data-action='ring'][data-value='yeast'] {
-  --tone: var(--loose);
-}
-
-.chip[data-action='ring'][data-value='chloroplast'] {
-  --tone: var(--first-atp);
+.chip[data-action='ring'] {
+  --tone: var(--rotor);
 }
 
 .chip[data-action='event'] {
