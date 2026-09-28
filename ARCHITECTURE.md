@@ -421,6 +421,12 @@ written from the same primitives: `configureRange`, `showRangeValue`,
 `watchShallowLocalized` in `subscribe.ts`, `requireElement`, `queryAll` and
 `setText` in `dom.ts`.
 
+Helpers that more than one explainer's widgets share:
+
+- `CanvasSurface` in `src/core/ui/canvasSurface.ts` sizes a chart canvas to its CSS width and
+  the pixel ratio, paints it only while it is near the screen and reads its font once per size
+  and language; `canvasFont` and `widestText` lay out its labels.
+
 The dock's jump chips sit under the scrubber's coloured bands. `phaseColumns` in
 `src/core/ui/phases.ts` gives each phase a grid column sized by its share of the
 cycle, and the dock sets it as `--phase-columns`. `--phase-min-width` on

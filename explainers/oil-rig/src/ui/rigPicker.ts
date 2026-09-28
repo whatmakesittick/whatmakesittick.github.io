@@ -1,11 +1,11 @@
 import { currentLanguage } from '@core/i18n';
 import { clamp } from '@core/math';
+import { CanvasSurface, canvasFont, widestText } from '@core/ui/canvasSurface';
+import type { CanvasFrame } from '@core/ui/canvasSurface';
 import { RIG_TYPES, RIG_TYPE_IDS, canWorkIn } from '../model';
 import type { RigTypeId } from '../model';
 import { WATER_DEPTH_RANGE } from '../state';
 import { CANVAS_COLORS } from './canvasColors';
-import { CanvasSurface, canvasFont, widestText } from './canvasSurface';
-import type { CanvasFrame } from './canvasSurface';
 import { formatMetres } from './format';
 
 interface Column {

@@ -1,4 +1,4 @@
-import type { CanvasFrame, Painter } from './canvasSurface';
+import type { CanvasFrame, Painter } from '@core/ui/canvasSurface';
 
 const KEY_SEPARATOR = '|';
 

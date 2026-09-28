@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { initI18n, setLanguage } from '@core/i18n';
+import { initI18n, setLanguage } from '../i18n';
 import { CanvasSurface } from './canvasSurface';
 import type { CanvasFrame } from './canvasSurface';
 

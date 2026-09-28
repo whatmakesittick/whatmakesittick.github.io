@@ -1,8 +1,8 @@
 import { FULL_TURN } from '@core/math';
+import { widestText } from '@core/ui/canvasSurface';
 import type { Curve } from '../model';
 import { BEAT_MS } from '../model';
 import { CANVAS_COLORS } from './canvasColors';
-import { widestText } from './canvasSurface';
 import { formatMs } from './format';
 
 export interface Plot {

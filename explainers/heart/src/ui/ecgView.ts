@@ -1,4 +1,6 @@
 import { currentLanguage, t } from '@core/i18n';
+import { CanvasSurface, canvasFont } from '@core/ui/canvasSurface';
+import type { CanvasFrame } from '@core/ui/canvasSurface';
 import { WAVE_IDS } from '../ids';
 import type { WaveId } from '../ids';
 import { BEAT_MS, P_WAVE, QRS, T_WAVE, WAVE_MOMENTS, ecgMillivolts } from '../model';
@@ -16,8 +18,6 @@ import {
 import type { Plot, Scale } from './beatPlot';
 import { CachedLayer, layerKey } from './cachedLayer';
 import { CANVAS_COLORS, WAVE_BANDS } from './canvasColors';
-import { CanvasSurface, canvasFont } from './canvasSurface';
-import type { CanvasFrame } from './canvasSurface';
 
 export interface EcgLayout {
   plot: Plot;

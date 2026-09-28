@@ -1,4 +1,6 @@
 import { currentLanguage } from '@core/i18n';
+import { CanvasSurface, canvasFont, widestText } from '@core/ui/canvasSurface';
+import type { CanvasFrame } from '@core/ui/canvasSurface';
 import { PHASE_IDS } from '../ids';
 import {
   END_DIASTOLIC_ML,
@@ -23,8 +25,6 @@ import {
 import type { BeatSample, Plot, Scale } from './beatPlot';
 import { CachedLayer, layerKey } from './cachedLayer';
 import { CANVAS_COLORS, PHASE_COLORS } from './canvasColors';
-import { CanvasSurface, canvasFont, widestText } from './canvasSurface';
-import type { CanvasFrame } from './canvasSurface';
 import { formatMl, formatMmHg } from './format';
 import { PRESSURE_FULL_SCALE_MMHG } from './readouts';
 

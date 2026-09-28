@@ -1,4 +1,6 @@
 import { currentLanguage } from '@core/i18n';
+import { CanvasSurface, canvasFont, widestText } from '@core/ui/canvasSurface';
+import type { CanvasFrame } from '@core/ui/canvasSurface';
 import {
   FITNESS_IDS,
   FITNESS_PROFILES,
@@ -9,8 +11,6 @@ import {
 } from '../model';
 import type { FitnessId } from '../model';
 import { CANVAS_COLORS } from './canvasColors';
-import { CanvasSurface, canvasFont, widestText } from './canvasSurface';
-import type { CanvasFrame } from './canvasSurface';
 import { formatMs, formatPerMinute } from './format';
 
 export type BeatPart = 'squeeze' | 'fill';
