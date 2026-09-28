@@ -1,4 +1,3 @@
-import { shallow } from 'zustand/vanilla/shallow';
 import { bindPresets } from '@core/scene/presetBinder';
 import type { LabelPolicy, PresetTargets } from '@core/scene/presetBinder';
 import type { AssemblyState } from '../ids';
@@ -46,19 +45,16 @@ class DoubleBufferedAssemblyState {
   }
 }
 
-export function highlightOf(preset: Preset, state: HeartState): readonly string[] {
-  return presetHighlight(preset, state);
-}
-
 function highlightSelection(store: HeartStore, targets: SceneTargets): () => void {
-  return store.subscribe(
-    (state) => [state.chamber, state.valve] as const,
-    () => {
-      const state = store.getState();
-      targets.highlighter.setHighlight(highlightOf(PRESETS[state.preset], state));
-    },
-    { equalityFn: shallow },
-  );
+  const refresh = () => {
+    const state = store.getState();
+    targets.highlighter.setHighlight(presetHighlight(PRESETS[state.preset], state));
+  };
+  const unsubscribers = [
+    store.subscribe((state) => state.chamber, refresh),
+    store.subscribe((state) => state.valve, refresh),
+  ];
+  return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
 }
 
 function followSelectedValve(store: HeartStore, targets: SceneTargets): () => void {
@@ -85,7 +81,7 @@ export function bindStore(store: HeartStore, targets: SceneTargets): () => void 
       parts: PART_IDS,
       labels: labelVisibility,
       prepare: push,
-      highlight: highlightOf,
+      highlight: presetHighlight,
     }),
   ];
   return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
