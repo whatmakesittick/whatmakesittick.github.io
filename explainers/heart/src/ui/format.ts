@@ -9,6 +9,7 @@ const REAL_TIME_FORMAT = '×1';
 const SLOWER_PREFIX = '1/';
 const PERCENT = 100;
 const MILLIVOLT_DIGITS = 2;
+const MILLIVOLT_STEPS = 10 ** MILLIVOLT_DIGITS;
 const LITRE_DIGITS = 1;
 const HEART_SOUNDS: ReadonlySet<string> = new Set<HeartSound>(['s1', 's2']);
 
@@ -59,6 +60,10 @@ export function formatMl(millilitres: number): string {
 
 export function formatMlPerSecond(millilitresPerSecond: number): string {
   return t('units.mlPerSecond', { value: whole(millilitresPerSecond) });
+}
+
+export function roundMillivolts(millivolts: number): number {
+  return Math.round(millivolts * MILLIVOLT_STEPS) / MILLIVOLT_STEPS;
 }
 
 export function formatMillivolts(millivolts: number): string {

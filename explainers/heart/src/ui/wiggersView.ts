@@ -26,6 +26,7 @@ import { CANVAS_COLORS, PHASE_COLORS } from './canvasColors';
 import { CanvasSurface, canvasFont, widestText } from './canvasSurface';
 import type { CanvasFrame } from './canvasSurface';
 import { formatMl, formatMmHg } from './format';
+import { PRESSURE_FULL_SCALE_MMHG } from './readouts';
 
 export interface WiggersLayout {
   strip: Plot;
@@ -47,7 +48,7 @@ interface Trace {
   width: number;
 }
 
-const PRESSURE_SCALE: Scale = { min: 0, max: 140 };
+const PRESSURE_SCALE: Scale = { min: 0, max: PRESSURE_FULL_SCALE_MMHG };
 const PRESSURE_TICKS = [0, 40, 80, 120] as const;
 const VOLUME_SCALE: Scale = { min: 35, max: 135 };
 const VOLUME_TICKS = [END_SYSTOLIC_ML, END_DIASTOLIC_ML] as const;
@@ -63,19 +64,19 @@ const LAYOUT = {
   tickGap: 6,
   pressureShare: 0.64,
 } as const;
-const GRID_WIDTH = 1;
+const LINE = { grid: 1, atrium: 1.6, aorta: 1.8, ventricle: 2.4, volume: 2.2 } as const;
 
 function trace(curve: Curve, color: string, width: number): Trace {
   return { samples: sampleBeat(curve, SAMPLE_STEP_MS), curve, color, width };
 }
 
 const PRESSURE_TRACES: readonly Trace[] = [
-  trace(leftAtrialPressure, CANVAS_COLORS.atrium, 1.6),
-  trace(aorticPressure, CANVAS_COLORS.aorta, 1.8),
-  trace(leftVentriclePressure, CANVAS_COLORS.ventricle, 2.4),
+  trace(leftAtrialPressure, CANVAS_COLORS.atrium, LINE.atrium),
+  trace(aorticPressure, CANVAS_COLORS.aorta, LINE.aorta),
+  trace(leftVentriclePressure, CANVAS_COLORS.ventricle, LINE.ventricle),
 ];
 
-const VOLUME_TRACE = trace(leftVentricleVolume, CANVAS_COLORS.volume, 2.2);
+const VOLUME_TRACE = trace(leftVentricleVolume, CANVAS_COLORS.volume, LINE.volume);
 
 export function wiggersLayout(width: number, height: number, gutter: number): WiggersLayout {
   const left = gutter;
@@ -121,7 +122,7 @@ function paintValueGrid(
   ticks: readonly number[],
   labels: readonly string[],
 ): void {
-  context.lineWidth = GRID_WIDTH;
+  context.lineWidth = LINE.grid;
   context.strokeStyle = CANVAS_COLORS.grid;
   context.fillStyle = CANVAS_COLORS.tick;
   context.textAlign = 'right';

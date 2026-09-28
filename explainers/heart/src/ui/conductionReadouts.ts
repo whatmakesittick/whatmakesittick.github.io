@@ -6,13 +6,11 @@ import type { HeartState, HeartStore } from '../state';
 import { disposeAll } from './disposers';
 import type { Disposer } from './disposers';
 import { EcgView } from './ecgView';
-import { formatMillivolts, formatMs, formatSignal } from './format';
+import { formatMillivolts, formatMs, formatSignal, roundMillivolts } from './format';
 import { readoutElement } from './readoutElement';
 
-const HUNDREDTHS = 100;
-
 function millivoltsOf(state: HeartState): number {
-  return Math.round(ecgMillivolts(timeOf(state)) * HUNDREDTHS) / HUNDREDTHS;
+  return roundMillivolts(ecgMillivolts(timeOf(state)));
 }
 
 export function mountConductionReadouts(root: Document, store: HeartStore): Disposer {

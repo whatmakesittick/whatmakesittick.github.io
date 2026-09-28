@@ -95,7 +95,7 @@ function paintSegment(context: CanvasRenderingContext2D, row: BeatRow, segment: 
   const width = Math.max(segment.width - SEGMENT_GAP, 0);
   context.fillStyle = PART_COLORS[segment.part];
   context.fillRect(segment.left, row.top, width, row.height);
-  const label = formatMs(Math.round(segment.ms));
+  const label = formatMs(segment.ms);
   if (context.measureText(label).width + 2 * LAYOUT.pad > width) return;
   context.fillStyle = CANVAS_COLORS.barText;
   context.fillText(label, segment.left + width / 2, row.top + row.height / 2);
@@ -112,11 +112,7 @@ function paintRows(
   beatSplitRows(frame.width, frame.height, gutter, rates).forEach((row) => {
     context.textAlign = 'right';
     context.fillStyle = CANVAS_COLORS.tick;
-    context.fillText(
-      formatPerMinute(Math.round(row.rate)),
-      gutter - LAYOUT.labelGap,
-      row.top + row.height / 2,
-    );
+    context.fillText(formatPerMinute(row.rate), gutter - LAYOUT.labelGap, row.top + row.height / 2);
     context.textAlign = 'center';
     row.segments.forEach((segment) => paintSegment(context, row, segment));
   });

@@ -24,6 +24,7 @@ import {
   formatValveMoment,
   formatValveState,
   formatWall,
+  roundMillivolts,
 } from './format';
 
 const { timeline } = en;
@@ -64,6 +65,11 @@ describe('heart formats', () => {
     expect(formatMillivolts(0.15)).toBe('0.15 mV');
     expect(formatMillivolts(-0.3)).toBe('-0.30 mV');
     expect(formatMillivolts(-0.0001)).toBe('0.00 mV');
+  });
+
+  it('rounds the trace to the hundredths it prints', () => {
+    expect(roundMillivolts(1.1949)).toBe(1.19);
+    expect(roundMillivolts(-0.305)).toBe(-0.3);
   });
 
   it('prints the exercise readouts', () => {
