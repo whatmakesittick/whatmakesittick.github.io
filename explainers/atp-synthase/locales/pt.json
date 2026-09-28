@@ -105,11 +105,6 @@
     "neighbourMotors": "Mais motores"
   },
   "sites": {
-    "name": {
-      "open": "Aberto",
-      "loose": "Frouxo",
-      "tight": "Apertado"
-    },
     "doing": {
       "open": "Aberto: recebe ADP e fosfato",
       "loose": "Frouxo: fecha para fazer ATP",

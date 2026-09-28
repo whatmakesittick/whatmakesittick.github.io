@@ -105,11 +105,6 @@
     "neighbourMotors": "Weitere Motoren"
   },
   "sites": {
-    "name": {
-      "open": "Offen",
-      "loose": "Locker",
-      "tight": "Fest"
-    },
     "doing": {
       "open": "Offen: nimmt ADP und Phosphat auf",
       "loose": "Locker: schließt sich und bildet ATP",

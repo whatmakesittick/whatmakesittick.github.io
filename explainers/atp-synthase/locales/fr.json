@@ -105,11 +105,6 @@
     "neighbourMotors": "Autres moteurs"
   },
   "sites": {
-    "name": {
-      "open": "Ouvert",
-      "loose": "Lâche",
-      "tight": "Serré"
-    },
     "doing": {
       "open": "Ouvert : accueille l’ADP et le phosphate",
       "loose": "Lâche : se resserre pour fabriquer l’ATP",

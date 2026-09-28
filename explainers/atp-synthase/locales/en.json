@@ -105,11 +105,6 @@
     "neighbourMotors": "More motors"
   },
   "sites": {
-    "name": {
-      "open": "Open",
-      "loose": "Loose",
-      "tight": "Tight"
-    },
     "doing": {
       "open": "Open: takes in ADP and phosphate",
       "loose": "Loose: closes to make ATP",

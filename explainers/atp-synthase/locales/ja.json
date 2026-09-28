@@ -105,11 +105,6 @@
     "neighbourMotors": "ほかのモーター"
   },
   "sites": {
-    "name": {
-      "open": "オープン",
-      "loose": "ルーズ",
-      "tight": "タイト"
-    },
     "doing": {
       "open": "オープン：ADPとリン酸を取り込む",
       "loose": "ルーズ：閉じてATPを作る",

@@ -105,11 +105,6 @@
     "neighbourMotors": "更多马达"
   },
   "sites": {
-    "name": {
-      "open": "开放",
-      "loose": "松弛",
-      "tight": "紧密"
-    },
     "doing": {
       "open": "开放：接纳ADP和磷酸",
       "loose": "松弛：收紧，合成ATP",

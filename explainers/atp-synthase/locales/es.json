@@ -105,11 +105,6 @@
     "neighbourMotors": "Más motores"
   },
   "sites": {
-    "name": {
-      "open": "Abierto",
-      "loose": "Flojo",
-      "tight": "Apretado"
-    },
     "doing": {
       "open": "Abierto: recoge ADP y fosfato",
       "loose": "Flojo: se cierra para formar ATP",
