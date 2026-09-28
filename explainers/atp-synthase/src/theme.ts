@@ -1,0 +1,28 @@
+import { THEME as CORE_THEME } from '@core/theme';
+
+export const THEME = {
+  ...CORE_THEME,
+  firstAtp: '#9be15d',
+  secondAtp: '#4fd1c5',
+  thirdAtp: '#4cc3ff',
+  open: '#4fd1c5',
+  loose: '#ffb347',
+  tight: '#ff5d8f',
+  proton: '#ffe066',
+  electron: '#7ee0ff',
+  oxygen: '#ff7a7a',
+  atp: '#9be15d',
+  adp: '#a9b4c6',
+  phosphate: '#ffb347',
+  lipid: '#c9a27a',
+  lipidHead: '#e8c9a0',
+  rotor: '#81b29a',
+  axle: '#3d9be9',
+  alpha: '#e07a5f',
+  beta: '#f2cc8f',
+  stator: '#9b8fd6',
+  gate: '#b388eb',
+  pump: '#6c8ea4',
+  aerobic: '#4fd1c5',
+  anaerobic: '#ff9f43',
+} as const;
