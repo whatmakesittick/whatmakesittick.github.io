@@ -532,7 +532,7 @@ export const SHAPE = {
   envelopeSmoothness: 12,
   collarSmoothness: 5,
   carveSmoothness: 4,
-  envelopeResolution: 100,
+  envelopeResolution: 80,
   cavityResolution: 76,
   gridMarginMm: 8,
 } as const;
@@ -570,7 +570,7 @@ export const CAP = {
   bandShare: 0.35,
   lipMm: 0.35,
   cellMm: 0.6,
-  muscle: THEME.muscle,
+  muscle: '#a8323d',
   deep: THEME.muscleDeep,
   glow: '#ff7a4d',
   glowStrength: 0.16,

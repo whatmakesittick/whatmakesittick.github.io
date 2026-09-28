@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { CHAMBER_IDS } from '../../ids';
 import { APEX, CHAMBERS, SEPTUM, VALVES } from '../../model';
 import { SHAPE_SPEC } from '../constants';
-import { blobBounds, heartShapes, unionBounds } from './heartShape';
+import { heartShapes } from './heartShape';
 
 const shapes = heartShapes(SHAPE_SPEC);
 
@@ -53,6 +53,14 @@ describe('heart shape', () => {
     expect(Math.abs(shapes.envelope.distance(...APEX))).toBeLessThan(6);
   });
 
+  it('bounds the envelope and both cavities', () => {
+    const inside = (bounds: typeof shapes.envelopeBounds, point: readonly number[]) =>
+      point.every((value, axis) => value >= bounds.min[axis] && value <= bounds.max[axis]);
+    expect(inside(shapes.envelopeBounds, APEX)).toBe(true);
+    expect(inside(shapes.sideBounds.left, CHAMBERS.leftVentricle.centre)).toBe(true);
+    expect(inside(shapes.sideBounds.right, CHAMBERS.rightAtrium.centre)).toBe(true);
+  });
+
   it('knows where each vessel leaves the heart', () => {
     expect(shapes.portals.length).toBeGreaterThanOrEqual(8);
     for (const portal of shapes.portals) {
@@ -62,14 +70,5 @@ describe('heart shape', () => {
     expect(shapes.sidePortals.right.length + shapes.sidePortals.left.length).toBe(
       shapes.portals.length,
     );
-  });
-
-  it('bounds blobs and unions of bounds', () => {
-    const bounds = unionBounds([
-      blobBounds({ kind: 'ellipsoid', centre: [0, 0, 0], radii: [1, 2, 3] }),
-      blobBounds({ kind: 'cone', from: [5, 0, 0], to: [10, 0, 0], fromRadius: 1, toRadius: 2 }),
-    ]);
-    expect(bounds.min[0]).toBeLessThanOrEqual(-1);
-    expect(bounds.max[0]).toBeGreaterThanOrEqual(12);
   });
 });

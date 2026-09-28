@@ -76,30 +76,6 @@ export function wallOf(piece: CavityPiece): number {
   return piece.wall ?? CHAMBERS[piece.chamber].wall;
 }
 
-function fieldBounds(field: Field, margin: number): Bounds {
-  const reach = field.reach + margin;
-  const [x, y, z] = field.centre;
-  return { min: [x - reach, y - reach, z - reach], max: [x + reach, y + reach, z + reach] };
-}
-
-export function blobBounds(blob: Blob, margin = 0): Bounds {
-  if (blob.kind !== 'cone') return fieldBounds(blobField(blob), margin);
-  const scale = blob.squash ?? [1, 1, 1];
-  const reach = Math.max(blob.fromRadius, blob.toRadius) + margin;
-  const axis = (index: number): [number, number] => [
-    Math.min(blob.from[index], blob.to[index]) - reach * scale[index],
-    Math.max(blob.from[index], blob.to[index]) + reach * scale[index],
-  ];
-  const [x, y, z] = [axis(0), axis(1), axis(2)];
-  return { min: [x[0], y[0], z[0]], max: [x[1], y[1], z[1]] };
-}
-
-export function unionBounds(all: readonly Bounds[]): Bounds {
-  const min = [0, 1, 2].map((axis) => Math.min(...all.map((bounds) => bounds.min[axis])));
-  const max = [0, 1, 2].map((axis) => Math.max(...all.map((bounds) => bounds.max[axis])));
-  return { min: [min[0], min[1], min[2]], max: [max[0], max[1], max[2]] };
-}
-
 function reachOf(vessel: VesselSpec, spec: ShapeSpec): number {
   return (vessel.portalMm ?? 0) + spec.collarBeyond;
 }
@@ -176,18 +152,9 @@ export function envelopeField(spec: ShapeSpec): Field {
   return blend([heart, union(collars(spec))], spec.collarSmoothness);
 }
 
-function boundsOfFields(fields: readonly Field[], margin: number): Bounds {
-  return unionBounds(fields.map((field) => fieldBounds(field, margin)));
-}
-
-function sideBounds(spec: ShapeSpec, side: HeartSide): Bounds {
-  const chambers = SIDE_CHAMBERS[side];
-  return unionBounds([
-    ...spec.pieces
-      .filter((piece) => chambers.includes(piece.chamber))
-      .map((piece) => blobBounds(piece.blob)),
-    ...chambers.flatMap((chamber) => channels(spec, chamber)).map((field) => fieldBounds(field, 0)),
-  ]);
+function boxBounds(field: Field): Bounds {
+  const { min, max } = field.box;
+  return { min: [min[0], min[1], min[2]], max: [max[0], max[1], max[2]] };
 }
 
 export function heartShapes(spec: ShapeSpec): HeartShapes {
@@ -198,17 +165,13 @@ export function heartShapes(spec: ShapeSpec): HeartShapes {
     leftVentricle: chamberField(spec, 'leftVentricle'),
   };
   const side = (id: HeartSide) => union(SIDE_CHAMBERS[id].map((chamber) => chamberFields[chamber]));
+  const envelope = envelopeField(spec);
+  const sides = { right: side('right'), left: side('left') };
   return {
-    envelope: envelopeField(spec),
-    envelopeBounds: unionBounds([
-      ...spec.pieces.map((piece) =>
-        blobBounds(piece.blob, wallOf(piece) + spec.envelopeSmoothness),
-      ),
-      ...spec.extras.map((blob) => blobBounds(blob, spec.envelopeSmoothness)),
-      boundsOfFields(collars(spec), spec.envelopeSmoothness),
-    ]),
-    sides: { right: side('right'), left: side('left') },
-    sideBounds: { right: sideBounds(spec, 'right'), left: sideBounds(spec, 'left') },
+    envelope,
+    envelopeBounds: boxBounds(envelope),
+    sides,
+    sideBounds: { right: boxBounds(sides.right), left: boxBounds(sides.left) },
     chambers: chamberFields,
     portals: spec.vessels
       .filter((vessel) => vessel.portalMm !== undefined)
