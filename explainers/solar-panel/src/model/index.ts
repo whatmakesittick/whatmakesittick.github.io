@@ -6,4 +6,5 @@ export * from './scale';
 export * from './slice';
 export * from './spectrum';
 export * from './sun';
+export * from './wiring';
 export * from './yield';
