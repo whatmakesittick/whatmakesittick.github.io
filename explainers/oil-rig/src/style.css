@@ -8,14 +8,14 @@
   --bottom: #ff7eb6;
   --mud: #b08a5a;
   --gas: #ffe08a;
-  --oil: #a8743f;
-  --brine: #5c9fd6;
-  --source-rock: #8d7a66;
-  --danger: #ff6b5e;
-  --safe: #8bd47f;
-  --mud-line: #f5d08a;
-  --pore-line: #4cc3ff;
-  --fracture-line: #ff5f7e;
+  --brine: #3f7fb8;
+  --hull: #d94f3d;
+  --rock: #6f6a63;
+  --safe: var(--top-hole);
+  --danger: var(--hull);
+  --mud-line: var(--gas);
+  --pore-line: var(--sea);
+  --fracture-line: var(--bottom);
 }
 
 .readout[data-readout='pressure'] .readout-meter > span:not(.meter) {
@@ -151,7 +151,7 @@
 }
 
 .chip[data-action='layer'][data-value='oil'] {
-  --tone: var(--oil);
+  --tone: var(--reservoir);
 }
 
 .chip[data-action='layer'][data-value='water'] {
@@ -159,7 +159,7 @@
 }
 
 .chip[data-action='layer'][data-value='sourceRock'] {
-  --tone: var(--source-rock);
+  --tone: var(--rock);
 }
 
 .chip[data-action='mudPlan'] {

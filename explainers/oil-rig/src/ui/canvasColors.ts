@@ -1,5 +1,15 @@
 import { THEME } from '../theme';
 
+const HEX_COLOR = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i;
+const HEX_RADIX = 16;
+
+function withAlpha(hex: string, alpha: number): string {
+  const match = HEX_COLOR.exec(hex);
+  if (!match) throw new Error(`Expected a #rrggbb colour, got "${hex}"`);
+  const [red, green, blue] = match.slice(1).map((channel) => parseInt(channel, HEX_RADIX));
+  return `rgb(${red} ${green} ${blue} / ${alpha})`;
+}
+
 export const CANVAS_COLORS = {
   waterTop: '#1f5c80',
   waterBottom: '#071827',
@@ -9,18 +19,18 @@ export const CANVAS_COLORS = {
   grid: 'rgb(255 255 255 / 0.07)',
   tick: THEME.muted,
   lit: THEME.text,
-  dim: 'rgb(139 146 156 / 0.3)',
+  dim: withAlpha(THEME.muted, 0.3),
   limit: 'rgb(255 255 255 / 0.22)',
-  seaBand: 'rgb(63 127 184 / 0.14)',
-  rockBand: 'rgb(201 162 126 / 0.08)',
-  window: 'rgb(139 212 127 / 0.3)',
-  windowEdge: 'rgb(139 212 127 / 0.75)',
+  seaBand: withAlpha(THEME.brine, 0.14),
+  rockBand: withAlpha(THEME.overburden, 0.08),
+  window: withAlpha(THEME.topHole, 0.3),
+  windowEdge: withAlpha(THEME.topHole, 0.75),
   pore: THEME.sea,
-  fracture: '#ff5f7e',
-  mud: '#f5d08a',
-  mudAhead: 'rgb(245 208 138 / 0.3)',
+  fracture: THEME.bottom,
+  mud: THEME.gas,
+  mudAhead: withAlpha(THEME.gas, 0.3),
   marker: 'rgb(255 255 255 / 0.4)',
-  danger: '#ff6b5e',
+  danger: THEME.hull,
   gas: THEME.gas,
   oil: THEME.oil,
   brine: THEME.brine,
