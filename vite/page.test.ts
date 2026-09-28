@@ -3,7 +3,7 @@ import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import type { PageLanguage } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import {
-  catalogueEntries,
+  catalogueCards,
   renderCatalogue,
   renderEntry,
   renderNotFound,
@@ -398,12 +398,18 @@ describe('renderEntry', () => {
   });
 });
 
-describe('catalogueEntries', () => {
-  it('exposes the manifest, the meta of every language and the publish date', () => {
-    const [entry] = catalogueEntries([explainer]);
-    expect(entry.meta.uk?.title).toBe('Як працює річ');
-    expect(entry.manifest.slug).toBe('thing');
-    expect(entry.published).toBe(explainer.dates.published);
+describe('catalogueCards', () => {
+  it('keeps only what a card shows, in every shipped language, and the publish date', () => {
+    expect(catalogueCards([explainer])).toEqual([
+      {
+        manifest: { slug: 'thing', tags: ['tools'], cover: 'cover.webp', locales: ['en', 'uk'] },
+        meta: {
+          en: { title: meta.title, eyebrow: meta.eyebrow, summary: meta.summary },
+          uk: { title: 'Як працює річ', eyebrow: meta.eyebrow, summary: meta.summary },
+        },
+        published: explainer.dates.published,
+      },
+    ]);
   });
 
   it('lists the newest explainer first', () => {
@@ -412,7 +418,7 @@ describe('catalogueEntries', () => {
       manifest: { ...explainer.manifest, slug: 'older' },
       dates: { published: '2025-12-01T09:00:00+02:00', modified: '2025-12-01T09:00:00+02:00' },
     };
-    const slugs = catalogueEntries([older, explainer]).map((entry) => entry.manifest.slug);
+    const slugs = catalogueCards([older, explainer]).map((card) => card.manifest.slug);
     expect(slugs).toEqual(['thing', 'older']);
   });
 });

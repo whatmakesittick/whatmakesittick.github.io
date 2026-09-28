@@ -3,6 +3,7 @@ import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { languagePath } from '../src/core/i18n/paths.ts';
 import { compareNewestFirst } from '../src/core/manifest.ts';
 import type { CatalogueEntry, ExplainerMeta } from '../src/core/manifest.ts';
+import type { CardMeta, CatalogueCard } from '../src/site/catalogue.ts';
 import { renderCatalogueGrid } from '../src/site/catalogueMarkup.ts';
 import { alternateLinks, imageType, jsonLd, localeTags } from './head.ts';
 import type { PageLanguage } from './i18n.ts';
@@ -217,7 +218,7 @@ export function renderNotFound(
 }
 
 function catalogueGrid(explainers: readonly LoadedExplainer[], language: PageLanguage): string {
-  return renderCatalogueGrid(catalogueEntries(explainers), { ...language, base: ROOT_PATH });
+  return renderCatalogueGrid(catalogueCards(explainers), { ...language, base: ROOT_PATH });
 }
 
 function localeLoader(localesRoot: string, code: LanguageCode): string {
@@ -241,10 +242,24 @@ export function renderEntry(manifest: LoadedExplainer['manifest']): string {
   ].join('\n');
 }
 
-export function catalogueEntries(explainers: readonly LoadedExplainer[]): CatalogueEntry[] {
-  return catalogueOrder(explainers).map(catalogueEntry);
+function cardMeta({ title, eyebrow, summary }: ExplainerMeta): CardMeta {
+  return { title, eyebrow, summary };
+}
+
+function catalogueCard({ manifest, metas, dates }: LoadedExplainer): CatalogueCard {
+  const { slug, tags, cover, locales } = manifest;
+  const meta: CatalogueCard['meta'] = {};
+  for (const code of locales) {
+    const localized = metas[code];
+    if (localized) meta[code] = cardMeta(localized);
+  }
+  return { manifest: { slug, tags, cover, locales }, meta, published: dates.published };
+}
+
+export function catalogueCards(explainers: readonly LoadedExplainer[]): CatalogueCard[] {
+  return catalogueOrder(explainers).map(catalogueCard);
 }
 
 export function renderCatalogueModule(explainers: readonly LoadedExplainer[]): string {
-  return `export const entries = ${JSON.stringify(catalogueEntries(explainers))};\n`;
+  return `export const entries = ${JSON.stringify(catalogueCards(explainers))};\n`;
 }

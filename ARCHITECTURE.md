@@ -419,9 +419,10 @@ slash and regenerates the pages when a manifest, chapters, locale, template, par
 or the root `index.html` is added, changed or removed. A failed regeneration is
 logged and shown in the error overlay, and the next change retries it. At build it
 emits the same files into `dist/<slug>/`. It also serves
-`virtual:explainer-catalogue`: every manifest with the `meta` block of each shipped
-language and its publish date, newest first, so the catalogue never bundles an
-explainer's full copy.
+`virtual:explainer-catalogue`: newest first, one card per explainer with its slug,
+tags, cover, languages, publish date and the title, eyebrow and summary of each
+shipped language. The build prerenders the catalogue from the same list, and the
+catalogue bundles only what a card shows.
 
 Every page is prerendered in every language it ships. English stays at `/<slug>/`
 and `/`; any other language lives at `/<lang>/<slug>/` and `/<lang>/`, where the
