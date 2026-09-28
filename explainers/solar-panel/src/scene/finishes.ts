@@ -5,6 +5,7 @@ const GLOSS_REFLECTION = 1.6;
 const METAL_REFLECTION = 1.3;
 const LAMP_GLOW = 0.6;
 const GLASS_REFLECTION = 2.2;
+const CELL_REFLECTION = 0.8;
 const DIODE_GLOW = 1.4;
 const LED_GLOW = 2.2;
 const DIAGRAM_GLOW = 0.35;
@@ -15,12 +16,12 @@ function diagram(color: string, glow = DIAGRAM_GLOW): MaterialFinish {
 }
 
 export const PAINT = {
-  plaster: '#e9dcc4',
+  plaster: '#dccbb0',
   concrete: '#bdb7ac',
   coping: '#d2cdc3',
   plinth: '#8f877b',
-  paver: '#cdc7bb',
-  paverJoint: '#a59e92',
+  paver: '#c4bdb0',
+  paverJoint: '#978f83',
   windowFrame: '#f3f3f0',
   windowGlass: '#27394d',
   door: '#4d6670',
@@ -60,11 +61,12 @@ export const PAINT = {
   ledRed: '#ff4d4d',
   ledOff: '#3a3f45',
   brand: THEME.sun,
-  pyramids: '#7282c8',
+  lawn: '#7c8c6c',
+  pyramids: '#4f5fa6',
   arCoating: '#2a3290',
-  emitter: '#c56b80',
+  emitter: '#9a4a60',
   junction: THEME.dusk,
-  base: '#3d5d98',
+  base: '#2b4678',
   rearPassivation: '#8fd3c8',
   rearContact: '#b9bec6',
   finger: '#eceff2',
@@ -127,11 +129,11 @@ export const FINISHES = {
   backsheet: { color: PAINT.backsheet, roughness: 0.7, metalness: 0 },
   cellFront: {
     color: '#ffffff',
-    roughness: 0.3,
-    metalness: 0.15,
+    roughness: 0.55,
+    metalness: 0.05,
     emissive: PAINT.cellGlow,
     emissiveIntensity: 0,
-    envMapIntensity: GLOSS_REFLECTION,
+    envMapIntensity: CELL_REFLECTION,
   },
   cellEdge: { color: PAINT.cellEdge, roughness: 0.5, metalness: 0.1 },
   cellRear: { color: PAINT.cellRear, roughness: 0.6, metalness: 0.4 },
@@ -161,6 +163,7 @@ export const FINISHES = {
     roughness: 0.4,
     metalness: 0,
   },
+  lawn: { color: PAINT.lawn, roughness: 1, metalness: 0, transparent: true },
   inverter: { color: PAINT.inverter, roughness: 0.45, metalness: 0.05 },
   inverterFront: { color: PAINT.inverterFront, roughness: 0.4, metalness: 0.05 },
   meter: { color: PAINT.meter, roughness: 0.5, metalness: 0.05 },

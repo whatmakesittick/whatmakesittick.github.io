@@ -10,6 +10,7 @@ import { repeating } from '../canvas';
 import { finishMesh } from '../context';
 import type { PartContext } from '../context';
 import { addBulkhead } from './bulkhead';
+import { createGround } from './ground';
 import { addParapet } from './parapet';
 import { PAVER_TILES_PER_TEXTURE, paverTexture } from './paverTexture';
 import { addWalls } from './walls';
@@ -54,7 +55,7 @@ export function createHouse(context: PartContext): HousePart {
   addBulkhead(batch);
   addVentPipe(batch);
   const object = new Group();
-  object.add(batch.build(context, STRUCTURE_GROUP), createFloor(context));
+  object.add(batch.build(context, STRUCTURE_GROUP), createFloor(context), createGround(context));
   const roof = anchorAt(object, ROOF_LABEL.x, TERRACE.y + ANCHOR_LIFT_CM, ROOF_LABEL.z);
   return { object, roof };
 }
