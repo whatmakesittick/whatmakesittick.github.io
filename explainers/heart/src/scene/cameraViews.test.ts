@@ -25,8 +25,8 @@ describe('camera views', () => {
     const framed = (id: 'front' | 'section' | 'left' | 'septum' | 'whole') =>
       views[id] as FramedView<RegionId>;
     expect(framed('front')).toMatchObject({
-      region: 'heart',
-      margin: 1.1,
+      region: 'scene',
+      margin: 1.02,
       distance: FRONT_DISTANCE,
     });
     expect(framed('section').region).toBe('chambers');
