@@ -3,8 +3,8 @@ import { THEME as CORE_THEME } from '@core/theme';
 export const THEME = {
   ...CORE_THEME,
   firstAtp: '#9be15d',
-  secondAtp: '#4fd1c5',
-  thirdAtp: '#4cc3ff',
+  secondAtp: '#4cc3ff',
+  thirdAtp: '#c792ea',
   open: '#4fd1c5',
   loose: '#ffb347',
   tight: '#ff5d8f',
