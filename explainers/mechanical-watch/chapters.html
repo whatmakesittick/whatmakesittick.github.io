@@ -76,7 +76,7 @@
       </div>
       <div>
         <dt data-i18n="sections.mainspring.control.turns">Turns left in the spring</dt>
-        <dd class="number" data-readout="reserve-turns">5.25</dd>
+        <dd class="number" data-readout="reserve-turns">5.25 turns</dd>
       </div>
       <div>
         <dt data-i18n="sections.mainspring.control.amplitude">Balance amplitude</dt>
@@ -84,7 +84,7 @@
       </div>
       <div>
         <dt data-i18n="sections.mainspring.control.energy">Energy still stored</dt>
-        <dd class="number" data-readout="reserve-energy">0.31 J</dd>
+        <dd class="number" data-readout="reserve-energy">0.29 J</dd>
       </div>
     </dl>
   </div>
@@ -307,9 +307,10 @@
   <p data-i18n-html="sections.balance.p1">
     The <strong>balance</strong> is a ring 10.6 mm across that turns back and forth on pivots just
     0.08 mm thick. A spiral hairspring always pulls it back toward the centre, so it overshoots and
-    swings the other way, like a child on a swing. Only two things set how long a swing takes: the
-    rim's mass and the spring's stiffness. A heavier rim swings slower, a stiffer spring faster, and
-    here one full swing takes 250 ms. Christiaan Huygens designed a spiral balance spring in 1675.
+    swings the other way, like a child on a swing. Only two things set how long a swing takes: how
+    heavy the rim is and how far out that weight sits, and how stiff the spring is. More weight far
+    out swings slower, a stiffer spring faster, and here one full swing takes 250 ms. Christiaan
+    Huygens designed a spiral balance spring in 1675.
   </p>
   <p data-i18n-html="sections.balance.p2">
     How far the balance swings is its <strong>amplitude</strong>: about 280° each way when the watch
@@ -328,7 +329,7 @@
   <div class="range-widget regulator-control">
     <div class="range-widget__header">
       <label for="regulator" data-i18n="sections.balance.control.label">Regulator index</label>
-      <output class="number" for="regulator" data-readout="regulator">0</output>
+      <output class="number" for="regulator" data-readout="regulator">0.00</output>
     </div>
     <input id="regulator" type="range" class="range" data-control="regulator" />
     <div class="range-widget__scale" aria-hidden="true">
@@ -338,7 +339,7 @@
     <dl class="range-widget__readouts">
       <div>
         <dt data-i18n="sections.balance.control.rate">Daily rate</dt>
-        <dd class="number" data-readout="regulator-rate">+0.0 s/day</dd>
+        <dd class="number" data-readout="regulator-rate">0.0 s/day</dd>
       </div>
       <div>
         <dt data-i18n="sections.balance.control.period">One swing takes</dt>
@@ -356,8 +357,8 @@
   </div>
   <p data-i18n-html="sections.balance.p4">
     Heat, magnetism and knocks all disturb the balance. Hairsprings of Nivarox, an alloy developed
-    for them in 1933, hardly change with temperature, and silicon hairsprings are not magnetic. For
-    knocks, the jewels that hold the balance pivots sit in a <strong>shock setting</strong>: a
+    for them in the 1930s, hardly change with temperature, and silicon hairsprings are not magnetic.
+    For knocks, the jewels that hold the balance pivots sit in a <strong>shock setting</strong>: a
     spring lets the jewel shift, the thick shoulder of the staff takes the blow, and the spring
     centres the pivot again. Incabloc, from the early 1930s, is one such setting. In this family
     only the better grades get it; the others use ETA's own Etachocs.
@@ -388,7 +389,7 @@
     faster <strong>beat rate</strong> keeps the rate steadier against knocks and changes of
     position. The cost is energy: with the same balance and swing, the energy grows with the square
     of the frequency, so the spring runs down sooner or parts wear faster. Switch the rates and
-    watch the seconds hand.
+    compare the numbers below.
   </p>
   <p class="chip-row">
     <button
@@ -451,7 +452,7 @@
     +6 seconds a day in COSC's tests, one of seven criteria checked on the bare movement over 15
     days, in 5 positions and at 3 temperatures. METAS tests the cased watch, even after a magnetic
     field of 15,000 gauss, and allows 0 to +5 seconds a day, or 0 to +6 for a movement this size.
-    For quartz, COSC's limit is ±0.07 seconds a day. Yet in 2025 Switzerland exported 5.2 million
-    mechanical watches, worth 86 percent of all its watch exports.
+    For quartz, COSC's limit is about ±0.07 seconds a day. Yet in 2025 Switzerland exported 5.2
+    million mechanical watches, worth 86 percent of all its watch exports.
   </p>
 </section>
