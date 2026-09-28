@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatAttributeKeys, parseAttributeKeys } from './markup';
+import { formatAttributeKeys, parseAttributeKeys, translateValues } from './markup';
 
 describe('parseAttributeKeys', () => {
   it('reads attribute and key pairs and skips incomplete ones', () => {
@@ -18,5 +18,16 @@ describe('formatAttributeKeys', () => {
     ] as const;
     expect(formatAttributeKeys(pairs)).toBe('aria-label:stage.expand;title:stage.expand');
     expect(parseAttributeKeys(formatAttributeKeys(pairs))).toEqual(pairs);
+  });
+});
+
+describe('translateValues', () => {
+  it('translates the key of every named value', () => {
+    const translate = (key: string) => `<${key}>`;
+    expect(translateValues('title: meta.title; year:footer.year', translate)).toEqual({
+      title: '<meta.title>',
+      year: '<footer.year>',
+    });
+    expect(translateValues('', translate)).toEqual({});
   });
 });

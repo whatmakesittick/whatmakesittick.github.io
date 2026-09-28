@@ -4,7 +4,9 @@ import {
   ATTRIBUTES_ATTRIBUTE,
   HTML_ATTRIBUTE,
   TEXT_ATTRIBUTE,
+  VALUES_ATTRIBUTE,
   parseAttributeKeys,
+  translateValues,
 } from '../src/core/i18n/markup.ts';
 import type { Translate } from './i18n.ts';
 import { escapeHtml } from './template.ts';
@@ -17,10 +19,18 @@ function withAttribute(root: HTMLElement, attribute: string): [HTMLElement, stri
     .map((element) => [element, element.getAttribute(attribute) ?? '']);
 }
 
+function translateText(element: HTMLElement, key: string, translate: Translate): string {
+  const spec = element.getAttribute(VALUES_ATTRIBUTE) ?? '';
+  return translate(
+    key,
+    translateValues(spec, (name) => translate(name)),
+  );
+}
+
 export function translateHtml(html: string, translate: Translate): string {
   const root = parse(html, PARSE_OPTIONS);
   for (const [element, key] of withAttribute(root, TEXT_ATTRIBUTE)) {
-    element.set_content(escapeHtml(translate(key)));
+    element.set_content(escapeHtml(translateText(element, key, translate)));
   }
   for (const [element, key] of withAttribute(root, HTML_ATTRIBUTE)) {
     element.set_content(translate(key));

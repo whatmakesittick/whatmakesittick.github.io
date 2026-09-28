@@ -2,7 +2,7 @@ import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { languagePath } from '../src/core/i18n/paths.ts';
 import { compareNewestFirst } from '../src/core/manifest.ts';
-import type { CatalogueEntry } from '../src/core/manifest.ts';
+import type { CatalogueEntry, ExplainerMeta } from '../src/core/manifest.ts';
 import { alternateLinks, imageType, jsonLd, localeTags } from './head.ts';
 import type { PageLanguage } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
@@ -32,6 +32,8 @@ export const PAGE_ENTRY = 'main.ts';
 const ROOT_PATH = '/';
 const CATALOGUE_TAGLINE_KEY = 'catalogue.tagline';
 const CATALOGUE_TITLE_KEY = 'catalogue.title';
+const CATALOGUE_DOCUMENT_TITLE_KEY = 'catalogue.metaTitle';
+const PAGE_DOCUMENT_TITLE_KEY = 'page.metaTitle';
 
 export function siteValues(sourceUrl: string): TemplateValues {
   return {
@@ -62,6 +64,18 @@ function socialValues(image: string, alt: string): TemplateValues {
   };
 }
 
+function explainerHeadValues(meta: ExplainerMeta, { translate }: PageLanguage): TemplateValues {
+  return {
+    documentTitle: escapeHtml(translate(PAGE_DOCUMENT_TITLE_KEY, { title: meta.title })),
+  };
+}
+
+function catalogueHeadValues({ translate }: PageLanguage): TemplateValues {
+  return {
+    documentTitle: escapeHtml(translate(CATALOGUE_DOCUMENT_TITLE_KEY)),
+  };
+}
+
 function render(template: string, partials: TemplateValues, values: TemplateValues): string {
   return fillTemplate(expandPartials(template, partials), values);
 }
@@ -70,8 +84,9 @@ export function renderPage(
   template: string,
   partials: TemplateValues,
   explainer: LoadedExplainer,
-  { code, translate }: PageLanguage,
+  language: PageLanguage,
 ): string {
+  const { code, translate } = language;
   const { manifest } = explainer;
   const meta = explainer.metas[code] ?? explainer.meta;
   const route = explainerRoute(explainer);
@@ -81,6 +96,7 @@ export function renderPage(
     ...siteValues(explainerSourceUrl(manifest.slug)),
     ...languageValues(code, route),
     ...socialValues(image, manifest.social.alt),
+    ...explainerHeadValues(meta, language),
     title: escapeHtml(meta.title),
     description: escapeHtml(meta.description),
     eyebrow: escapeHtml(meta.eyebrow),
@@ -110,8 +126,9 @@ export function renderCatalogue(
   template: string,
   partials: TemplateValues,
   explainers: readonly LoadedExplainer[],
-  { code, translate }: PageLanguage,
+  language: PageLanguage,
 ): string {
+  const { code, translate } = language;
   const pages = catalogueOrder(explainers).map((explainer) => listedPage(explainer, code));
   const image = siteUrl(SITE_SOCIAL.image);
   const description = translate(CATALOGUE_TAGLINE_KEY);
@@ -120,6 +137,7 @@ export function renderCatalogue(
     ...siteValues(REPOSITORY_URL),
     ...languageValues(code, CATALOGUE_ROUTE),
     ...socialValues(image, SITE_SOCIAL.alt),
+    ...catalogueHeadValues(language),
     title: escapeHtml(translate(CATALOGUE_TITLE_KEY)),
     description: escapeHtml(description),
     structuredData: jsonLd(catalogueData(description, facts, pages)),

@@ -34,7 +34,8 @@ const explainer: LoadedExplainer = {
 
 const template = [
   '<html lang="{{lang}}">',
-  '<title>{{title}}</title>',
+  '<title>{{documentTitle}}</title>',
+  '<meta property="og:title" content="{{title}}" />',
   '<meta content="{{description}}" />',
   '<link rel="canonical" href="{{url}}" />',
   '{{alternateLinks}}',
@@ -53,14 +54,26 @@ const template = [
 
 const partials = { footer: '<footer>{{licenseUrl}}</footer>' };
 
+const english: Record<string, string> = {
+  'page.metaTitle': '{{title}} · What makes it tick',
+  'catalogue.metaTitle': 'What makes it tick: how things work',
+};
+
 const translations: Record<string, string> = {
   'sections.intro': 'Вступ',
+  'page.metaTitle': '{{title}} · Що змушує цокати',
   'catalogue.title': 'Що змушує цокати',
+  'catalogue.metaTitle': 'Що змушує цокати: як усе працює',
   'catalogue.tagline': 'Як працюють машини',
 };
 
+function interpolate(text: string, values: Record<string, string> = {}): string {
+  return text.replace(/\{\{(\w+)\}\}/g, (placeholder, name: string) => values[name] ?? placeholder);
+}
+
 function language(code: LanguageCode): PageLanguage {
-  return { code, translate: (key) => (code === 'en' ? key : (translations[key] ?? key)) };
+  const table = code === 'en' ? english : translations;
+  return { code, translate: (key, values) => interpolate(table[key] ?? key, values) };
 }
 
 function structuredData(html: string): unknown {
@@ -79,7 +92,8 @@ describe('renderPage', () => {
   const ukrainian = renderPage(template, partials, explainer, language('uk'));
 
   it('escapes the explainer copy into the head', () => {
-    expect(html).toContain('<title>How a &quot;thing&quot; works</title>');
+    expect(html).toContain('<title>How a &quot;thing&quot; works · What makes it tick</title>');
+    expect(html).toContain('<meta property="og:title" content="How a &quot;thing&quot; works"');
     expect(html).toContain('content="A look inside &lt;things&gt;"');
   });
 
@@ -122,7 +136,8 @@ describe('renderPage', () => {
 
   it('renders a language page in its language with a canonical link to itself', () => {
     expect(ukrainian).toContain('<html lang="uk">');
-    expect(ukrainian).toContain('<title>Як працює річ</title>');
+    expect(ukrainian).toContain('<title>Як працює річ · Що змушує цокати</title>');
+    expect(ukrainian).toContain('<meta property="og:title" content="Як працює річ"');
     expect(ukrainian).toContain(
       '<link rel="canonical" href="https://whatmakesittick.github.io/uk/thing/"',
     );
@@ -162,7 +177,8 @@ describe('renderCatalogue', () => {
 
   it('renders the catalogue in the language of its folder', () => {
     expect(html).toContain('<html lang="uk">');
-    expect(html).toContain('<title>Що змушує цокати</title>');
+    expect(html).toContain('<title>Що змушує цокати: як усе працює</title>');
+    expect(html).toContain('<meta property="og:title" content="Що змушує цокати"');
     expect(html).toContain('content="Як працюють машини"');
     expect(html).toContain('<link rel="canonical" href="https://whatmakesittick.github.io/uk/"');
     expect(html).toContain('content="https://whatmakesittick.github.io/social/og-image.png"');

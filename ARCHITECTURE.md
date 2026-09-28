@@ -428,14 +428,19 @@ build and the runtime. A page is rendered in two steps:
 
 1. `vite/page.ts` expands the `<!-- partial:name -->` markers and fills the
    `{{token}}` values of `src/core/page.html` or the root `index.html`: `lang`, the
-   translated title, description, eyebrow and tagline, the catalogue path in the
+   translated title, description, eyebrow and tagline, the document title
+   (`documentTitle`: `page.metaTitle` with the explainer's title, "How a solar panel works ·
+   What makes it tick", or `catalogue.metaTitle`), the catalogue path in the
    page's language (`catalogueUrl`, `/` or `/<lang>/`), the canonical URL of the page
    itself, `og:locale` with the other languages as alternates, the Open Graph and
    Twitter tags, one `<link rel="alternate" hreflang>` per language variant plus
    `x-default` for the English page, and the JSON-LD.
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
-   element, in that order, the way `translateDom` does at runtime. The markers stay,
+   element, in that order, the way `translateDom` does at runtime. A `data-i18n` element
+   may carry `data-i18n-values="name:key"`, which fills the `{{name}}` placeholder with the
+   translation of `key`; the `<title>` composes the explainer's title this way, so an
+   in-place language switch sets the same composed title. The markers stay,
    so the runtime can still switch languages. `vite/i18n.ts` builds an i18next
    instance per page from the same resources the runtime loads, the core locale
    merged with the explainer locale and English as the fallback, and the same
@@ -514,7 +519,8 @@ falls back to its `en` copy. An explainer must ship `en.json`; any other languag
 it ships must have the same keys, placeholders and markup, which a test enforces
 per explainer. The catalogue reads `meta.title`, `meta.eyebrow` and `meta.summary`
 of every explainer from `virtual:explainer-catalogue`, and the page head uses
-`meta.title` and `meta.description`.
+`meta.title` and `meta.description`, with `page.metaTitle` around the title in the
+`<title>`.
 
 The build prerenders each language (see "Build"), so the HTML a crawler fetches is
 already in the page's language. Detection prefers the `/<lang>/` path prefix, then
@@ -536,8 +542,8 @@ English page otherwise.
 
 Kept from the engine: TypeScript strict, ESLint and Prettier over the repository,
 Vitest for pure modules, happy-dom for `*.dom.test.ts` files, no comments by
-default, no all-caps text, `data-i18n`, `data-i18n-html` and `data-i18n-attr` for
-copy, tokens in `src/core/style.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
+default, no all-caps text, `data-i18n`, `data-i18n-html`, `data-i18n-attr` and
+`data-i18n-values` for copy, tokens in `src/core/style.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
 (`vite/`, `src/core/manifest.ts`) import with explicit `.ts` extensions.
 
 Fonts are self-hosted. `src/core/style.css` imports Inter (variable) and JetBrains
