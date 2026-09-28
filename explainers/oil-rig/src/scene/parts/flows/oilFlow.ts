@@ -9,7 +9,7 @@ import type { Tunnel } from '../well/completion';
 import { TUBING_END_DEPTH } from '../well/completion';
 import { Stream } from './stream';
 
-const TONES = ['#7a5330', '#5e3e22', '#8b6038'] as const;
+const TONES = ['#8a5a2b', '#6b4422', '#a36b33'] as const;
 const INFLOW_TONES = ['#8a5a2b', '#a06a34'] as const;
 const TUBING_SPREAD = 0.55;
 const TUBING_LIFT = 0.06;
@@ -44,7 +44,7 @@ export class OilFlowPart {
         tones,
         seed,
       });
-    this.main = make(FLOW.oil.count, TONES, 1, FLOW.seed + 5);
+    this.main = make(FLOW.oil.count, TONES, FLOW.oil.size, FLOW.seed + 5);
     this.inflow = make(FLOW.inflow.count, INFLOW_TONES, FLOW.inflow.size, FLOW.seed + 6);
     this.object.add(this.main.points, this.inflow.points);
     this.surfaceLine();

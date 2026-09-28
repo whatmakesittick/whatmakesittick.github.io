@@ -363,9 +363,8 @@ export const MOUND = {
   height: 3.4,
   steps: 9,
   segments: 16,
-  jitter: 0.35,
+  jitter: 0.3,
   minGrowth: 0.08,
-  seed: 3,
 } as const;
 
 export const ANTICLINE = { amplitudeM: 360, width: 85, sourceShare: 0.35 } as const;
@@ -441,7 +440,7 @@ export const FLOW = {
   plume: { share: 0.22, radius: 16, rise: 3.5 },
   bubbles: { count: 170, speed: 30, wobble: 0.35, size: 2.4 },
   loss: { count: 150, speed: 5 },
-  oil: { count: 1100, speed: 24 },
+  oil: { count: 1100, speed: 24, size: 1.6 },
   inflow: { count: 220, speed: 2.4, size: 1.4 },
   cuttingsEvery: 4,
   seed: 7,
