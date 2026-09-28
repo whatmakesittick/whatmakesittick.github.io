@@ -264,7 +264,7 @@
         "label": "Wie stark sich der Körper anstrengt",
         "rest": "Ruhig sitzen",
         "max": "Vollgas-Sprint",
-        "caption": "Oben ein Herzschlag in Ruhe, unten einer bei dieser Belastung. Rot ist das Zusammenziehen, blau die Zeit, die zum Füllen bleibt.",
+        "caption": "Oben ein durchschnittlicher Erwachsener in Ruhe, unten Ihre Auswahl. Rot ist das Zusammenziehen, blau die Zeit, die zum Füllen bleibt.",
         "rate": "Puls",
         "stroke": "Blut pro Schlag",
         "output": "Blut pro Minute",

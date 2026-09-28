@@ -264,7 +264,7 @@
         "label": "How hard the body is working",
         "rest": "Sitting still",
         "max": "Flat-out sprint",
-        "caption": "One beat at rest above, one beat at this effort below. Red is the squeeze, blue is the time left to fill.",
+        "caption": "A typical adult at rest above, your pick below. Red is the squeeze, blue is the time left to fill.",
         "rate": "Heart rate",
         "stroke": "Blood per beat",
         "output": "Blood per minute",

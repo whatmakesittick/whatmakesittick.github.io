@@ -264,7 +264,7 @@
         "label": "Quanto o corpo está trabalhando",
         "rest": "Sentado, sem esforço",
         "max": "Sprint máximo",
-        "caption": "Um batimento em repouso em cima, um batimento neste esforço embaixo. Vermelho é a contração, azul é o tempo que sobra para encher.",
+        "caption": "Em cima, um adulto comum em repouso; embaixo, a sua escolha. Vermelho é a contração, azul é o tempo que sobra para encher.",
         "rate": "Frequência cardíaca",
         "stroke": "Sangue por batimento",
         "output": "Sangue por minuto",

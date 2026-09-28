@@ -264,7 +264,7 @@
         "label": "Cuánto trabaja el cuerpo",
         "rest": "Sentado y quieto",
         "max": "Esprint a tope",
-        "caption": "Arriba, un latido en reposo; abajo, un latido con este esfuerzo. El rojo es la contracción, y el azul, el tiempo que queda para llenarse.",
+        "caption": "Arriba, un adulto típico en reposo; abajo, lo que has elegido. El rojo es la contracción, y el azul, el tiempo que queda para llenarse.",
         "rate": "Frecuencia cardíaca",
         "stroke": "Sangre por latido",
         "output": "Sangre por minuto",

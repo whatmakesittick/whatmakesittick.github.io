@@ -264,7 +264,7 @@
         "label": "Intensité de l’effort",
         "rest": "Assis, immobile",
         "max": "Sprint à fond",
-        "caption": "Un battement au repos en haut, un battement à cet effort en bas. Le rouge, c’est la contraction ; le bleu, le temps qui reste pour se remplir.",
+        "caption": "En haut, un adulte moyen au repos ; en bas, votre choix. Le rouge, c’est la contraction ; le bleu, le temps qui reste pour se remplir.",
         "rate": "Fréquence cardiaque",
         "stroke": "Sang par battement",
         "output": "Sang par minute",
