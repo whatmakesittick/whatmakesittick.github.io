@@ -3,11 +3,12 @@ import { airGapM, displacementT, keelWaveMotion } from '../model';
 import { DRAFT_RANGE } from '../state';
 import type { OilRigStore } from '../state';
 import { formatMetresToTenths, formatPercent, formatTonnes } from './format';
+import type { Disposer } from './disposers';
 
 const DISPLACEMENT_ROUNDING_T = 100;
 
-export function mountDraftControl(root: Document, store: OilRigStore): void {
-  mountRangeWidget(root, store, {
+export function mountDraftControl(root: Document, store: OilRigStore): Disposer {
+  return mountRangeWidget(root, store, {
     control: 'draft',
     range: DRAFT_RANGE,
     select: (state) => [state.draft] as const,

@@ -11,6 +11,7 @@ import { MUD_WEIGHT_RANGE, effectiveMudWeight, mudStateOf } from '../state';
 import type { OilRigStore } from '../state';
 import { formatBar, formatDensity, formatMudState, formatOptional } from './format';
 import { MudWindowGraph, depthBucket } from './mudWindowGraph';
+import type { Disposer } from './disposers';
 
 const PLAN_CHIP = '.chip[data-action="mudPlan"]';
 
@@ -18,12 +19,12 @@ function rockPressure(depth: number, pressure: (depth: number) => number): strin
   return formatOptional(whenInRock(depth, pressure), formatBar);
 }
 
-export function mountMudControl(root: Document, store: OilRigStore): void {
+export function mountMudControl(root: Document, store: OilRigStore): Disposer {
   const graph = new MudWindowGraph(
     requireElement<HTMLCanvasElement>(root, '[data-view="mud-window"]'),
   );
   const planChip = requireElement(root, PLAN_CHIP);
-  mountRangeWidget(root, store, {
+  const unmount = mountRangeWidget(root, store, {
     control: 'mud-weight',
     range: MUD_WEIGHT_RANGE,
     select: (state) =>
@@ -50,4 +51,8 @@ export function mountMudControl(root: Document, store: OilRigStore): void {
       graph.draw({ mudWeight, bitDepth: depth, riser, state });
     },
   });
+  return () => {
+    unmount();
+    graph.dispose();
+  };
 }

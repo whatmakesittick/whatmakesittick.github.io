@@ -5,10 +5,11 @@ import { WATER_DEPTH_RANGE } from '../state';
 import type { OilRigStore } from '../state';
 import { formatBar, formatMetres, formatRigs } from './format';
 import { RigPicker } from './rigPicker';
+import type { Disposer } from './disposers';
 
-export function mountDepthPicker(root: Document, store: OilRigStore): void {
+export function mountDepthPicker(root: Document, store: OilRigStore): Disposer {
   const picker = new RigPicker(requireElement<HTMLCanvasElement>(root, '[data-view="rigs"]'));
-  mountRangeWidget(root, store, {
+  const unmount = mountRangeWidget(root, store, {
     control: 'water-depth',
     range: WATER_DEPTH_RANGE,
     select: (state) => [state.pickerDepth] as const,
@@ -21,4 +22,8 @@ export function mountDepthPicker(root: Document, store: OilRigStore): void {
     },
     after: ([depth]) => picker.draw(depth),
   });
+  return () => {
+    unmount();
+    picker.dispose();
+  };
 }

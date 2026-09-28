@@ -3,9 +3,10 @@ import { OIL_COLUMN_BAR, flowState, reservoirPressureBar, wellheadPressureBar } 
 import { PRODUCTION_YEARS_RANGE } from '../state';
 import type { OilRigStore } from '../state';
 import { formatBar, formatFlowState, formatYear } from './format';
+import type { Disposer } from './disposers';
 
-export function mountDepletionControl(root: Document, store: OilRigStore): void {
-  mountRangeWidget(root, store, {
+export function mountDepletionControl(root: Document, store: OilRigStore): Disposer {
+  return mountRangeWidget(root, store, {
     control: 'production-years',
     range: PRODUCTION_YEARS_RANGE,
     select: (state) => [state.productionYears] as const,
