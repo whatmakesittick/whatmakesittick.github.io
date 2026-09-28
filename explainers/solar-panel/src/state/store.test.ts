@@ -35,7 +35,7 @@ describe('solar panel store', () => {
       shade: 0,
       layout: 'halfCut',
       temperature: null,
-      view: { sun: true, slice: false, flow: true, labels: false },
+      view: { sun: true, slice: false, flow: false, labels: false },
     });
   });
 
@@ -89,7 +89,7 @@ describe('solar panel store', () => {
   it('spreads the layers when the layers chapter opens and closes them elsewhere', () => {
     const store = createSolarPanelStore();
     store.getState().applyPreset('layers');
-    expect(store.getState().explode).toBe(0.6);
+    expect(store.getState().explode).toBe(0.8);
     store.getState().setExplode(0.9);
     store.getState().applyPreset('layers');
     expect(store.getState().explode).toBe(0.9);

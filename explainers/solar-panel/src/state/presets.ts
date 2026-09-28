@@ -17,7 +17,7 @@ export interface Preset extends ScenePreset<PartId, CameraView> {
 }
 
 const MORNING_START_PHASE = 210;
-const LAYERS_EXPLODE = 0.6;
+const LAYERS_EXPLODE = 0.8;
 
 const SLICE_PARTS: readonly PartId[] = [
   'pyramids',
@@ -35,7 +35,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   overview: {
     camera: 'roof',
     speed: 16,
-    view: { sun: true, slice: false },
+    view: { sun: true, slice: false, flow: false },
     startAt: MORNING_START_PHASE,
     labels: ['sun', 'panel', 'inverter', 'roof'],
     highlight: [],
@@ -43,7 +43,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   sun: {
     camera: 'sky',
     speed: 10,
-    view: { sun: true, slice: false },
+    view: { sun: true, slice: false, flow: false },
     controls: ['tilt'],
     labels: ['sun', 'panel', 'frame'],
     highlight: ['panel', 'frame', 'sun'],
@@ -51,7 +51,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   layers: {
     camera: 'stack',
     speed: 4,
-    view: { slice: false },
+    view: { sun: false, slice: false, flow: false },
     explode: LAYERS_EXPLODE,
     controls: ['explode', 'layer'],
     labels: ['glass', 'encapsulant', 'cell', 'backsheet', 'frame', 'junctionBox'],
@@ -61,7 +61,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   junction: {
     camera: 'cell',
     speed: 2,
-    view: { slice: true, flow: true },
+    view: { sun: false, slice: true, flow: true },
     startAt: SUN_MOMENTS.noon,
     controls: ['wavelength'],
     labels: SLICE_PARTS,
@@ -70,7 +70,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   wiring: {
     camera: 'strings',
     speed: 6,
-    view: { slice: false },
+    view: { sun: false, slice: false, flow: true },
     controls: ['shade', 'layout'],
     labels: WIRING_PARTS,
     highlight: WIRING_PARTS,
@@ -78,7 +78,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   inverter: {
     camera: 'inverter',
     speed: 16,
-    view: { flow: true },
+    view: { sun: false, flow: true },
     controls: ['temperature'],
     labels: ['inverter', 'meter', 'dcCable', 'acCable', 'connector'],
     highlight: ['inverter', 'meter', 'dcCable', 'acCable', 'connector', 'junctionBox'],
