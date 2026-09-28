@@ -23,29 +23,33 @@ function blankState(): AssemblyState {
   };
 }
 
-class AssemblyStates {
-  // the assembly may diff against the object it was given last, so never refill that one
-  private readonly buffers = [blankState(), blankState()] as const;
-  private index = 0;
+function copyInto(target: AssemblyState, state: OilRigState): AssemblyState {
+  target.bitDepth = state.phase;
+  target.draft = state.draft;
+  target.mudWeight = effectiveMudWeight(state);
+  target.mudState = mudStateOf(state);
+  target.bit = state.bit;
+  target.view = state.view;
+  return target;
+}
 
-  next(state: OilRigState): AssemblyState {
-    this.index = 1 - this.index;
-    const target = this.buffers[this.index];
-    target.bitDepth = state.phase;
-    target.draft = state.draft;
-    target.mudWeight = effectiveMudWeight(state);
-    target.mudState = mudStateOf(state);
-    target.bit = state.bit;
-    target.view = state.view;
-    return target;
+class DoubleBufferedAssemblyState {
+  private heldByAssembly = blankState();
+  private free = blankState();
+
+  handOver(state: OilRigState): AssemblyState {
+    const next = copyInto(this.free, state);
+    this.free = this.heldByAssembly;
+    this.heldByAssembly = next;
+    return next;
   }
 }
 
 export function bindStore(store: OilRigStore, targets: SceneTargets): () => void {
   const { oilRig, labelVisibility } = targets;
-  const states = new AssemblyStates();
-  const push = (state: OilRigState) => oilRig.setState(states.next(state));
-  oilRig.build(states.next(store.getState()));
+  const assemblyState = new DoubleBufferedAssemblyState();
+  const push = (state: OilRigState) => oilRig.setState(assemblyState.handOver(state));
+  oilRig.build(assemblyState.handOver(store.getState()));
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<OilRigStoreState, Preset>(targets, store, {
