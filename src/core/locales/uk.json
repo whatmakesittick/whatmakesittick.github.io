@@ -2,7 +2,7 @@
   "page": {
     "skipLink": "Перейти до пояснення",
     "metaTitle": "{{title}} · What makes it tick",
-    "moreExplainers": "More explainers"
+    "moreExplainers": "Інші пояснення"
   },
   "header": {
     "language": "Мова",
@@ -14,7 +14,7 @@
     "gauge": "Поточні показники",
     "expand": "Показати модель на весь екран",
     "collapse": "Повернутися до статті",
-    "coverAlt": "{{title}}: a still image of the interactive 3D model"
+    "coverAlt": "{{title}}: статичне зображення інтерактивної 3D-моделі"
   },
   "controls": {
     "label": "Керування",
@@ -44,7 +44,7 @@
     "license": "Ліцензія MIT",
     "builtWith": "Зроблено на Three.js",
     "copyright": "© {{year}} {{title}}. Зробив з ♥ <a href=\"https://github.com/veelenga\">veelenga</a>",
-    "languages": "Languages"
+    "languages": "Мови"
   },
   "catalogue": {
     "title": "What makes it tick",
@@ -70,10 +70,10 @@
       "earth": "Земля",
       "biology": "Біологія"
     },
-    "metaTitle": "What makes it tick: interactive 3D explainers of how things work"
+    "metaTitle": "What makes it tick: інтерактивні 3D-пояснення того, як усе працює"
   },
   "notFound": {
-    "title": "Page not found",
-    "text": "This page does not exist or has moved. Every explainer is on the front page."
+    "title": "Сторінку не знайдено",
+    "text": "Цієї сторінки немає або її перенесли. Усі пояснення є на головній сторінці."
   }
 }

@@ -2,7 +2,7 @@
   "page": {
     "skipLink": "Pular para a explicação",
     "metaTitle": "{{title}} · What makes it tick",
-    "moreExplainers": "More explainers"
+    "moreExplainers": "Mais explicações"
   },
   "header": {
     "language": "Idioma",
@@ -14,7 +14,7 @@
     "gauge": "Leituras ao vivo",
     "expand": "Ver o modelo em tela cheia",
     "collapse": "Voltar ao artigo",
-    "coverAlt": "{{title}}: a still image of the interactive 3D model"
+    "coverAlt": "{{title}}: imagem estática do modelo 3D interativo"
   },
   "controls": {
     "label": "Controles",
@@ -44,7 +44,7 @@
     "license": "Licença MIT",
     "builtWith": "Feito com Three.js",
     "copyright": "© {{year}} {{title}}. Feito com ♥ por <a href=\"https://github.com/veelenga\">veelenga</a>",
-    "languages": "Languages"
+    "languages": "Idiomas"
   },
   "catalogue": {
     "title": "What makes it tick",
@@ -70,10 +70,10 @@
       "earth": "Terra",
       "biology": "Biologia"
     },
-    "metaTitle": "What makes it tick: interactive 3D explainers of how things work"
+    "metaTitle": "What makes it tick: explicações interativas em 3D de como as coisas funcionam"
   },
   "notFound": {
-    "title": "Page not found",
-    "text": "This page does not exist or has moved. Every explainer is on the front page."
+    "title": "Página não encontrada",
+    "text": "Esta página não existe ou mudou de endereço. Todas as explicações estão na página inicial."
   }
 }
