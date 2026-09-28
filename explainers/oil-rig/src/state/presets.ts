@@ -7,8 +7,11 @@ export type PresetId = 'overview' | 'float' | 'drill' | 'mud' | 'rock' | 'flow';
 export type CameraView =
   'overview' | 'waterline' | 'drillFloor' | 'bit' | 'seabed' | 'trap' | 'completion' | 'well';
 
+export type ChapterControl = 'mudWeight' | 'draft';
+
 export interface Preset extends ScenePreset<PartId, CameraView> {
   view?: Partial<ViewOptions>;
+  controls?: readonly ChapterControl[];
 }
 
 const MUD_CHAPTER_START_M = 2100;
@@ -26,6 +29,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: 40,
     view: { flow: false },
     startAt: 0,
+    controls: ['draft'],
     labels: ['pontoon', 'column', 'thruster', 'mooring', 'derrick', 'helideck', 'moonpool'],
     highlight: ['pontoon', 'column'],
   },
@@ -42,6 +46,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: 40,
     view: { mud: true, flow: false },
     startAt: MUD_CHAPTER_START_M,
+    controls: ['mudWeight'],
     labels: ['riser', 'bop', 'wellhead', 'annulus', 'drillPipe'],
     highlight: ['riser', 'bop', 'annulus'],
   },

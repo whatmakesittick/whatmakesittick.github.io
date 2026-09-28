@@ -99,18 +99,35 @@ describe('oil rig store', () => {
     expect(store.getState()).toMatchObject({ phase: 3550, playing: true, view: { flow: false } });
   });
 
-  it('keeps the reader choices and labels through the chapters', () => {
+  it('keeps the bit and the labels through the chapters', () => {
     const store = createOilRigStore();
     store.getState().setBit('rollerCone');
-    store.getState().setMudWeight(1.5);
-    store.getState().setDraft(12);
     store.getState().setView({ labels: true });
     CHAPTERS.forEach((id) => store.getState().applyPreset(id));
-    expect(store.getState()).toMatchObject({
-      bit: 'rollerCone',
-      mudWeight: 1.5,
-      draft: 12,
-      view: { labels: true },
+    expect(store.getState()).toMatchObject({ bit: 'rollerCone', view: { labels: true } });
+  });
+
+  it('keeps the mud weight in the mud chapter and goes back to the plan elsewhere', () => {
+    const store = createOilRigStore();
+    store.getState().setMudWeight(1.5);
+    store.getState().applyPreset('mud');
+    expect(store.getState().mudWeight).toBe(1.5);
+    CHAPTERS.filter((id) => id !== 'mud').forEach((id) => {
+      store.getState().setMudWeight(1.5);
+      store.getState().applyPreset(id);
+      expect(store.getState().mudWeight, id).toBeNull();
+    });
+  });
+
+  it('keeps the ballast in the float chapter and ballasts down to drill elsewhere', () => {
+    const store = createOilRigStore();
+    store.getState().setDraft(12);
+    store.getState().applyPreset('float');
+    expect(store.getState().draft).toBe(12);
+    CHAPTERS.filter((id) => id !== 'float').forEach((id) => {
+      store.getState().setDraft(12);
+      store.getState().applyPreset(id);
+      expect(store.getState().draft, id).toBe(DRAFT_RANGE.default);
     });
   });
 
