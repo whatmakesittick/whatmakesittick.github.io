@@ -2,7 +2,7 @@ import { Box3, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import type { CustomView, FramedView } from '@core/scene/cameraViews';
 import type { RegionId } from '../ids';
-import { SUN_ARC_RADIUS_CM } from '../model';
+import { SUN_ARC_RADIUS_CM, SUN_DISC_RADIUS_CM } from '../model';
 import { PRESETS } from '../state';
 import {
   CLOSE_DISTANCE,
@@ -44,9 +44,11 @@ describe('camera views', () => {
 
   it('spans the sun arc from the eastern to the western horizon', () => {
     const arc = sunArcBox(new Vector3(0, 0, 0));
-    expect(arc.max.x).toBeCloseTo(SUN_ARC_RADIUS_CM, 0);
-    expect(arc.min.x).toBeCloseTo(-SUN_ARC_RADIUS_CM, 0);
-    expect(arc.max.y).toBeCloseTo(SUN_ARC_RADIUS_CM * Math.sin((50 * Math.PI) / 180), 0);
+    const reach = SUN_ARC_RADIUS_CM + SUN_DISC_RADIUS_CM;
+    expect(arc.max.x).toBeCloseTo(reach, 0);
+    expect(arc.min.x).toBeCloseTo(-reach, 0);
+    const noonHeight = SUN_ARC_RADIUS_CM * Math.sin((50 * Math.PI) / 180);
+    expect(arc.max.y).toBeCloseTo(noonHeight + SUN_DISC_RADIUS_CM, 0);
     expect(arc.max.z).toBeGreaterThan(0);
   });
 
@@ -59,8 +61,22 @@ describe('camera views', () => {
     expect(offset.y).toBeLessThan(0.35);
   });
 
+  it('aims closer to the panels on a short stage', () => {
+    const tall = skyPose(ARRAY, WIDE_SLOPES);
+    const short = skyPose(ARRAY, { vertical: 0.15, horizontal: 0.3 });
+    expect(short.target.y).toBeLessThan(tall.target.y);
+    expect(short.target.y).toBeGreaterThan(ARRAY.min.y);
+  });
+
   it('keeps the camera inside the sky on a narrow screen', () => {
     const pose = skyPose(ARRAY, NARROW_SLOPES);
     expect(pose.position.distanceTo(pose.target)).toBeCloseTo(SKY_VIEW.maxDistance);
+  });
+
+  it('aims between the panels and the noon sun', () => {
+    const pose = skyPose(ARRAY, WIDE_SLOPES);
+    expect(pose.target.y).toBeGreaterThan(ARRAY.max.y);
+    expect(pose.target.y).toBeLessThan(SUN_ARC_RADIUS_CM * Math.sin((50 * Math.PI) / 180));
+    expect(pose.target.x).toBeCloseTo(0);
   });
 });

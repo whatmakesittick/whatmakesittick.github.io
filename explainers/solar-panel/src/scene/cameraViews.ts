@@ -6,6 +6,8 @@ import type { FramingSlopes } from '@core/scene/lens';
 import type { RegionId } from '../ids';
 import {
   SKY_RADIUS_CM,
+  SOLAR_NOON_MIN,
+  SUN_DISC_RADIUS_CM,
   SUNRISE_MIN,
   SUNSET_MIN,
   SUN_ARC_RADIUS_CM,
@@ -22,10 +24,12 @@ export const WIDE_DISTANCE = { min: 60, max: 4000 } as const;
 export const CLOSE_DISTANCE = { min: 20, max: 2500 } as const;
 
 export const SKY_VIEW = {
-  direction: [0.12, 0.3, -1] as Direction,
+  direction: [0.25, 0.32, -1] as Direction,
   margin: 1.06,
   maxDistance: SKY_RADIUS_CM * 0.92,
   arcStepMin: 15,
+  aimShare: 0.45,
+  aimSharePerSlope: 1.5,
 } as const;
 
 const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
@@ -46,25 +50,28 @@ const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
   },
 };
 
+function sunPosition(minute: number, centre: Vector3): Vector3 {
+  const [x, y, z] = sunDirection(minute);
+  return new Vector3(x, y, z).multiplyScalar(SUN_ARC_RADIUS_CM).add(centre);
+}
+
 export function sunArcBox(centre: Vector3): Box3 {
   const box = new Box3();
   for (let minute = SUNRISE_MIN; minute <= SUNSET_MIN; minute += SKY_VIEW.arcStepMin) {
-    const [x, y, z] = sunDirection(minute);
-    box.expandByPoint(new Vector3(x, y, z).multiplyScalar(SUN_ARC_RADIUS_CM).add(centre));
+    box.expandByPoint(sunPosition(minute, centre));
   }
-  return box;
+  return box.expandByScalar(SUN_DISC_RADIUS_CM);
 }
 
 export function skyPose(array: Box3, slopes: FramingSlopes): CameraPose {
-  const centre = array.getCenter(new Vector3()).setY(TERRACE.y);
-  const box = sunArcBox(centre).union(array);
+  const centre = array.getCenter(new Vector3());
+  const ground = centre.clone().setY(TERRACE.y);
   const direction = new Vector3(...SKY_VIEW.direction).normalize();
-  const pose = frameBox(box, direction, slopes, SKY_VIEW.margin);
-  const distance = Math.min(pose.position.distanceTo(pose.target), SKY_VIEW.maxDistance);
-  return {
-    target: pose.target,
-    position: pose.target.clone().addScaledVector(direction, distance),
-  };
+  const framed = frameBox(sunArcBox(ground).union(array), direction, slopes, SKY_VIEW.margin);
+  const distance = Math.min(framed.position.distanceTo(framed.target), SKY_VIEW.maxDistance);
+  const share = Math.min(SKY_VIEW.aimShare, slopes.vertical * SKY_VIEW.aimSharePerSlope);
+  const target = centre.lerp(sunPosition(SOLAR_NOON_MIN, ground), share);
+  return { target, position: target.clone().addScaledVector(direction, distance) };
 }
 
 function skyView(region: RegionLookup): CustomView {
