@@ -1,15 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { PHASE_IDS, VALVE_IDS } from '../ids';
-import type { ValveId, ValveState } from '../ids';
+import { CHAMBER_IDS, PHASE_IDS, VALVE_IDS } from '../ids';
+import type { ChamberId, ValveId, ValveState } from '../ids';
+import type { Curve } from './curve';
 import {
   AV_VALVES_CLOSE_MS,
   AV_VALVES_OPEN_MS,
-  SEMILUNAR_CLOSE_MS,
+  BEAT_MS,
   PHASE_RANGES,
+  SEMILUNAR_CLOSE_MS,
   SEMILUNAR_OPEN_MS,
   SOUNDS,
   VALVE_TRANSITION_MS,
+  leftAtrialPressure,
   leftVentriclePressure,
+  rightAtrialPressure,
   rightVentriclePressure,
   valveClosesAt,
   valveOpensAt,
@@ -23,6 +27,17 @@ const OPEN_IN_STATE: Readonly<Record<ValveState, readonly ValveId[]>> = {
   semilunarOpen: ['pulmonary', 'aortic'],
 };
 
+const CHAMBER_CURVES: Readonly<Record<ChamberId, Curve>> = {
+  rightAtrium: rightAtrialPressure,
+  rightVentricle: rightVentriclePressure,
+  leftAtrium: leftAtrialPressure,
+  leftVentricle: leftVentriclePressure,
+};
+
+function peak(curve: Curve): number {
+  return Math.max(...Array.from({ length: BEAT_MS }, (_, time) => curve(time)));
+}
+
 describe('chamber pressures', () => {
   it('peaks at about 120 mmHg in the left ventricle and a fifth of that in the right', () => {
     expect(PEAK_PRESSURE_MMHG.leftVentricle).toBe(120);
@@ -34,9 +49,10 @@ describe('chamber pressures', () => {
     expect(PEAK_PRESSURE_MMHG.rightAtrium).toBe(5);
   });
 
-  it('agrees with the peaks of the cycle model for the ventricles', () => {
-    expect(leftVentriclePressure(340)).toBeCloseTo(PEAK_PRESSURE_MMHG.leftVentricle, 0);
-    expect(rightVentriclePressure(330)).toBeCloseTo(PEAK_PRESSURE_MMHG.rightVentricle, 0);
+  it('agrees with the rounded peak of every chamber curve in the cycle model', () => {
+    CHAMBER_IDS.forEach((chamber) => {
+      expect(PEAK_PRESSURE_MMHG[chamber], chamber).toBe(Math.round(peak(CHAMBER_CURVES[chamber])));
+    });
   });
 });
 
