@@ -476,6 +476,10 @@ a:hover {
   white-space: nowrap;
 }
 
+.readout-value {
+  color: var(--tone, currentColor);
+}
+
 .tone-text {
   color: var(--tone, var(--text));
   font-weight: 600;

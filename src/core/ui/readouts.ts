@@ -5,6 +5,7 @@ import { TEXT_REFRESH_INTERVAL_MS, throttle } from './throttle';
 
 const TONE_PROPERTY = '--tone';
 const METER_FILL_PROPERTY = '--meter-fill';
+const VALUE_CLASS = 'readout-value';
 
 interface ReadoutRow<S extends Playback> {
   readout: Readout<S>;
@@ -24,7 +25,9 @@ function createMeter<S extends Playback>(readout: Readout<S>): HTMLElement | und
 function createRow<S extends Playback>(readout: Readout<S>): ReadoutRow<S> {
   const valueClass = readout.numeric ? 'number' : 'tone-text';
   const meter = createMeter(readout);
-  const value = meter ? html('span') : html('dd', { class: valueClass });
+  const value = meter
+    ? html('span', { class: VALUE_CLASS })
+    : html('dd', { class: `${valueClass} ${VALUE_CLASS}` });
   const content = meter
     ? html('dd', { class: `${valueClass} readout-meter` }, [
         html('span', { class: 'meter', 'aria-hidden': 'true' }, [meter]),
