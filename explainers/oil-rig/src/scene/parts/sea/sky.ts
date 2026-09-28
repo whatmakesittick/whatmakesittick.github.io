@@ -2,6 +2,7 @@ import { BackSide, BufferAttribute, Color, MeshBasicMaterial, SphereGeometry } f
 import type { Camera, Mesh } from 'three';
 import { smoothstep } from '@core/math';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
+import { SEA_LEVEL_Y } from '../../../model/scale';
 import { RENDER_ORDER, SKY } from '../../constants';
 import { registeredMesh } from '../context';
 import type { PartContext } from '../context';
@@ -44,7 +45,8 @@ export function createSky(context: PartContext): Mesh {
   sky.frustumCulled = false;
   sky.renderOrder = RENDER_ORDER.sky;
   sky.onBeforeRender = (_renderer, _scene, camera: Camera) => {
-    sky.position.copy(camera.position);
+    const { x, y, z } = camera.position;
+    sky.position.set(x, Math.max(y, SEA_LEVEL_Y), z);
     sky.updateMatrixWorld();
   };
   return sky;

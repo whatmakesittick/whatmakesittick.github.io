@@ -17,6 +17,7 @@ import { RockPart } from './parts/rock/rockBlock';
 import { createRuler } from './parts/rock/ruler';
 import { SeaPart } from './parts/sea/sea';
 import { createClouds } from './parts/sea/clouds';
+import { MarineSnowPart } from './parts/sea/marineSnow';
 import { createSky } from './parts/sea/sky';
 import { BOP_TOP, WELLHEAD_TOP } from './parts/well/bop';
 import { DrillStringPart } from './parts/well/drillString';
@@ -50,6 +51,7 @@ export class RigAssembly implements Assembly {
   private readonly mud: MudFlowPart;
   private readonly oil: OilFlowPart;
   private readonly ruler: Group;
+  private readonly snow: MarineSnowPart;
   private readonly anchors: Map<PartId, Object3D>;
   private readonly named: Record<AnchorId, Object3D>;
   private state: AssemblyState | null = null;
@@ -67,7 +69,14 @@ export class RigAssembly implements Assembly {
     this.mud = new MudFlowPart(context);
     this.oil = new OilFlowPart(context, this.well.completion.tunnels);
     this.ruler = createRuler(context);
-    this.block.add(this.sea.object, this.rock.object, this.ruler, this.well.blockObject);
+    this.snow = new MarineSnowPart(context);
+    this.block.add(
+      this.sea.object,
+      this.snow.points,
+      this.rock.object,
+      this.ruler,
+      this.well.blockObject,
+    );
     this.root.add(
       createSky(context),
       createClouds(context),
@@ -103,6 +112,7 @@ export class RigAssembly implements Assembly {
     this.time += deltaSeconds;
     const pointSize = clamp(cameraDistance * FLOW.sizePerDistance, FLOW.minSize, FLOW.maxSize);
     this.sea.update(this.time);
+    this.snow.update(deltaSeconds, this.time, pointSize);
     this.string.update(deltaSeconds);
     this.rig.flame.update(this.time);
     this.mud.update(deltaSeconds, this.time, pointSize);
@@ -150,6 +160,7 @@ export class RigAssembly implements Assembly {
     this.rock.setCutaway(cutaway);
     this.well.setCutaway(cutaway);
     this.ruler.visible = cutaway;
+    this.snow.setVisible(cutaway);
   }
 
   private applyDepth(state: AssemblyState): void {

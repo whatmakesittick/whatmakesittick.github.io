@@ -21,7 +21,7 @@ export const PAINT = {
   craneYellow: '#f3c63a',
   orange: '#ff7a1a',
   buoyancy: '#f08a2a',
-  foam: '#f6cf9b',
+  foam: '#f5ad63',
   steel: THEME.steel,
   stand: '#7c858c',
   darkSteel: '#474f56',

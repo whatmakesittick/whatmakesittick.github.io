@@ -60,6 +60,20 @@ export const SEA = {
   foam: { inner: 8.5, outer: 15.5, alpha: 0.75, lift: 0.35, segments: 32 },
 } as const;
 
+export const SNOW = {
+  count: 900,
+  size: 0.7,
+  speed: 1.6,
+  sway: 1.2,
+  swayRate: 0.35,
+  alpha: 0.55,
+  edgeFade: 8,
+  surfaceGap: 24,
+  seabedGap: 2,
+  tones: ['#e8f1f6', '#cfdde6'],
+  seed: 31,
+} as const;
+
 export const HULL = {
   keelY: -DRILLING_DRAFT_M,
   pontoon: { length: 110, width: 18, height: 9, offset: 30.5 },
