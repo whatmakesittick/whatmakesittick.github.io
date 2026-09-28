@@ -1,5 +1,6 @@
 import { formatFixed } from '@core/format';
 import { currentLanguage } from '@core/i18n';
+import { FULL_TURN } from '@core/math';
 import type { MudState } from '../ids';
 import {
   DRILL_FLOOR_ABOVE_SEA_M,
@@ -208,7 +209,7 @@ function paintMarker(context: CanvasRenderingContext2D, plot: Plot, sight: MudSi
     plot.right,
   );
   context.beginPath();
-  context.arc(x, y, MARKER.radius, 0, Math.PI * 2);
+  context.arc(x, y, MARKER.radius, 0, FULL_TURN);
   context.fillStyle = sight.state === 'safe' ? CANVAS_COLORS.mud : CANVAS_COLORS.danger;
   context.fill();
   context.lineWidth = MARKER.ring;
