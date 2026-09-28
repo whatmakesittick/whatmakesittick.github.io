@@ -22,7 +22,7 @@ const THICKNESS: Readonly<Record<StackLayerId, { closed: number; open: number }>
   glass: { closed: mm(MODULE_SPEC.glassMm), open: 4 },
 };
 
-export const EXPLODE = { gap: 8, lift: 6, frameDrop: 20, floorClearance: 2 } as const;
+export const EXPLODE = { gap: 22, lift: 14, frameDrop: 20, floorClearance: 2 } as const;
 
 export interface LayerPlacement {
   back: number;

@@ -14,8 +14,8 @@ export const SKY_DISTANCE = { min: 20, max: 7500 } as const;
 
 const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
   roof: { region: 'house', direction: [0.55, 0.45, 1], margin: 1.05, distance: WIDE_DISTANCE },
-  stack: { region: 'stack', direction: [-0.6, 0.5, 0.8], margin: 1.1, distance: CLOSE_DISTANCE },
-  cell: { region: 'slice', direction: [-0.45, 0.4, 1], margin: 1.1, distance: CLOSE_DISTANCE },
+  stack: { region: 'stack', direction: [-0.85, 0.5, 0.55], margin: 1.1, distance: CLOSE_DISTANCE },
+  cell: { region: 'slice', direction: [-0.35, 0.12, 1], margin: 1.1, distance: CLOSE_DISTANCE },
   strings: {
     region: 'panel',
     direction: [0.15, 0.82, 0.57],
