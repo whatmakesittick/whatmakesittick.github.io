@@ -22,12 +22,6 @@ const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
     margin: 1.06,
     distance: { min: 25, max: 1200 },
   },
-  drillFloor: {
-    region: 'drillFloor',
-    direction: [0.8, 0.3, 1],
-    margin: 1.08,
-    distance: { min: 12, max: 800 },
-  },
   seabed: {
     region: 'seabed',
     direction: [0.65, 0.2, 1],
@@ -43,12 +37,6 @@ const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
   completion: {
     region: 'completion',
     direction: [0.4, 0.08, 1],
-    margin: 1.04,
-    distance: { min: 30, max: 3000 },
-  },
-  well: {
-    region: 'well',
-    direction: [0.3, 0.06, 1],
     margin: 1.04,
     distance: { min: 30, max: 3000 },
   },

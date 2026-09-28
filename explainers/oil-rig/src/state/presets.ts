@@ -4,8 +4,7 @@ import { FINAL_DEPTH_M, RISER_LANDED_DEPTH_M, layerById } from '../model';
 
 export type PresetId = 'overview' | 'float' | 'drill' | 'mud' | 'rock' | 'flow';
 
-export type CameraView =
-  'overview' | 'waterline' | 'drillFloor' | 'bit' | 'seabed' | 'trap' | 'completion' | 'well';
+export type CameraView = 'overview' | 'waterline' | 'bit' | 'seabed' | 'trap' | 'completion';
 
 export type ChapterControl = 'mudWeight' | 'draft';
 
@@ -38,8 +37,8 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: 60,
     view: { cutaway: true, flow: false },
     startAt: RISER_LANDED_DEPTH_M,
-    labels: ['topDrive', 'drillPipe', 'drillCollars', 'bit', 'surfaceCasing'],
-    highlight: ['topDrive', 'drillPipe', 'bit'],
+    labels: ['drillPipe', 'drillCollars', 'bit', 'surfaceCasing'],
+    highlight: ['drillPipe', 'bit'],
   },
   mud: {
     camera: 'seabed',
