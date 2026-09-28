@@ -5,7 +5,7 @@ import { anchorAt } from '@core/scene/parts';
 import type { LayoutId } from '../../../ids';
 import { LAYOUT_IDS } from '../../../ids';
 import type { ModuleLayout } from '../../../model';
-import { LAYOUTS, shadedShareOfRow } from '../../../model';
+import { LAYOUTS } from '../../../model';
 import { BUS_RIBBON, BUSBARS, FACE_LAYERS, SHADE } from '../../constants';
 import { FINISHES } from '../../finishes';
 import { around, block } from '../../geometry/blocks';
@@ -22,6 +22,7 @@ import {
 import { cellFaceTexture } from '../array/cellTextures';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
+import { cellShadeShare } from '../../geometry/shade';
 import { diodeX, diodeY } from '../../geometry/strings';
 import { StringOverlayPart } from './stringOverlay';
 
@@ -125,7 +126,7 @@ export class CellSheetPart {
     LAYOUT_IDS.forEach((id) => {
       const { cells, rects, layout } = this.variants[id];
       rects.forEach((rect, index) => {
-        const share = shadedShareOfRow(layout, rect.row, shade);
+        const share = cellShadeShare(layout, rect.column, rect.row, shade);
         const level = lerp(1, SHADE.tint, share);
         cells.setColorAt(index, this.tint.setRGB(level, level, level));
       });

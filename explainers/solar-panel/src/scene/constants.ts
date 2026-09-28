@@ -99,7 +99,7 @@ export const DIODE_GLYPH = {
 
 export const SHADE = { tint: 0.34, bandColor: '#05070c', bandOpacity: 0.5, lift: 0.1 } as const;
 
-export const CELL_WARMTH = { fromC: 50, toC: 75, maxGlow: 0.1 } as const;
+export const CELL_WARMTH = { fromC: 58, toC: 75, maxGlow: 0.12 } as const;
 
 export const ENCAPSULANT_SHOWN_ABOVE = 0.02;
 
@@ -126,7 +126,12 @@ export const RENDER_ORDER = { sky: -2, ground: -1, glow: 5, rays: 6, particles: 
 
 export const SKY_DOME = { widthSegments: 48, heightSegments: 24, horizonBlend: 0.22 } as const;
 
-export const GROUND = { radius: 2300, segments: 64, fade: 0.55 } as const;
+export const GROUND = {
+  radius: 1600,
+  segments: 64,
+  fadeFrom: 0.35,
+  shadow: { spread: 1.5, opacity: 0.55, lift: 0.5 },
+} as const;
 
 export const ARC_CENTRE = { x: 0, y: 0, z: 0 } as const;
 
@@ -146,11 +151,11 @@ export const RAYS = {
   columns: 3,
   rows: 4,
   inset: 0.18,
-  length: 420,
-  width: 1.2,
-  dashes: 6,
+  length: 320,
+  width: 1.1,
+  dashes: 5,
   speed: 0.6,
-  opacity: 0.38,
+  opacity: 0.3,
 } as const;
 
 export const INVERTER_BODY = {
@@ -177,4 +182,50 @@ export const SLICE_VIEW = {
   entryUm: 70,
   exitUm: 40,
   labelLift: 1.5,
+  sectionDepth: 14,
+  framedWidthShare: 0.62,
 } as const;
+
+export const DC_ROUTE = {
+  floorY: 2.2,
+  runZ: 48,
+  trayX: -182,
+  wallX: -186.5,
+  wallFoot: 7,
+  glandRise: 9,
+} as const;
+
+export const AC_ROUTE = { wallX: -186.5, drop: 8, wallEntry: 9 } as const;
+
+export const TRAY = { width: 7, height: 4, wall: 0.4, overrun: 5 } as const;
+
+export const CLIP = { size: 2.2, depth: 1.6, spacing: 22 } as const;
+
+export const FLOW = {
+  dc: { count: 28, seed: 11 },
+  ac: { count: 16, seed: 23 },
+  minSpeed: 12,
+  maxSpeed: 70,
+  samples: 240,
+  fadeShare: 0.04,
+  sizePerDistance: 0.0045,
+  minSize: 2.5,
+  maxSize: 9,
+  color: '#ffb347',
+} as const;
+
+export const CELL_VIEW_DIRECTION = [-0.45, 0.4, 1] as const;
+
+export const SLICE_FLOW = {
+  faceGap: 0.5,
+  siliconIndex: 3.9,
+  photon: { pool: 26, trail: 8, spacing: 0.9, speed: 40, size: 4.2, maxRate: 9 },
+  carrier: { pool: 64, speed: 10, size: 5.4, fade: 0.45, wiggle: 0.7, wiggleRate: 7 },
+  edgeMarginUm: 20,
+  depthJitter: 0.18,
+  referenceDistance: 420,
+  maxScale: 3,
+  seed: 5,
+} as const;
+
+export const SHADE_EDGE_DROP = 1 / 3;

@@ -1,15 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { LAYOUTS, MODULE, shadedShareOfRow } from '../../model';
-import {
-  CELL_GAP_CM,
-  CELL_WIDTH_CM,
-  GRID,
-  cellHeight,
-  cellRect,
-  cellRects,
-  shadeTop,
-  sliceCorner,
-} from './moduleLayout';
+import { LAYOUTS, MODULE } from '../../model';
+import { CELL_WIDTH_CM, GRID, cellHeight, cellRect, cellRects, sliceCorner } from './moduleLayout';
 
 describe('module layout', () => {
   it('fits the half-cut grid inside the module with the real cell size', () => {
@@ -42,17 +33,5 @@ describe('module layout', () => {
     const corner = sliceCorner();
     expect(corner.x).toBeLessThan(0);
     expect(corner.y).toBeCloseTo(GRID.y[1], 5);
-  });
-
-  it('draws the shade band over the rows the wiring model counts as shaded', () => {
-    const layout = LAYOUTS.halfCut;
-    [0.1, 0.25, 0.5, 0.83].forEach((shade) => {
-      const top = shadeTop(shade);
-      for (let row = 0; row < layout.rows; row += 1) {
-        const rect = cellRect(layout, 0, row);
-        const covered = top > rect.y[0] - CELL_GAP_CM / 2 + 1e-9;
-        expect(shadedShareOfRow(layout, row, shade) > 0, `row ${row}`).toBe(covered);
-      }
-    });
   });
 });

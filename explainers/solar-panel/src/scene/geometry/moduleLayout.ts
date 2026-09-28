@@ -77,8 +77,3 @@ export function cellRects(layout: ModuleLayout): CellRect[] {
 export function sliceCorner(): { x: number; y: number } {
   return { x: GRID.x[0], y: GRID.y[1] };
 }
-
-export function shadeTop(shade: number): number {
-  const span = GRID.y[1] - GRID.y[0] + CELL_GAP_CM;
-  return GRID.y[0] - CELL_GAP_CM / 2 + shade * span;
-}

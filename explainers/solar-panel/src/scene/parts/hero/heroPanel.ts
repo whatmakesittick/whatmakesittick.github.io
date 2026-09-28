@@ -1,4 +1,4 @@
-import { Group, MeshBasicMaterial } from 'three';
+import { Group, MeshBasicMaterial, Shape, ShapeGeometry, Vector2 } from 'three';
 import type { Mesh, Object3D } from 'three';
 import { clamp } from '@core/math';
 import type { LayoutId } from '../../../ids';
@@ -6,10 +6,12 @@ import { MODULE } from '../../../model';
 import { ANCHOR_LIFT_CM, CELL_WARMTH, ENCAPSULANT_SHOWN_ABOVE, SHADE } from '../../constants';
 import { block } from '../../geometry/blocks';
 import { moduleFrameGeometry } from '../../geometry/moduleFrame';
-import { FRAME_WALL_CM, LAMINATE, shadeTop } from '../../geometry/moduleLayout';
+import { FRAME_WALL_CM, LAMINATE } from '../../geometry/moduleLayout';
+import { shadePolygon } from '../../geometry/shade';
 import type { LayerPlacement } from '../../geometry/stack';
 import { frameDrop, layerFront, stackLayout } from '../../geometry/stack';
-import { partMesh, registeredMesh } from '../context';
+import { partMesh, registered } from '../context';
+import { SwapMesh } from '../swapMesh';
 import type { PartContext } from '../context';
 import { CellSheetPart } from './cellSheet';
 import { JunctionBoxPart } from './junctionBox';
@@ -29,7 +31,6 @@ export type HeroAnchorId =
 
 const LAMINATE_X = [-LAMINATE.width / 2, LAMINATE.width / 2] as const;
 const LAMINATE_Y = [FRAME_WALL_CM, MODULE.height - FRAME_WALL_CM] as const;
-const SHADE_BAND_DEPTH = 0.02;
 const LABEL_HEIGHT = {
   glass: 0.82,
   encapsulant: 0.66,
@@ -57,7 +58,7 @@ export class HeroPanelPart {
   private readonly backsheet: Mesh;
   private readonly cells: CellSheetPart;
   private readonly junction: JunctionBoxPart;
-  private readonly shadeBand: Mesh;
+  private readonly shadeBand: SwapMesh;
   private readonly labels = {
     panel: new Group(),
     glass: new Group(),
@@ -80,13 +81,7 @@ export class HeroPanelPart {
       opacity: SHADE.bandOpacity,
       depthWrite: false,
     });
-    this.shadeBand = registeredMesh(
-      context,
-      block(LAMINATE_X, [0, 1], [0, SHADE_BAND_DEPTH]),
-      'cell',
-      band,
-    );
-    this.shadeBand.position.y = FRAME_WALL_CM;
+    this.shadeBand = new SwapMesh(context, registered(context, 'cell', band));
     this.object.add(
       this.frame,
       this.glass,
@@ -95,7 +90,7 @@ export class HeroPanelPart {
       this.rearEncapsulant,
       this.backsheet,
       this.junction.object,
-      this.shadeBand,
+      this.shadeBand.mesh,
       ...Object.values(this.labels),
     );
     const frameLabel = new Group();
@@ -136,7 +131,7 @@ export class HeroPanelPart {
     this.junction.setBack(layers.backsheet.back);
     this.frame.position.y = -frameDrop(explode, tiltDeg);
     this.stackTop = layerFront(layers.glass);
-    this.shadeBand.position.z = this.stackTop + SHADE.lift;
+    this.shadeBand.mesh.position.z = this.stackTop + SHADE.lift;
     this.placeLabels(layers);
   }
 
@@ -146,8 +141,13 @@ export class HeroPanelPart {
 
   setShade(shade: number): void {
     this.cells.setShade(shade);
-    this.shadeBand.visible = shade > 0;
-    this.shadeBand.scale.y = Math.max(shadeTop(shade) - FRAME_WALL_CM, 0);
+    const outline = shadePolygon(shade);
+    this.shadeBand.mesh.visible = outline.length > 2;
+    if (outline.length > 2) {
+      this.shadeBand.swap(
+        new ShapeGeometry(new Shape(outline.map(({ x, y }) => new Vector2(x, y)))),
+      );
+    }
   }
 
   setDeadStrings(dead: readonly boolean[]): void {
