@@ -5,6 +5,7 @@ export const WATER_DEPTH_M = 1000;
 export const SEABED_DEPTH_M = DRILL_FLOOR_ABOVE_SEA_M + WATER_DEPTH_M;
 export const TOTAL_DEPTH_M = 4500;
 export const BLOCK_BOTTOM_DEPTH_M = 4900;
+export const STAND_LENGTH_M = 28;
 
 export interface Section {
   id: SectionId;
@@ -15,7 +16,7 @@ export interface Section {
 }
 
 export const SECTIONS: readonly Section[] = [
-  { id: 'conductor', holeInches: 36, casingInches: 30, shoeDepth: 1100, plannedMudWeight: 1.03 },
+  { id: 'conductor', holeInches: 36, casingInches: 30, shoeDepth: 1100, plannedMudWeight: 1.04 },
   { id: 'surface', holeInches: 26, casingInches: 20, shoeDepth: 2025, plannedMudWeight: 1.08 },
   {
     id: 'intermediate',
