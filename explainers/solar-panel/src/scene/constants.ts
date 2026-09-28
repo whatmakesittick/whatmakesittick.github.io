@@ -137,16 +137,18 @@ export const GROUND = {
 
 export const ARC_CENTRE = { x: 0, y: 0, z: 0 } as const;
 
+export const SKY_VIEW = { direction: [0, 0.18, -1], margin: 1.04, stepMinutes: 20 } as const;
+
 export const SUN_DISC = { hideBelowDeg: -3, textureSize: 128, limb: 0.18 } as const;
 
 export const SUN_GLOW = { size: 560, fadeBelowDeg: -4, fullAboveDeg: 4, opacity: 0.85 } as const;
 
 export const SUN_ARC = {
-  radius: 2.4,
   stepMinutes: 10,
-  radialSegments: 6,
-  tick: { radius: 5, noonRadius: 8, segments: 10 },
-  opacity: 0.6,
+  linePixels: 2.5,
+  tickPixels: 9,
+  noonPixels: 14,
+  opacity: 0.8,
 } as const;
 
 export const RAYS = {

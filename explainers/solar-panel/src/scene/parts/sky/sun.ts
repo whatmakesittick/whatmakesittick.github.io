@@ -1,6 +1,5 @@
 import {
   AdditiveBlending,
-  CatmullRomCurve3,
   DoubleSide,
   Group,
   InstancedMesh,
@@ -8,63 +7,26 @@ import {
   MeshBasicMaterial,
   PlaneGeometry,
   Quaternion,
-  SphereGeometry,
   Sprite,
   SpriteMaterial,
-  TubeGeometry,
   Vector3,
 } from 'three';
 import type { Texture } from 'three';
 import { smoothstep } from '@core/math';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
-import {
-  MINUTES_PER_HOUR,
-  SOLAR_NOON_MIN,
-  SUN_ARC_RADIUS_CM,
-  SUN_DISC_RADIUS_CM,
-  SUNRISE_MIN,
-  SUNSET_MIN,
-  sunDirection,
-  sunElevationDeg,
-} from '../../../model';
+import { SUN_DISC_RADIUS_CM, sunDirection, sunElevationDeg } from '../../../model';
 import { THEME } from '../../../theme';
-import { ARC_CENTRE, RAYS, RENDER_ORDER, SUN_ARC, SUN_DISC, SUN_GLOW } from '../../constants';
+import { RAYS, RENDER_ORDER, SUN_DISC, SUN_GLOW } from '../../constants';
+import { sunPosition } from '../../geometry/sunArc';
 import { mergeParts } from '../../geometry/merge';
-import { registered, registeredMesh } from '../context';
+import { registered } from '../context';
 import type { PartContext } from '../context';
 import type { SkyPalette } from './palette';
+import { createSunPath } from './sunPath';
 import { rayDashTexture, rayFadeTexture, sunDiscTexture } from './sunTextures';
 
 const UP = new Vector3(0, 1, 0);
-const ARC_ORIGIN = new Vector3(ARC_CENTRE.x, ARC_CENTRE.y, ARC_CENTRE.z);
 const QUARTER_TURN = Math.PI / 2;
-
-export function sunPosition(minute: number, target = new Vector3()): Vector3 {
-  const [x, y, z] = sunDirection(minute);
-  return target.set(x, y, z).multiplyScalar(SUN_ARC_RADIUS_CM).add(ARC_ORIGIN);
-}
-
-function arcGeometry(): TubeGeometry {
-  const points: Vector3[] = [];
-  for (let minute = SUNRISE_MIN; minute <= SUNSET_MIN; minute += SUN_ARC.stepMinutes) {
-    points.push(sunPosition(minute));
-  }
-  const curve = new CatmullRomCurve3(points);
-  return new TubeGeometry(curve, points.length * 2, SUN_ARC.radius, SUN_ARC.radialSegments);
-}
-
-function tickGeometry() {
-  const ticks = [];
-  for (let minute = SUNRISE_MIN; minute <= SUNSET_MIN; minute += MINUTES_PER_HOUR) {
-    const { tick } = SUN_ARC;
-    const radius = minute === SOLAR_NOON_MIN ? tick.noonRadius : tick.radius;
-    const sphere = new SphereGeometry(radius, tick.segments, tick.segments / 2);
-    const at = sunPosition(minute);
-    sphere.translate(at.x, at.y, at.z);
-    ticks.push(sphere);
-  }
-  return mergeParts(ticks);
-}
 
 function rayGeometry() {
   const flat = new PlaneGeometry(RAYS.width, 1);
@@ -118,10 +80,7 @@ export class SunPart {
     halo.scale.setScalar(SUN_GLOW.size);
     halo.renderOrder = RENDER_ORDER.glow;
     this.sun.add(halo, disc);
-    this.path.add(
-      registeredMesh(context, arcGeometry(), UNDIMMED_GROUP, this.pathMaterial()),
-      registeredMesh(context, tickGeometry(), UNDIMMED_GROUP, this.pathMaterial()),
-    );
+    this.path.add(createSunPath(context));
     this.dashes = context.tracker.track(rayDashTexture());
     this.rays = this.buildRays(context);
     this.object.add(this.sun, this.path, this.rays);
@@ -162,16 +121,6 @@ export class SunPart {
 
   private updateRayVisibility(): void {
     this.rays.visible = this.pathShown && this.elevation > 0;
-  }
-
-  private pathMaterial(): MeshBasicMaterial {
-    return new MeshBasicMaterial({
-      color: THEME.sun,
-      transparent: true,
-      opacity: SUN_ARC.opacity,
-      depthWrite: false,
-      toneMapped: false,
-    });
   }
 
   private buildRays(context: PartContext): InstancedMesh {
