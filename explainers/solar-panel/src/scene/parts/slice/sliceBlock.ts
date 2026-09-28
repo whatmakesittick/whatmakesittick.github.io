@@ -36,6 +36,7 @@ import {
   fingerTopCm,
   sliceOrigin,
 } from '../../geometry/sliceGeometry';
+import type { CutSide } from '../../geometry/sliceMotion';
 import { partMesh, registered } from '../context';
 import type { PartContext } from '../context';
 
@@ -89,6 +90,13 @@ export class SliceBlockPart {
     this.block.add(this.pyramids(context), this.finger(context));
     this.object.add(this.block, ...this.callout(context, corner));
     this.anchors = this.placeAnchors();
+  }
+
+  setCutSide(side: CutSide): void {
+    const y = side * (SLICE_SIZE.depth / 2 + ANCHOR_LIFT_CM);
+    Object.values(this.anchors).forEach((anchor) => {
+      anchor.position.y = y;
+    });
   }
 
   private buildLayers(context: PartContext): void {

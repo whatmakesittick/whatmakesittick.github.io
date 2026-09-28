@@ -1,13 +1,17 @@
-import { Group, Vector3 } from 'three';
+import { Group, Quaternion, Vector3 } from 'three';
+import { clamp } from '@core/math';
 import type { Box3, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, RegionId, ViewOptions } from '../ids';
 import { MODULE, sunDirection } from '../model';
 import type { Assembly, AssemblyResources } from './assembly';
-import { RAYS } from './constants';
+import { CELL_VIEW_DIRECTION, FLOW, RAYS, SLICE_FLOW } from './constants';
+import { cutSide, photonPath } from './geometry/sliceMotion';
+import type { CutSide } from './geometry/sliceMotion';
 import { ArrayPart } from './parts/array/array';
 import type { PartContext } from './parts/context';
+import { CablesPart } from './parts/equipment/cables';
 import { InverterPart } from './parts/equipment/inverter';
 import { MeterPart } from './parts/equipment/meter';
 import { createHouse } from './parts/house/house';
@@ -16,6 +20,7 @@ import { skyPalette } from './parts/sky/palette';
 import { SkyDomePart } from './parts/sky/skyDome';
 import { SunPart } from './parts/sky/sun';
 import { SliceBlockPart } from './parts/slice/sliceBlock';
+import { SliceFlowPart } from './parts/slice/sliceFlow';
 import {
   HOUSE_REGION,
   INVERTER_REGION,
@@ -71,10 +76,13 @@ export class SolarAssembly implements Assembly {
   private readonly inverter: InverterPart;
   private readonly meter: MeterPart;
   private readonly slice: SliceBlockPart;
+  private readonly cables: CablesPart;
+  private readonly sliceFlow: SliceFlowPart;
   private readonly anchors = new Map<PartId, Object3D>();
   private readonly named: Record<AnchorId, Object3D>;
   private readonly faceTargets = rayTargets();
   private state: AssemblyState | null = null;
+  private side: CutSide = -1;
 
   constructor(resources: AssemblyResources, state: AssemblyState) {
     this.materials = resources.materials;
@@ -86,6 +94,9 @@ export class SolarAssembly implements Assembly {
     this.inverter = new InverterPart(context);
     this.meter = new MeterPart(context);
     this.slice = new SliceBlockPart(context);
+    this.cables = new CablesPart(context);
+    this.sliceFlow = new SliceFlowPart(context);
+    this.slice.block.add(this.sliceFlow.object);
     this.array.heroPivot.add(this.slice.object);
     this.root.add(
       this.sky.mesh,
@@ -94,6 +105,7 @@ export class SolarAssembly implements Assembly {
       this.sun.object,
       this.inverter.object,
       this.meter.object,
+      this.cables.object,
     );
     this.collectAnchors();
     this.named = {
@@ -112,11 +124,16 @@ export class SolarAssembly implements Assembly {
     const changed = <K extends keyof AssemblyState>(key: K) =>
       !previous || previous[key] !== state[key];
     const viewChanged = (key: ViewKey) => !previous || previous.view[key] !== state.view[key];
-    if (changed('tilt')) this.array.setTilt(state.tilt);
+    if (changed('tilt')) this.applyTilt(state.tilt);
     if (changed('tilt') || changed('explode'))
       this.array.hero.setExplode(state.explode, state.tilt);
     if (changed('minute')) this.applyMinute(state.minute);
-    if (changed('minute') || changed('tilt')) this.aimRays(state);
+    if (changed('minute') || changed('tilt')) {
+      this.aimRays(state);
+      this.aimPhotons(state);
+    }
+    if (changed('wavelength')) this.sliceFlow.setWavelength(state.wavelength);
+    if (changed('irradiance')) this.sliceFlow.setIrradiance(state.irradiance);
     if (changed('layout')) this.array.hero.setLayout(state.layout);
     if (changed('shade')) this.array.hero.setShade(state.shade);
     if (changed('layout') || !previous || !sameFlags(previous.deadStrings, state.deadStrings)) {
@@ -129,13 +146,18 @@ export class SolarAssembly implements Assembly {
     if (changed('power')) this.applyPower(state.power);
     if (viewChanged('sun')) this.sun.setPathVisible(state.view.sun);
     if (viewChanged('slice')) this.slice.object.visible = state.view.slice;
-    if (viewChanged('flow')) this.array.hero.setOverlayVisible(state.view.flow);
+    if (viewChanged('flow')) this.applyFlow(state.view.flow);
   }
 
   update(deltaSeconds: number, cameraDistance: number): void {
+    const pointSize = clamp(cameraDistance * FLOW.sizePerDistance, FLOW.minSize, FLOW.maxSize);
     this.sun.update(deltaSeconds);
     this.meter.update(deltaSeconds);
-    void cameraDistance;
+    this.cables.update(deltaSeconds, pointSize);
+    if (this.slice.object.visible) {
+      const scale = clamp(cameraDistance / SLICE_FLOW.referenceDistance, 1, SLICE_FLOW.maxScale);
+      this.sliceFlow.update(deltaSeconds, scale);
+    }
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {
@@ -165,7 +187,7 @@ export class SolarAssembly implements Assembly {
       case 'stack':
         return regionIn(stackRegion(state?.explode ?? 0, state?.tilt ?? 0), hero);
       case 'slice':
-        return regionIn(sliceRegion(), this.slice.block.matrixWorld);
+        return regionIn(sliceRegion(this.side), this.slice.block.matrixWorld);
       case 'inverter':
         return regionIn(INVERTER_REGION, this.root.matrixWorld);
     }
@@ -175,6 +197,20 @@ export class SolarAssembly implements Assembly {
     this.root.removeFromParent();
     this.materials.clearRegistered();
     this.tracker.dispose();
+  }
+
+  private applyTilt(tilt: number): void {
+    this.array.setTilt(tilt);
+    this.cables.setHeroPose(this.array.heroPivot.matrix);
+    this.side = cutSide(tilt, CELL_VIEW_DIRECTION);
+    this.slice.setCutSide(this.side);
+    this.sliceFlow.setSide(this.side);
+  }
+
+  private applyFlow(shown: boolean): void {
+    this.array.hero.setOverlayVisible(shown);
+    this.cables.setFlowShown(shown);
+    this.sliceFlow.setShown(shown);
   }
 
   private applyMinute(minute: number): void {
@@ -191,9 +227,17 @@ export class SolarAssembly implements Assembly {
     this.sun.aimRays(targets, state.minute);
   }
 
+  private aimPhotons(state: AssemblyState): void {
+    const [x, y, z] = sunDirection(state.minute);
+    const toPanel = new Quaternion().copy(this.array.heroPivot.quaternion).invert();
+    const local = new Vector3(x, y, z).applyQuaternion(toPanel);
+    this.sliceFlow.setPath(photonPath([local.x, local.y, local.z], SLICE_FLOW.siliconIndex));
+  }
+
   private applyPower(power: number): void {
     this.inverter.setPower(power);
     this.meter.setPower(power);
+    this.cables.setPower(power);
   }
 
   private collectAnchors(): void {
@@ -205,8 +249,8 @@ export class SolarAssembly implements Assembly {
       ...(Object.entries(this.slice.anchors) as [PartId, Object3D][]),
       ['inverter', this.inverter.anchor],
       ['meter', this.meter.anchor],
-      ['dcCable', this.inverter.anchor],
-      ['acCable', this.meter.anchor],
+      ['dcCable', this.cables.anchors.dcCable],
+      ['acCable', this.cables.anchors.acCable],
     ];
     entries.forEach(([id, anchor]) => this.anchors.set(id, anchor));
   }

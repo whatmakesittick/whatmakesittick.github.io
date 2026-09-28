@@ -19,6 +19,7 @@ import { JUNCTION_BOX } from './geometry/junctionBox';
 import { frameDrop, stackFront, stackLayout } from './geometry/stack';
 import { BASE_RAIL, RAIL } from './geometry/tiltFrame';
 import { SLICE_SIZE } from './geometry/sliceGeometry';
+import type { CutSide } from './geometry/sliceMotion';
 
 const EQUIPMENT_MARGIN_CM = 6;
 const CABLE_ROOM_CM = 14;
@@ -72,10 +73,12 @@ export function stackRegion(explode: number, tiltDeg: number): RegionSpec {
   };
 }
 
-export function sliceRegion(): RegionSpec {
+export function sliceRegion(side: CutSide): RegionSpec {
+  const face = side * (SLICE_SIZE.depth / 2 + ANCHOR_LIFT_CM);
+  const inner = face - side * (SLICE_VIEW.sectionDepth + ANCHOR_LIFT_CM);
   return {
-    x: [0, SLICE_SIZE.width],
-    y: [-SLICE_SIZE.depth / 2 - ANCHOR_LIFT_CM, SLICE_SIZE.depth / 2],
+    x: [0, SLICE_SIZE.width * SLICE_VIEW.framedWidthShare],
+    y: [Math.min(face, inner), Math.max(face, inner)],
     z: [0, SLICE_SIZE.height + um(SLICE_VIEW.entryUm)],
   };
 }
