@@ -2,9 +2,11 @@ import type { SolarPanelStore } from '../state';
 import { disposeAll } from './disposers';
 import type { Disposer } from './disposers';
 import { mountExplodeControl } from './explodeControl';
+import { mountInverterReadouts } from './inverterReadouts';
 import { mountJunctionReadouts } from './junctionReadouts';
 import { mountLayerReadouts } from './layerReadouts';
 import { mountShadeControl } from './shadeControl';
+import { mountTemperatureControl } from './temperatureControl';
 import { mountTiltControl } from './tiltControl';
 import { mountWavelengthControl } from './wavelengthControl';
 
@@ -20,5 +22,7 @@ export function mountSolarPanelUi(root: Document, store: SolarPanelStore): Dispo
     mountWavelengthControl(root, store),
     mountJunctionReadouts(root, store),
     mountShadeControl(root, store),
+    mountTemperatureControl(root, store),
+    mountInverterReadouts(root, store),
   ]);
 }

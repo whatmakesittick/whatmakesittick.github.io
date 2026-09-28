@@ -148,6 +148,39 @@ describe('chapter widgets', () => {
     expect(readout('shade-diodes')).toBe('0 of 3');
   });
 
+  it('shows what the cell temperature does to the power and the voltage', () => {
+    expect(readout('temperature')).toBe('54 °C');
+    expect(readout('temperature-loss')).toBe('-8.4%');
+    const follow = document.querySelector('[data-action="followDay"]');
+    expect(follow?.getAttribute('aria-disabled')).toBe('true');
+    slide('temperature', 25);
+    expect(store.getState().temperature).toBe(25);
+    expect(readout('temperature')).toBe('25 °C');
+    expect(readout('temperature-loss')).toBe('0.0%');
+    expect(readout('temperature-voltage')).toBe('38.1 V');
+    expect(follow?.getAttribute('aria-disabled')).toBe('false');
+    slide('temperature', 0);
+    expect(readout('temperature-loss')).toBe('+7.3%');
+    click('followDay');
+    expect(store.getState().temperature).toBeNull();
+    expect(readout('temperature')).toBe('54 °C');
+    expect(follow?.getAttribute('aria-disabled')).toBe('true');
+  });
+
+  it('follows the power through the inverter and adds up the day', () => {
+    expect(readout('inverter-dc')).toBe('375 W');
+    expect(readout('inverter-ac')).toBe('360 W');
+    expect(readout('inverter-today')).toMatch(/^1\.[34]\d kWh$/);
+    expect(Number(readout('inverter-powers'))).toBeGreaterThan(20);
+    store.getState().setPhase(10);
+    expect(readout('inverter-dc')).toBe('0 W');
+    expect(readout('inverter-today')).toBe('0.00 kWh');
+    expect(readout('inverter-powers')).toBe('0');
+    store.getState().setTemperature(0);
+    store.getState().setPhase(SUN_MOMENTS.noon);
+    expect(readout('inverter-dc')).toBe('439 W');
+  });
+
   it('stops updating once disposed', () => {
     dispose();
     store.getState().setTilt(80);
