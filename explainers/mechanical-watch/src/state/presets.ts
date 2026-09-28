@@ -84,7 +84,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   },
   hands: {
     camera: 'dialSide',
-    speed: 8,
+    speed: 6,
     view: { dial: false, bridges: true },
     controls: ['beatRate'],
     labels: ['cannonPinion', 'minuteWheel', 'hourWheel', 'fourthWheel'],
