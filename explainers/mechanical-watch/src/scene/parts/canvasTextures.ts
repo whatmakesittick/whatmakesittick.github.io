@@ -2,6 +2,7 @@ import { CanvasTexture, RepeatWrapping, SRGBColorSpace } from 'three';
 import { toRadians } from '@core/math';
 import { DIAL_FACE } from '../constants';
 import { PAINT } from '../finishes';
+import { THEME } from '../../theme';
 import { WHEEL_CENTRES } from '../../model/layout';
 import { DIAL_RADIUS_MM } from '../../model/scale';
 
@@ -22,7 +23,7 @@ const DIAL_PAINT = {
   track: { outer: 13.05, minute: 12.55, five: 12.2, line: 0.045, fiveLine: 0.1 },
   subDial: { rings: 34, ringAlpha: 0.1, tick: 0.34, fiveTick: 0.62, line: 0.035, fiveLine: 0.07 },
   subDialNumbers: { radius: 2.28, size: 0.62 },
-  wordmark: { y: 5.6, size: 0.72, text: 'hand wound' },
+  wordmark: { y: 5.6, size: 0.68, lead: 'what makes it ', accent: 'tick' },
   font: '"Georgia", "Times New Roman", serif',
   subFont: '"Helvetica Neue", Arial, sans-serif',
 } as const;
@@ -255,12 +256,16 @@ function paintSubDial(frame: DialFrame): void {
 function paintWordmark(frame: DialFrame): void {
   const { context, scale } = frame;
   const { wordmark } = DIAL_PAINT;
-  context.fillStyle = PAINT.print;
   context.font = `italic ${wordmark.size * scale}px ${DIAL_PAINT.font}`;
-  context.textAlign = 'center';
+  context.textAlign = 'left';
   context.textBaseline = 'middle';
+  const leadWidth = context.measureText(wordmark.lead).width;
+  const width = leadWidth + context.measureText(wordmark.accent).width;
   const [x, y] = toCanvas(frame, 0, wordmark.y);
-  context.fillText(wordmark.text, x, y);
+  context.fillStyle = PAINT.print;
+  context.fillText(wordmark.lead, x - width / 2, y);
+  context.fillStyle = THEME.tick;
+  context.fillText(wordmark.accent, x - width / 2 + leadWidth, y);
 }
 
 function paintDial(context: CanvasRenderingContext2D, size: number): void {
