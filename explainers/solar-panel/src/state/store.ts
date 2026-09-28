@@ -48,6 +48,7 @@ export const DEFAULT_VIEW: ViewState = { sun: true, slice: false, flow: true, la
 export const DEFAULT_LAYER: LayerId = 'glass';
 export const DEFAULT_LAYOUT: LayoutId = 'halfCut';
 export const START_PHASE = PRESETS.overview.startAt ?? 0;
+export const START_SPEED = PRESETS.overview.speed ?? SPEED_RANGE.default;
 
 const CHAPTER_CONTROL_DEFAULTS: ChapterControls = {
   explode: EXPLODE_RANGE.default,
@@ -83,7 +84,7 @@ export function createSolarPanelStore(
     {
       timeline: SOLAR_PANEL_TIMELINE,
       presets: PRESETS,
-      defaults: { preset: 'overview', speed: SPEED_RANGE.default, view: DEFAULT_VIEW },
+      defaults: { preset: 'overview', speed: START_SPEED, view: DEFAULT_VIEW },
       extend: (set) => ({
         ...CHAPTER_CONTROL_DEFAULTS,
         tilt: TILT_RANGE.default,
