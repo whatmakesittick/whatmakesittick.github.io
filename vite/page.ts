@@ -51,7 +51,7 @@ function pagePath(code: LanguageCode, page: string): string {
   return `${ROOT_PATH}${languagePath(code, page)}`;
 }
 
-export function languageLinks(route: PageRoute, current?: LanguageCode): string {
+function languageLinks(route: PageRoute, current?: LanguageCode): string {
   return LANGUAGES.filter(({ code }) => route.languages.includes(code))
     .map(({ code, label }) => {
       const currentPage = code === current ? ' aria-current="page"' : '';
