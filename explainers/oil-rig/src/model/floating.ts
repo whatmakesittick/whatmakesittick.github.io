@@ -24,7 +24,7 @@ export const RIG_TYPES: Record<RigTypeId, RigType> = {
   jacket: { footing: 'seabed', maxWaterDepth: 412 },
   tlp: { footing: 'floating', maxWaterDepth: 1584 },
   spar: { footing: 'floating', maxWaterDepth: 2400 },
-  semi: { footing: 'floating', maxWaterDepth: 3000 },
+  semi: { footing: 'floating', maxWaterDepth: 3600 },
   drillship: { footing: 'floating', maxWaterDepth: 3628 },
 };
 

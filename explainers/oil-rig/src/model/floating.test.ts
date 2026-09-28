@@ -38,9 +38,10 @@ describe('rigs for each water depth', () => {
     expect(rigsFor(300)).not.toContain('jackUp');
   });
 
-  it('floats in deep water and leaves the deepest to drillships', () => {
+  it('floats in deep water and leaves the deepest to semi-submersibles and drillships', () => {
     expect(rigsFor(1000)).toEqual(['tlp', 'spar', 'semi', 'drillship']);
-    expect(rigsFor(3500)).toEqual(['drillship']);
+    expect(rigsFor(3500)).toEqual(['semi', 'drillship']);
+    expect(rigsFor(3620)).toEqual(['drillship']);
   });
 
   it('keeps floating rigs out of water shallower than their draft', () => {
