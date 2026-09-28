@@ -188,7 +188,7 @@ export class Diorama {
     const attitude: Attitude = {
       heading: pose.heading,
       pitch: pitchFor(state.airspeed),
-      bank: bankAt(phase, state.airspeed),
+      bank: bankAt(phase),
     };
     this.heading = pose.heading;
     this.glider.object.position.set(pose.x, state.height / METRES_PER_UNIT, pose.z);
