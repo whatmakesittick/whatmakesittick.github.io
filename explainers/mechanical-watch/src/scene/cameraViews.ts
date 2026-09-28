@@ -44,7 +44,7 @@ const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
 
 export const ANCHORED_VIEWS: Record<AnchoredViewId, AnchorFraming> = {
   wheel: { spanMm: 9, elevationDeg: 55, azimuthDeg: -20 },
-  escapement: { spanMm: 7, elevationDeg: 50, azimuthDeg: 25 },
+  escapement: { spanMm: 7, elevationDeg: 38, azimuthDeg: 35 },
 };
 
 export function anchorPose(

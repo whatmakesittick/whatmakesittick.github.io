@@ -7,11 +7,11 @@ const CAMERA = {
   maxPolarAngle: Math.PI * 0.5,
   distance: { min: 3, max: 1200 },
 } as const;
-const GENTLE_DIM = { saturation: 0.45, brightness: 0.62, emissive: 0.35 } as const;
+const GHOST_DIM = { saturation: 0.45, brightness: 0.62, emissive: 0.35, opacity: 0.28 } as const;
 
 export const SCENE_OPTIONS: SceneOptions = {
   background: BACKGROUND,
   stage: true,
   camera: CAMERA,
-  highlight: { dim: GENTLE_DIM },
+  highlight: { dim: GHOST_DIM },
 };
