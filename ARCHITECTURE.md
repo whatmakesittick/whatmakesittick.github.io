@@ -194,15 +194,32 @@ run without stopping playback.
 
 Core mounts the shell (`src/core/mount.ts`): the dock (play, scrubber with phase
 bands, status, speed slider, choices, toggles, reset camera, more), the gauge
-readouts, language, footer, `mountUi`, chapter actions, the keyboard (space,
-arrows, digits for phases, R, choice and toggle shortcuts, explainer shortcuts),
-reading-line sections and the safe area. Then it builds the scene host from the
+readouts, language, footer, `mountUi`, chapter actions, the full screen toggle,
+the keyboard (space, arrows, digits for phases, R, X and Escape for full screen,
+choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
+safe area. Then it builds the scene host from the
 explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
 scene, camera rig, label layer, highlighter, materials, textures, stage, lighting
 and `onFrame(update)`. Core owns the frame loop: each frame it ticks the store,
 runs the explainer's frame updates, eases the highlighter and the camera, hides
 the labels whose anchor is out of sight, renders and lays out the labels. `onFrame` and `viewport.onResize` return a function that
 removes the listener; the unmount that `mountScene` returns calls it.
+
+The round button in the stage's top-right corner shows the model full screen
+(`src/core/ui/stageExpansion.ts`). Expanding sets `data-stage-expanded` on the root,
+which pins the stage over the whole viewport with the dock still at its bottom and
+hides the rest of the page, and `createScrollLock` in `scrollLock.ts` fixes the body
+at its scroll offset, pads it by the scrollbar's width and scrolls back to the same
+spot on collapse. Where the Fullscreen API exists the stage then asks for full
+screen, and `fullscreenchange` collapses it when the browser leaves full screen on
+its own; where it is missing or refused, as on the iPhone, the pinned layout alone
+is the full screen view, so both look the same. The viewport's resize observer
+refits the renderer, the lens and the labels, and the reading-line sections ignore
+chapters while the stage is expanded and measure the reading line again after it
+collapses, so expanding never changes the chapter. X toggles it and Escape closes
+it; the keyboard runs these shell keys before the explainer's bindings, and Escape
+passes through when nothing is expanded. The gauge sits under the button, and the
+button is 44px on a touch screen.
 
 A choice's `shortcut` cycles through its options. Chapter buttons use
 `data-action="<name>" data-value="<value>"`; actions with `current` keep

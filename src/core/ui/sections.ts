@@ -1,6 +1,7 @@
 import type { ExplainerStore } from '../explainer';
 import { queryAll, requireElement } from './dom';
 import { parseOption } from './parse';
+import type { StageExpansion } from './stageExpansion';
 import { debounce } from './throttle';
 
 const DESKTOP_QUERY = '(min-width: 900px)';
@@ -12,6 +13,8 @@ interface Chapter {
   element: HTMLElement;
   preset: string;
 }
+
+type ExpandableStage = Pick<StageExpansion, 'expanded' | 'onChange'>;
 
 function readingLineMargin(stage: HTMLElement, isDesktop: boolean): string {
   const viewportHeight = window.innerHeight;
@@ -29,6 +32,7 @@ export function mountSections(
   root: Document,
   store: ExplainerStore,
   presetIds: readonly string[],
+  expansion: ExpandableStage,
 ): void {
   const stage = requireElement(root, '[data-stage]');
   const chapters: Chapter[] = queryAll(root, '[data-preset]').map((element) => ({
@@ -45,12 +49,14 @@ export function mountSections(
   };
 
   const onIntersect = (entries: IntersectionObserverEntry[]) => {
+    if (expansion.expanded) return;
     const crossing = entries.filter((entry) => entry.isIntersecting).at(-1);
     const chapter = chapters.find((candidate) => candidate.element === crossing?.target);
     if (chapter) activate(chapter);
   };
 
   const observe = () => {
+    if (expansion.expanded) return;
     observer?.disconnect();
     observer = new IntersectionObserver(onIntersect, {
       rootMargin: readingLineMargin(stage, desktop.matches),
@@ -63,4 +69,7 @@ export function mountSections(
   observe();
   desktop.addEventListener('change', observe);
   window.addEventListener('resize', debounce(observe, RESIZE_SETTLE_MS));
+  expansion.onChange((expanded) => {
+    if (!expanded) observe();
+  });
 }
