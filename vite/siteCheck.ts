@@ -126,6 +126,9 @@ function deliveryProblems(page: BuiltPage, root: HTMLElement, site: BuiltSite): 
 
 function contentProblems(page: BuiltPage, root: HTMLElement, explainers: number): string[] {
   const problems: string[] = [];
+  if (root.querySelectorAll('select[data-language-select] option').length === 0) {
+    problems.push('language dropdown has no prerendered options');
+  }
   if (isCatalogue(page.path)) {
     const cards = root.querySelectorAll('a.card').length;
     if (cards !== explainers)

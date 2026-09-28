@@ -66,6 +66,13 @@ function languageLinks(route: PageRoute, current?: LanguageCode): string {
     .join('\n');
 }
 
+function languageOptions(current: LanguageCode): string {
+  return LANGUAGES.map(({ code, label }) => {
+    const selected = code === current ? ' selected' : '';
+    return `<option value="${code}" lang="${code}"${selected}>${escapeHtml(label)}</option>`;
+  }).join('');
+}
+
 function languageValues(code: LanguageCode, route: PageRoute): TemplateValues {
   return {
     lang: code,
@@ -74,6 +81,7 @@ function languageValues(code: LanguageCode, route: PageRoute): TemplateValues {
     localeTags: localeTags(code, route),
     alternateLinks: alternateLinks(route),
     languageLinks: languageLinks(route, code),
+    languageOptions: languageOptions(code),
   };
 }
 

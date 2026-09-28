@@ -47,7 +47,7 @@ function pageHtml(code: string, slug: string, options: PageOptions = {}): string
     <script type="application/ld+json">{"@type":"WebPage"}</script>
     ${preload}
     <script type="module" src="/assets/${slug ? 'engine' : 'main'}.js"></script>
-  </head><body><h1>Title</h1>${body}</body></html>`;
+  </head><body><h1>Title</h1><select data-language-select><option value="${code}">${code}</option></select>${body}</body></html>`;
 }
 
 function site(overrides: Partial<Record<string, PageOptions>> = {}): BuiltSite {

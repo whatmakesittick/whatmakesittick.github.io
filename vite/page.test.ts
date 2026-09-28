@@ -73,12 +73,16 @@ const template = [
   '  {{chapters}}',
   '</main>',
   '<ul>{{moreExplainers}}</ul>',
+  '<!-- partial:header-actions -->',
   '<!-- partial:footer -->',
   '<script type="module" src="{{entry}}"></script>',
   '</html>',
 ].join('\n');
 
-const partials = { footer: '<footer>{{licenseUrl}}<ul>{{languageLinks}}</ul></footer>' };
+const partials = {
+  'header-actions': '<select data-language-select>{{languageOptions}}</select>',
+  footer: '<footer>{{licenseUrl}}<ul>{{languageLinks}}</ul></footer>',
+};
 
 const english: Record<string, string> = {
   'page.metaTitle': '{{title}} · What makes it tick',
@@ -329,6 +333,11 @@ describe('renderCatalogue', () => {
     );
     expect(links).toEqual(['/', '/zh/', '/es/', '/uk/', '/pt/', '/fr/', '/de/', '/ja/']);
     expect(html).toContain('href="/uk/" hreflang="uk" lang="uk" aria-current="page"');
+  });
+
+  it('prerenders every language in the dropdown with the page language selected', () => {
+    expect(html).toContain('<option value="en" lang="en">English</option>');
+    expect(html).toContain('<option value="uk" lang="uk" selected>Українська</option>');
   });
 
   it('prerenders the cards newest first, each linked in the language of the folder', () => {
