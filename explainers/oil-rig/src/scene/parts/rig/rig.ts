@@ -29,7 +29,7 @@ export type RigAnchorId =
   | 'mooring'
   | 'moonpool';
 
-const MOONPOOL_LIP = 1;
+const MOONPOOL_LIP = 4;
 
 export class RigPart {
   readonly object = new Group();
@@ -75,7 +75,7 @@ export class RigPart {
       mooring: mooring.anchor,
       moonpool: anchorAt(
         this.object,
-        0,
+        -HULL.deck.moonpoolX / 2,
         HULL.deck.underside - MOONPOOL_LIP,
         HULL.deck.moonpoolZ / 2,
       ),
