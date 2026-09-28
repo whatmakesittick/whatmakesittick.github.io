@@ -21,6 +21,7 @@ const MIN_SAFE_FRACTION = 0.3;
 function createRenderer(): WebGLRenderer {
   const renderer = new WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
   renderer.outputColorSpace = SRGBColorSpace;
+  renderer.debug.checkShaderErrors = import.meta.env.DEV;
   renderer.toneMapping = ACESFilmicToneMapping;
   renderer.toneMappingExposure = TONE_MAPPING_EXPOSURE;
   return renderer;

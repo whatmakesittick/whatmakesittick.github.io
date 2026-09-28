@@ -203,7 +203,10 @@ choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
 safe area. Then it builds the scene host from the
 explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
 scene, camera rig, label layer, highlighter, materials, textures, stage, lighting
-and `onFrame(update)`. Core owns the frame loop: each frame it ticks the store,
+and `onFrame(update)`. Before the first frame the host compiles every material in
+the scene with `renderer.compileAsync`, so the shaders build in parallel while the
+page stays responsive; three's shader error checks run in dev only, since their
+queries stall the first frame. Core owns the frame loop: each frame it ticks the store,
 runs the explainer's frame updates, eases the highlighter and the camera, hides
 the labels whose anchor is out of sight, renders and lays out the labels. `onFrame` and `viewport.onResize` return a function that
 removes the listener; the unmount that `mountScene` returns calls it.

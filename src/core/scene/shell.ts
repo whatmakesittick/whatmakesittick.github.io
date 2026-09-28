@@ -89,6 +89,7 @@ export function createSceneHost(
   });
   const updates = new Listeners<[deltaSeconds: number]>();
   let loop: Loop | undefined;
+  let disposed = false;
 
   const shell: SceneShell = {
     viewport,
@@ -117,10 +118,14 @@ export function createSceneHost(
   return {
     shell,
     start: (tick) => {
-      loop?.stop();
-      loop = startLoop((deltaSeconds) => renderFrame(tick, deltaSeconds));
+      void viewport.renderer.compileAsync(scene, rig.camera).then(() => {
+        if (disposed) return;
+        loop?.stop();
+        loop = startLoop((deltaSeconds) => renderFrame(tick, deltaSeconds));
+      });
     },
     dispose: () => {
+      disposed = true;
       loop?.stop();
       updates.clear();
       labels.dispose();
