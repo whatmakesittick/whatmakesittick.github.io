@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { momentPhase, phaseAt } from '../model';
 import { PRESETS, presetHighlight } from './presets';
 import type { PresetId } from './presets';
@@ -39,6 +39,15 @@ describe('watch store', () => {
     store.getState().setPhase(355);
     expect(store.getState().cycles).toBe(0);
     store.getState().setPhase(200);
+    expect(store.getState().cycles).toBe(0);
+  });
+
+  it('notifies subscribers once per frame while the loop does not wrap', () => {
+    const store = createWatchStore({ phase: 10, speed: 8, playing: true });
+    const listener = vi.fn();
+    store.subscribe(listener);
+    store.getState().tick(0.01);
+    expect(listener).toHaveBeenCalledTimes(1);
     expect(store.getState().cycles).toBe(0);
   });
 

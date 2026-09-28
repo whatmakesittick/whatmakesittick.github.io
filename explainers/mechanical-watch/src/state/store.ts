@@ -69,8 +69,11 @@ function chapterControls(preset: Preset, state: ChapterControls): ChapterControl
 function countCycles(store: WatchStore): WatchStore {
   store.subscribe(
     (state) => state.phase,
-    (phase, previous) =>
-      store.setState({ cycles: cycleCountAfter(previous, phase, store.getState().cycles) }),
+    (phase, previous) => {
+      const { cycles } = store.getState();
+      const next = cycleCountAfter(previous, phase, cycles);
+      if (next !== cycles) store.setState({ cycles: next });
+    },
   );
   return store;
 }
