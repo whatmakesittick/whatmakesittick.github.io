@@ -9,6 +9,7 @@ export const LAYER_STOP_IDS = ['seal', 'gasCap', 'oil', 'water', 'sourceRock'] a
 export type LayerStopId = (typeof LAYER_STOP_IDS)[number];
 
 const SOURCE_ROCK = layerById('sourceRock');
+const BELOW_SECTION_TOP_M = 1;
 
 const LAYER_STOP_DEPTHS: Record<LayerStopId, number> = {
   seal: layerById('seal').top,
@@ -22,7 +23,8 @@ const FLUID_STOPS = { gas: 'gasCap', oil: 'oil', water: 'water' } as const;
 
 export function sectionStartDepth(id: SectionId): number {
   const index = SECTION_IDS.indexOf(id);
-  return index > 0 ? SECTIONS[index - 1].shoeDepth + 1 : SEABED_DEPTH_M;
+  const top = index > 0 ? SECTIONS[index - 1].shoeDepth : SEABED_DEPTH_M;
+  return top + BELOW_SECTION_TOP_M;
 }
 
 export function layerStopDepth(id: LayerStopId): number {

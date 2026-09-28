@@ -16,7 +16,7 @@ const SOURCE_ROCK = layerById('sourceRock');
 
 describe('chapter stops', () => {
   it('starts each hole section just below the shoe above it', () => {
-    expect(sectionStartDepth('conductor')).toBe(SEABED_DEPTH_M);
+    expect(sectionStartDepth('conductor')).toBe(SEABED_DEPTH_M + 1);
     expect(sectionStartDepth('surface')).toBe(1101);
     expect(sectionStartDepth('intermediate')).toBe(2026);
     expect(sectionStartDepth('production')).toBe(3001);

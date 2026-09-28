@@ -35,7 +35,7 @@ function depthBelowSea(depth: number): number {
 }
 
 export function isInRock(depth: number): boolean {
-  return depth > SEABED_DEPTH_M;
+  return depth >= SEABED_DEPTH_M;
 }
 
 export function whenInRock<T>(depth: number, measure: (depth: number) => T): T | null {
@@ -92,8 +92,8 @@ export function mudState(bitDepth: number, mudWeight: number): MudState {
 }
 
 export function mudWindowShare(bitDepth: number, mudWeight: number): number {
-  if (!isInRock(bitDepth)) return 0;
   const pore = porePressureBar(bitDepth);
   const room = fracturePressureBar(bitDepth) - pore;
+  if (room <= 0) return 0;
   return clamp((mudPressureBar(bitDepth, mudWeight) - pore) / room, 0, 1);
 }

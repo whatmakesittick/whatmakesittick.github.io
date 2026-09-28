@@ -3,6 +3,7 @@ import {
   SEABED_PRESSURE_BAR,
   fracturePressureBar,
   hydrostaticBar,
+  isInRock,
   mudPressureBar,
   mudState,
   mudWindow,
@@ -13,7 +14,13 @@ import {
   whenInRock,
 } from './pressure';
 import { layerById } from './rocks';
-import { RISER_LANDED_DEPTH_M, SEABED_DEPTH_M, TOTAL_DEPTH_M, sectionAt } from './wellPlan';
+import {
+  RISER_LANDED_DEPTH_M,
+  SEABED_DEPTH_M,
+  TOTAL_DEPTH_M,
+  layerAt,
+  sectionAt,
+} from './wellPlan';
 
 const RESERVOIR = layerById('reservoir');
 const SEAL = layerById('seal');
@@ -34,6 +41,12 @@ describe('pressure in the sea', () => {
     expect(porePressureBar(SEABED_DEPTH_M)).toBeCloseTo(SEABED_PRESSURE_BAR);
     expect(overburdenBar(SEABED_DEPTH_M)).toBeCloseTo(SEABED_PRESSURE_BAR);
     expect(porePressureBar(0)).toBe(0);
+  });
+
+  it('counts the seabed itself as rock, as the layer table does', () => {
+    expect(isInRock(SEABED_DEPTH_M)).toBe(layerAt(SEABED_DEPTH_M) !== undefined);
+    expect(isInRock(SEABED_DEPTH_M - 1)).toBe(layerAt(SEABED_DEPTH_M - 1) !== undefined);
+    expect(mudWindowShare(SEABED_DEPTH_M, 1.03)).toBe(0);
   });
 
   it('measures rock only below the seabed', () => {
