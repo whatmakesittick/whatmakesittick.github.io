@@ -1,18 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import type { CatalogueEntry, Tag } from '@core/manifest';
+import type { Tag } from '@core/manifest';
+import type { CatalogueCard } from './catalogue';
 import { filterByTag, readTagQuery, toggleTag, usedTags, writeTagQuery } from './tagFilter';
 
-function entry(slug: string, tags: Tag[]): CatalogueEntry {
+function entry(slug: string, tags: Tag[]): CatalogueCard {
   return {
-    manifest: {
-      slug,
-      tags,
-      cover: 'cover.webp',
-      entry: 'src/index.ts',
-      chapters: 'chapters.html',
-      locales: ['en'],
-      social: { image: 'social/og-image.png', alt: 'Card' },
-    },
+    manifest: { slug, tags, cover: 'cover.webp', locales: ['en'] },
     meta: {},
     published: '2026-03-10T09:00:00Z',
   };
@@ -23,7 +16,7 @@ const glider = entry('glider', ['aircraft', 'flight', 'physics', 'weather']);
 const helicopter = entry('helicopter', ['aircraft', 'flight', 'mechanics']);
 const entries = [engine, glider, helicopter];
 
-function slugs(list: readonly CatalogueEntry[]): string[] {
+function slugs(list: readonly CatalogueCard[]): string[] {
   return list.map(({ manifest }) => manifest.slug);
 }
 

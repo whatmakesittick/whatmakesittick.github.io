@@ -278,7 +278,7 @@ describe('renderCatalogue', () => {
   const catalogueTemplate = template
     .replace(articleTags, '')
     .replace(coverTag, '')
-    .replace('{{chapters}}', '')
+    .replace('{{chapters}}', '{{catalogue}}')
     .replace('{{entry}}', '/main.ts');
   const gearbox: LoadedExplainer = {
     ...explainer,
@@ -304,6 +304,13 @@ describe('renderCatalogue', () => {
     );
     expect(links).toEqual(['/', '/zh/', '/es/', '/uk/', '/pt/', '/fr/', '/de/', '/ja/']);
     expect(html).toContain('href="/uk/" hreflang="uk" lang="uk" aria-current="page"');
+  });
+
+  it('prerenders the cards newest first, each linked in the language of the folder', () => {
+    const links = [...html.matchAll(/<a class="card" href="([^"]+)"/g)].map(([, href]) => href);
+    expect(links).toEqual(['/gearbox/', '/uk/thing/']);
+    expect(html).toContain('<h2 class="card-title">Як працює річ</h2>');
+    expect(html).toContain('<ul class="cards" data-language="uk">');
   });
 
   it('lists the catalogue in every language', () => {

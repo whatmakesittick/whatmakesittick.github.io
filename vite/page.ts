@@ -3,6 +3,7 @@ import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { languagePath } from '../src/core/i18n/paths.ts';
 import { compareNewestFirst } from '../src/core/manifest.ts';
 import type { CatalogueEntry, ExplainerMeta } from '../src/core/manifest.ts';
+import { renderCatalogueGrid } from '../src/site/catalogueMarkup.ts';
 import { alternateLinks, imageType, jsonLd, localeTags } from './head.ts';
 import type { PageLanguage } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
@@ -194,6 +195,7 @@ export function renderCatalogue(
     title: escapeHtml(title),
     description: escapeHtml(description),
     structuredData: jsonLd(catalogueData({ name: title, description }, facts, pages)),
+    catalogue: catalogueGrid(explainers, { code, translate }),
   });
   return translateHtml(html, translate);
 }
@@ -212,6 +214,10 @@ export function renderNotFound(
     documentTitle: escapeHtml(translate(PAGE_DOCUMENT_TITLE_KEY, { title })),
   });
   return translateHtml(html, translate);
+}
+
+function catalogueGrid(explainers: readonly LoadedExplainer[], language: PageLanguage): string {
+  return renderCatalogueGrid(catalogueEntries(explainers), { ...language, base: ROOT_PATH });
 }
 
 function localeLoader(localesRoot: string, code: LanguageCode): string {

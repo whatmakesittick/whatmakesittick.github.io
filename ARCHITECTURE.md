@@ -444,6 +444,7 @@ build and the runtime. A page is rendered in two steps:
    `{{languageLinks}}` lists one `<a hreflang lang>` per language the page ships, with the
    native language names from `src/core/i18n/languages.ts` and `aria-current="page"` on the
    page's own language, so the HTML links every language version without scripts.
+   On a catalogue page the grid itself is prerendered too (see "Catalogue").
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
    element, in that order, the way `translateDom` does at runtime. A `data-i18n` element
@@ -510,12 +511,20 @@ explainer does not ship it.
 
 ## Catalogue
 
-`src/site` renders the catalogue at runtime into `[data-catalogue]`: a row of
-tag chips and one flat grid of cards, newest first by `compareNewestFirst` from
-`src/core/manifest.ts`, the same order the build uses for the `ItemList`. Each
-card is an `a.card` with the cover, eyebrow, title, summary and action, and its
-tags as small chips laid over the bottom of the cover. The chips sit beside the
-link in the card's `li`, never inside it, so each one is a button of its own.
+The catalogue is prerendered into `[data-catalogue]`: a row of tag chips and one
+flat grid of cards, newest first by `compareNewestFirst` from
+`src/core/manifest.ts`, the same order the build uses for the `ItemList`.
+`renderCatalogueGrid` in `src/site/catalogueMarkup.ts` writes it as a string
+without touching the DOM, so the build and the runtime share one renderer:
+`vite/page.ts` fills the grid of every catalogue page in its language, and at
+runtime `src/site` hydrates it, binding the chips to the cards already there. The
+grid carries its language in `data-language`; the runtime renders it again only
+when that is not the page's language, as after an old `?lang=` link. Each card is
+an `a.card` with the cover, eyebrow, title and summary, and its tags as small
+chips below. The chips sit beside the link in the card's `li`, never inside it, so
+each one is a button of its own. Every cover is 932 × 699 and says so in its
+`width` and `height`; the first three load at once with `fetchpriority="high"`,
+the rest lazily.
 
 The filter row offers "All" and every tag at least one explainer uses, in
 vocabulary order. It selects one tag at a time: a tag chip, in the row or on a

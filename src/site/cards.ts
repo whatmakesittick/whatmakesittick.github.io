@@ -1,75 +1,35 @@
-import { DEFAULT_LANGUAGE, currentLanguage, onLanguageChanged, t } from '@core/i18n';
+import { currentLanguage, onLanguageChanged, t } from '@core/i18n';
 import type { LanguageCode } from '@core/i18n';
-import { languagePath } from '@core/i18n/paths';
-import { compareNewestFirst } from '@core/manifest';
-import type { CatalogueEntry } from '@core/manifest';
-import { html, requireElement } from '@core/ui/dom';
-import { localizedMeta, pageLanguage } from './catalogue';
-import { createCardTags, createTagFilter, showSelection } from './tagChips';
-import type { ChooseTag } from './tagChips';
+import { queryAll, requireElement } from '@core/ui/dom';
+import type { CatalogueCard } from './catalogue';
+import {
+  CARD_ITEM_SELECTOR,
+  CARD_TAGS_SELECTOR,
+  CHIP_SELECTOR,
+  FILTER_SELECTOR,
+  GRID_SELECTOR,
+  renderCatalogueGrid,
+} from './catalogueMarkup';
+import { chipChoice, showSelection } from './tagChips';
 import { filterByTag, readTagQuery, toggleTag, usedTags, writeTagQuery } from './tagFilter';
 import type { TagSelection } from './tagFilter';
 
-interface CardView {
-  entry: CatalogueEntry;
-  element: HTMLElement;
-}
-
 const CATALOGUE_SELECTOR = '[data-catalogue]';
-const FILTER_SELECTOR = '.tag-filter';
 
-function explainerPath(entry: CatalogueEntry, file = ''): string {
-  return `${import.meta.env.BASE_URL}${entry.manifest.slug}/${file}`;
+function renderedLanguage(container: HTMLElement): string | undefined {
+  return container.querySelector<HTMLElement>(GRID_SELECTOR)?.dataset.language;
 }
 
-function explainerPage(entry: CatalogueEntry, code: LanguageCode): string {
-  const language = pageLanguage(entry, code, DEFAULT_LANGUAGE);
-  return `${import.meta.env.BASE_URL}${languagePath(language, entry.manifest.slug)}`;
+function render(container: HTMLElement, cards: readonly CatalogueCard[], code: LanguageCode): void {
+  const context = { code, base: import.meta.env.BASE_URL, translate: (key: string) => t(key) };
+  container.innerHTML = renderCatalogueGrid(cards, context);
 }
 
-function createCard(entry: CatalogueEntry, choose: ChooseTag): CardView | undefined {
-  const code = currentLanguage();
-  const meta = localizedMeta(entry, code, DEFAULT_LANGUAGE);
-  if (!meta) return undefined;
-  const cover = html('img', {
-    src: explainerPath(entry, entry.manifest.cover),
-    alt: meta.title,
-    loading: 'lazy',
-    decoding: 'async',
-  });
-  const link = html('a', { class: 'card', href: explainerPage(entry, code) }, [
-    html('span', { class: 'card-cover' }, [cover]),
-    html('span', { class: 'card-body' }, [
-      html('span', { class: 'card-eyebrow' }, [meta.eyebrow]),
-      html('h2', { class: 'card-title' }, [meta.title]),
-      html('span', { class: 'card-summary' }, [meta.summary]),
-    ]),
-  ]);
-  const footer = html('div', { class: 'card-footer' }, [
-    createCardTags(entry.manifest.tags, choose),
-  ]);
-  const element = html('li', { class: 'card-item' }, [link, footer]);
-  return { entry, element };
-}
-
-function createPlaceholder(): HTMLElement {
-  return html('li', { class: 'card-placeholder' }, [t('catalogue.moreSoon')]);
-}
-
-function createCards(entries: readonly CatalogueEntry[], choose: ChooseTag): CardView[] {
-  return entries.map((entry) => createCard(entry, choose)).filter((card) => card !== undefined);
-}
-
-function createGrid(cards: readonly CardView[]): HTMLElement {
-  return html('ul', { class: 'cards' }, [
-    ...cards.map(({ element }) => element),
-    createPlaceholder(),
-  ]);
-}
-
-function showCards(cards: readonly CardView[], visible: readonly CatalogueEntry[]): void {
-  const shown = new Set(visible);
-  cards.forEach(({ entry, element }) => (element.hidden = !shown.has(entry)));
+function showCards(container: HTMLElement, visible: readonly CatalogueCard[]): void {
+  const shown = new Set(visible.map(({ manifest }) => manifest.slug));
+  queryAll(container, CARD_ITEM_SELECTOR).forEach(
+    (item) => (item.hidden = !shown.has(item.dataset.slug ?? '')),
+  );
 }
 
 function storeSelection(selection: TagSelection): void {
@@ -83,33 +43,36 @@ function revealFilter(container: HTMLElement): void {
   if (filter && filter.getBoundingClientRect().top < 0) filter.scrollIntoView({ block: 'start' });
 }
 
-export function mountCards(root: Document, entries: readonly CatalogueEntry[]): void {
+function clickedChip(event: Event): HTMLElement | undefined {
+  const target = event.target instanceof Element ? event.target : null;
+  return target?.closest<HTMLElement>(CHIP_SELECTOR) ?? undefined;
+}
+
+export function mountCards(root: Document, cards: readonly CatalogueCard[]): void {
   const container = requireElement(root, CATALOGUE_SELECTOR);
-  const sorted = [...entries].sort(compareNewestFirst);
-  const tags = usedTags(sorted);
+  const tags = usedTags(cards);
   let selection = readTagQuery(window.location.search, tags);
-  let cards: CardView[] = [];
 
   const show = () => {
     showSelection(container, selection);
-    showCards(cards, filterByTag(sorted, selection));
+    showCards(container, filterByTag(cards, selection));
   };
-  const choose: ChooseTag = (choice) => {
-    selection = toggleTag(selection, choice);
-    storeSelection(selection);
-    show();
-  };
-  const chooseFromCard: ChooseTag = (choice) => {
-    choose(choice);
-    revealFilter(container);
-  };
-  const render = () => {
-    cards = createCards(sorted, chooseFromCard);
-    container.replaceChildren(createTagFilter(tags, choose), createGrid(cards));
+  const renderIn = (code: LanguageCode) => {
+    render(container, cards, code);
     show();
   };
 
-  render();
+  container.addEventListener('click', (event) => {
+    const chip = clickedChip(event);
+    if (!chip) return;
+    selection = toggleTag(selection, chipChoice(chip, tags));
+    storeSelection(selection);
+    show();
+    if (chip.closest(CARD_TAGS_SELECTOR)) revealFilter(container);
+  });
+
+  if (renderedLanguage(container) === currentLanguage()) show();
+  else renderIn(currentLanguage());
   storeSelection(selection);
-  onLanguageChanged(render);
+  onLanguageChanged(renderIn);
 }

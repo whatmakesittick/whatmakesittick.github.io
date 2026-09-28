@@ -1,18 +1,26 @@
-import type { LanguageCode } from '@core/i18n/languages';
-import type { CatalogueEntry, ExplainerMeta } from '@core/manifest';
+import type { LanguageCode } from '../core/i18n/languages.ts';
+import type { ExplainerManifest, ExplainerMeta } from '../core/manifest.ts';
+
+export type CardMeta = Pick<ExplainerMeta, 'title' | 'eyebrow' | 'summary'>;
+
+export interface CatalogueCard {
+  manifest: Pick<ExplainerManifest, 'slug' | 'tags' | 'cover' | 'locales'>;
+  meta: Partial<Record<LanguageCode, CardMeta>>;
+  published: string;
+}
 
 export function localizedMeta(
-  entry: CatalogueEntry,
+  card: CatalogueCard,
   language: LanguageCode,
   fallback: LanguageCode,
-): ExplainerMeta | undefined {
-  return entry.meta[language] ?? entry.meta[fallback];
+): CardMeta | undefined {
+  return card.meta[language] ?? card.meta[fallback];
 }
 
 export function pageLanguage(
-  entry: CatalogueEntry,
+  card: CatalogueCard,
   language: LanguageCode,
   fallback: LanguageCode,
 ): LanguageCode {
-  return entry.manifest.locales.includes(language) ? language : fallback;
+  return card.manifest.locales.includes(language) ? language : fallback;
 }

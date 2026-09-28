@@ -1,20 +1,21 @@
-import { TAGS } from '@core/manifest';
-import type { CatalogueEntry, Tag } from '@core/manifest';
+import { TAGS } from '../core/manifest.ts';
+import type { Tag } from '../core/manifest.ts';
+import type { CatalogueCard } from './catalogue.ts';
 
 export type TagSelection = Tag | undefined;
 
 export const TAG_QUERY_KEY = 'tag';
 
-export function usedTags(entries: readonly CatalogueEntry[]): Tag[] {
-  return TAGS.filter((tag) => entries.some((entry) => entry.manifest.tags.includes(tag)));
+export function usedTags(cards: readonly CatalogueCard[]): Tag[] {
+  return TAGS.filter((tag) => cards.some((card) => card.manifest.tags.includes(tag)));
 }
 
 export function filterByTag(
-  entries: readonly CatalogueEntry[],
+  cards: readonly CatalogueCard[],
   selection: TagSelection,
-): CatalogueEntry[] {
-  if (selection === undefined) return [...entries];
-  return entries.filter((entry) => entry.manifest.tags.includes(selection));
+): CatalogueCard[] {
+  if (selection === undefined) return [...cards];
+  return cards.filter((card) => card.manifest.tags.includes(selection));
 }
 
 export function toggleTag(selection: TagSelection, choice: TagSelection): TagSelection {
