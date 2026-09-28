@@ -3,7 +3,7 @@ import type { BufferGeometry, ColorRepresentation, Object3D } from 'three';
 import { box } from '@core/scene/geometry/box';
 import { anchorAt } from '@core/scene/parts';
 import { SEABED_Y } from '../../../model/scale';
-import { ANCHOR_LIFT, BOP, SEGMENTS, WELLHEAD } from '../../constants';
+import { ANCHOR_LIFT, BOP, RISER, SEGMENTS, WELLHEAD } from '../../constants';
 import { PAINT } from '../../finishes';
 import { barGeometry, rodGeometry } from '../../geometry/bars';
 import type { Point } from '../../geometry/bars';
@@ -33,6 +33,7 @@ const POD_OFFSET = 1.2;
 const LMRP_FRAME_SHARE = 0.8;
 const FLEX_BULGE = 1.18;
 const FLEX_NECK = 0.8;
+const CHOKE_KILL = { radius: 0.3, standoff: 1, front: 2.4, valve: 1.1 } as const;
 const PODS = [
   { color: PAINT.podBlue, side: -1 },
   { color: PAINT.safetyYellow, side: 1 },
@@ -152,6 +153,35 @@ function pods(bottom: number): Painted[] {
   ]);
 }
 
+function chokeKillLines(): Painted[] {
+  const { radius, standoff, front, valve } = CHOKE_KILL;
+  const rampTop = WELLHEAD_TOP + BOP.connector.height + RAM_STACK - BOP.ram.height / 2;
+  return [-1, 1].flatMap((side): Painted[] => {
+    const outer = side * (BOP.ram.half + standoff);
+    const riserFoot: Point = [side * RISER.lineOffset, BOP_TOP, 0];
+    const bend: Point = [outer, LMRP_TOP - BOP.flexJoint.height, front];
+    const foot: Point = [outer, rampTop, front];
+    const inlet: Point = [side * BOP.ram.half, rampTop, front];
+    const valveAt = rampTop + BOP.ram.height;
+    return [
+      [rodGeometry(riserFoot, bend, radius, SEGMENTS.rod), PAINT.darkSteel],
+      [rodGeometry(bend, foot, radius, SEGMENTS.rod), PAINT.darkSteel],
+      [rodGeometry(foot, inlet, radius, SEGMENTS.rod), PAINT.darkSteel],
+      [
+        box({
+          minX: outer - valve / 2,
+          maxX: outer + valve / 2,
+          minY: valveAt - valve / 2,
+          maxY: valveAt + valve / 2,
+          minZ: front - valve / 2,
+          maxZ: front + valve / 2,
+        }),
+        PAINT.bopYellow,
+      ],
+    ];
+  });
+}
+
 function stackGeometry(): BufferGeometry {
   let y = WELLHEAD_TOP;
   const parts: Painted[] = [
@@ -170,7 +200,7 @@ function stackGeometry(): BufferGeometry {
   y += BOP.annular.height;
   parts.push(...frame(lmrpBottom, y, BOP.frame.half * LMRP_FRAME_SHARE), flexJoint(y));
   y += BOP.flexJoint.height;
-  parts.push(rod(y, y + BOP.adapter.height, BOP.adapter.radius, PAINT.steel));
+  parts.push(rod(y, y + BOP.adapter.height, BOP.adapter.radius, PAINT.steel), ...chokeKillLines());
   return mergePainted(parts);
 }
 
