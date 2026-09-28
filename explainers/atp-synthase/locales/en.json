@@ -1,0 +1,190 @@
+{
+  "meta": {
+    "title": "How ATP synthase works",
+    "eyebrow": "ATP synthase",
+    "tagline": "The spinning motor in your cells that recharges the fuel for every stride.",
+    "description": "An interactive 3D model of ATP synthase, the rotary motor in your mitochondria. See protons turn its rotor, watch it build ATP three at a time, and find out what it means for a sprint, a marathon and your training.",
+    "summary": "Proton push, the rotor ring, the three seats, sprint versus marathon, training."
+  },
+  "stage": {
+    "label": "Interactive ATP synthase model",
+    "gauge": "Live motor readings"
+  },
+  "controls": {
+    "label": "Motor controls",
+    "views": {
+      "membrane": {
+        "name": "Membrane",
+        "short": "Membrane",
+        "hint": "Membrane (M)"
+      },
+      "cutaway": {
+        "name": "See-through head",
+        "short": "Inside",
+        "hint": "See-through head (C)"
+      },
+      "flow": {
+        "name": "Protons and molecules",
+        "short": "Flow",
+        "hint": "Protons and molecules (F)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      }
+    },
+    "ringOptions": {
+      "animal": "Humans and other animals: 8",
+      "yeast": "Yeast and E. coli: 10",
+      "chloroplast": "Spinach leaves: 14"
+    },
+    "eventOptions": {
+      "m100": "100 m",
+      "m200": "200 m",
+      "m400": "400 m",
+      "m800": "800 m",
+      "m1500": "1500 m",
+      "m5000": "5000 m",
+      "marathon": "Marathon"
+    },
+    "trainingOptions": {
+      "untrained": "Untrained",
+      "tenWeeks": "After 10 weeks",
+      "years": "Years of endurance training"
+    }
+  },
+  "timeline": {
+    "label": "Rotor angle",
+    "phases": "Jump to an ATP",
+    "speed": "Playback",
+    "value": "{{angle}}, {{phase}}",
+    "realTime": "Real time, about {{value}} turns a second",
+    "slower": "{{factor}} times slower than life",
+    "phase": {
+      "firstAtp": "First ATP",
+      "secondAtp": "Second ATP",
+      "thirdAtp": "Third ATP"
+    },
+    "during": {
+      "firstAtp": "making the first ATP of this lap",
+      "secondAtp": "making the second ATP of this lap",
+      "thirdAtp": "making the third ATP of this lap"
+    },
+    "jump": {
+      "firstAtp": "Jump to the first ATP",
+      "secondAtp": "Jump to the second ATP",
+      "thirdAtp": "Jump to the third ATP"
+    }
+  },
+  "readouts": {
+    "angle": "Rotor angle",
+    "atp": "ATP made",
+    "protons": "Protons through",
+    "perAtp": "Protons per ATP"
+  },
+  "parts": {
+    "membrane": "Inner membrane",
+    "cRing": "Rotor ring",
+    "subunitA": "Proton gate (subunit a)",
+    "centralStalk": "Crooked axle",
+    "peripheralStalk": "Side arm",
+    "alphaSubunits": "α subunits",
+    "betaSubunits": "β subunits",
+    "openSite": "Open seat",
+    "looseSite": "Loose seat",
+    "tightSite": "Tight seat",
+    "adpPhosphate": "ADP and phosphate",
+    "atp": "New ATP",
+    "protons": "Protons",
+    "pumps": "Proton pumps",
+    "electrons": "Electrons from food",
+    "oxygen": "Oxygen",
+    "matrix": "Matrix",
+    "intermembraneSpace": "Intermembrane space",
+    "neighbourMotors": "More motors"
+  },
+  "sites": {
+    "name": {
+      "open": "Open",
+      "loose": "Loose",
+      "tight": "Tight"
+    },
+    "doing": {
+      "open": "Open: takes in ADP and phosphate",
+      "loose": "Loose: closes to make ATP",
+      "tight": "Tight: opens to let the ATP go"
+    }
+  },
+  "units": {
+    "degrees": "{{value}}°",
+    "litresPerMinute": "{{value}} L a minute",
+    "kilograms": "{{value}} kg",
+    "times": "×{{value}}",
+    "percent": "{{value}}%",
+    "percentRange": "{{low}} to {{high}}%"
+  },
+  "sections": {
+    "overview": {
+      "title": "Every stride is paid in ATP",
+      "p1": "Push off the blocks in a sprint, or stand on the pedals for a steep climb. Every time a muscle fibre contracts, it spends a small molecule called <strong>ATP</strong>, the energy currency of every cell. Your muscles hold only enough ATP for a second or two of all-out effort. Yet they never run out. Even at the end of the hardest effort, the level falls by a third at most. Your body simply remakes ATP as fast as you spend it.",
+      "p2": "The trick is <strong>recycling</strong>. Each ATP is spent by splitting into ADP and phosphate, and then it is rebuilt, over and over. Your whole body holds only roughly 50 to 100 g of ATP at any moment. Yet it remakes tens of kilograms a day, roughly your body weight if you are active. One marathon takes about 50 to 60 kg of ATP, more than most runners weigh. At rest, about 90 percent of all that rebuilding happens in the machine in front of you.",
+      "p3": "This machine is <strong>ATP synthase</strong>, a rotary motor made of protein. It sits in the folds, called cristae, of the inner membrane of your mitochondria, the power plants of your cells. Its head sticks out into the matrix, the space inside that membrane. Real motors stand in pairs, in long rows along the curved edges of the folds. The model shows just one. Each motor is about 24 nm tall, and a nanometre is a millionth of a millimetre. About 3,000 of them stacked end to end would span the width of a human hair.",
+      "p4": "It has four main parts. A head of six pieces, three called α and three called β, makes the ATP. A crooked axle runs up through its middle. At the bottom, a ring of 8 blades turns in the membrane, and together the ring and the axle form the <strong>rotor</strong>. A side arm holds the head still. The model uses simple shapes, runs slowed down and is drawn turning smoothly. Drag the timeline under it to turn the rotor by hand, and drag the model to look from any side."
+    },
+    "gradient": {
+      "title": "Why you breathe hard",
+      "p1": "Halfway up a long climb, you breathe fast and deep. That air is for your mitochondria. The food you eat is broken down, and its electrons are handed to a carrier molecule called NADH. On the flat parts of the folds, the <strong>electron transport chain</strong> passes these electrons along three proton pumps. Each pump uses the energy of the electrons to push protons out of the matrix. For every NADH, 10 protons go out. The model draws the pumps simplified and not to scale.",
+      "p2": "<strong>Oxygen</strong> is the last stop for the electrons. At the last pump, oxygen takes them and becomes water. Without oxygen, the electrons have nowhere to go and the pumps stop. That is why you breathe hard: every breath keeps the pumps working. Their work builds a push of about 200 mV, mostly electric voltage, across a membrane only about 4 to 5 nm thick. The protons crowd to get back into the matrix, and their main way back is through ATP synthase.",
+      "p3": "Drag the slider to set how much oxygen you take in. The more oxygen, the more ATP these motors can make. Sitting still, you use about 0.25 L a minute, which adds up to about 40 kg of ATP a day. At full effort, the limit is your <strong>VO2max</strong>, the most oxygen you can use in a minute for each kilogram you weigh. Young adults top out around 48 mL per kg per minute for men and 38 for women. Endurance champions reach 70 to 85. The highest published is 96.7, from a junior world champion cyclist, at the right end of the slider.",
+      "p4": "What does each breath buy? About 5 ATP for every oxygen molecule, or about 2.5 for every NADH. Burning one glucose with oxygen gives about 30 ATP. Without oxygen, <strong>glycolysis</strong> splits glucose only partway and makes just 2 ATP, or 3 when the sugar comes from glycogen stored in the muscle. So oxygen gets many times more out of every gram of sugar, and most of that extra ATP comes from these motors.",
+      "control": {
+        "label": "Oxygen you take in",
+        "rest": "Sitting still",
+        "record": "Record VO2max",
+        "perMinute": "ATP made per minute",
+        "perHour": "ATP made per hour",
+        "vsRest": "Compared with sitting still"
+      }
+    },
+    "rotor": {
+      "title": "Eight protons per lap",
+      "p1": "Picture the gates of a stadium before a big match. Nobody walks straight in: each fan pushes a turnstile round, and the crowd keeps it turning. Protons meet a gate like that. They cannot cross the fatty membrane on their own. Next to the rotor ring sits <strong>subunit a</strong>, the proton gate. It holds two half-channels that do not line up, so there is no straight tunnel through.",
+      "p2": "A proton comes up the inlet half-channel from the intermembrane space and lands on a blade. Each blade carries a <strong>glutamate</strong>, an amino acid at the middle of the membrane that can hold one proton. The ring turns, and the proton rides almost a full lap through the fatty core of the membrane. When its blade comes back to the gate, the proton steps off through the outlet half-channel into the matrix. Seen from the matrix, the ring turns anticlockwise.",
+      "p3": "In humans the ring has 8 blades, so 8 protons pass through for every lap. One lap makes 3 ATP, so each ATP costs about 2.7 protons. The number of blades sets this <strong>price</strong>. Tap the chips to compare other rings: yeast and E. coli use 10 blades, and spinach leaves use 14. Their laps still make only 3 ATP, so their ATP costs more. Your small ring makes the cheapest ATP in nature, per proton.",
+      "p4": "Counting the cost of bringing ADP and phosphate in and sending the new ATP out to the cell, the full price is about 3.7 protons. The model shows the ring turning smoothly, but the real rotor moves in <strong>steps</strong>. It pauses, jumps on, and now and then even steps backwards. Each proton that rides the lap and steps off into the matrix pushes the ring one blade further in the direction that makes ATP.",
+      "blades": "Protons per lap",
+      "perAtp": "Protons per ATP",
+      "per100": "ATP from 100 protons"
+    },
+    "head": {
+      "title": "Three seats, one ATP each",
+      "p1": "On a bike, your legs turn the crank while the frame holds still around it. The top of this motor works the same way. The crooked axle turns inside the head, and the <strong>side arm</strong> holds the head still, like the frame around the crank. So the head never spins. Because the axle is bent, it presses on each part of the head in turn as it goes round, like a camshaft opening the valves of an engine.",
+      "p2": "Each of the three β pieces has a <strong>seat</strong> where ATP is made, and at any moment the three seats are in three different states. Every 120° step of the axle moves each seat one state on. The open seat takes in ADP and phosphate and becomes loose. The loose seat closes tight and squeezes them into ATP. The tight seat opens and lets its new ATP go. So one lap makes 3 ATP. Real seats also pass through half-closed states in between. The rows below follow the seats live.",
+      "p3": "Where does the energy go? Not into a special bond: breaking any bond costs energy. ATP is worth energy because the whole reaction, splitting ATP into ADP and phosphate, ends in more stable products. In a cell that is about 50 to 60 kJ per mole. The push of the protons is spent on making the seats grip and let go: gripping ADP and phosphate until they join, then letting go of the finished ATP. This is the <strong>binding change</strong> idea.",
+      "p4": "Paul Boyer worked out this mechanism, and John Walker solved the structure that supported it. They shared the 1997 <strong>Nobel Prize</strong> in Chemistry with Jens Skou, who won for a different pump. The real steps are split even finer. The human head, measured running in reverse and splitting ATP, moves each 120° step as 65°, 25° and 30°. The bacterial version turns with about 40 pN·nm of torque and is one of the most efficient motors known.",
+      "seat1": "Seat 1",
+      "seat2": "Seat 2",
+      "seat3": "Seat 3"
+    },
+    "sprint": {
+      "title": "Why a sprint cannot wait for the motor",
+      "p1": "The gun goes, and a sprinter explodes out of the blocks. The model now plays at the motor's estimated real speed. In working mitochondria it turns about 100 times a second, about 6,000 rpm, and makes about 300 ATP a second. Watch the counter climb. A 2026 Formula 1 turbo may spin up to 150,000 rpm, about 25 times faster. Yet for a sprinter, this motor is the <strong>slow lane</strong>.",
+      "p2": "In a sprint, your muscles spend ATP faster than all their motors can make it. Two faster systems fill the gap. <strong>Phosphocreatine</strong>, a small store in the muscle, recharges ATP almost at once, but it is mostly used up in 10 to 15 seconds of all-out effort. Glycolysis runs fast without oxygen, but it makes little ATP from each glucose. All three systems work at the same time. They overlap, rather than switching on one after another.",
+      "p3": "Tap an event to see how much of its energy comes from this motor, using oxygen. In the 100 m it is only about 10 to 20 percent, and methods disagree. The 200 m is about 30 percent, the 400 m about 40 to 45, the 800 m about two-thirds and the 1500 m about 80 to 85. The 5000 m is about 90 percent, the marathon about 99. The <strong>crossover</strong>, where oxygen covers half, comes after about 75 to 80 seconds of all-out effort. So the 400 m and 800 m are not the anaerobic events they are often called.",
+      "p4": "A marathon has the opposite problem. The motors have plenty of time, but the fuel runs short. You store only about 400 g of carbohydrate: roughly 90 g in the liver and 310 g in the leg muscles. Over 40 percent of marathoners <strong>hit the wall</strong> when it runs low. Fat stores are far bigger, but you burn fat at only about half a gram a minute at best. Inside the muscle, that feeds the pumps too slowly, and the motors cannot keep up with race pace.",
+      "aerobic": "From this motor, with oxygen",
+      "anaerobic": "From stores and glycolysis, without oxygen"
+    },
+    "training": {
+      "title": "Training builds room for more motors",
+      "p1": "Start a <strong>training block</strong> of steady rides or runs, and your muscles begin to change within weeks. Six weeks of endurance training gives about 40 to 55 percent more mitochondria. Most of that gain comes from making the mitochondria you already have bigger, rather than building new ones. For this, how much you train matters most. How hard you train matters more for how well they work. Bigger mitochondria hold more inner membrane, and more membrane means more room for these motors.",
+      "p2": "What <strong>share</strong> of a muscle is mitochondria? In an untrained thigh muscle, it is about 4 to 5 percent. In trained endurance athletes, it is about 7 to 11 percent. Your heart, which never gets a rest day, is about a quarter mitochondria. But the amount is not the whole story. Fitter people also get more work out of each mitochondrion, even with the same amount. So training helps twice: you get more mitochondria, and each one works better.",
+      "p3": "Weeks of training add mitochondria, but the folds inside them stay just as tightly packed. Only years of training change that. In endurance athletes, the <strong>cristae</strong> are packed about 23 percent denser, so each mitochondrion holds more membrane for motors. Nobody has counted the motors before and after training. So the model draws motors in proportion to the measured fold membrane. Tap the chips to compare an untrained muscle, 10 weeks of training and years of it.",
+      "p4": "Stop training and the gain fades fast. This <strong>detraining</strong> takes away half of it in about two weeks. So keep the sessions coming. The next time you breathe hard on a climb, think of what the breath is for. Deep in your muscle, it keeps the pumps pushing protons out, the protons riding the rings back in, and these motors turning, three ATP for every lap.",
+      "share": "Mitochondria in thigh muscle",
+      "membrane": "Fold membrane for motors",
+      "motors": "Motors in the model"
+    }
+  }
+}
