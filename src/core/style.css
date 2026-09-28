@@ -1,3 +1,7 @@
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+
 :root {
   color-scheme: dark;
 
@@ -19,7 +23,7 @@
   --glass: linear-gradient(150deg, rgb(24 29 37 / 0.9), rgb(13 16 21 / 0.86));
   --shadow: 0 18px 50px -20px rgb(0 0 0 / 0.75);
 
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   --gutter: 16px;
@@ -44,11 +48,15 @@
 }
 
 :root:lang(zh) {
-  --font-sans: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-sans:
+    'Inter Variable', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC',
+    'Noto Sans SC', sans-serif;
 }
 
 :root:lang(ja) {
-  --font-sans: 'Inter', 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', system-ui, sans-serif;
+  --font-sans:
+    'Inter Variable', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', Meiryo,
+    'Noto Sans CJK JP', 'Noto Sans JP', sans-serif;
 }
 
 *,

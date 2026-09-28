@@ -540,6 +540,12 @@ default, no all-caps text, `data-i18n`, `data-i18n-html` and `data-i18n-attr` fo
 copy, tokens in `src/core/style.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
 (`vite/`, `src/core/manifest.ts`) import with explicit `.ts` extensions.
 
+Fonts are self-hosted. `src/core/style.css` imports Inter (variable) and JetBrains
+Mono 400 and 500 from Fontsource, so Vite emits hashed woff2 files and each page
+downloads only the `unicode-range` subsets its text uses. Chinese and Japanese pages
+keep Inter for Latin glyphs and use the system CJK fonts for the rest. No page loads
+fonts from a third party.
+
 `npm run test:e2e` runs the Playwright smoke test in `e2e/` against `vite preview`
 of `dist/`, so build first and run `npx playwright install chromium` once. Chromium
 draws WebGL in software, so the test sticks to what catches a broken page. At
