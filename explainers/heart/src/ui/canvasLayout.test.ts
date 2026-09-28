@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { FITNESS_PROFILES, REST_SYSTOLE_MS, beatLength } from '../model';
-import { TIME_TICKS_MS, sampleBeat, xOfTime, yOfValue } from './beatPlot';
+import { TIME_TICKS_MS, sampleBeat, shownTimeTicks, xOfTime, yOfValue } from './beatPlot';
 import { beatRates, beatSplitRows } from './beatSplitView';
 import { ecgLayout, waveLabelX } from './ecgView';
 import { wiggersLayout } from './wiggersView';
@@ -19,6 +19,11 @@ describe('beat plots', () => {
     expect(yOfValue(PLOT, 0, scale)).toBe(110);
     expect(yOfValue(PLOT, 100, scale)).toBe(10);
     expect(yOfValue(PLOT, 25, scale)).toBe(85);
+  });
+
+  it('labels every other time tick when the labels would touch', () => {
+    expect(shownTimeTicks(PLOT, 40)).toEqual([0, 1, 2, 3, 4]);
+    expect(shownTimeTicks(PLOT, 70)).toEqual([0, 2, 4]);
   });
 
   it('samples a curve over the whole beat, both ends included', () => {

@@ -2,6 +2,7 @@ import { FULL_TURN } from '@core/math';
 import type { Curve } from '../model';
 import { BEAT_MS } from '../model';
 import { CANVAS_COLORS } from './canvasColors';
+import { widestText } from './canvasSurface';
 import { formatMs } from './format';
 
 export interface Plot {
@@ -24,6 +25,9 @@ export interface BeatSample {
 export const TIME_TICKS_MS = [0, 200, 400, 600, 800] as const;
 
 const DOT = { radius: 3.5, ring: 1.2 } as const;
+const TICK_LABEL_GAP = 8;
+const EDGE_LABEL_SHARE = 1.5;
+const THINNED_TICK_STEP = 2;
 const CURSOR_WIDTH = 1.5;
 
 export function xOfTime(plot: Plot, time: number): number {
@@ -52,6 +56,13 @@ function tickAlignment(index: number, count: number): CanvasTextAlign {
   return 'center';
 }
 
+export function shownTimeTicks(plot: Plot, widestLabel: number): number[] {
+  const spacing = (plot.right - plot.left) / (TIME_TICKS_MS.length - 1);
+  const fits = spacing >= EDGE_LABEL_SHARE * widestLabel + TICK_LABEL_GAP;
+  const step = fits ? 1 : THINNED_TICK_STEP;
+  return TIME_TICKS_MS.map((_, index) => index).filter((index) => index % step === 0);
+}
+
 export function paintTimeTicks(
   context: CanvasRenderingContext2D,
   plot: Plot,
@@ -60,9 +71,9 @@ export function paintTimeTicks(
 ): void {
   context.fillStyle = CANVAS_COLORS.tick;
   context.textBaseline = 'top';
-  TIME_TICKS_MS.forEach((time, index) => {
+  shownTimeTicks(plot, widestText(context, labels)).forEach((index) => {
     context.textAlign = tickAlignment(index, TIME_TICKS_MS.length);
-    context.fillText(labels[index], xOfTime(plot, time), baseline);
+    context.fillText(labels[index], xOfTime(plot, TIME_TICKS_MS[index]), baseline);
   });
 }
 
