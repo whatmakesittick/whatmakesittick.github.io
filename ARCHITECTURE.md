@@ -468,9 +468,14 @@ the `shared` chunk.
 
 Only the HTML is per language. Every language page of an explainer loads the same
 `/<slug>/main.ts`, and every catalogue page loads `/src/site/main.ts`, so the
-scripts, styles and images are shared. The `shared` chunk is limited to
-`src/core`, `node_modules` and Vite's helpers: with several pages per explainer,
-"used by two pages" no longer means "used by two explainers".
+scripts, styles and images are shared. Code used by two pages is split into
+three chunks. `three` is Three.js. `scene` is `src/core/scene`, `three-mesh-bvh` and
+every core module that imports them, such as `mount.ts`: `dependsOn` in
+`vite/chunks.ts` follows a module's static imports. `shared` is the rest of
+`src/core`, `node_modules` and Vite's helpers, so it never imports `scene` or
+`three`, and the catalogue loads neither. Both groups are limited to `src/core`,
+`node_modules` and Vite's helpers: with several pages per explainer, "used by two
+pages" no longer means "used by two explainers".
 
 The generated `<slug>/main.ts` imports the explainer's `en.json` and passes
 `mountExplainer` a loader per shipped language: `en` resolves the bundled copy,
