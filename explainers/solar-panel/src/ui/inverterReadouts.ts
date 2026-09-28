@@ -1,6 +1,6 @@
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
-import { acPowerW, laptopCharges } from '../model';
+import { acEnergyWh, acPowerW, laptopCharges } from '../model';
 import { energyOf, powerOf } from '../state';
 import type { SolarPanelState, SolarPanelStore } from '../state';
 import { disposeAll } from './disposers';
@@ -17,12 +17,16 @@ function acOf(state: SolarPanelState): number {
   return Math.round(acPowerW(powerOf(state)));
 }
 
+function acEnergyOf(state: SolarPanelState): number {
+  return acEnergyWh(energyOf(state));
+}
+
 function energyShownOf(state: SolarPanelState): number {
-  return Math.round(energyOf(state) / ENERGY_STEP_WH) * ENERGY_STEP_WH;
+  return Math.round(acEnergyOf(state) / ENERGY_STEP_WH) * ENERGY_STEP_WH;
 }
 
 function chargesOf(state: SolarPanelState): number {
-  return Math.round(laptopCharges(energyOf(state)));
+  return Math.round(laptopCharges(acEnergyOf(state)));
 }
 
 export function mountInverterReadouts(root: Document, store: SolarPanelStore): Disposer {

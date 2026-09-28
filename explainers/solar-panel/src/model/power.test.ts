@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  acEnergyWh,
   acPowerW,
   cellTemperatureC,
   modulePowerW,
@@ -41,5 +42,10 @@ describe('module power', () => {
   it('loses 4 percent in the inverter', () => {
     expect(acPowerW(300)).toBeCloseTo(288);
     expect(acPowerW(-5)).toBe(0);
+  });
+
+  it('keeps 96 percent of the energy after the inverter', () => {
+    expect(acEnergyWh(2730)).toBeCloseTo(2620.8);
+    expect(acEnergyWh(-5)).toBe(0);
   });
 });

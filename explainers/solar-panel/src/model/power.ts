@@ -44,3 +44,7 @@ export function vocAt(irradiance: number, cellTemperatureC: number): number {
 export function acPowerW(dcPowerW: number): number {
   return Math.max(0, dcPowerW) * INVERTER_EFFICIENCY;
 }
+
+export function acEnergyWh(dcEnergyWh: number): number {
+  return Math.max(0, dcEnergyWh) * INVERTER_EFFICIENCY;
+}

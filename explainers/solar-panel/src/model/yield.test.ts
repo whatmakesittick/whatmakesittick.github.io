@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DAY_CYCLE_MIN, SUN_MOMENTS } from './day';
+import { acEnergyWh } from './power';
 import { clearDayPowerW, dailyEnergyWh, energySoFarWh, fridgeDays, laptopCharges } from './yield';
 
 describe('energy over the day', () => {
@@ -39,5 +40,9 @@ describe('energy over the day', () => {
   it('turns 2.28 kWh into about 42 laptop charges or 1.8 fridge days (facts section 9)', () => {
     expect(laptopCharges(2280)).toBeCloseTo(42.4, 1);
     expect(fridgeDays(2280)).toBeCloseTo(1.82, 2);
+  });
+
+  it('ends a clear day on the 35° roof at about 50 laptop charges after the inverter', () => {
+    expect(Math.round(laptopCharges(acEnergyWh(dailyEnergyWh(35))))).toBe(49);
   });
 });

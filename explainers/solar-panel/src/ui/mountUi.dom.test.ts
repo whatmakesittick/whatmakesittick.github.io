@@ -176,6 +176,9 @@ describe('chapter widgets', () => {
     expect(readout('inverter-ac')).toBe('360 W');
     expect(readout('inverter-today')).toMatch(/^1\.[34]\d kWh$/);
     expect(Number(readout('inverter-powers'))).toBeGreaterThan(20);
+    store.getState().setPhase(SUN_MOMENTS.sunset);
+    expect(readout('inverter-today')).toBe('2.62 kWh');
+    expect(readout('inverter-powers')).toBe('49');
     store.getState().setPhase(10);
     expect(readout('inverter-dc')).toBe('0 W');
     expect(readout('inverter-today')).toBe('0.00 kWh');
