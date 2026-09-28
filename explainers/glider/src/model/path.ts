@@ -80,10 +80,24 @@ export class Route {
   }
 
   poseAt(share: number): Pose {
-    const distance = clamp(share, 0, 1) * this.length;
-    const current =
-      this.placed.find((placed) => distance <= placed.offset + placed.length) ??
-      this.placed[this.placed.length - 1];
+    const distance = this.distanceAt(share);
+    const current = this.placedAt(distance);
     return poseAlong(current.start, current.step, distance - current.offset);
+  }
+
+  turnAt(share: number): number {
+    const { step } = this.placedAt(this.distanceAt(share));
+    return step.kind === 'arc' ? Math.sign(step.turn) : 0;
+  }
+
+  private distanceAt(share: number): number {
+    return clamp(share, 0, 1) * this.length;
+  }
+
+  private placedAt(distance: number): PlacedStep {
+    return (
+      this.placed.find((placed) => distance <= placed.offset + placed.length) ??
+      this.placed[this.placed.length - 1]
+    );
   }
 }

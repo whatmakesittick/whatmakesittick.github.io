@@ -28,6 +28,13 @@ describe('Route', () => {
     expect(route.end.x).toBeCloseTo(15, 6);
     expect(route.end.z).toBeCloseTo(15, 6);
   });
+
+  it('reports the turn direction of the step at a share', () => {
+    const route = new Route(START, [line(10), arc(5, Math.PI / 2), arc(5, -Math.PI / 2)]);
+    expect(route.turnAt(0.1)).toBe(0);
+    expect(route.turnAt(0.5)).toBe(1);
+    expect(route.turnAt(0.9)).toBe(-1);
+  });
 });
 
 describe('rampedShare', () => {
