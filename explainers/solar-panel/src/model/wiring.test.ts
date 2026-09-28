@@ -10,6 +10,7 @@ import {
   ivCurve,
   maximumPowerPoint,
   moduleCircuit,
+  shadedAreaShare,
 } from './wiring';
 
 const { halfCut, fullCell } = LAYOUTS;
@@ -115,6 +116,16 @@ describe('shading (facts section 7)', () => {
     expect(keptShare(fullCell, 0.09)).toBeCloseTo(0.65, 1);
     expect(keptShare(halfCut, 0.35)).toBeCloseTo(0.503, 1);
     expect(keptShare(fullCell, 0.35)).toBeLessThan(0.05);
+  });
+
+  it('shades less area than the slider reads because the edge comes in at a slant', () => {
+    [halfCut, fullCell].forEach((layout) => {
+      expect(shadedAreaShare(layout, 0)).toBe(0);
+      expect(shadedAreaShare(layout, 0.1)).toBeCloseTo(0.027, 3);
+      expect(shadedAreaShare(layout, 0.35)).toBeCloseTo(0.3, 2);
+      expect(shadedAreaShare(layout, 0.5)).toBeCloseTo(0.5, 6);
+      expect(shadedAreaShare(layout, 1)).toBeCloseTo(1, 6);
+    });
   });
 });
 

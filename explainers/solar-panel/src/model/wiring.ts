@@ -137,6 +137,12 @@ export function bandShading(layout: ModuleLayout, shade: number): Shading {
   return (cell) => shadedShareOfCell(layout, cell.column, cell.row, shade);
 }
 
+export function shadedAreaShare(layout: ModuleLayout, shade: number): number {
+  const shading = bandShading(layout, shade);
+  const cells = cellsOf(layout);
+  return cells.reduce((sum, cell) => sum + shading(cell), 0) / cells.length;
+}
+
 function toShading(layout: ModuleLayout, shade: Shade): Shading {
   return typeof shade === 'number' ? bandShading(layout, shade) : shade;
 }

@@ -1,7 +1,7 @@
 import { requireElement } from '@core/ui/dom';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import type { ShadeAnalysis } from '../model';
-import { LAYOUTS, cellCount, diodeCount, shadedCellCount } from '../model';
+import { LAYOUTS, cellCount, diodeCount, shadedAreaShare, shadedCellCount } from '../model';
 import { SHADE_RANGE, powerOf, shadeAnalysisOf } from '../state';
 import type { SolarPanelStore } from '../state';
 import type { Disposer } from './disposers';
@@ -21,7 +21,7 @@ export function mountShadeControl(root: Document, store: SolarPanelStore): Dispo
     select: (state) =>
       [state.shade, state.layout, Math.round(powerOf(state)), shadeAnalysisOf(state)] as const,
     value: ([shade]) => shade,
-    format: ([shade]) => formatPercent(shade),
+    format: ([shade, layout]) => formatPercent(shadedAreaShare(LAYOUTS[layout], shade)),
     set: (state, shade) => state.setShade(shade),
     readouts: {
       'shade-cells': ([shade, layout]) =>

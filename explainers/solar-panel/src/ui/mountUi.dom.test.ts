@@ -131,7 +131,7 @@ describe('chapter widgets', () => {
     expect(readout('shade-power')).toBe('375 W');
     expect(readout('shade-loss')).toBe('0%');
     slide('shade', 0.35);
-    expect(readout('shade')).toBe('35%');
+    expect(readout('shade')).toBe('30%');
     expect(readout('shade-cells')).toBe(`${shadedCellCount(LAYOUTS.halfCut, 0.35)} of 108`);
     expect(readout('shade-diodes')).toBe('0 of 3');
     expect(readout('shade-loss')).toMatch(/^(49|5\d)%$/);
