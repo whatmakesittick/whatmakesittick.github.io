@@ -2,6 +2,7 @@ import type { PlaybackState } from '@core/explainer';
 import type { PlumeState } from '../ids';
 import {
   SEA_LEVEL_PRESSURE_PA,
+  airPressureBar,
   engineState,
   exitPressureBar,
   plumeState,
@@ -32,6 +33,7 @@ export interface Performance {
   chamberPressureBar: number;
   exhaustSpeedKmS: number;
   exitPressureBar: number;
+  airPressureBar: number;
   airShare: number;
   pressureRatio: number;
   plume: PlumeReading;
@@ -52,7 +54,7 @@ export function engineOf(state: TimeState): Readonly<EngineState> {
 }
 
 function performanceAt(phase: number): Performance {
-  const { throttle, airPressurePa } = latestEngine(phase);
+  const { throttle, airPressurePa, altitudeKm } = latestEngine(phase);
   const firing = throttle > 0;
   const ratio = pressureRatio(throttle, airPressurePa);
   return {
@@ -65,6 +67,7 @@ function performanceAt(phase: number): Performance {
     chamberPressureBar: chamberPressureBar(throttle),
     exhaustSpeedKmS: exhaustSpeedKmS(throttle, airPressurePa),
     exitPressureBar: exitPressureBar(throttle),
+    airPressureBar: airPressureBar(altitudeKm),
     airShare: airPressurePa / SEA_LEVEL_PRESSURE_PA,
     pressureRatio: ratio,
     plume: firing ? plumeState(ratio) : 'off',
