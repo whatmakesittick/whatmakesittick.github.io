@@ -3,7 +3,7 @@ import { FULL_TURN } from '@core/math';
 import { CanvasSurface, canvasFont, widestText } from '@core/ui/canvasSurface';
 import type { CanvasFrame } from '@core/ui/canvasSurface';
 import { PHASE_IDS } from '../ids';
-import { RUN_LENGTH, engineState, phaseAt } from '../model';
+import { CUTOFF_TIME, RUN_LENGTH, engineState, phaseAt, speedKmh } from '../model';
 import { PHASE_RANGES } from '../model/phases';
 import { thrustTf } from '../model/performance';
 import { CachedLayer, layerKey } from './cachedLayer';
@@ -41,7 +41,7 @@ interface Labels {
 }
 
 const SAMPLE_STEP = 0.5;
-const SPEED_FULL_SCALE_KMH = 5800;
+const SPEED_FULL_SCALE_KMH = speedKmh(CUTOFF_TIME);
 const THRUST_TICKS = [0, THRUST_FULL_SCALE_TF / 2, THRUST_FULL_SCALE_TF] as const;
 const HEIGHT_TICKS = [0, ALTITUDE_FULL_SCALE_KM / 2, ALTITUDE_FULL_SCALE_KM] as const;
 const TIME_TICKS_SECONDS = [0, 60, 120] as const;
@@ -77,15 +77,12 @@ export const launchHeight: LaunchCurve = (phase) => engineState(phase).altitudeK
 
 export const launchSpeed: LaunchCurve = (phase) => engineState(phase).speedKmh;
 
-let traces: readonly Trace[] | null = null;
-
 function launchTraces(): readonly Trace[] {
-  traces ??= [
+  return [
     trace(launchSpeed, SPEED_FULL_SCALE_KMH, CANVAS_COLORS.speed, LINE.speed),
     trace(launchHeight, ALTITUDE_FULL_SCALE_KM, CANVAS_COLORS.height, LINE.height),
     trace(launchThrust, THRUST_FULL_SCALE_TF, CANVAS_COLORS.thrust, LINE.thrust),
   ];
-  return traces;
 }
 
 export function xOfPhase(plot: Plot, phase: number): number {
@@ -183,12 +180,13 @@ function paintBackdrop(
   frame: CanvasFrame,
   layout: LaunchLayout,
   labels: Labels,
+  traces: readonly Trace[],
 ): void {
   context.font = canvasFont(frame, LAYOUT.font);
   paintStrip(context, layout.strip);
   paintValueTicks(context, layout.plot, labels);
   paintTimeTicks(context, layout.plot, layout.axisBaseline, labels);
-  launchTraces().forEach((line) => strokeTrace(context, layout.plot, line));
+  traces.forEach((line) => strokeTrace(context, layout.plot, line));
 }
 
 function paintDot(context: CanvasRenderingContext2D, x: number, y: number, color: string): void {
@@ -201,7 +199,12 @@ function paintDot(context: CanvasRenderingContext2D, x: number, y: number, color
   context.stroke();
 }
 
-function paintNow(context: CanvasRenderingContext2D, layout: LaunchLayout, phase: number): void {
+function paintNow(
+  context: CanvasRenderingContext2D,
+  layout: LaunchLayout,
+  traces: readonly Trace[],
+  phase: number,
+): void {
   const { plot } = layout;
   const x = xOfPhase(plot, phase);
   context.strokeStyle = CANVAS_COLORS.cursor;
@@ -210,20 +213,27 @@ function paintNow(context: CanvasRenderingContext2D, layout: LaunchLayout, phase
   context.moveTo(x, plot.top);
   context.lineTo(x, layout.strip.bottom);
   context.stroke();
-  launchTraces().forEach(({ curve, max, color }) =>
+  traces.forEach(({ curve, max, color }) =>
     paintDot(context, x, yOfShare(plot, curve(phase) / max), color),
   );
+}
+
+interface CachedLayout {
+  key: string;
+  layout: LaunchLayout;
 }
 
 export class LaunchView {
   private readonly surface: CanvasSurface;
   private readonly backdrop = new CachedLayer();
+  private tracesCache: readonly Trace[] | null = null;
+  private layoutCache: CachedLayout | null = null;
   private painted: number | null = null;
   private language = currentLanguage();
   private labels = labelsNow();
 
   constructor(canvas: HTMLCanvasElement) {
-    this.surface = new CanvasSurface(canvas, { onFontsReady: () => this.backdrop.invalidate() });
+    this.surface = new CanvasSurface(canvas, { onFontsReady: () => this.invalidate() });
   }
 
   draw(phase: number): void {
@@ -232,24 +242,42 @@ export class LaunchView {
     if (language !== this.language) this.labels = labelsNow();
     this.painted = phase;
     this.language = language;
-    const { labels } = this;
     this.surface.paint((context, frame) => {
-      context.font = canvasFont(frame, LAYOUT.font);
-      const layout = launchLayout(
-        frame.width,
-        frame.height,
-        gutter(context, labels.thrust),
-        gutter(context, labels.height),
-      );
-      const key = layerKey(frame, [...labels.thrust, ...labels.height, ...labels.time]);
+      const traces = this.traces();
+      const { key, layout } = this.layoutFor(context, frame);
       this.backdrop.draw(context, frame, key, (layer) =>
-        paintBackdrop(layer, frame, layout, labels),
+        paintBackdrop(layer, frame, layout, this.labels, traces),
       );
-      paintNow(context, layout, phase);
+      paintNow(context, layout, traces, phase);
     });
   }
 
   dispose(): void {
     this.surface.dispose();
+  }
+
+  private invalidate(): void {
+    this.backdrop.invalidate();
+    this.layoutCache = null;
+  }
+
+  private traces(): readonly Trace[] {
+    this.tracesCache ??= launchTraces();
+    return this.tracesCache;
+  }
+
+  private layoutFor(context: CanvasRenderingContext2D, frame: CanvasFrame): CachedLayout {
+    const { labels } = this;
+    const key = layerKey(frame, [...labels.thrust, ...labels.height, ...labels.time]);
+    if (this.layoutCache?.key === key) return this.layoutCache;
+    context.font = canvasFont(frame, LAYOUT.font);
+    const layout = launchLayout(
+      frame.width,
+      frame.height,
+      gutter(context, labels.thrust),
+      gutter(context, labels.height),
+    );
+    this.layoutCache = { key, layout };
+    return this.layoutCache;
   }
 }
