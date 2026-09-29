@@ -34,7 +34,7 @@ describe('scene bindings', () => {
     bindStore(createRaptorStore({ phase: 40 }), targets);
     expect(received[0]).toEqual({
       phase: 40,
-      propellant: 'methane',
+      propellant: null,
       view: { cutaway: false, flow: false, flame: true, cluster: false, labels: false },
     });
     expect(frame).toHaveBeenCalledWith('hero', false, undefined);
@@ -49,6 +49,8 @@ describe('scene bindings', () => {
     store.getState().applyPreset('propellants');
     store.getState().setPropellant('oxygen');
     expect(received.at(-1)).toMatchObject({ propellant: 'oxygen', view: { cutaway: true } });
+    store.getState().applyPreset('chamber');
+    expect(received.at(-1)?.propellant).toBeNull();
     store.getState().toggleView('cluster');
     expect(received.at(-1)?.view.cluster).toBe(true);
   });

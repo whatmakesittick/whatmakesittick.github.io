@@ -1,7 +1,7 @@
 import { bindPresets } from '@core/scene/presetBinder';
 import type { LabelPolicy, PresetTargets } from '@core/scene/presetBinder';
-import type { AssemblyState } from '../ids';
-import { DEFAULT_PROPELLANT, DEFAULT_VIEW, PRESETS, presetHighlight } from '../state';
+import type { AssemblyState, PropellantId } from '../ids';
+import { DEFAULT_VIEW, PRESETS, presetHighlight } from '../state';
 import type { Preset, RaptorState, RaptorStore, RaptorStoreState } from '../state';
 import type { RaptorController } from './controller';
 import { PART_IDS } from './partInfo';
@@ -12,12 +12,16 @@ export interface SceneTargets extends PresetTargets {
 }
 
 function blankState(): AssemblyState {
-  return { phase: 0, propellant: DEFAULT_PROPELLANT, view: DEFAULT_VIEW };
+  return { phase: 0, propellant: null, view: DEFAULT_VIEW };
+}
+
+function emphasisedPropellant(state: RaptorState): PropellantId | null {
+  return PRESETS[state.preset].controls?.includes('propellant') ? state.propellant : null;
 }
 
 function copyInto(target: AssemblyState, state: RaptorState): AssemblyState {
   target.phase = state.phase;
-  target.propellant = state.propellant;
+  target.propellant = emphasisedPropellant(state);
   target.view = state.view;
   return target;
 }
