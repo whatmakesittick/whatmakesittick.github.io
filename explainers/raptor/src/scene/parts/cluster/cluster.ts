@@ -101,6 +101,8 @@ export class ClusterPart {
   private readonly euler = new Euler();
   private readonly position = new Vector3();
   private readonly unit = new Vector3(1, 1, 1);
+  private pitch = Number.NaN;
+  private yaw = Number.NaN;
 
   private readonly column: Mesh;
   private readonly columnUniforms = plumeUniforms();
@@ -169,6 +171,9 @@ export class ClusterPart {
   }
 
   setGimbal(gimbal: Gimbal): void {
+    if (gimbal.pitch === this.pitch && gimbal.yaw === this.yaw) return;
+    this.pitch = gimbal.pitch;
+    this.yaw = gimbal.yaw;
     this.engines.forEach((engine, index) => {
       const pitch = engine.gimbals ? toRadians(gimbal.pitch) : 0;
       const yaw = engine.gimbals ? toRadians(gimbal.yaw) : 0;

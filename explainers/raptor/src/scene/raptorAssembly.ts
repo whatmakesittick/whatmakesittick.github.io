@@ -155,7 +155,7 @@ export class RaptorAssembly implements Assembly {
     this.flow.setShown(state.view.flow);
     this.flow.setEmphasis(state.propellant, engine.preburnerGlow);
     this.cluster.setShown(state.view.cluster);
-    this.cluster.setGimbal(engine.gimbal);
+    if (state.view.cluster) this.cluster.setGimbal(engine.gimbal);
     this.cluster.setFire(
       engine.chamberGlow,
       shape,
