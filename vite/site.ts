@@ -6,7 +6,6 @@ export const SITE_NAME = 'What makes it tick';
 export const REPOSITORY_URL = 'https://github.com/whatmakesittick/whatmakesittick.github.io';
 export const LICENSE_URL = `${REPOSITORY_URL}/blob/main/LICENSE`;
 export const ISSUES_URL = `${REPOSITORY_URL}/issues`;
-export const PROCESS_URL = `${REPOSITORY_URL}/blob/main/.claude/skills/new-explainer/SKILL.md`;
 export const AUTHOR = { name: 'Vitalii Elenhaupt', url: 'https://github.com/veelenga' } as const;
 export const SOCIAL_IMAGE_SIZE = { width: 1200, height: 630 } as const;
 export const FEED_FILE = 'feed.xml';

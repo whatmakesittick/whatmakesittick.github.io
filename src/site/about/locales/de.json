@@ -48,12 +48,6 @@
       "p1": "Es sind Anschauungsmodelle, keine Konstruktionszeichnungen. Die Formen sind vereinfacht, damit Sie den Mechanismus erkennen. Manche Teile sind aufgeschnitten oder anders skaliert, damit die wichtigen im Blick bleiben. Die Simulation erfasst, was für die Erklärung zählt, aber nicht jeden Effekt, den ein echter Ingenieur berücksichtigen müsste.",
       "p2": "Nutzen Sie die Modelle also, um zu verstehen, wie etwas funktioniert. Wenn Sie für echte Arbeit genaue Werte brauchen, schauen Sie in die Quellen."
     },
-    "ai": {
-      "title": "Mit KI gebaut, von einem Menschen geprüft",
-      "p1": "Recherche, Modelle, Texte und Prüfung übernehmen KI-Agenten. Jeder hat genau eine Aufgabe und folgt der Checkliste oben. Sie ist öffentlich und liegt im Repository der Seite. Deshalb kommt das Faktenblatt zuerst: Die Regel lautet, dass keine Zahl aus dem Gedächtnis stammt, und die Prüfung gleicht den Text mit dem Blatt ab.",
-      "p2": "Ein Mensch wählt jedes Thema aus, sieht sich die fertige Erklärung an und entscheidet, ob sie online geht.",
-      "link": "Zur Checkliste"
-    },
     "reading": {
       "title": "So lesen Sie eine Erklärung",
       "p1": "Scrollen Sie, und das Modell folgt dem Text. Mit Abspielen setzen Sie es in Gang. Ziehen Sie an der Zeitleiste, um einen Zyklus Schritt für Schritt durchzugehen, oder bremsen Sie es stark ab, um zu sehen, was in einem Wimpernschlag passiert. Die Anzeige in der Ecke liefert Live-Messwerte, die sich ändern, während das Modell läuft.",
@@ -61,7 +55,7 @@
     },
     "open": {
       "title": "Open Source",
-      "p1": "Die Seite, alle Erklärungen und die Checkliste sind Open Source unter der MIT-Lizenz. Jede Erklärung verlinkt auf ihren eigenen Quellcode. So können Sie die Simulation hinter dem Bild selbst nachlesen. Keine Werbung, kein Tracking, nichts wird von fremden Servern geladen. Ihre Sprachwahl bleibt in Ihrem Browser und nirgendwo sonst.",
+      "p1": "Die Seite und alle Erklärungen sind Open Source unter der MIT-Lizenz. Jede Erklärung verlinkt auf ihren eigenen Quellcode. So können Sie die Simulation hinter dem Bild selbst nachlesen. Keine Werbung, kein Tracking, nichts wird von fremden Servern geladen. Ihre Sprachwahl bleibt in Ihrem Browser und nirgendwo sonst.",
       "p2": "Ist Ihnen ein Fehler in einer Zahl, einem Modell oder einer Übersetzung aufgefallen? Sagen Sie es bitte. Jeder Hinweis ist willkommen.",
       "link": "Fehler auf GitHub melden"
     }

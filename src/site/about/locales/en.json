@@ -48,12 +48,6 @@
       "p1": "These are teaching models, not engineering drawings. Shapes are simplified so you can see the mechanism. Parts are cut away or scaled so the important ones stay in view. The simulation captures what matters for the story, not every effect a real engineer would have to model.",
       "p2": "So use them to understand how something works. If you need exact figures for real work, go to the sources."
     },
-    "ai": {
-      "title": "Built with AI, checked by a person",
-      "p1": "The research, the models, the text and the review are done by AI agents. Each has one job and follows the checklist above, which is public and lives in the site's repository. That is why the facts sheet comes first: the rule is that no number comes from memory, and the review checks the text against the sheet.",
-      "p2": "A person chooses each subject, looks at the finished explainer and decides whether it goes live.",
-      "link": "Read the checklist"
-    },
     "reading": {
       "title": "How to read an explainer",
       "p1": "Scroll, and the model follows the text. Press play to set it going, drag the timeline to step through one cycle, or slow it right down to catch what happens in a blink. The gauge in the corner shows live readings that change as the model runs.",
@@ -61,7 +55,7 @@
     },
     "open": {
       "title": "Open source",
-      "p1": "The site, every explainer and the checklist are open source under the MIT license. Each explainer page links to its own source code, so you can read the simulation behind what you see. No ads, no tracking, nothing loaded from anyone else's servers. Your language choice is kept in your browser and nowhere else.",
+      "p1": "The site and every explainer are open source under the MIT license. Each explainer page links to its own source code, so you can read the simulation behind what you see. No ads, no tracking, nothing loaded from anyone else's servers. Your language choice is kept in your browser and nowhere else.",
       "p2": "Spotted a mistake in a number, a model or a translation? Please say so. Every report is welcome.",
       "link": "Report a mistake on GitHub"
     }

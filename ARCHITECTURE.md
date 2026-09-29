@@ -520,8 +520,7 @@ rendered by `renderAbout` in `vite/page.ts` into `about/` and `<lang>/about/` fo
 site language, with the site's social image, a `WebPage` and `AboutPage` JSON-LD node
 dated from git like an explainer (`vite/about.ts` loads the template, the locales and the
 dates), a breadcrumb from the catalogue, the language redirect on the English page and
-links to the issue tracker and the explainer checklist (`ISSUES_URL` and `PROCESS_URL` in
-`vite/site.ts`). Its copy lives in `src/site/about/locales/*.json` under `about.*`, one
+a link to the issue tracker (`ISSUES_URL` in `vite/site.ts`). Its copy lives in `src/site/about/locales/*.json` under `about.*`, one
 file per site language, so it never joins the core dictionary that every page loads; a
 test keeps every language on the English keys and `about.description` within the
 snippet limit. `src/site/about/main.ts` mounts the shell (language dropdown, site links,

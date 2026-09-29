@@ -20,7 +20,6 @@ import {
   FEED_TYPE,
   ISSUES_URL,
   LICENSE_URL,
-  PROCESS_URL,
   REPOSITORY_URL,
   SITE_NAME,
   SITE_SOCIAL,
@@ -290,7 +289,6 @@ export function renderAbout(
     title: escapeHtml(title),
     description: escapeHtml(description),
     structuredData: jsonLd(aboutData({ name: title, description }, facts, about.dates, catalogue)),
-    processUrl: escapeHtml(PROCESS_URL),
     issuesUrl: escapeHtml(ISSUES_URL),
     entry: `/${ABOUT_ENTRY}`,
   });

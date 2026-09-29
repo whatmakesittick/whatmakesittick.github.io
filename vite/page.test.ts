@@ -454,7 +454,6 @@ describe('renderAbout', () => {
       '<a class="about" href="{{aboutUrl}}">About</a>',
       '<script type="application/ld+json">{{structuredData}}</script>',
       '<h1 data-i18n="about.title">Old</h1>',
-      '<a class="process" href="{{processUrl}}">Checklist</a>',
       '<a class="issues" href="{{issuesUrl}}">Report</a>',
       '<!-- partial:header-actions -->',
       '<!-- partial:footer -->',
@@ -485,10 +484,7 @@ describe('renderAbout', () => {
     expect(html).toContain('href="/uk/about/" hreflang="uk" lang="uk" aria-current="page"');
   });
 
-  it('links the checklist and the issue tracker of the repository', () => {
-    expect(html).toContain(
-      '<a class="process" href="https://github.com/whatmakesittick/whatmakesittick.github.io/blob/main/.claude/skills/new-explainer/SKILL.md">',
-    );
+  it('links the issue tracker of the repository', () => {
     expect(html).toContain(
       '<a class="issues" href="https://github.com/whatmakesittick/whatmakesittick.github.io/issues">',
     );

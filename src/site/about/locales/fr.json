@@ -48,12 +48,6 @@
       "p1": "Ce sont des modèles pédagogiques, pas des plans d’ingénieur. Les formes sont simplifiées pour que vous voyiez le mécanisme. Certaines pièces sont coupées, agrandies ou réduites pour garder les plus importantes en vue. La simulation rend ce qui compte pour l’explication, pas chaque effet qu’un vrai ingénieur devrait modéliser.",
       "p2": "Servez-vous-en donc pour comprendre comment une chose fonctionne. Si vous avez besoin de chiffres exacts pour un vrai travail, reportez-vous aux sources."
     },
-    "ai": {
-      "title": "Conçu avec l’IA, vérifié par une personne",
-      "p1": "Les recherches, les modèles, les textes et la relecture sont confiés à des agents d’IA. Chacun a une seule tâche et suit la liste de contrôle ci-dessus, qui est publique et se trouve dans le dépôt du site. C’est pourquoi la fiche de faits passe en premier : la règle veut qu’aucun chiffre ne vienne de mémoire, et la relecture confronte le texte à la fiche.",
-      "p2": "Une personne choisit chaque sujet, regarde l’explication terminée et décide si elle est mise en ligne.",
-      "link": "Lire la liste de contrôle"
-    },
     "reading": {
       "title": "Comment lire une explication",
       "p1": "Faites défiler la page, et le modèle suit le texte. Appuyez sur Lancer pour le mettre en marche. Faites glisser la frise pour parcourir un cycle pas à pas, ou ralentissez-le fortement pour saisir ce qui se passe en un clin d’œil. Le cadran dans le coin affiche des mesures en direct, qui changent pendant que le modèle tourne.",
@@ -61,7 +55,7 @@
     },
     "open": {
       "title": "Open source",
-      "p1": "Le site, chaque explication et la liste de contrôle sont open source, sous licence MIT. Chaque page d’explication renvoie vers son propre code source : vous pouvez donc lire la simulation qui se cache derrière ce que vous voyez. Pas de publicité, pas de pistage, rien n’est chargé depuis les serveurs de quelqu’un d’autre. Votre choix de langue reste dans votre navigateur, et nulle part ailleurs.",
+      "p1": "Le site et chaque explication sont open source, sous licence MIT. Chaque page d’explication renvoie vers son propre code source : vous pouvez donc lire la simulation qui se cache derrière ce que vous voyez. Pas de publicité, pas de pistage, rien n’est chargé depuis les serveurs de quelqu’un d’autre. Votre choix de langue reste dans votre navigateur, et nulle part ailleurs.",
       "p2": "Vous avez repéré une erreur dans un chiffre, un modèle ou une traduction ? Dites-le-nous. Chaque signalement est le bienvenu.",
       "link": "Signaler une erreur sur GitHub"
     }

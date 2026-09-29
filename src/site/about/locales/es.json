@@ -48,12 +48,6 @@
       "p1": "Son modelos para aprender, no planos de ingeniería. Las formas están simplificadas para que veas el mecanismo. Algunas piezas se recortan o cambian de escala para que las importantes sigan a la vista. La simulación recoge lo que importa para la explicación, no cada efecto que un ingeniero de verdad tendría que modelar.",
       "p2": "Así que úsalos para entender cómo funciona algo. Si necesitas cifras exactas para un trabajo real, acude a las fuentes."
     },
-    "ai": {
-      "title": "Hecho con IA, revisado por una persona",
-      "p1": "La investigación, los modelos, los textos y la revisión los hacen agentes de IA. Cada uno tiene una sola tarea y sigue la lista de comprobación de arriba, que es pública y está en el repositorio del sitio. Por eso la hoja de datos va primero: la regla es que ninguna cifra sale de la memoria, y la revisión contrasta el texto con la hoja.",
-      "p2": "Una persona elige cada tema, mira la explicación terminada y decide si se publica.",
-      "link": "Leer la lista de comprobación"
-    },
     "reading": {
       "title": "Cómo leer una explicación",
       "p1": "Desplázate y el modelo sigue al texto. Pulsa Reproducir para ponerlo en marcha. Arrastra la línea de tiempo para recorrer un ciclo paso a paso, o ralentízalo mucho para ver lo que pasa en un abrir y cerrar de ojos. El indicador de la esquina muestra lecturas en directo que cambian mientras el modelo funciona.",
@@ -61,7 +55,7 @@
     },
     "open": {
       "title": "Código abierto",
-      "p1": "El sitio, cada explicación y la lista de comprobación son de código abierto, con licencia MIT. Cada explicación enlaza a su propio código fuente, así que puedes leer la simulación que hay detrás de lo que ves. Sin anuncios, sin rastreo y sin nada cargado desde servidores ajenos. El idioma que eliges se guarda en tu navegador y en ningún otro sitio.",
+      "p1": "El sitio y cada explicación son de código abierto, con licencia MIT. Cada explicación enlaza a su propio código fuente, así que puedes leer la simulación que hay detrás de lo que ves. Sin anuncios, sin rastreo y sin nada cargado desde servidores ajenos. El idioma que eliges se guarda en tu navegador y en ningún otro sitio.",
       "p2": "¿Has visto un error en una cifra, un modelo o una traducción? Cuéntanoslo, por favor. Todos los avisos son bienvenidos.",
       "link": "Informar de un error en GitHub"
     }
