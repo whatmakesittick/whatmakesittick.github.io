@@ -143,4 +143,26 @@ describe('LabelLayer', () => {
     expect(listener).toHaveBeenCalledTimes(1);
     layer.dispose();
   });
+
+  it('hides a label that a keep-out area leaves no room for and shows it again', () => {
+    stubResizeObserver();
+    const layer = new LabelLayer(PARTS);
+    const wheel = new Object3D();
+    wheel.updateMatrixWorld();
+    layer.attach(new Map([['wheel', wheel]]));
+    layer.setViewport(VIEWPORT);
+    layer.show(new Set(['wheel']));
+    const camera = frontCamera();
+    const element = (wheel.children[0] as unknown as { element: HTMLElement }).element;
+    const listener = vi.fn();
+    layer.onChange(listener);
+    layer.setKeepOut([{ left: 0, right: 400, top: 0, bottom: 300 }]);
+    expect(listener).toHaveBeenCalledTimes(1);
+    layer.layout(camera);
+    expect(element.classList.contains('scene-label--crowded')).toBe(true);
+    layer.setKeepOut([]);
+    layer.layout(camera);
+    expect(element.classList.contains('scene-label--crowded')).toBe(false);
+    layer.dispose();
+  });
 });

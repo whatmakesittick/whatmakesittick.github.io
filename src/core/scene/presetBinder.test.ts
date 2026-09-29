@@ -162,6 +162,7 @@ describe('createLabelVisibility', () => {
       };
     };
     let shown: string[] = [];
+    let ranked: readonly string[] = [];
     const anchor = new Object3D();
     const camera = new PerspectiveCamera();
     camera.position.set(0, 0, 10);
@@ -172,6 +173,7 @@ describe('createLabelVisibility', () => {
           show: (ids) => (shown = sorted(ids)),
           anchors: () => new Map([['wheel', anchor]]),
           isOccluded: () => false,
+          setPriority: (order) => (ranked = order),
         },
         rig: { camera },
         viewport: {
@@ -184,6 +186,7 @@ describe('createLabelVisibility', () => {
       },
       PARTS,
     );
+    expect(ranked).toEqual(PARTS);
     visibility.setWanted(new Set(['wheel']), new Set());
     expect(shown).toEqual(['wheel']);
     expect([resizes.length, frames.length]).toEqual([1, 1]);

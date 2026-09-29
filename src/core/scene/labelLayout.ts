@@ -9,44 +9,49 @@ export interface Point {
   y: number;
 }
 
-export interface LabelBox {
-  id: string;
-  anchor: Point;
-  width: number;
-  height: number;
-  preferred: LabelSide;
-}
-
-export interface LabelBounds {
-  width: number;
-  height: number;
-  bottomInset: number;
-}
-
-export interface Placement {
-  side: LabelSide;
-  shift: number;
-}
-
-interface Rect {
+export interface Rect {
   left: number;
   right: number;
   top: number;
   bottom: number;
 }
 
+export interface LabelBox {
+  id: string;
+  anchor: Point;
+  width: number;
+  height: number;
+  preferred: LabelSide;
+  rank?: number;
+}
+
+export interface LabelBounds {
+  width: number;
+  height: number;
+  bottomInset: number;
+  keepOut?: readonly Rect[];
+}
+
+export interface Placement {
+  side: LabelSide;
+  shift: number;
+  hidden?: true;
+}
+
 function opposite(side: LabelSide): LabelSide {
   return side === 'left' ? 'right' : 'left';
 }
 
-function chooseSide(box: LabelBox, bounds: LabelBounds): LabelSide {
+function fitsSide(box: LabelBox, side: LabelSide, bounds: LabelBounds): boolean {
   const reach = box.width + TEXT_OFFSET_PX;
-  const fits: Record<LabelSide, boolean> = {
-    left: box.anchor.x - reach >= 0,
-    right: box.anchor.x + reach <= bounds.width,
-  };
+  return side === 'left' ? box.anchor.x - reach >= 0 : box.anchor.x + reach <= bounds.width;
+}
+
+function sideOrder(box: LabelBox, bounds: LabelBounds): LabelSide[] {
   const { preferred } = box;
-  return fits[preferred] || !fits[opposite(preferred)] ? preferred : opposite(preferred);
+  const other = opposite(preferred);
+  const fitting = [preferred, other].filter((side) => fitsSide(box, side, bounds));
+  return fitting.length > 0 ? fitting : [preferred];
 }
 
 function pillRect(box: LabelBox, side: LabelSide, shift: number): Rect {
@@ -70,22 +75,36 @@ function collides(a: Rect, b: Rect): boolean {
   );
 }
 
-function byAnchor(a: LabelBox, b: LabelBox): number {
-  return a.anchor.y - b.anchor.y || a.anchor.x - b.anchor.x;
+function byRankThenAnchor(a: LabelBox, b: LabelBox): number {
+  const rank = (a.rank ?? Number.POSITIVE_INFINITY) - (b.rank ?? Number.POSITIVE_INFINITY);
+  return (Number.isNaN(rank) ? 0 : rank) || a.anchor.y - b.anchor.y || a.anchor.x - b.anchor.x;
 }
 
-function settle(box: LabelBox, side: LabelSide, placed: Rect[], floor: number): number {
+function candidateShifts(natural: Rect, obstacles: readonly Rect[]): number[] {
+  const shifts = obstacles.flatMap((other) => [
+    other.bottom + LABEL_GAP_PX - natural.top,
+    other.top - LABEL_GAP_PX - natural.bottom,
+  ]);
+  const below = shifts.filter((shift) => shift > 0).sort((a, b) => a - b);
+  const above = shifts.filter((shift) => shift < 0).sort((a, b) => b - a);
+  return [0, ...below, ...above];
+}
+
+function freeShift(
+  box: LabelBox,
+  side: LabelSide,
+  obstacles: readonly Rect[],
+  floor: number,
+): number | undefined {
   const natural = pillRect(box, side, 0);
-  let shift = 0;
-  for (let attempt = 0; attempt <= placed.length * 2; attempt += 1) {
-    const rect = pillRect(box, side, shift);
-    const blocker = placed.find((other) => collides(rect, other));
-    if (!blocker) break;
-    const below = blocker.bottom + LABEL_GAP_PX - natural.top;
-    const above = blocker.top - LABEL_GAP_PX - natural.bottom;
-    shift = natural.bottom + below <= floor ? below : above;
-  }
-  return Math.round(shift);
+  const nearby = obstacles.filter(
+    (other) =>
+      natural.left < other.right + LABEL_GAP_PX && other.left < natural.right + LABEL_GAP_PX,
+  );
+  return candidateShifts(natural, nearby).find((shift) => {
+    const rect = pillRect(box, side, Math.round(shift));
+    return rect.top >= 0 && rect.bottom <= floor && !nearby.some((other) => collides(rect, other));
+  });
 }
 
 export function layoutLabels(
@@ -93,13 +112,20 @@ export function layoutLabels(
   bounds: LabelBounds,
 ): Map<string, Placement> {
   const placements = new Map<string, Placement>();
-  const placed: Rect[] = [];
+  const obstacles: Rect[] = [...(bounds.keepOut ?? [])];
   const floor = bounds.height - bounds.bottomInset;
-  for (const box of [...boxes].sort(byAnchor)) {
-    const side = chooseSide(box, bounds);
-    const shift = settle(box, side, placed, floor);
-    placed.push(pillRect(box, side, shift));
-    placements.set(box.id, { side, shift });
+  for (const box of [...boxes].sort(byRankThenAnchor)) {
+    const sides = sideOrder(box, bounds);
+    const spot = sides
+      .map((side) => ({ side, shift: freeShift(box, side, obstacles, floor) }))
+      .find((candidate) => candidate.shift !== undefined);
+    if (!spot || spot.shift === undefined) {
+      placements.set(box.id, { side: sides[0], shift: 0, hidden: true });
+      continue;
+    }
+    const shift = Math.round(spot.shift);
+    obstacles.push(pillRect(box, spot.side, shift));
+    placements.set(box.id, { side: spot.side, shift });
   }
   return placements;
 }
