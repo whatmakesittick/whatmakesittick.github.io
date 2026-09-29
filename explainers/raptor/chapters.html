@@ -1,0 +1,434 @@
+<section class="chapter" data-preset="overview" aria-labelledby="overview-title">
+  <p class="chapter-index">01</p>
+  <h2 id="overview-title" data-i18n="sections.overview.title">Throw mass back, go forward</h2>
+  <p data-i18n-html="sections.overview.p1">
+    A rocket engine works by throwing mass out of its back, very fast. Push something one way and it
+    pushes you the other way, like the kick of a fire hose. That push back is the
+    <strong>thrust</strong>. A rocket carries everything it throws, so it needs no air to push
+    against. Raptor, the engine SpaceX builds for its Starship rocket, burns liquid methane with
+    liquid oxygen. The fire turns them into hot gas at huge pressure, and the bell at the bottom
+    sends that gas out at over 3 km/s.
+  </p>
+  <p data-i18n-html="sections.overview.p2">
+    This is <strong>Raptor 3</strong>, the newest version. In flight it makes 250 tonnes of thrust,
+    and SpaceX designed it for up to 280. It weighs 1,525 kg, so it pushes about 160 times its own
+    weight. It stands about 3.1 m tall and 1.3 m wide. Thirty-three of them fire together under the
+    Super Heavy booster. Each one swallows about three quarters of a tonne of propellant every
+    second. The whole booster burns through about 25 tonnes a second.
+  </p>
+  <dl class="range-widget__readouts section-readouts overview-readouts">
+    <div>
+      <dt data-i18n="sections.overview.burn">Propellant burned each second</dt>
+      <dd class="number" data-readout="overview-burn">758 kg</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.overview.lift">Thrust against its own weight</dt>
+      <dd class="number" data-readout="overview-lift">164 times</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.overview.booster">All 33 engines together</dt>
+      <dd class="number" data-readout="overview-booster">8,250 t</dd>
+    </div>
+  </dl>
+  <p data-i18n-html="sections.overview.p3">
+    The model follows one centre engine through a single <strong>launch burn</strong>, from the
+    start command to booster engine cutoff. It keeps a few things simple. Raptor 3's inside layout
+    is not public, so the cutaway shows the known cycle as a simple diagram, not the real pipes.
+    SpaceX has not published the throttle curve, so the model reads it from the speed numbers on the
+    webcast. The start-up follows the usual order, with made-up timings inside SpaceX's roughly 3
+    seconds. The plume shows how the real one changes, in a simplified way. Drag the timeline to
+    move through the launch, and drag the model to turn it.
+  </p>
+  <p data-i18n-html="sections.overview.p4">
+    Each version of Raptor pushes harder and weighs less. <strong>Raptor 1</strong> made 185 tonnes
+    of thrust and weighed 2,080 kg. Raptor 2 made 230 tonnes and weighed 1,630 kg. Raptor 3 is built
+    for up to 280 tonnes and weighs 1,525 kg. It also lost something you could see from outside: the
+    heat shield. Older engines wore a shield around them to protect their outside pipes and wires.
+    On Raptor 3 most of that plumbing moved inside the engine's own parts, many of them 3D printed.
+    So each engine no longer needs a shield around it.
+  </p>
+</section>
+
+<section class="chapter" data-preset="propellants" aria-labelledby="propellants-title">
+  <p class="chapter-index">02</p>
+  <h2 id="propellants-title" data-i18n="sections.propellants.title">
+    Fuel and oxygen as super-cold liquids
+  </h2>
+  <p data-i18n-html="sections.propellants.p1">
+    A car engine takes its oxygen from the air. A rocket climbs to where there is almost no air, so
+    it brings its own. Raptor burns methane with oxygen. Both are gases at room temperature, and
+    gases take up far too much room. So both fly as liquids, chilled until they are colder than
+    their <strong>boiling points</strong>. Methane boils at 111 K, about −162 °C. Oxygen boils at 90
+    K, about −183 °C. The colder a liquid gets, the denser it is, so more of it fits in the tank.
+  </p>
+  <p data-i18n-html="sections.propellants.p2">
+    The two do not burn in equal amounts. For every kilogram of methane, Raptor burns about 3.6 kg
+    of oxygen. So by mass the <strong>mixture</strong> is nearly four fifths oxygen. That is why the
+    oxygen side of the engine is the bigger one, with the wider inlet and the larger pump. At full
+    power one engine takes in about 593 kg of oxygen and about 165 kg of methane every second. That
+    is a lot of liquid to move, as the next chapter shows.
+  </p>
+  <p data-i18n-html="sections.propellants.p3">
+    Methane takes a detour before it burns. After its pump, most of it flows through thin channels
+    inside the nozzle and chamber walls. The cold liquid soaks up heat, and that keeps the metal
+    from melting next to a flame of about 3,500 K. This is called
+    <strong>regenerative cooling</strong>. The heat is not wasted: it warms the methane on its way
+    to the fire. Oxygen takes the short way, straight from its pump to its preburner. Tap a
+    propellant to follow its route.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="propellant"
+      data-value="methane"
+      data-i18n="controls.propellantOptions.methane"
+    >
+      Liquid methane
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="propellant"
+      data-value="oxygen"
+      data-i18n="controls.propellantOptions.oxygen"
+    >
+      Liquid oxygen
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts propellant-readouts">
+    <div>
+      <dt data-i18n="sections.propellants.boils">Boils at</dt>
+      <dd class="number" data-readout="propellant-boils">111 K (−162 °C)</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.propellants.share">Share of the mixture by mass</dt>
+      <dd class="number" data-readout="propellant-share">22 %</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.propellants.flow">Flow right now</dt>
+      <dd class="number" data-readout="propellant-flow">165 kg/s</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.propellants.route">Its route</dt>
+      <dd data-readout="propellant-route">
+        pump, nozzle and chamber walls, preburner, turbine, chamber
+      </dd>
+    </div>
+  </dl>
+  <p data-i18n-html="sections.propellants.p4">
+    Rocket makers go one step further. They chill their propellants well below the boiling point,
+    close to freezing. This is called <strong>densifying</strong>. A colder liquid shrinks a little,
+    so the same tank holds more. In general, densifying packs about a tenth more propellant into the
+    same tank, with no bigger rocket. There is not much room to play with, though. Methane freezes
+    at about 91 K, only 20 degrees below its boiling point. SpaceX has not published how cold it
+    loads Starship.
+  </p>
+</section>
+
+<section class="chapter" data-preset="pumps" aria-labelledby="pumps-title">
+  <p class="chapter-index">03</p>
+  <h2 id="pumps-title" data-i18n="sections.pumps.title">Two pumps, two small fires</h2>
+  <p data-i18n-html="sections.pumps.p1">
+    Raptor has to push about three quarters of a tonne of propellant a second into a chamber at over
+    300 bar. That is more than 300 times the air pressure around you. Tanks strong enough to push
+    that hard would be far too heavy, so pumps do the work. Each pump sits on one shaft with a
+    turbine, a wheel with blades that hot gas blows round. Pump and turbine together make a
+    <strong>turbopump</strong>. Raptor has two: a bigger one for oxygen and a smaller one for
+    methane.
+  </p>
+  <p data-i18n-html="sections.pumps.p2">
+    The turbines need hot gas, and it comes from small fires called <strong>preburners</strong>.
+    Each turbopump has its own. The oxygen-rich preburner burns nearly all the oxygen with a little
+    methane. Its hot gas, still mostly oxygen, spins the oxygen pump. The methane-rich preburner
+    burns nearly all the methane with a little oxygen, and its gas spins the methane pump. Then both
+    gases flow on into the main chamber, where they burn together. Nothing is thrown away.
+  </p>
+  <p data-i18n-html="sections.pumps.p3">
+    This design is called <strong>full-flow staged combustion</strong>: every drop of both
+    propellants passes through a turbine before it burns. With so much gas driving them, the
+    turbines can run cooler, at several hundred degrees rather than over 3,000, so they last longer.
+    The pumps can push harder, for higher pressure and more thrust from a smaller engine. And each
+    shaft carries only one propellant, so no tricky seal has to keep hot oxygen away from fuel. Here
+    the start-up plays slowly: the pumps spin, the preburners light, then the main chamber. Tap an
+    engine to compare its cycle.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="engine"
+      data-value="merlin"
+      data-i18n="controls.engineOptions.merlin"
+    >
+      Merlin 1D
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="engine"
+      data-value="rs25"
+      data-i18n="controls.engineOptions.rs25"
+    >
+      RS-25
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="engine"
+      data-value="rd180"
+      data-i18n="controls.engineOptions.rd180"
+    >
+      RD-180
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="engine"
+      data-value="raptor"
+      data-i18n="controls.engineOptions.raptor"
+    >
+      Raptor 3
+    </button>
+  </p>
+  <figure class="cycle-view">
+    <canvas data-view="cycle" width="640" height="300" aria-hidden="true"></canvas>
+    <figcaption data-i18n="sections.pumps.caption">
+      Pumps in blue, burners in orange, turbines in grey. A red arrow is gas thrown overboard.
+    </figcaption>
+  </figure>
+  <dl class="range-widget__readouts section-readouts engine-readouts">
+    <div>
+      <dt data-i18n="sections.pumps.cycle">Cycle</dt>
+      <dd data-readout="engine-cycle">Full-flow staged combustion</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.pumps.propellants">Propellants</dt>
+      <dd data-readout="engine-propellants">Liquid oxygen and methane</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.pumps.pressure">Chamber pressure</dt>
+      <dd class="number" data-readout="engine-pressure">about 330 bar</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.pumps.thrust">Thrust at sea level</dt>
+      <dd class="number" data-readout="engine-thrust">250 t</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.pumps.dumps">Turbine gas thrown away</dt>
+      <dd data-readout="engine-dumps">None</dd>
+    </div>
+  </dl>
+  <p data-i18n-html="sections.pumps.p4">
+    The hardest part is the oxygen side. Hot gas full of oxygen eats most metals, and the oxygen
+    turbine spins right inside it. So SpaceX made its own alloys, such as <strong>SX500</strong>, to
+    survive it. The idea of full flow is not new. The Soviet RD-270 was built and test-fired in the
+    1960s, and the US Integrated Powerhead Demonstrator in the mid-2000s. Neither ever flew. Raptor
+    was the first full-flow engine to fly: on 25 July 2019 a single Raptor lifted the Starhopper
+    test vehicle about 20 m.
+  </p>
+</section>
+
+<section class="chapter" data-preset="chamber" aria-labelledby="chamber-title">
+  <p class="chapter-index">04</p>
+  <h2 id="chamber-title" data-i18n="sections.chamber.title">Where the big fire burns</h2>
+  <p data-i18n-html="sections.chamber.p1">
+    The two hot gases meet at the <strong>main injector</strong>, the plate at the top of the
+    combustion chamber. There they mix and burn at about 3,500 K, over 3,200 °C. The pressure inside
+    is over 300 bar. In 2023 a Raptor 3 on the test stand reached a record 350 bar. The chamber
+    itself is small. Most of the engine's height is the pumps above it and the nozzle below.
+  </p>
+  <p data-i18n-html="sections.chamber.p2">
+    Below the chamber the walls pinch in to the <strong>throat</strong>, about 22 cm across, roughly
+    the width of a dinner plate. All the gas has to squeeze through this narrow neck. It speeds up
+    as it goes, and right at the throat it reaches the speed of sound. Then the walls open out into
+    the nozzle, and the gas keeps speeding up. By the time it leaves the engine it moves at over 3
+    km/s, about ten times the speed of sound in air.
+  </p>
+  <p data-i18n-html="sections.chamber.p3">
+    This is the hottest place in the engine. The walls survive only because cold methane races
+    through the channels inside them. The fire itself burns cleanly because both propellants arrive
+    as gas. With <strong>gas meeting gas</strong>, there are no drops of liquid to break up and boil
+    first, so the two mix fast and burn completely. The readouts show what flows in each second and
+    how fast the exhaust leaves.
+  </p>
+  <dl class="range-widget__readouts section-readouts chamber-readouts">
+    <div>
+      <dt data-i18n="sections.chamber.oxygen">Oxygen flow</dt>
+      <dd class="number" data-readout="chamber-oxygen">593 kg/s</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.chamber.methane">Methane flow</dt>
+      <dd class="number" data-readout="chamber-methane">165 kg/s</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.chamber.pressure">Chamber pressure</dt>
+      <dd class="number" data-readout="chamber-pressure">about 330 bar</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.chamber.temperature">Flame</dt>
+      <dd class="number" data-readout="chamber-temperature">about 3,500 K</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.chamber.speed">Exhaust speed</dt>
+      <dd class="number" data-readout="chamber-speed">3.2 km/s</dd>
+    </div>
+  </dl>
+  <p data-i18n-html="sections.chamber.p4">
+    How do you light a fire at over 300 bar? Small torch igniters, which Elon Musk calls heavy-duty
+    spark plugs, light the two preburners. But since Raptor 2 the main chamber has no igniter at
+    all. The two gases arriving from the preburners are so hot and so dense that they light each
+    other the moment they meet. Engineers say they act <strong>hypergolic</strong>, like propellants
+    that burst into flame on contact. One part fewer means one less thing that can fail.
+  </p>
+</section>
+
+<section class="chapter" data-preset="nozzle" aria-labelledby="nozzle-title">
+  <p class="chapter-index">05</p>
+  <h2 id="nozzle-title" data-i18n="sections.nozzle.title">A bell for thick and thin air</h2>
+  <p data-i18n-html="sections.nozzle.p1">
+    The <strong>nozzle</strong> is the bell under the chamber. As the gas flows down it, the bell
+    widens, and the gas expands, cools and speeds up. The bell turns pressure and heat into speed,
+    and speed is what makes thrust. But a bell can only be the perfect size for one air pressure.
+    Too short, and the gas leaves before it has given all its push. Too wide, and the outside air
+    pushes in. Raptor's bell is sized for sea level, where the booster starts.
+  </p>
+  <p data-i18n-html="sections.nozzle.p2">
+    At sea level Raptor's exhaust leaves the bell at about 0.9 bar. That is a little below the air
+    around it, which is about 1 bar. So the air squeezes the plume in. The squeezed jet forms shock
+    waves that cross back and forth, and the gas heated at each crossing glows. These bright spots
+    are called <strong>shock diamonds</strong>. They stand still in the jet while the gas rushes
+    through them, like ripples in a fast stream.
+  </p>
+  <p data-i18n-html="sections.nozzle.p3">
+    As the rocket climbs, the air thins and presses less. The plume spreads wide and the diamonds
+    stretch out and fade. At the same throttle the engine now pushes about 5 percent harder, about
+    14 tonnes more. Its <strong>specific impulse</strong>, how much push it gets from its
+    propellant, climbs from about 330 s to about 350 s. Above 30 km the engine already has nearly
+    all of that gain. Drag the slider to see the engine at any height on the way up. Thrust dips
+    around max-Q because the engine throttles back, not because of the air.
+  </p>
+  <div class="range-widget height-control">
+    <div class="range-widget__header">
+      <label for="height" data-i18n="sections.nozzle.control.label">Height above the ground</label>
+      <output class="number" for="height">0 km</output>
+    </div>
+    <input id="height" type="range" class="range" data-control="height" />
+    <div class="range-widget__scale" aria-hidden="true">
+      <span data-i18n="sections.nozzle.control.ground">Launch pad</span>
+      <span data-i18n="sections.nozzle.control.top">Just before cutoff</span>
+    </div>
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.nozzle.control.air">Air pressure</dt>
+        <dd class="number" data-readout="height-air">1.01 bar</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.nozzle.control.exit">Exhaust pressure at the exit</dt>
+        <dd class="number" data-readout="height-exit">0.90 bar</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.nozzle.control.plume">Plume</dt>
+        <dd data-readout="height-plume">Squeezed by the air</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.nozzle.control.thrust">Thrust</dt>
+        <dd class="number" data-readout="height-thrust">250 t</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.nozzle.control.efficiency">Specific impulse</dt>
+        <dd class="number" data-readout="height-efficiency">330 s</dd>
+      </div>
+    </dl>
+  </div>
+  <p data-i18n-html="sections.nozzle.p4">
+    Starship's upper stage also carries <strong>Raptor Vacuum</strong>, or RVac, with a much wider
+    bell. In space there is no air to squeeze the plume, so a bigger bell can expand the gas
+    further, for about 380 s. But RVac cannot fire at full power at sea level. The thick air would
+    push up into the bell and tear the flow away from the wall. That shakes the nozzle sideways and
+    can damage it. So the booster flies with sea-level bells, and RVac waits for space.
+  </p>
+</section>
+
+<section class="chapter" data-preset="ascent" aria-labelledby="ascent-title">
+  <p class="chapter-index">06</p>
+  <h2 id="ascent-title" data-i18n="sections.ascent.title">Thirty-three engines, one launch</h2>
+  <p data-i18n-html="sections.ascent.p1">
+    Super Heavy carries 33 Raptors in three rings: 3 in the centre, 10 around them and 20 at the
+    edge. The inner 13 steer. Each one can tilt on its <strong>gimbal</strong>, a joint at the top,
+    by about 15 degrees at most, pushed by two steering actuators. Tilting the engines tilts their
+    push, and that turns the rocket. The outer 20 are fixed in place. The engine in this model is
+    one of the three in the centre.
+  </p>
+  <p data-i18n-html="sections.ascent.p2">
+    About 3 seconds before liftoff, the engines start. The rocket checks that every one is running
+    well, and only then do the clamps let go, at T−0. The rocket speeds up through the thick lower
+    air. About 45 to 60 seconds after liftoff comes <strong>max-Q</strong>, the moment the air
+    pushes hardest on the rocket. The engines throttle back to ease the load. SpaceX has not
+    published by how much, so the curve here is the model's own reading of the webcast.
+  </p>
+  <p data-i18n-html="sections.ascent.p3">
+    After max-Q the engines go back to full throttle, and the thinning air adds its extra push. By
+    about T+2:20 the booster is about 52 km up and moving at about 5,800 km/h. Then the booster
+    engines cut off, and the ship on top lights its own six engines while still attached. This is
+    called <strong>hot staging</strong>. Every Raptor 3 can relight, so the booster can fire again
+    to fly back. Tap a moment to jump to it on the chart.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="liftoff"
+      data-i18n="controls.momentOptions.liftoff"
+    >
+      Liftoff
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="maxQ"
+      data-i18n="controls.momentOptions.maxQ"
+    >
+      Max-Q
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="cutoff"
+      data-i18n="controls.momentOptions.cutoff"
+    >
+      Cutoff
+    </button>
+  </p>
+  <figure class="launch-view">
+    <canvas data-view="launch" width="640" height="280" aria-hidden="true"></canvas>
+    <figcaption data-i18n="sections.ascent.caption">
+      Thrust of one engine in orange, height in blue, speed in white. The line marks now.
+    </figcaption>
+  </figure>
+  <dl class="range-widget__readouts section-readouts ascent-readouts">
+    <div>
+      <dt data-i18n="sections.ascent.speed">Speed</dt>
+      <dd class="number" data-readout="ascent-speed">1,300 km/h</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.ascent.booster">All 33 engines</dt>
+      <dd class="number" data-readout="ascent-booster">6,800 t</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.ascent.steer">Steering tilt</dt>
+      <dd class="number" data-readout="ascent-steer">0.5°</dd>
+    </div>
+  </dl>
+  <p data-i18n-html="sections.ascent.p4">
+    Raptor 3 first flew on Flight 12, on 22 May 2026. So far, starting the engines again in flight
+    has been the hard part. On that flight 20 of 28 engines relit for the
+    <strong>boostback</strong>, the burn that turns the booster toward home, and only one relit for
+    the landing burn. The start on the ground is watched closely too. On 16 July 2026 the first try
+    at Flight 13 stopped itself at T−0, because some engines did not come up to speed. The rocket
+    stayed safely on the pad.
+  </p>
+</section>

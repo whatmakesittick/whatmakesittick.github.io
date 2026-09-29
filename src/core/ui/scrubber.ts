@@ -24,8 +24,12 @@ export function bindScrubber(
   });
 
   const render = throttle((phase: number) => {
-    input.value = String(Math.round(phase / timeline.step) * timeline.step);
-    input.setAttribute('aria-valuetext', timeline.describePhase(phase));
+    const value = String(Math.round(phase / timeline.step) * timeline.step);
+    if (input.value !== value) input.value = value;
+    const valueText = timeline.describePhase(phase);
+    if (input.getAttribute('aria-valuetext') !== valueText) {
+      input.setAttribute('aria-valuetext', valueText);
+    }
   }, TEXT_REFRESH_INTERVAL_MS);
   watchLocalized(store, (state) => state.phase, render);
 }

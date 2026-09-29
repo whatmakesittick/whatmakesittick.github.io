@@ -206,7 +206,12 @@ scene, camera rig, label layer, highlighter, materials, textures, stage, lightin
 `onFrame(update)` and `invalidate()`. Before the first frame the host compiles
 every material in the scene with `renderer.compileAsync`, so the shaders build in
 parallel while the page stays responsive; three's shader error checks run in dev
-only, since their queries stall the first frame. Core owns the frame loop and
+only, since their queries stall the first frame. A dim style with `opacity` below 1
+makes a dimmed material transparent, and that flip needs a second shader program.
+So after the first frame, in idle time, `compileFadedVariants` in `materials.ts`
+turns every opaque dimmable material transparent for one more `compileAsync` and
+turns it back, and a chapter change then finds both programs ready instead of
+compiling mid-frame. Core owns the frame loop and
 draws on demand: a frame runs only when something asked for one. In a frame it
 ticks the store, runs the explainer's frame updates, eases the highlighter and the
 camera, hides the labels whose anchor is out of sight, renders and lays out the
@@ -361,6 +366,18 @@ from the size of its text, which a `ResizeObserver` measures when the text first
 shows and whenever it changes with the language or a font; layout never reads the
 DOM, so a frame forces no style or layout work. A new size asks for a frame.
 
+The layout keeps labels off the stage overlays. `watchKeepOut` in `keepOut.ts` measures
+the expand button, the gauge and the dock in the label frame's coordinates. It does this
+only when one of them or the frame resizes, or when the stage expands or collapses; the
+shell passes the areas to `labels.setKeepOut`. `layoutLabels` in `labelLayout.ts` places the labels in priority order (from
+`createLabelVisibility`, then top to bottom). On each side it finds the free spot nearest
+the label's own height, up or down with ties going down, clear of the keep-out areas, the
+labels already placed and the top and bottom of the view. A label keeps its own side unless
+that side has no free spot or the other side's spot is nearer by more than one label height,
+so leader lines stay short. A label with no free spot on either side is hidden with
+`scene-label--crowded` until a later frame has room for it, so two labels never sit on top
+of each other.
+
 `createLabelVisibility(shell, priority)` wraps `LabelVisibility` as a label
 policy: it follows the viewport size, updates every frame and `dispose` removes
 both listeners. It reads the anchors from the label layer, whose `anchors()`
@@ -398,16 +415,17 @@ slider with a value and readouts:
 </div>
 ```
 
-| Option     | Role                                                                       |
-| ---------- | -------------------------------------------------------------------------- |
-| `control`  | The slider's `data-control` value                                          |
-| `range`    | `min`, `max` and `step` of the slider                                      |
-| `select`   | A tuple from the store, compared shallowly; a change re-renders the widget |
-| `value`    | The slider position for the selected tuple                                 |
-| `format`   | Text for the `<output for>` and the slider's `aria-valuetext`              |
-| `set`      | Writes the slider position to the store on input                           |
-| `readouts` | Optional `data-readout` id to text, looked up inside the widget            |
-| `after`    | Optional hook with the tuple, the state and the widget element, run last   |
+| Option              | Role                                                                       |
+| ------------------- | -------------------------------------------------------------------------- |
+| `control`           | The slider's `data-control` value                                          |
+| `range`             | `min`, `max` and `step` of the slider                                      |
+| `select`            | A tuple from the store, compared shallowly; a change re-renders the widget |
+| `value`             | The slider position for the selected tuple                                 |
+| `format`            | Text for the `<output for>` and the slider's `aria-valuetext`              |
+| `set`               | Writes the slider position to the store on input                           |
+| `readouts`          | Optional `data-readout` id to text, looked up inside the widget            |
+| `after`             | Optional hook with the tuple, the state and the widget element, run last   |
+| `refreshIntervalMs` | Optional; renders at most once per interval while the tuple keeps changing |
 
 The widget re-renders on mount, when the tuple changes and when the language
 changes. It needs the slider and the `.range-widget` around it; the output, the

@@ -1,0 +1,262 @@
+{
+  "meta": {
+    "title": "Como funciona um motor de foguete",
+    "eyebrow": "SpaceX Raptor 3",
+    "tagline": "Duas turbobombas, duas pequenas chamas e uma grande: como o Raptor transforma metano e oxigênio ultrafrios em 250 toneladas de empuxo.",
+    "description": "Um motor Raptor 3 da SpaceX em 3D, ligado e aberto: propelentes ultrafrios, turbobombas, câmara de combustão, bocal e um lançamento do Super Heavy.",
+    "summary": "Propelentes, turbobombas, o ciclo de fluxo total, a câmara de combustão, o bocal no ar cada vez mais rarefeito e um lançamento do Super Heavy.",
+    "socialAlt": "Modelo 3D de um motor de foguete Raptor 3 da SpaceX em funcionamento, aberto para mostrar as turbobombas e a câmara de combustão, com um jato de escape brilhante, ao lado do título “Como funciona um motor de foguete”"
+  },
+  "stage": {
+    "label": "Modelo interativo do motor Raptor",
+    "gauge": "Leituras do motor ao vivo"
+  },
+  "controls": {
+    "label": "Controles do motor",
+    "views": {
+      "cutaway": {
+        "name": "Motor aberto",
+        "short": "Corte",
+        "hint": "Motor aberto (C)"
+      },
+      "flow": {
+        "name": "Fluxo de propelentes",
+        "short": "Fluxo",
+        "hint": "Fluxo de propelentes (F)"
+      },
+      "flame": {
+        "name": "Chama",
+        "short": "Chama",
+        "hint": "Chama (P)"
+      },
+      "cluster": {
+        "name": "Propulsor",
+        "short": "Propulsor",
+        "hint": "Propulsor (B)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    },
+    "propellantOptions": {
+      "methane": "Metano líquido",
+      "oxygen": "Oxigênio líquido"
+    },
+    "engineOptions": {
+      "merlin": "Merlin 1D",
+      "rs25": "RS-25",
+      "rd180": "RD-180",
+      "raptor": "Raptor 3"
+    },
+    "momentOptions": {
+      "liftoff": "Decolagem",
+      "maxQ": "Max-Q",
+      "cutoff": "Desligamento"
+    }
+  },
+  "timeline": {
+    "label": "Momento do lançamento",
+    "phases": "Ir para um momento do lançamento",
+    "speed": "Reprodução",
+    "value": "{{time}}, {{phase}}",
+    "before": "T−{{seconds}} s",
+    "after": "T+{{minutes}}:{{seconds}}",
+    "realTime": "Tempo real",
+    "slower": "{{factor}} vezes mais lento",
+    "faster": "{{factor}} vezes mais rápido",
+    "phase": {
+      "start": "Partida",
+      "liftoff": "Decolagem",
+      "climb": "Subida",
+      "maxQ": "Max-Q",
+      "thinAir": "Ar rarefeito",
+      "cutoff": "Desligamento"
+    },
+    "during": {
+      "start": "as bombas começam a girar e as chamas se acendem",
+      "liftoff": "as garras se soltam e o foguete decola",
+      "climb": "o foguete ganha velocidade na parte mais densa da atmosfera",
+      "maxQ": "o motor reduz a potência enquanto o ar empurra com mais força",
+      "thinAir": "o motor funciona a toda potência enquanto o ar fica mais rarefeito",
+      "cutoff": "o motor reduz a potência e desliga"
+    },
+    "jump": {
+      "start": "Ir para a partida",
+      "liftoff": "Ir para a decolagem",
+      "climb": "Ir para a subida",
+      "maxQ": "Ir para o Max-Q",
+      "thinAir": "Ir para o ar rarefeito",
+      "cutoff": "Ir para o desligamento"
+    }
+  },
+  "readouts": {
+    "thrust": "Empuxo",
+    "efficiency": "Impulso específico",
+    "airPressure": "Pressão do ar",
+    "altitude": "Altitude",
+    "throttle": "Potência"
+  },
+  "parts": {
+    "gimbal": "Cardã",
+    "actuators": "Atuadores de direção",
+    "oxygenInlet": "Entrada de oxigênio",
+    "methaneInlet": "Entrada de metano",
+    "oxygenPump": "Turbobomba de oxigênio",
+    "methanePump": "Turbobomba de metano",
+    "oxygenPreburner": "Pré-queimador rico em oxigênio",
+    "methanePreburner": "Pré-queimador rico em metano",
+    "hotGasManifold": "Dutos de gás quente",
+    "injector": "Injetor principal",
+    "chamber": "Câmara de combustão",
+    "throat": "Garganta",
+    "coolingChannels": "Canais de resfriamento",
+    "nozzle": "Bocal",
+    "plume": "Jato de escape",
+    "shockDiamonds": "Diamantes de choque",
+    "liquidOxygen": "Oxigênio líquido",
+    "liquidMethane": "Metano líquido",
+    "oxygenRichGas": "Gás rico em oxigênio",
+    "methaneRichGas": "Gás rico em metano",
+    "booster": "Propulsor Super Heavy"
+  },
+  "plume": {
+    "squeezed": "Comprimido pelo ar",
+    "matched": "Equilibrado com o ar",
+    "spreading": "Bem aberto",
+    "off": "Sem jato"
+  },
+  "propellants": {
+    "route": {
+      "methane": "bomba, paredes do bocal e da câmara, pré-queimador, turbina, câmara",
+      "oxygen": "bomba, pré-queimador, turbina, câmara"
+    }
+  },
+  "engines": {
+    "cycle": {
+      "gasGenerator": "Gerador de gás",
+      "fuelRichStaged": "Combustão estagiada rica em combustível",
+      "oxygenRichStaged": "Combustão estagiada rica em oxigênio",
+      "fullFlow": "Combustão estagiada de fluxo total"
+    },
+    "propellants": {
+      "oxygenKerosene": "Oxigênio líquido e querosene",
+      "oxygenHydrogen": "Oxigênio líquido e hidrogênio",
+      "oxygenMethane": "Oxigênio líquido e metano"
+    },
+    "dumps": {
+      "yes": "Sim, para fora do motor",
+      "no": "Nenhum"
+    }
+  },
+  "cycle": {
+    "tank": "Tanque",
+    "pump": "Bomba",
+    "boostPump": "Bomba auxiliar",
+    "burner": "Queimador",
+    "preburner": "Pré-queimador",
+    "gasGenerator": "Gerador de gás",
+    "turbine": "Turbina",
+    "chamber": "Câmara",
+    "nozzle": "Bocal",
+    "overboard": "Para fora",
+    "oxygen": "Oxigênio",
+    "fuel": "Combustível"
+  },
+  "units": {
+    "tonnes": "{{value}} t",
+    "tonnesAbout": "cerca de {{value}} t",
+    "seconds": "{{value}} s",
+    "bar": "{{value}} bar",
+    "barAbout": "cerca de {{value}} bar",
+    "km": "{{value}} km",
+    "kmPerHour": "{{value}} km/h",
+    "kmPerSecond": "{{value}} km/s",
+    "kgPerSecond": "{{value}} kg/s",
+    "kg": "{{value}} kg",
+    "kelvin": "{{value}} K",
+    "kelvinAbout": "cerca de {{value}} K",
+    "kelvinCelsius": "{{kelvin}} K ({{celsius}} °C)",
+    "percent": "{{value}}%",
+    "degrees": "{{value}}°",
+    "times": "{{value}} vezes",
+    "off": "Desligado"
+  },
+  "sections": {
+    "overview": {
+      "title": "Gás para trás, foguete para a frente",
+      "p1": "No fundo, um motor de foguete é simples: ele joga gás quente para trás o mais rápido que consegue. Sempre que você empurra alguma coisa para um lado, ela empurra você para o outro. Dá para sentir isso ao segurar uma mangueira de bombeiro: a água sai com força para a frente, e a mangueira tenta recuar nas suas mãos. Essa força de reação se chama <strong>empuxo</strong>. O foguete carrega tudo o que joga para fora. Por isso não precisa de ar para se apoiar e funciona igualmente bem no espaço. O Raptor é o motor que a SpaceX fabrica para o foguete Starship. Ele queima metano líquido com oxigênio líquido. A chama transforma os dois em gás quente, a uma pressão enorme. Lá embaixo, o bocal em forma de sino lança esse gás para fora a mais de 3 km/s.",
+      "p2": "O que você vê aqui é o <strong>Raptor 3</strong>, a versão mais nova. Em voo, ele produz 250 toneladas de empuxo, e a SpaceX o projetou para chegar a 280. O motor em si pesa só 1.525 kg, então consegue erguer cerca de 160 vezes o próprio peso. Mede cerca de 3,1 m de altura e 1,3 m de largura. Trinta e três desses motores funcionam juntos na base do propulsor Super Heavy. Cada um consome cerca de três quartos de tonelada de propelente por segundo. O propulsor inteiro queima umas 25 toneladas por segundo.",
+      "p3": "Este modelo acompanha um dos motores centrais durante uma <strong>queima de lançamento</strong> inteira. Ela vai do comando de partida, na plataforma, até o desligamento dos motores do propulsor. Algumas coisas foram simplificadas. A SpaceX nunca mostrou o interior do Raptor 3. Por isso, a vista em corte mostra o ciclo conhecido num esquema claro, e não a tubulação real. A curva de potência também não foi divulgada. O modelo a deduz da velocidade que aparece na transmissão do lançamento. A partida segue a sequência de sempre. Segundo a SpaceX, ela leva cerca de 3 segundos ao todo. Já o tempo de cada etapa é uma estimativa do próprio modelo. O jato muda de forma como o de verdade, só que de um jeito mais simples. Arraste a linha do tempo para percorrer o lançamento e arraste o modelo para girá-lo.",
+      "p4": "A cada nova versão, o Raptor ficou mais forte e mais leve. O <strong>Raptor 1</strong> dava 185 toneladas de empuxo e pesava 2.080 kg. O Raptor 2 subiu para 230 toneladas, e o peso caiu para 1.630 kg. O Raptor 3 foi projetado para 280 toneladas e pesa 1.525 kg. Por fora, ele também tem um visual bem mais limpo, porque perdeu o escudo térmico. As versões anteriores vinham envoltas num escudo, que protegia os tubos e os fios instalados do lado de fora. No Raptor 3, a maior parte dessa tubulação passou para dentro das próprias peças do motor, muitas delas impressas em 3D. Como não sobrou nada para proteger, o escudo pôde ser retirado.",
+      "burn": "Propelente queimado por segundo",
+      "lift": "Empuxo em relação ao peso",
+      "booster": "Os 33 motores juntos"
+    },
+    "propellants": {
+      "title": "Dois líquidos ultrafrios",
+      "p1": "O motor de um carro tira o oxigênio do ar. Um foguete sobe até onde quase não há ar, então precisa levar o próprio oxigênio. O Raptor queima metano e oxigênio. Em temperatura ambiente, os dois são gases, e um gás ocupa espaço demais para ser transportado. Por isso eles viajam na forma líquida, resfriados abaixo do <strong>ponto de ebulição</strong>. Para o metano, isso quer dizer 111 K, cerca de −162 °C. Para o oxigênio, são 90 K, cerca de −183 °C. E quanto mais frio o líquido, mais denso ele fica, então cabe mais dele no mesmo tanque.",
+      "p2": "O motor não queima os dois em quantidades iguais. Para cada quilo de metano, ele queima cerca de 3,6 kg de oxigênio. Assim, em peso, quase quatro quintos da <strong>mistura</strong> são oxigênio. É por isso que o lado do oxigênio ocupa mais espaço no motor. A entrada dele é mais larga, e a bomba é maior. Em potência máxima, um único motor engole cerca de 593 kg de oxigênio e uns 165 kg de metano por segundo. Mover tanto líquido tão depressa exige bombas de respeito, e elas são o assunto do próximo capítulo.",
+      "p3": "O metano faz um desvio antes de queimar. Depois da bomba, a maior parte dele percorre muitos canais finos dentro das paredes do bocal e da câmara. No caminho, o líquido frio absorve calor. É isso que impede o metal de derreter ao lado de uma chama de cerca de 3.500 K. Os engenheiros chamam esse processo de <strong>resfriamento regenerativo</strong>. Nada desse calor se perde, porque ele esquenta o metano que está a caminho do fogo. O oxigênio pega o atalho: vai direto da bomba para o seu pré-queimador. Toque num propelente para ver a rota dele pelo motor.",
+      "p4": "Alguns fabricantes de foguetes, entre eles a SpaceX, vão um passo além. Eles resfriam os dois líquidos bem abaixo do ponto de ebulição, até perto do ponto de congelamento. Isso se chama <strong>densificação</strong>: um líquido mais frio encolhe um pouco, e o mesmo tanque passa a comportar mais dele. Em geral, a densificação permite pôr cerca de um décimo a mais de propelente no tanque, sem aumentar o foguete. Só que a margem é estreita. O metano congela a cerca de 91 K, só 20 graus abaixo da temperatura em que ferve. A SpaceX não disse exatamente a que temperatura abastece o Starship.",
+      "boils": "Ferve a",
+      "share": "Parte da mistura, em massa",
+      "flow": "Vazão agora",
+      "route": "Rota pelo motor"
+    },
+    "pumps": {
+      "title": "Duas bombas, duas pequenas chamas",
+      "p1": "A cada segundo, o Raptor precisa injetar cerca de três quartos de tonelada de propelente numa câmara. Lá dentro, a pressão passa de 300 bar, mais de 300 vezes a pressão do ar à sua volta. Tanques capazes de fazer essa força sozinhos seriam pesados demais. Por isso, quem faz o trabalho são as bombas. Cada bomba divide o eixo com uma turbina, uma roda com pás que o gás quente faz girar. Juntas, bomba e turbina formam uma <strong>turbobomba</strong>. O Raptor tem duas: uma maior, para o oxigênio, e uma menor, para o metano.",
+      "p2": "As turbinas precisam de gás quente para girar. Esse gás vem de duas pequenas câmaras de combustão, os <strong>pré-queimadores</strong>, e cada turbobomba tem o seu. Quase todo o oxigênio passa pelo pré-queimador rico em oxigênio, onde se queima só um pouco de metano. O gás que sai dele é quente, mas continua sendo quase só oxigênio. É esse gás que faz girar a bomba de oxigênio. O pré-queimador rico em metano faz o contrário: quase todo o metano passa por ele, e nele se queima só um pouco de oxigênio. O gás que sai dali aciona a bomba de metano. Depois, os dois gases seguem para a câmara principal e ali terminam de queimar juntos. Nada é jogado fora.",
+      "p3": "Esse projeto se chama <strong>combustão estagiada de fluxo total</strong>, porque cada gota dos dois propelentes passa por uma turbina antes de queimar. Isso traz três grandes vantagens. Com tanto gás para movê-las, as turbinas podem trabalhar mais frias: ficam a algumas centenas de graus, em vez de mais de 3.000, e duram mais. As bombas podem empurrar com mais força, o que dá mais pressão e mais empuxo num motor menor. E cada eixo lida com um só propelente. Assim, não é preciso uma vedação complicada para manter o oxigênio quente longe do combustível. A cena mostra a partida em câmera lenta: primeiro as bombas ganham rotação, depois os pré-queimadores acendem e, por fim, a câmara principal. Toque num motor abaixo para comparar o ciclo dele com o do Raptor.",
+      "p4": "A parte mais difícil de acertar é o lado do oxigênio. Um gás quente formado quase só por oxigênio corrói a maioria dos metais. E a turbina de oxigênio precisa girar bem no meio dele. Para resistir a esse ambiente, a SpaceX desenvolveu ligas metálicas próprias, como uma que ela chama de <strong>SX500</strong>. A ideia do fluxo total em si não é nova. A União Soviética construiu e testou em bancada o RD-270 nos anos 1960. Os Estados Unidos testaram o Integrated Powerhead Demonstrator em meados dos anos 2000. Nenhum dos dois chegou a sair do chão. O Raptor foi o primeiro motor de fluxo total a voar, em 25 de julho de 2019. Naquele dia, um só Raptor levantou o veículo de testes Starhopper a cerca de 20 m de altura.",
+      "caption": "Bombas em azul, queimadores em laranja e turbinas em cinza. Uma seta vermelha indica gás jogado para fora do motor.",
+      "cycle": "Ciclo",
+      "propellants": "Propelentes",
+      "pressure": "Pressão na câmara",
+      "thrust": "Empuxo ao nível do mar",
+      "dumps": "Gás da turbina descartado"
+    },
+    "chamber": {
+      "title": "Onde queima a chama principal",
+      "p1": "Os dois gases quentes se encontram no <strong>injetor principal</strong>, uma placa no alto da câmara de combustão. Ali eles se misturam e queimam a cerca de 3.500 K, ou seja, mais de 3.200 °C. Lá dentro, a pressão passa de 300 bar. Em 2023, um Raptor 3 atingiu a marca recorde de 350 bar na bancada de testes. A câmara em si é surpreendentemente pequena. A maior parte da altura do motor vem das bombas, em cima, e do bocal, embaixo.",
+      "p2": "Abaixo da câmara, as paredes se estreitam e formam a <strong>garganta</strong>. Ela tem cerca de 22 cm de diâmetro, mais ou menos a largura de um prato raso. Todo o gás precisa se espremer por esse gargalo e, ao passar, fica mais rápido. Bem na garganta, ele atinge a velocidade do som. Depois, as paredes voltam a se abrir no bocal, e o gás continua acelerando. Quando sai do motor, ele passa de 3 km/s, cerca de dez vezes a velocidade do som no ar.",
+      "p3": "Este é o ponto mais quente de todo o motor. As paredes só resistem porque o metano frio circula rápido pelos canais dentro delas. A combustão em si é limpa, porque os dois propelentes já chegam na forma de gás. Quando <strong>gás encontra gás</strong>, não há gotas de líquido que precisem antes se partir e evaporar. Por isso os dois se misturam depressa e queimam por completo. As leituras abaixo mostram quanto entra na câmara a cada segundo e a que velocidade o escape sai.",
+      "p4": "Como acender um fogo a mais de 300 bar? Os dois pré-queimadores são acesos por pequenos ignitores de tocha, que Elon Musk comparou a velas de ignição reforçadas. Já a câmara principal não tem ignitor nenhum desde o Raptor 2. Os gases que chegam dos pré-queimadores são tão quentes e tão densos que pegam fogo assim que se encontram. Os engenheiros dizem que eles se comportam como se fossem <strong>hipergólicos</strong>, isto é, propelentes que se inflamam ao simples contato. Uma peça a menos é uma coisa a menos para dar defeito.",
+      "oxygen": "Vazão de oxigênio",
+      "methane": "Vazão de metano",
+      "pressure": "Pressão na câmara",
+      "temperature": "Chama",
+      "speed": "Velocidade do escape"
+    },
+    "nozzle": {
+      "title": "Um bocal para o ar denso e o rarefeito",
+      "p1": "O <strong>bocal</strong> é a peça em forma de sino embaixo da câmara. À medida que o gás desce por ele, o bocal vai se alargando. O gás então se expande, esfria e acelera. Ou seja, o bocal transforma pressão e calor em velocidade, e é a velocidade que gera o empuxo. Mas um bocal só tem o tamanho ideal para uma pressão de ar. Se for curto demais, o gás sai antes que toda a sua força seja aproveitada. Se for largo demais, o ar de fora força a entrada. O bocal do Raptor é feito sob medida para o nível do mar, onde o propulsor começa a subir.",
+      "p2": "Ao nível do mar, o escape do Raptor sai do bocal a cerca de 0,9 bar. O ar ao redor está a cerca de 1 bar, um pouco acima disso, e por isso comprime o jato. No jato comprimido, ondas de choque vão e voltam de um lado para o outro. Onde elas se cruzam, o gás esquenta e brilha. Esses pontos brilhantes se chamam <strong>diamantes de choque</strong>. Eles não saem do lugar, embora o gás passe correndo por eles. Acontece o mesmo com as ondinhas de um riacho rápido: a água corre, mas elas ficam paradas.",
+      "p3": "Conforme o foguete sobe, o ar fica mais rarefeito e comprime menos o jato. Ele então se abre, e os diamantes se esticam até sumir. Com a mesma potência, o motor agora empurra cerca de 5 por cento a mais: umas 14 toneladas extras. Sobe também o seu <strong>impulso específico</strong>, que vai de cerca de 330 s para uns 350 s. Esse número mede quanto empuxo o motor tira de uma dada quantidade de propelente. Aos 30 km de altitude, o ganho já está quase completo. Arraste o controle para ver o motor em qualquer altitude da subida. Aquela queda de empuxo perto do Max-Q não vem do ar: é o motor reduzindo a potência.",
+      "p4": "A nave que vai em cima do propulsor usa também outra versão, o <strong>Raptor Vacuum</strong>, ou RVac. Ele tem um bocal bem mais largo. No espaço, não há ar para comprimir o jato. Ali, um bocal maior consegue expandir mais o gás e chegar a cerca de 380 s de impulso específico. Mas o RVac não pode funcionar a toda potência ao nível do mar. O ar denso subiria para dentro do bocal e descolaria o fluxo da parede. Isso sacudiria o bocal para os lados com força suficiente para danificá-lo. Por isso o propulsor voa com bocais feitos para o nível do mar, e o RVac espera pelo espaço.",
+      "control": {
+        "label": "Altitude",
+        "ground": "Plataforma",
+        "top": "Pouco antes do desligamento",
+        "air": "Pressão do ar",
+        "exit": "Pressão do escape na saída",
+        "plume": "Jato",
+        "thrust": "Empuxo",
+        "efficiency": "Impulso específico"
+      }
+    },
+    "ascent": {
+      "title": "Trinta e três motores, um lançamento",
+      "p1": "O Super Heavy leva 33 motores Raptor, dispostos em três anéis: 3 no centro, 10 em volta deles e 20 na borda. Os 13 de dentro cuidam das manobras. Cada um deles fica pendurado num <strong>cardã</strong>, uma articulação no topo. Dois atuadores podem inclinar o motor até cerca de 15 graus. Quando um motor se inclina, o empuxo dele também se inclina, e o foguete inteiro muda de direção. Os 20 de fora são fixos e não se inclinam. O motor deste modelo é um dos três do centro.",
+      "p2": "Os motores dão a partida cerca de 3 segundos antes da decolagem. O foguete confere se todos estão funcionando direito. Só então, em T−0, as garras que o prendem à plataforma se soltam. Livre, ele ganha velocidade no ar denso das camadas mais baixas. Entre 45 e 60 segundos depois da decolagem, chega o <strong>Max-Q</strong>. É o instante em que o ar faz mais força contra o foguete. Os motores reduzem a potência por um tempo para aliviar a carga sobre a estrutura. A SpaceX não informou de quanto é essa redução. Por isso, a curva mostrada aqui é a leitura que o próprio modelo fez da transmissão.",
+      "p3": "Depois do Max-Q, os motores voltam à potência máxima. E o ar, cada vez mais rarefeito, ainda traz aquele ganho extra de empuxo. Por volta de T+2:20, o propulsor está a uns 52 km de altitude, voando a cerca de 5.800 km/h. Então os motores do propulsor se desligam. A nave no topo acende os seus seis motores enquanto os dois veículos ainda estão acoplados. Isso se chama <strong>separação a quente</strong>. Todo Raptor 3 pode ser reaceso em voo. Assim, o propulsor consegue ligar os motores de novo e voltar para casa. Toque num momento abaixo para ir até ele no gráfico.",
+      "p4": "O Raptor 3 estreou no voo 12, em 22 de maio de 2026. Até agora, o mais difícil tem sido reacender os motores no ar. Naquela missão, 20 dos 28 motores reacenderam para a <strong>queima de retorno</strong>, a que põe o propulsor no rumo de casa. Só um reacendeu para a queima de pouso. A partida no solo é acompanhada com o mesmo cuidado. Em 16 de julho de 2026, a primeira tentativa do voo 13 foi abortada automaticamente em T−0. Alguns motores não tinham chegado à rotação necessária. O foguete ficou em segurança na plataforma.",
+      "caption": "Empuxo de um motor em laranja, altitude em azul e velocidade em branco. A linha vertical marca o momento atual.",
+      "speed": "Velocidade",
+      "booster": "Os 33 motores",
+      "steer": "Inclinação do cardã"
+    }
+  }
+}

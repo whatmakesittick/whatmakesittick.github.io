@@ -31,6 +31,10 @@
   animation: scene-label-in 260ms ease-out;
 }
 
+.scene-label--crowded {
+  visibility: hidden;
+}
+
 .scene-label--left {
   --scene-label-angle: -148deg;
 }

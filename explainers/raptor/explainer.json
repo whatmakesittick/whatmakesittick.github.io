@@ -1,0 +1,12 @@
+{
+  "slug": "raptor",
+  "tags": ["engines", "physics", "vehicles"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "3D model of a SpaceX Raptor 3 rocket engine firing, cut open to show its turbopumps and combustion chamber, with a bright exhaust plume, beside the title How a rocket engine works"
+  }
+}

@@ -1,0 +1,146 @@
+:root {
+  --start: #9aa7ff;
+  --liftoff: #ffb347;
+  --climb: #ff8a4c;
+  --maxq: #ff5d73;
+  --thin: #6fb6ff;
+  --cutoff: #b48cff;
+  --liquid-oxygen: #a8ecff;
+  --liquid-methane: #4f8dff;
+  --oxygen-rich-gas: #ffae42;
+  --methane-rich-gas: #ff5fa2;
+  --flame: #ff9b3d;
+  --flame-core: #fff3d6;
+  --plume: #8fb4ff;
+  --diamond: #fff0c2;
+  --steel: #b9bcc2;
+  --dark-steel: #5a5f69;
+  --hot-wall: #c8643a;
+  --booster: #d9dadc;
+}
+
+.height-control,
+.section-readouts {
+  --readout-min-width: 8rem;
+}
+
+.section-readouts {
+  margin-block: 16px;
+}
+
+.propellant-readouts,
+.engine-readouts,
+.chamber-readouts,
+.height-control .range-widget__readouts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.overview-readouts,
+.ascent-readouts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.propellant-readouts > div:has([data-readout='propellant-route']),
+.engine-readouts > div:has([data-readout='engine-cycle']),
+.chamber-readouts > div:has([data-readout='chamber-speed']),
+.height-control .range-widget__readouts > div:has([data-readout='height-plume']) {
+  grid-column: 1 / -1;
+}
+
+.chamber-readouts dt::before {
+  content: '';
+  display: inline-block;
+  width: 0.625em;
+  height: 0.625em;
+  margin-inline-end: 0.4em;
+  border-radius: 2px;
+  background: var(--swatch);
+}
+
+.chamber-readouts > div:has([data-readout='chamber-oxygen']) {
+  --swatch: var(--liquid-oxygen);
+}
+
+.chamber-readouts > div:has([data-readout='chamber-methane']) {
+  --swatch: var(--liquid-methane);
+}
+
+.chamber-readouts > div:has([data-readout='chamber-pressure']) dt::before,
+.chamber-readouts > div:has([data-readout='chamber-temperature']) dt::before,
+.chamber-readouts > div:has([data-readout='chamber-speed']) dt::before {
+  content: none;
+}
+
+.height-control .range {
+  --range-color: var(--thin);
+}
+
+.cycle-view,
+.launch-view {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.cycle-view canvas,
+.launch-view canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-small);
+}
+
+.cycle-view figcaption,
+.launch-view figcaption {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.chip[data-action='propellant'][data-value='methane'] {
+  --tone: var(--liquid-methane);
+}
+
+.chip[data-action='propellant'][data-value='oxygen'] {
+  --tone: var(--liquid-oxygen);
+}
+
+.chip[data-action='engine'] {
+  --tone: var(--steel);
+}
+
+.chip[data-action='engine'][data-value='raptor'] {
+  --tone: var(--flame);
+}
+
+.chip[data-action='moment'][data-value='liftoff'] {
+  --tone: var(--liftoff);
+}
+
+.chip[data-action='moment'][data-value='maxQ'] {
+  --tone: var(--maxq);
+}
+
+.chip[data-action='moment'][data-value='cutoff'] {
+  --tone: var(--cutoff);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action='propellant'],
+  .chip[data-action='engine'],
+  .chip[data-action='moment'] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .overview-readouts,
+  .ascent-readouts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.gauge .readouts {
+  width: 12.5rem;
+}

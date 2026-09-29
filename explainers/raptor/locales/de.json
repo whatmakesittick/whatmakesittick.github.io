@@ -1,0 +1,262 @@
+{
+  "meta": {
+    "title": "So funktioniert ein Raketentriebwerk",
+    "eyebrow": "SpaceX Raptor 3",
+    "tagline": "Zwei Turbopumpen, zwei kleine Feuer und ein großes: So macht Raptor aus tiefkaltem Methan und Sauerstoff 250 Tonnen Schub.",
+    "description": "Ein Raptor-3-Triebwerk von SpaceX in 3D, in Betrieb und aufgeschnitten: tiefkalte Treibstoffe, Turbopumpen, Brennkammer, Düse und ein Super-Heavy-Start.",
+    "summary": "Treibstoffe, Turbopumpen, das Vollstromverfahren, die Brennkammer, die Düse in immer dünnerer Luft und ein Super-Heavy-Start.",
+    "socialAlt": "Aufgeschnittenes 3D-Modell eines laufenden Raptor-3-Raketentriebwerks von SpaceX mit sichtbaren Turbopumpen, Brennkammer und hellem Abgasstrahl, daneben der Titel „So funktioniert ein Raketentriebwerk“"
+  },
+  "stage": {
+    "label": "Interaktives Modell des Raptor-Triebwerks",
+    "gauge": "Live-Werte des Triebwerks"
+  },
+  "controls": {
+    "label": "Steuerung des Triebwerksmodells",
+    "views": {
+      "cutaway": {
+        "name": "Aufgeschnitten",
+        "short": "Schnitt",
+        "hint": "Aufgeschnitten (C)"
+      },
+      "flow": {
+        "name": "Treibstofffluss",
+        "short": "Fluss",
+        "hint": "Treibstofffluss (F)"
+      },
+      "flame": {
+        "name": "Flamme",
+        "short": "Flamme",
+        "hint": "Flamme (P)"
+      },
+      "cluster": {
+        "name": "Booster",
+        "short": "Booster",
+        "hint": "Booster (B)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    },
+    "propellantOptions": {
+      "methane": "Flüssiges Methan",
+      "oxygen": "Flüssiger Sauerstoff"
+    },
+    "engineOptions": {
+      "merlin": "Merlin 1D",
+      "rs25": "RS-25",
+      "rd180": "RD-180",
+      "raptor": "Raptor 3"
+    },
+    "momentOptions": {
+      "liftoff": "Abheben",
+      "maxQ": "Max-Q",
+      "cutoff": "Brennschluss"
+    }
+  },
+  "timeline": {
+    "label": "Zeitpunkt im Startablauf",
+    "phases": "Zu einem Moment im Startablauf springen",
+    "speed": "Wiedergabe",
+    "value": "{{time}}, {{phase}}",
+    "before": "T−{{seconds}} s",
+    "after": "T+{{minutes}}:{{seconds}}",
+    "realTime": "Echtzeit",
+    "slower": "{{factor}}-mal langsamer",
+    "faster": "{{factor}}-mal schneller",
+    "phase": {
+      "start": "Zündung",
+      "liftoff": "Abheben",
+      "climb": "Steigflug",
+      "maxQ": "Max-Q",
+      "thinAir": "Dünne Luft",
+      "cutoff": "Brennschluss"
+    },
+    "during": {
+      "start": "die Pumpen laufen an, dann wird gezündet",
+      "liftoff": "die Halteklammern lösen sich, und die Rakete hebt ab",
+      "climb": "die Rakete wird in den dichten unteren Luftschichten schneller",
+      "maxQ": "das Triebwerk drosselt, während die Luft am stärksten drückt",
+      "thinAir": "das Triebwerk läuft mit voller Leistung, und die Luft wird dünner",
+      "cutoff": "das Triebwerk drosselt und schaltet ab"
+    },
+    "jump": {
+      "start": "Zur Zündung springen",
+      "liftoff": "Zum Abheben springen",
+      "climb": "Zum Steigflug springen",
+      "maxQ": "Zu Max-Q springen",
+      "thinAir": "Zur dünnen Luft springen",
+      "cutoff": "Zum Brennschluss springen"
+    }
+  },
+  "readouts": {
+    "thrust": "Schub",
+    "efficiency": "Spezifischer Impuls",
+    "airPressure": "Luftdruck",
+    "altitude": "Höhe",
+    "throttle": "Leistung"
+  },
+  "parts": {
+    "gimbal": "Kardangelenk",
+    "actuators": "Stellantriebe",
+    "oxygenInlet": "Sauerstoffeinlass",
+    "methaneInlet": "Methaneinlass",
+    "oxygenPump": "Sauerstoff-Turbopumpe",
+    "methanePump": "Methan-Turbopumpe",
+    "oxygenPreburner": "Sauerstoffreicher Vorbrenner",
+    "methanePreburner": "Methanreicher Vorbrenner",
+    "hotGasManifold": "Heißgasleitungen",
+    "injector": "Haupteinspritzkopf",
+    "chamber": "Brennkammer",
+    "throat": "Düsenhals",
+    "coolingChannels": "Kühlkanäle",
+    "nozzle": "Düse",
+    "plume": "Abgasstrahl",
+    "shockDiamonds": "Machsche Knoten",
+    "liquidOxygen": "Flüssiger Sauerstoff",
+    "liquidMethane": "Flüssiges Methan",
+    "oxygenRichGas": "Sauerstoffreiches Gas",
+    "methaneRichGas": "Methanreiches Gas",
+    "booster": "Super-Heavy-Booster"
+  },
+  "plume": {
+    "squeezed": "Von der Luft eingeschnürt",
+    "matched": "An die Luft angepasst",
+    "spreading": "Weit aufgefächert",
+    "off": "Kein Strahl"
+  },
+  "propellants": {
+    "route": {
+      "methane": "Pumpe, Düsen- und Kammerwände, Vorbrenner, Turbine, Brennkammer",
+      "oxygen": "Pumpe, Vorbrenner, Turbine, Brennkammer"
+    }
+  },
+  "engines": {
+    "cycle": {
+      "gasGenerator": "Gasgeneratorverfahren",
+      "fuelRichStaged": "Brennstoffreiches Hauptstromverfahren",
+      "oxygenRichStaged": "Sauerstoffreiches Hauptstromverfahren",
+      "fullFlow": "Vollstrom-Hauptstromverfahren"
+    },
+    "propellants": {
+      "oxygenKerosene": "Flüssiger Sauerstoff und Kerosin",
+      "oxygenHydrogen": "Flüssiger Sauerstoff und Wasserstoff",
+      "oxygenMethane": "Flüssiger Sauerstoff und Methan"
+    },
+    "dumps": {
+      "yes": "Ja, ins Freie",
+      "no": "Nein"
+    }
+  },
+  "cycle": {
+    "tank": "Tank",
+    "pump": "Pumpe",
+    "boostPump": "Vorförderpumpe",
+    "burner": "Brenner",
+    "preburner": "Vorbrenner",
+    "gasGenerator": "Gasgenerator",
+    "turbine": "Turbine",
+    "chamber": "Brennkammer",
+    "nozzle": "Düse",
+    "overboard": "Ins Freie",
+    "oxygen": "Sauerstoff",
+    "fuel": "Brennstoff"
+  },
+  "units": {
+    "tonnes": "{{value}} t",
+    "tonnesAbout": "etwa {{value}} t",
+    "seconds": "{{value}} s",
+    "bar": "{{value}} bar",
+    "barAbout": "etwa {{value}} bar",
+    "km": "{{value}} km",
+    "kmPerHour": "{{value}} km/h",
+    "kmPerSecond": "{{value}} km/s",
+    "kgPerSecond": "{{value}} kg/s",
+    "kg": "{{value}} kg",
+    "kelvin": "{{value}} K",
+    "kelvinAbout": "etwa {{value}} K",
+    "kelvinCelsius": "{{kelvin}} K ({{celsius}} °C)",
+    "percent": "{{value}} %",
+    "degrees": "{{value}}°",
+    "times": "{{value}}-fach",
+    "off": "Aus"
+  },
+  "sections": {
+    "overview": {
+      "title": "Gas nach hinten, Rakete nach vorn",
+      "p1": "Im Grunde ist ein Raketentriebwerk ganz einfach: Es stößt heißes Gas so schnell wie möglich nach hinten aus. Wenn Sie etwas wegdrücken, drückt es Sie immer in die Gegenrichtung zurück. Genau das passiert bei einem Feuerwehrschlauch: Schießt vorn das Wasser heraus, drückt er kräftig nach hinten. Diesen Rückstoß nennt man <strong>Schub</strong>. Eine Rakete hat alles, was sie ausstößt, selbst an Bord. Sie muss sich also nicht an der Luft abstoßen und funktioniert im All genauso gut. Raptor ist das Triebwerk, das SpaceX für seine Rakete Starship baut. Es verbrennt flüssiges Methan mit flüssigem Sauerstoff. Die Flamme macht daraus heißes Gas unter enormem Druck, und die Glocke unten am Triebwerk jagt es mit mehr als 3 km/s hinaus.",
+      "p2": "Vor Ihnen sehen Sie <strong>Raptor 3</strong>, die neueste Version. Im Flug liefert das Triebwerk 250 Tonnen Schub, ausgelegt hat SpaceX es sogar für 280. Dabei wiegt es nur 1.525 kg. Sein Schub ist also rund 160-mal so groß wie sein eigenes Gewicht. Es ist etwa 3,1 m hoch und 1,3 m breit. Dreiunddreißig solcher Triebwerke arbeiten gleichzeitig unter dem Super-Heavy-Booster. Jedes schluckt pro Sekunde etwa eine Dreivierteltonne Treibstoff. Der ganze Booster verbraucht in derselben Zeit rund 25 Tonnen.",
+      "p3": "Das Modell begleitet eines der mittleren Triebwerke durch die gesamte <strong>Brennphase</strong> eines Starts: vom Startbefehl auf der Rampe bis zum Brennschluss des Boosters. Einiges ist dabei vereinfacht. Das Innere von Raptor 3 hat SpaceX nie gezeigt. Der Schnitt stellt deshalb den bekannten Weg der Treibstoffe als übersichtliches Schema dar, nicht die echten Rohrleitungen. Auch den Leistungsverlauf hat SpaceX nicht veröffentlicht. Das Modell leitet ihn aus der Geschwindigkeit ab, die im Livestream des Starts eingeblendet wird. Die Zündung läuft in der üblichen Reihenfolge ab. Laut SpaceX braucht sie insgesamt etwa 3 Sekunden. Wie lange jeder einzelne Schritt dauert, hat das Modell selbst geschätzt. Der Abgasstrahl ändert seine Form wie der echte, nur einfacher. Ziehen Sie den Regler der Zeitleiste, um den Start zu verfolgen. Ziehen Sie das Modell, um es zu drehen.",
+      "p4": "Mit jeder neuen Version hat Raptor an Schub gewonnen und an Gewicht verloren. <strong>Raptor 1</strong> lieferte 185 Tonnen Schub und wog 2.080 kg. Raptor 2 kam auf 230 Tonnen bei 1.630 kg. Raptor 3 ist für 280 Tonnen gebaut und wiegt 1.525 kg. Von außen wirkt es außerdem viel aufgeräumter, denn sein Hitzeschild ist weg. Bei früheren Versionen schützte dieser Schild die Rohre und Kabel, die außen am Triebwerk entlangliefen. Bei Raptor 3 wanderten die meisten dieser Leitungen ins Innere der Bauteile. Viele dieser Bauteile kommen aus dem 3D-Drucker. Weil nichts mehr zu schützen war, konnte der Schild entfallen.",
+      "burn": "Treibstoffverbrauch pro Sekunde",
+      "lift": "Schub im Verhältnis zum Gewicht",
+      "booster": "Alle 33 Triebwerke zusammen"
+    },
+    "propellants": {
+      "title": "Zwei tiefkalte Flüssigkeiten",
+      "p1": "Ein Automotor holt sich seinen Sauerstoff aus der Luft. Eine Rakete aber steigt so hoch, dass dort kaum noch Luft ist. Sie muss ihren Sauerstoff also selbst mitbringen. Raptor verbrennt Methan und Sauerstoff. Bei Zimmertemperatur sind beide gasförmig, und als Gas nähmen sie viel zu viel Platz ein. Deshalb reisen beide als Flüssigkeiten mit, gekühlt bis unter ihren <strong>Siedepunkt</strong>. Bei Methan sind das 111 K, etwa −162 °C. Bei Sauerstoff sind es 90 K, etwa −183 °C. Und je kälter eine Flüssigkeit ist, desto dichter wird sie. So passt mehr davon in denselben Tank.",
+      "p2": "Das Triebwerk verbrennt die beiden nicht zu gleichen Teilen. Auf jedes Kilogramm Methan kommen etwa 3,6 kg Sauerstoff. Nach Gewicht besteht die <strong>Mischung</strong> also fast zu vier Fünfteln aus Sauerstoff. Deshalb ist die Sauerstoffseite des Triebwerks kräftiger gebaut, mit breiterem Einlass und größerer Pumpe. Bei voller Leistung schluckt ein einzelnes Triebwerk jede Sekunde etwa 593 kg Sauerstoff und etwa 165 kg Methan. Um so viel Flüssigkeit so schnell zu bewegen, braucht es starke Pumpen. Von ihnen handelt das nächste Kapitel.",
+      "p3": "Das Methan nimmt einen Umweg, bevor es verbrennt. Hinter seiner Pumpe fließt das meiste davon durch viele dünne Kanäle in den Wänden von Düse und Brennkammer. Unterwegs nimmt die kalte Flüssigkeit Wärme auf. Nur deshalb schmilzt das Metall nicht, obwohl direkt daneben eine Flamme mit etwa 3.500 K brennt. Fachleute nennen das <strong>regenerative Kühlung</strong>. Die Wärme geht dabei nicht verloren, denn sie heizt das Methan vor, bevor es ins Feuer strömt. Der Sauerstoff nimmt die Abkürzung: direkt von seiner Pumpe zu seinem Vorbrenner. Tippen Sie auf einen Treibstoff, um seinem Weg durch das Triebwerk zu folgen.",
+      "p4": "Manche Raketenbauer, darunter SpaceX, gehen noch einen Schritt weiter. Sie kühlen beide Flüssigkeiten weit unter ihren Siedepunkt, bis fast an den Gefrierpunkt. Das nennt man <strong>Unterkühlen</strong>. Es lohnt sich, weil sich eine kältere Flüssigkeit ein wenig zusammenzieht. Derselbe Tank fasst dann mehr davon. Meist passt so etwa ein Zehntel mehr Treibstoff hinein, ohne dass die Rakete größer werden muss. Viel Spielraum gibt es dabei allerdings nicht. Methan gefriert schon bei etwa 91 K, nur 20 Grad unter seinem Siedepunkt. Wie kalt die Treibstoffe in Starship genau sind, hat SpaceX nicht verraten.",
+      "boils": "Siedet bei",
+      "share": "Massenanteil in der Mischung",
+      "flow": "Aktueller Durchfluss",
+      "route": "Weg durch das Triebwerk"
+    },
+    "pumps": {
+      "title": "Zwei Pumpen, zwei kleine Feuer",
+      "p1": "Raptor muss jede Sekunde etwa eine Dreivierteltonne Treibstoff in eine Kammer pressen, in der ein Druck von über 300 bar herrscht. Das ist mehr als 300-mal so viel wie der Luftdruck um Sie herum. Tanks, die aus eigener Kraft so stark drücken könnten, wären viel zu schwer. Deshalb erledigen Pumpen diese Arbeit. Jede Pumpe sitzt mit einer Turbine auf einer gemeinsamen Welle. Eine Turbine ist ein Schaufelrad, das von heißem Gas angetrieben wird. Pumpe und Turbine zusammen bilden eine <strong>Turbopumpe</strong>. Raptor hat zwei davon: eine größere für den Sauerstoff und eine kleinere für das Methan.",
+      "p2": "Das heiße Gas für die Turbinen liefern zwei kleine Feuer, die <strong>Vorbrenner</strong>. Jede Turbopumpe hat ihren eigenen. Fast der gesamte Sauerstoff fließt durch den sauerstoffreichen Vorbrenner, in dem nur ein wenig Methan verbrennt. Heraus kommt heißes Gas, das noch größtenteils aus Sauerstoff besteht. Es treibt die Sauerstoffpumpe an. Der methanreiche Vorbrenner macht es umgekehrt: Durch ihn fließt fast das gesamte Methan, und nur wenig Sauerstoff verbrennt darin. Sein Gas treibt die Methanpumpe an. Danach strömen beide Gase in die Hauptbrennkammer, wo sie gemeinsam vollständig verbrennen. Nichts geht verloren.",
+      "p3": "Dieses Prinzip heißt <strong>Vollstrom-Hauptstromverfahren</strong>, denn jeder Tropfen beider Treibstoffe strömt durch eine Turbine, bevor er verbrennt. Das bringt drei große Vorteile. Weil so viel Gas die Turbinen antreibt, können sie kühler laufen: mit einigen hundert Grad statt mit über 3.000. So halten sie länger. Außerdem können die Pumpen kräftiger arbeiten. Das sorgt für mehr Druck in der Kammer und mehr Schub aus einem kleineren Triebwerk. Und jede Welle hat nur mit einem Treibstoff zu tun. Es braucht also keine heikle Dichtung, die heißen Sauerstoff vom Brennstoff fernhält. Die Szene zeigt die Zündung in Zeitlupe: Erst laufen die Pumpen an, dann zünden die Vorbrenner, zuletzt die Hauptbrennkammer. Tippen Sie unten auf ein Triebwerk, um sein Verfahren mit dem von Raptor zu vergleichen.",
+      "p4": "Die größte Herausforderung ist die Sauerstoffseite. Heißes Gas, das überwiegend aus Sauerstoff besteht, zerfrisst die meisten Metalle. Und genau darin muss sich die Sauerstoffturbine drehen. SpaceX hat deshalb eigene Legierungen entwickelt, die das aushalten, etwa eine namens <strong>SX500</strong>. Die Idee des Vollstromverfahrens ist nicht neu. Die Sowjetunion baute in den 1960er-Jahren das RD-270 und testete es auf dem Prüfstand. Die USA erprobten Mitte der 2000er-Jahre den Integrated Powerhead Demonstrator. Keines von beiden ist je geflogen. Am 25. Juli 2019 flog Raptor als erstes Vollstromtriebwerk: Ein einzelnes Raptor-Triebwerk hob das Testfahrzeug Starhopper etwa 20 m in die Höhe.",
+      "caption": "Pumpen sind blau, Brenner orange, Turbinen grau. Ein roter Pfeil zeigt Gas, das ins Freie abgelassen wird.",
+      "cycle": "Verfahren",
+      "propellants": "Treibstoffe",
+      "pressure": "Brennkammerdruck",
+      "thrust": "Schub auf Meereshöhe",
+      "dumps": "Turbinengas abgelassen"
+    },
+    "chamber": {
+      "title": "Wo das große Feuer brennt",
+      "p1": "Die beiden heißen Gase treffen sich am <strong>Haupteinspritzkopf</strong>, einer Platte oben in der Brennkammer. Dort mischen sie sich und verbrennen bei etwa 3.500 K, also bei mehr als 3.200 °C. Der Druck liegt bei über 300 bar. Im Jahr 2023 erreichte ein Raptor 3 auf dem Prüfstand sogar den Rekordwert von 350 bar. Die Kammer selbst ist überraschend klein. Den größten Teil der Triebwerkshöhe nehmen die Pumpen darüber und die Düse darunter ein.",
+      "p2": "Unter der Kammer verengen sich die Wände zum <strong>Düsenhals</strong>. Er misst etwa 22 cm, ungefähr so viel wie ein Essteller. Das gesamte Gas muss sich durch diese Engstelle zwängen und wird dabei schneller. Genau im Hals erreicht es Schallgeschwindigkeit. Danach weiten sich die Wände wieder zur Düse, und das Gas beschleunigt weiter. Wenn es das Triebwerk verlässt, ist es schneller als 3 km/s, etwa zehnmal so schnell wie der Schall in Luft.",
+      "p3": "Nirgends im Triebwerk ist es heißer als hier. Die Wände halten nur, weil kaltes Methan durch die Kanäle in ihrem Inneren rast. Das Feuer selbst brennt sauber, denn beide Treibstoffe kommen bereits als Gas an. Wenn <strong>Gas auf Gas</strong> trifft, gibt es keine Tropfen, die erst zerstäubt werden und verdampfen müssen. Deshalb mischen sich die beiden schnell und verbrennen vollständig. Unten sehen Sie, was jede Sekunde in die Kammer strömt und wie schnell das Abgas sie verlässt.",
+      "p4": "Wie zündet man ein Feuer bei über 300 bar? In den beiden Vorbrennern sorgen kleine Fackelzünder für die Flamme. Elon Musk hat sie mit besonders robusten Zündkerzen verglichen. Die Hauptbrennkammer dagegen kommt seit Raptor 2 ganz ohne Zünder aus. Die Gase aus den Vorbrennern sind so heiß und so dicht, dass sie sofort Feuer fangen, wenn sie aufeinandertreffen. Für Ingenieure verhalten sich die beiden, als wären sie <strong>hypergol</strong>. So nennt man Treibstoffe, die bei Berührung von selbst in Flammen aufgehen. Ein Bauteil weniger ist eine Fehlerquelle weniger.",
+      "oxygen": "Sauerstoffzufluss",
+      "methane": "Methanzufluss",
+      "pressure": "Brennkammerdruck",
+      "temperature": "Flamme",
+      "speed": "Abgasgeschwindigkeit"
+    },
+    "nozzle": {
+      "title": "Eine Glocke für dichte und dünne Luft",
+      "p1": "Die <strong>Düse</strong> ist die Glocke unter der Brennkammer. Nach unten wird sie immer weiter. Das Gas strömt hindurch, dehnt sich dabei aus, kühlt ab und wird schneller. Die Glocke verwandelt also Druck und Wärme in Geschwindigkeit, und aus Geschwindigkeit entsteht Schub. Allerdings passt eine Glocke nur zu einem einzigen Luftdruck perfekt. Ist sie zu kurz, verlässt das Gas die Düse, bevor es seine ganze Kraft abgegeben hat. Ist sie zu weit, drückt die Außenluft wieder hinein. Die Glocke von Raptor ist für Meereshöhe ausgelegt, denn dort beginnt der Booster seinen Aufstieg.",
+      "p2": "Auf Meereshöhe verlässt das Abgas die Glocke mit etwa 0,9 bar. Die Luft ringsum hat etwa 1 bar, also etwas mehr. Deshalb drückt sie den Strahl zusammen. Darin laufen Stoßwellen hin und her. Wo sie sich kreuzen, erhitzt sich das Gas und leuchtet. Diese hellen Flecken heißen <strong>Machsche Knoten</strong>, oft auch Schockdiamanten. Sie bleiben an Ort und Stelle, während das Gas durch sie hindurchrast, wie stehende Wellen in einem reißenden Bach.",
+      "p3": "Je höher die Rakete steigt, desto dünner wird die Luft und desto weniger drückt sie auf den Abgasstrahl. Er fächert sich weit auf, und die Knoten ziehen sich in die Länge und verblassen. Bei gleicher Leistungsstufe liefert das Triebwerk jetzt etwa 5 Prozent mehr Schub, rund 14 Tonnen. Sein <strong>spezifischer Impuls</strong> steigt von etwa 330 s auf etwa 350 s. Dieser Wert gibt an, wie viel Schub das Triebwerk aus einer bestimmten Menge Treibstoff holt. In 30 km Höhe ist der Zuwachs schon fast vollständig erreicht. Ziehen Sie den Regler, um das Triebwerk in jeder Höhe des Aufstiegs zu sehen. Die Delle im Schub um Max-Q kommt vom Drosseln des Triebwerks, nicht von der Luft.",
+      "p4": "Das Raumschiff oben auf dem Booster nutzt außerdem eine Variante namens <strong>Raptor Vacuum</strong>, kurz RVac, mit einer viel breiteren Glocke. Im All gibt es keine Luft, die den Strahl zusammendrückt. Dort kann eine größere Glocke das Gas weiter ausdehnen und kommt so auf etwa 380 s. Auf Meereshöhe verträgt RVac aber keine volle Leistung. Die dichte Luft würde in die Glocke hineindrücken und die Strömung von der Wand ablösen. Dabei wird die Düse so heftig seitlich durchgerüttelt, dass sie Schaden nehmen kann. Deshalb fliegt der Booster mit Glocken für Meereshöhe, und RVac wartet auf das All.",
+      "control": {
+        "label": "Höhe über dem Boden",
+        "ground": "Startrampe",
+        "top": "Kurz vor Brennschluss",
+        "air": "Luftdruck",
+        "exit": "Abgasdruck am Düsenende",
+        "plume": "Strahl",
+        "thrust": "Schub",
+        "efficiency": "Spezifischer Impuls"
+      }
+    },
+    "ascent": {
+      "title": "Dreiunddreißig Triebwerke, ein Start",
+      "p1": "Super Heavy trägt 33 Raptor-Triebwerke in drei Ringen: 3 in der Mitte, 10 darum herum und 20 am äußeren Rand. Die inneren 13 übernehmen die Steuerung. Jedes von ihnen hängt oben an einem <strong>Kardangelenk</strong>. Zwei Stellantriebe können es um bis zu etwa 15 Grad schwenken. Schwenkt ein Triebwerk, schwenkt auch sein Schub mit, und das dreht die ganze Rakete. Die äußeren 20 sind fest montiert und lassen sich nicht schwenken. Das Triebwerk in diesem Modell ist eines der drei in der Mitte.",
+      "p2": "Die Triebwerke zünden etwa 3 Sekunden vor dem Abheben. Die Rakete prüft, ob jedes einzelne richtig läuft. Erst dann, bei T−0, lassen die Halteklammern sie los. In den dichten unteren Luftschichten wird sie immer schneller. Irgendwann zwischen 45 und 60 Sekunden nach dem Abheben kommt <strong>Max-Q</strong>: der Moment, in dem die Luft am stärksten gegen die Rakete drückt. Für eine Weile wird der Schub gedrosselt, um die Belastung zu verringern. Um wie viel, hat SpaceX nicht gesagt. Die Kurve hier hat das Modell deshalb selbst aus dem Livestream abgelesen.",
+      "p3": "Nach Max-Q gehen die Triebwerke wieder auf volle Leistung, und die dünner werdende Luft bringt noch etwas Schub dazu. Bei etwa T+2:20 ist der Booster rund 52 km hoch und etwa 5.800 km/h schnell. Dann schalten seine Triebwerke ab. Das Raumschiff obendrauf zündet seine eigenen sechs Triebwerke, solange beide Stufen noch verbunden sind. Das nennt man <strong>heiße Stufentrennung</strong>. Jedes Raptor 3 lässt sich im Flug neu zünden. So kann der Booster seine Triebwerke noch einmal starten und zurückfliegen. Tippen Sie unten auf einen Moment, um im Diagramm dorthin zu springen.",
+      "p4": "Raptor 3 flog zum ersten Mal bei Flug 12, am 22. Mai 2026. Die größte Hürde war bisher das Wiederzünden im Flug. Bei diesem Flug sprangen für die <strong>Boostback-Zündung</strong> 20 der 28 Triebwerke wieder an. Mit dieser Zündung dreht der Booster um und nimmt Kurs zurück zum Startplatz. Für die Landezündung startete dagegen nur ein einziges Triebwerk neu. Genauso streng wird der Start am Boden überwacht. Am 16. Juli 2026 brach der erste Startversuch von Flug 13 bei T−0 automatisch ab. Einige Triebwerke waren nicht auf volle Leistung gekommen. Die Rakete blieb sicher auf der Startrampe.",
+      "caption": "Schub eines Triebwerks in Orange, Höhe in Blau, Geschwindigkeit in Weiß. Die senkrechte Linie markiert den aktuellen Moment.",
+      "speed": "Geschwindigkeit",
+      "booster": "Alle 33 Triebwerke",
+      "steer": "Schwenkwinkel"
+    }
+  }
+}

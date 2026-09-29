@@ -42,7 +42,7 @@ export interface PresetBindingOptions<S extends Playback, P extends ScenePreset>
 }
 
 export interface LabelVisibilityShell {
-  labels: LabelSource;
+  labels: LabelSource & Pick<LabelLayer, 'setPriority'>;
   rig: Pick<CameraRig, 'camera'>;
   viewport: Pick<Viewport, 'onResize'>;
   onFrame: SceneShell['onFrame'];
@@ -131,6 +131,7 @@ export function createLabelVisibility(
   shell: LabelVisibilityShell,
   priority: readonly string[],
 ): SceneLabelVisibility {
+  shell.labels.setPriority(priority);
   const visibility = new LabelVisibility(shell.labels, shell.rig.camera, priority);
   const removers = [
     shell.viewport.onResize((size) => visibility.setViewport(size)),

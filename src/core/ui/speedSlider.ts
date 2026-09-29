@@ -29,6 +29,15 @@ export function bindSpeedSlider(
     note.hidden = false;
     note.hidden = !fitsWithin(output);
   };
+  let fitPending = false;
+  const fitNextFrame = () => {
+    if (fitPending) return;
+    fitPending = true;
+    requestAnimationFrame(() => {
+      fitPending = false;
+      fitNote();
+    });
+  };
   new ResizeObserver(fitNote).observe(output.parentElement ?? output);
 
   input.addEventListener('input', () => store.getState().setSpeed(Number(input.value)));
@@ -39,7 +48,7 @@ export function bindSpeedSlider(
       showRangeValue(input, speed, describeSpeed(scale, speed));
       value.textContent = scale.format(speed);
       note.textContent = scale.describe(speed);
-      fitNote();
+      fitNextFrame();
     },
   );
 }

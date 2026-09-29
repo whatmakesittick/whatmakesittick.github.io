@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { Preset, Readout, Timeline } from '../explainer';
 import { createExplainerStore } from '../store';
 import { mountReadouts } from './readouts';
@@ -48,5 +48,18 @@ describe('gauge readouts', () => {
     const values = document.querySelectorAll<HTMLElement>('.readout-value');
     expect(Array.from(values, (value) => value.textContent)).toEqual(['1', '2']);
     values.forEach((value) => expect(value.style.getPropertyValue('--tone')).toBe(TONE));
+  });
+
+  it('writes the tone and the meter only when they change', async () => {
+    document.body.innerHTML = '<dl data-readouts></dl>';
+    const store = createStore();
+    mountReadouts(document, store, READOUTS);
+    const value = document.querySelector<HTMLElement>('.readout-value');
+    if (!value) throw new Error('No readout value');
+    const setProperty = vi.spyOn(value.style, 'setProperty');
+    await new Promise((resolve) => setTimeout(resolve, 40));
+    store.getState().setPhase(10);
+    await new Promise((resolve) => setTimeout(resolve, 40));
+    expect(setProperty).not.toHaveBeenCalled();
   });
 });

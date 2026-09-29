@@ -16,6 +16,8 @@ import type { MaterialLibraryOptions } from './materials';
 import { Stage } from './stage';
 import { createSceneTextures } from './textures';
 import type { SceneTextures } from './textures';
+import { afterFirstFrameWhenIdle } from './warmUp';
+import { keepOutOverlays, watchKeepOut } from './keepOut';
 import { createViewport } from './viewport';
 import type { Viewport } from './viewport';
 
@@ -101,6 +103,7 @@ export function createSceneHost(
   let needsRender = true;
   let disposed = false;
   let stopPlayback = () => {};
+  let cancelWarmUp = () => {};
 
   const invalidate = () => {
     needsRender = true;
@@ -115,6 +118,7 @@ export function createSceneHost(
     rig.onChange(invalidate),
     labels.onChange(invalidate),
     highlighter.onChange(invalidate),
+    watchKeepOut(viewport.element, keepOutOverlays(container), (areas) => labels.setKeepOut(areas)),
   ];
 
   const shell: SceneShell = {
@@ -157,6 +161,10 @@ export function createSceneHost(
     loop = startLoop((deltaSeconds) => renderFrame(playback, deltaSeconds));
     stopPlayback = playback.subscribe(invalidate);
     invalidate();
+    cancelWarmUp();
+    cancelWarmUp = afterFirstFrameWhenIdle(() =>
+      materials.compileFadedVariants(() => viewport.renderer.compileAsync(scene, rig.camera)),
+    );
   };
 
   return {
@@ -166,6 +174,7 @@ export function createSceneHost(
     },
     dispose: () => {
       disposed = true;
+      cancelWarmUp();
       loop?.stop();
       stopPlayback();
       removers.forEach((remove) => remove());

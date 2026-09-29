@@ -99,6 +99,11 @@ function applyOpacity(material: Material, base: ToneBase, style: DimStyle, empha
   material.opacity = base.opacity * lerp(style.opacity, 1, emphasis);
 }
 
+function setTransparent(material: Material, transparent: boolean): void {
+  material.transparent = transparent;
+  material.needsUpdate = true;
+}
+
 function applyTone(material: Material, base: ToneBase, style: DimStyle, emphasis: number): void {
   applyColor(material, base, style, emphasis);
   applyGlow(material, base, style, emphasis);
@@ -169,10 +174,32 @@ export class MaterialLibrary {
     this.extras.get(group)?.forEach((material) => this.emphasise(material, value));
   }
 
+  compileFadedVariants(compile: () => unknown): void {
+    const opaque = this.style.opacity < 1 ? this.opaqueDimmable() : [];
+    if (opaque.length === 0) return;
+    opaque.forEach((material) => setTransparent(material, true));
+    try {
+      compile();
+    } finally {
+      opaque.forEach((material) => setTransparent(material, false));
+    }
+  }
+
   dispose(): void {
     this.finishes.forEach((byFinish) => byFinish.forEach((material) => material.dispose()));
     this.finishes.clear();
     this.extras.clear();
+  }
+
+  private opaqueDimmable(): Material[] {
+    const found: Material[] = [];
+    const collect = (materials: Iterable<Material>, group: string) => {
+      if (!this.canDim(group)) return;
+      for (const material of materials) if (!material.transparent) found.push(material);
+    };
+    this.finishes.forEach((byFinish, group) => collect(byFinish.values(), group));
+    this.extras.forEach((materials, group) => collect(materials, group));
+    return found;
   }
 
   private emphasise(material: Material, emphasis: number): void {

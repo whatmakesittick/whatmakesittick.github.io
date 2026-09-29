@@ -4,7 +4,7 @@ import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import type { PartInfo } from '../explainer';
 import { onLanguageChanged, t } from '../i18n';
 import { layoutLabels, TEXT_OFFSET_PX, TEXT_RISE_PX } from './labelLayout';
-import type { LabelBox, LabelSide, Placement, Point } from './labelLayout';
+import type { LabelBox, LabelSide, Placement, Point, Rect } from './labelLayout';
 import { NO_SAFE_AREA } from './lens';
 import type { ViewportSize } from './lens';
 import { Listeners } from './listeners';
@@ -19,16 +19,18 @@ const TEXT_SELECTOR = '.scene-label__text';
 const DEGREES_PER_RADIAN = 180 / Math.PI;
 const UNMEASURED: TextSize = { width: 0, height: 0 };
 const CLIP_RANGE = 1;
+const CROWDED_CLASS = 'scene-label--crowded';
 const SIDE_CLASS: Record<LabelSide, string> = {
   left: 'scene-label--left',
   right: 'scene-label--right',
 };
 
 function samePlacement(a: Placement | undefined, b: Placement): boolean {
-  return a?.side === b.side && a.shift === b.shift;
+  return a?.side === b.side && a.shift === b.shift && a.hidden === b.hidden;
 }
 
 function applyPlacement(element: HTMLElement, placement: Placement): void {
+  element.classList.toggle(CROWDED_CLASS, placement.hidden === true);
   setSide(element, placement.side);
   const dx = placement.side === 'right' ? TEXT_OFFSET_PX : -TEXT_OFFSET_PX;
   const dy = placement.shift - TEXT_RISE_PX;
@@ -80,6 +82,8 @@ export class LabelLayer {
   private changes = 0;
   private readonly stopTranslating: () => void;
   private viewport: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
+  private keepOut: readonly Rect[] = [];
+  private ranks: ReadonlyMap<string, number> = new Map();
   private readonly textSizes = new Map<string, TextSize>();
   private readonly texts = new Map<Element, string>();
   private readonly observer = new ResizeObserver((entries) => this.remeasure(entries));
@@ -176,16 +180,32 @@ export class LabelLayer {
     this.viewport = size;
   }
 
+  setKeepOut(areas: readonly Rect[]): void {
+    this.keepOut = areas;
+    this.listeners.notify();
+  }
+
+  setPriority(order: readonly string[]): void {
+    this.ranks = new Map(order.map((id, rank) => [id, rank]));
+    this.listeners.notify();
+  }
+
   layout(camera: Camera): void {
     const boxes: LabelBox[] = [];
     this.labels.forEach((label, id) => {
       const anchor = isShown(label) ? this.screenPoint(label, camera) : undefined;
       if (!anchor) return;
       const { width, height } = this.textSizes.get(id) ?? UNMEASURED;
-      boxes.push({ id, anchor, width, height, preferred: this.parts[id].side });
+      const rank = this.ranks.get(id);
+      boxes.push({ id, anchor, width, height, preferred: this.parts[id].side, rank });
     });
     const { width, height, safe } = this.viewport;
-    const placements = layoutLabels(boxes, { width, height, bottomInset: safe.bottom });
+    const placements = layoutLabels(boxes, {
+      width,
+      height,
+      bottomInset: safe.bottom,
+      keepOut: this.keepOut,
+    });
     placements.forEach((placement, id) => this.place(id, placement));
   }
 
