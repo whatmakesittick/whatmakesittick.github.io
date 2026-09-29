@@ -28,6 +28,7 @@ import { PlumePart } from './parts/flame/plume';
 import { FlowStreamsPart } from './parts/flow/flowStreams';
 import { LabelAnchors } from './parts/labels';
 import { REGIONS } from './regions';
+import { SkyDomePart } from './parts/sky/skyDome';
 
 const PUMP_SIDES: readonly PumpSide[] = ['oxygen', 'methane'];
 const PUMP_DIRECTION: Readonly<Record<PumpSide, number>> = { oxygen: 1, methane: -1 };
@@ -77,6 +78,7 @@ export class RaptorAssembly implements Assembly {
   private readonly flow: FlowStreamsPart;
   private readonly cluster: ClusterPart;
   private readonly labels: LabelAnchors;
+  private readonly sky: SkyDomePart;
   private readonly spinAngle: Record<PumpSide, number> = { oxygen: 0, methane: 0 };
   private phase: number | null = null;
 
@@ -118,7 +120,14 @@ export class RaptorAssembly implements Assembly {
       this.flow.object,
       this.plume.object,
     );
-    this.root.add(this.mount.fixed, this.engine, this.cluster.object, this.cluster.light);
+    this.sky = new SkyDomePart(context);
+    this.root.add(
+      this.sky.mesh,
+      this.mount.fixed,
+      this.engine,
+      this.cluster.object,
+      this.cluster.light,
+    );
     const plumeOffset = this.plume.object.position.toArray();
     const streamHost = { object: this.flow.object, offset: [0, 0, 0] as const };
     this.labels = new LabelAnchors(this.engine, this.cluster.object, {
@@ -137,6 +146,7 @@ export class RaptorAssembly implements Assembly {
       this.cutaway.set(cut);
       this.labels.setCutaway(cut);
     }
+    this.sky.setAltitude(engine.altitudeKm);
     this.engine.rotation.set(toRadians(engine.gimbal.pitch), 0, toRadians(engine.gimbal.yaw));
     this.mount.follow(this.engine);
     this.applyFire(engine, state);

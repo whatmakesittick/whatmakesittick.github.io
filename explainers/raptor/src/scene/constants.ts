@@ -372,3 +372,54 @@ export const SURFACES = {
     ],
   },
 } as const;
+
+export const SKY = {
+  radius: 20000,
+  widthSegments: 48,
+  heightSegments: 24,
+  renderOrder: -10,
+  topKm: 60,
+  dipExaggeration: 2.2,
+  sunDirection: [-1, -0.08, -0.35],
+  haze: [0.14, 0.03],
+  hazeGoneKm: 30,
+  duskStars: 0.04,
+  starsFrom: 18,
+  starsFull: 42,
+  lightsGoneKm: 3,
+  shoreFadeKm: [4, 20],
+  zenith: [
+    [0, '#13213f'],
+    [8, '#0f1936'],
+    [25, '#0a0c26'],
+    [45, '#030410'],
+  ],
+  horizon: [
+    [0, '#302e48'],
+    [10, '#27335a'],
+    [30, '#16275a'],
+    [50, '#0a1230'],
+  ],
+  ground: [
+    [0, '#0a121d'],
+    [10, '#0a1424'],
+    [40, '#0b1a30'],
+  ],
+  glow: [
+    [0, '#7a4632'],
+    [15, '#5a3a52'],
+    [40, '#1e2a55'],
+  ],
+  limb: [
+    [0, '#000000'],
+    [15, '#101f44'],
+    [40, '#3f7fe0'],
+  ],
+} as const satisfies {
+  zenith: readonly (readonly [number, string])[];
+  horizon: readonly (readonly [number, string])[];
+  ground: readonly (readonly [number, string])[];
+  glow: readonly (readonly [number, string])[];
+  limb: readonly (readonly [number, string])[];
+  [key: string]: unknown;
+};

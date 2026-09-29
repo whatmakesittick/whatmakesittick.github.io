@@ -38,7 +38,7 @@ const REGIONS: readonly RegionId[] = [
   'nozzleAndPlume',
   'booster',
 ];
-const TRIANGLE_BUDGET = 450_000;
+const TRIANGLE_BUDGET = 460_000;
 const FRAME = 1 / 60;
 const STEP = 0.05;
 const TURBINE_COLOUR = new Color(PAINT.inconel).getHex();
