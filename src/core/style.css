@@ -350,7 +350,7 @@ a:hover {
   flex: 1;
 }
 
-.not-found-link {
+.pill-link {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -366,8 +366,8 @@ a:hover {
     color 160ms ease;
 }
 
-.not-found-link:hover,
-.not-found-link:focus-visible {
+.pill-link:hover,
+.pill-link:focus-visible {
   border-color: var(--accent);
   color: var(--accent);
 }
