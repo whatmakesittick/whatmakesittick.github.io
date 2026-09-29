@@ -52,7 +52,8 @@ describe('regions', () => {
     expect(holds('chamber', [0, CHAMBER.top, 0])).toBe(true);
     expect(holds('chamber', [0, THROAT.y, 0])).toBe(true);
     expect(holds('nozzle', [NOZZLE_EXIT.radius, NOZZLE_EXIT.y, 0])).toBe(true);
-    expect(holds('hero', [0, NOZZLE_EXIT.y - 500, 0])).toBe(true);
+    expect(holds('hero', [0, NOZZLE_EXIT.y - 250, 0])).toBe(true);
+    expect(holds('hero', [0, NOZZLE_EXIT.y - 400, 0])).toBe(false);
     expect(holds('nozzleAndPlume', [0, NOZZLE_EXIT.y - 1400, 0])).toBe(true);
   });
 

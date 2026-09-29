@@ -15,7 +15,7 @@ import {
   pad,
 } from '../model';
 
-const HERO_PLUME_CM = 500;
+const HERO_PLUME_CM = 250;
 const BOOSTER_PLUME_CM = 800;
 const SEA_LEVEL_PLUME_CM = 1400;
 const REGION_MARGIN = 4;
@@ -30,9 +30,9 @@ export const REGIONS: Readonly<Record<RegionId, RegionSpec>> = {
   },
   engine: ENGINE_EXTENT,
   hero: {
-    x: [-110, 110],
+    x: [-80, 80],
     y: [NOZZLE_EXIT.y - HERO_PLUME_CM, THRUST_MOUNT.top],
-    z: [-80, 80],
+    z: [-70, 70],
   },
   powerhead: { x: [-80, 80], y: [INJECTOR.y - 5, THRUST_MOUNT.top], z: [-40, 40] },
   turbopumps: pad(
