@@ -1,6 +1,7 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { initI18n } from '@core/i18n';
 import { mountActions } from '@core/ui/actions';
+import { TEXT_REFRESH_INTERVAL_MS } from '@core/ui/throttle';
 import chapters from '../../chapters.html?raw';
 import en from '../../locales/en.json';
 import { MOMENTS } from '../model/phases';
@@ -15,6 +16,10 @@ function readout(id: string): string | null | undefined {
 
 function click(action: string, value: string): void {
   document.querySelector<HTMLElement>(`[data-action="${action}"][data-value="${value}"]`)?.click();
+}
+
+function nextRefresh(): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, TEXT_REFRESH_INTERVAL_MS + 1));
 }
 
 function slide(control: string, value: number): void {
@@ -96,15 +101,16 @@ describe('chapter widgets', () => {
     expect(readout('chamber-oxygen')).toBe(en.units.off);
   });
 
-  it('holds back the exhaust speed and the impulse while the thrust builds', () => {
+  it('holds back the exhaust speed and the impulse while the thrust builds', async () => {
     store.getState().setPhase(1.5);
     expect(readout('chamber-oxygen')).toMatch(/^\d+ kg\/s$/);
     expect(readout('chamber-speed')).toBe(en.units.off);
+    await nextRefresh();
     expect(readout('height-efficiency')).toBe(en.units.off);
     expect(readout('height-thrust')).toMatch(/^\d+ t$/);
   });
 
-  it('moves the flight with the height slider and thins the air', () => {
+  it('moves the flight with the height slider and thins the air', async () => {
     expect(document.querySelector('output[for="height"]')?.textContent).toBe('0.0 km');
     expect(readout('height-air')).toBe('1.01 bar');
     expect(readout('height-exit')).toBe('0.90 bar');
@@ -112,6 +118,7 @@ describe('chapter widgets', () => {
     expect(readout('height-thrust')).toBe('250 t');
     expect(readout('height-efficiency')).toBe('330 s');
     slide('height', 30);
+    await nextRefresh();
     expect(store.getState().playing).toBe(false);
     expect(document.querySelector('output[for="height"]')?.textContent).toBe('30.0 km');
     expect(readout('height-plume')).toBe(en.plume.spreading);

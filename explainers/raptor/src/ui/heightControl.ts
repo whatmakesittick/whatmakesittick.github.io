@@ -1,5 +1,6 @@
 import type { Disposer } from '@core/ui/disposers';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
+import { TEXT_REFRESH_INTERVAL_MS } from '@core/ui/throttle';
 import { HEIGHT_RANGE, engineOf, performanceOf } from '../state';
 import type { Performance, RaptorStore } from '../state';
 import { formatBar, formatKm, formatPlume, formatSeconds, formatTonnes, unlessOff } from './format';
@@ -22,6 +23,7 @@ export function mountHeightControl(root: Document, store: RaptorStore): Disposer
     value: altitudeAt,
     format: (selected) => formatKm(altitudeAt(selected)),
     set: (state, km) => state.seekAltitude(km),
+    refreshIntervalMs: TEXT_REFRESH_INTERVAL_MS,
     readouts: {
       'height-air': (selected) => formatBar(performanceAt(selected).airPressureBar),
       'height-exit': (selected) => {
