@@ -1,0 +1,78 @@
+import type { PlaybackState } from '@core/explainer';
+import type { PlumeState } from '../ids';
+import {
+  SEA_LEVEL_PRESSURE_PA,
+  engineState,
+  exitPressureBar,
+  plumeState,
+  pressureRatio,
+} from '../model';
+import type { EngineState } from '../model';
+import {
+  chamberPressureBar,
+  exhaustSpeedKmS,
+  massFlow,
+  methaneFlow,
+  oxygenFlow,
+  specificImpulse,
+  thrustTf,
+} from '../model/performance';
+
+type TimeState = Pick<PlaybackState, 'phase'>;
+
+export type PlumeReading = PlumeState | 'off';
+
+export interface Performance {
+  firing: boolean;
+  thrustTf: number;
+  specificImpulse: number;
+  massFlow: number;
+  oxygenFlow: number;
+  methaneFlow: number;
+  chamberPressureBar: number;
+  exhaustSpeedKmS: number;
+  exitPressureBar: number;
+  airShare: number;
+  pressureRatio: number;
+  plume: PlumeReading;
+}
+
+function rememberLast<T>(compute: (phase: number) => T): (phase: number) => T {
+  let last: { phase: number; value: T } | null = null;
+  return (phase) => {
+    if (last?.phase !== phase) last = { phase, value: compute(phase) };
+    return last.value;
+  };
+}
+
+const latestEngine = rememberLast(engineState);
+
+export function engineOf(state: TimeState): Readonly<EngineState> {
+  return latestEngine(state.phase);
+}
+
+function performanceAt(phase: number): Performance {
+  const { throttle, airPressurePa } = latestEngine(phase);
+  const firing = throttle > 0;
+  const ratio = pressureRatio(throttle, airPressurePa);
+  return {
+    firing,
+    thrustTf: thrustTf(throttle, airPressurePa),
+    specificImpulse: specificImpulse(throttle, airPressurePa),
+    massFlow: massFlow(throttle),
+    oxygenFlow: oxygenFlow(throttle),
+    methaneFlow: methaneFlow(throttle),
+    chamberPressureBar: chamberPressureBar(throttle),
+    exhaustSpeedKmS: exhaustSpeedKmS(throttle, airPressurePa),
+    exitPressureBar: exitPressureBar(throttle),
+    airShare: airPressurePa / SEA_LEVEL_PRESSURE_PA,
+    pressureRatio: ratio,
+    plume: firing ? plumeState(ratio) : 'off',
+  };
+}
+
+const latestPerformance = rememberLast(performanceAt);
+
+export function performanceOf(state: TimeState): Readonly<Performance> {
+  return latestPerformance(state.phase);
+}
