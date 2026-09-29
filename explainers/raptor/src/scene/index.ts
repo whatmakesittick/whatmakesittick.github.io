@@ -5,6 +5,7 @@ import { bindStore } from './bindings';
 import { RaptorController } from './controller';
 import { LABEL_PRIORITY } from './partInfo';
 
+const NIGHT_SKY = '#070b16';
 const CAMERA = {
   near: 2,
   far: 30000,
@@ -21,7 +22,7 @@ const UNDIMMED_GLOW = [
 ] as const;
 
 export const SCENE_OPTIONS: SceneOptions = {
-  background: '#070b16',
+  background: NIGHT_SKY,
   stage: false,
   camera: CAMERA,
   highlight: { dim: CUTAWAY_DIM, undimmed: UNDIMMED_GLOW },
