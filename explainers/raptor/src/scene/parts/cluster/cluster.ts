@@ -1,27 +1,31 @@
 import {
+  AdditiveBlending,
+  DoubleSide,
   Euler,
   ExtrudeGeometry,
   Group,
   InstancedMesh,
   Matrix4,
+  Mesh,
   Path,
   PointLight,
   Quaternion,
+  ShaderMaterial,
   Shape,
   Vector3,
 } from 'three';
-import type { BufferGeometry, Material, MeshStandardMaterial, ShaderMaterial } from 'three';
+import type { BufferGeometry, Material, MeshStandardMaterial } from 'three';
 import { toRadians } from '@core/math';
 import { BOOSTER, BOOSTER_AXIS, NOZZLE_EXIT, THRUST_MOUNT, clusterEngines } from '../../../model';
-import type { ClusterEngine, Gimbal } from '../../../model';
+import type { ClusterEngine, Gimbal, PlumeShape } from '../../../model';
 import { THEME } from '../../../theme';
 import { BOOSTER_PARTS, GLOW, MOUNT, PLUME } from '../../constants';
 import { lineStrand } from '../../geometry/profile';
 import { revolveStrand } from '../../geometry/revolve';
 import type { ProfilePoint } from '../../geometry/revolve';
 import { notchedDisc } from '../engine/mount';
-import { plumeGeometry } from '../flame/plume';
-import { partMesh } from '../context';
+import { applyShape, plumeGeometry, plumeUniforms } from '../flame/plume';
+import { partMesh, registered } from '../context';
 import type { PartContext } from '../context';
 import { engineCopyGeometry } from './engineCopy';
 
@@ -98,7 +102,10 @@ export class ClusterPart {
   private readonly position = new Vector3();
   private readonly unit = new Vector3(1, 1, 1);
 
-  constructor(context: PartContext, plumeMaterial: ShaderMaterial) {
+  private readonly column: Mesh;
+  private readonly columnUniforms = plumeUniforms();
+
+  constructor(context: PartContext, plumeMaterial: ShaderMaterial, time: { value: number }) {
     const { finishes, materials, tracker } = context;
     this.engines = clusterEngines().filter((engine) => !engine.isModelEngine);
     const skirt = revolveStrand(skirtProfile(), { segments: BOOSTER_PARTS.skirtSegments });
@@ -133,6 +140,30 @@ export class ClusterPart {
     this.plumes.frustumCulled = false;
     this.plumes.renderOrder = 2;
     this.object.add(this.plumes);
+    this.columnUniforms.uTime = time;
+    this.columnUniforms.uExitRadius.value = PLUME.columnRadius;
+    const columnMaterial = registered(
+      context,
+      'plume',
+      new ShaderMaterial({
+        uniforms: this.columnUniforms,
+        vertexShader: plumeMaterial.vertexShader,
+        fragmentShader: plumeMaterial.fragmentShader,
+        side: DoubleSide,
+        blending: AdditiveBlending,
+        transparent: true,
+        depthWrite: false,
+        opacity: plumeMaterial.opacity,
+      }),
+    );
+    this.column = new Mesh(
+      tracker.track(plumeGeometry(PLUME.clusterRadialSegments, PLUME.clusterLengthSegments)),
+      columnMaterial,
+    );
+    this.column.frustumCulled = false;
+    this.column.renderOrder = 1;
+    this.column.position.set(BOOSTER_AXIS.x, NOZZLE_EXIT.y + PLUME_INSET, BOOSTER_AXIS.z);
+    this.object.add(this.column);
     this.light = new PointLight(THEME.flame, 0, 0, LIGHT_DECAY);
     this.light.position.set(BOOSTER_AXIS.x, -PLUME.clusterLightDepth, BOOSTER_AXIS.z);
   }
@@ -155,10 +186,19 @@ export class ClusterPart {
     this.plumes.instanceMatrix.needsUpdate = true;
   }
 
-  setFire(glow: number, brightness: number, flame: boolean): void {
+  setFire(glow: number, shape: PlumeShape, airPa: number, flame: boolean): void {
+    const { brightness } = shape;
     this.glow.emissiveIntensity = glow * GLOW.cluster;
     this.plumes.visible = flame && brightness > 0;
+    this.column.visible = this.plumes.visible;
     this.light.intensity = flame ? PLUME.clusterLightIntensity * brightness : 0;
+    applyShape(this.columnUniforms, shape, airPa);
+    this.columnUniforms.uLength.value = Math.max(
+      PLUME.minLength,
+      shape.length * PLUME.columnLength,
+    );
+    this.columnUniforms.uWaist.value = 1;
+    this.columnUniforms.uBrightness.value = brightness * PLUME.columnShare;
   }
 
   setShown(shown: boolean): void {

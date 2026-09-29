@@ -29,6 +29,7 @@ const EXIT_SHARE = 0.95;
 const START_INSET = 3;
 const SEA_LEVEL_PA = 101325;
 const LIGHT_DECAY = 2;
+const DIAMOND_LABEL_STRENGTH = 0.05;
 
 export type PlumeUniforms = {
   uLength: { value: number };
@@ -41,6 +42,7 @@ export type PlumeUniforms = {
   uBrightness: { value: number };
   uAir: { value: number };
   uOpacity: { value: number };
+  uFirst: { value: number };
   uCore: { value: Color };
   uSheath: { value: Color };
   uFlame: { value: Color };
@@ -58,6 +60,7 @@ export function plumeUniforms(): PlumeUniforms {
     uBrightness: { value: 0 },
     uAir: { value: 1 },
     uOpacity: { value: 1 },
+    uFirst: { value: PLUME.firstDiamond },
     uCore: { value: new Color(THEME.flameCore) },
     uSheath: { value: new Color(THEME.plume) },
     uFlame: { value: new Color(THEME.flame) },
@@ -98,6 +101,8 @@ export class PlumePart {
   readonly material: ShaderMaterial;
   readonly uniforms = plumeUniforms();
   readonly light: PointLight;
+  readonly labelHost = new Group();
+  readonly diamondHost = new Group();
   private readonly plume: Mesh;
   private readonly glow: Sprite;
   private readonly diamonds: InstancedMesh;
@@ -152,7 +157,8 @@ export class PlumePart {
     this.diamonds.setColorAt(0, this.strength);
     this.light = new PointLight(THEME.flame, 0, 0, LIGHT_DECAY);
     this.light.position.y = -PLUME.lightOffset;
-    this.object.add(this.plume, this.glow, this.diamonds, this.light);
+    this.object.add(this.plume, this.glow, this.diamonds, this.light, this.labelHost);
+    this.labelHost.add(this.diamondHost);
   }
 
   setShape(shape: PlumeShape, airPa: number, shown: boolean, crowded: boolean): void {
@@ -160,10 +166,11 @@ export class PlumePart {
     this.uniforms.uOpacity.value = crowded ? PLUME.clusterShare : 1;
     const lit = shown && shape.brightness > 0;
     this.plume.visible = lit;
+    this.labelHost.visible = lit;
     this.glow.visible = lit;
     this.glow.scale.setScalar(PLUME.exitGlowSize * (0.4 + 0.6 * shape.brightness));
     this.light.intensity = lit ? PLUME.lightIntensity * shape.brightness : 0;
-    this.placeDiamonds(shape, lit);
+    this.placeDiamonds(shape, lit, crowded ? PLUME.crowdedDiamonds : 1);
   }
 
   advance(deltaSeconds: number): void {
@@ -174,9 +181,10 @@ export class PlumePart {
     return this.plume.visible;
   }
 
-  private placeDiamonds(shape: PlumeShape, lit: boolean): void {
+  private placeDiamonds(shape: PlumeShape, lit: boolean, share: number): void {
     const count = lit && shape.diamondStrength > 0 ? shape.diamondCount : 0;
     this.diamonds.visible = count > 0;
+    this.diamondHost.visible = count > 0 && shape.diamondStrength * share > DIAMOND_LABEL_STRENGTH;
     this.diamonds.count = count;
     const radius = NOZZLE_EXIT.radius * shape.waist * PLUME.diamondRadius;
     const height = NOZZLE_EXIT.radius * 2 * PLUME.diamondLength;
@@ -186,7 +194,7 @@ export class PlumePart {
       this.scale.set(2 * radius * fading, height * (0.7 + 0.3 * fading), 1);
       this.matrix.compose(this.position, this.rotation, this.scale);
       this.diamonds.setMatrixAt(index, this.matrix);
-      this.strength.setScalar(shape.diamondStrength * shape.brightness * fading);
+      this.strength.setScalar(shape.diamondStrength * shape.brightness * fading * share);
       this.diamonds.setColorAt(index, this.strength);
     }
     this.diamonds.instanceMatrix.needsUpdate = true;

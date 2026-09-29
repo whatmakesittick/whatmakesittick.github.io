@@ -32,6 +32,7 @@ uniform float uSpread;
 uniform float uWaist;
 uniform float uSpacing;
 uniform float uGrowth;
+uniform float uFirst;
 
 varying float vShare;
 varying float vDistance;
@@ -44,7 +45,8 @@ const float PI = 3.141592653589793;
 void main() {
   float share = clamp(-position.y, 0.0, 1.0);
   float distance = share * uLength;
-  float pinch = 1.0 - (1.0 - uWaist) * pow(sin(PI * distance / uSpacing), 2.0) * (1.0 - share);
+  float cell = distance / uSpacing - uFirst + 0.5;
+  float pinch = 1.0 - (1.0 - uWaist) * pow(sin(PI * cell), 2.0) * (1.0 - share) * step(0.0, cell);
   float radius = uExitRadius * pinch + distance * uSpread + uExitRadius * uGrowth * share;
   vec3 local = vec3(position.x * radius, -distance, position.z * radius);
   vec3 localNormal = normalize(vec3(position.x, uSpread + uGrowth * uExitRadius / max(uLength, 1.0), position.z));
@@ -90,7 +92,7 @@ void main() {
   float rim = pow(1.0 - facing, 2.0);
   float share = vShare;
   float tail = 1.0 - smoothstep(0.3, 1.0, share);
-  float exitCore = exp(-share * 16.0);
+  float exitCore = exp(-share * 30.0);
   float warm = exp(-share * 3.5);
   vec2 flow = vec2(vAngle * 1.6, vDistance * 0.01 - uTime * 7.0);
   float turbulence = fbm(flow);
@@ -142,10 +144,12 @@ void main() {
   float facing = abs(dot(normalize(vNormalView), normalize(vViewPosition)));
   float turbulence = fbm(vec2(vAngle * 2.0, vShare * 6.0 - uTime * 9.0));
   float heat = exp(-vShare * 2.6);
-  vec3 colour = vShare < 0.35
+  vec3 axial = vShare < 0.35
     ? mix(uHot, uMid, vShare / 0.35)
     : mix(uMid, uCool, clamp((vShare - 0.35) / 0.65, 0.0, 1.0));
-  float intensity = (0.06 + 0.42 * heat) * pow(facing, 1.8) * (0.55 + 0.9 * turbulence);
+  float core = pow(facing, 3.0);
+  vec3 colour = mix(mix(uMid, uCool, 0.6), axial, core);
+  float intensity = (0.04 + 0.3 * heat) * (0.25 + 0.75 * core) * pow(facing, 1.2) * (0.55 + 0.9 * turbulence);
   gl_FragColor = vec4(colour * intensity * uIntensity, 1.0);
   #include <tonemapping_fragment>
   #include <colorspace_fragment>

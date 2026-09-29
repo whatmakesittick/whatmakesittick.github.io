@@ -4,6 +4,7 @@ import { toRadians } from '@core/math';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { regionFromSpec } from '@core/scene/regions';
 import { ResourceTracker } from '@core/scene/resources';
+import { STREAM_IDS } from '../ids';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
 import { PREBURNERS, START_SEQUENCE, engineState, plumeShape, wallRadius } from '../model';
 import type { Canister, EngineState, PumpSide } from '../model';
@@ -82,7 +83,7 @@ export class RaptorAssembly implements Assembly {
   constructor(resources: AssemblyResources, state: AssemblyState) {
     this.materials = resources.materials;
     this.surfaces = this.tracker.track(
-      createSurfaceTextures(SURFACES.brushed, SURFACES.channels, SURFACES.heat),
+      createSurfaceTextures(SURFACES.brushed, SURFACES.channels, SURFACES.heat, SURFACES.panels),
     );
     const context: PartContext = {
       ...resources,
@@ -106,7 +107,7 @@ export class RaptorAssembly implements Assembly {
       methane: this.preburnerFlame(context, 'methane'),
     };
     this.flow = new FlowStreamsPart(context);
-    this.cluster = new ClusterPart(context, this.plume.material);
+    this.cluster = new ClusterPart(context, this.plume.material, this.plume.uniforms.uTime);
     this.engine.add(
       this.mount.hanging,
       this.powerhead.object,
@@ -118,7 +119,13 @@ export class RaptorAssembly implements Assembly {
       this.plume.object,
     );
     this.root.add(this.mount.fixed, this.engine, this.cluster.object, this.cluster.light);
-    this.labels = new LabelAnchors(this.engine, this.cluster.object);
+    const plumeOffset = this.plume.object.position.toArray();
+    const streamHost = { object: this.flow.object, offset: [0, 0, 0] as const };
+    this.labels = new LabelAnchors(this.engine, this.cluster.object, {
+      plume: { object: this.plume.labelHost, offset: plumeOffset },
+      shockDiamonds: { object: this.plume.diamondHost, offset: plumeOffset },
+      ...Object.fromEntries(STREAM_IDS.map((id) => [id, streamHost])),
+    });
     this.setState(state);
   }
 
@@ -141,7 +148,8 @@ export class RaptorAssembly implements Assembly {
     this.cluster.setGimbal(engine.gimbal);
     this.cluster.setFire(
       engine.chamberGlow,
-      shape.brightness,
+      shape,
+      engine.airPressurePa,
       state.view.flame && state.view.cluster,
     );
     this.advance(state.phase, engine);

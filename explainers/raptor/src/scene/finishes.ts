@@ -12,6 +12,7 @@ const COAT_ROUGHNESS = 0.64;
 const BRUSHED_NORMAL = new Vector2(0.35, 0.35);
 const CHANNEL_NORMAL_INNER = new Vector2(0.9, 0.9);
 const WHITE = '#ffffff';
+const LINER_GLOW = '#ffb46a';
 const BLACK = '#000000';
 
 export const PAINT = {
@@ -24,7 +25,7 @@ export const PAINT = {
   cut: THEME.darkSteel,
   cavity: '#3e424a',
   shield: '#2a2d33',
-  booster: THEME.booster,
+  booster: '#c4c7cc',
 } as const;
 
 export const BELL_OUTER_TINT: readonly TintStop[] = [
@@ -146,15 +147,16 @@ export function createFinishes(surfaces: SurfaceTextures): Finishes {
       envMapIntensity: METAL_REFLECTION,
       normalMap: innerChannels,
       normalScale: CHANNEL_NORMAL_INNER,
-      emissive: THEME.flameCore,
+      emissive: LINER_GLOW,
       emissiveIntensity: 0,
       emissiveMap: surfaces.heat,
     },
     booster: {
       color: PAINT.booster,
-      metalness: 0.9,
-      roughness: 0.4,
-      envMapIntensity: 1.2,
+      map: surfaces.panels,
+      metalness: 0.88,
+      roughness: 0.46,
+      envMapIntensity: 1.05,
     },
     clusterInner: {
       color: WHITE,

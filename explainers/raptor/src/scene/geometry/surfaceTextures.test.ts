@@ -5,6 +5,7 @@ import {
   createSurfaceTextures,
   heatLevel,
   heatPixels,
+  panelPixels,
   ribSlope,
 } from './surfaceTextures';
 
@@ -36,12 +37,20 @@ describe('surface textures', () => {
     }
   });
 
+  it('draws darker seams around each skirt panel', () => {
+    const pixels = panelPixels({ size: 8, repeat: [1, 1], seam: 0.5, grain: 0, seed: 1 });
+    expect(pixels[0]).toBe(128);
+    expect(pixels[(3 * 8 + 3) * 4]).toBe(255);
+  });
+
   it('builds and frees the textures', () => {
     const surfaces = createSurfaceTextures(
       { size: 8, repeat: [2, 1], streakStrength: 0.3, seed: 1 },
       { width: 8, repeat: 24, ribs: 2, depth: 0.5 },
       { height: 4, keys: KEYS },
+      { size: 8, repeat: [4, 2], seam: 0.7, grain: 0.05, seed: 2 },
     );
+    expect(surfaces.panels.repeat.x).toBe(4);
     expect(surfaces.channels.repeat.x).toBe(24);
     expect(surfaces.brushed.repeat.x).toBe(2);
     surfaces.dispose();

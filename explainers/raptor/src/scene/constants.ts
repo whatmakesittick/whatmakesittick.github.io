@@ -301,7 +301,11 @@ export const PLUME = {
   diamondLength: 0.75,
   diamondRadius: 0.3,
   maxDiamonds: 8,
-  firstDiamond: 0.5,
+  firstDiamond: 0.6,
+  crowdedDiamonds: 0.3,
+  columnShare: 0.22,
+  columnRadius: 330,
+  columnLength: 0.75,
   lightOffset: 70,
   lightIntensity: 60_000,
   clusterLightIntensity: 1_500_000,
@@ -332,7 +336,7 @@ export const FLOW = {
 } as const;
 
 export const GLOW = {
-  chamber: 1.1,
+  chamber: 0.7,
   throat: 1.1,
   nozzle: 0.8,
   preburnerFlash: 3,
@@ -355,6 +359,7 @@ export const BOOSTER_PARTS = {
 export const SURFACES = {
   brushed: { size: 128, repeat: [6, 3], streakStrength: 0.35, seed: 11 },
   channels: { width: 32, repeat: 24, ribs: 4, depth: 0.6 },
+  panels: { size: 64, repeat: [48, 6], seam: 0.9, grain: 0.03, seed: 5 },
   heat: {
     height: 128,
     keys: [

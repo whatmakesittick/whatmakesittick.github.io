@@ -4,8 +4,8 @@ import type { BufferGeometry, MeshStandardMaterial, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
-import { PART_IDS } from '../ids';
-import type { AnchorId, AssemblyState, RegionId } from '../ids';
+import { PART_IDS, STREAM_IDS } from '../ids';
+import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
 import { CUTOFF_TIME, NOZZLE_EXIT, START_SEQUENCE, phaseAt } from '../model';
 import { PAINT } from './finishes';
 import { RaptorAssembly } from './raptorAssembly';
@@ -234,6 +234,31 @@ describe('raptor assembly', () => {
       else if (object instanceof Mesh) total += triangles(object.geometry);
     });
     expect(total).toBeLessThan(TRIANGLE_BUDGET);
+  });
+
+  it('hides the labels of parts that are not showing', () => {
+    const labels = assembly.labelAnchors();
+    const shown = (id: PartId) => {
+      const anchor = labels.get(id);
+      if (!anchor) throw new Error(`No anchor ${id}`);
+      return isShown(anchor);
+    };
+    assembly.setState({ ...STATE, phase: 0 });
+    expect(shown('plume')).toBe(false);
+    expect(shown('shockDiamonds')).toBe(false);
+    assembly.setState({ ...STATE, phase: phaseAt(5) });
+    expect(shown('plume')).toBe(true);
+    expect(shown('shockDiamonds')).toBe(true);
+    expect(shown('nozzle')).toBe(true);
+    for (const id of STREAM_IDS) expect(shown(id)).toBe(false);
+    expect(shown('booster')).toBe(false);
+    assembly.setState({
+      ...STATE,
+      view: { ...STATE.view, cutaway: true, flow: true, cluster: true },
+    });
+    for (const id of STREAM_IDS) expect(shown(id)).toBe(true);
+    expect(shown('booster')).toBe(true);
+    assembly.setState(STATE);
   });
 
   it('frees its resources', () => {

@@ -101,35 +101,48 @@ export const BOOSTER_LABEL: Point = [
   BOOSTER_AXIS.z + BOOSTER.radius + ANCHOR_LIFT,
 ];
 
+export interface LabelHost {
+  object: Object3D;
+  offset: Point;
+}
+
+export type LabelHosts = Partial<Record<PartId, LabelHost>>;
+
 export class LabelAnchors {
   readonly labels = new Map<PartId, Object3D>();
   readonly anchors = new Map<AnchorId, Object3D>();
   private readonly placements = labelPlacements();
+  private readonly hosts: LabelHosts;
 
-  constructor(engine: Object3D, cluster: Object3D) {
+  constructor(engine: Object3D, cluster: Object3D, hosts: LabelHosts = {}) {
+    this.hosts = { booster: { object: cluster, offset: [0, 0, 0] }, ...hosts };
     for (const id of Object.keys(ANCHOR_POINTS) as AnchorId[]) {
       const [x, y, z] = ANCHOR_POINTS[id];
       this.anchors.set(id, anchorAt(engine, x, y, z));
     }
     for (const id of PART_IDS) {
-      if (id === 'booster') {
-        this.labels.set(id, anchorAt(cluster, ...BOOSTER_LABEL));
-        continue;
-      }
-      this.labels.set(id, anchorAt(engine, ...this.placements[id].whole));
+      const parent = this.hosts[id]?.object ?? engine;
+      const point = id === 'booster' ? BOOSTER_LABEL : this.placements[id].whole;
+      const anchor = anchorAt(parent, 0, 0, 0);
+      this.labels.set(id, anchor);
+      this.place(id, point);
     }
   }
 
   setCutaway(cut: boolean): void {
     for (const [id, placement] of Object.entries(this.placements)) {
-      this.labels.get(id as PartId)?.position.set(...(cut ? placement.cut : placement.whole));
+      this.place(id as PartId, cut ? placement.cut : placement.whole);
     }
   }
 
   setPlume(shape: PlumeShape): void {
-    const diamond = this.labels.get('shockDiamonds');
-    if (diamond && shape.diamondSpacing > 0) {
-      diamond.position.y = NOZZLE_EXIT.y - shape.diamondSpacing * PLUME.firstDiamond;
-    }
+    if (shape.diamondSpacing <= 0) return;
+    const [x, , z] = this.placements.shockDiamonds.whole;
+    this.place('shockDiamonds', [x, NOZZLE_EXIT.y - shape.diamondSpacing * PLUME.firstDiamond, z]);
+  }
+
+  private place(id: PartId, [x, y, z]: Point): void {
+    const [ox, oy, oz] = this.hosts[id]?.offset ?? [0, 0, 0];
+    this.labels.get(id)?.position.set(x - ox, y - oy, z - oz);
   }
 }

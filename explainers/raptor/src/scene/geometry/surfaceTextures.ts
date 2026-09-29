@@ -4,6 +4,7 @@ import {
   LinearMipmapLinearFilter,
   RGBAFormat,
   RepeatWrapping,
+  SRGBColorSpace,
 } from 'three';
 import { seededRandom } from './random';
 
@@ -15,6 +16,7 @@ export interface SurfaceTextures {
   brushed: DataTexture;
   channels: DataTexture;
   heat: DataTexture;
+  panels: DataTexture;
   dispose(): void;
 }
 
@@ -30,6 +32,14 @@ export interface ChannelSpec {
   repeat: number;
   ribs: number;
   depth: number;
+}
+
+export interface PanelSpec {
+  size: number;
+  repeat: readonly [number, number];
+  seam: number;
+  grain: number;
+  seed: number;
 }
 
 export interface HeatSpec {
@@ -107,20 +117,40 @@ export function heatPixels(spec: HeatSpec): Uint8Array {
   return pixels;
 }
 
+export function panelPixels(spec: PanelSpec): Uint8Array {
+  const random = seededRandom(spec.seed);
+  const pixels = new Uint8Array(spec.size * spec.size * CHANNELS);
+  const edge = (value: number) => value === 0 || value === spec.size - 1;
+  for (let row = 0; row < spec.size; row += 1) {
+    const tone = 1 - spec.grain * random();
+    for (let column = 0; column < spec.size; column += 1) {
+      const level = edge(row) || edge(column) ? spec.seam : tone;
+      const value = Math.round(level * BYTE);
+      pixels.set([value, value, value, BYTE], (row * spec.size + column) * CHANNELS);
+    }
+  }
+  return pixels;
+}
+
 export function createSurfaceTextures(
   brushed: BrushedSpec,
   channels: ChannelSpec,
   heat: HeatSpec,
+  panels: PanelSpec,
 ): SurfaceTextures {
   const brushedMap = texture(brushedNormals(brushed), brushed.size, brushed.size, true);
   brushedMap.repeat.set(...brushed.repeat);
   const channelMap = texture(channelNormals(channels), channels.width, 1, true);
   channelMap.repeat.set(channels.repeat, 1);
   const heatMap = texture(heatPixels(heat), 1, heat.height, false);
+  const panelMap = texture(panelPixels(panels), panels.size, panels.size, true);
+  panelMap.repeat.set(...panels.repeat);
+  panelMap.colorSpace = SRGBColorSpace;
   return {
     brushed: brushedMap,
     channels: channelMap,
     heat: heatMap,
-    dispose: () => [brushedMap, channelMap, heatMap].forEach((map) => map.dispose()),
+    panels: panelMap,
+    dispose: () => [brushedMap, channelMap, heatMap, panelMap].forEach((map) => map.dispose()),
   };
 }
