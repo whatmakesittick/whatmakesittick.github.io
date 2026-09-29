@@ -38,7 +38,7 @@ describe('camera views', () => {
     );
   });
 
-  it('frames about 60 mm around the picked valve from the front, above and to the right', () => {
+  it('frames about 70 mm around the picked valve from the front, a little above and to the right', () => {
     const valve = anchorAt(21, 2, -1);
     const view = cameraViews(() => valve).valve as CustomView;
     const pose = view.pose(SLOPES);
@@ -48,9 +48,9 @@ describe('camera views', () => {
     if (!pose) return;
     expect(pose.target.distanceTo(valve.position)).toBeCloseTo(0);
     const offset = pose.position.clone().sub(pose.target);
-    expect(offset.z).toBeGreaterThan(offset.y);
-    expect(offset.y).toBeGreaterThan(offset.x);
-    expect(offset.x).toBeGreaterThan(0);
+    expect(offset.z).toBeGreaterThan(offset.x);
+    expect(offset.x).toBeGreaterThan(offset.y);
+    expect(offset.y).toBeGreaterThan(0);
     expect(offset.length()).toBeCloseTo(VALVE_FRAMING.spanMm / 2 / SLOPES.vertical);
     expect(offset.normalize().dot(new Vector3(...VALVE_FRAMING.direction).normalize())).toBeCloseTo(
       1,
