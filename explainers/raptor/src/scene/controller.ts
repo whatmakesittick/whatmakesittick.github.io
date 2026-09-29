@@ -1,3 +1,4 @@
+import type { Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
 import type { AssemblyState, RegionId } from '../ids';
@@ -8,13 +9,25 @@ import { CAMERA_VIEWS } from './cameraViews';
 
 export type RaptorControllerDependencies = Pick<
   SceneShell,
-  'scene' | 'materials' | 'textures' | 'labels' | 'stage' | 'rig'
+  'scene' | 'materials' | 'textures' | 'labels' | 'stage' | 'rig' | 'viewport'
 >;
+
+const IDLE_TIMEOUT_MS = 2000;
+
+function whenIdle(task: () => void): () => void {
+  if (typeof requestIdleCallback === 'function') {
+    const handle = requestIdleCallback(task, { timeout: IDLE_TIMEOUT_MS });
+    return () => cancelIdleCallback(handle);
+  }
+  const handle = setTimeout(task, IDLE_TIMEOUT_MS);
+  return () => clearTimeout(handle);
+}
 
 export class RaptorController {
   readonly views: CameraViews<CameraView, RegionId>;
   private readonly dependencies: RaptorControllerDependencies;
   private assembly: Assembly | null = null;
+  private cancelWarmUp: () => void = () => {};
 
   constructor(dependencies: RaptorControllerDependencies) {
     this.dependencies = dependencies;
@@ -34,6 +47,15 @@ export class RaptorController {
     const bounds = assembly.region('scene');
     rig.setBounds(bounds, bounds.min.y);
     stage.fit(bounds, bounds.min.y);
+    this.cancelWarmUp = whenIdle(() => assembly.warmUp?.((object) => this.compileHidden(object)));
+  }
+
+  private compileHidden(object: Object3D): void {
+    const { viewport, rig, scene } = this.dependencies;
+    const shown = object.visible;
+    object.visible = true;
+    void viewport.renderer.compileAsync(object, rig.camera, scene);
+    object.visible = shown;
   }
 
   setState(state: AssemblyState): void {
@@ -48,6 +70,7 @@ export class RaptorController {
   }
 
   dispose(): void {
+    this.cancelWarmUp();
     this.assembly?.root.removeFromParent();
     this.assembly?.dispose();
     this.assembly = null;

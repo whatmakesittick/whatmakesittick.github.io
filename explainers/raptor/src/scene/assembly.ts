@@ -16,6 +16,7 @@ export interface Assembly {
   labelAnchors(): ReadonlyMap<PartId, Object3D>;
   anchor(id: AnchorId): Object3D;
   region(id: RegionId): Box3;
+  warmUp?(compile: (object: Object3D) => void): void;
   dispose(): void;
 }
 

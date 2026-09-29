@@ -212,7 +212,32 @@ describe('raptor assembly', () => {
     expect(clouds.every((cloud) => !isShown(cloud))).toBe(true);
   });
 
+  it('builds the booster only when it is warmed up or first shown', () => {
+    const late = new RaptorAssembly({ materials, textures }, STATE);
+    const instanced = () => {
+      let count = 0;
+      late.root.traverse((object) => {
+        if (
+          object instanceof InstancedMesh &&
+          materials.groupOf(object.material as MeshStandardMaterial) === 'booster'
+        )
+          count += 1;
+      });
+      return count;
+    };
+    expect(instanced()).toBe(0);
+    const compiled: Object3D[] = [];
+    late.warmUp((object) => compiled.push(object));
+    expect(instanced()).toBeGreaterThan(0);
+    expect(compiled).toHaveLength(1);
+    expect(isShown(compiled[0])).toBe(false);
+    late.warmUp((object) => compiled.push(object));
+    expect(compiled).toHaveLength(1);
+    late.dispose();
+  });
+
   it('shows the booster with 32 more engines and plumes only in the booster view', () => {
+    assembly.warmUp(() => {});
     const copies = objectsOf(
       (object): object is InstancedMesh => object instanceof InstancedMesh,
       'booster',

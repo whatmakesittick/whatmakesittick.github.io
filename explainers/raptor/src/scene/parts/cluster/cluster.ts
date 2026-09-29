@@ -8,17 +8,16 @@ import {
   Matrix4,
   Mesh,
   Path,
-  PointLight,
   Quaternion,
   ShaderMaterial,
   Shape,
   Vector3,
 } from 'three';
 import type { BufferGeometry, Material, MeshStandardMaterial } from 'three';
+import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { toRadians } from '@core/math';
 import { BOOSTER, BOOSTER_AXIS, NOZZLE_EXIT, THRUST_MOUNT, clusterEngines } from '../../../model';
 import type { ClusterEngine, Gimbal, PlumeShape } from '../../../model';
-import { THEME } from '../../../theme';
 import { BOOSTER_PARTS, GLOW, MOUNT, PLUME } from '../../constants';
 import { lineStrand } from '../../geometry/profile';
 import { revolveStrand } from '../../geometry/revolve';
@@ -30,10 +29,9 @@ import type { PartContext } from '../context';
 import { engineCopyGeometry } from './engineCopy';
 
 const PLUME_INSET = 3;
-const LIGHT_DECAY = 2;
 const RING_DEPTH = 1.2;
 const RING_HEIGHT = 3;
-const HOLE_STEPS = 36;
+const HOLE_STEPS = 24;
 
 export function skirtProfile(): ProfilePoint[] {
   const points: ProfilePoint[] = [];
@@ -76,7 +74,10 @@ function shieldGeometry(engines: readonly ClusterEngine[]): BufferGeometry {
   });
   geometry.rotateX(-Math.PI / 2);
   geometry.translate(BOOSTER_AXIS.x, BOOSTER.baseY, BOOSTER_AXIS.z);
-  return geometry;
+  geometry.deleteAttribute('uv');
+  const indexed = mergeVertices(geometry);
+  geometry.dispose();
+  return indexed;
 }
 
 function plateGeometry(): BufferGeometry {
@@ -90,7 +91,6 @@ function plateGeometry(): BufferGeometry {
 
 export class ClusterPart {
   readonly object = new Group();
-  readonly light: PointLight;
   private readonly engines: ClusterEngine[];
   private readonly tilting: InstancedMesh[] = [];
   private readonly plumes: InstancedMesh;
@@ -167,8 +167,6 @@ export class ClusterPart {
     this.column.renderOrder = 1;
     this.column.position.set(BOOSTER_AXIS.x, NOZZLE_EXIT.y + PLUME_INSET, BOOSTER_AXIS.z);
     this.object.add(this.column);
-    this.light = new PointLight(THEME.flame, 0, 0, LIGHT_DECAY);
-    this.light.position.set(BOOSTER_AXIS.x, -PLUME.clusterLightDepth, BOOSTER_AXIS.z);
   }
 
   setGimbal(gimbal: Gimbal): void {
@@ -197,7 +195,6 @@ export class ClusterPart {
     this.glow.emissiveIntensity = glow * GLOW.cluster;
     this.plumes.visible = flame && brightness > 0;
     this.column.visible = this.plumes.visible;
-    this.light.intensity = flame ? PLUME.clusterLightIntensity * brightness : 0;
     applyShape(this.columnUniforms, shape, airPa);
     this.columnUniforms.uLength.value = Math.max(
       PLUME.minLength,
@@ -205,13 +202,5 @@ export class ClusterPart {
     );
     this.columnUniforms.uWaist.value = 1;
     this.columnUniforms.uBrightness.value = brightness * PLUME.columnShare;
-  }
-
-  setShown(shown: boolean): void {
-    this.object.visible = shown;
-  }
-
-  get shown(): boolean {
-    return this.object.visible;
   }
 }

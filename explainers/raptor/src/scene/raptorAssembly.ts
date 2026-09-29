@@ -1,4 +1,4 @@
-import { Group } from 'three';
+import { Group, PointLight } from 'three';
 import type { Box3, Object3D } from 'three';
 import { toRadians } from '@core/math';
 import type { MaterialLibrary } from '@core/scene/materials';
@@ -6,19 +6,26 @@ import { regionFromSpec } from '@core/scene/regions';
 import { ResourceTracker } from '@core/scene/resources';
 import { STREAM_IDS } from '../ids';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
-import { PREBURNERS, START_SEQUENCE, engineState, plumeShape, wallRadius } from '../model';
-import type { Canister, EngineState, PumpSide } from '../model';
+import {
+  BOOSTER_AXIS,
+  PREBURNERS,
+  START_SEQUENCE,
+  engineState,
+  plumeShape,
+  wallRadius,
+} from '../model';
+import type { Canister, EngineState, PlumeShape, PumpSide } from '../model';
 import { THEME } from '../theme';
 import type { Assembly, AssemblyResources } from './assembly';
-import { CHAMBER_FLAME, FLOW, GLOW, SEGMENTS, SPIN, SURFACES } from './constants';
+import { CHAMBER_FLAME, FLOW, GLOW, PLUME, SEGMENTS, SPIN, SURFACES } from './constants';
 import { createFinishes } from './finishes';
 import { smoothStrand } from './geometry/profile';
 import type { Strand } from './geometry/revolve';
 import { createSurfaceTextures } from './geometry/surfaceTextures';
 import type { SurfaceTextures } from './geometry/surfaceTextures';
 import { ClusterPart } from './parts/cluster/cluster';
-import { batchStatic } from './parts/batch';
 import { CutawaySwitch, markDynamic } from './parts/context';
+import { batchStatic } from './parts/batch';
 import type { PartContext } from './parts/context';
 import { MountPart } from './parts/engine/mount';
 import { PowerheadPart } from './parts/engine/powerhead';
@@ -34,6 +41,7 @@ import { SkyDomePart } from './parts/sky/skyDome';
 const PUMP_SIDES: readonly PumpSide[] = ['oxygen', 'methane'];
 const PUMP_DIRECTION: Readonly<Record<PumpSide, number>> = { oxygen: 1, methane: -1 };
 const CHAMBER_FLAME_GLOW = 0.8;
+const CLUSTER_LIGHT_DECAY = 2;
 const FLAME_YELLOW = '#ffc861';
 const PINK_CORE = '#ffd6e6';
 const PREBURNER_FLAME_GLOW = 0.5;
@@ -77,7 +85,11 @@ export class RaptorAssembly implements Assembly {
   private readonly chamberFlame: FlameVolume;
   private readonly preburnerFlames: Readonly<Record<PumpSide, FlameVolume>>;
   private readonly flow: FlowStreamsPart;
-  private readonly cluster: ClusterPart;
+  private cluster: ClusterPart | null = null;
+  private readonly clusterHost = new Group();
+  private readonly clusterLight = new PointLight(THEME.flame, 0, 0, CLUSTER_LIGHT_DECAY);
+  private readonly context: PartContext;
+  private lastState: AssemblyState;
   private readonly labels: LabelAnchors;
   private readonly sky: SkyDomePart;
   private readonly spinAngle: Record<PumpSide, number> = { oxygen: 0, methane: 0 };
@@ -111,7 +123,9 @@ export class RaptorAssembly implements Assembly {
       methane: this.preburnerFlame(context, 'methane'),
     };
     this.flow = new FlowStreamsPart(context);
-    this.cluster = new ClusterPart(context, this.plume.material, this.plume.uniforms.uTime);
+    this.context = context;
+    this.lastState = state;
+    this.clusterLight.position.set(BOOSTER_AXIS.x, -PLUME.clusterLightDepth, BOOSTER_AXIS.z);
     this.engine.add(
       this.mount.hanging,
       this.powerhead.object,
@@ -130,12 +144,12 @@ export class RaptorAssembly implements Assembly {
       this.sky.mesh,
       this.mount.fixed,
       this.engine,
-      this.cluster.object,
-      this.cluster.light,
+      this.clusterHost,
+      this.clusterLight,
     );
     const plumeOffset = this.plume.object.position.toArray();
     const streamHost = { object: this.flow.object, offset: [0, 0, 0] as const };
-    this.labels = new LabelAnchors(this.engine, this.cluster.object, {
+    this.labels = new LabelAnchors(this.engine, this.clusterHost, {
       plume: { object: this.plume.labelHost, offset: plumeOffset },
       shockDiamonds: { object: this.plume.diamondHost, offset: plumeOffset },
       ...Object.fromEntries(STREAM_IDS.map((id) => [id, streamHost])),
@@ -160,14 +174,11 @@ export class RaptorAssembly implements Assembly {
     this.labels.setPlume(shape);
     this.flow.setShown(state.view.flow);
     this.flow.setEmphasis(state.propellant, engine.preburnerGlow);
-    this.cluster.setShown(state.view.cluster);
-    if (state.view.cluster) this.cluster.setGimbal(engine.gimbal);
-    this.cluster.setFire(
-      engine.chamberGlow,
-      shape,
-      engine.airPressurePa,
-      state.view.flame && state.view.cluster,
-    );
+    this.lastState = state;
+    this.clusterHost.visible = state.view.cluster;
+    const lit = state.view.flame && state.view.cluster;
+    this.clusterLight.intensity = lit ? PLUME.clusterLightIntensity * shape.brightness : 0;
+    if (state.view.cluster) this.applyCluster(this.buildCluster(), engine, shape);
     this.advance(state.phase, engine);
   }
 
@@ -201,6 +212,26 @@ export class RaptorAssembly implements Assembly {
     this.root.removeFromParent();
     this.materials.clearRegistered();
     this.tracker.dispose();
+  }
+
+  warmUp(compile: (object: Object3D) => void): void {
+    if (this.cluster) return;
+    const cluster = this.buildCluster();
+    const engine = engineState(this.lastState.phase);
+    this.applyCluster(cluster, engine, plumeShape(engine.throttle, engine.airPressurePa));
+    compile(this.clusterHost);
+  }
+
+  private buildCluster(): ClusterPart {
+    if (this.cluster) return this.cluster;
+    this.cluster = new ClusterPart(this.context, this.plume.material, this.plume.uniforms.uTime);
+    this.clusterHost.add(this.cluster.object);
+    return this.cluster;
+  }
+
+  private applyCluster(cluster: ClusterPart, engine: EngineState, shape: PlumeShape): void {
+    cluster.setGimbal(engine.gimbal);
+    cluster.setFire(engine.chamberGlow, shape, engine.airPressurePa, this.lastState.view.flame);
   }
 
   private preburnerFlame(context: PartContext, side: PumpSide): FlameVolume {
