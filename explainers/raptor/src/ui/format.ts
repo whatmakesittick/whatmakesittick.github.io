@@ -117,8 +117,8 @@ export function formatExactBar(bar: number): string {
   return t('units.bar', { value: whole(bar) });
 }
 
-export function formatKm(km: number): string {
-  return t('units.km', { value: formatFixed(km, TENTHS) });
+export function formatKm(km: number, digits: number = TENTHS): string {
+  return t('units.km', { value: formatFixed(km, digits) });
 }
 
 export function formatKmPerHour(kmPerHour: number): string {
