@@ -166,6 +166,7 @@
   },
   "units": {
     "tonnes": "{{value}}吨",
+    "tonnesAbout": "约{{value}}吨",
     "seconds": "{{value}}秒",
     "bar": "{{value}}巴",
     "barAbout": "约{{value}}巴",

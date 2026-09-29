@@ -166,6 +166,7 @@
   },
   "units": {
     "tonnes": "{{value}}トン",
+    "tonnesAbout": "約{{value}}トン",
     "seconds": "{{value}}秒",
     "bar": "{{value}}bar",
     "barAbout": "約{{value}}bar",

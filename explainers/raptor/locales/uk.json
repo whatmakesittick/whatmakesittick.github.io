@@ -166,6 +166,7 @@
   },
   "units": {
     "tonnes": "{{value}} т",
+    "tonnesAbout": "близько {{value}} т",
     "seconds": "{{value}} с",
     "bar": "{{value}} бар",
     "barAbout": "близько {{value}} бар",

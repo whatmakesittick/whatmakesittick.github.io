@@ -166,6 +166,7 @@
   },
   "units": {
     "tonnes": "{{value}} t",
+    "tonnesAbout": "unas {{value}} t",
     "seconds": "{{value}} s",
     "bar": "{{value}} bar",
     "barAbout": "unos {{value}} bar",
