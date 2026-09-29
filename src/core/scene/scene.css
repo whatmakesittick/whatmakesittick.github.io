@@ -82,6 +82,16 @@
   backdrop-filter: blur(6px);
 }
 
+.scene-label--glide .scene-label__leader {
+  transition:
+    transform 220ms ease-out,
+    width 220ms ease-out;
+}
+
+.scene-label--glide .scene-label__text {
+  transition: top 220ms ease-out;
+}
+
 .scene-label--right .scene-label__text {
   left: 28px;
 }
@@ -103,5 +113,10 @@
 @media (prefers-reduced-motion: reduce) {
   .scene-label {
     animation: none;
+  }
+
+  .scene-label--glide .scene-label__leader,
+  .scene-label--glide .scene-label__text {
+    transition: none;
   }
 }
