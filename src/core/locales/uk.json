@@ -40,6 +40,7 @@
   },
   "footer": {
     "catalogue": "Усі пояснення",
+    "about": "Про сайт",
     "source": "Вихідний код",
     "license": "Ліцензія MIT",
     "builtWith": "Зроблено на Three.js",

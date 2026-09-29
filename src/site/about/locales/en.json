@@ -1,0 +1,69 @@
+{
+  "about": {
+    "eyebrow": "About this site",
+    "skipLink": "Skip to the text",
+    "title": "How the explainers are made",
+    "tagline": "What this site is, how every fact is checked before a model is built, and what the models leave out.",
+    "description": "What this site is, how every fact is checked with sources before a 3D model is built, and what the models leave out.",
+    "what": {
+      "title": "What this site is",
+      "p1": "Every page here takes one thing apart: a machine, an instrument or something from nature. You get a 3D model you can turn, slow down and step through, next to a text that moves with it. Scroll to the next chapter and the camera moves, the parts it talks about light up and the labels follow.",
+      "p2": "The aim is simple. Anyone can watch a thing move. Here you should also see why each part is there and what would go wrong without it."
+    },
+    "process": {
+      "title": "Facts first, then the model",
+      "intro": "No model is built before its facts are in. Every explainer goes through the same five steps, in the same order."
+    },
+    "steps": {
+      "facts": {
+        "title": "A facts sheet with sources",
+        "text": "Work starts with research. Every number and every claim the explainer will make is written down with a link to its source. Primary sources come first: the people who make, measure or study the thing. A number that cannot be found is marked unverified, never guessed. The sheet also lists what the first idea got wrong, the numbers the text is allowed to quote, and the common misconceptions the text must not repeat."
+      },
+      "spec": {
+        "title": "One spec for everything",
+        "text": "The facts sheet becomes a spec: what the model shows, how it is simplified, which formulas drive it and which constants they use. Every constant in the simulation points back to a line in the facts sheet. Corrections from the research are folded in here, before anything is built."
+      },
+      "build": {
+        "title": "Model, scene and words",
+        "text": "The simulation, the 3D scene and the text in every language are built from that one spec, so the picture, the live readings and the words agree with each other. The simulation is a small program with its own tests. The text may quote only the numbers the facts sheet cleared. Each language is written to read naturally to a native reader, not translated word for word."
+      },
+      "review": {
+        "title": "A separate review",
+        "text": "When the parts come together, a reviewer that did not build them checks the physics against the facts sheet, reads every language and looks at the page the way someone with a keyboard or a screen reader would. What the review finds is fixed before the explainer goes any further."
+      },
+      "browser": {
+        "title": "Checked in a browser",
+        "text": "The finished page is opened on a desktop screen and on a phone, in English and in two other languages. Every chapter is walked through, the timeline is dragged and the readings are watched. Errors, missing translations, labels sitting over the controls or text that does not fit all send it back. Only then is it published."
+      }
+    },
+    "labels": {
+      "title": "Every fact on the sheet carries one of four labels",
+      "confirmed": "Confirmed",
+      "approximate": "Approximate",
+      "disputed": "Disputed",
+      "unverified": "Unverified"
+    },
+    "limits": {
+      "title": "What the models leave out",
+      "p1": "These are teaching models, not engineering drawings. Shapes are simplified so you can see the mechanism. Parts are cut away or scaled so the important ones stay in view. The simulation captures what matters for the story, not every effect a real engineer would have to model.",
+      "p2": "So use them to understand how something works. If you need exact figures for real work, go to the sources."
+    },
+    "ai": {
+      "title": "Built with AI, checked by a person",
+      "p1": "The research, the models, the text and the review are done by AI agents. Each has one job and follows the checklist above, which is public and lives in the site's repository. That is why the facts sheet comes first: the rule is that no number comes from memory, and the review checks the text against the sheet.",
+      "p2": "A person chooses each subject, looks at the finished explainer and decides whether it goes live.",
+      "link": "Read the checklist"
+    },
+    "reading": {
+      "title": "How to read an explainer",
+      "p1": "Scroll, and the model follows the text. Press play to set it going, drag the timeline to step through one cycle, or slow it right down to catch what happens in a blink. The gauge in the corner shows live readings that change as the model runs.",
+      "p2": "Drag to turn the model, scroll or pinch to zoom, and press R to bring the camera back. The space bar plays and pauses, the arrow keys nudge the timeline, and the number keys jump to a phase. X shows the model full screen. Without JavaScript you still get a still image of the model and the whole text."
+    },
+    "open": {
+      "title": "Open source",
+      "p1": "The site, every explainer and the checklist are open source under the MIT license. Each explainer page links to its own source code, so you can read the simulation behind what you see. No ads, no tracking, nothing loaded from anyone else's servers. Your language choice is kept in your browser and nowhere else.",
+      "p2": "Spotted a mistake in a number, a model or a translation? Please say so. Every report is welcome.",
+      "link": "Report a mistake on GitHub"
+    }
+  }
+}

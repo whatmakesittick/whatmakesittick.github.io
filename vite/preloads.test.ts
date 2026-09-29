@@ -7,6 +7,7 @@ const chunks = [
   { fileName: 'assets/uk-engine.js', facadeModuleId: '/repo/explainers/engine/locales/uk.json' },
   { fileName: 'assets/uk-glider.js', facadeModuleId: '/repo/explainers/glider/locales/uk.json' },
   { fileName: 'assets/de-engine.js', facadeModuleId: '/repo/explainers/engine/locales/de.json' },
+  { fileName: 'assets/uk-about.js', facadeModuleId: '/repo/src/site/about/locales/uk.json' },
   { fileName: 'assets/main.js', facadeModuleId: null },
 ];
 
@@ -14,6 +15,13 @@ describe('languageChunks', () => {
   it('finds the explainer and the core locale of a language page', () => {
     expect(languageChunks(ROOT, '/uk/engine/index.html', chunks)).toEqual([
       'assets/uk-engine.js',
+      'assets/uk-core.js',
+    ]);
+  });
+
+  it('finds the about and the core locale of an about language page', () => {
+    expect(languageChunks(ROOT, '/uk/about/index.html', chunks)).toEqual([
+      'assets/uk-about.js',
       'assets/uk-core.js',
     ]);
   });

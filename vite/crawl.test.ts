@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
+import type { LoadedAbout } from './about.ts';
 import { ROBOTS_FILE, SITEMAP_FILE, crawlFiles, renderRobots, renderSitemap } from './crawl.ts';
+
+const about: LoadedAbout = {
+  template: '',
+  dictionaries: {},
+  dates: { published: '2026-02-01T09:00:00+02:00', modified: '2026-03-20T09:00:00+02:00' },
+};
 
 const routes = [
   { page: '', languages: ['en', 'uk'] as const },
@@ -59,7 +66,9 @@ describe('renderRobots', () => {
 
 describe('crawlFiles', () => {
   it('names both files with their content types', () => {
-    expect(crawlFiles([]).map(({ fileName, contentType }) => [fileName, contentType])).toEqual([
+    expect(
+      crawlFiles([], about).map(({ fileName, contentType }) => [fileName, contentType]),
+    ).toEqual([
       [SITEMAP_FILE, 'application/xml; charset=utf-8'],
       [ROBOTS_FILE, 'text/plain; charset=utf-8'],
     ]);

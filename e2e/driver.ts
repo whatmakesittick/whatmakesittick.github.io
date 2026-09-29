@@ -3,6 +3,7 @@ import type { Locator, Page } from '@playwright/test';
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { LANGUAGE_QUERY_KEY, languagePath } from '../src/core/i18n/paths.ts';
+import { ABOUT_PAGE } from '../src/core/pages.ts';
 import { CAMERA_TWEEN_SECONDS, MAX_FRAME_SECONDS } from '../src/core/scene/constants.ts';
 import { labelsAgree } from './geometry.ts';
 import type { SceneLabel } from './geometry.ts';
@@ -18,6 +19,7 @@ const PAUSED = 'false';
 const SCRUBBER = '[data-control="scrubber"]';
 const SCENE_CANVAS = '#scene canvas';
 const CARD = '.card';
+const ABOUT_MAIN = 'main.about';
 const MILLISECONDS_PER_SECOND = 1000;
 const MAX_FRAME_MS = MAX_FRAME_SECONDS * MILLISECONDS_PER_SECOND;
 const CAMERA_WAIT_LIMIT_MS = 10_000;
@@ -77,6 +79,14 @@ export async function openCatalogue(
   const cards = page.locator(CARD);
   await expect(cards.first()).toBeVisible();
   return cards;
+}
+
+export async function openAbout(
+  page: Page,
+  language: LanguageCode = DEFAULT_LANGUAGE,
+): Promise<void> {
+  await visit(page, ABOUT_PAGE, language, 'page');
+  await expect(page.locator(ABOUT_MAIN)).toBeVisible();
 }
 
 export function visibleChapters(page: Page): Promise<Locator[]> {

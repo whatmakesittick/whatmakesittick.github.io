@@ -94,6 +94,10 @@ describe('reservedSlugs', () => {
     );
   });
 
+  it('reserves the about page for its own folder', () => {
+    expect([...reservedSlugs(createRoot())]).toEqual(expect.arrayContaining(['about']));
+  });
+
   it('reserves every language code for the language folders', () => {
     expect([...reservedSlugs(createRoot())]).toEqual(expect.arrayContaining(['uk', 'ja']));
   });

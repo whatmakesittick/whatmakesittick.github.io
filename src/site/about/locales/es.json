@@ -1,0 +1,69 @@
+{
+  "about": {
+    "eyebrow": "Sobre este sitio",
+    "skipLink": "Saltar al texto",
+    "title": "Cómo se hacen las explicaciones",
+    "tagline": "Qué es este sitio, cómo se comprueba cada dato antes de construir un modelo y qué dejan fuera los modelos.",
+    "description": "Qué es este sitio, cómo se comprueba cada dato con sus fuentes antes de construir un modelo 3D y qué dejan fuera los modelos.",
+    "what": {
+      "title": "Qué es este sitio",
+      "p1": "Cada página de este sitio desmonta una sola cosa: una máquina, un instrumento o algo de la naturaleza. Tienes un modelo 3D que puedes girar, ralentizar y recorrer paso a paso, junto a un texto que avanza con él. Baja hasta el capítulo siguiente y la cámara se mueve, las piezas de las que habla el texto se iluminan y las etiquetas las acompañan.",
+      "p2": "La idea es sencilla. Cualquiera puede ver algo en movimiento. Aquí, además, deberías ver por qué está cada pieza y qué fallaría sin ella."
+    },
+    "process": {
+      "title": "Primero los datos, después el modelo",
+      "intro": "No se construye ningún modelo hasta tener sus datos. Cada explicación pasa por los mismos cinco pasos, siempre en el mismo orden."
+    },
+    "steps": {
+      "facts": {
+        "title": "Una hoja de datos con fuentes",
+        "text": "Todo empieza con una investigación. Cada cifra y cada afirmación que hará la explicación se anota con un enlace a su fuente. Primero van las fuentes primarias: quienes fabrican, miden o estudian la cosa en cuestión. Si una cifra no se encuentra, se marca como sin verificar y nunca se adivina. La hoja también recoge en qué se equivocaba la idea inicial, qué cifras puede citar el texto y qué errores comunes no debe repetir."
+      },
+      "spec": {
+        "title": "Una sola especificación para todo",
+        "text": "La hoja de datos se convierte en una especificación: qué muestra el modelo, cómo se simplifica, qué fórmulas lo mueven y qué constantes usan. Cada constante de la simulación remite a una línea de la hoja de datos. Las correcciones que salen de la investigación se incorporan aquí, antes de construir nada."
+      },
+      "build": {
+        "title": "Modelo, escena y texto",
+        "text": "La simulación, la escena 3D y el texto en cada idioma salen de esa única especificación. Así, la imagen, las lecturas en directo y las palabras cuentan lo mismo. La simulación es un pequeño programa con sus propias pruebas. El texto solo puede citar las cifras que aprobó la hoja de datos. Cada idioma se escribe para que suene natural a un hablante nativo, no se traduce palabra por palabra."
+      },
+      "review": {
+        "title": "Una revisión independiente",
+        "text": "Cuando las piezas se juntan, entra un revisor que no las ha construido. Comprueba la física con la hoja de datos, lee cada idioma y mira la página como lo haría alguien que usa el teclado o un lector de pantalla. Todo lo que encuentra se corrige antes de que la explicación siga adelante."
+      },
+      "browser": {
+        "title": "Comprobado en un navegador",
+        "text": "La página terminada se abre en la pantalla de un ordenador y en un móvil, en inglés y en otros dos idiomas. Se recorre cada capítulo, se arrastra la línea de tiempo y se vigilan las lecturas. Un error, una traducción que falta, una etiqueta encima de los controles o un texto que no cabe: basta uno solo para que la página vuelva al taller. Solo se publica cuando todo está bien."
+      }
+    },
+    "labels": {
+      "title": "Cada dato de la hoja lleva una de estas cuatro etiquetas",
+      "confirmed": "Confirmado",
+      "approximate": "Aproximado",
+      "disputed": "Controvertido",
+      "unverified": "Sin verificar"
+    },
+    "limits": {
+      "title": "Lo que los modelos dejan fuera",
+      "p1": "Son modelos para aprender, no planos de ingeniería. Las formas están simplificadas para que veas el mecanismo. Algunas piezas se recortan o cambian de escala para que las importantes sigan a la vista. La simulación recoge lo que importa para la explicación, no cada efecto que un ingeniero de verdad tendría que modelar.",
+      "p2": "Así que úsalos para entender cómo funciona algo. Si necesitas cifras exactas para un trabajo real, acude a las fuentes."
+    },
+    "ai": {
+      "title": "Hecho con IA, revisado por una persona",
+      "p1": "La investigación, los modelos, los textos y la revisión los hacen agentes de IA. Cada uno tiene una sola tarea y sigue la lista de comprobación de arriba, que es pública y está en el repositorio del sitio. Por eso la hoja de datos va primero: la regla es que ninguna cifra sale de la memoria, y la revisión contrasta el texto con la hoja.",
+      "p2": "Una persona elige cada tema, mira la explicación terminada y decide si se publica.",
+      "link": "Leer la lista de comprobación"
+    },
+    "reading": {
+      "title": "Cómo leer una explicación",
+      "p1": "Desplázate y el modelo sigue al texto. Pulsa Reproducir para ponerlo en marcha. Arrastra la línea de tiempo para recorrer un ciclo paso a paso, o ralentízalo mucho para ver lo que pasa en un abrir y cerrar de ojos. El indicador de la esquina muestra lecturas en directo que cambian mientras el modelo funciona.",
+      "p2": "Arrastra para girar el modelo, desplázate o pellizca para hacer zoom y pulsa R para devolver la cámara a su sitio. La barra espaciadora reproduce y pausa, las flechas mueven un poco la línea de tiempo y las teclas numéricas saltan a una fase. X muestra el modelo a pantalla completa. Sin JavaScript, sigues teniendo una imagen fija del modelo y todo el texto."
+    },
+    "open": {
+      "title": "Código abierto",
+      "p1": "El sitio, cada explicación y la lista de comprobación son de código abierto, con licencia MIT. Cada explicación enlaza a su propio código fuente, así que puedes leer la simulación que hay detrás de lo que ves. Sin anuncios, sin rastreo y sin nada cargado desde servidores ajenos. El idioma que eliges se guarda en tu navegador y en ningún otro sitio.",
+      "p2": "¿Has visto un error en una cifra, un modelo o una traducción? Cuéntanoslo, por favor. Todos los avisos son bienvenidos.",
+      "link": "Informar de un error en GitHub"
+    }
+  }
+}

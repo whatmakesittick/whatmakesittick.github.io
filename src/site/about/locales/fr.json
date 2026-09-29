@@ -1,0 +1,69 @@
+{
+  "about": {
+    "eyebrow": "À propos de ce site",
+    "skipLink": "Aller directement au texte",
+    "title": "Comment naissent les explications",
+    "tagline": "Ce qu’est ce site, comment chaque fait est vérifié avant de construire un modèle, et ce que les modèles laissent de côté.",
+    "description": "Ce qu’est ce site, comment chaque fait est vérifié à la source avant de construire un modèle 3D, et ce que les modèles laissent de côté.",
+    "what": {
+      "title": "Ce qu’est ce site",
+      "p1": "Chaque page démonte une seule chose : une machine, un instrument ou quelque chose qui vient de la nature. Vous avez un modèle 3D que vous pouvez faire tourner, ralentir et parcourir pas à pas. À côté, un texte avance avec lui. Faites défiler jusqu’au chapitre suivant : la caméra se déplace, les pièces dont parle le texte s’allument et les étiquettes suivent.",
+      "p2": "Le but est simple. Tout le monde peut regarder une chose bouger. Ici, vous devriez aussi voir pourquoi chaque pièce est là, et ce qui ne marcherait plus sans elle."
+    },
+    "process": {
+      "title": "D’abord les faits, ensuite le modèle",
+      "intro": "Aucun modèle n’est construit tant que ses faits ne sont pas réunis. Chaque explication passe par les mêmes cinq étapes, toujours dans le même ordre."
+    },
+    "steps": {
+      "facts": {
+        "title": "Une fiche de faits avec ses sources",
+        "text": "Tout commence par des recherches. Chaque chiffre et chaque affirmation que l’explication avancera sont notés avec un lien vers leur source. Les sources primaires passent en premier : ceux qui fabriquent, mesurent ou étudient l’objet. Un chiffre introuvable est marqué « non vérifié », jamais deviné. La fiche note aussi ce que la première idée avait de faux, les chiffres que le texte a le droit de citer et les idées reçues qu’il ne doit pas répéter."
+      },
+      "spec": {
+        "title": "Une seule spécification pour tout",
+        "text": "La fiche de faits devient une spécification : ce que montre le modèle, comment il est simplifié, quelles formules le font tourner et quelles constantes elles utilisent. Chaque constante de la simulation renvoie à une ligne de la fiche. Les corrections issues des recherches sont intégrées à ce stade, avant de construire quoi que ce soit."
+      },
+      "build": {
+        "title": "Modèle, scène et texte",
+        "text": "La simulation, la scène 3D et le texte dans chaque langue partent de cette seule spécification. Ainsi, l’image, les mesures en direct et les mots disent la même chose. La simulation est un petit programme, avec ses propres tests. Le texte ne peut citer que les chiffres validés par la fiche de faits. Chaque langue est rédigée pour se lire naturellement pour un lecteur natif, et non traduite mot à mot."
+      },
+      "review": {
+        "title": "Une relecture indépendante",
+        "text": "Une fois les pièces assemblées, un relecteur qui ne les a pas construites prend le relais. Il confronte la physique à la fiche de faits, lit chaque langue et regarde la page comme le ferait une personne qui utilise un clavier ou un lecteur d’écran. Tout ce qu’il relève est corrigé avant que l’explication n’aille plus loin."
+      },
+      "browser": {
+        "title": "Vérifié dans un navigateur",
+        "text": "La page terminée est ouverte sur un écran d’ordinateur et sur un téléphone, en anglais et dans deux autres langues. On parcourt chaque chapitre, on fait glisser la frise et on surveille les mesures. Une erreur, une traduction manquante, une étiquette posée sur les commandes ou un texte qui déborde : il suffit d’un seul de ces défauts pour que la page reparte en correction. Elle n’est publiée qu’une fois tout en ordre."
+      }
+    },
+    "labels": {
+      "title": "Chaque fait de la fiche porte l’une de ces quatre étiquettes",
+      "confirmed": "Confirmé",
+      "approximate": "Approximatif",
+      "disputed": "Contesté",
+      "unverified": "Non vérifié"
+    },
+    "limits": {
+      "title": "Ce que les modèles laissent de côté",
+      "p1": "Ce sont des modèles pédagogiques, pas des plans d’ingénieur. Les formes sont simplifiées pour que vous voyiez le mécanisme. Certaines pièces sont coupées, agrandies ou réduites pour garder les plus importantes en vue. La simulation rend ce qui compte pour l’explication, pas chaque effet qu’un vrai ingénieur devrait modéliser.",
+      "p2": "Servez-vous-en donc pour comprendre comment une chose fonctionne. Si vous avez besoin de chiffres exacts pour un vrai travail, reportez-vous aux sources."
+    },
+    "ai": {
+      "title": "Conçu avec l’IA, vérifié par une personne",
+      "p1": "Les recherches, les modèles, les textes et la relecture sont confiés à des agents d’IA. Chacun a une seule tâche et suit la liste de contrôle ci-dessus, qui est publique et se trouve dans le dépôt du site. C’est pourquoi la fiche de faits passe en premier : la règle veut qu’aucun chiffre ne vienne de mémoire, et la relecture confronte le texte à la fiche.",
+      "p2": "Une personne choisit chaque sujet, regarde l’explication terminée et décide si elle est mise en ligne.",
+      "link": "Lire la liste de contrôle"
+    },
+    "reading": {
+      "title": "Comment lire une explication",
+      "p1": "Faites défiler la page, et le modèle suit le texte. Appuyez sur Lancer pour le mettre en marche. Faites glisser la frise pour parcourir un cycle pas à pas, ou ralentissez-le fortement pour saisir ce qui se passe en un clin d’œil. Le cadran dans le coin affiche des mesures en direct, qui changent pendant que le modèle tourne.",
+      "p2": "Faites glisser pour tourner le modèle, faites défiler ou pincez pour zoomer, et appuyez sur R pour remettre la caméra en place. La barre d’espace lance et met en pause, les flèches font avancer la frise par petits pas, et les touches numériques sautent à une phase. X affiche le modèle en plein écran. Sans JavaScript, vous avez quand même une image fixe du modèle et tout le texte."
+    },
+    "open": {
+      "title": "Open source",
+      "p1": "Le site, chaque explication et la liste de contrôle sont open source, sous licence MIT. Chaque page d’explication renvoie vers son propre code source : vous pouvez donc lire la simulation qui se cache derrière ce que vous voyez. Pas de publicité, pas de pistage, rien n’est chargé depuis les serveurs de quelqu’un d’autre. Votre choix de langue reste dans votre navigateur, et nulle part ailleurs.",
+      "p2": "Vous avez repéré une erreur dans un chiffre, un modèle ou une traduction ? Dites-le-nous. Chaque signalement est le bienvenu.",
+      "link": "Signaler une erreur sur GitHub"
+    }
+  }
+}

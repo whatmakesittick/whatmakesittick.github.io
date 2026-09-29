@@ -1,6 +1,8 @@
 import { DEFAULT_LANGUAGE, LANGUAGES } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { languagePath } from '../src/core/i18n/paths.ts';
+import { ABOUT_PAGE, CATALOGUE_PAGE } from '../src/core/pages.ts';
+import type { LoadedAbout } from './about.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { pageUrl } from './site.ts';
 
@@ -18,10 +20,10 @@ export interface Alternate {
 const TRAILING_SLASH = /\/$/;
 const DEFAULT_HREFLANG = 'x-default';
 
-export const CATALOGUE_ROUTE: PageRoute = {
-  page: '',
-  languages: LANGUAGES.map((language) => language.code),
-};
+const SITE_LANGUAGES = LANGUAGES.map((language) => language.code);
+
+export const CATALOGUE_ROUTE: PageRoute = { page: CATALOGUE_PAGE, languages: SITE_LANGUAGES };
+export const ABOUT_ROUTE: PageRoute = { page: ABOUT_PAGE, languages: SITE_LANGUAGES };
 
 export function explainerRoute(explainer: LoadedExplainer): PageRoute {
   const { manifest, dates } = explainer;
@@ -42,8 +44,15 @@ export function catalogueRoute(explainers: readonly LoadedExplainer[]): PageRout
   return modified ? { ...CATALOGUE_ROUTE, modified } : CATALOGUE_ROUTE;
 }
 
-export function siteRoutes(explainers: readonly LoadedExplainer[]): PageRoute[] {
-  return [catalogueRoute(explainers), ...explainers.map(explainerRoute)];
+export function aboutRoute(about: LoadedAbout): PageRoute {
+  return { ...ABOUT_ROUTE, modified: about.dates.modified };
+}
+
+export function siteRoutes(
+  explainers: readonly LoadedExplainer[],
+  about: LoadedAbout,
+): PageRoute[] {
+  return [catalogueRoute(explainers), aboutRoute(about), ...explainers.map(explainerRoute)];
 }
 
 export function pageFolder(code: LanguageCode, page: string): string {

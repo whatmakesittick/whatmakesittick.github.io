@@ -1,7 +1,10 @@
 import { join } from 'node:path';
 import type { Plugin } from 'vite';
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
+import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { splitLanguagePath } from '../src/core/i18n/paths.ts';
+import { ABOUT_PAGE } from '../src/core/pages.ts';
+import { aboutLocaleFile } from './about.ts';
 import { CORE_LOCALES_DIRECTORY } from './i18n.ts';
 import { EXPLAINERS_DIRECTORY, localeFile } from './manifest.ts';
 
@@ -13,11 +16,17 @@ export interface EmittedChunk {
 const PAGE_FILE = /index\.html$/;
 const MODULE_SCRIPT = /^([ \t]*)<script type="module"/m;
 
+function pageLocaleFile(root: string, page: string, code: LanguageCode): string {
+  return page === ABOUT_PAGE
+    ? aboutLocaleFile(root, code)
+    : localeFile(join(root, EXPLAINERS_DIRECTORY, page), code);
+}
+
 function languageModules(root: string, pagePath: string): string[] {
   const { code, page } = splitLanguagePath(pagePath.replace(PAGE_FILE, ''));
   if (!code || code === DEFAULT_LANGUAGE) return [];
   const core = join(root, CORE_LOCALES_DIRECTORY, `${code}.json`);
-  return page ? [localeFile(join(root, EXPLAINERS_DIRECTORY, page), code), core] : [core];
+  return page ? [pageLocaleFile(root, page, code), core] : [core];
 }
 
 export function languageChunks(

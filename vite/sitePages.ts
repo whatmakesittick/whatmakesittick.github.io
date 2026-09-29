@@ -1,6 +1,8 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
+import { loadAbout } from './about.ts';
+import type { LoadedAbout } from './about.ts';
 import type { CatalogueCard } from '../src/site/catalogue.ts';
 import { loadCoreDictionaries, mergeLocales, pageLanguage } from './i18n.ts';
 import type { Dictionaries } from './i18n.ts';
@@ -10,6 +12,7 @@ import { pickMoreExplainers } from './moreExplainers.ts';
 import {
   PAGE_ENTRY,
   catalogueCards,
+  renderAbout,
   renderCatalogue,
   renderEntry,
   renderNotFound,
@@ -17,10 +20,11 @@ import {
 } from './page.ts';
 import { prunePageFolders, writePageFolder } from './pageFolders.ts';
 import type { PageFiles } from './pageFolders.ts';
-import { CATALOGUE_ROUTE, pageFolder } from './routes.ts';
+import { ABOUT_ROUTE, CATALOGUE_ROUTE, pageFolder } from './routes.ts';
 import type { TemplateValues } from './template.ts';
 
 export const CORE_DIRECTORY = join('src', 'core');
+export const SITE_DIRECTORY = join('src', 'site');
 export const SITE_ENTRY = 'index.html';
 export const NOT_FOUND_ENTRY = '404.html';
 
@@ -33,6 +37,7 @@ interface Sources {
   siteTemplate: string;
   partials: TemplateValues;
   core: Dictionaries;
+  about: LoadedAbout;
 }
 
 interface PageFolder {
@@ -64,6 +69,7 @@ function readSources(root: string): Sources {
     siteTemplate: readFileSync(join(root, SITE_ENTRY), 'utf8'),
     partials: readPartials(root),
     core: loadCoreDictionaries(root),
+    about: loadAbout(root),
   };
 }
 
@@ -81,6 +87,16 @@ function catalogueFolders(sources: Sources, explainers: LoadedExplainer[]): Page
         ),
       },
     }));
+}
+
+function aboutFolders({ about, partials, core }: Sources): PageFolder[] {
+  const dictionaries = mergeLocales(core, about.dictionaries);
+  return ABOUT_ROUTE.languages.map((code) => ({
+    path: pageFolder(code, ABOUT_ROUTE.page),
+    files: {
+      [SITE_ENTRY]: renderAbout(about, partials, pageLanguage(dictionaries, code)),
+    },
+  }));
 }
 
 function explainerFolders(
@@ -113,6 +129,7 @@ export function generateSite(root: string): Site {
   const cards = catalogueCards(explainers);
   const folders = [
     ...catalogueFolders(sources, explainers),
+    ...aboutFolders(sources),
     ...explainers.flatMap((explainer) => explainerFolders(sources, explainer, cards)),
   ];
   for (const { path, files } of folders) writePageFolder(root, path, files);

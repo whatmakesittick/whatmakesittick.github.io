@@ -4,6 +4,7 @@ import { DEFAULT_LANGUAGE, LANGUAGES, isLanguageCode } from '../src/core/i18n/la
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import type { Dictionary } from '../src/core/i18n/resources.ts';
 import { META_KEYS, TAGS } from '../src/core/manifest.ts';
+import { ABOUT_PAGE } from '../src/core/pages.ts';
 import type { ExplainerManifest, ExplainerMeta, Tag } from '../src/core/manifest.ts';
 import { readPageDates } from './dates.ts';
 import type { PageDates } from './dates.ts';
@@ -16,6 +17,7 @@ export const LOCALES_DIRECTORY = 'locales';
 const SOCIAL_ALT_KEY = 'socialAlt';
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const PROJECT_FOLDERS = [
+  ABOUT_PAGE,
   'assets',
   'dist',
   'explainers',

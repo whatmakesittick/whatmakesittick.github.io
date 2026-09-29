@@ -1,3 +1,4 @@
+import type { LoadedAbout } from './about.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { alternates, siteRoutes } from './routes.ts';
 import type { PageRoute } from './routes.ts';
@@ -43,12 +44,12 @@ export function renderRobots(): string {
   return ['User-agent: *', 'Allow: /', '', `Sitemap: ${siteUrl(SITEMAP_FILE)}`, ''].join('\n');
 }
 
-export function crawlFiles(explainers: readonly LoadedExplainer[]): SiteFile[] {
+export function crawlFiles(explainers: readonly LoadedExplainer[], about: LoadedAbout): SiteFile[] {
   return [
     {
       fileName: SITEMAP_FILE,
       contentType: XML_TYPE,
-      source: renderSitemap(siteRoutes(explainers)),
+      source: renderSitemap(siteRoutes(explainers, about)),
     },
     { fileName: ROBOTS_FILE, contentType: TEXT_TYPE, source: renderRobots() },
   ];

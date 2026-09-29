@@ -1,3 +1,4 @@
+import type { LoadedAbout } from './about.ts';
 import { crawlFiles } from './crawl.ts';
 import { feedFiles } from './feed.ts';
 import type { Dictionaries } from './i18n.ts';
@@ -9,6 +10,12 @@ export interface SiteFile {
   source: string;
 }
 
-export function siteFiles(explainers: readonly LoadedExplainer[], core: Dictionaries): SiteFile[] {
-  return [...crawlFiles(explainers), ...feedFiles(explainers, core)];
+export interface SiteContent {
+  explainers: readonly LoadedExplainer[];
+  about: LoadedAbout;
+  core: Dictionaries;
+}
+
+export function siteFiles({ explainers, about, core }: SiteContent): SiteFile[] {
+  return [...crawlFiles(explainers, about), ...feedFiles(explainers, core)];
 }

@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
+import type { LoadedAbout } from './about.ts';
 import type { PageLanguage } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import {
   catalogueCards,
   redirectValues,
+  renderAbout,
   renderCatalogue,
   renderEntry,
   renderNotFound,
@@ -89,6 +91,9 @@ const partials = {
 const english: Record<string, string> = {
   'page.metaTitle': '{{title}} · What makes it tick',
   'catalogue.metaTitle': 'What makes it tick: how things work',
+  'catalogue.title': 'What makes it tick',
+  'about.title': 'How the explainers are made',
+  'about.description': 'Facts first, then a <model>',
 };
 
 const translations: Record<string, string> = {
@@ -98,6 +103,8 @@ const translations: Record<string, string> = {
   'catalogue.title': 'Що змушує цокати',
   'catalogue.metaTitle': 'Що змушує цокати: як усе працює',
   'catalogue.tagline': 'Як працюють машини',
+  'about.title': 'Як робляться пояснення',
+  'about.description': 'Спершу факти',
 };
 
 function interpolate(text: string, values: Record<string, string> = {}): string {
@@ -431,6 +438,108 @@ describe('renderNotFound', () => {
 
   it('links the English feed from the footer', () => {
     expect(html).toContain('<a class="feed" href="/feed.xml">');
+  });
+});
+
+describe('renderAbout', () => {
+  const about: LoadedAbout = {
+    template: [
+      '<html lang="{{lang}}">',
+      '<title>{{documentTitle}}</title>',
+      '<meta content="{{description}}" />',
+      '<link rel="canonical" href="{{url}}" />',
+      '{{alternateLinks}}',
+      '<meta property="og:image" content="{{image}}" />',
+      '<a class="site" href="{{catalogueUrl}}">{{siteName}}</a>',
+      '<a class="about" href="{{aboutUrl}}">About</a>',
+      '<script type="application/ld+json">{{structuredData}}</script>',
+      '<h1 data-i18n="about.title">Old</h1>',
+      '<a class="process" href="{{processUrl}}">Checklist</a>',
+      '<a class="issues" href="{{issuesUrl}}">Report</a>',
+      '<!-- partial:header-actions -->',
+      '<!-- partial:footer -->',
+      '<script type="module" src="{{entry}}"></script>',
+      '</html>',
+    ].join('\n'),
+    dictionaries: {},
+    dates: { published: '2026-02-01T09:00:00+02:00', modified: '2026-03-20T09:00:00+02:00' },
+  };
+  const html = renderAbout(about, partials, language('uk'));
+
+  it('renders the about page in its language with its own head', () => {
+    expect(html).toContain('<html lang="uk">');
+    expect(html).toContain('<title>Як робляться пояснення · Що змушує цокати</title>');
+    expect(html).toContain('<h1 data-i18n="about.title">Як робляться пояснення</h1>');
+    expect(html).toContain('<meta content="Спершу факти" >');
+    expect(html).toContain(
+      '<link rel="canonical" href="https://whatmakesittick.github.io/uk/about/" >',
+    );
+    expect(html).toContain(
+      '<meta property="og:image" content="https://whatmakesittick.github.io/social/og-image.png" >',
+    );
+  });
+
+  it('links the catalogue and itself in the language of the page', () => {
+    expect(html).toContain('<a class="site" href="/uk/">What makes it tick</a>');
+    expect(html).toContain('<a class="about" href="/uk/about/">About</a>');
+    expect(html).toContain('href="/uk/about/" hreflang="uk" lang="uk" aria-current="page"');
+  });
+
+  it('links the checklist and the issue tracker of the repository', () => {
+    expect(html).toContain(
+      '<a class="process" href="https://github.com/whatmakesittick/whatmakesittick.github.io/blob/main/.claude/skills/new-explainer/SKILL.md">',
+    );
+    expect(html).toContain(
+      '<a class="issues" href="https://github.com/whatmakesittick/whatmakesittick.github.io/issues">',
+    );
+  });
+
+  it('loads the shared about entry and lists every language variant', () => {
+    expect(html).toContain('<script type="module" src="/src/site/about/main.ts"></script>');
+    expect(hreflangs(html)).toContain('x-default https://whatmakesittick.github.io/about/');
+    expect(hreflangs(html)).toContain('ja https://whatmakesittick.github.io/ja/about/');
+  });
+
+  it('describes itself as the about page of the site with its dates', () => {
+    expect(graphNode(html, 'AboutPage')).toEqual({
+      '@type': ['WebPage', 'AboutPage'],
+      '@id': 'https://whatmakesittick.github.io/uk/about/',
+      name: 'Як робляться пояснення',
+      description: 'Спершу факти',
+      url: 'https://whatmakesittick.github.io/uk/about/',
+      image: 'https://whatmakesittick.github.io/social/og-image.png',
+      inLanguage: 'uk',
+      datePublished: '2026-02-01T09:00:00+02:00',
+      dateModified: '2026-03-20T09:00:00+02:00',
+      author: { '@type': 'Person', name: 'Vitalii Elenhaupt', url: 'https://github.com/veelenga' },
+      isPartOf: { '@id': 'https://whatmakesittick.github.io/#website' },
+      about: { '@id': 'https://whatmakesittick.github.io/#website' },
+      breadcrumb: { '@id': 'https://whatmakesittick.github.io/uk/about/#breadcrumb' },
+    });
+    expect(graphNode(html, 'BreadcrumbList')?.itemListElement).toEqual([
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Що змушує цокати',
+        item: 'https://whatmakesittick.github.io/uk/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Як робляться пояснення',
+        item: 'https://whatmakesittick.github.io/uk/about/',
+      },
+    ]);
+  });
+
+  it('keeps the English about page with the language redirect', () => {
+    const englishHtml = renderAbout(about, partials, language('en'));
+    expect(englishHtml).toContain('<html lang="en">');
+    expect(englishHtml).toContain('<a class="about" href="/about/">About</a>');
+    expect(englishHtml).toContain(
+      '<title>How the explainers are made · What makes it tick</title>',
+    );
+    expect(englishHtml).toContain('<meta content="Facts first, then a &lt;model&gt;" >');
   });
 });
 

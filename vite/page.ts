@@ -10,13 +10,17 @@ import { alternateLinks, imageType, jsonLd, localeTags } from './head.ts';
 import type { PageLanguage } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { renderMoreExplainers } from './moreExplainers.ts';
-import { CATALOGUE_ROUTE, explainerRoute } from './routes.ts';
+import type { LoadedAbout } from './about.ts';
+import { ABOUT_ENTRY } from './about.ts';
+import { ABOUT_ROUTE, CATALOGUE_ROUTE, explainerRoute } from './routes.ts';
 import type { PageRoute } from './routes.ts';
 import { REDIRECT_SCRIPT } from './redirectScript.ts';
 import {
   COVER_SIZE,
   FEED_TYPE,
+  ISSUES_URL,
   LICENSE_URL,
+  PROCESS_URL,
   REPOSITORY_URL,
   SITE_NAME,
   SITE_SOCIAL,
@@ -28,7 +32,7 @@ import {
   pageUrl,
   siteUrl,
 } from './site.ts';
-import { catalogueData, explainerData } from './structuredData.ts';
+import { aboutData, catalogueData, explainerData } from './structuredData.ts';
 import type { ExplainerFacts, ListedPage } from './structuredData.ts';
 import { escapeHtml, expandPartials, fillTemplate } from './template.ts';
 import type { TemplateValues } from './template.ts';
@@ -45,6 +49,8 @@ const CATALOGUE_DOCUMENT_TITLE_KEY = 'catalogue.metaTitle';
 const PAGE_DOCUMENT_TITLE_KEY = 'page.metaTitle';
 const COVER_ALT_KEY = 'stage.coverAlt';
 const NOT_FOUND_TITLE_KEY = 'notFound.title';
+const ABOUT_TITLE_KEY = 'about.title';
+const ABOUT_DESCRIPTION_KEY = 'about.description';
 
 export function siteValues(sourceUrl: string): TemplateValues {
   return {
@@ -76,11 +82,18 @@ function languageOptions(current: LanguageCode): string {
   }).join('');
 }
 
+function siteLinkValues(code: LanguageCode): TemplateValues {
+  return {
+    catalogueUrl: escapeHtml(pagePath(code, CATALOGUE_ROUTE.page)),
+    aboutUrl: escapeHtml(pagePath(code, ABOUT_ROUTE.page)),
+  };
+}
+
 function languageValues(code: LanguageCode, route: PageRoute): TemplateValues {
   return {
     lang: code,
     url: escapeHtml(pageUrl(code, route.page)),
-    catalogueUrl: escapeHtml(pagePath(code, CATALOGUE_ROUTE.page)),
+    ...siteLinkValues(code),
     localeTags: localeTags(code, route),
     alternateLinks: alternateLinks(route),
     languageLinks: languageLinks(route, code),
@@ -245,10 +258,41 @@ export function renderNotFound(
   const html = render(template, partials, {
     ...siteValues(REPOSITORY_URL),
     ...feedValues(language),
+    ...siteLinkValues(code),
     lang: code,
-    catalogueUrl: escapeHtml(pagePath(code, CATALOGUE_ROUTE.page)),
     languageLinks: languageLinks(CATALOGUE_ROUTE),
     documentTitle: escapeHtml(translate(PAGE_DOCUMENT_TITLE_KEY, { title })),
+  });
+  return translateHtml(html, translate);
+}
+
+export function renderAbout(
+  about: LoadedAbout,
+  partials: TemplateValues,
+  language: PageLanguage,
+): string {
+  const { code, translate } = language;
+  const image = siteUrl(SITE_SOCIAL.image);
+  const title = translate(ABOUT_TITLE_KEY);
+  const description = translate(ABOUT_DESCRIPTION_KEY);
+  const facts = { code, url: pageUrl(code, ABOUT_ROUTE.page), image };
+  const catalogue = {
+    name: translate(CATALOGUE_TITLE_KEY),
+    url: pageUrl(code, CATALOGUE_ROUTE.page),
+  };
+  const html = render(about.template, partials, {
+    ...siteValues(REPOSITORY_URL),
+    ...languageValues(code, ABOUT_ROUTE),
+    ...feedValues(language),
+    ...redirectValues(code, ABOUT_ROUTE),
+    ...socialValues(image, SITE_SOCIAL.alt),
+    documentTitle: escapeHtml(translate(PAGE_DOCUMENT_TITLE_KEY, { title })),
+    title: escapeHtml(title),
+    description: escapeHtml(description),
+    structuredData: jsonLd(aboutData({ name: title, description }, facts, about.dates, catalogue)),
+    processUrl: escapeHtml(PROCESS_URL),
+    issuesUrl: escapeHtml(ISSUES_URL),
+    entry: `/${ABOUT_ENTRY}`,
   });
   return translateHtml(html, translate);
 }
