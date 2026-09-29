@@ -137,4 +137,46 @@ describe('MaterialLibrary', () => {
     expect(library.canDim('sky')).toBe(false);
     expect(library.canDim('part')).toBe(true);
   });
+
+  it('compiles the faded variants of opaque dimmable materials and restores them', () => {
+    const library = new MaterialLibrary({ dim: { opacity: 0.35 }, undimmed: ['sky'] });
+    const metal = library.get('part', METAL);
+    const glass = library.get('part', GLASS);
+    const sky = library.get('sky', METAL);
+    const points = new PointsMaterial({ color: RED });
+    library.register('stream', points);
+    const versions = [metal.version, points.version];
+    const seen: boolean[][] = [];
+    library.compileFadedVariants(() =>
+      seen.push([metal.transparent, points.transparent, glass.transparent, sky.transparent]),
+    );
+    expect(seen).toEqual([[true, true, true, false]]);
+    expect([metal.transparent, points.transparent, glass.transparent, sky.transparent]).toEqual([
+      false,
+      false,
+      true,
+      false,
+    ]);
+    expect(metal.version).toBeGreaterThan(versions[0]);
+    expect(points.version).toBeGreaterThan(versions[1]);
+  });
+
+  it('skips the faded variants when dimming keeps the opacity', () => {
+    const library = new MaterialLibrary();
+    library.get('part', METAL);
+    let compiled = 0;
+    library.compileFadedVariants(() => (compiled += 1));
+    expect(compiled).toBe(0);
+  });
+
+  it('restores the materials even when compiling throws', () => {
+    const library = new MaterialLibrary({ dim: { opacity: 0.35 } });
+    const metal = library.get('part', METAL);
+    expect(() =>
+      library.compileFadedVariants(() => {
+        throw new Error('lost context');
+      }),
+    ).toThrow('lost context');
+    expect(metal.transparent).toBe(false);
+  });
 });

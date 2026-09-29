@@ -206,7 +206,12 @@ scene, camera rig, label layer, highlighter, materials, textures, stage, lightin
 `onFrame(update)` and `invalidate()`. Before the first frame the host compiles
 every material in the scene with `renderer.compileAsync`, so the shaders build in
 parallel while the page stays responsive; three's shader error checks run in dev
-only, since their queries stall the first frame. Core owns the frame loop and
+only, since their queries stall the first frame. A dim style with `opacity` below 1
+makes a dimmed material transparent, and that flip needs a second shader program.
+So after the first frame, in idle time, `compileFadedVariants` in `materials.ts`
+turns every opaque dimmable material transparent for one more `compileAsync` and
+turns it back, and a chapter change then finds both programs ready instead of
+compiling mid-frame. Core owns the frame loop and
 draws on demand: a frame runs only when something asked for one. In a frame it
 ticks the store, runs the explainer's frame updates, eases the highlighter and the
 camera, hides the labels whose anchor is out of sight, renders and lays out the
