@@ -3,41 +3,41 @@
     "eyebrow": "Über diese Seite",
     "skipLink": "Direkt zum Text",
     "title": "So entstehen die Erklärungen",
-    "tagline": "Was diese Seite ist, wie jede Angabe vor dem Bau eines Modells geprüft wird und was die Modelle weglassen.",
-    "description": "Was diese Seite ist, wie jede Angabe anhand von Quellen geprüft wird, bevor ein 3D-Modell entsteht, und was die Modelle weglassen.",
+    "tagline": "Worum es hier geht, wie jede Angabe geprüft wird, bevor ein Modell entsteht, und was die Modelle weglassen.",
+    "description": "Worum es hier geht, wie jede Angabe anhand von Quellen geprüft wird, bevor ein 3D-Modell entsteht, und was die Modelle weglassen.",
     "what": {
-      "title": "Was diese Seite ist",
-      "p1": "Jede Seite hier nimmt eine Sache auseinander: eine Maschine, ein Instrument oder etwas aus der Natur. Sie bekommen ein 3D-Modell, das Sie drehen, verlangsamen und Schritt für Schritt durchgehen können. Daneben steht ein Text, der mitläuft. Scrollen Sie zum nächsten Kapitel, dann bewegt sich die Kamera, die besprochenen Teile leuchten auf und die Beschriftungen wandern mit.",
-      "p2": "Das Ziel ist einfach. Zusehen, wie sich etwas bewegt, kann jeder. Hier sollen Sie auch sehen, warum jedes Teil da ist und was ohne dieses Teil schiefgehen würde."
+      "title": "Worum es hier geht",
+      "p1": "Auf jeder Seite wird ein Ding in seine Teile zerlegt: eine Maschine, ein Instrument oder etwas aus der Natur. Dazu gibt es ein 3D-Modell. Sie können es drehen, langsamer laufen lassen und Schritt für Schritt durchgehen. Daneben läuft der Text mit. Scrollen Sie zum nächsten Kapitel, schwenkt die Kamera mit. Die Teile, um die es gerade geht, leuchten auf, und die Beschriftungen wandern hinterher.",
+      "p2": "Die Idee dahinter ist einfach. Wie sich etwas bewegt, kann jeder sehen. Hier sollen Sie auch erkennen, wozu jedes Teil da ist und was ohne dieses Teil schiefginge."
     },
     "process": {
       "title": "Erst die Fakten, dann das Modell",
-      "intro": "Kein Modell entsteht, bevor seine Fakten feststehen. Jede Erklärung durchläuft dieselben fünf Schritte, immer in derselben Reihenfolge."
+      "intro": "Ein Modell wird erst gebaut, wenn die Fakten stehen. Jede Erklärung geht dafür durch dieselben fünf Schritte, immer in derselben Reihenfolge."
     },
     "steps": {
       "facts": {
         "title": "Ein Faktenblatt mit Quellen",
-        "text": "Am Anfang steht die Recherche. Jede Zahl und jede Aussage, die in der Erklärung vorkommen soll, wird mit einem Link zur Quelle notiert. Primärquellen haben Vorrang: die Menschen, die die Sache bauen, messen oder erforschen. Lässt sich eine Zahl nicht finden, wird sie als unbestätigt markiert und nie geraten. Das Blatt hält außerdem fest, wo die erste Idee danebenlag, welche Zahlen der Text nennen darf und welche verbreiteten Irrtümer er nicht wiederholen darf."
+        "text": "Am Anfang steht die Recherche. Jede Zahl und jede Aussage, die später in der Erklärung auftaucht, kommt mit einem Link zur Quelle aufs Blatt. Vorrang haben Quellen aus erster Hand, also die Leute, die das Ding bauen, messen oder erforschen. Findet sich eine Zahl nicht, wird sie als unbestätigt markiert. Geraten wird nie. Außerdem steht auf dem Blatt, wo die erste Vorstellung danebenlag. Es hält fest, welche Zahlen der Text nennen darf. Und es zählt verbreitete Irrtümer auf, die der Text nicht wiederholen darf."
       },
       "spec": {
-        "title": "Eine Spezifikation für alles",
-        "text": "Aus dem Faktenblatt wird eine Spezifikation: was das Modell zeigt, wie es vereinfacht wird, welche Formeln es antreiben und welche Konstanten darin stecken. Jede Konstante in der Simulation verweist auf eine Zeile im Faktenblatt. Korrekturen aus der Recherche fließen genau hier ein, bevor irgendetwas gebaut wird."
+        "title": "Ein Bauplan für alles",
+        "text": "Aus dem Faktenblatt wird ein Bauplan. Er legt fest, was das Modell zeigt, wie es vereinfacht wird, welche Formeln es antreiben und mit welchen Konstanten sie rechnen. Jede Konstante in der Simulation lässt sich auf eine Zeile im Faktenblatt zurückführen. Was die Recherche korrigiert hat, fließt schon hier ein, bevor irgendetwas gebaut wird."
       },
       "build": {
         "title": "Modell, Szene und Text",
-        "text": "Die Simulation, die 3D-Szene und der Text in jeder Sprache entstehen aus dieser einen Spezifikation. So passen Bild, Live-Messwerte und Worte zusammen. Die Simulation ist ein kleines Programm mit eigenen Tests. Der Text darf nur die Zahlen nennen, die das Faktenblatt freigegeben hat. Jede Sprache wird so geschrieben, dass sie sich für Muttersprachler natürlich liest, statt Wort für Wort übersetzt zu werden."
+        "text": "Simulation, 3D-Szene und Text in allen Sprachen entstehen aus diesem einen Bauplan. Deshalb stimmen Bild, Live-Messwerte und Worte überein. Die Simulation ist ein kleines Programm mit eigenen Tests. Im Text dürfen nur Zahlen stehen, die das Faktenblatt freigegeben hat. Jede Sprache wird so geschrieben, dass sie für Muttersprachler natürlich klingt. Wort für Wort übersetzt wird nichts."
       },
       "review": {
         "title": "Eine unabhängige Prüfung",
-        "text": "Sobald die Teile zusammenkommen, übernimmt ein Prüfer, der sie nicht gebaut hat. Er gleicht die Physik mit dem Faktenblatt ab, liest jede Sprache und sieht sich die Seite so an, wie es jemand mit Tastatur oder Screenreader tun würde. Alles, was er findet, wird behoben, bevor es mit der Erklärung weitergeht."
+        "text": "Sind alle Teile beisammen, prüft sie jemand, der nicht daran gebaut hat. Er gleicht die Physik mit dem Faktenblatt ab und liest jede Sprache. Außerdem sieht er sich die Seite so an, wie es jemand mit Tastatur oder Screenreader tut. Was er findet, wird behoben, bevor es mit der Erklärung weitergeht."
       },
       "browser": {
-        "title": "Im Browser geprüft",
-        "text": "Die fertige Seite wird auf einem großen Bildschirm und auf einem Handy geöffnet, auf Englisch und in zwei weiteren Sprachen. Jedes Kapitel wird durchgegangen, die Zeitleiste wird verschoben und die Messwerte werden beobachtet. Fehler, fehlende Übersetzungen, Beschriftungen über den Bedienelementen oder Text, der nicht hineinpasst: Schon eines davon schickt die Seite zurück in die Werkstatt. Erst wenn alles stimmt, wird sie veröffentlicht."
+        "title": "Im Browser getestet",
+        "text": "Die fertige Seite wird am großen Bildschirm und auf dem Handy geöffnet, auf Englisch und in zwei weiteren Sprachen. Jedes Kapitel wird durchgegangen, die Zeitleiste hin und her gezogen, die Messwerte werden beobachtet. Fehler, fehlende Übersetzungen, Beschriftungen über den Bedienelementen, Text, der nicht hineinpasst: Schon eines davon reicht, und die Seite geht zurück in die Werkstatt. Erst dann wird sie veröffentlicht."
       }
     },
     "labels": {
-      "title": "Jede Angabe im Faktenblatt bekommt eine von vier Kennzeichnungen",
+      "title": "Jede Angabe im Faktenblatt bekommt einen dieser vier Vermerke",
       "confirmed": "Bestätigt",
       "approximate": "Ungefähr",
       "disputed": "Umstritten",
@@ -45,18 +45,18 @@
     },
     "limits": {
       "title": "Was die Modelle weglassen",
-      "p1": "Es sind Anschauungsmodelle, keine Konstruktionszeichnungen. Die Formen sind vereinfacht, damit Sie den Mechanismus erkennen. Manche Teile sind aufgeschnitten oder anders skaliert, damit die wichtigen im Blick bleiben. Die Simulation erfasst, was für die Erklärung zählt, aber nicht jeden Effekt, den ein echter Ingenieur berücksichtigen müsste.",
-      "p2": "Nutzen Sie die Modelle also, um zu verstehen, wie etwas funktioniert. Wenn Sie für echte Arbeit genaue Werte brauchen, schauen Sie in die Quellen."
+      "p1": "Die Modelle sollen etwas erklären. Konstruktionszeichnungen sind sie nicht. Die Formen sind vereinfacht, damit Sie den Mechanismus erkennen. Manche Teile sind aufgeschnitten oder in der Größe verändert, damit die wichtigen im Blick bleiben. Die Simulation bildet ab, was für die Erklärung zählt, aber nicht jeden Effekt, den ein Ingenieur in der Praxis berücksichtigen müsste.",
+      "p2": "Nutzen Sie die Modelle also, um zu verstehen, wie etwas funktioniert. Wenn Sie genaue Zahlen für ein echtes Projekt brauchen, schauen Sie in die Quellen."
     },
     "reading": {
       "title": "So lesen Sie eine Erklärung",
-      "p1": "Scrollen Sie, und das Modell folgt dem Text. Mit Abspielen setzen Sie es in Gang. Ziehen Sie an der Zeitleiste, um einen Zyklus Schritt für Schritt durchzugehen, oder bremsen Sie es stark ab, um zu sehen, was in einem Wimpernschlag passiert. Die Anzeige in der Ecke liefert Live-Messwerte, die sich ändern, während das Modell läuft.",
-      "p2": "Ziehen Sie, um das Modell zu drehen. Zum Zoomen scrollen Sie oder nutzen die Pinch-Geste. Mit R holen Sie die Kamera zurück. Die Leertaste startet und pausiert, die Pfeiltasten verschieben die Zeitleiste ein kleines Stück, und die Zifferntasten springen zu einer Phase. X zeigt das Modell im Vollbild. Ohne JavaScript sehen Sie trotzdem ein Standbild des Modells und den ganzen Text."
+      "p1": "Scrollen Sie, und das Modell folgt dem Text. Ein Klick auf Abspielen setzt es in Gang. Ziehen Sie an der Zeitleiste, um einen Durchlauf Schritt für Schritt anzusehen. Oder drehen Sie das Tempo ganz herunter. Dann sehen Sie, was sonst in einem Wimpernschlag vorbei ist. In der Ecke laufen Live-Messwerte mit, die sich ändern, während das Modell arbeitet.",
+      "p2": "Zum Drehen ziehen Sie am Modell. Zum Zoomen scrollen Sie oder nehmen zwei Finger. Mit R kehrt die Kamera an ihren Platz zurück. Die Leertaste startet und stoppt das Modell. Mit den Pfeiltasten schieben Sie die Zeitleiste ein Stück vor oder zurück, mit den Zifferntasten springen Sie direkt zu einer Phase. X zeigt das Modell im Vollbild. Auch ohne JavaScript sehen Sie ein Standbild des Modells und den ganzen Text."
     },
     "open": {
       "title": "Open Source",
-      "p1": "Die Seite und alle Erklärungen sind Open Source unter der MIT-Lizenz. Jede Erklärung verlinkt auf ihren eigenen Quellcode. So können Sie die Simulation hinter dem Bild selbst nachlesen. Keine Werbung, kein Tracking, nichts wird von fremden Servern geladen. Ihre Sprachwahl bleibt in Ihrem Browser und nirgendwo sonst.",
-      "p2": "Ist Ihnen ein Fehler in einer Zahl, einem Modell oder einer Übersetzung aufgefallen? Sagen Sie es bitte. Jeder Hinweis ist willkommen.",
+      "p1": "Die Seite und alle Erklärungen sind Open Source und stehen unter der MIT-Lizenz. Jede Erklärung verlinkt ihren eigenen Quellcode. Dort können Sie nachlesen, welche Simulation hinter dem Bild steckt. Es gibt keine Werbung und kein Tracking, und nichts wird von fremden Servern geladen. Welche Sprache Sie gewählt haben, merkt sich nur Ihr Browser.",
+      "p2": "Haben Sie einen Fehler entdeckt, etwa in einer Zahl, einem Modell oder einer Übersetzung? Dann sagen Sie gern Bescheid. Jeder Hinweis ist willkommen.",
       "link": "Fehler auf GitHub melden"
     }
   }
