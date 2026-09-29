@@ -25,7 +25,7 @@ export interface ExplainerFacts extends PageFacts {
   catalogue: ListedPage;
 }
 
-export interface CatalogueCopy {
+export interface PageCopy {
   name: string;
   description: string;
 }
@@ -102,6 +102,37 @@ export function explainerData(
   };
 }
 
+export function aboutData(
+  copy: PageCopy,
+  facts: PageFacts,
+  dates: PageDates,
+  catalogue: ListedPage,
+): object {
+  const breadcrumbId = `${facts.url}${BREADCRUMB_FRAGMENT}`;
+  return {
+    '@context': CONTEXT,
+    '@graph': [
+      website(),
+      {
+        '@type': ['WebPage', 'AboutPage'],
+        '@id': facts.url,
+        name: copy.name,
+        description: copy.description,
+        url: facts.url,
+        image: facts.image,
+        inLanguage: facts.code,
+        datePublished: dates.published,
+        dateModified: dates.modified,
+        author: author(),
+        isPartOf: reference(WEBSITE_ID),
+        about: reference(WEBSITE_ID),
+        breadcrumb: reference(breadcrumbId),
+      },
+      breadcrumbList(breadcrumbId, [catalogue, { name: copy.name, url: facts.url }]),
+    ],
+  };
+}
+
 function itemList(id: string, pages: readonly ListedPage[]) {
   return {
     '@type': 'ItemList',
@@ -112,7 +143,7 @@ function itemList(id: string, pages: readonly ListedPage[]) {
 }
 
 export function catalogueData(
-  copy: CatalogueCopy,
+  copy: PageCopy,
   facts: PageFacts,
   pages: readonly ListedPage[],
 ): object {

@@ -1,0 +1,63 @@
+{
+  "about": {
+    "eyebrow": "À propos du site",
+    "skipLink": "Aller directement au texte",
+    "title": "Comment se fabrique une explication",
+    "tagline": "Ce qu’on trouve ici, comment chaque fait est vérifié avant la construction d’un modèle, et ce que les modèles laissent de côté.",
+    "description": "Ce qu’on trouve ici, comment chaque fait est vérifié, sources à l’appui, avant la construction du modèle 3D, et ce que les modèles laissent de côté.",
+    "what": {
+      "title": "Le principe du site",
+      "p1": "Chaque page démonte une seule chose : une machine, un instrument ou un phénomène naturel. Vous y trouvez un modèle 3D que vous pouvez faire tourner, ralentir et suivre pas à pas. À côté, un texte avance en même temps que lui. Descendez jusqu’au chapitre suivant : la caméra se déplace, les pièces dont il est question s’allument et les étiquettes suivent.",
+      "p2": "L’idée est simple. Regarder une chose bouger, tout le monde sait le faire. Ici, vous devriez aussi voir à quoi sert chaque pièce, et ce qui irait de travers sans elle."
+    },
+    "process": {
+      "title": "Les faits d’abord, le modèle ensuite",
+      "intro": "Pas de modèle tant que les faits ne sont pas réunis. Chaque explication passe par les cinq mêmes étapes, toujours dans le même ordre."
+    },
+    "steps": {
+      "facts": {
+        "title": "Une fiche de faits, sources à l’appui",
+        "text": "Tout commence par des recherches. Pour chaque chiffre et chaque affirmation que l’explication va avancer, on note un lien vers la source. Les sources primaires passent en premier : les gens qui fabriquent, mesurent ou étudient l’objet. Un chiffre introuvable est marqué « non vérifié » : on ne le devine jamais. La fiche relève aussi où l’idée de départ se trompait, quels chiffres le texte a le droit de citer et quelles idées reçues il ne doit pas reprendre."
+      },
+      "spec": {
+        "title": "Un seul cahier des charges",
+        "text": "La fiche de faits devient un cahier des charges. On y fixe ce que montre le modèle, comment on le simplifie, quelles formules le font tourner et avec quelles constantes. Chaque constante de la simulation renvoie à une ligne de la fiche. C’est aussi là qu’on intègre les corrections issues des recherches, avant de construire quoi que ce soit."
+      },
+      "build": {
+        "title": "Le modèle, la scène et le texte",
+        "text": "La simulation, la scène 3D et le texte dans chaque langue partent tous de ce même cahier des charges. L’image, les mesures en direct et les mots racontent donc la même chose. La simulation est un petit programme, avec ses propres tests. Le texte n’a le droit de citer que les chiffres validés par la fiche. Chaque langue est rédigée pour sonner juste à l’oreille d’un lecteur natif, et non traduite mot à mot."
+      },
+      "review": {
+        "title": "Un regard extérieur",
+        "text": "Une fois les morceaux assemblés, un relecteur qui ne les a pas construits passe tout en revue. Il confronte la physique à la fiche de faits, lit chaque langue et parcourt la page comme le ferait une personne au clavier ou avec un lecteur d’écran. Tout ce qu’il relève est corrigé. Alors seulement, l’explication passe à l’étape suivante."
+      },
+      "browser": {
+        "title": "À l’épreuve du navigateur",
+        "text": "La page terminée est ouverte sur un écran d’ordinateur et sur un téléphone, en anglais et dans deux autres langues. On parcourt chaque chapitre, on fait glisser le curseur du temps et on surveille les mesures. Une erreur, une traduction manquante, une étiquette qui cache les commandes, un texte qui déborde : au moindre défaut, la page retourne à l’atelier. Elle n’est publiée qu’une fois tout en ordre."
+      }
+    },
+    "labels": {
+      "title": "Sur la fiche, chaque fait reçoit l’une de ces quatre étiquettes",
+      "confirmed": "Confirmé",
+      "approximate": "Approximatif",
+      "disputed": "Contesté",
+      "unverified": "Non vérifié"
+    },
+    "limits": {
+      "title": "Ce que les modèles laissent de côté",
+      "p1": "Ce sont des modèles pédagogiques, pas des plans d’ingénieur. Les formes sont simplifiées pour laisser voir le mécanisme. Certaines pièces sont montrées en coupe ou à une autre échelle, pour que les plus importantes restent visibles. La simulation garde ce qui compte pour l’explication. Elle ne reprend pas tous les effets qu’un vrai ingénieur devrait modéliser.",
+      "p2": "Utilisez-les donc pour comprendre comment une chose fonctionne. Besoin de chiffres exacts pour un vrai projet ? Allez voir les sources."
+    },
+    "reading": {
+      "title": "Mode d’emploi",
+      "p1": "Faites défiler la page : le modèle suit le texte. Appuyez sur Lancer pour le mettre en marche. Faites glisser le curseur du temps pour parcourir un cycle pas à pas. Vous pouvez aussi le ralentir au maximum, pour voir ce qui se joue en un clin d’œil. Dans le coin, le cadran affiche des mesures en direct, qui évoluent pendant que le modèle tourne.",
+      "p2": "Faites glisser le modèle pour le tourner, faites défiler ou pincez pour zoomer, et appuyez sur R pour remettre la caméra en place. La barre d’espace lance et met en pause. Les flèches déplacent le curseur du temps par petits pas, et les touches numériques sautent directement à une phase. X passe le modèle en plein écran. Sans JavaScript, vous gardez une image fixe du modèle et tout le texte."
+    },
+    "open": {
+      "title": "Open source",
+      "p1": "Le site et toutes les explications sont open source, sous licence MIT. Chaque page d’explication renvoie à son code source : vous pouvez lire la simulation qui tourne derrière ce que vous voyez. Pas de publicité, pas de pistage, aucun contenu chargé depuis les serveurs d’un tiers. Votre choix de langue reste dans votre navigateur, nulle part ailleurs.",
+      "p2": "Une erreur dans un chiffre, un modèle ou une traduction ? N’hésitez pas à nous le dire. Tout signalement est le bienvenu.",
+      "link": "Signaler une erreur sur GitHub"
+    }
+  }
+}

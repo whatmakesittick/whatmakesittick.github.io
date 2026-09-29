@@ -1,5 +1,12 @@
 import type { Locator, Page } from '@playwright/test';
-import { openCatalogue, openExplainer, scrubTo, showChapter, visibleChapters } from './driver.ts';
+import {
+  openAbout,
+  openCatalogue,
+  openExplainer,
+  scrubTo,
+  showChapter,
+  visibleChapters,
+} from './driver.ts';
 import { expect, test } from './fixtures.ts';
 import { boxesIntersect } from './geometry.ts';
 import type { SceneLabel } from './geometry.ts';
@@ -116,6 +123,26 @@ if (QUERY_LINK_EXPLAINER?.secondLanguage) {
     await openExplainer(page, slug, secondLanguage, 'query');
     await expectNamedPage(page);
     await expectTranslatedCopy(page);
+  });
+}
+
+async function expectAboutPage(page: Page): Promise<void> {
+  await expectNamedPage(page);
+  await expectTranslatedCopy(page);
+  await expectFitsWidth(page);
+  await expect(page.locator('main p').first()).toHaveText(NON_BLANK);
+}
+
+test('about', async ({ page }) => {
+  await openAbout(page);
+  await expectAboutPage(page);
+});
+
+if (CATALOGUE_SECOND_LANGUAGE) {
+  const language = CATALOGUE_SECOND_LANGUAGE;
+  test(`about (${language})`, async ({ page }) => {
+    await openAbout(page, language);
+    await expectAboutPage(page);
   });
 }
 

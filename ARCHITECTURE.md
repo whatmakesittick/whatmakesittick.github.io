@@ -2,15 +2,16 @@
 
 One website, many explainers, one repository. `src/core` is the app: the page
 shell, the 3D toolkit, the store contract and translations plumbing. `vite/` is
-the build that turns every explainer into a page. `src/site` is the catalogue.
-An explainer is a content package under `explainers/<slug>/`, built into a page
-at `/<slug>/`.
+the build that turns every explainer into a page. `src/site` is the catalogue and
+the about page. An explainer is a content package under `explainers/<slug>/`,
+built into a page at `/<slug>/`.
 
 ## Repository layout
 
 | Path                      | Owns                                                                            |
 | ------------------------- | ------------------------------------------------------------------------------- |
 | `index.html`, `src/site/` | Catalogue page: cards newest first, a tag filter, language dropdown             |
+| `src/site/about/`         | About page: template, entry, styles and its own locales, built into `/about/`   |
 | `404.html`                | The page GitHub Pages serves for a missing path, filled by the build            |
 | `src/core/`               | Everything an explainer builds on (see below)                                   |
 | `src/core/page.html`      | The explainer page template: masthead, stage, gauge, dock, prose column, footer |
@@ -24,16 +25,17 @@ at `/<slug>/`.
 | `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`, `smoke.yml` by hand          |
 
 Generated at build and dev time, never committed: `<slug>/index.html` and
-`<slug>/main.ts` for every explainer, `<lang>/index.html` for the catalogue and
+`<slug>/main.ts` for every explainer, `<lang>/index.html` for the catalogue,
+`about/index.html` and `<lang>/about/index.html` for the about page, and
 `<lang>/<slug>/index.html` for every other language an explainer ships, produced by
-the `explainerPages` Vite plugin from `src/core/page.html`, the root `index.html` and
-the explainer manifest. Each generated folder gets a `.gitignore` containing `*` and
+the `explainerPages` Vite plugin from `src/core/page.html`, `src/site/about/page.html`,
+the root `index.html` and the explainer manifest. Each generated folder gets a `.gitignore` containing `*` and
 an empty `.explainer-page` marker. Prettier skips `/*/index.html`, `/*/*/index.html`
 and `/*/main.ts`, and ESLint skips the generated `main.ts`, so a root folder holding
 those files is always a generated page. Generation removes marked folders whose page is gone, never removes
 an unmarked folder and refuses to write into one that holds files it did not write.
-Language codes are reserved slugs, so a language folder never clashes with an
-explainer.
+Language codes and `about` are reserved slugs (`src/core/pages.ts` names the site
+pages), so a language folder or the about page never clashes with an explainer.
 
 ## Explainer package
 
@@ -513,6 +515,20 @@ build and the runtime. A page is rendered in two steps:
    options from `src/core/i18n/config.ts`, so interpolation and placeholders behave
    identically.
 
+The about page is a site page like the catalogue: `src/site/about/page.html` is
+rendered by `renderAbout` in `vite/page.ts` into `about/` and `<lang>/about/` for every
+site language, with the site's social image, a `WebPage` and `AboutPage` JSON-LD node
+dated from git like an explainer (`vite/about.ts` loads the template, the locales and the
+dates), a breadcrumb from the catalogue, the language redirect on the English page and
+a link to the issue tracker (`ISSUES_URL` in `vite/site.ts`). Its copy lives in `src/site/about/locales/*.json` under `about.*`, one
+file per site language, so it never joins the core dictionary that every page loads; a
+test keeps every language on the English keys and `about.description` within the
+snippet limit. `src/site/about/main.ts` mounts the shell (language dropdown, site links,
+footer) with those locales, the English copy bundled and the others as chunks, which
+`vite/preloads.ts` preloads on a translated about page. The shared footer links the about
+page in the page's language through `{{aboutUrl}}` and `data-about-link`, which
+`mountSiteLinks` keeps pointed at it the way it does the catalogue link.
+
 The root `404.html` is filled the same way in English, like the root `index.html` in
 `transformIndexHtml`, and is a Rollup input, so it is emitted as `dist/404.html`, which
 GitHub Pages serves for every missing path; the dev server serves it at `/404.html`. It
@@ -588,8 +604,9 @@ rule in `vite/siteCheck.ts`: the `lang` of the page, a title with the site name,
 description within `descriptionLimit` of its language, the canonical URL, hreflang links with
 `x-default` and the page itself, one JSON-LD block that parses, one `h1`, no external
 stylesheet and no Google Fonts host, a gzipped JavaScript budget (`JS_BUDGET_GZIP`, summed
-over the module scripts and preloads of the page and their static imports), no three.js chunk
-on a catalogue page, a `modulepreload` on every translated page, one card per explainer on the
+over the module scripts and preloads of the page and their static imports, with the smaller
+`site` budget on the catalogue and the about page), no three.js chunk
+on a site page, a `modulepreload` on every translated page, one card per explainer on the
 catalogue, the noscript cover and the more-explainers links on an explainer page, a sitemap
 that lists exactly the built pages, a feed link to the page language on every page, a feed per
 language that lists exactly its built explainers, `robots.txt`, a `noindex` 404 page without scripts and a
@@ -627,12 +644,13 @@ language redirect.
 
 Every page links back to the catalogue: the explainer masthead shows the site name
 as a link above the eyebrow, and the shared footer has an "All explainers" link
-(`footer.catalogue`). Both carry `data-catalogue-link`. The build fills their
-`href` with the catalogue in the page's language, and at runtime
-`mountCatalogueLinks` from `src/core/ui/catalogueLink.ts` points them at
-`catalogueHref` from `src/core/i18n/paths.ts`, which adds the base path and keeps a
-`?lang=` query, so an English page translated by the query opens the English
-catalogue in the same language.
+(`footer.catalogue`) and an "About" link (`footer.about`). They carry
+`data-catalogue-link` and `data-about-link`. The build fills their `href` with the
+page in the page's language, and at runtime `mountSiteLinks` from
+`src/core/ui/siteLinks.ts` points them at `sitePageHref` from
+`src/core/i18n/paths.ts`, which adds the base path and keeps a `?lang=` query, so an
+English page translated by the query opens the English catalogue or about page in
+the same language.
 
 Explainers also link to each other. After the chapters, every explainer page ends
 with "More explainers" (`page.moreExplainers`): three other explainers as small
@@ -706,7 +724,7 @@ draws WebGL in software, so the test sticks to what catches a broken page. At
 desktop and iPhone 13 sizes, the phone at one device pixel per point, it opens every
 explainer in English, walks its chapters and stops the scrubber mid-cycle, then loads
 its last language once at `/<lang>/<slug>/`; one explainer is also opened through an
-old `?lang=` link, and the catalogue in English and in the last site language. It
+old `?lang=` link, and the catalogue and the about page in English and in the last site language. It
 fails on page or console errors, untranslated copy, overflow, empty readouts, labels
 over the dock or broken cards. A run takes about three minutes; CI runs it only by
 hand, from the Smoke test workflow, and keeps the report when it fails.

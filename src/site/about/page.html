@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="{{lang}}">
+  <head>
+    <meta charset="UTF-8" />
+    {{languageRedirect}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0d10" />
+    <meta name="description" content="{{description}}" data-i18n-attr="content:about.description" />
+    <title data-i18n="page.metaTitle" data-i18n-values="title:about.title">{{documentTitle}}</title>
+    <link rel="canonical" href="{{url}}" />
+    {{alternateLinks}} {{feedLink}}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{url}}" />
+    <meta property="og:site_name" content="{{siteName}}" />
+    <meta property="og:title" content="{{title}}" data-i18n-attr="content:about.title" />
+    <meta
+      property="og:description"
+      content="{{description}}"
+      data-i18n-attr="content:about.description"
+    />
+    <meta property="og:image" content="{{image}}" />
+    <meta property="og:image:type" content="{{imageType}}" />
+    <meta property="og:image:width" content="{{imageWidth}}" />
+    <meta property="og:image:height" content="{{imageHeight}}" />
+    <meta property="og:image:alt" content="{{imageAlt}}" />
+    {{localeTags}}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{title}}" data-i18n-attr="content:about.title" />
+    <meta
+      name="twitter:description"
+      content="{{description}}"
+      data-i18n-attr="content:about.description"
+    />
+    <meta name="twitter:image" content="{{image}}" />
+    <meta name="twitter:image:alt" content="{{imageAlt}}" />
+    <script type="application/ld+json">
+      {{structuredData}}
+    </script>
+    <noscript>
+      <style>
+        .language-select {
+          display: none;
+        }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <a class="skip-link" href="#about" data-i18n="about.skipLink">Skip to the text</a>
+
+    <div class="site-page about-page">
+      <header class="masthead">
+        <a class="site-link" href="{{catalogueUrl}}" data-catalogue-link>
+          <img class="site-link-icon" src="/favicon.svg" alt="" width="22" height="22" />
+          <span>{{siteName}}</span>
+        </a>
+        <div class="masthead-row">
+          <p class="eyebrow" data-i18n="about.eyebrow">About this site</p>
+          <!-- partial:header-actions -->
+        </div>
+        <h1 data-i18n="about.title">How the explainers are made</h1>
+        <p class="tagline" data-i18n="about.tagline">
+          What this site is, how every fact is checked before a model is built, and what the models
+          leave out.
+        </p>
+      </header>
+
+      <main id="about" class="about">
+        <section class="about-section">
+          <h2 data-i18n="about.what.title">What this site is</h2>
+          <p data-i18n="about.what.p1"></p>
+          <p data-i18n="about.what.p2"></p>
+        </section>
+
+        <section class="about-section">
+          <h2 data-i18n="about.process.title">Facts first, then the model</h2>
+          <p data-i18n="about.process.intro"></p>
+          <ol class="about-steps">
+            <li class="about-step">
+              <h3 data-i18n="about.steps.facts.title">A facts sheet with sources</h3>
+              <p data-i18n="about.steps.facts.text"></p>
+              <p class="fact-labels-title" data-i18n="about.labels.title"></p>
+              <ul class="fact-labels">
+                <li
+                  class="fact-label fact-label--confirmed"
+                  data-i18n="about.labels.confirmed"
+                ></li>
+                <li
+                  class="fact-label fact-label--approximate"
+                  data-i18n="about.labels.approximate"
+                ></li>
+                <li class="fact-label fact-label--disputed" data-i18n="about.labels.disputed"></li>
+                <li
+                  class="fact-label fact-label--unverified"
+                  data-i18n="about.labels.unverified"
+                ></li>
+              </ul>
+            </li>
+            <li class="about-step">
+              <h3 data-i18n="about.steps.spec.title">One spec for everything</h3>
+              <p data-i18n="about.steps.spec.text"></p>
+            </li>
+            <li class="about-step">
+              <h3 data-i18n="about.steps.build.title">Model, scene and words</h3>
+              <p data-i18n="about.steps.build.text"></p>
+            </li>
+            <li class="about-step">
+              <h3 data-i18n="about.steps.review.title">A separate review</h3>
+              <p data-i18n="about.steps.review.text"></p>
+            </li>
+            <li class="about-step">
+              <h3 data-i18n="about.steps.browser.title">Checked in a browser</h3>
+              <p data-i18n="about.steps.browser.text"></p>
+            </li>
+          </ol>
+        </section>
+
+        <section class="about-section">
+          <h2 data-i18n="about.limits.title">What the models leave out</h2>
+          <p data-i18n="about.limits.p1"></p>
+          <p data-i18n="about.limits.p2"></p>
+        </section>
+
+        <section class="about-section">
+          <h2 data-i18n="about.reading.title">How to read an explainer</h2>
+          <p data-i18n="about.reading.p1"></p>
+          <p data-i18n="about.reading.p2"></p>
+        </section>
+
+        <section class="about-section">
+          <h2 data-i18n="about.open.title">Open source</h2>
+          <p data-i18n="about.open.p1"></p>
+          <p data-i18n="about.open.p2"></p>
+          <a class="pill-link" href="{{issuesUrl}}" data-i18n="about.open.link">
+            Report a mistake on GitHub
+          </a>
+        </section>
+      </main>
+
+      <!-- partial:footer -->
+    </div>
+
+    <script type="module" src="{{entry}}"></script>
+  </body>
+</html>

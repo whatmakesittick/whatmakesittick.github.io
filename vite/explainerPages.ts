@@ -9,6 +9,7 @@ import { languagePreloads } from './preloads.ts';
 import {
   CORE_DIRECTORY,
   NOT_FOUND_ENTRY,
+  SITE_DIRECTORY,
   SITE_ENTRY,
   generateSite,
   renderNotFoundEntry,
@@ -16,8 +17,9 @@ import {
 } from './sitePages.ts';
 import type { Site } from './sitePages.ts';
 import { siteFiles } from './siteFiles.ts';
+import type { SiteContent } from './siteFiles.ts';
 
-const WATCHED_DIRECTORIES = [EXPLAINERS_DIRECTORY, CORE_DIRECTORY];
+const WATCHED_DIRECTORIES = [EXPLAINERS_DIRECTORY, CORE_DIRECTORY, SITE_DIRECTORY];
 const PAGE_SOURCES = /(?:explainer\.json|\.html|locales[\\/]\w+\.json)$/;
 const MOVED_PERMANENTLY = 301;
 const PLUGIN_NAME = 'explainer-pages';
@@ -67,13 +69,17 @@ function serveSiteFiles(server: ViteDevServer, site: () => Site | undefined): vo
     const [path] = (request.url ?? '').split('?');
     const current = site();
     if (!current) return next();
-    const file = siteFiles(current.explainers, current.sources.core).find(
+    const file = siteFiles(siteContent(current)).find(
       ({ fileName }) => path === `${server.config.base}${fileName}`,
     );
     if (!file) return next();
     response.setHeader('Content-Type', file.contentType);
     response.end(file.source);
   });
+}
+
+function siteContent({ explainers, sources }: Site): SiteContent {
+  return { explainers, about: sources.about, core: sources.core };
 }
 
 function reloadPages(server: ViteDevServer): void {
@@ -167,8 +173,8 @@ function pagesPlugin(): Plugin {
 
     generateBundle() {
       if (!site) return;
-      const { explainers, sources } = site;
-      for (const { fileName, source } of siteFiles(explainers, sources.core)) {
+      const { explainers } = site;
+      for (const { fileName, source } of siteFiles(siteContent(site))) {
         this.emitFile({ type: 'asset', fileName, source });
       }
       for (const { manifest, directory } of explainers) {

@@ -48,6 +48,12 @@ function byLocale(files: Record<string, Dictionary>): Map<string, Map<string, Di
 const coreLocales = byLocale(
   import.meta.glob<Dictionary>('/src/core/locales/*.json', { eager: true, import: 'default' }),
 ).get('core');
+const aboutLocales = byLocale(
+  import.meta.glob<Dictionary>('/src/site/about/locales/*.json', {
+    eager: true,
+    import: 'default',
+  }),
+).get('about');
 const explainerLocales = byLocale(
   import.meta.glob<Dictionary>('/explainers/*/locales/*.json', { eager: true, import: 'default' }),
 );
@@ -77,6 +83,24 @@ describe('core locales', () => {
     expect(dictionary, code).toBeDefined();
     expectSameShape(dictionary ?? {}, english);
   });
+});
+
+describe('about locales', () => {
+  const english = aboutLocales?.get(DEFAULT_LANGUAGE) ?? {};
+
+  it.each(LANGUAGES.map((language) => language.code))('%s matches the English keys', (code) => {
+    const dictionary = aboutLocales?.get(code);
+    expect(dictionary, code).toBeDefined();
+    expectSameShape(dictionary ?? {}, english);
+  });
+
+  it.each(LANGUAGES.map((language) => language.code))(
+    '%s description fits a search snippet',
+    (code) => {
+      const description = flatten(aboutLocales?.get(code) ?? {}).get('about.description') ?? '';
+      expect(description.length, description).toBeLessThanOrEqual(descriptionLimit(code));
+    },
+  );
 });
 
 describe.each(Object.values(manifests).map((manifest) => [manifest.slug, manifest] as const))(

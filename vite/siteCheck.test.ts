@@ -5,6 +5,7 @@ import { parse } from 'node-html-parser';
 
 const SITE = 'https://whatmakesittick.github.io';
 const EXPLAINERS = ['engine', 'glider'];
+const ABOUT = 'about';
 const LANGUAGES = ['en', 'uk'] as const;
 
 interface PageOptions {
@@ -31,10 +32,13 @@ function pageHtml(code: string, slug: string, options: PageOptions = {}): string
     { length: options.cards ?? EXPLAINERS.length },
     (_, index) => `<a class="card" href="/${EXPLAINERS[index] ?? 'extra'}/">Card</a>`,
   );
-  const body = slug
-    ? `<div id="scene"><noscript><img class="stage-cover" src="/${slug}/cover.webp"></noscript></div>
+  const body =
+    slug === ABOUT
+      ? '<main>About</main>'
+      : slug
+        ? `<div id="scene"><noscript><img class="stage-cover" src="/${slug}/cover.webp"></noscript></div>
        <a class="more-explainer" href="/other/">More</a>`
-    : cards.join('');
+        : cards.join('');
   const preload =
     code !== 'en' && options.preload !== false
       ? '<link rel="modulepreload" href="/assets/uk.js">'
@@ -52,7 +56,7 @@ function pageHtml(code: string, slug: string, options: PageOptions = {}): string
     ${options.stylesheet ? `<link rel="stylesheet" href="${options.stylesheet}">` : ''}
     <script type="application/ld+json">{"@type":"WebPage"}</script>
     ${preload}
-    <script type="module" src="/assets/${slug ? 'engine' : 'main'}.js"></script>
+    <script type="module" src="/assets/${slug && slug !== ABOUT ? 'engine' : 'main'}.js"></script>
   </head><body><h1>Title</h1><select data-language-select><option value="${code}">${code}</option></select>${body}</body></html>`;
 }
 
@@ -64,7 +68,7 @@ function feedXml(code: string, slugs: readonly string[]): string {
 
 function site(overrides: Partial<Record<string, PageOptions>> = {}): BuiltSite {
   const pages = LANGUAGES.flatMap((code) =>
-    ['', ...EXPLAINERS].map((slug) => {
+    ['', ABOUT, ...EXPLAINERS].map((slug) => {
       const path = pagePath(code, slug);
       return { path, html: pageHtml(code, slug, overrides[path]) };
     }),
@@ -116,17 +120,21 @@ describe('checkSite', () => {
     ]);
   });
 
-  it('rejects a catalogue that loads three.js or misses a card', () => {
+  it('rejects a site page that loads three.js or a catalogue that misses a card', () => {
     const heavy = site({ '/': { cards: 1 } });
     const scripts = new Map(heavy.scripts);
     scripts.set('/assets/main.js', 'import"./three-x.js";');
     const problems = checkSite({ ...heavy, scripts });
     expect(problems).toEqual([
-      `/: loads ${168_000} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.catalogue}`,
+      `/: loads ${168_000} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.site}`,
       '/: loads the three.js chunk',
       '/: links 1 explainer cards instead of 2',
-      `/uk/: loads ${169_000} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.catalogue}`,
+      `/about/: loads ${168_000} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.site}`,
+      '/about/: loads the three.js chunk',
+      `/uk/: loads ${169_000} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.site}`,
       '/uk/: loads the three.js chunk',
+      `/uk/about/: loads ${169_000} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.site}`,
+      '/uk/about/: loads the three.js chunk',
     ]);
   });
 

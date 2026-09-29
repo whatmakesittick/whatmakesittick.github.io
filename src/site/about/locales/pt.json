@@ -1,0 +1,63 @@
+{
+  "about": {
+    "eyebrow": "Sobre o site",
+    "skipLink": "Pular para o texto",
+    "title": "Como as explicações são feitas",
+    "tagline": "O que é este site, como cada fato é checado antes de o modelo sair do papel e o que os modelos deixam de fora.",
+    "description": "O que é este site, como cada fato é checado nas fontes antes de o modelo 3D sair do papel e o que os modelos deixam de fora.",
+    "what": {
+      "title": "O que é este site",
+      "p1": "Cada página aqui desmonta uma coisa só: uma máquina, um instrumento ou algo da natureza. Você encontra um modelo 3D para girar, deixar em câmera lenta e avançar passo a passo. Do lado, um texto acompanha o modelo. Quando você rola até o próximo capítulo, a câmera muda de lugar, as peças citadas se acendem e os rótulos vão junto.",
+      "p2": "A proposta é simples. Ver uma coisa se mexer, qualquer um consegue. A ideia aqui é você enxergar também por que cada peça está ali e o que daria errado sem ela."
+    },
+    "process": {
+      "title": "Primeiro os fatos, depois o modelo",
+      "intro": "O modelo só começa quando os fatos já estão reunidos. Toda explicação passa pelas mesmas cinco etapas, sempre na mesma ordem."
+    },
+    "steps": {
+      "facts": {
+        "title": "Uma ficha de fatos com fontes",
+        "text": "Tudo começa pela pesquisa. Cada número e cada afirmação que vão aparecer na explicação são anotados junto com o link da fonte. As fontes primárias têm prioridade: quem fabrica, mede ou estuda aquilo. Quando não dá para encontrar um número, ele fica marcado como não verificado, em vez de ser chutado. A ficha também anota onde a primeira ideia errou, quais números o texto pode citar e quais equívocos comuns não podem aparecer nele."
+      },
+      "spec": {
+        "title": "Uma só especificação para tudo",
+        "text": "A ficha vira uma especificação. Ela define o que o modelo mostra, como ele é simplificado, quais fórmulas estão por trás dele e quais constantes essas fórmulas usam. Cada constante da simulação aponta para uma linha da ficha. As correções que a pesquisa trouxe entram aqui, antes de construir qualquer coisa."
+      },
+      "build": {
+        "title": "Modelo, cena e texto",
+        "text": "A simulação, a cena 3D e o texto em cada idioma nascem dessa mesma especificação. Por isso a imagem, as leituras ao vivo e as palavras batem entre si. A simulação é um pequeno programa, com testes próprios. O texto só pode citar os números que a ficha liberou. Cada idioma é escrito para soar natural a um falante nativo, e não traduzido palavra por palavra."
+      },
+      "review": {
+        "title": "Uma revisão à parte",
+        "text": "Quando as partes se juntam, entra um revisor que não construiu nenhuma delas. Ele confere a física com a ficha, lê cada idioma e olha a página como alguém que navega pelo teclado ou usa leitor de tela. Tudo o que aparece na revisão é corrigido antes de a explicação seguir em frente."
+      },
+      "browser": {
+        "title": "Testado no navegador",
+        "text": "A página pronta é aberta no computador e no celular, em inglês e em mais dois idiomas. O teste percorre cada capítulo, arrasta a linha do tempo e acompanha as leituras. Se aparecer um erro, uma tradução faltando, um rótulo em cima dos controles ou um texto que não cabe, a página volta para correção. Só depois disso ela é publicada."
+      }
+    },
+    "labels": {
+      "title": "Cada fato da ficha leva um destes quatro rótulos",
+      "confirmed": "Confirmado",
+      "approximate": "Aproximado",
+      "disputed": "Contestado",
+      "unverified": "Não verificado"
+    },
+    "limits": {
+      "title": "O que os modelos deixam de fora",
+      "p1": "São modelos para ensinar, não desenhos de engenharia. As formas foram simplificadas para você enxergar o mecanismo. Algumas peças aparecem cortadas ou fora de escala, para que as importantes continuem à vista. A simulação capta o que importa para a história, e não cada efeito que um engenheiro de verdade teria que modelar.",
+      "p2": "Por isso, use os modelos para entender como algo funciona. Se precisar de valores exatos para um projeto real, vá direto às fontes."
+    },
+    "reading": {
+      "title": "Como ler uma explicação",
+      "p1": "Role a página, e o modelo acompanha o texto. Aperte Reproduzir para o modelo começar a se mexer. Arraste a linha do tempo para ver um ciclo passo a passo, ou reduza bem a velocidade para flagrar o que acontece num piscar de olhos. O mostrador no canto traz leituras ao vivo, que mudam enquanto o modelo roda.",
+      "p2": "Arraste para girar o modelo. Use a rolagem ou o movimento de pinça para dar zoom, e aperte R para a câmera voltar ao lugar. A barra de espaço inicia e pausa, as setas empurram a linha do tempo um pouquinho e as teclas de número pulam direto para uma fase. A tecla X mostra o modelo em tela cheia. Sem JavaScript, você ainda vê uma imagem estática do modelo e o texto completo."
+    },
+    "open": {
+      "title": "Código aberto",
+      "p1": "O site e todas as explicações são de código aberto, sob a licença MIT. Cada explicação tem um link para o próprio código, então você pode ler a simulação por trás do que está vendo. Sem anúncios, sem rastreamento e nada carregado de servidores de terceiros. O idioma que você escolhe fica salvo só no seu navegador.",
+      "p2": "Achou um erro num número, num modelo ou numa tradução? Avise, por favor. Qualquer aviso é bem-vindo.",
+      "link": "Reportar um erro no GitHub"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { catalogueHref, languagePath, languageUrl, splitLanguagePath } from './paths';
+import { languagePath, languageUrl, sitePageHref, splitLanguagePath } from './paths';
 
 describe('languagePath', () => {
   it('keeps English at the root and prefixes every other language', () => {
@@ -38,16 +38,18 @@ describe('languageUrl', () => {
   });
 });
 
-describe('catalogueHref', () => {
+describe('sitePageHref', () => {
   const site = 'https://example.com';
 
-  it('points at the catalogue in the language of the page', () => {
-    expect(catalogueHref(`${site}/uk/glider/`, '/')).toBe('/uk/');
-    expect(catalogueHref(`${site}/glider/`, '/')).toBe('/');
+  it('points at a site page in the language of the current page', () => {
+    expect(sitePageHref(`${site}/uk/glider/`, '/', '')).toBe('/uk/');
+    expect(sitePageHref(`${site}/glider/`, '/', '')).toBe('/');
+    expect(sitePageHref(`${site}/uk/glider/`, '/', 'about')).toBe('/uk/about/');
   });
 
   it('keeps the language query of an English page and drops everything else', () => {
-    expect(catalogueHref(`${site}/glider/?lang=de`, '/')).toBe('/?lang=de');
-    expect(catalogueHref(`${site}/tick/ja/glider/?debug=1#wave`, '/tick/')).toBe('/tick/ja/');
+    expect(sitePageHref(`${site}/glider/?lang=de`, '/', '')).toBe('/?lang=de');
+    expect(sitePageHref(`${site}/glider/?lang=de`, '/', 'about')).toBe('/about/?lang=de');
+    expect(sitePageHref(`${site}/tick/ja/glider/?debug=1#wave`, '/tick/', '')).toBe('/tick/ja/');
   });
 });

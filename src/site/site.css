@@ -1,6 +1,6 @@
-.catalogue-page {
-  --catalogue-width: 72rem;
-  --catalogue-gutter: clamp(16px, 4vw, 48px);
+.site-page {
+  --site-width: 72rem;
+  --site-gutter: clamp(16px, 4vw, 48px);
 
   display: flex;
   flex-direction: column;
@@ -10,16 +10,16 @@
     var(--background);
 }
 
-.catalogue-page .masthead,
-.catalogue-page .catalogue,
-.catalogue-page .site-footer {
+.site-page > .masthead,
+.site-page > main,
+.site-page > .site-footer {
   width: 100%;
-  max-width: calc(var(--catalogue-width) + 2 * var(--catalogue-gutter));
+  max-width: calc(var(--site-width) + 2 * var(--site-gutter));
   margin-inline: auto;
-  padding-inline: var(--catalogue-gutter);
+  padding-inline: var(--site-gutter);
 }
 
-.catalogue-page .masthead {
+.site-page > .masthead {
   padding-top: clamp(32px, 9vh, 104px);
   padding-bottom: clamp(32px, 6vh, 64px);
 }

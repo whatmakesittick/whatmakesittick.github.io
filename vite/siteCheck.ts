@@ -3,6 +3,7 @@ import type { HTMLElement } from 'node-html-parser';
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { splitLanguagePath } from '../src/core/i18n/paths.ts';
+import { ABOUT_PAGE, CATALOGUE_PAGE } from '../src/core/pages.ts';
 import { descriptionLimit } from '../src/core/manifest.ts';
 import { FEED_TYPE, SITE_URL, feedUrl } from './site.ts';
 
@@ -22,7 +23,7 @@ export interface BuiltSite {
   favicon: Uint8Array;
 }
 
-export const JS_BUDGET_GZIP = { catalogue: 50_000, explainer: 300_000 } as const;
+export const JS_BUDGET_GZIP = { site: 50_000, explainer: 300_000 } as const;
 export const MORE_EXPLAINERS = 3;
 
 const SITE_NAME = 'What makes it tick';
@@ -40,8 +41,23 @@ function pageLanguage(path: string): LanguageCode {
   return splitLanguagePath(path).code ?? DEFAULT_LANGUAGE;
 }
 
+type PageKind = 'catalogue' | 'about' | 'explainer';
+
+const SITE_PAGES: Record<string, PageKind> = {
+  [CATALOGUE_PAGE]: 'catalogue',
+  [ABOUT_PAGE]: 'about',
+};
+
+function pageKind(path: string): PageKind {
+  return SITE_PAGES[splitLanguagePath(path).page] ?? 'explainer';
+}
+
 function isCatalogue(path: string): boolean {
-  return splitLanguagePath(path).page === '';
+  return pageKind(path) === 'catalogue';
+}
+
+function isExplainer(path: string): boolean {
+  return pageKind(path) === 'explainer';
 }
 
 function attribute(root: HTMLElement, selector: string, name: string): string | undefined {
@@ -115,9 +131,10 @@ function deliveryProblems(page: BuiltPage, root: HTMLElement, site: BuiltSite): 
     .forEach((tag) => problems.push(`loads an external stylesheet ${tag.getAttribute('href')}`));
   const scripts = loadedScripts(root, site.scripts);
   const bytes = scripts.reduce((sum, href) => sum + (site.gzipBytes.get(href) ?? 0), 0);
-  const budget = isCatalogue(page.path) ? JS_BUDGET_GZIP.catalogue : JS_BUDGET_GZIP.explainer;
+  const explainer = isExplainer(page.path);
+  const budget = explainer ? JS_BUDGET_GZIP.explainer : JS_BUDGET_GZIP.site;
   if (bytes > budget) problems.push(`loads ${bytes} gzipped bytes of JavaScript, budget ${budget}`);
-  if (isCatalogue(page.path) && scripts.some((href) => THREE_CHUNK.test(href)))
+  if (!explainer && scripts.some((href) => THREE_CHUNK.test(href)))
     problems.push('loads the three.js chunk');
   if (
     pageLanguage(page.path) !== DEFAULT_LANGUAGE &&
@@ -137,8 +154,8 @@ function contentProblems(page: BuiltPage, root: HTMLElement, explainers: number)
     const cards = root.querySelectorAll('a.card').length;
     if (cards !== explainers)
       problems.push(`links ${cards} explainer cards instead of ${explainers}`);
-    return problems;
   }
+  if (!isExplainer(page.path)) return problems;
   if (!NOSCRIPT_COVER.test(page.html)) problems.push('has no noscript cover');
   const more = root.querySelectorAll('a.more-explainer').length;
   const expected = Math.min(MORE_EXPLAINERS, explainers - 1);
@@ -153,7 +170,7 @@ function feedProblems(site: BuiltSite): string[] {
     if (feed === undefined) return [`the ${language} feed is missing`];
     const listed = [...feed.matchAll(FEED_ITEM)].map(([, url]) => url).sort();
     const expected = site.pages
-      .filter((page) => pageLanguage(page.path) === language && !isCatalogue(page.path))
+      .filter((page) => pageLanguage(page.path) === language && isExplainer(page.path))
       .map((page) => `${SITE_URL}${page.path}`)
       .sort();
     return listed.join('\n') === expected.join('\n')
@@ -179,7 +196,7 @@ function siteProblems(site: BuiltSite): string[] {
 
 export function checkSite(site: BuiltSite): string[] {
   const explainers = site.pages.filter(
-    (page) => pageLanguage(page.path) === DEFAULT_LANGUAGE && !isCatalogue(page.path),
+    (page) => pageLanguage(page.path) === DEFAULT_LANGUAGE && isExplainer(page.path),
   ).length;
   const pageProblems = site.pages.flatMap((page) => {
     const root = parse(page.html);

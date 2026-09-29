@@ -40,6 +40,7 @@
   },
   "footer": {
     "catalogue": "Alle Erklärungen",
+    "about": "Über",
     "source": "Quellcode",
     "license": "MIT-Lizenz",
     "builtWith": "Erstellt mit Three.js",

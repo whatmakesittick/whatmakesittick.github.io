@@ -29,13 +29,13 @@ export function pathFromBase(pathname: string, base: string): string {
   return pathname.startsWith(base) ? pathname.slice(base.length) : pathname;
 }
 
-export function catalogueHref(href: string, base: string): string {
+export function sitePageHref(href: string, base: string, page: string): string {
   const url = new URL(href);
   const { code = DEFAULT_LANGUAGE } = splitLanguagePath(pathFromBase(url.pathname, base));
   const language = url.searchParams.get(LANGUAGE_QUERY_KEY);
   const query =
     language === null ? '' : `?${new URLSearchParams({ [LANGUAGE_QUERY_KEY]: language })}`;
-  return `${base}${languagePath(code)}${query}`;
+  return `${base}${languagePath(code, page)}${query}`;
 }
 
 export function languageUrl(href: string, base: string, code: LanguageCode): string {
