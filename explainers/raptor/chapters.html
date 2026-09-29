@@ -33,11 +33,11 @@
   <p data-i18n-html="sections.overview.p3">
     The model follows one centre engine through a single <strong>launch burn</strong>, from the
     start command to booster engine cutoff. It keeps a few things simple. Raptor 3's inside layout
-    is not public, so the routes in the cutaway follow the known cycle as a clear diagram, not the
-    real pipes. SpaceX has not published the throttle curve, so the model reads it from the speed
-    numbers on the webcast. The start-up follows the usual order, with made-up timings inside
-    SpaceX's roughly 3 seconds. The plume is a simple picture of the real trend. Drag the timeline
-    to move through the launch, and drag the model to turn it.
+    is not public, so the cutaway shows the known cycle as a simple diagram, not the real pipes.
+    SpaceX has not published the throttle curve, so the model reads it from the speed numbers on the
+    webcast. The start-up follows the usual order, with made-up timings inside SpaceX's roughly 3
+    seconds. The plume shows how the real one changes, in a simplified way. Drag the timeline to
+    move through the launch, and drag the model to turn it.
   </p>
   <p data-i18n-html="sections.overview.p4">
     Each version of Raptor pushes harder and weighs less. <strong>Raptor 1</strong> made 185 tonnes
@@ -106,7 +106,7 @@
       <dd class="number" data-readout="propellant-share">22 %</dd>
     </div>
     <div>
-      <dt data-i18n="sections.propellants.flow">Flowing in right now</dt>
+      <dt data-i18n="sections.propellants.flow">Flow right now</dt>
       <dd class="number" data-readout="propellant-flow">165 kg/s</dd>
     </div>
     <div>
@@ -254,15 +254,15 @@
   </p>
   <dl class="range-widget__readouts section-readouts chamber-readouts">
     <div>
-      <dt data-i18n="sections.chamber.oxygen">Oxygen in</dt>
+      <dt data-i18n="sections.chamber.oxygen">Oxygen flow</dt>
       <dd class="number" data-readout="chamber-oxygen">593 kg/s</dd>
     </div>
     <div>
-      <dt data-i18n="sections.chamber.methane">Methane in</dt>
+      <dt data-i18n="sections.chamber.methane">Methane flow</dt>
       <dd class="number" data-readout="chamber-methane">165 kg/s</dd>
     </div>
     <div>
-      <dt data-i18n="sections.chamber.pressure">Pressure inside</dt>
+      <dt data-i18n="sections.chamber.pressure">Chamber pressure</dt>
       <dd class="number" data-readout="chamber-pressure">about 330 bar</dd>
     </div>
     <div>
@@ -270,7 +270,7 @@
       <dd class="number" data-readout="chamber-temperature">about 3,500 K</dd>
     </div>
     <div>
-      <dt data-i18n="sections.chamber.speed">Exhaust leaves at</dt>
+      <dt data-i18n="sections.chamber.speed">Exhaust speed</dt>
       <dd class="number" data-readout="chamber-speed">3.2 km/s</dd>
     </div>
   </dl>
@@ -304,9 +304,9 @@
     As the rocket climbs, the air thins and presses less. The plume spreads wide and the diamonds
     stretch out and fade. At the same throttle the engine now pushes about 5 percent harder, about
     14 tonnes more. Its <strong>specific impulse</strong>, how much push it gets from its
-    propellant, climbs from about 330 s to about 350 s. Above 30 km nearly all of that gain is
-    there. Drag the slider to move the flight to any height. The thrust dip around max-Q is the
-    throttle, not the air.
+    propellant, climbs from about 330 s to about 350 s. Above 30 km the engine already has nearly
+    all of that gain. Drag the slider to see the engine at any height on the way up. Thrust dips
+    around max-Q because the engine throttles back, not because of the air.
   </p>
   <div class="range-widget height-control">
     <div class="range-widget__header">
@@ -316,15 +316,15 @@
     <input id="height" type="range" class="range" data-control="height" />
     <div class="range-widget__scale" aria-hidden="true">
       <span data-i18n="sections.nozzle.control.ground">Launch pad</span>
-      <span data-i18n="sections.nozzle.control.top">Booster cutoff</span>
+      <span data-i18n="sections.nozzle.control.top">Just before cutoff</span>
     </div>
     <dl class="range-widget__readouts">
       <div>
-        <dt data-i18n="sections.nozzle.control.air">Outside air</dt>
+        <dt data-i18n="sections.nozzle.control.air">Air pressure</dt>
         <dd class="number" data-readout="height-air">1.01 bar</dd>
       </div>
       <div>
-        <dt data-i18n="sections.nozzle.control.exit">Exhaust at the exit</dt>
+        <dt data-i18n="sections.nozzle.control.exit">Exhaust pressure at the exit</dt>
         <dd class="number" data-readout="height-exit">0.90 bar</dd>
       </div>
       <div>
