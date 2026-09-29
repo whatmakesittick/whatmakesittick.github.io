@@ -1,5 +1,4 @@
 import { formatFixed, formatNumber } from '@core/format';
-import { t } from '@core/i18n';
 import { slowMotionFactor } from '@core/playback';
 import { PHASE_IDS } from '../ids';
 import type { PhaseId, PropellantId } from '../ids';
@@ -8,6 +7,7 @@ import { phaseIdAt } from '../model/phases';
 import { flightTime } from '../model';
 import type { CycleId, PropellantPair } from '../model/engines';
 import type { PlumeReading } from '../state/derived';
+import { translate } from './templates';
 
 export type CycleBox =
   | 'tank'
@@ -56,9 +56,9 @@ function clockSeconds(seconds: number): string {
 }
 
 export function formatFlightTime(time: number): string {
-  if (time < 0) return t('timeline.before', { seconds: formatFixed(-time, TENTHS) });
+  if (time < 0) return translate('timeline.before', { seconds: formatFixed(-time, TENTHS) });
   const elapsed = Math.floor(time);
-  return t('timeline.after', {
+  return translate('timeline.after', {
     minutes: Math.floor(elapsed / SECONDS_PER_MINUTE),
     seconds: clockSeconds(elapsed % SECONDS_PER_MINUTE),
   });
@@ -69,9 +69,9 @@ export function formatPhase(phase: number): string {
 }
 
 export function describePhase(phase: number): string {
-  return t('timeline.value', {
+  return translate('timeline.value', {
     time: formatPhase(phase),
-    phase: t(DURING_KEYS[phaseIdAt(phase)]),
+    phase: translate(DURING_KEYS[phaseIdAt(phase)]),
   });
 }
 
@@ -84,25 +84,25 @@ export function formatSpeed(speed: number): string {
 }
 
 export function describeSpeed(speed: number): string {
-  if (speed === REAL_TIME_SPEED) return t('timeline.realTime');
+  if (speed === REAL_TIME_SPEED) return translate('timeline.realTime');
   if (speed < REAL_TIME_SPEED) {
-    return t('timeline.slower', {
+    return translate('timeline.slower', {
       factor: formatNumber(slowMotionFactor(speed, REAL_TIME_SPEED)),
     });
   }
-  return t('timeline.faster', { factor: formatNumber(playbackFactor(speed)) });
+  return translate('timeline.faster', { factor: formatNumber(playbackFactor(speed)) });
 }
 
 export function formatTonnes(tonnes: number): string {
-  return t('units.tonnes', { value: whole(tonnes) });
+  return translate('units.tonnes', { value: whole(tonnes) });
 }
 
 export function formatAboutTonnes(tonnes: number): string {
-  return t('units.tonnesAbout', { value: whole(tonnes) });
+  return translate('units.tonnesAbout', { value: whole(tonnes) });
 }
 
 export function formatSeconds(seconds: number): string {
-  return t('units.seconds', { value: whole(seconds) });
+  return translate('units.seconds', { value: whole(seconds) });
 }
 
 function barDigits(bar: number): number {
@@ -111,35 +111,35 @@ function barDigits(bar: number): number {
 }
 
 export function formatBar(bar: number): string {
-  return t('units.bar', { value: formatFixed(bar, barDigits(bar)) });
+  return translate('units.bar', { value: formatFixed(bar, barDigits(bar)) });
 }
 
 export function formatAboutBar(bar: number): string {
-  return t('units.barAbout', { value: whole(bar) });
+  return translate('units.barAbout', { value: whole(bar) });
 }
 
 export function formatExactBar(bar: number): string {
-  return t('units.bar', { value: whole(bar) });
+  return translate('units.bar', { value: whole(bar) });
 }
 
 export function formatKm(km: number, digits: number = TENTHS): string {
-  return t('units.km', { value: formatFixed(km, digits) });
+  return translate('units.km', { value: formatFixed(km, digits) });
 }
 
 export function formatKmPerHour(kmPerHour: number): string {
-  return t('units.kmPerHour', { value: whole(kmPerHour) });
+  return translate('units.kmPerHour', { value: whole(kmPerHour) });
 }
 
 export function formatKmPerSecond(kmPerSecond: number): string {
-  return t('units.kmPerSecond', { value: formatFixed(kmPerSecond, TENTHS) });
+  return translate('units.kmPerSecond', { value: formatFixed(kmPerSecond, TENTHS) });
 }
 
 export function formatKgPerSecond(kgPerSecond: number): string {
-  return t('units.kgPerSecond', { value: whole(kgPerSecond) });
+  return translate('units.kgPerSecond', { value: whole(kgPerSecond) });
 }
 
 export function formatKg(kg: number): string {
-  return t('units.kg', { value: whole(kg) });
+  return translate('units.kg', { value: whole(kg) });
 }
 
 function signedWhole(value: number): string {
@@ -148,27 +148,27 @@ function signedWhole(value: number): string {
 }
 
 export function formatKelvinCelsius(kelvin: number, celsius: number): string {
-  return t('units.kelvinCelsius', { kelvin: whole(kelvin), celsius: signedWhole(celsius) });
+  return translate('units.kelvinCelsius', { kelvin: whole(kelvin), celsius: signedWhole(celsius) });
 }
 
 export function formatAboutKelvin(kelvin: number): string {
-  return t('units.kelvinAbout', { value: formatNumber(kelvin) });
+  return translate('units.kelvinAbout', { value: formatNumber(kelvin) });
 }
 
 export function formatPercent(share: number): string {
-  return t('units.percent', { value: whole(share * PERCENT) });
+  return translate('units.percent', { value: whole(share * PERCENT) });
 }
 
 export function formatDegrees(degrees: number): string {
-  return t('units.degrees', { value: formatFixed(degrees, TENTHS) });
+  return translate('units.degrees', { value: formatFixed(degrees, TENTHS) });
 }
 
 export function formatTimes(times: number): string {
-  return t('units.times', { value: whole(times) });
+  return translate('units.times', { value: whole(times) });
 }
 
 export function formatOff(): string {
-  return t('units.off');
+  return translate('units.off');
 }
 
 export function unlessOff(on: boolean, text: () => string): string {
@@ -176,25 +176,25 @@ export function unlessOff(on: boolean, text: () => string): string {
 }
 
 export function formatPlume(reading: PlumeReading): string {
-  return t(`plume.${reading}`);
+  return translate(`plume.${reading}`);
 }
 
 export function formatRoute(propellant: PropellantId): string {
-  return t(`propellants.route.${propellant}`);
+  return translate(`propellants.route.${propellant}`);
 }
 
 export function formatCycle(cycle: CycleId): string {
-  return t(`engines.cycle.${cycle}`);
+  return translate(`engines.cycle.${cycle}`);
 }
 
 export function formatPropellantPair(pair: PropellantPair): string {
-  return t(`engines.propellants.${pair}`);
+  return translate(`engines.propellants.${pair}`);
 }
 
 export function formatDumps(dumps: boolean): string {
-  return t(dumps ? 'engines.dumps.yes' : 'engines.dumps.no');
+  return translate(dumps ? 'engines.dumps.yes' : 'engines.dumps.no');
 }
 
 export function formatCycleBox(box: CycleBox): string {
-  return t(`cycle.${box}`);
+  return translate(`cycle.${box}`);
 }
