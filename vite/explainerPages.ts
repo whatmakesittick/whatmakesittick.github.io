@@ -62,10 +62,12 @@ function redirectToTrailingSlash(server: ViteDevServer, folders: () => string[])
   });
 }
 
-function serveSiteFiles(server: ViteDevServer, explainers: () => LoadedExplainer[]): void {
+function serveSiteFiles(server: ViteDevServer, site: () => Site | undefined): void {
   server.middlewares.use((request, response, next) => {
     const [path] = (request.url ?? '').split('?');
-    const file = siteFiles(explainers()).find(
+    const current = site();
+    if (!current) return next();
+    const file = siteFiles(current.explainers, current.sources.core).find(
       ({ fileName }) => path === `${server.config.base}${fileName}`,
     );
     if (!file) return next();
@@ -141,7 +143,7 @@ function pagesPlugin(): Plugin {
     configureServer(server) {
       redirectToTrailingSlash(server, () => site?.folders ?? []);
       servePublicFiles(server, site?.explainers ?? []);
-      serveSiteFiles(server, () => site?.explainers ?? []);
+      serveSiteFiles(server, () => site);
       const regenerate = () => {
         try {
           site = generateSite(root);
@@ -164,8 +166,9 @@ function pagesPlugin(): Plugin {
     },
 
     generateBundle() {
-      const explainers = site?.explainers ?? [];
-      for (const { fileName, source } of siteFiles(explainers)) {
+      if (!site) return;
+      const { explainers, sources } = site;
+      for (const { fileName, source } of siteFiles(explainers, sources.core)) {
         this.emitFile({ type: 'asset', fileName, source });
       }
       for (const { manifest, directory } of explainers) {

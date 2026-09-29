@@ -15,6 +15,7 @@ import type { PageRoute } from './routes.ts';
 import { REDIRECT_SCRIPT } from './redirectScript.ts';
 import {
   COVER_SIZE,
+  FEED_TYPE,
   LICENSE_URL,
   REPOSITORY_URL,
   SITE_NAME,
@@ -22,6 +23,8 @@ import {
   SOCIAL_IMAGE_SIZE,
   explainerSourceUrl,
   explainerUrl,
+  feedPath,
+  feedUrl,
   pageUrl,
   siteUrl,
 } from './site.ts';
@@ -82,6 +85,14 @@ function languageValues(code: LanguageCode, route: PageRoute): TemplateValues {
     alternateLinks: alternateLinks(route),
     languageLinks: languageLinks(route, code),
     languageOptions: languageOptions(code),
+  };
+}
+
+function feedValues({ code, translate }: PageLanguage): TemplateValues {
+  const title = escapeHtml(translate(CATALOGUE_TITLE_KEY));
+  return {
+    feedUrl: escapeHtml(`${ROOT_PATH}${feedPath(code)}`),
+    feedLink: `<link rel="alternate" type="${FEED_TYPE}" title="${title}" href="${escapeHtml(feedUrl(code))}" />`,
   };
 }
 
@@ -166,6 +177,7 @@ export function renderPage(
   const html = render(template, partials, {
     ...siteValues(explainerSourceUrl(manifest.slug)),
     ...languageValues(code, route),
+    ...feedValues(language),
     ...redirectValues(code, route),
     ...socialValues(image, meta.socialAlt ?? manifest.social.alt),
     ...explainerHeadValues(explainer, meta, language),
@@ -186,7 +198,7 @@ function catalogueEntry({ manifest, metas, dates }: LoadedExplainer): CatalogueE
   return { manifest, meta: metas, published: dates.published };
 }
 
-function catalogueOrder(explainers: readonly LoadedExplainer[]): LoadedExplainer[] {
+export function catalogueOrder(explainers: readonly LoadedExplainer[]): LoadedExplainer[] {
   return [...explainers].sort((a, b) => compareNewestFirst(catalogueEntry(a), catalogueEntry(b)));
 }
 
@@ -211,6 +223,7 @@ export function renderCatalogue(
   const html = render(template, partials, {
     ...siteValues(REPOSITORY_URL),
     ...languageValues(code, CATALOGUE_ROUTE),
+    ...feedValues(language),
     ...redirectValues(code, CATALOGUE_ROUTE),
     ...socialValues(image, SITE_SOCIAL.alt),
     ...catalogueHeadValues(language),
@@ -225,11 +238,13 @@ export function renderCatalogue(
 export function renderNotFound(
   template: string,
   partials: TemplateValues,
-  { code, translate }: PageLanguage,
+  language: PageLanguage,
 ): string {
+  const { code, translate } = language;
   const title = translate(NOT_FOUND_TITLE_KEY);
   const html = render(template, partials, {
     ...siteValues(REPOSITORY_URL),
+    ...feedValues(language),
     lang: code,
     catalogueUrl: escapeHtml(pagePath(code, CATALOGUE_ROUTE.page)),
     languageLinks: languageLinks(CATALOGUE_ROUTE),

@@ -43,6 +43,7 @@
     "source": "源代码",
     "license": "MIT 许可证",
     "builtWith": "使用 Three.js 构建",
+    "feed": "RSS 订阅",
     "copyright": "© {{year}} {{title}}。由 <a href=\"https://github.com/veelenga\">veelenga</a> 用 ♥ 制作",
     "languages": "语言"
   },

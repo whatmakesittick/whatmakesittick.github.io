@@ -1,4 +1,6 @@
 import { crawlFiles } from './crawl.ts';
+import { feedFiles } from './feed.ts';
+import type { Dictionaries } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
 
 export interface SiteFile {
@@ -7,6 +9,6 @@ export interface SiteFile {
   source: string;
 }
 
-export function siteFiles(explainers: readonly LoadedExplainer[]): SiteFile[] {
-  return crawlFiles(explainers);
+export function siteFiles(explainers: readonly LoadedExplainer[], core: Dictionaries): SiteFile[] {
+  return [...crawlFiles(explainers), ...feedFiles(explainers, core)];
 }

@@ -5,7 +5,7 @@ import { parse } from 'node-html-parser';
 
 const SITE = 'https://whatmakesittick.github.io';
 const EXPLAINERS = ['engine', 'glider'];
-const LANGUAGES = ['en', 'uk'];
+const LANGUAGES = ['en', 'uk'] as const;
 
 interface PageOptions {
   description?: string;
@@ -13,6 +13,7 @@ interface PageOptions {
   stylesheet?: string;
   cards?: number;
   preload?: boolean;
+  feed?: boolean;
 }
 
 function pagePath(code: string, slug: string): string {
@@ -38,16 +39,27 @@ function pageHtml(code: string, slug: string, options: PageOptions = {}): string
     code !== 'en' && options.preload !== false
       ? '<link rel="modulepreload" href="/assets/uk.js">'
       : '';
+  const feed =
+    options.feed === false
+      ? ''
+      : `<link rel="alternate" type="application/rss+xml" href="${SITE}${pagePath(code, '')}feed.xml">`;
   return `<!doctype html><html lang="${code}"><head>
     <title>How it works · What makes it tick</title>
     <meta name="description" content="${options.description ?? 'A short look inside.'}">
     <link rel="canonical" href="${SITE}${path}">
     ${links.join('')}
+    ${feed}
     ${options.stylesheet ? `<link rel="stylesheet" href="${options.stylesheet}">` : ''}
     <script type="application/ld+json">{"@type":"WebPage"}</script>
     ${preload}
     <script type="module" src="/assets/${slug ? 'engine' : 'main'}.js"></script>
   </head><body><h1>Title</h1><select data-language-select><option value="${code}">${code}</option></select>${body}</body></html>`;
+}
+
+function feedXml(code: string, slugs: readonly string[]): string {
+  return slugs
+    .map((slug) => `<item><guid isPermaLink="true">${SITE}${pagePath(code, slug)}</guid></item>`)
+    .join('');
 }
 
 function site(overrides: Partial<Record<string, PageOptions>> = {}): BuiltSite {
@@ -73,6 +85,7 @@ function site(overrides: Partial<Record<string, PageOptions>> = {}): BuiltSite {
       ['/assets/three-x.js', 160_000],
       ['/assets/uk.js', 1_000],
     ]),
+    feeds: new Map(LANGUAGES.map((code) => [code, feedXml(code, EXPLAINERS)])),
     sitemap: pages.map((page) => `<loc>${SITE}${page.path}</loc>`).join('\n'),
     robots: 'Sitemap: x',
     notFound: '<meta name="robots" content="noindex">',
@@ -92,7 +105,9 @@ describe('checkSite', () => {
 
   it('rejects hreflang links without x-default and external stylesheets', () => {
     const problems = checkSite(
-      site({ '/': { alternates: LANGUAGES, stylesheet: 'https://fonts.googleapis.com/css2' } }),
+      site({
+        '/': { alternates: [...LANGUAGES], stylesheet: 'https://fonts.googleapis.com/css2' },
+      }),
     );
     expect(problems).toEqual([
       '/: hreflang links lack x-default',
@@ -118,6 +133,18 @@ describe('checkSite', () => {
   it('rejects a translated page that preloads no language chunk', () => {
     expect(checkSite(site({ '/uk/engine/': { preload: false } }))).toEqual([
       '/uk/engine/: preloads no language chunk',
+    ]);
+  });
+
+  it('rejects a page without its feed link and a feed that misses an explainer', () => {
+    const broken = site({ '/uk/glider/': { feed: false } });
+    const feeds = new Map(broken.feeds);
+    feeds.set('uk', feedXml('uk', ['engine']));
+    feeds.delete('en');
+    expect(checkSite({ ...broken, feeds })).toEqual([
+      '/uk/glider/: feed link is not https://whatmakesittick.github.io/uk/feed.xml',
+      'the en feed is missing',
+      'the uk feed does not list exactly the built explainers',
     ]);
   });
 

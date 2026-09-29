@@ -43,6 +43,7 @@
     "source": "ソースコード",
     "license": "MITライセンス",
     "builtWith": "Three.jsで制作",
+    "feed": "RSS フィード",
     "copyright": "© {{year}} {{title}}。<a href=\"https://github.com/veelenga\">veelenga</a>が♥を込めて制作",
     "languages": "言語"
   },
