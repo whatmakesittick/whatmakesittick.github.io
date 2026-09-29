@@ -1,6 +1,6 @@
 import { CHAMBERS, VALVES } from '../../model';
 import type { Point } from '../../model';
-import { PULMONARY_RING, VESSELS, VESSEL_WALL_MM } from '../constants';
+import { PULMONARY_SPLIT, VESSELS, VESSEL_WALL_MM } from '../constants';
 import type { VesselName } from '../constants';
 import type { PathLeg } from './bloodPath';
 
@@ -58,7 +58,22 @@ function aortaUntil(count: number, style: BloodRouteStyle): Leg {
   };
 }
 
-function rightHeart(inlet: VesselName, outlet: VesselName, style: BloodRouteStyle): Leg[] {
+type PulmonaryBranch = 'left' | 'right';
+
+function pulmonaryOutflow(branch: PulmonaryBranch, style: BloodRouteStyle): Leg[] {
+  const { points } = VESSELS.pulmonaryTrunk.route;
+  const trunk = (until: number): Leg => ({
+    points: points.slice(0, until),
+    radius: lumen('pulmonaryTrunk', style),
+    zone: 'artery',
+    chamber: false,
+  });
+  if (branch === 'left') return [trunk(points.length)];
+  const split = points.indexOf(PULMONARY_SPLIT) + 1;
+  return [trunk(split), vesselLeg('rightPulmonaryArtery', style, false, 'artery')];
+}
+
+function rightHeart(inlet: VesselName, branch: PulmonaryBranch, style: BloodRouteStyle): Leg[] {
   const spread = style.chamberSpread;
   return [
     vesselLeg(inlet, style, true, 'vein'),
@@ -83,13 +98,7 @@ function rightHeart(inlet: VesselName, outlet: VesselName, style: BloodRouteStyl
       'ventricle',
       style,
     ),
-    {
-      points: [PULMONARY_RING, ...VESSELS.pulmonaryTrunk.route.points.slice(1)],
-      radius: lumen('pulmonaryTrunk', style),
-      zone: 'artery',
-      chamber: false,
-    },
-    vesselLeg(outlet, style, false, 'artery'),
+    ...pulmonaryOutflow(branch, style),
   ];
 }
 
@@ -130,10 +139,10 @@ function archBranch(name: keyof typeof ARCH_BRANCH_AT, style: BloodRouteStyle): 
 
 export function venousRoutes(style: BloodRouteStyle): Leg[][] {
   return [
-    rightHeart('superiorVenaCava', 'leftPulmonaryArtery', style),
-    rightHeart('superiorVenaCava', 'rightPulmonaryArtery', style),
-    rightHeart('inferiorVenaCava', 'leftPulmonaryArtery', style),
-    rightHeart('inferiorVenaCava', 'rightPulmonaryArtery', style),
+    rightHeart('superiorVenaCava', 'left', style),
+    rightHeart('superiorVenaCava', 'right', style),
+    rightHeart('inferiorVenaCava', 'left', style),
+    rightHeart('inferiorVenaCava', 'right', style),
   ];
 }
 

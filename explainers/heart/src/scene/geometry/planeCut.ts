@@ -83,6 +83,16 @@ export function insertPlane(geometry: BufferGeometry, plane: CutPlane): BufferGe
   const positions = geometry.getAttribute('position').array as Float32Array;
   const distances = signedDistances(positions, plane);
   geometry.getAttribute('position').needsUpdate = true;
+  return insertLevel(geometry, distances);
+}
+
+export type CrossingLocator = (from: number, to: number, share: number) => number;
+
+export function insertLevel(
+  geometry: BufferGeometry,
+  distances: ArrayLike<number>,
+  locate: CrossingLocator = (_from, _to, share) => share,
+): BufferGeometry {
   const attributes = new GrowingAttributes(geometry);
   const index = geometry.getIndex()?.array ?? [];
   const crossings = new Map<number, number>();
@@ -91,7 +101,11 @@ export function insertPlane(geometry: BufferGeometry, plane: CutPlane): BufferGe
     const key = Math.min(a, b) * vertexCount + Math.max(a, b);
     const known = crossings.get(key);
     if (known !== undefined) return known;
-    const created = attributes.interpolate(a, b, distances[a] / (distances[a] - distances[b]));
+    const created = attributes.interpolate(
+      a,
+      b,
+      locate(a, b, distances[a] / (distances[a] - distances[b])),
+    );
     crossings.set(key, created);
     return created;
   };
@@ -213,6 +227,16 @@ function positionKey(positions: ArrayLike<number>, vertex: number): string {
 }
 
 export function planeLoops(geometry: BufferGeometry, plane: CutPlane): number[][] {
+  const positions = geometry.getAttribute('position').array;
+  return openLoops(
+    geometry,
+    (a, b) => onPlane(positions, a, plane) && onPlane(positions, b, plane),
+  );
+}
+
+export type EdgeFilter = (from: number, to: number) => boolean;
+
+export function openLoops(geometry: BufferGeometry, accept: EdgeFilter = () => true): number[][] {
   const index = geometry.getIndex()?.array ?? [];
   const positions = geometry.getAttribute('position').array;
   const directed = new Map<string, [number, number]>();
@@ -220,7 +244,7 @@ export function planeLoops(geometry: BufferGeometry, plane: CutPlane): number[][
     for (let corner = 0; corner < CORNERS; corner += 1) {
       const a = index[t + corner];
       const b = index[t + ((corner + 1) % CORNERS)];
-      if (!onPlane(positions, a, plane) || !onPlane(positions, b, plane)) continue;
+      if (!accept(a, b)) continue;
       const forward = `${positionKey(positions, a)}|${positionKey(positions, b)}`;
       const backward = `${positionKey(positions, b)}|${positionKey(positions, a)}`;
       if (directed.has(backward)) directed.delete(backward);

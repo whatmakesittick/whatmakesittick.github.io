@@ -1,5 +1,6 @@
 import { BufferAttribute, BufferGeometry, Color, Vector3 } from 'three';
 import type { CatmullRomCurve3 } from 'three';
+import { subsetGeometry } from './planeCut';
 
 export interface HollowTubeSpec {
   readonly curve: CatmullRomCurve3;
@@ -11,6 +12,7 @@ export interface HollowTubeSpec {
   readonly wallColour: string;
   readonly lumenColour: string;
   readonly plugInsetMm: number;
+  readonly annuli: { readonly start: boolean; readonly end: boolean };
   readonly plugs: { readonly start: boolean; readonly end: boolean };
   readonly lumenFade?: { readonly colour: string; readonly fromMm: number; readonly toMm: number };
 }
@@ -35,14 +37,17 @@ class MeshBuilder {
   readonly normals: number[] = [];
   readonly colours: number[] = [];
   readonly layers: number[] = [];
+  readonly alongs: number[] = [];
   readonly index: number[] = [];
   layer: number = TUBE_LAYER.wall;
+  along = 0;
 
   vertex(position: Vector3, normal: Vector3, colour: Color): number {
     this.positions.push(position.x, position.y, position.z);
     this.normals.push(normal.x, normal.y, normal.z);
     this.colours.push(colour.r, colour.g, colour.b);
     this.layers.push(this.layer);
+    this.alongs.push(this.along);
     return this.positions.length / XYZ - 1;
   }
 
@@ -56,6 +61,7 @@ class MeshBuilder {
     geometry.setAttribute('normal', new BufferAttribute(new Float32Array(this.normals), XYZ));
     geometry.setAttribute('color', new BufferAttribute(new Float32Array(this.colours), XYZ));
     geometry.setAttribute('layer', new BufferAttribute(new Float32Array(this.layers), 1));
+    geometry.setAttribute('along', new BufferAttribute(new Float32Array(this.alongs), 1));
     geometry.setIndex(this.index);
     return geometry;
   }
@@ -109,6 +115,7 @@ function surfaceRows(
   const rows = all.map((ring) => {
     const row: number[] = [];
     const colour = colourAt(ring.distance);
+    builder.along = ring.distance;
     for (let segment = 0; segment <= spec.radialSegments; segment += 1) {
       const direction = around(ring, (segment / spec.radialSegments) * Math.PI * 2);
       const radius = inward ? ring.inner : ring.outer;
@@ -136,6 +143,7 @@ function annulus(
   facing: 1 | -1,
 ): void {
   const normal = ring.tangent.clone().multiplyScalar(facing);
+  builder.along = ring.distance;
   const outer: number[] = [];
   const inner: number[] = [];
   for (let segment = 0; segment <= spec.radialSegments; segment += 1) {
@@ -162,6 +170,7 @@ function plug(
   facing: 1 | -1,
 ): void {
   const normal = ring.tangent.clone().multiplyScalar(facing);
+  builder.along = ring.distance;
   const centre = ring.centre.clone().addScaledVector(ring.tangent, -facing * spec.plugInsetMm);
   const hub = builder.vertex(centre, normal, colour);
   const rim: number[] = [];
@@ -199,11 +208,40 @@ export function hollowTube(spec: HollowTubeSpec): BufferGeometry {
   const first = all[0];
   const last = all[all.length - 1];
   surfaceRows(builder, all, spec, () => wall, false);
-  annulus(builder, first, spec, spec.lumenFade ? new Color(spec.lumenFade.colour) : wall, -1);
-  annulus(builder, last, spec, wall, 1);
+  const startColour = spec.lumenFade ? new Color(spec.lumenFade.colour) : wall;
+  if (spec.annuli.start) annulus(builder, first, spec, startColour, -1);
+  if (spec.annuli.end) annulus(builder, last, spec, wall, 1);
   builder.layer = TUBE_LAYER.lumen;
   surfaceRows(builder, all, spec, lumenColourAt(spec, lumen), true);
   if (spec.plugs.start) plug(builder, first, spec, lumen, -1);
   if (spec.plugs.end) plug(builder, last, spec, lumen, 1);
   return builder.build();
+}
+
+export interface TubeSurfaces {
+  readonly wall: BufferGeometry;
+  readonly lumen: BufferGeometry;
+}
+
+function withoutBookkeeping(geometry: BufferGeometry): BufferGeometry {
+  geometry.deleteAttribute('layer');
+  geometry.deleteAttribute('along');
+  return geometry;
+}
+
+export function tubePieces(geometry: BufferGeometry, breaks: readonly number[]): TubeSurfaces[] {
+  const layers = geometry.getAttribute('layer').array;
+  const alongs = geometry.getAttribute('along').array;
+  const bounds = [Number.NEGATIVE_INFINITY, ...breaks, Number.POSITIVE_INFINITY];
+  return bounds.slice(1).map((end, piece) => {
+    const start = bounds[piece];
+    const pick = (layer: number) =>
+      withoutBookkeeping(
+        subsetGeometry(geometry, (corners) => {
+          const middle = (alongs[corners[0]] + alongs[corners[1]] + alongs[corners[2]]) / 3;
+          return layers[corners[0]] === layer && middle >= start && middle < end;
+        }),
+      );
+    return { wall: pick(TUBE_LAYER.wall), lumen: pick(TUBE_LAYER.lumen) };
+  });
 }

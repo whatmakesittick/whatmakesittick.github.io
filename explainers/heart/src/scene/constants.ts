@@ -16,6 +16,7 @@ import type { CuspShape } from './geometry/cusp';
 import type { FlapShape, FlapSpec } from './geometry/leaflet';
 import { planAngle, ringFrame } from './geometry/valveFrame';
 import type { SurfaceMark } from './geometry/surfacePath';
+import { distanceAlong } from './geometry/vesselPath';
 import type { VesselRoute } from './geometry/vesselPath';
 
 export type Blob =
@@ -223,7 +224,6 @@ export type VesselName =
   | 'leftCarotid'
   | 'leftSubclavian'
   | 'pulmonaryTrunk'
-  | 'leftPulmonaryArtery'
   | 'rightPulmonaryArtery'
   | 'superiorVenaCava'
   | 'inferiorVenaCava'
@@ -234,6 +234,11 @@ export type VesselName =
 
 export type Blood = 'arterial' | 'venous';
 
+export interface PartBreak {
+  readonly atMm: number;
+  readonly part: PartId;
+}
+
 export interface VesselSpec {
   readonly part: PartId;
   readonly blood: Blood;
@@ -241,10 +246,25 @@ export interface VesselSpec {
   readonly portalMm?: number;
   readonly chamber?: ChamberId;
   readonly carves?: readonly ChamberId[];
+  readonly parent?: VesselName;
+  readonly breaks?: readonly PartBreak[];
 }
 
 const ARCH_TOP: Point = [5, 90, -16];
-const PULMONARY_SPLIT: Point = [18, 62, 14];
+export const PULMONARY_SPLIT: Point = [18, 61, 3];
+const PULMONARY_TREE: readonly Point[] = [
+  PULMONARY_RING,
+  [0, 44, 22],
+  [12, 55, 12],
+  PULMONARY_SPLIT,
+  [31, 63, -6],
+  [48, 63, -14],
+  [80, 62, -22],
+];
+export const PULMONARY_SPLIT_MM = distanceAlong(PULMONARY_TREE, PULMONARY_SPLIT);
+const BRANCH_RADIUS_MM = 9;
+const BRANCH_NARROWING_MM = 18;
+const NARROWING_LEAD_MM = 4;
 
 const PULMONARY_VEIN_RADIUS_MM = 5.5;
 
@@ -285,6 +305,7 @@ export const VESSELS: Readonly<Record<VesselName, VesselSpec>> = {
   brachiocephalic: {
     part: 'archBranches',
     blood: 'arterial',
+    parent: 'aorta',
     route: {
       points: [
         [-3, 86, -11],
@@ -297,6 +318,7 @@ export const VESSELS: Readonly<Record<VesselName, VesselSpec>> = {
   leftCarotid: {
     part: 'archBranches',
     blood: 'arterial',
+    parent: 'aorta',
     route: {
       points: [
         [6, 94, -17],
@@ -309,6 +331,7 @@ export const VESSELS: Readonly<Record<VesselName, VesselSpec>> = {
   leftSubclavian: {
     part: 'archBranches',
     blood: 'arterial',
+    parent: 'aorta',
     route: {
       points: [
         [15, 93, -25],
@@ -323,34 +346,33 @@ export const VESSELS: Readonly<Record<VesselName, VesselSpec>> = {
     blood: 'venous',
     chamber: 'rightVentricle',
     portalMm: 12,
+    breaks: [{ atMm: PULMONARY_SPLIT_MM, part: 'pulmonaryArteries' }],
     route: {
-      points: [PULMONARY_RING, [0, 44, 22], [9, 54, 18], PULMONARY_SPLIT],
+      points: PULMONARY_TREE,
       radius: 12,
       rootRadius: ringRadius(VALVES.pulmonary.radius) + VESSEL_WALL_MM,
       flareMm: 10,
-    },
-  },
-  leftPulmonaryArtery: {
-    part: 'pulmonaryArteries',
-    blood: 'venous',
-    route: {
-      points: [PULMONARY_SPLIT, [31, 63, 0], [48, 63, -12], [80, 62, -22]],
-      radius: 9,
+      narrowing: {
+        atMm: PULMONARY_SPLIT_MM - NARROWING_LEAD_MM,
+        lengthMm: BRANCH_NARROWING_MM,
+        radius: BRANCH_RADIUS_MM,
+      },
     },
   },
   rightPulmonaryArtery: {
     part: 'pulmonaryArteries',
     blood: 'venous',
+    parent: 'pulmonaryTrunk',
     route: {
       points: [
         PULMONARY_SPLIT,
-        [14, 60, -8],
-        [2, 59, -30],
-        [-22, 59, -27],
-        [-45, 58, -24],
+        [13, 60, -20],
+        [2, 59, -34],
+        [-22, 59, -30],
+        [-45, 58, -25],
         [-80, 57, -20],
       ],
-      radius: 9,
+      radius: BRANCH_RADIUS_MM,
     },
   },
   superiorVenaCava: {
@@ -525,8 +547,13 @@ export const VESSEL_DETAIL = {
   collarLipMm: 1.1,
   collarMm: 4,
   lumenFadeMm: 14,
-  jointSegments: 28,
-  jointMarginMm: 0.6,
+  capDepthMm: -0.05,
+  lumenTuckMm: 0.3,
+  capCellMm: 0.5,
+  capOwnerSamples: 200,
+  portalDepthMm: 24,
+  portalClearanceMm: 4,
+  collar: { radiusMm: 0.9, radialSegments: 8, spacingMm: 1.2, smoothing: 3 },
 } as const;
 
 export const SHAPE = {
@@ -899,8 +926,8 @@ export const LABELS = {
   vesselShare: {
     aorta: 0.3,
     archBranches: 0.5,
-    pulmonaryTrunk: 0.45,
-    pulmonaryArteries: 0.5,
+    pulmonaryTrunk: 0.22,
+    pulmonaryArteries: 0.72,
     superiorVenaCava: 0.3,
     inferiorVenaCava: 0.7,
     pulmonaryVeins: 0.6,

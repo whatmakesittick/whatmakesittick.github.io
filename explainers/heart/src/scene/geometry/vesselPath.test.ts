@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { pointAtDistance, portalAt, radiusAt, routeCurve, routeField } from './vesselPath';
+import {
+  distanceAlong,
+  pointAtDistance,
+  portalAt,
+  radiusAt,
+  routeCurve,
+  routeField,
+} from './vesselPath';
 
 const ROUTE = {
   points: [
@@ -39,5 +46,23 @@ describe('vessel routes', () => {
     expect(tube.distance(0, 15, 0)).toBeLessThan(0);
     expect(tube.distance(15, 15, 0)).toBeGreaterThan(0);
     expect(tube.distance(radiusAt(ROUTE, 15), 15, 0)).toBeCloseTo(0, 1);
+  });
+
+  it('can start the tube field part way along the route', () => {
+    const tail = routeField(ROUTE, 30, 0, 12);
+    expect(tail.distance(0, 2, 0)).toBeGreaterThan(0);
+    expect(tail.distance(0, 20, 0)).toBeLessThan(0);
+  });
+
+  it('narrows a route toward a branch radius', () => {
+    const narrowing = { ...ROUTE, narrowing: { atMm: 20, lengthMm: 10, radius: 5 } };
+    expect(radiusAt(narrowing, 15)).toBe(10);
+    expect(radiusAt(narrowing, 25)).toBeGreaterThan(5);
+    expect(radiusAt(narrowing, 25)).toBeLessThan(10);
+    expect(radiusAt(narrowing, 40)).toBe(5);
+  });
+
+  it('measures how far along a route a point lies', () => {
+    expect(distanceAlong(ROUTE.points, [0, 20, 0])).toBeCloseTo(20, 0);
   });
 });

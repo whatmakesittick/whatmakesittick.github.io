@@ -92,9 +92,7 @@ export class LabelAnchors {
         whole: lifted(alongVessel('pulmonaryTrunk', LABELS.vesselShare.pulmonaryTrunk), lift),
         cut: aboveRing('pulmonary', LABELS.trunkAboveRingMm),
       },
-      pulmonaryArteries: fixed(
-        alongVessel('leftPulmonaryArtery', LABELS.vesselShare.pulmonaryArteries),
-      ),
+      pulmonaryArteries: fixed(alongVessel('pulmonaryTrunk', LABELS.vesselShare.pulmonaryArteries)),
       superiorVenaCava: fixed(alongVessel('superiorVenaCava', LABELS.vesselShare.superiorVenaCava)),
       inferiorVenaCava: fixed(alongVessel('inferiorVenaCava', LABELS.vesselShare.inferiorVenaCava)),
       pulmonaryVeins: fixed(alongVessel('pulmonaryVein0', LABELS.vesselShare.pulmonaryVeins)),

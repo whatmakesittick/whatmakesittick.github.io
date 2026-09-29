@@ -1,6 +1,6 @@
 import { CatmullRomCurve3, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
-import { hollowTube } from './tube';
+import { hollowTube, tubePieces } from './tube';
 
 const CURVE = new CatmullRomCurve3([
   new Vector3(0, 0, 0),
@@ -19,6 +19,7 @@ function tube(plugs: { start: boolean; end: boolean }) {
     wallColour: '#ff0000',
     lumenColour: '#330000',
     plugInsetMm: 0.4,
+    annuli: { start: true, end: true },
     plugs,
   });
 }
@@ -73,6 +74,7 @@ describe('hollow tubes', () => {
       wallColour: '#ff0000',
       lumenColour: '#0000ff',
       plugInsetMm: 0.4,
+      annuli: { start: true, end: true },
       plugs: { start: false, end: false },
       lumenFade: { colour: '#00ff00', fromMm: 0, toMm: 20 },
     });
@@ -81,5 +83,40 @@ describe('hollow tubes', () => {
     const lumenStart = rings * 9 * 3;
     expect(colours[lumenStart + 1]).toBeCloseTo(1, 3);
     expect(colours[colours.length / 2 + 1]).toBeLessThan(1);
+  });
+
+  it('splits a tube into pieces along its length that share their seam rings', () => {
+    const geometry = tube({ start: false, end: true });
+    const [first, second] = tubePieces(geometry, [20]);
+    const ys = (piece: typeof first.wall) => {
+      const positions = piece.getAttribute('position').array;
+      const values: number[] = [];
+      for (let offset = 1; offset < positions.length; offset += 3) values.push(positions[offset]);
+      return values;
+    };
+    expect(Math.max(...ys(first.wall))).toBeLessThan(21);
+    expect(Math.min(...ys(second.wall))).toBeGreaterThan(18);
+    expect(first.lumen.getAttribute('position').count).toBeGreaterThan(0);
+    expect(first.wall.getAttribute('layer')).toBeUndefined();
+    const seamTop = Math.max(...ys(first.wall));
+    expect(ys(second.wall).some((y) => Math.abs(y - seamTop) < 1e-4)).toBe(true);
+  });
+
+  it('leaves the end rings off when asked', () => {
+    const open = hollowTube({
+      curve: CURVE,
+      fromMm: 0,
+      outer: () => 6,
+      inner: () => 4.5,
+      segmentMm: 3,
+      radialSegments: 16,
+      wallColour: '#ff0000',
+      lumenColour: '#330000',
+      plugInsetMm: 0.4,
+      annuli: { start: false, end: false },
+      plugs: { start: false, end: false },
+    });
+    const closed = tube({ start: false, end: false });
+    expect((closed.getIndex()?.count ?? 0) - (open.getIndex()?.count ?? 0)).toBe(2 * 16 * 6);
   });
 });
