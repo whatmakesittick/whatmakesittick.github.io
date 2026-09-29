@@ -15,7 +15,8 @@ describe('propellants', () => {
   it('splits the mixture 22 to 78 by mass, close to the mixture ratio', () => {
     const { methane, oxygen } = PROPELLANTS;
     expect(methane.massShare + oxygen.massShare).toBeCloseTo(1);
-    expect(oxygen.massShare / methane.massShare).toBeCloseTo(MIXTURE_RATIO, 0);
+    expect(oxygen.massShare / methane.massShare).toBeCloseTo(MIXTURE_RATIO);
+    expect(methane.massShare).toBeCloseTo(0.22, 2);
   });
 
   it('turns kelvin into degrees Celsius', () => {

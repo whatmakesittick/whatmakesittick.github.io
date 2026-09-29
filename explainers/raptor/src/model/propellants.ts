@@ -1,5 +1,5 @@
 import type { PropellantId } from '../ids';
-import { methaneFlow, oxygenFlow } from './performance';
+import { MIXTURE_RATIO, methaneFlow, oxygenFlow } from './performance';
 
 export interface Propellant {
   boilsAtK: number;
@@ -9,9 +9,11 @@ export interface Propellant {
 
 export const KELVIN_OFFSET = 273.15;
 
+const MIXTURE_PARTS = MIXTURE_RATIO + 1;
+
 export const PROPELLANTS: Readonly<Record<PropellantId, Propellant>> = {
-  methane: { boilsAtK: 111, freezesAtK: 90.7, massShare: 0.22 },
-  oxygen: { boilsAtK: 90, freezesAtK: 54, massShare: 0.78 },
+  methane: { boilsAtK: 111, freezesAtK: 90.7, massShare: 1 / MIXTURE_PARTS },
+  oxygen: { boilsAtK: 90, freezesAtK: 54, massShare: MIXTURE_RATIO / MIXTURE_PARTS },
 };
 
 export function toCelsius(kelvin: number): number {

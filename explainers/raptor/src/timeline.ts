@@ -2,7 +2,7 @@ import type { Phase, Timeline } from '@core/explainer';
 import { PHASE_IDS } from './ids';
 import { RUN_LENGTH } from './model';
 import { PHASE_RANGES } from './model/phases';
-import { burnSecondsPerSecond } from './model/playback';
+import { playbackFactor } from './model/playback';
 import {
   JUMP_KEYS,
   PHASE_KEYS,
@@ -37,7 +37,7 @@ export const RAPTOR_TIMELINE: Timeline = {
   phasesLabelKey: 'timeline.phases',
   formatPhase,
   describePhase,
-  rate: burnSecondsPerSecond,
+  rate: playbackFactor,
   phases: LAUNCH_PHASES,
   speed: {
     min: SPEED_RANGE.min,
