@@ -45,14 +45,15 @@ describe('wallRadius', () => {
 });
 
 describe('powerhead', () => {
-  it('keeps the pumps and preburners inside the engine and apart', () => {
+  it('keeps the pumps and preburners inside the engine, each burner hugging its pump', () => {
     for (const side of ['oxygen', 'methane'] as const) {
       const pump = TURBOPUMPS[side];
       const burner = PREBURNERS[side];
       expect(contains(ENGINE_EXTENT, pump.centre)).toBe(true);
       expect(contains(ENGINE_EXTENT, burner.centre)).toBe(true);
       const gap = Math.abs(pump.centre[0] - burner.centre[0]);
-      expect(gap).toBeGreaterThan(pump.radius + burner.radius);
+      expect(gap).toBeGreaterThan(pump.radius);
+      expect(gap).toBeLessThan(pump.radius + burner.radius);
     }
   });
 

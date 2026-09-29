@@ -51,25 +51,25 @@ export const COOLING_CHANNELS = { count: 96, depth: 1 };
 export const BELL_ANGLES = { throat: toRadians(32), exit: toRadians(8) };
 
 export const TURBOPUMPS: Readonly<Record<PumpSide, Canister>> = {
-  oxygen: { centre: [-40, -58, 0], radius: 16, top: -28, bottom: -88 },
-  methane: { centre: [40, -58, 0], radius: 14, top: -30, bottom: -86 },
+  oxygen: { centre: [-33, -57, 0], radius: 13, top: -28, bottom: -86 },
+  methane: { centre: [33, -57, 0], radius: 11, top: -30, bottom: -84 },
 };
 
 export const PREBURNERS: Readonly<Record<PumpSide, Canister>> = {
-  oxygen: { centre: [-66, -64, 0], radius: 9, top: -46, bottom: -82 },
-  methane: { centre: [64, -64, 0], radius: 8, top: -48, bottom: -80 },
+  oxygen: { centre: [-50, -62, 0], radius: 6.5, top: -44, bottom: -80 },
+  methane: { centre: [48, -62, 0], radius: 6, top: -44, bottom: -80 },
 };
 
-export const HOT_GAS_MANIFOLD: Ring = { y: -91, radius: 30, tube: 7 };
+export const HOT_GAS_MANIFOLD: Ring = { y: -91, radius: 26, tube: 6 };
 
 export const INLETS: Readonly<Record<PumpSide, { centre: Point; radius: number }>> = {
-  oxygen: { centre: [-40, -10, 0], radius: 11 },
-  methane: { centre: [40, -10, 0], radius: 9 },
+  oxygen: { centre: [-33, -10, 0], radius: 10 },
+  methane: { centre: [33, -10, 0], radius: 8.5 },
 };
 
 export const ACTUATORS: readonly Strut[] = [
-  { top: [24, 10, 24], bottom: [27, -44, 29] },
-  { top: [-24, 10, 24], bottom: [-27, -44, 29] },
+  { top: [24, 10, 24], bottom: [24, -46, 26] },
+  { top: [-24, 10, 24], bottom: [-24, -46, 26] },
 ];
 
 export const COOLANT_MANIFOLD: Ring = { y: -300, radius: 67, tube: 4 };
@@ -130,26 +130,26 @@ const CHAMBER_CENTRE: Point = [0, -112, 0];
 export const STREAM_PATHS: Readonly<Record<StreamId, readonly (readonly Point[])[]>> = {
   liquidOxygen: [
     [
-      [-40, 14, 0],
-      [-40, -10, 0],
-      [-40, -34, 0],
-      [-54, -40, 0],
-      [-66, -46, 0],
+      [-33, 14, 0],
+      [-33, -10, 0],
+      [-33, -34, 0],
+      [-44, -39, 0],
+      [-50, -44, 0],
     ],
     [
-      [-54, -40, 0],
-      [-34, -16, -12],
-      [30, -16, -12],
-      [64, -48, 0],
+      [-44, -39, 0],
+      [-28, -16, -10],
+      [26, -16, -10],
+      [48, -44, 0],
     ],
   ],
   liquidMethane: [
     [
-      [40, 14, 0],
-      [40, -10, 0],
-      [40, -34, 0],
-      [52, -40, 0],
-      [70, -60, COOLANT_LINE_Z],
+      [33, 14, 0],
+      [33, -10, 0],
+      [33, -34, 0],
+      [44, -39, 0],
+      [50, -58, COOLANT_LINE_Z],
       ...wallPath(
         (y) => wallRadius(y) + COOLANT_LINE_OFFSET,
         COOLANT_LINE_Z,
@@ -157,38 +157,38 @@ export const STREAM_PATHS: Readonly<Record<StreamId, readonly (readonly Point[])
         COOLANT_MANIFOLD.y,
       ),
       ...wallPath((y) => wallRadius(y) + CHANNEL_OFFSET, 0, COOLANT_MANIFOLD.y, INJECTOR.y - 3),
-      [48, -100, 0],
-      [74, -90, 0],
-      [74, -50, 0],
-      [64, -48, 0],
+      [40, -100, 0],
+      [57, -90, 0],
+      [57, -50, 0],
+      [48, -44, 0],
     ],
     [
-      [52, -40, 0],
-      [30, -22, -6],
-      [-34, -22, -6],
-      [-66, -46, 0],
+      [44, -39, 0],
+      [26, -22, -6],
+      [-28, -22, -6],
+      [-50, -44, 0],
     ],
   ],
   oxygenRichGas: [
     [
-      [-66, -46, 0],
-      [-66, -80, 0],
-      [-50, -86, 0],
-      [-40, -82, 0],
-      [-34, -91, 0],
-      [-20, -93, 0],
+      [-50, -44, 0],
+      [-50, -78, 0],
+      [-41, -85, 0],
+      [-33, -80, 0],
+      [-27, -90, 0],
+      [-17, -93, 0],
       [-8, -97, 0],
       CHAMBER_CENTRE,
     ],
   ],
   methaneRichGas: [
     [
-      [64, -48, 0],
-      [64, -80, 0],
-      [50, -84, 0],
-      [40, -80, 0],
-      [34, -91, 0],
-      [20, -93, 0],
+      [48, -44, 0],
+      [48, -78, 0],
+      [40, -84, 0],
+      [33, -79, 0],
+      [27, -90, 0],
+      [17, -93, 0],
       [8, -97, 0],
       CHAMBER_CENTRE,
     ],
