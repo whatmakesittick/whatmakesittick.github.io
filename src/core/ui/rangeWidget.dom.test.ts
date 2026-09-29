@@ -122,6 +122,23 @@ describe('mountRangeWidget', () => {
     expect(store.getState().level).toBe(1);
   });
 
+  it('refreshes at most once per interval and shows the latest state', () => {
+    vi.useFakeTimers();
+    const store = createLevelStore();
+    const unmount = mountRangeWidget(document, store, levelOptions({ refreshIntervalMs: 33 }));
+    expect(text('level')).toBe('4 units');
+    store.getState().setLevel(5);
+    store.getState().setLevel(6);
+    expect(text('level')).toBe('4 units');
+    vi.advanceTimersByTime(33);
+    expect(text('level')).toBe('6 units');
+    store.getState().setLevel(7);
+    unmount();
+    vi.advanceTimersByTime(33);
+    expect(text('level')).toBe('6 units');
+    vi.useRealTimers();
+  });
+
   it('requires a range widget around the control', () => {
     document.body.innerHTML = '<input id="level" type="range" data-control="level" />';
     expect(() => mountRangeWidget(document, createLevelStore(), levelOptions())).toThrow(

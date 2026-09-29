@@ -403,16 +403,17 @@ slider with a value and readouts:
 </div>
 ```
 
-| Option     | Role                                                                       |
-| ---------- | -------------------------------------------------------------------------- |
-| `control`  | The slider's `data-control` value                                          |
-| `range`    | `min`, `max` and `step` of the slider                                      |
-| `select`   | A tuple from the store, compared shallowly; a change re-renders the widget |
-| `value`    | The slider position for the selected tuple                                 |
-| `format`   | Text for the `<output for>` and the slider's `aria-valuetext`              |
-| `set`      | Writes the slider position to the store on input                           |
-| `readouts` | Optional `data-readout` id to text, looked up inside the widget            |
-| `after`    | Optional hook with the tuple, the state and the widget element, run last   |
+| Option              | Role                                                                       |
+| ------------------- | -------------------------------------------------------------------------- |
+| `control`           | The slider's `data-control` value                                          |
+| `range`             | `min`, `max` and `step` of the slider                                      |
+| `select`            | A tuple from the store, compared shallowly; a change re-renders the widget |
+| `value`             | The slider position for the selected tuple                                 |
+| `format`            | Text for the `<output for>` and the slider's `aria-valuetext`              |
+| `set`               | Writes the slider position to the store on input                           |
+| `readouts`          | Optional `data-readout` id to text, looked up inside the widget            |
+| `after`             | Optional hook with the tuple, the state and the widget element, run last   |
+| `refreshIntervalMs` | Optional; renders at most once per interval while the tuple keeps changing |
 
 The widget re-renders on mount, when the tuple changes and when the language
 changes. It needs the slider and the `.range-widget` around it; the output, the

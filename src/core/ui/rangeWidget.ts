@@ -3,6 +3,7 @@ import { requireElement, setText } from './dom';
 import { configureRange, showRangeValue } from './range';
 import type { NumericRange } from './range';
 import { watchShallowLocalized } from './subscribe';
+import { throttle } from './throttle';
 import type { Selector } from './subscribe';
 
 const WIDGET_SELECTOR = '.range-widget';
@@ -18,6 +19,7 @@ export interface RangeWidgetOptions<S extends Playback, T extends readonly unkno
   set(state: S, value: number): void;
   readouts?: Readonly<Record<string, RangeReadout<S, T>>>;
   after?(selected: T, state: S, widget: HTMLElement): void;
+  refreshIntervalMs?: number;
 }
 
 interface RangeWidgetElements<S, T> {
@@ -68,10 +70,15 @@ export function mountRangeWidget<S extends Playback, T extends readonly unknown[
 
   configureRange(input, options.range);
   input.addEventListener('input', onInput);
-  const stopWatching = watchShallowLocalized(store, options.select, (selected) =>
-    render(elements, options, selected, store.getState()),
-  );
+  let mounted = true;
+  const show = (selected: T) => {
+    if (mounted) render(elements, options, selected, store.getState());
+  };
+  const listener =
+    options.refreshIntervalMs === undefined ? show : throttle(show, options.refreshIntervalMs);
+  const stopWatching = watchShallowLocalized(store, options.select, listener);
   return () => {
+    mounted = false;
     input.removeEventListener('input', onInput);
     stopWatching();
   };
