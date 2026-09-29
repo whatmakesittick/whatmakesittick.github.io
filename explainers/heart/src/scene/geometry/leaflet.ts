@@ -1,4 +1,5 @@
 import { Vector3 } from 'three';
+import type { Field } from './field';
 import { annulusPoint, ease, planDirection, sheetIndex } from './valveFrame';
 import type { AnnulusLift, RingFrame } from './valveFrame';
 
@@ -25,9 +26,22 @@ export interface FlapShape {
   readonly appositionMm: number;
   readonly openTilt: number;
   readonly openBellyMm: number;
+  readonly ledgeMm: number;
+  readonly ledgeShare: number;
   readonly tongue: number;
   readonly cleftDepth: number;
   readonly cleftWidth: number;
+}
+
+export interface LeafletGuard {
+  readonly cavity: Field;
+  readonly clearanceMm: number;
+  readonly rampRows: number;
+  readonly stepMm: number;
+  readonly reachMm: number;
+  readonly fullAtOpening: number;
+  readonly smoothing: number;
+  readonly maxLeanMm: number;
 }
 
 export interface FlapValve {
@@ -35,6 +49,7 @@ export interface FlapValve {
   readonly lift: AnnulusLift;
   readonly leaflets: readonly FlapSpec[];
   readonly shape: FlapShape;
+  readonly guard?: LeafletGuard;
 }
 
 interface Seam {
@@ -177,9 +192,11 @@ function openPoint(valve: FlapValve, column: ColumnFrame, row: number, out: Vect
     .clone()
     .multiplyScalar(Math.cos(shape.openTilt))
     .addScaledVector(column.inward, Math.sin(shape.openTilt));
+  const ledge = shape.ledgeMm * ease(share / shape.ledgeShare);
   return out
     .copy(column.hinge)
     .addScaledVector(direction, column.depth * share)
+    .addScaledVector(column.inward, ledge)
     .addScaledVector(column.inward, -shape.openBellyMm * Math.sin(Math.PI * share) * column.weight);
 }
 
@@ -240,26 +257,79 @@ export function flapIndex(valve: FlapValve, leaflet: number): number[] {
   return sheetIndex(flapColumns(valve, leaflet), valve.shape.rows);
 }
 
+function inwardShift(guard: LeafletGuard, point: Vector3, inward: Vector3): number {
+  const probe = new Vector3();
+  for (let shift = 0; shift <= guard.reachMm; shift += guard.stepMm) {
+    probe.copy(point).addScaledVector(inward, shift);
+    if (guard.cavity.distance(probe.x, probe.y, probe.z) + guard.clearanceMm <= 0) return shift;
+  }
+  return guard.reachMm;
+}
+
+const LEAN_FULL_SHARE = 0.4;
+
+export function leanProfile(share: number): number {
+  return ease(share / LEAN_FULL_SHARE);
+}
+
+function columnLean(guard: LeafletGuard, points: readonly Vector3[], inward: Vector3): number {
+  const rows = points.length - 1;
+  let lean = 0;
+  for (let row = guard.rampRows; row <= rows; row += 1) {
+    lean = Math.max(lean, inwardShift(guard, points[row], inward) / leanProfile(row / rows));
+  }
+  return Math.min(lean, guard.maxLeanMm);
+}
+
+export function spreadLeans(leans: readonly number[], passes: number): number[] {
+  let current = leans.map((lean, index) =>
+    Math.max(lean, leans[index - 1] ?? 0, leans[index + 1] ?? 0),
+  );
+  for (let pass = 0; pass < passes; pass += 1) {
+    current = current.map((lean, index) => {
+      const before = current[index - 1] ?? lean;
+      const after = current[index + 1] ?? lean;
+      return Math.max(lean, (before + 2 * lean + after) / 4);
+    });
+  }
+  return current;
+}
+
 export function writeFlap(
   valve: FlapValve,
   leaflet: number,
   opening: number,
   target: Float32Array,
 ): void {
-  const { shape } = valve;
+  const { shape, guard } = valve;
   const all = seams(valve);
   const amount = ease(opening);
-  const point = new Vector3();
   const columns = flapColumns(valve, leaflet);
+  const frames = Array.from({ length: columns + 1 }, (_, column) =>
+    columnFrame(valve, all, leaflet, column / columns),
+  );
+  const grid = frames.map((frame) =>
+    Array.from({ length: shape.rows + 1 }, (_, row) =>
+      columnPoint(valve, frame, row, amount, new Vector3()),
+    ),
+  );
+  const strength = guard ? ease(opening / guard.fullAtOpening) : 0;
+  const leans =
+    guard && strength > 0
+      ? spreadLeans(
+          grid.map((points, column) => columnLean(guard, points, frames[column].inward)),
+          guard.smoothing,
+        )
+      : grid.map(() => 0);
   let offset = 0;
-  for (let column = 0; column <= columns; column += 1) {
-    const frame = columnFrame(valve, all, leaflet, column / columns);
-    for (let row = 0; row <= shape.rows; row += 1) {
-      columnPoint(valve, frame, row, amount, point);
+  grid.forEach((points, column) => {
+    points.forEach((point, row) => {
+      const lean = leans[column] * strength * leanProfile(row / shape.rows);
+      point.addScaledVector(frames[column].inward, lean);
       target[offset] = point.x;
       target[offset + 1] = point.y;
       target[offset + 2] = point.z;
       offset += XYZ;
-    }
-  }
+    });
+  });
 }

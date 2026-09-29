@@ -1,6 +1,7 @@
 import { Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import {
+  spreadLeans,
   closedEdge,
   flapColumns,
   flapIndex,
@@ -12,6 +13,7 @@ import {
   writeFlap,
 } from './leaflet';
 import type { FlapShape, FlapValve } from './leaflet';
+import { ellipsoid } from './field';
 import { FLAT, ringFrame } from './valveFrame';
 
 const THIRD = (Math.PI * 2) / 3;
@@ -31,6 +33,8 @@ const SHAPE: FlapShape = {
   appositionMm: 0.35,
   openTilt: 0.18,
   openBellyMm: 1.5,
+  ledgeMm: 0,
+  ledgeShare: 0.25,
   tongue: 0.7,
   cleftDepth: 0.5,
   cleftWidth: 0.05,
@@ -148,5 +152,33 @@ describe('atrioventricular leaflets', () => {
     expect(flapIndex(MITRAL, POSTERIOR)).toHaveLength(
       flapColumns(MITRAL, POSTERIOR) * SHAPE.rows * 6,
     );
+  });
+
+  it('leans the columns inward to keep clear of a wall and spreads the lean smoothly', () => {
+    const wall = ellipsoid([0, -10, 0], [15.5, 30, 15.5]);
+    const guarded: FlapValve = {
+      ...MITRAL,
+      guard: {
+        cavity: wall,
+        clearanceMm: 3,
+        rampRows: 2,
+        stepMm: 0.25,
+        reachMm: 14,
+        fullAtOpening: 0.4,
+        smoothing: 3,
+        maxLeanMm: 9,
+      },
+    };
+    const target = new Float32Array(flapVertexCount(guarded, POSTERIOR) * 3);
+    writeFlap(guarded, POSTERIOR, 1, target);
+    const rows = SHAPE.rows;
+    for (let column = 0; column <= flapColumns(guarded, POSTERIOR); column += 1) {
+      const offset = (column * (rows + 1) + rows) * 3;
+      expect(
+        wall.distance(target[offset], target[offset + 1], target[offset + 2]),
+      ).toBeLessThanOrEqual(-2.6);
+    }
+    expect(spreadLeans([0, 0, 4, 0, 0], 2)[1]).toBeGreaterThan(1);
+    expect(spreadLeans([0, 0, 4, 0, 0], 2)[2]).toBe(4);
   });
 });

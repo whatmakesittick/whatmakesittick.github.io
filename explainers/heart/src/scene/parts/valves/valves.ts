@@ -2,10 +2,11 @@ import { Group } from 'three';
 import type { Object3D } from 'three';
 import { VALVE_IDS } from '../../../ids';
 import type { ValveId } from '../../../ids';
-import { SOUNDS, heartSound, shareOf, valveOpening, wrapTime } from '../../../model';
-import { VALVE_DESIGN } from '../../constants';
+import { SOUNDS, VALVES, heartSound, shareOf, valveOpening, wrapTime } from '../../../model';
+import { VALVE_DESIGN, VALVE_DETAIL } from '../../constants';
 import type { Contraction } from '../../geometry/contraction';
-import type { Field } from '../../geometry/field';
+import { cylinder, union } from '../../geometry/field';
+import type { Field, Vec3 } from '../../geometry/field';
 import type { PartContext } from '../context';
 import { ChordaePart } from './chordae';
 import { ValvePart } from './valve';
@@ -13,6 +14,22 @@ import { ValvePart } from './valve';
 const ATRIOVENTRICULAR: readonly ValveId[] = ['tricuspid', 'mitral'];
 const SOUND_VALVES = { s1: ATRIOVENTRICULAR, s2: ['aortic', 'pulmonary'] } as const;
 const LABELLED_VALVE: ValveId = 'mitral';
+
+export function guardField(id: ValveId, cavity: Field): Field {
+  const { centre, normal, radius } = VALVES[id];
+  const size = Math.hypot(...normal);
+  const along = (distance: number): Vec3 => [
+    centre[0] + (normal[0] / size) * distance,
+    centre[1] + (normal[1] / size) * distance,
+    centre[2] + (normal[2] / size) * distance,
+  ];
+  const orifice = cylinder(
+    along(-VALVE_DETAIL.guardNeckUpMm),
+    along(VALVE_DETAIL.guardNeckDownMm),
+    radius - VALVE_DETAIL.guardNeckInsetMm,
+  );
+  return union([cavity, orifice]);
+}
 
 export class ValvesPart {
   readonly object = new Group();
@@ -24,8 +41,12 @@ export class ValvesPart {
     cavities: Readonly<Record<'left' | 'right', Field>>,
     motion: Contraction,
   ) {
+    const cavityOf: Partial<Record<ValveId, Field>> = {
+      mitral: cavities.left,
+      tricuspid: cavities.right,
+    };
     for (const id of VALVE_IDS) {
-      const valve = new ValvePart(context, id, VALVE_DESIGN[id]);
+      const valve = new ValvePart(context, id, VALVE_DESIGN[id], cavityOf[id]);
       this.valves.set(id, valve);
       this.object.add(valve.object);
     }

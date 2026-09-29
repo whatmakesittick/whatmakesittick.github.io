@@ -9,7 +9,10 @@ import type { CuspValveDesign, FlapValveDesign, ValveDesign } from '../../consta
 import { FINISHES } from '../../finishes';
 import { crownLift, cuspIndex, cuspVertexCount, writeCusp } from '../../geometry/cusp';
 import type { CuspValve } from '../../geometry/cusp';
-import { flapIndex, flapPoint, flapVertexCount, writeFlap } from '../../geometry/leaflet';
+import { flapColumns, flapIndex, flapVertexCount, writeFlap } from '../../geometry/leaflet';
+import type { Field } from '../../geometry/field';
+import { openRim, thicken, thickLayout } from '../../geometry/thickSheet';
+import type { Edge, ThickLayout } from '../../geometry/thickSheet';
 import type { FlapValve } from '../../geometry/leaflet';
 import { clipCapacity, clipSheet } from '../../geometry/clipSheet';
 import { FRONTAL_PLANE, insertPlane, sideFilter, subsetGeometry } from '../../geometry/planeCut';
@@ -31,7 +34,18 @@ export interface CordAttachment {
 interface Sheets {
   readonly counts: readonly number[];
   readonly indices: readonly (readonly number[])[];
+  readonly grids: readonly { readonly columns: number; readonly rows: number }[];
   write(sheet: number, opening: number, target: Float32Array): void;
+}
+
+function sheetLayout(sheets: Sheets, sheet: BufferGeometry): ThickLayout {
+  const edges: Edge[] = [];
+  let start = 0;
+  sheets.grids.forEach((grid, which) => {
+    edges.push(...openRim({ start, columns: grid.columns, rows: grid.rows }));
+    start += sheets.counts[which];
+  });
+  return thickLayout(sheet.getIndex()?.array ?? [], start, edges);
 }
 
 function sheetGeometry(sheets: Sheets): BufferGeometry {
@@ -48,8 +62,45 @@ function sheetGeometry(sheets: Sheets): BufferGeometry {
   return geometry;
 }
 
-function displayGeometry(sheet: BufferGeometry): BufferGeometry {
-  const capacity = clipCapacity(sheet.getIndex()?.count ?? 0);
+function sheetStarts(sheets: Sheets): number[] {
+  const starts: number[] = [];
+  let start = 0;
+  for (const count of sheets.counts) {
+    starts.push(start);
+    start += count;
+  }
+  return starts;
+}
+
+function keyframesOf(sheets: Sheets, vertexCount: number): Float32Array[] {
+  const starts = sheetStarts(sheets);
+  return Array.from({ length: VALVE_DETAIL.openingKeyframes + 1 }, (_, frame) => {
+    const positions = new Float32Array(vertexCount * XYZ);
+    const opening = frame / VALVE_DETAIL.openingKeyframes;
+    sheets.counts.forEach((_, sheet) =>
+      sheets.write(sheet, opening, positions.subarray(starts[sheet] * XYZ)),
+    );
+    return positions;
+  });
+}
+
+function blendKeyframes(
+  keyframes: readonly Float32Array[],
+  opening: number,
+  target: Float32Array,
+): void {
+  const last = keyframes.length - 1;
+  const at = Math.min(Math.max(opening, 0), 1) * last;
+  const before = Math.min(Math.floor(at), last - 1);
+  const share = at - before;
+  const [from, to] = [keyframes[before], keyframes[before + 1]];
+  for (let offset = 0; offset < target.length; offset += 1) {
+    target[offset] = from[offset] + (to[offset] - from[offset]) * share;
+  }
+}
+
+function displayGeometry(layout: ThickLayout): BufferGeometry {
+  const capacity = clipCapacity(layout.index.length);
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new BufferAttribute(new Float32Array(capacity * XYZ), XYZ));
   geometry.setAttribute('normal', new BufferAttribute(new Float32Array(capacity * XYZ), XYZ));
@@ -67,12 +118,29 @@ function ringHalves(ring: BufferGeometry): { front: BufferGeometry; back: Buffer
   return halves;
 }
 
-function flapValve(frame: RingFrame, design: FlapValveDesign): FlapValve {
+export function flapValve(
+  ring: RingFrame,
+  design: FlapValveDesign,
+  cavity: Field | undefined,
+): FlapValve {
+  const frame = { ...ring, radius: ring.radius - VALVE_DETAIL.hingeInsetMm };
   return {
     frame,
     lift: saddle(design.saddleMm, design.saddlePeak),
     leaflets: design.leaflets,
     shape: design.shape,
+    guard: cavity
+      ? {
+          cavity,
+          clearanceMm: VALVE_DETAIL.leafletClearanceMm,
+          rampRows: VALVE_DETAIL.guardRampRows,
+          stepMm: VALVE_DETAIL.guardStepMm,
+          reachMm: VALVE_DETAIL.guardReachMm,
+          fullAtOpening: VALVE_DETAIL.guardFullAtOpening,
+          smoothing: VALVE_DETAIL.guardSmoothing,
+          maxLeanMm: VALVE_DETAIL.guardMaxLeanMm,
+        }
+      : undefined,
   };
 }
 
@@ -81,6 +149,10 @@ function flapSheets(valve: FlapValve): Sheets {
   return {
     counts: leaflets.map((leaflet) => flapVertexCount(valve, leaflet)),
     indices: leaflets.map((leaflet) => flapIndex(valve, leaflet)),
+    grids: leaflets.map((leaflet) => ({
+      columns: flapColumns(valve, leaflet),
+      rows: valve.shape.rows,
+    })),
     write: (sheet, opening, target) => writeFlap(valve, sheet, opening, target),
   };
 }
@@ -90,6 +162,7 @@ function cuspSheets(valve: CuspValve): Sheets {
   return {
     counts: cusps.map(() => cuspVertexCount(valve.shape)),
     indices: cusps.map(() => cuspIndex(valve.shape)),
+    grids: cusps.map(() => ({ columns: valve.shape.columns, rows: valve.shape.rows })),
     write: (sheet, opening, target) => writeCusp(valve, sheet, opening, target),
   };
 }
@@ -106,16 +179,21 @@ export class ValvePart {
   private readonly frontRing: Mesh | null;
   private readonly sheet: BufferGeometry;
   private readonly sheets: Sheets;
+  private readonly layout: ThickLayout;
+  private readonly thickPositions: Float32Array;
+  private readonly thickNormals: Float32Array;
+  private readonly keyframes: Float32Array[];
+  private readonly starts: number[];
   private readonly pulse = new Color(VALVE_DETAIL.pulseColour);
   private opening = Number.NaN;
   private cut = false;
 
-  constructor(context: PartContext, id: ValveId, design: ValveDesign) {
+  constructor(context: PartContext, id: ValveId, design: ValveDesign, cavity?: Field) {
     this.id = id;
     this.design = design;
     const { normal, radius } = VALVES[id];
     this.frame = ringFrame(ringCentre(id), normal, radius);
-    this.flap = design.kind === 'flap' ? flapValve(this.frame, design) : null;
+    this.flap = design.kind === 'flap' ? flapValve(this.frame, design, cavity) : null;
     this.sheets = this.flap
       ? flapSheets(this.flap)
       : cuspSheets(this.cuspValve(design as CuspValveDesign));
@@ -137,7 +215,12 @@ export class ValvePart {
       this.rings = [partMesh(context, ring, group, FINISHES.ring)];
     }
     this.sheet = context.tracker.track(sheetGeometry(this.sheets));
-    this.leaflets = partMesh(context, displayGeometry(this.sheet), group, FINISHES.leaflet);
+    this.starts = sheetStarts(this.sheets);
+    this.keyframes = keyframesOf(this.sheets, this.sheet.getAttribute('position').count);
+    this.layout = sheetLayout(this.sheets, this.sheet);
+    this.thickPositions = new Float32Array(this.layout.vertexCount * XYZ);
+    this.thickNormals = new Float32Array(this.layout.vertexCount * XYZ);
+    this.leaflets = partMesh(context, displayGeometry(this.layout), group, FINISHES.leaflet);
     this.leaflets.name = LEAFLETS_NAME;
     this.object.add(...this.rings, this.leaflets);
     const { x, y, z } = this.frame.centre;
@@ -149,11 +232,7 @@ export class ValvePart {
     if (opening === this.opening) return;
     this.opening = opening;
     const positions = this.sheet.getAttribute('position').array as Float32Array;
-    let start = 0;
-    this.sheets.counts.forEach((count, sheet) => {
-      this.sheets.write(sheet, opening, positions.subarray(start * XYZ));
-      start += count;
-    });
+    blendKeyframes(this.keyframes, opening, positions);
     this.sheet.getAttribute('position').needsUpdate = true;
     this.sheet.computeVertexNormals();
     this.sheet.computeBoundingSphere();
@@ -173,14 +252,18 @@ export class ValvePart {
   }
 
   attachmentPoint(attachment: CordAttachment, out: Vector3): Vector3 {
-    if (!this.flap) return out.copy(this.frame.centre);
-    return flapPoint(
-      this.flap,
-      attachment.leaflet,
-      attachment.share,
-      attachment.row,
-      this.opening,
-      out,
+    const grid = this.sheets.grids[attachment.leaflet];
+    const positions = this.sheet.getAttribute('position').array;
+    const column = attachment.share * grid.columns;
+    const before = Math.min(Math.floor(column), grid.columns - 1);
+    const share = column - before;
+    const vertex = (at: number) =>
+      (this.starts[attachment.leaflet] + at * (grid.rows + 1) + attachment.row) * XYZ;
+    const [a, b] = [vertex(before), vertex(before + 1)];
+    return out.set(
+      positions[a] + (positions[b] - positions[a]) * share,
+      positions[a + 1] + (positions[b + 1] - positions[a + 1]) * share,
+      positions[a + 2] + (positions[b + 2] - positions[a + 2]) * share,
     );
   }
 
@@ -188,12 +271,16 @@ export class ValvePart {
     const display = this.leaflets.geometry;
     const positions = display.getAttribute('position');
     const normals = display.getAttribute('normal');
+    thicken(
+      this.layout,
+      this.sheet.getAttribute('position').array,
+      this.sheet.getAttribute('normal').array,
+      VALVE_DETAIL.leafletHalfThicknessMm,
+      this.thickPositions,
+      this.thickNormals,
+    );
     const count = clipSheet(
-      {
-        positions: this.sheet.getAttribute('position').array,
-        normals: this.sheet.getAttribute('normal').array,
-        index: this.sheet.getIndex()?.array ?? [],
-      },
+      { positions: this.thickPositions, normals: this.thickNormals, index: this.layout.index },
       this.cut ? CUT_PLANE_Z : null,
       { positions: positions.array as Float32Array, normals: normals.array as Float32Array },
     );
