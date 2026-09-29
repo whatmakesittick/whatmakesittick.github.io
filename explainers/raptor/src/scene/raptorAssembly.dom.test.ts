@@ -132,7 +132,7 @@ describe('raptor assembly', () => {
     expect(Math.abs(tilted.z)).toBeGreaterThan(1);
   });
 
-  it('lights the plume only while the engine runs and flickers it', () => {
+  it('lights the plume while the engine runs and flickers it only while playing', () => {
     const [plume] = objectsOf(isMesh, 'plume').filter(
       (mesh) => mesh.material instanceof ShaderMaterial && !(mesh instanceof InstancedMesh),
     );
@@ -141,10 +141,12 @@ describe('raptor assembly', () => {
     expect(assembly.update(FRAME, 500)).toBe(false);
     assembly.setState(STATE);
     expect(isShown(plume)).toBe(true);
+    expect(assembly.update(FRAME, 500)).toBe(false);
+    assembly.setState({ ...STATE, playing: true });
     expect(assembly.update(FRAME, 500)).toBe(true);
     assembly.setState({ ...STATE, view: { ...STATE.view, flame: false } });
     expect(isShown(plume)).toBe(false);
-    assembly.setState({ ...STATE, phase: phaseAt(CUTOFF_TIME + 1.5) });
+    assembly.setState({ ...STATE, playing: true, phase: phaseAt(CUTOFF_TIME + 1.5) });
     expect(assembly.update(FRAME, 500)).toBe(false);
   });
 

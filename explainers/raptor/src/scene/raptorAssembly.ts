@@ -81,6 +81,7 @@ export class RaptorAssembly implements Assembly {
   private readonly sky: SkyDomePart;
   private readonly spinAngle: Record<PumpSide, number> = { oxygen: 0, methane: 0 };
   private phase: number | null = null;
+  private playing = false;
 
   constructor(resources: AssemblyResources, state: AssemblyState) {
     this.materials = resources.materials;
@@ -139,6 +140,7 @@ export class RaptorAssembly implements Assembly {
   }
 
   setState(state: AssemblyState): void {
+    this.playing = state.playing;
     const engine = engineState(state.phase);
     const shape = plumeShape(engine.throttle, engine.airPressurePa);
     const cut = state.view.cutaway;
@@ -166,11 +168,12 @@ export class RaptorAssembly implements Assembly {
   }
 
   update(deltaSeconds: number, _cameraDistance: number): boolean {
-    const moving =
+    const burning =
       this.plume.lit ||
       this.chamberFlame.mesh.visible ||
       this.preburnerFlames.oxygen.mesh.visible ||
       this.preburnerFlames.methane.mesh.visible;
+    const moving = this.playing && burning;
     if (moving) this.plume.advance(deltaSeconds);
     return moving;
   }
