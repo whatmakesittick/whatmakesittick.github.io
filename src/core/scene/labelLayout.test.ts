@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TEXT_OFFSET_PX, TEXT_RISE_PX, layoutLabels } from './labelLayout';
+import { MAX_SHIFT_PX, TEXT_OFFSET_PX, TEXT_RISE_PX, layoutLabels } from './labelLayout';
 import type { LabelBounds, LabelBox, Placement, Rect } from './labelLayout';
 
 const bounds = { width: 400, height: 400, bottomInset: 0 };
@@ -180,6 +180,105 @@ describe('layoutLabels', () => {
     pills.forEach((a, index) => {
       keepOut.forEach((area) => expect(overlaps(a, area)).toBe(false));
       pills.slice(index + 1).forEach((b) => expect(overlaps(a, b)).toBe(false));
+    });
+  });
+
+  it('hides a label instead of pushing it far from its dot', () => {
+    const wall = { left: 60, right: 190, top: 0, bottom: 300 };
+    const narrow = { ...bounds, width: 250, keepOut: [wall] };
+    const placements = layoutLabels([box('far', 200, 100, 'left')], narrow);
+    expect(placements.get('far')?.hidden).toBe(true);
+  });
+
+  it('still shifts a label as far as the cap allows', () => {
+    const wall = { left: 60, right: 190, top: 0, bottom: 150 };
+    const narrow = { ...bounds, width: 250, keepOut: [wall] };
+    const placements = layoutLabels([box('near', 200, 100, 'left')], narrow);
+    expect(placements.get('near')?.hidden).toBeUndefined();
+    expect(Math.abs(placements.get('near')?.shift ?? 0)).toBeLessThanOrEqual(MAX_SHIFT_PX);
+  });
+
+  describe('with earlier placements', () => {
+    const previous = (id: string, placement: Placement) => new Map([[id, placement]]);
+
+    it('keeps the side it already holds when the other side is only a little nearer', () => {
+      const own = { left: 228, right: 308, top: 60, bottom: 96 };
+      const other = { left: 60, right: 190, top: 80, bottom: 96 };
+      const placements = layoutLabels(
+        [box('held', 200, 100, 'left')],
+        { ...bounds, keepOut: [own, other] },
+        previous('held', { side: 'right', shift: 0 }),
+      );
+      expect(placements.get('held')?.side).toBe('right');
+    });
+
+    it('goes back to its preferred side once that is clearly free', () => {
+      const placements = layoutLabels(
+        [box('home', 200, 100, 'left')],
+        bounds,
+        previous('home', { side: 'right', shift: 30 }),
+      );
+      expect(placements.get('home')).toEqual({ side: 'left', shift: 0 });
+    });
+
+    it('keeps its shift while that spot stays free and home is taken', () => {
+      const blocker = { left: 60, right: 190, top: 70, bottom: 96 };
+      const placements = layoutLabels(
+        [box('kept', 200, 100)],
+        { ...bounds, keepOut: [blocker] },
+        previous('kept', { side: 'left', shift: 40 }),
+      );
+      expect(placements.get('kept')).toEqual({ side: 'left', shift: 40 });
+    });
+
+    it('stays shifted while home is free only barely', () => {
+      const blocker = { left: 60, right: 190, top: 40, bottom: 64 };
+      const placements = layoutLabels(
+        [box('wary', 200, 100)],
+        { ...bounds, keepOut: [blocker] },
+        previous('wary', { side: 'left', shift: 40 }),
+      );
+      expect(placements.get('wary')?.shift).toBe(40);
+    });
+
+    it('settles back home once there is clear room', () => {
+      const blocker = { left: 60, right: 190, top: 40, bottom: 52 };
+      const placements = layoutLabels(
+        [box('calm', 200, 100)],
+        { ...bounds, keepOut: [blocker] },
+        previous('calm', { side: 'left', shift: 40 }),
+      );
+      expect(placements.get('calm')).toEqual({ side: 'left', shift: 0 });
+    });
+
+    it('moves to the nearest free spot when the held spot is taken', () => {
+      const blockers = [
+        { left: 60, right: 190, top: 70, bottom: 96 },
+        { left: 60, right: 190, top: 110, bottom: 140 },
+      ];
+      const placements = layoutLabels(
+        [box('moved', 200, 100)],
+        { ...bounds, keepOut: blockers },
+        previous('moved', { side: 'left', shift: 40 }),
+      );
+      const placement = placements.get('moved');
+      expect(placement?.hidden).toBeUndefined();
+      expect(placement?.shift).not.toBe(40);
+      if (placement)
+        blockers.forEach((area) =>
+          expect(overlaps(pill(box('moved', 200, 100), placement), area)).toBe(false),
+        );
+    });
+
+    it('ignores a hidden earlier placement', () => {
+      const blocker = { left: 60, right: 190, top: 70, bottom: 96 };
+      const fresh = layoutLabels([box('back', 200, 100)], { ...bounds, keepOut: [blocker] });
+      const after = layoutLabels(
+        [box('back', 200, 100)],
+        { ...bounds, keepOut: [blocker] },
+        previous('back', { side: 'left', shift: 0, hidden: true }),
+      );
+      expect(after.get('back')).toEqual(fresh.get('back'));
     });
   });
 });

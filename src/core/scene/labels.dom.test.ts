@@ -165,4 +165,31 @@ describe('LabelLayer', () => {
     expect(element.classList.contains('scene-label--crowded')).toBe(false);
     layer.dispose();
   });
+
+  it('glides only while a label keeps its side', () => {
+    const { resize, texts } = stubResizeObserver();
+    const layer = new LabelLayer(PARTS);
+    const wheel = new Object3D();
+    wheel.updateMatrixWorld();
+    layer.attach(new Map([['wheel', wheel]]));
+    layer.setViewport({ ...VIEWPORT, width: 300 });
+    layer.show(new Set(['wheel']));
+    resize([{ target: texts[0], borderBoxSize: [{ inlineSize: 80, blockSize: 22 }] }]);
+    const camera = frontCamera();
+    const element = (wheel.children[0] as unknown as { element: HTMLElement }).element;
+    const glide = () => element.classList.contains('scene-label--glide');
+    layer.setKeepOut([{ left: 0, right: 200, top: 100, bottom: 170 }]);
+    layer.layout(camera);
+    expect(sideOf(wheel)).toBe('left');
+    expect(glide()).toBe(false);
+    layer.setKeepOut([]);
+    layer.layout(camera);
+    expect(glide()).toBe(true);
+    layer.setViewport(VIEWPORT);
+    layer.setKeepOut([{ left: 0, right: 200, top: 0, bottom: 300 }]);
+    layer.layout(camera);
+    expect(sideOf(wheel)).toBe('right');
+    expect(glide()).toBe(false);
+    layer.dispose();
+  });
 });

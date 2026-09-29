@@ -20,6 +20,7 @@ const DEGREES_PER_RADIAN = 180 / Math.PI;
 const UNMEASURED: TextSize = { width: 0, height: 0 };
 const CLIP_RANGE = 1;
 const CROWDED_CLASS = 'scene-label--crowded';
+const GLIDE_CLASS = 'scene-label--glide';
 const SIDE_CLASS: Record<LabelSide, string> = {
   left: 'scene-label--left',
   right: 'scene-label--right',
@@ -29,8 +30,13 @@ function samePlacement(a: Placement | undefined, b: Placement): boolean {
   return a?.side === b.side && a.shift === b.shift && a.hidden === b.hidden;
 }
 
-function applyPlacement(element: HTMLElement, placement: Placement): void {
+function glides(previous: Placement | undefined, next: Placement): boolean {
+  return previous !== undefined && previous.hidden === undefined && previous.side === next.side;
+}
+
+function applyPlacement(element: HTMLElement, placement: Placement, glide: boolean): void {
   element.classList.toggle(CROWDED_CLASS, placement.hidden === true);
+  element.classList.toggle(GLIDE_CLASS, glide);
   setSide(element, placement.side);
   const dx = placement.side === 'right' ? TEXT_OFFSET_PX : -TEXT_OFFSET_PX;
   const dy = placement.shift - TEXT_RISE_PX;
@@ -200,12 +206,11 @@ export class LabelLayer {
       boxes.push({ id, anchor, width, height, preferred: this.parts[id].side, rank });
     });
     const { width, height, safe } = this.viewport;
-    const placements = layoutLabels(boxes, {
-      width,
-      height,
-      bottomInset: safe.bottom,
-      keepOut: this.keepOut,
-    });
+    const placements = layoutLabels(
+      boxes,
+      { width, height, bottomInset: safe.bottom, keepOut: this.keepOut },
+      this.placements,
+    );
     placements.forEach((placement, id) => this.place(id, placement));
   }
 
@@ -218,9 +223,10 @@ export class LabelLayer {
 
   private place(id: string, placement: Placement): void {
     const label = this.labels.get(id);
-    if (!label || samePlacement(this.placements.get(id), placement)) return;
+    const previous = this.placements.get(id);
+    if (!label || samePlacement(previous, placement)) return;
     this.placements.set(id, placement);
-    applyPlacement(label.element, placement);
+    applyPlacement(label.element, placement, glides(previous, placement));
   }
 
   dispose(): void {
