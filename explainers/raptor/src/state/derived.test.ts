@@ -11,6 +11,7 @@ describe('derived engine values', () => {
   it('gives 250 t, about 330 s and a squeezed plume at liftoff', () => {
     const liftoff = performanceOf({ phase: 3 });
     expect(liftoff.firing).toBe(true);
+    expect(liftoff.airPressureBar).toBeCloseTo(1.01325);
     expect(liftoff.thrustTf).toBeCloseTo(250, 0);
     expect(liftoff.specificImpulse).toBeCloseTo(330, 0);
     expect(liftoff.oxygenFlow).toBeCloseTo(593, 0);
@@ -33,6 +34,15 @@ describe('derived engine values', () => {
     const before = performanceOf({ phase: 0 });
     expect(before).toMatchObject({ firing: false, thrustTf: 0, specificImpulse: 0, plume: 'off' });
     expect(performanceOf({ phase: 145 }).plume).toBe('off');
+  });
+
+  it('holds back the efficiency while the thrust is still building', () => {
+    const ramp = performanceOf({ phase: 1.5 });
+    expect(ramp.firing).toBe(true);
+    expect(ramp.steady).toBe(false);
+    expect(ramp.massFlow).toBeGreaterThan(0);
+    expect(performanceOf({ phase: 3 }).steady).toBe(true);
+    expect(performanceOf({ phase: 143.5 }).steady).toBe(false);
   });
 
   it('works the values out once for each phase', () => {

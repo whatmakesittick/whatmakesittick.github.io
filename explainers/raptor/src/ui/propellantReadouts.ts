@@ -2,7 +2,13 @@ import type { Disposer } from '@core/ui/disposers';
 import { PROPELLANTS, propellantFlow, toCelsius } from '../model/propellants';
 import { engineOf } from '../state';
 import type { RaptorState, RaptorStore } from '../state';
-import { formatKelvinCelsius, formatKgPerSecond, formatPercent, formatRoute } from './format';
+import {
+  formatKelvinCelsius,
+  formatKgPerSecond,
+  formatPercent,
+  formatRoute,
+  unlessOff,
+} from './format';
 import { mountLiveReadouts } from './liveReadouts';
 
 function boilsAt(state: RaptorState): string {
@@ -14,8 +20,12 @@ export function mountPropellantReadouts(root: Document, store: RaptorStore): Dis
   return mountLiveReadouts(root, store, {
     'propellant-boils': boilsAt,
     'propellant-share': (state) => formatPercent(PROPELLANTS[state.propellant].massShare),
-    'propellant-flow': (state) =>
-      formatKgPerSecond(propellantFlow(state.propellant, engineOf(state).throttle)),
+    'propellant-flow': (state) => {
+      const { throttle } = engineOf(state);
+      return unlessOff(throttle > 0, () =>
+        formatKgPerSecond(propellantFlow(state.propellant, throttle)),
+      );
+    },
     'propellant-route': (state) => formatRoute(state.propellant),
   });
 }

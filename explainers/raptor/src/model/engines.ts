@@ -13,6 +13,7 @@ export interface EngineSpec {
   chamberBar: number;
   chamberBarIsApproximate: boolean;
   thrustTf: number;
+  thrustIsApproximate: boolean;
   ispSeaLevel: number;
   ispVacuum: number;
   dumps: boolean;
@@ -30,6 +31,7 @@ export const ENGINES: Readonly<Record<EngineId, EngineSpec>> = {
     chamberBar: 97,
     chamberBarIsApproximate: true,
     thrustTf: 86,
+    thrustIsApproximate: false,
     ispSeaLevel: 282,
     ispVacuum: 311,
     dumps: true,
@@ -45,6 +47,7 @@ export const ENGINES: Readonly<Record<EngineId, EngineSpec>> = {
     chamberBar: 206,
     chamberBarIsApproximate: false,
     thrustTf: 190,
+    thrustIsApproximate: false,
     ispSeaLevel: 366,
     ispVacuum: 452,
     dumps: false,
@@ -60,6 +63,7 @@ export const ENGINES: Readonly<Record<EngineId, EngineSpec>> = {
     chamberBar: 260,
     chamberBarIsApproximate: true,
     thrustTf: 390,
+    thrustIsApproximate: true,
     ispSeaLevel: 311,
     ispVacuum: 338,
     dumps: false,
@@ -75,6 +79,7 @@ export const ENGINES: Readonly<Record<EngineId, EngineSpec>> = {
     chamberBar: CHAMBER_PRESSURE_BAR,
     chamberBarIsApproximate: true,
     thrustTf: FLIGHT_THRUST_TF,
+    thrustIsApproximate: false,
     ispSeaLevel: 330,
     ispVacuum: 350,
     dumps: false,

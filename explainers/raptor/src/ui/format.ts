@@ -34,6 +34,7 @@ const SIGNIFICANT_DIGITS = 3;
 const REAL_TIME_FORMAT = '1×';
 const SLOWER_PREFIX = '1/';
 const TIMES_SUFFIX = '×';
+const MINUS_SIGN = '−';
 
 function phaseKeys(group: string): Readonly<Record<PhaseId, string>> {
   return Object.fromEntries(PHASE_IDS.map((id) => [id, `timeline.${group}.${id}`])) as Record<
@@ -96,6 +97,10 @@ export function formatTonnes(tonnes: number): string {
   return t('units.tonnes', { value: whole(tonnes) });
 }
 
+export function formatAboutTonnes(tonnes: number): string {
+  return t('units.tonnesAbout', { value: whole(tonnes) });
+}
+
 export function formatSeconds(seconds: number): string {
   return t('units.seconds', { value: whole(seconds) });
 }
@@ -137,8 +142,13 @@ export function formatKg(kg: number): string {
   return t('units.kg', { value: whole(kg) });
 }
 
+function signedWhole(value: number): string {
+  const rounded = Math.round(value);
+  return rounded < 0 ? `${MINUS_SIGN}${whole(-rounded)}` : whole(rounded);
+}
+
 export function formatKelvinCelsius(kelvin: number, celsius: number): string {
-  return t('units.kelvinCelsius', { kelvin: whole(kelvin), celsius: whole(celsius) });
+  return t('units.kelvinCelsius', { kelvin: whole(kelvin), celsius: signedWhole(celsius) });
 }
 
 export function formatAboutKelvin(kelvin: number): string {
@@ -159,6 +169,10 @@ export function formatTimes(times: number): string {
 
 export function formatOff(): string {
   return t('units.off');
+}
+
+export function unlessOff(on: boolean, text: () => string): string {
+  return on ? text() : formatOff();
 }
 
 export function formatPlume(reading: PlumeReading): string {

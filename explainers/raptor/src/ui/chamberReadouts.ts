@@ -1,29 +1,35 @@
 import type { Disposer } from '@core/ui/disposers';
 import { FLAME_TEMPERATURE_K } from '../model/performance';
 import { performanceOf } from '../state';
-import type { RaptorState, RaptorStore } from '../state';
+import type { RaptorStore } from '../state';
 import {
   formatAboutBar,
   formatAboutKelvin,
   formatKgPerSecond,
   formatKmPerSecond,
-  formatOff,
+  unlessOff,
 } from './format';
 import { mountLiveReadouts } from './liveReadouts';
 
-function whileFiring(state: RaptorState, text: () => string): string {
-  return performanceOf(state).firing ? text() : formatOff();
-}
-
 export function mountChamberReadouts(root: Document, store: RaptorStore): Disposer {
   return mountLiveReadouts(root, store, {
-    'chamber-oxygen': (state) => formatKgPerSecond(performanceOf(state).oxygenFlow),
-    'chamber-methane': (state) => formatKgPerSecond(performanceOf(state).methaneFlow),
-    'chamber-pressure': (state) =>
-      whileFiring(state, () => formatAboutBar(performanceOf(state).chamberPressureBar)),
+    'chamber-oxygen': (state) => {
+      const { firing, oxygenFlow } = performanceOf(state);
+      return unlessOff(firing, () => formatKgPerSecond(oxygenFlow));
+    },
+    'chamber-methane': (state) => {
+      const { firing, methaneFlow } = performanceOf(state);
+      return unlessOff(firing, () => formatKgPerSecond(methaneFlow));
+    },
+    'chamber-pressure': (state) => {
+      const { firing, chamberPressureBar } = performanceOf(state);
+      return unlessOff(firing, () => formatAboutBar(chamberPressureBar));
+    },
     'chamber-temperature': (state) =>
-      whileFiring(state, () => formatAboutKelvin(FLAME_TEMPERATURE_K)),
-    'chamber-speed': (state) =>
-      whileFiring(state, () => formatKmPerSecond(performanceOf(state).exhaustSpeedKmS)),
+      unlessOff(performanceOf(state).firing, () => formatAboutKelvin(FLAME_TEMPERATURE_K)),
+    'chamber-speed': (state) => {
+      const { steady, exhaustSpeedKmS } = performanceOf(state);
+      return unlessOff(steady, () => formatKmPerSecond(exhaustSpeedKmS));
+    },
   });
 }

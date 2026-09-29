@@ -1,13 +1,14 @@
+import { disposeAll } from '@core/ui/disposers';
 import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
-import { disposeAll } from '@core/ui/disposers';
 import { ENGINES } from '../model/engines';
 import type { EngineSpec } from '../model/engines';
 import type { RaptorState, RaptorStore } from '../state';
 import { CycleView } from './cycleView';
 import {
   formatAboutBar,
+  formatAboutTonnes,
   formatCycle,
   formatDumps,
   formatExactBar,
@@ -18,6 +19,10 @@ import { mountLiveReadouts } from './liveReadouts';
 
 function chosen(state: RaptorState): EngineSpec {
   return ENGINES[state.engine];
+}
+
+function thrust({ thrustTf, thrustIsApproximate }: EngineSpec): string {
+  return thrustIsApproximate ? formatAboutTonnes(thrustTf) : formatTonnes(thrustTf);
 }
 
 function chamberPressure({ chamberBar, chamberBarIsApproximate }: EngineSpec): string {
@@ -31,7 +36,7 @@ export function mountEngineReadouts(root: Document, store: RaptorStore): Dispose
       'engine-cycle': (state) => formatCycle(chosen(state).cycle),
       'engine-propellants': (state) => formatPropellantPair(chosen(state).propellants),
       'engine-pressure': (state) => chamberPressure(chosen(state)),
-      'engine-thrust': (state) => formatTonnes(chosen(state).thrustTf),
+      'engine-thrust': (state) => thrust(chosen(state)),
       'engine-dumps': (state) => formatDumps(chosen(state).dumps),
     }),
     watchLocalized(

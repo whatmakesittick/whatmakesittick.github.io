@@ -6,10 +6,10 @@ import type { RaptorStoreState } from '../state';
 import {
   formatBar,
   formatKm,
-  formatOff,
   formatPercent,
   formatSeconds,
   formatTonnes,
+  unlessOff,
 } from './format';
 import {
   AIR_METER_FILL,
@@ -35,6 +35,7 @@ function impulse(state: RaptorStoreState): number {
 
 function efficiencyShare(state: RaptorStoreState): number {
   const { min, max } = EFFICIENCY_SCALE_S;
+  if (!performanceOf(state).steady) return 0;
   return clamp((impulse(state) - min) / (max - min), 0, 1);
 }
 
@@ -43,7 +44,7 @@ export const RAPTOR_READOUTS: readonly Readout<RaptorStoreState>[] = [
     id: 'thrust',
     labelKey: 'readouts.thrust',
     numeric: true,
-    value: (state) => formatTonnes(thrust(state)),
+    value: (state) => unlessOff(performanceOf(state).firing, () => formatTonnes(thrust(state))),
     tone: (state) => (engineOf(state).running ? RUNNING_TONE : NEUTRAL_TONE),
     meter: { share: (state) => thrust(state) / THRUST_FULL_SCALE_TF, fill: THRUST_METER_FILL },
   },
@@ -51,7 +52,7 @@ export const RAPTOR_READOUTS: readonly Readout<RaptorStoreState>[] = [
     id: 'efficiency',
     labelKey: 'readouts.efficiency',
     numeric: true,
-    value: (state) => (performanceOf(state).firing ? formatSeconds(impulse(state)) : formatOff()),
+    value: (state) => unlessOff(performanceOf(state).steady, () => formatSeconds(impulse(state))),
     meter: { share: efficiencyShare, fill: EFFICIENCY_METER_FILL },
   },
   {

@@ -31,6 +31,7 @@ describe('engine comparison', () => {
       true,
     ]);
     expect(ENGINE_IDS.map((id) => ENGINES[id].thrustTf)).toEqual([86, 190, 390, 250]);
+    expect(ENGINE_IDS.filter((id) => ENGINES[id].thrustIsApproximate)).toEqual(['rd180']);
     expect(ENGINE_IDS.map((id) => [ENGINES[id].ispSeaLevel, ENGINES[id].ispVacuum])).toEqual([
       [282, 311],
       [366, 452],

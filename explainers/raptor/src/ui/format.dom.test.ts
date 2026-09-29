@@ -6,6 +6,7 @@ import {
   describeSpeed,
   formatAboutBar,
   formatAboutKelvin,
+  formatAboutTonnes,
   formatBar,
   formatCycle,
   formatCycleBox,
@@ -27,6 +28,7 @@ import {
   formatSpeed,
   formatTimes,
   formatTonnes,
+  unlessOff,
 } from './format';
 
 const { timeline } = en;
@@ -88,7 +90,9 @@ describe('raptor formats', () => {
     expect(formatAboutBar(330)).toBe('about 330 bar');
     expect(formatExactBar(206)).toBe('206 bar');
     expect(formatAboutKelvin(3500)).toBe('about 3,500 K');
-    expect(formatKelvinCelsius(111, -162.15)).toBe('111 K (-162 °C)');
+    expect(formatKelvinCelsius(111, -162.15)).toBe('111 K (−162 °C)');
+    expect(formatKelvinCelsius(300, 26.85)).toBe('300 K (27 °C)');
+    expect(formatAboutTonnes(390)).toBe('about 390 t');
   });
 
   it('names the plume, the routes, the cycles and the diagram boxes', () => {
@@ -101,5 +105,7 @@ describe('raptor formats', () => {
     expect(formatDumps(false)).toBe(en.engines.dumps.no);
     expect(formatCycleBox('preburner')).toBe(en.cycle.preburner);
     expect(formatOff()).toBe(en.units.off);
+    expect(unlessOff(false, () => 'on')).toBe(en.units.off);
+    expect(unlessOff(true, () => 'on')).toBe('on');
   });
 });

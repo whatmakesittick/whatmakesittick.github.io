@@ -31,6 +31,12 @@ describe('gauge readouts', () => {
     expect(tone?.(stateAt(0))).toBe('var(--text)');
   });
 
+  it('shows no efficiency until full thrust and no thrust while off', () => {
+    expect(readout('efficiency').value(stateAt(1.5))).toBe(readout('efficiency').value(stateAt(0)));
+    expect(readout('efficiency').meter?.share(stateAt(1.5))).toBe(0);
+    expect(readout('thrust').meter?.share(stateAt(1.5))).toBeGreaterThan(0);
+  });
+
   it('fills the thrust against 280 t and the efficiency between 300 and 360 s', () => {
     expect(readout('thrust').meter?.share(stateAt(3))).toBeCloseTo(250 / 280, 2);
     expect(readout('efficiency').meter?.share(stateAt(3))).toBeCloseTo(0.5, 1);

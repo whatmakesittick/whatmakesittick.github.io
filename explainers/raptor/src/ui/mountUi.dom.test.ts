@@ -1,4 +1,4 @@
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { initI18n } from '@core/i18n';
 import { mountActions } from '@core/ui/actions';
 import chapters from '../../chapters.html?raw';
@@ -43,22 +43,25 @@ describe('chapter widgets', () => {
     mountActions(document, store, CHAPTER_ACTIONS);
   });
 
+  afterEach(() => dispose());
+
   it('shows what one engine burns and pushes at liftoff', () => {
     expect(readout('overview-burn')).toBe('758 kg');
     expect(readout('overview-lift')).toBe('164 times');
     expect(readout('overview-booster')).toBe('8,250 t');
     store.getState().setPhase(0);
-    expect(readout('overview-burn')).toBe('0 kg');
+    expect(readout('overview-burn')).toBe(en.units.off);
+    expect(readout('overview-booster')).toBe(en.units.off);
   });
 
   it('describes the propellant the reader picks', () => {
-    expect(readout('propellant-boils')).toBe('111 K (-162 °C)');
+    expect(readout('propellant-boils')).toBe('111 K (−162 °C)');
     expect(readout('propellant-share')).toBe('22 %');
     expect(readout('propellant-flow')).toBe('165 kg/s');
     expect(readout('propellant-route')).toBe(en.propellants.route.methane);
     click('propellant', 'oxygen');
     expect(pressed('propellant', 'oxygen')).toBe('true');
-    expect(readout('propellant-boils')).toBe('90 K (-183 °C)');
+    expect(readout('propellant-boils')).toBe('90 K (−183 °C)');
     expect(readout('propellant-share')).toBe('78 %');
     expect(readout('propellant-flow')).toBe('593 kg/s');
     expect(readout('propellant-route')).toBe(en.propellants.route.oxygen);
@@ -75,6 +78,8 @@ describe('chapter widgets', () => {
     expect(readout('engine-propellants')).toBe(en.engines.propellants.oxygenKerosene);
     expect(readout('engine-pressure')).toBe('about 97 bar');
     expect(readout('engine-dumps')).toBe(en.engines.dumps.yes);
+    click('engine', 'rd180');
+    expect(readout('engine-thrust')).toBe('about 390 t');
     click('engine', 'rs25');
     expect(readout('engine-pressure')).toBe('206 bar');
     expect(readout('engine-thrust')).toBe('190 t');
@@ -88,7 +93,15 @@ describe('chapter widgets', () => {
     expect(readout('chamber-speed')).toBe('3.2 km/s');
     store.getState().setPhase(0);
     expect(readout('chamber-temperature')).toBe(en.units.off);
-    expect(readout('chamber-oxygen')).toBe('0 kg/s');
+    expect(readout('chamber-oxygen')).toBe(en.units.off);
+  });
+
+  it('holds back the exhaust speed and the impulse while the thrust builds', () => {
+    store.getState().setPhase(1.5);
+    expect(readout('chamber-oxygen')).toMatch(/^\d+ kg\/s$/);
+    expect(readout('chamber-speed')).toBe(en.units.off);
+    expect(readout('height-efficiency')).toBe(en.units.off);
+    expect(readout('height-thrust')).toMatch(/^\d+ t$/);
   });
 
   it('moves the flight with the height slider and thins the air', () => {

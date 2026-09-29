@@ -1,31 +1,41 @@
 import type { Disposer } from '@core/ui/disposers';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { HEIGHT_RANGE, engineOf, performanceOf } from '../state';
-import type { RaptorStore } from '../state';
-import { formatBar, formatKm, formatOff, formatPlume, formatSeconds, formatTonnes } from './format';
+import type { Performance, RaptorStore } from '../state';
+import { formatBar, formatKm, formatPlume, formatSeconds, formatTonnes, unlessOff } from './format';
 
-type Moment = readonly [phase: number];
+type SelectedPhase = readonly [phase: number];
 
-function performanceAt([phase]: Moment) {
+function performanceAt([phase]: SelectedPhase): Readonly<Performance> {
   return performanceOf({ phase });
+}
+
+function altitudeAt([phase]: SelectedPhase): number {
+  return engineOf({ phase }).altitudeKm;
 }
 
 export function mountHeightControl(root: Document, store: RaptorStore): Disposer {
   return mountRangeWidget(root, store, {
     control: 'height',
     range: HEIGHT_RANGE,
-    select: (state) => [state.phase] as const,
-    value: ([phase]) => engineOf({ phase }).altitudeKm,
-    format: ([phase]) => formatKm(engineOf({ phase }).altitudeKm),
+    select: (state): SelectedPhase => [state.phase],
+    value: altitudeAt,
+    format: (selected) => formatKm(altitudeAt(selected)),
     set: (state, km) => state.seekAltitude(km),
     readouts: {
-      'height-air': (moment) => formatBar(performanceAt(moment).airPressureBar),
-      'height-exit': (moment) => formatBar(performanceAt(moment).exitPressureBar),
-      'height-plume': (moment) => formatPlume(performanceAt(moment).plume),
-      'height-thrust': (moment) => formatTonnes(performanceAt(moment).thrustTf),
-      'height-efficiency': (moment) => {
-        const { firing, specificImpulse } = performanceAt(moment);
-        return firing ? formatSeconds(specificImpulse) : formatOff();
+      'height-air': (selected) => formatBar(performanceAt(selected).airPressureBar),
+      'height-exit': (selected) => {
+        const { firing, exitPressureBar } = performanceAt(selected);
+        return unlessOff(firing, () => formatBar(exitPressureBar));
+      },
+      'height-plume': (selected) => formatPlume(performanceAt(selected).plume),
+      'height-thrust': (selected) => {
+        const { firing, thrustTf } = performanceAt(selected);
+        return unlessOff(firing, () => formatTonnes(thrustTf));
+      },
+      'height-efficiency': (selected) => {
+        const { steady, specificImpulse } = performanceAt(selected);
+        return unlessOff(steady, () => formatSeconds(specificImpulse));
       },
     },
   });
