@@ -17,7 +17,7 @@ export interface AnchorFraming {
 export const FRONT_DISTANCE = { min: 60, max: 900 } as const;
 export const VALVE_DISTANCE = { min: 25, max: 400 } as const;
 
-export const VALVE_FRAMING: AnchorFraming = { direction: [0.25, 0.45, 1], spanMm: 60 };
+export const VALVE_FRAMING: AnchorFraming = { direction: [0.35, 0.12, 1], spanMm: 70 };
 
 const FRAMED_VIEWS: Record<FramedViewId, FramedView<RegionId>> = {
   front: { region: 'scene', direction: [0.35, 0.25, 1], margin: 1.02, distance: FRONT_DISTANCE },
