@@ -43,6 +43,7 @@
     "source": "Вихідний код",
     "license": "Ліцензія MIT",
     "builtWith": "Зроблено на Three.js",
+    "feed": "RSS-стрічка",
     "copyright": "© {{year}} {{title}}. Зробив з ♥ <a href=\"https://github.com/veelenga\">veelenga</a>",
     "languages": "Мови"
   },

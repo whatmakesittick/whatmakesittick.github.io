@@ -62,6 +62,7 @@ const template = [
   '<meta content="{{description}}" />',
   '<link rel="canonical" href="{{url}}" />',
   '{{alternateLinks}}',
+  '{{feedLink}}',
   '<meta content="{{image}}" type="{{imageType}}" />',
   '<meta property="og:image:alt" content="{{imageAlt}}" />',
   '{{localeTags}}',
@@ -81,7 +82,8 @@ const template = [
 
 const partials = {
   'header-actions': '<select data-language-select>{{languageOptions}}</select>',
-  footer: '<footer>{{licenseUrl}}<ul>{{languageLinks}}</ul></footer>',
+  footer:
+    '<footer>{{licenseUrl}}<a class="feed" href="{{feedUrl}}">Feed</a><ul>{{languageLinks}}</ul></footer>',
 };
 
 const english: Record<string, string> = {
@@ -278,6 +280,15 @@ describe('renderPage', () => {
     });
   });
 
+  it('points the head and the footer at the feed of the page language', () => {
+    expect(ukrainian).toContain(
+      '<link rel="alternate" type="application/rss+xml" title="Що змушує цокати" href="https://whatmakesittick.github.io/uk/feed.xml"',
+    );
+    expect(ukrainian).toContain('<a class="feed" href="/uk/feed.xml">');
+    expect(html).toContain('href="https://whatmakesittick.github.io/feed.xml"');
+    expect(html).toContain('<a class="feed" href="/feed.xml">');
+  });
+
   it('translates the marked copy and keeps the markers for the runtime', () => {
     expect(ukrainian).toContain('<h2 data-i18n="sections.intro">Вступ</h2>');
   });
@@ -325,6 +336,11 @@ describe('renderCatalogue', () => {
     expect(html).toContain('<link rel="canonical" href="https://whatmakesittick.github.io/uk/"');
     expect(html).toContain('content="https://whatmakesittick.github.io/social/og-image.png"');
     expect(html).toContain('<a class="catalogue" href="/uk/">');
+  });
+
+  it('advertises the feed of the catalogue language', () => {
+    expect(html).toContain('type="application/rss+xml" title="Що змушує цокати"');
+    expect(html).toContain('href="https://whatmakesittick.github.io/uk/feed.xml"');
   });
 
   it('links the catalogue in every site language from the footer', () => {
@@ -411,6 +427,10 @@ describe('renderNotFound', () => {
     expect(html).toContain('<footer>https://github.com/whatmakesittick/');
     expect(html.match(/class="footer-language"/g)).toHaveLength(8);
     expect(html).not.toContain('aria-current');
+  });
+
+  it('links the English feed from the footer', () => {
+    expect(html).toContain('<a class="feed" href="/feed.xml">');
   });
 });
 

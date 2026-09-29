@@ -535,6 +535,18 @@ every crawler and points at the sitemap. `public/favicon.ico` holds the favicon 
 `public/favicon.svg` at both sizes and `scripts/favicon-ico.ts` packs the PNG files with
 `encodeIco` from `vite/ico.ts`. Every page links it after the SVG icon.
 
+### Feeds
+
+`vite/feed.ts` builds one RSS 2.0 feed per site language: `feed.xml` for English and
+`<code>/feed.xml` for the others. Each feed lists the explainers that ship its language,
+newest first in catalogue order, with the translated title and summary, the page URL as a
+permalink, the `datePublished` and the tags. The channel takes the catalogue's translated
+title and tagline and is dated by the newest explainer. Every page advertises the feed of its
+language with a `<link rel="alternate" type="application/rss+xml">` in the head, and the
+footer links it. `vite/siteFiles.ts` joins the crawl files and the feeds into the one list the
+plugin emits at build and serves in dev; none of them is committed. `vite/xml.ts` holds the
+escaping and nesting both share.
+
 `vite/structuredData.ts` writes the JSON-LD, a `@graph` on every page that starts with
 the same `WebSite` node, whose `@id` is `https://whatmakesittick.github.io/#website`; every
 page points at it with `isPartOf`. An explainer page is a `WebPage` and
@@ -559,7 +571,8 @@ stylesheet and no Google Fonts host, a gzipped JavaScript budget (`JS_BUDGET_GZI
 over the module scripts and preloads of the page and their static imports), no three.js chunk
 on a catalogue page, a `modulepreload` on every translated page, one card per explainer on the
 catalogue, the noscript cover and the more-explainers links on an explainer page, a sitemap
-that lists exactly the built pages, `robots.txt`, a `noindex` 404 page without scripts and a
+that lists exactly the built pages, a feed link to the page language on every page, a feed per
+language that lists exactly its built explainers, `robots.txt`, a `noindex` 404 page without scripts and a
 real `favicon.ico`. When it fails, fix the page rather than the rule, and raise a budget only
 with a measurement.
 

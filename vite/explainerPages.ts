@@ -2,7 +2,6 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
 import sirv from 'sirv';
 import type { Plugin, ViteDevServer } from 'vite';
-import { crawlFiles } from './crawl.ts';
 import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { renderCatalogueModule } from './page.ts';
@@ -16,6 +15,7 @@ import {
   renderSiteEntry,
 } from './sitePages.ts';
 import type { Site } from './sitePages.ts';
+import { siteFiles } from './siteFiles.ts';
 
 const WATCHED_DIRECTORIES = [EXPLAINERS_DIRECTORY, CORE_DIRECTORY];
 const PAGE_SOURCES = /(?:explainer\.json|\.html|locales[\\/]\w+\.json)$/;
@@ -62,10 +62,12 @@ function redirectToTrailingSlash(server: ViteDevServer, folders: () => string[])
   });
 }
 
-function serveCrawlFiles(server: ViteDevServer, explainers: () => LoadedExplainer[]): void {
+function serveSiteFiles(server: ViteDevServer, site: () => Site | undefined): void {
   server.middlewares.use((request, response, next) => {
     const [path] = (request.url ?? '').split('?');
-    const file = crawlFiles(explainers()).find(
+    const current = site();
+    if (!current) return next();
+    const file = siteFiles(current.explainers, current.sources.core).find(
       ({ fileName }) => path === `${server.config.base}${fileName}`,
     );
     if (!file) return next();
@@ -141,7 +143,7 @@ function pagesPlugin(): Plugin {
     configureServer(server) {
       redirectToTrailingSlash(server, () => site?.folders ?? []);
       servePublicFiles(server, site?.explainers ?? []);
-      serveCrawlFiles(server, () => site?.explainers ?? []);
+      serveSiteFiles(server, () => site);
       const regenerate = () => {
         try {
           site = generateSite(root);
@@ -164,8 +166,9 @@ function pagesPlugin(): Plugin {
     },
 
     generateBundle() {
-      const explainers = site?.explainers ?? [];
-      for (const { fileName, source } of crawlFiles(explainers)) {
+      if (!site) return;
+      const { explainers, sources } = site;
+      for (const { fileName, source } of siteFiles(explainers, sources.core)) {
         this.emitFile({ type: 'asset', fileName, source });
       }
       for (const { manifest, directory } of explainers) {

@@ -4,7 +4,7 @@ import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { splitLanguagePath } from '../src/core/i18n/paths.ts';
 import { descriptionLimit } from '../src/core/manifest.ts';
-import { SITE_URL } from './site.ts';
+import { FEED_TYPE, SITE_URL, feedUrl } from './site.ts';
 
 export interface BuiltPage {
   path: string;
@@ -17,6 +17,7 @@ export interface BuiltSite {
   gzipBytes: ReadonlyMap<string, number>;
   sitemap: string;
   robots: string;
+  feeds: ReadonlyMap<LanguageCode, string>;
   notFound: string;
   favicon: Uint8Array;
 }
@@ -32,6 +33,7 @@ const EXTERNAL = /^https?:/;
 const ICO_HEADER = [0, 0, 1, 0];
 const X_DEFAULT = 'x-default';
 const LOCATION = /<loc>([^<]+)<\/loc>/g;
+const FEED_ITEM = /<guid isPermaLink="true">([^<]+)<\/guid>/g;
 const NOSCRIPT_COVER = /<noscript>[\s\S]*?class="stage-cover"[\s\S]*?<\/noscript>/;
 
 function pageLanguage(path: string): LanguageCode {
@@ -96,6 +98,8 @@ function headProblems(page: BuiltPage, root: HTMLElement): string[] {
   } catch {
     problems.push('json-ld does not parse');
   }
+  const feed = attribute(root, `link[rel="alternate"][type="${FEED_TYPE}"]`, 'href');
+  if (feed !== feedUrl(language)) problems.push(`feed link is not ${feedUrl(language)}`);
   if (root.querySelectorAll('h1').length !== 1) problems.push('not exactly one h1');
   return problems;
 }
@@ -142,8 +146,24 @@ function contentProblems(page: BuiltPage, root: HTMLElement, explainers: number)
   return problems;
 }
 
+function feedProblems(site: BuiltSite): string[] {
+  const languages = [...new Set(site.pages.map((page) => pageLanguage(page.path)))];
+  return languages.flatMap((language) => {
+    const feed = site.feeds.get(language);
+    if (feed === undefined) return [`the ${language} feed is missing`];
+    const listed = [...feed.matchAll(FEED_ITEM)].map(([, url]) => url).sort();
+    const expected = site.pages
+      .filter((page) => pageLanguage(page.path) === language && !isCatalogue(page.path))
+      .map((page) => `${SITE_URL}${page.path}`)
+      .sort();
+    return listed.join('\n') === expected.join('\n')
+      ? []
+      : [`the ${language} feed does not list exactly the built explainers`];
+  });
+}
+
 function siteProblems(site: BuiltSite): string[] {
-  const problems: string[] = [];
+  const problems: string[] = [...feedProblems(site)];
   const listed = [...site.sitemap.matchAll(LOCATION)].map(([, url]) => url).sort();
   const expected = site.pages.map((page) => `${SITE_URL}${page.path}`).sort();
   if (listed.join('\n') !== expected.join('\n'))

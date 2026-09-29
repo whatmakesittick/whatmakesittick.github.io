@@ -43,6 +43,7 @@
     "source": "Source",
     "license": "MIT license",
     "builtWith": "Built with Three.js",
+    "feed": "RSS feed",
     "copyright": "© {{year}} {{title}}. Built with ♥ by <a href=\"https://github.com/veelenga\">veelenga</a>",
     "languages": "Languages"
   },

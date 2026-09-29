@@ -1,8 +1,11 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import type { Plugin } from 'vite';
+import { LANGUAGES } from '../src/core/i18n/languages.ts';
+import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { ROBOTS_FILE, SITEMAP_FILE } from './crawl.ts';
+import { feedPath } from './site.ts';
 import { checkSite } from './siteCheck.ts';
 import type { BuiltPage, BuiltSite } from './siteCheck.ts';
 import { NOT_FOUND_ENTRY, SITE_ENTRY } from './sitePages.ts';
@@ -42,6 +45,14 @@ function readScripts(outDir: string, base: string): Pick<BuiltSite, 'scripts' | 
   return { scripts, gzipBytes };
 }
 
+function readFeeds(outDir: string): Map<LanguageCode, string> {
+  return new Map(
+    LANGUAGES.map(({ code }) => [code, join(outDir, feedPath(code))] as const)
+      .filter(([, file]) => existsSync(file))
+      .map(([code, file]) => [code, readFileSync(file, 'utf8')]),
+  );
+}
+
 export function readBuiltSite(outDir: string, base: string): BuiltSite {
   const text = (file: string) => readFileSync(join(outDir, file), 'utf8');
   return {
@@ -49,6 +60,7 @@ export function readBuiltSite(outDir: string, base: string): BuiltSite {
     ...readScripts(outDir, base),
     sitemap: text(SITEMAP_FILE),
     robots: text(ROBOTS_FILE),
+    feeds: readFeeds(outDir),
     notFound: text(NOT_FOUND_ENTRY),
     favicon: readFileSync(join(outDir, FAVICON_FILE)),
   };
