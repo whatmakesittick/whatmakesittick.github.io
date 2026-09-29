@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ENGINE_IDS } from '../ids';
 import { RUN_LENGTH } from '../model';
+import { ENGINES } from '../model/engines';
 import { CYCLE_DIAGRAMS, DIAGRAM_SIZE } from './cycleDiagrams';
 import type { DiagramPoint } from './cycleDiagrams';
 import {
@@ -55,23 +56,24 @@ describe('cycle diagrams', () => {
     });
   });
 
-  it('draws the pumps, burners and chambers each engine has', () => {
-    const count = (id: (typeof ENGINE_IDS)[number], kind: string) =>
-      CYCLE_DIAGRAMS[id].nodes.filter((node) => node.kind === kind).length;
-    expect(ENGINE_IDS.map((id) => count(id, 'pump') + count(id, 'boostPump'))).toEqual([
-      2, 4, 2, 2,
-    ]);
-    expect(ENGINE_IDS.map((id) => count(id, 'burner'))).toEqual([1, 2, 1, 2]);
-    expect(ENGINE_IDS.map((id) => count(id, 'turbine'))).toEqual([1, 2, 1, 2]);
-    expect(ENGINE_IDS.map((id) => count(id, 'chamber'))).toEqual([1, 1, 2, 1]);
-    expect(ENGINE_IDS.map((id) => CYCLE_DIAGRAMS[id].shafts.length)).toEqual([1, 2, 1, 2]);
+  it('draws the turbopumps, burners and chambers each engine has', () => {
+    ENGINE_IDS.forEach((id) => {
+      const engine = ENGINES[id];
+      const { nodes, shafts } = CYCLE_DIAGRAMS[id];
+      const count = (kind: string) => nodes.filter((node) => node.kind === kind).length;
+      expect(shafts.length, id).toBe(engine.pumps - engine.boostPumps);
+      expect(count('turbine'), id).toBe(shafts.length);
+      expect(count('boostPump'), id).toBe(engine.boostPumps);
+      expect(count('burner'), id).toBe(engine.burners);
+      expect(count('chamber'), id).toBe(engine.chambers);
+    });
   });
 
-  it('throws gas overboard only in the gas generator engine', () => {
-    const dumping = ENGINE_IDS.filter((id) =>
-      CYCLE_DIAGRAMS[id].links.some((link) => link.stream === 'overboard'),
-    );
-    expect(dumping).toEqual(['merlin']);
+  it('throws gas overboard exactly where the engine dumps it', () => {
+    ENGINE_IDS.forEach((id) => {
+      const overboard = CYCLE_DIAGRAMS[id].links.some((link) => link.stream === 'overboard');
+      expect(overboard, id).toBe(ENGINES[id].dumps);
+    });
   });
 
   it('burns oxygen-rich gas on the oxygen side of the full-flow engine', () => {
