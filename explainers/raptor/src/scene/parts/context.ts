@@ -9,6 +9,15 @@ import type { RevolvedShell } from '../geometry/revolve';
 
 export type EmphasisGroup = PartId | typeof STRUCTURE_GROUP;
 
+export type CutawayRole = 'whole' | 'opened' | 'always';
+
+export const DYNAMIC = 'dynamic';
+
+export function markDynamic<T extends Object3D>(object: T): T {
+  object.userData[DYNAMIC] = true;
+  return object;
+}
+
 export class CutawaySwitch {
   private readonly wholeParts: Object3D[] = [];
   private readonly cutParts: Object3D[] = [];
@@ -28,6 +37,27 @@ export class CutawaySwitch {
 
   get isCut(): boolean {
     return this.cut;
+  }
+
+  roleOf(object: Object3D): CutawayRole {
+    if (this.wholeParts.includes(object)) return 'whole';
+    if (this.cutParts.includes(object)) return 'opened';
+    return 'always';
+  }
+
+  forget(objects: readonly Object3D[]): void {
+    for (const list of [this.wholeParts, this.cutParts]) {
+      for (const object of objects) {
+        const index = list.indexOf(object);
+        if (index >= 0) list.splice(index, 1);
+      }
+    }
+  }
+
+  adopt<T extends Object3D>(object: T, role: CutawayRole): T {
+    if (role === 'whole') return this.whole(object);
+    if (role === 'opened') return this.opened(object);
+    return object;
   }
 
   set(cut: boolean): void {

@@ -6,7 +6,7 @@ import { revolveShell } from '../../geometry/revolve';
 import { bladeRow, impeller, inducer } from '../../geometry/rotor';
 import { scaleProfile, smoothShell } from '../../geometry/shells';
 import type { TemplateScale } from '../../geometry/shells';
-import { partMesh, shellMeshes } from '../context';
+import { markDynamic, partMesh, shellMeshes } from '../context';
 import type { PartContext } from '../context';
 
 const PROFILE_SAMPLES = 90;
@@ -53,7 +53,7 @@ export class TurbopumpPart {
     );
     shellMeshes(context, this.object, shell, group, { outer: finishes.coat });
     this.buildRotor(context, group, scale);
-    this.object.add(cutaway.opened(this.rotor));
+    this.object.add(cutaway.opened(markDynamic(this.rotor)));
   }
 
   setAngle(angle: number): void {

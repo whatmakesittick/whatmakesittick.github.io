@@ -87,6 +87,7 @@ export function plumeGeometry(
 
 function additive(material: ShaderMaterial | SpriteMaterial): void {
   material.blending = AdditiveBlending;
+  material.forceSinglePass = true;
   material.transparent = true;
   material.depthWrite = false;
   material.opacity = TRANSLUCENT;

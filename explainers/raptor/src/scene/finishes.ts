@@ -76,6 +76,7 @@ export const STATIC_FINISHES = {
     roughness: 0.2,
     envMapIntensity: POLISH_REFLECTION,
     side: DoubleSide,
+    forceSinglePass: true,
   },
   inconel: {
     color: PAINT.inconel,
@@ -92,7 +93,7 @@ export const STATIC_FINISHES = {
   cut: { color: PAINT.cut, metalness: 0.2, roughness: 0.6, envMapIntensity: 1.3 },
   cavity: { color: PAINT.cavity, metalness: 0.8, roughness: 0.5, envMapIntensity: 1.2 },
   channel: { color: PAINT.channel, metalness: 0.7, roughness: 0.5, envMapIntensity: 1 },
-  duct: { ...coat(COAT_ROUGHNESS), side: DoubleSide },
+  duct: { ...coat(COAT_ROUGHNESS), side: DoubleSide, forceSinglePass: true },
   shield: { color: PAINT.shield, metalness: 0.3, roughness: 0.78, envMapIntensity: 0.8 },
   preburnerShell: glowing(coat(COAT_ROUGHNESS), '#ffb072'),
   oxygenFlame: glowing(

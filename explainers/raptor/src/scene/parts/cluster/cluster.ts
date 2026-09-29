@@ -155,6 +155,7 @@ export class ClusterPart {
         blending: AdditiveBlending,
         transparent: true,
         depthWrite: false,
+        forceSinglePass: true,
         opacity: plumeMaterial.opacity,
       }),
     );

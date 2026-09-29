@@ -17,7 +17,8 @@ import type { Strand } from './geometry/revolve';
 import { createSurfaceTextures } from './geometry/surfaceTextures';
 import type { SurfaceTextures } from './geometry/surfaceTextures';
 import { ClusterPart } from './parts/cluster/cluster';
-import { CutawaySwitch } from './parts/context';
+import { batchStatic } from './parts/batch';
+import { CutawaySwitch, markDynamic } from './parts/context';
 import type { PartContext } from './parts/context';
 import { MountPart } from './parts/engine/mount';
 import { PowerheadPart } from './parts/engine/powerhead';
@@ -121,6 +122,9 @@ export class RaptorAssembly implements Assembly {
       this.flow.object,
       this.plume.object,
     );
+    markDynamic(this.flow.object);
+    markDynamic(this.plume.object);
+    batchStatic(this.engine, this.cutaway).forEach((geometry) => this.tracker.track(geometry));
     this.sky = new SkyDomePart(context);
     this.root.add(
       this.sky.mesh,
