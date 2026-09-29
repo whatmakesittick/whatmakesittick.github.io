@@ -1,10 +1,10 @@
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import { drillStringWeightT, holeDiameterMm, whenInRock } from '../model';
 import { effectiveMudWeight } from '../state';
 import type { OilRigStore } from '../state';
-import { disposeAll } from './disposers';
-import type { Disposer } from './disposers';
 import { formatMetres, formatMillimetres, formatOptional, formatTonnes } from './format';
 
 export function mountSectionReadouts(root: Document, store: OilRigStore): Disposer {

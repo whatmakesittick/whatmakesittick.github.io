@@ -1,6 +1,8 @@
 import { formatFixed } from '@core/format';
 import { currentLanguage } from '@core/i18n';
 import { FULL_TURN } from '@core/math';
+import { CanvasSurface, canvasFont, widestText } from '@core/ui/canvasSurface';
+import type { CanvasFrame } from '@core/ui/canvasSurface';
 import type { MudState } from '../ids';
 import {
   DRILL_FLOOR_ABOVE_SEA_M,
@@ -11,8 +13,6 @@ import {
   porePressureBar,
 } from '../model';
 import { CANVAS_COLORS } from './canvasColors';
-import { CanvasSurface, canvasFont, widestText } from './canvasSurface';
-import type { CanvasFrame } from './canvasSurface';
 import { formatBar, formatMetres } from './format';
 
 export interface MudSight {

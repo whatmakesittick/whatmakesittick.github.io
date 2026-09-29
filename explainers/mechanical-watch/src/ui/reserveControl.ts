@@ -1,9 +1,9 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { amplitude, arborTurns, storedEnergyJ, torqueMNm } from '../model';
 import { RESERVE_RANGE } from '../state';
 import type { WatchStore } from '../state';
-import type { Disposer } from './disposers';
 import { formatDegrees, formatHours, formatJoules, formatTorque, formatTurns } from './format';
 
 const WIND_CHIP = '.chip[data-action="wind"]';

@@ -421,6 +421,18 @@ written from the same primitives: `configureRange`, `showRangeValue`,
 `watchShallowLocalized` in `subscribe.ts`, `requireElement`, `queryAll` and
 `setText` in `dom.ts`.
 
+Helpers that more than one explainer's widgets share:
+
+- `CanvasSurface` in `src/core/ui/canvasSurface.ts` sizes a chart canvas to its CSS width and
+  the pixel ratio, paints it only while it is near the screen and reads its font once per size
+  and language; `canvasFont` and `widestText` lay out its labels.
+- `disposeAll` in `src/core/ui/disposers.ts` folds a list of `Disposer` functions into one, so a
+  mount can hand back a single unmount.
+- `withAlpha` in `src/core/color.ts` turns a `#rrggbb` theme colour into an `rgb()` string with
+  an alpha, for canvas fills and bands.
+- `slowMotionFactor(speed, realTimeSpeed)` in `src/core/playback.ts` gives how many times slower
+  than real life a speed stop plays, halving at every stop up to the explainer's real time stop.
+
 The dock's jump chips sit under the scrubber's coloured bands. `phaseColumns` in
 `src/core/ui/phases.ts` gives each phase a grid column sized by its share of the
 cycle, and the dock sets it as `--phase-columns`. `--phase-min-width` on

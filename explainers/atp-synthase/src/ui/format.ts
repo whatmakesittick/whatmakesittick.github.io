@@ -1,13 +1,8 @@
 import { formatFixed, formatNumber } from '@core/format';
 import { t } from '@core/i18n';
+import { slowMotionFactor } from '@core/playback';
 import type { PhaseId, SiteState } from '../ids';
-import {
-  REAL_TIME_SPEED,
-  REAL_TURNS_PER_SECOND,
-  isSingleValue,
-  phaseAt,
-  slowdownFactor,
-} from '../model';
+import { REAL_TIME_SPEED, REAL_TURNS_PER_SECOND, isSingleValue, phaseAt } from '../model';
 import type { PercentRange } from '../model';
 
 const REAL_TIME_FORMAT = '×1';
@@ -59,14 +54,16 @@ export function describePhase(phase: number): string {
 
 export function formatSpeed(speed: number): string {
   if (speed === REAL_TIME_SPEED) return REAL_TIME_FORMAT;
-  return `${SLOWER_PREFIX}${slowdownFactor(speed)}`;
+  return `${SLOWER_PREFIX}${slowMotionFactor(speed, REAL_TIME_SPEED)}`;
 }
 
 export function describeSpeed(speed: number): string {
   if (speed === REAL_TIME_SPEED) {
     return t('timeline.realTime', { value: formatNumber(REAL_TURNS_PER_SECOND) });
   }
-  return t('timeline.slower', { factor: formatNumber(slowdownFactor(speed)) });
+  return t('timeline.slower', {
+    factor: formatNumber(slowMotionFactor(speed, REAL_TIME_SPEED)),
+  });
 }
 
 export function formatCount(count: number): string {

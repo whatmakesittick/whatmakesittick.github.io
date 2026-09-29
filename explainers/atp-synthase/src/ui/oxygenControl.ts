@@ -1,8 +1,8 @@
+import type { Disposer } from '@core/ui/disposers';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { atpKgPerHour, atpKgPerMinute, timesRest } from '../model';
 import { OXYGEN_RANGE } from '../state';
 import type { AtpSynthaseStore } from '../state';
-import type { Disposer } from './disposers';
 import {
   formatKilogramsPerHour,
   formatKilogramsPerMinute,

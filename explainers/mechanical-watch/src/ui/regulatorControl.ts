@@ -1,8 +1,8 @@
+import type { Disposer } from '@core/ui/disposers';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { activeLengthMm, balanceEnergyMicroJ, dailyRate, isWithinCosc, periodMs } from '../model';
 import { REGULATOR_RANGE, amplitudeOf } from '../state';
 import type { WatchStore } from '../state';
-import type { Disposer } from './disposers';
 import {
   formatMicroJoules,
   formatMilliseconds,

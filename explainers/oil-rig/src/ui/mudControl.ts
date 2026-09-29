@@ -1,3 +1,4 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import {
@@ -11,7 +12,6 @@ import { MUD_WEIGHT_RANGE, effectiveMudWeight, mudStateOf } from '../state';
 import type { OilRigStore } from '../state';
 import { formatBar, formatDensity, formatMudState, formatOptional } from './format';
 import { MudWindowGraph, depthBucket } from './mudWindowGraph';
-import type { Disposer } from './disposers';
 
 const PLAN_CHIP = '.chip[data-action="mudPlan"]';
 

@@ -1,9 +1,9 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import type { LayerId } from '../ids';
 import { CELL, MODULE_SPEC } from '../model';
 import type { SolarPanelStore } from '../state';
-import type { Disposer } from './disposers';
 import { MICROMETRES_PER_MM, formatLayerJob, formatLayerMaterial, formatThickness } from './format';
 
 export const LAYER_THICKNESS_MM: Record<LayerId, number | null> = {

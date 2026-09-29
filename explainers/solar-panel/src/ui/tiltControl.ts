@@ -1,8 +1,8 @@
+import type { Disposer } from '@core/ui/disposers';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { dailyEnergyWh, incidenceAngleDeg, incidenceCosine, isSunUp } from '../model';
 import { TILT_RANGE, irradianceOf, minuteOf } from '../state';
 import type { SolarPanelState, SolarPanelStore } from '../state';
-import type { Disposer } from './disposers';
 import { NO_VALUE, formatDegrees, formatIrradiance, formatKilowattHours } from './format';
 
 function incidenceOf(state: SolarPanelState): number | null {

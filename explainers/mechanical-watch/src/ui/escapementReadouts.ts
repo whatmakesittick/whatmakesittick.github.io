@@ -1,3 +1,5 @@
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import {
@@ -9,8 +11,6 @@ import {
 } from '../model';
 import { amplitudeOf } from '../state';
 import type { WatchState, WatchStore } from '../state';
-import { disposeAll } from './disposers';
-import type { Disposer } from './disposers';
 import { formatEscapeAdvance, formatMilliseconds, formatSignedDegrees, toTenths } from './format';
 
 const TENTH_DIGITS = 1;

@@ -1,9 +1,9 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { absorptionDepthUm, excessEnergyEv, photonEnergyEv } from '../model';
 import { WAVELENGTH_RANGE } from '../state';
 import type { SolarPanelStore } from '../state';
-import type { Disposer } from './disposers';
 import {
   formatAbsorption,
   formatBand,

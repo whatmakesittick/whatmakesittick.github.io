@@ -1,9 +1,9 @@
 import { currentLanguage } from '@core/i18n';
 import { FULL_TURN } from '@core/math';
+import { CanvasSurface, canvasFont, widestText } from '@core/ui/canvasSurface';
+import type { CanvasFrame } from '@core/ui/canvasSurface';
 import type { IvPoint, OperatingPoint, ShadeAnalysis } from '../model';
 import { CANVAS_COLORS } from './canvasColors';
-import { CanvasSurface, canvasFont, widestText } from './canvasSurface';
-import type { CanvasFrame } from './canvasSurface';
 import { formatAxisAmps, formatAxisVolts } from './format';
 
 interface Plot {

@@ -1,0 +1,481 @@
+<section class="chapter" data-preset="overview" aria-labelledby="overview-title">
+  <p class="chapter-index">01</p>
+  <h2 id="overview-title" data-i18n="sections.overview.title">
+    Two pumps in one fist-sized muscle
+  </h2>
+  <p data-i18n-html="sections.overview.p1">
+    Make a fist. Your <strong>heart</strong> is roughly that size: about 12 by 8 by 6 cm. It weighs
+    250 to 350 g. It sits in the middle of your chest, behind the breastbone and between the lungs.
+    It is tilted, so about two thirds of it lies left of the midline, and its tip, the apex, points
+    down and to the left. At rest a healthy heart beats about 60 to 100 times a minute. In a study
+    of 92,000 adults who wore fitness trackers, the average was about 65.
+  </p>
+  <p data-i18n-html="sections.overview.p2">
+    In a typical example, each beat pushes out about 70 mL of blood. At rest that adds up to about 5
+    litres a minute, roughly as much blood as your whole body holds. So on average your blood makes
+    a full lap of the body about once a minute. Your heart beats about 100,000 times a day. The
+    heart is really <strong>two pumps</strong> side by side. The right side sends blood through the
+    lungs to pick up oxygen. The left side sends it on round the rest of the body.
+  </p>
+  <p data-i18n-html="sections.overview.p3">
+    Each pump has two rooms. An <strong>atrium</strong> collects the blood coming in, and a
+    ventricle pushes it out. Four one-way valves keep the blood moving forward. The model shows one
+    resting beat, at 75 beats a minute, slowed right down. It takes a few shortcuts. Oxygen-poor
+    blood is drawn blue, as in most anatomy books, but in life it is dark red. In a real heart the
+    atria sit more behind the ventricles than on top of them. The vessels are cut off a hand's width
+    from the heart. Drag the timeline to move through the beat, and drag the model to turn it.
+  </p>
+  <p data-i18n-html="sections.overview.p4">
+    You may have heard that the heart never rests. In fact it rests in every beat. At rest the
+    ventricles spend only about two fifths of each beat squeezing. For the other three fifths the
+    muscle relaxes while the heart fills again. This relaxed part is called
+    <strong>diastole</strong>, and the squeeze is called systole. There is no single normal pulse,
+    either. In that tracker study, resting rates ran from about 40 to over 100. One healthy person's
+    normal rate could differ from another's by up to 70 beats a minute.
+  </p>
+</section>
+
+<section class="chapter" data-preset="chambers" aria-labelledby="chambers-title">
+  <p class="chapter-index">02</p>
+  <h2 id="chambers-title" data-i18n="sections.chambers.title">Four rooms, two pressures</h2>
+  <p data-i18n-html="sections.chambers.p1">
+    The model is now sliced open and seen from the front, a textbook view that shows all four rooms
+    at once. It faces you, so the heart's right side is on your left. Blood that has given up its
+    oxygen comes back from the body through two big veins, the venae cavae. They empty into the
+    <strong>right atrium</strong>. From there the blood passes into the right ventricle, which
+    pushes it through the lungs next door. That takes little force: its pressure peaks at about 25
+    mmHg.
+  </p>
+  <p data-i18n-html="sections.chambers.p2">
+    Blood rich in oxygen comes back from the lungs through four pulmonary veins into the left
+    atrium. From there it passes into the <strong>left ventricle</strong>, the strongest room. This
+    one must push blood round the whole body, from your brain to your toes. Its pressure peaks at
+    about 120 mmHg, roughly five times the right side's. So its wall is about three times as thick
+    as the right ventricle's, typically 6 to 9 mm. You can see the difference in the cut.
+  </p>
+  <p data-i18n-html="sections.chambers.p3">
+    A muscular wall, the <strong>septum</strong>, divides the two sides, so oxygen-rich and
+    oxygen-poor blood do not mix. Both ventricles move the same amount, about 70 mL per beat in a
+    typical example. If one side kept pumping even a little more, blood would pile up behind the
+    other. Most filling happens on its own: blood flows through the atria into the relaxed
+    ventricles. At the end, the atria squeeze and add a small top-up: up to about a fifth at rest,
+    and more when the heart races. Tap a room to see where its blood comes from and where it goes.
+  </p>
+  <p data-i18n-html="sections.chambers.p4">
+    How does each side know how much to pump? Nothing has to tell it. Heart muscle follows a simple
+    rule called the <strong>Frank-Starling mechanism</strong>: the more a ventricle fills, the
+    harder it squeezes. Extra blood stretches the muscle cells, stretched cells pull with more
+    force, and the ventricle pushes the extra out. So what flows in flows out again, beat after
+    beat. The rule is built into the muscle itself. Endurance athletes use it far more than
+    untrained people: their hearts fill more, so they pump more.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="chamber"
+      data-value="rightAtrium"
+      data-i18n="controls.chamberOptions.rightAtrium"
+    >
+      Right atrium
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="chamber"
+      data-value="rightVentricle"
+      data-i18n="controls.chamberOptions.rightVentricle"
+    >
+      Right ventricle
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="chamber"
+      data-value="leftAtrium"
+      data-i18n="controls.chamberOptions.leftAtrium"
+    >
+      Left atrium
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="chamber"
+      data-value="leftVentricle"
+      data-i18n="controls.chamberOptions.leftVentricle"
+    >
+      Left ventricle
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts chamber-readouts">
+    <div>
+      <dt data-i18n="sections.chambers.receives">Blood comes in from</dt>
+      <dd data-readout="chamber-receives">the left atrium</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.chambers.sends">Blood goes out to</dt>
+      <dd data-readout="chamber-sends">the whole body, through the aorta</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.chambers.wall">Wall thickness</dt>
+      <dd data-readout="chamber-wall">6 to 9 mm</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.chambers.pressure">Peak pressure</dt>
+      <dd class="number" data-readout="chamber-pressure">120 mmHg</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.chambers.role">What it does</dt>
+      <dd data-readout="chamber-role">pumps blood hard round the whole body</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="valves" aria-labelledby="valves-title">
+  <p class="chapter-index">03</p>
+  <h2 id="valves-title" data-i18n="sections.valves.title">Four one-way doors</h2>
+  <p data-i18n-html="sections.valves.p1">
+    Between each atrium and its ventricle sits a valve made of thin flaps called leaflets. On the
+    right it is the tricuspid valve, with three leaflets. On the left it is the
+    <strong>mitral valve</strong>, with two. When the ventricle squeezes, the rising pressure pushes
+    the leaflets shut. Thin cords, the chordae tendineae, tie their edges to small muscles in the
+    ventricle wall, called the papillary muscles. These tighten during the squeeze, so the leaflets
+    cannot blow back into the atrium like an umbrella in the wind.
+  </p>
+  <p data-i18n-html="sections.valves.p2">
+    The exits have a different kind of valve. The pulmonary valve opens the way to the lungs and the
+    <strong>aortic valve</strong> the way to the body. Each has three cusps shaped like small
+    pockets. While blood rushes out, the pockets lie flat against the wall. When the ventricle
+    relaxes, blood starts to fall back and fills the pockets. They snap shut and meet in the middle.
+    The model shows all four valves in one cut for clarity. In a real heart the pulmonary valve sits
+    higher and further forward.
+  </p>
+  <p data-i18n-html="sections.valves.p3">
+    No valve has muscle of its own. Each one opens when the pressure behind it is higher than the
+    pressure in front, and shuts when that reverses. As the valves snap shut, they make the
+    <strong>heart sounds</strong>, the lub-dub a doctor hears through a stethoscope. Lub, the first
+    sound, is the mitral and tricuspid valves shutting as the squeeze begins. Dub, the second, is
+    the aortic and pulmonary valves shutting as it ends. So the sounds come from the valves, not
+    from the muscle. Tap a valve, and the camera follows it through the beat.
+  </p>
+  <p data-i18n-html="sections.valves.p4">
+    Each sound is really two. The mitral valve shuts a fraction of a second before the tricuspid, a
+    gap too short to hear with a stethoscope. Tap each one and compare the times they shut to see
+    the gap in the model. The aortic valve also shuts just before the pulmonary valve. That gap,
+    called the <strong>split</strong> of the second sound, varies as you breathe and even when you
+    change position. A healthy adult heart makes only these two sounds. A third sound is normal in
+    children, but in adults it is often a sign of disease.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="valve"
+      data-value="tricuspid"
+      data-i18n="controls.valveOptions.tricuspid"
+    >
+      Tricuspid
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="valve"
+      data-value="pulmonary"
+      data-i18n="controls.valveOptions.pulmonary"
+    >
+      Pulmonary
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="valve"
+      data-value="mitral"
+      data-i18n="controls.valveOptions.mitral"
+    >
+      Mitral
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="valve"
+      data-value="aortic"
+      data-i18n="controls.valveOptions.aortic"
+    >
+      Aortic
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts valve-readouts">
+    <div>
+      <dt data-i18n="sections.valves.between">Sits between</dt>
+      <dd data-readout="valve-between">the left atrium and the left ventricle</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.valves.leaflets">Leaflets</dt>
+      <dd class="number" data-readout="valve-leaflets">2</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.valves.opens">Opens at</dt>
+      <dd class="number" data-readout="valve-opens">590 ms</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.valves.closes">Shuts at</dt>
+      <dd class="number" data-readout="valve-closes">190 ms</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.valves.now">Right now</dt>
+      <dd data-readout="valve-now">open</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="cycle" aria-labelledby="cycle-title">
+  <p class="chapter-index">04</p>
+  <h2 id="cycle-title" data-i18n="sections.cycle.title">One beat, step by step</h2>
+  <p data-i18n-html="sections.cycle.p1">
+    The graph follows the left side through one beat. It starts with the ventricle relaxed and
+    already mostly full. The atria squeeze and top it up to about 120 mL. Then the ventricle begins
+    to squeeze. The mitral valve shuts, and for a moment all four valves are closed. Blood has
+    nowhere to go, so the volume stays the same while the pressure shoots up, from about 10 to about
+    80 mmHg. This phase has a long name, <strong>isovolumetric contraction</strong>: squeezing at
+    the same volume.
+  </p>
+  <p data-i18n-html="sections.cycle.p2">
+    At about 80 mmHg the ventricle's pressure passes the aorta's, and the aortic valve swings open.
+    Blood rushes into the aorta at up to about 1 m/s, and the pressure peaks at about 120 mmHg. In a
+    quarter of a second or so, the ventricle pushes out about 70 mL, and about 50 mL stays behind.
+    So each beat sends out only a bit over half the blood, about 55 to 65 percent. This share is the
+    <strong>ejection fraction</strong>. The curves are typical textbook shapes, not one person's
+    measurement, and real hearts, when measured, often hold more.
+  </p>
+  <p data-i18n-html="sections.cycle.p3">
+    As the squeeze fades, blood starts to fall back and the aortic valve snaps shut. That makes the
+    little notch in the aortic curve. All four valves are shut again while the pressure falls, for
+    0.07 s or less. Once it drops below the atrium's, the mitral valve opens and blood flows in,
+    fast at first, then slowly. The elastic aorta stretches with each push and springs back between
+    them, so its pressure only falls to about 80. The high and the low together are the
+    <strong>blood pressure</strong> in the aorta, the familiar 120 over 80.
+  </p>
+  <p data-i18n-html="sections.cycle.p4">
+    Heart muscle has its own blood supply, the <strong>coronary arteries</strong> on its surface.
+    But a squeezing muscle presses on its own vessels, so most of that blood flows between beats,
+    while the muscle relaxes. When the heart speeds up, it is mostly the relaxed part that gets
+    shorter. At 75 beats a minute the heart spends about 33 seconds of every minute relaxed. At 150
+    it gets only about 22. So doubling the rate cuts the heart's own feeding time by about a third.
+    That matters most when the coronary arteries are narrowed.
+  </p>
+  <figure class="wiggers-view">
+    <canvas data-view="wiggers" width="640" height="400" aria-hidden="true"></canvas>
+    <figcaption data-i18n="sections.cycle.caption">
+      Pressure in the left ventricle, the aorta and the left atrium through one beat, with the
+      volume of the left ventricle below. The line is where the model is now.
+    </figcaption>
+  </figure>
+  <dl class="range-widget__readouts section-readouts cycle-readouts">
+    <div>
+      <dt data-i18n="sections.cycle.ventricle">Left ventricle</dt>
+      <dd class="number" data-readout="cycle-ventricle">118 mmHg</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.cycle.aorta">Aorta</dt>
+      <dd class="number" data-readout="cycle-aorta">112 mmHg</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.cycle.atrium">Left atrium</dt>
+      <dd class="number" data-readout="cycle-atrium">6 mmHg</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.cycle.flow">Flow through the aortic valve</dt>
+      <dd class="number" data-readout="cycle-flow">380 mL/s</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="conduction" aria-labelledby="conduction-title">
+  <p class="chapter-index">05</p>
+  <h2 id="conduction-title" data-i18n="sections.conduction.title">A spark that starts inside</h2>
+  <p data-i18n-html="sections.conduction.p1">
+    Every beat starts in the heart itself, not in the brain. High in the wall of the right atrium
+    sits a small patch of special cells, the <strong>sinus node</strong>. Left to itself, it would
+    fire about 100 times a minute. But the vagus nerve constantly holds it back, down to a resting
+    60 to 80. Nerves and hormones such as adrenaline only turn the rate up or down. Breathing does
+    too. Each breath in briefly loosens the grip of the vagus, so a healthy pulse speeds up a little
+    as you breathe in and slows as you breathe out.
+  </p>
+  <p data-i18n-html="sections.conduction.p2">
+    Each time the node fires, an electrical wave spreads across both atria in about 90 ms, and they
+    squeeze. On the trace this is the small bump called the P wave. Then the wave meets a ring of
+    tough tissue that it cannot cross, except at one gate: the <strong>AV node</strong>, short for
+    atrioventricular node. It is the slowest part of the system: the signal crawls through at about
+    0.05 m/s. It holds the signal for about a tenth of a second, so the atria finish emptying before
+    the ventricles start to squeeze.
+  </p>
+  <p data-i18n-html="sections.conduction.p3">
+    Past the node, the signal runs down the bundle of His and its two branches, one on each side of
+    the septum, at about 2 m/s. A fine network, the <strong>Purkinje fibres</strong>, then spreads
+    it over the inner walls at about 4 m/s, roughly 80 times faster than in the node. The whole
+    ventricle wall fires in less than a tenth of a second: the tall spike on the trace, called QRS.
+    Then the walls recover, and that shows on the trace as the T wave. Tap a wave to jump to that
+    moment.
+  </p>
+  <p data-i18n-html="sections.conduction.p4">
+    A <strong>transplanted heart</strong> shows how much the heart runs itself. It arrives with no
+    nerves connected, yet it beats. With no vagus to slow it, it beats faster than normal at rest.
+    During exercise it still speeds up, only more slowly, as adrenaline and similar hormones reach
+    it through the blood. In 40 to 70 percent of patients some nerves grow back, months to years
+    later. The heart has spare pacemakers too. If the sinus node fails, the AV node takes over at
+    about 40 to 60 beats a minute.
+  </p>
+  <figure class="ecg-view">
+    <canvas data-view="ecg" width="640" height="240" aria-hidden="true"></canvas>
+    <figcaption data-i18n="sections.conduction.caption">
+      The electrical trace of one beat, as it would appear on an electrocardiogram taken from the
+      skin. The line is where the model is now.
+    </figcaption>
+  </figure>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="wave"
+      data-value="p"
+      data-i18n="controls.waveOptions.p"
+    >
+      P wave
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="wave"
+      data-value="qrs"
+      data-i18n="controls.waveOptions.qrs"
+    >
+      QRS
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="wave"
+      data-value="t"
+      data-i18n="controls.waveOptions.t"
+    >
+      T wave
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts conduction-readouts">
+    <div>
+      <dt data-i18n="sections.conduction.where">Where the signal is</dt>
+      <dd data-readout="conduction-where">Atria</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.conduction.since">Since the node fired</dt>
+      <dd class="number" data-readout="conduction-since">40 ms</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.conduction.trace">Trace right now</dt>
+      <dd class="number" data-readout="conduction-trace">0.15 mV</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="circulation" aria-labelledby="circulation-title">
+  <p class="chapter-index">06</p>
+  <h2 id="circulation-title" data-i18n="sections.circulation.title">
+    Two loops, and what running changes
+  </h2>
+  <p data-i18n-html="sections.circulation.p1">
+    Follow one drop of blood. The right ventricle sends it through the pulmonary arteries into the
+    lungs, where it picks up oxygen. It returns through the pulmonary veins to the left side, which
+    sends it out through the aorta to the body. Then it comes back through the venae cavae to the
+    right side. So there are <strong>two loops</strong> in a row, and the heart drives both at once.
+    An artery is any vessel that carries blood away from the heart, with or without oxygen: the
+    pulmonary arteries carry oxygen-poor blood. At rest a drop goes round in about a minute on
+    average.
+  </p>
+  <p data-i18n-html="sections.circulation.p2">
+    Now slide the effort up. The rate climbs from about 75 towards about 190 beats a minute for a
+    25-year-old, and each beat pushes out more. Heart rate times the blood per beat is the
+    <strong>cardiac output</strong>, the blood pumped each minute. It rises from about 5 litres at
+    rest to about 20 in hard exercise. The squeeze gets a little shorter, but the time to fill
+    shrinks far more. When the rate doubles, the squeeze loses less than a third of its time and the
+    filling about two thirds. Watch the blue part of the chart shrink.
+  </p>
+  <p data-i18n-html="sections.circulation.p3">
+    All that work has a cost. The heart feeds itself through its coronary arteries, which take about
+    250 mL of blood a minute at rest, roughly 5 percent of what it pumps. It uses about a tenth of
+    the oxygen your body takes up. Its <strong>pumping power</strong> is modest, though: about 1 W
+    for the left side. Over a lifetime it beats about 3 billion times. That is a lot for a mammal.
+    Across mammals, a lifetime comes to roughly a billion beats, within a factor of ten. A diving
+    blue whale's heart beats only 2 to 8 times a minute.
+  </p>
+  <p data-i18n-html="sections.circulation.p4">
+    Endurance training reshapes the heart. The left ventricle grows roomier, about 55 mm across in
+    male athletes against about 48 mm in untrained people, and its wall thickens slightly. This
+    <strong>athlete's heart</strong> is a healthy change. Each beat moves more blood, and the
+    resting rate drops to about 50, nearer 30 in elite cyclists. Flat out it pumps about 28 litres a
+    minute. The records are about 42 litres a minute and 210 mL in one beat. Yet its top rate is no
+    higher than anyone else's. And 220 minus your age is only a rough guess, off by about 10 beats
+    either way. Tap the athlete to compare.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="fitness"
+      data-value="typical"
+      data-i18n="controls.fitnessOptions.typical"
+    >
+      Typical adult
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="fitness"
+      data-value="athlete"
+      data-i18n="controls.fitnessOptions.athlete"
+    >
+      Endurance athlete
+    </button>
+  </p>
+  <div class="range-widget effort-control">
+    <div class="range-widget__header">
+      <label for="effort" data-i18n="sections.circulation.control.label"
+        >How hard the body is working</label
+      >
+      <output class="number" for="effort" data-readout="effort">Resting</output>
+    </div>
+    <input id="effort" type="range" class="range" data-control="effort" />
+    <div class="range-widget__scale" aria-hidden="true">
+      <span data-i18n="sections.circulation.control.rest">Sitting still</span>
+      <span data-i18n="sections.circulation.control.max">Flat-out sprint</span>
+    </div>
+    <figure class="beat-split-view">
+      <canvas data-view="beat-split" width="640" height="160" aria-hidden="true"></canvas>
+      <figcaption data-i18n="sections.circulation.control.caption">
+        A typical adult at rest above, your pick below. Red is the squeeze, blue is the time left to
+        fill.
+      </figcaption>
+    </figure>
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.circulation.control.rate">Heart rate</dt>
+        <dd class="number" data-readout="effort-rate">75 per minute</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.circulation.control.stroke">Blood per beat</dt>
+        <dd class="number" data-readout="effort-stroke">70 mL</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.circulation.control.output">Blood per minute</dt>
+        <dd class="number" data-readout="effort-output">5.3 L</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.circulation.control.filling">Filling time per beat</dt>
+        <dd class="number" data-readout="effort-filling">470 ms</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.circulation.control.trip">One drop round the body in</dt>
+        <dd class="number" data-readout="effort-trip">57 s</dd>
+      </div>
+    </dl>
+  </div>
+</section>

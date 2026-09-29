@@ -1,5 +1,7 @@
 import { currentLanguage } from '@core/i18n';
 import { FULL_TURN } from '@core/math';
+import { CanvasSurface, canvasFont } from '@core/ui/canvasSurface';
+import type { CanvasFrame } from '@core/ui/canvasSurface';
 import {
   AM15G_SPECTRUM,
   BAND_GAP_EV,
@@ -11,8 +13,6 @@ import {
   wavelengthColor,
 } from '../model';
 import { CANVAS_COLORS, rgbCss } from './canvasColors';
-import { CanvasSurface, canvasFont } from './canvasSurface';
-import type { CanvasFrame } from './canvasSurface';
 import { formatElectronVolts, formatNanometres } from './format';
 
 interface Plot {

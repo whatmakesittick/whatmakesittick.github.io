@@ -1,9 +1,9 @@
+import type { Disposer } from '@core/ui/disposers';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { airGapM, displacementT, keelWaveMotion } from '../model';
 import { DRAFT_RANGE } from '../state';
 import type { OilRigStore } from '../state';
 import { formatMetresToTenths, formatPercent, formatTonnes } from './format';
-import type { Disposer } from './disposers';
 
 const DISPLACEMENT_ROUNDING_T = 100;
 

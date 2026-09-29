@@ -1,0 +1,12 @@
+{
+  "slug": "heart",
+  "tags": ["biology", "physics"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "Low-poly 3D model of a human heart cut open to show its four chambers and valves, with the aorta and pulmonary trunk above, beside the title How the heart works"
+  }
+}

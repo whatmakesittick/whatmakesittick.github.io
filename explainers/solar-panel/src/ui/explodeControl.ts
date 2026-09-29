@@ -1,7 +1,7 @@
+import type { Disposer } from '@core/ui/disposers';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { EXPLODE_RANGE } from '../state';
 import type { SolarPanelStore } from '../state';
-import type { Disposer } from './disposers';
 import { formatPercent } from './format';
 
 export function mountExplodeControl(root: Document, store: SolarPanelStore): Disposer {

@@ -1,9 +1,9 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import type { WheelId } from '../ids';
 import { secondsPerTurn, stepUp, wheelSpec } from '../model';
 import type { WatchStore } from '../state';
-import type { Disposer } from './disposers';
 import { formatStepUp, formatTeeth, formatTurnPeriod } from './format';
 
 function pinionLeaves(wheel: WheelId): number | null {

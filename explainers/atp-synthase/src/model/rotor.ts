@@ -1,3 +1,4 @@
+import { slowMotionFactor } from '@core/playback';
 import type { BetaIndex, RingId, SiteState } from '../ids';
 import { BETA_INDICES } from '../ids';
 import { STATOR_AZIMUTH_DEG } from './scale';
@@ -58,11 +59,7 @@ export function wrapDegrees(degrees: number): number {
 }
 
 export function degreesPerSecond(speed: number): number {
-  return REAL_DEGREES_PER_SECOND * 2 ** (speed - REAL_TIME_SPEED);
-}
-
-export function slowdownFactor(speed: number): number {
-  return 2 ** (REAL_TIME_SPEED - speed);
+  return REAL_DEGREES_PER_SECOND / slowMotionFactor(speed, REAL_TIME_SPEED);
 }
 
 export function stepIndex(rotorDeg: number): number {

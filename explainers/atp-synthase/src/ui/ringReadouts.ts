@@ -1,8 +1,8 @@
+import type { Disposer } from '@core/ui/disposers';
 import { requireElement, setText } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
 import { ringFacts } from '../model';
 import type { AtpSynthaseStore } from '../state';
-import type { Disposer } from './disposers';
 import { formatCount, formatDecimal, formatPerAtp } from './format';
 
 export function mountRingReadouts(root: Document, store: AtpSynthaseStore): Disposer {

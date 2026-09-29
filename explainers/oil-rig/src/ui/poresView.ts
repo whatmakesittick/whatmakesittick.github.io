@@ -1,11 +1,11 @@
 import { currentLanguage } from '@core/i18n';
 import { FULL_TURN, toRadians } from '@core/math';
+import { CanvasSurface, canvasFont } from '@core/ui/canvasSurface';
+import type { CanvasFrame } from '@core/ui/canvasSurface';
 import type { FluidId, LayerId } from '../ids';
 import { ROCKS, fluidLeg, layPlates, layerAt, packSand, placeBubbles, poreFluidAt } from '../model';
 import type { Bubble, Grain, Plate, PlateBed, PlateFabric } from '../model';
 import { CANVAS_COLORS } from './canvasColors';
-import { CanvasSurface, canvasFont } from './canvasSurface';
-import type { CanvasFrame } from './canvasSurface';
 import { formatScaleLength } from './format';
 
 type Fabric = 'sand' | 'clay' | 'shale' | 'organic';

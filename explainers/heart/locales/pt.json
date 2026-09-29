@@ -1,0 +1,276 @@
+{
+  "meta": {
+    "title": "Como funciona o coração",
+    "eyebrow": "Coração humano",
+    "tagline": "Um músculo do tamanho da sua mão fechada se contrai cerca de uma vez por segundo e bombeia o sangue por dois circuitos, com quatro portas que só abrem para um lado e o mantêm no sentido certo.",
+    "description": "Um coração 3D batendo em câmera lenta, aberto ao meio: câmaras, válvulas, curva de pressão, marca-passo natural e o que muda quando você corre.",
+    "summary": "Quatro câmaras, quatro válvulas, a curva de pressão, o marca-passo interno e o que acontece quando você corre.",
+    "socialAlt": "Modelo 3D low poly de um coração humano aberto ao meio, mostrando as quatro câmaras e as válvulas, com a aorta e o tronco pulmonar em cima, ao lado do título “Como funciona o coração”"
+  },
+  "stage": {
+    "label": "Modelo interativo do coração",
+    "gauge": "Leituras do coração ao vivo"
+  },
+  "controls": {
+    "label": "Controles do coração",
+    "views": {
+      "cutaway": {
+        "name": "Coração aberto",
+        "short": "Corte",
+        "hint": "Coração aberto (C)"
+      },
+      "flow": {
+        "name": "Fluxo sanguíneo",
+        "short": "Fluxo",
+        "hint": "Fluxo sanguíneo (F)"
+      },
+      "conduction": {
+        "name": "Sistema elétrico",
+        "short": "Sinal",
+        "hint": "Sistema elétrico (E)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    },
+    "chamberOptions": {
+      "rightAtrium": "Átrio direito",
+      "rightVentricle": "Ventrículo direito",
+      "leftAtrium": "Átrio esquerdo",
+      "leftVentricle": "Ventrículo esquerdo"
+    },
+    "valveOptions": {
+      "tricuspid": "Tricúspide",
+      "pulmonary": "Pulmonar",
+      "mitral": "Mitral",
+      "aortic": "Aórtica"
+    },
+    "waveOptions": {
+      "p": "Onda P",
+      "qrs": "QRS",
+      "t": "Onda T"
+    },
+    "fitnessOptions": {
+      "typical": "Adulto comum",
+      "athlete": "Atleta de endurance"
+    }
+  },
+  "timeline": {
+    "label": "Momento do batimento",
+    "phases": "Ir para um momento do batimento",
+    "speed": "Reprodução",
+    "value": "Aos {{time}} do batimento, {{phase}}",
+    "realTime": "Tempo real",
+    "slower": "{{factor}} vezes mais lento que na vida real",
+    "phase": {
+      "atria": "Contração dos átrios",
+      "squeeze": "Subida da pressão",
+      "eject": "Saída do sangue",
+      "relax": "Queda da pressão",
+      "fill": "Enchimento rápido",
+      "rest": "Enchimento lento"
+    },
+    "during": {
+      "atria": "os átrios completam o enchimento dos ventrículos",
+      "squeeze": "os ventrículos se contraem com todas as válvulas fechadas",
+      "eject": "o sangue sai pela aorta e pelo tronco pulmonar",
+      "relax": "os ventrículos relaxam com todas as válvulas fechadas",
+      "fill": "o sangue entra depressa nos ventrículos",
+      "rest": "os ventrículos se enchem devagar"
+    },
+    "jump": {
+      "atria": "Ir para a contração dos átrios",
+      "squeeze": "Ir para a subida da pressão",
+      "eject": "Ir para a saída do sangue",
+      "relax": "Ir para a queda da pressão",
+      "fill": "Ir para o enchimento rápido",
+      "rest": "Ir para o enchimento lento"
+    }
+  },
+  "readouts": {
+    "lvPressure": "Pressão no ventrículo esquerdo",
+    "aorticPressure": "Pressão na aorta",
+    "lvVolume": "Volume do ventrículo esquerdo",
+    "valves": "Válvulas",
+    "signal": "Sinal"
+  },
+  "parts": {
+    "rightAtrium": "Átrio direito",
+    "rightVentricle": "Ventrículo direito",
+    "leftAtrium": "Átrio esquerdo",
+    "leftVentricle": "Ventrículo esquerdo",
+    "septum": "Septo",
+    "wall": "Músculo cardíaco",
+    "apex": "Ápice",
+    "tricuspidValve": "Válvula tricúspide",
+    "pulmonaryValve": "Válvula pulmonar",
+    "mitralValve": "Válvula mitral",
+    "aorticValve": "Válvula aórtica",
+    "chordae": "Cordas tendíneas e músculos papilares",
+    "aorta": "Aorta",
+    "archBranches": "Artérias para a cabeça e os braços",
+    "pulmonaryTrunk": "Tronco pulmonar",
+    "pulmonaryArteries": "Artérias pulmonares",
+    "superiorVenaCava": "Veia cava superior",
+    "inferiorVenaCava": "Veia cava inferior",
+    "pulmonaryVeins": "Veias pulmonares",
+    "coronaries": "Artérias coronárias",
+    "sinusNode": "Nó sinusal",
+    "avNode": "Nó AV",
+    "bundleBranches": "Ramos do feixe de His",
+    "purkinjeFibres": "Fibras de Purkinje",
+    "venousBlood": "Sangue pobre em oxigênio",
+    "arterialBlood": "Sangue rico em oxigênio"
+  },
+  "valves": {
+    "state": {
+      "avOpen": "Mitral e tricúspide abertas",
+      "allClosed": "As quatro fechadas",
+      "semilunarOpen": "Aórtica e pulmonar abertas"
+    },
+    "now": {
+      "open": "aberta",
+      "shut": "fechada",
+      "opening": "abrindo",
+      "closing": "fechando"
+    },
+    "between": {
+      "tricuspid": "o átrio direito e o ventrículo direito",
+      "pulmonary": "o ventrículo direito e o tronco pulmonar",
+      "mitral": "o átrio esquerdo e o ventrículo esquerdo",
+      "aortic": "o ventrículo esquerdo e a aorta"
+    },
+    "sound": {
+      "s1": "o primeiro som do coração",
+      "s2": "o segundo som do coração"
+    }
+  },
+  "chambers": {
+    "receives": {
+      "rightAtrium": "do corpo, pelas duas veias cavas",
+      "rightVentricle": "do átrio direito",
+      "leftAtrium": "dos pulmões, pelas quatro veias pulmonares",
+      "leftVentricle": "do átrio esquerdo"
+    },
+    "sends": {
+      "rightAtrium": "para o ventrículo direito",
+      "rightVentricle": "para os pulmões, pelo tronco pulmonar",
+      "leftAtrium": "para o ventrículo esquerdo",
+      "leftVentricle": "para o corpo todo, pela aorta"
+    },
+    "wall": {
+      "rightAtrium": "fina",
+      "rightVentricle": "cerca de um terço da do ventrículo esquerdo",
+      "leftAtrium": "fina",
+      "leftVentricle": "6 a 9 mm"
+    },
+    "role": {
+      "rightAtrium": "recolhe o sangue do corpo e completa o enchimento do ventrículo direito",
+      "rightVentricle": "bombeia o sangue com pouca força pelos pulmões",
+      "leftAtrium": "recolhe o sangue dos pulmões e completa o enchimento do ventrículo esquerdo",
+      "leftVentricle": "bombeia o sangue com força pelo corpo todo"
+    }
+  },
+  "signal": {
+    "sinusNode": "Nó sinusal",
+    "atria": "Átrios",
+    "avNode": "Nó AV, em espera",
+    "bundle": "Feixe de His",
+    "branches": "Ramos do feixe de His",
+    "purkinje": "Fibras de Purkinje",
+    "ventricles": "Paredes ventriculares",
+    "recovering": "Paredes em recuperação",
+    "quiet": "Entre batimentos"
+  },
+  "units": {
+    "ms": "{{value}} ms",
+    "mmHg": "{{value}} mmHg",
+    "ml": "{{value}} mL",
+    "mlPerSecond": "{{value}} mL/s",
+    "mv": "{{value}} mV",
+    "mm": "{{value}} mm",
+    "mmRange": "{{from}} a {{to}} mm",
+    "perMinute": "{{value}} por minuto",
+    "litres": "{{value}} L",
+    "litresPerMinute": "{{value}} L/min",
+    "seconds": "{{value}} s",
+    "percent": "{{value}}%",
+    "resting": "Em repouso"
+  },
+  "sections": {
+    "overview": {
+      "title": "Duas bombas num músculo do tamanho de um punho",
+      "p1": "Feche a mão. Seu <strong>coração</strong> tem mais ou menos esse tamanho: uns 12 por 8 por 6 cm, e pesa de 250 a 350 g. Ele fica no meio do peito, atrás do esterno e entre os pulmões. Como é inclinado, cerca de dois terços dele ficam à esquerda da linha média, e a ponta, chamada ápice, fica voltada para baixo e para a esquerda. Em repouso, um coração saudável bate cerca de 60 a 100 vezes por minuto. Num estudo com 92.000 adultos que usavam pulseiras de atividade física, a média foi de cerca de 65.",
+      "p2": "Num exemplo típico, cada batimento bombeia cerca de 70 mL de sangue. Em repouso, isso dá uns 5 litros por minuto, mais ou menos todo o sangue que o seu corpo tem. Então, em média, o seu sangue dá uma volta completa pelo corpo cerca de uma vez por minuto. E o seu coração bate umas 100.000 vezes por dia. No fundo, o coração é formado por <strong>duas bombas</strong> lado a lado. O lado direito manda o sangue pelos pulmões para pegar oxigênio. O lado esquerdo o leva pelo resto do corpo.",
+      "p3": "Cada bomba tem duas câmaras. Um <strong>átrio</strong> recebe o sangue que chega, e um ventrículo o expulsa. Quatro válvulas de mão única fazem o sangue seguir sempre para a frente. O modelo mostra um batimento em repouso, a 75 por minuto, em câmera bem lenta. Ele simplifica algumas coisas. O sangue pobre em oxigênio aparece em azul, como na maioria dos livros de anatomia, mas na vida real ele é vermelho-escuro. Além disso, os átrios ficam mais atrás dos ventrículos do que em cima deles. E os vasos terminam a um palmo do coração. Arraste a linha do tempo para percorrer o batimento e arraste o modelo para girá-lo.",
+      "p4": "Talvez você já tenha ouvido dizer que o coração nunca descansa. Na verdade, ele descansa a cada batimento. Em repouso, os ventrículos passam só cerca de dois quintos de cada batimento se contraindo. Nos outros três quintos, o músculo relaxa enquanto o coração volta a se encher. Essa fase de relaxamento se chama <strong>diástole</strong>, e a contração se chama sístole. Também não existe um pulso normal que valha para todos. Naquele estudo com as pulseiras, a frequência em repouso ia de cerca de 40 a mais de 100, e o valor normal de uma pessoa saudável podia diferir do de outra em até 70 batimentos por minuto."
+    },
+    "chambers": {
+      "title": "Quatro câmaras, duas pressões",
+      "p1": "Agora o modelo aparece aberto por um corte reto e visto de frente: é a vista clássica dos livros didáticos, que mostra as quatro câmaras de uma vez. Ele está virado para você, então o lado direito do coração fica à sua esquerda. O sangue que já entregou o oxigênio volta do corpo por duas grandes veias, as veias cavas. Elas desembocam no <strong>átrio direito</strong>. De lá, o sangue passa para o ventrículo direito, que o manda para os pulmões, logo ao lado. Isso exige pouca força: ali a pressão chega no máximo a cerca de 25 mmHg.",
+      "p2": "O sangue volta dos pulmões rico em oxigênio, pelas quatro veias pulmonares, e entra no átrio esquerdo. De lá, passa para o <strong>ventrículo esquerdo</strong>, a câmara mais forte. Ele precisa empurrar o sangue pelo corpo todo, do cérebro até os dedos dos pés. A pressão dele chega a cerca de 120 mmHg, umas cinco vezes a do lado direito. Por isso, a parede dele é cerca de três vezes mais grossa que a do ventrículo direito, em geral de 6 a 9 mm. Dá para ver a diferença no corte.",
+      "p3": "Uma parede de músculo, o <strong>septo</strong>, separa os dois lados, e assim o sangue rico e o sangue pobre em oxigênio não se misturam. Os dois ventrículos bombeiam a mesma quantidade de sangue, cerca de 70 mL por batimento num exemplo típico. Se um lado bombeasse nem que fosse um pouco mais durante muito tempo, o sangue se acumularia na entrada do outro. A maior parte do enchimento acontece sozinha: o sangue passa pelos átrios e entra nos ventrículos relaxados. No fim, os átrios se contraem e dão um pequeno reforço, de até cerca de um quinto em repouso, e mais quando o coração dispara. Toque numa câmara para ver de onde vem o sangue dela e para onde ele vai.",
+      "p4": "Como cada lado sabe quanto bombear? Ninguém precisa avisar. O músculo do coração segue uma regra simples, o <strong>mecanismo de Frank-Starling</strong>: quanto mais o ventrículo se enche, mais forte ele se contrai. O sangue extra estica as células do músculo, as células esticadas fazem mais força, e o ventrículo expulsa o excesso. Assim, tudo o que entra volta a sair, batimento após batimento. A regra faz parte do próprio músculo. Atletas de endurance usam esse mecanismo muito mais que pessoas sem treino: o coração deles se enche mais, e por isso bombeia mais.",
+      "receives": "Recebe sangue",
+      "sends": "Envia sangue",
+      "wall": "Espessura da parede",
+      "pressure": "Pressão máxima",
+      "role": "O que faz"
+    },
+    "valves": {
+      "title": "Quatro portas que só abrem para um lado",
+      "p1": "Entre cada átrio e o seu ventrículo há uma válvula feita de abas finas, chamadas folhetos. À direita fica a válvula tricúspide, com três folhetos. À esquerda fica a <strong>válvula mitral</strong>, com dois. Quando o ventrículo se contrai, o aumento da pressão empurra os folhetos e os fecha. Cordões finos, as cordas tendíneas, prendem as bordas deles a pequenos músculos na parede do ventrículo, os músculos papilares. Esses músculos ficam tensos durante a contração, e assim os folhetos não viram para dentro do átrio como um guarda-chuva virado pelo vento.",
+      "p2": "As saídas têm outro tipo de válvula. A válvula pulmonar abre o caminho para os pulmões, e a <strong>válvula aórtica</strong>, o caminho para o corpo. Cada uma tem três cúspides em forma de bolsinhas. Enquanto o sangue sai com força, as bolsinhas ficam coladas à parede. Quando o ventrículo relaxa e o sangue começa a voltar, ele enche as bolsinhas, que se fecham de golpe e se encontram no meio. Para ficar mais claro, o modelo mostra as quatro válvulas num só corte. Num coração de verdade, a válvula pulmonar fica mais alta e mais à frente.",
+      "p3": "Nenhuma válvula tem músculo próprio. Cada uma abre quando a pressão atrás dela é maior que a pressão à frente, e fecha quando isso se inverte. Ao se fecharem de golpe, elas produzem os <strong>sons do coração</strong>, o tum-tá que o médico ouve com o estetoscópio. O tum, o primeiro som, vem das válvulas mitral e tricúspide, que se fecham quando a contração começa. O tá, o segundo som, vem das válvulas aórtica e pulmonar, que se fecham quando ela termina. Ou seja, os sons vêm das válvulas, não do músculo. Toque numa válvula e a câmera vai acompanhá-la durante o batimento.",
+      "p4": "A rigor, cada som é duplo. A válvula mitral fecha uma fração de segundo antes da tricúspide, um intervalo curto demais para ouvir com o estetoscópio. Compare os tempos das duas no modelo. A válvula aórtica também fecha um pouco antes da pulmonar. Esse intervalo, chamado <strong>desdobramento</strong> do segundo som, varia com a respiração e até quando você muda de posição. Num adulto saudável, o coração faz só esses dois sons. Um terceiro som é normal em crianças, mas em adultos muitas vezes é sinal de doença.",
+      "between": "Fica entre",
+      "leaflets": "Folhetos",
+      "opens": "Abre aos",
+      "closes": "Fecha aos",
+      "now": "Agora está"
+    },
+    "cycle": {
+      "title": "Um batimento, passo a passo",
+      "p1": "O gráfico acompanha o lado esquerdo durante um batimento. Ele começa com o ventrículo relaxado e já bem cheio. Os átrios se contraem e completam o enchimento até cerca de 120 mL. Então o ventrículo começa a se contrair. A válvula mitral fecha, e por um instante as quatro válvulas ficam fechadas. O sangue não tem para onde ir. Por isso o volume não muda, enquanto a pressão dispara de cerca de 10 para cerca de 80 mmHg. Essa fase tem um nome comprido, <strong>contração isovolumétrica</strong>: contrair sem mudar de volume.",
+      "p2": "Por volta de 80 mmHg, a pressão do ventrículo ultrapassa a da aorta, e a válvula aórtica se abre. O sangue entra na aorta a uma velocidade de até cerca de 1 m/s, e a pressão chega a cerca de 120 mmHg. Em cerca de um quarto de segundo, o ventrículo expulsa uns 70 mL, e uns 50 mL continuam lá dentro. Então cada batimento esvazia só um pouco mais da metade, algo entre 55 e 65 por cento. Essa parcela é a <strong>fração de ejeção</strong>. As curvas têm o formato típico dos livros didáticos e não vêm da medição de uma pessoa, e corações de verdade costumam ter volumes maiores.",
+      "p3": "Quando a contração perde força, o sangue começa a voltar e a válvula aórtica se fecha de golpe. É isso que cria a pequena reentrância na curva da aorta. As quatro válvulas ficam fechadas de novo enquanto a pressão cai, por 0,07 s ou menos. Quando ela fica abaixo da pressão do átrio, a válvula mitral se abre e o sangue entra, depressa no começo e devagar depois. A aorta é elástica: ela se estica a cada empurrão e volta ao lugar entre um e outro, e assim a pressão dentro dela só cai até cerca de 80. Esse máximo e esse mínimo são a <strong>pressão arterial</strong> na aorta: 120 por 80 mmHg, o famoso 12 por 8.",
+      "p4": "O músculo do coração é irrigado por vasos próprios, as <strong>artérias coronárias</strong>, que correm pela superfície dele. Mas um músculo que se contrai aperta os próprios vasos. Por isso a maior parte desse sangue passa entre os batimentos, enquanto o músculo relaxa. Quando o coração acelera, o que mais encurta é a fase de relaxamento. A 75 batimentos por minuto, o coração passa cerca de 33 segundos de cada minuto relaxado. A 150, sobram só cerca de 22. Ou seja, dobrar a frequência corta em cerca de um terço o tempo em que o coração se alimenta. Isso pesa mais quando as coronárias estão estreitadas.",
+      "caption": "Pressão no ventrículo esquerdo, na aorta e no átrio esquerdo durante um batimento, com o volume do ventrículo esquerdo embaixo. A linha mostra onde o modelo está agora.",
+      "ventricle": "Ventrículo esquerdo",
+      "aorta": "Aorta",
+      "atrium": "Átrio esquerdo",
+      "flow": "Fluxo pela válvula aórtica"
+    },
+    "conduction": {
+      "title": "Uma faísca que vem de dentro",
+      "p1": "Cada batimento começa no próprio coração, não no cérebro. No alto da parede do átrio direito fica um pequeno grupo de células especializadas, o <strong>nó sinusal</strong>. Sozinho, ele dispararia cerca de 100 vezes por minuto. Mas o nervo vago o freia o dia todo e o mantém num ritmo de repouso de 60 a 80. Nervos e hormônios como a adrenalina só aumentam ou diminuem esse ritmo. Até a respiração faz isso: cada inspiração alivia por um instante o freio do vago. Por isso, um pulso saudável acelera um pouco quando você inspira e desacelera quando você expira.",
+      "p2": "Cada vez que o nó dispara, uma onda elétrica se espalha pelos dois átrios em cerca de 90 ms, e eles se contraem. No traçado, é a pequena elevação chamada onda P. Então a onda encontra um anel de tecido fibroso que ela não consegue atravessar, a não ser por uma porta: o <strong>nó AV</strong>, abreviação de nó atrioventricular. É a parte mais lenta do sistema: ali o sinal anda a cerca de 0,05 m/s. Ele segura o sinal por cerca de um décimo de segundo, para que os átrios terminem de se esvaziar antes que os ventrículos comecem a se contrair.",
+      "p3": "Depois do nó, o sinal desce pelo feixe de His e pelos seus dois ramos, um de cada lado do septo, a cerca de 2 m/s. Em seguida, uma rede fina, as <strong>fibras de Purkinje</strong>, o espalha pelas paredes internas a cerca de 4 m/s, umas 80 vezes mais rápido que no nó. A parede inteira dos ventrículos dispara em menos de um décimo de segundo: é o pico alto do traçado, chamado complexo QRS. Depois, as paredes se recuperam, e isso aparece no traçado como a onda T. Toque numa onda para ir até esse momento.",
+      "p4": "Um <strong>coração transplantado</strong> mostra o quanto esse órgão funciona por conta própria. Ele chega sem nenhum nervo ligado, e mesmo assim bate. Sem o vago para freá-lo, ele bate mais rápido que o normal em repouso. Durante o exercício, ele ainda acelera, só que mais devagar, à medida que a adrenalina e hormônios parecidos chegam pelo sangue. Em 40 a 70 por cento dos pacientes, alguns nervos voltam a crescer, meses ou anos depois. O coração também tem marca-passos de reserva. Se o nó sinusal falhar, o nó AV assume o comando, num ritmo de cerca de 40 a 60 batimentos por minuto.",
+      "caption": "O traçado elétrico de um batimento, como um eletrocardiograma o registraria na pele. A linha mostra onde o modelo está agora.",
+      "where": "Onde está o sinal",
+      "since": "Desde o disparo do nó",
+      "trace": "Traçado agora"
+    },
+    "circulation": {
+      "title": "Dois circuitos e o que muda quando você corre",
+      "p1": "Siga uma gota de sangue. O ventrículo direito a manda pelas artérias pulmonares até os pulmões, onde ela pega oxigênio. Ela volta pelas veias pulmonares ao lado esquerdo, que a manda pela aorta para o corpo. Depois, ela retorna pelas veias cavas ao lado direito. São <strong>dois circuitos</strong> em sequência, e o coração impulsiona os dois ao mesmo tempo. Artéria é todo vaso que leva sangue do coração para os órgãos, com ou sem oxigênio: as artérias pulmonares levam sangue pobre em oxigênio. Em repouso, uma gota dá a volta em cerca de um minuto, em média.",
+      "p2": "Agora aumente o esforço. A frequência sobe de cerca de 75 para perto de 190 batimentos por minuto numa pessoa de 25 anos, e cada batimento bombeia mais sangue. A frequência multiplicada pelo volume de cada batimento dá o <strong>débito cardíaco</strong>, o sangue bombeado por minuto. Ele sobe de cerca de 5 litros em repouso para cerca de 20 num exercício intenso. A contração fica um pouco mais curta, mas o tempo de enchimento encurta muito mais. Quando a frequência dobra, a contração perde menos de um terço do seu tempo, e o enchimento, cerca de dois terços. Veja a parte azul do gráfico encolher.",
+      "p3": "Todo esse trabalho tem um custo. O coração se alimenta pelas próprias artérias coronárias, com cerca de 250 mL de sangue por minuto em repouso, cerca de 5 por cento do que ele bombeia. Ele usa cerca de um décimo do oxigênio que o corpo consome. Já a <strong>potência de bombeamento</strong> dele é modesta: cerca de 1 W no lado esquerdo. Ao longo da vida, ele bate cerca de 3 bilhões de vezes. É muito para um mamífero. Entre os mamíferos, uma vida dá mais ou menos um bilhão de batimentos, com variação de até dez vezes para mais ou para menos. Numa baleia-azul em mergulho, o coração bate só 2 a 8 vezes por minuto.",
+      "p4": "O treino de endurance remodela o coração. O ventrículo esquerdo fica mais amplo, com cerca de 55 mm de diâmetro em atletas homens contra cerca de 48 mm em pessoas sem treino, e a parede dele engrossa um pouco. Esse <strong>coração de atleta</strong> é uma mudança saudável. Cada batimento bombeia mais sangue, e a frequência em repouso cai para cerca de 50, ou para perto de 30 em ciclistas de elite. No esforço máximo, ele consegue bombear uns 28 litros por minuto. Os recordes são de cerca de 42 litros por minuto e 210 mL num só batimento. Mesmo assim, a frequência máxima de um atleta não é maior que a de qualquer outra pessoa. E a fórmula 220 menos a sua idade é só uma estimativa grosseira, que erra em cerca de 10 batimentos para mais ou para menos. Toque no atleta para comparar.",
+      "control": {
+        "label": "Intensidade do esforço",
+        "rest": "Sentado, sem esforço",
+        "max": "Sprint máximo",
+        "caption": "Em cima, um adulto comum em repouso; embaixo, a sua escolha. O vermelho é a contração, e o azul, o tempo que sobra para encher.",
+        "rate": "Frequência cardíaca",
+        "stroke": "Sangue por batimento",
+        "output": "Sangue por minuto",
+        "filling": "Tempo de enchimento por batimento",
+        "trip": "Uma gota dá a volta no corpo em"
+      }
+    }
+  }
+}

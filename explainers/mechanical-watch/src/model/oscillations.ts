@@ -1,3 +1,4 @@
+import { slowMotionFactor } from '@core/playback';
 import {
   CYCLE_DEG,
   SECONDS_PER_HALF_DAY,
@@ -10,16 +11,11 @@ export { cycleCountAfter } from './kinematics';
 
 export const REAL_TIME_SPEED = 8;
 
-const SLOW_MOTION_BASE = 2;
 const HOURS_ON_DIAL = 12;
 const CLOCK_DIGITS = 2;
 
-export function slowMotionFactor(speed: number): number {
-  return SLOW_MOTION_BASE ** (REAL_TIME_SPEED - speed);
-}
-
 export function phaseDegreesPerSecond(speed: number): number {
-  return (CYCLE_DEG * OSCILLATIONS_PER_SECOND) / slowMotionFactor(speed);
+  return (CYCLE_DEG * OSCILLATIONS_PER_SECOND) / slowMotionFactor(speed, REAL_TIME_SPEED);
 }
 
 function twoDigits(value: number): string {
