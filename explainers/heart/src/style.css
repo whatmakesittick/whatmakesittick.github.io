@@ -136,3 +136,11 @@
     height: 44px;
   }
 }
+
+.gauge .readouts {
+  width: 12.5rem;
+}
+
+.gauge .readout dd.tone-text {
+  white-space: normal;
+}
