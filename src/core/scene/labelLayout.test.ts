@@ -47,15 +47,44 @@ describe('layoutLabels', () => {
     expect(placements.get('piston')?.shift).toBe(18);
   });
 
-  it('stacks three overlapping labels in anchor order', () => {
-    const placements = layoutLabels(
-      [box('c', 200, 104), box('a', 200, 100), box('b', 200, 102)],
-      bounds,
+  it('spreads three overlapping labels on one side without overlap', () => {
+    const boxes = [box('c', 330, 104), box('a', 330, 100), box('b', 330, 102)];
+    const placements = layoutLabels(boxes, bounds);
+    expect(placements.get('a')?.shift).toBe(0);
+    expect(placements.get('b')?.shift).toBeGreaterThan(0);
+    expect(boxes.every((item) => placements.get(item.id)?.side === 'left')).toBe(true);
+    const pills = shownPills(boxes, bounds);
+    pills.forEach((one, index) =>
+      pills.slice(index + 1).forEach((other) => expect(overlaps(one, other)).toBe(false)),
     );
-    const shifts = ['a', 'b', 'c'].map((id) => placements.get(id)?.shift);
-    expect(shifts[0]).toBe(0);
-    expect(shifts[1]).toBeGreaterThan(0);
-    expect(shifts[2]).toBeGreaterThan(shifts[1] ?? 0);
+  });
+
+  it('takes the nearer free spot above when it is closer than the one below', () => {
+    const blocker = { left: 60, right: 180, top: 70, bottom: 130 };
+    const placements = layoutLabels([box('near', 200, 110, 'left')], {
+      ...bounds,
+      width: 250,
+      keepOut: [blocker],
+    });
+    const placement = placements.get('near');
+    expect(placement?.side).toBe('left');
+    expect(placement?.shift).toBeLessThan(0);
+  });
+
+  it('flips to the other side when its own nearest free spot is far away', () => {
+    const wall = { left: 60, right: 190, top: 0, bottom: 300 };
+    const placements = layoutLabels([box('far', 200, 100, 'left')], { ...bounds, keepOut: [wall] });
+    expect(placements.get('far')).toEqual({ side: 'right', shift: 0 });
+  });
+
+  it('stays on its own side when the other side is only a little nearer', () => {
+    const own = { left: 60, right: 190, top: 60, bottom: 90 };
+    const other = { left: 210, right: 330, top: 60, bottom: 76 };
+    const placements = layoutLabels([box('close', 200, 100, 'left')], {
+      ...bounds,
+      keepOut: [own, other],
+    });
+    expect(placements.get('close')?.side).toBe('left');
   });
 
   it('moves a label up instead when pushing down would cross the floor', () => {

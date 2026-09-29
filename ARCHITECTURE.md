@@ -369,13 +369,14 @@ DOM, so a frame forces no style or layout work. A new size asks for a frame.
 The layout keeps labels off the stage overlays. `watchKeepOut` in `keepOut.ts` measures
 the expand button, the gauge and the dock in the label frame's coordinates. It does this
 only when one of them or the frame resizes, or when the stage expands or collapses; the
-shell passes the areas to `labels.setKeepOut`. `layoutLabels` in `labelLayout.ts` places
-the labels in priority order (from `createLabelVisibility`, then top to bottom). It tries
-each label's own side first and then the other side. On each side it takes the smallest
-shift, downward first, that clears the keep-out areas, the labels already placed and the
-top and bottom of the view. A label with no free spot on either side is hidden with
-`scene-label--crowded` until a later frame has room for it, so two labels never sit on
-top of each other.
+shell passes the areas to `labels.setKeepOut`. `layoutLabels` in `labelLayout.ts` places the labels in priority order (from
+`createLabelVisibility`, then top to bottom). On each side it finds the free spot nearest
+the label's own height, up or down with ties going down, clear of the keep-out areas, the
+labels already placed and the top and bottom of the view. A label keeps its own side unless
+that side has no free spot or the other side's spot is nearer by more than one label height,
+so leader lines stay short. A label with no free spot on either side is hidden with
+`scene-label--crowded` until a later frame has room for it, so two labels never sit on top
+of each other.
 
 `createLabelVisibility(shell, priority)` wraps `LabelVisibility` as a label
 policy: it follows the viewport size, updates every frame and `dispose` removes

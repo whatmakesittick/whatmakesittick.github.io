@@ -85,9 +85,7 @@ function candidateShifts(natural: Rect, obstacles: readonly Rect[]): number[] {
     other.bottom + LABEL_GAP_PX - natural.top,
     other.top - LABEL_GAP_PX - natural.bottom,
   ]);
-  const below = shifts.filter((shift) => shift > 0).sort((a, b) => a - b);
-  const above = shifts.filter((shift) => shift < 0).sort((a, b) => b - a);
-  return [0, ...below, ...above];
+  return [0, ...shifts].sort((a, b) => Math.abs(a) - Math.abs(b) || b - a);
 }
 
 function freeShift(
@@ -107,6 +105,18 @@ function freeShift(
   });
 }
 
+interface Spot {
+  side: LabelSide;
+  shift: number | undefined;
+}
+
+function nearestSpot(box: LabelBox, spots: readonly Spot[]): Placement | undefined {
+  const free = spots.flatMap(({ side, shift }) => (shift === undefined ? [] : [{ side, shift }]));
+  const [own, other] = free;
+  if (!own || !other) return own;
+  return Math.abs(other.shift) + box.height < Math.abs(own.shift) ? other : own;
+}
+
 export function layoutLabels(
   boxes: readonly LabelBox[],
   bounds: LabelBounds,
@@ -116,10 +126,11 @@ export function layoutLabels(
   const floor = bounds.height - bounds.bottomInset;
   for (const box of [...boxes].sort(byRankThenAnchor)) {
     const sides = sideOrder(box, bounds);
-    const spot = sides
-      .map((side) => ({ side, shift: freeShift(box, side, obstacles, floor) }))
-      .find((candidate) => candidate.shift !== undefined);
-    if (!spot || spot.shift === undefined) {
+    const spot = nearestSpot(
+      box,
+      sides.map((side) => ({ side, shift: freeShift(box, side, obstacles, floor) })),
+    );
+    if (!spot) {
       placements.set(box.id, { side: sides[0], shift: 0, hidden: true });
       continue;
     }
