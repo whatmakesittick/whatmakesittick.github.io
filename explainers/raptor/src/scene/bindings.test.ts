@@ -35,6 +35,7 @@ describe('scene bindings', () => {
     expect(received[0]).toEqual({
       phase: 40,
       propellant: null,
+      playing: true,
       view: { cutaway: false, flow: false, flame: true, cluster: false, labels: false },
     });
     expect(frame).toHaveBeenCalledWith('hero', false, undefined);

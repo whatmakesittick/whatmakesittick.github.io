@@ -13,6 +13,7 @@ import { RaptorAssembly } from './raptorAssembly';
 const STATE: AssemblyState = {
   phase: phaseAt(20),
   propellant: null,
+  playing: false,
   view: { cutaway: false, flow: false, flame: true, cluster: false, labels: false },
 };
 const ANCHORS: readonly AnchorId[] = [

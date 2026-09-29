@@ -85,5 +85,6 @@ export interface ViewOptions {
 export interface AssemblyState {
   phase: number;
   propellant: PropellantId | null;
+  playing: boolean;
   view: ViewOptions;
 }

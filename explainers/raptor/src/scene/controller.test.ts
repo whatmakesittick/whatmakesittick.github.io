@@ -28,6 +28,7 @@ const SLOPES = { vertical: 0.29, horizontal: 0.45 };
 const STATE: AssemblyState = {
   phase: 0,
   propellant: null,
+  playing: false,
   view: { cutaway: false, flow: false, flame: true, cluster: false, labels: false },
 };
 

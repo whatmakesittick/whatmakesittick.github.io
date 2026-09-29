@@ -12,7 +12,7 @@ export interface SceneTargets extends PresetTargets {
 }
 
 function blankState(): AssemblyState {
-  return { phase: 0, propellant: null, view: DEFAULT_VIEW };
+  return { phase: 0, propellant: null, playing: false, view: DEFAULT_VIEW };
 }
 
 function emphasisedPropellant(state: RaptorState): PropellantId | null {
@@ -22,6 +22,7 @@ function emphasisedPropellant(state: RaptorState): PropellantId | null {
 function copyInto(target: AssemblyState, state: RaptorState): AssemblyState {
   target.phase = state.phase;
   target.propellant = emphasisedPropellant(state);
+  target.playing = state.playing;
   target.view = state.view;
   return target;
 }
