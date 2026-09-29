@@ -12,6 +12,7 @@ import { ValvePart } from './valve';
 
 const ATRIOVENTRICULAR: readonly ValveId[] = ['tricuspid', 'mitral'];
 const SOUND_VALVES = { s1: ATRIOVENTRICULAR, s2: ['aortic', 'pulmonary'] } as const;
+const LABELLED_VALVE: ValveId = 'mitral';
 
 export class ValvesPart {
   readonly object = new Group();
@@ -34,6 +35,7 @@ export class ValvesPart {
       hinged,
       (valve) => (valve.id === 'mitral' ? cavities.left : cavities.right),
       motion,
+      LABELLED_VALVE,
     );
     this.object.add(this.chordae.object);
   }
@@ -46,6 +48,11 @@ export class ValvesPart {
 
   anchor(id: ValveId): Object3D {
     return this.valve(id).anchor;
+  }
+
+  setCutaway(cutaway: boolean): void {
+    this.chordae.setCutaway(cutaway);
+    for (const valve of this.valves.values()) valve.setCutaway(cutaway);
   }
 
   setTime(time: number, squeeze: number, emptying: number): void {

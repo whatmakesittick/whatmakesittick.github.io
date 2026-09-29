@@ -41,6 +41,7 @@ const REGIONS: readonly RegionId[] = [
   'ventricles',
 ];
 const TRIANGLE_BUDGET = 150_000;
+const VALVE_TRIANGLE_BUDGET = 3_000;
 const FRAME_STEP_MS = 16;
 
 let assembly: HeartAssembly;
@@ -61,8 +62,22 @@ function meshesOf(group: string): Mesh[] {
   return found;
 }
 
-function positionsOf(mesh: Mesh): number[] {
-  return [...mesh.geometry.getAttribute('position').array];
+function leafletsOf(group: string): Mesh {
+  const leaflets = meshesOf(group).find((mesh) => mesh.name === 'leaflets');
+  if (!leaflets) throw new Error(`No leaflets in ${group}`);
+  return leaflets;
+}
+
+function drawnPositions(mesh: Mesh): number[] {
+  const { count } = mesh.geometry.drawRange;
+  return [...mesh.geometry.getAttribute('position').array.slice(0, count * 3)];
+}
+
+function drawnTriangles(meshes: readonly Mesh[]): number {
+  return meshes.reduce((sum, mesh) => {
+    const drawn = Math.min(mesh.geometry.drawRange.count, triangles(mesh.geometry) * 3);
+    return sum + drawn / 3;
+  }, 0);
 }
 
 function worldPosition(object: Object3D): Vector3 {
@@ -108,14 +123,35 @@ describe('heart assembly', () => {
   });
 
   it('swings the mitral leaflets between open and shut', () => {
-    const [ring, leaflets] = meshesOf('mitralValve');
-    expect(ring).toBeDefined();
+    const leaflets = leafletsOf('mitralValve');
     assembly.setState({ ...STATE, time: AV_VALVES_OPEN_MS + 60 });
-    const open = positionsOf(leaflets);
+    const open = drawnPositions(leaflets);
     assembly.setState({ ...STATE, time: (EJECTION.start + EJECTION.end) / 2 });
-    const shut = positionsOf(leaflets);
+    const shut = drawnPositions(leaflets);
     const lowest = (values: number[]) => Math.min(...values.filter((_, index) => index % 3 === 1));
     expect(lowest(open)).toBeLessThan(lowest(shut) - 5);
+  });
+
+  it('keeps every valve light', () => {
+    assembly.setState({ ...STATE, view: { ...STATE.view, cutaway: false } });
+    for (const group of ['mitralValve', 'tricuspidValve', 'aorticValve', 'pulmonaryValve']) {
+      expect(drawnTriangles(meshesOf(group))).toBeLessThan(VALVE_TRIANGLE_BUDGET);
+    }
+  });
+
+  it('trims the inflow valves at the cut so nothing hangs in front of the cut face', () => {
+    assembly.setState({
+      ...STATE,
+      time: AV_VALVES_OPEN_MS + 60,
+      view: { ...STATE.view, cutaway: true },
+    });
+    const drawn = drawnPositions(leafletsOf('mitralValve'));
+    for (let offset = 2; offset < drawn.length; offset += 3)
+      expect(drawn[offset]).toBeLessThanOrEqual(1e-4);
+    const shownRings = meshesOf('mitralValve').filter(
+      (mesh) => mesh.name !== 'leaflets' && isShown(mesh),
+    );
+    expect(shownRings).toHaveLength(1);
   });
 
   it('squeezes the ventricles during ejection', () => {

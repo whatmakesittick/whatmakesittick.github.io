@@ -150,6 +150,7 @@ export class HeartAssembly implements Assembly {
       this.myocardium.setCutaway(state.view.cutaway);
       this.vessels.setCutaway(state.view.cutaway);
       this.coronaries.setCutaway(state.view.cutaway);
+      this.valves.setCutaway(state.view.cutaway);
       this.labels.setCutaway(state.view.cutaway);
     }
     if (changes.view('flow')) this.blood.setShown(state.view.flow);

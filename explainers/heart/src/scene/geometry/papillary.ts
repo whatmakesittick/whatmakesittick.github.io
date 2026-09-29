@@ -1,4 +1,5 @@
-import { Vector3 } from 'three';
+import { LatheGeometry, Quaternion, Vector2, Vector3 } from 'three';
+import type { BufferGeometry } from 'three';
 import type { Field, Vec3 } from './field';
 
 const MAX_REACH_MM = 60;
@@ -19,6 +20,35 @@ export function wallBase(
   return point;
 }
 
-export function spokes(from: Vector3, to: Vector3, count: number): Vector3[] {
-  return Array.from({ length: count + 1 }, (_, index) => from.clone().lerp(to, index / count));
+export interface FingerShape {
+  readonly baseRadius: number;
+  readonly tipRadius: number;
+  readonly segments: number;
+}
+
+const FINGER_PROFILE: readonly (readonly [share: number, height: number])[] = [
+  [1, 0],
+  [0.96, 0.3],
+  [0.82, 0.62],
+  [0.62, 0.82],
+  [0.45, 0.9],
+  [0.25, 0.96],
+  [0, 1],
+];
+const Y_AXIS = new Vector3(0, 1, 0);
+
+export function papillaryFinger(base: Vector3, tip: Vector3, shape: FingerShape): BufferGeometry {
+  const length = base.distanceTo(tip);
+  const points = FINGER_PROFILE.map(([share, height]) => {
+    const radius = shape.tipRadius + (shape.baseRadius - shape.tipRadius) * share;
+    const rounded = height < 1 ? radius : 0;
+    return new Vector2(rounded, height * length);
+  });
+  const finger = new LatheGeometry(points, shape.segments);
+  finger.deleteAttribute('uv');
+  finger.applyQuaternion(
+    new Quaternion().setFromUnitVectors(Y_AXIS, tip.clone().sub(base).normalize()),
+  );
+  finger.translate(base.x, base.y, base.z);
+  return finger;
 }

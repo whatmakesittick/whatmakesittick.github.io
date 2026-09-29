@@ -12,7 +12,9 @@ import type { Point } from '../model';
 import { THEME } from '../theme';
 import type { ContractionFrame, ContractionProfile } from './geometry/contraction';
 import type { ShapeSpec } from './geometry/heartShape';
-import type { LeafletShape, LeafletSpec } from './geometry/leaflet';
+import type { CuspShape } from './geometry/cusp';
+import type { FlapShape, FlapSpec } from './geometry/leaflet';
+import { planAngle, ringFrame } from './geometry/valveFrame';
 import type { SurfaceMark } from './geometry/surfacePath';
 import type { VesselRoute } from './geometry/vesselPath';
 
@@ -593,104 +595,208 @@ export const SHAPE_SPEC: ShapeSpec = {
 };
 
 export interface PapillarySpec {
-  readonly tip: Point;
-  readonly toward: Point;
+  readonly angleOffset: number;
+  readonly radiusShare: number;
+  readonly depthMm: number;
+  readonly outward: number;
+  readonly downward: number;
+  readonly baseRadiusMm: number;
+  readonly tipRadiusMm: number;
 }
 
-export interface ValveDesign {
-  readonly leaflets: readonly LeafletSpec[];
-  readonly shape: LeafletShape;
+export interface CordPlan {
+  readonly primaryPerHalf: readonly number[];
+  readonly strutsPerHalf: readonly number[];
+  readonly strutRowShare: number;
+  readonly edgeMargin: number;
+}
+
+export interface FlapValveDesign {
+  readonly kind: 'flap';
+  readonly leaflets: readonly FlapSpec[];
+  readonly shape: FlapShape;
+  readonly saddleMm: number;
+  readonly saddlePeak: number;
   readonly papillaries: readonly PapillarySpec[];
-  readonly chordsPerLeaflet: number;
+  readonly cords: CordPlan;
 }
 
-const HALF_TURN = Math.PI;
-const QUARTER_TURN = Math.PI / 2;
-
-function evenlySplit(count: number, start: number): LeafletSpec[] {
-  const span = (Math.PI * 2) / count;
-  return Array.from({ length: count }, (_, index) => ({
-    from: start + index * span,
-    to: start + (index + 1) * span,
-  }));
+export interface CuspValveDesign {
+  readonly kind: 'cusp';
+  readonly shape: CuspShape;
 }
 
-const ATRIOVENTRICULAR_SHAPE: LeafletShape = {
-  kind: 'flap',
-  commissureHeight: 0,
-  wallInset: 0,
-  columns: 14,
-  rows: 7,
-  coaptationDepth: 3,
-  belly: 2.5,
-  openTilt: 0.22,
-  openBulge: 1.5,
-  edgeRise: 0,
+export type ValveDesign = FlapValveDesign | CuspValveDesign;
+
+const DEGREE = Math.PI / 180;
+const MITRAL_ANTERIOR_SPAN = 120 * DEGREE;
+const MITRAL_FRAME = ringFrame(mitral.centre, mitral.normal, mitral.radius);
+const MITRAL_ANTERIOR_MIDDLE = planAngle(MITRAL_FRAME, aortic.centre);
+const MITRAL_COMMISSURES = [
+  MITRAL_ANTERIOR_MIDDLE - MITRAL_ANTERIOR_SPAN / 2,
+  MITRAL_ANTERIOR_MIDDLE + MITRAL_ANTERIOR_SPAN / 2,
+] as const;
+const MITRAL_POSTERIOR_MIDDLE = MITRAL_ANTERIOR_MIDDLE + Math.PI;
+const MITRAL_JUNCTION_SHARE = 0.34;
+
+const FLAP_SHAPE: FlapShape = {
+  columnsPerTurn: 48,
+  minColumns: 10,
+  rows: 11,
+  lipRows: 2,
+  commissureDepthMm: 5,
+  commissureGap: 0.07,
+  junction: [0, 0],
+  smile: 0.25,
+  seamBend: 0,
+  closedDropMm: 3,
+  domeMm: 2.2,
+  lipMm: 3.2,
+  appositionMm: 0.35,
+  openTilt: 0.2,
+  openBellyMm: 1.4,
+  tongue: 0.65,
+  cleftDepth: 0.5,
+  cleftWidth: 0.045,
 };
 
-const SEMILUNAR_SHAPE: LeafletShape = {
-  kind: 'cusp',
+const SEMILUNAR_SHAPE: CuspShape = {
+  count: 3,
+  firstCommissure: Math.PI / 2,
   columns: 14,
   rows: 8,
-  coaptationDepth: 6,
-  belly: 3.5,
-  openTilt: 0,
-  openBulge: 0.6,
-  edgeRise: 0,
-  commissureHeight: 8,
-  wallInset: 1.4,
+  commissureHeightMm: 8,
+  meetHeightMm: 6,
+  edgeSagMm: 0.8,
+  bellyMm: 3.2,
+  wallInsetMm: 1.3,
+  openBellyMm: 0.6,
 };
+
+const TRICUSPID_COMMISSURES = {
+  anteroseptal: 20,
+  anteroposterior: 150,
+  posteroseptal: 265,
+} as const;
 
 export const VALVE_DESIGN: Readonly<Record<ValveId, ValveDesign>> = {
   mitral: {
+    kind: 'flap',
     leaflets: [
-      { from: QUARTER_TURN, to: QUARTER_TURN + HALF_TURN },
-      { from: QUARTER_TURN + HALF_TURN, to: QUARTER_TURN + 2 * HALF_TURN },
+      { from: MITRAL_COMMISSURES[0], to: MITRAL_COMMISSURES[1], depthMm: 23, clefts: [] },
+      {
+        from: MITRAL_COMMISSURES[1],
+        to: MITRAL_COMMISSURES[0] + 2 * Math.PI,
+        depthMm: 13,
+        clefts: [0.3, 0.7],
+      },
     ],
-    shape: { ...ATRIOVENTRICULAR_SHAPE, columns: 18 },
+    shape: {
+      ...FLAP_SHAPE,
+      junction: [
+        Math.cos(MITRAL_POSTERIOR_MIDDLE) * MITRAL_JUNCTION_SHARE,
+        Math.sin(MITRAL_POSTERIOR_MIDDLE) * MITRAL_JUNCTION_SHARE,
+      ],
+    },
+    saddleMm: 1.8,
+    saddlePeak: MITRAL_ANTERIOR_MIDDLE,
     papillaries: [
-      { tip: [31, -21, -6], toward: [0.45, -1, -0.25] },
-      { tip: [13, -24, -8], toward: [-0.2, -1, -0.45] },
+      {
+        angleOffset: -8 * DEGREE,
+        radiusShare: 0.62,
+        depthMm: 27,
+        outward: 0.8,
+        downward: 1,
+        baseRadiusMm: 4.8,
+        tipRadiusMm: 2.4,
+      },
+      {
+        angleOffset: 8 * DEGREE,
+        radiusShare: 0.62,
+        depthMm: 28,
+        outward: 0.8,
+        downward: 1,
+        baseRadiusMm: 4.8,
+        tipRadiusMm: 2.4,
+      },
     ],
-    chordsPerLeaflet: 7,
+    cords: { primaryPerHalf: [3, 4], strutsPerHalf: [1, 0], strutRowShare: 0.5, edgeMargin: 0.06 },
   },
   tricuspid: {
-    leaflets: evenlySplit(3, Math.PI / 3),
-    shape: ATRIOVENTRICULAR_SHAPE,
-    papillaries: [
-      { tip: [-30, -19, -5], toward: [-0.4, -1, -0.2] },
-      { tip: [-19, -26, -8], toward: [0.05, -1, -0.4] },
-      { tip: [-10, -17, -5], toward: [0.45, -1, -0.15] },
+    kind: 'flap',
+    leaflets: [
+      {
+        from: TRICUSPID_COMMISSURES.anteroseptal * DEGREE,
+        to: TRICUSPID_COMMISSURES.anteroposterior * DEGREE,
+        depthMm: 20,
+        clefts: [],
+      },
+      {
+        from: TRICUSPID_COMMISSURES.anteroposterior * DEGREE,
+        to: TRICUSPID_COMMISSURES.posteroseptal * DEGREE,
+        depthMm: 15,
+        clefts: [0.5],
+      },
+      {
+        from: TRICUSPID_COMMISSURES.posteroseptal * DEGREE,
+        to: (TRICUSPID_COMMISSURES.anteroseptal + 360) * DEGREE,
+        depthMm: 16,
+        clefts: [],
+      },
     ],
-    chordsPerLeaflet: 5,
+    shape: { ...FLAP_SHAPE, junction: [0.16, -0.14], seamBend: 0.1, cleftDepth: 0.35 },
+    saddleMm: 0,
+    saddlePeak: 0,
+    papillaries: [
+      {
+        angleOffset: 0,
+        radiusShare: 0.78,
+        depthMm: 16,
+        outward: 1,
+        downward: 0.3,
+        baseRadiusMm: 2.4,
+        tipRadiusMm: 1.3,
+      },
+      {
+        angleOffset: 0,
+        radiusShare: 0.62,
+        depthMm: 26,
+        outward: 0.8,
+        downward: 1,
+        baseRadiusMm: 4.6,
+        tipRadiusMm: 2.2,
+      },
+      {
+        angleOffset: 0,
+        radiusShare: 0.62,
+        depthMm: 25,
+        outward: 0.8,
+        downward: 1,
+        baseRadiusMm: 3.8,
+        tipRadiusMm: 1.9,
+      },
+    ],
+    cords: {
+      primaryPerHalf: [3, 3, 3],
+      strutsPerHalf: [0, 0, 0],
+      strutRowShare: 0.5,
+      edgeMargin: 0.07,
+    },
   },
-  aortic: {
-    leaflets: evenlySplit(3, Math.PI / 6),
-    shape: SEMILUNAR_SHAPE,
-    papillaries: [],
-    chordsPerLeaflet: 0,
-  },
-  pulmonary: {
-    leaflets: evenlySplit(3, Math.PI / 6),
-    shape: SEMILUNAR_SHAPE,
-    papillaries: [],
-    chordsPerLeaflet: 0,
-  },
+  aortic: { kind: 'cusp', shape: { ...SEMILUNAR_SHAPE } },
+  pulmonary: { kind: 'cusp', shape: { ...SEMILUNAR_SHAPE } },
 };
 
 export const VALVE_DETAIL = {
   ringTubeMm: 1.1,
-  ringRadialSegments: 10,
-  ringSegments: 64,
-  chordRadiusMm: 0.32,
+  crownTubeMm: 0.85,
+  ringRadialSegments: 8,
+  ringSegments: 72,
+  chordRadiusMm: 0.3,
   chordSegments: 5,
-  chordEdgeInset: 0.97,
-  chordMargin: 0.08,
-  papillaryRadius: [4.6, 0.6] as const,
   papillaryWallMm: 1.5,
   papillaryStepMm: 0.5,
   papillarySegments: 12,
-  papillaryRings: 6,
   pulseGlow: 0.9,
   pulseColour: THEME.valve,
 } as const;
