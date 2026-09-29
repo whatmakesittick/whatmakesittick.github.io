@@ -17,6 +17,7 @@ import { Stage } from './stage';
 import { createSceneTextures } from './textures';
 import type { SceneTextures } from './textures';
 import { afterFirstFrameWhenIdle } from './warmUp';
+import { keepOutOverlays, watchKeepOut } from './keepOut';
 import { createViewport } from './viewport';
 import type { Viewport } from './viewport';
 
@@ -117,6 +118,7 @@ export function createSceneHost(
     rig.onChange(invalidate),
     labels.onChange(invalidate),
     highlighter.onChange(invalidate),
+    watchKeepOut(viewport.element, keepOutOverlays(container), (areas) => labels.setKeepOut(areas)),
   ];
 
   const shell: SceneShell = {
