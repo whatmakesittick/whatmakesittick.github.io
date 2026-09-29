@@ -7,6 +7,8 @@ export interface NumericRange {
 }
 
 const PERCENT = 100;
+const VALUE_TEXT = 'aria-valuetext';
+const FILL_PROPERTY = '--fill';
 
 export function configureRange(input: HTMLInputElement, range: NumericRange): void {
   setAttributes(input, { min: range.min, max: range.max, step: range.step });
@@ -21,8 +23,11 @@ export function toPercent(fraction: number): string {
 }
 
 export function showRangeValue(input: HTMLInputElement, value: number, valueText: string): void {
-  input.value = String(value);
-  input.setAttribute('aria-valuetext', valueText);
+  const text = String(value);
+  if (input.value !== text) input.value = text;
+  if (input.getAttribute(VALUE_TEXT) !== valueText) input.setAttribute(VALUE_TEXT, valueText);
   const fraction = rangeFraction(value, { min: Number(input.min), max: Number(input.max) });
-  input.style.setProperty('--fill', toPercent(fraction));
+  const fill = toPercent(fraction);
+  if (input.style.getPropertyValue(FILL_PROPERTY) !== fill)
+    input.style.setProperty(FILL_PROPERTY, fill);
 }

@@ -45,8 +45,12 @@ function renderRow<S extends Playback>(row: ReadoutRow<S>, state: S): void {
   const { readout, value, meter } = row;
   setText(value, readout.value(state));
   const tone = readout.tone?.(state);
-  if (tone) value.style.setProperty(TONE_PROPERTY, tone);
-  if (meter && readout.meter) meter.style.transform = `scaleX(${readout.meter.share(state)})`;
+  if (tone && value.style.getPropertyValue(TONE_PROPERTY) !== tone) {
+    value.style.setProperty(TONE_PROPERTY, tone);
+  }
+  if (!meter || !readout.meter) return;
+  const transform = `scaleX(${readout.meter.share(state)})`;
+  if (meter.style.transform !== transform) meter.style.transform = transform;
 }
 
 export function mountReadouts<S extends Playback>(
