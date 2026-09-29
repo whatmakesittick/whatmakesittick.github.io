@@ -249,7 +249,9 @@ touch screens.
 
 `src/core/scene` holds what any explainer needs: viewport and CSS2D label
 renderer, camera rig with tweens, orbit controls and `follow(anchor)`, `frameBox`
-for fitting a box into the safe area, label layer with overlap layout,
+for fitting a box into the safe area, label layer with an overlap layout that
+remembers each label's side and spot and moves it only when that spot is taken
+or its home is clearly free again, so labels stay put while a part moves,
 highlighter, material library, textures, lighting with its `key`, `fill` and `rim`
 lights, stage grid and shadow, `PointCloud` for particles, frame loop and lens.
 Shared scene helpers sit beside them: `LabelVisibility` shows only the wanted

@@ -200,12 +200,11 @@ export class LabelLayer {
       boxes.push({ id, anchor, width, height, preferred: this.parts[id].side, rank });
     });
     const { width, height, safe } = this.viewport;
-    const placements = layoutLabels(boxes, {
-      width,
-      height,
-      bottomInset: safe.bottom,
-      keepOut: this.keepOut,
-    });
+    const placements = layoutLabels(
+      boxes,
+      { width, height, bottomInset: safe.bottom, keepOut: this.keepOut },
+      this.placements,
+    );
     placements.forEach((placement, id) => this.place(id, placement));
   }
 

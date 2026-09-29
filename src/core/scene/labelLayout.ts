@@ -2,7 +2,9 @@ export type LabelSide = 'left' | 'right';
 
 export const TEXT_OFFSET_PX = 28;
 export const TEXT_RISE_PX = 18;
+export const MAX_SHIFT_PX = 120;
 const LABEL_GAP_PX = 4;
+const SETTLE_GAP_PX = 16;
 
 export interface Point {
   x: number;
@@ -38,6 +40,27 @@ export interface Placement {
   hidden?: true;
 }
 
+export type Placements = ReadonlyMap<string, Placement>;
+
+interface Board {
+  bounds: LabelBounds;
+  obstacles: Rect[];
+  floor: number;
+}
+
+interface Lane {
+  box: LabelBox;
+  side: LabelSide;
+  natural: Rect;
+  nearby: readonly Rect[];
+  floor: number;
+}
+
+interface Spot {
+  side: LabelSide;
+  shift: number | undefined;
+}
+
 function opposite(side: LabelSide): LabelSide {
   return side === 'left' ? 'right' : 'left';
 }
@@ -47,11 +70,9 @@ function fitsSide(box: LabelBox, side: LabelSide, bounds: LabelBounds): boolean 
   return side === 'left' ? box.anchor.x - reach >= 0 : box.anchor.x + reach <= bounds.width;
 }
 
-function sideOrder(box: LabelBox, bounds: LabelBounds): LabelSide[] {
-  const { preferred } = box;
-  const other = opposite(preferred);
-  const fitting = [preferred, other].filter((side) => fitsSide(box, side, bounds));
-  return fitting.length > 0 ? fitting : [preferred];
+function sideOrder(box: LabelBox, bounds: LabelBounds, own: LabelSide): LabelSide[] {
+  const fitting = [own, opposite(own)].filter((side) => fitsSide(box, side, bounds));
+  return fitting.length > 0 ? fitting : [own];
 }
 
 function pillRect(box: LabelBox, side: LabelSide, shift: number): Rect {
@@ -66,18 +87,37 @@ function pillRect(box: LabelBox, side: LabelSide, shift: number): Rect {
   };
 }
 
-function collides(a: Rect, b: Rect): boolean {
+function collides(a: Rect, b: Rect, gap: number): boolean {
   return (
-    a.left < b.right + LABEL_GAP_PX &&
-    b.left < a.right + LABEL_GAP_PX &&
-    a.top < b.bottom + LABEL_GAP_PX &&
-    b.top < a.bottom + LABEL_GAP_PX
+    a.left < b.right + gap &&
+    b.left < a.right + gap &&
+    a.top < b.bottom + gap &&
+    b.top < a.bottom + gap
   );
 }
 
 function byRankThenAnchor(a: LabelBox, b: LabelBox): number {
   const rank = (a.rank ?? Number.POSITIVE_INFINITY) - (b.rank ?? Number.POSITIVE_INFINITY);
   return (Number.isNaN(rank) ? 0 : rank) || a.anchor.y - b.anchor.y || a.anchor.x - b.anchor.x;
+}
+
+function lane(box: LabelBox, side: LabelSide, board: Board): Lane {
+  const natural = pillRect(box, side, 0);
+  const nearby = board.obstacles.filter(
+    (other) =>
+      natural.left < other.right + LABEL_GAP_PX && other.left < natural.right + LABEL_GAP_PX,
+  );
+  return { box, side, natural, nearby, floor: board.floor };
+}
+
+function isFree(place: Lane, shift: number, gap: number = LABEL_GAP_PX): boolean {
+  if (Math.abs(shift) > MAX_SHIFT_PX) return false;
+  const rect = pillRect(place.box, place.side, Math.round(shift));
+  return (
+    rect.top >= 0 &&
+    rect.bottom <= place.floor &&
+    !place.nearby.some((other) => collides(rect, other, gap))
+  );
 }
 
 function candidateShifts(natural: Rect, obstacles: readonly Rect[]): number[] {
@@ -88,26 +128,8 @@ function candidateShifts(natural: Rect, obstacles: readonly Rect[]): number[] {
   return [0, ...shifts].sort((a, b) => Math.abs(a) - Math.abs(b) || b - a);
 }
 
-function freeShift(
-  box: LabelBox,
-  side: LabelSide,
-  obstacles: readonly Rect[],
-  floor: number,
-): number | undefined {
-  const natural = pillRect(box, side, 0);
-  const nearby = obstacles.filter(
-    (other) =>
-      natural.left < other.right + LABEL_GAP_PX && other.left < natural.right + LABEL_GAP_PX,
-  );
-  return candidateShifts(natural, nearby).find((shift) => {
-    const rect = pillRect(box, side, Math.round(shift));
-    return rect.top >= 0 && rect.bottom <= floor && !nearby.some((other) => collides(rect, other));
-  });
-}
-
-interface Spot {
-  side: LabelSide;
-  shift: number | undefined;
+function nearestShift(place: Lane): number | undefined {
+  return candidateShifts(place.natural, place.nearby).find((shift) => isFree(place, shift));
 }
 
 function nearestSpot(box: LabelBox, spots: readonly Spot[]): Placement | undefined {
@@ -117,26 +139,51 @@ function nearestSpot(box: LabelBox, spots: readonly Spot[]): Placement | undefin
   return Math.abs(other.shift) + box.height < Math.abs(own.shift) ? other : own;
 }
 
+function held(previous: Placement | undefined): Placement | undefined {
+  return previous && !previous.hidden ? previous : undefined;
+}
+
+function home(box: LabelBox, board: Board): Placement | undefined {
+  const side = box.preferred;
+  if (!fitsSide(box, side, board.bounds)) return undefined;
+  return isFree(lane(box, side, board), 0, SETTLE_GAP_PX) ? { side, shift: 0 } : undefined;
+}
+
+function hold(box: LabelBox, board: Board, last: Placement | undefined): Placement | undefined {
+  if (!last || !fitsSide(box, last.side, board.bounds)) return undefined;
+  return isFree(lane(box, last.side, board), last.shift)
+    ? { side: last.side, shift: last.shift }
+    : undefined;
+}
+
+function search(box: LabelBox, board: Board, own: LabelSide): Placement {
+  const sides = sideOrder(box, board.bounds, own);
+  const spot = nearestSpot(
+    box,
+    sides.map((side) => ({ side, shift: nearestShift(lane(box, side, board)) })),
+  );
+  return spot
+    ? { side: spot.side, shift: Math.round(spot.shift) }
+    : { side: sides[0], shift: 0, hidden: true };
+}
+
 export function layoutLabels(
   boxes: readonly LabelBox[],
   bounds: LabelBounds,
+  previous: Placements = new Map(),
 ): Map<string, Placement> {
   const placements = new Map<string, Placement>();
-  const obstacles: Rect[] = [...(bounds.keepOut ?? [])];
-  const floor = bounds.height - bounds.bottomInset;
+  const board: Board = {
+    bounds,
+    obstacles: [...(bounds.keepOut ?? [])],
+    floor: bounds.height - bounds.bottomInset,
+  };
   for (const box of [...boxes].sort(byRankThenAnchor)) {
-    const sides = sideOrder(box, bounds);
-    const spot = nearestSpot(
-      box,
-      sides.map((side) => ({ side, shift: freeShift(box, side, obstacles, floor) })),
-    );
-    if (!spot) {
-      placements.set(box.id, { side: sides[0], shift: 0, hidden: true });
-      continue;
-    }
-    const shift = Math.round(spot.shift);
-    obstacles.push(pillRect(box, spot.side, shift));
-    placements.set(box.id, { side: spot.side, shift });
+    const last = held(previous.get(box.id));
+    const placement =
+      home(box, board) ?? hold(box, board, last) ?? search(box, board, last?.side ?? box.preferred);
+    if (!placement.hidden) board.obstacles.push(pillRect(box, placement.side, placement.shift));
+    placements.set(box.id, placement);
   }
   return placements;
 }
