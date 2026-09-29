@@ -126,7 +126,6 @@ export class ClusterPart {
       instanced(copy.coat, materials.get('booster', finishes.coat)),
       instanced(copy.bellOuter, materials.get('booster', finishes.bellOuter)),
       instanced(copy.bellInner, materials.get('booster', finishes.clusterInner)),
-      instanced(copy.steel, materials.get('booster', finishes.brightSteel)),
     );
     const plates = instanced(plateGeometry(), materials.get('booster', finishes.steel));
     this.engines.forEach((engine, index) => {

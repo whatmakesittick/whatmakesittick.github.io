@@ -39,7 +39,7 @@ const REGIONS: readonly RegionId[] = [
   'nozzleAndPlume',
   'booster',
 ];
-const TRIANGLE_BUDGET = 460_000;
+const TRIANGLE_BUDGET = { cut: 120_000, ascent: 250_000 };
 const FRAME = 1 / 60;
 const STEP = 0.05;
 const TURBINE_COLOUR = new Color(PAINT.inconel).getHex();
@@ -255,13 +255,22 @@ describe('raptor assembly', () => {
     assembly.setState(STATE);
   });
 
-  it('stays within the triangle budget', () => {
-    let total = 0;
-    assembly.root.traverse((object) => {
-      if (object instanceof InstancedMesh) total += triangles(object.geometry) * object.count;
-      else if (object instanceof Mesh) total += triangles(object.geometry);
-    });
-    expect(total).toBeLessThan(TRIANGLE_BUDGET);
+  it('stays within the triangle budget in every view', () => {
+    const drawn = (state: AssemblyState) => {
+      assembly.setState(state);
+      let total = 0;
+      assembly.root.traverse((object) => {
+        if (!(object instanceof Mesh) || !isShown(object)) return;
+        const count = object instanceof InstancedMesh ? object.count : 1;
+        total += triangles(object.geometry) * count;
+      });
+      return total;
+    };
+    const cut = drawn({ ...STATE, view: { ...STATE.view, cutaway: true, flow: true } });
+    const ascent = drawn({ ...STATE, view: { ...STATE.view, cluster: true } });
+    expect(cut).toBeLessThan(TRIANGLE_BUDGET.cut);
+    expect(ascent).toBeLessThan(TRIANGLE_BUDGET.ascent);
+    assembly.setState(STATE);
   });
 
   it('hides the labels of parts that are not showing', () => {

@@ -1,7 +1,6 @@
-import { SphereGeometry } from 'three';
 import type { BufferGeometry } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { GIMBAL, NOZZLE_EXIT, PREBURNERS, TURBOPUMPS, wallRadius } from '../../../model';
+import { NOZZLE_EXIT, PREBURNERS, TURBOPUMPS, wallRadius } from '../../../model';
 import type { Canister } from '../../../model';
 import {
   BELL_TOP_Y,
@@ -24,16 +23,16 @@ import { revolveStrand } from '../../geometry/revolve';
 import type { ProfilePoint } from '../../geometry/revolve';
 import { scaleProfile } from '../../geometry/shells';
 
-const SAMPLES = 14;
-const SIDE_SAMPLES = 8;
-const BELL_SAMPLES = 14;
-const RING_STEPS = 8;
+const SAMPLES = 9;
+const SIDE_SAMPLES = 5;
+const BELL_SAMPLES = 8;
+const INNER_SAMPLES = 5;
+const RING_STEPS = 6;
 
 export interface EngineCopyGeometry {
   coat: BufferGeometry;
   bellOuter: BufferGeometry;
   bellInner: BufferGeometry;
-  steel: BufferGeometry;
 }
 
 function mergeAll(parts: BufferGeometry[]): BufferGeometry {
@@ -89,11 +88,10 @@ export function engineCopyGeometry(): EngineCopyGeometry {
     wallStrand(WALL_OUTSET, BELL_TOP_Y, NOZZLE_EXIT.y, BELL_SAMPLES),
     { segments: SEGMENTS.cluster, tint: gradientTint(BELL_OUTER_TINT) },
   );
-  const bellInner = revolveStrand(wallStrand(0, NOZZLE_EXIT.y, BELL_TOP_Y + 40, BELL_SAMPLES), {
-    segments: SEGMENTS.cluster,
+  const bellInner = revolveStrand(wallStrand(0, NOZZLE_EXIT.y, BELL_TOP_Y + 40, INNER_SAMPLES), {
+    segments: SEGMENTS.clusterInner,
     tint: gradientTint(BELL_INNER_TINT),
     vRange: [NOZZLE_EXIT.y, -95],
   });
-  const steel = new SphereGeometry(GIMBAL.radius, SEGMENTS.cluster / 2, SEGMENTS.cluster / 4);
-  return { coat, bellOuter, bellInner, steel };
+  return { coat, bellOuter, bellInner };
 }

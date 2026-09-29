@@ -15,8 +15,9 @@ export const SEGMENTS = {
   part: 36,
   small: 16,
   tube: 12,
-  cluster: 20,
-  clusterSide: 10,
+  cluster: 14,
+  clusterSide: 8,
+  clusterInner: 12,
 } as const;
 
 export const WALL_LAYERS = { liner: 1, channel: 1, jacket: 1 } as const;
@@ -293,8 +294,8 @@ export const SPIN = { turnsPerSecond: 4, maxStepSeconds: 1 } as const;
 export const PLUME = {
   radialSegments: 48,
   lengthSegments: 120,
-  clusterRadialSegments: 24,
-  clusterLengthSegments: 48,
+  clusterRadialSegments: 16,
+  clusterLengthSegments: 24,
   growth: 0.55,
   minLength: 1,
   exitGlowSize: 150,
