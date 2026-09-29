@@ -1,11 +1,11 @@
 {
   "meta": {
     "title": "Comment fonctionne un moteur-fusée",
-    "eyebrow": "SpaceX Raptor 3",
-    "tagline": "Deux turbopompes, deux petits feux et un grand : comment le Raptor transforme du méthane et de l’oxygène glacés en 250 tonnes de poussée.",
-    "description": "Un moteur Raptor 3 de SpaceX en 3D, allumé et ouvert : ergols glacés, turbopompes, chambre de combustion, tuyère et un lancement du Super Heavy.",
-    "summary": "Ergols, turbopompes, le cycle à flux intégral, la chambre de combustion, la tuyère dans l’air raréfié et un lancement du Super Heavy.",
-    "socialAlt": "Modèle 3D d’un moteur-fusée Raptor 3 de SpaceX allumé, ouvert pour montrer ses turbopompes et sa chambre de combustion, avec un jet brillant, à côté du titre « Comment fonctionne un moteur-fusée »"
+    "eyebrow": "Raptor 3 de SpaceX",
+    "tagline": "Deux turbopompes, deux petits feux et un grand : voilà comment le Raptor transforme du méthane et de l’oxygène glacés en 250 tonnes de poussée.",
+    "description": "Un Raptor 3 de SpaceX en 3D, en marche et vu en coupe : ergols glacés, turbopompes, chambre de combustion, tuyère et lancement du Super Heavy.",
+    "summary": "Les ergols, les turbopompes, le cycle à flux intégral, la chambre de combustion, la tuyère quand l’air se raréfie et un lancement du Super Heavy.",
+    "socialAlt": "Modèle 3D d’un moteur-fusée Raptor 3 de SpaceX en marche, vu en coupe pour montrer ses turbopompes et sa chambre de combustion, avec un jet de gaz lumineux, à côté du titre « Comment fonctionne un moteur-fusée »"
   },
   "stage": {
     "label": "Modèle interactif du moteur Raptor",
@@ -20,9 +20,9 @@
         "hint": "Vue en coupe (C)"
       },
       "flow": {
-        "name": "Flux des ergols",
-        "short": "Flux",
-        "hint": "Flux des ergols (F)"
+        "name": "Circulation des ergols",
+        "short": "Ergols",
+        "hint": "Circulation des ergols (F)"
       },
       "flame": {
         "name": "Flamme",
@@ -61,7 +61,7 @@
     "phases": "Aller à un moment du lancement",
     "speed": "Lecture",
     "value": "{{time}}, {{phase}}",
-    "before": "T−{{seconds}} s",
+    "before": "T−{{seconds}} s",
     "after": "T+{{minutes}}:{{seconds}}",
     "realTime": "Temps réel",
     "slower": "{{factor}} fois plus lent",
@@ -76,11 +76,11 @@
     },
     "during": {
       "start": "les pompes se mettent à tourner et les feux s’allument",
-      "liftoff": "les pinces lâchent et la fusée s’élève",
-      "climb": "la fusée accélère dans les basses couches de l’atmosphère",
-      "maxQ": "le moteur réduit la poussée au moment où l’air appuie le plus fort",
+      "liftoff": "les pinces s’ouvrent et la fusée décolle",
+      "climb": "la fusée accélère dans l’air dense des basses couches",
+      "maxQ": "le moteur réduit sa poussée au moment où l’air appuie le plus fort",
       "thinAir": "le moteur tourne à plein régime dans un air de plus en plus raréfié",
-      "cutoff": "le moteur réduit la poussée puis s’éteint"
+      "cutoff": "le moteur réduit sa poussée puis s’éteint"
     },
     "jump": {
       "start": "Aller au démarrage",
@@ -146,7 +146,7 @@
       "oxygenMethane": "Oxygène liquide et méthane"
     },
     "dumps": {
-      "yes": "Oui, rejeté à l’extérieur",
+      "yes": "Oui, à l’extérieur",
       "no": "Aucun"
     }
   },
@@ -165,19 +165,19 @@
     "fuel": "Carburant"
   },
   "units": {
-    "tonnes": "{{value}} t",
-    "tonnesAbout": "environ {{value}} t",
-    "seconds": "{{value}} s",
-    "bar": "{{value}} bar",
-    "barAbout": "environ {{value}} bar",
-    "km": "{{value}} km",
-    "kmPerHour": "{{value}} km/h",
-    "kmPerSecond": "{{value}} km/s",
-    "kgPerSecond": "{{value}} kg/s",
-    "kg": "{{value}} kg",
-    "kelvin": "{{value}} K",
-    "kelvinAbout": "environ {{value}} K",
-    "kelvinCelsius": "{{kelvin}} K ({{celsius}} °C)",
+    "tonnes": "{{value}} t",
+    "tonnesAbout": "environ {{value}} t",
+    "seconds": "{{value}} s",
+    "bar": "{{value}} bar",
+    "barAbout": "environ {{value}} bar",
+    "km": "{{value}} km",
+    "kmPerHour": "{{value}} km/h",
+    "kmPerSecond": "{{value}} km/s",
+    "kgPerSecond": "{{value}} kg/s",
+    "kg": "{{value}} kg",
+    "kelvin": "{{value}} K",
+    "kelvinAbout": "environ {{value}} K",
+    "kelvinCelsius": "{{kelvin}} K ({{celsius}} °C)",
     "percent": "{{value}} %",
     "degrees": "{{value}}°",
     "times": "{{value}} fois",
@@ -185,32 +185,32 @@
   },
   "sections": {
     "overview": {
-      "title": "Jeter de la masse en arrière pour aller en avant",
-      "p1": "Un moteur-fusée fonctionne en projetant de la masse vers l’arrière, à très grande vitesse. Poussez quelque chose d’un côté, et cela vous pousse de l’autre, comme le recul d’une lance à incendie. Cette réaction, c’est la <strong>poussée</strong>. Une fusée emporte tout ce qu’elle éjecte, elle n’a donc pas besoin d’air pour s’appuyer. Le Raptor, le moteur que SpaceX construit pour sa fusée Starship, brûle du méthane liquide avec de l’oxygène liquide. Le feu les transforme en gaz chaud à une pression énorme, et la tuyère en forme de cloche, en bas, éjecte ce gaz à plus de 3 km/s.",
-      "p2": "Voici le <strong>Raptor 3</strong>, la version la plus récente. En vol, il fournit 250 tonnes de poussée, et SpaceX l’a conçu pour aller jusqu’à 280. Il pèse 1 525 kg, il pousse donc environ 160 fois son propre poids. Il mesure environ 3,1 m de haut et 1,3 m de large. Trente-trois moteurs comme lui s’allument ensemble sous le propulseur Super Heavy. Chacun avale environ trois quarts de tonne d’ergols par seconde. Le Super Heavy entier en brûle environ 25 tonnes par seconde.",
-      "p3": "Le modèle suit l’un des moteurs centraux pendant la <strong>phase propulsée</strong> d’un lancement, de l’ordre de démarrage jusqu’à l’extinction des moteurs du propulseur. Il simplifie certaines choses. L’intérieur du Raptor 3 n’est pas public, alors la vue en coupe montre le cycle connu sous forme de schéma simple, pas les vraies canalisations. SpaceX n’a pas publié la courbe de régime, alors le modèle la déduit des chiffres de vitesse affichés pendant la retransmission. Le démarrage suit l’ordre habituel, avec des durées inventées dans les 3 secondes environ annoncées par SpaceX. Le jet donne une image simplifiée de son évolution réelle. Faites glisser la chronologie pour parcourir le lancement, et faites glisser le modèle pour le tourner.",
-      "p4": "Chaque version du Raptor pousse plus fort et pèse moins lourd. Le <strong>Raptor 1</strong> fournissait 185 tonnes de poussée et pesait 2 080 kg. Le Raptor 2 fournissait 230 tonnes et pesait 1 630 kg. Le Raptor 3 est conçu pour aller jusqu’à 280 tonnes et pèse 1 525 kg. Il a aussi perdu quelque chose qui se voyait de l’extérieur : son bouclier thermique. Les anciens moteurs portaient un bouclier autour d’eux pour protéger leurs tuyaux et câbles extérieurs. Sur le Raptor 3, l’essentiel de cette tuyauterie est passé à l’intérieur des pièces du moteur, dont beaucoup sont imprimées en 3D. Chaque moteur n’a donc plus besoin de bouclier.",
-      "burn": "Ergols brûlés chaque seconde",
-      "lift": "Poussée comparée à son propre poids",
+      "title": "Éjecter du gaz vers l’arrière pour aller de l’avant",
+      "p1": "Le principe d’un moteur-fusée est simple : il projette du gaz chaud vers l’arrière, le plus vite possible. Or, quand vous poussez quelque chose dans un sens, vous êtes repoussé dans l’autre. C’est ce qui fait reculer le pompier qui tient une lance à incendie. Cette réaction s’appelle la <strong>poussée</strong>. Une fusée emporte tout ce qu’elle éjecte. Elle n’a donc pas besoin d’air pour prendre appui : elle fonctionne tout aussi bien dans l’espace. Le Raptor est le moteur que SpaceX construit pour sa fusée Starship. Il brûle du méthane liquide avec de l’oxygène liquide. La flamme les transforme en gaz chaud, sous une pression énorme. Tout en bas, la tuyère en forme de cloche éjecte ce gaz à plus de 3 km/s.",
+      "p2": "Le moteur que vous avez sous les yeux est le <strong>Raptor 3</strong>, la version la plus récente. En vol, il fournit 250 tonnes de poussée, et SpaceX l’a conçu pour atteindre 280. Il ne pèse pourtant que 1 525 kg : il pousse donc environ 160 fois son propre poids. Il mesure environ 3,1 m de haut pour 1,3 m de large. Trente-trois de ces moteurs s’allument ensemble sous le propulseur Super Heavy, le premier étage de la fusée. Chacun avale chaque seconde environ trois quarts de tonne de méthane et d’oxygène. Le propulseur entier en brûle environ 25 tonnes par seconde.",
+      "p3": "Ce modèle suit l’un des moteurs du centre pendant toute la <strong>phase propulsée</strong> d’un lancement. Il part de l’ordre de démarrage, sur le pas de tir, et va jusqu’à l’extinction des moteurs du propulseur. Certaines choses sont simplifiées. SpaceX n’a jamais montré l’intérieur du Raptor 3. La vue en coupe présente donc le cycle connu sous forme de schéma clair, et non la vraie tuyauterie. SpaceX n’a pas non plus publié la courbe de régime du moteur. Le modèle la déduit de la vitesse affichée pendant la retransmission du lancement. Le démarrage suit l’ordre habituel des étapes. Selon SpaceX, il dure environ 3 secondes en tout. Le moment exact de chaque étape, lui, est estimé par le modèle. Le jet change de forme comme le vrai, en plus simple. Faites glisser le curseur du temps pour parcourir le lancement, et le modèle pour le faire tourner.",
+      "p4": "À chaque nouvelle version, le Raptor a gagné en poussée et perdu du poids. Le <strong>Raptor 1</strong> fournissait 185 tonnes de poussée et pesait 2 080 kg. Le Raptor 2 est passé à 230 tonnes, et son poids est descendu à 1 630 kg. Le Raptor 3 est conçu pour 280 tonnes et pèse 1 525 kg. Vu de l’extérieur, il est aussi bien plus épuré, car il a perdu son bouclier thermique. Les versions précédentes étaient enveloppées d’un bouclier qui protégeait les tuyaux et les câbles installés à l’extérieur. Sur le Raptor 3, la plupart de ces conduites passent désormais dans les pièces du moteur elles-mêmes. Beaucoup de ces pièces sont imprimées en 3D. Il n’y avait plus rien à protéger : le bouclier a pu disparaître.",
+      "burn": "Ergols brûlés par seconde",
+      "lift": "Poussée comparée à son poids",
       "booster": "Les 33 moteurs ensemble"
     },
     "propellants": {
-      "title": "Carburant et oxygène, sous forme de liquides glacés",
-      "p1": "Le moteur d’une voiture prend son oxygène dans l’air. Une fusée monte là où il n’y a presque plus d’air, alors elle emporte le sien. Le Raptor brûle du méthane avec de l’oxygène. À température ambiante, ce sont deux gaz, et les gaz prennent bien trop de place. Ils voyagent donc sous forme liquide, refroidis sous leur <strong>point d’ébullition</strong>. Le méthane bout à 111 K, environ −162 °C. L’oxygène bout à 90 K, environ −183 °C. Plus un liquide est froid, plus il est dense, et plus le réservoir en contient.",
-      "p2": "Les deux ne brûlent pas en quantités égales. Pour chaque kilo de méthane, le Raptor brûle environ 3,6 kg d’oxygène. Cette proportion s’appelle le <strong>rapport de mélange</strong>. En masse, l’oxygène représente près des quatre cinquièmes du mélange. C’est pourquoi le côté oxygène du moteur est le plus gros, avec l’entrée la plus large et la plus grosse pompe. À pleine puissance, un moteur aspire environ 593 kg d’oxygène et environ 165 kg de méthane chaque seconde. Cela fait beaucoup de liquide à déplacer, comme le montre le chapitre suivant.",
-      "p3": "Le méthane fait un détour avant de brûler. Après sa pompe, presque tout le méthane passe par de fins canaux creusés dans les parois de la tuyère et de la chambre. Le liquide froid absorbe la chaleur, et le métal ne fond pas à côté d’une flamme d’environ 3 500 K. C’est ce qu’on appelle le <strong>refroidissement régénératif</strong>. La chaleur n’est pas perdue : elle réchauffe le méthane en route vers le feu. L’oxygène prend le chemin court, tout droit de sa pompe à sa préchambre. Touchez un ergol pour suivre son trajet.",
-      "p4": "Les constructeurs de fusées vont encore plus loin. Ils refroidissent leurs ergols bien en dessous du point d’ébullition, près de la congélation. C’est ce qu’on appelle la <strong>densification</strong>. Un liquide plus froid se contracte un peu, donc le même réservoir en contient davantage. En général, la densification fait tenir environ un dixième d’ergols en plus dans le même réservoir, sans agrandir la fusée. Mais la marge est mince. Le méthane gèle vers 91 K, à peine 20 degrés sous son point d’ébullition. SpaceX n’a pas publié à quelle température elle charge les ergols de Starship.",
+      "title": "Deux liquides glacés",
+      "p1": "Le moteur d’une voiture puise son oxygène dans l’air. Une fusée, elle, monte là où il n’y a presque plus d’air : elle doit donc emporter le sien. Le Raptor brûle du méthane et de l’oxygène, que l’on appelle ses ergols. À température ambiante, ce sont deux gaz, et un gaz prend bien trop de place pour être transporté. Les deux voyagent donc sous forme liquide, refroidis sous leur <strong>point d’ébullition</strong>. Pour le méthane, c’est 111 K, soit environ −162 °C. Pour l’oxygène, c’est 90 K, soit environ −183 °C. Et plus un liquide est froid, plus il est dense : on en loge donc davantage dans le même réservoir.",
+      "p2": "Le moteur ne brûle pas les deux en quantités égales. Pour chaque kilo de méthane, il consomme environ 3,6 kg d’oxygène. En masse, l’oxygène représente donc près des quatre cinquièmes du <strong>mélange</strong>. Voilà pourquoi le côté oxygène du moteur est le plus imposant, avec l’entrée la plus large et la plus grosse pompe. À pleine puissance, un seul moteur avale chaque seconde environ 593 kg d’oxygène et environ 165 kg de méthane. Déplacer autant de liquide aussi vite exige des pompes très puissantes : c’est le sujet du chapitre suivant.",
+      "p3": "Avant de brûler, le méthane fait un détour. À la sortie de sa pompe, il passe en grande partie dans une multitude de canaux très fins. Ces canaux traversent les parois de la tuyère et de la chambre. En chemin, ce liquide froid absorbe la chaleur. C’est ce qui empêche le métal de fondre, tout près d’une flamme d’environ 3 500 K. Les ingénieurs appellent cela le <strong>refroidissement régénératif</strong>. Cette chaleur n’est pas perdue : elle réchauffe le méthane avant qu’il ne brûle. L’oxygène, lui, prend le chemin le plus court, directement de sa pompe à sa préchambre. Touchez un ergol pour suivre son trajet dans le moteur.",
+      "p4": "Certains constructeurs, dont SpaceX, vont encore plus loin. Ils refroidissent les deux liquides bien en dessous de leur point d’ébullition, presque jusqu’à les geler. C’est ce qu’on appelle la <strong>densification</strong>. En refroidissant, un liquide se contracte un peu : le même réservoir en contient alors davantage. En général, on y fait tenir environ un dixième d’ergols en plus, sans agrandir la fusée. Mais la marge est étroite. Le méthane gèle vers 91 K, à peine 20 degrés sous la température où il bout. SpaceX n’a pas précisé jusqu’à quelle température elle refroidit les ergols de Starship.",
       "boils": "Bout à",
       "share": "Part du mélange en masse",
-      "flow": "Débit en ce moment",
-      "route": "Son trajet"
+      "flow": "Débit actuel",
+      "route": "Trajet dans le moteur"
     },
     "pumps": {
       "title": "Deux pompes, deux petits feux",
-      "p1": "Le Raptor doit envoyer environ trois quarts de tonne d’ergols par seconde dans une chambre à plus de 300 bar. C’est plus de 300 fois la pression de l’air autour de vous. Des réservoirs capables de pousser aussi fort seraient bien trop lourds, alors ce sont des pompes qui font le travail. Chaque pompe partage son arbre avec une turbine, une roue à aubes que le gaz chaud fait tourner. Pompe et turbine forment ensemble une <strong>turbopompe</strong>. Le Raptor en a deux : une grosse pour l’oxygène et une plus petite pour le méthane.",
-      "p2": "Les turbines ont besoin de gaz chaud, et ce gaz vient de petits feux appelés <strong>préchambres</strong>. Chaque turbopompe a la sienne. La préchambre riche en oxygène brûle presque tout l’oxygène avec un peu de méthane. Son gaz chaud, encore surtout de l’oxygène, fait tourner la pompe à oxygène. La préchambre riche en méthane brûle presque tout le méthane avec un peu d’oxygène, et son gaz entraîne la pompe à méthane. Ensuite, les deux gaz continuent jusqu’à la chambre principale, où ils brûlent ensemble. Rien n’est jeté.",
-      "p3": "Ce cycle s’appelle la <strong>combustion étagée à flux intégral</strong> : chaque goutte des deux ergols passe par une turbine avant de brûler. Avec autant de gaz pour les entraîner, les turbines peuvent fonctionner moins chaud, à quelques centaines de degrés au lieu de plus de 3 000, et elles durent plus longtemps. Les pompes peuvent pousser plus fort, pour plus de pression et plus de poussée dans un moteur plus petit. Et chaque arbre n’est en contact qu’avec un seul ergol, donc pas besoin d’un joint délicat pour séparer l’oxygène chaud du carburant. Ici, le démarrage est ralenti : les pompes tournent, les préchambres s’allument, puis la chambre principale. Touchez un moteur pour comparer son cycle.",
-      "p4": "Le plus difficile, c’est le côté oxygène. Un gaz chaud plein d’oxygène ronge la plupart des métaux, et la turbine à oxygène tourne en plein dedans. SpaceX a donc créé ses propres alliages, comme le <strong>SX500</strong>, pour y résister. L’idée du flux intégral n’est pas neuve. Le RD-270 soviétique a été construit et essayé au banc dans les années 1960, et l’Integrated Powerhead Demonstrator américain au milieu des années 2000. Aucun des deux n’a jamais volé. Le Raptor est le premier moteur à flux intégral à avoir volé : le 25 juillet 2019, un seul Raptor a soulevé le véhicule d’essai Starhopper à environ 20 m.",
+      "p1": "Chaque seconde, le Raptor doit injecter environ trois quarts de tonne d’ergols dans une chambre où la pression dépasse 300 bar. C’est plus de 300 fois la pression de l’air qui vous entoure. Pour pousser aussi fort sans aide, les réservoirs devraient être si solides qu’ils pèseraient bien trop lourd. Ce sont donc des pompes qui font ce travail. Chaque pompe partage son axe avec une turbine, une roue à aubes que du gaz chaud fait tourner. Ensemble, la pompe et la turbine forment une <strong>turbopompe</strong>. Le Raptor en compte deux : une grande pour l’oxygène et une plus petite pour le méthane.",
+      "p2": "Pour tourner, les turbines ont besoin de gaz chaud. Ce gaz vient de deux petits feux appelés <strong>préchambres</strong>, une pour chaque turbopompe. Presque tout l’oxygène traverse la préchambre riche en oxygène, où brûle juste un peu de méthane. Le gaz qui en sort est chaud, mais reste surtout composé d’oxygène. C’est lui qui fait tourner la pompe à oxygène. La préchambre riche en méthane fait l’inverse : presque tout le méthane la traverse, et un peu d’oxygène y brûle. Son gaz entraîne la pompe à méthane. Les deux gaz continuent ensuite jusqu’à la chambre principale, où ils finissent de brûler ensemble. Rien n’est rejeté.",
+      "p3": "Ce cycle s’appelle la <strong>combustion étagée à flux intégral</strong>, car chaque goutte des deux ergols traverse une turbine avant de brûler. Il offre trois grands avantages. D’abord, avec autant de gaz pour les entraîner, les turbines peuvent rester plus froides. Elles tournent à quelques centaines de degrés au lieu de plus de 3 000, et durent donc plus longtemps. Ensuite, les pompes peuvent pousser plus fort. La pression monte, et un moteur plus petit fournit plus de poussée. Enfin, chaque axe n’est en contact qu’avec un seul ergol. Il n’y a donc pas besoin de joint délicat pour tenir l’oxygène chaud à l’écart du carburant. La scène montre le démarrage au ralenti : les pompes se lancent d’abord, puis les préchambres s’allument, et enfin la chambre principale. Touchez un moteur ci-dessous pour comparer son cycle à celui du Raptor.",
+      "p4": "Le plus difficile à maîtriser, c’est le côté oxygène. Un gaz chaud composé surtout d’oxygène ronge la plupart des métaux, et la turbine à oxygène doit tourner en plein dedans. Pour y résister, SpaceX a mis au point ses propres alliages, comme celui qu’elle appelle <strong>SX500</strong>. L’idée du flux intégral, elle, n’est pas nouvelle. L’Union soviétique a construit le RD-270 dans les années 1960 et l’a essayé au banc. Les États-Unis ont testé l’Integrated Powerhead Demonstrator au milieu des années 2000. Aucun des deux n’a jamais quitté le sol. Le 25 juillet 2019, le Raptor est devenu le premier moteur à flux intégral à voler. Ce jour-là, un seul Raptor a soulevé le véhicule d’essai Starhopper à environ 20 m de haut.",
       "caption": "Pompes en bleu, brûleurs en orange, turbines en gris. Une flèche rouge indique du gaz rejeté à l’extérieur.",
       "cycle": "Cycle",
       "propellants": "Ergols",
@@ -220,28 +220,28 @@
     },
     "chamber": {
       "title": "Là où brûle le grand feu",
-      "p1": "Les deux gaz chauds se rencontrent dans l’<strong>injecteur principal</strong>, la plaque en haut de la chambre de combustion. Là, ils se mélangent et brûlent à environ 3 500 K, soit plus de 3 200 °C. La pression à l’intérieur dépasse 300 bar. En 2023, un Raptor 3 au banc d’essai a atteint un record de 350 bar. La chambre elle-même est petite. L’essentiel de la hauteur du moteur, ce sont les pompes au-dessus et la tuyère en dessous.",
-      "p2": "Sous la chambre, les parois se resserrent jusqu’au <strong>col</strong>, large d’environ 22 cm, à peu près la taille d’une assiette plate. Tout le gaz doit se faufiler par ce goulot étroit. Il accélère en passant, et au col même il atteint la vitesse du son. Ensuite les parois s’ouvrent en tuyère, et le gaz continue d’accélérer. Quand il quitte le moteur, il file à plus de 3 km/s, environ dix fois la vitesse du son dans l’air.",
-      "p3": "C’est l’endroit le plus chaud du moteur. Les parois ne tiennent que parce que le méthane froid file dans les canaux qui les traversent. Le feu, lui, brûle proprement, car les deux ergols arrivent sous forme de gaz. Quand un <strong>gaz rencontre un gaz</strong>, il n’y a pas de gouttes de liquide à briser puis à vaporiser, donc ils se mélangent vite et brûlent entièrement. Les mesures montrent ce qui entre chaque seconde et à quelle vitesse les gaz ressortent.",
-      "p4": "Comment allumer un feu à plus de 300 bar ? De petits allumeurs à torche, qu’Elon Musk appelle des bougies d’allumage renforcées, allument les deux préchambres. Mais depuis le Raptor 2, la chambre principale n’a plus aucun allumeur. Les deux gaz qui arrivent des préchambres sont si chauds et si denses qu’ils s’enflamment l’un l’autre dès qu’ils se touchent. Les ingénieurs disent qu’ils se comportent comme des <strong>hypergoliques</strong>, ces ergols qui s’enflamment seuls au contact. Une pièce de moins, c’est une panne possible de moins.",
+      "p1": "Les deux gaz chauds se rejoignent à l’<strong>injecteur principal</strong>, une plaque située en haut de la chambre de combustion. Ils s’y mélangent et brûlent à environ 3 500 K, soit plus de 3 200 °C. À l’intérieur, la pression dépasse 300 bar. En 2023, un Raptor 3 a même atteint le record de 350 bar au banc d’essai. La chambre elle-même est étonnamment petite. L’essentiel de la hauteur du moteur revient aux pompes, au-dessus, et à la tuyère, en dessous.",
+      "p2": "Sous la chambre, les parois se resserrent jusqu’au <strong>col</strong>, large d’environ 22 cm, à peu près le diamètre d’une assiette. Tout le gaz doit passer par cet étranglement, et il accélère en le franchissant. Au col même, il atteint la vitesse du son. Puis les parois s’écartent à nouveau pour former la tuyère, et le gaz continue d’accélérer. Quand il quitte le moteur, il file à plus de 3 km/s, environ dix fois la vitesse du son dans l’air.",
+      "p3": "C’est l’endroit le plus chaud de tout le moteur. Les parois ne tiennent que parce que du méthane froid circule à toute vitesse dans les canaux qui les parcourent. La combustion, elle, est très propre, car les deux ergols arrivent déjà sous forme de gaz. Quand du <strong>gaz rencontre du gaz</strong>, aucune goutte de liquide ne doit d’abord se briser puis s’évaporer. Les deux se mélangent donc vite et brûlent entièrement. Les mesures ci-dessous montrent ce qui entre dans la chambre chaque seconde, et à quelle vitesse les gaz en sortent.",
+      "p4": "Comment allumer un feu à plus de 300 bar ? Pour les deux préchambres, on utilise de petits allumeurs à torche. Elon Musk les a comparés à des bougies d’allumage renforcées. La chambre principale, en revanche, n’a plus aucun allumeur depuis le Raptor 2. Les gaz qui arrivent des préchambres sont si chauds et si denses qu’ils s’enflamment dès qu’ils se rencontrent. Selon les ingénieurs, ils se comportent comme s’ils étaient <strong>hypergoliques</strong>. C’est le nom des ergols qui prennent feu spontanément au contact l’un de l’autre. Une pièce en moins, c’est une panne possible en moins.",
       "oxygen": "Débit d’oxygène",
       "methane": "Débit de méthane",
-      "pressure": "Pression interne",
+      "pressure": "Pression dans la chambre",
       "temperature": "Flamme",
       "speed": "Vitesse d’éjection"
     },
     "nozzle": {
       "title": "Une tuyère pour l’air dense et l’air raréfié",
-      "p1": "La <strong>tuyère</strong> est la cloche sous la chambre. Quand le gaz y descend, la cloche s’élargit, et le gaz se détend, refroidit et accélère. La tuyère transforme la pression et la chaleur en vitesse, et c’est la vitesse qui fait la poussée. Mais une cloche n’a la taille idéale que pour une seule pression d’air. Trop courte, et le gaz sort avant d’avoir donné toute sa poussée. Trop large, et l’air extérieur s’y engouffre. Celle du Raptor est taillée pour le niveau de la mer, d’où part le propulseur.",
-      "p2": "Au niveau de la mer, les gaz du Raptor sortent de la cloche à environ 0,9 bar. C’est un peu moins que l’air autour, qui est à environ 1 bar. L’air comprime donc le jet. Le jet comprimé forme des ondes de choc qui se croisent d’un bord à l’autre, et le gaz chauffé à chaque croisement se met à briller. Ces taches lumineuses s’appellent des <strong>diamants de choc</strong>. Elles restent immobiles dans le jet pendant que le gaz les traverse à toute vitesse, comme les rides d’un torrent.",
-      "p3": "À mesure que la fusée monte, l’air se raréfie et appuie moins. Le jet s’évase et les diamants s’étirent puis s’effacent. Au même régime, le moteur pousse maintenant environ 5 % plus fort, soit environ 14 tonnes de plus. Son <strong>impulsion spécifique</strong>, la poussée qu’il tire de ses ergols, passe d’environ 330 s à environ 350 s. Au-dessus de 30 km, ce gain est presque entièrement acquis. Faites glisser le curseur pour voir le moteur à n’importe quelle altitude pendant la montée. Si la poussée baisse autour du Max-Q, c’est parce que le moteur réduit son régime, pas à cause de l’air.",
-      "p4": "L’étage supérieur de Starship emporte aussi le <strong>Raptor Vacuum</strong>, ou RVac, avec une cloche bien plus large. Dans l’espace, aucun air ne comprime le jet, alors une plus grande cloche détend davantage le gaz et atteint environ 380 s. Mais le RVac ne peut pas tourner à pleine puissance au niveau de la mer. L’air dense s’engouffrerait dans la cloche et décollerait l’écoulement de la paroi. La tuyère se mettrait à vibrer latéralement et pourrait être endommagée. Le propulseur vole donc avec des tuyères adaptées au niveau de la mer, et le RVac attend l’espace.",
+      "p1": "La <strong>tuyère</strong> est la cloche placée sous la chambre. En descendant dans cette cloche qui s’élargit, le gaz se détend, se refroidit et accélère. Autrement dit, la tuyère transforme la pression et la chaleur en vitesse, et c’est la vitesse qui crée la poussée. Mais une cloche n’a la taille idéale que pour une seule pression d’air. Trop courte, elle laisse sortir le gaz avant qu’il ait donné toute sa poussée. Trop large, elle laisse l’air extérieur s’y engouffrer. Celle du Raptor est dimensionnée pour le niveau de la mer, là où le propulseur commence sa montée.",
+      "p2": "Au niveau de la mer, les gaz du Raptor sortent de la cloche à environ 0,9 bar. La pression de l’air ambiant est un peu plus forte : environ 1 bar. L’air comprime donc le jet vers l’intérieur. Dans ce jet comprimé, des ondes de choc se croisent en zigzag d’un bord à l’autre. Là où elles se rencontrent, le gaz s’échauffe et se met à briller. Ces taches lumineuses s’appellent des <strong>diamants de choc</strong>. Elles restent en place pendant que le gaz les traverse à toute vitesse. On dirait les remous immobiles d’un torrent.",
+      "p3": "Pendant la montée, l’air se raréfie et comprime de moins en moins le jet. Celui-ci s’évase, et les diamants s’étirent puis s’effacent. À régime égal, le moteur pousse alors environ 5 % plus fort, soit à peu près 14 tonnes de plus. Son <strong>impulsion spécifique</strong> indique combien de poussée il tire d’une quantité donnée d’ergols. Elle passe d’environ 330 s à environ 350 s. Dès 30 km de hauteur, le moteur a déjà gagné presque tout cet écart. Faites glisser le curseur pour voir le moteur à n’importe quelle altitude pendant l’ascension. Autour du Max-Q, la poussée baisse un moment : c’est le moteur qui réduit son régime, l’air n’y est pour rien.",
+      "p4": "Le vaisseau posé sur le propulseur emporte aussi une autre version, le <strong>Raptor Vacuum</strong>, ou RVac. Sa cloche est bien plus large. Dans l’espace, aucun air ne vient comprimer le jet. Une plus grande cloche peut donc détendre davantage le gaz, et en tirer environ 380 s d’impulsion spécifique. Mais le RVac ne peut pas tourner à pleine puissance au niveau de la mer. L’air dense remonterait dans la cloche et décollerait l’écoulement de la paroi. La tuyère serait alors secouée de côté, assez fort pour être endommagée. Voilà pourquoi le propulseur vole avec des tuyères adaptées au niveau de la mer, tandis que le RVac attend l’espace.",
       "control": {
-        "label": "Altitude au-dessus du sol",
+        "label": "Hauteur au-dessus du sol",
         "ground": "Pas de tir",
         "top": "Juste avant l’extinction",
         "air": "Pression de l’air",
-        "exit": "Pression des gaz à la sortie",
+        "exit": "Pression des gaz en sortie",
         "plume": "Jet",
         "thrust": "Poussée",
         "efficiency": "Impulsion spécifique"
@@ -249,11 +249,11 @@
     },
     "ascent": {
       "title": "Trente-trois moteurs, un lancement",
-      "p1": "Le Super Heavy porte 33 Raptor en trois anneaux : 3 au centre, 10 autour et 20 sur le bord. Les 13 de l’intérieur dirigent la fusée. Chacun peut s’incliner sur son <strong>cardan</strong>, une articulation au sommet, de 15 degrés environ au maximum, actionné par deux vérins. Incliner les moteurs incline leur poussée, et la fusée tourne. Les 20 du bord sont fixes. Le moteur de ce modèle est l’un des trois du centre.",
-      "p2": "Environ 3 secondes avant le décollage, les moteurs démarrent. La fusée vérifie que chacun fonctionne bien, et alors seulement les pinces lâchent, à T−0. La fusée accélère dans l’air dense des basses couches. Entre 45 et 60 secondes après le décollage arrive le <strong>Max-Q</strong>, le moment où l’air appuie le plus fort sur la fusée. Les moteurs réduisent leur poussée pour alléger la charge. SpaceX n’a pas publié de combien, alors la courbe affichée ici est la lecture que le modèle fait de la retransmission.",
-      "p3": "Après le Max-Q, les moteurs repassent à plein régime, et l’air de plus en plus raréfié apporte un surplus de poussée. Vers T+2:20, le propulseur est à environ 52 km d’altitude et file à environ 5 800 km/h. Les moteurs du propulseur s’éteignent alors, et le vaisseau au-dessus allume ses six moteurs alors que les deux étages sont encore attachés. C’est la <strong>séparation à chaud</strong>. Tous les Raptor 3 peuvent se rallumer, donc le propulseur peut rallumer ses moteurs pour revenir. Touchez un moment pour le retrouver sur le graphique.",
-      "p4": "Le Raptor 3 a volé pour la première fois lors du vol 12, le 22 mai 2026. Jusqu’ici, le plus dur a été de rallumer les moteurs en vol. Pendant ce vol, 20 moteurs sur 28 se sont rallumés pour l’<strong>allumage de retour</strong>, celui qui fait faire demi-tour au propulseur, et un seul pour l’allumage d’atterrissage. Le démarrage au sol est lui aussi surveillé de près. Le 16 juillet 2026, la première tentative du vol 13 s’est arrêtée d’elle-même à T−0, car certains moteurs n’avaient pas atteint leur régime. La fusée est restée en sécurité sur le pas de tir.",
-      "caption": "Poussée d’un moteur en orange, altitude en bleu, vitesse en blanc. La ligne marque l’instant présent.",
+      "p1": "Le Super Heavy porte 33 Raptor, disposés en trois couronnes : 3 au centre, 10 autour d’eux et 20 sur le pourtour. Les 13 moteurs intérieurs servent à diriger la fusée. Chacun est suspendu à un <strong>cardan</strong>, une articulation placée à son sommet. Deux vérins peuvent l’incliner jusqu’à environ 15 degrés. Incliner un moteur, c’est incliner sa poussée : toute la fusée tourne alors. Les 20 moteurs extérieurs, eux, sont fixes. Le moteur de ce modèle est l’un des trois du centre.",
+      "p2": "Les moteurs démarrent environ 3 secondes avant le décollage. La fusée vérifie que chacun fonctionne correctement. Alors seulement, à T−0, les pinces qui la retiennent au sol la libèrent. Elle prend ensuite de la vitesse dans l’air dense des basses couches. Entre 45 et 60 secondes après le décollage survient le <strong>Max-Q</strong>. C’est le moment où l’air appuie le plus fort sur la fusée. Les moteurs réduisent alors leur poussée un moment, pour ménager la structure. SpaceX n’a pas précisé de combien. La courbe affichée ici est donc une estimation du modèle, tirée de la retransmission.",
+      "p3": "Après le Max-Q, les moteurs repassent à plein régime, et l’air qui se raréfie leur apporte un surcroît de poussée. Vers T+2:20, le propulseur se trouve à environ 52 km d’altitude et file à environ 5 800 km/h. Ses moteurs s’éteignent alors. Le vaisseau, au-dessus, allume à son tour ses six moteurs, avant même que les deux étages se séparent. C’est ce qu’on appelle la <strong>séparation à chaud</strong>. Chaque Raptor 3 peut se rallumer en vol. Le propulseur est donc capable de relancer ses moteurs pour revenir à son point de départ. Touchez un moment ci-dessous pour le retrouver sur le graphique.",
+      "p4": "Le Raptor 3 a fait ses débuts lors du vol 12, le 22 mai 2026. Jusqu’ici, le plus difficile a été de rallumer les moteurs en vol. Ce jour-là, 20 moteurs sur 28 ont redémarré pour l’<strong>allumage de retour</strong>, la manœuvre qui fait faire demi-tour au propulseur. Pour l’allumage d’atterrissage, un seul moteur est reparti. Le démarrage au sol est surveillé de tout aussi près. Le 16 juillet 2026, la première tentative du vol 13 s’est interrompue d’elle-même à T−0. Certains moteurs n’avaient pas atteint leur régime. La fusée est restée en sécurité sur le pas de tir.",
+      "caption": "Poussée d’un moteur en orange, altitude en bleu, vitesse en blanc. La ligne verticale marque l’instant présent.",
       "speed": "Vitesse",
       "booster": "Les 33 moteurs",
       "steer": "Inclinaison"
