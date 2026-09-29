@@ -86,6 +86,14 @@ describe('signed distance fields', () => {
     expect(soft.distance(20, 0, 0)).toBeCloseTo(hard.distance(20, 0, 0), 5);
   });
 
+  it('takes the deepest of overlapping shapes inside a union', () => {
+    const outer = ellipsoid([0, 0, 0], [10, 10, 10]);
+    const inner = ellipsoid([9.5, 0, 0], [1, 1, 1]);
+    expect(outer.distance(9.5, 0, 0)).toBeGreaterThan(-1);
+    expect(union([inner, outer]).distance(9.5, 0, 0)).toBeCloseTo(-1, 5);
+    expect(union([outer, inner]).distance(9.5, 0, 0)).toBeCloseTo(-1, 5);
+  });
+
   it('carves one shape out of another', () => {
     const block = ellipsoid([0, 0, 0], [10, 10, 10]);
     const hole = capsule([0, 0, 0], [0, 20, 0], 3);

@@ -53,9 +53,10 @@ function boxGapSquared(box: FieldBox, x: number, y: number, z: number): number {
 }
 
 function beyondReach(box: FieldBox, x: number, y: number, z: number, limit: number): boolean {
-  if (limit < 0) return true;
   if (limit === Number.POSITIVE_INFINITY) return false;
-  return boxGapSquared(box, x, y, z) > limit * limit;
+  const gap = boxGapSquared(box, x, y, z);
+  if (gap === 0) return false;
+  return limit < 0 || gap > limit * limit;
 }
 
 function length3(x: number, y: number, z: number): number {
