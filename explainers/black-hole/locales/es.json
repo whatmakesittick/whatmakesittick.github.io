@@ -1,28 +1,28 @@
 {
   "meta": {
-    "title": "Cómo un agujero negro curva el tiempo",
+    "title": "Cómo un agujero negro deforma el tiempo",
     "eyebrow": "Sagittarius A*",
-    "tagline": "Una sonda cae hacia el agujero negro del centro de nuestra galaxia mientras su reloj gemelo se queda en la nave, y los dos relojes dejan de coincidir.",
-    "description": "Una sonda cae en Sagittarius A*, el agujero negro central de la Vía Láctea, en 3D: dos relojes se separan, la luz se curva y la nave nunca la ve cruzar.",
-    "summary": "Dos relojes, la caída, la luz que se curva alrededor del agujero, la imagen congelada en el horizonte, el cruce y otros agujeros negros.",
-    "socialAlt": "Vista 3D del agujero negro del centro de la Vía Láctea curvando la luz de su disco de gas brillante, con una pequeña sonda y su baliza intermitente cayendo hacia la sombra oscura, junto al título «Cómo un agujero negro curva el tiempo»"
+    "tagline": "Una sonda cae hacia el agujero negro del centro de nuestra galaxia. Su reloj gemelo se queda en la nave, y los dos relojes dejan de marcar lo mismo.",
+    "description": "En 3D, una sonda cae en Sagittarius A*, el agujero negro central de la Vía Láctea. Dos relojes se desfasan, la luz se curva y la nave nunca la ve cruzar.",
+    "summary": "Dos relojes, la caída, la luz que rodea el agujero, la imagen que se congela en el horizonte, el cruce y otros agujeros negros.",
+    "socialAlt": "Vista en 3D del agujero negro del centro de la Vía Láctea, que curva la luz de su brillante disco de gas. Una pequeña sonda con su baliza de destellos cae hacia la sombra oscura. Al lado, el título «Cómo un agujero negro deforma el tiempo»"
   },
   "stage": {
     "label": "Modelo interactivo del agujero negro",
-    "gauge": "Lecturas de la caída en directo"
+    "gauge": "Datos de la caída en directo"
   },
   "controls": {
     "label": "Controles del agujero negro",
     "views": {
       "disc": {
-        "name": "Disco de gas",
+        "name": "Disco de acreción",
         "short": "Disco",
-        "hint": "Disco de gas (D)"
+        "hint": "Disco de acreción (D)"
       },
       "sheet": {
-        "name": "Lámina elástica",
-        "short": "Lámina",
-        "hint": "Lámina elástica (S)"
+        "name": "Tela elástica",
+        "short": "Tela",
+        "hint": "Tela elástica (S)"
       },
       "labels": {
         "name": "Etiquetas",
@@ -52,23 +52,23 @@
     "phase": {
       "letGo": "Se suelta",
       "plunge": "Acelera",
-      "noOrbit": "Pasada la última órbita",
+      "noOrbit": "Tras la última órbita",
       "lightRing": "Dentro del anillo de luz",
       "inside": "Dentro"
     },
     "during": {
-      "letGo": "la sonda se deja caer y los dos relojes empiezan a discrepar",
+      "letGo": "la sonda cae hacia dentro y los dos relojes empiezan a desfasarse",
       "plunge": "la sonda supera un cuarto de la velocidad de la luz",
-      "noOrbit": "aquí ya nada puede girar alrededor del agujero",
-      "lightRing": "la baliza pasa del rojo al negro para la nave",
-      "inside": "no hay salida, y el centro está a segundos"
+      "noOrbit": "aquí ya nada puede dar vueltas alrededor del agujero",
+      "lightRing": "para la nave, la baliza enrojece hasta volverse negra",
+      "inside": "no hay salida, y el centro está a pocos segundos"
     },
     "jump": {
-      "letGo": "Saltar al momento de soltarse",
-      "plunge": "Saltar a la aceleración",
+      "letGo": "Saltar al momento en que se suelta",
+      "plunge": "Saltar al momento en que acelera",
       "noOrbit": "Saltar más allá de la última órbita",
-      "lightRing": "Saltar al interior del anillo de luz",
-      "inside": "Saltar al interior del horizonte"
+      "lightRing": "Saltar dentro del anillo de luz",
+      "inside": "Saltar dentro del horizonte"
     }
   },
   "readouts": {
@@ -87,17 +87,17 @@
       "orange": "Naranja",
       "red": "Rojo intenso",
       "infrared": "Infrarrojo",
-      "gone": "Apagada"
+      "gone": "Sin luz"
     }
   },
   "parts": {
     "horizon": "Horizonte de sucesos",
     "photonSphere": "Esfera de fotones",
-    "disc": "Disco de gas",
+    "disc": "Disco de acreción",
     "probe": "Sonda",
     "ship": "Nave",
     "beacon": "Destellos de la baliza",
-    "sheetProbe": "Sonda sobre la lámina"
+    "sheetProbe": "Sonda sobre la tela"
   },
   "units": {
     "horizonRadii": "{{value}} rs",
@@ -121,10 +121,10 @@
   "sections": {
     "overview": {
       "title": "El agujero en el corazón de nuestra galaxia",
-      "p1": "Tienes delante el agujero negro del centro de nuestra galaxia, la Vía Láctea. Los astrónomos lo llaman <strong>Sagittarius A*</strong>, y se lee «A estrella». Está a unos 27.000 años luz de la Tierra y pesa unos 4,3 millones de veces más que el Sol. A su alrededor gira un disco fino de gas caliente. El círculo oscuro del centro es el propio agujero. Su borde es el horizonte de sucesos, la línea de la que nada vuelve, ni siquiera la luz. Del centro a ese borde hay unos 12,7 millones de km, unas 18 veces el radio del Sol. La luz tarda unos 42 segundos en recorrer esa distancia.",
-      "p2": "El círculo oscuro no es una superficie. Es la <strong>sombra</strong> del agujero: el trozo de cielo desde el que ninguna luz puede llegarte. La luz que pasa cerca del agujero se curva, y el disco lo muestra muy bien. Su lado lejano debería quedar oculto detrás del agujero. En cambio, lo ves flotar por encima y por debajo del círculo oscuro, porque su luz rodea el agujero por arriba y por abajo de camino hacia ti. El lado derecho del disco también brilla más que el izquierdo. Ese gas viene hacia ti a una buena fracción de la velocidad de la luz, y eso vuelve su luz más brillante y más azul.",
-      "p3": "Dos viajeros comparten esta escena. Una pequeña <strong>sonda</strong> con un reloj y una baliza intermitente se ha detenido a cinco radios del horizonte, contados desde el centro. Está a punto de soltarse y caer en línea recta. Una nave espera en una órbita circular a veinte radios del horizonte, con un reloj gemelo a bordo. Los dos relojes empiezan en cero. El modelo simplifica algunas cosas. La sonda y la nave están dibujadas miles de veces más grandes que en la realidad para que puedas verlas. El agujero está dibujado sin giro, porque nadie ha medido a qué velocidad rota el de verdad. Arrastra la línea de tiempo para seguir la caída y arrastra la escena para girarla.",
-      "p4": "El Sagittarius A* real es mucho más tenue que esta imagen. Todo él junto brilla como unos 200 soles, muy poco para 4,3 millones de soles de masa, y solo traga alrededor de una cienmillonésima de la masa del Sol cada año. El disco brillante está dibujado así para que veas cómo se curva la luz. Aun así, la sombra real se ha fotografiado. En 2022, el <strong>Telescopio del Horizonte de Sucesos</strong>, una red de antenas de radio repartidas por toda la Tierra, mostró el anillo brillante que la rodea, de unas 52 millonésimas de segundo de arco de ancho. Un grado tiene 3.600 segundos de arco, así que ese anillo es realmente muy pequeño.",
+      "p1": "Lo que ves es el agujero negro del centro de nuestra galaxia, la Vía Láctea. Los astrónomos lo llaman <strong>Sagittarius A*</strong>, y se lee «A estrella». Está a unos 27.000 años luz de la Tierra y tiene unos 4,3 millones de veces la masa del Sol. A su alrededor gira un disco fino de gas caliente, llamado disco de acreción. El círculo oscuro del centro es el agujero en sí. Su borde es el horizonte de sucesos: la frontera de la que nada vuelve, ni siquiera la luz. Del centro a ese borde hay unos 12,7 millones de km, unas 18 veces el radio del Sol. La luz tarda unos 42 segundos en recorrer esa distancia.",
+      "p2": "El círculo oscuro no es una superficie. Es la <strong>sombra</strong> del agujero: la zona del cielo desde la que no te puede llegar ninguna luz. La luz que pasa cerca del agujero se curva, y el disco lo deja ver muy bien. Su parte de atrás debería quedar oculta tras el agujero. Sin embargo, la ves flotar por encima y por debajo del círculo oscuro. Es porque su luz rodea el agujero por arriba y por abajo antes de llegar a ti. Además, el lado derecho del disco brilla más que el izquierdo. Allí el gas se acerca a ti a una buena fracción de la velocidad de la luz, y por eso su luz se ve más brillante y más azul.",
+      "p3": "Dos viajeros comparten esta escena. Una pequeña <strong>sonda</strong> lleva un reloj y una baliza que emite destellos. Espera quieta a cinco radios del horizonte, contados desde el centro, a punto de soltarse y caer en línea recta. Más afuera, una nave da vueltas en una órbita circular a veinte radios del horizonte, con un reloj gemelo a bordo. Los dos relojes empiezan en cero. El modelo simplifica algunas cosas. La sonda y la nave se ven miles de veces más grandes de lo que son, para que puedas distinguirlas. El agujero se dibuja sin rotación, porque nadie ha medido a qué velocidad gira el de verdad. Arrastra la línea de tiempo para seguir la caída, y arrastra la escena para girarla.",
+      "p4": "El Sagittarius A* real es mucho más tenue que en esta imagen. En total brilla como unos 200 soles, muy poco para una masa de 4,3 millones de soles. Cada año se traga solo alrededor de una cienmillonésima de la masa del Sol. Aquí el disco se dibuja brillante para que veas cómo se curva la luz. Aun así, la sombra real ya se ha fotografiado. En 2022, el <strong>Telescopio del Horizonte de Sucesos</strong>, una red de radiotelescopios repartidos por toda la Tierra, mostró el anillo luminoso que la rodea. Mide unas 52 millonésimas de segundo de arco. Un grado tiene 3.600 segundos de arco, así que ese anillo es diminuto.",
       "mass": "Masa",
       "massValue": "4,3 millones de soles",
       "horizon": "Radio del horizonte",
@@ -134,10 +134,10 @@
     },
     "clocks": {
       "title": "Dos relojes que dejan de coincidir",
-      "p1": "En 0:00 la sonda se suelta. Parte del <strong>reposo</strong>, algo que una sonda real solo conseguiría con un motor, porque todo lo que hay cerca del agujero se mueve deprisa. Los relojes se comportan igual en ambos casos, así que el modelo lo deja sencillo. Aquí fuera, el tirón es gravedad normal, nada más. La sonda se desliza hacia dentro despacio al principio, y luego cada vez más rápido. Según su propio reloj, llega al horizonte hacia las 11:53 y al centro unos 30 segundos después. La nave, en su órbita a veinte radios del horizonte, lleva un reloj que marcha casi igual que uno lejos de cualquier agujero negro.",
-      "p2": "Cada diez segundos de tiempo de la sonda, la baliza emite un destello. Ese intervalo es una elección del modelo; una baliza real podría destellar al ritmo que fuera. Cada destello viaja hacia la nave, y la nave anota cuándo llega. Ya al principio, los destellos llegan un 8 % más separados de lo que la sonda los envió. Más adentro, los huecos crecen. A tres radios del horizonte, cada segundo de la sonda dura casi dos segundos de la nave. A dos radios, casi tres. A este estiramiento del tiempo se le llama <strong>dilatación del tiempo</strong>. Arrastra el control para mover la sonda según su distancia y mira cómo los dos relojes se separan.",
-      "p3": "Aquí se suman dos efectos. El primero es la gravedad: un reloj quieto en el fondo de un pozo de gravedad marcha más lento que uno lejano. Quieto a dos radios del horizonte, un reloj iría solo a cerca del 71 % del ritmo lejano; a 1,1 radios, a cerca del 30 %. El segundo es el movimiento. La sonda cae cada vez más deprisa, y cada destello tiene que remontar el tirón mientras su fuente se aleja a toda velocidad. Los dos efectos estiran la luz hacia frecuencias más bajas y huecos más largos. Juntos forman el <strong>corrimiento al rojo</strong> que mide la nave: los destellos llegan no solo más tarde, sino también más rojos.",
-      "p4": "Nada de esto es exótico. Los relojes de los <strong>satélites GPS</strong> sienten los mismos dos efectos. Orbitan a unos 20.000 km de altura, donde la gravedad de la Tierra es más débil, así que adelantan unos 45 microsegundos al día. También se mueven a unos 14.000 km/h, y eso los hace atrasar unos 7 microsegundos al día. En total adelantan unos 38 microsegundos al día, y el sistema lo corrige. Sin esa corrección, tu posición se desviaría unos 10 km cada día. En 2010, científicos del NIST compararon dos relojes, uno 33 cm por encima del otro, y vieron que el de arriba iba más rápido: unos 90 nanosegundos a lo largo de toda una vida.",
+      "p1": "Cuando los relojes marcan 0:00, la sonda se suelta. Parte del <strong>reposo</strong>, algo que una sonda real solo lograría con un motor, porque cerca del agujero todo se mueve deprisa. Los relojes se comportan igual en los dos casos, así que el modelo lo simplifica. Aquí fuera, lo que tira de la sonda es la gravedad de siempre, nada más. Al principio la sonda cae despacio, y luego cada vez más rápido. Según su propio reloj, llega al horizonte hacia el minuto 11:53 y al centro unos 30 segundos después. La nave sigue en su órbita, a veinte radios del horizonte. Su reloj marcha casi igual que uno muy lejos de cualquier agujero negro.",
+      "p2": "La baliza emite un destello cada diez segundos del reloj de la sonda. Ese ritmo es una elección del modelo: una baliza real podría destellar con cualquier frecuencia. Cada destello viaja hacia la nave, y la nave anota cuándo llega. Ya al principio, la separación entre destellos al llegar es alrededor de un 8 % mayor que al salir. Más adentro, la separación crece. A tres radios del horizonte, cada segundo de la sonda dura casi dos segundos de la nave. A dos radios, casi tres. Este estiramiento del tiempo se llama <strong>dilatación del tiempo</strong>. Arrastra el control deslizante para cambiar la distancia de la sonda y mira cómo se desfasan los dos relojes.",
+      "p3": "Aquí se suman dos efectos. El primero es la gravedad: un reloj quieto en lo hondo de un pozo gravitatorio marcha más despacio que uno lejano. Quieto a dos radios del horizonte, un reloj iría solo a cerca del 71 % del ritmo de un reloj lejano. A 1,1 radios, a cerca del 30 %. El segundo efecto es el movimiento. La sonda cae cada vez más deprisa, y cada destello tiene que subir contra la gravedad mientras la sonda se aleja a toda velocidad. Los dos efectos estiran la luz: su frecuencia baja y los destellos llegan más espaciados. Juntos forman el <strong>corrimiento al rojo</strong> que mide la nave. Los destellos no solo llegan más tarde, también llegan más rojos.",
+      "p4": "Nada de esto es exótico. Los relojes de los <strong>satélites GPS</strong> notan los mismos dos efectos. Orbitan a unos 20.000 km de altura, donde la gravedad de la Tierra es más débil, y por eso se adelantan unos 45 microsegundos al día. Además se mueven a unos 14.000 km/h, y eso los atrasa unos 7 microsegundos al día. En total se adelantan unos 38 microsegundos al día, y el sistema lo corrige. Sin esa corrección, tu posición se desviaría unos 10 km cada día. En 2010, unos científicos del NIST compararon dos relojes, uno 33 cm más alto que el otro. El de arriba iba más rápido: la diferencia sería de unos 90 nanosegundos a lo largo de toda una vida.",
       "control": {
         "label": "Distancia al centro",
         "horizon": "Horizonte",
@@ -145,18 +145,18 @@
         "probe": "Reloj de la sonda",
         "ship": "Reloj de la nave",
         "ratio": "Segundos de la nave por segundo de la sonda",
-        "flash": "La baliza, vista desde la nave"
+        "flash": "La baliza vista desde la nave"
       }
     },
     "light": {
-      "title": "La luz se curva alrededor del agujero",
-      "p1": "La luz siempre sigue el camino más recto posible, pero cerca de un agujero negro el propio espacio está curvado, así que ese camino se dobla. Esto es la <strong>lente gravitatoria</strong>. La luz del lado lejano del disco debería quedar oculta detrás del agujero. En cambio, pasa por encima y por debajo de él y se curva hacia ti, y ves ese lado como dos arcos, uno sobre la sombra y otro debajo. Las estrellas de detrás del agujero se estiran en arcos por la misma razón. Mira con atención y encontrarás una segunda imagen del disco, más tenue, pegada al borde de la sombra: luz que dio media vuelta al agujero antes de escapar.",
-      "p2": "A 1,5 radios del horizonte hay un lugar donde la luz puede dar vueltas alrededor del agujero. Se llama <strong>esfera de fotones</strong>. La luz que llega con el ángulo justo gira y gira, y una pizca se escapa hacia ti: es el anillo fino y brillante pegado a la sombra. Por ese anillo la sombra parece mayor que el horizonte. Toda luz que apunte a menos de unos 2,6 radios del horizonte, contados desde el centro, queda atrapada, así que la mancha oscura mide unos 5,2 radios del horizonte de ancho, más del doble que el propio horizonte. En Sagittarius A*, la esfera de fotones está a unos 19 millones de km del centro.",
-      "p3": "Más afuera, a tres radios del horizonte, está la <strong>última órbita estable</strong>. Fuera de ella, el gas y las estrellas pueden girar alrededor del agujero todo el tiempo que quieran, como los planetas alrededor del Sol. Dentro no existe ninguna órbita estable: cualquier cosa que se acerque un poco sigue cayendo. Por eso el disco termina a tres radios del horizonte, a unos 38 millones de km del centro. El gas de ese borde interior se mueve a cerca de la mitad de la velocidad de la luz. A esa velocidad, el gas que viene hacia ti parece decenas de veces más brillante que el que se aleja. Toca una ficha para llevar la sonda a cada lugar.",
-      "p4": "Esta curvatura está medida, no solo dibujada. La estrella <strong>S2</strong> da una vuelta alrededor de Sagittarius A* cada 16 años. En mayo de 2018 pasó por su punto más cercano, a unas 120 veces la distancia Tierra-Sol del agujero, unos 1.400 radios del horizonte, a unos 7.700 km/s. Eso es cerca de un 2,6 % de la velocidad de la luz. Su luz llegó estirada hacia el rojo por la gravedad del agujero y por su velocidad, un desplazamiento de unos 200 km/s, justo el que predice la relatividad general. Luego se alejó de nuevo, intacta. Un agujero negro no absorbe las cosas; las cosas orbitan a su alrededor.",
-      "shadow": "Anchura de la sombra",
+      "title": "La luz rodea el agujero",
+      "p1": "La luz siempre sigue el camino más recto que puede. Pero cerca de un agujero negro el propio espacio está curvado, así que hasta el camino más recto se curva. Esto se llama <strong>lente gravitacional</strong>. La luz de la parte de atrás del disco debería quedar oculta tras el agujero. En cambio, pasa por encima y por debajo de él y se dobla hacia ti. Por eso ves esa parte como dos arcos, uno sobre la sombra y otro bajo ella. Por la misma razón, las estrellas que hay detrás del agujero se estiran en forma de arco. Si miras con atención, verás una segunda imagen del disco, más tenue, pegada al borde de la sombra. Es luz que dio media vuelta al agujero antes de escapar.",
+      "p2": "A 1,5 radios del horizonte hay una zona donde la luz puede dar vueltas alrededor del agujero. Se llama <strong>esfera de fotones</strong>. La luz que llega allí con el ángulo justo gira y gira, y una pequeña parte se escapa hacia ti. Es el anillo fino y brillante pegado a la sombra. Por ese anillo, la sombra parece más grande que el horizonte. La luz que apunta demasiado cerca del centro queda atrapada, y el límite está a unos 2,6 radios del horizonte. Por eso la mancha oscura que ves mide unos 5,2 radios del horizonte de ancho, más del doble que el propio horizonte. En Sagittarius A*, la esfera de fotones está a unos 19 millones de km del centro.",
+      "p3": "Más afuera, a tres radios del horizonte, está la <strong>última órbita estable</strong>. Por fuera de ella, el gas y las estrellas pueden girar alrededor del agujero todo el tiempo que quieran, como los planetas alrededor del Sol. Por dentro no hay ninguna órbita estable: si algo se desvía un poco hacia dentro, ya no deja de caer. Por eso el disco termina a tres radios del horizonte, a unos 38 millones de km del centro. El gas de ese borde interior se mueve a cerca de la mitad de la velocidad de la luz. A esa velocidad, el gas que viene hacia ti parece decenas de veces más brillante que el que se aleja. Toca un botón para llevar la sonda a cada uno de estos lugares.",
+      "p4": "Esta curvatura se ha medido, no solo dibujado. La estrella <strong>S2</strong> da una vuelta a Sagittarius A* cada 16 años. En mayo de 2018 pasó por su punto más cercano al agujero: unas 120 veces la distancia entre la Tierra y el Sol, o unos 1.400 radios del horizonte. Iba a unos 7.700 km/s, cerca del 2,6 % de la velocidad de la luz. Su luz llegó desplazada hacia colores más rojos por la gravedad del agujero y por su velocidad. Ese desplazamiento equivalía a unos 200 km/s, y su valor coincidió con lo que predice la relatividad general. Después, la estrella volvió a alejarse, intacta. Un agujero negro no aspira las cosas: las cosas giran a su alrededor.",
+      "shadow": "Ancho de la sombra",
       "shadowValue": "unos 5,2 radios del horizonte",
-      "ring": "La luz gira a",
+      "ring": "Órbita de la luz",
       "ringValue": "1,5 radios del horizonte",
       "orbit": "Última órbita estable",
       "orbitValue": "3 radios del horizonte",
@@ -165,31 +165,31 @@
     },
     "frozen": {
       "title": "La nave nunca la ve cruzar",
-      "p1": "Ahora estás en la nave y miras caer la sonda. Sus destellos llegan a intervalos cada vez más largos, cada uno más rojo y más débil que el anterior. Cerca del horizonte, el cambio se dispara. A 1,2 radios del horizonte, un segundo de la sonda tarda casi diez segundos de la nave. A 1,05 radios, tarda unos 36. Los colores pasan del blanco al naranja, al rojo intenso y, más allá del rojo, al <strong>infrarrojo</strong>, donde tus ojos ya no ven nada. Las lecturas de abajo siguen los últimos destellos a medida que llegan. En este capítulo la reproducción va más lenta, para que puedas ver cómo se apaga.",
-      "p2": "Desde la nave, la sonda nunca llega al horizonte. Su imagen se frena, se arrastra hacia el borde oscuro y se <strong>congela</strong> allí, mientras se desvanece hasta el negro. El último destello enviado antes del cruce tarda una eternidad en salir, y ningún destello enviado en el horizonte o dentro de él llega jamás. Cada vez que la sonda se acerca diez veces más al horizonte, su luz necesita unos 98 segundos más para alcanzar la nave, y así sin fin. El tiempo lejano no tiene ninguna lectura para el momento del cruce, así que el reloj de la nave en las lecturas dice simplemente «nunca».",
-      "p3": "Y sin embargo la sonda sí cruza, hacia las 11:53 de su propio reloj. ¿Cómo pueden ser ciertas las dos cosas? La nave no está mirando la sonda; está mirando la luz que salió de la sonda. La dilatación del tiempo trata de cuándo esa luz puede llegar a la nave, no de lo que siente la sonda. La luz del propio horizonte nunca sale, así que la imagen de la nave se detiene ahí, aunque la sonda haya seguido su camino hace mucho. No hay ninguna <strong>contradicción</strong>: dos relojes en lugares distintos miden cosas distintas, y la relatividad general dice exactamente cómo se relacionan las dos lecturas.",
-      "p4": "Flotar muy cerca de un horizonte alargaría de verdad tu vida frente a la de tus amigos. Un reloj quieto a 1,1 radios del horizonte va a cerca del 30 % del ritmo lejano. En la película <strong>Interstellar</strong>, una hora en el planeta de Miller equivale a siete años en otra parte, un factor de unos 60.000. Eso no es posible en Sagittarius A*. En un agujero sin giro solo hay órbitas estables desde tres radios del horizonte, y allí un reloj va como mucho unas 1,4 veces más lento. El planeta de la película necesita un agujero de unos 100 millones de soles, girando a menos de una parte en 100 billones del máximo, en una órbita que roza su horizonte.",
+      "p1": "Ahora estás en la nave y miras cómo cae la sonda. Sus destellos llegan cada vez más espaciados, y cada uno es más rojo y más débil que el anterior. Cerca del horizonte, el cambio se dispara. A 1,2 radios del horizonte, un segundo de la sonda dura casi diez segundos de la nave. A 1,05 radios, dura unos 36. Los colores pasan del blanco al naranja y al rojo intenso. Después van más allá del rojo, al <strong>infrarrojo</strong>, donde tus ojos ya no ven nada. Los datos de abajo siguen los últimos destellos a medida que llegan. En este capítulo la reproducción va más lenta, para que puedas ver cómo se apaga la luz.",
+      "p2": "Desde la nave, la sonda nunca llega al horizonte. Su imagen se frena, avanza muy despacio hacia el borde oscuro y se <strong>congela</strong> allí, mientras se funde en negro. El último destello enviado antes del cruce tarda una eternidad en salir. Ningún destello enviado en el horizonte o dentro de él llega nunca. Cada vez que la distancia entre la sonda y el horizonte se reduce a la décima parte, su luz tarda unos 98 segundos más en llegar a la nave. Y así sin fin. En el tiempo lejano no hay ningún instante que corresponda al cruce. Por eso el reloj de la nave, en los datos, dice simplemente «nunca».",
+      "p3": "Y sin embargo, la sonda sí cruza, hacia el minuto 11:53 de su propio reloj. ¿Cómo pueden ser ciertas las dos cosas? La nave no está viendo la sonda, sino la luz que salió de ella. La dilatación del tiempo habla de cuándo puede llegar esa luz a la nave, no de lo que siente la sonda. La luz del propio horizonte no sale nunca. Así que la imagen que ve la nave se detiene ahí, aunque la sonda haya seguido su camino hace mucho. No hay ninguna <strong>contradicción</strong>. Dos relojes en lugares distintos miden cosas distintas, y la relatividad general dice con exactitud cómo se relacionan sus lecturas.",
+      "p4": "Quedarte flotando muy cerca de un horizonte sí estiraría tu vida en comparación con la de tus amigos. Un reloj quieto a 1,1 radios del horizonte va a cerca del 30 % del ritmo de un reloj lejano. En la película <strong>Interstellar</strong>, una hora en el planeta de Miller equivale a siete años en otros lugares, un factor de unos 60.000. Eso no es posible en Sagittarius A*. Alrededor de un agujero que no gira, solo hay órbitas estables a partir de tres radios del horizonte, y ahí un reloj va, como mucho, unas 1,4 veces más lento. El planeta de la película necesita un agujero de unos 100 millones de soles. Ese agujero tendría que girar casi al máximo posible, a solo una parte en 100 billones del límite. Y el planeta tendría que seguir una órbita que roce su horizonte.",
       "ship": "Reloj de la nave",
-      "gap": "Intervalo entre destellos",
+      "gap": "Tiempo entre destellos",
       "brightness": "Brillo de la sonda",
       "colour": "Color de los destellos"
     },
     "inside": {
       "title": "Un cruce sin sobresaltos",
-      "p1": "Cambia a la sonda. Cuando se acerca al horizonte, no pasa nada. Ni pared, ni destello, ni sacudida. El <strong>horizonte de sucesos</strong> no es una superficie que puedas tocar o ver; es la línea a partir de la cual la luz ya no puede escapar. Desde dentro no hay ninguna señal de que lo hayas pasado. El reloj de la sonda sigue marcando con toda normalidad, y hacia las 11:53 cruza. Las lecturas cuentan hacia atrás el tiempo propio de la sonda hasta el centro. En este capítulo la reproducción va en tiempo real, así que los últimos segundos pasan tan despacio como pasarían para la sonda.",
-      "p2": "¿Se apaga el cielo? No. La luz de fuera sigue cayendo detrás de la sonda, así que las estrellas y el disco siguen a la vista, aunque curvados y enrojecidos. La sonda tampoco ve pasar de golpe todo el futuro del universo. Su propio tiempo se acaba en el centro, así que solo recibe la luz que logra alcanzarla antes. Y la vista no se encoge en una ventana cada vez más pequeña. Una sonda quieta cerca del horizonte vería el cielo apretado sobre su cabeza, pero una sonda que cae se lanza hacia dentro tan deprisa que un efecto llamado <strong>aberración</strong> vuelve a desplegar el cielo.",
-      "p3": "Dentro, todos los caminos llevan al centro, y este llega unos 30 segundos después según el reloj de la sonda. Mucho antes, el agujero tira con más fuerza del extremo cercano de la sonda que del lejano. Este estiramiento es una <strong>marea</strong>, el mismo efecto que levanta el mar en la Tierra. En el horizonte de un agujero tan grande es diminuta: alrededor de una diezmilésima de g a lo largo de dos metros, demasiado pequeña para notarla. Solo llega a 1 g a cerca de una vigésima parte del radio del horizonte desde el centro, muy adentro. Una persona cruzaría el horizonte de Sagittarius A* sin sentir nada.",
-      "p4": "En un agujero negro pequeño el orden se invierte. <strong>Cygnus X-1</strong>, de unos 21 soles de masa, tiene un radio del horizonte de solo unos 63 km. Allí la marea es de unos 5 millones de g a lo largo de dos metros. Una persona que cayera dentro quedaría despedazada mucho antes del horizonte, estirada como un fideo. Toda la caída desde cinco radios del horizonte duraría unas pocas milésimas de segundo. Los agujeros grandes son suaves en el borde y los pequeños son feroces, porque la marea depende de cuánto cambia la gravedad a lo largo de tu cuerpo, y ese cambio se atenúa a medida que el horizonte crece.",
+      "p1": "Ahora pasa a la sonda. Cuando se acerca al horizonte, no ocurre nada. No hay pared, ni destello, ni sacudida. El <strong>horizonte de sucesos</strong> no es una superficie que puedas tocar o ver. Es la frontera a partir de la cual la luz ya no puede escapar. Desde dentro no hay ninguna señal de que lo hayas cruzado. El reloj de la sonda sigue marcando el tiempo con total normalidad, y hacia el minuto 11:53 la sonda cruza. Los datos cuentan hacia atrás el tiempo que le queda a la sonda, según su propio reloj, hasta llegar al centro. En este capítulo la reproducción va en tiempo real, así que los últimos segundos pasan tan despacio como los viviría la sonda.",
+      "p2": "¿Se oscurece el cielo? No. La luz de fuera sigue cayendo detrás de la sonda, así que las estrellas y el disco siguen a la vista, aunque curvados y enrojecidos. La sonda tampoco ve pasar en un instante todo el futuro del universo. Su propio tiempo se acaba en el centro, así que solo recibe la luz que logra alcanzarla antes. Y la vista no se encoge en una ventana cada vez más pequeña. Una sonda quieta cerca del horizonte vería el cielo concentrado sobre su cabeza. Pero una sonda que cae se lanza hacia dentro tan deprisa que un efecto llamado <strong>aberración</strong> vuelve a desplegar el cielo.",
+      "p3": "Dentro, todos los caminos llevan al centro, y la sonda llega unos 30 segundos después según su reloj. Mucho antes, el agujero tira más fuerte del extremo cercano de la sonda que del lejano. Es la <strong>fuerza de marea</strong>, el mismo efecto que hace subir el mar en la Tierra. En el horizonte de un agujero tan grande es diminuta: alrededor de una diezmilésima de g a lo largo de dos metros. Es demasiado poco para notarla. Solo llega a 1 g muy adentro, a cerca de una vigésima parte del radio del horizonte desde el centro. Una persona cruzaría el horizonte de Sagittarius A* sin notar nada.",
+      "p4": "En un agujero negro pequeño pasa lo contrario. <strong>Cygnus X-1</strong> tiene unos 21 soles de masa y un radio del horizonte de solo unos 63 km. Allí la fuerza de marea es de unos 5 millones de g a lo largo de dos metros. Una persona que cayera quedaría despedazada mucho antes de llegar al horizonte, estirada como un espagueti. Toda la caída desde cinco radios del horizonte duraría unas pocas milésimas de segundo. Los agujeros grandes son suaves en el borde y los pequeños son brutales. La razón es que la fuerza de marea depende de cuánto cambia la gravedad de un extremo a otro de tu cuerpo, y ese cambio se suaviza cuanto mayor es el horizonte.",
       "left": "Tiempo de la sonda hasta el centro",
       "speed": "Velocidad respecto a un observador quieto",
       "tide": "Estiramiento en 2 m"
     },
     "others": {
       "title": "Agujeros más grandes, bordes más suaves",
-      "p1": "Activa la lámina elástica y la escena cambia a la imagen popular: una cuadrícula plana hundida en forma de embudo. Es el dibujo del espacio como <strong>lámina elástica</strong>, y muestra una cosa cierta. Cerca del agujero, las distancias se estiran: una regla apoyada a lo largo del embudo mide más longitud de la que sugieren los círculos planos. Pero no muestra nada más. No muestra cómo corre el tiempo ni qué es lo que tira. Nada rueda por la lámina; el embudo es solo una manera de dibujar el espacio estirado en una pantalla. El marcador baja por él mientras la sonda cae.",
-      "p2": "Las fichas comparan tres agujeros negros reales. <strong>Sagittarius A*</strong> es el que has estado mirando, de unos 4,3 millones de soles. M87*, en el corazón de la galaxia gigante M87, pesa unos 6.500 millones de soles, y su radio del horizonte es de unos 19.000 millones de km, unas 128 veces la distancia de la Tierra al Sol. Cygnus X-1 pesa unos 21 soles, y su radio del horizonte es de unos 63 km, el tamaño de una ciudad. El radio del horizonte crece al mismo ritmo que la masa: dobla la masa y doblas el radio.",
-      "p3": "Más grande es más suave. La marea en el horizonte se debilita a medida que el agujero crece, así que en M87* queda muy por debajo de lo que una sonda podría medir, mientras que en Cygnus X-1 desgarra. La misma caída también dura más. Suelta la sonda desde cinco radios del horizonte y llega al centro en unos 12 minutos en Sagittarius A*, en unos 13 días en M87* y en unas pocas milésimas de segundo en Cygnus X-1. Cualquier masa tiene un radio del horizonte, llamado <strong>radio de Schwarzschild</strong>: comprime la masa dentro de él y tienes un agujero negro. Para el Sol es de unos 2,95 km. Para la Tierra, de unos 8,9 mm.",
-      "p4": "La propia luz muestra lo grandes que son estos agujeros. La luz cruza un radio del horizonte de Sagittarius A* en unos 42 segundos. En <strong>M87*</strong> el mismo viaje dura unas 18 horas, y en Cygnus X-1, alrededor de una quinta parte de una milésima de segundo. M87* es unas 1.500 veces más pesado que Sagittarius A*, que a su vez es unas 200.000 veces más pesado que Cygnus X-1. Y aun así, los dos gigantes parecen casi del mismo tamaño en el cielo desde la Tierra, porque M87* está muchísimo más lejos. El Telescopio del Horizonte de Sucesos fotografió primero su anillo, en 2019, de unas 42 millonésimas de segundo de arco de ancho.",
+      "p1": "Activa la tela elástica y la escena cambia a la imagen clásica: una cuadrícula plana hundida en forma de embudo. Es el dibujo del espacio como una <strong>tela elástica</strong>, y muestra una cosa cierta. Cerca del agujero, las distancias se estiran: una regla colocada a lo largo del embudo mide más longitud de la que sugieren los círculos planos. Pero no muestra nada más. No muestra cómo pasa el tiempo, ni qué es lo que tira. Nada rueda por la tela: el embudo es solo una forma de dibujar en una pantalla el espacio estirado. El marcador baja por él mientras la sonda cae.",
+      "p2": "Con los botones puedes comparar tres agujeros negros reales. <strong>Sagittarius A*</strong> es el que has estado mirando, de unos 4,3 millones de soles. M87* está en el corazón de la galaxia gigante M87. Tiene una masa de unos 6.500 millones de soles y un radio del horizonte de unos 19.000 millones de km, unas 128 veces la distancia entre la Tierra y el Sol. Cygnus X-1 tiene una masa de unos 21 soles y un radio del horizonte de unos 63 km, el tamaño de una ciudad. El radio del horizonte crece en proporción a la masa: si duplicas la masa, se duplica el radio.",
+      "p3": "Cuanto más grande, más suave. La fuerza de marea en el horizonte se debilita a medida que el agujero crece. En M87* queda muy por debajo de lo que una sonda podría medir, mientras que en Cygnus X-1 te haría pedazos. La misma caída también dura más. Si sueltas la sonda a cinco radios del horizonte, llega al centro en unos 12 minutos en Sagittarius A*, en unos 13 días en M87* y en unas pocas milésimas de segundo en Cygnus X-1. Toda masa tiene un radio del horizonte, llamado <strong>radio de Schwarzschild</strong>: si comprimes la masa dentro de él, obtienes un agujero negro. Para el Sol es de unos 2,95 km. Para la Tierra, de unos 8,9 mm.",
+      "p4": "La propia luz muestra lo grandes que son estos agujeros. La luz recorre un radio del horizonte de Sagittarius A* en unos 42 segundos. En <strong>M87*</strong>, el mismo viaje dura unas 18 horas, y en Cygnus X-1, alrededor de una quinta parte de una milésima de segundo. M87* es unas 1.500 veces más pesado que Sagittarius A*, y este, a su vez, unas 200.000 veces más pesado que Cygnus X-1. Aun así, desde la Tierra los dos gigantes se ven casi del mismo tamaño en el cielo, porque M87* está muchísimo más lejos. Su anillo fue el primero que fotografió el Telescopio del Horizonte de Sucesos, en 2019. Mide unas 42 millonésimas de segundo de arco.",
       "mass": "Masa",
       "horizon": "Radio del horizonte",
       "fall": "La misma caída duraría",
