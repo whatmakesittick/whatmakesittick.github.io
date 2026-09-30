@@ -4,7 +4,7 @@
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",
-  "locales": ["en"],
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
   "social": {
     "image": "social/og-image.png",
     "alt": "3D view of the black hole at the centre of the Milky Way bending the light of its glowing gas disc, with a small probe and its flashing beacon falling toward the dark shadow, beside the title How a black hole bends time"

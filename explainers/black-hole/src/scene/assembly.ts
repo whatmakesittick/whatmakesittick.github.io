@@ -2,7 +2,7 @@ import type { Box3, Group, Object3D, WebGLRenderer } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
-import { PlaceholderAssembly } from './placeholderAssembly';
+import { BlackHoleAssembly } from './blackHoleAssembly';
 
 export interface AssemblyResources {
   materials: MaterialLibrary;
@@ -22,5 +22,5 @@ export interface Assembly {
 }
 
 export function createAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
-  return new PlaceholderAssembly(resources, state);
+  return new BlackHoleAssembly(resources, state);
 }
