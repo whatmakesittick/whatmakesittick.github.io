@@ -43,6 +43,7 @@ export function sheetDepth(radius: number): number {
 
 const SCENE_EXTENT = 22;
 const HOLE_EXTENT = 13;
+const SYSTEM_EXTENT = 17;
 const SHEET_EXTENT = SHEET.rim;
 
 export const REGIONS: Readonly<Record<Exclude<RegionId, 'probeClose'>, RegionSpec>> = {
@@ -51,7 +52,7 @@ export const REGIONS: Readonly<Record<Exclude<RegionId, 'probeClose'>, RegionSpe
     y: [-SCENE_EXTENT, SCENE_EXTENT],
     z: [-SCENE_EXTENT, SCENE_EXTENT],
   },
-  system: { x: [-SCENE_EXTENT, SCENE_EXTENT], y: [-4, 14], z: [-14, 14] },
+  system: { x: [-SYSTEM_EXTENT, SYSTEM_EXTENT], y: [-4, 13], z: [-10, 10] },
   hole: { x: [-HOLE_EXTENT, HOLE_EXTENT], y: [-3, 3], z: [-HOLE_EXTENT, HOLE_EXTENT] },
   sheet: { x: [-SHEET_EXTENT, SHEET_EXTENT], y: [-9, 1], z: [-SHEET_EXTENT, SHEET_EXTENT] },
 };
