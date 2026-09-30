@@ -1,3 +1,52 @@
 :root {
-  --orbit: #7aa2ff;
+  --let-go: #7aa2ff;
+  --plunge: #9c8cff;
+  --no-orbit: #ff9a5c;
+  --ring: #ff6b6b;
+  --inside: #c9c9d6;
+  --probe: #e6f0ff;
+  --ship: #cfd6e6;
+  --beacon: #fff1c9;
+  --beacon-red: #ff4a2a;
+  --disc: #ffb066;
+  --disc-hot: #fff4e6;
+  --shadow: #000000;
+  --sheet: #5f7bd6;
+  --sheet-glow: #9fb6ff;
+  --fall-line: #6f7a99;
+}
+
+.radius-control,
+.section-readouts {
+  --readout-min-width: 8rem;
+}
+
+.section-readouts {
+  margin-block: 16px;
+}
+
+.overview-readouts,
+.light-readouts,
+.frozen-readouts,
+.others-readouts,
+.radius-control .range-widget__readouts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.inside-readouts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.radius-control .range {
+  --range-color: var(--let-go);
+}
+
+.radius-control .range-widget__scale {
+  display: flex;
+  justify-content: space-between;
+}
+
+.frozen-readouts > div:has([data-readout='frozen-colour']) dd,
+.radius-control [data-readout='radius-flash'] {
+  color: var(--ring);
 }
