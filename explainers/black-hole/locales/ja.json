@@ -103,7 +103,7 @@
     "horizonRadii": "{{value}}rs",
     "lightSpeed": "{{value}}c",
     "g": "{{value}}g",
-    "gBelow": "{{value}}gをはるかに下回る",
+    "gBelow": "< {{value}}g",
     "millionG": "{{value}}百万g",
     "seconds": "{{value}}秒",
     "minutes": "{{value}}分",
