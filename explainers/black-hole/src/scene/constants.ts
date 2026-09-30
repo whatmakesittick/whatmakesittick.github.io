@@ -13,12 +13,14 @@ export const SCENE_EXTENT = DISC_OUTER_RADIUS * 2;
 export const NO_FLOOR = -1e6;
 
 export const LENS = {
-  exposure: 1.4,
+  exposure: 0.6,
   maxSteps: 240,
   maxPixels: 1_000_000,
   bent: 1,
   straight: 0,
 } as const;
+
+export const BLOOM = { strength: 0.3, radius: 0.15, threshold: 1.6 } as const;
 
 export const SEGMENTS = { capsule: 8, radial: 16, sphere: 12 } as const;
 

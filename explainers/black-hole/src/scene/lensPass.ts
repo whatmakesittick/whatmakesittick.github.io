@@ -14,6 +14,7 @@ import type { PerspectiveCamera, WebGLRenderer } from 'three';
 import { DISC_INNER_RADIUS, DISC_OUTER_RADIUS } from '../model';
 import { LENS } from './constants';
 import { fullscreenTriangle } from './fullscreenTriangle';
+import { LensBloom } from './lensBloom';
 import { LENS_FRAGMENT, LENS_VERTEX } from './lensShader';
 
 const SHOWN = 1;
@@ -31,6 +32,7 @@ export class LensPass {
   private readonly material: ShaderMaterial;
   private readonly scene = new Scene();
   private readonly camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  private readonly bloom = new LensBloom();
   private readonly bufferSize = new Vector2();
   private ready = false;
 
@@ -40,7 +42,6 @@ export class LensPass {
         uTime: { value: 0 },
         uDisc: { value: SHOWN },
         uBending: { value: LENS.bent },
-        uExposure: { value: LENS.exposure },
         uDiscInner: { value: DISC_INNER_RADIUS },
         uDiscOuter: { value: DISC_OUTER_RADIUS },
         uMaxSteps: { value: LENS.maxSteps },
@@ -73,7 +74,14 @@ export class LensPass {
   }
 
   async prepare(renderer: WebGLRenderer): Promise<void> {
-    await renderer.compileAsync(this.scene, this.camera);
+    const previous = renderer.getRenderTarget();
+    renderer.setRenderTarget(this.target);
+    const compiled = Promise.all([
+      renderer.compileAsync(this.scene, this.camera),
+      this.bloom.prepare(renderer),
+    ]);
+    renderer.setRenderTarget(previous);
+    await compiled;
     this.ready = true;
   }
 
@@ -95,17 +103,20 @@ export class LensPass {
     const previous = renderer.getRenderTarget();
     renderer.setRenderTarget(this.target);
     renderer.render(this.scene, this.camera);
+    this.bloom.apply(renderer, this.target);
     renderer.setRenderTarget(previous);
   }
 
   dispose(): void {
     this.target.dispose();
     this.material.dispose();
+    this.bloom.dispose();
   }
 
   private resize(renderer: WebGLRenderer): void {
     const size = fitPixels(renderer.getDrawingBufferSize(this.bufferSize), LENS.maxPixels);
     if (this.target.width === size.x && this.target.height === size.y) return;
     this.target.setSize(size.x, size.y);
+    this.bloom.setSize(size.x, size.y);
   }
 }

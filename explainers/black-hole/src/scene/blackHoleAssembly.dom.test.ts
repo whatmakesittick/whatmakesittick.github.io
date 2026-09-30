@@ -27,6 +27,7 @@ const FRAME = 1 / 60;
 const SCRUB_STEP = 7.3;
 const RGBA = 4;
 const ALPHA = 3;
+const COMPILED_PASSES = ['lens', 'bloom'].length;
 
 let assembly: BlackHoleAssembly;
 let materials: MaterialLibrary;
@@ -37,6 +38,8 @@ const renderer = {
   compileAsync: async () => {
     compiled += 1;
   },
+  getRenderTarget: () => null,
+  setRenderTarget: () => undefined,
 } as unknown as WebGLRenderer;
 
 function worldPosition(object: Object3D): Vector3 {
@@ -224,11 +227,11 @@ describe('black hole assembly', () => {
     }
   });
 
-  it('compiles the lens through prepare and frees its resources', async () => {
+  it('compiles the lens and its bloom through prepare and frees its resources', async () => {
     const extra = new BlackHoleAssembly({ materials, textures, renderer }, STATE);
     const before = compiled;
     await extra.prepare();
-    expect(compiled).toBe(before + 1);
+    expect(compiled).toBe(before + COMPILED_PASSES);
     extra.dispose();
     expect(extra.root.parent).toBeNull();
     expect(probePosition(RELEASE_RADIUS).z).toBe(0);
