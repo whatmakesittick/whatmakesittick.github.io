@@ -21,6 +21,7 @@ export const LENS = {
 } as const;
 
 export const BLOOM = { strength: 0.3, radius: 0.15, threshold: 1.6 } as const;
+export const DISC_DRIFT_SPEED = 4;
 
 export const SEGMENTS = { capsule: 8, radial: 16, sphere: 12 } as const;
 

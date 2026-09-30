@@ -206,10 +206,13 @@ describe('black hole assembly', () => {
     expect(isShown(labelAt('disc'))).toBe(true);
   });
 
-  it('asks for frames while playing and while the sheet marker glow eases', () => {
-    assembly.setState(STATE);
+  it('asks for frames while the disc drifts, while playing and while the sheet glow eases', () => {
+    const discOff = { ...STATE, view: { ...STATE.view, disc: false } };
+    assembly.setState(discOff);
     expect(assembly.update(FRAME, 30)).toBe(false);
-    assembly.setState({ ...STATE, playing: true });
+    assembly.setState(STATE);
+    expect(assembly.update(FRAME, 30)).toBe(true);
+    assembly.setState({ ...discOff, playing: true });
     expect(assembly.update(FRAME, 30)).toBe(true);
     assembly.setState(SHEET_STATE);
     expect(assembly.update(FRAME, 30)).toBe(true);
@@ -217,7 +220,7 @@ describe('black hole assembly', () => {
     while (assembly.update(FRAME, 30) && frames < 120) frames += 1;
     expect(frames).toBeGreaterThan(0);
     expect(frames).toBeLessThan(120);
-    assembly.setState(STATE);
+    assembly.setState(discOff);
     expect(assembly.update(FRAME, 30)).toBe(false);
   });
 

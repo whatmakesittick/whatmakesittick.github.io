@@ -5,7 +5,7 @@ import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
 import { radiusAtTau } from '../model';
 import type { Assembly, AssemblyResources } from './assembly';
-import { LENS } from './constants';
+import { DISC_DRIFT_SPEED, LENS } from './constants';
 import { FINISHES } from './finishes';
 import { probePosition, shipPosition } from './layout';
 import { LensedSky } from './lensedSky';
@@ -30,6 +30,9 @@ export class BlackHoleAssembly implements Assembly {
   private readonly flashes: BeaconFlashesPart;
   private readonly fallLine: FallLinePart;
   private readonly sheet: RubberSheetPart;
+  private phase = 0;
+  private drift = 0;
+  private discShown = false;
   private readonly anchors: SceneAnchors;
   private readonly probeAt = new Vector3();
   private readonly shipAt = new Vector3();
@@ -73,15 +76,21 @@ export class BlackHoleAssembly implements Assembly {
     this.sheet.setShown(view.sheet);
     this.system.visible = !view.sheet;
     this.anchors.set(this.probeAt, this.shipAt, !view.sheet, view.disc && !view.sheet);
-    this.sky.setTime(phase);
-    this.sky.setDiscShown(view.disc && !view.sheet);
+    this.phase = phase;
+    this.discShown = view.disc && !view.sheet;
+    this.sky.setTime(this.phase + this.drift);
+    this.sky.setDiscShown(this.discShown);
     this.sky.setBending(view.sheet ? LENS.straight : LENS.bent);
     this.playing = state.playing;
   }
 
   update(deltaSeconds: number, _cameraDistance: number): boolean {
     const easing = this.sheet.ease(deltaSeconds);
-    return this.playing || easing;
+    if (this.discShown) {
+      this.drift += deltaSeconds * DISC_DRIFT_SPEED;
+      this.sky.setTime(this.phase + this.drift);
+    }
+    return this.playing || easing || this.discShown;
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {
