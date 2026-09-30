@@ -1,11 +1,18 @@
-import { BoxGeometry, CapsuleGeometry, Group, SphereGeometry } from 'three';
+import { ExtrudeGeometry, Group, LatheGeometry, Shape, SphereGeometry, Vector2 } from 'three';
+import type { Mesh } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { SEGMENTS, SHIP } from '../constants';
-import { shipAngle, shipPosition } from '../layout';
+import type { Outline } from '../constants';
+import { SHIP_SIZE, shipAngle, shipPosition } from '../layout';
 import { partMesh } from './context';
 import type { PartContext } from './context';
 
 const HULL_ALONG_X = -Math.PI / 2;
+const WING_FLAT = Math.PI / 2;
+
+function sized(outline: Outline): Vector2[] {
+  return outline.map(([x, y]) => new Vector2(x * SHIP_SIZE, y * SHIP_SIZE));
+}
 
 export class ShipPart {
   readonly object = new Group();
@@ -13,23 +20,32 @@ export class ShipPart {
   constructor(context: PartContext) {
     const hull = partMesh(
       context,
-      new CapsuleGeometry(SHIP.hullRadius, SHIP.hullLength, SEGMENTS.capsule, SEGMENTS.radial),
+      new LatheGeometry(sized(SHIP.hullProfile), SEGMENTS.radial),
       'ship',
       context.finishes.shipHull,
     );
     hull.rotation.z = HULL_ALONG_X;
-    const wing = partMesh(
-      context,
-      new BoxGeometry(SHIP.wing.width, SHIP.wing.thickness, SHIP.wing.span),
-      'ship',
-      context.finishes.shipHull,
-    );
-    const half = SHIP.wing.span / 2;
+    const wing = this.plate(context, SHIP.wingOutline);
+    wing.rotation.x = WING_FLAT;
     this.object.add(
       hull,
       wing,
-      this.light(context, context.finishes.portLight, -half),
-      this.light(context, context.finishes.starboardLight, half),
+      this.plate(context, SHIP.finOutline),
+      this.glow(context, context.finishes.engine, SHIP.engine.radius, SHIP.engine.x, 0),
+      this.glow(
+        context,
+        context.finishes.portLight,
+        SHIP.light.radius,
+        SHIP.light.x,
+        -SHIP.light.z,
+      ),
+      this.glow(
+        context,
+        context.finishes.starboardLight,
+        SHIP.light.radius,
+        SHIP.light.x,
+        SHIP.light.z,
+      ),
     );
   }
 
@@ -38,14 +54,29 @@ export class ShipPart {
     this.object.rotation.z = shipAngle(tau) + SHIP.quarterTurn;
   }
 
-  private light(context: PartContext, finish: MaterialFinish, z: number) {
-    const light = partMesh(
+  private plate(context: PartContext, outline: Outline): Mesh {
+    const geometry = new ExtrudeGeometry(new Shape(sized(outline)), {
+      depth: SHIP.plateThickness,
+      bevelEnabled: false,
+    });
+    geometry.translate(0, 0, -SHIP.plateThickness / 2);
+    return partMesh(context, geometry, 'ship', context.finishes.shipHull);
+  }
+
+  private glow(
+    context: PartContext,
+    finish: MaterialFinish,
+    radius: number,
+    x: number,
+    z: number,
+  ): Mesh {
+    const glow = partMesh(
       context,
-      new SphereGeometry(SHIP.lightRadius, SEGMENTS.sphere, SEGMENTS.sphere),
+      new SphereGeometry(radius, SEGMENTS.sphere, SEGMENTS.sphere),
       'ship',
       finish,
     );
-    light.position.z = z;
-    return light;
+    glow.position.set(x, 0, z);
+    return glow;
   }
 }

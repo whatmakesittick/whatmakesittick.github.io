@@ -6,7 +6,7 @@ import { RELEASE_RADIUS, RS_LIGHT_SECONDS, SHIP_RADIUS } from '../model';
 const FULL_TURN = Math.PI * 2;
 const DEGREES_TO_RADIANS = Math.PI / 180;
 
-export const FALL_ANGLE_DEG = 35;
+export const FALL_ANGLE_DEG = 60;
 export const FALL_ANGLE = FALL_ANGLE_DEG * DEGREES_TO_RADIANS;
 export const FALL_DIRECTION = new Vector3(Math.cos(FALL_ANGLE), Math.sin(FALL_ANGLE), 0);
 
@@ -18,7 +18,7 @@ export const SHIP_ORBIT = {
 const SHIP_TIME_STRETCH = 1.2;
 
 export const PROBE_SIZE = 0.35;
-export const SHIP_SIZE = 0.9;
+export const SHIP_SIZE = 1.8;
 export const FLASH_SPEED = 1;
 
 export const SHEET = { rim: 20, depthScale: 1, segments: 96, rings: 48 } as const;
@@ -43,7 +43,7 @@ export function sheetDepth(radius: number): number {
 
 const SCENE_EXTENT = 22;
 const HOLE_EXTENT = 13;
-const SYSTEM_EXTENT = 17;
+const SYSTEM_EXTENT = 12;
 const SHEET_EXTENT = SHEET.rim;
 
 export const REGIONS: Readonly<Record<Exclude<RegionId, 'probeClose'>, RegionSpec>> = {
@@ -52,7 +52,7 @@ export const REGIONS: Readonly<Record<Exclude<RegionId, 'probeClose'>, RegionSpe
     y: [-SCENE_EXTENT, SCENE_EXTENT],
     z: [-SCENE_EXTENT, SCENE_EXTENT],
   },
-  system: { x: [-SYSTEM_EXTENT, SYSTEM_EXTENT], y: [-4, 13], z: [-10, 10] },
+  system: { x: [-SYSTEM_EXTENT, SYSTEM_EXTENT], y: [-5, 18.5], z: [-1, 1] },
   hole: { x: [-HOLE_EXTENT, HOLE_EXTENT], y: [-3, 3], z: [-HOLE_EXTENT, HOLE_EXTENT] },
   sheet: { x: [-SHEET_EXTENT, SHEET_EXTENT], y: [-9, 1], z: [-SHEET_EXTENT, SHEET_EXTENT] },
 };

@@ -1,5 +1,5 @@
 import { DISC_OUTER_RADIUS, PHOTON_SPHERE_RADIUS, RELEASE_RADIUS, SHIP_RADIUS } from '../model';
-import { PROBE_SIZE, SHIP_SIZE } from './layout';
+import { FALL_ANGLE, PROBE_SIZE, SHIP_SIZE } from './layout';
 
 export const SKY = {
   radius: 900,
@@ -34,11 +34,36 @@ export const PROBE = {
   pulseDecay: 6,
 } as const;
 
+export type Outline = readonly (readonly [x: number, y: number])[];
+
+const HULL_PROFILE: Outline = [
+  [0.07, -0.5],
+  [0.1, -0.4],
+  [0.1, 0.18],
+  [0.06, 0.36],
+  [0, 0.5],
+];
+const WING_OUTLINE: Outline = [
+  [0.18, 0],
+  [-0.3, 0.42],
+  [-0.42, 0.42],
+  [-0.42, -0.42],
+  [-0.3, -0.42],
+];
+const FIN_OUTLINE: Outline = [
+  [-0.1, 0],
+  [-0.36, -0.26],
+  [-0.46, -0.26],
+  [-0.42, 0],
+];
+
 export const SHIP = {
-  hullRadius: SHIP_SIZE * 0.13,
-  hullLength: SHIP_SIZE * 0.74,
-  wing: { width: SHIP_SIZE * 0.18, thickness: SHIP_SIZE * 0.05, span: SHIP_SIZE * 0.8 },
-  lightRadius: SHIP_SIZE * 0.05,
+  hullProfile: HULL_PROFILE,
+  wingOutline: WING_OUTLINE,
+  finOutline: FIN_OUTLINE,
+  plateThickness: SHIP_SIZE * 0.03,
+  engine: { radius: SHIP_SIZE * 0.07, x: -SHIP_SIZE * 0.5 },
+  light: { radius: SHIP_SIZE * 0.04, x: -SHIP_SIZE * 0.36, z: SHIP_SIZE * 0.42 },
   quarterTurn: Math.PI / 2,
 } as const;
 
@@ -63,11 +88,13 @@ export const SHEET_LOOK = {
   glowEaseSeconds: 0.5,
 } as const;
 
+const PHOTON_SPHERE_ANCHOR_ANGLE = FALL_ANGLE + Math.PI / 7;
+
 export const ANCHOR_POINTS = {
   horizon: [-1, 0, 0.4],
   photonSphere: [
-    PHOTON_SPHERE_RADIUS * Math.cos(Math.PI / 3),
-    PHOTON_SPHERE_RADIUS * Math.sin(Math.PI / 3),
+    PHOTON_SPHERE_RADIUS * Math.cos(PHOTON_SPHERE_ANCHOR_ANGLE),
+    PHOTON_SPHERE_RADIUS * Math.sin(PHOTON_SPHERE_ANCHOR_ANGLE),
     0,
   ],
   disc: [8, 0, 0],

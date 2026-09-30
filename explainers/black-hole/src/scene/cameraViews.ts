@@ -18,7 +18,7 @@ const PROBE_CAMERA_DISTANCE = 2.6;
 const PROBE_CAMERA_OFFSET = new Vector3(0.9, 0.5, 1).normalize();
 
 export const FRAMED_VIEWS: Readonly<Record<FixedView, FramedView<RegionId>>> = {
-  hero: { region: 'system', direction: [0.12, 0.22, 1], margin: 1.06 },
+  hero: { region: 'system', direction: [0.12, 0.12, 1], margin: 1.04 },
   lens: { region: 'hole', direction: [0.35, 0.16, 1], margin: 1.1 },
   sheet: { region: 'sheet', direction: [0.4, 1, 0.55], margin: 1.05 },
 };
