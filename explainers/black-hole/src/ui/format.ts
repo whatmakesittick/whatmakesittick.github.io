@@ -100,7 +100,7 @@ export function formatLightSpeed(share: number): string {
 }
 
 export function formatTide(stretchG: number): string {
-  if (stretchG < TIDE_FLOOR_G) return t('units.gBelow');
+  if (stretchG < TIDE_FLOOR_G) return t('units.gBelow', { value: significant(TIDE_FLOOR_G) });
   if (stretchG > TIDE_MILLION_G)
     return t('units.millionG', { value: significant(stretchG / MILLION) });
   return t('units.g', { value: significant(stretchG) });

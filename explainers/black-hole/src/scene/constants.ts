@@ -14,8 +14,8 @@ export const NO_FLOOR = -1e6;
 
 export const LENS = {
   exposure: 1.4,
-  maxSteps: 300,
-  maxPixels: 1_400_000,
+  maxSteps: 240,
+  maxPixels: 1_000_000,
   bent: 1,
   straight: 0,
 } as const;
