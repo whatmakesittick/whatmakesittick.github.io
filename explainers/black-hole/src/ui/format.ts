@@ -1,4 +1,4 @@
-import { formatFixed, formatNumber } from '@core/format';
+import { formatCompact, formatFixed, formatNumber } from '@core/format';
 import { t } from '@core/i18n';
 import { PHASE_IDS } from '../ids';
 import type { FlashTone, PhaseId } from '../ids';
@@ -21,8 +21,9 @@ const TIMES_SUFFIX = '×';
 const RATIO_DECIMAL_LIMIT = 10;
 const PERCENT_DECIMAL_LIMIT = 10;
 const TIDE_FLOOR_G = 1e-4;
-const TIDE_MILLION_G = 1e5;
+const TIDE_COMPACT_G = 1e5;
 const SIGNIFICANT_DIGITS = 2;
+const HORIZON_MILLION_DIGITS = 3;
 
 function phaseKeys(group: string): Readonly<Record<PhaseId, string>> {
   return Object.fromEntries(PHASE_IDS.map((id) => [id, `timeline.${group}.${id}`])) as Record<
@@ -101,8 +102,9 @@ export function formatLightSpeed(share: number): string {
 
 export function formatTide(stretchG: number): string {
   if (stretchG < TIDE_FLOOR_G) return t('units.gBelow', { value: significant(TIDE_FLOOR_G) });
-  if (stretchG > TIDE_MILLION_G)
-    return t('units.millionG', { value: significant(stretchG / MILLION) });
+  if (stretchG > TIDE_COMPACT_G) {
+    return t('units.gLarge', { value: formatCompact(stretchG, SIGNIFICANT_DIGITS) });
+  }
   return t('units.g', { value: significant(stretchG) });
 }
 
@@ -122,16 +124,20 @@ export function formatFlashTone(tone: FlashTone): string {
   return t(`clocks.flash.${tone}`);
 }
 
+function formatLarge(unit: string, value: number, significantDigits: number): string {
+  if (value >= MILLION) {
+    return t(`units.${unit}Large`, { value: formatCompact(value, significantDigits) });
+  }
+  return t(`units.${unit}`, { value: whole(value) });
+}
+
 export function formatMass(massSolar: number): string {
-  if (massSolar >= BILLION) return t('units.billionSuns', { value: tenths(massSolar / BILLION) });
-  if (massSolar >= MILLION) return t('units.millionSuns', { value: tenths(massSolar / MILLION) });
-  return t('units.suns', { value: whole(massSolar) });
+  return formatLarge('suns', massSolar, SIGNIFICANT_DIGITS);
 }
 
 export function formatHorizon(rsKm: number): string {
-  if (rsKm >= BILLION) return t('units.billionKm', { value: whole(rsKm / BILLION) });
-  if (rsKm >= MILLION) return t('units.millionKm', { value: tenths(rsKm / MILLION) });
-  return t('units.km', { value: whole(rsKm) });
+  const digits = rsKm >= BILLION ? SIGNIFICANT_DIGITS : HORIZON_MILLION_DIGITS;
+  return formatLarge('km', rsKm, digits);
 }
 
 export function formatFallTime(seconds: number): string {
