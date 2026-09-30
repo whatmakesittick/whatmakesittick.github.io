@@ -71,7 +71,7 @@ describe('black hole formats', () => {
     expect(formatDistance(0)).toBe('0.0 rs');
     expect(formatLightSpeed(0.612)).toBe('0.61 c');
     expect(formatLightSpeed(1)).toBe('1.00 c');
-    expect(formatTide(9e-7)).toBe(en.units.gBelow);
+    expect(formatTide(9e-7)).toBe(en.units.gBelow.replace('{{value}}', '0.0001'));
     expect(formatTide(1.14e-4)).toBe('0.00011 g');
     expect(formatTide(0.5)).toBe('0.5 g');
     expect(formatTide(30)).toBe('30 g');
@@ -111,7 +111,7 @@ describe('black hole formats', () => {
       mass: '6.5 billion Suns',
       horizon: '19 billion km',
       fall: '13 days',
-      tide: en.units.gBelow,
+      tide: en.units.gBelow.replace('{{value}}', '0.0001'),
     });
     expect(formatComparison(BLACK_HOLES.stellar)).toMatchObject({
       mass: '21 Suns',
