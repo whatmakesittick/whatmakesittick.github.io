@@ -1,0 +1,12 @@
+{
+  "slug": "black-hole",
+  "tags": ["physics"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "3D view of a black hole bending the light of its glowing disc and the stars behind it, beside the title How a black hole bends time"
+  }
+}

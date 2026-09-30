@@ -1,0 +1,108 @@
+import {
+  HalfFloatType,
+  LinearFilter,
+  Matrix4,
+  Mesh,
+  OrthographicCamera,
+  Scene,
+  ShaderMaterial,
+  Vector2,
+  Vector3,
+  WebGLRenderTarget,
+} from 'three';
+import type { PerspectiveCamera, WebGLRenderer } from 'three';
+import { DISC_INNER_RADIUS, DISC_OUTER_RADIUS } from './constants';
+import { fullscreenTriangle } from './fullscreenTriangle';
+import { LENS_FRAGMENT, LENS_VERTEX } from './lensShader';
+
+const EXPOSURE = 1.4;
+const MAX_STEPS = 300;
+const MAX_PIXELS = 1_400_000;
+const SHOWN = 1;
+const HIDDEN = 0;
+
+function fitPixels(size: Vector2, maxPixels: number): Vector2 {
+  const pixels = size.x * size.y;
+  if (pixels <= maxPixels) return size;
+  const scale = Math.sqrt(maxPixels / pixels);
+  return size.multiplyScalar(scale).floor();
+}
+
+export class LensPass {
+  readonly target: WebGLRenderTarget;
+  private readonly material: ShaderMaterial;
+  private readonly scene = new Scene();
+  private readonly camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  private readonly bufferSize = new Vector2();
+  private ready = false;
+
+  constructor() {
+    this.material = new ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uDisc: { value: SHOWN },
+        uExposure: { value: EXPOSURE },
+        uDiscInner: { value: DISC_INNER_RADIUS },
+        uDiscOuter: { value: DISC_OUTER_RADIUS },
+        uMaxSteps: { value: MAX_STEPS },
+        uCameraPosition: { value: new Vector3() },
+        uInverseProjection: { value: new Matrix4() },
+        uCameraToWorld: { value: new Matrix4() },
+      },
+      vertexShader: LENS_VERTEX,
+      fragmentShader: LENS_FRAGMENT,
+      depthTest: false,
+      depthWrite: false,
+    });
+    this.target = new WebGLRenderTarget(1, 1, {
+      type: HalfFloatType,
+      minFilter: LinearFilter,
+      magFilter: LinearFilter,
+      depthBuffer: false,
+    });
+    const triangle = new Mesh(fullscreenTriangle(), this.material);
+    triangle.frustumCulled = false;
+    this.scene.add(triangle);
+  }
+
+  setTime(seconds: number): void {
+    this.material.uniforms.uTime.value = seconds;
+  }
+
+  setMaxSteps(steps: number): void {
+    this.material.uniforms.uMaxSteps.value = steps;
+  }
+
+  async prepare(renderer: WebGLRenderer): Promise<void> {
+    await renderer.compileAsync(this.scene, this.camera);
+    this.ready = true;
+  }
+
+  setDiscShown(shown: boolean): void {
+    this.material.uniforms.uDisc.value = shown ? SHOWN : HIDDEN;
+  }
+
+  render(renderer: WebGLRenderer, camera: PerspectiveCamera): void {
+    if (!this.ready) return;
+    this.resize(renderer);
+    const uniforms = this.material.uniforms;
+    uniforms.uCameraPosition.value.copy(camera.position);
+    uniforms.uInverseProjection.value.copy(camera.projectionMatrixInverse);
+    uniforms.uCameraToWorld.value.copy(camera.matrixWorld);
+    const previous = renderer.getRenderTarget();
+    renderer.setRenderTarget(this.target);
+    renderer.render(this.scene, this.camera);
+    renderer.setRenderTarget(previous);
+  }
+
+  dispose(): void {
+    this.target.dispose();
+    this.material.dispose();
+  }
+
+  private resize(renderer: WebGLRenderer): void {
+    const size = fitPixels(renderer.getDrawingBufferSize(this.bufferSize), MAX_PIXELS);
+    if (this.target.width === size.x && this.target.height === size.y) return;
+    this.target.setSize(size.x, size.y);
+  }
+}

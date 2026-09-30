@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "title": "How a black hole bends time",
+    "eyebrow": "Sagittarius A*",
+    "tagline": "A probe falls toward a black hole while its twin clock stays far away, and the two clocks stop agreeing.",
+    "description": "A black hole in 3D with its glowing disc bent by gravity, and two clocks that stop agreeing as a probe falls in.",
+    "summary": "Lensing spike: the disc, the photon ring and the lensed stars.",
+    "socialAlt": "3D view of a black hole bending the light of its glowing disc and the stars behind it, beside the title How a black hole bends time"
+  },
+  "stage": {
+    "label": "Interactive black hole model",
+    "gauge": "Live readings"
+  },
+  "controls": {
+    "label": "Black hole controls",
+    "views": {
+      "disc": {
+        "name": "Gas disc",
+        "short": "Disc",
+        "hint": "Gas disc (D)"
+      }
+    }
+  },
+  "timeline": {
+    "label": "Time on the probe clock",
+    "phases": "Jump to a moment",
+    "speed": "Playback",
+    "value": "{{seconds}} s",
+    "times": "{{factor}} times",
+    "phase": {
+      "orbit": "In orbit"
+    },
+    "jump": {
+      "orbit": "Jump to the orbit"
+    }
+  },
+  "sections": {
+    "overview": {
+      "title": "A hole in the sky",
+      "p1": "You are looking at a black hole the mass of millions of Suns, with a thin disc of hot gas circling it. Nothing you see is where it seems to be. The disc behind the hole appears bent over its top and under its bottom, and the stars behind it are smeared into a ring."
+    },
+    "disc": {
+      "title": "One side shines brighter",
+      "p1": "The gas in the disc moves at a good fraction of the speed of light. The side coming toward you is brighter and bluer, the side moving away is dimmer and redder."
+    }
+  }
+}
