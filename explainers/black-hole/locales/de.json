@@ -1,0 +1,199 @@
+{
+  "meta": {
+    "title": "So verbiegt ein Schwarzes Loch die Zeit",
+    "eyebrow": "Sagittarius A*",
+    "tagline": "Eine Sonde fällt auf das Schwarze Loch im Zentrum unserer Galaxie zu, ihre Zwillingsuhr bleibt beim Schiff, und die beiden Uhren gehen auseinander.",
+    "description": "Eine Sonde stürzt in 3D in Sagittarius A*, das Schwarze Loch der Milchstraße: Zwei Uhren gehen auseinander, Licht biegt sich, das Schiff sieht kein Ende.",
+    "summary": "Zwei Uhren, der Fall, Licht, das sich um das Loch biegt, das eingefrorene Bild am Horizont, der Übertritt und andere Schwarze Löcher.",
+    "socialAlt": "3D-Ansicht des Schwarzen Lochs im Zentrum der Milchstraße, das das Licht seiner leuchtenden Gasscheibe verbiegt, mit einer kleinen Sonde und ihrer blinkenden Signalleuchte auf dem Weg in den dunklen Schatten, daneben der Titel „So verbiegt ein Schwarzes Loch die Zeit“"
+  },
+  "stage": {
+    "label": "Interaktives Modell des Schwarzen Lochs",
+    "gauge": "Live-Werte des Falls"
+  },
+  "controls": {
+    "label": "Steuerung des Modells",
+    "views": {
+      "disc": {
+        "name": "Gasscheibe",
+        "short": "Scheibe",
+        "hint": "Gasscheibe (D)"
+      },
+      "sheet": {
+        "name": "Gummituch",
+        "short": "Tuch",
+        "hint": "Gummituch (S)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    },
+    "momentOptions": {
+      "lastOrbit": "Letzte stabile Bahn",
+      "lightRing": "Photonensphäre",
+      "horizon": "Horizont"
+    },
+    "comparisonOptions": {
+      "sgrA": "Sagittarius A*",
+      "m87": "M87*",
+      "stellar": "Cygnus X-1"
+    }
+  },
+  "timeline": {
+    "label": "Zeit auf der Sondenuhr",
+    "phases": "Zu einem Moment des Falls springen",
+    "speed": "Wiedergabe",
+    "value": "{{time}}, {{phase}}",
+    "clock": "{{minutes}}:{{seconds}}",
+    "realTime": "Echtzeit",
+    "faster": "{{factor}}-mal schneller",
+    "phase": {
+      "letGo": "Loslassen",
+      "plunge": "Schneller werden",
+      "noOrbit": "Hinter der letzten Bahn",
+      "lightRing": "Im Lichtring",
+      "inside": "Innen"
+    },
+    "during": {
+      "letGo": "die Sonde treibt nach innen, und die beiden Uhren beginnen auseinanderzugehen",
+      "plunge": "die Sonde wird schneller als ein Viertel der Lichtgeschwindigkeit",
+      "noOrbit": "hier kann nichts mehr das Loch umkreisen",
+      "lightRing": "die Signalleuchte wird für das Schiff rot und dann schwarz",
+      "inside": "es gibt keinen Weg zurück, und das Zentrum ist nur Sekunden entfernt"
+    },
+    "jump": {
+      "letGo": "Zum Loslassen springen",
+      "plunge": "Zum Schnellerwerden springen",
+      "noOrbit": "Hinter die letzte Bahn springen",
+      "lightRing": "In den Lichtring springen",
+      "inside": "Hinter den Horizont springen"
+    }
+  },
+  "readouts": {
+    "probeClock": "Sondenuhr",
+    "shipClock": "Schiffsuhr",
+    "clockRatio": "Schiffssekunden pro Sondensekunde",
+    "distance": "Abstand vom Zentrum",
+    "speed": "Geschwindigkeit",
+    "tide": "Dehnung über 2 m"
+  },
+  "clocks": {
+    "never": "nie",
+    "infinite": "∞",
+    "flash": {
+      "white": "Weiß",
+      "orange": "Orange",
+      "red": "Tiefrot",
+      "infrared": "Infrarot",
+      "gone": "Erloschen"
+    }
+  },
+  "parts": {
+    "horizon": "Ereignishorizont",
+    "photonSphere": "Photonensphäre",
+    "disc": "Gasscheibe",
+    "probe": "Sonde",
+    "ship": "Schiff",
+    "beacon": "Blitze der Signalleuchte",
+    "sheetProbe": "Sonde auf dem Tuch"
+  },
+  "units": {
+    "horizonRadii": "{{value}} rs",
+    "lightSpeed": "{{value}} c",
+    "g": "{{value}} g",
+    "gBelow": "weit unter {{value}} g",
+    "millionG": "{{value}} Millionen g",
+    "seconds": "{{value}} s",
+    "minutes": "{{value}} Minuten",
+    "days": "{{value}} Tage",
+    "milliseconds": "{{value}} Tausendstelsekunden",
+    "km": "{{value}} km",
+    "millionKm": "{{value}} Millionen km",
+    "billionKm": "{{value}} Milliarden km",
+    "suns": "{{value}} Sonnen",
+    "millionSuns": "{{value}} Millionen Sonnen",
+    "billionSuns": "{{value}} Milliarden Sonnen",
+    "percent": "{{value}} %",
+    "times": "{{value}}×"
+  },
+  "sections": {
+    "overview": {
+      "title": "Das Loch im Herzen unserer Galaxie",
+      "p1": "Sie sehen das Schwarze Loch im Zentrum unserer Galaxie, der Milchstraße. Astronomen nennen es <strong>Sagittarius A*</strong>, gesprochen „A-Stern“. Es ist etwa 27.000 Lichtjahre von der Erde entfernt und wiegt etwa 4,3 Millionen Mal so viel wie die Sonne. Um das Loch dreht sich eine dünne Scheibe aus heißem Gas. Der dunkle Kreis in der Mitte ist das Loch selbst. Sein Rand ist der Ereignishorizont: die Linie, hinter der nichts mehr zurückkommt, nicht einmal Licht. Vom Zentrum bis zu diesem Rand sind es etwa 12,7 Millionen km, rund 18 Sonnenradien. Licht braucht für diese Strecke etwa 42 Sekunden.",
+      "p2": "Der dunkle Kreis ist keine Oberfläche. Er ist der <strong>Schatten</strong> des Lochs: der Fleck am Himmel, aus dem Sie kein Licht erreichen kann. Licht, das nah am Loch vorbeikommt, wird gebogen, und die Scheibe zeigt das gut. Ihre Rückseite müsste hinter dem Loch verborgen sein. Stattdessen sehen Sie sie über und unter dem dunklen Kreis schweben, weil ihr Licht auf dem Weg zu Ihnen über das Loch und unter ihm hindurch gebogen wird. Die rechte Seite der Scheibe ist außerdem heller als die linke. Das Gas dort kommt mit einem guten Teil der Lichtgeschwindigkeit auf Sie zu, und das macht sein Licht heller und blauer.",
+      "p3": "Zwei Reisende teilen sich diese Szene. Eine kleine <strong>Sonde</strong> mit einer Uhr und einer blinkenden Signalleuchte hat fünf Horizontradien vom Zentrum entfernt angehalten. Gleich lässt sie los und fällt geradewegs hinein. Zwanzig Horizontradien weiter außen wartet ein Schiff auf einer Kreisbahn, mit einer Zwillingsuhr an Bord. Beide Uhren starten bei null. Das Modell vereinfacht einiges. Sonde und Schiff sind viele tausend Mal größer gezeichnet, als sie sind, damit Sie sie sehen können. Das Loch ist ohne Drehung gezeichnet, denn niemand hat gemessen, wie schnell sich das echte dreht. Ziehen Sie die Zeitleiste, um dem Fall zu folgen, und ziehen Sie die Szene, um sie zu drehen.",
+      "p4": "Das echte Sagittarius A* ist viel schwächer als dieses Bild. Alles zusammen leuchtet es so hell wie etwa 200 Sonnen, sehr wenig für 4,3 Millionen Sonnenmassen, und es verschluckt jedes Jahr nur etwa ein Hundertmillionstel der Sonnenmasse. Die helle Scheibe ist hier so gezeichnet, dass Sie sehen können, wie sich das Licht biegt. Der echte Schatten wurde aber fotografiert. Im Jahr 2022 zeigte das <strong>Event Horizon Telescope</strong>, ein Verbund von Radioteleskopen rund um die Erde, den leuchtenden Ring darum, etwa 52 Millionstel einer Bogensekunde groß. Eine Bogensekunde ist ein 3.600stel eines Grads. Das ist also ein sehr kleiner Ring.",
+      "mass": "Masse",
+      "massValue": "4,3 Millionen Sonnen",
+      "horizon": "Horizontradius",
+      "horizonValue": "12,7 Millionen km",
+      "probeClock": "Sondenuhr",
+      "shipClock": "Schiffsuhr"
+    },
+    "clocks": {
+      "title": "Zwei Uhren, die auseinandergehen",
+      "p1": "Bei 0:00 lässt die Sonde los. Sie startet aus dem <strong>Stand</strong>, was eine echte Sonde nur mit einem Triebwerk schaffen könnte, denn nahe am Loch bewegt sich alles schnell. Die Uhren verhalten sich so oder so gleich, deshalb hält das Modell es einfach. Hier draußen ist die Anziehung gewöhnliche Schwerkraft, nichts weiter. Die Sonde treibt zuerst langsam nach innen, dann immer schneller. Auf ihrer eigenen Uhr erreicht sie den Horizont bei etwa 11:53 und das Zentrum etwa 30 Sekunden später. Das Schiff auf seiner Bahn zwanzig Horizontradien weiter außen hat eine Uhr, die fast so läuft wie eine Uhr weit weg von jedem Schwarzen Loch.",
+      "p2": "Alle zehn Sekunden Sondenzeit blinkt die Signalleuchte. Diesen Abstand hat das Modell gewählt; eine echte Leuchte könnte in jedem Takt blinken. Jeder Blitz reist zum Schiff, und das Schiff notiert, wann er ankommt. Schon am Anfang kommen die Blitze etwa 8 Prozent weiter auseinander an, als die Sonde sie gesendet hat. Weiter innen wachsen die Abstände. Bei drei Horizontradien dauert jede Sondensekunde fast zwei Schiffssekunden. Bei zwei Horizontradien fast drei. Diese Dehnung der Zeit heißt <strong>Zeitdilatation</strong>. Ziehen Sie den Regler, um die Sonde nach ihrem Abstand zu bewegen, und sehen Sie zu, wie die beiden Uhren auseinandergehen.",
+      "p3": "Hier kommen zwei Effekte zusammen. Der erste ist die Schwerkraft: Eine Uhr, die tief in einer Schwerkraftmulde festgehalten wird, läuft langsamer als eine Uhr weit draußen. Festgehalten bei zwei Horizontradien würde eine Uhr nur mit etwa 71 Prozent des fernen Tempos ticken, bei 1,1 Horizontradien mit etwa 30 Prozent. Der zweite ist die Bewegung. Die Sonde fällt immer schneller, und jeder Blitz muss gegen die Anziehung nach oben klettern, während seine Quelle davonrast. Beides dehnt das Licht zu tieferen Frequenzen und längeren Abständen. Zusammen ergeben sie die <strong>Rotverschiebung</strong>, die das Schiff misst: Die Blitze kommen nicht nur später an, sondern auch röter.",
+      "p4": "Nichts davon ist exotisch. Die Uhren der <strong>GPS-Satelliten</strong> spüren dieselben zwei Effekte. Sie kreisen etwa 20.000 km hoch, wo die Schwerkraft der Erde schwächer ist, und gehen deshalb etwa 45 Mikrosekunden pro Tag vor. Sie bewegen sich außerdem mit etwa 14.000 km/h, und das lässt sie etwa 7 Mikrosekunden pro Tag nachgehen. Unterm Strich gehen sie etwa 38 Mikrosekunden pro Tag vor, und das System gleicht das aus. Ohne diese Korrektur würde Ihre Position um etwa 10 km pro Tag abdriften. Im Jahr 2010 verglichen Forscher am NIST zwei Uhren, von denen eine 33 cm über der anderen stand, und sahen die obere schneller laufen: um etwa 90 Nanosekunden in einem Menschenleben.",
+      "control": {
+        "label": "Abstand vom Zentrum",
+        "horizon": "Horizont",
+        "release": "Ort des Loslassens",
+        "probe": "Sondenuhr",
+        "ship": "Schiffsuhr",
+        "ratio": "Schiffssekunden pro Sondensekunde",
+        "flash": "Die Signalleuchte, vom Schiff gesehen"
+      }
+    },
+    "light": {
+      "title": "Licht biegt sich um das Loch",
+      "p1": "Licht nimmt immer den geradesten Weg, den es finden kann. Nahe an einem Schwarzen Loch ist aber der Raum selbst gekrümmt, und so biegt sich auch der geradeste Weg. Das ist der <strong>Gravitationslinseneffekt</strong>. Licht von der Rückseite der Scheibe müsste hinter dem Loch verborgen sein. Stattdessen läuft es über und unter dem Loch vorbei und biegt sich zu Ihnen hin, sodass Sie die Rückseite als zwei Bögen über und unter dem Schatten sehen. Die Sterne hinter dem Loch werden aus demselben Grund zu Bögen verschmiert. Wenn Sie genau hinsehen, finden Sie ein zweites, schwächeres Bild der Scheibe, das sich eng an den Rand des Schattens schmiegt: Licht, das halb um das Loch gelaufen ist, bevor es entkam.",
+      "p2": "Bei 1,5 Horizontradien gibt es einen Ort, an dem Licht das Loch umkreisen kann. Er heißt <strong>Photonensphäre</strong>. Licht, das genau im richtigen Winkel dort ankommt, läuft immer weiter im Kreis, und ein wenig davon sickert zu Ihnen heraus: als dünner heller Ring dicht am Schatten. Wegen dieses Rings wirkt der Schatten größer als der Horizont. Jedes Licht, das auf weniger als etwa 2,6 Horizontradien am Zentrum vorbeizielt, wird eingefangen. Der dunkle Fleck, den Sie sehen, ist deshalb etwa 5,2 Horizontradien breit, mehr als doppelt so breit wie der Horizont selbst. Bei Sagittarius A* liegt die Photonensphäre etwa 19 Millionen km vom Zentrum entfernt.",
+      "p3": "Weiter außen, bei drei Horizontradien, liegt die <strong>letzte stabile Bahn</strong>. Außerhalb können Gas und Sterne das Loch umkreisen, so lange sie wollen, so wie Planeten die Sonne umkreisen. Innerhalb gibt es keine dauerhafte Bahn: Was ein wenig nach innen treibt, fällt weiter. Deshalb endet die Scheibe bei drei Horizontradien, etwa 38 Millionen km vom Zentrum. Das Gas an diesem inneren Rand bewegt sich mit etwa halber Lichtgeschwindigkeit. Bei diesem Tempo wirkt das Gas, das auf Sie zukommt, einige Dutzend Mal heller als das Gas, das sich entfernt. Tippen Sie auf einen Chip, um die Sonde zu jedem dieser Orte springen zu lassen.",
+      "p4": "Diese Krümmung ist gemessen, nicht nur gezeichnet. Der Stern <strong>S2</strong> umrundet Sagittarius A* einmal alle 16 Jahre. Im Mai 2018 flog er durch seinen nächsten Punkt, etwa 120-mal so weit vom Loch entfernt wie die Erde von der Sonne, also etwa 1.400 Horizontradien, mit etwa 7.700 km/s. Das sind etwa 2,6 Prozent der Lichtgeschwindigkeit. Sein Licht kam durch die Schwerkraft des Lochs und durch seine Geschwindigkeit zu röteren Farben gedehnt an, eine Verschiebung von etwa 200 km/s, und die Größe dieser Verschiebung passte genau zur Vorhersage der allgemeinen Relativitätstheorie. Dann schwang der Stern wieder nach außen, unversehrt. Ein Schwarzes Loch saugt nichts ein; die Dinge umkreisen es.",
+      "shadow": "Breite des Schattens",
+      "shadowValue": "etwa 5,2 Horizontradien",
+      "ring": "Licht kreist bei",
+      "ringValue": "1,5 Horizontradien",
+      "orbit": "Letzte stabile Bahn",
+      "orbitValue": "3 Horizontradien",
+      "seen": "Von der Erde gesehen",
+      "seenValue": "etwa 52 Millionstel einer Bogensekunde"
+    },
+    "frozen": {
+      "title": "Das Schiff sieht den Übertritt nie",
+      "p1": "Jetzt sitzen Sie im Schiff und sehen der Sonde beim Fallen zu. Ihre Blitze kommen in immer längeren Abständen an, jeder röter und schwächer als der vorige. Nahe am Horizont läuft die Veränderung davon. Bei 1,2 Horizontradien dauert eine Sondensekunde fast zehn Schiffssekunden. Bei 1,05 Horizontradien etwa 36. Die Farben gleiten von Weiß nach Orange, dann nach Tiefrot und schließlich über Rot hinaus ins <strong>Infrarot</strong>, wo Ihre Augen gar nichts mehr sehen. Die Anzeigen unten folgen den letzten Blitzen, wie sie ankommen. In diesem Kapitel läuft die Wiedergabe langsamer, damit Sie das Verblassen verfolgen können.",
+      "p2": "Vom Schiff aus erreicht die Sonde den Horizont nie. Ihr Bild wird langsamer, kriecht auf den dunklen Rand zu und <strong>friert</strong> dort ein, bis es ins Schwarze verblasst. Der letzte Blitz vor dem Übertritt braucht ewig, um herauszuklettern, und kein Blitz, der am oder hinter dem Horizont gesendet wird, kommt je an. Jedes Mal, wenn die Sonde dem Horizont zehnmal näher kommt, braucht ihr Licht etwa 98 Sekunden länger bis zum Schiff, ohne Ende. Die Zeit weit draußen hat für den Moment des Übertritts keinen Wert, deshalb zeigt die Schiffsuhr in den Anzeigen einfach „nie“.",
+      "p3": "Und doch tritt die Sonde über, bei etwa 11:53 auf ihrer eigenen Uhr. Wie kann beides stimmen? Das Schiff sieht nicht die Sonde; es sieht Licht, das die Sonde verlassen hat. Bei der Zeitdilatation geht es darum, wann dieses Licht das Schiff erreichen kann, nicht darum, was die Sonde erlebt. Licht vom Horizont selbst kommt nie heraus, deshalb endet das Bild des Schiffs dort, obwohl die Sonde längst weitergefallen ist. Es gibt keinen <strong>Widerspruch</strong>: Zwei Uhren an verschiedenen Orten messen verschiedene Dinge, und die allgemeine Relativitätstheorie sagt genau, wie die beiden Werte zusammenhängen.",
+      "p4": "Dicht über einem Horizont zu schweben würde Ihr Leben gegenüber dem Ihrer Freunde wirklich dehnen. Eine Uhr, die bei 1,1 Horizontradien festgehalten wird, läuft mit etwa 30 Prozent des fernen Tempos. Im Film <strong>Interstellar</strong> entspricht eine Stunde auf Millers Planet sieben Jahren anderswo, ein Faktor von etwa 60.000. Bei Sagittarius A* ist das nicht möglich. Um ein Loch ohne Drehung gibt es stabile Bahnen erst ab drei Horizontradien, und eine Uhr dort läuft höchstens etwa 1,4-mal langsamer. Der Planet aus dem Film braucht ein Loch von etwa 100 Millionen Sonnen, das sich bis auf ein Hundertbillionstel so schnell dreht, wie es überhaupt kann, und eine Bahn, die seinen Horizont streift.",
+      "ship": "Schiffsuhr",
+      "gap": "Abstand zwischen den Blitzen",
+      "brightness": "Helligkeit der Sonde",
+      "colour": "Farbe der Blitze"
+    },
+    "inside": {
+      "title": "Übertritt ohne Ruck",
+      "p1": "Wechseln Sie zur Sonde. Während sie sich dem Horizont nähert, passiert nichts. Keine Wand, kein Blitz, kein Ruck. Der <strong>Ereignishorizont</strong> ist keine Oberfläche, die Sie berühren oder sehen könnten; er ist die Linie, hinter der Licht nicht mehr entkommt. Von innen gibt es kein Zeichen dafür, dass Sie ihn passiert haben. Die Uhr der Sonde tickt so normal wie immer, und bei etwa 11:53 tritt sie über. Die Anzeigen zählen die eigene Zeit der Sonde bis zum Zentrum herunter. In diesem Kapitel läuft die Wiedergabe in Echtzeit, die letzten Sekunden vergehen also so langsam wie für die Sonde.",
+      "p2": "Wird der Himmel dunkel? Nein. Licht von außen fällt weiter hinter der Sonde herein, deshalb bleiben Sterne und Scheibe zu sehen, wenn auch verbogen und gerötet. Die Sonde sieht auch nicht die ganze Zukunft des Universums vorbeirauschen. Ihre eigene Zeit endet im Zentrum, deshalb empfängt sie nur das Licht, das sie vorher noch einholen kann. Und der Blick schrumpft nicht zu einem kleinen Fenster zusammen. Eine Sonde, die nahe am Horizont festgehalten wird, sähe den Himmel über sich zusammengedrängt. Eine fallende Sonde aber rast so schnell nach innen, dass ein Effekt namens <strong>Aberration</strong> den Himmel wieder auseinanderzieht.",
+      "p3": "Innen führt jeder Weg zum Zentrum, und das kommt etwa 30 Sekunden später auf der Uhr der Sonde. Lange davor zieht das Loch am nahen Ende der Sonde stärker als am fernen. Diese Dehnung ist eine <strong>Gezeitenkraft</strong>, derselbe Effekt, der auf der Erde das Meer hebt. Am Horizont eines so großen Lochs ist sie winzig: etwa ein Zehntausendstel g über zwei Meter, viel zu wenig, um es zu spüren. Erst etwa ein Zwanzigstel Horizontradius vom Zentrum entfernt, tief innen, erreicht sie 1 g. Ein Mensch würde den Horizont von Sagittarius A* überschreiten, ohne etwas zu fühlen.",
+      "p4": "Bei einem kleinen Schwarzen Loch kehrt sich die Reihenfolge um. <strong>Cygnus X-1</strong>, etwa 21 Sonnenmassen schwer, hat einen Horizontradius von nur etwa 63 km. Die Gezeitenkraft dort beträgt etwa 5 Millionen g über zwei Meter. Ein Mensch, der hineinfällt, würde lange vor dem Horizont auseinandergezogen, dünn wie eine Nudel. Der ganze Fall von fünf Horizontradien würde nur einige Tausendstelsekunden dauern. Große Löcher sind am Rand sanft und kleine Löcher brutal, denn die Gezeitenkraft hängt davon ab, wie stark sich die Schwerkraft über Ihren Körper hinweg ändert, und diese Änderung wird schwächer, je größer der Horizont ist.",
+      "left": "Sondenzeit bis zum Zentrum",
+      "speed": "Geschwindigkeit an einem schwebenden Beobachter vorbei",
+      "tide": "Dehnung über 2 m"
+    },
+    "others": {
+      "title": "Größere Löcher, sanftere Ränder",
+      "p1": "Schalten Sie das Gummituch ein, und die Szene wechselt zum bekannten Bild: ein flaches Gitter, zu einem Trichter eingedrückt. Das ist das <strong>Gummituch</strong>, mit dem man den Raum gern zeichnet, und eines daran stimmt. Nahe am Loch sind die Abstände gedehnt: Ein Lineal entlang des Trichters misst mehr Länge, als die flachen Kreise vermuten lassen. Mehr zeigt es aber nicht. Es zeigt nicht, wie die Zeit läuft, und es zeigt nicht, was zieht. Nichts rollt das Tuch hinunter; der Trichter ist nur eine Art, gedehnten Raum auf einem Bildschirm zu zeichnen. Die Markierung gleitet daran hinab, während die Sonde fällt.",
+      "p2": "Die Chips vergleichen drei echte Schwarze Löcher. <strong>Sagittarius A*</strong> ist das, das Sie bisher beobachtet haben, etwa 4,3 Millionen Sonnen. M87*, im Herzen der Riesengalaxie M87, wiegt etwa 6,5 Milliarden Sonnen, und sein Horizontradius beträgt etwa 19 Milliarden km, etwa 128-mal so weit wie von der Erde zur Sonne. Cygnus X-1 wiegt etwa 21 Sonnen, und sein Horizontradius beträgt etwa 63 km, so groß wie eine Stadt. Der Horizontradius wächst im Gleichschritt mit der Masse: Verdoppeln Sie die Masse, und der Radius verdoppelt sich mit.",
+      "p3": "Größer ist sanfter. Die Gezeitenkraft am Horizont wird schwächer, je größer das Loch ist. Bei M87* liegt sie weit unter allem, was eine Sonde messen könnte, bei Cygnus X-1 zerreißt sie. Auch derselbe Fall dauert länger. Lassen Sie bei fünf Horizontradien los, dann erreicht die Sonde das Zentrum bei Sagittarius A* in etwa 12 Minuten, bei M87* in etwa 13 Tagen und bei Cygnus X-1 in einigen Tausendstelsekunden. Jede Masse hat einen Horizontradius, den <strong>Schwarzschild-Radius</strong>: Pressen Sie die Masse in diesen Radius hinein, und Sie haben ein Schwarzes Loch. Für die Sonne sind das etwa 2,95 km. Für die Erde etwa 8,9 mm.",
+      "p4": "Auch das Licht zeigt, wie groß diese Löcher sind. Licht durchquert einen Horizontradius von Sagittarius A* in etwa 42 Sekunden. Bei <strong>M87*</strong> dauert dieselbe Strecke etwa 18 Stunden, bei Cygnus X-1 etwa ein Fünftel einer Tausendstelsekunde. M87* ist etwa 1.500-mal schwerer als Sagittarius A*, und das ist selbst etwa 200.000-mal schwerer als Cygnus X-1. Trotzdem wirken die beiden Riesen von der Erde aus am Himmel fast gleich groß, weil M87* so viel weiter entfernt ist. Das Event Horizon Telescope hat seinen Ring zuerst abgebildet, im Jahr 2019, etwa 42 Millionstel einer Bogensekunde groß.",
+      "mass": "Masse",
+      "horizon": "Horizontradius",
+      "fall": "Derselbe Fall würde dauern",
+      "tide": "Dehnung über 2 m am Horizont"
+    }
+  }
+}

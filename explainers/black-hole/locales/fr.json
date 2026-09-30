@@ -1,0 +1,199 @@
+{
+  "meta": {
+    "title": "Comment un trou noir déforme le temps",
+    "eyebrow": "Sagittarius A*",
+    "tagline": "Une sonde tombe vers le trou noir au centre de notre galaxie pendant que son horloge jumelle reste à bord du vaisseau, et les deux horloges cessent de s’accorder.",
+    "description": "Une sonde tombe dans Sagittarius A*, le trou noir de la Voie lactée, en 3D : deux horloges divergent, la lumière dévie et le vaisseau ne voit rien passer.",
+    "summary": "Deux horloges, la chute, la lumière qui se courbe autour du trou, l’image figée à l’horizon, la traversée et d’autres trous noirs.",
+    "socialAlt": "Vue 3D du trou noir au centre de la Voie lactée qui courbe la lumière de son disque de gaz brillant, avec une petite sonde et sa balise clignotante qui tombent vers l’ombre sombre, à côté du titre « Comment un trou noir déforme le temps »"
+  },
+  "stage": {
+    "label": "Modèle interactif du trou noir",
+    "gauge": "Mesures de la chute en direct"
+  },
+  "controls": {
+    "label": "Commandes du trou noir",
+    "views": {
+      "disc": {
+        "name": "Disque de gaz",
+        "short": "Disque",
+        "hint": "Disque de gaz (D)"
+      },
+      "sheet": {
+        "name": "Toile élastique",
+        "short": "Toile",
+        "hint": "Toile élastique (S)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    },
+    "momentOptions": {
+      "lastOrbit": "Dernière orbite stable",
+      "lightRing": "Sphère de photons",
+      "horizon": "Horizon"
+    },
+    "comparisonOptions": {
+      "sgrA": "Sagittarius A*",
+      "m87": "M87*",
+      "stellar": "Cygnus X-1"
+    }
+  },
+  "timeline": {
+    "label": "Temps sur l’horloge de la sonde",
+    "phases": "Aller à un moment de la chute",
+    "speed": "Lecture",
+    "value": "{{time}}, {{phase}}",
+    "clock": "{{minutes}}:{{seconds}}",
+    "realTime": "Temps réel",
+    "faster": "{{factor}} fois plus rapide",
+    "phase": {
+      "letGo": "Départ",
+      "plunge": "Accélération",
+      "noOrbit": "Après la dernière orbite",
+      "lightRing": "Dans l’anneau de lumière",
+      "inside": "À l’intérieur"
+    },
+    "during": {
+      "letGo": "la sonde glisse vers l’intérieur et les deux horloges commencent à diverger",
+      "plunge": "la sonde dépasse le quart de la vitesse de la lumière",
+      "noOrbit": "plus rien ne peut tourner autour du trou à cette distance",
+      "lightRing": "pour le vaisseau, la balise rougit jusqu’au noir",
+      "inside": "il n’y a plus d’issue, et le centre est à quelques secondes"
+    },
+    "jump": {
+      "letGo": "Aller au départ",
+      "plunge": "Aller à l’accélération",
+      "noOrbit": "Aller après la dernière orbite",
+      "lightRing": "Aller dans l’anneau de lumière",
+      "inside": "Aller sous l’horizon"
+    }
+  },
+  "readouts": {
+    "probeClock": "Horloge de la sonde",
+    "shipClock": "Horloge du vaisseau",
+    "clockRatio": "Secondes du vaisseau par seconde de la sonde",
+    "distance": "Distance au centre",
+    "speed": "Vitesse",
+    "tide": "Étirement sur 2 m"
+  },
+  "clocks": {
+    "never": "jamais",
+    "infinite": "∞",
+    "flash": {
+      "white": "Blanc",
+      "orange": "Orange",
+      "red": "Rouge profond",
+      "infrared": "Infrarouge",
+      "gone": "Noir"
+    }
+  },
+  "parts": {
+    "horizon": "Horizon des événements",
+    "photonSphere": "Sphère de photons",
+    "disc": "Disque de gaz",
+    "probe": "Sonde",
+    "ship": "Vaisseau",
+    "beacon": "Éclairs de la balise",
+    "sheetProbe": "Sonde sur la toile"
+  },
+  "units": {
+    "horizonRadii": "{{value}} rs",
+    "lightSpeed": "{{value}} c",
+    "g": "{{value}} g",
+    "gBelow": "bien moins de {{value}} g",
+    "millionG": "{{value}} millions de g",
+    "seconds": "{{value}} s",
+    "minutes": "{{value}} minutes",
+    "days": "{{value}} jours",
+    "milliseconds": "{{value}} millièmes de seconde",
+    "km": "{{value}} km",
+    "millionKm": "{{value}} millions de km",
+    "billionKm": "{{value}} milliards de km",
+    "suns": "{{value}} Soleils",
+    "millionSuns": "{{value}} millions de Soleils",
+    "billionSuns": "{{value}} milliards de Soleils",
+    "percent": "{{value}} %",
+    "times": "{{value}}×"
+  },
+  "sections": {
+    "overview": {
+      "title": "Le trou au cœur de notre galaxie",
+      "p1": "Vous regardez le trou noir au centre de notre galaxie, la Voie lactée. Les astronomes l’appellent <strong>Sagittarius A*</strong>, ce qui se lit « A étoile ». Il se trouve à environ 27 000 années-lumière de la Terre et pèse environ 4,3 millions de fois plus que le Soleil. Autour de lui tourne un fin disque de gaz chaud. Le cercle sombre au milieu, c’est le trou lui-même. Son bord est l’horizon des événements, la limite au-delà de laquelle rien ne revient, pas même la lumière. Du centre à ce bord, il y a environ 12,7 millions de km, soit environ 18 fois le rayon du Soleil. La lumière met environ 42 secondes à parcourir cette distance.",
+      "p2": "Le cercle sombre n’est pas une surface. C’est l’<strong>ombre</strong> du trou : la portion de ciel d’où aucune lumière ne peut vous atteindre. La lumière qui passe près du trou est déviée, et le disque le montre bien. Sa face arrière devrait être cachée derrière le trou. Pourtant, vous la voyez flotter au-dessus et au-dessous du cercle sombre, parce que sa lumière contourne le trou par le haut et par le bas pour venir jusqu’à vous. Le côté droit du disque est aussi plus brillant que le gauche. Le gaz y vient vers vous à une bonne fraction de la vitesse de la lumière, et cela rend sa lumière plus vive et plus bleue.",
+      "p3": "Deux voyageurs partagent cette scène. Une petite <strong>sonde</strong>, munie d’une horloge et d’une balise clignotante, s’est arrêtée à cinq rayons d’horizon du centre. Elle est sur le point de se laisser tomber tout droit vers le trou. Un vaisseau attend sur une orbite circulaire, à vingt rayons d’horizon, avec une horloge jumelle à bord. Les deux horloges partent de zéro. Le modèle simplifie certaines choses. La sonde et le vaisseau sont dessinés des milliers de fois plus grands que nature, pour que vous puissiez les voir. Le trou est dessiné sans rotation, parce que personne n’a mesuré à quelle vitesse tourne le vrai. Faites glisser le curseur du temps pour suivre la chute, et la scène pour la faire tourner.",
+      "p4": "Le vrai Sagittarius A* est bien plus faible que cette image. Dans son ensemble, il brille comme environ 200 Soleils, très peu pour une masse de 4,3 millions de Soleils, et il n’avale qu’environ un cent-millionième de la masse du Soleil par an. Le disque brillant est dessiné ici pour que vous voyiez comment la lumière se courbe. Mais la vraie ombre a bel et bien été photographiée. En 2022, l’<strong>Event Horizon Telescope</strong>, un réseau de radiotélescopes répartis sur toute la Terre, a montré l’anneau lumineux qui l’entoure, large d’environ 52 millionièmes de seconde d’arc. Une seconde d’arc est un 3 600e de degré : c’est donc un tout petit anneau.",
+      "mass": "Masse",
+      "massValue": "4,3 millions de Soleils",
+      "horizon": "Rayon de l’horizon",
+      "horizonValue": "12,7 millions de km",
+      "probeClock": "Horloge de la sonde",
+      "shipClock": "Horloge du vaisseau"
+    },
+    "clocks": {
+      "title": "Deux horloges qui cessent de s’accorder",
+      "p1": "À 0:00, la sonde se laisse tomber. Elle part de l’<strong>immobilité</strong>, ce qu’une vraie sonde ne pourrait faire qu’avec un moteur, car tout va vite près du trou. Les horloges se comportent de la même façon dans les deux cas, alors le modèle reste simple. À cette distance, l’attraction est une gravité ordinaire, rien de plus. La sonde glisse vers l’intérieur, lentement d’abord, puis de plus en plus vite. Sur sa propre horloge, elle atteint l’horizon vers 11:53 et le centre environ 30 secondes plus tard. Le vaisseau, sur son orbite à vingt rayons d’horizon, garde une horloge qui tourne presque comme une horloge loin de tout trou noir.",
+      "p2": "Toutes les dix secondes du temps de la sonde, la balise émet un éclair. Cet intervalle est un choix du modèle ; une vraie balise pourrait clignoter à n’importe quel rythme. Chaque éclair voyage vers le vaisseau, qui note son heure d’arrivée. Dès le début, les éclairs arrivent environ 8 % plus espacés que la sonde ne les a envoyés. Plus profond, les écarts grandissent. À trois rayons d’horizon, chaque seconde de la sonde dure presque deux secondes du vaisseau. À deux rayons d’horizon, presque trois. Cet étirement du temps s’appelle la <strong>dilatation du temps</strong>. Faites glisser le curseur pour déplacer la sonde selon sa distance et regardez les deux horloges s’écarter.",
+      "p3": "Deux effets s’additionnent ici. Le premier est la gravité : une horloge maintenue immobile au fond d’un puits de gravité tourne plus lentement qu’une horloge éloignée. Maintenue à deux rayons d’horizon, une horloge ne battrait qu’à environ 71 % du rythme lointain ; à 1,1 rayon d’horizon, à environ 30 %. Le second est le mouvement. La sonde tombe de plus en plus vite, et chaque éclair doit remonter contre l’attraction pendant que sa source s’enfuit. Les deux étirent la lumière : fréquences plus basses, écarts plus longs. Ensemble, ils produisent le <strong>décalage vers le rouge</strong> que mesure le vaisseau : les éclairs arrivent non seulement plus tard, mais aussi plus rouges.",
+      "p4": "Rien de tout cela n’est exotique. Les horloges des <strong>satellites GPS</strong> subissent les deux mêmes effets. Ils tournent à environ 20 000 km d’altitude, où la gravité de la Terre est plus faible, et avancent donc d’environ 45 microsecondes par jour. Ils filent aussi à environ 14 000 km/h, ce qui les retarde d’environ 7 microsecondes par jour. Au total, ils avancent d’environ 38 microsecondes par jour, et le système corrige cet écart. Sans cette correction, votre position dériverait d’environ 10 km par jour. En 2010, des scientifiques du NIST ont comparé deux horloges placées l’une 33 cm au-dessus de l’autre et ont vu la plus haute avancer, d’environ 90 nanosecondes sur une vie entière.",
+      "control": {
+        "label": "Distance au centre",
+        "horizon": "Horizon",
+        "release": "Point de départ",
+        "probe": "Horloge de la sonde",
+        "ship": "Horloge du vaisseau",
+        "ratio": "Secondes du vaisseau par seconde de la sonde",
+        "flash": "La balise, vue du vaisseau"
+      }
+    },
+    "light": {
+      "title": "La lumière se courbe autour du trou",
+      "p1": "La lumière suit toujours le chemin le plus droit possible, mais près d’un trou noir l’espace lui-même est courbe, alors le chemin le plus droit se courbe aussi. C’est l’<strong>effet de lentille gravitationnelle</strong>. La lumière de la face arrière du disque devrait être cachée derrière le trou. Au lieu de cela, elle passe au-dessus et au-dessous du trou et se courbe vers vous : vous voyez donc la face arrière sous forme de deux arcs, au-dessus et au-dessous de l’ombre. Les étoiles situées derrière le trou sont étirées en arcs pour la même raison. Regardez bien et vous trouverez une deuxième image du disque, plus faible, collée au bord de l’ombre : de la lumière qui a fait un demi-tour avant de s’échapper.",
+      "p2": "À 1,5 rayon d’horizon se trouve un endroit où la lumière peut tourner autour du trou. On l’appelle la <strong>sphère de photons</strong>. La lumière qui y arrive sous le bon angle tourne encore et encore, et une petite partie s’en échappe vers vous : c’est le fin anneau brillant collé à l’ombre. Cet anneau explique pourquoi l’ombre paraît plus grande que l’horizon. Toute lumière qui vise à moins d’environ 2,6 rayons d’horizon du centre est capturée, si bien que la tache sombre que vous voyez mesure environ 5,2 rayons d’horizon de large, plus de deux fois la largeur de l’horizon lui-même. Autour de Sagittarius A*, la sphère de photons se trouve à environ 19 millions de km du centre.",
+      "p3": "Plus loin, à trois rayons d’horizon, se trouve la <strong>dernière orbite stable</strong>. Au-delà, le gaz et les étoiles peuvent tourner autour du trou aussi longtemps qu’ils le veulent, comme les planètes autour du Soleil. En dessous, aucune orbite stable n’existe : tout ce qui glisse un peu vers l’intérieur continue de tomber. Voilà pourquoi le disque s’arrête à trois rayons d’horizon, à environ 38 millions de km du centre. À ce bord intérieur, le gaz file à environ la moitié de la vitesse de la lumière. À cette vitesse, le gaz qui vient vers vous paraît des dizaines de fois plus brillant que celui qui s’éloigne. Touchez un bouton pour envoyer la sonde à chacun de ces endroits.",
+      "p4": "Cette déviation est mesurée, pas seulement dessinée. L’étoile <strong>S2</strong> fait le tour de Sagittarius A* tous les 16 ans. En mai 2018, elle a franchi son point le plus proche, à environ 120 fois la distance Terre-Soleil du trou, soit environ 1 400 rayons d’horizon, en filant à environ 7 700 km/s. C’est environ 2,6 % de la vitesse de la lumière. Sa lumière est arrivée étirée vers le rouge par la gravité du trou et par sa vitesse, un décalage d’environ 200 km/s, et l’ampleur de ce décalage correspondait à ce que prédit la relativité générale. L’étoile est ensuite repartie vers le large, intacte. Un trou noir n’aspire pas les choses ; elles tournent autour de lui.",
+      "shadow": "Largeur de l’ombre",
+      "shadowValue": "environ 5,2 rayons d’horizon",
+      "ring": "La lumière tourne à",
+      "ringValue": "1,5 rayon d’horizon",
+      "orbit": "Dernière orbite stable",
+      "orbitValue": "3 rayons d’horizon",
+      "seen": "Vue depuis la Terre",
+      "seenValue": "environ 52 millionièmes de seconde d’arc"
+    },
+    "frozen": {
+      "title": "Le vaisseau ne la voit jamais passer",
+      "p1": "Vous êtes maintenant à bord du vaisseau et vous regardez la sonde tomber. Ses éclairs arrivent à des intervalles de plus en plus longs, chacun plus rouge et plus faible que le précédent. Près de l’horizon, le changement s’emballe. À 1,2 rayon d’horizon, une seconde de la sonde prend presque dix secondes du vaisseau. À 1,05 rayon d’horizon, environ 36. Les couleurs glissent du blanc à l’orange, puis au rouge profond, puis au-delà du rouge vers l’<strong>infrarouge</strong>, où vos yeux ne voient plus rien du tout. Les mesures ci-dessous suivent les derniers éclairs à leur arrivée. Dans ce chapitre, la lecture est ralentie pour que vous puissiez regarder la balise s’éteindre.",
+      "p2": "Vu du vaisseau, la sonde n’atteint jamais l’horizon. Son image ralentit, rampe vers le bord sombre et s’y <strong>fige</strong>, en s’effaçant vers le noir. Le dernier éclair émis avant la traversée met un temps infini à remonter, et aucun éclair émis à l’horizon ou en dessous n’arrive jamais. Chaque fois que la sonde se rapproche dix fois plus de l’horizon, sa lumière a besoin d’environ 98 secondes de plus pour atteindre le vaisseau, et cela sans fin. Le temps lointain n’a aucune valeur pour l’instant de la traversée : dans les mesures, l’horloge du vaisseau dit donc simplement « jamais ».",
+      "p3": "Pourtant, la sonde traverse bel et bien, vers 11:53 sur sa propre horloge. Comment les deux peuvent-ils être vrais ? Le vaisseau ne regarde pas la sonde ; il regarde la lumière qui a quitté la sonde. La dilatation du temps porte sur le moment où cette lumière peut atteindre le vaisseau, pas sur ce que ressent la sonde. La lumière de l’horizon lui-même ne sort jamais, alors l’image que voit le vaisseau s’arrête là, même si la sonde a continué depuis longtemps. Il n’y a aucune <strong>contradiction</strong> : deux horloges en deux lieux différents mesurent des choses différentes, et la relativité générale dit exactement comment leurs valeurs sont liées.",
+      "p4": "Rester suspendu juste au-dessus d’un horizon allongerait vraiment votre vie par rapport à celle de vos amis. Une horloge maintenue à 1,1 rayon d’horizon tourne à environ 30 % du rythme lointain. Dans le film <strong>Interstellar</strong>, une heure sur la planète de Miller vaut sept ans ailleurs, un facteur d’environ 60 000. Ce n’est pas possible autour de Sagittarius A*. Autour d’un trou sans rotation, les orbites stables n’existent qu’à partir de trois rayons d’horizon, et une horloge y tourne au plus environ 1,4 fois plus lentement. La planète du film exige un trou d’environ 100 millions de Soleils, qui tourne à moins d’une part sur 100 000 milliards du maximum, sur une orbite qui frôle son horizon.",
+      "ship": "Horloge du vaisseau",
+      "gap": "Écart entre les éclairs",
+      "brightness": "Luminosité de la sonde",
+      "colour": "Couleur des éclairs"
+    },
+    "inside": {
+      "title": "Traverser sans la moindre secousse",
+      "p1": "Passez du côté de la sonde. À l’approche de l’horizon, rien ne se passe. Pas de mur, pas d’éclair, pas de choc. L’<strong>horizon des événements</strong> n’est pas une surface que l’on peut toucher ou voir ; c’est la limite au-delà de laquelle la lumière ne peut plus s’échapper. De l’intérieur, rien n’indique que vous l’avez franchi. L’horloge de la sonde bat aussi normalement qu’avant, et vers 11:53 elle traverse. Les mesures comptent à rebours le temps propre de la sonde jusqu’au centre. Dans ce chapitre, la lecture se fait en temps réel : les dernières secondes passent aussi lentement que pour la sonde.",
+      "p2": "Le ciel devient-il noir ? Non. La lumière de l’extérieur continue de tomber derrière la sonde, alors les étoiles et le disque restent visibles, même déformés et rougis. La sonde ne voit pas non plus défiler tout l’avenir de l’univers. Son propre temps s’arrête au centre, elle ne reçoit donc que la lumière qui peut la rattraper avant. Et la vue ne se resserre pas dans une fenêtre qui rétrécit. Une sonde maintenue immobile près de l’horizon verrait le ciel se tasser au-dessus d’elle, mais une sonde en chute fonce vers l’intérieur si vite qu’un effet appelé <strong>aberration</strong> redéploie le ciel autour d’elle.",
+      "p3": "À l’intérieur, tous les chemins mènent au centre, et il arrive environ 30 secondes plus tard sur l’horloge de la sonde. Bien avant, le trou tire plus fort sur le bout le plus proche de la sonde que sur le bout le plus éloigné. Cet étirement est une <strong>marée</strong>, le même effet qui soulève la mer sur Terre. À l’horizon d’un trou aussi grand, elle est minuscule : environ un dix-millième de g sur deux mètres, bien trop faible pour être ressentie. Elle n’atteint 1 g qu’à environ un vingtième de rayon d’horizon du centre, très profond. Une personne franchirait l’horizon de Sagittarius A* sans rien sentir.",
+      "p4": "Près d’un petit trou noir, l’ordre s’inverse. <strong>Cygnus X-1</strong>, environ 21 Soleils, a un rayon d’horizon d’environ 63 km seulement. La marée y vaut environ 5 millions de g sur deux mètres. Une personne qui y tomberait serait déchirée bien avant l’horizon, étirée comme un brin de spaghetti. Toute la chute depuis cinq rayons d’horizon prendrait quelques millièmes de seconde. Les grands trous sont doux à leur bord et les petits sont féroces, parce que la marée dépend de la vitesse à laquelle la gravité change le long de votre corps, et ce changement s’adoucit quand l’horizon grandit.",
+      "left": "Temps de la sonde jusqu’au centre",
+      "speed": "Vitesse devant un observateur immobile",
+      "tide": "Étirement sur 2 m"
+    },
+    "others": {
+      "title": "Plus le trou est grand, plus le bord est doux",
+      "p1": "Activez la toile élastique et la scène passe à l’image bien connue : une grille plate creusée en entonnoir. C’est le dessin de l’espace en <strong>toile élastique</strong>, et il montre une chose vraie. Près du trou, les distances sont étirées : une règle posée le long de l’entonnoir mesure plus de longueur que ne le laissent penser les cercles plats. Mais il ne montre rien d’autre. Il ne montre pas comment le temps s’écoule, ni ce qui attire. Rien ne roule sur la toile ; l’entonnoir n’est qu’une façon de dessiner l’espace étiré sur un écran. Le repère y glisse à mesure que la sonde tombe.",
+      "p2": "Les boutons comparent trois vrais trous noirs. <strong>Sagittarius A*</strong> est celui que vous regardez depuis le début, environ 4,3 millions de Soleils. M87*, au cœur de la galaxie géante M87, pèse environ 6,5 milliards de Soleils, et son rayon d’horizon mesure environ 19 milliards de km, soit environ 128 fois la distance de la Terre au Soleil. Cygnus X-1 pèse environ 21 Soleils, et son rayon d’horizon fait environ 63 km, la taille d’une ville. Le rayon de l’horizon grandit avec la masse : doublez la masse et vous doublez le rayon.",
+      "p3": "Plus grand, c’est plus doux. La marée à l’horizon s’affaiblit à mesure que le trou grandit : à M87*, elle est bien en dessous de tout ce qu’une sonde pourrait mesurer, tandis qu’à Cygnus X-1 elle déchire. La même chute dure aussi plus longtemps. Lâchée depuis cinq rayons d’horizon, la sonde atteint le centre en environ 12 minutes à Sagittarius A*, en environ 13 jours à M87* et en quelques millièmes de seconde à Cygnus X-1. Toute masse possède un rayon d’horizon, appelé son <strong>rayon de Schwarzschild</strong> : comprimez la masse à l’intérieur de ce rayon et vous obtenez un trou noir. Pour le Soleil, il vaut environ 2,95 km. Pour la Terre, environ 8,9 mm.",
+      "p4": "La lumière elle-même montre la taille de ces trous. Elle traverse un rayon d’horizon de Sagittarius A* en environ 42 secondes. À <strong>M87*</strong>, le même trajet prend environ 18 heures, et à Cygnus X-1 environ un cinquième de millième de seconde. M87* est environ 1 500 fois plus lourd que Sagittarius A*, lui-même environ 200 000 fois plus lourd que Cygnus X-1. Pourtant, vus de la Terre, les deux géants paraissent presque de la même taille dans le ciel, parce que M87* est bien plus loin. L’Event Horizon Telescope a photographié son anneau en premier, en 2019, large d’environ 42 millionièmes de seconde d’arc.",
+      "mass": "Masse",
+      "horizon": "Rayon de l’horizon",
+      "fall": "La même chute prendrait",
+      "tide": "Étirement sur 2 m à l’horizon"
+    }
+  }
+}
