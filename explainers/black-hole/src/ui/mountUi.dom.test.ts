@@ -119,7 +119,7 @@ describe('chapter widgets', () => {
     store.getState().setPhase(0);
     expect(readout('inside-left')).toBe('12:23');
     expect(readout('inside-speed')).toBe('0.00 c');
-    expect(readout('inside-tide')).toBe(en.units.gBelow);
+    expect(readout('inside-tide')).toBe(en.units.gBelow.replace('{{value}}', '0.0001'));
   });
 
   it('compares the black hole the reader picks', () => {
@@ -131,7 +131,7 @@ describe('chapter widgets', () => {
     expect(pressed('comparison', 'm87')).toBe('true');
     expect(readout('others-mass')).toBe('6.5 billion Suns');
     expect(readout('others-fall')).toBe('13 days');
-    expect(readout('others-tide')).toBe(en.units.gBelow);
+    expect(readout('others-tide')).toBe(en.units.gBelow.replace('{{value}}', '0.0001'));
     click('comparison', 'stellar');
     expect(readout('others-horizon')).toBe('62 km');
     expect(readout('others-fall')).toBe('4 thousandths of a second');
