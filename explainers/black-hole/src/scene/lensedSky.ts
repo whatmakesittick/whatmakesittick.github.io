@@ -41,6 +41,10 @@ export class LensedSky {
     this.pass.setDiscShown(shown);
   }
 
+  setBending(bending: number): void {
+    this.pass.setBending(bending);
+  }
+
   dispose(): void {
     this.mesh.geometry.dispose();
     this.material.dispose();

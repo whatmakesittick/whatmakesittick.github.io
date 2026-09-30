@@ -67,8 +67,9 @@ uniform float uDiscOuter;
 
 const float HORIZON = 1.0;
 const float SPEED_CAP = 0.72;
-const float SWIRL_RATE = 0.55;
-const vec3 HOT = vec3(1.0, 0.96, 0.9);
+const float SWIRL_RATE = 0.1;
+const float HEAT_SPREAD = 1.4;
+const vec3 HOT = vec3(1.0, 0.98, 0.95);
 const vec3 COOL = vec3(1.0, 0.42, 0.1);
 const vec3 BLUE_SHIFT = vec3(0.72, 0.82, 1.0);
 const vec3 RED_SHIFT = vec3(1.0, 0.32, 0.12);
@@ -99,7 +100,7 @@ vec4 discSample(vec3 hit, vec3 rayDirection) {
   float profile = pow(uDiscInner / radius, 2.2);
   float texture = discTexture(radius, angle);
   float emission = 2.4 * profile * texture * inner * outer;
-  vec3 base = mix(COOL, HOT, clamp(profile * profile, 0.0, 1.0));
+  vec3 base = mix(COOL, HOT, clamp(pow(profile, HEAT_SPREAD), 0.0, 1.0));
   float shift = shiftFactor(hit, rayDirection, radius);
   vec3 tint = shift > 1.0
     ? mix(base, BLUE_SHIFT, clamp((shift - 1.0) * 1.6, 0.0, 0.7))
@@ -110,8 +111,33 @@ vec4 discSample(vec3 hit, vec3 rayDirection) {
 }
 `;
 
+const GLOW = /* glsl */ `
+const float PHOTON_SPHERE = 1.5;
+const float RING_WIDTH = 0.12;
+const float RING_STRENGTH = 1.8;
+const vec3 RING_COLOUR = vec3(1.0, 0.9, 0.75);
+const float HALO_REACH = 2.5;
+const float HALO_FALLOFF = 1.6;
+const float HALO_STRENGTH = 0.05;
+const vec3 HALO_COLOUR = vec3(1.0, 0.62, 0.3);
+
+float haloDensity(vec3 position) {
+  float radius = length(position.xz);
+  float band = smoothstep(uDiscInner - HALO_REACH, uDiscInner, radius)
+    * (1.0 - smoothstep(uDiscOuter, uDiscOuter + HALO_REACH, radius));
+  float profile = pow(uDiscInner / max(radius, uDiscInner), 2.0);
+  return band * profile * exp(-abs(position.y) * HALO_FALLOFF);
+}
+
+vec3 photonRing(float closest) {
+  float offset = (closest - PHOTON_SPHERE) / RING_WIDTH;
+  return RING_COLOUR * RING_STRENGTH * exp(-offset * offset);
+}
+`;
+
 export const LENS_FRAGMENT = /* glsl */ `
 uniform float uDisc;
+uniform float uBending;
 uniform float uExposure;
 uniform int uMaxSteps;
 uniform vec3 uCameraPosition;
@@ -122,6 +148,7 @@ varying vec2 vClip;
 ${NOISE}
 ${STARS}
 ${DISC}
+${GLOW}
 
 const float ESCAPE_RADIUS = 60.0;
 const float STEP_SCALE = 0.045;
@@ -138,6 +165,8 @@ struct Ray {
   vec3 firstDirection;
   vec3 secondHit;
   vec3 secondDirection;
+  float closest;
+  float halo;
 };
 
 bool insideDisc(vec3 hit) {
@@ -160,15 +189,19 @@ void recordHit(inout Ray ray, vec3 from, vec3 to, vec3 direction) {
 }
 
 Ray trace(vec3 origin, vec3 direction) {
-  Ray ray = Ray(origin, direction, false, 0, vec3(0.0), vec3(0.0), vec3(0.0), vec3(0.0));
+  Ray ray = Ray(origin, direction, false, 0, vec3(0.0), vec3(0.0), vec3(0.0), vec3(0.0),
+    ESCAPE_RADIUS, 0.0);
   vec3 angular = cross(origin, direction);
-  float h2 = dot(angular, angular);
+  float h2 = dot(angular, angular) * uBending;
+  bool bent = uBending > 0.5;
   for (int i = 0; i < uMaxSteps; i++) {
     float r2 = dot(ray.position, ray.position);
     float radius = sqrt(r2);
-    if (radius < HORIZON) { ray.captured = true; break; }
+    ray.closest = min(ray.closest, radius);
+    if (bent && radius < HORIZON) { ray.captured = true; break; }
     if (radius > ESCAPE_RADIUS && dot(ray.position, ray.velocity) > 0.0) break;
     float dt = clamp(radius * STEP_SCALE, STEP_MIN, STEP_MAX);
+    ray.halo += haloDensity(ray.position) * dt;
     vec3 acceleration = -BENDING * h2 * ray.position / (r2 * r2 * radius);
     vec3 nextVelocity = ray.velocity + acceleration * dt;
     vec3 nextPosition = ray.position + nextVelocity * dt;
@@ -199,6 +232,8 @@ void main() {
     transmit *= 1.0 - second.a;
   }
   if (!ray.captured) colour += transmit * starField(normalize(ray.velocity));
+  if (uDisc > 0.5 && !ray.captured) colour += uBending * photonRing(ray.closest);
+  colour += uDisc * HALO_COLOUR * HALO_STRENGTH * ray.halo;
   gl_FragColor = vec4(1.0 - exp(-colour * uExposure), 1.0);
 }
 `;

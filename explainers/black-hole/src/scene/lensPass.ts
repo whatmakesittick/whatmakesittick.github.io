@@ -11,13 +11,11 @@ import {
   WebGLRenderTarget,
 } from 'three';
 import type { PerspectiveCamera, WebGLRenderer } from 'three';
-import { DISC_INNER_RADIUS, DISC_OUTER_RADIUS } from './constants';
+import { DISC_INNER_RADIUS, DISC_OUTER_RADIUS } from '../model';
+import { LENS } from './constants';
 import { fullscreenTriangle } from './fullscreenTriangle';
 import { LENS_FRAGMENT, LENS_VERTEX } from './lensShader';
 
-const EXPOSURE = 1.4;
-const MAX_STEPS = 300;
-const MAX_PIXELS = 1_400_000;
 const SHOWN = 1;
 const HIDDEN = 0;
 
@@ -41,10 +39,11 @@ export class LensPass {
       uniforms: {
         uTime: { value: 0 },
         uDisc: { value: SHOWN },
-        uExposure: { value: EXPOSURE },
+        uBending: { value: LENS.bent },
+        uExposure: { value: LENS.exposure },
         uDiscInner: { value: DISC_INNER_RADIUS },
         uDiscOuter: { value: DISC_OUTER_RADIUS },
-        uMaxSteps: { value: MAX_STEPS },
+        uMaxSteps: { value: LENS.maxSteps },
         uCameraPosition: { value: new Vector3() },
         uInverseProjection: { value: new Matrix4() },
         uCameraToWorld: { value: new Matrix4() },
@@ -82,6 +81,10 @@ export class LensPass {
     this.material.uniforms.uDisc.value = shown ? SHOWN : HIDDEN;
   }
 
+  setBending(bending: number): void {
+    this.material.uniforms.uBending.value = bending;
+  }
+
   render(renderer: WebGLRenderer, camera: PerspectiveCamera): void {
     if (!this.ready) return;
     this.resize(renderer);
@@ -101,7 +104,7 @@ export class LensPass {
   }
 
   private resize(renderer: WebGLRenderer): void {
-    const size = fitPixels(renderer.getDrawingBufferSize(this.bufferSize), MAX_PIXELS);
+    const size = fitPixels(renderer.getDrawingBufferSize(this.bufferSize), LENS.maxPixels);
     if (this.target.width === size.x && this.target.height === size.y) return;
     this.target.setSize(size.x, size.y);
   }
