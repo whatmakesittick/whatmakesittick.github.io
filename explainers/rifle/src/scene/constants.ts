@@ -311,6 +311,7 @@ export const BULLET_SHAPE = {
 export const ROUND_SEGMENTS = 16;
 
 export const BOLT_BODY = {
+  window: [-100, -15] as const,
   rear: -110,
   stemEnd: -104,
   radius: 7.5,
@@ -340,8 +341,8 @@ export const EXTRACTOR_SHAPE = {
 
 export const EJECTOR_BLOCK: Box = {
   x: [EJECTOR_X - 5, EJECTOR_X + 5],
-  y: [1, 6.5],
-  z: [RECEIVER.z[0] + SHEET, -4],
+  y: [4.5, 7.8],
+  z: [RECEIVER.z[0] + SHEET, -3.5],
 };
 
 export const HAMMER_SHAPE = {
@@ -382,6 +383,8 @@ export const SPRING_SHAPE = {
   tubular: 8,
   radial: 12,
 } as const;
+
+export const RETURN_SPRING_LABEL_X = -215;
 
 export const MAGAZINE_STACK = {
   firstArc: 5.5,

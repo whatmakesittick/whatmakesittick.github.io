@@ -99,6 +99,7 @@ export function addPiece(
   cutPiece: CutPiece,
   group: EmphasisGroup,
   look: Look,
+  ghost?: MaterialFinish,
 ): Mesh[] {
   const { cutaway } = context;
   const mesh = (geometry: BufferGeometry, finish: MaterialFinish) =>
@@ -107,7 +108,10 @@ export function addPiece(
     cutPiece.kind === 'always'
       ? [mesh(cutPiece.geometry, look.surface)]
       : cutPiece.kind === 'removed'
-        ? [cutaway.whole(mesh(cutPiece.geometry, look.surface))]
+        ? [
+            cutaway.whole(mesh(cutPiece.geometry, look.surface)),
+            ...(ghost ? [cutaway.opened(mesh(cutPiece.geometry, ghost))] : []),
+          ]
         : [
             cutaway.whole(mesh(cutPiece.whole, look.surface)),
             cutaway.opened(mesh(cutPiece.half, look.surface)),

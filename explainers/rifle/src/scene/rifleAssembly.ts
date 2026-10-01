@@ -1,75 +1,119 @@
-import { Group } from 'three';
-import type { Box3, Object3D } from 'three';
+import { Group, Mesh } from 'three';
+import type { Box3, Material, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
+import { isShown } from '@core/scene/parts';
 import { regionFromSpec } from '@core/scene/regions';
 import { ResourceTracker } from '@core/scene/resources';
-import { toRadians } from '@core/math';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
 import type { Assembly, AssemblyResources } from './assembly';
 import { WOOD_GRAIN } from './constants';
 import { createLooks } from './finishes';
+import { hammerAngle, pinPush } from './geometry/hammerClearance';
+import { boltTravel } from './geometry/roundPaths';
 import { woodGrain } from './geometry/woodGrain';
 import { addBarrel } from './parts/barrel';
 import { batchStatic } from './parts/batch';
-import { CutawaySwitch, markDynamic } from './parts/context';
+import { BoltPart } from './parts/bolt';
+import { CarrierPart } from './parts/carrier';
+import { CutawaySwitch } from './parts/context';
 import type { PartContext } from './parts/context';
-import { createChargingHandle, createSelector, createTrigger } from './parts/controls';
+import { TriggerPart, createSelector } from './parts/controls';
 import { addFurniture } from './parts/furniture';
 import { addGasSystem } from './parts/gasSystem';
+import { HammerPart } from './parts/hammer';
 import { LabelAnchors } from './parts/labels';
 import { addMagazine } from './parts/magazine';
 import { addReceiver } from './parts/receiver';
+import { RoundsPart, addMagazineStack, createRoundGeometry } from './parts/rounds';
 import { addSights } from './parts/sights';
+import { SpringPart } from './parts/spring';
 import { REGIONS } from './regions';
+
+function createContext(
+  resources: AssemblyResources,
+  tracker: ResourceTracker,
+  cutaway: CutawaySwitch,
+): PartContext {
+  const looks = createLooks({
+    stock: tracker.track(woodGrain(WOOD_GRAIN.stock)),
+    handguard: tracker.track(woodGrain(WOOD_GRAIN.handguard)),
+  });
+  return { ...resources, tracker, cutaway, looks };
+}
 
 export class RifleAssembly implements Assembly {
   readonly root = new Group();
   private readonly body = new Group();
-  private readonly carrier = new Group();
-  private readonly trigger: Group;
+  private readonly gas = new Group();
   private readonly tracker = new ResourceTracker();
   private readonly materials: MaterialLibrary;
   private readonly cutaway = new CutawaySwitch();
+  private readonly carrier: CarrierPart;
+  private readonly bolt: BoltPart;
+  private readonly hammer: HammerPart;
+  private readonly trigger: TriggerPart;
+  private readonly spring: SpringPart;
+  private readonly rounds: RoundsPart;
   private readonly labels: LabelAnchors;
   private shownCut: boolean | null = null;
 
   constructor(resources: AssemblyResources, state: AssemblyState) {
     this.materials = resources.materials;
-    const looks = createLooks({
-      stock: this.tracker.track(woodGrain(WOOD_GRAIN.stock)),
-      handguard: this.tracker.track(woodGrain(WOOD_GRAIN.handguard)),
-    });
-    const context: PartContext = {
-      ...resources,
-      tracker: this.tracker,
-      cutaway: this.cutaway,
-      looks,
-    };
+    const context = createContext(resources, this.tracker, this.cutaway);
+    const roundGeometry = createRoundGeometry(context);
     addBarrel(context, this.body);
     addGasSystem(context, this.body);
     addSights(context, this.body);
     addFurniture(context, this.body);
     addReceiver(context, this.body);
     addMagazine(context, this.body);
+    addMagazineStack(context, this.body, roundGeometry);
     this.body.add(createSelector(context));
-    this.trigger = markDynamic(createTrigger(context));
-    this.carrier.add(createChargingHandle(context));
-    this.body.add(this.trigger, markDynamic(this.carrier));
+    this.carrier = new CarrierPart(context);
+    this.bolt = new BoltPart(context);
+    this.hammer = new HammerPart(context);
+    this.trigger = new TriggerPart(context);
+    this.spring = new SpringPart(context);
+    this.rounds = new RoundsPart(context, roundGeometry);
+    this.body.add(
+      this.carrier.object,
+      this.bolt.object,
+      this.hammer.object,
+      this.trigger.object,
+      this.spring.object,
+      this.rounds.object,
+    );
     batchStatic(this.body, this.cutaway).forEach((geometry) => this.tracker.track(geometry));
-    this.root.add(this.body);
-    this.labels = new LabelAnchors(this.body);
+    this.root.add(this.body, this.gas);
+    this.labels = new LabelAnchors({
+      body: this.body,
+      carrier: this.carrier.object,
+      bolt: this.bolt.object,
+      features: this.bolt.features,
+      hammer: this.hammer.object,
+      trigger: this.trigger.object,
+      bullet: this.rounds.bullet.object,
+      fired: this.rounds.fired,
+      gas: this.gas,
+    });
     this.setState(state);
   }
 
   setState(state: AssemblyState): void {
-    const cut = state.view.cutaway;
-    if (cut !== this.shownCut) {
-      this.shownCut = cut;
-      this.cutaway.set(cut);
-      this.labels.setCutaway(cut);
+    const { motion, view } = state;
+    if (view.cutaway !== this.shownCut) {
+      this.shownCut = view.cutaway;
+      this.cutaway.set(view.cutaway);
+      this.labels.setCutaway(view.cutaway);
     }
-    this.carrier.position.x = -state.motion.carrier;
-    this.trigger.rotation.z = -toRadians(state.motion.trigger);
+    const travel = boltTravel(motion.carrier);
+    const hammer = hammerAngle(motion.hammer, travel);
+    this.carrier.set(motion.carrier);
+    this.bolt.set(travel, motion.bolt, pinPush(hammer, travel));
+    this.hammer.set(hammer);
+    this.trigger.set(motion.trigger);
+    this.spring.set(motion.carrier);
+    this.rounds.setState(state);
   }
 
   update(_deltaSeconds: number, _cameraDistance: number): boolean {
@@ -89,6 +133,19 @@ export class RifleAssembly implements Assembly {
   region(id: RegionId): Box3 {
     this.root.updateMatrixWorld(true);
     return regionFromSpec(REGIONS[id]).applyMatrix4(this.root.matrixWorld);
+  }
+
+  warmUp(compile: (object: Object3D) => void): void {
+    const seen = new Set<Material>();
+    this.root.traverse((object) => {
+      if (!(object instanceof Mesh) || isShown(object)) return;
+      const materials: Material[] = Array.isArray(object.material)
+        ? object.material
+        : [object.material];
+      if (materials.every((material) => seen.has(material))) return;
+      materials.forEach((material) => seen.add(material));
+      compile(object);
+    });
   }
 
   dispose(): void {

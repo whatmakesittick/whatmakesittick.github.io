@@ -1,29 +1,35 @@
-import { CapsuleGeometry, CylinderGeometry, Group, Shape, Vector2 } from 'three';
-import { CHARGING_HANDLE, SELECTOR, TRIGGER } from '../../model/layout';
-import { CHARGING_KNOB, SEGMENTS, SELECTOR_LEVER, TRIGGER_SHAPE } from '../constants';
-import { boxPiece, piece, sidePiece } from '../geometry/pieces';
-import { addPiece } from './context';
+import { CylinderGeometry, Group, Shape, Vector2 } from 'three';
+import { SELECTOR, TRIGGER } from '../../model/layout';
+import { SEGMENTS, SELECTOR_LEVER, TRIGGER_SHAPE } from '../constants';
+import { FINISHES } from '../finishes';
+import { boxPiece, piece, sidePiece, solidSide } from '../geometry/pieces';
+import { addPiece, markDynamic } from './context';
 import type { PartContext } from './context';
 
 const QUARTER_TURN = Math.PI / 2;
-const CAP_SEGMENTS = 6;
 
-const TRIGGER_OUTLINE: readonly (readonly [number, number])[] = [
+type Outline = readonly (readonly [number, number])[];
+
+const TRIGGER_OUTLINE: Outline = [
   [-3.5, 3],
-  [3.5, 3],
-  [4, -6],
-  [2, -13],
-  [3, -20],
-  [5, -25],
-  [7.5, -27.5],
-  [4.5, -28.8],
-  [1, -26],
-  [-1.5, -20],
-  [-2.8, -12],
-  [-3.5, -4],
+  [60, 2.5],
+  [60, 6.5],
+  [64, 6.5],
+  [64, 0],
+  [6, -1.5],
+  [5, -6],
+  [2.5, -13],
+  [2, -20],
+  [2.5, -24.5],
+  [4.5, -27.5],
+  [1.5, -28.5],
+  [-2.5, -25.5],
+  [-4, -19],
+  [-4.5, -12],
+  [-4.5, -4],
 ];
 
-const SELECTOR_OUTLINE: readonly (readonly [number, number])[] = [
+const SELECTOR_OUTLINE: Outline = [
   [-3, -4.5],
   [78, -4],
   [80, -7],
@@ -35,22 +41,29 @@ const SELECTOR_OUTLINE: readonly (readonly [number, number])[] = [
   [-3, 4.5],
 ];
 
-function outlineShape(points: readonly (readonly [number, number])[]): Shape {
+function outlineShape(points: Outline): Shape {
   return new Shape(points.map(([x, y]) => new Vector2(x, y)));
 }
 
-export function createTrigger(context: PartContext): Group {
-  const group = new Group();
-  const { halfWidth, bevel } = TRIGGER_SHAPE;
-  addPiece(
-    context,
-    group,
-    sidePiece(outlineShape(TRIGGER_OUTLINE), [-halfWidth, halfWidth], bevel),
-    'trigger',
-    context.looks.blued,
-  );
-  group.position.set(...TRIGGER.centre);
-  return group;
+export class TriggerPart {
+  readonly object = new Group();
+
+  constructor(context: PartContext) {
+    const { halfWidth, bevel } = TRIGGER_SHAPE;
+    addPiece(
+      context,
+      this.object,
+      solidSide(outlineShape(TRIGGER_OUTLINE), [-halfWidth, halfWidth], bevel),
+      'trigger',
+      context.looks.blued,
+    );
+    this.object.position.set(...TRIGGER.centre);
+    markDynamic(this.object);
+  }
+
+  set(pull: number): void {
+    this.object.rotation.z = (pull - 1) * TRIGGER.swing;
+  }
 }
 
 export function createSelector(context: PartContext): Group {
@@ -58,49 +71,27 @@ export function createSelector(context: PartContext): Group {
   const [x, y, surface] = SELECTOR.centre;
   const { thickness, bossRadius, bossHeight, autoAngle, tab } = SELECTOR_LEVER;
   const look = context.looks.steel;
+  const ghost = FINISHES.ghost;
   addPiece(
     context,
     group,
     sidePiece(outlineShape(SELECTOR_OUTLINE), [surface, surface + thickness]),
     'selector',
     look,
+    ghost,
   );
   const boss = new CylinderGeometry(bossRadius, bossRadius, bossHeight, SEGMENTS.knob);
   boss.rotateX(QUARTER_TURN).translate(0, 0, surface + bossHeight / 2);
-  addPiece(context, group, piece(boss), 'selector', look);
+  addPiece(context, group, piece(boss), 'selector', look, ghost);
   addPiece(
     context,
     group,
     boxPiece({ x: tab.x, y: tab.y, z: [surface, surface + tab.height] }),
     'selector',
     look,
+    ghost,
   );
   group.position.set(x, y, 0);
   group.rotation.z = autoAngle;
-  return group;
-}
-
-export function createChargingHandle(context: PartContext): Group {
-  const group = new Group();
-  const { radius, length, arm } = CHARGING_KNOB;
-  const centreX = (CHARGING_HANDLE.x[0] + CHARGING_HANDLE.x[1]) / 2;
-  const centreY = (CHARGING_HANDLE.y[0] + CHARGING_HANDLE.y[1]) / 2;
-  const outer = CHARGING_HANDLE.z[1];
-  const knobLength = length + 2 * radius;
-  const knob = new CapsuleGeometry(radius, length, CAP_SEGMENTS, SEGMENTS.knob);
-  knob.rotateX(QUARTER_TURN).translate(centreX, centreY, outer - knobLength / 2);
-  const look = context.looks.bright;
-  addPiece(context, group, piece(knob), 'chargingHandle', look);
-  addPiece(
-    context,
-    group,
-    boxPiece({
-      x: [centreX - radius * 0.6, centreX + radius * 0.6],
-      y: arm.y,
-      z: [CHARGING_HANDLE.z[0] - 2, outer - knobLength / 2],
-    }),
-    'chargingHandle',
-    look,
-  );
   return group;
 }

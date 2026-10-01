@@ -5,6 +5,7 @@ import type { Box, Extent } from '../../model/scale';
 import {
   CLEARANCE,
   DUST_COVER,
+  EJECTOR_BLOCK,
   MAGAZINE_CATCH,
   RECEIVER_SHELL,
   RIVET,
@@ -193,6 +194,7 @@ export function addReceiver(context: PartContext, parent: Object3D): void {
     look,
   );
   addPiece(context, parent, sectionPiece(trunnionSection(), TRUNNION.x), 'trunnion', look);
+  addPiece(context, parent, boxPiece(EJECTOR_BLOCK), 'ejector', look);
   addTriggerGuard(context, parent);
   addRivets(context, parent);
 }

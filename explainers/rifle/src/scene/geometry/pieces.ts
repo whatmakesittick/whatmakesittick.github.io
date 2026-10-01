@@ -51,6 +51,10 @@ export function sidePiece(shape: Shape, z: Extent, bevel = 0): CutPiece {
   return piece(creased(extrudeSide(shape, z, bevel)));
 }
 
+export function solidSide(shape: Shape, z: Extent, bevel = 0): CutPiece {
+  return solid(creased(extrudeSide(shape, z, bevel)));
+}
+
 export function sectionPiece(section: Section, x: Extent): SplitPiece {
   const whole = creased(extrudeProfileAlongX(wholeSectionShape(section), x[0], x[1]));
   const kept = creased(extrudeProfileAlongX(keptSectionShape(section), x[0], x[1]));

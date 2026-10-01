@@ -98,6 +98,14 @@ export const FINISHES = {
     roughness: 0.28,
     envMapIntensity: POLISH_REFLECTION,
   },
+  ghost: {
+    color: PAINT.brightSteel,
+    metalness: 0.3,
+    roughness: 0.5,
+    transparent: true,
+    opacity: 0.3,
+    depthWrite: false,
+  },
   engraving: {
     color: PAINT.engraving,
     metalness: 0.8,
