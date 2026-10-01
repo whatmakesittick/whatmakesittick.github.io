@@ -5,7 +5,7 @@
     "tagline": "Un tir, une bouffée de gaz, et le fusil est de nouveau prêt en un dixième de seconde.",
     "description": "Un fusil à emprunt de gaz en 3D, au ralenti : un tir, une bouffée de ses propres gaz, et les pièces qui éjectent l’étui et chargent la cartouche suivante.",
     "summary": "La cartouche, la culasse verrouillée, le canon, les gaz empruntés, puis l’aller-retour qui charge la cartouche suivante.",
-    "socialAlt": "Vue en coupe d’un fusil à emprunt de gaz, la balle encore dans le canon et les gaz chauds qui repoussent le piston pour recharger, à côté du titre « Comment un fusil se recharge tout seul »."
+    "socialAlt": "Vue en coupe d’un fusil à emprunt de gaz, la balle encore dans le canon et les gaz chauds qui repoussent le piston pour recharger, à côté du titre « Comment un fusil se recharge tout seul »"
   },
   "stage": {
     "label": "Modèle interactif du fusil",
@@ -39,7 +39,7 @@
       "strike": "Frappe du chien",
       "start": "Départ de la balle",
       "peak": "Pic de pression",
-      "port": "Balle à l’évent",
+      "port": "Passage à l’évent",
       "exit": "Sortie de la balle",
       "unlock": "Déverrouillage",
       "eject": "Éjection de l’étui",
@@ -194,7 +194,7 @@
     },
     "cartridge": {
       "title": "Une petite flamme et beaucoup de gaz",
-      "p1": "Tout commence par la <strong>cartouche</strong>. Elle mesure 56 mm de long, pèse 16,2 g et contient tout ce qu’il faut pour un tir. L’étui fait environ 39 mm de long et renferme 1,6 g de poudre. Au centre du fond de l’étui se trouve l’amorce, une petite coupelle en laiton. La balle pèse 7,9 g et possède un noyau en acier. Elle est enfoncée dans l’ouverture, à l’avant de l’étui.",
+      "p1": "Tout commence par la <strong>cartouche</strong>. Elle mesure 56 mm de long, pèse 16,2 g et contient tout ce qu’il faut pour un tir. L’étui fait environ 39 mm de long et renferme 1,6 g de poudre. Au centre du culot de l’étui se trouve l’amorce, une petite coupelle en laiton. La balle pèse 7,9 g et possède un noyau en acier. Elle est enfoncée dans l’ouverture, à l’avant de l’étui.",
       "p2": "Le tir commence quand le percuteur écrase l’<strong>amorce</strong>. L’amorce produit alors une petite flamme. Cette flamme passe par deux trous minuscules jusque dans l’étui et allume la poudre. La poudre n’explose pas. Elle <strong>brûle</strong>, très vite, et se change en une énorme quantité de gaz chauds.",
       "p3": "Ces gaz sont enfermés dans un tout petit espace, alors leur pression grimpe vite. Ils poussent dans toutes les directions, mais seule la balle peut céder, et elle ne tarde pas à bouger. La pression continue pourtant de monter, jusqu’à environ 275 MPa. C’est à peu près 2 700 fois la pression de l’air qui vous entoure, soit environ 2 800 kg qui pèsent sur chaque centimètre carré.",
       "p4": "Le pic arrive tôt, quand la balle n’a avancé que de 4 à 6 cm. Ensuite, l’espace derrière la balle grandit plus vite que la poudre ne peut le remplir, et la pression commence à baisser. Appuyez sur les boutons pour voir la frappe du chien, le départ de la balle et le pic de pression.",
@@ -214,7 +214,7 @@
     },
     "barrel": {
       "title": "Environ une milliseconde dans le canon",
-      "p1": "Le canon mesure 415 mm de long, et la balle le parcourt en environ 1 milliseconde, soit un millième de seconde. C’est bien trop rapide pour l’œil, alors la barre de lecture étire ce moment du tir pour vous. Faites glisser le curseur pour déplacer la balle dans le canon, et suivez sa vitesse ainsi que la pression qui la pousse.",
+      "p1": "Le canon mesure 415 mm de long, et la balle le parcourt en 1 milliseconde environ, soit un millième de seconde. C’est bien trop rapide pour l’œil, alors la barre de lecture étire ce moment du tir pour vous. Faites glisser le curseur pour déplacer la balle dans le canon, et suivez sa vitesse ainsi que la pression qui la pousse.",
       "p2": "La poussée est la plus forte au début. La pression culmine dans les premiers centimètres puis retombe, mais les gaz continuent de pousser la balle tout le long du canon. En arrivant à la bouche du canon, la balle file à environ <strong>715 m/s</strong>. C’est environ deux fois la vitesse du son, et environ 26 fois celle d’une voiture à 100 km/h.",
       "p3": "L’intérieur du canon n’est pas lisse. Quatre rainures en spirale, les <strong>rayures</strong>, tournent vers la droite et font un tour complet tous les 240 mm. Elles agrippent la balle et la mettent en rotation. Pendant sa traversée du canon, la balle fait environ un tour et demi. À la bouche, elle tourne sur elle-même environ 3 000 fois par seconde.",
       "p4": "Seule une partie de l’énergie de la poudre finit dans la balle : environ un quart à un tiers. Une part chauffe le canon et l’étui, une autre sert à faire entrer la balle de force dans les rayures. Environ 40 % s’en va avec les gaz chauds qui jaillissent derrière la balle. Pourtant, juste avant que la balle sorte, le fusil emprunte un peu de ces gaz pour son propre usage. Le chapitre suivant montre comment.",
@@ -228,7 +228,7 @@
       "title": "Une bouffée de gaz qui recharge le fusil",
       "p1": "Près de la bouche, un petit trou incliné part du canon et monte jusqu’au bloc d’emprunt de gaz. C’est l’<strong>évent</strong>. Tant que la balle ne l’a pas encore atteint, il ne se passe rien ici. Ce n’est qu’une fois la balle passée que les gaz chauds s’engouffrent dans l’évent. Dans le bloc, ils rencontrent le <strong>piston</strong>.",
       "p2": "Le piston se trouve au bout d’une longue tige, et cette tige est fixée au porte-culasse, la longue pièce qui glisse au-dessus de la culasse. Quand les gaz repoussent le piston vers l’arrière, la tige, le porte-culasse et le levier d’armement partent donc avec lui. Voilà pourquoi le levier bouge à chaque tir. La poussée est brève. Un instant plus tard, la balle quitte le canon, la pression chute et les gaz usés s’échappent par des trous d’évacuation. Le porte-culasse est alors déjà en mouvement, et il termine sa course vers l’arrière <strong>sur sa lancée</strong>.",
-      "p3": "Le porte-culasse ne fait pas tourner la culasse tout de suite. Sur les premiers millimètres, il recule seul, et la culasse reste verrouillée. Puis une rampe taillée à l’intérieur du porte-culasse accroche un ergot sur le dessus de la culasse et fait ainsi tourner la culasse d’environ un dixième de tour. Les tenons de verrouillage sortent de leurs logements, et la culasse est libre de suivre. À ce moment-là, la balle a déjà quitté le canon.",
+      "p3": "Le porte-culasse ne fait pas tourner la culasse tout de suite. Sur les premiers millimètres, il recule seul, et la culasse reste verrouillée. Puis une rampe taillée à l’intérieur du porte-culasse accroche un ergot sur le dessus de la culasse et la fait tourner d’environ un dixième de tour. Les tenons de verrouillage sortent de leurs logements, et la culasse est libre de suivre. À ce moment-là, la balle a déjà quitté le canon.",
       "p4": "Essayez maintenant de boucher l’évent. Le coup part normalement, et la balle sort bien du canon. Mais aucun gaz n’atteint le piston, alors rien ne bouge. L’étui vide reste dans la chambre, et le fusil s’arrête après un seul tir. Pour charger la cartouche suivante, il faudrait tirer à la main le levier d’armement vers l’arrière. Avec l’évent ouvert, cette petite bouffée de gaz fait le travail pour vous.",
       "fill": "Gaz dans le bloc",
       "carrier": "Course du porte-culasse",
@@ -237,7 +237,7 @@
     "reload": {
       "title": "Un étui sort, une cartouche entre",
       "p1": "En reculant, le porte-culasse entraîne la culasse, et la culasse tire l’étui vide hors de la chambre. Une petite griffe à ressort sur la culasse, l’<strong>extracteur</strong>, tient l’étui par une rainure qui entoure sa base. En chemin, l’étui rencontre l’<strong>éjecteur</strong>, un rebord fixe à l’intérieur de la boîte de culasse. Ce rebord heurte le côté gauche de l’étui, qui pivote alors autour de la griffe et s’envole par l’ouverture de droite.",
-      "p2": "Dans sa course vers l’arrière, le porte-culasse fait encore deux choses. Il rabat le chien et l’arme pour le tir suivant, et il comprime le <strong>ressort récupérateur</strong>. Ce ressort arrête le porte-culasse, puis le relance vers l’avant. Pendant ce temps, le ressort du chargeur pousse la cartouche suivante vers le haut, contre les lèvres, tout en haut du chargeur. Le chargeur contient 30 cartouches sur deux rangées en quinconce, et il se contente de les faire monter.",
+      "p2": "Dans sa course vers l’arrière, le porte-culasse fait encore deux choses. Il repousse le chien vers l’arrière et l’arme pour le tir suivant, et il comprime le <strong>ressort récupérateur</strong>. Ce ressort arrête le porte-culasse, puis le relance vers l’avant. Pendant ce temps, le ressort du chargeur pousse la cartouche suivante vers le haut, contre les lèvres, tout en haut du chargeur. Le chargeur contient 30 cartouches sur deux rangées en quinconce, et il se contente de les faire monter.",
       "p3": "En repartant vers l’avant, la culasse accroche la cartouche du dessus, la pousse hors du chargeur et l’enfonce dans la chambre. La griffe de l’extracteur s’enclenche dans la rainure du nouvel étui. Puis la culasse tourne dans le sens des aiguilles d’une montre, vue de derrière, et ses tenons se verrouillent de nouveau. La gâchette automatique libère le chien, mais le chien bute d’abord sur le <strong>retardateur</strong>. Celui-ci le freine un instant, pour laisser le fusil se stabiliser après le choc du porte-culasse en fin de course. Le tir suivant peut alors commencer.",
       "p4": "Un aller-retour complet dure environ 100 ms. Un clignement d’yeux dure de 100 à 400 ms : un cycle dure donc à peu près autant que le plus rapide des clignements. Chaque tir fait aussi reculer le fusil. Si rien ne le retenait, le fusil chargé partirait vers l’arrière à environ 2 m/s. Environ un quart à un tiers de ce recul vient des gaz qui jaillissent de la bouche du canon. Comme la crosse se trouve sous l’axe du canon, le recul fait aussi légèrement remonter la bouche. Appuyez sur les boutons pour comparer un cycle à des choses que vous connaissez.",
       "carrier": "Course du porte-culasse",
