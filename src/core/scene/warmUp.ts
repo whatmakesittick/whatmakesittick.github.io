@@ -2,10 +2,10 @@ export type Cancel = () => void;
 
 const IDLE_TIMEOUT_MS = 2000;
 
-function whenIdle(callback: () => void): Cancel {
-  if ('requestIdleCallback' in window) {
-    const handle = window.requestIdleCallback(callback, { timeout: IDLE_TIMEOUT_MS });
-    return () => window.cancelIdleCallback(handle);
+export function whenIdle(callback: () => void): Cancel {
+  if (typeof requestIdleCallback === 'function') {
+    const handle = requestIdleCallback(callback, { timeout: IDLE_TIMEOUT_MS });
+    return () => cancelIdleCallback(handle);
   }
   const timer = setTimeout(callback, 0);
   return () => clearTimeout(timer);

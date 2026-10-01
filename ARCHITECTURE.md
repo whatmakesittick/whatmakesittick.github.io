@@ -265,7 +265,9 @@ into a solid with `sampleProfile` and `latheAlongX`; `geometry/extrude.ts` raise
 a plan outline in x and z between two heights with `extrudePlan`, runs a side
 profile in z and y along the x axis with `extrudeProfileAlongX`, and draws the
 outlines with `roundedRectShape`, `roundedRectHole`, `planShape` and `planHole`;
-`geometry/box.ts` makes an axis-aligned `box` from its bounds. The
+`geometry/box.ts` makes an axis-aligned `box` from its bounds; `whenIdle` in
+`warmUp.ts` runs a task in idle time, such as an assembly's warm-up, and returns
+its cancel. The
 material library caches one material per emphasis group and finish, where a
 finish is a plain `MeshStandardMaterialParameters` object the explainer owns;
 `register` adds a material the explainer made itself, such as points, lines or a
