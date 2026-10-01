@@ -63,7 +63,7 @@
     "value": "{{time}}, {{phase}}",
     "ms": "{{value}} ms",
     "perShot": "{{seconds}} s por tiro",
-    "realPace": "Ritmo real, {{seconds}} s por tiro",
+    "realPace": "Ritmo real",
     "speedValue": "{{factor}} vezes mais lento que na vida real",
     "phase": {
       "strike": "O cão cai",

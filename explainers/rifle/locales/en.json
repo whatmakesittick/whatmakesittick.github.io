@@ -63,7 +63,7 @@
     "value": "{{time}}, {{phase}}",
     "ms": "{{value}} ms",
     "perShot": "{{seconds}} s per shot",
-    "realPace": "Real pace, {{seconds}} s per shot",
+    "realPace": "Real pace",
     "speedValue": "{{factor}} times slower than real life",
     "phase": {
       "strike": "Hammer falls",

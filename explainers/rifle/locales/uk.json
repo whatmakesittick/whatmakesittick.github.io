@@ -63,7 +63,7 @@
     "value": "{{time}}, {{phase}}",
     "ms": "{{value}} мс",
     "perShot": "{{seconds}} с на постріл",
-    "realPace": "Реальний темп, {{seconds}} с на постріл",
+    "realPace": "Справжній темп",
     "speedValue": "сповільнено до 1/{{factor}} справжньої швидкості",
     "phase": {
       "strike": "Удар курка",

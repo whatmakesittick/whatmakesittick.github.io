@@ -63,7 +63,7 @@
     "value": "{{time}}、{{phase}}",
     "ms": "{{value}}ミリ秒",
     "perShot": "1発あたり{{seconds}}秒",
-    "realPace": "実際の速さ、1発あたり{{seconds}}秒",
+    "realPace": "等倍",
     "speedValue": "実際の{{factor}}分の1の速さ",
     "phase": {
       "strike": "ハンマーが落ちる",
