@@ -15,7 +15,7 @@ import {
   TWIST_MM,
 } from './constants';
 import { keyframes } from './keyframes';
-import { BULLET_SEAT_X, BULLET_TRAVEL, RIFLED_LENGTH, RIFLING } from './layout';
+import { BULLET_SEAT_X, BULLET_TRAVEL, CARTRIDGE, RIFLING } from './layout';
 import { VENTS_CLEAR_MS } from './motion';
 import { EXIT_MS, PORT_MS, START_MS, STRIKE_MS } from './timing';
 
@@ -24,17 +24,27 @@ export { BARREL_TIME_MS, travelTimeMs };
 const PRESSURE_DECAY_MS = 0.5;
 const FLASH_MS = 1;
 const GAS_VENT_MS = 2;
+const ENGRAVING_LENGTH = CARTRIDGE.bulletLength;
+const BASE_AT_RIFLING = RIFLING.x[0] - BULLET_SEAT_X;
+const ENGRAVING_START = BASE_AT_RIFLING - ENGRAVING_LENGTH / 2;
 
-function rifledTravel(travel: number): number {
-  return clamp(BULLET_SEAT_X + travel - RIFLING.x[0], 0, RIFLED_LENGTH);
+function engravedShare(travel: number): number {
+  return clamp((travel - ENGRAVING_START) / ENGRAVING_LENGTH, 0, 1);
+}
+
+function spinningLength(travel: number): number {
+  const depth = travel - ENGRAVING_START;
+  if (depth <= 0) return 0;
+  if (depth < ENGRAVING_LENGTH) return depth ** 2 / (2 * ENGRAVING_LENGTH);
+  return depth - ENGRAVING_LENGTH / 2;
 }
 
 export function turnsAt(travel: number): number {
-  return rifledTravel(travel) / TWIST_MM;
+  return (spinningLength(travel) - spinningLength(0)) / TWIST_MM;
 }
 
 export function spinAt(travel: number, speed: number): number {
-  return rifledTravel(travel) > 0 ? (speed * MM_PER_METRE) / TWIST_MM : 0;
+  return (engravedShare(travel) * speed * MM_PER_METRE) / TWIST_MM;
 }
 
 export const EXIT_SPIN = spinAt(BULLET_TRAVEL, MUZZLE_SPEED);

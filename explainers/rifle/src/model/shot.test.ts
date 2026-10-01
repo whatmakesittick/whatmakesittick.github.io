@@ -1,12 +1,39 @@
 import { describe, expect, it } from 'vitest';
 import { pressureAtTravel, speedAtTravel, travelAtTime } from './bore';
-import { MUZZLE_PRESSURE_MPA, PEAK_PRESSURE_MPA, START_PRESSURE_MPA } from './constants';
+import {
+  MS_PER_SECOND,
+  MUZZLE_PRESSURE_MPA,
+  PEAK_PRESSURE_MPA,
+  START_PRESSURE_MPA,
+} from './constants';
 import { BULLET_TRAVEL, RIFLED_LENGTH } from './layout';
 import { VENTS_CLEAR_MS } from './motion';
-import { BARREL_TIME_MS, EXIT_SPIN, EXIT_TURNS, shotAt, travelTimeMs } from './shot';
+import {
+  BARREL_TIME_MS,
+  EXIT_SPIN,
+  EXIT_TURNS,
+  shotAt,
+  spinAt,
+  travelTimeMs,
+  turnsAt,
+} from './shot';
 import { EXIT_MS, PEAK_MS, PORT_MS, PORT_TRAVEL_MM, START_MS, STRIKE_MS } from './timing';
 
 const TRAVEL_STEPS = Array.from({ length: 387 }, (_, index) => Math.min(index, BULLET_TRAVEL));
+const SPIN_STEP_LIMIT = 60;
+const TIME_SLICES = 2000;
+
+function spinOver(travel: number): number {
+  return spinAt(travel, speedAtTravel(travel));
+}
+
+function integratedTurns(): number {
+  const slice = BARREL_TIME_MS / TIME_SLICES;
+  return Array.from({ length: TIME_SLICES }, (_, index) => {
+    const ms = START_MS + (index + 0.5) * slice;
+    return (shotAt(ms).spin * slice) / MS_PER_SECOND;
+  }).reduce((sum, turns) => sum + turns, 0);
+}
 
 describe('pressure behind the bullet', () => {
   it('starts at the pressure that moves the bullet and peaks at 275 MPa near 5 cm', () => {
@@ -52,6 +79,20 @@ describe('the bullet in the barrel', () => {
     expect(EXIT_TURNS).toBeCloseTo(RIFLED_LENGTH / 240, 9);
     expect(EXIT_TURNS).toBeGreaterThan(1.5);
     expect(EXIT_TURNS).toBeLessThan(1.6);
+  });
+
+  it('picks up spin smoothly while the rifling grips the bullet', () => {
+    expect(spinOver(0)).toBe(0);
+    TRAVEL_STEPS.slice(1).forEach((travel, index) => {
+      const rise = spinOver(travel) - spinOver(TRAVEL_STEPS[index]);
+      expect(rise).toBeGreaterThanOrEqual(0);
+      expect(rise).toBeLessThan(SPIN_STEP_LIMIT);
+    });
+  });
+
+  it('counts the turns the spin adds up to', () => {
+    expect(turnsAt(0)).toBe(0);
+    expect(integratedTurns()).toBeCloseTo(EXIT_TURNS, 3);
   });
 
   it('passes the gas port a fraction of a millisecond before it leaves', () => {
