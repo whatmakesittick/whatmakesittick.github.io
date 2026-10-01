@@ -1,9 +1,13 @@
 import { toRadians } from '@core/math';
 import {
   BARREL,
+  BOLT,
   BORE,
+  CARRIER,
+  CARTRIDGE,
   CHAMBER,
   CLEANING_ROD,
+  EJECTOR_X,
   FRONT_SIGHT,
   GAS_BLOCK,
   GAS_CYLINDER,
@@ -13,8 +17,10 @@ import {
   GRIP,
   HANDGUARD,
   MAGAZINE,
+  PISTON,
   REAR_SIGHT,
   RECEIVER,
+  RETURN_SPRING,
   RIFLING,
   STOCK,
   TRUNNION,
@@ -272,3 +278,149 @@ export const WOOD_GRAIN = {
     seed: 11,
   },
 } as const satisfies Record<string, GrainSpec>;
+
+export const CASE_SHAPE = {
+  rim: CARTRIDGE.rimRadius,
+  groove: { x: [1.4, 2.6] as const, radius: 4.9 },
+  shoulderX: CHAMBER.neckStart,
+  neckX: CHAMBER.neckStart + 2.5,
+  wall: 0.5,
+  head: 3.2,
+  pocket: { depth: 1.6, radius: CARTRIDGE.primerRadius + 0.05 },
+  flashHole: 0.6,
+} as const;
+
+export const PRIMER_SHAPE = { recess: 0.05, depth: 1.55, radius: CARTRIDGE.primerRadius } as const;
+
+export const POWDER_FILL = { start: CASE_SHAPE.head + 0.2, gap: 0.15 } as const;
+
+export const BULLET_SHAPE = {
+  heel: 1.5,
+  heelRadius: 3.4,
+  bearingEnd: 13.5,
+  ogive: [
+    [16, 3.85],
+    [19, 3.4],
+    [22, 2.6],
+    [24.5, 1.7],
+    [26.3, 0.8],
+  ] as const,
+  engraving: { count: 4, width: 0.8, depth: 0.3 },
+} as const;
+
+export const ROUND_SEGMENTS = 16;
+
+export const BOLT_BODY = {
+  rear: -110,
+  stemEnd: -104,
+  radius: 7.5,
+  stemRadius: 6,
+  chamfer: 0.6,
+  pinBore: 1.9,
+} as const;
+
+export const FIRING_PIN = {
+  radius: 1.5,
+  tail: 3,
+  travel: 1.2,
+  tipRecess: 0.9,
+  collar: 1.85,
+} as const;
+
+export const BOLT_LUGS = { x: [-BOLT.lugLength, -1] as const, inner: 7, halfWidth: 3.5 } as const;
+
+export const CAM_LUG: Box = { x: [-40, -32], y: [6.5, 10.5], z: [-2.4, 2.4] };
+
+export const RAMMER: Box = { x: [-8, 0], y: [-10.4, -6], z: [-3, 3] };
+
+export const EXTRACTOR_SHAPE = {
+  bar: { x: [-22, 0] as const, y: [-1.6, 1.6] as const, z: [6.8, 8.6] as const },
+  claw: { x: [-0.5, 2.2] as const, y: [-1.4, 1.4] as const, z: [5.1, 8.6] as const },
+} as const;
+
+export const EJECTOR_BLOCK: Box = {
+  x: [EJECTOR_X - 5, EJECTOR_X + 5],
+  y: [1, 6.5],
+  z: [RECEIVER.z[0] + SHEET, -4],
+};
+
+export const HAMMER_SHAPE = {
+  pivot: [-115, -14] as const,
+  length: 15,
+  face: 3.2,
+  halfWidth: 4,
+  hub: 4.5,
+  pin: 2,
+  clearance: 0.5,
+  maxAngle: toRadians(110),
+  step: toRadians(1),
+} as const;
+
+export const TRIGGER_BAR = { x: [0, 50] as const, y: [-2.3, 0.5] as const, hook: 4 } as const;
+
+export const CARRIER_SHAPE = {
+  body: { x: [CARRIER.x[0], -38] as const, bottom: 8, halfWidth: 13, corner: 5, lower: 2 },
+  ridge: { x: [-38, CARRIER.x[1]] as const, bottom: 20.5, halfWidth: 5.6, corner: 2 },
+  springBore: { y: RETURN_SPRING.axisY, radius: 6.6, end: -45 },
+} as const;
+
+export const PISTON_SHAPE = {
+  rodStart: CARRIER.x[1] - 3,
+  grooves: [3, 7] as const,
+  grooveDepth: 0.6,
+  grooveWidth: 1.2,
+  chamfer: 1,
+} as const;
+
+export const SPRING_SHAPE = {
+  coils: 22,
+  coilRadius: 5.2,
+  wire: 0.9,
+  seat: RECEIVER_SHELL.rearTrunnion[1] + 2,
+  guide: [RECEIVER_SHELL.rearTrunnion[1], -180] as const,
+  guideRadius: 2.4,
+  tubular: 8,
+  radial: 12,
+} as const;
+
+export const MAGAZINE_STACK = {
+  firstArc: 5.5,
+  column: 4.15,
+  pitch: 7.67,
+  baseInset: 2,
+  topSide: 1,
+  follower: 4,
+} as const;
+
+export const FEED_PATH = { tilt: toRadians(12) } as const;
+
+export const CASE_FLIGHT = {
+  forward: 60,
+  rise: 25,
+  drop: -45,
+  right: 150,
+  turns: 2.5,
+  roll: toRadians(50),
+} as const;
+
+export const GAS_GLOW = {
+  referencePressure: 120,
+  bore: { radius: 3.9, core: 2, start: 1 },
+  port: { radius: 1.3 },
+  cylinder: { radius: 7.2 },
+  ventOpenTravel: PISTON.headFrontX - VENT_HOLES.x[1],
+  segments: 16,
+} as const;
+
+export const VENT_WISPS = {
+  count: 48,
+  life: 0.9,
+  rate: 60,
+  speed: 40,
+  rise: 18,
+  size: 9,
+} as const;
+
+export const MUZZLE_FLASH = { length: 70, radius: 16, glow: 110, lean: toRadians(8) } as const;
+
+export const TRAIL = { radius: 0.6, opacity: 0.55 } as const;

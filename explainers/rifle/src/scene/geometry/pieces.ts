@@ -12,7 +12,7 @@ import { KEPT_HALF, turnOutline, turnStrands, turnedCap } from './turned';
 import type { TurnPoint, TurnStrand } from './turned';
 
 export type CutPiece =
-  | { kind: 'kept'; geometry: BufferGeometry }
+  | { kind: 'always'; geometry: BufferGeometry }
   | { kind: 'removed'; geometry: BufferGeometry }
   | { kind: 'split'; whole: BufferGeometry; half: BufferGeometry; face: BufferGeometry | null };
 
@@ -30,9 +30,13 @@ function creased(geometry: BufferGeometry): BufferGeometry {
 export function piece(geometry: BufferGeometry): CutPiece {
   geometry.computeBoundingBox();
   const bounds = geometry.boundingBox;
-  if (!bounds || bounds.max.z <= ON_CUT) return { kind: 'kept', geometry };
+  if (!bounds || bounds.max.z <= ON_CUT) return { kind: 'always', geometry };
   if (bounds.min.z >= -ON_CUT) return { kind: 'removed', geometry };
   return { kind: 'split', whole: geometry, ...splitAtCut(geometry) };
+}
+
+export function solid(geometry: BufferGeometry): CutPiece {
+  return { kind: 'always', geometry };
 }
 
 export function boxGeometry({ x, y, z }: Box): BufferGeometry {

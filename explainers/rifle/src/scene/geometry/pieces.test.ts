@@ -4,7 +4,7 @@ import { zRange } from './testing';
 
 describe('cut pieces', () => {
   it('keeps a piece on the left of the cut as it is', () => {
-    expect(boxPiece({ x: [0, 1], y: [0, 1], z: [-3, -1] }).kind).toBe('kept');
+    expect(boxPiece({ x: [0, 1], y: [0, 1], z: [-3, -1] }).kind).toBe('always');
   });
 
   it('drops a piece on the right of the cut', () => {

@@ -104,7 +104,7 @@ export function addPiece(
   const mesh = (geometry: BufferGeometry, finish: MaterialFinish) =>
     partMesh(context, geometry, group, finish);
   const meshes =
-    cutPiece.kind === 'kept'
+    cutPiece.kind === 'always'
       ? [mesh(cutPiece.geometry, look.surface)]
       : cutPiece.kind === 'removed'
         ? [cutaway.whole(mesh(cutPiece.geometry, look.surface))]
