@@ -87,7 +87,7 @@
       "unlock": "Saltar al desbloqueo del cerrojo",
       "eject": "Saltar al viaje hacia atrás",
       "feed": "Saltar al viaje hacia delante",
-      "ready": "Saltar al momento en que está listo"
+      "ready": "Saltar al momento en que el fusil está listo"
     }
   },
   "readouts": {
@@ -137,7 +137,7 @@
     "hammer": {
       "falling": "Cayendo",
       "struck": "Apoyado en el percutor",
-      "cocking": "Empujado por el portacerrojo",
+      "cocking": "Empujado hacia atrás por el portacerrojo",
       "cocked": "Armado",
       "held": "Frenado por el retardador"
     },
@@ -187,7 +187,7 @@
       "p1": "Lo que ves es un <strong>fusil accionado por gas</strong>. Está basado en el AKM, una versión modernizada del Kaláshnikov. Mide 880 mm de largo y pesa 3,1 kg con el cargador vacío. Lo ingenioso es que se recarga solo. Después de cada disparo expulsa la vaina vacía, carga un cartucho nuevo y vuelve a bloquear el cerrojo. Todo ese trabajo lo paga con un poco del gas caliente de cada disparo.",
       "p2": "El modelo sigue un disparo en <strong>fuego automático</strong>, desde que cae el martillo hasta que vuelve a caer. El martillo golpea el percutor, y una pequeña llama enciende la pólvora. Al arder, la pólvora se convierte en gas caliente, que impulsa la bala por el cañón. Un soplo de ese gas empuja un pistón hacia atrás, y el portacerrojo va con él. Después, un muelle lo devuelve todo hacia delante con un cartucho nuevo, y el fusil queda listo para el siguiente disparo.",
       "p3": "Todo el ciclo dura unos 100 ms, una décima de segundo. A ese ritmo, el mecanismo podría repetirlo unas <strong>600 veces por minuto</strong>. Esa cifra indica lo rápido que se mueven las piezas, no cuántos disparos se hacen en un minuto. El cargador solo lleva 30 cartuchos. Al principio, la reproducción va muy despacio. Arrastra la línea de tiempo para avanzar por el disparo, o toca un botón para saltar a un momento concreto. Fíjate en la palanca de carga, en el lado derecho: se mueve con cada disparo.",
-      "p4": "Algunas cosas están simplificadas. Dentro del fusil, el modelo solo dibuja las piezas que importan para esta historia. Ninguna fuente da tiempos exactos para la caída del martillo ni para el viaje de ida y vuelta del portacerrojo, así que ahí el modelo usa estimaciones cuidadosas. Los datos en pantalla siguen el reloj del modelo. Por eso, solo dos de sus tiempos se apoyan en fuentes: el ciclo completo y el paso de la bala por el cañón, que dura alrededor de un milisegundo. Activa la <strong>vista en corte</strong> para mirar dentro.",
+      "p4": "Algunas cosas están simplificadas. Dentro del fusil, el modelo solo dibuja las piezas que importan para esta historia. Ninguna fuente da tiempos exactos para la caída del martillo ni para el viaje de ida y vuelta del portacerrojo, así que ahí el modelo usa estimaciones razonables. Los datos en pantalla siguen el reloj del modelo. Por eso, solo dos de sus tiempos se apoyan en fuentes: el ciclo completo y el paso de la bala por el cañón, que dura alrededor de un milisegundo. Activa la <strong>vista en corte</strong> para mirar dentro.",
       "cycle": "Un ciclo completo",
       "pace": "Ritmo del mecanismo",
       "left": "Tiempo hasta el próximo disparo"
@@ -226,9 +226,9 @@
     },
     "gas": {
       "title": "Un soplo de gas que recarga el fusil",
-      "p1": "Cerca de la boca, un pequeño orificio inclinado sube desde el cañón hasta el bloque de gases. Es el <strong>orificio de gases</strong>. Mientras la bala no llega hasta él, aquí no pasa nada. Solo cuando la bala lo deja atrás, el gas caliente sube con fuerza por el orificio. En el bloque de gases se encuentra con el <strong>pistón</strong>.",
+      "p1": "Cerca de la boca, un pequeño orificio inclinado sube desde el cañón hasta el bloque de gases. Es el <strong>orificio de gases</strong>. Hasta que la bala llega a él, aquí no pasa nada. Solo cuando la bala lo deja atrás sube el gas caliente con fuerza por el orificio. En el bloque de gases se encuentra con el <strong>pistón</strong>.",
       "p2": "El pistón está en la punta de un vástago largo, y el vástago va fijo al portacerrojo, la pieza larga que se desliza encima del cerrojo. Cuando el gas empuja el pistón hacia atrás, el vástago, el portacerrojo y la palanca de carga van con él. Por eso la palanca se mueve con cada disparo. El empujón es corto. Un instante después, la bala sale por la boca, la presión cae y el gas usado se va por los orificios de escape. Para entonces el portacerrojo ya está en marcha, y recorre <strong>por inercia</strong> el resto del camino hacia atrás.",
-      "p3": "El portacerrojo no gira el cerrojo de inmediato. Durante los primeros milímetros se desliza hacia atrás él solo, y el cerrojo sigue bloqueado. Después, una ranura curva dentro del portacerrojo engancha un tetón que hay encima del cerrojo y así hace girar el cerrojo más o menos una décima de vuelta. Los tetones de cierre salen de sus huecos, y el cerrojo queda libre para seguirlo. En ese momento, la bala ya ha salido del cañón.",
+      "p3": "El portacerrojo no gira el cerrojo de inmediato. Durante los primeros milímetros se desliza hacia atrás él solo, y el cerrojo sigue bloqueado. Después, una ranura curva dentro del portacerrojo engancha un tetón que hay encima del cerrojo y lo hace girar más o menos una décima de vuelta. Los tetones de cierre salen de sus huecos, y el cerrojo queda libre para seguirlo. En ese momento, la bala ya ha salido del cañón.",
       "p4": "Ahora prueba a tapar el orificio de gases. El disparo se produce igual, y la bala sale del cañón como siempre. Pero el gas no llega al pistón, así que nada se mueve. La vaina vacía se queda en la recámara, y el fusil se detiene tras un solo disparo. Para cargar el siguiente cartucho, alguien tendría que tirar de la palanca de carga hacia atrás con la mano. Con el orificio abierto, ese pequeño soplo de gas hace el trabajo por ti.",
       "fill": "Gas en el bloque de gases",
       "carrier": "Recorrido del portacerrojo",
@@ -238,7 +238,7 @@
       "title": "Fuera la vaina vacía, dentro el siguiente cartucho",
       "p1": "En su viaje hacia atrás, el portacerrojo arrastra el cerrojo, y el cerrojo saca la vaina vacía de la recámara. Una pequeña uña con muelle en el cerrojo, el <strong>extractor</strong>, sujeta la vaina por una ranura que rodea su base. A mitad de camino, la vaina choca con el <strong>eyector</strong>, un pequeño tope fijo dentro del cajón de mecanismos. El tope golpea el lado izquierdo de la vaina, así que esta gira alrededor de la uña y sale despedida por la abertura de la derecha.",
       "p2": "Al retroceder, el portacerrojo hace dos trabajos más. Empuja el martillo hacia atrás y lo deja armado para el siguiente disparo, y comprime el <strong>muelle recuperador</strong>. El muelle frena el portacerrojo y luego lo lanza otra vez hacia delante. Mientras tanto, un muelle dentro del cargador sube el siguiente cartucho hasta los labios de su parte superior. El cargador lleva 30 cartuchos en dos hileras escalonadas, y lo único que hace es subirlos.",
-      "p3": "Al avanzar, el cerrojo atrapa el cartucho de arriba, lo saca del cargador y lo empuja dentro de la recámara. La uña del extractor se engancha en la ranura de la nueva vaina. Luego el cerrojo gira en el sentido de las agujas del reloj, visto desde atrás, y sus tetones vuelven a bloquearse en su sitio. El fiador automático suelta el martillo, pero el martillo choca primero con el <strong>retardador</strong>. El retardador lo frena un instante para que el fusil se asiente tras el golpe del portacerrojo al llegar delante. Entonces empieza el siguiente disparo.",
+      "p3": "Al avanzar, el cerrojo atrapa el cartucho de arriba, lo saca del cargador y lo empuja dentro de la recámara. La uña del extractor se engancha en la ranura de la nueva vaina. Luego el cerrojo gira en el sentido de las agujas del reloj, visto desde atrás, y sus tetones vuelven a bloquearse en su sitio. El fiador automático suelta el martillo, pero el martillo choca primero con el <strong>retardador</strong>. El retardador lo frena un instante para que el fusil se estabilice después de que el portacerrojo cierre de golpe. Entonces empieza el siguiente disparo.",
       "p4": "Un viaje completo de ida y vuelta dura unos 100 ms. Un parpadeo dura entre 100 y 400 ms, así que un ciclo dura más o menos lo mismo que el parpadeo más rápido. Cada disparo también hace retroceder el fusil. Si nada lo sujetara, el fusil cargado iría hacia atrás a unos 2 m/s, y más o menos entre un cuarto y un tercio de ese retroceso viene del gas que sale con fuerza por la boca. Como la culata está por debajo de la línea del cañón, el retroceso también levanta un poco la boca. Toca los botones para comparar un ciclo con cosas que conoces.",
       "carrier": "Recorrido del portacerrojo",
       "case": "Vaina vacía",
