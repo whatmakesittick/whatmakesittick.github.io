@@ -1,0 +1,249 @@
+{
+  "meta": {
+    "title": "Como um fuzil se recarrega sozinho",
+    "eyebrow": "Fuzil",
+    "tagline": "Um tiro, um sopro de gás e, um décimo de segundo depois, tudo pronto de novo.",
+    "description": "Por dentro de um fuzil operado a gás, em 3D e em câmera lenta: um tiro, um sopro do próprio gás e as peças que trocam o estojo vazio por um cartucho novo.",
+    "summary": "O cartucho, o ferrolho trancado, o cano, o gás tomado emprestado e o vaivém que coloca o próximo cartucho na câmara.",
+    "socialAlt": "Vista em corte de um fuzil operado a gás, com o projétil ainda no cano e o gás quente empurrando o pistão para trás, para recarregar a arma. Ao lado, o título “Como um fuzil se recarrega sozinho”"
+  },
+  "stage": {
+    "label": "Modelo interativo de um fuzil",
+    "gauge": "Dados do tiro em tempo real"
+  },
+  "controls": {
+    "label": "Controles do fuzil",
+    "views": {
+      "cutaway": {
+        "name": "Vista em corte",
+        "short": "Corte",
+        "hint": "Vista em corte (C)"
+      },
+      "gas": {
+        "name": "Gás quente",
+        "short": "Gás",
+        "hint": "Gás quente (G)"
+      },
+      "trail": {
+        "name": "Rastro do projétil",
+        "short": "Rastro",
+        "hint": "Rastro do projétil (T)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    },
+    "momentOptions": {
+      "strike": "O cão bate",
+      "start": "O projétil parte",
+      "peak": "Pressão máxima",
+      "port": "O projétil passa o orifício",
+      "exit": "O projétil sai",
+      "unlock": "O ferrolho destranca",
+      "eject": "O estojo sai voando",
+      "strip": "Próximo cartucho",
+      "lock": "O ferrolho tranca"
+    },
+    "gasPortOptions": {
+      "open": "Orifício de gás aberto",
+      "blocked": "Orifício de gás bloqueado"
+    },
+    "comparisonOptions": {
+      "blink": "Uma piscada",
+      "sound": "O som",
+      "car": "Um carro"
+    }
+  },
+  "timeline": {
+    "label": "Tempo no ciclo",
+    "phases": "Ir para uma etapa",
+    "speed": "Reprodução",
+    "value": "{{time}}, {{phase}}",
+    "ms": "{{value}} ms",
+    "perShot": "{{seconds}} s por tiro",
+    "realPace": "Ritmo real, {{seconds}} s por tiro",
+    "speedValue": "{{seconds}} segundos por tiro",
+    "phase": {
+      "strike": "O cão cai",
+      "barrel": "Pelo cano",
+      "unlock": "Destrancamento",
+      "eject": "Para trás e para fora",
+      "feed": "Para a frente e para dentro",
+      "ready": "Pronto"
+    },
+    "during": {
+      "strike": "o cão cai e bate no percussor",
+      "barrel": "a pólvora queima e impulsiona o projétil pelo cano",
+      "unlock": "o projétil já saiu e o transportador gira o ferrolho até destrancá-lo",
+      "eject": "o transportador voa para trás, joga fora o estojo vazio e arma o cão",
+      "feed": "a mola manda o transportador de volta para a frente com o próximo cartucho",
+      "ready": "o ferrolho está trancado e o cão está prestes a cair de novo"
+    },
+    "jump": {
+      "strike": "Ir para a queda do cão",
+      "barrel": "Ir para o projétil no cano",
+      "unlock": "Ir para o destrancamento do ferrolho",
+      "eject": "Ir para o movimento para trás",
+      "feed": "Ir para o movimento para a frente",
+      "ready": "Ir para o fuzil pronto de novo"
+    }
+  },
+  "readouts": {
+    "time": "Tempo",
+    "pressure": "Pressão",
+    "bulletSpeed": "Velocidade do projétil",
+    "carrier": "Curso do transportador"
+  },
+  "parts": {
+    "barrel": "Cano",
+    "chamber": "Câmara",
+    "muzzle": "Boca do cano",
+    "rifling": "Raiamento",
+    "trunnion": "Munhão",
+    "bolt": "Ferrolho",
+    "firingPin": "Percussor",
+    "extractor": "Extrator",
+    "carrier": "Transportador do ferrolho",
+    "chargingHandle": "Alavanca de manejo",
+    "pistonRod": "Haste do pistão",
+    "pistonHead": "Pistão",
+    "gasBlock": "Bloco de gás",
+    "gasPort": "Orifício de gás",
+    "gasTube": "Tubo de gás",
+    "ventHoles": "Furos de escape",
+    "returnSpring": "Mola recuperadora",
+    "hammer": "Cão",
+    "trigger": "Gatilho",
+    "selector": "Alavanca seletora",
+    "ejector": "Ejetor",
+    "receiver": "Caixa da culatra",
+    "magazine": "Carregador",
+    "cartridgeCase": "Estojo",
+    "primer": "Espoleta",
+    "powder": "Pólvora",
+    "bullet": "Projétil",
+    "spentCase": "Estojo vazio",
+    "hotGas": "Gás quente",
+    "stock": "Coronha",
+    "grip": "Empunhadura",
+    "handguard": "Guarda-mão",
+    "rearSight": "Alça de mira",
+    "frontSight": "Massa de mira",
+    "cleaningRod": "Vareta de limpeza"
+  },
+  "firing": {
+    "hammer": {
+      "falling": "Caindo",
+      "struck": "Apoiado no percussor",
+      "cocking": "Empurrado pelo transportador",
+      "cocked": "Armado",
+      "held": "Retido pelo retardador"
+    },
+    "lock": {
+      "locked": "Trancado",
+      "turning": "Girando",
+      "open": "Destrancado"
+    }
+  },
+  "gas": {
+    "result": {
+      "open": "O transportador recarrega o fuzil",
+      "blocked": "Um tiro, e depois nada se move"
+    }
+  },
+  "reload": {
+    "case": {
+      "held": "Preso pelo extrator",
+      "flying": "Voando para a direita",
+      "gone": "Já saiu"
+    },
+    "round": {
+      "waiting": "Esperando no carregador",
+      "feeding": "A caminho da câmara",
+      "chambered": "Na câmara"
+    },
+    "compare": {
+      "blink": "Um ciclo cabe dentro da piscada mais rápida.",
+      "sound": "Em um ciclo, o som percorre cerca de {{metres}} m.",
+      "car": "Em um ciclo, um carro a 100 km/h anda cerca de {{metres}} m."
+    }
+  },
+  "units": {
+    "ms": "{{value}} ms",
+    "mpa": "{{value}} MPa",
+    "metresPerSecond": "{{value}} m/s",
+    "percent": "{{value}} %",
+    "perMinute": "{{value}} por minuto",
+    "turnsPerSecond": "{{value}} rps",
+    "turns": "{{value}} rot.",
+    "mm": "{{value}} mm",
+    "timesAir": "{{value}}× a pressão do ar"
+  },
+  "sections": {
+    "overview": {
+      "title": "Um décimo de segundo, e começa tudo de novo",
+      "p1": "Você está vendo um <strong>fuzil operado a gás</strong>. Este aqui é baseado no AKM, uma versão atualizada do Kalashnikov. Tem 880 mm de comprimento e pesa 3,1 kg com o carregador vazio. O mais engenhoso é que ele se recarrega sozinho. Depois de cada tiro, joga fora o estojo vazio, coloca um cartucho novo na câmara e volta a se trancar. E paga por todo esse trabalho com um pouco do gás quente de cada tiro.",
+      "p2": "O modelo acompanha um disparo no <strong>modo automático</strong>, da queda do cão até a queda seguinte. O cão bate no percussor, e uma pequena chama acende a pólvora. Ao queimar, a pólvora vira gás quente, que impulsiona o projétil ao longo do cano. Um sopro desse gás joga um pistão para trás, e o transportador do ferrolho vai junto. Depois, uma mola manda tudo de volta para a frente com um cartucho novo, e o fuzil fica pronto para o próximo tiro.",
+      "p3": "O ciclo inteiro leva cerca de 100 ms, um décimo de segundo. Nesse ritmo, o mecanismo poderia repetir o ciclo cerca de <strong>600 vezes por minuto</strong>. Esse número mostra a rapidez das peças, e não quantos tiros alguém dá em um minuto. O carregador comporta só 30 cartuchos. A reprodução começa bem devagar. Arraste a linha do tempo para acompanhar o tiro, ou toque num botão para ir direto a um momento. Fique de olho na alavanca de manejo, do lado direito: ela se mexe a cada tiro.",
+      "p4": "Algumas coisas foram simplificadas. Dentro do fuzil, o modelo mostra só as peças que importam para esta história. Nenhuma fonte dá os tempos exatos da queda do cão nem do vaivém do transportador. Por isso, nesses trechos, o modelo usa estimativas cuidadosas. Os valores na tela seguem o relógio do modelo, então só dois dos tempos mostrados vêm de fontes: o ciclo inteiro e a passagem do projétil pelo cano, que leva cerca de um milissegundo. Ligue a <strong>vista em corte</strong> para olhar por dentro.",
+      "cycle": "Um ciclo completo",
+      "pace": "Ritmo do mecanismo",
+      "left": "Tempo até ficar pronto"
+    },
+    "cartridge": {
+      "title": "Uma pequena chama e muito gás",
+      "p1": "Tudo começa com o <strong>cartucho</strong>. Ele tem 56 mm de comprimento, pesa 16,2 g e reúne tudo de que um tiro precisa. O estojo tem cerca de 39 mm e guarda 1,6 g de pólvora. No centro da base fica a espoleta, uma pequena cápsula de latão. O projétil, de 7,9 g e com núcleo de aço, fica encaixado sob pressão na ponta aberta do estojo.",
+      "p2": "O tiro começa quando o percussor esmaga a <strong>espoleta</strong>. A espoleta solta uma pequena chama. A chama atravessa dois furinhos, entra no estojo e acende a pólvora. A pólvora não explode. Ela <strong>queima</strong> muito depressa e vira uma enorme quantidade de gás quente.",
+      "p3": "Esse gás fica preso num espaço minúsculo, então a pressão sobe rápido. Ele empurra para todos os lados, mas só o projétil pode ceder. Por isso, o projétil logo começa a se mover. Mesmo assim, a pressão continua subindo, até cerca de 275 MPa. Isso é mais ou menos 2.700 vezes a pressão do ar à sua volta, ou cerca de 2.800 kg pressionando cada centímetro quadrado.",
+      "p4": "O pico chega cedo, quando o projétil avançou só de 4 a 6 cm. A partir daí, o espaço atrás dele cresce mais depressa do que a pólvora consegue enchê-lo de gás, e a pressão começa a cair. Toque nos botões para ver o golpe do cão, a partida do projétil e o momento de pressão máxima.",
+      "pressure": "Pressão",
+      "air": "Comparada com o ar",
+      "travel": "O projétil já andou"
+    },
+    "firing": {
+      "title": "Por que a parte de trás não cede",
+      "p1": "Atrás do cartucho, as peças que fazem o disparo esperam enfileiradas. O <strong>cão</strong>, empurrado pela própria mola, gira para a frente e bate na parte de trás do percussor. O percussor fica solto dentro do ferrolho, então a pancada lança a ponta dele para a frente, contra a espoleta. Foi esse golpe que você viu no capítulo anterior.",
+      "p2": "Agora pense de novo naquela pressão. O gás empurra o estojo para trás com a mesma força com que empurra o projétil para a frente, então alguma coisa precisa segurar o estojo no lugar. Essa é a função do <strong>ferrolho</strong>. Na frente dele há duas saliências, os ressaltos de trancamento. Antes de cada tiro, o ferrolho gira, e os ressaltos entram em dois encaixes num bloco de aço, bem onde o cano se une à caixa da culatra, o corpo do fuzil. Esse bloco se chama munhão. Enquanto os ressaltos estão ali, o ferrolho não consegue ir para trás.",
+      "p3": "Do lado direito do fuzil fica a <strong>alavanca seletora</strong>. De cima para baixo, ela tem três posições: segurança, automático e tiro a tiro. Na segurança, o gatilho fica travado. No tiro a tiro, cada vez que o gatilho é puxado e solto, sai um único tiro. No automático, o fuzil continua disparando enquanto o gatilho estiver puxado. A alavanca fica justamente no lado que a vista em corte remove, então desligue o corte para vê-la.",
+      "p4": "Este modelo está no automático, e aqui mais uma peça garante a ordem certa: o <strong>retém automático</strong>. Ele segura o cão armado e só o solta quando o ferrolho já trancou e o transportador já voltou todo para a frente. Depois disso, o ferrolho fica trancado enquanto a pressão está alta. Ele só gira e se solta depois que o projétil sai do cano. Toque nos botões para ver o golpe do cão, a partida do projétil e o destrancamento do ferrolho.",
+      "hammer": "Cão",
+      "lock": "Ferrolho",
+      "pressure": "Pressão"
+    },
+    "barrel": {
+      "title": "Cerca de um milissegundo no cano",
+      "p1": "O cano tem 415 mm, e o projétil o percorre em cerca de 1 milissegundo, um milésimo de segundo. É rápido demais para os olhos, então a linha do tempo estica esse trecho do tiro para você. Arraste o controle para levar o projétil ao longo do cano e veja a velocidade dele e a pressão logo atrás.",
+      "p2": "O empurrão é mais forte no começo. A pressão chega ao pico nos primeiros centímetros e depois vai caindo, mas o gás continua empurrando o projétil por todo o cano. Na boca do cano, o projétil já está a cerca de <strong>715 m/s</strong>. É mais ou menos o dobro da velocidade do som e umas 26 vezes a de um carro a 100 km/h.",
+      "p3": "Por dentro, o cano não é liso. Quatro sulcos em espiral, o <strong>raiamento</strong>, dão uma volta completa a cada 240 mm, sempre para a direita. Eles agarram o projétil e o fazem girar. No caminho, o projétil dá cerca de uma volta e meia e, na boca do cano, já gira cerca de 3.000 vezes por segundo.",
+      "p4": "Só uma parte da energia da pólvora vai parar no projétil: cerca de um quarto a um terço. Outra parte esquenta o cano e o estojo, e mais um pouco se gasta para forçar o projétil nos sulcos. Cerca de 40 por cento saem com o gás quente que escapa logo atrás do projétil. Mas, pouco antes de o projétil sair, o fuzil pega um pouco desse gás emprestado para si. O próximo capítulo mostra como.",
+      "travelLabel": "Quanto o projétil já andou",
+      "speed": "Velocidade do projétil",
+      "pressure": "Pressão logo atrás",
+      "spin": "Rotação",
+      "turns": "Rotações até aqui"
+    },
+    "gas": {
+      "title": "Um sopro que faz a recarga",
+      "p1": "Perto da boca do cano, um pequeno furo inclinado sobe do cano até o bloco de gás. É o <strong>orifício de gás</strong>. Enquanto o projétil não chega até ele, nada acontece aqui. Só depois que o projétil passa é que o gás quente sobe com força pelo furo. No bloco de gás, ele encontra o <strong>pistão</strong>.",
+      "p2": "O pistão fica na ponta dianteira de uma haste comprida, e essa haste é presa ao transportador do ferrolho, a peça longa que corre por cima do ferrolho. Então, quando o gás joga o pistão para trás, a haste, o transportador e a alavanca de manejo vão juntos. É por isso que a alavanca se mexe a cada tiro. O empurrão é curto. Um instante depois, o projétil sai pela boca do cano, a pressão cai e o gás usado vai embora pelos furos de escape. A essa altura, o transportador já está em movimento e segue <strong>no embalo</strong>, sozinho, pelo resto do caminho para trás.",
+      "p3": "O transportador não gira o ferrolho logo de cara. Nos primeiros milímetros, ele desliza para trás sozinho, e o ferrolho continua trancado. Depois, um rasgo curvo dentro do transportador pega um ressalto no alto do ferrolho e faz o ferrolho girar cerca de um décimo de volta. Os ressaltos de trancamento saem dos encaixes, e o ferrolho fica livre para acompanhar o transportador. Quando isso acontece, o projétil já saiu do cano.",
+      "p4": "Agora experimente bloquear o orifício de gás. O tiro sai do mesmo jeito, e o projétil deixa o cano normalmente. Mas nenhum gás chega ao pistão, então nada se move. O estojo vazio fica na câmara, e o fuzil para depois de um tiro. Para carregar o próximo cartucho, alguém teria que puxar a alavanca de manejo para trás à mão. Com o orifício aberto, aquele pequeno sopro de gás faz esse trabalho por você.",
+      "fill": "Gás no bloco de gás",
+      "carrier": "Curso do transportador",
+      "result": "O que acontece"
+    },
+    "reload": {
+      "title": "Sai o vazio, entra o próximo",
+      "p1": "Enquanto vai para trás, o transportador puxa o ferrolho, e o ferrolho puxa o estojo vazio para fora da câmara. Uma pequena garra com mola, no ferrolho, segura o estojo por uma canaleta em volta da base. Essa garra é o <strong>extrator</strong>. No meio do caminho, o estojo bate no <strong>ejetor</strong>, uma saliência fixa dentro da caixa da culatra. A saliência acerta o lado esquerdo do estojo, que gira em torno da garra e sai voando pela abertura do lado direito.",
+      "p2": "Na ida para trás, o transportador cumpre mais duas tarefas. Ele empurra o cão para trás e o deixa armado para o próximo tiro, e comprime a <strong>mola recuperadora</strong>. A mola freia o transportador e depois o lança de novo para a frente. Enquanto isso, a mola do carregador empurra o próximo cartucho para cima, contra as bordas lá no alto. O carregador guarda 30 cartuchos em duas fileiras intercaladas, e a única coisa que ele faz é erguê-los.",
+      "p3": "Na volta para a frente, o ferrolho pega o cartucho de cima. Ele o empurra para fora do carregador e o leva para dentro da câmara. A garra do extrator se encaixa com um estalo na canaleta do estojo novo. Depois, o ferrolho gira no sentido horário, visto por trás, e os ressaltos voltam a trancar. O retém automático solta o cão, mas no caminho o cão bate primeiro no <strong>retardador</strong>. Essa peça freia o cão por um instante, para que o fuzil se estabilize depois que o transportador bate com força lá na frente. Então começa o próximo tiro.",
+      "p4": "A ida e volta completa leva cerca de 100 ms. Uma piscada dura de 100 a 400 ms, então um ciclo cabe dentro da piscada mais rápida. Cada tiro também dá um coice no fuzil. Se nada o segurasse, o fuzil carregado recuaria a cerca de 2 m/s, e cerca de um quarto a um terço desse coice vem do gás que sai pela boca do cano. A coronha fica abaixo da linha do cano, então o coice também levanta um pouco a boca do cano. Toque nos botões para comparar um ciclo com coisas que você conhece.",
+      "carrier": "Curso do transportador",
+      "case": "Estojo vazio",
+      "round": "Próximo cartucho",
+      "left": "Tempo até ficar pronto"
+    }
+  }
+}
