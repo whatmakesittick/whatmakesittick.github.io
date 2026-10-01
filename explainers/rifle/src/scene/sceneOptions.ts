@@ -11,5 +11,6 @@ const UNDIMMED = ['hotGas'] as const;
 export const SCENE_OPTIONS: SceneOptions = {
   stage: false,
   camera: CAMERA,
+  gaugeSide: 'top',
   highlight: { dim: DIM, undimmed: UNDIMMED },
 };
