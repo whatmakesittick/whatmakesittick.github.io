@@ -165,7 +165,7 @@
       "chambered": "En la recámara"
     },
     "compare": {
-      "blink": "Un ciclo cabe dentro del parpadeo más rápido.",
+      "blink": "Un ciclo dura más o menos lo mismo que el parpadeo más rápido.",
       "sound": "En un ciclo, el sonido recorre unos {{metres}} m.",
       "car": "En un ciclo, un coche a 100 km/h avanza unos {{metres}} m."
     }
@@ -239,7 +239,7 @@
       "p1": "En su viaje hacia atrás, el portacerrojo arrastra el cerrojo, y el cerrojo saca la vaina vacía de la recámara. Una pequeña uña con muelle en el cerrojo, el <strong>extractor</strong>, sujeta la vaina por una ranura que rodea su base. A mitad de camino, la vaina choca con el <strong>eyector</strong>, un pequeño tope fijo dentro del cajón de mecanismos. El tope golpea el lado izquierdo de la vaina, así que esta gira alrededor de la uña y sale despedida por la abertura de la derecha.",
       "p2": "Al retroceder, el portacerrojo hace dos trabajos más. Empuja el martillo hacia atrás y lo deja armado para el siguiente disparo, y comprime el <strong>muelle recuperador</strong>. El muelle frena el portacerrojo y luego lo lanza otra vez hacia delante. Mientras tanto, un muelle dentro del cargador sube el siguiente cartucho hasta los labios de su parte superior. El cargador lleva 30 cartuchos en dos hileras escalonadas, y lo único que hace es subirlos.",
       "p3": "Al avanzar, el cerrojo atrapa el cartucho de arriba, lo saca del cargador y lo empuja dentro de la recámara. La uña del extractor se engancha en la ranura de la nueva vaina. Luego el cerrojo gira en el sentido de las agujas del reloj, visto desde atrás, y sus tetones vuelven a bloquearse en su sitio. El fiador automático suelta el martillo, pero el martillo choca primero con el <strong>retardador</strong>. El retardador lo frena un instante para que el fusil se asiente tras el golpe del portacerrojo al llegar delante. Entonces empieza el siguiente disparo.",
-      "p4": "Un viaje completo de ida y vuelta dura unos 100 ms. Un parpadeo dura entre 100 y 400 ms, así que un ciclo cabe dentro del parpadeo más rápido. Cada disparo también hace retroceder el fusil. Si nada lo sujetara, el fusil cargado iría hacia atrás a unos 2 m/s, y más o menos entre un cuarto y un tercio de ese retroceso viene del gas que sale con fuerza por la boca. Como la culata está por debajo de la línea del cañón, el retroceso también levanta un poco la boca. Toca los botones para comparar un ciclo con cosas que conoces.",
+      "p4": "Un viaje completo de ida y vuelta dura unos 100 ms. Un parpadeo dura entre 100 y 400 ms, así que un ciclo dura más o menos lo mismo que el parpadeo más rápido. Cada disparo también hace retroceder el fusil. Si nada lo sujetara, el fusil cargado iría hacia atrás a unos 2 m/s, y más o menos entre un cuarto y un tercio de ese retroceso viene del gas que sale con fuerza por la boca. Como la culata está por debajo de la línea del cañón, el retroceso también levanta un poco la boca. Toca los botones para comparar un ciclo con cosas que conoces.",
       "carrier": "Recorrido del portacerrojo",
       "case": "Vaina vacía",
       "round": "Siguiente cartucho",

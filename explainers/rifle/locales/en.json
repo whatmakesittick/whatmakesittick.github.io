@@ -165,7 +165,7 @@
       "chambered": "In the chamber"
     },
     "compare": {
-      "blink": "One cycle fits inside the quickest blink.",
+      "blink": "One cycle lasts about as long as the quickest blink.",
       "sound": "In one cycle, sound travels about {{metres}} m.",
       "car": "In one cycle, a car at 100 km/h moves about {{metres}} m."
     }
@@ -239,7 +239,7 @@
       "p1": "On its way back, the carrier pulls the bolt along, and the bolt pulls the empty case out of the chamber. A small sprung claw on the bolt, the <strong>extractor</strong>, holds the case by a groove around its base. Partway back, the case meets the <strong>ejector</strong>, a fixed lip inside the receiver. The lip knocks the left side of the case, so the case swings around the claw and flies out of the opening on the right.",
       "p2": "The carrier does two more jobs on the way back. It rolls the hammer back and cocks it for the next shot, and it squeezes the <strong>return spring</strong>. The spring stops the carrier and then throws it forward again. Meanwhile the spring in the magazine lifts the next round up against the lips at the top. The magazine holds 30 rounds in two staggered columns, and all it does is lift them.",
       "p3": "Moving forward, the bolt catches the top round, pushes it out of the magazine and drives it into the chamber. The extractor claw snaps over the groove of the new case. Then the bolt turns clockwise, seen from behind, and its lugs lock into place again. The auto sear lets the hammer go, but the hammer first hits the <strong>retarder</strong>. It slows the hammer for a moment, so the rifle can settle after the carrier slams home. Then the next shot begins.",
-      "p4": "One whole round trip takes about 100 ms. A blink of an eye lasts 100 to 400 ms, so one cycle fits inside the quickest blink. Each shot also kicks the rifle back. If nothing held it, the loaded rifle would move back at about 2 m/s, and about a quarter to a third of that kick comes from the gas rushing out of the muzzle. The stock sits below the line of the barrel, so the kick also lifts the muzzle a little. Tap the chips to compare one cycle with things you know.",
+      "p4": "One whole round trip takes about 100 ms. A blink of an eye lasts 100 to 400 ms, so one cycle is about as long as the quickest blink. Each shot also kicks the rifle back. If nothing held it, the loaded rifle would move back at about 2 m/s, and about a quarter to a third of that kick comes from the gas rushing out of the muzzle. The stock sits below the line of the barrel, so the kick also lifts the muzzle a little. Tap the chips to compare one cycle with things you know.",
       "carrier": "Carrier travel",
       "case": "Empty case",
       "round": "Next round",

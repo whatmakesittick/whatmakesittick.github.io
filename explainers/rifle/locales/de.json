@@ -165,7 +165,7 @@
       "chambered": "Im Patronenlager"
     },
     "compare": {
-      "blink": "Ein Zyklus passt in den schnellsten Wimpernschlag.",
+      "blink": "Ein Zyklus dauert etwa so lange wie der schnellste Wimpernschlag.",
       "sound": "In einem Zyklus legt der Schall etwa {{metres}} m zurück.",
       "car": "In einem Zyklus fährt ein Auto mit 100 km/h etwa {{metres}} m weit."
     }
@@ -239,7 +239,7 @@
       "p1": "Auf dem Weg nach hinten nimmt der Verschlussträger den Verschluss mit, und der Verschluss zieht die leere Hülse aus dem Patronenlager. Dabei hält eine kleine, gefederte Kralle am Verschluss die Hülse an einer Rille rund um ihren Boden fest. Diese Kralle heißt <strong>Auszieher</strong>. Ein Stück weiter hinten trifft die Hülse auf den <strong>Auswerfer</strong>, einen festen Vorsprung im Gehäuse. Der Vorsprung stößt gegen die linke Seite der Hülse. Dadurch schwenkt die Hülse um die Kralle herum und fliegt durch die Öffnung auf der rechten Seite hinaus.",
       "p2": "Auf diesem Weg nach hinten erledigt der Verschlussträger noch zwei Aufgaben. Er drückt den Hahn nach hinten und spannt ihn so für den nächsten Schuss. Außerdem presst er die <strong>Schließfeder</strong> zusammen. Die Feder bremst den Träger ab und schleudert ihn dann wieder nach vorn. Währenddessen hebt die Feder im Magazin die nächste Patrone an, bis sie oben an den Lippen des Magazins anliegt. Das Magazin fasst 30 Patronen in zwei versetzten Reihen. Es hebt sie nur an, mehr nicht.",
       "p3": "Auf dem Weg nach vorn erfasst der Verschluss die oberste Patrone, schiebt sie aus dem Magazin und drückt sie ins Patronenlager. Die Kralle des Ausziehers schnappt über die Rille der neuen Hülse. Dann dreht sich der Verschluss, von hinten gesehen im Uhrzeigersinn, und seine Warzen greifen wieder in ihre Aussparungen. Der Selbstauslöser gibt den Hahn frei, doch der Hahn trifft zuerst auf den <strong>Verzögerer</strong>. Dieses Teil bremst den Hahn einen Moment lang. So kann das Gewehr zur Ruhe kommen, nachdem der Träger vorn hart angeschlagen ist. Dann beginnt der nächste Schuss.",
-      "p4": "Ein ganzer Durchlauf, nach hinten und wieder nach vorn, braucht etwa 100 Millisekunden. Ein Wimpernschlag dauert 100 bis 400 Millisekunden. Ein Zyklus passt also sogar in den schnellsten Wimpernschlag. Außerdem stößt jeder Schuss das Gewehr nach hinten. Hielte es nichts fest, würde sich das geladene Gewehr mit etwa 2 m/s nach hinten bewegen. Etwa ein Viertel bis ein Drittel dieses Rückstoßes kommt vom Gas, das aus der Mündung strömt. Der Schaft liegt unterhalb der Laufachse. Deshalb hebt der Rückstoß die Mündung auch ein wenig an. Tippen Sie auf die Schaltflächen und vergleichen Sie einen Zyklus mit Dingen, die Sie kennen.",
+      "p4": "Ein ganzer Durchlauf, nach hinten und wieder nach vorn, braucht etwa 100 Millisekunden. Ein Wimpernschlag dauert 100 bis 400 Millisekunden. Ein Zyklus dauert also etwa so lange wie der schnellste Wimpernschlag. Außerdem stößt jeder Schuss das Gewehr nach hinten. Hielte es nichts fest, würde sich das geladene Gewehr mit etwa 2 m/s nach hinten bewegen. Etwa ein Viertel bis ein Drittel dieses Rückstoßes kommt vom Gas, das aus der Mündung strömt. Der Schaft liegt unterhalb der Laufachse. Deshalb hebt der Rückstoß die Mündung auch ein wenig an. Tippen Sie auf die Schaltflächen und vergleichen Sie einen Zyklus mit Dingen, die Sie kennen.",
       "carrier": "Weg des Trägers",
       "case": "Leere Hülse",
       "round": "Nächste Patrone",

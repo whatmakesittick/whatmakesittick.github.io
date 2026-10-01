@@ -165,7 +165,7 @@
       "chambered": "Dans la chambre"
     },
     "compare": {
-      "blink": "Un cycle tient dans le plus rapide des clignements d’yeux.",
+      "blink": "Un cycle dure à peu près autant que le plus rapide des clignements d’yeux.",
       "sound": "Pendant un cycle, le son parcourt environ {{metres}} m.",
       "car": "Pendant un cycle, une voiture à 100 km/h avance d’environ {{metres}} m."
     }
@@ -239,7 +239,7 @@
       "p1": "En reculant, le porte-culasse entraîne la culasse, et la culasse tire l’étui vide hors de la chambre. Une petite griffe à ressort sur la culasse, l’<strong>extracteur</strong>, tient l’étui par une rainure qui entoure sa base. En chemin, l’étui rencontre l’<strong>éjecteur</strong>, un rebord fixe à l’intérieur de la boîte de culasse. Ce rebord heurte le côté gauche de l’étui, qui pivote alors autour de la griffe et s’envole par l’ouverture de droite.",
       "p2": "Dans sa course vers l’arrière, le porte-culasse fait encore deux choses. Il rabat le chien et l’arme pour le tir suivant, et il comprime le <strong>ressort récupérateur</strong>. Ce ressort arrête le porte-culasse, puis le relance vers l’avant. Pendant ce temps, le ressort du chargeur pousse la cartouche suivante vers le haut, contre les lèvres, tout en haut du chargeur. Le chargeur contient 30 cartouches sur deux rangées en quinconce, et il se contente de les faire monter.",
       "p3": "En repartant vers l’avant, la culasse accroche la cartouche du dessus, la pousse hors du chargeur et l’enfonce dans la chambre. La griffe de l’extracteur s’enclenche dans la rainure du nouvel étui. Puis la culasse tourne dans le sens des aiguilles d’une montre, vue de derrière, et ses tenons se verrouillent de nouveau. La gâchette automatique libère le chien, mais le chien bute d’abord sur le <strong>retardateur</strong>. Celui-ci le freine un instant, pour laisser le fusil se stabiliser après le choc du porte-culasse en fin de course. Le tir suivant peut alors commencer.",
-      "p4": "Un aller-retour complet dure environ 100 ms. Un clignement d’yeux dure de 100 à 400 ms : un cycle tient donc dans le plus rapide des clignements. Chaque tir fait aussi reculer le fusil. Si rien ne le retenait, le fusil chargé partirait vers l’arrière à environ 2 m/s. Environ un quart à un tiers de ce recul vient des gaz qui jaillissent de la bouche du canon. Comme la crosse se trouve sous l’axe du canon, le recul fait aussi légèrement remonter la bouche. Appuyez sur les boutons pour comparer un cycle à des choses que vous connaissez.",
+      "p4": "Un aller-retour complet dure environ 100 ms. Un clignement d’yeux dure de 100 à 400 ms : un cycle dure donc à peu près autant que le plus rapide des clignements. Chaque tir fait aussi reculer le fusil. Si rien ne le retenait, le fusil chargé partirait vers l’arrière à environ 2 m/s. Environ un quart à un tiers de ce recul vient des gaz qui jaillissent de la bouche du canon. Comme la crosse se trouve sous l’axe du canon, le recul fait aussi légèrement remonter la bouche. Appuyez sur les boutons pour comparer un cycle à des choses que vous connaissez.",
       "carrier": "Course du porte-culasse",
       "case": "Étui vide",
       "round": "Cartouche suivante",

@@ -165,7 +165,7 @@
       "chambered": "Na câmara"
     },
     "compare": {
-      "blink": "Um ciclo cabe dentro da piscada mais rápida.",
+      "blink": "Um ciclo dura mais ou menos o mesmo que a piscada mais rápida.",
       "sound": "Em um ciclo, o som percorre cerca de {{metres}} m.",
       "car": "Em um ciclo, um carro a 100 km/h anda cerca de {{metres}} m."
     }
@@ -239,7 +239,7 @@
       "p1": "Enquanto vai para trás, o transportador puxa o ferrolho, e o ferrolho puxa o estojo vazio para fora da câmara. Uma pequena garra com mola, no ferrolho, segura o estojo por uma canaleta em volta da base. Essa garra é o <strong>extrator</strong>. No meio do caminho, o estojo bate no <strong>ejetor</strong>, uma saliência fixa dentro da caixa da culatra. A saliência acerta o lado esquerdo do estojo, que gira em torno da garra e sai voando pela abertura do lado direito.",
       "p2": "Na ida para trás, o transportador cumpre mais duas tarefas. Ele empurra o cão para trás e o deixa armado para o próximo tiro, e comprime a <strong>mola recuperadora</strong>. A mola freia o transportador e depois o lança de novo para a frente. Enquanto isso, a mola do carregador empurra o próximo cartucho para cima, contra as bordas lá no alto. O carregador guarda 30 cartuchos em duas fileiras intercaladas, e a única coisa que ele faz é erguê-los.",
       "p3": "Na volta para a frente, o ferrolho pega o cartucho de cima. Ele o empurra para fora do carregador e o leva para dentro da câmara. A garra do extrator se encaixa com um estalo na canaleta do estojo novo. Depois, o ferrolho gira no sentido horário, visto por trás, e os ressaltos voltam a trancar. O retém automático solta o cão, mas no caminho o cão bate primeiro no <strong>retardador</strong>. Essa peça freia o cão por um instante, para que o fuzil se estabilize depois que o transportador bate com força lá na frente. Então começa o próximo tiro.",
-      "p4": "A ida e volta completa leva cerca de 100 ms. Uma piscada dura de 100 a 400 ms, então um ciclo cabe dentro da piscada mais rápida. Cada tiro também dá um coice no fuzil. Se nada o segurasse, o fuzil carregado recuaria a cerca de 2 m/s, e cerca de um quarto a um terço desse coice vem do gás que sai pela boca do cano. A coronha fica abaixo da linha do cano, então o coice também levanta um pouco a boca do cano. Toque nos botões para comparar um ciclo com coisas que você conhece.",
+      "p4": "A ida e volta completa leva cerca de 100 ms. Uma piscada dura de 100 a 400 ms, então um ciclo dura mais ou menos o mesmo que a piscada mais rápida. Cada tiro também dá um coice no fuzil. Se nada o segurasse, o fuzil carregado recuaria a cerca de 2 m/s, e cerca de um quarto a um terço desse coice vem do gás que sai pela boca do cano. A coronha fica abaixo da linha do cano, então o coice também levanta um pouco a boca do cano. Toque nos botões para comparar um ciclo com coisas que você conhece.",
       "carrier": "Curso do transportador",
       "case": "Estojo vazio",
       "round": "Próximo cartucho",
