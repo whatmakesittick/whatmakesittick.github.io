@@ -1,6 +1,6 @@
 {
   "slug": "rifle",
-  "tags": ["mechanics", "physics"],
+  "tags": ["mechanics", "physics", "weapons"],
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",
