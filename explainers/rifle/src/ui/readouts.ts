@@ -3,8 +3,8 @@ import { clamp } from '@core/math';
 import { MUZZLE_SPEED } from '../model';
 import { cycleOf } from '../state';
 import type { RifleStoreState } from '../state';
-import { carrierShare } from './cycleTexts';
-import { formatMs, formatPercent, formatPressure, formatSpeedMs } from './format';
+import { carrierPercent, carrierShare } from './cycleTexts';
+import { formatMs, formatPressure, formatSpeedMs } from './format';
 import { CARRIER_METER_FILL, PRESSURE_METER_FILL, SPEED_METER_FILL } from './palette';
 
 export const PRESSURE_FULL_SCALE_MPA = 300;
@@ -44,7 +44,7 @@ export const RIFLE_READOUTS: readonly Readout<RifleStoreState>[] = [
     id: 'carrier',
     labelKey: 'readouts.carrier',
     numeric: true,
-    value: (state) => formatPercent(carrierShare(state)),
+    value: carrierPercent,
     meter: { share: carrierShare, fill: CARRIER_METER_FILL },
   },
 ];
