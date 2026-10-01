@@ -2,9 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { SCENE_OPTIONS } from './sceneOptions';
 
 describe('scene options', () => {
-  it('floats the rifle over the dark stage without the grid and reaches it at millimetre scale', () => {
+  it('hazes the far lane without the grid and never fogs the rifle at any zoom', () => {
     expect(SCENE_OPTIONS.stage).toBe(false);
-    expect(SCENE_OPTIONS.fog).toBeUndefined();
+    expect(SCENE_OPTIONS.fog?.near).toBeGreaterThan(
+      SCENE_OPTIONS.camera?.distance?.max ?? Infinity,
+    );
+    expect(SCENE_OPTIONS.fog?.far).toBeGreaterThan(SCENE_OPTIONS.fog?.near ?? 0);
     expect(SCENE_OPTIONS.camera?.near).toBeLessThan(10);
     expect(SCENE_OPTIONS.camera?.far).toBeGreaterThan(5000);
     expect(SCENE_OPTIONS.camera?.distance?.min).toBeLessThan(100);

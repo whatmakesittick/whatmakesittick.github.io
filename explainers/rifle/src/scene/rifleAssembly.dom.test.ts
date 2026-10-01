@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { InstancedMesh, Mesh, Vector3 } from 'three';
-import type { BufferGeometry, Material, Object3D } from 'three';
-import { MaterialLibrary } from '@core/scene/materials';
+import type { BufferGeometry, Material, Object3D, ShaderMaterial } from 'three';
+import { MaterialLibrary, UNDIMMED_GROUP } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
 import { PART_IDS } from '../ids';
@@ -273,14 +273,30 @@ describe('rifle assembly', () => {
     expect(meshesOf('powder').some((mesh) => isShown(mesh))).toBe(false);
   });
 
-  it('animates the vent wisps on its own only while playing and venting', () => {
+  it('moves the vent wisps and the dust only while playing', () => {
     show({});
     expect(assembly.update(FRAME, 500)).toBe(false);
+    show({ playing: true });
+    expect(assembly.update(FRAME, 500)).toBe(true);
     const venting = { shot: { gas: 1, stage: 'gone' as const }, motion: { carrier: 22 } };
     show({ ...venting, playing: true });
     expect(assembly.update(FRAME, 500)).toBe(true);
     show({ ...venting, playing: false });
     expect(assembly.update(FRAME, 500)).toBe(false);
+  });
+
+  it('keeps the backdrop out of the highlight and lights the floor with the flash', () => {
+    const backdrop = meshesOf(UNDIMMED_GROUP);
+    expect(backdrop.length).toBeGreaterThanOrEqual(2);
+    const floor = backdrop.find((mesh) => (mesh.material as Material).transparent);
+    const flashOf = () =>
+      ((floor?.material as ShaderMaterial).uniforms.uFlash.value as number) ?? 0;
+    show({});
+    expect(flashOf()).toBe(0);
+    show({ shot: { stage: 'gone', muzzleFlash: 1 } });
+    expect(flashOf()).toBeGreaterThan(0);
+    show({ shot: { stage: 'gone', muzzleFlash: 1 }, view: { gas: false } });
+    expect(flashOf()).toBe(0);
   });
 
   it('plugs the gas port when it is blocked', () => {

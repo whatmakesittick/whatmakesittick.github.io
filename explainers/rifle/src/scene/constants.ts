@@ -522,3 +522,52 @@ export const HANDGUARD_VENTS = {
 } as const;
 
 export const HANDGUARD_GROOVES = { ys: [-1, -11] as const, depth: 1, width: 1.6 } as const;
+
+export const BACKDROP = {
+  dome: {
+    radius: 9000,
+    widthSegments: 32,
+    heightSegments: 16,
+    stops: [
+      { height: -0.35, colour: '#08090b' },
+      { height: 0, colour: '#191816' },
+      { height: 0.08, colour: '#11151b' },
+      { height: 0.45, colour: '#0b0d10' },
+      { height: 1, colour: '#07080a' },
+    ],
+    renderOrder: -2,
+  },
+  floor: {
+    size: 26000,
+    base: '#0a0b0d',
+    pool: '#1f1d1a',
+    poolRadius: [1000, 480] as const,
+    poolStrength: 0.6,
+    fade: [1600, 8000] as const,
+    flash: { radius: 220, strength: 0.12 },
+    renderOrder: -1,
+  },
+  lights: {
+    colour: '#ffcf8f',
+    points: [
+      [-1910, 520, -4180],
+      [-2070, 535, -4990],
+      [-2180, 550, -5800],
+      [-2230, 565, -6640],
+      [-2220, 580, -7480],
+    ] as const,
+    bokeh: { size: 150, opacity: 0.32 },
+    glow: { size: 460, opacity: 0.1 },
+  },
+  haze: { size: [640, 420] as const, opacity: 0.06, offset: 60 },
+  motes: {
+    count: 28,
+    box: { x: [-520, 620] as const, y: [-140, 260] as const, z: [-320, 320] as const },
+    size: 2.6,
+    alpha: 0.2,
+    rise: 9,
+    sway: 6,
+    seed: 41,
+  },
+  fog: { colour: '#121418', near: 4500, far: 16000 },
+} as const;

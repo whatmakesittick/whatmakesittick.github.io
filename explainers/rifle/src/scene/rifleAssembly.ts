@@ -12,6 +12,7 @@ import { hammerAngle, pinPush } from './geometry/hammerClearance';
 import { boltTravel } from './geometry/roundPaths';
 import { powderGrain } from './geometry/powderGrain';
 import { woodGrain } from './geometry/woodGrain';
+import { BackdropPart } from './parts/backdrop/backdrop';
 import { addBarrel } from './parts/barrel';
 import { batchStatic } from './parts/batch';
 import { BoltPart } from './parts/bolt';
@@ -55,6 +56,7 @@ export class RifleAssembly implements Assembly {
   readonly root = new Group();
   private readonly body = new Group();
   private readonly gas: GasPart;
+  private readonly backdrop: BackdropPart;
   private readonly tracker = new ResourceTracker();
   private readonly materials: MaterialLibrary;
   private readonly cutaway = new CutawaySwitch();
@@ -87,6 +89,7 @@ export class RifleAssembly implements Assembly {
     this.spring = new SpringPart(context);
     this.rounds = new RoundsPart(context, roundGeometry);
     this.gas = new GasPart(context);
+    this.backdrop = new BackdropPart(context);
     this.body.add(
       this.carrier.object,
       this.bolt.object,
@@ -96,7 +99,7 @@ export class RifleAssembly implements Assembly {
       this.rounds.object,
     );
     batchStatic(this.body, this.cutaway).forEach((geometry) => this.tracker.track(geometry));
-    this.root.add(this.body, this.gas.object);
+    this.root.add(this.backdrop.object, this.body, this.gas.object);
     this.labels = new LabelAnchors({
       body: this.body,
       carrier: this.carrier.object,
@@ -128,10 +131,13 @@ export class RifleAssembly implements Assembly {
     this.spring.set(motion.carrier);
     this.rounds.setState(state);
     this.gas.setState(state);
+    this.backdrop.setState(state);
   }
 
   update(deltaSeconds: number, _cameraDistance: number): boolean {
-    return this.gas.update(deltaSeconds);
+    const gasMoving = this.gas.update(deltaSeconds);
+    const backdropMoving = this.backdrop.update(deltaSeconds);
+    return gasMoving || backdropMoving;
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {
