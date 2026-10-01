@@ -7,8 +7,12 @@ export const SPEED_RANGE = { min: 0, max: REAL_PACE_SPEED, step: 1, default: 1 }
 
 const CYCLE_SECONDS = CYCLE_MS / MS_PER_SECOND;
 
+export function slowdown(speed: number): number {
+  return PACE_FACTOR ** (REAL_PACE_SPEED - speed);
+}
+
 export function loopSeconds(speed: number): number {
-  return CYCLE_SECONDS * PACE_FACTOR ** (REAL_PACE_SPEED - speed);
+  return CYCLE_SECONDS * slowdown(speed);
 }
 
 export function rate(speed: number): number {

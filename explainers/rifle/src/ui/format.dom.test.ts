@@ -57,7 +57,8 @@ describe('rifle formats', () => {
       ['25.6', '6.4', '1.6', '0.4'].map((seconds) => fill(timeline.perShot, { seconds })),
     );
     expect(formatSpeed(4)).toBe(fill(timeline.realPace, { seconds: '0.1' }));
-    expect(describeSpeed(1)).toBe(fill(timeline.speedValue, { seconds: '6.4' }));
+    expect(describeSpeed(1)).toBe(fill(timeline.speedValue, { seconds: '6.4', factor: '64' }));
+    expect(describeSpeed(0)).toBe(fill(timeline.speedValue, { seconds: '25.6', factor: '256' }));
   });
 
   it('prints the pressure, the speed and the travel in whole units', () => {

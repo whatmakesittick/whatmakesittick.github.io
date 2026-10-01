@@ -1,4 +1,4 @@
-import { formatFixed } from '@core/format';
+import { formatFixed, formatNumber } from '@core/format';
 import { t } from '@core/i18n';
 import { PHASE_IDS } from '../ids';
 import type { ComparisonId, GasPortId, PhaseId } from '../ids';
@@ -9,6 +9,7 @@ import {
   loopSeconds,
   msAt,
   phaseIdAt,
+  slowdown,
 } from '../model';
 import type { CaseStage, HammerStage, LockStage, RoundStage } from '../model';
 
@@ -66,7 +67,10 @@ export function formatSpeed(speed: number): string {
 }
 
 export function describeSpeed(speed: number): string {
-  return t('timeline.speedValue', { seconds: secondsPerShot(speed) });
+  return t('timeline.speedValue', {
+    seconds: secondsPerShot(speed),
+    factor: formatNumber(slowdown(speed)),
+  });
 }
 
 export function formatPressure(mpa: number): string {
