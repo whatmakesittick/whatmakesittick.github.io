@@ -13,7 +13,7 @@ describe('black hole store', () => {
       speed: 3,
       preset: 'overview',
       comparison: 'sgrA',
-      view: { disc: true, sheet: false, labels: false },
+      view: { disc: true, sheet: false, labels: true },
     });
   });
 

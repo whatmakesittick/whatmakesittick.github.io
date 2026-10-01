@@ -33,7 +33,6 @@ export interface PresetTargets {
 export interface PresetBindingOptions<S extends Playback, P extends ScenePreset> {
   presets: Readonly<Record<string, P>>;
   views: Pick<CameraViews<P['camera']>, 'frame'>;
-  parts: readonly string[];
   labels?: LabelPolicy;
   variant?(state: S): string;
   prepare?(state: S): void;
@@ -48,6 +47,8 @@ export interface LabelVisibilityShell {
   onFrame: SceneShell['onFrame'];
 }
 
+const NO_LABELS: ReadonlySet<string> = new Set();
+
 function layerPolicy(labels: PresetTargets['labels']): LabelPolicy {
   return { setWanted: (wanted) => labels.show(wanted) };
 }
@@ -57,7 +58,6 @@ class PresetPresenter<S extends Playback, P extends ScenePreset> {
   private readonly store: ExplainerStore<S>;
   private readonly options: PresetBindingOptions<S, P>;
   private readonly labels: LabelPolicy;
-  private readonly allParts: ReadonlySet<string>;
 
   constructor(
     targets: PresetTargets,
@@ -68,7 +68,6 @@ class PresetPresenter<S extends Playback, P extends ScenePreset> {
     this.store = store;
     this.options = options;
     this.labels = options.labels ?? layerPolicy(targets.labels);
-    this.allParts = new Set(options.parts);
   }
 
   present(animate: boolean): void {
@@ -94,8 +93,12 @@ class PresetPresenter<S extends Playback, P extends ScenePreset> {
   }
 
   private showLabels(state: S): void {
+    if (!state.view.labels) {
+      this.labels.setWanted(NO_LABELS, NO_LABELS);
+      return;
+    }
     const pinned = new Set<string>(this.presetOf(state).labels);
-    this.labels.setWanted(state.view.labels ? this.allParts : pinned, pinned);
+    this.labels.setWanted(pinned, pinned);
   }
 
   private presetOf(state: S): P {

@@ -69,12 +69,12 @@ export const LABEL_PRIORITY: readonly PartId[] = [
   'tubing',
   'flare',
   'perforations',
+  'seabed',
   'topDrive',
   'drillFloor',
   'crane',
   'flareBoom',
   'conductor',
   'intermediateCasing',
-  'seabed',
   'claystone',
 ];

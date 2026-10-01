@@ -22,7 +22,7 @@ export type SewingState = PlaybackState & SewingFields;
 export type SewingStoreState = Playback & SewingFields & SewingOwnActions;
 export type SewingStore = ExplainerStore<SewingStoreState>;
 
-const DEFAULT_VIEW: ViewOptions = { labels: false, cutaway: false };
+const DEFAULT_VIEW: ViewOptions = { labels: true, cutaway: false };
 const DEFAULT_TENSION: Tension = 'balanced';
 
 export function createSewingStore(overrides: Partial<SewingStoreState> = {}): SewingStore {

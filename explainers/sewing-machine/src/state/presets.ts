@@ -36,7 +36,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'overview',
     speed: 20,
     view: { cutaway: false },
-    labels: [],
+    labels: ['spool', 'handwheel', 'takeUpLever', 'needle', 'presserFoot', 'fabric'],
     highlight: [],
   },
   needle: {

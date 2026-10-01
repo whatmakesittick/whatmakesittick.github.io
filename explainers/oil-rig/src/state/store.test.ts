@@ -35,7 +35,7 @@ describe('oil rig store', () => {
       pickerDepth: WATER_DEPTH_RANGE.default,
       productionYears: PRODUCTION_YEARS_RANGE.default,
       speed: 80,
-      view: { cutaway: true, mud: true, flow: false, labels: false },
+      view: { cutaway: true, mud: true, flow: false, labels: true },
     });
   });
 

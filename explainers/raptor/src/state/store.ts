@@ -32,7 +32,7 @@ export const DEFAULT_VIEW: ViewState = {
   flow: false,
   flame: true,
   cluster: false,
-  labels: false,
+  labels: true,
 };
 const START_SPEED = PRESETS.overview.speed ?? SPEED_RANGE.default;
 

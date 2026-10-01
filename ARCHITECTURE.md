@@ -351,14 +351,14 @@ looks a region up by id and moves it into its root's space.
 A scene binds its presets to the store with `bindPresets(shell, store, options)`
 from `presetBinder.ts`. It presents the first preset at once, eases to each new
 one, reframes the current view when the reader resets the camera, and on a view
-change calls `onView` and updates the labels: every part while `view.labels` is
-on, the preset's labels otherwise, and those stay pinned either way.
+change calls `onView` and updates the labels: the preset's labels while
+`view.labels` is on, pinned so crowding never hides them, and none at all while it
+is off.
 
 | Option      | Role                                                                    |
 | ----------- | ----------------------------------------------------------------------- |
 | `presets`   | The explainer's `ScenePreset` records                                   |
 | `views`     | The controller's `CameraViews`                                          |
-| `parts`     | Every label id                                                          |
 | `labels`    | Optional label policy; by default the label layer shows the wanted ones |
 | `variant`   | Optional variant of the view directions, the engine's layout            |
 | `prepare`   | Optional step before framing, so a `startAt` preset frames a fresh pose |

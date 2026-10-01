@@ -11,7 +11,6 @@ import {
 } from '../state';
 import type { HeartState, HeartStore, HeartStoreState, Preset, PresetId } from '../state';
 import type { HeartController } from './controller';
-import { PART_IDS } from './partInfo';
 
 const VALVE_PRESET: PresetId = 'valves';
 const VALVE_VIEW = 'valve';
@@ -78,7 +77,6 @@ export function bindStore(store: HeartStore, targets: SceneTargets): () => void 
     bindPresets<HeartStoreState, Preset>(targets, store, {
       presets: PRESETS,
       views: heart.views,
-      parts: PART_IDS,
       labels: labelVisibility,
       prepare: push,
       highlight: presetHighlight,

@@ -227,7 +227,7 @@
     "step": "Step the crank 2°, or 15° with <kbd>Shift</kbd>",
     "cutaway": "Cutaway on or off",
     "gas": "Gas colours on or off",
-    "labels": "All labels on or off",
+    "labels": "Labels on or off",
     "flow": "Gas flow arrows on or off",
     "engineType": "Switch between petrol and diesel",
     "layout": "Switch between one cylinder and the inline four",

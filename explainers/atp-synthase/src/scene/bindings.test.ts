@@ -39,7 +39,7 @@ describe('scene bindings', () => {
       degreesPerSecond: 0,
       bladeCount: 8,
       motorCount: 1,
-      view: { membrane: true, cutaway: false, flow: true, labels: false },
+      view: { membrane: true, cutaway: false, flow: true, labels: true },
     });
     expect(frame).toHaveBeenCalledWith('motor', false, undefined);
   });
@@ -95,6 +95,8 @@ describe('scene bindings', () => {
       new Set(['cRing', 'subunitA', 'protons', 'matrix', 'intermembraneSpace']),
       new Set(['cRing', 'subunitA', 'protons', 'matrix', 'intermembraneSpace']),
     );
+    store.getState().toggleView('labels');
+    expect(targets.labelVisibility.setWanted).toHaveBeenLastCalledWith(new Set(), new Set());
   });
 
   it('never changes the state object the assembly got last', () => {

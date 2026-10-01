@@ -36,7 +36,7 @@ describe('scene bindings', () => {
       phase: 40,
       propellant: null,
       playing: true,
-      view: { cutaway: false, flow: false, flame: true, cluster: false, labels: false },
+      view: { cutaway: false, flow: false, flame: true, cluster: false, labels: true },
     });
     expect(frame).toHaveBeenCalledWith('hero', false, undefined);
   });

@@ -20,7 +20,6 @@ import {
 import type { Preset, SolarPanelState, SolarPanelStore, SolarPanelStoreState } from '../state';
 import { HERO_PANEL_PARTS } from './constants';
 import type { SolarPanelController } from './controller';
-import { PART_IDS } from './partInfo';
 
 export interface SceneTargets extends PresetTargets {
   solarPanel: SolarPanelController;
@@ -99,7 +98,6 @@ export function bindStore(store: SolarPanelStore, targets: SceneTargets): () => 
     bindPresets<SolarPanelStoreState, Preset>(targets, store, {
       presets: PRESETS,
       views: solarPanel.views,
-      parts: PART_IDS,
       labels: labelVisibility,
       prepare: push,
       highlight: highlightOf,

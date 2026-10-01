@@ -36,7 +36,7 @@ describe('engine store', () => {
     store.getState().setView({ labels: true });
     store.getState().applyPreset('inline4');
     expect(store.getState()).toMatchObject({ layout: 'inline4', preset: 'inline4' });
-    expect(store.getState().view.labels).toBe(false);
+    expect(store.getState().view.labels).toBe(true);
     store.getState().applyPreset('controls');
     expect(store.getState().layout).toBe('inline4');
   });

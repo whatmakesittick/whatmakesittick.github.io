@@ -12,7 +12,6 @@ import {
 } from '../state';
 import type { Preset, WatchState, WatchStore, WatchStoreState } from '../state';
 import type { WatchController } from './controller';
-import { PART_IDS } from './partInfo';
 
 export interface SceneTargets extends PresetTargets {
   watch: WatchController;
@@ -80,7 +79,6 @@ export function bindStore(store: WatchStore, targets: SceneTargets): () => void 
     bindPresets<WatchStoreState, Preset>(targets, store, {
       presets: PRESETS,
       views: watch.views,
-      parts: PART_IDS,
       labels: labelVisibility,
       prepare: push,
       highlight: highlightOf,

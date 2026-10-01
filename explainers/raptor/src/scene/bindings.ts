@@ -4,7 +4,6 @@ import type { AssemblyState, PropellantId } from '../ids';
 import { DEFAULT_VIEW, PRESETS, presetHighlight } from '../state';
 import type { Preset, RaptorState, RaptorStore, RaptorStoreState } from '../state';
 import type { RaptorController } from './controller';
-import { PART_IDS } from './partInfo';
 
 export interface SceneTargets extends PresetTargets {
   raptor: RaptorController;
@@ -60,7 +59,6 @@ export function bindStore(store: RaptorStore, targets: SceneTargets): () => void
     bindPresets<RaptorStoreState, Preset>(targets, store, {
       presets: PRESETS,
       views: raptor.views,
-      parts: PART_IDS,
       labels: labelVisibility,
       prepare: push,
       highlight: presetHighlight,

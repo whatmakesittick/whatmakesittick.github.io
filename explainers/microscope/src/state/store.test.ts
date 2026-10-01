@@ -31,7 +31,7 @@ describe('microscope store', () => {
       wavelength: 550,
       focus: 0,
       speed: 80,
-      view: { rays: true, labels: false, cutaway: true },
+      view: { rays: true, labels: true, cutaway: true },
     });
   });
 

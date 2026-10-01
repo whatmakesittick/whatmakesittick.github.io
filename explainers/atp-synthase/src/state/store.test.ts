@@ -26,7 +26,7 @@ describe('ATP synthase store', () => {
       laps: 0,
       speed: 2,
       preset: 'overview',
-      view: { membrane: true, cutaway: false, flow: true, labels: false },
+      view: { membrane: true, cutaway: false, flow: true, labels: true },
     });
   });
 

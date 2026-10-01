@@ -2,7 +2,7 @@ import { bindPresets, createLabelVisibility } from '@core/scene/presetBinder';
 import type { SceneShell } from '@core/scene/shell';
 import { PRESETS } from '../state';
 import type { SewingStore } from '../state';
-import { LABEL_PRIORITY, PART_IDS } from './partInfo';
+import { LABEL_PRIORITY } from './partInfo';
 import { SewingController } from './sewingController';
 
 export { SCENE_OPTIONS } from './sceneOptions';
@@ -15,7 +15,6 @@ export function mountSewingScene(shell: SceneShell, store: SewingStore): () => v
   const unbind = bindPresets(shell, store, {
     presets: PRESETS,
     views: sewing.views,
-    parts: PART_IDS,
     labels,
     onView: (view) => sewing.applyView(view),
   });

@@ -63,7 +63,6 @@ function bind(options: Partial<Options> = {}, log: Entry[] = []) {
     {
       presets: PRESETS,
       views: { frame: (view, animate, variant) => log.push(['frame', view, animate, variant]) },
-      parts: PARTS,
       ...options,
     },
   );
@@ -81,7 +80,7 @@ describe('bindPresets', () => {
     expect(next()).toEqual([
       ['frame', 'wide', false, undefined],
       ['highlight', []],
-      ['show', ['wheel']],
+      ['show', []],
     ]);
   });
 
@@ -90,10 +89,10 @@ describe('bindPresets', () => {
     next();
     store.getState().applyPreset('detail');
     expect(next()).toEqual([
-      ['show', ['hub', 'spoke']],
+      ['show', []],
       ['frame', 'close', true, undefined],
       ['highlight', ['spoke']],
-      ['show', ['hub', 'spoke']],
+      ['show', []],
     ]);
   });
 
@@ -105,7 +104,7 @@ describe('bindPresets', () => {
     expect(next()).toEqual([['frame', 'close', true, undefined]]);
   });
 
-  it('wants every part while the labels view is on and pins the preset labels', () => {
+  it('wants and pins the preset labels while the labels view is on', () => {
     const log: Entry[] = [];
     const { store, next } = bind(
       { labels: recordingLabels(log), onView: (view) => log.push(['view', view.labels]) },
@@ -115,8 +114,23 @@ describe('bindPresets', () => {
     store.getState().setView({ labels: true });
     expect(next()).toEqual([
       ['view', true],
-      ['wanted', ['hub', 'spoke', 'wheel'], ['wheel']],
+      ['wanted', ['wheel'], ['wheel']],
     ]);
+    store.getState().applyPreset('detail');
+    expect(next().at(-1)).toEqual(['wanted', ['hub', 'spoke'], ['hub', 'spoke']]);
+  });
+
+  it('wants no label at all while the labels view is off', () => {
+    const log: Entry[] = [];
+    const { store, next } = bind({ labels: recordingLabels(log) }, log);
+    store.getState().setView({ labels: true });
+    next();
+    store.getState().setView({ labels: false });
+    expect(next()).toEqual([['wanted', [], []]]);
+    store.getState().applyPreset('detail');
+    const wanted = next().filter(([name]) => name === 'wanted');
+    expect(wanted.length).toBeGreaterThan(0);
+    wanted.forEach((entry) => expect(entry).toEqual(['wanted', [], []]));
   });
 
   it('prepares the state and passes the variant before framing', () => {

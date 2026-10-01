@@ -227,7 +227,7 @@
     "step": "Girar o virabrequim 2°, ou 15° com <kbd>Shift</kbd>",
     "cutaway": "Ligar ou desligar a vista em corte",
     "gas": "Ligar ou desligar as cores do gás",
-    "labels": "Ligar ou desligar todos os rótulos",
+    "labels": "Ligar ou desligar os rótulos",
     "flow": "Ligar ou desligar as setas de fluxo do gás",
     "engineType": "Alternar entre gasolina e diesel",
     "layout": "Alternar entre um cilindro e quatro em linha",

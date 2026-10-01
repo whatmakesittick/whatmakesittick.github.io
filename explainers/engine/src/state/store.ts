@@ -25,7 +25,7 @@ export type EngineActions = PlaybackActions & EngineOwnActions;
 export type EngineStoreState = Playback & EngineFields & EngineOwnActions;
 export type EngineStore = ExplainerStore<EngineStoreState>;
 
-export const DEFAULT_VIEW: ViewOptions = { cutaway: true, gas: true, labels: false, flow: true };
+export const DEFAULT_VIEW: ViewOptions = { cutaway: true, gas: true, labels: true, flow: true };
 
 export function currentSpec(
   state: Pick<EngineState, 'engineType' | 'compressionRatio'>,
