@@ -64,7 +64,7 @@
     "ms": "{{value}} ms",
     "perShot": "{{seconds}} s par tir",
     "realPace": "Rythme réel, {{seconds}} s par tir",
-    "speedValue": "{{seconds}} s par tir",
+    "speedValue": "{{factor}} fois plus lent qu’en réalité",
     "phase": {
       "strike": "Chute du chien",
       "barrel": "Dans le canon",

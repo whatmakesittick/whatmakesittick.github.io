@@ -64,7 +64,7 @@
     "ms": "{{value}} ms",
     "perShot": "{{seconds}} s per shot",
     "realPace": "Real pace, {{seconds}} s per shot",
-    "speedValue": "{{seconds}} seconds per shot",
+    "speedValue": "{{factor}} times slower than real life",
     "phase": {
       "strike": "Hammer falls",
       "barrel": "Down the barrel",

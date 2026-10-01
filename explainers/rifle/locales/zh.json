@@ -64,7 +64,7 @@
     "ms": "{{value}}毫秒",
     "perShot": "每发{{seconds}}秒",
     "realPace": "真实速度，每发{{seconds}}秒",
-    "speedValue": "每发{{seconds}}秒",
+    "speedValue": "比实际慢{{factor}}倍",
     "phase": {
       "strike": "击锤落下",
       "barrel": "穿过枪管",

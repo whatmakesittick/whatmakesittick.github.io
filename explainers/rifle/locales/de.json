@@ -64,7 +64,7 @@
     "ms": "{{value}} ms",
     "perShot": "{{seconds}} s pro Schuss",
     "realPace": "Echtzeit, {{seconds}} s pro Schuss",
-    "speedValue": "{{seconds}} Sekunden pro Schuss",
+    "speedValue": "{{factor}}-mal langsamer als in Wirklichkeit",
     "phase": {
       "strike": "Hahn fällt",
       "barrel": "Durch den Lauf",

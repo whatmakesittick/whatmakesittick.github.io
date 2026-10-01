@@ -64,7 +64,7 @@
     "ms": "{{value}} ms",
     "perShot": "{{seconds}} s por disparo",
     "realPace": "Ritmo real, {{seconds}} s por disparo",
-    "speedValue": "{{seconds}} segundos por disparo",
+    "speedValue": "{{factor}} veces más lento que en la realidad",
     "phase": {
       "strike": "Cae el martillo",
       "barrel": "Por el cañón",
