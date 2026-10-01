@@ -333,10 +333,22 @@ export const EXTRACTOR_SHAPE = {
   claw: { x: [-0.5, 2.2] as const, y: [-1.4, 1.4] as const, z: [5.1, 8.6] as const },
 } as const;
 
+export const RECEIVER_RAILS = {
+  x: [-235, TRUNNION.x[0]] as const,
+  y: [4.6, 7.9] as const,
+  reach: 3,
+} as const;
+
+export const EJECTOR_PLATE: Box = {
+  x: [EJECTOR_X - 11, EJECTOR_X + 11],
+  y: [-5, 11],
+  z: [RECEIVER.z[0] + SHEET, RECEIVER.z[0] + SHEET + 1.2],
+};
+
 export const EJECTOR_BLOCK: Box = {
-  x: [EJECTOR_X - 5, EJECTOR_X + 5],
-  y: [4.5, 7.8],
-  z: [RECEIVER.z[0] + SHEET, -3.5],
+  x: [EJECTOR_X - 7, EJECTOR_X + 7],
+  y: [3.5, 7.8],
+  z: [RECEIVER.z[0] + SHEET + RECEIVER_RAILS.reach - 0.5, -3.5],
 };
 
 export const HAMMER_SHAPE = {

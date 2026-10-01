@@ -9,8 +9,10 @@ import {
   DUST_COVER,
   DUST_COVER_RIBS,
   EJECTOR_BLOCK,
+  EJECTOR_PLATE,
   MAGAZINE_CATCH,
   PIN_HEADS,
+  RECEIVER_RAILS,
   RECEIVER_SHELL,
   SEGMENTS,
   SHEET,
@@ -197,6 +199,14 @@ function addStuds(context: PartContext, parent: Object3D): void {
   }
 }
 
+function addRails(context: PartContext, parent: Object3D): void {
+  const { x, y, reach } = RECEIVER_RAILS;
+  const inner = RECEIVER_SHELL.inner;
+  for (const z of [[-inner, -inner + reach] as const, [inner - reach, inner] as const]) {
+    addPiece(context, parent, boxPiece({ x, y, z }, BEVELS.fine), 'receiver', context.looks.steel);
+  }
+}
+
 function outerFace(offset: number): number {
   return RECEIVER_SHELL.outer + offset;
 }
@@ -252,7 +262,10 @@ export function addReceiver(context: PartContext, parent: Object3D): void {
     'trunnion',
     look,
   );
-  addPiece(context, parent, boxPiece(EJECTOR_BLOCK, BEVELS.round), 'ejector', look);
+  addRails(context, parent);
+  for (const part of [EJECTOR_PLATE, EJECTOR_BLOCK]) {
+    addPiece(context, parent, boxPiece(part, BEVELS.round), 'ejector', context.looks.steel);
+  }
   addTriggerGuard(context, parent);
   addStuds(context, parent);
 }
