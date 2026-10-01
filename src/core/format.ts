@@ -23,6 +23,10 @@ export function formatFixed(value: number, fractionDigits: number): string {
   }).format(value);
 }
 
+export function formatSignificant(value: number, significantDigits: number): string {
+  return numberFormat({ maximumSignificantDigits: significantDigits }).format(value);
+}
+
 export function formatCompact(value: number, significantDigits: number): string {
   return numberFormat({
     notation: 'compact',

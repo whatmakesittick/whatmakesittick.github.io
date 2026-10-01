@@ -1,4 +1,4 @@
-import { formatFixed, formatNumber } from '@core/format';
+import { formatFixed, formatNumber, formatSignificant } from '@core/format';
 import { t } from '@core/i18n';
 import { PHASE_IDS } from '../ids';
 import type { ComparisonId, GasPortId, PhaseId } from '../ids';
@@ -39,10 +39,7 @@ function tenthsBelowTen(value: number): string {
 }
 
 function twoSignificant(value: number): string {
-  if (value === 0) return whole(value);
-  const magnitude = 10 ** (Math.floor(Math.log10(Math.abs(value))) - SIGNIFICANT_DIGITS + 1);
-  const rounded = Math.round(value / magnitude) * magnitude;
-  return formatFixed(rounded, Math.max(0, -Math.round(Math.log10(magnitude))));
+  return formatSignificant(value, SIGNIFICANT_DIGITS);
 }
 
 export function formatMs(ms: number): string {
