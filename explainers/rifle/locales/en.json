@@ -1,0 +1,249 @@
+{
+  "meta": {
+    "title": "How a rifle reloads itself",
+    "eyebrow": "Rifle",
+    "tagline": "One shot, one puff of gas, ready again in a tenth of a second.",
+    "description": "Look inside a gas-operated rifle in 3D, slowed right down: one shot, a puff of its own gas, and the parts that throw out the case and load the next.",
+    "summary": "The cartridge, the locked bolt, the barrel, the borrowed gas, and the trip back and forward that loads the next round.",
+    "socialAlt": "Cutaway of a gas-operated rifle, the bullet still in the barrel and hot gas pushing the piston back to reload, beside the title How a rifle reloads itself"
+  },
+  "stage": {
+    "label": "Interactive rifle model",
+    "gauge": "Live shot readings"
+  },
+  "controls": {
+    "label": "Rifle controls",
+    "views": {
+      "cutaway": {
+        "name": "Cutaway",
+        "short": "Cutaway",
+        "hint": "Cutaway (C)"
+      },
+      "gas": {
+        "name": "Hot gas",
+        "short": "Gas",
+        "hint": "Hot gas (G)"
+      },
+      "trail": {
+        "name": "Bullet trail",
+        "short": "Trail",
+        "hint": "Bullet trail (T)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      }
+    },
+    "momentOptions": {
+      "strike": "Hammer strikes",
+      "start": "Bullet starts",
+      "peak": "Peak pressure",
+      "port": "Bullet passes the port",
+      "exit": "Bullet leaves",
+      "unlock": "Bolt unlocks",
+      "eject": "Case flies out",
+      "strip": "Next round",
+      "lock": "Bolt locks"
+    },
+    "gasPortOptions": {
+      "open": "Gas port open",
+      "blocked": "Gas port blocked"
+    },
+    "comparisonOptions": {
+      "blink": "A blink",
+      "sound": "Sound",
+      "car": "A car"
+    }
+  },
+  "timeline": {
+    "label": "Time in the cycle",
+    "phases": "Jump to a step",
+    "speed": "Playback",
+    "value": "{{time}}, {{phase}}",
+    "ms": "{{value}} ms",
+    "perShot": "{{seconds}} s per shot",
+    "realPace": "Real pace, {{seconds}} s per shot",
+    "speedValue": "{{seconds}} seconds per shot",
+    "phase": {
+      "strike": "Hammer falls",
+      "barrel": "Down the barrel",
+      "unlock": "Unlocking",
+      "eject": "Back and out",
+      "feed": "Forward and in",
+      "ready": "Ready"
+    },
+    "during": {
+      "strike": "the hammer falls and hits the firing pin",
+      "barrel": "the powder burns and drives the bullet down the barrel",
+      "unlock": "the bullet is gone and the carrier turns the bolt free",
+      "eject": "the carrier flies back, throws out the empty case and cocks the hammer",
+      "feed": "the spring sends the carrier forward with the next round",
+      "ready": "the bolt is locked and the hammer is about to fall again"
+    },
+    "jump": {
+      "strike": "Jump to the hammer falling",
+      "barrel": "Jump to the bullet in the barrel",
+      "unlock": "Jump to the bolt unlocking",
+      "eject": "Jump to the trip back",
+      "feed": "Jump to the trip forward",
+      "ready": "Jump to ready"
+    }
+  },
+  "readouts": {
+    "time": "Time",
+    "pressure": "Pressure",
+    "bulletSpeed": "Bullet speed",
+    "carrier": "Carrier travel"
+  },
+  "parts": {
+    "barrel": "Barrel",
+    "chamber": "Chamber",
+    "muzzle": "Muzzle",
+    "rifling": "Rifling",
+    "trunnion": "Trunnion",
+    "bolt": "Bolt",
+    "firingPin": "Firing pin",
+    "extractor": "Extractor",
+    "carrier": "Bolt carrier",
+    "chargingHandle": "Charging handle",
+    "pistonRod": "Piston rod",
+    "pistonHead": "Piston",
+    "gasBlock": "Gas block",
+    "gasPort": "Gas port",
+    "gasTube": "Gas tube",
+    "ventHoles": "Vent holes",
+    "returnSpring": "Return spring",
+    "hammer": "Hammer",
+    "trigger": "Trigger",
+    "selector": "Selector lever",
+    "ejector": "Ejector",
+    "receiver": "Receiver",
+    "magazine": "Magazine",
+    "cartridgeCase": "Case",
+    "primer": "Primer",
+    "powder": "Powder",
+    "bullet": "Bullet",
+    "spentCase": "Empty case",
+    "hotGas": "Hot gas",
+    "stock": "Stock",
+    "grip": "Grip",
+    "handguard": "Handguard",
+    "rearSight": "Rear sight",
+    "frontSight": "Front sight",
+    "cleaningRod": "Cleaning rod"
+  },
+  "firing": {
+    "hammer": {
+      "falling": "Falling",
+      "struck": "Resting on the pin",
+      "cocking": "Pushed back by the carrier",
+      "cocked": "Cocked",
+      "held": "Held back by the retarder"
+    },
+    "lock": {
+      "locked": "Locked",
+      "turning": "Turning",
+      "open": "Unlocked"
+    }
+  },
+  "gas": {
+    "result": {
+      "open": "The carrier reloads the rifle",
+      "blocked": "One shot, then nothing moves"
+    }
+  },
+  "reload": {
+    "case": {
+      "held": "Held by the extractor",
+      "flying": "Flying out to the right",
+      "gone": "Gone"
+    },
+    "round": {
+      "waiting": "Waiting in the magazine",
+      "feeding": "On its way in",
+      "chambered": "In the chamber"
+    },
+    "compare": {
+      "blink": "One cycle fits inside the quickest blink.",
+      "sound": "In one cycle, sound travels about {{metres}} m.",
+      "car": "In one cycle, a car at 100 km/h moves about {{metres}} m."
+    }
+  },
+  "units": {
+    "ms": "{{value}} ms",
+    "mpa": "{{value}} MPa",
+    "metresPerSecond": "{{value}} m/s",
+    "percent": "{{value}} %",
+    "perMinute": "{{value}} per minute",
+    "turnsPerSecond": "{{value}} turns per second",
+    "turns": "{{value}} turns",
+    "mm": "{{value}} mm",
+    "timesAir": "{{value}} times air pressure"
+  },
+  "sections": {
+    "overview": {
+      "title": "A tenth of a second, then again",
+      "p1": "You are looking at a <strong>gas-operated rifle</strong>. This one is modelled on the AKM, an updated version of the Kalashnikov. It is 880 mm long and weighs 3.1 kg with an empty magazine. What makes it clever is that it reloads itself. After each shot it throws out the empty case, loads a new round and locks up again. It pays for all that work with a little of the hot gas from each shot.",
+      "p2": "The model follows one shot in <strong>automatic fire</strong>, from the moment the hammer falls to the moment it falls again. The hammer hits the firing pin, and a small flame lights the powder. The burning powder turns into hot gas, which drives the bullet down the barrel. A puff of that gas shoves a piston back, and the bolt carrier goes with it. Then a spring sends everything forward again with a fresh round, and the rifle is ready for the next shot.",
+      "p3": "The whole loop takes about 100 ms, a tenth of a second. At that pace the mechanism could cycle about <strong>600 times a minute</strong>. That number says how fast the parts move, not how many shots anyone fires in a minute. The magazine holds only 30 rounds. Playback starts slowed right down. Drag the timeline to move through the shot, or tap a chip to jump to a moment. Keep an eye on the charging handle on the right side: it moves with every shot.",
+      "p4": "A few things are kept simple. Inside the rifle, the model draws only the parts that matter for this story. No source gives exact times for the hammer's fall or for the carrier's trip back and forth, so the model uses careful guesses there. The readouts follow the model's clock, so only two of its times are backed by sources: the whole cycle and the bullet's trip down the barrel, about a millisecond. Switch on the <strong>cutaway</strong> to look inside.",
+      "cycle": "One full cycle",
+      "pace": "Pace of the mechanism",
+      "left": "Time until ready"
+    },
+    "cartridge": {
+      "title": "A small flame and a lot of gas",
+      "p1": "Everything starts with the <strong>cartridge</strong>. It is 56 mm long, weighs 16.2 g and holds all that one shot needs. The case is about 39 mm long and holds 1.6 g of powder. In the middle of its base sits the primer, a small brass cup. The bullet, 7.9 g with a steel core, is pressed into the open front end.",
+      "p2": "The shot begins when the firing pin crushes the <strong>primer</strong>. The primer makes a small flame. The flame passes through two tiny holes into the case and lights the powder. The powder does not explode. It <strong>burns</strong>, very fast, and turns into a great deal of hot gas.",
+      "p3": "That gas is trapped in a very small space, so its pressure climbs fast. It pushes in every direction, but only the bullet can give way, so the bullet soon starts to move. The pressure keeps rising anyway, up to about 275 MPa. That is roughly 2,700 times the pressure of the air around you, or about 2,800 kg pressing on every square centimetre.",
+      "p4": "The peak comes early, after the bullet has moved only 4 to 6 cm. From then on the space behind the bullet grows faster than the powder can fill it, and the pressure starts to fall. Tap the chips to see the hammer strike, the bullet start and the moment of highest pressure.",
+      "pressure": "Pressure",
+      "air": "Compared with air",
+      "travel": "Bullet has moved"
+    },
+    "firing": {
+      "title": "Why the back does not blow open",
+      "p1": "Behind the cartridge, the parts that fire it wait in a line. The <strong>hammer</strong> swings forward on its spring and hits the back of the firing pin. The pin sits loose inside the bolt, so the blow drives its tip forward into the primer. That is the strike you saw in the last chapter.",
+      "p2": "Now think of that pressure again. The gas pushes back on the case just as hard as it pushes the bullet forward, so something has to hold the case in place. That job belongs to the <strong>bolt</strong>. At its front are two lugs. Before each shot the bolt turns, and the lugs slide into two recesses in a steel block where the barrel meets the receiver. That block is called the trunnion. While the lugs sit there, the bolt cannot move back.",
+      "p3": "On the right side of the rifle sits the <strong>selector lever</strong>. From top to bottom it has three positions: safe, automatic and single. Safe locks the trigger. Single fires one shot each time the trigger is pulled and let go. Automatic keeps firing for as long as the trigger is held back. The lever sits on the side the cutaway removes, so switch the cutaway off to see it.",
+      "p4": "This model runs in automatic fire, and here one more part keeps the order right: the <strong>auto sear</strong>. It holds the cocked hammer and lets it go only once the bolt has locked and the carrier has come all the way forward. The bolt then stays locked while the pressure is high. It turns free only after the bullet has left the barrel. Tap the chips to watch the strike, the bullet starting and the bolt unlocking.",
+      "hammer": "Hammer",
+      "lock": "Bolt",
+      "pressure": "Pressure"
+    },
+    "barrel": {
+      "title": "About a millisecond in the barrel",
+      "p1": "The barrel is 415 mm long, and the bullet runs its length in about 1 millisecond, a thousandth of a second. That is far too quick to see, so the timeline stretches this part of the shot out for you. Drag the slider to move the bullet along the barrel, and read its speed and the pressure behind it.",
+      "p2": "The push is strongest early on. The pressure peaks in the first few centimetres and then falls away, yet the gas keeps pushing the bullet all along the barrel. By the muzzle the bullet moves at about <strong>715 m/s</strong>. That is about twice the speed of sound, and about 26 times as fast as a car at 100 km/h.",
+      "p3": "The inside of the barrel is not smooth. Four spiral grooves, the <strong>rifling</strong>, make one full turn every 240 mm, twisting to the right. They grip the bullet and make it spin. It turns about one and a half times on its way through, and by the muzzle it spins about 3,000 times a second.",
+      "p4": "Only part of the powder's energy ends up in the bullet: about a quarter to a third. Some of it heats the barrel and the case, and some goes into pressing the bullet into the grooves. About 40 % leaves with the hot gas that rushes out after the bullet. Just before the bullet leaves, though, the rifle borrows a little of that gas for itself. The next chapter shows how.",
+      "travelLabel": "How far the bullet has moved",
+      "speed": "Bullet speed",
+      "pressure": "Pressure behind it",
+      "spin": "Spin",
+      "turns": "Turns so far"
+    },
+    "gas": {
+      "title": "A puff that does the reloading",
+      "p1": "Near the muzzle, a small slanted hole leads from the barrel up into the gas block. This is the <strong>gas port</strong>. While the bullet is still behind it, nothing happens here. Only once the bullet slides past does hot gas rush up through the port. In the gas block it meets the <strong>piston</strong>.",
+      "p2": "The piston sits at the front of a long rod, and the rod is fixed to the bolt carrier, the long part that rides on top of the bolt. So when the gas shoves the piston back, the rod, the carrier and the charging handle all go with it. That is why the handle moves with every shot. The push is short. A moment later the bullet leaves the muzzle, the pressure drops and the spent gas escapes through vent holes. By then the carrier is already moving, and it <strong>coasts</strong> the rest of the way back on its own.",
+      "p3": "The carrier does not turn the bolt at once. For the first few millimetres it slides back alone, and the bolt stays locked. Then a shaped cut inside the carrier catches a lug on top of the bolt and turns the bolt about a tenth of a turn. The locking lugs swing out of their recesses, and the bolt is free to follow. By that moment the bullet has already left the barrel.",
+      "p4": "Now try blocking the gas port. The shot fires just the same, and the bullet still leaves the barrel. But no gas reaches the piston, so nothing moves. The empty case stays in the chamber, and the rifle stops after one shot. To load the next round, someone would have to pull the charging handle back by hand. With the port open, that small puff of gas does the job for you.",
+      "fill": "Gas in the gas block",
+      "carrier": "Carrier travel",
+      "result": "What happens"
+    },
+    "reload": {
+      "title": "Out with the empty, in with the next",
+      "p1": "On its way back, the carrier pulls the bolt along, and the bolt pulls the empty case out of the chamber. A small sprung claw on the bolt, the <strong>extractor</strong>, holds the case by a groove around its base. Partway back, the case meets the <strong>ejector</strong>, a fixed lip inside the receiver. The lip knocks the left side of the case, so the case swings around the claw and flies out of the opening on the right.",
+      "p2": "The carrier does two more jobs on the way back. It rolls the hammer back and cocks it for the next shot, and it squeezes the <strong>return spring</strong>. The spring stops the carrier and then throws it forward again. Meanwhile the spring in the magazine lifts the next round up against the lips at the top. The magazine holds 30 rounds in two staggered columns, and all it does is lift them.",
+      "p3": "Moving forward, the bolt catches the top round, pushes it out of the magazine and drives it into the chamber. The extractor claw snaps over the groove of the new case. Then the bolt turns clockwise, seen from behind, and its lugs lock into place again. The auto sear lets the hammer go, but the hammer first hits the <strong>retarder</strong>. It slows the hammer for a moment, so the rifle can settle after the carrier slams home. Then the next shot begins.",
+      "p4": "One whole round trip takes about 100 ms. A blink of an eye lasts 100 to 400 ms, so one cycle fits inside the quickest blink. Each shot also kicks the rifle back. If nothing held it, the loaded rifle would move back at about 2 m/s, and about a quarter to a third of that kick comes from the gas rushing out of the muzzle. The stock sits below the line of the barrel, so the kick also lifts the muzzle a little. Tap the chips to compare one cycle with things you know.",
+      "carrier": "Carrier travel",
+      "case": "Empty case",
+      "round": "Next round",
+      "left": "Time until ready"
+    }
+  }
+}
