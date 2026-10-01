@@ -1,0 +1,197 @@
+{
+  "meta": {
+    "title": "How a black hole bends time",
+    "eyebrow": "Sagittarius A*",
+    "tagline": "A probe falls toward the black hole at the centre of our galaxy while its twin clock stays with the ship, and the two clocks stop agreeing.",
+    "description": "A probe falls into Sagittarius A*, the Milky Way's central black hole, in 3D: two clocks drift apart, light bends and the ship never sees it cross.",
+    "summary": "Two clocks, the fall, light bending around the hole, the frozen image at the horizon, the crossing, and other black holes.",
+    "socialAlt": "3D view of the black hole at the centre of the Milky Way bending the light of its glowing gas disc, with a small probe and its flashing beacon falling toward the dark shadow, beside the title How a black hole bends time"
+  },
+  "stage": {
+    "label": "Interactive black hole model",
+    "gauge": "Live fall readings"
+  },
+  "controls": {
+    "label": "Black hole controls",
+    "views": {
+      "disc": {
+        "name": "Gas disc",
+        "short": "Disc",
+        "hint": "Gas disc (D)"
+      },
+      "sheet": {
+        "name": "Rubber sheet",
+        "short": "Sheet",
+        "hint": "Rubber sheet (S)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      }
+    },
+    "momentOptions": {
+      "lastOrbit": "Last stable orbit",
+      "lightRing": "Photon sphere",
+      "horizon": "Horizon"
+    },
+    "comparisonOptions": {
+      "sgrA": "Sagittarius A*",
+      "m87": "M87*",
+      "stellar": "Cygnus X-1"
+    }
+  },
+  "timeline": {
+    "label": "Time on the probe clock",
+    "phases": "Jump to a moment in the fall",
+    "speed": "Playback",
+    "value": "{{time}}, {{phase}}",
+    "clock": "{{minutes}}:{{seconds}}",
+    "realTime": "Real time",
+    "faster": "{{factor}} times faster",
+    "phase": {
+      "letGo": "Letting go",
+      "plunge": "Speeding up",
+      "noOrbit": "Past the last orbit",
+      "lightRing": "Inside the light ring",
+      "inside": "Inside"
+    },
+    "during": {
+      "letGo": "the probe drifts inward and the two clocks begin to disagree",
+      "plunge": "the probe passes a quarter of the speed of light",
+      "noOrbit": "nothing can circle the hole here any more",
+      "lightRing": "the beacon reddens to black for the ship",
+      "inside": "there is no way out, and the centre is seconds away"
+    },
+    "jump": {
+      "letGo": "Jump to letting go",
+      "plunge": "Jump to speeding up",
+      "noOrbit": "Jump past the last orbit",
+      "lightRing": "Jump inside the light ring",
+      "inside": "Jump inside the horizon"
+    }
+  },
+  "readouts": {
+    "probeClock": "Probe clock",
+    "shipClock": "Ship clock",
+    "clockRatio": "Ship seconds per probe second",
+    "distance": "Distance from the centre",
+    "speed": "Speed",
+    "tide": "Stretch over 2 m"
+  },
+  "clocks": {
+    "never": "never",
+    "infinite": "∞",
+    "flash": {
+      "white": "White",
+      "orange": "Orange",
+      "red": "Deep red",
+      "infrared": "Infrared",
+      "gone": "Gone dark"
+    }
+  },
+  "parts": {
+    "horizon": "Event horizon",
+    "photonSphere": "Photon sphere",
+    "disc": "Gas disc",
+    "probe": "Probe",
+    "ship": "Ship",
+    "beacon": "Beacon flashes",
+    "sheetProbe": "Probe on the sheet"
+  },
+  "units": {
+    "horizonRadii": "{{value}} rs",
+    "lightSpeed": "{{value}} c",
+    "g": "{{value}} g",
+    "gLarge": "{{value}} g",
+    "gBelow": "< {{value}} g",
+    "seconds": "{{value}} s",
+    "minutes": "{{value}} minutes",
+    "days": "{{value}} days",
+    "milliseconds": "{{value}} thousandths of a second",
+    "km": "{{value}} km",
+    "kmLarge": "{{value}} km",
+    "suns": "{{value}} Suns",
+    "sunsLarge": "{{value}} Suns",
+    "percent": "{{value}} %",
+    "times": "{{value}}×"
+  },
+  "sections": {
+    "overview": {
+      "title": "The hole at the heart of our galaxy",
+      "p1": "You are looking at the black hole at the centre of our galaxy, the Milky Way. Astronomers call it <strong>Sagittarius A*</strong>, said \"A-star\". It sits about 27,000 light years from Earth and weighs about 4.3 million times as much as the Sun. Around it turns a thin disc of hot gas. The dark circle in the middle is the hole itself. Its edge is the event horizon, the line past which nothing comes back, not even light. From the centre to that edge is about 12.7 million km, about 18 times the radius of the Sun. Light needs about 42 seconds to cover that distance.",
+      "p2": "The dark circle is not a surface. It is the hole's <strong>shadow</strong>: the patch of sky from which no light can reach you. Light that passes close to the hole is bent, and the disc shows this well. Its far side should be hidden behind the hole. Instead you see it floating above and below the dark circle, because its light bends over and under the hole on the way to you. The right-hand side of the disc is also brighter than the left. The gas there is coming toward you at a good fraction of the speed of light, and that makes its light brighter and bluer.",
+      "p3": "Two travellers share this scene. A small <strong>probe</strong> with a clock and a flashing beacon has stopped five horizon radii from the centre. It is about to let go and fall straight in. A ship waits on a circular orbit twenty horizon radii out, carrying a twin clock. Both clocks start at zero. The model keeps a few things simple. The probe and the ship are drawn thousands of times larger than life so that you can see them. The hole is drawn without spin, because nobody has measured how fast the real one turns. Drag the timeline to follow the fall, and drag the scene to turn it.",
+      "p4": "The real Sagittarius A* is far fainter than this picture. All of it together shines with about 200 Suns' worth of light, very little for 4.3 million Suns of mass, and it swallows only about a hundred-millionth of the Sun's mass each year. The bright disc here is drawn so that you can see how the light bends. Yet the real shadow has been photographed. In 2022 the <strong>Event Horizon Telescope</strong>, a network of radio dishes spread across the Earth, showed the glowing ring around it, about 52 millionths of an arcsecond across. An arcsecond is one 3,600th of a degree, so that is a very small ring indeed.",
+      "mass": "Mass",
+      "massValue": "4.3 million Suns",
+      "horizon": "Horizon radius",
+      "horizonValue": "12.7 million km",
+      "probeClock": "Probe clock",
+      "shipClock": "Ship clock"
+    },
+    "clocks": {
+      "title": "Two clocks that stop agreeing",
+      "p1": "At 0:00 the probe lets go. It starts from a <strong>standstill</strong>, which a real probe could only manage with an engine, because everything near the hole moves fast. The clocks behave the same either way, so the model keeps it simple. Out here the pull is ordinary gravity, nothing more. The probe drifts inward slowly at first, then faster and faster. On its own clock it reaches the horizon at about 11:53 and the centre about 30 seconds later. The ship, on its orbit twenty horizon radii out, keeps a clock that runs almost like one far from any black hole.",
+      "p2": "Every ten seconds of probe time, the beacon flashes. That gap is the model's choice; a real beacon could flash at any rate. Each flash travels toward the ship, and the ship notes when it arrives. Already at the start, the flashes arrive about 8 percent further apart than the probe sent them. Deeper in, the gaps grow. At three horizon radii, each probe second lasts almost two ship seconds. At two horizon radii, almost three. This stretching of time is called <strong>time dilation</strong>. Drag the slider to move the probe by its distance and watch the two clocks drift apart.",
+      "p3": "Two effects add up here. The first is gravity: a clock held still deep in a gravity well runs slower than a clock far away. Held still at two horizon radii, a clock would tick at only about 71 percent of the far-away rate; at 1.1 horizon radii, at about 30 percent. The second is motion. The probe falls faster all the time, and each flash has to climb out against the pull while its source rushes away. Both stretch the light to lower frequencies and longer gaps. Together they make the <strong>redshift</strong> the ship measures: the flashes arrive not only later but redder.",
+      "p4": "None of this is exotic. The clocks on <strong>GPS satellites</strong> feel the same two effects. They orbit about 20,000 km up, where Earth's gravity is weaker, so they run about 45 microseconds a day fast. They also move at about 14,000 km/h, which makes them run about 7 microseconds a day slow. The net result is about 38 microseconds a day fast, and the system corrects for it. Without that correction, your position would drift by about 10 km a day. In 2010 scientists at NIST compared two clocks one 33 cm above the other and saw the higher one run faster, by about 90 nanoseconds over a lifetime.",
+      "control": {
+        "label": "Distance from the centre",
+        "horizon": "Horizon",
+        "release": "Where it let go",
+        "probe": "Probe clock",
+        "ship": "Ship clock",
+        "ratio": "Ship seconds per probe second",
+        "flash": "The beacon, seen from the ship"
+      }
+    },
+    "light": {
+      "title": "Light bends around the hole",
+      "p1": "Light always takes the straightest path it can, but near a black hole space itself is curved, so the straightest path bends. This is <strong>gravitational lensing</strong>. Light from the far side of the disc should be hidden behind the hole. Instead it passes over and under the hole and bends toward you, so you see the far side as two arcs above and below the shadow. The stars behind the hole are smeared into arcs for the same reason. Look closely and you can find a second, fainter image of the disc hugging the shadow's edge: light that went halfway round before it escaped.",
+      "p2": "At 1.5 horizon radii there is a place where light can circle the hole. It is called the <strong>photon sphere</strong>. Light that reaches it at just the right angle goes round and round, and a little of it leaks toward you as the thin bright ring hugging the shadow. That ring is why the shadow looks bigger than the horizon. Any light aimed within about 2.6 horizon radii of the centre is captured, so the dark patch you see is about 5.2 horizon radii across, more than twice the width of the horizon itself. Around Sagittarius A*, the photon sphere lies about 19 million km from the centre.",
+      "p3": "Farther out, at three horizon radii, is the <strong>last stable orbit</strong>. Outside it, gas and stars can circle the hole for as long as they like, the way planets circle the Sun. Inside it, no steady orbit exists: anything that drifts a little inward keeps falling. That is why the disc ends at three horizon radii, about 38 million km from the centre. Gas at that inner edge moves at about half the speed of light. At that speed, the gas coming toward you looks tens of times brighter than the gas moving away. Tap a chip to jump the probe to each of these places.",
+      "p4": "This bending is measured, not just drawn. The star <strong>S2</strong> loops around Sagittarius A* once every 16 years. In May 2018 it swept past its closest point, about 120 times the Earth-Sun distance from the hole, or about 1,400 horizon radii, moving at about 7,700 km/s. That is about 2.6 percent of the speed of light. Its light arrived stretched to redder colours by the hole's gravity and by its speed, a shift worth about 200 km/s, and the size of that shift matched what general relativity predicts. The star then swung back out, unharmed. A black hole does not suck things in; things orbit it.",
+      "shadow": "Shadow across",
+      "shadowValue": "about 5.2 horizon radii",
+      "ring": "Light circles at",
+      "ringValue": "1.5 horizon radii",
+      "orbit": "Last stable orbit",
+      "orbitValue": "3 horizon radii",
+      "seen": "Seen from Earth",
+      "seenValue": "about 52 millionths of an arcsecond"
+    },
+    "frozen": {
+      "title": "The ship never sees it cross",
+      "p1": "Now you sit on the ship and watch the probe fall. Its flashes come in at longer and longer intervals, each one redder and dimmer than the last. Near the horizon the change runs away. At 1.2 horizon radii one probe second takes almost ten ship seconds. At 1.05 horizon radii it takes about 36. The colours slide from white to orange, to deep red, then past red into <strong>infrared</strong>, where your eyes see nothing at all. The readouts below follow the last flashes as they arrive. Playback runs slower in this chapter so that you can watch the fade.",
+      "p2": "From the ship, the probe never reaches the horizon. Its image slows, creeps toward the dark edge and <strong>freezes</strong> there, fading to black. The last flash sent before the crossing takes forever to climb out, and no flash sent at or inside the horizon ever arrives at all. Each time the probe gets ten times closer to the horizon, its light needs about 98 more seconds to reach the ship, without end. Far-away time has no reading for the moment of crossing, so the ship clock in the readouts simply says \"never\".",
+      "p3": "Yet the probe does cross, at about 11:53 on its own clock. How can both be true? The ship is not watching the probe; it is watching light that left the probe. Time dilation is about when that light can reach the ship, not about what the probe feels. Light from the horizon itself never gets out, so the ship's picture stops there, even though the probe has long since gone on. There is no <strong>contradiction</strong>: two clocks in different places measure different things, and general relativity says exactly how the two readings relate.",
+      "p4": "Hovering close above a horizon really would stretch your life against your friends' lives. A clock held still at 1.1 horizon radii runs at about 30 percent of the far-away rate. In the film <strong>Interstellar</strong>, one hour on Miller's planet equals seven years elsewhere, a factor of about 60,000. That is not possible around Sagittarius A*. Around a hole that does not spin, stable orbits exist only from three horizon radii out, and a clock there runs at most about 1.4 times slow. The film's planet needs a hole of about 100 million Suns, spinning within one part in 100 trillion of the maximum, on an orbit skimming its horizon.",
+      "ship": "Ship clock",
+      "gap": "Gap between flashes",
+      "brightness": "Brightness of the probe",
+      "colour": "Colour of the flashes"
+    },
+    "inside": {
+      "title": "Crossing without a bump",
+      "p1": "Switch to the probe. As it nears the horizon, nothing happens. No wall, no flash, no jolt. The <strong>event horizon</strong> is not a surface you can touch or see; it is the line past which light can no longer escape. From the inside there is no sign at all that you have passed it. The probe's clock ticks as normally as it ever did, and at about 11:53 it crosses. The readouts count down the probe's own time to the centre. Playback runs in real time in this chapter, so the last seconds pass as slowly as they would for the probe.",
+      "p2": "Does the sky go dark? No. Light from outside still falls in after the probe, so the stars and the disc stay in view, though bent and reddened. Nor does the probe watch the whole future of the universe flash by. Its own time runs out at the centre, so it receives only the light that can catch it before then. And the view does not squeeze into a shrinking window. A probe held still near the horizon would see the sky bunched up overhead, but a falling probe rushes inward so fast that an effect called <strong>aberration</strong> spreads the sky back out.",
+      "p3": "Inside, every path leads to the centre, and it comes about 30 seconds later on the probe's clock. Long before then, the hole pulls harder on the near end of the probe than on the far end. This stretching is a <strong>tide</strong>, the same effect that raises the sea on Earth. At the horizon of a hole this big it is tiny: about a ten-thousandth of g over two metres, far too small to feel. It reaches 1 g only at about a twentieth of a horizon radius from the centre, deep inside. A person would cross the horizon of Sagittarius A* without feeling anything.",
+      "p4": "At a small black hole the order reverses. <strong>Cygnus X-1</strong>, about 21 Suns in mass, has a horizon radius of only about 63 km. The tide there is about 5 million g over two metres. A person falling in would be pulled apart long before the horizon, stretched thin like a strand of pasta. The whole fall from five horizon radii would take a few thousandths of a second. Big holes are gentle at the edge and small holes are savage, because the tide depends on how sharply gravity changes across your body, and that change fades as the horizon grows.",
+      "left": "Probe time to the centre",
+      "speed": "Speed past a hovering observer",
+      "tide": "Stretch over 2 m"
+    },
+    "others": {
+      "title": "Bigger holes, gentler edges",
+      "p1": "Switch on the rubber sheet and the scene changes to the popular picture: a flat grid dented into a funnel. This is the <strong>rubber sheet</strong> drawing of space, and it shows one true thing. Near the hole, distances are stretched: a ruler laid along the funnel measures more length than the flat circles suggest. But it shows nothing else. It does not show how time runs, and it does not show what pulls. Nothing rolls down the sheet; the funnel is just a way to draw stretched space on a screen. The marker slides down it as the probe falls.",
+      "p2": "The chips compare three real black holes. <strong>Sagittarius A*</strong> is the one you have been watching, about 4.3 million Suns. M87*, at the heart of the giant galaxy M87, weighs about 6.5 billion Suns, and its horizon radius is about 19 billion km, about 128 times the distance from the Earth to the Sun. Cygnus X-1 weighs about 21 Suns, and its horizon radius is about 63 km, the size of a city. The horizon radius grows in step with the mass: double the mass and you double the radius.",
+      "p3": "Bigger is gentler. The tide at the horizon weakens as the hole grows, so at M87* it is far below anything a probe could measure, while at Cygnus X-1 it tears. The same fall takes longer too. Let go from five horizon radii and the probe reaches the centre in about 12 minutes at Sagittarius A*, in about 13 days at M87* and in a few thousandths of a second at Cygnus X-1. Any mass has a horizon radius, called its <strong>Schwarzschild radius</strong>: squeeze the mass inside it and you have a black hole. For the Sun it is about 2.95 km. For the Earth, about 8.9 mm.",
+      "p4": "Light itself shows how big these holes are. Light crosses one horizon radius of Sagittarius A* in about 42 seconds. At <strong>M87*</strong> the same trip takes about 18 hours, and at Cygnus X-1 about a fifth of a thousandth of a second. M87* is about 1,500 times heavier than Sagittarius A*, which is itself about 200,000 times heavier than Cygnus X-1. Yet the two giants look almost the same size in the sky from Earth, because M87* is so much farther away. The Event Horizon Telescope pictured its ring first, in 2019, about 42 millionths of an arcsecond across.",
+      "mass": "Mass",
+      "horizon": "Horizon radius",
+      "fall": "The same fall would take",
+      "tide": "Stretch over 2 m at the horizon"
+    }
+  }
+}

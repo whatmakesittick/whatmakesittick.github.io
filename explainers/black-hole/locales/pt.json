@@ -1,0 +1,197 @@
+{
+  "meta": {
+    "title": "Como um buraco negro distorce o tempo",
+    "eyebrow": "Sagittarius A*",
+    "tagline": "Uma sonda cai rumo ao buraco negro no centro da nossa galáxia. Um relógio idêntico ao dela fica na nave, e os dois deixam de marcar a mesma hora.",
+    "description": "Em 3D, uma sonda cai em Sagittarius A*, o buraco negro no centro da Via Láctea. Os relógios se desencontram, a luz se curva e a nave nunca a vê entrar.",
+    "summary": "Dois relógios, a queda, a luz que contorna o buraco, a imagem congelada no horizonte, a travessia e outros buracos negros.",
+    "socialAlt": "Vista em 3D do buraco negro no centro da Via Láctea, que curva a luz do seu disco de gás brilhante. Uma pequena sonda com um farol piscando cai rumo à sombra escura. Ao lado, o título “Como um buraco negro distorce o tempo”"
+  },
+  "stage": {
+    "label": "Modelo interativo de um buraco negro",
+    "gauge": "Dados da queda ao vivo"
+  },
+  "controls": {
+    "label": "Controles do buraco negro",
+    "views": {
+      "disc": {
+        "name": "Disco de gás",
+        "short": "Disco",
+        "hint": "Disco de gás (D)"
+      },
+      "sheet": {
+        "name": "Malha elástica",
+        "short": "Malha",
+        "hint": "Malha elástica (S)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    },
+    "momentOptions": {
+      "lastOrbit": "Última órbita estável",
+      "lightRing": "Esfera de fótons",
+      "horizon": "Horizonte"
+    },
+    "comparisonOptions": {
+      "sgrA": "Sagittarius A*",
+      "m87": "M87*",
+      "stellar": "Cygnus X-1"
+    }
+  },
+  "timeline": {
+    "label": "Tempo no relógio da sonda",
+    "phases": "Ir para um momento da queda",
+    "speed": "Reprodução",
+    "value": "{{time}}, {{phase}}",
+    "clock": "{{minutes}}:{{seconds}}",
+    "realTime": "Tempo real",
+    "faster": "{{factor}} vezes mais rápido",
+    "phase": {
+      "letGo": "Início da queda",
+      "plunge": "Acelerando",
+      "noOrbit": "Além da última órbita",
+      "lightRing": "Dentro do anel de luz",
+      "inside": "Lá dentro"
+    },
+    "during": {
+      "letGo": "a sonda começa a descer devagar e os dois relógios se desencontram",
+      "plunge": "a sonda passa de um quarto da velocidade da luz",
+      "noOrbit": "aqui, nada mais consegue orbitar o buraco",
+      "lightRing": "visto da nave, o farol fica cada vez mais vermelho até escurecer",
+      "inside": "não há mais saída, e o centro está a segundos daqui"
+    },
+    "jump": {
+      "letGo": "Ir para o início da queda",
+      "plunge": "Ir para a aceleração",
+      "noOrbit": "Ir para além da última órbita",
+      "lightRing": "Ir para dentro do anel de luz",
+      "inside": "Ir para dentro do horizonte"
+    }
+  },
+  "readouts": {
+    "probeClock": "Relógio da sonda",
+    "shipClock": "Relógio da nave",
+    "clockRatio": "Segundos da nave por segundo da sonda",
+    "distance": "Distância até o centro",
+    "speed": "Velocidade",
+    "tide": "Estiramento em 2 m"
+  },
+  "clocks": {
+    "never": "nunca",
+    "infinite": "∞",
+    "flash": {
+      "white": "Branco",
+      "orange": "Laranja",
+      "red": "Vermelho escuro",
+      "infrared": "Infravermelho",
+      "gone": "Apagado"
+    }
+  },
+  "parts": {
+    "horizon": "Horizonte de eventos",
+    "photonSphere": "Esfera de fótons",
+    "disc": "Disco de gás",
+    "probe": "Sonda",
+    "ship": "Nave",
+    "beacon": "Piscadas do farol",
+    "sheetProbe": "Sonda na malha"
+  },
+  "units": {
+    "horizonRadii": "{{value}} rs",
+    "lightSpeed": "{{value}} c",
+    "g": "{{value}} g",
+    "gLarge": "{{value}} de g",
+    "gBelow": "< {{value}} g",
+    "seconds": "{{value}} s",
+    "minutes": "{{value}} minutos",
+    "days": "{{value}} dias",
+    "milliseconds": "{{value}} milésimos de segundo",
+    "km": "{{value}} km",
+    "kmLarge": "{{value}} de km",
+    "suns": "{{value}} sóis",
+    "sunsLarge": "{{value}} de sóis",
+    "percent": "{{value}} %",
+    "times": "{{value}}×"
+  },
+  "sections": {
+    "overview": {
+      "title": "O buraco negro no coração da nossa galáxia",
+      "p1": "Você está vendo o buraco negro que fica no centro da nossa galáxia, a Via Láctea. Os astrônomos o chamam de <strong>Sagittarius A*</strong> (pronuncia-se “A estrela”). Ele está a cerca de 27.000 anos-luz da Terra e tem cerca de 4,3 milhões de vezes a massa do Sol. Em volta dele gira um disco fino de gás quente. O círculo escuro no meio é o próprio buraco. A borda dele é o horizonte de eventos: a linha a partir da qual nada volta, nem mesmo a luz. Do centro até essa borda são cerca de 12,7 milhões de km, umas 18 vezes o raio do Sol. Essa distância é o raio do horizonte. A luz leva cerca de 42 segundos para percorrê-la.",
+      "p2": "O círculo escuro não é uma superfície. É a <strong>sombra</strong> do buraco: o pedaço do céu de onde nenhuma luz consegue chegar até você. A luz que passa perto do buraco faz uma curva, e o disco mostra isso muito bem. A parte de trás do disco deveria ficar escondida atrás do buraco. Mas você a vê flutuando acima e abaixo do círculo escuro, porque a luz dela contorna o buraco por cima e por baixo no caminho até você. O lado direito do disco também brilha mais que o esquerdo. Ali, o gás vem na sua direção a uma boa fração da velocidade da luz, e isso deixa a luz dele mais brilhante e mais azulada.",
+      "p3": "Há dois viajantes nesta cena. Uma pequena <strong>sonda</strong>, com um relógio e um farol que pisca, está parada a cinco raios do horizonte, contando a partir do centro. Ela está prestes a se soltar e cair direto no buraco. Mais longe, a vinte raios do horizonte, uma nave espera numa órbita circular. A bordo, ela leva um relógio idêntico ao da sonda. Os dois relógios começam marcando zero. O modelo simplifica algumas coisas. A sonda e a nave aparecem milhares de vezes maiores do que são, para que você consiga vê-las. O buraco aparece sem rotação, porque ninguém mediu quão rápido o buraco real gira. Arraste a linha do tempo para acompanhar a queda e arraste a cena para girá-la.",
+      "p4": "O Sagittarius A* de verdade é bem mais apagado que esta imagem. Somando tudo, ele brilha tanto quanto uns 200 sóis, muito pouco para 4,3 milhões de sóis de massa. E engole por ano só cerca de um centésimo de milionésimo da massa do Sol. Aqui, o disco aparece brilhante para que você veja como a luz se curva. Mesmo assim, a sombra real já foi fotografada. Em 2022, o <strong>Event Horizon Telescope</strong>, uma rede de radiotelescópios espalhados pela Terra, mostrou o anel brilhante em volta dela, com cerca de 52 milionésimos de segundo de arco de diâmetro. Um segundo de arco é um grau dividido por 3.600, então esse anel é pequeno de verdade.",
+      "mass": "Massa",
+      "massValue": "4,3 milhões de sóis",
+      "horizon": "Raio do horizonte",
+      "horizonValue": "12,7 milhões de km",
+      "probeClock": "Relógio da sonda",
+      "shipClock": "Relógio da nave"
+    },
+    "clocks": {
+      "title": "Dois relógios que se desencontram",
+      "p1": "Em 0:00, a sonda se solta. Ela parte do <strong>repouso</strong>. Uma sonda de verdade só conseguiria ficar parada ali com a ajuda de um motor, porque perto do buraco tudo se move depressa. Para os relógios, tanto faz, então o modelo fica com o caso mais simples. Aqui fora, a atração é só a gravidade comum. No começo, a sonda desce devagar, depois cada vez mais rápido. Pelo próprio relógio, ela chega ao horizonte por volta de 11:53 e ao centro uns 30 segundos depois. A nave, em órbita a vinte raios do horizonte, tem um relógio que anda quase no mesmo ritmo de um relógio longe de qualquer buraco negro.",
+      "p2": "O farol pisca a cada dez segundos do tempo da sonda. Esse intervalo foi escolhido para o modelo: um farol real poderia piscar em qualquer ritmo. Cada piscada viaja até a nave, que anota a hora em que ela chega. Logo no início, as piscadas chegam cerca de 8 por cento mais espaçadas do que a sonda as enviou. Quanto mais fundo, maiores os intervalos. A três raios do horizonte, cada segundo da sonda dura quase dois segundos da nave. A dois raios, quase três. Esse tempo que se estica tem nome: <strong>dilatação do tempo</strong>. Arraste o controle para mudar a distância da sonda e veja os dois relógios se desencontrarem.",
+      "p3": "Aqui, dois efeitos se somam. O primeiro é a gravidade: um relógio parado no fundo de um poço gravitacional anda mais devagar que um relógio distante. Parado a dois raios do horizonte, um relógio andaria a só cerca de 71 por cento do ritmo de um relógio distante. A 1,1 raio do horizonte, a cerca de 30 por cento. O segundo efeito é o movimento. A sonda cai cada vez mais rápido, e cada piscada precisa subir contra a atração enquanto a sonda que a enviou se afasta em disparada. Os dois efeitos esticam a luz: a frequência cai e as piscadas ficam mais espaçadas. Juntos, eles produzem o <strong>desvio para o vermelho</strong> que a nave mede. As piscadas chegam não só mais tarde, mas também mais vermelhas.",
+      "p4": "Nada disso é exótico. Os relógios dos <strong>satélites de GPS</strong> sentem os mesmos dois efeitos. Eles orbitam a cerca de 20.000 km de altura, onde a gravidade da Terra é mais fraca, e por isso adiantam cerca de 45 microssegundos por dia. Eles também se movem a cerca de 14.000 km/h, o que os faz atrasar cerca de 7 microssegundos por dia. No saldo, adiantam cerca de 38 microssegundos por dia, e o sistema corrige essa diferença. Sem a correção, o erro na sua posição cresceria cerca de 10 km por dia. Em 2010, cientistas do NIST compararam dois relógios, um 33 cm acima do outro. O de cima andou mais rápido: cerca de 90 nanossegundos a mais ao longo de uma vida inteira.",
+      "control": {
+        "label": "Distância até o centro",
+        "horizon": "Horizonte",
+        "release": "Onde se soltou",
+        "probe": "Relógio da sonda",
+        "ship": "Relógio da nave",
+        "ratio": "Segundos da nave por segundo da sonda",
+        "flash": "O farol visto da nave"
+      }
+    },
+    "light": {
+      "title": "A luz contorna o buraco",
+      "p1": "A luz sempre segue o caminho mais reto possível. Mas perto de um buraco negro o próprio espaço é curvo, então até o caminho mais reto faz uma curva. Isso se chama <strong>lente gravitacional</strong>. A luz da parte de trás do disco deveria ficar escondida atrás do buraco. Em vez disso, ela passa por cima e por baixo do buraco e se curva na sua direção. Por isso você vê a parte de trás como dois arcos, um acima e outro abaixo da sombra. Pelo mesmo motivo, as estrelas atrás do buraco aparecem esticadas em arcos. Olhando com atenção, você encontra uma segunda imagem do disco, mais fraca, colada na borda da sombra. É luz que deu meia volta em torno do buraco antes de escapar.",
+      "p2": "A 1,5 raio do horizonte existe uma região onde a luz consegue andar em círculos em volta do buraco. É a <strong>esfera de fótons</strong>. A luz que chega ali no ângulo certo fica dando voltas, e um pouco dela escapa na sua direção. É o anel fino e brilhante colado na sombra. Esse anel explica por que a sombra parece maior que o horizonte. Toda luz apontada para dentro de um círculo de cerca de 2,6 raios do horizonte em volta do centro acaba capturada. Por isso a mancha escura que você vê tem cerca de 5,2 raios do horizonte de diâmetro, mais que o dobro do diâmetro do próprio horizonte. Em Sagittarius A*, a esfera de fótons fica a cerca de 19 milhões de km do centro.",
+      "p3": "Mais para fora, a três raios do horizonte, fica a <strong>última órbita estável</strong>. Do lado de fora dela, gás e estrelas podem girar em volta do buraco pelo tempo que quiserem, como os planetas giram em volta do Sol. Do lado de dentro, nenhuma órbita se mantém: qualquer coisa que chegue um pouco mais perto continua caindo. É por isso que o disco termina a três raios do horizonte, a cerca de 38 milhões de km do centro. Nessa borda interna, o gás se move a cerca de metade da velocidade da luz. Nessa velocidade, o gás que vem na sua direção parece dezenas de vezes mais brilhante que o gás que se afasta. Toque num botão para levar a sonda a cada um desses lugares.",
+      "p4": "Essa curvatura não existe só no desenho: ela foi medida. A estrela <strong>S2</strong> dá uma volta em torno de Sagittarius A* a cada 16 anos. Em maio de 2018, ela passou pelo ponto mais próximo do buraco, a cerca de 120 vezes a distância entre a Terra e o Sol, ou cerca de 1.400 raios do horizonte. Ali, ela se movia a cerca de 7.700 km/s, uns 2,6 por cento da velocidade da luz. A luz dela chegou esticada para cores mais vermelhas, pela gravidade do buraco e pela velocidade da estrela. Esse desvio equivale a cerca de 200 km/s, e o tamanho dele bateu com o que a relatividade geral prevê. Depois, a estrela voltou a se afastar, sem nenhum dano. Um buraco negro não suga as coisas: elas ficam em órbita em volta dele.",
+      "shadow": "Diâmetro da sombra",
+      "shadowValue": "cerca de 5,2 raios do horizonte",
+      "ring": "Onde a luz circula",
+      "ringValue": "1,5 raio do horizonte",
+      "orbit": "Última órbita estável",
+      "orbitValue": "3 raios do horizonte",
+      "seen": "Tamanho visto da Terra",
+      "seenValue": "cerca de 52 milionésimos de segundo de arco"
+    },
+    "frozen": {
+      "title": "A nave nunca vê a sonda cruzar",
+      "p1": "Agora você está na nave, vendo a sonda cair. As piscadas chegam com intervalos cada vez maiores, cada uma mais vermelha e mais fraca que a anterior. Perto do horizonte, a mudança dispara. A 1,2 raio do horizonte, um segundo da sonda leva quase dez segundos da nave. A 1,05 raio do horizonte, leva cerca de 36. As cores passam do branco ao laranja e ao vermelho escuro. Depois vão além do vermelho, até o <strong>infravermelho</strong>, onde os seus olhos não veem mais nada. Os números abaixo acompanham as últimas piscadas conforme elas chegam. Neste capítulo, a reprodução fica mais lenta para você ver a sonda se apagar.",
+      "p2": "Vista da nave, a sonda nunca chega ao horizonte. A imagem dela fica mais lenta, se arrasta até a borda escura e <strong>congela</strong> ali, até sumir no preto. A última piscada enviada antes da travessia leva uma eternidade para sair. E nenhuma piscada enviada no horizonte ou dentro dele jamais chega. Cada vez que a sonda fica dez vezes mais perto do horizonte, a luz dela precisa de uns 98 segundos a mais para chegar à nave, e isso não tem fim. No relógio de quem está longe, não existe uma hora para o momento da travessia. Por isso o relógio da nave, nos números, mostra apenas “nunca”.",
+      "p3": "Mesmo assim, a sonda cruza o horizonte, por volta de 11:53 no próprio relógio. Como as duas coisas podem ser verdade? A nave não vê a sonda em si. Ela vê a luz que saiu da sonda. A dilatação do tempo diz quando essa luz consegue chegar à nave, e não o que a sonda sente. A luz do próprio horizonte nunca sai, então a imagem na nave para ali, mesmo que a sonda já tenha seguido em frente há muito tempo. Não há <strong>contradição</strong>. Dois relógios em lugares diferentes medem coisas diferentes, e a relatividade geral diz exatamente como as duas medidas se relacionam.",
+      "p4": "Se você ficasse pairando logo acima de um horizonte, a sua vida passaria de fato mais devagar que a dos seus amigos. Um relógio parado a 1,1 raio do horizonte anda a cerca de 30 por cento do ritmo de um relógio distante. No filme <strong>Interestelar</strong>, uma hora no planeta de Miller equivale a sete anos em outro lugar, um fator de cerca de 60.000. Isso não é possível em Sagittarius A*. Em volta de um buraco que não gira, só existem órbitas estáveis a partir de três raios do horizonte, e ali um relógio anda no máximo cerca de 1,4 vez mais devagar. O planeta do filme precisaria de um buraco de cerca de 100 milhões de sóis, girando a menos de uma parte em 100 trilhões da velocidade máxima, numa órbita rente ao horizonte.",
+      "ship": "Relógio da nave",
+      "gap": "Intervalo entre piscadas",
+      "brightness": "Brilho da sonda",
+      "colour": "Cor das piscadas"
+    },
+    "inside": {
+      "title": "Uma travessia sem solavancos",
+      "p1": "Agora passe para a sonda. Quando ela se aproxima do horizonte, nada acontece. Nenhuma parede, nenhum clarão, nenhum tranco. O <strong>horizonte de eventos</strong> não é uma superfície que dá para tocar ou ver. É a linha a partir da qual a luz não consegue mais escapar. Do lado de dentro, não há nenhum sinal de que você passou por ela. O relógio da sonda continua marcando o tempo normalmente, como sempre, e por volta de 11:53 ela cruza o horizonte. Os números fazem a contagem regressiva do tempo da sonda até o centro. Neste capítulo, a reprodução é em tempo real, então os últimos segundos passam tão devagar quanto passariam para a sonda.",
+      "p2": "O céu fica escuro? Não. A luz de fora continua caindo no buraco, atrás da sonda, então as estrelas e o disco continuam à vista, só que curvados e avermelhados. A sonda também não vê todo o futuro do universo passar num piscar de olhos. O tempo dela acaba no centro, então ela só recebe a luz que consegue alcançá-la antes disso. E a vista não se espreme numa janela cada vez menor. Uma sonda parada perto do horizonte veria o céu todo amontoado acima dela. Mas uma sonda em queda avança tão depressa que um efeito chamado <strong>aberração</strong> volta a espalhar o céu.",
+      "p3": "Lá dentro, todos os caminhos levam ao centro. Pelo relógio da sonda, ela chega lá uns 30 segundos depois de cruzar o horizonte. Bem antes disso, o buraco puxa a ponta mais próxima da sonda com mais força que a ponta mais distante. Esse estiramento é a <strong>força de maré</strong>, o mesmo efeito que provoca as marés na Terra. No horizonte de um buraco tão grande, ela é minúscula: cerca de um décimo de milésimo de g em dois metros, fraca demais para ser sentida. Ela só chega a 1 g bem lá no fundo, quando falta cerca de um vigésimo do raio do horizonte para o centro. Uma pessoa cruzaria o horizonte de Sagittarius A* sem sentir nada.",
+      "p4": "Num buraco negro pequeno, acontece o contrário. <strong>Cygnus X-1</strong>, com cerca de 21 sóis de massa, tem um raio do horizonte de só uns 63 km. Ali, a força de maré é de cerca de 5 milhões de g em dois metros. Uma pessoa que caísse nele seria despedaçada muito antes do horizonte, esticada até ficar fina como um fio de espaguete. A queda inteira, a partir de cinco raios do horizonte, levaria alguns milésimos de segundo. Buracos grandes são suaves na borda, e buracos pequenos são violentos. Isso porque a força de maré depende de quão bruscamente a gravidade muda ao longo do seu corpo, e essa mudança fica mais fraca à medida que o horizonte cresce.",
+      "left": "Tempo da sonda até o centro",
+      "speed": "Velocidade ao passar por um observador parado",
+      "tide": "Estiramento em 2 m"
+    },
+    "others": {
+      "title": "Buracos maiores, bordas mais suaves",
+      "p1": "Ligue a malha elástica e a cena vira aquela imagem famosa: uma grade plana que afunda como um funil. É o desenho do espaço como uma <strong>malha elástica</strong>, e ele mostra uma coisa verdadeira. Perto do buraco, as distâncias ficam esticadas: uma régua deitada ao longo do funil mede mais comprimento do que os círculos planos sugerem. Mas ele não mostra mais nada. Não mostra como o tempo passa, nem de onde vem a atração. Nada rola pela malha: o funil é só um jeito de desenhar o espaço esticado numa tela. O marcador desce pelo funil conforme a sonda cai.",
+      "p2": "Os botões comparam três buracos negros reais. <strong>Sagittarius A*</strong> é o que você está acompanhando, com cerca de 4,3 milhões de sóis. M87*, no coração da galáxia gigante M87, tem cerca de 6,5 bilhões de sóis. O raio do horizonte dele é de cerca de 19 bilhões de km, umas 128 vezes a distância da Terra ao Sol. Cygnus X-1 tem cerca de 21 sóis, e o raio do horizonte dele é de uns 63 km, o tamanho de uma cidade. O raio do horizonte cresce na mesma proporção que a massa: dobre a massa e o raio também dobra.",
+      "p3": "Quanto maior, mais suave. A força de maré no horizonte enfraquece conforme o buraco cresce. Em M87*, ela fica muito abaixo do que qualquer sonda conseguiria medir. Já em Cygnus X-1, ela despedaça tudo. E, quanto maior o buraco, mais demora a mesma queda. Solte a sonda a cinco raios do horizonte e ela chega ao centro em cerca de 12 minutos em Sagittarius A*, em cerca de 13 dias em M87* e em alguns milésimos de segundo em Cygnus X-1. Toda massa tem um raio do horizonte, chamado <strong>raio de Schwarzschild</strong>: comprima a massa dentro dele e você terá um buraco negro. Para o Sol, ele é de cerca de 2,95 km. Para a Terra, de cerca de 8,9 mm.",
+      "p4": "A própria luz mostra o tamanho desses buracos. A luz atravessa um raio do horizonte de Sagittarius A* em cerca de 42 segundos. Em <strong>M87*</strong>, a mesma viagem leva cerca de 18 horas. Em Cygnus X-1, cerca de um quinto de milésimo de segundo. M87* é cerca de 1.500 vezes mais pesado que Sagittarius A*, que por sua vez é cerca de 200.000 vezes mais pesado que Cygnus X-1. Mesmo assim, vistos da Terra, os dois gigantes parecem quase do mesmo tamanho no céu, porque M87* está muito mais longe. O Event Horizon Telescope fotografou primeiro o anel de M87*, em 2019. Ele mede cerca de 42 milionésimos de segundo de arco de diâmetro.",
+      "mass": "Massa",
+      "horizon": "Raio do horizonte",
+      "fall": "A mesma queda levaria",
+      "tide": "Estiramento em 2 m no horizonte"
+    }
+  }
+}
