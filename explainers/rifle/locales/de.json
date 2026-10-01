@@ -219,7 +219,7 @@
       "p3": "Innen ist der Lauf nicht glatt. Vier spiralförmige Rillen, die <strong>Züge</strong>, winden sich nach rechts und machen alle 240 mm eine volle Umdrehung. Sie packen das Geschoss und versetzen es in Drehung. Auf dem Weg durch den Lauf dreht es sich etwa anderthalbmal. An der Mündung macht es etwa 3.000 Umdrehungen pro Sekunde.",
       "p4": "Nur etwa ein Viertel bis ein Drittel der Energie des Pulvers landet im Geschoss. Ein Teil heizt Lauf und Hülse auf, ein anderer wird gebraucht, um das Geschoss in die Züge zu pressen. Etwa 40 Prozent entweichen mit dem heißen Gas, das hinter dem Geschoss aus dem Lauf strömt. Kurz bevor das Geschoss den Lauf verlässt, zweigt das Gewehr aber ein wenig von diesem Gas für sich ab. Wie das geht, zeigt das nächste Kapitel.",
       "travelLabel": "Wie weit das Geschoss gekommen ist",
-      "speed": "Geschossgeschwindigkeit",
+      "speed": "Geschwindigkeit",
       "pressure": "Druck dahinter",
       "spin": "Drehzahl",
       "turns": "Umdrehungen bisher"
