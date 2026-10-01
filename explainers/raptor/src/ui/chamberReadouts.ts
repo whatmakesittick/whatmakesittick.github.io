@@ -1,4 +1,5 @@
 import type { Disposer } from '@core/ui/disposers';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { FLAME_TEMPERATURE_K } from '../model/performance';
 import { performanceOf } from '../state';
 import type { RaptorStore } from '../state';
@@ -9,7 +10,6 @@ import {
   formatKmPerSecond,
   unlessOff,
 } from './format';
-import { mountLiveReadouts } from './liveReadouts';
 
 export function mountChamberReadouts(root: Document, store: RaptorStore): Disposer {
   return mountLiveReadouts(root, store, {

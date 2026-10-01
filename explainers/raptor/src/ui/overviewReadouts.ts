@@ -1,9 +1,9 @@
 import type { Disposer } from '@core/ui/disposers';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { boosterThrustTf, thrustToWeight } from '../model/performance';
 import { performanceOf } from '../state';
 import type { RaptorStore } from '../state';
 import { formatKg, formatTimes, formatTonnes, unlessOff } from './format';
-import { mountLiveReadouts } from './liveReadouts';
 
 export function mountOverviewReadouts(root: Document, store: RaptorStore): Disposer {
   return mountLiveReadouts(root, store, {

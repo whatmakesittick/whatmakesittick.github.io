@@ -452,6 +452,9 @@ Helpers that more than one explainer's widgets share:
   and language; `canvasFont` and `widestText` lay out its labels.
 - `disposeAll` in `src/core/ui/disposers.ts` folds a list of `Disposer` functions into one, so a
   mount can hand back a single unmount.
+- `mountLiveReadouts(root, store, readouts)` in `src/core/ui/liveReadouts.ts` keeps each
+  `data-readout` element in a chapter showing its text from the store, in the current language,
+  and hands back one unmount.
 - `withAlpha` in `src/core/color.ts` turns a `#rrggbb` theme colour into an `rgb()` string with
   an alpha, for canvas fills and bands.
 - `slowMotionFactor(speed, realTimeSpeed, base)` in `src/core/playback.ts` gives how many times

@@ -1,8 +1,8 @@
 import type { Disposer } from '@core/ui/disposers';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { clocksOf } from '../state';
 import type { BlackHoleStore } from '../state';
 import { formatFlashTone, formatPercent, formatSeconds, formatShipClock } from './format';
-import { mountLiveReadouts } from './liveReadouts';
 
 export function mountFrozenReadouts(root: Document, store: BlackHoleStore): Disposer {
   return mountLiveReadouts(root, store, {

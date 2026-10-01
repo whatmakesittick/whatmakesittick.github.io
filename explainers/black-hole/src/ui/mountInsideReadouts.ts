@@ -1,8 +1,8 @@
 import type { Disposer } from '@core/ui/disposers';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { clocksOf, fallOf } from '../state';
 import type { BlackHoleStore } from '../state';
 import { formatClock, formatLightSpeed, formatTide } from './format';
-import { mountLiveReadouts } from './liveReadouts';
 
 export function mountInsideReadouts(root: Document, store: BlackHoleStore): Disposer {
   return mountLiveReadouts(root, store, {

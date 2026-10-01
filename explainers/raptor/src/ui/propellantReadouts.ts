@@ -1,4 +1,5 @@
 import type { Disposer } from '@core/ui/disposers';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { PROPELLANTS, propellantFlow, toCelsius } from '../model/propellants';
 import { engineOf } from '../state';
 import type { RaptorState, RaptorStore } from '../state';
@@ -9,7 +10,6 @@ import {
   formatRoute,
   unlessOff,
 } from './format';
-import { mountLiveReadouts } from './liveReadouts';
 
 function boilsAt(state: RaptorState): string {
   const { boilsAtK } = PROPELLANTS[state.propellant];

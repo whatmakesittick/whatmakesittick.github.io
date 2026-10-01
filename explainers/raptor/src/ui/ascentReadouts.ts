@@ -2,12 +2,12 @@ import { disposeAll } from '@core/ui/disposers';
 import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { boosterThrustTf } from '../model/performance';
 import { engineOf, performanceOf } from '../state';
 import type { RaptorState, RaptorStore } from '../state';
 import { formatDegrees, formatKmPerHour, formatTonnes } from './format';
 import { LaunchView } from './launchView';
-import { mountLiveReadouts } from './liveReadouts';
 
 function steeringTilt(state: RaptorState): number {
   const { pitch, yaw } = engineOf(state).gimbal;

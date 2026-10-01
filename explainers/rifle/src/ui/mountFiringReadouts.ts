@@ -1,9 +1,9 @@
 import type { Disposer } from '@core/ui/disposers';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { hammerStage, lockStage } from '../model';
 import { cycleOf } from '../state';
 import type { RifleStore } from '../state';
 import { formatHammer, formatLock, formatPressure } from './format';
-import { mountLiveReadouts } from './liveReadouts';
 
 export function mountFiringReadouts(root: Document, store: RifleStore): Disposer {
   return mountLiveReadouts(root, store, {

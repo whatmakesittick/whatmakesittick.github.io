@@ -1,10 +1,10 @@
 import type { Disposer } from '@core/ui/disposers';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { caseStage, roundStage } from '../model';
 import { cycleOf } from '../state';
 import type { RifleStore } from '../state';
 import { carrierPercent, timeUntilReady } from './cycleTexts';
 import { formatCase, formatComparison, formatRound } from './format';
-import { mountLiveReadouts } from './liveReadouts';
 
 export function mountReloadReadouts(root: Document, store: RifleStore): Disposer {
   return mountLiveReadouts(root, store, {

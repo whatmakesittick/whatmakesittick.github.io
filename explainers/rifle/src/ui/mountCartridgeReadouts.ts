@@ -1,8 +1,8 @@
 import type { Disposer } from '@core/ui/disposers';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { cycleOf } from '../state';
 import type { RifleStore } from '../state';
 import { formatMm, formatPressure, formatTimesAir } from './format';
-import { mountLiveReadouts } from './liveReadouts';
 
 export function mountCartridgeReadouts(root: Document, store: RifleStore): Disposer {
   return mountLiveReadouts(root, store, {
