@@ -6,14 +6,15 @@ import {
   CARRIER,
   CARRIER_STROKE,
   EJECTOR_X,
+  FRONT_SIGHT,
   GAS_CYLINDER,
   GAS_PORT_X,
   MAGAZINE,
   OVERALL_LENGTH,
+  REAR_SIGHT,
   RECEIVER,
   RIFLED_LENGTH,
   RIFLING,
-  SIGHT_RADIUS,
   STOCK,
 } from './layout';
 
@@ -22,7 +23,7 @@ describe('layout', () => {
     expect(BARREL.x[1] - BARREL.x[0]).toBe(415);
     expect(RIFLING.x[1] - RIFLING.x[0]).toBe(RIFLED_LENGTH);
     expect(RIFLING.x[0]).toBe(46);
-    expect(SIGHT_RADIUS).toBe(378);
+    expect(FRONT_SIGHT.x - REAR_SIGHT.x).toBe(378);
   });
 
   it('seats the bullet so it travels 386 mm to the muzzle', () => {

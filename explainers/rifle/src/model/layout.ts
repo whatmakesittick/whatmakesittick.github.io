@@ -30,8 +30,6 @@ export const RIFLED_LENGTH = 369;
 
 export const RIFLING: Span = { x: [BARREL.x[1] - RIFLED_LENGTH, BARREL.x[1]] };
 
-export const CHAMBER = { x: [0, 38.7] as Extent, baseRadius: 5.65, neckRadius: 4.3, neckStart: 30 };
-
 export const CARTRIDGE = {
   length: 56,
   caseLength: 38.7,
@@ -40,6 +38,13 @@ export const CARTRIDGE = {
   bulletRadius: 3.96,
   bulletLength: 26.8,
   primerRadius: 2.75,
+};
+
+export const CHAMBER = {
+  x: [0, CARTRIDGE.caseLength] as Extent,
+  baseRadius: CARTRIDGE.rimRadius,
+  neckRadius: CARTRIDGE.neckRadius,
+  neckStart: 30,
 };
 
 export const BULLET_SEAT_X = CARTRIDGE.length - CARTRIDGE.bulletLength;
@@ -102,11 +107,10 @@ export const GRIP: Box = { x: [-215, -180], y: [-95, -22], z: [-13, 13] };
 
 export const TRIGGER_GUARD: Box = { x: [-205, -150], y: [-50, -22], z: [-6, 6] };
 
-export const STOCK: Box & { butDrop: number } = {
+export const STOCK: Box = {
   x: [-OVERALL_LENGTH + BARREL.x[1], -260],
   y: [-60, 32],
   z: [-18, 18],
-  butDrop: 30,
 };
 
 export const HANDGUARD: Box = { x: [40, 180], y: [-26, 36], z: [-18, 18] };
@@ -115,12 +119,13 @@ export const REAR_SIGHT = { block: { x: [20, 60] as Extent }, x: 32, y: 36 };
 
 export const FRONT_SIGHT = { tower: { x: [400, 418] as Extent }, x: 410, y: 40 };
 
-export const SIGHT_RADIUS = FRONT_SIGHT.x - REAR_SIGHT.x;
-
 export const CLEANING_ROD: Tube = { x: [40, 405], axisY: -14, radius: 2.5 };
+
+const SIGHT_HEADROOM = 8;
+const LEFT_SIDE_CLEARANCE = 2;
 
 export const RIFLE_EXTENT: Box = {
   x: [STOCK.x[0], BARREL.x[1]],
-  y: [GRIP.y[0], FRONT_SIGHT.y + 8],
-  z: [-20, CHARGING_HANDLE.z[1]],
+  y: [GRIP.y[0], FRONT_SIGHT.y + SIGHT_HEADROOM],
+  z: [STOCK.z[0] - LEFT_SIDE_CLEARANCE, CHARGING_HANDLE.z[1]],
 };

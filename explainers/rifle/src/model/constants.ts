@@ -1,3 +1,4 @@
+import { BORE } from './layout';
 export const BULLET_MASS_KG = 0.0079;
 export const POWDER_MASS_KG = 0.0016;
 export const MUZZLE_SPEED = 715;
@@ -5,7 +6,7 @@ export const PEAK_PRESSURE_MPA = 275;
 export const START_PRESSURE_MPA = 29;
 export const PEAK_TRAVEL_MM = 50;
 export const MUZZLE_PRESSURE_MPA = 55;
-export const TWIST_MM = 240;
+export const TWIST_MM = BORE.twist;
 export const CYCLE_MS = 100;
 export const SHOTS_PER_MINUTE = 600;
 export const RIFLE_MASS_KG = 3.6;
