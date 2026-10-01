@@ -125,6 +125,26 @@ describe('createExplainerStore', () => {
     expect(store.getState().playing).toBe(false);
   });
 
+  it('keeps a pause made before a preset pause, as reduced motion starts the page', () => {
+    const store = createTestStore();
+    store.getState().pause();
+    store.getState().applyPreset('hold');
+    expect(store.getState()).toMatchObject({ phase: 25, playing: false, pausedByPreset: false });
+    store.getState().applyPreset('seek');
+    expect(store.getState()).toMatchObject({ phase: 60, playing: false });
+    store.getState().applyPreset('intro');
+    expect(store.getState().playing).toBe(false);
+  });
+
+  it('resumes after two preset pauses in a row', () => {
+    const store = createTestStore();
+    store.getState().applyPreset('hold');
+    store.getState().applyPreset('holdPastEnd');
+    expect(store.getState().pausedByPreset).toBe(true);
+    store.getState().applyPreset('seek');
+    expect(store.getState().playing).toBe(true);
+  });
+
   it('seeks to a preset start and keeps playing', () => {
     const store = createTestStore({ phase: 10 });
     store.getState().applyPreset('seek');

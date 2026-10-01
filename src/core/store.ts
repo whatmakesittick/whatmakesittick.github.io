@@ -52,7 +52,9 @@ function playbackForPreset(
   state: PlaybackState,
   preset: Preset,
 ): Pick<PlaybackState, 'playing' | 'pausedByPreset'> {
-  if (preset.pauseAt !== undefined) return { playing: false, pausedByPreset: true };
+  if (preset.pauseAt !== undefined) {
+    return { playing: false, pausedByPreset: state.playing || state.pausedByPreset };
+  }
   if (state.pausedByPreset) return { playing: true, pausedByPreset: false };
   return { playing: state.playing, pausedByPreset: false };
 }

@@ -56,7 +56,7 @@ describe('engine store', () => {
     store.getState().pause();
     store.getState().applyPreset('compression');
     store.getState().applyPreset('fuel');
-    expect(store.getState().playing).toBe(true);
+    expect(store.getState().playing).toBe(false);
 
     store.getState().pause();
     store.getState().applyPreset('inline4');

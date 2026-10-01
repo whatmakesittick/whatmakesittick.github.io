@@ -136,7 +136,7 @@ interface Timeline {
 interface Preset {
   view?: Partial<Record<string, boolean>>;
   speed?: number;
-  pauseAt?: number; // pauses there; the next preset without it resumes
+  pauseAt?: number; // pauses there; the next preset without it resumes, unless it was already paused
   startAt?: number; // seeks there and keeps the playing state
 }
 
@@ -195,7 +195,9 @@ strike or a rocket launch: the phase is clamped to `[0, cycle]`, playback pauses
 at the end, play at the end starts over from 0, the scrubber reaches the end and
 the last phase stays current there. A preset's `pauseAt` and `startAt` are
 wrapped or clamped the same way; `startAt` moves a chapter to its moment in the
-run without stopping playback.
+run without stopping playback. A `pauseAt` chapter owns its pause only when it
+stopped playback itself: a pause made by hand, or the one reduced motion starts
+the page with, stays when the reader moves on to the next chapter.
 
 Core mounts the shell (`src/core/mount.ts`): the dock (play, scrubber with phase
 bands, status, speed slider, choices, toggles, reset camera, more), the gauge
