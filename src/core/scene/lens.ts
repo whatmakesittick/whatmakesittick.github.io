@@ -9,6 +9,8 @@ export interface SafeArea {
   left: number;
 }
 
+export type GaugeSide = 'right' | 'top';
+
 export interface ViewportSize {
   width: number;
   height: number;

@@ -1,0 +1,12 @@
+{
+  "slug": "rifle",
+  "tags": ["mechanics", "physics", "weapons"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "Cutaway of a gas-operated rifle, the bullet still in the barrel and hot gas pushing the piston back to reload, beside the title How a rifle reloads itself"
+  }
+}

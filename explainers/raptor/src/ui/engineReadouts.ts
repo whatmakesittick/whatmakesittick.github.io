@@ -2,6 +2,7 @@ import { disposeAll } from '@core/ui/disposers';
 import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
 import { watchLocalized } from '@core/ui/subscribe';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { ENGINES } from '../model/engines';
 import type { EngineSpec } from '../model/engines';
 import type { RaptorState, RaptorStore } from '../state';
@@ -15,7 +16,6 @@ import {
   formatPropellantPair,
   formatTonnes,
 } from './format';
-import { mountLiveReadouts } from './liveReadouts';
 
 function chosen(state: RaptorState): EngineSpec {
   return ENGINES[state.engine];

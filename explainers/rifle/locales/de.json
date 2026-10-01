@@ -1,0 +1,249 @@
+{
+  "meta": {
+    "title": "So lädt sich ein Gewehr selbst nach",
+    "eyebrow": "Gewehr",
+    "tagline": "Ein Schuss, ein kurzer Gasstoß, und nach einer Zehntelsekunde ist das Gewehr wieder schussbereit.",
+    "description": "Ein Blick in einen Gasdrucklader, in 3D und in Zeitlupe: ein Schuss, ein Stoß aus dem eigenen Gas und die Teile, die die Hülse auswerfen und nachladen.",
+    "summary": "Die Patrone, der verriegelte Verschluss, der Lauf, das abgezweigte Gas und das Hin und Her, das die nächste Patrone lädt.",
+    "socialAlt": "Schnittbild eines Gasdruckladers. Das Geschoss steckt noch im Lauf, und heißes Gas drückt den Gaskolben zum Nachladen nach hinten. Daneben steht der Titel „So lädt sich ein Gewehr selbst nach“."
+  },
+  "stage": {
+    "label": "Interaktives Gewehrmodell",
+    "gauge": "Messwerte während des Schusses"
+  },
+  "controls": {
+    "label": "Steuerung des Modells",
+    "views": {
+      "cutaway": {
+        "name": "Schnittansicht",
+        "short": "Schnitt",
+        "hint": "Schnittansicht (C)"
+      },
+      "gas": {
+        "name": "Heißes Gas",
+        "short": "Gas",
+        "hint": "Heißes Gas (G)"
+      },
+      "trail": {
+        "name": "Geschossspur",
+        "short": "Spur",
+        "hint": "Geschossspur (T)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    },
+    "momentOptions": {
+      "strike": "Hahn schlägt zu",
+      "start": "Geschoss startet",
+      "peak": "Höchster Druck",
+      "port": "Geschoss an der Gasbohrung",
+      "exit": "Geschoss verlässt den Lauf",
+      "unlock": "Verschluss entriegelt",
+      "eject": "Hülse fliegt heraus",
+      "strip": "Nächste Patrone",
+      "lock": "Verschluss verriegelt"
+    },
+    "gasPortOptions": {
+      "open": "Gasbohrung offen",
+      "blocked": "Gasbohrung blockiert"
+    },
+    "comparisonOptions": {
+      "blink": "Ein Wimpernschlag",
+      "sound": "Schall",
+      "car": "Ein Auto"
+    }
+  },
+  "timeline": {
+    "label": "Zeit im Zyklus",
+    "phases": "Zu einem Schritt springen",
+    "speed": "Wiedergabe",
+    "value": "{{time}}, {{phase}}",
+    "ms": "{{value}} ms",
+    "perShot": "{{seconds}} s pro Schuss",
+    "realPace": "Echtzeit",
+    "speedValue": "{{factor}}-fach verlangsamt",
+    "phase": {
+      "strike": "Hahn fällt",
+      "barrel": "Durch den Lauf",
+      "unlock": "Entriegelung",
+      "eject": "Rücklauf",
+      "feed": "Vorlauf",
+      "ready": "Bereit"
+    },
+    "during": {
+      "strike": "der Hahn fällt und trifft den Schlagbolzen",
+      "barrel": "das Pulver verbrennt und treibt das Geschoss durch den Lauf",
+      "unlock": "das Geschoss hat den Lauf verlassen, und der Verschlussträger dreht den Verschluss frei",
+      "eject": "der Verschlussträger saust nach hinten, wirft die leere Hülse aus und spannt den Hahn",
+      "feed": "die Schließfeder schiebt den Verschlussträger mit der nächsten Patrone nach vorn",
+      "ready": "der Verschluss ist verriegelt, und gleich fällt der Hahn wieder"
+    },
+    "jump": {
+      "strike": "Zum fallenden Hahn springen",
+      "barrel": "Zum Geschoss im Lauf springen",
+      "unlock": "Zum Entriegeln springen",
+      "eject": "Zum Rücklauf springen",
+      "feed": "Zum Vorlauf springen",
+      "ready": "Zum Ende des Zyklus springen"
+    }
+  },
+  "readouts": {
+    "time": "Zeit",
+    "pressure": "Druck",
+    "bulletSpeed": "Geschossgeschwindigkeit",
+    "carrier": "Weg des Trägers"
+  },
+  "parts": {
+    "barrel": "Lauf",
+    "chamber": "Patronenlager",
+    "muzzle": "Mündung",
+    "rifling": "Züge",
+    "trunnion": "Laufaufnahme",
+    "bolt": "Verschluss",
+    "firingPin": "Schlagbolzen",
+    "extractor": "Auszieher",
+    "carrier": "Verschlussträger",
+    "chargingHandle": "Spannhebel",
+    "pistonRod": "Kolbenstange",
+    "pistonHead": "Gaskolben",
+    "gasBlock": "Gasblock",
+    "gasPort": "Gasbohrung",
+    "gasTube": "Gasrohr",
+    "ventHoles": "Entlüftungslöcher",
+    "returnSpring": "Schließfeder",
+    "hammer": "Hahn",
+    "trigger": "Abzug",
+    "selector": "Feuerwahlhebel",
+    "ejector": "Auswerfer",
+    "receiver": "Gehäuse",
+    "magazine": "Magazin",
+    "cartridgeCase": "Hülse",
+    "primer": "Zündhütchen",
+    "powder": "Pulver",
+    "bullet": "Geschoss",
+    "spentCase": "Leere Hülse",
+    "hotGas": "Heißes Gas",
+    "stock": "Schaft",
+    "grip": "Griff",
+    "handguard": "Handschutz",
+    "rearSight": "Kimme",
+    "frontSight": "Korn",
+    "cleaningRod": "Putzstock"
+  },
+  "firing": {
+    "hammer": {
+      "falling": "Fällt",
+      "struck": "Liegt am Schlagbolzen an",
+      "cocking": "Vom Träger zurückgedrückt",
+      "cocked": "Gespannt",
+      "held": "Vom Hahnverzögerer gebremst"
+    },
+    "lock": {
+      "locked": "Verriegelt",
+      "turning": "Dreht sich",
+      "open": "Entriegelt"
+    }
+  },
+  "gas": {
+    "result": {
+      "open": "Der Verschlussträger lädt das Gewehr nach",
+      "blocked": "Ein Schuss, dann bewegt sich nichts"
+    }
+  },
+  "reload": {
+    "case": {
+      "held": "Vom Auszieher gehalten",
+      "flying": "Fliegt nach rechts heraus",
+      "gone": "Ausgeworfen"
+    },
+    "round": {
+      "waiting": "Wartet im Magazin",
+      "feeding": "Wird eingeschoben",
+      "chambered": "Im Patronenlager"
+    },
+    "compare": {
+      "blink": "Ein Zyklus dauert etwa so lange wie der schnellste Wimpernschlag.",
+      "sound": "In einem Zyklus legt der Schall etwa {{metres}} m zurück.",
+      "car": "In einem Zyklus fährt ein Auto mit 100 km/h etwa {{metres}} m weit."
+    }
+  },
+  "units": {
+    "ms": "{{value}} ms",
+    "mpa": "{{value}} MPa",
+    "metresPerSecond": "{{value}} m/s",
+    "percent": "{{value}} %",
+    "perMinute": "{{value}} pro Minute",
+    "turnsPerSecond": "{{value}} U/s",
+    "turns": "{{value}} Umdr.",
+    "mm": "{{value}} mm",
+    "timesAir": "{{value}}-facher Luftdruck"
+  },
+  "sections": {
+    "overview": {
+      "title": "Eine Zehntelsekunde, dann von vorn",
+      "p1": "Hier sehen Sie ein Gewehr, einen sogenannten <strong>Gasdrucklader</strong>. Vorbild für dieses Modell ist das AKM, eine überarbeitete Version der Kalaschnikow. Das Gewehr ist 880 mm lang und wiegt mit leerem Magazin 3,1 kg. Der Clou: Es lädt sich selbst nach. Nach jedem Schuss wirft es die leere Hülse aus, lädt eine neue Patrone und verriegelt wieder. Dafür zweigt es bei jedem Schuss ein wenig heißes Gas ab.",
+      "p2": "Das Modell folgt einem Schuss im <strong>Dauerfeuer</strong>: von dem Moment, in dem der Hahn fällt, bis er wieder fällt. Der Hahn trifft den Schlagbolzen, und eine kleine Flamme entzündet das Pulver. Das brennende Pulver wird zu heißem Gas, und dieses Gas treibt das Geschoss durch den Lauf. Ein kurzer Gasstoß drückt einen Kolben nach hinten, und der Verschlussträger fährt mit. Dann schiebt eine Feder alles wieder nach vorn und bringt dabei eine frische Patrone mit. Jetzt ist das Gewehr bereit für den nächsten Schuss.",
+      "p3": "Der ganze Ablauf dauert etwa 100 Millisekunden, also eine Zehntelsekunde. In diesem Tempo käme die Mechanik auf etwa <strong>600 Durchläufe pro Minute</strong>. Diese Zahl beschreibt, wie schnell sich die Teile bewegen. Sie sagt nicht, wie viele Schüsse jemand in einer Minute abgibt. Das Magazin fasst nur 30 Patronen. Die Wiedergabe beginnt stark verlangsamt. Ziehen Sie den Regler auf der Zeitleiste, um den Schuss Schritt für Schritt zu verfolgen. Oder tippen Sie auf eine Schaltfläche, um zu einem bestimmten Moment zu springen. Behalten Sie dabei den Spannhebel auf der rechten Seite im Auge: Er bewegt sich bei jedem Schuss mit.",
+      "p4": "Ein paar Dinge sind vereinfacht. Im Inneren zeigt das Modell nur die Teile, auf die es hier ankommt. Für zwei Zeiten gibt es in keiner Quelle genaue Werte: wie lange der Hahn fällt und wie lange der Verschlussträger nach hinten und wieder nach vorn braucht. Hier arbeitet das Modell mit sorgfältigen Schätzungen. Die Anzeigen laufen nach der Uhr des Modells. Deshalb sind nur zwei ihrer Zeiten durch Quellen belegt: der ganze Zyklus und der Weg des Geschosses durch den Lauf, etwa eine Millisekunde. Schalten Sie die <strong>Schnittansicht</strong> ein, um hineinzuschauen.",
+      "cycle": "Ein ganzer Zyklus",
+      "pace": "Tempo der Mechanik",
+      "left": "Zeit bis zum nächsten Schuss"
+    },
+    "cartridge": {
+      "title": "Eine kleine Flamme und viel Gas",
+      "p1": "Alles beginnt mit der <strong>Patrone</strong>. Sie ist 56 mm lang, wiegt 16,2 g und enthält alles, was ein Schuss braucht. Die Hülse ist etwa 39 mm lang und fasst 1,6 g Pulver. Mitten in ihrem Boden sitzt das Zündhütchen, ein kleines Näpfchen aus Messing. Das Geschoss ist vorn in die offene Hülse eingepresst. Es wiegt 7,9 g und hat einen Stahlkern.",
+      "p2": "Der Schuss beginnt, wenn der Schlagbolzen das <strong>Zündhütchen</strong> eindrückt. Darin entsteht eine kleine Flamme. Sie dringt durch zwei winzige Löcher in die Hülse und entzündet das Pulver. Das Pulver explodiert nicht. Es <strong>verbrennt</strong>, und zwar sehr schnell, und wird dabei zu sehr viel heißem Gas.",
+      "p3": "Dieses Gas ist auf sehr engem Raum eingesperrt, deshalb steigt sein Druck schnell. Es drückt in alle Richtungen, aber nachgeben kann nur das Geschoss. Deshalb setzt sich das Geschoss schon bald in Bewegung. Der Druck steigt trotzdem weiter, bis auf etwa 275 MPa. Das ist rund 2.700-mal so viel wie der Luftdruck um Sie herum. Anders gesagt: Auf jedem Quadratzentimeter lasten etwa 2.800 kg.",
+      "p4": "Der Druck erreicht seinen Höchstwert schon früh, wenn das Geschoss erst 4 bis 6 cm zurückgelegt hat. Danach wächst der Raum hinter dem Geschoss schneller, als das Pulver ihn mit Gas füllen kann, und der Druck beginnt zu sinken. Tippen Sie auf die Schaltflächen, um zu sehen, wie der Hahn zuschlägt, wie das Geschoss startet und wann der Druck am höchsten ist.",
+      "pressure": "Druck",
+      "air": "Im Vergleich zum Luftdruck",
+      "travel": "Weg des Geschosses"
+    },
+    "firing": {
+      "title": "Warum hinten nichts aufspringt",
+      "p1": "Hinter der Patrone stehen die Teile, die den Schuss auslösen, hintereinander bereit. Eine Feder schleudert den <strong>Hahn</strong> nach vorn, und er trifft das hintere Ende des Schlagbolzens. Der Schlagbolzen sitzt frei beweglich im Verschluss. Der Schlag treibt ihn deshalb nach vorn, und seine Spitze drückt sich ins Zündhütchen. Diesen Schlag haben Sie im letzten Kapitel gesehen.",
+      "p2": "Zurück zum Druck. Derselbe Druck, der das Geschoss nach vorn schiebt, drückt die Hülse auch nach hinten. Irgendetwas muss die Hülse also festhalten. Diese Aufgabe übernimmt der <strong>Verschluss</strong>. Vorn hat er zwei kleine Nasen, die Verriegelungswarzen. Vor jedem Schuss dreht sich der Verschluss, und die Warzen gleiten in zwei Aussparungen in einem Stahlblock. Dieser Block sitzt dort, wo Lauf und Gehäuse aufeinandertreffen, und heißt Laufaufnahme. Solange die Warzen darin stecken, kann der Verschluss nicht nach hinten ausweichen.",
+      "p3": "Rechts am Gewehr sitzt der <strong>Feuerwahlhebel</strong>. Er hat drei Stellungen, von oben nach unten: gesichert, Dauerfeuer und Einzelfeuer. Ist das Gewehr gesichert, lässt sich der Abzug nicht bewegen. Bei Einzelfeuer fällt jedes Mal ein Schuss, wenn man den Abzug zieht und wieder loslässt. Bei Dauerfeuer schießt das Gewehr weiter, solange der Abzug durchgezogen bleibt. Der Hebel liegt auf der Seite, die in der Schnittansicht fehlt. Um ihn zu sehen, schalten Sie die Schnittansicht aus.",
+      "p4": "Das Modell läuft im Dauerfeuer. Dabei sorgt ein weiteres Teil der Abzugsmechanik für die richtige Reihenfolge: der <strong>Selbstauslöser</strong>. Er hält den gespannten Hahn fest und gibt ihn erst frei, wenn der Verschluss verriegelt und der Verschlussträger ganz vorn angekommen ist. Danach bleibt der Verschluss verriegelt, solange der Druck hoch ist. Er dreht sich erst frei, wenn das Geschoss den Lauf verlassen hat. Tippen Sie auf die Schaltflächen und sehen Sie zu, wie der Hahn zuschlägt, das Geschoss startet und der Verschluss entriegelt.",
+      "hammer": "Hahn",
+      "lock": "Verschluss",
+      "pressure": "Druck"
+    },
+    "barrel": {
+      "title": "Etwa eine Millisekunde im Lauf",
+      "p1": "Der Lauf ist 415 mm lang. Das Geschoss braucht für diese Strecke etwa 1 Millisekunde, also eine Tausendstelsekunde. Das ist viel zu schnell fürs Auge. Deshalb zeigt die Zeitleiste diesen Teil des Schusses gedehnt. Ziehen Sie den Regler, um das Geschoss durch den Lauf zu bewegen. Dabei sehen Sie seine Geschwindigkeit und den Druck hinter ihm.",
+      "p2": "Am stärksten schiebt das Gas ganz am Anfang. Der Druck erreicht auf den ersten paar Zentimetern seinen Höhepunkt und fällt dann ab. Trotzdem treibt das Gas das Geschoss den ganzen Lauf entlang weiter an. An der Mündung ist das Geschoss etwa <strong>715 m/s</strong> schnell. Das ist etwa doppelt so schnell wie der Schall und etwa 26-mal so schnell wie ein Auto mit 100 km/h.",
+      "p3": "Innen ist der Lauf nicht glatt. Vier spiralförmige Rillen, die <strong>Züge</strong>, winden sich nach rechts und machen alle 240 mm eine volle Umdrehung. Sie packen das Geschoss und versetzen es in Drehung. Auf dem Weg durch den Lauf dreht es sich etwa anderthalbmal. An der Mündung macht es etwa 3.000 Umdrehungen pro Sekunde.",
+      "p4": "Nur etwa ein Viertel bis ein Drittel der Energie des Pulvers landet im Geschoss. Ein Teil heizt Lauf und Hülse auf, ein anderer wird gebraucht, um das Geschoss in die Züge zu pressen. Etwa 40 Prozent entweichen mit dem heißen Gas, das hinter dem Geschoss aus dem Lauf strömt. Kurz bevor das Geschoss den Lauf verlässt, zweigt das Gewehr aber ein wenig von diesem Gas für sich ab. Wie das geht, zeigt das nächste Kapitel.",
+      "travelLabel": "Wie weit das Geschoss gekommen ist",
+      "speed": "Geschwindigkeit",
+      "pressure": "Druck dahinter",
+      "spin": "Drehzahl",
+      "turns": "Umdrehungen bisher"
+    },
+    "gas": {
+      "title": "Ein Gasstoß, der nachlädt",
+      "p1": "Nahe der Mündung führt ein kleines, schräges Loch vom Lauf nach oben in den Gasblock. Das ist die <strong>Gasbohrung</strong>. Solange das Geschoss die Bohrung noch nicht erreicht hat, passiert hier nichts. Erst wenn es an ihr vorbei ist, strömt heißes Gas durch die Bohrung nach oben. Im Gasblock trifft das Gas auf den <strong>Gaskolben</strong>.",
+      "p2": "Der Gaskolben sitzt vorn an einer langen Stange. Diese Stange ist fest mit dem Verschlussträger verbunden, dem langen Teil, das oben auf dem Verschluss liegt. Stößt das Gas den Kolben nach hinten, fahren Stange, Verschlussträger und Spannhebel alle mit. Darum bewegt sich der Spannhebel bei jedem Schuss. Der Stoß ist kurz. Einen Augenblick später verlässt das Geschoss die Mündung, der Druck fällt, und das verbrauchte Gas entweicht durch Entlüftungslöcher. Da ist der Verschlussträger aber schon in Bewegung. Den Rest des Wegs nach hinten legt er <strong>aus eigenem Schwung</strong> zurück.",
+      "p3": "Der Verschlussträger dreht den Verschluss nicht sofort. Auf den ersten paar Millimetern gleitet er allein nach hinten, und der Verschluss bleibt verriegelt. Dann erfasst eine schräge Nut im Inneren des Trägers einen Zapfen oben am Verschluss. So dreht sie den Verschluss um etwa ein Zehntel einer vollen Umdrehung. Die Verriegelungswarzen schwenken aus ihren Aussparungen, und der Verschluss kann dem Träger folgen. Zu diesem Zeitpunkt hat das Geschoss den Lauf schon verlassen.",
+      "p4": "Blockieren Sie jetzt einmal die Gasbohrung. Der Schuss fällt genauso, und das Geschoss verlässt den Lauf wie vorher. Doch zum Kolben gelangt kein Gas, also bewegt sich nichts. Die leere Hülse bleibt im Patronenlager, und nach einem Schuss ist Schluss. Für die nächste Patrone müsste jemand den Spannhebel von Hand zurückziehen. Ist die Bohrung offen, erledigt das der kleine Gasstoß für Sie.",
+      "fill": "Gas im Gasblock",
+      "carrier": "Weg des Trägers",
+      "result": "Was passiert"
+    },
+    "reload": {
+      "title": "Leere Hülse raus, neue Patrone rein",
+      "p1": "Auf dem Weg nach hinten nimmt der Verschlussträger den Verschluss mit, und der Verschluss zieht die leere Hülse aus dem Patronenlager. Dabei hält eine kleine, gefederte Kralle am Verschluss die Hülse an einer Rille rund um ihren Boden fest. Diese Kralle heißt <strong>Auszieher</strong>. Ein Stück weiter hinten trifft die Hülse auf den <strong>Auswerfer</strong>, einen festen Vorsprung im Gehäuse. Der Vorsprung stößt gegen die linke Seite der Hülse. Dadurch schwenkt die Hülse um die Kralle herum und fliegt durch die Öffnung auf der rechten Seite hinaus.",
+      "p2": "Auf diesem Weg nach hinten erledigt der Verschlussträger noch zwei Aufgaben. Er drückt den Hahn nach hinten und spannt ihn so für den nächsten Schuss. Außerdem presst er die <strong>Schließfeder</strong> zusammen. Die Feder bremst den Träger ab und schleudert ihn dann wieder nach vorn. Währenddessen hebt die Feder im Magazin die nächste Patrone an, bis sie oben an den Magazinlippen anliegt. Das Magazin fasst 30 Patronen in zwei versetzten Reihen. Seine einzige Aufgabe ist, sie anzuheben.",
+      "p3": "Auf dem Weg nach vorn erfasst der Verschluss die oberste Patrone, schiebt sie aus dem Magazin und drückt sie ins Patronenlager. Die Kralle des Ausziehers rastet in die Rille der neuen Hülse ein. Dann dreht sich der Verschluss, von hinten gesehen im Uhrzeigersinn, und seine Warzen greifen wieder in ihre Aussparungen. Der Selbstauslöser gibt den Hahn frei, doch der Hahn trifft zuerst auf den <strong>Hahnverzögerer</strong>. Dieses Teil bremst den Hahn einen Moment lang. So kann das Gewehr zur Ruhe kommen, nachdem der Träger vorn hart angeschlagen ist. Dann beginnt der nächste Schuss.",
+      "p4": "Ein ganzer Durchlauf, nach hinten und wieder nach vorn, braucht etwa 100 Millisekunden. Ein Wimpernschlag dauert 100 bis 400 Millisekunden. Ein Zyklus dauert also etwa so lange wie der schnellste Wimpernschlag. Außerdem stößt jeder Schuss das Gewehr nach hinten. Hielte nichts das geladene Gewehr fest, würde es sich mit etwa 2 m/s nach hinten bewegen. Etwa ein Viertel bis ein Drittel dieses Rückstoßes kommt vom Gas, das aus der Mündung strömt. Der Schaft liegt unterhalb der Laufachse. Deshalb hebt der Rückstoß die Mündung auch ein wenig an. Tippen Sie auf die Schaltflächen und vergleichen Sie einen Zyklus mit Dingen aus dem Alltag.",
+      "carrier": "Weg des Trägers",
+      "case": "Leere Hülse",
+      "round": "Nächste Patrone",
+      "left": "Zeit bis zum nächsten Schuss"
+    }
+  }
+}

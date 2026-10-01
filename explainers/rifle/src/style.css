@@ -1,0 +1,110 @@
+:root {
+  --strike: #ffb347;
+  --barrel: #ff5d4c;
+  --unlock: #ffd24c;
+  --eject: #5fa8ff;
+  --feed: #6fd38a;
+  --ready: #b48cff;
+  --pressure: #ff7a45;
+  --gas: #ffb067;
+  --copper: #b5652d;
+  --steel: #9aa3ad;
+}
+
+.section-readouts,
+.range-widget:has([data-control='bullet-travel']) {
+  --readout-min-width: 8rem;
+}
+
+.section-readouts {
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.section-readouts:has([data-readout='overview-cycle']),
+.section-readouts:has([data-readout='cartridge-pressure']),
+.section-readouts:has([data-readout='firing-hammer']) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.range-widget:has([data-control='bullet-travel']) .range-widget__readouts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.section-readouts > div:has([data-readout='gas-result']) {
+  grid-column: 1 / -1;
+}
+
+[data-control='bullet-travel'] {
+  --range-color: var(--barrel);
+}
+
+[data-readout='cartridge-pressure'],
+[data-readout='firing-pressure'],
+[data-readout='barrel-pressure'] {
+  color: var(--pressure);
+}
+
+.compare {
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--ready);
+  border-radius: var(--radius-small);
+  background: var(--wash);
+  color: var(--text);
+}
+
+.chip[data-action='moment'][data-value='strike'],
+.chip[data-action='moment'][data-value='start'] {
+  --tone: var(--strike);
+}
+
+.chip[data-action='moment'][data-value='peak'],
+.chip[data-action='moment'][data-value='port'],
+.chip[data-action='moment'][data-value='exit'] {
+  --tone: var(--barrel);
+}
+
+.chip[data-action='moment'][data-value='unlock'] {
+  --tone: var(--unlock);
+}
+
+.chip[data-action='moment'][data-value='eject'] {
+  --tone: var(--eject);
+}
+
+.chip[data-action='moment'][data-value='strip'] {
+  --tone: var(--feed);
+}
+
+.chip[data-action='moment'][data-value='lock'] {
+  --tone: var(--ready);
+}
+
+.chip[data-action='gasPort'][data-value='open'] {
+  --tone: var(--gas);
+}
+
+.chip[data-action='gasPort'][data-value='blocked'] {
+  --tone: var(--steel);
+}
+
+.chip[data-action='comparison'] {
+  --tone: var(--ready);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action='moment'],
+  .chip[data-action='gasPort'],
+  .chip[data-action='comparison'] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-readouts:has([data-readout='overview-cycle']),
+  .section-readouts:has([data-readout='cartridge-pressure']),
+  .section-readouts:has([data-readout='firing-hammer']) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

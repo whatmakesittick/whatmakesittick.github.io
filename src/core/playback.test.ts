@@ -12,4 +12,10 @@ describe('slow motion', () => {
     expect(slowMotionFactor(8, 8)).toBe(1);
     expect(slowMotionFactor(0, 8)).toBe(256);
   });
+
+  it('slows down by another base at every stop when the explainer gives one', () => {
+    expect([0, 1, 2, 3, 4].map((speed) => slowMotionFactor(speed, 4, 4))).toEqual([
+      256, 64, 16, 4, 1,
+    ]);
+  });
 });

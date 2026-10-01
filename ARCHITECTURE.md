@@ -136,7 +136,7 @@ interface Timeline {
 interface Preset {
   view?: Partial<Record<string, boolean>>;
   speed?: number;
-  pauseAt?: number; // pauses there; the next preset without it resumes
+  pauseAt?: number; // pauses there; the next preset without it resumes, unless it was already paused
   startAt?: number; // seeks there and keeps the playing state
 }
 
@@ -195,14 +195,18 @@ strike or a rocket launch: the phase is clamped to `[0, cycle]`, playback pauses
 at the end, play at the end starts over from 0, the scrubber reaches the end and
 the last phase stays current there. A preset's `pauseAt` and `startAt` are
 wrapped or clamped the same way; `startAt` moves a chapter to its moment in the
-run without stopping playback.
+run without stopping playback. A `pauseAt` chapter owns its pause only when it
+stopped playback itself: a pause made by hand, or the one reduced motion starts
+the page with, stays when the reader moves on to the next chapter.
 
 Core mounts the shell (`src/core/mount.ts`): the dock (play, scrubber with phase
 bands, status, speed slider, choices, toggles, reset camera, more), the gauge
 readouts, language, footer, `mountUi`, chapter actions, the full screen toggle,
 the keyboard (space, arrows, digits for phases, R, X and Escape for full screen,
 choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
-safe area. Then it builds the scene host from the
+safe area: the dock reserves the bottom of the stage and the gauge the right, or
+the top strip when the scene options set `gaugeSide: 'top'` for a wide subject.
+Then it builds the scene host from the
 explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
 scene, camera rig, label layer, highlighter, materials, textures, stage, lighting,
 `onFrame(update)` and `invalidate()`. Before the first frame the host compiles
@@ -265,7 +269,9 @@ into a solid with `sampleProfile` and `latheAlongX`; `geometry/extrude.ts` raise
 a plan outline in x and z between two heights with `extrudePlan`, runs a side
 profile in z and y along the x axis with `extrudeProfileAlongX`, and draws the
 outlines with `roundedRectShape`, `roundedRectHole`, `planShape` and `planHole`;
-`geometry/box.ts` makes an axis-aligned `box` from its bounds. The
+`geometry/box.ts` makes an axis-aligned `box` from its bounds; `whenIdle` in
+`warmUp.ts` runs a task in idle time, such as an assembly's warm-up, and returns
+its cancel. The
 material library caches one material per emphasis group and finish, where a
 finish is a plain `MeshStandardMaterialParameters` object the explainer owns;
 `register` adds a material the explainer made itself, such as points, lines or a
@@ -450,10 +456,14 @@ Helpers that more than one explainer's widgets share:
   and language; `canvasFont` and `widestText` lay out its labels.
 - `disposeAll` in `src/core/ui/disposers.ts` folds a list of `Disposer` functions into one, so a
   mount can hand back a single unmount.
+- `mountLiveReadouts(root, store, readouts)` in `src/core/ui/liveReadouts.ts` keeps each
+  `data-readout` element in a chapter showing its text from the store, in the current language,
+  and hands back one unmount.
 - `withAlpha` in `src/core/color.ts` turns a `#rrggbb` theme colour into an `rgb()` string with
   an alpha, for canvas fills and bands.
-- `slowMotionFactor(speed, realTimeSpeed)` in `src/core/playback.ts` gives how many times slower
-  than real life a speed stop plays, halving at every stop up to the explainer's real time stop.
+- `slowMotionFactor(speed, realTimeSpeed, base)` in `src/core/playback.ts` gives how many times
+  slower than real life a speed stop plays, dividing by `base` (2 unless given) at every stop up to
+  the explainer's real time stop.
 
 The dock's jump chips sit under the scrubber's coloured bands. `phaseColumns` in
 `src/core/ui/phases.ts` gives each phase a grid column sized by its share of the

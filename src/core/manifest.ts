@@ -10,6 +10,7 @@ export const TAGS = [
   'weather',
   'home',
   'tools',
+  'weapons',
   'optics',
   'energy',
   'earth',

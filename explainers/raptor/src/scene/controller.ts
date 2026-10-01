@@ -1,6 +1,7 @@
 import type { Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
+import { whenIdle } from '@core/scene/warmUp';
 import type { AssemblyState, RegionId } from '../ids';
 import type { CameraView } from '../state';
 import { createAssembly } from './assembly';
@@ -11,17 +12,6 @@ export type RaptorControllerDependencies = Pick<
   SceneShell,
   'scene' | 'materials' | 'textures' | 'labels' | 'stage' | 'rig' | 'viewport'
 >;
-
-const IDLE_TIMEOUT_MS = 2000;
-
-function whenIdle(task: () => void): () => void {
-  if (typeof requestIdleCallback === 'function') {
-    const handle = requestIdleCallback(task, { timeout: IDLE_TIMEOUT_MS });
-    return () => cancelIdleCallback(handle);
-  }
-  const handle = setTimeout(task, IDLE_TIMEOUT_MS);
-  return () => clearTimeout(handle);
-}
 
 export class RaptorController {
   readonly views: CameraViews<CameraView, RegionId>;

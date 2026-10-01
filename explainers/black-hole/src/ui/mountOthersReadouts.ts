@@ -1,8 +1,8 @@
 import type { Disposer } from '@core/ui/disposers';
+import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { BLACK_HOLES } from '../model';
 import type { BlackHoleState, BlackHoleStore } from '../state';
 import { formatFallTime, formatHorizon, formatMass, formatTide } from './format';
-import { mountLiveReadouts } from './liveReadouts';
 
 function compared(state: BlackHoleState) {
   return BLACK_HOLES[state.comparison];

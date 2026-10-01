@@ -23,15 +23,21 @@ export function bindScrubber(
     state.setPhase(Number(input.value));
   });
 
-  const render = throttle((phase: number) => {
-    const value = String(Math.round(phase / timeline.step) * timeline.step);
-    if (input.value !== value) input.value = value;
+  const describe = throttle((phase: number) => {
     const valueText = timeline.describePhase(phase);
     if (input.getAttribute('aria-valuetext') !== valueText) {
       input.setAttribute('aria-valuetext', valueText);
     }
   }, TEXT_REFRESH_INTERVAL_MS);
-  watchLocalized(store, (state) => state.phase, render);
+  watchLocalized(
+    store,
+    (state) => state.phase,
+    (phase) => {
+      const value = String(Math.round(phase / timeline.step) * timeline.step);
+      if (input.value !== value) input.value = value;
+      describe(phase);
+    },
+  );
 }
 
 export function createPhaseButtons(timeline: Timeline): HTMLButtonElement[] {
