@@ -49,7 +49,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: 0,
     view: CUTAWAY_VIEW,
     startAt: CYCLE_START,
-    labels: ['hammer', 'firingPin', 'bolt', 'trunnion', 'trigger', 'selector'],
+    labels: ['hammer', 'firingPin', 'bolt', 'trunnion', 'trigger'],
     highlight: ['hammer', 'firingPin', 'bolt', 'trunnion'],
   },
   barrel: {

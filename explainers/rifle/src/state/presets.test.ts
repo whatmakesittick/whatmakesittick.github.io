@@ -4,6 +4,8 @@ import { unitsAt } from '../model';
 import { SPEED_RANGE } from '../timeline';
 import { PRESETS } from './presets';
 
+const CUT_AWAY_PARTS = ['chargingHandle', 'selector'] as const;
+
 describe('chapter presets', () => {
   it('has the six chapters in reading order', () => {
     expect(Object.keys(PRESETS)).toEqual([...PRESET_IDS]);
@@ -15,6 +17,12 @@ describe('chapter presets', () => {
         expect(PART_IDS, `${id}: ${part}`).toContain(part),
       );
     });
+  });
+
+  it('never labels the parts the cutaway takes away with the right side', () => {
+    PRESET_IDS.filter((id) => PRESETS[id].view?.cutaway).forEach((id) =>
+      CUT_AWAY_PARTS.forEach((part) => expect(PRESETS[id].labels, id).not.toContain(part)),
+    );
   });
 
   it('frames each chapter with its own camera view', () => {
