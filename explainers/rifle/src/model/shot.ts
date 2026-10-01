@@ -103,6 +103,10 @@ function goneAt(ms: number, gas: number): ShotReading {
   };
 }
 
+export function shotTimeAt(travel: number): number {
+  return START_MS + travelTimeMs(clamp(travel, 0, BULLET_TRAVEL));
+}
+
 export function shotAt(ms: number, gasPort: GasPortId = 'open'): ShotReading {
   const gas = gasPort === 'open' ? gasTrack(ms) : 0;
   if (ms < START_MS) return seatedAt(ms, gas);
