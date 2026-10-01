@@ -1,17 +1,21 @@
-import { Shape } from 'three';
+import { Shape, TorusGeometry } from 'three';
 import type { Object3D } from 'three';
 import { roundedRectShape } from '@core/scene/geometry/extrude';
 import { BARREL, CLEANING_ROD, GAS_TUBE, RECEIVER, STOCK } from '../../model/layout';
 import {
+  BEVELS,
   CLEANING_ROD_HEAD,
   GRIP_SHAPE,
+  HANDGUARD_GROOVES,
   HANDGUARD_RETAINER,
+  HANDGUARD_VENTS,
   LOWER_HANDGUARD,
   SEGMENTS,
+  SLING_LOOPS,
   STOCK_SHAPE,
   UPPER_HANDGUARD,
 } from '../constants';
-import { sectionPiece, sidePiece, turnedPiece } from '../geometry/pieces';
+import { boxPiece, piece, sectionPiece, sidePiece, turnedPiece } from '../geometry/pieces';
 import type { SplitPiece } from '../geometry/pieces';
 import { arcPoints } from '../geometry/section';
 import type { Section, SectionPoint } from '../geometry/section';
@@ -25,6 +29,25 @@ const BUTT_PLATE_CORNER = 2;
 const WRIST_BLEND = 25;
 const PALM_SWELL = 6;
 const GRIP_CORNER = 8;
+const FINGER_SWELL = 3.5;
+
+function grooved(rim: readonly SectionPoint[]): SectionPoint[] {
+  const { ys, depth, width } = HANDGUARD_GROOVES;
+  const result: SectionPoint[] = [];
+  for (let index = 0; index < rim.length; index += 1) {
+    const point = rim[index];
+    result.push(point);
+    const next = rim[index + 1];
+    if (!next) continue;
+    for (const y of ys) {
+      if (!(point[1] > y + width && next[1] < y - width)) continue;
+      const share = (point[1] - y) / (point[1] - next[1]);
+      const z = point[0] + share * (next[0] - point[0]);
+      result.push([z, y + width / 2], [z + depth, y], [z, y - width / 2]);
+    }
+  }
+  return result;
+}
 
 const LOWER_HANDGUARD_RIM: readonly SectionPoint[] = [
   [0, 12],
@@ -93,7 +116,12 @@ function gripShape(): Shape {
   shape.quadraticCurveTo(rearBottom - 1, bottom, rearBottom + GRIP_CORNER, bottom);
   shape.lineTo(frontBottom - GRIP_CORNER / 2, bottom);
   shape.quadraticCurveTo(frontBottom + 2, bottom, frontBottom + 2, bottom + GRIP_CORNER);
-  shape.closePath();
+  shape.quadraticCurveTo(
+    (frontBottom + topFront) / 2 + FINGER_SWELL,
+    (top + bottom) / 2,
+    topFront,
+    top,
+  );
   return shape;
 }
 
@@ -167,6 +195,36 @@ function cleaningRodPiece(): SplitPiece {
   });
 }
 
+function addSlingLoops(context: PartContext, parent: Object3D): void {
+  for (const loop of [SLING_LOOPS.rear, SLING_LOOPS.front]) {
+    const [x, y, z] = loop.centre;
+    const ring = new TorusGeometry(loop.radius, loop.tube, SEGMENTS.rod / 2, SLING_LOOPS.segments);
+    ring.rotateX(QUARTER_TURN).translate(x, y, z - loop.radius + loop.tube);
+    addPiece(context, parent, piece(ring), 'stock', context.looks.blued);
+  }
+}
+
+function addHandguardVents(context: PartContext, parent: Object3D): void {
+  const [length, height, depth] = HANDGUARD_VENTS.size;
+  const radius = UPPER_HANDGUARD.outer - depth / 3;
+  for (const x of HANDGUARD_VENTS.xs) {
+    for (const side of [-1, 1]) {
+      const angle = HANDGUARD_VENTS.angle;
+      const y = GAS_TUBE.axisY + radius * Math.cos(angle);
+      const z = side * radius * Math.sin(angle);
+      const slot = boxPiece(
+        {
+          x: [x - length / 2, x + length / 2],
+          y: [y - height / 2, y + height / 2],
+          z: [z - depth / 2, z + depth / 2],
+        },
+        height / 2,
+      );
+      addPiece(context, parent, slot, 'handguard', context.looks.hole);
+    }
+  }
+}
+
 export function addFurniture(context: PartContext, parent: Object3D): void {
   const { halfWidth, bevel } = STOCK_SHAPE;
   addPiece(
@@ -193,23 +251,25 @@ export function addFurniture(context: PartContext, parent: Object3D): void {
   addPiece(
     context,
     parent,
-    sectionPiece(upperHandguardSection(), UPPER_HANDGUARD.x),
+    sectionPiece(upperHandguardSection(), UPPER_HANDGUARD.x, BEVELS.wood),
     'handguard',
     context.looks.handguard,
   );
   addPiece(
     context,
     parent,
-    sectionPiece(lowerSection(LOWER_HANDGUARD_RIM), LOWER_HANDGUARD.x),
+    sectionPiece(lowerSection(grooved(LOWER_HANDGUARD_RIM)), LOWER_HANDGUARD.x, BEVELS.wood),
     'handguard',
     context.looks.handguard,
   );
   addPiece(
     context,
     parent,
-    sectionPiece(lowerSection(RETAINER_RIM), HANDGUARD_RETAINER.x),
+    sectionPiece(lowerSection(RETAINER_RIM), HANDGUARD_RETAINER.x, BEVELS.fine),
     'handguard',
     context.looks.blued,
   );
   addPiece(context, parent, cleaningRodPiece(), 'cleaningRod', context.looks.steel);
+  addSlingLoops(context, parent);
+  addHandguardVents(context, parent);
 }

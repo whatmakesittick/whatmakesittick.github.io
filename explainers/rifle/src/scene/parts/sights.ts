@@ -1,6 +1,7 @@
 import type { Object3D } from 'three';
 import { BARREL, CLEANING_ROD, FRONT_SIGHT, GAS_TUBE, REAR_SIGHT } from '../../model/layout';
 import {
+  BEVELS,
   CLEARANCE,
   FRONT_SIGHT_BASE,
   REAR_SIGHT_BLOCK,
@@ -57,15 +58,21 @@ function addRearSight(context: PartContext, parent: Object3D): void {
   addPiece(
     context,
     parent,
-    sectionPiece(rearBlockSection(), REAR_SIGHT.block.x),
+    sectionPiece(rearBlockSection(), REAR_SIGHT.block.x, BEVELS.block),
     'rearSight',
     look,
   );
-  addPiece(context, parent, sectionPiece(notchSection(), REAR_SIGHT_NOTCH.x), 'rearSight', look);
   addPiece(
     context,
     parent,
-    boxPiece({ ...REAR_SIGHT_LEAF, x: [REAR_SIGHT_NOTCH.x[1], REAR_SIGHT_LEAF.x[1]] }),
+    sectionPiece(notchSection(), REAR_SIGHT_NOTCH.x, BEVELS.fine),
+    'rearSight',
+    look,
+  );
+  addPiece(
+    context,
+    parent,
+    boxPiece({ ...REAR_SIGHT_LEAF, x: [REAR_SIGHT_NOTCH.x[1], REAR_SIGHT_LEAF.x[1]] }, BEVELS.fine),
     'rearSight',
     look,
   );
@@ -73,9 +80,9 @@ function addRearSight(context: PartContext, parent: Object3D): void {
   for (const side of [-1, 1]) {
     const wall =
       side < 0 ? ([z[0], z[0] + SLIDER_WALL] as const) : ([z[1] - SLIDER_WALL, z[1]] as const);
-    addPiece(context, parent, boxPiece({ x, y, z: wall }), 'rearSight', look);
+    addPiece(context, parent, boxPiece({ x, y, z: wall }, BEVELS.fine), 'rearSight', look);
   }
-  addPiece(context, parent, boxPiece({ x, y: SLIDER_ROOF.y, z }), 'rearSight', look);
+  addPiece(context, parent, boxPiece({ x, y: SLIDER_ROOF.y, z }, BEVELS.fine), 'rearSight', look);
 }
 
 function frontBaseSection(): Section {
@@ -111,13 +118,19 @@ function addFrontSight(context: PartContext, parent: Object3D): void {
   addPiece(
     context,
     parent,
-    sectionPiece(frontBaseSection(), FRONT_SIGHT.tower.x),
+    sectionPiece(frontBaseSection(), FRONT_SIGHT.tower.x, BEVELS.block),
     'frontSight',
     look,
   );
   for (const side of [-1, 1]) {
     const z = side < 0 ? ([-ears.z[1], -ears.z[0]] as const) : ears.z;
-    addPiece(context, parent, boxPiece({ x: ears.x, y: ears.y, z }), 'frontSight', look);
+    addPiece(
+      context,
+      parent,
+      boxPiece({ x: ears.x, y: ears.y, z }, BEVELS.round),
+      'frontSight',
+      look,
+    );
   }
   addPiece(
     context,

@@ -6,10 +6,11 @@ import { regionFromSpec } from '@core/scene/regions';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
 import type { Assembly, AssemblyResources } from './assembly';
-import { WOOD_GRAIN } from './constants';
+import { POWDER_GRAIN, WOOD_GRAIN } from './constants';
 import { createLooks } from './finishes';
 import { hammerAngle, pinPush } from './geometry/hammerClearance';
 import { boltTravel } from './geometry/roundPaths';
+import { powderGrain } from './geometry/powderGrain';
 import { woodGrain } from './geometry/woodGrain';
 import { addBarrel } from './parts/barrel';
 import { batchStatic } from './parts/batch';
@@ -17,7 +18,7 @@ import { BoltPart } from './parts/bolt';
 import { CarrierPart } from './parts/carrier';
 import { CutawaySwitch } from './parts/context';
 import type { PartContext } from './parts/context';
-import { TriggerPart, createSelector } from './parts/controls';
+import { TriggerPart, addSelectorMarks, createSelector } from './parts/controls';
 import { addFurniture } from './parts/furniture';
 import { GasPart } from './parts/gas';
 import { addGasSystem } from './parts/gasSystem';
@@ -38,6 +39,7 @@ function createContext(
   const looks = createLooks({
     stock: tracker.track(woodGrain(WOOD_GRAIN.stock)),
     handguard: tracker.track(woodGrain(WOOD_GRAIN.handguard)),
+    powder: tracker.track(powderGrain(POWDER_GRAIN)),
   });
   return { ...resources, tracker, cutaway, looks };
 }
@@ -70,6 +72,7 @@ export class RifleAssembly implements Assembly {
     addMagazine(context, this.body);
     addMagazineStack(context, this.body, roundGeometry);
     this.body.add(createSelector(context));
+    addSelectorMarks(context, this.body);
     this.carrier = new CarrierPart(context);
     this.bolt = new BoltPart(context);
     this.hammer = new HammerPart(context);

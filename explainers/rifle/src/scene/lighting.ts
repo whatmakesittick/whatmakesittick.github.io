@@ -10,9 +10,9 @@ interface LightSetting {
 type LightName = 'key' | 'fill' | 'rim';
 
 const RIFLE_LIGHT: Record<LightName, LightSetting> = {
-  key: { color: '#fff1e0', intensity: 2.8, position: [260, 420, 520] },
-  fill: { color: '#bcd6ff', intensity: 0.9, position: [-420, 60, 300] },
-  rim: { color: '#cfe0ff', intensity: 2.2, position: [-160, 360, -420] },
+  key: { color: '#ffe6c7', intensity: 3, position: [320, 420, 520] },
+  fill: { color: '#a9c8ff', intensity: 0.8, position: [-460, 80, 280] },
+  rim: { color: '#d6e6ff', intensity: 3.2, position: [-120, 380, -460] },
 };
 
 function apply(light: DirectionalLight, setting: LightSetting): () => void {

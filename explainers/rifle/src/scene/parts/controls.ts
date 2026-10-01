@@ -66,6 +66,30 @@ export class TriggerPart {
   }
 }
 
+const MARK_DEPTH = 0.25;
+
+export function addSelectorMarks(context: PartContext, parent: Group): void {
+  const [x, y, surface] = SELECTOR.centre;
+  const { marks, notches } = SELECTOR_LEVER;
+  const z = [surface, surface + MARK_DEPTH] as const;
+  const place = (radius: number, angle: number, width: number, height: number) => {
+    const centreX = x + radius * Math.cos(angle);
+    const centreY = y + radius * Math.sin(angle);
+    const box = boxPiece(
+      {
+        x: [centreX - width / 2, centreX + width / 2],
+        y: [centreY - height / 2, centreY + height / 2],
+        z,
+      },
+      height / 2,
+    );
+    addPiece(context, parent, box, 'selector', context.looks.hole);
+  };
+  const [markWidth, markHeight] = marks.size;
+  for (const angle of marks.angles) place(marks.radius, angle, markWidth, markHeight);
+  for (const angle of notches.angles) place(notches.radius, angle, notches.size, notches.size);
+}
+
 export function createSelector(context: PartContext): Group {
   const group = new Group();
   const [x, y, surface] = SELECTOR.centre;

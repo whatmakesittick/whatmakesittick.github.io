@@ -1,11 +1,10 @@
 import { Shape, Vector2 } from 'three';
 import type { Object3D } from 'three';
-import { MAGAZINE_ARC, MAGAZINE_SHAPE, SHEET, magazinePoint } from '../constants';
+import { BEVELS, MAGAZINE_ARC, MAGAZINE_SHAPE, SHEET, magazinePoint } from '../constants';
 import { boxPiece, sidePiece } from '../geometry/pieces';
+import type { CutPiece } from '../geometry/pieces';
 import { addPiece } from './context';
 import type { PartContext } from './context';
-
-const FLOOR_PLATE_BEVEL = 0.6;
 
 function arc(radius: number, from: number, to: number): Vector2[] {
   const steps = MAGAZINE_SHAPE.arcSteps;
@@ -39,40 +38,55 @@ function floorPlateShape(): Shape {
   return new Shape([...arc(front - overhang, from, to), ...arc(rear + overhang, to, from)]);
 }
 
+function ribShape(offset: number): Shape {
+  const { radius, sweep } = MAGAZINE_ARC;
+  const { width, start, end } = MAGAZINE_SHAPE.ribs;
+  const middle = radius + offset;
+  return new Shape([
+    ...arc(middle - width / 2, start, sweep - end),
+    ...arc(middle + width / 2, sweep - end, start),
+  ]);
+}
+
+function addRibs(context: PartContext, parent: Object3D): void {
+  const { halfWidth, ribs } = MAGAZINE_SHAPE;
+  for (const offset of ribs.offsets) {
+    for (const side of [-1, 1]) {
+      const z =
+        side > 0
+          ? ([halfWidth, halfWidth + ribs.height] as const)
+          : ([-halfWidth - ribs.height, -halfWidth] as const);
+      addPiece(
+        context,
+        parent,
+        sidePiece(ribShape(offset), z, BEVELS.fine / 2),
+        'magazine',
+        context.looks.blued,
+      );
+    }
+  }
+}
+
 export function addMagazine(context: PartContext, parent: Object3D): void {
   const look = context.looks.blued;
   const { halfWidth, top, lips, frontLug, floorPlate } = MAGAZINE_SHAPE;
   const inner = halfWidth - SHEET;
-  addPiece(context, parent, sidePiece(outlineShape(), [-halfWidth, -inner]), 'magazine', look);
-  addPiece(context, parent, sidePiece(outlineShape(), [inner, halfWidth]), 'magazine', look);
-  addPiece(context, parent, sidePiece(bandShape(), [-inner, inner]), 'magazine', look);
-  addPiece(
-    context,
-    parent,
-    sidePiece(floorPlateShape(), [-floorPlate.halfWidth, floorPlate.halfWidth], FLOOR_PLATE_BEVEL),
-    'magazine',
-    look,
+  const add = (piece: CutPiece) => addPiece(context, parent, piece, 'magazine', look);
+  add(sidePiece(outlineShape(), [-halfWidth, -inner]));
+  add(sidePiece(outlineShape(), [inner, halfWidth]));
+  add(sidePiece(bandShape(), [-inner, inner]));
+  add(
+    sidePiece(floorPlateShape(), [-floorPlate.halfWidth, floorPlate.halfWidth], floorPlate.bevel),
   );
   const lipY = [top - lips.depth, top] as const;
-  addPiece(
-    context,
-    parent,
-    boxPiece({ x: lips.x, y: lipY, z: [-inner, -lips.inner] }),
-    'magazine',
-    look,
+  for (const z of [[-inner, -lips.inner] as const, [lips.inner, inner] as const]) {
+    add(boxPiece({ x: lips.x, y: lipY, z }, BEVELS.round));
+  }
+  add(
+    boxPiece(
+      { x: frontLug.x, y: frontLug.y, z: [-frontLug.halfWidth, frontLug.halfWidth] },
+      BEVELS.round,
+    ),
   );
-  addPiece(
-    context,
-    parent,
-    boxPiece({ x: lips.x, y: lipY, z: [lips.inner, inner] }),
-    'magazine',
-    look,
-  );
-  addPiece(
-    context,
-    parent,
-    boxPiece({ x: frontLug.x, y: frontLug.y, z: [-frontLug.halfWidth, frontLug.halfWidth] }),
-    'magazine',
-    look,
-  );
+  addRibs(context, parent);
 }

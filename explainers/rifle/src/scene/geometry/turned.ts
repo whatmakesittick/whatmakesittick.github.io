@@ -62,10 +62,12 @@ export function turnedCap(outline: readonly TurnPoint[]): BufferGeometry {
   );
   const positions: number[] = [];
   const normals: number[] = [];
+  const uvs: number[] = [];
   for (const side of [1, -1]) {
     for (const [x, radius] of outline) {
       positions.push(x, side * radius, 0);
       normals.push(0, 0, 1);
+      uvs.push(x, side * radius);
     }
   }
   const count = outline.length;
@@ -77,6 +79,7 @@ export function turnedCap(outline: readonly TurnPoint[]): BufferGeometry {
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new Float32BufferAttribute(positions, XYZ));
   geometry.setAttribute('normal', new Float32BufferAttribute(normals, XYZ));
+  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
   geometry.setIndex(indices);
   return geometry;
 }

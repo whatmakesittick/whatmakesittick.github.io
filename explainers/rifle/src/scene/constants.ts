@@ -27,6 +27,7 @@ import {
   VENT_HOLES,
 } from '../model/layout';
 import type { Box } from '../model/scale';
+import type { PowderSpec } from './geometry/powderGrain';
 import type { GrainSpec } from './geometry/woodGrain';
 
 export const SEGMENTS = { barrel: 48, tube: 32, rod: 16, knob: 16 } as const;
@@ -171,18 +172,6 @@ export const DUST_COVER = {
   corner: 6,
 } as const;
 
-export const RIVET = { radius: 1.8, height: 0.8 } as const;
-
-export const RIVETS: readonly (readonly [x: number, y: number])[] = [
-  [-22, -12],
-  [-22, 10],
-  [-8, -12],
-  [-250, -12],
-  [-250, 12],
-  [-190, -16],
-  [-150, -12],
-];
-
 export const STOCK_SHAPE = {
   frontTop: 27,
   heel: 12,
@@ -219,20 +208,22 @@ export const MAGAZINE_SHAPE = {
   halfWidth: MAGAZINE.well.z[1] - 1,
   floor: 4,
   arcSteps: 24,
-  lips: { x: [-102, -64] as const, depth: 1.4, inner: 6.5 },
+  lips: { x: [-102, -64] as const, depth: 1.4, inner: 5.5 },
   frontLug: { x: [-41.5, -36.5] as const, y: [-17, -10.5] as const, halfWidth: 5 },
-  floorPlate: { overhang: 2, thickness: 4, halfWidth: MAGAZINE.well.z[1] + 0.2 },
+  floorPlate: { overhang: 3, thickness: 5, halfWidth: MAGAZINE.well.z[1] + 0.4, bevel: 1 },
+  ribs: { offsets: [14, -12] as const, width: 2.6, height: 0.6, start: 0.06, end: 0.04 },
 } as const;
 
 const MAGAZINE_DEPTH = MAGAZINE.well.x[1] - MAGAZINE.well.x[0];
-const MAGAZINE_RADIUS = MAGAZINE.length / MAGAZINE.tilt;
+const MAGAZINE_SWEEP = toRadians(34);
+const MAGAZINE_RADIUS = MAGAZINE.length / MAGAZINE_SWEEP;
 
 export const MAGAZINE_ARC = {
   radius: MAGAZINE_RADIUS,
   front: MAGAZINE_RADIUS - MAGAZINE_DEPTH / 2,
   rear: MAGAZINE_RADIUS + MAGAZINE_DEPTH / 2,
   centre: [(MAGAZINE.well.x[0] + MAGAZINE.well.x[1]) / 2 + MAGAZINE_RADIUS, MAGAZINE.well.y[1]],
-  sweep: MAGAZINE.tilt,
+  sweep: MAGAZINE_SWEEP,
 } as const;
 
 export function magazinePoint(radius: number, angle: number): readonly [x: number, y: number] {
@@ -250,7 +241,9 @@ export const SELECTOR_LEVER = {
   thickness: 1.6,
   bossRadius: 5,
   bossHeight: 2,
-  autoAngle: toRadians(-12),
+  autoAngle: toRadians(-11),
+  marks: { radius: 93, angles: [toRadians(-11), toRadians(-21)] as const, size: [6, 0.8] as const },
+  notches: { radius: 70, angles: [0, toRadians(-11), toRadians(-21)] as const, size: 1.4 },
   tab: { x: [80, 88] as const, y: [-12, -7] as const, height: 3.5 },
 } as const;
 
@@ -446,3 +439,72 @@ export const RIFLING_LANDS = { width: 1.1, lift: 0.08, step: 2 } as const;
 export const CASE_GLINT = { size: 24, sharpness: 10, mouth: 34 } as const;
 
 export const TRAIL = { length: 46, radius: 1.6, opacity: 0.85, segments: 12 } as const;
+
+export const POWDER_GRAIN: PowderSpec = {
+  size: 64,
+  grains: 90,
+  radius: [2.2, 3.4],
+  period: 7,
+  base: [30, 26, 20],
+  grain: [96, 88, 70],
+  seed: 5,
+};
+
+export const BEVELS = {
+  wall: 0.35,
+  cover: 0.5,
+  block: 0.8,
+  fine: 0.4,
+  wood: 1.4,
+  carrier: 0.6,
+  round: 0.5,
+} as const;
+
+export const DUST_COVER_RIBS = {
+  xs: [-232, -206, -180, -154, -128] as const,
+  width: 5,
+  height: 0.9,
+  lift: 2,
+} as const;
+
+export const PIN_HEADS = {
+  radius: 2.6,
+  height: 0.7,
+  points: [
+    [-115, -14],
+    [-150, -12],
+    [-190, -18],
+  ] as const,
+} as const;
+
+export const DOMED_RIVETS = {
+  radius: 1.9,
+  flatten: 0.45,
+  points: [
+    [-24, -13],
+    [-24, 6],
+    [-10, -13],
+    [-10, 6],
+    [-252, -14],
+    [-252, 2],
+    [-246, 14],
+    [-205, -17],
+    [-140, -17],
+  ] as const,
+} as const;
+
+export const WELL_PANEL: Box = { x: [-97, -50], y: [-19, -7], z: [0, 0.45] };
+
+export const SLING_LOOPS = {
+  rear: { centre: [-432, -48, -STOCK.z[1] - 0.5] as const, radius: 6, tube: 1.2 },
+  front: { centre: [GAS_BLOCK.x[0] + 9, -4, -12.6] as const, radius: 4.5, tube: 1 },
+  segments: 20,
+} as const;
+
+export const HANDGUARD_VENTS = {
+  xs: [92, 118, 144] as const,
+  angle: toRadians(118),
+  size: [14, 3.2, 1.6] as const,
+} as const;
+
+export const HANDGUARD_GROOVES = { ys: [-1, -11] as const, depth: 1, width: 1.6 } as const;

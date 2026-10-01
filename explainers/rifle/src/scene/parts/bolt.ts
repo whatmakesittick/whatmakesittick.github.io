@@ -2,6 +2,7 @@ import { Group } from 'three';
 import { BOLT } from '../../model/layout';
 import type { Box } from '../../model/scale';
 import {
+  BEVELS,
   BOLT_BODY,
   BOLT_LUGS,
   CAM_LUG,
@@ -10,7 +11,7 @@ import {
   RAMMER,
   SEGMENTS,
 } from '../constants';
-import { boxGeometry, solid, turnedPiece } from '../geometry/pieces';
+import { roundedBox, solid, turnedPiece } from '../geometry/pieces';
 import { turnStrands } from '../geometry/turned';
 import type { TurnStrand } from '../geometry/turned';
 import { addPiece, markDynamic } from './context';
@@ -131,10 +132,16 @@ export class BoltPart {
     );
     addPiece(context, this.pin, solid(turnStrands(PIN, SEGMENTS.rod)), 'firingPin', looks.steel);
     for (const box of [lug(1), lug(-1), CAM_LUG, RAMMER]) {
-      addPiece(context, this.features, solid(boxGeometry(box)), 'bolt', looks.bright);
+      addPiece(context, this.features, solid(roundedBox(box, BEVELS.round)), 'bolt', looks.bright);
     }
     for (const box of [EXTRACTOR_SHAPE.bar, EXTRACTOR_SHAPE.claw]) {
-      addPiece(context, this.features, solid(boxGeometry(box)), 'extractor', looks.steel);
+      addPiece(
+        context,
+        this.features,
+        solid(roundedBox(box, BEVELS.fine)),
+        'extractor',
+        looks.steel,
+      );
     }
     this.object.add(this.pin, this.features);
     markDynamic(this.object);

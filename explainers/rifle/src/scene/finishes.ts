@@ -1,3 +1,4 @@
+import { Color } from 'three';
 import type { Texture } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../theme';
@@ -7,18 +8,20 @@ export interface Look {
   cut: MaterialFinish;
 }
 
-export interface WoodGrains {
+export interface SurfaceMaps {
   stock: Texture;
   handguard: Texture;
+  powder: Texture;
 }
 
-const METAL_REFLECTION = 2.2;
+const METAL_REFLECTION = 2;
 const POLISH_REFLECTION = 2.4;
-const WOOD_REFLECTION = 0.8;
+const WOOD_REFLECTION = 0.9;
+const LACQUER_TINT = 0.35;
 
 export const PAINT = {
   blued: THEME.bluedSteel,
-  bluedCut: '#9aa2ac',
+  bluedCut: '#a3abb5',
   steel: THEME.steel,
   brightSteel: THEME.brightSteel,
   brightCut: '#eef1f4',
@@ -27,25 +30,24 @@ export const PAINT = {
   bakelite: THEME.bakelite,
   bakeliteCut: '#95553d',
   hole: '#05070a',
-  caseLacquer: THEME.caseLacquer,
-  caseCut: '#a9b08f',
+  caseCut: '#e3c77a',
   brass: THEME.brass,
-  brassCut: '#e3c77a',
   powder: THEME.powder,
-  powderCut: '#4a4235',
   copper: THEME.copper,
   engraving: '#5a2c12',
 } as const;
 
+const LACQUERED_BRASS = new Color(THEME.brass).lerp(new Color(THEME.caseLacquer), LACQUER_TINT);
+
 export const FINISHES = {
-  blued: { color: PAINT.blued, metalness: 0.6, roughness: 0.36, envMapIntensity: METAL_REFLECTION },
+  blued: { color: PAINT.blued, metalness: 0.7, roughness: 0.32, envMapIntensity: METAL_REFLECTION },
   bluedCut: {
     color: PAINT.bluedCut,
-    metalness: 0.75,
-    roughness: 0.34,
+    metalness: 0.8,
+    roughness: 0.3,
     envMapIntensity: METAL_REFLECTION,
   },
-  steel: { color: PAINT.steel, metalness: 0.9, roughness: 0.3, envMapIntensity: METAL_REFLECTION },
+  steel: { color: PAINT.steel, metalness: 0.9, roughness: 0.28, envMapIntensity: METAL_REFLECTION },
   bright: {
     color: PAINT.brightSteel,
     metalness: 1,
@@ -61,8 +63,8 @@ export const FINISHES = {
   bakelite: {
     color: PAINT.bakelite,
     metalness: 0,
-    roughness: 0.4,
-    envMapIntensity: WOOD_REFLECTION,
+    roughness: 0.3,
+    envMapIntensity: 1.1,
   },
   bakeliteCut: {
     color: PAINT.bakeliteCut,
@@ -72,31 +74,29 @@ export const FINISHES = {
   },
   hole: { color: PAINT.hole, metalness: 0, roughness: 1, envMapIntensity: 0 },
   caseLacquer: {
-    color: PAINT.caseLacquer,
-    metalness: 0.45,
-    roughness: 0.42,
+    color: LACQUERED_BRASS,
+    metalness: 0.85,
+    roughness: 0.3,
     envMapIntensity: METAL_REFLECTION,
   },
   caseCut: {
     color: PAINT.caseCut,
-    metalness: 0.7,
-    roughness: 0.35,
+    metalness: 0.8,
+    roughness: 0.32,
     envMapIntensity: METAL_REFLECTION,
   },
   brass: { color: PAINT.brass, metalness: 0.9, roughness: 0.3, envMapIntensity: METAL_REFLECTION },
-  brassCut: {
-    color: PAINT.brassCut,
-    metalness: 0.8,
-    roughness: 0.35,
-    envMapIntensity: METAL_REFLECTION,
-  },
-  powder: { color: PAINT.powder, metalness: 0, roughness: 0.95, envMapIntensity: 0.4 },
-  powderCut: { color: PAINT.powderCut, metalness: 0, roughness: 1, envMapIntensity: 0.4 },
   copper: {
     color: PAINT.copper,
     metalness: 0.95,
-    roughness: 0.28,
+    roughness: 0.24,
     envMapIntensity: POLISH_REFLECTION,
+  },
+  engraving: {
+    color: PAINT.engraving,
+    metalness: 0.8,
+    roughness: 0.5,
+    envMapIntensity: METAL_REFLECTION,
   },
   ghost: {
     color: PAINT.brightSteel,
@@ -106,12 +106,6 @@ export const FINISHES = {
     opacity: 0.3,
     depthWrite: false,
   },
-  engraving: {
-    color: PAINT.engraving,
-    metalness: 0.8,
-    roughness: 0.5,
-    envMapIntensity: METAL_REFLECTION,
-  },
 } as const satisfies Record<string, MaterialFinish>;
 
 function wood(map: Texture): Look {
@@ -120,11 +114,16 @@ function wood(map: Texture): Look {
       color: PAINT.wood,
       map,
       metalness: 0,
-      roughness: 0.48,
+      roughness: 0.42,
       envMapIntensity: WOOD_REFLECTION,
     },
     cut: { color: PAINT.woodCut, map, metalness: 0, roughness: 0.85, envMapIntensity: 0.5 },
   };
+}
+
+function powder(map: Texture): Look {
+  const grains = { color: '#ffffff', map, metalness: 0, roughness: 0.9, envMapIntensity: 0.5 };
+  return { surface: grains, cut: grains };
 }
 
 export interface Looks {
@@ -142,11 +141,11 @@ export interface Looks {
   handguard: Look;
 }
 
-export function createLooks(grains: WoodGrains): Looks {
+export function createLooks(maps: SurfaceMaps): Looks {
   return {
     case: { surface: FINISHES.caseLacquer, cut: FINISHES.caseCut },
-    primer: { surface: FINISHES.brass, cut: FINISHES.brassCut },
-    powder: { surface: FINISHES.powder, cut: FINISHES.powderCut },
+    primer: { surface: FINISHES.brass, cut: FINISHES.caseCut },
+    powder: powder(maps.powder),
     copper: { surface: FINISHES.copper, cut: FINISHES.copper },
     engraving: { surface: FINISHES.engraving, cut: FINISHES.engraving },
     blued: { surface: FINISHES.blued, cut: FINISHES.bluedCut },
@@ -154,7 +153,7 @@ export function createLooks(grains: WoodGrains): Looks {
     bright: { surface: FINISHES.bright, cut: FINISHES.brightCut },
     bakelite: { surface: FINISHES.bakelite, cut: FINISHES.bakeliteCut },
     hole: { surface: FINISHES.hole, cut: FINISHES.hole },
-    stock: wood(grains.stock),
-    handguard: wood(grains.handguard),
+    stock: wood(maps.stock),
+    handguard: wood(maps.handguard),
   };
 }

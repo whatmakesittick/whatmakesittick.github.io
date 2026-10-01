@@ -1,6 +1,6 @@
 import { CapsuleGeometry, Group } from 'three';
 import { CARRIER, CHARGING_HANDLE, GAS_CYLINDER, PISTON } from '../../model/layout';
-import { CARRIER_SHAPE, CHARGING_KNOB, PISTON_SHAPE, SEGMENTS } from '../constants';
+import { BEVELS, CARRIER_SHAPE, CHARGING_KNOB, PISTON_SHAPE, SEGMENTS } from '../constants';
 import { FINISHES } from '../finishes';
 import { boxPiece, piece, sectionPiece, solid } from '../geometry/pieces';
 import { arcPoints } from '../geometry/section';
@@ -102,11 +102,14 @@ function addChargingHandle(context: PartContext, parent: Group): void {
   addPiece(
     context,
     parent,
-    boxPiece({
-      x: [centreX - radius * 0.6, centreX + radius * 0.6],
-      y: arm.y,
-      z: [CHARGING_HANDLE.z[0] - 2, outer - knobLength / 2],
-    }),
+    boxPiece(
+      {
+        x: [centreX - radius * 0.6, centreX + radius * 0.6],
+        y: arm.y,
+        z: [CHARGING_HANDLE.z[0] - 2, outer - knobLength / 2],
+      },
+      BEVELS.round,
+    ),
     'chargingHandle',
     look,
     FINISHES.ghost,
@@ -120,7 +123,7 @@ export class CarrierPart {
     const look = context.looks.bright;
     const { body, ridge, springBore } = CARRIER_SHAPE;
     const add = (section: Section, x: readonly [number, number]) =>
-      addPiece(context, this.object, sectionPiece(section, x), 'carrier', look);
+      addPiece(context, this.object, sectionPiece(section, x, BEVELS.carrier), 'carrier', look);
     add(bodySection(true), [body.x[0], springBore.end]);
     add(bodySection(false), [springBore.end, body.x[1]]);
     add(ridgeSection(), ridge.x);

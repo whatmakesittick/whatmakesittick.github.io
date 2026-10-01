@@ -4,6 +4,7 @@ import { toRadians } from '@core/math';
 import { BARREL, CLEANING_ROD, GAS_BLOCK, GAS_CYLINDER, GAS_TUBE } from '../../model/layout';
 import {
   BARREL_OUTLINE,
+  BEVELS,
   BORE_RADIUS,
   CLEARANCE,
   CUT_DECAL_LIFT,
@@ -138,14 +139,14 @@ export function addGasSystem(context: PartContext, parent: Object3D): void {
   addPiece(
     context,
     parent,
-    sectionPiece(gasBlockSection(socket), [start, socketEndX]),
+    sectionPiece(gasBlockSection(socket), [start, socketEndX], BEVELS.fine),
     'gasBlock',
     context.looks.blued,
   );
   addPiece(
     context,
     parent,
-    sectionPiece(gasBlockSection(GAS_CYLINDER.radius), [socketEndX, lowerEndX]),
+    sectionPiece(gasBlockSection(GAS_CYLINDER.radius), [socketEndX, lowerEndX], BEVELS.fine),
     'gasBlock',
     context.looks.blued,
   );

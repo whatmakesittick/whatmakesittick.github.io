@@ -1,19 +1,22 @@
-import { CylinderGeometry, Shape } from 'three';
-import type { Object3D } from 'three';
+import { CylinderGeometry, Shape, SphereGeometry } from 'three';
+import type { BufferGeometry, Object3D } from 'three';
 import { EJECTION_PORT, MAGAZINE, RECEIVER, TRIGGER_GUARD, TRUNNION } from '../../model/layout';
 import type { Box, Extent } from '../../model/scale';
 import {
+  BEVELS,
   CLEARANCE,
+  DOMED_RIVETS,
   DUST_COVER,
+  DUST_COVER_RIBS,
   EJECTOR_BLOCK,
   MAGAZINE_CATCH,
+  PIN_HEADS,
   RECEIVER_SHELL,
-  RIVET,
-  RIVETS,
   SEGMENTS,
   SHEET,
   TRIGGER_GUARD_SHAPE,
   TRUNNION_SHAPE,
+  WELL_PANEL,
 } from '../constants';
 import { boxPiece, piece, sectionPiece, sidePiece } from '../geometry/pieces';
 import { arcPoints } from '../geometry/section';
@@ -23,6 +26,7 @@ import type { PartContext } from './context';
 
 const ARC_STEPS = 10;
 const QUARTER_TURN = Math.PI / 2;
+const FULL_TURN = Math.PI * 2;
 const END_PLATE = 2;
 
 function leftWallShape(): Shape {
@@ -150,26 +154,88 @@ function addTriggerGuard(context: PartContext, parent: Object3D): void {
     y: [RECEIVER.y[0] - gap - SHEET, RECEIVER.y[0] - gap],
     z: [-halfWidth, halfWidth],
   };
-  addPiece(context, parent, boxPiece(strap), 'receiver', look);
-  addPiece(context, parent, boxPiece(MAGAZINE_CATCH), 'receiver', look);
+  addPiece(context, parent, boxPiece(strap, BEVELS.round), 'receiver', look);
+  addPiece(context, parent, boxPiece(MAGAZINE_CATCH, BEVELS.block), 'receiver', look);
 }
 
-function addRivets(context: PartContext, parent: Object3D): void {
-  for (const [x, y] of RIVETS) {
-    for (const side of [-1, 1]) {
-      const rivet = new CylinderGeometry(RIVET.radius, RIVET.radius, RIVET.height, SEGMENTS.rod);
-      rivet.rotateX(QUARTER_TURN);
-      rivet.translate(x, y, side * (RECEIVER_SHELL.outer + RIVET.height / 2));
-      addPiece(context, parent, piece(rivet), 'receiver', context.looks.blued);
+function sideStud(geometry: BufferGeometry, x: number, y: number, side: number): BufferGeometry {
+  return geometry.translate(x, y, side * RECEIVER_SHELL.outer);
+}
+
+function addStuds(context: PartContext, parent: Object3D): void {
+  const look = context.looks.blued;
+  for (const side of [-1, 1]) {
+    for (const [x, y] of DOMED_RIVETS.points) {
+      const dome = new SphereGeometry(
+        DOMED_RIVETS.radius,
+        SEGMENTS.rod,
+        SEGMENTS.rod / 2,
+        0,
+        FULL_TURN,
+        0,
+        QUARTER_TURN,
+      );
+      dome.rotateX(side * QUARTER_TURN).scale(1, 1, DOMED_RIVETS.flatten);
+      addPiece(context, parent, piece(sideStud(dome, x, y, side)), 'receiver', look);
     }
+    for (const [x, y] of PIN_HEADS.points) {
+      const head = new CylinderGeometry(
+        PIN_HEADS.radius,
+        PIN_HEADS.radius,
+        PIN_HEADS.height,
+        SEGMENTS.rod,
+      );
+      head.rotateX(QUARTER_TURN).translate(0, 0, (side * PIN_HEADS.height) / 2);
+      addPiece(context, parent, piece(sideStud(head, x, y, side)), 'receiver', look);
+    }
+    const panel = WELL_PANEL.z;
+    const z =
+      side > 0
+        ? ([outerFace(panel[0]), outerFace(panel[1])] as const)
+        : ([-outerFace(panel[1]), -outerFace(panel[0])] as const);
+    addPiece(context, parent, boxPiece({ ...WELL_PANEL, z }, BEVELS.fine), 'receiver', look);
   }
+}
+
+function outerFace(offset: number): number {
+  return RECEIVER_SHELL.outer + offset;
+}
+
+function ribRim(): SectionPoint[] {
+  const { top, sideBottom, halfWidth, corner } = DUST_COVER;
+  const { height, lift } = DUST_COVER_RIBS;
+  const centre: SectionPoint = [-halfWidth + corner, top - corner];
+  return [
+    [0, top + height],
+    ...arcPoints(centre, corner + height, QUARTER_TURN, Math.PI, ARC_STEPS),
+    [-halfWidth - height, sideBottom + lift],
+    [-halfWidth, sideBottom + lift],
+    ...arcPoints(centre, corner, Math.PI, QUARTER_TURN, ARC_STEPS),
+    [0, top],
+  ];
+}
+
+function addDustCover(context: PartContext, parent: Object3D): void {
+  const look = context.looks.blued;
+  const [coverRear, coverFront] = DUST_COVER.x;
+  const cover = (rim: SectionPoint[], x: readonly [number, number]) =>
+    addPiece(context, parent, sectionPiece({ rim }, x, BEVELS.cover), 'receiver', look);
+  cover(coverEndRim(), [coverRear, coverRear + END_PLATE]);
+  cover(coverRim(), [coverRear + END_PLATE, coverFront]);
+  const half = DUST_COVER_RIBS.width / 2;
+  for (const x of DUST_COVER_RIBS.xs) cover(ribRim(), [x - half, x + half]);
 }
 
 export function addReceiver(context: PartContext, parent: Object3D): void {
   const look = context.looks.blued;
   const { outer, inner, rearTrunnion, sideTop } = RECEIVER_SHELL;
-  addPiece(context, parent, sidePiece(leftWallShape(), [-outer, -inner]), 'receiver', look);
-  addPiece(context, parent, sidePiece(rightWallShape(), [inner, outer]), 'receiver', look);
+  const walls = [
+    { shape: leftWallShape(), z: [-outer, -inner] as const },
+    { shape: rightWallShape(), z: [inner, outer] as const },
+  ];
+  for (const { shape, z } of walls) {
+    addPiece(context, parent, sidePiece(shape, z, BEVELS.wall), 'receiver', look);
+  }
   for (const floor of floorBoxes()) addPiece(context, parent, boxPiece(floor), 'receiver', look);
   addPiece(
     context,
@@ -178,23 +244,15 @@ export function addReceiver(context: PartContext, parent: Object3D): void {
     'receiver',
     look,
   );
-  const [coverRear, coverFront] = DUST_COVER.x;
+  addDustCover(context, parent);
   addPiece(
     context,
     parent,
-    sectionPiece({ rim: coverEndRim() }, [coverRear, coverRear + END_PLATE]),
-    'receiver',
+    sectionPiece(trunnionSection(), TRUNNION.x, BEVELS.block),
+    'trunnion',
     look,
   );
-  addPiece(
-    context,
-    parent,
-    sectionPiece({ rim: coverRim() }, [coverRear + END_PLATE, coverFront]),
-    'receiver',
-    look,
-  );
-  addPiece(context, parent, sectionPiece(trunnionSection(), TRUNNION.x), 'trunnion', look);
-  addPiece(context, parent, boxPiece(EJECTOR_BLOCK), 'ejector', look);
+  addPiece(context, parent, boxPiece(EJECTOR_BLOCK, BEVELS.round), 'ejector', look);
   addTriggerGuard(context, parent);
-  addRivets(context, parent);
+  addStuds(context, parent);
 }
