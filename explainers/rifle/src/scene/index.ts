@@ -5,7 +5,9 @@ import { bindStore } from './bindings';
 import { RifleController } from './controller';
 import { LABEL_PRIORITY } from './partInfo';
 
-export const SCENE_OPTIONS: SceneOptions = { camera: { near: 1, far: 20000 } };
+const CAMERA = { near: 1, far: 20000 } as const;
+
+export const SCENE_OPTIONS: SceneOptions = { camera: CAMERA };
 
 export function mountRifleScene(shell: SceneShell, store: RifleStore): () => void {
   const rifle = new RifleController(shell);
