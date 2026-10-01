@@ -20,7 +20,7 @@ describe('heart store', () => {
       valve: 'mitral',
       effort: 0,
       fitness: 'typical',
-      view: { cutaway: false, flow: true, conduction: false, labels: false },
+      view: { cutaway: false, flow: true, conduction: false, labels: true },
     });
   });
 

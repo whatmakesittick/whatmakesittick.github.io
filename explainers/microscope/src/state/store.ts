@@ -33,7 +33,7 @@ export type MicroscopeState = PlaybackState & MicroscopeFields;
 export type MicroscopeStoreState = Playback & MicroscopeFields & MicroscopeOwnActions;
 export type MicroscopeStore = ExplainerStore<MicroscopeStoreState>;
 
-export const DEFAULT_VIEW: ViewOptions = { rays: true, labels: false, cutaway: true };
+export const DEFAULT_VIEW: ViewOptions = { rays: true, labels: true, cutaway: true };
 
 export function createMicroscopeStore(
   overrides: Partial<MicroscopeStoreState> = {},

@@ -35,7 +35,7 @@ describe('solar panel store', () => {
       shade: 0,
       layout: 'halfCut',
       temperature: null,
-      view: { sun: true, slice: false, flow: false, labels: false },
+      view: { sun: true, slice: false, flow: false, labels: true },
     });
   });
 

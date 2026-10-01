@@ -5,7 +5,6 @@ import { DEFAULT_BIT } from '../model';
 import { DEFAULT_VIEW, PRESETS, effectiveMudWeight, mudStateOf } from '../state';
 import type { OilRigState, OilRigStore, OilRigStoreState, Preset } from '../state';
 import type { OilRigController } from './controller';
-import { PART_IDS } from './partInfo';
 
 export interface SceneTargets extends PresetTargets {
   oilRig: OilRigController;
@@ -55,7 +54,6 @@ export function bindStore(store: OilRigStore, targets: SceneTargets): () => void
     bindPresets<OilRigStoreState, Preset>(targets, store, {
       presets: PRESETS,
       views: oilRig.views,
-      parts: PART_IDS,
       labels: labelVisibility,
       prepare: push,
     }),

@@ -4,7 +4,6 @@ import type { AssemblyState } from '../ids';
 import { DEFAULT_VIEW, PRESETS } from '../state';
 import type { BlackHoleState, BlackHoleStore, BlackHoleStoreState, Preset } from '../state';
 import type { BlackHoleController } from './controller';
-import { PART_IDS } from './partInfo';
 
 export interface SceneTargets extends PresetTargets {
   blackHole: BlackHoleController;
@@ -44,7 +43,6 @@ export function bindStore(store: BlackHoleStore, targets: SceneTargets): () => v
     bindPresets<BlackHoleStoreState, Preset>(targets, store, {
       presets: PRESETS,
       views: blackHole.views,
-      parts: PART_IDS,
       labels: labelVisibility,
       prepare: push,
     }),

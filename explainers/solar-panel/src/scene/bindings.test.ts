@@ -42,7 +42,7 @@ describe('scene bindings', () => {
       layout: 'halfCut',
       deadStrings: [false, false, false, false, false, false],
       activeDiodes: [false, false, false],
-      view: { sun: true, slice: false, flow: false, labels: false },
+      view: { sun: true, slice: false, flow: false, labels: true },
     });
     expect(received[0].irradiance).toBeCloseTo(973, -1);
     expect(received[0].power).toBeCloseTo(375, -0.5);

@@ -65,7 +65,7 @@ describe('watch store', () => {
       beatRate: 'vph28800',
       cycles: 0,
       speed: 3,
-      view: { dial: true, bridges: true, energy: false, labels: false },
+      view: { dial: true, bridges: true, energy: false, labels: true },
     });
   });
 

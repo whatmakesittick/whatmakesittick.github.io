@@ -6,7 +6,6 @@ import { DEFAULT_VIEW, PRESETS, SINGLE_MOTOR, bladeCountOf, motorCountOf } from 
 import type { AtpSynthaseState, AtpSynthaseStore, AtpSynthaseStoreState, Preset } from '../state';
 import { ATP_TIMELINE } from '../timeline';
 import type { AtpSynthaseController } from './controller';
-import { PART_IDS } from './partInfo';
 
 const STOPPED = 0;
 
@@ -62,7 +61,6 @@ export function bindStore(store: AtpSynthaseStore, targets: SceneTargets): () =>
     bindPresets<AtpSynthaseStoreState, Preset>(targets, store, {
       presets: PRESETS,
       views: synthase.views,
-      parts: PART_IDS,
       labels: labelVisibility,
       prepare: push,
     }),

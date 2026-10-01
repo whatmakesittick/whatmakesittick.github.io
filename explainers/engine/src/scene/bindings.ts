@@ -4,7 +4,6 @@ import type { PresetTargets } from '@core/scene/presetBinder';
 import { PRESETS } from '../state';
 import type { EngineStore } from '../state';
 import type { EngineController } from './engineController';
-import { PART_IDS } from './partInfo';
 
 export interface SceneTargets extends PresetTargets {
   engine: EngineController;
@@ -27,7 +26,6 @@ export function bindStore(store: EngineStore, targets: SceneTargets): () => void
     bindPresets(targets, store, {
       presets: PRESETS,
       views: engine.views,
-      parts: PART_IDS,
       variant: (state) => state.layout,
       onView: (view) => engine.applyView(view),
     }),

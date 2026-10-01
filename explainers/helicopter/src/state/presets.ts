@@ -23,7 +23,7 @@ export interface Preset extends ScenePreset<PartId, CameraView> {
 export const PRESETS: Record<PresetId, Preset> = {
   overview: {
     camera: 'overview',
-    view: { labels: false, flow: true },
+    view: { flow: true },
     speed: 40,
     flightMode: 'hover',
     collective: COLLECTIVE_RANGE.hover,

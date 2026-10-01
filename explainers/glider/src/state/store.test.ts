@@ -31,7 +31,7 @@ describe('glider store', () => {
       polarSpeed: POLAR_SPEED.default,
       spread: SPREAD.default,
       speed: 60,
-      view: { forces: false, air: true, labels: false },
+      view: { forces: false, air: true, labels: true },
     });
   });
 

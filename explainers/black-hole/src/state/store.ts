@@ -25,7 +25,7 @@ export type BlackHoleStore = ExplainerStore<BlackHoleStoreState>;
 
 type ChapterControls = Pick<BlackHoleFields, ChapterControl>;
 
-export const DEFAULT_VIEW: ViewState = { disc: true, sheet: false, labels: false };
+export const DEFAULT_VIEW: ViewState = { disc: true, sheet: false, labels: true };
 const START_SPEED = PRESETS.overview.speed ?? SPEED_RANGE.default;
 
 const CHAPTER_CONTROL_DEFAULTS: ChapterControls = { comparison: DEFAULT_COMPARISON };

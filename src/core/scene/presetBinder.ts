@@ -33,7 +33,6 @@ export interface PresetTargets {
 export interface PresetBindingOptions<S extends Playback, P extends ScenePreset> {
   presets: Readonly<Record<string, P>>;
   views: Pick<CameraViews<P['camera']>, 'frame'>;
-  parts: readonly string[];
   labels?: LabelPolicy;
   variant?(state: S): string;
   prepare?(state: S): void;
@@ -59,7 +58,6 @@ class PresetPresenter<S extends Playback, P extends ScenePreset> {
   private readonly store: ExplainerStore<S>;
   private readonly options: PresetBindingOptions<S, P>;
   private readonly labels: LabelPolicy;
-  private readonly allParts: ReadonlySet<string>;
 
   constructor(
     targets: PresetTargets,
@@ -70,7 +68,6 @@ class PresetPresenter<S extends Playback, P extends ScenePreset> {
     this.store = store;
     this.options = options;
     this.labels = options.labels ?? layerPolicy(targets.labels);
-    this.allParts = new Set(options.parts);
   }
 
   present(animate: boolean): void {
@@ -101,7 +98,7 @@ class PresetPresenter<S extends Playback, P extends ScenePreset> {
       return;
     }
     const pinned = new Set<string>(this.presetOf(state).labels);
-    this.labels.setWanted(this.allParts, pinned);
+    this.labels.setWanted(pinned, pinned);
   }
 
   private presetOf(state: S): P {

@@ -18,7 +18,7 @@ describe('raptor store', () => {
       preset: 'overview',
       propellant: 'methane',
       engine: 'raptor',
-      view: { cutaway: false, flow: false, flame: true, cluster: false, labels: false },
+      view: { cutaway: false, flow: false, flame: true, cluster: false, labels: true },
     });
   });
 

@@ -36,7 +36,7 @@ describe('scene bindings', () => {
       time: 320,
       chamber: 'leftVentricle',
       valve: 'mitral',
-      view: { cutaway: false, flow: true, conduction: false, labels: false },
+      view: { cutaway: false, flow: true, conduction: false, labels: true },
     });
     expect(frame).toHaveBeenCalledWith('front', false, undefined);
   });

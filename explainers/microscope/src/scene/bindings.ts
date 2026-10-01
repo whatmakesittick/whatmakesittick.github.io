@@ -4,7 +4,6 @@ import type { LabelPolicy, PresetTargets } from '@core/scene/presetBinder';
 import { PRESETS } from '../state';
 import type { CameraView, MicroscopeStore } from '../state';
 import type { MicroscopeController } from './microscopeController';
-import { PART_IDS } from './partInfo';
 
 export interface SceneTargets extends PresetTargets {
   microscope: MicroscopeController;
@@ -39,7 +38,6 @@ export function bindStore(store: MicroscopeStore, targets: SceneTargets): () => 
     bindPresets(targets, store, {
       presets: PRESETS,
       views: microscope.views,
-      parts: PART_IDS,
       labels: labelVisibility,
       onView: (view) => microscope.applyView(view),
     }),

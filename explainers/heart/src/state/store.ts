@@ -36,7 +36,7 @@ export const DEFAULT_VIEW: ViewState = {
   cutaway: false,
   flow: true,
   conduction: false,
-  labels: false,
+  labels: true,
 };
 const START_SPEED = PRESETS.overview.speed ?? SPEED_RANGE.default;
 

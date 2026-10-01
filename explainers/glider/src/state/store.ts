@@ -24,7 +24,7 @@ export type GliderState = PlaybackState & GliderFields;
 export type GliderStoreState = Playback & GliderFields & GliderOwnActions;
 export type GliderStore = ExplainerStore<GliderStoreState>;
 
-export const DEFAULT_VIEW: ViewOptions = { forces: false, air: true, labels: false };
+export const DEFAULT_VIEW: ViewOptions = { forces: false, air: true, labels: true };
 
 export function createGliderStore(overrides: Partial<GliderStoreState> = {}): GliderStore {
   return createExplainerStore<GliderFields & GliderOwnActions, Preset>(

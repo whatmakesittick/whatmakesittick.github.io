@@ -44,7 +44,7 @@ export const DEFAULT_VIEW: ViewState = {
   membrane: true,
   cutaway: false,
   flow: true,
-  labels: false,
+  labels: true,
 };
 
 export const DEFAULT_RING: RingId = 'animal';

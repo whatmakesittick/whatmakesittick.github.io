@@ -35,7 +35,7 @@ export type ViewState = { [Key in keyof ViewOptions]: ViewOptions[Key] };
 type MudInputs = Pick<OilRigState, 'phase' | 'mudWeight'>;
 type ChapterControls = Pick<OilRigFields, ChapterControl>;
 
-export const DEFAULT_VIEW: ViewState = { cutaway: true, mud: true, flow: false, labels: false };
+export const DEFAULT_VIEW: ViewState = { cutaway: true, mud: true, flow: false, labels: true };
 
 const CHAPTER_CONTROL_DEFAULTS: ChapterControls = { mudWeight: null, draft: DRAFT_RANGE.default };
 

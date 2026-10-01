@@ -33,7 +33,7 @@ export type ViewState = { [Key in keyof ViewOptions]: ViewOptions[Key] };
 
 type ChapterControls = Pick<WatchFields, ChapterControl>;
 
-export const DEFAULT_VIEW: ViewState = { dial: true, bridges: true, energy: false, labels: false };
+export const DEFAULT_VIEW: ViewState = { dial: true, bridges: true, energy: false, labels: true };
 export const DEFAULT_WHEEL: WheelId = 'centreWheel';
 export const DEFAULT_BEAT_RATE: BeatRateId = 'vph28800';
 

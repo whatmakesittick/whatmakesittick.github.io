@@ -22,7 +22,7 @@ export type HelicopterState = PlaybackState & HelicopterFields;
 export type HelicopterStoreState = Playback & HelicopterFields & HelicopterOwnActions;
 export type HelicopterStore = ExplainerStore<HelicopterStoreState>;
 
-export const DEFAULT_VIEW: ViewOptions = { labels: false, flow: true };
+export const DEFAULT_VIEW: ViewOptions = { labels: true, flow: true };
 
 export function createHelicopterStore(
   overrides: Partial<HelicopterStoreState> = {},

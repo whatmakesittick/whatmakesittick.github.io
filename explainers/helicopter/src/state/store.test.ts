@@ -48,6 +48,6 @@ describe('helicopter store', () => {
     store.getState().applyPreset('torque');
     expect(store.getState().view.labels).toBe(true);
     store.getState().applyPreset('overview');
-    expect(store.getState().view.labels).toBe(false);
+    expect(store.getState().view.labels).toBe(true);
   });
 });

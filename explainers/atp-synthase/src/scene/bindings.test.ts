@@ -39,7 +39,7 @@ describe('scene bindings', () => {
       degreesPerSecond: 0,
       bladeCount: 8,
       motorCount: 1,
-      view: { membrane: true, cutaway: false, flow: true, labels: false },
+      view: { membrane: true, cutaway: false, flow: true, labels: true },
     });
     expect(frame).toHaveBeenCalledWith('motor', false, undefined);
   });
@@ -91,13 +91,12 @@ describe('scene bindings', () => {
     bindStore(store, targets);
     store.getState().applyPreset('rotor');
     expect(setHighlight).toHaveBeenLastCalledWith(['cRing', 'subunitA', 'protons']);
-    expect(targets.labelVisibility.setWanted).toHaveBeenLastCalledWith(new Set(), new Set());
-    store.getState().toggleView('labels');
-    const [wanted, pinned] = targets.labelVisibility.setWanted.mock.lastCall ?? [];
-    expect(pinned).toEqual(
+    expect(targets.labelVisibility.setWanted).toHaveBeenLastCalledWith(
+      new Set(['cRing', 'subunitA', 'protons', 'matrix', 'intermembraneSpace']),
       new Set(['cRing', 'subunitA', 'protons', 'matrix', 'intermembraneSpace']),
     );
-    expect(wanted?.size).toBeGreaterThan(pinned?.size ?? 0);
+    store.getState().toggleView('labels');
+    expect(targets.labelVisibility.setWanted).toHaveBeenLastCalledWith(new Set(), new Set());
   });
 
   it('never changes the state object the assembly got last', () => {
