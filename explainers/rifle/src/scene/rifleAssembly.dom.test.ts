@@ -278,6 +278,16 @@ describe('rifle assembly', () => {
     expect(shownTriangles()).toBeLessThan(TRIANGLE_BUDGET.cut);
   });
 
+  it('compiles every hidden material once when warming up', () => {
+    show({});
+    const compiled: Object3D[] = [];
+    assembly.warmUp((object) => compiled.push(object));
+    const materialsSeen = new Set(compiled.map((object) => (object as Mesh).material));
+    expect(compiled.length).toBeGreaterThan(5);
+    expect(materialsSeen.size).toBe(compiled.length);
+    expect(compiled.every((object) => !isShown(object))).toBe(true);
+  });
+
   it('frees its resources on dispose', () => {
     const extra = new RifleAssembly({ materials, textures }, STATE);
     expect(() => extra.dispose()).not.toThrow();

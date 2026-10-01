@@ -50,7 +50,12 @@ const VISIBLE = 0.004;
 const FLICKER = { rate: 30, depth: 0.15 } as const;
 const FLASH_LIGHT = { intensity: 90000, decay: 2, reach: 18 } as const;
 const PROFILE_SAMPLES = 20;
-const FLASH_TONES = { core: THEME.flame, flame: THEME.gas, ember: THEME.pressure } as const;
+const FLASH_TONES = {
+  white: '#ffffff',
+  core: THEME.flame,
+  flame: THEME.gas,
+  ember: THEME.pressure,
+} as const;
 const PLUG_SHARE = 0.55;
 
 interface Seeds {
@@ -156,6 +161,15 @@ class Wisps {
     return this.alive > 0;
   }
 
+  clear(): void {
+    this.age.fill(Infinity);
+    for (let index = 0; index < VENT_WISPS.count; index += 1)
+      this.cloud.setColor(index, 0, 0, 0, 0);
+    this.alive = 0;
+    this.pending = 0;
+    this.cloud.commit();
+  }
+
   advance(deltaSeconds: number, venting: number): void {
     this.pending += VENT_WISPS.rate * venting * deltaSeconds;
     let alive = 0;
@@ -231,6 +245,7 @@ export class GasPart {
   private readonly color = new Color();
   private venting = 0;
   private playing = false;
+  private time = 0;
 
   constructor(context: PartContext) {
     const random = seededRandom(GAS_GLOW.seed);
@@ -276,7 +291,9 @@ export class GasPart {
     this.placeFlash(gasShown ? shot.muzzleFlash : 0);
     this.placeTrail(state);
     this.plug.visible = state.gasPort === 'blocked';
-    if (!gasShown) this.wisps.cloud.points.visible = false;
+    const jumped = !state.playing && state.time !== this.time;
+    if (!gasShown || state.gasPort === 'blocked' || jumped) this.wisps.clear();
+    this.time = state.time;
   }
 
   update(deltaSeconds: number): boolean {

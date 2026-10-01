@@ -403,31 +403,32 @@ export const GAS_GLOW = {
   referencePressure: 120,
   falloff: 0.6,
   ventOpenTravel: PISTON.headFrontX - VENT_HOLES.x[1],
-  bore: { count: 260, size: 11, start: 1.5, caseRadius: 4, radius: 3, swirl: 0.9, alpha: 0.24 },
+  bore: { count: 280, size: 11, start: 1.5, caseRadius: 4, radius: 3, swirl: 0.9, alpha: 0.42 },
   port: { count: 40, size: 7, radius: 1, flow: 2.2, pressure: 30, alpha: 0.6 },
-  chamber: { count: 120, size: 13, radius: 6, swirl: 0.35, frontGap: 0.6, alpha: 0.32 },
-  puffs: { size: 18, reach: 2.5, alpha: 0.55 },
+  chamber: { count: 200, size: 15, radius: 6, swirl: 0.35, frontGap: 0.6, alpha: 0.24 },
+  puffs: { size: 22, reach: 3, alpha: 0.55 },
   seed: 23,
 } as const;
 
 export const VENT_WISPS = {
-  count: 64,
+  count: 80,
   life: 1.1,
-  rate: 70,
+  rate: 90,
   speed: 34,
   rise: 26,
   drag: 1.6,
-  size: 26,
-  alpha: 0.26,
+  size: 30,
+  alpha: 0.3,
   seed: 31,
 } as const;
 
 export const MUZZLE_FLASH = {
   plumes: [
-    { x: 8, length: 34, width: 13, tone: 'core', weight: 1 },
-    { x: 26, length: 70, width: 26, tone: 'flame', weight: 0.85 },
-    { x: 40, length: 96, width: 40, tone: 'ember', weight: 0.5 },
-    { x: 30, length: 170, width: 120, tone: 'flame', weight: 0.3 },
+    { x: 6, length: 40, width: 12, tone: 'white', weight: 1 },
+    { x: 16, length: 64, width: 22, tone: 'core', weight: 1 },
+    { x: 42, length: 120, width: 46, tone: 'flame', weight: 0.85 },
+    { x: 66, length: 170, width: 70, tone: 'ember', weight: 0.5 },
+    { x: 50, length: 300, width: 200, tone: 'flame', weight: 0.3 },
   ],
   lean: toRadians(9),
   offset: 2,
@@ -436,7 +437,7 @@ export const MUZZLE_FLASH = {
 
 export const RIFLING_LANDS = { width: 1.1, lift: 0.08, step: 2 } as const;
 
-export const CASE_GLINT = { size: 24, sharpness: 10, mouth: 34 } as const;
+export const CASE_GLINT = { size: 26, sharpness: 12, mouth: 30, lift: 5, phase: 0.6 } as const;
 
 export const TRAIL = { length: 46, radius: 1.6, opacity: 0.85, segments: 12 } as const;
 

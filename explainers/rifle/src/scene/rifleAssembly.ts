@@ -1,4 +1,4 @@
-import { Group, Mesh } from 'three';
+import { Group, Mesh, Points, Sprite } from 'three';
 import type { Box3, Material, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
@@ -30,6 +30,13 @@ import { RoundsPart, addMagazineStack, createRoundGeometry } from './parts/round
 import { addSights } from './parts/sights';
 import { SpringPart } from './parts/spring';
 import { REGIONS } from './regions';
+
+type Drawable = (Mesh | Points | Sprite) & { material: Material };
+
+function isDrawable(object: Object3D): object is Drawable {
+  const drawable = object instanceof Mesh || object instanceof Points || object instanceof Sprite;
+  return drawable && !Array.isArray((object as Drawable).material);
+}
 
 function createContext(
   resources: AssemblyResources,
@@ -144,12 +151,8 @@ export class RifleAssembly implements Assembly {
   warmUp(compile: (object: Object3D) => void): void {
     const seen = new Set<Material>();
     this.root.traverse((object) => {
-      if (!(object instanceof Mesh) || isShown(object)) return;
-      const materials: Material[] = Array.isArray(object.material)
-        ? object.material
-        : [object.material];
-      if (materials.every((material) => seen.has(material))) return;
-      materials.forEach((material) => seen.add(material));
+      if (!isDrawable(object) || isShown(object) || seen.has(object.material)) return;
+      seen.add(object.material);
       compile(object);
     });
   }

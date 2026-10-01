@@ -1,4 +1,4 @@
-import { BoxGeometry, Group } from 'three';
+import { AdditiveBlending, BoxGeometry, Group, Sprite, SpriteMaterial } from 'three';
 import type { BufferGeometry } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { AssemblyState, ShotReading } from '../../ids';
@@ -6,6 +6,7 @@ import { BULLET_SEAT_X, CARTRIDGE } from '../../model/layout';
 import type { Point } from '../../model/scale';
 import {
   BULLET_SHAPE,
+  CASE_GLINT,
   MAGAZINE_ARC,
   MAGAZINE_SHAPE,
   ROUND_SEGMENTS,
@@ -27,7 +28,7 @@ import {
 import type { RoundPose } from '../geometry/roundPaths';
 import { turnStrands } from '../geometry/turned';
 import type { TurnStrand } from '../geometry/turned';
-import { markDynamic, partMesh } from './context';
+import { markDynamic, partMesh, registered } from './context';
 import type { EmphasisGroup, PartContext } from './context';
 
 export type Representation = 'whole' | 'section' | 'hidden';
@@ -167,6 +168,7 @@ export class RoundsPart {
   readonly next: RoundView;
   private readonly live: RoundView;
   private readonly spent: RoundView;
+  private readonly glint: Sprite;
 
   constructor(context: PartContext, geometry: RoundGeometry) {
     this.live = new RoundView(context, geometry, {
@@ -182,7 +184,8 @@ export class RoundsPart {
       bullet: 'bullet',
     });
     this.bullet = new BulletPart(context, geometry);
-    this.fired.add(this.live.object, this.spent.object);
+    this.glint = createGlint(context);
+    this.fired.add(this.live.object, this.spent.object, this.glint);
     this.object.add(this.fired, this.next.object, this.bullet.object);
     markDynamic(this.object);
   }
@@ -208,10 +211,33 @@ export class RoundsPart {
     }
     const shown: Representation =
       flight >= 1 ? 'hidden' : flying || !view.cutaway ? 'whole' : 'section';
+    this.glint.visible = flying && flight < 1;
+    if (this.glint.visible) this.glint.material.opacity = glintStrength(this.fired.rotation.y);
     const live = shot.stage === 'seated';
     this.live.show(live ? shown : 'hidden');
     this.spent.show(live ? 'hidden' : shown);
   }
+}
+
+function createGlint(context: PartContext): Sprite {
+  const material = new SpriteMaterial({
+    map: context.textures.glow,
+    color: '#ffffff',
+    transparent: true,
+    opacity: 0,
+    blending: AdditiveBlending,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const glint = new Sprite(registered(context, 'spentCase', material));
+  glint.position.set(CASE_GLINT.mouth, CASE_GLINT.lift, 0);
+  glint.scale.setScalar(CASE_GLINT.size);
+  glint.visible = false;
+  return glint;
+}
+
+function glintStrength(yaw: number): number {
+  return Math.max(0, Math.sin(2 * yaw + CASE_GLINT.phase)) ** CASE_GLINT.sharpness;
 }
 
 function addStackRound(
