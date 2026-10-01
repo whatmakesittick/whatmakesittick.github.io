@@ -10,8 +10,8 @@ describe('scene options', () => {
     expect(SCENE_OPTIONS.camera?.distance?.min).toBeLessThan(100);
   });
 
-  it('fades dimmed parts so the cut shows through and never dims the hot gas', () => {
-    expect(SCENE_OPTIONS.highlight?.dim?.opacity).toBeLessThan(1);
+  it('keeps dimmed parts solid so a closed receiver hides its insides and never dims the hot gas', () => {
+    expect(SCENE_OPTIONS.highlight?.dim?.opacity).toBeUndefined();
     expect(SCENE_OPTIONS.highlight?.undimmed).toContain('hotGas');
   });
 });

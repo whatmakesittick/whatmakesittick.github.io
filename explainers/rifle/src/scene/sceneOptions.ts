@@ -5,7 +5,7 @@ const CAMERA = {
   far: 12000,
   distance: { min: 60, max: 4000 },
 } as const;
-const DIM = { saturation: 0.3, brightness: 0.5, emissive: 0.3, opacity: 0.4 } as const;
+const DIM = { saturation: 0.35, brightness: 0.6, emissive: 0.3 } as const;
 const UNDIMMED = ['hotGas'] as const;
 
 export const SCENE_OPTIONS: SceneOptions = {

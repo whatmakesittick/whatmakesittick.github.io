@@ -93,13 +93,13 @@ export function addSelectorMarks(context: PartContext, parent: Group): void {
 export function createSelector(context: PartContext): Group {
   const group = new Group();
   const [x, y, surface] = SELECTOR.centre;
-  const { thickness, bossRadius, bossHeight, autoAngle, tab } = SELECTOR_LEVER;
+  const { thickness, bevel, bossRadius, bossHeight, autoAngle, tab } = SELECTOR_LEVER;
   const look = context.looks.steel;
   const ghost = FINISHES.ghost;
   addPiece(
     context,
     group,
-    sidePiece(outlineShape(SELECTOR_OUTLINE), [surface, surface + thickness]),
+    sidePiece(outlineShape(SELECTOR_OUTLINE), [surface, surface + thickness], bevel),
     'selector',
     look,
     ghost,

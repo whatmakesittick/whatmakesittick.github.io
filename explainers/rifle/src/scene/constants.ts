@@ -238,7 +238,8 @@ export const MAGAZINE_FRONT = magazinePoint(MAGAZINE_ARC.front, MAGAZINE_ARC.swe
 export const TRIGGER_SHAPE = { halfWidth: 3, bevel: 0.6 } as const;
 
 export const SELECTOR_LEVER = {
-  thickness: 1.6,
+  thickness: 2.4,
+  bevel: 0.6,
   bossRadius: 5,
   bossHeight: 2,
   autoAngle: toRadians(-11),
