@@ -452,8 +452,9 @@ Helpers that more than one explainer's widgets share:
   mount can hand back a single unmount.
 - `withAlpha` in `src/core/color.ts` turns a `#rrggbb` theme colour into an `rgb()` string with
   an alpha, for canvas fills and bands.
-- `slowMotionFactor(speed, realTimeSpeed)` in `src/core/playback.ts` gives how many times slower
-  than real life a speed stop plays, halving at every stop up to the explainer's real time stop.
+- `slowMotionFactor(speed, realTimeSpeed, base)` in `src/core/playback.ts` gives how many times
+  slower than real life a speed stop plays, dividing by `base` (2 unless given) at every stop up to
+  the explainer's real time stop.
 
 The dock's jump chips sit under the scrubber's coloured bands. `phaseColumns` in
 `src/core/ui/phases.ts` gives each phase a grid column sized by its share of the

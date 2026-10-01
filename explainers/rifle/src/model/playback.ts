@@ -1,3 +1,4 @@
+import { slowMotionFactor } from '@core/playback';
 import { CYCLE_UNITS } from './clock';
 import { CYCLE_MS, MS_PER_SECOND } from './constants';
 
@@ -8,7 +9,7 @@ export const SPEED_RANGE = { min: 0, max: REAL_PACE_SPEED, step: 1, default: 1 }
 const CYCLE_SECONDS = CYCLE_MS / MS_PER_SECOND;
 
 export function slowdown(speed: number): number {
-  return PACE_FACTOR ** (REAL_PACE_SPEED - speed);
+  return slowMotionFactor(speed, REAL_PACE_SPEED, PACE_FACTOR);
 }
 
 export function loopSeconds(speed: number): number {
