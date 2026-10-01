@@ -1,10 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { CARRIER_STROKE, EJECTOR_X, HAMMER, RETARDER_ANGLE, UNLOCK_ANGLE } from './layout';
-import { EJECT_MS, HAMMER_TIMES, VENTS_CLEAR_MS, boltFaceX, boltTravel, motionAt } from './motion';
+import {
+  CARRIER_STROKE,
+  EJECTOR_X,
+  FREE_TRAVEL,
+  HAMMER,
+  RETARDER_ANGLE,
+  UNLOCK_ANGLE,
+} from './layout';
+import { EJECT_MS, HAMMER_TIMES, VENTS_CLEAR_MS, motionAt } from './motion';
 import { shotAt } from './shot';
 import { EXIT_MS, LOCKED_MS, REAR_MS, UNLOCKED_MS } from './timing';
 
 const MILLISECONDS = Array.from({ length: 1001 }, (_, index) => index / 10);
+
+function boltFaceX(carrier: number): number {
+  return -Math.max(0, carrier - FREE_TRAVEL);
+}
 
 describe('carrier and bolt', () => {
   it('keeps the carrier inside its stroke and still until the bullet is gone', () => {
@@ -30,12 +41,6 @@ describe('carrier and bolt', () => {
     expect(motionAt(UNLOCKED_MS, 'open').bolt).toBeCloseTo(-UNLOCK_ANGLE, 9);
     expect(motionAt(60, 'open').bolt).toBeCloseTo(-UNLOCK_ANGLE, 9);
     expect(motionAt(LOCKED_MS, 'open').bolt).toBe(0);
-  });
-
-  it('moves the bolt face back only after the free travel', () => {
-    expect(boltTravel(5.5)).toBe(0);
-    expect(boltTravel(80.5)).toBe(75);
-    expect(boltFaceX(CARRIER_STROKE)).toBe(-124.5);
   });
 
   it('meets the ejector when the case head on the bolt face reaches it', () => {

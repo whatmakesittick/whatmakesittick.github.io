@@ -1,6 +1,5 @@
 export const BULLET_MASS_KG = 0.0079;
 export const POWDER_MASS_KG = 0.0016;
-export const CARTRIDGE_MASS_KG = 0.0162;
 export const MUZZLE_SPEED = 715;
 export const PEAK_PRESSURE_MPA = 275;
 export const START_PRESSURE_MPA = 29;

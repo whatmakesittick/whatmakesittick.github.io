@@ -3,7 +3,7 @@ import type { LabelSide } from '@core/scene/labelLayout';
 import { PART_IDS } from '../ids';
 import type { PartId } from '../ids';
 
-export const BELOW_BORE_PARTS: ReadonlySet<PartId> = new Set<PartId>([
+const BELOW_BORE_PARTS: ReadonlySet<PartId> = new Set<PartId>([
   'magazine',
   'trigger',
   'grip',
@@ -13,7 +13,7 @@ export const BELOW_BORE_PARTS: ReadonlySet<PartId> = new Set<PartId>([
   'ejector',
 ]);
 
-export const BORE_REAR_PARTS: ReadonlySet<PartId> = new Set<PartId>([
+const BORE_REAR_PARTS: ReadonlySet<PartId> = new Set<PartId>([
   'primer',
   'firingPin',
   'cartridgeCase',
@@ -29,8 +29,6 @@ function labelSide(id: PartId): LabelSide {
 export const PART_INFO: Record<PartId, PartInfo> = Object.fromEntries(
   PART_IDS.map((id) => [id, { labelKey: `parts.${id}`, side: labelSide(id) }]),
 ) as Record<PartId, PartInfo>;
-
-export { PART_IDS };
 
 export const LABEL_PRIORITY: readonly PartId[] = [
   'bullet',

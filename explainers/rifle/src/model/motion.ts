@@ -57,14 +57,6 @@ const hammerTrack = keyframes([
 
 const blockedHammerTrack = keyframes(hammerFall);
 
-export function boltTravel(carrier: number): number {
-  return Math.max(0, carrier - FREE_TRAVEL);
-}
-
-export function boltFaceX(carrier: number): number {
-  return -boltTravel(carrier);
-}
-
 export const EJECT_MS = timeWhen(carrierTrack, FREE_TRAVEL - EJECTOR_X, UNLOCKED_MS, REAR_MS);
 
 export const VENTS_CLEAR_MS = timeWhen(carrierTrack, VENT_CLEAR_TRAVEL_MM, UNLOCKED_MS, REAR_MS);
