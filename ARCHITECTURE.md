@@ -352,7 +352,8 @@ A scene binds its presets to the store with `bindPresets(shell, store, options)`
 from `presetBinder.ts`. It presents the first preset at once, eases to each new
 one, reframes the current view when the reader resets the camera, and on a view
 change calls `onView` and updates the labels: every part while `view.labels` is
-on, the preset's labels otherwise, and those stay pinned either way.
+on, with the preset's labels pinned so crowding never hides them, and none at all
+while it is off.
 
 | Option      | Role                                                                    |
 | ----------- | ----------------------------------------------------------------------- |

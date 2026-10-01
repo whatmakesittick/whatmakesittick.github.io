@@ -81,7 +81,7 @@ describe('bindPresets', () => {
     expect(next()).toEqual([
       ['frame', 'wide', false, undefined],
       ['highlight', []],
-      ['show', ['wheel']],
+      ['show', []],
     ]);
   });
 
@@ -90,10 +90,10 @@ describe('bindPresets', () => {
     next();
     store.getState().applyPreset('detail');
     expect(next()).toEqual([
-      ['show', ['hub', 'spoke']],
+      ['show', []],
       ['frame', 'close', true, undefined],
       ['highlight', ['spoke']],
-      ['show', ['hub', 'spoke']],
+      ['show', []],
     ]);
   });
 
@@ -117,6 +117,19 @@ describe('bindPresets', () => {
       ['view', true],
       ['wanted', ['hub', 'spoke', 'wheel'], ['wheel']],
     ]);
+  });
+
+  it('wants no label at all while the labels view is off', () => {
+    const log: Entry[] = [];
+    const { store, next } = bind({ labels: recordingLabels(log) }, log);
+    store.getState().setView({ labels: true });
+    next();
+    store.getState().setView({ labels: false });
+    expect(next()).toEqual([['wanted', [], []]]);
+    store.getState().applyPreset('detail');
+    const wanted = next().filter(([name]) => name === 'wanted');
+    expect(wanted.length).toBeGreaterThan(0);
+    wanted.forEach((entry) => expect(entry).toEqual(['wanted', [], []]));
   });
 
   it('prepares the state and passes the variant before framing', () => {

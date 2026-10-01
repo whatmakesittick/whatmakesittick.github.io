@@ -85,12 +85,10 @@ describe('scene bindings', () => {
     expect(setHighlight).toHaveBeenLastCalledWith([]);
     store.getState().applyPreset('clocks');
     expect(setHighlight).toHaveBeenLastCalledWith(['probe', 'ship', 'beacon']);
-    expect(setWanted).toHaveBeenLastCalledWith(
-      new Set(['probe', 'ship', 'beacon']),
-      new Set(['probe', 'ship', 'beacon']),
-    );
+    expect(setWanted).toHaveBeenLastCalledWith(new Set(), new Set());
     store.getState().toggleView('labels');
     expect(setWanted.mock.lastCall?.[0].size).toBe(7);
+    expect(setWanted.mock.lastCall?.[1]).toEqual(new Set(['probe', 'ship', 'beacon']));
   });
 
   it('stops listening once unbound', () => {

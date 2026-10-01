@@ -91,10 +91,13 @@ describe('scene bindings', () => {
     bindStore(store, targets);
     store.getState().applyPreset('rotor');
     expect(setHighlight).toHaveBeenLastCalledWith(['cRing', 'subunitA', 'protons']);
-    expect(targets.labelVisibility.setWanted).toHaveBeenLastCalledWith(
-      new Set(['cRing', 'subunitA', 'protons', 'matrix', 'intermembraneSpace']),
+    expect(targets.labelVisibility.setWanted).toHaveBeenLastCalledWith(new Set(), new Set());
+    store.getState().toggleView('labels');
+    const [wanted, pinned] = targets.labelVisibility.setWanted.mock.lastCall ?? [];
+    expect(pinned).toEqual(
       new Set(['cRing', 'subunitA', 'protons', 'matrix', 'intermembraneSpace']),
     );
+    expect(wanted?.size).toBeGreaterThan(pinned?.size ?? 0);
   });
 
   it('never changes the state object the assembly got last', () => {

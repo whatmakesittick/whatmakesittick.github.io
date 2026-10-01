@@ -48,6 +48,8 @@ export interface LabelVisibilityShell {
   onFrame: SceneShell['onFrame'];
 }
 
+const NO_LABELS: ReadonlySet<string> = new Set();
+
 function layerPolicy(labels: PresetTargets['labels']): LabelPolicy {
   return { setWanted: (wanted) => labels.show(wanted) };
 }
@@ -94,8 +96,12 @@ class PresetPresenter<S extends Playback, P extends ScenePreset> {
   }
 
   private showLabels(state: S): void {
+    if (!state.view.labels) {
+      this.labels.setWanted(NO_LABELS, NO_LABELS);
+      return;
+    }
     const pinned = new Set<string>(this.presetOf(state).labels);
-    this.labels.setWanted(state.view.labels ? this.allParts : pinned, pinned);
+    this.labels.setWanted(this.allParts, pinned);
   }
 
   private presetOf(state: S): P {
