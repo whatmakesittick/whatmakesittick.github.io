@@ -62,15 +62,12 @@ function secondsPerShot(speed: number): string {
 }
 
 export function formatSpeed(speed: number): string {
-  const key = speed === REAL_PACE_SPEED ? 'timeline.realPace' : 'timeline.perShot';
-  return t(key, { seconds: secondsPerShot(speed) });
+  return t('timeline.perShot', { seconds: secondsPerShot(speed) });
 }
 
 export function describeSpeed(speed: number): string {
-  return t('timeline.speedValue', {
-    seconds: secondsPerShot(speed),
-    factor: formatNumber(slowdown(speed)),
-  });
+  if (speed === REAL_PACE_SPEED) return t('timeline.realPace');
+  return t('timeline.speedValue', { factor: formatNumber(slowdown(speed)) });
 }
 
 export function formatPressure(mpa: number): string {

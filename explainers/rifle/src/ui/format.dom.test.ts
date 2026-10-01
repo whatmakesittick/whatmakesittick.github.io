@@ -52,13 +52,16 @@ describe('rifle formats', () => {
     expect(describePhase(97)).toContain(timeline.during.ready);
   });
 
-  it('gives the playback in seconds per shot and calls the last stop real pace', () => {
-    expect([0, 1, 2, 3].map(formatSpeed)).toEqual(
-      ['25.6', '6.4', '1.6', '0.4'].map((seconds) => fill(timeline.perShot, { seconds })),
+  it('gives the playback in seconds per shot at every stop', () => {
+    expect([0, 1, 2, 3, 4].map(formatSpeed)).toEqual(
+      ['25.6', '6.4', '1.6', '0.4', '0.1'].map((seconds) => fill(timeline.perShot, { seconds })),
     );
-    expect(formatSpeed(4)).toBe(fill(timeline.realPace, { seconds: '0.1' }));
-    expect(describeSpeed(1)).toBe(fill(timeline.speedValue, { seconds: '6.4', factor: '64' }));
-    expect(describeSpeed(0)).toBe(fill(timeline.speedValue, { seconds: '25.6', factor: '256' }));
+  });
+
+  it('describes the slow stops by their slowdown and calls the last stop real pace', () => {
+    expect(describeSpeed(1)).toBe(fill(timeline.speedValue, { factor: '64' }));
+    expect(describeSpeed(0)).toBe(fill(timeline.speedValue, { factor: '256' }));
+    expect(describeSpeed(4)).toBe(timeline.realPace);
   });
 
   it('prints the pressure, the speed and the travel in whole units', () => {
