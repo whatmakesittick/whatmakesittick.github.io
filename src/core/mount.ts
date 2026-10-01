@@ -56,7 +56,7 @@ export async function mountExplainer<S extends Playback>(
   const stage = mountStageExpansion(document);
   const unmountKeyboard = mountKeyboard(document, store, explainer, stageShortcuts(stage));
   mountSections(document, store, Object.keys(explainer.presets), stage);
-  mountSafeArea(document);
+  mountSafeArea(document, explainer.scene?.gaugeSide);
   const unmountScene = mountScene(document, store, explainer);
   return () => {
     unmountScene();

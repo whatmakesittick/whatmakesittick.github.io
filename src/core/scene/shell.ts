@@ -7,6 +7,7 @@ import { MAX_FRAME_SECONDS } from './constants';
 import { Highlighter } from './highlight';
 import { LabelOcclusion } from './labelOcclusion';
 import { LabelLayer } from './labels';
+import type { GaugeSide } from './lens';
 import { createLighting } from './lighting';
 import type { Lighting } from './lighting';
 import { startLoop } from './loop';
@@ -35,6 +36,7 @@ export interface SceneOptions {
   stage?: boolean;
   camera?: CameraOptions;
   highlight?: MaterialLibraryOptions;
+  gaugeSide?: GaugeSide;
 }
 
 export interface SceneShell {

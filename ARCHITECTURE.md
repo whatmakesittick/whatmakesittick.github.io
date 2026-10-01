@@ -204,7 +204,9 @@ bands, status, speed slider, choices, toggles, reset camera, more), the gauge
 readouts, language, footer, `mountUi`, chapter actions, the full screen toggle,
 the keyboard (space, arrows, digits for phases, R, X and Escape for full screen,
 choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
-safe area. Then it builds the scene host from the
+safe area: the dock reserves the bottom of the stage and the gauge the right, or
+the top strip when the scene options set `gaugeSide: 'top'` for a wide subject.
+Then it builds the scene host from the
 explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
 scene, camera rig, label layer, highlighter, materials, textures, stage, lighting,
 `onFrame(update)` and `invalidate()`. Before the first frame the host compiles
