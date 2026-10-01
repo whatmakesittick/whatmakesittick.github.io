@@ -75,10 +75,13 @@ describe('rifle formats', () => {
   it('rounds the air comparison and the spin to two figures', () => {
     expect(formatTimesAir(275)).toBe(fill(units.timesAir, { value: '2,700' }));
     expect(formatTimesAir(29)).toBe(fill(units.timesAir, { value: '290' }));
-    expect(formatTimesAir(0)).toBe(fill(units.timesAir, { value: '0' }));
     expect(formatSpin(2979.2)).toBe(fill(units.turnsPerSecond, { value: '3,000' }));
     expect(formatSpin(0)).toBe(fill(units.turnsPerSecond, { value: '0' }));
     expect(formatTurns(1.5375)).toBe(fill(units.turns, { value: '1.5' }));
+  });
+
+  it('counts the air already in the case, so the chamber reads 1 times air pressure at rest', () => {
+    expect(formatTimesAir(0)).toBe(fill(units.timesAir, { value: '1' }));
   });
 
   it('names the stages of the hammer, the bolt, the case and the next round', () => {

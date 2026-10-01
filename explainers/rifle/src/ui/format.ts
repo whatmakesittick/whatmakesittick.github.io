@@ -71,8 +71,12 @@ export function formatPressure(mpa: number): string {
   return t('units.mpa', { value: whole(mpa) });
 }
 
+function timesAirPressure(gaugeMpa: number): number {
+  return (gaugeMpa + AIR_PRESSURE_MPA) / AIR_PRESSURE_MPA;
+}
+
 export function formatTimesAir(mpa: number): string {
-  return t('units.timesAir', { value: twoSignificant(mpa / AIR_PRESSURE_MPA) });
+  return t('units.timesAir', { value: twoSignificant(timesAirPressure(mpa)) });
 }
 
 export function formatSpeedMs(metresPerSecond: number): string {
