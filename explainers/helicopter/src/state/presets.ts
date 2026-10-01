@@ -27,7 +27,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: 40,
     flightMode: 'hover',
     collective: COLLECTIVE_RANGE.hover,
-    labels: [],
+    labels: ['mainRotor', 'fuselage', 'tailBoom', 'tailRotor', 'skids'],
     highlight: [],
   },
   collective: {

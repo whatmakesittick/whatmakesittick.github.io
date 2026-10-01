@@ -227,7 +227,7 @@
     "step": "Faire tourner le vilebrequin par pas de 2°, ou de 15° avec <kbd>Maj</kbd>",
     "cutaway": "Activer ou désactiver la vue en coupe",
     "gas": "Activer ou désactiver les couleurs des gaz",
-    "labels": "Activer ou désactiver toutes les étiquettes",
+    "labels": "Activer ou désactiver les étiquettes",
     "flow": "Activer ou désactiver les flèches de flux des gaz",
     "engineType": "Basculer entre essence et diesel",
     "layout": "Basculer entre un cylindre et le quatre-cylindres en ligne",

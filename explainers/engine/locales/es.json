@@ -227,7 +227,7 @@
     "step": "Mover el cigüeñal 2°, o 15° con <kbd>Mayús</kbd>",
     "cutaway": "Activar o desactivar la vista en corte",
     "gas": "Activar o desactivar los colores del gas",
-    "labels": "Activar o desactivar todas las etiquetas",
+    "labels": "Activar o desactivar las etiquetas",
     "flow": "Activar o desactivar las flechas del flujo de gas",
     "engineType": "Cambiar entre gasolina y diésel",
     "layout": "Cambiar entre un cilindro y cuatro en línea",

@@ -35,7 +35,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'overview',
     speed: 60,
     view: { air: true, forces: false },
-    labels: [],
+    labels: ['field', 'thermal', 'cumulus', 'ridge', 'wave'],
     highlight: [],
   },
   glide: {

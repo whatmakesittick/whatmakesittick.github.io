@@ -35,7 +35,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'overview',
     speed: 80,
     view: { rays: true, cutaway: true },
-    labels: [],
+    labels: ['eyepiece', 'tube', 'objective', 'stage', 'condenser', 'lamp'],
     highlight: [],
   },
   lens: {

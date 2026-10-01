@@ -20,7 +20,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'overview',
     speed: 80,
     view: { cutaway: true, mud: true, flow: false },
-    labels: [],
+    labels: ['derrick', 'pontoon', 'seabed', 'drillPipe', 'bit'],
     highlight: [],
   },
   float: {

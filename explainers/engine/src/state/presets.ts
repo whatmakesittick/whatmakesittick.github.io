@@ -63,7 +63,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     layout: 'single',
     view: { cutaway: true, gas: true, flow: true },
     speed: 60,
-    labels: [],
+    labels: ['piston', 'intakeValve', 'exhaustValve', 'connectingRod', 'crankshaft'],
     highlight: [],
   },
   strokes: {
@@ -133,13 +133,13 @@ export const PRESETS: Record<PresetId, Preset> = {
     layout: 'inline4',
     view: { cutaway: true, gas: true },
     speed: 60,
-    labels: [],
+    labels: ['piston', 'crankshaft', 'flywheel'],
     highlight: [],
   },
   controls: {
     id: 'controls',
     camera: 'overview',
-    labels: [],
+    labels: ['piston', 'intakeValve', 'exhaustValve', 'connectingRod', 'crankshaft'],
     highlight: [],
   },
 };
