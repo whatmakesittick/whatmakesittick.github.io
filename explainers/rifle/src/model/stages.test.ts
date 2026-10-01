@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { EJECT_MS, motionAt } from './motion';
+import { msAt, unitsAt } from './clock';
+import { MOMENTS } from './moments';
+import { CASE_GONE_MS, EJECT_MS, motionAt } from './motion';
 import { caseStage, hammerStage, lockStage, roundStage } from './stages';
 
 describe('hammer stage', () => {
@@ -40,12 +42,15 @@ describe('lock, case and round stages', () => {
   });
 
   it('holds, throws and loses the empty case', () => {
-    expect([10, EJECT_MS + 5, 60].map((ms) => caseStage(at(ms)))).toEqual([
-      'held',
-      'flying',
-      'gone',
-    ]);
-    expect(caseStage(motionAt(60, 'blocked'))).toBe('held');
+    expect(
+      [10, EJECT_MS - 0.01, EJECT_MS + 5, CASE_GONE_MS, 60].map((ms) => caseStage(ms, 'open')),
+    ).toEqual(['held', 'held', 'flying', 'gone', 'gone']);
+    expect(caseStage(60, 'blocked')).toBe('held');
+  });
+
+  it('shows the case flying the moment the ejector flips it out', () => {
+    expect(caseStage(EJECT_MS, 'open')).toBe('flying');
+    expect(caseStage(msAt(unitsAt(MOMENTS.eject)), 'open')).toBe('flying');
   });
 
   it('keeps the next round waiting, feeds it and chambers it', () => {

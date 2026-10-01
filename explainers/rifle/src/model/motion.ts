@@ -69,9 +69,11 @@ export const EJECT_MS = timeWhen(carrierTrack, FREE_TRAVEL - EJECTOR_X, UNLOCKED
 
 export const VENTS_CLEAR_MS = timeWhen(carrierTrack, VENT_CLEAR_TRAVEL_MM, UNLOCKED_MS, REAR_MS);
 
+export const CASE_GONE_MS = EJECT_MS + CASE_FLIGHT_MS;
+
 const caseFlightTrack = keyframes([
   { at: EJECT_MS, value: 0 },
-  { at: EJECT_MS + CASE_FLIGHT_MS, value: 1 },
+  { at: CASE_GONE_MS, value: 1 },
 ]);
 
 const feedTrack = keyframes([

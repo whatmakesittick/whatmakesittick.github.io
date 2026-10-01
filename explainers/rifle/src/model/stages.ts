@@ -1,6 +1,6 @@
 import type { GasPortId, MotionReading } from '../ids';
 import { UNLOCK_ANGLE } from './layout';
-import { HAMMER_TIMES } from './motion';
+import { CASE_GONE_MS, EJECT_MS, HAMMER_TIMES } from './motion';
 
 export const HAMMER_STAGES = ['falling', 'struck', 'cocking', 'cocked', 'held'] as const;
 export type HammerStage = (typeof HAMMER_STAGES)[number];
@@ -15,6 +15,7 @@ export const ROUND_STAGES = ['waiting', 'feeding', 'chambered'] as const;
 export type RoundStage = (typeof ROUND_STAGES)[number];
 
 const SETTLED = 1e-6;
+const CLOCK_ROUNDING_MS = 1e-9;
 
 function stageOf<T>(share: number, [before, during, after]: readonly [T, T, T]): T {
   if (share <= SETTLED) return before;
@@ -35,8 +36,10 @@ export function lockStage(motion: MotionReading): LockStage {
   return stageOf(Math.abs(motion.bolt) / UNLOCK_ANGLE, LOCK_STAGES);
 }
 
-export function caseStage(motion: MotionReading): CaseStage {
-  return stageOf(motion.caseFlight, CASE_STAGES);
+export function caseStage(ms: number, gasPort: GasPortId): CaseStage {
+  if (gasPort === 'blocked' || ms < EJECT_MS - CLOCK_ROUNDING_MS) return 'held';
+  if (ms < CASE_GONE_MS) return 'flying';
+  return 'gone';
 }
 
 export function roundStage(motion: MotionReading): RoundStage {

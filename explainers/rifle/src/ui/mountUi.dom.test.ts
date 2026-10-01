@@ -124,6 +124,8 @@ describe('chapter widgets', () => {
     click('moment', 'unlock');
     expect(readout('reload-case')).toBe(en.reload.case.held);
     expect(readout('reload-round')).toBe(en.reload.round.waiting);
+    click('moment', 'eject');
+    expect(readout('reload-case')).toBe(en.reload.case.flying);
     store.getState().seekTime(MOMENTS.eject + 5);
     expect(readout('reload-case')).toBe(en.reload.case.flying);
     store.getState().seekTime(REAR_MS);

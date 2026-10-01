@@ -9,7 +9,7 @@ import { mountLiveReadouts } from './liveReadouts';
 export function mountReloadReadouts(root: Document, store: RifleStore): Disposer {
   return mountLiveReadouts(root, store, {
     'reload-carrier': carrierPercent,
-    'reload-case': (state) => formatCase(caseStage(cycleOf(state).motion)),
+    'reload-case': (state) => formatCase(caseStage(cycleOf(state).ms, state.gasPort)),
     'reload-round': (state) => formatRound(roundStage(cycleOf(state).motion)),
     'reload-left': timeUntilReady,
     'reload-compare': (state) => formatComparison(state.comparison),
