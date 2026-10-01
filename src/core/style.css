@@ -819,6 +819,8 @@ a:hover {
 }
 
 .speed-field {
+  --speed-range-width: 160px;
+
   flex: 1 1 220px;
 }
 
@@ -829,6 +831,10 @@ a:hover {
 .field-label {
   color: var(--muted);
   font-size: 0.75rem;
+}
+
+.speed-field .range {
+  flex: 0 0 var(--speed-range-width);
 }
 
 .field-value {
@@ -1084,6 +1090,8 @@ a:hover {
   }
 
   .speed-field {
+    --speed-range-width: 150px;
+
     flex-basis: 100%;
   }
 
