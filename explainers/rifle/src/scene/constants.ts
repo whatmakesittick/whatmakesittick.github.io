@@ -437,11 +437,11 @@ export const VENT_WISPS = {
 
 export const MUZZLE_FLASH = {
   plumes: [
-    { x: 6, length: 40, width: 12, tone: 'white', weight: 1 },
-    { x: 16, length: 64, width: 22, tone: 'core', weight: 1 },
-    { x: 42, length: 120, width: 46, tone: 'flame', weight: 0.85 },
-    { x: 66, length: 170, width: 70, tone: 'ember', weight: 0.5 },
-    { x: 50, length: 300, width: 200, tone: 'flame', weight: 0.3 },
+    { x: 6, length: 36, width: 11, tone: 'white', weight: 1 },
+    { x: 14, length: 56, width: 20, tone: 'core', weight: 1 },
+    { x: 34, length: 90, width: 38, tone: 'flame', weight: 0.85 },
+    { x: 52, length: 120, width: 54, tone: 'ember', weight: 0.5 },
+    { x: 40, length: 170, width: 110, tone: 'flame', weight: 0.3 },
   ],
   lean: toRadians(9),
   offset: 2,
