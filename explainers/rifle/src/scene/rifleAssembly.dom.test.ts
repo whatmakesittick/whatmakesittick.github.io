@@ -103,6 +103,18 @@ function labelPosition(id: (typeof PART_IDS)[number]): Vector3 {
   return worldPosition(anchor);
 }
 
+function spentLabel(): Object3D {
+  const anchor = assembly.labelAnchors().get('spentCase');
+  if (!anchor) throw new Error('No empty case label');
+  return anchor;
+}
+
+function caseLabel(): Object3D {
+  const anchor = assembly.labelAnchors().get('cartridgeCase');
+  if (!anchor) throw new Error('No case label');
+  return anchor;
+}
+
 function meshesOf(group: string): Mesh[] {
   const found: Mesh[] = [];
   assembly.root.traverse((object) => {
@@ -239,11 +251,18 @@ describe('rifle assembly', () => {
   it('carries the empty case on the bolt face, then throws it out to the right', () => {
     show({ shot: { stage: 'gone' }, motion: { carrier: FREE_TRAVEL - EJECTOR_X } });
     const ejected = labelPosition('spentCase');
-    expect(ejected.x).toBeCloseTo(EJECTOR_X + 20, 0);
+    expect(ejected.x).toBeCloseTo(EJECTOR_X + 34, 0);
     show({ shot: { stage: 'gone' }, motion: { carrier: 100, caseFlight: 0.8 } });
     expect(labelPosition('spentCase').z).toBeGreaterThan(80);
     show({ shot: { stage: 'gone' }, motion: { carrier: 100, caseFlight: 1 } });
     expect(meshesOf('spentCase').some((mesh) => isShown(mesh))).toBe(false);
+    expect(isShown(spentLabel())).toBe(false);
+    show({});
+    expect(isShown(spentLabel())).toBe(false);
+    expect(isShown(caseLabel())).toBe(true);
+    show({ shot: { stage: 'moving', travel: 50 } });
+    expect(isShown(spentLabel())).toBe(true);
+    expect(isShown(caseLabel())).toBe(false);
   });
 
   it('shows the live round as a section in the chamber with the cutaway on', () => {

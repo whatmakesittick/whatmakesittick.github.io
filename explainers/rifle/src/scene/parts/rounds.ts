@@ -166,8 +166,8 @@ export class RoundsPart {
   readonly fired = new Group();
   readonly bullet: BulletPart;
   readonly next: RoundView;
-  private readonly live: RoundView;
-  private readonly spent: RoundView;
+  readonly live: RoundView;
+  readonly spent: RoundView;
   private readonly glint: Sprite;
 
   constructor(context: PartContext, geometry: RoundGeometry) {

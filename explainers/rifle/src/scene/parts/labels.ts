@@ -15,6 +15,7 @@ import {
   GAS_TUBE,
   PISTON,
   RECEIVER,
+  SELECTOR,
 } from '../../model/layout';
 import type { Point } from '../../model/scale';
 import {
@@ -22,13 +23,23 @@ import {
   EJECTOR_BLOCK,
   MAGAZINE_ARC,
   RETURN_SPRING_LABEL_X,
+  SELECTOR_LEVER,
   SHEET,
   VENT_HOLE,
   magazinePoint,
 } from '../constants';
 
 export type LabelHost =
-  'body' | 'carrier' | 'bolt' | 'features' | 'hammer' | 'trigger' | 'bullet' | 'fired' | 'gas';
+  | 'body'
+  | 'carrier'
+  | 'bolt'
+  | 'features'
+  | 'hammer'
+  | 'trigger'
+  | 'bullet'
+  | 'live'
+  | 'spent'
+  | 'gas';
 
 export interface LabelPlacement {
   host: LabelHost;
@@ -37,6 +48,20 @@ export interface LabelPlacement {
 }
 
 const LIFT = 0.4;
+const SELECTOR_SPOT = { along: 15, across: 1, lift: 0.2 } as const;
+
+function selectorLabel(): Point {
+  const [x, y, surface] = SELECTOR.centre;
+  const { along, across, lift } = SELECTOR_SPOT;
+  const angle = SELECTOR_LEVER.autoAngle;
+  return [
+    x + along * Math.cos(angle) - across * Math.sin(angle),
+    y + along * Math.sin(angle) + across * Math.cos(angle),
+    surface + SELECTOR_LEVER.thickness + lift,
+  ];
+}
+
+const SELECTOR_LABEL = selectorLabel();
 const GAS_BLOCK_X = (GAS_BLOCK.x[0] + GAS_BLOCK.x[1]) / 2;
 const MUZZLE_X = (COMPENSATOR.x[0] + COMPENSATOR.x[1]) / 2;
 const VENT_X = (VENT_HOLE.xs[0] + VENT_HOLE.xs[1]) / 2;
@@ -62,37 +87,41 @@ function ventAt(radius: number, side: number): Point {
 
 export const LABEL_PLACEMENTS: Readonly<Record<PartId, LabelPlacement>> = {
   barrel: on('body', [230, 0, 8.7], [230, 6.4, LIFT]),
-  chamber: on('body', [16, 0, BARREL.radius + LIFT], [30, 7.5, LIFT]),
+  chamber: on('body', [16, 0, BARREL.radius + LIFT], [44, 7, LIFT]),
   muzzle: on('body', [MUZZLE_X, 0, COMPENSATOR.outer + LIFT], [MUZZLE_X, -7, LIFT]),
   rifling: on('body', [400, 0, 8.4], [360, 0, -4]),
   trunnion: on('body', [6, 0, 14 + LIFT], [-15, -12, LIFT]),
   bolt: on('bolt', [-50, 3, 7], [-8, -5, 5.8]),
-  firingPin: on('bolt', [-111, 0, 1.6], [-60, 0, 1.6]),
+  firingPin: on('bolt', [-111, 0, 1.6], [-32, 1.1, 1.2]),
   extractor: on('features', [-10, 0, 8.7]),
-  carrier: on('carrier', [-60, 14, 13 + LIFT], [-80, 26, LIFT]),
+  carrier: on('carrier', [-60, 14, 13 + LIFT], [-100, 27, LIFT]),
   chargingHandle: on('carrier', [-50, 17, CHARGING_HANDLE.z[1] + LIFT]),
   pistonRod: on('carrier', [16, GAS_TUBE.axisY, 5.2], [150, GAS_TUBE.axisY, 5.2]),
-  pistonHead: on('carrier', [PISTON.headFrontX - 7, GAS_CYLINDER.axisY, PISTON.headRadius + 0.2]),
-  gasBlock: on('body', [GAS_BLOCK_X, 6, 12.3], [GAS_BLOCK_X, -6, LIFT]),
+  pistonHead: on('carrier', [PISTON.headFrontX - 12, GAS_CYLINDER.axisY + 6.5, 2]),
+  gasBlock: on('body', [GAS_BLOCK_X - 11, -8, 9.3], [GAS_BLOCK_X - 11, -17.3, LIFT]),
   gasPort: on('body', [GAS_PORT_X, 12, 11.5], [GAS_PORT_X + 6.5, 10, LIFT]),
   gasTube: on('body', [220, GAS_TUBE.axisY, GAS_TUBE.radius + LIFT], [220, 32.3, LIFT]),
   ventHoles: on('body', ventAt(GAS_TUBE.radius + LIFT, 1), ventAt(VENT_INNER, -1)),
   returnSpring: on('body', [RETURN_SPRING_LABEL_X, 18, 6.2]),
   hammer: on('hammer', [-2, 14, 4.4]),
   trigger: on('trigger', [3, -22, 3.4]),
-  selector: on('body', [-116, 5.6, 17.8]),
-  ejector: on('body', [EJECTOR_X, EJECTOR_BLOCK.y[1] + 0.2, -9]),
-  receiver: on('body', [-200, 0, RECEIVER.z[1] + LIFT], [-200, 0, RECEIVER.z[0] + SHEET + LIFT]),
+  selector: on('body', SELECTOR_LABEL),
+  ejector: on('body', [EJECTOR_X, EJECTOR_BLOCK.y[1] + 0.2, -6]),
+  receiver: on(
+    'body',
+    [-225, -14, RECEIVER.z[1] + LIFT],
+    [-225, -14, RECEIVER.z[0] + SHEET + LIFT],
+  ),
   magazine: on(
     'body',
     magazineAt(MAGAZINE_ARC.radius, 11 + LIFT),
     magazineAt(MAGAZINE_ARC.front + SHEET / 2, LIFT),
   ),
-  cartridgeCase: on('fired', [15, 5.4, 0.2]),
-  primer: on('fired', [0.8, 0, 2.9], [0.8, 1.5, LIFT]),
-  powder: on('fired', [16, 0, 4.8], [16, 1.5, LIFT]),
-  bullet: on('bullet', [13, 0, 4.2]),
-  spentCase: on('fired', [20, 5.4, 0.2]),
+  cartridgeCase: on('live', [10, -5.2, 0.2]),
+  primer: on('live', [0.8, 0, 2.9], [0.8, -1.4, LIFT]),
+  powder: on('live', [17, 0, 4.6], [17, 0, LIFT]),
+  bullet: on('bullet', [21, -1.5, 2.5]),
+  spentCase: on('spent', [34, 4.4, 0.2]),
   hotGas: on('gas', [0, 0, 0.5]),
   stock: on('body', [-380, -10, 17.3], [-380, -10, LIFT]),
   grip: on('body', [-232, -60, 13.3], [-232, -60, LIFT]),

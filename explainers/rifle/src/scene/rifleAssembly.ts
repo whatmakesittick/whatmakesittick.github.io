@@ -105,7 +105,8 @@ export class RifleAssembly implements Assembly {
       hammer: this.hammer.object,
       trigger: this.trigger.object,
       bullet: this.rounds.bullet.object,
-      fired: this.rounds.fired,
+      live: this.rounds.live.object,
+      spent: this.rounds.spent.object,
       gas: this.gas.labelHost,
     });
     this.setState(state);
