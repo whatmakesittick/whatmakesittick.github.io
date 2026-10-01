@@ -19,6 +19,7 @@ import { CutawaySwitch } from './parts/context';
 import type { PartContext } from './parts/context';
 import { TriggerPart, createSelector } from './parts/controls';
 import { addFurniture } from './parts/furniture';
+import { GasPart } from './parts/gas';
 import { addGasSystem } from './parts/gasSystem';
 import { HammerPart } from './parts/hammer';
 import { LabelAnchors } from './parts/labels';
@@ -44,7 +45,7 @@ function createContext(
 export class RifleAssembly implements Assembly {
   readonly root = new Group();
   private readonly body = new Group();
-  private readonly gas = new Group();
+  private readonly gas: GasPart;
   private readonly tracker = new ResourceTracker();
   private readonly materials: MaterialLibrary;
   private readonly cutaway = new CutawaySwitch();
@@ -75,6 +76,7 @@ export class RifleAssembly implements Assembly {
     this.trigger = new TriggerPart(context);
     this.spring = new SpringPart(context);
     this.rounds = new RoundsPart(context, roundGeometry);
+    this.gas = new GasPart(context);
     this.body.add(
       this.carrier.object,
       this.bolt.object,
@@ -84,7 +86,7 @@ export class RifleAssembly implements Assembly {
       this.rounds.object,
     );
     batchStatic(this.body, this.cutaway).forEach((geometry) => this.tracker.track(geometry));
-    this.root.add(this.body, this.gas);
+    this.root.add(this.body, this.gas.object);
     this.labels = new LabelAnchors({
       body: this.body,
       carrier: this.carrier.object,
@@ -94,7 +96,7 @@ export class RifleAssembly implements Assembly {
       trigger: this.trigger.object,
       bullet: this.rounds.bullet.object,
       fired: this.rounds.fired,
-      gas: this.gas,
+      gas: this.gas.labelHost,
     });
     this.setState(state);
   }
@@ -114,10 +116,11 @@ export class RifleAssembly implements Assembly {
     this.trigger.set(motion.trigger);
     this.spring.set(motion.carrier);
     this.rounds.setState(state);
+    this.gas.setState(state);
   }
 
-  update(_deltaSeconds: number, _cameraDistance: number): boolean {
-    return false;
+  update(deltaSeconds: number, _cameraDistance: number): boolean {
+    return this.gas.update(deltaSeconds);
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {

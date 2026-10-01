@@ -1,14 +1,24 @@
-import type { BufferGeometry, Object3D } from 'three';
-import { BARREL, GAS_BLOCK, RIFLING } from '../../model/layout';
-import { BARREL_OUTLINE, BORE_RADIUS, CHAMBER_BORE, COMPENSATOR, SEGMENTS } from '../constants';
+import type { Object3D } from 'three';
+import { BufferGeometry, Float32BufferAttribute } from 'three';
+import { BARREL, BORE, GAS_BLOCK, RIFLING } from '../../model/layout';
+import {
+  BARREL_OUTLINE,
+  BORE_RADIUS,
+  CHAMBER_BORE,
+  COMPENSATOR,
+  RIFLING_LANDS,
+  SEGMENTS,
+} from '../constants';
+import { FINISHES } from '../finishes';
 import { turnedPiece } from '../geometry/pieces';
 import type { CutPiece } from '../geometry/pieces';
 import { turnOutline } from '../geometry/turned';
 import type { TurnStrand } from '../geometry/turned';
-import { addPiece } from './context';
+import { addPiece, partMesh } from './context';
 import type { PartContext } from './context';
 
 const CHAMBER_END = CHAMBER_BORE.leadeEnd;
+const FULL_TURN = Math.PI * 2;
 const MUZZLE = BARREL.x[1];
 
 function chamberPiece(): CutPiece {
@@ -91,6 +101,46 @@ function borePiece(): CutPiece {
   });
 }
 
+function landAngle(x: number, land: number): number {
+  return (land / BORE.grooves) * FULL_TURN + (FULL_TURN * (x - RIFLING.x[0])) / BORE.twist;
+}
+
+function onKeptSide(angle: number): boolean {
+  return Math.sin(angle) <= 0;
+}
+
+function boreSurfacePoint(x: number, angle: number, offset: number): number[] {
+  const radius = BORE_RADIUS - RIFLING_LANDS.lift;
+  const turn = angle + offset / radius;
+  return [x, radius * Math.cos(turn), radius * Math.sin(turn)];
+}
+
+function riflingLands(): BufferGeometry {
+  const positions: number[] = [];
+  const normals: number[] = [];
+  const half = RIFLING_LANDS.width / 2;
+  for (let land = 0; land < BORE.grooves; land += 1) {
+    for (let x = RIFLING.x[0]; x < RIFLING.x[1]; x += RIFLING_LANDS.step) {
+      const next = Math.min(x + RIFLING_LANDS.step, RIFLING.x[1]);
+      const from = landAngle(x, land);
+      const to = landAngle(next, land);
+      if (!onKeptSide(from) || !onKeptSide(to)) continue;
+      const a = boreSurfacePoint(x, from, -half);
+      const b = boreSurfacePoint(x, from, half);
+      const c = boreSurfacePoint(next, to, half);
+      const d = boreSurfacePoint(next, to, -half);
+      positions.push(...a, ...c, ...b, ...a, ...d, ...c);
+      for (const angle of [from, to, from, from, to, to]) {
+        normals.push(0, -Math.cos(angle), -Math.sin(angle));
+      }
+    }
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('normal', new Float32BufferAttribute(normals, 3));
+  return geometry;
+}
+
 function lipReach(y: number, z: number): number {
   const radius = Math.hypot(y, z);
   if (radius === 0) return 0;
@@ -144,6 +194,7 @@ function compensatorPiece(): CutPiece {
 export function addBarrel(context: PartContext, parent: Object3D): void {
   addPiece(context, parent, chamberPiece(), 'chamber', context.looks.blued);
   addPiece(context, parent, barrelPiece(), 'barrel', context.looks.blued);
-  addPiece(context, parent, borePiece(), 'rifling', context.looks.steel);
+  addPiece(context, parent, borePiece(), 'rifling', context.looks.blued);
+  parent.add(context.cutaway.opened(partMesh(context, riflingLands(), 'rifling', FINISHES.steel)));
   addPiece(context, parent, compensatorPiece(), 'muzzle', context.looks.blued);
 }
