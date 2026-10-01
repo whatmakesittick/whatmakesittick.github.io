@@ -190,7 +190,7 @@
       "p4": "Le modèle simplifie quelques points. À l’intérieur du fusil, il ne dessine que les pièces utiles à cette histoire. Aucune source ne donne de durées exactes pour la chute du chien ni pour l’aller-retour du porte-culasse : pour ces moments, le modèle se fonde sur des estimations prudentes. Les valeurs affichées suivent l’horloge du modèle. Seules deux de ses durées reposent donc sur des sources : le cycle complet et le trajet de la balle dans le canon, qui dure environ une milliseconde. Activez la <strong>vue en coupe</strong> pour regarder à l’intérieur.",
       "cycle": "Un cycle complet",
       "pace": "Rythme du mécanisme",
-      "left": "Temps avant d’être prêt"
+      "left": "Temps avant le tir suivant"
     },
     "cartridge": {
       "title": "Une petite flamme et beaucoup de gaz",
@@ -243,7 +243,7 @@
       "carrier": "Course du porte-culasse",
       "case": "Étui vide",
       "round": "Cartouche suivante",
-      "left": "Temps avant d’être prêt"
+      "left": "Temps avant le tir suivant"
     }
   }
 }

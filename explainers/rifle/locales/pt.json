@@ -190,7 +190,7 @@
       "p4": "Algumas coisas foram simplificadas. Dentro do fuzil, o modelo mostra só as peças que importam para esta história. Nenhuma fonte dá os tempos exatos da queda do cão nem do vaivém do transportador. Por isso, nesses trechos, o modelo usa estimativas cuidadosas. Os valores na tela seguem o relógio do modelo, então só dois dos tempos mostrados vêm de fontes: o ciclo inteiro e a passagem do projétil pelo cano, que leva cerca de um milissegundo. Ligue a <strong>vista em corte</strong> para olhar por dentro.",
       "cycle": "Um ciclo completo",
       "pace": "Ritmo do mecanismo",
-      "left": "Tempo até ficar pronto"
+      "left": "Tempo até o próximo tiro"
     },
     "cartridge": {
       "title": "Uma pequena chama e muito gás",
@@ -243,7 +243,7 @@
       "carrier": "Curso do transportador",
       "case": "Estojo vazio",
       "round": "Próximo cartucho",
-      "left": "Tempo até ficar pronto"
+      "left": "Tempo até o próximo tiro"
     }
   }
 }

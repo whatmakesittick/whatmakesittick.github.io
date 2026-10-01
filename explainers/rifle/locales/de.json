@@ -190,7 +190,7 @@
       "p4": "Ein paar Dinge sind vereinfacht. Im Inneren zeigt das Modell nur die Teile, auf die es in dieser Geschichte ankommt. Wie lange der Hahn fällt und wie lange der Verschlussträger für den Weg nach hinten und zurück braucht, gibt keine Quelle genau an. Hier arbeitet das Modell mit sorgfältigen Schätzungen. Die Anzeigen laufen nach der Uhr des Modells. Belegt sind deshalb nur zwei ihrer Zeiten: der ganze Zyklus und der Weg des Geschosses durch den Lauf, etwa eine Millisekunde. Schalten Sie die <strong>Schnittansicht</strong> ein, um hineinzuschauen.",
       "cycle": "Ein ganzer Zyklus",
       "pace": "Tempo der Mechanik",
-      "left": "Bis wieder bereit"
+      "left": "Zeit bis zum nächsten Schuss"
     },
     "cartridge": {
       "title": "Eine kleine Flamme und viel Gas",
@@ -243,7 +243,7 @@
       "carrier": "Weg des Trägers",
       "case": "Leere Hülse",
       "round": "Nächste Patrone",
-      "left": "Bis wieder bereit"
+      "left": "Zeit bis zum nächsten Schuss"
     }
   }
 }

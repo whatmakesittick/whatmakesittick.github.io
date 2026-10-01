@@ -190,7 +190,7 @@
       "p4": "Algunas cosas están simplificadas. Dentro del fusil, el modelo solo dibuja las piezas que importan para esta historia. Ninguna fuente da tiempos exactos para la caída del martillo ni para el viaje de ida y vuelta del portacerrojo, así que ahí el modelo usa estimaciones cuidadosas. Los datos en pantalla siguen el reloj del modelo. Por eso, solo dos de sus tiempos se apoyan en fuentes: el ciclo completo y el paso de la bala por el cañón, que dura alrededor de un milisegundo. Activa la <strong>vista en corte</strong> para mirar dentro.",
       "cycle": "Un ciclo completo",
       "pace": "Ritmo del mecanismo",
-      "left": "Tiempo hasta estar listo"
+      "left": "Tiempo hasta el próximo disparo"
     },
     "cartridge": {
       "title": "Una pequeña llama y mucho gas",
@@ -243,7 +243,7 @@
       "carrier": "Recorrido del portacerrojo",
       "case": "Vaina vacía",
       "round": "Siguiente cartucho",
-      "left": "Tiempo hasta estar listo"
+      "left": "Tiempo hasta el próximo disparo"
     }
   }
 }

@@ -190,7 +190,7 @@
       "p4": "A few things are kept simple. Inside the rifle, the model draws only the parts that matter for this story. No source gives exact times for the hammer's fall or for the carrier's trip back and forth, so the model uses careful guesses there. The readouts follow the model's clock, so only two of its times are backed by sources: the whole cycle and the bullet's trip down the barrel, about a millisecond. Switch on the <strong>cutaway</strong> to look inside.",
       "cycle": "One full cycle",
       "pace": "Pace of the mechanism",
-      "left": "Time until ready"
+      "left": "Time to the next shot"
     },
     "cartridge": {
       "title": "A small flame and a lot of gas",
@@ -243,7 +243,7 @@
       "carrier": "Carrier travel",
       "case": "Empty case",
       "round": "Next round",
-      "left": "Time until ready"
+      "left": "Time to the next shot"
     }
   }
 }
