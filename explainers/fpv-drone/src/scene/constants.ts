@@ -37,8 +37,12 @@ export const ARMS = {
     motorRearLeft: [-0.08, -0.02] as Extent,
   },
   overhang: 0.02,
-  foot: { radius: 0.006, inboard: 0.03, segments: 10 },
+  foot: { radius: 0.007, tip: 0.0055, height: 0.018, inboard: 0.03, segments: 10 },
 } as const;
+
+export const PAD_TOP_METRES = 0.005;
+
+export const BODY_DROP = DRONE.restHeight - PLATE.thickness - ARMS.foot.height - PAD_TOP_METRES;
 
 export const STANDOFFS = {
   radius: 0.0028,
@@ -149,7 +153,7 @@ export const GPS = {
 
 export const DRONE_BOX = {
   x: [-0.14 - PROP.radius, 0.11 + PROP.radius] as Extent,
-  y: [-DRONE.restHeight, 0.095] as Extent,
+  y: [-PLATE.thickness - ARMS.foot.height, 0.095] as Extent,
   z: [-0.13 - PROP.radius, 0.13 + PROP.radius] as Extent,
 } as const;
 
@@ -288,7 +292,7 @@ export const STATION_SET = {
 export const LAUNCH_PAD = {
   at: PAD,
   size: droneUnits(0.45),
-  thickness: 0.05,
+  thickness: droneUnits(PAD_TOP_METRES),
   border: 0.25,
   markLift: 0.012,
   labelInset: 0.4,

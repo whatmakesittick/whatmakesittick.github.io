@@ -3,8 +3,8 @@ import type { Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import { MOTOR_PART_IDS } from '../../../ids';
 import type { AssemblyState, MotorPartId, PartId } from '../../../ids';
-import { DRONE_SCALE } from '../../../model/scale';
-import { DRONE_BOX, PROP } from '../../constants';
+import { DRONE_SCALE, droneUnits } from '../../../model/scale';
+import { BODY_DROP, DRONE_BOX, PROP } from '../../constants';
 import { applyDronePose } from '../../pose';
 import type { PartContext } from '../context';
 import { SpinArrowsPart } from '../effects/spinArrows';
@@ -50,6 +50,7 @@ export class DronePart {
 
   constructor(context: PartContext) {
     this.body.scale.setScalar(DRONE_SCALE);
+    this.body.position.y = -droneUnits(BODY_DROP);
     const motors = MOTOR_PART_IDS.map((id) => [id, buildMotor(context, id)] as const);
     this.propellers = new PropellerSet(context);
     const battery = buildBattery(context);

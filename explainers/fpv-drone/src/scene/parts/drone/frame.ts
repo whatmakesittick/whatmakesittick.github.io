@@ -3,7 +3,7 @@ import type { BufferGeometry } from 'three';
 import { extrudePlan, planShape, roundedRectShape } from '@core/scene/geometry/extrude';
 import { MOTOR_PART_IDS } from '../../../ids';
 import type { MotorPartId } from '../../../ids';
-import { DRONE, MOTOR_POSITIONS } from '../../../model/layout';
+import { MOTOR_POSITIONS } from '../../../model/layout';
 import { ARMS, PLATE, STANDOFFS } from '../../constants';
 import { FINISHES } from '../../finishes';
 import { mergeParts, partMesh } from '../context';
@@ -75,15 +75,14 @@ function standoffGeometry(): BufferGeometry {
 
 function feetGeometry(): BufferGeometry {
   const { foot } = ARMS;
-  const height = DRONE.restHeight - PLATE.thickness;
   return mergeParts(
     MOTOR_PART_IDS.map((id) => {
       const motor = MOTOR_POSITIONS[id];
       const { direction } = armLine(id);
-      const peg = new CylinderGeometry(foot.radius, foot.radius * 0.8, height, foot.segments);
+      const peg = new CylinderGeometry(foot.radius, foot.tip, foot.height, foot.segments);
       peg.translate(
         motor[0] - direction[0] * foot.inboard,
-        -PLATE.thickness - height / 2,
+        -PLATE.thickness - foot.height / 2,
         motor[2] - direction[1] * foot.inboard,
       );
       return peg;

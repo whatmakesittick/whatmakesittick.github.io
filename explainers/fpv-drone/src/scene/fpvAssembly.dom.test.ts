@@ -8,7 +8,7 @@ import { MOTOR_PART_IDS, PART_IDS } from '../ids';
 import type { AnchorId, AssemblyState, MotorPartId, PartId, Point, RegionId } from '../ids';
 import { CROSSROADS, DRONE, MOTOR_POSITIONS, MOTOR_SPIN, PAD, STATION } from '../model/layout';
 import { droneUnits } from '../model/scale';
-import { PROP } from './constants';
+import { LAUNCH_PAD, PROP } from './constants';
 import { FpvAssembly } from './fpvAssembly';
 import { propName } from './parts/drone/propeller';
 
@@ -172,6 +172,7 @@ describe('fpv assembly', () => {
     expect(centre.x).toBeCloseTo(PAD[0]);
     expect(centre.y).toBeCloseTo(droneUnits(DRONE.restHeight));
     expect(worldOf(label('launchPad')).y).toBeLessThan(0.3);
+    expect(assembly.region('drone').min.y).toBeCloseTo(LAUNCH_PAD.thickness, 3);
   });
 
   it('puts every motor at its layout position with the nose along x and right at plus z', () => {
