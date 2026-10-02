@@ -154,7 +154,7 @@ export function heightAt(seconds: number): number {
   return HEIGHT.at(clampSeconds(seconds));
 }
 
-export function distanceAt(seconds: number): number {
+export function distanceFlownAt(seconds: number): number {
   const time = clampSeconds(seconds);
   const phase = phaseAt(time);
   const { start, end } = PHASE_RANGES[phase];
@@ -183,14 +183,14 @@ function overlapShare(arc: Arc, from: number, to: number): number {
 
 export function rollAt(seconds: number): number {
   const half = ATTITUDE_BLEND_S / 2;
-  const from = distanceAt(seconds - half);
-  const to = distanceAt(seconds + half);
+  const from = distanceFlownAt(seconds - half);
+  const to = distanceFlownAt(seconds + half);
   const speed = speedAt(seconds);
   return ARCS.reduce((roll, arc) => roll + overlapShare(arc, from, to) * bankIn(arc, speed), 0);
 }
 
 export function headingAt(seconds: number): number {
-  return ROUTE.poseAt(distanceAt(seconds) / ROUTE.length).heading;
+  return ROUTE.poseAt(distanceFlownAt(seconds) / ROUTE.length).heading;
 }
 
 function rateOf(read: (seconds: number) => number, seconds: number): number {
@@ -203,7 +203,7 @@ export function isArmedAt(seconds: number): boolean {
 
 export function flightAt(seconds: number): FlightMotion {
   const time = clampSeconds(seconds);
-  const pose = ROUTE.poseAt(distanceAt(time) / ROUTE.length);
+  const pose = ROUTE.poseAt(distanceFlownAt(time) / ROUTE.length);
   const height = HEIGHT.at(time);
   const position: Point = [pose.x, height, pose.z];
   return {

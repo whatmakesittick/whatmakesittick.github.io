@@ -7,7 +7,7 @@ import {
   ORBIT_ENTRY_DISTANCE,
   PHASE_DISTANCES,
   ROUTE,
-  distanceAt,
+  distanceFlownAt,
   flightAt,
   pitchAt,
   rollAt,
@@ -66,11 +66,11 @@ describe('flightAt', () => {
   it('moves forward monotonically and covers the whole route', () => {
     let last = -1;
     for (let seconds = 0; seconds <= SORTIE_SECONDS; seconds += 0.1) {
-      const distance = distanceAt(seconds);
+      const distance = distanceFlownAt(seconds);
       expect(distance).toBeGreaterThanOrEqual(last);
       last = distance;
     }
-    expect(distanceAt(SORTIE_SECONDS)).toBeCloseTo(ROUTE.length, 6);
+    expect(distanceFlownAt(SORTIE_SECONDS)).toBeCloseTo(ROUTE.length, 6);
   });
 
   it('sits on the pad at the start and at the end', () => {
@@ -98,13 +98,13 @@ describe('flightAt', () => {
     const cruise = flightAt(MOMENTS.cruise);
     expect(cruise.height).toBeCloseTo(CRUISE_HEIGHT, 9);
     expect(cruise.speedKmh).toBeCloseTo(SPEED_KMH.cruise, 9);
-    expect(distanceAt(MOMENTS.cruise)).toBeCloseTo(PHASE_DISTANCES.climb.to, 9);
+    expect(distanceFlownAt(MOMENTS.cruise)).toBeCloseTo(PHASE_DISTANCES.climb.to, 9);
     expect(flightAt(9).verticalSpeed).toBeGreaterThan(0);
   });
 
   it('arrives at the orbit entry at twenty seven seconds and circles the crossroads', () => {
     const entry = flightAt(MOMENTS.onStation);
-    expect(distanceAt(MOMENTS.onStation)).toBeCloseTo(ORBIT_ENTRY_DISTANCE, 9);
+    expect(distanceFlownAt(MOMENTS.onStation)).toBeCloseTo(ORBIT_ENTRY_DISTANCE, 9);
     expect(entry.position[0]).toBeCloseTo(ORBIT.entryX, 6);
     expect(entry.position[2]).toBeCloseTo(0, 6);
     const { position, speedKmh, height } = flightAt(ORBIT_TIME);
@@ -117,7 +117,7 @@ describe('flightAt', () => {
   });
 
   it('turns for home at forty nine seconds and stops over the pad before touching down', () => {
-    expect(distanceAt(MOMENTS.turnHome)).toBeCloseTo(PHASE_DISTANCES.orbit.to, 9);
+    expect(distanceFlownAt(MOMENTS.turnHome)).toBeCloseTo(PHASE_DISTANCES.orbit.to, 9);
     expect(flightAt(60).speedKmh).toBeCloseTo(SPEED_KMH.cruise, 9);
     const stop = flightAt(HOVER_STOP_S);
     expect(stop.speedKmh).toBeCloseTo(0, 9);
