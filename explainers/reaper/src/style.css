@@ -26,9 +26,12 @@
 }
 
 .section-readouts:has([data-readout='overview-link']),
-.section-readouts:has([data-readout='link-mode']),
 .range-widget:has([data-control='area-distance']) .range-widget__readouts {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.section-readouts > div:has([data-readout='link-delay']) {
+  grid-column: 1 / -1;
 }
 
 .section-readouts:has([data-readout='flight-span']),
@@ -154,7 +157,6 @@
 
 @media (max-width: 480px) {
   .section-readouts:has([data-readout='overview-link']),
-  .section-readouts:has([data-readout='link-mode']),
   .range-widget:has([data-control='area-distance']) .range-widget__readouts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
