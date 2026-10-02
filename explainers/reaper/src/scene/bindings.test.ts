@@ -83,6 +83,22 @@ describe('scene bindings', () => {
     expect(received.at(-1)).toMatchObject({ phase: 61.5, clock: minutesAt(61.5) });
   });
 
+  it('labels only the parts the scene draws', () => {
+    const { targets } = fakeTargets();
+    const store = createReaperStore();
+    bindStore(store, targets);
+    const wanted = () =>
+      targets.labelVisibility.setWanted.mock.lastCall?.[0] as ReadonlySet<string>;
+    store.getState().applyPreset('strike');
+    expect(wanted()).toContain('hellfire');
+    expect(wanted()).not.toContain('missile');
+    store.getState().setPhase(MOMENTS.launch + 1);
+    expect(wanted()).toContain('missile');
+    store.getState().setLoad('clean');
+    expect(wanted()).not.toContain('hellfire');
+    expect(wanted()).not.toContain('missile');
+  });
+
   it('stops listening once unbound', () => {
     const { received, targets } = fakeTargets();
     const store = createReaperStore();

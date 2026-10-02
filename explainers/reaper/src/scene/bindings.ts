@@ -4,6 +4,7 @@ import type { AssemblyState } from '../ids';
 import { CHAPTER_CONTROL_DEFAULTS, DEFAULT_LOAD, DEFAULT_VIEW, PRESETS, missionAt } from '../state';
 import type { Preset, ReaperState, ReaperStore, ReaperStoreState } from '../state';
 import type { ReaperController } from './controller';
+import { DrawnLabels } from './drawnLabels';
 
 export interface SceneTargets extends PresetTargets {
   reaper: ReaperController;
@@ -55,14 +56,20 @@ class DoubleBufferedAssemblyState {
 export function bindStore(store: ReaperStore, targets: SceneTargets): () => void {
   const { reaper, labelVisibility } = targets;
   const assemblyState = new DoubleBufferedAssemblyState();
-  const push = (state: AssemblySource) => reaper.setState(assemblyState.handOver(state));
-  reaper.build(assemblyState.handOver(store.getState()));
+  const drawnLabels = new DrawnLabels(labelVisibility);
+  const handOver = (state: AssemblySource) => {
+    const next = assemblyState.handOver(state);
+    drawnLabels.follow(next);
+    return next;
+  };
+  const push = (state: AssemblySource) => reaper.setState(handOver(state));
+  reaper.build(handOver(store.getState()));
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<ReaperStoreState, Preset>(targets, store, {
       presets: PRESETS,
       views: reaper.views,
-      labels: labelVisibility,
+      labels: drawnLabels,
       prepare: push,
       onView: (_view, state) => push(state),
     }),
