@@ -119,6 +119,7 @@
     "g": "{{value}} g",
     "kg": "{{value}} kg",
     "percent": "{{value}} %",
+    "ofHover": "{{percent}} % of hover",
     "volts": "{{value}} V",
     "amps": "{{value}} A",
     "ms": "{{value}} ms",

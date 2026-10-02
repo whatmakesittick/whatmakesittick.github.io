@@ -28,6 +28,7 @@ import {
   formatMilliseconds,
   formatMinutes,
   formatMix,
+  formatOfHover,
   formatPercent,
   formatPhase,
   formatPicture,
@@ -87,6 +88,7 @@ describe('fpv formatting', () => {
     expect(formatMetres(39.7)).toBe(fill(units.m, { value: '40' }));
     expect(formatGrams(1400)).toBe(fill(units.g, { value: '1,400' }));
     expect(formatPercent(0.874)).toBe(fill(units.percent, { value: '87' }));
+    expect(formatOfHover(1.154)).toBe(fill(units.ofHover, { percent: '115' }));
     expect(formatVolts(24.26)).toBe(fill(units.volts, { value: '24.3' }));
     expect(formatAmps(14.49)).toBe(fill(units.amps, { value: '14.5' }));
     expect(formatDbm(-108)).toBe(fill(units.dbm, { value: '-108' }));

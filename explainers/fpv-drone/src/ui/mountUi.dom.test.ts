@@ -102,13 +102,13 @@ describe('chapter widgets', () => {
   it('turns the tilt slider into push, thrust and sprint time', () => {
     expect(output('tilt')).toBe(fill(units.degrees, { value: '30' }));
     expect(readout('tilt-push')).toBe(fill(units.push, { ms2: '5.7', g: '0.58' }));
-    expect(readout('tilt-thrust')).toBe(fill(units.percent, { value: '115' }));
+    expect(readout('tilt-thrust')).toBe(fill(units.ofHover, { percent: '115' }));
     expect(readout('tilt-sprint')).toBe(fill(units.seconds, { value: '4.9' }));
     slide('tilt', 45);
     expect(store.getState().tilt).toBe(45);
     expect(output('tilt')).toBe(fill(units.degrees, { value: '45' }));
     expect(readout('tilt-push')).toBe(fill(units.push, { ms2: '9.8', g: '1.00' }));
-    expect(readout('tilt-thrust')).toBe(fill(units.percent, { value: '141' }));
+    expect(readout('tilt-thrust')).toBe(fill(units.ofHover, { percent: '141' }));
     expect(readout('tilt-sprint')).toBe(fill(units.seconds, { value: '2.8' }));
     slide('tilt', 0);
     expect(readout('tilt-sprint')).toBe(fill(units.seconds, { value: '∞' }));

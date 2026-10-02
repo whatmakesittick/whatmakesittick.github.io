@@ -9,7 +9,7 @@ import {
   thrustShareAt,
 } from '../model';
 import type { FpvStore } from '../state';
-import { formatDegrees, formatPercent, formatPush, formatSeconds } from './format';
+import { formatDegrees, formatOfHover, formatPush, formatSeconds } from './format';
 
 type SelectedTilt = readonly [tilt: number];
 
@@ -23,7 +23,7 @@ export function mountTiltControl(root: Document, store: FpvStore): Disposer {
     set: (state, tilt) => state.setTilt(tilt),
     readouts: {
       'tilt-push': ([tilt]) => formatPush(accelerationAt(tilt), accelerationInG(tilt)),
-      'tilt-thrust': ([tilt]) => formatPercent(thrustShareAt(tilt)),
+      'tilt-thrust': ([tilt]) => formatOfHover(thrustShareAt(tilt)),
       'tilt-sprint': ([tilt]) => formatSeconds(secondsToKmh(tilt, SPRINT_KMH)),
     },
   });

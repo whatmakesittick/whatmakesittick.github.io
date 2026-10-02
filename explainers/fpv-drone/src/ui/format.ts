@@ -95,6 +95,10 @@ export function formatPercent(share: number): string {
   return t('units.percent', { value: percent(share) });
 }
 
+export function formatOfHover(share: number): string {
+  return t('units.ofHover', { percent: percent(share) });
+}
+
 export function formatVolts(volts: number): string {
   return t('units.volts', { value: tenths(volts) });
 }
