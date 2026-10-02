@@ -10,6 +10,7 @@ import type { DronePart } from '../drone/drone';
 import { Beam } from './beam';
 import { GroundWash } from './groundWash';
 import { TrackEffect } from './track';
+import { WindStreaks } from './windStreaks';
 
 export interface EffectTargets {
   drone: DronePart;
@@ -35,10 +36,12 @@ export class EffectsPart {
   private readonly video: Beam;
   private readonly track: TrackEffect;
   private readonly groundWash: GroundWash;
+  private readonly wind: WindStreaks;
   private readonly controlLabel: Object3D;
   private readonly videoLabel: Object3D;
   private readonly from = new Vector3();
   private readonly to = new Vector3();
+  private readonly eye = new Vector3();
 
   constructor(context: PartContext, targets: EffectTargets) {
     this.targets = targets;
@@ -46,9 +49,16 @@ export class EffectsPart {
     this.video = new Beam(context, 'videoLink', BEAMS.video, THEME.videoLink);
     this.track = new TrackEffect(context);
     this.groundWash = new GroundWash(context);
+    this.wind = new WindStreaks(context);
     this.controlLabel = beamLabel(this.control);
     this.videoLabel = beamLabel(this.video);
-    this.object.add(this.track.mesh, this.groundWash.mesh, this.control.mesh, this.video.mesh);
+    this.object.add(
+      this.track.mesh,
+      this.groundWash.mesh,
+      this.wind.mesh,
+      this.control.mesh,
+      this.video.mesh,
+    );
     this.labels = new Map<EffectLabel, Object3D>([
       ['controlLink', this.controlLabel],
       ['videoLink', this.videoLabel],
@@ -75,6 +85,7 @@ export class EffectsPart {
     }
     this.track.setState(state.phase, state.flight, state.view.track);
     this.groundWash.setState(state.flight, state.motors.shares);
+    this.wind.setState(state.flight, drone.cameraAnchor.getWorldPosition(this.eye));
   }
 
   advance(deltaSeconds: number): void {

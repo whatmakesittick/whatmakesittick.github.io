@@ -436,6 +436,21 @@ export const GROUND_WASH = {
   shown: 0.01,
 } as const;
 
+export const WIND_STREAKS = {
+  count: 120,
+  box: [30, 12, 30] as Triple,
+  ahead: 9,
+  length: { seconds: 0.11, max: 3 },
+  width: 0.014,
+  speedKmh: { from: 50, to: 62 },
+  rider: { full: 1, none: 2 },
+  near: [2, 5] as Extent,
+  edge: 0.36,
+  opacity: 0.38,
+  colour: '#f4f8fc',
+  seed: 71,
+} as const;
+
 export const SCENE_LIMITS = {
   cameraNear: 0.2,
   cameraFar: 14000,

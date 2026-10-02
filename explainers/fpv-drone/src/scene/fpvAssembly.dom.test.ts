@@ -13,6 +13,7 @@ import { FpvAssembly } from './fpvAssembly';
 import { propName } from './parts/drone/propeller';
 import { DOWNWASH_NAME } from './parts/effects/downwash';
 import { GROUND_WASH_NAME } from './parts/effects/groundWash';
+import { WIND_STREAKS_NAME } from './parts/effects/windStreaks';
 
 const ANCHORS: readonly AnchorId[] = ['drone', 'camera', 'station', 'crossroads'];
 const REGIONS: readonly RegionId[] = ['scene', 'station', 'drone', 'crossroads', 'route'];
@@ -313,6 +314,15 @@ describe('fpv assembly', () => {
     expect(worldOf(wash()).y).toBeGreaterThan(LAUNCH_PAD.thickness);
     show(cruising());
     expect(isShown(wash())).toBe(false);
+  });
+
+  it('blows the wind streaks only at cruise speed', () => {
+    const wind = () => assembly.root.getObjectByName(WIND_STREAKS_NAME) ?? assembly.root;
+    show(stateAt());
+    expect(wind()).not.toBe(assembly.root);
+    expect(isShown(wind())).toBe(false);
+    show(cruising());
+    expect(isShown(wind())).toBe(true);
   });
 
   it('moves on its own only while playing', () => {
