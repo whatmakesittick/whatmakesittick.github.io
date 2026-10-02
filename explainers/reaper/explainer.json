@@ -1,0 +1,12 @@
+{
+  "slug": "reaper",
+  "tags": ["aircraft", "flight", "weapons"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A Reaper drone over a desert at dusk, beside the title How a Reaper drone flies a mission"
+  }
+}
