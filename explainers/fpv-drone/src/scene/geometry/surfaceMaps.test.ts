@@ -42,13 +42,24 @@ describe('surface maps', () => {
     expect(discAlpha(PROP.disc, 1)).toBe(0);
   });
 
-  it('keeps the field and road shades near one with gentle variation', () => {
-    const grass = fieldShade(FIELD.texture, 0.3, 0.7);
-    const dirt = roadShade(ROADS.texture, 0.5 - ROADS.texture.rut, 0.2);
-    for (const channel of [...grass.slice(0, 3), ...dirt.slice(0, 3)]) {
+  it('keeps the field shade near one with gentle variation', () => {
+    for (const channel of fieldShade(FIELD.texture, 0.3, 0.7).slice(0, 3)) {
       expect(channel).toBeGreaterThan(0.6);
       expect(channel).toBeLessThan(1.4);
     }
-    expect(dirt[0]).toBeGreaterThan(roadShade(ROADS.texture, 0.5, 0.2)[0]);
+  });
+
+  it('darkens the road map into two wheel ruts and lightens the dusty crown', () => {
+    const layout = ROADS.texture;
+    const rut = roadShade(layout, 0.5 - layout.rut, 0.2)[0];
+    const crown = roadShade(layout, 0.5, 0.2)[0];
+    const verge = roadShade(layout, 0.02, 0.2)[0];
+    expect(rut).toBeLessThan(verge);
+    expect(crown).toBeGreaterThan(verge);
+    for (let u = 0; u <= 1; u += 0.05) {
+      const level = roadShade(layout, u, 0.4)[0];
+      expect(level).toBeGreaterThan(0.45);
+      expect(level).toBeLessThanOrEqual(1);
+    }
   });
 });

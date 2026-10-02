@@ -48,9 +48,13 @@ export interface FieldLayout {
 
 export interface RoadLayout {
   size: number;
+  base: number;
   rut: number;
   rutWidth: number;
-  depth: number;
+  rutDepth: number;
+  dust: number;
+  dustWidth: number;
+  wear: number;
   seed: number;
 }
 
@@ -69,7 +73,6 @@ const FIELD_SCALE = 6;
 const FIELD_TINT = [0.98, 1, 0.9] as const;
 const ROAD_OCTAVES = 3;
 const ROAD_SCALE = 5;
-const ROAD_TINT = [1, 0.96, 0.9] as const;
 
 export function paintTexture(
   width: number,
@@ -189,15 +192,20 @@ export function fieldTexture(layout: FieldLayout): DataTexture {
   return paintTexture(layout.size, layout.size, (u, v) => fieldShade(layout, u, v), true);
 }
 
+function bump(value: number, centre: number, width: number): number {
+  return Math.exp(-(((value - centre) / width) ** 2));
+}
+
 export function roadShade(layout: RoadLayout, u: number, v: number): Rgba {
-  const ruts = [0.5 - layout.rut, 0.5 + layout.rut];
-  const rut = ruts.reduce(
-    (most, centre) => Math.max(most, Math.exp(-(((u - centre) / layout.rutWidth) ** 2))),
-    0,
+  const rut = Math.max(
+    bump(u, 0.5 - layout.rut, layout.rutWidth),
+    bump(u, 0.5 + layout.rut, layout.rutWidth),
   );
+  const dust = bump(u, 0.5, layout.dustWidth);
   const wear = fractalNoise(u * ROAD_SCALE, v * ROAD_SCALE, ROAD_OCTAVES, layout.seed, ROAD_SCALE);
-  const level = 1 + layout.depth * rut - 0.2 * (wear - 0.5);
-  return [level * ROAD_TINT[0], level * ROAD_TINT[1], level * ROAD_TINT[2], OPAQUE];
+  const level =
+    layout.base + layout.dust * dust - layout.rutDepth * rut - layout.wear * (wear - 0.5);
+  return [level, level, level, OPAQUE];
 }
 
 export function roadTexture(layout: RoadLayout): DataTexture {

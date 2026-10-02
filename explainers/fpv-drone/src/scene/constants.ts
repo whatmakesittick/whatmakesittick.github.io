@@ -194,7 +194,18 @@ export const ROADS = {
   lift: 0.03,
   along: { z: CROSSROADS[2], x: [-80, 520] as Extent },
   across: { x: CROSSROADS[0], z: [-300, 200] as Extent },
-  texture: { size: 64, rut: 0.22, rutWidth: 0.1, depth: 0.22, metres: 8, seed: 41 },
+  texture: {
+    size: 64,
+    base: 0.84,
+    rut: 0.24,
+    rutWidth: 0.07,
+    rutDepth: 0.24,
+    dust: 0.14,
+    dustWidth: 0.12,
+    wear: 0.12,
+    metres: 8,
+    seed: 41,
+  },
 } as const;
 
 export const CROSSING = {

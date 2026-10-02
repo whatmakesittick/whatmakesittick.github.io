@@ -181,5 +181,5 @@ export function fieldFinish(map: Texture): MaterialFinish {
 }
 
 export function roadFinish(map: Texture): MaterialFinish {
-  return { ...WORLD_FINISHES.road, color: '#ffffff', map };
+  return { ...WORLD_FINISHES.road, map };
 }
