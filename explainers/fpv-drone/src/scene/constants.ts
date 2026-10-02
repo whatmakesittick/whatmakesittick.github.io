@@ -173,7 +173,7 @@ export const SKY = {
   blend: 0.55,
 } as const;
 
-export const HAZE = { near: 350, far: 2400 } as const;
+export const HAZE = { near: 500, far: 2600 } as const;
 
 export const FIELD = {
   extent: { x: [-260, 700] as Extent, z: [-420, 360] as Extent },
