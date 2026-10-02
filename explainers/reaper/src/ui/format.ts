@@ -34,6 +34,7 @@ const CLOCK_SEPARATOR = ':';
 const METRES_STEP = 10;
 const FEET_STEP = 100;
 const DELAY_DIGITS = 2;
+const UNARMED_KEY = 'controls.loadOptions.clean';
 
 type Values = Record<string, string>;
 
@@ -195,5 +196,6 @@ export function formatSensorAim(sensor: SensorReading): string {
 }
 
 export function formatMissileStage(stage: MissileStage): string {
-  return t(`strike.stage.${stage}`);
+  const key = `strike.stage.${stage}`;
+  return stage === 'none' ? t([key, UNARMED_KEY]) : t(key);
 }

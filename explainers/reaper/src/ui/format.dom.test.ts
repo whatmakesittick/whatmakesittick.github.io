@@ -3,6 +3,7 @@ import { formatNumber } from '@core/format';
 import { initI18n, t } from '@core/i18n';
 import en from '../../locales/en.json';
 import { LOAD_IDS } from '../ids';
+import type { MissileStage } from '../ids';
 import { MISSION_END_MIN, MISSION_UNITS, MOMENTS, flightSeconds, unitsAt } from '../model';
 import { createReaperStore } from '../state';
 import {
@@ -15,6 +16,7 @@ import {
   formatFuel,
   formatHoursMinutes,
   formatLinkDelay,
+  formatMissileStage,
   formatPhase,
   formatSpanComparison,
   formatSpeed,
@@ -24,6 +26,8 @@ import { REAPER_READOUTS } from './readouts';
 import { fill, isFilled } from './testing';
 
 const { units, timeline } = en;
+const MISSILE_STAGES: readonly MissileStage[] = ['none', 'armed', 'flying', 'hit', 'done'];
+const STAGE_KEY_PREFIX = 'strike.stage.';
 
 function clock(text: string): string {
   return fill(timeline.clock, { clock: text });
@@ -112,6 +116,14 @@ describe('reaper formatting', () => {
       expect(text).toContain(describeSpeed(speed));
       expect(value).toContain(formatNumber(speed));
     }
+  });
+
+  it('names every missile stage, the unarmed one included', () => {
+    MISSILE_STAGES.forEach((stage) => {
+      const text = formatMissileStage(stage);
+      expect(isFilled(text), stage).toBe(true);
+      expect(text, stage).not.toContain(STAGE_KEY_PREFIX);
+    });
   });
 
   it('fills every gauge readout through the whole mission', () => {
