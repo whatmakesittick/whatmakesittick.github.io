@@ -8,6 +8,7 @@ export const PAINT = {
   airframe: THEME.airframe,
   airframeDark: THEME.airframeDark,
   radome: '#a7aeb6',
+  ghost: '#dce6f2',
   ball: '#aeb4bb',
   glass: THEME.sensorGlass,
   bezel: '#2a2f36',
@@ -30,23 +31,23 @@ export const PAINT = {
   navWhite: '#ffffff',
 } as const;
 
-const PAINT_REFLECTION = 1.3;
+const PAINT_REFLECTION = 2.2;
 const METAL_REFLECTION = 1.6;
 const GLASS_REFLECTION = 2.6;
 const LIGHT_GLOW = 3;
 
 export const FINISHES = {
   airframeGhost: {
-    color: PAINT.airframe,
+    color: PAINT.ghost,
     metalness: 0.1,
-    roughness: 0.4,
+    roughness: 0.3,
     transparent: true,
-    opacity: 0.16,
+    opacity: 0.26,
     depthWrite: false,
     side: DoubleSide,
   },
   wingGhost: {
-    color: PAINT.airframe,
+    color: PAINT.ghost,
     metalness: 0.1,
     roughness: 0.4,
     transparent: true,
@@ -263,6 +264,13 @@ export const WORLD_FINISHES = {
   },
   charred: matte(COMPOUND.vehicle.charred, 1),
   palm: matte('#4d5a2e', 0.85),
+  rock: {
+    color: '#ffffff',
+    vertexColors: true,
+    metalness: 0,
+    roughness: 0.92,
+    envMapIntensity: GROUND_REFLECTION,
+  },
   trunk: matte('#6b5236'),
   foil: {
     color: SATELLITE_SHAPE.colours.foil,

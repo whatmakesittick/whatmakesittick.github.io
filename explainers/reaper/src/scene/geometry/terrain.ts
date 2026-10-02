@@ -18,11 +18,13 @@ const EPSILON = 1e-6;
 const DUNE_SEED = 31;
 const SWELL_SEED = 43;
 const PATCH_SEED = 57;
-const CREST_SHARPNESS = 1.6;
+const CREST_SHARPNESS = 1.3;
 const PLAINS_SEED = 67;
 const BEND_REACH = 4;
 const PATCH_EDGES = [0.3, 0.7] as const;
 const SWELL_BASE = 0.35;
+const WADI_OCTAVES = 3;
+const WADI_SEED = 91;
 
 export function gridLines(extent: Range, fine: Range, cell: number, growth: number): number[] {
   const inner: number[] = [];
@@ -77,6 +79,19 @@ export function lakeShare(x: number, z: number): number {
   return 1 - smoothstep(ellipseReach(x, z, GROUND.lake), 0, GROUND.lake.soft);
 }
 
+export function duneProfile(position: number): number {
+  const { windward } = GROUND.dunes;
+  const share = position - Math.floor(position);
+  const rise = share < windward ? share / windward : (1 - share) / (1 - windward);
+  return Math.pow(smoothstep(rise, 0, 1), CREST_SHARPNESS);
+}
+
+export function wadiShare(x: number, z: number): number {
+  const { scale, width, edge } = GROUND.wadis;
+  const level = fractalNoise(x / scale, z / scale, WADI_OCTAVES, WADI_SEED);
+  return 1 - smoothstep(Math.abs(level - 0.5), width, width + edge);
+}
+
 function duneField(x: number, z: number): number {
   const { height, wavelength, direction, wander, swell, swellScale, patchScale } = GROUND.dunes;
   const along = x * Math.cos(direction) + z * Math.sin(direction);
@@ -87,8 +102,7 @@ function duneField(x: number, z: number): number {
     NOISE_OCTAVES,
     DUNE_SEED,
   );
-  const phase = (along / wavelength + wander * bend * BEND_REACH) * Math.PI * 2;
-  const crest = Math.pow(0.5 + 0.5 * Math.sin(phase), CREST_SHARPNESS);
+  const crest = duneProfile(along / wavelength + wander * bend * BEND_REACH);
   const patch = fractalNoise(x / patchScale, z / patchScale, NOISE_OCTAVES, PATCH_SEED);
   const rolling = fractalNoise(x / swellScale, z / swellScale, NOISE_OCTAVES, SWELL_SEED);
   return height * crest * smoothstep(patch, ...PATCH_EDGES) + swell * (rolling - SWELL_BASE);

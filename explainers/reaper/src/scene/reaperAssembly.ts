@@ -15,7 +15,9 @@ import { EffectsPart } from './parts/effects/effects';
 import { createAirfield } from './parts/world/airfield';
 import { CompoundPart } from './parts/world/compound';
 import { createGround } from './parts/world/ground';
+import { createMesas } from './parts/world/mesas';
 import { createSatellite } from './parts/world/satellite';
+import { createShrubs } from './parts/world/shrubs';
 import { createSky } from './parts/world/sky';
 import { staticRegions } from './regions';
 
@@ -64,6 +66,8 @@ export class ReaperAssembly implements Assembly {
     this.root.add(
       createSky(context),
       createGround(context),
+      createMesas(context),
+      createShrubs(context),
       airfield.object,
       this.compound.object,
       satellite.object,

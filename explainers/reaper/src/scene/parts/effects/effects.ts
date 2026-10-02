@@ -166,12 +166,12 @@ export class EffectsPart {
     this.losLink.mesh.visible = linked && state.link === 'los';
     if (this.satLink.mesh.visible) {
       this.satLink.span(this.hump, satellite);
-      placeLabel(this.satLabel, this.hump, satellite, SENSOR_VIEW.beamLabelShare);
+      placeLabel(this.satLabel, this.hump, satellite, SENSOR_VIEW.linkLabelShare.sat);
     }
     if (this.losLink.mesh.visible) {
       const mast = this.targets.mastTop.getWorldPosition(this.far);
       this.losLink.span(this.hump, mast);
-      placeLabel(this.losLabel, this.hump, mast, SENSOR_VIEW.beamLabelShare);
+      placeLabel(this.losLabel, this.hump, mast, SENSOR_VIEW.linkLabelShare.los);
     }
   }
 
@@ -196,7 +196,7 @@ export class EffectsPart {
     this.spot.visible = lasing;
     if (lasing) {
       this.laser.span(ball, aim);
-      placeLabel(this.laserLabel, ball, aim, SENSOR_VIEW.beamLabelShare);
+      placeLabel(this.laserLabel, ball, aim, SENSOR_VIEW.laserLabelShare);
       this.spot.position.set(aim.x, aim.y + SPOT_LIFT, aim.z);
     }
   }

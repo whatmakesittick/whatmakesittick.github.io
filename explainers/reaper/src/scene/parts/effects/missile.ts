@@ -44,11 +44,23 @@ export function launchRailOffset(railLocal: Vector3): Vector3 {
   return pose.localToWorld(railLocal.clone()).sub(new Vector3(...flight.position));
 }
 
-function sprite(context: PartContext, colour: string, size: number, opacity = 1): Sprite {
+function sprite(
+  context: PartContext,
+  colour: string,
+  size: number,
+  opacity = 1,
+  sizeAttenuation = true,
+): Sprite {
   const material = registered(
     context,
     'missile',
-    new SpriteMaterial({ ...GLOW_SPRITE, map: context.textures.glow, color: colour, opacity }),
+    new SpriteMaterial({
+      ...GLOW_SPRITE,
+      map: context.textures.glow,
+      color: colour,
+      opacity,
+      sizeAttenuation,
+    }),
   );
   const glow = new Sprite(material);
   glow.scale.setScalar(size);
@@ -109,9 +121,10 @@ export class MissileEffect {
 
   constructor(context: PartContext, geometry: HellfireGeometry, railLocal: Vector3) {
     this.railOffset = launchRailOffset(railLocal);
-    const { core, glow, flame } = MISSILE_FX;
+    const { core, glow, flame, beacon } = MISSILE_FX;
     this.core = sprite(context, core.colour, core.size);
     this.glow = sprite(context, glow.colour, glow.size, glow.opacity);
+    const marker = sprite(context, core.colour, beacon.size, beacon.opacity, false);
     const cone = context.tracker.track(
       new ConeGeometry(flame.radius, flame.length, flame.segments, 1, true),
     );
@@ -131,7 +144,7 @@ export class MissileEffect {
     const flameMesh = new Mesh(cone, flameMaterial);
     flameMesh.position.x = -flame.length / 2;
     this.plume.position.x = -HELLFIRE.length / 2 - TAIL_GAP;
-    this.plume.add(flameMesh, this.glow, this.core);
+    this.plume.add(flameMesh, this.glow, this.core, marker);
     this.missile.add(...hellfireMeshes(context, geometry, 'missile'), this.plume);
     this.missile.visible = false;
     this.trail = new SmokeTrail(context);

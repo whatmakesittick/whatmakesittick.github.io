@@ -235,11 +235,12 @@ describe('reaper assembly', () => {
     show({ link: 'sat' });
     const hump = worldOf(assembly.anchor('hump'));
     const satellite = worldOf(assembly.anchor('satellite'));
-    const middle = worldOf(label('satLink'));
-    expect(middle.distanceTo(hump) + middle.distanceTo(satellite)).toBeCloseTo(
+    const onBeam = worldOf(label('satLink'));
+    expect(onBeam.distanceTo(hump) + onBeam.distanceTo(satellite)).toBeCloseTo(
       hump.distanceTo(satellite),
       0,
     );
+    expect(onBeam.distanceTo(hump)).toBeLessThan(hump.distanceTo(satellite) / 2);
   });
 
   it('shows the sensor cone in day and infrared and the laser on the target', () => {

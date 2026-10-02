@@ -12,7 +12,7 @@ type LightName = 'key' | 'fill' | 'rim';
 export const REAPER_LIGHT: Readonly<Record<LightName, LightSetting>> = {
   key: { color: '#ffc08a', intensity: 3, position: [380, 300, -900] },
   fill: { color: '#8ea8ff', intensity: 0.9, position: [-250, 900, 450] },
-  rim: { color: '#d9a6c8', intensity: 1.3, position: [-420, 180, 950] },
+  rim: { color: '#e3ad86', intensity: 1.7, position: [-250, -420, 700] },
 };
 
 function apply(light: DirectionalLight, setting: LightSetting): () => void {

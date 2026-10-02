@@ -118,7 +118,7 @@ export function buildInternals(context: PartContext, loop: readonly LoopPoint[])
   const engineMiddle = (ENGINE.core[0][0] + ENGINE.gearbox[0][0]) / 2;
   return {
     object,
-    fuelAnchor: anchorAt(fuel, FUEL_TANK.labelX, FUEL_TANK.centre.y, 0),
+    fuelAnchor: anchorAt(fuel, FUEL_TANK.labelX, FUEL_TANK.centre.y + FUEL_TANK.labelLift, 0),
     engineAnchor: anchorAt(engine, engineMiddle, 0, 0),
   };
 }

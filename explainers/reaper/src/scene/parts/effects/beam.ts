@@ -4,6 +4,7 @@ import {
   CylinderGeometry,
   DoubleSide,
   Mesh,
+  NormalBlending,
   Quaternion,
   ShaderMaterial,
   Vector2,
@@ -38,6 +39,7 @@ uniform float uOffset;
 uniform float uLength;
 uniform float uCore;
 uniform vec4 uDash;
+uniform float uDashFloor;
 uniform vec2 uFade;
 varying float vAlong;
 varying vec3 vNormalView;
@@ -52,7 +54,7 @@ void main() {
     ? smoothstep(0.0, 0.12, phase) * (1.0 - smoothstep(uDash.y, uDash.y + 0.12, phase))
     : 1.0;
   float fade = smoothstep(0.0, uFade.x, vAlong) * (1.0 - smoothstep(1.0 - uFade.y, 1.0, vAlong));
-  float alpha = uOpacity * body * mix(0.22, 1.0, dash) * fade;
+  float alpha = uOpacity * body * mix(uDashFloor, 1.0, dash) * fade;
   gl_FragColor = vec4(uColour, alpha);
   #include <colorspace_fragment>
 }
@@ -85,13 +87,14 @@ export class Beam {
           uCore: { value: look.core },
           uRadius: { value: new Vector2(look.startRadius, look.endRadius) },
           uDash: { value: new Vector4(dash.period, dash.duty, dash.speed, dash.logScale) },
+          uDashFloor: { value: dash.floor },
           uFade: { value: new Vector2(...look.fade) },
         },
         vertexShader: VERTEX,
         fragmentShader: FRAGMENT,
         transparent: true,
         depthWrite: false,
-        blending: AdditiveBlending,
+        blending: look.glow ? AdditiveBlending : NormalBlending,
         side: DoubleSide,
         toneMapped: false,
       }),

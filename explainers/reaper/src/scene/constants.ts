@@ -302,6 +302,7 @@ export const FUEL_TANK = {
   },
   wing: { from: 0.55, to: 2.15, leadingShare: 0.12, chordShare: 0.52, thickness: 0.17 },
   labelX: 0.2,
+  labelLift: 0.25,
   segments: 24,
   samples: 14,
 } as const;
@@ -341,11 +342,11 @@ export const PROBE = { at: [5.75, -0.18, 0.12] as Triple, length: 0.35, radius: 
 
 export const NAV_LIGHTS = {
   radius: 0.045,
-  glow: 1.1,
+  glow: 0.9,
   tail: [-4.72, 0.18, 0] as Triple,
   strobePeriod: 1.3,
   strobeFlash: 0.07,
-  strobeSize: 2.6,
+  strobeSize: 1.8,
 } as const;
 
 export const FUSELAGE_PANELS = {
@@ -459,16 +460,17 @@ export const GROUND = {
   },
   colours: {
     sand: '#c7a16b',
-    crest: '#d8b47c',
-    trough: '#a9824f',
+    crest: '#e0bd86',
+    trough: '#9c7346',
     gravel: '#9a8462',
     lake: '#e2d4b6',
     lakeEdge: '#cdb48a',
     rust: '#b07a4a',
   },
   dunes: {
-    height: 2.6,
-    wavelength: 95,
+    height: 4.2,
+    wavelength: 110,
+    windward: 0.78,
     direction: 0.6,
     wander: 0.35,
     swell: 5,
@@ -480,6 +482,7 @@ export const GROUND = {
     { centre: [1000, 150] as const, radius: [55, 55] as const, soft: 90, level: 0, gravel: 0.15 },
   ],
   plains: { scale: 1400, from: 0.45, to: 0.7, share: 0.55, colour: '#9c8264' },
+  wadis: { scale: 1100, width: 0.004, edge: 0.01 },
   lake: {
     centre: [-330, -230] as const,
     radius: [200, 110] as const,
@@ -574,7 +577,7 @@ export const AIRFIELD = {
     ] as readonly Triple[],
     height: 4.5,
     radius: [0.06, 0.08] as const,
-    glow: 4.5,
+    glow: 3.2,
     colour: '#ffd29a',
   },
   segments: { mast: 10, dish: 20, dishSamples: 8 },
@@ -666,27 +669,30 @@ export interface BeamLook {
   endRadius: number;
   opacity: number;
   core: number;
-  dash: { period: number; duty: number; speed: number; logScale: number };
+  glow: boolean;
+  dash: { period: number; duty: number; speed: number; logScale: number; floor: number };
   fade: readonly [start: number, end: number];
   segments: number;
 }
 
 export const BEAMS = {
   sat: {
-    startRadius: 0.18,
-    endRadius: 9,
-    opacity: 0.85,
-    core: 1.6,
-    dash: { period: 2.4, duty: 0.55, speed: 1.6, logScale: 26 },
-    fade: [0.004, 0.3],
+    startRadius: 0.16,
+    endRadius: 8,
+    opacity: 0.8,
+    core: 1.4,
+    glow: false,
+    dash: { period: 2.6, duty: 0.55, speed: 1.6, logScale: 26, floor: 0.28 },
+    fade: [0.004, 0.04],
     segments: 14,
   },
   los: {
-    startRadius: 0.12,
-    endRadius: 1.4,
-    opacity: 0.8,
-    core: 1.8,
-    dash: { period: 2, duty: 0.5, speed: -1.4, logScale: 22 },
+    startRadius: 0.1,
+    endRadius: 0.9,
+    opacity: 0.75,
+    core: 1.5,
+    glow: false,
+    dash: { period: 2.2, duty: 0.5, speed: -1.4, logScale: 22, floor: 0.28 },
     fade: [0.01, 0.05],
     segments: 12,
   },
@@ -695,17 +701,19 @@ export const BEAMS = {
     endRadius: 0.55,
     opacity: 1,
     core: 2.4,
-    dash: { period: 0, duty: 1, speed: 0, logScale: 0 },
+    glow: true,
+    dash: { period: 0, duty: 1, speed: 0, logScale: 0, floor: 1 },
     fade: [0.003, 0.002],
     segments: 10,
   },
   cone: {
     startRadius: 0.03,
     endRadius: 1,
-    opacity: 0.2,
-    core: 0.9,
-    dash: { period: 22, duty: 0.82, speed: 0.6, logScale: 0 },
-    fade: [0.08, 0.01],
+    opacity: 0.16,
+    core: 0.8,
+    glow: false,
+    dash: { period: 40, duty: 0.7, speed: 0.5, logScale: 0, floor: 0.7 },
+    fade: [0.1, 0.02],
     segments: 28,
   },
 } as const satisfies Record<string, BeamLook>;
@@ -717,7 +725,8 @@ export const SENSOR_VIEW = {
   laserGlow: 22,
   spotPulse: 7,
   labelShare: 0.35,
-  beamLabelShare: 0.5,
+  linkLabelShare: { sat: 0.1, los: 0.5 },
+  laserLabelShare: 0.5,
 } as const;
 
 export const MISSILE_FX = {
@@ -725,12 +734,13 @@ export const MISSILE_FX = {
   tangentStep: 0.002,
   core: { size: 1.4, colour: '#fff6dc' },
   glow: { size: 5.5, colour: '#ffb15a', opacity: 0.85 },
+  beacon: { size: 0.014, opacity: 0.9 },
   flame: { length: 2.4, radius: 0.22, segments: 12 },
   flicker: { rate: 31, depth: 0.18 },
   trail: {
-    count: 340,
-    size: 6.5,
-    opacity: 0.5,
+    count: 420,
+    size: 12,
+    opacity: 0.42,
     colour: '#e4ddd2',
     drift: 5,
     rise: 3,
@@ -740,21 +750,25 @@ export const MISSILE_FX = {
 
 export const IMPACT_FX = {
   lift: 1.2,
-  core: { size: 34, colour: '#fff3d6' },
-  glow: { size: 110, colour: '#ff9a3c', opacity: 0.9 },
-  ground: { size: 90, colour: '#ff8a3a', opacity: 0.8 },
-  ring: { from: 6, to: 60, width: 0.12, colour: '#ffd9a0', opacity: 0.8, segments: 64 },
+  core: { size: 60, colour: '#fff3d6' },
+  glow: { size: 320, colour: '#ff9a3c', opacity: 0.9 },
+  beacon: { size: 0.12, colour: '#ffe2b0' },
+  ground: { size: 240, colour: '#ff8a3a', opacity: 0.85 },
+  ring: { from: 8, to: 110, width: 0.1, colour: '#ffd9a0', opacity: 0.85, segments: 72 },
   dust: {
-    count: 220,
-    size: 9,
-    colour: '#b89a74',
-    shade: '#6f5d4a',
-    opacity: 0.6,
-    linger: 0.22,
-    rise: 34,
-    spread: 26,
-    riseTime: 2.2,
-    fadeTime: 9,
+    count: 300,
+    size: 34,
+    colour: '#b59a78',
+    shade: '#4f4339',
+    opacity: 0.8,
+    linger: 0.3,
+    rise: 64,
+    column: 0.32,
+    surge: { share: 0.4, spread: 58, height: 5, lift: 9 },
+    cap: 1.7,
+    drift: 2.2,
+    riseTime: 2.4,
+    fadeTime: 12,
     seed: 77,
   },
 } as const;
@@ -769,4 +783,47 @@ export const TRACK = {
   fadeDistance: 900,
   gap: 14,
   orbit: { width: 0.8, opacity: 0.45, dashes: 64, duty: 0.55, segments: 256 },
+} as const;
+
+export const MESAS = {
+  points: 22,
+  layers: [
+    { height: -0.08, spread: 1.36, jag: 0.06 },
+    { height: 0.22, spread: 1.14, jag: 0.08 },
+    { height: 0.42, spread: 1.03, jag: 0.1 },
+    { height: 0.9, spread: 0.98, jag: 0.08 },
+    { height: 1, spread: 0.9, jag: 0.03 },
+  ],
+  roughness: 0.45,
+  wobble: 2.2,
+  colours: { cliff: '#6e3d2a', talus: '#8a5638', cap: '#b4875a' },
+  shade: { from: 0.2, to: 0.75 },
+  sites: [
+    { x: 330, z: -430, radius: 60, height: 23, seed: 1 },
+    { x: 760, z: -620, radius: 90, height: 35, seed: 2 },
+    { x: 1420, z: -360, radius: 45, height: 17, seed: 3 },
+    { x: 1560, z: 560, radius: 80, height: 31, seed: 4 },
+    { x: 820, z: 780, radius: 55, height: 21, seed: 5 },
+    { x: 180, z: 860, radius: 110, height: 42, seed: 6 },
+    { x: -460, z: 620, radius: 70, height: 27, seed: 7 },
+    { x: -760, z: -560, radius: 95, height: 37, seed: 8 },
+    { x: 2600, z: -1500, radius: 260, height: 100, seed: 9 },
+    { x: -2100, z: 1300, radius: 320, height: 123, seed: 10 },
+    { x: 3100, z: 1900, radius: 300, height: 115, seed: 11 },
+    { x: -1500, z: -2300, radius: 280, height: 108, seed: 12 },
+    { x: 400, z: -3200, radius: 420, height: 162, seed: 13 },
+    { x: -3400, z: -200, radius: 360, height: 138, seed: 14 },
+  ],
+} as const;
+
+export const SHRUBS = {
+  count: 2600,
+  size: 1.5,
+  lift: 0.35,
+  seed: 37,
+  area: { x: [-520, 1500] as const, z: [-520, 820] as const },
+  keepOut: 0.35,
+  wadiBias: 0.65,
+  colours: ['#4f5130', '#5d5634', '#6b6040', '#3f4529'],
+  opacity: 0.85,
 } as const;

@@ -27,7 +27,6 @@ const FULL_TURN = Math.PI * 2;
 const VISIBLE = 0.002;
 const GROUND_LIFT = 0.15;
 const SEEDS = { angle: 1, reach: 2, height: 3, shade: 4 } as const;
-const BILLOW = 0.45;
 const SETTLE = 0.3;
 const CORE_REST = 0.35;
 const GLOW_REST = 0.6;
@@ -80,22 +79,25 @@ class DustCloud {
   }
 
   place(age: number): void {
-    const { rise, spread, riseTime, fadeTime, opacity, linger } = IMPACT_FX.dust;
+    const { rise, column, surge, cap, drift, riseTime, fadeTime, opacity, linger } = IMPACT_FX.dust;
     const lift = 1 - Math.exp(-age / riseTime);
     const widen = 1 - Math.exp(-age / (riseTime * 2));
     const presence = smoothstep(age, 0, SETTLE) * lerp(1, linger, smoothstep(age, 0, fadeTime));
+    const wind = drift * age;
     this.grains.forEach((grain, index) => {
-      const reach = spread * widen * grain.reach * (1 + BILLOW * grain.height);
-      const height = rise * lift * grain.height * (1 - BILLOW * grain.reach * grain.reach);
+      const ground = grain.shade < surge.share;
+      const height = ground
+        ? surge.lift + surge.height * grain.height * widen
+        : rise * lift * Math.sqrt(grain.height);
+      const swell = ground ? surge.spread : rise * column * (1 + cap * grain.height * grain.height);
+      const reach = swell * widen * grain.reach;
       this.cloud.setPoint(
         index,
-        TARGET[0] + Math.cos(grain.angle) * reach,
+        TARGET[0] + Math.cos(grain.angle) * reach + wind * grain.height,
         TARGET[1] + height + GROUND_LIFT,
         TARGET[2] + Math.sin(grain.angle) * reach,
       );
-      this.tint
-        .copy(this.dark)
-        .lerp(this.light, grain.height * HEIGHT_TINT + grain.shade * (1 - HEIGHT_TINT));
+      this.tint.copy(ground ? this.light : this.dark).lerp(this.light, grain.height * HEIGHT_TINT);
       this.cloud.setColor(index, this.tint.r, this.tint.g, this.tint.b, opacity * presence);
     });
     this.cloud.commit();
@@ -107,6 +109,7 @@ export class ImpactEffect {
   private readonly flash = new Group();
   private readonly core: Sprite;
   private readonly glow: Sprite;
+  private readonly beacon: Sprite;
   private readonly ground: Mesh;
   private readonly ring: Mesh;
   private readonly ringMaterial: MeshBasicMaterial;
@@ -115,11 +118,18 @@ export class ImpactEffect {
 
   constructor(context: PartContext) {
     const { core, glow, ground, ring, lift } = IMPACT_FX;
-    const spriteOf = (colour: string, size: number, opacity: number) => {
+    const spriteOf = (colour: string, size: number, opacity: number, sizeAttenuation = true) => {
       const material = registered(
         context,
         'missile',
-        new SpriteMaterial({ ...GLOW_SPRITE, map: context.textures.glow, color: colour, opacity }),
+        new SpriteMaterial({
+          ...GLOW_SPRITE,
+          map: context.textures.glow,
+          color: colour,
+          opacity,
+          sizeAttenuation,
+          depthTest: false,
+        }),
       );
       const flare = new Sprite(material);
       flare.scale.setScalar(size);
@@ -128,6 +138,7 @@ export class ImpactEffect {
     };
     this.core = spriteOf(core.colour, core.size, 1);
     this.glow = spriteOf(glow.colour, glow.size, glow.opacity);
+    this.beacon = spriteOf(IMPACT_FX.beacon.colour, IMPACT_FX.beacon.size, 1, false);
     this.groundMaterial = additive(context, ground.colour, ground.opacity);
     this.groundMaterial.map = context.textures.glow;
     const disc = context.tracker.track(new PlaneGeometry(ground.size, ground.size));
@@ -139,7 +150,7 @@ export class ImpactEffect {
     band.rotateX(-QUARTER_TURN);
     this.ring = new Mesh(band, this.ringMaterial);
     this.ring.position.copy(this.ground.position);
-    this.flash.add(this.glow, this.core, this.ground, this.ring);
+    this.flash.add(this.glow, this.core, this.beacon, this.ground, this.ring);
     this.dust = new DustCloud(context);
     this.object.add(this.flash, this.dust.cloud.points);
     this.flash.visible = false;
@@ -163,6 +174,8 @@ export class ImpactEffect {
     this.core.material.opacity = burst;
     this.glow.scale.setScalar(glow.size * (GLOW_REST + (1 - GLOW_REST) * flash));
     this.glow.material.opacity = glow.opacity * flash;
+    this.beacon.scale.setScalar(IMPACT_FX.beacon.size * flash);
+    this.beacon.material.opacity = burst;
     this.groundMaterial.opacity = IMPACT_FX.ground.opacity * flash;
     this.ring.scale.setScalar(lerp(ring.from, ring.to, 1 - flash));
     this.ringMaterial.opacity = ring.opacity * flash;
