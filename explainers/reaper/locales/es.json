@@ -179,6 +179,7 @@
   },
   "strike": {
     "stage": {
+      "none": "Sin armas a bordo",
       "armed": "Esperando en su lanzador",
       "flying": "Guiándose hacia el punto láser",
       "hit": "Impacto",

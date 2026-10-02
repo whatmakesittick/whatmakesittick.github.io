@@ -179,6 +179,7 @@
   },
   "strike": {
     "stage": {
+      "none": "Sem armas a bordo",
       "armed": "Esperando no trilho",
       "flying": "Seguindo o ponto de laser",
       "hit": "Impacto",

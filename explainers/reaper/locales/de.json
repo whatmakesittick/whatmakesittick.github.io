@@ -179,6 +179,7 @@
   },
   "strike": {
     "stage": {
+      "none": "Keine Waffen an Bord",
       "armed": "Wartet auf der Startschiene",
       "flying": "Fliegt auf den Laserpunkt zu",
       "hit": "Einschlag",

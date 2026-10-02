@@ -179,6 +179,7 @@
   },
   "strike": {
     "stage": {
+      "none": "No weapons on board",
       "armed": "Waiting on its rail",
       "flying": "Homing on the laser spot",
       "hit": "Impact",
