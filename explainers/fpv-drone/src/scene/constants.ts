@@ -307,24 +307,24 @@ export interface BeamLook {
 
 export const BEAMS = {
   control: {
-    startRadius: 0.12,
-    endRadius: 0.45,
-    opacity: 0.9,
-    core: 1.6,
-    glow: true,
+    startRadius: 0.05,
+    endRadius: 0.12,
+    opacity: 0.55,
+    core: 1.4,
+    glow: false,
     dash: { period: 3, duty: 0.5, speed: 2.4, logScale: 30, floor: 0.3 },
-    fade: [0.01, 0.02],
-    segments: 12,
+    fade: [0.25, 0.02],
+    segments: 8,
   },
   video: {
-    startRadius: 0.5,
-    endRadius: 3.2,
-    opacity: 0.38,
+    startRadius: 0.14,
+    endRadius: 0.06,
+    opacity: 0.32,
     core: 1.2,
     glow: false,
     dash: { period: 6, duty: 0.6, speed: -1.6, logScale: 40, floor: 0.35 },
-    fade: [0.02, 0.01],
-    segments: 16,
+    fade: [0.02, 0.25],
+    segments: 8,
   },
 } as const satisfies Record<string, BeamLook>;
 
