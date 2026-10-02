@@ -35,8 +35,8 @@ describe('scene bindings', () => {
       phase: 50,
       clock: minutesAt(50),
       flight: flightAt(50),
-      strike: strikeAt(50),
-      sensor: sensorAt(50, 'day'),
+      strike: strikeAt(50, 'armed'),
+      sensor: sensorAt(50, 'day', 'armed'),
       link: 'sat',
       load: 'armed',
       playing: true,
@@ -54,6 +54,7 @@ describe('scene bindings', () => {
     expect(received.at(-1)?.sensor.lasing).toBe(true);
     store.getState().setLoad('clean');
     expect(received.at(-1)?.load).toBe('clean');
+    expect(received.at(-1)?.strike.stage).toBe('none');
     store.getState().applyPreset('sensor');
     store.getState().setSensorMode('infrared');
     expect(received.at(-1)?.sensor.mode).toBe('infrared');

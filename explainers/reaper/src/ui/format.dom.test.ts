@@ -3,7 +3,7 @@ import { formatNumber } from '@core/format';
 import { initI18n, t } from '@core/i18n';
 import en from '../../locales/en.json';
 import { LOAD_IDS } from '../ids';
-import { MISSION_UNITS, MOMENTS, flightSeconds, unitsAt } from '../model';
+import { MISSION_END_MIN, MISSION_UNITS, MOMENTS, flightSeconds, unitsAt } from '../model';
 import { createReaperStore } from '../state';
 import {
   describePhase,
@@ -34,7 +34,8 @@ describe('reaper formatting', () => {
 
   it('shows the mission clock as hours, minutes and seconds after takeoff', () => {
     expect(formatClock(0)).toBe(clock('0:00:00'));
-    expect(formatPhase(100)).toBe(clock('10:25:00'));
+    expect(formatClock(625)).toBe(clock('10:25:00'));
+    expect(formatPhase(MISSION_UNITS)).toBe(formatClock(MISSION_END_MIN));
     expect(formatPhase(MOMENTS.impact)).toBe(clock('8:00:25'));
     expect(formatPhase(unitsAt(30))).toBe(clock('0:30:00'));
   });

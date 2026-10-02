@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { MISSION_UNITS, PHASE_RANGES, unitsAt } from './mission';
+import type { LoadId, PhaseId } from '../ids';
+import { MINUTES_PER_HOUR } from './clock';
+import { MISSION_UNITS, PHASE_RANGES, minutesAt, unitsAt } from './mission';
 import {
   CRUISE_TO_LOITER_BURN,
   FUEL_KG,
@@ -9,6 +11,21 @@ import {
   fuelUsedKg,
   loiterBurn,
 } from './fuel';
+
+function phaseMinutes(...phases: PhaseId[]): number {
+  return phases.reduce(
+    (sum, id) => sum + minutesAt(PHASE_RANGES[id].end) - minutesAt(PHASE_RANGES[id].start),
+    0,
+  );
+}
+
+function landedWith(load: LoadId): number {
+  const burnt =
+    FULL_POWER_BURN_KG_PER_H * phaseMinutes('takeoff', 'climb') +
+    burnRate('cruise', load) * phaseMinutes('handover', 'return') +
+    loiterBurn(load) * phaseMinutes('loiter', 'strike');
+  return FUEL_KG - burnt / MINUTES_PER_HOUR;
+}
 
 describe('fuel', () => {
   it('starts with about 1,800 kg in the tanks', () => {
@@ -31,14 +48,14 @@ describe('fuel', () => {
   it('lands the armed mission with fuel to spare', () => {
     const left = fuelAt(MISSION_UNITS, 'armed');
     expect(left.kg).toBeGreaterThan(0);
-    expect(left.kg).toBeCloseTo(293, 0);
+    expect(left.kg).toBeCloseTo(landedWith('armed'), 6);
     expect(left.share).toBeCloseTo(left.kg / FUEL_KG, 9);
   });
 
   it('leaves more fuel flying clean than armed', () => {
     const clean = fuelAt(MISSION_UNITS, 'clean').kg;
     expect(clean).toBeGreaterThan(fuelAt(MISSION_UNITS, 'armed').kg);
-    expect(clean).toBeCloseTo(988, 0);
+    expect(clean).toBeCloseTo(landedWith('clean'), 6);
   });
 
   it('only ever goes down', () => {

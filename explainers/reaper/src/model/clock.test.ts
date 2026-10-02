@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MISSION_UNITS } from './mission';
+import { MISSION_END_MIN, MISSION_UNITS, PHASE_RANGES, minutesAt } from './mission';
 import { clockAt, hoursAndMinutes, missionShareAt } from './clock';
 
 describe('mission clock readings', () => {
@@ -18,7 +18,8 @@ describe('mission clock readings', () => {
 
   it('reads the share of the mission flown', () => {
     expect(missionShareAt(0)).toBe(0);
-    expect(missionShareAt(40)).toBeCloseTo(90 / 625, 9);
+    const onStation = PHASE_RANGES.loiter.start;
+    expect(missionShareAt(onStation)).toBeCloseTo(minutesAt(onStation) / MISSION_END_MIN, 9);
     expect(missionShareAt(MISSION_UNITS)).toBe(1);
   });
 });

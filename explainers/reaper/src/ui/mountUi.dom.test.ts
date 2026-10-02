@@ -4,10 +4,11 @@ import { mountActions } from '@core/ui/actions';
 import chapters from '../../chapters.html?raw';
 import en from '../../locales/en.json';
 import { COMPARISON_IDS, LOAD_IDS, MOMENT_IDS, SENSOR_MODE_IDS } from '../ids';
-import { MOMENTS, unitsAt } from '../model';
+import { MISSION_UNITS, MOMENTS, missionShareAt } from '../model';
 import { createReaperStore } from '../state';
 import type { ReaperStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
+import { formatPercent } from './format';
 import { fill, isFilled } from './testing';
 import { mountReaperUi } from '.';
 
@@ -60,10 +61,10 @@ describe('chapter widgets', () => {
     click('moment', 'onStation');
     expect(pressed('moment', 'onStation')).toBe('true');
     expect(readout('overview-link')).toBe(en.link.mode.sat);
-    expect(readout('overview-done')).toBe(fill(units.percent, { value: '14' }));
+    expect(readout('overview-done')).toBe(formatPercent(missionShareAt(MOMENTS.onStation)));
     click('moment', 'touchdown');
     expect(readout('overview-link')).toBe(en.link.mode.los);
-    expect(readout('overview-done')).toBe(fill(units.percent, { value: '99' }));
+    expect(readout('overview-done')).toBe(formatPercent(missionShareAt(MOMENTS.touchdown)));
   });
 
   it('compares the Reaper with the aircraft the reader picks', () => {
@@ -120,7 +121,7 @@ describe('chapter widgets', () => {
     expect(readout('strike-missile')).toBe(en.strike.stage.flying);
     click('moment', 'impact');
     expect(readout('strike-missile')).toBe(en.strike.stage.hit);
-    store.getState().setPhase(unitsAt(600));
+    store.getState().setPhase(MISSION_UNITS);
     expect(readout('strike-missile')).toBe(en.strike.stage.done);
   });
 
