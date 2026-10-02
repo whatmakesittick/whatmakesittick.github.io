@@ -30,6 +30,7 @@ const PERCENT = 100;
 const CLOCK_DIGITS = 2;
 const CLOCK_PAD = '0';
 const CLOCK_SEPARATOR = ':';
+const MINUS_SIGN = '−';
 
 function phaseKeys(group: string): Readonly<Record<PhaseId, string>> {
   return Object.fromEntries(PHASE_IDS.map((id) => [id, `timeline.${group}.${id}`])) as Record<
@@ -52,6 +53,11 @@ function tenths(value: number): string {
 
 function percent(share: number): string {
   return whole(share * PERCENT);
+}
+
+function signedWhole(value: number): string {
+  const rounded = Math.round(value);
+  return rounded < 0 ? `${MINUS_SIGN}${whole(-rounded)}` : whole(rounded);
 }
 
 export function formatClock(seconds: number): string {
@@ -116,7 +122,7 @@ export function formatMilliseconds(ms: number): string {
 }
 
 export function formatDbm(dbm: number): string {
-  return t('units.dbm', { value: whole(dbm) });
+  return t('units.dbm', { value: signedWhole(dbm) });
 }
 
 export function formatMinutes(minutes: number): string {

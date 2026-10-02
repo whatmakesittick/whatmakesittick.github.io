@@ -91,7 +91,7 @@ describe('fpv formatting', () => {
     expect(formatOfHover(1.154)).toBe(fill(units.ofHover, { percent: '115' }));
     expect(formatVolts(24.26)).toBe(fill(units.volts, { value: '24.3' }));
     expect(formatAmps(14.49)).toBe(fill(units.amps, { value: '14.5' }));
-    expect(formatDbm(-108)).toBe(fill(units.dbm, { value: '-108' }));
+    expect(formatDbm(-108)).toBe(fill(units.dbm, { value: '−108' }));
     expect(formatMinutes(12.34)).toBe(fill(units.minutes, { value: '12.3' }));
     expect(formatDegrees(30)).toBe(fill(units.degrees, { value: '30' }));
   });

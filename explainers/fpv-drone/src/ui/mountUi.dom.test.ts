@@ -132,12 +132,12 @@ describe('chapter widgets', () => {
     expect(readout('link-picture')).toBe(en.link.picture.digital);
     expect(pressed('packetRate', '250')).toBe('true');
     expect(readout('rate-period')).toBe(fill(units.ms, { value: '4' }));
-    expect(readout('rate-sensitivity')).toBe(fill(units.dbm, { value: '-108' }));
+    expect(readout('rate-sensitivity')).toBe(fill(units.dbm, { value: '−108' }));
     expect(readout('rate-reach')).toBe(fill(units.times, { factor: '1.4' }));
     click('packetRate', '50');
     expect(pressed('packetRate', '50')).toBe('true');
     expect(readout('rate-period')).toBe(fill(units.ms, { value: '20' }));
-    expect(readout('rate-sensitivity')).toBe(fill(units.dbm, { value: '-115' }));
+    expect(readout('rate-sensitivity')).toBe(fill(units.dbm, { value: '−115' }));
     expect(readout('rate-reach')).toBe(fill(units.times, { factor: '3.2' }));
     expect(readout('link-distance')).toBe(fill(units.m, { value: '6' }));
     expect(readout('link-signal')).toBe(en.link.signal.strong);
