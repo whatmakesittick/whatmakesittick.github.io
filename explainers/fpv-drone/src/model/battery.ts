@@ -6,7 +6,7 @@ import type { FlightMotion } from './flight';
 import { totalThrustG } from './motors';
 import { allUpG } from './payload';
 import { powerAt } from './power';
-import { SECONDS_PER_MINUTE, SORTIE_SECONDS, clampSeconds } from './sortie';
+import { MINUTES_PER_HOUR, SECONDS_PER_MINUTE, SORTIE_SECONDS, clampSeconds } from './sortie';
 
 export const BATTERY = {
   cells: PACK.cells,
@@ -20,7 +20,7 @@ export const BATTERY = {
 
 export const BATTERY_GRID_S = 0.5;
 
-const SECONDS_PER_HOUR = SECONDS_PER_MINUTE * SECONDS_PER_MINUTE;
+const SECONDS_PER_HOUR = SECONDS_PER_MINUTE * MINUTES_PER_HOUR;
 const MILLI = 1000;
 const GRID_STEPS = Math.ceil(SORTIE_SECONDS / BATTERY_GRID_S);
 const HALF = 0.5;

@@ -4,6 +4,7 @@ import type { MomentId, PhaseId } from '../ids';
 
 export const SORTIE_SECONDS = 80;
 export const SECONDS_PER_MINUTE = 60;
+export const MINUTES_PER_HOUR = 60;
 
 export interface PhaseRange {
   start: number;

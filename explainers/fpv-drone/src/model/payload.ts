@@ -7,7 +7,7 @@ import {
   USABLE_ENERGY_SHARE,
 } from './figures';
 import { cruisePowerW } from './power';
-import { SECONDS_PER_MINUTE } from './sortie';
+import { MINUTES_PER_HOUR } from './sortie';
 
 export const PAYLOAD_RANGE = {
   min: 0,
@@ -16,7 +16,6 @@ export const PAYLOAD_RANGE = {
   default: MASS_G.defaultPayload,
 } as const;
 
-const MINUTES_PER_HOUR = SECONDS_PER_MINUTE;
 const MAX_THRUST_G = MOTOR_COUNT * THRUST_PER_MOTOR_G.flight;
 
 export const USABLE_ENERGY_WH = USABLE_ENERGY_SHARE * PACK.energyWh;
