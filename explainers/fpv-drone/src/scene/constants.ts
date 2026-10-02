@@ -391,6 +391,7 @@ export const SCENE_LIMITS = {
   cameraMinDistance: 2,
   cameraMaxDistance: SCENE_BOUNDS.x[1] - SCENE_BOUNDS.x[0] + 400,
   maxPolarAngle: Math.PI * 0.84,
+  targetFloorMargin: 0,
 } as const;
 
 export const HIGHLIGHT_DIM = { saturation: 0.5, brightness: 0.6, emissive: 0.45 } as const;

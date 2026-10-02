@@ -11,6 +11,7 @@ export const SCENE_OPTIONS: SceneOptions = {
     far: SCENE_LIMITS.cameraFar,
     maxPolarAngle: SCENE_LIMITS.maxPolarAngle,
     distance: { min: SCENE_LIMITS.cameraMinDistance, max: SCENE_LIMITS.cameraMaxDistance },
+    floorMargin: SCENE_LIMITS.targetFloorMargin,
   },
   gaugeSide: 'top',
   highlight: { dim: HIGHLIGHT_DIM, undimmed: UNDIMMED_PARTS },

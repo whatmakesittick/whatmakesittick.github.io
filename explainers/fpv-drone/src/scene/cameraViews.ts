@@ -25,14 +25,14 @@ const FPV_LOOK_AHEAD_M = 60;
 const PILOT_MARGIN = 1.05;
 
 export const FOLLOW_VIEWS: Readonly<Record<FollowView, FollowSpec>> = {
-  chase: { bearing: toRadians(-150), elevation: toRadians(18), spans: 2.2, aimAhead: 0, aimUp: 0 },
+  chase: { bearing: toRadians(-150), elevation: toRadians(18), spans: 2.4, aimAhead: 0, aimUp: 0 },
   top: { bearing: toRadians(180), elevation: toRadians(80), spans: 2, aimAhead: 0, aimUp: 0 },
-  close: { bearing: toRadians(-60), elevation: toRadians(20), spans: 1, aimAhead: 0, aimUp: 0.2 },
-  side: { bearing: toRadians(90), elevation: toRadians(5), spans: 1.4, aimAhead: 0, aimUp: 0 },
+  close: { bearing: toRadians(-60), elevation: toRadians(20), spans: 1.9, aimAhead: 0, aimUp: 0 },
+  side: { bearing: toRadians(90), elevation: toRadians(5), spans: 2, aimAhead: 0, aimUp: 0 },
 };
 
 export const FIXED_VIEWS: Readonly<Record<FixedView, FramedView<RegionId>>> = {
-  pilot: { region: 'route', direction: [-1, 0.25, 0.1], margin: PILOT_MARGIN },
+  pilot: { region: 'route', direction: [-1, 0.42, 0.12], margin: PILOT_MARGIN },
 };
 
 export const CAMERA_OFFSET: Point = [
