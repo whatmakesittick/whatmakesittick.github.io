@@ -177,7 +177,7 @@
       "horizon": "A tilt angle near the centre, a rotation rate at full stick, so it self-levels but can still flip"
     },
     "limit": {
-      "acro": "No tilt limit. Full stick asks for about 670 degrees a second by default",
+      "acro": "No tilt limit. Full stick asks for about {{rate}} degrees a second by default",
       "angle": "A set tilt limit, which also caps the speed. No flips or rolls",
       "horizon": "No limit at full stick, a tilt limit near the centre"
     }
