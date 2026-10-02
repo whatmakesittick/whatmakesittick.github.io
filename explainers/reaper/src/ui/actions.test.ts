@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { MOMENT_IDS } from '../ids';
 import { MOMENTS } from '../model';
 import { createReaperStore } from '../state';
-import { CHAPTER_ACTIONS } from './actions';
+import { CHAPTER_ACTIONS, MOMENT_TOLERANCE_UNITS } from './actions';
 
 describe('chapter actions', () => {
   it('pauses at each moment and marks it as current', () => {
@@ -16,12 +16,25 @@ describe('chapter actions', () => {
     });
   });
 
-  it('keeps a moment current within half a unit and marks none between them', () => {
-    const near = createReaperStore({ phase: MOMENTS.onStation + 0.4 }).getState();
+  it('keeps a moment current within its tolerance and marks none between them', () => {
+    const near = createReaperStore({ phase: MOMENTS.onStation + 0.25 }).getState();
     expect(CHAPTER_ACTIONS.moment.current?.(near)).toBe('onStation');
+    const past = createReaperStore({ phase: MOMENTS.onStation + 0.4 }).getState();
+    expect(CHAPTER_ACTIONS.moment.current?.(past)).toBe('');
     const between = createReaperStore({ phase: 50 }).getState();
     expect(CHAPTER_ACTIONS.moment.current?.(between)).toBe('');
     expect(() => CHAPTER_ACTIONS.moment.run(between, 'landing')).toThrow();
+  });
+
+  it('never marks two moments at once', () => {
+    const units = MOMENT_IDS.map((moment) => MOMENTS[moment]);
+    units
+      .slice(1)
+      .forEach((next, index) =>
+        expect(next - units[index], MOMENT_IDS[index + 1]).toBeGreaterThan(
+          2 * MOMENT_TOLERANCE_UNITS,
+        ),
+      );
   });
 
   it('switches the load, the comparison and the sensor mode', () => {

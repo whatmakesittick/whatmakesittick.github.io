@@ -6,7 +6,7 @@ import { MOMENTS } from '../model';
 import type { ReaperStoreState } from '../state';
 
 const NOTHING_CURRENT = '';
-const MOMENT_TOLERANCE_UNITS = 0.5;
+export const MOMENT_TOLERANCE_UNITS = 0.3;
 
 function momentAt(state: ReaperStoreState): MomentId | undefined {
   return MOMENT_IDS.find(
