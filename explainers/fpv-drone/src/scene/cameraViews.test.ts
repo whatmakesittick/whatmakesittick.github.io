@@ -80,6 +80,15 @@ describe('camera views', () => {
     );
   });
 
+  it('backs off further when the stage is wider than it is tall', () => {
+    const wide = { vertical: 0.15, horizontal: 0.45 };
+    const close = followPose(CHASE, FOLLOW_VIEWS.close, SLOPES);
+    const squat = followPose(CHASE, FOLLOW_VIEWS.close, wide);
+    expect(squat.position.distanceTo(squat.target)).toBeCloseTo(
+      (close.position.distanceTo(close.target) * SLOPES.vertical) / wide.vertical,
+    );
+  });
+
   it('puts the fpv eye at the camera, looking ahead and up by the camera tilt', () => {
     const { position, target } = fpvPose(CHASE);
     expect(position.toArray()).toEqual([

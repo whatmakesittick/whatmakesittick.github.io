@@ -50,8 +50,8 @@ function direction(azimuth: number, elevation: number): Vector3 {
   return new Vector3(level * Math.cos(azimuth), Math.sin(elevation), level * Math.sin(azimuth));
 }
 
-function fitDistance(width: number, slopes: FramingSlopes): number {
-  return width / (2 * slopes.horizontal);
+function fitDistance(size: number, slopes: FramingSlopes): number {
+  return size / (2 * Math.min(slopes.horizontal, slopes.vertical));
 }
 
 function aimPoint(chase: ChaseTarget, spec: FollowSpec): Vector3 {
