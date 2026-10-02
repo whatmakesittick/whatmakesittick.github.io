@@ -28,6 +28,7 @@ export interface CameraOptions {
   far?: number;
   maxPolarAngle?: number;
   distance?: CameraDistance;
+  floorMargin?: number;
 }
 
 export class CameraRig {
@@ -39,6 +40,7 @@ export class CameraRig {
   private readonly followedPosition = new Vector3();
   private readonly followShift = new Vector3();
   private floorHeight = -Infinity;
+  private readonly floorMargin: number;
   private boundsRadius = 1;
   private readonly sceneDistance: CameraDistance;
   private distanceOverride: CameraDistance = {};
@@ -46,8 +48,14 @@ export class CameraRig {
   private readonly changes = new Listeners<[]>();
 
   constructor(domElement: HTMLElement, options: CameraOptions = {}) {
-    const { near = CAMERA_NEAR, far = CAMERA_FAR, maxPolarAngle = CAMERA_MAX_POLAR } = options;
+    const {
+      near = CAMERA_NEAR,
+      far = CAMERA_FAR,
+      maxPolarAngle = CAMERA_MAX_POLAR,
+      floorMargin = TARGET_FLOOR_MARGIN,
+    } = options;
     this.sceneDistance = options.distance ?? {};
+    this.floorMargin = floorMargin;
     this.camera = new PerspectiveCamera(CAMERA_FOV, 1, near, far);
     this.controls = new OrbitControls(this.camera, domElement);
     this.controls.enableDamping = true;
@@ -174,7 +182,7 @@ export class CameraRig {
   }
 
   private keepTargetAboveFloor(): void {
-    const minimum = this.floorHeight + TARGET_FLOOR_MARGIN;
+    const minimum = this.floorHeight + this.floorMargin;
     const shortfall = minimum - this.controls.target.y;
     if (shortfall <= 0) return;
     this.controls.target.y += shortfall;

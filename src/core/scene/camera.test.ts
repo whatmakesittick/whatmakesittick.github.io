@@ -15,6 +15,8 @@ const BOUNDS = new Box3(new Vector3(-2, 0, -2), new Vector3(2, 4, 2));
 const VIEWPORT: ViewportSize = { width: 800, height: 600, safe: NO_SAFE_AREA };
 const SCENE_DISTANCE = { min: 3, max: 50 };
 const VIEW_MIN_DISTANCE = 1;
+const DEFAULT_FLOOR_MARGIN = 1;
+const GROUND_TARGET: CameraPose = { position: new Vector3(0, 2, 4), target: new Vector3(0, 0, 0) };
 
 function fakeCanvas(): HTMLElement {
   const root = new EventTarget();
@@ -55,6 +57,23 @@ describe('CameraRig', () => {
     expect(rig.camera.far).toBe(CAMERA_FAR);
     expect(rig.controls.maxPolarAngle).toBe(CAMERA_MAX_POLAR);
     rig.dispose();
+  });
+
+  it('keeps the target a metre above the floor unless the explainer sets its own margin', () => {
+    const lifted = new CameraRig(fakeCanvas());
+    lifted.setBounds(BOUNDS, BOUNDS.min.y);
+    lifted.jumpTo(GROUND_TARGET);
+    lifted.update(FRAME_SECONDS);
+    expect(lifted.controls.target.y).toBeCloseTo(DEFAULT_FLOOR_MARGIN);
+    expect(lifted.camera.position.y).toBeCloseTo(GROUND_TARGET.position.y + DEFAULT_FLOOR_MARGIN);
+    lifted.dispose();
+
+    const grounded = new CameraRig(fakeCanvas(), { floorMargin: 0 });
+    grounded.setBounds(BOUNDS, BOUNDS.min.y);
+    grounded.jumpTo(GROUND_TARGET);
+    grounded.update(FRAME_SECONDS);
+    expect(grounded.controls.target.y).toBeCloseTo(0);
+    grounded.dispose();
   });
 
   it('applies the camera planes and orbit limit an explainer asks for', () => {
