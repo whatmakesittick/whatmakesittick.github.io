@@ -9,6 +9,7 @@ import {
   SCENE_BOUNDS,
   TREELINE,
 } from '../model/layout';
+import { DEMO_HOVER_SHARE } from '../model/motors';
 import { droneUnits } from '../model/scale';
 
 type Triple = readonly [number, number, number];
@@ -162,6 +163,31 @@ export const SPIN_ARROWS = {
   lift: 0.048,
   texture: { size: 128, radius: 44, stroke: 9, sweep: toRadians(265), head: 15, font: 46 },
   brightness: { base: 0.72, gain: 5, min: 0.3 },
+} as const;
+
+export const DOWNWASH = {
+  radius: PROP.radius * 0.94,
+  length: 0.42,
+  around: 20,
+  along: 16,
+  waist: { share: 0.26, by: 0.35 },
+  flare: { share: 0.2, from: 0.5 },
+  lanes: 8,
+  laneWidth: [0.14, 0.32] as Extent,
+  laneSkip: 0.22,
+  dashes: 2.2,
+  pace: { step: 0.25, count: 3 },
+  swirl: toRadians(25),
+  lengthFloor: 0.55,
+  fade: { top: 0.06, from: 0.3 },
+  opacity: 0.4,
+  haze: 0.12,
+  softness: 0.8,
+  groundFade: 0.8,
+  colour: '#f3f7fb',
+  level: { reference: DEMO_HOVER_SHARE * 1.25, gain: 8, max: 1.4, shown: 0.02 },
+  flow: { base: 0.35, gain: 0.9, wrap: 4 },
+  bend: { max: 1.3, fullAtKmh: 70, power: 1.6, rise: 0.4 },
 } as const;
 
 export const SCALED_LABELS = {

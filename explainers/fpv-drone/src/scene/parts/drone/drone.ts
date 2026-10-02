@@ -7,6 +7,7 @@ import { DRONE_SCALE, droneUnits } from '../../../model/scale';
 import { BODY_DROP, DRONE_BOX, PROP } from '../../constants';
 import { applyDronePose } from '../../pose';
 import type { PartContext } from '../context';
+import { DownwashPart } from '../effects/downwash';
 import { SpinArrowsPart } from '../effects/spinArrows';
 import { buildGps, buildReceiverAntennas, VideoAntennaPart } from './antennas';
 import { buildBattery } from './battery';
@@ -43,6 +44,7 @@ export class DronePart {
   private readonly cameraModule: CameraModulePart;
   private readonly videoAntenna: VideoAntennaPart;
   private readonly arrows: SpinArrowsPart;
+  private readonly downwash: DownwashPart;
   private readonly localBox = new Box3(
     new Vector3(DRONE_BOX.x[0], DRONE_BOX.y[0], DRONE_BOX.z[0]),
     new Vector3(DRONE_BOX.x[1], DRONE_BOX.y[1], DRONE_BOX.z[1]),
@@ -60,6 +62,7 @@ export class DronePart {
     this.cameraModule = new CameraModulePart(context);
     this.videoAntenna = new VideoAntennaPart(context);
     this.arrows = new SpinArrowsPart(context);
+    this.downwash = new DownwashPart(context, this.propellers);
     this.body.add(
       buildFrame(context),
       ...motors.map(([, motor]) => motor.object),
@@ -71,6 +74,7 @@ export class DronePart {
       receiver.object,
       gps.object,
       this.arrows.object,
+      this.downwash.mesh,
     );
     this.object.add(this.body);
     this.cameraAnchor = this.cameraModule.lens;
@@ -98,10 +102,12 @@ export class DronePart {
     this.cameraModule.setVideo(state.video);
     this.videoAntenna.setVideo(state.video);
     this.arrows.setState(state.view.arrows, state.motors.shares);
+    this.downwash.setState(state.motors.shares, state.flight);
   }
 
   advance(deltaSeconds: number): void {
     this.propellers.advance(deltaSeconds);
+    this.downwash.advance(deltaSeconds);
   }
 
   worldBox(target: Box3): Box3 {

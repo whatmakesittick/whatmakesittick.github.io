@@ -11,6 +11,7 @@ import { droneUnits } from '../model/scale';
 import { LAUNCH_PAD, PROP } from './constants';
 import { FpvAssembly } from './fpvAssembly';
 import { propName } from './parts/drone/propeller';
+import { DOWNWASH_NAME } from './parts/effects/downwash';
 
 const ANCHORS: readonly AnchorId[] = ['drone', 'camera', 'station', 'crossroads'];
 const REGIONS: readonly RegionId[] = ['scene', 'station', 'drone', 'crossroads', 'route'];
@@ -291,6 +292,15 @@ describe('fpv assembly', () => {
     expect(crossroads.z).toBeCloseTo(CROSSROADS[2]);
     const pad = worldOf(label('launchPad'));
     expect(pad.distanceTo(new Vector3(...PAD))).toBeLessThan(3);
+  });
+
+  it('blows the downwash only while the motors push air', () => {
+    const downwash = () => assembly.root.getObjectByName(DOWNWASH_NAME) ?? assembly.root;
+    show(stateAt({ motors: { shares: [0, 0, 0, 0] } }));
+    expect(isShown(downwash())).toBe(false);
+    show(cruising());
+    expect(downwash()).not.toBe(assembly.root);
+    expect(isShown(downwash())).toBe(true);
   });
 
   it('moves on its own only while playing', () => {
