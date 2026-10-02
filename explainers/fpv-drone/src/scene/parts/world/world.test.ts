@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { PAD, STATION, TREELINE } from '../../../model/layout';
 import { FIELD, ROADS, SHRUBS, TREES } from '../../constants';
 import { PAINT } from '../../finishes';
-import { fieldColour } from './field';
+import { fieldColour, mownBand } from './field';
 import { scatterShrubs } from './shrubs';
 import { treeSpots } from './trees';
 
@@ -26,6 +26,31 @@ describe('field colour', () => {
     const yellows = samples.filter((colour) => apart(colour, straw) < 0.08).length;
     expect(greens).toBeGreaterThan(20);
     expect(yellows).toBeGreaterThan(5);
+  });
+});
+
+describe('field texture in the vertex colours', () => {
+  it('shows a few bare earth spots across the field', () => {
+    const earth = new Color(PAINT.earth);
+    let bare = 0;
+    let total = 0;
+    for (let x = FIELD.extent.x[0]; x < FIELD.extent.x[1]; x += 7) {
+      for (let z = FIELD.extent.z[0]; z < FIELD.extent.z[1]; z += 7) {
+        total += 1;
+        if (apart(fieldColour(x, z, new Color()), earth) < 0.04) bare += 1;
+      }
+    }
+    expect(bare / total).toBeGreaterThan(0.005);
+    expect(bare / total).toBeLessThan(0.15);
+  });
+
+  it('alternates lighter and darker mown bands across the field', () => {
+    const quarter = FIELD.mown.width / 2;
+    expect(mownBand(quarter)).toBeCloseTo(1);
+    expect(mownBand(quarter * 3)).toBeCloseTo(-1);
+    const light = fieldColour(100, quarter, new Color());
+    const dark = fieldColour(100, quarter + FIELD.mown.width, new Color());
+    expect(light.g).toBeGreaterThan(dark.g);
   });
 });
 

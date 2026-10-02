@@ -181,12 +181,15 @@ export const HAZE = { near: 500, far: 2600 } as const;
 
 export const FIELD = {
   extent: { x: [-260, 700] as Extent, z: [-420, 360] as Extent },
-  cell: 10,
+  cell: 6,
   outer: 9000,
   outerSink: 0.08,
-  texture: { size: 256, metres: 24, stripes: 4, stripeDepth: 0.07, mottle: 0.16, seed: 17 },
+  texture: { size: 256, metres: 24, stripes: 4, stripeDepth: 0.1, mottle: 0.18, seed: 17 },
   patches: { scale: 46, from: 0.48, to: 0.68, seed: 23 },
+  tufts: { scale: 15, from: 0.55, to: 0.75, seed: 31, share: 0.45 },
   tracks: { scale: 180, from: 0.56, to: 0.62, seed: 29, share: 0.35 },
+  bare: { scale: 11, from: 0.7, to: 0.76, seed: 37, share: 0.75 },
+  mown: { width: 12, depth: 0.05 },
 } as const;
 
 export const ROADS = {

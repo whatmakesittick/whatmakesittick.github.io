@@ -18,12 +18,29 @@ const GRASS = new Color(PAINT.grass);
 const STRAW = new Color(PAINT.straw);
 const EARTH = new Color(PAINT.earth);
 
+interface NoiseLayer {
+  scale: number;
+  from: number;
+  to: number;
+  seed: number;
+}
+
+function noiseShare(x: number, z: number, layer: NoiseLayer): number {
+  const level = fractalNoise(x / layer.scale, z / layer.scale, NOISE_OCTAVES, layer.seed);
+  return smoothstep(level, layer.from, layer.to);
+}
+
+export function mownBand(z: number): number {
+  return Math.sin((Math.PI * z) / FIELD.mown.width);
+}
+
 export function fieldColour(x: number, z: number, target: Color): Color {
-  const { patches, tracks } = FIELD;
-  const patch = fractalNoise(x / patches.scale, z / patches.scale, NOISE_OCTAVES, patches.seed);
-  const worn = fractalNoise(x / tracks.scale, z / tracks.scale, NOISE_OCTAVES, tracks.seed);
-  target.copy(GRASS).lerp(STRAW, smoothstep(patch, patches.from, patches.to));
-  return target.lerp(EARTH, smoothstep(worn, tracks.from, tracks.to) * tracks.share);
+  const { patches, tufts, tracks, bare, mown } = FIELD;
+  target.copy(GRASS).lerp(STRAW, noiseShare(x, z, patches));
+  target.lerp(STRAW, noiseShare(x, z, tufts) * tufts.share);
+  target.lerp(EARTH, noiseShare(x, z, tracks) * tracks.share);
+  target.lerp(EARTH, noiseShare(x, z, bare) * bare.share);
+  return target.multiplyScalar(1 + mown.depth * mownBand(z));
 }
 
 export function fieldGeometry(): BufferGeometry {
