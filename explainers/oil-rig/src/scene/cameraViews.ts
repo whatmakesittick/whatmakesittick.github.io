@@ -71,7 +71,7 @@ export function cameraViews(
       const anchor = bitAnchor();
       return anchor ? bitPose(anchor, slopes) : null;
     },
-    follow: true,
+    follow: 'position',
     distance: BIT_VIEW.distance,
   };
   return { ...FRAMED_VIEWS, bit };

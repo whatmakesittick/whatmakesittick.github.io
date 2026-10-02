@@ -84,7 +84,7 @@ describe('reaper controller', () => {
     reaper.views.frame('chase', true);
     const target = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
     expect(target?.toArray()).toEqual([500, 300, 0]);
-    expect(rig.follow).toHaveBeenLastCalledWith(expect.anything());
+    expect(rig.follow).toHaveBeenLastCalledWith(expect.anything(), 'position');
   });
 
   it('frames the orbit and the strike on fixed layout regions without following', () => {
@@ -94,12 +94,12 @@ describe('reaper controller', () => {
     expect(rig.tweenTo).not.toHaveBeenCalled();
     reaper.build(STATE);
     reaper.views.frame('orbit', true);
-    expect(rig.follow).toHaveBeenLastCalledWith(null);
+    expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
     const orbitTarget = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
     expect(orbitTarget?.x).toBeCloseTo(LOITER.centre[0], 6);
     expect(orbitTarget?.z).toBeCloseTo(LOITER.centre[1], 6);
     reaper.views.frame('strike', false);
-    expect(rig.follow).toHaveBeenLastCalledWith(null);
+    expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
     expect(rig.jumpTo).toHaveBeenCalledTimes(1);
   });
 

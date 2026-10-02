@@ -42,7 +42,7 @@ describe('camera views', () => {
     const valve = anchorAt(21, 2, -1);
     const view = cameraViews(() => valve).valve as CustomView;
     const pose = view.pose(SLOPES);
-    expect(view.follow).toBe(true);
+    expect(view.follow).toBe('position');
     expect(view.distance).toEqual(VALVE_DISTANCE);
     expect(pose).not.toBeNull();
     if (!pose) return;

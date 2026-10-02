@@ -44,7 +44,7 @@ describe('camera views', () => {
     const wheel = anchorAt(20, -60, 12);
     const view = cameraViews({ ...NO_ANCHORS, wheel: () => wheel }).wheel as CustomView;
     const pose = view.pose(SLOPES);
-    expect(view.follow).toBe(true);
+    expect(view.follow).toBe('position');
     expect(pose).not.toBeNull();
     expect(pose!.target.distanceTo(wheel.position)).toBeCloseTo(0);
     expect(pose!.position.y).toBeGreaterThan(pose!.target.y);
@@ -60,7 +60,7 @@ describe('camera views', () => {
     const fork = anchorAt(-40, -50, 24);
     const view = cameraViews({ ...NO_ANCHORS, fork: () => fork }).escapement as CustomView;
     const pose = view.pose(SLOPES);
-    expect(view.follow).toBe(false);
+    expect(view.follow).toBeUndefined();
     expect(pose!.position.x).toBeGreaterThan(pose!.target.x);
     expect(pose!.position.z).toBeGreaterThan(pose!.target.z);
   });

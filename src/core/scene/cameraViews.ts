@@ -1,6 +1,6 @@
 import { Vector3 } from 'three';
 import type { Box3, Object3D } from 'three';
-import type { CameraDistance, CameraRig } from './camera';
+import type { CameraDistance, CameraRig, FollowMode } from './camera';
 import { frameBox } from './frameBox';
 import type { CameraPose } from './frameBox';
 import type { FramingSlopes } from './lens';
@@ -8,7 +8,7 @@ import type { FramingSlopes } from './lens';
 export type Direction = readonly [x: number, y: number, z: number];
 
 interface ViewBehaviour {
-  follow?: boolean;
+  follow?: FollowMode;
   distance?: CameraDistance;
 }
 
@@ -72,7 +72,7 @@ export class CameraViews<V extends string, R extends string = string> {
     const pose = this.pose(view, variant);
     if (!pose) return;
     const spec = this.options.views[view];
-    this.rig.follow(spec.follow ? (this.options.anchor?.() ?? null) : null);
+    this.rig.follow(spec.follow ? (this.options.anchor?.() ?? null) : null, spec.follow);
     this.rig.setDistanceLimits(spec.distance ?? {});
     if (animate) this.rig.tweenTo(pose);
     else this.rig.jumpTo(pose);

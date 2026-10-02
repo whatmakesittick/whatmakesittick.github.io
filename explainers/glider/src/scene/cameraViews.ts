@@ -62,7 +62,7 @@ export function cameraViews(
       const target = chaseTarget();
       return target ? chasePose(target, slopes) : null;
     },
-    follow: true,
+    follow: 'position',
   };
   return { ...FIXED_VIEWS, chase };
 }

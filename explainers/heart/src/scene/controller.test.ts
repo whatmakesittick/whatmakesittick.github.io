@@ -87,7 +87,7 @@ describe('heart controller', () => {
     heart.build(stateWith('mitral'));
     picked = 'aortic';
     heart.views.frame('valve', true);
-    expect(rig.follow).toHaveBeenLastCalledWith(anchorOf('aortic'));
+    expect(rig.follow).toHaveBeenLastCalledWith(anchorOf('aortic'), 'position');
     expect(lastTarget(rig.tweenTo)?.distanceTo(anchorOf('aortic').position)).toBeCloseTo(0);
   });
 
@@ -104,7 +104,7 @@ describe('heart controller', () => {
     store.getState().applyPreset('valves');
     (['tricuspid', 'pulmonary', 'aortic', 'mitral'] as const).forEach((valve) => {
       store.getState().setValve(valve);
-      expect(rig.follow, valve).toHaveBeenLastCalledWith(anchorOf(valve));
+      expect(rig.follow, valve).toHaveBeenLastCalledWith(anchorOf(valve), 'position');
       expect(lastTarget(rig.tweenTo)?.distanceTo(anchorOf(valve).position), valve).toBeCloseTo(0);
     });
   });

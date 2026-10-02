@@ -41,7 +41,7 @@ function valveView(anchor: () => Object3D | null): CustomView {
       const object = anchor();
       return object ? anchorPose(object, VALVE_FRAMING, slopes) : null;
     },
-    follow: true,
+    follow: 'position',
     distance: VALVE_DISTANCE,
   };
 }

@@ -38,7 +38,7 @@ describe('camera views', () => {
 
   it('sits the probe camera 2.6 units from the probe and follows it', () => {
     const { spec, pose } = customPose('probe', ANCHORS);
-    expect(spec.follow).toBe(true);
+    expect(spec.follow).toBe('position');
     expect(spec.distance).toEqual(PROBE_DISTANCE);
     expect(pose?.target).toEqual(ANCHORS.probe);
     expect(pose?.position.distanceTo(ANCHORS.probe)).toBeCloseTo(2.6, 5);

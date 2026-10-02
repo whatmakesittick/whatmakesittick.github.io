@@ -1,4 +1,5 @@
 import { Spherical, Vector3 } from 'three';
+import type { Quaternion } from 'three';
 import { CAMERA_TWEEN_SECONDS } from './constants';
 import type { CameraPose } from './frameBox';
 
@@ -33,6 +34,13 @@ export class CameraTween {
     [this.from, this.to].forEach((pose) => {
       pose.position.add(delta);
       pose.target.add(delta);
+    });
+  }
+
+  turn(pivot: Vector3, rotation: Quaternion): void {
+    [this.from, this.to].forEach((pose) => {
+      pose.position.sub(pivot).applyQuaternion(rotation).add(pivot);
+      pose.target.sub(pivot).applyQuaternion(rotation).add(pivot);
     });
   }
 
