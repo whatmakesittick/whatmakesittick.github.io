@@ -55,7 +55,7 @@
     },
     "open": {
       "title": "Open source",
-      "p1": "The site and every explainer are open source under the MIT license. Each explainer page links to its own source code, so you can read the simulation behind what you see. No ads, no tracking, nothing loaded from anyone else's servers. Your language choice is kept in your browser and nowhere else.",
+      "p1": "The site and every explainer are open source under the MIT license. Each explainer page links to its own source code, so you can read the simulation behind what you see. There are no ads and no cookies. The only thing loaded from another server is GoatCounter, an open source visit counter. It counts page views and keeps nothing about you as a person. Your language choice is kept in your browser and nowhere else.",
       "p2": "Spotted a mistake in a number, a model or a translation? Please say so. Every report is welcome.",
       "link": "Report a mistake on GitHub"
     }
