@@ -774,11 +774,11 @@ export const IMPACT_FX = {
 } as const;
 
 export const TRACK = {
-  width: 0.9,
+  width: 1.6,
   step: 4,
   lift: 0.35,
-  colour: '#cfe3ff',
-  opacity: 0.42,
+  colour: '#eef6ff',
+  opacity: 0.7,
   floor: 0.14,
   fadeDistance: 900,
   gap: 14,

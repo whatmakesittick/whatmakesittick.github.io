@@ -1,5 +1,4 @@
 import {
-  AdditiveBlending,
   BufferAttribute,
   BufferGeometry,
   Color,
@@ -152,7 +151,6 @@ function trackMaterial(
       fragmentShader,
       transparent: true,
       depthWrite: false,
-      blending: AdditiveBlending,
       side: DoubleSide,
       toneMapped: false,
     }),
