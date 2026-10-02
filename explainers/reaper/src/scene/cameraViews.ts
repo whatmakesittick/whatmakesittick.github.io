@@ -33,10 +33,10 @@ export const FOLLOW_VIEWS: Readonly<Record<FollowView, FollowSpec>> = {
   side: { bearing: toRadians(90), elevation: toRadians(3), spans: 1.25, aimAhead: 0, aimUp: 0 },
   wide: {
     bearing: toRadians(160),
-    elevation: toRadians(26),
-    spans: 30,
-    aimAhead: -150,
-    aimUp: -80,
+    elevation: toRadians(22),
+    spans: 11,
+    aimAhead: -50,
+    aimUp: -25,
   },
   nose: {
     bearing: toRadians(-40),
