@@ -68,7 +68,7 @@
     "value": "{{time}}、{{phase}}",
     "clock": "T+{{clock}}",
     "speedFormat": "{{factor}}×",
-    "speedValue": "通常の{{factor}}倍の速さで再生",
+    "speedValue": "通常の再生速度に対する倍率",
     "phase": {
       "takeoff": "離陸",
       "climb": "上昇",
@@ -148,22 +148,22 @@
       "sat": "米国内の任務クルー"
     },
     "delay": {
-      "los": "ごくわずか、衛星の中継なし",
-      "sat": "約0.5秒から2秒"
+      "los": "ごくわずか。衛星を経由すると、1回の上り下りは地球{{girths}}周分で{{oneWay}}、往復で{{roundTrip}}かかる",
+      "sat": "約0.5秒から2秒。1回の上り下りは地球{{girths}}周分で、光だけでも{{oneWay}}、往復で{{roundTrip}}かかる"
     }
   },
   "flight": {
     "span": {
-      "predator": "リーパーは20.1m、プレデターは16.8m",
-      "cessna": "リーパーは20.1m、セスナは11m"
+      "predator": "リーパーは{{reaper}}m、プレデターは{{other}}mで、{{ratio}}倍",
+      "cessna": "リーパーは{{reaper}}m、セスナは{{other}}mで、{{ratio}}倍。アスペクト比は{{aspect}}対{{otherAspect}}で、{{slender}}倍細長い"
     },
     "weight": {
-      "predator": "リーパーは4,760kg、プレデターは1,020kg",
-      "cessna": "リーパーは4,760kg、セスナは1,157kg"
+      "predator": "リーパーは{{reaper}}kg、プレデターは{{other}}kgで、{{ratio}}倍",
+      "cessna": "リーパーは{{reaper}}kg、セスナは{{other}}kgで、{{ratio}}倍"
     },
     "engine": {
-      "predator": "リーパーは900馬力のターボプロップ、プレデターは115馬力のピストンエンジン",
-      "cessna": "リーパーはターボプロップ、セスナはピストンエンジン"
+      "predator": "リーパーは{{reaper}}馬力のターボプロップ、プレデターは{{other}}馬力のピストンエンジンで、出力は{{ratio}}倍",
+      "cessna": "リーパーは{{reaper}}馬力のターボプロップ、セスナはピストンエンジン"
     }
   },
   "sensor": {

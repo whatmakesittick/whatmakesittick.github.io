@@ -68,7 +68,7 @@
     "value": "{{time}}，{{phase}}",
     "clock": "T+{{clock}}",
     "speedFormat": "{{factor}}×",
-    "speedValue": "{{factor}}倍速播放",
+    "speedValue": "相对于正常播放速度",
     "phase": {
       "takeoff": "起飞",
       "climb": "爬升",
@@ -148,22 +148,22 @@
       "sat": "美国境内的任务机组"
     },
     "delay": {
-      "los": "极短，不经卫星中转",
-      "sat": "约0.5到2秒"
+      "los": "极短。若经卫星中转，一上一下的路程约绕地球{{girths}}圈，要多花{{oneWay}}，一来一回则是{{roundTrip}}",
+      "sat": "约0.5到2秒。一上一下的路程约绕地球{{girths}}圈，光走一趟就要{{oneWay}}，一来一回要{{roundTrip}}"
     }
   },
   "flight": {
     "span": {
-      "predator": "“死神”20.1米，“捕食者”16.8米",
-      "cessna": "“死神”20.1米，塞斯纳11米"
+      "predator": "“死神”{{reaper}}米，“捕食者”{{other}}米，翼展是它的{{ratio}}倍",
+      "cessna": "“死神”{{reaper}}米，塞斯纳{{other}}米，翼展是它的{{ratio}}倍。展弦比{{aspect}}比{{otherAspect}}，细长程度是它的{{slender}}倍"
     },
     "weight": {
-      "predator": "“死神”4760千克，“捕食者”1020千克",
-      "cessna": "“死神”4760千克，塞斯纳1157千克"
+      "predator": "“死神”{{reaper}}千克，“捕食者”{{other}}千克，重量是它的{{ratio}}倍",
+      "cessna": "“死神”{{reaper}}千克，塞斯纳{{other}}千克，重量是它的{{ratio}}倍"
     },
     "engine": {
-      "predator": "“死神”900马力涡桨发动机，“捕食者”115马力活塞发动机",
-      "cessna": "“死神”涡桨发动机，塞斯纳活塞发动机"
+      "predator": "“死神”{{reaper}}马力涡桨发动机，“捕食者”{{other}}马力活塞发动机，功率是它的{{ratio}}倍",
+      "cessna": "“死神”{{reaper}}马力涡桨发动机，塞斯纳活塞发动机"
     }
   },
   "sensor": {

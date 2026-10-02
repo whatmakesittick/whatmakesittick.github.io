@@ -68,7 +68,7 @@
     "value": "{{time}}, {{phase}}",
     "clock": "T+{{clock}}",
     "speedFormat": "{{factor}}×",
-    "speedValue": "{{factor}} vezes a velocidade normal",
+    "speedValue": "em relação à velocidade normal",
     "phase": {
       "takeoff": "Decolagem",
       "climb": "Subida",
@@ -148,22 +148,22 @@
       "sat": "Equipe de missão nos EUA"
     },
     "delay": {
-      "los": "Muito curto, sem passar pelo satélite",
-      "sat": "Cerca de 0,5 a 2 s"
+      "los": "Muito curto. Uma subida e descida pelo satélite, {{girths}} volta ao redor da Terra, somaria {{oneWay}}, ou {{roundTrip}} na ida e na volta",
+      "sat": "Cerca de 0,5 a 2 s. Cada subida e descida equivale a {{girths}} volta ao redor da Terra, então só a luz leva {{oneWay}}, ou {{roundTrip}} na ida e na volta"
     }
   },
   "flight": {
     "span": {
-      "predator": "Reaper 20,1 m, Predator 16,8 m",
-      "cessna": "Reaper 20,1 m, Cessna 11 m"
+      "predator": "Reaper {{reaper}} m, Predator {{other}} m: {{ratio}} vezes a envergadura",
+      "cessna": "Reaper {{reaper}} m, Cessna {{other}} m: {{ratio}} vezes a envergadura. Alongamento {{aspect}} contra {{otherAspect}}: asa {{slender}} vezes mais esguia"
     },
     "weight": {
-      "predator": "Reaper 4.760 kg, Predator 1.020 kg",
-      "cessna": "Reaper 4.760 kg, Cessna 1.157 kg"
+      "predator": "Reaper {{reaper}} kg, Predator {{other}} kg: {{ratio}} vezes o peso",
+      "cessna": "Reaper {{reaper}} kg, Cessna {{other}} kg: {{ratio}} vezes o peso"
     },
     "engine": {
-      "predator": "Reaper com turbo-hélice de 900 cv, Predator com motor a pistão de 115 cv",
-      "cessna": "Reaper com turbo-hélice, Cessna com motor a pistão"
+      "predator": "Reaper com turbo-hélice de {{reaper}} cv, Predator com motor a pistão de {{other}} cv: {{ratio}} vezes a potência",
+      "cessna": "Reaper com turbo-hélice de {{reaper}} cv, Cessna com motor a pistão"
     }
   },
   "sensor": {

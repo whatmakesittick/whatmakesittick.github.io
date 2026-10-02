@@ -68,7 +68,7 @@
     "value": "{{time}}, {{phase}}",
     "clock": "T+{{clock}}",
     "speedFormat": "{{factor}}×",
-    "speedValue": "звичайна швидкість, помножена на {{factor}}",
+    "speedValue": "відносно звичайної швидкості",
     "phase": {
       "takeoff": "Зліт",
       "climb": "Набір висоти",
@@ -148,22 +148,22 @@
       "sat": "Основний екіпаж у США"
     },
     "delay": {
-      "los": "Дуже коротка, без супутника",
-      "sat": "Приблизно від 0,5 до 2 с"
+      "los": "Дуже коротка. Шлях через супутник, {{girths}} кола навколо Землі, додав би {{oneWay}}, а туди й назад {{roundTrip}}",
+      "sat": "Приблизно від 0,5 до 2 с. Кожен шлях через супутник становить {{girths}} кола навколо Землі, тож лише світлу треба {{oneWay}}, а туди й назад {{roundTrip}}"
     }
   },
   "flight": {
     "span": {
-      "predator": "Reaper 20,1 м, Predator 16,8 м",
-      "cessna": "Reaper 20,1 м, Cessna 11 м"
+      "predator": "Reaper {{reaper}} м, Predator {{other}} м: розмах у {{ratio}} раза більший",
+      "cessna": "Reaper {{reaper}} м, Cessna {{other}} м: розмах у {{ratio}} раза більший. Видовження {{aspect}} проти {{otherAspect}}: крило в {{slender}} раза стрункіше"
     },
     "weight": {
-      "predator": "Reaper 4 760 кг, Predator 1 020 кг",
-      "cessna": "Reaper 4 760 кг, Cessna 1 157 кг"
+      "predator": "Reaper {{reaper}} кг, Predator {{other}} кг: у {{ratio}} раза важчий",
+      "cessna": "Reaper {{reaper}} кг, Cessna {{other}} кг: у {{ratio}} раза важчий"
     },
     "engine": {
-      "predator": "Reaper турбогвинтовий на 900 к. с., Predator поршневий на 115 к. с.",
-      "cessna": "Reaper турбогвинтовий, Cessna поршневий"
+      "predator": "Reaper турбогвинтовий на {{reaper}} к. с., Predator поршневий на {{other}} к. с.: у {{ratio}} раза потужніший",
+      "cessna": "Reaper турбогвинтовий на {{reaper}} к. с., Cessna поршневий"
     }
   },
   "sensor": {

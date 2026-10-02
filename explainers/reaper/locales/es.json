@@ -68,7 +68,7 @@
     "value": "{{time}}, {{phase}}",
     "clock": "T+{{clock}}",
     "speedFormat": "{{factor}}×",
-    "speedValue": "{{factor}} veces la velocidad normal",
+    "speedValue": "respecto a la velocidad normal",
     "phase": {
       "takeoff": "Despegue",
       "climb": "Ascenso",
@@ -148,22 +148,22 @@
       "sat": "Tripulación de misión en EE. UU."
     },
     "delay": {
-      "los": "Muy corto, sin pasar por el satélite",
-      "sat": "Unos 0,5 a 2 s"
+      "los": "Muy corto. Un salto por satélite, {{girths}} vueltas a la Tierra, añadiría {{oneWay}}, o {{roundTrip}} de ida y vuelta",
+      "sat": "Unos 0,5 a 2 s. Cada salto equivale a {{girths}} vueltas a la Tierra, así que solo la luz tarda {{oneWay}}, o {{roundTrip}} de ida y vuelta"
     }
   },
   "flight": {
     "span": {
-      "predator": "Reaper 20,1 m, Predator 16,8 m",
-      "cessna": "Reaper 20,1 m, Cessna 11 m"
+      "predator": "Reaper {{reaper}} m, Predator {{other}} m: {{ratio}} veces la envergadura",
+      "cessna": "Reaper {{reaper}} m, Cessna {{other}} m: {{ratio}} veces la envergadura. Alargamiento {{aspect}} frente a {{otherAspect}}: ala {{slender}} veces más esbelta"
     },
     "weight": {
-      "predator": "Reaper 4.760 kg, Predator 1.020 kg",
-      "cessna": "Reaper 4.760 kg, Cessna 1.157 kg"
+      "predator": "Reaper {{reaper}} kg, Predator {{other}} kg: {{ratio}} veces el peso",
+      "cessna": "Reaper {{reaper}} kg, Cessna {{other}} kg: {{ratio}} veces el peso"
     },
     "engine": {
-      "predator": "Reaper con turbohélice de 900 CV, Predator con motor de pistón de 115 CV",
-      "cessna": "Reaper con turbohélice, Cessna con motor de pistón"
+      "predator": "Reaper con turbohélice de {{reaper}} CV, Predator con motor de pistón de {{other}} CV: {{ratio}} veces la potencia",
+      "cessna": "Reaper con turbohélice de {{reaper}} CV, Cessna con motor de pistón"
     }
   },
   "sensor": {

@@ -68,7 +68,7 @@
     "value": "{{time}}, {{phase}}",
     "clock": "T+{{clock}}",
     "speedFormat": "{{factor}}×",
-    "speedValue": "{{factor}} fois la vitesse de lecture normale",
+    "speedValue": "par rapport à la vitesse normale",
     "phase": {
       "takeoff": "Décollage",
       "climb": "Montée",
@@ -148,22 +148,22 @@
       "sat": "Équipage de mission aux États-Unis"
     },
     "delay": {
-      "los": "Très courte, sans passer par un satellite",
-      "sat": "Environ 0,5 à 2 s"
+      "los": "Très courte. Un trajet par satellite, {{girths}} fois le tour de la Terre, ajouterait {{oneWay}}, soit {{roundTrip}} aller et retour",
+      "sat": "Environ 0,5 à 2 s. Chaque trajet vaut {{girths}} fois le tour de la Terre, si bien que la lumière seule met {{oneWay}}, soit {{roundTrip}} aller et retour"
     }
   },
   "flight": {
     "span": {
-      "predator": "Reaper : 20,1 m, Predator : 16,8 m",
-      "cessna": "Reaper : 20,1 m, Cessna : 11 m"
+      "predator": "Reaper : {{reaper}} m, Predator : {{other}} m, soit {{ratio}} fois l’envergure",
+      "cessna": "Reaper : {{reaper}} m, Cessna : {{other}} m, soit {{ratio}} fois l’envergure. Allongement de {{aspect}} contre {{otherAspect}} : une aile {{slender}} fois plus élancée"
     },
     "weight": {
-      "predator": "Reaper : 4 760 kg, Predator : 1 020 kg",
-      "cessna": "Reaper : 4 760 kg, Cessna : 1 157 kg"
+      "predator": "Reaper : {{reaper}} kg, Predator : {{other}} kg, soit {{ratio}} fois le poids",
+      "cessna": "Reaper : {{reaper}} kg, Cessna : {{other}} kg, soit {{ratio}} fois le poids"
     },
     "engine": {
-      "predator": "Reaper : turbopropulseur de 900 ch, Predator : moteur à pistons de 115 ch",
-      "cessna": "Reaper : turbopropulseur, Cessna : moteur à pistons"
+      "predator": "Reaper : turbopropulseur de {{reaper}} ch, Predator : moteur à pistons de {{other}} ch, soit {{ratio}} fois la puissance",
+      "cessna": "Reaper : turbopropulseur de {{reaper}} ch, Cessna : moteur à pistons"
     }
   },
   "sensor": {

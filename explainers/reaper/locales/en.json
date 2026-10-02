@@ -68,7 +68,7 @@
     "value": "{{time}}, {{phase}}",
     "clock": "T+{{clock}}",
     "speedFormat": "{{factor}}×",
-    "speedValue": "{{factor}} times normal playback",
+    "speedValue": "compared with normal playback",
     "phase": {
       "takeoff": "Takeoff",
       "climb": "Climb",
@@ -148,22 +148,22 @@
       "sat": "Mission crew in the US"
     },
     "delay": {
-      "los": "Very short, no satellite hop",
-      "sat": "About 0.5 to 2 s"
+      "los": "Very short. A satellite hop, {{girths}} times around the Earth, would add {{oneWay}}, or {{roundTrip}} there and back",
+      "sat": "About 0.5 to 2 s. Each hop is {{girths}} times around the Earth, so light alone needs {{oneWay}}, or {{roundTrip}} there and back"
     }
   },
   "flight": {
     "span": {
-      "predator": "Reaper 20.1 m, Predator 16.8 m",
-      "cessna": "Reaper 20.1 m, Cessna 11 m"
+      "predator": "Reaper {{reaper}} m, Predator {{other}} m: {{ratio}} times the span",
+      "cessna": "Reaper {{reaper}} m, Cessna {{other}} m: {{ratio}} times the span. Aspect ratio {{aspect}} against {{otherAspect}}: {{slender}} times as slender"
     },
     "weight": {
-      "predator": "Reaper 4,760 kg, Predator 1,020 kg",
-      "cessna": "Reaper 4,760 kg, Cessna 1,157 kg"
+      "predator": "Reaper {{reaper}} kg, Predator {{other}} kg: {{ratio}} times the weight",
+      "cessna": "Reaper {{reaper}} kg, Cessna {{other}} kg: {{ratio}} times the weight"
     },
     "engine": {
-      "predator": "Reaper 900 hp turboprop, Predator 115 hp piston engine",
-      "cessna": "Reaper turboprop, Cessna piston engine"
+      "predator": "Reaper {{reaper}} hp turboprop, Predator {{other}} hp piston engine: {{ratio}} times the power",
+      "cessna": "Reaper {{reaper}} hp turboprop, Cessna piston engine"
     }
   },
   "sensor": {

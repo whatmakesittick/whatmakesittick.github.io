@@ -68,7 +68,7 @@
     "value": "{{time}}, {{phase}}",
     "clock": "T+{{clock}}",
     "speedFormat": "{{factor}}×",
-    "speedValue": "Wiedergabe mit {{factor}}-facher Geschwindigkeit",
+    "speedValue": "im Vergleich zur normalen Wiedergabe",
     "phase": {
       "takeoff": "Start",
       "climb": "Steigflug",
@@ -148,22 +148,22 @@
       "sat": "Einsatzcrew in den USA"
     },
     "delay": {
-      "los": "Sehr kurz, kein Satellit dazwischen",
-      "sat": "Etwa 0,5 bis 2 s"
+      "los": "Sehr kurz. Ein Weg über den Satelliten, {{girths}}-mal um die Erde, würde {{oneWay}} dauern, hin und zurück {{roundTrip}}",
+      "sat": "Etwa 0,5 bis 2 s. Jeder Weg führt {{girths}}-mal um die Erde; allein das Licht braucht dafür {{oneWay}}, hin und zurück {{roundTrip}}"
     }
   },
   "flight": {
     "span": {
-      "predator": "Reaper 20,1 m, Predator 16,8 m",
-      "cessna": "Reaper 20,1 m, Cessna 11 m"
+      "predator": "Reaper {{reaper}} m, Predator {{other}} m: {{ratio}}-fache Spannweite",
+      "cessna": "Reaper {{reaper}} m, Cessna {{other}} m: {{ratio}}-fache Spannweite. Streckung {{aspect}} gegen {{otherAspect}}: {{slender}}-mal so schlank"
     },
     "weight": {
-      "predator": "Reaper 4.760 kg, Predator 1.020 kg",
-      "cessna": "Reaper 4.760 kg, Cessna 1.157 kg"
+      "predator": "Reaper {{reaper}} kg, Predator {{other}} kg: {{ratio}}-faches Gewicht",
+      "cessna": "Reaper {{reaper}} kg, Cessna {{other}} kg: {{ratio}}-faches Gewicht"
     },
     "engine": {
-      "predator": "Reaper mit 900-PS-Turboprop, Predator mit 115-PS-Kolbenmotor",
-      "cessna": "Reaper mit Turboprop, Cessna mit Kolbenmotor"
+      "predator": "Reaper mit {{reaper}}-PS-Turboprop, Predator mit {{other}}-PS-Kolbenmotor: {{ratio}}-fache Leistung",
+      "cessna": "Reaper mit {{reaper}}-PS-Turboprop, Cessna mit Kolbenmotor"
     }
   },
   "sensor": {
