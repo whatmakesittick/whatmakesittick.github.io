@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>How a Reaper drone flies a mission: social card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap"
+    />
+    <style>
+      :root {
+        --background: #0b0d10;
+        --text: #e6e9ee;
+        --prose: #c3c9d2;
+        --muted: #8b929c;
+        --accent: #f5a524;
+        --takeoff: #ffb347;
+        --climb: #ffd24c;
+        --handover: #5fa8ff;
+        --loiter: #6fd38a;
+        --strike: #ff5d4c;
+        --return: #b48cff;
+      }
+
+      body {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        margin: 0;
+        overflow: hidden;
+        color: var(--text);
+        background: var(--background);
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .shot {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 640px;
+        height: 630px;
+        overflow: hidden;
+      }
+
+      .shot img {
+        position: absolute;
+        top: -30px;
+        left: -60px;
+        width: 1000px;
+      }
+
+      .shot::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, var(--background), transparent 120px);
+      }
+
+      .copy {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 72px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 500px;
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin: 0 0 26px;
+        color: var(--accent);
+        font-size: 24px;
+        font-weight: 500;
+      }
+
+      .eyebrow img {
+        width: 44px;
+        height: 44px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 56px;
+        font-weight: 700;
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+      }
+
+      .subtitle {
+        margin: 26px 0 0;
+        color: var(--prose);
+        font-size: 28px;
+        line-height: 1.4;
+      }
+
+      .topics {
+        display: flex;
+        gap: 6px;
+        margin: 40px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .topics li {
+        flex: 1;
+        padding-top: 12px;
+        border-top: 5px solid var(--tone);
+        color: var(--muted);
+        font-size: 17px;
+        font-weight: 500;
+      }
+
+      .url {
+        position: absolute;
+        bottom: 40px;
+        left: 72px;
+        margin: 0;
+        color: var(--muted);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 20px;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shot">
+      <img src="../../explainers/reaper/public/cover.webp" alt="" />
+    </div>
+    <main class="copy">
+      <p class="eyebrow">
+        <img src="../../public/favicon.svg" alt="" />
+        Reaper drone
+      </p>
+      <h1>How a Reaper drone flies a mission</h1>
+      <p class="subtitle">
+        Nobody on board: a crew far away flies it through a satellite and keeps it over one spot for
+        hours.
+      </p>
+      <ol class="topics">
+        <li style="--tone: var(--takeoff)">Mission</li>
+        <li style="--tone: var(--climb)">Flight</li>
+        <li style="--tone: var(--handover)">Link</li>
+        <li style="--tone: var(--loiter)">Sensor</li>
+        <li style="--tone: var(--strike)">Strike</li>
+        <li style="--tone: var(--return)">Endurance</li>
+      </ol>
+    </main>
+    <p class="url">whatmakesittick.github.io/reaper</p>
+    <script>
+      Promise.all([
+        document.fonts.ready,
+        ...[...document.images].map((image) => image.decode()),
+      ]).then(() => document.body.setAttribute('data-ready', ''));
+    </script>
+  </body>
+</html>

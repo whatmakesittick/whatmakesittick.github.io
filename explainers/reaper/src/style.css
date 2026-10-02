@@ -1,0 +1,163 @@
+:root {
+  --takeoff: #ffb347;
+  --climb: #ffd24c;
+  --handover: #5fa8ff;
+  --loiter: #6fd38a;
+  --strike: #ff5d4c;
+  --return: #b48cff;
+  --fuel: #f5a524;
+  --sat-link: #5fa8ff;
+  --los-link: #6fd38a;
+  --laser: #ff4d4d;
+  --infrared: #ff9a3c;
+  --daylight: #f4f7fb;
+  --airframe: #9da4ad;
+}
+
+.section-readouts,
+.range-widget:has([data-control='target-range']),
+.range-widget:has([data-control='area-distance']) {
+  --readout-min-width: 8rem;
+}
+
+.section-readouts {
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.section-readouts:has([data-readout='overview-link']),
+.range-widget:has([data-control='area-distance']) .range-widget__readouts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.section-readouts > div:has([data-readout='link-delay']) {
+  grid-column: 1 / -1;
+}
+
+.section-readouts:has([data-readout='flight-span']),
+.section-readouts:has([data-readout='strike-missile']) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.range-widget:has([data-control='target-range']) .range-widget__readouts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+[data-control='target-range'] {
+  --range-color: var(--strike);
+}
+
+[data-control='area-distance'] {
+  --range-color: var(--loiter);
+}
+
+[data-readout='overview-fuel'] {
+  color: var(--fuel);
+}
+
+[data-readout='strike-time'],
+[data-readout='strike-laser'] {
+  color: var(--laser);
+}
+
+.signal-path__title {
+  margin: 24px 0 8px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.signal-path {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+  counter-reset: signal-step;
+}
+
+.signal-path li {
+  position: relative;
+  padding: 10px 14px 10px 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--sat-link) 8%, transparent),
+    transparent
+  );
+  counter-increment: signal-step;
+}
+
+.signal-path li::before {
+  content: counter(signal-step);
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  width: 20px;
+  color: var(--sat-link);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-align: center;
+}
+
+.chip[data-action='moment'][data-value='liftoff'] {
+  --tone: var(--takeoff);
+}
+
+.chip[data-action='moment'][data-value='handover'] {
+  --tone: var(--handover);
+}
+
+.chip[data-action='moment'][data-value='onStation'] {
+  --tone: var(--loiter);
+}
+
+.chip[data-action='moment'][data-value='launch'],
+.chip[data-action='moment'][data-value='impact'] {
+  --tone: var(--strike);
+}
+
+.chip[data-action='moment'][data-value='handback'],
+.chip[data-action='moment'][data-value='touchdown'] {
+  --tone: var(--return);
+}
+
+.chip[data-action='comparison'] {
+  --tone: var(--airframe);
+}
+
+.chip[data-action='sensorMode'][data-value='day'] {
+  --tone: var(--daylight);
+}
+
+.chip[data-action='sensorMode'][data-value='infrared'] {
+  --tone: var(--infrared);
+}
+
+.chip[data-action='sensorMode'][data-value='laser'] {
+  --tone: var(--laser);
+}
+
+.chip[data-action='load'][data-value='clean'] {
+  --tone: var(--airframe);
+}
+
+.chip[data-action='load'][data-value='armed'] {
+  --tone: var(--strike);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action='moment'],
+  .chip[data-action='comparison'],
+  .chip[data-action='sensorMode'],
+  .chip[data-action='load'] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-readouts:has([data-readout='overview-link']),
+  .range-widget:has([data-control='area-distance']) .range-widget__readouts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

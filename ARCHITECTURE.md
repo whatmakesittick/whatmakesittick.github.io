@@ -85,8 +85,9 @@ The explainer imports the toolkit through the `@core/*` alias, which resolves to
 `src/core/*`. Explainers carry no tooling of their own; the repository's lint,
 tests and build cover them. A helper that a second explainer needs moves to core
 instead of being copied: `@core/math` has `clamp`, `lerp`, `smoothstep`,
-`wrapAngle`, `FULL_TURN` and the degree conversions, and `@core/scene` has the
-shared scene helpers listed under "Scene toolkit". The package keeps its own
+`wrapAngle`, `FULL_TURN` and the degree conversions, `@core/path` has `Route`, `line`,
+`arc`, `poseAlong` and `rampedShare` for a ground track of lines and arcs, and `@core/scene`
+has the shared scene helpers listed under "Scene toolkit". The package keeps its own
 data: dimensions, finishes, segment counts and part geometry.
 
 ## Contract

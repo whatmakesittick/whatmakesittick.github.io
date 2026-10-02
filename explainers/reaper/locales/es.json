@@ -1,0 +1,258 @@
+{
+  "meta": {
+    "title": "Cómo vuela un dron Reaper en una misión",
+    "eyebrow": "Dron Reaper",
+    "tagline": "Nadie va a bordo: una tripulación lo pilota desde muy lejos, vía satélite, y lo mantiene horas sobre el mismo punto.",
+    "description": "Sigue en 3D a un dron MQ-9 Reaper en misión armada: el ala larga, el enlace por satélite y su retraso, la bola de sensores y un ataque guiado por láser.",
+    "summary": "El ala larga, el enlace por satélite y su retraso, la bola de sensores, el misil guiado por láser y el combustible que le permite pasar horas sobre un mismo punto.",
+    "socialAlt": "Un dron MQ-9 Reaper inclinado en un viraje sobre un desierto al atardecer, con un haz que sube hacia el satélite desde la joroba de su morro, junto al título «Cómo vuela un dron Reaper en una misión»"
+  },
+  "stage": {
+    "label": "Modelo interactivo del dron Reaper",
+    "gauge": "Datos de vuelo en tiempo real"
+  },
+  "controls": {
+    "label": "Controles del Reaper",
+    "views": {
+      "cutaway": {
+        "name": "Vista en corte",
+        "short": "Corte",
+        "hint": "Vista en corte (C)"
+      },
+      "links": {
+        "name": "Enlaces de radio",
+        "short": "Enlaces",
+        "hint": "Enlaces de radio (K)"
+      },
+      "track": {
+        "name": "Ruta de vuelo",
+        "short": "Ruta",
+        "hint": "Ruta de vuelo (T)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      }
+    },
+    "load": {
+      "label": "Armamento"
+    },
+    "loadOptions": {
+      "clean": "Sin armas",
+      "armed": "Armado"
+    },
+    "momentOptions": {
+      "liftoff": "Despegue",
+      "handover": "Relevo: tripulación de misión",
+      "onStation": "Sobre la zona",
+      "launch": "Lanzamiento",
+      "impact": "Impacto",
+      "handback": "Relevo: tripulación del aeródromo",
+      "touchdown": "Aterrizaje"
+    },
+    "comparisonOptions": {
+      "predator": "Predator",
+      "cessna": "Cessna 172"
+    },
+    "sensorOptions": {
+      "day": "Luz de día",
+      "infrared": "Infrarrojo",
+      "laser": "Láser"
+    }
+  },
+  "timeline": {
+    "label": "Tiempo de misión",
+    "phases": "Saltar a una parte de la misión",
+    "speed": "Velocidad de reproducción",
+    "value": "{{time}}, {{phase}}",
+    "clock": "T+{{clock}}",
+    "speedFormat": "{{factor}}×",
+    "speedValue": "respecto a la velocidad normal",
+    "phase": {
+      "takeoff": "Despegue",
+      "climb": "Ascenso",
+      "handover": "Relevo",
+      "loiter": "Sobre la zona",
+      "strike": "Ataque",
+      "return": "Regreso"
+    },
+    "during": {
+      "takeoff": "la tripulación del aeródromo hace rodar el Reaper por la pista y lo pone en el aire",
+      "climb": "el Reaper sube hacia su altura de trabajo, de unos 7,6 km",
+      "handover": "la tripulación de misión toma el control vía satélite y lo lleva hasta la zona",
+      "loiter": "el Reaper da vueltas sobre la zona mientras la tripulación vigila el objetivo",
+      "strike": "un Hellfire se dirige al punto láser que la tripulación mantiene sobre el objetivo",
+      "return": "el Reaper vuelve a la base y la tripulación del aeródromo lo hace aterrizar"
+    },
+    "jump": {
+      "takeoff": "Saltar al despegue",
+      "climb": "Saltar al ascenso",
+      "handover": "Saltar al relevo",
+      "loiter": "Saltar al tiempo sobre la zona",
+      "strike": "Saltar al ataque",
+      "return": "Saltar al vuelo de regreso"
+    }
+  },
+  "readouts": {
+    "clock": "Reloj de misión",
+    "altitude": "Altitud",
+    "airspeed": "Velocidad",
+    "fuel": "Combustible"
+  },
+  "units": {
+    "km": "{{value}} km",
+    "kmh": "{{value}} km/h",
+    "altitude": "{{m}} m, {{ft}} pies",
+    "kg": "{{value}} kg",
+    "fuel": "{{kg}} kg, {{share}} %",
+    "hours": "{{value}} h",
+    "hoursMinutes": "{{hours}} h {{minutes}} min",
+    "seconds": "{{value}} s",
+    "secondsRange": "de {{from}} a {{to}} s",
+    "percent": "{{value}} %"
+  },
+  "parts": {
+    "fuselage": "Fuselaje",
+    "wing": "Ala",
+    "vTail": "Cola en V",
+    "ventralFin": "Aleta ventral",
+    "noseHump": "Joroba del morro",
+    "satelliteDish": "Antena parabólica",
+    "sensorBall": "Bola de sensores",
+    "fuelTank": "Depósito de combustible",
+    "engine": "Motor turbohélice",
+    "propeller": "Hélice propulsora",
+    "landingGear": "Tren de aterrizaje",
+    "pylons": "Pilones",
+    "hellfire": "Misiles Hellfire",
+    "bombs": "Bombas GBU-12",
+    "runway": "Pista",
+    "groundStation": "Estación de control",
+    "losAntenna": "Antena del aeródromo",
+    "losLink": "Enlace de línea de vista",
+    "satLink": "Enlace por satélite",
+    "satellite": "Satélite",
+    "sensorCone": "Vista de la cámara",
+    "laserBeam": "Haz láser",
+    "missile": "Hellfire en vuelo",
+    "target": "Objetivo"
+  },
+  "link": {
+    "mode": {
+      "los": "Línea de vista, banda C",
+      "sat": "Satélite, banda Ku"
+    },
+    "crew": {
+      "los": "Tripulación del aeródromo",
+      "sat": "Tripulación de misión en EE. UU."
+    },
+    "delay": {
+      "los": "Muy corto. Un salto por satélite equivale a {{girths}} vueltas a la Tierra y añadiría {{oneWay}}, o {{roundTrip}} de ida y vuelta",
+      "sat": "Entre 0,5 y 2 s, aproximadamente. Cada salto equivale a {{girths}} vueltas a la Tierra, así que solo la luz ya tarda {{oneWay}}, o {{roundTrip}} de ida y vuelta"
+    }
+  },
+  "flight": {
+    "span": {
+      "predator": "Reaper {{reaper}} m, Predator {{other}} m: {{ratio}} veces la envergadura",
+      "cessna": "Reaper {{reaper}} m, Cessna {{other}} m: {{ratio}} veces la envergadura. Alargamiento {{aspect}} frente a {{otherAspect}}: un ala {{slender}} veces más esbelta"
+    },
+    "weight": {
+      "predator": "Reaper {{reaper}} kg, Predator {{other}} kg: {{ratio}} veces el peso",
+      "cessna": "Reaper {{reaper}} kg, Cessna {{other}} kg: {{ratio}} veces el peso"
+    },
+    "engine": {
+      "predator": "Reaper con turbohélice de {{reaper}} CV, Predator con motor de pistón de {{other}} CV: {{ratio}} veces la potencia",
+      "cessna": "Reaper con turbohélice de {{reaper}} CV, Cessna con motor de pistón"
+    }
+  },
+  "sensor": {
+    "shows": {
+      "day": "Imagen en color, con luz de día",
+      "infrared": "Calor, de día o de noche",
+      "laser": "Un punto codificado, invisible a simple vista"
+    },
+    "aim": {
+      "ahead": "Hacia delante y abajo",
+      "target": "Fija en el objetivo"
+    }
+  },
+  "strike": {
+    "stage": {
+      "none": "Sin armas a bordo",
+      "armed": "Esperando en su lanzador",
+      "flying": "Rumbo al punto láser",
+      "hit": "Impacto",
+      "done": "Ataque terminado"
+    }
+  },
+  "sections": {
+    "overview": {
+      "title": "Nueve horas y nadie a bordo",
+      "p1": "Lo que tienes delante es un <strong>MQ-9 Reaper</strong>, un dron fabricado por General Atomics, una empresa de California. La Fuerza Aérea de Estados Unidos lo tiene en servicio desde 2007. Es un avión grande: de una punta del ala a la otra mide 20 m. Al despegar puede pesar unos 4.760 kg, casi lo mismo que dos coches y medio. Y dentro no va nadie. Lo pilota una tripulación desde una estación de control en tierra, a menudo a miles de kilómetros. Su tarea principal es vigilar una zona durante horas. Pero también lleva armas, así que la misma tripulación que encuentra un objetivo puede atacarlo. Por eso lo han llamado «cazador-asesino».",
+      "p2": "El modelo sigue de principio a fin una <strong>misión armada</strong>. Dura unas nueve horas y cuarto, desde que el avión empieza a rodar para despegar hasta que se detiene tras aterrizar. Una tripulación del aeródromo se encarga del despegue y del comienzo del ascenso. Media hora después, otra tripulación, muy lejos de allí, toma el control vía satélite. El Reaper pasa seis horas y media dando vueltas sobre una zona. Allí dispara un misil Hellfire. Después vuelve a la base, y la tripulación del aeródromo lo hace aterrizar.",
+      "p3": "Para que todo esto quepa en tu pantalla, el modelo se toma algunas licencias. Encoge todas las distancias, así que el vuelo entero cabe en unos pocos kilómetros de desierto. Sobre la zona solo da dos vueltas y media, cuando un Reaper de verdad daría muchas más. El avión, en cambio, está dibujado veinte veces más grande de lo que le correspondería. Si no, no podrías verlo desde 7,6 km de altura. Algunas cifras las ha elegido el propio modelo y no salen de fuentes publicadas: la duración de la misión, la hora de cada relevo, las velocidades de despegue, ascenso y aterrizaje y el combustible gastado.",
+      "p4": "El reloj de arriba marca el tiempo de misión, contado desde que el avión empieza a rodar para despegar. Así, T+1:30:00 quiere decir que la misión lleva hora y media. A velocidad normal, el vuelo completo dura en pantalla un minuto y medio, más o menos. Arrastra la línea de tiempo hasta cualquier momento, o toca un botón de abajo para saltar a él. Mientras avanzas, fíjate en los datos: el enlace de radio cambia cuando las tripulaciones se relevan, y el combustible baja hora a hora. El botón de <strong>enlaces de radio</strong> muestra los haces. El de <strong>ruta de vuelo</strong> dibuja el rastro que va dejando el avión y el círculo que traza sobre la zona.",
+      "link": "Enlace de radio",
+      "fuel": "Combustible restante",
+      "done": "Avance de la misión"
+    },
+    "flight": {
+      "title": "Hecho para aguantar en el aire, no para correr",
+      "p1": "Empieza por el <strong>ala</strong>. Es larga y estrecha, como la que esperarías ver en un planeador. Los ingenieros miden esa forma con el alargamiento: cuántas veces es el ala más larga que ancha. El Reaper tiene un alargamiento de unos 17, más del doble del 7,5 de una avioneta Cessna 172. Un ala larga y estrecha gasta menos energía en sostener el avión. Y eso importa cuando quieres pasar muchas horas en el aire.",
+      "p2": "Pero el Reaper no es un planeador. Cada metro cuadrado de su ala sostiene unos 200 kg, casi el triple que en una Cessna. Para mantenerse en el aire con esa carga, tiene que volar bastante rápido, y eso exige un motor potente. Lleva un <strong>turbohélice</strong>: una pequeña turbina de gas que hace girar una hélice a través de una caja de engranajes. El motor, de Honeywell, da 900 caballos. Mueve una hélice de tres palas situada en la cola, que empuja el avión desde atrás. La vista en corte te deja ver el motor y el depósito de combustible.",
+      "p3": "¿Por qué una hélice y no un reactor? Una hélice da un empujón pequeño a mucho aire, y esa es la forma más económica de volar despacio. Y el Reaper no tiene prisa: en crucero va a unos 370 km/h, y sobre una zona da vueltas a unos 300 km/h. La turbina tiene otra ventaja: conserva su potencia en el aire poco denso de las alturas. Por eso el Reaper puede subir mucho más que el antiguo Predator, cuyo motor de pistón no le permitía pasar de unos 7,6 km.",
+      "p4": "El Reaper es una máquina mucho más grande que el Predator: pesa unas 4,7 veces lo que él y tiene casi ocho veces su potencia. Las colas también son distintas. El Reaper lleva dos aletas que apuntan hacia arriba, en forma de V, y una pequeña aleta que apunta hacia abajo. Vista desde atrás, su cola parece una Y. La V del Predator, en cambio, apuntaba hacia abajo. Alrededor del 38 % del peso del Reaper al despegar es combustible, unos 1.800 kg, y ahí está el verdadero secreto de sus vuelos tan largos. Toca los botones para ponerlo junto al Predator o junto a una Cessna 172.",
+      "span": "Envergadura",
+      "weight": "Peso al despegar",
+      "engine": "Motor"
+    },
+    "link": {
+      "title": "Pilotado desde muy lejos, a través del espacio",
+      "p1": "Sin nadie a bordo, todo depende de la radio. Cerca del aeródromo, el Reaper usa un enlace directo de <strong>línea de vista</strong>: la antena de tierra tiene que poder ver el avión. Este enlace funciona en la banda C, una de las franjas de frecuencias de radio. Más lejos, la curvatura de la Tierra se pone en medio. Por eso, durante la misión, el Reaper pasa a un <strong>enlace por satélite</strong> en la banda Ku, otra franja de frecuencias. Su antena parabólica va dentro de la joroba que tiene encima del morro.",
+      "p2": "Dos tripulaciones se reparten el trabajo. En el aeródromo, una pequeña tripulación de <strong>lanzamiento y recuperación</strong> se ocupa del despegue y del aterrizaje por el enlace directo. Todo lo demás lo pilota la <strong>tripulación de misión</strong>, desde una estación de control en Estados Unidos, por ejemplo en la base aérea de Creech, en Nevada. En el modelo, la tripulación de misión toma el control media hora después del despegue. La del aeródromo vuelve a tomar el control en T+8:55:00, un cuarto de hora antes de aterrizar.",
+      "p3": "Una orden enviada desde Nevada hace un largo viaje. Primero recorre cables de fibra óptica hasta una estación de retransmisión, que la envía por radio a un satélite. Un tribunal alemán reconstruyó una de estas rutas. En los vuelos sobre Yemen, los datos viajaban por cable hasta la base aérea de Ramstein, en Alemania, y desde allí subían al satélite. El modelo dibuja el satélite cerca, pero el de verdad está a 35.786 km sobre el ecuador. Subir hasta él y volver a bajar equivale a unas 1,8 vueltas a la Tierra. Incluso a la velocidad de la luz, ese viaje dura alrededor de un cuarto de segundo.",
+      "p4": "La orden necesita uno de esos viajes para llegar al avión, y las imágenes, otro para volver. En total, alrededor de medio segundo. Si sumas los cables y los equipos del camino, el piloto ve el efecto de cada movimiento entre medio segundo y dos segundos después, aproximadamente. Por eso la tripulación vuela buena parte de la misión con el piloto automático. Si el enlace se corta, el avión sigue una ruta fijada de antemano hasta un lugar donde puedan recuperarlo. El reparto entre dos tripulaciones que ves aquí es el clásico, y sigue siendo habitual. Pero desde 2018 el Reaper también puede aterrizar de forma automática. Y según la Fuerza Aérea, los aterrizajes controlados por satélite se están convirtiendo en lo normal.",
+      "mode": "Enlace de radio",
+      "crew": "Quién lo pilota",
+      "delay": "Retraso que nota el piloto",
+      "path": "Cómo llega una orden al avión",
+      "step1": "<strong>Estación de control</strong>: el piloto mueve la palanca, por ejemplo en Creech, Nevada.",
+      "step2": "<strong>Cable</strong>: la orden viaja por líneas de fibra óptica en tierra.",
+      "step3": "<strong>Estación de retransmisión</strong>: una estación como la de Ramstein, en Alemania, la sube por radio al satélite.",
+      "step4": "<strong>Satélite</strong>: a 35.786 km sobre el ecuador, devuelve la señal hacia la Tierra.",
+      "step5": "<strong>Reaper</strong>: la antena de la joroba del morro la recibe, y las imágenes vuelven por el mismo camino."
+    },
+    "sensor": {
+      "title": "Una bola de sensores que ve en la oscuridad",
+      "p1": "Bajo el morro cuelga la <strong>bola de sensores</strong>, de unos 56 cm de diámetro. El módulo de sensores que lleva dentro pesa unos 104 kg. La bola gira y se inclina, así que la tripulación puede tener sus cámaras clavadas en un punto mientras el avión da vueltas. De camino a la zona, mira hacia delante y hacia abajo. Ya sobre la zona, se queda fija en el objetivo, como indica el dato de abajo.",
+      "p2": "Dentro lleva varios ojos. Las cámaras de día graban en color y en blanco y negro. Una cámara <strong>infrarroja</strong> ve el calor en vez de la luz, así que los motores calientes y las personas destacan incluso de noche. Y luego están las herramientas láser: un telémetro que mide distancias, un iluminador que alumbra la escena y un designador. Toca los botones para pasar de la vista de día a la infrarroja o al láser.",
+      "p3": "En un ataque, el láser que importa es el <strong>designador</strong>, que marca el objetivo para un arma guiada. Su luz tiene una longitud de onda de 1.064 nm, en el infrarrojo, así que ningún ojo puede verla. La línea brillante del modelo está dibujada solo para que puedas seguirla. La luz sale en pulsos cortos que siguen un código. El arma está programada con el mismo código, así que solo se guía hacia su propio punto.",
+      "p4": "Las cámaras no ven a través de las nubes, pero el radar sí. El <strong>radar Lynx</strong>, integrado en el avión, toma imágenes detalladas del suelo a través de nubes y lluvia. También detecta lo que se mueve. En la estación de control, el piloto lleva los mandos y el <strong>operador de sensores</strong> maneja la bola y los láseres. A menudo hay un tercer miembro de la tripulación, un coordinador de inteligencia, que los ayuda a entender lo que ven. En una misión tan larga como esta, tripulaciones descansadas toman el relevo varias veces.",
+      "shows": "Qué muestra",
+      "aim": "Hacia dónde mira"
+    },
+    "strike": {
+      "title": "Un misil que sigue un punto invisible",
+      "p1": "Las armas cuelgan de los <strong>pilones</strong>, unos soportes que van bajo las alas. El modelo lleva una carga clásica. Hay cuatro misiles <strong>Hellfire</strong> en lanzadores dobles y dos bombas GBU-12 más cerca del fuselaje, donde los pilones aguantan más peso. Un Hellfire mide unos 1,6 m y pesa unos 45 kg. Desde una actualización de software de 2020, un Reaper puede llevar hasta ocho.",
+      "p2": "Un motor cohete de combustible sólido impulsa el Hellfire, que puede alcanzar un objetivo a unos 8 km. Se guía por <strong>láser semiactivo</strong>: el misil no lleva un láser propio. En la punta tiene un buscador, un sensor que detecta la luz láser que rebota en el objetivo. Esa luz sale del designador, que el operador de sensores mantiene apuntado al punto. El buscador puede fijar el punto antes del lanzamiento o encontrarlo ya en el aire.",
+      "p3": "Así que la tripulación no puede disparar y desentenderse: el láser tiene que seguir sobre el objetivo hasta el impacto. Desde la altura del Reaper, un vuelo típico dura entre 20 y 30 segundos, aproximadamente. El control deslizante marca la distancia que recorre el misil. Empieza en 8 km, porque el Reaper ya vuela a 7,6 km de altura. Arrástralo para probar con un objetivo más lejano y verás cómo crecen el tiempo de vuelo y el tiempo con el láser encendido. El modelo los muestra como un intervalo, porque las fuentes no coinciden en la velocidad de un Hellfire.",
+      "p4": "Además de misiles, el Reaper puede lanzar bombas. La GBU-12 también busca un punto láser, mientras que la GBU-38, conocida como JDAM, se orienta con GPS. En el modelo, el objetivo es un recinto ficticio. El ataque solo ocupa unos segundos de una misión muy larga, así que la línea de tiempo les reserva una franja ancha para ellos solos. Toca los botones para saltar al lanzamiento o al impacto.",
+      "rangeLabel": "Distancia que recorre el misil",
+      "time": "Tiempo de vuelo del misil",
+      "laser": "Tiempo con el láser encendido",
+      "missile": "Misil"
+    },
+    "endurance": {
+      "title": "Más de un día en el aire",
+      "p1": "El verdadero punto fuerte del Reaper es cuánto aguanta en el aire. Sin armas puede volar unas 27 horas seguidas, más que el vuelo comercial más largo. Totalmente armado, aguanta unas 14 horas. No puede llevar a la vez el depósito lleno y la carga completa de armas, porque juntos pesarían más de lo permitido para despegar. Por eso la tripulación cambia combustible por armas. Toca los botones para comparar: sin armas, el Reaper hace la misma misión, pero sin el ataque.",
+      "p2": "En una misión suele volar a unos 7,6 km, alrededor de 25.000 pies. Podría subir más, hasta unos 15 km, aunque las fuentes no coinciden en su altura máxima exacta. Sobre la zona da vueltas despacio, con el motor a poca potencia, y así el combustible le dura más. La misión armada del modelo, de unas nueve horas y cuarto, cabe con holgura en esas 14 horas.",
+      "p3": "La distancia se come esas horas. Cada hora de viaje hasta la zona, y cada hora de vuelta, es una hora menos vigilando. Arrastra el control deslizante para probar con una zona más lejana. El modelo supone un crucero de unos 370 km/h en cada sentido y guarda una hora de combustible de reserva. Después te muestra cuánto tiempo le queda sobre la zona.",
+      "p4": "Un solo avión no puede vigilar un punto día y noche sin parar. Para una patrulla sin pausas, lo que la Fuerza Aérea llama una línea de combate, suelen hacer falta cuatro aviones y unas 200 personas. Las tripulaciones se turnan en la estación de control, y los aviones, sobre la zona. Sin embargo, la flota se está reduciendo. La Fuerza Aérea de Estados Unidos tenía 351 Reaper en 2022 y 135 en mayo de 2026, y la línea de producción ya ha cerrado.",
+      "distanceLabel": "Distancia a la zona",
+      "hours": "Tiempo en el aire",
+      "transit": "Trayecto en cada sentido",
+      "station": "Tiempo sobre la zona"
+    }
+  }
+}

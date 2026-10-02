@@ -1,0 +1,258 @@
+{
+  "meta": {
+    "title": "How a Reaper drone flies a mission",
+    "eyebrow": "Reaper drone",
+    "tagline": "Nobody on board: a crew far away flies it through a satellite and keeps it over one spot for hours.",
+    "description": "Follow an MQ-9 Reaper drone in 3D through one armed mission: the long wing, the satellite link and its delay, the camera ball and a laser-guided strike.",
+    "summary": "The long wing, the satellite link and its delay, the camera ball, the laser-guided missile, and the fuel that buys hours over one spot.",
+    "socialAlt": "An MQ-9 Reaper drone banking over a desert at dusk, a satellite beam rising from the hump on its nose, beside the title How a Reaper drone flies a mission"
+  },
+  "stage": {
+    "label": "Interactive Reaper drone model",
+    "gauge": "Live flight readings"
+  },
+  "controls": {
+    "label": "Reaper controls",
+    "views": {
+      "cutaway": {
+        "name": "Cutaway",
+        "short": "Cutaway",
+        "hint": "Cutaway (C)"
+      },
+      "links": {
+        "name": "Radio links",
+        "short": "Links",
+        "hint": "Radio links (K)"
+      },
+      "track": {
+        "name": "Flight track",
+        "short": "Track",
+        "hint": "Flight track (T)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      }
+    },
+    "load": {
+      "label": "Weapons"
+    },
+    "loadOptions": {
+      "clean": "Unarmed",
+      "armed": "Armed"
+    },
+    "momentOptions": {
+      "liftoff": "Lift-off",
+      "handover": "Mission crew takes over",
+      "onStation": "Over the area",
+      "launch": "Launch",
+      "impact": "Impact",
+      "handback": "Airfield crew takes over",
+      "touchdown": "Touchdown"
+    },
+    "comparisonOptions": {
+      "predator": "Predator",
+      "cessna": "Cessna 172"
+    },
+    "sensorOptions": {
+      "day": "Daylight",
+      "infrared": "Infrared",
+      "laser": "Laser"
+    }
+  },
+  "timeline": {
+    "label": "Mission time",
+    "phases": "Jump to a part of the mission",
+    "speed": "Playback speed",
+    "value": "{{time}}, {{phase}}",
+    "clock": "T+{{clock}}",
+    "speedFormat": "{{factor}}×",
+    "speedValue": "compared with normal playback",
+    "phase": {
+      "takeoff": "Takeoff",
+      "climb": "Climb",
+      "handover": "Handover",
+      "loiter": "Over the area",
+      "strike": "Strike",
+      "return": "Home"
+    },
+    "during": {
+      "takeoff": "the airfield crew sends the Reaper down the runway and into the air",
+      "climb": "the Reaper climbs toward its working height of about 7.6 km",
+      "handover": "the mission crew takes over through a satellite and flies out to the area",
+      "loiter": "the Reaper circles the area while the crew watches the target",
+      "strike": "a Hellfire homes on the laser spot the crew holds on the target",
+      "return": "the Reaper flies home and the airfield crew lands it"
+    },
+    "jump": {
+      "takeoff": "Jump to the takeoff",
+      "climb": "Jump to the climb",
+      "handover": "Jump to the handover",
+      "loiter": "Jump to the time over the area",
+      "strike": "Jump to the strike",
+      "return": "Jump to the flight home"
+    }
+  },
+  "readouts": {
+    "clock": "Mission clock",
+    "altitude": "Altitude",
+    "airspeed": "Airspeed",
+    "fuel": "Fuel"
+  },
+  "units": {
+    "km": "{{value}} km",
+    "kmh": "{{value}} km/h",
+    "altitude": "{{m}} m, {{ft}} ft",
+    "kg": "{{value}} kg",
+    "fuel": "{{kg}} kg, {{share}} %",
+    "hours": "{{value}} h",
+    "hoursMinutes": "{{hours}} h {{minutes}} min",
+    "seconds": "{{value}} s",
+    "secondsRange": "{{from}} to {{to}} s",
+    "percent": "{{value}} %"
+  },
+  "parts": {
+    "fuselage": "Fuselage",
+    "wing": "Wing",
+    "vTail": "V-tail",
+    "ventralFin": "Ventral fin",
+    "noseHump": "Nose hump",
+    "satelliteDish": "Satellite dish",
+    "sensorBall": "Sensor ball",
+    "fuelTank": "Fuel tank",
+    "engine": "Turboprop engine",
+    "propeller": "Pusher propeller",
+    "landingGear": "Landing gear",
+    "pylons": "Pylons",
+    "hellfire": "Hellfire missiles",
+    "bombs": "GBU-12 bombs",
+    "runway": "Runway",
+    "groundStation": "Ground station",
+    "losAntenna": "Airfield antenna",
+    "losLink": "Line-of-sight link",
+    "satLink": "Satellite link",
+    "satellite": "Satellite",
+    "sensorCone": "Camera view",
+    "laserBeam": "Laser beam",
+    "missile": "Hellfire in flight",
+    "target": "Target"
+  },
+  "link": {
+    "mode": {
+      "los": "Line of sight, C-band",
+      "sat": "Satellite, Ku-band"
+    },
+    "crew": {
+      "los": "Airfield crew",
+      "sat": "Mission crew in the US"
+    },
+    "delay": {
+      "los": "Very short. A satellite hop, {{girths}} times around the Earth, would add {{oneWay}}, or {{roundTrip}} there and back",
+      "sat": "About 0.5 to 2 s. Each hop is {{girths}} times around the Earth, so light alone needs {{oneWay}}, or {{roundTrip}} there and back"
+    }
+  },
+  "flight": {
+    "span": {
+      "predator": "Reaper {{reaper}} m, Predator {{other}} m: {{ratio}} times the span",
+      "cessna": "Reaper {{reaper}} m, Cessna {{other}} m: {{ratio}} times the span. Aspect ratio {{aspect}} against {{otherAspect}}: {{slender}} times as slender"
+    },
+    "weight": {
+      "predator": "Reaper {{reaper}} kg, Predator {{other}} kg: {{ratio}} times the weight",
+      "cessna": "Reaper {{reaper}} kg, Cessna {{other}} kg: {{ratio}} times the weight"
+    },
+    "engine": {
+      "predator": "Reaper {{reaper}} hp turboprop, Predator {{other}} hp piston engine: {{ratio}} times the power",
+      "cessna": "Reaper {{reaper}} hp turboprop, Cessna piston engine"
+    }
+  },
+  "sensor": {
+    "shows": {
+      "day": "Colour picture by daylight",
+      "infrared": "Heat, by day or night",
+      "laser": "A coded spot, invisible to the eye"
+    },
+    "aim": {
+      "ahead": "Ahead and down",
+      "target": "On the target"
+    }
+  },
+  "strike": {
+    "stage": {
+      "none": "No weapons on board",
+      "armed": "Waiting on its rail",
+      "flying": "Homing on the laser spot",
+      "hit": "Impact",
+      "done": "Strike over"
+    }
+  },
+  "sections": {
+    "overview": {
+      "title": "Nine hours, and nobody on board",
+      "p1": "You are looking at an <strong>MQ-9 Reaper</strong>, a drone built by General Atomics in California. The US Air Force has flown it since 2007. It is a big aircraft, with a wing that spans 20 m. At takeoff it can weigh about 4,760 kg, almost as much as two and a half cars. Nobody sits inside. A crew flies it from a ground station, often thousands of kilometres away. Its main job is to watch an area for hours, but it also carries weapons, so the crew that finds a target can strike it. That is why it has been called a hunter-killer.",
+      "p2": "The model follows one <strong>armed mission</strong> from start to finish: about nine and a quarter hours from the takeoff roll to the stop after landing. A crew at the airfield takes off and starts the climb. Half an hour later, a second crew far away takes over through a satellite. The Reaper circles one area for six and a half hours and fires one Hellfire missile. Then it flies home, and the airfield crew lands it.",
+      "p3": "To fit all this on your screen, the model takes a few shortcuts. It shrinks every distance, so the whole flight fits into a few kilometres of desert. Over the area it flies two and a half laps, while a real Reaper would fly many more. The aircraft itself is drawn twenty times too big, or you could not see it from 7.6 km up. The length of the mission, the handover times, the speeds for takeoff, climb and landing and the fuel used are the model's own choices, not published figures.",
+      "p4": "The clock at the top counts from the start of the takeoff roll, so T+1:30:00 means an hour and a half into the mission. At normal speed the whole flight plays in about a minute and a half. Drag the timeline to any moment, or tap a chip below to jump there. As you go, watch the readouts: the radio link changes when the crews swap, and the fuel drops hour by hour. The <strong>radio links</strong> switch shows the beams. The <strong>flight track</strong> switch draws the path behind the aircraft and the circle it flies over the area.",
+      "link": "Radio link",
+      "fuel": "Fuel left",
+      "done": "Mission flown"
+    },
+    "flight": {
+      "title": "Built to stay up, not to go fast",
+      "p1": "Start with the <strong>wing</strong>. It is long and narrow, a shape you might expect on a glider. Engineers measure this with the aspect ratio: how many times longer the wing is than it is wide. The Reaper's is about 17, more than twice the 7.5 of a small Cessna 172. A long, narrow wing wastes less energy holding the aircraft up. That matters when you want to stay in the air for many hours.",
+      "p2": "But the Reaper is no glider. Each square metre of its wing carries about 200 kg, almost three times as much as on a Cessna. To stay up with that load, it has to fly fairly fast, and that takes a strong engine. It has a <strong>turboprop</strong>: a small gas turbine that turns a propeller through a gearbox. The Honeywell engine gives 900 horsepower and drives a three-blade propeller at the tail, which pushes the aircraft along. The cutaway shows the engine and the fuel tank inside.",
+      "p3": "Why a propeller and not a jet? A propeller gives a lot of air a small push, and that is the thrifty way to fly slowly. The Reaper is in no hurry: it cruises at about 370 km/h and circles over an area at about 300 km/h. The turbine has one more advantage. It keeps its power in thin, high air. So the Reaper can climb far higher than the older Predator, whose piston engine kept it below about 7.6 km.",
+      "p4": "Next to the Predator, the Reaper is a much bigger machine: about 4.7 times as heavy, with almost eight times the power. Their tails differ too. The Reaper has two fins pointing up in a V and a small fin pointing down, so from behind it looks like a Y. The Predator's V pointed down. About 38 % of the Reaper's takeoff weight is fuel, roughly 1,800 kg, and that is the real secret of its long flights. Tap the chips to set it beside the Predator or a Cessna 172.",
+      "span": "Wingspan",
+      "weight": "Takeoff weight",
+      "engine": "Engine"
+    },
+    "link": {
+      "title": "Flown from far away, through space",
+      "p1": "With nobody on board, everything depends on radio. Near the airfield the Reaper uses a direct <strong>line-of-sight</strong> link: the antenna on the ground must be able to see the aircraft. This link works in the C-band, one range of radio frequencies. Farther away, the curve of the Earth gets in the way. So for the mission the Reaper switches to a <strong>satellite link</strong> in the Ku-band, another range of frequencies. Its dish sits inside the hump on top of the nose.",
+      "p2": "Two crews share the work. A small <strong>launch and recovery</strong> crew at the airfield handles the takeoff and the landing over the direct link. The <strong>mission crew</strong> flies everything in between from a ground station in the United States, for example at Creech Air Force Base in Nevada. In the model the mission crew takes over half an hour after takeoff. The airfield crew takes the aircraft back at T+8:55:00, a quarter of an hour before landing.",
+      "p3": "A command from Nevada takes a long road. First it runs through fibre-optic cables to a relay station, which sends it up to a satellite by radio. A German court traced one such route: for flights over Yemen, the data went by cable to Ramstein Air Base in Germany and up from there. The model draws the satellite close by, but the real one sits 35,786 km above the equator. Going up and back down is about 1.8 times around the Earth. Even at the speed of light, that trip takes about a quarter of a second.",
+      "p4": "A command going up and the video coming back make two such trips, so about half a second. Add the cables and the equipment along the way, and the pilot sees the result of a move about half a second to two seconds later. That is why the crew flies much of the mission through the autopilot. If the link drops, the aircraft flies a route set in advance to a place where it can be recovered. The two-crew split you see here is the classic one, and still common. But since 2018 the Reaper can also land automatically, and the Air Force says landings under satellite control are becoming standard.",
+      "mode": "Radio link",
+      "crew": "Who flies it",
+      "delay": "Delay the pilot feels",
+      "path": "How a command reaches the aircraft",
+      "step1": "<strong>Ground station</strong>: the pilot moves the stick, for example at Creech in Nevada.",
+      "step2": "<strong>Cable</strong>: the command travels through fibre-optic lines on the ground.",
+      "step3": "<strong>Relay station</strong>: a station such as Ramstein in Germany sends it up by radio.",
+      "step4": "<strong>Satellite</strong>: 35,786 km above the equator, it sends the signal back down.",
+      "step5": "<strong>Reaper</strong>: the dish in the nose hump picks it up, and the video goes home the same way."
+    },
+    "sensor": {
+      "title": "A camera ball that sees in the dark",
+      "p1": "Under the nose hangs the <strong>sensor ball</strong>, about 56 cm across. The sensor module inside weighs about 104 kg. The ball turns and tilts, so the crew can keep its cameras on one spot while the aircraft circles. On the way out it looks ahead and down. Over the area it stays on the target, as the readout below shows.",
+      "p2": "Inside are several eyes. Daylight cameras film in colour and in black and white. An <strong>infrared</strong> camera sees heat instead of light, so warm engines and people stand out even at night. Then there are the laser tools: a rangefinder that measures distance, an illuminator that lights up a scene, and a designator. Tap the chips to switch between the daylight view, the infrared view and the laser.",
+      "p3": "For a strike, the laser that matters is the <strong>designator</strong>. It marks a target for a guided weapon. Its light has a wavelength of 1,064 nm, in the infrared, so no eye can see it. The bright line in the model is drawn only so you can follow it. The light comes in short pulses that follow a code. The weapon is set to the same code, so it homes only on its own spot.",
+      "p4": "Cameras cannot see through cloud, but radar can. The <strong>Lynx radar</strong>, built into the aircraft, makes detailed pictures of the ground through cloud and rain. It also picks out things that move. In the ground station, the pilot flies and the <strong>sensor operator</strong> runs the ball and the lasers. Often a third crew member, an intelligence coordinator, helps them make sense of what they see. On a long mission like this one, fresh crews take over the seats several times.",
+      "shows": "What it shows",
+      "aim": "Where it looks"
+    },
+    "strike": {
+      "title": "A missile that follows an invisible spot",
+      "p1": "The weapons hang on <strong>pylons</strong>, the mounts under the wings. The model carries a classic load: four <strong>Hellfire</strong> missiles on two-rail launchers, and two GBU-12 bombs closer to the body, where the pylons hold the most weight. A Hellfire is about 1.6 m long and weighs about 45 kg. Since a software update in 2020, a Reaper can carry up to eight of them.",
+      "p2": "A solid rocket motor drives the Hellfire, and it can reach a target about 8 km away. It steers by <strong>semi-active laser</strong> homing, which means it carries no laser of its own. Instead, a seeker in its nose looks for laser light bouncing off the target. That light comes from the designator, which the sensor operator keeps on the spot. The seeker can lock on before launch or find the spot after.",
+      "p3": "So the crew cannot fire and look away: the laser has to stay on the target until the missile hits. From the Reaper's height, a typical flight takes about 20 to 30 seconds. The slider sets how far the missile flies. It starts at 8 km, because the Reaper is already 7.6 km up. Drag it to try a target farther away, and watch the flight time and the laser time grow. The model shows them as a range, because sources disagree on how fast a Hellfire flies.",
+      "p4": "The Reaper can also drop bombs. The GBU-12 steers onto a laser spot too, while the GBU-38, also called JDAM, finds its way with GPS. In the model the target is a made-up compound. The strike takes only seconds of the long mission, so the timeline gives those seconds a wide band of their own. Tap the chips to jump to the launch or the impact.",
+      "rangeLabel": "How far the missile flies",
+      "time": "Missile flight time",
+      "laser": "Laser must stay on",
+      "missile": "Missile"
+    },
+    "endurance": {
+      "title": "More than a day in the air",
+      "p1": "Time in the air is the Reaper's real strength. Without weapons it can stay up for about 27 hours, longer than the longest airline flight. Fully armed, it manages about 14 hours. It cannot carry a full tank and a full load of weapons at once, because together they would weigh more than it may take off with. So the crew trades fuel for weapons. Tap the chips to compare: the unarmed Reaper flies the same mission, just without the strike.",
+      "p2": "On a mission it usually flies at about 7.6 km, around 25,000 ft. It could climb higher, up to about 15 km, though sources disagree on its exact ceiling. Over the area it circles slowly with the engine at low power, and that makes the fuel last. The armed mission in the model, about nine and a quarter hours, fits easily inside those 14 hours.",
+      "p3": "Distance eats into those hours. Every hour spent flying out to the area, and every hour flying back, is an hour not spent watching. Drag the slider to try an area farther away. The model assumes a cruise of about 370 km/h each way and keeps one hour of fuel in reserve. Then it shows how much time is left over the area.",
+      "p4": "One aircraft cannot watch a spot around the clock. A patrol without breaks, which the Air Force calls a combat line, typically takes four aircraft and about 200 people. Crews take turns in the ground station, and aircraft take turns over the area. The fleet is shrinking, though. The US Air Force had 351 Reapers in 2022 and 135 in May 2026, and the production line has closed.",
+      "distanceLabel": "Distance to the area",
+      "hours": "Time in the air",
+      "transit": "Flight each way",
+      "station": "Time over the area"
+    }
+  }
+}

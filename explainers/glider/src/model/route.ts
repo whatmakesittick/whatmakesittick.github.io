@@ -1,6 +1,6 @@
 import { FULL_TURN, toRadians, wrapAngle } from '@core/math';
-import { Route, arc, line, rampedShare } from './path';
-import type { Pose } from './path';
+import { Route, arc, line, rampedShare } from '@core/path';
+import type { Pose } from '@core/path';
 import { PHASE_RANGES, flightTime, heightAt } from './story';
 import type { TimeRange } from './story';
 
