@@ -9,9 +9,11 @@ import { mergeParts, partMesh } from '../context';
 import type { PartContext } from '../context';
 
 type Triple = readonly [number, number, number];
+type Extent = readonly [number, number];
 
 const QUARTER_TURN = Math.PI / 2;
 const ENDS = [-1, 1] as const;
+const ROOF_SEAT = 0.05;
 
 function centredBox(at: Triple, size: Triple): BufferGeometry {
   return box({
@@ -24,45 +26,120 @@ function centredBox(at: Triple, size: Triple): BufferGeometry {
   });
 }
 
-function shedGeometry(): { walls: BufferGeometry; roof: BufferGeometry; door: BufferGeometry } {
-  const { size, roof, door } = CROSSING.shed;
-  const [length, wall, depth] = size;
-  const walls = centredBox([0, 0, 0], size);
-  const gable = new Shape();
-  const half = depth / 2 + roof.overhang;
-  gable.moveTo(-half, wall - 0.05);
-  gable.lineTo(half, wall - 0.05);
-  gable.lineTo(0, wall + roof.rise);
-  gable.closePath();
-  const roofGeometry = extrudeProfileAlongX(
-    gable,
-    -length / 2 - roof.overhang,
-    length / 2 + roof.overhang,
-  );
-  const doorGeometry = centredBox(
-    [length * 0.2, 0, -depth / 2 - door.depth / 2],
-    [door.width, door.height, door.depth],
-  );
-  return { walls, roof: roofGeometry, door: doorGeometry };
+interface ShedGeometry {
+  walls: BufferGeometry;
+  roof: BufferGeometry;
+  door: BufferGeometry;
+  trim: BufferGeometry;
+  glass: BufferGeometry;
 }
 
-function carGeometry(): { body: BufferGeometry; glass: BufferGeometry; wheels: BufferGeometry } {
-  const { body, cabin, cabinShift, clearance, wheel } = CROSSING.car;
-  const shell = centredBox([0, clearance, 0], body);
-  const top = centredBox([body[0] * cabinShift, clearance + body[1], 0], cabin);
-  const glass = centredBox(
-    [body[0] * cabinShift + cabin[0] / 2, clearance + body[1] + 0.05, 0],
-    [0.05, cabin[1] * 0.7, cabin[2] * 0.85],
-  );
-  const wheels = ENDS.flatMap((end) =>
-    ENDS.map((side) => {
-      const tyre = new CylinderGeometry(wheel.radius, wheel.radius, wheel.width, wheel.segments);
-      tyre.rotateX(QUARTER_TURN);
-      tyre.translate(end * wheel.axle, wheel.radius, side * (body[2] / 2 - wheel.width * 0.3));
-      return tyre;
+function shedGeometry(): ShedGeometry {
+  const { size, roof, door, window } = CROSSING.shed;
+  const [length, wall, depth] = size;
+  const gable = new Shape();
+  const half = depth / 2 + roof.overhang;
+  gable.moveTo(-half, wall - ROOF_SEAT);
+  gable.lineTo(half, wall - ROOF_SEAT);
+  gable.lineTo(0, wall + roof.rise);
+  gable.closePath();
+  const doorX = length * door.shift;
+  const front = depth / 2;
+  return {
+    walls: centredBox([0, 0, 0], size),
+    roof: extrudeProfileAlongX(gable, -length / 2 - roof.overhang, length / 2 + roof.overhang),
+    door: centredBox([doorX, 0, front + door.depth / 2], [door.width, door.height, door.depth]),
+    trim: centredBox(
+      [doorX, 0, front + door.depth / 4],
+      [door.width + door.frame * 2, door.height + door.frame, door.depth / 2],
+    ),
+    glass: centredBox(
+      [-length / 2 - window.depth / 2, window.sill, 0],
+      [window.depth, window.height, window.width],
+    ),
+  };
+}
+
+function span(extent: Extent, y: Extent, halfWidth: number): BufferGeometry {
+  return box({
+    minX: extent[0],
+    maxX: extent[1],
+    minY: y[0],
+    maxY: y[1],
+    minZ: -halfWidth,
+    maxZ: halfWidth,
+  });
+}
+
+function bodyGeometry(): BufferGeometry {
+  const { sill, bonnet, cabin, bed, bumper } = CROSSING.car;
+  const floor = sill.y[1];
+  const sideZ = sill.halfWidth - bed.wall / 2;
+  const sides = ENDS.map((side) =>
+    box({
+      minX: bed.x[0],
+      maxX: bed.x[1],
+      minY: floor,
+      maxY: bed.top,
+      minZ: side * sideZ - bed.wall / 2,
+      maxZ: side * sideZ + bed.wall / 2,
     }),
   );
-  return { body: mergeParts([shell, top]), glass, wheels: mergeParts(wheels) };
+  return mergeParts([
+    span(sill.x, sill.y, sill.halfWidth),
+    span(bonnet.x, [floor, bonnet.top], bonnet.halfWidth),
+    span(cabin.x, [floor, cabin.top], cabin.halfWidth),
+    ...sides,
+    span([bed.x[0], bed.x[0] + bed.wall], [floor, bed.top], sill.halfWidth),
+    span([sill.x[1], sill.x[1] + bumper.depth], bumper.y, bumper.halfWidth),
+    span([sill.x[0] - bumper.depth, sill.x[0]], bumper.y, bumper.halfWidth),
+  ]);
+}
+
+function glassGeometry(): BufferGeometry {
+  const { cabin, glass } = CROSSING.car;
+  const y: Extent = [glass.bottom, glass.top];
+  const windscreen = box({
+    minX: cabin.x[1],
+    maxX: cabin.x[1] + glass.thickness,
+    minY: y[0],
+    maxY: y[1],
+    minZ: -cabin.halfWidth + glass.inset,
+    maxZ: cabin.halfWidth - glass.inset,
+  });
+  const windows = ENDS.map((side) =>
+    box({
+      minX: cabin.x[0] + glass.inset,
+      maxX: cabin.x[1] - glass.inset,
+      minY: y[0],
+      maxY: y[1],
+      minZ: side * cabin.halfWidth - glass.thickness / 2,
+      maxZ: side * cabin.halfWidth + glass.thickness / 2,
+    }),
+  );
+  return mergeParts([windscreen, ...windows]);
+}
+
+export function wheelsGeometry(): BufferGeometry {
+  const { wheel } = CROSSING.car;
+  return mergeParts(
+    ENDS.flatMap((end) =>
+      ENDS.map((side) => {
+        const tyre = new CylinderGeometry(wheel.radius, wheel.radius, wheel.width, wheel.segments);
+        tyre.rotateX(QUARTER_TURN);
+        tyre.translate(end * wheel.axle, wheel.radius, side * wheel.track);
+        return tyre;
+      }),
+    ),
+  );
+}
+
+export function carGeometry(): {
+  body: BufferGeometry;
+  glass: BufferGeometry;
+  wheels: BufferGeometry;
+} {
+  return { body: bodyGeometry(), glass: glassGeometry(), wheels: wheelsGeometry() };
 }
 
 export interface CrossingPart {
@@ -82,6 +159,8 @@ export function createCrossing(context: PartContext): CrossingPart {
     partMesh(context, shedParts.walls, 'crossroads', WORLD_FINISHES.shedWall),
     partMesh(context, shedParts.roof, 'crossroads', WORLD_FINISHES.shedRoof),
     partMesh(context, shedParts.door, 'crossroads', WORLD_FINISHES.shedDoor),
+    partMesh(context, shedParts.trim, 'crossroads', WORLD_FINISHES.shedTrim),
+    partMesh(context, shedParts.glass, 'crossroads', WORLD_FINISHES.carGlass),
   );
   const carParts = carGeometry();
   const carGroup = new Group();
