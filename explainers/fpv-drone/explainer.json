@@ -4,7 +4,7 @@
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",
-  "locales": ["en"],
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
   "social": {
     "image": "social/og-image.png",
     "alt": "A camouflaged FPV quadcopter banking low over a field under a grey sky, its four propellers blurred and a radio beam reaching back to a pilot's dugout, beside the title How an FPV drone flies"
