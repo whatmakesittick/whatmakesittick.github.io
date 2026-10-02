@@ -131,9 +131,10 @@
     The slider shows what a tilt does. Tilt the drone 30 degrees and it pushes sideways with about
     0.58 of gravity, close to 5.7 m/s². To hold its height at the same time it needs about 15 % more
     thrust than in a hover, because only part of the thrust still points up. At 45 degrees the push
-    equals gravity and the thrust must rise by 41 %. Freestyle quads carry four to five times their
-    weight in thrust, so they hover at 20 to 25 % throttle and keep plenty for a climb or a sprint.
-    Long-range quads carry less, at least two to one, because a bigger battery weighs them down.
+    equals gravity and the thrust must rise by 41 %. Freestyle quads carry about four to five times
+    their weight in thrust, so they hover at about 20 to 25 % throttle and keep plenty for a climb
+    or a sprint. Long-range quads carry less because a bigger battery weighs them down: this one has
+    about 5.7 to 1, and heavy-lift builds go as low as 2 to 1.
   </p>
   <p class="chip-row">
     <button
@@ -239,17 +240,17 @@
     in one board, rated 50 to 55 A per motor. It turns each new throttle value into timed pulses for
     the three windings of its motor. The two boards talk over DShot, a digital protocol: one 16-bit
     word per motor, 11 bits of throttle, a telemetry bit and a checksum, sent in 27 microseconds at
-    600 kilobits a second. The ESC reports the real motor speed back, so the controller can filter
-    out the vibration each propeller makes.
+    600 kilobits a second. With bidirectional DShot the ESC also reports the real motor speed back,
+    so the controller can filter out the vibration each propeller makes.
   </p>
   <p data-i18n-html="sections.controller.p3">
     What do the sticks command? In <strong>acro mode</strong>, the default, each stick commands a
     rotation rate. Push the roll stick halfway and the drone rolls at a steady rate; centre it and
     the drone stops rolling and holds the angle it has reached, even upside down. By default, full
     stick asks for about 670 degrees a second, almost two full rolls. Angle mode is for beginners:
-    the stick sets a tilt angle, and the drone levels itself when you let go. Most FPV pilots,
-    racers and front-line pilots alike, fly acro: it gives full control in wind and lets the drone
-    take any attitude. Tap the chips to compare the three modes.
+    the stick sets a tilt angle, and the drone levels itself when you let go. Most FPV pilots fly
+    acro, from racers to freestyle pilots: it gives full control in wind and lets the drone take any
+    attitude. Tap the chips to compare the three modes.
   </p>
   <p data-i18n-html="sections.controller.p4">
     Two safety features matter. A switch on the radio <strong>arms</strong> the drone, which starts
@@ -353,9 +354,9 @@
     <strong>video antenna</strong> at the rear. Analogue video on 5.8 GHz is the classic choice: 40
     channels in five bands, a standard-definition picture that fades gracefully into snow as the
     drone gets far away, and a delay of about 20 to 30 ms from camera to eye. Digital systems send a
-    1080p picture at 100 frames a second with a delay of about 20 ms, and the best units reach 10 to
-    15 km. But good analogue is still the lowest-latency option, and it degrades gently instead of
-    freezing. Tap the chips to compare.
+    1080p picture at 100 frames a second with a delay of about 20 ms, and the best units are rated
+    for 10 to 15 km. But good analogue is still the lowest-latency option, and it degrades gently
+    instead of freezing. Tap the chips to compare.
   </p>
   <p data-i18n-html="sections.link.p3">
     Both links use circular polarised antennas: the wave turns as it travels. A reflection off the
@@ -495,10 +496,10 @@
     Drag the slider to load the drone. Each extra 100 g raises the all-up weight, lowers the
     thrust-to-weight ratio, raises the throttle needed to hover and cuts the flight time. The model
     takes 80 % of the pack's energy as usable and divides it by the power needed to cruise at that
-    weight, which gives about 13 minutes with the camera on board. A bigger battery does not fix
+    weight, which gives about 12 minutes with the camera on board. A bigger battery does not fix
     this for long: more battery means more weight, which means more power to carry it, so each extra
     pack gives less than the last. Real 7-inch long-range quads fly 12 to 30 minutes; a 5-inch
-    freestyle quad on a small LiPo manages 4 to 6.
+    freestyle quad on a small LiPo manages about 4 to 6.
   </p>
   <p data-i18n-html="sections.power.p4">
     Watch the voltage during the flight. It sags under load, because current through the pack's
@@ -559,8 +560,8 @@
   </p>
   <p data-i18n-html="sections.limits.p2">
     Wind is the real limit in the field. A rule of thumb says to fly only when the wind is below two
-    thirds of the drone's top speed, and quads this size handle 32 to 40 km/h of steady wind. Every
-    gust costs battery, because the drone has to tilt into it and the tilted thrust takes more
+    thirds of the drone's top speed, and quads this size handle about 32 to 40 km/h of steady wind.
+    Every gust costs battery, because the drone has to tilt into it and the tilted thrust takes more
     power. This is also where an FPV quad differs from a camera drone such as a Mavic. A Mavic holds
     its position with GPS and a barometer when you let go of the sticks. An FPV quad in acro holds
     only its attitude and drifts with the wind. Nothing stops it but the pilot.
