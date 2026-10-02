@@ -3,8 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { PAD, STATION, TREELINE } from '../../../model/layout';
 import { FIELD, ROADS, SHRUBS, TREES } from '../../constants';
 import { PAINT } from '../../finishes';
+import { SCENE_OPTIONS } from '../../sceneOptions';
 import { fieldColour, mownBand } from './field';
 import { scatterShrubs } from './shrubs';
+import { skyUniforms } from './sky';
 import { coniferGreen, poplarGeometry, treeSpots } from './trees';
 
 function apart(a: Color, b: Color): number {
@@ -105,5 +107,17 @@ describe('shrubs', () => {
       expect(Math.abs(shrub.z - ROADS.along.z)).toBeGreaterThan(ROADS.halfWidth);
       expect(Math.abs(shrub.x - ROADS.across.x)).toBeGreaterThan(ROADS.halfWidth);
     }
+  });
+});
+
+describe('sky', () => {
+  it('meets the fog colour at the horizon and deepens to blue overhead', () => {
+    const { uHorizon, uTop } = skyUniforms();
+    expect(uHorizon.value.equals(new Color(SCENE_OPTIONS.fog?.color))).toBe(true);
+    const horizon = uHorizon.value.getHSL({ h: 0, s: 0, l: 0 });
+    const top = uTop.value.getHSL({ h: 0, s: 0, l: 0 });
+    expect(top.l).toBeLessThan(horizon.l);
+    expect(top.s).toBeGreaterThan(horizon.s);
+    expect(uTop.value.b).toBeGreaterThan(uTop.value.r * 2);
   });
 });

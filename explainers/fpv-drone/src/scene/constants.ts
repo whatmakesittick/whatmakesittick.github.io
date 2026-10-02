@@ -199,8 +199,19 @@ export const SKY = {
   widthSegments: 32,
   heightSegments: 16,
   renderOrder: -10,
-  cloud: { scale: 2.4, cover: 0.42, softness: 0.3, lift: 0.08, from: 0.02, to: 0.6 },
-  blend: 0.55,
+  rise: 3.2,
+  haze: 0.018,
+  cloud: {
+    scale: 2.2,
+    cover: 0.5,
+    softness: 0.16,
+    lift: 0.1,
+    band: { from: 0.004, to: 0.85 },
+    strength: 0.92,
+    shading: { reach: 0.25, contrast: 2.4 },
+    lit: '#f2f4f7',
+    shade: '#a1adbb',
+  },
 } as const;
 
 export const HAZE = { near: 500, far: 2600 } as const;

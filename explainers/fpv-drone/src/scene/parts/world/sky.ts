@@ -1,8 +1,18 @@
-import { BackSide, Color, Mesh, ShaderMaterial, SphereGeometry, Vector3, Vector4 } from 'three';
+import {
+  BackSide,
+  Color,
+  Mesh,
+  ShaderMaterial,
+  SphereGeometry,
+  Vector2,
+  Vector3,
+  Vector4,
+} from 'three';
 import type { Camera } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { THEME } from '../../../theme';
 import { SKY } from '../../constants';
+import { FPV_LIGHT } from '../../lighting';
 import { registered } from '../context';
 import type { PartContext } from '../context';
 
@@ -17,9 +27,13 @@ void main() {
 const FRAGMENT = /* glsl */ `
 uniform vec3 uTop;
 uniform vec3 uHorizon;
+uniform vec2 uGradient;
 uniform vec4 uCloud;
 uniform vec3 uCloudBand;
-uniform float uBlend;
+uniform vec2 uShading;
+uniform vec3 uLit;
+uniform vec3 uShade;
+uniform vec3 uSun;
 varying vec3 vDirection;
 
 float hash(vec2 p) {
@@ -48,17 +62,26 @@ float fbm(vec2 p) {
   return total;
 }
 
+vec3 clouds(vec3 sky, float up, vec3 direction) {
+  float band = smoothstep(uCloudBand.x, uCloudBand.x + 0.08, up)
+    * (1.0 - smoothstep(uCloudBand.y * 0.7, uCloudBand.y, up));
+  if (band <= 0.0) return sky;
+  vec2 plane = direction.xz / (up + uCloud.w) * uCloud.x + vec2(2.3, 7.1);
+  float shape = fbm(plane);
+  float cover = smoothstep(uCloud.y, uCloud.y + uCloud.z, shape);
+  if (cover <= 0.0) return sky;
+  float towardSun = fbm(plane + normalize(uSun.xz) * uShading.x);
+  float lit = clamp(0.5 + (shape - towardSun) * uShading.y, 0.0, 1.0);
+  vec3 cloud = mix(uShade, uLit, mix(lit, 1.0, 1.0 - cover));
+  return mix(sky, cloud, cover * band * uCloudBand.z);
+}
+
 void main() {
   vec3 direction = normalize(vDirection);
   float up = max(direction.y, 0.0);
-  vec3 sky = mix(uHorizon, uTop, smoothstep(0.0, uBlend, up));
-  vec2 plane = direction.xz / (up + uCloud.w) * uCloud.x;
-  float cloud = fbm(plane + vec2(2.3, 7.1));
-  float cover = smoothstep(uCloud.y, uCloud.y + uCloud.z, cloud);
-  float band = smoothstep(uCloudBand.x, uCloudBand.x + 0.08, up) * (1.0 - smoothstep(uCloudBand.y * 0.7, uCloudBand.y, up));
-  vec3 lit = mix(sky, uHorizon, 0.55);
-  vec3 shade = mix(sky, uTop, 0.35);
-  sky = mix(sky, mix(shade, lit, cover), band * uCloudBand.z);
+  vec3 sky = mix(uHorizon, uTop, 1.0 - exp(-up * uGradient.x));
+  sky = clouds(sky, up, direction);
+  sky = mix(uHorizon, sky, smoothstep(0.0, uGradient.y, up));
   vec3 colour = mix(uHorizon, sky, smoothstep(-0.01, 0.0, direction.y));
   gl_FragColor = vec4(colour, 1.0);
   #include <colorspace_fragment>
@@ -66,13 +89,17 @@ void main() {
 `;
 
 export function skyUniforms() {
-  const { cloud, blend } = SKY;
+  const { cloud, rise, haze } = SKY;
   return {
     uTop: { value: new Color(THEME.skyTop) },
     uHorizon: { value: new Color(THEME.skyHorizon) },
+    uGradient: { value: new Vector2(rise, haze) },
     uCloud: { value: new Vector4(cloud.scale, cloud.cover, cloud.softness, cloud.lift) },
-    uCloudBand: { value: new Vector3(cloud.from, cloud.to, 0.9) },
-    uBlend: { value: blend },
+    uCloudBand: { value: new Vector3(cloud.band.from, cloud.band.to, cloud.strength) },
+    uShading: { value: new Vector2(cloud.shading.reach, cloud.shading.contrast) },
+    uLit: { value: new Color(cloud.lit) },
+    uShade: { value: new Color(cloud.shade) },
+    uSun: { value: new Vector3(...FPV_LIGHT.key.position).normalize() },
   };
 }
 

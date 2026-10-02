@@ -24,6 +24,6 @@ export const THEME = {
   straw: '#9a9360',
   earth: '#6b5a42',
   tree: '#2f3f2a',
-  skyTop: '#5a6b7d',
+  skyTop: '#46709f',
   skyHorizon: '#b9c3cc',
 } as const;
