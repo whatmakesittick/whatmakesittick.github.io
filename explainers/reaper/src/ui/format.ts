@@ -32,6 +32,7 @@ const CLOCK_PAD = '0';
 const CLOCK_SEPARATOR = ':';
 const METRES_STEP = 10;
 const FEET_STEP = 100;
+const FUEL_STEP_KG = 10;
 const DELAY_DIGITS = 2;
 const UNARMED_KEY = 'controls.loadOptions.clean';
 
@@ -98,11 +99,11 @@ export function formatKmh(kmh: number): string {
 }
 
 export function formatFuel({ kg, share }: FuelReading): string {
-  return t('units.fuel', { kg: whole(kg), share: whole(share * PERCENT) });
+  return t('units.fuel', { kg: roundedTo(kg, FUEL_STEP_KG), share: whole(share * PERCENT) });
 }
 
-export function formatKg(kg: number): string {
-  return t('units.kg', { value: whole(kg) });
+export function formatFuelKg(kg: number): string {
+  return t('units.kg', { value: roundedTo(kg, FUEL_STEP_KG) });
 }
 
 export function formatPercent(share: number): string {

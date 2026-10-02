@@ -56,7 +56,7 @@ describe('chapter widgets', () => {
 
   it('follows the link, the fuel and the share flown in the overview', () => {
     expect(readout('overview-link')).toBe(en.link.mode.los);
-    expect(readout('overview-fuel')).toBe(fill(units.kg, { value: '1,814' }));
+    expect(readout('overview-fuel')).toBe(fill(units.kg, { value: '1,810' }));
     expect(readout('overview-done')).toBe(fill(units.percent, { value: '0' }));
     click('moment', 'onStation');
     expect(pressed('moment', 'onStation')).toBe('true');

@@ -14,6 +14,7 @@ import {
   formatEngineComparison,
   formatFlightSeconds,
   formatFuel,
+  formatFuelKg,
   formatHoursMinutes,
   formatLinkDelay,
   formatMissileStage,
@@ -60,13 +61,14 @@ describe('reaper formatting', () => {
     expect(formatAltitude(0)).toBe(fill(units.altitude, { m: '0', ft: '0' }));
   });
 
-  it('shows the fuel in kilograms and as a share of a full tank', () => {
+  it('shows the fuel to the nearest 10 kg and as a share of a full tank', () => {
     expect(formatFuel({ kg: 1814, share: 1 })).toBe(
-      fill(units.fuel, { kg: '1,814', share: '100' }),
+      fill(units.fuel, { kg: '1,810', share: '100' }),
     );
-    expect(formatFuel({ kg: 293.4, share: 0.162 })).toBe(
-      fill(units.fuel, { kg: '293', share: '16' }),
+    expect(formatFuel({ kg: 296.4, share: 0.162 })).toBe(
+      fill(units.fuel, { kg: '300', share: '16' }),
     );
+    expect(formatFuelKg(1814)).toBe(fill(units.kg, { value: '1,810' }));
   });
 
   it('shows the missile flight from the fast to the slow case', () => {
