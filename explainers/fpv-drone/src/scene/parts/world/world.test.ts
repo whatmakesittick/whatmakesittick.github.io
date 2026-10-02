@@ -5,7 +5,7 @@ import { FIELD, ROADS, SHRUBS, TREES } from '../../constants';
 import { PAINT } from '../../finishes';
 import { fieldColour, mownBand } from './field';
 import { scatterShrubs } from './shrubs';
-import { treeSpots } from './trees';
+import { coniferGreen, poplarGeometry, treeSpots } from './trees';
 
 function apart(a: Color, b: Color): number {
   return Math.hypot(a.r - b.r, a.g - b.g, a.b - b.b);
@@ -67,6 +67,29 @@ describe('treeline', () => {
     const poplars = spots.filter((spot) => spot.poplar).length;
     expect(poplars / spots.length).toBeGreaterThan(0.2);
     expect(poplars / spots.length).toBeLessThan(0.5);
+  });
+});
+
+describe('treeline variety', () => {
+  it('spreads the conifers over a wide range of heights and several greens', () => {
+    const conifers = treeSpots().filter((spot) => !spot.poplar);
+    const heights = conifers.map((spot) => spot.height);
+    expect(Math.max(...heights) - Math.min(...heights)).toBeGreaterThan(8);
+    const greens = new Set(conifers.map((spot) => coniferGreen(spot.tone).getHexString()));
+    expect(greens.size).toBe(TREES.conifer.greens.length);
+  });
+
+  it('gives each bare poplar forked limbs, not a single stick', () => {
+    const spot = treeSpots().find((candidate) => candidate.poplar);
+    if (!spot) throw new Error('No poplar in the treeline');
+    const geometry = poplarGeometry(spot);
+    const { branches, twigs } = TREES.poplar;
+    const rods = 1 + branches.count * (1 + twigs.perBranch);
+    const triangles = (geometry.getIndex()?.count ?? 0) / 3;
+    expect(triangles).toBeGreaterThan(rods * 8);
+    geometry.computeBoundingBox();
+    const width = (geometry.boundingBox?.max.x ?? 0) - (geometry.boundingBox?.min.x ?? 0);
+    expect(width).toBeGreaterThan(spot.height * 0.15);
   });
 });
 

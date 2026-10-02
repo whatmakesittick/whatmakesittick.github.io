@@ -1,11 +1,11 @@
-import { ConeGeometry, CylinderGeometry, Group } from 'three';
+import { BufferAttribute, Color, ConeGeometry, CylinderGeometry, Group } from 'three';
 import type { BufferGeometry } from 'three';
 import { lerp } from '@core/math';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { TREES } from '../../constants';
 import { WORLD_FINISHES } from '../../finishes';
 import { hash2 } from '../../geometry/noise';
-import { rod } from '../../geometry/rods';
+import { along, rod } from '../../geometry/rods';
 import type { Vec3 } from '../../geometry/rods';
 import { mergeParts, partMesh } from '../context';
 import type { PartContext } from '../context';
@@ -16,28 +16,62 @@ export interface TreeSpot {
   height: number;
   poplar: boolean;
   turn: number;
+  girth: number;
+  tone: number;
 }
 
-const SEEDS = { jitterX: 1, jitterZ: 2, kind: 3, height: 4, turn: 5 } as const;
+const SEEDS = { jitterX: 1, jitterZ: 2, kind: 3, height: 4, turn: 5, girth: 6, tone: 7 } as const;
+const RGB = 3;
+const ROW_SEED_STEP = 100;
+const TRUNK_SINK = 1.4;
+const TWIG_SIDES = [1, -1] as const;
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+const LIMB_SHORTENING = 0.5;
+const LIMB_TAPER = 0.35;
+const TWIG_TAPER = 0.4;
+const TRUNK_TOP_SHARE = 0.7;
+const GREENS = TREES.conifer.greens.map((colour) => new Color(colour));
 
 export function treeSpots(): TreeSpot[] {
   const spots: TreeSpot[] = [];
   TREES.rows.forEach((row, rowIndex) => {
     const [from, to] = TREES.line.x;
+    const seed = TREES.seed + rowIndex * ROW_SEED_STEP;
     for (let x = from + row.offset, index = 0; x <= to; x += row.spacing, index += 1) {
-      const seed = TREES.seed + rowIndex * 100;
-      const poplar = hash2(index, seed + SEEDS.kind) < TREES.poplarShare;
+      const random = (key: number) => hash2(index, seed + key);
+      const poplar = random(SEEDS.kind) < TREES.poplarShare;
       const range = poplar ? TREES.poplar.height : TREES.conifer.height;
       spots.push({
-        x: x + (hash2(index, seed + SEEDS.jitterX) - 0.5) * row.jitter * 2,
-        z: TREES.line.z + row.z + (hash2(index, seed + SEEDS.jitterZ) - 0.5) * row.jitter * 2,
-        height: lerp(range[0], range[1], hash2(index, seed + SEEDS.height)),
+        x: x + (random(SEEDS.jitterX) - 0.5) * row.jitter * 2,
+        z: TREES.line.z + row.z + (random(SEEDS.jitterZ) - 0.5) * row.jitter * 2,
+        height: lerp(range[0], range[1], random(SEEDS.height)),
         poplar,
-        turn: hash2(index, seed + SEEDS.turn) * Math.PI * 2,
+        turn: random(SEEDS.turn) * Math.PI * 2,
+        girth: random(SEEDS.girth),
+        tone: random(SEEDS.tone),
       });
     }
   });
   return spots;
+}
+
+export function coniferGreen(tone: number): Color {
+  return GREENS[Math.min(GREENS.length - 1, Math.floor(tone * GREENS.length))];
+}
+
+function paintCrown(geometry: BufferGeometry, spot: TreeSpot): BufferGeometry {
+  const { shade } = TREES.conifer;
+  const position = geometry.getAttribute('position');
+  const colours = new Float32Array(position.count * RGB);
+  const green = coniferGreen(spot.tone);
+  const tint = new Color();
+  for (let index = 0; index < position.count; index += 1) {
+    const share = position.getY(index) / spot.height;
+    tint.copy(green).multiplyScalar(lerp(shade.base, shade.tip, share));
+    tint.toArray(colours, index * RGB);
+  }
+  geometry.setAttribute('color', new BufferAttribute(colours, RGB));
+  return geometry;
 }
 
 function coniferGeometry(spot: TreeSpot): { crown: BufferGeometry; trunk: BufferGeometry } {
@@ -45,37 +79,67 @@ function coniferGeometry(spot: TreeSpot): { crown: BufferGeometry; trunk: Buffer
   const trunkHeight = spot.height * trunk.share;
   const crownHeight = spot.height - trunkHeight;
   const tierHeight = crownHeight / (tiers - (tiers - 1) * overlap);
+  const width = spot.height * lerp(radius[0], radius[1], spot.girth);
   const crowns: BufferGeometry[] = [];
   for (let tier = 0; tier < tiers; tier += 1) {
     const share = 1 - tier / tiers;
     const base = trunkHeight + tier * tierHeight * (1 - overlap);
-    const cone = new ConeGeometry(spot.height * radius * share, tierHeight, segments);
+    const cone = new ConeGeometry(width * share, tierHeight, segments);
     cone.translate(0, base + tierHeight / 2, 0);
     cone.rotateY(spot.turn);
-    cone.translate(spot.x, 0, spot.z);
     crowns.push(cone);
   }
-  const stem = new CylinderGeometry(trunk.radius * 0.7, trunk.radius, trunkHeight * 1.4, 6);
-  stem.translate(spot.x, trunkHeight * 0.7, spot.z);
-  return { crown: mergeParts(crowns), trunk: stem };
+  const crown = paintCrown(mergeParts(crowns), spot);
+  crown.translate(spot.x, 0, spot.z);
+  const stem = new CylinderGeometry(
+    trunk.radius * TRUNK_TOP_SHARE,
+    trunk.radius,
+    trunkHeight * TRUNK_SINK,
+    6,
+  );
+  stem.translate(spot.x, (trunkHeight * TRUNK_SINK) / 2, spot.z);
+  return { crown, trunk: stem };
 }
 
-function poplarGeometry(spot: TreeSpot): BufferGeometry {
-  const { trunk, branches } = TREES.poplar;
+function limbDirection(angle: number, spread: number): Vec3 {
+  return [Math.cos(angle) * Math.sin(spread), Math.cos(spread), Math.sin(angle) * Math.sin(spread)];
+}
+
+export function poplarGeometry(spot: TreeSpot): BufferGeometry {
+  const { trunk, branches, twigs } = TREES.poplar;
   const stem = new CylinderGeometry(trunk.radius[0], trunk.radius[1], spot.height, trunk.segments);
   stem.translate(spot.x, spot.height / 2, spot.z);
-  const limbs = Array.from({ length: branches.count }, (_, index) => {
+  const limbs: BufferGeometry[] = [];
+  for (let index = 0; index < branches.count; index += 1) {
     const share = branches.from + ((1 - branches.from) * index) / branches.count;
-    const angle = spot.turn + (index * Math.PI * 2) / branches.count;
+    const angle = spot.turn + index * GOLDEN_ANGLE;
+    const spread = lerp(branches.spread[0], branches.spread[1], hash2(index, spot.turn));
     const base: Vec3 = [spot.x, spot.height * share, spot.z];
-    const length = spot.height * branches.length * (1 - share * 0.5);
-    const tip: Vec3 = [
-      spot.x + Math.cos(angle) * Math.sin(branches.spread) * length,
-      spot.height * share + Math.cos(branches.spread) * length,
-      spot.z + Math.sin(angle) * Math.sin(branches.spread) * length,
-    ];
-    return rod(base, tip, branches.radius, 5, branches.radius * 0.4);
-  });
+    const length = spot.height * branches.length * (1 - share * LIMB_SHORTENING);
+    const direction = limbDirection(angle, spread);
+    limbs.push(
+      rod(
+        base,
+        along(base, direction, length),
+        branches.radius,
+        branches.segments,
+        branches.radius * LIMB_TAPER,
+      ),
+    );
+    const fork = along(base, direction, length * twigs.at);
+    for (const side of TWIG_SIDES.slice(0, twigs.perBranch)) {
+      const twig = limbDirection(angle + side * twigs.fork, spread + twigs.fork / 2);
+      limbs.push(
+        rod(
+          fork,
+          along(fork, twig, length * twigs.length),
+          twigs.radius,
+          branches.segments - 1,
+          twigs.radius * TWIG_TAPER,
+        ),
+      );
+    }
+  }
   return mergeParts([stem, ...limbs]);
 }
 

@@ -245,17 +245,27 @@ export const TREES = {
   seed: 53,
   poplarShare: 0.35,
   conifer: {
-    height: [9, 15] as Extent,
+    height: [7, 18] as Extent,
     tiers: 3,
-    radius: 0.32,
+    radius: [0.26, 0.36] as Extent,
     overlap: 0.42,
     segments: 8,
     trunk: { radius: 0.25, share: 0.12 },
+    greens: ['#2f3f2a', '#26352a', '#3a4a2e', '#33442f', '#2b3a30'],
+    shade: { base: 0.78, tip: 1.08 },
   },
   poplar: {
-    height: [12, 19] as Extent,
+    height: [12, 20] as Extent,
     trunk: { radius: [0.14, 0.32] as Extent, segments: 7 },
-    branches: { count: 7, from: 0.3, length: 0.3, spread: toRadians(18), radius: 0.06 },
+    branches: {
+      count: 12,
+      from: 0.25,
+      length: 0.28,
+      spread: [toRadians(16), toRadians(30)] as Extent,
+      radius: 0.07,
+      segments: 5,
+    },
+    twigs: { perBranch: 2, at: 0.55, length: 0.45, fork: toRadians(28), radius: 0.03 },
   },
 } as const;
 

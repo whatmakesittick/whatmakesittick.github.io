@@ -50,7 +50,6 @@ export const PAINT = {
   carGlass: '#1d2328',
   tyre: '#1b1c1e',
   trunk: '#4a3a2c',
-  conifer: THEME.tree,
   poplar: '#6b5d50',
 } as const;
 
@@ -128,7 +127,7 @@ export const WORLD_FINISHES = {
   carGlass: { color: PAINT.carGlass, metalness: 0.3, roughness: 0.3, envMapIntensity: 1.2 },
   tyre: matte(PAINT.tyre, 0.95),
   trunk: matte(PAINT.trunk, 0.9),
-  conifer: matte(PAINT.conifer, 0.95),
+  conifer: { ...matte('#ffffff', 0.95), vertexColors: true },
   poplar: matte(PAINT.poplar, 0.9),
 } as const satisfies Record<string, MaterialFinish>;
 
