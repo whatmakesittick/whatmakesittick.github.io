@@ -67,6 +67,11 @@ describe('chapter presets', () => {
     ]);
   });
 
+  it('arms the aircraft only for the strike', () => {
+    expect(PRESET_IDS.filter((id) => PRESETS[id].load)).toEqual(['strike']);
+    expect(PRESETS.strike.load).toBe('armed');
+  });
+
   it('highlights nothing in the overview', () => {
     expect(PRESETS.overview.highlight).toEqual([]);
     expect(PRESETS.overview.labels).toHaveLength(8);

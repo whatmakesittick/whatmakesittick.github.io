@@ -61,6 +61,10 @@ function chapterControls(preset: Preset, state: ReaperFields): ChapterControls {
   };
 }
 
+function presetFields(preset: Preset, state: ReaperFields): Partial<ReaperFields> {
+  return { ...chapterControls(preset, state), load: preset.load ?? state.load };
+}
+
 export function createReaperStore(overrides: Partial<ReaperStoreState> = {}): ReaperStore {
   return createExplainerStore<ReaperFields & ReaperOwnActions, Preset>(
     {
@@ -82,7 +86,7 @@ export function createReaperStore(overrides: Partial<ReaperStoreState> = {}): Re
           get().setPhase(MOMENTS[moment]);
         },
       }),
-      presetState: chapterControls,
+      presetState: presetFields,
     },
     overrides,
   );

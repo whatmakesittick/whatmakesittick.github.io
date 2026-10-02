@@ -14,6 +14,7 @@ export type ChapterControl = 'comparison' | 'sensorMode' | 'targetRange' | 'area
 export interface Preset extends ScenePreset<PartId, CameraView> {
   view?: Partial<ViewOptions>;
   controls?: readonly ChapterControl[];
+  load?: LoadId;
 }
 
 export const DEFAULT_LOAD: LoadId = 'armed';
@@ -90,6 +91,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: { cutaway: false },
     startAt: CHAPTER_START_UNITS.strike,
     controls: ['targetRange'],
+    load: 'armed',
     labels: ['hellfire', 'pylons', 'missile', 'laserBeam', 'target', 'sensorBall'],
     highlight: ['hellfire', 'missile', 'laserBeam', 'target'],
   },

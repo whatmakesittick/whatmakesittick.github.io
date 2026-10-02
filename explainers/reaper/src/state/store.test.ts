@@ -72,13 +72,20 @@ describe('reaper store', () => {
     },
   );
 
-  it('keeps the load through every chapter', () => {
+  it('keeps the load through every chapter but arms the aircraft for the strike', () => {
     const store = createReaperStore();
-    store.getState().setLoad('clean');
     PRESET_IDS.forEach((id) => {
+      store.getState().setLoad('clean');
       store.getState().applyPreset(id);
-      expect(store.getState().load, id).toBe('clean');
+      expect(store.getState().load, id).toBe(id === 'strike' ? 'armed' : 'clean');
     });
+  });
+
+  it('lets the reader unload the aircraft once the strike chapter is open', () => {
+    const store = createReaperStore();
+    store.getState().applyPreset('strike');
+    store.getState().setLoad('clean');
+    expect(store.getState().load).toBe('clean');
   });
 
   it('seeks each chapter without stopping playback and plays the endurance chapter faster', () => {
