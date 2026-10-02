@@ -273,7 +273,17 @@ export const STATION_SET = {
     alongX: 5.5,
     alongZ: 5.5,
     log: { radius: 0.13, rows: 4, segments: 10, jitter: 0.05 },
-    sandbags: { perMetre: 1.6, size: [0.5, 0.22, 0.34] as Triple, segments: 8 },
+    sandbags: {
+      size: [0.56, 0.13, 0.34] as const,
+      squareness: 2.4,
+      widthSegments: 10,
+      heightSegments: 6,
+      spacing: 0.5,
+      rows: 3,
+      rowRise: 0.11,
+      wobble: 0.05,
+      turn: 0.12,
+    },
   },
   tripod: {
     at: [-1.4, 0, 1.4] as Triple,

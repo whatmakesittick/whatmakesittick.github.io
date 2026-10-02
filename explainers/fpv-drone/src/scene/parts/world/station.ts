@@ -1,4 +1,4 @@
-import { CylinderGeometry, Group, SphereGeometry } from 'three';
+import { CylinderGeometry, Group } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { box } from '@core/scene/geometry/box';
 import { anchorAt } from '@core/scene/parts';
@@ -6,6 +6,7 @@ import { STATION } from '../../../model/layout';
 import { STATION_SET } from '../../constants';
 import { WORLD_FINISHES } from '../../finishes';
 import { hash2 } from '../../geometry/noise';
+import { pillowGeometry } from '../../geometry/pillow';
 import { rod } from '../../geometry/rods';
 import type { Vec3 } from '../../geometry/rods';
 import { mergeParts, partMesh } from '../context';
@@ -46,20 +47,26 @@ function logRow(from: Vec3, alongX: boolean, length: number, row: number): Buffe
 
 function sandbagsOn(from: Vec3, alongX: boolean, length: number, top: number): BufferGeometry[] {
   const { sandbags } = STATION_SET.dugout;
-  const count = Math.round(length * sandbags.perMetre);
-  return Array.from({ length: count }, (_, index) => {
-    const bag = new SphereGeometry(0.5, sandbags.segments, sandbags.segments / 2);
-    bag.scale(...sandbags.size);
-    const share = (index + 0.5) / count;
-    const wobble = (hash2(index, alongX ? 7 : 8) - 0.5) * 0.12;
-    bag.rotateY(alongX ? 0 : QUARTER_TURN);
-    bag.translate(
-      from[0] + (alongX ? share * length : wobble),
-      top + sandbags.size[1] / 2,
-      from[2] + (alongX ? wobble : share * length),
-    );
-    return bag;
-  });
+  const seed = alongX ? 7 : 8;
+  const bags: BufferGeometry[] = [];
+  for (let row = 0; row < sandbags.rows; row += 1) {
+    const shift = row % 2 === 0 ? 0 : sandbags.spacing / 2;
+    const count = Math.floor((length - shift) / sandbags.spacing);
+    for (let index = 0; index < count; index += 1) {
+      const key = row * 100 + index;
+      const bag = pillowGeometry(sandbags);
+      bag.rotateY((hash2(key, seed) - 0.5) * sandbags.turn + (alongX ? 0 : QUARTER_TURN));
+      const along = shift + (index + 0.5) * sandbags.spacing;
+      const wobble = (hash2(key, seed + 1) - 0.5) * sandbags.wobble * 2;
+      bag.translate(
+        from[0] + (alongX ? along : wobble),
+        top + row * sandbags.rowRise + sandbags.size[1] / 2,
+        from[2] + (alongX ? wobble : along),
+      );
+      bags.push(bag);
+    }
+  }
+  return bags;
 }
 
 function dugoutGeometry(): { logs: BufferGeometry; bags: BufferGeometry } {
