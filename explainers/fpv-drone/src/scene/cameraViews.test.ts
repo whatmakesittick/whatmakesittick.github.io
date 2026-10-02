@@ -31,11 +31,12 @@ describe('camera views', () => {
     Object.values(PRESETS).forEach((preset) => expect(views[preset.camera]).toBeDefined());
   });
 
-  it('follows the drone everywhere but the pilot view', () => {
-    (['chase', 'top', 'close', 'side', 'fpv'] as const).forEach((id) =>
-      expect(views[id].follow, id).toBe(true),
+  it('turns with the drone in the follow views and banks with it in the goggles', () => {
+    (['chase', 'top', 'close', 'side'] as const).forEach((id) =>
+      expect(views[id].follow, id).toBe('heading'),
     );
-    expect(views.pilot.follow).toBeFalsy();
+    expect(views.fpv.follow).toBe('attitude');
+    expect(views.pilot.follow).toBeUndefined();
   });
 
   it('leaves the camera alone until the drone exists', () => {

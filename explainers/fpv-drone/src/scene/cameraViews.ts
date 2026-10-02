@@ -88,7 +88,7 @@ function followView(source: ChaseSource, spec: FollowSpec): CustomView {
       const chase = source();
       return chase ? followPose(chase, spec, slopes) : null;
     },
-    follow: true,
+    follow: 'heading',
   };
 }
 
@@ -98,7 +98,7 @@ function fpvView(source: ChaseSource): CustomView {
       const chase = source();
       return chase ? fpvPose(chase) : null;
     },
-    follow: true,
+    follow: 'attitude',
   };
 }
 

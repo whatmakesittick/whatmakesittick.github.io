@@ -82,7 +82,7 @@ describe('fpv controller', () => {
     controller.views.frame('chase', true);
     const target = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
     expect(target?.toArray()).toEqual([100, 40, 0]);
-    expect(rig.follow).toHaveBeenLastCalledWith(expect.anything());
+    expect(rig.follow).toHaveBeenLastCalledWith(expect.anything(), 'heading');
   });
 
   it('frames the pilot view on the route region without following', () => {
@@ -90,7 +90,7 @@ describe('fpv controller', () => {
     const controller = new FpvController(shell);
     controller.build(state());
     controller.views.frame('pilot', false);
-    expect(rig.follow).toHaveBeenLastCalledWith(null);
+    expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
     expect(rig.jumpTo).toHaveBeenCalledTimes(1);
   });
 
