@@ -87,7 +87,7 @@ describe('camera views', () => {
 
   it('frames the wide view far out', () => {
     const wide = followPose(CHASE, FOLLOW_VIEWS.wide, SLOPES);
-    expect(wide.position.distanceTo(wide.target)).toBeGreaterThan(8 * CHASE.span);
+    expect(wide.position.distanceTo(wide.target)).toBeGreaterThan(2 * CHASE.span);
   });
 
   it('frames the whole loiter circle up to the cruise altitude for the orbit', () => {
