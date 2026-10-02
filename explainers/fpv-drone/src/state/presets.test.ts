@@ -36,8 +36,8 @@ describe('chapter presets', () => {
     });
   });
 
-  it('seeks each chapter to its second of the flight and never pauses', () => {
-    expect(PRESET_IDS.map((id) => PRESETS[id].startAt)).toEqual([0, 5, 16, 20, 30, 52]);
+  it('seeks each chapter but flight to its second of the flight and never pauses', () => {
+    expect(PRESET_IDS.map((id) => PRESETS[id].startAt)).toEqual([0, undefined, 16, 20, 30, 52]);
     Object.values(PRESETS).forEach((preset) => expect(preset.pauseAt).toBeUndefined());
   });
 

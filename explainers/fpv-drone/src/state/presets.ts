@@ -25,9 +25,8 @@ export const DEFAULT_FLIGHT_MODE: FlightModeId = 'acro';
 export const DEFAULT_PACKET_RATE: PacketRate = 250;
 export const DEFAULT_SPEEDSTER: SpeedsterId = 'longRange';
 
-const CHAPTER_START_S: Readonly<Record<PresetId, number>> = {
+const CHAPTER_START_S: Readonly<Record<Exclude<PresetId, 'flight'>, number>> = {
   overview: 0,
-  flight: 5,
   controller: 16,
   link: 20,
   power: 30,
@@ -49,7 +48,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'top',
     speed: NORMAL_SPEED,
     view: { arrows: true },
-    startAt: CHAPTER_START_S.flight,
     controls: ['move', 'tilt'],
     labels: [
       'motorFrontLeft',
