@@ -88,12 +88,13 @@ describe('reaper store', () => {
     expect(store.getState().load).toBe('clean');
   });
 
-  it('seeks each chapter without stopping playback and plays the endurance chapter faster', () => {
+  it('seeks each chapter without stopping playback at normal speed', () => {
     const store = createReaperStore({ phase: 80, playing: true });
     store.getState().applyPreset('strike');
     expect(store.getState()).toMatchObject({ phase: 61.5, playing: true, speed: 1 });
+    store.getState().setSpeed(2);
     store.getState().applyPreset('endurance');
-    expect(store.getState()).toMatchObject({ phase: 46, playing: true, speed: 2 });
+    expect(store.getState()).toMatchObject({ phase: 46, playing: true, speed: 1 });
   });
 
   it('keeps the labels through the chapters', () => {

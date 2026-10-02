@@ -31,7 +31,6 @@ const CHAPTER_START_UNITS: Readonly<Record<PresetId, number>> = {
 };
 
 const NORMAL_SPEED = 1;
-const ENDURANCE_SPEED = 2;
 
 export const PRESETS: Record<PresetId, Preset> = {
   overview: {
@@ -97,7 +96,7 @@ export const PRESETS: Record<PresetId, Preset> = {
   },
   endurance: {
     camera: 'orbit',
-    speed: ENDURANCE_SPEED,
+    speed: NORMAL_SPEED,
     view: { cutaway: false, track: true },
     startAt: CHAPTER_START_UNITS.endurance,
     controls: ['areaDistance'],

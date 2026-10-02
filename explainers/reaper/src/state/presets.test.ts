@@ -28,8 +28,8 @@ describe('chapter presets', () => {
     ]);
   });
 
-  it('plays every chapter at normal speed but the endurance one at twice', () => {
-    expect(PRESET_IDS.map((id) => PRESETS[id].speed)).toEqual([1, 1, 1, 1, 1, 2]);
+  it('plays every chapter at normal speed', () => {
+    expect(PRESET_IDS.map((id) => PRESETS[id].speed)).toEqual([1, 1, 1, 1, 1, 1]);
     Object.values(PRESETS).forEach((preset) => {
       expect(preset.speed).toBeGreaterThanOrEqual(SPEED_RANGE.min);
       expect(preset.speed).toBeLessThanOrEqual(SPEED_RANGE.max);
