@@ -53,7 +53,7 @@ describe('reaper formatting', () => {
 
   it('names the playback factor', () => {
     expect(formatSpeed(0.25)).toBe(fill(timeline.speedFormat, { factor: '0.25' }));
-    expect(describeSpeed(2)).toBe(fill(timeline.speedValue, { factor: '2' }));
+    expect(describeSpeed()).toBe(timeline.speedValue);
   });
 
   it('shows the altitude in metres and feet', () => {
@@ -112,10 +112,10 @@ describe('reaper formatting', () => {
   it('fills every speed stop for the dock', () => {
     for (let speed = 0.25; speed <= 4; speed += 0.25) {
       const value = formatSpeed(speed);
-      const text = t('controls.speedValue', { value, description: describeSpeed(speed) });
+      const text = t('controls.speedValue', { value, description: describeSpeed() });
       expect(isFilled(text), text).toBe(true);
       expect(text).toContain(value);
-      expect(text).toContain(describeSpeed(speed));
+      expect(text).toContain(describeSpeed());
       expect(value).toContain(formatNumber(speed));
     }
   });

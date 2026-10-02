@@ -83,8 +83,8 @@ export function formatSpeed(speed: number): string {
   return t('timeline.speedFormat', { factor: formatNumber(speed) });
 }
 
-export function describeSpeed(speed: number): string {
-  return t('timeline.speedValue', { factor: formatNumber(speed) });
+export function describeSpeed(): string {
+  return t('timeline.speedValue');
 }
 
 export function formatAltitude(metres: number): string {
