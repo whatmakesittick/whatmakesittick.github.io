@@ -1,0 +1,11 @@
+export const GEO_ALTITUDE_KM = 35786;
+export const LIGHT_SPEED_KMPS = 299792;
+export const EARTH_GIRTH_KM = 40075;
+
+const LEGS_PER_HOP = 2;
+const HOPS_PER_ROUND_TRIP = 2;
+
+export const HOP_KM = LEGS_PER_HOP * GEO_ALTITUDE_KM;
+export const HOP_S = HOP_KM / LIGHT_SPEED_KMPS;
+export const ROUND_TRIP_S = HOPS_PER_ROUND_TRIP * HOP_S;
+export const HOP_EARTH_GIRTHS = HOP_KM / EARTH_GIRTH_KM;
