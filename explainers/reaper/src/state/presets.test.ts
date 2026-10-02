@@ -37,7 +37,7 @@ describe('chapter presets', () => {
   });
 
   it('seeks each chapter to its moment and never pauses', () => {
-    expect(PRESET_IDS.map((id) => PRESETS[id].startAt)).toEqual([0, 12, 23, 44, 61.5, 46]);
+    expect(PRESET_IDS.map((id) => PRESETS[id].startAt)).toEqual([0, 12, 23, 44, 60.5, 46]);
     Object.values(PRESETS).forEach((preset) => expect(preset.pauseAt).toBeUndefined());
   });
 

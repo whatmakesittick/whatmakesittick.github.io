@@ -26,7 +26,7 @@ const CHAPTER_START_UNITS: Readonly<Record<PresetId, number>> = {
   flight: 12,
   link: 23,
   sensor: 44,
-  strike: 61.5,
+  strike: 60.5,
   endurance: 46,
 };
 

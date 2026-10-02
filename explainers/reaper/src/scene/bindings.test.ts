@@ -80,7 +80,7 @@ describe('scene bindings', () => {
     bindStore(store, targets);
     store.getState().applyPreset('strike');
     expect(frame).toHaveBeenLastCalledWith('strike', true, undefined);
-    expect(received.at(-1)).toMatchObject({ phase: 61.5, clock: minutesAt(61.5) });
+    expect(received.at(-1)).toMatchObject({ phase: 60.5, clock: minutesAt(60.5) });
   });
 
   it('labels only the parts the scene draws', () => {

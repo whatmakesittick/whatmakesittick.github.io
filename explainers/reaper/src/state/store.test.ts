@@ -91,7 +91,7 @@ describe('reaper store', () => {
   it('seeks each chapter without stopping playback at normal speed', () => {
     const store = createReaperStore({ phase: 80, playing: true });
     store.getState().applyPreset('strike');
-    expect(store.getState()).toMatchObject({ phase: 61.5, playing: true, speed: 1 });
+    expect(store.getState()).toMatchObject({ phase: 60.5, playing: true, speed: 1 });
     store.getState().setSpeed(2);
     store.getState().applyPreset('endurance');
     expect(store.getState()).toMatchObject({ phase: 46, playing: true, speed: 1 });
