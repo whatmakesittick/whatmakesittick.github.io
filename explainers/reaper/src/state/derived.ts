@@ -34,8 +34,8 @@ function readingAt(phase: number, sensorMode: SensorModeId, load: LoadId): Missi
   return {
     clock,
     flight: flightAt(phase),
-    strike: strikeAt(phase),
-    sensor: sensorAt(phase, sensorMode),
+    strike: strikeAt(phase, load),
+    sensor: sensorAt(phase, sensorMode, load),
     link: linkAt(clock),
     fuel: fuelAt(phase, load),
   };

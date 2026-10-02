@@ -14,7 +14,7 @@ export const THEME = {
   fuel: '#f5a524',
   satLink: '#5fa8ff',
   losLink: '#6fd38a',
-  laser: '#ff4d4d',
+  laser: '#c6ffd9',
   infrared: '#ff9a3c',
   daylight: '#f4f7fb',
   plume: '#ffd9a0',

@@ -1,5 +1,5 @@
 import { clamp, lerp } from '@core/math';
-import type { Point, SensorModeId, SensorReading, StrikeReading } from '../ids';
+import type { LoadId, Point, SensorModeId, SensorReading, StrikeReading } from '../ids';
 import { flightAt, isOnStation } from './flight';
 import { TARGET } from './layout';
 import { MOMENTS } from './mission';
@@ -30,7 +30,8 @@ export function missilePointAt(share: number): Point {
   ];
 }
 
-export function strikeAt(units: number): StrikeReading {
+export function strikeAt(units: number, load: LoadId): StrikeReading {
+  if (load === 'clean') return { stage: 'none', share: 0, launchPoint: null, flash: 0 };
   if (units < LAUNCH_UNITS) return { stage: 'armed', share: 0, launchPoint: null, flash: 0 };
   if (units < IMPACT_UNITS) {
     const share = (units - LAUNCH_UNITS) / (IMPACT_UNITS - LAUNCH_UNITS);
@@ -53,8 +54,8 @@ export function sensorAimAt(units: number): Point {
   ];
 }
 
-export function sensorAt(units: number, mode: SensorModeId): SensorReading {
-  const { stage } = strikeAt(units);
+export function sensorAt(units: number, mode: SensorModeId, load: LoadId): SensorReading {
+  const { stage } = strikeAt(units, load);
   return {
     mode,
     aim: sensorAimAt(units),

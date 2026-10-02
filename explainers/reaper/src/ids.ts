@@ -68,7 +68,7 @@ export type AnchorId =
 
 export type LinkMode = 'los' | 'sat';
 
-export type MissileStage = 'armed' | 'flying' | 'hit' | 'done';
+export type MissileStage = 'none' | 'armed' | 'flying' | 'hit' | 'done';
 
 export type Point = readonly [x: number, y: number, z: number];
 

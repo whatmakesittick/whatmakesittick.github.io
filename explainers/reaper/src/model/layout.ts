@@ -32,7 +32,7 @@ export const LOS_MAST = { position: [-60, 0, 24] as Point, height: 3 } as const;
 export const CRUISE_ALTITUDE_M = 7600;
 export const CRUISE_ALTITUDE = metresToUnits(CRUISE_ALTITUDE_M);
 export const CLIMB_END_DISTANCE = 900;
-export const DESCENT_LENGTH = 1190;
+export const DESCENT_LENGTH = 400;
 
 export const LOITER = {
   entry: [1000, 0] as const,

@@ -68,7 +68,7 @@ describe('mission clock', () => {
     expect(minutesAt(MOMENTS.launch)).toBe(480);
     expect((minutesAt(MOMENTS.impact) - 480) * 60).toBeCloseTo(25, 9);
     expect(minutesAt(MOMENTS.handback)).toBeCloseTo(HANDBACK_MIN, 9);
-    expect(minutesAt(MOMENTS.touchdown)).toBeCloseTo(620, 9);
+    expect(minutesAt(MOMENTS.touchdown)).toBeCloseTo(550, 9);
     expect(MOMENTS.liftoff).toBeCloseTo(7.3, 1);
   });
 });

@@ -14,9 +14,9 @@ export const BASE_UNITS_PER_SECOND = MISSION_UNITS / RUN_SECONDS_AT_NORMAL_SPEED
 export const HANDOVER_MIN = 30;
 export const LAUNCH_MIN = 480;
 export const MISSILE_FLIGHT_S = 25;
-export const HANDBACK_MIN = 615;
-export const TOUCHDOWN_MIN = 620;
-export const MISSION_END_MIN = 625;
+export const HANDBACK_MIN = 535;
+export const TOUCHDOWN_MIN = 550;
+export const MISSION_END_MIN = 555;
 
 export const SEGMENTS: readonly Segment[] = [
   { units: [0, 10], minutes: [0, 2] },
