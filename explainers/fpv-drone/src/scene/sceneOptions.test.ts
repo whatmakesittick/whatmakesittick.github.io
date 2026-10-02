@@ -11,7 +11,7 @@ describe('scene options', () => {
     expect(SCENE_OPTIONS.fog?.color).toBe(SCENE_OPTIONS.background);
     expect(SCENE_OPTIONS.fog?.near).toBeLessThan(SCENE_OPTIONS.fog?.far ?? 0);
     expect(SCENE_OPTIONS.fog?.near).toBeGreaterThan(SCENE_BOUNDS.x[1] - SCENE_BOUNDS.x[0]);
-    expect(SCENE_OPTIONS.gaugeSide).toBe('top');
+    expect(SCENE_OPTIONS.gaugeSide).toBe('right');
   });
 
   it('reaches the sky dome and lets the camera look up from below', () => {
