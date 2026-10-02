@@ -411,6 +411,20 @@ export const TRACK = {
   floor: 0.08,
 } as const;
 
+export const GROUND_WASH = {
+  radius: 6,
+  spread: 0.5,
+  lift: LAUNCH_PAD.thickness + LAUNCH_PAD.markLift * 2,
+  reach: { full: 1, none: 6 },
+  thrust: { reference: DEMO_HOVER_SHARE, max: 1.3 },
+  rings: { count: 3, speed: 0.8, wrap: 64 },
+  envelope: { inner: [0.05, 0.3] as Extent, outer: 0.55 },
+  streaks: { fine: 41, coarse: 13 },
+  opacity: 0.75,
+  colour: '#ddd2b0',
+  shown: 0.01,
+} as const;
+
 export const SCENE_LIMITS = {
   cameraNear: 0.2,
   cameraFar: 14000,

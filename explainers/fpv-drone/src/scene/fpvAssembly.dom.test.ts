@@ -12,6 +12,7 @@ import { LAUNCH_PAD, PROP } from './constants';
 import { FpvAssembly } from './fpvAssembly';
 import { propName } from './parts/drone/propeller';
 import { DOWNWASH_NAME } from './parts/effects/downwash';
+import { GROUND_WASH_NAME } from './parts/effects/groundWash';
 
 const ANCHORS: readonly AnchorId[] = ['drone', 'camera', 'station', 'crossroads'];
 const REGIONS: readonly RegionId[] = ['scene', 'station', 'drone', 'crossroads', 'route'];
@@ -301,6 +302,17 @@ describe('fpv assembly', () => {
     show(cruising());
     expect(downwash()).not.toBe(assembly.root);
     expect(isShown(downwash())).toBe(true);
+  });
+
+  it('raises the ground wash under the drone only near the ground', () => {
+    const wash = () => assembly.root.getObjectByName(GROUND_WASH_NAME) ?? assembly.root;
+    show(stateAt({ flight: { position: [PAD[0], 1, PAD[2]], height: 1, onGround: false } }));
+    expect(wash()).not.toBe(assembly.root);
+    expect(isShown(wash())).toBe(true);
+    expect(worldOf(wash()).x).toBeCloseTo(PAD[0]);
+    expect(worldOf(wash()).y).toBeGreaterThan(LAUNCH_PAD.thickness);
+    show(cruising());
+    expect(isShown(wash())).toBe(false);
   });
 
   it('moves on its own only while playing', () => {
