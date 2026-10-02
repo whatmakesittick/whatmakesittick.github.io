@@ -1,7 +1,7 @@
 import { Box3, Vector3 } from 'three';
 import { describe, expect, it, vi } from 'vitest';
 import type { AssemblyState } from '../ids';
-import { flightAt, sensorAt, strikeAt } from '../model';
+import { LOITER, flightAt, sensorAt, strikeAt } from '../model';
 import { ReaperController } from './controller';
 import type { ReaperControllerDependencies } from './controller';
 
@@ -85,6 +85,22 @@ describe('reaper controller', () => {
     const target = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
     expect(target?.toArray()).toEqual([500, 300, 0]);
     expect(rig.follow).toHaveBeenLastCalledWith(expect.anything());
+  });
+
+  it('frames the orbit and the strike on fixed layout regions without following', () => {
+    const { rig, shell } = fakeShell();
+    const reaper = new ReaperController(shell);
+    reaper.views.frame('orbit', true);
+    expect(rig.tweenTo).not.toHaveBeenCalled();
+    reaper.build(STATE);
+    reaper.views.frame('orbit', true);
+    expect(rig.follow).toHaveBeenLastCalledWith(null);
+    const orbitTarget = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
+    expect(orbitTarget?.x).toBeCloseTo(LOITER.centre[0], 6);
+    expect(orbitTarget?.z).toBeCloseTo(LOITER.centre[1], 6);
+    reaper.views.frame('strike', false);
+    expect(rig.follow).toHaveBeenLastCalledWith(null);
+    expect(rig.jumpTo).toHaveBeenCalledTimes(1);
   });
 
   it('hands the camera distance to the assembly each frame', () => {

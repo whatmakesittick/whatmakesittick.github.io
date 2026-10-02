@@ -1,11 +1,13 @@
-import type { Object3D } from 'three';
+import type { Box3, Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
+import { regionFromSpec } from '@core/scene/regions';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
-import type { AssemblyState, CameraView, RegionId } from '../ids';
+import type { AssemblyState, CameraView } from '../ids';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
-import { cameraViews } from './cameraViews';
+import { LAYOUT_REGIONS, cameraViews, isLayoutRegion } from './cameraViews';
+import type { ViewRegionId } from './cameraViews';
 
 export type ReaperControllerDependencies = Pick<
   SceneShell,
@@ -13,7 +15,7 @@ export type ReaperControllerDependencies = Pick<
 >;
 
 export class ReaperController {
-  readonly views: CameraViews<CameraView, RegionId>;
+  readonly views: CameraViews<CameraView, ViewRegionId>;
   private readonly dependencies: ReaperControllerDependencies;
   private assembly: Assembly | null = null;
   private cancelWarmUp: () => void = () => {};
@@ -22,7 +24,7 @@ export class ReaperController {
     this.dependencies = dependencies;
     this.views = new CameraViews(dependencies.rig, {
       views: cameraViews(() => this.assembly?.chaseTarget() ?? null),
-      region: (id) => this.assembly?.region(id) ?? null,
+      region: (id) => this.region(id),
       anchor: () => this.assembly?.anchor('aircraft') ?? null,
     });
   }
@@ -37,6 +39,11 @@ export class ReaperController {
     const bounds = assembly.region('scene');
     rig.setBounds(bounds, bounds.min.y);
     this.cancelWarmUp = whenIdle(() => assembly.warmUp?.((object) => this.compileHidden(object)));
+  }
+
+  private region(id: ViewRegionId): Box3 | null {
+    if (!this.assembly) return null;
+    return isLayoutRegion(id) ? regionFromSpec(LAYOUT_REGIONS[id]) : this.assembly.region(id);
   }
 
   private compileHidden(object: Object3D): void {

@@ -1,14 +1,19 @@
 import { Vector3 } from 'three';
 import { toRadians } from '@core/math';
-import type { CustomView } from '@core/scene/cameraViews';
+import type { CustomView, Direction, FramedView, ViewSpec } from '@core/scene/cameraViews';
 import type { CameraPose } from '@core/scene/frameBox';
 import type { FramingSlopes } from '@core/scene/lens';
-import type { CameraView, Point } from '../ids';
+import type { RegionSpec } from '@core/scene/regions';
+import type { CameraView, Point, RegionId } from '../ids';
+import { CRUISE_ALTITUDE, LAUNCH_POINT, LOITER, MISSILE_ARC_RISE, TARGET } from '../model';
 import type { ChaseTarget } from './assembly';
 
 export type ChaseSource = () => ChaseTarget | null;
+export type LayoutRegionId = 'loiter' | 'strikeLane';
+export type ViewRegionId = RegionId | LayoutRegionId;
 
-type HeadingView = Exclude<CameraView, 'strike'>;
+type FollowView = Exclude<CameraView, 'strike' | 'orbit'>;
+type FixedView = Extract<CameraView, 'strike' | 'orbit'>;
 
 interface FollowSpec {
   bearing: number;
@@ -16,40 +21,22 @@ interface FollowSpec {
   spans: number;
   aimAhead: number;
   aimUp: number;
-  aimToTarget: number;
 }
 
-interface StrikeSpec {
-  sideTurn: number;
-  lift: number;
-  spans: number;
-  aimToTarget: number;
-}
+const LOITER_MARGIN = 30;
+const LOITER_HEADROOM = 30;
+const STRIKE_LANE_MARGIN = 20;
+const STRIKE_LIFT = toRadians(25);
 
-export const FOLLOW_VIEWS: Readonly<Record<HeadingView, FollowSpec>> = {
-  chase: {
-    bearing: toRadians(-145),
-    elevation: toRadians(14),
-    spans: 1.7,
-    aimAhead: 0,
-    aimUp: 0,
-    aimToTarget: 0,
-  },
-  side: {
-    bearing: toRadians(90),
-    elevation: toRadians(3),
-    spans: 1.25,
-    aimAhead: 0,
-    aimUp: 0,
-    aimToTarget: 0,
-  },
+export const FOLLOW_VIEWS: Readonly<Record<FollowView, FollowSpec>> = {
+  chase: { bearing: toRadians(-145), elevation: toRadians(14), spans: 1.7, aimAhead: 0, aimUp: 0 },
+  side: { bearing: toRadians(90), elevation: toRadians(3), spans: 1.25, aimAhead: 0, aimUp: 0 },
   wide: {
     bearing: toRadians(160),
     elevation: toRadians(26),
     spans: 30,
     aimAhead: -150,
     aimUp: -80,
-    aimToTarget: 0,
   },
   nose: {
     bearing: toRadians(-40),
@@ -57,23 +44,43 @@ export const FOLLOW_VIEWS: Readonly<Record<HeadingView, FollowSpec>> = {
     spans: 0.7,
     aimAhead: 4.6,
     aimUp: -0.95,
-    aimToTarget: 0,
-  },
-  orbit: {
-    bearing: toRadians(180),
-    elevation: toRadians(55),
-    spans: 34,
-    aimAhead: 0,
-    aimUp: 0,
-    aimToTarget: 0,
   },
 };
 
-export const STRIKE_VIEW: StrikeSpec = {
-  sideTurn: toRadians(14),
-  lift: toRadians(12),
-  spans: 12,
-  aimToTarget: 0.45,
+function around(centre: number, reach: number): readonly [number, number] {
+  return [centre - reach, centre + reach];
+}
+
+function between(a: number, b: number, margin: number): readonly [number, number] {
+  return [Math.min(a, b) - margin, Math.max(a, b) + margin];
+}
+
+export const LAYOUT_REGIONS: Readonly<Record<LayoutRegionId, RegionSpec>> = {
+  loiter: {
+    x: around(LOITER.centre[0], LOITER.radius + LOITER_MARGIN),
+    y: [0, CRUISE_ALTITUDE + LOITER_HEADROOM],
+    z: around(LOITER.centre[1], LOITER.radius + LOITER_MARGIN),
+  },
+  strikeLane: {
+    x: between(LAUNCH_POINT[0], TARGET[0], STRIKE_LANE_MARGIN),
+    y: [TARGET[1], LAUNCH_POINT[1] + MISSILE_ARC_RISE],
+    z: between(LAUNCH_POINT[2], TARGET[2], STRIKE_LANE_MARGIN),
+  },
+};
+
+export function isLayoutRegion(id: ViewRegionId): id is LayoutRegionId {
+  return id in LAYOUT_REGIONS;
+}
+
+function behindLaunch(): Direction {
+  const away = Math.atan2(LAUNCH_POINT[2] - TARGET[2], LAUNCH_POINT[0] - TARGET[0]);
+  const level = Math.cos(STRIKE_LIFT);
+  return [level * Math.cos(away), Math.sin(STRIKE_LIFT), level * Math.sin(away)];
+}
+
+export const FIXED_VIEWS: Readonly<Record<FixedView, FramedView<ViewRegionId>>> = {
+  orbit: { region: 'loiter', direction: [-0.55, 1.2, -0.45], margin: 1.05 },
+  strike: { region: 'strikeLane', direction: behindLaunch(), margin: 1.15 },
 };
 
 function vectorOf(point: Point): Vector3 {
@@ -91,7 +98,6 @@ function fitDistance(width: number, slopes: FramingSlopes): number {
 
 function aimPoint(chase: ChaseTarget, spec: FollowSpec): Vector3 {
   return vectorOf(chase.position)
-    .lerp(vectorOf(chase.target), spec.aimToTarget)
     .add(direction(chase.heading, 0).multiplyScalar(spec.aimAhead))
     .add(new Vector3(0, spec.aimUp, 0));
 }
@@ -107,41 +113,22 @@ export function followPose(
   return { position: aim.clone().add(offset), target: aim };
 }
 
-export function strikePose(chase: ChaseTarget, slopes: FramingSlopes): CameraPose {
-  const aircraft = vectorOf(chase.position);
-  const target = vectorOf(chase.target);
-  const away = aircraft.clone().sub(target);
-  const azimuth = Math.atan2(away.z, away.x) + STRIKE_VIEW.sideTurn;
-  const elevation = Math.atan2(away.y, Math.hypot(away.x, away.z)) + STRIKE_VIEW.lift;
-  const distance = fitDistance(STRIKE_VIEW.spans * chase.span, slopes);
-  return {
-    position: aircraft.clone().add(direction(azimuth, elevation).multiplyScalar(distance)),
-    target: aircraft.clone().lerp(target, STRIKE_VIEW.aimToTarget),
-  };
-}
-
-function followView(
-  source: ChaseSource,
-  pose: (chase: ChaseTarget, slopes: FramingSlopes) => CameraPose,
-): CustomView {
+function followView(source: ChaseSource, spec: FollowSpec): CustomView {
   return {
     pose: (slopes) => {
       const chase = source();
-      return chase ? pose(chase, slopes) : null;
+      return chase ? followPose(chase, spec, slopes) : null;
     },
     follow: true,
   };
 }
 
-export function cameraViews(source: ChaseSource): Record<CameraView, CustomView> {
-  const headingView = (view: HeadingView) =>
-    followView(source, (chase, slopes) => followPose(chase, FOLLOW_VIEWS[view], slopes));
+export function cameraViews(source: ChaseSource): Record<CameraView, ViewSpec<ViewRegionId>> {
   return {
-    chase: headingView('chase'),
-    side: headingView('side'),
-    wide: headingView('wide'),
-    nose: headingView('nose'),
-    orbit: headingView('orbit'),
-    strike: followView(source, strikePose),
+    chase: followView(source, FOLLOW_VIEWS.chase),
+    side: followView(source, FOLLOW_VIEWS.side),
+    wide: followView(source, FOLLOW_VIEWS.wide),
+    nose: followView(source, FOLLOW_VIEWS.nose),
+    ...FIXED_VIEWS,
   };
 }
