@@ -1,0 +1,173 @@
+:root {
+  --takeoff: #ffb347;
+  --climb: #ffd24c;
+  --transit: #5fa8ff;
+  --orbit: #6fd38a;
+  --return: #b48cff;
+  --landing: #ff8a7a;
+  --battery: #f5a524;
+  --control-link: #6fd38a;
+  --video-link: #5fa8ff;
+  --clockwise: #ff9a3c;
+  --counter: #5fd0ff;
+  --olive: #5b6b3a;
+}
+
+.section-readouts,
+.range-widget:has([data-control='tilt']),
+.range-widget:has([data-control='payload']) {
+  --readout-min-width: 8rem;
+}
+
+.section-readouts {
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.section-readouts:has([data-readout='overview-battery']),
+.section-readouts:has([data-readout='rate-period']),
+.section-readouts:has([data-readout='limits-speed']),
+.range-widget:has([data-control='tilt']) .range-widget__readouts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.section-readouts:has([data-readout='flight-mix']),
+.section-readouts:has([data-readout='mode-stick']) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.section-readouts > div:has([data-readout='limits-who']),
+.range-widget__readouts > div:has([data-readout='power-hover']) {
+  grid-column: 1 / -1;
+}
+
+.range-widget:has([data-control='payload']) .range-widget__readouts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+[data-control='tilt'] {
+  --range-color: var(--transit);
+}
+
+[data-control='payload'] {
+  --range-color: var(--battery);
+}
+
+[data-readout='overview-battery'],
+[data-readout='power-volts'],
+[data-readout='power-amps'] {
+  color: var(--battery);
+}
+
+[data-readout='link-signal'] {
+  color: var(--control-link);
+}
+
+[data-readout='link-latency'],
+[data-readout='link-picture'] {
+  color: var(--video-link);
+}
+
+.signal-path__title {
+  margin: 24px 0 8px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.signal-path {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+  counter-reset: signal-step;
+}
+
+.signal-path li {
+  position: relative;
+  padding: 10px 14px 10px 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--control-link) 8%, transparent),
+    transparent
+  );
+  counter-increment: signal-step;
+}
+
+.signal-path li::before {
+  content: counter(signal-step);
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  width: 20px;
+  color: var(--control-link);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-align: center;
+}
+
+.chip[data-action='moment'][data-value='liftoff'] {
+  --tone: var(--takeoff);
+}
+
+.chip[data-action='moment'][data-value='cruise'] {
+  --tone: var(--transit);
+}
+
+.chip[data-action='moment'][data-value='onStation'] {
+  --tone: var(--orbit);
+}
+
+.chip[data-action='moment'][data-value='turnHome'] {
+  --tone: var(--return);
+}
+
+.chip[data-action='moment'][data-value='touchdown'] {
+  --tone: var(--landing);
+}
+
+.chip[data-action='move'] {
+  --tone: var(--clockwise);
+}
+
+.chip[data-action='move'][data-value='yaw'] {
+  --tone: var(--counter);
+}
+
+.chip[data-action='flightMode'] {
+  --tone: var(--olive);
+}
+
+.chip[data-action='video'] {
+  --tone: var(--video-link);
+}
+
+.chip[data-action='packetRate'] {
+  --tone: var(--control-link);
+}
+
+.chip[data-action='speedster'] {
+  --tone: var(--climb);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action='moment'],
+  .chip[data-action='move'],
+  .chip[data-action='flightMode'],
+  .chip[data-action='video'],
+  .chip[data-action='packetRate'],
+  .chip[data-action='speedster'] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-readouts:has([data-readout='overview-battery']),
+  .section-readouts:has([data-readout='rate-period']),
+  .section-readouts:has([data-readout='limits-speed']),
+  .range-widget:has([data-control='tilt']) .range-widget__readouts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

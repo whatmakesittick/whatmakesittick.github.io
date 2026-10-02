@@ -1,0 +1,12 @@
+{
+  "slug": "fpv-drone",
+  "tags": ["aircraft", "flight", "weapons"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A camouflaged FPV quadcopter banking low over a field under a grey sky, its four propellers blurred and a radio beam reaching back to a pilot's dugout, beside the title How an FPV drone flies"
+  }
+}
