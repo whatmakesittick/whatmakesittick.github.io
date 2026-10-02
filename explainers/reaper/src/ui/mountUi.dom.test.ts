@@ -3,11 +3,12 @@ import { initI18n } from '@core/i18n';
 import { mountActions } from '@core/ui/actions';
 import chapters from '../../chapters.html?raw';
 import en from '../../locales/en.json';
+import { COMPARISON_IDS, LOAD_IDS, MOMENT_IDS, SENSOR_MODE_IDS } from '../ids';
 import { MOMENTS, unitsAt } from '../model';
 import { createReaperStore } from '../state';
 import type { ReaperStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
-import { fill } from './testing';
+import { fill, isFilled } from './testing';
 import { mountReaperUi } from '.';
 
 const { units } = en;
@@ -67,30 +68,32 @@ describe('chapter widgets', () => {
 
   it('compares the Reaper with the aircraft the reader picks', () => {
     expect(pressed('comparison', 'predator')).toBe('true');
-    expect(readout('flight-weight')).toBe(
-      fill(en.flight.weight.predator, { reaper: '4,760', ratio: '4.7' }),
-    );
+    ['4,760', '1,020', '4.7'].forEach((value) => expect(readout('flight-weight')).toContain(value));
     click('comparison', 'cessna');
     expect(pressed('comparison', 'cessna')).toBe('true');
-    expect(readout('flight-span')).toBe(
-      fill(en.flight.span.cessna, { reaper: '20.1', other: '11', slender: '2.3' }),
+    ['20.1', '11', '17', '7.5', '2.3'].forEach((value) =>
+      expect(readout('flight-span')).toContain(value),
     );
-    expect(readout('flight-engine')).toBe(fill(en.flight.engine.cessna, { reaper: '900' }));
+    expect(readout('flight-engine')).toContain('900');
+    ['flight-span', 'flight-weight', 'flight-engine'].forEach((id) =>
+      expect(isFilled(readout(id)), id).toBe(true),
+    );
   });
 
   it('hands the aircraft to the satellite and back in the link chapter', () => {
     click('moment', 'liftoff');
     expect(readout('link-mode')).toBe(en.link.mode.los);
     expect(readout('link-crew')).toBe(en.link.crew.los);
-    expect(readout('link-delay')).toBe(en.link.delay.los);
+    const radioDelay = readout('link-delay');
     click('moment', 'handover');
     expect(readout('link-mode')).toBe(en.link.mode.sat);
     expect(readout('link-crew')).toBe(en.link.crew.sat);
-    expect(readout('link-delay')).toBe(
-      fill(en.link.delay.sat, { roundTrip: fill(units.seconds, { value: '0.48' }) }),
-    );
+    expect(readout('link-delay')).not.toBe(radioDelay);
+    expect(readout('link-delay')).toContain('0.48 s');
+    expect(isFilled(readout('link-delay'))).toBe(true);
     click('moment', 'handback');
     expect(readout('link-crew')).toBe(en.link.crew.los);
+    expect(readout('link-delay')).toBe(radioDelay);
   });
 
   it('switches what the sensor ball shows and where it looks', () => {
@@ -143,6 +146,26 @@ describe('chapter widgets', () => {
     );
     expect(readout('endurance-station')).toBe(
       fill(units.hoursMinutes, { hours: '16', minutes: '0' }),
+    );
+  });
+
+  it('fills every readout at every moment, comparison, sensor mode and load', () => {
+    const readouts = () => [...document.querySelectorAll('[data-readout]')];
+    MOMENT_IDS.forEach((moment) =>
+      COMPARISON_IDS.forEach((comparison) =>
+        SENSOR_MODE_IDS.forEach((sensorMode) =>
+          LOAD_IDS.forEach((load) => {
+            store.getState().seekMoment(moment);
+            store.setState({ comparison, sensorMode, load });
+            readouts().forEach((element) =>
+              expect(
+                isFilled(element.textContent),
+                element.getAttribute('data-readout') ?? '',
+              ).toBe(true),
+            );
+          }),
+        ),
+      ),
     );
   });
 

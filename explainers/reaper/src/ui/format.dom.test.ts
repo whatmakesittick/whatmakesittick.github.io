@@ -1,7 +1,10 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { initI18n } from '@core/i18n';
+import { formatNumber } from '@core/format';
+import { initI18n, t } from '@core/i18n';
 import en from '../../locales/en.json';
-import { MOMENTS, flightSeconds, unitsAt } from '../model';
+import { LOAD_IDS } from '../ids';
+import { MISSION_UNITS, MOMENTS, flightSeconds, unitsAt } from '../model';
+import { createReaperStore } from '../state';
 import {
   describePhase,
   describeSpeed,
@@ -17,9 +20,10 @@ import {
   formatSpeed,
   formatWeightComparison,
 } from './format';
-import { fill } from './testing';
+import { REAPER_READOUTS } from './readouts';
+import { fill, isFilled } from './testing';
 
-const { units, timeline, flight, link } = en;
+const { units, timeline } = en;
 
 function clock(text: string): string {
   return fill(timeline.clock, { clock: text });
@@ -75,26 +79,49 @@ describe('reaper formatting', () => {
     );
   });
 
-  it('gives the satellite link its round trip', () => {
-    expect(formatLinkDelay('sat')).toBe(
-      fill(link.delay.sat, { roundTrip: fill(units.seconds, { value: '0.48' }) }),
-    );
-    expect(formatLinkDelay('los')).toBe(link.delay.los);
+  it('gives the satellite link its hop and its round trip in both modes', () => {
+    (['los', 'sat'] as const).forEach((mode) => {
+      const text = formatLinkDelay(mode);
+      expect(isFilled(text), text).toBe(true);
+      ['1.8', '0.24 s', '0.48 s'].forEach((value) => expect(text, mode).toContain(value));
+    });
   });
 
   it('compares the Reaper with the Predator and the Cessna', () => {
-    expect(formatSpanComparison('predator')).toBe(
-      fill(flight.span.predator, { reaper: '20.1', other: '16.8', ratio: '1.2' }),
-    );
-    expect(formatSpanComparison('cessna')).toBe(
-      fill(flight.span.cessna, { reaper: '20.1', other: '11', ratio: '1.8', slender: '2.3' }),
-    );
-    expect(formatWeightComparison('predator')).toBe(
-      fill(flight.weight.predator, { reaper: '4,760', other: '1,020', ratio: '4.7' }),
-    );
-    expect(formatEngineComparison('predator')).toBe(
-      fill(flight.engine.predator, { reaper: '900', other: '115', ratio: '7.8' }),
-    );
-    expect(formatEngineComparison('cessna')).toBe(fill(flight.engine.cessna, { reaper: '900' }));
+    const expected: [string, readonly string[]][] = [
+      [formatSpanComparison('predator'), ['20.1', '16.8', '1.2']],
+      [formatSpanComparison('cessna'), ['20.1', '11', '1.8', '17', '7.5', '2.3']],
+      [formatWeightComparison('predator'), ['4,760', '1,020', '4.7']],
+      [formatWeightComparison('cessna'), ['4,760', '1,157', '4.1']],
+      [formatEngineComparison('predator'), ['900', '115', '7.8']],
+      [formatEngineComparison('cessna'), ['900']],
+    ];
+    expected.forEach(([text, values]) => {
+      expect(isFilled(text), text).toBe(true);
+      values.forEach((value) => expect(text).toContain(value));
+    });
+  });
+
+  it('fills every speed stop for the dock', () => {
+    for (let speed = 0.25; speed <= 4; speed += 0.25) {
+      const value = formatSpeed(speed);
+      const text = t('controls.speedValue', { value, description: describeSpeed(speed) });
+      expect(isFilled(text), text).toBe(true);
+      expect(text).toContain(value);
+      expect(text).toContain(describeSpeed(speed));
+      expect(value).toContain(formatNumber(speed));
+    }
+  });
+
+  it('fills every gauge readout through the whole mission', () => {
+    LOAD_IDS.forEach((load) => {
+      for (let phase = 0; phase <= MISSION_UNITS; phase += 5) {
+        const state = createReaperStore({ phase, load }).getState();
+        REAPER_READOUTS.forEach((row) => {
+          const text = row.value(state);
+          expect(isFilled(text), `${row.id} at ${phase}: ${text}`).toBe(true);
+        });
+      }
+    });
   });
 });
