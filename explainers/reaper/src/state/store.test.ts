@@ -45,9 +45,9 @@ describe('reaper store', () => {
   it('keeps the target range and the area distance inside their sliders', () => {
     const store = createReaperStore();
     store.getState().setTargetRange(12);
+    expect(store.getState().targetRange).toBe(11);
+    store.getState().setTargetRange(2);
     expect(store.getState().targetRange).toBe(8);
-    store.getState().setTargetRange(1);
-    expect(store.getState().targetRange).toBe(2);
     store.getState().setAreaDistance(5000);
     expect(store.getState().areaDistance).toBe(2000);
     store.getState().setAreaDistance(10);
@@ -57,7 +57,7 @@ describe('reaper store', () => {
   it.each([
     ['flight', 'comparison', 'cessna', 'predator'],
     ['sensor', 'sensorMode', 'infrared', 'day'],
-    ['strike', 'targetRange', 4.5, 8],
+    ['strike', 'targetRange', 10, 8],
     ['endurance', 'areaDistance', 1200, 400],
   ] as const)(
     'keeps the %s chapter control and resets it elsewhere',

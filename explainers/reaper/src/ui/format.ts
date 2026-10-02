@@ -26,7 +26,6 @@ import type { Figure, FlightSeconds, FuelReading } from '../model';
 
 const WHOLE = 0;
 const TENTHS = 1;
-const DECIMAL_LIMIT = 10;
 const PERCENT = 100;
 const CLOCK_DIGITS = 2;
 const CLOCK_PAD = '0';
@@ -51,10 +50,6 @@ const DURING_KEYS = phaseKeys('during');
 
 function whole(value: number): string {
   return formatFixed(value, WHOLE);
-}
-
-function tenthsBelowTen(value: number): string {
-  return formatFixed(value, Math.abs(value) < DECIMAL_LIMIT ? TENTHS : WHOLE);
 }
 
 function tenths(value: number): string {
@@ -135,7 +130,7 @@ export function formatSeconds(seconds: number): string {
 }
 
 export function formatFlightSeconds({ fast, slow }: FlightSeconds): string {
-  return t('units.secondsRange', { from: tenthsBelowTen(fast), to: tenthsBelowTen(slow) });
+  return t('units.secondsRange', { from: whole(fast), to: whole(slow) });
 }
 
 export function formatLinkMode(link: LinkMode): string {

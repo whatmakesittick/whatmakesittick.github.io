@@ -1,5 +1,5 @@
 export const FLIGHT_SPEEDS_MPS = [300, 450] as const;
-export const TARGET_RANGE_KM = { min: 2, max: 8, step: 0.5, default: 8 } as const;
+export const TARGET_RANGE_KM = { min: 8, max: 11, step: 0.5, default: 8 } as const;
 
 const METRES_PER_KM = 1000;
 

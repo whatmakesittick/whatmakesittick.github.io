@@ -110,10 +110,10 @@ describe('chapter widgets', () => {
   it('times the missile with the range slider and follows it to the target', () => {
     expect(output('target-range')).toBe(fill(units.km, { value: '8' }));
     expect(readout('strike-time')).toBe(fill(units.secondsRange, { from: '18', to: '27' }));
-    slide('target-range', 4.5);
-    expect(store.getState().targetRange).toBe(4.5);
-    expect(output('target-range')).toBe(fill(units.km, { value: '4.5' }));
-    expect(readout('strike-time')).toBe(fill(units.secondsRange, { from: '10', to: '15' }));
+    slide('target-range', 10.5);
+    expect(store.getState().targetRange).toBe(10.5);
+    expect(output('target-range')).toBe(fill(units.km, { value: '10.5' }));
+    expect(readout('strike-time')).toBe(fill(units.secondsRange, { from: '23', to: '35' }));
     expect(readout('strike-laser')).toBe(readout('strike-time'));
     expect(readout('strike-missile')).toBe(en.strike.stage.armed);
     click('moment', 'launch');

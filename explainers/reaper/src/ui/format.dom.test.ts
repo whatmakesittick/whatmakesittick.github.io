@@ -73,8 +73,8 @@ describe('reaper formatting', () => {
     expect(formatFlightSeconds(flightSeconds(8))).toBe(
       fill(units.secondsRange, { from: '18', to: '27' }),
     );
-    expect(formatFlightSeconds(flightSeconds(2))).toBe(
-      fill(units.secondsRange, { from: '4.4', to: '6.7' }),
+    expect(formatFlightSeconds(flightSeconds(11))).toBe(
+      fill(units.secondsRange, { from: '24', to: '37' }),
     );
   });
 

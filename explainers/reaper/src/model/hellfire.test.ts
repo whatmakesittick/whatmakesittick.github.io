@@ -9,11 +9,11 @@ describe('Hellfire flight time', () => {
   });
 
   it('grows with the range', () => {
-    expect(flightSeconds(2).slow).toBeCloseTo(6.67, 2);
-    expect(flightSeconds(2).fast).toBeCloseTo(4.44, 2);
+    expect(flightSeconds(11).slow).toBeCloseTo(36.67, 2);
+    expect(flightSeconds(11).fast).toBeCloseTo(24.44, 2);
   });
 
-  it('reaches out to the 8 km range', () => {
-    expect(TARGET_RANGE_KM).toEqual({ min: 2, max: 8, step: 0.5, default: 8 });
+  it('starts at the 8 km a missile covers from the cruise altitude and reaches 11 km', () => {
+    expect(TARGET_RANGE_KM).toEqual({ min: 8, max: 11, step: 0.5, default: 8 });
   });
 });
