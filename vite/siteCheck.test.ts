@@ -7,6 +7,8 @@ const SITE = 'https://whatmakesittick.github.io';
 const EXPLAINERS = ['engine', 'glider'];
 const ABOUT = 'about';
 const LANGUAGES = ['en', 'uk'] as const;
+const COUNTER =
+  '<script data-goatcounter="https://whatmakesittick.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>';
 
 interface PageOptions {
   description?: string;
@@ -15,6 +17,7 @@ interface PageOptions {
   cards?: number;
   preload?: boolean;
   feed?: boolean;
+  counter?: boolean;
 }
 
 function pagePath(code: string, slug: string): string {
@@ -47,12 +50,14 @@ function pageHtml(code: string, slug: string, options: PageOptions = {}): string
     options.feed === false
       ? ''
       : `<link rel="alternate" type="application/rss+xml" href="${SITE}${pagePath(code, '')}feed.xml">`;
+  const counter = options.counter === false ? '' : COUNTER;
   return `<!doctype html><html lang="${code}"><head>
     <title>How it works · What makes it tick</title>
     <meta name="description" content="${options.description ?? 'A short look inside.'}">
     <link rel="canonical" href="${SITE}${path}">
     ${links.join('')}
     ${feed}
+    ${counter}
     ${options.stylesheet ? `<link rel="stylesheet" href="${options.stylesheet}">` : ''}
     <script type="application/ld+json">{"@type":"WebPage"}</script>
     ${preload}
@@ -141,6 +146,12 @@ describe('checkSite', () => {
   it('rejects a translated page that preloads no language chunk', () => {
     expect(checkSite(site({ '/uk/engine/': { preload: false } }))).toEqual([
       '/uk/engine/: preloads no language chunk',
+    ]);
+  });
+
+  it('rejects a page without the visit counter', () => {
+    expect(checkSite(site({ '/about/': { counter: false } }))).toEqual([
+      '/about/: 0 visit counter scripts instead of 1',
     ]);
   });
 

@@ -5,7 +5,7 @@ import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { splitLanguagePath } from '../src/core/i18n/paths.ts';
 import { ABOUT_PAGE, CATALOGUE_PAGE } from '../src/core/pages.ts';
 import { descriptionLimit } from '../src/core/manifest.ts';
-import { FEED_TYPE, SITE_URL, feedUrl } from './site.ts';
+import { ANALYTICS, FEED_TYPE, SITE_URL, feedUrl } from './site.ts';
 
 export interface BuiltPage {
   path: string;
@@ -129,6 +129,10 @@ function deliveryProblems(page: BuiltPage, root: HTMLElement, site: BuiltSite): 
     .querySelectorAll('link[rel="stylesheet"][href]')
     .filter((tag) => EXTERNAL.test(tag.getAttribute('href') ?? ''))
     .forEach((tag) => problems.push(`loads an external stylesheet ${tag.getAttribute('href')}`));
+  const counters = root.querySelectorAll(
+    `script[data-goatcounter="${ANALYTICS.endpoint}"][src="${ANALYTICS.script}"]`,
+  ).length;
+  if (counters !== 1) problems.push(`${counters} visit counter scripts instead of 1`);
   const scripts = loadedScripts(root, site.scripts);
   const bytes = scripts.reduce((sum, href) => sum + (site.gzipBytes.get(href) ?? 0), 0);
   const explainer = isExplainer(page.path);

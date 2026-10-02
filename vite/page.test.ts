@@ -65,6 +65,7 @@ const template = [
   '<link rel="canonical" href="{{url}}" />',
   '{{alternateLinks}}',
   '{{feedLink}}',
+  '{{analytics}}',
   '<meta content="{{image}}" type="{{imageType}}" />',
   '<meta property="og:image:alt" content="{{imageAlt}}" />',
   '{{localeTags}}',
@@ -168,6 +169,12 @@ describe('renderPage', () => {
     );
     expect(html).toContain('<meta property="og:locale" content="en_GB"');
     expect(html).toContain('<meta property="og:locale:alternate" content="uk_UA"');
+  });
+
+  it('loads the visit counter', () => {
+    expect(html).toContain(
+      '<script data-goatcounter="https://whatmakesittick.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>',
+    );
   });
 
   it('describes the social image in the language of the page', () => {

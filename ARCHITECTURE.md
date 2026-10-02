@@ -512,7 +512,9 @@ build and the runtime. A page is rendered in two steps:
    page's own language, so the HTML links every language version without scripts.
    On a catalogue page the grid itself is prerendered too (see "Catalogue").
    The head's `{{languageRedirect}}` holds the inline language redirect on an English page
-   (see "Translations") and nothing elsewhere.
+   (see "Translations") and nothing elsewhere. `{{analytics}}` holds the GoatCounter script
+   tag built by `analyticsTag` in `vite/head.ts` from `ANALYTICS` in `vite/site.ts`; the 404
+   page ships no scripts, so it has none.
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
    element, in that order, the way `translateDom` does at runtime. A `data-i18n` element
@@ -613,7 +615,7 @@ explainer does not ship it.
 rule in `vite/siteCheck.ts`: the `lang` of the page, a title with the site name, a
 description within `descriptionLimit` of its language, the canonical URL, hreflang links with
 `x-default` and the page itself, one JSON-LD block that parses, one `h1`, no external
-stylesheet and no Google Fonts host, a gzipped JavaScript budget (`JS_BUDGET_GZIP`, summed
+stylesheet and no Google Fonts host, exactly one GoatCounter script, a gzipped JavaScript budget (`JS_BUDGET_GZIP`, summed
 over the module scripts and preloads of the page and their static imports, with the smaller
 `site` budget on the catalogue and the about page), no three.js chunk
 on a site page, a `modulepreload` on every translated page, one card per explainer on the
