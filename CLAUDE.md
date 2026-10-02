@@ -8,4 +8,6 @@
 - Every number in an explainer's copy comes from a sourced facts sheet written for that explainer, never from memory.
 - Copy reads naturally in every language, as a native reader would write it, and is easy to follow: short sentences, everyday words, one idea per sentence, the same warm second-person voice in each translation. No em or en dashes as sentence punctuation in any language; use commas, colons or a new sentence.
 - To build a new explainer, use the `new-explainer` skill in `.claude/skills/`.
+- When coordinating an explainer build, never read a whole package, `ARCHITECTURE.md` or a locale file yourself: delegate the reading and the drafting, read the agents' reports, run the checks.
+- Review screenshots as one contact sheet per device (`e2e/tools/contact.ts`), not one file at a time.
 - Git: feature branches, atomic conventional commits, no comments in code, no all-caps words in text, never push to main, PRs are squash-merged.
