@@ -71,7 +71,6 @@ export function bindStore(store: ReaperStore, targets: SceneTargets): () => void
       views: reaper.views,
       labels: drawnLabels,
       prepare: push,
-      onView: (_view, state) => push(state),
     }),
   ];
   return () => unsubscribers.forEach((unsubscribe) => unsubscribe());

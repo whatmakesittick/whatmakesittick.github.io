@@ -63,6 +63,16 @@ describe('scene bindings', () => {
     expect(received.at(-1)?.phase).toBe(44);
   });
 
+  it('hands the scene each view change once', () => {
+    const { received, targets } = fakeTargets();
+    const store = createReaperStore();
+    bindStore(store, targets);
+    const calls = received.length;
+    store.getState().toggleView('track');
+    expect(received).toHaveLength(calls + 1);
+    expect(received.at(-1)?.view.track).toBe(false);
+  });
+
   it('never changes the state object the assembly got last', () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createReaperStore();
