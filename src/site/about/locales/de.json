@@ -55,7 +55,7 @@
     },
     "open": {
       "title": "Open Source",
-      "p1": "Die Seite und alle Erklärungen sind Open Source und stehen unter der MIT-Lizenz. Jede Erklärung verlinkt ihren eigenen Quellcode. Dort können Sie nachlesen, welche Simulation hinter dem Bild steckt. Es gibt keine Werbung und kein Tracking, und nichts wird von fremden Servern geladen. Welche Sprache Sie gewählt haben, merkt sich nur Ihr Browser.",
+      "p1": "Die Seite und alle Erklärungen sind Open Source und stehen unter der MIT-Lizenz. Jede Erklärung verlinkt ihren eigenen Quellcode. Dort können Sie nachlesen, welche Simulation hinter dem Bild steckt. Es gibt keine Werbung und keine Cookies. Von einem fremden Server wird nur GoatCounter geladen, ein quelloffener Besucherzähler. Er zählt die Seitenaufrufe und speichert nichts Persönliches über Sie. Welche Sprache Sie gewählt haben, merkt sich nur Ihr Browser.",
       "p2": "Haben Sie einen Fehler entdeckt, etwa in einer Zahl, einem Modell oder einer Übersetzung? Dann sagen Sie gern Bescheid. Jeder Hinweis ist willkommen.",
       "link": "Fehler auf GitHub melden"
     }

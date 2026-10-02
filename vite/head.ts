@@ -3,6 +3,7 @@ import { LANGUAGES } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { alternates } from './routes.ts';
 import type { PageRoute } from './routes.ts';
+import { ANALYTICS } from './site.ts';
 import { escapeHtml } from './template.ts';
 
 const IMAGE_TYPES: Record<string, string> = {
@@ -45,4 +46,8 @@ export function alternateLinks(route: PageRoute): string {
 
 export function jsonLd(data: object): string {
   return JSON.stringify(data, null, JSON_INDENT).replaceAll('</', '<\\/');
+}
+
+export function analyticsTag(): string {
+  return `<script data-goatcounter="${ANALYTICS.endpoint}" async src="${ANALYTICS.script}"></script>`;
 }

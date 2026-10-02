@@ -6,7 +6,7 @@ import { compareNewestFirst } from '../src/core/manifest.ts';
 import type { CatalogueEntry, ExplainerMeta } from '../src/core/manifest.ts';
 import type { CardMeta, CatalogueCard } from '../src/site/catalogue.ts';
 import { renderCatalogueGrid } from '../src/site/catalogueMarkup.ts';
-import { alternateLinks, imageType, jsonLd, localeTags } from './head.ts';
+import { alternateLinks, analyticsTag, imageType, jsonLd, localeTags } from './head.ts';
 import type { PageLanguage } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { renderMoreExplainers } from './moreExplainers.ts';
@@ -57,6 +57,7 @@ export function siteValues(sourceUrl: string): TemplateValues {
     repositoryUrl: escapeHtml(REPOSITORY_URL),
     licenseUrl: escapeHtml(LICENSE_URL),
     sourceUrl: escapeHtml(sourceUrl),
+    analytics: analyticsTag(),
   };
 }
 

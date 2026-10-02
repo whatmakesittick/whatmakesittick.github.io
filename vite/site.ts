@@ -39,3 +39,8 @@ export function feedPath(code: LanguageCode): string {
 export function feedUrl(code: LanguageCode): string {
   return siteUrl(feedPath(code));
 }
+
+export const ANALYTICS = {
+  endpoint: 'https://whatmakesittick.goatcounter.com/count',
+  script: 'https://gc.zgo.at/count.js',
+} as const;

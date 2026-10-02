@@ -55,7 +55,7 @@
     },
     "open": {
       "title": "Open source",
-      "p1": "Le site et toutes les explications sont open source, sous licence MIT. Chaque page d’explication renvoie à son code source : vous pouvez lire la simulation qui tourne derrière ce que vous voyez. Pas de publicité, pas de pistage, aucun contenu chargé depuis les serveurs d’un tiers. Votre choix de langue reste dans votre navigateur, nulle part ailleurs.",
+      "p1": "Le site et toutes les explications sont open source, sous licence MIT. Chaque page d’explication renvoie à son code source : vous pouvez lire la simulation qui tourne derrière ce que vous voyez. Pas de publicité, pas de cookies. La seule chose chargée depuis un autre serveur est GoatCounter, un compteur de visites open source. Il compte les pages vues et ne garde rien de personnel sur vous. Votre choix de langue reste dans votre navigateur, nulle part ailleurs.",
       "p2": "Une erreur dans un chiffre, un modèle ou une traduction ? N’hésitez pas à nous le dire. Tout signalement est le bienvenu.",
       "link": "Signaler une erreur sur GitHub"
     }

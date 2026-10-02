@@ -55,7 +55,7 @@
     },
     "open": {
       "title": "Código aberto",
-      "p1": "O site e todas as explicações são de código aberto, sob a licença MIT. Cada explicação tem um link para o próprio código, então você pode ler a simulação por trás do que está vendo. Sem anúncios, sem rastreamento e nada carregado de servidores de terceiros. O idioma que você escolhe fica salvo só no seu navegador.",
+      "p1": "O site e todas as explicações são de código aberto, sob a licença MIT. Cada explicação tem um link para o próprio código, então você pode ler a simulação por trás do que está vendo. Não há anúncios nem cookies. A única coisa carregada de outro servidor é o GoatCounter, um contador de visitas de código aberto. Ele conta as visualizações de página e não guarda nenhum dado pessoal seu. O idioma que você escolhe fica salvo só no seu navegador.",
       "p2": "Achou um erro num número, num modelo ou numa tradução? Avise, por favor. Qualquer aviso é bem-vindo.",
       "link": "Reportar um erro no GitHub"
     }
