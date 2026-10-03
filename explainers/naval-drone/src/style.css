@@ -20,6 +20,22 @@
   --readout-min-width: 8rem;
 }
 
+.range-widget__header {
+  flex-wrap: wrap;
+}
+
+.range-widget__readouts,
+.range-widget__readouts > div,
+.range-widget__header label {
+  min-width: 0;
+}
+
+.range-widget__header label,
+.range-widget__readouts :is(dt, dd) {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
 .section-readouts {
   margin-block: 16px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
