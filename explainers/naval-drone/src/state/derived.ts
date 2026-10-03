@@ -106,15 +106,16 @@ function sourceOf(state: RunSource): RunSource {
   return { phase, trialKnots, helm, linkMode, videoDelayMs, seaState, preset };
 }
 
-function isRemembered(source: RunSource): boolean {
-  return last !== null && RUN_SOURCE_KEYS.every((key) => last?.source[key] === source[key]);
+function isRemembered(remembered: Remembered | null, source: RunSource): remembered is Remembered {
+  return (
+    remembered !== null && RUN_SOURCE_KEYS.every((key) => remembered.source[key] === source[key])
+  );
 }
 
 export function runAt(state: RunSource): Readonly<RunReading> {
-  if (!last || !isRemembered(state)) {
-    const source = sourceOf(state);
-    last = { source, reading: readingOf(source) };
-  }
+  if (isRemembered(last, state)) return last.reading;
+  const source = sourceOf(state);
+  last = { source, reading: readingOf(source) };
   return last.reading;
 }
 
