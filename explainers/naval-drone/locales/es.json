@@ -2,14 +2,14 @@
   "meta": {
     "title": "Cómo funciona un dron naval",
     "eyebrow": "Dron naval",
-    "tagline": "Una lancha pequeña sin nadie a bordo: se desliza sobre su casco, avanza gracias a una bomba de agua y se pilota vía satélite.",
-    "description": "Sigue en 3D a un dron naval Magura V5: el casco que se pone a planear, el chorro de agua, el enlace por satélite y por qué cuesta ver una lancha tan baja.",
-    "summary": "El casco que planea, el chorro de agua que mueve y dirige la lancha, el enlace por satélite y su retraso, la curvatura del mar y un diseño que no deja de cambiar.",
+    "tagline": "Una lancha sin nadie a bordo: se desliza sobre su casco, avanza con una bomba de agua y se pilota por satélite.",
+    "description": "Un dron naval Magura V5 en 3D: cómo planea su casco, cómo lo mueve un chorro de agua, su enlace por satélite y por qué cuesta ver una lancha tan baja.",
+    "summary": "El casco que planea, el chorro de agua, el enlace por satélite y su retraso, la curvatura del mar y un diseño que no para de cambiar.",
     "socialAlt": "Una lancha gris sin tripulación se desliza sobre el mar al amanecer, con la espuma saltando de las aristas de su casco, junto al título «Cómo funciona un dron naval»"
   },
   "stage": {
     "label": "Modelo interactivo del dron naval",
-    "gauge": "Datos del recorrido en tiempo real"
+    "gauge": "Datos del recorrido en directo"
   },
   "controls": {
     "label": "Controles del dron naval",
@@ -83,7 +83,7 @@
     "value": "{{time}}, {{phase}}",
     "clock": "T+{{clock}}",
     "speedFormat": "{{factor}}×",
-    "speedValue": "respecto a la velocidad normal",
+    "speedValue": "frente a la velocidad normal",
     "phase": {
       "launch": "Salida",
       "hump": "Joroba",
@@ -92,11 +92,11 @@
       "arrival": "Llegada"
     },
     "during": {
-      "launch": "la lancha sale de la rampa al ralentí, por debajo de su velocidad de casco",
-      "hump": "la lancha acelera, supera la joroba y se pone a planear",
-      "cruise": "la lancha navega a 22 nudos, en un viaje de muchas horas que aquí se acorta",
-      "sprint": "la lancha acelera hasta los 42 nudos y se le unen otras dos",
-      "arrival": "la lancha recorre los últimos 170 m hasta el costado del buque"
+      "launch": "la lancha sale de la rampa al ralentí",
+      "hump": "la lancha acelera y se pone a planear",
+      "cruise": "la lancha navega a 22 nudos; aquí se recortan horas de viaje",
+      "sprint": "la lancha esprinta a 42 nudos con otras dos",
+      "arrival": "la lancha recorre los últimos 170 m hasta el buque"
     },
     "jump": {
       "launch": "Saltar a la salida",
@@ -134,11 +134,11 @@
     "sprayRails": "Deflectores de salpicaduras",
     "payloadBay": "Compartimento de carga",
     "fuelTanks": "Depósitos de combustible",
-    "engine": "Motor en su cubeta",
+    "engine": "Motor",
     "electronicsBay": "Electrónica",
     "starlinkPanels": "Antenas Starlink",
-    "backupPanel": "Antena de satélite de reserva",
-    "cameraDome": "Cúpula de la cámara térmica",
+    "backupPanel": "Antena de reserva",
+    "cameraDome": "Cúpula de la cámara",
     "bowCamera": "Cámara de proa",
     "intake": "Toma de agua y rejilla",
     "duct": "Conducto de entrada",
@@ -154,8 +154,8 @@
     "bowWave": "Ola de proa",
     "spray": "Salpicaduras",
     "wake": "Estela",
-    "wettedLength": "Longitud mojada del fondo",
-    "videoGhost": "Donde la ve el piloto",
+    "wettedLength": "Fondo mojado",
+    "videoGhost": "Vista retrasada del piloto",
     "satLink": "Enlace Starlink",
     "backupLink": "Enlace de reserva",
     "satellite": "Satélite Starlink",
@@ -168,40 +168,40 @@
   "hull": {
     "lift": "{{dynamic}} % por la velocidad, {{buoyant}} % por flotar",
     "wetted": "{{m}} m, frente a {{rest}} m en reposo",
-    "ratio": "{{times}} veces la velocidad de casco, que es de {{hullSpeed}} nudos",
-    "ratioStill": "Parada. La velocidad de casco es de {{hullSpeed}} nudos"
+    "ratio": "{{times}} veces la velocidad de casco, de {{hullSpeed}} nudos",
+    "ratioStill": "Parada; la velocidad de casco es de {{hullSpeed}} nudos"
   },
   "jet": {
     "flow": "{{kg}} kg por segundo, unos {{litres}} litros",
-    "backing": "Frenando, con la cuchara bajada",
+    "backing": "Frenando, cuchara bajada",
     "astern": "La cuchara lo desvía hacia delante",
-    "noEfficiency": "Ninguna mientras la lancha no avanza",
+    "noEfficiency": "Ninguna si no avanza",
     "push": {
-      "left": "Tobera {{angle}}° a la izquierda: la proa gira a la izquierda",
-      "right": "Tobera {{angle}}° a la derecha: la proa gira a la derecha",
-      "straight": "Chorro recto hacia atrás: la lancha mantiene el rumbo",
-      "reverse": "Cuchara bajada: el chorro sale hacia delante y hacia abajo"
+      "left": "Tobera {{angle}}° a la izquierda: proa a la izquierda",
+      "right": "Tobera {{angle}}° a la derecha: proa a la derecha",
+      "straight": "Recto hacia atrás: mantiene el rumbo",
+      "reverse": "Cuchara bajada: chorro hacia delante y abajo"
     }
   },
   "link": {
-    "now": "{{m}} m por detrás de la lancha, a {{kn}} nudos",
+    "now": "{{m}} m tras la lancha, a {{kn}} nudos",
     "nowLost": "Sin imagen mientras no hay enlace",
-    "top": "{{m}} m a 42 nudos, {{lengths}} veces el largo de la lancha",
+    "top": "{{m}} m a 42 nudos, {{lengths}} veces su largo",
     "carrier": {
       "satellite": "Starlink, dos terminales",
       "backup": "Antena de satélite de reserva",
       "lost": "Ninguno"
     },
     "boat": {
-      "satellite": "El piloto la guía mirando el vídeo",
+      "satellite": "El piloto la guía con el vídeo",
       "backup": "El piloto la guía por el enlace de reserva",
-      "lost": "En el modelo sigue el rumbo fijado; no se ha publicado qué hace una lancha real"
+      "lost": "En el modelo mantiene el rumbo; lo que hace una real no se ha publicado"
     }
   },
   "horizon": {
-    "camera": "{{km}} km, desde una lente a {{m}} m sobre el agua",
+    "camera": "{{km}} km desde una lente a {{m}} m de altura",
     "detect": "Unos {{km}} km, {{min}} min de aviso a 42 nudos",
-    "detectBeyond": "Fuera de la norma: solo cubre hasta el estado de la mar 4",
+    "detectBeyond": "La norma solo llega al estado de la mar 4",
     "waves": {
       "smooth": "De {{from}} a {{to}} m, estado de la mar 2",
       "slight": "De {{from}} a {{to}} m, estado de la mar 3",
@@ -209,10 +209,10 @@
       "rough": "De {{from}} a {{to}} m, estado de la mar 5"
     },
     "hidden": {
-      "smooth": "No hay cifras para un mar tan tranquilo: las olas se quedan por debajo de su cubierta de 0,5 m",
-      "slight": "Hasta la mitad del tiempo: las olas son tan altas como su cubierta",
-      "moderate": "Hasta la mitad del tiempo: las olas superan su cubierta",
-      "rough": "Hasta la mitad del tiempo: las olas se alzan muy por encima de su cubierta"
+      "smooth": "Sin cifras para un mar tan tranquilo; las olas no llegan a su cubierta de 0,5 m",
+      "slight": "Hasta la mitad del tiempo: olas tan altas como su cubierta",
+      "moderate": "Hasta la mitad del tiempo: olas por encima de su cubierta",
+      "rough": "Hasta la mitad del tiempo: olas muy por encima de su cubierta"
     },
     "canvas": {
       "radar": "Radar del buque",
@@ -225,7 +225,7 @@
   },
   "fleet": {
     "carries": {
-      "standard": "Una carga de hasta {{kg}} kg en la proa",
+      "standard": "Hasta {{kg}} kg de carga en la proa",
       "missile": "Dos misiles R-73 sobre rieles; el modelo conserva el compartimento de proa"
     },
     "cost": "Entre unos {{from}} y {{to}} USD",
@@ -234,89 +234,89 @@
   "sections": {
     "overview": {
       "title": "Una lancha rápida sin nadie a bordo",
-      "p1": "Lo que tienes delante es un <strong>Magura V5</strong>, un dron naval de Ucrania: una lancha rápida sin nadie a bordo. Lo fabrica la empresa estatal SpetsTechnoExport para el GUR, la inteligencia militar de Ucrania. Se presentó por primera vez en la feria IDEF de Estambul, en julio de 2023. Mide 5,5 m de largo y 1,5 m de ancho, más o menos el tamaño de una lancha motora pequeña. Su cubierta queda a solo 0,5 m sobre el agua, y pesa menos de una tonelada. Un piloto lo maneja desde muy lejos a través de un enlace por satélite.",
-      "p2": "Vista desde fuera, la lancha parece muy sencilla. Su <strong>casco</strong>, bajo y gris, es de material compuesto: capas de tejido de fibra dentro de una resina dura. Sobre el carenado elevado de la parte trasera van dos <strong>antenas Starlink</strong> planas y una <strong>antena de satélite de reserva</strong>. Hacia la proa hay una <strong>cúpula</strong> baja con una cámara térmica, que capta el calor, y una <strong>cámara de proa</strong> fija que mira justo hacia delante. Abajo, en la popa, va el <strong>propulsor de chorro</strong> que mueve la lancha. Por dentro, la proa tiene un compartimento de carga cerrado para un máximo de 320 kg. Detrás van los depósitos de combustible y luego el motor, dentro de una cubeta de aluminio asentada sobre espuma, con la electrónica encima. Activa la vista en corte (C) para verlos, o espera al capítulo del propulsor, que te abre el casco.",
-      "p3": "El modelo sigue un <strong>recorrido</strong> completo. La lancha sale de una rampa al ralentí, se pone a planear y navega a 22 nudos. Un nudo es una milla náutica por hora, así que eso son unos 41 km/h. Después acelera hasta su velocidad máxima de 42 nudos, unos 78 km/h, y se le unen otras dos lanchas. El recorrido termina cuando su proa llega al costado de un gran buque gris fondeado.",
-      "p4": "A velocidad normal, la lancha avanza tan rápido como una de verdad, pero el viaje se acorta para que quepa en dos minutos. Una lancha real navegaría durante muchas horas: unas 20 horas para recorrer toda su autonomía, de 450 millas náuticas, es decir, unos 800 km. Aquí el crucero dura 42 segundos, y el esprint también se acorta. El buque está a solo 1,5 km de la rampa, cuando un objetivo real estaría a cientos de kilómetros. El reloj de arriba cuenta el tiempo del modelo, así que T+1:05 quiere decir un minuto y cinco segundos después de la salida. Arrastra la línea de tiempo o toca un botón de abajo para saltar a un momento.",
+      "p1": "Esto es un <strong>Magura V5</strong>, un dron naval ucraniano: una lancha rápida sin nadie a bordo. Lo fabrica la empresa estatal SpetsTechnoExport para el GUR, la inteligencia militar de Ucrania, y se presentó en julio de 2023. Mide 5,5 m de largo, asoma solo 0,5 m sobre el agua y pesa menos de una tonelada. Un piloto lo guía por satélite desde muy lejos.",
+      "p2": "Por fuera ves un <strong>casco</strong> bajo y gris de material compuesto, tejido de fibra en resina. Sobre el carenado elevado de popa van dos <strong>antenas Starlink</strong> y una <strong>antena de satélite de reserva</strong>; hacia la proa, una <strong>cúpula</strong> baja con una cámara térmica y una <strong>cámara de proa</strong> fija. La mueve el <strong>propulsor de chorro</strong> de la popa. Dentro hay un compartimento de carga para hasta 320 kg, los depósitos de combustible y el motor en una cubeta sobre espuma, con la electrónica encima. Activa la vista en corte (C) para verlos, o espera al capítulo del propulsor.",
+      "p3": "El modelo sigue un <strong>recorrido</strong>. La lancha sale de una rampa, se pone a planear y navega a 22 nudos, unos 41 km/h; un nudo es una milla náutica por hora. Luego acelera a 42 nudos, unos 78 km/h, con otras dos lanchas, hasta que su proa llega a un buque gris fondeado.",
+      "p4": "A velocidad normal, la lancha va tan rápido como una real, pero el viaje se recorta a dos minutos: un crucero de unas 20 horas por toda su autonomía de 450 millas náuticas, unos 800 km, aquí dura 42 segundos, y el esprint también se acorta. El buque está a 1,5 km, no a cientos de kilómetros. El reloj cuenta el tiempo del modelo; arrastra la línea de tiempo para saltar.",
       "mode": "Casco",
       "covered": "Distancia recorrida",
       "done": "Avance del recorrido"
     },
     "hull": {
       "title": "Deja de flotar y empieza a deslizarse",
-      "p1": "En reposo, la lancha flota como cualquier otra. El agua que aparta la sostiene, y a eso se le llama <strong>flotabilidad</strong>. A medida que la lancha acelera, entra en juego una segunda fuerza. El agua choca contra el fondo inclinado y lo empuja hacia arriba, y cuanto más rápido va la lancha, más fuerte empuja. Cuando ese empuje sostiene la mayor parte del peso, el casco se eleva y se desliza sobre el agua. Eso es <strong>planear</strong>. Aun así, la parte trasera del fondo siempre sigue dentro del agua.",
-      "p2": "Todo barco que avanza por el agua levanta una ola en la proa. A unos 5,7 nudos, esa ola es tan larga como este casco de 5,5 m. Es la <strong>velocidad de casco</strong>, una regla práctica para los barcos que solo flotan. No es un límite de velocidad: a 42 nudos, el Magura va a unas 7 veces esa velocidad. Para llegar ahí, tiene que superar la <strong>joroba de resistencia</strong>. En ese tramo, la lancha levanta olas grandes y la <strong>resistencia al avance</strong>, la fuerza con la que el agua la frena, crece muy deprisa. Las aristas afiladas que recorren el fondo, los <strong>codillos</strong>, también añaden resistencia aquí. Solo resultan útiles cuando la lancha ya planea.",
-      "p3": "Mueve el control deslizante, o toca un botón, y fíjate en la proa. Cerca de la joroba es donde más se levanta, y luego vuelve a bajar cuando la lancha planea. Ese ángulo es el <strong>trimado</strong>. La resistencia es mínima con unos 3 o 4 grados, y a velocidad máxima la lancha va un poco más plana. En esta lancha, el planeo empieza más o menos entre los 15 y los 18 nudos, y el indicador del modelo cambia a los 16 nudos. En el modelo, la parte mojada del fondo mide 5,1 m en reposo. Cuando la lancha se pone a planear, esa longitud se acorta deprisa: unos 4,5 m a 15 nudos y solo entre 1,5 y 2 m, aproximadamente, a 42 nudos. No hay datos publicados de la joroba de esta lancha, así que el pico de 6 grados y el reparto del peso que ves en los datos son cifras propias del modelo.",
-      "p4": "El fondo tiene forma de <strong>V</strong> profunda, que suaviza los golpes de las olas. Su ángulo no se ha publicado: el modelo le da 20 grados en la popa, y la V se va haciendo más afilada hacia la proa. La popa es cuadrada y tiene el borde inferior afilado, así que a buena velocidad el agua se separa limpiamente y la popa queda seca. A cada lado, un fino <strong>deflector de salpicaduras</strong> lanza el agua hacia fuera; este detalle es una suposición del modelo. El modelo no incluye los patines de sustentación, unos salientes situados más abajo que ayudan al casco a ponerse a planear, porque no aparecen en ninguna foto. Un trimado excesivo también trae problemas: pasado cierto ángulo, una lancha que planea empieza a dar saltos con un ritmo regular, y a eso se le llama <strong>marsopeo</strong>.",
+      "p1": "En reposo, el agua que aparta la lancha la sostiene: es la <strong>flotabilidad</strong>. Al acelerar, el agua que choca con el fondo inclinado la empuja hacia arriba cada vez con más fuerza. Cuando ese empuje carga con la mayor parte del peso, el casco se eleva y se desliza: es <strong>planear</strong>. La parte trasera del fondo siempre sigue en el agua.",
+      "p2": "Todo barco levanta una ola de proa. A unos 5,7 nudos es tan larga como este casco de 5,5 m: es la <strong>velocidad de casco</strong>, una regla práctica para barcos que solo flotan, no un límite; a 42 nudos, el Magura va unas 7 veces más rápido. Primero supera la <strong>joroba de resistencia</strong>, donde levanta olas grandes y la <strong>resistencia al avance</strong>, el agua que la frena, crece muy deprisa. Las aristas afiladas del fondo, los <strong>codillos</strong>, añaden resistencia aquí y solo compensan cuando ya planea.",
+      "p3": "Mueve el control deslizante y fíjate en la proa. Se levanta sobre todo cerca de la joroba y luego baja: ese ángulo es el <strong>trimado</strong>, con la mínima resistencia a unos 3 o 4 grados. El planeo empieza entre unos 15 y 18 nudos; el modelo cambia a los 16. El fondo mojado, de 5,1 m en reposo en el modelo, pasa de unos 4,5 m a 15 nudos a entre 1,5 y 2 m a 42. Como no hay datos publicados de la joroba, el pico de 6 grados y el reparto del peso son cifras propias del modelo.",
+      "p4": "El fondo es una <strong>V</strong> profunda que suaviza los golpes de las olas; el modelo usa 20 grados en la popa, más afilada hacia proa, porque el ángulo real no se ha publicado. El agua se separa limpia del borde inferior afilado de la popa cuadrada. Un fino <strong>deflector de salpicaduras</strong> a cada lado, una suposición del modelo, lanza el agua hacia fuera. Con demasiado trimado, una lancha que planea rebota: es el <strong>marsopeo</strong>.",
       "speedLabel": "Velocidad de la lancha",
       "mode": "Casco",
       "trim": "Ángulo de proa (trimado)",
-      "lift": "Cómo se sostiene el peso",
-      "wetted": "Longitud mojada del fondo",
+      "lift": "Reparto del peso",
+      "wetted": "Fondo mojado",
       "ratio": "Frente a la velocidad de casco"
     },
     "jet": {
       "title": "Una bomba en lugar de una hélice",
-      "p1": "Con el casco abierto, puedes ver cómo pasa la energía del combustible al agua. En el centro de la lancha, los <strong>depósitos de combustible</strong> alimentan el <strong>motor</strong>, que va en su cubeta asentada sobre espuma. Un <strong>eje de transmisión</strong> lleva el giro del motor hacia atrás, hasta una bomba en la popa: el <strong>propulsor de chorro</strong>, que hace el trabajo de una hélice. El agua entra por una abertura en el fondo, protegida por una rejilla de barras de acero. Un <strong>impulsor</strong>, un pequeño rotor parecido a un ventilador, la acelera. Detrás, unos álabes fijos, el <strong>estátor</strong>, enderezan el agua, que sale girando del impulsor. Después, una <strong>tobera</strong> estrecha el chorro y lo lanza hacia atrás. La vista de flujo de agua te muestra su camino.",
-      "p2": "La lancha avanza porque la bomba acelera el agua que pasa por ella. El <strong>empuje</strong> es igual a la masa de agua que cruza la bomba cada segundo, multiplicada por la diferencia entre la velocidad del chorro y la de la lancha. Por eso el chorro siempre tiene que ir más rápido que la lancha. Incluso con una bomba perfecta, la parte del trabajo que mueve la lancha es 2 / (1 + velocidad del chorro / velocidad de la lancha). Si el chorro sale a una vez y media la velocidad de la lancha, esa parte es del 80 %. A poca velocidad, el chorro va mucho más rápido que la lancha, y se pierde la mayor parte del trabajo.",
-      "p3": "Por encima de unos 25 a 30 nudos, un chorro iguala o supera a una hélice. Bajo el casco no cuelga nada que añada resistencia o choque con algo, así que la lancha también puede navegar en aguas poco profundas. A velocidad de planeo, la rejilla suele limpiarse sola, pero las algas y los cabos todavía pueden atascar una toma de agua. La primera lancha de esta familia, en mayo de 2022, llevaba un pequeño motor fueraborda. Más adelante, ese mismo año, lanchas como la que se encontró cerca de Sebastopol usaban piezas de motos de agua: un motor de gasolina Rotax de tres cilindros y una bomba Sea-Doo. No se ha dado a conocer qué motor lleva el Magura, así que el modelo supone uno de gasolina, del tipo de las motos de agua, que hace girar la bomba directamente. La bomba del modelo tiene el tamaño de la de una moto de agua, 155 mm de diámetro, y a 42 nudos mueve unos 210 litros de agua de mar por segundo. Es una estimación: si el chorro saliera más rápido, bastaría con más o menos la mitad de agua.",
-      "p4": "No hay timón. Para girar, la <strong>tobera de dirección</strong> desvía el chorro hasta 27 grados hacia cualquiera de los dos lados. Si la giras a la derecha, la popa recibe un empuje hacia la izquierda, así que la proa gira a la derecha, igual que en una moto de agua. Para frenar o ir marcha atrás, una <strong>cuchara de marcha atrás</strong> baja sobre la tobera y manda el chorro hacia delante y hacia abajo. El control deslizante marca el acelerador, que el modelo entiende como la cantidad de agua que mueve la bomba. Toca los botones para girar o dar marcha atrás, y pulsa reproducir para devolver la lancha al recorrido.",
+      "p1": "Con el casco abierto, sigue la energía: los <strong>depósitos de combustible</strong> alimentan el <strong>motor</strong>, y su <strong>eje de transmisión</strong> mueve la bomba de popa, el <strong>propulsor de chorro</strong>. El agua entra por una rejilla en el fondo. Un <strong>impulsor</strong>, un rotor que gira como un ventilador, la acelera; unos álabes fijos, el <strong>estátor</strong>, le quitan el remolino, y una <strong>tobera</strong> la lanza hacia atrás.",
+      "p2": "La lancha avanza porque la bomba acelera el agua: el <strong>empuje</strong> es la masa de agua por segundo multiplicada por cuánto más rápido sale el chorro de lo que avanza la lancha. Incluso una bomba perfecta solo convierte en avance 2 / (1 + velocidad del chorro / velocidad de la lancha) de su trabajo: un 80 % con el chorro a 1,5 veces la velocidad de la lancha, mucho menos a poca velocidad.",
+      "p3": "Por encima de unos 25 a 30 nudos, un chorro iguala o supera a una hélice, y como bajo el casco no cuelga nada, la lancha puede ir por aguas poco profundas. La rejilla suele limpiarse sola, pero las algas y los cabos aún pueden atascarla. La primera lancha de esta familia, en mayo de 2022, llevaba un fueraborda; más tarde ese año, otras como la hallada cerca de Sebastopol usaban un motor Rotax de moto de agua y una bomba Sea-Doo. No se ha revelado el motor del Magura, así que el modelo supone uno de gasolina, tipo moto de agua, que hace girar la bomba directamente; se estima que esta mueve unos 210 litros por segundo a 42 nudos.",
+      "p4": "No hay timón. La <strong>tobera de dirección</strong> desvía el chorro hasta 27 grados a cada lado: si la giras a la derecha, la proa gira a la derecha. Para frenar o ir marcha atrás, una <strong>cuchara de marcha atrás</strong> baja sobre la tobera y manda el chorro hacia delante y hacia abajo. El control deslizante marca el acelerador, que en el modelo es el caudal de la bomba. Pulsa reproducir para volver al recorrido.",
       "throttleLabel": "Acelerador",
       "boat": "Velocidad de la lancha",
-      "flow": "Agua que pasa por la bomba",
+      "flow": "Caudal de la bomba",
       "velocity": "Velocidad del chorro",
       "thrust": "Empuje",
       "efficiency": "Eficiencia ideal",
-      "push": "Hacia dónde empuja el chorro"
+      "push": "Empuje del chorro"
     },
     "link": {
-      "title": "Se pilota desde cientos de kilómetros de distancia",
-      "p1": "Sin nadie a bordo, todo depende del enlace de radio. En noviembre de 2023 se capturó un Magura en el oeste de Crimea, y más tarde fuentes rusas enseñaron lo que llevaba dentro. Encontraron dos terminales de satélite <strong>Starlink</strong>, una antena de satélite de reserva fabricada por Kymeta, un receptor GPS y un pequeño ordenador con Linux. Un router móvil con dos tarjetas SIM daba conexión cerca de la costa, a unos 40 km como mucho. El fabricante también menciona una red de radio en malla, control autónomo y hasta tres señales de vídeo, pero son afirmaciones del propio fabricante.",
-      "p2": "El piloto trabaja en una consola que se transporta en una maleta rígida, con pantallas, palancas y joysticks. Los trayectos largos por mar se pueden programar de antemano, pero un piloto vigila durante todo el camino, y el último tramo a menudo se lleva a mano. Así que la lancha no es del todo autónoma. Toca los botones para cambiar entre Starlink, el satélite de reserva y ningún enlace. No se ha publicado qué hace una lancha real cuando pierde el enlace, así que el modelo simplemente la mantiene en su rumbo fijado.",
-      "p3": "Para ser un servicio por satélite, Starlink es rápido. En tierra, su retraso típico es de unos 25 a 35 milisegundos, y en el mar puede pasar de 100. El límite más estricto es la velocidad de subida, de 10 a 30 megabits por segundo, más o menos lo que necesitan tres señales de vídeo. Así que lo que marca la nitidez de la imagen del piloto es la subida, no el retraso. Aun así, la imagen siempre llega con algo de retraso, y nadie ha publicado cuánto. Arrastra el control deslizante para probar un retraso: a 42 nudos, un cuarto de segundo son 5,4 m, más o menos el largo de la lancha. La lancha fantasma muestra dónde la ve el piloto.",
-      "p4": "Orientarse también exige cuidado. Desde mediados de 2024 están bien documentadas las interferencias y las señales GPS falsas sobre el mar Negro, con barcos que aparecen tierra adentro en los mapas de seguimiento. Probablemente por eso el fabricante también menciona la navegación inercial y la visual, que se basan en los sensores de movimiento y las cámaras de la propia lancha. El propio Starlink tiene aquí su historia. En septiembre de 2022, según el relato de Elon Musk y la versión corregida de un libro de 2023 sobre él, Ucrania esperaba tener cobertura cerca de Crimea, pero esa cobertura nunca se había activado. Al principio, el libro decía que se había desactivado. Musk afirmó que SpaceX no había desactivado nada, y el autor corrigió su relato. El modelo dibuja los satélites bajos y cercanos, mucho más grandes que los de verdad, y los mueve junto con la lancha para que puedas verlos.",
+      "title": "Se pilota desde cientos de kilómetros",
+      "p1": "Un Magura capturado en Crimea en noviembre de 2023 llevaba, según fuentes rusas, dos terminales <strong>Starlink</strong>, una antena de satélite de reserva de Kymeta, GPS, un ordenador con Linux y un router con dos SIM para usar cerca de la costa. El fabricante afirma además que tiene radio en malla, control autónomo y hasta tres señales de vídeo.",
+      "p2": "El piloto se sienta ante una consola que va en una maleta rígida. Los trayectos largos se pueden programar, pero un piloto vigila todo el tiempo y a menudo lleva a mano el último tramo: la lancha no es del todo autónoma. No se ha publicado qué hace una lancha real si pierde el enlace; el modelo la mantiene en su rumbo.",
+      "p3": "El retraso típico de Starlink es de unos 25 a 35 ms en tierra y puede pasar de 100 ms en el mar. La subida, de 10 a 30 megabits por segundo, más o menos lo que piden tres señales de vídeo, marca la nitidez de la imagen. Cuánto tarda en llegar no se ha publicado. A 42 nudos, un cuarto de segundo son 5,4 m, casi el largo de la lancha; la lancha fantasma muestra dónde la ve el piloto.",
+      "p4": "Desde mediados de 2024 están documentadas las interferencias y las señales falsas de GPS sobre el mar Negro; probablemente por eso el fabricante también menciona navegación inercial y visual. En septiembre de 2022, según Elon Musk y la versión corregida de un libro de 2023 sobre él, Ucrania esperaba cobertura de Starlink cerca de Crimea que nunca se había activado; al principio, el libro decía que se había desactivado. Aquí los satélites se dibujan bajos, cercanos y mucho más grandes que los reales.",
       "delayLabel": "Retraso del vídeo",
       "now": "Dónde la ve el piloto",
-      "top": "El mismo retraso a velocidad máxima",
+      "top": "A velocidad máxima",
       "carrier": "Enlace",
       "boat": "Qué hace la lancha",
       "path": "Cómo llega una orden a la lancha",
-      "step1": "<strong>Piloto</strong>: mueve una palanca o un joystick de la consola.",
-      "step2": "<strong>Estación terrestre</strong>: una estación de Starlink en tierra sube la orden por radio.",
-      "step3": "<strong>Satélite</strong>: un satélite Starlink la baja hasta la lancha.",
-      "step4": "<strong>Lancha</strong>: una antena de cubierta la recibe, y el ordenador mueve el acelerador o la tobera de dirección.",
-      "step5": "<strong>Vídeo</strong>: las imágenes de la cámara vuelven por el mismo camino y llegan al piloto con algo de retraso."
+      "step1": "<strong>Piloto</strong>: mueve una palanca o un joystick.",
+      "step2": "<strong>Estación terrestre</strong>: sube la orden por radio.",
+      "step3": "<strong>Satélite</strong>: la baja hasta la lancha.",
+      "step4": "<strong>Lancha</strong>: el ordenador mueve el acelerador o la tobera.",
+      "step5": "<strong>Vídeo</strong>: vuelve por el mismo camino, con algo de retraso."
     },
     "horizon": {
       "title": "Tan baja que puede esconderse tras la curvatura del mar",
-      "p1": "El mar se curva, así que solo puedes ver hasta cierta distancia. Desde una altura de h metros, el horizonte está a unos 3,86 × √h kilómetros. La cámara térmica de la lancha va a unos 0,7 m sobre el agua, así que su horizonte queda a solo unos 3 km. El mar 3D del modelo es plano, porque en 1,5 km la curvatura real baja menos de 0,2 m. El dibujo de abajo exagera mucho la curvatura para que puedas verla.",
-      "p2": "El radar de un buque tiene el mismo problema. Su antena está alta, pero la lancha solo mide unos 0,5 m de alto. Las ondas de radio se curvan un poco alrededor de la Tierra, así que la <strong>línea de vista</strong> del radar llega a unos 4,12 × (√h1 + √h2) kilómetros, con las dos alturas en metros. Para un radar a 20 m de altura, eso son unos 21 km. Pero eso es solo lo más lejos que el radar podría llegar a ver la lancha, no donde de verdad la detecta. Ante una lancha a 42 nudos, incluso esa distancia le daría al buque, como mucho, unos 16 minutos de aviso. Arrastra el control deslizante para subir o bajar el radar.",
-      "p3": "En la práctica, la detección llega mucho más tarde. Una lancha pequeña devuelve un eco débil. Su <strong>sección transversal de radar</strong>, es decir, el tamaño que aparenta como blanco ante un radar, es de unos 0,5 a 5 m², y no se ha publicado ninguna cifra para el Magura. Según una norma para radares costeros, un blanco de 1 m², a 1 m sobre el mar, debería detectarse a unos 9 km, y eso solo con un radar avanzado y hasta el estado de la mar 4. El estado de la mar es una escala de la altura de las olas, y el estado 4 corresponde a olas de 1,25 a 2,5 m. Ante una lancha a 42 nudos, eso le deja al buque unos 7 minutos de aviso. Las olas lo ponen aún más difícil: una lancha pequeña puede quedar oculta tras ellas hasta la mitad del tiempo. Además, las propias olas devuelven ecos, los <strong>ecos parásitos del mar</strong>, que pueden tapar el de la lancha.",
-      "p4": "Quienes manejan estas lanchas dicen que cuesta detectarlas. Un comandante del Grupo 13, la unidad de drones navales del GUR, dijo que al radar le cuesta ver el casco de plástico y que la lancha desprende poco calor. Son afirmaciones, y no se ha publicado ninguna medición. Según fuentes rusas que desmontaron una lancha capturada, el motor va en una cubeta de aluminio asentada sobre espuma, con la electrónica encima, lo que reduce el calentamiento de la superficie exterior del casco. Las lanchas están pintadas de gris, y los ataques más conocidos fueron de noche o al amanecer. Toca los botones para cambiar el <strong>estado de la mar</strong>, de tranquilo a muy agitado.",
-      "caption": "Vista lateral del radar del buque, la curvatura del mar y la lancha. La curvatura y las alturas están exageradas.",
+      "p1": "El mar se curva, así que desde h metros de altura el horizonte está a unos 3,86 × √h km. La cámara de la lancha, a unos 0,7 m, solo ve unos 3 km. El mar 3D es plano, porque en 1,5 km la curvatura real baja menos de 0,2 m; el dibujo de abajo la exagera.",
+      "p2": "El radar de un buque choca con la misma curva. Las ondas de radio se curvan un poco, así que su <strong>línea de vista</strong> hasta una lancha de 0,5 m es de unos 4,12 × (√h1 + √h2) km, con las alturas en metros: unos 21 km para un radar a 20 m. Eso es solo lo más lejos que podría verla, y aun así el buque tendría como mucho unos 16 minutos de aviso a 42 nudos.",
+      "p3": "La detección real llega más tarde. La <strong>sección transversal de radar</strong> de una lancha pequeña, lo grande que parece al radar, es de unos 0,5 a 5 m²; la del Magura no se ha publicado. Una norma de radar costero espera detectar un blanco de 1 m² a 1 m de altura a unos 9 km, con un radar avanzado y hasta el estado de la mar 4 (olas de 1,25 a 2,5 m): unos 7 minutos de aviso a 42 nudos. Las lanchas pequeñas pueden ocultarse tras las olas hasta la mitad del tiempo, y los <strong>ecos parásitos del mar</strong>, los ecos de las propias olas, pueden tapar los suyos.",
+      "p4": "Quienes las manejan dicen que son difíciles de detectar: un comandante del Grupo 13 del GUR dijo que al radar le cuesta ver el casco de plástico y que la lancha desprende poco calor. Son afirmaciones; no se ha publicado ninguna medición. Según un desmontaje ruso, la cubeta del motor sobre espuma reduce el calentamiento del casco por fuera. Las lanchas son grises, y los ataques más conocidos fueron de noche o al amanecer. Toca los botones para cambiar el <strong>estado de la mar</strong>.",
+      "caption": "Vista lateral del radar, el mar y la lancha; curvatura y alturas exageradas.",
       "heightLabel": "Altura del radar",
       "radar": "Línea de vista del radar",
-      "minutes": "Tiempo de aviso del buque a 42 nudos",
-      "camera": "Horizonte de la cámara de la lancha",
+      "minutes": "Aviso del buque a 42 nudos",
+      "camera": "Horizonte de la cámara",
       "detect": "Detección esperada",
       "waves": "Altura de las olas",
       "hidden": "Oculta tras las olas"
     },
     "fleet": {
       "title": "Barata, pequeña y en constante cambio",
-      "p1": "Un Magura V5 cuesta alrededor de un cuarto de millón de dólares. El fabricante habla de unos 273.000 USD, y otras estimaciones, de unos 250.000 USD. Sea Baby, un diseño distinto del SBU, el servicio de seguridad de Ucrania, cuesta unos 221.000 USD. El GUR valora en unos 65 millones de USD el patrullero Serguéi Kótov, que se hundió en marzo de 2024 tras un ataque con lanchas Magura. Son cifras públicas, y en los datos de abajo las tienes una al lado de la otra.",
-      "p2": "Estas lanchas casi nunca actúan solas. Según lo publicado, en muchos ataques se usaron grupos de unas cinco a diez lanchas, y quienes las desarrollan dicen que cada lancha del grupo tiene su propio papel. Los buques que se dieron por hundidos recibieron varios impactos, no uno solo. En el recorrido, otras dos lanchas se unen para el esprint; cómo se colocan es una elección del modelo.",
-      "p3": "El diseño no deja de cambiar. En diciembre de 2024, el GUR equipó lanchas V5 con dos misiles aire-aire R-73 sobre rieles, rebautizados como Sea Dragon. Toca los botones para ver esta versión. Solo cambia la cubierta: la lancha del modelo hace la misma ruta y sigue acabando junto al buque. En 2025, el GUR presentó el Magura V7, más grande, de 7,2 m de largo y con una carga de hasta 650 kg. Sea Baby es la línea propia del SBU, no un Magura.",
-      "p4": "La lista de abajo se limita a lo que ha dicho cada parte, y muchas de esas afirmaciones están en disputa. El Ministerio de Defensa británico cuenta al menos 26 buques de la Armada rusa dañados o destruidos entre febrero de 2022 y junio de 2024, alrededor de un tercio de la Flota del mar Negro. Esa cifra incluye todo tipo de armas, no solo drones navales. En octubre de 2023, las imágenes de satélite ya mostraban unos 14 buques trasladados de Sebastopol a Novorosíisk.",
+      "p1": "Un Magura V5 cuesta alrededor de un cuarto de millón de dólares. Sea Baby, una lancha distinta del SBU, el servicio de seguridad de Ucrania, cuesta unos 221.000 USD. El GUR valora en unos 65 millones de USD el patrullero Serguéi Kótov, hundido en marzo de 2024 tras un ataque de lanchas Magura.",
+      "p2": "Las lanchas casi nunca actúan solas: según lo publicado, muchos ataques usaron grupos de unas cinco a diez, y quienes las desarrollan dicen que cada una tiene su papel. Los buques que se dieron por hundidos recibieron varios impactos. Las dos acompañantes del recorrido, y su formación, son una elección del modelo.",
+      "p3": "El diseño no deja de cambiar. En diciembre de 2024, el GUR equipó lanchas V5 con dos misiles aire-aire R-73, rebautizados como Sea Dragon; los botones muestran esta versión, que solo cambia la cubierta, no el recorrido. En 2025, el GUR presentó el Magura V7, más grande, de 7,2 m de largo y con hasta 650 kg de carga.",
+      "p4": "La lista de abajo se ciñe a lo que dice cada parte, y muchas afirmaciones están en disputa. El Ministerio de Defensa británico cuenta al menos 26 buques de la Armada rusa dañados o destruidos de febrero de 2022 a junio de 2024 con todo tipo de armas, alrededor de un tercio de la Flota del mar Negro.",
       "carries": "A bordo",
       "cost": "Coste por lancha",
-      "ship": "Patrullero, según la valoración del GUR",
+      "ship": "Patrullero, valor según el GUR",
       "events": "Registro público, según lo publicado",
-      "event1": "<strong>29 de octubre de 2022, Sebastopol</strong>: drones navales y aéreos alcanzaron la fragata Almirante Makárov y un dragaminas. Rusia solo reconoció daños menores.",
-      "event2": "<strong>Noche del 31 de enero al 1 de febrero de 2024, lago Donuzlav</strong>: lanchas Magura V5 hundieron la corbeta lanzamisiles Ivanovets. El GUR habla de seis impactos; en el vídeo se ven unos tres.",
-      "event3": "<strong>Noche del 4 al 5 de marzo de 2024, cerca del estrecho de Kerch</strong>: lanchas Magura V5 hundieron el patrullero Serguéi Kótov. Según las autoridades ucranianas, participaron cinco lanchas.",
-      "event4": "<strong>31 de diciembre de 2024, cabo Tarjankut</strong>: el GUR dice que lanchas Magura V5 derribaron helicópteros Mi-8 con misiles R-73, las primeras aeronaves abatidas desde un dron naval. Primero habló de uno destruido y otro dañado, y más tarde de dos destruidos.",
-      "event5": "<strong>2 de mayo de 2025, cerca de Novorosíisk</strong>: el GUR dice que lanchas Magura V7 derribaron dos cazas Su-30SM con misiles Sidewinder. Rusia no lo ha confirmado."
+      "event1": "<strong>29 de octubre de 2022, Sebastopol</strong>: drones navales y aéreos alcanzaron la fragata Almirante Makárov y un dragaminas; Rusia reconoció daños menores.",
+      "event2": "<strong>Del 31 de enero al 1 de febrero de 2024, lago Donuzlav</strong>: lanchas Magura V5 hundieron la corbeta Ivanovets; el GUR afirma que hubo seis impactos y en el vídeo se ven unos tres.",
+      "event3": "<strong>Del 4 al 5 de marzo de 2024, estrecho de Kerch</strong>: lanchas Magura V5 hundieron el patrullero Serguéi Kótov; según Ucrania, participaron cinco lanchas.",
+      "event4": "<strong>31 de diciembre de 2024, cabo Tarjankut</strong>: el GUR dice que lanchas Magura V5 derribaron helicópteros Mi-8 con misiles R-73, la primera vez para un dron naval; primero afirmó haber derribado uno y luego dos.",
+      "event5": "<strong>2 de mayo de 2025, cerca de Novorosíisk</strong>: el GUR dice que lanchas Magura V7 derribaron dos cazas Su-30SM con misiles Sidewinder; Rusia no lo ha confirmado."
     }
   }
 }
