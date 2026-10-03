@@ -135,7 +135,14 @@ export const WAVES = {
   ],
 } as const;
 
-export const WET = { rise: 0.025, fade: 0.06, darken: 0.62, roughness: 0.22 } as const;
+export const WET = {
+  rise: 0.025,
+  fade: 0.06,
+  darken: 0.62,
+  roughness: 0.22,
+  murk: 0.6,
+  murkDepth: 0.3,
+} as const;
 
 export const SUN_DIRECTION: Triple = [0.172, 0.122, -0.977];
 
@@ -370,10 +377,12 @@ export const SECTION_LOOK = {
   depth: 1,
   backDepth: 5,
   backReach: 3,
-  clear: 0.42,
+  backRise: 0.5,
+  clear: 0.16,
   rim: 0.03,
   edge: 0.3,
-  elevation: [6, 15] as const,
+  elevation: [20, 35] as const,
+  faces: [6, 15] as const,
   soft: 0.6,
   side: [-3, 0] as const,
   deep: '#0a2433',

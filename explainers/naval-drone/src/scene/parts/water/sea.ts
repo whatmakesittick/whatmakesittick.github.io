@@ -169,6 +169,7 @@ export class SeaPart {
           uHullPlan: { value: tracker.track(hullPlanTexture()) },
           uHullPlanRange: { value: hullPlanRange() },
           uHullMargin: { value: SEA.hullMargin },
+          uOpenPort: { value: 0 },
           uRipples: { value: tracker.track(rippleTexture()) },
           uFoamMap: { value: foamMap },
           uDeep: { value: new Color(colours.deep) },
@@ -199,8 +200,8 @@ export class SeaPart {
         toneMapped: false,
       }),
     );
-    const { uBoatInverse, uHullPlan, uHullPlanRange } = this.material.uniforms;
-    this.hullMask = { uBoatInverse, uHullPlan, uHullPlanRange };
+    const { uBoatInverse, uHullPlan, uHullPlanRange, uOpenPort } = this.material.uniforms;
+    this.hullMask = { uBoatInverse, uHullPlan, uHullPlanRange, uOpenPort };
     this.mesh = new Mesh(tracker.track(polarGrid()), this.material);
     this.mesh.frustumCulled = false;
     this.mesh.renderOrder = SEA.renderOrder;
@@ -217,6 +218,10 @@ export class SeaPart {
   followBoat(body: Object3D): void {
     body.updateMatrixWorld(true);
     this.boatInverse.copy(body.matrixWorld).invert();
+  }
+
+  openPort(open: boolean): void {
+    this.material.uniforms.uOpenPort.value = open ? 1 : 0;
   }
 
   setWaveScale(waveHeight: number, foamLevel: number): void {

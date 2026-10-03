@@ -9,20 +9,20 @@ import {
 } from 'three';
 import type { Matrix4 } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
-import { WATER_SECTION } from '../../../model/layout';
+import { BOAT, TRANSOM_X, WATER_SECTION } from '../../../model/layout';
 import { THEME } from '../../../theme';
 import { SECTION_LOOK } from '../../constants';
 import { mergeParts, registered } from '../context';
 import type { PartContext } from '../context';
 import { HULL_MASK_GLSL } from './hullPlan';
 import { SECTION_GLSL } from './sectionMask';
-import { SKY_GLSL, skyUniforms } from './skyShade';
 import { WATER, WAVE_GLSL } from './waves';
 
 type Corner = readonly [x: number, z: number];
 
 const VERTEX = /* glsl */ `
 ${WAVE_GLSL}
+uniform float uBack;
 attribute vec2 aWall;
 varying vec3 vWorld;
 varying vec2 vWall;
@@ -30,7 +30,8 @@ varying float vDepth;
 void main() {
   vec4 world = modelMatrix * vec4(position, 1.0);
   float surface = seaHeight(world.xz);
-  world.y = mix(world.y, surface, aWall.x);
+  float rise = uBack * step(${TRANSOM_X.toFixed(3)}, position.x) * step(position.x, ${BOAT.halfLength.toFixed(3)});
+  world.y = mix(world.y, surface + rise * ${SECTION_LOOK.backRise.toFixed(2)}, aWall.x);
   vWorld = world.xyz;
   vWall = aWall;
   vDepth = surface - world.y;
@@ -42,7 +43,6 @@ const FRAGMENT = /* glsl */ `
 ${WAVE_GLSL}
 ${HULL_MASK_GLSL}
 ${SECTION_GLSL}
-${SKY_GLSL}
 uniform vec3 uShallow;
 uniform vec3 uDeep;
 uniform vec3 uGlint;
@@ -53,20 +53,17 @@ varying vec2 vWall;
 varying float vDepth;
 void main() {
   float fade = sectionFade();
-  if (fade <= 0.0 || (uBack > 0.5 && insideHull(vWorld, -0.002))) discard;
+  if (fade <= 0.0 || (uBack > 0.5 && uOpenPort > 0.5 && insideHull(vWorld, -0.002))) discard;
   float depth = clamp(vDepth / uLook.x, 0.0, 1.0);
   float edge = smoothstep(0.0, uLook.w, vWall.y);
   vec3 colour = mix(uShallow, uDeep, sqrt(depth));
   float rim = (1.0 - smoothstep(0.0, uLook.z, vDepth)) * edge;
   if (uBack > 0.5) {
-    vec3 view = normalize(vWorld - cameraPosition);
-    float fresnel = 0.02 + 0.98 * pow(1.0 - abs(view.y), 5.0);
-    vec3 far = mix(uDeep, skyColour(reflect(view, vec3(0.0, 1.0, 0.0))), fresnel);
-    colour = mix(far, colour, edge * (1.0 - smoothstep(0.45, 1.0, depth)));
-    gl_FragColor = vec4(colour, fade);
+    colour = mix(uDeep, colour, 0.35 * edge * (1.0 - depth));
+    gl_FragColor = vec4(colour, 1.0);
   } else {
     float alpha = uLook.y * pow(1.0 - depth, 1.6) * edge;
-    gl_FragColor = vec4(mix(colour, uGlint, rim), max(alpha, rim * 0.85) * fade);
+    gl_FragColor = vec4(mix(colour, uGlint, rim), max(alpha, rim * 0.85));
   }
   #include <colorspace_fragment>
 }
@@ -110,7 +107,6 @@ function material(
     new ShaderMaterial({
       uniforms: {
         ...uniforms,
-        ...skyUniforms(),
         uSeaTime: WATER.uSeaTime,
         uSeaDrift: WATER.uSeaDrift,
         uWaves: WATER.uWaves,

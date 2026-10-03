@@ -256,6 +256,7 @@ export class NavalDroneAssembly implements Assembly {
     this.boat.setState(state);
     this.settleBoats(state.playing || state.boat.held ? 0 : 1);
     this.missiles.object.visible = state.fit === 'missile';
+    this.sea.openPort(state.view.cutaway);
     sectionFrame(state.boat.position, state.boat.heading, this.frame);
     placeSection(this.sea.section, this.frame, state.waterSection);
     this.section.place(this.frame, state.waterSection);

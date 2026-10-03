@@ -1,5 +1,5 @@
 import { DataTexture, LinearFilter, NoColorSpace, RGBAFormat, Vector4 } from 'three';
-import { SEA } from '../../constants';
+import { HULL_LINES, SEA } from '../../constants';
 import { halfBreadthAt } from '../../geometry/hullLines';
 
 const CHANNELS = 4;
@@ -33,9 +33,11 @@ export const HULL_MASK_GLSL = /* glsl */ `
 uniform mat4 uBoatInverse;
 uniform sampler2D uHullPlan;
 uniform vec4 uHullPlanRange;
+uniform float uOpenPort;
 
 bool insideHull(vec3 world, float margin) {
   vec3 local = (uBoatInverse * vec4(world, 1.0)).xyz;
+  if (uOpenPort > 0.5 && local.z < 0.0 && local.x < ${HULL_LINES.cutX.toFixed(2)}) return false;
   vec2 uv = vec2(
     (local.x - uHullPlanRange.x) / (uHullPlanRange.y - uHullPlanRange.x),
     (local.y - uHullPlanRange.z) / (uHullPlanRange.w - uHullPlanRange.z)

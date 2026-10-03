@@ -28,7 +28,9 @@ export function placeSection(uniforms: SectionUniforms, frame: Matrix4, on: bool
   uniforms.uSectionDepth.value.y = on ? 1 : 0;
 }
 
-const [LOW, HIGH] = SECTION_LOOK.elevation.map((degrees) => Math.tan((degrees * Math.PI) / 180));
+const slope = (degrees: number) => Math.tan((degrees * Math.PI) / 180).toFixed(4);
+const [LOW, HIGH] = SECTION_LOOK.elevation.map(slope);
+const [FACE_LOW, FACE_HIGH] = SECTION_LOOK.faces.map(slope);
 const [SIDE_FROM, SIDE_TO] = SECTION_LOOK.side;
 const SOFT = SECTION_LOOK.soft;
 
@@ -37,12 +39,16 @@ uniform mat4 uSection;
 uniform vec4 uSectionBox;
 uniform vec2 uSectionDepth;
 
-float sectionFade() {
-  if (uSectionDepth.y < 0.5) return 0.0;
+float sectionRise() {
   vec3 c = (uSection * vec4(cameraPosition, 1.0)).xyz;
   vec2 centre = vec2(uSectionBox.x + uSectionBox.y, uSectionBox.z + uSectionBox.w) * 0.5;
-  float rise = c.y / max(length(c.xz - centre), 0.001);
-  return (1.0 - smoothstep(${LOW.toFixed(4)}, ${HIGH.toFixed(4)}, rise)) * (1.0 - smoothstep(${SIDE_FROM.toFixed(2)}, ${SIDE_TO.toFixed(2)}, c.z));
+  return c.y / max(length(c.xz - centre), 0.001);
+}
+
+float sectionFade() {
+  if (uSectionDepth.y < 0.5) return 0.0;
+  float side = (uSection * vec4(cameraPosition, 1.0)).z;
+  return (1.0 - smoothstep(${LOW}, ${HIGH}, sectionRise())) * (1.0 - smoothstep(${SIDE_FROM.toFixed(2)}, ${SIDE_TO.toFixed(2)}, side));
 }
 
 float edgeIn(float value, vec2 span, float soft) {
@@ -66,8 +72,8 @@ float sectionCut(vec3 world) {
   vec3 c = (uSection * vec4(cameraPosition, 1.0)).xyz;
   vec3 d = p - c;
   vec4 b = uSectionBox;
-  float top = edgeIn(p.x, b.xy, ${SOFT.toFixed(2)}) * step(b.z, p.z) * step(p.z, b.w);
+  float top = edgeIn(p.x, b.xy, ${SOFT.toFixed(2)}) * edgeIn(p.z, b.zw, ${SOFT.toFixed(2)});
   float faces = max(throughFace(c, d, false, b.z, -1.0, b.xy), max(throughFace(c, d, true, b.x, -1.0, b.zw), throughFace(c, d, true, b.y, 1.0, b.zw)));
-  return fade * max(top, faces);
+  return fade * max(top, faces * (1.0 - smoothstep(${FACE_LOW}, ${FACE_HIGH}, sectionRise())));
 }
 `;
