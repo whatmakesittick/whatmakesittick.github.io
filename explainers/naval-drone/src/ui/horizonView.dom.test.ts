@@ -2,25 +2,33 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { initI18n } from '@core/i18n';
 import type { CanvasFrame } from '@core/ui/canvasSurface';
 import en from '../../locales/en.json';
-import { RADAR_HEIGHT_M, radarLineOfSightKm, surfaceDropM } from '../model';
+import {
+  DETECTION_KM,
+  RADAR_HEIGHT_M,
+  detectionCovered,
+  radarLineOfSightKm,
+  surfaceDropM,
+} from '../model';
+import { intersects } from './canvasLabels';
+import type { Box } from './canvasLabels';
 import {
   AXIS_KM,
   TICKS_KM,
   horizonLayout,
-  intersects,
+  blockedBoxes,
   paintHorizon,
-  placeLabel,
   sightHeightM,
   surfaceY,
   xOfKm,
   yOfMetres,
 } from './horizonView';
-import type { Box, HorizonScene } from './horizonView';
+import type { HorizonScene } from './horizonView';
 import { fill } from './testing';
 
 const PHONE: CanvasFrame = { width: 358, height: 168, ratio: 1, fontFamily: 'sans-serif' };
 const DESKTOP: CanvasFrame = { width: 640, height: 300, ratio: 1, fontFamily: 'sans-serif' };
-const CHAR_WIDTH = 6;
+const CHAR_WIDTHS = [6, 8] as const;
+let charWidth: number = CHAR_WIDTHS[0];
 const { canvas } = en.horizon;
 
 type Align = 'left' | 'center' | 'right';
@@ -42,7 +50,9 @@ function recordingContext() {
     lineWidth: 1,
     textAlign: 'left' as Align,
     textBaseline: 'alphabetic',
-    measureText: (text: string) => ({ width: text.length * CHAR_WIDTH }),
+    measureText: (text: string) => ({ width: text.length * charWidth }),
+    strokeText: noop,
+    lineJoin: 'round',
     fillText: (text: string, x: number, y: number) =>
       texts.push({ text, x, y, align: context.textAlign }),
     beginPath: noop,
@@ -72,7 +82,7 @@ describe('horizon view layout', () => {
       expect(yOfMetres(layout, RADAR_HEIGHT_M.max)).toBeGreaterThan(layout.plot.top);
       expect(surfaceY(layout, AXIS_KM)).toBeLessThan(layout.plot.bottom);
       expect(layout.tickBaseline).toBeLessThan(height);
-      expect(layout.font).toBeGreaterThanOrEqual(11);
+      expect(layout.metrics.font).toBeGreaterThanOrEqual(11);
     });
   });
 
@@ -89,30 +99,11 @@ describe('horizon view layout', () => {
 describe('horizon view labels', () => {
   beforeAll(() => initI18n({ en: () => Promise.resolve(en) }));
 
-  it('takes the first free spot, inside the canvas', () => {
-    const { context } = recordingContext();
-    const layout = horizonLayout(PHONE.width, PHONE.height);
-    const taken: Box[] = [{ left: 0, top: 40, right: 100, bottom: 60 }];
-    const spot = placeLabel(
-      context,
-      'Label',
-      [
-        { x: 50, baseline: 55, align: 'center' },
-        { x: 50, baseline: 90, align: 'center' },
-      ],
-      taken,
-      layout,
+  it('places the radar label first, the only one that may cross the detection mark', () => {
+    const labels = paint({ radarHeight: 20, seaState: 'slight' }).filter(
+      (drawn) => !drawn.text.endsWith(' km'),
     );
-    expect(spot.baseline).toBe(90);
-    expect(taken).toHaveLength(2);
-    const edge = placeLabel(
-      context,
-      'Label',
-      [{ x: 0, baseline: 120, align: 'center' }],
-      [],
-      layout,
-    );
-    expect(edge.box.left).toBeGreaterThanOrEqual(layout.bounds.left);
+    expect(labels[0].text).toBe(canvas.radar);
   });
 
   it('draws every text from the locale, ticks at 0, 10, 20 and 30 km', () => {
@@ -135,28 +126,45 @@ describe('horizon view labels', () => {
     expect(rough).toContain(canvas.boat);
   });
 
-  it('keeps the labels apart at every radar height on a phone and a desktop', () => {
-    [PHONE, DESKTOP].forEach((frame) =>
-      [5, 20, 35, 50].forEach((radarHeight) => {
-        const { context, texts } = recordingContext();
-        paintHorizon(context, frame, { radarHeight, seaState: 'smooth' });
-        const layout = horizonLayout(frame.width, frame.height);
-        const boxes = texts
-          .filter((drawn) => !drawn.text.endsWith(' km'))
-          .map((drawn) => labelBox(drawn, layout.font));
-        boxes.forEach((box, index) =>
-          boxes
-            .slice(index + 1)
-            .forEach((other) => expect(intersects(box, other), `${radarHeight} m`).toBe(false)),
-        );
-      }),
-    );
-  });
+  it.each(CHAR_WIDTHS)(
+    'keeps labels of %d px a letter apart and off the line and the sea',
+    (width) => {
+      charWidth = width;
+      [PHONE, DESKTOP].forEach((frame) =>
+        [5, 8, 12, 20, 35, 50].forEach((radarHeight) =>
+          (['smooth', 'moderate', 'rough'] as const).forEach((seaState) => {
+            const scene = { radarHeight, seaState };
+            const { context, texts } = recordingContext();
+            paintHorizon(context, frame, scene);
+            const layout = horizonLayout(frame.width, frame.height);
+            const blocked = blockedBoxes(layout, scene);
+            const labels = texts.filter((drawn) => !drawn.text.endsWith(' km'));
+            const boxes = labels.map((drawn) => labelBox(drawn, layout.metrics.font));
+            boxes.forEach((box, index) => {
+              const where = `${frame.width} px, ${radarHeight} m, ${seaState}: ${labels[index].text}`;
+              expect(box.bottom, where).toBeLessThanOrEqual(layout.plot.bottom);
+              const marks = index === 0 ? blocked : [...blocked, detectionMark(layout, scene)];
+              [...boxes.slice(index + 1), ...marks].forEach((other) =>
+                expect(intersects(box, other), where).toBe(false),
+              );
+            });
+          }),
+        ),
+      );
+      charWidth = CHAR_WIDTHS[0];
+    },
+  );
 });
 
+function detectionMark(layout: ReturnType<typeof horizonLayout>, scene: HorizonScene): Box {
+  if (!detectionCovered(scene.seaState)) return { left: 0, right: 0, top: 0, bottom: 0 };
+  const x = xOfKm(layout, DETECTION_KM);
+  return { left: x - 1, right: x + 1, top: layout.plot.top, bottom: layout.plot.bottom };
+}
+
 function labelBox(drawn: Drawn, font: number): Box {
-  const width = drawn.text.length * CHAR_WIDTH;
+  const width = drawn.text.length * charWidth;
   const offset = { left: 0, center: width / 2, right: width }[drawn.align];
   const left = drawn.x - offset;
-  return { left, right: left + width, top: drawn.y - font * 0.78, bottom: drawn.y };
+  return { left, right: left + width, top: drawn.y - font * 0.78, bottom: drawn.y + font * 0.24 };
 }
