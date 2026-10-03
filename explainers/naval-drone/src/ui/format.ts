@@ -106,10 +106,6 @@ export function formatBoatSpeed(knots: number): string {
   return t('units.speed', { kn: knotsText(shown), kmh: whole(knotsToKmh(shown)) });
 }
 
-export function formatTrialSpeed(knots: number): string {
-  return t('units.speed', { kn: tenths(knots), kmh: whole(knotsToKmh(knots)) });
-}
-
 export function formatMode(mode: HullMode): string {
   return t(`mode.${mode}`);
 }

@@ -15,7 +15,6 @@ import {
   formatHullRatio,
   formatLinkNow,
   formatPercent,
-  formatTrialSpeed,
   shownKnots,
 } from './format';
 import { fill, isFilled } from './testing';
@@ -110,7 +109,7 @@ describe('chapter widgets', () => {
   it('follows the run on the hull slider until the reader takes the boat over', () => {
     store.getState().setPhase(MOMENTS.humpPeak);
     expect(Number(input('trial-knots').value)).toBeCloseTo(speedAt(MOMENTS.humpPeak), 6);
-    expect(output('trial-knots')).toBe(formatTrialSpeed(11));
+    expect(output('trial-knots')).toBe(fill(units.speed, { kn: '11', kmh: '20' }));
     expect(readout('hull-mode')).toBe(en.mode.hump);
     expect(pressed('speedMark', 'hump')).toBe('true');
     store.getState().play();
@@ -124,12 +123,12 @@ describe('chapter widgets', () => {
     expect(pressed('speedMark', 'top')).toBe('true');
     store.getState().play();
     expect(store.getState().trialKnots).toBeNull();
-    expect(output('trial-knots')).toBe(formatTrialSpeed(speedAt(store.getState().phase)));
+    expect(output('trial-knots')).toBe(formatBoatSpeed(speedAt(store.getState().phase)));
   });
 
   it('holds the boat at each speed mark', () => {
     click('speedMark', 'hullSpeed');
-    expect(output('trial-knots')).toBe(formatTrialSpeed(5.7));
+    expect(output('trial-knots')).toBe(formatBoatSpeed(5.7));
     expect(readout('hull-ratio')).toBe(fill(hull.ratio, { times: '1.0', hullSpeed: '5.7' }));
     click('speedMark', 'planing');
     expect(readout('hull-mode')).toBe(en.mode.planing);

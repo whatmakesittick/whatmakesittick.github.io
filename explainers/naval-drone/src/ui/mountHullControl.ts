@@ -4,11 +4,11 @@ import { TRIAL_KNOTS, planingAt, trialKnotsOf } from '../model';
 import { followedKnots } from '../state';
 import type { NavalDroneStore } from '../state';
 import {
+  formatBoatSpeed,
   formatDegrees,
   formatHullRatio,
   formatLift,
   formatMode,
-  formatTrialSpeed,
   formatWetted,
 } from './format';
 
@@ -24,7 +24,7 @@ export function mountHullControl(root: Document, store: NavalDroneStore): Dispos
     range: TRIAL_KNOTS,
     select: (state): SelectedSpeed => [trialKnotsOf(followedKnots(state))],
     value: ([knots]) => knots,
-    format: ([knots]) => formatTrialSpeed(knots),
+    format: ([knots]) => formatBoatSpeed(knots),
     set: (state, knots) => state.setTrialKnots(knots),
     readouts: {
       'hull-mode': (selected) => formatMode(planingOf(selected).mode),
