@@ -384,7 +384,7 @@ export const SKY = {
 const THEME_SEA = { deep: THEME.seaDeep, lit: THEME.seaLit, foam: THEME.foam } as const;
 
 export const SEA = {
-  rings: 150,
+  rings: 168,
   segments: 128,
   innerRadius: 0.35,
   growth: 1.062,
