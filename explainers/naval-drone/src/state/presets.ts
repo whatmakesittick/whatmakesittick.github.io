@@ -61,9 +61,9 @@ const JET_LABELS: readonly PartId[] = [
   'fuelTanks',
 ];
 
-const LINK_PARTS: readonly PartId[] = [
-  'starlinkPanels',
-  'backupPanel',
+const LINK_ANTENNAS: readonly PartId[] = ['starlinkPanels', 'backupPanel'];
+
+const LINK_LABELS: readonly PartId[] = [
   'satLink',
   'backupLink',
   'satellite',
@@ -107,8 +107,8 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: { cutaway: false, flow: false, links: true },
     startAt: CHAPTER_START_SECONDS.link,
     controls: ['linkMode', 'videoDelayMs'],
-    labels: LINK_PARTS,
-    highlight: LINK_PARTS,
+    labels: LINK_LABELS,
+    highlight: [...LINK_ANTENNAS, ...LINK_LABELS],
   },
   horizon: {
     camera: 'eye',
