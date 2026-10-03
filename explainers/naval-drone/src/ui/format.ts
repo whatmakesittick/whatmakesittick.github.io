@@ -37,7 +37,7 @@ const WHOLE_KNOTS_FROM = 10;
 const METRES_STEP = 10;
 const LITRES_PER_CUBIC_METRE = 1000;
 const KG_PER_LITRE = SEAWATER_DENSITY / LITRES_PER_CUBIC_METRE;
-const STRAIGHT_NOZZLE = 0.5;
+const STRAIGHT_NOZZLE_DEG = 0.5;
 
 function phaseKeys(group: string): Readonly<Record<PhaseId, string>> {
   return Object.fromEntries(PHASE_IDS.map((id) => [id, `timeline.${group}.${id}`])) as Record<
@@ -166,7 +166,7 @@ export function formatEfficiency(efficiency: number, knots: number): string {
 export function formatPush(helm: HelmId, nozzleAngle: number): string {
   if (helm === 'reverse') return t('jet.push.reverse');
   const degrees = toDegrees(nozzleAngle);
-  if (Math.abs(degrees) < STRAIGHT_NOZZLE) return t('jet.push.straight');
+  if (Math.abs(degrees) < STRAIGHT_NOZZLE_DEG) return t('jet.push.straight');
   const side = degrees < 0 ? 'left' : 'right';
   return t(`jet.push.${side}`, { angle: whole(Math.abs(degrees)) });
 }
