@@ -1,0 +1,222 @@
+:root {
+  --launch: #7fb3d5;
+  --hump: #ffb347;
+  --cruise: #6fd38a;
+  --sprint: #ff7a59;
+  --arrival: #b48cff;
+  --floating: #5fa8ff;
+  --planing: #4fd1c5;
+  --sat-link: #5fa8ff;
+  --backup-link: #ffd24c;
+  --sea: #2b6f8f;
+  --hull: #9aa3ab;
+}
+
+.section-readouts,
+.range-widget:has([data-control='trial-knots']),
+.range-widget:has([data-control='throttle']),
+.range-widget:has([data-control='video-delay']),
+.range-widget:has([data-control='radar-height']) {
+  --readout-min-width: 8rem;
+}
+
+.range-widget__header {
+  flex-wrap: wrap;
+}
+
+.range-widget__readouts,
+.range-widget__readouts > div,
+.range-widget__header label {
+  min-width: 0;
+}
+
+.range-widget__header label,
+.range-widget__readouts :is(dt, dd) {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+@media (max-width: 599px) {
+  .range-widget__readouts dd {
+    min-block-size: 2lh;
+  }
+
+  .range-widget__readouts > div:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+.section-readouts {
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.section-readouts:has([data-readout='overview-mode']) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.section-readouts:has([data-readout='jet-push']),
+.section-readouts:has([data-readout='fleet-carries']),
+.section-readouts > div:has([data-readout='link-boat']) {
+  grid-column: 1 / -1;
+}
+
+.section-readouts:has([data-readout='jet-push']),
+.section-readouts:has([data-readout='fleet-carries']) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+[data-control='trial-knots'] {
+  --range-color: var(--planing);
+}
+
+[data-control='throttle'] {
+  --range-color: var(--hump);
+}
+
+[data-control='video-delay'] {
+  --range-color: var(--sat-link);
+}
+
+[data-control='radar-height'] {
+  --range-color: var(--sprint);
+}
+
+[data-readout='horizon-radar'],
+[data-readout='horizon-minutes'] {
+  color: var(--sprint);
+}
+
+[data-readout='link-now'],
+[data-readout='link-top'] {
+  color: var(--sat-link);
+}
+
+.horizon-view {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin: 4px 0 16px;
+}
+
+.horizon-view canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-small);
+}
+
+.horizon-view figcaption {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.signal-path__title {
+  margin: 24px 0 8px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.signal-path {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+  counter-reset: signal-step;
+}
+
+.signal-path li {
+  position: relative;
+  padding: 10px 14px 10px 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--sat-link) 8%, transparent),
+    transparent
+  );
+  counter-increment: signal-step;
+}
+
+.signal-path li::before {
+  content: counter(signal-step);
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  width: 20px;
+  color: var(--sat-link);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-align: center;
+}
+
+.chip[data-action='moment'][data-value='hullSpeed'],
+.chip[data-action='moment'][data-value='humpPeak'],
+.chip[data-action='moment'][data-value='onPlane'] {
+  --tone: var(--hump);
+}
+
+.chip[data-action='moment'][data-value='cruiseSpeed'] {
+  --tone: var(--cruise);
+}
+
+.chip[data-action='moment'][data-value='throttleUp'],
+.chip[data-action='moment'][data-value='topSpeed'] {
+  --tone: var(--sprint);
+}
+
+.chip[data-action='moment'][data-value='alongside'] {
+  --tone: var(--arrival);
+}
+
+.chip[data-action='speedMark'][data-value='hullSpeed'] {
+  --tone: var(--floating);
+}
+
+.chip[data-action='speedMark'][data-value='hump'] {
+  --tone: var(--hump);
+}
+
+.chip[data-action='speedMark'][data-value='planing'],
+.chip[data-action='speedMark'][data-value='cruise'],
+.chip[data-action='speedMark'][data-value='top'] {
+  --tone: var(--planing);
+}
+
+.chip[data-action='helm'] {
+  --tone: var(--hump);
+}
+
+.chip[data-action='linkMode'][data-value='satellite'] {
+  --tone: var(--sat-link);
+}
+
+.chip[data-action='linkMode'][data-value='backup'] {
+  --tone: var(--backup-link);
+}
+
+.chip[data-action='linkMode'][data-value='lost'] {
+  --tone: var(--muted);
+}
+
+.chip[data-action='seaState'] {
+  --tone: var(--sea);
+}
+
+.chip[data-action='fit'] {
+  --tone: var(--hull);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-readouts:has([data-readout='overview-mode']) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

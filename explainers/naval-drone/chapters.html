@@ -1,0 +1,600 @@
+<section class="chapter" data-preset="overview" aria-labelledby="overview-title">
+  <p class="chapter-index">01</p>
+  <h2 id="overview-title" data-i18n="sections.overview.title">A speedboat with no one aboard</h2>
+  <p data-i18n-html="sections.overview.p1">
+    This is a <strong>Magura V5</strong>, a Ukrainian naval drone: a fast boat with nobody on board.
+    The state firm SpetsTechnoExport builds it for GUR, Ukraine's defence intelligence; it was first
+    shown in July 2023. It is 5.5 m long, sits just 0.5 m above the water and weighs under one
+    tonne. A pilot far away steers it by satellite.
+  </p>
+  <p data-i18n-html="sections.overview.p2">
+    Outside you see a low grey <strong>hull</strong> of composite, fibre cloth set in resin. On the
+    raised fairing at the back sit two <strong>Starlink antennas</strong> and a
+    <strong>backup satellite antenna</strong>; toward the bow, a low <strong>dome</strong> with a
+    thermal camera and a fixed <strong>bow camera</strong>. The <strong>waterjet</strong> at the
+    stern drives it. Inside are a payload bay for up to 320 kg, fuel tanks, and the engine in a
+    foam-bedded tub with the electronics above. Switch on the cutaway (C) to see them, or wait for
+    the jet chapter.
+  </p>
+  <p data-i18n-html="sections.overview.p3">
+    The model follows one <strong>run</strong>. The boat leaves a slipway, rises onto the plane and
+    cruises at 22 knots, about 41 km/h; a knot is one nautical mile an hour. It then sprints at 42
+    knots, about 78 km/h, with two more boats, until its bow reaches a grey ship at anchor.
+  </p>
+  <p data-i18n-html="sections.overview.p4">
+    At normal speed the boat moves as fast as a real one, but the trip is cut to two minutes: a
+    cruise of about 20 hours over its full 450 nautical miles, about 800 km, takes 42 seconds here,
+    and the sprint is shorter too. The ship lies 1.5 km away, not hundreds of kilometres. The clock
+    counts model time; drag the timeline to jump.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="humpPeak"
+      data-i18n="controls.momentOptions.humpPeak"
+    >
+      Hump peak
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="onPlane"
+      data-i18n="controls.momentOptions.onPlane"
+    >
+      On the plane
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="cruiseSpeed"
+      data-i18n="controls.momentOptions.cruiseSpeed"
+    >
+      Cruising
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="topSpeed"
+      data-i18n="controls.momentOptions.topSpeed"
+    >
+      Top speed
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="alongside"
+      data-i18n="controls.momentOptions.alongside"
+    >
+      At the ship
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.overview.mode">Hull</dt>
+      <dd data-readout="overview-mode">Floating</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.overview.covered">Distance run</dt>
+      <dd class="number" data-readout="overview-covered">0 m</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.overview.done">Run done</dt>
+      <dd class="number" data-readout="overview-done">0 %</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="hull" aria-labelledby="hull-title">
+  <p class="chapter-index">02</p>
+  <h2 id="hull-title" data-i18n="sections.hull.title">It stops floating and starts skimming</h2>
+  <p data-i18n-html="sections.hull.p1">
+    At rest, the water the boat pushes aside holds it up: <strong>buoyancy</strong>. As it speeds
+    up, water striking the slanted bottom pushes it up harder and harder. Once that push carries
+    most of the weight, the hull rises and skims: <strong>planing</strong>. The back of the bottom
+    always stays in the water.
+  </p>
+  <p data-i18n-html="sections.hull.p2">
+    Every boat makes a bow wave. At about 5.7 knots it is as long as this 5.5 m hull: the
+    <strong>hull speed</strong>, a rule of thumb for boats that only float, not a limit; at 42 knots
+    the Magura goes about 7 times faster. First it climbs the <strong>resistance hump</strong>,
+    where it makes big waves and the <strong>drag</strong>, the water holding it back, climbs
+    steeply. The sharp bottom edges, the <strong>chines</strong>, add drag here and pay off only
+    once it planes.
+  </p>
+  <p data-i18n-html="sections.hull.p3">
+    Move the slider and watch the bow. It rises most near the hump, then settles: this angle is the
+    <strong>trim</strong>, with least drag at about 3 to 4 degrees. Planing starts at about 15 to 18
+    knots; the model switches at 16. The wet bottom, 5.1 m at rest in the model, shrinks from about
+    4.5 m at 15 knots to 1.5 to 2 m at 42. With no hump data published, the 6 degree peak and the
+    weight split are the model's own.
+  </p>
+  <p data-i18n-html="sections.hull.p4">
+    The bottom is a deep <strong>V</strong> that softens the blows of waves; the model uses 20
+    degrees at the stern, sharper forward, as the real angle is not published. Water breaks cleanly
+    off the square stern's sharp lower edge. A thin <strong>spray rail</strong> on each side, a
+    model guess, throws spray outward. Too much trim makes a planing boat bounce:
+    <strong>porpoising</strong>.
+  </p>
+  <div class="range-widget">
+    <div class="range-widget__header">
+      <label for="trial-knots" data-i18n="sections.hull.speedLabel">Boat speed</label>
+      <output class="number" for="trial-knots">11 kn, 20 km/h</output>
+    </div>
+    <input id="trial-knots" type="range" class="range" data-control="trial-knots" />
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.hull.mode">Hull</dt>
+        <dd data-readout="hull-mode">Climbing the hump</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.hull.trim">Bow angle (trim)</dt>
+        <dd class="number" data-readout="hull-trim">6.0°</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.hull.lift">Weight carried</dt>
+        <dd data-readout="hull-lift">36 % by speed, 64 % by floating</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.hull.wetted">Wet bottom length</dt>
+        <dd data-readout="hull-wetted">4.4 m, against 5.1 m at rest</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.hull.ratio">Against hull speed</dt>
+        <dd data-readout="hull-ratio">1.9 times the hull speed of 5.7 kn</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="speedMark"
+      data-value="hullSpeed"
+      data-i18n="controls.speedMarkOptions.hullSpeed"
+    >
+      Hull speed
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="speedMark"
+      data-value="hump"
+      data-i18n="controls.speedMarkOptions.hump"
+    >
+      Hump
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="speedMark"
+      data-value="planing"
+      data-i18n="controls.speedMarkOptions.planing"
+    >
+      Planing
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="speedMark"
+      data-value="cruise"
+      data-i18n="controls.speedMarkOptions.cruise"
+    >
+      Cruise
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="speedMark"
+      data-value="top"
+      data-i18n="controls.speedMarkOptions.top"
+    >
+      Top speed
+    </button>
+  </p>
+</section>
+
+<section class="chapter" data-preset="jet" aria-labelledby="jet-title">
+  <p class="chapter-index">03</p>
+  <h2 id="jet-title" data-i18n="sections.jet.title">A pump instead of a propeller</h2>
+  <p data-i18n-html="sections.jet.p1">
+    With the hull cut open, follow the power: the <strong>fuel tanks</strong> feed the
+    <strong>engine</strong>, whose <strong>drive shaft</strong> turns the pump at the stern, the
+    <strong>waterjet</strong>. Water enters through a grate in the bottom. A spinning
+    <strong>impeller</strong>, a fan-like rotor, speeds it up; fixed vanes, the
+    <strong>stator</strong>, take out the swirl; a <strong>nozzle</strong> shoots it out behind.
+  </p>
+  <p data-i18n-html="sections.jet.p2">
+    The push comes from speeding up the water in the pump: <strong>thrust</strong> is the mass of
+    water per second times how much faster the jet leaves than the boat moves. Even a perfect pump
+    turns only 2 / (1 + jet speed / boat speed) of its work into motion: 80 % with the jet at 1.5
+    times boat speed, far less at low speed.
+  </p>
+  <p data-i18n-html="sections.jet.p3">
+    Above about 25 to 30 knots a jet matches or beats a propeller, and with nothing under the hull
+    the boat can run in shallow water. The grate mostly clears itself, but weed and rope can still
+    block it. The first boat of this family, in May 2022, had an outboard motor; later 2022 boats,
+    like one found near Sevastopol, used a Rotax jet-ski engine and a Sea-Doo pump. The Magura's
+    engine is not disclosed, so the model assumes a jet-ski-type petrol engine turning the pump
+    directly; the pump moves an estimated 210 litres a second at 42 knots.
+  </p>
+  <p data-i18n-html="sections.jet.p4">
+    There is no rudder. The <strong>steering nozzle</strong> swings the stream up to 27 degrees each
+    way: swing it right and the bow turns right. To stop or back up, a
+    <strong>reverse bucket</strong> drops over the nozzle and sends the stream forward and down. The
+    slider sets the throttle, taken in the model as the pump's flow. Press play to rejoin the run.
+  </p>
+  <div class="range-widget">
+    <div class="range-widget__header">
+      <label for="throttle" data-i18n="sections.jet.throttleLabel">Throttle</label>
+      <output class="number" for="throttle">69 %</output>
+    </div>
+    <input id="throttle" type="range" class="range" data-control="throttle" />
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.jet.boat">Boat speed</dt>
+        <dd data-readout="jet-boat">22 kn, 41 km/h</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.jet.flow">Water through the pump</dt>
+        <dd data-readout="jet-flow">148 kg a second, about 144 litres</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.jet.velocity">Jet speed</dt>
+        <dd class="number" data-readout="jet-velocity">22 m/s, 81 km/h</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.jet.thrust">Thrust</dt>
+        <dd data-readout="jet-thrust">1.65 kN</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.jet.efficiency">Ideal efficiency</dt>
+        <dd data-readout="jet-efficiency">67 %</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="helm"
+      data-value="left"
+      data-i18n="controls.helmOptions.left"
+    >
+      Left
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="helm"
+      data-value="straight"
+      data-i18n="controls.helmOptions.straight"
+    >
+      Straight
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="helm"
+      data-value="right"
+      data-i18n="controls.helmOptions.right"
+    >
+      Right
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="helm"
+      data-value="reverse"
+      data-i18n="controls.helmOptions.reverse"
+    >
+      Reverse
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.jet.push">Jet push</dt>
+      <dd data-readout="jet-push">Straight back: holds course</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="link" aria-labelledby="link-title">
+  <p class="chapter-index">04</p>
+  <h2 id="link-title" data-i18n="sections.link.title">Steered from hundreds of kilometres away</h2>
+  <p data-i18n-html="sections.link.p1">
+    A Magura captured in Crimea in November 2023 carried, by Russian accounts, two
+    <strong>Starlink</strong> terminals, a Kymeta backup satellite antenna, GPS, a Linux computer
+    and a two-SIM router for use near shore. The maker also claims mesh radio, autonomous control
+    and up to three video streams.
+  </p>
+  <p data-i18n-html="sections.link.p2">
+    The pilot sits at a console in a hard case. Long trips can be pre-programmed, but a pilot
+    watches throughout and often steers the last stretch by hand: the boat is not fully autonomous.
+    What a real boat does when the link drops is not published; the model keeps it on course.
+  </p>
+  <p data-i18n-html="sections.link.p3">
+    Starlink's typical delay is about 25 to 35 ms on land and can pass 100 ms at sea. The upload, 10
+    to 30 megabits a second, about what three video streams need, sets how sharp the picture is. How
+    late it arrives is unpublished. At 42 knots a quarter second is 5.4 m, about a boat length; the
+    ghost boat shows where the pilot sees it.
+  </p>
+  <p data-i18n-html="sections.link.p4">
+    GPS jamming and faking over the Black Sea has been documented since mid-2024, likely why the
+    maker also lists inertial and visual navigation. In September 2022, by Elon Musk's account and a
+    corrected 2023 book about him, Ukraine expected Starlink coverage near Crimea that had never
+    been turned on; the book had first said it was switched off. The satellites here are drawn low,
+    close and far bigger than real.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="linkMode"
+      data-value="satellite"
+      data-i18n="controls.linkOptions.satellite"
+    >
+      Starlink
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="linkMode"
+      data-value="backup"
+      data-i18n="controls.linkOptions.backup"
+    >
+      Backup satellite
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="linkMode"
+      data-value="lost"
+      data-i18n="controls.linkOptions.lost"
+    >
+      Link lost
+    </button>
+  </p>
+  <div class="range-widget">
+    <div class="range-widget__header">
+      <label for="video-delay" data-i18n="sections.link.delayLabel">Video delay</label>
+      <output class="number" for="video-delay">250 ms</output>
+    </div>
+    <input id="video-delay" type="range" class="range" data-control="video-delay" />
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.link.now">Where the pilot sees it</dt>
+        <dd data-readout="link-now">2.8 m behind the boat at 22 kn</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.link.top">At top speed</dt>
+        <dd data-readout="link-top">5.4 m at 42 kn, 1.0 boat lengths</dd>
+      </div>
+    </dl>
+  </div>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.link.carrier">Link</dt>
+      <dd data-readout="link-carrier">Starlink, two terminals</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.link.boat">What the boat does</dt>
+      <dd data-readout="link-boat">Pilot steers by the video</dd>
+    </div>
+  </dl>
+  <p class="signal-path__title" data-i18n="sections.link.path">How a command reaches the boat</p>
+  <ol class="signal-path">
+    <li data-i18n-html="sections.link.step1"><strong>Pilot</strong>: moves a lever or joystick.</li>
+    <li data-i18n-html="sections.link.step2">
+      <strong>Ground station</strong>: sends the command up by radio.
+    </li>
+    <li data-i18n-html="sections.link.step3">
+      <strong>Satellite</strong>: passes it down to the boat.
+    </li>
+    <li data-i18n-html="sections.link.step4">
+      <strong>Boat</strong>: the computer moves the throttle or nozzle.
+    </li>
+    <li data-i18n-html="sections.link.step5">
+      <strong>Video</strong>: comes back the same way, a little late.
+    </li>
+  </ol>
+</section>
+
+<section class="chapter" data-preset="horizon" aria-labelledby="horizon-title">
+  <p class="chapter-index">05</p>
+  <h2 id="horizon-title" data-i18n="sections.horizon.title">
+    Low enough to hide behind the curve of the sea
+  </h2>
+  <p data-i18n-html="sections.horizon.p1">
+    The sea curves away, so from h metres up the horizon lies about 3.86 × √h km off. The boat's
+    camera, about 0.7 m up, sees only about 3 km. The 3D sea is flat, as over 1.5 km the real curve
+    drops less than 0.2 m; the drawing below exaggerates it.
+  </p>
+  <p data-i18n-html="sections.horizon.p2">
+    A ship's radar meets the same curve. Radio bends slightly, so its
+    <strong>line of sight</strong> to a 0.5 m boat is about 4.12 × (√h1 + √h2) km, heights in
+    metres: about 21 km for a radar 20 m up. That is only the farthest it could see the boat, and
+    even then the ship would get at most about 16 minutes of warning at 42 knots.
+  </p>
+  <p data-i18n-html="sections.horizon.p3">
+    Real detection comes later. A small boat's <strong>radar cross-section</strong>, how big it
+    looks to radar, is about 0.5 to 5 m²; none is published for the Magura. A coastal radar standard
+    expects a 1 m² target 1 m up to be found at about 9 km, by an advanced radar, up to sea state 4
+    (waves of 1.25 to 2.5 m): about 7 minutes of warning at 42 knots. Small boats may hide behind
+    waves up to half the time, and <strong>sea clutter</strong>, the waves' own echoes, can drown
+    theirs.
+  </p>
+  <p data-i18n-html="sections.horizon.p4">
+    Operators say the boats are hard to spot: a commander of GUR's Group 13 said radar struggles
+    with the plastic hull and the boat gives off little heat. These are claims; no measurement is
+    published. A Russian teardown reported that the foam-bedded engine tub reduces heating of the
+    outer skin. The boats are grey, and the best-known attacks came at night or dawn. Tap the chips
+    to change the <strong>sea state</strong>.
+  </p>
+  <figure class="horizon-view">
+    <canvas data-view="horizon" width="640" height="300" aria-hidden="true"></canvas>
+    <figcaption data-i18n="sections.horizon.caption">
+      Side view of the radar, the sea and the boat; curve and heights exaggerated.
+    </figcaption>
+  </figure>
+  <div class="range-widget">
+    <div class="range-widget__header">
+      <label for="radar-height" data-i18n="sections.horizon.heightLabel">Radar height</label>
+      <output class="number" for="radar-height">20 m</output>
+    </div>
+    <input id="radar-height" type="range" class="range" data-control="radar-height" />
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.horizon.radar">Radar line of sight</dt>
+        <dd class="number" data-readout="horizon-radar">21.3 km</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.horizon.minutes">Ship's warning at 42 kn</dt>
+        <dd class="number" data-readout="horizon-minutes">16.5 min</dd>
+      </div>
+    </dl>
+  </div>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="seaState"
+      data-value="smooth"
+      data-i18n="controls.seaStateOptions.smooth"
+    >
+      Smooth
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="seaState"
+      data-value="slight"
+      data-i18n="controls.seaStateOptions.slight"
+    >
+      Slight
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="seaState"
+      data-value="moderate"
+      data-i18n="controls.seaStateOptions.moderate"
+    >
+      Moderate
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="seaState"
+      data-value="rough"
+      data-i18n="controls.seaStateOptions.rough"
+    >
+      Rough
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.horizon.camera">Camera horizon</dt>
+      <dd data-readout="horizon-camera">3.2 km from a lens 0.7 m up</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.horizon.detect">Expected detection</dt>
+      <dd data-readout="horizon-detect">About 9.3 km, 7.1 min of warning at 42 kn</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.horizon.waves">Wave height</dt>
+      <dd data-readout="horizon-waves">0.5 to 1.25 m, sea state 3</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.horizon.hidden">Hidden behind waves</dt>
+      <dd data-readout="horizon-hidden">Up to half the time: waves as tall as its deck</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="fleet" aria-labelledby="fleet-title">
+  <p class="chapter-index">06</p>
+  <h2 id="fleet-title" data-i18n="sections.fleet.title">Cheap, small and changing fast</h2>
+  <p data-i18n-html="sections.fleet.p1">
+    A Magura V5 costs about a quarter of a million dollars. Sea Baby, a different boat built by the
+    SBU, Ukraine's security service, costs about USD 221,000. GUR values the patrol ship Sergey
+    Kotov, sunk in March 2024 after a Magura attack, at about USD 65 million.
+  </p>
+  <p data-i18n-html="sections.fleet.p2">
+    The boats rarely work alone: many reported attacks used groups of about five to ten, each boat
+    with a role, the developers say. Ships reported sunk took several hits. The two companions in
+    the run, and their formation, are the model's choice.
+  </p>
+  <p data-i18n-html="sections.fleet.p3">
+    The design keeps changing. In December 2024 GUR fitted V5 boats with two R-73 air-to-air
+    missiles, renamed Sea Dragon; the chips show this fit, which changes only the deck, not the run.
+    In 2025 GUR showed the larger Magura V7, 7.2 m long, with up to 650 kg of payload.
+  </p>
+  <p data-i18n-html="sections.fleet.p4">
+    The record below keeps to each side's words, and many claims are disputed. The UK Ministry of
+    Defence counts at least 26 Russian navy ships damaged or destroyed from February 2022 to June
+    2024 by all weapons, about a third of the Black Sea Fleet.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="fit"
+      data-value="standard"
+      data-i18n="controls.fitOptions.standard"
+    >
+      Standard
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="fit"
+      data-value="missile"
+      data-i18n="controls.fitOptions.missile"
+    >
+      Missile rails
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.fleet.carries">On board</dt>
+      <dd data-readout="fleet-carries">A payload of up to 320 kg in the bow</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.fleet.cost">Cost per boat</dt>
+      <dd data-readout="fleet-cost">About USD 250,000 to 273,000</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.fleet.ship">Patrol ship, GUR's value</dt>
+      <dd data-readout="fleet-ship">About USD 65 million</dd>
+    </div>
+  </dl>
+  <p class="signal-path__title" data-i18n="sections.fleet.events">Public record, as reported</p>
+  <ol class="signal-path">
+    <li data-i18n-html="sections.fleet.event1">
+      <strong>29 Oct 2022, Sevastopol</strong>: sea and air drones hit the frigate Admiral Makarov
+      and a minesweeper; Russia admitted minor damage.
+    </li>
+    <li data-i18n-html="sections.fleet.event2">
+      <strong>31 Jan to 1 Feb 2024, Lake Donuzlav</strong>: Magura V5 boats sank the corvette
+      Ivanovets; GUR claims six hits, video shows about three.
+    </li>
+    <li data-i18n-html="sections.fleet.event3">
+      <strong>4 to 5 Mar 2024, Kerch Strait</strong>: Magura V5 boats sank the patrol ship Sergey
+      Kotov; Ukraine said five boats took part.
+    </li>
+    <li data-i18n-html="sections.fleet.event4">
+      <strong>31 Dec 2024, Cape Tarkhankut</strong>: GUR says Magura V5 boats downed Mi-8
+      helicopters with R-73 missiles, a first for a sea drone; it first claimed one, later two.
+    </li>
+    <li data-i18n-html="sections.fleet.event5">
+      <strong>2 May 2025, near Novorossiysk</strong>: GUR says Magura V7 boats downed two Su-30SM
+      jets with Sidewinders; Russia has not confirmed it.
+    </li>
+  </ol>
+</section>

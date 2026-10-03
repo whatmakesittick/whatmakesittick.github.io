@@ -1,0 +1,322 @@
+{
+  "meta": {
+    "title": "How a naval drone works",
+    "eyebrow": "Naval drone",
+    "tagline": "A boat with nobody on board: it skims on its hull, drives with a water pump and is steered by satellite.",
+    "description": "A Magura V5 naval drone in 3D: how its hull planes, how a waterjet drives it, its satellite link, and why a low boat is hard to see.",
+    "summary": "The planing hull, the waterjet, the satellite link and its delay, the curve of the sea, and a changing design.",
+    "socialAlt": "A grey uncrewed boat skimming over the sea at dawn with spray flying from its chines, beside the title How a naval drone works"
+  },
+  "stage": {
+    "label": "Interactive naval drone model",
+    "gauge": "Live run readings"
+  },
+  "controls": {
+    "label": "Naval drone controls",
+    "views": {
+      "cutaway": {
+        "name": "Cutaway",
+        "short": "Cutaway",
+        "hint": "Cutaway (C)"
+      },
+      "flow": {
+        "name": "Water flow",
+        "short": "Flow",
+        "hint": "Water flow (W)"
+      },
+      "links": {
+        "name": "Radio links",
+        "short": "Links",
+        "hint": "Radio links (K)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      }
+    },
+    "fit": {
+      "label": "Deck fit"
+    },
+    "fitOptions": {
+      "standard": "Standard",
+      "missile": "Missile rails"
+    },
+    "momentOptions": {
+      "hullSpeed": "Hull speed",
+      "humpPeak": "Hump peak",
+      "onPlane": "On the plane",
+      "cruiseSpeed": "Cruising",
+      "throttleUp": "Sprint starts",
+      "topSpeed": "Top speed",
+      "alongside": "At the ship"
+    },
+    "speedMarkOptions": {
+      "hullSpeed": "Hull speed",
+      "hump": "Hump",
+      "planing": "Planing",
+      "cruise": "Cruise",
+      "top": "Top speed"
+    },
+    "helmOptions": {
+      "left": "Left",
+      "straight": "Straight",
+      "right": "Right",
+      "reverse": "Reverse"
+    },
+    "linkOptions": {
+      "satellite": "Starlink",
+      "backup": "Backup satellite",
+      "lost": "Link lost"
+    },
+    "seaStateOptions": {
+      "smooth": "Smooth",
+      "slight": "Slight",
+      "moderate": "Moderate",
+      "rough": "Rough"
+    }
+  },
+  "timeline": {
+    "label": "Run time",
+    "phases": "Jump to a part of the run",
+    "speed": "Playback speed",
+    "value": "{{time}}, {{phase}}",
+    "clock": "T+{{clock}}",
+    "speedFormat": "{{factor}}×",
+    "speedValue": "versus normal speed",
+    "phase": {
+      "launch": "Launch",
+      "hump": "Hump",
+      "cruise": "Cruise",
+      "sprint": "Sprint",
+      "arrival": "Arrival"
+    },
+    "during": {
+      "launch": "the boat idles off the slipway",
+      "hump": "the boat speeds up onto the plane",
+      "cruise": "the boat cruises at 22 knots, hours cut short",
+      "sprint": "the boat sprints at 42 knots with two more",
+      "arrival": "the boat runs the last 170 m to the ship"
+    },
+    "jump": {
+      "launch": "Jump to the launch",
+      "hump": "Jump to the hump",
+      "cruise": "Jump to the cruise",
+      "sprint": "Jump to the sprint",
+      "arrival": "Jump to the arrival"
+    }
+  },
+  "readouts": {
+    "clock": "Run clock",
+    "speed": "Speed",
+    "mode": "Hull",
+    "distance": "To the ship"
+  },
+  "mode": {
+    "floating": "Floating",
+    "hump": "Climbing the hump",
+    "planing": "Planing"
+  },
+  "units": {
+    "speed": "{{kn}} kn, {{kmh}} km/h",
+    "m": "{{value}} m",
+    "km": "{{value}} km",
+    "percent": "{{value}} %",
+    "degrees": "{{value}}°",
+    "kilonewtons": "{{value}} kN",
+    "mps": "{{ms}} m/s, {{kmh}} km/h",
+    "ms": "{{value}} ms",
+    "minutes": "{{value}} min"
+  },
+  "parts": {
+    "hull": "Composite hull",
+    "chines": "Chines",
+    "sprayRails": "Spray rails",
+    "payloadBay": "Payload bay",
+    "fuelTanks": "Fuel tanks",
+    "engine": "Engine",
+    "electronicsBay": "Electronics",
+    "starlinkPanels": "Starlink antennas",
+    "backupPanel": "Backup antenna",
+    "cameraDome": "Camera dome",
+    "bowCamera": "Bow camera",
+    "intake": "Intake and grate",
+    "duct": "Intake duct",
+    "driveShaft": "Drive shaft",
+    "impeller": "Impeller",
+    "waterjet": "Waterjet",
+    "stator": "Stator vanes",
+    "nozzle": "Nozzle",
+    "steeringNozzle": "Steering nozzle",
+    "reverseBucket": "Reverse bucket",
+    "missileRails": "Missile rails",
+    "jetStream": "Jet stream",
+    "bowWave": "Bow wave",
+    "spray": "Spray",
+    "wake": "Wake",
+    "wettedLength": "Wet bottom length",
+    "videoGhost": "Pilot's delayed view",
+    "satLink": "Starlink link",
+    "backupLink": "Backup link",
+    "satellite": "Starlink satellite",
+    "backupSatellite": "Backup satellite",
+    "groundStation": "Ground station",
+    "ship": "Ship at anchor",
+    "shipRadar": "Ship's radar",
+    "companions": "Companion boats"
+  },
+  "hull": {
+    "lift": "{{dynamic}} % by speed, {{buoyant}} % by floating",
+    "wetted": "{{m}} m, against {{rest}} m at rest",
+    "ratio": "{{times}} times the hull speed of {{hullSpeed}} kn",
+    "ratioStill": "Stopped; hull speed is {{hullSpeed}} kn"
+  },
+  "jet": {
+    "flow": "{{kg}} kg a second, about {{litres}} litres",
+    "backing": "Stopping, bucket down",
+    "astern": "Turned forward by the bucket",
+    "noEfficiency": "None while not moving ahead",
+    "push": {
+      "left": "Nozzle {{angle}}° left: bow turns left",
+      "right": "Nozzle {{angle}}° right: bow turns right",
+      "straight": "Straight back: holds course",
+      "reverse": "Bucket down: stream forward and down"
+    }
+  },
+  "link": {
+    "now": "{{m}} m behind the boat at {{kn}} kn",
+    "nowLost": "No picture while the link is down",
+    "top": "{{m}} m at 42 kn, {{lengths}} boat lengths",
+    "carrier": {
+      "satellite": "Starlink, two terminals",
+      "backup": "Backup satellite antenna",
+      "lost": "None"
+    },
+    "boat": {
+      "satellite": "Pilot steers by the video",
+      "backup": "Pilot steers over the backup link",
+      "lost": "Keeps its set course in the model; real behaviour not published"
+    }
+  },
+  "horizon": {
+    "camera": "{{km}} km from a lens {{m}} m up",
+    "detect": "About {{km}} km, {{min}} min of warning at 42 kn",
+    "detectBeyond": "Not covered: the standard stops at sea state 4",
+    "waves": {
+      "smooth": "{{from}} to {{to}} m, sea state 2",
+      "slight": "{{from}} to {{to}} m, sea state 3",
+      "moderate": "{{from}} to {{to}} m, sea state 4",
+      "rough": "{{from}} to {{to}} m, sea state 5"
+    },
+    "hidden": {
+      "smooth": "No figure this smooth; waves stay below its 0.5 m deck",
+      "slight": "Up to half the time: waves as tall as its deck",
+      "moderate": "Up to half the time: waves above its deck",
+      "rough": "Up to half the time: waves far above its deck"
+    },
+    "canvas": {
+      "radar": "Ship's radar",
+      "boat": "Boat, 0.5 m high",
+      "lineOfSight": "Line of sight",
+      "detection": "Expected detection",
+      "km": "{{value}} km",
+      "note": "Curve of the sea exaggerated"
+    }
+  },
+  "fleet": {
+    "carries": {
+      "standard": "A payload of up to {{kg}} kg in the bow",
+      "missile": "Two R-73 missiles on rails; bow bay kept in the model"
+    },
+    "cost": "About USD {{from}} to {{to}}",
+    "ship": "About USD {{value}} million"
+  },
+  "sections": {
+    "overview": {
+      "title": "A speedboat with no one aboard",
+      "p1": "This is a <strong>Magura V5</strong>, a Ukrainian naval drone: a fast boat with nobody on board. The state firm SpetsTechnoExport builds it for GUR, Ukraine's defence intelligence; it was first shown in July 2023. It is 5.5 m long, sits just 0.5 m above the water and weighs under one tonne. A pilot far away steers it by satellite.",
+      "p2": "Outside you see a low grey <strong>hull</strong> of composite, fibre cloth set in resin. On the raised fairing at the back sit two <strong>Starlink antennas</strong> and a <strong>backup satellite antenna</strong>; toward the bow, a low <strong>dome</strong> with a thermal camera and a fixed <strong>bow camera</strong>. The <strong>waterjet</strong> at the stern drives it. Inside are a payload bay for up to 320 kg, fuel tanks, and the engine in a foam-bedded tub with the electronics above. Switch on the cutaway (C) to see them, or wait for the jet chapter.",
+      "p3": "The model follows one <strong>run</strong>. The boat leaves a slipway, rises onto the plane and cruises at 22 knots, about 41 km/h; a knot is one nautical mile an hour. It then sprints at 42 knots, about 78 km/h, with two more boats, until its bow reaches a grey ship at anchor.",
+      "p4": "At normal speed the boat moves as fast as a real one, but the trip is cut to two minutes: a cruise of about 20 hours over its full 450 nautical miles, about 800 km, takes 42 seconds here, and the sprint is shorter too. The ship lies 1.5 km away, not hundreds of kilometres. The clock counts model time; drag the timeline to jump.",
+      "mode": "Hull",
+      "covered": "Distance run",
+      "done": "Run done"
+    },
+    "hull": {
+      "title": "It stops floating and starts skimming",
+      "p1": "At rest, the water the boat pushes aside holds it up: <strong>buoyancy</strong>. As it speeds up, water striking the slanted bottom pushes it up harder and harder. Once that push carries most of the weight, the hull rises and skims: <strong>planing</strong>. The back of the bottom always stays in the water.",
+      "p2": "Every boat makes a bow wave. At about 5.7 knots it is as long as this 5.5 m hull: the <strong>hull speed</strong>, a rule of thumb for boats that only float, not a limit; at 42 knots the Magura goes about 7 times faster. First it climbs the <strong>resistance hump</strong>, where it makes big waves and the <strong>drag</strong>, the water holding it back, climbs steeply. The sharp bottom edges, the <strong>chines</strong>, add drag here and pay off only once it planes.",
+      "p3": "Move the slider and watch the bow. It rises most near the hump, then settles: this angle is the <strong>trim</strong>, with least drag at about 3 to 4 degrees. Planing starts at about 15 to 18 knots; the model switches at 16. The wet bottom, 5.1 m at rest in the model, shrinks from about 4.5 m at 15 knots to 1.5 to 2 m at 42. With no hump data published, the 6 degree peak and the weight split are the model's own.",
+      "p4": "The bottom is a deep <strong>V</strong> that softens the blows of waves; the model uses 20 degrees at the stern, sharper forward, as the real angle is not published. Water breaks cleanly off the square stern's sharp lower edge. A thin <strong>spray rail</strong> on each side, a model guess, throws spray outward. Too much trim makes a planing boat bounce: <strong>porpoising</strong>.",
+      "speedLabel": "Boat speed",
+      "mode": "Hull",
+      "trim": "Bow angle (trim)",
+      "lift": "Weight carried",
+      "wetted": "Wet bottom length",
+      "ratio": "Against hull speed"
+    },
+    "jet": {
+      "title": "A pump instead of a propeller",
+      "p1": "With the hull cut open, follow the power: the <strong>fuel tanks</strong> feed the <strong>engine</strong>, whose <strong>drive shaft</strong> turns the pump at the stern, the <strong>waterjet</strong>. Water enters through a grate in the bottom. A spinning <strong>impeller</strong>, a fan-like rotor, speeds it up; fixed vanes, the <strong>stator</strong>, take out the swirl; a <strong>nozzle</strong> shoots it out behind.",
+      "p2": "The push comes from speeding up the water in the pump: <strong>thrust</strong> is the mass of water per second times how much faster the jet leaves than the boat moves. Even a perfect pump turns only 2 / (1 + jet speed / boat speed) of its work into motion: 80 % with the jet at 1.5 times boat speed, far less at low speed.",
+      "p3": "Above about 25 to 30 knots a jet matches or beats a propeller, and with nothing under the hull the boat can run in shallow water. The grate mostly clears itself, but weed and rope can still block it. The first boat of this family, in May 2022, had an outboard motor; later 2022 boats, like one found near Sevastopol, used a Rotax jet-ski engine and a Sea-Doo pump. The Magura's engine is not disclosed, so the model assumes a jet-ski-type petrol engine turning the pump directly; the pump moves an estimated 210 litres a second at 42 knots.",
+      "p4": "There is no rudder. The <strong>steering nozzle</strong> swings the stream up to 27 degrees each way: swing it right and the bow turns right. To stop or back up, a <strong>reverse bucket</strong> drops over the nozzle and sends the stream forward and down. The slider sets the throttle, taken in the model as the pump's flow. Press play to rejoin the run.",
+      "throttleLabel": "Throttle",
+      "boat": "Boat speed",
+      "flow": "Water through the pump",
+      "velocity": "Jet speed",
+      "thrust": "Thrust",
+      "efficiency": "Ideal efficiency",
+      "push": "Jet push"
+    },
+    "link": {
+      "title": "Steered from hundreds of kilometres away",
+      "p1": "A Magura captured in Crimea in November 2023 carried, by Russian accounts, two <strong>Starlink</strong> terminals, a Kymeta backup satellite antenna, GPS, a Linux computer and a two-SIM router for use near shore. The maker also claims mesh radio, autonomous control and up to three video streams.",
+      "p2": "The pilot sits at a console in a hard case. Long trips can be pre-programmed, but a pilot watches throughout and often steers the last stretch by hand: the boat is not fully autonomous. What a real boat does when the link drops is not published; the model keeps it on course.",
+      "p3": "Starlink's typical delay is about 25 to 35 ms on land and can pass 100 ms at sea. The upload, 10 to 30 megabits a second, about what three video streams need, sets how sharp the picture is. How late it arrives is unpublished. At 42 knots a quarter second is 5.4 m, about a boat length; the ghost boat shows where the pilot sees it.",
+      "p4": "GPS jamming and faking over the Black Sea has been documented since mid-2024, likely why the maker also lists inertial and visual navigation. In September 2022, by Elon Musk's account and a corrected 2023 book about him, Ukraine expected Starlink coverage near Crimea that had never been turned on; the book had first said it was switched off. The satellites here are drawn low, close and far bigger than real.",
+      "delayLabel": "Video delay",
+      "now": "Where the pilot sees it",
+      "top": "At top speed",
+      "carrier": "Link",
+      "boat": "What the boat does",
+      "path": "How a command reaches the boat",
+      "step1": "<strong>Pilot</strong>: moves a lever or joystick.",
+      "step2": "<strong>Ground station</strong>: sends the command up by radio.",
+      "step3": "<strong>Satellite</strong>: passes it down to the boat.",
+      "step4": "<strong>Boat</strong>: the computer moves the throttle or nozzle.",
+      "step5": "<strong>Video</strong>: comes back the same way, a little late."
+    },
+    "horizon": {
+      "title": "Low enough to hide behind the curve of the sea",
+      "p1": "The sea curves away, so from h metres up the horizon lies about 3.86 × √h km off. The boat's camera, about 0.7 m up, sees only about 3 km. The 3D sea is flat, as over 1.5 km the real curve drops less than 0.2 m; the drawing below exaggerates it.",
+      "p2": "A ship's radar meets the same curve. Radio bends slightly, so its <strong>line of sight</strong> to a 0.5 m boat is about 4.12 × (√h1 + √h2) km, heights in metres: about 21 km for a radar 20 m up. That is only the farthest it could see the boat, and even then the ship would get at most about 16 minutes of warning at 42 knots.",
+      "p3": "Real detection comes later. A small boat's <strong>radar cross-section</strong>, how big it looks to radar, is about 0.5 to 5 m²; none is published for the Magura. A coastal radar standard expects a 1 m² target 1 m up to be found at about 9 km, by an advanced radar, up to sea state 4 (waves of 1.25 to 2.5 m): about 7 minutes of warning at 42 knots. Small boats may hide behind waves up to half the time, and <strong>sea clutter</strong>, the waves' own echoes, can drown theirs.",
+      "p4": "Operators say the boats are hard to spot: a commander of GUR's Group 13 said radar struggles with the plastic hull and the boat gives off little heat. These are claims; no measurement is published. A Russian teardown reported that the foam-bedded engine tub reduces heating of the outer skin. The boats are grey, and the best-known attacks came at night or dawn. Tap the chips to change the <strong>sea state</strong>.",
+      "caption": "Side view of the radar, the sea and the boat; curve and heights exaggerated.",
+      "heightLabel": "Radar height",
+      "radar": "Radar line of sight",
+      "minutes": "Ship's warning at 42 kn",
+      "camera": "Camera horizon",
+      "detect": "Expected detection",
+      "waves": "Wave height",
+      "hidden": "Hidden behind waves"
+    },
+    "fleet": {
+      "title": "Cheap, small and changing fast",
+      "p1": "A Magura V5 costs about a quarter of a million dollars. Sea Baby, a different boat built by the SBU, Ukraine's security service, costs about USD 221,000. GUR values the patrol ship Sergey Kotov, sunk in March 2024 after a Magura attack, at about USD 65 million.",
+      "p2": "The boats rarely work alone: many reported attacks used groups of about five to ten, each boat with a role, the developers say. Ships reported sunk took several hits. The two companions in the run, and their formation, are the model's choice.",
+      "p3": "The design keeps changing. In December 2024 GUR fitted V5 boats with two R-73 air-to-air missiles, renamed Sea Dragon; the chips show this fit, which changes only the deck, not the run. In 2025 GUR showed the larger Magura V7, 7.2 m long, with up to 650 kg of payload.",
+      "p4": "The record below keeps to each side's words, and many claims are disputed. The UK Ministry of Defence counts at least 26 Russian navy ships damaged or destroyed from February 2022 to June 2024 by all weapons, about a third of the Black Sea Fleet.",
+      "carries": "On board",
+      "cost": "Cost per boat",
+      "ship": "Patrol ship, GUR's value",
+      "events": "Public record, as reported",
+      "event1": "<strong>29 Oct 2022, Sevastopol</strong>: sea and air drones hit the frigate Admiral Makarov and a minesweeper; Russia admitted minor damage.",
+      "event2": "<strong>31 Jan to 1 Feb 2024, Lake Donuzlav</strong>: Magura V5 boats sank the corvette Ivanovets; GUR claims six hits, video shows about three.",
+      "event3": "<strong>4 to 5 Mar 2024, Kerch Strait</strong>: Magura V5 boats sank the patrol ship Sergey Kotov; Ukraine said five boats took part.",
+      "event4": "<strong>31 Dec 2024, Cape Tarkhankut</strong>: GUR says Magura V5 boats downed Mi-8 helicopters with R-73 missiles, a first for a sea drone; it first claimed one, later two.",
+      "event5": "<strong>2 May 2025, near Novorossiysk</strong>: GUR says Magura V7 boats downed two Su-30SM jets with Sidewinders; Russia has not confirmed it."
+    }
+  }
+}
