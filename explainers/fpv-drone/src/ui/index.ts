@@ -2,6 +2,7 @@ import { disposeAll } from '@core/ui/disposers';
 import type { Disposer } from '@core/ui/disposers';
 import type { FpvStore } from '../state';
 import { mountFlightReadouts } from './mountFlightReadouts';
+import { mountGogglesFeed } from './mountGogglesFeed';
 import { mountLimitsReadouts } from './mountLimitsReadouts';
 import { mountLinkReadouts } from './mountLinkReadouts';
 import { mountModeReadouts } from './mountModeReadouts';
@@ -24,5 +25,6 @@ export function mountFpvUi(root: Document, store: FpvStore): Disposer {
     mountPayloadControl(root, store),
     mountPowerReadouts(root, store),
     mountLimitsReadouts(root, store),
+    mountGogglesFeed(root, store),
   ]);
 }

@@ -275,7 +275,7 @@
     },
     "limits": {
       "title": "Rápidos, baratos e por toda parte",
-      "p1": "Quão rápido ele vai? Um drone de longo alcance de 7 polegadas como este chega a cerca de 140 km/h e voa em cruzeiro a 60 a 80 km/h. Os de corrida são mais rápidos: o RacerX da Drone Racing League marcou 263 km/h oficiais em 2017. O recorde está em outro mundo. Em 11 de dezembro de 2025, o Peregreen V4, construído por Luke e Mike Bell na África do Sul, estabeleceu um recorde do Guinness de 657,59 km/h para um quadricóptero a bateria. É uma máquina feita sob medida, nada parecida com um drone FPV comum. Toque nos botões para ver quanto tempo cada um levaria para percorrer os 350 m até o <strong>cruzamento</strong>.",
+      "p1": "Agora você está olhando pelos óculos do piloto: esta é a imagem da própria câmera do drone na volta para casa. Quão rápido ele vai? Um drone de longo alcance de 7 polegadas como este chega a cerca de 140 km/h e voa em cruzeiro a 60 a 80 km/h. Os de corrida são mais rápidos: o RacerX da Drone Racing League marcou 263 km/h oficiais em 2017. O recorde está em outro mundo. Em 11 de dezembro de 2025, o Peregreen V4, construído por Luke e Mike Bell na África do Sul, estabeleceu um recorde do Guinness de 657,59 km/h para um quadricóptero a bateria. É uma máquina feita sob medida, nada parecida com um drone FPV comum. Toque nos botões para ver quanto tempo cada um levaria para percorrer os 350 m até o <strong>cruzamento</strong>.",
       "p2": "O verdadeiro limite em campo é o vento. Uma regra prática diz para voar só quando o vento está abaixo de dois terços da velocidade máxima do drone, e drones deste tamanho aguentam vento constante de cerca de 32 a 40 km/h. Cada rajada custa bateria, porque o drone precisa se inclinar contra ela e o empuxo inclinado pede mais potência. É aqui também que um drone FPV difere de um drone de câmera como um Mavic. Um Mavic segura a posição com GPS e barômetro quando você solta os sticks. Um drone FPV em acro só mantém a atitude e vai embora com o vento. Nada o segura além do piloto.",
       "p3": "Por isso é difícil aprender. A maioria dos pilotos novos cai várias vezes nas primeiras horas, então começa num simulador: de 20 a 60 horas num programa como Velocidrone ou Liftoff antes do primeiro voo real é um conselho comum. Os primeiros pilotos a voar com óculos fizeram isso por volta de 2007, como hobby, e as corridas vieram depois. O primeiro campeonato mundial foi disputado em Shenzhen em 2018, com 128 pilotos de 34 países, e quem venceu foi um garoto de 15 anos.",
       "p4": "Baratos e simples: é por isso que esses drones estão por toda parte. Um drone de hobby custa de 550 a 950 dólares sem rádio nem óculos; só o kit do frame sai por cerca de 130 a 150 dólares. Fabricado aos milhares para um exército, o drone em si custa cerca de 400 a 500 dólares, e a Ucrânia planejava comprar 4,5 milhões de drones FPV em 2025. Na prática, eles operam a cerca de 10 a 20 km do piloto. Para ir mais longe, as equipes põem um repetidor num segundo drone: um sistema ucraniano vai a bordo de um drone maior a 500 m, fica uma hora no ar e retransmite sinais a até 30 km. O <strong>posto do piloto</strong> no modelo é bem mais simples: um abrigo, uma maleta, um mastro com antena e um piloto de óculos.",
@@ -283,5 +283,8 @@
       "field": "Tempo nos 350 m até o cruzamento",
       "who": "O que é"
     }
+  },
+  "goggles": {
+    "caption": "Visão dos óculos"
   }
 }

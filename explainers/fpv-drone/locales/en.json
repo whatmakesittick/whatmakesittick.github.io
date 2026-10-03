@@ -275,7 +275,7 @@
     },
     "limits": {
       "title": "Fast, cheap and everywhere",
-      "p1": "How fast can it go? A 7-inch long-range quad like this one tops out at about 140 km/h and cruises at 60 to 80 km/h. Racing quads are quicker: the Drone Racing League's RacerX set an official 263 km/h in 2017. The record is in another world. On 11 December 2025 the Peregreen V4, built by Luke and Mike Bell in South Africa, set a Guinness record of 657.59 km/h for a battery-powered quadcopter. It is a purpose-built machine, nothing like a typical FPV drone. Tap the chips to see how long each would take to cover the 350 m to the <strong>crossroads</strong>.",
+      "p1": "You are now looking through the pilot's goggles: this is the picture from the drone's own camera on its way home. How fast can it go? A 7-inch long-range quad like this one tops out at about 140 km/h and cruises at 60 to 80 km/h. Racing quads are quicker: the Drone Racing League's RacerX set an official 263 km/h in 2017. The record is in another world. On 11 December 2025 the Peregreen V4, built by Luke and Mike Bell in South Africa, set a Guinness record of 657.59 km/h for a battery-powered quadcopter. It is a purpose-built machine, nothing like a typical FPV drone. Tap the chips to see how long each would take to cover the 350 m to the <strong>crossroads</strong>.",
       "p2": "Wind is the real limit in the field. A rule of thumb says to fly only when the wind is below two thirds of the drone's top speed, and quads this size handle about 32 to 40 km/h of steady wind. Every gust costs battery, because the drone has to tilt into it and the tilted thrust takes more power. This is also where an FPV quad differs from a camera drone such as a Mavic. A Mavic holds its position with GPS and a barometer when you let go of the sticks. An FPV quad in acro holds only its attitude and drifts with the wind. Nothing stops it but the pilot.",
       "p3": "That makes it hard to learn. Most new pilots crash repeatedly in their first hours, so they start in a simulator: 20 to 60 hours in a program such as Velocidrone or Liftoff before the first real flight is common advice. The first pilots to fly with goggles did so around 2007, as a hobby, and racing followed. The first world championship was flown in Shenzhen in 2018 by 128 pilots from 34 countries, and a 15-year-old won it.",
       "p4": "Cheap and simple is why these drones are everywhere. A hobby quad costs USD 550 to 950 without radio and goggles; a frame kit alone is about USD 130 to 150. Built by the thousand for an army, the airframe comes to about USD 400 to 500, and Ukraine planned to buy 4.5 million FPV drones in 2025. In practice they work about 10 to 20 km from the pilot. To reach farther, teams fly a repeater on a second drone: one Ukrainian system rides a larger drone at 500 m, stays up for an hour and relays signals up to 30 km. The <strong>pilot's station</strong> in the model is far simpler: a dugout, a case, a mast with an antenna, and a pilot in goggles.",
@@ -283,5 +283,8 @@
       "field": "Time over the 350 m to the crossroads",
       "who": "What it is"
     }
+  },
+  "goggles": {
+    "caption": "Goggles view"
   }
 }

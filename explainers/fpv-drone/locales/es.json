@@ -275,7 +275,7 @@
     },
     "limits": {
       "title": "Rápidos, baratos y por todas partes",
-      "p1": "¿Cuánto corre? Un dron de largo alcance de 7 pulgadas como este alcanza unos 140 km/h y vuela en crucero a 60 a 80 km/h. Los de carreras son más rápidos: el RacerX de la Drone Racing League marcó 263 km/h oficiales en 2017. El récord está en otro mundo. El 11 de diciembre de 2025, el Peregreen V4, construido por Luke y Mike Bell en Sudáfrica, fijó un récord Guinness de 657,59 km/h para un cuadricóptero a batería. Es una máquina hecha a medida, nada que ver con un dron FPV normal. Toca los botones para ver cuánto tardaría cada uno en recorrer los 350 m hasta el <strong>cruce</strong>.",
+      "p1": "Ahora miras a través de las gafas del piloto: es la imagen de la cámara del propio dron mientras vuelve a casa. ¿Cuánto corre? Un dron de largo alcance de 7 pulgadas como este alcanza unos 140 km/h y vuela en crucero a 60 a 80 km/h. Los de carreras son más rápidos: el RacerX de la Drone Racing League marcó 263 km/h oficiales en 2017. El récord está en otro mundo. El 11 de diciembre de 2025, el Peregreen V4, construido por Luke y Mike Bell en Sudáfrica, fijó un récord Guinness de 657,59 km/h para un cuadricóptero a batería. Es una máquina hecha a medida, nada que ver con un dron FPV normal. Toca los botones para ver cuánto tardaría cada uno en recorrer los 350 m hasta el <strong>cruce</strong>.",
       "p2": "El verdadero límite en el terreno es el viento. Una regla dice que solo se vuela cuando el viento está por debajo de dos tercios de la velocidad máxima del dron, y los drones de este tamaño aguantan un viento constante de unos 32 a 40 km/h. Cada racha cuesta batería, porque el dron tiene que inclinarse contra ella y el empuje inclinado pide más potencia. Aquí también está la diferencia entre un dron FPV y un dron de cámara como un Mavic. Un Mavic mantiene su posición con GPS y barómetro cuando sueltas las palancas. Un dron FPV en acro solo mantiene su postura y se va con el viento. Nada lo detiene salvo el piloto.",
       "p3": "Por eso cuesta aprender. La mayoría de los pilotos nuevos se estrellan una y otra vez en sus primeras horas, así que empiezan en un simulador: de 20 a 60 horas en un programa como Velocidrone o Liftoff antes del primer vuelo real es un consejo habitual. Los primeros pilotos que volaron con gafas lo hicieron hacia 2007, por afición, y las carreras vinieron después. El primer campeonato del mundo se disputó en Shenzhen en 2018, con 128 pilotos de 34 países, y lo ganó un chico de 15 años.",
       "p4": "Baratos y sencillos: por eso están por todas partes. Un dron de aficionado cuesta de 550 a 950 dólares sin emisora ni gafas; solo el kit del chasis sale por unos 130 a 150 dólares. Fabricado por miles para un ejército, el dron en sí cuesta unos 400 a 500 dólares, y Ucrania planeaba comprar 4,5 millones de drones FPV en 2025. En la práctica operan a unos 10 a 20 km del piloto. Para llegar más lejos, los equipos montan un repetidor en un segundo dron: un sistema ucraniano va sobre un dron más grande a 500 m, aguanta una hora en el aire y retransmite señales hasta 30 km. El <strong>puesto del piloto</strong> del modelo es mucho más sencillo: un refugio, una maleta, un mástil con antena y un piloto con gafas.",
@@ -283,5 +283,8 @@
       "field": "Tiempo para los 350 m hasta el cruce",
       "who": "Qué es"
     }
+  },
+  "goggles": {
+    "caption": "Vista de gafas"
   }
 }
