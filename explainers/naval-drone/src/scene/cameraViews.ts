@@ -7,6 +7,7 @@ import type { FramingSlopes } from '@core/scene/lens';
 import type { CameraView, Point } from '../ids';
 import {
   BACKUP_SATELLITE_OFFSET,
+  BOAT,
   BOW_CAMERA,
   DOME,
   FAIRING,
@@ -14,6 +15,7 @@ import {
   HULL_STATIONS,
   JET,
   SATELLITE_OFFSET,
+  SHIP,
   TRANSOM_X,
   VENT_BOX,
   skyPoint,
@@ -59,7 +61,6 @@ const STERN_AIM_AFT = 0.15;
 const STERN_WIDTH_M = 2.4;
 const CHASE_WIDTH_LENGTHS = 2.2;
 const WATERLINE_WIDTH_LENGTHS = 1.4;
-const FIT_FILL = 0.86;
 const KEEP_FILL = 0.92;
 const BOAT_LEAD = 0.12;
 const WIDE_FRAMING: CompactFraming = { lead: 0, widen: 1 };
@@ -104,12 +105,13 @@ export const ORBIT_VIEWS: Readonly<Record<OrbitView, OrbitSpec>> = {
 };
 
 export const GROUP_VIEW = {
-  bearing: toRadians(165),
-  elevation: toRadians(16),
-  width: 60,
-  aimAhead: 120,
-  maxDistance: 900,
+  behind: { min: 10, max: 160 },
+  outboard: 2,
+  height: 4,
+  fill: 0.86,
 } as const;
+
+const PORT = -1;
 
 export const SKY_VIEW = {
   bearing: toRadians(175),
@@ -168,29 +170,45 @@ export function orbitPose(
   );
 }
 
-function formationPoints(target: FollowTarget): Vector3[] {
+function groupPoints(target: FollowTarget): Vector3[] {
   const frame = level(target);
-  const slots = SIDES.map((side) =>
-    boatToWorld(frame, [-FORMATION.back, 0, side * FORMATION.side], false),
-  );
-  return [vectorOf(target.position), ...slots];
+  const companion = (along: number, height: number) =>
+    boatToWorld(frame, [along - FORMATION.back, height, PORT * FORMATION.side], false);
+  const [shipX, , shipZ] = target.ship;
+  return [
+    vectorOf(target.position),
+    companion(-BOAT.halfLength, 0),
+    companion(BOAT.halfLength, BOAT.freeboard),
+    new Vector3(shipX, SHIP.mastTop, shipZ),
+  ];
+}
+
+function middle(values: readonly number[]): number {
+  return (Math.min(...values) + Math.max(...values)) / 2;
+}
+
+function bearingFrom(from: Vector3, point: Vector3, heading: number): number {
+  const turn = Math.atan2(point.z - from.z, point.x - from.x) - heading;
+  return Math.atan2(Math.sin(turn), Math.cos(turn));
+}
+
+function groupPoseAt(target: FollowTarget, behind: number, points: readonly Vector3[]): CameraPose {
+  const { height, outboard } = GROUP_VIEW;
+  const slot: Point = [-(FORMATION.back + behind), height, PORT * (FORMATION.side + outboard)];
+  const position = boatToWorld(level(target), slot, false);
+  const turn = middle(points.map((point) => bearingFrom(position, point, target.heading)));
+  const pitch = middle(points.map((point) => elevationFrom(position, point)));
+  return { position, target: position.clone().add(direction(target.heading + turn, pitch)) };
 }
 
 export function groupPose(target: FollowTarget, slopes: FramingSlopes): CameraPose {
-  const boat = vectorOf(target.position);
-  const aim = boatToWorld(level(target), [GROUP_VIEW.aimAhead, 0, 0], false);
-  const away = direction(target.heading + GROUP_VIEW.bearing, GROUP_VIEW.elevation);
-  const points = formationPoints(target);
+  const points = groupPoints(target);
   const pose = nearestFit(
-    (distance) => ({ position: boat.clone().addScaledVector(away, distance), target: aim.clone() }),
-    (candidate) => fitsView(candidate, points, slopes, FIT_FILL),
-    { min: fitDistance(GROUP_VIEW.width, slopes), max: GROUP_VIEW.maxDistance },
+    (behind) => groupPoseAt(target, behind, points),
+    (candidate) => fitsView(candidate, points, slopes, GROUP_VIEW.fill),
+    GROUP_VIEW.behind,
   );
-  return pivotNear(pose, centreOf(points));
-}
-
-function centreOf(points: readonly Vector3[]): Vector3 {
-  return points.reduce((sum, point) => sum.add(point), new Vector3()).divideScalar(points.length);
+  return pivotNear(pose, vectorOf(target.position));
 }
 
 function skyPoints(target: FollowTarget): Vector3[] {

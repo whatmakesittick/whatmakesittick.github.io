@@ -167,16 +167,19 @@ describe('camera views', () => {
     expect(LOOK_AROUND_POLAR.eye).toBeGreaterThan(Math.PI / 2);
   });
 
-  it('frames the boat and the formation behind it on the starboard quarter, looking ahead', () => {
+  it('looks past the port companion at the lead boat and the ship, turning around the lead', () => {
+    const sprint: FollowTarget = { ...TARGET, ship: [920, 0, -100] };
+    const lead = vectorOf(sprint.position);
+    const companion = new Vector3(370, 0, -118);
+    const ship = new Vector3(920, 20, -100);
     [PHONE, DESKTOP].forEach((slopes) => {
-      const pose = groupPose(TARGET, slopes);
-      const offset = pose.position.clone().sub(vectorOf(TARGET.position));
-      expect(offset.x).toBeLessThan(0);
-      expect(offset.z).toBeGreaterThan(0);
-      const companions = [-1, 1].map((side) => new Vector3(370, 0, -100 + side * 18));
-      const boats = [vectorOf(TARGET.position), ...companions];
-      expect(fitsView(pose, boats, slopes, 0.9)).toBe(true);
-      expectPivotNear(pose, new Vector3(380, 0.2, -100));
+      const pose = groupPose(sprint, slopes);
+      expect(pose.position.x).toBeLessThan(companion.x);
+      expect(pose.position.z).toBeLessThan(companion.z);
+      expect(pose.position.distanceTo(companion)).toBeLessThan(pose.position.distanceTo(lead));
+      expect(pose.position.distanceTo(lead)).toBeLessThan(60);
+      expect(fitsView(pose, [lead, companion, ship], slopes, 0.9)).toBe(true);
+      expectPivotNear(pose, lead);
     });
   });
 
