@@ -418,7 +418,7 @@ export const WAKE = {
   armReach: 140,
   fade: { core: 12, wash: 90, arm: 55 },
   speedFrom: [0.4, 9] as const,
-  foamScale: [1, 3.2] as const,
+  foamScale: 1,
   emphasis: 1.35,
   tint: '#5fb3bd',
   renderOrder: 2,

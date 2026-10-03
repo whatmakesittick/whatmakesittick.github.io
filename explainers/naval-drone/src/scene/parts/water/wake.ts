@@ -48,44 +48,41 @@ uniform sampler2D uFoamMap;
 uniform vec3 uFoam;
 uniform vec3 uTint;
 uniform vec4 uShape;
-uniform vec2 uFoamScale;
+uniform float uFoamScale;
 uniform float uSeaTime;
 uniform vec2 uSeaDrift;
 varying vec4 vWake;
 varying vec3 vWorld;
 varying float vHeading;
+float foamAt(vec2 p) {
+  return texture2D(uFoamMap, p).r;
+}
 void main() {
   float behind = vWake.x;
   float across = vWake.y;
   vec2 dir = vec2(cos(vHeading), sin(vHeading));
   vec2 p = vWorld.xz + uSeaDrift;
-  vec2 q = vec2(dot(p, dir), dot(p, vec2(-dir.y, dir.x)));
-  float n1 = texture2D(uFoamMap, q * vec2(0.035, 0.22) * uFoamScale.x).r;
-  float n2 = texture2D(uFoamMap, q * vec2(0.16, 0.8) * uFoamScale.x + vec2(0.31, uSeaTime * 0.01)).r;
-  float n3 = texture2D(uFoamMap, q * vec2(0.7, 2.2) * uFoamScale.x + vec2(0.73, 0.19)).r;
-  float fbm = n1 * 0.45 + n2 * 0.33 + n3 * 0.22;
-  float white;
-  float aerated;
+  vec2 q = vec2(dot(p, dir), dot(p, vec2(-dir.y, dir.x))) * uFoamScale;
+  float t = uSeaTime;
+  vec2 warp = vec2(foamAt(q * 0.05 + vec2(t * 0.013, 0.0)), foamAt(q * 0.05 + vec2(0.5, t * 0.011))) - 0.5;
+  vec2 w = q + warp * 1.6;
+  float churn = foamAt(w * 0.55 + vec2(0.0, t * 0.04)) * 0.55 + foamAt(w * 1.7 + vec2(0.37, -t * 0.06)) * 0.45;
+  float streaks = foamAt(w * vec2(0.03, 0.3)) * 0.55 + foamAt(w * vec2(0.09, 0.9) + vec2(0.21, 0.6)) * 0.45;
+  float n = mix(churn, streaks, smoothstep(4.0, 60.0, behind));
+  float edge = abs(across) + warp.x * 0.6;
+  float density;
   if (vWake.z < 0.5) {
-    float core = exp(-pow(across / 0.52, 2.0));
-    float churn = exp(-behind / uShape.x);
-    float wash = exp(-behind / uShape.y);
-    float lines = exp(-pow((abs(across) - 0.86) / 0.12, 2.0)) * exp(-behind / (uShape.z * 0.6));
-    white = core * (churn * 1.25 + wash * 0.42) + lines * 0.6;
-    aerated = core * (wash * 0.55 + churn * 0.5);
+    float body = 1.0 - smoothstep(0.3, 1.0, edge);
+    float lines = exp(-pow((abs(across) - 0.86) / 0.16, 2.0)) * exp(-behind / (uShape.z * 0.6));
+    density = body * (exp(-behind / uShape.x) * 1.1 + exp(-behind / uShape.y) * 0.5) + lines * 0.6;
   } else {
-    float line = exp(-pow(across / 0.5, 2.0)) * smoothstep(0.0, 4.0, behind);
-    white = line * exp(-behind / uShape.z) * 0.62;
-    aerated = line * exp(-behind / (uShape.z * 1.5)) * 0.3;
+    density = (1.0 - smoothstep(0.2, 1.0, edge)) * smoothstep(0.0, 4.0, behind) * exp(-behind / uShape.z) * 0.65;
   }
-  float strength = uShape.w * vWake.w;
-  float density = clamp(white, 0.0, 1.3);
-  float threshold = 1.02 - density * 0.62;
-  float foam = smoothstep(threshold, threshold + 0.16, fbm);
-  foam *= strength;
-  float tint = clamp(aerated, 0.0, 1.0) * strength;
-  vec3 colour = mix(uTint, uFoam * (0.85 + 0.15 * n3), foam / max(foam + tint * 0.35, 1e-3));
-  gl_FragColor = vec4(colour, clamp(max(foam * 0.94, tint * 0.14), 0.0, 0.95));
+  density = clamp(density * uShape.w * vWake.w * smoothstep(0.0, 0.6, behind), 0.0, 1.0);
+  float foam = smoothstep(0.92 - density * 0.55, 1.12 - density * 0.55, n) * smoothstep(0.0, 0.12, density);
+  float tint = clamp(density, 0.0, 1.0) * 0.16;
+  vec3 colour = mix(uTint, uFoam * (0.88 + 0.12 * churn), foam / max(foam + tint, 1e-3));
+  gl_FragColor = vec4(colour, clamp(max(foam * 0.9, tint), 0.0, 0.92));
   #include <colorspace_fragment>
 }
 `;
@@ -127,7 +124,7 @@ export class WakePart {
           uFoam: { value: new Color(THEME.foam) },
           uTint: { value: new Color(WAKE.tint) },
           uShape: { value: [WAKE.fade.core, WAKE.fade.wash, WAKE.fade.arm, 1] },
-          uFoamScale: { value: new Vector2(...WAKE.foamScale) },
+          uFoamScale: { value: WAKE.foamScale },
         },
         vertexShader: VERTEX,
         fragmentShader: FRAGMENT,
