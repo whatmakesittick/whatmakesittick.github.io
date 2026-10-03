@@ -54,7 +54,7 @@ export type NavalDroneState = PlaybackState & NavalDroneFields;
 export type NavalDroneStoreState = Playback & NavalDroneFields & NavalDroneOwnActions;
 export type NavalDroneStore = ExplainerStore<NavalDroneStoreState>;
 
-export const DEFAULT_VIEW: ViewState = { cutaway: true, flow: false, links: false, labels: true };
+export const DEFAULT_VIEW: ViewState = { cutaway: false, flow: false, links: false, labels: true };
 export const DEFAULT_HELM: HelmId = 'straight';
 const START_SPEED = PRESETS.overview.speed ?? SPEED_RANGE.default;
 

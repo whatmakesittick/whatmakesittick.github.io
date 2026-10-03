@@ -24,7 +24,7 @@ describe('naval drone store', () => {
       videoDelayMs: 250,
       radarHeight: 20,
       seaState: 'smooth',
-      view: { cutaway: true, flow: false, links: false, labels: true },
+      view: { cutaway: false, flow: false, links: false, labels: true },
     });
   });
 

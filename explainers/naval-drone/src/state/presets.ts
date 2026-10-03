@@ -76,19 +76,9 @@ export const PRESETS: Record<PresetId, Preset> = {
   overview: {
     camera: 'chase',
     speed: NORMAL_SPEED,
-    view: { cutaway: true, flow: false, links: false },
+    view: { cutaway: false, flow: false, links: false },
     startAt: CHAPTER_START_SECONDS.overview,
-    labels: [
-      'hull',
-      'payloadBay',
-      'fuelTanks',
-      'engine',
-      'electronicsBay',
-      'waterjet',
-      'starlinkPanels',
-      'cameraDome',
-      'bowCamera',
-    ],
+    labels: ['hull', 'waterjet', 'starlinkPanels', 'backupPanel', 'cameraDome', 'bowCamera'],
     highlight: [],
   },
   hull: {
@@ -108,8 +98,8 @@ export const PRESETS: Record<PresetId, Preset> = {
     pauseAt: HELD_PHASE,
     controls: ['trialKnots', 'helm'],
     start: { trialKnots: SPEED_MARKS.cruise, helm: 'straight' },
-    labels: JET_PARTS,
-    highlight: [...JET_PARTS, 'waterjet', 'engine'],
+    labels: [...JET_PARTS, 'engine', 'fuelTanks'],
+    highlight: [...JET_PARTS, 'engine', 'fuelTanks', 'waterjet'],
   },
   link: {
     camera: 'sky',

@@ -40,8 +40,8 @@ describe('scene bindings', () => {
       sea: seaAt('smooth'),
       link: { mode: 'satellite', ghost: null },
       fit: 'standard',
-      view: { cutaway: true, flow: false, links: false, labels: true },
-      waterSection: true,
+      view: { cutaway: false, flow: false, links: false, labels: true },
+      waterSection: false,
       wettedBar: false,
     });
     expect(frame).toHaveBeenCalledWith('chase', false, undefined);
