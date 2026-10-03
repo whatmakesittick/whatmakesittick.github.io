@@ -1,37 +1,34 @@
 import { Group } from 'three';
 import type { Matrix4, Object3D, ShaderMaterial, Texture } from 'three';
 import { clamp, lerp, smoothstep } from '@core/math';
-import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import type { AssemblyState, PartId } from '../../../ids';
-import { HULL_DETAIL, TRANSOM_X } from '../../../model/layout';
+import { BOAT, HULL_DETAIL, TRANSOM_X } from '../../../model/layout';
 import { HULL_WATER, LABEL_SPOTS } from '../../constants';
 import { halfBreadthAt, hullSectionAt } from '../../geometry/hullLines';
 import type { Vec3 } from '../../geometry/surface';
-import { registered } from '../context';
 import type { PartContext } from '../context';
 import { SheetGrid, foamSheetMaterial } from './foamSheet';
+import type { SheetLook } from './foamSheet';
 import { seaHeightAt } from './waves';
 
 type Side = -1 | 1;
+type Kind = 'bow' | 'waterline' | 'stern' | 'spray';
+type Shape = (row: number, column: number, side: Side) => Vec3;
+
+interface Sheet {
+  material: ShaderMaterial;
+  grids: SheetGrid[];
+}
 
 const SIDES: readonly Side[] = [-1, 1];
-const WHISKER_SEED = 0.6180339887;
 const TUNING = HULL_WATER.tuning;
 const SHOWN = HULL_WATER.levels.shown;
-
-interface Levels {
-  bow: number;
-  stern: number;
-  spray: number;
-  rail: number;
-  waterline: number;
-}
 
 function hump(knots: number, peak: number, width: number): number {
   return Math.exp(-(((knots - peak) / width) ** 2));
 }
 
-export function waterLevels(knots: number): Levels {
+export function waterLevels(knots: number): Record<Kind, number> {
   const { bow, spray, waterline, levels } = HULL_WATER;
   return {
     bow:
@@ -40,7 +37,6 @@ export function waterLevels(knots: number): Levels {
       lerp(levels.bowFloor, 1, smoothstep(knots, bow.onFrom[0], bow.peakKnots)),
     stern: hump(knots, levels.sternPeak, levels.sternWidth) * smoothstep(knots, ...levels.sternOn),
     spray: smoothstep(knots, ...spray.onFrom),
-    rail: hump(knots, bow.peakKnots, levels.railWidth) * smoothstep(knots, ...levels.railOn),
     waterline: smoothstep(knots, ...waterline.from),
   };
 }
@@ -54,9 +50,7 @@ export class LocalWater {
 
   level(x: number, z: number): number {
     const e = this.elements;
-    const worldX = e[0] * x + e[8] * z + e[12];
-    const worldZ = e[2] * x + e[10] * z + e[14];
-    const surface = seaHeightAt(worldX, worldZ);
+    const surface = seaHeightAt(e[0] * x + e[8] * z + e[12], e[2] * x + e[10] * z + e[14]);
     return (surface - e[13] - e[1] * x - e[9] * z) / e[5];
   }
 }
@@ -66,75 +60,36 @@ export class HullWaterPart {
   readonly bowAnchor = new Group();
   readonly sprayAnchor = new Group();
   private readonly water = new LocalWater();
-  private readonly materials: ShaderMaterial[] = [];
-  private readonly bow: SheetGrid[];
-  private readonly line: SheetGrid[];
-  private readonly spray: SheetGrid[];
-  private readonly rails: SheetGrid[];
-  private readonly stern: SheetGrid;
-  private readonly whiskers: PointCloud;
-  private readonly bowMaterial: ShaderMaterial;
-  private readonly sprayMaterial: ShaderMaterial;
-  private readonly railMaterial: ShaderMaterial;
-  private readonly lineMaterial: ShaderMaterial;
-  private readonly sternMaterial: ShaderMaterial;
+  private readonly sheets: Record<Kind, Sheet>;
   private clock = 0;
-  private levels: Levels = waterLevels(0);
-  private root: { keel: Vec3; chine: number } = { keel: [0, 0, 0], chine: 0 };
+  private levels = waterLevels(0);
 
-  constructor(context: PartContext, cellMap: Texture, groups: { bow: PartId; spray: PartId }) {
+  constructor(context: PartContext, foamMap: Texture, groups: { bow: PartId; spray: PartId }) {
     const { looks, profiles } = HULL_WATER;
-    this.bowMaterial = foamSheetMaterial(context, groups.bow, cellMap, looks.bow, profiles.bow);
-    this.sternMaterial = foamSheetMaterial(
-      context,
-      groups.bow,
-      cellMap,
-      looks.stern,
-      profiles.mound,
-    );
-    this.lineMaterial = foamSheetMaterial(context, 'wake', cellMap, looks.waterline, profiles.line);
-    this.sprayMaterial = foamSheetMaterial(
-      context,
-      groups.spray,
-      cellMap,
-      looks.spray,
-      profiles.sheet,
-    );
-    this.railMaterial = foamSheetMaterial(
-      context,
-      groups.spray,
-      cellMap,
-      looks.rail,
-      profiles.sheet,
-    );
-    this.materials.push(
-      this.bowMaterial,
-      this.sternMaterial,
-      this.lineMaterial,
-      this.sprayMaterial,
-      this.railMaterial,
-    );
-    const grid = (material: ShaderMaterial, rows: number, columns: number) => {
-      const sheet = new SheetGrid(context, material, rows, columns);
-      this.object.add(sheet.mesh);
-      return sheet;
+    const sheet = (
+      group: PartId,
+      look: SheetLook,
+      profile: readonly [number, number],
+      sides: number,
+      kind: Kind,
+    ): Sheet => {
+      const material = foamSheetMaterial(context, group, foamMap, look, profile);
+      const { rows, columns } = HULL_WATER[kind];
+      const grids = Array.from(
+        { length: sides },
+        () => new SheetGrid(context, material, rows, columns),
+      );
+      grids.forEach((grid) => this.object.add(grid.mesh));
+      return { material, grids };
     };
-    const { bow, waterline, spray, rail, stern, whisker } = HULL_WATER;
-    this.bow = SIDES.map(() => grid(this.bowMaterial, bow.rows, bow.columns));
-    this.line = SIDES.map(() => grid(this.lineMaterial, waterline.rows, waterline.columns));
-    this.spray = SIDES.map(() => grid(this.sprayMaterial, spray.rows, spray.columns));
-    this.rails = SIDES.map(() => grid(this.railMaterial, rail.rows, rail.columns));
-    this.stern = grid(this.sternMaterial, stern.rows, stern.columns);
-    const pointMaterial = registered(
-      context,
-      groups.spray,
-      createPointMaterial(context.textures.dot, whisker.size),
-    );
-    this.whiskers = new PointCloud(whisker.count, pointMaterial);
-    this.object.add(this.whiskers.points);
-    this.bow[0].mesh.add(this.bowAnchor);
-    this.spray[0].mesh.add(this.sprayAnchor);
-    context.tracker.track({ dispose: () => this.whiskers.dispose() });
+    this.sheets = {
+      bow: sheet(groups.bow, looks.bow, profiles.bow, SIDES.length, 'bow'),
+      waterline: sheet('wake', looks.waterline, profiles.line, SIDES.length, 'waterline'),
+      stern: sheet(groups.bow, looks.stern, profiles.mound, 1, 'stern'),
+      spray: sheet(groups.spray, looks.spray, profiles.sheet, SIDES.length, 'spray'),
+    };
+    this.sheets.bow.grids[0].mesh.add(this.bowAnchor);
+    this.sheets.spray.grids[0].mesh.add(this.sprayAnchor);
   }
 
   setState(state: AssemblyState, body: Object3D): void {
@@ -143,26 +98,28 @@ export class HullWaterPart {
     this.water.use(body.matrixWorld);
     this.levels = waterLevels(boat.knots);
     const emphasis = view.flow ? HULL_WATER.emphasis : 1;
-    this.bowMaterial.uniforms.uStrength.value = this.levels.bow * emphasis;
-    this.sternMaterial.uniforms.uStrength.value = this.levels.stern * emphasis;
-    this.lineMaterial.uniforms.uStrength.value = this.levels.waterline * emphasis;
-    this.sprayMaterial.uniforms.uStrength.value = emphasis;
-    this.railMaterial.uniforms.uStrength.value = this.levels.rail * emphasis;
     const front = TRANSOM_X + planing.keelWettedLength;
     const chineX = TRANSOM_X + Math.max(planing.chineWettedLength, HULL_WATER.spray.root[0]);
-    this.placeBow(front);
-    this.placeWaterline(front);
-    this.placeStern();
-    this.placeSpray(chineX, boat.knots);
-    this.root = { keel: [front, this.water.level(front, 0), 0], chine: chineX };
-    const { anchorBack, sprayOut } = TUNING;
-    const bowX = front - anchorBack;
+    this.place('bow', emphasis, this.bowShape(front));
+    this.place('waterline', emphasis, this.lineShape(front));
+    this.place('stern', emphasis, this.sternShape());
+    this.place('spray', emphasis, this.sprayShape(chineX, boat.knots));
+    const bowX = front - TUNING.anchorBack;
     const bowY = this.water.level(front, 0);
     const bowSide = -(halfBreadthAt(bowX, bowY) + LABEL_SPOTS.bowOut);
     this.bowAnchor.position.set(bowX, bowY + HULL_WATER.bow.height / 2, bowSide);
-    const chineSection = hullSectionAt(chineX);
-    this.sprayAnchor.position.set(chineX, chineSection.chine[1], -chineSection.flat[0] - sprayOut);
-    this.placeWhiskers();
+    const chine = hullSectionAt(chineX);
+    this.sprayAnchor.position.set(chineX, chine.chine[1], -chine.flat[0] - TUNING.sprayOut);
+  }
+
+  private place(kind: Kind, emphasis: number, shape: Shape): void {
+    const { material, grids } = this.sheets[kind];
+    const level = this.levels[kind];
+    material.uniforms.uStrength.value = level * emphasis;
+    grids.forEach((grid, index) => {
+      grid.mesh.visible = level > SHOWN;
+      if (grid.mesh.visible) grid.set((row, column) => shape(row, column, SIDES[index]));
+    });
   }
 
   private hullSide(x: number, side: Side): { y: number; z: number } {
@@ -170,135 +127,67 @@ export class HullWaterPart {
     return { y, z: side * (halfBreadthAt(x, y) + TUNING.hullGap) };
   }
 
-  private placeBow(front: number): void {
+  private bowShape(front: number): Shape {
     const { length, height, peakAt, curl, spread, flare, rows, columns } = HULL_WATER.bow;
-    const visible = this.levels.bow > SHOWN;
     const reach = lerp(length[0], length[1], this.levels.bow);
-    SIDES.forEach((side, index) => {
-      const sheet = this.bow[index];
-      sheet.mesh.visible = visible;
-      if (!visible) return;
-      sheet.set((row, column) => {
-        const along = row / (rows - 1);
-        const x = front - TUNING.bowStart - along * reach;
-        const { y, z } = this.hullSide(x, side);
-        const rise =
-          along < peakAt
-            ? Math.sin((along / peakAt) * (Math.PI / 2))
-            : Math.exp(-(along - peakAt) * TUNING.bowDecay);
-        const crest = height * this.levels.bow * rise;
-        const share = column / (columns - 1);
-        const out = (spread * crest + along * reach * Math.tan(flare) * TUNING.bowFlare) * share;
-        const arc = Math.sin(Math.min(share / curl, 1) * Math.PI) * crest;
-        const fall = share > curl ? ((share - curl) / (1 - curl)) ** 2 * crest * TUNING.bowFall : 0;
-        return [x - share * crest * TUNING.bowLean, y + arc - fall, z + side * out];
-      });
-    });
+    return (row, column, side) => {
+      const along = row / (rows - 1);
+      const x = front - TUNING.bowStart - along * reach;
+      const { y, z } = this.hullSide(x, side);
+      const rise =
+        along < peakAt
+          ? Math.sin((along / peakAt) * (Math.PI / 2))
+          : Math.exp(-(along - peakAt) * TUNING.bowDecay);
+      const crest = height * this.levels.bow * rise;
+      const share = column / (columns - 1);
+      const out = (spread * crest + along * reach * Math.tan(flare) * TUNING.bowFlare) * share;
+      const arc = Math.sin(Math.min(share / curl, 1) * Math.PI) * crest;
+      const fall = share > curl ? ((share - curl) / (1 - curl)) ** 2 * crest * TUNING.bowFall : 0;
+      return [x - share * crest * TUNING.bowLean, y + arc - fall, z + side * out];
+    };
   }
 
-  private placeWaterline(front: number): void {
+  private lineShape(front: number): Shape {
     const { rows, columns, width } = HULL_WATER.waterline;
-    const visible = this.levels.waterline > SHOWN;
-    SIDES.forEach((side, index) => {
-      const sheet = this.line[index];
-      sheet.mesh.visible = visible;
-      if (!visible) return;
-      sheet.set((row, column) => {
-        const x = lerp(front, TRANSOM_X, row / (rows - 1));
-        const { y, z } = this.hullSide(x, side);
-        return [x, y + TUNING.lineLift, z + side * width * (column / (columns - 1))];
-      });
-    });
+    return (row, column, side) => {
+      const x = lerp(front, TRANSOM_X, row / (rows - 1));
+      const { y, z } = this.hullSide(x, side);
+      return [x, y + TUNING.lineLift, z + side * width * (column / (columns - 1))];
+    };
   }
 
-  private placeStern(): void {
+  private sternShape(): Shape {
     const { rows, columns, length, halfWidth, height, peak, width } = HULL_WATER.stern;
-    const visible = this.levels.stern > SHOWN;
-    this.stern.mesh.visible = visible;
-    if (!visible) return;
-    this.stern.set((row, column) => {
+    return (row, column) => {
       const z = lerp(-halfWidth, halfWidth, row / (rows - 1));
       const share = column / (columns - 1);
       const x = TRANSOM_X - TUNING.sternStart - share * length;
       const across = 1 - (z / (halfWidth * TUNING.sternTaper)) ** 2;
       const bump = Math.exp(-(((share - peak) / width) ** 2)) * across;
       return [x, this.water.level(x, z) + height * this.levels.stern * bump + TUNING.sternLift, z];
-    });
+    };
   }
 
-  private placeSpray(chineX: number, knots: number): void {
-    const { spray, rail } = HULL_WATER;
-    const on = this.levels.spray > SHOWN;
-    const range = lerp(spray.range[0], spray.range[1], smoothstep(knots, spray.onFrom[0], 42));
-    const rootLength = lerp(spray.root[0], spray.root[1], this.levels.spray);
-    SIDES.forEach((side, index) => {
-      const sheet = this.spray[index];
-      sheet.mesh.visible = on;
-      if (on) {
-        sheet.set((row, column) => {
-          const x = chineX + (row / (spray.rows - 1)) * rootLength;
-          const section = hullSectionAt(clamp(x, TRANSOM_X, HULL_DETAIL.chineFlat.endX));
-          const share = column / (spray.columns - 1);
-          const distance = share * range * this.levels.spray;
-          const out = Math.cos(spray.up) * distance;
-          const px = x - Math.sin(spray.back) * out * spray.trail;
-          const pz = side * (section.flat[0] + Math.cos(spray.back) * out);
-          const rise =
-            section.chine[1] + Math.sin(spray.up) * distance - spray.drop * distance * distance;
-          return [px, Math.max(rise, this.water.level(px, pz) + spray.skim), pz];
-        });
-      }
-      const railSheet = this.rails[index];
-      const [railFrom, railTo] = HULL_DETAIL.sprayRail.x;
-      const railOn = this.levels.rail > SHOWN;
-      railSheet.mesh.visible = railOn;
-      if (!railOn) return;
-      railSheet.set((row, column) => {
-        const back = (row / (rail.rows - 1)) * rail.lead * TUNING.railStretch;
-        const x = clamp(chineX + rail.lead - back, railFrom, railTo);
-        const section = hullSectionAt(x);
-        const distance = (column / (rail.columns - 1)) * rail.range * this.levels.rail;
-        return [
-          x - distance * TUNING.railTrail,
-          section.knuckle[1] - Math.sin(rail.down) * distance,
-          side * (section.knuckle[0] + section.rail + Math.cos(rail.down) * distance),
-        ];
-      });
-    });
-  }
-
-  private placeWhiskers(): void {
-    const { count, life, speed, spread } = HULL_WATER.whisker;
-    const on = this.levels.spray > SHOWN;
-    this.whiskers.points.visible = on;
-    if (!on) return;
-    const { keel, chine } = this.root;
-    for (let index = 0; index < count; index += 1) {
-      const side: Side = index % 2 === 0 ? -1 : 1;
-      const seed = (index * WHISKER_SEED) % 1;
-      const age = ((this.clock / life + seed) % 1) * life;
-      const along = (seed * TUNING.whiskerFan[0]) % 1;
-      const x = lerp(chine, keel[0], along * HULL_WATER.whisker.reach);
+  private sprayShape(chineX: number, knots: number): Shape {
+    const { rows, columns, range, root, onFrom, up, back, trail, drop, skim } = HULL_WATER.spray;
+    const reach = lerp(range[0], range[1], smoothstep(knots, onFrom[0], BOAT.topKnots));
+    const rootLength = lerp(root[0], root[1], this.levels.spray);
+    return (row, column, side) => {
+      const x = chineX + (row / (rows - 1)) * rootLength;
       const section = hullSectionAt(clamp(x, TRANSOM_X, HULL_DETAIL.chineFlat.endX));
-      const angle = spread * (((seed * TUNING.whiskerFan[1]) % 1) - 0.5);
-      const travel = age * speed * this.levels.spray;
-      const z = side * (section.flat[0] + TUNING.whiskerGap + Math.cos(angle) * travel);
-      const surface = this.water.level(x, z);
-      this.whiskers.setPoint(
-        index,
-        x + Math.sin(angle) * travel * TUNING.whiskerLean,
-        surface + travel * TUNING.whiskerLift - TUNING.whiskerFall * age * age,
-        z,
-      );
-      const alpha = (1 - age / life) * TUNING.whiskerAlpha * this.levels.spray;
-      this.whiskers.setColor(index, 1, 1, 1, alpha);
-    }
-    this.whiskers.commit();
+      const distance = (column / (columns - 1)) * reach * this.levels.spray;
+      const out = Math.cos(up) * distance;
+      const px = x - Math.sin(back) * out * trail;
+      const pz = side * (section.flat[0] + Math.cos(back) * out);
+      const rise = section.chine[1] + Math.sin(up) * distance - drop * distance * distance;
+      return [px, Math.max(rise, this.water.level(px, pz) + skim), pz];
+    };
   }
 
   advance(deltaSeconds: number): void {
     this.clock += deltaSeconds;
-    this.materials.forEach((material) => (material.uniforms.uTime.value = this.clock));
-    this.placeWhiskers();
+    Object.values(this.sheets).forEach(
+      ({ material }) => (material.uniforms.uTime.value = this.clock),
+    );
   }
 }

@@ -65,7 +65,8 @@ uniform float uHullMargin;
 varying vec3 vWorld;
 
 void main() {
-  if (insideSection(vWorld) || insideHull(vWorld, uHullMargin)) discard;
+  float cut = sectionCut(vWorld);
+  if (cut > 0.99 || insideHull(vWorld, uHullMargin)) discard;
   float dist = length(cameraPosition - vWorld);
   float footprint = dist * 0.002;
   vec3 wave = seaWave(vWorld.xz, footprint * 4.0);
@@ -97,7 +98,7 @@ void main() {
   float lace = smoothstep(0.5, 0.56, streaks * 0.55 + fine * 0.45 + cap * 0.2);
   float foam = cap * lace * uFoamLevel * (1.0 - smoothstep(60.0, 450.0, dist));
   colour = mix(colour, uFoamColour * (0.72 + 0.28 * sunSide), foam);
-  gl_FragColor = vec4(colour, 1.0);
+  gl_FragColor = vec4(colour, 1.0 - cut);
   #include <colorspace_fragment>
   #include <fog_fragment>
 }
@@ -194,6 +195,7 @@ export class SeaPart {
         vertexShader: VERTEX,
         fragmentShader: FRAGMENT,
         fog: true,
+        transparent: true,
         toneMapped: false,
       }),
     );

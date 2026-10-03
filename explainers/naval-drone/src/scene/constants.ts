@@ -145,10 +145,10 @@ export const SUN_DIRECTION: Triple = [0.172, 0.122, -0.977];
 export const LIGHT_RIG = {
   distance: 1000,
   sun: SUN_DIRECTION,
-  key: { color: '#ffc58a', intensity: 1.6 },
+  key: { color: '#ffc58a', intensity: 1.35 },
   fill: { color: '#7f9bb8', intensity: 0.35, direction: [-0.35, 1, 0.45] as Triple },
   rim: { color: '#a9bfdc', intensity: 1.1, direction: [-0.3, 0.16, 0.94] as Triple },
-  sky: { color: '#7f9bb8', ground: '#1b2a3a', intensity: 1.55 },
+  sky: { color: '#7f9bb8', ground: '#1b2a3a', intensity: 1.75 },
 } as const;
 
 export const HAZE = { colour: '#8d9aa6', near: 400, far: 5000 } as const;
@@ -419,15 +419,19 @@ export const SEA = {
 } as const;
 
 export const SECTION_LOOK = {
-  depth: 1.2,
-  clear: 0.1,
-  murky: 0.55,
+  depth: 1,
+  backDepth: 5,
+  backReach: 3,
+  clear: 0.42,
   rim: 0.03,
+  edge: 0.3,
+  elevation: [6, 15] as const,
+  soft: 0.6,
+  side: [-3, 0] as const,
   deep: '#0a2433',
   glint: '#c6ecf2',
   samples: { along: 96, across: 40 },
-  surface: { along: 64, across: 26, clarity: [0.16, 0.8] as const },
-  renderOrder: 3,
+  renderOrder: -3,
 } as const;
 
 export const MOTION = {
@@ -451,6 +455,7 @@ export const SEA_FOAM: Readonly<Record<'smooth' | 'slight' | 'moderate' | 'rough
 };
 
 export const WAKE = {
+  start: 3.25,
   samples: 72,
   length: 320,
   power: 1.7,
@@ -507,14 +512,11 @@ export const HULL_WATER = {
     trail: 1.2,
     skim: 0.02,
   },
-  rail: { rows: 8, columns: 6, range: 0.75, down: toRadians(58), lead: 0.45 },
-  whisker: { count: 140, life: 0.35, speed: 5.5, size: 0.05, spread: toRadians(25), reach: 0.35 },
   looks: {
     bow: { opacity: 0.95, scroll: 0.5, streaks: 3.5, stretch: 0.5, colour: '#f2f7f8' },
     waterline: { opacity: 0.85, scroll: 1.2, streaks: 9, stretch: 0.35, colour: '#eef4f6' },
     stern: { opacity: 0.5, scroll: 0.2, streaks: 2.5, stretch: 0.6, colour: '#e9f1f3' },
     spray: { opacity: 0.55, scroll: 1.6, streaks: 12, stretch: 1.1, colour: '#f4f7f8' },
-    rail: { opacity: 0.22, scroll: 2.2, streaks: 14, stretch: 1.2, colour: '#f4f7f8' },
   },
   profiles: {
     bow: [0.04, 0.5] as const,
@@ -528,8 +530,6 @@ export const HULL_WATER = {
     sternPeak: 10,
     sternWidth: 3.5,
     sternOn: [4, 7] as const,
-    railWidth: 3,
-    railOn: [6, 8] as const,
     shown: 0.01,
   },
   tuning: {
@@ -543,16 +543,8 @@ export const HULL_WATER = {
     sternStart: 0.1,
     sternTaper: 1.15,
     sternLift: 0.015,
-    railStretch: 1.6,
-    railTrail: 0.4,
     anchorBack: 0.4,
-    sprayOut: 0.6,
-    whiskerFan: [7.3, 13.1] as const,
-    whiskerLift: 0.3,
-    whiskerLean: 0.6,
-    whiskerGap: 0.03,
-    whiskerFall: 2,
-    whiskerAlpha: 0.55,
+    sprayOut: 0.08,
   },
 } as const;
 
@@ -623,7 +615,6 @@ export const WETTED_BAR = {
   lift: 0.012,
   offset: 0.03,
   below: 0.006,
-  labelOut: 0.35,
   colour: '#ffd36b',
 } as const;
 
@@ -638,8 +629,8 @@ export const ANIMATION = {
 } as const;
 
 export const LABEL_SPOTS = {
-  chinesX: 1,
-  railShare: 0.5,
+  chinesX: -1.2,
+  railShare: 0.8,
   outboard: 0.04,
   wakeBehind: 5,
   bowOut: 0.45,

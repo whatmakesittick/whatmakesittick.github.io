@@ -109,10 +109,6 @@ export class WettedBarPart {
       [chineX, chine.chine[1] - below + line, -chine.chine[0]],
     );
     this.geometry.getAttribute('position').needsUpdate = true;
-    this.anchor.position.set(
-      (TRANSOM_X + end) / 2,
-      points[0][1],
-      points[0][2] - WETTED_BAR.labelOut,
-    );
+    this.anchor.position.set(...points[Math.floor(samples / 2)]);
   }
 }

@@ -11,6 +11,7 @@ import {
 import type { Texture } from 'three';
 import type { Vec3 } from '../../geometry/surface';
 import { registered } from '../context';
+import { WATER, WAVE_GLSL } from './waves';
 import type { EmphasisGroup, PartContext } from '../context';
 
 export interface SheetLook {
@@ -21,12 +22,16 @@ export interface SheetLook {
   colour: string;
 }
 
+const SURFACE_CLIP = '0.02';
+
 const VERTEX = /* glsl */ `
 varying vec2 vUv;
 varying vec3 vNormalView;
 varying vec3 vView;
+varying vec3 vWorld;
 void main() {
   vUv = uv;
+  vWorld = (modelMatrix * vec4(position, 1.0)).xyz;
   vec4 view = modelViewMatrix * vec4(position, 1.0);
   vView = -view.xyz;
   vNormalView = normalize(normalMatrix * normal);
@@ -35,6 +40,8 @@ void main() {
 `;
 
 const FRAGMENT = /* glsl */ `
+${WAVE_GLSL}
+varying vec3 vWorld;
 uniform sampler2D uCellMap;
 uniform vec3 uColour;
 uniform vec4 uSheet;
@@ -45,6 +52,7 @@ varying vec2 vUv;
 varying vec3 vNormalView;
 varying vec3 vView;
 void main() {
+  if (vWorld.y < seaHeight(vWorld.xz) - ${SURFACE_CLIP}) discard;
   float along = vUv.x;
   float outward = vUv.y;
   vec2 flow = vec2(along * uSheet.z, outward * uSheet.w - uTime * uSheet.y);
@@ -78,6 +86,9 @@ export function foamSheetMaterial(
         uSheet: { value: new Vector4(look.opacity, look.scroll, look.streaks, look.stretch) },
         uTime: { value: 0 },
         uStrength: { value: 1 },
+        uSeaTime: WATER.uSeaTime,
+        uSeaDrift: WATER.uSeaDrift,
+        uWaves: WATER.uWaves,
         uProfile: { value: [...profile] },
       },
       vertexShader: VERTEX,

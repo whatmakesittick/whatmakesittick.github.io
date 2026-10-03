@@ -139,7 +139,7 @@ export class NavalDroneAssembly implements Assembly {
     const cells = this.tracker.track(cellFoamTexture());
     this.boat = new BoatPart(context);
     this.sea = new SeaPart(context, foam);
-    this.section = new WaterSectionPart(context, this.sea.hullMask);
+    this.section = new WaterSectionPart(context, { ...this.sea.hullMask, ...this.sea.section });
     this.wake = new WakePart(context, 'wake', foam, cells);
     this.hullWater = new HullWaterPart(context, foam, { bow: 'bowWave', spray: 'spray' });
     this.jetStream = new JetStreamPart(context, foam, this.boat.jet.steering);
@@ -308,8 +308,8 @@ export class NavalDroneAssembly implements Assembly {
   private boatTrail(state: AssemblyState): TrailSample[] {
     const { boat } = state;
     return boat.held
-      ? straightTrail(boat, BOAT.halfLength, this.spacing)
-      : routeTrail(poseAtDistance, boat.distance, BOAT.halfLength, this.spacing);
+      ? straightTrail(boat, WAKE.start, this.spacing)
+      : routeTrail(poseAtDistance, boat.distance, WAKE.start, this.spacing);
   }
 
   private companionTrail(index: number, phase: number): TrailSample[] | null {
@@ -317,7 +317,7 @@ export class NavalDroneAssembly implements Assembly {
       .filter((time) => time >= FORMATION.joinStart)
       .map((time) => companionsAt(time)[index]);
     if (history.length < 2) return null;
-    return pathTrail(history, BOAT.halfLength, this.spacing);
+    return pathTrail(history, WAKE.start, this.spacing);
   }
 
   private placeCompanions(state: AssemblyState): void {
