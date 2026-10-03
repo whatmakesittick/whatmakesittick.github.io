@@ -100,6 +100,7 @@ export const ORBIT_VIEWS: Readonly<Record<OrbitView, OrbitSpec>> = {
     elevation: toRadians(12),
     width: () => STERN_WIDTH_M,
     aim: [TRANSOM_X - STERN_AIM_AFT, STERN_AIM_Y, 0],
+    compact: { lead: BOAT_LEAD, widen: 1 },
     keep: STERN_KEEP,
   },
 };

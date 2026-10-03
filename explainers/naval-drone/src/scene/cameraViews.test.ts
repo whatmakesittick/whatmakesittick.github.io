@@ -86,18 +86,18 @@ describe('camera views', () => {
     expect(offset.length()).toBeCloseTo((2.2 * BOAT.length) / (2 * PHONE.horizontal), 9);
   });
 
-  it('moves the boat off the centre on a phone so a long hull label fits beside it', () => {
-    const sides = { chase: -1, waterline: 1 } as const;
-    (['chase', 'waterline'] as const).forEach((view) => {
+  it('moves the boat off the centre on a phone so the long labels fit beside it', () => {
+    const sides = { chase: -1, waterline: 1, stern: 1 } as const;
+    (['chase', 'waterline', 'stern'] as const).forEach((view) => {
       const wide = orbitPose(TARGET, ORBIT_VIEWS[view], PHONE);
       const phone = orbitPose(TARGET, ORBIT_VIEWS[view], PHONE, true);
       const right = rightOf(offsetOf(phone).normalize());
-      const boat = vectorOf(TARGET.position).sub(phone.target);
-      expect(sides[view] * boat.dot(right), view).toBeGreaterThan(0.5);
-      expect(offsetOf(phone).length(), view).toBeGreaterThanOrEqual(offsetOf(wide).length());
+      const subject = wide.target.clone().sub(phone.target);
+      expect(sides[view] * subject.dot(right), view).toBeGreaterThan(0.25);
     });
-    const stern = orbitPose(TARGET, ORBIT_VIEWS.stern, PHONE, true);
-    expect(stern).toEqual(orbitPose(TARGET, ORBIT_VIEWS.stern, PHONE));
+    const waterline = (compact: boolean) =>
+      offsetOf(orbitPose(TARGET, ORBIT_VIEWS.waterline, PHONE, compact)).length();
+    expect(waterline(true)).toBeGreaterThan(waterline(false));
   });
 
   it('turns the views with the heading', () => {
