@@ -237,8 +237,8 @@ export const SHIP = {
 
 export const GROUND_STATION: Point = [-70, 3, -60];
 
-export const SATELLITE_OFFSET: SkyOffset = { ahead: 800, up: 360, side: -70 };
-export const BACKUP_SATELLITE_OFFSET: SkyOffset = { ahead: 860, up: 430, side: 60 };
+export const SATELLITE_OFFSET: SkyOffset = { ahead: 800, up: 160, side: -70 };
+export const BACKUP_SATELLITE_OFFSET: SkyOffset = { ahead: 860, up: 175, side: 60 };
 
 export function skyPoint(position: Point, offset: SkyOffset): Point {
   const aheadX = Math.cos(FINAL_HEADING);
