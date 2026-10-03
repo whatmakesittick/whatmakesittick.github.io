@@ -103,10 +103,11 @@ describe('black hole controller', () => {
     controller.views.frame('probe', false);
     expect(rig.follow).toHaveBeenLastCalledWith(
       expect.objectContaining({ position: expect.anything() }),
+      'position',
     );
     expect(rig.jumpTo.mock.lastCall?.[0]?.target).toEqual(new Vector3(4, 3, 0));
     controller.views.frame('ship', false);
-    expect(rig.follow).toHaveBeenLastCalledWith(null);
+    expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
     expect(rig.jumpTo.mock.lastCall?.[0]?.position).toEqual(new Vector3(16, 12, 0));
   });
 

@@ -15,6 +15,12 @@ const BOUNDS = new Box3(new Vector3(-2, 0, -2), new Vector3(2, 4, 2));
 const VIEWPORT: ViewportSize = { width: 800, height: 600, safe: NO_SAFE_AREA };
 const SCENE_DISTANCE = { min: 3, max: 50 };
 const VIEW_MIN_DISTANCE = 1;
+const DEFAULT_FLOOR_MARGIN = 1;
+const GROUND_TARGET: CameraPose = { position: new Vector3(0, 2, 4), target: new Vector3(0, 0, 0) };
+
+function expectVector(actual: Vector3, expected: [number, number, number]): void {
+  actual.toArray().forEach((value, index) => expect(value).toBeCloseTo(expected[index]));
+}
 
 function fakeCanvas(): HTMLElement {
   const root = new EventTarget();
@@ -57,6 +63,23 @@ describe('CameraRig', () => {
     rig.dispose();
   });
 
+  it('keeps the target a metre above the floor unless the explainer sets its own margin', () => {
+    const lifted = new CameraRig(fakeCanvas());
+    lifted.setBounds(BOUNDS, BOUNDS.min.y);
+    lifted.jumpTo(GROUND_TARGET);
+    lifted.update(FRAME_SECONDS);
+    expect(lifted.controls.target.y).toBeCloseTo(DEFAULT_FLOOR_MARGIN);
+    expect(lifted.camera.position.y).toBeCloseTo(GROUND_TARGET.position.y + DEFAULT_FLOOR_MARGIN);
+    lifted.dispose();
+
+    const grounded = new CameraRig(fakeCanvas(), { floorMargin: 0 });
+    grounded.setBounds(BOUNDS, BOUNDS.min.y);
+    grounded.jumpTo(GROUND_TARGET);
+    grounded.update(FRAME_SECONDS);
+    expect(grounded.controls.target.y).toBeCloseTo(0);
+    grounded.dispose();
+  });
+
   it('applies the camera planes and orbit limit an explainer asks for', () => {
     const rig = new CameraRig(fakeCanvas(), { near: 2, far: 9000, maxPolarAngle: 2 });
     expect(rig.camera.near).toBe(2);
@@ -90,6 +113,34 @@ describe('CameraRig', () => {
     anchor.position.copy(MOVE);
     rig.update(FRAME_SECONDS);
     expectPose(rig, CLOSE_UP, MOVE);
+  });
+
+  it('swings round an anchor that turns about the vertical when following its heading', () => {
+    const anchor = new Object3D();
+    const rig = new CameraRig(fakeCanvas());
+    rig.follow(anchor, 'heading');
+    rig.jumpTo(CLOSE_UP);
+    anchor.rotation.set(Math.PI / 2, Math.PI / 2, 0);
+    rig.update(FRAME_SECONDS);
+    expect(rig.camera.position.toArray().map((v) => Math.round(v))).toEqual([4, 3, 0]);
+    expect(rig.controls.target.toArray().map((v) => Math.round(v))).toEqual([0, 0, 0]);
+    expect(rig.camera.up.toArray()).toEqual([0, 1, 0]);
+    rig.dispose();
+  });
+
+  it('banks with an anchor when following its attitude, and stands upright again afterwards', () => {
+    const anchor = new Object3D();
+    const rig = new CameraRig(fakeCanvas());
+    rig.follow(anchor, 'attitude');
+    rig.jumpTo(CLOSE_UP);
+    anchor.rotation.z = Math.PI / 4;
+    rig.update(FRAME_SECONDS);
+    const side = 3 * Math.SQRT1_2;
+    expectVector(rig.camera.position, [-side, side, 4]);
+    expectVector(rig.camera.up, [-Math.SQRT1_2, Math.SQRT1_2, 0]);
+    rig.follow(null);
+    expect(rig.camera.up.toArray()).toEqual([0, 1, 0]);
+    rig.dispose();
   });
 
   it('follows an anchor that moves with its parent', () => {

@@ -51,7 +51,7 @@ export function cameraViews(
 ): Readonly<Record<CameraView, ViewSpec<RegionId>>> {
   return {
     ...FRAMED_VIEWS,
-    probe: customView(anchors, probePose, { follow: true, distance: PROBE_DISTANCE }),
+    probe: customView(anchors, probePose, { follow: 'position', distance: PROBE_DISTANCE }),
     ship: customView(anchors, shipPose, { distance: SHIP_DISTANCE }),
   };
 }

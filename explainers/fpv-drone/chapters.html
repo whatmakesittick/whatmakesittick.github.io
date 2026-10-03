@@ -1,0 +1,632 @@
+<section class="chapter" data-preset="overview" aria-labelledby="overview-title">
+  <p class="chapter-index">01</p>
+  <h2 id="overview-title" data-i18n="sections.overview.title">
+    Four motors, a battery and a pair of goggles
+  </h2>
+  <p data-i18n-html="sections.overview.p1">
+    You are looking at an <strong>FPV drone</strong>: a small quadcopter flown by a pilot who wears
+    goggles and sees through its camera. FPV stands for first-person view. This one is a 7-inch
+    long-range model, named after its propellers: each is about 7.5 inches across, about 190 mm. The
+    <strong>frame</strong> is carbon fibre, two plates and four arms. Without a battery it weighs
+    630 to 705 g; with one it comes to about 1 kg. A hobby version costs USD 550 to 950 without
+    radio and goggles. Built in bulk for an army, the airframe comes to about USD 400 to 500.
+  </p>
+  <p data-i18n-html="sections.overview.p2">
+    Drones like this fly in large numbers in the war in Ukraine. Ukraine's defence ministry bought
+    more than 1.5 million drones in 2024 and planned to buy 4.5 million FPV drones in 2025. In
+    practice they work about 10 to 20 km from the pilot. Scout teams fly them to look at roads,
+    fields and treelines, and that is what the drone in the model does: its payload is a
+    <strong>camera</strong>, the pilot's eye.
+  </p>
+  <p data-i18n-html="sections.overview.p3">
+    The model follows one short reconnaissance sortie of 80 seconds. The pilot arms the drone beside
+    a dugout, lifts off from a pad, climbs to 40 m and cruises out at 70 km/h. Over a crossroads 350
+    m away the drone circles one and a half times at 50 m, then flies home and lands on the pad. The
+    distances are real metres, but a real sortie would be far longer. The drone is drawn ten times
+    too big so you can still see it. Its speeds, heights and the battery it uses are the model's own
+    choices, inside the ranges a real 7-inch quad flies.
+  </p>
+  <p data-i18n-html="sections.overview.p4">
+    The clock at the top counts real seconds since arming, so T+0:42 means 42 seconds into the
+    flight. Drag the timeline to any moment, or tap a chip below to jump there. Watch the readouts
+    as you go: speed, height, the battery voltage and how far the drone is from the pilot. The
+    <strong>radio links</strong> switch draws the two beams between the drone and the
+    <strong>pilot's station</strong>. The <strong>flight track</strong> switch draws the path behind
+    the drone. The <strong>spin arrows</strong> switch shows which way each propeller turns, with
+    its motor number.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="liftoff"
+      data-i18n="controls.momentOptions.liftoff"
+    >
+      Lift-off
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="cruise"
+      data-i18n="controls.momentOptions.cruise"
+    >
+      Cruise
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="onStation"
+      data-i18n="controls.momentOptions.onStation"
+    >
+      Over the crossroads
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="turnHome"
+      data-i18n="controls.momentOptions.turnHome"
+    >
+      Turn for home
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="touchdown"
+      data-i18n="controls.momentOptions.touchdown"
+    >
+      Touchdown
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.overview.battery">Battery left</dt>
+      <dd class="number" data-readout="overview-battery">25.2 V, 100 %</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.overview.distance">Distance from the pilot</dt>
+      <dd class="number" data-readout="overview-distance">6 m</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.overview.done">Flight flown</dt>
+      <dd class="number" data-readout="overview-done">0 %</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="flight" aria-labelledby="flight-title">
+  <p class="chapter-index">02</p>
+  <h2 id="flight-title" data-i18n="sections.flight.title">
+    No wings, no rudder: it steers with motor speed
+  </h2>
+  <p data-i18n-html="sections.flight.p1">
+    A quadcopter has no wings, no rudder and no moving control surfaces at all. Every move it makes
+    is a change in the speed of one or more <strong>motors</strong>. To hover, the four
+    <strong>propellers</strong> together must push up with exactly the drone's weight. Each motor
+    can give up to about 2 kg of thrust, so a 1.4 kg drone hovers on a small part of what it has.
+    Thrust grows with the square of the propeller speed: double the speed and you get four times the
+    push.
+  </p>
+  <p data-i18n-html="sections.flight.p2">
+    Look at the <strong>spin direction</strong> arrows: two propellers turn clockwise and two turn
+    counter-clockwise, in diagonal pairs. There is a reason. A spinning propeller twists back on the
+    drone. If all four spun the same way, the body would spin the other way. With two turning each
+    way, the twists cancel. That also gives the pilot a way to turn: speed up one pair and slow the
+    other, and the twists no longer cancel. The drone turns about its vertical axis, the opposite
+    way to the faster pair. Pilots call this yaw.
+  </p>
+  <p data-i18n-html="sections.flight.p3">
+    To tilt, the drone speeds up one side and slows the other. Speed up the two rear motors and the
+    nose dips; that is pitch. Speed up the left pair and the drone leans right; that is roll. The
+    total thrust stays the same, but now it points at an angle, so part of it pushes sideways. That
+    is how a quad moves: it tilts, and the tilted thrust drags it along. Tap the chips to see which
+    motors speed up for each move. The rear motors are numbers 1 and 3, as the flight control
+    software Betaflight counts them.
+  </p>
+  <p data-i18n-html="sections.flight.p4">
+    The slider shows what a tilt does. Tilt the drone 30 degrees and it pushes sideways with about
+    0.58 of gravity, close to 5.7 m/s². To hold its height at the same time it needs about 15 % more
+    thrust than in a hover, because only part of the thrust still points up. At 45 degrees the push
+    equals gravity and the thrust must rise by 41 %. Freestyle quads carry about four to five times
+    their weight in thrust, so they hover at about 20 to 25 % throttle and keep plenty for a climb
+    or a sprint. Long-range quads carry less because a bigger battery weighs them down: this one has
+    about 5.7 to 1, and heavy-lift builds go as low as 2 to 1.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="move"
+      data-value="hover"
+      data-i18n="controls.moveOptions.hover"
+    >
+      Hover
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="move"
+      data-value="forward"
+      data-i18n="controls.moveOptions.forward"
+    >
+      Forward
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="move"
+      data-value="roll"
+      data-i18n="controls.moveOptions.roll"
+    >
+      Roll right
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="move"
+      data-value="yaw"
+      data-i18n="controls.moveOptions.yaw"
+    >
+      Yaw right
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="move"
+      data-value="climb"
+      data-i18n="controls.moveOptions.climb"
+    >
+      Climb
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.flight.mix">Motor shares</dt>
+      <dd data-readout="flight-mix">
+        All four motors share the load evenly: motor 1 at 18 %, motor 2 at 18 %, motor 3 at 18 %,
+        motor 4 at 18 % of maximum thrust
+      </dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.flight.why">Why it works</dt>
+      <dd data-readout="flight-why">
+        The four thrusts add up to exactly the drone's weight, and the two clockwise propellers
+        cancel the twist of the two counter-clockwise ones, so nothing turns.
+      </dd>
+    </div>
+  </dl>
+  <div class="range-widget">
+    <div class="range-widget__header">
+      <label for="tilt" data-i18n="sections.flight.tiltLabel">Tilt angle</label>
+      <output class="number" for="tilt">30°</output>
+    </div>
+    <input id="tilt" type="range" class="range" data-control="tilt" />
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.flight.push">Sideways push</dt>
+        <dd class="number" data-readout="tilt-push">5.7 m/s², 0.58 g</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.flight.thrust">Thrust needed</dt>
+        <dd class="number" data-readout="tilt-thrust">115 % of hover</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.flight.sprint">0 to 100 km/h</dt>
+        <dd class="number" data-readout="tilt-sprint">4.9 s</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="chapter" data-preset="controller" aria-labelledby="controller-title">
+  <p class="chapter-index">03</p>
+  <h2 id="controller-title" data-i18n="sections.controller.title">
+    A thousand corrections a second
+  </h2>
+  <p data-i18n-html="sections.controller.p1">
+    A quad cannot balance on its own, and no human can react fast enough to balance it by hand. The
+    <strong>flight controller</strong>, a small board in the stack between the plates, does it. Its
+    gyroscope measures how fast the drone is rotating about each axis 8,000 times a second. A
+    control loop called PID compares that with what the pilot asks for and corrects the four motor
+    speeds, 4,000 or 8,000 times a second. P pushes toward the asked-for rate, I removes slow drift,
+    D damps the fast wobbles. Several thousand corrections a second, every second of the flight.
+  </p>
+  <p data-i18n-html="sections.controller.p2">
+    Under the flight controller sits the <strong>ESC</strong>, the electronic speed controller: four
+    in one board, rated 50 to 55 A per motor. It turns each new throttle value into timed pulses for
+    the three windings of its motor. The two boards talk over DShot, a digital protocol: one 16-bit
+    word per motor, 11 bits of throttle, a telemetry bit and a checksum, sent in 27 microseconds at
+    600 kilobits a second. With bidirectional DShot the ESC also reports the real motor speed back,
+    so the controller can filter out the vibration each propeller makes.
+  </p>
+  <p data-i18n-html="sections.controller.p3">
+    What do the sticks command? In <strong>acro mode</strong>, the default, each stick commands a
+    rotation rate. Push the roll stick halfway and the drone rolls at a steady rate; centre it and
+    the drone stops rolling and holds the angle it has reached, even upside down. By default, full
+    stick asks for about 670 degrees a second, almost two full rolls. Angle mode is for beginners:
+    the stick sets a tilt angle, and the drone levels itself when you let go. Most FPV pilots fly
+    acro, from racers to freestyle pilots: it gives full control in wind and lets the drone take any
+    attitude. Tap the chips to compare the three modes.
+  </p>
+  <p data-i18n-html="sections.controller.p4">
+    Two safety features matter. A switch on the radio <strong>arms</strong> the drone, which starts
+    the motors and the stabilisation; the controller refuses to arm if the throttle is up or the
+    drone is tilted too far. If the radio packets stop, the failsafe waits 1.5 seconds, then by
+    default cuts the motors and the drone drops. The <strong>GPS module</strong> on its mast is
+    optional. Betaflight flies without it. With it, GPS Rescue can fly the drone back toward where
+    it was armed when the link is lost, but it is an emergency aid, not a return to home: the pilot
+    must take back control, or it crashes.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="flightMode"
+      data-value="acro"
+      data-i18n="controls.modeOptions.acro"
+    >
+      Acro
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="flightMode"
+      data-value="angle"
+      data-i18n="controls.modeOptions.angle"
+    >
+      Angle
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="flightMode"
+      data-value="horizon"
+      data-i18n="controls.modeOptions.horizon"
+    >
+      Horizon
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.controller.stick">What the stick commands</dt>
+      <dd data-readout="mode-stick">
+        A rotation rate: how fast to roll or pitch. Centre the stick and the drone holds whatever
+        angle it has reached
+      </dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.controller.limit">Limit</dt>
+      <dd data-readout="mode-limit">
+        No tilt limit. Full stick asks for about 670 degrees a second by default
+      </dd>
+    </div>
+  </dl>
+  <p class="signal-path__title" data-i18n="sections.controller.path">
+    How a stick move reaches the propellers
+  </p>
+  <ol class="signal-path">
+    <li data-i18n-html="sections.controller.step1">
+      <strong>Radio</strong>: the pilot moves a stick; the radio reads it and sends a packet, 250
+      times a second in the model.
+    </li>
+    <li data-i18n-html="sections.controller.step2">
+      <strong>Receiver antenna</strong>: the receiver on the drone decodes the packet and hands the
+      stick values to the flight controller.
+    </li>
+    <li data-i18n-html="sections.controller.step3">
+      <strong>Gyro</strong>: the flight controller reads how fast the drone is turning, 8,000 times
+      a second.
+    </li>
+    <li data-i18n-html="sections.controller.step4">
+      <strong>PID loop</strong>: it compares the asked-for rate with the measured one and works out
+      four new throttle values.
+    </li>
+    <li data-i18n-html="sections.controller.step5">
+      <strong>ESC</strong>: each value goes out as a 16-bit DShot word in 27 microseconds, and the
+      ESC times the pulses to the motor.
+    </li>
+    <li data-i18n-html="sections.controller.step6">
+      <strong>Propellers</strong>: the motor speeds change, the thrusts change, and the drone tilts,
+      turns or climbs.
+    </li>
+  </ol>
+</section>
+
+<section class="chapter" data-preset="link" aria-labelledby="link-title">
+  <p class="chapter-index">04</p>
+  <h2 id="link-title" data-i18n="sections.link.title">Two radios: one to steer, one to see</h2>
+  <p data-i18n-html="sections.link.p1">
+    Two radio links run between the <strong>pilot's station</strong> and the drone. The
+    <strong>control link</strong> carries the stick positions out. In the model it is ExpressLRS, an
+    open-source system that works on 900 MHz or 2.4 GHz. It sends small packets at a fixed rate, 50
+    to 1,000 times a second on 2.4 GHz. Slower packets reach farther: the receiver can listen longer
+    for each one and still decode a weaker signal. At 50 Hz it hears signals down to −115 dBm, at
+    500 Hz only down to −105 dBm. That difference of 10 dB is about 3.2 times the reach in open air.
+    Flown at a low rate, in line of sight from a height, a single 2.4 GHz link has reached over 100
+    km.
+  </p>
+  <p data-i18n-html="sections.link.p2">
+    The <strong>video link</strong> comes back the other way, from the
+    <strong>video antenna</strong> at the rear. Analogue video on 5.8 GHz is the classic choice: 40
+    channels in five bands, a standard-definition picture that fades gracefully into snow as the
+    drone gets far away, and a delay of about 20 to 30 ms from camera to eye. Digital systems send a
+    1080p picture at 100 frames a second with a delay of about 20 ms, and the best units are rated
+    for 10 to 15 km. But good analogue is still the lowest-latency option, and it degrades gently
+    instead of freezing. Tap the chips to compare.
+  </p>
+  <p data-i18n-html="sections.link.p3">
+    Both links use circular polarised antennas: the wave turns as it travels. A reflection off the
+    ground or a wall flips the turning direction, so the antenna rejects most of the bounced signal
+    that would otherwise smear the picture. The goggles put two small 1080p screens in front of the
+    pilot's eyes, with a field of view of 44 to 46 degrees. A field team usually adds a second
+    screen so a navigator can watch too, puts the radio antenna on a mast, and sometimes flies a
+    second drone high up as a repeater to carry the links over a ridge. Some FPV drones trade both
+    radios for a thin optical fibre unwound from a spool of 10 to 20 km: with no radio link, there
+    is nothing to jam.
+  </p>
+  <p data-i18n-html="sections.link.p4">
+    Use the second chip row to change the packet rate and watch three numbers move: the time between
+    packets, the weakest signal the receiver still hears and the reach compared with 500 Hz. The
+    readouts below follow the model: the distance from the pilot and how strong the control link is.
+    In this short sortie the drone never gets farther than about 400 m, so the link stays strong.
+    Real teams work at 10 to 20 km, where the packet rate, the antennas and a clear line of sight
+    decide whether the picture holds. Radio power is the last lever, not the first.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="video"
+      data-value="analogue"
+      data-i18n="controls.videoOptions.analogue"
+    >
+      Analogue
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="video"
+      data-value="digital"
+      data-i18n="controls.videoOptions.digital"
+    >
+      Digital
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.link.latency">Video delay</dt>
+      <dd data-readout="link-latency">About 20 to 30 ms</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.link.picture">Picture</dt>
+      <dd data-readout="link-picture">
+        Standard definition, 40 channels to choose from, fades to snow at range
+      </dd>
+    </div>
+  </dl>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="packetRate"
+      data-value="50"
+      data-i18n="controls.packetRateOptions.50"
+    >
+      50 Hz
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="packetRate"
+      data-value="150"
+      data-i18n="controls.packetRateOptions.150"
+    >
+      150 Hz
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="packetRate"
+      data-value="250"
+      data-i18n="controls.packetRateOptions.250"
+    >
+      250 Hz
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="packetRate"
+      data-value="500"
+      data-i18n="controls.packetRateOptions.500"
+    >
+      500 Hz
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.link.period">Time between packets</dt>
+      <dd class="number" data-readout="rate-period">4 ms</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.link.sensitivity">Weakest signal it still hears</dt>
+      <dd class="number" data-readout="rate-sensitivity">−108 dBm</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.link.reach">Reach compared with 500 Hz</dt>
+      <dd class="number" data-readout="rate-reach">1.4 times</dd>
+    </div>
+  </dl>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.link.distance">Distance now</dt>
+      <dd class="number" data-readout="link-distance">224 m</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.link.signal">Control link</dt>
+      <dd data-readout="link-signal">Strong</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="power" aria-labelledby="power-title">
+  <p class="chapter-index">05</p>
+  <h2 id="power-title" data-i18n="sections.power.title">Twelve minutes in the air</h2>
+  <p data-i18n-html="sections.power.p1">
+    The <strong>battery</strong> on the top plate is a 6S pack: six lithium cells in series. With
+    LiPo cells that is 22.2 V nominal and 25.2 V full. The Li-ion pack in the model is 21.6 V
+    nominal and 25.2 V full. Pilots land at about 3.5 V a cell, 21 V for the pack, and never go
+    below 3 V a cell, where the cells take damage. This pack holds 4,200 mAh, about 91 Wh, and
+    weighs about 450 g. A battery's C rating says how much current it can give as a multiple of its
+    capacity: a 1,800 mAh LiPo rated 95C could in theory deliver 171 A, while a Li-ion cell manages
+    30 to 45 A.
+  </p>
+  <p data-i18n-html="sections.power.p2">
+    Why Li-ion for long range? Energy per kilogram. A 6S 1,800 mAh LiPo stores 40 Wh in 288 g, about
+    139 Wh/kg. The Li-ion pack stores 91 Wh in 450 g, about 200 Wh/kg, roughly 45 % more. The price
+    is current: Li-ion cells cannot deliver the bursts a racing quad wants, which is fine for a
+    scout that cruises. And cruising is where the energy goes furthest. Hovering costs more power
+    than flying forward at a moderate speed, because propellers work better in moving air.
+    Long-range pilots plan routes that keep the drone moving and hover as little as possible.
+  </p>
+  <p data-i18n-html="sections.power.p3">
+    Drag the slider to load the drone. Each extra 100 g raises the all-up weight, lowers the
+    thrust-to-weight ratio, raises the throttle needed to hover and cuts the flight time. The model
+    takes 80 % of the pack's energy as usable and divides it by the power needed to cruise at that
+    weight, which gives about 12 minutes with the camera on board. A bigger battery does not fix
+    this for long: more battery means more weight, which means more power to carry it, so each extra
+    pack gives less than the last. Real 7-inch long-range quads fly 12 to 30 minutes; a 5-inch
+    freestyle quad on a small LiPo manages about 4 to 6.
+  </p>
+  <p data-i18n-html="sections.power.p4">
+    Watch the voltage during the flight. It sags under load, because current through the pack's
+    internal resistance costs volts, and it recovers when the drone eases off: a 6S can show 21 V in
+    a hard climb and 23 V in a hover. Cold makes this worse. At minus 20 °C a lithium cell keeps
+    only about 65 % of its capacity, and its resistance rises, so the low-voltage warning comes
+    early. Pilots keep their packs warm until launch. The readouts below show the pack's voltage and
+    current as the model flies the sortie, and the battery gauge at the top fills from them.
+  </p>
+  <div class="range-widget">
+    <div class="range-widget__header">
+      <label for="payload" data-i18n="sections.power.payloadLabel">Payload</label>
+      <output class="number" for="payload">300 g</output>
+    </div>
+    <input id="payload" type="range" class="range" data-control="payload" />
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="sections.power.weight">All-up weight</dt>
+        <dd class="number" data-readout="power-weight">1,400 g</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.power.twr">Thrust to weight</dt>
+        <dd class="number" data-readout="power-twr">5.7 to 1</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.power.hover">Throttle to hover</dt>
+        <dd data-readout="power-hover">18 % of maximum thrust, about 42 % of top motor speed</dd>
+      </div>
+      <div>
+        <dt data-i18n="sections.power.minutes">Flight time</dt>
+        <dd class="number" data-readout="power-minutes">12.3 min</dd>
+      </div>
+    </dl>
+  </div>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.power.volts">Pack voltage now</dt>
+      <dd class="number" data-readout="power-volts">23.9 V</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.power.amps">Current now</dt>
+      <dd class="number" data-readout="power-amps">17.6 A</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="limits" aria-labelledby="limits-title">
+  <p class="chapter-index">06</p>
+  <h2 id="limits-title" data-i18n="sections.limits.title">Fast, cheap and everywhere</h2>
+  <p data-i18n-html="sections.limits.p1">
+    You are now looking through the pilot's goggles: this is the picture from the drone's own camera
+    on its way home. How fast can it go? A 7-inch long-range quad like this one tops out at about
+    140 km/h and cruises at 60 to 80 km/h. Racing quads are quicker: the Drone Racing League's
+    RacerX set an official 263 km/h in 2017. The record is in another world. On 11 December 2025 the
+    Peregreen V4, built by Luke and Mike Bell in South Africa, set a Guinness record of 657.59 km/h
+    for a battery-powered quadcopter. It is a purpose-built machine, nothing like a typical FPV
+    drone. Tap the chips to see how long each would take to cover the 350 m to the
+    <strong>crossroads</strong>.
+  </p>
+  <p data-i18n-html="sections.limits.p2">
+    Wind is the real limit in the field. A rule of thumb says to fly only when the wind is below two
+    thirds of the drone's top speed, and quads this size handle about 32 to 40 km/h of steady wind.
+    Every gust costs battery, because the drone has to tilt into it and the tilted thrust takes more
+    power. This is also where an FPV quad differs from a camera drone such as a Mavic. A Mavic holds
+    its position with GPS and a barometer when you let go of the sticks. An FPV quad in acro holds
+    only its attitude and drifts with the wind. Nothing stops it but the pilot.
+  </p>
+  <p data-i18n-html="sections.limits.p3">
+    That makes it hard to learn. Most new pilots crash repeatedly in their first hours, so they
+    start in a simulator: 20 to 60 hours in a program such as Velocidrone or Liftoff before the
+    first real flight is common advice. The first pilots to fly with goggles did so around 2007, as
+    a hobby, and racing followed. The first world championship was flown in Shenzhen in 2018 by 128
+    pilots from 34 countries, and a 15-year-old won it.
+  </p>
+  <p data-i18n-html="sections.limits.p4">
+    Cheap and simple is why these drones are everywhere. A hobby quad costs USD 550 to 950 without
+    radio and goggles; a frame kit alone is about USD 130 to 150. Built by the thousand for an army,
+    the airframe comes to about USD 400 to 500, and Ukraine planned to buy 4.5 million FPV drones in
+    2025. In practice they work about 10 to 20 km from the pilot. To reach farther, teams fly a
+    repeater on a second drone: one Ukrainian system rides a larger drone at 500 m, stays up for an
+    hour and relays signals up to 30 km. The <strong>pilot's station</strong> in the model is far
+    simpler: a dugout, a case, a mast with an antenna, and a pilot in goggles.
+  </p>
+  <p class="chip-row">
+    <button
+      type="button"
+      class="chip"
+      data-action="speedster"
+      data-value="longRange"
+      data-i18n="controls.speedsterOptions.longRange"
+    >
+      Long-range quad
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="speedster"
+      data-value="racer"
+      data-i18n="controls.speedsterOptions.racer"
+    >
+      Racing quad
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="speedster"
+      data-value="record"
+      data-i18n="controls.speedsterOptions.record"
+    >
+      Record holder
+    </button>
+  </p>
+  <dl class="range-widget__readouts section-readouts">
+    <div>
+      <dt data-i18n="sections.limits.speed">Top speed</dt>
+      <dd class="number" data-readout="limits-speed">140 km/h</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.limits.field">Time over the 350 m to the crossroads</dt>
+      <dd class="number" data-readout="limits-field">9 s</dd>
+    </div>
+    <div>
+      <dt data-i18n="sections.limits.who">What it is</dt>
+      <dd data-readout="limits-who">
+        A 7-inch long-range quad like the one in the model: about 140 km/h flat out, 60 to 80 km/h
+        in cruise
+      </dd>
+    </div>
+  </dl>
+</section>

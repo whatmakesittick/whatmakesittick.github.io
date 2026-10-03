@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "title": "Comment vole un drone FPV",
+    "eyebrow": "Drone FPV",
+    "tagline": "Quatre moteurs, une caméra et un masque vidéo : le pilote vole comme s’il était dans le drone, et chaque mouvement n’est qu’un changement de régime moteur.",
+    "description": "Suivez en 3D un drone FPV de 7 pouces en vol de reconnaissance : quatre moteurs sans gouverne, le gyroscope, deux radios, la batterie et les limites.",
+    "summary": "Quatre moteurs et aucune gouverne, un contrôleur de vol qui corrige des milliers de fois par seconde, deux liaisons radio, la batterie qui fixe l’autonomie, et les limites de vitesse, de vent et de portée.",
+    "socialAlt": "Un quadricoptère FPV camouflé s’incline en rase-mottes au-dessus d’un champ sous un ciel gris, ses quatre hélices floues et un faisceau radio qui rejoint l’abri du pilote, à côté du titre « Comment vole un drone FPV »"
+  },
+  "stage": {
+    "label": "Modèle interactif d’un drone FPV",
+    "gauge": "Mesures de vol en direct"
+  },
+  "controls": {
+    "label": "Commandes du drone FPV",
+    "views": {
+      "links": {
+        "name": "Liaisons radio",
+        "short": "Liaisons",
+        "hint": "Liaisons radio (K)"
+      },
+      "track": {
+        "name": "Trajectoire de vol",
+        "short": "Trajectoire",
+        "hint": "Trajectoire de vol (T)"
+      },
+      "arrows": {
+        "name": "Sens de rotation",
+        "short": "Flèches",
+        "hint": "Sens de rotation (A)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    },
+    "video": {
+      "label": "Vidéo"
+    },
+    "videoOptions": {
+      "analogue": "Analogique",
+      "digital": "Numérique"
+    },
+    "momentOptions": {
+      "liftoff": "Décollage",
+      "cruise": "Croisière",
+      "onStation": "Sur le carrefour",
+      "turnHome": "Demi-tour vers l’abri",
+      "touchdown": "Atterrissage"
+    },
+    "moveOptions": {
+      "hover": "Vol stationnaire",
+      "forward": "En avant",
+      "roll": "Roulis à droite",
+      "yaw": "Lacet à droite",
+      "climb": "Montée"
+    },
+    "modeOptions": {
+      "acro": "Acro",
+      "angle": "Angle",
+      "horizon": "Horizon"
+    },
+    "packetRateOptions": {
+      "50": "50 Hz",
+      "150": "150 Hz",
+      "250": "250 Hz",
+      "500": "500 Hz"
+    },
+    "speedsterOptions": {
+      "longRange": "Drone longue portée",
+      "racer": "Drone de course",
+      "record": "Détenteur du record"
+    }
+  },
+  "timeline": {
+    "label": "Temps de vol",
+    "phases": "Aller à une étape du vol",
+    "speed": "Vitesse de lecture",
+    "value": "{{time}}, {{phase}}",
+    "clock": "T+{{clock}}",
+    "speedFormat": "{{factor}}×",
+    "speedValue": "par rapport au temps réel",
+    "phase": {
+      "takeoff": "Décollage",
+      "climb": "Montée",
+      "transit": "Aller vers le carrefour",
+      "orbit": "Sur le carrefour",
+      "return": "Retour",
+      "landing": "Atterrissage"
+    },
+    "during": {
+      "takeoff": "le pilote arme le drone, les hélices se lancent et le drone quitte sa plateforme pour un stationnaire à basse hauteur",
+      "climb": "le drone pique du nez, accélère jusqu’à 70 km/h et monte à 40 m",
+      "transit": "le drone file tout droit au-dessus du champ à 70 km/h",
+      "orbit": "le drone fait un tour et demi autour du carrefour à 50 m, la caméra tournée vers l’intérieur",
+      "return": "le drone rentre à 70 km/h et s’aligne sur la plateforme par une courbe en S",
+      "landing": "le drone ralentit, descend, reste en stationnaire au-dessus de la plateforme et se pose"
+    },
+    "jump": {
+      "takeoff": "Aller au décollage",
+      "climb": "Aller à la montée",
+      "transit": "Aller au trajet aller",
+      "orbit": "Aller aux tours au-dessus du carrefour",
+      "return": "Aller au vol retour",
+      "landing": "Aller à l’atterrissage"
+    }
+  },
+  "readouts": {
+    "clock": "Temps de vol",
+    "speed": "Vitesse",
+    "height": "Hauteur",
+    "battery": "Batterie",
+    "distance": "Jusqu’au pilote"
+  },
+  "units": {
+    "kmh": "{{value}} km/h",
+    "m": "{{value}} m",
+    "g": "{{value}} g",
+    "kg": "{{value}} kg",
+    "percent": "{{value}} %",
+    "ofHover": "{{percent}} % du stationnaire",
+    "volts": "{{value}} V",
+    "amps": "{{value}} A",
+    "ms": "{{value}} ms",
+    "dbm": "{{value}} dBm",
+    "minutes": "{{value}} min",
+    "seconds": "{{value}} s",
+    "degrees": "{{value}}°",
+    "ms2": "{{value}} m/s²",
+    "times": "{{factor}} fois",
+    "battery": "{{volts}} V, {{share}} %",
+    "push": "{{ms2}} m/s², {{g}} g",
+    "ratio": "{{ratio}} pour 1",
+    "hover": "{{thrust}} % de la poussée maximale, soit environ {{speed}} % du régime maximal"
+  },
+  "parts": {
+    "frame": "Châssis",
+    "motorFrontLeft": "Moteur 4 (avant gauche)",
+    "motorFrontRight": "Moteur 2 (avant droit)",
+    "motorRearLeft": "Moteur 3 (arrière gauche)",
+    "motorRearRight": "Moteur 1 (arrière droit)",
+    "propellers": "Hélices",
+    "battery": "Batterie",
+    "stack": "Contrôleur de vol et ESC",
+    "camera": "Caméra",
+    "videoAntenna": "Antenne vidéo",
+    "receiverAntenna": "Antenne du récepteur",
+    "gpsModule": "Module GPS",
+    "groundStation": "Poste du pilote",
+    "controlLink": "Liaison de commande",
+    "videoLink": "Liaison vidéo",
+    "spinArrows": "Sens de rotation",
+    "crossroads": "Carrefour",
+    "launchPad": "Plateforme de décollage"
+  },
+  "flight": {
+    "mix": {
+      "hover": "Les quatre moteurs se partagent la charge à égalité : moteur 1 à {{m1}} %, moteur 2 à {{m2}} %, moteur 3 à {{m3}} %, moteur 4 à {{m4}} % de la poussée maximale",
+      "forward": "La paire arrière accélère et la paire avant ralentit : moteur 1 à {{m1}} %, moteur 2 à {{m2}} %, moteur 3 à {{m3}} %, moteur 4 à {{m4}} % de la poussée maximale",
+      "roll": "La paire gauche accélère et la paire droite ralentit : moteur 1 à {{m1}} %, moteur 2 à {{m2}} %, moteur 3 à {{m3}} %, moteur 4 à {{m4}} % de la poussée maximale",
+      "yaw": "Les deux moteurs qui tournent dans le sens inverse des aiguilles d’une montre accélèrent, les deux autres ralentissent : moteur 1 à {{m1}} %, moteur 2 à {{m2}} %, moteur 3 à {{m3}} %, moteur 4 à {{m4}} % de la poussée maximale",
+      "climb": "Les quatre moteurs accélèrent ensemble : moteur 1 à {{m1}} %, moteur 2 à {{m2}} %, moteur 3 à {{m3}} %, moteur 4 à {{m4}} % de la poussée maximale"
+    },
+    "why": {
+      "hover": "Les quatre poussées font exactement le poids du drone, et les deux hélices qui tournent dans le sens des aiguilles d’une montre annulent le couple des deux autres : rien ne tourne.",
+      "forward": "Plus de poussée à l’arrière qu’à l’avant fait piquer le nez. Une partie de la poussée pointe maintenant vers l’avant, et le drone accélère.",
+      "roll": "Plus de poussée à gauche qu’à droite fait baisser le côté droit. Une partie de la poussée pointe maintenant vers la droite, et le drone glisse de ce côté.",
+      "yaw": "La poussée totale ne change pas, mais les couples ne s’annulent plus. Le corps tourne dans le sens des aiguilles d’une montre, à l’inverse des hélices les plus rapides.",
+      "climb": "La poussée dépasse maintenant le poids, et le drone accélère vers le haut. Rien ne bascule, car les quatre moteurs ont changé de la même quantité."
+    }
+  },
+  "mode": {
+    "stick": {
+      "acro": "Une vitesse de rotation : à quelle vitesse partir en roulis ou en tangage. Manche au centre, le drone garde l’angle qu’il a atteint",
+      "angle": "Un angle d’inclinaison : de combien s’écarter de l’horizontale. Manche au centre, le drone se remet à plat tout seul",
+      "horizon": "Un angle d’inclinaison près du centre, une vitesse de rotation en butée : il se remet à plat, mais peut encore faire un flip"
+    },
+    "limit": {
+      "acro": "Aucune limite d’inclinaison. Le manche en butée demande environ {{rate}} degrés par seconde par défaut",
+      "angle": "Une limite d’inclinaison fixée, qui limite aussi la vitesse. Ni flips ni tonneaux",
+      "horizon": "Aucune limite en butée, une limite d’inclinaison près du centre"
+    }
+  },
+  "link": {
+    "latency": {
+      "analogue": "Environ 20 à 30 ms",
+      "digital": "Environ 20 ms, 15 ms sur les meilleurs systèmes"
+    },
+    "picture": {
+      "analogue": "Définition standard, 40 canaux au choix, se noie dans la neige avec la distance",
+      "digital": "1080p à 100 images par seconde, nette jusqu’à la coupure, environ 10 km de portée"
+    },
+    "signal": {
+      "strong": "Forte",
+      "good": "Bonne",
+      "weak": "Faible",
+      "lost": "Perdue"
+    }
+  },
+  "speeds": {
+    "who": {
+      "longRange": "Un drone longue portée de 7 pouces comme celui du modèle : environ 140 km/h à fond, 60 à 80 km/h en croisière",
+      "racer": "Le RacerX de la Drone Racing League, en 2017, un drone de course construit pour un record : 263 km/h officiels",
+      "record": "Peregreen V4, détenteur du record Guinness depuis le 11 décembre 2025 : une machine conçue pour la vitesse, rien à voir avec un drone FPV ordinaire"
+    }
+  },
+  "sections": {
+    "overview": {
+      "title": "Quatre moteurs, une batterie et un masque",
+      "p1": "Vous avez sous les yeux un <strong>drone FPV</strong> : un petit quadricoptère piloté par une personne qui porte un masque vidéo et voit à travers la caméra du drone. FPV signifie « vue à la première personne ». Celui-ci est un modèle longue portée de 7 pouces. Il doit son nom à ses hélices : chacune mesure environ 7,5 pouces, soit à peu près 190 mm. Le <strong>châssis</strong> se compose de deux plaques et de quatre bras en fibre de carbone. Sans batterie, le drone pèse de 630 à 705 g ; avec, il approche 1 kg. Une version de loisir coûte de 550 à 950 dollars sans radio ni masque. Produit en série pour une armée, le drone seul revient à environ 400 à 500 dollars.",
+      "p2": "Des drones comme celui-ci volent en grand nombre dans la guerre en Ukraine. Le ministère ukrainien de la Défense a acheté plus de 1,5 million de drones en 2024 et prévoyait d’acheter 4,5 millions de drones FPV en 2025. En pratique, ils volent à environ 10 à 20 km du pilote. Les équipes de reconnaissance s’en servent pour observer des routes, des champs et des lisières, et c’est ce que fait le drone du modèle : sa charge utile est une <strong>caméra</strong>, l’œil du pilote.",
+      "p3": "Le modèle suit un court vol de reconnaissance de 80 secondes. Le pilote arme le drone à côté d’un abri, le drone décolle d’une plateforme, monte à 40 m et part en croisière à 70 km/h. Au-dessus d’un carrefour situé à 350 m, il fait un tour et demi à 50 m, puis il rentre et se pose sur la plateforme. Les distances sont de vrais mètres, mais un vrai vol serait bien plus long. Le drone est dessiné dix fois trop grand pour que vous puissiez le voir. Ses vitesses, ses hauteurs et sa batterie sont des choix du modèle, dans les plages où vole un vrai drone de 7 pouces.",
+      "p4": "L’horloge, en haut, compte les secondes réelles depuis que le drone est armé : T+0:42 signifie donc 42 secondes de vol. Faites glisser la barre de lecture jusqu’au moment de votre choix, ou appuyez sur un bouton ci-dessous pour y aller directement. En chemin, surveillez les indicateurs : la vitesse, la hauteur, la tension de la batterie et la distance entre le drone et le pilote. Le bouton <strong>Liaisons radio</strong> trace les deux faisceaux entre le drone et le <strong>poste du pilote</strong>. Le bouton <strong>Trajectoire de vol</strong> trace le chemin parcouru derrière le drone. Le bouton <strong>Sens de rotation</strong> montre dans quel sens tourne chaque hélice, avec le numéro de son moteur.",
+      "battery": "Batterie restante",
+      "distance": "Distance au pilote",
+      "done": "Vol effectué"
+    },
+    "flight": {
+      "title": "Ni ailes ni gouverne : il se dirige au régime moteur",
+      "p1": "Un quadricoptère n’a ni ailes, ni gouverne, ni aucune surface de commande mobile. Chacun de ses mouvements est un changement de régime d’un ou plusieurs <strong>moteurs</strong>. Pour rester en stationnaire, les quatre <strong>hélices</strong> doivent ensemble pousser vers le haut avec une force égale au poids du drone. Chaque moteur peut fournir jusqu’à environ 2 kg de poussée : un drone de 1,4 kg tient donc en l’air avec une petite part de sa poussée disponible. La poussée grandit avec le carré de la vitesse de l’hélice : doublez le régime, et la poussée est multipliée par quatre.",
+      "p2": "Regardez les flèches du <strong>sens de rotation</strong> : deux hélices tournent dans le sens des aiguilles d’une montre, deux dans l’autre, par paires en diagonale. Ce n’est pas un hasard. Une hélice qui tourne pousse le drone à tourner dans l’autre sens. Si les quatre tournaient dans le même sens, le corps tournerait dans l’autre. Avec deux dans chaque sens, les couples s’annulent. Cela donne aussi au pilote un moyen de tourner : accélérez une paire et ralentissez l’autre, et les couples ne s’annulent plus. Le drone pivote autour de son axe vertical, à l’inverse de la paire la plus rapide. Les pilotes appellent cela le lacet, ou yaw.",
+      "p3": "Pour s’incliner, le drone accélère un côté et ralentit l’autre. Accélérez les deux moteurs arrière et le nez pique : c’est le tangage. Accélérez la paire gauche et le drone penche à droite : c’est le roulis. La poussée totale ne change pas, mais elle pointe maintenant de biais, et une partie pousse sur le côté. Voilà comment un quad se déplace : il s’incline, et la poussée inclinée l’entraîne. Appuyez sur les boutons pour voir quels moteurs accélèrent à chaque mouvement. Les moteurs arrière portent les numéros 1 et 3, dans la numérotation de Betaflight, le logiciel de contrôle de vol.",
+      "p4": "Le curseur montre ce que fait une inclinaison. Inclinez le drone de 30 degrés, et il pousse sur le côté avec environ 0,58 fois la gravité, près de 5,7 m/s². Pour tenir sa hauteur en même temps, il lui faut environ 15 % de poussée de plus qu’en stationnaire, car seule une partie de la poussée pointe encore vers le haut. À 45 degrés, la poussée latérale égale la gravité et la poussée totale doit augmenter de 41 %. Les drones de freestyle disposent d’environ quatre à cinq fois leur poids en poussée : ils tiennent en stationnaire à environ 20 à 25 % de gaz et gardent une large réserve pour monter ou sprinter. Les drones longue portée en ont moins, parce qu’une plus grosse batterie les alourdit : celui-ci a environ 5,7 pour 1, et les drones conçus pour les lourdes charges descendent jusqu’à 2 pour 1.",
+      "mix": "Répartition entre moteurs",
+      "why": "Pourquoi ça marche",
+      "tiltLabel": "Angle d’inclinaison",
+      "push": "Poussée latérale",
+      "thrust": "Poussée nécessaire",
+      "sprint": "De 0 à 100 km/h"
+    },
+    "controller": {
+      "title": "Mille corrections par seconde",
+      "p1": "Un quad ne peut pas tenir en équilibre seul, et personne ne réagit assez vite pour l’équilibrer à la main. C’est le travail du <strong>contrôleur de vol</strong>, une petite carte dans la pile entre les deux plaques. Son gyroscope mesure 8 000 fois par seconde la vitesse à laquelle le drone tourne autour de chaque axe. Une boucle de régulation appelée PID compare cette mesure à ce que demande le pilote et corrige les quatre régimes moteur, 4 000 ou 8 000 fois par seconde. P pousse vers la vitesse demandée, I efface la dérive lente, D amortit les tremblements rapides. Plusieurs milliers de corrections par seconde, à chaque seconde du vol.",
+      "p2": "Sous le contrôleur de vol se trouve l’<strong>ESC</strong>, le variateur électronique : quatre sur une seule carte, prévus pour 50 à 55 A par moteur. Il transforme chaque nouvelle valeur de gaz en impulsions bien minutées pour les trois bobinages de son moteur. Les deux cartes se parlent en DShot, un protocole numérique : un mot de 16 bits par moteur, 11 bits de gaz, un bit de télémétrie et une somme de contrôle, envoyé en 27 microsecondes à 600 kilobits par seconde. Avec le DShot bidirectionnel, l’ESC renvoie aussi le régime réel du moteur, ce qui permet au contrôleur de filtrer la vibration de chaque hélice.",
+      "p3": "Que commandent les manches ? En <strong>mode acro</strong>, le mode par défaut, chaque manche commande une vitesse de rotation. Poussez le manche de roulis à mi-course et le drone tourne en roulis à vitesse constante ; recentrez-le et le drone cesse de tourner et garde l’angle atteint, même à l’envers. Par défaut, le manche en butée demande environ 670 degrés par seconde, presque deux tonneaux complets. Le mode angle s’adresse aux débutants : le manche fixe un angle d’inclinaison, et le drone se remet à plat dès que vous lâchez. La plupart des pilotes FPV volent en acro, des pilotes de course aux pilotes de freestyle : ce mode donne un contrôle total dans le vent et laisse le drone prendre n’importe quelle attitude. Appuyez sur les boutons pour comparer les trois modes.",
+      "p4": "Deux sécurités sont essentielles. Un interrupteur de la radio <strong>arme</strong> le drone, c’est-à-dire met en route les moteurs et la stabilisation. Le contrôleur refuse d’armer si les gaz ne sont pas au minimum ou si le drone est trop incliné. Si les paquets radio cessent d’arriver, le failsafe attend 1,5 seconde, puis coupe par défaut les moteurs, et le drone tombe. Le <strong>module GPS</strong> sur son mât est facultatif. Betaflight vole sans lui. Avec lui, la fonction GPS Rescue peut ramener le drone vers l’endroit où il a été armé si la liaison est perdue. Mais c’est une aide d’urgence, pas un retour automatique : le pilote doit reprendre la main, sinon le drone s’écrase.",
+      "stick": "Ce que commande le manche",
+      "limit": "Limite",
+      "path": "Le trajet d’un mouvement de manche jusqu’aux hélices",
+      "step1": "<strong>Radio</strong> : le pilote bouge un manche ; la radio le lit et envoie un paquet, 250 fois par seconde dans le modèle.",
+      "step2": "<strong>Antenne du récepteur</strong> : le récepteur du drone décode le paquet et transmet les valeurs des manches au contrôleur de vol.",
+      "step3": "<strong>Gyroscope</strong> : le contrôleur de vol lit la vitesse de rotation du drone, 8 000 fois par seconde.",
+      "step4": "<strong>Boucle PID</strong> : il compare la vitesse demandée à la vitesse mesurée et calcule quatre nouvelles valeurs de gaz.",
+      "step5": "<strong>ESC</strong> : chaque valeur part en un mot DShot de 16 bits en 27 microsecondes, et l’ESC minute les impulsions du moteur.",
+      "step6": "<strong>Hélices</strong> : les régimes changent, les poussées changent, et le drone s’incline, tourne ou monte."
+    },
+    "link": {
+      "title": "Deux radios : une pour diriger, une pour voir",
+      "p1": "Deux liaisons radio relient le <strong>poste du pilote</strong> au drone. La <strong>liaison de commande</strong> transporte la position des manches vers le drone. Dans le modèle, c’est ExpressLRS, un système libre qui fonctionne en 900 MHz ou en 2,4 GHz. Il envoie de petits paquets à une cadence fixe, de 50 à 1 000 fois par seconde en 2,4 GHz. Les paquets plus lents portent plus loin : le récepteur peut écouter chacun plus longtemps et décoder un signal plus faible. À 50 Hz, il entend des signaux jusqu’à −115 dBm ; à 500 Hz, seulement jusqu’à −105 dBm. Cet écart de 10 dB vaut environ 3,2 fois la portée en terrain dégagé. À faible cadence, en vue directe depuis une hauteur, une seule liaison 2,4 GHz a déjà dépassé 100 km.",
+      "p2": "La <strong>liaison vidéo</strong> fait le chemin inverse, depuis l’<strong>antenne vidéo</strong> à l’arrière. La vidéo analogique en 5,8 GHz est le choix classique : 40 canaux dans cinq bandes, une image en définition standard qui se noie doucement dans la neige quand le drone s’éloigne, et un délai d’environ 20 à 30 ms de la caméra à l’œil. Les systèmes numériques envoient une image 1080p à 100 images par seconde avec un délai d’environ 20 ms, et les meilleurs sont annoncés pour 10 à 15 km. Mais une bonne liaison analogique reste la solution au délai le plus court, et elle se dégrade en douceur au lieu de se figer. Appuyez sur les boutons pour comparer.",
+      "p3": "Les deux liaisons utilisent des antennes à polarisation circulaire : l’onde tourne sur elle-même en se propageant. Une réflexion sur le sol ou sur un mur inverse ce sens de rotation, si bien que l’antenne rejette l’essentiel du signal réfléchi qui, sinon, brouillerait l’image. Le masque place deux petits écrans 1080p devant les yeux du pilote, avec un champ de vision de 44 à 46 degrés. Une équipe sur le terrain ajoute en général un second écran pour qu’un navigateur suive aussi, installe l’antenne radio sur un mât et fait parfois voler un second drone très haut, en relais, pour faire passer les liaisons par-dessus une crête. Certains drones FPV remplacent les deux radios par une fibre optique très fine, déroulée depuis une bobine de 10 à 20 km : sans liaison radio, il n’y a rien à brouiller.",
+      "p4": "Avec la seconde rangée de boutons, changez la cadence des paquets et regardez trois chiffres bouger : le temps entre deux paquets, le signal le plus faible que le récepteur entend encore, et la portée comparée à 500 Hz. Les indicateurs du bas suivent le modèle : la distance au pilote et la force de la liaison de commande. Sur ce court vol, le drone ne s’éloigne jamais à plus de 400 m environ, et la liaison reste forte. Sur le terrain, les équipes travaillent à 10 à 20 km, et là, la cadence des paquets, les antennes et une vue directe dégagée décident si l’image tient. La puissance d’émission est le dernier levier, pas le premier.",
+      "latency": "Délai de la vidéo",
+      "picture": "Image",
+      "period": "Temps entre deux paquets",
+      "sensitivity": "Signal le plus faible encore entendu",
+      "reach": "Portée comparée à 500 Hz",
+      "distance": "Distance actuelle",
+      "signal": "Liaison de commande"
+    },
+    "power": {
+      "title": "Douze minutes en l’air",
+      "p1": "La <strong>batterie</strong> sur la plaque supérieure est un pack 6S : six cellules au lithium en série. Avec des cellules LiPo, cela fait 22,2 V nominaux et 25,2 V à pleine charge. Le pack Li-ion du modèle fait 21,6 V nominaux et 25,2 V à pleine charge. Les pilotes se posent vers 3,5 V par cellule, soit 21 V pour le pack, et ne descendent jamais sous 3 V par cellule, où les cellules s’abîment. Ce pack contient 4 200 mAh, environ 91 Wh, et pèse environ 450 g. Le taux C d’une batterie indique le courant qu’elle peut fournir, en multiple de sa capacité : une LiPo de 1 800 mAh en 95C pourrait en théorie débiter 171 A, quand une cellule Li-ion fournit 30 à 45 A.",
+      "p2": "Pourquoi du Li-ion pour la longue portée ? Pour l’énergie par kilo. Une LiPo 6S de 1 800 mAh stocke 40 Wh dans 288 g, environ 139 Wh/kg. Le pack Li-ion stocke 91 Wh dans 450 g, environ 200 Wh/kg, soit à peu près 45 % de plus. Le prix à payer, c’est le courant : les cellules Li-ion ne fournissent pas les pointes qu’exige un drone de course, ce qui ne gêne pas un éclaireur qui vole en croisière. Et c’est en croisière que l’énergie va le plus loin. Le stationnaire coûte plus de puissance qu’un vol en avant à vitesse modérée, parce que les hélices travaillent mieux dans de l’air en mouvement. Les pilotes longue portée tracent des routes qui gardent le drone en mouvement et limitent le stationnaire au minimum.",
+      "p3": "Faites glisser le curseur pour charger le drone. Chaque tranche de 100 g de plus augmente la masse totale, réduit le rapport poussée sur poids, augmente les gaz nécessaires au stationnaire et rogne l’autonomie. Le modèle compte 80 % de l’énergie du pack comme utilisable et la divise par la puissance qu’il faut pour voler en croisière à cette masse : cela donne environ 12 minutes avec la caméra à bord. Une plus grosse batterie n’arrange rien bien longtemps : plus de batterie, c’est plus de masse, donc plus de puissance pour la porter, et chaque pack de plus rapporte moins que le précédent. Les vrais drones longue portée de 7 pouces volent de 12 à 30 minutes ; un drone de freestyle de 5 pouces sur une petite LiPo tient environ 4 à 6 minutes.",
+      "p4": "Observez la tension pendant le vol. Elle s’affaisse sous la charge, car le courant qui traverse la résistance interne du pack coûte des volts, et elle remonte quand le drone relâche l’effort : un 6S peut afficher 21 V dans une montée brutale et 23 V en stationnaire. Le froid aggrave tout. À moins 20 °C, une cellule au lithium ne garde qu’environ 65 % de sa capacité, et sa résistance augmente, si bien que l’alerte de tension basse arrive tôt. Les pilotes gardent leurs packs au chaud jusqu’au décollage. Les indicateurs ci-dessous montrent la tension et le courant du pack pendant que le modèle vole, et la jauge de batterie en haut se remplit à partir d’eux.",
+      "payloadLabel": "Charge utile",
+      "weight": "Masse totale",
+      "twr": "Poussée sur poids",
+      "hover": "Gaz pour le stationnaire",
+      "minutes": "Autonomie",
+      "volts": "Tension actuelle du pack",
+      "amps": "Courant actuel"
+    },
+    "limits": {
+      "title": "Rapides, bon marché et partout",
+      "p1": "Vous voyez maintenant à travers le masque du pilote : c’est l’image de la caméra embarquée du drone, sur le chemin du retour. À quelle vitesse va-t-il ? Un drone longue portée de 7 pouces comme celui-ci plafonne à environ 140 km/h et croise à 60 à 80 km/h. Les drones de course vont plus vite : le RacerX de la Drone Racing League a été chronométré à 263 km/h officiels en 2017. Le record, lui, est d’un autre monde. Le 11 décembre 2025, le Peregreen V4, construit par Luke et Mike Bell en Afrique du Sud, a établi un record Guinness à 657,59 km/h pour un quadricoptère à batterie. C’est une machine conçue pour cela, rien à voir avec un drone FPV ordinaire. Appuyez sur les boutons pour voir combien de temps chacun mettrait à parcourir les 350 m jusqu’au <strong>carrefour</strong>.",
+      "p2": "La vraie limite sur le terrain, c’est le vent. Une règle simple dit de ne voler que si le vent reste sous les deux tiers de la vitesse maximale du drone, et les drones de cette taille tiennent un vent établi d’environ 32 à 40 km/h. Chaque rafale coûte de la batterie, car le drone doit s’incliner contre elle, et la poussée inclinée demande plus de puissance. C’est aussi là qu’un drone FPV se distingue d’un drone à caméra comme un Mavic. Un Mavic tient sa position grâce au GPS et à un baromètre quand vous lâchez les manches. Un drone FPV en acro ne tient que son attitude et part avec le vent. Rien ne l’arrête, à part le pilote.",
+      "p3": "C’est ce qui rend l’apprentissage difficile. La plupart des nouveaux pilotes s’écrasent encore et encore pendant leurs premières heures, alors ils commencent en simulateur : 20 à 60 heures sur un programme comme Velocidrone ou Liftoff avant le premier vrai vol, c’est le conseil habituel. Les premiers pilotes à voler avec un masque l’ont fait vers 2007, en loisir, et la course a suivi. Le premier championnat du monde s’est couru à Shenzhen en 2018, avec 128 pilotes de 34 pays, et c’est un garçon de 15 ans qui l’a gagné.",
+      "p4": "Bon marché et simples : voilà pourquoi ces drones sont partout. Un drone de loisir coûte de 550 à 950 dollars sans radio ni masque ; le kit de châssis seul revient à environ 130 à 150 dollars. Produit par milliers pour une armée, le drone seul coûte environ 400 à 500 dollars, et l’Ukraine prévoyait d’acheter 4,5 millions de drones FPV en 2025. En pratique, ils volent à environ 10 à 20 km du pilote. Pour aller plus loin, les équipes embarquent un relais sur un second drone : un système ukrainien est porté par un plus gros drone à 500 m, tient une heure en l’air et retransmet les signaux jusqu’à 30 km. Le <strong>poste du pilote</strong> du modèle est bien plus simple : un abri, une mallette, un mât avec une antenne, et un pilote sous son masque.",
+      "speed": "Vitesse maximale",
+      "field": "Temps pour les 350 m jusqu’au carrefour",
+      "who": "De quoi il s’agit"
+    }
+  },
+  "goggles": {
+    "caption": "Vue du masque"
+  }
+}

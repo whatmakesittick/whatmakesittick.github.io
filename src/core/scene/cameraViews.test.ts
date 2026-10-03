@@ -8,7 +8,7 @@ import type { FramingSlopes } from './lens';
 
 type View = 'front' | 'side' | 'chase';
 type Region = 'body';
-type Call = readonly [name: string, value: unknown];
+type Call = readonly [name: string, ...values: unknown[]];
 
 const SLOPES: FramingSlopes = { vertical: 0.3, horizontal: 0.5 };
 const BODY = new Box3(new Vector3(-1, 0, -2), new Vector3(1, 2, 2));
@@ -18,7 +18,7 @@ const CHASE_DISTANCE = { min: 1 };
 const VIEWS: Record<View, ViewSpec<Region>> = {
   front: { region: 'body', direction: [0, 0, 1], margin: FRONT_MARGIN },
   side: { region: 'body', direction: { single: [1, 0, 0], wide: [0, 1, 0] }, margin: 1 },
-  chase: { pose: () => CHASE_POSE, follow: true, distance: CHASE_DISTANCE },
+  chase: { pose: () => CHASE_POSE, follow: 'heading', distance: CHASE_DISTANCE },
 };
 
 interface Harness {
@@ -31,7 +31,7 @@ function createHarness(region: Box3 | null = BODY): Harness {
   const calls: Call[] = [];
   const rig: ViewRig = {
     framing: () => SLOPES,
-    follow: (anchor) => calls.push(['follow', anchor]),
+    follow: (anchor, mode) => calls.push(['follow', anchor, mode]),
     setDistanceLimits: (limits) => calls.push(['distance', limits]),
     jumpTo: (pose) => calls.push(['jumpTo', pose]),
     tweenTo: (pose) => calls.push(['tweenTo', pose]),
@@ -77,7 +77,7 @@ describe('CameraViews', () => {
     const { views, calls, anchor } = createHarness();
     views.frame('chase', true);
     expect(calls).toEqual([
-      ['follow', anchor],
+      ['follow', anchor, 'heading'],
       ['distance', CHASE_DISTANCE],
       ['tweenTo', CHASE_POSE],
     ]);
@@ -87,7 +87,7 @@ describe('CameraViews', () => {
     const { views, calls } = createHarness();
     views.frame('front', false);
     expect(calls).toEqual([
-      ['follow', null],
+      ['follow', null, undefined],
       ['distance', {}],
       ['jumpTo', views.pose('front')],
     ]);

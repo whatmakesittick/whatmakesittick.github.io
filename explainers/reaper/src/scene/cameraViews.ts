@@ -119,7 +119,7 @@ function followView(source: ChaseSource, spec: FollowSpec): CustomView {
       const chase = source();
       return chase ? followPose(chase, spec, slopes) : null;
     },
-    follow: true,
+    follow: 'position',
   };
 }
 

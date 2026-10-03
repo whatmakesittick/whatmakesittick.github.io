@@ -17,7 +17,7 @@ describe('camera views', () => {
     bit.position.set(0, -300, 0);
     const view = cameraViews(() => bit).bit as CustomView;
     const pose = view.pose(SLOPES);
-    expect(view.follow).toBe(true);
+    expect(view.follow).toBe('position');
     expect(pose).not.toBeNull();
     expect(pose!.position.z).toBeGreaterThan(0);
     expect(pose!.position.x).toBeGreaterThan(0);

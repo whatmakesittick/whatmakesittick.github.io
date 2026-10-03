@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Sphere, Vector3 } from 'three';
+import { PerspectiveCamera, Quaternion, Sphere, Vector3 } from 'three';
 import type { Box3, Object3D } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
@@ -17,6 +17,14 @@ import type { FramingSlopes, ViewportSize } from './lens';
 import { Listeners } from './listeners';
 
 const TARGET_FLOOR_MARGIN = 1;
+const WORLD_UP = new Vector3(0, 1, 0);
+
+export type FollowMode = 'position' | 'heading' | 'attitude';
+
+function twistAboutUp(turn: Quaternion): Quaternion {
+  turn.set(0, turn.y, 0, turn.w);
+  return turn.lengthSq() > 0 ? turn.normalize() : turn.identity();
+}
 
 export interface CameraDistance {
   min?: number;
@@ -28,6 +36,7 @@ export interface CameraOptions {
   far?: number;
   maxPolarAngle?: number;
   distance?: CameraDistance;
+  floorMargin?: number;
 }
 
 export class CameraRig {
@@ -35,10 +44,15 @@ export class CameraRig {
   readonly controls: OrbitControls;
   private tween: CameraTween | null = null;
   private anchor: Object3D | null = null;
+  private followMode: FollowMode = 'position';
   private readonly anchorPosition = new Vector3();
+  private readonly anchorRotation = new Quaternion();
   private readonly followedPosition = new Vector3();
+  private readonly followedRotation = new Quaternion();
   private readonly followShift = new Vector3();
+  private readonly followTurn = new Quaternion();
   private floorHeight = -Infinity;
+  private readonly floorMargin: number;
   private boundsRadius = 1;
   private readonly sceneDistance: CameraDistance;
   private distanceOverride: CameraDistance = {};
@@ -46,8 +60,14 @@ export class CameraRig {
   private readonly changes = new Listeners<[]>();
 
   constructor(domElement: HTMLElement, options: CameraOptions = {}) {
-    const { near = CAMERA_NEAR, far = CAMERA_FAR, maxPolarAngle = CAMERA_MAX_POLAR } = options;
+    const {
+      near = CAMERA_NEAR,
+      far = CAMERA_FAR,
+      maxPolarAngle = CAMERA_MAX_POLAR,
+      floorMargin = TARGET_FLOOR_MARGIN,
+    } = options;
     this.sceneDistance = options.distance ?? {};
+    this.floorMargin = floorMargin;
     this.camera = new PerspectiveCamera(CAMERA_FOV, 1, near, far);
     this.controls = new OrbitControls(this.camera, domElement);
     this.controls.enableDamping = true;
@@ -85,8 +105,10 @@ export class CameraRig {
     this.notifyChange();
   }
 
-  follow(anchor: Object3D | null): void {
+  follow(anchor: Object3D | null, mode: FollowMode = 'position'): void {
     this.anchor = anchor;
+    this.followMode = mode;
+    this.camera.up.copy(WORLD_UP);
     this.syncAnchor();
     this.notifyChange();
   }
@@ -130,13 +152,31 @@ export class CameraRig {
 
   private syncAnchor(): void {
     this.anchor?.getWorldPosition(this.anchorPosition);
+    this.anchor?.getWorldQuaternion(this.anchorRotation);
   }
 
   private followAnchor(): void {
     if (!this.anchor) return;
     const position = this.anchor.getWorldPosition(this.followedPosition);
+    const rotation = this.anchor.getWorldQuaternion(this.followedRotation);
     this.shift(this.followShift.subVectors(position, this.anchorPosition));
+    this.turnWith(position, rotation);
     this.anchorPosition.copy(position);
+    this.anchorRotation.copy(rotation);
+  }
+
+  private turnWith(pivot: Vector3, rotation: Quaternion): void {
+    if (this.followMode === 'position') return;
+    const turn = this.followTurn.copy(this.anchorRotation).invert().premultiply(rotation);
+    if (this.followMode === 'heading') twistAboutUp(turn);
+    this.rotateAbout(pivot, turn);
+    if (this.followMode === 'attitude') this.camera.up.copy(WORLD_UP).applyQuaternion(rotation);
+  }
+
+  private rotateAbout(pivot: Vector3, turn: Quaternion): void {
+    this.camera.position.sub(pivot).applyQuaternion(turn).add(pivot);
+    this.controls.target.sub(pivot).applyQuaternion(turn).add(pivot);
+    this.tween?.turn(pivot, turn);
   }
 
   private shift(delta: Vector3): void {
@@ -174,7 +214,7 @@ export class CameraRig {
   }
 
   private keepTargetAboveFloor(): void {
-    const minimum = this.floorHeight + TARGET_FLOOR_MARGIN;
+    const minimum = this.floorHeight + this.floorMargin;
     const shortfall = minimum - this.controls.target.y;
     if (shortfall <= 0) return;
     this.controls.target.y += shortfall;

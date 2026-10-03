@@ -37,7 +37,7 @@ describe('camera views', () => {
 
   it('follows the aircraft everywhere but the orbit and the strike', () => {
     (['chase', 'side', 'wide', 'nose'] as const).forEach((id) =>
-      expect(views[id].follow, id).toBe(true),
+      expect(views[id].follow, id).toBe('position'),
     );
     (['orbit', 'strike'] as const).forEach((id) => expect(views[id].follow, id).toBeFalsy());
   });

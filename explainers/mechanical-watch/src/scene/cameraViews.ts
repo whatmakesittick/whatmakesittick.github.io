@@ -1,6 +1,7 @@
 import { Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { toRadians } from '@core/math';
+import type { FollowMode } from '@core/scene/camera';
 import type { CustomView, FramedView, ViewSpec } from '@core/scene/cameraViews';
 import type { CameraPose } from '@core/scene/frameBox';
 import type { FramingSlopes } from '@core/scene/lens';
@@ -69,7 +70,7 @@ export function anchorPose(
 function anchoredView(
   anchor: () => Object3D | null,
   framing: AnchorFraming,
-  follow: boolean,
+  follow?: FollowMode,
 ): CustomView {
   return {
     pose: (slopes) => {
@@ -84,7 +85,7 @@ function anchoredView(
 export function cameraViews(anchors: ViewAnchors): Record<CameraView, ViewSpec<RegionId>> {
   return {
     ...FRAMED_VIEWS,
-    wheel: anchoredView(anchors.wheel, ANCHORED_VIEWS.wheel, true),
-    escapement: anchoredView(anchors.fork, ANCHORED_VIEWS.escapement, false),
+    wheel: anchoredView(anchors.wheel, ANCHORED_VIEWS.wheel, 'position'),
+    escapement: anchoredView(anchors.fork, ANCHORED_VIEWS.escapement),
   };
 }
