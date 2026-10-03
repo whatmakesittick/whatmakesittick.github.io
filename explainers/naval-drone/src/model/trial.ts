@@ -3,6 +3,12 @@ import type { SpeedMarkId } from '../ids';
 import { HULL_SPEED_KN, HUMP_PEAK_KN, PLANING_FROM_KN } from './hull';
 import { BOAT } from './layout';
 
+export interface SteppedRange {
+  min: number;
+  max: number;
+  step: number;
+}
+
 export const TRIAL_KNOTS = { min: 0, max: BOAT.topKnots, step: 0.1 } as const;
 export const THROTTLE_PERCENT = { min: 0, max: 100, step: 1 } as const;
 export const MARK_TOLERANCE_KN = 0.25;
@@ -17,13 +23,12 @@ export const SPEED_MARKS: Readonly<Record<SpeedMarkId, number>> = {
 
 const PERCENT = 100;
 
-export function roundToStep(value: number, step: number): number {
-  return Math.round(value / step) * step;
+export function stepTo(value: number, range: SteppedRange): number {
+  return Math.round(clamp(value, range.min, range.max) / range.step) * range.step;
 }
 
 export function trialKnotsOf(knots: number): number {
-  const stepped = roundToStep(clamp(knots, TRIAL_KNOTS.min, TRIAL_KNOTS.max), TRIAL_KNOTS.step);
-  return Number(stepped.toFixed(1));
+  return Number(stepTo(knots, TRIAL_KNOTS).toFixed(1));
 }
 
 export function throttleShareOf(percent: number): number {
@@ -31,7 +36,7 @@ export function throttleShareOf(percent: number): number {
 }
 
 export function throttlePercentOf(share: number): number {
-  return roundToStep(share * PERCENT, THROTTLE_PERCENT.step);
+  return stepTo(share * PERCENT, THROTTLE_PERCENT);
 }
 
 export function speedMarkAt(knots: number): SpeedMarkId | undefined {

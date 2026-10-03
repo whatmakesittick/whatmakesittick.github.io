@@ -6,6 +6,7 @@ import {
   THROTTLE_PERCENT,
   TRIAL_KNOTS,
   speedMarkAt,
+  stepTo,
   throttlePercentOf,
   throttleShareOf,
   trialKnotsOf,
@@ -29,11 +30,19 @@ describe('speed trial', () => {
     expect(trialKnotsOf(5.66)).toBe(5.7);
   });
 
+  it('keeps any value inside its range and on its step', () => {
+    const range = { min: 50, max: 1000, step: 10 };
+    expect(stepTo(333, range)).toBe(330);
+    expect(stepTo(10, range)).toBe(50);
+    expect(stepTo(2000, range)).toBe(1000);
+  });
+
   it('turns throttle percents into a share of full flow and back', () => {
     expect(throttleShareOf(55)).toBeCloseTo(0.55, 12);
     expect(throttleShareOf(140)).toBe(1);
     expect(throttleShareOf(-5)).toBe(0);
     expect(throttlePercentOf(0.694)).toBe(69);
+    expect(throttlePercentOf(1.2)).toBe(100);
   });
 
   it('finds the mark within a quarter knot and none between marks', () => {

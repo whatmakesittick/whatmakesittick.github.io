@@ -1,5 +1,4 @@
 import type { ExplainerStore, Playback, PlaybackState } from '@core/explainer';
-import { clamp } from '@core/math';
 import { createExplainerStore } from '@core/store';
 import { shallow } from 'zustand/vanilla/shallow';
 import type {
@@ -21,6 +20,7 @@ import {
   VIDEO_DELAY_MS,
   knotsAtThrottle,
   speedAt,
+  stepTo,
   throttleShareOf,
   trialKnotsOf,
 } from '../model';
@@ -66,10 +66,6 @@ export const CHAPTER_CONTROL_DEFAULTS: ChapterControls = {
   radarHeight: RADAR_HEIGHT_M.default,
   seaState: DEFAULT_SEA_STATE,
 };
-
-function stepTo(value: number, range: { min: number; max: number; step: number }): number {
-  return Math.round(clamp(value, range.min, range.max) / range.step) * range.step;
-}
 
 function presetFields(preset: Preset, state: NavalDroneFields): Partial<NavalDroneFields> {
   if (PRESETS[state.preset] === preset) return {};
