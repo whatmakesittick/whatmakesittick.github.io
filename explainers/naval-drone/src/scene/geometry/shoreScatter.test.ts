@@ -1,33 +1,43 @@
 import { describe, expect, it } from 'vitest';
 import { SLIPWAY } from '../../model/layout';
-import { gridHeight, terrainGrid } from './shoreGrid';
-import { SCRUB, TUFTS, scatterRocks, scatterScrub, scatterTufts } from './shoreScatter';
-import { slipwayGap, stationGap, trackHit } from './shoreTerrain';
+import { SCRUB_COUNT, scatterRocks, scatterScrub } from './shoreScatter';
+import type { TerrainGrid } from './shoreTerrain';
+import { slipwayGap, stationGap, terrainGrid } from './shoreTerrain';
 
 const grid = terrainGrid();
-const scrub = scatterScrub(grid);
-const tufts = scatterTufts(grid);
-const rocks = scatterRocks(grid);
+const scrub = scatterScrub();
+const rocks = scatterRocks();
+
+function cell(lines: readonly number[], value: number): number {
+  return lines.findIndex((line, index) => value >= line && value <= lines[index + 1]);
+}
+
+function meshHeight({ xs, zs, heights }: TerrainGrid, x: number, z: number): number {
+  const column = cell(xs, x);
+  const row = cell(zs, z);
+  const s = (x - xs[column]) / (xs[column + 1] - xs[column]);
+  const t = (z - zs[row]) / (zs[row + 1] - zs[row]);
+  const at = (dx: number, dz: number) => heights[(row + dz) * xs.length + column + dx];
+  if (s + t <= 1) return at(0, 0) + s * (at(1, 0) - at(0, 0)) + t * (at(0, 1) - at(0, 0));
+  return at(1, 1) + (1 - s) * (at(0, 1) - at(1, 1)) + (1 - t) * (at(1, 0) - at(1, 1));
+}
 
 describe('shore scatter', () => {
-  it('fills the scrub and grass budgets', () => {
-    expect(scrub).toHaveLength(SCRUB.count);
-    expect(tufts).toHaveLength(TUFTS.count);
+  it('fills the scrub budget', () => {
+    expect(scrub).toHaveLength(SCRUB_COUNT);
     expect(rocks.length).toBeGreaterThan(0);
   });
 
-  it('keeps plants off the slipway, the track and the station pad', () => {
-    [...scrub, ...tufts].forEach(({ x, z }) => {
+  it('keeps scrub off the slipway and the station pad', () => {
+    scrub.forEach(({ x, z }) => {
       expect(slipwayGap(x, z)).toBeGreaterThan(0);
       expect(stationGap(x, z)).toBeGreaterThan(0);
-      const hit = trackHit(x, z);
-      if (hit) expect(hit.distance).toBeGreaterThan(1);
     });
   });
 
   it('sinks every item into the ground so none float', () => {
-    [...scrub, ...tufts, ...rocks].forEach(({ x, y, z }) => {
-      expect(y).toBeLessThanOrEqual(gridHeight(grid, x, z));
+    [...scrub, ...rocks].forEach(({ x, y, z }) => {
+      expect(y).toBeLessThanOrEqual(meshHeight(grid, x, z));
     });
   });
 
@@ -36,6 +46,6 @@ describe('shore scatter', () => {
   });
 
   it('places the same items on every build', () => {
-    expect(scatterScrub(grid)).toEqual(scrub);
+    expect(scatterScrub()).toEqual(scrub);
   });
 });

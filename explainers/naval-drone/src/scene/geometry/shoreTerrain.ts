@@ -1,219 +1,133 @@
-import { Color, SplineCurve, Vector2 } from 'three';
+import { Color } from 'three';
 import { FULL_TURN, clamp, lerp, smoothstep } from '@core/math';
 import { GROUND_STATION, SHORELINE_X, SLIPWAY } from '../../model/layout';
 import { THEME } from '../../theme';
-import { centredNoise, fractalNoise, signedNoise } from './shoreNoise';
 
 export type Range = readonly [number, number];
-export type Spot = readonly [x: number, z: number];
 
-interface Rect {
-  x: Range;
-  z: Range;
+export interface TerrainGrid {
+  xs: readonly number[];
+  zs: readonly number[];
+  heights: Float32Array;
 }
 
-export interface TrackSample {
-  x: number;
-  z: number;
-  level: number;
+type Tint = readonly [colour: string, from: number, to: number, share: number, patch?: number];
+
+export const SLAB_THICKNESS = 0.35;
+export const APRON = { x: [-28, SLIPWAY.x[0]] as Range, z: [-4, 4] as Range } as const;
+export const SCRUB_PATCH = 19;
+
+const CALM_REACH = 60;
+const CALM_BLEND = 240;
+const COAST_SWING = 200;
+const COAST_SCALE = 900;
+const SHELF_SLOPE = 0.075;
+const SHELF_REACH = 80;
+const BEACH_SLOPE = 1 / 15;
+const BEACH_WIDTH = 30;
+const LAND_RISE = 0.012;
+const HILLS = [140, 900, 38, 520, 0.28, 0.78] as const;
+const DUNE_BAND = [22, 36, 110, 165] as const;
+const DUNE_CREST = 42;
+const DUNE_SPACING = 34;
+const DUNE_LUMPS = [28, 70] as const;
+const DUNE_HEIGHT = [2, 4, 260] as const;
+const DUNE_RIDGE = 0.42;
+const DUNE_EDGES = [0.22, 0.8] as const;
+const CUT_REVEAL = 0.16;
+const CUT_SINK = 0.12;
+const CUT_SHOULDER = 3;
+const STATION_FLAT = [17, 13] as const;
+const STATION_CORNER = 5;
+const STATION_BLEND = 16;
+const GRID_X: Range = [-1200, 160];
+const GRID_Z: Range = [-2500, 2500];
+const FINE_X: Range = [-130, 8];
+const FINE_Z: Range = [-120, 50];
+const CELL = 2.4;
+const GROWTH = 1.27;
+const SEA_GROWTH = 1.45;
+const CLEARANCE = 0.3;
+const EDGE_GAP = 0.02;
+const EDGE_INSET = 0.4;
+const PATCH = [24, 0.4, 0.62] as const;
+
+const TINTS: readonly Tint[] = [
+  ['#6c6151', -4, 1, 1],
+  [THEME.beach, 2, 6.5, 1],
+  ['#8a8858', 16, 34, 0.8, 31],
+  ['#6f6e50', 44, 85, 0.75],
+  ['#53573b', 30, 60, 0.85, SCRUB_PATCH],
+  [THEME.shore, 80, 150, 1],
+];
+
+const HASH = [127.1, 311.7, 74.7, 43758.5453] as const;
+const OCTAVES = 4;
+const MIDDLE = 0.5;
+const SWING_SEED = 3;
+const LUMPS_SEED = 11;
+const SIZE_SEED = 13;
+const HILLS_SEED = 17;
+const EPSILON = 1e-6;
+
+export function hash(x: number, y: number, seed = 0): number {
+  const value = Math.sin(x * HASH[0] + y * HASH[1] + seed * HASH[2]) * HASH[3];
+  return value - Math.floor(value);
 }
 
-export interface TrackHit {
-  distance: number;
-  level: number;
+function valueNoise(x: number, y: number, seed: number): number {
+  const x0 = Math.floor(x);
+  const y0 = Math.floor(y);
+  const tx = smoothstep(x - x0);
+  const corner = (dx: number, dy: number) => hash(x0 + dx, y0 + dy, seed);
+  const bottom = lerp(corner(0, 0), corner(1, 0), tx);
+  return lerp(bottom, lerp(corner(0, 1), corner(1, 1), tx), smoothstep(y - y0));
 }
 
-export const COAST = {
-  calm: 60,
-  blend: 240,
-  swing: { amplitude: 200, scale: 900 },
-  ripple: { amplitude: 30, scale: 220 },
-  bay: { from: 250, to: 2500, depth: 420 },
-} as const;
-
-export const SEA_BED = { shelfSlope: 0.075, shelfReach: 80, deepSlope: 0.02 } as const;
-
-export const LAND = {
-  beachSlope: 1 / 15,
-  beachWidth: 30,
-  rise: 0.012,
-  hills: { from: 140, to: 900, height: 38, scale: 520, edges: [0.28, 0.78] as Range },
-} as const;
-
-export const DUNES = {
-  rise: [22, 36] as Range,
-  fall: [110, 165] as Range,
-  firstCrest: 42,
-  spacing: 34,
-  warp: { scale: 140, reach: 0.9 },
-  hummock: [28, 70] as Range,
-  sizeScale: 260,
-  height: [2, 4] as Range,
-  ridgeShare: 0.42,
-  shapeEdges: [0.22, 0.8] as Range,
-  lumps: { height: 0.35, scale: 9 },
-} as const;
-
-export const SLIPWAY_WORKS = {
-  thickness: 0.35,
-  apron: { x: [-28, SLIPWAY.x[0]] as Range, z: [-4, 4] as Range },
-  reveal: 0.16,
-  sink: 0.12,
-  shoulder: 3,
-  edgeGap: 0.02,
-  innerInset: 0.4,
-} as const;
-
-export const STATION_SITE = {
-  centre: [GROUND_STATION[0], GROUND_STATION[2]] as Spot,
-  level: GROUND_STATION[1],
-  flat: [17, 13] as Spot,
-  corner: 5,
-  blend: 16,
-} as const;
-
-export const TRACK = {
-  points: [
-    [-28.4, 0],
-    [-36, -2.5],
-    [-46, -11],
-    [-55, -24],
-    [-61, -38],
-    [-64, -50.5],
-  ] as readonly Spot[],
-  halfWidth: 1.9,
-  shoulder: 7,
-  samples: 72,
-  smoothing: 10,
-  startBlend: 0.12,
-  startDrop: 0.1,
-} as const;
-
-export const SHORE_COLOURS = {
-  seabed: '#4f493d',
-  wet: '#6c6151',
-  beach: THEME.beach,
-  dry: '#c6b99c',
-  wrack: '#5f5646',
-  crest: '#c9bb9b',
-  grass: '#8a8858',
-  heath: '#6f6e50',
-  scrubby: '#53573b',
-  coast: THEME.shore,
-  coastLight: '#6a6850',
-  coastDark: '#33362c',
-  field: '#78744f',
-  gravel: '#8e897e',
-} as const;
-
-const TINT = {
-  wet: [-4, 1] as Range,
-  beach: [2, 6.5] as Range,
-  wrack: { at: 9, width: 1.2, scale: [5, 28] as Range, edges: [0.48, 0.72] as Range, share: 0.5 },
-  dry: [10, 22] as Range,
-  dryShare: 0.5,
-  grass: [16, 34] as Range,
-  grassScale: [14, 36] as Range,
-  grassEdges: [0.32, 0.6] as Range,
-  grassShare: 0.8,
-  heath: [44, 85] as Range,
-  heathShare: 0.75,
-  scrub: [30, 60] as Range,
-  scrubScale: 24,
-  scrubEdges: [0.4, 0.62] as Range,
-  scrubShare: 0.85,
-  blowout: { from: 0.55, scale: 60, edges: [0.45, 0.6] as Range, share: 0.7 },
-  coast: [80, 150] as Range,
-  coastScale: 140,
-  coastMix: 0.3,
-  fields: { scale: 420, edges: [0.5, 0.66] as Range, share: 0.45 },
-  grainScale: 7,
-  grain: 0.08,
-  gravelEdge: 0.75,
-} as const;
-
-const SEEDS = {
-  swing: 3,
-  ripple: 5,
-  warp: 7,
-  hummock: 11,
-  size: 13,
-  hills: 17,
-  scrub: 19,
-  coast: 23,
-  grain: 29,
-  grass: 31,
-  wrack: 37,
-  blowout: 41,
-  lumps: 43,
-  fields: 47,
-} as const;
-const NOISE_ROW = 0.5;
-const RIDGE_MIDDLE = 0.5;
-const DUNE_SIZE_OCTAVES = 2;
+export function noise(x: number, y: number, seed: number): number {
+  let total = 0;
+  let norm = 0;
+  for (let octave = 0, weight = 1; octave < OCTAVES; octave += 1, weight *= MIDDLE) {
+    total += weight * valueNoise(x / weight, y / weight, seed + octave);
+    norm += weight;
+  }
+  return total / norm;
+}
 
 export function shorelineX(z: number): number {
-  const reach = smoothstep(Math.abs(z), COAST.calm, COAST.calm + COAST.blend);
-  const { swing, ripple, bay } = COAST;
-  const sweep = swing.amplitude * centredNoise(z / swing.scale, NOISE_ROW, SEEDS.swing);
-  const wobble = ripple.amplitude * centredNoise(z / ripple.scale, NOISE_ROW, SEEDS.ripple);
-  const curve = Math.max(0, Math.abs(z) - bay.from) / (bay.to - bay.from);
-  return SHORELINE_X + reach * (sweep + wobble) + bay.depth * curve * curve;
-}
-
-export function inlandDistance(x: number, z: number): number {
-  return shorelineX(z) - x;
+  const reach = smoothstep(Math.abs(z), CALM_REACH, CALM_REACH + CALM_BLEND);
+  return SHORELINE_X + reach * COAST_SWING * (noise(z / COAST_SCALE, MIDDLE, SWING_SEED) - MIDDLE);
 }
 
 export function profileHeight(inland: number): number {
-  if (inland <= 0) {
-    const offshore = -inland;
-    const shelf = Math.min(offshore, SEA_BED.shelfReach) * SEA_BED.shelfSlope;
-    return -shelf - Math.max(0, offshore - SEA_BED.shelfReach) * SEA_BED.deepSlope;
+  if (inland > 0) {
+    return (
+      Math.min(inland, BEACH_WIDTH) * BEACH_SLOPE + Math.max(0, inland - BEACH_WIDTH) * LAND_RISE
+    );
   }
-  const beach = Math.min(inland, LAND.beachWidth) * LAND.beachSlope;
-  return beach + Math.max(0, inland - LAND.beachWidth) * LAND.rise;
+  return Math.max(inland, -SHELF_REACH) * SHELF_SLOPE;
 }
 
-function duneBand(inland: number): number {
-  return smoothstep(inland, ...DUNES.rise) * (1 - smoothstep(inland, ...DUNES.fall));
+export function band(value: number, edges: readonly number[]): number {
+  return smoothstep(value, edges[0], edges[1]) * (1 - smoothstep(value, edges[2], edges[3]));
 }
 
-function duneShape(x: number, z: number, inland: number): number {
-  const { warp } = DUNES;
-  const bend = centredNoise(x / warp.scale, z / warp.scale, SEEDS.warp) * warp.reach;
-  const phase = (inland - DUNES.firstCrest) / DUNES.spacing + bend;
-  const ridge = RIDGE_MIDDLE + RIDGE_MIDDLE * Math.cos(FULL_TURN * phase);
-  const [across, along] = DUNES.hummock;
-  const hummock = fractalNoise(x / across, z / along, SEEDS.hummock);
-  return smoothstep(lerp(hummock, ridge, DUNES.ridgeShare), ...DUNES.shapeEdges);
-}
-
-export function duneHeight(x: number, z: number, inland: number): number {
-  const band = duneBand(inland);
-  if (band <= 0) return 0;
-  const scale = DUNES.sizeScale;
-  const size = fractalNoise(x / scale, z / scale, SEEDS.size, DUNE_SIZE_OCTAVES);
-  return band * lerp(DUNES.height[0], DUNES.height[1], size) * duneShape(x, z, inland);
-}
-
-function lumpHeight(x: number, z: number, inland: number): number {
-  const { height, scale } = DUNES.lumps;
-  return duneBand(inland) * height * signedNoise(x / scale, z / scale, SEEDS.lumps);
-}
-
-function hillHeight(x: number, z: number, inland: number): number {
-  const { hills } = LAND;
-  const reach = smoothstep(inland, hills.from, hills.to);
-  if (reach <= 0) return 0;
-  const level = fractalNoise(x / hills.scale, z / hills.scale, SEEDS.hills);
-  return reach * hills.height * smoothstep(level, ...hills.edges);
+function duneHeight(x: number, z: number, inland: number): number {
+  const share = band(inland, DUNE_BAND);
+  if (share <= 0) return 0;
+  const wave = MIDDLE + MIDDLE * Math.cos((FULL_TURN * (inland - DUNE_CREST)) / DUNE_SPACING);
+  const lumps = noise(x / DUNE_LUMPS[0], z / DUNE_LUMPS[1], LUMPS_SEED);
+  const [low, high, scale] = DUNE_HEIGHT;
+  const tall = lerp(low, high, noise(x / scale, z / scale, SIZE_SEED));
+  return share * tall * smoothstep(lerp(lumps, wave, DUNE_RIDGE), ...DUNE_EDGES);
 }
 
 export function naturalHeight(x: number, z: number): number {
-  const inland = inlandDistance(x, z);
-  const dunes = duneHeight(x, z, inland) + lumpHeight(x, z, inland);
-  return profileHeight(inland) + dunes + hillHeight(x, z, inland);
+  const inland = shorelineX(z) - x;
+  const [from, to, height, scale, low, high] = HILLS;
+  const level = smoothstep(noise(x / scale, z / scale, HILLS_SEED), low, high);
+  const hills = smoothstep(inland, from, to) * height * level;
+  return profileHeight(inland) + duneHeight(x, z, inland) + hills;
 }
 
 export function slabTop(x: number): number {
@@ -221,187 +135,96 @@ export function slabTop(x: number): number {
   return lerp(SLIPWAY.top, SLIPWAY.foot, share);
 }
 
-const SLIPWAY_RECTS: readonly Rect[] = [
-  { x: SLIPWAY.x, z: SLIPWAY.z },
-  { x: SLIPWAY_WORKS.apron.x, z: SLIPWAY_WORKS.apron.z },
-];
-
-function rectGap(x: number, z: number, rect: Rect): number {
-  const dx = Math.max(rect.x[0] - x, 0, x - rect.x[1]);
-  const dz = Math.max(rect.z[0] - z, 0, z - rect.z[1]);
-  return Math.hypot(dx, dz);
+function rectGap(x: number, z: number, xs: Range, zs: Range): number {
+  return Math.hypot(Math.max(xs[0] - x, 0, x - xs[1]), Math.max(zs[0] - z, 0, z - zs[1]));
 }
 
 export function slipwayGap(x: number, z: number): number {
-  return Math.min(...SLIPWAY_RECTS.map((rect) => rectGap(x, z, rect)));
-}
-
-function slipwayCut(x: number, z: number, ground: number): number {
-  const gap = slipwayGap(x, z);
-  if (gap > SLIPWAY_WORKS.shoulder) return ground;
-  const top = slabTop(clamp(x, SLIPWAY_WORKS.apron.x[0], SLIPWAY.x[1]));
-  if (gap <= 0) return top - SLIPWAY_WORKS.thickness - SLIPWAY_WORKS.sink;
-  return lerp(top - SLIPWAY_WORKS.reveal, ground, smoothstep(gap, 0, SLIPWAY_WORKS.shoulder));
+  return Math.min(rectGap(x, z, SLIPWAY.x, SLIPWAY.z), rectGap(x, z, APRON.x, APRON.z));
 }
 
 export function stationGap(x: number, z: number): number {
-  const { centre, flat, corner } = STATION_SITE;
-  const qx = Math.max(Math.abs(x - centre[0]) - (flat[0] - corner), 0);
-  const qz = Math.max(Math.abs(z - centre[1]) - (flat[1] - corner), 0);
-  return Math.max(0, Math.hypot(qx, qz) - corner);
-}
-
-function stationGrade(x: number, z: number, ground: number): number {
-  const share = smoothstep(stationGap(x, z), 0, STATION_SITE.blend);
-  return lerp(STATION_SITE.level, ground, share);
-}
-
-function smoothed(values: readonly number[], reach: number): number[] {
-  return values.map((_, index) => {
-    const window = values.slice(Math.max(0, index - reach), index + reach + 1);
-    return window.reduce((sum, value) => sum + value, 0) / window.length;
-  });
-}
-
-function trackSamples(): readonly TrackSample[] {
-  const curve = new SplineCurve(TRACK.points.map(([x, z]) => new Vector2(x, z)));
-  const points = curve.getSpacedPoints(TRACK.samples);
-  const ground = points.map((point) =>
-    stationGrade(point.x, point.y, naturalHeight(point.x, point.y)),
-  );
-  const levels = smoothed(ground, TRACK.smoothing);
-  const start = SLIPWAY.top - TRACK.startDrop;
-  return points.map((point, index) => ({
-    x: point.x,
-    z: point.y,
-    level: lerp(start, levels[index], smoothstep(index / TRACK.samples, 0, TRACK.startBlend)),
-  }));
-}
-
-const TRACK_PATH = trackSamples();
-
-export function trackLine(): readonly TrackSample[] {
-  return TRACK_PATH;
-}
-const TRACK_REACH = TRACK.halfWidth + TRACK.shoulder;
-
-function bounds(values: readonly number[]): Range {
-  return [Math.min(...values) - TRACK_REACH, Math.max(...values) + TRACK_REACH];
-}
-
-const TRACK_BOX = {
-  x: bounds(TRACK_PATH.map((sample) => sample.x)),
-  z: bounds(TRACK_PATH.map((sample) => sample.z)),
-} as const;
-
-function segmentHit(x: number, z: number, from: TrackSample, to: TrackSample): TrackHit {
-  const dx = to.x - from.x;
-  const dz = to.z - from.z;
-  const along = clamp(((x - from.x) * dx + (z - from.z) * dz) / (dx * dx + dz * dz), 0, 1);
-  return {
-    distance: Math.hypot(x - from.x - along * dx, z - from.z - along * dz),
-    level: lerp(from.level, to.level, along),
-  };
-}
-
-function nearTrack(x: number, z: number): boolean {
-  const insideX = x >= TRACK_BOX.x[0] && x <= TRACK_BOX.x[1];
-  return insideX && z >= TRACK_BOX.z[0] && z <= TRACK_BOX.z[1];
-}
-
-export function trackHit(x: number, z: number): TrackHit | null {
-  if (!nearTrack(x, z)) return null;
-  let best: TrackHit | null = null;
-  for (let index = 1; index < TRACK_PATH.length; index += 1) {
-    const hit = segmentHit(x, z, TRACK_PATH[index - 1], TRACK_PATH[index]);
-    if (!best || hit.distance < best.distance) best = hit;
-  }
-  return best && best.distance < TRACK_REACH ? best : null;
-}
-
-function trackGrade(x: number, z: number, ground: number): number {
-  const hit = trackHit(x, z);
-  if (!hit) return ground;
-  return lerp(hit.level, ground, smoothstep(hit.distance, TRACK.halfWidth, TRACK_REACH));
+  const qx = Math.max(Math.abs(x - GROUND_STATION[0]) - STATION_FLAT[0] + STATION_CORNER, 0);
+  const qz = Math.max(Math.abs(z - GROUND_STATION[2]) - STATION_FLAT[1] + STATION_CORNER, 0);
+  return Math.max(0, Math.hypot(qx, qz) - STATION_CORNER);
 }
 
 export function shoreHeight(x: number, z: number): number {
-  const natural = naturalHeight(x, z);
-  return slipwayCut(x, z, trackGrade(x, z, stationGrade(x, z, natural)));
+  const level = smoothstep(stationGap(x, z), 0, STATION_BLEND);
+  const ground = lerp(GROUND_STATION[1], naturalHeight(x, z), level);
+  const gap = slipwayGap(x, z);
+  if (gap > CUT_SHOULDER) return ground;
+  const top = slabTop(clamp(x, APRON.x[0], SLIPWAY.x[1]));
+  if (gap <= 0) return top - SLAB_THICKNESS - CUT_SINK;
+  return lerp(top - CUT_REVEAL, ground, smoothstep(gap, 0, CUT_SHOULDER));
 }
 
-const COLOURS = Object.fromEntries(
-  Object.entries(SHORE_COLOURS).map(([name, value]) => [name, new Color(value)]),
-) as Record<keyof typeof SHORE_COLOURS, Color>;
-const SHADE = new Color();
-
-export function scrubPatch(x: number, z: number): number {
-  const patch = fractalNoise(x / TINT.scrubScale, z / TINT.scrubScale, SEEDS.scrub);
-  return smoothstep(patch, ...TINT.scrubEdges);
+export function patchShare(x: number, z: number, seed: number): number {
+  const [scale, low, high] = PATCH;
+  return smoothstep(noise(x / scale, z / scale, seed), low, high);
 }
 
-export function grassPatch(x: number, z: number): number {
-  const [across, along] = TINT.grassScale;
-  return smoothstep(fractalNoise(x / across, z / along, SEEDS.grass), ...TINT.grassEdges);
-}
-
-function wrackShare(x: number, z: number, inland: number): number {
-  const { at, width, scale, edges, share } = TINT.wrack;
-  const line = 1 - smoothstep(Math.abs(inland - at), 0, width);
-  return line * smoothstep(fractalNoise(x / scale[0], z / scale[1], SEEDS.wrack), ...edges) * share;
-}
-
-function sandColour(x: number, z: number, inland: number, target: Color): Color {
-  target.copy(COLOURS.seabed).lerp(COLOURS.wet, smoothstep(inland, ...TINT.wet));
-  target.lerp(COLOURS.beach, smoothstep(inland, ...TINT.beach));
-  target.lerp(COLOURS.dry, smoothstep(inland, ...TINT.dry) * TINT.dryShare);
-  return target.lerp(COLOURS.wrack, wrackShare(x, z, inland));
-}
-
-function plantColour(x: number, z: number, inland: number, target: Color): Color {
-  const grass = smoothstep(inland, ...TINT.grass) * grassPatch(x, z);
-  target.lerp(COLOURS.grass, grass * TINT.grassShare);
-  target.lerp(COLOURS.heath, smoothstep(inland, ...TINT.heath) * TINT.heathShare);
-  const scrub = smoothstep(inland, ...TINT.scrub) * scrubPatch(x, z);
-  return target.lerp(COLOURS.scrubby, scrub * TINT.scrubShare);
-}
-
-function blowoutColour(x: number, z: number, inland: number, target: Color): Color {
-  const { from, scale, edges, share } = TINT.blowout;
-  const relief = duneHeight(x, z, inland) / DUNES.height[1];
-  const bare = smoothstep(fractalNoise(x / scale, z / scale, SEEDS.blowout), ...edges);
-  return target.lerp(COLOURS.crest, smoothstep(relief, from, 1) * bare * share);
-}
-
-function coastColour(x: number, z: number, inland: number, target: Color): Color {
-  const scale = TINT.coastScale;
-  const variation = fractalNoise(x / scale, z / scale, SEEDS.coast);
-  SHADE.copy(COLOURS.coastDark).lerp(COLOURS.coastLight, variation);
-  SHADE.lerp(COLOURS.coast, TINT.coastMix);
-  const { fields } = TINT;
-  const field = smoothstep(
-    fractalNoise(x / fields.scale, z / fields.scale, SEEDS.fields),
-    ...fields.edges,
-  );
-  SHADE.lerp(COLOURS.field, field * fields.share);
-  return target.lerp(SHADE, smoothstep(inland, ...TINT.coast));
-}
-
-function worksColour(x: number, z: number, target: Color): Color {
-  const hit = trackHit(x, z);
-  const edge = TRACK.halfWidth * TINT.gravelEdge;
-  const track = hit ? 1 - smoothstep(hit.distance, edge, TRACK.halfWidth) : 0;
-  const station = 1 - smoothstep(stationGap(x, z), 0, STATION_SITE.corner);
-  return target.lerp(COLOURS.gravel, Math.max(track, station));
-}
+const PALETTE = TINTS.map(([colour, ...rest]) => [new Color(colour), ...rest] as const);
+const SEABED = new Color('#4f493d');
+const GRAVEL = new Color('#8e897e');
 
 export function shoreColour(x: number, z: number, target: Color): Color {
-  const inland = inlandDistance(x, z);
-  sandColour(x, z, inland, target);
-  plantColour(x, z, inland, target);
-  blowoutColour(x, z, inland, target);
-  coastColour(x, z, inland, target);
-  worksColour(x, z, target);
-  const grain = centredNoise(x / TINT.grainScale, z / TINT.grainScale, SEEDS.grain) * TINT.grain;
-  return target.multiplyScalar(1 + grain);
+  const inland = shorelineX(z) - x;
+  target.copy(SEABED);
+  PALETTE.forEach(([tone, from, to, share, patch]) => {
+    const spread = patch ? patchShare(x, z, patch) : 1;
+    target.lerp(tone, smoothstep(inland, from, to) * share * spread);
+  });
+  return target.lerp(GRAVEL, 1 - smoothstep(stationGap(x, z), 0, STATION_CORNER));
+}
+
+function outward(start: number, limit: number, growth: number): number[] {
+  const lines: number[] = [];
+  const direction = Math.sign(limit - start);
+  for (
+    let size = CELL * growth, at = start + direction * size;
+    direction * (limit - at) > EPSILON;
+  ) {
+    lines.push(at);
+    size *= growth;
+    at += direction * size;
+  }
+  return lines;
+}
+
+export function gridLines(
+  extent: Range,
+  fine: Range,
+  growth: Range,
+  keep: readonly number[],
+): number[] {
+  const inner: number[] = [];
+  for (let at = fine[0]; at <= fine[1] + EPSILON; at += CELL) inner.push(at);
+  const base = [
+    ...outward(fine[0], extent[0], growth[0]),
+    ...inner,
+    ...outward(inner[inner.length - 1], extent[1], growth[1]),
+  ];
+  const spaced = base.filter((line) =>
+    keep.every((kept) => Math.abs(kept - line) > CELL * CLEARANCE),
+  );
+  return [extent[0], ...spaced, ...keep, extent[1]].sort((a, b) => a - b);
+}
+
+function breaks(edges: readonly number[]): number[] {
+  return edges.flatMap((edge, index) => {
+    const inward = index % 2 === 0 ? 1 : -1;
+    return [edge - inward * EDGE_GAP, edge + inward * EDGE_INSET];
+  });
+}
+
+export function terrainGrid(): TerrainGrid {
+  const xs = gridLines(GRID_X, FINE_X, [GROWTH, SEA_GROWTH], breaks([APRON.x[0], SLIPWAY.x[1]]));
+  const zEdges = [SLIPWAY.z[0], SLIPWAY.z[1], APRON.z[0], APRON.z[1]];
+  const zs = gridLines(GRID_Z, FINE_Z, [GROWTH, GROWTH], breaks(zEdges));
+  const heights = new Float32Array(xs.length * zs.length);
+  zs.forEach((z, row) =>
+    xs.forEach((x, column) => (heights[row * xs.length + column] = shoreHeight(x, z))),
+  );
+  return { xs, zs, heights };
 }

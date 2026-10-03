@@ -1,234 +1,117 @@
-import { BufferAttribute, BufferGeometry } from 'three';
-import type { Mesh } from 'three';
+import { BoxGeometry, Matrix4 } from 'three';
+import type { BufferGeometry, Mesh, Texture } from 'three';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
-import type { MaterialFinish } from '@core/scene/materials';
 import { SLIPWAY } from '../../../model/layout';
-import { SLIPWAY_WORKS, slabTop } from '../../geometry/shoreTerrain';
+import { THEME } from '../../../theme';
+import { APRON, SLAB_THICKNESS } from '../../geometry/shoreTerrain';
 import { mergeParts, partMesh } from '../context';
 import type { PartContext } from '../context';
-import { SLIPWAY_MAP, slipwayRoughness, slipwayTexture, slipwayUv } from './shoreMaps';
+import { canvasTexture, mottle } from '../surfaces';
 
-type Corner = readonly [x: number, y: number, z: number];
-type Quad = readonly [Corner, Corner, Corner, Corner];
-type Facing = 'top' | 'side' | 'end';
+type Span = readonly [number, number];
 
-export const SLIPWAY_SHAPE = {
-  kerb: { width: SLIPWAY_MAP.kerbWidth, height: 0.18, end: 0 },
-  finish: { roughness: 1, metalness: 0, envMapIntensity: 0.5 },
-} as const;
+const KERB_WIDTH = 0.25;
+const KERB_HEIGHT = 0.18;
+const KERB_END = 0;
+const MAP_SIZE = [2048, 512] as const;
+const SIDE_Z = 2.4;
+const MOTTLE = { cells: [240, 60] as const, strength: 0.08, seed: 41 };
+const GROOVE_PITCH = 0.15;
+const GROOVE_WIDTH = 0.025;
+const GROOVE_COLOUR = 'rgba(40, 40, 36, 0.38)';
+const WATER_MARKS = [
+  [0.3, 0.35, '#7c7b75'],
+  [0.08, 0.45, '#76825c'],
+] as const;
+const FINISH = { color: '#ffffff', roughness: 0.85, envMapIntensity: 0.5 } as const;
 
-const XYZ = 3;
-const UV = 2;
-const QUAD_INDEX = [0, 1, 2, 0, 2, 3];
-const SIDES = [-1, 1] as const;
+const SPAN: Span = [APRON.x[0], SLIPWAY.x[1]];
+const SLOPE = (SLIPWAY.foot - SLIPWAY.top) / (SLIPWAY.x[1] - SLIPWAY.x[0]);
+const UPRIGHT = 0.5;
+const WHITE = '#ffffff';
 
-function bottom(x: number): number {
-  return slabTop(x) - SLIPWAY_WORKS.thickness;
+function u(x: number): number {
+  return (x - SPAN[0]) / (SPAN[1] - SPAN[0]);
 }
 
-function kerbTop(x: number): number {
-  return slabTop(x) + SLIPWAY_SHAPE.kerb.height;
+function v(z: number): number {
+  return (z - APRON.z[0]) / (APRON.z[1] - APRON.z[0]);
 }
 
-function sideUv([x, y]: Corner): [number, number] {
-  return slipwayUv(x, SLIPWAY_MAP.sideBand[0] + y - bottom(x));
+function block(x: Span, y: number, height: number, z: number, width: number): BufferGeometry {
+  return new BoxGeometry(x[1] - x[0], height, width).translate(
+    (x[0] + x[1]) / 2,
+    y + height / 2,
+    z,
+  );
 }
 
-function endUv([x, y, z]: Corner): [number, number] {
-  const across = SLIPWAY_MAP.plainX[0] + (z - SLIPWAY_MAP.z[0]);
-  return slipwayUv(across, SLIPWAY_MAP.sideBand[0] + y - bottom(x));
+function sloped(geometry: BufferGeometry): BufferGeometry {
+  geometry.applyMatrix4(new Matrix4().makeShear(SLOPE, 0, 0, 0, 0, 0));
+  return geometry.translate(0, SLIPWAY.top - SLOPE * SLIPWAY.x[0], 0);
 }
 
-const UV_BY_FACING: Readonly<Record<Facing, (corner: Corner) => [number, number]>> = {
-  top: ([x, , z]) => slipwayUv(x, z),
-  side: sideUv,
-  end: endUv,
-};
-
-function quad(corners: Quad, facing: Facing): BufferGeometry {
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new BufferAttribute(new Float32Array(corners.flat()), XYZ));
-  const uvs = corners.flatMap((corner) => UV_BY_FACING[facing](corner));
-  geometry.setAttribute('uv', new BufferAttribute(new Float32Array(uvs), UV));
-  geometry.setIndex(QUAD_INDEX);
-  geometry.computeVertexNormals();
+function mapped(geometry: BufferGeometry): BufferGeometry {
+  const position = geometry.getAttribute('position');
+  const normal = geometry.getAttribute('normal');
+  const uv = geometry.getAttribute('uv');
+  for (let index = 0; index < position.count; index += 1) {
+    const z =
+      Math.abs(normal.getY(index)) > UPRIGHT ? position.getZ(index) : SIDE_Z + position.getY(index);
+    uv.setXY(index, u(position.getX(index)), v(z));
+  }
   return geometry;
 }
 
-function deck(from: number, to: number, halfWidth: number): BufferGeometry {
-  return quad(
-    [
-      [from, slabTop(from), -halfWidth],
-      [from, slabTop(from), halfWidth],
-      [to, slabTop(to), halfWidth],
-      [to, slabTop(to), -halfWidth],
-    ],
-    'top',
-  );
-}
-
-function rampTop(): BufferGeometry[] {
-  const [x0, x1] = SLIPWAY.x;
-  const { kerb } = SLIPWAY_SHAPE;
-  return [deck(x0, kerb.end, SLIPWAY.z[1] - kerb.width), deck(kerb.end, x1, SLIPWAY.z[1])];
-}
-
-function mirrored(side: number, corners: Quad): Quad {
-  return side > 0 ? corners : [corners[0], corners[3], corners[2], corners[1]];
-}
-
-function outerSide(side: number): BufferGeometry[] {
-  const [x0, x1] = SLIPWAY.x;
-  const end = SLIPWAY_SHAPE.kerb.end;
-  const z = side * SLIPWAY.z[1];
-  const face = (from: number, to: number, top: (x: number) => number) =>
-    quad(
-      mirrored(side, [
-        [from, top(from), z],
-        [from, bottom(from), z],
-        [to, bottom(to), z],
-        [to, top(to), z],
-      ]),
-      'side',
-    );
-  return [face(x0, end, kerbTop), face(end, x1, slabTop)];
-}
-
-function kerb(side: number): BufferGeometry[] {
-  const x0 = SLIPWAY.x[0];
-  const x1 = SLIPWAY_SHAPE.kerb.end;
-  const outer = side * SLIPWAY.z[1];
-  const inner = side * (SLIPWAY.z[1] - SLIPWAY_SHAPE.kerb.width);
-  const faces: [Quad, Facing][] = [
-    [
-      [
-        [x0, kerbTop(x0), inner],
-        [x0, kerbTop(x0), outer],
-        [x1, kerbTop(x1), outer],
-        [x1, kerbTop(x1), inner],
-      ],
-      'top',
-    ],
-    [
-      [
-        [x0, slabTop(x0), inner],
-        [x0, kerbTop(x0), inner],
-        [x1, kerbTop(x1), inner],
-        [x1, slabTop(x1), inner],
-      ],
-      'side',
-    ],
-    [
-      [
-        [x0, slabTop(x0), outer],
-        [x0, kerbTop(x0), outer],
-        [x0, kerbTop(x0), inner],
-        [x0, slabTop(x0), inner],
-      ],
-      'end',
-    ],
-    [
-      [
-        [x1, kerbTop(x1), outer],
-        [x1, slabTop(x1), outer],
-        [x1, slabTop(x1), inner],
-        [x1, kerbTop(x1), inner],
-      ],
-      'end',
-    ],
-  ];
-  return faces.map(([corners, facing]) => quad(mirrored(side, corners), facing));
-}
-
-function toe(): BufferGeometry {
-  const x = SLIPWAY.x[1];
-  const [z0, z1] = SLIPWAY.z;
-  return quad(
-    [
-      [x, slabTop(x), z1],
-      [x, bottom(x), z1],
-      [x, bottom(x), z0],
-      [x, slabTop(x), z0],
-    ],
-    'end',
-  );
-}
-
-function apron(): BufferGeometry[] {
-  const [x0, x1] = SLIPWAY_WORKS.apron.x;
-  const [z0, z1] = SLIPWAY_WORKS.apron.z;
-  const top = SLIPWAY.top;
-  const base = top - SLIPWAY_WORKS.thickness;
-  const front = (from: number, to: number): BufferGeometry =>
-    quad(
-      [
-        [x1, top, to],
-        [x1, base, to],
-        [x1, base, from],
-        [x1, top, from],
-      ],
-      'end',
-    );
-  return [
-    quad(
-      [
-        [x0, top, z0],
-        [x0, top, z1],
-        [x1, top, z1],
-        [x1, top, z0],
-      ],
-      'top',
-    ),
-    quad(
-      [
-        [x0, top, z0],
-        [x0, base, z0],
-        [x0, base, z1],
-        [x0, top, z1],
-      ],
-      'end',
-    ),
-    quad(
-      [
-        [x0, top, z0],
-        [x1, top, z0],
-        [x1, base, z0],
-        [x0, base, z0],
-      ],
-      'side',
-    ),
-    quad(
-      [
-        [x0, base, z1],
-        [x1, base, z1],
-        [x1, top, z1],
-        [x0, top, z1],
-      ],
-      'side',
-    ),
-    front(z0, SLIPWAY.z[0]),
-    front(SLIPWAY.z[1], z1),
-  ];
-}
-
 export function slipwayGeometry(): BufferGeometry {
-  return mergeParts([
-    ...rampTop(),
-    ...SIDES.flatMap(kerb),
-    ...SIDES.flatMap(outerSide),
-    toe(),
-    ...apron(),
-  ]);
+  const kerbZ = SLIPWAY.z[1] - KERB_WIDTH / 2;
+  const kerbs = [-kerbZ, kerbZ].map((z) =>
+    sloped(block([SLIPWAY.x[0], KERB_END], 0, KERB_HEIGHT, z, KERB_WIDTH)),
+  );
+  const slab = block(SLIPWAY.x, -SLAB_THICKNESS, SLAB_THICKNESS, 0, SLIPWAY.z[1] - SLIPWAY.z[0]);
+  const apron = block(
+    APRON.x,
+    SLIPWAY.top - SLAB_THICKNESS,
+    SLAB_THICKNESS,
+    0,
+    APRON.z[1] - APRON.z[0],
+  );
+  return mergeParts([sloped(slab), ...kerbs, apron].map(mapped));
+}
+
+function xAt(level: number): number {
+  return SLIPWAY.x[0] + (level - SLIPWAY.top) / SLOPE;
+}
+
+function slipwayTexture(): Texture {
+  return canvasTexture(MAP_SIZE[0], MAP_SIZE[1], (pen, width, height) => {
+    pen.fillStyle = THEME.concrete;
+    pen.fillRect(0, 0, width, height);
+    mottle(pen, width, height, MOTTLE);
+    const inner = SLIPWAY.z[1] - KERB_WIDTH;
+    const top = v(-inner) * height;
+    const groove = (GROOVE_WIDTH * width) / (SPAN[1] - SPAN[0]);
+    pen.fillStyle = GROOVE_COLOUR;
+    for (let x = SLIPWAY.x[0] + GROOVE_PITCH; x < SLIPWAY.x[1]; x += GROOVE_PITCH) {
+      pen.fillRect(u(x) * width, top, groove, v(inner) * height - top);
+    }
+    pen.globalCompositeOperation = 'multiply';
+    WATER_MARKS.forEach(([level, fade, tone]) => {
+      const gradient = pen.createLinearGradient(
+        u(xAt(level + fade)) * width,
+        0,
+        u(xAt(level - fade)) * width,
+        0,
+      );
+      gradient.addColorStop(0, WHITE);
+      gradient.addColorStop(1, tone);
+      pen.fillStyle = gradient;
+      pen.fillRect(0, 0, width, height);
+    });
+  });
 }
 
 export function createSlipway(context: PartContext): Mesh {
-  const finish: MaterialFinish = {
-    color: '#ffffff',
-    map: context.tracker.track(slipwayTexture()),
-    roughnessMap: context.tracker.track(slipwayRoughness()),
-    ...SLIPWAY_SHAPE.finish,
-  };
-  const mesh = partMesh(context, slipwayGeometry(), STRUCTURE_GROUP, finish);
-  mesh.name = 'slipway';
-  return mesh;
+  const map = context.tracker.track(slipwayTexture());
+  return partMesh(context, slipwayGeometry(), STRUCTURE_GROUP, { ...FINISH, map });
 }

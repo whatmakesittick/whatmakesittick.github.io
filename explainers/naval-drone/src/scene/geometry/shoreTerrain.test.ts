@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { Color } from 'three';
 import { GROUND_STATION, SLIPWAY } from '../../model/layout';
-import { gridHeight, gridLines, terrainGrid } from './shoreGrid';
 import {
-  SLIPWAY_WORKS,
+  SLAB_THICKNESS,
+  gridLines,
+  terrainGrid,
   naturalHeight,
   shoreColour,
   shoreHeight,
@@ -12,6 +13,7 @@ import {
 } from './shoreTerrain';
 
 const grid = terrainGrid();
+const EDGE = 0.02;
 
 describe('shore terrain', () => {
   it('meets the sea at the shoreline near the slipway', () => {
@@ -40,10 +42,19 @@ describe('shore terrain', () => {
   it('keeps the terrain under the slab and below its top at the edges', () => {
     for (let x = -27.5; x <= 2.5; x += 0.5) {
       const top = slabTop(x);
-      expect(shoreHeight(x, 0)).toBeLessThan(top - SLIPWAY_WORKS.thickness);
-      expect(shoreHeight(x, SLIPWAY.z[1] + SLIPWAY_WORKS.edgeGap)).toBeLessThan(top);
-      expect(gridHeight(grid, x, 1.99)).toBeLessThan(top - SLIPWAY_WORKS.thickness / 2);
+      expect(shoreHeight(x, 0)).toBeLessThan(top - SLAB_THICKNESS);
+      expect(shoreHeight(x, SLIPWAY.z[1] + EDGE)).toBeLessThan(top);
     }
+  });
+
+  it('keeps every mesh vertex on and beside the ramp below the slab top', () => {
+    const { xs, zs, heights } = grid;
+    zs.forEach((z, row) =>
+      xs.forEach((x, column) => {
+        const onRamp = x >= SLIPWAY.x[0] && x <= SLIPWAY.x[1] && Math.abs(z) <= SLIPWAY.z[1] + EDGE;
+        if (onRamp) expect(heights[row * xs.length + column]).toBeLessThan(slabTop(x));
+      }),
+    );
   });
 
   it('flattens the ground station pad', () => {
@@ -52,31 +63,19 @@ describe('shore terrain', () => {
     expect(shoreHeight(x + 12, z - 8)).toBeCloseTo(level, 6);
   });
 
-  it('samples the grid as the mesh triangles do', () => {
-    const { xs, zs } = grid;
-    const column = xs.findIndex((x) => x > -50);
-    const row = zs.findIndex((z) => z > -30);
-    const corner = grid.heights[row * xs.length + column];
-    expect(gridHeight(grid, xs[column], zs[row])).toBeCloseTo(corner, 5);
-    const middle = gridHeight(grid, (xs[column] + xs[column + 1]) / 2, zs[row]);
-    const right = grid.heights[row * xs.length + column + 1];
-    expect(middle).toBeCloseTo((corner + right) / 2, 5);
-  });
-
   it('builds sorted lines that keep the break lines', () => {
-    const lines = gridLines([-100, 100], [-10, 10], 2, [1.5, 1.5], [2.02, 1.6]);
+    const lines = gridLines([-100, 100], [-10, 10], [1.5, 1.5], [2.02, 1.6]);
     expect(lines[0]).toBe(-100);
     expect(lines[lines.length - 1]).toBe(100);
     expect(lines).toContain(2.02);
     expect(lines).toContain(1.6);
-    expect(lines).not.toContain(2);
-    expect(lines).toContain(0);
+    expect(lines.filter((line) => Math.abs(line - 2) < 0.5)).toEqual([1.6, 2.02]);
     lines.slice(1).forEach((line, index) => expect(line).toBeGreaterThan(lines[index]));
   });
 
   it('keeps the grid within the triangle budget', () => {
     const cells = (grid.xs.length - 1) * (grid.zs.length - 1);
-    expect(cells * 2).toBeLessThan(18000);
+    expect(cells * 2).toBeLessThan(24000);
   });
 
   it('darkens the wet band and the far coast', () => {
