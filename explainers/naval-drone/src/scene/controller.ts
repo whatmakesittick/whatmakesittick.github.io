@@ -2,7 +2,7 @@ import type { Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
-import type { AssemblyState, CameraView, RegionId } from '../ids';
+import type { AnchorId, AssemblyState, CameraView, RegionId } from '../ids';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
 import { VIEW_DISTANCE, cameraViews } from './cameraViews';
@@ -17,6 +17,7 @@ export type NavalDroneControllerDependencies = Pick<
 export type ViewFramer = Pick<CameraViews<CameraView>, 'frame'>;
 
 const SEA_CLEARANCE_M = 1;
+const FOLLOWED_ANCHOR: Partial<Record<CameraView, AnchorId>> = { eye: 'dome' };
 
 export class NavalDroneController {
   readonly views: ViewFramer;
@@ -26,6 +27,7 @@ export class NavalDroneController {
   private assembly: Assembly | null = null;
   private state: AssemblyState | null = null;
   private cancelWarmUp: () => void = () => {};
+  private followed: AnchorId = 'boat';
 
   constructor(dependencies: NavalDroneControllerDependencies) {
     this.dependencies = dependencies;
@@ -33,7 +35,7 @@ export class NavalDroneController {
     this.cameraViews = new CameraViews(dependencies.rig, {
       views: cameraViews(() => this.followTarget()),
       region: (id) => this.assembly?.region(id) ?? null,
-      anchor: () => this.assembly?.anchor('boat') ?? null,
+      anchor: () => this.assembly?.anchor(this.followed) ?? null,
     });
     this.views = { frame: (view, animate, variant) => this.frame(view, animate, variant) };
   }
@@ -77,6 +79,7 @@ export class NavalDroneController {
   }
 
   private frame(view: CameraView, animate: boolean, variant?: string): void {
+    this.followed = FOLLOWED_ANCHOR[view] ?? 'boat';
     this.cameraViews.frame(view, animate, variant);
     this.limitLookUp(view);
   }

@@ -2,7 +2,7 @@ import type { Box3, Group, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, PartId, Point, RegionId } from '../ids';
-import { createPlaceholderAssembly } from './placeholderAssembly';
+import { createNavalDroneAssembly } from './navalDroneAssembly';
 
 export interface AssemblyResources {
   materials: MaterialLibrary;
@@ -29,5 +29,5 @@ export interface Assembly {
 }
 
 export function createAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
-  return createPlaceholderAssembly(resources, state);
+  return createNavalDroneAssembly(resources, state);
 }

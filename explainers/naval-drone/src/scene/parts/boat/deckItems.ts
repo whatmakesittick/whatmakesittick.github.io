@@ -11,7 +11,7 @@ import {
   Vector2,
   Vector3,
 } from 'three';
-import type { BufferGeometry, MeshStandardMaterial, Object3D } from 'three';
+import type { BufferGeometry, MeshStandardMaterial } from 'three';
 import { toRadians } from '@core/math';
 import { BOW_CAMERA, DOME, HATCHES, PANEL, STUB, VENT_BOX } from '../../../model/layout';
 import { DECK_ITEMS } from '../../constants';
@@ -27,7 +27,6 @@ import { PANEL_XS } from './fairing';
 export interface DeckItems {
   object: Group;
   dome: Group;
-  domeLens: Object3D;
   starlinkGlow: MeshStandardMaterial;
   backupGlow: MeshStandardMaterial;
 }
@@ -158,7 +157,7 @@ function stub(context: PartContext): Mesh {
   return partMesh(context, geometry, 'hull', FINISHES.ring);
 }
 
-function domeParts(context: PartContext): { dome: Group; ring: Mesh; lens: Object3D } {
+function domeParts(context: PartContext): { dome: Group; ring: Mesh } {
   const { ringInner, ringDepth, ringRise, segments, capSamples, skirt, window, frame } =
     DECK_ITEMS.dome;
   const ring = partMesh(
@@ -222,10 +221,7 @@ function domeParts(context: PartContext): { dome: Group; ring: Mesh; lens: Objec
     ),
     windowMesh,
   );
-  const lens = new Group();
-  lens.position.set(DOME.radius, DOME.lens - DOME.base, 0);
-  dome.add(lens);
-  return { dome, ring, lens };
+  return { dome, ring };
 }
 
 function bowCamera(context: PartContext): Group {
@@ -301,7 +297,7 @@ export function buildDeckItems(context: PartContext): DeckItems {
     starlinkGlow,
   );
   const backup = new Mesh(context.tracker.track(panelSlab(backupX)), backupGlow);
-  const { dome, ring, lens } = domeParts(context);
+  const { dome, ring } = domeParts(context);
   const object = new Group();
   object.add(
     ventBox(context),
@@ -315,5 +311,5 @@ export function buildDeckItems(context: PartContext): DeckItems {
     bowCamera(context),
     instanced(context, handleGeometry(), 'hull', FINISHES.handle, handleMatrices()),
   );
-  return { object, dome, domeLens: lens, starlinkGlow, backupGlow };
+  return { object, dome, starlinkGlow, backupGlow };
 }

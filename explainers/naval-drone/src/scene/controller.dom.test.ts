@@ -1,5 +1,7 @@
-import { Box3, MeshStandardMaterial, Vector3 } from 'three';
+import { Box3, Vector3 } from 'three';
 import { describe, expect, it, vi } from 'vitest';
+import { MaterialLibrary } from '@core/scene/materials';
+import { createSceneTextures } from '@core/scene/textures';
 import type { AssemblyState } from '../ids';
 import { HELD_PHASE } from '../model';
 import { CHAPTER_CONTROL_DEFAULTS, DEFAULT_VIEW, runAt } from '../state';
@@ -41,10 +43,11 @@ function fakeShell() {
   };
   const shell = {
     scene: { add: vi.fn() },
-    materials: { get: () => new MeshStandardMaterial() },
-    textures: {},
+    materials: new MaterialLibrary(),
+    textures: createSceneTextures(),
     labels: { attach: vi.fn(), show: vi.fn() },
     rig,
+    viewport: { renderer: { compileAsync: vi.fn(() => Promise.resolve()) } },
   };
   return { rig, shell: shell as unknown as NavalDroneControllerDependencies };
 }
@@ -74,6 +77,18 @@ describe('naval drone controller', () => {
     expect(target?.x).toBeCloseTo(state.boat.position[0], 1);
     expect(rig.follow).toHaveBeenLastCalledWith(expect.anything());
     expect(rig.setDistanceLimits).toHaveBeenLastCalledWith({});
+  });
+
+  it('rides the deck in the eye view so the camera moves with the waves', () => {
+    const { rig, shell } = fakeShell();
+    const navalDrone = new NavalDroneController(shell);
+    navalDrone.build(assemblyState());
+    navalDrone.views.frame('eye', false);
+    const eyeAnchor = rig.follow.mock.lastCall?.[0] as Vector3 | undefined;
+    navalDrone.views.frame('chase', false);
+    const boatAnchor = rig.follow.mock.lastCall?.[0] as Vector3 | undefined;
+    expect(eyeAnchor).toBeDefined();
+    expect(eyeAnchor).not.toBe(boatAnchor);
   });
 
   it('lets the sky view look up without the camera reaching the sea, then levels again', () => {

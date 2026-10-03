@@ -196,7 +196,7 @@ export class NavalDroneAssembly implements Assembly {
     );
     this.named = {
       boat: this.boat.object,
-      dome: this.boat.deck.domeLens,
+      dome: anchorAt(this.boat.deck.object, DOME.x, DOME.lens, 0),
       stern: this.boat.jet.stern,
       ship: this.ship.object,
       satellite: this.satellite.anchor,
