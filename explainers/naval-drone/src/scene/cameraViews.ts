@@ -86,7 +86,7 @@ export const ORBIT_VIEWS: Readonly<Record<OrbitView, OrbitSpec>> = {
     elevation: toRadians(18),
     width: (target) => CHASE_WIDTH_LENGTHS * target.length,
     aim: [0, 0.2, 0],
-    compact: { lead: BOAT_LEAD, widen: 1 },
+    compact: { lead: -BOAT_LEAD, widen: 1 },
   },
   waterline: {
     bearing: toRadians(-90),

@@ -86,13 +86,14 @@ describe('camera views', () => {
     expect(offset.length()).toBeCloseTo((2.2 * BOAT.length) / (2 * PHONE.horizontal), 9);
   });
 
-  it('moves the boat right of the centre on a phone so a long hull label fits beside it', () => {
+  it('moves the boat off the centre on a phone so a long hull label fits beside it', () => {
+    const sides = { chase: -1, waterline: 1 } as const;
     (['chase', 'waterline'] as const).forEach((view) => {
       const wide = orbitPose(TARGET, ORBIT_VIEWS[view], PHONE);
       const phone = orbitPose(TARGET, ORBIT_VIEWS[view], PHONE, true);
       const right = rightOf(offsetOf(phone).normalize());
       const boat = vectorOf(TARGET.position).sub(phone.target);
-      expect(boat.dot(right), view).toBeGreaterThan(0.5);
+      expect(sides[view] * boat.dot(right), view).toBeGreaterThan(0.5);
       expect(offsetOf(phone).length(), view).toBeGreaterThanOrEqual(offsetOf(wide).length());
     });
     const stern = orbitPose(TARGET, ORBIT_VIEWS.stern, PHONE, true);
