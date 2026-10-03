@@ -28,11 +28,11 @@ void main() {
   vec3 direction = normalize(vDirection);
   vec3 colour = skyColour(direction);
   float up = max(direction.y, 0.0);
-  vec2 plane = direction.xz / (direction.y + 0.1) * uClouds.z;
+  vec2 plane = direction.xz / (direction.y + 0.3) * uClouds.z;
   vec2 streak = vec2(plane.x * 0.6 + plane.y, (plane.y - plane.x * 0.5) * uClouds.w);
-  float cloud = texture2D(uFoamMap, streak).r;
+  float cloud = texture2D(uFoamMap, streak, 2.0).r;
   float cover = smoothstep(uClouds.x, uClouds.x + uClouds.y, cloud);
-  cover *= smoothstep(uCloudBand.x, uCloudBand.x + 0.05, up) * (1.0 - smoothstep(uCloudBand.y * 0.5, uCloudBand.y, up));
+  cover *= smoothstep(uCloudBand.x, uCloudBand.x + 0.2, up) * (1.0 - smoothstep(uCloudBand.y * 0.5, uCloudBand.y, up));
   float sunward = 0.5 + 0.5 * dot(normalize(direction.xz + vec2(1e-5)), normalize(uSun.xz));
   float near = max(dot(direction, uSun), 0.0);
   vec3 cloudColour = mix(uCloudShade, uCloudLit, clamp(pow(sunward, 2.0) * 1.1 + near * 0.3 - 0.1, 0.0, 1.0));

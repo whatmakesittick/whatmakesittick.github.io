@@ -327,13 +327,13 @@ export const SKY = {
   heights: { band: 0.08, upper: 0.32 },
   glow: { tight: 900, broad: 9, tightGain: 2.4, broadGain: 0.45, disc: 0.99985 },
   clouds: {
-    cover: 0.68,
-    sharpness: 0.22,
-    scale: 0.2,
+    cover: 0.6,
+    sharpness: 0.3,
+    scale: 0.3,
     stretch: 6,
-    from: 0.03,
-    to: 0.5,
-    opacity: 0.55,
+    from: 0.04,
+    to: 0.6,
+    opacity: 0.4,
   },
 } as const;
 
