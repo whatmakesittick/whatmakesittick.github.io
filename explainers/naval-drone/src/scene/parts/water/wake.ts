@@ -84,7 +84,7 @@ void main() {
   float density = clamp(white, 0.0, 1.3);
   float threshold = 1.02 - density * 0.62;
   float foam = smoothstep(threshold, threshold + 0.16, fbm + (1.0 - bubble) * 0.08);
-  foam *= 0.75 + 0.25 * smoothstep(0.1, 0.5, bubble);
+  foam *= 0.9 + 0.1 * smoothstep(0.1, 0.5, bubble);
   foam *= strength;
   float tint = clamp(aerated, 0.0, 1.0) * strength;
   vec3 colour = mix(uTint, uFoam * (0.85 + 0.15 * n3), foam / max(foam + tint * 0.35, 1e-3));

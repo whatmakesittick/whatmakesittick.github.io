@@ -33,6 +33,7 @@ export interface DeckItems {
 }
 
 const QUARTER_TURN = Math.PI / 2;
+const BOX_TOP_FACE = [8, 12] as const;
 const Y_AXIS = new Vector3(0, 1, 0);
 
 function boxAt(size: Vec3, centre: Vec3, turn = 0): BufferGeometry {
@@ -96,9 +97,8 @@ function ventBox(context: PartContext): Group {
 function panelSlab(x: number): BufferGeometry {
   const slab = new BoxGeometry(PANEL.length, PANEL.thickness, PANEL.width);
   const uv = slab.getAttribute('uv');
-  const topFace = { from: 8, to: 12 };
   for (let at = 0; at < uv.count; at += 1) {
-    if (at < topFace.from || at >= topFace.to)
+    if (at < BOX_TOP_FACE[0] || at >= BOX_TOP_FACE[1])
       uv.setXY(at, DECK_ITEMS.panel.edgeUv, DECK_ITEMS.panel.edgeUv);
   }
   slab.translate(x, PANEL.top - PANEL.thickness / 2, 0);

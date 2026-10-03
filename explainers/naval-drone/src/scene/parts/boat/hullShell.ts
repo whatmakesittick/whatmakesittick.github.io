@@ -166,7 +166,7 @@ function railRows(section: HullSection): Pair[] {
 }
 
 function railStrip(sections: readonly HullSection[]): BufferGeometry {
-  const rows = rowsOf(sections, (section, row) => railRows(section)[row], 3);
+  const rows = rowsOf(sections, (section, row) => railRows(section)[row], SHELL.railUv.length);
   const geometry = gridSurface(rows, {
     uv: (row, column) => [alongHull(sections[column].x), SHELL.railUv[row]],
   });
@@ -230,8 +230,9 @@ function centreBands(sections: readonly HullSection[]): BufferGeometry[] {
     });
     return groups.filter((group) => group.length > 1);
   };
-  const keelRuns = runs((x) => x <= JET.intake.x[0] + 1e-6 || x >= JET.intake.x[1] - 1e-6);
-  const deckRuns = runs((x) => x <= FAIRING.x[0] + 1e-6 || x >= FAIRING.x[1] - 1e-6);
+  const near = HULL_LINES.epsilon;
+  const keelRuns = runs((x) => x <= JET.intake.x[0] + near || x >= JET.intake.x[1] - near);
+  const deckRuns = runs((x) => x <= FAIRING.x[0] + near || x >= FAIRING.x[1] - near);
   const keel = keelRuns.map((run) =>
     flatPolygon(
       [

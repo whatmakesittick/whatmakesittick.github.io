@@ -10,11 +10,6 @@ import {
   FUEL_TANKS,
   JET,
   PAYLOAD_BAY,
-  PANEL,
-  STARLINK_PANEL_XS,
-  BACKUP_PANEL_X,
-  DOME,
-  BOW_CAMERA,
 } from '../../../model/layout';
 import { roundedRectShape, extrudeProfileAlongX } from '@core/scene/geometry/extrude';
 import { INTERNALS, SHELL } from '../../constants';
@@ -250,11 +245,16 @@ function engineBody(): {
   rubber: BufferGeometry;
 } {
   const spec = INTERNALS.engine;
-  const ribs = spread(spec.cover.x[0] + 0.04, spec.cover.x[1] - 0.04, spec.ribs - 1).map((x) =>
+  const detail = INTERNALS.detail;
+  const ribs = spread(
+    spec.cover.x[0] + detail.ribInset,
+    spec.cover.x[1] - detail.ribInset,
+    spec.ribs - 1,
+  ).map((x) =>
     boxBetween(
-      [x - 0.006, x + 0.006],
-      [spec.cover.y[1], spec.cover.y[1] + 0.008],
-      [-spec.cover.halfWidth * 0.8, spec.cover.halfWidth * 0.8],
+      [x - detail.ribWidth / 2, x + detail.ribWidth / 2],
+      [spec.cover.y[1], spec.cover.y[1] + detail.ribHeight],
+      [-spec.cover.halfWidth * detail.ribSpan, spec.cover.halfWidth * detail.ribSpan],
     ),
   );
   const coils = spec.coilXs.map((x) =>
@@ -269,7 +269,7 @@ function engineBody(): {
     tubeAlong(
       [
         [x, runner.from[1], runner.from[0]],
-        [x, plenum.y + 0.03, (runner.from[0] + plenum.z) / 2],
+        [x, plenum.y + detail.runnerRise, (runner.from[0] + plenum.z) / 2],
         [x, plenum.y, plenum.z],
       ],
       runner.radius,
@@ -289,31 +289,30 @@ function engineBody(): {
     ...runners,
   ]);
   const { exhaust, muffler } = spec;
+  const { routes } = INTERNALS;
+  const [collectorX, collectorY, collectorZ] = exhaust.collector;
   const headers = cylinderXs().map((x) =>
     tubeAlong(
       [
-        [x, 0.08, 0.16],
-        [x, 0.04, 0.215],
-        [lerp(x, exhaust.collector[0], 0.6), 0.0, exhaust.collector[1]],
+        ...routes.headers.map(([, y, z]): Vec3 => [x, y, z]),
+        [lerp(x, collectorX, detail.headerShare), collectorY, collectorZ],
       ],
       exhaust.radius,
     ),
   );
+  const pipeRadius = exhaust.radius * detail.exhaustGrow;
+  const [mufflerX, mufflerY, mufflerZ] = muffler.centre;
   const pipe = tubeAlong(
     [
-      [exhaust.collector[0], 0.0, exhaust.collector[1]],
-      [-1.4, 0.0, 0.25],
-      [muffler.centre[0] + muffler.length / 2, muffler.centre[1], muffler.centre[2]],
+      [collectorX, collectorY, collectorZ],
+      routes.pipe,
+      [mufflerX + muffler.length / 2, mufflerY, mufflerZ],
     ],
-    exhaust.radius * 1.2,
+    pipeRadius,
   );
   const tail = tubeAlong(
-    [
-      [muffler.centre[0] - muffler.length / 2, muffler.centre[1], muffler.centre[2]],
-      [-2.3, 0.02, 0.35],
-      exhaust.outlet,
-    ],
-    exhaust.radius * 1.2,
+    [[mufflerX - muffler.length / 2, mufflerY, mufflerZ], routes.tail, exhaust.outlet],
+    pipeRadius,
   );
   const { starter, filter, alternator, flange, mounts } = spec;
   const block = mergeParts([
@@ -353,7 +352,7 @@ function engineBody(): {
         const floor = bottomYAt(x, z) + INTERNALS.tub.floorLift;
         return boxBetween(
           [x - mounts.size[0] / 2, x + mounts.size[0] / 2],
-          [floor, floor + mounts.size[1] + 0.02],
+          [floor, floor + mounts.size[1] + detail.mountRise],
           [z - mounts.size[2] / 2, z + mounts.size[2] / 2],
         );
       }),
@@ -391,28 +390,34 @@ function electronics(): { tray: BufferGeometry; dark: BufferGeometry; light: Buf
       [side * half - tray.thickness / 2, side * half + tray.thickness / 2],
     ),
   );
-  const legs = [x0 + 0.05, x1 - 0.05].flatMap((x) =>
+  const detail = INTERNALS.detail;
+  const [legX, legZ] = detail.legInset;
+  const legs = [x0 + legX, x1 - legX].flatMap((x) =>
     [-1, 1].map((side) =>
       boxBetween(
         [x - tray.legs, x + tray.legs],
         [ENGINE_TUB.y[1], base],
-        [side * (half - 0.04) - tray.legs, side * (half - 0.04) + tray.legs],
+        [side * (half - legZ) - tray.legs, side * (half - legZ) + tray.legs],
       ),
     ),
   );
   const { computer, router, power, puck, canister } = items;
-  const fins = spread(computer.x[0] + 0.02, computer.x[1] - 0.02, computer.fins - 1).map((x) =>
+  const fins = spread(
+    computer.x[0] + detail.finInset,
+    computer.x[1] - detail.finInset,
+    computer.fins - 1,
+  ).map((x) =>
     boxBetween(
-      [x - 0.004, x + 0.004],
-      [top + computer.height, top + computer.height + 0.012],
+      [x - detail.finWidth / 2, x + detail.finWidth / 2],
+      [top + computer.height, top + computer.height + detail.finHeight],
       computer.z,
     ),
   );
   const antennas = [-1, 1].map((side) =>
-    cylinderAlong('y', 0.005, router.antenna, [
-      side > 0 ? router.x[1] - 0.02 : router.x[0] + 0.02,
+    cylinderAlong('y', detail.antennaRadius, router.antenna, [
+      side > 0 ? router.x[1] - detail.antennaInset : router.x[0] + detail.antennaInset,
       top + router.height + router.antenna / 2,
-      router.z[0] + 0.02,
+      router.z[0] + detail.antennaInset,
     ]),
   );
   return {
@@ -421,7 +426,13 @@ function electronics(): { tray: BufferGeometry; dark: BufferGeometry; light: Buf
       boxBetween(computer.x, [top, top + computer.height], computer.z),
       ...fins,
       boxBetween(power.x, [top, top + power.height], power.z),
-      cylinderAlong('y', puck.radius, puck.height, [puck.x, top + puck.height / 2, puck.z], 20),
+      cylinderAlong(
+        'y',
+        puck.radius,
+        puck.height,
+        [puck.x, top + puck.height / 2, puck.z],
+        detail.roundSegments,
+      ),
       cylinderAlong('x', canister.radius, canister.x[1] - canister.x[0], [
         middle(canister.x),
         top + canister.radius,
@@ -434,64 +445,23 @@ function electronics(): { tray: BufferGeometry; dark: BufferGeometry; light: Buf
 }
 
 function cables(): { cables: BufferGeometry; hoses: BufferGeometry } {
-  const { radius, hose } = INTERNALS.cable;
-  const top = ELECTRONICS.y[0] + INTERNALS.tray.thickness;
-  const panelUnder = PANEL.top - PANEL.thickness - 0.03;
-  const toPanel = (from: Vec3, x: number, z: number) =>
-    tubeAlong(
-      [from, [lerp(from[0], x, 0.5), panelUnder - 0.04, (from[2] + z) / 2], [x, panelUnder, z]],
-      radius,
-    );
-  const dome: Vec3 = [DOME.x, DOME.base - 0.03, 0];
-  const camera: Vec3 = [BOW_CAMERA.x[0], hullSectionAt(BOW_CAMERA.x[0]).deck - 0.04, 0.02];
-  const forward = tubeAlong(
-    [
-      [-0.95, top + 0.03, 0.2],
-      [-0.6, top + 0.02, 0.45],
-      [0.3, 0.3, 0.52],
-      [0.75, 0.36, 0.45],
-      [dome[0] - 0.12, dome[1] - 0.02, 0.18],
-      dome,
-    ],
-    radius * 1.4,
-  );
-  const bow = tubeAlong([[0.75, 0.36, 0.45], [1.4, 0.4, 0.42], [1.9, 0.42, 0.25], camera], radius);
-  const tankHose = (side: number): BufferGeometry =>
-    tubeAlong(
-      [
-        [FUEL_TANKS.x[0] + 0.04, FUEL_TANKS.y[1] - 0.04, side * 0.2],
-        [-0.6, ENGINE_TUB.y[1] + 0.03, side * 0.16],
-        [-0.8, ENGINE_TUB.y[1] + 0.02, -0.12],
-        [
-          INTERNALS.engine.plenum.x[1],
-          INTERNALS.engine.plenum.y + 0.05,
-          INTERNALS.engine.plenum.z + 0.04,
-        ],
-      ],
-      hose,
-    );
-  const vent = tubeAlong(
-    [
-      [0.1, FUEL_TANKS.y[1], 0.27],
-      [-0.4, 0.3, 0.3],
-      [-0.9, top + 0.06, 0.25],
-      [
-        INTERNALS.electronics.canister.x[1],
-        top + INTERNALS.electronics.canister.radius,
-        INTERNALS.electronics.canister.z,
-      ],
-    ],
-    radius,
-  );
+  const { radius, hose, thick, sag } = INTERNALS.cable;
+  const { panels, forward, bow, tankHose, vent } = INTERNALS.routes;
+  const toPanel = ({ from, to }: { from: Vec3; to: Vec3 }) =>
+    tubeAlong([from, [(from[0] + to[0]) / 2, to[1] - sag, (from[2] + to[2]) / 2], to], radius);
+  const mirrored = (side: number): Vec3[] =>
+    tankHose.map(([x, y, z], index) => [x, y, index < 2 ? side * z : z]);
   return {
     cables: mergeParts([
-      toPanel([-1.4, top + 0.075, -0.2], BACKUP_PANEL_X, -0.1),
-      toPanel([-1.3, top + 0.075, -0.1], STARLINK_PANEL_XS[0], -0.08),
-      toPanel([-1.0, top + 0.045, -0.2], STARLINK_PANEL_XS[1], -0.08),
-      forward,
-      bow,
+      ...panels.map(toPanel),
+      tubeAlong(forward, radius * thick),
+      tubeAlong(bow, radius),
     ]),
-    hoses: mergeParts([tankHose(-1), tankHose(1), vent]),
+    hoses: mergeParts([
+      tubeAlong(mirrored(-1), hose),
+      tubeAlong(mirrored(1), hose),
+      tubeAlong(vent, radius),
+    ]),
   };
 }
 

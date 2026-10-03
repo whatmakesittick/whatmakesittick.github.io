@@ -24,7 +24,7 @@ const ANGLE = 0.569840291;
 
 function segmentSpeed(x: number, boatSpeed: number, jetSpeed: number): number {
   const { speeds } = FLOW;
-  if (x > -1.75) return Math.max(boatSpeed, speeds.intake);
+  if (x > FLOW.intakeEdge) return Math.max(boatSpeed, speeds.intake);
   if (x > JET.duct.endX) return speeds.duct;
   if (x > JET.stator.x[0]) return speeds.pump;
   if (x > JET.nozzle.x[0]) return speeds.nozzle;
@@ -33,7 +33,7 @@ function segmentSpeed(x: number, boatSpeed: number, jetSpeed: number): number {
 
 function segmentRadius(x: number): number {
   const { radius } = FLOW;
-  if (x > -1.75) return radius.intake;
+  if (x > FLOW.intakeEdge) return radius.intake;
   if (x > JET.nozzle.x[1]) return radius.duct;
   if (x > JET.steeringNozzle.x[0]) return radius.nozzle;
   return radius.jet;
@@ -68,7 +68,7 @@ export class FlowPart {
     if (bucket > 0.5) {
       const { reverse } = JET_STREAM;
       points.push(
-        exit.clone().add(new Vector3(-0.08, -0.05, 0)),
+        exit.clone().add(new Vector3(...FLOW.turn, 0)),
         exit.clone().add(new Vector3(reverse.length * Math.cos(reverse.angle), -reverse.dive, 0)),
       );
       return points;
@@ -97,9 +97,10 @@ export class FlowPart {
         to,
         length: from.distanceTo(to),
         speed:
-          segmentSpeed(middle, boatSpeed, state.jet.jetSpeed) * clamp(state.jet.throttle, 0.25, 1),
+          segmentSpeed(middle, boatSpeed, state.jet.jetSpeed) *
+          clamp(state.jet.throttle, FLOW.minThrottle, 1),
         radius: [segmentRadius(from.x), segmentRadius(to.x)],
-        swirl: middle < IMPELLER.x + 0.02 && middle > JET.stator.x[0] ? FLOW.swirl : 0,
+        swirl: middle < IMPELLER.x + FLOW.swirlReach && middle > JET.stator.x[0] ? FLOW.swirl : 0,
       };
     });
     this.total = this.segments.reduce((sum, segment) => sum + segment.length / segment.speed, 0);
@@ -132,7 +133,7 @@ export class FlowPart {
       );
       const speed = clamp(segment.speed / FLOW.speeds.jet, 0, 1);
       this.mixed.copy(this.slow).lerp(this.fast, speed);
-      this.cloud.setColor(index, this.mixed.r, this.mixed.g, this.mixed.b, 0.95);
+      this.cloud.setColor(index, this.mixed.r, this.mixed.g, this.mixed.b, FLOW.alpha);
     }
     this.cloud.commit();
   }

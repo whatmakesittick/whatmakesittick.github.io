@@ -40,7 +40,7 @@ export function waveMotion(
   const port = sample(0, -span.side);
   const right = sample(0, span.side);
   return {
-    heave: ((bow + stern + port + right) / 4) * response,
+    heave: ((bow + stern + port + right) / 4) * lerp(1, response, MOTION.heaveDamping),
     pitch: clamp(
       Math.atan2(bow - stern, span.bow + span.stern) * response,
       -MOTION.maxPitch,

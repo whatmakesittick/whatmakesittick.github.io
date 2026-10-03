@@ -14,13 +14,15 @@ import { lerp, smoothstep } from '@core/math';
 import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import type { AssemblyState } from '../../../ids';
 import { JET } from '../../../model/layout';
-import { knotsToMs } from '../../../model/scale';
+import { GRAVITY, knotsToMs } from '../../../model/scale';
 import { JET_STREAM } from '../../constants';
 import type { Vec3 } from '../../geometry/surface';
 import { registered } from '../context';
 import type { PartContext } from '../context';
 import { seededRandom } from '../surfaces';
 import { LocalWater } from './hullWater';
+
+const TUNING = JET_STREAM.tuning;
 
 const VERTEX = /* glsl */ `
 varying vec2 vUv;
@@ -175,15 +177,15 @@ export class JetStreamPart {
       smoothstep(jet.jetSpeed * JET_STREAM.lengthPerSpeed, 0, 2),
     );
     const flowing = jet.flow > 0;
-    this.reverseOn = jet.bucket > 0.5;
+    this.reverseOn = jet.bucket > TUNING.reverseOn;
     this.column.visible = flowing && !this.reverseOn;
     this.reverse.visible = flowing && this.reverseOn;
     const uniforms = this.material.uniforms;
-    (uniforms.uFlow.value as number[])[0] = jet.jetSpeed / Math.max(length, 0.1);
+    (uniforms.uFlow.value as number[])[0] = jet.jetSpeed / Math.max(length, TUNING.minLength);
     (uniforms.uFlow.value as number[])[2] =
-      JET_STREAM.look.opacity * emphasis * smoothstep(jet.throttle, 0, 0.2);
+      JET_STREAM.look.opacity * emphasis * smoothstep(jet.throttle, 0, TUNING.throttleFade);
     const drop = (share: number) =>
-      0.5 * 9.81 * ((share * length) / Math.max(jet.jetSpeed, 1)) ** 2;
+      0.5 * GRAVITY * ((share * length) / Math.max(jet.jetSpeed, 1)) ** 2;
     shapeTube(
       this.columnGeometry,
       JET_STREAM.rings,
@@ -196,7 +198,7 @@ export class JetStreamPart {
       (share) => JET_STREAM.exitRadius + share * length * JET_STREAM.spread,
     );
     this.anchor.position.set(
-      JET.steeringNozzle.x[0] - JET.steeringNozzle.pivotX - length * 0.4,
+      JET.steeringNozzle.x[0] - JET.steeringNozzle.pivotX - length * TUNING.anchorShare,
       0,
       0,
     );
@@ -213,7 +215,7 @@ export class JetStreamPart {
 
   private placeReverse(): void {
     const { reverse, segments } = JET_STREAM;
-    const [cx, cy] = [-3.17, JET.axisY];
+    const [cx, cy] = TUNING.reverseCentre;
     this.reverseGeometries.forEach((geometry, index) => {
       const side = index === 0 ? -1 : 1;
       shapeTube(
@@ -222,30 +224,33 @@ export class JetStreamPart {
         segments,
         (share) => [
           cx + share * reverse.length * Math.cos(reverse.angle),
-          cy - reverse.dive * Math.sin(share * Math.PI * 0.6) - share * 0.1,
+          cy -
+            reverse.dive * Math.sin(share * Math.PI * TUNING.reverseArc) -
+            share * TUNING.reverseSink,
           side * share * reverse.length * Math.sin(reverse.angle),
         ],
-        (share) => reverse.radius * (1 + share * 1.5),
+        (share) => reverse.radius * (1 + share * TUNING.reverseGrow),
       );
     });
   }
 
   private placeRooster(speed: number): void {
     const { count, life, aft, up, spread, gravity } = JET_STREAM.rooster;
-    this.rooster.points.visible = this.level > 0.01;
+    this.rooster.points.visible = this.level > TUNING.shown;
     if (!this.rooster.points.visible) return;
     const exit = JET.steeringNozzle.x[0];
     for (let index = 0; index < count; index += 1) {
       const [phase, across, rise, drift] = this.seeds[index];
       const age = ((this.clock / life + phase) % 1) * life;
-      const lateral = (across - 0.5) * spread * (0.4 + drift);
-      const lift = up * (0.45 + 0.55 * rise) * this.level;
-      const x = exit - (aft * (0.7 + 0.5 * drift) + speed * 0.05) * age;
-      const z = lateral * age * 2;
+      const [lateralBase, liftBase, aftBase, aftSpread] = TUNING.jitter;
+      const lateral = (across - 0.5) * spread * (lateralBase + drift);
+      const lift = up * (liftBase + (1 - liftBase) * rise) * this.level;
+      const x = exit - (aft * (aftBase + aftSpread * drift) + speed * TUNING.speedDrift) * age;
+      const z = lateral * age * TUNING.lateralGain;
       const floor = this.water.level(x, z);
       const y = Math.max(floor + lift * age - 0.5 * gravity * age * age, floor);
       this.rooster.setPoint(index, x, y, z);
-      this.rooster.setColor(index, 1, 1, 1, (1 - age / life) * 0.22 * this.level);
+      this.rooster.setColor(index, 1, 1, 1, (1 - age / life) * TUNING.alpha * this.level);
     }
     this.rooster.commit();
   }

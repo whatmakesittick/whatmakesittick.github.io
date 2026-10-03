@@ -90,7 +90,7 @@ export class HullWaterPart {
       groups.bow,
       cellMap,
       looks.stern,
-      profiles.line,
+      profiles.mound,
     );
     this.lineMaterial = foamSheetMaterial(context, 'wake', cellMap, looks.waterline, profiles.line);
     this.sprayMaterial = foamSheetMaterial(
@@ -282,11 +282,13 @@ export class HullWaterPart {
       const section = hullSectionAt(clamp(x, TRANSOM_X, HULL_DETAIL.chineFlat.endX));
       const angle = spread * (((seed * TUNING.whiskerFan[1]) % 1) - 0.5);
       const travel = age * speed * this.levels.spray;
+      const z = side * (section.flat[0] + TUNING.whiskerGap + Math.cos(angle) * travel);
+      const surface = this.water.level(x, z);
       this.whiskers.setPoint(
         index,
         x + Math.sin(angle) * travel * TUNING.whiskerLean,
-        section.chine[1] + travel * TUNING.whiskerLift - TUNING.whiskerFall * age * age,
-        side * (section.flat[0] + TUNING.whiskerGap + Math.cos(angle) * travel),
+        surface + travel * TUNING.whiskerLift - TUNING.whiskerFall * age * age,
+        z,
       );
       const alpha = (1 - age / life) * TUNING.whiskerAlpha * this.levels.spray;
       this.whiskers.setColor(index, 1, 1, 1, alpha);

@@ -145,10 +145,10 @@ export const SUN_DIRECTION: Triple = [0.172, 0.122, -0.977];
 export const LIGHT_RIG = {
   distance: 1000,
   sun: SUN_DIRECTION,
-  key: { color: '#ffc58a', intensity: 1.9 },
+  key: { color: '#ffc58a', intensity: 1.6 },
   fill: { color: '#7f9bb8', intensity: 0.35, direction: [-0.35, 1, 0.45] as Triple },
   rim: { color: '#a9bfdc', intensity: 1.1, direction: [-0.3, 0.16, 0.94] as Triple },
-  sky: { color: '#7f9bb8', ground: '#1b2a3a', intensity: 1.3 },
+  sky: { color: '#7f9bb8', ground: '#1b2a3a', intensity: 1.55 },
 } as const;
 
 export const HAZE = { colour: '#8d9aa6', near: 400, far: 5000 } as const;
@@ -294,7 +294,63 @@ export const INTERNALS = {
     puck: { x: -0.86, z: 0.2, radius: 0.04, height: 0.02 },
     canister: { x: [-1.46, -1.3] as const, z: 0.24, radius: 0.034 },
   },
-  cable: { radius: 0.007, hose: 0.011 },
+  cable: { radius: 0.007, hose: 0.011, thick: 1.4, sag: 0.04 },
+  detail: {
+    ribInset: 0.04,
+    ribWidth: 0.012,
+    ribHeight: 0.008,
+    ribSpan: 0.8,
+    runnerRise: 0.03,
+    headerShare: 0.6,
+    exhaustGrow: 1.2,
+    mountRise: 0.02,
+    legInset: [0.05, 0.04] as const,
+    finInset: 0.02,
+    finWidth: 0.008,
+    finHeight: 0.012,
+    antennaRadius: 0.005,
+    antennaInset: 0.02,
+    roundSegments: 20,
+  },
+  routes: {
+    headers: [
+      [0, 0.08, 0.16],
+      [0, 0.04, 0.215],
+    ] as Triple[],
+    pipe: [-1.4, 0, 0.25] as Triple,
+    tail: [-2.3, 0.02, 0.35] as Triple,
+    panels: [
+      { from: [-1.4, 0.323, -0.2] as Triple, to: [-2.05, 0.48, -0.1] as Triple },
+      { from: [-1.3, 0.323, -0.1] as Triple, to: [-1.55, 0.48, -0.08] as Triple },
+      { from: [-1.0, 0.293, -0.2] as Triple, to: [-1.05, 0.48, -0.08] as Triple },
+    ],
+    forward: [
+      [-0.95, 0.278, 0.2],
+      [-0.6, 0.268, 0.45],
+      [0.3, 0.3, 0.52],
+      [0.75, 0.36, 0.45],
+      [0.8, 0.376, 0.18],
+      [0.92, 0.396, 0],
+    ] as Triple[],
+    bow: [
+      [0.75, 0.36, 0.45],
+      [1.4, 0.4, 0.42],
+      [1.9, 0.42, 0.25],
+      [2.12, 0.46, 0.02],
+    ] as Triple[],
+    tankHose: [
+      [-0.51, 0.16, 0.2],
+      [-0.6, 0.25, 0.16],
+      [-0.8, 0.24, -0.12],
+      [-0.97, 0.125, -0.195],
+    ] as Triple[],
+    vent: [
+      [0.1, 0.2, 0.27],
+      [-0.4, 0.3, 0.3],
+      [-0.9, 0.308, 0.25],
+      [-1.3, 0.282, 0.24],
+    ] as Triple[],
+  },
 } as const;
 
 export const SKY = {
@@ -379,6 +435,7 @@ export const MOTION = {
   stern: 2.3,
   side: 0.65,
   planedResponse: 0.35,
+  heaveDamping: 0.25,
   maxPitch: toRadians(12),
   maxRoll: toRadians(14),
   shipSide: 7,
@@ -455,11 +512,16 @@ export const HULL_WATER = {
   looks: {
     bow: { opacity: 0.95, scroll: 0.5, streaks: 3.5, stretch: 0.5, colour: '#f2f7f8' },
     waterline: { opacity: 0.85, scroll: 1.2, streaks: 9, stretch: 0.35, colour: '#eef4f6' },
-    stern: { opacity: 0.7, scroll: 0.2, streaks: 2.5, stretch: 0.6, colour: '#e9f1f3' },
-    spray: { opacity: 0.5, scroll: 1.6, streaks: 7, stretch: 0.4, colour: '#f4f7f8' },
+    stern: { opacity: 0.5, scroll: 0.2, streaks: 2.5, stretch: 0.6, colour: '#e9f1f3' },
+    spray: { opacity: 0.55, scroll: 1.6, streaks: 12, stretch: 1.1, colour: '#f4f7f8' },
     rail: { opacity: 0.4, scroll: 1.6, streaks: 6, stretch: 0.5, colour: '#f4f7f8' },
   },
-  profiles: { bow: [0.04, 0.88] as const, sheet: [0.1, 0.5] as const, line: [0.0, 1.0] as const },
+  profiles: {
+    bow: [0.04, 0.88] as const,
+    sheet: [0.1, 0.5] as const,
+    line: [0.0, 1.0] as const,
+    mound: [0.25, 0.55] as const,
+  },
   emphasis: 1.3,
   levels: {
     bowFloor: 0.35,
@@ -515,6 +577,21 @@ export const JET_STREAM = {
     onFrom: [15, 30] as const,
   },
   emphasis: 1.3,
+  tuning: {
+    reverseOn: 0.5,
+    minLength: 0.1,
+    throttleFade: 0.2,
+    anchorShare: 0.4,
+    reverseCentre: [-3.17, -0.15] as const,
+    reverseArc: 0.6,
+    reverseSink: 0.1,
+    reverseGrow: 1.5,
+    shown: 0.01,
+    jitter: [0.4, 0.45, 0.7, 0.5] as const,
+    speedDrift: 0.05,
+    lateralGain: 2,
+    alpha: 0.22,
+  },
 } as const;
 
 export const FLOW = {
@@ -531,6 +608,11 @@ export const FLOW = {
   slow: '#5fa8ff',
   fast: '#ffffff',
   playback: 0.18,
+  turn: [-0.08, -0.05] as const,
+  intakeEdge: -1.75,
+  minThrottle: 0.25,
+  swirlReach: 0.02,
+  alpha: 0.95,
 } as const;
 
 export const WETTED_BAR = {
@@ -628,4 +710,9 @@ export const GHOST = {
   tether: { radius: 0.025, opacity: 0.55 },
 } as const;
 
-export const COMPANION = { segments: 18, exit: 0.05, stubSides: 6 } as const;
+export const COMPANION = {
+  segments: 18,
+  exit: 0.05,
+  stubSides: 6,
+  shoulder: Math.SQRT1_2,
+} as const;

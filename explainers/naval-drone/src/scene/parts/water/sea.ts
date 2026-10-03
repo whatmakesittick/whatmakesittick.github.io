@@ -91,9 +91,10 @@ void main() {
   float sharp = mix(uGlitter.x, uGlitter.w, smoothstep(30.0, 1200.0, dist));
   colour += uSunColour * (pow(sunDot, sharp) * uGlitter.z + pow(sunDot, uGlitter.y) * 0.25) * (0.3 + 0.7 * fresnel);
   float noise = texture2D(uFoamMap, base * uFoamShape.x + uSeaTime * 0.012).r;
-  float streaks = texture2D(uFoamMap, base * uFoamShape.x * 3.1 + vec2(0.37, 0.61)).r;
-  float cap = smoothstep(uFoamShape.y, uFoamShape.z, crest + (noise - 0.5) * 0.5);
-  float lace = smoothstep(0.55, 0.62, noise * 0.6 + streaks * 0.5);
+  float streaks = texture2D(uFoamMap, base * uFoamShape.x * 4.3 + vec2(0.37, 0.61)).r;
+  float fine = texture2D(uFoamMap, base * uFoamShape.x * 11.0 + vec2(0.71, 0.13)).r;
+  float cap = smoothstep(uFoamShape.y, uFoamShape.z, crest + (noise - 0.5) * 0.45);
+  float lace = smoothstep(0.5, 0.56, streaks * 0.55 + fine * 0.45 + cap * 0.2);
   float foam = cap * lace * uFoamLevel * (1.0 - smoothstep(150.0, 1200.0, dist));
   colour = mix(colour, uFoamColour * (0.72 + 0.28 * sunSide), foam);
   gl_FragColor = vec4(colour, 1.0);

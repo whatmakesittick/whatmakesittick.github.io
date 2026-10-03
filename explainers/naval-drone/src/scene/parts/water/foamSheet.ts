@@ -50,7 +50,7 @@ void main() {
   vec2 flow = vec2(along * uSheet.z, outward * uSheet.w - uTime * uSheet.y);
   float coarse = texture2D(uCellMap, flow).r;
   float fine = texture2D(uCellMap, flow * vec2(2.3, 1.6) + vec2(0.37, 0.11)).r;
-  float streak = smoothstep(0.42, 0.78, coarse * 0.6 + fine * 0.5);
+  float streak = smoothstep(0.5, 0.82, coarse * 0.55 + fine * 0.55);
   float body = smoothstep(0.0, max(uProfile.x, 1e-3), outward) * (1.0 - smoothstep(uProfile.y, 1.0, outward));
   body *= smoothstep(0.0, 0.18, along) * (1.0 - smoothstep(0.78, 1.0, along));
   float facing = abs(dot(normalize(vNormalView), normalize(vView)));

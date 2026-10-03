@@ -32,7 +32,7 @@ function domeShape(): BufferGeometry {
     new Vector2(0, 0),
     new Vector2(DOME.radius, 0),
     new Vector2(DOME.radius, DOME.height),
-    new Vector2(DOME.radius * 0.7, DOME.height + DOME.radius * 0.7),
+    new Vector2(DOME.radius * COMPANION.shoulder, DOME.height + DOME.radius * COMPANION.shoulder),
     new Vector2(0, DOME.height + DOME.radius),
   ];
   const dome = new LatheGeometry(points, segments);
