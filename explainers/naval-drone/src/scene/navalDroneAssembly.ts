@@ -43,7 +43,14 @@ import type { PartContext } from './parts/context';
 import { GhostPart } from './parts/effects/ghost';
 import { LinksPart } from './parts/effects/links';
 import { cellTexture, deckTexture, hullSideTexture, noiseTexture } from './parts/surfaces';
-import { SHIP_SPAN, applyMotion, responseFor, waveMotion } from './parts/water/boatMotion';
+import {
+  SHIP_SPAN,
+  SmoothMotion,
+  applyMotion,
+  motionBlend,
+  responseFor,
+  waveMotion,
+} from './parts/water/boatMotion';
 import { FlowPart } from './parts/water/flow';
 import { HullWaterPart } from './parts/water/hullWater';
 import { JetStreamPart } from './parts/water/jetStream';
@@ -70,6 +77,7 @@ interface Companion {
   wake: WakePart;
   water: HullWaterPart;
   missiles: MissileFit;
+  motion: SmoothMotion;
 }
 
 const COMPANION_COUNT = 2;
@@ -119,6 +127,7 @@ export class NavalDroneAssembly implements Assembly {
   private readonly named: Readonly<Record<AnchorId, Object3D>>;
   private readonly regions: Readonly<Record<RegionId, Box3>>;
   private readonly frame = new Matrix4();
+  private readonly boatMotion = new SmoothMotion();
   private readonly spacing = trailSpacing(WAKE.samples, WAKE.length, WAKE.power);
   private seaState: AssemblyState['sea']['state'];
   private state: AssemblyState;
@@ -154,7 +163,8 @@ export class NavalDroneAssembly implements Assembly {
       const water = new HullWaterPart(context, foam, { bow: 'companions', spray: 'companions' });
       const missiles = buildMissileFit(context);
       part.body.add(water.object, missiles.object);
-      return { part, wake: new WakePart(context, 'companions', foam), water, missiles };
+      const wake = new WakePart(context, 'companions', foam);
+      return { part, wake, water, missiles, motion: new SmoothMotion() };
     });
     this.ghost = new GhostPart(context, shapes.outline);
     this.links = new LinksPart(context);
@@ -244,7 +254,7 @@ export class NavalDroneAssembly implements Assembly {
     this.state = state;
     this.applySea(state);
     this.boat.setState(state);
-    this.settleBoats();
+    this.settleBoats(state.playing || state.boat.held ? 0 : 1);
     this.missiles.object.visible = state.fit === 'missile';
     sectionFrame(state.boat.position, state.boat.heading, this.frame);
     placeSection(this.sea.section, this.frame, state.waterSection);
@@ -276,16 +286,18 @@ export class NavalDroneAssembly implements Assembly {
     WATER.uWaves.value = waveVectors(state.sea.waveHeight);
   }
 
-  private settleBoats(): void {
+  private settleBoats(blend: number): void {
     const { boat, planing, companions } = this.state;
     const response = responseFor(planing.liftShare);
-    applyMotion(this.boat.body, waveMotion(boat.position, boat.heading, response));
+    const scale = boat.held ? MOTION.held : 1;
+    const target = waveMotion(boat.position, boat.heading, response);
+    applyMotion(this.boat.body, this.boatMotion.follow(target, blend, scale));
     this.sea.followBoat(this.boat.body);
     companions.forEach((reading, index) => {
       const companion = this.companions[index];
-      if (companion) {
-        applyMotion(companion.part.body, waveMotion(reading.position, reading.heading, response));
-      }
+      if (!companion) return;
+      const wave = waveMotion(reading.position, reading.heading, response);
+      applyMotion(companion.part.body, companion.motion.follow(wave, blend, scale));
     });
   }
 
@@ -353,7 +365,7 @@ export class NavalDroneAssembly implements Assembly {
       WATER.uSeaDrift.value.x += Math.cos(boat.heading) * travel;
       WATER.uSeaDrift.value.y += Math.sin(boat.heading) * travel;
     }
-    this.settleBoats();
+    this.settleBoats(motionBlend(deltaSeconds));
     this.boat.advance(deltaSeconds, this.state);
     this.hullWater.advance(deltaSeconds);
     this.hullWater.setState(this.state, this.boat.body);

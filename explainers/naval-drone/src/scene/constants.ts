@@ -393,6 +393,9 @@ export const MOTION = {
   shipSide: 7,
   shipEnd: 50,
   shipResponse: 0.6,
+  swell: 3,
+  lag: 1,
+  held: 0.12,
 } as const;
 
 export const SEA_FOAM: Readonly<Record<'smooth' | 'slight' | 'moderate' | 'rough', number>> = {

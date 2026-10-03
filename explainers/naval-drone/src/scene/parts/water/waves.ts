@@ -45,11 +45,16 @@ export function resetWater(waveHeight: number): void {
   WATER.uWaves.value = waveVectors(waveHeight);
 }
 
-export function seaHeightAt(x: number, z: number, uniforms: WaterUniforms = WATER): number {
+export function seaHeightAt(
+  x: number,
+  z: number,
+  uniforms: WaterUniforms = WATER,
+  components: number = WAVES.components.length,
+): number {
   const px = x + uniforms.uSeaDrift.value.x;
   const pz = z + uniforms.uSeaDrift.value.y;
   const time = uniforms.uSeaTime.value;
-  return uniforms.uWaves.value.reduce((height, wave, index) => {
+  return uniforms.uWaves.value.slice(0, components).reduce((height, wave, index) => {
     const phase = wave.x * px + wave.y * pz - wave.z * time + index * WAVES.phaseStep;
     const k = Math.hypot(wave.x, wave.y);
     return height + wave.w * Math.cos(phase) + 0.5 * k * wave.w * wave.w * Math.cos(2 * phase);

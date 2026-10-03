@@ -2,7 +2,7 @@ import type { Object3D } from 'three';
 import { clamp, lerp } from '@core/math';
 import type { Point } from '../../../ids';
 import { MOTION } from '../../constants';
-import { seaHeightAt } from './waves';
+import { WATER, seaHeightAt } from './waves';
 
 export interface Motion {
   heave: number;
@@ -40,6 +40,8 @@ export function waveMotion(
     seaHeightAt(
       position[0] + ahead[0] * along + starboard[0] * across,
       position[2] + ahead[1] * along + starboard[1] * across,
+      WATER,
+      MOTION.swell,
     );
   const bow = sample(span.bow, 0);
   const stern = sample(-span.stern, 0);
@@ -58,6 +60,21 @@ export function waveMotion(
       MOTION.maxRoll,
     ),
   };
+}
+
+export class SmoothMotion {
+  private readonly current: Motion = { heave: 0, pitch: 0, roll: 0 };
+
+  follow(target: Motion, blend: number, scale: number): Motion {
+    this.current.heave += (target.heave * scale - this.current.heave) * blend;
+    this.current.pitch += (target.pitch * scale - this.current.pitch) * blend;
+    this.current.roll += (target.roll * scale - this.current.roll) * blend;
+    return this.current;
+  }
+}
+
+export function motionBlend(deltaSeconds: number): number {
+  return 1 - Math.exp(-deltaSeconds / MOTION.lag);
 }
 
 export function responseFor(liftShare: number): number {
