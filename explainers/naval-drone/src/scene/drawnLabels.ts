@@ -21,6 +21,8 @@ const COMPACT_HIDDEN: ReadonlySet<string> = new Set<PartId>([
 const DRAWN_WHEN: Readonly<Partial<Record<PartId, DrawnTest>>> = {
   satLink: ({ view, link }) => view.links && link.mode === 'satellite',
   backupLink: ({ view, link }) => view.links && link.mode === 'backup',
+  satellite: ({ view }) => view.links,
+  backupSatellite: ({ view }) => view.links,
   videoGhost: ({ link }) => link.ghost !== null,
   missileRails: ({ fit }) => fit === 'missile',
   companions: ({ companions }) => companions.length > 0,

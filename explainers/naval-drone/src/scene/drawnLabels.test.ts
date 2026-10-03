@@ -8,6 +8,8 @@ import type { DrawnSource } from './drawnLabels';
 const ALL = new Set([
   'satLink',
   'backupLink',
+  'satellite',
+  'backupSatellite',
   'videoGhost',
   'missileRails',
   'companions',
@@ -62,6 +64,18 @@ describe('drawn labels', () => {
     expect(shown(source(22, { link: { mode: 'satellite', ghost: null } }))).not.toContain(
       'satLink',
     );
+  });
+
+  it('labels the satellites only while the links are shown, as the scene draws them', () => {
+    const links = { ...DEFAULT_VIEW, links: true };
+    ['satellite', 'backupSatellite'].forEach((part) => {
+      expect(shown(source(22, { view: links })), part).toContain(part);
+      expect(
+        shown(source(22, { view: links, link: { mode: 'lost', ghost: null } })),
+        part,
+      ).toContain(part);
+      expect(shown(source(22)), part).not.toContain(part);
+    });
   });
 
   it('labels the ghost, the rails, the companions and the wetted bar when drawn', () => {
