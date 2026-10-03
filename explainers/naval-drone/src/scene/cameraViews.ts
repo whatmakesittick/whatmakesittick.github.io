@@ -203,7 +203,7 @@ function followView(
       const target = source();
       return target ? pose(target, slopes) : null;
     },
-    follow: true,
+    follow: 'position',
     distance,
   };
 }

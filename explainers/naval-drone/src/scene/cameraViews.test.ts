@@ -41,7 +41,7 @@ describe('camera views', () => {
   it('offers every view the chapters ask for, all following the boat', () => {
     Object.values(PRESETS).forEach((preset) => {
       expect(views[preset.camera]).toBeDefined();
-      expect(views[preset.camera].follow, preset.camera).toBe(true);
+      expect(views[preset.camera].follow, preset.camera).toBe('position');
     });
   });
 

@@ -75,7 +75,7 @@ describe('naval drone controller', () => {
     navalDrone.views.frame('chase', true);
     const target = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
     expect(target?.x).toBeCloseTo(state.boat.position[0], 1);
-    expect(rig.follow).toHaveBeenLastCalledWith(expect.anything());
+    expect(rig.follow).toHaveBeenLastCalledWith(expect.anything(), 'position');
     expect(rig.setDistanceLimits).toHaveBeenLastCalledWith({});
   });
 
