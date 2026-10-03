@@ -6,6 +6,8 @@ import {
   BACKUP_SATELLITE_OFFSET,
   BOAT,
   DOME,
+  FAIRING,
+  JET,
   SATELLITE_OFFSET,
   TRANSOM_X,
   skyPoint,
@@ -95,13 +97,29 @@ describe('camera views', () => {
     expect(pose.position.y).toBeLessThan(TARGET.position[1] + 1);
   });
 
-  it('aims at the pump axis behind the transom, dropping with the trim', () => {
+  it('aims between the pump axis and the deck behind the transom, dropping with the trim', () => {
     const level = orbitPose(TARGET, ORBIT_VIEWS.stern, PHONE);
     expect(level.target.x).toBeCloseTo(400 + TRANSOM_X - 0.15, 9);
-    expect(level.target.y).toBeCloseTo(0.2 - 0.15, 9);
+    expect(level.target.y).toBeGreaterThan(0.2 + JET.axisY);
+    expect(level.target.y).toBeLessThan(0.2 + FAIRING.top);
     const trimmed = orbitPose({ ...TARGET, trim: toRadians(4) }, ORBIT_VIEWS.stern, PHONE);
     expect(trimmed.target.y).toBeLessThan(level.target.y);
-    expect(offsetOf(level).length()).toBeCloseTo(2.4 / (2 * PHONE.horizontal), 9);
+  });
+
+  it('backs the stern view off until the pump and the top of the stern fit', () => {
+    const stern: Point[] = [
+      [TRANSOM_X, 0.65, -0.18],
+      [FAIRING.frontTopX, FAIRING.top, FAIRING.topHalfWidth],
+      [JET.steeringNozzle.x[0], JET.axisY, 0],
+    ];
+    const points = stern.map((point) => vectorOf(point).add(vectorOf(TARGET.position)));
+    [PHONE, DESKTOP].forEach((slopes) => {
+      const pose = orbitPose(TARGET, ORBIT_VIEWS.stern, slopes);
+      expect(offsetOf(pose).length()).toBeGreaterThanOrEqual(2.4 / (2 * slopes.horizontal) - 1e-9);
+      expect(fitsView(pose, points, slopes, 0.93)).toBe(true);
+    });
+    const wide = { vertical: 0.5, horizontal: 0.5 };
+    expect(offsetOf(orbitPose(TARGET, ORBIT_VIEWS.stern, wide)).length()).toBeCloseTo(2.4, 9);
   });
 
   it('looks from just forward of the dome along the heading with the bow fairing low in the frame', () => {

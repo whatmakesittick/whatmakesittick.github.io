@@ -26,7 +26,6 @@ describe('part labels', () => {
         'duct',
         'driveShaft',
         'impeller',
-        'stator',
         'wake',
         'jetStream',
         'wettedLength',
@@ -38,9 +37,9 @@ describe('part labels', () => {
         'hull',
       ] as const
     ).forEach((id) => expect(PART_INFO[id].side, id).toBe('left'));
-    (['nozzle', 'steeringNozzle', 'satLink', 'satellite', 'ship', 'cameraDome'] as const).forEach(
-      (id) => expect(PART_INFO[id].side, id).toBe('right'),
-    );
+    (
+      ['stator', 'nozzle', 'steeringNozzle', 'satLink', 'satellite', 'ship', 'cameraDome'] as const
+    ).forEach((id) => expect(PART_INFO[id].side, id).toBe('right'));
   });
 
   it('splits the labels of the busy chapters across both sides', () => {

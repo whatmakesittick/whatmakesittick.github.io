@@ -9,10 +9,13 @@ import {
   BACKUP_SATELLITE_OFFSET,
   BOW_CAMERA,
   DOME,
+  FAIRING,
   FORMATION,
+  HULL_STATIONS,
   JET,
   SATELLITE_OFFSET,
   TRANSOM_X,
+  VENT_BOX,
   skyPoint,
 } from '../model';
 import type { ChaseTarget } from './assembly';
@@ -33,6 +36,7 @@ interface OrbitSpec {
   elevation: number;
   width(target: FollowTarget): number;
   aim: Point;
+  keep?: readonly Point[];
 }
 
 const STERN_AIM_AFT = 0.15;
@@ -40,7 +44,22 @@ const STERN_WIDTH_M = 2.4;
 const CHASE_WIDTH_LENGTHS = 2.2;
 const WATERLINE_WIDTH_LENGTHS = 1.4;
 const FIT_FILL = 0.86;
+const KEEP_FILL = 0.92;
+const MAX_ZOOM_OUT = 3;
 const SIDES = [-1, 1] as const;
+const [TRANSOM_STATION] = HULL_STATIONS;
+
+const STERN_AIM_Y = (JET.axisY + FAIRING.top) / 2;
+
+const STERN_KEEP: readonly Point[] = [
+  [JET.steeringNozzle.x[0], JET.axisY, 0],
+  [JET.intake.x[1], JET.intake.y, 0],
+  ...SIDES.flatMap((side): Point[] => [
+    [VENT_BOX.x[0], VENT_BOX.top, side * VENT_BOX.halfWidth],
+    [FAIRING.frontTopX, FAIRING.top, side * FAIRING.topHalfWidth],
+    [TRANSOM_X, TRANSOM_STATION.deck, side * TRANSOM_STATION.sheer[0]],
+  ]),
+];
 
 export const ORBIT_VIEWS: Readonly<Record<OrbitView, OrbitSpec>> = {
   chase: {
@@ -59,7 +78,8 @@ export const ORBIT_VIEWS: Readonly<Record<OrbitView, OrbitSpec>> = {
     bearing: toRadians(-145),
     elevation: toRadians(12),
     width: () => STERN_WIDTH_M,
-    aim: [TRANSOM_X - STERN_AIM_AFT, JET.axisY, 0],
+    aim: [TRANSOM_X - STERN_AIM_AFT, STERN_AIM_Y, 0],
+    keep: STERN_KEEP,
   },
 };
 
@@ -113,10 +133,16 @@ export function orbitPose(
   spec: OrbitSpec,
   slopes: FramingSlopes,
 ): CameraPose {
-  const aim = boatToWorld(frameOf(target), spec.aim, true);
-  const distance = fitDistance(spec.width(target), slopes);
-  const offset = direction(target.heading + spec.bearing, spec.elevation).multiplyScalar(distance);
-  return { position: aim.clone().add(offset), target: aim };
+  const frame = frameOf(target);
+  const aim = boatToWorld(frame, spec.aim, true);
+  const away = direction(target.heading + spec.bearing, spec.elevation);
+  const keep = (spec.keep ?? []).map((point) => boatToWorld(frame, point, true));
+  const nearest = fitDistance(spec.width(target), slopes);
+  return nearestFit(
+    (distance) => ({ position: aim.clone().addScaledVector(away, distance), target: aim.clone() }),
+    (pose) => fitsView(pose, keep, slopes, KEEP_FILL),
+    { min: nearest, max: nearest * MAX_ZOOM_OUT },
+  );
 }
 
 function formationPoints(target: FollowTarget): Vector3[] {

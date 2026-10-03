@@ -30,7 +30,7 @@ describe('chapter presets', () => {
   it('highlights the labelled parts of the hull, jet and link chapters', () => {
     expect(PRESETS.hull.highlight).toEqual(PRESETS.hull.labels);
     expect(PRESETS.link.highlight).toEqual(PRESETS.link.labels);
-    expect(PRESETS.jet.highlight).toEqual([...PRESETS.jet.labels, 'waterjet']);
+    expect(PRESETS.jet.highlight).toEqual([...PRESETS.jet.labels, 'duct', 'jetStream', 'waterjet']);
     expect(PRESETS.horizon.highlight).toEqual(['cameraDome', 'bowCamera', 'ship', 'shipRadar']);
     expect(PRESETS.overview.highlight).toEqual([]);
     expect(PRESETS.fleet.highlight).toEqual([]);

@@ -1,3 +1,4 @@
+import type { ViewportSize } from '@core/scene/lens';
 import type { LabelPolicy } from '@core/scene/presetBinder';
 import type { AssemblyState, PartId } from '../ids';
 
@@ -10,6 +11,18 @@ type DrawnTest = (state: DrawnSource) => boolean;
 
 const NO_PARTS: ReadonlySet<string> = new Set();
 const MOVING_KNOTS = 0.5;
+const COMPACT_STAGE_WIDTH_PX = 600;
+
+const COMPACT_HIDDEN: ReadonlySet<string> = new Set<PartId>([
+  'driveShaft',
+  'stator',
+  'nozzle',
+  'fuelTanks',
+]);
+
+export function isCompactStage(size: Pick<ViewportSize, 'width'>): boolean {
+  return size.width < COMPACT_STAGE_WIDTH_PX;
+}
 
 const DRAWN_WHEN: Readonly<Partial<Record<PartId, DrawnTest>>> = {
   satLink: ({ view, link }) => view.links && link.mode === 'satellite',
@@ -30,6 +43,7 @@ export class DrawnLabels implements LabelPolicy {
   private readonly hidden = new Set<string>();
   private wanted = NO_PARTS;
   private pinned = NO_PARTS;
+  private compact = false;
 
   constructor(policy: LabelPolicy) {
     this.policy = policy;
@@ -43,6 +57,12 @@ export class DrawnLabels implements LabelPolicy {
 
   follow(state: DrawnSource): void {
     if (this.hideUndrawn(state)) this.publish();
+  }
+
+  setCompact(compact: boolean): void {
+    if (compact === this.compact) return;
+    this.compact = compact;
+    this.publish();
   }
 
   private hideUndrawn(state: DrawnSource): boolean {
@@ -62,6 +82,10 @@ export class DrawnLabels implements LabelPolicy {
   }
 
   private drawn(parts: ReadonlySet<string>): ReadonlySet<string> {
-    return new Set([...parts].filter((part) => !this.hidden.has(part)));
+    return new Set([...parts].filter((part) => this.fits(part) && !this.hidden.has(part)));
+  }
+
+  private fits(part: string): boolean {
+    return !this.compact || !COMPACT_HIDDEN.has(part);
   }
 }

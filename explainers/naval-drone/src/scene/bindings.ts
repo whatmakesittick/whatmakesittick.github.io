@@ -1,5 +1,6 @@
 import { bindPresets } from '@core/scene/presetBinder';
 import type { LabelPolicy, PresetTargets } from '@core/scene/presetBinder';
+import type { Viewport } from '@core/scene/viewport';
 import type { AssemblyState } from '../ids';
 import {
   CHAPTER_CONTROL_DEFAULTS,
@@ -17,11 +18,12 @@ import type {
   RunSource,
 } from '../state';
 import type { NavalDroneController } from './controller';
-import { DrawnLabels } from './drawnLabels';
+import { DrawnLabels, isCompactStage } from './drawnLabels';
 
 export interface SceneTargets extends PresetTargets {
   navalDrone: NavalDroneController;
   labelVisibility: LabelPolicy;
+  viewport: Pick<Viewport, 'onResize'>;
 }
 
 type AssemblySource = RunSource & Pick<NavalDroneState, 'playing' | 'fit' | 'view'>;
@@ -69,7 +71,7 @@ class DoubleBufferedAssemblyState {
 }
 
 export function bindStore(store: NavalDroneStore, targets: SceneTargets): () => void {
-  const { navalDrone, labelVisibility } = targets;
+  const { navalDrone, labelVisibility, viewport } = targets;
   const assemblyState = new DoubleBufferedAssemblyState();
   const drawnLabels = new DrawnLabels(labelVisibility);
   const handOver = (state: AssemblySource) => {
@@ -80,6 +82,7 @@ export function bindStore(store: NavalDroneStore, targets: SceneTargets): () => 
   const push = (state: AssemblySource) => navalDrone.setState(handOver(state));
   navalDrone.build(handOver(store.getState()));
   const unsubscribers = [
+    viewport.onResize((size) => drawnLabels.setCompact(isCompactStage(size))),
     store.subscribe(push),
     bindPresets<NavalDroneStoreState, Preset>(targets, store, {
       presets: PRESETS,

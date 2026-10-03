@@ -12,7 +12,6 @@ const LEFT_PARTS: ReadonlySet<PartId> = new Set<PartId>([
   'duct',
   'driveShaft',
   'impeller',
-  'stator',
   'wake',
   'jetStream',
   'wettedLength',

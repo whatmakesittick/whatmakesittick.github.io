@@ -1,9 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
+import { NO_SAFE_AREA } from '@core/scene/lens';
+import type { ViewportSize } from '@core/scene/lens';
 import type { AssemblyState } from '../ids';
 import { HELD_PHASE, boatAt, companionsAt, planingAt, seaAt } from '../model';
 import { createNavalDroneStore } from '../state';
 import { bindStore } from './bindings';
 import type { NavalDroneController } from './controller';
+
+const DESKTOP_STAGE: ViewportSize = { width: 835, height: 900, safe: NO_SAFE_AREA };
+const PHONE_STAGE: ViewportSize = { width: 390, height: 330, safe: NO_SAFE_AREA };
 
 function fakeTargets() {
   const received: AssemblyState[] = [];
@@ -14,7 +19,14 @@ function fakeTargets() {
   };
   const frame = vi.fn();
   const navalDrone = { build: record, setState: record, views: { frame } };
+  const resizes: ((size: ViewportSize) => void)[] = [];
+  const resize = (listener: (size: ViewportSize) => void) => {
+    resizes.push(listener);
+    listener(DESKTOP_STAGE);
+    return () => resizes.splice(resizes.indexOf(listener), 1);
+  };
   return {
+    resizes,
     received,
     snapshots,
     frame,
@@ -23,6 +35,7 @@ function fakeTargets() {
       labelVisibility: { setWanted: vi.fn() },
       highlighter: { setHighlight: vi.fn() },
       labels: { show: vi.fn() },
+      viewport: { onResize: resize },
     },
   };
 }
@@ -120,6 +133,21 @@ describe('scene bindings', () => {
     expect(wanted()).not.toContain('missileRails');
     store.getState().setFit('missile');
     expect(wanted()).toContain('missileRails');
+  });
+
+  it('drops the minor pump labels on a phone-sized stage', () => {
+    const { resizes, targets } = fakeTargets();
+    const store = createNavalDroneStore();
+    bindStore(store, targets);
+    const wanted = () =>
+      targets.labelVisibility.setWanted.mock.lastCall?.[0] as ReadonlySet<string>;
+    store.getState().applyPreset('jet');
+    expect(wanted()).toContain('driveShaft');
+    resizes.forEach((listener) => listener(PHONE_STAGE));
+    expect(wanted()).not.toContain('driveShaft');
+    expect(wanted()).toContain('impeller');
+    resizes.forEach((listener) => listener(DESKTOP_STAGE));
+    expect(wanted()).toContain('driveShaft');
   });
 
   it('stops listening once unbound', () => {

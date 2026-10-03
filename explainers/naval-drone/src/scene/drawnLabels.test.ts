@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { boatAt, jetAt, planingAt, seaAt } from '../model';
 import { DEFAULT_VIEW } from '../state';
-import { DrawnLabels } from './drawnLabels';
+import { DrawnLabels, isCompactStage } from './drawnLabels';
 import type { DrawnSource } from './drawnLabels';
 
 const ALL = new Set([
@@ -76,6 +76,21 @@ describe('drawn labels', () => {
     ['videoGhost', 'missileRails', 'companions', 'wettedLength'].forEach((part) =>
       expect(drawn).toContain(part),
     );
+  });
+
+  it('drops the minor pump labels while the stage is phone-sized', () => {
+    const policy = { setWanted: vi.fn() };
+    const labels = new DrawnLabels(policy);
+    const pump = new Set(['impeller', 'nozzle', 'driveShaft', 'steeringNozzle']);
+    labels.setWanted(pump, pump);
+    const wanted = () => [...(policy.setWanted.mock.lastCall?.[0] as ReadonlySet<string>)];
+    labels.setCompact(isCompactStage({ width: 390 }));
+    expect(wanted()).toEqual(['impeller', 'steeringNozzle']);
+    const calls = policy.setWanted.mock.calls.length;
+    labels.setCompact(isCompactStage({ width: 400 }));
+    expect(policy.setWanted.mock.calls).toHaveLength(calls);
+    labels.setCompact(isCompactStage({ width: 835 }));
+    expect(wanted()).toEqual([...pump]);
   });
 
   it('publishes again only when a drawn part changes', () => {

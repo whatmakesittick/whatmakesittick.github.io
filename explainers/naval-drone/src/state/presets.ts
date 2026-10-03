@@ -49,16 +49,16 @@ const HULL_PARTS: readonly PartId[] = [
   'wettedLength',
 ];
 
-const JET_PARTS: readonly PartId[] = [
+const JET_LABELS: readonly PartId[] = [
   'intake',
-  'duct',
   'driveShaft',
   'impeller',
   'stator',
   'nozzle',
   'steeringNozzle',
   'reverseBucket',
-  'jetStream',
+  'engine',
+  'fuelTanks',
 ];
 
 const LINK_PARTS: readonly PartId[] = [
@@ -98,8 +98,8 @@ export const PRESETS: Record<PresetId, Preset> = {
     pauseAt: HELD_PHASE,
     controls: ['trialKnots', 'helm'],
     start: { trialKnots: SPEED_MARKS.cruise, helm: 'straight' },
-    labels: [...JET_PARTS, 'engine', 'fuelTanks'],
-    highlight: [...JET_PARTS, 'engine', 'fuelTanks', 'waterjet'],
+    labels: JET_LABELS,
+    highlight: [...JET_LABELS, 'duct', 'jetStream', 'waterjet'],
   },
   link: {
     camera: 'sky',
