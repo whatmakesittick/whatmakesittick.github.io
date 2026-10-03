@@ -9,7 +9,7 @@ import type {
   SeaStateId,
   ViewOptions,
 } from '../ids';
-import { HELD_PHASE } from '../model';
+import { HELD_PHASE, SPEED_MARKS } from '../model';
 
 export interface ChapterControls {
   trialKnots: number | null;
@@ -31,8 +31,6 @@ export interface Preset extends ScenePreset<PartId, CameraView> {
 export const DEFAULT_FIT: FitId = 'standard';
 
 const NORMAL_SPEED = 1;
-const HULL_TRIAL_KNOTS = 11;
-const JET_TRIAL_KNOTS = 22;
 
 const CHAPTER_START_SECONDS = {
   overview: 0,
@@ -99,7 +97,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: { cutaway: false, flow: true, links: false },
     pauseAt: HELD_PHASE,
     controls: ['trialKnots'],
-    start: { trialKnots: HULL_TRIAL_KNOTS },
+    start: { trialKnots: SPEED_MARKS.hump },
     labels: HULL_PARTS,
     highlight: HULL_PARTS,
   },
@@ -109,7 +107,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: { cutaway: true, flow: true, links: false },
     pauseAt: HELD_PHASE,
     controls: ['trialKnots', 'helm'],
-    start: { trialKnots: JET_TRIAL_KNOTS, helm: 'straight' },
+    start: { trialKnots: SPEED_MARKS.cruise, helm: 'straight' },
     labels: JET_PARTS,
     highlight: [...JET_PARTS, 'waterjet', 'engine'],
   },
