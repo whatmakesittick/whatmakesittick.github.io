@@ -1,5 +1,5 @@
 import { toRadians } from '@core/math';
-import { FAIRING, HATCHES } from '../model/layout';
+import { FAIRING, HATCHES, JET } from '../model/layout';
 import { THEME } from '../theme';
 
 type Triple = readonly [number, number, number];
@@ -246,7 +246,7 @@ export const JET_SHAPE = {
     arc: [toRadians(100), toRadians(290)] as const,
     centre: [-3.165, -0.15] as const,
     thickness: 0.006,
-    stow: toRadians(-76),
+    stow: toRadians(-110),
     arm: { width: 0.022, thickness: 0.008 },
     boss: 0.016,
     bracket: { x: [-3.0, -2.905] as const, bottom: -0.085, thickness: 0.01 },
@@ -415,7 +415,7 @@ export const SEA_FOAM: Readonly<Record<'smooth' | 'slight' | 'moderate' | 'rough
 };
 
 export const WAKE = {
-  start: 3.25,
+  start: -JET.nozzle.x[1],
   samples: 72,
   length: 320,
   power: 1.7,

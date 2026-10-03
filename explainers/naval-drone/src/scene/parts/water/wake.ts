@@ -66,23 +66,24 @@ void main() {
   float t = uSeaTime;
   vec2 warp = vec2(foamAt(q * 0.05 + vec2(t * 0.013, 0.0)), foamAt(q * 0.05 + vec2(0.5, t * 0.011))) - 0.5;
   vec2 w = q + warp * 1.6;
-  float churn = foamAt(w * 0.55 + vec2(0.0, t * 0.04)) * 0.55 + foamAt(w * 1.7 + vec2(0.37, -t * 0.06)) * 0.45;
+  float fine = mix(foamAt(w * 1.7 + vec2(0.37, -t * 0.06)), 0.6, smoothstep(10.0, 50.0, distance(cameraPosition, vWorld)));
+  float churn = foamAt(w * 0.55 + vec2(0.0, t * 0.04)) * 0.55 + fine * 0.45;
   float streaks = foamAt(w * vec2(0.03, 0.3)) * 0.55 + foamAt(w * vec2(0.09, 0.9) + vec2(0.21, 0.6)) * 0.45;
   float n = mix(churn, streaks, smoothstep(4.0, 60.0, behind));
-  float edge = abs(across) + warp.x * 0.6;
+  float edge = abs(across) + warp.x * 0.3;
   float density;
   if (vWake.z < 0.5) {
-    float body = 1.0 - smoothstep(0.3, 1.0, edge);
+    float body = 1.0 - smoothstep(0.3, 0.85, edge);
     float lines = exp(-pow((abs(across) - 0.86) / 0.16, 2.0)) * exp(-behind / (uShape.z * 0.6));
     density = body * (exp(-behind / uShape.x) * 1.1 + exp(-behind / uShape.y) * 0.5) + lines * 0.6;
   } else {
-    density = (1.0 - smoothstep(0.2, 1.0, edge)) * smoothstep(0.0, 4.0, behind) * exp(-behind / uShape.z) * 0.65;
+    density = (1.0 - smoothstep(0.2, 0.85, edge)) * smoothstep(0.0, 4.0, behind) * exp(-behind / uShape.z) * 0.65;
   }
-  density = clamp(density * uShape.w * vWake.w * smoothstep(0.0, 0.6, behind), 0.0, 1.0);
-  float foam = smoothstep(0.92 - density * 0.55, 1.12 - density * 0.55, n) * smoothstep(0.0, 0.12, density);
+  density = clamp(density * uShape.w * vWake.w * smoothstep(0.0, 0.1, behind), 0.0, 1.0);
+  float foam = smoothstep(0.85 - density * 0.55, 1.2 - density * 0.55, n) * smoothstep(0.0, 0.12, density);
   float tint = clamp(density, 0.0, 1.0) * 0.16;
   vec3 colour = mix(uTint, uFoam * (0.88 + 0.12 * churn), foam / max(foam + tint, 1e-3));
-  gl_FragColor = vec4(colour, clamp(max(foam * 0.9, tint), 0.0, 0.92));
+  gl_FragColor = vec4(colour, clamp(max(foam * 0.8, tint), 0.0, 0.8));
   #include <colorspace_fragment>
 }
 `;
