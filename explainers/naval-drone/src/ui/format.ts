@@ -87,12 +87,23 @@ export function describeSpeed(): string {
   return t('timeline.speedValue');
 }
 
+function roundTo(value: number, fractionDigits: number): number {
+  return Number(value.toFixed(fractionDigits));
+}
+
+export function shownKnots(knots: number): number {
+  const inTenths = roundTo(knots, TENTHS);
+  return inTenths < WHOLE_KNOTS_FROM ? inTenths : roundTo(knots, WHOLE);
+}
+
 function knotsText(knots: number): string {
-  return knots < WHOLE_KNOTS_FROM ? tenths(knots) : whole(knots);
+  const shown = shownKnots(knots);
+  return formatFixed(shown, shown < WHOLE_KNOTS_FROM ? TENTHS : WHOLE);
 }
 
 export function formatBoatSpeed(knots: number): string {
-  return t('units.speed', { kn: knotsText(knots), kmh: whole(knotsToKmh(knots)) });
+  const shown = shownKnots(knots);
+  return t('units.speed', { kn: knotsText(shown), kmh: whole(knotsToKmh(shown)) });
 }
 
 export function formatTrialSpeed(knots: number): string {

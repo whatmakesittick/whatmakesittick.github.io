@@ -1,11 +1,12 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { initI18n } from '@core/i18n';
 import { mountActions } from '@core/ui/actions';
+import { TEXT_REFRESH_INTERVAL_MS } from '@core/ui/throttle';
 import chapters from '../../chapters.html?raw';
 import en from '../../locales/en.json';
 import { FIT_IDS, HELM_IDS, LINK_MODES, SEA_STATE_IDS, SPEED_MARK_IDS } from '../ids';
 import { HELD_PHASE, MOMENTS, distanceAt, knotsAtThrottle, speedAt, throttleAt } from '../model';
-import { createNavalDroneStore } from '../state';
+import { createNavalDroneStore, runAt } from '../state';
 import type { NavalDroneStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
 import {
@@ -20,6 +21,7 @@ import { mountNavalDroneUi } from '.';
 
 const { units, hull, jet, link, horizon, fleet } = en;
 const PERCENT = 100;
+const PHASE_NUDGE = 0.05;
 
 function readout(id: string): string | null | undefined {
   return document.querySelector(`[data-readout="${id}"]`)?.textContent;
@@ -55,6 +57,10 @@ function output(control: string): string | null | undefined {
   return document.querySelector(`output[for="${control}"]`)?.textContent;
 }
 
+function settle(): void {
+  vi.advanceTimersByTime(TEXT_REFRESH_INTERVAL_MS);
+}
+
 describe('chapter widgets', () => {
   let store: NavalDroneStore;
   let dispose: () => void;
@@ -62,13 +68,17 @@ describe('chapter widgets', () => {
   beforeAll(() => initI18n({ en: () => Promise.resolve(en) }));
 
   beforeEach(() => {
+    vi.useFakeTimers();
     document.body.innerHTML = chapters;
     store = createNavalDroneStore({ playing: false, phase: 0 });
     dispose = mountNavalDroneUi(document, store);
     mountActions(document, store, CHAPTER_ACTIONS);
   });
 
-  afterEach(() => dispose());
+  afterEach(() => {
+    dispose();
+    vi.useRealTimers();
+  });
 
   it('offers a chip for every option the chapters switch', () => {
     const values = (action: string) =>
@@ -127,15 +137,27 @@ describe('chapter widgets', () => {
 
   it('follows the run throttle on the jet slider and holds the boat when it moves', () => {
     store.getState().setPhase(HELD_PHASE);
+    settle();
     expect(Number(input('throttle').value)).toBe(Math.round(throttleAt(22) * PERCENT));
     expect(readout('jet-boat')).toBe(formatBoatSpeed(22));
     slide('throttle', 100);
+    settle();
     expect(store.getState().trialKnots).toBeCloseTo(knotsAtThrottle(1), 6);
     expect(output('throttle')).toBe(fill(units.percent, { value: '100' }));
     expect(readout('jet-flow')).toBe(fill(jet.flow, { kg: '213', litres: '207' }));
     expect(readout('jet-velocity')).toBe(fill(units.mps, { ms: '32', kmh: '117' }));
     expect(readout('jet-thrust')).toBe(fill(units.kilonewtons, { value: '2.30' }));
     expect(readout('jet-efficiency')).toBe(fill(units.percent, { value: '80' }));
+  });
+
+  it('keeps the jet boat speed with the gauge while the run speeds up', () => {
+    for (let phase = MOMENTS.humpPeak; phase <= HELD_PHASE; phase += PHASE_NUDGE) {
+      store.getState().setPhase(phase);
+      settle();
+      expect(readout('jet-boat'), `${phase}`).toBe(
+        formatBoatSpeed(runAt(store.getState()).boat.knots),
+      );
+    }
   });
 
   it('swings the nozzle and backs the boat with the helm chips', () => {
@@ -148,6 +170,7 @@ describe('chapter widgets', () => {
     click('helm', 'right');
     expect(readout('jet-push')).toBe(fill(jet.push.right, { angle: '27' }));
     click('helm', 'reverse');
+    settle();
     expect(readout('jet-push')).toBe(jet.push.reverse);
     expect(readout('jet-boat')).toBe(jet.backing);
     expect(readout('jet-thrust')).toBe(jet.astern);

@@ -40,6 +40,7 @@ import {
   formatTrialSpeed,
   formatWaves,
   formatWetted,
+  shownKnots,
 } from './format';
 import { fill, isFilled } from './testing';
 
@@ -71,7 +72,14 @@ describe('naval drone formatting', () => {
     expect(formatBoatSpeed(5.7)).toBe(fill(units.speed, { kn: '5.7', kmh: '11' }));
     expect(formatBoatSpeed(22)).toBe(fill(units.speed, { kn: '22', kmh: '41' }));
     expect(formatBoatSpeed(42)).toBe(fill(units.speed, { kn: '42', kmh: '78' }));
+    expect(formatBoatSpeed(9.97)).toBe(fill(units.speed, { kn: '10', kmh: '19' }));
     expect(formatTrialSpeed(11)).toBe(fill(units.speed, { kn: '11.0', kmh: '20' }));
+  });
+
+  it('pairs the km/h with the knots it shows', () => {
+    expect(shownKnots(9.94)).toBe(9.9);
+    expect(shownKnots(21.6)).toBe(22);
+    expect(formatBoatSpeed(21.6)).toBe(formatBoatSpeed(22));
   });
 
   it('names the hull mode', () => {
