@@ -8,6 +8,7 @@ import {
   fitsView,
   lookUpLimits,
   nearestFit,
+  pivotNear,
   polarOf,
 } from './viewFit';
 
@@ -55,6 +56,13 @@ describe('view fitting', () => {
     expect(near.position.x).toBeCloseTo(-10, 3);
     const far = nearestFit(poseAt, () => false, { min: 1, max: 100 });
     expect(far.position.x).toBeCloseTo(-100, 6);
+  });
+
+  it('turns the camera around the point of its view nearest the subject', () => {
+    const pose = { position: new Vector3(0, 10, 0), target: new Vector3(100, 10, 0) };
+    const pivoted = pivotNear(pose, new Vector3(30, 2, 5));
+    expect(pivoted.position.toArray()).toEqual([0, 10, 0]);
+    expect(pivoted.target.toArray()).toEqual([30, 10, 0]);
   });
 
   it('lets a camera look up only as far as its view asks, and never under the sea', () => {

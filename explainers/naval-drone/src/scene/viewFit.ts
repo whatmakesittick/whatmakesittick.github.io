@@ -86,6 +86,15 @@ export function nearestFit(
   return poseAt(high);
 }
 
+export function pivotNear(pose: CameraPose, point: Vector3): CameraPose {
+  const forward = pose.target.clone().sub(pose.position).normalize();
+  const depth = point.clone().sub(pose.position).dot(forward);
+  return {
+    position: pose.position.clone(),
+    target: pose.position.clone().addScaledVector(forward, depth),
+  };
+}
+
 export function polarOf(pose: CameraPose): number {
   return pose.position.clone().sub(pose.target).angleTo(UP);
 }

@@ -14,7 +14,6 @@ import {
 } from '../model';
 import {
   EYE_VIEW,
-  GROUP_VIEW,
   LOOK_AROUND_POLAR,
   ORBIT_VIEWS,
   SKY_VIEW,
@@ -45,6 +44,12 @@ const TARGET: FollowTarget = {
 
 function offsetOf(pose: { position: Vector3; target: Vector3 }): Vector3 {
   return pose.position.clone().sub(pose.target);
+}
+
+function expectPivotNear(pose: { position: Vector3; target: Vector3 }, point: Vector3): void {
+  const forward = offsetOf(pose).negate().normalize();
+  expect(point.clone().sub(pose.target).dot(forward)).toBeCloseTo(0, 6);
+  expect(pose.target.distanceTo(point)).toBeLessThan(offsetOf(pose).length() / 2);
 }
 
 describe('camera views', () => {
@@ -165,12 +170,13 @@ describe('camera views', () => {
   it('frames the boat and the formation behind it on the starboard quarter, looking ahead', () => {
     [PHONE, DESKTOP].forEach((slopes) => {
       const pose = groupPose(TARGET, slopes);
-      expect(pose.target.x).toBeCloseTo(400 + GROUP_VIEW.aimAhead, 9);
       const offset = pose.position.clone().sub(vectorOf(TARGET.position));
       expect(offset.x).toBeLessThan(0);
       expect(offset.z).toBeGreaterThan(0);
       const companions = [-1, 1].map((side) => new Vector3(370, 0, -100 + side * 18));
-      expect(fitsView(pose, [vectorOf(TARGET.position), ...companions], slopes, 0.9)).toBe(true);
+      const boats = [vectorOf(TARGET.position), ...companions];
+      expect(fitsView(pose, boats, slopes, 0.9)).toBe(true);
+      expectPivotNear(pose, new Vector3(380, 0.2, -100));
     });
   });
 
@@ -182,6 +188,7 @@ describe('camera views', () => {
       expect(-behind.x).toBeLessThanOrEqual(SKY_VIEW.back.max + 1);
       expect(pose.target.y).toBeGreaterThan(pose.position.y);
       expect(fitsView(pose, [vectorOf(TARGET.position)], slopes, 1)).toBe(true);
+      expectPivotNear(pose, vectorOf(TARGET.position));
     });
     const satellites = [SATELLITE_OFFSET, BACKUP_SATELLITE_OFFSET].map((offset) =>
       vectorOf(skyPoint(TARGET.position, offset)),

@@ -1,4 +1,4 @@
-import type { Vector3 } from 'three';
+import { Vector3 } from 'three';
 import { toRadians } from '@core/math';
 import type { CameraDistance } from '@core/scene/camera';
 import type { CustomView } from '@core/scene/cameraViews';
@@ -25,6 +25,7 @@ import {
   fitDistance,
   fitsView,
   nearestFit,
+  pivotNear,
   rightOf,
   vectorOf,
 } from './viewFit';
@@ -180,11 +181,16 @@ export function groupPose(target: FollowTarget, slopes: FramingSlopes): CameraPo
   const aim = boatToWorld(level(target), [GROUP_VIEW.aimAhead, 0, 0], false);
   const away = direction(target.heading + GROUP_VIEW.bearing, GROUP_VIEW.elevation);
   const points = formationPoints(target);
-  return nearestFit(
+  const pose = nearestFit(
     (distance) => ({ position: boat.clone().addScaledVector(away, distance), target: aim.clone() }),
-    (pose) => fitsView(pose, points, slopes, FIT_FILL),
+    (candidate) => fitsView(candidate, points, slopes, FIT_FILL),
     { min: fitDistance(GROUP_VIEW.width, slopes), max: GROUP_VIEW.maxDistance },
   );
+  return pivotNear(pose, centreOf(points));
+}
+
+function centreOf(points: readonly Vector3[]): Vector3 {
+  return points.reduce((sum, point) => sum.add(point), new Vector3()).divideScalar(points.length);
 }
 
 function skyPoints(target: FollowTarget): Vector3[] {
@@ -227,11 +233,12 @@ function skyPoseAt(
 
 export function skyPose(target: FollowTarget, slopes: FramingSlopes): CameraPose {
   const points = skyPoints(target);
-  return nearestFit(
+  const pose = nearestFit(
     (back) => skyPoseAt(target, back, points, slopes),
-    (pose) => fitsView(pose, points, slopes, SKY_VIEW.fill),
+    (candidate) => fitsView(candidate, points, slopes, SKY_VIEW.fill),
     SKY_VIEW.back,
   );
+  return pivotNear(pose, vectorOf(target.position));
 }
 
 export function eyePitch(slopes: FramingSlopes): number {
