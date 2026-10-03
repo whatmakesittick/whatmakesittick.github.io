@@ -2,21 +2,30 @@ import { Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { toRadians } from '@core/math';
 import { PRESETS } from '../state';
-import { BACKUP_SATELLITE_OFFSET, BOAT, SATELLITE_OFFSET, TRANSOM_X, skyPoint } from '../model';
+import {
+  BACKUP_SATELLITE_OFFSET,
+  BOAT,
+  DOME,
+  SATELLITE_OFFSET,
+  TRANSOM_X,
+  skyPoint,
+} from '../model';
 import {
   EYE_VIEW,
   GROUP_VIEW,
+  LOOK_AROUND_POLAR,
   ORBIT_VIEWS,
   SKY_VIEW,
   VIEW_DISTANCE,
   cameraViews,
-  eyeAim,
+  eyePitch,
   eyePose,
   groupPose,
   orbitPose,
   skyPitch,
   skyPose,
 } from './cameraViews';
+import type { Point } from '../ids';
 import type { FollowTarget } from './cameraViews';
 import { fitsView, vectorOf } from './viewFit';
 
@@ -29,6 +38,7 @@ const TARGET: FollowTarget = {
   length: BOAT.length,
   ship: [1400, 0, -420],
   trim: 0,
+  lens: [400 + DOME.x, 0.2 + DOME.lens, -100],
 };
 
 function offsetOf(pose: { position: Vector3; target: Vector3 }): Vector3 {
@@ -53,7 +63,7 @@ describe('camera views', () => {
   it('limits the zoom of the close views', () => {
     expect(views.stern.distance).toEqual({ min: 1.2, max: 30 });
     expect(views.waterline.distance).toEqual({ min: 4, max: 80 });
-    expect(views.eye.distance).toEqual({ min: 5, max: 120 });
+    expect(views.eye.distance).toEqual({ min: EYE_VIEW.look, max: EYE_VIEW.look });
     expect(views.chase.distance).toBeUndefined();
     expect(VIEW_DISTANCE.sky).toBeUndefined();
   });
@@ -94,15 +104,31 @@ describe('camera views', () => {
     expect(offsetOf(level).length()).toBeCloseTo(2.4 / (2 * PHONE.horizontal), 9);
   });
 
-  it('looks from just behind the dome along the heading with the bow fairing low in the frame', () => {
+  it('looks from just forward of the dome along the heading with the bow fairing low in the frame', () => {
     const pose = eyePose(TARGET, PHONE);
-    expect(pose.position.toArray()).toEqual([400.75, 1.12, -100]);
-    expect(pose.target.x).toBeCloseTo(440, 9);
-    const window = vectorOf(EYE_VIEW.window).add(vectorOf(TARGET.position));
+    const lens = vectorOf(TARGET.lens);
+    const ahead = pose.position.clone().sub(lens);
+    expect(ahead.x).toBeGreaterThan(DOME.ringRadius);
+    expect(lens.y + ahead.y).toBeGreaterThan(TARGET.position[1] + DOME.top);
+    expect(Math.abs(ahead.z)).toBeLessThan(1e-9);
+    expect(pose.target.x).toBeGreaterThan(pose.position.x);
+    const window = vectorOf(EYE_VIEW.window).add(lens);
     const margin = 0.01;
     expect(fitsView(pose, [window], PHONE, EYE_VIEW.windowShare + margin)).toBe(true);
     expect(fitsView(pose, [window], PHONE, EYE_VIEW.windowShare - margin)).toBe(false);
-    expect(eyeAim(DESKTOP)[1]).toBeGreaterThan(eyeAim(PHONE)[1]);
+    expect(eyePitch(DESKTOP)).toBeGreaterThan(eyePitch(PHONE));
+  });
+
+  it('rides with the lens through the waves and turns in place when dragged', () => {
+    const calm = eyePose(TARGET, PHONE);
+    const raised: Point = [TARGET.lens[0], TARGET.lens[1] + 0.8, TARGET.lens[2] + 0.1];
+    const rough = eyePose({ ...TARGET, lens: raised }, PHONE);
+    const shift = rough.position.clone().sub(calm.position);
+    expect(shift.x).toBeCloseTo(0, 9);
+    expect(shift.y).toBeCloseTo(0.8, 9);
+    expect(shift.z).toBeCloseTo(0.1, 9);
+    expect(calm.position.distanceTo(calm.target)).toBeCloseTo(EYE_VIEW.look, 9);
+    expect(LOOK_AROUND_POLAR.eye).toBeGreaterThan(Math.PI / 2);
   });
 
   it('frames the boat and the formation behind it on the starboard quarter, looking ahead', () => {

@@ -5,6 +5,7 @@ import { createSceneTextures } from '@core/scene/textures';
 import type { AssemblyState } from '../ids';
 import { HELD_PHASE } from '../model';
 import { CHAPTER_CONTROL_DEFAULTS, DEFAULT_VIEW, runAt } from '../state';
+import { EYE_VIEW, LOOK_AROUND_POLAR, VIEW_DISTANCE } from './cameraViews';
 import { NavalDroneController } from './controller';
 import type { NavalDroneControllerDependencies } from './controller';
 
@@ -89,6 +90,17 @@ describe('naval drone controller', () => {
     const boatAnchor = rig.follow.mock.lastCall?.[0] as Vector3 | undefined;
     expect(eyeAnchor).toBeDefined();
     expect(eyeAnchor).not.toBe(boatAnchor);
+  });
+
+  it('turns in place from the dome in the eye view without a sea limit on the zoom', () => {
+    const { rig, shell } = fakeShell();
+    const navalDrone = new NavalDroneController(shell);
+    navalDrone.build(assemblyState());
+    navalDrone.views.frame('eye', false);
+    expect(rig.controls.maxPolarAngle).toBe(LOOK_AROUND_POLAR.eye);
+    expect(rig.setDistanceLimits).toHaveBeenLastCalledWith(VIEW_DISTANCE.eye);
+    const pose = rig.jumpTo.mock.lastCall?.[0] as { position: Vector3; target: Vector3 };
+    expect(pose.position.distanceTo(pose.target)).toBeCloseTo(EYE_VIEW.look, 9);
   });
 
   it('lets the sky view look up without the camera reaching the sea, then levels again', () => {

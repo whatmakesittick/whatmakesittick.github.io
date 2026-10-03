@@ -1,3 +1,4 @@
+import { Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
@@ -5,7 +6,7 @@ import { whenIdle } from '@core/scene/warmUp';
 import type { AnchorId, AssemblyState, CameraView, RegionId } from '../ids';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
-import { VIEW_DISTANCE, cameraViews } from './cameraViews';
+import { LOOK_AROUND_POLAR, VIEW_DISTANCE, cameraViews } from './cameraViews';
 import type { FollowTarget } from './cameraViews';
 import { lookUpLimits } from './viewFit';
 
@@ -73,9 +74,10 @@ export class NavalDroneController {
   }
 
   private followTarget(): FollowTarget | null {
-    const chase = this.assembly?.chaseTarget();
-    if (!chase || !this.state) return null;
-    return { ...chase, trim: this.state.planing.trim };
+    const { assembly, state } = this;
+    if (!assembly || !state) return null;
+    const lens = assembly.anchor('dome').getWorldPosition(new Vector3());
+    return { ...assembly.chaseTarget(), trim: state.planing.trim, lens: [lens.x, lens.y, lens.z] };
   }
 
   private frame(view: CameraView, animate: boolean, variant?: string): void {
@@ -86,6 +88,11 @@ export class NavalDroneController {
 
   private limitLookUp(view: CameraView): void {
     const { rig } = this.dependencies;
+    const lookAround = LOOK_AROUND_POLAR[view];
+    if (lookAround !== undefined) {
+      rig.controls.maxPolarAngle = lookAround;
+      return;
+    }
     const pose = this.cameraViews.pose(view);
     if (!pose) return;
     const limits = lookUpLimits(pose, this.defaultMaxPolar, SEA_CLEARANCE_M);

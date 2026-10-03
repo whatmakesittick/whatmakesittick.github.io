@@ -8,6 +8,7 @@ import type { CameraView, Point } from '../ids';
 import {
   BACKUP_SATELLITE_OFFSET,
   BOW_CAMERA,
+  DOME,
   FORMATION,
   JET,
   SATELLITE_OFFSET,
@@ -20,6 +21,7 @@ import type { BoatFrame } from './viewFit';
 
 export interface FollowTarget extends ChaseTarget {
   trim: number;
+  lens: Point;
 }
 
 export type FollowSource = () => FollowTarget | null;
@@ -77,17 +79,25 @@ export const SKY_VIEW = {
   aimAhead: 45,
 } as const;
 
+const EYE_CLEARANCE_M = 0.06;
+
 export const EYE_VIEW = {
-  camera: [0.75, 0.92, 0] as Point,
-  window: [BOW_CAMERA.x[1], BOW_CAMERA.window.y, 0] as Point,
-  ahead: 40,
+  forward: DOME.ringRadius + EYE_CLEARANCE_M,
+  rise: DOME.top - DOME.lens + EYE_CLEARANCE_M,
+  window: [BOW_CAMERA.x[1] - DOME.x, BOW_CAMERA.window.y - DOME.lens, 0] as Point,
   windowShare: 0.65,
+  look: 0.1,
+  lookUp: toRadians(60),
 } as const;
 
 export const VIEW_DISTANCE: Readonly<Partial<Record<CameraView, CameraDistance>>> = {
   stern: { min: 1.2, max: 30 },
   waterline: { min: 4, max: 80 },
-  eye: { min: 5, max: 120 },
+  eye: { min: EYE_VIEW.look, max: EYE_VIEW.look },
+};
+
+export const LOOK_AROUND_POLAR: Readonly<Partial<Record<CameraView, number>>> = {
+  eye: Math.PI / 2 + EYE_VIEW.lookUp,
 };
 
 function frameOf(target: FollowTarget): BoatFrame {
@@ -176,20 +186,20 @@ export function skyPose(target: FollowTarget, slopes: FramingSlopes): CameraPose
   );
 }
 
-export function eyeAim(slopes: FramingSlopes): Point {
-  const [x, y] = EYE_VIEW.camera;
+export function eyePitch(slopes: FramingSlopes): number {
   const [windowX, windowY] = EYE_VIEW.window;
-  const pitch =
-    Math.atan2(windowY - y, windowX - x) + Math.atan(slopes.vertical * EYE_VIEW.windowShare);
-  const reach = EYE_VIEW.ahead - x;
-  return [EYE_VIEW.ahead, y + reach * Math.tan(pitch), 0];
+  const down = Math.atan2(windowY - EYE_VIEW.rise, windowX - EYE_VIEW.forward);
+  return down + Math.atan(slopes.vertical * EYE_VIEW.windowShare);
 }
 
 export function eyePose(target: FollowTarget, slopes: FramingSlopes): CameraPose {
-  const frame = frameOf(target);
+  const frame = { ...frameOf(target), position: target.lens };
+  const { forward, rise, look } = EYE_VIEW;
+  const pitch = eyePitch(slopes);
+  const ahead: Point = [forward + look * Math.cos(pitch), rise + look * Math.sin(pitch), 0];
   return {
-    position: boatToWorld(frame, EYE_VIEW.camera, true),
-    target: boatToWorld(frame, eyeAim(slopes), true),
+    position: boatToWorld(frame, [forward, rise, 0], true),
+    target: boatToWorld(frame, ahead, true),
   };
 }
 
