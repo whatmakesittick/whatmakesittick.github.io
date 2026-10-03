@@ -18,12 +18,14 @@ import type { EmphasisGroup, PartContext } from '../context';
 const VERTEX = /* glsl */ `
 uniform float uLength;
 uniform vec2 uRadius;
+uniform float uMinWidth;
 varying float vAlong;
 varying vec3 vNormalView;
 varying vec3 vViewPosition;
 void main() {
   vAlong = position.y;
-  float radius = mix(uRadius.x, uRadius.y, position.y);
+  vec4 axis = modelViewMatrix * vec4(0.0, position.y * uLength, 0.0, 1.0);
+  float radius = max(mix(uRadius.x, uRadius.y, position.y), -axis.z * uMinWidth);
   vec3 placed = vec3(position.x * radius, position.y * uLength, position.z * radius);
   vec4 view = modelViewMatrix * vec4(placed, 1.0);
   vViewPosition = -view.xyz;
@@ -62,6 +64,7 @@ void main() {
 
 const Y_AXIS = new Vector3(0, 1, 0);
 const UNIT_RADIUS = 1;
+const MIN_WIDTH = 0.0016;
 
 export class Beam {
   readonly mesh: Mesh;
@@ -86,6 +89,7 @@ export class Beam {
           uLength: { value: 1 },
           uCore: { value: look.core },
           uRadius: { value: new Vector2(look.startRadius, look.endRadius) },
+          uMinWidth: { value: MIN_WIDTH },
           uDash: { value: new Vector4(dash.period, dash.duty, dash.speed, dash.logScale) },
           uDashFloor: { value: dash.floor },
           uFade: { value: new Vector2(...look.fade) },

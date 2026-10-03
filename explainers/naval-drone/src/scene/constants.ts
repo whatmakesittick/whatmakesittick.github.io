@@ -606,11 +606,11 @@ export interface BeamLook {
 }
 
 const BEAM_DASH = { period: 2.4, duty: 0.55, speed: 1.4, logScale: 22, floor: 0.3 } as const;
-const BEAM_BASE = { core: 1.4, glow: false, dash: BEAM_DASH, segments: 14 } as const;
+const BEAM_BASE = { core: 0.8, glow: false, dash: BEAM_DASH, segments: 14 } as const;
 
 export const BEAMS = {
-  up: { ...BEAM_BASE, startRadius: 0.06, endRadius: 5, opacity: 0.85, fade: [0.003, 0.03] },
-  down: { ...BEAM_BASE, startRadius: 5, endRadius: 1.2, opacity: 0.7, fade: [0.02, 0.01] },
+  up: { ...BEAM_BASE, startRadius: 0.06, endRadius: 1.2, opacity: 0.95, fade: [0.003, 0.03] },
+  down: { ...BEAM_BASE, startRadius: 1.2, endRadius: 0.6, opacity: 0.9, fade: [0.02, 0.01] },
   labelShare: 0.08,
   panelGlow: 0.55,
 } as const satisfies Record<string, BeamLook | number>;

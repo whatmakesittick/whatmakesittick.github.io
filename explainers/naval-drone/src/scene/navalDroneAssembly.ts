@@ -343,6 +343,8 @@ export class NavalDroneAssembly implements Assembly {
   }
 
   private placeSky(state: AssemblyState): void {
+    this.satellite.object.visible = state.view.links;
+    this.backupSatellite.object.visible = state.view.links;
     const { position } = state.boat;
     this.satellite.object.position.set(...skyPoint(position, SATELLITE_OFFSET));
     this.backupSatellite.object.position.set(...skyPoint(position, BACKUP_SATELLITE_OFFSET));
