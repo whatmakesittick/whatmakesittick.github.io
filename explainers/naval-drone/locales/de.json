@@ -2,9 +2,9 @@
   "meta": {
     "title": "So funktioniert eine Seedrohne",
     "eyebrow": "Seedrohne",
-    "tagline": "Ein kleines Boot, an Bord niemand: Es gleitet auf seinem Rumpf übers Wasser, eine Wasserpumpe treibt es an, und gesteuert wird es per Satellit.",
-    "description": "Begleiten Sie die Seedrohne Magura V5 in 3D: Gleitrumpf, Wasserstrahlantrieb, Satellitenfunk und warum ein niedriges Boot schwer zu sehen ist.",
-    "summary": "Der Gleitrumpf, der Wasserstrahl, der das Boot antreibt und lenkt, die Satellitenverbindung und ihre Verzögerung, die Krümmung des Meeres und eine Bauweise, die sich ständig ändert.",
+    "tagline": "Ein Boot ohne Besatzung: Es gleitet auf seinem Rumpf, fährt mit einer Wasserpumpe und wird per Satellit gesteuert.",
+    "description": "Seedrohne Magura V5 in 3D: wie ihr Rumpf gleitet, wie ein Wasserstrahl sie antreibt, ihr Satellitenfunk und warum ein niedriges Boot schwer zu sehen ist.",
+    "summary": "Der Gleitrumpf, der Wasserstrahl, die Satellitenverbindung und ihre Verzögerung, die Krümmung des Meeres und eine Bauweise im Wandel.",
     "socialAlt": "Ein graues, unbemanntes Boot gleitet im Morgengrauen über das Meer, an den scharfen Kanten seines Rumpfs spritzt Gischt auf. Daneben steht der Titel „So funktioniert eine Seedrohne“."
   },
   "stage": {
@@ -36,7 +36,7 @@
       }
     },
     "fit": {
-      "label": "Ausrüstung an Deck"
+      "label": "Deckausrüstung"
     },
     "fitOptions": {
       "standard": "Standard",
@@ -44,7 +44,7 @@
     },
     "momentOptions": {
       "hullSpeed": "Rumpfgeschwindigkeit",
-      "humpPeak": "Gipfel des Buckels",
+      "humpPeak": "Buckelspitze",
       "onPlane": "In Gleitfahrt",
       "cruiseSpeed": "Reisefahrt",
       "throttleUp": "Sprint beginnt",
@@ -83,7 +83,7 @@
     "value": "{{time}}, {{phase}}",
     "clock": "T+{{clock}}",
     "speedFormat": "{{factor}}×",
-    "speedValue": "im Vergleich zur normalen Wiedergabe",
+    "speedValue": "gegenüber normalem Tempo",
     "phase": {
       "launch": "Start",
       "hump": "Buckel",
@@ -92,11 +92,11 @@
       "arrival": "Ankunft"
     },
     "during": {
-      "launch": "das Boot tuckert von der Slipanlage los, langsamer als seine Rumpfgeschwindigkeit",
-      "hump": "das Boot beschleunigt über den Buckel und kommt ins Gleiten",
-      "cruise": "das Boot fährt mit 22 Knoten, eine Fahrt von vielen Stunden, hier stark gekürzt",
-      "sprint": "das Boot beschleunigt auf 42 Knoten, und zwei weitere Boote schließen sich an",
-      "arrival": "das Boot fährt die letzten 170 m bis an die Bordwand des Schiffs"
+      "launch": "das Boot tuckert von der Slipanlage los",
+      "hump": "das Boot beschleunigt und kommt ins Gleiten",
+      "cruise": "das Boot fährt stundenlang mit 22 Knoten, hier stark gekürzt",
+      "sprint": "das Boot sprintet mit 42 Knoten, zwei weitere kommen dazu",
+      "arrival": "das Boot fährt die letzten 170 m bis zum Schiff"
     },
     "jump": {
       "launch": "Zum Start springen",
@@ -134,11 +134,11 @@
     "sprayRails": "Spritzleisten",
     "payloadBay": "Nutzlastraum",
     "fuelTanks": "Kraftstofftanks",
-    "engine": "Motor in seiner Wanne",
+    "engine": "Motor",
     "electronicsBay": "Elektronik",
     "starlinkPanels": "Starlink-Antennen",
-    "backupPanel": "Reserve-Satellitenantenne",
-    "cameraDome": "Kuppel der Wärmebildkamera",
+    "backupPanel": "Reserveantenne",
+    "cameraDome": "Kamerakuppel",
     "bowCamera": "Bugkamera",
     "intake": "Einlass mit Gitter",
     "duct": "Einlasskanal",
@@ -155,7 +155,7 @@
     "spray": "Gischt",
     "wake": "Kielwasser",
     "wettedLength": "Nasse Bodenlänge",
-    "videoGhost": "Wo der Pilot das Boot sieht",
+    "videoGhost": "Verzögerte Sicht des Piloten",
     "satLink": "Starlink-Verbindung",
     "backupLink": "Reserveverbindung",
     "satellite": "Starlink-Satellit",
@@ -169,18 +169,18 @@
     "lift": "{{dynamic}} % durch die Fahrt, {{buoyant}} % durch Auftrieb",
     "wetted": "{{m}} m, gegenüber {{rest}} m im Stand",
     "ratio": "Das {{times}}-Fache der Rumpfgeschwindigkeit von {{hullSpeed}} kn",
-    "ratioStill": "Stillstand. Die Rumpfgeschwindigkeit liegt bei {{hullSpeed}} kn"
+    "ratioStill": "Stillstand, Rumpfgeschwindigkeit {{hullSpeed}} kn"
   },
   "jet": {
     "flow": "{{kg}} kg pro Sekunde, etwa {{litres}} Liter",
-    "backing": "Bremst mit gesenkter Umkehrklappe",
-    "astern": "Von der Umkehrklappe nach vorn gelenkt",
-    "noEfficiency": "Keiner, solange das Boot nicht vorwärtsfährt",
+    "backing": "Bremst, Klappe unten",
+    "astern": "Von der Klappe nach vorn gelenkt",
+    "noEfficiency": "Keiner ohne Vorwärtsfahrt",
     "push": {
-      "left": "Düse {{angle}}° nach links: Der Bug dreht nach links",
-      "right": "Düse {{angle}}° nach rechts: Der Bug dreht nach rechts",
-      "straight": "Gerade nach hinten: Das Boot hält seinen Kurs",
-      "reverse": "Klappe unten: Der Strahl geht nach vorn und unten"
+      "left": "Düse {{angle}}° links: Bug dreht nach links",
+      "right": "Düse {{angle}}° rechts: Bug dreht nach rechts",
+      "straight": "Gerade nach hinten: hält den Kurs",
+      "reverse": "Klappe unten: Strahl nach vorn und unten"
     }
   },
   "link": {
@@ -193,13 +193,13 @@
       "lost": "Keine"
     },
     "boat": {
-      "satellite": "Der Pilot steuert nach dem Video",
-      "backup": "Der Pilot steuert über die Reserveverbindung",
-      "lost": "Im Modell hält es seinen eingestellten Kurs. Was ein echtes Boot tut, ist nicht veröffentlicht"
+      "satellite": "Pilot steuert nach dem Video",
+      "backup": "Pilot steuert über die Reserveverbindung",
+      "lost": "Hält im Modell den eingestellten Kurs, echtes Verhalten nicht veröffentlicht"
     }
   },
   "horizon": {
-    "camera": "{{km}} km, von einem Objektiv {{m}} m über dem Wasser aus",
+    "camera": "{{km}} km aus {{m}} m Höhe",
     "detect": "Etwa {{km}} km, {{min}} min Vorwarnzeit bei 42 kn",
     "detectBeyond": "Nicht abgedeckt: Die Norm reicht nur bis Seegang 4",
     "waves": {
@@ -209,10 +209,10 @@
       "rough": "{{from}} bis {{to}} m, Seegang 5"
     },
     "hidden": {
-      "smooth": "Für so glatte See gibt es keinen Wert. Die Wellen bleiben unter seinem 0,5 m hohen Deck",
-      "slight": "Bis zur Hälfte der Zeit: Die Wellen sind so hoch wie sein Deck",
-      "moderate": "Bis zur Hälfte der Zeit: Die Wellen sind höher als sein Deck",
-      "rough": "Bis zur Hälfte der Zeit: Die Wellen ragen weit über sein Deck hinaus"
+      "smooth": "Kein Wert für so glatte See: Die Wellen bleiben unter dem 0,5 m hohen Deck",
+      "slight": "Bis zur Hälfte der Zeit: Wellen so hoch wie das Deck",
+      "moderate": "Bis zur Hälfte der Zeit: Wellen über dem Deck",
+      "rough": "Bis zur Hälfte der Zeit: Wellen weit über dem Deck"
     },
     "canvas": {
       "radar": "Radar des Schiffs",
@@ -226,7 +226,7 @@
   "fleet": {
     "carries": {
       "standard": "Bis zu {{kg}} kg Nutzlast im Bug",
-      "missile": "Zwei Raketen vom Typ R-73 auf Schienen. Den Nutzlastraum im Bug behält das Modell bei"
+      "missile": "Zwei R-73-Raketen auf Schienen, im Modell bleibt der Bugraum"
     },
     "cost": "Etwa {{from}} bis {{to}} USD",
     "ship": "Etwa {{value}} Millionen USD"
@@ -234,89 +234,89 @@
   "sections": {
     "overview": {
       "title": "Ein Speedboot ohne Menschen an Bord",
-      "p1": "Hier sehen Sie eine <strong>Magura V5</strong>, eine Seedrohne aus der Ukraine. Das ist ein schnelles Boot, auf dem niemand mitfährt. Die staatliche Firma SpetsTechnoExport baut es für den GUR, den Militärgeheimdienst der Ukraine. Zum ersten Mal war es im Juli 2023 auf der Messe IDEF in Istanbul zu sehen. Das Boot ist 5,5 m lang und 1,5 m breit, etwa so groß wie ein kleines Motorboot. Sein Deck liegt nur 0,5 m über dem Wasser, und es wiegt weniger als eine Tonne. Ein Pilot steuert es aus großer Entfernung über eine Satellitenverbindung.",
-      "p2": "Von außen wirkt das Boot schlicht. Sein grauer <strong>Rumpf</strong> ragt nur wenig aus dem Wasser und besteht aus Verbundwerkstoff: Lagen aus Fasergewebe, eingebettet in hartes Harz. Auf dem erhöhten Aufbau hinten an Deck liegen zwei flache <strong>Starlink-Antennen</strong> und eine <strong>Reserve-Satellitenantenne</strong>. Weiter vorn wölbt sich eine niedrige <strong>Kuppel</strong> mit einer Wärmebildkamera, die Wärme sichtbar macht. Ganz vorn blickt eine fest eingebaute <strong>Bugkamera</strong> geradeaus. Unten am Heck sitzt der <strong>Wasserstrahlantrieb</strong>, der das Boot voranbringt. Im Inneren verbirgt sich vorn ein geschlossener Nutzlastraum für bis zu 320 kg. Dahinter folgen die Kraftstofftanks und dann der Motor. Er sitzt in einer Aluminiumwanne, die in Schaumstoff gebettet ist, und über ihm liegt die Elektronik. Schalten Sie die Schnittansicht (C) ein, um all das zu sehen. Oder warten Sie auf das Kapitel über den Antrieb: Dort öffnet sich der Rumpf von selbst.",
-      "p3": "Das Modell begleitet eine <strong>Fahrt</strong>. Das Boot tuckert von einer Slipanlage los, kommt ins Gleiten und fährt mit 22 Knoten weiter. Ein Knoten ist eine Seemeile pro Stunde, das sind also etwa 41 km/h. Dann beschleunigt es auf seine Höchstgeschwindigkeit von 42 Knoten, etwa 78 km/h, und zwei weitere Boote schließen sich an. Die Fahrt endet, sobald sein Bug die Bordwand eines großen grauen Schiffs vor Anker erreicht.",
-      "p4": "Bei normalem Wiedergabetempo fährt das Boot so schnell wie ein echtes. Die Fahrt ist aber stark gekürzt, damit sie in zwei Minuten passt. Ein echtes Boot wäre viele Stunden unterwegs: etwa 20 Stunden für seine volle Reichweite von 450 Seemeilen, rund 800 km. Hier dauert die Reisefahrt 42 Sekunden, und auch der Sprint ist verkürzt. Das Schiff liegt nur 1,5 km von der Slipanlage entfernt. Ein echtes Ziel wäre Hunderte Kilometer weit weg. Die Uhr oben zählt die Modellzeit. T+1:05 heißt also: eine Minute und fünf Sekunden nach dem Start. Ziehen Sie den Regler der Zeitleiste an eine beliebige Stelle. Oder tippen Sie unten auf eine Schaltfläche, um zu einem bestimmten Moment zu springen.",
+      "p1": "Das ist eine <strong>Magura V5</strong>, eine ukrainische Seedrohne: ein schnelles Boot ohne Menschen an Bord. Die staatliche Firma SpetsTechnoExport baut es für den GUR, den Militärgeheimdienst der Ukraine. Erstmals gezeigt wurde es im Juli 2023. Das Boot ist 5,5 m lang, ragt nur 0,5 m aus dem Wasser und wiegt unter einer Tonne. Ein Pilot steuert es aus der Ferne per Satellit.",
+      "p2": "Außen sehen Sie einen niedrigen grauen <strong>Rumpf</strong> aus Verbundwerkstoff, also Fasergewebe in Harz. Auf dem erhöhten Aufbau hinten sitzen zwei <strong>Starlink-Antennen</strong> und eine <strong>Reserve-Satellitenantenne</strong>. Weiter vorn gibt es eine niedrige <strong>Kuppel</strong> mit Wärmebildkamera und eine feste <strong>Bugkamera</strong>. Der <strong>Wasserstrahlantrieb</strong> am Heck treibt das Boot an. Innen liegen ein Nutzlastraum für bis zu 320 kg, die Tanks und der Motor in einer schaumgepolsterten Wanne, darüber die Elektronik. Schalten Sie die Schnittansicht (C) ein, um sie zu sehen, oder warten Sie auf das Kapitel zum Antrieb.",
+      "p3": "Das Modell begleitet eine <strong>Fahrt</strong>. Das Boot verlässt eine Slipanlage, kommt ins Gleiten und fährt mit 22 Knoten, etwa 41 km/h. Ein Knoten ist eine Seemeile pro Stunde. Dann sprintet es mit 42 Knoten, etwa 78 km/h. Zwei weitere Boote fahren mit, bis sein Bug ein graues Schiff vor Anker erreicht.",
+      "p4": "Bei normalem Tempo fährt das Boot so schnell wie ein echtes, doch die Fahrt ist auf zwei Minuten gekürzt. Eine Reisefahrt von etwa 20 Stunden über die vollen 450 Seemeilen, rund 800 km, dauert hier 42 Sekunden, und auch der Sprint ist kürzer. Das Schiff liegt 1,5 km entfernt, nicht Hunderte Kilometer. Die Uhr zählt Modellzeit. Ziehen Sie an der Zeitleiste, um zu springen.",
       "mode": "Rumpf",
       "covered": "Zurückgelegte Strecke",
       "done": "Fortschritt der Fahrt"
     },
     "hull": {
       "title": "Vom Schwimmen zum Gleiten",
-      "p1": "Im Stand schwimmt das Boot wie jedes andere. Das Wasser, das es zur Seite drückt, hält es oben. Das nennt man <strong>Auftrieb</strong>. Wird das Boot schneller, kommt eine zweite Kraft hinzu. Das Wasser prallt gegen den schrägen Boden und drückt ihn nach oben. Je schneller das Boot fährt, desto stärker ist dieser Druck. Sobald er den größten Teil des Gewichts trägt, hebt sich der Rumpf und gleitet über das Wasser. Das ist die <strong>Gleitfahrt</strong>. Selbst dann bleibt der hintere Teil des Bodens immer im Wasser.",
-      "p2": "Jedes Boot, das sich durchs Wasser schiebt, macht eine Bugwelle. Bei etwa 5,7 Knoten ist diese Welle so lang wie der 5,5 m lange Rumpf dieses Boots. Das ist die <strong>Rumpfgeschwindigkeit</strong>, eine Faustregel für Boote, die nur schwimmen. Ein Tempolimit ist sie aber nicht: Mit 42 Knoten ist die Magura etwa 7-mal so schnell. Auf dem Weg dorthin muss das Boot den <strong>Widerstandsbuckel</strong> überwinden. Dort macht es große Wellen, und der <strong>Widerstand</strong> steigt steil an. So heißt die Kraft, mit der das Wasser das Boot bremst. Die scharfen Kanten entlang des Bodens, die <strong>Kimmkanten</strong>, bremsen hier zusätzlich. Ihr Nutzen zeigt sich erst, wenn das Boot gleitet.",
-      "p3": "Bewegen Sie den Regler oder tippen Sie auf eine Schaltfläche, und achten Sie auf den Bug. Rund um den Buckel hebt er sich am stärksten. Sobald das Boot gleitet, senkt er sich wieder. Diesen Winkel nennt man <strong>Trimm</strong>. Bei etwa 3 bis 4 Grad ist der Widerstand am kleinsten, und bei Höchstgeschwindigkeit liegt das Boot etwas flacher. Bei diesem Boot beginnt die Gleitfahrt bei etwa 15 bis 18 Knoten. Die Anzeige im Modell schaltet bei 16 um. Den nassen Teil des Bodens setzt das Modell im Stand mit 5,1 m an. Sobald das Boot gleitet, schrumpft er schnell: von etwa 4,5 m bei 15 Knoten auf etwa 1,5 bis 2 m bei 42 Knoten. Für dieses Boot sind keine Daten zum Buckel veröffentlicht. Die Spitze von 6 Grad und die Aufteilung des Gewichts in den Anzeigen sind deshalb eigene Zahlen des Modells.",
-      "p4": "Der Boden hat die Form eines tiefen <strong>V</strong>. Das dämpft die Schläge der Wellen. Wie spitz das V ist, wurde nicht veröffentlicht: Im Modell sind es am Heck 20 Grad, zum Bug hin wird es schärfer. Das Heck ist gerade abgeschnitten und hat eine scharfe Unterkante. So reißt das Wasser bei schneller Fahrt sauber ab, und das Heck läuft trocken. An jeder Seite lenkt eine schmale <strong>Spritzleiste</strong> die Gischt nach außen. Diese Leisten sind eine Annahme des Modells. Rippen weiter unten am Rumpf, die einem Boot ins Gleiten helfen, heißen Auftriebsleisten. Das Modell lässt sie weg, denn kein Foto zeigt sie. Zu viel Trimm bringt eigene Probleme: Ab einem bestimmten Winkel beginnt ein gleitendes Boot in gleichmäßigem Takt zu springen. Das nennt man <strong>Delfinieren</strong>.",
+      "p1": "Im Stand drückt das Boot Wasser zur Seite, und dieses Wasser hält es oben: der <strong>Auftrieb</strong>. Wird es schneller, drückt das Wasser immer stärker gegen den schrägen Boden und hebt das Boot an. Trägt dieser Druck den größten Teil des Gewichts, hebt sich der Rumpf und gleitet: die <strong>Gleitfahrt</strong>. Das hintere Ende des Bodens bleibt immer im Wasser.",
+      "p2": "Jedes Boot macht eine Bugwelle. Bei etwa 5,7 Knoten ist sie so lang wie dieser 5,5 m lange Rumpf. Das ist die <strong>Rumpfgeschwindigkeit</strong>, eine Faustregel für Boote, die nur schwimmen. Ein Tempolimit ist sie nicht: Mit 42 Knoten ist die Magura etwa 7-mal so schnell. Zuerst muss das Boot den <strong>Widerstandsbuckel</strong> überwinden. Dort macht es große Wellen, und der <strong>Widerstand</strong>, mit dem das Wasser es bremst, steigt steil an. Die scharfen Bodenkanten, die <strong>Kimmkanten</strong>, bremsen hier zusätzlich und nützen erst in Gleitfahrt.",
+      "p3": "Bewegen Sie den Regler und achten Sie auf den Bug. Am Buckel hebt er sich am stärksten, dann senkt er sich. Dieser Winkel heißt <strong>Trimm</strong>. Bei etwa 3 bis 4 Grad ist der Widerstand am kleinsten. Die Gleitfahrt beginnt bei etwa 15 bis 18 Knoten, das Modell schaltet bei 16 um. Die nasse Bodenlänge, im Modell 5,1 m im Stand, schrumpft von etwa 4,5 m bei 15 Knoten auf 1,5 bis 2 m bei 42. Da keine Daten zum Buckel veröffentlicht sind, sind die Spitze von 6 Grad und die Gewichtsaufteilung eigene Werte des Modells.",
+      "p4": "Der Boden ist ein tiefes <strong>V</strong>, das die Schläge der Wellen dämpft. Der echte Winkel ist nicht veröffentlicht: Das Modell nimmt am Heck 20 Grad an, nach vorn spitzer. An der scharfen Unterkante des geraden Hecks reißt das Wasser sauber ab. Eine schmale <strong>Spritzleiste</strong> an jeder Seite, eine Annahme des Modells, lenkt die Gischt nach außen. Zu viel Trimm lässt ein gleitendes Boot springen: das <strong>Delfinieren</strong>.",
       "speedLabel": "Bootsgeschwindigkeit",
       "mode": "Rumpf",
       "trim": "Bugwinkel (Trimm)",
       "lift": "Getragenes Gewicht",
       "wetted": "Nasse Bodenlänge",
-      "ratio": "Im Vergleich zur Rumpfgeschwindigkeit"
+      "ratio": "Gegenüber der Rumpfgeschwindigkeit"
     },
     "jet": {
       "title": "Eine Pumpe statt eines Propellers",
-      "p1": "Jetzt ist der Rumpf aufgeschnitten, und Sie können den Weg der Energie verfolgen, vom Kraftstoff bis ins Wasser. Die <strong>Kraftstofftanks</strong> in der Bootsmitte versorgen den <strong>Motor</strong> in seiner Wanne, die in Schaumstoff gebettet ist. Eine <strong>Antriebswelle</strong> leitet die Drehbewegung des Motors nach hinten zum Heck. Dort sitzt der <strong>Wasserstrahlantrieb</strong>: eine Pumpe, die die Arbeit eines Propellers übernimmt. Das Wasser strömt durch eine Öffnung im Boden herein, hinter einem Gitter aus Stahlstäben. Ein rotierender <strong>Impeller</strong>, ein kleines Laufrad ähnlich einem Ventilator, beschleunigt es. Dahinter nehmen feste Schaufeln, der <strong>Stator</strong>, den Drall aus der Strömung. Dann verengt eine <strong>Düse</strong> den Strahl und schießt ihn hinter dem Boot heraus. Die Ansicht „Wasserströmung“ zeigt den Weg des Wassers.",
-      "p2": "Die Kraft nach vorn entsteht, weil die Pumpe das Wasser beschleunigt, das durch sie hindurchfließt. Der <strong>Schub</strong> ergibt sich so: die Wassermasse, die pro Sekunde durchfließt, multipliziert mit dem Unterschied zwischen Strahl- und Bootsgeschwindigkeit. Der Strahl muss also immer schneller sein als das Boot. Selbst bei einer perfekten Pumpe liegt der Anteil der Arbeit, der das Boot voranbringt, bei 2 / (1 + Strahlgeschwindigkeit / Bootsgeschwindigkeit). Verlässt der Strahl die Düse mit dem Anderthalbfachen der Bootsgeschwindigkeit, liegt dieser Anteil bei 80 %. Bei langsamer Fahrt ist der Strahl viel schneller als das Boot, und der größte Teil der Arbeit geht verloren.",
-      "p3": "Ab etwa 25 bis 30 Knoten ist ein Wasserstrahlantrieb einem Propeller ebenbürtig oder sogar überlegen. Unter dem Rumpf hängt nichts, das bremst oder irgendwo anstößt. So kann das Boot auch in flachem Wasser fahren. In Gleitfahrt hält sich das Gitter meist selbst frei. Tang und Leinen können einen Einlass aber trotzdem verstopfen. Das erste Boot dieser Baureihe stammt vom Mai 2022 und hatte einen kleinen Außenbordmotor. Später im selben Jahr nutzten Boote wie jenes, das bei Sewastopol gefunden wurde, Teile von Jetskis: einen Dreizylinder-Benzinmotor von Rotax und eine Pumpe von Sea-Doo. Welchen Motor die Magura selbst hat, ist nicht offengelegt. Das Modell nimmt deshalb einen Benzinmotor an, wie er in Jetskis steckt, und lässt ihn die Pumpe direkt antreiben. Die Pumpe im Modell hat Jetski-Größe, 155 mm im Durchmesser. Bei 42 Knoten bewegt sie etwa 210 Liter Meerwasser pro Sekunde. Das ist eine Schätzung: Verließe der Strahl die Düse schneller, käme das Boot mit etwa halb so viel Wasser aus.",
-      "p4": "Ein Ruder gibt es nicht. Für eine Kurve schwenkt die <strong>Steuerdüse</strong> den Strahl um bis zu 27 Grad nach links oder rechts. Schwenkt sie nach rechts, wird das Heck nach links gedrückt, und der Bug dreht nach rechts, genau wie bei einem Jetski. Zum Bremsen oder Rückwärtsfahren senkt sich eine <strong>Umkehrklappe</strong> über die Düse und lenkt den Strahl nach vorn und unten. Mit dem Regler geben Sie Gas. Das Modell versteht darunter, wie viel Wasser die Pumpe bewegt. Tippen Sie auf die Schaltflächen, um zu lenken oder rückwärtszufahren. Drücken Sie auf Wiedergabe, und das Boot kehrt zur Fahrt zurück.",
+      "p1": "Verfolgen Sie im offenen Rumpf den Weg der Kraft: Die <strong>Kraftstofftanks</strong> versorgen den <strong>Motor</strong>, und seine <strong>Antriebswelle</strong> dreht die Pumpe am Heck, den <strong>Wasserstrahlantrieb</strong>. Das Wasser kommt durch ein Gitter im Boden herein. Ein rotierender <strong>Impeller</strong>, ein Laufrad wie bei einem Ventilator, beschleunigt es. Feste Schaufeln, der <strong>Stator</strong>, nehmen den Drall heraus. Eine <strong>Düse</strong> schießt es nach hinten hinaus.",
+      "p2": "Die Kraft nach vorn entsteht, weil die Pumpe Wasser beschleunigt. Der <strong>Schub</strong> ist die Wassermasse pro Sekunde mal dem Tempo, um das der Strahl schneller ist als das Boot. Selbst eine perfekte Pumpe setzt nur 2 / (1 + Strahlgeschwindigkeit / Bootsgeschwindigkeit) ihrer Arbeit in Fahrt um: 80 %, wenn der Strahl 1,5-mal so schnell ist wie das Boot, bei langsamer Fahrt viel weniger.",
+      "p3": "Ab etwa 25 bis 30 Knoten ist ein Wasserstrahlantrieb einem Propeller ebenbürtig oder überlegen. Da unter dem Rumpf nichts hängt, kann das Boot auch in flachem Wasser fahren. Das Gitter hält sich meist selbst frei, Tang und Leinen können es aber trotzdem verstopfen. Das erste Boot dieser Reihe hatte im Mai 2022 einen Außenbordmotor. Spätere Boote von 2022, etwa eines, das bei Sewastopol gefunden wurde, nutzten einen Jetski-Motor von Rotax und eine Pumpe von Sea-Doo. Der Motor der Magura ist nicht offengelegt. Das Modell nimmt deshalb einen Benzinmotor wie im Jetski an, der die Pumpe direkt antreibt. Bei 42 Knoten bewegt die Pumpe geschätzt 210 Liter pro Sekunde.",
+      "p4": "Ein Ruder gibt es nicht. Die <strong>Steuerdüse</strong> schwenkt den Strahl bis zu 27 Grad zu jeder Seite. Schwenkt sie nach rechts, dreht der Bug nach rechts. Zum Bremsen oder Rückwärtsfahren senkt sich eine <strong>Umkehrklappe</strong> über die Düse und lenkt den Strahl nach vorn und unten. Mit dem Regler geben Sie Gas, im Modell ist das der Durchfluss der Pumpe. Drücken Sie auf Wiedergabe, um zur Fahrt zurückzukehren.",
       "throttleLabel": "Gas",
       "boat": "Bootsgeschwindigkeit",
       "flow": "Wasser durch die Pumpe",
       "velocity": "Strahlgeschwindigkeit",
       "thrust": "Schub",
       "efficiency": "Idealer Wirkungsgrad",
-      "push": "Richtung des Strahls"
+      "push": "Strahlrichtung"
     },
     "link": {
       "title": "Gesteuert aus Hunderten Kilometern Entfernung",
-      "p1": "Ohne Menschen an Bord hängt alles am Funk. Im November 2023 wurde auf der westlichen Krim eine Magura erbeutet. Russische Quellen zeigten später ihr Inneres. Gefunden wurden zwei <strong>Starlink</strong>-Satellitenterminals, eine Reserve-Satellitenantenne der Firma Kymeta, ein GPS-Empfänger und ein kleiner Computer mit Linux. Ein Mobilfunkrouter mit zwei SIM-Karten hielt die Verbindung in Küstennähe, im Umkreis von etwa 40 km. Der Hersteller nennt außerdem ein Mesh-Funknetz, autonome Steuerung und bis zu drei Videostreams. Das sind aber seine eigenen Angaben.",
-      "p2": "Der Pilot arbeitet an einem Steuerpult mit Bildschirmen, Hebeln und Joysticks. Das Pult ist in einen robusten Koffer eingebaut und lässt sich so mitnehmen. Lange Fahrten über das Meer lassen sich vorab programmieren. Trotzdem schaut ein Pilot die ganze Zeit zu, und das letzte Stück wird oft von Hand gesteuert. Vollständig autonom ist das Boot also nicht. Tippen Sie auf die Schaltflächen, um zwischen Starlink, dem Reservesatelliten und gar keiner Verbindung zu wechseln. Was ein echtes Boot tut, wenn die Verbindung abreißt, ist nicht veröffentlicht. Das Modell hält es einfach auf seinem eingestellten Kurs.",
-      "p3": "Für einen Satellitendienst ist Starlink schnell. An Land liegt die typische Verzögerung bei etwa 25 bis 35 Millisekunden, auf See können es über 100 sein. Enger ist die Grenze beim Upload: 10 bis 30 Megabit pro Sekunde. Das ist etwa so viel, wie drei Videostreams brauchen. Wie scharf der Pilot sein Bild sieht, hängt also am Upload, nicht an der Verzögerung. Trotzdem kommt das Bild immer etwas zu spät an. Wie spät, hat niemand veröffentlicht. Ziehen Sie den Regler, um eine Verzögerung auszuprobieren: Bei 42 Knoten entspricht eine Viertelsekunde 5,4 m, etwa einer Bootslänge. Das Geisterboot zeigt, wo der Pilot das Boot sieht.",
-      "p4": "Auch die Navigation braucht Sorgfalt. Seit Mitte 2024 sind gestörte und gefälschte GPS-Signale über dem Schwarzen Meer gut belegt. Auf Karten zur Schiffsverfolgung tauchten Schiffe sogar im Landesinneren auf. Vermutlich nennt der Hersteller deshalb auch Trägheitsnavigation und visuelle Navigation. Beide arbeiten mit den eigenen Bewegungssensoren und Kameras des Boots. Starlink selbst hat hier ebenfalls eine Geschichte. Elon Musk und die korrigierte Fassung eines Buchs über ihn aus dem Jahr 2023 schildern es so: Im September 2022 erwartete die Ukraine Netzabdeckung in der Nähe der Krim, die nie eingeschaltet worden war. Im Buch stand zuerst, sie sei abgeschaltet worden. Musk erklärte, SpaceX habe nichts deaktiviert, und der Autor korrigierte seine Darstellung. Das Modell zeichnet die Satelliten niedrig, nah und viel größer als echte und lässt sie mit dem Boot mitwandern, damit Sie sie sehen können.",
+      "p1": "Im November 2023 wurde auf der Krim eine Magura erbeutet. Laut russischen Angaben hatte sie zwei <strong>Starlink</strong>-Terminals an Bord, eine Reserve-Satellitenantenne von Kymeta, GPS, einen Linux-Computer und einen Router mit zwei SIM-Karten für die Küstennähe. Laut eigenen Angaben bietet der Hersteller außerdem Mesh-Funk, autonome Steuerung und bis zu drei Videostreams.",
+      "p2": "Der Pilot sitzt an einem Steuerpult in einem robusten Koffer. Lange Fahrten lassen sich vorab programmieren, doch ein Pilot schaut die ganze Zeit zu und steuert das letzte Stück oft von Hand. Vollständig autonom ist das Boot also nicht. Was ein echtes Boot tut, wenn die Verbindung abreißt, ist nicht veröffentlicht. Das Modell hält es auf Kurs.",
+      "p3": "Die typische Verzögerung von Starlink liegt an Land bei etwa 25 bis 35 ms, auf See kann sie über 100 ms steigen. Wie scharf das Bild ist, bestimmt der Upload: 10 bis 30 Megabit pro Sekunde, etwa so viel, wie drei Videostreams brauchen. Wie spät das Bild ankommt, ist nicht veröffentlicht. Bei 42 Knoten ist eine Viertelsekunde 5,4 m, etwa eine Bootslänge. Das Geisterboot zeigt, wo der Pilot das Boot sieht.",
+      "p4": "Gestörte und gefälschte GPS-Signale über dem Schwarzen Meer sind seit Mitte 2024 belegt. Vermutlich nennt der Hersteller deshalb auch Trägheitsnavigation und visuelle Navigation. Laut Elon Musk und der korrigierten Fassung eines Buchs über ihn von 2023 erwartete die Ukraine im September 2022 Starlink-Abdeckung nahe der Krim, die nie eingeschaltet worden war. Im Buch hieß es zuerst, sie sei abgeschaltet worden. Die Satelliten sind hier niedrig, nah und viel größer als echte gezeichnet.",
       "delayLabel": "Videoverzögerung",
       "now": "Wo der Pilot das Boot sieht",
-      "top": "Gleiche Verzögerung bei Höchstgeschwindigkeit",
+      "top": "Bei Höchstgeschwindigkeit",
       "carrier": "Verbindung",
       "boat": "Was das Boot tut",
       "path": "So erreicht ein Befehl das Boot",
-      "step1": "<strong>Pilot</strong>: Er bewegt einen Hebel oder einen Joystick am Steuerpult.",
-      "step2": "<strong>Bodenstation</strong>: Eine Starlink-Station an Land funkt den Befehl nach oben.",
-      "step3": "<strong>Satellit</strong>: Ein Starlink-Satellit gibt ihn nach unten an das Boot weiter.",
-      "step4": "<strong>Boot</strong>: Eine Antenne an Deck empfängt ihn, und der Computer verstellt das Gas oder die Steuerdüse.",
-      "step5": "<strong>Video</strong>: Die Kamerabilder nehmen denselben Weg zurück und kommen etwas verspätet beim Piloten an."
+      "step1": "<strong>Pilot</strong>: bewegt einen Hebel oder Joystick.",
+      "step2": "<strong>Bodenstation</strong>: funkt den Befehl nach oben.",
+      "step3": "<strong>Satellit</strong>: gibt ihn nach unten ans Boot weiter.",
+      "step4": "<strong>Boot</strong>: Der Computer verstellt Gas oder Steuerdüse.",
+      "step5": "<strong>Video</strong>: kommt auf demselben Weg zurück, etwas verspätet."
     },
     "horizon": {
       "title": "Niedrig genug, um sich hinter der Krümmung des Meeres zu verstecken",
-      "p1": "Das Meer ist gekrümmt, deshalb können Sie nur ein Stück weit darüber blicken. Aus einer Höhe von h Metern liegt der Horizont etwa 3,86 × √h Kilometer entfernt. Die Wärmebildkamera des Boots sitzt etwa 0,7 m über dem Wasser. Der Horizont der Kamera liegt also nur etwa 3 km entfernt. Das 3D-Meer im Modell ist flach, denn auf 1,5 km fällt die echte Krümmung um weniger als 0,2 m ab. Die Zeichnung unten macht die Krümmung viel steiler, damit Sie sie sehen können.",
-      "p2": "Das Radar eines Schiffs hat dasselbe Problem. Seine Antenne sitzt hoch, aber das Boot ist nur etwa 0,5 m hoch. Funkwellen biegen sich ein wenig um die Erde. Darum reicht die <strong>Sichtlinie</strong> des Radars etwa 4,12 × (√h1 + √h2) Kilometer weit, beide Höhen in Metern. Bei einem Radar in 20 m Höhe sind das etwa 21 km. Das ist aber nur die größte Entfernung, auf die das Radar das Boot überhaupt sehen könnte. Wo es das Boot wirklich entdeckt, steht auf einem anderen Blatt. Selbst diese Entfernung ließe dem Schiff bei einem Boot mit 42 Knoten höchstens etwa 16 Minuten Vorwarnzeit. Ziehen Sie den Regler, um das Radar höher oder tiefer zu setzen.",
-      "p3": "Wirklich entdeckt wird das Boot viel später. Ein kleines Boot wirft nur ein schwaches Echo zurück. Sein <strong>Radarquerschnitt</strong> gibt an, wie groß es einem Radar als Ziel erscheint. Er liegt bei etwa 0,5 bis 5 m², und für die Magura ist kein Wert veröffentlicht. Eine Norm für Küstenradar erwartet, dass ein Ziel von 1 m² in 1 m Höhe über dem Meer in etwa 9 km Entfernung gefunden wird. Und das nur mit einem fortschrittlichen Radar und nur bis Seegang 4. Der Seegang wird auf einer Skala der Wellenhöhe angegeben, und Seegang 4 bedeutet Wellen von 1,25 bis 2,5 m. Bei einem Boot mit 42 Knoten bleiben dem Schiff damit etwa 7 Minuten Vorwarnzeit. Wellen machen es noch schwerer: Ein kleines Boot kann bis zur Hälfte der Zeit hinter ihnen verborgen sein. Und die Echos der Wellen selbst, die <strong>Seegangsechos</strong>, können sein eigenes Echo überdecken.",
-      "p4": "Wer diese Boote einsetzt, sagt, sie seien schwer zu entdecken. Ein Kommandeur der Gruppe 13, der Seedrohnen-Einheit des GUR, sagte, Radar erfasse den Kunststoffrumpf nur schwer, und das Boot gebe wenig Wärme ab. Das sind Behauptungen. Veröffentlichte Messungen gibt es nicht. Ein russischer Bericht über die Zerlegung eines erbeuteten Boots hält fest: Der Motor sitzt in einer Aluminiumwanne, die in Schaumstoff gebettet ist, und darüber liegt die Elektronik. Das verringert die Erwärmung der Außenhaut. Die Boote sind grau gestrichen, und die bekanntesten Angriffe kamen nachts oder im Morgengrauen. Tippen Sie auf die Schaltflächen, um den <strong>Seegang</strong> zu ändern, von glatt bis rau.",
-      "caption": "Seitenansicht: das Radar des Schiffs, die Krümmung des Meeres und das Boot. Krümmung und Höhen sind übertrieben dargestellt.",
-      "heightLabel": "Höhe des Radars",
+      "p1": "Das Meer ist gekrümmt, deshalb liegt der Horizont aus h Metern Höhe etwa 3,86 × √h km entfernt. Die Bootskamera sitzt etwa 0,7 m über dem Wasser und sieht nur etwa 3 km weit. Das 3D-Meer ist flach, denn auf 1,5 km fällt die echte Krümmung um weniger als 0,2 m ab. Die Zeichnung unten übertreibt sie.",
+      "p2": "Das Radar eines Schiffs trifft auf dieselbe Krümmung. Funkwellen biegen sich leicht, darum reicht seine <strong>Sichtlinie</strong> zu einem 0,5 m hohen Boot etwa 4,12 × (√h1 + √h2) km weit, Höhen in Metern. Bei einem Radar in 20 m Höhe sind das etwa 21 km. Das ist nur die größte Entfernung, auf die es das Boot überhaupt sehen könnte. Selbst dann hätte das Schiff bei 42 Knoten höchstens etwa 16 Minuten Vorwarnzeit.",
+      "p3": "Wirklich entdeckt wird das Boot erst später. Der <strong>Radarquerschnitt</strong> eines kleinen Boots, also wie groß es für ein Radar wirkt, liegt bei etwa 0,5 bis 5 m². Für die Magura ist keiner veröffentlicht. Eine Norm für Küstenradar erwartet, dass ein fortschrittliches Radar ein Ziel von 1 m² in 1 m Höhe auf etwa 9 km findet, bis Seegang 4 (Wellen von 1,25 bis 2,5 m). Das sind bei 42 Knoten etwa 7 Minuten Vorwarnzeit. Kleine Boote können bis zur Hälfte der Zeit hinter Wellen verborgen sein, und die <strong>Seegangsechos</strong>, die Echos der Wellen selbst, können ihr Echo überdecken.",
+      "p4": "Wer die Boote einsetzt, sagt, sie seien schwer zu entdecken. Ein Kommandeur der Gruppe 13 des GUR sagte, Radar erfasse den Kunststoffrumpf schlecht, und das Boot gebe wenig Wärme ab. Das sind Behauptungen, Messungen sind nicht veröffentlicht. Laut einem russischen Bericht über ein zerlegtes Boot verringert die schaumgepolsterte Motorwanne die Erwärmung der Außenhaut. Die Boote sind grau, und die bekanntesten Angriffe kamen nachts oder im Morgengrauen. Tippen Sie auf die Schaltflächen, um den <strong>Seegang</strong> zu ändern.",
+      "caption": "Seitenansicht von Radar, Meer und Boot. Krümmung und Höhen sind übertrieben.",
+      "heightLabel": "Radarhöhe",
       "radar": "Sichtlinie des Radars",
       "minutes": "Vorwarnzeit des Schiffs bei 42 kn",
-      "camera": "Horizont der Bootskamera",
+      "camera": "Kamerahorizont",
       "detect": "Erwartete Entdeckung",
       "waves": "Wellenhöhe",
       "hidden": "Hinter Wellen verborgen"
     },
     "fleet": {
       "title": "Günstig, klein und ständig im Wandel",
-      "p1": "Eine Magura V5 kostet etwa eine Viertelmillion Dollar. Der Hersteller nennt etwa 273.000 USD, andere Schätzungen etwa 250.000 USD. Sea Baby, eine eigene Konstruktion des SBU, des ukrainischen Sicherheitsdienstes, kostet etwa 221.000 USD. Der GUR beziffert den Wert des Patrouillenschiffs Sergej Kotow auf etwa 65 Millionen USD. Es sank im März 2024 nach einem Magura-Angriff. Das sind öffentlich genannte Zahlen, unten in den Anzeigen nebeneinandergestellt.",
-      "p2": "Diese Boote sind selten allein unterwegs. Bei vielen gemeldeten Angriffen waren es Gruppen von etwa fünf bis zehn. Laut den Entwicklern hat jedes Boot in einer Gruppe seine eigene Aufgabe. Die Schiffe, die als versenkt gemeldet wurden, bekamen mehrere Treffer ab, nicht nur einen. In der Fahrt des Modells kommen für den Sprint zwei Begleitboote dazu. Wie sie sich aufstellen, hat das Modell selbst gewählt.",
-      "p3": "Die Bauweise ändert sich ständig. Im Dezember 2024 rüstete der GUR V5-Boote mit zwei Luft-Luft-Raketen vom Typ R-73 auf Schienen aus. Die Raketen bekamen den neuen Namen Sea Dragon. Tippen Sie auf die Schaltflächen, um diese Ausrüstung zu sehen. Nur das Deck ändert sich: Das Boot im Modell fährt dieselbe Route und endet wie zuvor neben dem Schiff. 2025 stellte der GUR die größere Magura V7 vor, 7,2 m lang, mit bis zu 650 kg Nutzlast. Sea Baby ist eine eigene Baureihe des SBU und keine Magura.",
-      "p4": "Die Liste unten gibt nur wieder, was die Seiten jeweils gesagt haben, und vieles davon ist umstritten. Das britische Verteidigungsministerium zählt zwischen Februar 2022 und Juni 2024 mindestens 26 russische Marineschiffe, die beschädigt oder zerstört wurden. Das ist etwa ein Drittel der Schwarzmeerflotte. Diese Zahl umfasst alle Arten von Waffen, nicht nur Drohnenboote. Bis Oktober 2023 zeigten Satellitenbilder, dass etwa 14 Schiffe von Sewastopol nach Noworossijsk verlegt worden waren.",
+      "p1": "Eine Magura V5 kostet etwa eine Viertelmillion Dollar. Sea Baby, ein anderes Boot des SBU, des ukrainischen Sicherheitsdienstes, kostet etwa 221.000 USD. Das Patrouillenschiff Sergej Kotow, das im März 2024 nach einem Magura-Angriff sank, ist laut GUR etwa 65 Millionen USD wert.",
+      "p2": "Die Boote sind selten allein unterwegs. Bei vielen gemeldeten Angriffen fuhren Gruppen von etwa fünf bis zehn Booten. Laut den Entwicklern hat jedes seine Aufgabe. Als versenkt gemeldete Schiffe bekamen mehrere Treffer ab. Die zwei Begleitboote in der Fahrt und ihre Formation hat das Modell gewählt.",
+      "p3": "Die Bauweise ändert sich ständig. Im Dezember 2024 rüstete der GUR V5-Boote mit zwei Luft-Luft-Raketen vom Typ R-73 aus, die nun Sea Dragon heißen. Die Schaltflächen zeigen diese Ausrüstung, die nur das Deck ändert, nicht die Fahrt. 2025 stellte der GUR die größere Magura V7 vor, 7,2 m lang, mit bis zu 650 kg Nutzlast.",
+      "p4": "Die Liste unten gibt nur wieder, was jede Seite sagt, und vieles ist umstritten. Das britische Verteidigungsministerium zählt von Februar 2022 bis Juni 2024 mindestens 26 russische Marineschiffe, die durch Waffen aller Art beschädigt oder zerstört wurden. Das ist etwa ein Drittel der Schwarzmeerflotte.",
       "carries": "An Bord",
       "cost": "Kosten pro Boot",
       "ship": "Patrouillenschiff, Wert laut GUR",
-      "events": "Öffentlich bekannte Ereignisse, laut Berichten",
-      "event1": "<strong>29. Oktober 2022, Sewastopol</strong>: See- und Luftdrohnen trafen die Fregatte Admiral Makarow und ein Minenräumboot. Russland räumte nur leichte Schäden ein.",
-      "event2": "<strong>Nacht vom 31. Januar zum 1. Februar 2024, Donuslaw-See</strong>: Magura-V5-Boote versenkten die Raketenkorvette Iwanowez. Der GUR spricht von sechs Treffern, auf Videos sind etwa drei zu sehen.",
-      "event3": "<strong>Nacht vom 4. zum 5. März 2024, nahe der Straße von Kertsch</strong>: Magura-V5-Boote versenkten das Patrouillenschiff Sergej Kotow. Laut ukrainischen Stellen waren fünf Boote beteiligt.",
-      "event4": "<strong>31. Dezember 2024, Kap Tarchankut</strong>: Laut GUR schossen Magura-V5-Boote mit R-73-Raketen Mi-8-Hubschrauber ab, als erste Seedrohnen überhaupt. Zuerst meldete der GUR einen zerstörten und einen beschädigten Hubschrauber, später zwei zerstörte.",
-      "event5": "<strong>2. Mai 2025, nahe Noworossijsk</strong>: Laut GUR schossen Magura-V7-Boote mit Sidewinder-Raketen zwei Jets vom Typ Su-30SM ab. Russland hat das nicht bestätigt."
+      "events": "Bekannte Ereignisse, laut Berichten",
+      "event1": "<strong>29. Okt. 2022, Sewastopol</strong>: See- und Luftdrohnen trafen die Fregatte Admiral Makarow und ein Minenräumboot. Russland räumte leichte Schäden ein.",
+      "event2": "<strong>31. Jan. bis 1. Feb. 2024, Donuslaw-See</strong>: Magura-V5-Boote versenkten die Korvette Iwanowez. Der GUR spricht von sechs Treffern, Videos zeigen etwa drei.",
+      "event3": "<strong>4. bis 5. März 2024, Straße von Kertsch</strong>: Magura-V5-Boote versenkten das Patrouillenschiff Sergej Kotow. Laut der Ukraine waren fünf Boote beteiligt.",
+      "event4": "<strong>31. Dez. 2024, Kap Tarchankut</strong>: Laut GUR schossen Magura-V5-Boote mit R-73-Raketen Mi-8-Hubschrauber ab, eine Premiere für Seedrohnen. Erst behauptete der GUR einen Abschuss, später zwei.",
+      "event5": "<strong>2. Mai 2025, nahe Noworossijsk</strong>: Laut GUR schossen Magura-V7-Boote mit Sidewinder-Raketen zwei Su-30SM-Jets ab. Russland hat das nicht bestätigt."
     }
   }
 }
