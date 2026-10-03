@@ -38,10 +38,12 @@ const DUNE = { from: 22, height: 2.2, waves: [0.083, 0.061, 0.047, 1.3] as const
 const LAND = { from: 140, rise: 0.012, hills: 4, scale: 0.06 } as const;
 const SLAB = { thickness: 0.35, reveal: 0.16, shoulder: 3, apron: [-28, 4] as const };
 const PAD = { half: [17, 13] as const, blend: 16, thickness: 0.3 } as const;
+const COAST = { amplitude: 24, scale: 0.35, ripple: 5, rippleScale: 2.4 } as const;
+const SHADE = { base: 0.7, range: 0.5 } as const;
 const TINTS: readonly (readonly [string, number])[] = [
-  ['#5e5547', -3],
-  ['#6c6151', 1],
-  [THEME.beach, 3],
+  ['#4a463d', -3],
+  ['#514c42', 7],
+  [THEME.beach, 9],
   [THEME.beach, 18],
   ['#8a8858', 34],
   ['#6f6e50', 70],
@@ -86,8 +88,13 @@ function dune(x: number, z: number): number {
   return 0.5 + 0.5 * Math.sin(x * a + Math.sin(z * c) * warp) * Math.sin(z * b + x * c);
 }
 
+function inlandOf(x: number, z: number): number {
+  const swing = (amplitude: number, scale: number) => amplitude * (2 * dune(0, z * scale) - 1);
+  return swing(COAST.amplitude, COAST.scale) + swing(COAST.ripple, COAST.rippleScale) - x;
+}
+
 function naturalHeight(x: number, z: number): number {
-  const inland = -x;
+  const inland = inlandOf(x, z);
   if (inland < 0) return inland * SHELF;
   const land = Math.max(inland - LAND.from, 0);
   return (
@@ -129,7 +136,8 @@ function lines([from, to]: Range, [fineFrom, fineTo]: Range): number[] {
 }
 
 function tint(x: number, y: number, z: number, target: Color): Color {
-  const level = x > 0 ? y : -x;
+  const inland = inlandOf(x, z);
+  const level = inland < 0 ? y : inland;
   const index = TINTS.findIndex(([, at]) => level < at);
   if (index <= 0) return target.set(TINTS[index < 0 ? TINTS.length - 1 : 0][0]);
   const [[low, from], [high, to]] = [TINTS[index - 1], TINTS[index]];
@@ -144,7 +152,11 @@ function ground(): BufferGeometry {
   const surface = gridSurface(rows);
   const colour = new Color();
   const colours = rows.flatMap((row) =>
-    row.flatMap(([x, y, z]) => tint(x, y, z, colour).toArray()),
+    row.flatMap(([x, y, z]) =>
+      tint(x, y, z, colour)
+        .multiplyScalar(SHADE.base + SHADE.range * dune(x, z))
+        .toArray(),
+    ),
   );
   return surface.setAttribute('color', new BufferAttribute(new Float32Array(colours), 3));
 }
