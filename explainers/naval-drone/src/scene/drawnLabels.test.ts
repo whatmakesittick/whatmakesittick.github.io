@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { boatAt, jetAt, planingAt, seaAt } from '../model';
 import { DEFAULT_VIEW } from '../state';
-import { DrawnLabels, isCompactStage } from './drawnLabels';
+import { DrawnLabels } from './drawnLabels';
+import { isCompactStage } from './viewFit';
 import type { DrawnSource } from './drawnLabels';
 
 const ALL = new Set([

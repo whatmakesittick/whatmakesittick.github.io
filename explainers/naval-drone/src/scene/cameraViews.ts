@@ -19,7 +19,15 @@ import {
   skyPoint,
 } from '../model';
 import type { ChaseTarget } from './assembly';
-import { boatToWorld, direction, fitDistance, fitsView, nearestFit, vectorOf } from './viewFit';
+import {
+  boatToWorld,
+  direction,
+  fitDistance,
+  fitsView,
+  nearestFit,
+  rightOf,
+  vectorOf,
+} from './viewFit';
 import type { BoatFrame } from './viewFit';
 
 export interface FollowTarget extends ChaseTarget {
@@ -28,14 +36,21 @@ export interface FollowTarget extends ChaseTarget {
 }
 
 export type FollowSource = () => FollowTarget | null;
+export type CompactSource = () => boolean;
 
 type OrbitView = Extract<CameraView, 'chase' | 'waterline' | 'stern'>;
+
+interface CompactFraming {
+  lead: number;
+  widen: number;
+}
 
 interface OrbitSpec {
   bearing: number;
   elevation: number;
   width(target: FollowTarget): number;
   aim: Point;
+  compact?: CompactFraming;
   keep?: readonly Point[];
 }
 
@@ -45,6 +60,8 @@ const CHASE_WIDTH_LENGTHS = 2.2;
 const WATERLINE_WIDTH_LENGTHS = 1.4;
 const FIT_FILL = 0.86;
 const KEEP_FILL = 0.92;
+const BOAT_LEAD = 0.12;
+const WIDE_FRAMING: CompactFraming = { lead: 0, widen: 1 };
 const MAX_ZOOM_OUT = 3;
 const SIDES = [-1, 1] as const;
 const [TRANSOM_STATION] = HULL_STATIONS;
@@ -67,12 +84,14 @@ export const ORBIT_VIEWS: Readonly<Record<OrbitView, OrbitSpec>> = {
     elevation: toRadians(18),
     width: (target) => CHASE_WIDTH_LENGTHS * target.length,
     aim: [0, 0.2, 0],
+    compact: { lead: BOAT_LEAD, widen: 1 },
   },
   waterline: {
     bearing: toRadians(-90),
     elevation: toRadians(1.5),
     width: (target) => WATERLINE_WIDTH_LENGTHS * target.length,
     aim: [0, 0.1, 0],
+    compact: { lead: BOAT_LEAD, widen: 1.2 },
   },
   stern: {
     bearing: toRadians(-145),
@@ -132,12 +151,15 @@ export function orbitPose(
   target: FollowTarget,
   spec: OrbitSpec,
   slopes: FramingSlopes,
+  compact = false,
 ): CameraPose {
   const frame = frameOf(target);
-  const aim = boatToWorld(frame, spec.aim, true);
   const away = direction(target.heading + spec.bearing, spec.elevation);
+  const { lead, widen } = (compact ? spec.compact : undefined) ?? WIDE_FRAMING;
+  const width = spec.width(target) * widen;
+  const aim = boatToWorld(frame, spec.aim, true).addScaledVector(rightOf(away), -lead * width);
   const keep = (spec.keep ?? []).map((point) => boatToWorld(frame, point, true));
-  const nearest = fitDistance(spec.width(target), slopes);
+  const nearest = fitDistance(width, slopes);
   return nearestFit(
     (distance) => ({ position: aim.clone().addScaledVector(away, distance), target: aim.clone() }),
     (pose) => fitsView(pose, keep, slopes, KEEP_FILL),
@@ -244,19 +266,22 @@ function followView(
   };
 }
 
-function orbitView(source: FollowSource, view: OrbitView): CustomView {
+function orbitView(source: FollowSource, compact: CompactSource, view: OrbitView): CustomView {
   return followView(
     source,
-    (target, slopes) => orbitPose(target, ORBIT_VIEWS[view], slopes),
+    (target, slopes) => orbitPose(target, ORBIT_VIEWS[view], slopes, compact()),
     VIEW_DISTANCE[view],
   );
 }
 
-export function cameraViews(source: FollowSource): Record<CameraView, CustomView> {
+export function cameraViews(
+  source: FollowSource,
+  compact: CompactSource = () => false,
+): Record<CameraView, CustomView> {
   return {
-    chase: orbitView(source, 'chase'),
-    waterline: orbitView(source, 'waterline'),
-    stern: orbitView(source, 'stern'),
+    chase: orbitView(source, compact, 'chase'),
+    waterline: orbitView(source, compact, 'waterline'),
+    stern: orbitView(source, compact, 'stern'),
     sky: followView(source, skyPose, VIEW_DISTANCE.sky),
     eye: followView(source, eyePose, VIEW_DISTANCE.eye),
     group: followView(source, groupPose, VIEW_DISTANCE.group),

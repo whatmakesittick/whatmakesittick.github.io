@@ -11,6 +11,8 @@ import type { NavalDroneControllerDependencies } from './controller';
 
 const PHONE = { vertical: 0.2, horizontal: 0.27 };
 const LEVEL_LIMIT = Math.PI / 2;
+const PHONE_WIDTH_PX = 390;
+const DESKTOP_WIDTH_PX = 835;
 
 function assemblyState(changes: Partial<AssemblyState> = {}): AssemblyState {
   const reading = runAt({ ...CHAPTER_CONTROL_DEFAULTS, phase: HELD_PHASE, preset: 'overview' });
@@ -31,7 +33,7 @@ function assemblyState(changes: Partial<AssemblyState> = {}): AssemblyState {
   };
 }
 
-function fakeShell() {
+function fakeShell(stageWidth = DESKTOP_WIDTH_PX) {
   const rig = {
     framing: () => PHONE,
     follow: vi.fn(),
@@ -48,7 +50,10 @@ function fakeShell() {
     textures: createSceneTextures(),
     labels: { attach: vi.fn(), show: vi.fn() },
     rig,
-    viewport: { renderer: { compileAsync: vi.fn(() => Promise.resolve()) } },
+    viewport: {
+      renderer: { compileAsync: vi.fn(() => Promise.resolve()) },
+      element: { clientWidth: stageWidth },
+    },
   };
   return { rig, shell: shell as unknown as NavalDroneControllerDependencies };
 }
@@ -78,6 +83,21 @@ describe('naval drone controller', () => {
     expect(target?.x).toBeCloseTo(state.boat.position[0], 1);
     expect(rig.follow).toHaveBeenLastCalledWith(expect.anything(), 'position');
     expect(rig.setDistanceLimits).toHaveBeenLastCalledWith({});
+  });
+
+  it('moves the boat off the centre of a phone-sized stage', () => {
+    const state = assemblyState();
+    const aimOn = (width: number) => {
+      const { rig, shell } = fakeShell(width);
+      const navalDrone = new NavalDroneController(shell);
+      navalDrone.build(state);
+      navalDrone.views.frame('waterline', false);
+      return (rig.jumpTo.mock.lastCall?.[0] as { target: Vector3 }).target;
+    };
+    const wide = aimOn(DESKTOP_WIDTH_PX);
+    const phone = aimOn(PHONE_WIDTH_PX);
+    expect(wide.x).toBeCloseTo(state.boat.position[0], 1);
+    expect(phone.distanceTo(wide)).toBeGreaterThan(0.5);
   });
 
   it('rides the deck in the eye view so the camera moves with the waves', () => {

@@ -29,7 +29,7 @@ import {
 } from './cameraViews';
 import type { Point } from '../ids';
 import type { FollowTarget } from './cameraViews';
-import { fitsView, vectorOf } from './viewFit';
+import { fitsView, rightOf, vectorOf } from './viewFit';
 
 const PHONE = { vertical: 0.2, horizontal: 0.27 };
 const DESKTOP = { vertical: 0.25, horizontal: 0.42 };
@@ -79,6 +79,19 @@ describe('camera views', () => {
     expect(Math.asin(offset.y / offset.length())).toBeCloseTo(toRadians(18), 9);
     expect(Math.atan2(offset.z, offset.x)).toBeCloseTo(toRadians(-150), 9);
     expect(offset.length()).toBeCloseTo((2.2 * BOAT.length) / (2 * PHONE.horizontal), 9);
+  });
+
+  it('moves the boat right of the centre on a phone so a long hull label fits beside it', () => {
+    (['chase', 'waterline'] as const).forEach((view) => {
+      const wide = orbitPose(TARGET, ORBIT_VIEWS[view], PHONE);
+      const phone = orbitPose(TARGET, ORBIT_VIEWS[view], PHONE, true);
+      const right = rightOf(offsetOf(phone).normalize());
+      const boat = vectorOf(TARGET.position).sub(phone.target);
+      expect(boat.dot(right), view).toBeGreaterThan(0.5);
+      expect(offsetOf(phone).length(), view).toBeGreaterThanOrEqual(offsetOf(wide).length());
+    });
+    const stern = orbitPose(TARGET, ORBIT_VIEWS.stern, PHONE, true);
+    expect(stern).toEqual(orbitPose(TARGET, ORBIT_VIEWS.stern, PHONE));
   });
 
   it('turns the views with the heading', () => {

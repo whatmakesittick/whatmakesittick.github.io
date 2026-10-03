@@ -1,4 +1,3 @@
-import type { ViewportSize } from '@core/scene/lens';
 import type { LabelPolicy } from '@core/scene/presetBinder';
 import type { AssemblyState, PartId } from '../ids';
 
@@ -11,7 +10,6 @@ type DrawnTest = (state: DrawnSource) => boolean;
 
 const NO_PARTS: ReadonlySet<string> = new Set();
 const MOVING_KNOTS = 0.5;
-const COMPACT_STAGE_WIDTH_PX = 600;
 
 const COMPACT_HIDDEN: ReadonlySet<string> = new Set<PartId>([
   'driveShaft',
@@ -19,10 +17,6 @@ const COMPACT_HIDDEN: ReadonlySet<string> = new Set<PartId>([
   'nozzle',
   'fuelTanks',
 ]);
-
-export function isCompactStage(size: Pick<ViewportSize, 'width'>): boolean {
-  return size.width < COMPACT_STAGE_WIDTH_PX;
-}
 
 const DRAWN_WHEN: Readonly<Partial<Record<PartId, DrawnTest>>> = {
   satLink: ({ view, link }) => view.links && link.mode === 'satellite',

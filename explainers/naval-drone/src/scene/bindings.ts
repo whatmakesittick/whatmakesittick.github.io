@@ -18,7 +18,8 @@ import type {
   RunSource,
 } from '../state';
 import type { NavalDroneController } from './controller';
-import { DrawnLabels, isCompactStage } from './drawnLabels';
+import { DrawnLabels } from './drawnLabels';
+import { isCompactStage } from './viewFit';
 
 export interface SceneTargets extends PresetTargets {
   navalDrone: NavalDroneController;

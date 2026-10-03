@@ -8,7 +8,7 @@ import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
 import { LOOK_AROUND_POLAR, VIEW_DISTANCE, cameraViews } from './cameraViews';
 import type { FollowTarget } from './cameraViews';
-import { lookUpLimits } from './viewFit';
+import { isCompactStage, lookUpLimits } from './viewFit';
 
 export type NavalDroneControllerDependencies = Pick<
   SceneShell,
@@ -34,7 +34,10 @@ export class NavalDroneController {
     this.dependencies = dependencies;
     this.defaultMaxPolar = dependencies.rig.controls.maxPolarAngle;
     this.cameraViews = new CameraViews(dependencies.rig, {
-      views: cameraViews(() => this.followTarget()),
+      views: cameraViews(
+        () => this.followTarget(),
+        () => isCompactStage({ width: dependencies.viewport.element.clientWidth }),
+      ),
       region: (id) => this.assembly?.region(id) ?? null,
       anchor: () => this.assembly?.anchor(this.followed) ?? null,
     });

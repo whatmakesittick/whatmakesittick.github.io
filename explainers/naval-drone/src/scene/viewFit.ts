@@ -1,6 +1,6 @@
 import { Euler, Vector3 } from 'three';
 import type { CameraPose } from '@core/scene/frameBox';
-import type { FramingSlopes } from '@core/scene/lens';
+import type { FramingSlopes, ViewportSize } from '@core/scene/lens';
 import type { Point } from '../ids';
 import { BOAT_EULER_ORDER } from './pose';
 
@@ -21,8 +21,13 @@ export interface PolarLimits {
 }
 
 const UP = new Vector3(0, 1, 0);
+const COMPACT_STAGE_WIDTH_PX = 600;
 const SOLVE_STEPS = 32;
 const POLAR_SLACK = 0.005;
+
+export function isCompactStage(size: Pick<ViewportSize, 'width'>): boolean {
+  return size.width < COMPACT_STAGE_WIDTH_PX;
+}
 
 export function vectorOf(point: Point): Vector3 {
   return new Vector3(point[0], point[1], point[2]);
@@ -31,6 +36,10 @@ export function vectorOf(point: Point): Vector3 {
 export function direction(azimuth: number, elevation: number): Vector3 {
   const level = Math.cos(elevation);
   return new Vector3(level * Math.cos(azimuth), Math.sin(elevation), level * Math.sin(azimuth));
+}
+
+export function rightOf(away: Vector3): Vector3 {
+  return away.clone().negate().cross(UP).normalize();
 }
 
 export function boatToWorld(frame: BoatFrame, point: Point, pitched: boolean): Vector3 {
@@ -49,7 +58,7 @@ export function fitsView(
   fill: number,
 ): boolean {
   const forward = pose.target.clone().sub(pose.position).normalize();
-  const right = forward.clone().cross(UP).normalize();
+  const right = rightOf(forward.clone().negate());
   const up = right.clone().cross(forward);
   return points.every((point) => {
     const offset = point.clone().sub(pose.position);
