@@ -130,6 +130,17 @@ describe('speed trial', () => {
     expect(store.getState().playing).toBe(false);
   });
 
+  it('never lets go of the boat in the update that changes the chapter', () => {
+    const store = createNavalDroneStore({
+      preset: 'hull',
+      phase: HELD_PHASE,
+      playing: false,
+      trialKnots: 11,
+    });
+    store.setState({ preset: 'jet', playing: true, phase: MOMENTS.topSpeed, trialKnots: 22 });
+    expect(store.getState().trialKnots).toBe(22);
+  });
+
   it('keeps holding the boat while the phase stays put', () => {
     const store = heldStore();
     store.getState().setPhase(50);

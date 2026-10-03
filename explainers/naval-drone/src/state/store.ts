@@ -77,7 +77,7 @@ type TrialWatch = readonly [phase: number, playing: boolean, preset: PresetId];
 function shouldRelease(next: TrialWatch, previous: TrialWatch): boolean {
   const [phase, playing, preset] = next;
   const [lastPhase, wasPlaying, lastPreset] = previous;
-  return (playing && !wasPlaying) || (phase !== lastPhase && preset === lastPreset);
+  return preset === lastPreset && ((playing && !wasPlaying) || phase !== lastPhase);
 }
 
 function releaseTrialOnRun(store: NavalDroneStore): NavalDroneStore {
