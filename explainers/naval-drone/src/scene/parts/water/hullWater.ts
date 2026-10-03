@@ -104,6 +104,8 @@ export class HullWaterPart {
     this.place('waterline', emphasis, this.lineShape(front));
     this.place('stern', emphasis, this.sternShape());
     this.place('spray', emphasis, this.sprayShape(chineX, boat.knots));
+    const [portSpray] = this.sheets.spray.grids;
+    portSpray.mesh.visible &&= !view.cutaway;
     const bowX = front - TUNING.anchorBack;
     const bowY = this.water.level(front, 0);
     const bowSide = -(halfBreadthAt(bowX, bowY) + LABEL_SPOTS.bowOut);

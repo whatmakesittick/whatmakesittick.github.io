@@ -451,7 +451,7 @@ export const HULL_WATER = {
   spray: {
     rows: 10,
     columns: 9,
-    onFrom: [6, 15] as const,
+    onFrom: [11, 18] as const,
     root: [0.25, 0.9] as const,
     range: [0.6, 2.2] as const,
     up: toRadians(17),
@@ -464,7 +464,7 @@ export const HULL_WATER = {
     bow: { opacity: 0.95, scroll: 0.5, streaks: 3.5, stretch: 0.5, colour: '#f2f7f8' },
     waterline: { opacity: 0.85, scroll: 1.2, streaks: 9, stretch: 0.35, colour: '#eef4f6' },
     stern: { opacity: 0.5, scroll: 0.2, streaks: 2.5, stretch: 0.6, colour: '#e9f1f3' },
-    spray: { opacity: 0.55, scroll: 1.6, streaks: 12, stretch: 1.1, colour: '#f4f7f8' },
+    spray: { opacity: 0.85, scroll: 1.6, streaks: 8, stretch: 1.1, colour: '#ffffff' },
   },
   profiles: {
     bow: [0.04, 0.5] as const,
