@@ -5,7 +5,15 @@ import { TEXT_REFRESH_INTERVAL_MS } from '@core/ui/throttle';
 import chapters from '../../chapters.html?raw';
 import en from '../../locales/en.json';
 import { FIT_IDS, HELM_IDS, LINK_MODES, SEA_STATE_IDS, SPEED_MARK_IDS } from '../ids';
-import { HELD_PHASE, MOMENTS, distanceAt, knotsAtThrottle, speedAt, throttleAt } from '../model';
+import {
+  HELD_PHASE,
+  MOMENTS,
+  distanceAt,
+  knotsAtThrottle,
+  speedAt,
+  throttleAt,
+  throttlePercentOf,
+} from '../model';
 import { createNavalDroneStore, runAt } from '../state';
 import type { NavalDroneStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
@@ -21,7 +29,6 @@ import { fill, isFilled } from './testing';
 import { mountNavalDroneUi } from '.';
 
 const { units, hull, jet, link, horizon, fleet } = en;
-const PERCENT = 100;
 const PHASE_NUDGE = 0.05;
 
 function readout(id: string): string | null | undefined {
@@ -139,7 +146,7 @@ describe('chapter widgets', () => {
   it('follows the run throttle on the jet slider and holds the boat when it moves', () => {
     store.getState().setPhase(HELD_PHASE);
     settle();
-    expect(Number(input('throttle').value)).toBe(Math.round(throttleAt(22) * PERCENT));
+    expect(Number(input('throttle').value)).toBe(throttlePercentOf(throttleAt(22)));
     expect(readout('jet-boat')).toBe(formatBoatSpeed(22));
     slide('throttle', 100);
     settle();

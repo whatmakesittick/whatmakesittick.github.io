@@ -10,10 +10,13 @@ import {
   HULL_SPEED_KN,
   KOTOV_VALUE_MUSD,
   LENS_HEIGHT_M,
+  METRES_PER_KM,
   NEWTONS_PER_KILONEWTON,
   PAYLOAD_MAX_KG,
+  PERCENT,
   SEAWATER_DENSITY,
   SEA_STATES,
+  SECONDS_PER_MINUTE,
   boatLengths,
   detectionCovered,
   knotsToKmh,
@@ -27,14 +30,11 @@ import {
 const WHOLE = 0;
 const TENTHS = 1;
 const HUNDREDTHS = 2;
-const PERCENT = 100;
-const SECONDS_PER_MINUTE = 60;
 const CLOCK_DIGITS = 2;
 const CLOCK_PAD = '0';
 const CLOCK_SEPARATOR = ':';
 const WHOLE_KNOTS_FROM = 10;
 const METRES_STEP = 10;
-const METRES_PER_KM = 1000;
 const KG_PER_LITRE = SEAWATER_DENSITY / METRES_PER_KM;
 const STRAIGHT_NOZZLE = 0.5;
 

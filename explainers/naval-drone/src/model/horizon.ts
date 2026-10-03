@@ -9,9 +9,9 @@ export const TARGET_HEIGHT_M = 0.5;
 export const LENS_HEIGHT_M = BOAT.lensHeight;
 export const RADAR_HEIGHT_M = { min: 5, max: 50, step: 1, default: 20 } as const;
 export const DETECTION_KM = 9.26;
+export const METRES_PER_KM = 1000;
+export const SECONDS_PER_MINUTE = 60;
 
-const METRES_PER_KM = 1000;
-const SECONDS_PER_MINUTE = 60;
 const DETECTION_COVERED_UP_TO: SeaStateId = 'moderate';
 const HIDDEN_FROM: SeaStateId = 'slight';
 

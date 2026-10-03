@@ -4,7 +4,7 @@ import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import { TEXT_REFRESH_INTERVAL_MS } from '@core/ui/throttle';
 import type { HelmId } from '../ids';
-import { THROTTLE_PERCENT, throttleAt, throttlePercentOf } from '../model';
+import { THROTTLE_PERCENT, throttleAt, throttlePercentOf, throttleShareOf } from '../model';
 import { followedKnots, runAt } from '../state';
 import type { NavalDroneStore, NavalDroneStoreState } from '../state';
 import {
@@ -25,8 +25,6 @@ type SelectedThrottle = readonly [
   knots: number,
 ];
 
-const PERCENT = 100;
-
 function jetOf(state: NavalDroneStoreState) {
   return runAt(state).jet;
 }
@@ -43,7 +41,7 @@ export function mountJetControl(root: Document, store: NavalDroneStore): Dispose
         shownKnots(runAt(state).boat.knots),
       ],
       value: ([percent]) => percent,
-      format: ([percent]) => formatPercent(percent / PERCENT),
+      format: ([percent]) => formatPercent(throttleShareOf(percent)),
       set: (state, percent) => state.setThrottle(percent),
       refreshIntervalMs: TEXT_REFRESH_INTERVAL_MS,
       readouts: {

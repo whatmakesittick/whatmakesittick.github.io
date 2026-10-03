@@ -9,8 +9,9 @@ export interface SteppedRange {
   step: number;
 }
 
+export const PERCENT = 100;
 export const TRIAL_KNOTS = { min: 0, max: BOAT.topKnots, step: 0.1 } as const;
-export const THROTTLE_PERCENT = { min: 0, max: 100, step: 1 } as const;
+export const THROTTLE_PERCENT = { min: 0, max: PERCENT, step: 1 } as const;
 export const MARK_TOLERANCE_KN = 0.25;
 
 export const SPEED_MARKS: Readonly<Record<SpeedMarkId, number>> = {
@@ -20,8 +21,6 @@ export const SPEED_MARKS: Readonly<Record<SpeedMarkId, number>> = {
   cruise: BOAT.cruiseKnots,
   top: BOAT.topKnots,
 };
-
-const PERCENT = 100;
 
 export function stepTo(value: number, range: SteppedRange): number {
   return Math.round(clamp(value, range.min, range.max) / range.step) * range.step;
