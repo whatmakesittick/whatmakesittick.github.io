@@ -1,0 +1,322 @@
+{
+  "meta": {
+    "title": "Comment fonctionne un drone naval",
+    "eyebrow": "Drone naval",
+    "tagline": "Un petit bateau sans personne à bord : sa coque glisse à la surface, une pompe à eau le fait avancer, et on le pilote par liaison satellite.",
+    "description": "Suivez en 3D un drone naval Magura V5 : la coque qui se met à planer, l’hydrojet, la liaison satellite, et pourquoi un bateau si bas se voit mal.",
+    "summary": "La coque qui plane, l’hydrojet qui fait avancer et tourner le bateau, la liaison satellite et son décalage, la courbure de la mer, et une conception qui ne cesse d’évoluer.",
+    "socialAlt": "Un bateau gris sans équipage glisse sur la mer à l’aube, des gerbes d’embruns jaillissant de ses bouchains, à côté du titre « Comment fonctionne un drone naval »"
+  },
+  "stage": {
+    "label": "Modèle interactif du drone naval",
+    "gauge": "Mesures du trajet en direct"
+  },
+  "controls": {
+    "label": "Commandes du drone naval",
+    "views": {
+      "cutaway": {
+        "name": "Vue en coupe",
+        "short": "Coupe",
+        "hint": "Vue en coupe (C)"
+      },
+      "flow": {
+        "name": "Flux d’eau",
+        "short": "Flux",
+        "hint": "Flux d’eau (W)"
+      },
+      "links": {
+        "name": "Liaisons radio",
+        "short": "Liaisons",
+        "hint": "Liaisons radio (K)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    },
+    "fit": {
+      "label": "Équipement du pont"
+    },
+    "fitOptions": {
+      "standard": "Standard",
+      "missile": "Rails lance-missiles"
+    },
+    "momentOptions": {
+      "hullSpeed": "Vitesse de carène",
+      "humpPeak": "Haut de la bosse",
+      "onPlane": "Le bateau plane",
+      "cruiseSpeed": "En croisière",
+      "throttleUp": "Début du sprint",
+      "topSpeed": "Vitesse maximale",
+      "alongside": "Au navire"
+    },
+    "speedMarkOptions": {
+      "hullSpeed": "Vitesse de carène",
+      "hump": "Bosse",
+      "planing": "Déjaugeage",
+      "cruise": "Croisière",
+      "top": "Vitesse maximale"
+    },
+    "helmOptions": {
+      "left": "Gauche",
+      "straight": "Tout droit",
+      "right": "Droite",
+      "reverse": "Marche arrière"
+    },
+    "linkOptions": {
+      "satellite": "Starlink",
+      "backup": "Satellite de secours",
+      "lost": "Liaison perdue"
+    },
+    "seaStateOptions": {
+      "smooth": "Belle",
+      "slight": "Peu agitée",
+      "moderate": "Agitée",
+      "rough": "Forte"
+    }
+  },
+  "timeline": {
+    "label": "Temps du trajet",
+    "phases": "Aller à une étape du trajet",
+    "speed": "Vitesse de lecture",
+    "value": "{{time}}, {{phase}}",
+    "clock": "T+{{clock}}",
+    "speedFormat": "{{factor}}×",
+    "speedValue": "par rapport à la vitesse normale",
+    "phase": {
+      "launch": "Départ",
+      "hump": "Bosse",
+      "cruise": "Croisière",
+      "sprint": "Sprint",
+      "arrival": "Arrivée"
+    },
+    "during": {
+      "launch": "le bateau quitte la cale au ralenti, sans atteindre sa vitesse de carène",
+      "hump": "à plein gaz, le bateau franchit la bosse et se met à planer",
+      "cruise": "le bateau file à 22 nœuds, une croisière de longues heures ici écourtée",
+      "sprint": "le bateau accélère jusqu’à 42 nœuds, et deux autres bateaux le rejoignent",
+      "arrival": "le bateau parcourt les 170 derniers mètres jusqu’au flanc du navire"
+    },
+    "jump": {
+      "launch": "Aller au départ",
+      "hump": "Aller à la bosse",
+      "cruise": "Aller à la croisière",
+      "sprint": "Aller au sprint",
+      "arrival": "Aller à l’arrivée"
+    }
+  },
+  "readouts": {
+    "clock": "Horloge du trajet",
+    "speed": "Vitesse",
+    "mode": "Coque",
+    "distance": "Jusqu’au navire"
+  },
+  "mode": {
+    "floating": "Elle flotte",
+    "hump": "Elle franchit la bosse",
+    "planing": "Elle plane"
+  },
+  "units": {
+    "speed": "{{kn}} nd, {{kmh}} km/h",
+    "m": "{{value}} m",
+    "km": "{{value}} km",
+    "percent": "{{value}} %",
+    "degrees": "{{value}}°",
+    "kilonewtons": "{{value}} kN",
+    "mps": "{{ms}} m/s, {{kmh}} km/h",
+    "ms": "{{value}} ms",
+    "minutes": "{{value}} min"
+  },
+  "parts": {
+    "hull": "Coque en composite",
+    "chines": "Bouchains",
+    "sprayRails": "Déflecteurs d’embruns",
+    "payloadBay": "Soute de charge utile",
+    "fuelTanks": "Réservoirs de carburant",
+    "engine": "Moteur dans son bac",
+    "electronicsBay": "Électronique",
+    "starlinkPanels": "Antennes Starlink",
+    "backupPanel": "Antenne satellite de secours",
+    "cameraDome": "Dôme de la caméra thermique",
+    "bowCamera": "Caméra avant",
+    "intake": "Prise d’eau et grille",
+    "duct": "Conduit d’aspiration",
+    "driveShaft": "Arbre de transmission",
+    "impeller": "Turbine",
+    "waterjet": "Hydrojet",
+    "stator": "Aubes du stator",
+    "nozzle": "Tuyère",
+    "steeringNozzle": "Tuyère orientable",
+    "reverseBucket": "Godet de marche arrière",
+    "missileRails": "Rails lance-missiles",
+    "jetStream": "Jet d’eau",
+    "bowWave": "Vague d’étrave",
+    "spray": "Embruns",
+    "wake": "Sillage",
+    "wettedLength": "Longueur mouillée du fond",
+    "videoGhost": "Là où le pilote le voit",
+    "satLink": "Liaison Starlink",
+    "backupLink": "Liaison de secours",
+    "satellite": "Satellite Starlink",
+    "backupSatellite": "Satellite de secours",
+    "groundStation": "Station au sol",
+    "ship": "Navire à l’ancre",
+    "shipRadar": "Radar du navire",
+    "companions": "Bateaux qui l’accompagnent"
+  },
+  "hull": {
+    "lift": "{{dynamic}} % par la vitesse, {{buoyant}} % par la flottaison",
+    "wetted": "{{m}} m, contre {{rest}} m au repos",
+    "ratio": "{{times}} fois la vitesse de carène, qui est de {{hullSpeed}} nd",
+    "ratioStill": "À l’arrêt. La vitesse de carène est de {{hullSpeed}} nd"
+  },
+  "jet": {
+    "flow": "{{kg}} kg par seconde, soit environ {{litres}} litres",
+    "backing": "Le bateau freine, godet baissé",
+    "astern": "Renvoyé vers l’avant par le godet",
+    "noEfficiency": "Nul tant que le bateau n’avance pas",
+    "push": {
+      "left": "Tuyère tournée de {{angle}}° vers la gauche : l’avant vire à gauche",
+      "right": "Tuyère tournée de {{angle}}° vers la droite : l’avant vire à droite",
+      "straight": "Droit vers l’arrière : le bateau garde son cap",
+      "reverse": "Godet baissé : le jet part vers l’avant et vers le bas"
+    }
+  },
+  "link": {
+    "now": "{{m}} m derrière le bateau à {{kn}} nd",
+    "nowLost": "Aucune image tant que la liaison est coupée",
+    "top": "{{m}} m à 42 nd, soit {{lengths}} fois la longueur du bateau",
+    "carrier": {
+      "satellite": "Starlink, deux terminaux",
+      "backup": "Antenne satellite de secours",
+      "lost": "Aucune"
+    },
+    "boat": {
+      "satellite": "Le pilote dirige d’après la vidéo",
+      "backup": "Le pilote dirige par la liaison de secours",
+      "lost": "Dans le modèle, il garde son cap ; ce que fait un vrai bateau n’est pas publié"
+    }
+  },
+  "horizon": {
+    "camera": "{{km}} km, depuis un objectif à {{m}} m au-dessus de l’eau",
+    "detect": "Environ {{km}} km, soit {{min}} min à 42 nd",
+    "detectBeyond": "Non couvert : la norme s’arrête à une mer de force 4",
+    "waves": {
+      "smooth": "{{from}} à {{to}} m, mer de force 2",
+      "slight": "{{from}} à {{to}} m, mer de force 3",
+      "moderate": "{{from}} à {{to}} m, mer de force 4",
+      "rough": "{{from}} à {{to}} m, mer de force 5"
+    },
+    "hidden": {
+      "smooth": "Rarement : les vagues restent sous son pont, haut de 0,5 m",
+      "slight": "Jusqu’à la moitié du temps : les vagues sont aussi hautes que son pont",
+      "moderate": "Jusqu’à la moitié du temps : les vagues dépassent son pont",
+      "rough": "Jusqu’à la moitié du temps : les vagues dominent largement son pont"
+    },
+    "canvas": {
+      "radar": "Radar du navire",
+      "boat": "Bateau, 0,5 m de haut",
+      "lineOfSight": "Ligne de vue",
+      "detection": "Détection attendue",
+      "km": "{{value}} km",
+      "note": "Courbure de la mer exagérée"
+    }
+  },
+  "fleet": {
+    "carries": {
+      "standard": "Une charge utile de {{kg}} kg au plus, à l’avant",
+      "missile": "Deux missiles R-73 sur rails ; le modèle garde la soute avant"
+    },
+    "cost": "De {{from}} à {{to}} dollars environ",
+    "ship": "Environ {{value}} millions de dollars"
+  },
+  "sections": {
+    "overview": {
+      "title": "Une vedette rapide sans personne à bord",
+      "p1": "Vous avez sous les yeux un <strong>Magura V5</strong>, un drone naval venu d’Ukraine : un bateau rapide sans personne à bord. Une entreprise d’État, SpetsTechnoExport, le construit pour le GUR, le renseignement militaire ukrainien. Il a été présenté pour la première fois en juillet 2023, au salon IDEF d’Istanbul. Le bateau mesure 5,5 m de long et 1,5 m de large, à peu près la taille d’un petit hors-bord. Son pont ne dépasse l’eau que de 0,5 m, et il pèse moins d’une tonne. Un pilote, très loin de là, le dirige par une liaison satellite.",
+      "p2": "La vue en coupe vous permet de regarder à l’intérieur. La coque est en <strong>composite</strong> : des couches de tissu de fibres prises dans une résine dure. L’avant abrite une <strong>soute de charge utile</strong> fermée, qui peut recevoir jusqu’à 320 kg. Derrière viennent les réservoirs de carburant, puis le moteur, logé dans un bac en aluminium calé dans de la mousse, avec l’électronique au-dessus. À l’arrière, le moteur entraîne un <strong>hydrojet</strong>, un propulseur à jet d’eau. Le fabricant n’a pas dit quel moteur il utilise : le modèle suppose donc un moteur à essence de type jet-ski, comme sur les premiers bateaux. Sur le pont se trouvent deux antennes Starlink, une antenne satellite de secours, un dôme bas qui abrite une caméra thermique, et une caméra fixe à l’avant.",
+      "p3": "Le modèle suit un seul <strong>trajet</strong>. Le bateau quitte au ralenti une cale de mise à l’eau, se met à planer, puis file à 22 nœuds en croisière. Un nœud, c’est un mille marin par heure : cela fait donc environ 41 km/h. Ensuite, il accélère jusqu’à sa vitesse maximale de 42 nœuds, environ 78 km/h, et deux autres bateaux le rejoignent. Le trajet s’achève quand sa proue atteint le flanc d’un grand navire gris, à l’ancre.",
+      "p4": "À vitesse normale, le bateau avance aussi vite qu’un vrai, mais le voyage est raccourci pour tenir en deux minutes. Un vrai bateau naviguerait de longues heures : il lui faudrait environ 20 heures pour aller au bout de son autonomie, 450 milles marins, soit environ 800 km. Ici, la croisière dure 42 secondes, et le sprint est lui aussi écourté. Le navire n’est qu’à 1,5 km de la cale, alors qu’une vraie cible serait à des centaines de kilomètres. L’horloge, en haut, compte le temps du modèle : T+1:05 signifie donc une minute et cinq secondes après le départ. Faites glisser le curseur de la barre de lecture, ou appuyez sur un bouton ci-dessous pour aller directement à un moment.",
+      "mode": "Coque",
+      "covered": "Distance parcourue",
+      "done": "Avancement du trajet"
+    },
+    "hull": {
+      "title": "Il cesse de flotter et glisse sur l’eau",
+      "p1": "Au repos, le bateau flotte comme n’importe quel autre. L’eau qu’il écarte le maintient à flot : c’est la <strong>poussée d’Archimède</strong>. Quand il prend de la vitesse, une deuxième force entre en jeu. L’eau qui frappe le fond incliné le pousse vers le haut, et plus le bateau va vite, plus elle pousse fort. Dès que cette poussée porte l’essentiel du poids, la coque se soulève et glisse sur l’eau : le bateau <strong>plane</strong>. Les marins disent qu’il déjauge. Même alors, la partie arrière du fond reste toujours dans l’eau.",
+      "p2": "Tout bateau qui fend l’eau crée une vague à l’avant, la vague d’étrave. Vers 5,7 nœuds, cette vague devient aussi longue que la coque, qui mesure 5,5 m. C’est la <strong>vitesse de carène</strong>, un repère approximatif pour les bateaux qui ne font que flotter. Ce n’est pas une limite de vitesse : à 42 nœuds, le Magura va environ 7 fois plus vite. Pour y arriver, il doit franchir la <strong>bosse de résistance</strong>. Là, le bateau fait de grosses vagues, et la <strong>traînée</strong>, la force de l’eau qui le freine, grimpe en flèche. Les <strong>bouchains</strong>, ces arêtes vives qui longent le fond, ajoutent eux aussi de la traînée à ce stade. Ils ne deviennent utiles qu’une fois que le bateau plane.",
+      "p3": "Déplacez le curseur, ou appuyez sur un bouton, et observez l’avant. C’est près de la bosse qu’il se lève le plus, puis il redescend quand le bateau plane. Cet angle s’appelle l’<strong>assiette</strong>. La traînée est la plus faible vers 3 à 4 degrés, et le bateau file un peu plus à plat à vitesse maximale. Sur ce bateau, le déjaugeage commence vers 15 à 18 nœuds, et l’indicateur du modèle bascule à 16. Ensuite, la partie mouillée du fond raccourcit vite : d’environ 4,5 m à 15 nœuds, elle passe à environ 1,5 à 2 m à 42 nœuds. Aucune donnée n’est publiée sur la bosse de ce bateau : le pic de 6 degrés et la répartition du poids dans les indicateurs sont donc des chiffres propres au modèle.",
+      "p4": "Le fond forme un <strong>V</strong> profond, qui amortit les chocs des vagues. Son angle n’est pas publié : le modèle lui donne 20 degrés à l’arrière, avec un V de plus en plus prononcé vers l’avant. L’arrière, coupé droit, se termine en bas par une arête vive : quand le bateau va vite, l’eau s’en détache net et l’arrière reste au sec. Le long de chaque flanc, un mince <strong>déflecteur d’embruns</strong> rejette les gerbes d’eau vers l’extérieur ; c’est une supposition du modèle. Les virures, des nervures placées plus bas qui aident une coque à déjauger, ne sont pas représentées, car aucune photo ne les montre. Trop d’assiette pose aussi problème : au-delà d’un certain angle, un bateau qui plane se met à rebondir à un rythme régulier. C’est ce qu’on appelle le <strong>marsouinage</strong>.",
+      "speedLabel": "Vitesse du bateau",
+      "mode": "Coque",
+      "trim": "Angle de la proue (assiette)",
+      "lift": "Poids porté",
+      "wetted": "Longueur mouillée du fond",
+      "ratio": "Par rapport à la vitesse de carène"
+    },
+    "jet": {
+      "title": "Une pompe au lieu d’une hélice",
+      "p1": "À l’arrière se trouve un <strong>hydrojet</strong>, une pompe qui fait le travail d’une hélice. L’eau entre par une ouverture dans le fond, derrière une grille de barreaux d’acier. Une <strong>turbine</strong>, un petit rotor qui tourne comme un ventilateur, l’accélère. Derrière elle, des aubes fixes, le <strong>stator</strong>, redressent l’écoulement pour qu’il ne tourbillonne plus. Enfin, une <strong>tuyère</strong>, un embout plus étroit, resserre le jet et le projette derrière le bateau. La vue Flux d’eau montre son trajet.",
+      "p2": "La force qui fait avancer le bateau vient de l’eau que la pompe accélère. La <strong>poussée</strong> est égale à la masse d’eau qui passe chaque seconde, multipliée par l’écart entre la vitesse du jet et celle du bateau. Le jet doit donc toujours aller plus vite que le bateau. Dans une pompe idéale, la part du travail qui sert à faire avancer le bateau vaut 2 / (1 + vitesse du jet / vitesse du bateau). Quand le jet sort à une fois et demie la vitesse du bateau, cette part atteint 80 %. À basse vitesse, le jet va bien plus vite que le bateau, et l’essentiel du travail est perdu.",
+      "p3": "Au-delà d’environ 25 à 30 nœuds, un hydrojet fait aussi bien qu’une hélice, voire mieux, et il a d’autres atouts. Rien ne dépasse sous la coque pour freiner le bateau ou heurter un obstacle : il peut donc naviguer en eau peu profonde. Quand le bateau plane, la grille se dégage le plus souvent d’elle-même, mais des algues ou des cordages peuvent quand même boucher une prise d’eau. En 2022, les premiers bateaux utilisaient des pièces de jet-ski : un moteur à essence Rotax à trois cylindres et une pompe Sea-Doo. Le moteur du Magura lui-même n’est pas dévoilé. La pompe du modèle a la taille de celle d’un jet-ski, 155 mm de diamètre, et à 42 nœuds, elle fait passer à peu près 100 à 200 litres d’eau de mer par seconde.",
+      "p4": "Il n’y a pas de gouvernail. Pour tourner, la <strong>tuyère orientable</strong> dévie le jet jusqu’à 27 degrés d’un côté ou de l’autre. Si elle pivote vers la droite, l’arrière est poussé vers la gauche, et l’avant tourne donc à droite, comme sur un jet-ski. Pour s’arrêter ou reculer, un <strong>godet de marche arrière</strong> s’abaisse sur la sortie de la tuyère et renvoie le jet vers l’avant et vers le bas. Le curseur règle l’accélérateur, que le modèle traduit en quantité d’eau brassée par la pompe. Appuyez sur les boutons pour diriger le bateau ou passer en marche arrière, puis lancez la lecture pour le rendre au trajet.",
+      "throttleLabel": "Accélérateur",
+      "boat": "Vitesse du bateau",
+      "flow": "Eau qui traverse la pompe",
+      "velocity": "Vitesse du jet",
+      "thrust": "Poussée",
+      "efficiency": "Rendement idéal",
+      "push": "Direction du jet"
+    },
+    "link": {
+      "title": "Piloté à des centaines de kilomètres",
+      "p1": "Sans personne à bord, tout dépend de la liaison radio. En novembre 2023, un Magura a été capturé dans l’ouest de la Crimée, et des sources russes ont ensuite montré ce qu’il contenait. Elles y ont trouvé deux terminaux satellite <strong>Starlink</strong>, une antenne satellite de secours fabriquée par Kymeta, un récepteur GPS et un petit ordinateur sous Linux. Un routeur mobile à deux cartes SIM assurait une liaison près des côtes, jusqu’à environ 40 km. Le fabricant annonce aussi un réseau radio maillé, un pilotage autonome et jusqu’à trois flux vidéo, mais ce ne sont que ses propres affirmations.",
+      "p2": "Le pilote travaille sur un pupitre qui se transporte dans une mallette rigide, avec des écrans, des leviers et des joysticks. Les longues traversées peuvent être programmées à l’avance, mais un pilote surveille tout le trajet, et la dernière portion se fait souvent à la main. Le bateau n’est donc pas entièrement autonome. Appuyez sur les boutons pour passer de Starlink au satellite de secours, ou pour simuler une liaison coupée. Ce que fait un vrai bateau quand sa liaison tombe n’a pas été publié : le modèle se contente donc de le garder sur son cap.",
+      "p3": "Pour un service par satellite, Starlink est rapide. Sur terre, sa latence, c’est-à-dire le délai de transmission, est en général d’environ 25 à 35 millisecondes, et en mer elle peut dépasser 100. La contrainte la plus forte, c’est le débit montant, ce que le bateau peut envoyer : 10 à 30 mégabits par seconde, à peu près ce qu’il faut pour trois flux vidéo. C’est donc le débit montant, et non la latence, qui fixe la netteté de l’image du pilote. Mais l’image arrive toujours un peu en retard, et personne n’a publié de combien. Faites glisser le curseur pour essayer un retard : à 42 nœuds, un quart de seconde représente 5,4 m, soit à peu près une longueur de bateau. Le bateau fantôme montre où le pilote le voit.",
+      "p4": "Se repérer demande aussi des précautions. Depuis la mi-2024, le brouillage et la falsification des signaux GPS au-dessus de la mer Noire sont bien documentés : sur les cartes de suivi, des navires apparaissent en pleine terre. C’est pourquoi le fabricant annonce aussi une navigation inertielle et visuelle, qui s’appuie sur les capteurs de mouvement et les caméras du bateau lui-même. Starlink a lui aussi son histoire. En septembre 2022, l’Ukraine comptait sur une couverture près de la Crimée qui n’avait jamais été activée. Un livre sur Elon Musk paru en 2023 a d’abord raconté l’épisode autrement, puis son auteur a corrigé son récit après que Musk a déclaré que SpaceX n’avait rien désactivé. Le modèle dessine les satellites petits, bas et proches, et les fait avancer avec le bateau, pour que vous puissiez les voir.",
+      "delayLabel": "Retard de la vidéo",
+      "now": "Là où le pilote le voit",
+      "top": "Même retard à vitesse maximale",
+      "carrier": "Liaison",
+      "boat": "Ce que fait le bateau",
+      "path": "Le trajet d’une commande jusqu’au bateau",
+      "step1": "<strong>Pilote</strong> : il bouge un levier ou un joystick sur le pupitre.",
+      "step2": "<strong>Station au sol</strong> : une station Starlink à terre envoie la commande par radio vers le satellite.",
+      "step3": "<strong>Satellite</strong> : un satellite Starlink la renvoie vers le bateau.",
+      "step4": "<strong>Bateau</strong> : une antenne sur le pont la capte, et l’ordinateur actionne l’accélérateur ou la tuyère orientable.",
+      "step5": "<strong>Vidéo</strong> : les images des caméras font le chemin inverse et arrivent au pilote avec un léger retard."
+    },
+    "horizon": {
+      "title": "Assez bas pour se cacher derrière la courbure de la mer",
+      "p1": "La surface de la mer est courbe, si bien que le regard ne porte pas au-delà d’une certaine distance. Depuis une hauteur de h mètres, l’horizon se trouve à environ 3,86 × √h kilomètres. La caméra thermique du bateau est placée à environ 0,7 m au-dessus de l’eau : son horizon n’est donc qu’à environ 3 km. Dans le modèle, la mer en 3D est plate, car sur 1,5 km, la vraie courbure ne descend que d’environ 0,1 m. Le dessin ci-dessous rend la courbure bien plus prononcée pour que vous puissiez la voir.",
+      "p2": "Le radar d’un navire a le même problème. Son antenne est placée haut, mais le bateau ne mesure qu’environ 0,5 m de haut. Les ondes radio se courbent un peu autour de la Terre, si bien que la <strong>ligne de vue</strong> du radar s’étend jusqu’à environ 4,12 × (√h1 + √h2) kilomètres, les deux hauteurs étant en mètres. Pour un radar placé à 20 m, cela donne environ 21 km, et à 42 nœuds, le bateau les parcourt en environ 16 minutes. Mais c’est seulement la distance maximale à laquelle le radar pourrait voir le bateau, pas celle où il le repère vraiment. Faites glisser le curseur pour monter ou baisser le radar.",
+      "p3": "En réalité, la détection arrive bien plus tard. Un petit bateau ne renvoie qu’un faible écho. Sa <strong>surface équivalente radar</strong>, la taille de la cible qu’il semble être aux yeux d’un radar, est d’environ 0,5 à 5 m², et aucun chiffre n’a été publié pour le Magura. Une norme pour les radars côtiers prévoit qu’une cible de 1 m², à 1 m au-dessus de la mer, soit repérée à environ 9 km, et seulement par un radar de pointe, avec une mer de force 4 au plus. À 42 nœuds, le bateau couvre cette distance en environ 7 minutes. Les vagues compliquent encore les choses : un petit bateau peut rester caché derrière elles jusqu’à la moitié du temps, et les échos des vagues elles-mêmes, qu’on appelle le <strong>fouillis de mer</strong>, peuvent noyer le sien.",
+      "p4": "Ceux qui utilisent ces bateaux disent qu’ils sont difficiles à repérer. Un commandant du Groupe 13, l’unité de drones navals du GUR, a déclaré que les radars ont du mal à voir la coque en plastique, et que le bateau dégage peu de chaleur. Ce sont des affirmations, et aucune mesure n’a été publiée. Un fait, lui, est établi : le moteur se trouve dans un bac en aluminium garni de mousse, avec l’électronique au-dessus, ce qui tient la chaleur à l’écart de la paroi extérieure. Les bateaux sont peints en gris, et les attaques les plus connues ont eu lieu de nuit ou à l’aube. Appuyez sur les boutons pour changer l’<strong>état de la mer</strong>, une échelle de hauteur des vagues qui va de « belle » à « forte ».",
+      "caption": "Vue de côté du radar du navire, de la courbure de la mer et du bateau. La courbure et les hauteurs sont exagérées.",
+      "heightLabel": "Hauteur du radar",
+      "radar": "Ligne de vue du radar",
+      "minutes": "Temps de parcours à 42 nd",
+      "camera": "Horizon de la caméra du bateau",
+      "detect": "Détection attendue",
+      "waves": "Hauteur des vagues",
+      "hidden": "Masqué par les vagues"
+    },
+    "fleet": {
+      "title": "Bon marché, petit et en pleine évolution",
+      "p1": "Un Magura V5 coûte environ un quart de million de dollars. Le fabricant annonce environ 273 000 dollars, et d’autres estimations parlent d’environ 250 000 dollars. Le Sea Baby, un modèle distinct conçu par le SBU, le service de sécurité ukrainien, coûte environ 221 000 dollars. Le GUR estime à environ 65 millions de dollars la valeur du patrouilleur Sergueï Kotov, qui a coulé en mars 2024 après une attaque de Magura. Ce sont des chiffres publics, placés côte à côte dans les indicateurs ci-dessous.",
+      "p2": "Ces bateaux agissent rarement seuls. Les attaques rapportées impliquaient des groupes d’environ cinq à dix bateaux, et les concepteurs disent que chacun y a son propre rôle. Les navires signalés comme coulés ont été touchés plusieurs fois, pas une seule. Dans le trajet, deux bateaux rejoignent le Magura pour le sprint ; leur formation est un choix du modèle.",
+      "p3": "La conception évolue sans cesse. En décembre 2024, le GUR a équipé des V5 de deux missiles air-air R-73 sur rails, rebaptisés Sea Dragon. Appuyez sur les boutons pour voir cette version. Seul le pont change : le bateau du modèle suit le même trajet et finit toujours contre le flanc du navire. En 2025, le GUR a présenté le Magura V7, plus grand, long de 7,2 m, avec une charge utile pouvant atteindre 650 kg. Le Sea Baby, lui, est une gamme propre au SBU : ce n’est pas un Magura.",
+      "p4": "La chronologie ci-dessous s’en tient à ce que chaque camp a déclaré, et beaucoup de ces affirmations sont contestées. Le ministère britannique de la Défense compte au moins 26 navires de la marine russe endommagés ou détruits entre février 2022 et juin 2024, soit environ un tiers de la flotte de la mer Noire. Ce décompte couvre tous les types d’armes, pas seulement les drones navals. En octobre 2023, des images satellite montraient qu’environ 14 navires avaient déjà été déplacés de Sébastopol à Novorossiisk.",
+      "carries": "À bord",
+      "cost": "Coût par bateau",
+      "ship": "Patrouilleur, selon l’estimation du GUR",
+      "events": "Faits rapportés publiquement",
+      "event1": "<strong>29 octobre 2022, Sébastopol</strong> : des drones marins et aériens ont touché la frégate Amiral Makarov et un dragueur de mines. La Russie n’a reconnu que des dégâts mineurs.",
+      "event2": "<strong>Nuit du 31 janvier au 1er février 2024, lac Donouzlav</strong> : des Magura V5 ont coulé la corvette lance-missiles Ivanovets. Le GUR revendique six coups au but ; la vidéo en montre environ trois.",
+      "event3": "<strong>Nuit du 4 au 5 mars 2024, près du détroit de Kertch</strong> : des Magura V5 ont coulé le patrouilleur Sergueï Kotov. Selon des responsables ukrainiens, cinq bateaux y ont pris part.",
+      "event4": "<strong>31 décembre 2024, cap Tarkhankout</strong> : selon le GUR, des Magura V5 ont abattu des hélicoptères Mi-8 avec des missiles R-73, les premiers aéronefs abattus depuis un drone naval. Le GUR en a d’abord revendiqué un, puis deux.",
+      "event5": "<strong>2 mai 2025, près de Novorossiisk</strong> : selon le GUR, des Magura V7 ont abattu deux avions de chasse Su-30SM avec des missiles Sidewinder. La Russie ne l’a pas confirmé."
+    }
+  }
+}
