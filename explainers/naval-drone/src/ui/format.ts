@@ -35,7 +35,8 @@ const CLOCK_PAD = '0';
 const CLOCK_SEPARATOR = ':';
 const WHOLE_KNOTS_FROM = 10;
 const METRES_STEP = 10;
-const KG_PER_LITRE = SEAWATER_DENSITY / METRES_PER_KM;
+const LITRES_PER_CUBIC_METRE = 1000;
+const KG_PER_LITRE = SEAWATER_DENSITY / LITRES_PER_CUBIC_METRE;
 const STRAIGHT_NOZZLE = 0.5;
 
 function phaseKeys(group: string): Readonly<Record<PhaseId, string>> {
