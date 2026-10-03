@@ -461,7 +461,7 @@ export const HULL_WATER = {
     skim: 0.02,
   },
   looks: {
-    bow: { opacity: 0.95, scroll: 0.5, streaks: 3.5, stretch: 0.5, colour: '#f2f7f8' },
+    bow: { opacity: 0.95, scroll: 0.5, streaks: 3.5, stretch: 0.5, colour: '#f2f7f8', floor: 0.6 },
     waterline: { opacity: 0.85, scroll: 1.2, streaks: 9, stretch: 0.35, colour: '#eef4f6' },
     stern: { opacity: 0.5, scroll: 0.2, streaks: 2.5, stretch: 0.6, colour: '#e9f1f3' },
     spray: { opacity: 0.85, scroll: 1.6, streaks: 8, stretch: 1.1, colour: '#ffffff' },

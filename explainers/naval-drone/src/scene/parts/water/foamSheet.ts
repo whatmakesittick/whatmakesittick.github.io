@@ -20,6 +20,7 @@ export interface SheetLook {
   streaks: number;
   stretch: number;
   colour: string;
+  floor?: number;
 }
 
 const SURFACE_CLIP = '0.02';
@@ -47,6 +48,7 @@ uniform vec3 uColour;
 uniform vec4 uSheet;
 uniform float uTime;
 uniform float uStrength;
+uniform float uFloor;
 uniform vec3 uProfile;
 varying vec2 vUv;
 varying vec3 vNormalView;
@@ -63,7 +65,7 @@ void main() {
   body *= mix(1.0, smoothstep(0.0, 0.18, along) * (1.0 - smoothstep(0.78, 1.0, along)), uProfile.z);
   float facing = abs(dot(normalize(vNormalView), normalize(vView)));
   float mist = (1.0 - outward) * 0.3 * (0.5 + coarse);
-  float alpha = uSheet.x * uStrength * body * (mist + (0.4 + 0.6 * facing) * streak);
+  float alpha = uSheet.x * uStrength * body * (mist + mix(uFloor, 1.0, (0.4 + 0.6 * facing) * streak));
   gl_FragColor = vec4(uColour, clamp(alpha, 0.0, 0.95));
   #include <colorspace_fragment>
 }
@@ -87,6 +89,7 @@ export function foamSheetMaterial(
         uSheet: { value: new Vector4(look.opacity, look.scroll, look.streaks, look.stretch) },
         uTime: { value: 0 },
         uStrength: { value: 1 },
+        uFloor: { value: look.floor ?? 0 },
         uSeaTime: WATER.uSeaTime,
         uSeaDrift: WATER.uSeaDrift,
         uWaves: WATER.uWaves,
