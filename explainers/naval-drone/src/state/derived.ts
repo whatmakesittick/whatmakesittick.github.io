@@ -34,7 +34,7 @@ const RUN_SOURCE_KEYS = [
 ] as const;
 
 export type RunSource = Pick<NavalDroneState, (typeof RUN_SOURCE_KEYS)[number]>;
-export type FlagSource = Pick<NavalDroneState, 'view' | 'preset'>;
+export type FlagSource = Pick<NavalDroneState, 'preset'>;
 
 export interface RunReading {
   boat: BoatReading;
@@ -123,6 +123,6 @@ export function followedKnots(state: Pick<NavalDroneState, 'trialKnots' | 'phase
   return state.trialKnots ?? speedAt(state.phase);
 }
 
-export function assemblyFlags({ view, preset }: FlagSource): AssemblyFlags {
-  return { waterSection: view.cutaway || preset === 'hull', wettedBar: preset === 'hull' };
+export function assemblyFlags({ preset }: FlagSource): AssemblyFlags {
+  return { waterSection: preset === 'hull' || preset === 'jet', wettedBar: preset === 'hull' };
 }

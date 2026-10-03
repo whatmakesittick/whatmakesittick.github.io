@@ -15,7 +15,6 @@ import {
 } from '../model';
 import { assemblyFlags, followedKnots, runAt } from './derived';
 import type { RunSource } from './derived';
-import { DEFAULT_VIEW } from './store';
 
 const RUNNING: RunSource = {
   phase: 45,
@@ -96,16 +95,19 @@ describe('run readings', () => {
     expect(followedKnots({ phase: 28, trialKnots: 30 })).toBe(30);
   });
 
-  it('opens the water section with the cutaway or in the hull chapter, the bar only there', () => {
-    expect(assemblyFlags({ view: DEFAULT_VIEW, preset: 'overview' })).toEqual({
-      waterSection: true,
+  it('opens the water section in the hull and jet chapters only, the bar only in the hull one', () => {
+    expect(assemblyFlags({ preset: 'overview' })).toEqual({
+      waterSection: false,
       wettedBar: false,
     });
-    const closed = { ...DEFAULT_VIEW, cutaway: false };
-    expect(assemblyFlags({ view: closed, preset: 'link' }).waterSection).toBe(false);
-    expect(assemblyFlags({ view: closed, preset: 'hull' })).toEqual({
+    expect(assemblyFlags({ preset: 'link' }).waterSection).toBe(false);
+    expect(assemblyFlags({ preset: 'hull' })).toEqual({
       waterSection: true,
       wettedBar: true,
+    });
+    expect(assemblyFlags({ preset: 'jet' })).toEqual({
+      waterSection: true,
+      wettedBar: false,
     });
   });
 });
