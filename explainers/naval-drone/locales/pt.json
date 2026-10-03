@@ -1,0 +1,322 @@
+{
+  "meta": {
+    "title": "Como funciona um drone naval",
+    "eyebrow": "Drone naval",
+    "tagline": "Um barco pequeno sem ninguém a bordo: ele desliza sobre o casco, é movido por uma bomba d'água e é pilotado por satélite.",
+    "description": "Siga em 3D um drone naval Magura V5: o casco que entra em planeio, o jato d'água, a conexão por satélite e por que um barco baixo é difícil de ver.",
+    "summary": "O casco de planeio, o jato d'água que impulsiona e dirige o barco, a conexão por satélite e seu atraso, a curvatura do mar e um projeto que não para de mudar.",
+    "socialAlt": "Um barco cinza não tripulado deslizando sobre o mar ao amanhecer, com respingos saindo das quinas. Ao lado, o título “Como funciona um drone naval”"
+  },
+  "stage": {
+    "label": "Modelo interativo de um drone naval",
+    "gauge": "Dados do percurso em tempo real"
+  },
+  "controls": {
+    "label": "Controles do drone naval",
+    "views": {
+      "cutaway": {
+        "name": "Vista em corte",
+        "short": "Corte",
+        "hint": "Vista em corte (C)"
+      },
+      "flow": {
+        "name": "Fluxo de água",
+        "short": "Fluxo",
+        "hint": "Fluxo de água (W)"
+      },
+      "links": {
+        "name": "Conexões de rádio",
+        "short": "Conexões",
+        "hint": "Conexões de rádio (K)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    },
+    "fit": {
+      "label": "Equipamento do convés"
+    },
+    "fitOptions": {
+      "standard": "Padrão",
+      "missile": "Trilhos de mísseis"
+    },
+    "momentOptions": {
+      "hullSpeed": "Velocidade de casco",
+      "humpPeak": "Alto da corcova",
+      "onPlane": "Em planeio",
+      "cruiseSpeed": "Em cruzeiro",
+      "throttleUp": "Início da arrancada",
+      "topSpeed": "Velocidade máxima",
+      "alongside": "Junto ao navio"
+    },
+    "speedMarkOptions": {
+      "hullSpeed": "Velocidade de casco",
+      "hump": "Corcova",
+      "planing": "Planeio",
+      "cruise": "Cruzeiro",
+      "top": "Velocidade máxima"
+    },
+    "helmOptions": {
+      "left": "Esquerda",
+      "straight": "Em frente",
+      "right": "Direita",
+      "reverse": "Ré"
+    },
+    "linkOptions": {
+      "satellite": "Starlink",
+      "backup": "Satélite reserva",
+      "lost": "Conexão perdida"
+    },
+    "seaStateOptions": {
+      "smooth": "Calmo",
+      "slight": "Pouco agitado",
+      "moderate": "Moderado",
+      "rough": "Agitado"
+    }
+  },
+  "timeline": {
+    "label": "Tempo de percurso",
+    "phases": "Ir para uma parte do percurso",
+    "speed": "Velocidade de reprodução",
+    "value": "{{time}}, {{phase}}",
+    "clock": "T+{{clock}}",
+    "speedFormat": "{{factor}}×",
+    "speedValue": "em relação à velocidade normal",
+    "phase": {
+      "launch": "Lançamento",
+      "hump": "Corcova",
+      "cruise": "Cruzeiro",
+      "sprint": "Arrancada",
+      "arrival": "Chegada"
+    },
+    "during": {
+      "launch": "o barco sai da rampa em marcha lenta, abaixo da sua velocidade de casco",
+      "hump": "com o acelerador no máximo, o barco vence a corcova e entra em planeio",
+      "cruise": "o barco segue a 22 nós, numa viagem de muitas horas que aqui foi encurtada",
+      "sprint": "o barco acelera até 42 nós, e mais dois barcos se juntam a ele",
+      "arrival": "o barco percorre os últimos 170 m até a lateral do navio"
+    },
+    "jump": {
+      "launch": "Ir para o lançamento",
+      "hump": "Ir para a corcova",
+      "cruise": "Ir para o cruzeiro",
+      "sprint": "Ir para a arrancada",
+      "arrival": "Ir para a chegada"
+    }
+  },
+  "readouts": {
+    "clock": "Relógio do percurso",
+    "speed": "Velocidade",
+    "mode": "Casco",
+    "distance": "Até o navio"
+  },
+  "mode": {
+    "floating": "Flutuando",
+    "hump": "Subindo a corcova",
+    "planing": "Em planeio"
+  },
+  "units": {
+    "speed": "{{kn}} nós, {{kmh}} km/h",
+    "m": "{{value}} m",
+    "km": "{{value}} km",
+    "percent": "{{value}} %",
+    "degrees": "{{value}}°",
+    "kilonewtons": "{{value}} kN",
+    "mps": "{{ms}} m/s, {{kmh}} km/h",
+    "ms": "{{value}} ms",
+    "minutes": "{{value}} min"
+  },
+  "parts": {
+    "hull": "Casco de compósito",
+    "chines": "Quinas",
+    "sprayRails": "Defletores de respingos",
+    "payloadBay": "Compartimento de carga",
+    "fuelTanks": "Tanques de combustível",
+    "engine": "Motor em sua cuba",
+    "electronicsBay": "Eletrônica",
+    "starlinkPanels": "Antenas Starlink",
+    "backupPanel": "Antena de satélite reserva",
+    "cameraDome": "Cúpula da câmera térmica",
+    "bowCamera": "Câmera de proa",
+    "intake": "Entrada e grade",
+    "duct": "Duto de entrada",
+    "driveShaft": "Eixo de transmissão",
+    "impeller": "Rotor",
+    "waterjet": "Propulsor a jato d'água",
+    "stator": "Aletas do estator",
+    "nozzle": "Bocal",
+    "steeringNozzle": "Bocal de direção",
+    "reverseBucket": "Concha de ré",
+    "missileRails": "Trilhos de mísseis",
+    "jetStream": "Jato de saída",
+    "bowWave": "Onda de proa",
+    "spray": "Respingos",
+    "wake": "Esteira",
+    "wettedLength": "Comprimento molhado do fundo",
+    "videoGhost": "Onde o piloto o vê",
+    "satLink": "Conexão Starlink",
+    "backupLink": "Conexão reserva",
+    "satellite": "Satélite Starlink",
+    "backupSatellite": "Satélite reserva",
+    "groundStation": "Estação terrestre",
+    "ship": "Navio ancorado",
+    "shipRadar": "Radar do navio",
+    "companions": "Barcos acompanhantes"
+  },
+  "hull": {
+    "lift": "{{dynamic}} % pela velocidade, {{buoyant}} % pela flutuação",
+    "wetted": "{{m}} m, contra {{rest}} m parado",
+    "ratio": "{{times}} vezes a velocidade de casco, de {{hullSpeed}} nós",
+    "ratioStill": "Parado. A velocidade de casco é de {{hullSpeed}} nós"
+  },
+  "jet": {
+    "flow": "{{kg}} kg por segundo, cerca de {{litres}} litros",
+    "backing": "Parando, com a concha abaixada",
+    "astern": "A concha joga o jato para a frente",
+    "noEfficiency": "Nenhuma enquanto o barco não anda para a frente",
+    "push": {
+      "left": "Bocal {{angle}}° para a esquerda: a proa vira para a esquerda",
+      "right": "Bocal {{angle}}° para a direita: a proa vira para a direita",
+      "straight": "Direto para trás: o barco mantém o rumo",
+      "reverse": "Concha abaixada: o jato vai para a frente e para baixo"
+    }
+  },
+  "link": {
+    "now": "{{m}} m atrás do barco a {{kn}} nós",
+    "nowLost": "Sem imagem enquanto a conexão está fora",
+    "top": "{{m}} m a 42 nós, {{lengths}} comprimentos do barco",
+    "carrier": {
+      "satellite": "Starlink, dois terminais",
+      "backup": "Antena de satélite reserva",
+      "lost": "Nenhuma"
+    },
+    "boat": {
+      "satellite": "O piloto conduz pelo vídeo",
+      "backup": "O piloto conduz pela conexão reserva",
+      "lost": "No modelo, o barco mantém o rumo definido; o que um barco real faz não foi divulgado"
+    }
+  },
+  "horizon": {
+    "camera": "{{km}} km, de uma lente a {{m}} m acima da água",
+    "detect": "Cerca de {{km}} km, ou {{min}} min a 42 nós",
+    "detectBeyond": "Fora da norma: ela só vai até o estado do mar 4",
+    "waves": {
+      "smooth": "{{from}} a {{to}} m, estado do mar 2",
+      "slight": "{{from}} a {{to}} m, estado do mar 3",
+      "moderate": "{{from}} a {{to}} m, estado do mar 4",
+      "rough": "{{from}} a {{to}} m, estado do mar 5"
+    },
+    "hidden": {
+      "smooth": "Raramente: as ondas são mais baixas que o convés, a 0,5 m da água",
+      "slight": "Até metade do tempo: as ondas têm a altura do convés",
+      "moderate": "Até metade do tempo: as ondas são mais altas que o convés",
+      "rough": "Até metade do tempo: as ondas ficam bem acima do convés"
+    },
+    "canvas": {
+      "radar": "Radar do navio",
+      "boat": "Barco, 0,5 m de altura",
+      "lineOfSight": "Linha de visada",
+      "detection": "Detecção esperada",
+      "km": "{{value}} km",
+      "note": "Curvatura do mar exagerada"
+    }
+  },
+  "fleet": {
+    "carries": {
+      "standard": "Uma carga de até {{kg}} kg na proa",
+      "missile": "Dois mísseis R-73 em trilhos; o modelo mantém o compartimento da proa"
+    },
+    "cost": "Cerca de US$ {{from}} a {{to}}",
+    "ship": "Cerca de US$ {{value}} milhões"
+  },
+  "sections": {
+    "overview": {
+      "title": "Uma lancha sem ninguém a bordo",
+      "p1": "Você está vendo um <strong>Magura V5</strong>, um drone naval da Ucrânia: um barco rápido sem ninguém a bordo. Quem o fabrica é a estatal SpetsTechnoExport, para o GUR, o serviço de inteligência militar da Ucrânia. Ele foi apresentado pela primeira vez em julho de 2023, na feira IDEF, em Istambul. O barco tem 5,5 m de comprimento e 1,5 m de largura, mais ou menos o tamanho de uma lancha pequena. O convés fica a apenas 0,5 m acima da água, e o barco pesa menos de uma tonelada. Um piloto lá longe o conduz por uma conexão via satélite.",
+      "p2": "A vista em corte deixa você olhar lá dentro. O casco é de <strong>compósito</strong>: camadas de tecido de fibra presas numa resina dura. Na proa fica um <strong>compartimento de carga</strong> fechado, para até 320 kg. Atrás dele vêm os tanques de combustível e, depois, o motor, dentro de uma cuba de alumínio assentada em espuma, com a eletrônica por cima. O motor aciona um <strong>propulsor a jato d'água</strong> na popa. O fabricante não revelou qual motor usa, então o modelo considera um motor a gasolina do tipo usado em jet ski, como os dos primeiros barcos. No convés ficam duas antenas Starlink, uma antena de satélite reserva, uma cúpula baixa com uma câmera térmica e uma câmera fixa na proa.",
+      "p3": "O modelo acompanha um <strong>percurso</strong>. O barco sai devagar de uma rampa, entra em planeio e segue em cruzeiro a 22 nós. Um nó é uma milha náutica por hora, então isso dá cerca de 41 km/h. Depois, ele acelera até a velocidade máxima, de 42 nós, cerca de 78 km/h, e mais dois barcos se juntam a ele. O percurso termina quando a proa chega à lateral de um grande navio cinza ancorado.",
+      "p4": "Na velocidade normal, o barco anda tão rápido quanto um de verdade, mas a viagem foi encurtada para caber em dois minutos. Um barco real ficaria muitas horas em cruzeiro: cerca de 20 horas para cobrir todo o seu alcance, de 450 milhas náuticas, cerca de 800 km. Aqui, o cruzeiro dura 42 segundos, e a arrancada também foi encurtada. O navio está a apenas 1,5 km da rampa, enquanto um alvo real estaria a centenas de quilômetros. O relógio lá no alto conta o tempo do modelo. Então T+1:05 quer dizer um minuto e cinco segundos depois do início. Arraste a linha do tempo ou toque num dos botões abaixo para ir direto a um momento.",
+      "mode": "Casco",
+      "covered": "Distância percorrida",
+      "done": "Progresso do percurso"
+    },
+    "hull": {
+      "title": "Ele para de boiar e passa a deslizar",
+      "p1": "Parado, o barco boia como qualquer outro. A água que ele empurra para o lado o sustenta, e isso se chama <strong>flutuação</strong>. Quando o barco ganha velocidade, entra em cena uma segunda força. A água bate no fundo inclinado e o empurra para cima, e quanto mais rápido o barco vai, mais forte é esse empurrão. Assim que esse empurrão passa a carregar a maior parte do peso, o casco sobe e desliza sobre a água. Isso é o <strong>planeio</strong>. Mesmo assim, a parte de trás do fundo continua sempre dentro da água.",
+      "p2": "Todo barco que abre caminho pela água forma uma onda na proa. A cerca de 5,7 nós, essa onda fica tão comprida quanto este casco de 5,5 m. Essa é a <strong>velocidade de casco</strong>, uma regra prática para barcos que só flutuam. Ela não é um limite de velocidade: a 42 nós, o Magura anda a cerca de 7 vezes essa velocidade. Para chegar lá, ele precisa subir a <strong>corcova de resistência</strong>, um trecho em que o barco faz ondas grandes e o <strong>arrasto</strong>, a força com que a água o segura, cresce rápido. As bordas afiadas ao longo do fundo, as <strong>quinas</strong>, também aumentam o arrasto nessa hora. Elas só compensam depois que o barco entra em planeio.",
+      "p3": "Mexa no controle deslizante ou toque num botão e observe a proa. Perto da corcova, ela sobe ao máximo e depois baixa quando o barco entra em planeio. Esse ângulo é o <strong>trim</strong>. O arrasto é menor quando esse ângulo fica em cerca de 3 a 4 graus, e na velocidade máxima o barco anda um pouco mais nivelado. Neste barco, o planeio começa por volta de 15 a 18 nós, e o mostrador do modelo muda aos 16. A partir daí, a parte molhada do fundo encolhe rápido: de cerca de 4,5 m a 15 nós para cerca de 1,5 a 2 m a 42 nós. Não há dados publicados sobre a corcova deste barco. Por isso, o pico de 6 graus e a divisão do peso nos mostradores são números do próprio modelo.",
+      "p4": "O fundo tem a forma de um <strong>V</strong> profundo, que amortece as pancadas das ondas. O ângulo desse V não foi publicado: o modelo usa 20 graus na popa, com o V ficando mais fechado em direção à proa. A popa reta tem uma borda inferior afiada. Assim, em velocidade, a água se solta dela de forma limpa e a popa corre seca. Ao longo de cada lateral, um fino <strong>defletor de respingos</strong> joga os respingos para fora; esse detalhe é um palpite do modelo. Os frisos de sustentação, saliências mais abaixo no casco que ajudam um barco a entrar em planeio, ficaram de fora, porque nenhuma foto os mostra. Trim demais também traz problemas: acima de certo ângulo, um barco em planeio começa a quicar num ritmo constante, o chamado <strong>efeito golfinho</strong>.",
+      "speedLabel": "Velocidade do barco",
+      "mode": "Casco",
+      "trim": "Ângulo da proa (trim)",
+      "lift": "Peso sustentado",
+      "wetted": "Comprimento molhado do fundo",
+      "ratio": "Em relação à velocidade de casco"
+    },
+    "jet": {
+      "title": "Uma bomba no lugar da hélice",
+      "p1": "Na popa fica um <strong>propulsor a jato d'água</strong>, uma bomba que faz o trabalho de uma hélice. A água entra por uma abertura no fundo, atrás de uma grade de barras de aço. Um <strong>rotor</strong>, uma pequena peça giratória parecida com um ventilador, acelera essa água. Logo atrás dele, aletas fixas, o <strong>estator</strong>, desfazem o giro da água. Depois, um <strong>bocal</strong> estreita o jato e o dispara para trás do barco. A vista de fluxo de água mostra esse caminho.",
+      "p2": "O empurrão vem de acelerar a água que passa pela bomba. A <strong>força de propulsão</strong> é a massa de água que passa a cada segundo multiplicada pela diferença entre a velocidade de saída do jato e a velocidade do barco. Por isso, o jato sempre precisa ser mais rápido que o barco. Numa bomba ideal, a parte do trabalho que move o barco é 2 / (1 + velocidade do jato / velocidade do barco). Quando o jato sai a uma vez e meia a velocidade do barco, essa parte é de 80 %. Em baixa velocidade, o jato é muito mais rápido que o barco, e a maior parte do trabalho se perde.",
+      "p3": "Acima de cerca de 25 a 30 nós, um jato iguala ou supera uma hélice, e ainda tem outras vantagens. Nada fica pendurado embaixo do casco para criar arrasto ou bater em alguma coisa, então o barco pode andar em águas rasas. Em velocidade de planeio, a grade quase sempre se limpa sozinha, mas algas e cordas ainda podem entupir a entrada. Os primeiros barcos, em 2022, usavam peças de jet ski: um motor a gasolina Rotax de três cilindros e uma bomba Sea-Doo. Já o motor do próprio Magura não foi divulgado. A bomba do modelo tem o tamanho da de um jet ski, 155 mm de diâmetro, e a 42 nós movimenta mais ou menos 100 a 200 litros de água do mar por segundo.",
+      "p4": "Não há leme. Para virar, o <strong>bocal de direção</strong> desvia o jato até 27 graus para qualquer um dos lados. Gire o bocal para a direita e a popa é empurrada para a esquerda, então a proa vira para a direita, igualzinho a um jet ski. Para parar ou dar ré, uma <strong>concha de ré</strong> desce sobre o bocal e vira o jato para a frente e para baixo. O controle deslizante ajusta o acelerador, que o modelo trata como a quantidade de água que a bomba movimenta. Toque nos botões para virar ou dar ré, e aperte o play para devolver o barco ao percurso.",
+      "throttleLabel": "Acelerador",
+      "boat": "Velocidade do barco",
+      "flow": "Água que passa pela bomba",
+      "velocity": "Velocidade do jato",
+      "thrust": "Força de propulsão",
+      "efficiency": "Eficiência ideal",
+      "push": "Para onde o jato empurra"
+    },
+    "link": {
+      "title": "Pilotado a centenas de quilômetros de distância",
+      "p1": "Sem ninguém a bordo, tudo depende da conexão de rádio. Em novembro de 2023, um Magura foi capturado no oeste da Crimeia, e fontes russas mostraram depois o que havia dentro dele. Encontraram dois terminais de satélite <strong>Starlink</strong>, uma antena de satélite reserva fabricada pela Kymeta, um receptor de GPS e um pequeno computador com Linux. Um roteador móvel com dois cartões SIM dava conexão perto da costa, num raio de cerca de 40 km. O fabricante também anuncia uma rede de rádio em malha, controle autônomo e até três transmissões de vídeo, mas essas são afirmações do próprio fabricante.",
+      "p2": "O piloto trabalha num console transportado numa maleta rígida, com telas, alavancas e joysticks. Viagens longas pelo mar podem ser programadas com antecedência, mas um piloto acompanha o trajeto inteiro, e o trecho final muitas vezes é conduzido à mão. Então o barco não é totalmente autônomo. Toque nos botões para alternar entre o Starlink, o satélite reserva e nenhuma conexão. O que um barco real faz quando perde a conexão não foi divulgado, então o modelo simplesmente o mantém no rumo definido.",
+      "p3": "Para um serviço por satélite, o Starlink é rápido. O atraso típico em terra é de cerca de 25 a 35 milissegundos, e no mar pode passar de 100. O limite mais apertado é o upload, de 10 a 30 megabits por segundo, mais ou menos o que três transmissões de vídeo exigem. Então é o upload, e não o atraso, que define a nitidez da imagem do piloto. Mesmo assim, a imagem sempre chega um pouco atrasada, e ninguém publicou quanto. Arraste o controle para testar um atraso: a 42 nós, um quarto de segundo equivale a 5,4 m, mais ou menos o comprimento do barco. O barco fantasma mostra onde o piloto o vê.",
+      "p4": "Achar o caminho também exige cuidado. Desde meados de 2024, há muitos registros de sinais de GPS bloqueados e falsificados sobre o mar Negro, com navios aparecendo em terra firme nos mapas de rastreamento. É por isso que o fabricante também anuncia navegação inercial e visual, que funcionam com os próprios sensores de movimento e câmeras do barco. O Starlink também tem uma história aqui. Em setembro de 2022, a Ucrânia esperava ter cobertura perto da Crimeia, mas essa cobertura nunca tinha sido ligada. Um livro de 2023 sobre Elon Musk a princípio contou a história de outro jeito, e o autor corrigiu o relato depois que Musk disse que a SpaceX não desativou nada. O modelo desenha os satélites pequenos, baixos e perto, acompanhando o barco, para que você consiga vê-los.",
+      "delayLabel": "Atraso do vídeo",
+      "now": "Onde o piloto o vê",
+      "top": "Mesmo atraso na velocidade máxima",
+      "carrier": "Conexão",
+      "boat": "O que o barco faz",
+      "path": "Como um comando chega ao barco",
+      "step1": "<strong>Piloto</strong>: mexe numa alavanca ou num joystick do console.",
+      "step2": "<strong>Estação terrestre</strong>: uma estação da Starlink em terra manda o comando para o espaço por rádio.",
+      "step3": "<strong>Satélite</strong>: um satélite Starlink repassa o comando para o barco.",
+      "step4": "<strong>Barco</strong>: uma antena no convés recebe o comando, e o computador mexe no acelerador ou no bocal de direção.",
+      "step5": "<strong>Vídeo</strong>: as imagens da câmera voltam pelo mesmo caminho e chegam ao piloto com um pouco de atraso."
+    },
+    "horizon": {
+      "title": "Baixo o bastante para se esconder atrás da curvatura do mar",
+      "p1": "A superfície do mar se curva, então só dá para enxergar até certo ponto sobre ela. De uma altura de h metros, o horizonte fica a cerca de 3,86 × √h quilômetros. A câmera térmica do barco fica a cerca de 0,7 m acima da água, então o horizonte dela está a apenas uns 3 km. O mar em 3D do modelo é plano, porque, em 1,5 km, a curvatura real desce só cerca de 0,1 m. O desenho abaixo deixa a curva bem mais acentuada para que você consiga vê-la.",
+      "p2": "O radar de um navio tem o mesmo problema. A antena dele fica no alto, mas o barco tem só cerca de 0,5 m de altura. As ondas de rádio se curvam um pouco em volta da Terra. Assim, a <strong>linha de visada</strong> do radar chega a cerca de 4,12 × (√h1 + √h2) quilômetros, com as duas alturas em metros. Para um radar a 20 m de altura, isso dá cerca de 21 km, e a 42 nós o barco percorre essa distância em cerca de 16 minutos. Mas essa é só a maior distância a que o radar poderia ver o barco, e não onde ele de fato o detecta. Arraste o controle para subir ou baixar o radar.",
+      "p3": "A detecção de verdade vem bem depois. Um barco pequeno devolve um eco fraco. A <strong>seção reta radar</strong>, o tamanho de alvo que o barco parece ter para um radar, fica em torno de 0,5 a 5 m², e nenhum número foi publicado para o Magura. Uma norma para radares costeiros espera que um alvo de 1 m², a 1 m acima do mar, seja encontrado a cerca de 9 km, e só por um radar avançado, com o mar até o estado 4. A 42 nós, o barco percorre essa distância em cerca de 7 minutos. As ondas dificultam ainda mais: um barco pequeno pode ficar escondido atrás delas até metade do tempo, e os ecos das próprias ondas, chamados de <strong>retorno do mar</strong>, podem abafar o eco dele.",
+      "p4": "Quem opera esses barcos diz que eles são difíceis de detectar. Um comandante do Grupo 13, a unidade de drones navais do GUR, disse que o radar tem dificuldade para enxergar o casco de plástico e que ele emite pouco calor. São afirmações, e nenhuma medição foi publicada. Uma coisa está registrada: o motor fica numa cuba de alumínio revestida de espuma, com a eletrônica por cima, o que mantém o calor longe da superfície externa. Os barcos são pintados de cinza, e os ataques mais conhecidos aconteceram à noite ou ao amanhecer. Toque nos botões para mudar o <strong>estado do mar</strong>, uma escala de altura das ondas que vai do mar calmo ao agitado.",
+      "caption": "Vista lateral do radar do navio, da curvatura do mar e do barco. A curvatura e as alturas estão exageradas.",
+      "heightLabel": "Altura do radar",
+      "radar": "Linha de visada do radar",
+      "minutes": "Tempo para percorrê-la a 42 nós",
+      "camera": "Horizonte da câmera do barco",
+      "detect": "Detecção esperada",
+      "waves": "Altura das ondas",
+      "hidden": "Escondido atrás das ondas"
+    },
+    "fleet": {
+      "title": "Barato, pequeno e mudando rápido",
+      "p1": "Um Magura V5 custa cerca de um quarto de milhão de dólares. O fabricante fala em cerca de US$ 273 mil, e outras estimativas, em cerca de US$ 250 mil. O Sea Baby, um projeto à parte do SBU, o serviço de segurança da Ucrânia, custa cerca de US$ 221 mil. O GUR avalia em cerca de US$ 65 milhões o navio-patrulha Sergey Kotov, que afundou em março de 2024 depois de um ataque de barcos Magura. São números públicos, mostrados lado a lado nos mostradores abaixo.",
+      "p2": "Esses barcos raramente atuam sozinhos. Os ataques relatados usaram grupos de cerca de cinco a dez, e os desenvolvedores dizem que cada barco do grupo tem uma função própria. Os navios que, segundo os relatos, afundaram levaram vários impactos, e não um só. No percurso, dois barcos acompanhantes se juntam ao barco na arrancada; a formação deles é uma escolha do modelo.",
+      "p3": "O projeto não para de mudar. Em dezembro de 2024, o GUR equipou barcos V5 com dois mísseis ar-ar R-73 em trilhos, rebatizados de Sea Dragon. Toque nos botões para ver essa configuração. Só o convés muda: o barco do modelo faz o mesmo trajeto e continua terminando ao lado do navio. Em 2025, o GUR apresentou o Magura V7, maior, com 7,2 m de comprimento e carga de até 650 kg. O Sea Baby é uma linha própria do SBU, e não um Magura.",
+      "p4": "O registro abaixo se limita ao que cada lado declarou, e muitas dessas afirmações são contestadas. O Ministério da Defesa do Reino Unido conta pelo menos 26 navios da Marinha russa danificados ou destruídos entre fevereiro de 2022 e junho de 2024, cerca de um terço da Frota do Mar Negro. Essa conta inclui todo tipo de arma, e não só barcos-drone. Até outubro de 2023, imagens de satélite mostravam que cerca de 14 navios tinham sido levados de Sebastopol para Novorossiysk.",
+      "carries": "A bordo",
+      "cost": "Custo por barco",
+      "ship": "Navio-patrulha, segundo a avaliação do GUR",
+      "events": "Registro público, conforme relatado",
+      "event1": "<strong>29 de outubro de 2022, Sebastopol</strong>: drones navais e aéreos atingiram a fragata Admiral Makarov e um caça-minas. A Rússia admitiu apenas danos leves.",
+      "event2": "<strong>Noite de 31 de janeiro para 1º de fevereiro de 2024, lago Donuzlav</strong>: barcos Magura V5 afundaram a corveta lança-mísseis Ivanovets. O GUR fala em seis impactos; o vídeo mostra cerca de três.",
+      "event3": "<strong>Noite de 4 para 5 de março de 2024, perto do estreito de Kerch</strong>: barcos Magura V5 afundaram o navio-patrulha Sergey Kotov. Autoridades ucranianas disseram que cinco barcos participaram.",
+      "event4": "<strong>31 de dezembro de 2024, cabo Tarkhankut</strong>: o GUR diz que barcos Magura V5 derrubaram helicópteros Mi-8 com mísseis R-73, as primeiras aeronaves abatidas a partir de um drone naval. A princípio, falou em um; depois, em dois.",
+      "event5": "<strong>2 de maio de 2025, perto de Novorossiysk</strong>: o GUR diz que barcos Magura V7 derrubaram dois caças Su-30SM com mísseis Sidewinder. A Rússia não confirmou."
+    }
+  }
+}
