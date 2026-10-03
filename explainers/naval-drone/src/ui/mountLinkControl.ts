@@ -12,6 +12,7 @@ import {
   formatLinkCarrier,
   formatLinkNow,
   formatLinkTop,
+  shownKnots,
 } from './format';
 
 type SelectedDelay = readonly [delayMs: number, mode: LinkMode, knots: number];
@@ -24,7 +25,7 @@ export function mountLinkControl(root: Document, store: NavalDroneStore): Dispos
       select: (state): SelectedDelay => [
         state.videoDelayMs,
         state.linkMode,
-        runAt(state).boat.knots,
+        shownKnots(runAt(state).boat.knots),
       ],
       value: ([delayMs]) => delayMs,
       format: ([delayMs]) => formatDelay(delayMs),

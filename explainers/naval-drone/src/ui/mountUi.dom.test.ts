@@ -13,8 +13,10 @@ import {
   formatBoatSpeed,
   formatDistance,
   formatHullRatio,
+  formatLinkNow,
   formatPercent,
   formatTrialSpeed,
+  shownKnots,
 } from './format';
 import { fill, isFilled } from './testing';
 import { mountNavalDroneUi } from '.';
@@ -192,6 +194,14 @@ describe('chapter widgets', () => {
     click('linkMode', 'lost');
     expect(readout('link-now')).toBe(link.nowLost);
     expect(readout('link-carrier')).toBe(link.carrier.lost);
+  });
+
+  it('gives the video lag at the speed the boat readouts show while the run speeds up', () => {
+    for (let phase = MOMENTS.throttleUp; phase <= MOMENTS.topSpeed; phase += PHASE_NUDGE) {
+      store.getState().setPhase(phase);
+      const knots = shownKnots(runAt(store.getState()).boat.knots);
+      expect(readout('link-now'), `${phase}`).toBe(formatLinkNow('satellite', 250, knots));
+    }
   });
 
   it('reads the radar line of sight and the sea state', () => {
