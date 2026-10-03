@@ -1,6 +1,4 @@
 import {
-  BoxGeometry,
-  CylinderGeometry,
   DoubleSide,
   Group,
   Matrix4,
@@ -12,6 +10,7 @@ import {
 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { lerp } from '@core/math';
+import { anchorAt } from '@core/scene/parts';
 import type { PartId } from '../../../ids';
 import { IMPELLER, JET } from '../../../model/layout';
 import { JET_SHAPE } from '../../constants';
@@ -22,6 +21,7 @@ import { bottomYAt } from '../../geometry/hullLines';
 import type { Pair } from '../../geometry/hullLines';
 import { thickSheet, turned, turnedCaps } from '../../geometry/sheet';
 import type { Arc, ProfilePoint } from '../../geometry/sheet';
+import { boxAt, rod } from '../../geometry/solids';
 import { gridSurface, orientFrom } from '../../geometry/surface';
 import type { Vec3 } from '../../geometry/surface';
 import { instanced, mergeParts, partMesh, registered } from '../context';
@@ -42,6 +42,7 @@ export interface Waterjet {
 const QUARTER_TURN = Math.PI / 2;
 const FULL_TURN = Math.PI * 2;
 const AXIS = JET.axisY;
+const BOLT_SIDES = 6;
 
 function sgnPow(value: number, exponent: number): number {
   return Math.sign(value) * Math.abs(value) ** exponent;
@@ -117,8 +118,7 @@ function halves(
 
 function flangeBolts(context: PartContext): Mesh {
   const { flange } = JET_SHAPE.housing;
-  const head = new CylinderGeometry(flange.bolt, flange.bolt, flange.boltHead, 6);
-  head.rotateZ(QUARTER_TURN);
+  const head = rod('x', flange.bolt, flange.boltHead, [0, 0, 0], BOLT_SIDES);
   const matrices = spread(0, FULL_TURN, flange.bolts)
     .slice(0, -1)
     .map((angle) =>
@@ -217,11 +217,10 @@ function grate(context: PartContext): Mesh {
   const { width, height } = JET_SHAPE.grate;
   const [aft, fore] = JET.intake.x;
   const half = JET.intake.halfWidth;
-  const bars = spread(-half * 0.8, half * 0.8, JET.intake.bars - 1).map((z) => {
-    const bar = new BoxGeometry(fore - aft, height, width);
-    bar.translate((aft + fore) / 2, bottomYAt((aft + fore) / 2, z) + height / 2, z);
-    return bar;
-  });
+  const middle = (aft + fore) / 2;
+  const bars = spread(-half * 0.8, half * 0.8, JET.intake.bars - 1).map((z) =>
+    boxAt([fore - aft, height, width], [middle, bottomYAt(middle, z) + height / 2, z]),
+  );
   return partMesh(context, mergeParts(bars), 'intake', FINISHES.steel);
 }
 
@@ -311,12 +310,8 @@ export function ductCentreline(): Vec3[] {
 function shaft(context: PartContext): Mesh {
   const { collar, collarLength, coupler, couplerLength } = JET_SHAPE.shaft;
   const [from, to] = JET.shaft.x;
-  const along = (radius: number, length: number, centre: number) => {
-    const piece = new CylinderGeometry(radius, radius, length, JET_SHAPE.smallSegments);
-    piece.rotateZ(QUARTER_TURN);
-    piece.translate(centre, AXIS, 0);
-    return piece;
-  };
+  const along = (radius: number, length: number, centre: number) =>
+    rod('x', radius, length, [centre, AXIS, 0]);
   return partMesh(
     context,
     mergeParts([
@@ -333,15 +328,14 @@ function steering(context: PartContext): { group: Group; stern: Object3D } {
   const { sleeve, pin, arm } = JET_SHAPE.steering;
   const group = new Group();
   group.position.set(JET.steeringNozzle.pivotX, AXIS, 0);
-  const pins = [-1, 1].map((side) => {
-    const piece = new CylinderGeometry(pin.radius, pin.radius, pin.height, JET_SHAPE.smallSegments);
-    piece.translate(0, side * (sleeve + pin.height / 2), 0);
-    return piece;
-  });
-  const lever = new BoxGeometry(arm.width, arm.thickness, arm.length);
-  lever.translate(0, sleeve + pin.height - arm.thickness / 2, arm.length / 2);
-  const knob = new CylinderGeometry(arm.ball, arm.ball, arm.thickness * 2, JET_SHAPE.smallSegments);
-  knob.translate(0, sleeve + pin.height, arm.length);
+  const pins = [-1, 1].map((side) =>
+    rod('y', pin.radius, pin.height, [0, side * (sleeve + pin.height / 2), 0]),
+  );
+  const lever = boxAt(
+    [arm.width, arm.thickness, arm.length],
+    [0, sleeve + pin.height - arm.thickness / 2, arm.length / 2],
+  );
+  const knob = rod('y', arm.ball, arm.thickness * 2, [0, sleeve + pin.height, arm.length]);
   group.add(
     partMesh(
       context,
@@ -360,7 +354,7 @@ function steering(context: PartContext): { group: Group; stern: Object3D } {
 function barBetween(from: Vec3, to: Vec3, width: number, thickness: number): BufferGeometry {
   const start = new Vector3(...from);
   const direction = new Vector3(...to).sub(start);
-  const bar = new BoxGeometry(direction.length(), width, thickness);
+  const bar = boxAt([direction.length(), width, thickness], [0, 0, 0]);
   bar.applyQuaternion(
     new Quaternion().setFromUnitVectors(new Vector3(1, 0, 0), direction.clone().normalize()),
   );
@@ -402,13 +396,7 @@ function bucket(context: PartContext): { group: Group; brackets: Mesh } {
       arm.thickness,
     ),
   );
-  const pin = new CylinderGeometry(
-    boss,
-    boss,
-    JET.bucket.width + 4 * arm.thickness,
-    JET_SHAPE.smallSegments,
-  );
-  pin.rotateX(QUARTER_TURN);
+  const pin = rod('z', boss, JET.bucket.width + 4 * arm.thickness, [0, 0, 0]);
   const group = new Group();
   group.position.set(pivotX, pivotY, 0);
   group.add(
@@ -447,12 +435,7 @@ function labelSpots(
   steeringGroup: Group,
   bucketGroup: Group,
 ): Map<PartId, Object3D> {
-  const at = (parent: Object3D, x: number, y: number, z: number) => {
-    const anchor = new Group();
-    anchor.position.set(x, y, z);
-    parent.add(anchor);
-    return anchor;
-  };
+  const at = anchorAt;
   const middle = ([a, b]: readonly [number, number]) => (a + b) / 2;
   const [pivotX, pivotY] = JET.bucket.pivot;
   const [cx, cy] = JET_SHAPE.bucket.centre;

@@ -5,11 +5,7 @@ import {
   CylinderGeometry,
   DoubleSide,
   Group,
-  IcosahedronGeometry,
-  Matrix4,
-  Quaternion,
   SphereGeometry,
-  Vector3,
 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { clamp, lerp, smoothstep } from '@core/math';
@@ -20,9 +16,9 @@ import { GROUND_STATION, SLIPWAY } from '../../../model/layout';
 import { THEME } from '../../../theme';
 import { gridSurface } from '../../geometry/surface';
 import type { Vec3 } from '../../geometry/surface';
-import { instanced, mergeParts, partMesh } from '../context';
+import { mergeParts, partMesh } from '../context';
 import type { PartContext } from '../context';
-import { canvasTexture, seededRandom } from '../surfaces';
+import { canvasTexture } from '../surfaces';
 
 export interface ShorePart {
   object: Group;
@@ -51,38 +47,17 @@ const TINTS: readonly (readonly [string, number])[] = [
   ['#6f6e50', 70],
   [THEME.shore, 140],
 ];
-const SCRUB = {
-  count: 240,
-  seed: 211,
-  x: [-130, -24] as Range,
-  z: [-130, 50] as Range,
-  size: [0.5, 1.4] as Range,
-  squash: 0.6,
-  sink: 0.3,
-};
-const SCRUB_TONES = ['#3a4129', '#55603a', '#6b6f48'] as const;
 const RADOMES: readonly Range[] = [
   [-7, 1.25],
   [0, 1.75],
   [7, 1.4],
 ];
-const PLINTH = { height: 1.2, share: 0.75 } as const;
-const FENCE = {
-  half: [15, 11] as const,
-  height: 2.2,
-  post: 0.06,
-  spacing: 3,
-  opacity: 0.35,
-} as const;
+const DOME_SINK = 0.25;
+const FENCE = { half: [15, 11] as const, height: 2.2, opacity: 0.45 } as const;
 const ANCHOR_LIFT = 2;
-const GROOVES = { size: [256, 8] as const, pitch: 6, groove: 2, wet: 0.8 } as const;
-const SEGMENTS = { dome: [24, 14] as const, plinth: 16, post: 6 } as const;
-const PAINT = {
-  groove: '#7d7d77',
-  algae: '#4c5a3c',
-  clear: 'rgba(0,0,0,0)',
-  white: '#ffffff',
-} as const;
+const GROOVES = { size: [256, 8] as const, pitch: 6, groove: 2 } as const;
+const DOME_SEGMENTS = [24, 14] as const;
+const PAINT = { groove: '#7d7d77', white: '#ffffff' } as const;
 
 const GROUND: MaterialFinish = {
   color: PAINT.white,
@@ -90,7 +65,6 @@ const GROUND: MaterialFinish = {
   roughness: 0.95,
   envMapIntensity: 0.3,
 };
-const SCRUB_FINISH: MaterialFinish = { color: PAINT.white, roughness: 0.95, envMapIntensity: 0.25 };
 const RADOME: MaterialFinish = { color: THEME.radome, roughness: 0.55, envMapIntensity: 0.8 };
 const METAL: MaterialFinish = { color: '#6d7378', roughness: 0.5, metalness: 0.6 };
 const PAD_FINISH: MaterialFinish = { color: '#8d8c86', roughness: 0.9 };
@@ -175,31 +149,6 @@ function ground(): BufferGeometry {
   return surface.setAttribute('color', new BufferAttribute(new Float32Array(colours), 3));
 }
 
-function scrub(context: PartContext): Object3D {
-  const random = seededRandom(SCRUB.seed);
-  const up = new Vector3(0, 1, 0);
-  const matrices = Array.from({ length: SCRUB.count }, () => {
-    const x = lerp(...SCRUB.x, random());
-    const z = lerp(...SCRUB.z, random());
-    const size = lerp(...SCRUB.size, random());
-    const at = new Vector3(x, shoreHeight(x, z) - size * SCRUB.squash * SCRUB.sink, z);
-    const turn = new Quaternion().setFromAxisAngle(up, random() * Math.PI * 2);
-    return new Matrix4().compose(at, turn, new Vector3(size, size * SCRUB.squash, size));
-  });
-  const mesh = instanced(
-    context,
-    new IcosahedronGeometry(1, 1),
-    UNDIMMED_GROUP,
-    SCRUB_FINISH,
-    matrices,
-  );
-  const colour = new Color();
-  matrices.forEach((_, index) =>
-    mesh.setColorAt(index, colour.set(SCRUB_TONES[index % SCRUB_TONES.length])),
-  );
-  return mesh;
-}
-
 function slab(x: Range, top: Range, half: number): BufferGeometry {
   const box = new BoxGeometry(Math.hypot(x[1] - x[0], top[1] - top[0]), SLAB.thickness, 2 * half);
   box.translate(0, -SLAB.thickness / 2, 0);
@@ -208,17 +157,12 @@ function slab(x: Range, top: Range, half: number): BufferGeometry {
 }
 
 function slipway(context: PartContext): Object3D {
-  const { size, pitch, groove, wet } = GROOVES;
+  const { size, pitch, groove } = GROOVES;
   const map = canvasTexture(...size, (pen, width, height) => {
     pen.fillStyle = THEME.concrete;
     pen.fillRect(0, 0, width, height);
     pen.fillStyle = PAINT.groove;
     for (let x = pitch; x < width; x += pitch) pen.fillRect(x, 0, groove, height);
-    const band = pen.createLinearGradient(width * wet, 0, width, 0);
-    band.addColorStop(0, PAINT.clear);
-    band.addColorStop(1, PAINT.algae);
-    pen.fillStyle = band;
-    pen.fillRect(0, 0, width, height);
   });
   const [apronX, apronHalf] = SLAB.apron;
   const parts = [
@@ -232,78 +176,30 @@ function slipway(context: PartContext): Object3D {
 function station(context: PartContext): { object: Group; anchor: Object3D } {
   const object = new Group();
   object.position.set(...GROUND_STATION);
-  const domes = RADOMES.flatMap(([dx, radius]) => [
-    new SphereGeometry(radius, ...SEGMENTS.dome).translate(
-      dx,
-      PLINTH.height + radius * PLINTH.share,
-      0,
-    ),
-  ]);
-  const plinths = RADOMES.map(([dx, radius]) =>
-    new CylinderGeometry(
-      radius * PLINTH.share,
-      radius * PLINTH.share,
-      PLINTH.height,
-      SEGMENTS.plinth,
-    ).translate(dx, PLINTH.height / 2, 0),
+  const domes = RADOMES.map(([dx, radius]) =>
+    new SphereGeometry(radius, ...DOME_SEGMENTS).translate(dx, radius * (1 - DOME_SINK), 0),
   );
   const [px, pz] = PAD.half;
   const [fx, fz] = FENCE.half;
-  const corners: Vec3[] = [
-    [-fx, 0, -fz],
-    [fx, 0, -fz],
-    [fx, 0, fz],
-    [-fx, 0, fz],
-    [-fx, 0, -fz],
-  ];
-  const posts: Matrix4[] = [];
-  const strips = corners.slice(1).map((to, index) => {
-    const from = corners[index];
-    const length = Math.hypot(to[0] - from[0], to[2] - from[2]);
-    for (let at = 0; at < length; at += FENCE.spacing) {
-      const share = at / length;
-      posts.push(
-        new Matrix4().makeTranslation(
-          lerp(from[0], to[0], share),
-          FENCE.height / 2,
-          lerp(from[2], to[2], share),
-        ),
-      );
-    }
-    const top = (point: Vec3): Vec3 => [point[0], FENCE.height, point[2]];
-    return gridSurface([
-      [from, to],
-      [top(from), top(to)],
-    ]);
-  });
+  const fence = new CylinderGeometry(Math.SQRT2, Math.SQRT2, FENCE.height, 4, 1, true)
+    .rotateY(Math.PI / 4)
+    .scale(fx, 1, fz)
+    .translate(0, FENCE.height / 2, 0);
   object.add(
     partMesh(context, new BoxGeometry(2 * px, PAD.thickness, 2 * pz), 'groundStation', PAD_FINISH),
     partMesh(context, mergeParts(domes), 'groundStation', RADOME),
-    partMesh(context, mergeParts(plinths), 'groundStation', METAL),
-    partMesh(context, mergeParts(strips), 'groundStation', MESH),
-    instanced(
-      context,
-      new CylinderGeometry(FENCE.post, FENCE.post, FENCE.height, SEGMENTS.post),
-      'groundStation',
-      METAL,
-      posts,
-    ),
+    partMesh(context, fence, 'groundStation', MESH),
   );
   const [, middle] = RADOMES[1];
   return {
     object,
-    anchor: anchorAt(object, 0, PLINTH.height + middle * (1 + PLINTH.share) + ANCHOR_LIFT, 0),
+    anchor: anchorAt(object, 0, middle * (2 - DOME_SINK) + ANCHOR_LIFT, 0),
   };
 }
 
 export function createShore(context: PartContext): ShorePart {
   const object = new Group();
   const { object: base, anchor } = station(context);
-  object.add(
-    partMesh(context, ground(), UNDIMMED_GROUP, GROUND),
-    scrub(context),
-    slipway(context),
-    base,
-  );
+  object.add(partMesh(context, ground(), UNDIMMED_GROUP, GROUND), slipway(context), base);
   return { object, stationAnchor: anchor };
 }

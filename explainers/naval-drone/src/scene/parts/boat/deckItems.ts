@@ -1,14 +1,11 @@
 import {
   BoxGeometry,
-  CylinderGeometry,
   Group,
-  LatheGeometry,
   Matrix4,
   Mesh,
   PlaneGeometry,
   Quaternion,
   SphereGeometry,
-  Vector2,
   Vector3,
 } from 'three';
 import type { BufferGeometry, MeshStandardMaterial } from 'three';
@@ -18,6 +15,7 @@ import { DECK_ITEMS } from '../../constants';
 import { FINISHES } from '../../finishes';
 import { spread } from '../../geometry/curves';
 import { deckYAt } from '../../geometry/hullLines';
+import { boxAt, lathe, rod } from '../../geometry/solids';
 import { gridSurface, orientFrom, polygonFan } from '../../geometry/surface';
 import type { Vec3 } from '../../geometry/surface';
 import { instanced, mergeParts, partMesh } from '../context';
@@ -34,13 +32,7 @@ export interface DeckItems {
 const QUARTER_TURN = Math.PI / 2;
 const BOX_TOP_FACE = [8, 12] as const;
 const Y_AXIS = new Vector3(0, 1, 0);
-
-function boxAt(size: Vec3, centre: Vec3, turn = 0): BufferGeometry {
-  const geometry = new BoxGeometry(...size);
-  geometry.rotateY(turn);
-  geometry.translate(...centre);
-  return geometry;
-}
+const STUB_SEGMENTS = 12;
 
 function ventBox(context: PartContext): Group {
   const { frame, slat, inset, capOverhang, capThickness, bottom } = DECK_ITEMS.vent;
@@ -110,15 +102,13 @@ function panelFeet(xs: readonly number[]): BufferGeometry {
   const height = PANEL.top - PANEL.thickness - floor;
   const feet = xs.flatMap((x) =>
     [-1, 1].flatMap((sx) =>
-      [-1, 1].map((sz) => {
-        const geometry = new CylinderGeometry(foot, foot, height, DECK_ITEMS.segments.small);
-        geometry.translate(
+      [-1, 1].map((sz) =>
+        rod('y', foot, height, [
           x + sx * (PANEL.length / 2 - footInset),
           floor + height / 2,
           sz * (PANEL.width / 2 - footInset),
-        );
-        return geometry;
-      }),
+        ]),
+      ),
     ),
   );
   return mergeParts(feet);
@@ -126,13 +116,6 @@ function panelFeet(xs: readonly number[]): BufferGeometry {
 
 function glowFinish(context: PartContext) {
   return { ...context.looks.panel, emissive: DECK_ITEMS.panel.glow, emissiveIntensity: 0 };
-}
-
-function lathe(points: readonly [number, number][], segments: number): BufferGeometry {
-  return new LatheGeometry(
-    points.map(([r, y]) => new Vector2(r, y)),
-    segments,
-  );
 }
 
 function stub(context: PartContext): Mesh {
@@ -151,15 +134,14 @@ function stub(context: PartContext): Mesh {
       [radius, flangeHeight],
       ...cap,
     ],
-    DECK_ITEMS.segments.small,
+    STUB_SEGMENTS,
   );
   geometry.translate(STUB.x, deckYAt(STUB.x, 0), 0);
   return partMesh(context, geometry, 'hull', FINISHES.ring);
 }
 
 function domeParts(context: PartContext): { dome: Group; ring: Mesh } {
-  const { ringInner, ringDepth, ringRise, segments, capSamples, skirt, window, frame } =
-    DECK_ITEMS.dome;
+  const { ringInner, ringDepth, ringRise, segments, capSamples, skirt, window } = DECK_ITEMS.dome;
   const ring = partMesh(
     context,
     lathe(
@@ -211,21 +193,12 @@ function domeParts(context: PartContext): { dome: Group; ring: Mesh } {
     'cameraDome',
     FINISHES.glass,
   );
-  dome.add(
-    partMesh(context, body, 'cameraDome', FINISHES.dome),
-    partMesh(
-      context,
-      patch(DOME.radius * frame.lift, frame.azimuth, frame.from, frame.to),
-      'cameraDome',
-      FINISHES.bezel,
-    ),
-    windowMesh,
-  );
+  dome.add(partMesh(context, body, 'cameraDome', FINISHES.dome), windowMesh);
   return { dome, ring };
 }
 
 function bowCamera(context: PartContext): Group {
-  const { samples, around, tailWidth, tailHeight, sink, squareness, bezel } = DECK_ITEMS.bowCamera;
+  const { samples, around, tailWidth, tailHeight, sink, squareness, proud } = DECK_ITEMS.bowCamera;
   const [aft, fore] = BOW_CAMERA.x;
   const sections = spread(0, 1, samples).map((share) => {
     const x = aft + (fore - aft) * share;
@@ -249,14 +222,10 @@ function bowCamera(context: PartContext): Group {
   const { width, height, y } = BOW_CAMERA.window;
   const glass = new PlaneGeometry(width, height);
   glass.rotateY(QUARTER_TURN);
-  glass.translate(fore + bezel.proud, y, 0);
-  const frame = new PlaneGeometry(width + 2 * bezel.border, height + 2 * bezel.border);
-  frame.rotateY(QUARTER_TURN);
-  frame.translate(fore + bezel.proud / 2, y, 0);
+  glass.translate(fore + proud, y, 0);
   const group = new Group();
   group.add(
     partMesh(context, mergeParts([shell, front]), 'bowCamera', FINISHES.deckPlain),
-    partMesh(context, frame, 'bowCamera', FINISHES.bezel),
     partMesh(context, glass, 'bowCamera', FINISHES.glass),
   );
   return group;
@@ -265,14 +234,11 @@ function bowCamera(context: PartContext): Group {
 function handleGeometry(): BufferGeometry {
   const { washer, washerHeight, stem, barRadius } = DECK_ITEMS.handle;
   const { bar, stem: stemHeight } = HATCHES.handle;
-  const base = new CylinderGeometry(washer, washer, washerHeight, DECK_ITEMS.segments.small);
-  base.translate(0, washerHeight / 2, 0);
-  const post = new CylinderGeometry(stem, stem, stemHeight, DECK_ITEMS.segments.small);
-  post.translate(0, stemHeight / 2, 0);
-  const grip = new CylinderGeometry(barRadius, barRadius, bar, DECK_ITEMS.segments.small);
-  grip.rotateZ(QUARTER_TURN);
-  grip.translate(0, stemHeight, 0);
-  return mergeParts([base, post, grip]);
+  return mergeParts([
+    rod('y', washer, washerHeight, [0, washerHeight / 2, 0]),
+    rod('y', stem, stemHeight, [0, stemHeight / 2, 0]),
+    rod('x', barRadius, bar, [0, stemHeight, 0]),
+  ]);
 }
 
 function handleMatrices(): Matrix4[] {

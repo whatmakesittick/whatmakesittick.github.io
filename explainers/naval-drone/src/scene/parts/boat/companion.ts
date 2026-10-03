@@ -1,4 +1,4 @@
-import { BoxGeometry, CylinderGeometry, Group, LatheGeometry, Mesh, Vector2 } from 'three';
+import { Group, Mesh } from 'three';
 import type { BufferGeometry, Material } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { BOW_CAMERA, DOME, FAIRING, JET, PANEL, STUB, VENT_BOX } from '../../../model/layout';
@@ -6,6 +6,7 @@ import { COMPANION } from '../../constants';
 import { FINISHES } from '../../finishes';
 import { deckYAt } from '../../geometry/hullLines';
 import { turned } from '../../geometry/sheet';
+import { boxAt, lathe, rod } from '../../geometry/solids';
 import { mergeParts } from '../context';
 import type { PartContext } from '../context';
 import { PANEL_XS, buildFairing } from './fairing';
@@ -20,24 +21,19 @@ export interface CompanionGeometry {
   outline: BufferGeometry;
 }
 
-function boxAt(size: readonly [number, number, number], centre: readonly [number, number, number]) {
-  const box = new BoxGeometry(...size);
-  box.translate(...centre);
-  return box;
-}
-
 function domeShape(): BufferGeometry {
   const { segments } = COMPANION;
-  const points = [
-    new Vector2(0, 0),
-    new Vector2(DOME.radius, 0),
-    new Vector2(DOME.radius, DOME.height),
-    new Vector2(DOME.radius * COMPANION.shoulder, DOME.height + DOME.radius * COMPANION.shoulder),
-    new Vector2(0, DOME.height + DOME.radius),
-  ];
-  const dome = new LatheGeometry(points, segments);
-  dome.translate(DOME.x, DOME.base, 0);
-  return dome;
+  const shoulder = DOME.radius * COMPANION.shoulder;
+  return lathe(
+    [
+      [0, 0],
+      [DOME.radius, 0],
+      [DOME.radius, DOME.height],
+      [shoulder, DOME.height + shoulder],
+      [0, DOME.height + DOME.radius],
+    ],
+    segments,
+  ).translate(DOME.x, DOME.base, 0);
 }
 
 function jetShape(): BufferGeometry {
@@ -81,8 +77,13 @@ export function buildCompanionGeometry(): CompanionGeometry {
     [BOW_CAMERA.x[1] - BOW_CAMERA.x[0], BOW_CAMERA.height, BOW_CAMERA.width],
     [cameraX, deckYAt(cameraX, 0) + BOW_CAMERA.height / 2, 0],
   );
-  const stub = new CylinderGeometry(STUB.radius, STUB.radius, STUB.height, COMPANION.stubSides);
-  stub.translate(STUB.x, deckYAt(STUB.x, 0) + STUB.height / 2, 0);
+  const stub = rod(
+    'y',
+    STUB.radius,
+    STUB.height,
+    [STUB.x, deckYAt(STUB.x, 0) + STUB.height / 2, 0],
+    COMPANION.stubSides,
+  );
   return {
     side,
     deck,

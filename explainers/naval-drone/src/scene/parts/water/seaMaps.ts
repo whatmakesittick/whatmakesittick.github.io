@@ -1,18 +1,10 @@
-import {
-  DataTexture,
-  LinearFilter,
-  LinearMipmapLinearFilter,
-  NoColorSpace,
-  RGBAFormat,
-  RepeatWrapping,
-} from 'three';
+import type { DataTexture } from 'three';
 import { SEA } from '../../constants';
-import { seededRandom } from '../surfaces';
+import { repeating, seededRandom } from '../surfaces';
 
 const CHANNELS = 4;
 const BYTE = 255;
 const HALF = 0.5;
-const ANISOTROPY = 8;
 const SLOPE_GAIN = 0.5;
 const MIN_FREQUENCY = 3;
 const FREQUENCY_SPAN = 26;
@@ -24,19 +16,6 @@ interface RippleWave {
   ky: number;
   amplitude: number;
   phase: number;
-}
-
-function repeating(pixels: Uint8Array, size: number, mipmaps = true): DataTexture {
-  const texture = new DataTexture(pixels, size, size, RGBAFormat);
-  texture.wrapS = RepeatWrapping;
-  texture.wrapT = RepeatWrapping;
-  texture.magFilter = LinearFilter;
-  texture.minFilter = mipmaps ? LinearMipmapLinearFilter : LinearFilter;
-  texture.generateMipmaps = mipmaps;
-  texture.anisotropy = ANISOTROPY;
-  texture.colorSpace = NoColorSpace;
-  texture.needsUpdate = true;
-  return texture;
 }
 
 export function rippleWaves(count: number, seed: number): RippleWave[] {
@@ -117,34 +96,6 @@ export function foamTexture(): DataTexture {
       const cells = 1 - Math.abs(2 * octaves[1](x, y) - 1);
       const byte = Math.round(Math.min(1, value * 0.9 + cells * 0.35) * BYTE);
       pixels.set([byte, byte, byte, BYTE], (y * size + x) * CHANNELS);
-    }
-  }
-  return repeating(pixels, size);
-}
-
-export function cellFoamTexture(): DataTexture {
-  const { size, seed, cells, edge } = SEA.cellFoam;
-  const random = seededRandom(seed);
-  const points = Array.from({ length: cells }, () => [random() * size, random() * size]);
-  const pixels = new Uint8Array(size * size * CHANNELS);
-  const wrapped = (delta: number) => delta - size * Math.round(delta / size);
-  for (let y = 0; y < size; y += 1) {
-    for (let x = 0; x < size; x += 1) {
-      let first = Infinity;
-      let second = Infinity;
-      points.forEach(([px, py]) => {
-        const distance = Math.hypot(wrapped(px - x), wrapped(py - y));
-        if (distance < first) {
-          second = first;
-          first = distance;
-        } else if (distance < second) second = distance;
-      });
-      const border = Math.min((second - first) / edge, 1);
-      const centre = Math.min(first / (size / Math.sqrt(cells)), 1);
-      pixels.set(
-        [Math.round(border * BYTE), Math.round(centre * BYTE), 0, BYTE],
-        (y * size + x) * CHANNELS,
-      );
     }
   }
   return repeating(pixels, size);

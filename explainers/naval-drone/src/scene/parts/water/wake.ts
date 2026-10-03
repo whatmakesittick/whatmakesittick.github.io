@@ -45,7 +45,6 @@ void main() {
 
 const FRAGMENT = /* glsl */ `
 uniform sampler2D uFoamMap;
-uniform sampler2D uCellMap;
 uniform vec3 uFoam;
 uniform vec3 uTint;
 uniform vec4 uShape;
@@ -64,7 +63,6 @@ void main() {
   float n1 = texture2D(uFoamMap, q * vec2(0.035, 0.22) * uFoamScale.x).r;
   float n2 = texture2D(uFoamMap, q * vec2(0.16, 0.8) * uFoamScale.x + vec2(0.31, uSeaTime * 0.01)).r;
   float n3 = texture2D(uFoamMap, q * vec2(0.7, 2.2) * uFoamScale.x + vec2(0.73, 0.19)).r;
-  float bubble = texture2D(uCellMap, q * uFoamScale.y).r;
   float fbm = n1 * 0.45 + n2 * 0.33 + n3 * 0.22;
   float white;
   float aerated;
@@ -83,8 +81,7 @@ void main() {
   float strength = uShape.w * vWake.w;
   float density = clamp(white, 0.0, 1.3);
   float threshold = 1.02 - density * 0.62;
-  float foam = smoothstep(threshold, threshold + 0.16, fbm + (1.0 - bubble) * 0.08);
-  foam *= 0.9 + 0.1 * smoothstep(0.1, 0.5, bubble);
+  float foam = smoothstep(threshold, threshold + 0.16, fbm);
   foam *= strength;
   float tint = clamp(aerated, 0.0, 1.0) * strength;
   vec3 colour = mix(uTint, uFoam * (0.85 + 0.15 * n3), foam / max(foam + tint * 0.35, 1e-3));
@@ -102,7 +99,7 @@ export class WakePart {
   private readonly headings: Float32Array;
   private readonly geometry = new BufferGeometry();
 
-  constructor(context: PartContext, group: PartId, foamMap: Texture, cellMap: Texture) {
+  constructor(context: PartContext, group: PartId, foamMap: Texture) {
     const { samples, across, armAcross } = WAKE;
     const count = samples * across + 2 * samples * armAcross;
     this.positions = new Float32Array(count * 3);
@@ -127,7 +124,6 @@ export class WakePart {
           uWaves: WATER.uWaves,
           uCellShape: { value: new Vector2(SEA.growth - 1, SEA.innerRadius) },
           uFoamMap: { value: foamMap },
-          uCellMap: { value: cellMap },
           uFoam: { value: new Color(THEME.foam) },
           uTint: { value: new Color(WAKE.tint) },
           uShape: { value: [WAKE.fade.core, WAKE.fade.wash, WAKE.fade.arm, 1] },

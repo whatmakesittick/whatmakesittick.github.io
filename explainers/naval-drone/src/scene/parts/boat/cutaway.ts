@@ -17,10 +17,6 @@ export class CutawaySwitch {
     return object;
   }
 
-  get isCut(): boolean {
-    return this.cut;
-  }
-
   set(cut: boolean): void {
     this.cut = cut;
     this.wholeParts.forEach((object) => (object.visible = !cut));

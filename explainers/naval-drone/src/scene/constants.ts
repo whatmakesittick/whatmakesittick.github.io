@@ -32,7 +32,6 @@ export const SURFACE_MAPS = {
     size: [512, 128] as const,
     span: 1.2,
     mottle: { cells: [56, 10] as const, strength: 0.07, seed: 11 },
-    streaks: { count: 70, alpha: 0.012, length: [0.15, 0.5] as const },
   },
   deck: {
     size: [1024, 256] as const,
@@ -78,7 +77,6 @@ function handleRow(xs: readonly number[], z: number): Triple[] {
 }
 
 export const DECK_ITEMS = {
-  segments: { small: 10 },
   slopeStep: 0.05,
   panelFloor: FAIRING.top - FAIRING_SHAPE.recess,
   vent: {
@@ -99,7 +97,6 @@ export const DECK_ITEMS = {
     capSamples: 10,
     skirt: { flare: 0.004, height: 0.02 },
     window: { lift: 1.012, azimuth: 24, from: 22, to: 62 },
-    frame: { lift: 1.006, azimuth: 30, from: 15, to: 68 },
   },
   bowCamera: {
     samples: 14,
@@ -108,7 +105,7 @@ export const DECK_ITEMS = {
     tailHeight: 0.004,
     sink: 0.012,
     squareness: 0.55,
-    bezel: { proud: 0.003, border: 0.009 },
+    proud: 0.003,
   },
   handle: { washer: 0.011, washerHeight: 0.003, stem: 0.006, barRadius: 0.0045 },
   handleSpots: [
@@ -165,7 +162,6 @@ export const SCENE_LIMITS = {
 
 export const JET_SHAPE = {
   segments: 40,
-  smallSegments: 12,
   bore: 0.0785,
   housing: {
     ringRadius: 0.112,
@@ -212,7 +208,6 @@ export const JET_SHAPE = {
     radial: 7,
     along: 12,
     blurOpacity: 0.32,
-    blurFrom: 6,
   },
   stator: {
     cone: [
@@ -263,7 +258,6 @@ export const INTERNALS = {
     head: { x: [-1.57, -0.88] as const, halfWidth: 0.16, y: [0.06, 0.118] as const },
     cover: { x: [-1.55, -0.9] as const, halfWidth: 0.13, y: [0.118, 0.155] as const },
     rounding: 0.02,
-    ribs: 7,
     coilXs: [-1.46, -1.225, -0.99] as const,
     coil: [0.06, 0.03, 0.05] as Triple,
     plenum: { x: [-1.48, -0.97] as const, z: -0.235, y: 0.075, radius: 0.042 },
@@ -275,42 +269,23 @@ export const INTERNALS = {
       outlet: [-2.755, 0.04, 0.36] as Triple,
     },
     muffler: { centre: [-1.85, 0.0, 0.33] as Triple, radius: 0.06, length: 0.22 },
-    starter: { x: [-1.5, -1.32] as const, z: -0.19, y: -0.1, radius: 0.035 },
-    filter: { x: -1.1, y: -0.04, z: 0.2, radius: 0.035, length: 0.07 },
-    alternator: { x: -0.79, y: 0.07, z: 0.12, radius: 0.045, length: 0.06 },
     flange: { radius: 0.06, length: 0.03 },
     mounts: { xs: [-1.48, -0.97] as const, z: 0.185, size: [0.05, 0.03, 0.04] as Triple },
   },
-  tray: { lip: 0.012, thickness: 0.008, legs: 0.012 },
+  tray: { thickness: 0.008 },
   electronics: {
-    computer: { x: [-1.5, -1.17] as const, z: [-0.3, -0.04] as const, height: 0.075, fins: 9 },
-    router: {
-      x: [-1.08, -0.88] as const,
-      z: [-0.28, -0.12] as const,
-      height: 0.045,
-      antenna: 0.11,
-    },
+    computer: { x: [-1.5, -1.17] as const, z: [-0.3, -0.04] as const, height: 0.075 },
+    router: { x: [-1.08, -0.88] as const, z: [-0.28, -0.12] as const, height: 0.045 },
     power: { x: [-1.18, -0.95] as const, z: [0.06, 0.28] as const, height: 0.045 },
     puck: { x: -0.86, z: 0.2, radius: 0.04, height: 0.02 },
     canister: { x: [-1.46, -1.3] as const, z: 0.24, radius: 0.034 },
   },
-  cable: { radius: 0.007, hose: 0.011, thick: 1.4, sag: 0.04 },
+  cable: { radius: 0.007, sag: 0.04 },
   detail: {
-    ribInset: 0.04,
-    ribWidth: 0.012,
-    ribHeight: 0.008,
-    ribSpan: 0.8,
     runnerRise: 0.03,
     headerShare: 0.6,
     exhaustGrow: 1.2,
     mountRise: 0.02,
-    legInset: [0.05, 0.04] as const,
-    finInset: 0.02,
-    finWidth: 0.008,
-    finHeight: 0.012,
-    antennaRadius: 0.005,
-    antennaInset: 0.02,
-    roundSegments: 20,
   },
   routes: {
     headers: [
@@ -324,32 +299,6 @@ export const INTERNALS = {
       { from: [-1.3, 0.323, -0.1] as Triple, to: [-1.55, 0.48, -0.08] as Triple },
       { from: [-1.0, 0.293, -0.2] as Triple, to: [-1.05, 0.48, -0.08] as Triple },
     ],
-    forward: [
-      [-0.95, 0.278, 0.2],
-      [-0.6, 0.268, 0.45],
-      [0.3, 0.3, 0.52],
-      [0.75, 0.36, 0.45],
-      [0.8, 0.376, 0.18],
-      [0.92, 0.396, 0],
-    ] as Triple[],
-    bow: [
-      [0.75, 0.36, 0.45],
-      [1.4, 0.4, 0.42],
-      [1.9, 0.42, 0.25],
-      [2.12, 0.46, 0.02],
-    ] as Triple[],
-    tankHose: [
-      [-0.51, 0.16, 0.2],
-      [-0.6, 0.25, 0.16],
-      [-0.8, 0.24, -0.12],
-      [-0.97, 0.125, -0.195],
-    ] as Triple[],
-    vent: [
-      [0.1, 0.2, 0.27],
-      [-0.4, 0.3, 0.3],
-      [-0.9, 0.308, 0.25],
-      [-1.3, 0.282, 0.24],
-    ] as Triple[],
   },
 } as const;
 
@@ -366,15 +315,15 @@ export const SKY = {
     glow: '#ffcf94',
     sun: '#fff1d8',
     cloudLit: '#f6c79a',
-    cloudShade: '#5f6f86',
+    cloudShade: '#8b97a8',
   },
   heights: { band: 0.08, upper: 0.32 },
   glow: { tight: 900, broad: 9, tightGain: 2.4, broadGain: 0.45, disc: 0.99985 },
   clouds: {
-    cover: 0.56,
+    cover: 0.68,
     sharpness: 0.22,
-    scale: 1.6,
-    stretch: 3.2,
+    scale: 0.2,
+    stretch: 6,
     from: 0.03,
     to: 0.5,
     opacity: 0.55,
@@ -411,7 +360,6 @@ export const SEA = {
     fadeTo: 900,
   },
   foam: { size: 128, seed: 23, scale: 0.22, crestFrom: 0.78, crestTo: 1.15 },
-  cellFoam: { size: 128, seed: 29, cells: 56, edge: 9 },
   glitter: { sharp: 1400, broad: 90, sharpGain: 7, broadGain: 0.6, farSharp: 60 },
   fresnel: { base: 0.02, power: 5 },
   hullMargin: 0.004,
@@ -556,7 +504,8 @@ export const JET_STREAM = {
   lengthPerSpeed: 0.055,
   length: [0.35, 2.1] as const,
   reverse: { rings: 10, radius: 0.035, length: 0.75, angle: toRadians(35), dive: 0.3, fade: 0.5 },
-  look: { opacity: 0.6, colour: '#dff3ff', streaks: 3.5 },
+  look: { opacity: 0.6, scroll: 0, streaks: 3.5, stretch: 1, colour: '#dff3ff' },
+  profile: [0.05, 0.55] as const,
   rooster: {
     count: 640,
     size: 0.34,
@@ -565,7 +514,6 @@ export const JET_STREAM = {
     up: 3.6,
     spread: 1.1,
     seed: 41,
-    gravity: 9.81,
     onFrom: [15, 30] as const,
   },
   emphasis: 1.3,
@@ -586,27 +534,6 @@ export const JET_STREAM = {
   },
 } as const;
 
-export const FLOW = {
-  count: 240,
-  size: 0.045,
-  radius: { intake: 0.1, duct: 0.07, nozzle: 0.035, jet: 0.05 },
-  approach: [
-    [-0.9, -0.38, 0],
-    [-1.55, -0.34, 0],
-  ] as Triple[],
-  jetLength: 1.6,
-  swirl: 2.4,
-  speeds: { intake: 2.2, duct: 3.4, pump: 9, nozzle: 16, jet: 18 },
-  slow: '#5fa8ff',
-  fast: '#ffffff',
-  playback: 0.18,
-  turn: [-0.08, -0.05] as const,
-  intakeEdge: -1.75,
-  minThrottle: 0.25,
-  swirlReach: 0.02,
-  alpha: 0.95,
-} as const;
-
 export const WETTED_BAR = {
   samples: 24,
   width: 0.035,
@@ -621,7 +548,6 @@ export const WETTED_BAR = {
 export const ANIMATION = {
   impellerCap: 5,
   blurFrom: 6,
-  blurOpacity: 0.34,
   rpmToHertz: 1 / 60,
   domeScan: toRadians(38),
   domeRate: 0.28,
@@ -653,7 +579,6 @@ export const MISSILE_SHAPE = {
   ] as readonly (readonly [number, number])[],
   segments: 24,
   fins: { root: 0.24, tip: 0.1, span: 0.11, from: 2.58, thickness: 0.006 },
-  canards: { root: 0.14, tip: 0.06, span: 0.07, from: 0.42, thickness: 0.005 },
   seekerGrow: 1.02,
 } as const;
 
@@ -668,38 +593,29 @@ export interface BeamLook {
   segments: number;
 }
 
+const BEAM_DASH = { period: 2.4, duty: 0.55, speed: 1.4, logScale: 22, floor: 0.3 } as const;
+const BEAM_BASE = { core: 1.4, glow: false, dash: BEAM_DASH, segments: 14 } as const;
+
 export const BEAMS = {
-  up: {
-    startRadius: 0.06,
-    endRadius: 5,
-    opacity: 0.85,
-    core: 1.4,
-    glow: false,
-    dash: { period: 2.4, duty: 0.55, speed: 1.4, logScale: 22, floor: 0.3 },
-    fade: [0.003, 0.03],
-    segments: 14,
-  },
-  down: {
-    startRadius: 5,
-    endRadius: 1.2,
-    opacity: 0.7,
-    core: 1.4,
-    glow: false,
-    dash: { period: 2.4, duty: 0.55, speed: 1.4, logScale: 22, floor: 0.3 },
-    fade: [0.02, 0.01],
-    segments: 14,
-  },
+  up: { ...BEAM_BASE, startRadius: 0.06, endRadius: 5, opacity: 0.85, fade: [0.003, 0.03] },
+  down: { ...BEAM_BASE, startRadius: 5, endRadius: 1.2, opacity: 0.7, fade: [0.02, 0.01] },
   labelShare: 0.08,
   panelGlow: 0.55,
 } as const satisfies Record<string, BeamLook | number>;
 
 export const GHOST = {
   colour: '#ffffff',
-  rim: 2.2,
-  base: 0.07,
-  edge: 0.6,
-  tether: { radius: 0.025, opacity: 0.55 },
-} as const;
+  opacity: 0.16,
+  tether: {
+    ...BEAM_BASE,
+    startRadius: 0.03,
+    endRadius: 0.03,
+    opacity: 0.7,
+    dash: { ...BEAM_DASH, period: 0 },
+    fade: [0.01, 0.01],
+    segments: 6,
+  },
+} as const satisfies Record<string, BeamLook | string | number>;
 
 export const COMPANION = {
   segments: 18,

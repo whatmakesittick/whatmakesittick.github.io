@@ -4,7 +4,7 @@ import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import type { AssemblyState } from '../../../ids';
 import { IMPELLER, JET } from '../../../model/layout';
 import { knotsToMs } from '../../../model/scale';
-import { FLOW, JET_STREAM } from '../../constants';
+import { JET_STREAM } from '../../constants';
 import type { Vec3 } from '../../geometry/surface';
 import { registered } from '../context';
 import type { PartContext } from '../context';
@@ -21,22 +21,38 @@ interface Segment {
 const GOLDEN = 0.6180339887;
 const SPREAD = 0.7548776662;
 const ANGLE = 0.569840291;
+const FLOW_COUNT = 240;
+const FLOW_SIZE = 0.045;
+const RADIUS = { intake: 0.1, duct: 0.07, nozzle: 0.035, jet: 0.05 };
+const SPEEDS = { intake: 2.2, duct: 3.4, pump: 9, nozzle: 16, jet: 18 };
+const APPROACH: Vec3[] = [
+  [-0.9, -0.38, 0],
+  [-1.55, -0.34, 0],
+];
+const JET_LENGTH = 1.6;
+const SWIRL = 2.4;
+const SWIRL_REACH = 0.02;
+const SLOW = '#5fa8ff';
+const FAST = '#ffffff';
+const PLAYBACK = 0.18;
+const TURN = [-0.08, -0.05] as const;
+const INTAKE_EDGE = -1.75;
+const MIN_THROTTLE = 0.25;
+const ALPHA = 0.95;
 
 function segmentSpeed(x: number, boatSpeed: number, jetSpeed: number): number {
-  const { speeds } = FLOW;
-  if (x > FLOW.intakeEdge) return Math.max(boatSpeed, speeds.intake);
-  if (x > JET.duct.endX) return speeds.duct;
-  if (x > JET.stator.x[0]) return speeds.pump;
-  if (x > JET.nozzle.x[0]) return speeds.nozzle;
-  return Math.max(jetSpeed, speeds.jet);
+  if (x > INTAKE_EDGE) return Math.max(boatSpeed, SPEEDS.intake);
+  if (x > JET.duct.endX) return SPEEDS.duct;
+  if (x > JET.stator.x[0]) return SPEEDS.pump;
+  if (x > JET.nozzle.x[0]) return SPEEDS.nozzle;
+  return Math.max(jetSpeed, SPEEDS.jet);
 }
 
 function segmentRadius(x: number): number {
-  const { radius } = FLOW;
-  if (x > FLOW.intakeEdge) return radius.intake;
-  if (x > JET.nozzle.x[1]) return radius.duct;
-  if (x > JET.steeringNozzle.x[0]) return radius.nozzle;
-  return radius.jet;
+  if (x > INTAKE_EDGE) return RADIUS.intake;
+  if (x > JET.nozzle.x[1]) return RADIUS.duct;
+  if (x > JET.steeringNozzle.x[0]) return RADIUS.nozzle;
+  return RADIUS.jet;
 }
 
 export class FlowPart {
@@ -46,18 +62,18 @@ export class FlowPart {
   private total = 1;
   private clock = 0;
   private visible = false;
-  private readonly slow = new Color(FLOW.slow);
-  private readonly fast = new Color(FLOW.fast);
+  private readonly slow = new Color(SLOW);
+  private readonly fast = new Color(FAST);
   private readonly mixed = new Color();
 
   constructor(context: PartContext, path: readonly Vec3[]) {
-    this.base = [...FLOW.approach, ...path];
+    this.base = [...APPROACH, ...path];
     const material = registered(
       context,
       'jetStream',
-      createPointMaterial(context.textures.dot, FLOW.size),
+      createPointMaterial(context.textures.dot, FLOW_SIZE),
     );
-    this.cloud = new PointCloud(FLOW.count, material);
+    this.cloud = new PointCloud(FLOW_COUNT, material);
     context.tracker.track({ dispose: () => this.cloud.dispose() });
   }
 
@@ -68,7 +84,7 @@ export class FlowPart {
     if (bucket > 0.5) {
       const { reverse } = JET_STREAM;
       points.push(
-        exit.clone().add(new Vector3(...FLOW.turn, 0)),
+        exit.clone().add(new Vector3(...TURN, 0)),
         exit.clone().add(new Vector3(reverse.length * Math.cos(reverse.angle), -reverse.dive, 0)),
       );
       return points;
@@ -79,7 +95,7 @@ export class FlowPart {
       .clone()
       .add(direction.clone().multiplyScalar(JET.steeringNozzle.pivotX - JET.steeringNozzle.x[0]));
     points[points.length - 1] = rotatedExit;
-    points.push(rotatedExit.clone().add(direction.multiplyScalar(FLOW.jetLength)));
+    points.push(rotatedExit.clone().add(direction.multiplyScalar(JET_LENGTH)));
     return points;
   }
 
@@ -98,9 +114,9 @@ export class FlowPart {
         length: from.distanceTo(to),
         speed:
           segmentSpeed(middle, boatSpeed, state.jet.jetSpeed) *
-          clamp(state.jet.throttle, FLOW.minThrottle, 1),
+          clamp(state.jet.throttle, MIN_THROTTLE, 1),
         radius: [segmentRadius(from.x), segmentRadius(to.x)],
-        swirl: middle < IMPELLER.x + FLOW.swirlReach && middle > JET.stator.x[0] ? FLOW.swirl : 0,
+        swirl: middle < IMPELLER.x + SWIRL_REACH && middle > JET.stator.x[0] ? SWIRL : 0,
       };
     });
     this.total = this.segments.reduce((sum, segment) => sum + segment.length / segment.speed, 0);
@@ -108,10 +124,9 @@ export class FlowPart {
   }
 
   private place(): void {
-    const { count } = FLOW;
     const point = new Vector3();
-    for (let index = 0; index < count; index += 1) {
-      const phase = ((index * GOLDEN + (this.clock * FLOW.playback) / this.total) % 1) * this.total;
+    for (let index = 0; index < FLOW_COUNT; index += 1) {
+      const phase = ((index * GOLDEN + (this.clock * PLAYBACK) / this.total) % 1) * this.total;
       let time = phase;
       let segment = this.segments[0];
       for (const candidate of this.segments) {
@@ -131,9 +146,9 @@ export class FlowPart {
         point.y + radius * Math.cos(angle),
         point.z + radius * Math.sin(angle),
       );
-      const speed = clamp(segment.speed / FLOW.speeds.jet, 0, 1);
+      const speed = clamp(segment.speed / SPEEDS.jet, 0, 1);
       this.mixed.copy(this.slow).lerp(this.fast, speed);
-      this.cloud.setColor(index, this.mixed.r, this.mixed.g, this.mixed.b, FLOW.alpha);
+      this.cloud.setColor(index, this.mixed.r, this.mixed.g, this.mixed.b, ALPHA);
     }
     this.cloud.commit();
   }

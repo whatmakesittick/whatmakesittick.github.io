@@ -1,4 +1,4 @@
-import { BoxGeometry, CylinderGeometry, Group, Matrix4, Mesh, RepeatWrapping } from 'three';
+import { Group, Matrix4, Mesh, RepeatWrapping } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
@@ -8,6 +8,7 @@ import { monotoneCubic, spread } from '../../geometry/curves';
 import { tubeAlong } from '../../geometry/fitted';
 import { flatPolygon } from '../../geometry/flat';
 import type { Pair } from '../../geometry/hullLines';
+import { boxAt, rod } from '../../geometry/solids';
 import { gridSurface, mirrorZ, orientFrom } from '../../geometry/surface';
 import type { Vec3 } from '../../geometry/surface';
 import { instanced, mergeParts, partMesh } from '../context';
@@ -85,11 +86,8 @@ const LAMPS: readonly Vec3[] = [
   [SHIP.mastX, SHIP.mastTop, 0],
 ];
 const LAMP_SIZE = 0.22;
-const BOLLARDS = [-48, -40, 36, 44] as const;
-const BOLLARD = { radius: 0.28, height: 0.7, inset: 0.88 } as const;
 const PORTS = { count: 6, y: 4, radius: 2, boot: 0.6, map: [256, 128] as const } as const;
 const WINDOWS = { xs: [0.2, 0.45, 0.8] as const, y: 0.42, size: [0.08, 0.12] as const, map: 64 };
-const ROD_SEGMENTS = 10;
 const CHAIN_RADIUS = 0.13;
 const CHAIN_SIDES = 6;
 const REFLECTION = 0.8;
@@ -167,11 +165,7 @@ function deck(): BufferGeometry {
 }
 
 function block([x0, x1, y0, y1, half]: Block): BufferGeometry {
-  const box = new BoxGeometry(x1 - x0, y1 - y0, 2 * half).translate(
-    (x0 + x1) / 2,
-    (y0 + y1) / 2,
-    0,
-  );
+  const box = boxAt([x1 - x0, y1 - y0, 2 * half], [(x0 + x1) / 2, (y0 + y1) / 2, 0]);
   const position = box.getAttribute('position');
   const normal = box.getAttribute('normal');
   const uv = box.getAttribute('uv');
@@ -180,10 +174,6 @@ function block([x0, x1, y0, y1, half]: Block): BufferGeometry {
     uv.setXY(at, across / WALL_TILE, (position.getY(at) - SHIP.deck) / WALL_TILE);
   }
   return box;
-}
-
-function rod(radius: number, height: number, at: Vec3): BufferGeometry {
-  return new CylinderGeometry(radius, radius, height, ROD_SEGMENTS).translate(...at);
 }
 
 function hullTexture() {
@@ -232,8 +222,8 @@ export function createShip(context: PartContext): ShipPart {
   const height = SHIP.mastTop - SHIP.bridgeTop;
   const [thickness, yardY, span] = MAST.yard;
   const mast = mergeParts([
-    rod(MAST.radius, height, [SHIP.mastX, SHIP.bridgeTop + height / 2, 0]),
-    new BoxGeometry(thickness, thickness, span).translate(SHIP.mastX, yardY, 0),
+    rod('y', MAST.radius, height, [SHIP.mastX, SHIP.bridgeTop + height / 2, 0]),
+    boxAt([thickness, thickness, span], [SHIP.mastX, yardY, 0]),
   ]);
   const radar = new Group();
   radar.position.set(SHIP.mastX + MAST.lead, SHIP.radarHeight, 0);
@@ -241,16 +231,12 @@ export function createShip(context: PartContext): ShipPart {
     partMesh(
       context,
       mergeParts([
-        rod(PEDESTAL[0], PEDESTAL[1], [0, -PEDESTAL[1] / 2, 0]),
-        new BoxGeometry(...RADAR).translate(0, RADAR[1] / 2, 0),
+        rod('y', PEDESTAL[0], PEDESTAL[1], [0, -PEDESTAL[1] / 2, 0]),
+        boxAt(RADAR, [0, RADAR[1] / 2, 0]),
       ]),
       'shipRadar',
       DARK,
     ),
-  );
-  const { radius, height: tall, inset } = BOLLARD;
-  const bollards = BOLLARDS.flatMap((x) =>
-    [-1, 1].map((sign): Vec3 => [x, sheerAt(x) + tall / 2, sign * inset * deckAt(x)]),
   );
   const object = new Group();
   object.add(
@@ -264,10 +250,9 @@ export function createShip(context: PartContext): ShipPart {
       DARK,
     ),
     partMesh(context, mast, 'shipRadar', walls),
-    instanced(context, rod(radius, tall, [0, 0, 0]), 'ship', DARK, placed(bollards)),
     instanced(
       context,
-      new BoxGeometry(LAMP_SIZE, LAMP_SIZE, LAMP_SIZE),
+      boxAt([LAMP_SIZE, LAMP_SIZE, LAMP_SIZE], [0, 0, 0]),
       'ship',
       LAMP,
       placed(LAMPS),

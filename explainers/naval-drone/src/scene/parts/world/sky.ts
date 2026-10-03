@@ -1,5 +1,5 @@
 import { BackSide, Color, Mesh, ShaderMaterial, SphereGeometry, Vector4 } from 'three';
-import type { Camera } from 'three';
+import type { Camera, Texture } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { SKY } from '../../constants';
 import { registered } from '../context';
@@ -21,29 +21,8 @@ uniform vec3 uCloudShade;
 uniform vec4 uClouds;
 uniform vec3 uCloudBand;
 uniform float uDisc;
+uniform sampler2D uFoamMap;
 varying vec3 vDirection;
-
-float hash(vec2 p) {
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
-}
-
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
-}
-
-float fbm(vec2 p) {
-  float total = 0.0;
-  float weight = 0.5;
-  for (int octave = 0; octave < 5; octave++) {
-    total += weight * noise(p);
-    p = p * 2.07 + vec2(1.7, 9.2);
-    weight *= 0.5;
-  }
-  return total;
-}
 
 void main() {
   vec3 direction = normalize(vDirection);
@@ -51,7 +30,7 @@ void main() {
   float up = max(direction.y, 0.0);
   vec2 plane = direction.xz / (direction.y + 0.1) * uClouds.z;
   vec2 streak = vec2(plane.x * 0.6 + plane.y, (plane.y - plane.x * 0.5) * uClouds.w);
-  float cloud = fbm(streak + vec2(4.1, 2.3));
+  float cloud = texture2D(uFoamMap, streak).r;
   float cover = smoothstep(uClouds.x, uClouds.x + uClouds.y, cloud);
   cover *= smoothstep(uCloudBand.x, uCloudBand.x + 0.05, up) * (1.0 - smoothstep(uCloudBand.y * 0.5, uCloudBand.y, up));
   float sunward = 0.5 + 0.5 * dot(normalize(direction.xz + vec2(1e-5)), normalize(uSun.xz));
@@ -65,7 +44,7 @@ void main() {
 }
 `;
 
-export function createSky(context: PartContext): Mesh {
+export function createSky(context: PartContext, foamMap: Texture): Mesh {
   const { clouds, colours, glow } = SKY;
   const material = registered(
     context,
@@ -80,6 +59,7 @@ export function createSky(context: PartContext): Mesh {
         },
         uCloudBand: { value: [clouds.from, clouds.to, clouds.opacity] },
         uDisc: { value: glow.disc },
+        uFoamMap: { value: foamMap },
       },
       vertexShader: VERTEX,
       fragmentShader: FRAGMENT,

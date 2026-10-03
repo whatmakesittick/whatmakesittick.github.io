@@ -43,13 +43,12 @@ import type { PartContext } from './parts/context';
 import { GhostPart } from './parts/effects/ghost';
 import { LinksPart } from './parts/effects/links';
 import { cellTexture, deckTexture, hullSideTexture, noiseTexture } from './parts/surfaces';
-import { SHIP_SPAN, responseFor, waveMotion } from './parts/water/boatMotion';
-import type { Motion } from './parts/water/boatMotion';
+import { SHIP_SPAN, applyMotion, responseFor, waveMotion } from './parts/water/boatMotion';
 import { FlowPart } from './parts/water/flow';
 import { HullWaterPart } from './parts/water/hullWater';
 import { JetStreamPart } from './parts/water/jetStream';
 import { SeaPart } from './parts/water/sea';
-import { cellFoamTexture, foamTexture } from './parts/water/seaMaps';
+import { foamTexture } from './parts/water/seaMaps';
 import { placeSection, sectionFrame } from './parts/water/sectionMask';
 import { WakePart } from './parts/water/wake';
 import type { WakeParams } from './parts/water/wake';
@@ -95,11 +94,6 @@ function createContext(resources: AssemblyResources, tracker: ResourceTracker): 
   return { ...resources, tracker, looks };
 }
 
-function applyMotion(body: Object3D, motion: Motion): void {
-  body.position.y = motion.heave;
-  body.rotation.set(motion.roll, 0, motion.pitch, 'ZXY');
-}
-
 export class NavalDroneAssembly implements Assembly {
   readonly root = new Group();
   private readonly tracker = new ResourceTracker();
@@ -136,11 +130,10 @@ export class NavalDroneAssembly implements Assembly {
     resetWater(state.sea.waveHeight);
     const context = createContext(resources, this.tracker);
     const foam = this.tracker.track(foamTexture());
-    const cells = this.tracker.track(cellFoamTexture());
     this.boat = new BoatPart(context);
     this.sea = new SeaPart(context, foam);
     this.section = new WaterSectionPart(context, { ...this.sea.hullMask, ...this.sea.section });
-    this.wake = new WakePart(context, 'wake', foam, cells);
+    this.wake = new WakePart(context, 'wake', foam);
     this.hullWater = new HullWaterPart(context, foam, { bow: 'bowWave', spray: 'spray' });
     this.jetStream = new JetStreamPart(context, foam, this.boat.jet.steering);
     this.flow = new FlowPart(context, this.boat.jet.flowPath);
@@ -161,7 +154,7 @@ export class NavalDroneAssembly implements Assembly {
       const water = new HullWaterPart(context, foam, { bow: 'companions', spray: 'companions' });
       const missiles = buildMissileFit(context);
       part.body.add(water.object, missiles.object);
-      return { part, wake: new WakePart(context, 'companions', foam, cells), water, missiles };
+      return { part, wake: new WakePart(context, 'companions', foam), water, missiles };
     });
     this.ghost = new GhostPart(context, shapes.outline);
     this.links = new LinksPart(context);
@@ -181,7 +174,7 @@ export class NavalDroneAssembly implements Assembly {
     const { sky } = LIGHT_RIG;
     this.root.add(
       new HemisphereLight(sky.color, sky.ground, sky.intensity),
-      createSky(context),
+      createSky(context, foam),
       this.sea.mesh,
       this.section.object,
       shore.object,
@@ -286,7 +279,7 @@ export class NavalDroneAssembly implements Assembly {
   private settleBoats(): void {
     const { boat, planing, companions } = this.state;
     const response = responseFor(planing.liftShare);
-    this.boat.setMotion(waveMotion(boat.position, boat.heading, response));
+    applyMotion(this.boat.body, waveMotion(boat.position, boat.heading, response));
     this.sea.followBoat(this.boat.body);
     companions.forEach((reading, index) => {
       const companion = this.companions[index];

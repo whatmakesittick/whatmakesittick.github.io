@@ -47,12 +47,12 @@ uniform vec3 uColour;
 uniform vec4 uSheet;
 uniform float uTime;
 uniform float uStrength;
-uniform vec2 uProfile;
+uniform vec3 uProfile;
 varying vec2 vUv;
 varying vec3 vNormalView;
 varying vec3 vView;
 void main() {
-  if (vWorld.y < seaHeight(vWorld.xz) - ${SURFACE_CLIP}) discard;
+  if (uProfile.z > 0.5 && vWorld.y < seaHeight(vWorld.xz) - ${SURFACE_CLIP}) discard;
   float along = vUv.x;
   float outward = vUv.y;
   vec2 flow = vec2(along * uSheet.z, outward * uSheet.w - uTime * uSheet.y);
@@ -60,7 +60,7 @@ void main() {
   float fine = texture2D(uCellMap, flow * vec2(2.3, 1.6) + vec2(0.37, 0.11)).r;
   float streak = smoothstep(0.5, 0.82, coarse * 0.55 + fine * 0.55);
   float body = smoothstep(0.0, max(uProfile.x, 1e-3), outward) * (1.0 - smoothstep(uProfile.y, 1.0, outward));
-  body *= smoothstep(0.0, 0.18, along) * (1.0 - smoothstep(0.78, 1.0, along));
+  body *= mix(1.0, smoothstep(0.0, 0.18, along) * (1.0 - smoothstep(0.78, 1.0, along)), uProfile.z);
   float facing = abs(dot(normalize(vNormalView), normalize(vView)));
   float mist = (1.0 - outward) * 0.3 * (0.5 + coarse);
   float alpha = uSheet.x * uStrength * body * (mist + (0.4 + 0.6 * facing) * streak);
@@ -75,6 +75,7 @@ export function foamSheetMaterial(
   cellMap: Texture,
   look: SheetLook,
   profile: readonly [number, number],
+  surface = true,
 ): ShaderMaterial {
   return registered(
     context,
@@ -89,7 +90,7 @@ export function foamSheetMaterial(
         uSeaTime: WATER.uSeaTime,
         uSeaDrift: WATER.uSeaDrift,
         uWaves: WATER.uWaves,
-        uProfile: { value: [...profile] },
+        uProfile: { value: [...profile, surface ? 1 : 0] },
       },
       vertexShader: VERTEX,
       fragmentShader: FRAGMENT,

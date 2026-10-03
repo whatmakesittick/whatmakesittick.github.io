@@ -85,20 +85,11 @@ function ratioStyle(from: string, to: string): string {
 }
 
 export function hullSideTexture(): Texture {
-  const { size, span, mottle: look, streaks } = SURFACE_MAPS.side;
+  const { size, span, mottle: look } = SURFACE_MAPS.side;
   return canvasTexture(size[0], size[1], (context, width, height) => {
     context.fillStyle = '#ffffff';
     context.fillRect(0, 0, width, height);
     mottle(context, width, height, look);
-    const random = seededRandom(look.seed + 1);
-    context.globalAlpha = streaks.alpha;
-    for (let at = 0; at < streaks.count; at += 1) {
-      context.fillStyle = random() > 0.5 ? '#000000' : '#ffffff';
-      const x = random() * width;
-      const length = height * (streaks.length[0] + random() * streaks.length[1]);
-      context.fillRect(x, random() * height * 0.2, 1 + random(), length);
-    }
-    context.globalAlpha = 1;
     context.fillStyle = ratioStyle(THEME.hull, THEME.hullDark);
     context.fillRect(0, 0, width, (SURFACE_MAPS.edgeBand / span) * height);
   });
@@ -175,6 +166,19 @@ export function cellTexture(): Texture {
   });
 }
 
+export function repeating(pixels: Uint8Array, size: number, mipmaps = true): DataTexture {
+  const texture = new DataTexture(pixels, size, size, RGBAFormat);
+  texture.wrapS = RepeatWrapping;
+  texture.wrapT = RepeatWrapping;
+  texture.magFilter = LinearFilter;
+  texture.minFilter = mipmaps ? LinearMipmapLinearFilter : LinearFilter;
+  texture.generateMipmaps = mipmaps;
+  texture.anisotropy = ANISOTROPY;
+  texture.colorSpace = NoColorSpace;
+  texture.needsUpdate = true;
+  return texture;
+}
+
 export function noiseTexture(size: number, low: number, high: number, seed: number): Texture {
   const random = seededRandom(seed);
   const pixels = new Uint8Array(size * size * CHANNELS);
@@ -188,13 +192,5 @@ export function noiseTexture(size: number, low: number, high: number, seed: numb
       pixels.set([byte, byte, byte, BYTE], (y * size + x) * CHANNELS);
     }
   }
-  const texture = new DataTexture(pixels, size, size, RGBAFormat);
-  texture.wrapS = RepeatWrapping;
-  texture.wrapT = RepeatWrapping;
-  texture.magFilter = LinearFilter;
-  texture.minFilter = LinearMipmapLinearFilter;
-  texture.generateMipmaps = true;
-  texture.colorSpace = NoColorSpace;
-  texture.needsUpdate = true;
-  return texture;
+  return repeating(pixels, size);
 }

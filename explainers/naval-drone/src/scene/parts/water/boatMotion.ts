@@ -1,3 +1,4 @@
+import type { Object3D } from 'three';
 import { clamp, lerp } from '@core/math';
 import type { Point } from '../../../ids';
 import { MOTION } from '../../constants';
@@ -21,6 +22,11 @@ export const SHIP_SPAN: MotionSpan = {
   stern: MOTION.shipEnd,
   side: MOTION.shipSide,
 };
+
+export function applyMotion(body: Object3D, motion: Motion): void {
+  body.position.y = motion.heave;
+  body.rotation.set(motion.roll, 0, motion.pitch, 'ZXY');
+}
 
 export function waveMotion(
   position: Point,

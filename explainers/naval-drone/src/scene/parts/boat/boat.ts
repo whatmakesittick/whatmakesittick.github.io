@@ -7,7 +7,6 @@ import { MAX_RPM } from '../../../model/jet';
 import { FINISHES } from '../../finishes';
 import { mergeParts } from '../context';
 import type { PartContext } from '../context';
-import type { Motion } from '../water/boatMotion';
 import { wetSurface } from '../water/wetSurface';
 import { CutawaySwitch } from './cutaway';
 import { buildDeckItems } from './deckItems';
@@ -89,11 +88,6 @@ export class BoatPart {
         new Mesh(tracker.track(fairing.cut), materials.get('hull', FINISHES.section)),
       ),
     );
-  }
-
-  setMotion(motion: Motion): void {
-    this.body.position.y = motion.heave;
-    this.body.rotation.set(motion.roll, 0, motion.pitch, 'ZXY');
   }
 
   advance(deltaSeconds: number, state: AssemblyState): void {

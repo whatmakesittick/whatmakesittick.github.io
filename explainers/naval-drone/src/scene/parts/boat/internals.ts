@@ -1,4 +1,4 @@
-import { BoxGeometry, CylinderGeometry, Group } from 'three';
+import { Group } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import { lerp } from '@core/math';
@@ -20,6 +20,7 @@ import type { FittedBox } from '../../geometry/fitted';
 import { flatPolygon, offsetPolyline, pinToAxis } from '../../geometry/flat';
 import { bottomYAt, hullSectionAt } from '../../geometry/hullLines';
 import type { Pair } from '../../geometry/hullLines';
+import { boxBetween, rod } from '../../geometry/solids';
 import { gridSurface, orientFrom } from '../../geometry/surface';
 import type { Vec3 } from '../../geometry/surface';
 import { mergeParts, partMesh } from '../context';
@@ -33,33 +34,7 @@ export interface Internals {
 
 type InternalPart = 'payloadBay' | 'fuelTanks' | 'engine' | 'electronicsBay';
 
-const QUARTER_TURN = Math.PI / 2;
-const SEGMENTS = 12;
 const middle = ([a, b]: readonly [number, number]) => (a + b) / 2;
-
-function boxBetween(
-  x: readonly [number, number],
-  y: readonly [number, number],
-  z: readonly [number, number],
-) {
-  const box = new BoxGeometry(x[1] - x[0], y[1] - y[0], z[1] - z[0]);
-  box.translate(middle(x), middle(y), middle(z));
-  return box;
-}
-
-function cylinderAlong(
-  axis: 'x' | 'y' | 'z',
-  radius: number,
-  length: number,
-  at: Vec3,
-  segments = SEGMENTS,
-) {
-  const piece = new CylinderGeometry(radius, radius, length, segments);
-  if (axis === 'x') piece.rotateZ(QUARTER_TURN);
-  if (axis === 'z') piece.rotateX(QUARTER_TURN);
-  piece.translate(...at);
-  return piece;
-}
 
 function roundedBlock(part: {
   x: readonly [number, number];
@@ -125,12 +100,8 @@ function tanks(): { shells: BufferGeometry; petrol: BufferGeometry; necks: Buffe
   const necks = sides.flatMap((side) => {
     const height = deck - FUEL_TANKS.y[1];
     return [
-      cylinderAlong('y', neck.radius, height, [
-        neck.x,
-        FUEL_TANKS.y[1] + height / 2,
-        side * neck.z,
-      ]),
-      cylinderAlong('y', neck.cap, neck.radius, [neck.x, deck - neck.radius / 2, side * neck.z]),
+      rod('y', neck.radius, height, [neck.x, FUEL_TANKS.y[1] + height / 2, side * neck.z]),
+      rod('y', neck.cap, neck.radius, [neck.x, deck - neck.radius / 2, side * neck.z]),
     ];
   });
   return {
@@ -246,17 +217,6 @@ function engineBody(): {
 } {
   const spec = INTERNALS.engine;
   const detail = INTERNALS.detail;
-  const ribs = spread(
-    spec.cover.x[0] + detail.ribInset,
-    spec.cover.x[1] - detail.ribInset,
-    spec.ribs - 1,
-  ).map((x) =>
-    boxBetween(
-      [x - detail.ribWidth / 2, x + detail.ribWidth / 2],
-      [spec.cover.y[1], spec.cover.y[1] + detail.ribHeight],
-      [-spec.cover.halfWidth * detail.ribSpan, spec.cover.halfWidth * detail.ribSpan],
-    ),
-  );
   const coils = spec.coilXs.map((x) =>
     boxBetween(
       [x - spec.coil[0] / 2, x + spec.coil[0] / 2],
@@ -276,12 +236,8 @@ function engineBody(): {
     ),
   );
   const manifold = mergeParts([
-    cylinderAlong('x', plenum.radius, plenum.x[1] - plenum.x[0], [
-      middle(plenum.x),
-      plenum.y,
-      plenum.z,
-    ]),
-    cylinderAlong('x', throttle.radius, throttle.length, [
+    rod('x', plenum.radius, plenum.x[1] - plenum.x[0], [middle(plenum.x), plenum.y, plenum.z]),
+    rod('x', throttle.radius, throttle.length, [
       plenum.x[0] - throttle.length / 2,
       plenum.y,
       plenum.z,
@@ -314,37 +270,14 @@ function engineBody(): {
     [[mufflerX - muffler.length / 2, mufflerY, mufflerZ], routes.tail, exhaust.outlet],
     pipeRadius,
   );
-  const { starter, filter, alternator, flange, mounts } = spec;
+  const { flange, mounts } = spec;
   const block = mergeParts([
     roundedBlock(spec.sump),
     roundedBlock(spec.block),
     roundedBlock(spec.head),
-    cylinderAlong('x', starter.radius, starter.x[1] - starter.x[0], [
-      middle(starter.x),
-      starter.y,
-      starter.z,
-    ]),
-    cylinderAlong('z', alternator.radius, alternator.length, [
-      alternator.x,
-      alternator.y,
-      alternator.z,
-    ]),
-    cylinderAlong('x', flange.radius, flange.length, [
-      ENGINE.x[0] - flange.length / 2,
-      JET.axisY,
-      0,
-    ]),
+    rod('x', flange.radius, flange.length, [ENGINE.x[0] - flange.length / 2, JET.axisY, 0]),
   ]);
-  const dark = mergeParts([
-    roundedBlock(spec.cover),
-    ...ribs,
-    ...coils,
-    cylinderAlong('z', filter.radius, filter.length, [
-      filter.x,
-      filter.y,
-      filter.z + filter.length / 2,
-    ]),
-  ]);
+  const dark = mergeParts([roundedBlock(spec.cover), ...coils]);
   const rubber = mergeParts(
     mounts.xs.flatMap((x) =>
       [-1, 1].map((side) => {
@@ -366,7 +299,7 @@ function engineBody(): {
       ...headers,
       pipe,
       tail,
-      cylinderAlong('x', muffler.radius, muffler.length, muffler.centre),
+      rod('x', muffler.radius, muffler.length, muffler.centre),
     ]),
     rubber,
   };
@@ -382,87 +315,35 @@ function electronics(): { tray: BufferGeometry; dark: BufferGeometry; light: Buf
   const half = ELECTRONICS.halfWidth;
   const base = ELECTRONICS.y[0];
   const top = base + tray.thickness;
-  const plate = boxBetween([x0, x1], [base, top], [-half, half]);
-  const lips = [-1, 1].map((side) =>
-    boxBetween(
-      [x0, x1],
-      [top, top + tray.lip],
-      [side * half - tray.thickness / 2, side * half + tray.thickness / 2],
-    ),
-  );
-  const detail = INTERNALS.detail;
-  const [legX, legZ] = detail.legInset;
-  const legs = [x0 + legX, x1 - legX].flatMap((x) =>
-    [-1, 1].map((side) =>
-      boxBetween(
-        [x - tray.legs, x + tray.legs],
-        [ENGINE_TUB.y[1], base],
-        [side * (half - legZ) - tray.legs, side * (half - legZ) + tray.legs],
-      ),
-    ),
-  );
   const { computer, router, power, puck, canister } = items;
-  const fins = spread(
-    computer.x[0] + detail.finInset,
-    computer.x[1] - detail.finInset,
-    computer.fins - 1,
-  ).map((x) =>
-    boxBetween(
-      [x - detail.finWidth / 2, x + detail.finWidth / 2],
-      [top + computer.height, top + computer.height + detail.finHeight],
-      computer.z,
-    ),
-  );
-  const antennas = [-1, 1].map((side) =>
-    cylinderAlong('y', detail.antennaRadius, router.antenna, [
-      side > 0 ? router.x[1] - detail.antennaInset : router.x[0] + detail.antennaInset,
-      top + router.height + router.antenna / 2,
-      router.z[0] + detail.antennaInset,
-    ]),
-  );
+  const box = (part: {
+    x: readonly [number, number];
+    z: readonly [number, number];
+    height: number;
+  }) => boxBetween(part.x, [top, top + part.height], part.z);
   return {
-    tray: mergeParts([plate, ...lips, ...legs]),
+    tray: boxBetween([x0, x1], [base, top], [-half, half]),
     dark: mergeParts([
-      boxBetween(computer.x, [top, top + computer.height], computer.z),
-      ...fins,
-      boxBetween(power.x, [top, top + power.height], power.z),
-      cylinderAlong(
-        'y',
-        puck.radius,
-        puck.height,
-        [puck.x, top + puck.height / 2, puck.z],
-        detail.roundSegments,
-      ),
-      cylinderAlong('x', canister.radius, canister.x[1] - canister.x[0], [
+      box(computer),
+      box(power),
+      rod('y', puck.radius, puck.height, [puck.x, top + puck.height / 2, puck.z]),
+      rod('x', canister.radius, canister.x[1] - canister.x[0], [
         middle(canister.x),
         top + canister.radius,
         canister.z,
       ]),
-      ...antennas,
     ]),
-    light: boxBetween(router.x, [top, top + router.height], router.z),
+    light: box(router),
   };
 }
 
-function cables(): { cables: BufferGeometry; hoses: BufferGeometry } {
-  const { radius, hose, thick, sag } = INTERNALS.cable;
-  const { panels, forward, bow, tankHose, vent } = INTERNALS.routes;
-  const toPanel = ({ from, to }: { from: Vec3; to: Vec3 }) =>
-    tubeAlong([from, [(from[0] + to[0]) / 2, to[1] - sag, (from[2] + to[2]) / 2], to], radius);
-  const mirrored = (side: number): Vec3[] =>
-    tankHose.map(([x, y, z], index) => [x, y, index < 2 ? side * z : z]);
-  return {
-    cables: mergeParts([
-      ...panels.map(toPanel),
-      tubeAlong(forward, radius * thick),
-      tubeAlong(bow, radius),
-    ]),
-    hoses: mergeParts([
-      tubeAlong(mirrored(-1), hose),
-      tubeAlong(mirrored(1), hose),
-      tubeAlong(vent, radius),
-    ]),
-  };
+function cables(): BufferGeometry {
+  const { radius, sag } = INTERNALS.cable;
+  return mergeParts(
+    INTERNALS.routes.panels.map(({ from, to }) =>
+      tubeAlong([from, [(from[0] + to[0]) / 2, to[1] - sag, (from[2] + to[2]) / 2], to], radius),
+    ),
+  );
 }
 
 export function buildInternals(context: PartContext): Internals {
@@ -471,7 +352,6 @@ export function buildInternals(context: PartContext): Internals {
   const tubParts = tub();
   const engine = engineBody();
   const bay = electronics();
-  const wiring = cables();
   object.add(
     partMesh(context, payloadBay(), 'payloadBay', FINISHES.bay),
     partMesh(context, bulkheads(), 'payloadBay', FINISHES.bulkhead),
@@ -489,8 +369,7 @@ export function buildInternals(context: PartContext): Internals {
     partMesh(context, bay.tray, 'electronicsBay', FINISHES.tub),
     partMesh(context, bay.dark, 'electronicsBay', FINISHES.box),
     partMesh(context, bay.light, 'electronicsBay', FINISHES.router),
-    partMesh(context, wiring.cables, 'electronicsBay', FINISHES.cable),
-    partMesh(context, wiring.hoses, 'fuelTanks', FINISHES.hose),
+    partMesh(context, cables(), 'electronicsBay', FINISHES.cable),
   );
   const at = (x: number, y: number, z: number) => anchorAt(object, x, y, z);
   const labels = new Map<InternalPart, Object3D>([

@@ -1,9 +1,10 @@
-import { BoxGeometry, Group, LatheGeometry, Vector2 } from 'three';
+import { BoxGeometry, Group } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { MISSILE_FIT } from '../../../model/layout';
 import { MISSILE_SHAPE } from '../../constants';
 import { FINISHES } from '../../finishes';
 import { deckYAt } from '../../geometry/hullLines';
+import { lathe } from '../../geometry/solids';
 import { mergeParts, partMesh } from '../context';
 import type { PartContext } from '../context';
 
@@ -15,10 +16,7 @@ export interface MissileFit {
 const QUARTER_TURN = Math.PI / 2;
 const FIN_COUNT = 4;
 
-function finSet(
-  fins: typeof MISSILE_SHAPE.fins | typeof MISSILE_SHAPE.canards,
-  radius: number,
-): BufferGeometry[] {
+function finSet(fins: typeof MISSILE_SHAPE.fins, radius: number): BufferGeometry[] {
   return Array.from({ length: FIN_COUNT }, (_, index) => {
     const fin = new BoxGeometry(fins.root, fins.span, fins.thickness);
     const position = fin.getAttribute('position');
@@ -35,19 +33,17 @@ function finSet(
 }
 
 function turnedBody(points: readonly (readonly [number, number])[], grow: number): BufferGeometry {
-  const lathe = new LatheGeometry(
-    points.map(([along, radius]) => new Vector2(radius * grow, along)),
+  return lathe(
+    points.map(([along, radius]) => [radius * grow, along]),
     MISSILE_SHAPE.segments,
-  );
-  lathe.rotateZ(QUARTER_TURN);
-  return lathe;
+  ).rotateZ(QUARTER_TURN);
 }
 
 function missile(): { body: BufferGeometry; seeker: BufferGeometry } {
-  const { profile, fins, canards, seekerGrow } = MISSILE_SHAPE;
+  const { profile, fins, seekerGrow } = MISSILE_SHAPE;
   const radius = MISSILE_FIT.missile.diameter / 2;
   return {
-    body: mergeParts([turnedBody(profile, 1), ...finSet(fins, radius), ...finSet(canards, radius)]),
+    body: mergeParts([turnedBody(profile, 1), ...finSet(fins, radius)]),
     seeker: turnedBody(profile.slice(0, 2), seekerGrow),
   };
 }

@@ -59,7 +59,6 @@ export const FINISHES = {
   louvre: matte(PAINT.louvre, 0.7),
   dome: matte(PAINT.dome, 0.45),
   ring: matte(PAINT.ring, 0.6, 0.2),
-  bezel: { ...matte(PAINT.ring, 0.6, 0.2), ...DECAL },
   glass: {
     color: PAINT.glass,
     metalness: 0.3,

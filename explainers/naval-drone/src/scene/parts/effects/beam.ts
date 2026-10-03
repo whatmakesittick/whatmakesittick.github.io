@@ -113,14 +113,6 @@ export class Beam {
     (this.material.uniforms.uRadius.value as Vector2).y = endRadius;
   }
 
-  setColour(colour: string): void {
-    (this.material.uniforms.uColour.value as Color).set(colour);
-  }
-
-  setOpacity(opacity: number): void {
-    this.material.uniforms.uOpacity.value = opacity;
-  }
-
   advance(deltaSeconds: number): void {
     const offset = this.material.uniforms.uOffset.value + deltaSeconds * this.look.dash.speed;
     this.material.uniforms.uOffset.value = offset - Math.floor(offset);
