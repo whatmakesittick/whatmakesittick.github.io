@@ -22,12 +22,21 @@ export const SPEED_MARKS: Readonly<Record<SpeedMarkId, number>> = {
   top: BOAT.topKnots,
 };
 
+const DECIMAL_POINT = '.';
+const WHOLE_STEP_DECIMALS = 0;
+
+function decimalsOf(step: number): number {
+  const [, fraction] = String(step).split(DECIMAL_POINT);
+  return fraction?.length ?? WHOLE_STEP_DECIMALS;
+}
+
 export function stepTo(value: number, range: SteppedRange): number {
-  return Math.round(clamp(value, range.min, range.max) / range.step) * range.step;
+  const stepped = Math.round(clamp(value, range.min, range.max) / range.step) * range.step;
+  return Number(stepped.toFixed(decimalsOf(range.step)));
 }
 
 export function trialKnotsOf(knots: number): number {
-  return Number(stepTo(knots, TRIAL_KNOTS).toFixed(1));
+  return stepTo(knots, TRIAL_KNOTS);
 }
 
 export function throttleShareOf(percent: number): number {

@@ -35,6 +35,8 @@ describe('speed trial', () => {
     expect(stepTo(333, range)).toBe(330);
     expect(stepTo(10, range)).toBe(50);
     expect(stepTo(2000, range)).toBe(1000);
+    expect(stepTo(0.7, { min: 0, max: 1, step: 0.1 })).toBe(0.7);
+    expect(stepTo(0.35, { min: 0, max: 1, step: 0.05 })).toBe(0.35);
   });
 
   it('turns throttle percents into a share of full flow and back', () => {
