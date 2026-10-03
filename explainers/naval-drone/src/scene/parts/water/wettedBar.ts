@@ -91,8 +91,8 @@ export class WettedBarPart {
     });
     [points[0], points[samples - 1]].forEach(([x, y, z]) =>
       this.add(
-        [x - line, y - tick, z],
-        [x + line, y - tick, z],
+        [x - line, y, z],
+        [x + line, y, z],
         [x - line, y + tick, z],
         [x + line, y + tick, z],
       ),
