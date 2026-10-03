@@ -1,4 +1,5 @@
-import { Group, Matrix4, Mesh, RepeatWrapping } from 'three';
+import { CylinderGeometry, Group, Matrix4, Mesh, RepeatWrapping } from 'three';
+import { extrudePlan, roundedRectShape } from '@core/scene/geometry/extrude';
 import type { BufferGeometry, Object3D } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
@@ -24,7 +25,15 @@ export interface ShipPart {
 }
 
 type Lines = readonly (readonly [number, number])[];
-type Block = readonly [x0: number, x1: number, y0: number, y1: number, halfWidth: number];
+type Block = readonly [
+  x0: number,
+  x1: number,
+  y0: number,
+  y1: number,
+  halfWidth: number,
+  corner: number,
+  lean: number,
+];
 
 const STERN = -SHIP.length / 2;
 const BOW = SHIP.length / 2;
@@ -33,44 +42,51 @@ const HOUSE_TOP = 9;
 const KEEL: Lines = [
   [STERN, -1.2],
   [-30, -SHIP.draft],
-  [38, -SHIP.draft],
-  [50.5, 0],
-  [BOW, 7.8],
+  [32, -SHIP.draft],
+  [46, 0],
+  [BOW, 9.6],
 ];
 const WATERLINE: Lines = [
   [STERN, 5.6],
   [-24, SHIP.beam / 2],
-  [8, SHIP.beam / 2],
-  [46, 1.6],
-  [50.5, 0],
+  [6, SHIP.beam / 2],
+  [40, 2],
+  [46, 0],
   [BOW, 0],
 ];
 const DECK_EDGE: Lines = [
-  [STERN, 6.2],
-  [-24, 7.25],
-  [18, 7.25],
-  [50, 2.2],
+  [STERN, 6.4],
+  [-24, 7.3],
+  [16, 7.3],
+  [44, 4.2],
   [BOW, 0],
 ];
 const SHEER: Lines = [
-  [STERN, 6.4],
-  [-30, SHIP.deck],
-  [12, SHIP.deck],
-  [BOW, 7.8],
+  [STERN, 6.8],
+  [-28, SHIP.deck],
+  [8, SHIP.deck],
+  [36, 7.2],
+  [BOW, 9.6],
 ];
 
 const HULL = { columns: 64, rows: 12, rowBias: 1.6, bilge: 4, tile: 22, span: 14, base: -5 };
 const WALL_TILE = 8;
 const BLOCKS: readonly Block[] = [
-  [-20, 26, SHIP.deck, HOUSE_TOP, 6.2],
-  [4, 24, HOUSE_TOP, 12, 5.4],
-  [12, 23, 12, SHIP.bridgeTop, 6.6],
-  [-14, -6, HOUSE_TOP, 17, 2.2],
+  [-20, 26, SHIP.deck, HOUSE_TOP, 6.2, 2.5, 0.25],
+  [4, 24, HOUSE_TOP, 12, 5.4, 2, 0.3],
+  [12, 23, 12, SHIP.bridgeTop, 6.6, 1.6, 0],
 ];
-const DARK_BLOCKS: readonly Block[] = [
-  [11.9, 23.1, 13.1, 14.5, 6.65],
-  [-14.1, -5.9, 17, 17.6, 2.3],
-];
+const BRIDGE_WINDOWS: Block = [11.9, 23.1, 13.1, 14.5, 6.65, 1.7, 0];
+const FUNNEL = {
+  x: -10,
+  base: HOUSE_TOP,
+  height: 8,
+  radii: [1, 1.25],
+  scale: [4, 2.2],
+  rake: 0.12,
+};
+const FUNNEL_CAP = 0.6;
+const STRAKE = { drop: 0.6, radius: 0.16, samples: 28, ends: [2, 4] } as const;
 const MAST = { radius: 0.24, yard: [0.18, 24, 7] as const, lead: 1.4 };
 const RADAR: Vec3 = [0.5, 0.22, 4.2];
 const PEDESTAL = [0.18, 0.8] as const;
@@ -92,6 +108,7 @@ const CHAIN_RADIUS = 0.13;
 const CHAIN_SIDES = 6;
 const REFLECTION = 0.8;
 const FACING = 0.5;
+const FUNNEL_SIDES = 20;
 
 const PAINT = {
   hull: THEME.ship,
@@ -164,25 +181,59 @@ function deck(): BufferGeometry {
   return orientFrom(gridSurface([edge(-1), edge(1)]), [0, 0, 0]);
 }
 
-function block([x0, x1, y0, y1, half]: Block): BufferGeometry {
-  const box = boxAt([x1 - x0, y1 - y0, 2 * half], [(x0 + x1) / 2, (y0 + y1) / 2, 0]);
-  const position = box.getAttribute('position');
-  const normal = box.getAttribute('normal');
-  const uv = box.getAttribute('uv');
+function block([x0, x1, y0, y1, half, corner, lean]: Block): BufferGeometry {
+  const solid = extrudePlan(
+    roundedRectShape({ minA: x0, maxA: x1, minB: -half, maxB: half }, corner),
+    y0,
+    y1,
+  );
+  const centre = (x0 + x1) / 2;
+  const position = solid.getAttribute('position');
+  for (let at = 0; at < position.count; at += 1) {
+    const inset = (lean * (position.getY(at) - y0)) / (y1 - y0);
+    const x = position.getX(at);
+    const z = position.getZ(at);
+    position.setX(at, x - Math.sign(x - centre) * inset);
+    position.setZ(at, z - Math.sign(z) * inset);
+  }
+  solid.computeVertexNormals();
+  const normal = solid.getAttribute('normal');
+  const uv = solid.getAttribute('uv');
   for (let at = 0; at < uv.count; at += 1) {
     const across = Math.abs(normal.getX(at)) > FACING ? position.getZ(at) : position.getX(at);
     uv.setXY(at, across / WALL_TILE, (position.getY(at) - SHIP.deck) / WALL_TILE);
   }
-  return box;
+  return solid;
+}
+
+function funnelPiece(radius: number, height: number, base: number): BufferGeometry {
+  const [width, depth] = FUNNEL.scale;
+  return new CylinderGeometry(radius, radius * FUNNEL.radii[1], height, FUNNEL_SIDES)
+    .scale(width, 1, depth)
+    .translate(0, base + height / 2, 0)
+    .rotateZ(FUNNEL.rake)
+    .translate(FUNNEL.x, 0, 0);
+}
+
+function strake(side: number): BufferGeometry {
+  const [aft, fore] = STRAKE.ends;
+  return tubeAlong(
+    spread(STERN + aft, BOW - fore, STRAKE.samples).map((x): Vec3 => {
+      const y = sheerAt(x) - STRAKE.drop;
+      return [x, y, side * shipHalfBreadth(x, y)];
+    }),
+    STRAKE.radius,
+    CHAIN_SIDES,
+  );
 }
 
 function hullTexture() {
   const texture = canvasTexture(...PORTS.map, (pen, width, height) => {
-    const v = (y: number) => height * (1 - (y - HULL.base) / HULL.span);
+    const v = (y: number) => (height * (y - HULL.base)) / HULL.span;
     pen.fillStyle = PAINT.hull;
     pen.fillRect(0, 0, width, height);
     pen.fillStyle = PAINT.boot;
-    pen.fillRect(0, v(PORTS.boot), width, height);
+    pen.fillRect(0, 0, width, v(PORTS.boot));
     pen.fillStyle = PAINT.port;
     for (let port = 0; port < PORTS.count; port += 1) {
       pen.beginPath();
@@ -224,6 +275,10 @@ export function createShip(context: PartContext): ShipPart {
   const mast = mergeParts([
     rod('y', MAST.radius, height, [SHIP.mastX, SHIP.bridgeTop + height / 2, 0]),
     boxAt([thickness, thickness, span], [SHIP.mastX, yardY, 0]),
+    boxAt(
+      [MAST.lead, thickness, thickness],
+      [SHIP.mastX + MAST.lead / 2, SHIP.radarHeight - PEDESTAL[1], 0],
+    ),
   ]);
   const radar = new Group();
   radar.position.set(SHIP.mastX + MAST.lead, SHIP.radarHeight, 0);
@@ -243,9 +298,16 @@ export function createShip(context: PartContext): ShipPart {
     new Mesh(track(hull()), wetSurface(context.materials.get('ship', hullFinish))),
     partMesh(context, deck(), 'ship', DECKING),
     partMesh(context, mergeParts(BLOCKS.map(block)), 'ship', walls),
+    partMesh(context, funnelPiece(1, FUNNEL.height, FUNNEL.base), 'ship', matte(PAINT.hull, 0.7)),
     partMesh(
       context,
-      mergeParts([...DARK_BLOCKS.map(block), tubeAlong(CHAIN, CHAIN_RADIUS, CHAIN_SIDES)]),
+      mergeParts([
+        block(BRIDGE_WINDOWS),
+        funnelPiece(FUNNEL.radii[0], FUNNEL_CAP, FUNNEL.base + FUNNEL.height),
+        tubeAlong(CHAIN, CHAIN_RADIUS, CHAIN_SIDES),
+        strake(-1),
+        strake(1),
+      ]),
       'ship',
       DARK,
     ),
