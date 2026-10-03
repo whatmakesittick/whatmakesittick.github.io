@@ -1,0 +1,12 @@
+{
+  "slug": "naval-drone",
+  "tags": ["vehicles", "physics", "weapons"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A grey uncrewed boat skimming the sea at dawn, beside the title How a naval drone works"
+  }
+}
