@@ -86,7 +86,7 @@ function ventBox(context: PartContext): Group {
   const group = new Group();
   group.add(
     partMesh(context, core, 'hull', FINISHES.pocket),
-    partMesh(context, mergeParts([...posts, ...rims, front]), 'hull', context.looks.deck),
+    partMesh(context, mergeParts([...posts, ...rims, front]), 'hull', FINISHES.deckPlain),
     partMesh(context, mergeParts(slats), 'hull', FINISHES.louvre),
     partMesh(context, cap, 'hull', FINISHES.cap),
   );
@@ -259,7 +259,7 @@ function bowCamera(context: PartContext): Group {
   frame.translate(fore + bezel.proud / 2, y, 0);
   const group = new Group();
   group.add(
-    partMesh(context, mergeParts([shell, front]), 'bowCamera', context.looks.deck),
+    partMesh(context, mergeParts([shell, front]), 'bowCamera', FINISHES.deckPlain),
     partMesh(context, frame, 'bowCamera', FINISHES.ring),
     partMesh(context, glass, 'bowCamera', FINISHES.glass),
   );

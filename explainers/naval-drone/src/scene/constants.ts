@@ -1,5 +1,6 @@
 import { toRadians } from '@core/math';
 import { FAIRING, HATCHES } from '../model/layout';
+import { THEME } from '../theme';
 
 type Triple = readonly [number, number, number];
 
@@ -126,11 +127,14 @@ export const WAVES = {
   defaultHeight: 0.3,
   phaseStep: 1.7,
   components: [
-    { length: 1, angle: 0, share: 0.42 },
-    { length: 0.63, angle: toRadians(28), share: 0.24 },
-    { length: 0.41, angle: toRadians(-34), share: 0.16 },
-    { length: 0.27, angle: toRadians(55), share: 0.11 },
-    { length: 0.17, angle: toRadians(-62), share: 0.07 },
+    { length: 1, angle: 0, share: 0.24 },
+    { length: 0.83, angle: toRadians(-23), share: 0.18 },
+    { length: 0.71, angle: toRadians(31), share: 0.15 },
+    { length: 0.53, angle: toRadians(-38), share: 0.12 },
+    { length: 0.37, angle: toRadians(64), share: 0.1 },
+    { length: 0.29, angle: toRadians(-71), share: 0.08 },
+    { length: 0.19, angle: toRadians(12), share: 0.08 },
+    { length: 0.13, angle: toRadians(-17), share: 0.05 },
   ],
 } as const;
 
@@ -142,9 +146,9 @@ export const LIGHT_RIG = {
   distance: 1000,
   sun: SUN_DIRECTION,
   key: { color: '#ffc58a', intensity: 1.9 },
-  fill: { color: '#7f9bb8', intensity: 0.55, direction: [-0.35, 1, 0.45] as Triple },
+  fill: { color: '#7f9bb8', intensity: 0.35, direction: [-0.35, 1, 0.45] as Triple },
   rim: { color: '#a9bfdc', intensity: 1.1, direction: [-0.3, 0.16, 0.94] as Triple },
-  sky: { color: '#7f9bb8', ground: '#1b2a3a', intensity: 1.6 },
+  sky: { color: '#7f9bb8', ground: '#1b2a3a', intensity: 1.3 },
 } as const;
 
 export const HAZE = { colour: '#8d9aa6', near: 400, far: 5000 } as const;
@@ -247,3 +251,381 @@ export const JET_SHAPE = {
     samples: [14, 6] as const,
   },
 } as const;
+
+export const INTERNALS = {
+  clearance: 0.022,
+  bay: { foreHalfWidth: 0.27, samples: 10 },
+  tank: { samples: 10, fill: 0.58, neck: { x: 0.36, z: 0.2, radius: 0.032, cap: 0.04 } },
+  tub: { wall: 0.004, floorLift: 0.058, foamTop: -0.02 },
+  engine: {
+    sump: { x: [-1.58, -0.87] as const, halfWidth: 0.15, y: [-0.2, -0.06] as const },
+    block: { x: [-1.6, -0.85] as const, halfWidth: 0.2, y: [-0.08, 0.06] as const },
+    head: { x: [-1.57, -0.88] as const, halfWidth: 0.16, y: [0.06, 0.118] as const },
+    cover: { x: [-1.55, -0.9] as const, halfWidth: 0.13, y: [0.118, 0.155] as const },
+    rounding: 0.02,
+    ribs: 7,
+    coilXs: [-1.46, -1.225, -0.99] as const,
+    coil: [0.06, 0.03, 0.05] as Triple,
+    plenum: { x: [-1.48, -0.97] as const, z: -0.235, y: 0.075, radius: 0.042 },
+    runner: { radius: 0.019, from: [-0.155, 0.09] as const },
+    throttle: { radius: 0.03, length: 0.06 },
+    exhaust: {
+      radius: 0.022,
+      collector: [-1.0, 0.24, -0.0] as Triple,
+      outlet: [-2.755, 0.04, 0.36] as Triple,
+    },
+    muffler: { centre: [-1.85, 0.0, 0.33] as Triple, radius: 0.06, length: 0.22 },
+    starter: { x: [-1.5, -1.32] as const, z: -0.19, y: -0.1, radius: 0.035 },
+    filter: { x: -1.1, y: -0.04, z: 0.2, radius: 0.035, length: 0.07 },
+    alternator: { x: -0.79, y: 0.07, z: 0.12, radius: 0.045, length: 0.06 },
+    flange: { radius: 0.06, length: 0.03 },
+    mounts: { xs: [-1.48, -0.97] as const, z: 0.185, size: [0.05, 0.03, 0.04] as Triple },
+  },
+  tray: { lip: 0.012, thickness: 0.008, legs: 0.012 },
+  electronics: {
+    computer: { x: [-1.5, -1.17] as const, z: [-0.3, -0.04] as const, height: 0.075, fins: 9 },
+    router: {
+      x: [-1.08, -0.88] as const,
+      z: [-0.28, -0.12] as const,
+      height: 0.045,
+      antenna: 0.11,
+    },
+    power: { x: [-1.18, -0.95] as const, z: [0.06, 0.28] as const, height: 0.045 },
+    puck: { x: -0.86, z: 0.2, radius: 0.04, height: 0.02 },
+    canister: { x: [-1.46, -1.3] as const, z: 0.24, radius: 0.034 },
+  },
+  cable: { radius: 0.007, hose: 0.011 },
+} as const;
+
+export const SKY = {
+  radius: 7000,
+  widthSegments: 48,
+  heightSegments: 24,
+  renderOrder: -10,
+  colours: {
+    zenith: '#1a2740',
+    upper: '#41587a',
+    sunHorizon: '#f0a868',
+    haze: HAZE.colour,
+    glow: '#ffcf94',
+    sun: '#fff1d8',
+    cloudLit: '#f6c79a',
+    cloudShade: '#5f6f86',
+  },
+  heights: { band: 0.08, upper: 0.32 },
+  glow: { tight: 900, broad: 9, tightGain: 2.4, broadGain: 0.45, disc: 0.99985 },
+  clouds: {
+    cover: 0.56,
+    sharpness: 0.22,
+    scale: 1.6,
+    stretch: 3.2,
+    from: 0.03,
+    to: 0.5,
+    opacity: 0.55,
+  },
+} as const;
+
+const THEME_SEA = { deep: THEME.seaDeep, lit: THEME.seaLit, foam: THEME.foam } as const;
+
+export const SEA = {
+  rings: 150,
+  segments: 128,
+  innerRadius: 0.35,
+  growth: 1.062,
+  snap: 0.5,
+  renderOrder: 1,
+  colours: {
+    deep: THEME_SEA.deep,
+    lit: THEME_SEA.lit,
+    foam: THEME_SEA.foam,
+    scatter: '#2f6b74',
+  },
+  ripples: {
+    size: 256,
+    waves: 28,
+    seed: 17,
+    scales: [0.19, 0.53] as const,
+    flow: [
+      [0.021, 0.013],
+      [-0.017, 0.026],
+    ] as const,
+    strength: 0.55,
+    broad: 0.031,
+    fadeFrom: 40,
+    fadeTo: 900,
+  },
+  foam: { size: 128, seed: 23, scale: 0.22, crestFrom: 0.78, crestTo: 1.15 },
+  cellFoam: { size: 128, seed: 29, cells: 56, edge: 9 },
+  glitter: { sharp: 1400, broad: 90, sharpGain: 7, broadGain: 0.6, farSharp: 60 },
+  fresnel: { base: 0.02, power: 5 },
+  hullMargin: 0.004,
+  plan: { columns: 128, rows: 40, x: [-3, 3] as const, y: [-0.45, 0.9] as const, scale: 0.8 },
+} as const;
+
+export const SECTION_LOOK = {
+  depth: 1.2,
+  clear: 0.1,
+  murky: 0.55,
+  rim: 0.03,
+  deep: '#0a2433',
+  glint: '#c6ecf2',
+  samples: { along: 96, across: 40 },
+  surface: { along: 64, across: 26, clarity: [0.16, 0.8] as const },
+  renderOrder: 3,
+} as const;
+
+export const MOTION = {
+  bow: 2,
+  stern: 2.3,
+  side: 0.65,
+  planedResponse: 0.35,
+  maxPitch: toRadians(12),
+  maxRoll: toRadians(14),
+  shipSide: 7,
+  shipEnd: 50,
+  shipResponse: 0.6,
+} as const;
+
+export const SEA_FOAM: Readonly<Record<'smooth' | 'slight' | 'moderate' | 'rough', number>> = {
+  smooth: 0,
+  slight: 0.3,
+  moderate: 0.65,
+  rough: 1,
+};
+
+export const WAKE = {
+  samples: 72,
+  length: 320,
+  power: 1.7,
+  across: 7,
+  armAcross: 3,
+  lift: 0.03,
+  coreHalfWidth: 0.62,
+  coreSpread: toRadians(4.5),
+  kelvin: toRadians(19.47),
+  planedArm: toRadians(10.5),
+  armWidth: [0.35, 4] as const,
+  armReach: 140,
+  fade: { core: 12, wash: 90, arm: 55 },
+  speedFrom: [0.4, 9] as const,
+  foamScale: [1, 3.2] as const,
+  emphasis: 1.35,
+  tint: '#5fb3bd',
+  renderOrder: 2,
+} as const;
+
+export const HULL_WATER = {
+  bow: {
+    rows: 16,
+    columns: 9,
+    length: [0.7, 2.6] as const,
+    height: 0.34,
+    peakAt: 0.22,
+    curl: 0.55,
+    spread: 2.6,
+    flare: toRadians(18),
+    onFrom: [0.5, 4] as const,
+    offFrom: [12.5, 16] as const,
+    peakKnots: 11,
+  },
+  waterline: { rows: 28, columns: 3, width: 0.16, from: [0.3, 3] as const },
+  stern: {
+    rows: 7,
+    columns: 10,
+    length: 4.2,
+    halfWidth: 1.5,
+    height: 0.26,
+    peak: 0.42,
+    width: 0.22,
+  },
+  spray: {
+    rows: 10,
+    columns: 9,
+    onFrom: [6, 15] as const,
+    root: [0.25, 0.9] as const,
+    range: [0.6, 2.2] as const,
+    up: toRadians(17),
+    back: toRadians(50),
+    drop: 0.13,
+    trail: 1.2,
+    skim: 0.02,
+  },
+  rail: { rows: 8, columns: 6, range: 0.5, down: toRadians(38), lead: 0.55 },
+  whisker: { count: 140, life: 0.35, speed: 5.5, size: 0.05, spread: toRadians(25), reach: 0.35 },
+  looks: {
+    bow: { opacity: 0.95, scroll: 0.5, streaks: 3.5, stretch: 0.5, colour: '#f2f7f8' },
+    waterline: { opacity: 0.85, scroll: 1.2, streaks: 9, stretch: 0.35, colour: '#eef4f6' },
+    stern: { opacity: 0.7, scroll: 0.2, streaks: 2.5, stretch: 0.6, colour: '#e9f1f3' },
+    spray: { opacity: 0.5, scroll: 1.6, streaks: 7, stretch: 0.4, colour: '#f4f7f8' },
+    rail: { opacity: 0.4, scroll: 1.6, streaks: 6, stretch: 0.5, colour: '#f4f7f8' },
+  },
+  profiles: { bow: [0.04, 0.88] as const, sheet: [0.1, 0.5] as const, line: [0.0, 1.0] as const },
+  emphasis: 1.3,
+  levels: {
+    bowFloor: 0.35,
+    sternPeak: 10,
+    sternWidth: 3.5,
+    sternOn: [4, 7] as const,
+    railWidth: 3,
+    railOn: [6, 8] as const,
+    shown: 0.01,
+  },
+  tuning: {
+    hullGap: 0.004,
+    lineLift: 0.012,
+    bowStart: 0.05,
+    bowDecay: 2.4,
+    bowFlare: 0.35,
+    bowFall: 0.15,
+    bowLean: 0.6,
+    sternStart: 0.1,
+    sternTaper: 1.15,
+    sternLift: 0.015,
+    railStretch: 1.6,
+    railTrail: 0.4,
+    anchorBack: 0.4,
+    sprayOut: 0.6,
+    whiskerFan: [7.3, 13.1] as const,
+    whiskerLift: 0.3,
+    whiskerLean: 0.6,
+    whiskerGap: 0.03,
+    whiskerFall: 2,
+    whiskerAlpha: 0.55,
+  },
+} as const;
+
+export const JET_STREAM = {
+  segments: 16,
+  rings: 14,
+  exitRadius: 0.042,
+  spread: 0.09,
+  lengthPerSpeed: 0.055,
+  length: [0.35, 2.1] as const,
+  reverse: { rings: 10, radius: 0.05, length: 0.9, angle: toRadians(35), dive: 0.3 },
+  look: { opacity: 0.6, colour: '#dff3ff', streaks: 3.5 },
+  rooster: {
+    count: 640,
+    size: 0.34,
+    life: 0.8,
+    aft: 6.5,
+    up: 3.6,
+    spread: 1.1,
+    seed: 41,
+    gravity: 9.81,
+    onFrom: [15, 30] as const,
+  },
+  emphasis: 1.3,
+} as const;
+
+export const FLOW = {
+  count: 240,
+  size: 0.045,
+  radius: { intake: 0.1, duct: 0.07, nozzle: 0.035, jet: 0.05 },
+  approach: [
+    [-0.9, -0.38, 0],
+    [-1.55, -0.34, 0],
+  ] as Triple[],
+  jetLength: 1.6,
+  swirl: 2.4,
+  speeds: { intake: 2.2, duct: 3.4, pump: 9, nozzle: 16, jet: 18 },
+  slow: '#5fa8ff',
+  fast: '#ffffff',
+  playback: 0.18,
+} as const;
+
+export const WETTED_BAR = {
+  samples: 24,
+  width: 0.035,
+  tick: 0.14,
+  line: 0.012,
+  lift: 0.012,
+  offset: 0.03,
+  below: 0.006,
+  labelOut: 0.35,
+  colour: '#ffd36b',
+} as const;
+
+export const ANIMATION = {
+  impellerCap: 5,
+  blurFrom: 6,
+  blurOpacity: 0.34,
+  rpmToHertz: 1 / 60,
+  domeScan: toRadians(38),
+  domeRate: 0.28,
+  radarRate: 2.1,
+} as const;
+
+export const LABEL_SPOTS = {
+  chinesX: 1,
+  railShare: 0.5,
+  outboard: 0.04,
+  wakeBehind: 5,
+  bowOut: 0.45,
+} as const;
+
+export const MISSILE_SHAPE = {
+  rail: { length: 1.8, height: 0.05, width: 0.07 },
+  pylons: [-0.7, 0.62] as const,
+  pylonLength: 0.22,
+  pylonWidth: 0.05,
+  hanger: 0.012,
+  profile: [
+    [0, 0],
+    [0.06, 0.035],
+    [0.18, 0.068],
+    [0.32, 0.085],
+    [2.72, 0.085],
+    [2.86, 0.07],
+    [2.9, 0.062],
+  ] as readonly (readonly [number, number])[],
+  segments: 24,
+  fins: { root: 0.24, tip: 0.1, span: 0.11, from: 2.58, thickness: 0.006 },
+  canards: { root: 0.14, tip: 0.06, span: 0.07, from: 0.42, thickness: 0.005 },
+  seekerGrow: 1.02,
+} as const;
+
+export interface BeamLook {
+  startRadius: number;
+  endRadius: number;
+  opacity: number;
+  core: number;
+  glow: boolean;
+  dash: { period: number; duty: number; speed: number; logScale: number; floor: number };
+  fade: readonly [start: number, end: number];
+  segments: number;
+}
+
+export const BEAMS = {
+  up: {
+    startRadius: 0.06,
+    endRadius: 5,
+    opacity: 0.85,
+    core: 1.4,
+    glow: false,
+    dash: { period: 2.4, duty: 0.55, speed: 1.4, logScale: 22, floor: 0.3 },
+    fade: [0.003, 0.03],
+    segments: 14,
+  },
+  down: {
+    startRadius: 5,
+    endRadius: 1.2,
+    opacity: 0.7,
+    core: 1.4,
+    glow: false,
+    dash: { period: 2.4, duty: 0.55, speed: 1.4, logScale: 22, floor: 0.3 },
+    fade: [0.02, 0.01],
+    segments: 14,
+  },
+  labelShare: 0.08,
+  panelGlow: 0.55,
+} as const satisfies Record<string, BeamLook | number>;
+
+export const GHOST = {
+  colour: '#ffffff',
+  rim: 2.2,
+  base: 0.07,
+  edge: 0.6,
+  tether: { radius: 0.025, opacity: 0.55 },
+} as const;
+
+export const COMPANION = { segments: 18, exit: 0.05, stubSides: 6 } as const;

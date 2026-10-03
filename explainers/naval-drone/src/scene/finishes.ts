@@ -53,6 +53,7 @@ export const FINISHES = {
   inner: { ...matte(PAINT.inner, 0.85), side: DoubleSide },
   section: { ...matte(PAINT.section, 0.7), side: DoubleSide },
   pocket: matte(PAINT.pocket, 0.8),
+  deckPlain: matte(PAINT.deck, 0.7, 0.05),
   cap: matte(PAINT.cap, 0.55),
   louvre: matte(PAINT.louvre, 0.7),
   dome: matte(PAINT.dome, 0.45),

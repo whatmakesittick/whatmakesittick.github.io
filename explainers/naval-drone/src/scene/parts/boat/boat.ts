@@ -2,15 +2,19 @@ import { Group, Mesh } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import type { AssemblyState } from '../../../ids';
 import { applyBoatPose } from '../../pose';
-import { JET_SHAPE } from '../../constants';
+import { ANIMATION, JET_SHAPE } from '../../constants';
+import { MAX_RPM } from '../../../model/jet';
 import { FINISHES } from '../../finishes';
 import { mergeParts } from '../context';
 import type { PartContext } from '../context';
+import type { Motion } from '../water/boatMotion';
 import { wetSurface } from '../water/wetSurface';
 import { CutawaySwitch } from './cutaway';
 import { buildDeckItems } from './deckItems';
 import type { DeckItems } from './deckItems';
 import { buildFairing } from './fairing';
+import { buildInternals } from './internals';
+import type { Internals } from './internals';
 import { buildHullShell } from './hullShell';
 import type { Look, ShellGroup, ShellPiece } from './hullShell';
 import { buildWaterjet } from './waterjet';
@@ -22,7 +26,9 @@ export class BoatPart {
   readonly cutaway = new CutawaySwitch();
   readonly deck: DeckItems;
   readonly jet: Waterjet;
+  readonly internals: Internals;
   private readonly context: PartContext;
+  private clock = 0;
 
   constructor(context: PartContext) {
     this.context = context;
@@ -30,7 +36,8 @@ export class BoatPart {
     this.buildShell();
     this.deck = buildDeckItems(context);
     this.jet = buildWaterjet(context, this.cutaway);
-    this.body.add(this.deck.object, this.jet.object);
+    this.internals = buildInternals(context);
+    this.body.add(this.deck.object, this.jet.object, this.cutaway.opened(this.internals.object));
   }
 
   private finish(look: Look): MaterialFinish {
@@ -84,8 +91,24 @@ export class BoatPart {
     );
   }
 
+  setMotion(motion: Motion): void {
+    this.body.position.y = motion.heave;
+    this.body.rotation.set(motion.roll, 0, motion.pitch, 'ZXY');
+  }
+
+  advance(deltaSeconds: number, state: AssemblyState): void {
+    this.clock += deltaSeconds;
+    const hertz = state.jet.impellerShare * MAX_RPM * ANIMATION.rpmToHertz;
+    const shown = Math.min(hertz, ANIMATION.impellerCap);
+    this.jet.impeller.rotation.x += Math.PI * 2 * shown * deltaSeconds;
+    this.jet.blur.visible = hertz > ANIMATION.blurFrom;
+    this.deck.dome.rotation.y = ANIMATION.domeScan * Math.sin(this.clock * ANIMATION.domeRate);
+  }
+
   setState(state: AssemblyState): void {
     applyBoatPose(this.object, state.boat, state.planing);
+    const hertz = state.jet.impellerShare * MAX_RPM * ANIMATION.rpmToHertz;
+    this.jet.blur.visible = hertz > ANIMATION.blurFrom;
     this.cutaway.set(state.view.cutaway);
     this.jet.steering.rotation.y = state.jet.nozzleAngle;
     this.jet.bucket.rotation.z = JET_SHAPE.bucket.stow * (1 - state.jet.bucket);

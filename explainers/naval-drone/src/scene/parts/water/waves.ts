@@ -67,7 +67,7 @@ vec3 seaWave(vec2 at, float fade) {
   for (int i = 0; i < ${WAVES.components.length}; i++) {
     vec4 w = uWaves[i];
     float k = length(w.xy);
-    float keep = 1.0 - smoothstep(0.18, 0.4, fade * k);
+    float keep = 1.0 - smoothstep(1.0, 2.2, fade * k);
     float phase = dot(w.xy, p) - w.z * uSeaTime + float(i) * ${WAVES.phaseStep.toFixed(4)};
     float a = w.w * keep;
     float second = 0.5 * k * a * a;
