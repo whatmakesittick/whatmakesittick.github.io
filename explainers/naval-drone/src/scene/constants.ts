@@ -479,7 +479,7 @@ export const HULL_WATER = {
     height: 0.34,
     peakAt: 0.22,
     curl: 0.55,
-    spread: 2.6,
+    spread: 1.8,
     flare: toRadians(18),
     onFrom: [0.5, 4] as const,
     offFrom: [12.5, 16] as const,
@@ -517,7 +517,7 @@ export const HULL_WATER = {
     rail: { opacity: 0.4, scroll: 1.6, streaks: 6, stretch: 0.5, colour: '#f4f7f8' },
   },
   profiles: {
-    bow: [0.04, 0.88] as const,
+    bow: [0.04, 0.5] as const,
     sheet: [0.1, 0.5] as const,
     line: [0.0, 1.0] as const,
     mound: [0.25, 0.55] as const,

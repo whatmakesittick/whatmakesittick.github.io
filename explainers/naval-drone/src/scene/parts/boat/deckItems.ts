@@ -218,7 +218,7 @@ function domeParts(context: PartContext): { dome: Group; ring: Mesh; lens: Objec
       context,
       patch(DOME.radius * frame.lift, frame.azimuth, frame.from, frame.to),
       'cameraDome',
-      FINISHES.ring,
+      FINISHES.bezel,
     ),
     windowMesh,
   );
@@ -260,7 +260,7 @@ function bowCamera(context: PartContext): Group {
   const group = new Group();
   group.add(
     partMesh(context, mergeParts([shell, front]), 'bowCamera', FINISHES.deckPlain),
-    partMesh(context, frame, 'bowCamera', FINISHES.ring),
+    partMesh(context, frame, 'bowCamera', FINISHES.bezel),
     partMesh(context, glass, 'bowCamera', FINISHES.glass),
   );
   return group;

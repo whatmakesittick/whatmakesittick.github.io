@@ -10,13 +10,13 @@ import {
   Vector2,
   Vector4,
 } from 'three';
-import type { Camera, Object3D } from 'three';
+import type { Camera, Object3D, Texture } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { LIGHT_RIG, SEA } from '../../constants';
 import { registered } from '../context';
 import type { PartContext } from '../context';
 import { HULL_MASK_GLSL, hullPlanRange, hullPlanTexture } from './hullPlan';
-import { foamTexture, rippleTexture } from './seaMaps';
+import { rippleTexture } from './seaMaps';
 import { SKY_GLSL, skyUniforms } from './skyShade';
 import { SECTION_GLSL, sectionUniforms } from './sectionMask';
 import type { SectionUniforms } from './sectionMask';
@@ -95,7 +95,7 @@ void main() {
   float fine = texture2D(uFoamMap, base * uFoamShape.x * 11.0 + vec2(0.71, 0.13)).r;
   float cap = smoothstep(uFoamShape.y, uFoamShape.z, crest + (noise - 0.5) * 0.45);
   float lace = smoothstep(0.5, 0.56, streaks * 0.55 + fine * 0.45 + cap * 0.2);
-  float foam = cap * lace * uFoamLevel * (1.0 - smoothstep(150.0, 1200.0, dist));
+  float foam = cap * lace * uFoamLevel * (1.0 - smoothstep(60.0, 450.0, dist));
   colour = mix(colour, uFoamColour * (0.72 + 0.28 * sunSide), foam);
   gl_FragColor = vec4(colour, 1.0);
   #include <colorspace_fragment>
@@ -145,7 +145,7 @@ export class SeaPart {
   private readonly material: ShaderMaterial;
   private readonly boatInverse = new Matrix4();
 
-  constructor(context: PartContext) {
+  constructor(context: PartContext, foamMap: Texture) {
     const { colours, ripples, glitter, foam, fresnel } = SEA;
     this.section = sectionUniforms();
     const { tracker } = context;
@@ -169,7 +169,7 @@ export class SeaPart {
           uHullPlanRange: { value: hullPlanRange() },
           uHullMargin: { value: SEA.hullMargin },
           uRipples: { value: tracker.track(rippleTexture()) },
-          uFoamMap: { value: tracker.track(foamTexture()) },
+          uFoamMap: { value: foamMap },
           uDeep: { value: new Color(colours.deep) },
           uLit: { value: new Color(colours.lit) },
           uScatter: { value: new Color(colours.scatter) },

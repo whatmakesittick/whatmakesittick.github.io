@@ -38,6 +38,7 @@ export const PAINT = {
 } as const;
 
 const PAINT_REFLECTION = 0.9;
+const DECAL = { polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -2 } as const;
 const METAL_REFLECTION = 1.6;
 const GLASS_REFLECTION = 2.4;
 
@@ -58,7 +59,15 @@ export const FINISHES = {
   louvre: matte(PAINT.louvre, 0.7),
   dome: matte(PAINT.dome, 0.45),
   ring: matte(PAINT.ring, 0.6, 0.2),
-  glass: { color: PAINT.glass, metalness: 0.3, roughness: 0.06, envMapIntensity: GLASS_REFLECTION },
+  bezel: { ...matte(PAINT.ring, 0.6, 0.2), ...DECAL },
+  glass: {
+    color: PAINT.glass,
+    metalness: 0.3,
+    roughness: 0.06,
+    envMapIntensity: GLASS_REFLECTION,
+    ...DECAL,
+    polygonOffsetUnits: DECAL.polygonOffsetUnits * 2,
+  },
   handle: metal(PAINT.steel, 0.3),
   foam: { ...matte(PAINT.foam, 0.95), side: DoubleSide },
   tub: { ...metal(PAINT.tub, 0.42, 0.75), side: DoubleSide },
