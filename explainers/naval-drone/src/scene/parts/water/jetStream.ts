@@ -113,6 +113,7 @@ export class JetStreamPart {
   readonly rooster: PointCloud;
   readonly anchor = new Group();
   private readonly material: ShaderMaterial;
+  private readonly reverseMaterial: ShaderMaterial;
   private readonly columnGeometry: BufferGeometry;
   private readonly reverseGeometries: BufferGeometry[];
   private readonly water = new LocalWater();
@@ -141,6 +142,10 @@ export class JetStreamPart {
         toneMapped: false,
       }),
     );
+    this.reverseMaterial = registered(context, 'jetStream', this.material.clone());
+    this.reverseMaterial.uniforms.uFoamMap.value.dispose();
+    this.reverseMaterial.uniforms.uFoamMap.value = foamMap;
+    this.reverseMaterial.uniforms.uTime = this.material.uniforms.uTime;
     this.columnGeometry = context.tracker.track(tubeGrid(rings, segments));
     this.column = new Mesh(this.columnGeometry, this.material);
     this.column.frustumCulled = false;
@@ -150,7 +155,7 @@ export class JetStreamPart {
       context.tracker.track(tubeGrid(reverse.rings, segments)),
     );
     this.reverseGeometries.forEach((geometry) => {
-      const mesh = new Mesh(geometry, this.material);
+      const mesh = new Mesh(geometry, this.reverseMaterial);
       mesh.frustumCulled = false;
       this.reverse.add(mesh);
     });
@@ -181,9 +186,12 @@ export class JetStreamPart {
     this.column.visible = flowing && !this.reverseOn;
     this.reverse.visible = flowing && this.reverseOn;
     const uniforms = this.material.uniforms;
-    (uniforms.uFlow.value as number[])[0] = jet.jetSpeed / Math.max(length, TUNING.minLength);
-    (uniforms.uFlow.value as number[])[2] =
-      JET_STREAM.look.opacity * emphasis * smoothstep(jet.throttle, 0, TUNING.throttleFade);
+    const flow = uniforms.uFlow.value as number[];
+    flow[0] = jet.jetSpeed / Math.max(length, TUNING.minLength);
+    flow[2] = JET_STREAM.look.opacity * emphasis * smoothstep(jet.throttle, 0, TUNING.throttleFade);
+    const reverse = this.reverseMaterial.uniforms.uFlow.value as number[];
+    reverse[0] = flow[0];
+    reverse[2] = flow[2] * JET_STREAM.reverse.fade;
     const drop = (share: number) =>
       0.5 * GRAVITY * ((share * length) / Math.max(jet.jetSpeed, 1)) ** 2;
     shapeTube(
