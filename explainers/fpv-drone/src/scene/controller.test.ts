@@ -94,6 +94,16 @@ describe('fpv controller', () => {
     expect(rig.jumpTo).toHaveBeenCalledTimes(1);
   });
 
+  it('knows when the camera rides in the nose of the drone', () => {
+    const { rig, shell } = fakeShell();
+    const controller = new FpvController(shell);
+    expect(controller.ridesTheCamera()).toBe(false);
+    controller.build(state());
+    expect(controller.ridesTheCamera()).toBe(false);
+    rig.camera.position.set(0, 0, 0.5);
+    expect(controller.ridesTheCamera()).toBe(true);
+  });
+
   it('hands the camera distance to the assembly each frame', () => {
     const { shell } = fakeShell();
     const controller = new FpvController(shell);

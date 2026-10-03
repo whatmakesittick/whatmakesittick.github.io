@@ -18,7 +18,14 @@ describe('fpv store', () => {
       packetRate: 250,
       speedster: 'longRange',
       view: { links: true, track: true, arrows: false, labels: true },
+      throughGoggles: false,
     });
+  });
+
+  it('remembers whether the camera rides in the goggles', () => {
+    const store = createFpvStore();
+    store.getState().setThroughGoggles(true);
+    expect(store.getState().throughGoggles).toBe(true);
   });
 
   it('opens with the view the overview chapter asks for', () => {

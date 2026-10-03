@@ -30,11 +30,20 @@ describe('goggles feed', () => {
     expect(feed()?.dataset.active).toBe('false');
   });
 
-  it('marks the picture as the goggles view in the chapter flown from the camera', () => {
+  it('marks the picture as the goggles view once the camera rides in the drone', () => {
     store.getState().applyPreset('limits');
+    expect(feed()?.dataset.active).toBe('false');
+    store.getState().setThroughGoggles(true);
     expect(feed()?.dataset.active).toBe('true');
     expect(feed()?.textContent).toBe(`${en.goggles.caption}${en.controls.videoOptions.analogue}`);
     store.getState().applyPreset('power');
+    expect(feed()?.dataset.active).toBe('false');
+  });
+
+  it('drops the mark when the reader pulls the camera out of the drone', () => {
+    store.getState().applyPreset('limits');
+    store.getState().setThroughGoggles(true);
+    store.getState().setThroughGoggles(false);
     expect(feed()?.dataset.active).toBe('false');
   });
 

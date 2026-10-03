@@ -35,6 +35,7 @@ export interface FpvFields {
   speedster: SpeedsterId;
   view: ViewState;
   preset: PresetId;
+  throughGoggles: boolean;
 }
 
 export interface FpvOwnActions {
@@ -46,6 +47,7 @@ export interface FpvOwnActions {
   setPacketRate(rate: PacketRate): void;
   setSpeedster(speedster: SpeedsterId): void;
   seekMoment(moment: MomentId): void;
+  setThroughGoggles(through: boolean): void;
 }
 
 export type FpvState = PlaybackState & FpvFields;
@@ -91,6 +93,7 @@ export function createFpvStore(overrides: Partial<FpvStoreState> = {}): FpvStore
       extend: (set, get) => ({
         ...CHAPTER_CONTROL_DEFAULTS,
         video: DEFAULT_VIDEO,
+        throughGoggles: false,
         setVideo: (video) => set({ video }),
         setMove: (move) => set({ move }),
         setTilt: (degrees) => set({ tilt: clamp(degrees, TILT_RANGE.min, TILT_RANGE.max) }),
@@ -98,6 +101,7 @@ export function createFpvStore(overrides: Partial<FpvStoreState> = {}): FpvStore
         setPayload: (grams) => set({ payload: clamp(grams, PAYLOAD_RANGE.min, PAYLOAD_RANGE.max) }),
         setPacketRate: (packetRate) => set({ packetRate }),
         setSpeedster: (speedster) => set({ speedster }),
+        setThroughGoggles: (throughGoggles) => set({ throughGoggles }),
         seekMoment: (moment) => {
           get().pause();
           get().setPhase(MOMENTS[moment]);

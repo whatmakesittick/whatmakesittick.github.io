@@ -3,7 +3,7 @@ import type { Disposer } from '@core/ui/disposers';
 import { watchShallowLocalized } from '@core/ui/subscribe';
 import type { CameraView, VideoId } from '../ids';
 import { PRESETS } from '../state';
-import type { FpvStore } from '../state';
+import type { FpvStore, FpvStoreState } from '../state';
 
 const SCENE_SELECTOR = '#scene';
 const GOGGLES_CAMERA: CameraView = 'fpv';
@@ -29,6 +29,10 @@ function createFeed(document: Document): Feed {
   return { root, caption, video };
 }
 
+function isThroughGoggles(state: FpvStoreState): boolean {
+  return state.throughGoggles && PRESETS[state.preset].camera === GOGGLES_CAMERA;
+}
+
 function show(feed: Feed, active: boolean, video: VideoId): void {
   feed.root.dataset.active = String(active);
   feed.root.dataset.video = video;
@@ -43,7 +47,7 @@ export function mountGogglesFeed(root: Document, store: FpvStore): Disposer {
   scene.append(feed.root);
   const stop = watchShallowLocalized(
     store,
-    (state) => [PRESETS[state.preset].camera === GOGGLES_CAMERA, state.video] as const,
+    (state) => [isThroughGoggles(state), state.video] as const,
     ([active, video]) => show(feed, active, video),
   );
   return () => {

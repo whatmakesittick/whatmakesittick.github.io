@@ -451,6 +451,8 @@ export const WIND_STREAKS = {
   seed: 71,
 } as const;
 
+export const GOGGLES_EYE_REACH = 1;
+
 export const SCENE_LIMITS = {
   cameraNear: 0.2,
   cameraFar: 14000,

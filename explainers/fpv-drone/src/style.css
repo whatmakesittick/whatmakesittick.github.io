@@ -173,20 +173,20 @@
 }
 
 .goggles-feed {
-  --goggles-mark: rgb(255 255 255 / 0.75);
-  --goggles-mark-length: 1.6rem;
-  --goggles-mark-width: 2px;
-  --goggles-shade: rgb(0 0 0 / 0.5);
+  --goggles-frame: calc(var(--stage-inset) * 0.75);
+  --goggles-surround: rgb(4 6 8 / 0.62);
+  --goggles-rim: rgb(255 255 255 / 0.7);
+  --goggles-vignette: rgb(0 0 0 / 0.45);
   --goggles-scanline: rgb(255 255 255 / 0.06);
   --goggles-live: #ff5a4d;
 
   position: absolute;
   inset: 0;
   z-index: 2;
+  overflow: hidden;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;
-  background: radial-gradient(ellipse at center, transparent 55%, var(--goggles-shade) 100%);
 }
 
 .goggles-feed[data-active='true'] {
@@ -207,39 +207,30 @@
 .goggles-feed::after {
   content: '';
   position: absolute;
-  inset: var(--stage-inset) var(--scene-safe-right, var(--stage-inset))
-    var(--scene-safe-bottom, var(--stage-inset)) var(--stage-inset);
-  background:
-    linear-gradient(var(--goggles-mark), var(--goggles-mark)) top left / var(--goggles-mark-length)
-      var(--goggles-mark-width) no-repeat,
-    linear-gradient(var(--goggles-mark), var(--goggles-mark)) top left / var(--goggles-mark-width)
-      var(--goggles-mark-length) no-repeat,
-    linear-gradient(var(--goggles-mark), var(--goggles-mark)) top right / var(--goggles-mark-length)
-      var(--goggles-mark-width) no-repeat,
-    linear-gradient(var(--goggles-mark), var(--goggles-mark)) top right / var(--goggles-mark-width)
-      var(--goggles-mark-length) no-repeat,
-    linear-gradient(var(--goggles-mark), var(--goggles-mark)) bottom left /
-      var(--goggles-mark-length) var(--goggles-mark-width) no-repeat,
-    linear-gradient(var(--goggles-mark), var(--goggles-mark)) bottom left /
-      var(--goggles-mark-width) var(--goggles-mark-length) no-repeat,
-    linear-gradient(var(--goggles-mark), var(--goggles-mark)) bottom right /
-      var(--goggles-mark-length) var(--goggles-mark-width) no-repeat,
-    linear-gradient(var(--goggles-mark), var(--goggles-mark)) bottom right /
-      var(--goggles-mark-width) var(--goggles-mark-length) no-repeat;
+  inset: var(--goggles-frame) var(--goggles-frame) var(--scene-safe-bottom, var(--goggles-frame))
+    var(--goggles-frame);
+  border: 2px solid var(--goggles-rim);
+  border-radius: 1.75rem;
+  box-shadow:
+    0 0 0 100vmax var(--goggles-surround),
+    inset 0 0 7rem var(--goggles-vignette);
 }
 
 .goggles-feed__label {
   position: absolute;
-  top: calc(var(--stage-inset) + 0.9rem);
-  left: calc(var(--stage-inset) + 1rem);
+  top: calc(var(--goggles-frame) + 0.8rem);
+  left: calc(var(--goggles-frame) + 0.9rem);
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin: 0;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--goggles-surround);
   color: #fff;
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  text-shadow: 0 1px 2px rgb(0 0 0 / 0.7);
+  font-weight: 500;
 }
 
 .goggles-feed__label::before {
