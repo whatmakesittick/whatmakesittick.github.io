@@ -16,6 +16,7 @@ import {
   formatWaves,
 } from './format';
 import { HorizonView } from './horizonView';
+import { inChapter } from './actions';
 
 type SelectedRadar = readonly [radarHeight: number, seaState: SeaStateId];
 
@@ -28,7 +29,7 @@ export function mountHorizonControl(root: Document, store: NavalDroneStore): Dis
       select: (state): SelectedRadar => [state.radarHeight, state.seaState],
       value: ([radarHeight]) => radarHeight,
       format: ([radarHeight]) => formatMetres(radarHeight),
-      set: (state, radarHeight) => state.setRadarHeight(radarHeight),
+      set: inChapter('horizon', (state, radarHeight: number) => state.setRadarHeight(radarHeight)),
       readouts: {
         'horizon-radar': ([radarHeight]) => formatKm(radarLineOfSightKm(radarHeight)),
         'horizon-minutes': ([radarHeight]) =>

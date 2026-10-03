@@ -11,6 +11,7 @@ import {
   formatMode,
   formatWetted,
 } from './format';
+import { inChapter } from './actions';
 
 type SelectedSpeed = readonly [knots: number];
 
@@ -25,7 +26,7 @@ export function mountHullControl(root: Document, store: NavalDroneStore): Dispos
     select: (state): SelectedSpeed => [trialKnotsOf(followedKnots(state))],
     value: ([knots]) => knots,
     format: ([knots]) => formatBoatSpeed(knots),
-    set: (state, knots) => state.setTrialKnots(knots),
+    set: inChapter('hull', (state, knots: number) => state.setTrialKnots(knots)),
     readouts: {
       'hull-mode': (selected) => formatMode(planingOf(selected).mode),
       'hull-trim': (selected) => formatDegrees(planingOf(selected).trim),

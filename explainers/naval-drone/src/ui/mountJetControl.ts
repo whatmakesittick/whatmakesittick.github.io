@@ -17,6 +17,7 @@ import {
   formatThrust,
   shownKnots,
 } from './format';
+import { inChapter } from './actions';
 
 type SelectedThrottle = readonly [
   percent: number,
@@ -42,7 +43,7 @@ export function mountJetControl(root: Document, store: NavalDroneStore): Dispose
       ],
       value: ([percent]) => percent,
       format: ([percent]) => formatPercent(throttleShareOf(percent)),
-      set: (state, percent) => state.setThrottle(percent),
+      set: inChapter('jet', (state, percent: number) => state.setThrottle(percent)),
       refreshIntervalMs: TEXT_REFRESH_INTERVAL_MS,
       readouts: {
         'jet-boat': ([, helm, , knots]) => formatBoatOrBacking(knots, helm),

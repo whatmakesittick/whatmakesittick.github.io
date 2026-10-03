@@ -218,7 +218,8 @@ describe('chapter widgets', () => {
     expect(readout('horizon-radar')).toBe(fill(units.km, { value: '12.1' }));
     expect(readout('horizon-camera')).toBe(fill(horizon.camera, { km: '3.2', m: '0.7' }));
     expect(readout('horizon-detect')).toBe(fill(horizon.detect, { km: '9.3', min: '7.1' }));
-    expect(readout('horizon-hidden')).toBe(horizon.hidden.smooth);
+    expect(store.getState().preset).toBe('horizon');
+    expect(readout('horizon-hidden')).toBe(horizon.hidden.slight);
     click('seaState', 'rough');
     expect(pressed('seaState', 'rough')).toBe('true');
     expect(readout('horizon-detect')).toBe(horizon.detectBeyond);

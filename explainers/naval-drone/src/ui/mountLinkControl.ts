@@ -14,6 +14,7 @@ import {
   formatLinkTop,
   shownKnots,
 } from './format';
+import { inChapter } from './actions';
 
 type SelectedDelay = readonly [delayMs: number, mode: LinkMode, knots: number];
 
@@ -29,7 +30,7 @@ export function mountLinkControl(root: Document, store: NavalDroneStore): Dispos
       ],
       value: ([delayMs]) => delayMs,
       format: ([delayMs]) => formatDelay(delayMs),
-      set: (state, delayMs) => state.setVideoDelay(delayMs),
+      set: inChapter('link', (state, delayMs: number) => state.setVideoDelay(delayMs)),
       readouts: {
         'link-now': ([delayMs, mode, knots]) => formatLinkNow(mode, delayMs, knots),
         'link-top': ([delayMs]) => formatLinkTop(delayMs),

@@ -51,22 +51,31 @@ describe('chapter actions', () => {
     expect(CHAPTER_ACTIONS.speedMark.current?.(between)).toBe('');
   });
 
-  it('switches the helm, the link, the sea and the deck fit', () => {
-    const store = createNavalDroneStore();
-    CHAPTER_ACTIONS.helm.run(store.getState(), 'reverse');
-    CHAPTER_ACTIONS.linkMode.run(store.getState(), 'backup');
-    CHAPTER_ACTIONS.seaState.run(store.getState(), 'rough');
-    CHAPTER_ACTIONS.fit.run(store.getState(), 'missile');
-    expect(store.getState()).toMatchObject({
-      helm: 'reverse',
-      linkMode: 'backup',
-      seaState: 'rough',
-      fit: 'missile',
+  it('switches the helm, the link, the sea and the deck fit in their own chapters', () => {
+    const cases = [
+      ['helm', 'reverse', 'jet'],
+      ['linkMode', 'backup', 'link'],
+      ['seaState', 'rough', 'horizon'],
+      ['fit', 'missile', 'fleet'],
+    ] as const;
+    cases.forEach(([action, value, preset]) => {
+      const store = createNavalDroneStore();
+      CHAPTER_ACTIONS[action].run(store.getState(), value);
+      expect(store.getState().preset, action).toBe(preset);
+      expect(store.getState()[action], action).toBe(value);
+      expect(CHAPTER_ACTIONS[action].current?.(store.getState()), action).toBe(value);
     });
-    expect(CHAPTER_ACTIONS.helm.current?.(store.getState())).toBe('reverse');
-    expect(CHAPTER_ACTIONS.linkMode.current?.(store.getState())).toBe('backup');
-    expect(CHAPTER_ACTIONS.seaState.current?.(store.getState())).toBe('rough');
-    expect(CHAPTER_ACTIONS.fit.current?.(store.getState())).toBe('missile');
-    expect(() => CHAPTER_ACTIONS.seaState.run(store.getState(), 'storm')).toThrow();
+    expect(() =>
+      CHAPTER_ACTIONS.seaState.run(createNavalDroneStore().getState(), 'storm'),
+    ).toThrow();
+  });
+
+  it('brings back the hull chapter when its speed marks are used after the jet took over', () => {
+    const store = createNavalDroneStore();
+    store.getState().applyPreset('jet');
+    CHAPTER_ACTIONS.speedMark.run(store.getState(), 'hullSpeed');
+    expect(store.getState()).toMatchObject({ preset: 'hull', trialKnots: SPEED_MARKS.hullSpeed });
+    CHAPTER_ACTIONS.speedMark.run(store.getState(), 'planing');
+    expect(store.getState()).toMatchObject({ preset: 'hull', trialKnots: SPEED_MARKS.planing });
   });
 });
