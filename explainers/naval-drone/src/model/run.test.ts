@@ -13,6 +13,7 @@ import {
   RUN_SECONDS,
   RUN_STEER,
   SHIP_CENTRE,
+  SHIP_STANDOFF_M,
   SHIP_HEADING,
   TURN_END_DISTANCE,
   TURN_END_TIME,
@@ -72,7 +73,7 @@ describe('run timeline', () => {
     expect(distanceAt(HELD_PHASE)).toBeCloseTo(399.2, 1);
     expect(distanceAt(RUN_SECONDS) - distanceAt(PHASE_RANGES.arrival.start)).toBeCloseTo(172.9, 0);
     expect(timeAtDistance(distanceAt(50))).toBeCloseTo(50, 6);
-    expect(distanceToShip(RUN_SECONDS)).toBe(0);
+    expect(distanceToShip(RUN_SECONDS)).toBe(SHIP_STANDOFF_M);
   });
 });
 
@@ -96,11 +97,11 @@ describe('route and ship', () => {
     expect(boatAt(HELD_PHASE).knots).toBe(BOAT.cruiseKnots);
   });
 
-  it('puts the ship side square across the run, one bow length past the route end', () => {
+  it('puts the ship side square across the run, a short gap past the bow at the route end', () => {
     const along =
       (SHIP_CENTRE[0] - ROUTE_END[0]) * Math.cos(FINAL_HEADING) +
       (SHIP_CENTRE[2] - ROUTE_END[2]) * Math.sin(FINAL_HEADING);
-    expect(along - SHIP.beam / 2).toBeCloseTo(BOAT.halfLength, 9);
+    expect(along - SHIP.beam / 2).toBeCloseTo(BOAT.halfLength + SHIP_STANDOFF_M, 9);
     expect(SHIP_HEADING - FINAL_HEADING).toBeCloseTo(Math.PI / 2, 9);
   });
 

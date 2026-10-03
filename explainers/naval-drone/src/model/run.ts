@@ -86,7 +86,8 @@ export const TURN_END_TIME = timeAtDistance(TURN_END_DISTANCE);
 
 export const ROUTE_END: Point = [ROUTE.end.x, 0, ROUTE.end.z];
 
-const SHIP_SIDE_GAP = BOAT.halfLength + SHIP.beam / 2;
+export const SHIP_STANDOFF_M = 4;
+const SHIP_SIDE_GAP = BOAT.halfLength + SHIP_STANDOFF_M + SHIP.beam / 2;
 
 export const SHIP_CENTRE: Point = [
   ROUTE_END[0] + SHIP_SIDE_GAP * Math.cos(FINAL_HEADING),
@@ -123,7 +124,7 @@ export function steerAt(t: number): number {
 }
 
 export function distanceToShip(t: number): number {
-  return RUN_DISTANCE - distanceAt(t);
+  return RUN_DISTANCE - distanceAt(t) + SHIP_STANDOFF_M;
 }
 
 export function phaseAt(t: number): PhaseId {
