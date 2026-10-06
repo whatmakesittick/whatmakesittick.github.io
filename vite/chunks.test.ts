@@ -1,12 +1,25 @@
 import { describe, expect, it } from 'vitest';
-import { dependsOn } from './chunks.ts';
+import { dependsOn, isExplainerOnlyPackage } from './chunks.ts';
 import type { ModuleGraph } from './chunks.ts';
 
 const THREE = /node_modules\/three\//;
 
-function graph(imports: Record<string, string[]>): ModuleGraph {
+type Imports = Record<string, string[]>;
+
+function importersOf(id: string, imports: Imports): string[] {
+  return Object.keys(imports).filter((importer) => imports[importer].includes(id));
+}
+
+function graph(imports: Imports, dynamicImports: Imports = {}): ModuleGraph {
   return {
-    getModuleInfo: (id) => (id in imports ? { importedIds: imports[id] } : null),
+    getModuleInfo: (id) =>
+      id in imports
+        ? {
+            importedIds: imports[id],
+            importers: importersOf(id, imports),
+            dynamicImporters: importersOf(id, dynamicImports),
+          }
+        : null,
   };
 }
 
@@ -32,5 +45,66 @@ describe('dependsOn', () => {
 
   it('treats a module the graph does not know as having no imports', () => {
     expect(dependsOn('/src/site/main.ts', THREE, modules)).toBe(false);
+  });
+});
+
+const packages = graph(
+  {
+    '/src/core/mount.ts': ['/node_modules/i18next/index.js'],
+    '/explainers/mri-scanner/src/model/kspace.ts': ['/node_modules/fft.js/lib/fft.js'],
+    '/explainers/mri-scanner/src/model/image.ts': [
+      '/node_modules/fft.js/lib/fft.js',
+      '/node_modules/wrapper/index.js',
+    ],
+    '/explainers/mri-scanner/src/scene/coil.ts': ['/explainers/mri-scanner/src/model/image.ts'],
+    '/explainers/naval-drone/src/model/hull.ts': ['/node_modules/both/index.js'],
+    '/explainers/sundial/src/model/sun.ts': [
+      '/node_modules/both/index.js',
+      '/node_modules/i18next/index.js',
+    ],
+    '/explainers/sundial/src/scene/sky.ts': [],
+    '/node_modules/wrapper/index.js': ['/node_modules/inner/index.js'],
+    '/node_modules/inner/index.js': ['/node_modules/wrapper/index.js'],
+    '/node_modules/fft.js/lib/fft.js': [],
+    '/node_modules/both/index.js': [],
+    '/node_modules/i18next/index.js': [],
+    '/node_modules/lazy/index.js': [],
+    '/node_modules/lazy-core/index.js': [],
+    '/node_modules/orphan/index.js': [],
+  },
+  {
+    '/explainers/sundial/src/scene/sky.ts': [
+      '/node_modules/lazy/index.js',
+      '/node_modules/lazy-core/index.js',
+    ],
+    '/src/core/mount.ts': ['/node_modules/lazy-core/index.js'],
+  },
+);
+
+describe('isExplainerOnlyPackage', () => {
+  it('is true for a package that only one explainer imports, from any of its files', () => {
+    expect(isExplainerOnlyPackage('/node_modules/fft.js/lib/fft.js', packages)).toBe(true);
+  });
+
+  it('follows imports through other packages, cycles included', () => {
+    expect(isExplainerOnlyPackage('/node_modules/inner/index.js', packages)).toBe(true);
+  });
+
+  it('counts dynamic imports as reaching the package', () => {
+    expect(isExplainerOnlyPackage('/node_modules/lazy/index.js', packages)).toBe(true);
+    expect(isExplainerOnlyPackage('/node_modules/lazy-core/index.js', packages)).toBe(false);
+  });
+
+  it('is false for a package that two explainers or the core import', () => {
+    expect(isExplainerOnlyPackage('/node_modules/both/index.js', packages)).toBe(false);
+    expect(isExplainerOnlyPackage('/node_modules/i18next/index.js', packages)).toBe(false);
+  });
+
+  it('is false for project code and for a package nothing imports', () => {
+    expect(isExplainerOnlyPackage('/explainers/mri-scanner/src/model/image.ts', packages)).toBe(
+      false,
+    );
+    expect(isExplainerOnlyPackage('/node_modules/orphan/index.js', packages)).toBe(false);
+    expect(isExplainerOnlyPackage('/node_modules/unknown/index.js', packages)).toBe(false);
   });
 });

@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
-import { dependsOn } from './vite/chunks.ts';
+import { dependsOn, isExplainerOnlyPackage } from './vite/chunks.ts';
 import type { ModuleGraph } from './vite/chunks.ts';
 import { explainerPages } from './vite/explainerPages.ts';
 import { siteCheck } from './vite/siteCheckPlugin.ts';
@@ -31,12 +31,18 @@ export default defineConfig({
           groups: [
             { name: 'three', test: THREE_MODULES },
             {
-              name: (id, context) => (needsScene(id, context) ? null : 'shared'),
+              name: (id, context) =>
+                isExplainerOnlyPackage(id, context) || needsScene(id, context) ? null : 'shared',
               debugName: 'shared',
               test: SHARED_MODULES,
               minShareCount: 2,
             },
-            { name: 'scene', test: SHARED_MODULES, minShareCount: 2 },
+            {
+              name: (id, context) => (isExplainerOnlyPackage(id, context) ? null : 'scene'),
+              debugName: 'scene',
+              test: SHARED_MODULES,
+              minShareCount: 2,
+            },
           ],
         },
       },
