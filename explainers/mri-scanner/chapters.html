@@ -4,31 +4,31 @@
     A tunnel that listens to your body
   </h2>
   <p data-i18n-html="sections.overview.p1">
-    This is an <strong>MRI scanner</strong> with a 1.5 tesla magnet. The
-    <strong>tesla</strong> measures how strong a magnetic field is. You lie on the
-    <strong>table</strong>, and it slides you into the <strong>bore</strong>, a tunnel about 70 cm
-    wide. The machine around it is about 1.6 to 1.9 m long and weighs 3 to 6 tonnes.
+    This is an <strong>MRI scanner</strong> with a 1.5 tesla magnet. MRI stands for magnetic
+    resonance imaging. The <strong>tesla</strong> measures how strong a magnetic field is. You lie
+    on the <strong>table</strong>, and it slides you into the <strong>bore</strong>, a tunnel about
+    70 cm wide. The machine around it is about 1.6 to 1.9 m long and weighs 3 to 6 tonnes.
   </p>
   <p data-i18n-html="sections.overview.p2">
     For a brain scan, a <strong>head coil</strong> sits around your head like a cage. It is an
     antenna with 20 to 64 small receivers that listen for a faint radio echo from your body. The
-    room is lined with copper sheet to keep outside radio out, so it cannot drown that echo. There
-    are no X-rays here. A radio wave at this pitch carries about 50 million times too little energy
-    to knock an electron out of an atom.
+    room is lined with copper sheet. It keeps outside radio waves from drowning that echo. There are
+    no X-rays here. The scanner's radio waves carry about 50 million times too little energy to
+    knock an electron out of an atom.
   </p>
   <p data-i18n-html="sections.overview.p3">
-    Under the white <strong>cover</strong>, layers sit one inside the other like rings: the magnet
-    in its cold jacket, three <strong>gradient coils</strong> and a radio antenna called the
-    <strong>body coil</strong>. Switch on the cutaway (C) to see them. The next chapters take them
-    one at a time.
+    Under the white <strong>cover</strong>, layers sit one inside the other like rings. From the
+    outside in, you find the magnet in its cold jacket, three <strong>gradient coils</strong> and
+    the <strong>body coil</strong>, a radio antenna. Switch on the cutaway (C) to see them. The next
+    chapters take them one at a time.
   </p>
   <p data-i18n-html="sections.overview.p4">
     The model follows one <strong>repetition</strong>, the short cycle a scan runs again and again
     to build one picture. In this model one repetition lasts 0.5 to 2.5 s of real time, but the
-    radio pulses inside it take only milliseconds. So the timeline is stretched: the pulses fill
-    most of the loop and the long rest is squeezed. The timeline names the step, and the live
-    readings show the real time. A whole head exam, with many pictures, takes about 30 to 45
-    minutes.
+    radio pulses inside it take only milliseconds. So the timeline is not to scale. The few
+    milliseconds of pulses and echo fill about two thirds of it. The long rest is squeezed into the
+    last third. The timeline names the step, and the live readings show the real time. A whole head
+    exam, with many pictures, takes about 30 to 45 minutes.
   </p>
   <dl class="readouts">
     <div>
@@ -53,25 +53,26 @@
     less than a tenth of a percent in a year.
   </p>
   <p data-i18n-html="sections.magnet.p2">
-    To stay superconducting, the coils sit in <strong>liquid helium</strong> at 4.2 K, about −269
-    °C. That is only about 1.5 K warmer than deep space. A classic magnet holds about 1,500 litres
-    of it, while newer sealed magnets need just 7. A heat shield and a vacuum around the helium
-    vessel work like a thermos flask. A small fridge on top, the <strong>cold head</strong>, turns
-    boiled helium back into liquid; it runs day and night and draws about 6 to 7 kW.
+    To stay superconducting, the coils sit in <strong>liquid helium</strong> at 4.2 kelvin (K),
+    about −269 °C. That is only about 1.5 K warmer than deep space. A classic magnet holds about
+    1,500 litres of it, while newer sealed magnets need 7 litres or even less. A heat shield and a
+    vacuum around the helium vessel work like a thermos flask. A small fridge on top, the
+    <strong>cold head</strong>, turns boiled helium back into liquid. It runs day and night and
+    draws about 6 to 7 kW.
   </p>
   <p data-i18n-html="sections.magnet.p3">
-    The field is tens of thousands of times stronger than Earth's, which changes from place to
-    place. Pick 3 T to compare a stronger magnet. Extra <strong>shield coils</strong> on the outside
-    push current the other way and pull the stray field in close. Even so, the 0.5 mT line, inside
-    which a pacemaker may no longer be safe, reaches about 4 m along the tunnel. Turn on the field
-    lines to see it.
+    The field is tens of thousands of times stronger than Earth's. Earth's own field differs from
+    place to place. Pick 3 T to compare a stronger magnet. Extra <strong>shield coils</strong> on
+    the outside carry current the other way and pull in the field that leaks out. Even so, the field
+    stays above 0.5 mT, half a thousandth of a tesla, up to about 4 m along the tunnel. Inside that
+    line, a pacemaker may no longer work safely. The dashed ring on the floor marks it.
   </p>
   <p data-i18n-html="sections.magnet.p4">
     Since the magnet never switches off, a lit sign at the door says so. Anything with iron in it
     can fly into the tunnel, and oxygen tanks have killed people this way. That is why staff check
     everyone and everything at the door. If the wire warms up somewhere, it stops superconducting
-    and the current turns into heat: a <strong>quench</strong>. The field drops to zero in 2 to 5
-    seconds, and the boiling helium roars out of the building through the
+    and the current turns into heat. This is a <strong>quench</strong>. The field drops to zero in 2
+    to 5 seconds. The boiling helium roars out of the building through the
     <strong>quench pipe</strong>.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.field">
@@ -121,21 +122,22 @@
   <p data-i18n-html="sections.spins.p2">
     In the field, each tiny magnet does not simply point along it. It <strong>precesses</strong>: it
     wobbles around the field direction like a tilted spinning top. At 1.5 T it wobbles about 64
-    million times a second, 63.9 MHz. This rate is the <strong>Larmor frequency</strong>, and it
-    grows with the field, to 127.7 MHz at 3 T. Both are close to FM radio, one just below the band
-    and one just above it.
+    million times a second, 63.9 MHz. This rate, the pitch of the wobble, is the
+    <strong>Larmor frequency</strong>. It grows with the field, to 127.7 MHz at 3 T. Both are close
+    to FM radio, one just below the band and one just above it.
   </p>
   <p data-i18n-html="sections.spins.p3">
     The nuclei do not all line up. Body heat jostles them, so they point almost every which way.
     Only about 5 in a million more lean with the field than against it. That small surplus still
-    adds up to about 3 × 10¹⁴ nuclei in one cubic millimetre of water. Together they make a tiny
+    adds up to about 3.3 × 10¹⁴ nuclei in one cubic millimetre of water. Together they make a tiny
     <strong>net magnet</strong>, the arrow the scanner works with.
   </p>
   <p data-i18n-html="sections.spins.p4">
     The arrows in the inset are a drawing, enlarged many times, not a real spot in the head. They
-    also show the lean much stronger than it is, so you can see it. The drawn wobble turns half a
-    turn per second, about 128 million times slower than the real one at 1.5 T. Switch to 3 T and
-    watch the frequency and the surplus double.
+    also show the lean much stronger than it is, so you can see it. Press play to watch them turn.
+    The drawing is slowed down enormously, and the reading shows by how much. That number also
+    changes with the playback speed. Switch to 3 T: the real frequency and the surplus double, but
+    the drawing keeps its pace.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.field">
     <button
@@ -159,7 +161,7 @@
   </div>
   <dl class="readouts">
     <div>
-      <dt data-i18n="chapters.spins.larmor">Wobble frequency</dt>
+      <dt data-i18n="chapters.spins.larmor">Larmor frequency</dt>
       <dd class="number" data-readout="larmor">63.9 MHz, just below FM radio</dd>
     </div>
     <div>
@@ -188,22 +190,25 @@
   </p>
   <p data-i18n-html="sections.resonance.p2">
     A <strong>90° pulse</strong> tips the net magnet over until it lies sideways. There it keeps
-    wobbling, and as it sweeps past the head coil it makes a tiny voltage of a few microvolts. That
+    wobbling. As it sweeps past the head coil, it makes a tiny voltage, measured in microvolts. That
     is the signal. Move the tip angle slider: only the sideways part makes signal, the part along
     the field makes none.
   </p>
   <p data-i18n-html="sections.resonance.p3">
-    The tiny magnets soon drift out of step, because some wobble a little faster than others, and
-    the signal fades. Halfway to the echo, a <strong>180° pulse</strong> flips them over, so the
-    fast ones end up behind and catch up. They come back into step and give an
-    <strong>echo</strong> at the <strong>echo time</strong>. Use the chips to stop at each moment.
+    The tiny magnets soon drift out of step, because some wobble a little faster than others. The
+    signal fades. Halfway to the echo, a <strong>180° pulse</strong> flips them over, so the fast
+    ones end up behind and catch up. They come back into step and give an <strong>echo</strong>. The
+    time from the 90° pulse to the echo is the <strong>echo time</strong>. Use the buttons below to
+    stop at each moment.
   </p>
   <p data-i18n-html="sections.resonance.p4">
     Two clocks decide how bright each tissue looks. <strong>T1</strong> is the time the net magnet
     takes to grow about 63 % of the way back along the field. <strong>T2</strong> is the time the
-    sideways signal takes to fade to about 37 % as the tiny magnets fall out of step. Fat recovers
-    fast and brain fluid slowly; pick a tissue to compare. The pulses also warm you slightly, so the
-    scanner keeps that heating within safe limits.
+    sideways signal takes to fade to about 37 %. The 180° flip undoes only steady differences.
+    Random nudges between neighbours stay, so the echo is a little weaker. That loss is T2. Fat
+    recovers fast and brain fluid slowly. Pick a tissue to compare. The values for each tissue are
+    rough figures chosen for this model. The pulses also warm you slightly, so the scanner keeps
+    that heating within safe limits.
   </p>
   <div class="range-widget">
     <div class="range-widget__header">
@@ -211,7 +216,7 @@
       ><output class="number" for="tip-angle">90°</output>
     </div>
     <input id="tip-angle" type="range" class="range" data-control="tip-angle" />
-    <dl class="readouts">
+    <dl class="range-widget__readouts">
       <div>
         <dt data-i18n="chapters.resonance.across">Sideways part (signal)</dt>
         <dd class="number" data-readout="across">100 %</dd>
@@ -306,15 +311,15 @@
   <h2 id="gradients-title" data-i18n="sections.gradients.title">Coils that tell places apart</h2>
   <p data-i18n-html="sections.gradients.p1">
     So far every spot in the head answers at the same pitch, so the echo cannot tell where it came
-    from. Three more coils inside the magnet fix that: the <strong>gradient coils</strong> x, y and
-    z. A <strong>gradient</strong> is a field that changes steadily from one side to the other. Each
-    coil adds a little to the main field on one side of the centre and takes a little away on the
-    other.
+    from. Three more coils inside the magnet fix that. They are the
+    <strong>gradient coils</strong> x, y and z. A <strong>gradient</strong> is a field that changes
+    steadily from one side to the other. Each coil adds a little to the main field on one side of
+    the centre. It takes a little away on the other.
   </p>
   <p data-i18n-html="sections.gradients.p2">
-    The change is small. At up to 45 mT per metre, the field at the edge of the head shifts by about
-    5.4 mT, a third of a percent of the main field. That is enough to give every position its own
-    frequency. The coils switch on in about 0.2 ms.
+    The change is small. Each coil changes the field by up to 45 mT per metre. At the edge of the
+    head that adds up to about 5.4 mT. That is a third of a percent of a 1.5 T field. It is enough
+    to give every position its own frequency. The coils switch on in about 0.2 ms.
   </p>
   <p data-i18n-html="sections.gradients.p3">
     Each coil has its own job. The z coil works with the radio pulse to wake just one thin slice:
@@ -376,7 +381,7 @@
       <dd class="number" data-readout="fieldShare">0.36 %</dd>
     </div>
     <div>
-      <dt data-i18n="chapters.gradients.spread">Pitch spread across the head</dt>
+      <dt data-i18n="chapters.gradients.spread">Pitch shift at the edge of the head</dt>
       <dd class="number" data-readout="spread">230 kHz</dd>
     </div>
     <div>
@@ -385,7 +390,7 @@
     </div>
     <div>
       <dt data-i18n="chapters.gradients.role">Job in this scan</dt>
-      <dd data-readout="axisRole">Follows the sequence</dd>
+      <dd data-readout="axisRole">Changes with each step</dd>
     </div>
   </dl>
 </section>
@@ -394,14 +399,14 @@
   <p class="chapter-index">06</p>
   <h2 id="picture-title" data-i18n="sections.picture.title">From echoes to a picture</h2>
   <p data-i18n-html="sections.picture.p1">
-    Each echo is stored as one line of <strong>k-space</strong>, a grid that sorts the echoes by
-    pitch and twist instead of by place. One repetition fills one line; the next one changes the
-    twist and fills another. In this model the picture is 64 × 64, so it takes 64 repetitions; real
+    Each echo is stored as one line of <strong>k-space</strong>. This is a grid that sorts the
+    echoes by pitch and twist, not by place. One repetition fills one line. The next one changes the
+    twist and fills another. In this model the picture is 64 × 64, so it takes 64 repetitions. Real
     head scans often use 256 lines. Here the lines fill from the middle outwards, so a rough picture
     shows up early.
   </p>
   <p data-i18n-html="sections.picture.p2">
-    A maths step called the <strong>Fourier transform</strong> turns that grid into the picture. It
+    A calculation called the <strong>Fourier transform</strong> turns that grid into the picture. It
     finds which mix of stripes, broad and fine, adds up to the image. The middle of k-space holds
     the broad stripes, the overall light and shade. The edges hold the fine detail. Try 8, 16, 32 or
     64 lines and watch the picture sharpen.
@@ -410,15 +415,17 @@
     The timing decides which tissues look bright. A <strong>T1-weighted</strong> scan repeats every
     500 ms and listens early, at 15 ms. The repetition ends before slow tissues have grown back, so
     fat is bright and brain fluid is dark. A <strong>T2-weighted</strong> scan waits 2,500 ms and
-    listens at 100 ms: slow-fading fluid now shines, and grey matter beats white. In this model
-    every tissue holds the same amount of hydrogen, and bone and air stay black.
+    listens at 100 ms. Now slow-fading fluid shines, and grey matter looks brighter than white
+    matter. The readings show how bright each tissue looks, with the brightest at 100 %. The head
+    here is a simple drawing made of ovals, not a real scan. In this model, every tissue holds the
+    same amount of hydrogen, and bone and air stay black.
   </p>
   <p data-i18n-html="sections.picture.p4">
     With one line per repetition, 256 lines take about 2.1 minutes for the T1 scan and 10.7 for the
-    T2 scan. Real scanners use <strong>turbo spin echo</strong>, which reads 4 to 32 lines in each
-    repetition; at 16 lines, the T2 scan takes about 40 seconds. The idea is young. Paul Lauterbur
-    published the first MR image in 1973, and he and Peter Mansfield shared the 2003 Nobel Prize for
-    it.
+    T2 scan. Most brain scans today use <strong>turbo spin echo</strong>, which reads 4 to 32 lines
+    in each repetition. At 16 lines, the T2 scan takes about 40 seconds. This model takes one slice.
+    A real head scan takes many. Paul Lauterbur published the first MR image in 1973. He and Peter
+    Mansfield shared the 2003 Nobel Prize for it.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.weighting">
     <button
@@ -503,12 +510,12 @@
       <dd class="number" data-readout="brightFluid">0 %</dd>
     </div>
     <div>
-      <dt data-i18n="chapters.picture.scanTime">One line per repetition, 256 lines</dt>
-      <dd class="number" data-readout="scanTime">2.1 min for 256 lines</dd>
+      <dt data-i18n="chapters.picture.scanTime">One line per repetition</dt>
+      <dd class="number" data-readout="scanTime">10.7 min for 256 lines</dd>
     </div>
     <div>
       <dt data-i18n="chapters.picture.turbo">Turbo spin echo, 16 lines per repetition</dt>
-      <dd data-readout="turbo">about 8 s</dd>
+      <dd data-readout="turbo">about 40 s</dd>
     </div>
   </dl>
 </section>

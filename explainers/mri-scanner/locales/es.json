@@ -110,8 +110,6 @@
     "ms": "{{value}} ms",
     "tesla": "{{value}} T",
     "kelvin": "{{kelvin}} K, {{celsius}} °C",
-    "minutes": "{{value}} min",
-    "seconds": "{{value}} s",
     "kHz": "{{value}} kHz",
     "mT": "{{value}} mT",
     "cm": "{{value}} cm"
