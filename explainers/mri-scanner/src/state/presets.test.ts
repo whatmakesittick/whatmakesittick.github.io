@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { PART_IDS, PRESET_IDS } from '../ids';
 import { PHASE_RANGES } from '../model';
 import { CAMERA_VIEWS } from '../scene/cameraViews';
-import { DEFAULT_SPEED, PICTURE_SPEED } from '../timeline';
+import { DEFAULT_SPEED, PICTURE_SPEED } from '../model';
 import { PRESETS } from './presets';
 
 const SCENE_FLAGS = ['cutaway', 'fieldLines', 'voxel'] as const;

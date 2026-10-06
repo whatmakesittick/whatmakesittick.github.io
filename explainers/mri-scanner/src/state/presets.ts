@@ -1,7 +1,6 @@
 import type { ScenePreset } from '@core/scene/presetBinder';
 import type { CameraView, GradientAxisId, PartId, PresetId, TissueId, ViewOptions } from '../ids';
-import { PHASE_RANGES } from '../model';
-import { DEFAULT_SPEED, PICTURE_SPEED } from '../timeline';
+import { DEFAULT_SPEED, PHASE_RANGES, PICTURE_SPEED } from '../model';
 
 export interface ChapterControls {
   tipAngle: number;

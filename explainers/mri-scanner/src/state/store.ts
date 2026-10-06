@@ -10,8 +10,8 @@ import type {
   ViewOptions,
   WeightingId,
 } from '../ids';
-import { LINE_DONE_UNITS, MODEL_SIZE, MOMENTS } from '../model';
-import { MRI_SCANNER_TIMELINE, SPEED_RANGE } from '../timeline';
+import { LINE_DONE_UNITS, MODEL_SIZE, MOMENTS, SPEED_RANGE } from '../model';
+import { MRI_SCANNER_TIMELINE } from '../timeline';
 import { PRESETS } from './presets';
 import type { ChapterControls, Preset } from './presets';
 

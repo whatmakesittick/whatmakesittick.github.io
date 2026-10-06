@@ -5,12 +5,9 @@ import { MOMENT_IDS, PHASE_IDS } from './ids';
 import type { PhaseId } from './ids';
 import { CYCLE_UNITS, PHASE_RANGES } from './model';
 import { PHASE_TONES } from './theme';
+import { DEFAULT_SPEED, MOMENTS, PICTURE_SPEED, SPEED_RANGE } from './model';
 import {
-  DEFAULT_SPEED,
-  MOMENTS,
   MRI_SCANNER_TIMELINE,
-  PICTURE_SPEED,
-  SPEED_RANGE,
   describePhase,
   describeSpeed,
   formatPhase,

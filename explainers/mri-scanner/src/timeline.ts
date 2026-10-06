@@ -3,16 +3,7 @@ import { formatNumber } from '@core/format';
 import { t } from '@core/i18n';
 import { MOMENT_IDS, PHASE_IDS } from './ids';
 import type { MomentId, PhaseId } from './ids';
-import {
-  CYCLE_UNITS,
-  DEFAULT_SPEED,
-  MOMENTS,
-  PHASE_RANGES,
-  PICTURE_SPEED,
-  SPEED_RANGE,
-  phaseOf,
-  rate,
-} from './model';
+import { CYCLE_UNITS, MOMENTS, PHASE_RANGES, SPEED_RANGE, phaseOf, rate } from './model';
 import { PHASE_TONES } from './theme';
 
 const SCRUBBER_STEP_UNITS = 1;
@@ -87,5 +78,3 @@ export const MRI_SCANNER_TIMELINE: Timeline = {
     describe: describeSpeed,
   },
 };
-
-export { DEFAULT_SPEED, MOMENTS, PICTURE_SPEED, SPEED_RANGE };

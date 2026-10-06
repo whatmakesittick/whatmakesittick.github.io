@@ -11,6 +11,7 @@ import type {
 } from '../ids';
 import {
   CYCLE_UNITS,
+  DEFAULT_SPEED,
   DISPLAY_TURNS_PER_S,
   FIELDS,
   SECONDS_PER_MINUTE,
@@ -26,7 +27,6 @@ import {
   rfPulse,
   spinArrows,
 } from '../model';
-import { DEFAULT_SPEED } from '../timeline';
 import { LINES_RANGE } from './store';
 import type { MriScannerState } from './store';
 
