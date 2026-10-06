@@ -77,6 +77,12 @@ describe('chapter widgets', () => {
     expect(readout('fieldShare')).toBe(fill(units.percent, { value: '0.18' }));
   });
 
+  it('follows the speed slider in the spins slowdown', () => {
+    expect(readout('slowdown')).toBe(fill(copy.spins.slowdownValue, { factor: '128 million' }));
+    store.getState().setSpeed(store.getState().speed * 2);
+    expect(readout('slowdown')).toBe(fill(copy.spins.slowdownValue, { factor: '63.9 million' }));
+  });
+
   it('keeps the spins larmor readout apart from the gauge readout of the same id', () => {
     dispose();
     document.body.innerHTML = `<div class="gauge"><div data-readout="larmor"></div></div>${chapters}`;

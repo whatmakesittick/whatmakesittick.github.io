@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { initI18n } from '@core/i18n';
 import en from '../../locales/en.json';
+import { DEFAULT_SPEED } from '../model';
 import {
   formatAcross,
   formatAlong,
@@ -53,7 +54,9 @@ describe('readout formats', () => {
     expect(formatLarmorBand('field30')).toBe('127.7 MHz, just above FM radio');
     expect(formatSurplus('field15')).toBe('about 5 in a million');
     expect(formatSurplusCount('field15')).toBe('about 3.3 × 10¹⁴');
-    expect(formatSlowdown('field15')).toBe('about 128 million times');
+    expect(formatSlowdown('field15', DEFAULT_SPEED)).toBe('about 128 million times');
+    expect(formatSlowdown('field30', DEFAULT_SPEED)).toBe('about 255 million times');
+    expect(formatSlowdown('field15', DEFAULT_SPEED * 2)).toBe('about 63.9 million times');
     expect(toSuperscript(-19)).toBe('⁻¹⁹');
   });
 

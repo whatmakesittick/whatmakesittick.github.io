@@ -11,6 +11,6 @@ export function mountSpinsReadouts(root: Document, store: MriScannerStore): Disp
     larmor: (state) => formatLarmorBand(state.field),
     surplus: (state) => formatSurplus(state.field),
     surplusCount: (state) => formatSurplusCount(state.field),
-    slowdown: (state) => formatSlowdown(state.field),
+    slowdown: (state) => formatSlowdown(state.field, state.speed),
   });
 }

@@ -18,6 +18,7 @@ import {
   activeGradient,
   echoAmplitude,
   gradientLevel,
+  larmorHz,
   magnetisation,
   phaseOf,
   pictureFor,
@@ -53,6 +54,14 @@ export interface TimeGauge {
 export const PRECESSION_TURNS_PER_CYCLE =
   (DISPLAY_TURNS_PER_S * SECONDS_PER_MINUTE) / DEFAULT_SPEED;
 export const CHOSEN_AXIS_LEVEL = 1;
+
+export function drawnTurnsPerSecond(speed: number): number {
+  return (PRECESSION_TURNS_PER_CYCLE * speed) / SECONDS_PER_MINUTE;
+}
+
+export function drawnSlowdown(field: FieldId, speed: number): number {
+  return larmorHz(field) / drawnTurnsPerSecond(speed);
+}
 
 const PICTURE_STATES_PER_WEIGHTING = LINES_RANGE.max + 1;
 const RESTING_NET: Point = [0, 0, 0];

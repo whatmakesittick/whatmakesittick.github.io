@@ -20,11 +20,11 @@ import {
   riseTimeMs,
   scanSeconds,
   shareOfField,
-  slowdown,
   spinSurplus,
   surplusPerMm3,
   tipComponents,
 } from '../model';
+import { drawnSlowdown } from '../state';
 import type { TimeGauge } from '../state';
 
 const WHOLE = 0;
@@ -130,9 +130,9 @@ export function formatSurplusCount(field: FieldId): string {
   });
 }
 
-export function formatSlowdown(field: FieldId): string {
+export function formatSlowdown(field: FieldId, speed: number): string {
   return t('chapters.spins.slowdownValue', {
-    factor: formatCompact(slowdown(field), SLOWDOWN_DIGITS),
+    factor: formatCompact(drawnSlowdown(field, speed), SLOWDOWN_DIGITS),
   });
 }
 
