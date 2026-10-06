@@ -1,0 +1,250 @@
+{
+  "meta": {
+    "title": "Comment fonctionne un appareil d’IRM",
+    "eyebrow": "Imagerie médicale",
+    "tagline": "Un aimant géant, une impulsion radio et l’hydrogène de votre corps : comment l’appareil capte un faible écho et en fait une image.",
+    "description": "Un appareil d’IRM en 3D : l’aimant jamais éteint, l’hydrogène qui répond à une impulsion radio, les bobines qui cognent, et l’écho qui devient image.",
+    "summary": "L’aimant supraconducteur, l’hydrogène qui penche, l’impulsion radio et son écho, les bobines de gradient et l’espace k.",
+    "socialAlt": "Un appareil d’IRM en coupe, les couches de son aimant emboîtées autour du tunnel, à côté de l’image d’une coupe de tête et du titre « Comment fonctionne un appareil d’IRM »"
+  },
+  "stage": {
+    "label": "Modèle interactif d’appareil d’IRM",
+    "gauge": "Mesures de l’examen en direct"
+  },
+  "timeline": {
+    "label": "Temps dans une répétition",
+    "phases": "Aller à une étape",
+    "speed": "Vitesse de lecture",
+    "value": "{{phase}}",
+    "during": "Étape {{step}} sur {{total}}, {{phase}}",
+    "speedValue": "{{value}}/min",
+    "speedFormat": "{{value}} répétitions par minute",
+    "phase": {
+      "excite": "Impulsion radio",
+      "encode": "Codage",
+      "refocus": "Refocalisation",
+      "echo": "Écho",
+      "recover": "Récupération"
+    },
+    "jump": {
+      "excite": "Aller à l’impulsion radio",
+      "encode": "Aller au codage",
+      "refocus": "Aller à l’impulsion de refocalisation",
+      "echo": "Aller à l’écho",
+      "recover": "Aller à la récupération"
+    }
+  },
+  "controls": {
+    "label": "Commandes du modèle",
+    "field": "Intensité du champ",
+    "weighting": "Type d’image",
+    "fieldOptions": {
+      "field15": "1,5 T",
+      "field30": "3 T"
+    },
+    "weightingOptions": {
+      "t1": "Pondérée en T1",
+      "t2": "Pondérée en T2"
+    },
+    "tissueOptions": {
+      "fat": "Graisse",
+      "whiteMatter": "Substance blanche",
+      "greyMatter": "Substance grise",
+      "fluid": "Liquide cérébral"
+    },
+    "axisOptions": {
+      "x": "Bobine x",
+      "y": "Bobine y",
+      "z": "Bobine z",
+      "sequence": "Suivre l’examen"
+    },
+    "momentOptions": {
+      "pulse90": "Impulsion de 90°",
+      "pulse180": "Impulsion de 180°",
+      "echoPeak": "Pic de l’écho",
+      "repetitionEnd": "Fin de la répétition"
+    },
+    "linesOptions": {
+      "8": "8 lignes",
+      "16": "16 lignes",
+      "32": "32 lignes",
+      "64": "64 lignes"
+    },
+    "groups": {
+      "field": "Intensité du champ",
+      "weighting": "Type d’image",
+      "tissue": "Tissu",
+      "axis": "Bobine de gradient",
+      "moment": "Moment de la répétition",
+      "lines": "Lignes de l’espace k"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Vue en coupe",
+        "short": "Coupe",
+        "hint": "Vue en coupe (C)"
+      },
+      "fieldLines": {
+        "name": "Lignes de champ",
+        "short": "Champ",
+        "hint": "Lignes de champ (F)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    }
+  },
+  "readouts": {
+    "larmor": "Fréquence des spins",
+    "time": "Temps dans la répétition",
+    "lines": "Lignes de l’espace k"
+  },
+  "units": {
+    "mhz": "{{value}} MHz",
+    "msOf": "{{value}} sur {{total}} ms",
+    "linesOf": "{{value}} sur {{total}}",
+    "degrees": "{{value}}°",
+    "percent": "{{value}} %",
+    "ms": "{{value}} ms",
+    "tesla": "{{value}} T",
+    "kelvin": "{{kelvin}} K, {{celsius}} °C",
+    "minutes": "{{value}} min",
+    "seconds": "{{value}} s",
+    "kHz": "{{value}} kHz",
+    "mT": "{{value}} mT",
+    "cm": "{{value}} cm"
+  },
+  "chapters": {
+    "overview": {
+      "fieldLabel": "Champ principal",
+      "field": "{{tesla}}, toujours actif",
+      "boreLabel": "Largeur du tunnel",
+      "bore": "{{cm}} de diamètre"
+    },
+    "magnet": {
+      "earth": "Comparé au champ terrestre",
+      "earthValue": "{{min}} à {{max}} fois plus fort",
+      "helium": "Hélium liquide",
+      "fringe": "Ligne de sécurité de 0,5 mT",
+      "fringeValue": "{{along}} m dans l’axe du tunnel, {{side}} m sur le côté"
+    },
+    "spins": {
+      "larmor": "Fréquence de précession",
+      "larmorBand": "{{value}}, {{band}}",
+      "band": {
+        "belowFm": "juste sous la bande FM",
+        "aboveFm": "juste au-dessus de la bande FM"
+      },
+      "surplus": "Noyaux en plus dans le sens du champ",
+      "surplusValue": "environ {{perMillion}} sur un million",
+      "count": "Excédent dans 1 mm³ d’eau",
+      "countValue": "environ {{mantissa}} × 10{{exponent}}",
+      "slowdown": "Dessin ralenti",
+      "slowdownValue": "environ {{millions}} millions de fois"
+    },
+    "resonance": {
+      "tip": "Angle de bascule",
+      "across": "Part transversale (signal)",
+      "along": "Part dans l’axe du champ",
+      "t1": "T1, remontée",
+      "t2": "T2, déclin"
+    },
+    "gradients": {
+      "edge": "Écart au bord de la tête",
+      "share": "Part du champ principal",
+      "spread": "Écart de fréquence sur la tête",
+      "rise": "Temps de montée",
+      "role": "Rôle dans cet examen",
+      "roleValue": {
+        "x": "Fréquence : de gauche à droite",
+        "y": "Phase : une torsion par ligne",
+        "z": "Coupe : choisit une tranche fine",
+        "sequence": "Suit la séquence"
+      }
+    },
+    "picture": {
+      "kspace": "Espace k, les échos stockés",
+      "image": "L’image",
+      "scanTime": "Une ligne par répétition, 256 lignes",
+      "scanTimeValue": "{{minutes}} min pour {{lines}} lignes",
+      "turbo": "Turbo spin écho, 16 lignes par répétition",
+      "turboValue": "environ {{seconds}} s",
+      "empty": "Lancez la lecture pour remplir la première ligne"
+    }
+  },
+  "parts": {
+    "room": "Salle tapissée de cuivre",
+    "cover": "Capot",
+    "vacuumVessel": "Enceinte à vide",
+    "radiationShield": "Écran thermique",
+    "heliumVessel": "Cuve d’hélium",
+    "mainCoils": "Bobines de l’aimant principal",
+    "shieldCoils": "Bobines de blindage",
+    "shims": "Correcteurs de champ",
+    "coldHead": "Tête froide",
+    "quenchPipe": "Tuyau de quench",
+    "gradientX": "Bobine de gradient x",
+    "gradientY": "Bobine de gradient y",
+    "gradientZ": "Bobine de gradient z",
+    "bodyCoil": "Antenne corps",
+    "bore": "Tunnel",
+    "table": "Table",
+    "patient": "Patient",
+    "headCoil": "Antenne tête",
+    "sliceSlab": "Coupe",
+    "spinArrows": "Noyaux d’hydrogène",
+    "netMagnet": "Aimant résultant",
+    "mainField": "Champ principal",
+    "rfWave": "Impulsion radio",
+    "echoWave": "Écho",
+    "fieldLinesGroup": "Lignes de champ",
+    "fringeLine": "Ligne de 0,5 mT",
+    "screen": "Image"
+  },
+  "sections": {
+    "overview": {
+      "title": "Un tunnel qui écoute votre corps",
+      "p1": "Voici un <strong>appareil d’IRM</strong> doté d’un aimant de 1,5 tesla. Le <strong>tesla</strong> mesure la force d’un champ magnétique. Vous vous allongez sur la <strong>table</strong>, qui vous fait glisser dans le <strong>tunnel</strong>, large d’environ 70 cm. La machine autour mesure environ 1,6 à 1,9 m de long et pèse de 3 à 6 tonnes.",
+      "p2": "Pour un examen du cerveau, une <strong>antenne tête</strong> entoure votre tête comme une cage. Cette antenne compte de 20 à 64 petits récepteurs qui guettent un faible écho radio venu de votre corps. La salle est tapissée de feuilles de cuivre : les ondes radio du dehors restent dehors et ne couvrent pas cet écho. Ici, pas de rayons X. Une onde radio de cette fréquence transporte environ 50 millions de fois trop peu d’énergie pour arracher un électron à un atome.",
+      "p3": "Sous le <strong>capot</strong> blanc, des couches s’emboîtent comme des anneaux : l’aimant dans son enveloppe froide, trois <strong>bobines de gradient</strong> et une antenne radio, l’<strong>antenne corps</strong>. Activez la vue en coupe (C) pour les voir. Les chapitres suivants les présentent une à une.",
+      "p4": "Le modèle suit une seule <strong>répétition</strong>, le court cycle qu’un examen reprend encore et encore pour construire une image. Dans ce modèle, une répétition dure de 0,5 à 2,5 s en temps réel, mais les impulsions radio qu’elle contient ne se comptent qu’en millisecondes. La barre de lecture n’est donc pas à l’échelle : les impulsions occupent l’essentiel de la boucle et la longue pause est tassée. La barre indique l’étape, et les mesures en direct donnent le temps réel. Un examen complet de la tête, avec de nombreuses images, dure environ 30 à 45 minutes."
+    },
+    "magnet": {
+      "title": "Un aimant qui ne s’éteint jamais",
+      "p1": "La plus grosse pièce est l’<strong>aimant principal</strong> : environ 30 à 40 km de fil de niobium-titane enroulé en bobines. Assez refroidi, ce fil devient <strong>supraconducteur</strong> : le courant y circule sans aucune résistance. Plusieurs centaines d’ampères tournent sans fin dans une boucle fermée. Une fois la boucle fermée, maintenir le champ ne consomme aucune énergie. Le champ faiblit de moins d’un dixième de pour cent par an.",
+      "p2": "Pour rester supraconductrices, les bobines baignent dans de l’<strong>hélium liquide</strong> à 4,2 K, soit environ −269 °C. Le vide spatial n’est qu’environ 1,5 K plus froid. Un aimant classique en contient environ 1 500 litres ; les aimants scellés plus récents se contentent de 7. Un écran thermique et un vide autour de la cuve d’hélium jouent le rôle d’une bouteille isotherme. Sur le dessus, un petit réfrigérateur, la <strong>tête froide</strong>, retransforme en liquide l’hélium évaporé. Il tourne jour et nuit et consomme environ 6 à 7 kW.",
+      "p3": "Le champ est des dizaines de milliers de fois plus fort que celui de la Terre, qui varie d’un endroit à l’autre. Choisissez 3 T pour comparer avec un aimant plus puissant. À l’extérieur, des <strong>bobines de blindage</strong> font circuler du courant en sens inverse et ramènent le champ de fuite près de l’appareil. Malgré cela, la ligne de 0,5 mT, à l’intérieur de laquelle un pacemaker risque de ne plus être en sécurité, s’étend à environ 4 m dans l’axe du tunnel. Activez les lignes de champ pour la voir.",
+      "p4": "Comme l’aimant ne s’éteint jamais, un panneau lumineux le rappelle à la porte. Tout objet qui contient du fer peut être aspiré dans le tunnel, et des bouteilles d’oxygène ont déjà tué des personnes de cette façon. C’est pourquoi le personnel contrôle chaque personne et chaque objet à l’entrée. Si le fil se réchauffe quelque part, il cesse d’être supraconducteur et le courant se change en chaleur : c’est le <strong>quench</strong>. Le champ tombe à zéro en 2 à 5 secondes, et l’hélium en ébullition s’échappe du bâtiment dans un grondement, par le <strong>tuyau de quench</strong>."
+    },
+    "spins": {
+      "title": "L’hydrogène penche et tournoie",
+      "p1": "Dans votre corps, environ six atomes sur dix sont de l’hydrogène, surtout dans l’eau et la graisse. Le cœur d’un atome d’hydrogène, son <strong>noyau</strong>, est un simple proton. Il se comporte comme un minuscule aimant. L’IRM écoute l’hydrogène parce qu’il est partout et qu’il donne le signal le plus fort.",
+      "p2": "Dans le champ, chaque petit aimant ne se contente pas de s’aligner. Il fait un mouvement de <strong>précession</strong> : il tourne autour de la direction du champ, comme une toupie penchée. À 1,5 T, il fait environ 64 millions de tours par seconde, soit 63,9 MHz. Cette cadence s’appelle la <strong>fréquence de Larmor</strong>. Elle augmente avec le champ et atteint 127,7 MHz à 3 T. Les deux sont proches de la radio FM, l’une juste sous la bande, l’autre juste au-dessus.",
+      "p3": "Les noyaux ne s’alignent pas tous. La chaleur du corps les bouscule, si bien qu’ils pointent presque dans tous les sens. Ceux qui penchent dans le sens du champ sont à peine plus nombreux que ceux qui penchent à l’inverse : environ 5 de plus sur un million. Ce petit excédent représente quand même environ 3 × 10¹⁴ noyaux dans un millimètre cube d’eau. Ensemble, ils forment un minuscule <strong>aimant résultant</strong> : c’est la flèche avec laquelle travaille l’appareil.",
+      "p4": "Les flèches de l’encart sont un dessin, fortement agrandi, et non un vrai point de la tête. Elles montrent aussi une inclinaison bien plus marquée qu’en réalité, pour que vous puissiez le voir. La précession dessinée fait un demi-tour par seconde, environ 128 millions de fois plus lentement que la vraie, à 1,5 T. Passez à 3 T et regardez la fréquence et l’excédent doubler."
+    },
+    "resonance": {
+      "title": "Une impulsion radio et son écho",
+      "p1": "Pour faire parler l’aimant résultant, l’appareil envoie une brève impulsion radio, exactement à la fréquence de Larmor. Se caler ainsi sur la rotation s’appelle la <strong>résonance</strong>, comme quand on pousse un enfant sur une balançoire au bon moment. L’impulsion vient de l’<strong>antenne corps</strong>, une cage de barreaux de cuivre placée juste à l’intérieur du tunnel. Elle dure au plus quelques millisecondes.",
+      "p2": "Une <strong>impulsion de 90°</strong> fait basculer l’aimant résultant jusqu’à le coucher sur le côté. Là, il continue de tourner et, en passant devant l’antenne tête, il crée une minuscule tension de quelques microvolts. C’est le signal. Déplacez le curseur de l’angle de bascule : seule la part transversale, couchée sur le côté, crée du signal, la part dans l’axe du champ n’en donne aucun.",
+      "p3": "Les petits aimants se décalent vite les uns des autres, car certains tournent un peu plus vite que d’autres, et le signal s’éteint. À mi-chemin de l’écho, une <strong>impulsion de 180°</strong> les retourne : les plus rapides se retrouvent derrière et rattrapent les autres. Ils se remettent en phase et produisent un <strong>écho</strong> au <strong>temps d’écho</strong>. Utilisez les boutons pour vous arrêter à chaque moment.",
+      "p4": "Deux horloges décident de la luminosité de chaque tissu. <strong>T1</strong> est le temps que met l’aimant résultant pour regagner environ 63 % de sa valeur dans l’axe du champ. <strong>T2</strong> est le temps que met le signal transversal pour tomber à environ 37 %, à mesure que les petits aimants se décalent. La graisse récupère vite, le liquide cérébral lentement : choisissez un tissu pour comparer. Les impulsions vous réchauffent aussi un peu, alors l’appareil maintient cet échauffement dans des limites sûres."
+    },
+    "gradients": {
+      "title": "Des bobines pour situer chaque point",
+      "p1": "Jusqu’ici, chaque point de la tête répond à la même fréquence : l’écho ne peut donc pas dire d’où il vient. Trois autres bobines, à l’intérieur de l’aimant, règlent ce problème : les <strong>bobines de gradient</strong> x, y et z. Un <strong>gradient</strong> est un champ qui varie régulièrement d’un côté à l’autre. Chaque bobine renforce un peu le champ principal d’un côté du centre et l’affaiblit un peu de l’autre.",
+      "p2": "L’écart est faible. Le gradient monte jusqu’à 45 mT par mètre : au bord de la tête, le champ varie alors d’environ 5,4 mT, un tiers de pour cent du champ principal. Cela suffit à donner à chaque position sa propre fréquence. Les bobines s’enclenchent en 0,2 ms environ.",
+      "p3": "Chaque bobine a son rôle. La bobine z agit avec l’impulsion radio pour ne réveiller qu’une tranche fine : c’est la <strong>sélection de coupe</strong>. La bobine y donne à chaque répétition une torsion différente, de haut en bas : c’est le <strong>codage de phase</strong>. La bobine x fonctionne pendant l’écoute de l’écho, si bien que la fréquence de l’écho indique la gauche ou la droite : c’est le <strong>codage en fréquence</strong>. Choisissez une bobine pour voir son champ, ou suivez l’examen.",
+      "p4": "Allumer et couper de forts courants dans un aimant puissant fait sursauter les bobines, comme la membrane d’un haut-parleur. C’est le fort martèlement que vous entendez pendant l’examen. Il peut dépasser 100 décibels, à peu près autant qu’un marteau-piqueur, voire plus. C’est pourquoi on vous donne toujours des bouchons d’oreilles ou un casque."
+    },
+    "picture": {
+      "title": "Des échos à l’image",
+      "p1": "Chaque écho est stocké comme une ligne de l’<strong>espace k</strong>, une grille qui range les échos par fréquence et par torsion, et non par position. Une répétition remplit une ligne ; la suivante change la torsion et en remplit une autre. Dans ce modèle, l’image fait 64 × 64, il faut donc 64 répétitions. Les vrais examens de la tête utilisent souvent 256 lignes. Ici, les lignes se remplissent du centre vers les bords, si bien qu’une image grossière apparaît tôt.",
+      "p2": "Une étape de calcul, la <strong>transformée de Fourier</strong>, change cette grille en image. Elle trouve quel mélange de rayures, larges et fines, reconstitue l’image. Le centre de l’espace k contient les rayures larges, les grandes zones de clair et d’ombre. Les bords contiennent les détails fins. Essayez 8, 16, 32 ou 64 lignes et regardez l’image devenir nette.",
+      "p3": "Le minutage décide des tissus qui apparaissent clairs. Une séquence <strong>pondérée en T1</strong> se répète toutes les 500 ms et écoute tôt, à 15 ms. La répétition s’achève avant que les tissus lents aient récupéré : la graisse est claire et le liquide cérébral sombre. Une séquence <strong>pondérée en T2</strong> attend 2 500 ms et écoute à 100 ms. Le liquide, qui s’estompe lentement, brille alors, et la substance grise ressort plus que la blanche. Dans ce modèle, chaque tissu contient la même quantité d’hydrogène, et l’os comme l’air restent noirs.",
+      "p4": "Avec une ligne par répétition, 256 lignes prennent environ 2,1 minutes pour la séquence T1 et 10,7 pour la séquence T2. Les vrais appareils utilisent le <strong>turbo spin écho</strong>, qui lit de 4 à 32 lignes à chaque répétition ; avec 16 lignes, la séquence T2 dure environ 40 secondes. L’idée est récente. Paul Lauterbur a publié la première image par résonance magnétique en 1973, et il a partagé avec Peter Mansfield le prix Nobel 2003 pour cette découverte."
+    }
+  }
+}
