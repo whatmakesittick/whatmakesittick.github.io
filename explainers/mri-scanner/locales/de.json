@@ -15,7 +15,7 @@
     "label": "Zeit in einer Wiederholung",
     "phases": "Zu einem Schritt springen",
     "speed": "Wiedergabetempo",
-    "value": "{{phase}}",
+    "value": "Schritt {{step}} von {{total}}",
     "during": "Schritt {{step}} von {{total}}, {{phase}}",
     "speedValue": "{{value}}/min",
     "speedFormat": "{{value}} Wiederholungen pro Minute",

@@ -15,7 +15,7 @@
     "label": "一个重复周期内的时间",
     "phases": "跳到某一步",
     "speed": "播放速度",
-    "value": "{{phase}}",
+    "value": "第{{step}}步，共{{total}}步",
     "during": "第{{step}}步，共{{total}}步：{{phase}}",
     "speedValue": "{{value}}次/分钟",
     "speedFormat": "每分钟重复{{value}}次",

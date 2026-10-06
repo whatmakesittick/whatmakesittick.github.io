@@ -15,7 +15,7 @@
     "label": "Tiempo dentro de una repetición",
     "phases": "Saltar a un paso",
     "speed": "Velocidad de reproducción",
-    "value": "{{phase}}",
+    "value": "Paso {{step}} de {{total}}",
     "during": "Paso {{step}} de {{total}}, {{phase}}",
     "speedValue": "{{value}}/min",
     "speedFormat": "{{value}} repeticiones por minuto",

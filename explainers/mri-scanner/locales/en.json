@@ -15,7 +15,7 @@
     "label": "Time in one repetition",
     "phases": "Jump to a step",
     "speed": "Playback speed",
-    "value": "{{phase}}",
+    "value": "Step {{step}} of {{total}}",
     "during": "Step {{step}} of {{total}}, {{phase}}",
     "speedValue": "{{value}}/min",
     "speedFormat": "{{value}} repetitions per minute",

@@ -15,7 +15,7 @@
     "label": "Час в одному повторенні",
     "phases": "Обрати крок",
     "speed": "Швидкість відтворення",
-    "value": "{{phase}}",
+    "value": "Крок {{step}} з {{total}}",
     "during": "Крок {{step}} з {{total}}, {{phase}}",
     "speedValue": "{{value}}/хв",
     "speedFormat": "Повторень за хвилину: {{value}}",

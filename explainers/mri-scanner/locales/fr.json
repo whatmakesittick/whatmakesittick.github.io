@@ -15,7 +15,7 @@
     "label": "Temps dans une répétition",
     "phases": "Aller à une étape",
     "speed": "Vitesse de lecture",
-    "value": "{{phase}}",
+    "value": "Étape {{step}} sur {{total}}",
     "during": "Étape {{step}} sur {{total}}, {{phase}}",
     "speedValue": "{{value}}/min",
     "speedFormat": "{{value}} répétitions par minute",

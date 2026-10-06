@@ -15,7 +15,7 @@
     "label": "1回の繰り返しの中の時間",
     "phases": "ステップへ移動",
     "speed": "再生速度",
-    "value": "{{phase}}",
+    "value": "ステップ{{step}}／{{total}}",
     "during": "ステップ{{step}}／{{total}}：{{phase}}",
     "speedValue": "{{value}}回/分",
     "speedFormat": "1分あたり{{value}}回の繰り返し",
