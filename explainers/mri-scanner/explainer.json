@@ -7,6 +7,6 @@
   "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
   "social": {
     "image": "social/og-image.png",
-    "alt": "A closed-bore MRI scanner in a shielded room, beside the title How an MRI scanner works"
+    "alt": "A cutaway MRI scanner with its nested magnet layers around the tunnel, beside a slice picture of a head and the title How an MRI scanner works"
   }
 }
