@@ -62,11 +62,11 @@ describe('mri scanner timeline', () => {
     expect(CYCLE_UNITS / rate(PICTURE_SPEED)).toBe(2);
   });
 
-  it('names the step on the scrubber, never a time or a percentage', () => {
-    expect(formatPhase(0)).toBe('Radio pulse');
-    expect(formatPhase(PHASE_RANGES.echo[0])).toBe('Echo');
-    expect(formatPhase(CYCLE_UNITS - 1)).toBe('Recover');
-    PHASE_IDS.forEach((id) => expect(formatPhase(PHASE_RANGES[id][0])).not.toMatch(/\d|%/));
+  it('counts the step on the scrubber, never a time or a percentage', () => {
+    expect(formatPhase(0)).toBe('Step 1 of 5');
+    expect(formatPhase(PHASE_RANGES.echo[0])).toBe('Step 4 of 5');
+    expect(formatPhase(CYCLE_UNITS - 1)).toBe('Step 5 of 5');
+    PHASE_IDS.forEach((id) => expect(formatPhase(PHASE_RANGES[id][0])).not.toMatch(/%|ms/));
   });
 
   it('tells a screen reader which step of five is playing', () => {

@@ -31,16 +31,19 @@ function phaseName(phase: number): string {
   return t(phaseKey(phaseOf(phase)));
 }
 
+function stepCount(phase: number): { step: string; total: string } {
+  return {
+    step: formatNumber(PHASE_IDS.indexOf(phaseOf(phase)) + 1),
+    total: formatNumber(PHASE_IDS.length),
+  };
+}
+
 export function formatPhase(phase: number): string {
-  return t('timeline.value', { phase: phaseName(phase) });
+  return t('timeline.value', stepCount(phase));
 }
 
 export function describePhase(phase: number): string {
-  return t('timeline.during', {
-    step: formatNumber(PHASE_IDS.indexOf(phaseOf(phase)) + 1),
-    total: formatNumber(PHASE_IDS.length),
-    phase: phaseName(phase),
-  });
+  return t('timeline.during', { ...stepCount(phase), phase: phaseName(phase) });
 }
 
 export function formatSpeed(speed: number): string {
