@@ -89,11 +89,12 @@ function shellGeometry(axis: GradientAxisId): BufferGeometry {
 
 function glowMaterial(axis: GradientAxisId): ShaderMaterial {
   const shell = gradientShell(axis);
-  return new ShaderMaterial({
+  const tone = new Color(GRADIENT_TONES[axis]);
+  const material = new ShaderMaterial({
     uniforms: {
       axis: { value: AXIS_VECTORS[axis] },
       extent: { value: axis === 'z' ? shell.halfLength : shell.outer },
-      tone: { value: new Color(GRADIENT_TONES[axis]) },
+      tone: { value: tone },
       level: { value: 0 },
       dimEnd: { value: GLOW.dimEnd },
       gain: { value: GLOW.gain },
@@ -112,6 +113,7 @@ function glowMaterial(axis: GradientAxisId): ShaderMaterial {
     polygonOffsetFactor: POLYGON_PULL,
     polygonOffsetUnits: POLYGON_PULL,
   });
+  return Object.assign(material, { color: tone });
 }
 
 interface Glow {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { InstancedMesh, Mesh } from 'three';
+import { InstancedMesh, Mesh, ShaderMaterial } from 'three';
 import type { Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
@@ -26,9 +26,9 @@ const OWNED: readonly PartId[] = [
 const TRIANGLE_BUDGET = 250_000;
 const FRAME = 1 / 60;
 
-function moduleUnderTest() {
+function moduleUnderTest(materials = new MaterialLibrary()) {
   return createMagnetModule({
-    materials: new MaterialLibrary(),
+    materials,
     textures: createSceneTextures(),
     tracker: new ResourceTracker(),
   });
@@ -91,5 +91,21 @@ describe('magnet module', () => {
     while (magnet.update(FRAME, 1)) frames += 1;
     expect(frames).toBeGreaterThan(0);
     expect(magnet.update(FRAME, 1)).toBe(false);
+  });
+
+  it('dims the gradient glow with the rest of the scene when another part has focus', () => {
+    const materials = new MaterialLibrary();
+    const magnet = moduleUnderTest(materials);
+    const glows: ShaderMaterial[] = [];
+    magnet.root.traverse((object) => {
+      if (!(object instanceof Mesh) || !(object.material instanceof ShaderMaterial)) return;
+      if (materials.groupOf(object.material) === 'gradientX') glows.push(object.material);
+    });
+    const [glow] = glows;
+    const tone = glow.uniforms.tone.value.clone();
+    materials.setEmphasis('gradientX', 0);
+    expect(glow.uniforms.tone.value.equals(tone)).toBe(false);
+    materials.setEmphasis('gradientX', 1);
+    expect(glow.uniforms.tone.value.equals(tone)).toBe(true);
   });
 });
