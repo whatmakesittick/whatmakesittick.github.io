@@ -9,7 +9,7 @@ import { CAMERA_VIEWS, STAGE_VARIANTS, stageVariant } from './cameraViews';
 import type { StageVariant } from './cameraViews';
 
 const VIEWS = Object.keys(CAMERA_VIEWS) as CameraView[];
-const TABLE_END_VIEWS: readonly CameraView[] = ['room', 'cryostat', 'voxel', 'coil'];
+const TABLE_END_VIEWS: readonly CameraView[] = ['cryostat', 'voxel', 'coil'];
 const SLOPES: Readonly<Record<StageVariant, FramingSlopes>> = {
   phone: { vertical: 0.75, horizontal: 0.38 },
   desktop: { vertical: 0.42, horizontal: 0.75 },
@@ -55,6 +55,14 @@ describe('camera views', () => {
         expect(cameraOf(view, variant).z, view).toBeGreaterThan(MAGNET.halfLength);
       }),
     );
+  });
+
+  it('looks across the table toward the monitor wall in the room view', () => {
+    eachVariant((variant) => {
+      const camera = cameraOf('room', variant);
+      expect(camera.x).toBeLessThan(0);
+      expect(camera.z).toBeGreaterThan(MAGNET.halfLength);
+    });
   });
 
   it('looks into the cutaway along x for the gradient shells', () => {

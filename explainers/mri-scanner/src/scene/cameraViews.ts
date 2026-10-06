@@ -18,13 +18,13 @@ export function stageVariant(width: number): StageVariant {
 export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   room: {
     region: 'room',
-    direction: { phone: [0.08, 0.45, 1], desktop: [0.08, 0.4, 1] },
-    margin: 1.05,
+    direction: { phone: [-0.25, 0.3, 1], desktop: [-0.45, 0.25, 1] },
+    margin: 0.95,
   },
   cryostat: {
     region: 'layers',
     direction: { phone: [0.5, 0.5, 1], desktop: [0.55, 0.45, 1] },
-    margin: 1.35,
+    margin: 1.55,
   },
   voxel: {
     region: 'voxel',
