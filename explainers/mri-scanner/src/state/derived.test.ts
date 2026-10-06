@@ -88,7 +88,7 @@ describe('readings', () => {
 
 describe('assembly state', () => {
   it('builds the sequence and spin readings from the model', () => {
-    const state = createAssemblyState(sourceAt());
+    const state = createAssemblyState(sourceAt({ view: { ...DEFAULT_VIEW, voxel: true } }));
     expect(state.sequence).toMatchObject({
       phase: MOMENTS.echoPeak,
       step: 'echo',
@@ -135,6 +135,15 @@ describe('assembly state', () => {
     writeAssemblyState(front, sourceAt({ weighting: 't1' }));
     expect(front.pictureVersion).toBe(back.pictureVersion);
     expect(front.picture).toBe(back.picture);
+  });
+
+  it('skips the spin readings while the voxel view is off', () => {
+    const state = createAssemblyState(sourceAt({ view: { ...DEFAULT_VIEW, voxel: true } }));
+    const { spins } = state;
+    writeAssemblyState(state, sourceAt({ view: DEFAULT_VIEW }));
+    expect(state.spins).toBe(spins);
+    expect(state.spins.arrows).toHaveLength(0);
+    expect(state.spins.precession).toBe(0);
   });
 
   it('copies the view flags without sharing the store object', () => {

@@ -126,7 +126,11 @@ function writeSequence(
   target.echo = echoAmplitude(phase, weighting, tissue, field, tipAngle);
 }
 
-function writeSpins(target: SpinReading, source: SpinSource): void {
+function writeSpins(target: SpinReading, source: SpinSource & Pick<AssemblySource, 'view'>): void {
+  if (!source.view.voxel) {
+    Object.assign(target, EMPTY_SPINS);
+    return;
+  }
   const { phase, weighting, tissue, field, tipAngle } = source;
   target.net = magnetisation(phase, weighting, tissue, field, tipAngle);
   target.arrows = spinArrows(phase, weighting, tissue, field, tipAngle);
