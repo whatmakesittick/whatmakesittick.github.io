@@ -12,9 +12,6 @@ import {
   TIP_ANGLE_RANGE,
 } from './store';
 
-const PLAYBACK = true;
-const SEEK = false;
-
 function storeOn(preset: Parameters<typeof freshScanLines>[0] = 'magnet') {
   const store = createMriScannerStore();
   store.getState().applyPreset(preset);
@@ -27,26 +24,24 @@ function secondsFor(units: number, speed: number): number {
 
 describe('line crossing', () => {
   it('counts a forward playback step that reaches the end of the echo', () => {
-    expect(crossesLineDone(600, 700, PLAYBACK)).toBe(true);
-    expect(crossesLineDone(600, LINE_DONE_UNITS, PLAYBACK)).toBe(true);
+    expect(crossesLineDone(600, 700)).toBe(true);
+    expect(crossesLineDone(600, LINE_DONE_UNITS)).toBe(true);
   });
 
   it('ignores a step that leaves from the line mark or stays short of it', () => {
-    expect(crossesLineDone(LINE_DONE_UNITS, 700, PLAYBACK)).toBe(false);
-    expect(crossesLineDone(100, 600, PLAYBACK)).toBe(false);
-    expect(crossesLineDone(700, 900, PLAYBACK)).toBe(false);
+    expect(crossesLineDone(LINE_DONE_UNITS, 700)).toBe(false);
+    expect(crossesLineDone(100, 600)).toBe(false);
+    expect(crossesLineDone(700, 900)).toBe(false);
   });
 
   it('counts a step that spans the loop wrap and passes the mark on either side', () => {
-    expect(crossesLineDone(600, 100, PLAYBACK)).toBe(true);
-    expect(crossesLineDone(900, 700, PLAYBACK)).toBe(true);
-    expect(crossesLineDone(900, 100, PLAYBACK)).toBe(false);
+    expect(crossesLineDone(600, 100)).toBe(true);
+    expect(crossesLineDone(900, 700)).toBe(true);
+    expect(crossesLineDone(900, 100)).toBe(false);
   });
 
-  it('never counts a seek or a still phase', () => {
-    expect(crossesLineDone(600, 700, SEEK)).toBe(false);
-    expect(crossesLineDone(600, 100, SEEK)).toBe(false);
-    expect(crossesLineDone(600, 600, PLAYBACK)).toBe(false);
+  it('never counts a still phase', () => {
+    expect(crossesLineDone(600, 600)).toBe(false);
   });
 
   it('wraps to a new scan after the last line', () => {

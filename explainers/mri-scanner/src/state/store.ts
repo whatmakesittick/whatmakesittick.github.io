@@ -71,8 +71,8 @@ export function snapToRange(value: number, { min, max, step }: SteppedRange): nu
   return clamp(min + Math.round((value - min) / step) * step, min, max);
 }
 
-export function crossesLineDone(previous: number, next: number, byPlayback: boolean): boolean {
-  if (!byPlayback || previous === next) return false;
+export function crossesLineDone(previous: number, next: number): boolean {
+  if (previous === next) return false;
   if (next > previous) return previous < LINE_DONE_UNITS && LINE_DONE_UNITS <= next;
   return previous < LINE_DONE_UNITS || LINE_DONE_UNITS <= next;
 }
@@ -96,7 +96,7 @@ function countLinesOnPlayback(store: MriScannerStore): MriScannerStore {
     tick: (deltaSeconds) => {
       const previous = store.getState().phase;
       advance(deltaSeconds);
-      if (crossesLineDone(previous, store.getState().phase, true)) store.getState().addLine();
+      if (crossesLineDone(previous, store.getState().phase)) store.getState().addLine();
     },
   });
   return store;
