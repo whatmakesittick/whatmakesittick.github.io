@@ -127,15 +127,19 @@ export const MAIN_FIELD_ARROW = {
 };
 
 export const REGIONS: Readonly<Record<RegionId, RegionSpec>> = {
-  room: { x: ROOM.x, y: [FLOOR_Y, CEILING_Y], z: ROOM.z },
+  room: {
+    x: [-MAGNET.radius, ROOM.x[1]],
+    y: [FLOOR_Y, MAGNET.top],
+    z: [-MAGNET.halfLength, ROOM.z[1]],
+  },
   scanner: {
     x: [-MAGNET.radius, MAGNET.radius],
     y: [FLOOR_Y, MAGNET.top],
     z: [-MAGNET.halfLength, MAGNET.halfLength],
   },
   layers: {
-    x: [ISOCENTRE[0], MAGNET.radius],
-    y: [ISOCENTRE[1], ISOCENTRE[1] + MAGNET.radius],
+    x: [ISOCENTRE[0] - BORE.radius, MAGNET.radius],
+    y: [ISOCENTRE[1] - BORE.radius, MAGNET.top],
     z: [-MAGNET.halfLength, MAGNET.halfLength],
   },
   voxel: {

@@ -62,13 +62,20 @@ describe('camera views', () => {
     expect(x).toBeGreaterThan(Math.max(Math.abs(y), Math.abs(z)));
   });
 
-  it('turns more end-on on a phone so the rings and arrows stay large', () => {
-    (['cryostat', 'voxel'] as const).forEach((view) => {
-      const ratio = (variant: StageVariant): number => {
-        const [x, , z] = CAMERA_VIEWS[view].direction[variant];
-        return x / z;
-      };
-      expect(ratio('phone'), view).toBeLessThan(ratio('desktop'));
+  it('turns more end-on on a phone so the cryostat rings stay large', () => {
+    const ratio = (variant: StageVariant): number => {
+      const [x, , z] = CAMERA_VIEWS.cryostat.direction[variant];
+      return x / z;
+    };
+    expect(ratio('phone')).toBeLessThan(ratio('desktop'));
+  });
+
+  it('looks at the voxel arrows side-on from the +x side', () => {
+    eachVariant((variant) => {
+      const [x, y, z] = CAMERA_VIEWS.voxel.direction[variant];
+      expect(x).toBeGreaterThan(z);
+      expect(x).toBeGreaterThan(y);
+      expect(z).toBeGreaterThan(0);
     });
   });
 

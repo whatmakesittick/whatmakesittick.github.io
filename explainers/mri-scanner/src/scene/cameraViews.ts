@@ -18,32 +18,32 @@ export function stageVariant(width: number): StageVariant {
 export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   room: {
     region: 'room',
-    direction: { phone: [0.5, 0.5, 1], desktop: [0.75, 0.45, 1] },
-    margin: 0.85,
+    direction: { phone: [0.08, 0.45, 1], desktop: [0.08, 0.4, 1] },
+    margin: 1.05,
   },
   cryostat: {
     region: 'layers',
-    direction: { phone: [0.3, 0.25, 1], desktop: [0.5, 0.35, 1] },
-    margin: 1.5,
+    direction: { phone: [0.5, 0.5, 1], desktop: [0.55, 0.45, 1] },
+    margin: 1.35,
   },
   voxel: {
     region: 'voxel',
-    direction: { phone: [0.12, 0.08, 1], desktop: [0.3, 0.15, 1] },
+    direction: { phone: [1, 0.6, 0.35], desktop: [1, 0.6, 0.35] },
     margin: 1.35,
   },
   coil: {
     region: 'bore',
-    direction: { phone: [0.4, 0.35, 1], desktop: [1, 0.55, 0.75] },
-    margin: 1.15,
+    direction: { phone: [0.25, 0.7, 1], desktop: [0.25, 0.7, 1] },
+    margin: 1.7,
   },
   gradient: {
     region: 'bore',
-    direction: { phone: [1, 0.35, 0.6], desktop: [1, 0.25, 0.2] },
-    margin: 1.1,
+    direction: { phone: [1, 0.6, 0.25], desktop: [1, 0.6, 0.25] },
+    margin: 2.2,
   },
   console: {
     region: 'console',
-    direction: { phone: [-1, 0.15, 0.3], desktop: [-1, 0.3, 0.45] },
-    margin: 2,
+    direction: { phone: [-0.8, 0.45, 0.9], desktop: [-1, 0.3, 0.45] },
+    margin: 1.5,
   },
 };
