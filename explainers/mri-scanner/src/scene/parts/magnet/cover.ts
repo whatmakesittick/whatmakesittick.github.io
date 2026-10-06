@@ -20,7 +20,7 @@ const FLATTEN_FROM = 0.93;
 const FRONT = { joint: 0.58, mouth: 0.53, face: 0.85, rim: 0.86, corner: 0.66 } as const;
 const BACK = { joint: -0.64, mouth: 0.43, face: -0.85, rim: 0.9, corner: -0.7 } as const;
 const LIP = 0.004;
-const BAND = { inner: 1.045, outer: 1.057, from: 0.4, to: 0.6, corner: 0.004 } as const;
+const BAND = { depth: 0.008, lift: 0.001, from: 0.4, to: 0.6, corner: 0.002 } as const;
 const ACCENT = { inner: 0.585, outer: 0.6, depth: 0.007 } as const;
 const PLINTH = { height: 0.32, inset: 0.05, segments: 3, radius: 0.03 } as const;
 
@@ -65,7 +65,8 @@ function coverProfile(): Profile {
 }
 
 function bandProfile(): Profile {
-  const loop = rectLoop(BAND.inner, BAND.outer, BAND.from, BAND.to);
+  const outer = MAGNET.radius + BAND.lift;
+  const loop = rectLoop(outer - BAND.depth, outer, BAND.from, BAND.to);
   return { outer: roundCorners(loop, BAND.corner, 2), holes: [] };
 }
 
