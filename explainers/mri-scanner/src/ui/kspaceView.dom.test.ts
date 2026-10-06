@@ -5,6 +5,7 @@ import { CanvasSurface } from '@core/ui/canvasSurface';
 import type { CanvasFrame, Painter } from '@core/ui/canvasSurface';
 import chapters from '../../chapters.html?raw';
 import en from '../../locales/en.json';
+import { MODEL_SIZE } from '../model';
 import { createMriScannerStore } from '../state';
 import type { MriScannerStore } from '../state';
 import { mountKspaceView } from './kspaceView';
@@ -69,6 +70,26 @@ describe('k-space and image canvases', () => {
     const drawn = paintWith(image);
     expect(drawn.fillText).not.toHaveBeenCalled();
     expect(drawn.fillRect.mock.calls.length).toBeGreaterThan(1);
+  });
+
+  function labelOf(name: string): string | null {
+    return document.querySelector(`[data-canvas="${name}"]`)?.getAttribute('aria-label') ?? null;
+  }
+
+  it('describes both canvases as images with the empty text before the first line', () => {
+    document.querySelectorAll('canvas[data-canvas]').forEach((canvas) => {
+      expect(canvas.getAttribute('role')).toBe('img');
+    });
+    expect(labelOf('kspace')).toBe(en.chapters.picture.empty);
+    expect(labelOf('image')).toBe(en.chapters.picture.empty);
+  });
+
+  it('counts the filled lines in both canvas labels', () => {
+    store.getState().setLinesFilled(16);
+    const filled = (template: string) =>
+      template.replace('{{lines}}', '16').replace('{{total}}', String(MODEL_SIZE));
+    expect(labelOf('kspace')).toBe(filled(en.chapters.picture.kspaceAlt));
+    expect(labelOf('image')).toBe(filled(en.chapters.picture.imageAlt));
   });
 
   it('redraws only when the field, the weighting or the lines change', () => {

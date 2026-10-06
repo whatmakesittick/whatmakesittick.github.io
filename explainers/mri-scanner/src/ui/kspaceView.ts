@@ -56,17 +56,26 @@ export function paintEmpty(context: CanvasRenderingContext2D, frame: CanvasFrame
   context.fillText(t('chapters.picture.empty'), frame.width * HALF, frame.height * HALF, maxWidth);
 }
 
-function squareSurface(root: ParentNode, name: string): CanvasSurface {
+function squareCanvas(root: ParentNode, name: string): HTMLCanvasElement {
   const canvas = requireElement<HTMLCanvasElement>(root, `[data-canvas="${name}"]`);
   canvas.width = CANVAS_SIZE;
   canvas.height = CANVAS_SIZE;
-  return new CanvasSurface(canvas);
+  canvas.setAttribute('role', 'img');
+  return canvas;
+}
+
+function canvasLabel(key: string, lines: number): string {
+  return lines > 0 ? t(key, { lines, total: MODEL_SIZE }) : t('chapters.picture.empty');
 }
 
 export function mountKspaceView(root: ParentNode, store: MriScannerStore): Disposer {
-  const kspace = squareSurface(root, 'kspace');
-  const image = squareSurface(root, 'image');
+  const kspaceCanvas = squareCanvas(root, 'kspace');
+  const imageCanvas = squareCanvas(root, 'image');
+  const kspace = new CanvasSurface(kspaceCanvas);
+  const image = new CanvasSurface(imageCanvas);
   const stopWatching = watchShallowLocalized(store, selectInputs, ([field, weighting, lines]) => {
+    kspaceCanvas.setAttribute('aria-label', canvasLabel('chapters.picture.kspaceAlt', lines));
+    imageCanvas.setAttribute('aria-label', canvasLabel('chapters.picture.imageAlt', lines));
     kspace.paint((context, frame) =>
       paintGrid(context, frame, kspaceDisplay(field, weighting, lines)),
     );
