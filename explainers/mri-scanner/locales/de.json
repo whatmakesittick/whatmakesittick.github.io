@@ -3,9 +3,9 @@
     "title": "So funktioniert ein MRT-Gerät",
     "eyebrow": "Medizinische Bildgebung",
     "tagline": "Ein riesiger Magnet, ein Funkimpuls und der Wasserstoff in Ihrem Körper: So hört das Gerät ein leises Echo und macht daraus ein Bild.",
-    "description": "Ein MRT in 3D: der Magnet, der nie abschaltet, wie Wasserstoff auf einen Funkimpuls antwortet, die klopfenden Spulen und wie aus Echos ein Bild wird.",
+    "description": "Ein MRT-Gerät in 3D: Der Magnet schaltet nie ab, Wasserstoff antwortet auf einen Funkimpuls, die Spulen klopfen, und aus Echos wird ein Bild.",
     "summary": "Der supraleitende Magnet, wie sich Wasserstoff neigt, der Funkimpuls und sein Echo, die Gradientenspulen und der k-Raum.",
-    "socialAlt": "Ein aufgeschnittenes MRT-Gerät mit ineinanderliegenden Magnetschichten rund um den Tunnel, daneben ein Schnittbild eines Kopfes und der Titel „So funktioniert ein MRT-Gerät“"
+    "socialAlt": "Ein aufgeschnittenes MRT-Gerät mit ineinanderliegenden Magnetschichten rund um die Röhre, daneben ein Schnittbild eines Kopfes und der Titel „So funktioniert ein MRT-Gerät“"
   },
   "stage": {
     "label": "Interaktives Modell eines MRT-Geräts",
@@ -39,8 +39,8 @@
     "field": "Feldstärke",
     "weighting": "Bildart",
     "fieldOptions": {
-      "field15": "1,5 T",
-      "field30": "3 T"
+      "field15": "1,5 T",
+      "field30": "3 T"
     },
     "weightingOptions": {
       "t1": "T1-gewichtet",
@@ -102,17 +102,17 @@
     "lines": "Zeilen im k-Raum"
   },
   "units": {
-    "mhz": "{{value}} MHz",
-    "msOf": "{{value}} von {{total}} ms",
+    "mhz": "{{value}} MHz",
+    "msOf": "{{value}} von {{total}} ms",
     "linesOf": "{{value}} von {{total}}",
     "degrees": "{{value}}°",
-    "percent": "{{value}} %",
-    "ms": "{{value}} ms",
-    "tesla": "{{value}} T",
-    "kelvin": "{{kelvin}} K, {{celsius}} °C",
-    "kHz": "{{value}} kHz",
-    "mT": "{{value}} mT",
-    "cm": "{{value}} cm"
+    "percent": "{{value}} %",
+    "ms": "{{value}} ms",
+    "tesla": "{{value}} T",
+    "kelvin": "{{kelvin}} K, {{celsius}} °C",
+    "kHz": "{{value}} kHz",
+    "mT": "{{value}} mT",
+    "cm": "{{value}} cm"
   },
   "chapters": {
     "overview": {
@@ -125,8 +125,8 @@
       "earth": "Verglichen mit dem Erdfeld",
       "earthValue": "{{min}}- bis {{max}}-mal so stark",
       "helium": "Flüssiges Helium",
-      "fringe": "Sicherheitslinie 0,5 mT",
-      "fringeValue": "{{along}} m entlang der Röhre, {{side}} m zur Seite"
+      "fringe": "Sicherheitslinie 0,5 mT",
+      "fringeValue": "{{along}} m entlang der Röhre, {{side}} m seitlich"
     },
     "spins": {
       "larmor": "Larmor-Frequenz",
@@ -135,9 +135,9 @@
         "belowFm": "knapp unter dem UKW-Band",
         "aboveFm": "knapp über dem UKW-Band"
       },
-      "surplus": "Zusätzliche Kerne, die sich mit dem Feld neigen",
+      "surplus": "Mehr Kerne mit dem Feld als dagegen",
       "surplusValue": "etwa {{perMillion}} pro Million",
-      "count": "Überschuss in 1 mm³ Wasser",
+      "count": "Überschuss in 1 mm³ Wasser",
       "countValue": "etwa {{mantissa}} × 10{{exponent}}",
       "slowdown": "Zeichnung verlangsamt",
       "slowdownValue": "etwa {{factor}} Mal"
@@ -166,11 +166,11 @@
       "kspace": "k-Raum, die gespeicherten Echos",
       "image": "Das Bild",
       "scanTime": "Eine Zeile pro Wiederholung",
-      "scanTimeValue": "{{minutes}} min für {{lines}} Zeilen",
+      "scanTimeValue": "{{minutes}} min für {{lines}} Zeilen",
       "turbo": "Turbo-Spin-Echo, 16 Zeilen pro Wiederholung",
-      "turboValue": "etwa {{seconds}} s",
+      "turboValue": "etwa {{seconds}} s",
       "empty": "Noch keine Zeilen. Das nächste Echo füllt die erste.",
-      "kspaceAlt": "Das Raster des k-Raums, {{lines}} von {{total}} Zeilen sind gefüllt",
+      "kspaceAlt": "Das Raster des k-Raums mit {{lines}} von {{total}} gefüllten Zeilen",
       "imageAlt": "Das Schnittbild des Kopfes, berechnet aus {{lines}} von {{total}} Zeilen"
     }
   },
@@ -206,45 +206,45 @@
   "sections": {
     "overview": {
       "title": "Eine Röhre, die Ihrem Körper zuhört",
-      "p1": "Das ist ein <strong>MRT-Gerät</strong>, auch Kernspintomograf genannt. MRT steht für Magnetresonanztomografie. Sein Magnet hat eine Stärke von 1,5 Tesla. Die Einheit <strong>Tesla</strong> gibt an, wie stark ein Magnetfeld ist. Sie legen sich auf die <strong>Liege</strong>, die Sie in die <strong>Röhre</strong> fährt, einen Tunnel von etwa 70 cm Breite. Das Gerät drumherum ist etwa 1,6 bis 1,9 m lang und wiegt 3 bis 6 Tonnen.",
-      "p2": "Für eine Untersuchung des Gehirns sitzt eine <strong>Kopfspule</strong> wie ein Käfig um Ihren Kopf. Die Spule ist eine Antenne mit 20 bis 64 kleinen Empfängern. Diese lauschen auf ein schwaches Funkecho aus Ihrem Körper. Der Raum ist mit Kupferblech ausgekleidet, damit Funkwellen von außen dieses Echo nicht übertönen. Röntgenstrahlen gibt es hier keine. Die Funkwellen des Geräts haben etwa 50 Millionen Mal zu wenig Energie, um ein Elektron aus einem Atom zu schlagen.",
+      "p1": "Das ist ein <strong>MRT-Gerät</strong>, auch Kernspintomograf genannt. MRT steht für Magnetresonanztomografie. Sein Magnet ist 1,5 Tesla stark. Die Einheit <strong>Tesla</strong> gibt an, wie stark ein Magnetfeld ist. Sie legen sich auf die <strong>Liege</strong>, die Sie in die <strong>Röhre</strong> fährt. Dieser Tunnel ist etwa 70 cm breit. Das Gerät drumherum ist etwa 1,6 bis 1,9 m lang und wiegt 3 bis 6 Tonnen.",
+      "p2": "Für eine Untersuchung des Gehirns sitzt eine <strong>Kopfspule</strong> wie ein Käfig um Ihren Kopf. Die Spule ist eine Antenne mit 20 bis 64 kleinen Empfängern. Diese lauschen auf ein schwaches Funkecho aus Ihrem Körper. Der Raum ist mit Kupferblech ausgekleidet, damit Funkwellen von außen dieses Echo nicht übertönen. Röntgenstrahlen gibt es hier keine. Um ein Elektron aus einem Atom zu schlagen, bräuchten die Funkwellen des Geräts etwa 50 Millionen Mal so viel Energie.",
       "p3": "Unter der weißen <strong>Verkleidung</strong> stecken die Bauteile ineinander wie Ringe. Von außen nach innen finden Sie den Magneten in seinem kalten Mantel, drei <strong>Gradientenspulen</strong> und die <strong>Körperspule</strong>, eine Funkantenne. Schalten Sie die Schnittansicht (C) ein. Dann öffnet sich ein Keil im Magneten, und Sie sehen die Schichten. Die nächsten Kapitel stellen sie nacheinander vor.",
-      "p4": "Das Modell spielt eine <strong>Wiederholung</strong> ab. Das ist der kurze Ablauf, den ein Scan immer wieder durchläuft, um ein Bild aufzubauen. Eine Wiederholung dauert hier in Echtzeit 0,5 bis 2,5 s, die Funkimpulse darin aber nur Millisekunden. Deshalb ist die Zeitleiste nicht maßstabsgetreu. Die wenigen Millisekunden mit Impulsen und Echo füllen etwa zwei Drittel davon, die lange Pause ist ins letzte Drittel gestaucht. Die Zeitleiste zeigt, welcher Schritt gerade läuft. Die Live-Werte zeigen die echte Zeit. Eine ganze Untersuchung des Kopfes mit vielen Bildern dauert etwa 30 bis 45 Minuten."
+      "p4": "Das Modell spielt eine <strong>Wiederholung</strong> ab. Das ist der kurze Ablauf, den ein Scan immer wieder durchläuft, um ein Bild aufzubauen. Eine Wiederholung dauert hier in Wirklichkeit 0,5 bis 2,5 s, die Funkimpulse darin aber nur Millisekunden. Deshalb ist die Zeitleiste nicht maßstabsgetreu. Die wenigen Millisekunden mit Impulsen und Echo füllen etwa zwei Drittel davon, die lange Pause ist ins letzte Drittel gestaucht. Die Zeitleiste zeigt, welcher Schritt gerade läuft. Die Live-Messwerte zeigen die echte Zeit. Eine ganze Untersuchung des Kopfes mit vielen Bildern dauert etwa 30 bis 45 Minuten."
     },
     "magnet": {
       "title": "Ein Magnet, der nie abschaltet",
-      "p1": "Das größte Bauteil ist der <strong>Hauptmagnet</strong>: etwa 30 bis 40 km Draht aus Niob-Titan, zu Spulen gewickelt. Kühlt man diesen Draht weit genug ab, wird er <strong>supraleitend</strong>. Das heißt: Strom fließt ganz ohne Widerstand hindurch. Mehrere hundert Ampere kreisen in einer geschlossenen Schleife. Ist die Schleife einmal geschlossen, braucht das Feld keine Stromzufuhr mehr. In einem Jahr wird es um weniger als ein Zehntel Prozent schwächer.",
-      "p2": "Damit die Spulen supraleitend bleiben, liegen sie in <strong>flüssigem Helium</strong> bei 4,2 Kelvin (K), etwa −269 °C. Kelvin ist eine Temperaturskala, die beim absoluten Nullpunkt beginnt. Kälter als dort kann nichts werden. Das Helium ist also nur etwa 1,5 K wärmer als das tiefe Weltall. Ein klassischer Magnet fasst etwa 1.500 Liter davon, neuere versiegelte Magnete brauchen 7 Liter oder sogar weniger. Ein Wärmeschild und ein Vakuum um den Heliumbehälter halten die Wärme draußen, wie bei einer Thermoskanne. Im geöffneten Keil sehen Sie diese Schichten. Eine kleine Kältemaschine obendrauf, der <strong>Kaltkopf</strong>, macht verdampftes Helium wieder flüssig. Er läuft Tag und Nacht und braucht etwa 6 bis 7 kW.",
-      "p3": "Das Feld ist mehrere zehntausend Mal stärker als das Erdfeld. Die genaue Zahl hängt davon ab, wo Sie sind, denn das Erdfeld ist nicht überall gleich stark. Wählen Sie 3 T, dann sehen Sie zum Vergleich einen stärkeren Magneten. Die Feldlinien um den Magneten zeigen die Form seines Feldes. Zusätzliche <strong>Abschirmspulen</strong> außen führen Strom in die Gegenrichtung und holen so das Feld zurück, das nach außen dringt. Trotzdem bleibt das Feld bis etwa 4 m entlang der Röhre über 0,5 mT, einem halben Tausendstel Tesla. In diesem Bereich arbeitet ein Herzschrittmacher womöglich nicht mehr sicher. Der gestrichelte Ring auf dem Boden markiert seine Grenze.",
-      "p4": "Der Magnet schaltet nie ab, deshalb warnt ein Leuchtschild an der Tür, dass er immer an ist. Alles, was Eisen enthält, kann in die Röhre fliegen. Sauerstoffflaschen haben auf diese Weise schon Menschen getötet. Deshalb kontrolliert das Personal an der Tür jeden Menschen und jeden Gegenstand. Erwärmt sich der Draht an einer Stelle, verliert er die Supraleitung, und der Strom wird zu Wärme. Das nennt man einen <strong>Quench</strong>. Das Feld fällt in 2 bis 5 Sekunden auf null, und das verdampfende Helium schießt donnernd durch das <strong>Quenchrohr</strong> ins Freie."
+      "p1": "Das größte Bauteil ist der <strong>Hauptmagnet</strong>: etwa 30 bis 40 km Draht aus Niob-Titan, zu Spulen gewickelt. Kühlt man diesen Draht weit genug ab, wird er <strong>supraleitend</strong>. Das heißt: Strom fließt ganz ohne Widerstand hindurch. Mehrere hundert Ampere kreisen in einer geschlossenen Schleife. Ist die Schleife einmal geschlossen, braucht das Feld keine Stromzufuhr mehr. In einem Jahr wird es um weniger als ein Zehntel Prozent schwächer.",
+      "p2": "Damit die Spulen supraleitend bleiben, liegen sie in <strong>flüssigem Helium</strong> bei 4,2 Kelvin (K), etwa −269 °C. Kelvin ist eine Temperaturskala, die beim absoluten Nullpunkt beginnt. Kälter geht es nicht. Das Helium ist also nur etwa 1,5 K wärmer als das tiefe Weltall. Ein klassischer Magnet fasst etwa 1.500 Liter davon, neuere versiegelte Magnete brauchen 7 Liter oder sogar weniger. Ein Wärmeschild und ein Vakuum um den Heliumbehälter halten die Wärme draußen, wie bei einer Thermoskanne. Im geöffneten Keil sehen Sie diese Schichten. Eine kleine Kältemaschine obendrauf, der <strong>Kaltkopf</strong>, macht verdampftes Helium wieder flüssig. Er läuft Tag und Nacht und braucht etwa 6 bis 7 kW.",
+      "p3": "Das Feld ist mehrere zehntausend Mal stärker als das Erdfeld. Die genaue Zahl hängt davon ab, wo Sie sind, denn das Erdfeld ist nicht überall gleich stark. Wählen Sie 3 T, dann sehen Sie zum Vergleich einen stärkeren Magneten. Die Feldlinien um den Magneten zeigen die Form seines Feldes. Zusätzliche <strong>Abschirmspulen</strong> außen führen Strom in die Gegenrichtung und holen so das Feld zurück, das nach außen dringt. Trotzdem ist das Feld entlang der Röhre noch bis etwa 4 m weit stärker als 0,5 mT. Das ist ein halbes Tausendstel Tesla. In diesem Bereich arbeitet ein Herzschrittmacher womöglich nicht mehr sicher. Der gestrichelte Ring auf dem Boden markiert seine Grenze.",
+      "p4": "Der Magnet schaltet nie ab, deshalb warnt ein Leuchtschild an der Tür, dass er immer an ist. Alles, was Eisen enthält, kann in die Röhre fliegen. Sauerstoffflaschen haben auf diese Weise schon Menschen getötet. Deshalb kontrolliert das Personal an der Tür jeden Menschen und jeden Gegenstand. Erwärmt sich der Draht an einer Stelle, verliert er die Supraleitung, und der Strom wird zu Wärme. Das nennt man einen <strong>Quench</strong>. Das Feld fällt in 2 bis 5 Sekunden auf null, und das verdampfende Helium schießt donnernd durch das <strong>Quenchrohr</strong> ins Freie."
     },
     "spins": {
       "title": "Wasserstoff neigt sich und taumelt",
-      "p1": "Etwa sechs von zehn Atomen in Ihrem Körper sind Wasserstoff, vor allem in Wasser und Fett. Das Zentrum eines Wasserstoffatoms, sein <strong>Kern</strong>, ist ein einzelnes Proton. Es verhält sich wie ein winziger Magnet. Die MRT lauscht auf Wasserstoff, weil er überall vorkommt und das stärkste Signal liefert.",
-      "p2": "Im Feld zeigt jeder dieser winzigen Magnete nicht einfach in Feldrichtung. Stattdessen <strong>präzediert</strong> er: Er taumelt um die Feldrichtung wie ein schräg stehender Kreisel. Bei 1,5 T taumelt er etwa 64 Millionen Mal pro Sekunde, also mit 63,9 MHz (Megahertz). Dieser Takt ist die <strong>Larmor-Frequenz</strong>, sozusagen die Tonhöhe des Taumelns. Je stärker das Feld, desto höher die Frequenz: Bei 3 T sind es 127,7 MHz. Beide Frequenzen liegen nah am UKW-Band: die eine knapp darunter, die andere knapp darüber.",
+      "p1": "Etwa sechs von zehn Atomen in Ihrem Körper sind Wasserstoffatome, vor allem in Wasser und Fett. Im Zentrum eines Wasserstoffatoms sitzt sein <strong>Kern</strong>, ein einzelnes Proton. Dieses Proton verhält sich wie ein winziger Magnet. Die MRT lauscht auf Wasserstoff, weil er überall vorkommt und das stärkste Signal liefert.",
+      "p2": "Im Feld zeigt jeder dieser winzigen Magnete nicht einfach in Feldrichtung. Stattdessen <strong>präzediert</strong> er: Er taumelt um die Feldrichtung wie ein schräg stehender Kreisel. Bei 1,5 T taumelt er etwa 64 Millionen Mal pro Sekunde, also mit 63,9 MHz (Megahertz). Dieser Takt ist die <strong>Larmor-Frequenz</strong>, sozusagen die Tonhöhe des Taumelns. Je stärker das Feld, desto höher die Frequenz: Bei 3 T sind es 127,7 MHz. Beide Frequenzen liegen nah am UKW-Band: die eine knapp darunter, die andere knapp darüber.",
       "p3": "Die Kerne richten sich nicht alle nach dem Feld aus. Die Körperwärme schubst sie herum, deshalb zeigen sie in fast alle Richtungen. Auf eine Million Kerne neigen sich nur etwa 5 mehr mit dem Feld als dagegen. Trotzdem ergibt dieser kleine Überschuss in einem Kubikmillimeter Wasser etwa 3,3 × 10¹⁴ Kerne. Zusammen bilden sie einen winzigen <strong>Gesamtmagneten</strong>. Das ist der Pfeil, mit dem das Gerät arbeitet.",
-      "p4": "Die Pfeile im kleinen Fenster sind eine vielfach vergrößerte Zeichnung, keine echte Stelle im Kopf. Auch die Neigung ist viel stärker gezeichnet, als sie wirklich ist, damit Sie sie erkennen. Drücken Sie auf Wiedergabe und sehen Sie zu, wie sich die Pfeile drehen. Die Zeichnung ist enorm verlangsamt, und der Messwert zeigt, um wie viel. Diese Zahl hängt auch vom Wiedergabetempo ab. Schalten Sie auf 3 T: Die echte Frequenz und der Überschuss verdoppeln sich, aber die Zeichnung behält ihr Tempo. Deshalb verdoppelt sich auch die Verlangsamung."
+      "p4": "Die Pfeile im kleinen Fenster sind eine vielfach vergrößerte Zeichnung, keine echte Stelle im Kopf. Auch die Neigung ist viel stärker gezeichnet, als sie wirklich ist, damit Sie sie erkennen. Drücken Sie auf Wiedergabe und sehen Sie zu, wie sich die Pfeile drehen. Die Zeichnung ist enorm verlangsamt, und der Messwert zeigt, um wie viel. Diese Zahl hängt auch vom Wiedergabetempo ab. Schalten Sie auf 3 T um: Die echte Frequenz und der Überschuss verdoppeln sich, aber die Zeichnung behält ihr Tempo. Deshalb verdoppelt sich auch die Verlangsamung."
     },
     "resonance": {
       "title": "Ein Funkimpuls und sein Echo",
-      "p1": "Um den Gesamtmagneten zum Sprechen zu bringen, sendet das Gerät einen kurzen Funkimpuls, genau mit der Larmor-Frequenz. Diesen Gleichtakt mit dem Taumeln nennt man <strong>Resonanz</strong>. Es ist wie beim Schaukeln: Sie schubsen ein Kind genau im richtigen Moment an. Der Impuls kommt aus der <strong>Körperspule</strong>, einem Käfig aus Kupferstäben gleich an der Innenseite der Röhre. Er dauert höchstens ein paar Millisekunden.",
+      "p1": "Um den Gesamtmagneten zum Sprechen zu bringen, sendet das Gerät einen kurzen Funkimpuls, genau auf der Larmor-Frequenz. Diesen Gleichtakt mit dem Taumeln nennt man <strong>Resonanz</strong>. Es ist wie beim Schaukeln: Sie schubsen ein Kind genau im richtigen Moment an. Der Impuls kommt aus der <strong>Körperspule</strong>, einem Käfig aus Kupferstäben direkt an der Innenseite der Röhre. Er dauert höchstens ein paar Millisekunden.",
       "p2": "Ein <strong>90°-Impuls</strong> kippt den Gesamtmagneten um, bis er seitlich liegt. Dort taumelt er weiter. Wenn er dabei an der Kopfspule vorbeistreicht, erzeugt er eine winzige Spannung, gemessen in Mikrovolt. Diese Spannung ist das Signal. Bewegen Sie den Regler für den Kippwinkel: Nur der seitliche Anteil liefert ein Signal, der Anteil entlang des Feldes liefert keins.",
       "p3": "Bald geraten die winzigen Magnete aus dem Takt, weil manche etwas schneller taumeln als andere. Das Signal klingt ab. Auf halbem Weg zum Echo klappt ein <strong>180°-Impuls</strong> sie um. Jetzt liegen die schnellen hinten und holen auf. Die Magnete kommen wieder in den Takt und liefern ein <strong>Echo</strong>. Die Zeit vom 90°-Impuls bis zum Echo heißt <strong>Echozeit</strong>. Mit den Schaltflächen unten halten Sie an jedem dieser Zeitpunkte an.",
-      "p4": "Zwei Zeitspannen bestimmen, wie hell ein Gewebe erscheint. <strong>T1</strong> ist die Zeit, bis der Gesamtmagnet entlang des Feldes wieder zu etwa 63 % aufgebaut ist. <strong>T2</strong> ist die Zeit, bis das seitliche Signal auf etwa 37 % abgeklungen ist. Das Umklappen durch den 180°-Impuls gleicht nur feste Unterschiede aus. Zufällige Stöße zwischen benachbarten Kernen gleicht es nicht aus, deshalb ist das Echo etwas schwächer. Genau dieser Verlust ist T2. Fett erholt sich schnell, Hirnwasser langsam. Wählen Sie ein Gewebe zum Vergleich. Die Werte der einzelnen Gewebe sind grobe Richtwerte für dieses Modell. Die Impulse wärmen Sie auch leicht auf, deshalb hält das Gerät diese Erwärmung in sicheren Grenzen."
+      "p4": "Zwei Zeitspannen bestimmen, wie hell ein Gewebe erscheint. <strong>T1</strong> ist die Zeit, bis der Gesamtmagnet entlang des Feldes wieder zu etwa 63 % aufgebaut ist. <strong>T2</strong> ist die Zeit, bis das seitliche Signal auf etwa 37 % abgeklungen ist. Das Umklappen durch den 180°-Impuls gleicht nur feste Unterschiede aus. Zufällige Stöße zwischen benachbarten Kernen gleicht es nicht aus, deshalb ist das Echo etwas schwächer. Genau dieser Verlust ist T2. Fett erholt sich schnell, Hirnwasser langsam. Wählen Sie ein Gewebe zum Vergleich. Die Werte der einzelnen Gewebe sind grobe Richtwerte für dieses Modell. Die Impulse wärmen Sie auch leicht auf, deshalb hält das Gerät diese Erwärmung in sicheren Grenzen."
     },
     "gradients": {
       "title": "Spulen, die Orte unterscheiden",
       "p1": "Bisher antwortet jede Stelle im Kopf mit derselben Frequenz, also verrät das Echo nicht, woher es kommt. Drei weitere Spulen im Magneten ändern das: die <strong>Gradientenspulen</strong> x, y und z. Ein <strong>Gradient</strong> ist ein Feld, das sich von einer Seite zur anderen gleichmäßig ändert. Jede Spule verstärkt das Hauptfeld auf einer Seite der Mitte ein wenig und schwächt es auf der anderen ein wenig ab.",
-      "p2": "Die Änderung ist klein: bis zu 45 mT pro Meter. Am Rand des Kopfes ergibt das etwa 5,4 mT. Das ist ein Drittel Prozent eines Feldes von 1,5 T. Trotzdem reicht es, damit jede Position ihre eigene Frequenz bekommt. Die Spulen schalten sich in etwa 0,2 ms ein.",
+      "p2": "Die Änderung ist klein: bis zu 45 mT pro Meter. Am Rand des Kopfes ergibt das etwa 5,4 mT. Das ist ein Drittel Prozent eines Feldes von 1,5 T. Trotzdem bekommt so jede Stelle ihre eigene Frequenz. Die Spulen schalten sich in etwa 0,2 ms ein.",
       "p3": "Jede Spule hat ihre eigene Aufgabe. Die z-Spule arbeitet mit dem Funkimpuls zusammen und weckt nur eine dünne Schicht. Das ist die <strong>Schichtauswahl</strong>. Die y-Spule gibt jeder Wiederholung eine andere Verdrehung von oben nach unten. Das nennt man <strong>Phasenkodierung</strong>. Die x-Spule läuft, während das Echo eintrifft. So verrät die Frequenz, ob etwas links oder rechts liegt. Das ist die <strong>Frequenzkodierung</strong>. Wählen Sie eine Spule, um ihr Feld zu sehen, oder folgen Sie dem Scan.",
-      "p4": "Werden in einem starken Magneten große Ströme geschaltet, zucken die Spulen wie ein Lautsprecher. Das ist das laute Klopfen, das Sie während eines Scans hören. Es kann über 100 Dezibel erreichen, so laut wie ein Presslufthammer oder noch lauter. Deshalb bekommen Sie immer Ohrstöpsel oder Kopfhörer."
+      "p4": "Werden in einem starken Magneten große Ströme geschaltet, zucken die Spulen wie ein Lautsprecher. Das ist das laute Klopfen, das Sie während eines Scans hören. Es kann über 100 Dezibel erreichen, so laut wie ein Presslufthammer oder noch lauter. Deshalb bekommen Sie immer Ohrstöpsel oder Kopfhörer."
     },
     "picture": {
       "title": "Von Echos zum Bild",
-      "p1": "Jedes Echo wird als eine Zeile im <strong>k-Raum</strong> gespeichert. Das ist ein Raster, das die Echos nach Frequenz und Verdrehung ordnet statt nach Ort. Eine Wiederholung füllt eine Zeile. Die nächste ändert die Verdrehung und füllt eine weitere. In diesem Modell hat das Bild 64 × 64 Pixel, es braucht also 64 Wiederholungen. Echte Aufnahmen des Kopfes nutzen oft 256 Zeilen. Hier füllen sich die Zeilen von der Mitte nach außen, darum erscheint früh ein grobes Bild.",
+      "p1": "Jedes Echo wird als eine Zeile im <strong>k-Raum</strong> gespeichert. Das ist ein Raster, das die Echos nach Frequenz und Verdrehung ordnet statt nach Ort. Eine Wiederholung füllt eine Zeile. Die nächste ändert die Verdrehung und füllt eine weitere. In diesem Modell hat das Bild 64 × 64 Pixel, es braucht also 64 Wiederholungen. Echte Aufnahmen des Kopfes nutzen oft 256 Zeilen. Hier füllen sich die Zeilen von der Mitte nach außen, darum erscheint früh ein grobes Bild.",
       "p2": "Eine Rechnung namens <strong>Fourier-Transformation</strong> macht aus diesem Raster das Bild. Dabei ermittelt sie, welche Mischung aus breiten und feinen Streifen zusammen das Bild ergibt. Die Mitte des k-Raums enthält die breiten Streifen: das grobe Hell und Dunkel. Die Ränder enthalten die feinen Details. Das Bild erscheint auf dem Monitor an der Wand, neben dem Fenster zum Kontrollraum. Wählen Sie 8, 16, 32 oder 64 Zeilen: Der Scan hält an, und Sie sehen, wie das Bild schärfer wird.",
-      "p3": "Das Timing entscheidet, welche Gewebe hell erscheinen. Ein <strong>T1-gewichteter</strong> Scan wiederholt sich alle 500 ms und lauscht früh, nach 15 ms. Jede Wiederholung endet, bevor sich langsame Gewebe erholt haben. Deshalb ist Fett hell und Hirnwasser dunkel. Ein <strong>T2-gewichteter</strong> Scan wartet 2.500 ms und lauscht nach 100 ms. Jetzt leuchtet das Hirnwasser, denn sein Signal klingt nur langsam ab. Graue Substanz wirkt heller als weiße. Die Messwerte zeigen, wie hell jedes Gewebe erscheint. Das hellste steht bei 100 %. Der Kopf hier ist eine einfache Zeichnung aus Ovalen, keine echte Aufnahme. In diesem Modell enthält jedes Gewebe gleich viel Wasserstoff, und Knochen und Luft bleiben schwarz.",
-      "p4": "Mit einer Zeile pro Wiederholung dauern 256 Zeilen etwa 2,1 Minuten beim T1-Scan und 10,7 Minuten beim T2-Scan. Die meisten Aufnahmen des Gehirns nutzen heute <strong>Turbo-Spin-Echo</strong>. Dabei liest das Gerät in jeder Wiederholung 4 bis 32 Zeilen. Mit 16 Zeilen pro Wiederholung dauert der T2-Scan etwa 40 Sekunden. Dieses Modell nimmt eine einzige Schicht auf, eine echte Untersuchung des Kopfes dagegen viele. Paul Lauterbur veröffentlichte 1973 das erste MR-Bild. Er und Peter Mansfield teilten sich dafür 2003 den Nobelpreis."
+      "p3": "Der zeitliche Ablauf entscheidet, welche Gewebe hell erscheinen. Ein <strong>T1-gewichteter</strong> Scan wiederholt sich alle 500 ms und lauscht früh, nach 15 ms. Jede Wiederholung endet, bevor sich langsame Gewebe erholt haben. Deshalb ist Fett hell und Hirnwasser dunkel. Ein <strong>T2-gewichteter</strong> Scan wartet 2.500 ms und lauscht nach 100 ms. Jetzt leuchtet das Hirnwasser, denn sein Signal klingt nur langsam ab. Graue Substanz wirkt heller als weiße. Die Messwerte zeigen, wie hell jedes Gewebe erscheint. Das hellste steht bei 100 %. Der Kopf hier ist eine einfache Zeichnung aus Ovalen, keine echte Aufnahme. In diesem Modell enthält jedes Gewebe gleich viel Wasserstoff, und Knochen und Luft bleiben schwarz.",
+      "p4": "Mit einer Zeile pro Wiederholung dauern 256 Zeilen etwa 2,1 Minuten beim T1-Scan und 10,7 Minuten beim T2-Scan. Für die meisten Aufnahmen des Gehirns nutzt man heute das <strong>Turbo-Spin-Echo</strong>. Dabei liest das Gerät in jeder Wiederholung 4 bis 32 Zeilen. Mit 16 Zeilen pro Wiederholung dauert der T2-Scan etwa 40 Sekunden. Dieses Modell nimmt eine einzige Schicht auf, eine echte Untersuchung des Kopfes dagegen viele. Paul Lauterbur veröffentlichte 1973 das erste MR-Bild. Er und Peter Mansfield teilten sich dafür 2003 den Nobelpreis."
     }
   }
 }
