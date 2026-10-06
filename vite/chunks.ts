@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url';
+
 export interface ModuleInfo {
   importedIds: readonly string[];
   importers: readonly string[];
@@ -9,7 +11,8 @@ export interface ModuleGraph {
 }
 
 const PACKAGE_MODULE = /[\\/]node_modules[\\/]/;
-const EXPLAINER_MODULE = /[\\/]explainers[\\/]([^\\/]+)[\\/]/;
+const EXPLAINER_MODULE = /^explainers\/([^/]+)\//;
+const PROJECT_ROOT = fileURLToPath(new URL('..', import.meta.url));
 
 export function dependsOn(id: string, target: RegExp, graph: ModuleGraph): boolean {
   const visited = new Set([id]);
@@ -45,12 +48,24 @@ function projectImporters(id: string, graph: ModuleGraph): Set<string> {
   return importers;
 }
 
-function explainerSlug(id: string): string | undefined {
-  return EXPLAINER_MODULE.exec(id)?.[1];
+function toPosix(path: string): string {
+  return path.replaceAll('\\', '/');
 }
 
-export function isExplainerOnlyPackage(id: string, graph: ModuleGraph): boolean {
+function explainerSlug(id: string, root: string): string | undefined {
+  const base = toPosix(root).replace(/\/?$/, '/');
+  const path = toPosix(id);
+  if (!path.startsWith(base)) return undefined;
+  return EXPLAINER_MODULE.exec(path.slice(base.length))?.[1];
+}
+
+export function isExplainerOnlyPackage(
+  id: string,
+  graph: ModuleGraph,
+  root: string = PROJECT_ROOT,
+): boolean {
   if (!PACKAGE_MODULE.test(id)) return false;
-  const owners = new Set([...projectImporters(id, graph)].map(explainerSlug));
+  const importers = [...projectImporters(id, graph)];
+  const owners = new Set(importers.map((importer) => explainerSlug(importer, root)));
   return owners.size === 1 && !owners.has(undefined);
 }

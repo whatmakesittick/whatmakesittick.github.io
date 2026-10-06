@@ -48,6 +48,8 @@ describe('dependsOn', () => {
   });
 });
 
+const FIXTURE_ROOT = '/';
+
 const packages = graph(
   {
     '/src/core/mount.ts': ['/node_modules/i18next/index.js'],
@@ -83,28 +85,59 @@ const packages = graph(
 
 describe('isExplainerOnlyPackage', () => {
   it('is true for a package that only one explainer imports, from any of its files', () => {
-    expect(isExplainerOnlyPackage('/node_modules/fft.js/lib/fft.js', packages)).toBe(true);
+    expect(isExplainerOnlyPackage('/node_modules/fft.js/lib/fft.js', packages, FIXTURE_ROOT)).toBe(
+      true,
+    );
   });
 
   it('follows imports through other packages, cycles included', () => {
-    expect(isExplainerOnlyPackage('/node_modules/inner/index.js', packages)).toBe(true);
+    expect(isExplainerOnlyPackage('/node_modules/inner/index.js', packages, FIXTURE_ROOT)).toBe(
+      true,
+    );
   });
 
   it('counts dynamic imports as reaching the package', () => {
-    expect(isExplainerOnlyPackage('/node_modules/lazy/index.js', packages)).toBe(true);
-    expect(isExplainerOnlyPackage('/node_modules/lazy-core/index.js', packages)).toBe(false);
+    expect(isExplainerOnlyPackage('/node_modules/lazy/index.js', packages, FIXTURE_ROOT)).toBe(
+      true,
+    );
+    expect(isExplainerOnlyPackage('/node_modules/lazy-core/index.js', packages, FIXTURE_ROOT)).toBe(
+      false,
+    );
   });
 
   it('is false for a package that two explainers or the core import', () => {
-    expect(isExplainerOnlyPackage('/node_modules/both/index.js', packages)).toBe(false);
-    expect(isExplainerOnlyPackage('/node_modules/i18next/index.js', packages)).toBe(false);
+    expect(isExplainerOnlyPackage('/node_modules/both/index.js', packages, FIXTURE_ROOT)).toBe(
+      false,
+    );
+    expect(isExplainerOnlyPackage('/node_modules/i18next/index.js', packages, FIXTURE_ROOT)).toBe(
+      false,
+    );
   });
 
   it('is false for project code and for a package nothing imports', () => {
-    expect(isExplainerOnlyPackage('/explainers/mri-scanner/src/model/image.ts', packages)).toBe(
+    expect(
+      isExplainerOnlyPackage('/explainers/mri-scanner/src/model/image.ts', packages, FIXTURE_ROOT),
+    ).toBe(false);
+    expect(isExplainerOnlyPackage('/node_modules/orphan/index.js', packages, FIXTURE_ROOT)).toBe(
       false,
     );
-    expect(isExplainerOnlyPackage('/node_modules/orphan/index.js', packages)).toBe(false);
-    expect(isExplainerOnlyPackage('/node_modules/unknown/index.js', packages)).toBe(false);
+    expect(isExplainerOnlyPackage('/node_modules/unknown/index.js', packages, FIXTURE_ROOT)).toBe(
+      false,
+    );
+  });
+
+  it('reads the slug below the project root when the checkout sits in an explainers folder', () => {
+    const root = '/home/reader/explainers/site';
+    const nested = graph({
+      [`${root}/explainers/mri-scanner/src/model/kspace.ts`]: [
+        `${root}/node_modules/fft.js/index.js`,
+      ],
+      [`${root}/explainers/sundial/src/model/sun.ts`]: [`${root}/node_modules/both/index.js`],
+      [`${root}/explainers/naval-drone/src/model/hull.ts`]: [`${root}/node_modules/both/index.js`],
+      [`${root}/node_modules/fft.js/index.js`]: [],
+      [`${root}/node_modules/both/index.js`]: [],
+    });
+    expect(isExplainerOnlyPackage(`${root}/node_modules/fft.js/index.js`, nested, root)).toBe(true);
+    expect(isExplainerOnlyPackage(`${root}/node_modules/both/index.js`, nested, root)).toBe(false);
   });
 });
