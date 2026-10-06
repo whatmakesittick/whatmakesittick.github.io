@@ -1,0 +1,250 @@
+{
+  "meta": {
+    "title": "Cómo funciona un escáner de resonancia magnética",
+    "eyebrow": "Imagen médica",
+    "tagline": "Un imán gigante, un pulso de radio y el hidrógeno de tu cuerpo: así capta un escáner un eco muy débil y lo convierte en una imagen.",
+    "description": "Una resonancia magnética en 3D: el imán que nunca se apaga, el hidrógeno que responde a la radio, las bobinas que golpean y los ecos que forman una imagen.",
+    "summary": "El imán superconductor, el hidrógeno que se inclina, el pulso de radio y su eco, las bobinas de gradiente y el espacio k.",
+    "socialAlt": "Un escáner de resonancia magnética abierto en corte, con las capas del imán encajadas alrededor del túnel, junto a la imagen de una sección de la cabeza y el título «Cómo funciona un escáner de resonancia magnética»"
+  },
+  "stage": {
+    "label": "Modelo interactivo de un escáner de resonancia magnética",
+    "gauge": "Datos de la exploración en directo"
+  },
+  "timeline": {
+    "label": "Tiempo dentro de una repetición",
+    "phases": "Saltar a un paso",
+    "speed": "Velocidad de reproducción",
+    "value": "{{phase}}",
+    "during": "Paso {{step}} de {{total}}, {{phase}}",
+    "speedValue": "{{value}}/min",
+    "speedFormat": "{{value}} repeticiones por minuto",
+    "phase": {
+      "excite": "Pulso de radio",
+      "encode": "Codificación",
+      "refocus": "Reenfoque",
+      "echo": "Eco",
+      "recover": "Recuperación"
+    },
+    "jump": {
+      "excite": "Saltar al pulso de radio",
+      "encode": "Saltar a la codificación",
+      "refocus": "Saltar al pulso de reenfoque",
+      "echo": "Saltar al eco",
+      "recover": "Saltar a la recuperación"
+    }
+  },
+  "controls": {
+    "label": "Controles del modelo",
+    "field": "Intensidad del campo",
+    "weighting": "Tipo de imagen",
+    "fieldOptions": {
+      "field15": "1,5 T",
+      "field30": "3 T"
+    },
+    "weightingOptions": {
+      "t1": "Potenciada en T1",
+      "t2": "Potenciada en T2"
+    },
+    "tissueOptions": {
+      "fat": "Grasa",
+      "whiteMatter": "Sustancia blanca",
+      "greyMatter": "Sustancia gris",
+      "fluid": "Líquido cerebral"
+    },
+    "axisOptions": {
+      "x": "Bobina x",
+      "y": "Bobina y",
+      "z": "Bobina z",
+      "sequence": "Seguir la exploración"
+    },
+    "momentOptions": {
+      "pulse90": "Pulso de 90°",
+      "pulse180": "Pulso de 180°",
+      "echoPeak": "Pico del eco",
+      "repetitionEnd": "Fin de la repetición"
+    },
+    "linesOptions": {
+      "8": "8 líneas",
+      "16": "16 líneas",
+      "32": "32 líneas",
+      "64": "64 líneas"
+    },
+    "groups": {
+      "field": "Intensidad del campo",
+      "weighting": "Tipo de imagen",
+      "tissue": "Tejido",
+      "axis": "Bobina de gradiente",
+      "moment": "Momento de la repetición",
+      "lines": "Líneas del espacio k"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Vista en corte",
+        "short": "Corte",
+        "hint": "Vista en corte (C)"
+      },
+      "fieldLines": {
+        "name": "Líneas de campo",
+        "short": "Campo",
+        "hint": "Líneas de campo (F)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      }
+    }
+  },
+  "readouts": {
+    "larmor": "Frecuencia de giro",
+    "time": "Tiempo en la repetición",
+    "lines": "Líneas del espacio k"
+  },
+  "units": {
+    "mhz": "{{value}} MHz",
+    "msOf": "{{value}} de {{total}} ms",
+    "linesOf": "{{value}} de {{total}}",
+    "degrees": "{{value}}°",
+    "percent": "{{value}} %",
+    "ms": "{{value}} ms",
+    "tesla": "{{value}} T",
+    "kelvin": "{{kelvin}} K, {{celsius}} °C",
+    "minutes": "{{value}} min",
+    "seconds": "{{value}} s",
+    "kHz": "{{value}} kHz",
+    "mT": "{{value}} mT",
+    "cm": "{{value}} cm"
+  },
+  "chapters": {
+    "overview": {
+      "fieldLabel": "Campo principal",
+      "field": "{{tesla}}, siempre encendido",
+      "boreLabel": "Ancho del túnel",
+      "bore": "{{cm}} de lado a lado"
+    },
+    "magnet": {
+      "earth": "Frente al campo de la Tierra",
+      "earthValue": "De {{min}} a {{max}} veces más fuerte",
+      "helium": "Helio líquido",
+      "fringe": "Línea de seguridad de 0,5 mT",
+      "fringeValue": "{{along}} m a lo largo del túnel, {{side}} m hacia los lados"
+    },
+    "spins": {
+      "larmor": "Frecuencia del bamboleo",
+      "larmorBand": "{{value}}, {{band}}",
+      "band": {
+        "belowFm": "justo por debajo de la radio FM",
+        "aboveFm": "justo por encima de la radio FM"
+      },
+      "surplus": "Núcleos de más inclinados a favor del campo",
+      "surplusValue": "unos {{perMillion}} por millón",
+      "count": "Excedente en 1 mm³ de agua",
+      "countValue": "unos {{mantissa}} × 10{{exponent}}",
+      "slowdown": "Dibujo ralentizado",
+      "slowdownValue": "unos {{millions}} millones de veces"
+    },
+    "resonance": {
+      "tip": "Ángulo de inclinación",
+      "across": "Parte transversal (señal)",
+      "along": "Parte a lo largo del campo",
+      "t1": "T1, recuperación",
+      "t2": "T2, desvanecimiento"
+    },
+    "gradients": {
+      "edge": "Cambio en el borde de la cabeza",
+      "share": "Parte del campo principal",
+      "spread": "Abanico de frecuencias en la cabeza",
+      "rise": "Tiempo de encendido",
+      "role": "Tarea en esta exploración",
+      "roleValue": {
+        "x": "Frecuencia: de izquierda a derecha",
+        "y": "Fase: una torsión por línea",
+        "z": "Corte: elige una capa fina",
+        "sequence": "Sigue la secuencia"
+      }
+    },
+    "picture": {
+      "kspace": "Espacio k, los ecos guardados",
+      "image": "La imagen",
+      "scanTime": "Una línea por repetición, 256 líneas",
+      "scanTimeValue": "{{minutes}} min para {{lines}} líneas",
+      "turbo": "Turbo espín eco, 16 líneas por repetición",
+      "turboValue": "unos {{seconds}} s",
+      "empty": "Pulsa reproducir para llenar la primera línea"
+    }
+  },
+  "parts": {
+    "room": "Sala forrada de cobre",
+    "cover": "Carcasa",
+    "vacuumVessel": "Cámara de vacío",
+    "radiationShield": "Escudo térmico",
+    "heliumVessel": "Depósito de helio",
+    "mainCoils": "Bobinas del imán principal",
+    "shieldCoils": "Bobinas de blindaje",
+    "shims": "Ajuste del campo (shims)",
+    "coldHead": "Cabezal frío",
+    "quenchPipe": "Tubo de quench",
+    "gradientX": "Bobina de gradiente x",
+    "gradientY": "Bobina de gradiente y",
+    "gradientZ": "Bobina de gradiente z",
+    "bodyCoil": "Bobina de cuerpo",
+    "bore": "Túnel",
+    "table": "Camilla",
+    "patient": "Paciente",
+    "headCoil": "Bobina de cabeza",
+    "sliceSlab": "Corte elegido",
+    "spinArrows": "Núcleos de hidrógeno",
+    "netMagnet": "Imán neto",
+    "mainField": "Campo principal",
+    "rfWave": "Pulso de radio",
+    "echoWave": "Eco",
+    "fieldLinesGroup": "Líneas de campo",
+    "fringeLine": "Línea de 0,5 mT",
+    "screen": "Imagen"
+  },
+  "sections": {
+    "overview": {
+      "title": "Un túnel que escucha tu cuerpo",
+      "p1": "Esto es un <strong>escáner de resonancia magnética</strong> con un imán de 1,5 teslas. El <strong>tesla</strong> mide la fuerza de un campo magnético. Te tumbas en la <strong>camilla</strong>, que te desliza dentro del <strong>túnel</strong>, de unos 70 cm de ancho. La máquina que lo rodea mide entre unos 1,6 y 1,9 m de largo y pesa de 3 a 6 toneladas.",
+      "p2": "Para explorar el cerebro, una <strong>bobina de cabeza</strong> te envuelve la cabeza como una jaula. Es una antena con entre 20 y 64 receptores pequeños que escuchan un eco de radio muy débil que sale de tu cuerpo. La sala está forrada de chapa de cobre para que no entren las radios de fuera, que podrían tapar ese eco. Aquí no hay rayos X. Una onda de radio de esta frecuencia lleva unos 50 millones de veces menos energía de la que hace falta para arrancarle un electrón a un átomo.",
+      "p3": "Bajo la <strong>carcasa</strong> blanca hay capas, una dentro de otra, como anillos: el imán en su funda fría, tres <strong>bobinas de gradiente</strong> y una antena de radio llamada <strong>bobina de cuerpo</strong>. Activa la vista en corte (C) para verlas. Los capítulos siguientes las explican una a una.",
+      "p4": "El modelo sigue una <strong>repetición</strong>, el ciclo corto que el escáner ejecuta una y otra vez para formar una imagen. En este modelo, una repetición dura de 0,5 a 2,5 s de tiempo real, pero los pulsos de radio que contiene duran solo milisegundos. Por eso la línea de tiempo está estirada: los pulsos ocupan casi todo el ciclo y el largo reposo se comprime. La línea de tiempo indica el paso, y los datos en directo muestran el tiempo real. Un examen completo de la cabeza, con muchas imágenes, dura unos 30 a 45 minutos."
+    },
+    "magnet": {
+      "title": "Un imán que nunca se apaga",
+      "p1": "La pieza más grande es el <strong>imán principal</strong>: unos 30 a 40 km de hilo de niobio-titanio enrollado en bobinas. Si se enfría lo suficiente, este hilo se vuelve <strong>superconductor</strong>: la corriente circula por él sin ninguna resistencia. Varios cientos de amperios dan vueltas y más vueltas en un circuito cerrado. Una vez cerrado el circuito, mantener el campo no gasta energía. El campo pierde menos del 0,1 % al año.",
+      "p2": "Para seguir siendo superconductoras, las bobinas están sumergidas en <strong>helio líquido</strong> a 4,2 K, unos −269 °C. Solo está unos 1,5 K por encima del espacio profundo. Un imán clásico contiene unos 1500 litros de helio, mientras que los imanes sellados más nuevos solo necesitan 7. Un escudo térmico y un vacío alrededor del depósito de helio funcionan como un termo. Una pequeña nevera encima, el <strong>cabezal frío</strong>, vuelve a licuar el helio que se evapora; funciona día y noche y consume unos 6 o 7 kW.",
+      "p3": "El campo es decenas de miles de veces más fuerte que el de la Tierra, que varía de un sitio a otro. Elige 3 T para comparar con un imán más potente. Por fuera, unas <strong>bobinas de blindaje</strong> extra llevan corriente en sentido contrario y mantienen el campo disperso cerca del imán. Aun así, la línea de 0,5 mT, dentro de la cual un marcapasos puede dejar de ser seguro, llega a unos 4 m a lo largo del túnel. Activa las líneas de campo para verla.",
+      "p4": "Como el imán nunca se apaga, un cartel luminoso en la puerta lo avisa. Cualquier cosa con hierro puede salir volando hacia el túnel, y así han muerto personas golpeadas por bombonas de oxígeno. Por eso el personal revisa a todo el mundo y todo lo que entra por la puerta. Si el hilo se calienta en algún punto, deja de ser superconductor y la corriente se convierte en calor: es un <strong>quench</strong>. El campo cae a cero en un plazo de 2 a 5 segundos, y el helio, al hervir, sale rugiendo del edificio por el <strong>tubo de quench</strong>."
+    },
+    "spins": {
+      "title": "El hidrógeno se inclina y se bambolea",
+      "p1": "Unos seis de cada diez átomos de tu cuerpo son de hidrógeno, sobre todo en el agua y la grasa. El centro de un átomo de hidrógeno, su <strong>núcleo</strong>, es un solo protón. Se comporta como un imán diminuto. La resonancia magnética se fija en el hidrógeno porque está en todas partes y da la señal más fuerte.",
+      "p2": "Dentro del campo, cada imán diminuto no se limita a apuntar hacia donde marca el campo. Describe una <strong>precesión</strong>: se bambolea alrededor de esa dirección, como una peonza inclinada que gira. A 1,5 T se bambolea unos 64 millones de veces por segundo: 63,9 MHz. Este ritmo es la <strong>frecuencia de Larmor</strong>, y crece con el campo, hasta 127,7 MHz a 3 T. Las dos están cerca de la radio FM: una justo por debajo de su banda y la otra justo por encima.",
+      "p3": "Los núcleos no se alinean todos. El calor del cuerpo los zarandea, así que apuntan casi en cualquier dirección. Por cada millón, solo unos 5 más se inclinan a favor del campo que en contra. Aun así, ese pequeño excedente suma unos 3 × 10¹⁴ núcleos en un milímetro cúbico de agua. Juntos forman un diminuto <strong>imán neto</strong>, la flecha con la que trabaja el escáner.",
+      "p4": "Las flechas del recuadro son un dibujo ampliado muchas veces, no un punto real de la cabeza. Además exageran mucho la inclinación, para que puedas verla. El bamboleo dibujado da media vuelta por segundo, unos 128 millones de veces más despacio que el real a 1,5 T. Cambia a 3 T y verás cómo se duplican la frecuencia y el excedente."
+    },
+    "resonance": {
+      "title": "Un pulso de radio y su eco",
+      "p1": "Para hacer hablar al imán neto, el escáner envía un pulso de radio corto exactamente a la frecuencia de Larmor. Seguir así el ritmo del bamboleo se llama <strong>resonancia</strong>, como empujar a un niño en un columpio en el momento preciso. El pulso sale de la <strong>bobina de cuerpo</strong>, una jaula de barras de cobre justo por dentro del túnel. Dura unos pocos milisegundos como mucho.",
+      "p2": "Un <strong>pulso de 90°</strong> inclina el imán neto hasta dejarlo tumbado de lado. Ahí sigue bamboleándose, y al pasar por delante de la bobina de cabeza genera un voltaje diminuto, de unos pocos microvoltios. Esa es la señal. Mueve el control del ángulo de inclinación: solo la parte transversal da señal; la parte a lo largo del campo no da ninguna.",
+      "p3": "Los núcleos pronto pierden el compás, porque unos se bambolean un poco más rápido que otros, y la señal se apaga. A mitad de camino hacia el eco, un <strong>pulso de 180°</strong> les da la vuelta, así que los rápidos quedan detrás y alcanzan a los demás. Vuelven a ir al compás y dan un <strong>eco</strong> en el <strong>tiempo de eco</strong>. Usa los botones para parar en cada momento.",
+      "p4": "Dos relojes deciden lo brillante que se ve cada tejido. <strong>T1</strong> es el tiempo que tarda el imán neto en recuperar alrededor del 63 % de su valor a lo largo del campo. <strong>T2</strong> es el tiempo que tarda la señal transversal en bajar a alrededor del 37 %, a medida que los núcleos pierden el compás. La grasa se recupera rápido y el líquido cerebral, despacio; elige un tejido para comparar. Los pulsos también te calientan un poco, así que el escáner mantiene ese calor dentro de límites seguros."
+    },
+    "gradients": {
+      "title": "Bobinas que distinguen lugares",
+      "p1": "Hasta ahora, cada punto de la cabeza responde con el mismo tono, así que el eco no puede decir de dónde viene. Tres bobinas más, dentro del imán, lo resuelven: las <strong>bobinas de gradiente</strong> x, y y z. Un <strong>gradiente</strong> es un campo que cambia poco a poco y de forma regular de un lado a otro. Cada bobina suma un poco al campo principal a un lado del centro y le resta un poco al otro lado.",
+      "p2": "El cambio es pequeño. Con hasta 45 mT por metro, el campo en el borde de la cabeza varía unos 5,4 mT, un tercio del 1 % del campo principal. Basta para que cada posición tenga su propia frecuencia. Las bobinas se encienden en unos 0,2 ms.",
+      "p3": "Cada bobina tiene su tarea. La bobina z trabaja con el pulso de radio para despertar solo una capa fina: es la <strong>selección de corte</strong>. La bobina y da a cada repetición una torsión distinta de arriba abajo: es la <strong>codificación de fase</strong>. La bobina x funciona mientras se escucha el eco, así que su tono distingue la izquierda de la derecha: es la <strong>codificación de frecuencia</strong>. Elige una bobina para ver su campo, o sigue la exploración.",
+      "p4": "Al conmutar corrientes grandes dentro de un imán potente, las bobinas dan sacudidas, como un altavoz. Ese es el golpeteo fuerte que oyes durante la exploración. Puede superar los 100 decibelios: tanto como un martillo neumático, o incluso más. Por eso siempre te dan tapones o auriculares."
+    },
+    "picture": {
+      "title": "De los ecos a la imagen",
+      "p1": "Cada eco se guarda como una línea del <strong>espacio k</strong>, una cuadrícula que ordena los ecos por tono y torsión en lugar de por posición. Una repetición llena una línea; la siguiente cambia la torsión y llena otra. En este modelo la imagen es de 64 × 64, así que hacen falta 64 repeticiones; las exploraciones reales de la cabeza suelen usar 256 líneas. Aquí las líneas se llenan desde el centro hacia fuera, así que pronto aparece una imagen aproximada.",
+      "p2": "Un paso matemático llamado <strong>transformada de Fourier</strong> convierte esa cuadrícula en la imagen. Busca qué mezcla de franjas, anchas y finas, forma la imagen al sumarlas. El centro del espacio k guarda las franjas anchas: las luces y sombras generales. Los bordes guardan el detalle fino. Prueba con 8, 16, 32 o 64 líneas y verás cómo se enfoca la imagen.",
+      "p3": "Los tiempos deciden qué tejidos se ven brillantes. Una exploración <strong>potenciada en T1</strong> se repite cada 500 ms y escucha pronto, a los 15 ms. La repetición termina antes de que los tejidos lentos se recuperen, así que la grasa sale brillante y el líquido cerebral, oscuro. Una exploración <strong>potenciada en T2</strong> espera 2500 ms y escucha a los 100 ms: ahora brilla el líquido, cuya señal se apaga despacio, y la sustancia gris brilla más que la blanca. En este modelo todos los tejidos tienen la misma cantidad de hidrógeno, y el hueso y el aire se quedan negros.",
+      "p4": "Con una línea por repetición, 256 líneas tardan unos 2,1 minutos en la exploración T1 y unos 10,7 en la T2. Los escáneres reales usan <strong>turbo espín eco</strong>, que lee de 4 a 32 líneas en cada repetición; con 16 líneas, la exploración T2 tarda unos 40 segundos. La idea es joven. Paul Lauterbur publicó la primera imagen por resonancia magnética en 1973, y él y Peter Mansfield compartieron el Premio Nobel de 2003 por ello."
+    }
+  }
+}
