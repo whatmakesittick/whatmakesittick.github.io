@@ -67,8 +67,8 @@ describe('mri scanner timeline', () => {
   });
 
   it('tells a screen reader which step of five is playing', () => {
-    expect(describePhase(0)).toBe('Step 1 of 5, Radio pulse');
-    expect(describePhase(PHASE_RANGES.refocus[0])).toBe('Step 3 of 5, Refocus');
+    expect(describePhase(0)).toBe('Step 1 of 5, 90° pulse');
+    expect(describePhase(PHASE_RANGES.refocus[0])).toBe('Step 3 of 5, 180° pulse');
   });
 
   it('shows the speed short on the slider and in full words for a screen reader', () => {
