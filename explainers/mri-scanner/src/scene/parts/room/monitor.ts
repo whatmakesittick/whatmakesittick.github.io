@@ -36,6 +36,10 @@ function monitorMatrix(): Matrix4 {
   return new Matrix4().makeRotationY(SCREEN.yawTowardTable - QUARTER).setPosition(...SCREEN.centre);
 }
 
+export function screenSideEdge(): Vector3 {
+  return new Vector3(SCREEN.width / 2 + MOUNT.bezel, 0, 0).applyMatrix4(monitorMatrix());
+}
+
 function wallArm(matrix: Matrix4): BufferGeometry[] {
   const { depth, hump, arm, plate } = MOUNT;
   const back = depth + hump.depth;

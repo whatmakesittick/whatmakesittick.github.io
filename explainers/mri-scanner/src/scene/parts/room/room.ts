@@ -27,7 +27,7 @@ import type { PartContext, SceneModule } from '../context';
 import { mergeParts, partMesh } from '../context';
 import { farSideMaterial, farSideMesh } from './farSide';
 import type { WallSide } from './farSide';
-import { monitorGeometry, pictureTexture, writePicture } from './monitor';
+import { monitorGeometry, pictureTexture, screenSideEdge, writePicture } from './monitor';
 import { ALWAYS_SHOWN, shellMesh } from './shell';
 import type { ShellPiece } from './shell';
 import { displayTexture, floorTexture, glassSheenTexture, wallTexture } from './surfaces';
@@ -38,6 +38,7 @@ const DISPLAY_FILL = { width: 0.92, height: 0.86 } as const;
 const DESK_SPAN = { top: 0.9, panel: 0.85 } as const;
 const [X0, X1] = ROOM.x;
 const [Z0, Z1] = ROOM.z;
+const ROOM_LABEL_POINT = [X1 / 2, FLOOR_Y, CONTROL_WINDOW.centreZ] as const;
 const WINDOW_SIDE: WallSide = { normal: [1, 0, 0], offset: X1 };
 const WALL_SIDES: readonly WallSide[] = [
   { normal: [0, 0, -1], offset: -Z0 },
@@ -262,8 +263,8 @@ class RoomModule implements SceneModule {
     this.root.add(room, screen);
     const screenAnchor = anchorAt(screen, ...SCREEN.centre);
     this.labels = new Map<PartId, Object3D>([
-      ['room', anchorAt(room, X0, FLOOR_Y, Z0)],
-      ['screen', screenAnchor],
+      ['room', anchorAt(room, ...ROOM_LABEL_POINT)],
+      ['screen', anchorAt(screen, ...screenSideEdge().toArray())],
     ]);
     this.anchors = { screen: screenAnchor };
   }
