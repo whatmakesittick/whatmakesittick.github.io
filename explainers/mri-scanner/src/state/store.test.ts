@@ -125,6 +125,12 @@ describe('mri scanner store', () => {
     expect(store.getState()).toMatchObject({ phase: MOMENTS.pulse180, playing: false });
   });
 
+  it('pauses on a chosen line count so the fill stays on screen', () => {
+    const store = createMriScannerStore({ playing: true });
+    store.getState().setLinesFilled(32);
+    expect(store.getState()).toMatchObject({ linesFilled: 32, playing: false });
+  });
+
   it('starts a new scan on a field or weighting change', () => {
     const store = storeOn('magnet');
     store.getState().setLinesFilled(40);

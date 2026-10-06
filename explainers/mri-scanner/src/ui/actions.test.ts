@@ -50,6 +50,7 @@ describe('chapter actions', () => {
   it('fills a chosen number of lines and marks only matching counts', () => {
     const state = run('lines', '32');
     expect(state.linesFilled).toBe(32);
+    expect(state.playing).toBe(false);
     expect(current('lines', state)).toBe('32');
     expect(current('lines', createMriScannerStore({ linesFilled: 5 }).getState())).toBe('');
   });

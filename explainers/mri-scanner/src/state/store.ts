@@ -123,7 +123,10 @@ export function createMriScannerStore(
           setWeighting: (weighting) => {
             if (weighting !== get().weighting) set({ weighting, ...newScan() });
           },
-          setLinesFilled: (lines) => set({ linesFilled: snapToRange(lines, LINES_RANGE) }),
+          setLinesFilled: (lines) => {
+            get().pause();
+            set({ linesFilled: snapToRange(lines, LINES_RANGE) });
+          },
           addLine: () => set({ linesFilled: nextLineCount(get().linesFilled) }),
           setTipAngle: (degrees) => set({ tipAngle: snapToRange(degrees, TIP_ANGLE_RANGE) }),
           setTissue: (tissue) => set({ tissue }),
