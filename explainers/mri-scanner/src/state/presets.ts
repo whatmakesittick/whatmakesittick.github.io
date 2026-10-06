@@ -10,18 +10,14 @@ export interface ChapterControls {
   linesFilled: number;
 }
 
-export type ChapterControl = keyof ChapterControls;
-
 export interface Preset extends ScenePreset<PartId, CameraView> {
   view: Partial<ViewOptions>;
-  controls?: readonly ChapterControl[];
   start?: Partial<ChapterControls>;
 }
 
 const LOOP_START = 0;
 const OVERVIEW_LINES = 24;
 const PICTURE_START_LINES = 8;
-const RESTING_TIP_DEG = 90;
 
 const MAGNET_LABELS: readonly PartId[] = [
   'vacuumVessel',
@@ -61,8 +57,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: DEFAULT_SPEED,
     view: { cutaway: true, fieldLines: false, voxel: true },
     pauseAt: LOOP_START,
-    controls: ['tissue'],
-    start: { tissue: 'whiteMatter' },
     labels: SPIN_PARTS,
     highlight: [...SPIN_PARTS, 'headCoil'],
   },
@@ -71,8 +65,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: DEFAULT_SPEED,
     view: { cutaway: true, fieldLines: false, voxel: true },
     startAt: LOOP_START,
-    controls: ['tipAngle', 'tissue'],
-    start: { tipAngle: RESTING_TIP_DEG, tissue: 'whiteMatter' },
     labels: ['bodyCoil', 'headCoil', 'rfWave', 'echoWave', 'netMagnet'],
     highlight: ['bodyCoil', 'headCoil', 'rfWave', 'echoWave', 'spinArrows', 'netMagnet'],
   },
@@ -81,7 +73,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: DEFAULT_SPEED,
     view: { cutaway: true, fieldLines: false, voxel: false },
     startAt: PHASE_RANGES.encode[0],
-    controls: ['gradientAxis'],
     start: { gradientAxis: null },
     labels: [...GRADIENT_COILS, 'bodyCoil'],
     highlight: GRADIENT_COILS,
@@ -91,7 +82,6 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: PICTURE_SPEED,
     view: { cutaway: false, fieldLines: false, voxel: false },
     startAt: PHASE_RANGES.echo[0],
-    controls: ['linesFilled'],
     start: { linesFilled: PICTURE_START_LINES },
     labels: ['screen', 'headCoil', 'echoWave'],
     highlight: ['screen', 'headCoil', 'patient', 'echoWave'],

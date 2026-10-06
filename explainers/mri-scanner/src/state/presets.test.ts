@@ -63,8 +63,8 @@ describe('chapter presets', () => {
   it('starts the chapter controls the spec names', () => {
     expect(PRESETS.overview.start).toEqual({ linesFilled: 24 });
     expect(PRESETS.magnet.start).toBeUndefined();
-    expect(PRESETS.spins.start).toEqual({ tissue: 'whiteMatter' });
-    expect(PRESETS.resonance.start).toEqual({ tipAngle: 90, tissue: 'whiteMatter' });
+    expect(PRESETS.spins.start).toBeUndefined();
+    expect(PRESETS.resonance.start).toBeUndefined();
     expect(PRESETS.gradients.start).toEqual({ gradientAxis: null });
     expect(PRESETS.picture.start).toEqual({ linesFilled: 8 });
   });
