@@ -49,10 +49,6 @@
   overflow-wrap: break-word;
 }
 
-.range-widget .readouts {
-  margin-block: 12px 0;
-}
-
 .kspace-widget {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
