@@ -105,7 +105,6 @@ class MriScannerAssembly implements Assembly {
   }
 
   dispose(): void {
-    this.root.removeFromParent();
     this.materials.clearRegistered();
     this.tracker.dispose();
   }
