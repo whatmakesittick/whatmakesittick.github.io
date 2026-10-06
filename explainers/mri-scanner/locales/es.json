@@ -171,7 +171,9 @@
       "scanTimeValue": "{{minutes}} min para {{lines}} líneas",
       "turbo": "Turbo espín eco, 16 líneas por repetición",
       "turboValue": "unos {{seconds}} s",
-      "empty": "Pulsa reproducir para llenar la primera línea"
+      "empty": "Pulsa reproducir para llenar la primera línea",
+      "kspaceAlt": "The raw data grid with {{lines}} of {{total}} lines filled",
+      "imageAlt": "The head slice rebuilt from {{lines}} of {{total}} lines"
     }
   },
   "parts": {

@@ -171,7 +171,9 @@
       "scanTimeValue": "{{lines}}行需{{minutes}}分钟",
       "turbo": "快速自旋回波，每个重复周期16行",
       "turboValue": "约{{seconds}}秒",
-      "empty": "按播放键，填入第一行"
+      "empty": "按播放键，填入第一行",
+      "kspaceAlt": "The raw data grid with {{lines}} of {{total}} lines filled",
+      "imageAlt": "The head slice rebuilt from {{lines}} of {{total}} lines"
     }
   },
   "parts": {

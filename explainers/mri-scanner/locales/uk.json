@@ -171,7 +171,9 @@
       "scanTimeValue": "{{minutes}} хв на {{lines}} рядків",
       "turbo": "Турбо спін-ехо, 16 рядків за повторення",
       "turboValue": "близько {{seconds}} с",
-      "empty": "Натисніть відтворення, щоб заповнити перший рядок"
+      "empty": "Натисніть відтворення, щоб заповнити перший рядок",
+      "kspaceAlt": "The raw data grid with {{lines}} of {{total}} lines filled",
+      "imageAlt": "The head slice rebuilt from {{lines}} of {{total}} lines"
     }
   },
   "parts": {

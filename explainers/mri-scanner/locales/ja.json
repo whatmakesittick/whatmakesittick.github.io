@@ -171,7 +171,9 @@
       "scanTimeValue": "{{lines}}ラインで{{minutes}}分",
       "turbo": "ターボスピンエコー、1回の繰り返しで16ライン",
       "turboValue": "約{{seconds}}秒",
-      "empty": "再生を押すと、最初のラインが埋まります"
+      "empty": "再生を押すと、最初のラインが埋まります",
+      "kspaceAlt": "The raw data grid with {{lines}} of {{total}} lines filled",
+      "imageAlt": "The head slice rebuilt from {{lines}} of {{total}} lines"
     }
   },
   "parts": {

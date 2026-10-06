@@ -171,7 +171,9 @@
       "scanTimeValue": "{{minutes}} min for {{lines}} lines",
       "turbo": "Turbo spin echo, 16 lines per repetition",
       "turboValue": "about {{seconds}} s",
-      "empty": "Press play to fill the first line"
+      "empty": "Press play to fill the first line",
+      "kspaceAlt": "The raw data grid with {{lines}} of {{total}} lines filled",
+      "imageAlt": "The head slice rebuilt from {{lines}} of {{total}} lines"
     }
   },
   "parts": {
