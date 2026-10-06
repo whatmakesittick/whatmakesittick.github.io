@@ -77,6 +77,16 @@ describe('chapter widgets', () => {
     expect(readout('fieldShare')).toBe(fill(units.percent, { value: '0.18' }));
   });
 
+  it('keeps the spins larmor readout apart from the gauge readout of the same id', () => {
+    dispose();
+    document.body.innerHTML = `<div class="gauge"><div data-readout="larmor"></div></div>${chapters}`;
+    dispose = mountMriScannerUi(document, store);
+    store.getState().setField('field30');
+    const spinsLarmor = document.querySelector('[data-preset="spins"] [data-readout="larmor"]');
+    expect(spinsLarmor?.textContent).toContain('127.7');
+    expect(document.querySelector('.gauge [data-readout="larmor"]')?.textContent).toBe('');
+  });
+
   it('turns the tip angle into the across and along shares', () => {
     expect(tipInput().max).toBe('180');
     tipInput().value = '180';
