@@ -24,7 +24,7 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   cryostat: {
     region: 'layers',
     direction: { phone: [0.3, 0.25, 1], desktop: [0.5, 0.35, 1] },
-    margin: 1.2,
+    margin: 1.5,
   },
   voxel: {
     region: 'voxel',
@@ -33,7 +33,7 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   },
   coil: {
     region: 'bore',
-    direction: { phone: [0.7, 0.6, 1], desktop: [1, 0.55, 0.75] },
+    direction: { phone: [0.4, 0.35, 1], desktop: [1, 0.55, 0.75] },
     margin: 1.15,
   },
   gradient: {
@@ -43,7 +43,7 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   },
   console: {
     region: 'console',
-    direction: { phone: [-1, 0.35, 0.65], desktop: [-1, 0.3, 0.45] },
-    margin: 2.8,
+    direction: { phone: [-1, 0.15, 0.3], desktop: [-1, 0.3, 0.45] },
+    margin: 2,
   },
 };
