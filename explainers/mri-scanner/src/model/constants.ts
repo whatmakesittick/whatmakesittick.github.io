@@ -1,0 +1,19 @@
+export const GAMMA_MHZ_PER_T = 42.577478;
+export const PLANCK = 6.62607015e-34;
+export const BOLTZMANN = 1.380649e-23;
+export const BODY_K = 310.15;
+export const EARTH_UT = { min: 25, typical: 50, max: 65 } as const;
+export const HELIUM_K = 4.2;
+export const HYDROGEN_PER_MM3 = 6.7e19;
+export const GRADIENT_MT_PER_M = 45;
+export const SLEW_T_PER_M_S = 200;
+export const HEAD_HALF_FOV_M = 0.12;
+export const REAL_LINES = 256;
+export const MODEL_SIZE = 64;
+export const DISPLAY_TURNS_PER_S = 0.5;
+
+export const HZ_PER_MHZ = 1e6;
+export const TESLA_PER_UT = 1e-6;
+export const MS_PER_S = 1000;
+export const SECONDS_PER_MINUTE = 60;
+export const KELVIN_AT_ZERO_CELSIUS = 273.15;
