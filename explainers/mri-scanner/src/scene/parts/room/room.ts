@@ -14,7 +14,7 @@ import { UNDIMMED_GROUP } from '@core/scene/materials';
 import type { MaterialFinish } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import type { AssemblyState, PartId } from '../../../ids';
-import { CEILING_Y, CONTROL_WINDOW, FLOOR_Y, ROOM } from '../../../model/layout';
+import { CEILING_Y, CONTROL_WINDOW, FLOOR_Y, ROOM, SCREEN } from '../../../model/layout';
 import { ROOM_DETAIL } from '../../constants';
 import {
   FINISHES,
@@ -27,7 +27,7 @@ import type { PartContext, SceneModule } from '../context';
 import { mergeParts, partMesh } from '../context';
 import { farSideMaterial, farSideMesh } from './farSide';
 import type { WallSide } from './farSide';
-import { MONITOR_CENTRE, monitorGeometry, pictureTexture, writePicture } from './monitor';
+import { monitorGeometry, pictureTexture, writePicture } from './monitor';
 import { ALWAYS_SHOWN, shellMesh } from './shell';
 import type { ShellPiece } from './shell';
 import { displayTexture, floorTexture, glassSheenTexture, wallTexture } from './surfaces';
@@ -260,7 +260,7 @@ class RoomModule implements SceneModule {
     const room = this.buildRoom();
     const screen = this.buildScreen();
     this.root.add(room, screen);
-    const screenAnchor = anchorAt(screen, ...MONITOR_CENTRE);
+    const screenAnchor = anchorAt(screen, ...SCREEN.centre);
     this.labels = new Map<PartId, Object3D>([
       ['room', anchorAt(room, X0, FLOOR_Y, Z0)],
       ['screen', screenAnchor],

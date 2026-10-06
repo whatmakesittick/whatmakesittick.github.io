@@ -99,8 +99,14 @@ export const ROOM = { x: [-3, 3] as Extent, z: [-2, 3] as Extent, height: CEILIN
 
 export const CONTROL_WINDOW = { x: ROOM.x[1], centreZ: 1.0, width: 1.4, sill: 0.9, top: 2.0 };
 
+const SCREEN_MOUNT = { wallStandoff: 0.34, windowGap: 0.6, height: 1.55 } as const;
+
 export const SCREEN = {
-  centre: [2.6, 1.55, 1.0] as Point,
+  centre: [
+    ROOM.x[1] - SCREEN_MOUNT.wallStandoff,
+    SCREEN_MOUNT.height,
+    CONTROL_WINDOW.centreZ - CONTROL_WINDOW.width / 2 - SCREEN_MOUNT.windowGap,
+  ] as Point,
   width: 0.9,
   height: 0.6,
   yawTowardTable: toRadians(25),
@@ -145,9 +151,6 @@ export const REGIONS: Readonly<Record<RegionId, RegionSpec>> = {
   console: {
     x: [SCREEN.centre[0] - SCREEN.height, ROOM.x[1]],
     y: [CONTROL_WINDOW.sill, CONTROL_WINDOW.top],
-    z: [
-      CONTROL_WINDOW.centreZ - CONTROL_WINDOW.width / 2,
-      CONTROL_WINDOW.centreZ + CONTROL_WINDOW.width / 2,
-    ],
+    z: [SCREEN.centre[2] - SCREEN.width / 2, CONTROL_WINDOW.centreZ - CONTROL_WINDOW.width / 4],
   },
 };

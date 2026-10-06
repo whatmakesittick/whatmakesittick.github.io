@@ -10,7 +10,7 @@ import {
   Vector3,
 } from 'three';
 import type { BufferGeometry } from 'three';
-import { CONTROL_WINDOW, ROOM, SCREEN } from '../../../model/layout';
+import { ROOM, SCREEN } from '../../../model/layout';
 import { ROOM_DETAIL } from '../../constants';
 import { mergeParts } from '../context';
 
@@ -21,8 +21,6 @@ const BAR_LEVEL = 7;
 const SURFACE_LIFT = 0.002;
 const WALL_X = ROOM.x[1];
 const MOUNT = {
-  standoff: 0.34,
-  windowGap: 0.6,
   bezel: 0.018,
   depth: 0.03,
   hump: { width: 0.36, height: 0.26, depth: 0.03 },
@@ -30,26 +28,18 @@ const MOUNT = {
   plate: { thickness: 0.016, height: 0.22, width: 0.12 },
 } as const;
 
-export const MONITOR_CENTRE = [
-  WALL_X - MOUNT.standoff,
-  SCREEN.centre[1],
-  CONTROL_WINDOW.centreZ - CONTROL_WINDOW.width / 2 - MOUNT.windowGap,
-] as const;
-
 const PICTURE_ROWS = ROOM_DETAIL.pictureSize;
 export const PICTURE_COLUMNS = Math.round((PICTURE_ROWS * SCREEN.width) / SCREEN.height);
 const BAR_COLUMNS = Math.floor((PICTURE_COLUMNS - PICTURE_ROWS) / 2);
 
 function monitorMatrix(): Matrix4 {
-  return new Matrix4()
-    .makeRotationY(SCREEN.yawTowardTable - QUARTER)
-    .setPosition(...MONITOR_CENTRE);
+  return new Matrix4().makeRotationY(SCREEN.yawTowardTable - QUARTER).setPosition(...SCREEN.centre);
 }
 
 function wallArm(matrix: Matrix4): BufferGeometry[] {
   const { depth, hump, arm, plate } = MOUNT;
   const back = depth + hump.depth;
-  const reach = (WALL_X - MONITOR_CENTRE[0]) / Math.cos(SCREEN.yawTowardTable) - back;
+  const reach = (WALL_X - SCREEN.centre[0]) / Math.cos(SCREEN.yawTowardTable) - back;
   const end = new Vector3(0, 0, -(back + reach)).applyMatrix4(matrix);
   return [
     new BoxGeometry(arm, arm, reach).translate(0, 0, -(back + reach / 2)).applyMatrix4(matrix),

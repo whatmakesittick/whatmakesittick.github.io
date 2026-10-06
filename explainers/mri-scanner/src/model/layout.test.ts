@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CONTROL_WINDOW,
   BODY_COIL,
   BORE,
   COLD_HEAD,
@@ -81,7 +82,10 @@ describe('scanner layout', () => {
   });
 
   it('places the screen, the voxel inset and the regions inside the room', () => {
-    expect(SCREEN.centre).toEqual([2.6, 1.55, 1.0]);
+    [2.66, 1.55, -0.3].forEach((value, axis) => expect(SCREEN.centre[axis]).toBeCloseTo(value, 9));
+    expect(SCREEN.centre[2] + SCREEN.width / 2).toBeLessThan(
+      CONTROL_WINDOW.centreZ - CONTROL_WINDOW.width / 2,
+    );
     expect(VOXEL.centre).toEqual([0, 1.75, 1.35]);
     expect(VOXEL_ARROWS).toBe(64);
     for (const region of Object.values(REGIONS)) {

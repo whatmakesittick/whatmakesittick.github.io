@@ -7,7 +7,6 @@ import { createSceneTextures } from '@core/scene/textures';
 import type { AssemblyState } from '../../../ids';
 import { MODEL_SIZE } from '../../../model/constants';
 import { CONTROL_WINDOW, ROOM, SCREEN } from '../../../model/layout';
-import { MONITOR_CENTRE } from './monitor';
 import { createRoomModule } from './room';
 
 const TRIANGLE_BUDGET = 20000;
@@ -60,7 +59,7 @@ describe('room module', () => {
     const room = createRoomModule(context());
     expect(room.root.getObjectByName('room')).toBeDefined();
     expect(room.root.getObjectByName('screen')).toBeDefined();
-    expect(worldPoint(room.anchors.screen as Object3D)).toEqual([...MONITOR_CENTRE]);
+    expect(worldPoint(room.anchors.screen as Object3D)).toEqual([...SCREEN.centre]);
     expect([...room.labels.keys()]).toEqual(['room', 'screen']);
     expect(room.update(0.016, 5)).toBe(false);
   });
@@ -114,12 +113,12 @@ describe('room module', () => {
     const room = createRoomModule(context());
     room.root.updateMatrixWorld(true);
     const blockers = (x: number, z: number) =>
-      new Raycaster(new Vector3(x, MONITOR_CENTRE[1], z), new Vector3(-1, 0, 0))
+      new Raycaster(new Vector3(x, SCREEN.centre[1], z), new Vector3(-1, 0, 0))
         .intersectObject(room.root, true)
         .filter((hit) => hit.point.x > 0);
     expect(blockers(ROOM.x[1] + 4, CONTROL_WINDOW.centreZ)).toHaveLength(0);
-    expect(blockers(ROOM.x[1] + 4, MONITOR_CENTRE[2])).toHaveLength(0);
-    expect(blockers(ROOM.x[1] - 0.1, MONITOR_CENTRE[2]).length).toBeGreaterThan(0);
+    expect(blockers(ROOM.x[1] + 4, SCREEN.centre[2])).toHaveLength(0);
+    expect(blockers(ROOM.x[1] - 0.1, SCREEN.centre[2]).length).toBeGreaterThan(0);
   });
 
   it('never blocks the scanner from above, behind or the far side', () => {

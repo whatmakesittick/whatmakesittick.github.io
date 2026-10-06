@@ -6,12 +6,11 @@ import { createSceneTextures } from '@core/scene/textures';
 import { PART_IDS } from '../ids';
 import type { AnchorId, AssemblyState, RegionId } from '../ids';
 import { FIELDS } from '../model/field';
-import { HEAD_COIL, ISOCENTRE, VOXEL } from '../model/layout';
+import { HEAD_COIL, ISOCENTRE, SCREEN, VOXEL } from '../model/layout';
 import { MODEL_SIZE } from '../model/constants';
 import type { Assembly } from './assembly';
 import { isShown } from '@core/scene/parts';
 import { createMriScannerAssembly } from './mriScannerAssembly';
-import { MONITOR_CENTRE } from './parts/room/monitor';
 
 const ANCHOR_IDS: readonly AnchorId[] = ['isocentre', 'voxel', 'headCoil', 'screen', 'coldHead'];
 const SETTLE_SECONDS = 5;
@@ -70,7 +69,7 @@ describe('mri scanner assembly', () => {
     ANCHOR_IDS.forEach((id) => expect(assembly.anchor(id)).toBeDefined());
     expect(worldPoint(assembly.anchor('isocentre'))).toEqual([...ISOCENTRE]);
     expect(worldPoint(assembly.anchor('voxel'))).toEqual([...VOXEL.centre]);
-    expect(worldPoint(assembly.anchor('screen'))).toEqual([...MONITOR_CENTRE]);
+    expect(worldPoint(assembly.anchor('screen'))).toEqual([...SCREEN.centre]);
     expect(worldPoint(assembly.anchor('headCoil'))).toEqual([...HEAD_COIL.centre]);
   });
 
