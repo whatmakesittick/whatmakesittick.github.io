@@ -117,9 +117,23 @@ describe('effects module', () => {
     expect(module.update(FRAME, 1)).toBe(true);
   });
 
-  it('keeps the pulse rings travelling and eases the slab in during excite', () => {
+  it('holds the pulse rings still while paused', () => {
     module.setState(
       stateWith({
+        sequence: { phase: 75, step: 'excite', rf: 90, gradient: 'z', gradientLevel: 1, echo: 0 },
+      }),
+    );
+    const ring = module.root.getObjectByName('rfWave')?.children[0];
+    expect(ring?.parent?.visible).toBe(true);
+    const before = ring?.scale.x;
+    expect(settle(module)).toBe(false);
+    expect(ring?.scale.x).toBe(before);
+  });
+
+  it('keeps the pulse rings travelling while playing and eases the slab in during excite', () => {
+    module.setState(
+      stateWith({
+        playing: true,
         sequence: { phase: 75, step: 'excite', rf: 90, gradient: 'z', gradientLevel: 1, echo: 0 },
       }),
     );
@@ -134,6 +148,7 @@ describe('effects module', () => {
   it('keeps the echo rings travelling only while the echo sounds', () => {
     module.setState(
       stateWith({
+        playing: true,
         sequence: { phase: 535, step: 'echo', rf: null, gradient: 'x', gradientLevel: 1, echo: 1 },
       }),
     );

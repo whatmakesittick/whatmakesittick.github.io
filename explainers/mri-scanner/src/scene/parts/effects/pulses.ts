@@ -122,8 +122,8 @@ export class Pulses {
     this.glowTarget = SLICE_STEPS.includes(sequence.step) ? 1 : 0;
   }
 
-  advance(deltaSeconds: number): boolean {
-    const travelling = this.rf.group.visible || this.echo.group.visible;
+  advance(deltaSeconds: number, playing: boolean): boolean {
+    const travelling = playing && (this.rf.group.visible || this.echo.group.visible);
     if (travelling) {
       this.rfTime = wrap(this.rfTime + deltaSeconds * RF_RINGS.speed);
       this.echoTime = wrap(this.echoTime + deltaSeconds * ECHO_RINGS.speed);

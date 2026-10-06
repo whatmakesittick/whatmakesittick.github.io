@@ -58,7 +58,7 @@ class EffectsModule implements SceneModule {
   update(deltaSeconds: number): boolean {
     const flowing = this.fieldLines.advance(deltaSeconds);
     const turning = this.voxel.advance(deltaSeconds, this.playing);
-    const easing = this.pulses.advance(deltaSeconds);
+    const easing = this.pulses.advance(deltaSeconds, this.playing);
     return flowing || turning || easing;
   }
 }
