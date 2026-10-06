@@ -1,11 +1,23 @@
 import { describe, expect, it } from 'vitest';
+import { FIELD_IDS, TISSUE_IDS, WEIGHTING_IDS } from '../ids';
 import type { Point } from '../ids';
 import { CYCLE_UNITS, MOMENTS, PHASE_RANGES } from './sequence';
 import { tissueSignal } from './signal';
 import { echoAmplitude, magnetisation, SPIN_COUNT, spinArrows } from './spins';
 
 const RIGHT_ANGLE = 90;
+const SMALL_TIP = 30;
+const HALF_TURN = 180;
 const LOOSE = 3;
+const SPIN_ECHO_SHIFT = 0.013;
+
+function alongOf(point: Point): number {
+  return -point[2];
+}
+
+function expectNearSignal(actual: number, expected: number): void {
+  expect(Math.abs(actual - expected)).toBeLessThan(SPIN_ECHO_SHIFT);
+}
 
 function length([x, y, z]: Point): number {
   return Math.hypot(x, y, z);
@@ -39,7 +51,7 @@ describe('net magnetisation', () => {
     const fanned = magnetisation(MOMENTS.pulse180, 't2', 'greyMatter', 'field30', RIGHT_ANGLE);
     const echo = magnetisation(MOMENTS.echoPeak, 't2', 'greyMatter', 'field30', RIGHT_ANGLE);
     expect(fanned[0]).toBeCloseTo(0, 6);
-    expect(echo[0]).toBeCloseTo(tissueSignal('greyMatter', 'field30', 't2'), 6);
+    expectNearSignal(echo[0], tissueSignal('greyMatter', 'field30', 't2'));
   });
 
   it('regrows along the field during recovery', () => {
@@ -54,11 +66,26 @@ describe('net magnetisation', () => {
     expect(late[2]).toBeLessThan(early[2]);
   });
 
-  it.each([30, RIGHT_ANGLE, 150])('closes the loop smoothly for a %d degree pulse', (tip) => {
-    const start = magnetisation(0, 't1', 'greyMatter', 'field15', tip);
-    const end = magnetisation(CYCLE_UNITS, 't1', 'greyMatter', 'field15', tip);
-    expectPointClose(start, end, 6);
+  it('turns the along-field part over with the refocusing pulse at a small tip', () => {
+    const before = magnetisation(PHASE_RANGES.refocus[0], 't1', 'fat', 'field15', SMALL_TIP);
+    const after = magnetisation(PHASE_RANGES.refocus[1], 't1', 'fat', 'field15', SMALL_TIP);
+    expect(alongOf(before)).toBeGreaterThan(0);
+    expect(alongOf(after)).toBeLessThan(0);
   });
+
+  it('points back up the field after a 180 degree tip and its refocusing pulse', () => {
+    const after = magnetisation(PHASE_RANGES.refocus[1], 't2', 'fat', 'field15', HALF_TURN);
+    expect(alongOf(after)).toBeGreaterThan(0);
+  });
+
+  it.each([SMALL_TIP, RIGHT_ANGLE, 150, HALF_TURN])(
+    'closes the loop smoothly for a %d degree pulse',
+    (tip) => {
+      const start = magnetisation(0, 't1', 'greyMatter', 'field15', tip);
+      const end = magnetisation(CYCLE_UNITS, 't1', 'greyMatter', 'field15', tip);
+      expectPointClose(start, end, 6);
+    },
+  );
 });
 
 describe('spin arrows', () => {
@@ -91,7 +118,7 @@ describe('spin arrows', () => {
 describe('echo amplitude', () => {
   it('peaks at the echo with the tissue signal and is silent outside the echo', () => {
     const peak = echoAmplitude(MOMENTS.echoPeak, 't1', 'fat', 'field15', RIGHT_ANGLE);
-    expect(peak).toBeCloseTo(tissueSignal('fat', 'field15', 't1'), 6);
+    expectNearSignal(peak, tissueSignal('fat', 'field15', 't1'));
     expect(echoAmplitude(MOMENTS.echoPeak - 40, 't1', 'fat', 'field15', RIGHT_ANGLE)).toBeLessThan(
       peak,
     );
@@ -103,6 +130,17 @@ describe('echo amplitude', () => {
       6,
     );
     expect(echoAmplitude(MOMENTS.pulse90, 't1', 'fat', 'field15', RIGHT_ANGLE)).toBe(0);
+  });
+
+  it.each(TISSUE_IDS)('keeps the 90 degree echo of %s at the tissue signal', (tissue) => {
+    FIELD_IDS.forEach((field) =>
+      WEIGHTING_IDS.forEach((weighting) =>
+        expectNearSignal(
+          echoAmplitude(MOMENTS.echoPeak, weighting, tissue, field, RIGHT_ANGLE),
+          tissueSignal(tissue, field, weighting),
+        ),
+      ),
+    );
   });
 
   it('shrinks with a smaller tip', () => {

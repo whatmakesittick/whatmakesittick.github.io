@@ -1,4 +1,4 @@
-import { clamp, smoothstep, toRadians } from '@core/math';
+import { clamp, lerp, smoothstep, toRadians } from '@core/math';
 import type { FieldId, Point, TissueId, WeightingId } from '../ids';
 import { MOMENTS, PHASE_RANGES, realMs, WEIGHTINGS } from './sequence';
 import { RELAXATION } from './tissues';
@@ -50,9 +50,31 @@ const OFFSETS = Array.from(
 );
 const JITTERS = OFFSETS.map(() => randomUnit(random));
 
-function steadyAlong(t1: number, tr: number, tipCos: number): number {
-  const decay = Math.exp(-tr / t1);
-  return (1 - decay) / (1 - decay * tipCos);
+function steadyAlong(t1: number, weighting: WeightingId, tipCos: number): number {
+  const { tr, te } = WEIGHTINGS[weighting];
+  const afterRefocus = Math.exp(-(tr - te / 2) / t1);
+  const full = Math.exp(-tr / t1);
+  return (1 - 2 * afterRefocus + full) / (1 + tipCos * full);
+}
+
+function regrow(start: number, ms: number, t1: number): number {
+  return 1 - (1 - start) * Math.exp(-ms / t1);
+}
+
+interface AlongInput {
+  t1: number;
+  tipped: number;
+  elapsed: number;
+  refocusMs: number;
+  flip: number;
+}
+
+function alongField(resting: number, tip: number, along: AlongInput): number {
+  const { t1, tipped, elapsed, refocusMs, flip } = along;
+  const beforeRefocus = regrow(resting * Math.cos(tipped), elapsed, t1);
+  const atRefocus = regrow(resting * Math.cos(tip), refocusMs, t1);
+  const afterRefocus = regrow(-atRefocus, elapsed - refocusMs, t1);
+  return lerp(beforeRefocus, afterRefocus, (1 - Math.cos(flip)) / 2);
 }
 
 function dephasing(phase: number): number {
@@ -68,15 +90,17 @@ function dephasing(phase: number): number {
 function spinState(phase: number, input: SpinInput): SpinState {
   const { t1, t2 } = RELAXATION[input.field][input.tissue];
   const tip = toRadians(input.tipDeg);
-  const resting = steadyAlong(t1, WEIGHTINGS[input.weighting].tr, Math.cos(tip));
+  const resting = steadyAlong(t1, input.weighting, Math.cos(tip));
   const tipped = tip * smoothstep(phase, ...PHASE_RANGES.excite);
   const elapsed = realMs(phase, input.weighting);
   const fade = 1 - smoothstep(phase, FADE_START_UNITS, MOMENTS.repetitionEnd);
+  const flip = Math.PI * smoothstep(phase, ...PHASE_RANGES.refocus);
+  const refocusMs = realMs(MOMENTS.pulse180, input.weighting);
   return {
-    along: 1 - (1 - resting * Math.cos(tipped)) * Math.exp(-elapsed / t1),
+    along: alongField(resting, tip, { t1, tipped, elapsed, refocusMs, flip }),
     across: resting * Math.sin(tipped) * Math.exp(-elapsed / t2) * fade,
     spread: Math.PI * dephasing(phase),
-    flip: Math.PI * smoothstep(phase, ...PHASE_RANGES.refocus),
+    flip,
   };
 }
 
