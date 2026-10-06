@@ -1,0 +1,136 @@
+:root {
+  --rf: #ffb347;
+  --grad-x: #ff7a59;
+  --grad-y: #6fd38a;
+  --grad-z: #b48cff;
+  --echo: #4fd1c5;
+  --main-field: #5fa8ff;
+  --fringe: #ffd24c;
+  --fat: #ffd27a;
+  --white-matter: #f0ece4;
+  --grey-matter: #a7a2b4;
+  --fluid: #5fb8ff;
+  --screen: #1b1d20;
+}
+
+.chapter .readouts {
+  --readout-min-width: 8rem;
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.chapter .readouts > div,
+.chapter .readouts :is(dt, dd) {
+  min-width: 0;
+}
+
+.chapter .readouts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.chapter .readouts dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chapter .readouts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.range-widget__header {
+  flex-wrap: wrap;
+}
+
+.range-widget__header label {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.kspace-widget {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
+  margin: 4px 0 16px;
+}
+
+.kspace-widget canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: var(--radius-small);
+  background: var(--screen);
+}
+
+.kspace-widget figcaption {
+  display: contents;
+}
+
+.kspace-widget figcaption span {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.chip[data-action='moment'] {
+  --tone: var(--rf);
+}
+
+.chip[data-action='moment'][data-value='echoPeak'] {
+  --tone: var(--echo);
+}
+
+.chip[data-action='field'] {
+  --tone: var(--main-field);
+}
+
+.chip[data-action='gradientAxis'][data-value='x'] {
+  --tone: var(--grad-x);
+}
+
+.chip[data-action='gradientAxis'][data-value='y'] {
+  --tone: var(--grad-y);
+}
+
+.chip[data-action='gradientAxis'][data-value='z'] {
+  --tone: var(--grad-z);
+}
+
+.chip[data-action='tissue'][data-value='fat'] {
+  --tone: var(--fat);
+}
+
+.chip[data-action='tissue'][data-value='whiteMatter'] {
+  --tone: var(--white-matter);
+}
+
+.chip[data-action='tissue'][data-value='greyMatter'] {
+  --tone: var(--grey-matter);
+}
+
+.chip[data-action='tissue'][data-value='fluid'] {
+  --tone: var(--fluid);
+}
+
+.chip:is([data-action='weighting'], [data-action='lines']) {
+  --tone: var(--echo);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapter .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chapter .readouts > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}

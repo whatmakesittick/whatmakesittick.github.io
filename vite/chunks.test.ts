@@ -1,12 +1,25 @@
 import { describe, expect, it } from 'vitest';
-import { dependsOn } from './chunks.ts';
+import { dependsOn, isExplainerOnlyPackage } from './chunks.ts';
 import type { ModuleGraph } from './chunks.ts';
 
 const THREE = /node_modules\/three\//;
 
-function graph(imports: Record<string, string[]>): ModuleGraph {
+type Imports = Record<string, string[]>;
+
+function importersOf(id: string, imports: Imports): string[] {
+  return Object.keys(imports).filter((importer) => imports[importer].includes(id));
+}
+
+function graph(imports: Imports, dynamicImports: Imports = {}): ModuleGraph {
   return {
-    getModuleInfo: (id) => (id in imports ? { importedIds: imports[id] } : null),
+    getModuleInfo: (id) =>
+      id in imports
+        ? {
+            importedIds: imports[id],
+            importers: importersOf(id, imports),
+            dynamicImporters: importersOf(id, dynamicImports),
+          }
+        : null,
   };
 }
 
@@ -32,5 +45,127 @@ describe('dependsOn', () => {
 
   it('treats a module the graph does not know as having no imports', () => {
     expect(dependsOn('/src/site/main.ts', THREE, modules)).toBe(false);
+  });
+});
+
+const FIXTURE_ROOT = '/';
+
+const packages = graph(
+  {
+    '/src/core/mount.ts': ['/node_modules/i18next/index.js'],
+    '/explainers/mri-scanner/src/model/kspace.ts': ['/node_modules/fft.js/lib/fft.js'],
+    '/explainers/mri-scanner/src/model/image.ts': [
+      '/node_modules/fft.js/lib/fft.js',
+      '/node_modules/wrapper/index.js',
+    ],
+    '/explainers/mri-scanner/src/scene/coil.ts': ['/explainers/mri-scanner/src/model/image.ts'],
+    '/explainers/naval-drone/src/model/hull.ts': ['/node_modules/both/index.js'],
+    '/explainers/sundial/src/model/sun.ts': [
+      '/node_modules/both/index.js',
+      '/node_modules/i18next/index.js',
+    ],
+    '/explainers/sundial/src/scene/sky.ts': [],
+    '/node_modules/wrapper/index.js': ['/node_modules/inner/index.js'],
+    '/node_modules/inner/index.js': ['/node_modules/wrapper/index.js'],
+    '/node_modules/fft.js/lib/fft.js': [],
+    '/node_modules/both/index.js': [],
+    '/node_modules/i18next/index.js': [],
+    '/node_modules/lazy/index.js': [],
+    '/node_modules/lazy-core/index.js': [],
+    '/node_modules/orphan/index.js': [],
+  },
+  {
+    '/explainers/sundial/src/scene/sky.ts': [
+      '/node_modules/lazy/index.js',
+      '/node_modules/lazy-core/index.js',
+    ],
+    '/src/core/mount.ts': ['/node_modules/lazy-core/index.js'],
+  },
+);
+
+describe('isExplainerOnlyPackage', () => {
+  it('is true for a package that only one explainer imports, from any of its files', () => {
+    expect(isExplainerOnlyPackage('/node_modules/fft.js/lib/fft.js', packages, FIXTURE_ROOT)).toBe(
+      true,
+    );
+  });
+
+  it('follows imports through other packages, cycles included', () => {
+    expect(isExplainerOnlyPackage('/node_modules/inner/index.js', packages, FIXTURE_ROOT)).toBe(
+      true,
+    );
+  });
+
+  it('counts dynamic imports as reaching the package', () => {
+    expect(isExplainerOnlyPackage('/node_modules/lazy/index.js', packages, FIXTURE_ROOT)).toBe(
+      true,
+    );
+    expect(isExplainerOnlyPackage('/node_modules/lazy-core/index.js', packages, FIXTURE_ROOT)).toBe(
+      false,
+    );
+  });
+
+  it('is false for a package that two explainers or the core import', () => {
+    expect(isExplainerOnlyPackage('/node_modules/both/index.js', packages, FIXTURE_ROOT)).toBe(
+      false,
+    );
+    expect(isExplainerOnlyPackage('/node_modules/i18next/index.js', packages, FIXTURE_ROOT)).toBe(
+      false,
+    );
+  });
+
+  it('is false for project code and for a package nothing imports', () => {
+    expect(
+      isExplainerOnlyPackage('/explainers/mri-scanner/src/model/image.ts', packages, FIXTURE_ROOT),
+    ).toBe(false);
+    expect(isExplainerOnlyPackage('/node_modules/orphan/index.js', packages, FIXTURE_ROOT)).toBe(
+      false,
+    );
+    expect(isExplainerOnlyPackage('/node_modules/unknown/index.js', packages, FIXTURE_ROOT)).toBe(
+      false,
+    );
+  });
+
+  it('reads the slug below the project root when the checkout sits in an explainers folder', () => {
+    const root = '/home/reader/explainers/site';
+    const nested = graph({
+      [`${root}/explainers/mri-scanner/src/model/kspace.ts`]: [
+        `${root}/node_modules/fft.js/index.js`,
+      ],
+      [`${root}/explainers/sundial/src/model/sun.ts`]: [`${root}/node_modules/both/index.js`],
+      [`${root}/explainers/naval-drone/src/model/hull.ts`]: [`${root}/node_modules/both/index.js`],
+      [`${root}/node_modules/fft.js/index.js`]: [],
+      [`${root}/node_modules/both/index.js`]: [],
+    });
+    expect(isExplainerOnlyPackage(`${root}/node_modules/fft.js/index.js`, nested, root)).toBe(true);
+    expect(isExplainerOnlyPackage(`${root}/node_modules/both/index.js`, nested, root)).toBe(false);
+  });
+
+  it('handles a full absolute posix id', () => {
+    const root = '/Users/reader/site';
+    const absolute = graph({
+      [`${root}/explainers/mri-scanner/src/model/kspace.ts`]: [
+        `${root}/node_modules/fft.js/index.js`,
+      ],
+      [`${root}/node_modules/fft.js/index.js`]: [],
+    });
+    expect(isExplainerOnlyPackage(`${root}/node_modules/fft.js/index.js`, absolute, root)).toBe(
+      true,
+    );
+  });
+
+  it('handles a Windows id with backslashes', () => {
+    const root = 'C:\\Users\\reader\\site';
+    const fft = `${root}\\node_modules\\fft.js\\index.js`;
+    const windows = graph({
+      [`${root}\\explainers\\mri-scanner\\src\\model\\kspace.ts`]: [fft],
+      [`${root}\\src\\core\\mount.ts`]: [`${root}\\node_modules\\i18next\\index.js`],
+      [fft]: [],
+      [`${root}\\node_modules\\i18next\\index.js`]: [],
+    });
+    expect(isExplainerOnlyPackage(fft, windows, root)).toBe(true);
+    expect(isExplainerOnlyPackage(`${root}\\node_modules\\i18next\\index.js`, windows, root)).toBe(
+      false,
+    );
   });
 });

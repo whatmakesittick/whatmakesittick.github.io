@@ -1,0 +1,250 @@
+{
+  "meta": {
+    "title": "Como funciona um aparelho de ressonância magnética",
+    "eyebrow": "Diagnóstico por imagem",
+    "tagline": "Um ímã gigante, um pulso de rádio e o hidrogênio do seu corpo: como o aparelho escuta um eco bem fraco e o transforma em imagem.",
+    "description": "Ressonância magnética em 3D: o ímã que nunca desliga, o hidrogênio que responde a um pulso de rádio, as bobinas barulhentas e os ecos que viram imagem.",
+    "summary": "O ímã supercondutor, o hidrogênio que se inclina, o pulso de rádio e seu eco, as bobinas de gradiente e o espaço k.",
+    "socialAlt": "Um aparelho de ressonância magnética em corte, com as camadas do ímã umas dentro das outras em volta do túnel. Ao lado, a imagem de um corte da cabeça e o título “Como funciona um aparelho de ressonância magnética”"
+  },
+  "stage": {
+    "label": "Modelo interativo de um aparelho de ressonância magnética",
+    "gauge": "Leituras do exame em tempo real"
+  },
+  "timeline": {
+    "label": "Tempo dentro de uma repetição",
+    "phases": "Ir para uma etapa",
+    "speed": "Velocidade de reprodução",
+    "value": "Etapa {{step}} de {{total}}",
+    "during": "Etapa {{step}} de {{total}}, {{phase}}",
+    "speedValue": "{{value}}/min",
+    "speedFormat": "{{value}} repetições por minuto",
+    "phase": {
+      "excite": "Pulso de 90°",
+      "encode": "Codificação",
+      "refocus": "Pulso de 180°",
+      "echo": "Eco",
+      "recover": "Recuperação"
+    },
+    "jump": {
+      "excite": "Ir para o pulso de 90°",
+      "encode": "Ir para a codificação",
+      "refocus": "Ir para o pulso de 180°",
+      "echo": "Ir para o eco",
+      "recover": "Ir para a recuperação"
+    }
+  },
+  "controls": {
+    "label": "Controles do modelo",
+    "field": "Intensidade do campo",
+    "weighting": "Tipo de imagem",
+    "fieldOptions": {
+      "field15": "1,5 T",
+      "field30": "3 T"
+    },
+    "weightingOptions": {
+      "t1": "Ponderada em T1",
+      "t2": "Ponderada em T2"
+    },
+    "tissueOptions": {
+      "fat": "Gordura",
+      "whiteMatter": "Substância branca",
+      "greyMatter": "Substância cinzenta",
+      "fluid": "Líquido cerebral"
+    },
+    "axisOptions": {
+      "x": "Bobina x",
+      "y": "Bobina y",
+      "z": "Bobina z",
+      "sequence": "Seguir o exame"
+    },
+    "momentOptions": {
+      "pulse90": "Pulso de 90°",
+      "pulse180": "Pulso de 180°",
+      "echoPeak": "Pico do eco",
+      "repetitionEnd": "Fim da repetição"
+    },
+    "linesOptions": {
+      "8": "8 linhas",
+      "16": "16 linhas",
+      "32": "32 linhas",
+      "64": "64 linhas"
+    },
+    "groups": {
+      "field": "Intensidade do campo",
+      "weighting": "Tipo de imagem",
+      "tissue": "Tecido",
+      "axis": "Bobina de gradiente",
+      "moment": "Momento da repetição",
+      "lines": "Linhas do espaço k"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Vista em corte",
+        "short": "Corte",
+        "hint": "Vista em corte (C)"
+      },
+      "fieldLines": {
+        "name": "Linhas de campo",
+        "short": "Campo",
+        "hint": "Linhas de campo (F)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    }
+  },
+  "readouts": {
+    "larmor": "Frequência de Larmor",
+    "time": "Tempo na repetição",
+    "lines": "Linhas do espaço k"
+  },
+  "units": {
+    "mhz": "{{value}} MHz",
+    "msOf": "{{value}} de {{total}} ms",
+    "linesOf": "{{value}} de {{total}}",
+    "degrees": "{{value}}°",
+    "percent": "{{value}} %",
+    "ms": "{{value}} ms",
+    "tesla": "{{value}} T",
+    "kelvin": "{{kelvin}} K, {{celsius}} °C",
+    "kHz": "{{value}} kHz",
+    "mT": "{{value}} mT",
+    "cm": "{{value}} cm"
+  },
+  "chapters": {
+    "overview": {
+      "fieldLabel": "Campo principal",
+      "field": "{{tesla}}, sempre ligado",
+      "boreLabel": "Largura do túnel",
+      "bore": "{{cm}} de diâmetro"
+    },
+    "magnet": {
+      "earth": "Comparado ao campo da Terra",
+      "earthValue": "de {{min}} a {{max}} vezes mais forte",
+      "helium": "Hélio líquido",
+      "fringe": "Linha de segurança de 0,5 mT",
+      "fringeValue": "{{along}} m ao longo do túnel, {{side}} m para o lado"
+    },
+    "spins": {
+      "larmor": "Frequência de Larmor",
+      "larmorBand": "{{value}}, {{band}}",
+      "band": {
+        "belowFm": "logo abaixo da faixa de rádio FM",
+        "aboveFm": "logo acima da faixa de rádio FM"
+      },
+      "surplus": "Núcleos a mais inclinados a favor do campo",
+      "surplusValue": "cerca de {{perMillion}} a cada milhão",
+      "count": "Excedente em 1 mm³ de água",
+      "countValue": "cerca de {{mantissa}} × 10{{exponent}}",
+      "slowdown": "Desenho mais lento",
+      "slowdownValue": "cerca de {{factor}} de vezes"
+    },
+    "resonance": {
+      "tip": "Ângulo de inclinação",
+      "across": "Parte lateral (sinal)",
+      "along": "Parte ao longo do campo",
+      "t1": "T1, recuperação",
+      "t2": "T2, decaimento"
+    },
+    "gradients": {
+      "edge": "Variação na borda da cabeça",
+      "share": "Fração do campo principal",
+      "spread": "Desvio de frequência na borda da cabeça",
+      "rise": "Tempo para ligar",
+      "role": "Função neste exame",
+      "roleValue": {
+        "x": "Frequência: da esquerda para a direita",
+        "y": "Fase: uma torção nova a cada repetição",
+        "z": "Fatia: escolhe uma camada fina",
+        "sequence": "Muda a cada etapa"
+      }
+    },
+    "picture": {
+      "kspace": "Espaço k, os ecos guardados",
+      "image": "A imagem",
+      "scanTime": "Uma linha por repetição",
+      "scanTimeValue": "{{minutes}} min para {{lines}} linhas",
+      "turbo": "Turbo spin eco, 16 linhas por repetição",
+      "turboValue": "cerca de {{seconds}} s",
+      "empty": "Ainda não há linhas. O próximo eco preenche a primeira.",
+      "kspaceAlt": "A grade do espaço k, com {{lines}} de {{total}} linhas preenchidas",
+      "imageAlt": "O corte da cabeça, reconstruído a partir de {{lines}} de {{total}} linhas"
+    }
+  },
+  "parts": {
+    "room": "Sala revestida de cobre",
+    "cover": "Carcaça",
+    "vacuumVessel": "Câmara de vácuo",
+    "radiationShield": "Escudo térmico",
+    "heliumVessel": "Reservatório de hélio",
+    "mainCoils": "Bobinas do ímã principal",
+    "shieldCoils": "Bobinas de blindagem",
+    "shims": "Shims",
+    "coldHead": "Cabeçote de refrigeração",
+    "quenchPipe": "Tubo de quench",
+    "gradientX": "Bobina de gradiente x",
+    "gradientY": "Bobina de gradiente y",
+    "gradientZ": "Bobina de gradiente z",
+    "bodyCoil": "Bobina de corpo",
+    "bore": "Túnel",
+    "table": "Mesa",
+    "patient": "Paciente",
+    "headCoil": "Bobina de cabeça",
+    "sliceSlab": "Fatia",
+    "spinArrows": "Núcleos de hidrogênio",
+    "netMagnet": "Ímã resultante",
+    "mainField": "Campo principal",
+    "rfWave": "Pulso de rádio",
+    "echoWave": "Eco",
+    "fieldLinesGroup": "Linhas de campo",
+    "fringeLine": "Linha de 0,5 mT",
+    "screen": "Imagem"
+  },
+  "sections": {
+    "overview": {
+      "title": "Um túnel que escuta o seu corpo",
+      "p1": "Este é um <strong>aparelho de ressonância magnética</strong>. O ímã dele tem uma força de 1,5 tesla. O <strong>tesla</strong> é a unidade que mede a força de um campo magnético. Você se deita na <strong>mesa</strong>, e ela desliza com você para dentro do <strong>túnel</strong>, que tem cerca de 70 cm de largura. A máquina em volta tem cerca de 1,6 a 1,9 m de comprimento e pesa de 3 a 6 toneladas.",
+      "p2": "Num exame do cérebro, uma <strong>bobina de cabeça</strong> fica em volta da sua cabeça como uma gaiola. É uma antena com 20 a 64 pequenos receptores. Eles escutam um eco de rádio bem fraco que vem do seu corpo. A sala é revestida com chapas de cobre, para que as ondas de rádio de fora não abafem esse eco. Aqui não há raios X. As ondas de rádio do aparelho carregam cerca de 50 milhões de vezes menos energia do que seria preciso para arrancar um elétron de um átomo.",
+      "p3": "Sob a <strong>carcaça</strong> branca, as peças ficam umas dentro das outras, como anéis. De fora para dentro, você encontra o ímã envolto na sua capa fria, três <strong>bobinas de gradiente</strong> e a <strong>bobina de corpo</strong>, uma antena de rádio. Ligue a vista em corte (C) para abrir uma cunha no ímã e ver essas peças. Os próximos capítulos mostram uma de cada vez.",
+      "p4": "O modelo mostra uma <strong>repetição</strong>. É o ciclo curto que o exame repete muitas vezes para montar uma imagem. Aqui, uma repetição dura de 0,5 a 2,5 s em tempo real, mas os pulsos de rádio dentro dela levam só milissegundos. Por isso a linha do tempo não está em escala. Os poucos milissegundos de pulsos e eco ocupam cerca de dois terços dela, e o longo descanso fica espremido no último terço. A linha do tempo mostra qual etapa está em andamento, e as leituras ao vivo mostram o tempo real. Um exame completo da cabeça, com muitas imagens, leva cerca de 30 a 45 minutos."
+    },
+    "magnet": {
+      "title": "Um ímã que nunca desliga",
+      "p1": "A maior peça é o <strong>ímã principal</strong>: cerca de 30 a 40 km de fio de nióbio-titânio enrolado em bobinas. Quando esse fio fica frio o bastante, ele se torna <strong>supercondutor</strong>. Isso quer dizer que a corrente passa por ele sem nenhuma resistência. Várias centenas de ampères circulam sem parar num circuito fechado. Depois que o circuito é fechado, manter o campo não consome energia nenhuma. O campo perde menos de 0,1 % da força por ano.",
+      "p2": "Para continuar supercondutoras, as bobinas ficam mergulhadas em <strong>hélio líquido</strong> a 4,2 kelvin (K), cerca de −269 °C. O kelvin é uma escala de temperatura que começa no zero absoluto, a temperatura mais baixa que existe. Ou seja, o hélio fica só cerca de 1,5 K mais quente que o espaço profundo. Um ímã clássico guarda cerca de 1.500 litros de hélio, enquanto os ímãs selados mais novos precisam de 7 litros ou até menos. Em volta do reservatório de hélio, um escudo térmico e um vácuo barram o calor, como numa garrafa térmica. A cunha aberta mostra essas camadas. Uma pequena geladeira no topo, o <strong>cabeçote de refrigeração</strong>, volta a transformar em líquido o hélio que evaporou. Ela funciona dia e noite e consome cerca de 6 a 7 kW.",
+      "p3": "O campo é dezenas de milhares de vezes mais forte que o da Terra. O número exato depende de onde você está, porque o próprio campo da Terra varia de um lugar para outro. Escolha 3 T para comparar com um ímã mais forte. As linhas em volta do ímã mostram a forma do campo dele. Do lado de fora ficam bobinas extras, as <strong>bobinas de blindagem</strong>. Elas conduzem corrente no sentido contrário e puxam de volta o campo que escapa. Mesmo assim, o campo fica acima de 0,5 mT, meio milésimo de tesla, até cerca de 4 m ao longo do túnel. Dentro dessa zona, um marca-passo pode deixar de funcionar com segurança. O anel tracejado no chão marca o limite dessa zona.",
+      "p4": "O ímã nunca desliga, por isso uma placa iluminada na porta avisa que ele está sempre ligado. Qualquer coisa com ferro pode voar para dentro do túnel, e cilindros de oxigênio já mataram pessoas assim. É por isso que a equipe confere todo mundo e tudo o que passa pela porta. Se o fio esquentar em algum ponto, ele deixa de ser supercondutor e a corrente vira calor. Isso se chama <strong>quench</strong>. O campo cai a zero em 2 a 5 segundos, e o hélio ferve e escapa com um rugido pelo <strong>tubo de quench</strong>, para fora do prédio."
+    },
+    "spins": {
+      "title": "O hidrogênio se inclina e oscila",
+      "p1": "Cerca de seis em cada dez átomos do seu corpo são de hidrogênio, a maioria na água e na gordura. O centro de um átomo de hidrogênio, o seu <strong>núcleo</strong>, é um único próton. Ele se comporta como um ímã minúsculo. A ressonância magnética escuta o hidrogênio porque ele está em toda parte e dá o sinal mais forte.",
+      "p2": "Dentro do campo, esses ímãs minúsculos não apontam simplesmente na direção dele. Em vez disso, cada um entra em <strong>precessão</strong>: oscila em volta dessa direção, como um pião que gira inclinado. A 1,5 T, ele oscila cerca de 64 milhões de vezes por segundo, ou 63,9 MHz (megahertz). Esse ritmo é a <strong>frequência de Larmor</strong>, o tom da oscilação. Ela sobe junto com o campo e chega a 127,7 MHz a 3 T. As duas ficam perto da faixa de rádio FM: uma logo abaixo, a outra logo acima.",
+      "p3": "Os núcleos não ficam todos alinhados. O calor do corpo os sacode, e eles apontam para quase todos os lados. A cada milhão de núcleos, só cerca de 5 a mais se inclinam a favor do campo do que contra ele. Mesmo assim, esse pequeno excedente soma cerca de 3,3 × 10¹⁴ núcleos em um milímetro cúbico de água. Juntos, eles formam um minúsculo <strong>ímã resultante</strong>. É essa a seta com que o aparelho trabalha.",
+      "p4": "As setas no quadro em destaque são um desenho, ampliado muitas vezes. Elas não mostram um ponto real da cabeça e exageram muito a inclinação, para você conseguir vê-la. Aperte o play para ver as setas girarem. O desenho está muitíssimo mais lento que a realidade, e a leitura mostra quantas vezes. Esse número acompanha a velocidade de reprodução. Mude para 3 T: a frequência real e o excedente dobram, mas o desenho mantém o mesmo ritmo, então a diferença de velocidade também dobra."
+    },
+    "resonance": {
+      "title": "Um pulso de rádio e seu eco",
+      "p1": "Para fazer o ímã resultante falar, o aparelho envia um pulso de rádio curto exatamente na frequência de Larmor. Acertar o ritmo da oscilação desse jeito se chama <strong>ressonância</strong>. É como empurrar uma criança no balanço bem na hora certa. O pulso sai da <strong>bobina de corpo</strong>, uma gaiola de barras de cobre que reveste o túnel por dentro. Ele dura no máximo alguns milissegundos.",
+      "p2": "Um <strong>pulso de 90°</strong> tomba o ímã resultante até ele ficar deitado de lado. Ali ele continua oscilando. Ao passar pela bobina de cabeça, ele gera uma tensão minúscula, medida em microvolts. Essa tensão é o sinal. Mexa no controle do ângulo de inclinação: só a parte lateral gera sinal, e a parte ao longo do campo não gera nenhum.",
+      "p3": "Os ímãs minúsculos logo perdem a sincronia, porque alguns oscilam um pouco mais rápido que outros. O sinal enfraquece. Na metade do caminho até o eco, um <strong>pulso de 180°</strong> inverte todos eles. Agora os mais rápidos ficam para trás e alcançam os outros. Os ímãs voltam a se sincronizar e geram um <strong>eco</strong>. O tempo entre o pulso de 90° e o eco é o <strong>tempo de eco</strong>. Use os botões abaixo para parar em cada momento.",
+      "p4": "Dois relógios decidem o brilho de cada tecido. <strong>T1</strong> é o tempo que o ímã resultante leva para recuperar cerca de 63 % do seu valor ao longo do campo. <strong>T2</strong> é o tempo que o sinal lateral leva para cair a cerca de 37 %. A inversão de 180° só desfaz as diferenças que ficam sempre iguais. Já os pequenos empurrões aleatórios entre núcleos vizinhos continuam, e por isso o eco sai um pouco mais fraco. Essa perda é o T2. A gordura se recupera rápido, e o líquido cerebral, devagar. Escolha um tecido para comparar. Os valores de cada tecido são aproximados e foram escolhidos para este modelo. Os pulsos também esquentam um pouco o seu corpo, por isso o aparelho mantém esse aquecimento dentro de limites seguros."
+    },
+    "gradients": {
+      "title": "Bobinas que distinguem os lugares",
+      "p1": "Até aqui, todo ponto da cabeça responde no mesmo tom, então o eco não tem como dizer de onde veio. Outras três bobinas dentro do ímã resolvem isso: as <strong>bobinas de gradiente</strong> x, y e z. Um <strong>gradiente</strong> é um campo que muda aos poucos e por igual, de um lado para o outro. Cada bobina soma um pouco ao campo principal de um lado do centro e tira um pouco do outro lado.",
+      "p2": "A mudança é pequena: até 45 mT por metro. Na borda da cabeça, isso chega a cerca de 5,4 mT, um terço de um por cento de um campo de 1,5 T. Mesmo assim, basta para dar a cada posição a sua própria frequência. As bobinas ligam em cerca de 0,2 ms.",
+      "p3": "Cada bobina tem a sua função. A bobina z trabalha junto com o pulso de rádio para despertar só uma fatia fina. Isso se chama <strong>seleção de fatia</strong>. A bobina y dá a cada repetição uma torção diferente, de cima para baixo, e isso se chama <strong>codificação de fase</strong>. A bobina x fica ligada enquanto o eco chega, então o tom do eco separa a esquerda da direita. Essa é a <strong>codificação de frequência</strong>. Escolha uma bobina para ver o campo dela, ou siga o exame.",
+      "p4": "Ligar e desligar correntes fortes dentro de um ímã potente faz as bobinas darem trancos, como um alto-falante. Daí vêm as batidas altas que você ouve durante o exame. O barulho pode passar de 100 decibéis, tão alto quanto uma britadeira, ou até mais. Por isso você sempre recebe protetores de ouvido ou fones."
+    },
+    "picture": {
+      "title": "Dos ecos à imagem",
+      "p1": "Cada eco é guardado como uma linha do <strong>espaço k</strong>. É uma grade que organiza os ecos por tom e por torção, e não por lugar. Uma repetição preenche uma linha. A seguinte muda a torção e preenche outra. Neste modelo, a imagem tem 64 × 64 pixels, então ela precisa de 64 repetições. Exames reais da cabeça costumam usar 256 linhas. Aqui o preenchimento vai do meio para fora, por isso uma imagem borrada já aparece logo no começo.",
+      "p2": "Um cálculo chamado <strong>transformada de Fourier</strong> converte essa grade na imagem. Ela descobre quais listras, largas e finas, é preciso somar para formar a imagem. O meio do espaço k guarda as listras largas: as grandes áreas de claro e escuro. As bordas guardam os detalhes finos. A imagem aparece no monitor da parede, ao lado da janela da sala de controle. Escolha 8, 16, 32 ou 64 linhas: o exame entra em pausa, e você vê a imagem ganhar nitidez.",
+      "p3": "Os tempos escolhidos decidem quais tecidos aparecem claros. Um exame <strong>ponderado em T1</strong> se repete a cada 500 ms e escuta cedo, aos 15 ms. Cada repetição termina antes que os tecidos lentos tenham se recuperado, então a gordura fica clara e o líquido cerebral, escuro. Um exame <strong>ponderado em T2</strong> espera 2.500 ms e escuta aos 100 ms. Agora quem brilha é o líquido, que perde o sinal devagar, e a substância cinzenta parece mais clara que a branca. As leituras mostram o brilho de cada tecido, com o mais claro em 100 %. A cabeça aqui é um desenho simples feito de ovais, e não um exame real. Neste modelo, todo tecido tem a mesma quantidade de hidrogênio, e o osso e o ar ficam pretos.",
+      "p4": "Com uma linha por repetição, 256 linhas levam cerca de 2,1 minutos no exame T1 e 10,7 minutos no exame T2. A maioria dos exames do cérebro hoje usa <strong>turbo spin eco</strong>, que lê de 4 a 32 linhas em cada repetição. Com 16 linhas, o exame T2 leva cerca de 40 segundos. Este modelo mostra uma só fatia, enquanto um exame real da cabeça faz muitas. Paul Lauterbur publicou a primeira imagem por ressonância magnética em 1973. Ele e Peter Mansfield dividiram o Prêmio Nobel de 2003 por esse trabalho."
+    }
+  }
+}

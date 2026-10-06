@@ -1,0 +1,12 @@
+{
+  "slug": "mri-scanner",
+  "tags": ["physics", "biology"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A cutaway MRI scanner with its nested magnet layers around the tunnel, beside a slice picture of a head and the title How an MRI scanner works"
+  }
+}
