@@ -140,4 +140,32 @@ describe('isExplainerOnlyPackage', () => {
     expect(isExplainerOnlyPackage(`${root}/node_modules/fft.js/index.js`, nested, root)).toBe(true);
     expect(isExplainerOnlyPackage(`${root}/node_modules/both/index.js`, nested, root)).toBe(false);
   });
+
+  it('handles a full absolute posix id', () => {
+    const root = '/Users/reader/site';
+    const absolute = graph({
+      [`${root}/explainers/mri-scanner/src/model/kspace.ts`]: [
+        `${root}/node_modules/fft.js/index.js`,
+      ],
+      [`${root}/node_modules/fft.js/index.js`]: [],
+    });
+    expect(isExplainerOnlyPackage(`${root}/node_modules/fft.js/index.js`, absolute, root)).toBe(
+      true,
+    );
+  });
+
+  it('handles a Windows id with backslashes', () => {
+    const root = 'C:\\Users\\reader\\site';
+    const fft = `${root}\\node_modules\\fft.js\\index.js`;
+    const windows = graph({
+      [`${root}\\explainers\\mri-scanner\\src\\model\\kspace.ts`]: [fft],
+      [`${root}\\src\\core\\mount.ts`]: [`${root}\\node_modules\\i18next\\index.js`],
+      [fft]: [],
+      [`${root}\\node_modules\\i18next\\index.js`]: [],
+    });
+    expect(isExplainerOnlyPackage(fft, windows, root)).toBe(true);
+    expect(isExplainerOnlyPackage(`${root}\\node_modules\\i18next\\index.js`, windows, root)).toBe(
+      false,
+    );
+  });
 });
