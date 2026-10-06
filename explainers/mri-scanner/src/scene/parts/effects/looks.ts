@@ -57,11 +57,12 @@ export const VOXEL_LOOK = {
 
 export const NET_ARROW = {
   scale: 0.95,
-  shaftRadius: 0.032,
-  headRadius: 0.078,
+  shaftRadius: 0.026,
+  headRadius: 0.062,
   headLength: 0.12,
   segments: 20,
-  emissiveIntensity: 0.7,
+  emissiveIntensity: 0.3,
+  ghostOpacity: 0.75,
   renderOrder: 3,
   colour: THEME.netMagnet,
 } as const;

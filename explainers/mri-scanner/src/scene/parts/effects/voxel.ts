@@ -3,6 +3,7 @@ import {
   BoxGeometry,
   ConeGeometry,
   CylinderGeometry,
+  GreaterDepth,
   Group,
   InstancedMesh,
   Matrix4,
@@ -40,6 +41,7 @@ interface ArrowLook {
 }
 
 interface Arrow {
+  shaft: Object3D;
   pivot: Group;
   setLength(length: number): void;
 }
@@ -59,6 +61,7 @@ const AXIS = new Vector3(...FIELD_DIRECTION);
 const FULL_TURN = 2 * Math.PI;
 const PRECESSION_RATE = DISPLAY_TURNS_PER_S * FULL_TURN;
 const MIN_LENGTH = 1e-4;
+const SHAFT_MIDDLE = 0.5;
 const ROUGHNESS = 0.4;
 const CELL = VOXEL.size / VOXEL.perSide;
 
@@ -97,7 +100,14 @@ function solidFinish(look: ArrowLook): MaterialFinish {
   };
 }
 
-const NET_FINISH: MaterialFinish = { ...solidFinish(NET_ARROW), depthTest: false };
+const NET_FINISH = solidFinish(NET_ARROW);
+const NET_GHOST_FINISH: MaterialFinish = {
+  ...NET_FINISH,
+  transparent: true,
+  opacity: NET_ARROW.ghostOpacity,
+  depthFunc: GreaterDepth,
+  depthWrite: false,
+};
 const FIELD_FINISH = solidFinish(FIELD_ARROW);
 const EDGE_FINISH: MaterialFinish = {
   color: VOXEL_LOOK.edgeColour,
@@ -196,11 +206,16 @@ function buildArrow(
   group: EmphasisGroup,
   look: ArrowLook,
   finish: MaterialFinish,
+  ghostFinish?: MaterialFinish,
 ): Arrow {
   const pivot = new Group();
   const shaft = partMesh(
     context,
-    new CylinderGeometry(look.shaftRadius, look.shaftRadius, 1, look.segments).translate(0, 0.5, 0),
+    new CylinderGeometry(look.shaftRadius, look.shaftRadius, 1, look.segments).translate(
+      0,
+      SHAFT_MIDDLE,
+      0,
+    ),
     group,
     finish,
   );
@@ -215,8 +230,14 @@ function buildArrow(
     finish,
   );
   pivot.add(shaft, head);
+  if (ghostFinish) {
+    const ghost = context.materials.get(group, ghostFinish);
+    shaft.add(new Mesh(shaft.geometry, ghost));
+    head.add(new Mesh(head.geometry, ghost));
+  }
   return {
     pivot,
+    shaft,
     setLength(length: number) {
       const stem = Math.max(length - look.headLength, MIN_LENGTH);
       shaft.scale.y = stem;
@@ -286,7 +307,7 @@ export class VoxelInset {
         CORE_FINISH,
       ),
     );
-    this.netArrow = buildArrow(context, 'netMagnet', NET_ARROW, NET_FINISH);
+    this.netArrow = buildArrow(context, 'netMagnet', NET_ARROW, NET_FINISH, NET_GHOST_FINISH);
     this.netArrow.pivot.position.set(...VOXEL.centre);
     this.netArrow.pivot.traverse((part) => {
       part.renderOrder = NET_ARROW.renderOrder;
@@ -301,7 +322,7 @@ export class VoxelInset {
     const half = VOXEL.size / 2;
     this.labels = {
       spinArrows: anchorAt(this.spins, x - half, y, z),
-      netMagnet: anchorAt(this.net, x, y + half, z),
+      netMagnet: anchorAt(this.netArrow.shaft, 0, SHAFT_MIDDLE, 0),
       mainField: anchorAt(this.field, ...MAIN_FIELD_ARROW.tail),
     };
   }
