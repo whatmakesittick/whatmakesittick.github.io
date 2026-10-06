@@ -1,0 +1,12 @@
+{
+  "slug": "mri-scanner",
+  "tags": ["physics", "biology"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A closed-bore MRI scanner in a shielded room, beside the title How an MRI scanner works"
+  }
+}
