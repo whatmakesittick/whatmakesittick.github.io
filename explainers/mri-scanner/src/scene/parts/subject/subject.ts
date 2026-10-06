@@ -299,7 +299,7 @@ class SubjectModule implements SceneModule {
     this.root.add(table, patient, headCoil);
     this.labels = new Map<PartId, Object3D>([
       ['table', anchorAt(table, TABLE.halfWidth, TABLE.top, TABLE.z[1])],
-      ['patient', anchorAt(patient, 0, TABLE.top, PATIENT.feetZ)],
+      ['patient', anchorAt(patient, 0, blanketHeight(0, PATIENT.feetZ), PATIENT.feetZ)],
       ['headCoil', anchorAt(headCoil, CX, CY + HEAD_COIL.radius, CZ)],
     ]);
     this.anchors = { headCoil: anchorAt(headCoil, ...HEAD_COIL.centre) };

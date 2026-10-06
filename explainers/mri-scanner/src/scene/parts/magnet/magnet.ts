@@ -70,7 +70,7 @@ function labelPoints(): Partial<Record<PartId, Point>> {
     shims: onShimTray(),
     ...gradients,
     bodyCoil: [0, -BODY_COIL.radius, BODY_COIL.halfLength],
-    bore: [0, -BORE.radius, BORE.halfLength],
+    bore: [BORE.radius, 0, BORE.halfLength],
     coldHead: [0, COLD_HEAD.top, 0],
     quenchPipe: [0, QUENCH_PIPE.to, 0],
   };
