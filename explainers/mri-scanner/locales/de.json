@@ -142,7 +142,7 @@
       "count": "Überschuss in 1 mm³ Wasser",
       "countValue": "etwa {{mantissa}} × 10{{exponent}}",
       "slowdown": "Zeichnung verlangsamt",
-      "slowdownValue": "etwa {{millions}} Millionen Mal"
+      "slowdownValue": "etwa {{factor}} Mal"
     },
     "resonance": {
       "tip": "Kippwinkel",

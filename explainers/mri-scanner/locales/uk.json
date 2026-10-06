@@ -142,7 +142,7 @@
       "count": "Надлишок в 1 мм³ води",
       "countValue": "близько {{mantissa}} × 10{{exponent}}",
       "slowdown": "Малюнок сповільнено",
-      "slowdownValue": "приблизно в {{millions}} млн разів"
+      "slowdownValue": "приблизно в {{factor}} разів"
     },
     "resonance": {
       "tip": "Кут нахилу",

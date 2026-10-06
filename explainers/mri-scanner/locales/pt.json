@@ -142,7 +142,7 @@
       "count": "Excedente em 1 mm³ de água",
       "countValue": "cerca de {{mantissa}} × 10{{exponent}}",
       "slowdown": "Desenho desacelerado",
-      "slowdownValue": "cerca de {{millions}} milhões de vezes"
+      "slowdownValue": "cerca de {{factor}} de vezes"
     },
     "resonance": {
       "tip": "Ângulo de inclinação",

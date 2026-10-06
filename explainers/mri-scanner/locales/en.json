@@ -142,7 +142,7 @@
       "count": "Surplus in 1 mm³ of water",
       "countValue": "about {{mantissa}} × 10{{exponent}}",
       "slowdown": "Drawing slowed down",
-      "slowdownValue": "about {{millions}} million times"
+      "slowdownValue": "about {{factor}} times"
     },
     "resonance": {
       "tip": "Tip angle",

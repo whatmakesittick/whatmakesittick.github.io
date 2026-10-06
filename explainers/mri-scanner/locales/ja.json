@@ -142,7 +142,7 @@
       "count": "水1mm³の中の余分な原子核",
       "countValue": "約{{mantissa}} × 10{{exponent}}個",
       "slowdown": "絵をゆっくりにした倍率",
-      "slowdownValue": "約{{millions}}百万倍"
+      "slowdownValue": "約{{factor}}倍"
     },
     "resonance": {
       "tip": "傾き角度",

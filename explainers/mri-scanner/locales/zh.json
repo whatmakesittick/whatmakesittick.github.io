@@ -142,7 +142,7 @@
       "count": "1 mm³水中多出的核",
       "countValue": "约{{mantissa}} × 10{{exponent}}个",
       "slowdown": "画面放慢了",
-      "slowdownValue": "约{{millions}}00万倍"
+      "slowdownValue": "约{{factor}}倍"
     },
     "resonance": {
       "tip": "翻转角",
