@@ -40,6 +40,13 @@ describe('readout formats', () => {
     expect(formatLines(24)).toBe('24 of 64');
   });
 
+  it('keeps the changing gauge numbers as wide as their totals', () => {
+    expect(formatTimeGauge({ ms: 7, totalMs: 2500, share: 0 })).toBe(
+      '\u00a0\u00a0\u00a0\u00a07 of 2,500 ms',
+    );
+    expect(formatLines(3)).toBe('\u00a03 of 64');
+  });
+
   it('formats the overview and the magnet', () => {
     expect(formatFieldNow('field15')).toBe('1.5 T, always on');
     expect(formatBoreWidth()).toBe('70 cm across');

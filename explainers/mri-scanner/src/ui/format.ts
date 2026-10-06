@@ -28,6 +28,7 @@ import { drawnSlowdown } from '../state';
 import type { TimeGauge } from '../state';
 
 const WHOLE = 0;
+const COLUMN_PAD = '\u00a0';
 const TENTHS = 1;
 const HUNDREDTHS = 2;
 const PERCENT = 100;
@@ -62,15 +63,17 @@ export function formatLarmor(field: FieldId): string {
   return unit('mhz', formatFixed(larmorMHz(field), TENTHS));
 }
 
+function steadyCount(value: number, total: number): { value: string; total: string } {
+  const whole = formatNumber(total);
+  return { value: formatNumber(value).padStart(whole.length, COLUMN_PAD), total: whole };
+}
+
 export function formatTimeGauge(gauge: TimeGauge): string {
-  return t('units.msOf', {
-    value: formatNumber(Math.round(gauge.ms)),
-    total: formatNumber(gauge.totalMs),
-  });
+  return t('units.msOf', steadyCount(Math.round(gauge.ms), gauge.totalMs));
 }
 
 export function formatLines(lines: number): string {
-  return t('units.linesOf', { value: formatNumber(lines), total: formatNumber(MODEL_SIZE) });
+  return t('units.linesOf', steadyCount(lines, MODEL_SIZE));
 }
 
 export function formatFieldNow(field: FieldId): string {
