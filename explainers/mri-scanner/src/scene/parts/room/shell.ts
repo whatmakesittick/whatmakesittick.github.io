@@ -53,5 +53,6 @@ export function shellMesh(
   const mesh = new Mesh(context.tracker.track(geometry), shellMaterial(context, group, finish));
   mesh.name = 'roomShell';
   mesh.raycast = () => undefined;
+  mesh.frustumCulled = false;
   return mesh;
 }
