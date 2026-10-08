@@ -1,4 +1,5 @@
 import { BufferAttribute, BufferGeometry, Mesh, MeshBasicMaterial, Vector2 } from 'three';
+import { clamp } from '@core/math';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import type { FarmSite } from '../../../ids';
 import { terrainHeight } from '../../../model';
@@ -7,6 +8,7 @@ import { FINISHES } from '../../finishes';
 import { registeredMaterial } from '../context';
 import type { PartContext } from '../context';
 import { CONTACT_SHADOW } from './turbineConstants';
+import { shadowTexture } from './textures';
 
 const NAME = 'turbineShadows';
 const XYZ = 3;
@@ -25,9 +27,17 @@ const GRID: GridSize = {
   across: CONTACT_SHADOW.acrossSteps + 1,
 };
 
-function blobPoints(site: FarmSite): { positions: number[]; uvs: number[] } {
-  const { length, width, overlap, lift } = CONTACT_SHADOW;
-  const reach = length / 2 - overlap;
+export function shadowScale(cameraDistance: number): number {
+  const { fullSizeDistance, maxScale, scaleStep } = CONTACT_SHADOW;
+  const scale = clamp(cameraDistance / fullSizeDistance, 1, maxScale);
+  return Math.round(scale / scaleStep) * scaleStep;
+}
+
+function blobPoints(site: FarmSite, scale: number): { positions: number[]; uvs: number[] } {
+  const { baseShare, lift } = CONTACT_SHADOW;
+  const length = CONTACT_SHADOW.length * scale;
+  const width = CONTACT_SHADOW.width * scale;
+  const reach = length * (0.5 - baseShare);
   const centreX = site.x + SHADOW_HEADING.x * reach;
   const centreZ = site.z + SHADOW_HEADING.y * reach;
   const positions: number[] = [];
@@ -57,8 +67,8 @@ function blobIndices(first: number): number[] {
   ).flat();
 }
 
-export function shadowGeometry(sites: readonly FarmSite[]): BufferGeometry {
-  const blobs = sites.map(blobPoints);
+export function shadowGeometry(sites: readonly FarmSite[], scale = 1): BufferGeometry {
+  const blobs = sites.map((site) => blobPoints(site, scale));
   const geometry = new BufferGeometry();
   geometry.setAttribute(
     'position',
@@ -75,6 +85,8 @@ export function shadowGeometry(sites: readonly FarmSite[]): BufferGeometry {
 
 export class TurbineShadows {
   readonly mesh: Mesh;
+  private sites?: readonly FarmSite[];
+  private scale = 1;
 
   constructor(context: PartContext) {
     const material = registeredMaterial(
@@ -82,10 +94,11 @@ export class TurbineShadows {
       UNDIMMED_GROUP,
       new MeshBasicMaterial({
         color: FINISHES.shadow.color,
-        map: context.textures.shadow,
+        alphaMap: context.tracker.track(shadowTexture()),
         transparent: true,
         opacity: CONTACT_SHADOW.opacity,
         depthWrite: false,
+        fog: false,
         ...SHADOW_OFFSET,
       }),
     );
@@ -95,8 +108,21 @@ export class TurbineShadows {
   }
 
   place(sites: readonly FarmSite[]): void {
+    this.sites = sites;
+    this.rebuild();
+  }
+
+  widen(cameraDistance: number): void {
+    const scale = shadowScale(cameraDistance);
+    if (scale === this.scale) return;
+    this.scale = scale;
+    this.rebuild();
+  }
+
+  private rebuild(): void {
+    if (!this.sites) return;
     const previous = this.mesh.geometry;
-    this.mesh.geometry = shadowGeometry(sites);
+    this.mesh.geometry = shadowGeometry(this.sites, this.scale);
     previous.dispose();
   }
 }

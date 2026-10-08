@@ -1,5 +1,6 @@
 import { DataTexture, LinearMipmapLinearFilter, LinearFilter, RepeatWrapping } from 'three';
 import { lerp, smoothstep } from '@core/math';
+import { CONTACT_SHADOW } from './turbineConstants';
 
 const RGBA = 4;
 const FULL_BYTE = 255;
@@ -21,6 +22,8 @@ const DISC_RIM = { hub: 0.05, hubEdge: 0.08, edge: 0.05 } as const;
 const DISC_BODY = { inner: 0.45, outer: 0.85 } as const;
 const DISC_RING = { at: 0.9, width: 0.06, boost: 0.35 } as const;
 const DISC_STREAKS = { count: 3, swirl: 1.1, depth: 0.35, sharpness: 3 } as const;
+const SHADOW_TEXELS = 64;
+const SHADOW_SHAPE = { tail: 0.4, baseWidth: 0.95, tipWidth: 0.35, softness: 0.6 } as const;
 const HASH_SCALE = 12.9898;
 const HASH_LIFT = 43758.5453;
 
@@ -79,6 +82,15 @@ export function discLevel(u: number, v: number): number {
   return Math.min(1, rim * (body + ring) * streaks);
 }
 
+export function shadowLevel(u: number, v: number): number {
+  const across = Math.abs(2 * v - 1);
+  const width = lerp(SHADOW_SHAPE.baseWidth, SHADOW_SHAPE.tipWidth, u);
+  const side = 1 - smoothstep(across, width * (1 - SHADOW_SHAPE.softness), width);
+  const rise = smoothstep(u, 0, CONTACT_SHADOW.baseShare);
+  const fall = 1 - smoothstep(u, SHADOW_SHAPE.tail, 1);
+  return side * rise * fall;
+}
+
 export function dashTexture(): DataTexture {
   return greyTexture(DASH_TEXELS, 1, dashLevel);
 }
@@ -89,4 +101,8 @@ export function streakTexture(): DataTexture {
 
 export function discTexture(): DataTexture {
   return greyTexture(DISC_TEXELS, DISC_TEXELS, discLevel);
+}
+
+export function shadowTexture(): DataTexture {
+  return greyTexture(SHADOW_TEXELS, SHADOW_TEXELS, shadowLevel);
 }

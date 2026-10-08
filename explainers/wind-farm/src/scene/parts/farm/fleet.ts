@@ -122,6 +122,7 @@ export class Fleet {
   animate(motion: Motion, yaw: number): void {
     this.turn(yaw, motion.azimuth);
     this.discs.spin(motion.rpm);
+    this.shadows.widen(motion.cameraDistance);
     this.widenings.forEach((widening) => widening.update(motion.cameraDistance));
   }
 
