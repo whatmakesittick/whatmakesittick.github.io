@@ -17,7 +17,6 @@ import {
   TURBINE_COUNT,
   TURBINE_GEOMETRY,
 } from '../../../model';
-import { THEME } from '../../../theme';
 import { FINISHES } from '../../finishes';
 import { namedGroup, registeredMaterial } from '../context';
 import type { Motion, PartContext } from '../context';
@@ -36,7 +35,7 @@ const HUB = new Vector3(...TURBINE_GEOMETRY.hub);
 const PLUME_FINISH = {
   ...FINISHES.wake,
   vertexColors: true,
-  emissive: THEME.wake,
+  emissive: FINISHES.wake.color,
   emissiveIntensity: PLUME.glow,
 };
 const VERTEX_DECLARATIONS = 'varying float vPlumeHeight;\nvoid main() {';
@@ -151,7 +150,12 @@ export class WakePlumes {
     const key = Math.round(opacity / PLUME.opacityStep);
     let material = this.materials.get(key);
     if (!material) {
-      material = createMaterial({ ...PLUME_FINISH, opacity, alphaMap: this.streaks });
+      material = createMaterial({
+        ...PLUME_FINISH,
+        opacity,
+        alphaMap: this.streaks,
+        emissiveMap: this.streaks,
+      });
       material.onBeforeCompile = fadePlume;
       material.customProgramCacheKey = () => CACHE_KEY;
       registeredMaterial(this.context, PART, material);

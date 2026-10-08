@@ -1,5 +1,5 @@
 import { DataTexture, LinearMipmapLinearFilter, LinearFilter, RepeatWrapping } from 'three';
-import { FULL_TURN, lerp, smoothstep } from '@core/math';
+import { lerp, smoothstep } from '@core/math';
 
 const RGBA = 4;
 const FULL_BYTE = 255;
@@ -7,13 +7,15 @@ const DASH_TEXELS = 64;
 const DASH_SHARE = 0.45;
 const DASH_EDGE = 0.08;
 const DASH_GAP_LEVEL = 0.28;
-const STREAK_TEXELS = 64;
-const STREAK_FLOOR = 0.3;
-const STREAK_WAVES = [
-  { along: 1, around: 3, weight: 0.45 },
-  { along: 2, around: 5, weight: 0.3 },
-  { along: 3, around: 2, weight: 0.25 },
-] as const;
+const STREAK_TEXELS = 128;
+const STREAK = {
+  floor: 0.3,
+  lanes: 4,
+  laneWidth: 0.2,
+  dashes: 2,
+  dashShare: 0.6,
+  dashEdge: 0.22,
+} as const;
 const DISC_TEXELS = 128;
 const DISC_RIM = { hub: 0.05, hubEdge: 0.08, edge: 0.05 } as const;
 const DISC_BODY = { inner: 0.45, outer: 0.85 } as const;
@@ -51,12 +53,15 @@ function dashLevel(u: number): number {
   return DASH_GAP_LEVEL + (1 - DASH_GAP_LEVEL) * Math.min(rise, fall);
 }
 
-function streakLevel(u: number, v: number): number {
-  const ripple = STREAK_WAVES.reduce((sum, wave, index) => {
-    const phase = hash(index + 1) * FULL_TURN;
-    return sum + wave.weight * Math.sin(FULL_TURN * (wave.along * u + wave.around * v) + phase);
-  }, 0);
-  return STREAK_FLOOR + (1 - STREAK_FLOOR) * (0.5 + ripple / 2);
+export function streakLevel(u: number, v: number): number {
+  const lane = Math.floor(v * STREAK.lanes);
+  const across = v * STREAK.lanes - lane;
+  const band = Math.exp(-(((across - 0.5) / STREAK.laneWidth) ** 2));
+  const along = (u * STREAK.dashes + hash(lane + 1)) % 1;
+  const dash =
+    smoothstep(along, 0, STREAK.dashEdge) *
+    (1 - smoothstep(along, STREAK.dashShare - STREAK.dashEdge, STREAK.dashShare));
+  return STREAK.floor + (1 - STREAK.floor) * band * dash;
 }
 
 export function discLevel(u: number, v: number): number {
