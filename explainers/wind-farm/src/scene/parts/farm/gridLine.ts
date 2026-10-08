@@ -22,6 +22,7 @@ import { EXIT_HALF_SPAN_M, LINE_EXIT } from './substation';
 const PART = 'gridLine';
 const FOOT_HALF_M = 3.6;
 const EXIT_EDGE_M = 1.5;
+const LABEL_PYLON = 1;
 
 export function pylonSites(): Point[] {
   const length = GRID_LINE_END.x - SUBSTATION.x;
@@ -90,8 +91,8 @@ export class GridLine {
     this.wires = new Mesh(wires, this.conductors.material);
     this.wires.name = PART;
     this.group.add(this.pylons, this.wires);
-    const middle = towers[Math.floor(towers.length / 2)];
-    label(context, PART, this.group, [middle[0], middle[1] + PYLON_TOP_M, middle[2]]);
+    const [x, y, z] = towers[Math.min(LABEL_PYLON, towers.length - 1)];
+    label(context, PART, this.group, [x, y + PYLON_TOP_M, z]);
   }
 
   setState(state: AssemblyState): void {
