@@ -14,14 +14,15 @@ const MAST = { x: 7.9, radius: 0.05, height: 2.2, cup: 0.09, arm: 0.35, segments
 
 const TOP = COOLER.topY;
 
-function baseGeometry(): BufferGeometry {
+function baseHalfGeometry(side: -1 | 1): BufferGeometry {
+  const edge = side * BASE.halfWidth;
   return box({
     minX: COOLER.minX,
     maxX: COOLER.maxX,
     minY: BASE.bottomY,
     maxY: BASE.topY,
-    minZ: -BASE.halfWidth,
-    maxZ: BASE.halfWidth,
+    minZ: Math.min(0, edge),
+    maxZ: Math.max(0, edge),
   });
 }
 
@@ -122,13 +123,18 @@ function mastGeometry(): BufferGeometry {
   return mergeParts([pole, arm, ...cups]);
 }
 
-export function buildCooler(context: PartContext, parent: Object3D): BufferGeometry {
+export function buildCooler(
+  context: PartContext,
+  parent: Object3D,
+  openable: Object3D,
+): BufferGeometry {
   const frame = frameGeometry();
   const cooler = partMesh(context, frame, 'cooler');
   cooler.add(
     groupMesh(context, grilleGeometry(), 'cooler', 'grille'),
-    groupMesh(context, baseGeometry(), 'cooler', 'paint'),
+    groupMesh(context, baseHalfGeometry(-1), 'cooler', 'paint'),
   );
+  openable.add(groupMesh(context, baseHalfGeometry(1), 'cooler', 'paint'));
   parent.add(cooler);
   label(context, 'cooler', cooler, [(COOLER.minX + COOLER.maxX) / 2, TOP, NACELLE.halfWidth]);
   return frame;

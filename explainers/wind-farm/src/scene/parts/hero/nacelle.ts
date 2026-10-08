@@ -31,6 +31,6 @@ export function buildNacelle(context: PartContext, yaw: Object3D): Nacelle {
   );
   yaw.add(nacelle);
   label(context, 'nacelle', nacelle, [...LABEL_POINT]);
-  const cooler = buildCooler(context, yaw);
+  const cooler = buildCooler(context, yaw, openable);
   return { openable, casters: [shell.closed, shell.open, cooler] };
 }

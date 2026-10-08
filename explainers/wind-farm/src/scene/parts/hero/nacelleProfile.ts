@@ -9,7 +9,6 @@ export const SHELL = {
   roofCorner: 0.62,
   floorCorner: 0.32,
   innerScale: 0.955,
-  coolerFrontX: 4.0,
 } as const;
 
 export const SHELL_CENTRE: SweepCentre = { y: SHAFT_Y, z: 0 };

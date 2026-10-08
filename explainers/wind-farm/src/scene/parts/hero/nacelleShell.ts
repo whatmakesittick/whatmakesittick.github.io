@@ -25,9 +25,8 @@ const PIECES: readonly Piece[] = [
   { panel: 'floor', from: NACELLE.minX, to: NACELLE.maxX, openable: false },
   { panel: 'wallMinus', from: NACELLE.minX, to: NACELLE.maxX, openable: false },
   { panel: 'roofMinus', from: NACELLE.minX, to: NACELLE.maxX, openable: false },
-  { panel: 'roofPlus', from: SHELL.coolerFrontX, to: NACELLE.maxX, openable: false },
   { panel: 'wallPlus', from: NACELLE.minX, to: NACELLE.maxX, openable: true },
-  { panel: 'roofPlus', from: NACELLE.minX, to: SHELL.coolerFrontX, openable: true },
+  { panel: 'roofPlus', from: NACELLE.minX, to: NACELLE.maxX, openable: true },
 ];
 
 function inward(point: Vector2): Vector2 {
