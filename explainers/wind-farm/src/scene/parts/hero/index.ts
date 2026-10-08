@@ -1,9 +1,14 @@
-import type { PartContext, Section } from '../context';
-import { label, namedGroup, sceneAnchor } from '../context';
+import type { AssemblyState, Point } from '../../../ids';
+import { bearingTurn, label, namedGroup, sceneAnchor } from '../context';
+import type { Motion, PartContext, Section } from '../context';
+import { HUB, TOWER } from './constants';
 import { buildInterior } from './interior';
+import { buildNacelle } from './nacelle';
 import { buildTower } from './tower';
 import { buildTowerCable } from './towerCable';
 import { buildTransformer } from './transformer';
+
+const PITCH_LABEL: Point = [HUB[0] - 0.3, HUB[1] + 0.4, 0.9];
 
 export function buildHero(context: PartContext): Section {
   const root = namedGroup('hero');
@@ -11,11 +16,29 @@ export function buildHero(context: PartContext): Section {
   buildTransformer(context, root);
   buildTowerCable(context, root);
   const yaw = namedGroup('yaw', root);
-  (
-    ['nacelle', 'cooler', 'hub', 'blades', 'pitchCylinders', 'sweptArea', 'heroWake'] as const
-  ).forEach((part) => label(context, part, yaw, [0, 105, 0]));
-  sceneAnchor(context, 'hub', yaw, [-7, 105, 0]);
-  sceneAnchor(context, 'yawPivot', yaw, [0, 103.3, 0]);
-  yaw.add(buildInterior(context).root);
-  return { root, setState: () => undefined };
+  const nacelle = buildNacelle(context, yaw);
+  const interior = buildInterior(context);
+  const nacelleInterior = namedGroup('nacelleInterior', yaw);
+  nacelleInterior.add(interior.root);
+  label(context, 'pitchCylinders', nacelleInterior, PITCH_LABEL);
+  (['hub', 'blades', 'sweptArea', 'heroWake'] as const).forEach((part) =>
+    label(context, part, yaw, HUB),
+  );
+  sceneAnchor(context, 'hub', yaw, HUB);
+  sceneAnchor(context, 'yawPivot', yaw, [0, TOWER.topY, 0]);
+
+  return {
+    root,
+    setState(state: AssemblyState) {
+      yaw.rotation.y = bearingTurn(state.rotor.yawDeg);
+      const open = state.view.cutaway;
+      nacelle.openable.visible = !open;
+      nacelleInterior.visible = open;
+      interior.setState(state);
+    },
+    animate(motion: Motion) {
+      interior.animate(motion);
+      return false;
+    },
+  };
 }
