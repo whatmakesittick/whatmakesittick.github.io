@@ -9,6 +9,7 @@ import {
 } from './constants';
 import { hardstandMesh } from './hardstand';
 import type { Random } from './random';
+import { skyDome } from './sky';
 import { terrainMesh } from './terrainMesh';
 import { crownGeometry, trunkGeometry } from './treeGeometry';
 import { placeTrees } from './treePlacement';
@@ -47,7 +48,7 @@ export function buildTurbineLand(context: PartContext): Section {
     crownGeometry(TREE_SHAPE.crown),
     trunkGeometry(),
   );
-  root.add(terrain, hardstandMesh(context), crown);
+  root.add(skyDome(context, 'turbineSky'), terrain, hardstandMesh(context), crown);
   if (trunk) root.add(trunk);
   const [x, z] = LAND_LABELS.land;
   label(context, 'land', terrain, [x, turbineLandHeight(x, z), z]);

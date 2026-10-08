@@ -12,6 +12,7 @@ import { terrainMesh } from './terrainMesh';
 import { crownGeometry } from './treeGeometry';
 import { placeTrees } from './treePlacement';
 import type { TreeArea } from './treePlacement';
+import { skyDome } from './sky';
 import { plantTrees } from './trees';
 
 function pointInsideMargin(random: Random): [number, number] {
@@ -40,7 +41,7 @@ export function buildFarmLand(context: PartContext): Section {
   const terrain = terrainMesh(context, farmTerrainGeometry(keepOut), 'farmLand');
   const spots = placeTrees(farmTreeArea(keepOut));
   const { crown } = plantTrees(context, spots, 'farmTreeClump', crownGeometry(TREE_SHAPE.clump));
-  root.add(terrain, crown);
+  root.add(skyDome(context, 'farmSky'), terrain, crown);
   const [x, z] = LAND_LABELS.farmLand;
   label(context, 'farmLand', terrain, [x, terrainHeight(x, z), z]);
   return { root, setState: () => undefined };
