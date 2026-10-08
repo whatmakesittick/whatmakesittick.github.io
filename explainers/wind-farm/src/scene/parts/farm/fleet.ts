@@ -27,7 +27,7 @@ import { nacelleGeometry, spinnerGeometry, towerGeometry } from './turbine';
 import { Widening } from './widening';
 
 const PART = 'farmTurbines';
-const LABELLED_TURBINE = ROW_COUNT * COLUMN_COUNT - 2;
+const LABELLED_TURBINE = ROW_COUNT * COLUMN_COUNT - 1;
 const X_AXIS = new Vector3(1, 0, 0);
 const Y_AXIS = new Vector3(0, 1, 0);
 const UNIT = new Vector3(1, 1, 1);
