@@ -7,6 +7,7 @@ import type {
   WebGLProgramParametersWithUniforms,
 } from 'three';
 import { anchorAt } from '@core/scene/parts';
+import { clamp, lerp } from '@core/math';
 import { createMaterial } from '@core/scene/materials';
 import type { AssemblyState, FarmSite, OperatingStateId } from '../../../ids';
 import {
@@ -54,7 +55,8 @@ function fadePlume(shader: WebGLProgramParametersWithUniforms): void {
 }
 
 export function plumeOpacity(strength: number): number {
-  const opacity = Math.min(PLUME.maxOpacity, strength * PLUME.opacityPerDeficit);
+  const share = clamp(strength / PLUME.fullStrength, 0, 1);
+  const opacity = lerp(PLUME.minOpacity, PLUME.maxOpacity, share);
   return Math.max(PLUME.opacityStep, Math.round(opacity / PLUME.opacityStep) * PLUME.opacityStep);
 }
 
