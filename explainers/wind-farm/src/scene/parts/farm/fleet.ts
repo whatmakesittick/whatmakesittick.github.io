@@ -5,7 +5,7 @@ import { clamp } from '@core/math';
 import type { FarmSite } from '../../../ids';
 import {
   COLUMN_COUNT,
-  HERO_SITE,
+  ROW_COUNT,
   TIP_HEIGHT_M,
   TURBINE_COUNT,
   TURBINE_GEOMETRY,
@@ -27,7 +27,7 @@ import { nacelleGeometry, spinnerGeometry, towerGeometry } from './turbine';
 import { Widening } from './widening';
 
 const PART = 'farmTurbines';
-const LABELLED_TURBINE = COLUMN_COUNT + HERO_SITE;
+const LABELLED_TURBINE = ROW_COUNT * COLUMN_COUNT - 2;
 const X_AXIS = new Vector3(1, 0, 0);
 const Y_AXIS = new Vector3(0, 1, 0);
 const UNIT = new Vector3(1, 1, 1);
