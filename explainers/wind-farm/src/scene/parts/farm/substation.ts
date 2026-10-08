@@ -4,7 +4,6 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { MaterialFinish } from '@core/scene/materials';
 import type { AssemblyState, Point } from '../../../ids';
 import { SUBSTATION } from '../../../model';
-import { SUBSTATION_HEIGHT_M } from '../../constants';
 import { FINISHES } from '../../finishes';
 import { finishMesh, label, namedGroup } from '../context';
 import type { PartContext } from '../context';
@@ -43,6 +42,7 @@ const APRON_M = 8;
 const PAD_HALF_WIDTH = HALF_WIDTH + APRON_M;
 const PAD_HALF_DEPTH = HALF_DEPTH + APRON_M;
 const FENCE = { inset: 1, height: 2.4, thickness: 0.12, postPitch: 8, post: 0.22 } as const;
+const LABEL_POINT: Point = [0, FENCE.height, -HALF_DEPTH];
 const BUILDING = { minX: -54, maxX: -32, minZ: 14, maxZ: 30, height: 5.5, eave: 0.6, roof: 0.5 };
 const TRANSFORMER_SITES: readonly (readonly [number, number])[] = [
   [30, -14],
@@ -168,7 +168,7 @@ export class Substation {
     this.busbars = new Mesh(context.tracker.track(busbars()), this.glow.material);
     this.busbars.name = PART;
     this.group.add(this.busbars);
-    label(context, PART, this.group, [0, SUBSTATION_HEIGHT_M, 0]);
+    label(context, PART, this.group, LABEL_POINT);
   }
 
   setState(state: AssemblyState): void {

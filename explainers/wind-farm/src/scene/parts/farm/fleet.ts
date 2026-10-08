@@ -3,14 +3,8 @@ import type { BufferGeometry, Group, Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import { clamp } from '@core/math';
 import type { FarmSite } from '../../../ids';
-import {
-  COLUMN_COUNT,
-  ROW_COUNT,
-  TIP_HEIGHT_M,
-  TURBINE_COUNT,
-  TURBINE_GEOMETRY,
-  terrainHeight,
-} from '../../../model';
+import { TIP_HEIGHT_M, TURBINE_COUNT, TURBINE_GEOMETRY, terrainHeight } from '../../../model';
+import { LABELLED_TURBINE } from '../../constants';
 import { namedGroup } from '../context';
 import type { Motion, PartContext } from '../context';
 import { rotorGeometry } from './blade';
@@ -29,7 +23,6 @@ import { Widening } from './widening';
 
 const PART = 'farmTurbines';
 const BLADES_CACHE_KEY = 'farmRotorBlades';
-const LABELLED_TURBINE = ROW_COUNT * COLUMN_COUNT - 1;
 const X_AXIS = new Vector3(1, 0, 0);
 const Y_AXIS = new Vector3(0, 1, 0);
 const UNIT = new Vector3(1, 1, 1);

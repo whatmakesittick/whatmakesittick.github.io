@@ -1,7 +1,7 @@
 import { Box3, Vector3 } from 'three';
 import type { RegionId, SpacingD } from '../ids';
 import type { GroundPoint } from '../model';
-import { SUBSTATION_HEIGHT_M } from './constants';
+import { LABELLED_TURBINE, SUBSTATION_HEIGHT_M } from './constants';
 import {
   collectorRoutes,
   FARM_TERRAIN,
@@ -23,6 +23,7 @@ const ROTOR_REACH_M = Math.abs(HUB_X) + ROTOR_RADIUS_M;
 const ROTOR_DEPTH_M = TURBINE_GEOMETRY.spinnerRadius * 2;
 const CABLE_END_REACH_M = 1200;
 const PLUME_VIEW_SHARE = 0.5;
+const LABELLED_TURBINE_ROOM_M = 2 * ROTOR_DIAMETER_M;
 
 function turbineRegion(): Box3 {
   return new Box3(
@@ -84,13 +85,24 @@ function cableEnd(route: readonly GroundPoint[]): GroundPoint {
   return [SUBSTATION.x + dx * share, SUBSTATION.z + dz * share];
 }
 
+function labelledTurbineReach(spacing: SpacingD): GroundPoint[] {
+  const { x, z } = farmLayout(spacing)[LABELLED_TURBINE];
+  return [
+    [x - LABELLED_TURBINE_ROOM_M, z - LABELLED_TURBINE_ROOM_M],
+    [x + LABELLED_TURBINE_ROOM_M, z + LABELLED_TURBINE_ROOM_M],
+  ];
+}
+
 function gridRegion(spacing: SpacingD): Box3 {
+  const labelled = farmLayout(spacing)[LABELLED_TURBINE];
   const ends = collectorRoutes(spacing).map(cableEnd);
-  const halfX = Math.max(...ends.map(([x]) => Math.abs(x - SUBSTATION.x)));
-  const halfZ = Math.max(...ends.map(([, z]) => Math.abs(z - SUBSTATION.z)));
+  const reach = [...ends, ...labelledTurbineReach(spacing)];
+  const halfX = Math.max(...reach.map(([x]) => Math.abs(x - SUBSTATION.x)));
+  const halfZ = Math.max(...reach.map(([, z]) => Math.abs(z - SUBSTATION.z)));
   const yard = terrainHeight(SUBSTATION.x, SUBSTATION.z);
-  const ground = Math.min(yard, ...ends.map(([x, z]) => terrainHeight(x, z)));
-  const top = yard + SUBSTATION_HEIGHT_M;
+  const ground = Math.min(yard, ...reach.map(([x, z]) => terrainHeight(x, z)));
+  const labelledTip = terrainHeight(labelled.x, labelled.z) + TIP_HEIGHT_M;
+  const top = Math.max(yard + SUBSTATION_HEIGHT_M, labelledTip);
   return new Box3(
     new Vector3(SUBSTATION.x - halfX, ground, SUBSTATION.z - halfZ),
     new Vector3(SUBSTATION.x + halfX, top, SUBSTATION.z + halfZ),

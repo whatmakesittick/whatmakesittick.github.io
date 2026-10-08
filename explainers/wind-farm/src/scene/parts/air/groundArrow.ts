@@ -12,6 +12,7 @@ import { turnedGround } from './bearing';
 const XYZ = 3;
 const LIE_FLAT = -Math.PI / 2;
 const OVERLAY_OFFSET = -2;
+const LABEL_POINT = [-GROUND_ARROW.length / 2, GROUND_ARROW.labelLift, 0] as const;
 
 const GROUND_ARROW_FINISH = {
   ...FINISHES.wind,
@@ -82,7 +83,7 @@ export class GroundArrowPart {
     this.geometry = mesh.geometry;
     this.flat = Float32Array.from(this.geometry.getAttribute('position').array);
     this.group.add(mesh);
-    label(context, 'prevailingWind', this.group, [0, GROUND_ARROW.labelLift, 0]);
+    label(context, 'prevailingWind', this.group, [...LABEL_POINT]);
   }
 
   place(spacing: SpacingD, turn: number): void {

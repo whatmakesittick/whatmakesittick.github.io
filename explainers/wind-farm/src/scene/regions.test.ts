@@ -1,13 +1,16 @@
 import { Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
+import { SPACING_OPTIONS } from '../ids';
 import {
   ROTOR_DIAMETER_M,
+  TIP_HEIGHT_M,
   SUBSTATION,
   collectorRoutes,
   farmLayout,
   terrainHeight,
   windArrowsX,
 } from '../model';
+import { LABELLED_TURBINE } from './constants';
 import { farmRegions } from './regions';
 
 const SPACING = 7;
@@ -34,6 +37,19 @@ describe('farm regions', () => {
     const base = new Vector3(nearest.x, terrainHeight(nearest.x, nearest.z), nearest.z);
     expect(regions.grid.distanceToPoint(base)).toBeLessThan(ROTOR_DIAMETER_M);
   });
+
+  it.each(SPACING_OPTIONS)(
+    'frames the labelled turbine tip with room in the grid at %sD',
+    (spacing) => {
+      const grid = farmRegions(spacing).grid;
+      const { x, z } = farmLayout(spacing)[LABELLED_TURBINE];
+      const tip = new Vector3(x, terrainHeight(x, z) + TIP_HEIGHT_M, z);
+      expect(grid.containsPoint(tip)).toBe(true);
+      expect(Math.min(tip.x - grid.min.x, tip.z - grid.min.z)).toBeGreaterThanOrEqual(
+        ROTOR_DIAMETER_M,
+      );
+    },
+  );
 
   it('keeps the grid region much tighter than the farm', () => {
     const grid = regions.grid.getSize(new Vector3());

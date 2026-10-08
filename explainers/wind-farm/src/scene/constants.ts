@@ -1,3 +1,4 @@
+import { TURBINE_COUNT } from '../model';
 import { THEME } from '../theme';
 
 type Triple = readonly [number, number, number];
@@ -35,5 +36,6 @@ export const SUN_DIRECTION: Triple = LIGHT_RIG.key.direction;
 export const EASE_SECONDS = 1.5;
 
 export const SUBSTATION_HEIGHT_M = 12;
+export const LABELLED_TURBINE = TURBINE_COUNT - 1;
 
 export const GROUND_LIFT_M = 2;
