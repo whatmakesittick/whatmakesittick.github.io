@@ -1,5 +1,5 @@
 import type { PartContext, Section } from '../context';
-import { stubSection } from '../stub';
+import { farmAirSection } from './farmAir';
 import { streamlinesSection } from './streamlines';
 
 export function buildStreamlines(context: PartContext): Section {
@@ -7,5 +7,5 @@ export function buildStreamlines(context: PartContext): Section {
 }
 
 export function buildFarmAir(context: PartContext): Section {
-  return stubSection(context, 'farmAir', ['prevailingWind', 'windArrows', 'shearProfile']);
+  return farmAirSection(context);
 }
