@@ -4,6 +4,8 @@ import type { Motion, PartContext, Section } from '../context';
 import { HUB, TOWER } from './constants';
 import { buildInterior } from './interior';
 import { buildNacelle } from './nacelle';
+import { buildRotor, turnRotor } from './rotor';
+import { buildSpinner } from './spinner';
 import { buildTower } from './tower';
 import { buildTowerCable } from './towerCable';
 import { buildTransformer } from './transformer';
@@ -21,9 +23,9 @@ export function buildHero(context: PartContext): Section {
   const nacelleInterior = namedGroup('nacelleInterior', yaw);
   nacelleInterior.add(interior.root);
   label(context, 'pitchCylinders', nacelleInterior, PITCH_LABEL);
-  (['hub', 'blades', 'sweptArea', 'heroWake'] as const).forEach((part) =>
-    label(context, part, yaw, HUB),
-  );
+  const spinner = buildSpinner(context, yaw);
+  const rotor = buildRotor(context, yaw);
+  (['sweptArea', 'heroWake'] as const).forEach((part) => label(context, part, yaw, HUB));
   sceneAnchor(context, 'hub', yaw, HUB);
   sceneAnchor(context, 'yawPivot', yaw, [0, TOWER.topY, 0]);
 
@@ -34,9 +36,12 @@ export function buildHero(context: PartContext): Section {
       const open = state.view.cutaway;
       nacelle.openable.visible = !open;
       nacelleInterior.visible = open;
+      spinner.openable.visible = !open;
+      rotor.pitchCylinders.forEach((cylinder) => (cylinder.visible = open));
       interior.setState(state);
     },
     animate(motion: Motion) {
+      turnRotor(rotor, motion.azimuth, motion.pitchDeg);
       interior.animate(motion);
       return false;
     },
