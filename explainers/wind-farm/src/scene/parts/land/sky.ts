@@ -14,6 +14,7 @@ import { HAZE, SKY, SUN_DIRECTION } from '../../constants';
 import { registeredMaterial } from '../context';
 import type { PartContext } from '../context';
 import { SKY_DOME } from './constants';
+import { DISTANT_LAND, distantLandUniforms } from './distantLand';
 
 const VERTEX = /* glsl */ `
 varying vec3 vDirection;
@@ -25,6 +26,7 @@ void main() {
 `;
 
 const FRAGMENT = /* glsl */ `
+${DISTANT_LAND}
 uniform vec3 uTop;
 uniform vec3 uHorizon;
 uniform vec3 uGlow;
@@ -32,7 +34,6 @@ uniform vec3 uSun;
 uniform vec2 uRise;
 uniform vec3 uWide;
 uniform vec3 uCore;
-uniform vec3 uGround;
 uniform vec2 uFloor;
 uniform vec2 uFog;
 varying vec3 vDirection;
@@ -42,7 +43,8 @@ vec3 groundBelow(vec3 direction) {
   float reach = max(cameraPosition.y, uFloor.x) / down;
   float depth = reach * max(-(viewMatrix * vec4(direction, 0.0)).z, 0.0);
   float haze = max(smoothstep(uFog.x, uFog.y, depth), 1.0 - smoothstep(0.0, uFloor.y, down));
-  return mix(uGround, uHorizon, haze);
+  vec2 point = cameraPosition.xz + direction.xz * reach;
+  return mix(distantLand(point), uHorizon, haze);
 }
 
 void main() {
@@ -50,7 +52,8 @@ void main() {
   float up = max(direction.y, 0.0);
   float lift = smoothstep(0.0, uRise.y, up);
   float rise = (1.0 - exp(-up * uRise.x)) * lift;
-  vec3 sky = direction.y >= 0.0 ? mix(uHorizon, uTop, rise) : groundBelow(direction);
+  vec3 ground = groundBelow(direction);
+  vec3 sky = direction.y >= 0.0 ? mix(uHorizon, uTop, rise) : ground;
   float towardSun = max(dot(direction, uSun), 0.0);
   vec2 bearing = normalize(direction.xz + vec2(1e-5));
   float sunward = max(dot(bearing, normalize(uSun.xz)), 0.0);
@@ -75,7 +78,7 @@ function skyMaterial(): ShaderMaterial {
       uRise: { value: new Vector2(rise, band) },
       uWide: { value: new Vector3(glow.wide, glow.wideTightness, glow.horizonTightness) },
       uCore: { value: new Vector3(glow.core, glow.coreTightness, glow.horizon) },
-      uGround: { value: new Color(ground.colour) },
+      ...distantLandUniforms(),
       uFloor: { value: new Vector2(ground.minHeight, ground.band) },
       uFog: { value: new Vector2(HAZE.near, HAZE.far) },
     },

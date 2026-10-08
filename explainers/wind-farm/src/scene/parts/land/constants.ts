@@ -41,11 +41,11 @@ export const TURBINE_GROUND = {
   meadow: { colour: '#97b565', inner: 90, outer: 170 },
   hedgeClear: 120,
   woodClear: 260,
-  hazeFrom: 0.7,
+  hazeFrom: 0.85,
   alphaFrom: 0.9,
 } as const;
 
-export const FARM_GROUND = { segments: 180, hazeFade: 1500, alphaFade: 450 } as const;
+export const FARM_GROUND = { segments: 180, hazeFade: 700, alphaFade: 450 } as const;
 
 export const LAND_RENDER_ORDER = -1;
 
@@ -150,9 +150,18 @@ export const SKY_DOME = {
   widthSegments: 48,
   heightSegments: 24,
   renderOrder: -10,
-  rise: 2.6,
-  band: 0.07,
-  ground: { colour: '#b8c8aa', minHeight: 2, band: 0.025 },
+  rise: 3.6,
+  band: 0.01,
+  ground: {
+    colour: '#a8bb93',
+    warm: '#bcb88b',
+    wood: '#8b9d73',
+    minHeight: 2,
+    band: 0.01,
+    fields: { size: 650, tone: 0.08, warmShare: 0.35, angle: 0.4 },
+    woods: { cell: 700, threshold: 0.72, edge: 0.08, octave: 2.7, octaveShare: 0.4 },
+    detail: { from: 0.15, to: 0.6 },
+  },
   glow: {
     colour: '#f7dbb1',
     wide: 0.3,
