@@ -87,6 +87,9 @@ function buildBlobs(context: PartContext, parent: Object3D): void {
       transparent: true,
       opacity: blob.opacity,
       depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -4,
     });
     const mesh = registeredMesh(context, plane, UNDIMMED_GROUP, material);
     mesh.position.set(blob.x, BLOB_LIFT, blob.z);

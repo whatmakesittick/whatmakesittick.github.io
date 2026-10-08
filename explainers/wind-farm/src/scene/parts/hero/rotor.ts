@@ -1,17 +1,23 @@
-import { Mesh, Vector3 } from 'three';
-import type { BufferGeometry, Group, Object3D } from 'three';
+import { Vector3 } from 'three';
+import type { BufferGeometry, Group, Mesh, Object3D } from 'three';
 import { latheAlongX, sampleProfile } from '@core/scene/geometry/lathe';
 import type { ProfilePoint } from '@core/scene/geometry/lathe';
 import { bandGeometry } from '../../geometry/band';
-import { bladeGeometry } from '../../geometry/blade';
+import { bladeGeometries } from '../../geometry/blade';
 import { cylinderBetween } from '../../geometry/cylinder';
 import { mergeParts } from '../../geometry/merge';
 import { FINISHES } from '../../finishes';
-import { degrees, groupMesh, label, namedGroup, partMesh } from '../context';
+import { degrees, finishMesh, groupMesh, label, namedGroup, partMesh } from '../context';
 import type { PartContext } from '../context';
 import { HUB } from './constants';
 
 const BLADE_COUNT = 3;
+const BAND_FINISH = {
+  ...FINISHES.paintShade,
+  polygonOffset: true,
+  polygonOffsetFactor: -1,
+  polygonOffsetUnits: -1,
+};
 const BLADE_LABEL_RADIUS = 52;
 const HUB_BODY: readonly ProfilePoint[] = [
   [-1.05, 0],
@@ -77,12 +83,7 @@ export function buildRotor(context: PartContext, yaw: Object3D): Rotor {
   root.add(groupMesh(context, hubGeometry(), 'hub', 'castIron'));
   const bearing = bandGeometry(BEARING, BEARING.segments);
   const cylinder = pitchCylinderGeometry();
-  const blade = bladeGeometry();
-  const bladeMaterials = [
-    context.materials.get('blades', FINISHES.gelcoat),
-    context.materials.get('blades', FINISHES.paintShade),
-  ];
-  context.tracker.track(blade);
+  const { body: blade, band } = bladeGeometries();
   const pitchGroups: Group[] = [];
   const pitchCylinders: Mesh[] = [];
   for (let index = 0; index < BLADE_COUNT; index += 1) {
@@ -94,8 +95,8 @@ export function buildRotor(context: PartContext, yaw: Object3D): Rotor {
     arm.add(actuator);
     pitchCylinders.push(actuator);
     const pitch = namedGroup(`bladePitch${index}`, arm);
-    const mesh = new Mesh(blade, bladeMaterials);
-    mesh.name = 'blades';
+    const mesh = partMesh(context, blade, 'blades');
+    mesh.add(finishMesh(context, band, 'blades', BAND_FINISH));
     pitch.add(mesh);
     pitchGroups.push(pitch);
   }

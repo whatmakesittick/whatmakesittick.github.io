@@ -110,21 +110,26 @@ function capCentre(ring: readonly number[]): number[] {
   });
 }
 
-export function bladeGeometry(): BufferGeometry {
+export interface BladeGeometries {
+  readonly body: BufferGeometry;
+  readonly band: BufferGeometry;
+}
+
+export function bladeGeometries(): BladeGeometries {
   const around = BLADE.aroundSections;
   const shares = Array.from({ length: BLADE.spanSections + 1 }, (_, index) => spanShare(index));
   const rings = shares.map(sectionRing);
   const positions = rings.flat();
-  const main: number[] = [];
+  const indices: number[] = [];
   const band: number[] = [];
   shares.slice(0, -1).forEach((share, section) => {
-    const target = inBand(share) ? band : main;
     for (let step = 0; step < around; step += 1) {
       const a = section * around + step;
       const b = section * around + ((step + 1) % around);
       const c = b + around;
       const d = a + around;
-      target.push(a, c, b, a, d, c);
+      indices.push(a, c, b, a, d, c);
+      if (inBand(share)) band.push(a, c, b, a, d, c);
     }
   });
   [0, rings.length - 1].forEach((ringIndex, capIndex) => {
@@ -134,14 +139,20 @@ export function bladeGeometry(): BufferGeometry {
     for (let step = 0; step < around; step += 1) {
       const a = base + step;
       const b = base + ((step + 1) % around);
-      main.push(...(capIndex === 0 ? [centre, a, b] : [centre, b, a]));
+      indices.push(...(capIndex === 0 ? [centre, a, b] : [centre, b, a]));
     }
   });
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
-  geometry.setIndex([...main, ...band]);
-  geometry.addGroup(0, main.length, 0);
-  geometry.addGroup(main.length, band.length, 1);
-  geometry.computeVertexNormals();
-  return geometry;
+  const body = new BufferGeometry();
+  body.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  body.setIndex(indices);
+  body.computeVertexNormals();
+  const stripe = new BufferGeometry();
+  stripe.setAttribute('position', body.getAttribute('position'));
+  stripe.setAttribute('normal', body.getAttribute('normal'));
+  stripe.setIndex(band);
+  return { body, band: stripe };
+}
+
+export function bladeGeometry(): BufferGeometry {
+  return bladeGeometries().body;
 }
