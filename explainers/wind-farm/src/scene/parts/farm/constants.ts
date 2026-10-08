@@ -7,10 +7,6 @@ const ROAD_OFFSET = { polygonOffset: true, polygonOffsetFactor: -1, polygonOffse
 const CABLE_OFFSET = { polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -8 };
 const MARKER_OFFSET = { polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -12 };
 
-export const NACELLE_FINISH: MaterialFinish = { ...FINISHES.paint, vertexColors: true };
-
-export const DEFICIT_SHADE = { colour: '#8ea4bd', full: 0.45 } as const;
-
 export const ROUTE = { offset: 30, towerClearance: 3 } as const;
 
 export const ROAD = {

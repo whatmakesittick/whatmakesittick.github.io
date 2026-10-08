@@ -1,8 +1,9 @@
-import { BufferAttribute, BufferGeometry, Matrix4, Sphere, Vector3 } from 'three';
+import { BufferAttribute, BufferGeometry, Matrix3, Matrix4, Sphere, Vector3 } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { FULL_TURN } from '@core/math';
+import { FULL_TURN, lerp } from '@core/math';
 import { BLADE_LENGTH_M, ROTOR_RADIUS_M, TURBINE_GEOMETRY } from '../../../model';
 import { degrees } from '../context';
+import { BLADE_WIDEN } from './turbineConstants';
 
 interface Station {
   readonly radius: number;
@@ -35,7 +36,7 @@ const OUTLINE: readonly (readonly [along: number, half: number])[] = [
 ];
 const BLADE_COUNT = 3;
 const XYZ = 3;
-const BOUNDS_MARGIN_M = 1;
+const BOUNDS_MARGIN_M = 6;
 
 function ring({ radius, chord, thickness, twistDeg }: Station): number[] {
   const twist = degrees(twistDeg);
@@ -46,6 +47,25 @@ function ring({ radius, chord, thickness, twistDeg }: Station): number[] {
     const across = half * thickness * chord;
     return [across * cos - chordwise * sin, radius, across * sin + chordwise * cos];
   });
+}
+
+function lateralWeight(radius: number): number {
+  return lerp(BLADE_WIDEN.rootWeight, BLADE_WIDEN.tipWeight, (radius - ROOT) / BLADE_LENGTH_M);
+}
+
+function ringLaterals(station: Station): number[] {
+  const points = ring(station);
+  const weight = lateralWeight(station.radius);
+  const side = new Vector3();
+  return OUTLINE.flatMap((_, index) => {
+    side.set(points[index * XYZ], 0, points[index * XYZ + 2]).normalize();
+    return side.multiplyScalar(weight).toArray();
+  });
+}
+
+function turnedLaterals(turn: Matrix4): BufferAttribute {
+  const laterals = new BufferAttribute(new Float32Array(STATIONS.flatMap(ringLaterals)), XYZ);
+  return laterals.applyMatrix3(new Matrix3().setFromMatrix4(turn));
 }
 
 function bladeIndices(): number[] {
@@ -76,9 +96,10 @@ function bladeGeometry(): BufferGeometry {
 export function rotorGeometry(): BufferGeometry {
   const blade = bladeGeometry();
   const rotor = mergeGeometries(
-    Array.from({ length: BLADE_COUNT }, (_, index) =>
-      blade.clone().applyMatrix4(new Matrix4().makeRotationX((index * FULL_TURN) / BLADE_COUNT)),
-    ),
+    Array.from({ length: BLADE_COUNT }, (_, index) => {
+      const turn = new Matrix4().makeRotationX((index * FULL_TURN) / BLADE_COUNT);
+      return blade.clone().applyMatrix4(turn).setAttribute('lateral', turnedLaterals(turn));
+    }),
   );
   blade.dispose();
   if (!rotor) throw new Error('Farm rotor blades do not share attributes');

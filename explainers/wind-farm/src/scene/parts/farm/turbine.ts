@@ -6,6 +6,8 @@ import type { ProfilePoint } from '@core/scene/geometry/lathe';
 import { TURBINE_GEOMETRY } from '../../../model';
 import { THEME } from '../../../theme';
 import { mergeParts, slab, tinted } from './geometry';
+import { radialAroundX, radialAroundY, withLateral } from './widening';
+import type { LateralRule } from './widening';
 
 const TOWER_SEGMENTS = 16;
 const TOWER_SINK_M = 3;
@@ -20,6 +22,8 @@ const NACELLE = TURBINE_GEOMETRY.nacelle;
 const COOLER = TURBINE_GEOMETRY.cooler;
 const [HUB_X] = TURBINE_GEOMETRY.hub;
 const SPINNER_RADIUS = TURBINE_GEOMETRY.spinnerRadius;
+const NACELLE_MIDDLE_Y = (NACELLE.minY + NACELLE.maxY) / 2;
+const NACELLE_HALF_HEIGHT = (NACELLE.maxY - NACELLE.minY) / 2;
 
 const SPINNER_PROFILE: readonly ProfilePoint[] = [
   [HUB_X - 2.6, 0],
@@ -39,8 +43,11 @@ export function towerGeometry(): BufferGeometry {
     new Vector2(base, TOWER_FLANGE_HEIGHT_M),
     new Vector2(top, TURBINE_GEOMETRY.towerTopY),
   ];
-  return new LatheGeometry(profile, TOWER_SEGMENTS);
+  return withLateral(new LatheGeometry(profile, TOWER_SEGMENTS), radialAroundY);
 }
+
+const nacelleLateral: LateralRule = (point, target) =>
+  target.set(0, (point.y - NACELLE_MIDDLE_Y) / NACELLE_HALF_HEIGHT, point.z / NACELLE.halfWidth);
 
 export function nacelleGeometry(): BufferGeometry {
   const shell = roundedRectShape(
@@ -55,13 +62,11 @@ export function nacelleGeometry(): BufferGeometry {
     ),
     THEME.cooler,
   );
-  return mergeParts([body, cooler]);
+  return withLateral(mergeParts([body, cooler]), nacelleLateral);
 }
 
 export function spinnerGeometry(): BufferGeometry {
-  return latheAlongX(sampleProfile(SPINNER_PROFILE, SPINNER_SAMPLES), SPINNER_SEGMENTS).translate(
-    0,
-    TURBINE_GEOMETRY.shaftY,
-    0,
-  );
+  const spinner = latheAlongX(sampleProfile(SPINNER_PROFILE, SPINNER_SAMPLES), SPINNER_SEGMENTS);
+  spinner.translate(0, TURBINE_GEOMETRY.shaftY, 0);
+  return withLateral(spinner, radialAroundX(TURBINE_GEOMETRY.shaftY));
 }

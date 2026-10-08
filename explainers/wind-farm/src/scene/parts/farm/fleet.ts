@@ -1,7 +1,6 @@
 import { Color, InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three';
 import type { BufferGeometry, Group, Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
-import type { MaterialFinish } from '@core/scene/materials';
 import { clamp } from '@core/math';
 import type { FarmSite } from '../../../ids';
 import {
@@ -12,11 +11,20 @@ import {
   TURBINE_GEOMETRY,
   terrainHeight,
 } from '../../../model';
-import { instancedMesh, namedGroup } from '../context';
-import type { PartContext } from '../context';
+import { namedGroup } from '../context';
+import type { Motion, PartContext } from '../context';
 import { rotorGeometry } from './blade';
-import { DEFICIT_SHADE, NACELLE_FINISH } from './constants';
+import {
+  BLADE_WIDEN,
+  DEFICIT_SHADE,
+  NACELLE_FINISH,
+  TURBINE_FINISH,
+  TURBINE_WIDEN,
+} from './turbineConstants';
+import { RotorDiscs } from './discs';
+import { TurbineShadows } from './shadows';
 import { nacelleGeometry, spinnerGeometry, towerGeometry } from './turbine';
+import { Widening } from './widening';
 
 const PART = 'farmTurbines';
 const LABELLED_TURBINE = COLUMN_COUNT + HERO_SITE;
@@ -43,14 +51,13 @@ export function rotorMatrix(base: Matrix4, azimuth: number, target = new Matrix4
   return target.multiplyMatrices(base, hubFrame.compose(HUB, spinTurn, UNIT));
 }
 
-function finishInstances(
+function widenedInstances(
   context: PartContext,
   geometry: BufferGeometry,
-  finish: MaterialFinish,
+  widening: Widening,
 ): InstancedMesh {
-  const material = context.materials.get(PART, finish);
   return context.tracker.track(
-    new InstancedMesh(context.tracker.track(geometry), material, TURBINE_COUNT),
+    new InstancedMesh(context.tracker.track(geometry), widening.material, TURBINE_COUNT),
   );
 }
 
@@ -60,6 +67,9 @@ export class Fleet {
   private readonly nacelles: InstancedMesh;
   private readonly hubs: InstancedMesh;
   private readonly rotors: InstancedMesh;
+  private readonly discs: RotorDiscs;
+  private readonly shadows: TurbineShadows;
+  private readonly widenings: readonly Widening[];
   private readonly positions = Array.from({ length: TURBINE_COUNT }, () => new Vector3());
   private readonly base = new Matrix4();
   private readonly spin = new Matrix4();
@@ -72,26 +82,22 @@ export class Fleet {
 
   constructor(context: PartContext) {
     this.group = namedGroup(PART);
-    this.towers = named(
-      instancedMesh(context, towerGeometry(), PART, 'towerPaint', TURBINE_COUNT),
-      'tower',
-      this.group,
-    );
+    const tower = new Widening(context, PART, TURBINE_FINISH, TURBINE_WIDEN);
+    const nacelle = new Widening(context, PART, NACELLE_FINISH, TURBINE_WIDEN);
+    const hub = new Widening(context, PART, TURBINE_FINISH, TURBINE_WIDEN);
+    const blades = new Widening(context, PART, TURBINE_FINISH, BLADE_WIDEN);
+    this.widenings = [tower, nacelle, hub, blades];
+    this.towers = named(widenedInstances(context, towerGeometry(), tower), 'tower', this.group);
     this.nacelles = named(
-      finishInstances(context, nacelleGeometry(), NACELLE_FINISH),
+      widenedInstances(context, nacelleGeometry(), nacelle),
       'nacelle',
       this.group,
     );
-    this.hubs = named(
-      instancedMesh(context, spinnerGeometry(), PART, 'paint', TURBINE_COUNT),
-      'hub',
-      this.group,
-    );
-    this.rotors = named(
-      instancedMesh(context, rotorGeometry(), PART, 'paint', TURBINE_COUNT),
-      'rotor',
-      this.group,
-    );
+    this.hubs = named(widenedInstances(context, spinnerGeometry(), hub), 'hub', this.group);
+    this.rotors = named(widenedInstances(context, rotorGeometry(), blades), 'rotor', this.group);
+    this.discs = new RotorDiscs(context);
+    this.shadows = new TurbineShadows(context);
+    this.group.add(this.discs.mesh, this.shadows.mesh);
     for (let index = 0; index < TURBINE_COUNT; index += 1)
       this.nacelles.setColorAt(index, this.plain);
     this.label = anchorAt(this.group, 0, 0, 0);
@@ -104,12 +110,19 @@ export class Fleet {
       this.towers.setMatrixAt(index, this.base.makeTranslation(this.positions[index]));
     });
     this.towers.instanceMatrix.needsUpdate = true;
+    this.shadows.place(sites);
     const labelled = this.positions[LABELLED_TURBINE];
     this.label.position.set(labelled.x, labelled.y + TIP_HEIGHT_M, labelled.z);
     this.turn(yaw, azimuth);
-    [this.towers, this.nacelles, this.hubs, this.rotors].forEach((mesh) =>
+    [this.towers, this.nacelles, this.hubs, this.rotors, this.discs.mesh].forEach((mesh) =>
       mesh.computeBoundingSphere(),
     );
+  }
+
+  animate(motion: Motion, yaw: number): void {
+    this.turn(yaw, motion.azimuth);
+    this.discs.spin(motion.rpm);
+    this.widenings.forEach((widening) => widening.update(motion.cameraDistance));
   }
 
   turn(yaw: number, azimuth: number): void {
@@ -119,8 +132,9 @@ export class Fleet {
       this.nacelles.setMatrixAt(index, this.base);
       this.hubs.setMatrixAt(index, this.base);
       this.rotors.setMatrixAt(index, rotorMatrix(this.base, azimuth, this.spin));
+      this.discs.setMatrixAt(index, this.base);
     });
-    [this.nacelles, this.hubs, this.rotors].forEach((mesh) => {
+    [this.nacelles, this.hubs, this.rotors, this.discs.mesh].forEach((mesh) => {
       mesh.instanceMatrix.needsUpdate = true;
     });
   }
