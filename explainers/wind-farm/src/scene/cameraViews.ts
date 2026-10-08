@@ -52,7 +52,7 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   },
   gridSubstation: {
     region: 'grid',
-    direction: { phone: [0.47, 1.64, 1], desktop: [0.58, 1.5, 1] },
+    direction: { phone: [0.14, 1.55, 1], desktop: [0.58, 1.5, 1] },
     margin: 1.1,
     distance: { min: 600, max: 15000 },
   },

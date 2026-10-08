@@ -21,7 +21,7 @@ type FarmRegionId = Extract<RegionId, 'farm' | 'wakes' | 'grid'>;
 const [HUB_X, HUB_Y] = TURBINE_GEOMETRY.hub;
 const ROTOR_REACH_M = Math.abs(HUB_X) + ROTOR_RADIUS_M;
 const ROTOR_DEPTH_M = TURBINE_GEOMETRY.spinnerRadius * 2;
-const CABLE_END_REACH_M = 750;
+const CABLE_END_REACH_M = 1200;
 const PLUME_VIEW_SHARE = 0.5;
 
 function turbineRegion(): Box3 {
