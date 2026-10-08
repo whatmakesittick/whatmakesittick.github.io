@@ -1,14 +1,18 @@
 import { CircleGeometry, InstancedMesh } from 'three';
 import type { DataTexture, Matrix4, MeshStandardMaterial } from 'three';
 import { clamp } from '@core/math';
-import { MAX_RPM, ROTOR_RADIUS_M, TURBINE_COUNT, TURBINE_GEOMETRY } from '../../../model';
+import { MAX_RPM, ROTOR_RADIUS_M, TURBINE_COUNT } from '../../../model';
 import type { PartContext } from '../context';
+import { tiltTowardEye } from './rotors';
 import { DISC, DISC_FINISH } from './turbineConstants';
 import { discTexture } from './textures';
 
 const PART = 'farmTurbines';
 const NAME = 'turbineDiscs';
 const QUARTER_TURN = Math.PI / 2;
+const CACHE_KEY = 'farmRotorDisc';
+const EDGE_FRAGMENT = `#include <normal_fragment_maps>
+diffuseColor.a /= max(abs(dot(normal, normalize(vViewPosition))), ${(1 / DISC.edgeBoost).toFixed(3)});`;
 
 export function discOpacity(rpm: number): number {
   if (rpm <= 0) return 0;
@@ -18,9 +22,7 @@ export function discOpacity(rpm: number): number {
 
 function discGeometry(): CircleGeometry {
   const geometry = new CircleGeometry(ROTOR_RADIUS_M, DISC.segments);
-  geometry.rotateY(QUARTER_TURN);
-  geometry.translate(...TURBINE_GEOMETRY.hub);
-  return geometry;
+  return geometry.rotateY(QUARTER_TURN);
 }
 
 export class RotorDiscs {
@@ -43,8 +45,8 @@ export class RotorDiscs {
     this.mesh.visible = false;
   }
 
-  setMatrixAt(index: number, base: Matrix4): void {
-    this.mesh.setMatrixAt(index, base);
+  setMatrixAt(index: number, rotor: Matrix4): void {
+    this.mesh.setMatrixAt(index, rotor);
   }
 
   spin(rpm: number): void {
@@ -58,6 +60,13 @@ export class RotorDiscs {
     let material = this.materials.get(key);
     if (!material) {
       material = this.context.materials.get(PART, { ...DISC_FINISH, opacity, alphaMap: this.blur });
+      material.onBeforeCompile = (shader) => {
+        shader.fragmentShader = shader.fragmentShader.replace(
+          '#include <normal_fragment_maps>',
+          EDGE_FRAGMENT,
+        );
+      };
+      tiltTowardEye(material, CACHE_KEY);
       this.materials.set(key, material);
     }
     return material;

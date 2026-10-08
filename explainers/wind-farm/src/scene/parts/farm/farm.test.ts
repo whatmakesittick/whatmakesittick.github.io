@@ -118,6 +118,26 @@ describe('farm diorama', () => {
     expect(discOpacity(MAX_RPM)).toBeGreaterThan(0.25);
   });
 
+  it('turns the rotor blur discs with the blades', () => {
+    const context = farmContext();
+    const section = buildFarm(context);
+    const state = farmState(SPACING);
+    section.setState(state);
+    section.animate?.(
+      { delta: 0, azimuth: QUARTER_TURN, pitchDeg: 0, rpm: MAX_RPM, cameraDistance: 0 },
+      state,
+    );
+    const blades = section.root.getObjectByName('farmTurbines.rotor') as InstancedMesh;
+    const discs = section.root.getObjectByName('turbineDiscs') as InstancedMesh;
+    const blade = new Matrix4();
+    const disc = new Matrix4();
+    blades.getMatrixAt(0, blade);
+    discs.getMatrixAt(0, disc);
+    expect(disc.equals(blade)).toBe(true);
+    expect(discs.visible).toBe(true);
+    context.tracker.dispose();
+  });
+
   it('sets the plume opacity from the plume strength', () => {
     expect(plumeOpacity(PLUME.fullStrength)).toBeCloseTo(PLUME.maxOpacity);
     expect(plumeOpacity(0.2)).toBeLessThan(plumeOpacity(PLUME.fullStrength));

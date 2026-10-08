@@ -31,7 +31,10 @@ export const DISC = {
   maxOpacity: 0.7,
   opacityStep: 0.05,
   glow: 0.6,
+  edgeBoost: 2,
 } as const;
+
+export const ROTOR_TILT = { minFacing: 0.45 } as const;
 
 export const DISC_FINISH: MaterialFinish = {
   color: THEME.turbineWhite,

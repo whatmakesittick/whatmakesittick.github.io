@@ -22,11 +22,13 @@ import {
   TURBINE_WIDEN,
 } from './turbineConstants';
 import { RotorDiscs } from './discs';
+import { tiltTowardEye } from './rotors';
 import { TurbineShadows } from './shadows';
 import { nacelleGeometry, spinnerGeometry, towerGeometry } from './turbine';
 import { Widening } from './widening';
 
 const PART = 'farmTurbines';
+const BLADES_CACHE_KEY = 'farmRotorBlades';
 const LABELLED_TURBINE = ROW_COUNT * COLUMN_COUNT - 1;
 const X_AXIS = new Vector3(1, 0, 0);
 const Y_AXIS = new Vector3(0, 1, 0);
@@ -86,6 +88,7 @@ export class Fleet {
     const nacelle = new Widening(context, PART, NACELLE_FINISH, TURBINE_WIDEN);
     const hub = new Widening(context, PART, TURBINE_FINISH, TURBINE_WIDEN);
     const blades = new Widening(context, PART, TURBINE_FINISH, BLADE_WIDEN);
+    tiltTowardEye(blades.material, BLADES_CACHE_KEY);
     this.widenings = [tower, nacelle, hub, blades];
     this.towers = named(widenedInstances(context, towerGeometry(), tower), 'tower', this.group);
     this.nacelles = named(
@@ -132,8 +135,9 @@ export class Fleet {
       this.base.compose(position, this.heading, UNIT);
       this.nacelles.setMatrixAt(index, this.base);
       this.hubs.setMatrixAt(index, this.base);
-      this.rotors.setMatrixAt(index, rotorMatrix(this.base, azimuth, this.spin));
-      this.discs.setMatrixAt(index, this.base);
+      const rotor = rotorMatrix(this.base, azimuth, this.spin);
+      this.rotors.setMatrixAt(index, rotor);
+      this.discs.setMatrixAt(index, rotor);
     });
     [this.nacelles, this.hubs, this.rotors, this.discs.mesh].forEach((mesh) => {
       mesh.instanceMatrix.needsUpdate = true;
