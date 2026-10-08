@@ -1,8 +1,8 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { CanvasSurface } from '@core/ui/canvasSurface';
 import type { CanvasFrame } from '@core/ui/canvasSurface';
-import { RATED_KW, RATED_WIND_MS } from '../model';
-import { createWindFarmStore } from '../state';
+import { RATED_KW, RATED_WIND_MS, parkedWindow, turbinePowerKw } from '../model';
+import { createWindFarmStore, liveReading } from '../state';
 import {
   AXIS_POWER_KW,
   AXIS_WIND_MS,
@@ -13,11 +13,13 @@ import {
   xOfWind,
   yOfPower,
 } from './powerCurveView';
+import type { CurvePoint } from './powerCurveView';
 import { TEST_LOCALE, initTestLocale } from './testing';
 
 const FRAME: CanvasFrame = { width: 600, height: 300, ratio: 2, fontFamily: 'sans-serif' };
 const CHAR_WIDTH = 6;
 const { curve } = TEST_LOCALE.chapters;
+const RATED_POINT: CurvePoint = { wind: RATED_WIND_MS, powerKw: RATED_KW };
 
 interface Arc {
   x: number;
@@ -67,20 +69,38 @@ describe('power curve', () => {
 
   it('labels both axes and all three lines', () => {
     const { context, texts } = recordingContext();
-    paintPowerCurve(context, FRAME, RATED_WIND_MS);
+    paintPowerCurve(context, FRAME, RATED_POINT);
     [curve.axisWind, curve.axisPower, curve.lineWind, curve.lineBetz, curve.lineTurbine].forEach(
       (label) => expect(texts).toContain(label),
     );
   });
 
-  it('puts the dot on the turbine curve at the live wind', () => {
+  it('puts the dot at the live wind and power', () => {
     const { context, arcs } = recordingContext();
-    paintPowerCurve(context, FRAME, RATED_WIND_MS);
+    paintPowerCurve(context, FRAME, RATED_POINT);
     const plot = plotOf(FRAME);
     expect(arcs).toEqual([{ x: xOfWind(plot, RATED_WIND_MS), y: yOfPower(plot, RATED_KW) }]);
   });
 
-  it('repaints only when the live wind changes', () => {
+  it('drops the dot to zero while the hero starts up after the storm', () => {
+    const { context, arcs } = recordingContext();
+    vi.spyOn(CanvasSurface.prototype, 'paint').mockImplementation((painter) =>
+      painter(context, FRAME),
+    );
+    document.body.innerHTML = '<canvas data-canvas="power-curve"></canvas>';
+    const restart = parkedWindow('typical')?.restart ?? 0;
+    const store = createWindFarmStore({ playing: false, phase: restart });
+    const { wind, heroKw, operating } = liveReading(store.getState());
+    expect(operating.state).toBe('starting');
+    expect(turbinePowerKw(wind)).toBeGreaterThan(0);
+    expect(heroKw).toBe(0);
+    const dispose = mountPowerCurve(document, store);
+    const plot = plotOf(FRAME);
+    expect(arcs).toEqual([{ x: xOfWind(plot, wind), y: yOfPower(plot, 0) }]);
+    dispose();
+  });
+
+  it('repaints only when the live wind or the hero power changes', () => {
     const paint = vi.spyOn(CanvasSurface.prototype, 'paint');
     document.body.innerHTML = '<canvas data-canvas="power-curve"></canvas>';
     const store = createWindFarmStore({ playing: false, windOverride: RATED_WIND_MS });
@@ -93,12 +113,14 @@ describe('power curve', () => {
     dispose();
   });
 
-  it('skips a repaint for the same wind and language', () => {
+  it('skips a repaint for the same point and language', () => {
     const paint = vi.spyOn(CanvasSurface.prototype, 'paint');
     const view = new PowerCurveView(document.createElement('canvas'));
-    view.draw(RATED_WIND_MS);
-    view.draw(RATED_WIND_MS);
+    view.draw(RATED_POINT);
+    view.draw({ ...RATED_POINT });
     expect(paint).toHaveBeenCalledTimes(1);
+    view.draw({ ...RATED_POINT, powerKw: 0 });
+    expect(paint).toHaveBeenCalledTimes(2);
     view.dispose();
   });
 });

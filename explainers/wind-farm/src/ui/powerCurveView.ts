@@ -5,9 +5,9 @@ import { CanvasSurface, canvasFont } from '@core/ui/canvasSurface';
 import type { CanvasFrame } from '@core/ui/canvasSurface';
 import type { Disposer } from '@core/ui/disposers';
 import { requireElement } from '@core/ui/dom';
-import { watchLocalized } from '@core/ui/subscribe';
+import { watchShallowLocalized } from '@core/ui/subscribe';
 import { BETZ_LIMIT, turbinePowerKw, windPowerKw } from '../model';
-import { WIND_OVERRIDE_RANGE, liveWind } from '../state';
+import { WIND_OVERRIDE_RANGE, liveReading } from '../state';
 import type { WindFarmStore } from '../state';
 import { THEME } from '../theme';
 
@@ -59,6 +59,11 @@ const LINES: readonly Line[] = [
   },
   { key: 'chapters.curve.lineTurbine', color: CURVE_COLORS.turbine, powerKw: turbinePowerKw },
 ];
+
+export interface CurvePoint {
+  wind: number;
+  powerKw: number;
+}
 
 export interface Plot {
   left: number;
@@ -159,9 +164,9 @@ function paintLegend(context: CanvasRenderingContext2D, frame: CanvasFrame, plot
   });
 }
 
-function paintDot(context: CanvasRenderingContext2D, plot: Plot, wind: number): void {
+function paintDot(context: CanvasRenderingContext2D, plot: Plot, point: CurvePoint): void {
   context.beginPath();
-  context.arc(xOfWind(plot, wind), yOfPower(plot, turbinePowerKw(wind)), DOT_RADIUS, 0, FULL_TURN);
+  context.arc(xOfWind(plot, point.wind), yOfPower(plot, point.powerKw), DOT_RADIUS, 0, FULL_TURN);
   context.fillStyle = CURVE_COLORS.turbine;
   context.fill();
   context.strokeStyle = CURVE_COLORS.dotRing;
@@ -172,31 +177,35 @@ function paintDot(context: CanvasRenderingContext2D, plot: Plot, wind: number): 
 export function paintPowerCurve(
   context: CanvasRenderingContext2D,
   frame: CanvasFrame,
-  wind: number,
+  point: CurvePoint,
 ): void {
   const plot = plotOf(frame);
   paintGrid(context, frame, plot);
   paintAxisLabels(context, frame, plot);
   LINES.forEach((line) => paintLine(context, plot, line));
   paintLegend(context, frame, plot);
-  paintDot(context, plot, wind);
+  paintDot(context, plot, point);
 }
 
 export class PowerCurveView {
   private readonly surface: CanvasSurface;
-  private paintedWind: number | null = null;
+  private painted: CurvePoint | null = null;
   private language = '';
 
   constructor(canvas: HTMLCanvasElement) {
     this.surface = new CanvasSurface(canvas);
   }
 
-  draw(wind: number): void {
+  draw(point: CurvePoint): void {
     const language = currentLanguage();
-    if (wind === this.paintedWind && language === this.language) return;
-    this.paintedWind = wind;
+    if (this.isPainted(point) && language === this.language) return;
+    this.painted = { ...point };
     this.language = language;
-    this.surface.paint((context, frame) => paintPowerCurve(context, frame, wind));
+    this.surface.paint((context, frame) => paintPowerCurve(context, frame, point));
+  }
+
+  private isPainted({ wind, powerKw }: CurvePoint): boolean {
+    return this.painted?.wind === wind && this.painted.powerKw === powerKw;
   }
 
   dispose(): void {
@@ -206,7 +215,14 @@ export class PowerCurveView {
 
 export function mountPowerCurve(root: Document, store: WindFarmStore): Disposer {
   const view = new PowerCurveView(requireElement<HTMLCanvasElement>(root, POWER_CURVE_CANVAS));
-  const stopWatching = watchLocalized(store, liveWind, (wind) => view.draw(wind));
+  const stopWatching = watchShallowLocalized(
+    store,
+    (state) => {
+      const { wind, heroKw } = liveReading(state);
+      return [wind, heroKw] as const;
+    },
+    ([wind, powerKw]) => view.draw({ wind, powerKw }),
+  );
   return () => {
     stopWatching();
     view.dispose();
