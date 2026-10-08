@@ -39,8 +39,8 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   },
   rotorQuarter: {
     region: 'rotor',
-    direction: { phone: [-1, 0.25, 0.58], desktop: [-1, 0.26, 0.7] },
-    margin: 1.3,
+    direction: { phone: [-1, 0.2, 0.58], desktop: [-1, 0.2, 0.7] },
+    margin: 1.6,
     follow: 'heading',
     distance: { min: 80, max: 1200 },
   },
