@@ -6,12 +6,19 @@ import type { WindFarmStore } from '../state';
 import { formatWind } from './format';
 
 const WIND_OVERRIDE_CONTROL = 'wind-override';
+const RANGE_WIDGET = '.range-widget';
 
 type SelectedWind = readonly [wind: number];
 
-export function mountWindOverride(root: Document, store: WindFarmStore, inputId: string): Disposer {
+function widgetAround(root: Document, inputId: string): HTMLElement {
   const input = requireElement<HTMLInputElement>(root, `#${inputId}`);
-  return mountRangeWidget(input.parentElement ?? root, store, {
+  const widget = input.closest<HTMLElement>(RANGE_WIDGET);
+  if (!widget) throw new Error(`Missing ${RANGE_WIDGET} around #${inputId}`);
+  return widget;
+}
+
+export function mountWindOverride(root: Document, store: WindFarmStore, inputId: string): Disposer {
+  return mountRangeWidget(widgetAround(root, inputId), store, {
     control: WIND_OVERRIDE_CONTROL,
     range: WIND_OVERRIDE_RANGE,
     select: (state): SelectedWind => [liveWind(state)],
