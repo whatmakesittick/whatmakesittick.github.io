@@ -22,7 +22,7 @@ const LEFT_PARTS: readonly PartId[] = [
   'spacingMarker',
   'accessRoads',
 ];
-const RANKED_COUNT = 15;
+const RANKED_COUNT = 16;
 const NACELLE_FIRST: readonly PartId[] = [
   'gearbox',
   'generator',
@@ -34,6 +34,12 @@ const NACELLE_FIRST: readonly PartId[] = [
 const NACELLE_LATER: readonly PartId[] = ['pitchCylinders', 'yawDrives', 'cooler'];
 
 describe('part labels', () => {
+  it('places the prevailing wind label before the farm labels around it', () => {
+    const wind = LABEL_PRIORITY.indexOf('prevailingWind');
+    expect(wind).toBeLessThan(LABEL_PRIORITY.indexOf('spacingMarker'));
+    expect(wind).toBeLessThan(LABEL_PRIORITY.indexOf('accessRoads'));
+  });
+
   it('names every part from its locale key', () => {
     PART_IDS.forEach((id) => expect(PART_INFO[id].labelKey).toBe(`parts.${id}`));
     expect(Object.keys(PART_INFO)).toHaveLength(PART_IDS.length);

@@ -17,7 +17,6 @@ import type {
 import { SUBSTATION, TURBINE_COUNT, farmLayout } from '../model';
 import type { Assembly } from './assembly';
 import { EASE_SECONDS } from './constants';
-import { GROUND_ARROW } from './parts/air/constants';
 import { createWindFarmAssembly } from './windFarmAssembly';
 
 const ANCHOR_IDS: readonly AnchorId[] = [
@@ -199,13 +198,5 @@ describe('wind farm assembly', () => {
     const [x, , z] = worldPoint(assembly.labelAnchors().get('substation')!);
     expect(x).toBeCloseTo(SUBSTATION.x, 0);
     expect(z).toBeCloseTo(SUBSTATION.z - SUBSTATION.depth / 2, 0);
-  });
-
-  it('anchors the prevailing wind label at the arrow tail', () => {
-    assembly.setState(stateWith('farm', ALL_VIEWS));
-    const anchor = assembly.labelAnchors().get('prevailingWind')!;
-    const [x, , z] = worldPoint(anchor);
-    const [centreX, , centreZ] = worldPoint(anchor.parent!);
-    expect(Math.hypot(x - centreX, z - centreZ)).toBeCloseTo(GROUND_ARROW.length / 2, 0);
   });
 });

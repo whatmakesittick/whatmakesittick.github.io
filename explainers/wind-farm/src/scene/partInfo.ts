@@ -33,6 +33,7 @@ const RANKED_FIRST: readonly PartId[] = [
   'generator',
   'wakePlumes',
   'collectorCables',
+  'prevailingWind',
   'tower',
   'brakeDisc',
   'mainShaft',
