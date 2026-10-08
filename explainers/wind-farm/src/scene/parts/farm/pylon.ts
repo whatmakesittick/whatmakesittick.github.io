@@ -1,7 +1,9 @@
+import { Vector3 } from 'three';
 import type { BufferGeometry } from 'three';
 import { lerp } from '@core/math';
 import type { Point } from '../../../ids';
 import { mergeParts, strut } from './geometry';
+import { withLateral } from './widening';
 
 const LEVELS = [0, 7, 13.5, 20, 25, 30, 35] as const;
 const WAIST_LEVEL = 3;
@@ -29,6 +31,16 @@ const CORNERS = [
 
 export const PYLON_TOP_M = LEVELS[LEVELS.length - 1] + PEAK_M;
 
+function beam(from: Point, to: Point, thickness: number): BufferGeometry {
+  const start = new Vector3(...from);
+  const axis = new Vector3(...to).sub(start).normalize();
+  const offset = new Vector3();
+  return withLateral(strut(from, to, thickness), (point, target) => {
+    offset.subVectors(point, start);
+    return target.copy(offset).addScaledVector(axis, -offset.dot(axis)).normalize();
+  });
+}
+
 function halfWidth(level: number): number {
   if (level <= WAIST_LEVEL) return lerp(BASE_HALF_M, WAIST_HALF_M, level / WAIST_LEVEL);
   return lerp(WAIST_HALF_M, TOP_HALF_M, (level - WAIST_LEVEL) / (LEVELS.length - 1 - WAIST_LEVEL));
@@ -46,10 +58,10 @@ function body(): BufferGeometry[] {
     return CORNERS.flatMap((signs, index) => {
       const next = CORNERS[(index + 1) % CORNERS.length];
       return [
-        strut(corner(below, signs), corner(above, signs), LEG_M),
-        strut(corner(above, signs), corner(above, next), BRACE_M),
-        strut(corner(below, signs), corner(above, next), BRACE_M),
-        strut(corner(below, next), corner(above, signs), BRACE_M),
+        beam(corner(below, signs), corner(above, signs), LEG_M),
+        beam(corner(above, signs), corner(above, next), BRACE_M),
+        beam(corner(below, signs), corner(above, next), BRACE_M),
+        beam(corner(below, next), corner(above, signs), BRACE_M),
       ];
     });
   });
@@ -68,15 +80,15 @@ function arms(): BufferGeometry[] {
     const y = LEVELS[level];
     const half = halfWidth(level);
     return [-1, 1].flatMap((side) => [
-      strut([0, y, side * half], [0, y, side * reach], LEG_M),
-      strut([0, y + ARM_RISE_M, side * half], [0, y, side * reach], BRACE_M),
-      strut([0, y, side * reach], [0, y - INSULATOR_M, side * reach], INSULATOR_THICKNESS_M),
+      beam([0, y, side * half], [0, y, side * reach], LEG_M),
+      beam([0, y + ARM_RISE_M, side * half], [0, y, side * reach], BRACE_M),
+      beam([0, y, side * reach], [0, y - INSULATOR_M, side * reach], INSULATOR_THICKNESS_M),
     ]);
   });
 }
 
 export function pylonGeometry(): BufferGeometry {
   const top = LEVELS.length - 1;
-  const peak = strut([0, LEVELS[top], 0], [0, PYLON_TOP_M, 0], LEG_M);
+  const peak = beam([0, LEVELS[top], 0], [0, PYLON_TOP_M, 0], LEG_M);
   return mergeParts([...body(), ...arms(), peak]);
 }

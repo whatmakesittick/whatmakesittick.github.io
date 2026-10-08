@@ -1,9 +1,17 @@
 import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../../../theme';
+import { FINISHES } from '../../finishes';
 
 const GALVANISED = '#c3cad1';
 const TRANSFORMER_GREY = '#ccd4dc';
 const RADIATOR_GREY = '#b2bcc6';
+const YARD_STONE = '#8b8881';
+
+export const YARD_GRAVEL_FINISH: MaterialFinish = {
+  color: YARD_STONE,
+  roughness: 0.95,
+  metalness: 0,
+};
 
 export const YARD_STEEL_FINISH: MaterialFinish = {
   color: GALVANISED,
@@ -23,7 +31,7 @@ export const RADIATOR_FINISH: MaterialFinish = {
   metalness: 0.2,
 };
 
-export const BUSBAR = { radius: 0.25, perMetre: 0.0003, glow: 0.9 } as const;
+export const BUSBAR = { radius: 0.25, perMetre: 0.0004, glow: 1.4 } as const;
 
 export const BUSBAR_GLOW_FINISH: MaterialFinish = {
   ...YARD_STEEL_FINISH,
@@ -50,4 +58,12 @@ export const CONDUCTOR_GLOW_FINISH: MaterialFinish = {
   ...CONDUCTOR_FINISH,
   emissive: THEME.cable,
   emissiveIntensity: CONDUCTOR.glow,
+};
+
+export const PYLON = { halfWidth: 0.25, perMetre: 0.00026, glow: 0.3 } as const;
+
+export const PYLON_GLOW_FINISH: MaterialFinish = {
+  ...FINISHES.gridSteel,
+  emissive: THEME.cable,
+  emissiveIntensity: PYLON.glow,
 };

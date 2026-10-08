@@ -1,14 +1,19 @@
-import { Matrix4, Mesh } from 'three';
-import type { Group, InstancedMesh, MeshStandardMaterial } from 'three';
+import { InstancedMesh, Matrix4, Mesh } from 'three';
+import type { Group } from 'three';
 import type { AssemblyState, Point } from '../../../ids';
 import { GRID_LINE_END, PYLON_SPACING_M, SUBSTATION } from '../../../model';
-import { THEME } from '../../../theme';
 import { FINISHES } from '../../finishes';
-import { instancedMesh, label, namedGroup } from '../context';
+import { label, namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { conductorGeometry } from './conductors';
 import type { Span } from './conductors';
-import { CONDUCTOR, CONDUCTOR_FINISH, CONDUCTOR_GLOW_FINISH } from './gridConstants';
+import {
+  CONDUCTOR,
+  CONDUCTOR_FINISH,
+  CONDUCTOR_GLOW_FINISH,
+  PYLON,
+  PYLON_GLOW_FINISH,
+} from './gridConstants';
 import { GlowSwitch } from './glowSwitch';
 import { groundRange } from './ground';
 import { EARTH_WIRE, phaseAttachments, pylonGeometry, PYLON_TOP_M } from './pylon';
@@ -17,7 +22,6 @@ import { EXIT_HALF_SPAN_M, LINE_EXIT } from './substation';
 const PART = 'gridLine';
 const FOOT_HALF_M = 3.6;
 const EXIT_EDGE_M = 1.5;
-const PYLON_GLOW = { ...FINISHES.gridSteel, emissive: THEME.cable, emissiveIntensity: 0.3 };
 
 export function pylonSites(): Point[] {
   const length = GRID_LINE_END.x - SUBSTATION.x;
@@ -55,22 +59,27 @@ function wireSpans(towers: readonly Point[]): Span[] {
 export class GridLine {
   readonly group: Group;
   private readonly pylons: InstancedMesh;
-  private readonly steel: MeshStandardMaterial;
-  private readonly glow: MeshStandardMaterial;
+  private readonly steel: GlowSwitch;
   private readonly wires: Mesh;
   private readonly conductors: GlowSwitch;
 
   constructor(context: PartContext) {
     this.group = namedGroup(PART);
     const towers = pylonSites();
-    this.pylons = instancedMesh(context, pylonGeometry(), PART, 'gridSteel', towers.length);
+    this.steel = new GlowSwitch(
+      context,
+      PART,
+      { plain: FINISHES.gridSteel, glowing: PYLON_GLOW_FINISH },
+      PYLON,
+    );
+    this.pylons = context.tracker.track(
+      new InstancedMesh(context.tracker.track(pylonGeometry()), this.steel.material, towers.length),
+    );
     this.pylons.name = PART;
     towers.forEach((tower, index) =>
       this.pylons.setMatrixAt(index, new Matrix4().makeTranslation(...tower)),
     );
     this.pylons.computeBoundingSphere();
-    this.steel = this.pylons.material as MeshStandardMaterial;
-    this.glow = context.materials.get(PART, PYLON_GLOW);
     this.conductors = new GlowSwitch(
       context,
       PART,
@@ -86,11 +95,12 @@ export class GridLine {
   }
 
   setState(state: AssemblyState): void {
-    this.pylons.material = state.view.cables ? this.glow : this.steel;
+    this.steel.apply(this.pylons, state.view.cables);
     this.conductors.apply(this.wires, state.view.cables);
   }
 
   widen(cameraDistance: number): void {
+    this.steel.widen(cameraDistance);
     this.conductors.widen(cameraDistance);
   }
 }

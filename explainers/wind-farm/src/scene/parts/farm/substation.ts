@@ -15,6 +15,7 @@ import {
   BUSBAR_GLOW_FINISH,
   RADIATOR_FINISH,
   TRANSFORMER_FINISH,
+  YARD_GRAVEL_FINISH,
   YARD_STEEL_FINISH,
 } from './gridConstants';
 import { groundRange } from './ground';
@@ -22,7 +23,7 @@ import { busbar, gantry, GANTRY, transformerPieces } from './yard';
 
 const PART = 'substation';
 const YARD_FINISHES = {
-  gravel: FINISHES.gravel,
+  gravel: YARD_GRAVEL_FINISH,
   concrete: FINISHES.concrete,
   transformer: TRANSFORMER_FINISH,
   radiator: RADIATOR_FINISH,

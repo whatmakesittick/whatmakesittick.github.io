@@ -4,7 +4,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { box } from '@core/scene/geometry/box';
 import type { Point } from '../../../ids';
 
-const KEPT_ATTRIBUTES = new Set(['position', 'normal', 'color']);
+const KEPT_ATTRIBUTES = new Set(['position', 'normal', 'color', 'lateral']);
 const RGB = 3;
 const UP = new Vector3(0, 1, 0);
 
