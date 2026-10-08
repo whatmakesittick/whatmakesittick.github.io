@@ -23,6 +23,17 @@ export const FIELD_KINDS: readonly { readonly colour: string; readonly stripes?:
   { colour: '#a39a6a' },
 ];
 
+export const CANOPY_TILE = {
+  size: 96,
+  crowns: 90,
+  radius: [2.2, 4],
+  lift: 0.9,
+  highlight: 0.6,
+  shadow: 'rgba(44,62,32,0.55)',
+  light: 'rgba(118,146,84,0.4)',
+  seed: 17,
+} as const;
+
 export const FARMSTEAD_ROOFS = ['#6b6a6c', '#9c5b43', '#85827b', '#b9b2a4', '#7a4c3c'] as const;
 
 export const GROUND_PAINT = {

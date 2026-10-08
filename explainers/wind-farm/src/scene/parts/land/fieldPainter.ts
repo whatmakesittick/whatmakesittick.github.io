@@ -1,5 +1,6 @@
 import { Color } from 'three';
 import type { GroundPoint } from '../../../model/layout';
+import { canopyPattern } from './canopyPattern';
 import { GROUND_TEXTURE } from './constants';
 import { FIELD_KINDS, GROUND_PAINT } from './fieldConstants';
 import type { Stripes } from './fieldConstants';
@@ -62,7 +63,12 @@ function fieldBase(field: Field, look: FieldLook): Color {
   return new Color(FIELD_KINDS[field.kind].colour).lerp(MEAN, look.muting).multiplyScalar(tone);
 }
 
-function paintField(painter: Painter, field: Field, look: FieldLook): void {
+function paintField(
+  painter: Painter,
+  field: Field,
+  look: FieldLook,
+  canopy: CanvasPattern | null,
+): void {
   const kind = FIELD_KINDS[field.kind];
   const base = fieldBase(field, look);
   const { context } = painter;
@@ -70,6 +76,10 @@ function paintField(painter: Painter, field: Field, look: FieldLook): void {
   context.fillStyle = fieldFill(painter, field, base);
   context.fill();
   if (field.wood) {
+    if (canopy) {
+      context.fillStyle = canopy;
+      context.fill();
+    }
     const [cx, cz] = centroid(field.corners);
     context.lineWidth = GROUND_PAINT.canopyEdgeWidth * painter.projection.scale(cx, cz);
     context.strokeStyle = GROUND_PAINT.canopyEdge;
@@ -81,5 +91,6 @@ export function paintFields(painter: Painter, { fields, look }: FieldLayout): vo
   const { context, projection } = painter;
   context.fillStyle = GROUND_PAINT.base;
   context.fillRect(0, 0, projection.size, projection.size);
-  fields.forEach((field) => paintField(painter, field, look));
+  const canopy = canopyPattern(context);
+  fields.forEach((field) => paintField(painter, field, look, canopy));
 }
