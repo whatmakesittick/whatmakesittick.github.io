@@ -1,0 +1,529 @@
+<section class="chapter" data-preset="farm" aria-labelledby="farm-title">
+  <p class="chapter-index">01</p>
+  <h2 id="farm-title" data-i18n="sections.farm.title">Twenty-seven turbines and one windy day</h2>
+  <p data-i18n-html="sections.farm.p1">
+    This is a <strong>wind farm</strong>: 27 turbines spread over rolling fields. Each one is a
+    Vestas V150, and at full power it makes 4.2 megawatts (MW). A <strong>megawatt</strong> is a
+    million watts, so together the farm can make about 113 MW. It is sized like Målarberget in
+    Sweden, a real farm of 27 of these turbines that has run since 2021.
+  </p>
+  <p data-i18n-html="sections.farm.p2">
+    The turbines stand in <strong>rows</strong> across the <strong>prevailing wind</strong>, the
+    direction the wind most often blows from. Here that is the west. Engineers measure the gaps in
+    rotor diameters, written D, and one D here is 150 m. Rows sit 7 D apart, or 1,050 m, and
+    turbines in a row sit 4 D apart, or 600 m. Each row is shifted sideways, so no turbine stands
+    right behind one in the row in front.
+  </p>
+  <p data-i18n-html="sections.farm.p3">
+    From above it looks crowded, but most of the land is still fields. Only about 0.3 hectares per
+    megawatt is actually built on, and most of that is <strong>access roads</strong>, not turbine
+    bases. A hectare is a square 100 m on each side. The power runs through
+    <strong>collector cables</strong> to a <strong>substation</strong>, where it heads for the grid.
+  </p>
+  <p data-i18n-html="sections.farm.p4">
+    Målarberget's real layout is not published, so the one you see is this model's own. The model
+    also plays a made-up day of wind, on a loop. It is not an average day: it fits a calm night, a
+    breezy morning, a full-power afternoon and an evening storm into 24 hours. The clock runs
+    hundreds of times faster than real time, but every rotor turns at its real speed. Roads, cables
+    and wind arrows are drawn wider than real so you can see them from kilometres away, and the
+    light does not follow the clock.
+  </p>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.farm.count">Turbines</dt>
+      <dd class="number" data-readout="turbineCount">27</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.farm.rated">Full power of the farm</dt>
+      <dd class="number" data-readout="farmRated">113.4 MW</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.farm.rows">Between rows, along the wind</dt>
+      <dd class="number" data-readout="rowSpacing">1,050 m, 7 D</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.farm.across">Between turbines in a row</dt>
+      <dd class="number" data-readout="acrossSpacing">600 m, 4 D</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.farm.built">Land built on</dt>
+      <dd class="number" data-readout="builtLand">34 ha</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.farm.project">Whole project area</dt>
+      <dd class="number" data-readout="projectArea">39 km²</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="tower" aria-labelledby="tower-title">
+  <p class="chapter-index">02</p>
+  <h2 id="tower-title" data-i18n="sections.tower.title">Blades that fly in circles</h2>
+  <p data-i18n-html="sections.tower.p1">
+    Up close, one turbine is huge. The steel <strong>tower</strong> lifts the hub 105 m above the
+    ground, and the <strong>rotor</strong>, the hub with its three blades, is 150 m across. At the
+    top of its turn, a blade tip reaches about 180 m, almost twice as high as Big Ben. Up there the
+    wind blows faster than near the ground, as chapter 5 shows.
+  </p>
+  <p data-i18n-html="sections.tower.p2">
+    Each <strong>blade</strong> is about 74 m long, almost the wingspan of an Airbus A380, the
+    biggest airliner. It is made of carbon fibre and glass fibre set in epoxy, a hard plastic glue.
+    A blade is not a sail that the wind pushes. The wind flows over it as over a plane's wing, and
+    the curved shape creates <strong>lift</strong>, a force across the wind. Lift pulls each blade
+    round, and the rotor turns.
+  </p>
+  <p data-i18n-html="sections.tower.p3">
+    At full speed the rotor makes only about 10 turns a minute, or 10 rpm (revolutions per minute).
+    That is one turn every 6 seconds, which looks lazy. But the tips travel a huge circle, so they
+    move at about 80 m/s, close to 300 km/h. Drag the wind slider to see the rotor speed up with the
+    wind, or pick Follow the day to give the wind back to the clock. In this model the tips move 8
+    times faster than the wind until the rotor reaches its top speed.
+  </p>
+  <p data-i18n-html="sections.tower.p4">
+    The circle the blades sweep is the <strong>swept area</strong>: about 17,700 m², the size of
+    about 2.5 football pitches. Only the wind that passes through this circle can turn the rotor.
+    The lines of air round the rotor are a drawing, since real air is invisible. The
+    <strong>transformer</strong> stands at the foot of the tower in this model, because where the
+    V150 keeps it is not published. For the same reason, the slight tilt of the rotor is not drawn.
+  </p>
+  <div class="range-widget">
+    <div class="range-widget__header">
+      <label for="tower-wind" data-i18n="chapters.tower.wind">Wind at hub height</label
+      ><output class="number" for="tower-wind">12.5 m/s</output>
+    </div>
+    <input id="tower-wind" type="range" class="range" data-control="wind-override" />
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="chapters.tower.rpm">Rotor speed</dt>
+        <dd class="number" data-readout="rotorRpm">10.4 rpm</dd>
+      </div>
+      <div>
+        <dt data-i18n="chapters.tower.turn">One turn takes</dt>
+        <dd class="number" data-readout="turnTime">5.8 s</dd>
+      </div>
+    </dl>
+  </div>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.windAt">
+    <button
+      type="button"
+      class="chip"
+      data-action="windAt"
+      data-value="day"
+      data-i18n="controls.windAtOptions.day"
+    >
+      Follow the day
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="windAt"
+      data-value="rated"
+      data-i18n="controls.windAtOptions.rated"
+    >
+      Full power, 12 m/s
+    </button>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.tower.tip">Blade tip speed</dt>
+      <dd class="number" data-readout="tipSpeed">82 m/s, 290 km/h</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.tower.height">Tip height</dt>
+      <dd class="number" data-readout="tipHeight">180 m</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.tower.blade">Blade length</dt>
+      <dd class="number" data-readout="bladeLength">74 m</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.tower.swept">Swept area</dt>
+      <dd class="number" data-readout="sweptArea">17,671 m², about 2.5 football pitches</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="nacelle" aria-labelledby="nacelle-title">
+  <p class="chapter-index">03</p>
+  <h2 id="nacelle-title" data-i18n="sections.nacelle.title">Inside the nacelle</h2>
+  <p data-i18n-html="sections.nacelle.p1">
+    The long box behind the hub is the <strong>nacelle</strong>, 12.8 m long. Pick Cover off to look
+    inside. It holds the machines that turn the rotor's slow, strong spin into electricity. They all
+    stand on the <strong>bedplate</strong>, a heavy cast iron frame, and a
+    <strong>cooler</strong> on the roof carries their heat away.
+  </p>
+  <p data-i18n-html="sections.nacelle.p2">
+    In the <strong>hub</strong>, each blade sits on a bearing so it can twist. Three
+    <strong>pitch cylinders</strong>, one per blade, twist them with oil pressure. The blade's angle
+    to the wind is its <strong>pitch</strong>, and it sets how much the wind can grab. Behind the
+    hub, the <strong>main shaft</strong> turns in its <strong>main bearing</strong> at the rotor's
+    own slow speed, about 10 rpm.
+  </p>
+  <p data-i18n-html="sections.nacelle.p3">
+    A generator needs to spin fast, so a <strong>gearbox</strong> sits in between. It has two
+    planetary stages, where small gears circle round a central one, and a helical stage with slanted
+    teeth. Together they make the shaft about 140 times faster, up to about 1,485 rpm. The
+    <strong>generator</strong> is an induction generator, with copper windings and no magnets. All
+    its power, at 800 volts, passes through the <strong>converter</strong>, which reshapes it to
+    match the grid.
+  </p>
+  <p data-i18n-html="sections.nacelle.p4">
+    On the shaft sits a <strong>disc brake</strong>. It is not what stops the turbine in a storm:
+    the blades do that by turning edge-on to the wind. The brake only holds the rotor once it is
+    slow, to park it. On top of the tower, <strong>yaw drives</strong> turn the whole nacelle to
+    face the wind. In this model it follows the wind exactly, because the V150's real turning speed
+    is not published.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.nacelle">
+    <button
+      type="button"
+      class="chip"
+      data-action="nacelle"
+      data-value="closed"
+      data-i18n="controls.nacelleOptions.closed"
+    >
+      Cover on
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="nacelle"
+      data-value="open"
+      data-i18n="controls.nacelleOptions.open"
+    >
+      Cover off
+    </button>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.nacelle.shaft">Main shaft</dt>
+      <dd class="number" data-readout="shaftRpm">10.4 rpm</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.nacelle.generator">Generator</dt>
+      <dd class="number" data-readout="generatorRpm">1,485 rpm</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.nacelle.gear">Gear ratio</dt>
+      <dd class="number" data-readout="gearRatio">about 1 to 140</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.nacelle.pitch">Blade pitch</dt>
+      <dd class="number" data-readout="pitchAngle">4°</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.nacelle.brake">Disc brake</dt>
+      <dd class="number" data-readout="brake">Released</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.nacelle.volts">Generator voltage</dt>
+      <dd class="number" data-readout="generatorVolts">800 V</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="curve" aria-labelledby="curve-title">
+  <p class="chapter-index">04</p>
+  <h2 id="curve-title" data-i18n="sections.curve.title">How much wind a turbine can catch</h2>
+  <p data-i18n-html="sections.curve.p1">
+    Below 3 m/s, the <strong>cut-in</strong> speed, the rotor waits. Above it, power climbs fast,
+    because the power in the wind grows with the speed cubed: speed times speed times speed. Double
+    the wind, and it carries eight times the power. So the turbine makes about 0.3 MW at 4 m/s,
+    about 2.5 MW at 8 m/s and its full 4.2 MW from about 12 m/s. Drag the wind slider and watch the
+    dot move along the curve.
+  </p>
+  <p data-i18n-html="sections.curve.p2">
+    No turbine can catch all of it. To take energy, the rotor has to slow the air down, yet the air
+    must still flow out behind it. The physicist Albert Betz showed that even a perfect rotor can
+    take at most 59.3 % of the power. That is the <strong>Betz limit</strong>. This turbine's best
+    is just under half, at about 7 to 8 m/s, and the chart shows how close it comes.
+  </p>
+  <p data-i18n-html="sections.curve.p3">
+    Above full power the wind brings more than the generator can take. So the pitch cylinders turn
+    the blades a little out of the wind, and most of it slips past. At 15 m/s the turbine keeps only
+    about 12 % of the power in the wind. The pitch angles shown above full power are this model's
+    own, since the V150's are not published. Above 20 m/s, power starts to ramp down.
+  </p>
+  <p data-i18n-html="sections.curve.p4">
+    At the <strong>cut-out</strong> speed, about 22 to 25 m/s, the blades turn edge-on to the wind.
+    This is <strong>feathering</strong>: the rotor slows on its own, and then the disc brake parks
+    it. The turbine starts again only once the wind has dropped by about 2 m/s. In this model all 27
+    turbines stop together at 24.5 m/s and restart at 22.5 m/s. The stop and the restart each take
+    20 minutes of the clock, longer than real, so you can watch them.
+  </p>
+  <div class="range-widget">
+    <div class="range-widget__header">
+      <label for="curve-wind" data-i18n="chapters.curve.wind">Wind speed</label
+      ><output class="number" for="curve-wind">8.0 m/s</output>
+    </div>
+    <input id="curve-wind" type="range" class="range" data-control="wind-override" />
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="chapters.curve.state">Turbine state</dt>
+        <dd class="number" data-readout="operatingState">Partial load</dd>
+      </div>
+      <div>
+        <dt data-i18n="chapters.curve.power">Turbine output</dt>
+        <dd class="number" data-readout="curvePower">2.55 MW</dd>
+      </div>
+    </dl>
+  </div>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.windAt">
+    <button
+      type="button"
+      class="chip"
+      data-action="windAt"
+      data-value="day"
+      data-i18n="controls.windAtOptions.day"
+    >
+      Follow the day
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="windAt"
+      data-value="cutIn"
+      data-i18n="controls.windAtOptions.cutIn"
+    >
+      Cut-in, 3 m/s
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="windAt"
+      data-value="peak"
+      data-i18n="controls.windAtOptions.peak"
+    >
+      Best share, 8 m/s
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="windAt"
+      data-value="rated"
+      data-i18n="controls.windAtOptions.rated"
+    >
+      Full power, 12 m/s
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="windAt"
+      data-value="rampDown"
+      data-i18n="controls.windAtOptions.rampDown"
+    >
+      Ramping down, 23 m/s
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="windAt"
+      data-value="cutOut"
+      data-i18n="controls.windAtOptions.cutOut"
+    >
+      Past cut-out, 25 m/s
+    </button>
+  </div>
+  <figure class="curve-widget" data-widget="power-curve">
+    <canvas data-canvas="power-curve"></canvas>
+    <figcaption data-i18n="chapters.curve.caption">
+      Power in the wind, the Betz limit and this turbine's output, for winds from 0 to 30 m/s
+    </figcaption>
+  </figure>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.curve.windPower">Power in the wind</dt>
+      <dd class="number" data-readout="windPower">5.54 MW</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.curve.cp">Share it catches</dt>
+      <dd class="number" data-readout="powerCoefficient">46 %</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.curve.betz">Share of the Betz limit</dt>
+      <dd class="number" data-readout="betzShare">78 %</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.curve.pitch">Blade pitch</dt>
+      <dd class="number" data-readout="curvePitch">0°</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="wakes" aria-labelledby="wakes-title">
+  <p class="chapter-index">05</p>
+  <h2 id="wakes-title" data-i18n="sections.wakes.title">Why turbines stand so far apart</h2>
+  <p data-i18n-html="sections.wakes.p1">
+    A turbine takes energy out of the wind, so the air behind it moves slower. This trail of slow,
+    stirred air is called a <strong>wake</strong>. Switch on Wakes (K) to see a plume behind every
+    turning rotor. Wakes are strongest in moderate wind, when the rotor holds back the air the
+    hardest. Above full power the blades let more wind slip past, and the wakes fade.
+  </p>
+  <p data-i18n-html="sections.wakes.p2">
+    This model draws wakes with a simple, widely used recipe, the <strong>Jensen model</strong>. It
+    treats each wake as a cone that widens and slowly fills back up with faster air. How fast it
+    widens is set by one number, 0.075 here, the usual value for land. At 8 m/s, a turbine 7 D
+    downwind still meets air about 13 % slower. Because power follows the wind cubed, that costs it
+    about a third of its power.
+  </p>
+  <p data-i18n-html="sections.wakes.p3">
+    Over a year, wakes cost a farm about 5 to 15 % of its energy. A Vestas example farm of 24 of
+    these turbines loses about 6 %. For a single wind direction, the loss can pass 30 %. That is why
+    rows usually stand 5 to 9 D apart along the wind and 3 to 5 D apart across it. Try 5, 7 and 9 D:
+    wider gaps lose less wind but need more land.
+  </p>
+  <p data-i18n-html="sections.wakes.p4">
+    Wind also grows with height, because the ground drags on the air near it. Switch on Airflow (F)
+    to see the profile: the top of the rotor meets faster wind than the bottom. The plumes and
+    arrows are drawings of invisible air. In this model the ground is flat, a stopped rotor leaves
+    no wake, and wakes that overlap add up in a simple way.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.spacing">
+    <button
+      type="button"
+      class="chip"
+      data-action="spacing"
+      data-value="5"
+      data-i18n="controls.spacingOptions.5"
+    >
+      5 D
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="spacing"
+      data-value="7"
+      data-i18n="controls.spacingOptions.7"
+    >
+      7 D
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="spacing"
+      data-value="9"
+      data-i18n="controls.spacingOptions.9"
+    >
+      9 D
+    </button>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.wakes.spacing">Gap between rows</dt>
+      <dd class="number" data-readout="wakeSpacing">1,050 m, 7 D</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.wakes.deficit">Wake slowdown at the next row</dt>
+      <dd class="number" data-readout="wakeDeficit">13 %</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.wakes.loss">Farm loss to wakes now</dt>
+      <dd class="number" data-readout="wakeLoss">4.9 %</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.wakes.top">Wind at the top of the rotor</dt>
+      <dd class="number" data-readout="windTop">8.3 m/s</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.wakes.bottom">Wind at the bottom of the rotor</dt>
+      <dd class="number" data-readout="windBottom">6.1 m/s</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="grid" aria-labelledby="grid-title">
+  <p class="chapter-index">06</p>
+  <h2 id="grid-title" data-i18n="sections.grid.title">The road to the grid</h2>
+  <p data-i18n-html="sections.grid.p1">
+    Each generator makes power at 800 volts (V). After the converter, the turbine's own
+    <strong>transformer</strong> raises the voltage. Higher voltage carries the same power with less
+    current, so less of it is lost as heat in the cables. Switch on Cables (C) to follow the power
+    from the turbines to the grid.
+  </p>
+  <p data-i18n-html="sections.grid.p2">
+    <strong>Collector cables</strong> at 36,000 volts, or 36 kilovolts (kV), link the turbines to
+    the <strong>substation</strong>. There another transformer raises the voltage to 110 kV for the
+    <strong>grid line</strong>. These voltages come from a Vestas example farm in Germany.
+  </p>
+  <p data-i18n-html="sections.grid.p3">
+    At full power, one turbine makes 4.2 megawatt hours (MWh) every hour. But the wind is not always
+    strong, so over a year a turbine averages about 40 % of its full power. That share is the
+    <strong>capacity factor</strong>. In a year, one turbine makes about 14,700 MWh, enough for
+    about 1,400 US homes. The model's made-up day is windier than a year's average, so its capacity
+    factor comes out higher.
+  </p>
+  <p data-i18n-html="sections.grid.p4">
+    Making a turbine costs energy and carbon too. Over its life, it adds about 7 g of CO2e for each
+    kilowatt hour (kWh) it makes, where CO2e counts every greenhouse gas as if it were carbon
+    dioxide. It pays back the energy used to build it in about 8 months. It is designed for 20 years
+    and often runs longer, though its blades are still hard to recycle. Pick a calm, typical or
+    windy site to see how much the everyday wind matters.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.siteWind">
+    <button
+      type="button"
+      class="chip"
+      data-action="siteWind"
+      data-value="calm"
+      data-i18n="controls.siteWindOptions.calm"
+    >
+      Calm site
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="siteWind"
+      data-value="typical"
+      data-i18n="controls.siteWindOptions.typical"
+    >
+      Typical site
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="siteWind"
+      data-value="windy"
+      data-i18n="controls.siteWindOptions.windy"
+    >
+      Windy site
+    </button>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.grid.output">Farm output now</dt>
+      <dd class="number" data-readout="farmOutput">113.4 MW</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.grid.energy">Energy made today</dt>
+      <dd class="number" data-readout="energyToday">1,250 MWh</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.grid.homes">US homes this output could run</dt>
+      <dd class="number" data-readout="homes">92,200</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.grid.capacity">Capacity factor of this day</dt>
+      <dd class="number" data-readout="capacityFactor">43 %</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.grid.voltages">Voltage at each step</dt>
+      <dd class="number" data-readout="voltages">800 V, 36 kV, 110 kV</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.grid.annual">One turbine in a year</dt>
+      <dd class="number" data-readout="annualEnergy">14,692 MWh</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.grid.annualHomes">US homes one turbine supplies</dt>
+      <dd class="number" data-readout="annualHomes">1,400</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.grid.carbon">Carbon footprint</dt>
+      <dd class="number" data-readout="carbon">7.3 g CO2e per kWh</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.grid.payback">Energy payback</dt>
+      <dd class="number" data-readout="payback">7.6 months</dd>
+    </div>
+  </dl>
+</section>
