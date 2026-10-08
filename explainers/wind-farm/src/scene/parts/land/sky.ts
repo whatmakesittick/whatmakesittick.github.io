@@ -1,13 +1,14 @@
 import {
   BackSide,
   Color,
+  Fog,
   Mesh,
   ShaderMaterial,
   SphereGeometry,
   Vector2,
   Vector3,
-  Vector4,
 } from 'three';
+import type { Object3D } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { HAZE, SKY, SUN_DIRECTION } from '../../constants';
 import { registeredMaterial } from '../context';
@@ -32,13 +33,15 @@ uniform vec2 uRise;
 uniform vec3 uWide;
 uniform vec3 uCore;
 uniform vec3 uGround;
-uniform vec4 uFloor;
+uniform vec2 uFloor;
+uniform vec2 uFog;
 varying vec3 vDirection;
 
 vec3 groundBelow(vec3 direction) {
   float down = max(-direction.y, 1e-5);
-  float reach = max(cameraPosition.y, uFloor.z) / down;
-  float haze = max(smoothstep(uFloor.x, uFloor.y, reach), 1.0 - smoothstep(0.0, uFloor.w, down));
+  float reach = max(cameraPosition.y, uFloor.x) / down;
+  float depth = reach * max(-(viewMatrix * vec4(direction, 0.0)).z, 0.0);
+  float haze = max(smoothstep(uFog.x, uFog.y, depth), 1.0 - smoothstep(0.0, uFloor.y, down));
   return mix(uGround, uHorizon, haze);
 }
 
@@ -73,7 +76,8 @@ function skyMaterial(): ShaderMaterial {
       uWide: { value: new Vector3(glow.wide, glow.wideTightness, glow.horizonTightness) },
       uCore: { value: new Vector3(glow.core, glow.coreTightness, glow.horizon) },
       uGround: { value: new Color(ground.colour) },
-      uFloor: { value: new Vector4(HAZE.near, HAZE.far, ground.minHeight, ground.band) },
+      uFloor: { value: new Vector2(ground.minHeight, ground.band) },
+      uFog: { value: new Vector2(HAZE.near, HAZE.far) },
     },
     vertexShader: VERTEX,
     fragmentShader: FRAGMENT,
@@ -85,11 +89,18 @@ function skyMaterial(): ShaderMaterial {
   });
 }
 
+const followFog: Object3D['onBeforeRender'] = (_renderer, scene, _camera, _geometry, material) => {
+  if (!(scene.fog instanceof Fog) || !(material instanceof ShaderMaterial)) return;
+  material.uniforms.uFog.value.set(scene.fog.near, scene.fog.far);
+  material.uniforms.uHorizon.value.copy(scene.fog.color);
+};
+
 export function skyDome(context: PartContext, name: string): Mesh {
   const geometry = context.tracker.track(
     new SphereGeometry(1, SKY_DOME.widthSegments, SKY_DOME.heightSegments),
   );
   const dome = new Mesh(geometry, registeredMaterial(context, UNDIMMED_GROUP, skyMaterial()));
+  dome.onBeforeRender = followFog;
   dome.name = name;
   dome.frustumCulled = false;
   dome.renderOrder = SKY_DOME.renderOrder;
