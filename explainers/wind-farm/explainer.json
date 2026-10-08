@@ -1,0 +1,12 @@
+{
+  "slug": "wind-farm",
+  "tags": ["energy", "mechanics", "weather"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A wind farm on rolling land with one turbine close up, beside the title How a wind farm works"
+  }
+}

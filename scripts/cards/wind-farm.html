@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>How a wind farm works: social card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap"
+    />
+    <style>
+      :root {
+        --background: #0b0d10;
+        --text: #e6e9ee;
+        --prose: #c3c9d2;
+        --muted: #8b929c;
+        --accent: #f5a524;
+        --farm: #6fbf73;
+        --tower: #5fa8ff;
+        --nacelle: #f2b134;
+        --curve: #e5534b;
+        --wakes: #9b7fd1;
+        --grid: #ffb347;
+      }
+
+      body {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        margin: 0;
+        overflow: hidden;
+        color: var(--text);
+        background: var(--background);
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .shot {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 640px;
+        height: 630px;
+        overflow: hidden;
+      }
+
+      .shot img {
+        position: absolute;
+        top: -30px;
+        left: -60px;
+        width: 1000px;
+      }
+
+      .shot::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, var(--background), transparent 120px);
+      }
+
+      .copy {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 72px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 500px;
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin: 0 0 26px;
+        color: var(--accent);
+        font-size: 24px;
+        font-weight: 500;
+      }
+
+      .eyebrow img {
+        width: 44px;
+        height: 44px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 56px;
+        font-weight: 700;
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+      }
+
+      .subtitle {
+        margin: 26px 0 0;
+        color: var(--prose);
+        font-size: 28px;
+        line-height: 1.4;
+      }
+
+      .topics {
+        display: flex;
+        gap: 6px;
+        margin: 40px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .topics li {
+        flex: 1;
+        padding-top: 12px;
+        border-top: 5px solid var(--tone);
+        color: var(--muted);
+        font-size: 17px;
+        font-weight: 500;
+      }
+
+      .url {
+        position: absolute;
+        bottom: 40px;
+        left: 72px;
+        margin: 0;
+        color: var(--muted);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 20px;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shot">
+      <img src="../../explainers/wind-farm/public/cover.webp" alt="" />
+    </div>
+    <main class="copy">
+      <p class="eyebrow">
+        <img src="../../public/favicon.svg" alt="" />
+        Renewable energy
+      </p>
+      <h1>How a wind farm works</h1>
+      <p class="subtitle">
+        Twenty-seven turbines and one windy day: how a blade shaped like a wing turns moving air
+        into power for the grid.
+      </p>
+      <ol class="topics">
+        <li style="--tone: var(--farm)">Farm</li>
+        <li style="--tone: var(--tower)">Blades</li>
+        <li style="--tone: var(--nacelle)">Nacelle</li>
+        <li style="--tone: var(--curve)">Curve</li>
+        <li style="--tone: var(--wakes)">Wakes</li>
+        <li style="--tone: var(--grid)">Grid</li>
+      </ol>
+    </main>
+    <p class="url">whatmakesittick.github.io/wind-farm</p>
+    <script>
+      Promise.all([
+        document.fonts.ready,
+        ...[...document.images].map((image) => image.decode()),
+      ]).then(() => document.body.setAttribute('data-ready', ''));
+    </script>
+  </body>
+</html>

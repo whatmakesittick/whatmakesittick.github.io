@@ -1,0 +1,95 @@
+:root {
+  --wind: #5fa8ff;
+  --power: #f2b134;
+  --cable: #ffb347;
+  --wake: #7f9fc0;
+  --cutaway: #c58b3a;
+  --screen: #1b1d20;
+}
+
+.chapter .readouts {
+  --readout-min-width: 8rem;
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.chapter .readouts > div,
+.chapter .readouts :is(dt, dd) {
+  min-width: 0;
+}
+
+.chapter .readouts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.chapter .readouts dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chapter .readouts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.range-widget__header {
+  flex-wrap: wrap;
+}
+
+.range-widget__header label {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.curve-widget {
+  margin: 4px 0 16px;
+}
+
+.curve-widget canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2;
+  border-radius: var(--radius-small);
+  background: var(--screen);
+}
+
+.curve-widget figcaption {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chip:is([data-action='windAt'], [data-action='siteWind']) {
+  --tone: var(--wind);
+}
+
+.chip[data-action='windAt'][data-value='rated'] {
+  --tone: var(--power);
+}
+
+.chip[data-action='spacing'] {
+  --tone: var(--wake);
+}
+
+.chip[data-action='nacelle'] {
+  --tone: var(--cutaway);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapter .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chapter .readouts > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}

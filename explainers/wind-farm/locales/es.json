@@ -1,0 +1,270 @@
+{
+  "meta": {
+    "title": "Cómo funciona un parque eólico",
+    "eyebrow": "Energía renovable",
+    "tagline": "Veintisiete aerogeneradores y un día de viento: así es como una pala con forma de ala convierte el viento en electricidad para la red.",
+    "description": "Un día ventoso en un parque eólico 3D: cómo las palas captan el viento, qué gira dentro de un aerogenerador, por qué se separan tanto y el camino a la red.",
+    "summary": "La distribución del parque, la torre y las palas, la multiplicadora y el generador, la curva de potencia y el límite de Betz, las estelas y el camino hasta la red.",
+    "socialAlt": "Un parque eólico sobre un terreno ondulado, con un aerogenerador en primer plano, junto al título «Cómo funciona un parque eólico»"
+  },
+  "stage": {
+    "label": "Modelo interactivo de un parque eólico",
+    "gauge": "Viento y potencia en directo"
+  },
+  "timeline": {
+    "label": "Hora del día",
+    "phases": "Saltar a un momento del día",
+    "speed": "Velocidad de reproducción",
+    "value": "{{time}}",
+    "during": "{{time}}, {{phase}}",
+    "speedValue": "{{value}} h/min",
+    "speedFormat": "{{value}} horas del día por minuto",
+    "phase": {
+      "night": "Noche en calma",
+      "morning": "Brisa de la mañana",
+      "afternoon": "Plena potencia",
+      "storm": "Tormenta",
+      "evening": "Anochecer"
+    },
+    "jump": {
+      "night": "Saltar a la noche en calma",
+      "morning": "Saltar a la brisa de la mañana",
+      "afternoon": "Saltar a plena potencia",
+      "storm": "Saltar a la tormenta",
+      "evening": "Saltar al anochecer"
+    }
+  },
+  "controls": {
+    "label": "Controles del modelo",
+    "siteWind": "Viento de la zona",
+    "siteWindOptions": {
+      "calm": "Zona tranquila",
+      "typical": "Zona normal",
+      "windy": "Zona ventosa"
+    },
+    "spacingOptions": {
+      "5": "5 D",
+      "7": "7 D",
+      "9": "9 D"
+    },
+    "nacelleOptions": {
+      "closed": "Con cubierta",
+      "open": "Sin cubierta"
+    },
+    "windAtOptions": {
+      "day": "Seguir el día",
+      "cutIn": "Arranque, 3 m/s",
+      "peak": "Mejor aprovechamiento, 8 m/s",
+      "rated": "Plena potencia, 12 m/s",
+      "rampDown": "Bajando potencia, 23 m/s",
+      "cutOut": "Pasado el corte, 25 m/s"
+    },
+    "groups": {
+      "siteWind": "Viento de la zona",
+      "spacing": "Distancia entre filas",
+      "nacelle": "Cubierta de la góndola",
+      "windAt": "Velocidad del viento"
+    },
+    "views": {
+      "streamlines": {
+        "name": "Flujo de aire",
+        "short": "Aire",
+        "hint": "Flujo de aire (F)"
+      },
+      "wakes": {
+        "name": "Estelas",
+        "short": "Estelas",
+        "hint": "Estelas (K)"
+      },
+      "cables": {
+        "name": "Cables",
+        "short": "Cables",
+        "hint": "Cables (C)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      }
+    }
+  },
+  "readouts": {
+    "wind": "Viento",
+    "power": "Un aerogenerador",
+    "farm": "Todo el parque",
+    "state": {
+      "idle": "Esperando viento",
+      "partial": "Por debajo de plena potencia",
+      "full": "Plena potencia",
+      "rampDown": "Bajando potencia",
+      "stopping": "Palas en bandera, parando",
+      "parked": "Parado",
+      "starting": "Arrancando"
+    }
+  },
+  "units": {
+    "metresPerSecond": "{{value}} m/s",
+    "speedPair": "{{ms}} m/s, {{kmh}} km/h",
+    "rpm": "{{value}} rpm",
+    "degrees": "{{value}}°",
+    "mw": "{{value}} MW",
+    "mwh": "{{value}} MWh",
+    "percent": "{{value}} %",
+    "metres": "{{value}} m",
+    "seconds": "{{value}} s",
+    "count": "{{value}}",
+    "hectares": "{{value}} ha",
+    "squareKm": "{{value}} km²",
+    "volts": "{{value}} V",
+    "gramsPerKwh": "{{value}} g de CO2e por kWh",
+    "months": "{{value}} meses"
+  },
+  "chapters": {
+    "farm": {
+      "count": "Aerogeneradores",
+      "rated": "Potencia máxima del parque",
+      "rows": "Entre filas, en la dirección del viento",
+      "across": "Entre aerogeneradores de una fila",
+      "spacingValue": "{{metres}} m, {{diameters}} D",
+      "built": "Superficie construida",
+      "project": "Superficie típica de un proyecto de este tamaño"
+    },
+    "tower": {
+      "wind": "Viento a la altura del buje",
+      "rpm": "Velocidad del rotor",
+      "turn": "Una vuelta dura",
+      "stopped": "Rotor parado",
+      "tip": "Velocidad en la punta de la pala",
+      "height": "Altura de la punta",
+      "blade": "Longitud de la pala",
+      "swept": "Área barrida",
+      "sweptValue": "{{area}} m², unos {{pitches}} campos de fútbol"
+    },
+    "nacelle": {
+      "shaft": "Eje principal",
+      "generator": "Generador",
+      "gear": "Relación de la multiplicadora",
+      "gearValue": "cerca de 1 a {{ratio}}",
+      "pitch": "Ángulo de paso",
+      "brake": "Freno de disco",
+      "brakeValue": {
+        "released": "Liberado",
+        "holding": "Sujetando el rotor"
+      },
+      "volts": "Voltaje del generador"
+    },
+    "curve": {
+      "wind": "Velocidad del viento",
+      "state": "Estado del aerogenerador",
+      "power": "Producción del aerogenerador",
+      "caption": "La potencia del viento, el límite de Betz y la producción de este aerogenerador, con vientos de 0 a 30 m/s. El punto marca el viento actual.",
+      "axisWind": "Velocidad del viento (m/s)",
+      "axisPower": "Potencia (MW)",
+      "lineWind": "Potencia del viento",
+      "lineBetz": "Límite de Betz",
+      "lineTurbine": "Este aerogenerador",
+      "windPower": "Potencia del viento",
+      "cp": "Parte de la potencia del viento que aprovecha",
+      "betz": "Cuánto se acerca al límite de Betz",
+      "pitch": "Ángulo de paso"
+    },
+    "wakes": {
+      "spacing": "Distancia entre filas",
+      "deficit": "Frenado en la estela, una fila más atrás",
+      "loss": "Potencia que pierde ahora el parque por las estelas",
+      "top": "Viento en lo alto del rotor",
+      "bottom": "Viento en la parte baja del rotor"
+    },
+    "grid": {
+      "output": "Producción actual del parque",
+      "energy": "Energía producida hoy",
+      "homes": "Hogares de EE. UU. que abastecería esta producción",
+      "capacity": "Factor de capacidad de este día",
+      "voltages": "Voltaje en cada etapa",
+      "voltagesValue": "{{generator}} V, {{collector}} kV, {{grid}} kV",
+      "annual": "Un aerogenerador en un año",
+      "annualHomes": "Hogares de EE. UU. que abastece un aerogenerador",
+      "carbon": "Huella de carbono",
+      "payback": "Amortización energética"
+    }
+  },
+  "parts": {
+    "land": "Suelo",
+    "foundation": "Cimentación",
+    "tower": "Torre",
+    "transformer": "Transformador",
+    "towerCable": "Cable eléctrico",
+    "nacelle": "Góndola",
+    "cooler": "Enfriador",
+    "bedplate": "Bancada",
+    "hub": "Buje",
+    "blades": "Palas",
+    "pitchCylinders": "Cilindros de paso",
+    "mainBearing": "Rodamiento principal",
+    "mainShaft": "Eje principal",
+    "gearbox": "Multiplicadora",
+    "brakeDisc": "Freno de disco",
+    "generator": "Generador",
+    "converter": "Convertidor",
+    "yawDrives": "Motores de orientación",
+    "sweptArea": "Área barrida",
+    "streamlinesGroup": "Flujo de aire",
+    "heroWake": "Estela",
+    "farmLand": "Tierras de cultivo",
+    "farmTurbines": "27 aerogeneradores",
+    "accessRoads": "Caminos de acceso",
+    "spacingMarker": "Distancia entre filas",
+    "prevailingWind": "Viento dominante",
+    "windArrows": "Viento",
+    "shearProfile": "Viento según la altura",
+    "wakePlumes": "Estelas",
+    "collectorCables": "Cables colectores",
+    "substation": "Subestación",
+    "gridLine": "Línea de la red"
+  },
+  "sections": {
+    "farm": {
+      "title": "Veintisiete aerogeneradores y un día de viento",
+      "p1": "Esto es un <strong>parque eólico</strong>: 27 aerogeneradores repartidos por campos ondulados. Todos son del modelo Vestas V150. A plena potencia, cada uno produce 4,2 megavatios (MW). Un <strong>megavatio</strong> es un millón de vatios. En total, el parque puede producir unos 113 MW. Målarberget, en Suecia, es un parque real igual que este: 27 de estos aerogeneradores, en marcha desde 2021.",
+      "p2": "Los aerogeneradores están en <strong>filas</strong>, de cara al <strong>viento dominante</strong>, que es la dirección desde la que sopla el viento más a menudo. Aquí sopla del oeste. Los ingenieros miden estas distancias en anchos de rotor, que llaman D. Un D es lo que mide el rotor de punta a punta: aquí, 150 m. Las filas están a 7 D unas de otras, es decir, a 1050 m. Dentro de cada fila, los aerogeneradores están a 4 D, o sea, a 600 m. La fila del medio está desplazada hacia un lado, así que ningún aerogenerador queda justo detrás de otro.",
+      "p3": "Desde arriba, el parque parece abarrotado, pero casi todo el terreno sigue siendo campo. Por cada megavatio, solo se construye sobre unas 0,3 hectáreas. Una hectárea es un cuadrado de 100 m de lado. La mayor parte de esa superficie son <strong>caminos de acceso</strong>, no las bases de los aerogeneradores. Los <strong>cables colectores</strong> recogen la electricidad de cada aerogenerador. La llevan hasta una <strong>subestación</strong>. Allí entra en la red, el entramado de líneas eléctricas que abastece a casas y pueblos.",
+      "p4": "La distribución real de Målarberget no se ha publicado, así que la que ves es propia de este modelo. El día de viento también es inventado, y se repite en bucle. No es un día medio. Reúne en 24 horas una noche en calma, una mañana de brisa, una tarde a plena potencia y una tormenta al anochecer. El reloj corre muchas veces más rápido que en la realidad, pero cada rotor gira a su velocidad real. Los caminos, los cables y las flechas del viento se dibujan más anchos de lo que son, para que puedas verlos desde lejos. La luz es la misma de día y de noche."
+    },
+    "tower": {
+      "title": "Palas que vuelan en círculo",
+      "p1": "De cerca, un solo aerogenerador es enorme. El <strong>rotor</strong> está formado por tres palas unidas a una pieza central redonda, el buje, y mide 150 m de punta a punta. La <strong>torre</strong> de acero levanta el buje a 105 m del suelo. En lo más alto de su giro, la punta de una pala llega a unos 180 m, casi el doble de alto que el Big Ben. Allí arriba el viento sopla más fuerte que cerca del suelo, como verás en el capítulo 5.",
+      "p2": "Cada <strong>pala</strong> mide unos 74 m, casi la envergadura de un Airbus A380, el avión de pasajeros más grande del mundo. Está hecha de fibra de carbono y fibra de vidrio unidas con resina epoxi, un pegamento plástico muy duro. El viento no empuja la pala como a una vela. Se desliza sobre ella igual que sobre el ala de un avión. Su forma curva crea <strong>sustentación</strong>, la misma fuerza que sostiene a un avión en el aire. La sustentación tira de cada pala, y el rotor gira.",
+      "p3": "A toda velocidad, el rotor da solo unas 10 vueltas por minuto, o 10 rpm (revoluciones por minuto). Es una vuelta cada 6 segundos, y parece que va sin prisa. Pero las puntas recorren un círculo enorme, así que van a unos 80 metros por segundo (m/s), cerca de 300 km/h. En este modelo, las puntas van 8 veces más rápido que el viento hasta que el rotor llega a su velocidad máxima. Arrastra el control del viento y mira cómo el rotor se acelera con él. Elige Seguir el día para que el viento vuelva a cambiar con la hora.",
+      "p4": "El círculo que recorren las palas es el <strong>área barrida</strong>: unos 17 700 m², más o menos 2,5 campos de fútbol. Solo el viento que pasa por ese círculo puede mover el rotor. Las líneas de aire alrededor del rotor son solo un dibujo, porque el aire de verdad no se ve.",
+      "p5": "El <strong>transformador</strong> del aerogenerador prepara su electricidad para los cables, como explica el capítulo 6. No se ha publicado dónde lo lleva el V150, así que este modelo lo pone al pie de la torre. Además, el rotor real mira un poco hacia arriba. Ese ángulo tampoco se ha publicado, así que en el modelo va recto."
+    },
+    "nacelle": {
+      "title": "Dentro de la góndola",
+      "p1": "La caja que hay detrás del buje es la <strong>góndola</strong>, de 12,8 m de largo. Dentro van las máquinas que convierten el giro lento y potente del rotor en electricidad. Elige Sin cubierta para verlas. Todas se apoyan en la <strong>bancada</strong>, un pesado armazón de hierro fundido. Un <strong>enfriador</strong> en el techo se lleva su calor.",
+      "p2": "La inclinación de una pala frente al viento se llama <strong>ángulo de paso</strong>. De él depende cuánto viento puede atrapar la pala. Cada pala va montada en el <strong>buje</strong> sobre un rodamiento, un anillo que le permite girar sobre sí misma. Tres <strong>cilindros de paso</strong>, uno por pala, las giran con presión de aceite. Detrás del buje, el <strong>eje principal</strong> gira dentro de su <strong>rodamiento principal</strong> a la misma velocidad lenta que el rotor, unas 10 rpm.",
+      "p3": "El generador necesita girar deprisa, así que entre él y el eje principal hay una caja de engranajes, la <strong>multiplicadora</strong>. Trabaja en tres etapas. En las dos primeras, unos engranajes pequeños giran alrededor de uno central, como los planetas alrededor del Sol. La última usa engranajes con dientes inclinados. Entre las tres hacen que el eje de salida gire unas 140 veces más rápido, hasta unas 1485 rpm. El <strong>generador</strong> produce electricidad con bobinas de cobre, sin imanes permanentes. La electricidad sale a 800 voltios. Después pasa entera por el <strong>convertidor</strong>, que la ajusta para que vaya al compás de la red.",
+      "p4": "En el eje hay un <strong>freno de disco</strong>. No es lo que detiene el aerogenerador en una tormenta. Eso lo hacen las palas, al ponerse de canto al viento. El freno solo sujeta el rotor cuando ya va despacio, para dejarlo parado. En lo alto de la torre, los <strong>motores de orientación</strong> giran toda la góndola para ponerla de cara al viento. A este giro se le llama orientación. En este modelo, la góndola sigue al viento al instante, porque no se ha publicado a qué velocidad gira la del V150 real."
+    },
+    "curve": {
+      "title": "Cuánto viento puede captar un aerogenerador",
+      "p1": "Un aerogenerador empieza a producir electricidad con una brisa suave de 3 m/s, la <strong>velocidad de arranque</strong>. A partir de ahí, la potencia sube deprisa. La potencia del viento crece con el cubo de la velocidad: velocidad por velocidad por velocidad. Si el viento sopla el doble de rápido, lleva ocho veces más potencia. Por eso el aerogenerador da unos 0,3 MW a 4 m/s, unos 2,5 MW a 8 m/s y sus 4,2 MW completos a partir de unos 12 m/s. Arrastra el control del viento y mira cómo se mueve el punto por la curva.",
+      "p2": "Ningún aerogenerador puede quedarse con toda esa potencia. Para sacar energía, el rotor tiene que frenar el aire. Pero ese aire frenado aún tiene que salir por detrás. Si el rotor lo parara del todo, no podría entrar aire nuevo. El físico Albert Betz demostró que ni siquiera un rotor perfecto puede sacar más del 59,3 % de la potencia del viento. Es el <strong>límite de Betz</strong>. Lo mejor que logra este aerogenerador es quedarse con algo menos de la mitad de la potencia del viento, con vientos de unos 7 a 8 m/s. La gráfica muestra lo cerca que se queda del límite.",
+      "p3": "Por encima de unos 12 m/s, el viento trae más potencia de la que el generador puede aguantar. Por eso los cilindros de paso giran las palas para sacarlas un poco del viento, y más aire pasa de largo. A 15 m/s, el aerogenerador solo se queda con alrededor del 12 % de la potencia del viento. Por encima de 20 m/s, empieza a reducir su potencia poco a poco. Los ángulos de paso que muestra el modelo con viento fuerte son una estimación propia, porque los del V150 no se han publicado.",
+      "p4": "A la <strong>velocidad de corte</strong>, de unos 22 a 25 m/s, el viento es demasiado fuerte y el aerogenerador se detiene. Las palas se ponen de canto al viento. Esto se llama <strong>puesta en bandera</strong>. El rotor se frena solo, y luego el freno de disco lo deja parado. El aerogenerador no vuelve a arrancar hasta que el viento baja unos 2 m/s. En este modelo, los 27 aerogeneradores se paran a la vez a 24,5 m/s y vuelven a arrancar a 22,5 m/s. La parada y el arranque duran 20 minutos cada uno en el reloj del modelo, más que en la realidad, para que te dé tiempo a verlos."
+    },
+    "wakes": {
+      "title": "Por qué los aerogeneradores están tan separados",
+      "p1": "Un aerogenerador le quita energía al viento, así que el aire que deja detrás va más lento. Esa cola de aire lento y revuelto se llama <strong>estela</strong>, como la que deja un barco al pasar. La opción Estelas (K) dibuja un penacho detrás de cada rotor que gira. Desactívala para comparar. Las estelas son más fuertes con vientos medios, que es cuando el rotor frena más aire. Con viento más fuerte, las palas dejan pasar más aire y las estelas se desvanecen.",
+      "p2": "Aquí las estelas siguen el <strong>modelo de Jensen</strong>, una receta sencilla que los ingenieros usan mucho. Trata cada estela como un cono que se va ensanchando y que poco a poco se vuelve a llenar de aire más rápido. Un solo número marca lo deprisa que se ensancha el cono: aquí 0,075, el valor habitual en tierra. A 8 m/s, un aerogenerador que está 7 D por detrás, en la dirección del viento, sigue recibiendo aire alrededor de un 13 % más lento. Como la potencia depende del cubo de la velocidad, eso le cuesta cerca de un tercio de su potencia.",
+      "p3": "A lo largo de un año, las estelas le cuestan a un parque entre un 5 y un 15 % de su energía. En un parque de ejemplo de Vestas con 24 de estos aerogeneradores, la pérdida ronda el 6 %. Si el viento sopla desde una dirección desafortunada, con los aerogeneradores en fila uno detrás de otro, la pérdida puede pasar del 30 %. Por eso las filas suelen separarse de 5 a 9 D en la dirección del viento, y los aerogeneradores, de 3 a 5 D a lo ancho. Prueba con 5, 7 y 9 D: cuanto más separados, menos se pierde por las estelas, pero más terreno hace falta. En este modelo, además, el viento oscila unos grados a cada lado del oeste a lo largo del día, así que las góndolas giran un poco.",
+      "p4": "El viento también es más fuerte cuanto más alto, porque el suelo frena el aire que tiene cerca. La opción Flujo de aire (F) lo muestra: la parte alta del rotor recibe un viento más rápido que la baja. Los penachos y las flechas son solo dibujos. El modelo de estelas también simplifica las cosas. Trata el suelo como si fuera llano, no pone estela detrás de un rotor parado y suma solo a grandes rasgos las estelas que se solapan."
+    },
+    "grid": {
+      "title": "El camino hasta la red",
+      "p1": "Cada generador produce electricidad a 800 voltios (V). El voltaje es el empuje que mueve la electricidad por un cable. Después del convertidor, el propio <strong>transformador</strong> del aerogenerador sube el voltaje. Con un empuje más fuerte, la misma potencia necesita menos corriente, que es el flujo de electricidad. Con menos corriente, los cables pierden menos energía en forma de calor. La opción Cables (C) muestra el camino de la electricidad desde los aerogeneradores hasta la red.",
+      "p2": "Los <strong>cables colectores</strong>, a 36 000 voltios, o 36 kilovoltios (kV), unen los aerogeneradores con la <strong>subestación</strong>. Allí, otro transformador vuelve a subir el voltaje, hasta 110 kV, para la <strong>línea de la red</strong>. Estos voltajes son los de un parque de ejemplo de Vestas en Alemania.",
+      "p3": "Un megavatio hora (MWh) es la energía que da un megavatio durante una hora. A plena potencia, un aerogenerador produce 4,2 MWh cada hora. Pero el viento no siempre sopla fuerte. A lo largo del año, un aerogenerador da de media cerca del 40 % de su plena potencia. Esa proporción es su <strong>factor de capacidad</strong>. En un año, un aerogenerador produce unos 14 700 MWh, suficiente para unos 1400 hogares de Estados Unidos. En las zonas normal y ventosa, el día inventado del modelo tiene más viento que un día medio de verdad, así que el factor de capacidad que muestra sale más alto.",
+      "p4": "Fabricar un aerogenerador también gasta energía y emite carbono. Contando toda su vida, son unos 7 g de CO2e por cada kilovatio hora (kWh) que produce. El CO2e cuenta todos los gases de efecto invernadero como si fueran dióxido de carbono. Un aerogenerador recupera en unos 8 meses la energía que costó construirlo. Está diseñado para durar 20 años, y a menudo funciona más tiempo. Eso sí, sus palas todavía son difíciles de reciclar. Prueba una zona tranquila, normal o ventosa para ver cuánto importa el viento de todos los días. Solo cambia ese viento. La tormenta del anochecer es la misma en todas las zonas."
+    }
+  }
+}

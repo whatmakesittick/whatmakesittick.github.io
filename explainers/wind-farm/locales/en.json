@@ -1,0 +1,270 @@
+{
+  "meta": {
+    "title": "How a wind farm works",
+    "eyebrow": "Renewable energy",
+    "tagline": "Twenty-seven turbines and one windy day: how a blade shaped like a wing turns moving air into power for the grid.",
+    "description": "A 3D wind farm through one windy day: how blades catch the wind, what turns inside a turbine, why turbines stand far apart and how power reaches the grid.",
+    "summary": "The farm layout, the tower and blades, the gearbox and generator, the power curve and the Betz limit, wakes, and the road to the grid.",
+    "socialAlt": "A wind farm on rolling land with one turbine close up, beside the title How a wind farm works"
+  },
+  "stage": {
+    "label": "Interactive wind farm model",
+    "gauge": "Live wind and power"
+  },
+  "timeline": {
+    "label": "Time of day",
+    "phases": "Jump to a part of the day",
+    "speed": "Playback speed",
+    "value": "{{time}}",
+    "during": "{{time}}, {{phase}}",
+    "speedValue": "{{value}} h/min",
+    "speedFormat": "{{value}} hours of the day per minute",
+    "phase": {
+      "night": "Calm night",
+      "morning": "Morning breeze",
+      "afternoon": "Full power",
+      "storm": "Storm",
+      "evening": "Evening"
+    },
+    "jump": {
+      "night": "Jump to the calm night",
+      "morning": "Jump to the morning breeze",
+      "afternoon": "Jump to full power",
+      "storm": "Jump to the storm",
+      "evening": "Jump to the evening"
+    }
+  },
+  "controls": {
+    "label": "Model controls",
+    "siteWind": "Site wind",
+    "siteWindOptions": {
+      "calm": "Calm site",
+      "typical": "Typical site",
+      "windy": "Windy site"
+    },
+    "spacingOptions": {
+      "5": "5 D",
+      "7": "7 D",
+      "9": "9 D"
+    },
+    "nacelleOptions": {
+      "closed": "Cover on",
+      "open": "Cover off"
+    },
+    "windAtOptions": {
+      "day": "Follow the day",
+      "cutIn": "Cut-in, 3 m/s",
+      "peak": "Best share, 8 m/s",
+      "rated": "Full power, 12 m/s",
+      "rampDown": "Ramping down, 23 m/s",
+      "cutOut": "Past cut-out, 25 m/s"
+    },
+    "groups": {
+      "siteWind": "Site wind",
+      "spacing": "Gap between rows",
+      "nacelle": "Nacelle cover",
+      "windAt": "Wind speed"
+    },
+    "views": {
+      "streamlines": {
+        "name": "Airflow",
+        "short": "Air",
+        "hint": "Airflow (F)"
+      },
+      "wakes": {
+        "name": "Wakes",
+        "short": "Wakes",
+        "hint": "Wakes (K)"
+      },
+      "cables": {
+        "name": "Cables",
+        "short": "Cables",
+        "hint": "Cables (C)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      }
+    }
+  },
+  "readouts": {
+    "wind": "Wind",
+    "power": "One turbine",
+    "farm": "Whole farm",
+    "state": {
+      "idle": "Waiting for wind",
+      "partial": "Below full power",
+      "full": "Full power",
+      "rampDown": "Ramping down",
+      "stopping": "Feathering to stop",
+      "parked": "Parked",
+      "starting": "Starting up"
+    }
+  },
+  "units": {
+    "metresPerSecond": "{{value}} m/s",
+    "speedPair": "{{ms}} m/s, {{kmh}} km/h",
+    "rpm": "{{value}} rpm",
+    "degrees": "{{value}}°",
+    "mw": "{{value}} MW",
+    "mwh": "{{value}} MWh",
+    "percent": "{{value}} %",
+    "metres": "{{value}} m",
+    "seconds": "{{value}} s",
+    "count": "{{value}}",
+    "hectares": "{{value}} ha",
+    "squareKm": "{{value}} km²",
+    "volts": "{{value}} V",
+    "gramsPerKwh": "{{value}} g CO2e per kWh",
+    "months": "{{value}} months"
+  },
+  "chapters": {
+    "farm": {
+      "count": "Turbines",
+      "rated": "Full power of the farm",
+      "rows": "Between rows, along the wind",
+      "across": "Between turbines in a row",
+      "spacingValue": "{{metres}} m, {{diameters}} D",
+      "built": "Land built on",
+      "project": "Typical project area for this size"
+    },
+    "tower": {
+      "wind": "Wind at hub height",
+      "rpm": "Rotor speed",
+      "turn": "One turn takes",
+      "stopped": "Rotor stopped",
+      "tip": "Blade tip speed",
+      "height": "Tip height",
+      "blade": "Blade length",
+      "swept": "Swept area",
+      "sweptValue": "{{area}} m², about {{pitches}} football pitches"
+    },
+    "nacelle": {
+      "shaft": "Main shaft",
+      "generator": "Generator",
+      "gear": "Gear ratio",
+      "gearValue": "about 1 to {{ratio}}",
+      "pitch": "Blade pitch",
+      "brake": "Disc brake",
+      "brakeValue": {
+        "released": "Released",
+        "holding": "Holding the rotor"
+      },
+      "volts": "Generator voltage"
+    },
+    "curve": {
+      "wind": "Wind speed",
+      "state": "Turbine state",
+      "power": "Turbine output",
+      "caption": "Power in the wind, the Betz limit and this turbine's output, for winds from 0 to 30 m/s. The dot marks the wind now.",
+      "axisWind": "Wind speed (m/s)",
+      "axisPower": "Power (MW)",
+      "lineWind": "Power in the wind",
+      "lineBetz": "Betz limit",
+      "lineTurbine": "This turbine",
+      "windPower": "Power in the wind",
+      "cp": "Share of the wind's power it catches",
+      "betz": "Share of the Betz limit",
+      "pitch": "Blade pitch"
+    },
+    "wakes": {
+      "spacing": "Gap between rows",
+      "deficit": "Slowdown in the wake, one row behind",
+      "loss": "Farm power lost to wakes now",
+      "top": "Wind at the top of the rotor",
+      "bottom": "Wind at the bottom of the rotor"
+    },
+    "grid": {
+      "output": "Farm output now",
+      "energy": "Energy made today",
+      "homes": "US homes this output could run",
+      "capacity": "This day's capacity factor",
+      "voltages": "Voltage at each step",
+      "voltagesValue": "{{generator}} V, {{collector}} kV, {{grid}} kV",
+      "annual": "One turbine in a year",
+      "annualHomes": "US homes one turbine supplies",
+      "carbon": "Carbon footprint",
+      "payback": "Energy payback"
+    }
+  },
+  "parts": {
+    "land": "Ground",
+    "foundation": "Foundation",
+    "tower": "Tower",
+    "transformer": "Transformer",
+    "towerCable": "Power cable",
+    "nacelle": "Nacelle",
+    "cooler": "Cooler",
+    "bedplate": "Bedplate",
+    "hub": "Hub",
+    "blades": "Blades",
+    "pitchCylinders": "Pitch cylinders",
+    "mainBearing": "Main bearing",
+    "mainShaft": "Main shaft",
+    "gearbox": "Gearbox",
+    "brakeDisc": "Disc brake",
+    "generator": "Generator",
+    "converter": "Converter",
+    "yawDrives": "Yaw drives",
+    "sweptArea": "Swept area",
+    "streamlinesGroup": "Airflow",
+    "heroWake": "Wake",
+    "farmLand": "Farmland",
+    "farmTurbines": "27 turbines",
+    "accessRoads": "Access roads",
+    "spacingMarker": "Row spacing",
+    "prevailingWind": "Prevailing wind",
+    "windArrows": "Wind",
+    "shearProfile": "Wind by height",
+    "wakePlumes": "Wakes",
+    "collectorCables": "Collector cables",
+    "substation": "Substation",
+    "gridLine": "Grid line"
+  },
+  "sections": {
+    "farm": {
+      "title": "Twenty-seven turbines and one windy day",
+      "p1": "This is a <strong>wind farm</strong>: 27 turbines spread over rolling fields. Each one is a Vestas V150. At full power it makes 4.2 megawatts (MW). A <strong>megawatt</strong> is a million watts. All together, the farm can make about 113 MW. Målarberget in Sweden is a real farm just like it: 27 of these turbines, running since 2021.",
+      "p2": "The turbines stand in <strong>rows</strong> across the <strong>prevailing wind</strong>, the direction the wind blows from most often. Here, that is west. Engineers measure the gaps in rotor widths, called D. One D is the width of a rotor from tip to tip, 150 m here. The rows are 7 D apart, or 1,050 m. In each row, the turbines are 4 D apart, or 600 m. The middle row is shifted sideways, so no turbine stands right behind another.",
+      "p3": "From above, the farm looks crowded, but most of the land is still fields. For each megawatt, only about 0.3 hectares is built on. A hectare is a square 100 m on each side. Most of that built land is <strong>access roads</strong>, not turbine bases. <strong>Collector cables</strong> gather the power from every turbine. They carry it to a <strong>substation</strong>. There it joins the grid, the web of power lines that feeds homes and towns.",
+      "p4": "Målarberget's real layout is not published, so this one is the model's own. The windy day is made up too, and it plays on a loop. It is not an average day. It packs a calm night, a breezy morning, a full-power afternoon and an evening storm into 24 hours. The clock runs many times faster than real time, yet every rotor turns at its real speed. Roads, cables and wind arrows are drawn wider than they really are, so you can see them from far away. The light stays the same all day and night."
+    },
+    "tower": {
+      "title": "Blades that fly in circles",
+      "p1": "Up close, one turbine is huge. The <strong>rotor</strong> is three blades fixed to a round hub, and it is 150 m across. The steel <strong>tower</strong> lifts the hub 105 m above the ground. At the top of its turn, a blade tip reaches about 180 m, almost twice as tall as Big Ben. Up there, the wind is faster than near the ground, as chapter 5 shows.",
+      "p2": "Each <strong>blade</strong> is about 74 m long, almost the wingspan of an Airbus A380, the biggest airliner. It is made of carbon and glass fibre set in epoxy, a hard plastic glue. The wind does not push a blade like a sail. It flows over the blade the way it flows over a plane's wing. The curved shape creates <strong>lift</strong>, the same force that holds a plane up. Lift pulls each blade round, and the rotor turns.",
+      "p3": "At full speed, the rotor turns only about 10 times a minute, or 10 rpm (revolutions per minute). That is one turn every 6 seconds, which looks lazy. But the tips travel round a huge circle, so they move at about 80 metres per second (m/s), close to 300 km/h. In this model, the tips move 8 times as fast as the wind until the rotor reaches its top speed. Drag the wind slider and watch the rotor speed up with the wind. Pick Follow the day to hand the wind back to the clock.",
+      "p4": "The circle the blades sweep is the <strong>swept area</strong>: about 17,700 m², roughly 2.5 football pitches. Only wind that passes through this circle can turn the rotor. The airflow lines round the rotor are only a drawing, since real air is invisible.",
+      "p5": "The turbine's <strong>transformer</strong> gets its power ready for the cables, as chapter 6 explains. Where the V150 keeps it is not published, so this model puts it at the foot of the tower. The real rotor also tilts up slightly, but that angle is not published either, so the model keeps it level."
+    },
+    "nacelle": {
+      "title": "Inside the nacelle",
+      "p1": "The box behind the hub is the <strong>nacelle</strong>, 12.8 m long. It holds the machines that turn the rotor's slow, strong spin into electricity. Pick Cover off to look inside. The machines all stand on the <strong>bedplate</strong>, a heavy cast iron frame. A <strong>cooler</strong> on the roof carries their heat away.",
+      "p2": "The angle of a blade to the wind is its <strong>pitch</strong>. It sets how much of the wind the blade can grab. Each blade sits in the <strong>hub</strong> on a bearing, a ring that lets it twist. Three <strong>pitch cylinders</strong>, one per blade, twist the blades with oil pressure. Behind the hub, the <strong>main shaft</strong> turns in its <strong>main bearing</strong> at the rotor's slow speed, about 10 rpm.",
+      "p3": "The generator needs a fast spin, so a <strong>gearbox</strong> sits between it and the main shaft. The gearbox works in three steps. In the first two, small gears circle round a central gear, like planets round the sun. The last step uses gears with slanted teeth. Together they make the output spin about 140 times faster, up to about 1,485 rpm. The <strong>generator</strong> makes electricity with copper coils, without permanent magnets. Its power comes out at 800 volts. All of it then passes through the <strong>converter</strong>, which reshapes it to keep in step with the grid.",
+      "p4": "A <strong>disc brake</strong> sits on the shaft. It is not what stops the turbine in a storm. The blades do that, by turning edge-on to the wind. The brake only holds the rotor still once it has slowed down, to park it. On top of the tower, <strong>yaw drives</strong> turn the whole nacelle to face the wind. This turning is called yaw. In this model, the nacelle turns with the wind at once, because the V150's real turning speed is not published."
+    },
+    "curve": {
+      "title": "How much wind a turbine can catch",
+      "p1": "A turbine starts making power in a light breeze of 3 m/s, the <strong>cut-in</strong> speed. From there, the power climbs fast. The power in the wind grows with the speed cubed: speed times speed times speed. Double the wind, and it carries eight times the power. So the turbine makes about 0.3 MW at 4 m/s, about 2.5 MW at 8 m/s and its full 4.2 MW from about 12 m/s. Drag the wind slider and watch the dot move along the curve.",
+      "p2": "No turbine can catch all of that power. To take energy, the rotor must slow the air down. But the slowed air still has to flow away behind it. If the rotor stopped the air completely, no new air could get through. The physicist Albert Betz showed that even a perfect rotor can take at most 59.3 % of the wind's power. That is the <strong>Betz limit</strong>. This turbine's best is just under half the wind's power, at about 7 to 8 m/s. The chart shows how close it comes.",
+      "p3": "Above about 12 m/s, the wind brings more power than the generator can take. So the pitch cylinders turn the blades a little out of the wind, and more of it slips past. At 15 m/s, the turbine keeps only about 12 % of the power in the wind. Above 20 m/s, it starts to ramp down, lowering its power step by step. The pitch angles the model shows in strong wind are its own guess, since the V150's are not published.",
+      "p4": "At the <strong>cut-out</strong> speed, about 22 to 25 m/s, the wind is too strong and the turbine shuts down. The blades turn edge-on to the wind. This is called <strong>feathering</strong>. The rotor slows down on its own, and then the disc brake parks it. The turbine starts again only once the wind has dropped by about 2 m/s. In this model, all 27 turbines stop together at 24.5 m/s and restart at 22.5 m/s. Stopping and restarting each take 20 minutes on the model's clock, longer than in real life, so you have time to watch."
+    },
+    "wakes": {
+      "title": "Why turbines stand so far apart",
+      "p1": "A turbine takes energy out of the wind, so the air behind it moves slower. This trail of slow, stirred-up air is called a <strong>wake</strong>, like the trail behind a boat. Wakes (K) draws a plume behind every turning rotor. Switch it off to compare. Wakes are strongest in medium winds, when the rotor holds back the most air. In stronger wind, the blades let more air slip past, and the wakes fade.",
+      "p2": "The wakes here follow the <strong>Jensen model</strong>, a simple recipe engineers use a lot. It treats each wake as a cone that widens and slowly fills back up with faster air. One number sets how fast the cone widens: 0.075 here, the usual value on land. At 8 m/s, a turbine 7 D downwind still meets air about 13 % slower. Since power follows the speed cubed, that costs it about a third of its power.",
+      "p3": "Over a year, wakes cost a farm about 5 to 15 % of its energy. In a Vestas example farm of 24 of these turbines, the loss is about 6 %. From one unlucky direction, where turbines line up one behind another, the loss can pass 30 %. That is why rows usually stand 5 to 9 D apart along the wind, and turbines 3 to 5 D apart across it. Try 5, 7 and 9 D: wider gaps lose less to wakes but need more land. In this model, the wind also swings a few degrees either side of west through the day, so the nacelles turn a little.",
+      "p4": "Wind also gets stronger with height, because the ground slows down the air near it. Airflow (F) shows this: the top of the rotor meets faster wind than the bottom. The plumes and arrows are only drawings. The wake model also cuts corners. It treats the ground as flat, leaves no wake behind a stopped rotor and only roughly adds up wakes that overlap."
+    },
+    "grid": {
+      "title": "The road to the grid",
+      "p1": "Each generator makes power at 800 volts (V). Voltage is the push that drives electricity along a wire. After the converter, the turbine's own <strong>transformer</strong> raises the voltage. With a stronger push, the same power needs less current, the flow of electricity. Less current means the cables waste less power as heat. Cables (C) shows the power's path from the turbines to the grid.",
+      "p2": "<strong>Collector cables</strong> at 36,000 volts, or 36 kilovolts (kV), link the turbines to the <strong>substation</strong>. There, another transformer raises the voltage again, to 110 kV, for the <strong>grid line</strong>. These voltages come from a Vestas example farm in Germany.",
+      "p3": "A megawatt hour (MWh) is the energy of one megawatt running for one hour. At full power, one turbine makes 4.2 MWh every hour. But the wind is not always strong. Over a year, a turbine averages about 40 % of its full power. That share is its <strong>capacity factor</strong>. In a year, one turbine makes about 14,700 MWh, enough for about 1,400 US homes. On the typical and windy sites, the model's made-up day is windier than a real average day, so the capacity factor it shows comes out higher.",
+      "p4": "Building a turbine also uses energy and releases carbon. Over its whole life, it causes about 7 g of CO2e for each kilowatt hour (kWh) it makes. CO2e counts every greenhouse gas as if it were carbon dioxide. A turbine pays back the energy used to build it in about 8 months. It is designed to last 20 years and often runs longer. Its blades, though, are still hard to recycle. Pick a calm, typical or windy site to see how much the everyday wind matters. Only the everyday wind changes. The evening storm is the same at every site."
+    }
+  }
+}

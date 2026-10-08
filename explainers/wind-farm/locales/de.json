@@ -1,0 +1,270 @@
+{
+  "meta": {
+    "title": "So funktioniert ein Windpark",
+    "eyebrow": "Erneuerbare Energie",
+    "tagline": "Siebenundzwanzig Windräder, ein windiger Tag: So macht ein Blatt in Flügelform aus bewegter Luft Strom fürs Netz.",
+    "description": "Ein 3D-Windpark, ein windiger Tag: wie Blätter den Wind einfangen, was sich im Windrad dreht, warum Windräder Abstand halten und wie Strom ins Netz kommt.",
+    "summary": "Die Anordnung des Parks, Turm und Rotorblätter, Getriebe und Generator, Leistungskurve und Betz-Grenze, Nachlauf und der Weg ins Netz.",
+    "socialAlt": "Ein Windpark in hügeliger Landschaft, vorn ein Windrad ganz nah, daneben der Titel „So funktioniert ein Windpark“"
+  },
+  "stage": {
+    "label": "Interaktives Modell eines Windparks",
+    "gauge": "Wind und Leistung live"
+  },
+  "timeline": {
+    "label": "Tageszeit",
+    "phases": "Zu einem Abschnitt des Tages springen",
+    "speed": "Wiedergabetempo",
+    "value": "{{time}}",
+    "during": "{{time}}, {{phase}}",
+    "speedValue": "{{value}} h/min",
+    "speedFormat": "{{value}} Stunden des Tages pro Minute",
+    "phase": {
+      "night": "Ruhige Nacht",
+      "morning": "Morgenbrise",
+      "afternoon": "Volllast",
+      "storm": "Sturm",
+      "evening": "Abend"
+    },
+    "jump": {
+      "night": "Zur ruhigen Nacht springen",
+      "morning": "Zur Morgenbrise springen",
+      "afternoon": "Zur Volllast springen",
+      "storm": "Zum Sturm springen",
+      "evening": "Zum Abend springen"
+    }
+  },
+  "controls": {
+    "label": "Steuerung des Modells",
+    "siteWind": "Wind am Standort",
+    "siteWindOptions": {
+      "calm": "Windarmer Standort",
+      "typical": "Typischer Standort",
+      "windy": "Windreicher Standort"
+    },
+    "spacingOptions": {
+      "5": "5 D",
+      "7": "7 D",
+      "9": "9 D"
+    },
+    "nacelleOptions": {
+      "closed": "Mit Haube",
+      "open": "Ohne Haube"
+    },
+    "windAtOptions": {
+      "day": "Tagesverlauf",
+      "cutIn": "Einschalten, 3 m/s",
+      "peak": "Beste Ausbeute, 8 m/s",
+      "rated": "Volllast, 12 m/s",
+      "rampDown": "Abregeln, 23 m/s",
+      "cutOut": "Abgeschaltet, 25 m/s"
+    },
+    "groups": {
+      "siteWind": "Wind am Standort",
+      "spacing": "Abstand der Reihen",
+      "nacelle": "Gondelhaube",
+      "windAt": "Windgeschwindigkeit"
+    },
+    "views": {
+      "streamlines": {
+        "name": "Luftströmung",
+        "short": "Luft",
+        "hint": "Luftströmung (F)"
+      },
+      "wakes": {
+        "name": "Nachlauf",
+        "short": "Nachlauf",
+        "hint": "Nachlauf (K)"
+      },
+      "cables": {
+        "name": "Kabel",
+        "short": "Kabel",
+        "hint": "Kabel (C)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    }
+  },
+  "readouts": {
+    "wind": "Wind",
+    "power": "Ein Windrad",
+    "farm": "Ganzer Park",
+    "state": {
+      "idle": "Wartet auf Wind",
+      "partial": "Teillast",
+      "full": "Volllast",
+      "rampDown": "Regelt ab",
+      "stopping": "Fährt in Fahnenstellung",
+      "parked": "Geparkt",
+      "starting": "Läuft an"
+    }
+  },
+  "units": {
+    "metresPerSecond": "{{value}} m/s",
+    "speedPair": "{{ms}} m/s, {{kmh}} km/h",
+    "rpm": "{{value}} U/min",
+    "degrees": "{{value}}°",
+    "mw": "{{value}} MW",
+    "mwh": "{{value}} MWh",
+    "percent": "{{value}} %",
+    "metres": "{{value}} m",
+    "seconds": "{{value}} s",
+    "count": "{{value}}",
+    "hectares": "{{value}} ha",
+    "squareKm": "{{value}} km²",
+    "volts": "{{value}} V",
+    "gramsPerKwh": "{{value}} g CO2e pro kWh",
+    "months": "{{value}} Monate"
+  },
+  "chapters": {
+    "farm": {
+      "count": "Windräder",
+      "rated": "Volle Leistung des Parks",
+      "rows": "Zwischen den Reihen, in Windrichtung",
+      "across": "Zwischen den Windrädern einer Reihe",
+      "spacingValue": "{{metres}} m, {{diameters}} D",
+      "built": "Bebaute Fläche",
+      "project": "Typische Projektfläche bei dieser Größe"
+    },
+    "tower": {
+      "wind": "Wind auf Nabenhöhe",
+      "rpm": "Rotordrehzahl",
+      "turn": "Eine Umdrehung dauert",
+      "stopped": "Rotor steht",
+      "tip": "Tempo der Blattspitze",
+      "height": "Höhe der Blattspitze",
+      "blade": "Blattlänge",
+      "swept": "Rotorfläche",
+      "sweptValue": "{{area}} m², etwa {{pitches}} Fußballfelder"
+    },
+    "nacelle": {
+      "shaft": "Hauptwelle",
+      "generator": "Generator",
+      "gear": "Übersetzung",
+      "gearValue": "etwa 1 zu {{ratio}}",
+      "pitch": "Blattwinkel",
+      "brake": "Scheibenbremse",
+      "brakeValue": {
+        "released": "Gelöst",
+        "holding": "Hält den Rotor"
+      },
+      "volts": "Generatorspannung"
+    },
+    "curve": {
+      "wind": "Windgeschwindigkeit",
+      "state": "Zustand des Windrads",
+      "power": "Leistung des Windrads",
+      "caption": "Leistung im Wind, Betz-Grenze und Leistung dieses Windrads bei Wind von 0 bis 30 m/s. Der Punkt zeigt den aktuellen Wind.",
+      "axisWind": "Windgeschwindigkeit (m/s)",
+      "axisPower": "Leistung (MW)",
+      "lineWind": "Leistung im Wind",
+      "lineBetz": "Betz-Grenze",
+      "lineTurbine": "Dieses Windrad",
+      "windPower": "Leistung im Wind",
+      "cp": "Genutzter Anteil der Leistung im Wind",
+      "betz": "Anteil an der Betz-Grenze",
+      "pitch": "Blattwinkel"
+    },
+    "wakes": {
+      "spacing": "Abstand der Reihen",
+      "deficit": "Windabschwächung im Nachlauf, eine Reihe dahinter",
+      "loss": "Aktueller Verlust durch Nachlauf",
+      "top": "Wind oben am Rotor",
+      "bottom": "Wind unten am Rotor"
+    },
+    "grid": {
+      "output": "Aktuelle Leistung des Parks",
+      "energy": "Heute erzeugte Energie",
+      "homes": "So viele US-Haushalte könnte diese Leistung versorgen",
+      "capacity": "Kapazitätsfaktor dieses Tages",
+      "voltages": "Spannung auf jeder Stufe",
+      "voltagesValue": "{{generator}} V, {{collector}} kV, {{grid}} kV",
+      "annual": "Ein Windrad in einem Jahr",
+      "annualHomes": "So viele US-Haushalte versorgt ein Windrad",
+      "carbon": "CO2-Fußabdruck",
+      "payback": "Energetische Amortisation"
+    }
+  },
+  "parts": {
+    "land": "Boden",
+    "foundation": "Fundament",
+    "tower": "Turm",
+    "transformer": "Transformator",
+    "towerCable": "Stromkabel",
+    "nacelle": "Gondel",
+    "cooler": "Kühler",
+    "bedplate": "Maschinenträger",
+    "hub": "Nabe",
+    "blades": "Rotorblätter",
+    "pitchCylinders": "Pitchzylinder",
+    "mainBearing": "Hauptlager",
+    "mainShaft": "Hauptwelle",
+    "gearbox": "Getriebe",
+    "brakeDisc": "Scheibenbremse",
+    "generator": "Generator",
+    "converter": "Umrichter",
+    "yawDrives": "Azimutantriebe",
+    "sweptArea": "Rotorfläche",
+    "streamlinesGroup": "Luftströmung",
+    "heroWake": "Nachlauf",
+    "farmLand": "Ackerland",
+    "farmTurbines": "27 Windräder",
+    "accessRoads": "Zufahrtswege",
+    "spacingMarker": "Reihenabstand",
+    "prevailingWind": "Hauptwindrichtung",
+    "windArrows": "Wind",
+    "shearProfile": "Wind je nach Höhe",
+    "wakePlumes": "Nachläufe",
+    "collectorCables": "Sammelkabel",
+    "substation": "Umspannwerk",
+    "gridLine": "Netzleitung"
+  },
+  "sections": {
+    "farm": {
+      "title": "Siebenundzwanzig Windräder und ein windiger Tag",
+      "p1": "Das ist ein <strong>Windpark</strong>: 27 Windräder, verteilt über sanft hügelige Felder. Alle sind vom Typ Vestas V150. Unter Volllast, also mit voller Kraft, liefert jedes 4,2 Megawatt (MW). Ein <strong>Megawatt</strong> sind eine Million Watt. Zusammen schafft der Park etwa 113 MW. Målarberget in Schweden ist ein echter Park genau wie dieser: 27 solche Windräder, in Betrieb seit 2021.",
+      "p2": "Die Windräder stehen in <strong>Reihen</strong> quer zur <strong>Hauptwindrichtung</strong>. Das ist die Richtung, aus der der Wind am häufigsten weht. Hier kommt er aus Westen. Fachleute messen die Abstände in Rotordurchmessern, kurz D. Ein D ist die Breite des Rotors von Blattspitze zu Blattspitze, hier 150 m. Die Reihen stehen 7 D auseinander, also 1.050 m. Innerhalb einer Reihe liegen 4 D zwischen den Windrädern, also 600 m. Die mittlere Reihe ist seitlich versetzt. So steht kein Windrad direkt hinter einem anderen.",
+      "p3": "Von oben wirkt der Park dicht gedrängt, doch der größte Teil der Fläche bleibt Acker. Pro Megawatt sind nur etwa 0,3 Hektar wirklich bebaut. Ein Hektar ist ein Quadrat mit 100 m Seitenlänge. Bebaut sind vor allem <strong>Zufahrtswege</strong>, nicht die Sockel der Windräder. <strong>Sammelkabel</strong> holen den Strom bei jedem Windrad ab. Sie bringen ihn zu einem <strong>Umspannwerk</strong>. Dort fließt er ins Stromnetz, das Geflecht aus Leitungen, das Häuser und Städte mit Strom versorgt.",
+      "p4": "Der echte Lageplan von Målarberget ist nicht veröffentlicht. Die Anordnung hier ist deshalb frei gewählt. Auch der windige Tag ist erfunden und läuft in einer Schleife. Er ist kein Durchschnittstag. In 24 Stunden stecken eine ruhige Nacht, eine Morgenbrise, ein Nachmittag unter Volllast und ein Sturm am Abend. Die Uhr läuft um ein Vielfaches schneller als in Wirklichkeit. Trotzdem dreht sich jeder Rotor in seinem echten Tempo. Wege, Kabel und Windpfeile sind breiter gezeichnet, als sie wirklich sind. So sehen Sie sie auch aus großer Entfernung. Das Licht bleibt Tag und Nacht gleich."
+    },
+    "tower": {
+      "title": "Blätter, die im Kreis fliegen",
+      "p1": "Aus der Nähe ist ein einzelnes Windrad riesig. Der <strong>Rotor</strong> besteht aus drei Blättern an einer runden Nabe. Er misst 150 m im Durchmesser. Der <strong>Turm</strong> aus Stahl hebt die Nabe 105 m über den Boden. Steht ein Blatt ganz oben, reicht seine Spitze etwa 180 m hoch, fast doppelt so hoch wie Big Ben. Dort oben weht der Wind schneller als am Boden, wie Kapitel 5 zeigt.",
+      "p2": "Jedes <strong>Rotorblatt</strong> ist etwa 74 m lang. Das ist fast die Spannweite eines Airbus A380, des größten Passagierflugzeugs. Das Blatt besteht aus Kohle- und Glasfasern in Epoxidharz, einem harten Kunststoffkleber. Der Wind drückt nicht dagegen wie gegen ein Segel. Er strömt darüber wie über die Tragfläche eines Flugzeugs. Die gewölbte Form erzeugt dabei <strong>Auftrieb</strong>, dieselbe Kraft, die ein Flugzeug in der Luft hält. Der Auftrieb zieht jedes Blatt im Kreis herum, und der Rotor dreht sich.",
+      "p3": "Bei voller Drehzahl schafft der Rotor nur etwa 10 Umdrehungen pro Minute, kurz 10 U/min. Das ist eine Umdrehung alle 6 Sekunden und wirkt gemächlich. Doch die Spitzen laufen auf einem riesigen Kreis. Deshalb erreichen sie etwa 80 Meter pro Sekunde (m/s), knapp 300 km/h. In diesem Modell sind die Spitzen 8-mal so schnell wie der Wind, bis der Rotor seine Höchstdrehzahl erreicht. Schieben Sie den Windregler und sehen Sie zu, wie der Rotor mit dem Wind schneller wird. Wählen Sie „Tagesverlauf“, dann bestimmt wieder die Uhr den Wind.",
+      "p4": "Beim Drehen überstreichen die Blätter einen Kreis, die <strong>Rotorfläche</strong>. Sie misst etwa 17.700 m², rund 2,5 Fußballfelder. Nur Wind, der durch diesen Kreis strömt, kann den Rotor antreiben. Die Strömungslinien um den Rotor sind nur gezeichnet, denn echte Luft ist unsichtbar.",
+      "p5": "Der <strong>Transformator</strong> des Windrads bereitet den Strom für die Kabel vor, wie Kapitel 6 erklärt. Wo die V150 ihn unterbringt, ist nicht veröffentlicht. Darum steht er in diesem Modell am Fuß des Turms. Der echte Rotor ist außerdem leicht nach oben geneigt. Auch dieser Winkel ist nicht veröffentlicht, deshalb steht der Rotor im Modell gerade."
+    },
+    "nacelle": {
+      "title": "Ein Blick in die Gondel",
+      "p1": "Der Kasten hinter der Nabe ist die <strong>Gondel</strong>, 12,8 m lang. Darin stecken die Maschinen, die aus der langsamen, kräftigen Drehung des Rotors Strom machen. Wählen Sie „Ohne Haube“, um hineinzusehen. Alle Maschinen stehen auf dem <strong>Maschinenträger</strong>, einem schweren Rahmen aus Gusseisen. Ein <strong>Kühler</strong> auf dem Dach führt ihre Wärme ab.",
+      "p2": "Der Winkel eines Blatts zum Wind heißt <strong>Pitch</strong> oder Blattwinkel. Davon hängt ab, wie viel Wind das Blatt zu fassen bekommt. Jedes Blatt sitzt in der <strong>Nabe</strong> auf einem Lager. Das ist ein Ring, in dem es sich drehen kann. Drei <strong>Pitchzylinder</strong>, einer pro Blatt, verstellen die Blätter mit Öldruck. Hinter der Nabe dreht sich die <strong>Hauptwelle</strong> in ihrem <strong>Hauptlager</strong>. Sie läuft so langsam wie der Rotor, mit etwa 10 U/min.",
+      "p3": "Der Generator braucht eine schnelle Drehung. Deshalb sitzt zwischen ihm und der Hauptwelle ein <strong>Getriebe</strong>. Es arbeitet in drei Stufen. In den ersten beiden kreisen kleine Zahnräder um ein mittleres, wie Planeten um die Sonne. Die letzte Stufe hat Zahnräder mit schrägen Zähnen. Zusammen machen sie die Drehung etwa 140-mal schneller, auf bis zu etwa 1.485 U/min. Der <strong>Generator</strong> erzeugt den Strom mit Kupferspulen, ganz ohne Dauermagnete. Er liefert ihn mit 800 Volt. Danach fließt der ganze Strom durch den <strong>Umrichter</strong>. Der formt ihn so um, dass er im Takt des Netzes bleibt.",
+      "p4": "Auf der Welle sitzt eine <strong>Scheibenbremse</strong>. Doch sie ist es nicht, die das Windrad im Sturm stoppt. Das erledigen die Blätter: Sie drehen ihre Kante in den Wind. Erst wenn der Rotor langsam geworden ist, hält die Bremse ihn fest. So wird er geparkt. Oben auf dem Turm drehen <strong>Azimutantriebe</strong> die ganze Gondel in den Wind. Diese Drehung heißt Windnachführung. In diesem Modell folgt die Gondel dem Wind sofort. Denn wie schnell sich die Gondel der echten V150 dreht, ist nicht veröffentlicht."
+    },
+    "curve": {
+      "title": "Wie viel Wind ein Windrad einfangen kann",
+      "p1": "Ab einer leichten Brise von 3 m/s fängt ein Windrad an, Strom zu erzeugen. Das ist die <strong>Einschaltgeschwindigkeit</strong>. Danach steigt die Leistung schnell an. Die Leistung im Wind wächst nämlich mit der dritten Potenz der Geschwindigkeit: Geschwindigkeit mal Geschwindigkeit mal Geschwindigkeit. Weht der Wind doppelt so schnell, trägt er achtmal so viel Leistung. Deshalb liefert das Windrad bei 4 m/s etwa 0,3 MW, bei 8 m/s etwa 2,5 MW und ab etwa 12 m/s seine vollen 4,2 MW. Schieben Sie den Windregler und sehen Sie zu, wie der Punkt über die Kurve wandert.",
+      "p2": "Kein Windrad kann diese ganze Leistung einfangen. Um Energie zu entnehmen, muss der Rotor die Luft bremsen. Doch die gebremste Luft muss hinter ihm noch abfließen können. Würde der Rotor die Luft ganz anhalten, käme keine neue mehr durch. Der Physiker Albert Betz hat gezeigt: Selbst ein perfekter Rotor kann höchstens 59,3 % der Leistung im Wind nutzen. Das ist die <strong>Betz-Grenze</strong>. Dieses Windrad schafft im besten Fall knapp die Hälfte der Leistung im Wind, bei etwa 7 bis 8 m/s. Das Diagramm zeigt, wie nah es der Grenze kommt.",
+      "p3": "Weht der Wind stärker als etwa 12 m/s, bringt er mehr Leistung, als der Generator aufnehmen kann. Deshalb drehen die Pitchzylinder die Blätter ein Stück aus dem Wind. So strömt mehr Wind ungenutzt vorbei. Bei 15 m/s nutzt das Windrad nur noch etwa 12 % der Leistung im Wind. Über 20 m/s beginnt es abzuregeln: Es senkt seine Leistung Schritt für Schritt. Die Blattwinkel, die das Modell bei starkem Wind zeigt, sind nur geschätzt. Die echten Werte der V150 sind nämlich nicht veröffentlicht.",
+      "p4": "Bei der <strong>Abschaltgeschwindigkeit</strong>, etwa 22 bis 25 m/s, ist der Wind zu stark, und das Windrad schaltet ab. Die Blätter drehen ihre Kante in den Wind. Das heißt <strong>Fahnenstellung</strong>, denn das Blatt steht nun wie eine Fahne im Wind. Der Rotor wird dabei von selbst langsamer, dann parkt ihn die Scheibenbremse. Das Windrad läuft erst wieder an, wenn der Wind um etwa 2 m/s nachgelassen hat. In diesem Modell halten alle 27 Windräder gemeinsam bei 24,5 m/s an und starten bei 22,5 m/s neu. Anhalten und Neustart dauern auf der Modelluhr jeweils 20 Minuten. Das ist länger als in Wirklichkeit, damit Sie in Ruhe zusehen können."
+    },
+    "wakes": {
+      "title": "Warum Windräder so viel Abstand halten",
+      "p1": "Ein Windrad nimmt dem Wind Energie. Deshalb strömt die Luft dahinter langsamer. Diese Spur aus langsamer, verwirbelter Luft heißt <strong>Nachlauf</strong>, ähnlich wie das Kielwasser hinter einem Boot. Die Ansicht „Nachlauf (K)“ zeichnet hinter jeden drehenden Rotor einen Schweif. Schalten Sie sie zum Vergleich aus. Am stärksten ist der Nachlauf bei mittlerem Wind. Dann bremst der Rotor die Luft am meisten. Bei stärkerem Wind lassen die Blätter mehr Luft vorbei, und der Nachlauf wird schwächer.",
+      "p2": "Die Nachläufe hier folgen dem <strong>Jensen-Modell</strong>, einer einfachen Rechenmethode, die Fachleute oft verwenden. Darin ist jeder Nachlauf ein Kegel. Er wird nach hinten breiter und füllt sich langsam wieder mit schnellerer Luft. Wie schnell der Kegel breiter wird, legt eine einzige Zahl fest: hier 0,075, der übliche Wert an Land. Bei 8 m/s trifft ein Windrad 7 D weiter hinten noch auf Luft, die etwa 13 % langsamer ist. Weil die Leistung der dritten Potenz der Geschwindigkeit folgt, verliert das Windrad dadurch etwa ein Drittel seiner Leistung.",
+      "p3": "Übers Jahr kostet der Nachlauf einen Windpark etwa 5 bis 15 % seiner Energie. In einem Beispielpark von Vestas mit 24 dieser Windräder sind es etwa 6 %. Bei einer besonders ungünstigen Windrichtung stehen die Windräder genau hintereinander im Wind. Dann kann der Verlust über 30 % steigen. Deshalb liegen zwischen den Reihen in Windrichtung meist 5 bis 9 D, zwischen den Windrädern quer dazu 3 bis 5 D. Probieren Sie 5, 7 und 9 D aus: Mit größeren Abständen geht weniger an den Nachlauf verloren, aber der Park braucht mehr Fläche. In diesem Modell pendelt der Wind außerdem im Lauf des Tages ein paar Grad um die Westrichtung. Darum drehen sich die Gondeln ein wenig mit.",
+      "p4": "Außerdem wird der Wind mit der Höhe stärker, weil der Boden die Luft in seiner Nähe bremst. Das zeigt die Ansicht „Luftströmung (F)“: Oben trifft der Rotor auf schnelleren Wind als unten. Die Schweife und Pfeile sind nur gezeichnet. Auch das Nachlaufmodell vereinfacht einiges. Es nimmt den Boden als flach an. Ein stehender Rotor hinterlässt darin keinen Nachlauf. Und wo sich Nachläufe überlagern, rechnet es sie nur grob zusammen."
+    },
+    "grid": {
+      "title": "Der Weg ins Netz",
+      "p1": "Jeder Generator erzeugt Strom mit 800 Volt (V). Die Spannung ist der Druck, der den Strom durch eine Leitung schiebt. Hinter dem Umrichter erhöht der eigene <strong>Transformator</strong> des Windrads die Spannung. Bei mehr Druck muss für dieselbe Leistung weniger Strom fließen. Und je weniger Strom fließt, desto weniger Energie geht in den Kabeln als Wärme verloren. Die Ansicht „Kabel (C)“ zeigt, welchen Weg der Strom von den Windrädern ins Netz nimmt.",
+      "p2": "<strong>Sammelkabel</strong> mit 36.000 Volt, also 36 Kilovolt (kV), verbinden die Windräder mit dem <strong>Umspannwerk</strong>. Dort erhöht ein weiterer Transformator die Spannung noch einmal, auf 110 kV für die <strong>Netzleitung</strong>. Diese Spannungen stammen aus einem Beispielpark von Vestas in Deutschland.",
+      "p3": "Eine Megawattstunde (MWh) ist die Energie, die ein Megawatt Leistung in einer Stunde liefert. Unter Volllast erzeugt ein Windrad jede Stunde 4,2 MWh. Doch der Wind weht nicht immer kräftig. Übers Jahr kommt ein Windrad im Schnitt auf etwa 40 % seiner vollen Leistung. Diesen Anteil nennt man <strong>Kapazitätsfaktor</strong>. In einem Jahr erzeugt ein Windrad so etwa 14.700 MWh. Das reicht für etwa 1.400 Haushalte in den USA. Am typischen und am windreichen Standort ist der erfundene Tag des Modells windiger als ein echter Durchschnittstag. Darum fällt der Kapazitätsfaktor im Modell höher aus.",
+      "p4": "Auch der Bau eines Windrads verbraucht Energie und setzt CO2 frei. Über seine ganze Lebensdauer verursacht es etwa 7 g CO2e für jede Kilowattstunde (kWh), die es liefert. CO2e rechnet alle Treibhausgase so, als wären sie Kohlendioxid. Die Energie für seinen Bau hat ein Windrad nach etwa 8 Monaten wieder erzeugt. Fachleute nennen das energetische Amortisation. Gebaut ist es für 20 Jahre, oft läuft es aber länger. Seine Blätter lassen sich allerdings noch schwer recyceln. Wählen Sie einen windarmen, typischen oder windreichen Standort und sehen Sie, wie viel der alltägliche Wind ausmacht. Dabei ändert sich nur der alltägliche Wind. Der Sturm am Abend ist an allen Standorten gleich."
+    }
+  }
+}
