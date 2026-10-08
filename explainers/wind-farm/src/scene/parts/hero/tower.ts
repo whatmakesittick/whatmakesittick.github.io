@@ -33,7 +33,7 @@ function flangeGeometry(): BufferGeometry {
         bottom: y - TOWER.flangeHeight / 2,
         top: y + TOWER.flangeHeight / 2,
       },
-      TOWER.segments,
+      TOWER.flangeSegments,
     );
   });
   const top = bandGeometry(
@@ -43,13 +43,14 @@ function flangeGeometry(): BufferGeometry {
       bottom: TOWER.topY - TOWER.topFlange.height,
       top: TOWER.topY,
     },
-    TOWER.segments,
+    TOWER.flangeSegments,
   );
   return mergeParts([...rings, top]);
 }
 
 export interface TowerParts {
   readonly shell: BufferGeometry;
+  readonly mesh: Object3D;
 }
 
 export function buildTower(context: PartContext, parent: Object3D): TowerParts {
@@ -62,5 +63,5 @@ export function buildTower(context: PartContext, parent: Object3D): TowerParts {
   label(context, 'foundation', foundation, [0, PLINTH.topY, PLINTH.chamferRadius]);
   label(context, 'tower', tower, [0, TOWER.topY / 2, towerRadiusAt(TOWER.topY / 2)]);
   sceneAnchor(context, 'towerBase', parent, [0, 0, 0]);
-  return { shell };
+  return { shell, mesh: tower };
 }

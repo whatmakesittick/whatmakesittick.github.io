@@ -5,6 +5,7 @@ export const TOWER = {
   topRadius: TURBINE_GEOMETRY.towerTopDiameter / 2,
   topY: TURBINE_GEOMETRY.towerTopY,
   segments: 64,
+  flangeSegments: 48,
   flangeYs: [26, 52, 78],
   flangeHeight: 0.22,
   flangeProud: 0.045,

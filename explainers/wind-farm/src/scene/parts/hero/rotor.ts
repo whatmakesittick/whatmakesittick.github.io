@@ -22,7 +22,7 @@ const HUB_BODY: readonly ProfilePoint[] = [
   [1.3, 0.62],
 ];
 const SHAFT = { from: 1.2, to: 2.75, radius: 0.6, segments: 24 } as const;
-const BEARING = { inner: 1.02, outer: 1.24, bottom: 1.15, top: 1.5, segments: 40 } as const;
+const BEARING = { inner: 1.02, outer: 1.24, bottom: 1.15, top: 1.5, segments: 32 } as const;
 const NECK = { bottom: 0.6, top: 1.2, radius: 0.75, segments: 24 } as const;
 const COLLAR = { inner: 0.7, outer: 1.12, bottom: 1.08, top: 1.2 } as const;
 const PITCH_CYLINDER = {
