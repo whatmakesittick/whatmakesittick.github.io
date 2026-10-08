@@ -1,0 +1,269 @@
+{
+  "meta": {
+    "title": "Comment fonctionne un parc éolien",
+    "eyebrow": "Énergies renouvelables",
+    "tagline": "Vingt-sept éoliennes et une journée de vent : comment une pale en forme d’aile transforme le vent en électricité pour le réseau.",
+    "description": "Un jour de vent dans un parc éolien en 3D : les pales qui captent l’air, ce qui tourne dans la nacelle, l’écart entre éoliennes et la route vers le réseau.",
+    "summary": "Le plan du parc, le mât et les pales, le multiplicateur et la génératrice, la courbe de puissance et la limite de Betz, les sillages et le chemin vers le réseau.",
+    "socialAlt": "Un parc éolien sur des collines douces, avec une éolienne en gros plan, à côté du titre « Comment fonctionne un parc éolien »"
+  },
+  "stage": {
+    "label": "Modèle interactif de parc éolien",
+    "gauge": "Vent et puissance en direct"
+  },
+  "timeline": {
+    "label": "Heure de la journée",
+    "phases": "Aller à un moment de la journée",
+    "speed": "Vitesse de lecture",
+    "value": "{{time}}",
+    "during": "{{time}}, {{phase}}",
+    "speedValue": "{{value}} h/min",
+    "speedFormat": "{{value}} heures de la journée par minute",
+    "phase": {
+      "night": "Nuit calme",
+      "morning": "Brise du matin",
+      "afternoon": "Pleine puissance",
+      "storm": "Tempête",
+      "evening": "Soirée"
+    },
+    "jump": {
+      "night": "Aller à la nuit calme",
+      "morning": "Aller à la brise du matin",
+      "afternoon": "Aller à la pleine puissance",
+      "storm": "Aller à la tempête",
+      "evening": "Aller à la soirée"
+    }
+  },
+  "controls": {
+    "label": "Commandes du modèle",
+    "siteWind": "Vent du site",
+    "siteWindOptions": {
+      "calm": "Site calme",
+      "typical": "Site moyen",
+      "windy": "Site venté"
+    },
+    "spacingOptions": {
+      "5": "5 D",
+      "7": "7 D",
+      "9": "9 D"
+    },
+    "nacelleOptions": {
+      "closed": "Avec capot",
+      "open": "Sans capot"
+    },
+    "windAtOptions": {
+      "day": "Suivre la journée",
+      "cutIn": "Démarrage, 3 m/s",
+      "peak": "Meilleur rendement, 8 m/s",
+      "rated": "Pleine puissance, 12 m/s",
+      "rampDown": "Baisse progressive, 23 m/s",
+      "cutOut": "Après la coupure, 25 m/s"
+    },
+    "groups": {
+      "siteWind": "Vent du site",
+      "spacing": "Écart entre les rangées",
+      "nacelle": "Capot de la nacelle",
+      "windAt": "Vitesse du vent"
+    },
+    "views": {
+      "streamlines": {
+        "name": "Flux d’air",
+        "short": "Air",
+        "hint": "Flux d’air (F)"
+      },
+      "wakes": {
+        "name": "Sillages",
+        "short": "Sillages",
+        "hint": "Sillages (K)"
+      },
+      "cables": {
+        "name": "Câbles",
+        "short": "Câbles",
+        "hint": "Câbles (C)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    }
+  },
+  "readouts": {
+    "wind": "Vent",
+    "power": "Une éolienne",
+    "farm": "Tout le parc",
+    "state": {
+      "idle": "En attente de vent",
+      "partial": "Charge partielle",
+      "full": "Pleine puissance",
+      "rampDown": "Baisse progressive",
+      "stopping": "Mise en drapeau",
+      "parked": "À l’arrêt",
+      "starting": "Démarrage"
+    }
+  },
+  "units": {
+    "metresPerSecond": "{{value}} m/s",
+    "speedPair": "{{ms}} m/s, {{kmh}} km/h",
+    "rpm": "{{value}} tr/min",
+    "degrees": "{{value}}°",
+    "mw": "{{value}} MW",
+    "mwh": "{{value}} MWh",
+    "percent": "{{value}} %",
+    "metres": "{{value}} m",
+    "seconds": "{{value}} s",
+    "count": "{{value}}",
+    "hectares": "{{value}} ha",
+    "squareKm": "{{value}} km²",
+    "volts": "{{value}} V",
+    "gramsPerKwh": "{{value}} g de CO2e par kWh",
+    "months": "{{value}} mois"
+  },
+  "chapters": {
+    "farm": {
+      "count": "Éoliennes",
+      "rated": "Pleine puissance du parc",
+      "rows": "Entre les rangées, dans l’axe du vent",
+      "across": "Entre les éoliennes d’une rangée",
+      "spacingValue": "{{metres}} m, {{diameters}} D",
+      "built": "Surface construite",
+      "project": "Surface totale du projet"
+    },
+    "tower": {
+      "wind": "Vent à hauteur du moyeu",
+      "rpm": "Vitesse du rotor",
+      "turn": "Durée d’un tour",
+      "stopped": "Rotor à l’arrêt",
+      "tip": "Vitesse en bout de pale",
+      "height": "Hauteur en bout de pale",
+      "blade": "Longueur d’une pale",
+      "swept": "Surface balayée",
+      "sweptValue": "{{area}} m², environ {{pitches}} terrains de football"
+    },
+    "nacelle": {
+      "shaft": "Arbre principal",
+      "generator": "Génératrice",
+      "gear": "Rapport de multiplication",
+      "gearValue": "environ 1 pour {{ratio}}",
+      "pitch": "Calage des pales",
+      "brake": "Frein à disque",
+      "brakeValue": {
+        "released": "Desserré",
+        "holding": "Retient le rotor"
+      },
+      "volts": "Tension de la génératrice"
+    },
+    "curve": {
+      "wind": "Vitesse du vent",
+      "state": "État de l’éolienne",
+      "power": "Production de l’éolienne",
+      "caption": "La puissance du vent, la limite de Betz et la production de cette éolienne, pour des vents de 0 à 30 m/s",
+      "axisWind": "Vitesse du vent (m/s)",
+      "axisPower": "Puissance (MW)",
+      "lineWind": "Puissance du vent",
+      "lineBetz": "Limite de Betz",
+      "lineTurbine": "Cette éolienne",
+      "windPower": "Puissance du vent",
+      "cp": "Part captée",
+      "betz": "Part de la limite de Betz",
+      "pitch": "Calage des pales"
+    },
+    "wakes": {
+      "spacing": "Écart entre les rangées",
+      "deficit": "Ralentissement dû au sillage à la rangée suivante",
+      "loss": "Pertes dues aux sillages en ce moment",
+      "top": "Vent en haut du rotor",
+      "bottom": "Vent en bas du rotor"
+    },
+    "grid": {
+      "output": "Production du parc en ce moment",
+      "energy": "Énergie produite aujourd’hui",
+      "homes": "Foyers américains que cette puissance pourrait alimenter",
+      "capacity": "Facteur de charge de cette journée",
+      "voltages": "Tension à chaque étape",
+      "voltagesValue": "{{generator}} V, {{collector}} kV, {{grid}} kV",
+      "annual": "Une éolienne en un an",
+      "annualHomes": "Foyers américains alimentés par une éolienne",
+      "carbon": "Empreinte carbone",
+      "payback": "Temps de retour énergétique"
+    }
+  },
+  "parts": {
+    "land": "Sol",
+    "foundation": "Fondation",
+    "tower": "Mât",
+    "transformer": "Transformateur",
+    "towerCable": "Câble électrique",
+    "nacelle": "Nacelle",
+    "cooler": "Refroidisseur",
+    "bedplate": "Châssis",
+    "hub": "Moyeu",
+    "blades": "Pales",
+    "pitchCylinders": "Vérins de calage",
+    "mainBearing": "Roulement principal",
+    "mainShaft": "Arbre principal",
+    "gearbox": "Multiplicateur",
+    "brakeDisc": "Frein à disque",
+    "generator": "Génératrice",
+    "converter": "Convertisseur",
+    "yawDrives": "Moteurs d’orientation",
+    "sweptArea": "Surface balayée",
+    "streamlinesGroup": "Flux d’air",
+    "heroWake": "Sillage",
+    "farmLand": "Terres agricoles",
+    "farmTurbines": "27 éoliennes",
+    "accessRoads": "Chemins d’accès",
+    "spacingMarker": "Écart entre les rangées",
+    "prevailingWind": "Vent dominant",
+    "windArrows": "Vent",
+    "shearProfile": "Vent selon la hauteur",
+    "wakePlumes": "Sillages",
+    "collectorCables": "Câbles de collecte",
+    "substation": "Poste électrique",
+    "gridLine": "Ligne du réseau"
+  },
+  "sections": {
+    "farm": {
+      "title": "Vingt-sept éoliennes et une journée de vent",
+      "p1": "Voici un <strong>parc éolien</strong> : 27 éoliennes réparties sur des champs vallonnés. Ce sont toutes des Vestas V150, et chacune produit 4,2 mégawatts (MW) à pleine puissance. Un <strong>mégawatt</strong>, c’est un million de watts. Au total, le parc peut donc fournir environ 113 MW. Il a la taille de Målarberget, en Suède : un vrai parc de 27 de ces éoliennes en service depuis 2021.",
+      "p2": "Les éoliennes forment des <strong>rangées</strong> placées en travers du <strong>vent dominant</strong>, c’est-à-dire la direction d’où le vent souffle le plus souvent. Ici, il vient de l’ouest. Les ingénieurs mesurent les écarts en diamètres de rotor, notés D, et un D mesure 150 m pour la V150. Les rangées sont à 7 D les unes des autres, soit 1 050 m, et dans une rangée, les éoliennes sont à 4 D, soit 600 m. Chaque rangée est décalée sur le côté, pour qu’aucune éolienne ne se trouve juste derrière une autre de la rangée de devant.",
+      "p3": "Vu d’en haut, le parc paraît encombré, pourtant l’essentiel du terrain reste en champs. On ne construit qu’environ 0,3 hectare par mégawatt, et ce sont surtout des <strong>chemins d’accès</strong>, pas des socles d’éoliennes. Un hectare, c’est un carré de 100 m de côté. Le courant passe par des <strong>câbles de collecte</strong> jusqu’à un <strong>poste électrique</strong>, d’où il part vers le réseau.",
+      "p4": "Le vrai plan de Målarberget n’est pas publié : celui que vous voyez est propre à ce modèle. Le modèle rejoue aussi en boucle une journée de vent inventée. Ce n’est pas une journée moyenne : elle réunit en 24 heures une nuit calme, une matinée de brise, un après-midi à pleine puissance et une tempête le soir. L’horloge va des centaines de fois plus vite que la réalité, mais chaque rotor tourne à sa vraie vitesse. Les routes, les câbles et les flèches de vent sont dessinés plus larges que nature pour rester visibles à des kilomètres, et la lumière ne suit pas l’horloge."
+    },
+    "tower": {
+      "title": "Des pales qui volent en rond",
+      "p1": "De près, une éolienne est immense. Le <strong>mât</strong> en acier porte le moyeu à 105 m du sol, et le <strong>rotor</strong>, c’est-à-dire le moyeu et ses trois pales, mesure 150 m de diamètre. En haut de sa course, le bout d’une pale atteint environ 180 m, presque deux fois la hauteur de Big Ben. Là-haut, le vent souffle plus vite qu’au ras du sol, comme le montre le chapitre 5.",
+      "p2": "Chaque <strong>pale</strong> mesure environ 74 m, presque l’envergure d’un Airbus A380, le plus gros avion de ligne. Elle est faite de fibres de carbone et de verre noyées dans de l’époxy, une colle plastique très dure. Une pale n’est pas une voile que le vent pousse. L’air glisse dessus comme sur l’aile d’un avion, et sa forme bombée crée une <strong>portance</strong>, une force qui agit en travers du vent. La portance entraîne chaque pale, et le rotor se met à tourner.",
+      "p3": "À pleine vitesse, le rotor ne fait qu’environ 10 tours par minute, ce qu’on note 10 tr/min. Un tour toutes les 6 secondes : cela paraît bien paresseux. Mais le bout des pales parcourt un cercle immense, si bien qu’il file à environ 80 m/s, près de 300 km/h. Faites glisser le curseur du vent pour voir le rotor accélérer avec lui, ou choisissez « Suivre la journée » pour que le vent suive à nouveau l’horloge. Dans ce modèle, le bout des pales va 8 fois plus vite que le vent, jusqu’à ce que le rotor atteigne sa vitesse maximale.",
+      "p4": "Le cercle que balaient les pales, c’est la <strong>surface balayée</strong> : environ 17 700 m², soit à peu près 2,5 terrains de football. Seul le vent qui traverse ce cercle peut faire tourner le rotor. Les lignes d’air autour du rotor sont dessinées pour vous, car en vrai, l’air est invisible. Dans ce modèle, le <strong>transformateur</strong> se trouve au pied du mât, car son emplacement réel sur la V150 n’est pas publié. Pour la même raison, la légère inclinaison du rotor n’est pas dessinée."
+    },
+    "nacelle": {
+      "title": "Dans la nacelle",
+      "p1": "Le grand caisson derrière le moyeu, c’est la <strong>nacelle</strong>, qui mesure 12,8 m de long. Choisissez « Sans capot » pour voir l’intérieur. Elle abrite les machines qui transforment la rotation lente et puissante du rotor en électricité. Toutes reposent sur le <strong>châssis</strong>, un lourd cadre en fonte, et un <strong>refroidisseur</strong> sur le toit évacue leur chaleur.",
+      "p2": "Dans le <strong>moyeu</strong>, chaque pale est montée sur un roulement qui lui permet de pivoter. Trois <strong>vérins de calage</strong>, un par pale, les font pivoter grâce à la pression d’huile. L’angle de la pale face au vent s’appelle le <strong>calage</strong>, et il règle la prise que le vent a sur elle. Derrière le moyeu, l’<strong>arbre principal</strong> tourne dans son <strong>roulement principal</strong> à la même vitesse lente que le rotor, environ 10 tr/min.",
+      "p3": "Une génératrice doit tourner vite : un <strong>multiplicateur</strong> s’intercale donc entre l’arbre et elle. Il compte deux étages planétaires, où de petits engrenages tournent autour d’un engrenage central, et un étage hélicoïdal aux dents inclinées. Ensemble, ils multiplient la vitesse de l’arbre par environ 140, jusqu’à environ 1 485 tr/min. La <strong>génératrice</strong> est de type asynchrone : elle a des bobinages en cuivre et pas d’aimants. Toute sa puissance, sous 800 volts, passe par le <strong>convertisseur</strong>, qui la remet en forme pour l’adapter au réseau.",
+      "p4": "Sur l’arbre se trouve un <strong>frein à disque</strong>. Ce n’est pas lui qui arrête l’éolienne pendant une tempête : ce sont les pales, en présentant leur tranche au vent. Le frein sert seulement à retenir le rotor une fois qu’il a ralenti, pour le garder à l’arrêt. En haut du mât, des <strong>moteurs d’orientation</strong> tournent toute la nacelle face au vent. Dans ce modèle, elle suit exactement le vent, car la vitesse réelle à laquelle la V150 pivote n’est pas publiée."
+    },
+    "curve": {
+      "title": "Quelle part du vent une éolienne peut capter",
+      "p1": "Sous 3 m/s, la <strong>vitesse de démarrage</strong>, le rotor attend. Au-delà, la puissance grimpe vite, car la puissance du vent croît avec le cube de sa vitesse : vitesse fois vitesse fois vitesse. Quand le vent double, sa puissance est multipliée par huit. L’éolienne produit donc environ 0,3 MW à 4 m/s, environ 2,5 MW à 8 m/s, et la totalité de ses 4,2 MW à partir d’environ 12 m/s. Faites glisser le curseur du vent et regardez le point avancer sur la courbe.",
+      "p2": "Aucune éolienne ne peut tout capter. Pour prendre de l’énergie, le rotor doit freiner l’air, mais cet air doit quand même pouvoir s’échapper derrière lui. Le physicien Albert Betz a montré que même un rotor parfait ne peut pas prendre plus de 59,3 % de la puissance. C’est la <strong>limite de Betz</strong>. Cette éolienne en capte au mieux un peu moins de la moitié, vers 7 à 8 m/s, et le graphique montre à quel point elle s’approche de la limite.",
+      "p3": "Une fois la pleine puissance atteinte, le vent apporte plus que la génératrice ne peut en prendre. Les vérins de calage tournent donc un peu les pales hors du vent, et l’essentiel de l’air passe sans être capté. À 15 m/s, l’éolienne ne garde qu’environ 12 % de la puissance du vent. Les angles de calage affichés à ce stade sont propres à ce modèle, car ceux de la V150 ne sont pas publiés. Au-delà de 20 m/s, la puissance commence à baisser progressivement.",
+      "p4": "À la <strong>vitesse de coupure</strong>, environ 22 à 25 m/s, les pales présentent leur tranche au vent. C’est la <strong>mise en drapeau</strong> : le rotor ralentit tout seul, puis le frein à disque l’immobilise. L’éolienne ne redémarre qu’une fois que le vent a baissé d’environ 2 m/s. Dans ce modèle, les 27 éoliennes s’arrêtent ensemble à 24,5 m/s et repartent à 22,5 m/s. L’arrêt et le redémarrage prennent chacun 20 minutes sur l’horloge, plus qu’en réalité, pour que vous ayez le temps de les observer."
+    },
+    "wakes": {
+      "title": "Pourquoi les éoliennes sont si espacées",
+      "p1": "Une éolienne prend de l’énergie au vent, donc l’air ralentit derrière elle. Cette traînée d’air lent et brassé s’appelle un <strong>sillage</strong>. Activez « Sillages (K) » pour voir un panache derrière chaque rotor qui tourne. Les sillages sont les plus forts par vent modéré, quand le rotor retient l’air le plus fortement. Une fois la pleine puissance atteinte, les pales laissent filer davantage de vent, et les sillages s’estompent.",
+      "p2": "Ce modèle dessine les sillages avec une recette simple et très répandue, le <strong>modèle de Jensen</strong>. Il traite chaque sillage comme un cône qui s’élargit et se remplit peu à peu d’air plus rapide. La vitesse à laquelle il s’élargit dépend d’un seul nombre, ici 0,075, la valeur habituelle pour les parcs à terre. À 8 m/s, une éolienne placée 7 D plus loin sous le vent reçoit encore un air environ 13 % plus lent. Comme la puissance suit le cube du vent, cela lui coûte environ un tiers de sa puissance.",
+      "p3": "Sur une année, les sillages font perdre à un parc environ 5 à 15 % de son énergie. Dans un exemple de parc fourni par Vestas, avec 24 de ces éoliennes, la perte est d’environ 6 %. Pour une seule direction de vent, elle peut dépasser 30 %. C’est pourquoi les rangées sont en général espacées de 5 à 9 D dans l’axe du vent, et de 3 à 5 D en travers. Essayez 5, 7 et 9 D : des écarts plus larges perdent moins de vent, mais demandent plus de terrain.",
+      "p4": "Le vent forcit aussi avec la hauteur, car le sol freine l’air qui le touche. Activez « Flux d’air (F) » pour voir ce profil : le haut du rotor reçoit un vent plus rapide que le bas. Les panaches et les flèches ne sont que des dessins, car l’air, lui, est invisible. Dans ce modèle, le sol est plat, un rotor arrêté ne laisse pas de sillage, et les sillages qui se chevauchent s’additionnent de façon simple."
+    },
+    "grid": {
+      "title": "Le chemin jusqu’au réseau",
+      "p1": "Chaque génératrice produit du courant sous 800 volts (V). Après le convertisseur, le <strong>transformateur</strong> de l’éolienne élève la tension. Une tension plus haute transporte la même puissance avec moins de courant, donc les câbles perdent moins d’énergie en chaleur. Activez « Câbles (C) » pour suivre le courant des éoliennes jusqu’au réseau.",
+      "p2": "Des <strong>câbles de collecte</strong> à 36 000 volts, soit 36 kilovolts (kV), relient les éoliennes au <strong>poste électrique</strong>. Là, un autre transformateur élève la tension à 110 kV pour la <strong>ligne du réseau</strong>. Ces tensions viennent d’un exemple de parc en Allemagne, fourni par Vestas.",
+      "p3": "À pleine puissance, une éolienne produit 4,2 mégawattheures (MWh) chaque heure. Mais le vent n’est pas toujours fort : sur un an, une éolienne fournit en moyenne environ 40 % de sa pleine puissance. Cette part s’appelle le <strong>facteur de charge</strong>. En un an, une éolienne produit environ 14 700 MWh, assez pour environ 1 400 foyers américains. La journée inventée du modèle est plus venteuse que la moyenne de l’année, si bien que son facteur de charge est plus élevé.",
+      "p4": "Fabriquer une éolienne coûte aussi de l’énergie et du carbone : sur toute sa durée de vie, elle représente environ 7 g de CO2e par kilowattheure (kWh) produit. Le CO2e compte tous les gaz à effet de serre comme s’ils étaient du dioxyde de carbone. L’éolienne rembourse en environ 8 mois l’énergie qui a servi à la construire. Elle est conçue pour 20 ans et tourne souvent plus longtemps, même si ses pales restent difficiles à recycler. Choisissez un site calme, moyen ou venté pour voir à quel point le vent de tous les jours compte."
+    }
+  }
+}
