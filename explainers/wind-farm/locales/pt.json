@@ -3,8 +3,8 @@
     "title": "Como funciona um parque eólico",
     "eyebrow": "Energia renovável",
     "tagline": "Vinte e sete turbinas e um dia de muito vento: como uma pá com formato de asa transforma o movimento do ar em energia para a rede elétrica.",
-    "description": "Um parque eólico em 3D num dia de vento: como as pás captam o vento, o que gira na nacele, por que as turbinas ficam longe e como a energia chega à rede.",
-    "summary": "A disposição do parque, a torre e as pás, a caixa de engrenagens e o gerador, a curva de potência e o limite de Betz, as esteiras e o caminho até a rede.",
+    "description": "Parque eólico em 3D num dia de vento: como as pás captam o vento, o que gira na nacele, por que as turbinas ficam afastadas e como a energia chega à rede.",
+    "summary": "A disposição do parque, a torre e as pás, a caixa multiplicadora e o gerador, a curva de potência e o limite de Betz, as esteiras e o caminho até a rede.",
     "socialAlt": "Um parque eólico em terreno ondulado, com uma turbina em primeiro plano, ao lado do título “Como funciona um parque eólico”"
   },
   "stage": {
@@ -94,7 +94,7 @@
     "farm": "Parque inteiro",
     "state": {
       "idle": "Esperando o vento",
-      "partial": "Carga parcial",
+      "partial": "Abaixo da potência máxima",
       "full": "Potência máxima",
       "rampDown": "Reduzindo a potência",
       "stopping": "Embandeirando para parar",
@@ -109,7 +109,7 @@
     "degrees": "{{value}}°",
     "mw": "{{value}} MW",
     "mwh": "{{value}} MWh",
-    "percent": "{{value}} %",
+    "percent": "{{value}}%",
     "metres": "{{value}} m",
     "seconds": "{{value}} s",
     "count": "{{value}}",
@@ -148,7 +148,7 @@
       "pitch": "Passo das pás",
       "brake": "Freio a disco",
       "brakeValue": {
-        "released": "Solto",
+        "released": "Liberado",
         "holding": "Segurando o rotor"
       },
       "volts": "Tensão do gerador"
@@ -171,8 +171,8 @@
     "wakes": {
       "spacing": "Distância entre fileiras",
       "deficit": "Perda de velocidade na fileira seguinte",
-      "loss": "Perda do parque com esteiras agora",
-      "top": "Vento no alto do rotor",
+      "loss": "Perda atual do parque por esteiras",
+      "top": "Vento na parte de cima do rotor",
       "bottom": "Vento na parte de baixo do rotor"
     },
     "grid": {
@@ -185,11 +185,11 @@
       "annual": "Uma turbina em um ano",
       "annualHomes": "Casas nos EUA que uma turbina abastece",
       "carbon": "Pegada de carbono",
-      "payback": "Retorno energético"
+      "payback": "Tempo de retorno energético"
     }
   },
   "parts": {
-    "land": "Solo",
+    "land": "Terreno",
     "foundation": "Fundação",
     "tower": "Torre",
     "transformer": "Transformador",
@@ -202,7 +202,7 @@
     "pitchCylinders": "Cilindros de passo",
     "mainBearing": "Rolamento principal",
     "mainShaft": "Eixo principal",
-    "gearbox": "Caixa de engrenagens",
+    "gearbox": "Caixa multiplicadora",
     "brakeDisc": "Freio a disco",
     "generator": "Gerador",
     "converter": "Conversor",
@@ -225,45 +225,45 @@
   "sections": {
     "farm": {
       "title": "Vinte e sete turbinas e um dia de vento",
-      "p1": "Este é um <strong>parque eólico</strong>: 27 turbinas espalhadas por campos ondulados. Cada uma é uma Vestas V150 e, na potência máxima, gera 4,2 megawatts (MW). Um <strong>megawatt</strong> é um milhão de watts, então o parque inteiro pode gerar cerca de 113 MW. Ele tem o tamanho de Målarberget, na Suécia, um parque real com 27 dessas turbinas que funciona desde 2021.",
-      "p2": "As turbinas ficam em <strong>fileiras</strong> que cortam o caminho do <strong>vento predominante</strong>, a direção de onde o vento mais sopra. Aqui, ele vem do oeste. Os engenheiros medem as distâncias em diâmetros do rotor, escritos como D, e aqui um D vale 150 m. As fileiras ficam a 7 D umas das outras, ou 1.050 m, e as turbinas de uma mesma fileira ficam a 4 D, ou 600 m. Cada fileira é deslocada para o lado, para que nenhuma turbina fique bem atrás de outra da fileira da frente.",
-      "p3": "Visto de cima, o parque parece lotado, mas o terreno continua sendo, em grande parte, lavoura. Só cerca de 0,3 hectare por megawatt é de fato ocupado por construções, e a maior parte dessa área são <strong>estradas de acesso</strong>, não as bases das turbinas. Um hectare é um quadrado de 100 m de lado. A energia segue pelos <strong>cabos coletores</strong> até uma <strong>subestação</strong>, de onde parte para a rede elétrica.",
-      "p4": "A disposição real das turbinas em Målarberget não foi publicada, então a que você vê foi criada para este modelo. O modelo também repete sem parar um dia de vento inventado. Não é um dia médio: ele junta em 24 horas uma noite calma, uma manhã de brisa, uma tarde de potência máxima e uma tempestade no fim da tarde. O relógio corre centenas de vezes mais rápido que o tempo real, mas cada rotor gira na sua velocidade de verdade. Estradas, cabos e setas de vento aparecem mais largos do que são para que você os veja a quilômetros de distância, e a luz não acompanha o relógio."
+      "p1": "Este é um <strong>parque eólico</strong>: 27 turbinas espalhadas por campos ondulados. Cada uma é uma Vestas V150 e, na potência máxima, gera 4,2 megawatts (MW). Um <strong>megawatt</strong> é um milhão de watts. Ou seja, o parque inteiro pode gerar cerca de 113 MW. Os números batem com os de Målarberget, na Suécia: um parque de verdade, com 27 dessas turbinas, que funciona desde 2021.",
+      "p2": "As turbinas ficam lado a lado em <strong>fileiras</strong>, de frente para o <strong>vento predominante</strong>, aquele que mais sopra no lugar. Aqui, ele vem do oeste. Os engenheiros medem as distâncias em diâmetros do rotor, representados pela letra D. Um D é a largura do rotor de uma ponta de pá à outra: aqui, 150 m. As fileiras ficam a 7 D umas das outras, ou 1.050 m. Dentro de cada fileira, as turbinas ficam a 4 D, ou 600 m. Cada fileira é um pouco deslocada para o lado, para que nenhuma turbina fique escondida bem atrás de outra.",
+      "p3": "Visto de cima, o parque parece lotado, mas quase todo o terreno continua sendo lavoura. Só cerca de 0,3 hectare por megawatt tem alguma construção. Um hectare é um quadrado de 100 m de lado. E a maior parte dessa área construída são <strong>estradas de acesso</strong>, não as bases das turbinas. Os <strong>cabos coletores</strong> recolhem a energia de cada turbina e a levam até uma <strong>subestação</strong>, onde ela entra na rede elétrica.",
+      "p4": "A disposição real de Målarberget não foi publicada, então a que você vê aqui foi criada para o modelo. O dia de vento também é inventado e se repete sem parar. Não é um dia médio: em 24 horas, ele reúne uma noite calma, uma manhã de brisa, uma tarde de potência máxima e uma tempestade no começo da noite. O relógio corre centenas de vezes mais rápido que o tempo real, mas cada rotor gira na sua velocidade de verdade. Estradas, cabos e setas de vento aparecem mais largos do que são, para que você os enxergue a quilômetros de distância. A iluminação é a mesma a qualquer hora."
     },
     "tower": {
       "title": "Pás que voam em círculos",
-      "p1": "De perto, uma turbina é enorme. A <strong>torre</strong> de aço ergue o cubo a 105 m do chão, e o <strong>rotor</strong>, o cubo com suas três pás, tem 150 m de diâmetro. No ponto mais alto da volta, a ponta de uma pá chega a cerca de 180 m, quase o dobro da altura do Big Ben. Lá em cima o vento sopra mais rápido do que perto do chão, como mostra o capítulo 5.",
-      "p2": "Cada <strong>pá</strong> tem cerca de 74 m de comprimento, quase a envergadura de um Airbus A380, o maior avião de passageiros. Ela é feita de fibra de carbono e fibra de vidro presas em epóxi, uma cola plástica dura. A pá não é uma vela que o vento empurra. O vento passa por ela como pela asa de um avião, e o formato curvo cria <strong>sustentação</strong>, uma força que age de lado em relação ao vento. A sustentação puxa cada pá ao longo do círculo, e o rotor gira.",
-      "p3": "Na velocidade máxima, o rotor dá só cerca de 10 voltas por minuto, ou 10 rpm (rotações por minuto). Isso dá uma volta a cada 6 segundos, o que parece até preguiçoso. Mas as pontas percorrem um círculo enorme, então andam a cerca de 80 m/s, perto de 300 km/h. Arraste o controle de vento para ver o rotor acelerar junto com o vento, ou escolha Seguir o dia para que o vento volte a seguir o relógio. Neste modelo, as pontas andam 8 vezes mais rápido que o vento até o rotor atingir sua velocidade máxima.",
-      "p4": "O círculo que as pás percorrem é a <strong>área varrida</strong>: cerca de 17.700 m², o tamanho de uns 2,5 campos de futebol. Só o vento que passa por esse círculo consegue girar o rotor. As linhas de ar em volta do rotor são um desenho, já que o ar de verdade é invisível. Neste modelo, o <strong>transformador</strong> fica no pé da torre, porque a posição dele na V150 não foi publicada. Pelo mesmo motivo, a leve inclinação do rotor não aparece no desenho."
+      "p1": "De perto, uma turbina é enorme. O <strong>rotor</strong> tem três pás presas a uma peça central redonda, o cubo. Ele mede 150 m de ponta a ponta. A <strong>torre</strong> de aço ergue o cubo a 105 m do chão. No alto da volta, a ponta de uma pá chega a cerca de 180 m, quase o dobro da altura do Big Ben. Lá em cima, o vento é mais rápido do que perto do chão, como mostra o capítulo 5.",
+      "p2": "Cada <strong>pá</strong> tem cerca de 74 m de comprimento, quase a envergadura de um Airbus A380, o maior avião de passageiros. Ela é feita de fibras de carbono e de vidro mergulhadas em epóxi, uma cola plástica que endurece. O vento não empurra a pá como faria com uma vela. O ar passa por ela do mesmo jeito que passa pela asa de um avião. O formato curvo gera <strong>sustentação</strong>, uma força perpendicular ao vento. É a sustentação que puxa cada pá ao longo do círculo, e assim o rotor gira.",
+      "p3": "Na velocidade máxima, o rotor dá só cerca de 10 voltas por minuto, ou 10 rpm (rotações por minuto). Isso dá uma volta a cada 6 segundos, um ritmo que parece preguiçoso. Só que as pontas percorrem um círculo enorme, e por isso andam a cerca de 80 m/s, perto de 300 km/h. Arraste o controle deslizante do vento e veja o rotor acelerar junto com ele. Escolha Seguir o dia para que o vento volte a acompanhar o relógio. Neste modelo, as pontas andam 8 vezes mais rápido que o vento, até o rotor chegar à sua velocidade máxima.",
+      "p4": "O círculo que as pás percorrem é a <strong>área varrida</strong>: cerca de 17.700 m², o equivalente a uns 2,5 campos de futebol. Só o vento que atravessa esse círculo consegue girar o rotor. As linhas de ar em volta do rotor são só um desenho, porque o ar de verdade é invisível. O <strong>transformador</strong> da turbina eleva a tensão, ou voltagem, da energia antes de ela seguir pelos cabos. A posição dele na V150 não é pública, então este modelo o coloca no pé da torre. Pelo mesmo motivo, a leve inclinação do rotor não aparece no desenho."
     },
     "nacelle": {
       "title": "Dentro da nacele",
-      "p1": "A caixa comprida atrás do cubo é a <strong>nacele</strong>, com 12,8 m de comprimento. Escolha Sem cobertura para ver por dentro. Ela abriga as máquinas que transformam o giro lento e forte do rotor em eletricidade. Todas ficam sobre o <strong>chassi</strong>, uma estrutura pesada de ferro fundido, e um <strong>resfriador</strong> no teto leva o calor delas embora.",
-      "p2": "No <strong>cubo</strong>, cada pá fica sobre um rolamento, para poder girar em torno do próprio eixo. Três <strong>cilindros de passo</strong>, um por pá, fazem esse giro com pressão de óleo. O ângulo da pá em relação ao vento é o seu <strong>passo</strong>, e ele define quanto o vento consegue agarrar. Atrás do cubo, o <strong>eixo principal</strong> gira no <strong>rolamento principal</strong> na mesma velocidade lenta do rotor, cerca de 10 rpm.",
-      "p3": "Um gerador precisa girar rápido, então há uma <strong>caixa de engrenagens</strong> no meio do caminho. Ela tem dois estágios planetários, em que engrenagens pequenas giram em volta de uma central, e um estágio helicoidal, com dentes inclinados. Juntos, eles multiplicam a rotação do eixo por cerca de 140, chegando a uns 1.485 rpm. O <strong>gerador</strong> é do tipo de indução, com enrolamentos de cobre e sem ímãs. Toda a energia dele, a 800 volts, passa pelo <strong>conversor</strong>, que a ajusta para combinar com a rede.",
-      "p4": "No eixo fica um <strong>freio a disco</strong>. Não é ele que para a turbina numa tempestade: quem faz isso são as pás, que giram até ficar com a borda virada para o vento. O freio só segura o rotor quando ele já está lento, para deixá-lo travado. No alto da torre, <strong>motores de guinada</strong> giram a nacele inteira para que ela fique de frente para o vento. Neste modelo, ela acompanha o vento com exatidão, porque a velocidade real de giro da V150 não foi publicada."
+      "p1": "A caixa atrás do cubo é a <strong>nacele</strong>, com 12,8 m de comprimento. Escolha Sem cobertura para espiar lá dentro. Ali ficam as máquinas que transformam o giro lento e forte do rotor em eletricidade. Todas se apoiam no <strong>chassi</strong>, uma estrutura pesada de ferro fundido. Um <strong>resfriador</strong> no teto leva o calor delas embora.",
+      "p2": "O ângulo da pá em relação ao vento é o seu <strong>passo</strong>. É ele que define quanto vento a pá consegue agarrar. Cada pá se encaixa no <strong>cubo</strong> sobre um rolamento, para poder girar em torno do próprio eixo. Três <strong>cilindros de passo</strong>, um por pá, fazem esse giro com pressão de óleo. Atrás do cubo, o <strong>eixo principal</strong> gira apoiado no <strong>rolamento principal</strong>, na mesma velocidade lenta do rotor: cerca de 10 rpm.",
+      "p3": "O gerador precisa de um giro rápido, por isso há uma <strong>caixa multiplicadora</strong> no meio do caminho. É uma caixa de engrenagens com dois estágios planetários, em que engrenagens pequenas giram em volta de uma central, e um estágio helicoidal, com dentes inclinados. Juntos, eles fazem a saída girar cerca de 140 vezes mais rápido, até uns 1.485 rpm. O <strong>gerador</strong> é de indução: tem enrolamentos de cobre e nenhum ímã. Ele entrega a energia a 800 volts, e toda ela passa pelo <strong>conversor</strong>. O conversor remodela a energia para que ela fique sincronizada com a rede.",
+      "p4": "No eixo fica um <strong>freio a disco</strong>. Não é ele que para a turbina numa tempestade: quem faz isso são as pás, ao virar a borda para o vento. O freio só entra em ação quando o rotor já perdeu velocidade, para deixá-lo travado. No alto da torre, os <strong>motores de guinada</strong> giram a nacele inteira para que ela fique de frente para o vento. Esse giro se chama guinada. Neste modelo, a nacele acompanha o vento com exatidão, porque a velocidade real desse giro na V150 não foi publicada."
     },
     "curve": {
       "title": "Quanto vento uma turbina consegue captar",
-      "p1": "Abaixo de 3 m/s, a <strong>velocidade de partida</strong>, o rotor espera. Acima dela, a potência sobe rápido, porque a potência do vento cresce com a velocidade ao cubo: velocidade vezes velocidade vezes velocidade. Com o dobro de vento, ele carrega oito vezes mais potência. Por isso a turbina gera cerca de 0,3 MW a 4 m/s, cerca de 2,5 MW a 8 m/s e sua potência máxima de 4,2 MW a partir de uns 12 m/s. Arraste o controle de vento e veja o ponto andar pela curva.",
-      "p2": "Nenhuma turbina consegue captar tudo. Para tirar energia, o rotor precisa frear o ar, mas o ar ainda tem que sair por trás dele. O físico Albert Betz mostrou que nem um rotor perfeito consegue tirar mais de 59,3 % da potência. Esse é o <strong>limite de Betz</strong>. No seu melhor momento, com ventos de cerca de 7 a 8 m/s, esta turbina capta pouco menos da metade, e o gráfico mostra o quanto ela chega perto do limite.",
-      "p3": "Depois da potência máxima, o vento traz mais energia do que o gerador aguenta. Então os cilindros de passo giram as pás um pouco para fora do vento, e a maior parte dele passa direto. A 15 m/s, a turbina fica com só cerca de 12 % da potência do vento. Os ângulos de passo mostrados nessa faixa foram criados para este modelo, já que os da V150 não foram publicados. Acima de 20 m/s, a potência começa a cair aos poucos.",
-      "p4": "Na <strong>velocidade de corte</strong>, cerca de 22 a 25 m/s, as pás giram até ficar com a borda virada para o vento. Isso é o <strong>embandeiramento</strong>: o rotor desacelera sozinho, e depois o freio a disco o trava. A turbina só volta a funcionar quando o vento cai cerca de 2 m/s. Neste modelo, as 27 turbinas param juntas a 24,5 m/s e voltam a girar a 22,5 m/s. A parada e a volta levam 20 minutos do relógio cada uma, mais do que na realidade, para que você possa acompanhar."
+      "p1": "O rotor espera o vento chegar a 3 m/s, a <strong>velocidade de partida</strong>. A partir daí, a potência sobe rápido. A potência do vento cresce com o cubo da velocidade: velocidade vezes velocidade vezes velocidade. Se o vento dobra, ele carrega oito vezes mais potência. Por isso, a turbina gera cerca de 0,3 MW a 4 m/s, cerca de 2,5 MW a 8 m/s e seus 4,2 MW de potência máxima a partir de uns 12 m/s. Arraste o controle deslizante do vento e veja o ponto andar pela curva.",
+      "p2": "Nenhuma turbina consegue captar toda essa potência. Para tirar energia, o rotor precisa frear o ar, mas o ar ainda tem que escapar por trás dele. Se o rotor parasse o ar por completo, nenhum ar novo conseguiria passar. O físico Albert Betz mostrou que nem um rotor perfeito consegue tirar mais de 59,3% da potência do vento. Esse é o <strong>limite de Betz</strong>. O melhor desta turbina fica um pouco abaixo da metade, com ventos de uns 7 a 8 m/s. O gráfico mostra o quanto ela chega perto do limite.",
+      "p3": "Depois que a turbina atinge a potência máxima, o vento mais forte traz mais energia do que o gerador aguenta. Então os cilindros de passo giram as pás um pouco para fora do vento, e a maior parte dele passa direto. A 15 m/s, a turbina aproveita só cerca de 12% da potência do vento. Os ângulos de passo que o modelo mostra nessa faixa foram criados para ele, porque os da V150 não foram publicados. Acima de 20 m/s, a turbina começa a reduzir a potência aos poucos.",
+      "p4": "Na <strong>velocidade de corte</strong>, algo entre 22 e 25 m/s, o vento fica forte demais para a turbina trabalhar. As pás giram até ficar com a borda virada para o vento. Isso se chama <strong>embandeiramento</strong>: o rotor desacelera sozinho, e depois o freio a disco o trava. A turbina só volta a funcionar quando o vento cai uns 2 m/s. Neste modelo, as 27 turbinas param juntas a 24,5 m/s e voltam a girar a 22,5 m/s. A parada e a retomada levam 20 minutos cada no relógio, mais do que na vida real, para que você consiga acompanhar."
     },
     "wakes": {
       "title": "Por que as turbinas ficam tão afastadas",
-      "p1": "Uma turbina tira energia do vento, então o ar atrás dela anda mais devagar. Esse rastro de ar lento e agitado se chama <strong>esteira</strong>. Ative Esteiras (K) para ver uma pluma atrás de cada rotor em movimento. As esteiras são mais fortes com vento moderado, quando o rotor segura o ar com mais força. Depois da potência máxima, as pás deixam mais vento passar, e as esteiras vão sumindo.",
-      "p2": "Este modelo desenha as esteiras com uma receita simples e muito usada, o <strong>modelo de Jensen</strong>. Ele trata cada esteira como um cone que se alarga e aos poucos volta a se encher de ar mais rápido. A rapidez com que o cone se alarga depende de um único número, aqui 0,075, o valor comum para parques em terra. A 8 m/s, uma turbina 7 D mais adiante, no sentido do vento, ainda recebe ar cerca de 13 % mais lento. Como a potência segue o vento ao cubo, isso custa a ela cerca de um terço da potência.",
-      "p3": "Ao longo de um ano, as esteiras custam a um parque cerca de 5 a 15 % da energia. Um parque de exemplo da Vestas, com 24 dessas turbinas, perde cerca de 6 %. Para uma única direção de vento, a perda pode passar de 30 %. Por isso, as fileiras costumam ficar de 5 a 9 D umas das outras no sentido do vento, e as turbinas de cada fileira, de 3 a 5 D entre si. Experimente 5, 7 e 9 D: distâncias maiores perdem menos vento, mas precisam de mais terra.",
-      "p4": "O vento também aumenta com a altura, porque o chão freia o ar que está perto dele. Ative Fluxo de ar (F) para ver o perfil: o alto do rotor recebe vento mais rápido do que a parte de baixo. As plumas e as setas são desenhos de um ar que ninguém vê. Neste modelo, o terreno é plano, um rotor parado não deixa esteira, e as esteiras que se sobrepõem se somam de um jeito simples."
+      "p1": "Uma turbina tira energia do vento, então o ar atrás dela fica mais lento. Esse rastro de ar lento e agitado se chama <strong>esteira</strong>, como o rastro que um barco deixa na água. Ative Esteiras (K) para ver uma pluma atrás de cada rotor que está girando. As esteiras são mais fortes com vento moderado, quando o rotor segura mais o ar. Acima da potência máxima, as pás deixam passar mais vento, e as esteiras vão sumindo.",
+      "p2": "As esteiras aqui são desenhadas com uma receita simples e muito usada, o <strong>modelo de Jensen</strong>. Ele trata cada esteira como um cone que vai se abrindo e, aos poucos, volta a se encher de ar mais rápido. Um único número define a rapidez com que o cone se abre: aqui, 0,075, o valor usual para parques em terra firme. A 8 m/s, uma turbina 7 D mais adiante, na direção do vento, ainda recebe ar cerca de 13% mais lento. Como a potência segue o cubo da velocidade, essa turbina perde cerca de um terço da potência.",
+      "p3": "Ao longo de um ano, as esteiras tiram de um parque algo entre 5% e 15% da energia. Num parque de exemplo da Vestas, com 24 dessas turbinas, a perda fica em cerca de 6%. Quando o vento vem de uma direção azarada, a perda pode passar de 30%. Por isso, as fileiras costumam ficar entre 5 e 9 D umas das outras no sentido do vento, e as turbinas de uma mesma fileira, entre 3 e 5 D. Experimente 5 D, 7 D e 9 D: com mais espaço, as esteiras roubam menos energia, mas o parque precisa de mais terra.",
+      "p4": "O vento também fica mais forte com a altura, porque o chão freia o ar que passa perto dele. Ative Fluxo de ar (F) para ver isso: a parte de cima do rotor recebe vento mais rápido que a parte de baixo. As plumas e as setas são só desenhos. Neste modelo, o terreno é plano, um rotor parado não deixa esteira, e as esteiras que se sobrepõem se somam de um jeito simples."
     },
     "grid": {
       "title": "O caminho até a rede",
-      "p1": "Cada gerador produz energia a 800 volts (V). Depois do conversor, o <strong>transformador</strong> da própria turbina eleva a tensão. Com tensão mais alta, a mesma potência passa com menos corrente, e assim menos energia se perde como calor nos cabos. Ative Cabos (C) para seguir a energia das turbinas até a rede.",
-      "p2": "Os <strong>cabos coletores</strong>, a 36.000 volts, ou 36 quilovolts (kV), ligam as turbinas à <strong>subestação</strong>. Lá, outro transformador eleva a tensão para 110 kV, a da <strong>linha de transmissão</strong>. Essas tensões vêm de um parque de exemplo da Vestas na Alemanha.",
-      "p3": "Na potência máxima, uma turbina gera 4,2 megawatts-hora (MWh) a cada hora. Mas o vento nem sempre é forte, então ao longo de um ano uma turbina rende em média cerca de 40 % da sua potência máxima. Essa parcela é o <strong>fator de capacidade</strong>. Em um ano, uma turbina gera cerca de 14.700 MWh, o bastante para umas 1.400 casas nos EUA. O dia inventado do modelo tem mais vento do que a média de um ano, por isso o fator de capacidade dele sai mais alto.",
-      "p4": "Fabricar uma turbina também custa energia e carbono. Ao longo da vida útil, ela soma cerca de 7 g de CO2e para cada quilowatt-hora (kWh) que gera, e o CO2e conta todo gás de efeito estufa como se fosse dióxido de carbono. Em cerca de 8 meses, ela gera de volta a energia usada para construí-la. Foi projetada para durar 20 anos e muitas vezes dura mais, embora as pás ainda sejam difíceis de reciclar. Escolha um local calmo, típico ou ventoso para ver o quanto o vento do dia a dia faz diferença."
+      "p1": "Cada gerador produz energia a 800 volts (V). Depois do conversor, o <strong>transformador</strong> da própria turbina eleva a tensão. Com tensão mais alta, a mesma potência precisa de menos corrente, e assim os cabos desperdiçam menos energia em forma de calor. Ative Cabos (C) para seguir a energia das turbinas até a rede.",
+      "p2": "Os <strong>cabos coletores</strong>, a 36.000 volts, ou 36 quilovolts (kV), ligam as turbinas à <strong>subestação</strong>. Lá, outro transformador eleva a tensão mais uma vez, para 110 kV, e a energia segue pela <strong>linha de transmissão</strong>. Esses valores de tensão vêm de um parque de exemplo da Vestas na Alemanha.",
+      "p3": "Na potência máxima, uma turbina gera 4,2 megawatts-hora (MWh) a cada hora. Mas o vento nem sempre é forte. Ao longo de um ano, uma turbina produz em média cerca de 40% da sua potência máxima. Essa porcentagem é o <strong>fator de capacidade</strong>. Em um ano, uma turbina gera cerca de 14.700 MWh, o bastante para umas 1.400 casas nos Estados Unidos. No dia inventado do modelo venta mais do que num dia médio, por isso o fator de capacidade dele sai mais alto.",
+      "p4": "Construir uma turbina também gasta energia e emite carbono. Ao longo de toda a vida útil, ela é responsável por cerca de 7 g de CO2e para cada quilowatt-hora (kWh) que gera. O CO2e conta todos os gases de efeito estufa como se fossem dióxido de carbono. Em cerca de 8 meses, a turbina devolve a energia gasta para construí-la. Ela é projetada para durar 20 anos e muitas vezes vai além, embora as pás ainda sejam difíceis de reciclar. Escolha entre Local calmo, Local típico e Local ventoso para ver o quanto o vento de todo dia faz diferença."
     }
   }
 }
