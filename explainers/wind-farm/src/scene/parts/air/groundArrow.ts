@@ -88,12 +88,14 @@ export class GroundArrowPart {
 
   place(spacing: SpacingD, turn: number): void {
     const centreX = windArrowsX(spacing) - GROUND_ARROW.offsetX;
-    const ground = terrainHeight(...turnedGround(centreX, 0, turn));
+    const ground = terrainHeight(centreX, 0);
     this.group.position.set(centreX, ground, 0);
+    this.group.rotation.y = turn;
     const position = this.geometry.getAttribute('position') as BufferAttribute;
     for (let vertex = 0; vertex < position.count; vertex += 1) {
       const [x, z] = [this.flat[vertex * XYZ], this.flat[vertex * XYZ + 2]];
-      const height = terrainHeight(...turnedGround(centreX + x, z, turn));
+      const [dx, dz] = turnedGround(x, z, turn);
+      const height = terrainHeight(centreX + dx, dz);
       position.setY(vertex, height - ground + GROUND_ARROW.lift);
     }
     position.needsUpdate = true;

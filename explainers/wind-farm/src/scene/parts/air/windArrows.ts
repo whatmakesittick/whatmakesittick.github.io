@@ -8,7 +8,6 @@ import type { PartContext } from '../context';
 import { arrowGeometry } from './arrowGeometry';
 import { advanceArrows, arrowMaterial } from './arrowMaterial';
 import { WIND_ARROWS } from './constants';
-import { turnedGround } from './windFrame';
 
 const { count, spanZ, length } = WIND_ARROWS;
 
@@ -40,7 +39,8 @@ export class WindArrowsPart {
     const x = windArrowsX(spacing);
     this.group.position.x = x;
     this.arrows.forEach((arrow) => {
-      arrow.position.y = terrainHeight(...turnedGround(x, arrow.position.z, turn)) + HUB_HEIGHT_M;
+      arrow.position.y = terrainHeight(x, arrow.position.z) + HUB_HEIGHT_M;
+      arrow.rotation.y = turn;
     });
   }
 

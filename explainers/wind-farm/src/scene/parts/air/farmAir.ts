@@ -9,19 +9,16 @@ import { quantise } from './windFrame';
 
 export function farmAirSection(context: PartContext): Section {
   const root = namedGroup('farmAir');
-  const windFrame = namedGroup('windFrame', root);
   const ground = new GroundArrowPart(context);
   const arrows = new WindArrowsPart(context);
   const shear = new ShearProfilePart(context);
-  windFrame.add(ground.group, arrows.group);
-  root.add(shear.group);
+  root.add(ground.group, arrows.group, shear.group);
   let placed: { spacing: SpacingD; bearing: number } | undefined;
 
   const place = (spacing: SpacingD, bearing: number) => {
     if (placed?.spacing === spacing && placed.bearing === bearing) return;
     placed = { spacing, bearing };
     const turn = bearingTurn(bearing);
-    windFrame.rotation.y = turn;
     ground.place(spacing, turn);
     arrows.place(spacing, turn);
     shear.place(spacing, turn);
