@@ -11,8 +11,8 @@
     The turbines stand in <strong>rows</strong> across the <strong>prevailing wind</strong>, the
     direction the wind blows from most often. Here that is the west. Engineers measure the gaps in
     rotor widths, written D. One D is the width of a rotor from tip to tip, 150 m here. The rows are
-    7 D apart, or 1,050 m. Within a row, turbines are 4 D apart, or 600 m. Each row is shifted a
-    little sideways, so no turbine hides right behind another.
+    7 D apart, or 1,050 m. Within a row, turbines are 4 D apart, or 600 m. The middle row is shifted
+    sideways, so a turbine never stands right behind one in the next row.
   </p>
   <p data-i18n-html="sections.farm.p3">
     From above it looks crowded, but most of the land is still fields. Only about 0.3 hectares per
@@ -24,10 +24,10 @@
   <p data-i18n-html="sections.farm.p4">
     The real layout of Målarberget is not published, so this one is the model's own. The day of wind
     is made up too, and it plays on a loop. It is not an average day: it packs a calm night, a
-    breezy morning, a full-power afternoon and an evening storm into 24 hours. The clock runs
-    hundreds of times faster than real time, yet every rotor turns at its real speed. Roads, cables
-    and wind arrows are drawn wider than they are, so you can see them from kilometres away. The
-    light stays the same at every hour.
+    breezy morning, a full-power afternoon and an evening storm into 24 hours. The clock runs many
+    times faster than real time, yet every rotor turns at its real speed. Roads, cables and wind
+    arrows are drawn wider than they are, so you can see them from kilometres away. The light stays
+    the same at every hour.
   </p>
   <dl class="readouts">
     <div>
@@ -51,7 +51,7 @@
       <dd class="number" data-readout="builtLand">34 ha</dd>
     </div>
     <div>
-      <dt data-i18n="chapters.farm.project">Whole project area</dt>
+      <dt data-i18n="chapters.farm.project">Typical project area for this size</dt>
       <dd class="number" data-readout="projectArea">39 km²</dd>
     </div>
   </dl>
@@ -83,10 +83,12 @@
   <p data-i18n-html="sections.tower.p4">
     The circle the blades sweep is the <strong>swept area</strong>: about 17,700 m², or about 2.5
     football pitches. Only wind that passes through this circle can turn the rotor. The lines of air
-    round the rotor are a drawing, since real air is invisible. The turbine's
-    <strong>transformer</strong> raises the voltage of its power for the cables. Where the V150
-    keeps it is not published, so this model puts it at the foot of the tower. For the same reason,
-    the rotor's slight tilt is not drawn.
+    round the rotor are a drawing, since real air is invisible.
+  </p>
+  <p data-i18n-html="sections.tower.p5">
+    The turbine's <strong>transformer</strong> raises the voltage of its power for the cables. Where
+    the V150 keeps it is not published, so this model puts it at the foot of the tower. For the same
+    reason, the rotor's slight tilt is not drawn.
   </p>
   <div class="range-widget">
     <div class="range-widget__header">
@@ -242,11 +244,11 @@
     under half, at about 7 to 8 m/s. The chart shows how close it comes.
   </p>
   <p data-i18n-html="sections.curve.p3">
-    Above full power the wind brings more than the generator can take. So the pitch cylinders turn
-    the blades a little out of the wind, and most of the wind slips past. At 15 m/s the turbine
-    keeps only about 12 % of the power in the wind. The pitch angles this model shows above full
-    power are its own, since the V150's are not published. Above 20 m/s, the turbine starts to ramp
-    its power down.
+    Above about 12 m/s, the wind brings more than the generator can take. So the pitch cylinders
+    turn the blades a little out of the wind, and most of the wind slips past. At 15 m/s the turbine
+    keeps only about 12 % of the power in the wind. The pitch angles this model shows in strong wind
+    are its own, since the V150's are not published. Above 20 m/s, the turbine starts to ramp its
+    power down.
   </p>
   <p data-i18n-html="sections.curve.p4">
     At the <strong>cut-out</strong> speed, about 22 to 25 m/s, the wind is too strong to work in.
@@ -332,7 +334,8 @@
   <figure class="curve-widget" data-widget="power-curve">
     <canvas data-canvas="power-curve"></canvas>
     <figcaption data-i18n="chapters.curve.caption">
-      Power in the wind, the Betz limit and this turbine's output, for winds from 0 to 30 m/s
+      Power in the wind, the Betz limit and this turbine's output, for winds from 0 to 30 m/s. The
+      dot marks the wind now.
     </figcaption>
   </figure>
   <dl class="readouts">
@@ -341,7 +344,7 @@
       <dd class="number" data-readout="windPower">5.54 MW</dd>
     </div>
     <div>
-      <dt data-i18n="chapters.curve.cp">Share it catches</dt>
+      <dt data-i18n="chapters.curve.cp">Share of the wind's power it catches</dt>
       <dd class="number" data-readout="powerCoefficient">46 %</dd>
     </div>
     <div>
@@ -360,10 +363,10 @@
   <h2 id="wakes-title" data-i18n="sections.wakes.title">Why turbines stand so far apart</h2>
   <p data-i18n-html="sections.wakes.p1">
     A turbine takes energy out of the wind, so the air behind it moves slower. This trail of slow,
-    stirred-up air is called a <strong>wake</strong>, like the trail behind a boat. Switch on Wakes
-    (K) to see a plume behind every turning rotor. Wakes are strongest in moderate wind, when the
-    rotor holds back the air the most. Above full power the blades let more wind slip past, and the
-    wakes fade.
+    stirred-up air is called a <strong>wake</strong>, like the trail behind a boat. Wakes (K) shows
+    a plume behind every turning rotor. Switch it off to compare. Wakes are strongest in moderate
+    wind, when the rotor holds back the air the most. In stronger wind the blades let more air slip
+    past, and the wakes fade.
   </p>
   <p data-i18n-html="sections.wakes.p2">
     This model draws wakes with a simple, widely used recipe, the <strong>Jensen model</strong>. It
@@ -376,13 +379,14 @@
     Over a year, wakes cost a farm about 5 to 15 % of its energy. In a Vestas example farm of 24 of
     these turbines, the loss is about 6 %. When the wind comes from one unlucky direction, the loss
     can pass 30 %. That is why rows usually stand 5 to 9 D apart along the wind, and turbines 3 to 5
-    D apart across it. Try 5, 7 and 9 D: wider gaps lose less to wakes but need more land.
+    D apart across it. Try 5, 7 and 9 D: wider gaps lose less to wakes but need more land. In this
+    model the wind swings a few degrees round west through the day, so the nacelles turn a little.
   </p>
   <p data-i18n-html="sections.wakes.p4">
-    Wind also gets stronger with height, because the ground drags on the air near it. Switch on
-    Airflow (F) to see this: the top of the rotor meets faster wind than the bottom. The plumes and
-    arrows are only drawings. In this model the ground is flat, a stopped rotor leaves no wake, and
-    overlapping wakes add up in a simple way.
+    Wind also gets stronger with height, because the ground drags on the air near it. Airflow (F)
+    shows this: the top of the rotor meets faster wind than the bottom. The plumes and arrows are
+    only drawings. The wake model treats the ground as flat, leaves no wake behind a stopped rotor
+    and adds up overlapping wakes in a simple way.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.spacing">
     <button
@@ -419,7 +423,7 @@
       <dd class="number" data-readout="wakeSpacing">1,050 m, 7 D</dd>
     </div>
     <div>
-      <dt data-i18n="chapters.wakes.deficit">Wake slowdown at the next row</dt>
+      <dt data-i18n="chapters.wakes.deficit">Slowdown in the wake, one row behind</dt>
       <dd class="number" data-readout="wakeDeficit">13 %</dd>
     </div>
     <div>
@@ -443,8 +447,8 @@
   <p data-i18n-html="sections.grid.p1">
     Each generator makes power at 800 volts (V). After the converter, the turbine's own
     <strong>transformer</strong> raises the voltage. At a higher voltage the same power needs less
-    current, so the cables waste less of it as heat. Switch on Cables (C) to follow the power from
-    the turbines to the grid.
+    current, so the cables waste less of it as heat. Cables (C) shows the path of the power from the
+    turbines to the grid.
   </p>
   <p data-i18n-html="sections.grid.p2">
     <strong>Collector cables</strong> at 36,000 volts, or 36 kilovolts (kV), link the turbines to
@@ -455,15 +459,16 @@
     At full power, one turbine makes 4.2 megawatt hours (MWh) every hour. But the wind is not always
     strong. Over a year, a turbine averages about 40 % of its full power. That share is its
     <strong>capacity factor</strong>. In a year, one turbine makes about 14,700 MWh, enough for
-    about 1,400 US homes. The model's made-up day is windier than an average day, so its capacity
-    factor comes out higher.
+    about 1,400 US homes. On the typical and windy sites the model's made-up day is windier than an
+    average day, so its capacity factor comes out higher.
   </p>
   <p data-i18n-html="sections.grid.p4">
     Building a turbine costs energy and carbon too. Over its whole life, it causes about 7 g of CO2e
     for each kilowatt hour (kWh) it makes. CO2e counts every greenhouse gas as if it were carbon
     dioxide. A turbine pays back the energy used to build it in about 8 months. It is designed for
     20 years and often runs longer, though its blades are still hard to recycle. Pick a calm,
-    typical or windy site to see how much the everyday wind matters.
+    typical or windy site to see how much the everyday wind matters. The evening storm is the same
+    at every site. Only the everyday wind changes.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.siteWind">
     <button
