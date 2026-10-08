@@ -19,6 +19,7 @@ export const ROAD = {
   padBehind: 16,
   padWidth: 36,
   period: 1,
+  widenPerMetre: 0.0006,
 } as const;
 
 export const ROAD_FINISH: MaterialFinish = { ...FINISHES.gravel, ...ROAD_OFFSET };
@@ -46,6 +47,7 @@ export const MARKER = {
   lift: GROUND_LIFT_M + 0.8,
   tickLength: 90,
   labelLift: 30,
+  widenPerMetre: 0.0011,
 } as const;
 
 export const MARKER_FINISH: MaterialFinish = { ...FINISHES.spacing, ...MARKER_OFFSET };

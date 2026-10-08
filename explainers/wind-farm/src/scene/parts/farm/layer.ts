@@ -1,5 +1,5 @@
 import { BufferGeometry, Mesh } from 'three';
-import type { Group, Material, Object3D } from 'three';
+import type { Group, Object3D } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { anchorAt } from '@core/scene/parts';
 import type { PartId, Point, SpacingD } from '../../../ids';
@@ -8,6 +8,7 @@ import { namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { ribbonGeometry } from './ground';
 import type { RibbonOptions } from './ground';
+import type { GroundWidening } from './widening';
 
 export interface LayerShape {
   readonly geometry: BufferGeometry;
@@ -37,13 +38,15 @@ export class SpacingLayer {
   private readonly label: Object3D;
   private readonly context: PartContext;
   private readonly build: LayerBuilder;
+  private readonly widening: GroundWidening;
   private readonly shapes = new Map<SpacingD, LayerShape>();
 
-  constructor(context: PartContext, part: PartId, material: Material, build: LayerBuilder) {
+  constructor(context: PartContext, part: PartId, widening: GroundWidening, build: LayerBuilder) {
     this.context = context;
     this.build = build;
+    this.widening = widening;
     this.group = namedGroup(part);
-    this.mesh = new Mesh(context.tracker.track(new BufferGeometry()), material);
+    this.mesh = new Mesh(context.tracker.track(new BufferGeometry()), widening.material);
     this.mesh.name = part;
     this.group.add(this.mesh);
     this.label = anchorAt(this.group, 0, 0, 0);
@@ -54,6 +57,10 @@ export class SpacingLayer {
     const shape = this.shapeFor(spacing);
     this.mesh.geometry = shape.geometry;
     this.label.position.set(...shape.label);
+  }
+
+  widen(cameraDistance: number): void {
+    this.widening.update(cameraDistance);
   }
 
   private shapeFor(spacing: SpacingD): LayerShape {

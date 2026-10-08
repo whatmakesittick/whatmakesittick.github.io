@@ -75,6 +75,7 @@ export function buildFarm(context: PartContext): Section {
     },
     animate: (motion: Motion, state: AssemblyState) => {
       azimuth = motion.azimuth;
+      layers.forEach((layer) => layer.widen(motion.cameraDistance));
       fleet.turn(bearingTurn(state.rotor.yawDeg), azimuth);
       const flowing = cables.animate(motion, state);
       const drifting = plumes.animate(motion, state);
