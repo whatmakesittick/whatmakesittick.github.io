@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PRESET_IDS, SCENE_PARTS } from '../ids';
-import { CYCLE_MINUTES, DEFAULT_SPEED, PHASE_RANGES } from '../model';
+import { CYCLE_MINUTES, DEFAULT_SPEED, PHASE_RANGES, clockOf } from '../model';
 import { sceneOf } from './derived';
 import { PRESETS } from './presets';
 
@@ -42,5 +42,12 @@ describe('wind farm presets', () => {
       expect(PRESETS[id].start?.windOverride).toBeNull();
     });
     expect(PRESETS.wakes.pauseAt).toBeGreaterThanOrEqual(PHASE_RANGES.morning[0]);
+  });
+
+  it('opens each chapter on the hour', () => {
+    const opening = PRESET_IDS.map((id) =>
+      clockOf(PRESETS[id].startAt ?? PRESETS[id].pauseAt ?? 0),
+    );
+    expect(opening).toEqual(['12:00', '12:00', '13:00', '06:00', '09:00', '12:00']);
   });
 });

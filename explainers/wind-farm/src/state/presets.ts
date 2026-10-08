@@ -1,6 +1,6 @@
 import type { ScenePreset } from '@core/scene/presetBinder';
 import type { CameraView, PartId, PresetId, SpacingD, ViewOptions } from '../ids';
-import { DEFAULT_SPACING_D, DEFAULT_SPEED } from '../model';
+import { DEFAULT_SPACING_D, DEFAULT_SPEED, MINUTES_PER_HOUR } from '../model';
 
 export interface ChapterControls {
   spacing: SpacingD;
@@ -12,10 +12,10 @@ export interface Preset extends ScenePreset<PartId, CameraView> {
   start?: Partial<ChapterControls>;
 }
 
-const NOON = 720;
-const EARLY_AFTERNOON = 780;
-const DAWN = 360;
-const MID_MORNING = 540;
+const NOON = 12 * MINUTES_PER_HOUR;
+const EARLY_AFTERNOON = 13 * MINUTES_PER_HOUR;
+const DAWN = 6 * MINUTES_PER_HOUR;
+const MID_MORNING = 9 * MINUTES_PER_HOUR;
 
 const FOLLOW_THE_DAY: Partial<ChapterControls> = { windOverride: null };
 const DEFAULT_FARM: Partial<ChapterControls> = { spacing: DEFAULT_SPACING_D, windOverride: null };
