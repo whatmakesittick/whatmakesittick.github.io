@@ -10,6 +10,8 @@ const METAL = 0.75;
 const GLOW = 0.8;
 const VEIL_OPACITY = 0.28;
 const RING_OPACITY = 0.35;
+const GENERATOR_BLUE = '#3f6c8c';
+const AIR_WHITE = '#eaf3fa';
 
 function matte(color: string): MaterialFinish {
   return { color, roughness: MATTE, metalness: 0 };
@@ -41,6 +43,7 @@ export const FINISHES = {
   steel: metal(THEME.steel, POLISHED),
   gearbox: metal(THEME.gearOil),
   copper: metal(THEME.copper),
+  generatorPaint: metal(GENERATOR_BLUE),
   hydraulic: metal(THEME.hydraulic),
   brake: metal(THEME.steel, POLISHED),
   brakeGlow: glowing(THEME.brakeGlow),
@@ -56,7 +59,7 @@ export const FINISHES = {
   trees: matte(THEME.trees),
   wind: glowing(THEME.wind),
   spacing: glowing(THEME.spacing),
-  wake: veil(THEME.wake, VEIL_OPACITY),
+  wake: veil(AIR_WHITE, VEIL_OPACITY),
   sweep: veil(THEME.wind, RING_OPACITY),
   shadow: { color: '#000000', transparent: true, opacity: 0.22, depthWrite: false },
 } as const satisfies Record<string, MaterialFinish>;
@@ -79,7 +82,7 @@ export const PART_FINISHES: Readonly<Record<PartId, Finish>> = {
   mainShaft: 'steel',
   gearbox: 'gearbox',
   brakeDisc: 'brake',
-  generator: 'copper',
+  generator: 'generatorPaint',
   converter: 'cabinet',
   yawDrives: 'castIron',
   sweptArea: 'sweep',
