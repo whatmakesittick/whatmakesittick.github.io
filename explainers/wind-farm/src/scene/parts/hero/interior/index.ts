@@ -4,7 +4,7 @@ import { label, namedGroup } from '../../context';
 import type { Motion, PartContext } from '../../context';
 import { buildBedplate } from './bedplate';
 import { buildBrake } from './brake';
-import { DECK_Y, FAST_SHAFT_RATIO } from './constants';
+import { AXIS_Y, DECK_Y, FAST_SHAFT_RATIO } from './constants';
 import { buildConverter, CONVERTER_FACE_Z } from './converter';
 import { buildFrame } from './frame';
 import { buildGearbox } from './gearbox';
@@ -22,13 +22,13 @@ export interface Interior {
 
 const INTERIOR_LABELS: readonly (readonly [PartId, Point])[] = [
   ['bedplate', [-2.2, DECK_Y, 1.2]],
-  ['mainBearing', [-3.6, 105.6, 1.04]],
-  ['mainShaft', [-2.4, 105.3, 0.52]],
-  ['gearbox', [-0.5, 105.8, 1.15]],
-  ['brakeDisc', [2.6, 105.5, 0.75]],
-  ['generator', [4.4, 105.5, 0.75]],
-  ['converter', [7.0, 105.4, CONVERTER_FACE_Z]],
-  ['yawDrives', [0.8, DRIVE_TOP, 1.72]],
+  ['mainBearing', [-3.3, AXIS_Y, 1.17]],
+  ['mainShaft', [-1.8, 104.7, 0.52]],
+  ['gearbox', [-0.5, 104.34, 1.14]],
+  ['brakeDisc', [2.6, 105.9, 0]],
+  ['generator', [3.8, 105.84, 0]],
+  ['converter', [7.6, 104.0, CONVERTER_FACE_Z]],
+  ['yawDrives', [-0.8, DRIVE_TOP, 1.72]],
 ];
 
 export function buildInterior(context: PartContext): Interior {

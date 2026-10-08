@@ -14,7 +14,7 @@ import { buildTowerCable } from './towerCable';
 import { buildTransformer } from './transformer';
 import { buildHeroWake } from './wake';
 
-const PITCH_LABEL: Point = [HUB[0] - 0.3, HUB[1] + 0.4, 0.9];
+const PITCH_LABEL: Point = [HUB[0] - 0.95, HUB[1] - 0.63, 1.1];
 
 export function buildHero(context: PartContext): Section {
   const root = namedGroup('hero');

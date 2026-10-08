@@ -35,8 +35,10 @@ const RANKED_FIRST: readonly PartId[] = [
   'collectorCables',
   'tower',
   'brakeDisc',
-  'pitchCylinders',
   'mainShaft',
+  'mainBearing',
+  'converter',
+  'pitchCylinders',
 ];
 
 function labelSide(id: PartId): LabelSide {
