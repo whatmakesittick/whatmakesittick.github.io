@@ -19,7 +19,7 @@ export const STREAMLINES = {
   dashShare: 0.3,
   dashOpacity: 0.7,
   lineOpacity: 0.32,
-  fade: [0.25, 0.45],
+  fade: [0.25, 2 / 3],
   facing: [0.12, 0.4],
   near: [0.35, 0.7],
   minWidth: 0.8,

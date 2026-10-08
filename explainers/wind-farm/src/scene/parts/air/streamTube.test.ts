@@ -79,6 +79,14 @@ describe('streamlines', () => {
     );
   });
 
+  it('keeps the tube centred at hub height', () => {
+    INDUCTIONS.forEach((induction) => {
+      const heights = shapedPoints(induction).map(([, y]) => y);
+      const mean = heights.reduce((sum, y) => sum + y, 0) / heights.length;
+      expect(mean).toBeCloseTo(HUB_Y, DIGITS);
+    });
+  });
+
   it('enters upstream inside the rotor radius and crosses the disc inside it', () => {
     const points = shapedPoints(INDUCTION);
     const upstream = points.filter(([x]) => x === STREAMLINES.startX);

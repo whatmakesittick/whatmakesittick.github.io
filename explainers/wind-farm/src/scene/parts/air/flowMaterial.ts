@@ -54,9 +54,10 @@ void main() {
   float phase = fract((vTravel - uClock) / uPeriod);
   float rise = smoothstep(1.0 - uDashShare, 1.0, phase);
   float dash = rise * rise * (1.0 - smoothstep(0.97, 1.0, phase));
-  float ends = smoothstep(0.0, uFade.x, vShare) * (1.0 - smoothstep(uFade.y, 1.0, vShare));
+  float tail = 1.0 - smoothstep(uFade.y, 1.0, vShare);
+  float ends = smoothstep(0.0, uFade.x, vShare) * tail;
   float line = uLineOpacity * core * core * core;
-  float alpha = ends * vSight * clamp(line + dash * core * uDashOpacity, 0.0, 1.0);
+  float alpha = ends * vSight * clamp(line + dash * tail * core * uDashOpacity, 0.0, 1.0);
   gl_FragColor = vec4(mix(uLine, uDash, dash), alpha);
   #include <colorspace_fragment>
 }
