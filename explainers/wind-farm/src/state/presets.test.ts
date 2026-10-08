@@ -48,6 +48,6 @@ describe('wind farm presets', () => {
     const opening = PRESET_IDS.map((id) =>
       clockOf(PRESETS[id].startAt ?? PRESETS[id].pauseAt ?? 0),
     );
-    expect(opening).toEqual(['12:00', '12:00', '13:00', '06:00', '09:00', '12:00']);
+    expect(opening).toEqual(['12:00', '12:00', '13:00', '06:00', '09:00', '15:00']);
   });
 });

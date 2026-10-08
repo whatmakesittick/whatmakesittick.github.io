@@ -14,6 +14,7 @@ export interface Preset extends ScenePreset<PartId, CameraView> {
 
 const NOON = 12 * MINUTES_PER_HOUR;
 const EARLY_AFTERNOON = 13 * MINUTES_PER_HOUR;
+const MID_AFTERNOON = 15 * MINUTES_PER_HOUR;
 const DAWN = 6 * MINUTES_PER_HOUR;
 const MID_MORNING = 9 * MINUTES_PER_HOUR;
 
@@ -83,7 +84,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'gridSubstation',
     speed: DEFAULT_SPEED,
     view: { cutaway: false, streamlines: false, wakes: false, cables: true },
-    startAt: NOON,
+    startAt: MID_AFTERNOON,
     start: DEFAULT_FARM,
     labels: ['collectorCables', 'substation', 'gridLine', 'farmTurbines', 'accessRoads'],
     highlight: ['collectorCables', 'substation', 'gridLine'],
