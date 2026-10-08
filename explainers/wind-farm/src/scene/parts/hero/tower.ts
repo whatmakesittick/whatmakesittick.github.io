@@ -19,7 +19,10 @@ function plinthGeometry(): BufferGeometry {
 }
 
 function shellGeometry(): BufferGeometry {
-  const profile = [new Vector2(TOWER.baseRadius, 0), new Vector2(TOWER.topRadius, TOWER.topY)];
+  const profile = Array.from({ length: TOWER.rows + 1 }, (_, row) => {
+    const y = (TOWER.topY * row) / TOWER.rows;
+    return new Vector2(towerRadiusAt(y), y);
+  });
   return new LatheGeometry(profile, TOWER.segments);
 }
 

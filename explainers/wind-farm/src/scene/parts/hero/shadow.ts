@@ -6,6 +6,7 @@ import { SUN_DIRECTION } from '../../constants';
 import { FINISHES } from '../../finishes';
 import { namedGroup, registeredMaterial, registeredMesh } from '../context';
 import type { PartContext } from '../context';
+import { followGround, groundHeightTexture } from './shadowGround';
 
 const LIFT = 0.05;
 const BLOBS = [
@@ -61,7 +62,8 @@ function relativeMatrix(source: Object3D, root: Object3D, target: Matrix4): Matr
 }
 
 function silhouetteMaterial(context: PartContext): MeshBasicMaterial {
-  return registeredMaterial(
+  const ground = followGround(context.tracker.track(groundHeightTexture()));
+  const material = registeredMaterial(
     context,
     UNDIMMED_GROUP,
     new MeshBasicMaterial({
@@ -76,6 +78,9 @@ function silhouetteMaterial(context: PartContext): MeshBasicMaterial {
       side: DoubleSide,
     }),
   );
+  material.onBeforeCompile = ground.compile;
+  material.customProgramCacheKey = ground.key;
+  return material;
 }
 
 function buildBlobs(context: PartContext, parent: Object3D): void {

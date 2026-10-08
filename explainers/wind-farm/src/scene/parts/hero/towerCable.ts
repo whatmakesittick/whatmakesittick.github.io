@@ -11,7 +11,7 @@ import { TURBINE_GEOMETRY, TURBINE_LAND } from '../../../model/layout';
 import { FINISHES } from '../../finishes';
 import { finishMesh, label, partMesh } from '../context';
 import type { PartContext } from '../context';
-import { heroGroundHeight } from './heroGround';
+import { turbineLandHeight } from '../land/turbineGround';
 
 const [TRANSFORMER_X, , TRANSFORMER_Z] = TURBINE_GEOMETRY.transformer.centre;
 const [TRANSFORMER_WIDTH] = TURBINE_GEOMETRY.transformer.size;
@@ -41,7 +41,7 @@ const TRENCH = {
   halfWidth: 0.55,
   nearStep: 6,
   farStep: 40,
-  nearReach: TURBINE_LAND.flatRadius + TURBINE_LAND.blendRadius,
+  nearReach: TURBINE_LAND.blendRadius,
   lift: 0.1,
   hillLift: 0.6,
   distanceLift: 0.0005,
@@ -72,7 +72,7 @@ function trenchGeometry(): BufferGeometry {
   trenchStations().forEach((x, index) => {
     [-1, 1].forEach((side) => {
       const z = TRANSFORMER_Z + side * TRENCH.halfWidth;
-      positions.push(x, heroGroundHeight(x, z) + trenchLift(x), z);
+      positions.push(x, turbineLandHeight(x, z) + trenchLift(x), z);
     });
     if (index === 0) return;
     const base = index * 2;
