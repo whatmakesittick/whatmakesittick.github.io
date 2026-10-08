@@ -2,7 +2,14 @@ import { THEME } from '../theme';
 
 type Triple = readonly [number, number, number];
 
-export const HAZE = { colour: THEME.haze, near: 9000, far: 28_000 } as const;
+export const HAZE = {
+  colour: THEME.haze,
+  near: 9000,
+  far: 28_000,
+  nearPerDistance: 1.3,
+  farPerDistance: 3,
+  maxNearShare: 0.8,
+} as const;
 
 export const SKY = { top: THEME.skyTop, horizon: THEME.haze } as const;
 

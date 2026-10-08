@@ -7,6 +7,7 @@ import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
 import { CAMERA_VIEWS, FOLLOWED_ANCHOR, stageVariant } from './cameraViews';
 import type { StageVariant } from './cameraViews';
+import { applyHaze } from './haze';
 
 export type WindFarmControllerDependencies = Pick<
   SceneShell,
@@ -55,10 +56,10 @@ export class WindFarmController {
   }
 
   update(deltaSeconds: number): boolean {
-    const { camera, controls } = this.dependencies.rig;
-    return (
-      this.assembly?.update(deltaSeconds, camera.position.distanceTo(controls.target)) ?? false
-    );
+    const { rig, scene } = this.dependencies;
+    const cameraDistance = rig.camera.position.distanceTo(rig.controls.target);
+    applyHaze(scene, cameraDistance);
+    return this.assembly?.update(deltaSeconds, cameraDistance) ?? false;
   }
 
   dispose(): void {
