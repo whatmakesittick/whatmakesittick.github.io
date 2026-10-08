@@ -5,12 +5,22 @@ import { FINISHES } from '../../finishes';
 const GALVANISED = '#c3cad1';
 const TRANSFORMER_GREY = '#ccd4dc';
 const RADIATOR_GREY = '#b2bcc6';
-const YARD_STONE = '#8b8881';
+const YARD_STONE = '#dcd9d1';
 
 export const YARD_GRAVEL_FINISH: MaterialFinish = {
   color: YARD_STONE,
   roughness: 0.95,
   metalness: 0,
+  emissive: YARD_STONE,
+  emissiveIntensity: 0.3,
+};
+
+export const YARD_FENCE = { halfWidth: 0.06, perMetre: 0.0006 } as const;
+
+export const YARD_FENCE_FINISH: MaterialFinish = {
+  color: THEME.gridLine,
+  roughness: 0.7,
+  metalness: 0.2,
 };
 
 export const YARD_STEEL_FINISH: MaterialFinish = {
@@ -31,7 +41,7 @@ export const RADIATOR_FINISH: MaterialFinish = {
   metalness: 0.2,
 };
 
-export const BUSBAR = { radius: 0.25, perMetre: 0.0004, glow: 1.4 } as const;
+export const BUSBAR = { radius: 0.25, perMetre: 0.0007, glow: 1.8 } as const;
 
 export const BUSBAR_GLOW_FINISH: MaterialFinish = {
   ...YARD_STEEL_FINISH,

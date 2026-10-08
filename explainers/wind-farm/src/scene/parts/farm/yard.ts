@@ -7,7 +7,7 @@ import { radialAroundX, withLateral } from './widening';
 
 const ROUND_SEGMENTS = 10;
 const QUARTER_TURN = Math.PI / 2;
-const KNEE_M = 3.2;
+const KNEE_M = 4.2;
 
 export const TRANSFORMER = {
   plinth: [14, 0.7, 9.5] as Point,
@@ -23,7 +23,7 @@ export const TRANSFORMER = {
 } as const;
 
 export const GANTRY = {
-  height: 15,
+  height: 20,
   column: 0.8,
   beam: 0.65,
   brace: 0.3,
@@ -88,6 +88,14 @@ export function transformerPieces([x, z]: readonly [number, number]): Transforme
     fins,
     bushings,
   };
+}
+
+export function inflatingSlab(min: Point, max: Point): BufferGeometry {
+  const centreX = (min[0] + max[0]) / 2;
+  const centreZ = (min[2] + max[2]) / 2;
+  return withLateral(slab(min, max), (point, target) =>
+    target.set(Math.sign(point.x - centreX), 0, Math.sign(point.z - centreZ)),
+  );
 }
 
 export function gantry(x: number, halfSpan: number): BufferGeometry[] {
