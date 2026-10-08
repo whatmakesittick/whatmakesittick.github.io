@@ -18,7 +18,7 @@ export const STREAMLINES = {
   floorBlend: 12,
   dashPeriod: 55,
   dashShare: 0.45,
-  lineOpacity: 0.45,
+  lineOpacity: 0.32,
   fade: [0.08, 0.9],
   minWidth: 0.8,
   widthPerMetre: 0.004,
@@ -74,13 +74,16 @@ export const GROUND_ARROW = {
   shaftHalf: 55,
   headHalf: 140,
   chevrons: 2,
-  chevronGap: 70,
+  chevronLead: 60,
+  chevronPitch: 80,
   chevronDepth: 90,
   chevronThickness: 38,
+  chevronSpan: 100,
   lift: 2,
   maxEdge: 45,
   tessellateSteps: 16,
-  bearingStep: 0.25,
   opacity: 0.85,
   labelLift: 40,
 } as const;
+
+export const BEARING_STEP_DEG = 0.25;

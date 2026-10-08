@@ -5,10 +5,7 @@ import type { Motion, PartContext, Section } from '../context';
 import { STREAMLINES } from './constants';
 import { flowMaterial } from './flowMaterial';
 import { StreamlineGeometry } from './streamlineGeometry';
-
-function quantise(value: number, step: number): number {
-  return Math.round(value / step) * step;
-}
+import { quantise } from './windFrame';
 
 export function streamlinesSection(context: PartContext): Section {
   const root = namedGroup('streamlinesGroup');
