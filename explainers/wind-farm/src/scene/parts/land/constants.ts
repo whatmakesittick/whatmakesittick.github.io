@@ -1,59 +1,24 @@
-import { THEME } from '../../../theme';
 import type { GroundPoint } from '../../../model/layout';
-import type { PatchworkLayout } from './patchwork';
 
 type Range = readonly [number, number];
 type Triple = readonly [number, number, number];
 
-export const FIELD_KINDS = [
-  { name: 'meadow', colour: THEME.grass, weight: 0.24 },
-  { name: 'pasture', colour: THEME.grassDark, weight: 0.17 },
-  { name: 'youngCrop', colour: '#a1b96b', weight: 0.13 },
-  { name: 'wheat', colour: THEME.field, weight: 0.16 },
-  { name: 'stubble', colour: '#d2c391', weight: 0.07 },
-  { name: 'ploughed', colour: '#8b6f50', weight: 0.13 },
-  { name: 'fallow', colour: '#a39a6a', weight: 0.1 },
-] as const;
-
-export const GROUND = {
-  hedge: '#45602f',
-  canopy: THEME.trees,
-  gravel: THEME.gravel,
-  haze: THEME.haze,
-  toneSpread: 0.16,
-  acrossShade: 0.07,
-  broad: { wavelength: 900, amount: 0.1, seed: 3 },
-  mottle: { wavelength: 65, amount: 0.12, seed: 5 },
-  canopyMottle: { wavelength: 18, amount: 0.3, seed: 7 },
-  grain: { amount: 0.05, seed: 9 },
-  hedgeBand: { halfWidth: 3.5, coverage: 0.55 },
-  bandSpacingShare: 0.6,
-  bandCore: 0.45,
+export const GROUND_TEXTURE = {
+  size: 2048,
+  anisotropy: 8,
+  minLinePx: 1.1,
+  minStripePx: 3,
+  strokePiece: 60,
+  fadeStops: 8,
+  farm: { softness: 2600, step: 150 },
+  turbine: { softness: 300, step: 20 },
+  mottle: [
+    { cells: 40, amount: 0.2, seed: 3 },
+    { cells: 320, amount: 0.12, seed: 5 },
+  ],
 } as const;
 
-export const TURBINE_PATCHWORK: PatchworkLayout = {
-  cell: [150, 230],
-  lengthSpread: [0.7, 1.4],
-  angle: 0.38,
-  warp: 22,
-  warpWave: 260,
-  splitShare: 0.35,
-  woodShare: 0.04,
-  hedgeShare: 0.78,
-  seed: 11,
-};
-
-export const FARM_PATCHWORK: PatchworkLayout = {
-  cell: [380, 560],
-  lengthSpread: [0.7, 1.4],
-  angle: 0.22,
-  warp: 70,
-  warpWave: 700,
-  splitShare: 0.4,
-  woodShare: 0.05,
-  hedgeShare: 0.72,
-  seed: 29,
-};
+export const MOWING = { width: 7, reach: 150, fade: 0.6, shade: 1.12, alpha: 0.5 } as const;
 
 export const TURBINE_GROUND = {
   firstRingStep: 2,
@@ -78,7 +43,6 @@ export const HARDSTAND = {
 } as const;
 
 export const TRACK = {
-  band: { halfWidth: 2.5, coverage: 0.35 },
   points: [
     [0, 30],
     [0, 120],
@@ -173,6 +137,7 @@ export const SKY_DOME = {
   renderOrder: -10,
   rise: 2.6,
   band: 0.07,
+  ground: { colour: '#b8c8aa', minHeight: 2, band: 0.025 },
   glow: {
     colour: '#f7dbb1',
     wide: 0.3,

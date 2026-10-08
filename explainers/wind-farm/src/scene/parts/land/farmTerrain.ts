@@ -1,13 +1,15 @@
-import { BufferAttribute, BufferGeometry, Color } from 'three';
+import { Color } from 'three';
+import type { BufferGeometry } from 'three';
 import { smoothstep } from '@core/math';
 import { FARM_TERRAIN, terrainHeight } from '../../../model/layout';
-import { FARM_GROUND, FARM_PATCHWORK } from './constants';
-import { RGBA, fadeToHaze, patchColour, weather, writeColour } from './groundColour';
-import type { GroundRules } from './groundColour';
+import { FARM_GROUND } from './constants';
+import type { GroundRules } from './fieldPlan';
 import { isClear } from './keepOut';
 import type { KeepOut } from './keepOut';
+import type { Projection } from './projection';
+import { terrainAttributes } from './terrainAttributes';
 
-const XYZ = 3;
+const WHITE = new Color(1, 1, 1);
 
 export function farmEdgeDistance(x: number, z: number): number {
   const { minX, maxX, minZ, maxZ } = FARM_TERRAIN;
@@ -30,30 +32,18 @@ export function farmRules(keepOut: KeepOut): GroundRules {
   return { wooded: (x, z) => isClear(keepOut, x, z), hedged: () => true };
 }
 
-export function farmTerrainGeometry(keepOut: KeepOut): BufferGeometry {
-  const { segments, hazeFade, alphaFade } = FARM_GROUND;
+export function farmTerrainGeometry(projection: Projection): BufferGeometry {
+  const { segments, alphaFade } = FARM_GROUND;
   const { minX, maxX, minZ, maxZ } = FARM_TERRAIN;
   const stepX = (maxX - minX) / segments;
   const stepZ = (maxZ - minZ) / segments;
-  const spacing = Math.max(stepX, stepZ);
-  const rules = farmRules(keepOut);
   const count = (segments + 1) ** 2;
-  const positions = new Float32Array(count * XYZ);
-  const colours = new Float32Array(count * RGBA);
-  const colour = new Color();
+  const attributes = terrainAttributes(count, projection);
   for (let index = 0; index < count; index += 1) {
     const x = minX + (index % (segments + 1)) * stepX;
     const z = minZ + Math.floor(index / (segments + 1)) * stepZ;
-    const edge = farmEdgeDistance(x, z);
-    positions.set([x, terrainHeight(x, z), z], index * XYZ);
-    weather(x, z, patchColour(FARM_PATCHWORK, rules, x, z, spacing, colour));
-    fadeToHaze(colour, 1 - smoothstep(edge, 0, hazeFade));
-    writeColour(colours, index, colour, smoothstep(edge, 0, alphaFade));
+    const alpha = smoothstep(farmEdgeDistance(x, z), 0, alphaFade);
+    attributes.write(index, [x, terrainHeight(x, z), z], WHITE, alpha);
   }
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new BufferAttribute(positions, XYZ));
-  geometry.setAttribute('color', new BufferAttribute(colours, RGBA));
-  geometry.setIndex(gridIndices(segments));
-  geometry.computeVertexNormals();
-  return geometry;
+  return attributes.geometry(gridIndices(segments));
 }

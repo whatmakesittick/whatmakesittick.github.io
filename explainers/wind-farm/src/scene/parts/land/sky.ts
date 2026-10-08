@@ -1,4 +1,13 @@
-import { BackSide, Color, Mesh, ShaderMaterial, SphereGeometry, Vector2, Vector3 } from 'three';
+import {
+  BackSide,
+  Color,
+  Mesh,
+  ShaderMaterial,
+  SphereGeometry,
+  Vector2,
+  Vector3,
+  Vector4,
+} from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { HAZE, SKY, SUN_DIRECTION } from '../../constants';
 import { registeredMaterial } from '../context';
@@ -22,14 +31,23 @@ uniform vec3 uSun;
 uniform vec2 uRise;
 uniform vec3 uWide;
 uniform vec3 uCore;
+uniform vec3 uGround;
+uniform vec4 uFloor;
 varying vec3 vDirection;
+
+vec3 groundBelow(vec3 direction) {
+  float down = max(-direction.y, 1e-5);
+  float reach = max(cameraPosition.y, uFloor.z) / down;
+  float haze = max(smoothstep(uFloor.x, uFloor.y, reach), 1.0 - smoothstep(0.0, uFloor.w, down));
+  return mix(uGround, uHorizon, haze);
+}
 
 void main() {
   vec3 direction = normalize(vDirection);
   float up = max(direction.y, 0.0);
   float lift = smoothstep(0.0, uRise.y, up);
   float rise = (1.0 - exp(-up * uRise.x)) * lift;
-  vec3 sky = mix(uHorizon, uTop, rise);
+  vec3 sky = direction.y >= 0.0 ? mix(uHorizon, uTop, rise) : groundBelow(direction);
   float towardSun = max(dot(direction, uSun), 0.0);
   vec2 bearing = normalize(direction.xz + vec2(1e-5));
   float sunward = max(dot(bearing, normalize(uSun.xz)), 0.0);
@@ -44,7 +62,7 @@ void main() {
 `;
 
 function skyMaterial(): ShaderMaterial {
-  const { rise, band, glow } = SKY_DOME;
+  const { rise, band, glow, ground } = SKY_DOME;
   return new ShaderMaterial({
     uniforms: {
       uTop: { value: new Color(SKY.top) },
@@ -54,6 +72,8 @@ function skyMaterial(): ShaderMaterial {
       uRise: { value: new Vector2(rise, band) },
       uWide: { value: new Vector3(glow.wide, glow.wideTightness, glow.horizonTightness) },
       uCore: { value: new Vector3(glow.core, glow.coreTightness, glow.horizon) },
+      uGround: { value: new Color(ground.colour) },
+      uFloor: { value: new Vector4(HAZE.near, HAZE.far, ground.minHeight, ground.band) },
     },
     vertexShader: VERTEX,
     fragmentShader: FRAGMENT,

@@ -3,10 +3,10 @@ import { SPACING_OPTIONS } from '../../../ids';
 import { TURBINE_LAND, farmLayout, terrainHeight } from '../../../model/layout';
 import { FARM_TREE_LIMITS, TURBINE_TREE_LIMITS } from './constants';
 import { farmKeepOut } from './farmKeepOut';
-import { farmTreeArea } from './farmLand';
+import { farmFieldLayout, farmTreeArea } from './farmLand';
 import { placeTrees } from './treePlacement';
 import { turbineLandHeight } from './turbineGround';
-import { TURBINE_TREE_AREA } from './turbineLand';
+import { turbineFieldLayout, turbineTreeArea } from './turbineLand';
 
 describe('turbine land', () => {
   it('is flat around the tower and meets the terrain past the blend', () => {
@@ -16,7 +16,7 @@ describe('turbine land', () => {
   });
 
   it('keeps trees away from the hero', () => {
-    const spots = placeTrees(TURBINE_TREE_AREA);
+    const spots = placeTrees(turbineTreeArea(turbineFieldLayout()));
     expect(spots.length).toBeGreaterThan(300);
     spots.forEach(({ x, z }) =>
       expect(Math.hypot(x, z)).toBeGreaterThan(TURBINE_TREE_LIMITS.heroClear),
@@ -26,7 +26,8 @@ describe('turbine land', () => {
 
 describe('farm land', () => {
   it('keeps tree clumps clear of every turbine site', () => {
-    const spots = placeTrees(farmTreeArea(farmKeepOut()));
+    const keepOut = farmKeepOut();
+    const spots = placeTrees(farmTreeArea(farmFieldLayout(keepOut), keepOut));
     expect(spots.length).toBeGreaterThan(1000);
     const sites = SPACING_OPTIONS.flatMap((spacing) => farmLayout(spacing));
     spots.forEach(({ x, z }) =>

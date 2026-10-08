@@ -1,10 +1,10 @@
-import { BufferAttribute, BufferGeometry, Color } from 'three';
+import type { BufferGeometry } from 'three';
 import { TURBINE_LAND } from '../../../model/layout';
 import { TURBINE_GROUND } from './constants';
-import { RGBA, writeColour } from './groundColour';
-import { turbineGroundAlpha, turbineGroundColour, turbineLandHeight } from './turbineGround';
+import type { Projection } from './projection';
+import { terrainAttributes } from './terrainAttributes';
+import { turbineGroundAlpha, turbineGroundTint, turbineLandHeight } from './turbineGround';
 
-const XYZ = 3;
 const FULL_TURN = Math.PI * 2;
 
 export function ringRadii(): number[] {
@@ -37,41 +37,25 @@ function ringIndices(rings: number, segments: number): number[] {
   return indices;
 }
 
-export function turbineTerrainGeometry(): BufferGeometry {
+export function turbineTerrainGeometry(projection: Projection): BufferGeometry {
   const { segments } = TURBINE_GROUND;
   const radii = ringRadii();
   const rings = radii.length - 1;
-  const count = 1 + rings * segments;
-  const positions = new Float32Array(count * XYZ);
-  const colours = new Float32Array(count * RGBA);
-  const colour = new Color();
-  const write = (index: number, x: number, z: number, spacing: number) => {
-    positions.set([x, turbineLandHeight(x, z), z], index * XYZ);
-    writeColour(
-      colours,
+  const attributes = terrainAttributes(1 + rings * segments, projection);
+  const write = (index: number, x: number, z: number) =>
+    attributes.write(
       index,
-      turbineGroundColour(x, z, spacing, colour),
+      [x, turbineLandHeight(x, z), z],
+      turbineGroundTint(x, z),
       turbineGroundAlpha(x, z),
     );
-  };
-  write(0, 0, 0, radii[1]);
+  write(0, 0, 0);
   for (let ring = 1; ring <= rings; ring += 1) {
-    const radius = radii[ring];
-    const spacing = Math.max(radius - radii[ring - 1], (radius * FULL_TURN) / segments);
     for (let step = 0; step < segments; step += 1) {
       const angle = (step / segments) * FULL_TURN;
-      write(
-        1 + (ring - 1) * segments + step,
-        radius * Math.cos(angle),
-        radius * Math.sin(angle),
-        spacing,
-      );
+      const index = 1 + (ring - 1) * segments + step;
+      write(index, radii[ring] * Math.cos(angle), radii[ring] * Math.sin(angle));
     }
   }
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new BufferAttribute(positions, XYZ));
-  geometry.setAttribute('color', new BufferAttribute(colours, RGBA));
-  geometry.setIndex(ringIndices(rings, segments));
-  geometry.computeVertexNormals();
-  return geometry;
+  return attributes.geometry(ringIndices(rings, segments));
 }

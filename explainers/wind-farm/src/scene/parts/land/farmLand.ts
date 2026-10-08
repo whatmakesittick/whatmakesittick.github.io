@@ -1,36 +1,33 @@
-import { lerp } from '@core/math';
-import { FARM_TERRAIN, terrainHeight } from '../../../model/layout';
+import { terrainHeight } from '../../../model/layout';
 import { label, namedGroup } from '../context';
 import type { PartContext, Section } from '../context';
-import { FARM_PATCHWORK, FARM_TREE_LIMITS, FARM_TREES, LAND_LABELS, TREE_SHAPE } from './constants';
+import { FARM_TREE_LIMITS, FARM_TREES, LAND_LABELS, TREE_SHAPE } from './constants';
+import { FARM_FIELDS } from './fieldConstants';
+import { fieldLayout } from './fieldLayout';
+import type { FieldLayout } from './fieldPlan';
 import { farmKeepOut } from './farmKeepOut';
-import { farmRules, farmTerrainGeometry } from './farmTerrain';
+import { farmEdgeDistance, farmRules, farmTerrainGeometry } from './farmTerrain';
+import { farmProjection, paintFarmGround } from './farmTexture';
+import { groundTexture } from './groundTexture';
 import { isClear } from './keepOut';
 import type { KeepOut } from './keepOut';
-import type { Random } from './random';
+import { skyDome } from './sky';
 import { terrainMesh } from './terrainMesh';
 import { crownGeometry } from './treeGeometry';
 import { placeTrees } from './treePlacement';
 import type { TreeArea } from './treePlacement';
-import { skyDome } from './sky';
 import { plantTrees } from './trees';
 
-function pointInsideMargin(random: Random): [number, number] {
-  const { minX, maxX, minZ, maxZ } = FARM_TERRAIN;
-  const margin = FARM_TREE_LIMITS.edgeMargin;
-  return [
-    lerp(minX + margin, maxX - margin, random()),
-    lerp(minZ + margin, maxZ - margin, random()),
-  ];
+export function farmFieldLayout(keepOut: KeepOut): FieldLayout {
+  return fieldLayout(FARM_FIELDS, farmRules(keepOut));
 }
 
-export function farmTreeArea(keepOut: KeepOut): TreeArea {
+export function farmTreeArea(layout: FieldLayout, keepOut: KeepOut): TreeArea {
   return {
-    layout: FARM_PATCHWORK,
-    rules: farmRules(keepOut),
+    layout,
     trees: FARM_TREES,
-    point: pointInsideMargin,
-    allowed: (x, z) => isClear(keepOut, x, z),
+    allowed: (x, z) =>
+      farmEdgeDistance(x, z) > FARM_TREE_LIMITS.edgeMargin && isClear(keepOut, x, z),
     height: terrainHeight,
   };
 }
@@ -38,8 +35,11 @@ export function farmTreeArea(keepOut: KeepOut): TreeArea {
 export function buildFarmLand(context: PartContext): Section {
   const root = namedGroup('farmLand');
   const keepOut = farmKeepOut();
-  const terrain = terrainMesh(context, farmTerrainGeometry(keepOut), 'farmLand');
-  const spots = placeTrees(farmTreeArea(keepOut));
+  const layout = farmFieldLayout(keepOut);
+  const projection = farmProjection();
+  const texture = groundTexture(context, projection, (painter) => paintFarmGround(painter, layout));
+  const terrain = terrainMesh(context, farmTerrainGeometry(projection), texture, 'farmLand');
+  const spots = placeTrees(farmTreeArea(layout, keepOut));
   const { crown } = plantTrees(context, spots, 'farmTreeClump', crownGeometry(TREE_SHAPE.clump));
   root.add(skyDome(context, 'farmSky'), terrain, crown);
   const [x, z] = LAND_LABELS.farmLand;
