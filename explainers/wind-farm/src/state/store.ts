@@ -49,6 +49,7 @@ export const CHAPTER_CONTROL_DEFAULTS: ChapterControls = {
 
 const START_PRESET: PresetId = 'farm';
 const START_SPEED = PRESETS[START_PRESET].speed ?? SPEED_RANGE.default;
+export const START_PHASE = PRESETS[START_PRESET].startAt ?? 0;
 
 export function snapToRange(value: number, { min, max, step }: SteppedRange): number {
   return clamp(min + Math.round((value - min) / step) * step, min, max);
@@ -79,6 +80,6 @@ export function createWindFarmStore(overrides: Partial<WindFarmStoreState> = {})
       }),
       presetState: presetFields,
     },
-    overrides,
+    { phase: START_PHASE, ...overrides },
   );
 }

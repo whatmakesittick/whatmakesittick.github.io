@@ -4,15 +4,19 @@ import {
   CHAPTER_CONTROL_DEFAULTS,
   DEFAULT_SITE_WIND,
   DEFAULT_VIEW,
+  START_PHASE,
   WIND_OVERRIDE_RANGE,
   createWindFarmStore,
   snapToRange,
 } from './store';
+import { PRESETS } from './presets';
 
 describe('wind farm store', () => {
   it('starts on the farm chapter at noon on a typical site with every view shown', () => {
     const state = createWindFarmStore().getState();
     expect(state.preset).toBe('farm');
+    expect(state.phase).toBe(START_PHASE);
+    expect(START_PHASE).toBe(PRESETS.farm.startAt);
     expect(state.siteWind).toBe(DEFAULT_SITE_WIND);
     expect(state.spacing).toBe(DEFAULT_SPACING_D);
     expect(state.windOverride).toBeNull();
