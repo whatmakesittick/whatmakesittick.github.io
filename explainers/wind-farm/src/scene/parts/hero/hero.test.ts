@@ -1,15 +1,21 @@
-import { Mesh, Texture, Vector3 } from 'three';
+import { Mesh, Raycaster, Texture, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { describe, expect, it } from 'vitest';
 import { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AssemblyState } from '../../../ids';
 import { TURBINE_COUNT, farmLayout } from '../../../model';
+import { CAMERA_VIEWS } from '../../cameraViews';
 import type { Motion, PartContext } from '../context';
 import { buildHero } from './index';
 
 const TRIANGLE_BUDGET = 60_000;
 const TIP_RADIUS = 75;
+const NACELLE_VIEW_TARGET = new Vector3(0, 105, 0);
+const NACELLE_VIEW_DISTANCES = [30, 60];
+const AZIMUTH_STEPS = 72;
+const PITCH_RANGE_DEG = [0, 90];
+const LABELS_BESIDE_BLADES = ['hub', 'pitchCylinders'] as const;
 
 function heroState(yawDeg: number): AssemblyState {
   return {
@@ -57,6 +63,15 @@ function bladeTip(root: Object3D, index: number): Vector3 {
   return new Vector3(0, TIP_RADIUS, 0).applyMatrix4(pitch?.matrixWorld ?? new Mesh().matrixWorld);
 }
 
+function bladeMeshes(context: PartContext, root: Object3D): Mesh[] {
+  const meshes: Mesh[] = [];
+  root.traverse((object) => {
+    if (!(object instanceof Mesh) || Array.isArray(object.material)) return;
+    if (context.materials.groupOf(object.material) === 'blades') meshes.push(object);
+  });
+  return meshes;
+}
+
 describe('buildHero', () => {
   it('places the hub upwind of the tower at both yaw extremes', () => {
     const { context, hero } = buildScene();
@@ -96,5 +111,37 @@ describe('buildHero', () => {
       triangles += (geometry.index?.count ?? geometry.getAttribute('position').count) / 3;
     });
     expect(triangles).toBeLessThan(TRIANGLE_BUDGET);
+  });
+
+  it('keeps the hub and pitch cylinder labels clear of the turning blades in the nacelle view', () => {
+    const { context, hero } = buildScene();
+    const state = heroState(270);
+    hero.setState(state);
+    const blades = bladeMeshes(context, hero.root);
+    const raycaster = new Raycaster();
+    const crossings: string[] = [];
+    for (const direction of Object.values(CAMERA_VIEWS.nacelleCutaway.direction)) {
+      for (const distance of NACELLE_VIEW_DISTANCES) {
+        const camera = new Vector3(...direction)
+          .normalize()
+          .multiplyScalar(distance)
+          .add(NACELLE_VIEW_TARGET);
+        for (let step = 0; step < AZIMUTH_STEPS * PITCH_RANGE_DEG.length; step += 1) {
+          const pitchDeg = PITCH_RANGE_DEG[step % PITCH_RANGE_DEG.length];
+          hero.animate?.(motion((step * 2 * Math.PI) / AZIMUTH_STEPS, pitchDeg), state);
+          hero.root.updateMatrixWorld(true);
+          for (const part of LABELS_BESIDE_BLADES) {
+            const anchor = worldOf(context.labels.get(part));
+            const sight = camera.clone().sub(anchor);
+            raycaster.set(anchor, sight.clone().normalize());
+            raycaster.far = sight.length();
+            if (raycaster.intersectObjects(blades, false).length > 0) {
+              crossings.push(`${part} ${distance} m step ${step}`);
+            }
+          }
+        }
+      }
+    }
+    expect(crossings).toEqual([]);
   });
 });

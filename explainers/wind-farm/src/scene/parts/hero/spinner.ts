@@ -18,8 +18,8 @@ const PROFILE: readonly ProfilePoint[] = [
 ];
 const SAMPLES = 20;
 const HALF_SEGMENTS = 24;
-const LABEL_X = -1.0;
-const LABEL_RADIUS = 1.8;
+const LABEL_X = 1.7;
+const LABEL_RADIUS = 1.85;
 
 export interface Spinner {
   readonly openable: Object3D;
