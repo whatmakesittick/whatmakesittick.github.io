@@ -3,12 +3,11 @@ import { clamp } from '@core/math';
 import { ROTOR_RADIUS_M } from '../../../model/constants';
 import { TURBINE_GEOMETRY } from '../../../model/layout';
 import { STREAMLINES } from './constants';
-import { lineRadius, lineSpeed, upstreamRadius } from './streamTube';
+import { speedRatio, tubeSpread } from './streamTube';
 
 interface Aim {
   readonly up: number;
   readonly across: number;
-  readonly disc: number;
 }
 
 const XYZ = 3;
@@ -18,17 +17,10 @@ const [HUB_X, HUB_Y, HUB_Z] = TURBINE_GEOMETRY.hub;
 const { samples, startX, endX } = STREAMLINES;
 
 function lineAims(): readonly Aim[] {
-  return STREAMLINES.rowsAcross.flatMap((up) =>
-    STREAMLINES.columnsAcross.map((across) => {
-      const disc = Math.hypot(up, across);
-      return { up: up / disc, across: across / disc, disc };
-    }),
+  const reach = STREAMLINES.gridReach * ROTOR_RADIUS_M;
+  return STREAMLINES.rows.flatMap((row) =>
+    STREAMLINES.columns.map((column) => ({ up: row * reach, across: column * reach })),
   );
-}
-
-export function softFloor(y: number, floor: number, blend: number): number {
-  const knee = floor + blend;
-  return y >= knee ? y : floor + blend * Math.exp((y - knee) / blend);
 }
 
 function vertexIndex(line: number, sample: number, side: number): number {
@@ -88,14 +80,12 @@ export class StreamlineGeometry {
   }
 
   private shapeLine(aim: Aim, line: number, induction: number): void {
-    const upstream = upstreamRadius(induction, aim.disc);
     this.points.forEach((point, sample) => {
       const x = startX + ((endX - startX) * sample) / (samples - 1);
       const xi = (x - HUB_X) / ROTOR_RADIUS_M;
-      const radius = lineRadius(induction, upstream, xi) * ROTOR_RADIUS_M;
-      const y = softFloor(HUB_Y + radius * aim.up, STREAMLINES.floorY, STREAMLINES.floorBlend);
-      point.set(x, y, HUB_Z + radius * aim.across);
-      this.speeds[sample] = lineSpeed(induction, upstream, xi);
+      const spread = tubeSpread(induction, xi);
+      point.set(x, HUB_Y + aim.up * spread, HUB_Z + aim.across * spread);
+      this.speeds[sample] = speedRatio(induction, xi);
     });
     let travel = (line * GOLDEN * STREAMLINES.dashPeriod) % STREAMLINES.dashPeriod;
     this.points.forEach((point, sample) => {
