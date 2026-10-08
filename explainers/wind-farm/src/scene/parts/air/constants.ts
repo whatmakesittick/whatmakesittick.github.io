@@ -81,7 +81,6 @@ export const GROUND_ARROW = {
   chevronSpan: 100,
   lift: 2,
   maxEdge: 45,
-  tessellateSteps: 16,
   opacity: 0.85,
   labelLift: 40,
 } as const;

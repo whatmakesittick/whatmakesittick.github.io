@@ -1,9 +1,9 @@
 import { Shape, ShapeGeometry } from 'three';
 import type { BufferAttribute, BufferGeometry } from 'three';
-import { TessellateModifier } from 'three/addons/modifiers/TessellateModifier.js';
 import type { SpacingD } from '../../../ids';
 import { terrainHeight, windArrowsX } from '../../../model/layout';
 import { FINISHES } from '../../finishes';
+import { subdivide } from '../../geometry/subdivide';
 import { finishMesh, label, namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { GROUND_ARROW } from './constants';
@@ -66,8 +66,7 @@ function flatArrow(): BufferGeometry {
     ...Array.from({ length: GROUND_ARROW.chevrons }, (_, index) => chevronShape(index)),
   ];
   const flat = new ShapeGeometry(shapes).rotateX(LIE_FLAT);
-  const modifier = new TessellateModifier(GROUND_ARROW.maxEdge, GROUND_ARROW.tessellateSteps);
-  const geometry = modifier.modify(flat);
+  const geometry = subdivide(flat, GROUND_ARROW.maxEdge);
   flat.dispose();
   return geometry;
 }
