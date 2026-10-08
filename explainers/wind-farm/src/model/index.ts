@@ -6,3 +6,5 @@ export * from './control';
 export * from './power';
 export * from './wakes';
 export * from './energy';
+export * from './shear';
+export * from './scale';
