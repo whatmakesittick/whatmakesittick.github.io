@@ -32,9 +32,10 @@ function veil(color: string, opacity: number): MaterialFinish {
 }
 
 export const FINISHES = {
-  paint: satin(THEME.turbineWhite),
+  paint: { color: THEME.turbineWhite, roughness: 0.32, metalness: 0.04 },
+  towerPaint: matte(THEME.turbineWhite),
   paintShade: satin(THEME.turbineGrey),
-  gelcoat: { color: THEME.turbineWhite, roughness: 0.38, metalness: 0.02 },
+  gelcoat: { color: THEME.turbineWhite, roughness: 0.26, metalness: 0.03 },
   concrete: matte(THEME.concrete),
   castIron: metal(THEME.castIron),
   steel: metal(THEME.steel, POLISHED),
@@ -45,6 +46,7 @@ export const FINISHES = {
   brakeGlow: glowing(THEME.brakeGlow),
   cabinet: satin(THEME.converterCabinet),
   cooler: metal(THEME.cooler),
+  grille: metal(THEME.castIron, MATTE),
   substation: satin(THEME.substation),
   gridSteel: metal(THEME.gridLine),
   cable: glowing(THEME.cable),
@@ -64,7 +66,7 @@ export type Finish = keyof typeof FINISHES;
 export const PART_FINISHES: Readonly<Record<PartId, Finish>> = {
   land: 'grass',
   foundation: 'concrete',
-  tower: 'paint',
+  tower: 'towerPaint',
   transformer: 'substation',
   towerCable: 'cable',
   nacelle: 'paint',
