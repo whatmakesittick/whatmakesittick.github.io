@@ -7,7 +7,7 @@ import { FINISHES } from '../../finishes';
 import { finishMesh, label, namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { GROUND_ARROW } from './constants';
-import { turnedGround } from './windFrame';
+import { turnedGround } from './bearing';
 
 const XYZ = 3;
 const LIE_FLAT = -Math.PI / 2;

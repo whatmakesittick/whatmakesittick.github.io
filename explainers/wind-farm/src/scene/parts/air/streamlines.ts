@@ -5,7 +5,7 @@ import type { Motion, PartContext, Section } from '../context';
 import { STREAMLINES } from './constants';
 import { flowMaterial } from './flowMaterial';
 import { StreamlineGeometry } from './streamlineGeometry';
-import { quantise } from './windFrame';
+import { quantise } from './bearing';
 
 export function streamlinesSection(context: PartContext): Section {
   const root = namedGroup('streamlinesGroup');

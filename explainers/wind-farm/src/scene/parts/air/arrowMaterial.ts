@@ -71,12 +71,13 @@ void main() {
 }
 `;
 
-export function arrowMaterial(shape: ArrowShape): ShaderMaterial {
-  return new ShaderMaterial({
+export type ArrowMaterial = ShaderMaterial & { readonly color: Color };
+
+export function arrowMaterial(shape: ArrowShape): ArrowMaterial {
+  const material = new ShaderMaterial({
     uniforms: UniformsUtils.merge([
       UniformsLib.fog,
       {
-        uColour: { value: new Color(FLOW_LOOK.line) },
         uChevron: { value: new Color(FLOW_LOOK.chevron) },
         uCycle: { value: 0 },
         uPeriod: { value: shape.chevronPeriod },
@@ -100,6 +101,9 @@ export function arrowMaterial(shape: ArrowShape): ShaderMaterial {
     side: DoubleSide,
     fog: true,
   });
+  const color = new Color(FLOW_LOOK.line);
+  material.uniforms.uColour = { value: color };
+  return Object.assign(material, { color });
 }
 
 export function advanceArrows(material: ShaderMaterial, metres: number): void {

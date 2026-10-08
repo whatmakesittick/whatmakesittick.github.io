@@ -5,7 +5,7 @@ import { BEARING_STEP_DEG, SHEAR_ARROWS, WIND_ARROWS } from './constants';
 import { GroundArrowPart } from './groundArrow';
 import { ShearProfilePart } from './shearProfile';
 import { WindArrowsPart } from './windArrows';
-import { quantise } from './windFrame';
+import { quantise } from './bearing';
 
 export function farmAirSection(context: PartContext): Section {
   const root = namedGroup('farmAir');
