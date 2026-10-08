@@ -1,5 +1,6 @@
 import { smoothstep } from '@core/math';
 import { FIELD_KINDS } from './fieldConstants';
+import { wavelengthNoise } from './noise';
 import type { FieldPlan, Run } from './fieldPlan';
 import { centroid, cutPolygon, extents } from './polygon';
 import type { Cut, Polygon } from './polygon';
@@ -19,6 +20,18 @@ export interface Parcels {
 }
 
 const QUARTER_TURN = Math.PI / 2;
+const WARMTH_RANGE = [0.3, 0.7] as const;
+
+function patchWeights(plan: FieldPlan, [x, z]: readonly [number, number]): number[] {
+  const { weights, patches } = plan.look;
+  const noise = wavelengthNoise(x, z, patches.wavelength, plan.seed);
+  const warmth = smoothstep(noise, ...WARMTH_RANGE);
+  return weights.map(
+    (weight, index) =>
+      weight * (1 + patches.pull * (1 - 2 * Math.abs(FIELD_KINDS[index].warmth - warmth))),
+  );
+}
+
 function pickKind(random: Random, weights: readonly number[]): number {
   let remaining = random() * weights.reduce((sum, weight) => sum + weight, 0);
   const index = weights.findIndex((weight) => (remaining -= weight) < 0);
@@ -92,7 +105,7 @@ export function splitParcels(plan: FieldPlan, random: Random): Parcels {
       parcels.push({
         corners,
         angle: fieldAngle,
-        kind: pickKind(random, plan.look.weights),
+        kind: pickKind(random, patchWeights(plan, [cx, cz])),
         tone: random(),
       });
       return;

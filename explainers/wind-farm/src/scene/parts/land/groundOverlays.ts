@@ -2,6 +2,7 @@ import { Color } from 'three';
 import { smoothstep } from '@core/math';
 import type { GroundPoint } from '../../../model/layout';
 import { GROUND_TEXTURE } from './constants';
+import type { MottleLayer } from './constants';
 import type { Bounds } from './fieldPlan';
 import { cssColour } from './groundCanvas';
 import type { Painter } from './groundCanvas';
@@ -29,13 +30,16 @@ function noiseCanvas(cells: number, amount: number, seed: number): HTMLCanvasEle
   return canvas;
 }
 
-export function paintMottle(painter: Painter): void {
+export function paintMottle(
+  painter: Painter,
+  layers: readonly MottleLayer[] = GROUND_TEXTURE.mottle,
+): void {
   const { context, projection } = painter;
   context.save();
   context.globalCompositeOperation = 'soft-light';
   context.imageSmoothingEnabled = true;
   context.imageSmoothingQuality = 'high';
-  GROUND_TEXTURE.mottle.forEach(({ cells, amount, seed }) =>
+  layers.forEach(({ cells, amount, seed }) =>
     context.drawImage(noiseCanvas(cells, amount, seed), 0, 0, projection.size, projection.size),
   );
   context.restore();

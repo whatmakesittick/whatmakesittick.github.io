@@ -59,38 +59,55 @@ const MEAN = new Color(GROUND_PAINT.mean);
 
 function fieldBase(field: Field, look: FieldLook): Color {
   const tone = 1 + (field.tone - HALF) * look.toneSpread;
-  if (field.wood) return shaded(GROUND_PAINT.canopy, tone);
-  return new Color(FIELD_KINDS[field.kind].colour).lerp(MEAN, look.muting).multiplyScalar(tone);
+  const [colour, muting] = field.wood
+    ? [GROUND_PAINT.canopy, look.woodMuting]
+    : [FIELD_KINDS[field.kind].colour, look.muting];
+  return new Color(colour).lerp(MEAN, muting).multiplyScalar(tone);
 }
 
-function paintField(
+function fillField(painter: Painter, field: Field, look: FieldLook): void {
+  tracePolygon(painter, field.corners);
+  painter.context.fillStyle = fieldFill(painter, field, fieldBase(field, look));
+  painter.context.fill();
+}
+
+function paintWood(painter: Painter, field: Field, canopy: CanvasPattern | null): void {
+  const { context } = painter;
+  tracePolygon(painter, field.corners);
+  if (canopy) {
+    context.fillStyle = canopy;
+    context.fill();
+  }
+  const [cx, cz] = centroid(field.corners);
+  context.lineWidth = GROUND_PAINT.canopyEdgeWidth * painter.projection.scale(cx, cz);
+  context.strokeStyle = GROUND_PAINT.canopyEdge;
+  context.stroke();
+}
+
+function detailField(
   painter: Painter,
   field: Field,
   look: FieldLook,
   canopy: CanvasPattern | null,
 ): void {
-  const kind = FIELD_KINDS[field.kind];
-  const base = fieldBase(field, look);
-  const { context } = painter;
-  tracePolygon(painter, field.corners);
-  context.fillStyle = fieldFill(painter, field, base);
-  context.fill();
-  if (field.wood) {
-    if (canopy) {
-      context.fillStyle = canopy;
-      context.fill();
-    }
-    const [cx, cz] = centroid(field.corners);
-    context.lineWidth = GROUND_PAINT.canopyEdgeWidth * painter.projection.scale(cx, cz);
-    context.strokeStyle = GROUND_PAINT.canopyEdge;
-    context.stroke();
-  } else if (kind.stripes) paintStripes(painter, field, base, kind.stripes);
+  const { stripes } = FIELD_KINDS[field.kind];
+  if (field.wood) paintWood(painter, field, canopy);
+  else if (stripes) paintStripes(painter, field, fieldBase(field, look), stripes);
 }
 
-export function paintFields(painter: Painter, { fields, look }: FieldLayout): void {
+export function paintFieldFills(painter: Painter, { fields, look }: FieldLayout): void {
   const { context, projection } = painter;
   context.fillStyle = GROUND_PAINT.base;
   context.fillRect(0, 0, projection.size, projection.size);
-  const canopy = canopyPattern(context);
-  fields.forEach((field) => paintField(painter, field, look, canopy));
+  fields.forEach((field) => fillField(painter, field, look));
+}
+
+export function paintFieldDetails(painter: Painter, { fields, look }: FieldLayout): void {
+  const canopy = canopyPattern(painter.context);
+  fields.forEach((field) => detailField(painter, field, look, canopy));
+}
+
+export function paintFields(painter: Painter, layout: FieldLayout): void {
+  paintFieldFills(painter, layout);
+  paintFieldDetails(painter, layout);
 }

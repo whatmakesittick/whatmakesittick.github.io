@@ -13,14 +13,20 @@ const FURROWS: Stripes = { spacing: 6, width: 2.4, shade: 0.7, alpha: 0.4 };
 const TRAMLINES: Stripes = { spacing: 24, width: 1.6, shade: 0.84, alpha: 0.45 };
 const SWATHS: Stripes = { spacing: 10, width: 3.5, shade: 1.15, alpha: 0.3 };
 
-export const FIELD_KINDS: readonly { readonly colour: string; readonly stripes?: Stripes }[] = [
-  { colour: THEME.grass },
-  { colour: THEME.grassDark },
-  { colour: '#a1b96b', stripes: TRAMLINES },
-  { colour: THEME.field, stripes: TRAMLINES },
-  { colour: '#d2c391', stripes: SWATHS },
-  { colour: '#8b6f50', stripes: FURROWS },
-  { colour: '#a39a6a' },
+export interface FieldKind {
+  readonly colour: string;
+  readonly warmth: number;
+  readonly stripes?: Stripes;
+}
+
+export const FIELD_KINDS: readonly FieldKind[] = [
+  { colour: '#8aa65d', warmth: 0 },
+  { colour: '#748f4c', warmth: 0.1 },
+  { colour: '#9db26a', warmth: 0.3, stripes: TRAMLINES },
+  { colour: '#bdb27a', warmth: 0.8, stripes: TRAMLINES },
+  { colour: '#c6bb8c', warmth: 1, stripes: SWATHS },
+  { colour: '#977f5d', warmth: 0.9, stripes: FURROWS },
+  { colour: '#a5a16d', warmth: 0.6 },
 ];
 
 export const CANOPY_TILE = {
@@ -67,8 +73,8 @@ const HEDGE = { share: 0.74, run: [40, 220], gapChance: 0.3, gap: [8, 26] } as c
 
 export const FARM_FIELDS: FieldPlan = {
   bounds: FARM_TERRAIN,
-  size: [420, 1000],
-  block: 2400,
+  size: [560, 1300],
+  block: 3000,
   angles: [0.22, 0.52, -0.14, 0.9],
   cutShare: [0.32, 0.68],
   cutJitter: 0.1,
@@ -77,10 +83,12 @@ export const FARM_FIELDS: FieldPlan = {
   track: { count: 8, minLength: 900 },
   farmstead: FARMSTEAD,
   look: {
-    weights: [0.28, 0.2, 0.15, 0.17, 0.07, 0.04, 0.09],
-    muting: 0.3,
-    toneSpread: 0.08,
-    hedgeMuting: 0.45,
+    weights: [0.26, 0.14, 0.2, 0.16, 0.09, 0.04, 0.11],
+    patches: { wavelength: 2600, pull: 0.8 },
+    muting: 0.32,
+    woodMuting: 0.22,
+    toneSpread: 0.06,
+    hedgeMuting: 0.6,
   },
   seed: 29,
 };
@@ -101,7 +109,9 @@ export const TURBINE_FIELDS: FieldPlan = {
   farmstead: FARMSTEAD,
   look: {
     weights: [0.24, 0.17, 0.13, 0.16, 0.07, 0.13, 0.1],
+    patches: { wavelength: 1400, pull: 0.4 },
     muting: 0.08,
+    woodMuting: 0,
     toneSpread: 0.14,
     hedgeMuting: 0.1,
   },

@@ -10,13 +10,28 @@ export const GROUND_TEXTURE = {
   minStripePx: 3,
   strokePiece: 60,
   fadeStops: 8,
-  farm: { softness: 2600, step: 150 },
+  farm: {
+    softness: 2600,
+    step: 150,
+    soften: { reduction: 4, alpha: 0.8 },
+    mottle: [
+      { cells: 40, amount: 0.18, seed: 3 },
+      { cells: 150, amount: 0.16, seed: 7 },
+      { cells: 520, amount: 0.12, seed: 5 },
+    ],
+  },
   turbine: { softness: 300, step: 20 },
   mottle: [
     { cells: 40, amount: 0.2, seed: 3 },
     { cells: 320, amount: 0.12, seed: 5 },
   ],
 } as const;
+
+export interface MottleLayer {
+  readonly cells: number;
+  readonly amount: number;
+  readonly seed: number;
+}
 
 export const MOWING = { width: 7, reach: 150, fade: 0.6, shade: 1.12, alpha: 0.5 } as const;
 

@@ -3,11 +3,12 @@ import { FARM_GROUND, GROUND_TEXTURE } from './constants';
 import { GROUND_PAINT } from './fieldConstants';
 import type { FieldLayout } from './fieldPlan';
 import { paintFeatures } from './featurePainter';
-import { paintFields } from './fieldPainter';
+import { paintFieldDetails, paintFieldFills } from './fieldPainter';
 import type { Painter } from './groundCanvas';
 import { fadeBoxEdges, paintMottle } from './groundOverlays';
 import { boxProjection } from './projection';
 import type { Projection } from './projection';
+import { softenCanvas } from './softenCanvas';
 
 export function farmProjection(): Projection {
   const { size, farm } = GROUND_TEXTURE;
@@ -15,8 +16,11 @@ export function farmProjection(): Projection {
 }
 
 export function paintFarmGround(painter: Painter, layout: FieldLayout): void {
-  paintFields(painter, layout);
+  const { soften, mottle } = GROUND_TEXTURE.farm;
+  paintFieldFills(painter, layout);
+  softenCanvas(painter, soften);
+  paintFieldDetails(painter, layout);
   paintFeatures(painter, layout);
-  paintMottle(painter);
+  paintMottle(painter, mottle);
   fadeBoxEdges(painter, FARM_TERRAIN, FARM_GROUND.hazeFade, GROUND_PAINT.distance);
 }

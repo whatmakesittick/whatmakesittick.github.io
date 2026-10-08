@@ -9,9 +9,16 @@ export interface Bounds {
   readonly maxZ: number;
 }
 
+export interface FieldPatches {
+  readonly wavelength: number;
+  readonly pull: number;
+}
+
 export interface FieldLook {
   readonly weights: readonly number[];
+  readonly patches: FieldPatches;
   readonly muting: number;
+  readonly woodMuting: number;
   readonly toneSpread: number;
   readonly hedgeMuting: number;
 }
