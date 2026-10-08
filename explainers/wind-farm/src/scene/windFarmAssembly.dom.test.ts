@@ -190,6 +190,6 @@ describe('wind farm assembly', () => {
     const tight = assembly.region('farm').clone();
     assembly.setState(stateWith('farm', ALL_VIEWS, TURNING_RPM, 9));
     expect(assembly.region('farm').equals(tight)).toBe(false);
-    expect(assembly.region('farm').max.x).toBeGreaterThan(tight.max.x);
+    expect(assembly.region('farm').min.x).toBeLessThan(tight.min.x);
   });
 });
