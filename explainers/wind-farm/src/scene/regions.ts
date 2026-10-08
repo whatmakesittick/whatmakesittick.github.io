@@ -1,7 +1,9 @@
 import { Box3, Vector3 } from 'three';
 import type { RegionId, SpacingD } from '../ids';
+import type { GroundPoint } from '../model';
 import { SUBSTATION_HEIGHT_M } from './constants';
 import {
+  collectorRoutes,
   FARM_TERRAIN,
   MAX_PLUME_D,
   ROTOR_DIAMETER_M,
@@ -11,6 +13,7 @@ import {
   TURBINE_GEOMETRY,
   farmLayout,
   terrainHeight,
+  windArrowsX,
 } from '../model';
 
 type FarmRegionId = Extract<RegionId, 'farm' | 'wakes' | 'grid'>;
@@ -18,6 +21,8 @@ type FarmRegionId = Extract<RegionId, 'farm' | 'wakes' | 'grid'>;
 const [HUB_X, HUB_Y] = TURBINE_GEOMETRY.hub;
 const ROTOR_REACH_M = Math.abs(HUB_X) + ROTOR_RADIUS_M;
 const ROTOR_DEPTH_M = TURBINE_GEOMETRY.spinnerRadius * 2;
+const CABLE_END_REACH_M = 750;
+const PLUME_VIEW_SHARE = 0.5;
 
 function turbineRegion(): Box3 {
   return new Box3(
@@ -41,7 +46,7 @@ function rotorRegion(): Box3 {
   );
 }
 
-function farmRegion(spacing: SpacingD): Box3 {
+function turbinesRegion(spacing: SpacingD): Box3 {
   const box = new Box3();
   farmLayout(spacing).forEach(({ x, z }) => {
     const ground = terrainHeight(x, z);
@@ -51,31 +56,54 @@ function farmRegion(spacing: SpacingD): Box3 {
   return box;
 }
 
-function wakesRegion(farm: Box3): Box3 {
-  const box = farm.clone();
-  box.max.x = Math.min(FARM_TERRAIN.maxX, box.max.x + MAX_PLUME_D * ROTOR_DIAMETER_M);
+function withSubstation(turbines: Box3): Box3 {
+  const ground = terrainHeight(SUBSTATION.x, SUBSTATION.z);
+  const halfWidth = SUBSTATION.width / 2;
+  const halfDepth = SUBSTATION.depth / 2;
+  return turbines
+    .clone()
+    .expandByPoint(new Vector3(SUBSTATION.x - halfWidth, ground, SUBSTATION.z - halfDepth))
+    .expandByPoint(new Vector3(SUBSTATION.x + halfWidth, ground, SUBSTATION.z + halfDepth));
+}
+
+function wakesRegion(turbines: Box3, spacing: SpacingD): Box3 {
+  const box = turbines.clone();
+  box.min.x = Math.min(box.min.x, windArrowsX(spacing));
+  box.max.x = Math.min(
+    FARM_TERRAIN.maxX,
+    box.max.x + MAX_PLUME_D * PLUME_VIEW_SHARE * ROTOR_DIAMETER_M,
+  );
   return box;
 }
 
-function gridRegion(farm: Box3): Box3 {
-  const ground = terrainHeight(SUBSTATION.x, SUBSTATION.z);
-  return farm
-    .clone()
-    .expandByPoint(
-      new Vector3(SUBSTATION.x - SUBSTATION.width / 2, ground, SUBSTATION.z - SUBSTATION.depth / 2),
-    )
-    .expandByPoint(
-      new Vector3(
-        SUBSTATION.x + SUBSTATION.width / 2,
-        ground + SUBSTATION_HEIGHT_M,
-        SUBSTATION.z + SUBSTATION.depth / 2,
-      ),
-    );
+function cableEnd(route: readonly GroundPoint[]): GroundPoint {
+  const [fromX, fromZ] = route[route.length - 2];
+  const dx = fromX - SUBSTATION.x;
+  const dz = fromZ - SUBSTATION.z;
+  const share = Math.min(1, CABLE_END_REACH_M / Math.hypot(dx, dz));
+  return [SUBSTATION.x + dx * share, SUBSTATION.z + dz * share];
+}
+
+function gridRegion(spacing: SpacingD): Box3 {
+  const ends = collectorRoutes(spacing).map(cableEnd);
+  const halfX = Math.max(...ends.map(([x]) => Math.abs(x - SUBSTATION.x)));
+  const halfZ = Math.max(...ends.map(([, z]) => Math.abs(z - SUBSTATION.z)));
+  const yard = terrainHeight(SUBSTATION.x, SUBSTATION.z);
+  const ground = Math.min(yard, ...ends.map(([x, z]) => terrainHeight(x, z)));
+  const top = yard + SUBSTATION_HEIGHT_M;
+  return new Box3(
+    new Vector3(SUBSTATION.x - halfX, ground, SUBSTATION.z - halfZ),
+    new Vector3(SUBSTATION.x + halfX, top, SUBSTATION.z + halfZ),
+  );
 }
 
 export function farmRegions(spacing: SpacingD): Readonly<Record<FarmRegionId, Box3>> {
-  const farm = farmRegion(spacing);
-  return { farm, wakes: wakesRegion(farm), grid: gridRegion(farm) };
+  const turbines = turbinesRegion(spacing);
+  return {
+    farm: withSubstation(turbines),
+    wakes: wakesRegion(turbines, spacing),
+    grid: gridRegion(spacing),
+  };
 }
 
 export function buildRegions(spacing: SpacingD): Record<RegionId, Box3> {
