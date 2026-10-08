@@ -15,6 +15,7 @@ const MAX_OPACITY = 0.2;
 const OPACITY_STEP = 0.05;
 const FLOW_PER_RPM = 0.012;
 const LABEL_SHARE = 0.3;
+const LABEL_REACH_M = ROTOR_DIAMETER_M;
 const CALM_STATES: readonly OperatingStateId[] = ['parked', 'idle'];
 const PROGRAM_KEY = 'heroWake';
 
@@ -65,7 +66,7 @@ export function buildHeroWake(context: PartContext, yaw: Object3D): HeroWake {
       if (!group.visible) return;
       mesh.material = materialFor(opacity);
       uniforms.wakeLength.value = length;
-      const along = length * LABEL_SHARE;
+      const along = Math.min(length * LABEL_SHARE, LABEL_REACH_M);
       anchor?.position.set(HUB[0] + along, HUB[1] + ROTOR_RADIUS_M + WAKE_DECAY * along, HUB[2]);
     },
     animate(delta, rpm) {
