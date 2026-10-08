@@ -1,25 +1,36 @@
+import { Mesh } from 'three';
 import type { BufferGeometry, Group } from 'three';
-import type { Point } from '../../../ids';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import type { MaterialFinish } from '@core/scene/materials';
+import type { AssemblyState, Point } from '../../../ids';
 import { SUBSTATION } from '../../../model';
 import { SUBSTATION_HEIGHT_M } from '../../constants';
-import { groupMesh, label, namedGroup } from '../context';
+import { FINISHES } from '../../finishes';
+import { finishMesh, label, namedGroup } from '../context';
 import type { PartContext } from '../context';
-import type { Finish } from '../../finishes';
 import { mergeParts, slab } from './geometry';
+import { GlowSwitch } from './glowSwitch';
+import {
+  BUSBAR,
+  BUSBAR_GLOW_FINISH,
+  RADIATOR_FINISH,
+  TRANSFORMER_FINISH,
+  YARD_STEEL_FINISH,
+} from './gridConstants';
 import { groundRange } from './ground';
 import { busbar, gantry, GANTRY, transformerPieces } from './yard';
 
 const PART = 'substation';
-const YARD_FINISHES = [
-  'gravel',
-  'concrete',
-  'substation',
-  'cooler',
-  'gridSteel',
-  'paintShade',
-] as const satisfies readonly Finish[];
+const YARD_FINISHES = {
+  gravel: FINISHES.gravel,
+  concrete: FINISHES.concrete,
+  transformer: TRANSFORMER_FINISH,
+  radiator: RADIATOR_FINISH,
+  steel: YARD_STEEL_FINISH,
+  roof: FINISHES.paintShade,
+} as const satisfies Record<string, MaterialFinish>;
 
-type YardFinish = (typeof YARD_FINISHES)[number];
+type YardPiece = keyof typeof YARD_FINISHES;
 const HALF_WIDTH = SUBSTATION.width / 2;
 const HALF_DEPTH = SUBSTATION.depth / 2;
 const PAD_RAISE_M = 0.3;
@@ -33,7 +44,7 @@ const TRANSFORMER_SITES: readonly (readonly [number, number])[] = [
 const GANTRY_XS = [-20, -6, 8] as const;
 const GANTRY_HALF_SPAN = 18;
 const BUSBAR_ZS = [-7, 0, 7] as const;
-const BUSBAR_DROP_M = 2.5;
+const BUSBAR_DROP_M = 3;
 const EXIT_GANTRY_X = HALF_WIDTH - 6;
 const EXIT_HALF_SPAN = 9;
 
@@ -88,14 +99,21 @@ function building(): { walls: BufferGeometry; roof: BufferGeometry } {
 function steelwork(): BufferGeometry[] {
   const portals = GANTRY_XS.flatMap((x) => gantry(x, GANTRY_HALF_SPAN));
   const exit = gantry(EXIT_GANTRY_X, EXIT_HALF_SPAN);
+  return [...portals, ...exit, ...fence()];
+}
+
+function busbars(): BufferGeometry {
   const busbarY = GANTRY.height - BUSBAR_DROP_M;
   const bars = BUSBAR_ZS.map((z) =>
     busbar(GANTRY_XS[0], GANTRY_XS[GANTRY_XS.length - 1], busbarY, z),
   );
-  return [...portals, ...exit, ...bars, ...fence()];
+  const merged = mergeGeometries(bars);
+  bars.forEach((bar) => bar.dispose());
+  if (!merged) throw new Error('Substation busbars do not share attributes');
+  return merged;
 }
 
-function pieces(): Record<YardFinish, BufferGeometry[]> {
+function pieces(): Record<YardPiece, BufferGeometry[]> {
   const transformers = TRANSFORMER_SITES.map(transformerPieces);
   const { walls, roof } = building();
   const pad = slab(
@@ -105,22 +123,45 @@ function pieces(): Record<YardFinish, BufferGeometry[]> {
   return {
     gravel: [pad],
     concrete: [walls, ...transformers.map((piece) => piece.plinth)],
-    substation: transformers.flatMap((piece) => piece.body),
-    cooler: transformers.flatMap((piece) => piece.fins),
-    gridSteel: steelwork(),
-    paintShade: [roof, ...transformers.flatMap((piece) => piece.bushings)],
+    transformer: transformers.flatMap((piece) => piece.body),
+    radiator: transformers.flatMap((piece) => piece.fins),
+    steel: steelwork(),
+    roof: [roof, ...transformers.flatMap((piece) => piece.bushings)],
   };
 }
 
-export function buildSubstation(context: PartContext): Group {
-  const group = namedGroup(PART);
-  group.position.set(SUBSTATION.x, YARD_LEVEL, SUBSTATION.z);
-  const yard = pieces();
-  YARD_FINISHES.forEach((finish) => {
-    const mesh = groupMesh(context, mergeParts(yard[finish]), PART, finish);
-    mesh.name = PART;
-    group.add(mesh);
-  });
-  label(context, PART, group, [0, SUBSTATION_HEIGHT_M, 0]);
-  return group;
+export class Substation {
+  readonly group: Group;
+  private readonly busbars: Mesh;
+  private readonly glow: GlowSwitch;
+
+  constructor(context: PartContext) {
+    this.group = namedGroup(PART);
+    this.group.position.set(SUBSTATION.x, YARD_LEVEL, SUBSTATION.z);
+    const yard = pieces();
+    (Object.keys(YARD_FINISHES) as YardPiece[]).forEach((piece) => {
+      const geometry = mergeParts(yard[piece]);
+      const mesh = finishMesh(context, geometry, PART, YARD_FINISHES[piece]);
+      mesh.name = PART;
+      this.group.add(mesh);
+    });
+    this.glow = new GlowSwitch(
+      context,
+      PART,
+      { plain: YARD_STEEL_FINISH, glowing: BUSBAR_GLOW_FINISH },
+      { halfWidth: BUSBAR.radius, perMetre: BUSBAR.perMetre },
+    );
+    this.busbars = new Mesh(context.tracker.track(busbars()), this.glow.material);
+    this.busbars.name = PART;
+    this.group.add(this.busbars);
+    label(context, PART, this.group, [0, SUBSTATION_HEIGHT_M, 0]);
+  }
+
+  setState(state: AssemblyState): void {
+    this.glow.apply(this.busbars, state.view.cables);
+  }
+
+  widen(cameraDistance: number): void {
+    this.glow.widen(cameraDistance);
+  }
 }

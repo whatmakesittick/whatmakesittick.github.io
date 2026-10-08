@@ -16,7 +16,7 @@ import { GridLine } from './gridLine';
 import { spacingMarker } from './marker';
 import { WakePlumes } from './plumes';
 import { accessRoads } from './roads';
-import { buildSubstation, YARD_LEVEL } from './substation';
+import { Substation, YARD_LEVEL } from './substation';
 
 const [HUB_X] = TURBINE_GEOMETRY.hub;
 const ORIGIN = [0, 0, 0] as const;
@@ -47,8 +47,9 @@ export function buildFarm(context: PartContext): Section {
   const cables = new CollectorCables(context);
   const marker = spacingMarker(context);
   const grid = new GridLine(context);
+  const substation = new Substation(context);
   const layers = [roads, cables.layer, marker];
-  root.add(fleet.group, plumes.group, grid.group, buildSubstation(context));
+  root.add(fleet.group, plumes.group, grid.group, substation.group);
   layers.forEach((layer) => root.add(layer.group));
   const anchors: LayoutAnchors = {
     farmCentre: sceneAnchor(context, 'farmCentre', root, ORIGIN),
@@ -72,10 +73,13 @@ export function buildFarm(context: PartContext): Section {
       plumes.setState(state, yaw);
       cables.setState(state);
       grid.setState(state);
+      substation.setState(state);
     },
     animate: (motion: Motion, state: AssemblyState) => {
       azimuth = motion.azimuth;
       layers.forEach((layer) => layer.widen(motion.cameraDistance));
+      grid.widen(motion.cameraDistance);
+      substation.widen(motion.cameraDistance);
       fleet.animate(motion, bearingTurn(state.rotor.yawDeg));
       const flowing = cables.animate(motion, state);
       const drifting = plumes.animate(motion, state);

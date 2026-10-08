@@ -1,31 +1,32 @@
 import { CylinderGeometry } from 'three';
 import type { BufferGeometry } from 'three';
 import type { Point } from '../../../ids';
+import { BUSBAR } from './gridConstants';
 import { strut, slab } from './geometry';
+import { radialAroundX, withLateral } from './widening';
 
 const ROUND_SEGMENTS = 10;
 const QUARTER_TURN = Math.PI / 2;
-const KNEE_M = 2.5;
+const KNEE_M = 3.2;
 
 export const TRANSFORMER = {
-  plinth: [11, 0.6, 7] as Point,
-  body: [9, 6, 5] as Point,
-  fins: 7,
-  fin: [2.4, 4.6, 0.18] as Point,
-  finPitch: 0.68,
+  plinth: [14, 0.7, 9.5] as Point,
+  body: [11.5, 7.6, 6.6] as Point,
+  fins: 8,
+  fin: [3, 5.8, 0.22] as Point,
+  finPitch: 0.82,
   bushings: 3,
-  bushingRadius: 0.22,
-  bushingHeight: 2.6,
-  conservatorRadius: 0.6,
-  conservatorLength: 3.6,
+  bushingRadius: 0.3,
+  bushingHeight: 3.3,
+  conservatorRadius: 0.8,
+  conservatorLength: 4.6,
 } as const;
 
 export const GANTRY = {
-  height: 12,
-  column: 0.55,
-  beam: 0.45,
-  brace: 0.2,
-  busbarRadius: 0.12,
+  height: 15,
+  column: 0.8,
+  beam: 0.65,
+  brace: 0.3,
 } as const;
 
 export interface TransformerPieces {
@@ -100,7 +101,10 @@ export function gantry(x: number, halfSpan: number): BufferGeometry[] {
 }
 
 export function busbar(fromX: number, toX: number, y: number, z: number): BufferGeometry {
-  return new CylinderGeometry(GANTRY.busbarRadius, GANTRY.busbarRadius, toX - fromX, ROUND_SEGMENTS)
-    .rotateZ(QUARTER_TURN)
-    .translate((fromX + toX) / 2, y, z);
+  const bar = new CylinderGeometry(BUSBAR.radius, BUSBAR.radius, toX - fromX, ROUND_SEGMENTS);
+  return withLateral(bar.rotateZ(QUARTER_TURN), radialAroundX(0)).translate(
+    (fromX + toX) / 2,
+    y,
+    z,
+  );
 }
