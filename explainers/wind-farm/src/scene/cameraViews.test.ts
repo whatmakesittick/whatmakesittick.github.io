@@ -9,11 +9,12 @@ const FOLLOWING_VIEWS: readonly CameraView[] = ['nacelleCutaway', 'rotorQuarter'
 const DEGREES_PER_RADIAN = 180 / Math.PI;
 const RIGHT_ANGLE_DEG = 90;
 const WITHIN_FIVE_DEGREES = -1;
-const AERIAL_DEG = 45;
+const AERIAL_DEG = 27;
 const WAKE_DEG = 25;
 const GRID_DEG = 55;
-const LOW_VIEW_MAX_DEG = 10;
-const OPENING_MIN_DEG = 30;
+const LOW_VIEW_MAX_DEG = 8;
+const ROTOR_DEG = { min: 8, max: 18 } as const;
+const OPENING_MIN_DEG = 20;
 const DISTANCES: Readonly<Record<CameraView, { min: number; max: number }>> = {
   farmAerial: { min: 2000, max: 20000 },
   turbineTall: { min: 150, max: 2500 },
@@ -69,7 +70,7 @@ describe('camera views', () => {
     );
   });
 
-  it('looks down on the farm from the south-southwest at about 45 degrees', () => {
+  it('looks down on the farm from the south-southwest at a low oblique', () => {
     eachVariant((variant) => {
       const [x, , z] = CAMERA_VIEWS.farmAerial.direction[variant];
       expect(x).toBeLessThan(0);
@@ -78,15 +79,22 @@ describe('camera views', () => {
     });
   });
 
-  it('looks at the hero turbine from upwind and to the south, low', () => {
+  it('looks at the hero turbine from upwind and to the south', () => {
     (['turbineTall', 'rotorQuarter'] as const).forEach((view) =>
       eachVariant((variant) => {
         const [x, , z] = CAMERA_VIEWS[view].direction[variant];
         expect(x, view).toBeLessThan(0);
         expect(z, view).toBeGreaterThan(0);
-        expect(elevation(view, variant), view).toBeLessThan(LOW_VIEW_MAX_DEG);
       }),
     );
+  });
+
+  it('keeps the tall view level and lifts the rotor view a little above the hub', () => {
+    eachVariant((variant) => {
+      expect(Math.abs(elevation('turbineTall', variant))).toBeLessThan(LOW_VIEW_MAX_DEG);
+      expect(elevation('rotorQuarter', variant)).toBeGreaterThan(ROTOR_DEG.min);
+      expect(elevation('rotorQuarter', variant)).toBeLessThan(ROTOR_DEG.max);
+    });
   });
 
   it('looks into the nacelle opening from the +z side and above', () => {
