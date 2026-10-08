@@ -4,11 +4,11 @@ import {
   FOLLOW_DAY,
   NACELLE_CHOICE_IDS,
   SITE_WIND_IDS,
-  SPACING_OPTIONS,
+  SPACING_CHOICE_IDS,
   WIND_AT_IDS,
   WIND_PRESET_IDS,
 } from '../ids';
-import type { NacelleChoiceId, SpacingD, WindAtId } from '../ids';
+import type { ChapterActionId, NacelleChoiceId, SpacingD, WindAtId } from '../ids';
 import { WIND_PRESETS } from '../model';
 import type { WindFarmStoreState } from '../state';
 
@@ -17,9 +17,7 @@ const OPEN: NacelleChoiceId = 'open';
 const CLOSED: NacelleChoiceId = 'closed';
 
 function spacingOf(value: string): SpacingD {
-  const spacing = SPACING_OPTIONS.find((option) => String(option) === value);
-  if (spacing === undefined) throw new Error(`Unexpected spacing "${value}"`);
-  return spacing;
+  return Number(parseOption(value, SPACING_CHOICE_IDS)) as SpacingD;
 }
 
 function overrideOf(choice: WindAtId): number | null {
@@ -31,7 +29,7 @@ function windAtOf(override: number | null): WindAtId | typeof NOTHING_CURRENT {
   return WIND_PRESET_IDS.find((preset) => WIND_PRESETS[preset] === override) ?? NOTHING_CURRENT;
 }
 
-export const CHAPTER_ACTIONS: Record<string, ChapterAction<WindFarmStoreState>> = {
+export const CHAPTER_ACTIONS: Record<ChapterActionId, ChapterAction<WindFarmStoreState>> = {
   siteWind: {
     run: (state, value) => state.setSiteWind(parseOption(value, SITE_WIND_IDS)),
     current: (state) => state.siteWind,
