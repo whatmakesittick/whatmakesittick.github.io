@@ -1,10 +1,10 @@
 import { InstancedMesh, LineSegments, Matrix4, Mesh, Vector3 } from 'three';
-import type { BufferGeometry, Object3D } from 'three';
+import type { BufferGeometry, Material, Object3D } from 'three';
 import { describe, expect, it } from 'vitest';
 import { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
-import type { AssemblyState, SpacingD } from '../../../ids';
+import type { AssemblyState, OperatingStateId, SpacingD } from '../../../ids';
 import {
   MAX_RPM,
   ROTOR_RADIUS_M,
@@ -15,20 +15,30 @@ import {
   farmLayout,
 } from '../../../model';
 import type { PartContext } from '../context';
+import { PLUME } from './constants';
 import { discOpacity } from './discs';
 import { rotorMatrix } from './fleet';
 import { ribbonGeometry } from './ground';
 import { buildFarm } from './index';
 import { plumeAlpha, plumeRadius } from './plumeGeometry';
-import { plumeOpacity } from './plumes';
+import { plumeOpacity, plumesShown } from './plumes';
 import { farmRoutes } from './routes';
 import { SHADOW_HEADING } from './shadows';
+import { shadowLevel } from './textures';
 
 const SPACING: SpacingD = 7;
 const QUARTER_TURN = Math.PI / 2;
 const TRIANGLE_BUDGET = 150_000;
 const DRAW_CALL_BUDGET = 25;
 const FLEET_PIECES = ['tower', 'nacelle', 'hub', 'rotor'] as const;
+
+function withRotor(state: AssemblyState, rotorState: OperatingStateId): AssemblyState {
+  return { ...state, rotor: { ...state.rotor, state: rotorState } };
+}
+
+function withWakes(state: AssemblyState, wakes: boolean): AssemblyState {
+  return { ...state, view: { ...state.view, wakes } };
+}
 
 function farmState(spacing: SpacingD): AssemblyState {
   return {
@@ -99,6 +109,7 @@ describe('farm diorama', () => {
     expect(plumeAlpha(0, 1200)).toBe(0);
     expect(plumeAlpha(1200, 1200)).toBe(0);
     expect(plumeAlpha(300, 1200)).toBeGreaterThan(0.3);
+    expect(plumeAlpha(900, 1200)).toBeLessThan(plumeAlpha(300, 1200));
   });
 
   it('thickens rotor blur discs with rpm and hides them at a standstill', () => {
@@ -107,9 +118,40 @@ describe('farm diorama', () => {
     expect(discOpacity(MAX_RPM)).toBeGreaterThan(0.25);
   });
 
-  it('lets a strong wake plume reach its full opacity', () => {
-    expect(plumeOpacity(0.6)).toBeCloseTo(0.45);
-    expect(plumeOpacity(0.2)).toBeLessThan(plumeOpacity(0.6));
+  it('sets the plume opacity from the plume strength', () => {
+    expect(plumeOpacity(PLUME.fullStrength)).toBeCloseTo(PLUME.maxOpacity);
+    expect(plumeOpacity(0.2)).toBeLessThan(plumeOpacity(PLUME.fullStrength));
+    const context = farmContext();
+    const section = buildFarm(context);
+    const state = farmState(SPACING);
+    section.setState(state);
+    const plumes = section.root.getObjectByName('wakePlumes')?.children[0] as InstancedMesh;
+    expect((plumes.material as Material).opacity).toBeCloseTo(
+      plumeOpacity(state.farm.plumeStrength),
+    );
+    context.tracker.dispose();
+  });
+
+  it('draws the wake plumes only with the wakes flag on and the rotors turning', () => {
+    const state = farmState(SPACING);
+    expect(plumesShown(state)).toBe(true);
+    expect(plumesShown(withWakes(state, false))).toBe(false);
+    expect(plumesShown(withRotor(state, 'parked'))).toBe(false);
+    expect(plumesShown(withRotor(state, 'idle'))).toBe(false);
+    const context = farmContext();
+    const section = buildFarm(context);
+    const plumes = section.root.getObjectByName('wakePlumes');
+    section.setState(withWakes(state, false));
+    expect(plumes?.visible).toBe(false);
+    section.setState(state);
+    expect(plumes?.visible).toBe(true);
+    context.tracker.dispose();
+  });
+
+  it('darkens the contact shadow beside the tower base and fades it toward the edges', () => {
+    expect(shadowLevel(0.2, 0.5)).toBeGreaterThan(shadowLevel(0.8, 0.5));
+    expect(shadowLevel(0.2, 0)).toBe(0);
+    expect(shadowLevel(0, 0.5)).toBe(0);
   });
 
   it('casts the turbine contact shadows toward the north-east', () => {
