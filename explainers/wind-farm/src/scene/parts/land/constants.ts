@@ -74,6 +74,7 @@ export interface TreeLayout {
   readonly hedgeCount: number;
   readonly woodCount: number;
   readonly hedgeBand: number;
+  readonly hedgeSpacing: number;
   readonly cluster: { readonly wavelength: number; readonly threshold: number };
   readonly scale: Range;
   readonly woodScale: Range;
@@ -85,7 +86,8 @@ export interface TreeLayout {
 export const TURBINE_TREES: TreeLayout = {
   hedgeCount: 280,
   woodCount: 190,
-  hedgeBand: 4,
+  hedgeBand: 1.5,
+  hedgeSpacing: 4.5,
   cluster: { wavelength: 140, threshold: 0.45 },
   scale: [0.8, 1.35],
   woodScale: [1, 1.5],
@@ -97,9 +99,10 @@ export const TURBINE_TREES: TreeLayout = {
 export const TURBINE_TREE_LIMITS = { reach: 2100, heroClear: 150, trackClear: 18 } as const;
 
 export const FARM_TREES: TreeLayout = {
-  hedgeCount: 950,
+  hedgeCount: 1300,
   woodCount: 650,
-  hedgeBand: 10,
+  hedgeBand: 2.5,
+  hedgeSpacing: 7,
   cluster: { wavelength: 420, threshold: 0.45 },
   scale: [1.2, 2],
   woodScale: [1.5, 2.4],

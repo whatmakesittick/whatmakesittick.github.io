@@ -45,7 +45,6 @@ export const FARMSTEAD_ROOFS = ['#6b6a6c', '#9c5b43', '#85827b', '#b9b2a4', '#7a
 export const GROUND_PAINT = {
   base: THEME.grass,
   canopy: THEME.trees,
-  canopyEdge: '#3f5a2e',
   hedge: '#45602f',
   track: '#c7b994',
   yard: '#b7ad93',
@@ -53,10 +52,19 @@ export const GROUND_PAINT = {
   distance: '#a4b298',
   mean: '#9eaa6e',
   acrossShade: 0.08,
-  hedgeWidth: 4,
+  hedgeWidth: 6,
   trackWidth: 4,
   accessWidth: 5,
-  canopyEdgeWidth: 3,
+  canopyFringe: { width: 14, alpha: 0.45 },
+} as const;
+
+export const WOOD_OUTLINE = {
+  rounding: 3,
+  smoothing: 2,
+  inset: [0, 0.12],
+  wavelength: 0.3,
+  maxPull: 0.4,
+  seed: 23,
 } as const;
 
 const FARMSTEAD = {
@@ -88,7 +96,7 @@ export const FARM_FIELDS: FieldPlan = {
     muting: 0.32,
     woodMuting: 0.22,
     toneSpread: 0.06,
-    hedgeMuting: 0.6,
+    hedgeMuting: 0.25,
   },
   seed: 29,
 };

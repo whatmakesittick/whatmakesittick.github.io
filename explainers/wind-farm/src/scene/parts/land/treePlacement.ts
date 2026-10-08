@@ -1,7 +1,7 @@
 import type { TreeLayout } from './constants';
 import type { FieldLayout, Run } from './fieldPlan';
 import { wavelengthNoise } from './noise';
-import { pointAlong, pointInPolygon, polygonArea } from './polygon';
+import { centroid, pointAlong, pointInPolygon, polygonArea } from './polygon';
 import type { Polygon } from './polygon';
 import { between, seededRandom } from './random';
 import type { Random } from './random';
@@ -25,6 +25,7 @@ type Grove = 'hedge' | 'wood';
 type Picker = (random: Random) => readonly [number, number];
 
 const HALF = 0.5;
+const HEDGE_STEP: readonly [number, number] = [0.8, 1.2];
 
 function firstAtLeast(totals: readonly number[], target: number): number {
   let [low, high] = [0, totals.length - 1];
@@ -42,21 +43,39 @@ function weightedPick<T>(items: readonly T[], weight: (item: T) => number): (ran
   return (random) => items[firstAtLeast(totals, random() * sum)];
 }
 
+function runLength({ from, to }: Run): number {
+  return Math.hypot(to[0] - from[0], to[1] - from[1]);
+}
+
+interface Row {
+  readonly run: Run;
+  readonly length: number;
+  at: number;
+}
+
 function hedgePicker({ hedges }: FieldLayout, trees: TreeLayout): Picker {
-  const pick = weightedPick<Run>(hedges, ({ from, to }) =>
-    Math.hypot(to[0] - from[0], to[1] - from[1]),
-  );
+  const pick = weightedPick<Run>(hedges, runLength);
+  let row: Row | undefined;
   return (random) => {
-    const { from, to } = pick(random);
-    const [x, z] = pointAlong(from, to, random());
-    const length = Math.hypot(to[0] - from[0], to[1] - from[1]) || 1;
+    if (!row || row.at > row.length) {
+      const run = pick(random);
+      row = { run, length: runLength(run) || 1, at: random() * trees.hedgeSpacing };
+    }
+    const { from, to } = row.run;
+    const [x, z] = pointAlong(from, to, row.at / row.length);
     const offset = (random() - HALF) * trees.hedgeBand;
-    return [x - ((to[1] - from[1]) / length) * offset, z + ((to[0] - from[0]) / length) * offset];
+    row.at += trees.hedgeSpacing * between(random, HEDGE_STEP);
+    return [
+      x - ((to[1] - from[1]) / row.length) * offset,
+      z + ((to[0] - from[0]) / row.length) * offset,
+    ];
   };
 }
 
 function woodPicker({ fields }: FieldLayout): Picker {
-  const woods: Polygon[] = fields.filter(({ wood }) => wood).map(({ corners }) => corners);
+  const woods: Polygon[] = fields.flatMap(({ wood }) =>
+    wood ? [[centroid(wood), ...wood, wood[0]]] : [],
+  );
   const pick = weightedPick(woods, polygonArea);
   return (random) => pointInPolygon(pick(random), random);
 }

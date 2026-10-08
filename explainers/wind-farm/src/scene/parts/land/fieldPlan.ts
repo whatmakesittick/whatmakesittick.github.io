@@ -1,4 +1,5 @@
 import type { GroundPoint } from '../../../model/layout';
+import type { Polygon } from './polygon';
 
 type Range = readonly [number, number];
 
@@ -62,7 +63,7 @@ export interface Field {
   readonly angle: number;
   readonly kind: number;
   readonly tone: number;
-  readonly wood: boolean;
+  readonly wood?: Polygon;
 }
 
 export interface Run {

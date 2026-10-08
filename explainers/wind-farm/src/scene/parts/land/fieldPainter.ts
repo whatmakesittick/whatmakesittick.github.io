@@ -8,6 +8,7 @@ import type { Field, FieldLayout, FieldLook } from './fieldPlan';
 import { cssColour, shaded, traceLine, tracePolygon } from './groundCanvas';
 import type { Painter } from './groundCanvas';
 import { centroid, extents } from './polygon';
+import type { Polygon } from './polygon';
 
 const HALF = 0.5;
 
@@ -57,31 +58,42 @@ function paintStripes(painter: Painter, field: Field, base: Color, stripes: Stri
 
 const MEAN = new Color(GROUND_PAINT.mean);
 
-function fieldBase(field: Field, look: FieldLook): Color {
+function tinted(colour: string, muting: number, field: Field, look: FieldLook): Color {
   const tone = 1 + (field.tone - HALF) * look.toneSpread;
-  const [colour, muting] = field.wood
-    ? [GROUND_PAINT.canopy, look.woodMuting]
-    : [FIELD_KINDS[field.kind].colour, look.muting];
   return new Color(colour).lerp(MEAN, muting).multiplyScalar(tone);
+}
+
+function fieldBase(field: Field, look: FieldLook): Color {
+  const colour = field.wood ? GROUND_PAINT.base : FIELD_KINDS[field.kind].colour;
+  return tinted(colour, look.muting, field, look);
+}
+
+function featherFill(
+  painter: Painter,
+  outline: Polygon,
+  style: CanvasGradient | CanvasPattern,
+): void {
+  const { context, projection } = painter;
+  const { width, alpha } = GROUND_PAINT.canopyFringe;
+  tracePolygon(painter, outline);
+  context.fillStyle = style;
+  context.fill();
+  context.save();
+  context.globalAlpha = alpha;
+  context.lineJoin = 'round';
+  context.lineWidth = width * projection.scale(...centroid(outline));
+  context.strokeStyle = style;
+  context.stroke();
+  context.restore();
 }
 
 function fillField(painter: Painter, field: Field, look: FieldLook): void {
   tracePolygon(painter, field.corners);
   painter.context.fillStyle = fieldFill(painter, field, fieldBase(field, look));
   painter.context.fill();
-}
-
-function paintWood(painter: Painter, field: Field, canopy: CanvasPattern | null): void {
-  const { context } = painter;
-  tracePolygon(painter, field.corners);
-  if (canopy) {
-    context.fillStyle = canopy;
-    context.fill();
-  }
-  const [cx, cz] = centroid(field.corners);
-  context.lineWidth = GROUND_PAINT.canopyEdgeWidth * painter.projection.scale(cx, cz);
-  context.strokeStyle = GROUND_PAINT.canopyEdge;
-  context.stroke();
+  if (!field.wood) return;
+  const canopy = tinted(GROUND_PAINT.canopy, look.woodMuting, field, look);
+  featherFill(painter, field.wood, fieldFill(painter, field, canopy));
 }
 
 function detailField(
@@ -91,8 +103,8 @@ function detailField(
   canopy: CanvasPattern | null,
 ): void {
   const { stripes } = FIELD_KINDS[field.kind];
-  if (field.wood) paintWood(painter, field, canopy);
-  else if (stripes) paintStripes(painter, field, fieldBase(field, look), stripes);
+  if (field.wood && canopy) featherFill(painter, field.wood, canopy);
+  if (!field.wood && stripes) paintStripes(painter, field, fieldBase(field, look), stripes);
 }
 
 export function paintFieldFills(painter: Painter, { fields, look }: FieldLayout): void {

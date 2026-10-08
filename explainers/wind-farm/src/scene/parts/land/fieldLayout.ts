@@ -14,6 +14,7 @@ import { pointAlong } from './polygon';
 import { between, seededRandom } from './random';
 import type { Random } from './random';
 import { FARMSTEAD_ROOFS } from './fieldConstants';
+import { woodOutline } from './woodOutline';
 
 const HALF = 0.5;
 const MIDDLE_SHARES = [0, HALF, 1];
@@ -24,8 +25,8 @@ function runLength({ from, to }: Run): number {
 }
 
 function toField(parcel: Parcel, plan: FieldPlan, rules: GroundRules, random: Random): Field {
-  const wooded = parcel.corners.every(([x, z]) => rules.wooded(x, z));
-  return { ...parcel, wood: wooded && random() < plan.woodShare };
+  const wooded = parcel.corners.every(([x, z]) => rules.wooded(x, z)) && random() < plan.woodShare;
+  return { ...parcel, wood: wooded ? woodOutline(parcel.corners) : undefined };
 }
 
 function hedgeRuns(boundary: Run, plan: FieldPlan, rules: GroundRules, random: Random): Run[] {
