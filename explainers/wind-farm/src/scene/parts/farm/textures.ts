@@ -10,7 +10,7 @@ const DASH_EDGE = 0.08;
 const DASH_GAP_LEVEL = 0.28;
 const STREAK_TEXELS = 128;
 const STREAK = {
-  floor: 0.5,
+  floor: 0.7,
   lanes: 4,
   laneWidth: 0.2,
   dashes: 2,

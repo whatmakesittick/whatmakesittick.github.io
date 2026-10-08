@@ -33,12 +33,7 @@ const LABEL_REACH_M = 3 * ROTOR_DIAMETER_M;
 const Y_AXIS = new Vector3(0, 1, 0);
 const UNIT = new Vector3(1, 1, 1);
 const HUB = new Vector3(...TURBINE_GEOMETRY.hub);
-const PLUME_FINISH = {
-  ...FINISHES.wake,
-  vertexColors: true,
-  emissive: FINISHES.wake.color,
-  emissiveIntensity: PLUME.glow,
-};
+const PLUME_FINISH = { ...FINISHES.plume, vertexColors: true, emissiveIntensity: PLUME.glow };
 const VERTEX_DECLARATIONS = 'varying float vPlumeHeight;\nvoid main() {';
 const VERTEX_HEIGHT = `#include <begin_vertex>\nvPlumeHeight = position.y + ${HUB_HEIGHT_M.toFixed(1)};`;
 const FRAGMENT_FADE = `#include <normal_fragment_maps>

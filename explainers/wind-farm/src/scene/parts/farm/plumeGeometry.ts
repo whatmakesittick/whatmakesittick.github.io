@@ -14,8 +14,8 @@ export function plumeRadius(distance: number): number {
 
 export function plumeAlpha(distance: number, length: number): number {
   const fadeIn = smoothstep(distance, 0, PLUME.fadeInD * ROTOR_DIAMETER_M);
-  const fadeOut = 1 - smoothstep(distance, length * PLUME.fadeOutFrom, length);
-  return fadeIn * fadeOut;
+  const remaining = Math.max(0, 1 - distance / length);
+  return fadeIn * remaining ** PLUME.tailPower;
 }
 
 export function plumeGeometry(length: number): BufferGeometry {

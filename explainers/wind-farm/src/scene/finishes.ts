@@ -12,6 +12,7 @@ const VEIL_OPACITY = 0.28;
 const RING_OPACITY = 0.35;
 const GENERATOR_BLUE = '#3f6c8c';
 const AIR_WHITE = '#eaf3fa';
+const PLUME_STREAK = '#9cc3ea';
 
 function matte(color: string): MaterialFinish {
   return { color, roughness: MATTE, metalness: 0 };
@@ -60,6 +61,7 @@ export const FINISHES = {
   wind: glowing(THEME.wind),
   spacing: glowing(THEME.spacing),
   wake: veil(AIR_WHITE, VEIL_OPACITY),
+  plume: { ...veil(THEME.wake, VEIL_OPACITY), emissive: PLUME_STREAK },
   sweep: veil(THEME.wind, RING_OPACITY),
   shadow: { color: '#000000', transparent: true, opacity: 0.22, depthWrite: false },
 } as const satisfies Record<string, MaterialFinish>;
@@ -95,7 +97,7 @@ export const PART_FINISHES: Readonly<Record<PartId, Finish>> = {
   prevailingWind: 'wind',
   windArrows: 'wind',
   shearProfile: 'wind',
-  wakePlumes: 'wake',
+  wakePlumes: 'plume',
   collectorCables: 'cable',
   substation: 'substation',
   gridLine: 'gridSteel',
