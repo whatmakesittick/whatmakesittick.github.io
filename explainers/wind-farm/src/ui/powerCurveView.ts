@@ -33,6 +33,7 @@ const DOT_RADIUS = 4.5;
 const DOT_RING = 1.5;
 const GRID_ALPHA = 0.14;
 const POWER_CURVE_CANVAS = '[data-canvas="power-curve"]';
+const CAPTION_KEY = 'chapters.curve.caption';
 
 export const CURVE_COLORS = {
   grid: withAlpha(THEME.muted, GRID_ALPHA),
@@ -44,20 +45,38 @@ export const CURVE_COLORS = {
   dotRing: THEME.text,
 } as const;
 
+export const CURVE_DASHES: Readonly<Record<'wind' | 'betz' | 'turbine', readonly number[]>> = {
+  wind: [8, 4],
+  betz: [2, 3],
+  turbine: [],
+};
+
 interface Line {
   key: string;
   color: string;
+  dash: readonly number[];
   powerKw: (wind: number) => number;
 }
 
 const LINES: readonly Line[] = [
-  { key: 'chapters.curve.lineWind', color: CURVE_COLORS.wind, powerKw: windPowerKw },
+  {
+    key: 'chapters.curve.lineWind',
+    color: CURVE_COLORS.wind,
+    dash: CURVE_DASHES.wind,
+    powerKw: windPowerKw,
+  },
   {
     key: 'chapters.curve.lineBetz',
     color: CURVE_COLORS.betz,
+    dash: CURVE_DASHES.betz,
     powerKw: (wind) => BETZ_LIMIT * windPowerKw(wind),
   },
-  { key: 'chapters.curve.lineTurbine', color: CURVE_COLORS.turbine, powerKw: turbinePowerKw },
+  {
+    key: 'chapters.curve.lineTurbine',
+    color: CURVE_COLORS.turbine,
+    dash: CURVE_DASHES.turbine,
+    powerKw: turbinePowerKw,
+  },
 ];
 
 export interface CurvePoint {
@@ -134,6 +153,7 @@ function paintLine(context: CanvasRenderingContext2D, plot: Plot, line: Line): v
   context.clip();
   context.strokeStyle = line.color;
   context.lineWidth = CURVE_WIDTH;
+  context.setLineDash(line.dash);
   context.beginPath();
   ticks(AXIS_WIND_MS, SAMPLE_STEP_MS).forEach((wind, index) => {
     const x = xOfWind(plot, wind);
@@ -146,6 +166,7 @@ function paintLine(context: CanvasRenderingContext2D, plot: Plot, line: Line): v
 }
 
 function paintLegend(context: CanvasRenderingContext2D, frame: CanvasFrame, plot: Plot): void {
+  context.save();
   context.font = canvasFont(frame, LABEL_FONT_PX);
   context.textBaseline = 'middle';
   context.textAlign = 'right';
@@ -157,11 +178,13 @@ function paintLegend(context: CanvasRenderingContext2D, frame: CanvasFrame, plot
     context.fillStyle = CURVE_COLORS.label;
     context.fillText(t(line.key), textRight, y);
     context.strokeStyle = line.color;
+    context.setLineDash(line.dash);
     context.beginPath();
     context.moveTo(lineRight - LEGEND_LINE, y);
     context.lineTo(lineRight, y);
     context.stroke();
   });
+  context.restore();
 }
 
 function paintDot(context: CanvasRenderingContext2D, plot: Plot, point: CurvePoint): void {
@@ -188,17 +211,21 @@ export function paintPowerCurve(
 }
 
 export class PowerCurveView {
+  private readonly canvas: HTMLCanvasElement;
   private readonly surface: CanvasSurface;
   private painted: CurvePoint | null = null;
   private language = '';
 
   constructor(canvas: HTMLCanvasElement) {
+    this.canvas = canvas;
     this.surface = new CanvasSurface(canvas);
+    canvas.setAttribute('role', 'img');
   }
 
   draw(point: CurvePoint): void {
     const language = currentLanguage();
     if (this.isPainted(point) && language === this.language) return;
+    if (language !== this.language) this.canvas.setAttribute('aria-label', t(CAPTION_KEY));
     this.painted = { ...point };
     this.language = language;
     this.surface.paint((context, frame) => paintPowerCurve(context, frame, point));

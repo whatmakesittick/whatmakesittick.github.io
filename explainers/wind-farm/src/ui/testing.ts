@@ -45,6 +45,7 @@ export const TEST_LOCALE = {
       lineWind: 'Power in the wind',
       lineBetz: 'Betz limit',
       lineTurbine: 'This turbine',
+      caption: 'Power in the wind, the Betz limit and this turbine',
     },
     grid: { voltagesValue: '{{generator}} V, {{collector}} kV, {{grid}} kV' },
   },

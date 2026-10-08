@@ -6,6 +6,8 @@ import { createWindFarmStore, liveReading } from '../state';
 import {
   AXIS_POWER_KW,
   AXIS_WIND_MS,
+  CURVE_COLORS,
+  CURVE_DASHES,
   PowerCurveView,
   mountPowerCurve,
   paintPowerCurve,
@@ -26,9 +28,17 @@ interface Arc {
   y: number;
 }
 
+interface Stroke {
+  color: string;
+  dash: readonly number[];
+}
+
 function recordingContext() {
   const texts: string[] = [];
   const arcs: Arc[] = [];
+  const strokes: Stroke[] = [];
+  const savedDashes: (readonly number[])[] = [];
+  let dash: readonly number[] = [];
   const noop = () => {};
   const context = {
     font: '',
@@ -40,17 +50,22 @@ function recordingContext() {
     measureText: (text: string) => ({ width: text.length * CHAR_WIDTH }),
     fillText: (text: string) => texts.push(text),
     arc: (x: number, y: number) => arcs.push({ x, y }),
-    save: noop,
-    restore: noop,
+    setLineDash: (segments: number[]) => {
+      dash = [...segments];
+    },
+    save: () => savedDashes.push(dash),
+    restore: () => {
+      dash = savedDashes.pop() ?? [];
+    },
     rect: noop,
     clip: noop,
     beginPath: noop,
     moveTo: noop,
     lineTo: noop,
-    stroke: noop,
+    stroke: () => strokes.push({ color: context.strokeStyle, dash }),
     fill: noop,
   };
-  return { context: context as unknown as CanvasRenderingContext2D, texts, arcs };
+  return { context: context as unknown as CanvasRenderingContext2D, texts, arcs, strokes };
 }
 
 describe('power curve', () => {
@@ -73,6 +88,31 @@ describe('power curve', () => {
     [curve.axisWind, curve.axisPower, curve.lineWind, curve.lineBetz, curve.lineTurbine].forEach(
       (label) => expect(texts).toContain(label),
     );
+  });
+
+  it('dashes the wind and Betz lines and their legend swatches apart from the turbine line', () => {
+    const { context, strokes } = recordingContext();
+    paintPowerCurve(context, FRAME, RATED_POINT);
+    const lines = ['wind', 'betz', 'turbine'] as const;
+    lines.forEach((line) => {
+      const dashes = strokes.filter(({ color }) => color === CURVE_COLORS[line]);
+      expect(dashes).toEqual([
+        { color: CURVE_COLORS[line], dash: CURVE_DASHES[line] },
+        { color: CURVE_COLORS[line], dash: CURVE_DASHES[line] },
+      ]);
+    });
+    const patterns = new Set(lines.map((line) => CURVE_DASHES[line].join()));
+    expect(patterns.size).toBe(lines.length);
+    expect(strokes.at(-1)).toEqual({ color: CURVE_COLORS.dotRing, dash: [] });
+  });
+
+  it('labels the canvas as an image with the caption', () => {
+    document.body.innerHTML = '<canvas data-canvas="power-curve"></canvas>';
+    const dispose = mountPowerCurve(document, createWindFarmStore({ playing: false }));
+    const canvas = document.querySelector('canvas');
+    expect(canvas?.getAttribute('role')).toBe('img');
+    expect(canvas?.getAttribute('aria-label')).toBe(curve.caption);
+    dispose();
   });
 
   it('puts the dot at the live wind and power', () => {
