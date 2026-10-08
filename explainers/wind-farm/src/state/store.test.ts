@@ -5,6 +5,7 @@ import {
   DEFAULT_SITE_WIND,
   DEFAULT_VIEW,
   START_PHASE,
+  START_VIEW,
   WIND_OVERRIDE_RANGE,
   createWindFarmStore,
   snapToRange,
@@ -12,7 +13,7 @@ import {
 import { PRESETS } from './presets';
 
 describe('wind farm store', () => {
-  it('starts on the farm chapter at noon on a typical site with every view shown', () => {
+  it('starts on the farm chapter at noon on a typical site with the farm view', () => {
     const state = createWindFarmStore().getState();
     expect(state.preset).toBe('farm');
     expect(state.phase).toBe(START_PHASE);
@@ -20,13 +21,23 @@ describe('wind farm store', () => {
     expect(state.siteWind).toBe(DEFAULT_SITE_WIND);
     expect(state.spacing).toBe(DEFAULT_SPACING_D);
     expect(state.windOverride).toBeNull();
-    expect(DEFAULT_VIEW).toEqual({
-      streamlines: true,
-      wakes: true,
-      cables: true,
+    expect(state.view).toEqual(START_VIEW);
+    expect(START_VIEW).toEqual({ ...DEFAULT_VIEW, ...PRESETS.farm.view });
+    expect(state.view).toEqual({
+      streamlines: false,
+      wakes: false,
+      cables: false,
       labels: true,
       cutaway: false,
     });
+  });
+
+  it('shows the same farm view on coming back to the farm chapter', () => {
+    const store = createWindFarmStore();
+    const firstView = store.getState().view;
+    store.getState().applyPreset('wakes');
+    store.getState().applyPreset('farm');
+    expect(store.getState().view).toEqual(firstView);
   });
 
   it('snaps the wind override to half metres per second inside its range', () => {

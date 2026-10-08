@@ -50,6 +50,7 @@ export const CHAPTER_CONTROL_DEFAULTS: ChapterControls = {
 const START_PRESET: PresetId = 'farm';
 const START_SPEED = PRESETS[START_PRESET].speed ?? SPEED_RANGE.default;
 export const START_PHASE = PRESETS[START_PRESET].startAt ?? 0;
+export const START_VIEW: ViewState = { ...DEFAULT_VIEW, ...PRESETS[START_PRESET].view };
 
 export function snapToRange(value: number, { min, max, step }: SteppedRange): number {
   return clamp(min + Math.round((value - min) / step) * step, min, max);
@@ -69,7 +70,7 @@ export function createWindFarmStore(overrides: Partial<WindFarmStoreState> = {})
     {
       timeline: WIND_FARM_TIMELINE,
       presets: PRESETS,
-      defaults: { preset: START_PRESET, speed: START_SPEED, view: DEFAULT_VIEW },
+      defaults: { preset: START_PRESET, speed: START_SPEED, view: START_VIEW },
       extend: (set) => ({
         ...CHAPTER_CONTROL_DEFAULTS,
         ...PRESETS[START_PRESET].start,
