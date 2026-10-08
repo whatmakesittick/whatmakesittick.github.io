@@ -1,4 +1,4 @@
-import { InstancedMesh, Matrix4, Mesh, Vector3 } from 'three';
+import { InstancedMesh, LineSegments, Matrix4, Mesh, Vector3 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { describe, expect, it } from 'vitest';
 import { MaterialLibrary } from '@core/scene/materials';
@@ -6,6 +6,7 @@ import { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AssemblyState, SpacingD } from '../../../ids';
 import {
+  MAX_RPM,
   ROTOR_RADIUS_M,
   SUBSTATION,
   TURBINE_COUNT,
@@ -14,15 +15,19 @@ import {
   farmLayout,
 } from '../../../model';
 import type { PartContext } from '../context';
+import { discOpacity } from './discs';
 import { rotorMatrix } from './fleet';
 import { ribbonGeometry } from './ground';
 import { buildFarm } from './index';
 import { plumeAlpha, plumeRadius } from './plumeGeometry';
+import { plumeOpacity } from './plumes';
 import { farmRoutes } from './routes';
+import { SHADOW_HEADING } from './shadows';
 
 const SPACING: SpacingD = 7;
 const QUARTER_TURN = Math.PI / 2;
 const TRIANGLE_BUDGET = 150_000;
+const DRAW_CALL_BUDGET = 25;
 const FLEET_PIECES = ['tower', 'nacelle', 'hub', 'rotor'] as const;
 
 function farmState(spacing: SpacingD): AssemblyState {
@@ -59,6 +64,14 @@ function triangles(geometry: BufferGeometry): number {
   return count / 3;
 }
 
+function drawCalls(root: Object3D): number {
+  let total = 0;
+  root.traverse((object) => {
+    if (object instanceof Mesh || object instanceof LineSegments) total += 1;
+  });
+  return total;
+}
+
 function drawnTriangles(root: Object3D): number {
   let total = 0;
   root.traverse((object) => {
@@ -88,6 +101,22 @@ describe('farm diorama', () => {
     expect(plumeAlpha(300, 1200)).toBeGreaterThan(0.3);
   });
 
+  it('thickens rotor blur discs with rpm and hides them at a standstill', () => {
+    expect(discOpacity(0)).toBe(0);
+    expect(discOpacity(MAX_RPM / 2)).toBeLessThan(discOpacity(MAX_RPM));
+    expect(discOpacity(MAX_RPM)).toBeGreaterThan(0.25);
+  });
+
+  it('lets a strong wake plume reach its full opacity', () => {
+    expect(plumeOpacity(0.6)).toBeCloseTo(0.45);
+    expect(plumeOpacity(0.2)).toBeLessThan(plumeOpacity(0.6));
+  });
+
+  it('casts the turbine contact shadows toward the north-east', () => {
+    expect(SHADOW_HEADING.x).toBeGreaterThan(0);
+    expect(SHADOW_HEADING.y).toBeLessThan(0);
+  });
+
   it('faces ground ribbons up whichever way they run', () => {
     const geometry = ribbonGeometry(
       [
@@ -111,7 +140,7 @@ describe('farm diorama', () => {
     });
   });
 
-  it('draws 27 instanced turbines within the triangle budget', () => {
+  it('draws 27 instanced turbines within the triangle and draw call budgets', () => {
     const context = farmContext();
     const section = buildFarm(context);
     section.setState(farmState(SPACING));
@@ -120,8 +149,10 @@ describe('farm diorama', () => {
       expect(mesh).toBeInstanceOf(InstancedMesh);
       expect((mesh as InstancedMesh).count).toBe(TURBINE_COUNT);
     });
-    const total = drawnTriangles(section.root);
-    expect(total).toBeLessThan(TRIANGLE_BUDGET);
+    const discs = section.root.getObjectByName('turbineDiscs');
+    expect((discs as InstancedMesh).count).toBe(TURBINE_COUNT);
+    expect(drawnTriangles(section.root)).toBeLessThan(TRIANGLE_BUDGET);
+    expect(drawCalls(section.root)).toBeLessThan(DRAW_CALL_BUDGET);
     context.tracker.dispose();
   });
 });

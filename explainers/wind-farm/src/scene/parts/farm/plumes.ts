@@ -53,7 +53,7 @@ function fadePlume(shader: WebGLProgramParametersWithUniforms): void {
     .replace('#include <normal_fragment_maps>', FRAGMENT_FADE);
 }
 
-function plumeOpacity(strength: number): number {
+export function plumeOpacity(strength: number): number {
   const opacity = Math.min(PLUME.maxOpacity, strength * PLUME.opacityPerDeficit);
   return Math.max(PLUME.opacityStep, Math.round(opacity / PLUME.opacityStep) * PLUME.opacityStep);
 }
