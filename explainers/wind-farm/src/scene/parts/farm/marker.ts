@@ -6,7 +6,7 @@ import { MARKER, MARKER_FINISH } from './constants';
 import { midpoint, onGround } from './ground';
 import { ribbons, SpacingLayer } from './layer';
 import type { LayerShape } from './layer';
-import { GroundWidening } from './widening';
+import { Widening } from './widening';
 
 function tick([x, z]: GroundPoint): GroundPoint[] {
   return [
@@ -33,7 +33,7 @@ function markerShape(spacing: SpacingD): LayerShape {
 }
 
 export function spacingMarker(context: PartContext): SpacingLayer {
-  const widening = new GroundWidening(context, 'spacingMarker', MARKER_FINISH, {
+  const widening = new Widening(context, 'spacingMarker', MARKER_FINISH, {
     halfWidth: MARKER.width / 2,
     perMetre: MARKER.widenPerMetre,
   });

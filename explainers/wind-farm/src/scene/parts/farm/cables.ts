@@ -7,7 +7,7 @@ import { ribbons, SpacingLayer } from './layer';
 import type { LayerShape } from './layer';
 import { farmRoutes, feederRoutes } from './routes';
 import { dashTexture } from './textures';
-import { GroundWidening } from './widening';
+import { Widening } from './widening';
 
 const LABEL_ROW = 1;
 const PART = 'collectorCables';
@@ -30,7 +30,7 @@ export class CollectorCables {
 
   constructor(context: PartContext) {
     this.dashes = context.tracker.track(dashTexture());
-    const widening = new GroundWidening(
+    const widening = new Widening(
       context,
       PART,
       { ...CABLE_FINISH, emissiveMap: this.dashes },

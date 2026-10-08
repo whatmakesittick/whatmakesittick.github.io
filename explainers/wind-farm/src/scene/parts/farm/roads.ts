@@ -5,7 +5,7 @@ import { midpoint, onGround } from './ground';
 import { ribbons, SpacingLayer } from './layer';
 import type { LayerShape } from './layer';
 import { farmRoutes, padRoutes } from './routes';
-import { GroundWidening } from './widening';
+import { Widening } from './widening';
 
 const PART = 'accessRoads';
 const LABEL_ROW = 2;
@@ -22,7 +22,7 @@ function roadShape(spacing: SpacingD): LayerShape {
 }
 
 export function accessRoads(context: PartContext): SpacingLayer {
-  const widening = new GroundWidening(context, PART, ROAD_FINISH, {
+  const widening = new Widening(context, PART, ROAD_FINISH, {
     halfWidth: ROAD.width / 2,
     perMetre: ROAD.widenPerMetre,
   });

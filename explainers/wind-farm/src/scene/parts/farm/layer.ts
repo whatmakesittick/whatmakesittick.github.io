@@ -8,7 +8,7 @@ import { namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { ribbonGeometry } from './ground';
 import type { RibbonOptions } from './ground';
-import type { GroundWidening } from './widening';
+import type { Widening } from './widening';
 
 export interface LayerShape {
   readonly geometry: BufferGeometry;
@@ -38,10 +38,10 @@ export class SpacingLayer {
   private readonly label: Object3D;
   private readonly context: PartContext;
   private readonly build: LayerBuilder;
-  private readonly widening: GroundWidening;
+  private readonly widening: Widening;
   private readonly shapes = new Map<SpacingD, LayerShape>();
 
-  constructor(context: PartContext, part: PartId, widening: GroundWidening, build: LayerBuilder) {
+  constructor(context: PartContext, part: PartId, widening: Widening, build: LayerBuilder) {
     this.context = context;
     this.build = build;
     this.widening = widening;
