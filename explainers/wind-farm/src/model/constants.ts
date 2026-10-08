@@ -45,4 +45,4 @@ export const PROJECT_HA_PER_MW = 34;
 export const FOOTBALL_PITCH_M2 = 7140;
 
 export const WIND_FROM_DEG = 270;
-export const VEER_DEG = 6;
+export const VEER_DEG = 3;

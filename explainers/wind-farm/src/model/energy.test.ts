@@ -57,7 +57,7 @@ describe('energy today', () => {
       .slice(1)
       .forEach((total, index) => expect(total).toBeGreaterThanOrEqual(samples[index]));
     expect(energyTodayMwh(0, 'typical', 7)).toBe(0);
-    expect(dayEnergyMwh('typical', 7)).toBeCloseTo(1182.8, 1);
+    expect(dayEnergyMwh('typical', 7)).toBeCloseTo(1183.3, 1);
   });
 
   it('reads linearly between the samples', () => {

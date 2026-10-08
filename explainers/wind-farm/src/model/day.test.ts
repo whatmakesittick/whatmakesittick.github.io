@@ -68,10 +68,10 @@ describe('dayWind', () => {
 });
 
 describe('windFromDeg', () => {
-  it('veers 6 degrees either side of west through the day', () => {
+  it('veers 3 degrees either side of west through the day', () => {
     expect(windFromDeg(0)).toBeCloseTo(270, 9);
-    expect(windFromDeg(360)).toBeCloseTo(276, 9);
-    expect(windFromDeg(1080)).toBeCloseTo(264, 9);
+    expect(windFromDeg(360)).toBeCloseTo(273, 9);
+    expect(windFromDeg(1080)).toBeCloseTo(267, 9);
   });
 });
 
