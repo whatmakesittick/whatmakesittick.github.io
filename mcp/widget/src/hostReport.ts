@@ -21,6 +21,9 @@ export function hostContextReport(
     ...(ctx.userAgent ? { userAgent: ctx.userAgent } : {}),
     ...(ctx.safeAreaInsets ? { safeAreaInsets: { ...ctx.safeAreaInsets } } : {}),
     ...(dimensions ? { containerDimensions: { ...dimensions } } : {}),
+    ...(ctx.locale ? { locale: ctx.locale } : {}),
+    ...(ctx.theme ? { theme: ctx.theme } : {}),
+    ...(ctx.timeZone ? { timeZone: ctx.timeZone } : {}),
     viewport,
   };
 }
@@ -28,7 +31,13 @@ export function hostContextReport(
 export function createContextReporter(send: (report: HostContextReport) => void) {
   const seen = new Set<string>();
   return (report: HostContextReport) => {
-    const key = JSON.stringify([report.displayMode, report.safeAreaInsets]);
+    const key = JSON.stringify([
+      report.displayMode,
+      report.safeAreaInsets,
+      report.locale,
+      report.theme,
+      report.timeZone,
+    ]);
     if (seen.has(key)) return;
     seen.add(key);
     send(report);

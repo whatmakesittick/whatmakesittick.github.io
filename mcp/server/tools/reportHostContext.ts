@@ -10,6 +10,9 @@ export const hostContextReportSchema = z.object({
   userAgent: z.string().max(200).optional(),
   safeAreaInsets: z.object({ top: size, right: size, bottom: size, left: size }).optional(),
   containerDimensions: z.record(z.string().max(32), size).optional(),
+  locale: z.string().max(35).optional(),
+  theme: z.enum(['light', 'dark']).optional(),
+  timeZone: z.string().max(64).optional(),
   viewport: z.object({ width: size, height: size }),
 });
 

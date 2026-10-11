@@ -90,5 +90,8 @@ export interface HostContextReport {
   userAgent?: string;
   safeAreaInsets?: HostInsets;
   containerDimensions?: Record<string, number>;
+  locale?: string;
+  theme?: 'light' | 'dark';
+  timeZone?: string;
   viewport: { width: number; height: number };
 }

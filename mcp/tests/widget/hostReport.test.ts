@@ -9,7 +9,7 @@ import type { HostContextReport } from '../../shared/tools.ts';
 const viewport = { width: 840, height: 900 };
 
 describe('host context report', () => {
-  it('keeps the fields that place the dock', () => {
+  it('keeps the fields that place the dock and the locale, theme and time zone', () => {
     expect(
       hostContextReport(
         {
@@ -17,7 +17,10 @@ describe('host context report', () => {
           platform: 'desktop',
           safeAreaInsets: { top: 0, right: 0, bottom: 140, left: 0 },
           containerDimensions: { maxHeight: 900, width: 840 },
-          locale: 'en-US',
+          locale: 'uk-UA',
+          theme: 'dark',
+          timeZone: 'Europe/Kyiv',
+          hostCapabilities: {},
         },
         viewport,
       ),
@@ -26,6 +29,9 @@ describe('host context report', () => {
       platform: 'desktop',
       safeAreaInsets: { top: 0, right: 0, bottom: 140, left: 0 },
       containerDimensions: { maxHeight: 900, width: 840 },
+      locale: 'uk-UA',
+      theme: 'dark',
+      timeZone: 'Europe/Kyiv',
       viewport,
     });
   });
@@ -42,6 +48,17 @@ describe('host context report', () => {
       viewport,
     });
     expect(sent.map((r) => r.displayMode)).toEqual(['inline', 'fullscreen', 'fullscreen']);
+  });
+
+  it('reports again when the locale, theme or time zone changes', () => {
+    const sent: HostContextReport[] = [];
+    const report = createContextReporter((r) => sent.push(r));
+    report({ displayMode: 'inline', locale: 'en-US', viewport });
+    report({ displayMode: 'inline', locale: 'en-US', viewport });
+    report({ displayMode: 'inline', locale: 'de-DE', viewport });
+    report({ displayMode: 'inline', locale: 'de-DE', theme: 'dark', viewport });
+    report({ displayMode: 'inline', locale: 'de-DE', theme: 'dark', timeZone: 'UTC', viewport });
+    expect(sent).toHaveLength(4);
   });
 
   it('reads the flag the server injects', () => {

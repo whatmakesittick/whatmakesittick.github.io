@@ -9,6 +9,9 @@ const report = {
   platform: 'desktop',
   safeAreaInsets: { top: 0, right: 0, bottom: 140, left: 0 },
   containerDimensions: { width: 1200, height: 800 },
+  locale: 'uk-UA',
+  theme: 'dark',
+  timeZone: 'Europe/Kyiv',
   viewport: { width: 1200, height: 800 },
 };
 
@@ -38,5 +41,19 @@ describe('report_host_context', () => {
     expect(await widgetText(client)).toContain('content="1"');
     await client.callTool({ name: TOOL_REPORT_HOST_CONTEXT, arguments: report });
     expect(lines).toEqual([`host context ${JSON.stringify(report)}`]);
+  });
+
+  it('rejects a theme the host context does not define', async () => {
+    const lines: string[] = [];
+    const client = await connect({
+      loaderHtml: widgetHtml,
+      logHostContext: (line) => lines.push(line),
+    });
+    const result = await client.callTool({
+      name: TOOL_REPORT_HOST_CONTEXT,
+      arguments: { ...report, theme: 'sepia' },
+    });
+    expect(result.isError).toBe(true);
+    expect(lines).toEqual([]);
   });
 });
