@@ -119,6 +119,12 @@
       const gl = lastCanvas && (lastCanvas.getContext('webgl2') || lastCanvas.getContext('webgl'));
       return { contextLost: gl ? gl.isContextLost() : null };
     },
+    async setLanguage(language) {
+      const resolved = await current.setLanguage(language);
+      return { resolved, info: current.info, state: current.getState() };
+    },
+    langs: () => ['viewport', 'dock-slot', 'gauge-slot'].map((id) => document.getElementById(id).getAttribute('lang')),
+    cyrillicFonts: () => [...document.fonts].filter((face) => /400-45F/i.test(face.unicodeRange)).map((face) => face.family.replaceAll('"', '')),
     env: () => ({ language: navigator.language, languages: [...navigator.languages] }),
   };
   window.__ready = true;

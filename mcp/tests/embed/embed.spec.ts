@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, test, type Frame, type Page } from '@playwright/test';
@@ -108,6 +108,38 @@ async function paintedShare(page: Page, frame: Frame): Promise<number> {
     }
     return painted / (data.length / 4);
   }, png.toString('base64'));
+}
+
+type Strings = { [key: string]: string | Strings };
+
+function readStrings(path: string): Strings {
+  return JSON.parse(readFileSync(resolve(root, path), 'utf8')) as Strings;
+}
+
+function translator(slug: string, code: string): (key: string) => string {
+  const sources = [
+    readStrings(`explainers/${slug}/locales/${code}.json`),
+    readStrings(`src/core/locales/${code}.json`),
+  ];
+  return (key) => {
+    for (const source of sources) {
+      let node: string | Strings | undefined = source;
+      for (const part of key.split('.')) node = typeof node === 'object' ? node[part] : undefined;
+      if (typeof node === 'string') return node;
+    }
+    return key;
+  };
+}
+
+function expectTranslated(info: EmbedInfo, entry: CatalogueEntry, code: string): void {
+  const t = translator(entry.slug, code);
+  expect(info.language).toBe(code);
+  expect(info.title).toBe(t('meta.title'));
+  expect(info.title).not.toBe(entry.title);
+  expect(info.tagline).toBe(t('meta.tagline'));
+  expect(info.chapters.map((c) => c.title)).toEqual(
+    entry.chapters.map((c) => t(`sections.${c.id}.title`)),
+  );
 }
 
 function expectEnglishLabels(labels: string[], entry: CatalogueEntry): void {
@@ -301,6 +333,70 @@ test.describe('embed v1 under the strict spec CSP', () => {
       }
     }
     expect(await paintedShare(page, frame)).toBeLessThan(0.01);
+    expect(await frameErrors(frame)).toEqual([]);
+    expect(problems).toEqual([]);
+  });
+
+  test('mounts in the language it is asked for', async ({ page }) => {
+    const problems = watchConsole(page);
+    const frame = await openHarness(page);
+    const entry = bySlug.get('engine')!;
+    const mounted = await wmit<Mounted>(frame, 'mount', 'engine', { ui: true, language: 'de-AT' });
+    expectTranslated(mounted.info, entry, 'de');
+    const t = translator('engine', 'de');
+    const ui = await wmit<SiteUiDom>(frame, 'siteUi');
+    expect(ui.phases).toEqual(mounted.info.phases.map((p) => p.label));
+    expect([t('controls.play'), t('controls.pause')]).toContain(ui.play);
+    expect(ui.texts).not.toMatch(/\b(controls|stage|timeline|readouts)\.[\w.]+/);
+    expect(await wmit(frame, 'langs')).toEqual(['de', 'de', 'de']);
+    const labels = await wmit<string[]>(frame, 'labels');
+    expect(labels.length).toBeGreaterThan(0);
+    for (const label of labels) expect(label).not.toMatch(/^[a-z][\w-]*(\.[\w-]+)+$/);
+    expect(await wmit<string[]>(frame, 'cyrillicFonts')).toEqual([]);
+    await wmit(frame, 'dispose');
+    expect(await wmit(frame, 'langs')).toEqual([null, null, null]);
+    expect(await frameErrors(frame)).toEqual([]);
+    expect(problems).toEqual([]);
+  });
+
+  test('switches to Ukrainian in place and back to English', async ({ page }) => {
+    const problems = watchConsole(page);
+    const frame = await openHarness(page);
+    const entry = bySlug.get('engine')!;
+    const mounted = await wmit<Mounted>(frame, 'mount', 'engine', { ui: true });
+    expect(mounted.info.language).toBe('en');
+    expect(mounted.info.title).toBe(entry.title);
+    expect(await wmit(frame, 'langs')).toEqual(['en', 'en', 'en']);
+
+    const switched = await wmit<{ resolved: string; info: EmbedInfo; state: EmbedState }>(
+      frame,
+      'setLanguage',
+      'uk',
+    );
+    expect(switched.resolved).toBe('uk');
+    expectTranslated(switched.info, entry, 'uk');
+    const t = translator('engine', 'uk');
+    const ui = await wmit<SiteUiDom>(frame, 'siteUi');
+    expect(ui.phases).toEqual(switched.info.phases.map((p) => p.label));
+    expect([t('controls.play'), t('controls.pause')]).toContain(ui.play);
+    expect(ui.speedLabel).toBe(switched.info.speed.label);
+    expect(switched.state.phaseLabel).toBe(
+      switched.info.phases.find((p) => p.id === switched.state.phaseId)!.label,
+    );
+    expect((await wmit<EmbedState>(frame, 'lastNotified'))?.phaseLabel).toBe(
+      switched.state.phaseLabel,
+    );
+    expect(await wmit(frame, 'langs')).toEqual(['uk', 'uk', 'uk']);
+    expect(await wmit<string[]>(frame, 'cyrillicFonts')).toEqual(
+      expect.arrayContaining(['Inter Variable', 'JetBrains Mono']),
+    );
+
+    const back = await wmit<{ resolved: string; info: EmbedInfo }>(frame, 'setLanguage', 'ru');
+    expect(back.resolved).toBe('en');
+    expect(back.info.title).toBe(entry.title);
+    expect((await wmit<SiteUiDom>(frame, 'siteUi')).play).toMatch(/^(Play|Pause)$/);
+    expect(await wmit(frame, 'langs')).toEqual(['en', 'en', 'en']);
+    await wmit(frame, 'dispose');
     expect(await frameErrors(frame)).toEqual([]);
     expect(problems).toEqual([]);
   });
