@@ -26,7 +26,8 @@ export const PATHS = {
   site: 'dist',
   build: 'mcp/dist',
   catalogue: 'mcp/dist/catalogue.json',
-  widget: 'mcp/dist/widget/explainer.html',
+  loader: 'mcp/widget/loader.html',
+  widgetModule: 'dist/embed/v1/widget.js',
 } as const;
 
 export const SITE_ASSET_BASE = 'https://whatmakesittick.github.io/embed/v1/';

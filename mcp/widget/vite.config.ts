@@ -1,5 +1,5 @@
 import { createReadStream, existsSync, statSync } from 'node:fs';
-import { dirname, extname, join, normalize, resolve, sep } from 'node:path';
+import { basename, dirname, extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import type { Plugin } from 'vite';
@@ -10,6 +10,7 @@ const MCP_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const REPOSITORY_ROOT = resolve(MCP_ROOT, '..');
 const CATALOGUE_MODULE = 'virtual:wmit-catalogue';
 const SITE_PREFIX = '/site/';
+const SLOW_PREFIX = /^slow\/(\d+)\//;
 const CONTENT_TYPES: Record<string, string> = {
   '.webp': 'image/webp',
   '.woff2': 'font/woff2',
@@ -47,56 +48,18 @@ function devSite(): Plugin {
       server.middlewares.use((req, res, next) => {
         const url = (req.url ?? '').split('?')[0] ?? '';
         if (!url.startsWith(SITE_PREFIX)) return next();
-        const file = siteFile(decodeURIComponent(url.slice(SITE_PREFIX.length)));
+        const path = decodeURIComponent(url.slice(SITE_PREFIX.length));
+        const slow = SLOW_PREFIX.exec(path);
+        const file = siteFile(slow ? path.slice(slow[0].length) : path);
         if (!file) {
           res.statusCode = 404;
           return res.end();
         }
         res.setHeader('Content-Type', CONTENT_TYPES[extname(file)] ?? 'application/octet-stream');
         res.setHeader('Access-Control-Allow-Origin', '*');
-        createReadStream(file).pipe(res);
+        res.setHeader('Cache-Control', 'no-store');
+        setTimeout(() => createReadStream(file).pipe(res), Number(slow?.[1] ?? 0));
       });
-    },
-  };
-}
-
-function inlineBundle(): Plugin {
-  return {
-    name: 'wmit-widget-inline',
-    apply: 'build',
-    enforce: 'post',
-    generateBundle: {
-      order: 'post',
-      handler(_options, bundle) {
-        const page = Object.values(bundle).find(
-          (file) => file.type === 'asset' && file.fileName.endsWith('.html'),
-        );
-        if (!page || page.type !== 'asset') return;
-        let html = String(page.source);
-        for (const file of Object.values(bundle)) {
-          if (file === page) continue;
-          const tag = (pattern: RegExp, replacement: string) => {
-            html = html.replace(pattern, () => replacement);
-          };
-          const name = file.fileName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          if (file.type === 'chunk') {
-            const code = file.code.replaceAll('</script', '<\\/script');
-            tag(
-              new RegExp(`<script type="module"[^>]*src="[^"]*${name}"[^>]*></script>`),
-              `<script type="module">${code}</script>`,
-            );
-          } else if (file.fileName.endsWith('.css')) {
-            tag(
-              new RegExp(`<link rel="stylesheet"[^>]*href="[^"]*${name}"[^>]*>`),
-              `<style>${String(file.source)}</style>`,
-            );
-          } else {
-            continue;
-          }
-          delete bundle[file.fileName];
-        }
-        page.source = html;
-      },
     },
   };
 }
@@ -110,18 +73,18 @@ export default defineConfig({
   logLevel: 'warn',
   oxc: { jsx: { runtime: 'automatic', importSource: 'preact' } },
   server: { port: 5183, fs: { allow: [REPOSITORY_ROOT] } },
-  plugins: [catalogue(), devSite(), inlineBundle()],
+  plugins: [catalogue(), devSite()],
   build: {
-    outDir: resolve(REPOSITORY_ROOT, PATHS.build, 'widget'),
-    emptyOutDir: true,
+    outDir: dirname(resolve(REPOSITORY_ROOT, PATHS.widgetModule)),
+    emptyOutDir: false,
     target: 'es2022',
     modulePreload: false,
     reportCompressedSize: false,
     assetsInlineLimit: () => true,
-    cssCodeSplit: false,
     rolldownOptions: {
-      input: resolve(MCP_ROOT, 'widget/explainer.html'),
-      output: { codeSplitting: false },
+      input: { widget: resolve(MCP_ROOT, 'widget/src/start.tsx') },
+      preserveEntrySignatures: 'strict',
+      output: { format: 'es', entryFileNames: basename(PATHS.widgetModule), codeSplitting: false },
     },
   },
 });
