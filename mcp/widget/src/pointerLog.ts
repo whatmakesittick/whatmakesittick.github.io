@@ -1,5 +1,6 @@
 import type { App } from '@modelcontextprotocol/ext-apps';
 import { TOOL_REPORT_POINTER_EVENTS } from '../../shared/tools.ts';
+import { watchDockAb } from './dockAb.ts';
 
 export interface PointerLogPoint {
   x: number;
@@ -47,6 +48,11 @@ const EVENTS = [
   'touchstart',
   'pointercancel',
   'lostpointercapture',
+  'pointerover',
+  'pointerout',
+  'pointermove',
+  'blur',
+  'focus',
 ] as const;
 const CONTROL = 'button,[role=slider],input,a';
 const DOCK = '.dock-slot .dock, .dock-fallback:not([hidden]), .dock-slot';
@@ -55,6 +61,7 @@ const CLICK_WINDOW_MS = 600;
 const FLUSH_MS = 300;
 const BATCH = 20;
 const QUEUE_MAX = 200;
+const MOVE_MS = 120;
 
 const round = (n: number) => Math.round(n * 10) / 10;
 
@@ -65,16 +72,19 @@ function rect(r: DOMRect | { x: number; y: number; width: number; height: number
 export function describeElement(node: Element): string {
   const tag = node.tagName.toLowerCase();
   const id = node.id ? `#${node.id}` : '';
+  const debug = node.getAttribute('data-debug');
+  const tagged = debug ? `[debug=${debug}]` : '';
   const classes = (node.getAttribute('class') ?? '')
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 4)
     .map((c) => `.${c}`)
     .join('');
-  return `${tag}${id}${classes}`.slice(0, 80);
+  return `${tag}${id}${tagged}${classes}`.slice(0, 100);
 }
 
 export function elementPath(node: unknown): string {
+  if (node && (node as Window).window === node) return 'window';
   if (!node || typeof (node as Element).tagName !== 'string') {
     return node && (node as Node).nodeName ? (node as Node).nodeName.toLowerCase() : 'none';
   }
@@ -177,13 +187,43 @@ export function createPointerLog(
     if (!timer) timer = setTimeout(flush, FLUSH_MS);
   };
 
+  let lastMove = -Infinity;
+  let hovered: Element | null | undefined;
+  const wanted = (event: Event): boolean => {
+    if (event.type === 'pointermove') {
+      if (event.timeStamp - lastMove < MOVE_MS) return false;
+      lastMove = event.timeStamp;
+      return true;
+    }
+    if (event.type === 'pointerover' || event.type === 'pointerout') {
+      const next = controlOf(
+        event.type === 'pointerover' ? event.target : (event as PointerEvent).relatedTarget,
+      );
+      if (next === hovered) return false;
+      hovered = next;
+      return true;
+    }
+    return true;
+  };
+
+  const focusNote = () => {
+    const active = doc.activeElement;
+    return `visibility=${doc.visibilityState} hasFocus=${doc.hasFocus()} active=${
+      active ? describeElement(active) : 'none'
+    }`.slice(0, 200);
+  };
+
   const onCapture = (event: Event) => {
+    if (!wanted(event)) return;
     let record: PointerLogRecord;
     try {
       record = serializePointerEvent(event, doc, displayMode());
     } catch (error) {
       console.warn('[wmit-widget] pointer log', error);
       return;
+    }
+    if (event.type === 'blur' || event.type === 'focus' || event.type === 'visibilitychange') {
+      record.note = focusNote();
     }
     records.set(event, record);
     const element = controlOf(event.target) ?? (event.target as Element | null);
@@ -218,7 +258,9 @@ export function createPointerLog(
     win.addEventListener(type, onCapture, { capture: true, passive });
     win.addEventListener(type, onBubble, { passive });
   }
+  doc.addEventListener('visibilitychange', onCapture, { capture: true });
   return () => {
+    doc.removeEventListener('visibilitychange', onCapture, { capture: true });
     for (const type of EVENTS) {
       win.removeEventListener(type, onCapture, { capture: true });
       win.removeEventListener(type, onBubble);
@@ -229,12 +271,35 @@ export function createPointerLog(
 }
 
 export function installPointerLog(app: App, doc: Document, displayMode: () => string | undefined) {
-  return createPointerLog(doc, displayMode, (events, dropped) => {
+  const send = (events: PointerLogRecord[], dropped: number) => {
     void app
       .callServerTool({
         name: TOOL_REPORT_POINTER_EVENTS,
         arguments: { events, ...(dropped ? { dropped } : {}) },
       })
       .catch((error: unknown) => console.warn('[wmit-widget] report_pointer_events', error));
+  };
+  const stop = createPointerLog(doc, displayMode, send);
+  const stopAb = watchDockAb(doc, (applied) => {
+    const html = doc.documentElement.getBoundingClientRect();
+    send(
+      [
+        {
+          type: 'dock-ab',
+          target: 'document',
+          capturePrevented: false,
+          reachedBubble: false,
+          timeStamp: Math.round(performance.now()),
+          viewport: { width: innerWidth, height: innerHeight, dpr: devicePixelRatio },
+          documentRect: rect(html),
+          note: applied.join(', ').slice(0, 200),
+        },
+      ],
+      0,
+    );
   });
+  return () => {
+    stop();
+    stopAb();
+  };
 }

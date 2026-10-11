@@ -88,4 +88,33 @@ describe('pointer log', () => {
     expect(all.map((r) => r.type)).toEqual(['pointerdown', 'click']);
     expect(all[1]).toMatchObject({ sameAsDown: true });
   });
+
+  it('throttles moves, logs hover only when the control changes and notes focus', () => {
+    vi.useFakeTimers();
+    const button = dockMarkup();
+    button.dataset.debug = 'text';
+    const batches: PointerLogRecord[][] = [];
+    const stop = createPointerLog(
+      document,
+      () => 'fullscreen',
+      (records) => batches.push(records),
+    );
+    const svg = button.querySelector('svg')!;
+    const over = (target: Element, related: Element | null) =>
+      target.dispatchEvent(
+        new MouseEvent('pointerover', { bubbles: true, relatedTarget: related }),
+      );
+    over(button, document.body);
+    over(svg, button);
+    button.dispatchEvent(new MouseEvent('pointermove', { bubbles: true }));
+    button.dispatchEvent(new MouseEvent('pointermove', { bubbles: true }));
+    window.dispatchEvent(new FocusEvent('blur'));
+    vi.advanceTimersByTime(1000);
+    stop();
+    const all = batches.flat();
+    expect(all.map((r) => r.type)).toEqual(['pointerover', 'pointermove', 'blur']);
+    expect(all[0]!.targetControl).toBe('button[debug=text].play.big');
+    expect(all[2]).toMatchObject({ target: 'window' });
+    expect(all[2]!.note).toMatch(/^visibility=\w+ hasFocus=\w+ active=/);
+  });
 });

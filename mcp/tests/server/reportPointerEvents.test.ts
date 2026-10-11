@@ -55,7 +55,7 @@ describe('report_pointer_events', () => {
     const client = await connect({ logHostContext: (line) => lines.push(line) });
     const result = await client.callTool({
       name: TOOL_REPORT_POINTER_EVENTS,
-      arguments: { events: [{ ...event, target: 'x'.repeat(601) }] },
+      arguments: { events: [{ ...event, target: 'x'.repeat(801) }] },
     });
     expect(result.isError).toBe(true);
     expect(lines).toEqual([]);

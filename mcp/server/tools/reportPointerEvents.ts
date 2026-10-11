@@ -4,8 +4,8 @@ import { z } from 'zod';
 const num = z.number().finite();
 const point = z.object({ x: num, y: num });
 const rect = z.object({ x: num, y: num, width: num, height: num });
-const path = z.string().max(600);
-const element = z.string().max(80);
+const path = z.string().max(800);
+const element = z.string().max(100);
 
 export const pointerEventSchema = z.object({
   type: z.string().max(32),
@@ -30,7 +30,7 @@ export const pointerEventSchema = z.object({
   dockRect: rect.optional(),
   sinceDownMs: num.optional(),
   sameAsDown: z.boolean().optional(),
-  note: z.string().max(80).optional(),
+  note: z.string().max(200).optional(),
 });
 
 export const pointerEventsReportSchema = z.object({
