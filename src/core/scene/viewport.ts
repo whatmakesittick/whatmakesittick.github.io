@@ -89,6 +89,7 @@ export function createViewport(container: HTMLElement): Viewport {
       safeAreaObserver.disconnect();
       listeners.clear();
       renderer.dispose();
+      renderer.forceContextLoss();
       element.remove();
     },
   };
