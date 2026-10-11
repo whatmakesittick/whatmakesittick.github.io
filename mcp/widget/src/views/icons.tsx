@@ -37,22 +37,6 @@ export const Icon = {
         <rect x="13" y="13" width="7" height="7" rx="1.5" />
       </>,
     ),
-  brand: () => (
-    <svg viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="7" fill="#0b0d10" />
-      <g transform="translate(-0.4 -3.74) scale(0.54)">
-        <circle cx="17" cy="37" r="8" fill="none" stroke="#f5a524" stroke-width="4" />
-        <circle cx="17" cy="37" r="2.2" fill="#f5a524" />
-        <path
-          d="M20.6 45.2 L30.8 59.7 L53 14.6 L51 13.4 L29.2 44.3 L24.4 41.8 Z"
-          fill="#f5a524"
-          stroke="#f5a524"
-          stroke-width="1.5"
-          stroke-linejoin="round"
-        />
-      </g>
-    </svg>
-  ),
 };
 
 const SHAPES = new Set(['path', 'circle', 'rect', 'line', 'polyline', 'polygon', 'ellipse', 'g']);

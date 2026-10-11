@@ -1,3 +1,5 @@
+@import '../../../src/core/styles/brand.css';
+
 /* Widget shell */
 
 :root {
@@ -151,15 +153,18 @@ button:focus-visible,
   margin: 0;
 }
 .brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font: 500 0.75rem/1 var(--f-sans);
-  color: var(--muted);
+  display: flex;
+  min-width: 0;
 }
-.brand svg {
-  width: 16px;
-  height: 16px;
+.brand .site-link {
+  min-width: 0;
+  margin: 0;
+}
+.brand .site-link span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Buttons */
@@ -170,6 +175,8 @@ button:focus-visible,
   height: 36px;
   padding: 0;
   border: 1px solid var(--line-strong);
+  flex: none;
+  aspect-ratio: 1;
   border-radius: 50%;
   background: var(--scrim);
   color: var(--text);
@@ -230,6 +237,8 @@ button:focus-visible,
 }
 .icon-btn {
   display: grid;
+  flex: none;
+  aspect-ratio: 1;
   place-items: center;
   width: var(--control-height);
   height: var(--control-height);
@@ -936,7 +945,7 @@ button:focus-visible,
   position: absolute;
   left: calc(16px + var(--safe-left));
   right: 16px;
-  bottom: max(8px, var(--safe-bottom));
+  bottom: calc(var(--safe-bottom) + 6px);
 }
 
 .prose {
@@ -956,9 +965,27 @@ button:focus-visible,
   gap: 8px;
   padding: calc(14px + var(--safe-top)) 0 12px;
   background: linear-gradient(180deg, var(--background) 75%, transparent);
+  container: wmit-bar / inline-size;
 }
 .prose .bar .sp {
   flex: 1;
+}
+.prose .bar > :not(.brand, .sp) {
+  flex: none;
+}
+.prose .bar .brand {
+  min-width: 0;
+}
+@container wmit-bar (max-width: 399px) {
+  .prose .ghost.scrim .txt-n {
+    display: none;
+  }
+  .prose .ghost.scrim {
+    width: 36px;
+    aspect-ratio: 1;
+    padding: 0;
+    justify-content: center;
+  }
 }
 .prose .masthead {
   display: grid;
@@ -1088,14 +1115,6 @@ button:focus-visible,
   .prose .title {
     font: 700 1.625rem/1.12 var(--f-sans);
   }
-  .prose .ghost.scrim .txt-n {
-    display: none;
-  }
-  .prose .ghost.scrim {
-    width: 36px;
-    padding: 0;
-    justify-content: center;
-  }
   .drawer .grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1121,7 +1140,7 @@ button:focus-visible,
     --stage-inset: 10px;
   }
   .prose {
-    padding: 0 16px 24px;
+    padding: 0 16px calc(24px + var(--safe-bottom));
   }
   .prose .bar {
     padding-top: 10px;
@@ -1143,6 +1162,12 @@ button:focus-visible,
   }
 }
 @container wmit-scene (min-width: 480px) {
+  .wmit.is-fs .gauge-slot .gauge {
+    display: flex;
+  }
+  .wmit.is-fs [data-gauge-clash] .gauge-slot .gauge {
+    visibility: hidden;
+  }
   .wmit .gauge-slot .readouts {
     display: grid;
   }

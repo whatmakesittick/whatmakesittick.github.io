@@ -26,6 +26,7 @@ export interface Actions {
   setChoice(id: string, value: string): void;
   resetCamera(): void;
   openSite(): void;
+  openCatalogue(): void;
   toggleFullscreen(): void;
   switchTo(slug: string): void;
   retry(): void;

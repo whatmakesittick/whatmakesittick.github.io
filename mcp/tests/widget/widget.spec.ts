@@ -156,4 +156,31 @@ test.describe('real embed (dist): the site dock and gauge in the slots', () => {
     await expect(dock.locator('[data-speed-value] .field-value-number')).toHaveText(/×/);
     expect(errors).toEqual([]);
   });
+
+  test('compact dock: a click on the center line of the scrubber seeks', async ({ page }) => {
+    test.setTimeout(60_000);
+    await page.setViewportSize({ width: 420, height: 800 });
+    const { errors } = await open(page, 'slug=engine&real=1&mode=fullscreen');
+    await expect(page.locator('.wmit.st-ready')).toBeVisible({ timeout: 30_000 });
+    const scrubber = page.locator('.dock-slot [data-control="scrubber"]');
+    await expect(page.locator('.dock-slot .dock-more')).toBeVisible();
+    const track = await box(page, '.dock-slot [data-control="scrubber"]');
+    const y = track.y + track.height / 2;
+    for (const share of [0.2, 0.8]) {
+      const x = track.x + track.width * share;
+      expect(
+        await page.evaluate(
+          ([px, py]) => document.elementFromPoint(px!, py!)?.matches('input'),
+          [x, y],
+        ),
+      ).toBe(true);
+      await page.mouse.click(x, y);
+      const min = Number(await scrubber.getAttribute('min'));
+      const max = Number(await scrubber.getAttribute('max'));
+      await expect
+        .poll(async () => (Number(await scrubber.inputValue()) - min) / (max - min))
+        .toBeCloseTo(share, 1);
+    }
+    expect(errors).toEqual([]);
+  });
 });

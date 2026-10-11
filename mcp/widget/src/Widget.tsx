@@ -8,6 +8,7 @@ import type { EmbedController, EmbedInfo, EmbedState } from '../../../src/core/e
 import { EMBED_DOM } from '../../../src/core/embed/contract.ts';
 import { MODEL_CONTEXT_DEBOUNCE_MS, type ModelContextSnapshot } from '../../shared/tools.ts';
 import type { DisplayMode, WidgetHost } from './bridge.ts';
+import { watchGaugeClearance } from './gaugeClearance.ts';
 import { createLive } from './live.ts';
 import { SceneSession, type ModuleLoader, type SceneStatus } from './scene.ts';
 import {
@@ -27,6 +28,7 @@ import { Drawer, ExploreStrip } from './views/Explore.tsx';
 import { ProseColumn } from './views/Prose.tsx';
 import { Header, Stage } from './views/Stage.tsx';
 import type { Actions, ChapterView, Discrete, ViewModel } from './views/types.ts';
+import { SITE_HOME } from './views/Brand.tsx';
 import { Unknown, Waiting } from './views/Empty.tsx';
 import { useKeyboard } from './keyboard.ts';
 
@@ -210,6 +212,12 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
   }, [fullscreen]);
 
   useEffect(() => {
+    const stage = hostRef.current?.closest<HTMLElement>('[data-stage]');
+    if (!stage || typeof ResizeObserver === 'undefined') return;
+    return watchGaugeClearance(stage);
+  }, [entry !== undefined]);
+
+  useEffect(() => {
     const stage = hostRef.current?.closest('[data-stage]');
     if (!stage || typeof IntersectionObserver === 'undefined') return;
     const io = new IntersectionObserver(([e]) => {
@@ -245,6 +253,7 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
       userChanged.current = true;
       fn(...a);
     };
+  const openCatalogue = () => void host.openLink(SITE_HOME);
   const actions: Actions = {
     setChapter: touched((id: string) => {
       chapterRef.current = id;
@@ -263,6 +272,7 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
     setChoice: touched((id: string, value: string) => ctrlRef.current?.setChoice(id, value)),
     resetCamera: () => ctrlRef.current?.resetCamera(),
     openSite: () => slug && void host.openLink(explainerUrl(slug)),
+    openCatalogue,
     async toggleFullscreen() {
       const next: DisplayMode = fullscreen ? 'inline' : 'fullscreen';
       try {
@@ -309,9 +319,10 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
             catalogue={entries}
             assetBase={assetBase}
             onPick={(s) => setTarget({ slug: s })}
+            onOpen={openCatalogue}
           />
         ) : (
-          <Waiting />
+          <Waiting onOpen={openCatalogue} />
         )}
       </div>
     );

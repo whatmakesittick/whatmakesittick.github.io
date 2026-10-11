@@ -2,6 +2,7 @@ import { Component, type RefObject } from 'preact';
 import { pad2 } from '../state.ts';
 import { S } from '../strings.ts';
 import { FallbackDock } from './Dock.tsx';
+import { Brand } from './Brand.tsx';
 import { Icon } from './icons.tsx';
 import { coverUrl, type ViewModel } from './types.ts';
 
@@ -23,20 +24,11 @@ class ViewportHost extends Component<{ hostRef: RefObject<HTMLDivElement | null>
   }
 }
 
-export function Brand() {
-  return (
-    <span class="brand">
-      <Icon.brand />
-      {S.brand}
-    </span>
-  );
-}
-
 export function Header({ vm }: { vm: ViewModel }) {
   return (
     <header class="a-head inline-only">
       <div class="row">
-        <Brand />
+        <Brand onOpen={vm.actions.openCatalogue} />
         <button type="button" class="ghost" onClick={vm.actions.openSite}>
           <span class="lg">{S.openOnSite}</span>
           <span class="sh">{S.openOnSiteShort}</span>

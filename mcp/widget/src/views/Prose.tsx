@@ -4,7 +4,7 @@ import { S } from '../strings.ts';
 import { Body } from './Chapter.tsx';
 import { DrawerButton } from './Explore.tsx';
 import { Icon } from './icons.tsx';
-import { Brand } from './Stage.tsx';
+import { Brand } from './Brand.tsx';
 import type { ViewModel } from './types.ts';
 
 export function ProseColumn({ vm }: { vm: ViewModel }) {
@@ -27,7 +27,7 @@ export function ProseColumn({ vm }: { vm: ViewModel }) {
   return (
     <aside class="prose fs-only" ref={column}>
       <div class="bar">
-        <Brand />
+        <Brand onOpen={vm.actions.openCatalogue} />
         <span class="sp" />
         <DrawerButton vm={vm} />
         <button

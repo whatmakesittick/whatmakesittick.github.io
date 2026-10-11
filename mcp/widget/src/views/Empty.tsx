@@ -1,23 +1,20 @@
 import type { WidgetCatalogueEntry } from '../../../shared/catalogue.ts';
 import { S } from '../strings.ts';
-import { Icon } from './icons.tsx';
+import { Brand } from './Brand.tsx';
 
-function BrandRow() {
+function BrandRow({ onOpen }: { onOpen: () => void }) {
   return (
     <div class="row">
-      <span class="brand">
-        <Icon.brand />
-        {S.brand}
-      </span>
+      <Brand onOpen={onOpen} />
     </div>
   );
 }
 
-export function Waiting() {
+export function Waiting({ onOpen }: { onOpen: () => void }) {
   return (
     <>
       <header class="a-head">
-        <BrandRow />
+        <BrandRow onOpen={onOpen} />
         <div class="text-skeleton title-skel" aria-hidden="true">
           <i />
           <i />
@@ -41,15 +38,17 @@ export function Unknown({
   catalogue,
   assetBase,
   onPick,
+  onOpen,
 }: {
   catalogue: WidgetCatalogueEntry[];
   assetBase: string;
   onPick: (slug: string) => void;
+  onOpen: () => void;
 }) {
   return (
     <>
       <header class="a-head">
-        <BrandRow />
+        <BrandRow onOpen={onOpen} />
         <h2 class="title">{S.unknown}</h2>
       </header>
       <section class="a-explore unknown">
