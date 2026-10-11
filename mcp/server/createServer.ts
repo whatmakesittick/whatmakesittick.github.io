@@ -20,6 +20,7 @@ import {
 } from '../shared/tools.ts';
 import { buildUiMeta } from './assets.ts';
 import {
+  LANG_DESCRIBE,
   LIST_EXPLAINERS_DESCRIPTION,
   buildShowExplainerDescription,
   type Aliases,
@@ -66,6 +67,7 @@ export function createServer(options: CreateServerOptions): McpServer {
       inputSchema: z.object({
         slug: z.enum(slugs as [string, ...string[]]).describe('Which explainer to show.'),
         chapter: z.string().optional().describe(SHOW_EXPLAINER_CHAPTER_DESCRIBE),
+        lang: z.string().max(35).optional().describe(LANG_DESCRIBE),
       }),
       annotations: { ...TOOL_ANNOTATIONS },
       _meta: { ui: { resourceUri: WIDGET_RESOURCE_URI }, ...OPENAI_INVOCATION_META },
@@ -80,6 +82,7 @@ export function createServer(options: CreateServerOptions): McpServer {
       description: LIST_EXPLAINERS_DESCRIPTION,
       inputSchema: z.object({
         tag: z.enum(TAGS).optional().describe('Only explainers with this tag.'),
+        lang: z.string().max(35).optional().describe(LANG_DESCRIBE),
       }),
       annotations: { ...TOOL_ANNOTATIONS },
     },

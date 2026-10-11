@@ -1,5 +1,5 @@
 import { ATTRIBUTION } from '../shared/config.ts';
-import type { CatalogueChapter, CatalogueEntry } from '../shared/catalogue.ts';
+import type { CatalogueChapter, LocalizedCatalogueEntry } from '../shared/catalogue.ts';
 import { MODEL_TEXT_MAX_BYTES } from '../shared/tools.ts';
 import type { ChapterResolution } from './chapters.ts';
 
@@ -33,7 +33,7 @@ const snippet = (c: CatalogueChapter): string => {
 };
 
 export function showExplainerText(
-  entry: CatalogueEntry,
+  entry: LocalizedCatalogueEntry,
   res: ChapterResolution,
   requested?: string,
 ): string {
@@ -73,7 +73,10 @@ export function showExplainerText(
   return truncateBytes(text, MODEL_TEXT_MAX_BYTES);
 }
 
-export function listExplainersText(entries: CatalogueEntry[], tag?: string): string {
+export function listExplainersText(
+  entries: readonly LocalizedCatalogueEntry[],
+  tag?: string,
+): string {
   if (entries.length === 0) {
     return tag ? `No explainers with the tag "${tag}".` : 'No explainers available.';
   }

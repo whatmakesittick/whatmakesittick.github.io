@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { TAGS } from '../../shared/catalogue.ts';
+import { LANGUAGE_CODES } from '../../../src/core/i18n/languages.ts';
+import { TAGS, localizeEntry } from '../../shared/catalogue.ts';
 import { ASSET_BASE_TOKEN } from '../../shared/config.ts';
 import { EMBED_API_VERSION } from '../../../src/core/embed/manifest.ts';
 import {
@@ -31,6 +32,26 @@ describe('tools/list', () => {
     const description = show.description ?? '';
     expect(description.length).toBeLessThanOrEqual(SHOW_EXPLAINER_DESCRIPTION_MAX);
     for (const slug of SLUGS) expect(description).toContain(topicLabel(aliases[slug] ?? []));
+  });
+
+  it('both tools take an optional free-form lang and the description asks for it', async () => {
+    const client = await connect();
+    const { tools } = await client.listTools();
+    for (const name of ['show_explainer', 'list_explainers']) {
+      const tool = tools.find((t) => t.name === name)!;
+      const lang = tool.inputSchema.properties?.lang as {
+        type?: string;
+        maxLength?: number;
+        enum?: unknown;
+        description?: string;
+      };
+      expect(lang).toMatchObject({ type: 'string', maxLength: 35 });
+      expect(lang.enum).toBeUndefined();
+      expect(lang.description).toContain('BCP 47');
+      expect(tool.inputSchema.required ?? []).not.toContain('lang');
+    }
+    const show = tools.find((t) => t.name === 'show_explainer')!;
+    expect(show.description).toContain('`lang`');
   });
 
   it('list_explainers: tag enum, read-only, no _meta.ui', async () => {
@@ -171,7 +192,94 @@ describe('show_explainer', () => {
   });
 });
 
+describe('show_explainer in other languages', () => {
+  const mri = catalogue.explainers.find((e) => e.slug === 'mri-scanner')!;
+
+  it('opens in the language the model passes and reports it', async () => {
+    const client = await connect();
+    const uk = localizeEntry(mri, 'uk');
+    const res = await client.callTool({
+      name: 'show_explainer',
+      arguments: { slug: 'mri-scanner', chapter: 'magnet', lang: 'uk' },
+    });
+    const sc = res.structuredContent as unknown as ShowExplainerResult;
+    expect(sc).toMatchObject({
+      lang: 'uk',
+      chapter: 'magnet',
+      title: uk.title,
+      chapterTitle: uk.chapters[1]!.title,
+    });
+    const text = textOf(res);
+    expect(text).toContain(`"${uk.title}"`);
+    expect(text).toContain(uk.tagline);
+    expect(text).toContain(`"${uk.chapters[1]!.title}" (id: magnet)`);
+    expect(text).toContain(uk.chapters[1]!.paragraphs[0]!.text.slice(0, 40));
+  });
+
+  it.each([
+    ['ru', 'en'],
+    ['en-US', 'en'],
+    ['de-AT', 'de'],
+    ['zh_CN', 'zh'],
+  ])('normalizes %j to %s', async (lang, expected) => {
+    const client = await connect();
+    const res = await client.callTool({
+      name: 'show_explainer',
+      arguments: { slug: 'mri-scanner', lang },
+    });
+    expect(res.isError).toBeFalsy();
+    expect(res.structuredContent).toMatchObject({
+      lang: expected,
+      title: localizeEntry(mri, expected as 'en').title,
+    });
+  });
+
+  it('leaves lang out when the model did not pass it', async () => {
+    const client = await connect();
+    const res = await client.callTool({ name: 'show_explainer', arguments: { slug: 'heart' } });
+    expect(res.structuredContent).not.toHaveProperty('lang');
+  });
+
+  it.each(LANGUAGE_CODES)('modelText ≤ 4 KB for every chapter in %s', async (lang) => {
+    const client = await connect();
+    for (const e of catalogue.explainers) {
+      const localized = localizeEntry(e, lang);
+      for (const c of localized.chapters) {
+        const res = await client.callTool({
+          name: 'show_explainer',
+          arguments: { slug: e.slug, chapter: c.id, lang },
+        });
+        const text = textOf(res);
+        expect(new TextEncoder().encode(text).length).toBeLessThanOrEqual(MODEL_TEXT_MAX_BYTES);
+        expect(text).toContain(`"${c.title}" (id: ${c.id})`);
+        expect(text).toContain(`Website: ${e.url}`);
+      }
+    }
+  });
+});
+
 describe('list_explainers', () => {
+  it('lists titles, summaries and chapter titles in the language passed', async () => {
+    const client = await connect();
+    const res = await client.callTool({
+      name: 'list_explainers',
+      arguments: { tag: 'biology', lang: 'ja' },
+    });
+    const sc = res.structuredContent as unknown as ListExplainersResult;
+    const mri = localizeEntry(
+      catalogue.explainers.find((e) => e.slug === 'mri-scanner')!,
+      'ja',
+    );
+    expect(sc.explainers.find((e) => e.slug === 'mri-scanner')).toEqual({
+      slug: 'mri-scanner',
+      title: mri.title,
+      summary: mri.summary,
+      tags: mri.tags,
+      chapters: mri.chapters.map(({ id, title }) => ({ id, title })),
+    });
+    expect(textOf(res)).toContain(`mri-scanner | ${mri.title} | ${mri.summary} | chapters:`);
+  });
+
   it('tag filter is exact', async () => {
     const client = await connect();
     for (const tag of TAGS) {

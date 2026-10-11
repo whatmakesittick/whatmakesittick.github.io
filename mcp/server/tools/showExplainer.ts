@@ -1,13 +1,13 @@
 import type { CallToolResult } from '@modelcontextprotocol/server';
 import { EMBED_API_VERSION } from '../../../src/core/embed/manifest.ts';
-import type { CatalogueEntry } from '../../shared/catalogue.ts';
-import type { ShowExplainerResult } from '../../shared/tools.ts';
+import { localizeEntry, resolveLanguage, type CatalogueEntry } from '../../shared/catalogue.ts';
+import type { ShowExplainerInput, ShowExplainerResult } from '../../shared/tools.ts';
 import { resolveChapter } from '../chapters.ts';
 import { showExplainerText } from '../text.ts';
 
 export function showExplainer(
   entries: ReadonlyMap<string, CatalogueEntry>,
-  args: { slug: string; chapter?: string },
+  args: ShowExplainerInput,
 ): CallToolResult {
   const entry = entries.get(args.slug);
   if (!entry) {
@@ -24,19 +24,24 @@ export function showExplainer(
     };
   }
 
-  const res = resolveChapter(entry, args.chapter);
+  const lang = resolveLanguage(args.lang);
+  const localized = localizeEntry(entry, lang);
+  const found = resolveChapter(entry, args.chapter);
+  const chapter = localized.chapters.find((c) => c.id === found.chapter.id) ?? found.chapter;
+  const res = { ...found, chapter };
   const result: ShowExplainerResult = {
     slug: entry.slug,
-    chapter: res.chapter.id,
-    chapterIndex: res.chapter.index,
-    chapterCount: entry.chapters.length,
-    title: entry.title,
-    chapterTitle: res.chapter.title,
+    chapter: chapter.id,
+    chapterIndex: chapter.index,
+    chapterCount: localized.chapters.length,
+    title: localized.title,
+    chapterTitle: chapter.title,
     url: entry.url,
     apiVersion: EMBED_API_VERSION,
+    ...(args.lang === undefined ? {} : { lang }),
   };
   return {
-    content: [{ type: 'text', text: showExplainerText(entry, res, args.chapter) }],
+    content: [{ type: 'text', text: showExplainerText(localized, res, args.chapter) }],
     structuredContent: { ...result },
   };
 }

@@ -1,4 +1,5 @@
 import type { EmbedApiVersion } from '../../src/core/embed/manifest.ts';
+import type { LanguageCode } from '../../src/core/i18n/languages.ts';
 import type { Tag } from './catalogue.ts';
 
 export const TOOL_SHOW_EXPLAINER = 'show_explainer' as const;
@@ -29,6 +30,7 @@ export const OPENAI_INVOCATION_META = {
 export interface ShowExplainerInput {
   slug: string;
   chapter?: string;
+  lang?: string;
 }
 
 export interface ShowExplainerResult {
@@ -40,10 +42,12 @@ export interface ShowExplainerResult {
   chapterTitle: string;
   url: string;
   apiVersion: EmbedApiVersion;
+  lang?: LanguageCode;
 }
 
 export interface ListExplainersInput {
   tag?: Tag;
+  lang?: string;
 }
 
 export interface ListExplainersItem {
