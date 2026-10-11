@@ -8,6 +8,6 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const catalogue = buildCatalogue(root);
 const file = resolve(root, PATHS.catalogue);
 mkdirSync(dirname(file), { recursive: true });
-writeFileSync(file, `${JSON.stringify(catalogue, null, 2)}\n`);
+writeFileSync(file, `${JSON.stringify(catalogue)}\n`);
 const counts = catalogue.explainers.map((e) => `${e.slug}:${e.chapters.length}`).join(' ');
 console.log(`${PATHS.catalogue}: ${catalogue.explainers.length} explainers (${counts})`);
