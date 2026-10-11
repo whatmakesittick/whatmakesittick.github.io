@@ -1,0 +1,20 @@
+{
+  "mri-scanner": ["MRI scanner", "magnetic resonance imaging"],
+  "engine": ["car engine", "four-stroke petrol/diesel", "inline-four"],
+  "raptor": ["rocket engine", "SpaceX Raptor"],
+  "helicopter": ["helicopter"],
+  "glider": ["glider", "sailplane", "thermals"],
+  "fpv-drone": ["FPV drone", "quadcopter"],
+  "reaper": ["MQ-9 Reaper drone"],
+  "naval-drone": ["naval drone", "uncrewed boat"],
+  "mechanical-watch": ["mechanical watch", "escapement"],
+  "microscope": ["microscope"],
+  "sewing-machine": ["sewing machine", "lockstitch"],
+  "solar-panel": ["solar panel", "photovoltaics"],
+  "wind-farm": ["wind farm", "wind turbine"],
+  "oil-rig": ["oil rig", "offshore drilling"],
+  "heart": ["human heart", "heartbeat"],
+  "atp-synthase": ["ATP synthase", "mitochondria"],
+  "black-hole": ["black hole", "time dilation"],
+  "rifle": ["self-loading rifle", "gas-operated"]
+}

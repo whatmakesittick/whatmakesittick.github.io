@@ -1,0 +1,220 @@
+import { createHash } from 'node:crypto';
+import { describe, expect, it } from 'vitest';
+import { TAGS } from '../../shared/catalogue.ts';
+import { ASSET_BASE_TOKEN } from '../../shared/config.ts';
+import { EMBED_API_VERSION } from '../../../src/core/embed/manifest.ts';
+import {
+  MODEL_TEXT_MAX_BYTES,
+  SHOW_EXPLAINER_DESCRIPTION_MAX,
+  WIDGET_RESOURCE_URI,
+  type ListExplainersResult,
+  type ShowExplainerResult,
+} from '../../shared/tools.ts';
+import { claudeAppDomain } from '../../server/assets.ts';
+import { availableSlugs } from '../../server/createServer.ts';
+import { buildShowExplainerDescription, topicLabel } from '../../server/description.ts';
+import { ASSET_BASE, aliases, catalogue, connect, slugs as SLUGS, textOf } from './helpers.ts';
+
+describe('tools/list', () => {
+  it('show_explainer: slug enum, fixed resourceUri, read-only, description with every topic', async () => {
+    const client = await connect();
+    const { tools } = await client.listTools();
+    const show = tools.find((t) => t.name === 'show_explainer')!;
+    expect((show.inputSchema.properties?.slug as { enum: string[] }).enum).toEqual([...SLUGS]);
+    expect(show.inputSchema.required).toEqual(['slug']);
+    expect(show._meta?.ui).toEqual({ resourceUri: WIDGET_RESOURCE_URI });
+    expect(show.annotations).toMatchObject({
+      readOnlyHint: true,
+      openWorldHint: false,
+      idempotentHint: true,
+    });
+    const description = show.description ?? '';
+    expect(description.length).toBeLessThanOrEqual(SHOW_EXPLAINER_DESCRIPTION_MAX);
+    for (const slug of SLUGS) expect(description).toContain(topicLabel(aliases[slug] ?? []));
+  });
+
+  it('list_explainers: tag enum, read-only, no _meta.ui', async () => {
+    const client = await connect();
+    const { tools } = await client.listTools();
+    const list = tools.find((t) => t.name === 'list_explainers')!;
+    expect((list.inputSchema.properties?.tag as { enum: string[] }).enum).toEqual([...TAGS]);
+    expect(list._meta?.ui).toBeUndefined();
+    expect(list.annotations).toMatchObject({ readOnlyHint: true });
+  });
+
+  it('WMIT_EXCLUDE_TAGS hides catalogued explainers with that tag', () => {
+    const full = catalogue;
+    const hidden = full.explainers.filter((e) => e.tags.includes('biology')).map((e) => e.slug);
+    const slugs = availableSlugs(full, ['biology']);
+    expect(slugs).not.toContain('mri-scanner');
+    expect(slugs).toHaveLength(SLUGS.length - hidden.length);
+    expect(buildShowExplainerDescription(aliases, slugs)).not.toContain('MRI scanner');
+  });
+});
+
+describe('resources/read', () => {
+  it('serves the widget as an MCP App with the asset base injected and CSP in contents[0]._meta.ui', async () => {
+    const client = await connect({
+      loadWidgetHtml: () => `<meta content="${ASSET_BASE_TOKEN}">x${ASSET_BASE_TOKEN}`,
+    });
+    const { resources } = await client.listResources();
+    const res = resources.find((r) => r.uri === WIDGET_RESOURCE_URI)!;
+    expect(res.mimeType).toBe('text/html;profile=mcp-app');
+    expect(res._meta?.ui).toMatchObject({
+      csp: { resourceDomains: ['http://localhost:3999'], connectDomains: [] },
+    });
+
+    const read = await client.readResource({ uri: WIDGET_RESOURCE_URI });
+    const c0 = read.contents[0]!;
+    expect(c0.mimeType).toBe('text/html;profile=mcp-app');
+    expect('text' in c0 && c0.text).toBe(`<meta content="${ASSET_BASE}">x${ASSET_BASE}`);
+    expect(c0._meta?.ui).toEqual({
+      prefersBorder: false,
+      csp: { resourceDomains: ['http://localhost:3999'], connectDomains: [] },
+    });
+  });
+
+  it('sets ui.domain only when given one, with the cv-mcp-app formula', async () => {
+    const publicUrl = 'https://x.trycloudflare.com/mcp';
+    const domain = await claudeAppDomain(publicUrl);
+    const expected = `${createHash('sha256').update(publicUrl).digest('hex').slice(0, 32)}.claudemcpcontent.com`;
+    expect(domain).toBe(expected);
+    expect(await claudeAppDomain(undefined)).toBeUndefined();
+
+    const client = await connect({ domain, assetBase: 'https://x.trycloudflare.com/embed/v1/' });
+    const read = await client.readResource({ uri: WIDGET_RESOURCE_URI });
+    expect(read.contents[0]?._meta?.ui).toMatchObject({
+      domain: expected,
+      csp: { resourceDomains: ['https://x.trycloudflare.com'] },
+    });
+  });
+
+  it('the placeholder widget carries the token and gets it replaced', async () => {
+    const client = await connect();
+    const read = await client.readResource({ uri: WIDGET_RESOURCE_URI });
+    const html = 'text' in read.contents[0]! ? read.contents[0].text : '';
+    expect(html).toContain(`content="${ASSET_BASE}"`);
+    expect(html).not.toContain(ASSET_BASE_TOKEN);
+  });
+});
+
+describe('show_explainer', () => {
+  it.each(['magnet', '2', 'the magnet'])('mri-scanner chapter %j → magnet', async (chapter) => {
+    const client = await connect();
+    const res = await client.callTool({
+      name: 'show_explainer',
+      arguments: { slug: 'mri-scanner', chapter },
+    });
+    expect(res.isError).toBeFalsy();
+    const sc = res.structuredContent as unknown as ShowExplainerResult;
+    expect(sc).toEqual({
+      slug: 'mri-scanner',
+      chapter: 'magnet',
+      chapterIndex: 2,
+      chapterCount: 6,
+      title: 'How an MRI scanner works',
+      chapterTitle: 'A magnet that never switches off',
+      url: 'https://whatmakesittick.github.io/mri-scanner/',
+      apiVersion: EMBED_API_VERSION,
+    } satisfies ShowExplainerResult);
+    const text = textOf(res);
+    expect(text).toContain(
+      'Opened at chapter 2 of 6: "A magnet that never switches off" (id: magnet).',
+    );
+    expect(text).toContain('Vitalii Elenhaupt');
+    expect(text).toContain('Website: https://whatmakesittick.github.io/mri-scanner/');
+  });
+
+  it('opens the first chapter without a chapter argument', async () => {
+    const client = await connect();
+    const res = await client.callTool({ name: 'show_explainer', arguments: { slug: 'engine' } });
+    expect(res.structuredContent).toMatchObject({
+      chapter: 'overview',
+      chapterIndex: 1,
+      chapterCount: 10,
+    });
+    expect(textOf(res)).not.toContain('No chapter matches');
+  });
+
+  it('unknown chapter → first chapter and a note in the text', async () => {
+    const client = await connect();
+    const res = await client.callTool({
+      name: 'show_explainer',
+      arguments: { slug: 'mri-scanner', chapter: 'toaster' },
+    });
+    expect(res.isError).toBeFalsy();
+    expect(res.structuredContent).toMatchObject({ chapter: 'overview', chapterIndex: 1 });
+    expect(textOf(res)).toContain('No chapter matches "toaster"');
+  });
+
+  it('unknown slug → isError listing the slugs', async () => {
+    const client = await connect();
+    const res = await client.callTool({ name: 'show_explainer', arguments: { slug: 'toaster' } });
+    expect(res.isError).toBe(true);
+    expect(textOf(res)).toContain('mri-scanner');
+  });
+
+  it('modelText ≤ 4 KB for every chapter', async () => {
+    const client = await connect();
+    for (const e of catalogue.explainers) {
+      for (const c of e.chapters) {
+        const res = await client.callTool({
+          name: 'show_explainer',
+          arguments: { slug: e.slug, chapter: c.id },
+        });
+        const text = textOf(res);
+        expect(new TextEncoder().encode(text).length).toBeLessThanOrEqual(MODEL_TEXT_MAX_BYTES);
+        expect(text).toContain(`(id: ${c.id})`);
+        expect(text).toContain(`Website: ${e.url}`);
+      }
+    }
+  });
+});
+
+describe('list_explainers', () => {
+  it('tag filter is exact', async () => {
+    const client = await connect();
+    for (const tag of TAGS) {
+      const res = await client.callTool({ name: 'list_explainers', arguments: { tag } });
+      const got = (res.structuredContent as unknown as ListExplainersResult).explainers.map(
+        (e) => e.slug,
+      );
+      expect(got).toEqual(
+        catalogue.explainers.filter((e) => e.tags.includes(tag)).map((e) => e.slug),
+      );
+    }
+  });
+
+  it('biology lists atp-synthase, heart and mri-scanner', async () => {
+    const client = await connect();
+    const res = await client.callTool({ name: 'list_explainers', arguments: { tag: 'biology' } });
+    const got = (res.structuredContent as unknown as ListExplainersResult).explainers
+      .map((e) => e.slug)
+      .sort();
+    expect(got).toEqual(['atp-synthase', 'heart', 'mri-scanner']);
+  });
+
+  it('without a tag lists everything, one text line per explainer with chapter ids', async () => {
+    const client = await connect();
+    const res = await client.callTool({ name: 'list_explainers', arguments: {} });
+    const sc = res.structuredContent as unknown as ListExplainersResult;
+    const mri = catalogue.explainers.find((e) => e.slug === 'mri-scanner')!;
+    expect(sc.explainers.map((e) => e.slug)).toEqual(catalogue.explainers.map((e) => e.slug));
+    expect(sc.explainers.find((e) => e.slug === 'mri-scanner')).toEqual({
+      slug: 'mri-scanner',
+      title: 'How an MRI scanner works',
+      summary: mri.summary,
+      tags: mri.tags,
+      chapters: mri.chapters.map(({ id, title }) => ({ id, title })),
+    });
+    expect(textOf(res)).toContain(
+      `mri-scanner | How an MRI scanner works | ${mri.summary} | chapters: overview, magnet, spins, resonance, gradients, picture`,
+    );
+  });
+
+  it('rejects an unknown tag', async () => {
+    const client = await connect();
+    const res = await client.callTool({ name: 'list_explainers', arguments: { tag: 'kitchen' } });
+    expect(res.isError).toBe(true);
+  });
+});
