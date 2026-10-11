@@ -232,7 +232,8 @@ button:focus-visible,
   -webkit-backdrop-filter: blur(10px);
   color: var(--text);
 }
-.ghost:hover {
+.ghost:hover,
+.round-btn:hover {
   border-color: var(--muted);
 }
 .icon-btn {
