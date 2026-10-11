@@ -1,8 +1,5 @@
-import {
-  DEFAULT_LANGUAGE,
-  baseLanguage,
-  type LanguageCode,
-} from '../../src/core/i18n/languages.ts';
+import { DEFAULT_LANGUAGE, type LanguageCode } from '../../src/core/i18n/languages.ts';
+export { resolveLanguage } from '../../src/core/i18n/languages.ts';
 import { TAGS } from '../../src/core/manifest.ts';
 import type { Tag } from '../../src/core/manifest.ts';
 
@@ -119,11 +116,6 @@ export function plainText(html: string): string {
 }
 
 export type BakedCatalogue = WidgetCatalogue & { taglines: Record<string, string> };
-
-export function resolveLanguage(language: string | undefined): LanguageCode {
-  const tag = (language ?? '').trim().replaceAll('_', '-').toLowerCase();
-  return baseLanguage(tag) ?? DEFAULT_LANGUAGE;
-}
 
 function localizeChapter(
   chapter: CatalogueChapter,

@@ -2,7 +2,8 @@ import i18next from 'i18next';
 import en from '../locales/en.json';
 import { NAMESPACE, TRANSLATION_OPTIONS } from './config';
 import { CORE_LOCALES } from './coreLocales';
-import { DEFAULT_LANGUAGE, LANGUAGE_CODES, baseLanguage } from './languages';
+import { DEFAULT_LANGUAGE, LANGUAGE_CODES } from './languages';
+export { resolveLanguage } from './languages';
 import type { LanguageCode } from './languages';
 import { createDictionaryLoader } from './loader';
 import type { DictionaryLoader } from './loader';
@@ -12,11 +13,6 @@ import type { Dictionary, LocaleLoaders } from './resources';
 let owner: LocaleLoaders | undefined;
 let load: DictionaryLoader = createDictionaryLoader([CORE_LOCALES]);
 let requested: LanguageCode = DEFAULT_LANGUAGE;
-
-export function resolveLanguage(language: string | undefined): LanguageCode {
-  const tag = (language ?? '').trim().replaceAll('_', '-').toLowerCase();
-  return baseLanguage(tag) ?? DEFAULT_LANGUAGE;
-}
 
 function adopt(locales: LocaleLoaders): void {
   if (!i18next.isInitialized) {

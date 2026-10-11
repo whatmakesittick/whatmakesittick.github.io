@@ -29,3 +29,8 @@ export function baseLanguage(code: string): LanguageCode | undefined {
   const [base] = code.split('-');
   return isLanguageCode(base) ? base : undefined;
 }
+
+export function resolveLanguage(language: string | undefined): LanguageCode {
+  const tag = (language ?? '').trim().replaceAll('_', '-').toLowerCase();
+  return baseLanguage(tag) ?? DEFAULT_LANGUAGE;
+}
