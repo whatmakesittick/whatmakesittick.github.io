@@ -6,7 +6,7 @@ import { embedEntrySlug } from './vite/embed.ts';
 import { explainerPages } from './vite/explainerPages.ts';
 import { siteCheck } from './vite/siteCheckPlugin.ts';
 
-const TEST_ROOTS = ['src', 'explainers/*/src', 'vite'];
+const TEST_ROOTS = ['src', 'explainers/*/src', 'vite', 'mcp'];
 const TEST_SUFFIX = '.test.ts';
 const DOM_TEST_SUFFIX = '.dom.test.ts';
 const testFiles = (suffix: string) => TEST_ROOTS.map((root) => `${root}/**/*${suffix}`);

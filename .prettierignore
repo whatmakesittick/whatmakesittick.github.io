@@ -6,3 +6,4 @@ package-lock.json
 /*/*/index.html
 test-results
 playwright-report
+mcp/docs/design
