@@ -82,4 +82,13 @@ describe('mountDock', () => {
     expect(chips.map((chip) => chip.dataset.i18nAttr)).toEqual(['title:jump.in', 'title:jump.out']);
     expect(chips.some((chip) => chip.hasAttribute('aria-label'))).toBe(false);
   });
+
+  it('stops following the store once unmounted', () => {
+    const store = createStore();
+    const unmount = mountDock(document, store, explainer);
+    const play = document.querySelector<HTMLButtonElement>('[data-control="play"]');
+    unmount();
+    store.getState().pause();
+    expect(play?.dataset.i18nAttr).toBe('aria-label:controls.pause');
+  });
 });

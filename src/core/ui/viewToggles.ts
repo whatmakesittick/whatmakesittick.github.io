@@ -1,4 +1,6 @@
 import type { ExplainerStore, ViewToggle } from '../explainer';
+import { disposeAll } from './disposers';
+import type { Disposer } from './disposers';
 import { html, queryAll, setPressed, svg } from './dom';
 import { parseOption } from './parse';
 import { watch } from './subscribe';
@@ -33,15 +35,17 @@ export function bindViewToggles(
   group: HTMLElement,
   store: ExplainerStore,
   toggles: readonly ViewToggle[],
-): void {
+): Disposer {
   const views = toggles.map((toggle) => toggle.view);
-  for (const button of queryAll<HTMLButtonElement>(group, '[data-view]')) {
-    const view = parseOption(button.dataset.view, views);
-    button.addEventListener('click', () => store.getState().toggleView(view));
-    watch(
-      store,
-      (state) => state.view[view],
-      (enabled) => setPressed(button, enabled),
-    );
-  }
+  return disposeAll(
+    queryAll<HTMLButtonElement>(group, '[data-view]').map((button) => {
+      const view = parseOption(button.dataset.view, views);
+      button.addEventListener('click', () => store.getState().toggleView(view));
+      return watch(
+        store,
+        (state) => state.view[view],
+        (enabled) => setPressed(button, enabled),
+      );
+    }),
+  );
 }

@@ -1,5 +1,6 @@
 import type { ExplainerStore, Playback, Readout } from '../explainer';
 import { onLanguageChanged } from '../i18n';
+import type { Disposer } from './disposers';
 import { html, requireElement, setText } from './dom';
 import { TEXT_REFRESH_INTERVAL_MS, throttle } from './throttle';
 
@@ -54,10 +55,10 @@ function renderRow<S extends Playback>(row: ReadoutRow<S>, state: S): void {
 }
 
 export function mountReadouts<S extends Playback>(
-  root: Document,
+  root: ParentNode,
   store: ExplainerStore<S>,
   readouts: readonly Readout<S>[],
-): void {
+): Disposer {
   const list = requireElement(root, '[data-readouts]');
   const rows = readouts.map(createRow);
   list.replaceChildren(...rows.map((row) => row.element));
@@ -67,6 +68,10 @@ export function mountReadouts<S extends Playback>(
     rows.forEach((row) => renderRow(row, state));
   }, TEXT_REFRESH_INTERVAL_MS);
   render();
-  store.subscribe(render);
-  onLanguageChanged(render);
+  const unsubscribe = store.subscribe(render);
+  const stopListening = onLanguageChanged(render);
+  return () => {
+    unsubscribe();
+    stopListening();
+  };
 }

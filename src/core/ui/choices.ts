@@ -1,4 +1,5 @@
 import type { Choice, ExplainerStore, Playback } from '../explainer';
+import type { Disposer } from './disposers';
 import { html, queryAll, setPressed } from './dom';
 import { parseOption } from './parse';
 import { watch } from './subscribe';
@@ -34,14 +35,14 @@ export function bindChoice<S extends Playback>(
   group: HTMLElement,
   store: ExplainerStore<S>,
   choice: Choice<S>,
-): void {
+): Disposer {
   const values = choice.options.map((option) => option.value);
   const buttons = queryAll<HTMLButtonElement>(group, 'button[data-value]');
   for (const button of buttons) {
     const value = parseOption(button.dataset.value, values);
     button.addEventListener('click', () => choice.apply(store.getState(), value));
   }
-  watch(store, choice.select, (current) =>
+  return watch(store, choice.select, (current) =>
     buttons.forEach((button) => setPressed(button, button.dataset.value === current)),
   );
 }

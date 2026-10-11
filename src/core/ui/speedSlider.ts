@@ -1,5 +1,6 @@
 import type { ExplainerStore, SpeedScale } from '../explainer';
 import { t } from '../i18n';
+import type { Disposer } from './disposers';
 import { html } from './dom';
 import { configureRange, showRangeValue } from './range';
 import { watchLocalized } from './subscribe';
@@ -19,7 +20,7 @@ export function bindSpeedSlider(
   output: HTMLElement,
   store: ExplainerStore,
   scale: SpeedScale,
-): void {
+): Disposer {
   configureRange(input, scale);
   const value = html('span', { class: 'field-value-number' });
   const note = html('span', { class: 'field-value-note' });
@@ -38,10 +39,11 @@ export function bindSpeedSlider(
       fitNote();
     });
   };
-  new ResizeObserver(fitNote).observe(output.parentElement ?? output);
+  const resizes = new ResizeObserver(fitNote);
+  resizes.observe(output.parentElement ?? output);
 
   input.addEventListener('input', () => store.getState().setSpeed(Number(input.value)));
-  watchLocalized(
+  const unwatch = watchLocalized(
     store,
     (state) => state.speed,
     (speed) => {
@@ -51,4 +53,8 @@ export function bindSpeedSlider(
       fitNextFrame();
     },
   );
+  return () => {
+    unwatch();
+    resizes.disconnect();
+  };
 }

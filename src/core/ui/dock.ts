@@ -2,6 +2,8 @@ import type { Explainer, ExplainerStore, Playback } from '../explainer';
 import { t } from '../i18n';
 import { requireElement } from './dom';
 import { bindChoice, createChoice } from './choices';
+import { disposeAll } from './disposers';
+import type { Disposer } from './disposers';
 import { phaseColumns } from './phases';
 import { bindPhaseButtons, bindPhaseStatus, bindScrubber, createPhaseButtons } from './scrubber';
 import { bindSpeedSlider } from './speedSlider';
@@ -12,9 +14,9 @@ const PHASE_COLUMNS_PROPERTY = '--phase-columns';
 const PLAY_KEY = 'controls.play';
 const PAUSE_KEY = 'controls.pause';
 
-function bindPlayButton(button: HTMLButtonElement, store: ExplainerStore): void {
+function bindPlayButton(button: HTMLButtonElement, store: ExplainerStore): Disposer {
   button.addEventListener('click', () => store.getState().togglePlaying());
-  watchLocalized(
+  return watchLocalized(
     store,
     (state) => state.playing,
     (playing) => {
@@ -42,7 +44,7 @@ function mountPlayback<S extends Playback>(
   dock: HTMLElement,
   store: ExplainerStore<S>,
   explainer: Explainer<S>,
-): void {
+): Disposer {
   const { timeline } = explainer;
   const find = <T extends HTMLElement>(selector: string) => requireElement<T>(dock, selector);
   const phaseGroup = find('[data-phase-buttons]');
@@ -53,46 +55,51 @@ function mountPlayback<S extends Playback>(
   find('[data-scrubber-label]').dataset.i18n = timeline.labelKey;
   find('[data-speed-label]').dataset.i18n = timeline.speed.labelKey;
 
-  bindPlayButton(find<HTMLButtonElement>('[data-control="play"]'), store);
-  bindScrubber(find<HTMLInputElement>('[data-control="scrubber"]'), store, timeline);
-  bindPhaseButtons(phaseButtons, store, timeline);
-  bindPhaseStatus(find('[data-status="phase"]'), find('[data-status="name"]'), store, timeline);
-  bindSpeedSlider(
-    find<HTMLInputElement>('[data-control="speed"]'),
-    find('[data-speed-value]'),
-    store,
-    timeline.speed,
-  );
+  return disposeAll([
+    bindPlayButton(find<HTMLButtonElement>('[data-control="play"]'), store),
+    bindScrubber(find<HTMLInputElement>('[data-control="scrubber"]'), store, timeline),
+    bindPhaseButtons(phaseButtons, store, timeline),
+    bindPhaseStatus(find('[data-status="phase"]'), find('[data-status="name"]'), store, timeline),
+    bindSpeedSlider(
+      find<HTMLInputElement>('[data-control="speed"]'),
+      find('[data-speed-value]'),
+      store,
+      timeline.speed,
+    ),
+  ]);
 }
 
 function mountExtras<S extends Playback>(
   dock: HTMLElement,
   store: ExplainerStore<S>,
   explainer: Explainer<S>,
-): void {
+): Disposer {
   const { choices, toggles } = explainer.dock;
+  const disposers: Disposer[] = [];
   const groups = choices.map((choice) => {
     const group = createChoice(choice);
-    bindChoice(group, store, choice);
+    disposers.push(bindChoice(group, store, choice));
     return group;
   });
   if (toggles.length > 0) {
     const group = createViewToggles(toggles);
-    bindViewToggles(group, store, toggles);
+    disposers.push(bindViewToggles(group, store, toggles));
     groups.push(group);
   }
   requireElement(dock, '[data-speed-field]').after(...groups);
+  return disposeAll(disposers);
 }
 
 export function mountDock<S extends Playback>(
-  root: Document,
+  root: ParentNode,
   store: ExplainerStore<S>,
   explainer: Explainer<S>,
-): void {
+): Disposer {
   const dock = requireElement(root, '[data-dock]');
-  mountPlayback(dock, store, explainer);
-  mountExtras(dock, store, explainer);
+  const unmountPlayback = mountPlayback(dock, store, explainer);
+  const unmountExtras = mountExtras(dock, store, explainer);
   bindCameraReset(requireElement<HTMLButtonElement>(dock, '[data-control="reset-camera"]'), store);
   bindDisclosure(dock, requireElement<HTMLButtonElement>(dock, '[data-control="more"]'));
   dock.style.removeProperty('visibility');
+  return disposeAll([unmountPlayback, unmountExtras]);
 }

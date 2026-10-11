@@ -1,5 +1,6 @@
 import type { ExplainerStore, Timeline } from '../explainer';
 import { t } from '../i18n';
+import type { Disposer } from './disposers';
 import { html, setAttributes, setPressed, setText } from './dom';
 import { phaseAt, phaseBands, phaseShortcut, scrubberMax } from './phases';
 import { watch, watchLocalized } from './subscribe';
@@ -12,7 +13,7 @@ export function bindScrubber(
   input: HTMLInputElement,
   store: ExplainerStore,
   timeline: Timeline,
-): void {
+): Disposer {
   setAttributes(input, { min: 0, max: scrubberMax(timeline), step: timeline.step });
   input.style.setProperty(BANDS_PROPERTY, phaseBands(timeline));
 
@@ -29,7 +30,7 @@ export function bindScrubber(
       input.setAttribute('aria-valuetext', valueText);
     }
   }, TEXT_REFRESH_INTERVAL_MS);
-  watchLocalized(
+  return watchLocalized(
     store,
     (state) => state.phase,
     (phase) => {
@@ -57,12 +58,12 @@ export function bindPhaseButtons(
   buttons: HTMLButtonElement[],
   store: ExplainerStore,
   timeline: Timeline,
-): void {
+): Disposer {
   for (const button of buttons) {
     const id = button.dataset.phase ?? '';
     button.addEventListener('click', () => store.getState().jumpToPhase(id));
   }
-  watch(
+  return watch(
     store,
     (state) => phaseAt(timeline, state.phase).id,
     (current) => buttons.forEach((button) => setPressed(button, button.dataset.phase === current)),
@@ -74,12 +75,12 @@ export function bindPhaseStatus(
   name: HTMLElement,
   store: ExplainerStore,
   timeline: Timeline,
-): void {
+): Disposer {
   const render = throttle((phase: number) => {
     const current = phaseAt(timeline, phase);
     setText(value, timeline.formatPhase(phase));
     setText(name, t(current.labelKey));
     name.style.setProperty(TONE_PROPERTY, current.tone);
   }, TEXT_REFRESH_INTERVAL_MS);
-  watchLocalized(store, (state) => state.phase, render);
+  return watchLocalized(store, (state) => state.phase, render);
 }

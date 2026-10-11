@@ -62,4 +62,19 @@ describe('gauge readouts', () => {
     await new Promise((resolve) => setTimeout(resolve, 40));
     expect(setProperty).not.toHaveBeenCalled();
   });
+
+  it('stops rendering once unmounted', async () => {
+    document.body.innerHTML = '<dl data-readouts></dl>';
+    const store = createStore();
+    const value = vi.fn(() => '1');
+    const unmount = mountReadouts(document, store, [
+      { id: 'live', labelKey: 'a', numeric: true, value },
+    ]);
+    await new Promise((resolve) => setTimeout(resolve, 40));
+    unmount();
+    const calls = value.mock.calls.length;
+    store.getState().setPhase(10);
+    await new Promise((resolve) => setTimeout(resolve, 40));
+    expect(value.mock.calls.length).toBe(calls);
+  });
 });
