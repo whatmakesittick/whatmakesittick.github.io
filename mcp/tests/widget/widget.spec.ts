@@ -157,6 +157,44 @@ test.describe('real embed (dist): the site dock and gauge in the slots', () => {
     expect(errors).toEqual([]);
   });
 
+  test('fullscreen dock: a press on the icon in the middle of a button reaches the button', async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    await page.setViewportSize({ width: 1010, height: 723 });
+    const { errors } = await open(
+      page,
+      'slug=black-hole&real=1&mode=fullscreen&insets=16,16,136,16',
+    );
+    await expect(page.locator('.wmit.is-fs.st-ready')).toBeVisible({ timeout: 30_000 });
+    const dock = page.locator('.dock-slot [data-dock]');
+    await expect(dock.locator('[data-control="play"]')).toHaveAttribute('data-playing', 'true');
+    const buttons = dock.locator(
+      '[data-control="play"], [data-control="reset-camera"], [data-view]',
+    );
+    await expect(buttons).toHaveCount(5);
+    for (const button of await buttons.all()) {
+      const hit = await button.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return (
+          document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2) === element
+        );
+      });
+      expect(hit).toBe(true);
+    }
+    for (const toggle of await dock.locator('[data-view]').all()) {
+      const before = await toggle.getAttribute('aria-pressed');
+      const b = await toggle.boundingBox();
+      if (!b) throw new Error('toggle without a box');
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2);
+      await page.mouse.down();
+      await page.waitForTimeout(100);
+      await page.mouse.up();
+      await expect(toggle).toHaveAttribute('aria-pressed', before === 'true' ? 'false' : 'true');
+    }
+    expect(errors).toEqual([]);
+  });
+
   test('compact dock: a click on the center line of the scrubber seeks', async ({ page }) => {
     test.setTimeout(60_000);
     await page.setViewportSize({ width: 420, height: 800 });
