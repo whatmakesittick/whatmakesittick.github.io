@@ -1,5 +1,6 @@
 import type { App } from '@modelcontextprotocol/ext-apps';
 import { TOOL_REPORT_POINTER_EVENTS } from '../../shared/tools.ts';
+import { installDebugPill } from './debugPill.ts';
 import { watchDockAb } from './dockAb.ts';
 
 export interface PointerLogPoint {
@@ -270,36 +271,48 @@ export function createPointerLog(
   };
 }
 
+export function debugRecord(
+  doc: Document,
+  displayMode: string | undefined,
+  type: string,
+  note: string,
+): PointerLogRecord {
+  const win = doc.defaultView ?? window;
+  const dock = doc.querySelector(DOCK);
+  return {
+    type,
+    target: 'document',
+    capturePrevented: false,
+    reachedBubble: false,
+    timeStamp: round(win.performance.now()),
+    ...(displayMode ? { displayMode } : {}),
+    viewport: { width: win.innerWidth, height: win.innerHeight, dpr: win.devicePixelRatio },
+    documentRect: rect(doc.documentElement.getBoundingClientRect()),
+    ...(dock ? { dockRect: rect(dock.getBoundingClientRect()) } : {}),
+    note: note.slice(0, 200),
+  };
+}
+
 export function installPointerLog(app: App, doc: Document, displayMode: () => string | undefined) {
-  const send = (events: PointerLogRecord[], dropped: number) => {
+  const call = (args: Record<string, unknown>) => {
     void app
-      .callServerTool({
-        name: TOOL_REPORT_POINTER_EVENTS,
-        arguments: { events, ...(dropped ? { dropped } : {}) },
-      })
+      .callServerTool({ name: TOOL_REPORT_POINTER_EVENTS, arguments: args })
       .catch((error: unknown) => console.warn('[wmit-widget] report_pointer_events', error));
   };
+  const send = (events: PointerLogRecord[], dropped: number) =>
+    call({ events, ...(dropped ? { dropped } : {}) });
   const stop = createPointerLog(doc, displayMode, send);
-  const stopAb = watchDockAb(doc, (applied) => {
-    const html = doc.documentElement.getBoundingClientRect();
-    send(
-      [
-        {
-          type: 'dock-ab',
-          target: 'document',
-          capturePrevented: false,
-          reachedBubble: false,
-          timeStamp: Math.round(performance.now()),
-          viewport: { width: innerWidth, height: innerHeight, dpr: devicePixelRatio },
-          documentRect: rect(html),
-          note: applied.join(', ').slice(0, 200),
-        },
-      ],
-      0,
-    );
+  const stopAb = watchDockAb(doc, (applied) =>
+    send([debugRecord(doc, displayMode(), 'dock-ab', applied.join(', '))], 0),
+  );
+  const stopPill = installDebugPill(doc, {
+    displayMode,
+    debug: (note) => send([debugRecord(doc, displayMode(), 'debug', note)], 0),
+    probe: (records) => call({ events: [], probe: records }),
   });
   return () => {
     stop();
     stopAb();
+    stopPill();
   };
 }

@@ -60,4 +60,20 @@ describe('report_pointer_events', () => {
     expect(result.isError).toBe(true);
     expect(lines).toEqual([]);
   });
+
+  it('logs compact probe records one per line', async () => {
+    const lines: string[] = [];
+    const client = await connect({ logHostContext: (line) => lines.push(line) });
+    await client.callTool({
+      name: TOOL_REPORT_POINTER_EVENTS,
+      arguments: {
+        events: [],
+        probe: [
+          { k: 'move', x: 300, y: 555, t: 10 },
+          { k: 'leave', x: 300, y: 556, t: 12 },
+        ],
+      },
+    });
+    expect(lines).toEqual(['pointer probe move 300 555 10', 'pointer probe leave 300 556 12']);
+  });
 });

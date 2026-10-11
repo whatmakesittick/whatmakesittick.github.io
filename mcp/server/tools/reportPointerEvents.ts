@@ -33,8 +33,16 @@ export const pointerEventSchema = z.object({
   note: z.string().max(200).optional(),
 });
 
+export const probeRecordSchema = z.object({
+  k: z.enum(['move', 'down', 'click', 'enter', 'leave', 'blur']),
+  x: num,
+  y: num,
+  t: num,
+});
+
 export const pointerEventsReportSchema = z.object({
   events: z.array(pointerEventSchema).max(20),
+  probe: z.array(probeRecordSchema).max(200).optional(),
   dropped: z.number().int().nonnegative().optional(),
 });
 
@@ -45,6 +53,7 @@ export function reportPointerEvents(
   write: (line: string) => void,
 ): CallToolResult {
   for (const event of report.events) write(`pointer ${JSON.stringify(event)}`);
+  for (const p of report.probe ?? []) write(`pointer probe ${p.k} ${p.x} ${p.y} ${p.t}`);
   if (report.dropped) write(`pointer dropped ${report.dropped}`);
   return { content: [{ type: 'text', text: 'Logged.' }] };
 }
