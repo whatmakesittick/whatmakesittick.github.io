@@ -2,8 +2,11 @@ import {
   EMBED_API_VERSION,
   type EmbedController,
   type EmbedModule,
+  type EmbedState,
   type EmbedUiSlots,
+  type LanguageCode,
 } from '../../../src/core/embed/contract.ts';
+import { DEFAULT_LANGUAGE } from '../../../src/core/i18n/languages.ts';
 
 export type SceneStatus = 'idle' | 'loading' | 'ready' | 'nowebgl' | 'error';
 
@@ -35,6 +38,25 @@ export function hasWebGL2(): boolean {
 export interface SceneCallbacks {
   status(status: SceneStatus, progress: number, error?: unknown): void;
   controller(controller: EmbedController | undefined): void;
+  language?(controller: EmbedController): void;
+}
+
+interface Mounted {
+  slug: string;
+  language: LanguageCode;
+  controller: EmbedController;
+  root: HTMLElement;
+}
+
+function restore(controller: EmbedController, state: EmbedState): void {
+  try {
+    for (const [id, on] of Object.entries(state.view)) controller.setView(id, on);
+    for (const [id, value] of Object.entries(state.choices)) controller.setChoice(id, value);
+    controller.seek(state.progress);
+    if (!state.playing) controller.pause();
+  } catch (error) {
+    console.warn('[wmit-widget] could not restore the scene state', error);
+  }
 }
 
 export interface SceneOptions {
@@ -48,7 +70,8 @@ export interface SceneOptions {
 export class SceneSession {
   private modules = new Map<string, Promise<EmbedModule>>();
   private attempts = new Map<string, number>();
-  private current: { controller: EmbedController; root: HTMLElement } | undefined;
+  private current: Mounted | undefined;
+  private language: LanguageCode = DEFAULT_LANGUAGE;
   private queue: Promise<void> = Promise.resolve();
   private generation = 0;
   private progressTimer: ReturnType<typeof setInterval> | undefined;
@@ -82,14 +105,40 @@ export class SceneSession {
     return p;
   }
 
-  show(slug: string, chapter: string | undefined, opts: { retry?: boolean } = {}): Promise<void> {
+  show(
+    slug: string,
+    chapter: string | undefined,
+    opts: { retry?: boolean; restore?: EmbedState } = {},
+  ): Promise<void> {
     const gen = ++this.generation;
     if (opts.retry) {
       this.attempts.set(slug, (this.attempts.get(slug) ?? 0) + 1);
       this.modules.delete(slug);
     }
-    this.queue = this.queue.then(() => this.run(gen, slug, chapter)).catch(() => {});
+    this.queue = this.queue.then(() => this.run(gen, slug, chapter, opts.restore)).catch(() => {});
     return this.queue;
+  }
+
+  setLanguage(language: LanguageCode): Promise<void> {
+    this.language = language;
+    return this.syncLanguage();
+  }
+
+  private async syncLanguage(): Promise<void> {
+    const cur = this.current;
+    const language = this.language;
+    if (!cur || cur.language === language || this.disposed) return;
+    cur.language = language;
+    if (typeof cur.controller.setLanguage !== 'function') {
+      const state = cur.controller.getState();
+      return this.show(cur.slug, state.chapter, { restore: state });
+    }
+    try {
+      await cur.controller.setLanguage(language);
+    } catch (error) {
+      console.warn('[wmit-widget] setLanguage failed', error);
+    }
+    if (this.current === cur) this.opts.callbacks.language?.(cur.controller);
   }
 
   private progress(from: number, to: number, ms: number): void {
@@ -122,7 +171,12 @@ export class SceneSession {
     cur.root.remove();
   }
 
-  private async run(gen: number, slug: string, chapter: string | undefined): Promise<void> {
+  private async run(
+    gen: number,
+    slug: string,
+    chapter: string | undefined,
+    state?: EmbedState,
+  ): Promise<void> {
     if (gen !== this.generation || this.disposed) return;
     this.teardownCurrent();
     const cb = this.opts.callbacks;
@@ -142,9 +196,12 @@ export class SceneSession {
       root.className = 'scene-mount';
       host.append(root);
       const ui = this.opts.ui?.();
+      const language = this.language;
       const controller = await mod.mount(root, {
         ...(chapter ? { chapter } : {}),
         ...(ui ? { ui } : {}),
+        ...(state ? { autoplay: state.playing } : {}),
+        language,
       });
       if (gen !== this.generation || this.disposed) {
         controller.dispose();
@@ -152,9 +209,11 @@ export class SceneSession {
         return;
       }
       this.stopProgress();
-      this.current = { controller, root };
+      if (state) restore(controller, state);
+      this.current = { slug, language, controller, root };
       cb.controller(controller);
       cb.status('ready', 1);
+      void this.syncLanguage();
     } catch (error) {
       this.stopProgress();
       root?.remove();
