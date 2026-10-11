@@ -26,9 +26,8 @@ export function showExplainer(
 
   const lang = resolveLanguage(args.lang);
   const localized = localizeEntry(entry, lang);
-  const found = resolveChapter(entry, args.chapter);
-  const chapter = localized.chapters.find((c) => c.id === found.chapter.id) ?? found.chapter;
-  const res = { ...found, chapter };
+  const res = resolveChapter(entry, args.chapter, lang);
+  const { chapter } = res;
   const result: ShowExplainerResult = {
     slug: entry.slug,
     chapter: chapter.id,

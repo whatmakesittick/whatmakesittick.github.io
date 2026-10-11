@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { LANGUAGE_CODES } from '../../../src/core/i18n/languages.ts';
+import { localizeEntry } from '../../shared/catalogue.ts';
 import { resolveChapter, tokens } from '../../server/chapters.ts';
 import { catalogues, fixture } from './helpers.ts';
 
@@ -59,4 +61,57 @@ describe('resolveChapter', () => {
       }
     },
   );
+});
+
+describe('tokens', () => {
+  it('keeps letters and digits of every script', () => {
+    expect(tokens('Магніт, що ніколи не вимикається')).toEqual([
+      'магніт',
+      'що',
+      'ніколи',
+      'не',
+      'вимикається',
+    ]);
+    expect(tokens('Wasserstoff neigt sich')).toEqual(['wasserstoff', 'neigt', 'sich']);
+    expect(tokens('Ein Röhre')).toContain('röhre');
+  });
+});
+
+describe('resolveChapter in other languages', () => {
+  it('returns the chapter in the language asked for', () => {
+    const res = resolveChapter(mri, 'magnet', 'uk');
+    expect(res).toMatchObject({ match: 'id', chapter: { id: 'magnet', index: 2 } });
+    expect(res.chapter.title).toBe(localizeEntry(mri, 'uk').chapters[1]!.title);
+  });
+
+  it.each([
+    ['uk', 'магніт', 'magnet'],
+    ['uk', 'Котушки', 'gradients'],
+    ['uk', 'радіоімпульс', 'resonance'],
+    ['de', 'Spulen', 'gradients'],
+    ['de', 'the magnet', 'magnet'],
+    ['ja', '磁石', 'magnet'],
+    ['ja', 'コイル', 'gradients'],
+    ['zh', '磁体', 'magnet'],
+    ['zh', '线圈', 'gradients'],
+    ['zh', '从回波到图像', 'picture'],
+  ] as const)('%s %j → %s', (lang, query, id) => {
+    expect(resolveChapter(mri, query, lang)).toMatchObject({ chapter: { id }, match: 'title' });
+  });
+
+  it('still falls back for words that match nothing', () => {
+    expect(resolveChapter(mri, 'тостер', 'uk')).toMatchObject({
+      chapter: { id: 'overview' },
+      match: 'fallback',
+    });
+    expect(resolveChapter(mri, '烤面包机', 'zh')).toMatchObject({ match: 'fallback' });
+  });
+
+  it.each(LANGUAGE_CODES)('resolves every chapter by its %s title', (lang) => {
+    for (const e of fixture.explainers) {
+      for (const c of localizeEntry(e, lang).chapters) {
+        expect(resolveChapter(e, c.title, lang).chapter.id, `${e.slug}/${c.id}`).toBe(c.id);
+      }
+    }
+  });
 });

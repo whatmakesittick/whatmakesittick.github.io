@@ -234,6 +234,15 @@ describe('show_explainer in other languages', () => {
     });
   });
 
+  it('finds the chapter by its title in that language', async () => {
+    const client = await connect();
+    const res = await client.callTool({
+      name: 'show_explainer',
+      arguments: { slug: 'mri-scanner', chapter: '磁石', lang: 'ja' },
+    });
+    expect(res.structuredContent).toMatchObject({ chapter: 'magnet', lang: 'ja' });
+  });
+
   it('leaves lang out when the model did not pass it', async () => {
     const client = await connect();
     const res = await client.callTool({ name: 'show_explainer', arguments: { slug: 'heart' } });
