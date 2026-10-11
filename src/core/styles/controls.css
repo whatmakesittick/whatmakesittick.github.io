@@ -171,6 +171,7 @@
 }
 
 .scrubber input::-webkit-slider-runnable-track {
+  pointer-events: none;
   height: 6px;
   border-radius: 3px;
   background: var(--phase-bands, var(--wash-strong));
@@ -410,6 +411,12 @@
 .icon-button {
   padding: 0;
   color: var(--text);
+}
+
+.play-button > *,
+.toggle > *,
+.icon-button > * {
+  pointer-events: none;
 }
 
 .toggle:hover,
