@@ -4,9 +4,6 @@ This note explains why the MCP App is built the way it is. How to build, run and
 [`mcp/README.md`](../README.md). The embed contract and its compatibility rules are in the "Embed"
 section of [`ARCHITECTURE.md`](../../ARCHITECTURE.md).
 
-The earlier research and design record, in Russian, is in git history under `mcp/docs/`, before
-the commit that added this note.
-
 ## What it is
 
 The MCP App shows the site's explainers inside chat hosts such as Claude, ChatGPT and the ext-apps
