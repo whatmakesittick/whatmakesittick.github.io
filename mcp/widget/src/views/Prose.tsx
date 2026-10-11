@@ -28,26 +28,27 @@ export function ProseColumn({ vm }: { vm: ViewModel }) {
     <aside class="prose fs-only" ref={column}>
       <div class="bar">
         <Brand onOpen={vm.actions.openCatalogue} />
-        <span class="sp" />
-        <DrawerButton vm={vm} />
-        <button
-          type="button"
-          class="round-btn"
-          aria-label={S.openOnSite}
-          title={S.openOnSite}
-          onClick={vm.actions.openSite}
-        >
-          <Icon.ext />
-        </button>
-        <button
-          type="button"
-          class="round-btn"
-          aria-label={S.exitFullscreen}
-          title={S.exitFullscreen}
-          onClick={vm.actions.toggleFullscreen}
-        >
-          <Icon.collapse />
-        </button>
+        <div class="bar-actions">
+          <DrawerButton vm={vm} />
+          <button
+            type="button"
+            class="round-btn"
+            aria-label={S.openOnSite}
+            title={S.openOnSite}
+            onClick={vm.actions.openSite}
+          >
+            <Icon.ext />
+          </button>
+          <button
+            type="button"
+            class="round-btn"
+            aria-label={S.exitFullscreen}
+            title={S.exitFullscreen}
+            onClick={vm.actions.toggleFullscreen}
+          >
+            <Icon.collapse />
+          </button>
+        </div>
       </div>
       <header class="masthead">
         <p class="eyebrow">{vm.entry.eyebrow}</p>

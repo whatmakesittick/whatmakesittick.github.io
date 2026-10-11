@@ -969,30 +969,32 @@ button:focus-visible,
   background: linear-gradient(180deg, var(--background) 75%, transparent);
   container: wmit-bar / inline-size;
 }
-.prose .bar .sp {
-  flex: 1;
+.prose .bar-actions {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  margin-left: auto;
 }
-.prose .bar > :not(.brand, .sp) {
+.prose .bar-actions > * {
   flex: none;
 }
 .prose .bar .brand {
-  flex: 0 0 100%;
+  flex: 0 0 auto;
+  max-width: 100%;
 }
 .prose .bar .brand .site-link span {
   overflow: visible;
   text-overflow: clip;
-  white-space: normal;
+  white-space: nowrap;
 }
-@container wmit-bar (max-width: 239px) {
-  .prose .ghost.scrim .txt-n {
-    display: none;
-  }
-  .prose .ghost.scrim {
-    width: 36px;
-    aspect-ratio: 1;
-    padding: 0;
-    justify-content: center;
-  }
+.prose .ghost.scrim .txt-n {
+  display: none;
+}
+.prose .ghost.scrim {
+  width: 36px;
+  aspect-ratio: 1;
+  padding: 0;
+  justify-content: center;
 }
 .prose .masthead {
   display: grid;
