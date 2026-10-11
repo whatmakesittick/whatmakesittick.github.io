@@ -1,22 +1,23 @@
 import { render } from 'preact';
-import bakedCatalogue from 'virtual:wmit-catalogue';
-import type { BakedCatalogue } from '../../../shared/catalogue.ts';
-import { explainerUrl, isSlug } from '../../../shared/catalogue.ts';
+import { explainerUrl, isSlug, resolveLanguage } from '../../../shared/catalogue.ts';
 import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import { createHub, type DisplayMode, type WidgetHost } from '../bridge.ts';
 import { createContextReporter, hostContextReport } from '../hostReport.ts';
+import { bundledPacks } from '../i18n/bundled.ts';
 import { hasWebGL2, urlLoader } from '../scene.ts';
 import '../styles.css';
 import { Widget } from '../Widget.tsx';
 import { mockLoader } from './mockEmbed.ts';
 
-const catalogue = bakedCatalogue as BakedCatalogue;
+const packs = bundledPacks();
+const catalogue = packs.english.catalogue;
 
 const q = new URLSearchParams(location.search);
 const slug = q.get('slug') ?? 'mri-scanner';
 const chapter = q.get('chapter') ?? 'magnet';
 const state = q.get('state');
 const real = q.get('real') === '1';
+const lang = q.get('lang');
 const assetBase = `${location.origin}/site/embed/v1/`;
 let mode: DisplayMode = q.get('mode') === 'fullscreen' ? 'fullscreen' : 'inline';
 const hostTheme =
@@ -63,11 +64,16 @@ const ctx: Partial<McpUiHostContext> = {
   availableDisplayModes: ['inline', 'fullscreen'],
   deviceCapabilities: { touch: q.get('touch') === '1', hover: q.get('touch') !== '1' },
   safeAreaInsets: parseInsets(q.get('insets')),
-  locale: 'en-US',
+  locale: q.get('locale') ?? 'en-US',
 };
 const report = createContextReporter((r) => say(`[HOST] host context ${JSON.stringify(r)}`));
 const reportContext = () =>
   report(hostContextReport(ctx, { width: innerWidth, height: innerHeight }));
+const setLocale = (locale: string) => {
+  ctx.locale = locale;
+  reportContext();
+  hub.emit('context', { ...ctx });
+};
 const setMode = (m: DisplayMode) => {
   mode = m;
   ctx.displayMode = m;
@@ -104,6 +110,8 @@ const loader = real
       ...(state === 'loading' ? { fail: 'loading' as const } : {}),
       failSlugs: (q.get('failSlugs') ?? '').split(',').filter(Boolean),
       delay: Number(q.get('delay') ?? 600),
+      packs,
+      inPlace: q.get('oldModule') !== '1',
     });
 
 const width = Number(q.get('width') ?? 720);
@@ -137,7 +145,7 @@ if (app) {
       host={host}
       loader={loader}
       assetBase={assetBase}
-      catalogue={catalogue}
+      packs={packs}
       webgl={state === 'nowebgl' ? () => false : real ? hasWebGL2 : () => true}
     />,
     mount,
@@ -149,14 +157,18 @@ if (app) {
 }
 
 reportContext();
-const args = state === 'unknown' ? { slug: 'toaster' } : { slug, chapter };
+const args = {
+  ...(state === 'unknown' ? { slug: 'toaster' } : { slug, chapter }),
+  ...(lang ? { lang } : {}),
+};
 setTimeout(() => hub.emit('input', args), 50);
-setTimeout(() => {
+setTimeout(async () => {
   if (state === 'unknown') {
     hub.emit('result', { content: [{ type: 'text', text: 'No explainer matches.' }] });
     return;
   }
-  const entry = catalogue.explainers.find((e) => e.slug === slug);
+  const shown = lang ? (await packs.load(resolveLanguage(lang))).catalogue : catalogue;
+  const entry = shown.explainers.find((e) => e.slug === slug);
   const ci = Math.max(0, entry?.chapters.findIndex((c) => c.id === chapter) ?? 0);
   const structured = {
     slug,
@@ -167,6 +179,7 @@ setTimeout(() => {
     chapterTitle: entry?.chapters[ci]?.title ?? '',
     url: isSlug(slug) ? explainerUrl(slug) : '',
     apiVersion: 1,
+    ...(lang ? { lang: resolveLanguage(lang) } : {}),
   };
   const text = `Showing the interactive 3D explainer "${structured.title}".\nOpened at chapter ${ci + 1} of ${structured.chapterCount}: "${structured.chapterTitle}" (id: ${chapter}).\nWebsite: ${structured.url}`;
   const data = q.get('data');
@@ -181,5 +194,5 @@ setTimeout(() => {
 }, 120);
 
 Object.assign(window, {
-  wmitDev: { hub, setMode, slugs: catalogue.explainers.map((e) => e.slug) },
+  wmitDev: { hub, setMode, setLocale, slugs: catalogue.explainers.map((e) => e.slug) },
 });

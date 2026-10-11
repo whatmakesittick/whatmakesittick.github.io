@@ -7,7 +7,7 @@ import type {
 } from '../../../../src/core/embed/contract.ts';
 import { useLive } from '../live.ts';
 import { shortLabel } from '../state.ts';
-import { S } from '../strings.ts';
+import { useStrings } from '../i18n/context.ts';
 import { Icon, ToggleIcon } from './icons.tsx';
 import type { ViewModel } from './types.ts';
 
@@ -17,13 +17,14 @@ const tint = (tone: string) => ({
 });
 
 export function PlayButton({ vm }: { vm: ViewModel }) {
+  const s = useStrings();
   const playing = vm.disc.playing;
   return (
     <button
       type="button"
       class="play"
-      aria-label={playing ? S.pause : S.play}
-      title={`${playing ? S.pause : S.play} (Space)`}
+      aria-label={playing ? s.pause : s.play}
+      title={`${playing ? s.pause : s.play} (Space)`}
       disabled={vm.status !== 'ready'}
       onClick={vm.actions.togglePlay}
     >
@@ -41,6 +42,7 @@ function bands(info: EmbedInfo): { phase: EmbedPhaseInfo; share: number }[] {
 }
 
 export function Scrubber({ vm }: { vm: ViewModel }) {
+  const s = useStrings();
   const state = useLive(vm.live);
   const track = useRef<HTMLDivElement>(null);
   const info = vm.info;
@@ -56,7 +58,7 @@ export function Scrubber({ vm }: { vm: ViewModel }) {
       class="scrub"
       ref={track}
       role="slider"
-      aria-label={S.timeline}
+      aria-label={s.timeline}
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(progress * 100)}
@@ -171,6 +173,7 @@ export function Toggle({
 }
 
 export function FallbackDock({ vm }: { vm: ViewModel }) {
+  const s = useStrings();
   const info = vm.info;
   return (
     <div class="dock-fallback glass" data-dock hidden={vm.siteDock || vm.status !== 'ready'}>
@@ -193,8 +196,8 @@ export function FallbackDock({ vm }: { vm: ViewModel }) {
           <button
             type="button"
             class="tgl icon-only"
-            aria-label={S.resetCamera}
-            title={`${S.resetCamera} (R)`}
+            aria-label={s.resetCamera}
+            title={`${s.resetCamera} (R)`}
             onClick={vm.actions.resetCamera}
           >
             <Icon.reset />

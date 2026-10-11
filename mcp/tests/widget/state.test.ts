@@ -17,9 +17,8 @@ import {
   targetFromResult,
 } from '../../widget/src/state.ts';
 
-const catalogue = toWidgetCatalogue(
-  buildCatalogue(resolve(dirname(fileURLToPath(import.meta.url)), '../../..')),
-);
+const full = buildCatalogue(resolve(dirname(fileURLToPath(import.meta.url)), '../../..'));
+const catalogue = toWidgetCatalogue(full);
 const mri = catalogue.explainers.find((e) => e.slug === 'mri-scanner')!;
 const find = (slug: string) => catalogue.explainers.find((e) => e.slug === slug);
 
@@ -159,6 +158,34 @@ describe('model context', () => {
     expect(text).toContain('Playback: paused at "Echo".');
     expect(text).toContain('Chapter text: Text of resonance.');
     expect(text).not.toContain('<');
+  });
+
+  it('names the language and uses localized titles', () => {
+    const uk = toWidgetCatalogue(full, 'uk').explainers.find((e) => e.slug === 'mri-scanner')!;
+    const localized: EmbedInfo = {
+      ...info,
+      language: 'uk',
+      chapters: info.chapters.map((c) => ({
+        ...c,
+        title: uk.chapters.find((u) => u.id === c.id)!.title,
+      })),
+    };
+    const snap = snapshotOf('mri-scanner', state, 'magnet');
+    const text = modelContextText(uk, localized, snap, state, 'uk');
+    expect(uk.title).not.toBe(mri.title);
+    expect(text).toContain(`"${uk.title}"`);
+    expect(text).toContain(`"${uk.chapters[3]!.title}" (id resonance)`);
+    expect(text).toContain('Language: uk.');
+    expect(text).toContain('Chapter text: Text of resonance.');
+  });
+
+  it('skips scene text in another language than the one shown', () => {
+    const uk = toWidgetCatalogue(full, 'uk').explainers.find((e) => e.slug === 'mri-scanner')!;
+    const snap = snapshotOf('mri-scanner', state, 'magnet');
+    const text = modelContextText(uk, info, snap, state, 'uk');
+    expect(text).toContain(`"${uk.chapters[3]!.title}" (id resonance)`);
+    expect(text).not.toContain('Chapter text');
+    expect(text).not.toContain('A radio pulse and its echo');
   });
 
   it('works before the scene is mounted', () => {

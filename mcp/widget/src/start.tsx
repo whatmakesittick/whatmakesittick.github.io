@@ -1,9 +1,8 @@
 import { App } from '@modelcontextprotocol/ext-apps';
 import { render } from 'preact';
-import bakedCatalogue from 'virtual:wmit-catalogue';
-import type { BakedCatalogue } from '../../shared/catalogue.ts';
 import type { WidgetStartOptions } from '../../shared/loader.ts';
 import { createAppHost } from './bridge.ts';
+import { bundledPacks } from './i18n/bundled.ts';
 import { readReportFlag } from './hostReport.ts';
 import { InboxTransport } from './inbox.ts';
 import { installPointerLog } from './pointerLog.ts';
@@ -11,7 +10,6 @@ import { hasWebGL2, urlLoader } from './scene.ts';
 import styles from './styles.css?inline';
 import { Widget } from './Widget.tsx';
 
-const catalogue = bakedCatalogue as BakedCatalogue;
 const STYLE_ATTRIBUTE = 'data-wmit-widget';
 
 function addStyles(doc: Document): void {
@@ -37,7 +35,7 @@ export function start(root: HTMLElement, { assetBase, inbox }: WidgetStartOption
       host={host}
       loader={urlLoader(assetBase)}
       assetBase={assetBase}
-      catalogue={catalogue}
+      packs={bundledPacks()}
       webgl={hasWebGL2}
     />,
     root,

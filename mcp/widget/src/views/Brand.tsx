@@ -1,7 +1,7 @@
 import favicon from '../../../../public/favicon.svg?raw';
 import siteLink from '../../../../src/core/partials/site-link.html?raw';
 import { SITE_ORIGIN } from '../../../shared/catalogue.ts';
-import { S } from '../strings.ts';
+import { useStrings } from '../i18n/context.ts';
 
 export const SITE_HOME = `${SITE_ORIGIN}/`;
 
@@ -10,13 +10,23 @@ const icon = favicon
   .replace('<svg ', '<svg class="site-link-icon" width="22" height="22" aria-hidden="true" ')
   .trim();
 
-const markup = siteLink
-  .replace('{{catalogueUrl}}', SITE_HOME)
-  .replace('{{siteName}}', S.brand)
-  .replace(/<img class="site-link-icon"[^>]*\/>/, icon)
-  .trim();
+const markups = new Map<string, string>();
+
+function markup(siteName: string): string {
+  let html = markups.get(siteName);
+  if (html === undefined) {
+    html = siteLink
+      .replace('{{catalogueUrl}}', SITE_HOME)
+      .replace('{{siteName}}', () => siteName)
+      .replace(/<img class="site-link-icon"[^>]*\/>/, icon)
+      .trim();
+    markups.set(siteName, html);
+  }
+  return html;
+}
 
 export function Brand({ onOpen }: { onOpen: () => void }) {
+  const s = useStrings();
   return (
     <span
       class="brand"
@@ -25,7 +35,7 @@ export function Brand({ onOpen }: { onOpen: () => void }) {
         event.preventDefault();
         onOpen();
       }}
-      dangerouslySetInnerHTML={{ __html: markup }}
+      dangerouslySetInnerHTML={{ __html: markup(s.brand) }}
     />
   );
 }

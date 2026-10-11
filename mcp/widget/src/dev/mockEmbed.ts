@@ -1,4 +1,4 @@
-import type { WidgetCatalogueEntry } from '../../../shared/catalogue.ts';
+import { resolveLanguage, type WidgetCatalogueEntry } from '../../../shared/catalogue.ts';
 import type {
   EmbedChoiceInfo,
   EmbedController,
@@ -7,8 +7,10 @@ import type {
   EmbedPhaseInfo,
   EmbedState,
   EmbedToggleInfo,
+  LanguageCode,
   MountOptions,
 } from '../../../../src/core/embed/contract.ts';
+import type { Packs } from '../i18n/packs.ts';
 import type { ModuleLoader } from '../scene.ts';
 
 const PHASES: [string, string, number, string][] = [
@@ -98,7 +100,7 @@ const LOREM = (title: string) => [
   'A second paragraph shows how <strong>Read more</strong> expands the chapter inline and how the fullscreen panel scrolls.',
 ];
 
-function infoFor(entry: WidgetCatalogueEntry, tagline: string): EmbedInfo {
+function infoFor(entry: WidgetCatalogueEntry, tagline: string, language: LanguageCode): EmbedInfo {
   const cycle = PHASES.reduce((s, p) => s + p[2], 0) * 40;
   let at = 0;
   const phases: EmbedPhaseInfo[] = PHASES.map(([id, label, share, tone]) => {
@@ -108,7 +110,7 @@ function infoFor(entry: WidgetCatalogueEntry, tagline: string): EmbedInfo {
   });
   return {
     slug: entry.slug,
-    language: 'en',
+    language,
     title: entry.title,
     eyebrow: entry.eyebrow,
     tagline,
@@ -116,7 +118,9 @@ function infoFor(entry: WidgetCatalogueEntry, tagline: string): EmbedInfo {
       id: c.id,
       index: i + 1,
       title: c.title,
-      paragraphsHtml: (entry.slug === 'mri-scanner' ? MRI_TEXT[c.id] : undefined) ?? LOREM(c.title),
+      paragraphsHtml:
+        (entry.slug === 'mri-scanner' && language === 'en' ? MRI_TEXT[c.id] : undefined) ??
+        LOREM(c.title),
     })),
     phases,
     cycle,
@@ -145,6 +149,8 @@ export interface MockOptions {
   delay?: number;
   fail?: 'error' | 'loading';
   failSlugs?: string[];
+  packs?: Packs;
+  inPlace?: boolean;
 }
 
 export function mockModule(slug: string, opts: MockOptions): EmbedModule {
@@ -154,7 +160,13 @@ export function mockModule(slug: string, opts: MockOptions): EmbedModule {
     apiVersion: 1,
     slug,
     async mount(container: HTMLElement, options: MountOptions = {}): Promise<EmbedController> {
-      const info = infoFor(entry, opts.taglines[slug] ?? entry.summary);
+      const describe = async (wanted: string | undefined): Promise<EmbedInfo> => {
+        const pack = await opts.packs?.load(resolveLanguage(wanted));
+        const shown = pack?.catalogue.explainers.find((e) => e.slug === slug) ?? entry;
+        const tagline = pack?.catalogue.taglines[slug] ?? opts.taglines[slug] ?? shown.summary;
+        return infoFor(shown, tagline, pack?.lang ?? 'en');
+      };
+      let info = await describe(options.language);
       const style = document.createElement('style');
       style.setAttribute('data-embed-styles', slug);
       style.textContent = css;
@@ -225,8 +237,16 @@ export function mockModule(slug: string, opts: MockOptions): EmbedModule {
       };
       raf = requestAnimationFrame(tick);
       await new Promise((r) => setTimeout(r, 150));
+      const switchLanguage = async (wanted: string): Promise<LanguageCode> => {
+        info = await describe(wanted);
+        set({});
+        return info.language;
+      };
       return {
-        info,
+        get info() {
+          return info;
+        },
+        ...(opts.inPlace === false ? {} : { setLanguage: switchLanguage }),
         getState: () => state,
         subscribe(l) {
           listeners.add(l);

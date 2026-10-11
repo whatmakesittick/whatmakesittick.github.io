@@ -1,7 +1,7 @@
 import { AppBridge, PostMessageTransport } from '@modelcontextprotocol/ext-apps/app-bridge';
 import bakedCatalogue from 'virtual:wmit-catalogue';
 import type { BakedCatalogue } from '../../../shared/catalogue.ts';
-import { explainerUrl } from '../../../shared/catalogue.ts';
+import { explainerUrl, resolveLanguage } from '../../../shared/catalogue.ts';
 import { ASSET_BASE_TOKEN, REPORT_CONTEXT_TOKEN } from '../../../shared/config.ts';
 import loaderHtml from '../../loader.html?raw';
 
@@ -10,6 +10,8 @@ const q = new URLSearchParams(location.search);
 const slug = q.get('slug') ?? 'engine';
 const delay = Number(q.get('delay') ?? 0);
 const early = q.get('early') === '1';
+const lang = q.get('lang');
+const locale = q.get('locale');
 const site = `${location.origin}/site/`;
 const assetBase =
   q.get('module') === 'missing'
@@ -20,7 +22,7 @@ const say = (line: string) => console.log(`[HOST] ${line}`);
 const entry = catalogue.explainers.find((e) => e.slug === slug);
 const chapter = q.get('chapter') ?? entry?.chapters[0]?.id ?? '';
 const index = Math.max(0, entry?.chapters.findIndex((c) => c.id === chapter) ?? 0);
-const input = { slug, chapter };
+const input = { slug, chapter, ...(lang ? { lang } : {}) };
 const result = {
   content: [{ type: 'text' as const, text: `Showing ${entry?.title ?? slug}.` }],
   structuredContent: {
@@ -32,6 +34,7 @@ const result = {
     chapterTitle: entry?.chapters[index]?.title ?? '',
     url: explainerUrl(slug),
     apiVersion: 1,
+    ...(lang ? { lang: resolveLanguage(lang) } : {}),
   },
 };
 
@@ -47,7 +50,13 @@ const bridge = new AppBridge(
   null,
   { name: 'wmit-test-host', version: '0.0.0' },
   { openLinks: {}, updateModelContext: { text: {} }, logging: {} },
-  { hostContext: { displayMode: 'inline', availableDisplayModes: ['inline', 'fullscreen'] } },
+  {
+    hostContext: {
+      displayMode: 'inline',
+      availableDisplayModes: ['inline', 'fullscreen'],
+      ...(locale ? { locale } : {}),
+    },
+  },
 );
 bridge.oninitialized = () => {
   say('initialized');

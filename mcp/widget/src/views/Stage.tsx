@@ -1,6 +1,6 @@
 import { Component, type RefObject } from 'preact';
 import { pad2 } from '../state.ts';
-import { S } from '../strings.ts';
+import { useStrings } from '../i18n/context.ts';
 import { FallbackDock } from './Dock.tsx';
 import { Brand } from './Brand.tsx';
 import { Icon } from './icons.tsx';
@@ -25,13 +25,14 @@ class ViewportHost extends Component<{ hostRef: RefObject<HTMLDivElement | null>
 }
 
 export function Header({ vm }: { vm: ViewModel }) {
+  const s = useStrings();
   return (
     <header class="a-head inline-only">
       <div class="row">
         <Brand onOpen={vm.actions.openCatalogue} />
         <button type="button" class="ghost" onClick={vm.actions.openSite}>
-          <span class="lg">{S.openOnSite}</span>
-          <span class="sh">{S.openOnSiteShort}</span>
+          <span class="lg">{s.openOnSite}</span>
+          <span class="sh">{s.openOnSiteShort}</span>
           <Icon.ext />
         </button>
       </div>
@@ -43,6 +44,7 @@ export function Header({ vm }: { vm: ViewModel }) {
 }
 
 function StateLayer({ vm }: { vm: ViewModel }) {
+  const s = useStrings();
   const { status } = vm;
   if (status === 'ready') return null;
   const cover = coverUrl(vm.assetBase, vm.entry);
@@ -58,8 +60,8 @@ function StateLayer({ vm }: { vm: ViewModel }) {
         <>
           <div class="center">
             <div class="box">
-              <h5>{S.loading.title}</h5>
-              <p>{S.loading.body}</p>
+              <h5>{s.loading.title}</h5>
+              <p>{s.loading.body}</p>
             </div>
           </div>
           <div
@@ -73,7 +75,7 @@ function StateLayer({ vm }: { vm: ViewModel }) {
               <i style={{ width: `${Math.round(vm.progress * 100)}%` }} />
             </div>
             <div class="row">
-              <span>{S.loading.progress}</span>
+              <span>{s.loading.progress}</span>
               <span class="mono">{Math.round(vm.progress * 100)}%</span>
             </div>
           </div>
@@ -81,14 +83,14 @@ function StateLayer({ vm }: { vm: ViewModel }) {
       )}
       {status === 'nowebgl' && (
         <>
-          <span class="badge-still">{S.noWebgl.chip}</span>
+          <span class="badge-still">{s.noWebgl.chip}</span>
           <div class="center bottom">
             <div class="box glass">
-              <h5>{S.noWebgl.title}</h5>
-              <p>{S.noWebgl.body}</p>
+              <h5>{s.noWebgl.title}</h5>
+              <p>{s.noWebgl.body}</p>
               <div class="btns">
                 <button type="button" class="ghost accent" onClick={vm.actions.openSite}>
-                  {S.noWebgl.cta} <Icon.ext />
+                  {s.noWebgl.cta} <Icon.ext />
                 </button>
               </div>
             </div>
@@ -98,15 +100,15 @@ function StateLayer({ vm }: { vm: ViewModel }) {
       {status === 'error' && (
         <div class="center">
           <div class="box glass">
-            <h5 class="err">{S.error.title}</h5>
-            <p>{S.error.body}</p>
+            <h5 class="err">{s.error.title}</h5>
+            <p>{s.error.body}</p>
             <div class="btns">
               <button type="button" class="ghost accent" onClick={vm.actions.retry}>
                 <Icon.reset />
-                {S.error.retry}
+                {s.error.retry}
               </button>
               <button type="button" class="ghost" onClick={vm.actions.openSite}>
-                {S.openOnSite} <Icon.ext />
+                {s.openOnSite} <Icon.ext />
               </button>
             </div>
           </div>
@@ -135,6 +137,7 @@ export function Stage({
   onPointerLeave: () => void;
   onUserInput: () => void;
 }) {
+  const s = useStrings();
   const current = vm.chapters.find((c) => c.id === vm.chapter);
   const ready = vm.status === 'ready';
   const showFs = vm.canFullscreen && vm.status !== 'nowebgl' && !vm.fullscreen;
@@ -167,8 +170,8 @@ export function Stage({
           type="button"
           class="round-btn stage-expand inline-only"
           hidden={!showFs}
-          aria-label={S.fullscreen}
-          title={S.fullscreen}
+          aria-label={s.fullscreen}
+          title={s.fullscreen}
           onClick={vm.actions.toggleFullscreen}
         >
           <Icon.expand />

@@ -1,5 +1,5 @@
 import type { WidgetCatalogueEntry } from '../../../shared/catalogue.ts';
-import { S } from '../strings.ts';
+import { useStrings } from '../i18n/context.ts';
 import { Brand } from './Brand.tsx';
 
 function BrandRow({ onOpen }: { onOpen: () => void }) {
@@ -10,7 +10,8 @@ function BrandRow({ onOpen }: { onOpen: () => void }) {
   );
 }
 
-export function Waiting({ onOpen }: { onOpen: () => void }) {
+export function Waiting({ onOpen, quiet }: { onOpen: () => void; quiet: boolean }) {
+  const s = useStrings();
   return (
     <>
       <header class="a-head">
@@ -22,12 +23,14 @@ export function Waiting({ onOpen }: { onOpen: () => void }) {
       </header>
       <div class="stage waiting">
         <div class="state state-loading">
-          <div class="center">
-            <div class="box">
-              <h5>{S.loading.title}</h5>
-              <p>{S.loading.body}</p>
+          {!quiet && (
+            <div class="center">
+              <div class="box">
+                <h5>{s.loading.title}</h5>
+                <p>{s.loading.body}</p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>
@@ -45,11 +48,12 @@ export function Unknown({
   onPick: (slug: string) => void;
   onOpen: () => void;
 }) {
+  const s = useStrings();
   return (
     <>
       <header class="a-head">
         <BrandRow onOpen={onOpen} />
-        <h2 class="title">{S.unknown}</h2>
+        <h2 class="title">{s.unknown}</h2>
       </header>
       <section class="a-explore unknown">
         <div class="grid">

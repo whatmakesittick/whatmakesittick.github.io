@@ -1,5 +1,5 @@
 import { isSlug, SITE_ORIGIN, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
-import type { EmbedInfo, EmbedState } from '../../../src/core/embed/contract.ts';
+import type { EmbedInfo, EmbedState, LanguageCode } from '../../../src/core/embed/contract.ts';
 import type { ModelContextSnapshot } from '../../shared/tools.ts';
 
 export interface Target {
@@ -127,9 +127,11 @@ export function modelContextText(
   info: EmbedInfo | undefined,
   snap: ModelContextSnapshot,
   state: EmbedState | undefined,
+  lang?: LanguageCode,
 ): string {
+  const scene = info && (!lang || info.language === lang) ? info : undefined;
   const chapters =
-    info?.chapters ??
+    scene?.chapters ??
     entry.chapters.map((c, i) => ({ id: c.id, index: i + 1, title: c.title, paragraphsHtml: [] }));
   const ch = chapters.find((c) => c.id === snap.chapter);
   const parts: string[] = [];
@@ -151,6 +153,7 @@ export function modelContextText(
   }
   const phase = state?.phaseLabel ? ` at "${state.phaseLabel}"` : '';
   parts.push(`Playback: ${snap.playing ? 'playing' : 'paused'}${phase}.`);
+  if (lang) parts.push(`Language: ${lang}.`);
   let text = parts.join(' ');
   if (ch && ch.paragraphsHtml.length) {
     let body = ch.paragraphsHtml.map(plainText).join(' ');

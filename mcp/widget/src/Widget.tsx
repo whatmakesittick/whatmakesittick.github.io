@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import {
-  explainerUrl,
-  type WidgetCatalogue,
-  type WidgetCatalogueEntry,
-} from '../../shared/catalogue.ts';
+import { explainerUrl, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { EmbedController, EmbedInfo, EmbedState } from '../../../src/core/embed/contract.ts';
 import { EMBED_DOM } from '../../../src/core/embed/contract.ts';
 import { MODEL_CONTEXT_DEBOUNCE_MS, type ModelContextSnapshot } from '../../shared/tools.ts';
 import type { DisplayMode, WidgetHost } from './bridge.ts';
 import { watchGaugeClearance } from './gaugeClearance.ts';
+import { StringsContext } from './i18n/context.ts';
+import { NO_SIGNALS, languageOf, withContext, withInput, withResult } from './i18n/language.ts';
+import type { LanguagePack, Packs } from './i18n/packs.ts';
 import { createLive } from './live.ts';
 import { SceneSession, type ModuleLoader, type SceneStatus } from './scene.ts';
 import {
@@ -36,9 +35,11 @@ export interface WidgetProps {
   host: WidgetHost;
   loader: ModuleLoader;
   assetBase: string;
-  catalogue: WidgetCatalogue & { taglines: Record<string, string> };
+  packs: Packs;
   webgl: () => boolean;
 }
+
+const LANGUAGE_PATIENCE_MS = 1500;
 
 const EMPTY: Discrete = { playing: false, view: {}, choices: {} };
 
@@ -50,10 +51,19 @@ const sameDiscrete = (a: Discrete, b: Discrete) =>
   JSON.stringify(a.view) === JSON.stringify(b.view) &&
   JSON.stringify(a.choices) === JSON.stringify(b.choices);
 
-export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProps) {
+export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
+  const [signals, setSignals] = useState(() => withContext(NO_SIGNALS, host.context()));
+  const lang = languageOf(signals);
+  const [pack, setPack] = useState<LanguagePack>(() => packs.ready(lang) ?? packs.english);
+  const [settled, setSettled] = useState(() => (packs.ready(lang) ? lang : undefined));
+  const [patient, setPatient] = useState(true);
+  const [inputSeen, setInputSeen] = useState(false);
+  const catalogue = pack.catalogue;
   const entries = catalogue.explainers;
+  const entriesRef = useRef(entries);
+  entriesRef.current = entries;
   const find = (slug: string): WidgetCatalogueEntry | undefined =>
-    entries.find((e) => e.slug === slug);
+    entriesRef.current.find((e) => e.slug === slug);
 
   const [target, setTarget] = useState<Target | undefined>();
   const [resultSeen, setResultSeen] = useState(false);
@@ -80,6 +90,9 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
   const resumeOnVisible = useRef(false);
   const userChanged = useRef(false);
   const lastSent = useRef<ModelContextSnapshot | undefined>(undefined);
+  const langRef = useRef(lang);
+  langRef.current = lang;
+  const painted = useRef(false);
 
   const session = useMemo(
     () =>
@@ -100,6 +113,9 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
             ctrlRef.current = c;
             setController(c);
           },
+          language: (c) => {
+            if (ctrlRef.current === c) setInfo({ ...c.info });
+          },
         },
       }),
     [loader, webgl],
@@ -108,6 +124,8 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
   useEffect(() => {
     const offs = [
       host.on('input', (args) => {
+        setInputSeen(true);
+        setSignals((s) => withInput(s, args));
         const t = targetFromInput(args, find);
         if (!t) return;
         session.prefetch(t.slug);
@@ -115,6 +133,7 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
       }),
       host.on('result', (result) => {
         setResultSeen(true);
+        setSignals((s) => withResult(s, result));
         const t = targetFromResult(result, find);
         if (t)
           setTarget((prev) =>
@@ -123,6 +142,7 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
       }),
       host.on('context', (c) => {
         setCtx({ ...c });
+        setSignals((s) => withContext(s, c));
         if (c.displayMode) setMode(c.displayMode as DisplayMode);
       }),
       host.on('teardown', () => session.dispose()),
@@ -132,11 +152,32 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
 
   useEffect(() => () => session.dispose(), [session]);
 
-  const slug = target?.slug;
-  const entry = slug ? find(slug) : undefined;
+  useEffect(() => {
+    void session.setLanguage(lang);
+    if (pack.lang === lang) return setSettled(lang);
+    let live = true;
+    const timer = setTimeout(() => setPatient(false), LANGUAGE_PATIENCE_MS);
+    packs
+      .load(lang)
+      .then((next) => live && langRef.current === next.lang && setPack(next))
+      .catch((error: unknown) => console.warn('[wmit-widget] language', lang, error))
+      .finally(() => live && langRef.current === lang && setSettled(lang));
+    return () => {
+      live = false;
+      clearTimeout(timer);
+    };
+  }, [lang, session]);
 
   useEffect(() => {
-    if (!target || !entry) return;
+    document.documentElement.lang = pack.lang;
+  }, [pack.lang]);
+
+  const slug = target?.slug;
+  const entry = slug ? find(slug) : undefined;
+  const hold = !painted.current && patient && settled !== lang;
+
+  useEffect(() => {
+    if (!target || !entry || hold) return;
     setStripFirst((f) => f ?? target.slug);
     const first = entry.chapters[0]?.id ?? '';
     const wanted =
@@ -158,7 +199,7 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
     setStatus(webgl() ? 'loading' : 'nowebgl');
     setProgress(0.04);
     void session.show(target.slug, wanted);
-  }, [target?.slug, target?.chapter]);
+  }, [target?.slug, target?.chapter, hold]);
 
   useEffect(() => {
     if (!controller) return;
@@ -198,8 +239,8 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
     const state = ctrlRef.current?.info.slug === slug ? ctrlRef.current.getState() : undefined;
     if (!userChanged.current) return;
     const snap = snapshotOf(slug, state, chapter);
-    sendContext(snap, modelContextText(entry, ctrlRef.current?.info, snap, state));
-  }, [slug, chapter, disc, info]);
+    sendContext(snap, modelContextText(entry, ctrlRef.current?.info, snap, state, pack.lang));
+  }, [slug, chapter, disc, info, pack.lang]);
 
   const fullscreen = mode === 'fullscreen';
   const canFullscreen =
@@ -311,30 +352,35 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
   if (radius) style['--border-radius-xl'] = radius;
   const rootClass = `wmit ${fullscreen ? 'is-fs' : 'is-inline'}${touch ? ' touch' : ''}`;
 
-  if (!entry || !slug) {
+  if (!entry || !slug || hold) {
     return (
-      <div class={rootClass} style={style}>
-        {resultSeen ? (
-          <Unknown
-            catalogue={entries}
-            assetBase={assetBase}
-            onPick={(s) => setTarget({ slug: s })}
-            onOpen={openCatalogue}
-          />
-        ) : (
-          <Waiting onOpen={openCatalogue} />
-        )}
-      </div>
+      <StringsContext.Provider value={pack.strings}>
+        <div class={rootClass} style={style} lang={pack.lang}>
+          {resultSeen && !hold ? (
+            <Unknown
+              catalogue={entries}
+              assetBase={assetBase}
+              onPick={(s) => setTarget({ slug: s })}
+              onOpen={openCatalogue}
+            />
+          ) : (
+            <Waiting onOpen={openCatalogue} quiet={hold || !inputSeen} />
+          )}
+        </div>
+      </StringsContext.Provider>
     );
   }
+  painted.current = true;
 
+  const scene = info?.language === pack.lang ? info : undefined;
   const chapters: ChapterView[] = entry.chapters.map((c, i) => {
     const fromInfo = info?.chapters.find((x) => x.id === c.id);
+    const title = scene?.chapters.find((x) => x.id === c.id)?.title ?? c.title;
     return {
       id: c.id,
       index: i + 1,
-      title: fromInfo?.title ?? c.title,
-      short: chapterShort(c.id),
+      title,
+      short: pack.lang === 'en' ? chapterShort(c.id) : title,
       paragraphsHtml: fromInfo?.paragraphsHtml ?? [],
     };
   });
@@ -344,7 +390,7 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
   const vm: ViewModel = {
     slug,
     entry,
-    tagline: info?.tagline ?? catalogue.taglines[slug] ?? entry.summary,
+    tagline: scene?.tagline ?? catalogue.taglines[slug] ?? entry.summary,
     info,
     status: shownStatus,
     progress,
@@ -363,20 +409,22 @@ export function Widget({ host, loader, assetBase, catalogue, webgl }: WidgetProp
   };
 
   return (
-    <div class={`${rootClass} st-${shownStatus}`} style={style} data-slug={slug}>
-      <Header key="header" vm={vm} />
-      <Stage
-        key="stage"
-        vm={vm}
-        refs={{ host: hostRef, dock: dockRef, gauge: gaugeRef }}
-        onPointerDown={() => (wheelArmed.current = true)}
-        onPointerLeave={() => (wheelArmed.current = false)}
-        onUserInput={() => (userChanged.current = true)}
-      />
-      <ProseColumn key="prose" vm={vm} />
-      <Drawer key="drawer" vm={vm} />
-      <ChapterSection key="chapter" vm={vm} />
-      <ExploreStrip key="explore" vm={vm} />
-    </div>
+    <StringsContext.Provider value={pack.strings}>
+      <div class={`${rootClass} st-${shownStatus}`} style={style} data-slug={slug} lang={pack.lang}>
+        <Header key="header" vm={vm} />
+        <Stage
+          key="stage"
+          vm={vm}
+          refs={{ host: hostRef, dock: dockRef, gauge: gaugeRef }}
+          onPointerDown={() => (wheelArmed.current = true)}
+          onPointerLeave={() => (wheelArmed.current = false)}
+          onUserInput={() => (userChanged.current = true)}
+        />
+        <ProseColumn key="prose" vm={vm} />
+        <Drawer key="drawer" vm={vm} />
+        <ChapterSection key="chapter" vm={vm} />
+        <ExploreStrip key="explore" vm={vm} />
+      </div>
+    </StringsContext.Provider>
   );
 }

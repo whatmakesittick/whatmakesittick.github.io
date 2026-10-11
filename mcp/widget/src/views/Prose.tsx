@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks';
 import { pad2 } from '../state.ts';
-import { S } from '../strings.ts';
+import { useStrings } from '../i18n/context.ts';
 import { Body } from './Chapter.tsx';
 import { DrawerButton } from './Explore.tsx';
 import { Icon } from './icons.tsx';
@@ -8,6 +8,7 @@ import { Brand } from './Brand.tsx';
 import type { ViewModel } from './types.ts';
 
 export function ProseColumn({ vm }: { vm: ViewModel }) {
+  const s = useStrings();
   const column = useRef<HTMLElement>(null);
   const shown = useRef('');
   useEffect(() => {
@@ -33,8 +34,8 @@ export function ProseColumn({ vm }: { vm: ViewModel }) {
           <button
             type="button"
             class="round-btn"
-            aria-label={S.openOnSite}
-            title={S.openOnSite}
+            aria-label={s.openOnSite}
+            title={s.openOnSite}
             onClick={vm.actions.openSite}
           >
             <Icon.ext />
@@ -42,8 +43,8 @@ export function ProseColumn({ vm }: { vm: ViewModel }) {
           <button
             type="button"
             class="round-btn"
-            aria-label={S.exitFullscreen}
-            title={S.exitFullscreen}
+            aria-label={s.exitFullscreen}
+            title={s.exitFullscreen}
             onClick={vm.actions.toggleFullscreen}
           >
             <Icon.collapse />
@@ -55,7 +56,7 @@ export function ProseColumn({ vm }: { vm: ViewModel }) {
         <h2 class="title">{vm.entry.title}</h2>
         <p class="tagline">{vm.tagline}</p>
       </header>
-      <ol class="chapters" aria-label="Chapters">
+      <ol class="chapters" aria-label={s.chapters}>
         {vm.chapters.map((c) => {
           const on = c.id === vm.chapter;
           return (

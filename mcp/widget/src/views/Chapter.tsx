@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { pad2 } from '../state.ts';
-import { S } from '../strings.ts';
+import { useStrings } from '../i18n/context.ts';
+import type { Strings } from '../i18n/strings.ts';
 import { Icon } from './icons.tsx';
 import { RichText } from './RichText.tsx';
 import type { ChapterView, ViewModel } from './types.ts';
 
 function Pills({ vm }: { vm: ViewModel }) {
+  const s = useStrings();
   const box = useRef<HTMLDivElement>(null);
   const current = vm.chapters.findIndex((c) => c.id === vm.chapter);
   useEffect(() => {
@@ -22,7 +24,7 @@ function Pills({ vm }: { vm: ViewModel }) {
     parent.scrollTo({ left: Math.max(0, start - 8), behavior: 'smooth' });
   }, [vm.chapter]);
   return (
-    <div class="pills" ref={box} role="tablist" aria-label="Chapters">
+    <div class="pills" ref={box} role="tablist" aria-label={s.chapters}>
       {vm.chapters.map((c, i) => (
         <button
           type="button"
@@ -42,13 +44,14 @@ function Pills({ vm }: { vm: ViewModel }) {
 }
 
 function Nav({ vm }: { vm: ViewModel }) {
+  const s = useStrings();
   const i = vm.chapters.findIndex((c) => c.id === vm.chapter);
   return (
     <div class="nav">
       <button
         type="button"
         class="icon-btn"
-        aria-label={S.prevChapter}
+        aria-label={s.prevChapter}
         disabled={i <= 0}
         onClick={() => vm.actions.step(-1)}
       >
@@ -57,7 +60,7 @@ function Nav({ vm }: { vm: ViewModel }) {
       <button
         type="button"
         class="icon-btn"
-        aria-label={S.nextChapter}
+        aria-label={s.nextChapter}
         disabled={i >= vm.chapters.length - 1}
         onClick={() => vm.actions.step(1)}
       >
@@ -68,6 +71,7 @@ function Nav({ vm }: { vm: ViewModel }) {
 }
 
 export function Body({ vm, chapter, all }: { vm: ViewModel; chapter: ChapterView; all: boolean }) {
+  const s = useStrings();
   if (chapter.paragraphsHtml.length === 0) {
     if (vm.status === 'loading' || vm.status === 'idle') {
       return (
@@ -78,7 +82,7 @@ export function Body({ vm, chapter, all }: { vm: ViewModel; chapter: ChapterView
         </div>
       );
     }
-    return <p class="muted-note">{S.chapterOnSite}</p>;
+    return <p class="muted-note">{s.chapterOnSite}</p>;
   }
   const paras = all ? chapter.paragraphsHtml : chapter.paragraphsHtml.slice(0, 1);
   return (
@@ -92,10 +96,11 @@ export function Body({ vm, chapter, all }: { vm: ViewModel; chapter: ChapterView
   );
 }
 
-const indexLabel = (vm: ViewModel, c: ChapterView) =>
-  S.chapterIndex(pad2(c.index), pad2(vm.chapters.length)).toUpperCase();
+const indexLabel = (s: Strings, vm: ViewModel, c: ChapterView) =>
+  s.chapterIndex(pad2(c.index), pad2(vm.chapters.length)).toUpperCase();
 
 export function ChapterSection({ vm }: { vm: ViewModel }) {
+  const s = useStrings();
   const [expanded, setExpanded] = useState(false);
   useEffect(() => setExpanded(false), [vm.chapter, vm.slug]);
   const chapter = vm.chapters.find((c) => c.id === vm.chapter) ?? vm.chapters[0];
@@ -104,7 +109,7 @@ export function ChapterSection({ vm }: { vm: ViewModel }) {
   return (
     <section class="a-chapter inline-only" aria-label={chapter.title}>
       <div class="top">
-        <div class="index">{indexLabel(vm, chapter)}</div>
+        <div class="index">{indexLabel(s, vm, chapter)}</div>
         <Nav vm={vm} />
       </div>
       <h3>{chapter.title}</h3>
@@ -117,7 +122,7 @@ export function ChapterSection({ vm }: { vm: ViewModel }) {
             aria-expanded={expanded}
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? S.readLess : S.readMore}
+            {expanded ? s.readLess : s.readMore}
           </button>
         </div>
       )}
