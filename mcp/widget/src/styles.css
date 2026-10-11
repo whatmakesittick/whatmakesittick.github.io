@@ -961,22 +961,28 @@ button:focus-visible,
   top: 0;
   z-index: 2;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  padding: calc(14px + var(--safe-top)) 0 12px;
+  gap: 10px 8px;
+  padding: calc(4px + var(--safe-top)) 0 12px;
   background: linear-gradient(180deg, var(--background) 75%, transparent);
   container: wmit-bar / inline-size;
 }
 .prose .bar .sp {
-  flex: 1;
+  display: none;
 }
 .prose .bar > :not(.brand, .sp) {
   flex: none;
 }
 .prose .bar .brand {
-  min-width: 0;
+  flex: 0 0 100%;
 }
-@container wmit-bar (max-width: 399px) {
+.prose .bar .brand .site-link span {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+@container wmit-bar (max-width: 239px) {
   .prose .ghost.scrim .txt-n {
     display: none;
   }
@@ -1143,7 +1149,7 @@ button:focus-visible,
     padding: 0 16px calc(24px + var(--safe-bottom));
   }
   .prose .bar {
-    padding-top: 10px;
+    padding-top: calc(4px + var(--safe-top));
   }
   .prose .masthead {
     padding-top: 8px;
