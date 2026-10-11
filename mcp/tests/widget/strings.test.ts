@@ -3,7 +3,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { LANGUAGE_CODES, type LanguageCode } from '../../../src/core/i18n/languages.ts';
-import { CORE_KEYS, STRINGS, stringsFor } from '../../widget/src/i18n/strings.ts';
+import { STRINGS, stringsFor } from '../../widget/src/i18n/all.ts';
+import { CORE_KEYS } from '../../widget/src/i18n/strings.ts';
 
 type Leaf = { path: string; value: unknown };
 
