@@ -2,15 +2,22 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import aliases from '../../data/aliases.json' with { type: 'json' };
+import { parse } from 'node-html-parser';
 import {
   buildCatalogue,
   extractChapters,
-  plainText,
   toBakedCatalogue,
   toWidgetCatalogue,
 } from '../../catalogue/build.ts';
 import { LANGUAGE_CODES } from '../../../src/core/i18n/languages.ts';
-import { localizeEntry, resolveLanguage, type CatalogueEntry } from '../../shared/catalogue.ts';
+import type { Dictionary } from '../../../src/core/i18n/resources.ts';
+import { loadExplainers } from '../../../vite/manifest.ts';
+import {
+  localizeEntry,
+  plainText,
+  resolveLanguage,
+  type CatalogueEntry,
+} from '../../shared/catalogue.ts';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 
@@ -19,6 +26,29 @@ describe('plainText', () => {
     expect(plainText('A <strong>big</strong>\n   magnet &amp; a <em>coil</em>&nbsp;here')).toBe(
       'A big magnet & a coil here'.replace(/\s+/g, ' '),
     );
+  });
+
+  it('decodes numeric entities and keeps a bare less-than sign', () => {
+    expect(plainText('&#8804; 3 &#x2192; &lt;b&gt; &unknown; < 2 g')).toBe(
+      '≤ 3 → <b> &unknown; < 2 g',
+    );
+  });
+
+  it('matches the html parser on every string of every explainer in every language', () => {
+    const parsed = (html: string): string =>
+      parse(`<div>${html}</div>`).text.replace(/\s+/g, ' ').trim();
+    const leaves = (node: string | Dictionary): string[] =>
+      typeof node === 'string' ? [node] : Object.values(node).flatMap(leaves);
+    let count = 0;
+    for (const loaded of loadExplainers(root)) {
+      for (const [lang, dictionary] of Object.entries(loaded.dictionaries)) {
+        for (const html of leaves(dictionary ?? {})) {
+          expect(plainText(html), `${loaded.manifest.slug}/${lang}: ${html}`).toBe(parsed(html));
+          count += 1;
+        }
+      }
+    }
+    expect(count).toBeGreaterThan(10_000);
   });
 });
 
@@ -55,7 +85,6 @@ describe('extractChapters', () => {
     expect(chapters[0]!.paragraphs[0]).toEqual({
       key: 'sections.a.p1',
       html: 'One <strong>x</strong>',
-      text: 'One x',
     });
     expect(chapters[1]!.paragraphs.map((p) => p.key)).toEqual([
       'sections.b.p1',
@@ -116,8 +145,9 @@ describe('catalogue from the explainers', () => {
         expect(c.paragraphs.length, `${e.slug}/${c.id}`).toBeGreaterThanOrEqual(1);
         for (const p of c.paragraphs) {
           expect(p.key.startsWith(`sections.${c.id}.`)).toBe(true);
-          expect(p.text).not.toContain('<');
-          expect(p.text).not.toMatch(/&[a-z]+;/);
+          expect(Object.keys(p)).toEqual(['key', 'html']);
+          expect(plainText(p.html)).not.toContain('<');
+          expect(plainText(p.html)).not.toMatch(/&[a-z]+;/);
         }
       }
     }
@@ -169,7 +199,7 @@ describe('catalogue from the explainers', () => {
     expect(uk.title).toMatch(/\p{Script=Cyrillic}/u);
     expect(uk.summary).toMatch(/\p{Script=Cyrillic}/u);
     expect(uk.chapters[1]!.title).toMatch(/\p{Script=Cyrillic}/u);
-    expect(uk.chapters[1]!.paragraphs[0]!.text).toMatch(/\p{Script=Cyrillic}/u);
+    expect(plainText(uk.chapters[1]!.paragraphs[0]!.html)).toMatch(/\p{Script=Cyrillic}/u);
     expect(uk.chapters[1]!.interactive).toEqual(mri.chapters[1]!.interactive);
     expect(localizeEntry(mri, 'ja').title).toMatch(/\p{Script=Han}|\p{Script=Katakana}/u);
     const { locales, ...english } = mri;
@@ -196,8 +226,8 @@ describe('localizeEntry', () => {
         index: 1,
         title: 'First',
         paragraphs: [
-          { key: 'sections.a.p1', html: 'One', text: 'One' },
-          { key: 'sections.a.p2', html: 'Two', text: 'Two' },
+          { key: 'sections.a.p1', html: 'One' },
+          { key: 'sections.a.p2', html: 'Two' },
         ],
         interactive: { range: false, canvas: false, action: false, readouts: false },
       },
@@ -205,14 +235,14 @@ describe('localizeEntry', () => {
         id: 'b',
         index: 2,
         title: 'Second',
-        paragraphs: [{ key: 'sections.b.p1', html: 'Three', text: 'Three' }],
+        paragraphs: [{ key: 'sections.b.p1', html: 'Three' }],
         interactive: { range: true, canvas: false, action: false, readouts: false },
       },
     ],
     locales: {
       uk: {
         title: 'Назва',
-        chapters: [{ id: 'a', paragraphs: [{ key: 'sections.a.p2', html: 'Два', text: 'Два' }] }],
+        chapters: [{ id: 'a', paragraphs: [{ key: 'sections.a.p2', html: 'Два' }] }],
       },
     },
   };
@@ -223,8 +253,8 @@ describe('localizeEntry', () => {
     expect(uk.summary).toBe('Summary');
     expect(uk.parts).toEqual(['Part']);
     expect(uk.chapters.map((c) => c.title)).toEqual(['First', 'Second']);
-    expect(uk.chapters[0]!.paragraphs.map((p) => p.text)).toEqual(['One', 'Два']);
-    expect(uk.chapters[1]!.paragraphs.map((p) => p.text)).toEqual(['Three']);
+    expect(uk.chapters[0]!.paragraphs.map((p) => p.html)).toEqual(['One', 'Два']);
+    expect(uk.chapters[1]!.paragraphs.map((p) => p.html)).toEqual(['Three']);
     expect('locales' in uk).toBe(false);
   });
 

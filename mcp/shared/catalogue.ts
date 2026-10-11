@@ -13,7 +13,6 @@ export type { Tag };
 export interface CatalogueParagraph {
   key: string;
   html: string;
-  text: string;
 }
 
 export interface CatalogueInteractive {
@@ -97,6 +96,27 @@ export function isSlug(value: string): boolean {
 
 export function explainerUrl(slug: string): string {
   return `${SITE_ORIGIN}/${slug}/`;
+}
+
+const ENTITIES: Record<string, string> = {
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  apos: "'",
+  nbsp: ' ',
+};
+
+export function plainText(html: string): string {
+  return html
+    .replace(/<\/?[a-zA-Z][^>]*>/g, '')
+    .replace(/&(?:#(\d+)|#x([\da-fA-F]+)|([a-zA-Z]+));/g, (entity, dec, hex, name) => {
+      if (dec) return String.fromCodePoint(Number(dec));
+      if (hex) return String.fromCodePoint(parseInt(hex, 16));
+      return ENTITIES[name as string] ?? entity;
+    })
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export type BakedCatalogue = WidgetCatalogue & { taglines: Record<string, string> };

@@ -1,5 +1,9 @@
 import { ATTRIBUTION } from '../shared/config.ts';
-import type { CatalogueChapter, LocalizedCatalogueEntry } from '../shared/catalogue.ts';
+import {
+  plainText,
+  type CatalogueChapter,
+  type LocalizedCatalogueEntry,
+} from '../shared/catalogue.ts';
 import { MODEL_TEXT_MAX_BYTES } from '../shared/tools.ts';
 import type { ChapterResolution } from './chapters.ts';
 
@@ -24,11 +28,13 @@ export function truncateBytes(text: string, maxBytes: number): string {
   return out.replace(/[\s,.;:]+$/, '') + ellipsis;
 }
 
-const chapterText = (c: CatalogueChapter): string => c.paragraphs.map((p) => p.text).join(' ');
+const chapterText = (c: CatalogueChapter): string =>
+  c.paragraphs.map((p) => plainText(p.html)).join(' ');
 
 const SNIPPET_CHARS = 160;
 const snippet = (c: CatalogueChapter): string => {
-  const p1 = c.paragraphs[0]?.text ?? '';
+  const first = c.paragraphs[0];
+  const p1 = first ? plainText(first.html) : '';
   return p1.length <= SNIPPET_CHARS ? p1 : `${p1.slice(0, SNIPPET_CHARS).replace(/\s+\S*$/, '')}…`;
 };
 

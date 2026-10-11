@@ -6,7 +6,7 @@ import { chapterOutline } from '../../vite/chapterOutline.ts';
 import { loadExplainers } from '../../vite/manifest.ts';
 import type { LoadedExplainer } from '../../vite/manifest.ts';
 import { explainerUrl } from '../../vite/site.ts';
-import { localizeEntry } from '../shared/catalogue.ts';
+import { localizeEntry, plainText } from '../shared/catalogue.ts';
 import type {
   BakedCatalogue,
   Catalogue,
@@ -18,10 +18,6 @@ import type {
 } from '../shared/catalogue.ts';
 
 const CHAPTER = 'section.chapter[data-preset]';
-
-export function plainText(html: string): string {
-  return parse(`<div>${html}</div>`).text.replace(/\s+/g, ' ').trim();
-}
 
 function lookup(dictionary: Dictionary | undefined, key: string): string | undefined {
   let node: string | Dictionary | undefined = dictionary;
@@ -50,7 +46,7 @@ export function extractChapters(
       title: plainText(need(dictionary, `sections.${id}.title`, where)),
       paragraphs: paragraphs.map((key) => {
         const html = need(dictionary, key, where).trim();
-        return { key, html, text: plainText(html) };
+        return { key, html };
       }),
       interactive: {
         range: section?.querySelector('.range-widget') != null,
@@ -73,7 +69,7 @@ export function localizedChapters(
       ...(title?.trim() ? { title: plainText(title) } : {}),
       paragraphs: paragraphs.flatMap((key) => {
         const html = lookup(dictionary, key)?.trim();
-        return html ? [{ key, html, text: plainText(html) }] : [];
+        return html ? [{ key, html }] : [];
       }),
     };
   });

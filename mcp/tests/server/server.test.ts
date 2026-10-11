@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { LANGUAGE_CODES } from '../../../src/core/i18n/languages.ts';
-import { TAGS, localizeEntry } from '../../shared/catalogue.ts';
+import { TAGS, localizeEntry, plainText } from '../../shared/catalogue.ts';
 import { ASSET_BASE_TOKEN } from '../../shared/config.ts';
 import { EMBED_API_VERSION } from '../../../src/core/embed/manifest.ts';
 import {
@@ -213,7 +213,7 @@ describe('show_explainer in other languages', () => {
     expect(text).toContain(`"${uk.title}"`);
     expect(text).toContain(uk.tagline);
     expect(text).toContain(`"${uk.chapters[1]!.title}" (id: magnet)`);
-    expect(text).toContain(uk.chapters[1]!.paragraphs[0]!.text.slice(0, 40));
+    expect(text).toContain(plainText(uk.chapters[1]!.paragraphs[0]!.html).slice(0, 40));
   });
 
   it.each([
