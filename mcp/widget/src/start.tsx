@@ -6,6 +6,7 @@ import type { WidgetStartOptions } from '../../shared/loader.ts';
 import { createAppHost } from './bridge.ts';
 import { readReportFlag } from './hostReport.ts';
 import { InboxTransport } from './inbox.ts';
+import { installPointerLog } from './pointerLog.ts';
 import { hasWebGL2, urlLoader } from './scene.ts';
 import styles from './styles.css?inline';
 import { Widget } from './Widget.tsx';
@@ -28,7 +29,9 @@ export function start(root: HTMLElement, { assetBase, inbox }: WidgetStartOption
     { availableDisplayModes: ['inline', 'fullscreen'] },
     { autoResize: true },
   );
-  const host = createAppHost(app, { reportToServer: readReportFlag(root.ownerDocument) });
+  const reportToServer = readReportFlag(root.ownerDocument);
+  const host = createAppHost(app, { reportToServer });
+  if (reportToServer) installPointerLog(app, root.ownerDocument, () => host.context()?.displayMode);
   render(
     <Widget
       host={host}

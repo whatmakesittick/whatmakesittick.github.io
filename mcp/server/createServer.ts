@@ -13,6 +13,7 @@ import {
   TOOL_ANNOTATIONS,
   TOOL_LIST_EXPLAINERS,
   TOOL_REPORT_HOST_CONTEXT,
+  TOOL_REPORT_POINTER_EVENTS,
   TOOL_SHOW_EXPLAINER,
   WIDGET_RESOURCE_DESCRIPTION,
   WIDGET_RESOURCE_NAME,
@@ -28,6 +29,7 @@ import {
 import { injectAssetBase, injectReportContext } from './html.ts';
 import { listExplainers } from './tools/listExplainers.ts';
 import { hostContextReportSchema, reportHostContext } from './tools/reportHostContext.ts';
+import { pointerEventsReportSchema, reportPointerEvents } from './tools/reportPointerEvents.ts';
 import { showExplainer } from './tools/showExplainer.ts';
 
 export { SERVER_NAME, SERVER_VERSION };
@@ -101,6 +103,17 @@ export function createServer(options: CreateServerOptions): McpServer {
         _meta: { ui: { resourceUri: WIDGET_RESOURCE_URI, visibility: ['app'] } },
       },
       async (report) => reportHostContext(report, logHostContext),
+    );
+    registerAppTool(
+      server,
+      TOOL_REPORT_POINTER_EVENTS,
+      {
+        title: 'Report pointer events',
+        description: 'Logs the pointer and click events the widget saw, for debugging.',
+        inputSchema: pointerEventsReportSchema,
+        _meta: { ui: { resourceUri: WIDGET_RESOURCE_URI, visibility: ['app'] } },
+      },
+      async (report) => reportPointerEvents(report, logHostContext),
     );
   }
 
