@@ -1,14 +1,14 @@
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import en from '../locales/en.json';
 import { NAMESPACE, TRANSLATION_OPTIONS } from './config';
 import { DEFAULT_LANGUAGE, LANGUAGES, baseLanguage } from './languages';
 import type { LanguageCode } from './languages';
-import { createDictionaryLoader, loadersByLanguage } from './loader';
+import { CORE_LOCALES } from './coreLocales';
+import { createDictionaryLoader } from './loader';
 import type { DictionaryLoader } from './loader';
 import { LANGUAGE_QUERY_KEY } from './paths';
 import { LANGUAGE_STORAGE_KEY } from './redirect';
-import type { Dictionary, LocaleLoaders } from './resources';
+import type { LocaleLoaders } from './resources';
 
 export { DEFAULT_LANGUAGE, LANGUAGES } from './languages';
 export type { Language, LanguageCode } from './languages';
@@ -19,15 +19,6 @@ export type { Dictionary, LocaleLoader, LocaleLoaders } from './resources';
 const STORED_SOURCE = 'localStorage';
 const BROWSER_SOURCE = 'navigator';
 const BASE_SEGMENTS = import.meta.env.BASE_URL.split('/').filter(Boolean).length;
-
-const CORE_LOCALES: LocaleLoaders = {
-  ...loadersByLanguage(
-    import.meta.glob<Dictionary>(['../locales/*.json', '!../locales/en.json'], {
-      import: 'default',
-    }),
-  ),
-  [DEFAULT_LANGUAGE]: () => Promise.resolve(en),
-};
 
 const detector = new LanguageDetector();
 let loadDictionary: DictionaryLoader = createDictionaryLoader([CORE_LOCALES]);
