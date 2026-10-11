@@ -1,0 +1,88 @@
+<div
+  class="dock glass"
+  data-dock
+  role="group"
+  aria-label="Controls"
+  data-i18n-attr="aria-label:controls.label"
+  style="visibility: hidden"
+>
+  <div class="dock-main">
+    <button
+      type="button"
+      class="play-button"
+      data-control="play"
+      aria-label="Pause"
+      aria-keyshortcuts="Space"
+      data-i18n-attr="aria-label:controls.pause"
+    >
+      <svg class="icon icon-play" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M8 5.2v13.6a.8.8 0 0 0 1.2.7l10.4-6.8a.8.8 0 0 0 0-1.4L9.2 4.5a.8.8 0 0 0-1.2.7Z"
+        />
+      </svg>
+      <svg class="icon icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="6" y="5" width="4.2" height="14" rx="1.2" />
+        <rect x="13.8" y="5" width="4.2" height="14" rx="1.2" />
+      </svg>
+    </button>
+
+    <p class="dock-status" aria-hidden="true">
+      <span class="number" data-status="phase"></span>
+      <span class="tone-text" data-status="name"></span>
+    </p>
+
+    <div class="scrubber">
+      <label class="visually-hidden" for="phase" data-scrubber-label></label>
+      <input id="phase" type="range" data-control="scrubber" value="0" />
+      <div class="phase-buttons" role="group" data-phase-buttons></div>
+    </div>
+
+    <button
+      type="button"
+      class="icon-button dock-more"
+      data-control="more"
+      aria-expanded="false"
+      aria-controls="dock-extra"
+      aria-label="More controls"
+      data-i18n-attr="aria-label:controls.more"
+    >
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
+        <circle cx="15" cy="7" r="2.2" />
+        <circle cx="9" cy="17" r="2.2" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="dock-extra" id="dock-extra">
+    <div class="field speed-field" data-speed-field>
+      <label class="field-label" for="speed" data-speed-label data-i18n="controls.speed">
+        Speed
+      </label>
+      <input id="speed" type="range" class="range" data-control="speed" />
+      <output class="field-value number" for="speed" data-speed-value></output>
+    </div>
+
+    <button
+      type="button"
+      class="icon-button"
+      data-control="reset-camera"
+      aria-label="Reset camera"
+      aria-keyshortcuts="R"
+      title="Reset camera (R)"
+      data-i18n-attr="aria-label:controls.resetCamera;title:controls.resetCameraHint"
+    >
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3" />
+        <path d="M4.5 4v4h4" />
+      </svg>
+    </button>
+
+    <select
+      class="language-select dock-language"
+      data-language-select
+      aria-label="Language"
+      data-i18n-attr="aria-label:header.language"
+    ></select>
+  </div>
+</div>
