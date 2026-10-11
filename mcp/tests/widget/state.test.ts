@@ -112,6 +112,7 @@ describe('helpers', () => {
 describe('model context', () => {
   const info: EmbedInfo = {
     slug: 'mri-scanner',
+    language: 'en',
     title: mri.title,
     eyebrow: mri.eyebrow,
     tagline: '',

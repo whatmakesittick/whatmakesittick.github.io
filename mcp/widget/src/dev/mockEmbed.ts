@@ -108,6 +108,7 @@ function infoFor(entry: WidgetCatalogueEntry, tagline: string): EmbedInfo {
   });
   return {
     slug: entry.slug,
+    language: 'en',
     title: entry.title,
     eyebrow: entry.eyebrow,
     tagline,
