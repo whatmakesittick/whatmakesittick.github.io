@@ -7,7 +7,7 @@ const en = {
   resetCamera: 'Reset camera',
   openOnSite: 'Open on site',
   openOnSiteShort: 'Site',
-  fullscreen: 'Fullscreen',
+  fullscreen: 'Show the model full screen',
   exitFullscreen: 'Exit fullscreen',
   chapterIndex: (n: string, total: string) => `Chapter ${n} / ${total}`,
   prevChapter: 'Previous chapter',
@@ -15,7 +15,7 @@ const en = {
   readMore: 'Read more',
   readLess: 'Show less',
   nextNamed: (chapter: string) => `Next: ${chapter}`,
-  exploreMore: 'Explore more',
+  exploreMore: 'More explainers',
   count: (n: number) => `${n} explainers`,
   explainers: (n: number) => `${n} explainers`,
   watching: 'Watching',
@@ -57,6 +57,8 @@ export const CORE_KEYS = {
   play: 'controls.play',
   pause: 'controls.pause',
   resetCamera: 'controls.resetCamera',
+  fullscreen: 'stage.expand',
+  exploreMore: 'page.moreExplainers',
 } as const satisfies Partial<Record<keyof Strings, string>>;
 
 export type CoreKey = keyof typeof CORE_KEYS;
@@ -74,7 +76,6 @@ function ukExplainers(n: number): string {
 const uk: WidgetStrings = {
   openOnSite: 'Відкрити на сайті',
   openOnSiteShort: 'Сайт',
-  fullscreen: 'На весь екран',
   exitFullscreen: 'Вийти з повноекранного режиму',
   chapterIndex: (n, total) => `Розділ ${n} / ${total}`,
   prevChapter: 'Попередній розділ',
@@ -82,7 +83,6 @@ const uk: WidgetStrings = {
   readMore: 'Читати далі',
   readLess: 'Згорнути',
   nextNamed: (chapter) => `Далі: ${chapter}`,
-  exploreMore: 'Інші пояснення',
   count: ukExplainers,
   explainers: ukExplainers,
   watching: 'Зараз відкрито',
@@ -116,7 +116,6 @@ const deExplainers = (n: number) => (n === 1 ? '1 Erklärung' : `${n} Erklärung
 const de: WidgetStrings = {
   openOnSite: 'Auf der Website öffnen',
   openOnSiteShort: 'Website',
-  fullscreen: 'Vollbild',
   exitFullscreen: 'Vollbild beenden',
   chapterIndex: (n, total) => `Kapitel ${n} / ${total}`,
   prevChapter: 'Vorheriges Kapitel',
@@ -124,7 +123,6 @@ const de: WidgetStrings = {
   readMore: 'Weiterlesen',
   readLess: 'Weniger anzeigen',
   nextNamed: (chapter) => `Als Nächstes: ${chapter}`,
-  exploreMore: 'Weitere Erklärungen',
   count: deExplainers,
   explainers: deExplainers,
   watching: 'Wird angezeigt',
@@ -158,7 +156,6 @@ const esExplainers = (n: number) => (n === 1 ? '1 explicación' : `${n} explicac
 const es: WidgetStrings = {
   openOnSite: 'Abrir en el sitio',
   openOnSiteShort: 'Sitio',
-  fullscreen: 'Pantalla completa',
   exitFullscreen: 'Salir de pantalla completa',
   chapterIndex: (n, total) => `Capítulo ${n} / ${total}`,
   prevChapter: 'Capítulo anterior',
@@ -166,7 +163,6 @@ const es: WidgetStrings = {
   readMore: 'Leer más',
   readLess: 'Ver menos',
   nextNamed: (chapter) => `Siguiente: ${chapter}`,
-  exploreMore: 'Más explicaciones',
   count: esExplainers,
   explainers: esExplainers,
   watching: 'Viendo ahora',
@@ -200,7 +196,6 @@ const frExplainers = (n: number) => (n === 1 ? '1 explication' : `${n} explicati
 const fr: WidgetStrings = {
   openOnSite: 'Ouvrir sur le site',
   openOnSiteShort: 'Site',
-  fullscreen: 'Plein écran',
   exitFullscreen: 'Quitter le plein écran',
   chapterIndex: (n, total) => `Chapitre ${n} / ${total}`,
   prevChapter: 'Chapitre précédent',
@@ -208,7 +203,6 @@ const fr: WidgetStrings = {
   readMore: 'Lire la suite',
   readLess: 'Afficher moins',
   nextNamed: (chapter) => `Ensuite\u00a0: ${chapter}`,
-  exploreMore: 'Autres explications',
   count: frExplainers,
   explainers: frExplainers,
   watching: 'En cours',
@@ -242,7 +236,6 @@ const ptExplainers = (n: number) => (n === 1 ? '1 explicação' : `${n} explica�
 const pt: WidgetStrings = {
   openOnSite: 'Abrir no site',
   openOnSiteShort: 'Site',
-  fullscreen: 'Tela cheia',
   exitFullscreen: 'Sair da tela cheia',
   chapterIndex: (n, total) => `Capítulo ${n} / ${total}`,
   prevChapter: 'Capítulo anterior',
@@ -250,7 +243,6 @@ const pt: WidgetStrings = {
   readMore: 'Ler mais',
   readLess: 'Mostrar menos',
   nextNamed: (chapter) => `A seguir: ${chapter}`,
-  exploreMore: 'Mais explicações',
   count: ptExplainers,
   explainers: ptExplainers,
   watching: 'Assistindo',
@@ -282,7 +274,6 @@ const pt: WidgetStrings = {
 const ja: WidgetStrings = {
   openOnSite: 'サイトで開く',
   openOnSiteShort: 'サイト',
-  fullscreen: '全画面',
   exitFullscreen: '全画面を終了',
   chapterIndex: (n, total) => `第${n}章 / 全${total}章`,
   prevChapter: '前の章',
@@ -290,7 +281,6 @@ const ja: WidgetStrings = {
   readMore: '続きを読む',
   readLess: '閉じる',
   nextNamed: (chapter) => `次は：${chapter}`,
-  exploreMore: 'ほかの解説',
   count: (n) => `${n}本の解説`,
   explainers: (n) => `${n}本の解説`,
   watching: '表示中',
@@ -322,7 +312,6 @@ const ja: WidgetStrings = {
 const zh: WidgetStrings = {
   openOnSite: '在网站上打开',
   openOnSiteShort: '网站',
-  fullscreen: '全屏',
   exitFullscreen: '退出全屏',
   chapterIndex: (n, total) => `第 ${n} 章 / 共 ${total} 章`,
   prevChapter: '上一章',
@@ -330,7 +319,6 @@ const zh: WidgetStrings = {
   readMore: '展开阅读',
   readLess: '收起',
   nextNamed: (chapter) => `下一章：${chapter}`,
-  exploreMore: '更多图解',
   count: (n) => `${n} 篇图解`,
   explainers: (n) => `${n} 篇图解`,
   watching: '正在观看',
