@@ -10,6 +10,7 @@ import {
   toWidgetCatalogue,
 } from '../../catalogue/build.ts';
 import { LANGUAGE_CODES } from '../../../src/core/i18n/languages.ts';
+import { resolveLanguage as coreResolveLanguage } from '../../../src/core/i18n/embedded.ts';
 import type { Dictionary } from '../../../src/core/i18n/resources.ts';
 import { loadExplainers } from '../../../vite/manifest.ts';
 import {
@@ -276,7 +277,10 @@ describe('resolveLanguage', () => {
     ['ru', 'en'],
     ['en-US', 'en'],
     ['klingon', 'en'],
-  ] as const)('%j → %s', (raw, lang) => {
+    [' DE ', 'de'],
+    ['xx-de', 'en'],
+  ] as const)('%j → %s, as the embed resolves it', (raw, lang) => {
     expect(resolveLanguage(raw)).toBe(lang);
+    expect(coreResolveLanguage(raw)).toBe(lang);
   });
 });
