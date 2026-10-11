@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Embed harness</title>
+    <style>
+      body {
+        margin: 0;
+        background: #222;
+      }
+      iframe {
+        border: 0;
+        width: 720px;
+        height: 600px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const assetBase = params.get('assets');
+      const origin = new URL(assetBase).origin;
+      const csp = [
+        "default-src 'none'",
+        `script-src 'self' 'unsafe-inline' ${origin}`,
+        `style-src 'self' 'unsafe-inline' ${origin}`,
+        `img-src 'self' data: ${origin}`,
+        `font-src 'self' ${origin}`,
+        "connect-src 'none'",
+      ].join('; ');
+
+      const inner = `<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="${csp}">
+<style>
+  html, body { margin: 0; background: #000; color: #fff; font-family: system-ui, sans-serif; }
+  [data-stage] { position: relative; width: 720px; height: 600px; container: wmit-scene / inline-size; }
+  #viewport { position: absolute; inset: 0; }
+  #placeholder { position: absolute; left: 12px; right: 12px; bottom: 12px; height: 44px;
+    background: rgb(0 0 0 / 0.4); pointer-events: none; }
+  #dock-slot { position: absolute; left: 12px; right: 12px; bottom: 12px; container: embed-dock / inline-size; }
+  #dock-slot [data-dock] { position: relative; inset: auto; }
+  #gauge-slot { display: contents; }
+</style>
+</head><body>
+<div data-stage><div id="viewport"></div><div id="placeholder" data-dock></div><div id="gauge-slot"></div><div id="dock-slot"></div></div>
+<script type="module">
+  const errors = [];
+  window.__errors = errors;
+  addEventListener('securitypolicyviolation', (e) =>
+    errors.push('csp: ' + e.violatedDirective + ' ' + e.blockedURI));
+  addEventListener('error', (e) => errors.push('error: ' + e.message));
+  addEventListener('unhandledrejection', (e) =>
+    errors.push('rejection: ' + (e.reason && e.reason.stack ? e.reason.stack : e.reason)));
+
+  const base = ${JSON.stringify(assetBase)};
+  const container = document.getElementById('viewport');
+  let current;
+  let lastCanvas;
+  window.__states = [];
+
+  window.wmit = {
+    async mount(slug, options) {
+      const mod = await import(base + slug + '.js');
+            const ui = options && options.ui ? { dock: document.getElementById('dock-slot'), gauge: document.getElementById('gauge-slot') } : undefined;
+      current = await mod.mount(container, { ...options, ui });
+      lastCanvas = container.querySelector('canvas');
+      window.__states = [];
+      current.subscribe((s) => window.__states.push(s));
+      return { apiVersion: mod.apiVersion, slug: mod.slug, info: current.info, state: current.getState(), ui: current.ui ?? null };
+    },
+    siteUi() {
+      const dock = document.querySelector('#dock-slot [data-dock]');
+      const text = (sel) => [...document.querySelectorAll(sel)].map((e) => e.textContent.trim());
+      const speed = dock && dock.querySelector('[data-control="speed"]');
+      return {
+        slots: ['dock-slot', 'gauge-slot'].filter((id) => document.getElementById(id).hasAttribute('data-embed-ui')),
+        dockVisible: !!dock && getComputedStyle(dock).visibility !== 'hidden' && dock.getBoundingClientRect().height > 0,
+        phases: text('#dock-slot [data-phase-buttons] button'),
+        pressed: text('#dock-slot [data-phase-buttons] button[aria-pressed="true"]'),
+        speed: speed ? { min: Number(speed.min), max: Number(speed.max), step: Number(speed.step), value: Number(speed.value) } : null,
+        speedLabel: text('#dock-slot [data-speed-label]')[0] ?? null,
+        speedValue: text('#dock-slot [data-speed-value]')[0] ?? null,
+        play: dock && dock.querySelector('[data-control="play"]').getAttribute('aria-label'),
+        readouts: text('#gauge-slot [data-readouts] dt'),
+        values: text('#gauge-slot [data-readouts] .readout-value'),
+        texts: [...document.querySelectorAll('#dock-slot, #gauge-slot')].map((e) => e.innerText).join(' | '),
+      };
+    },
+    clickPhase(i) {
+      document.querySelectorAll('#dock-slot [data-phase-buttons] button')[i].click();
+      return current.getState();
+    },
+    inputSpeed(value) {
+      const input = document.querySelector('#dock-slot [data-control="speed"]');
+      input.value = String(value);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      return current.getState();
+    },
+    call(method, ...args) {
+      current[method](...args);
+      return current.getState();
+    },
+    state: () => current.getState(),
+    lastNotified: () => window.__states[window.__states.length - 1] ?? null,
+    notifications: () => window.__states.length,
+    labels: () => [...container.querySelectorAll('.scene-label__text')].map((e) => e.textContent),
+    dom: () => ({
+      canvases: document.querySelectorAll('canvas').length,
+      styles: [...document.querySelectorAll('style[data-embed-styles]')].map((s) => s.dataset.embedStyles).filter((name) => name !== 'core'),
+      core: document.querySelectorAll('style[data-embed-styles="core"]').length,
+      scene: container.getAttribute('data-embed-scene'),
+    }),
+    dispose() {
+      current?.dispose();
+      current = undefined;
+      const gl = lastCanvas && (lastCanvas.getContext('webgl2') || lastCanvas.getContext('webgl'));
+      return { contextLost: gl ? gl.isContextLost() : null };
+    },
+    env: () => ({ language: navigator.language, languages: [...navigator.languages] }),
+  };
+  window.__ready = true;
+<\/script>
+</body></html>`;
+
+      const frame = document.createElement('iframe');
+      frame.setAttribute('sandbox', 'allow-scripts');
+      frame.srcdoc = inner;
+      document.body.append(frame);
+    </script>
+  </body>
+</html>
