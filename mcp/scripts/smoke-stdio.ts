@@ -62,6 +62,11 @@ await client.connect(transport);
 const { tools } = await client.listTools();
 const show = tools.find((t) => t.name === TOOL_SHOW_EXPLAINER);
 const list = tools.find((t) => t.name === TOOL_LIST_EXPLAINERS);
+const names = tools.map((t) => t.name).sort();
+check(
+  names.join(',') === [TOOL_LIST_EXPLAINERS, TOOL_SHOW_EXPLAINER].sort().join(','),
+  `tools/list: exactly ${names.join(', ')}`,
+);
 const slugEnum =
   (show?.inputSchema.properties?.slug as { enum?: string[] } | undefined)?.enum ?? [];
 check(

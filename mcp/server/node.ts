@@ -44,7 +44,6 @@ const serverOptions: CreateServerOptions = {
   assetBase,
   domain,
   excludeTags,
-  ...(process.env[ENV.logRequests] ? { logHostContext: (line: string) => log(line) } : {}),
 };
 
 const health = (): HealthInfo => ({

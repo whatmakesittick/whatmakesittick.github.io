@@ -1,10 +1,5 @@
 import type { App, McpUiHostContext } from '@modelcontextprotocol/ext-apps';
-import {
-  TOOL_REPORT_HOST_CONTEXT,
-  type HostContextReport,
-  type ModelContextSnapshot,
-} from '../../shared/tools.ts';
-import { createContextReporter, hostContextReport } from './hostReport.ts';
+import type { ModelContextSnapshot } from '../../shared/tools.ts';
 
 export type DisplayMode = 'inline' | 'fullscreen' | 'pip';
 
@@ -55,33 +50,14 @@ function fallbackOpen(url: string): void {
   }
 }
 
-function reportTo(app: App, toServer: boolean) {
-  return createContextReporter((report: HostContextReport) => {
-    console.info('[wmit-widget] host context', JSON.stringify(report));
-    void app
-      .sendLog({ level: 'info', logger: 'wmit-widget', data: { hostContext: report } })
-      .catch(() => {});
-    if (!toServer) return;
-    void app
-      .callServerTool({ name: TOOL_REPORT_HOST_CONTEXT, arguments: { ...report } })
-      .catch((error: unknown) => console.warn('[wmit-widget] report_host_context', error));
-  });
-}
-
-export function createAppHost(app: App, options: { reportToServer?: boolean } = {}): WidgetHost {
+export function createAppHost(app: App): WidgetHost {
   const hub = createHub();
-  const report = reportTo(app, options.reportToServer === true);
   let ctx: Partial<McpUiHostContext> | undefined;
   app.ontoolinput = (params) => hub.emit('input', params.arguments);
   app.ontoolresult = (result) => hub.emit('result', result);
   const mergeContext = (change: Partial<McpUiHostContext>) => {
     ctx = { ...(ctx ?? app.getHostContext() ?? {}), ...change };
     hub.emit('context', ctx);
-    try {
-      report(hostContextReport(ctx, { width: innerWidth, height: innerHeight }));
-    } catch (error) {
-      console.warn('[wmit-widget] host context report', error);
-    }
   };
   app.onhostcontextchanged = mergeContext;
   app.onteardown = async () => {

@@ -5,6 +5,6 @@ export function injectAssetBase(html: string, assetBase: string): string {
   return html.split(ASSET_BASE_TOKEN).join(safe);
 }
 
-export function injectReportContext(html: string, report: boolean): string {
-  return html.split(REPORT_CONTEXT_TOKEN).join(report ? '1' : '0');
+export function injectReportContext(html: string): string {
+  return html.split(REPORT_CONTEXT_TOKEN).join('0');
 }

@@ -2,7 +2,6 @@ import { render } from 'preact';
 import { explainerUrl, isSlug, resolveLanguage } from '../../../shared/catalogue.ts';
 import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import { createHub, type DisplayMode, type WidgetHost } from '../bridge.ts';
-import { createContextReporter, hostContextReport } from '../hostReport.ts';
 import { bundledPacks } from '../i18n/bundled.ts';
 import { hasWebGL2, urlLoader } from '../scene.ts';
 import '../styles.css';
@@ -67,19 +66,14 @@ const ctx: Partial<McpUiHostContext> = {
   safeAreaInsets: parseInsets(q.get('insets')),
   locale: q.get('locale') ?? 'en-US',
 };
-const report = createContextReporter((r) => say(`[HOST] host context ${JSON.stringify(r)}`));
-const reportContext = () =>
-  report(hostContextReport(ctx, { width: innerWidth, height: innerHeight }));
 const setLocale = (locale: string) => {
   ctx.locale = locale;
-  reportContext();
   hub.emit('context', { ...ctx });
 };
 const setMode = (m: DisplayMode) => {
   mode = m;
   ctx.displayMode = m;
   document.body.classList.toggle('fs', m === 'fullscreen');
-  reportContext();
   hub.emit('context', { ...ctx });
 };
 document.body.classList.toggle('fs', mode === 'fullscreen');
@@ -157,7 +151,6 @@ if (app) {
   document.head.append(fsStyle);
 }
 
-reportContext();
 const args = {
   ...(state === 'unknown' ? { slug: 'toaster' } : { slug, chapter }),
   ...(lang ? { lang } : {}),
