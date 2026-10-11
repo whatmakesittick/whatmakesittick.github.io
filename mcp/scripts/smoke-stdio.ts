@@ -120,6 +120,32 @@ check(
 );
 console.log(`     ${text.split('\n').slice(0, 3).join('\n     ')}`);
 
+const ukCall = await client.callTool({
+  name: TOOL_SHOW_EXPLAINER,
+  arguments: { slug: 'mri-scanner', lang: 'uk' },
+});
+const ukSc = ukCall.structuredContent as ShowExplainerResult | undefined;
+const ukText =
+  (ukCall.content as { type: string; text?: string }[]).find((x) => x.type === 'text')?.text ?? '';
+check(
+  !ukCall.isError &&
+    ukSc?.lang === 'uk' &&
+    /\p{Script=Cyrillic}/u.test(ukSc.title) &&
+    /\p{Script=Cyrillic}/u.test(ukText) &&
+    Buffer.byteLength(ukText) <= MODEL_TEXT_MAX_BYTES,
+  `tools/call show_explainer mri-scanner lang "uk" → lang ${ukSc?.lang}, "${ukSc?.title}"`,
+);
+
+const ruCall = await client.callTool({
+  name: TOOL_SHOW_EXPLAINER,
+  arguments: { slug: 'mri-scanner', lang: 'ru' },
+});
+const ruSc = ruCall.structuredContent as ShowExplainerResult | undefined;
+check(
+  !ruCall.isError && ruSc?.lang === 'en' && ruSc.title === 'How an MRI scanner works',
+  `tools/call show_explainer mri-scanner lang "ru" → falls back to ${ruSc?.lang}, "${ruSc?.title}"`,
+);
+
 const bad = await client.callTool({
   name: TOOL_SHOW_EXPLAINER,
   arguments: { slug: 'toaster' },
