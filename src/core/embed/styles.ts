@@ -7,6 +7,7 @@ import tokensCss from '../styles/tokens.css?inline';
 import { DOCK_COMPACT_MAX_WIDTH, EMBED_DOM } from './contract';
 
 const CORE_STYLES = 'core';
+const NARROW_STAGE_MAX_WIDTH = 620;
 
 export function scopedControlsCss(
   scope = `[${EMBED_DOM.uiAttr}]`,
@@ -20,8 +21,9 @@ export function scopedControlsCss(
 ): string {
   const compact = `@container ${EMBED_DOM.dockContainer} (max-width: ${DOCK_COMPACT_MAX_WIDTH}px){${css.compact}}`;
   const touch = `@media (pointer: coarse){${css.touch}}`;
+  const narrow = `@container (max-width: ${NARROW_STAGE_MAX_WIDTH}px){.gauge{display:none}}`;
   const tokens = css.tokens.replaceAll(':root', '&');
-  return `${scope}{${tokens}${css.primitives}${css.controls}${compact}${touch}}`;
+  return `${scope}{${tokens}${css.primitives}${css.controls}${narrow}${compact}${touch}}`;
 }
 
 function appendStyle(name: string, css: string): HTMLStyleElement {
