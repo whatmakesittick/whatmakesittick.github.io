@@ -1,0 +1,41 @@
+:root {
+  color-scheme: dark;
+
+  --background: #0b0d10;
+  --surface: #14181e;
+  --text: #e6e9ee;
+  --muted: #8b929c;
+  --accent: #f5a524;
+  --metal-light: #b8bec8;
+  --metal: #6f7782;
+  --metal-dark: #3a404a;
+  --highlight: #f5a524;
+
+  --prose: #c3c9d2;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.16);
+  --wash: rgb(255 255 255 / 0.05);
+  --wash-strong: rgb(255 255 255 / 0.1);
+  --glass: linear-gradient(150deg, rgb(24 29 37 / 0.9), rgb(13 16 21 / 0.86));
+  --shadow: 0 18px 50px -20px rgb(0 0 0 / 0.75);
+
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --radius: 14px;
+  --radius-small: 9px;
+  --control-height: 30px;
+  --stage-inset: 16px;
+}
+
+:root:lang(zh) {
+  --font-sans:
+    'Inter Variable', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC',
+    'Noto Sans SC', sans-serif;
+}
+
+:root:lang(ja) {
+  --font-sans:
+    'Inter Variable', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', Meiryo,
+    'Noto Sans CJK JP', 'Noto Sans JP', sans-serif;
+}

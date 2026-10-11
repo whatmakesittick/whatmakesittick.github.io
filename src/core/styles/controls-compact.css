@@ -1,0 +1,71 @@
+.dock {
+  gap: 8px;
+  padding: 8px 10px;
+}
+
+.dock-main {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'status status status'
+    'play scrub more';
+  row-gap: 6px;
+  column-gap: 10px;
+  align-items: center;
+}
+
+.phase-buttons {
+  display: none;
+}
+
+.play-button {
+  width: 44px;
+  height: 44px;
+}
+
+.dock-status {
+  display: flex;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+}
+
+.dock-status .number {
+  min-width: 4ch;
+}
+
+.icon-button.dock-more {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+}
+
+.dock-more[aria-expanded='true'] {
+  background: var(--text);
+  color: var(--background);
+}
+
+.dock-extra {
+  display: none;
+  gap: 8px;
+  max-height: calc(var(--stage-height) - 120px);
+  overflow-y: auto;
+}
+
+.dock[data-expanded='true'] .dock-extra {
+  display: flex;
+}
+
+.speed-field {
+  --speed-range-width: 150px;
+
+  flex-basis: 100%;
+}
+
+.dock-language {
+  display: inline-block;
+  height: var(--control-height);
+  padding-block: 0;
+}
+
+.field-value {
+  min-width: 0;
+}

@@ -1,0 +1,35 @@
+.dock {
+  --control-height: 40px;
+}
+
+.scrubber input,
+.range {
+  height: 44px;
+}
+
+.dock .scrubber input,
+.dock .range {
+  touch-action: none;
+}
+
+.scrubber input::-webkit-slider-thumb {
+  width: 24px;
+  height: 24px;
+  margin-top: -9px;
+}
+
+.scrubber input::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+}
+
+.range::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+  margin-top: -9px;
+}
+
+.range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+}
