@@ -69,3 +69,25 @@ export function isExplainerOnlyPackage(
   const owners = new Set(importers.map((importer) => explainerSlug(importer, root)));
   return owners.size === 1 && !owners.has(undefined);
 }
+
+export function sharedByPages(
+  id: string,
+  graph: ModuleGraph,
+  isPageRoot: (id: string) => boolean,
+  minimum = 2,
+): boolean {
+  const roots = new Set<string>();
+  const visited = new Set([id]);
+  const pending = [id];
+  for (let current = pending.pop(); current !== undefined; current = pending.pop()) {
+    const importers = importersOf(current, graph);
+    if (importers.length === 0 && isPageRoot(current)) roots.add(current);
+    if (roots.size >= minimum) return true;
+    for (const importer of importers) {
+      if (visited.has(importer)) continue;
+      visited.add(importer);
+      pending.push(importer);
+    }
+  }
+  return false;
+}

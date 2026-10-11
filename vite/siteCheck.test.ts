@@ -86,6 +86,9 @@ function site(overrides: Partial<Record<string, PageOptions>> = {}): BuiltSite {
       ['/assets/shared.js', ''],
       ['/assets/three-x.js', ''],
       ['/assets/uk.js', ''],
+      ['/embed/v1/engine.js', 'import"../../assets/embed.js";import"../../assets/three-x.js";'],
+      ['/embed/v1/glider.js', 'import"../../assets/embed.js";'],
+      ['/assets/embed.js', 'import"./shared.js";'],
     ]),
     gzipBytes: new Map([
       ['/assets/main.js', 8_000],
@@ -93,12 +96,16 @@ function site(overrides: Partial<Record<string, PageOptions>> = {}): BuiltSite {
       ['/assets/shared.js', 25_000],
       ['/assets/three-x.js', 160_000],
       ['/assets/uk.js', 1_000],
+      ['/embed/v1/engine.js', 1_000],
+      ['/embed/v1/glider.js', 1_000],
+      ['/assets/embed.js', 7_000],
     ]),
     feeds: new Map(LANGUAGES.map((code) => [code, feedXml(code, EXPLAINERS)])),
     sitemap: pages.map((page) => `<loc>${SITE}${page.path}</loc>`).join('\n'),
     robots: 'Sitemap: x',
     notFound: '<meta name="robots" content="noindex">',
     favicon: new Uint8Array([0, 0, 1, 0, 2, 0]),
+    embedManifest: JSON.stringify({ explainers: EXPLAINERS.map((slug) => ({ slug })) }),
   };
 }
 
@@ -192,6 +199,26 @@ describe('loadedScripts', () => {
       '/assets/uk.js',
       '/assets/shared.js',
       '/assets/three-x.js',
+    ]);
+  });
+
+  it('rejects a missing or heavy embed module and a manifest that misses an explainer', () => {
+    const built = site();
+    const scripts = new Map(built.scripts);
+    scripts.delete('/embed/v1/glider.js');
+    const gzipBytes = new Map(built.gzipBytes);
+    gzipBytes.set('/assets/embed.js', JS_BUDGET_GZIP.embed);
+    expect(
+      checkSite({
+        ...built,
+        scripts,
+        gzipBytes,
+        embedManifest: JSON.stringify({ explainers: [{ slug: 'engine' }] }),
+      }),
+    ).toEqual([
+      `/embed/v1/engine.js loads ${JS_BUDGET_GZIP.embed + 186_000} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.embed}`,
+      '/embed/v1/glider.js is missing',
+      'the embed manifest does not list exactly the built explainers',
     ]);
   });
 });

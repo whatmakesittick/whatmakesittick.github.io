@@ -2,6 +2,15 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
 import sirv from 'sirv';
 import type { Plugin, ViteDevServer } from 'vite';
+import {
+  EMBED_MANIFEST_FILE,
+  embedEntrySlug,
+  embedInputs,
+  embedManifest,
+  entryFileNames,
+  renderEmbedEntry,
+  resolveEmbedEntry,
+} from './embed.ts';
 import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { renderCatalogueModule } from './page.ts';
@@ -123,16 +132,26 @@ function pagesPlugin(): Plugin {
       root = resolve(config.root ?? process.cwd());
       if (env.mode === 'test' || env.isPreview) return;
       site = generateSite(root);
-      return { build: { rolldownOptions: { input: rollupInputs(root, site.folders) } } };
+      return {
+        build: {
+          rolldownOptions: {
+            input: { ...rollupInputs(root, site.folders), ...embedInputs(site.explainers) },
+            preserveEntrySignatures: 'exports-only',
+            output: { entryFileNames },
+          },
+        },
+      };
     },
 
     resolveId(id) {
-      return id === CATALOGUE_MODULE ? RESOLVED_CATALOGUE_MODULE : undefined;
+      return id === CATALOGUE_MODULE ? RESOLVED_CATALOGUE_MODULE : resolveEmbedEntry(id);
     },
 
     load(id) {
-      if (id !== RESOLVED_CATALOGUE_MODULE) return undefined;
-      return renderCatalogueModule(site?.explainers ?? []);
+      if (id === RESOLVED_CATALOGUE_MODULE) return renderCatalogueModule(site?.explainers ?? []);
+      const slug = embedEntrySlug(id);
+      const explainer = site?.explainers.find(({ manifest }) => manifest.slug === slug);
+      return explainer ? renderEmbedEntry(explainer) : undefined;
     },
 
     transformIndexHtml: {
@@ -177,6 +196,11 @@ function pagesPlugin(): Plugin {
       for (const { fileName, source } of siteFiles(siteContent(site))) {
         this.emitFile({ type: 'asset', fileName, source });
       }
+      this.emitFile({
+        type: 'asset',
+        fileName: EMBED_MANIFEST_FILE,
+        source: `${JSON.stringify(embedManifest(explainers), null, 2)}\n`,
+      });
       for (const { manifest, directory } of explainers) {
         const publicDirectory = join(directory, PUBLIC_DIRECTORY);
         for (const file of listFiles(publicDirectory)) {

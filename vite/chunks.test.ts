@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dependsOn, isExplainerOnlyPackage } from './chunks.ts';
+import { dependsOn, isExplainerOnlyPackage, sharedByPages } from './chunks.ts';
 import type { ModuleGraph } from './chunks.ts';
 
 const THREE = /node_modules\/three\//;
@@ -167,5 +167,25 @@ describe('isExplainerOnlyPackage', () => {
     expect(isExplainerOnlyPackage(`${root}\\node_modules\\i18next\\index.js`, windows, root)).toBe(
       false,
     );
+  });
+});
+
+const pages = graph({
+  '/catalogue.html': ['/src/core/i18n/index.ts'],
+  '/engine/main.ts': ['/explainers/engine/src/index.ts', '/src/core/i18n/index.ts'],
+  '\0virtual:embed/engine': ['/explainers/engine/src/index.ts', '/src/core/embed/mount.ts'],
+  '\0virtual:embed/glider': ['/src/core/embed/mount.ts'],
+  '/explainers/engine/src/index.ts': ['/src/core/path.ts'],
+  '/src/core/embed/mount.ts': ['/src/core/i18n/index.ts'],
+  '/src/core/i18n/index.ts': [],
+  '/src/core/path.ts': [],
+});
+const isPage = (id: string) => !id.startsWith('\0virtual:embed/');
+
+describe('sharedByPages', () => {
+  it('counts the pages that load a module, not the embeds', () => {
+    expect(sharedByPages('/src/core/path.ts', pages, isPage)).toBe(false);
+    expect(sharedByPages('/src/core/embed/mount.ts', pages, isPage)).toBe(false);
+    expect(sharedByPages('/src/core/i18n/index.ts', pages, isPage)).toBe(true);
   });
 });

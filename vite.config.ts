@@ -1,7 +1,8 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
-import { dependsOn, isExplainerOnlyPackage } from './vite/chunks.ts';
+import { dependsOn, isExplainerOnlyPackage, sharedByPages } from './vite/chunks.ts';
 import type { ModuleGraph } from './vite/chunks.ts';
+import { embedEntrySlug } from './vite/embed.ts';
 import { explainerPages } from './vite/explainerPages.ts';
 import { siteCheck } from './vite/siteCheckPlugin.ts';
 
@@ -12,9 +13,13 @@ const testFiles = (suffix: string) => TEST_ROOTS.map((root) => `${root}/**/*${su
 const THREE_MODULES = /node_modules[\\/]three[\\/]/;
 const SCENE_MODULES = /[\\/](?:node_modules[\\/]three(?:-mesh-bvh)?|src[\\/]core[\\/]scene)[\\/]/;
 const SHARED_MODULES = /[\\/](?:node_modules|src[\\/]core)[\\/]|^\0vite\//;
+const EMBED_MODULES = /[\\/]src[\\/]core[\\/]embed[\\/]|\?(?:inline|raw|url)$/;
 const FONT_FILE = /\.woff2?$/;
 const needsScene = (id: string, graph: ModuleGraph) =>
   SCENE_MODULES.test(id) || dependsOn(id, SCENE_MODULES, graph);
+const isPageRoot = (id: string) => embedEntrySlug(id) === undefined;
+const pageChunk = (id: string, graph: ModuleGraph) =>
+  !isExplainerOnlyPackage(id, graph) && sharedByPages(id, graph, isPageRoot);
 
 export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
@@ -32,17 +37,18 @@ export default defineConfig({
             { name: 'three', test: THREE_MODULES },
             {
               name: (id, context) =>
-                isExplainerOnlyPackage(id, context) || needsScene(id, context) ? null : 'shared',
+                !pageChunk(id, context) || needsScene(id, context) ? null : 'shared',
               debugName: 'shared',
               test: SHARED_MODULES,
               minShareCount: 2,
             },
             {
-              name: (id, context) => (isExplainerOnlyPackage(id, context) ? null : 'scene'),
+              name: (id, context) => (pageChunk(id, context) ? 'scene' : null),
               debugName: 'scene',
               test: SHARED_MODULES,
               minShareCount: 2,
             },
+            { name: 'embed', test: EMBED_MODULES, minShareCount: 2 },
           ],
         },
       },

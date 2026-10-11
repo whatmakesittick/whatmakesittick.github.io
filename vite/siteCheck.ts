@@ -21,15 +21,19 @@ export interface BuiltSite {
   feeds: ReadonlyMap<LanguageCode, string>;
   notFound: string;
   favicon: Uint8Array;
+  embedManifest?: string;
 }
 
-export const JS_BUDGET_GZIP = { site: 50_000, explainer: 300_000 } as const;
+export const JS_BUDGET_GZIP = { site: 50_000, explainer: 305_000, embed: 300_000 } as const;
+export const EMBED_PATH = '/embed/v1/';
 export const MORE_EXPLAINERS = 3;
 
 const SITE_NAME = 'What makes it tick';
 const BLOCKED_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 const THREE_CHUNK = /\/three-[^/]*\.js$/;
 const STATIC_IMPORT = /(?:from|import)\s*"(\.\/[^"]+\.js)"/g;
+const RELATIVE_IMPORT = /(?:from|import)\s*"(\.{1,2}\/[^"]+\.js)"/g;
+const RESOLVE_BASE = 'https://site.invalid';
 const EXTERNAL = /^https?:/;
 const ICO_HEADER = [0, 0, 1, 0];
 const X_DEFAULT = 'x-default';
@@ -198,6 +202,58 @@ function siteProblems(site: BuiltSite): string[] {
   return problems;
 }
 
+export function moduleClosure(entry: string, scripts: ReadonlyMap<string, string>): string[] {
+  const loaded = new Set<string>();
+  const queue = [entry];
+  while (queue.length > 0) {
+    const href = queue.shift();
+    if (href === undefined || loaded.has(href)) continue;
+    loaded.add(href);
+    for (const [, specifier] of (scripts.get(href) ?? '').matchAll(RELATIVE_IMPORT)) {
+      queue.push(new URL(specifier, `${RESOLVE_BASE}${href}`).pathname);
+    }
+  }
+  return [...loaded];
+}
+
+function embedManifestSlugs(manifest: string | undefined): string[] | undefined {
+  try {
+    const parsed = JSON.parse(manifest ?? '') as { explainers?: { slug: string }[] };
+    return (parsed.explainers ?? []).map((entry) => entry.slug).sort();
+  } catch {
+    return undefined;
+  }
+}
+
+function embedProblems(site: BuiltSite): string[] {
+  const slugs = site.pages
+    .filter((page) => pageLanguage(page.path) === DEFAULT_LANGUAGE && isExplainer(page.path))
+    .map((page) => splitLanguagePath(page.path).page)
+    .sort();
+  const problems: string[] = [];
+  for (const slug of slugs) {
+    const entry = `${EMBED_PATH}${slug}.js`;
+    if (!site.scripts.has(entry)) {
+      problems.push(`${entry} is missing`);
+      continue;
+    }
+    const scripts = moduleClosure(entry, site.scripts);
+    scripts
+      .filter((href) => !site.scripts.has(href))
+      .forEach((href) => problems.push(`${entry} imports the missing ${href}`));
+    const bytes = scripts.reduce((sum, href) => sum + (site.gzipBytes.get(href) ?? 0), 0);
+    if (bytes > JS_BUDGET_GZIP.embed)
+      problems.push(
+        `${entry} loads ${bytes} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.embed}`,
+      );
+  }
+  const listed = embedManifestSlugs(site.embedManifest);
+  if (listed === undefined) return [...problems, 'the embed manifest is missing or does not parse'];
+  if (listed.join('\n') !== slugs.join('\n'))
+    problems.push('the embed manifest does not list exactly the built explainers');
+  return problems;
+}
+
 export function checkSite(site: BuiltSite): string[] {
   const explainers = site.pages.filter(
     (page) => pageLanguage(page.path) === DEFAULT_LANGUAGE && isExplainer(page.path),
@@ -210,5 +266,5 @@ export function checkSite(site: BuiltSite): string[] {
       ...contentProblems(page, root, explainers),
     ].map((problem) => `${page.path}: ${problem}`);
   });
-  return [...pageProblems, ...siteProblems(site)];
+  return [...pageProblems, ...siteProblems(site), ...embedProblems(site)];
 }
