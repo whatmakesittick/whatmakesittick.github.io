@@ -763,7 +763,7 @@ and removes the styles it added. `/embed/v1/manifest.json` lists the explainers 
 and chapter titles, in English.
 
 The `language` option takes a language code or a BCP 47 tag (`de`, `pt-BR`, `zh-Hans-CN`);
-`resolveLanguage` in `src/core/i18n/embedded.ts` keeps its base language when the site ships it
+`resolveLanguage` in `src/core/i18n/languages.ts` keeps its base language when the site ships it
 and falls back to English otherwise. Without the option the embed is in English whatever the
 browser prefers, as before. `mount` loads the dictionaries before it describes the explainer.
 `controller.setLanguage(language)` resolves to the language it settled on once the dictionaries
@@ -799,8 +799,9 @@ JavaScript budget (`JS_BUDGET_GZIP.embed`) and the manifest. `mcp/` builds the M
 chat widget on these modules.
 
 The chat widget is a module here too, `/embed/v1/widget.js`. `npm run build:widget`, the last step
-of `npm run build`, bundles `mcp/widget/` into that one self-contained file: the Preact UI, its
-styles (added as a `<style data-wmit-widget>` element), the ext-apps bridge and the thin catalogue.
+of `npm run build`, bundles `mcp/widget/` into that file: the Preact UI, its
+styles (added as a `<style data-wmit-widget>` element), the ext-apps bridge and the thin English catalogue;
+every other language is a `widget-<lang>-<hash>.js` chunk next to it, loaded when first asked for.
 Chat hosts cache the `ui://` resource until the connector is reconnected, so the resource is only a
 loader, `mcp/widget/loader.html` (at most 8 KB): it reads the asset base from its
 `wmit-asset-base` meta tag, imports `<asset base>widget.js` and calls
