@@ -768,9 +768,14 @@ button:focus-visible,
   -webkit-backdrop-filter: none;
   padding: 10px 16px 12px;
 }
-.wmit.is-inline:is(.st-loading, .st-idle) .dock-slot:empty {
-  min-height: 104px;
+.wmit.is-inline:is(.st-loading, .st-idle, .st-error) .dock-slot:empty {
+  min-height: 126px;
   border-bottom: 1px solid var(--line);
+}
+@container wmit-scene (max-width: 459px) {
+  .wmit.is-inline:is(.st-loading, .st-idle, .st-error) .dock-slot:empty {
+    min-height: 88.6px;
+  }
 }
 .wmit.is-inline .gauge-slot .gauge {
   display: none;
@@ -829,6 +834,16 @@ button:focus-visible,
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+.a-chapter .text-skeleton {
+  font: var(--t-body);
+  gap: 0;
+  padding: 0;
+  grid-auto-rows: 1lh;
+  align-items: center;
+}
+.more-link.is-placeholder {
+  visibility: hidden;
 }
 .a-chapter .ch-text.all {
   display: grid;

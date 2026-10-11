@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { explainerUrl, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { EmbedController, EmbedInfo, EmbedState } from '../../../src/core/embed/contract.ts';
 import { EMBED_DOM } from '../../../src/core/embed/contract.ts';
 import { MODEL_CONTEXT_DEBOUNCE_MS, type ModelContextSnapshot } from '../../shared/tools.ts';
 import type { DisplayMode, WidgetHost } from './bridge.ts';
+import { reserveDock, type DockReserve } from './dockReserve.ts';
 import { watchGaugeClearance } from './gaugeClearance.ts';
 import { StringsContext } from './i18n/context.ts';
 import { NO_SIGNALS, languageOf, withContext, withInput, withResult } from './i18n/language.ts';
@@ -93,6 +94,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const langRef = useRef(lang);
   langRef.current = lang;
   const painted = useRef(false);
+  const dockReserve = useRef<DockReserve | undefined>(undefined);
 
   const session = useMemo(
     () =>
@@ -259,6 +261,22 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   }, [entry !== undefined]);
 
   useEffect(() => {
+    const slot = dockRef.current;
+    if (!slot) return;
+    const reserve = reserveDock(slot);
+    dockReserve.current = reserve;
+    return () => {
+      reserve.dispose();
+      dockReserve.current = undefined;
+    };
+  }, [entry !== undefined]);
+
+  const sceneReady = status === 'ready' && controller?.info.slug === slug;
+  useLayoutEffect(() => {
+    dockReserve.current?.sync({ inline: !fullscreen, ready: sceneReady });
+  }, [sceneReady, fullscreen, entry !== undefined]);
+
+  useEffect(() => {
     const stage = hostRef.current?.closest('[data-stage]');
     if (!stage || typeof IntersectionObserver === 'undefined') return;
     const io = new IntersectionObserver(([e]) => {
@@ -372,9 +390,10 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   }
   painted.current = true;
 
-  const scene = info?.language === pack.lang ? info : undefined;
+  const known = info ?? (controller?.info.slug === slug ? controller.info : undefined);
+  const scene = known?.language === pack.lang ? known : undefined;
   const chapters: ChapterView[] = entry.chapters.map((c, i) => {
-    const fromInfo = info?.chapters.find((x) => x.id === c.id);
+    const fromInfo = known?.chapters.find((x) => x.id === c.id);
     const title = scene?.chapters.find((x) => x.id === c.id)?.title ?? c.title;
     return {
       id: c.id,
@@ -385,13 +404,12 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     };
   });
 
-  const shownStatus: SceneStatus =
-    status === 'ready' && controller?.info.slug !== slug ? 'loading' : status;
+  const shownStatus: SceneStatus = status === 'ready' && !sceneReady ? 'loading' : status;
   const vm: ViewModel = {
     slug,
     entry,
     tagline: scene?.tagline ?? catalogue.taglines[slug] ?? entry.summary,
-    info,
+    info: known,
     status: shownStatus,
     progress,
     chapter,

@@ -106,6 +106,8 @@ export function ChapterSection({ vm }: { vm: ViewModel }) {
   const chapter = vm.chapters.find((c) => c.id === vm.chapter) ?? vm.chapters[0];
   if (!chapter) return null;
   const more = chapter.paragraphsHtml.length > 1 || (chapter.paragraphsHtml[0]?.length ?? 0) > 220;
+  const pending =
+    chapter.paragraphsHtml.length === 0 && (vm.status === 'loading' || vm.status === 'idle');
   return (
     <section class="a-chapter inline-only" aria-label={chapter.title}>
       <div class="top">
@@ -114,6 +116,13 @@ export function ChapterSection({ vm }: { vm: ViewModel }) {
       </div>
       <h3>{chapter.title}</h3>
       <Body vm={vm} chapter={chapter} all={expanded} />
+      {pending && (
+        <div aria-hidden="true">
+          <button type="button" class="more-link is-placeholder" tabIndex={-1} disabled>
+            {s.readMore}
+          </button>
+        </div>
+      )}
       {more && (
         <div>
           <button
