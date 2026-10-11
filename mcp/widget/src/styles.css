@@ -946,7 +946,7 @@ button:focus-visible,
   position: absolute;
   left: calc(16px + var(--safe-left));
   right: 16px;
-  bottom: calc(var(--safe-bottom) + 6px);
+  bottom: calc(var(--safe-bottom) + 26px);
 }
 
 .prose {
