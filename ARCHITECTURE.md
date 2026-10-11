@@ -15,11 +15,14 @@ built into a page at `/<slug>/`.
 | `404.html`                | The page GitHub Pages serves for a missing path, filled by the build            |
 | `src/core/`               | Everything an explainer builds on (see below)                                   |
 | `src/core/page.html`      | The explainer page template: masthead, stage, gauge, dock, prose column, footer |
-| `src/core/partials/`      | Markup shared by the template and the catalogue: header actions, footer         |
+| `src/core/partials/`      | Markup shared by the template, the catalogue and the embed: dock, gauge, footer |
+| `src/core/styles/`        | The stylesheet in parts, imported in cascade order by `src/core/style.css`      |
 | `src/core/locales/*.json` | Shell strings only: controls, footer, header chrome, keyboard, catalogue        |
 | `explainers/<slug>/`      | One folder per explainer, see "Explainer package"                               |
 | `vite/`                   | The `explainerPages` plugin: manifests, language pages, crawl files, catalogue  |
+| `src/core/embed/`         | The embed API: one explainer mounted into another page, see "Embed"             |
 | `e2e/`                    | Browser smoke test run by Playwright against the production build               |
+| `mcp/`                    | The MCP app: server and chat widget built on the embeds, see `mcp/README.md`    |
 | `public/`                 | Site-wide static files: favicon, icons, web manifest, catalogue link preview    |
 | `scripts/`                | `social-images.sh` renders the icons, `favicon.ico` and `scripts/cards/*.html`  |
 | `.github/workflows/`      | `ci.yml` on pull requests, `deploy.yml` on `main`, `smoke.yml` by hand          |
@@ -722,8 +725,13 @@ English page otherwise.
 Kept from the engine: TypeScript strict, ESLint and Prettier over the repository,
 Vitest for pure modules, happy-dom for `*.dom.test.ts` files, no comments by
 default, no all-caps text, `data-i18n`, `data-i18n-html`, `data-i18n-attr` and
-`data-i18n-values` for copy, tokens in `src/core/style.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
+`data-i18n-values` for copy, tokens in `src/core/styles/tokens.css` mirrored by `src/core/theme.ts`. Modules shared with the Vite config
 (`vite/`, `src/core/manifest.ts`) import with explicit `.ts` extensions.
+
+`src/core/style.css` imports the parts of `src/core/styles/` in cascade order: tokens, base,
+primitives, layout, controls, the phone dock rules under `(max-width: 899px)`, prose, and the
+touch sizes of the controls under `(pointer: coarse)`. The controls parts style only the dock and
+the gauge, so the embed reuses them; a rule for the page goes into the page parts.
 
 Fonts are self-hosted. `src/core/style.css` imports Inter (variable) and JetBrains
 Mono 400 and 500 from Fontsource, so Vite emits hashed woff2 files and each page
@@ -741,3 +749,34 @@ old `?lang=` link, and the catalogue and the about page in English and in the la
 fails on page or console errors, untranslated copy, overflow, empty readouts, labels
 over the dock or broken cards. A run takes about three minutes; CI runs it only by
 hand, from the Smoke test workflow, and keeps the report when it fails.
+
+## Embed
+
+The site build also emits every explainer as an ES module, `/embed/v1/<slug>.js`, for pages
+outside the site such as a chat widget. It exports `apiVersion` (1), `slug` and
+`mount(container, options)`; the contract is `src/core/embed/contract.ts`. `mount` resolves to a
+controller once the first frame is drawn: `info` (title, chapters with their paragraphs, phases,
+speed, toggles and choices, all in English), `getState` and `subscribe`, `setChapter`, `play`,
+`pause`, `togglePlaying`, `seek`, `setSpeed`, `setView`, `setChoice`, `resetCamera` and
+`dispose`, which unmounts the scene, releases the WebGL context and removes the styles it added.
+`/embed/v1/manifest.json` lists the explainers with their covers and chapter titles.
+
+`mountEmbed` in `src/core/embed/mount.ts` does what `mountExplainer` does for a page, minus the
+page: `useEnglishOnly` from `src/core/i18n/englishOnly.ts` sets the core and explainer strings in
+English without detection, the store applies the requested chapter before the scene exists, so
+the camera starts there, and the scene host mounts into the given container. A host may pass
+`ui: { dock, gauge }`, two empty elements inside its `[data-stage]`: the embed fills them with the
+`dock` and `gauge` partials, binds them with `mountDock` and `mountReadouts` and drops the language
+select. Their styles are the controls parts of the stylesheet, nested under `[data-embed-ui]`, with
+the phone dock rules keyed to an `embed-dock` container of at most 459px instead of the viewport.
+The scene styles and an explainer's `style.css` are added as `<style data-embed-styles>` elements
+while a scene is mounted. The embed loads the latin Inter and JetBrains Mono files the pages use.
+
+The build adds one entry per explainer (`vite/embed.ts`), generated from its manifest and the
+chapter outline of `chapters.html` (`vite/chapterOutline.ts`). The embeds share the `three`,
+`scene` and `shared` chunks and each explainer's own chunk with the pages, so a reader who has
+visited the site has them cached. A core module that only one page and its embed load stays out of
+the shared chunks (`sharedByPages` in `vite/chunks.ts`), and the embed runtime is a chunk of its
+own, so a page loads no embed code. The site check also checks an embed per explainer, its
+JavaScript budget (`JS_BUDGET_GZIP.embed`) and the manifest. `mcp/` builds the MCP server and the
+chat widget on these modules.
