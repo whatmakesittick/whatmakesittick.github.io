@@ -755,22 +755,37 @@ hand, from the Smoke test workflow, and keeps the report when it fails.
 The site build also emits every explainer as an ES module, `/embed/v1/<slug>.js`, for pages
 outside the site such as a chat widget. It exports `apiVersion` (1), `slug` and
 `mount(container, options)`; the contract is `src/core/embed/contract.ts`. `mount` resolves to a
-controller once the first frame is drawn: `info` (title, chapters with their paragraphs, phases,
-speed, toggles and choices, all in English), `getState` and `subscribe`, `setChapter`, `play`,
-`pause`, `togglePlaying`, `seek`, `setSpeed`, `setView`, `setChoice`, `resetCamera` and
-`dispose`, which unmounts the scene, releases the WebGL context and removes the styles it added.
-`/embed/v1/manifest.json` lists the explainers with their covers and chapter titles.
+controller once the first frame is drawn: `info` (its `language`, title, chapters with their
+paragraphs, phases, speed, toggles and choices, all in that language), `getState` and `subscribe`,
+`setChapter`, `play`, `pause`, `togglePlaying`, `seek`, `setSpeed`, `setView`, `setChoice`,
+`resetCamera`, `setLanguage` and `dispose`, which unmounts the scene, releases the WebGL context
+and removes the styles it added. `/embed/v1/manifest.json` lists the explainers with their covers
+and chapter titles, in English.
+
+The `language` option takes a language code or a BCP 47 tag (`de`, `pt-BR`, `zh-Hans-CN`);
+`resolveLanguage` in `src/core/i18n/embedded.ts` keeps its base language when the site ships it
+and falls back to English otherwise. Without the option the embed is in English whatever the
+browser prefers, as before. `mount` loads the dictionaries before it describes the explainer.
+`controller.setLanguage(language)` resolves to the language it settled on once the dictionaries
+are loaded, the controls are translated again and `info` is replaced; subscribers then get a state
+whose `phaseLabel` is in the new language. Each language is the core and the explainer dictionary
+merged, and a key a language lacks falls back to English (`fallbackLng`). The English dictionaries
+are in the module; the others are the same dynamic chunks the pages load, fetched only when a
+language is asked for. `setLanguage` is optional in the type because modules built before it
+lack it, so a widget checks for it.
 
 `mountEmbed` in `src/core/embed/mount.ts` does what `mountExplainer` does for a page, minus the
-page: `useEnglishOnly` from `src/core/i18n/englishOnly.ts` sets the core and explainer strings in
-English without detection, the store applies the requested chapter before the scene exists, so
+page: `useLanguage` from `src/core/i18n/embedded.ts` sets the core and explainer strings in the
+asked language without detection (`useEnglishOnly` is its English shortcut for tests), the
+container and the control slots get a matching `lang` attribute, the store applies the requested chapter before the scene exists, so
 the camera starts there, and the scene host mounts into the given container. A host may pass
 `ui: { dock, gauge }`, two empty elements inside its `[data-stage]`: the embed fills them with the
 `dock` and `gauge` partials, binds them with `mountDock` and `mountReadouts` and drops the language
 select. Their styles are the controls parts of the stylesheet, nested under `[data-embed-ui]`, with
 the phone dock rules keyed to an `embed-dock` container of at most 459px instead of the viewport.
 The scene styles and an explainer's `style.css` are added as `<style data-embed-styles>` elements
-while a scene is mounted. The embed loads the latin Inter and JetBrains Mono files the pages use.
+while a scene is mounted. The embed loads the latin Inter and JetBrains Mono files the pages use, and their
+Cyrillic files only for Ukrainian; Japanese and Chinese use system fonts, as on the pages.
 On a stage container of at most 620px, where the controls styles hide the readouts, the embed hides
 the whole gauge, so no empty glass panel is left.
 
