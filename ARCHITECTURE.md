@@ -783,6 +783,20 @@ own, so a page loads no embed code. The site check also checks an embed per expl
 JavaScript budget (`JS_BUDGET_GZIP.embed`) and the manifest. `mcp/` builds the MCP server and the
 chat widget on these modules.
 
+The chat widget is a module here too, `/embed/v1/widget.js`. `npm run build:widget`, the last step
+of `npm run build`, bundles `mcp/widget/` into that one self-contained file: the Preact UI, its
+styles (added as a `<style data-wmit-widget>` element), the ext-apps bridge and the thin catalogue.
+Chat hosts cache the `ui://` resource until the connector is reconnected, so the resource is only a
+loader, `mcp/widget/loader.html` (at most 8 KB): it reads the asset base from its
+`wmit-asset-base` meta tag, imports `<asset base>widget.js` and calls
+`start(root, { assetBase, inbox, loaderVersion })`, so a UI change ships with the site deploy. Until
+the module takes over, the loader keeps every `message` event the host window sends; the module's
+transport attaches its own listener, then calls `inbox.take()`, which stops the buffer and returns
+the events, and dispatches them again on `window` in their order, so a tool input or result that
+arrives while the module loads is not lost. If the import or `start` fails, the loader shows the
+site's name, a plain link to the explainer on the site and a retry button, and greets the host
+itself so the frame gets a size.
+
 Published widgets stay cached in chat hosts long after a release, so `/embed/v1/` only grows:
 within `v1`, never remove or rename a path, an export, a `MountOptions` field or a DOM attribute a
 published widget relies on. A breaking change goes to `/embed/v2/`, next to `v1`. Paths that only
@@ -790,3 +804,12 @@ earlier widgets request are still emitted as static files, so GitHub Pages serve
 `legacyEmbedFiles` in `vite/embed.ts` copies each cover to `/embed/v1/covers/<slug>.webp` and the
 latin fonts to `/embed/v1/fonts/<file>.woff2` under their fontsource names, and `vite/embed.test.ts`
 checks that they are in `dist/`.
+
+The loader is such a published widget, and it is never refreshed by a deploy. Within `v1`, the entry
+name `/embed/v1/widget.js` (not hashed, so a stale copy lives at most as long as the host's HTTP
+cache), the `start(root, options)` export, the `assetBase`, `inbox` and `loaderVersion` options, the
+inbox contract above and the `wmit-asset-base` and `wmit-report-context` meta tags stay backward
+compatible: a new option is optional, and the module works with every loader version still
+installed. `LOADER_VERSION` in `mcp/shared/loader.ts` numbers the loader. Changing the loader is a
+breaking event: it reaches a user only when their host reads the resource again, which in Claude
+means reconnecting the connector.

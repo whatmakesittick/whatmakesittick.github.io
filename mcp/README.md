@@ -2,8 +2,10 @@
 
 An [MCP App](https://modelcontextprotocol.io/) that shows the explainers inside chat hosts such as
 Claude, ChatGPT and the ext-apps `basic-host`. The model calls one UI tool, `show_explainer({ slug,
-chapter? })`, and the host renders one widget, `ui://wmit/explainer.html`. The widget loads the
-explainer's 3D scene from `/embed/v1/<slug>.js`, the embed module the site build emits for every
+chapter? })`, and the host renders one widget, `ui://wmit/explainer.html`. That resource is a small
+loader that imports the widget itself from `/embed/v1/widget.js`, next to the embeds, so a widget
+change ships with the site deploy even where the host keeps the resource cached. The widget loads
+the explainer's 3D scene from `/embed/v1/<slug>.js`, the embed module the site build emits for every
 explainer (see "Embed" in `ARCHITECTURE.md`), and mounts the site's own dock and gauge with it.
 A second tool, `list_explainers({ tag? })`, answers what is available and shows no widget.
 
@@ -15,11 +17,11 @@ A second tool, `list_explainers({ tag? })`, answers what is available and shows 
 | `catalogue/`        | The catalogue built from `explainers/*` with the site's own manifest loader       |
 | `data/aliases.json` | What people call each explainer, for the `show_explainer` description             |
 | `server/`           | `createServer` (platform independent), `http.ts` and the Node entry `node.ts`     |
-| `widget/`           | The widget: Preact, built into one HTML file without three.js                     |
+| `widget/`           | `loader.html` (the resource) and the widget module: Preact, without three.js      |
 | `scripts/`          | `smoke-stdio.ts`, the stdio round trip the way Claude Desktop runs the server     |
 | `tests/`            | Vitest unit tests, the embed smoke and the widget Playwright specs                |
 | `docs/`             | Research, the design record and the widget design package (`docs/design/`)        |
-| `dist/`             | Build output, ignored: `catalogue.json` and `widget/explainer.html`               |
+| `dist/`             | Build output, ignored: `catalogue.json`                                           |
 
 The embed contract (`EmbedModule`, `MountOptions`, `EmbedController`) is
 `src/core/embed/contract.ts`; the server and the widget import it from there.
@@ -30,8 +32,9 @@ Node 24 (`.nvmrc`). The server runs its TypeScript directly with Node's type str
 
 ```bash
 npm ci
-npm run build          # the site, with /embed/v1/ in dist/
-npm run build:mcp      # mcp/dist/catalogue.json and mcp/dist/widget/explainer.html
+npm run build          # the site, with /embed/v1/ and /embed/v1/widget.js in dist/
+npm run build:widget   # only dist/embed/v1/widget.js, after a widget change
+npm run build:mcp      # mcp/dist/catalogue.json
 npm run mcp            # http://localhost:3003/mcp, the site files and /healthz
 npm run mcp:stdio      # MCP over stdio; serves the site files on 127.0.0.1:$PORT itself
 ```
@@ -54,20 +57,34 @@ container dimensions and frame size to stderr as `host context {…}`. The widge
 same report with `console.info` and `sendLog`. The dev page takes `insets=top,right,bottom,left` to
 simulate a host's safe area and tints that area.
 
-The widget resource URI carries a hash of the built widget,
-`ui://wmit/explainer-<hash>.html`, because hosts cache a resource by its URI.
-
 To try it in `basic-host`: `SERVERS='["http://localhost:3003/mcp"]' npm start` in
 `ext-apps/examples/basic-host`, open http://localhost:8080 and call `show_explainer` with
 `{"slug": "mri-scanner", "chapter": "magnet"}`.
 
+## Loader and widget module
+
+Hosts may cache the `ui://` resource, and Claude keeps it until the connector is reconnected, so the
+resource URI is stable and the resource never changes with the widget. It is
+`widget/loader.html` with the asset base and the report flag filled in: about 5 KB, no build step.
+It imports `<asset base>widget.js`, built from `widget/src/start.tsx` by `npm run build:widget`
+into `dist/embed/v1/` (one file of about 310 KB, 87 KB gzipped, styles and catalogue included), and
+calls its `start(root, { assetBase, inbox, loaderVersion })`. Messages the host sends before the
+module runs wait in the loader's inbox and are replayed to the module's transport. If the module
+does not load, the loader shows a link to the explainer on the site and a retry button.
+
+`LOADER_VERSION` in `shared/loader.ts` numbers the loader. A loader change is a breaking event: users
+get it only when their host reads the resource again (in Claude, by reconnecting the connector), so
+the module keeps working with every loader version still installed. The rules are in "Embed" in
+`ARCHITECTURE.md`.
+
 ## Checks
 
 ```bash
-npm test               # includes mcp/**/*.test.ts: catalogue, server, widget state, built widget
+npm test               # includes mcp/**/*.test.ts: catalogue, server, widget state, loader, built module
 npm run smoke:embed    # every embed under the spec's strict CSP in a sandboxed iframe (needs npm run build)
 npm run smoke:stdio    # tools/list, resources/read, tools/call over stdio, then the asset server
-npm run test:widget    # the widget on its dev page with a mock embed, and once with the real one
+npm run test:widget    # the widget on its dev page with a mock embed and with the real one, and the
+                       # built module through the loader on a test host (host.html), a slow module too
 npm run dev:widget     # the dev page: http://localhost:5183/dev.html?slug=engine&chapter=strokes
 ```
 
