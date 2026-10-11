@@ -26,7 +26,7 @@ English. A `chapter` query matches chapter titles in any language and script.
 | `widget/`           | `loader.html` (the resource) and the widget module: Preact, without three.js      |
 | `scripts/`          | `smoke-stdio.ts`, the stdio round trip the way Claude Desktop runs the server     |
 | `tests/`            | Vitest unit tests, the embed smoke and the widget Playwright specs                |
-| `docs/`             | Research, the design record and the widget design package (`docs/design/`)        |
+| `docs/`             | `DESIGN.md`: why the app is built this way, host findings and open questions      |
 | `dist/`             | Build output, ignored: `catalogue.json`                                           |
 
 The embed contract (`EmbedModule`, `MountOptions`, `EmbedController`) is
