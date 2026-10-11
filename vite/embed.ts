@@ -7,6 +7,7 @@ import type { Dictionary } from '../src/core/i18n/resources.ts';
 import { chapterOutline } from './chapterOutline.ts';
 import { LOCALES_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
+import { localeLoader } from './page.ts';
 
 export const EMBED_DIRECTORY = 'embed/v1';
 export const EMBED_MANIFEST_FILE = `${EMBED_DIRECTORY}/manifest.json`;
@@ -55,20 +56,23 @@ export function embedEntrySlug(id: string): string | undefined {
 export function renderEmbedEntry({ manifest, directory, chapters }: LoadedExplainer): string {
   const entry = join(directory, manifest.entry);
   const style = join(dirname(entry), STYLE_FILE);
-  const locale = join(directory, LOCALES_DIRECTORY, `${DEFAULT_LANGUAGE}.json`);
+  const localesRoot = posix(join(directory, LOCALES_DIRECTORY));
   const styles = existsSync(style)
     ? `import styles from '${posix(style)}?inline';`
     : "const styles = '';";
   return [
     `import { defineEmbed } from '${EMBED_MOUNT_MODULE}';`,
     `import explainer from '${posix(entry)}';`,
-    `import dictionary from '${posix(locale)}';`,
+    `import ${DEFAULT_LANGUAGE} from '${localesRoot}/${DEFAULT_LANGUAGE}.json';`,
     styles,
     '',
     `export const apiVersion = ${EMBED_API_VERSION};`,
     `export const slug = ${JSON.stringify(manifest.slug)};`,
     `const chapters = ${JSON.stringify(chapterOutline(chapters))};`,
-    'export const mount = defineEmbed(explainer, { slug, dictionary, chapters, styles });',
+    'const locales = {',
+    ...manifest.locales.map((code) => localeLoader(localesRoot, code)),
+    '};',
+    'export const mount = defineEmbed(explainer, { slug, locales, chapters, styles });',
     '',
   ].join('\n');
 }

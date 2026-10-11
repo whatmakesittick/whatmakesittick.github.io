@@ -300,7 +300,7 @@ function catalogueGrid(explainers: readonly LoadedExplainer[], language: PageLan
   return renderCatalogueGrid(catalogueCards(explainers), { ...language, base: ROOT_PATH });
 }
 
-function localeLoader(localesRoot: string, code: LanguageCode): string {
+export function localeLoader(localesRoot: string, code: LanguageCode): string {
   return code === DEFAULT_LANGUAGE
     ? `  ${code}: () => Promise.resolve(${code}),`
     : `  ${code}: () => import('${localesRoot}/${code}.json').then((module) => module.default),`;

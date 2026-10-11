@@ -1,4 +1,7 @@
+import type { LanguageCode } from '../i18n/languages.ts';
 import type { EmbedApiVersion } from './manifest.ts';
+
+export type { LanguageCode } from '../i18n/languages.ts';
 
 export { EMBED_API_VERSION } from './manifest.ts';
 export type {
@@ -37,6 +40,7 @@ export interface MountOptions {
   autoplay?: boolean;
   reducedMotion?: boolean;
   ui?: EmbedUiSlots;
+  language?: string;
 }
 
 export interface EmbedChapterInfo {
@@ -79,6 +83,7 @@ export interface EmbedChoiceInfo {
 
 export interface EmbedInfo {
   slug: string;
+  language: LanguageCode;
   title: string;
   eyebrow: string;
   tagline: string;
@@ -119,6 +124,7 @@ export interface EmbedController {
   setView(id: string, on: boolean): void;
   setChoice(id: string, value: string): void;
   resetCamera(): void;
+  setLanguage?(language: string): Promise<LanguageCode>;
   dispose(): void;
 }
 

@@ -1,4 +1,5 @@
 import type { Explainer, ExplainerStore, Playback } from '../explainer';
+import { onLanguageChanged } from '../i18n';
 import { translateDom } from '../i18n/dom';
 import dockMarkup from '../partials/dock.html?raw';
 import gaugeMarkup from '../partials/gauge.html?raw';
@@ -40,7 +41,9 @@ function mountInto(
     fill(slot, markup);
     const unbind = bind(slot);
     translateDom(slot);
+    const unwatch = onLanguageChanged(() => translateDom(slot));
     return () => {
+      unwatch();
       unbind();
       clear(slot);
     };

@@ -1,6 +1,6 @@
 import { isLooping } from '../explainer';
 import type { Explainer, ExplainerStore, Playback } from '../explainer';
-import { t } from '../i18n';
+import { currentLanguage, t } from '../i18n';
 import { clamp } from '../math';
 import type {
   EmbedChapterOutline,
@@ -21,6 +21,7 @@ export function describeExplainer<S extends Playback>(
   const { timeline, dock } = explainer;
   return {
     slug,
+    language: currentLanguage(),
     title: t('meta.title'),
     eyebrow: t('meta.eyebrow'),
     tagline: t('meta.tagline'),
@@ -68,13 +69,20 @@ function phaseIndexAt(info: EmbedInfo, phase: number): number {
   return phase >= (info.phases.at(-1)?.end ?? 0) ? info.phases.length - 1 : 0;
 }
 
+export interface ControllerTranslation {
+  apply(language: string): Promise<unknown>;
+  describe(): EmbedInfo;
+}
+
 export function createController<S extends Playback>(
-  info: EmbedInfo,
+  described: EmbedInfo,
   explainer: Explainer<S>,
   store: ExplainerStore<S>,
   ui: EmbedUiMounted | undefined,
   unmount: () => void,
+  translation?: ControllerTranslation,
 ): EmbedController {
+  let info = described;
   const listeners = new Set<EmbedStateListener>();
   const choices = new Map(explainer.dock.choices.map((choice) => [choice.id, choice]));
   let disposed = false;
@@ -101,19 +109,33 @@ export function createController<S extends Playback>(
     return state;
   };
 
-  const unsubscribe = store.subscribe(() => {
+  const notify = () => {
     if (listeners.size === 0) return;
     const state = snapshot();
     listeners.forEach((listener) => listener(state));
-  });
+  };
+  const unsubscribe = store.subscribe(notify);
 
   const act = (run: (state: S) => void) => {
     if (!disposed) run(store.getState());
   };
 
+  const setLanguage = async (language: string) => {
+    if (disposed || !translation) return info.language;
+    await translation.apply(language);
+    if (disposed) return info.language;
+    info = translation.describe();
+    cached = undefined;
+    notify();
+    return info.language;
+  };
+
   return {
-    info,
+    get info() {
+      return info;
+    },
     ...(ui ? { ui } : {}),
+    ...(translation ? { setLanguage } : {}),
     getState: snapshot,
     subscribe(listener) {
       if (disposed) return () => {};

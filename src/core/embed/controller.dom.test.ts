@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Choice, Explainer, Playback, Timeline } from '../explainer';
-import { useEnglishOnly } from '../i18n/englishOnly';
+import { resolveLanguage, useEnglishOnly, useLanguage } from '../i18n/embedded';
+import { currentLanguage } from '../i18n';
 import { createExplainerStore } from '../store';
 import { createController, describeExplainer } from './controller';
 
@@ -62,6 +63,14 @@ const dictionary = {
   test: { in: 'In', out: 'Out', speed: 'Speed', size: 'Size', small: 'Small', large: 'Large' },
 };
 
+const german = {
+  meta: { title: 'Vorführung' },
+  sections: { intro: { p1: 'Erster <strong>Teil</strong>' } },
+  test: { in: 'Rein' },
+};
+
+const outline = [{ id: 'intro', paragraphs: ['sections.intro.p1'] }];
+
 describe('embed controller', () => {
   useEnglishOnly(dictionary);
 
@@ -70,6 +79,7 @@ describe('embed controller', () => {
       { id: 'intro', paragraphs: ['sections.intro.p1'] },
     ]);
     expect(info.title).toBe('Demo');
+    expect(info.language).toBe('en');
     expect(info.chapters).toEqual([
       { id: 'intro', index: 1, title: 'Intro', paragraphsHtml: ['First <strong>one</strong>'] },
     ]);
@@ -99,5 +109,36 @@ describe('embed controller', () => {
     controller.play();
     expect(store.getState().playing).toBe(false);
     expect(unmount).toHaveBeenCalledOnce();
+  });
+
+  it('switches language in place and tells its subscribers', async () => {
+    const locales = {
+      en: () => Promise.resolve(dictionary),
+      de: () => Promise.resolve(german),
+    };
+    await useLanguage(locales, 'en');
+    const describe = () => describeExplainer('demo', explainer, outline);
+    const apply = vi.fn((language: string) => useLanguage(locales, resolveLanguage(language)));
+    const controller = createController(describe(), explainer, createStore(), undefined, vi.fn(), {
+      apply,
+      describe,
+    });
+    const listener = vi.fn();
+    controller.subscribe(listener);
+    await expect(controller.setLanguage?.('de-AT')).resolves.toBe('de');
+    expect(apply).toHaveBeenCalledWith('de-AT');
+    expect(currentLanguage()).toBe('de');
+    expect(controller.info.language).toBe('de');
+    expect(controller.info.title).toBe('Vorführung');
+    expect(controller.info.tagline).toBe('A test');
+    expect(controller.info.chapters[0]?.paragraphsHtml).toEqual(['Erster <strong>Teil</strong>']);
+    expect(controller.getState().phaseLabel).toBe('Rein');
+    expect(listener).toHaveBeenLastCalledWith(expect.objectContaining({ phaseLabel: 'Rein' }));
+    await expect(controller.setLanguage?.('ru')).resolves.toBe('en');
+    expect(controller.info.title).toBe('Demo');
+    controller.dispose();
+    await expect(controller.setLanguage?.('de')).resolves.toBe('en');
+    expect(apply).toHaveBeenCalledTimes(2);
+    useEnglishOnly(dictionary);
   });
 });

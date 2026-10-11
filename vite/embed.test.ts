@@ -1,7 +1,13 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { EMBED_DIRECTORY, EMBED_MANIFEST_FILE, LEGACY_FONTS, legacyEmbedFiles } from './embed.ts';
+import {
+  EMBED_DIRECTORY,
+  EMBED_MANIFEST_FILE,
+  LEGACY_FONTS,
+  legacyEmbedFiles,
+  renderEmbedEntry,
+} from './embed.ts';
 import type { EmbedManifest } from '../src/core/embed/manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 
@@ -29,6 +35,23 @@ describe('legacyEmbedFiles', () => {
     expect(files.map(({ fileName }) => fileName)).toEqual(legacyPaths);
     expect(files[0]?.source).toBe(join(root, 'explainers', 'engine', 'public', 'cover.webp'));
     expect(files.at(-1)?.source).toBe(`/modules/${LEGACY_FONTS[2]}`);
+  });
+});
+
+describe('renderEmbedEntry', () => {
+  it('bundles English and loads the other languages on demand', () => {
+    const source = renderEmbedEntry({
+      manifest: { slug: 'engine', entry: 'src/index.ts', locales: ['en', 'de', 'uk'] },
+      directory: '/explainers/engine',
+      chapters: '',
+    } as unknown as LoadedExplainer);
+    const locales = '/explainers/engine/locales';
+    expect(source).toContain(`import en from '${locales}/en.json';`);
+    expect(source).toContain('en: () => Promise.resolve(en),');
+    expect(source).toContain(`de: () => import('${locales}/de.json')`);
+    expect(source).toContain(`uk: () => import('${locales}/uk.json')`);
+    expect(source).not.toContain('fr:');
+    expect(source).toContain('defineEmbed(explainer, { slug, locales, chapters, styles })');
   });
 });
 
