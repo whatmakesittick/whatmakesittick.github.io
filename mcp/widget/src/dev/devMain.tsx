@@ -18,7 +18,8 @@ const chapter = q.get('chapter') ?? 'magnet';
 const state = q.get('state');
 const real = q.get('real') === '1';
 const lang = q.get('lang');
-const assetBase = `${location.origin}/site/embed/v1/`;
+const slow = Number(q.get('slow') ?? 0);
+const assetBase = `${location.origin}/site/${slow > 0 ? `slow/${slow}/` : ''}embed/v1/`;
 let mode: DisplayMode = q.get('mode') === 'fullscreen' ? 'fullscreen' : 'inline';
 const hostTheme =
   q.get('host') ?? (Number(q.get('width')) && Number(q.get('width')) < 500 ? 'dark' : 'light');

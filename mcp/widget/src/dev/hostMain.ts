@@ -40,7 +40,7 @@ const result = {
 
 const frame = document.createElement('iframe');
 frame.setAttribute('sandbox', 'allow-scripts');
-frame.style.cssText = 'display:block;width:720px;height:480px;border:0';
+frame.style.cssText = `display:block;width:${Number(q.get('width') ?? 720)}px;height:480px;border:0`;
 document.body.style.margin = '0';
 document.body.append(frame);
 const view = frame.contentWindow;
@@ -65,7 +65,9 @@ bridge.oninitialized = () => {
   void bridge.sendToolResult(result);
 };
 bridge.onsizechange = ({ height }) => {
-  if (height) frame.style.height = `${height}px`;
+  if (!height) return;
+  if (frame.style.height !== `${height}px`) say(`size ${height}`);
+  frame.style.height = `${height}px`;
 };
 bridge.onopenlink = async ({ url }) => {
   say(`open-link ${url}`);
