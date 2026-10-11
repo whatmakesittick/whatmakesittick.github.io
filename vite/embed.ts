@@ -5,12 +5,18 @@ import { EMBED_API_VERSION } from '../src/core/embed/manifest.ts';
 import type { EmbedManifest, EmbedManifestEntry } from '../src/core/embed/manifest.ts';
 import type { Dictionary } from '../src/core/i18n/resources.ts';
 import { chapterOutline } from './chapterOutline.ts';
-import { LOCALES_DIRECTORY } from './manifest.ts';
+import { LOCALES_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 
 export const EMBED_DIRECTORY = 'embed/v1';
 export const EMBED_MANIFEST_FILE = `${EMBED_DIRECTORY}/manifest.json`;
 export const EMBED_MOUNT_MODULE = '@core/embed/mount';
+
+export const LEGACY_FONTS = [
+  '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
+  '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2',
+  '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2',
+] as const;
 
 const ENTRY_PREFIX = 'virtual:embed/';
 const RESOLVED_PREFIX = `\0${ENTRY_PREFIX}`;
@@ -96,4 +102,24 @@ function manifestEntry(explainer: LoadedExplainer): EmbedManifestEntry {
 
 export function embedManifest(explainers: readonly LoadedExplainer[]): EmbedManifest {
   return { apiVersion: EMBED_API_VERSION, explainers: explainers.map(manifestEntry) };
+}
+
+export interface LegacyEmbedFile {
+  fileName: string;
+  source: string;
+}
+
+export function legacyEmbedFiles(
+  explainers: readonly LoadedExplainer[],
+  resolveModule: (specifier: string) => string,
+): LegacyEmbedFile[] {
+  const covers = explainers.map(({ manifest, directory }) => ({
+    fileName: `${EMBED_DIRECTORY}/covers/${manifest.slug}.webp`,
+    source: join(directory, PUBLIC_DIRECTORY, manifest.cover),
+  }));
+  const fonts = LEGACY_FONTS.map((specifier) => ({
+    fileName: `${EMBED_DIRECTORY}/fonts/${specifier.slice(specifier.lastIndexOf('/') + 1)}`,
+    source: resolveModule(specifier),
+  }));
+  return [...covers, ...fonts];
 }

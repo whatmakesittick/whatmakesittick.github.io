@@ -1,4 +1,5 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { join, relative, resolve, sep } from 'node:path';
 import sirv from 'sirv';
 import type { Plugin, ViteDevServer } from 'vite';
@@ -8,6 +9,7 @@ import {
   embedInputs,
   embedManifest,
   entryFileNames,
+  legacyEmbedFiles,
   renderEmbedEntry,
   resolveEmbedEntry,
 } from './embed.ts';
@@ -201,6 +203,10 @@ function pagesPlugin(): Plugin {
         fileName: EMBED_MANIFEST_FILE,
         source: `${JSON.stringify(embedManifest(explainers), null, 2)}\n`,
       });
+      const resolveModule = createRequire(join(root, 'package.json')).resolve;
+      for (const { fileName, source } of legacyEmbedFiles(explainers, resolveModule)) {
+        this.emitFile({ type: 'asset', fileName, source: readFileSync(source) });
+      }
       for (const { manifest, directory } of explainers) {
         const publicDirectory = join(directory, PUBLIC_DIRECTORY);
         for (const file of listFiles(publicDirectory)) {

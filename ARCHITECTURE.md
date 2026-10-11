@@ -771,6 +771,8 @@ select. Their styles are the controls parts of the stylesheet, nested under `[da
 the phone dock rules keyed to an `embed-dock` container of at most 459px instead of the viewport.
 The scene styles and an explainer's `style.css` are added as `<style data-embed-styles>` elements
 while a scene is mounted. The embed loads the latin Inter and JetBrains Mono files the pages use.
+On a stage container of at most 620px, where the controls styles hide the readouts, the embed hides
+the whole gauge, so no empty glass panel is left.
 
 The build adds one entry per explainer (`vite/embed.ts`), generated from its manifest and the
 chapter outline of `chapters.html` (`vite/chapterOutline.ts`). The embeds share the `three`,
@@ -780,3 +782,11 @@ the shared chunks (`sharedByPages` in `vite/chunks.ts`), and the embed runtime i
 own, so a page loads no embed code. The site check also checks an embed per explainer, its
 JavaScript budget (`JS_BUDGET_GZIP.embed`) and the manifest. `mcp/` builds the MCP server and the
 chat widget on these modules.
+
+Published widgets stay cached in chat hosts long after a release, so `/embed/v1/` only grows:
+within `v1`, never remove or rename a path, an export, a `MountOptions` field or a DOM attribute a
+published widget relies on. A breaking change goes to `/embed/v2/`, next to `v1`. Paths that only
+earlier widgets request are still emitted as static files, so GitHub Pages serves them too:
+`legacyEmbedFiles` in `vite/embed.ts` copies each cover to `/embed/v1/covers/<slug>.webp` and the
+latin fonts to `/embed/v1/fonts/<file>.woff2` under their fontsource names, and `vite/embed.test.ts`
+checks that they are in `dist/`.
