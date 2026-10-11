@@ -5,6 +5,7 @@
 @import './styles/base.css';
 @import './styles/primitives.css';
 @import './styles/layout.css';
+@import './styles/brand.css';
 @import './styles/controls.css';
 @import './styles/controls-compact.css' (max-width: 899px);
 @import './styles/prose.css';
