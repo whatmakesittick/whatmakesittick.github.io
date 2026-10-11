@@ -1,5 +1,4 @@
-import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { createServer as createHttpServer, type Server } from 'node:http';
 import { StdioServerTransport } from '@modelcontextprotocol/server/stdio';
 import {
@@ -10,17 +9,24 @@ import {
   SERVER_NAME,
   SERVER_VERSION,
 } from '../shared/config.ts';
+import { LOADER_VERSION } from '../shared/loader.ts';
 import { claudeAppDomain, resolveAssetBase } from './assets.ts';
 import { createServer, type CreateServerOptions } from './createServer.ts';
 import { createHttpHandler, type HealthInfo, type HttpHandler } from './http.ts';
-import { loadAliases, loadCatalogue, parseExcludeTags, siteDir, widgetLoader } from './load.ts';
+import {
+  loadAliases,
+  loadCatalogue,
+  loaderHtml,
+  parseExcludeTags,
+  siteDir,
+  widgetModuleKind,
+} from './load.ts';
 import { log } from './log.ts';
 
 const stdio = process.argv.includes('--stdio');
 const port = Number.parseInt(process.env[ENV.port] ?? '', 10) || DEFAULT_PORT;
 const { catalogue, kind: catalogueKind } = loadCatalogue();
 const aliases = loadAliases(catalogue);
-const widget = widgetLoader();
 const site = siteDir();
 const publicUrl = stdio ? undefined : process.env[ENV.publicUrl] || undefined;
 const assetBase = resolveAssetBase({
@@ -31,28 +37,13 @@ const assetBase = resolveAssetBase({
 const domain = await claudeAppDomain(publicUrl);
 const excludeTags = parseExcludeTags(process.env[ENV.excludeTags]);
 
-let versionCache: { mtimeMs: number; version: string } | undefined;
-function widgetVersion(): string | undefined {
-  if (!existsSync(widget.file)) return undefined;
-  const { mtimeMs } = statSync(widget.file);
-  if (versionCache?.mtimeMs !== mtimeMs) {
-    const version = createHash('sha256')
-      .update(readFileSync(widget.file))
-      .digest('hex')
-      .slice(0, 10);
-    versionCache = { mtimeMs, version };
-  }
-  return versionCache.version;
-}
-
 const serverOptions: CreateServerOptions = {
   catalogue,
   aliases,
-  loadWidgetHtml: widget.load,
+  loaderHtml: loaderHtml(),
   assetBase,
   domain,
   excludeTags,
-  widgetVersion,
   ...(process.env[ENV.logRequests] ? { logHostContext: (line: string) => log(line) } : {}),
 };
 
@@ -62,7 +53,7 @@ const health = (): HealthInfo => ({
   version: SERVER_VERSION,
   mode: stdio ? 'stdio-assets' : 'http',
   catalogue: { source: catalogueKind, explainers: catalogue.explainers.length },
-  widget: widget.kind(),
+  widget: { loader: LOADER_VERSION, module: widgetModuleKind() },
   site: existsSync(site) ? 'built' : 'missing',
   assetBase,
 });
@@ -127,7 +118,9 @@ async function startStdio(): Promise<void> {
   transport.onclose = () => process.exit(0);
   process.stdin.on('end', () => process.exit(0));
   await createServer(serverOptions).connect(transport);
-  log(`stdio ready (catalogue: ${catalogueKind}, widget: ${widget.kind()}, assets ${assetBase})`);
+  log(
+    `stdio ready (catalogue: ${catalogueKind}, loader v${LOADER_VERSION}, widget module ${widgetModuleKind()}, assets ${assetBase})`,
+  );
 }
 
 (stdio ? startStdio() : startHttp()).catch((error: unknown) => {

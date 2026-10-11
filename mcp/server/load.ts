@@ -1,5 +1,4 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildCatalogue } from '../catalogue/build.ts';
@@ -7,7 +6,6 @@ import aliasesJson from '../data/aliases.json' with { type: 'json' };
 import { isTag, type Catalogue, type Tag } from '../shared/catalogue.ts';
 import { PATHS } from '../shared/config.ts';
 import { validateAliases, type Aliases } from './description.ts';
-import { PLACEHOLDER_WIDGET_HTML } from './html.ts';
 import { log } from './log.ts';
 
 export const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -36,27 +34,14 @@ export function loadAliases(catalogue: Catalogue): Aliases {
   );
 }
 
-export type WidgetSourceKind = 'built' | 'placeholder';
+export type WidgetModuleKind = 'built' | 'missing';
 
-export function widgetLoader(root: string = REPOSITORY_ROOT): {
-  file: string;
-  load: () => Promise<string>;
-  kind: () => WidgetSourceKind;
-} {
-  const file = resolve(root, PATHS.widget);
-  let warned = false;
-  return {
-    file,
-    kind: () => (existsSync(file) ? 'built' : 'placeholder'),
-    load: async () => {
-      if (existsSync(file)) return readFile(file, 'utf8');
-      if (!warned) {
-        log(`${PATHS.widget} missing (npm run build:mcp), serving the placeholder widget`);
-        warned = true;
-      }
-      return PLACEHOLDER_WIDGET_HTML;
-    },
-  };
+export function loaderHtml(root: string = REPOSITORY_ROOT): string {
+  return readFileSync(resolve(root, PATHS.loader), 'utf8');
+}
+
+export function widgetModuleKind(root: string = REPOSITORY_ROOT): WidgetModuleKind {
+  return existsSync(resolve(root, PATHS.widgetModule)) ? 'built' : 'missing';
 }
 
 export function siteDir(root: string = REPOSITORY_ROOT): string {

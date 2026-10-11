@@ -3,8 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { Client, InMemoryTransport } from '@modelcontextprotocol/client';
 import { buildCatalogue } from '../../catalogue/build.ts';
 import { createServer, type CreateServerOptions } from '../../server/createServer.ts';
-import { PLACEHOLDER_WIDGET_HTML } from '../../server/html.ts';
-import { loadAliases } from '../../server/load.ts';
+import { loadAliases, loaderHtml } from '../../server/load.ts';
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 export const catalogue = buildCatalogue(root, '2026-01-01T00:00:00.000Z');
@@ -16,7 +15,7 @@ export function serverOptions(over: Partial<CreateServerOptions> = {}): CreateSe
   return {
     catalogue,
     aliases,
-    loadWidgetHtml: () => PLACEHOLDER_WIDGET_HTML,
+    loaderHtml: loaderHtml(root),
     assetBase: ASSET_BASE,
     ...over,
   };

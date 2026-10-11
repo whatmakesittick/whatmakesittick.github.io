@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="wmit-asset-base" content="__WMIT_ASSET_BASE__" />
+    <meta name="wmit-report-context" content="__WMIT_REPORT_CONTEXT__" />
+    <meta name="wmit-loader" content="1" />
+    <title>What makes it tick</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      .wmit-loader-fallback {
+        display: grid;
+        gap: 10px;
+        justify-items: start;
+        padding: 20px;
+        border-radius: 16px;
+        background: #14181e;
+        color: #e6e9ee;
+        font:
+          15px/1.5 system-ui,
+          -apple-system,
+          sans-serif;
+      }
+      .wmit-loader-fallback strong {
+        font-size: 17px;
+      }
+      .wmit-loader-fallback p {
+        margin: 0;
+        color: #8b929c;
+      }
+      .wmit-loader-fallback div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .wmit-loader-fallback a,
+      .wmit-loader-fallback button {
+        padding: 8px 14px;
+        border: 1px solid rgb(255 255 255 / 0.16);
+        border-radius: 999px;
+        background: rgb(255 255 255 / 0.05);
+        color: inherit;
+        font: inherit;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .wmit-loader-fallback a {
+        border-color: #f5a524;
+        background: #f5a524;
+        color: #15110a;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      (function () {
+        var version = 1;
+        var site = 'https://whatmakesittick.github.io/';
+        var handshake = 'wmit-loader';
+        var host = window.parent;
+        var root = document.getElementById('root');
+        var queue = [];
+        var link = site;
+        var attempt = 0;
+        var greeted = false;
+
+        function post(message) {
+          host.postMessage(message, '*');
+        }
+
+        function notify(method, params) {
+          post({ jsonrpc: '2.0', method: method, params: params });
+        }
+
+        function resize() {
+          var page = document.documentElement;
+          notify('ui/notifications/size-changed', {
+            width: page.scrollWidth,
+            height: page.scrollHeight,
+          });
+        }
+
+        function remember(params) {
+          var url = params && params.structuredContent && params.structuredContent.url;
+          var slug = params && params.arguments && params.arguments.slug;
+          if (typeof url === 'string' && url.indexOf(site) === 0) link = url;
+          else if (typeof slug === 'string' && /^[a-z0-9-]+$/.test(slug)) link = site + slug + '/';
+          var anchor = root.querySelector('.wmit-loader-fallback a');
+          if (anchor) anchor.href = link;
+        }
+
+        function record(event) {
+          if (event.source !== host) return;
+          var data = event.data || {};
+          if (data.id === handshake) {
+            if (data.result) {
+              notify('ui/notifications/initialized', {});
+              resize();
+            }
+            return;
+          }
+          remember(data.params);
+          queue.push(event);
+        }
+
+        var inbox = {
+          take: function () {
+            window.removeEventListener('message', record);
+            var taken = queue;
+            queue = [];
+            return taken;
+          },
+        };
+
+        function assetBase() {
+          var meta = document.querySelector('meta[name="wmit-asset-base"]');
+          var value = meta ? (meta.getAttribute('content') || '').trim() : '';
+          if (!value || /^__[A-Z_]+__$/.test(value)) return '';
+          return value.charAt(value.length - 1) === '/' ? value : value + '/';
+        }
+
+        function fallback(error) {
+          console.error('[wmit-loader]', error);
+          window.addEventListener('message', record);
+          root.innerHTML =
+            '<div class="wmit-loader-fallback" role="alert"><strong>What makes it tick</strong>' +
+            '<p>The 3D explainer did not load.</p><div><a target="_blank" rel="noopener">' +
+            'Open on whatmakesittick.github.io</a><button type="button">Try again</button></div></div>';
+          root.querySelector('a').href = link;
+          root.querySelector('button').onclick = function (event) {
+            event.currentTarget.disabled = true;
+            event.currentTarget.textContent = 'Loading…';
+            load();
+          };
+          if (greeted) {
+            resize();
+            return;
+          }
+          greeted = true;
+          post({
+            jsonrpc: '2.0',
+            id: handshake,
+            method: 'ui/initialize',
+            params: {
+              appInfo: { name: handshake, version: String(version) },
+              appCapabilities: {},
+              protocolVersion: '2026-01-26',
+            },
+          });
+        }
+
+        function load() {
+          var base = assetBase();
+          if (!base) {
+            fallback(new Error('no asset base'));
+            return;
+          }
+          var url = base + 'widget.js' + (attempt ? '?retry=' + attempt : '');
+          attempt += 1;
+          import(url)
+            .then(function (module) {
+              root.textContent = '';
+              module.start(root, { assetBase: base, inbox: inbox, loaderVersion: version });
+            })
+            .catch(fallback);
+        }
+
+        window.addEventListener('message', record);
+        load();
+      })();
+    </script>
+  </body>
+</html>

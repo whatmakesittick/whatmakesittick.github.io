@@ -34,16 +34,11 @@ export { SERVER_NAME, SERVER_VERSION };
 export interface CreateServerOptions {
   catalogue: Catalogue;
   aliases: Aliases;
-  loadWidgetHtml: () => string | Promise<string>;
+  loaderHtml: string;
   assetBase: string;
   domain?: string;
   excludeTags?: readonly Tag[];
-  widgetVersion?: () => string | undefined;
   logHostContext?: (line: string) => void;
-}
-
-export function widgetResourceUri(version: string | undefined): string {
-  return version ? WIDGET_RESOURCE_URI.replace(/\.html$/, `-${version}.html`) : WIDGET_RESOURCE_URI;
 }
 
 export function availableSlugs(catalogue: Catalogue, excludeTags: readonly Tag[] = []): string[] {
@@ -61,7 +56,6 @@ export function createServer(options: CreateServerOptions): McpServer {
   const uiMeta = buildUiMeta(assetBase, domain);
 
   const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
-  const resourceUri = widgetResourceUri(options.widgetVersion?.());
 
   registerAppTool(
     server,
@@ -74,7 +68,7 @@ export function createServer(options: CreateServerOptions): McpServer {
         chapter: z.string().optional().describe(SHOW_EXPLAINER_CHAPTER_DESCRIBE),
       }),
       annotations: { ...TOOL_ANNOTATIONS },
-      _meta: { ui: { resourceUri }, ...OPENAI_INVOCATION_META },
+      _meta: { ui: { resourceUri: WIDGET_RESOURCE_URI }, ...OPENAI_INVOCATION_META },
     },
     async (args) => showExplainer(bySlug, args),
   );
@@ -101,7 +95,7 @@ export function createServer(options: CreateServerOptions): McpServer {
         title: 'Report the host context',
         description: 'Logs the display mode, safe area insets and container size the widget got.',
         inputSchema: hostContextReportSchema,
-        _meta: { ui: { resourceUri, visibility: ['app'] } },
+        _meta: { ui: { resourceUri: WIDGET_RESOURCE_URI, visibility: ['app'] } },
       },
       async (report) => reportHostContext(report, logHostContext),
     );
@@ -110,7 +104,7 @@ export function createServer(options: CreateServerOptions): McpServer {
   registerAppResource(
     server,
     WIDGET_RESOURCE_NAME,
-    resourceUri,
+    WIDGET_RESOURCE_URI,
     {
       mimeType: RESOURCE_MIME_TYPE,
       description: WIDGET_RESOURCE_DESCRIPTION,
@@ -118,13 +112,13 @@ export function createServer(options: CreateServerOptions): McpServer {
     },
     async (): Promise<ReadResourceResult> => {
       const html = injectReportContext(
-        injectAssetBase(await options.loadWidgetHtml(), assetBase),
+        injectAssetBase(options.loaderHtml, assetBase),
         logHostContext !== undefined,
       );
       return {
         contents: [
           {
-            uri: resourceUri,
+            uri: WIDGET_RESOURCE_URI,
             mimeType: RESOURCE_MIME_TYPE,
             text: html,
             _meta: { ui: uiMeta },

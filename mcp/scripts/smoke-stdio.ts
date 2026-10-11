@@ -1,9 +1,16 @@
 import { Client } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
+import { existsSync } from 'node:fs';
 import { createServer } from 'node:net';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ASSET_BASE_TOKEN, DEFAULT_HOST, ROUTES, SERVER_NAME } from '../shared/config.ts';
+import { ASSET_BASE_TOKEN, DEFAULT_HOST, PATHS, ROUTES, SERVER_NAME } from '../shared/config.ts';
+import {
+  LOADER_MAX_BYTES,
+  LOADER_META_NAME,
+  LOADER_VERSION,
+  WIDGET_MODULE_FILE,
+} from '../shared/loader.ts';
 import {
   MODEL_TEXT_MAX_BYTES,
   TOOL_LIST_EXPLAINERS,
@@ -12,7 +19,8 @@ import {
   type ShowExplainerResult,
 } from '../shared/tools.ts';
 
-const entry = resolve(dirname(fileURLToPath(import.meta.url)), '../server/node.ts');
+const here = dirname(fileURLToPath(import.meta.url));
+const entry = resolve(here, '../server/node.ts');
 
 function freePort(): Promise<number> {
   return new Promise((done, fail) => {
@@ -62,8 +70,8 @@ check(
 );
 const resourceUri = (show?._meta?.ui as { resourceUri?: string } | undefined)?.resourceUri ?? '';
 check(
-  /^ui:\/\/wmit\/explainer(-[0-9a-f]{10})?\.html$/.test(resourceUri),
-  `tools/list: show_explainer _meta.ui.resourceUri ${resourceUri} (${WIDGET_RESOURCE_URI} + build hash)`,
+  resourceUri === WIDGET_RESOURCE_URI,
+  `tools/list: show_explainer _meta.ui.resourceUri ${resourceUri}, stable`,
 );
 check(
   (show?.description?.length ?? 9999) <= 1200,
@@ -82,6 +90,12 @@ check(c0?.mimeType === 'text/html;profile=mcp-app', `resources/read: mimeType ${
 check(
   !html.includes(ASSET_BASE_TOKEN) && html.length > 0,
   `resources/read: ${html.length} chars, asset-base token replaced`,
+);
+check(
+  Buffer.byteLength(html) <= LOADER_MAX_BYTES &&
+    html.includes(`<meta name="${LOADER_META_NAME}" content="${LOADER_VERSION}"`) &&
+    html.includes(`'${WIDGET_MODULE_FILE}'`),
+  `resources/read: the loader v${LOADER_VERSION}, ${Buffer.byteLength(html)} bytes ≤ ${LOADER_MAX_BYTES}`,
 );
 check(
   (ui?.csp?.resourceDomains ?? []).length > 0,
@@ -145,6 +159,17 @@ const chunkStatus = chunk
 check(
   module.status === 200 && chunkStatus === 200,
   `assets server: mri-scanner.js ${module.status}, its chunk ${chunk ?? '-'} ${chunkStatus}`,
+);
+
+const built = existsSync(resolve(here, '../..', PATHS.widgetModule));
+const widget = await fetch(`${base}${ROUTES.embed}${WIDGET_MODULE_FILE}`);
+const widgetCode = widget.ok ? await widget.text() : '';
+check(
+  built &&
+    widget.status === 200 &&
+    widget.headers.get('access-control-allow-origin') === '*' &&
+    /\bas start\b|function start\b/.test(widgetCode),
+  `assets server: ${PATHS.widgetModule} ${built ? 'built' : 'missing'}, ${ROUTES.embed}${WIDGET_MODULE_FILE} → ${widget.status}, ${widgetCode.length} bytes, exports start`,
 );
 
 await client.close();

@@ -55,7 +55,7 @@ describe('tools/list', () => {
 describe('resources/read', () => {
   it('serves the widget as an MCP App with the asset base injected and CSP in contents[0]._meta.ui', async () => {
     const client = await connect({
-      loadWidgetHtml: () => `<meta content="${ASSET_BASE_TOKEN}">x${ASSET_BASE_TOKEN}`,
+      loaderHtml: `<meta content="${ASSET_BASE_TOKEN}">x${ASSET_BASE_TOKEN}`,
     });
     const { resources } = await client.listResources();
     const res = resources.find((r) => r.uri === WIDGET_RESOURCE_URI)!;

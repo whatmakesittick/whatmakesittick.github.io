@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ASSET_BASE_TOKEN } from '../../shared/config.ts';
 import { buildUiMeta, resolveAssetBase } from '../../server/assets.ts';
-import { injectAssetBase, PLACEHOLDER_WIDGET_HTML } from '../../server/html.ts';
+import { injectAssetBase } from '../../server/html.ts';
 import { truncateBytes, byteLength } from '../../server/text.ts';
 import { parseExcludeTags } from '../../server/load.ts';
 
@@ -38,12 +38,6 @@ describe('html', () => {
     );
     expect(injectAssetBase(ASSET_BASE_TOKEN, 'https://x/"><script>')).toBe(
       'https://x/&quot;>&lt;script>',
-    );
-  });
-
-  it('placeholder has the asset-base meta', () => {
-    expect(PLACEHOLDER_WIDGET_HTML).toContain(
-      `<meta name="wmit-asset-base" content="${ASSET_BASE_TOKEN}">`,
     );
   });
 });

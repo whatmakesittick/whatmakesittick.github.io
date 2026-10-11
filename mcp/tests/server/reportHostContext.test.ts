@@ -20,7 +20,7 @@ async function widgetText(client: Awaited<ReturnType<typeof connect>>): Promise<
 
 describe('report_host_context', () => {
   it('is not registered and the widget is not asked to report without a logger', async () => {
-    const client = await connect({ loadWidgetHtml: () => widgetHtml });
+    const client = await connect({ loaderHtml: widgetHtml });
     const { tools } = await client.listTools();
     expect(tools.map((t) => t.name)).not.toContain(TOOL_REPORT_HOST_CONTEXT);
     expect(await widgetText(client)).toContain('content="0"');
@@ -29,7 +29,7 @@ describe('report_host_context', () => {
   it('is app only, marks the widget and logs the report', async () => {
     const lines: string[] = [];
     const client = await connect({
-      loadWidgetHtml: () => widgetHtml,
+      loaderHtml: widgetHtml,
       logHostContext: (line) => lines.push(line),
     });
     const { tools } = await client.listTools();
