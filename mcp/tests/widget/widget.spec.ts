@@ -2,6 +2,12 @@ import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, test, type Page } from '@playwright/test';
+import { buildCatalogue, toWidgetCatalogue } from '../../catalogue/build.ts';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const full = buildCatalogue(root);
+const mriIn = (lang: Parameters<typeof toWidgetCatalogue>[1]) =>
+  toWidgetCatalogue(full, lang).explainers.find((e) => e.slug === 'mri-scanner')!;
 
 const open = async (page: Page, query: string) => {
   const errors: string[] = [];
@@ -27,6 +33,97 @@ test('inline: opens MRI at the requested chapter, chapter nav sends model contex
   expect(errors).toEqual([]);
 });
 
+test('the lang tool argument shows the widget in Ukrainian without an English flash', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    const seen: string[] = [];
+    Object.assign(window, { englishSeen: seen });
+    new MutationObserver(() => {
+      const text = document.body?.innerText ?? '';
+      for (const phrase of ['Building the 3D scene', 'Next chapter', 'Open on site'])
+        if (text.includes(phrase) && !seen.includes(phrase)) seen.push(phrase);
+    }).observe(document, { subtree: true, childList: true, characterData: true });
+  });
+  const uk = mriIn('uk');
+  const { errors, logs } = await open(page, 'slug=mri-scanner&chapter=magnet&lang=uk');
+  await expect(page.locator('.wmit.st-ready[lang="uk"]')).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'uk');
+  await expect(page.locator('.a-head .title')).toHaveText(uk.title);
+  await expect(page.locator('.a-chapter h3')).toHaveText(uk.chapters[1]!.title);
+  await expect(page.locator('.pill.on')).toContainText(uk.chapters[1]!.title);
+  await page.getByRole('button', { name: 'Наступний розділ' }).first().click();
+  await expect(page.locator('.a-chapter h3')).toHaveText(uk.chapters[2]!.title);
+  await expect
+    .poll(() => logs.find((l) => l.startsWith('[HOST] ui/update-model-context')))
+    .toContain('Language: uk.');
+  expect(
+    await page.evaluate(() => (window as unknown as { englishSeen: string[] }).englishSeen),
+  ).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('the host locale is the fallback when the model passes no lang', async ({ page }) => {
+  const de = mriIn('de');
+  const { errors } = await open(page, 'slug=mri-scanner&chapter=magnet&locale=de-DE');
+  await expect(page.locator('.wmit.st-ready[lang="de"]')).toBeVisible();
+  await expect(page.locator('.a-chapter h3')).toHaveText(de.chapters[1]!.title);
+  await expect(page.getByRole('button', { name: 'Nächstes Kapitel' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Modell im Vollbild ansehen' })).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('an unsupported lang argument falls back to English', async ({ page }) => {
+  const { errors } = await open(page, 'slug=mri-scanner&chapter=magnet&lang=ru&locale=de-DE');
+  await expect(page.locator('.wmit.st-ready[lang="en"]')).toBeVisible();
+  await expect(page.locator('.a-chapter h3')).toHaveText('A magnet that never switches off');
+  expect(errors).toEqual([]);
+});
+
+for (const oldModule of [false, true]) {
+  test(`a later call switches the language ${oldModule ? 'by mounting again' : 'in place'}`, async ({
+    page,
+  }) => {
+    const ja = mriIn('ja');
+    const { errors } = await open(
+      page,
+      `slug=mri-scanner&chapter=magnet&lang=uk${oldModule ? '&oldModule=1' : ''}`,
+    );
+    await expect(page.locator('.wmit.st-ready[lang="uk"]')).toBeVisible();
+    await page.getByRole('button', { name: 'Наступний розділ' }).first().click();
+    await page.evaluate(() =>
+      (
+        window as unknown as { wmitDev: { hub: { emit: (e: string, a: unknown) => void } } }
+      ).wmitDev.hub.emit('input', { slug: 'mri-scanner', lang: 'ja' }),
+    );
+    await expect(page.locator('.wmit.st-ready[lang="ja"]')).toBeVisible();
+    await expect(page.locator('html')).toHaveAttribute('lang', 'ja');
+    await expect(page.locator('.a-chapter h3')).toHaveText(ja.chapters[2]!.title);
+    await expect(page.locator('.a-chapter .ch-text')).toContainText(ja.chapters[2]!.title);
+    await expect(page.getByRole('button', { name: '次の章' })).toBeVisible();
+    await page.evaluate(() =>
+      (window as unknown as { wmitDev: { setLocale: (l: string) => void } }).wmitDev.setLocale(
+        'zh-CN',
+      ),
+    );
+    await expect(page.locator('.wmit[lang="ja"]')).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+}
+
+test('a new host locale switches when the model passed no lang', async ({ page }) => {
+  const { errors } = await open(page, 'slug=mri-scanner&chapter=magnet');
+  await expect(page.locator('.wmit.st-ready[lang="en"]')).toBeVisible();
+  await page.evaluate(() =>
+    (window as unknown as { wmitDev: { setLocale: (l: string) => void } }).wmitDev.setLocale(
+      'zh-CN',
+    ),
+  );
+  await expect(page.locator('.wmit.st-ready[lang="zh"]')).toBeVisible();
+  await expect(page.locator('.a-chapter h3')).toHaveText(mriIn('zh').chapters[1]!.title);
+  expect(errors).toEqual([]);
+});
+
 for (const data of ['content', 'structured']) {
   test(`result only in ${data}`, async ({ page }) => {
     await open(page, `slug=engine&chapter=strokes&data=${data}`);
@@ -40,7 +137,7 @@ test('switch in place and fullscreen round trip', async ({ page }) => {
   await page.locator('.strip .thumb[data-slug="heart"]').click();
   await expect(page.locator('.wmit.st-ready[data-slug="heart"]')).toBeVisible();
   await expect(page.locator('style[data-embed-styles]')).toHaveCount(1);
-  await page.getByRole('button', { name: 'Fullscreen' }).click();
+  await page.getByRole('button', { name: 'Show the model full screen' }).click();
   await expect(page.locator('.wmit.is-fs')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-stage-expanded', '');
   await page.getByRole('button', { name: 'Exit fullscreen' }).click();
@@ -116,9 +213,7 @@ for (const [width, stacked] of [
   });
 }
 
-const realEmbed = existsSync(
-  resolve(dirname(fileURLToPath(import.meta.url)), '../../../dist/embed/v1/black-hole.js'),
-);
+const realEmbed = existsSync(resolve(root, 'dist/embed/v1/black-hole.js'));
 test.describe('real embed (dist): the site dock and gauge in the slots', () => {
   test.skip(!realEmbed, 'npm run build first');
   test('black hole: site dock inline and fullscreen, gauge only in fullscreen', async ({
@@ -144,7 +239,7 @@ test.describe('real embed (dist): the site dock and gauge in the slots', () => {
     await expect(dock.locator('[data-speed-label]')).toHaveText('Playback');
     await expect(page.locator('.gauge-slot [data-gauge]')).toBeHidden();
 
-    await page.getByRole('button', { name: 'Fullscreen' }).click();
+    await page.getByRole('button', { name: 'Show the model full screen' }).click();
     await expect(page.locator('.wmit.is-fs')).toBeVisible();
     await expect(page.locator('.gauge-slot [data-gauge] .readout').first()).toBeVisible();
     await expect(page.locator('.gauge-slot [data-gauge] dt').first()).toHaveText('Probe clock');

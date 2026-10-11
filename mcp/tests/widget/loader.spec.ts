@@ -2,7 +2,14 @@ import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, test, type Page } from '@playwright/test';
+import { buildCatalogue, toWidgetCatalogue } from '../../catalogue/build.ts';
 import { PATHS } from '../../shared/config.ts';
+
+const engineIn = (lang: Parameters<typeof toWidgetCatalogue>[1]) =>
+  toWidgetCatalogue(
+    buildCatalogue(resolve(dirname(fileURLToPath(import.meta.url)), '../../..')),
+    lang,
+  ).explainers.find((e) => e.slug === 'engine')!;
 
 const built = existsSync(
   resolve(dirname(fileURLToPath(import.meta.url)), '../../..', PATHS.widgetModule),
@@ -46,6 +53,35 @@ test.describe('the loader resource', () => {
     await expect(view.locator('.wmit[data-slug="heart"]')).toBeVisible({ timeout: 15_000 });
     await expect(view.locator('.a-chapter h3').first()).not.toBeEmpty();
     expect(logs).toContain('[HOST] initialized');
+    expect(errors).toEqual([]);
+  });
+
+  test('an early tool input with lang opens the widget and the scene in that language', async ({
+    page,
+  }) => {
+    const uk = engineIn('uk');
+    const { errors, view } = await open(
+      page,
+      'slug=engine&chapter=strokes&lang=uk&early=1&delay=600',
+    );
+    await expect(view.locator('.wmit.st-ready[lang="uk"]')).toBeVisible({ timeout: 15_000 });
+    await expect(view.locator('html')).toHaveAttribute('lang', 'uk');
+    await expect(view.locator('.a-head .title')).toHaveText(uk.title);
+    await expect(view.locator('.a-chapter h3')).toHaveText(
+      uk.chapters.find((c) => c.id === 'strokes')!.title,
+    );
+    await expect(view.getByRole('button', { name: /^(Відтворити|Пауза)/ }).first()).toBeAttached();
+    await expect(view.getByRole('button', { name: 'Скинути камеру' }).first()).toBeAttached();
+    expect(errors).toEqual([]);
+  });
+
+  test('the host locale picks the language when the model passes none', async ({ page }) => {
+    const ja = engineIn('ja');
+    const { errors, view } = await open(page, 'slug=engine&chapter=strokes&locale=ja-JP');
+    await expect(view.locator('.wmit.st-ready[lang="ja"]')).toBeVisible({ timeout: 15_000 });
+    await expect(view.locator('.a-chapter h3')).toHaveText(
+      ja.chapters.find((c) => c.id === 'strokes')!.title,
+    );
     expect(errors).toEqual([]);
   });
 });
