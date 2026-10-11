@@ -6,8 +6,11 @@ import {
   buildCatalogue,
   extractChapters,
   plainText,
+  toBakedCatalogue,
   toWidgetCatalogue,
 } from '../../catalogue/build.ts';
+import { LANGUAGE_CODES } from '../../../src/core/i18n/languages.ts';
+import { localizeEntry, resolveLanguage, type CatalogueEntry } from '../../shared/catalogue.ts';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 
@@ -124,5 +127,126 @@ describe('catalogue from the explainers', () => {
     const thin = toWidgetCatalogue(catalogue);
     expect(thin.explainers).toHaveLength(catalogue.explainers.length);
     expect(JSON.stringify(thin).length).toBeLessThan(20_000);
+  });
+
+  it.each(LANGUAGE_CODES)('keeps the %s widget catalogue thin and in that language', (lang) => {
+    const thin = toWidgetCatalogue(catalogue, lang);
+    expect(thin.explainers.map((e) => e.slug)).toEqual(catalogue.explainers.map((e) => e.slug));
+    expect(JSON.stringify(thin).length).toBeLessThan(20_000);
+    const mri = thin.explainers.find((e) => e.slug === 'mri-scanner')!;
+    const localized = localizeEntry(bySlug.get('mri-scanner')!, lang);
+    expect(mri.title).toBe(localized.title);
+    expect(mri.chapters.map((c) => c.id)).toEqual(localized.chapters.map((c) => c.id));
+  });
+
+  it('bakes the taglines in the widget language', () => {
+    const baked = toBakedCatalogue(catalogue, 'uk');
+    expect(baked.explainers).toEqual(toWidgetCatalogue(catalogue, 'uk').explainers);
+    expect(baked.taglines['mri-scanner']).toBe(
+      localizeEntry(bySlug.get('mri-scanner')!, 'uk').tagline,
+    );
+    expect(JSON.stringify(baked).length).toBeLessThan(20_000);
+  });
+
+  it('carries every translation with the chapter ids of the English entry', () => {
+    for (const e of catalogue.explainers) {
+      for (const lang of LANGUAGE_CODES) {
+        const localized = localizeEntry(e, lang);
+        expect(localized.slug).toBe(e.slug);
+        expect(localized.url).toBe(e.url);
+        expect(localized.tags).toEqual(e.tags);
+        expect(localized.chapters.map((c) => [c.id, c.index])).toEqual(
+          e.chapters.map((c) => [c.id, c.index]),
+        );
+        if (lang !== 'en') expect(e.locales?.[lang]?.title, `${e.slug}/${lang}`).toBeTruthy();
+      }
+    }
+  });
+
+  it('localizes titles, texts and chapters', () => {
+    const mri = bySlug.get('mri-scanner')!;
+    const uk = localizeEntry(mri, 'uk');
+    expect(uk.title).toMatch(/\p{Script=Cyrillic}/u);
+    expect(uk.summary).toMatch(/\p{Script=Cyrillic}/u);
+    expect(uk.chapters[1]!.title).toMatch(/\p{Script=Cyrillic}/u);
+    expect(uk.chapters[1]!.paragraphs[0]!.text).toMatch(/\p{Script=Cyrillic}/u);
+    expect(uk.chapters[1]!.interactive).toEqual(mri.chapters[1]!.interactive);
+    expect(localizeEntry(mri, 'ja').title).toMatch(/\p{Script=Han}|\p{Script=Katakana}/u);
+    const { locales, ...english } = mri;
+    expect(locales).toBeDefined();
+    expect(localizeEntry(mri, 'en')).toEqual(english);
+  });
+});
+
+describe('localizeEntry', () => {
+  const entry: CatalogueEntry = {
+    slug: 'x',
+    title: 'Title',
+    eyebrow: 'Eyebrow',
+    tagline: 'Tagline',
+    description: 'Description',
+    summary: 'Summary',
+    tags: ['energy'],
+    url: 'https://example.com/x/',
+    cover: 'cover.webp',
+    parts: ['Part'],
+    chapters: [
+      {
+        id: 'a',
+        index: 1,
+        title: 'First',
+        paragraphs: [
+          { key: 'sections.a.p1', html: 'One', text: 'One' },
+          { key: 'sections.a.p2', html: 'Two', text: 'Two' },
+        ],
+        interactive: { range: false, canvas: false, action: false, readouts: false },
+      },
+      {
+        id: 'b',
+        index: 2,
+        title: 'Second',
+        paragraphs: [{ key: 'sections.b.p1', html: 'Three', text: 'Three' }],
+        interactive: { range: true, canvas: false, action: false, readouts: false },
+      },
+    ],
+    locales: {
+      uk: {
+        title: 'Назва',
+        chapters: [{ id: 'a', paragraphs: [{ key: 'sections.a.p2', html: 'Два', text: 'Два' }] }],
+      },
+    },
+  };
+
+  it('falls back to English field by field', () => {
+    const uk = localizeEntry(entry, 'uk');
+    expect(uk.title).toBe('Назва');
+    expect(uk.summary).toBe('Summary');
+    expect(uk.parts).toEqual(['Part']);
+    expect(uk.chapters.map((c) => c.title)).toEqual(['First', 'Second']);
+    expect(uk.chapters[0]!.paragraphs.map((p) => p.text)).toEqual(['One', 'Два']);
+    expect(uk.chapters[1]!.paragraphs.map((p) => p.text)).toEqual(['Three']);
+    expect('locales' in uk).toBe(false);
+  });
+
+  it('serves English for a language without a translation', () => {
+    expect(localizeEntry(entry, 'de').title).toBe('Title');
+    expect(localizeEntry({ ...entry, locales: {} }, 'uk').title).toBe('Title');
+  });
+});
+
+describe('resolveLanguage', () => {
+  it.each([
+    [undefined, 'en'],
+    ['', 'en'],
+    ['uk', 'uk'],
+    ['UK', 'uk'],
+    ['de-AT', 'de'],
+    ['pt_BR', 'pt'],
+    ['zh-Hans-CN', 'zh'],
+    ['ru', 'en'],
+    ['en-US', 'en'],
+    ['klingon', 'en'],
+  ] as const)('%j → %s', (raw, lang) => {
+    expect(resolveLanguage(raw)).toBe(lang);
   });
 });
