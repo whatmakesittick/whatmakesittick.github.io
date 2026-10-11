@@ -42,12 +42,19 @@ npm run mcp:stdio      # MCP over stdio; serves the site files on 127.0.0.1:$POR
 | `WMIT_ASSET_BASE`   | Where the widget loads embeds from, e.g. `https://whatmakesittick.github.io/embed/v1/`     |
 | `MCP_PUBLIC_URL`    | The public `/mcp` URL behind a tunnel: sets the asset base origin and Claude's `ui.domain` |
 | `WMIT_EXCLUDE_TAGS` | Comma separated tags whose explainers the tools leave out, e.g. `weapons`                  |
-| `WMIT_LOG_REQUESTS` | Logs every MCP method and file request to stderr                                           |
+| `WMIT_LOG_REQUESTS` | Logs every MCP method and file request to stderr, and the host context the widget reports  |
 
 Without `WMIT_ASSET_BASE` the asset base is the server's own origin (`MCP_PUBLIC_URL` or
 `http://localhost:$PORT`) and the server serves `dist/` with CORS and
 `Cross-Origin-Resource-Policy: cross-origin`, so the embeds, their chunks in `/assets/` and the
-covers load from it. The widget resource URI carries a hash of the built widget,
+covers load from it. With `WMIT_LOG_REQUESTS` the server also registers `report_host_context`, a tool only the widget can
+call (`visibility: ["app"]`), and marks the widget HTML so the widget calls it once per display mode
+and set of safe area insets. The server logs the display mode, platform, safe area insets,
+container dimensions and frame size to stderr as `host context {…}`. The widget always logs the
+same report with `console.info` and `sendLog`. The dev page takes `insets=top,right,bottom,left` to
+simulate a host's safe area and tints that area.
+
+The widget resource URI carries a hash of the built widget,
 `ui://wmit/explainer-<hash>.html`, because hosts cache a resource by its URI.
 
 To try it in `basic-host`: `SERVERS='["http://localhost:3003/mcp"]' npm start` in

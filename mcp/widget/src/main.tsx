@@ -4,6 +4,7 @@ import bakedCatalogue from 'virtual:wmit-catalogue';
 import type { BakedCatalogue } from '../../shared/catalogue.ts';
 import { createAppHost } from './bridge.ts';
 import { readAssetBase } from './assetBase.ts';
+import { readReportFlag } from './hostReport.ts';
 import { hasWebGL2, urlLoader } from './scene.ts';
 import './styles.css';
 import { Widget } from './Widget.tsx';
@@ -17,7 +18,7 @@ const app = new App(
   { availableDisplayModes: ['inline', 'fullscreen'] },
   { autoResize: true },
 );
-const host = createAppHost(app);
+const host = createAppHost(app, { reportToServer: readReportFlag() });
 const root = document.getElementById('root');
 if (root) {
   render(

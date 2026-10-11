@@ -12,6 +12,7 @@ import {
   SHOW_EXPLAINER_CHAPTER_DESCRIBE,
   TOOL_ANNOTATIONS,
   TOOL_LIST_EXPLAINERS,
+  TOOL_REPORT_HOST_CONTEXT,
   TOOL_SHOW_EXPLAINER,
   WIDGET_RESOURCE_DESCRIPTION,
   WIDGET_RESOURCE_NAME,
@@ -23,8 +24,9 @@ import {
   buildShowExplainerDescription,
   type Aliases,
 } from './description.ts';
-import { injectAssetBase } from './html.ts';
+import { injectAssetBase, injectReportContext } from './html.ts';
 import { listExplainers } from './tools/listExplainers.ts';
+import { hostContextReportSchema, reportHostContext } from './tools/reportHostContext.ts';
 import { showExplainer } from './tools/showExplainer.ts';
 
 export { SERVER_NAME, SERVER_VERSION };
@@ -37,6 +39,7 @@ export interface CreateServerOptions {
   domain?: string;
   excludeTags?: readonly Tag[];
   widgetVersion?: () => string | undefined;
+  logHostContext?: (line: string) => void;
 }
 
 export function widgetResourceUri(version: string | undefined): string {
@@ -89,6 +92,21 @@ export function createServer(options: CreateServerOptions): McpServer {
     async (args) => listExplainers(entries, args),
   );
 
+  const { logHostContext } = options;
+  if (logHostContext) {
+    registerAppTool(
+      server,
+      TOOL_REPORT_HOST_CONTEXT,
+      {
+        title: 'Report the host context',
+        description: 'Logs the display mode, safe area insets and container size the widget got.',
+        inputSchema: hostContextReportSchema,
+        _meta: { ui: { resourceUri, visibility: ['app'] } },
+      },
+      async (report) => reportHostContext(report, logHostContext),
+    );
+  }
+
   registerAppResource(
     server,
     WIDGET_RESOURCE_NAME,
@@ -99,7 +117,10 @@ export function createServer(options: CreateServerOptions): McpServer {
       _meta: { ui: uiMeta },
     },
     async (): Promise<ReadResourceResult> => {
-      const html = injectAssetBase(await options.loadWidgetHtml(), assetBase);
+      const html = injectReportContext(
+        injectAssetBase(await options.loadWidgetHtml(), assetBase),
+        logHostContext !== undefined,
+      );
       return {
         contents: [
           {

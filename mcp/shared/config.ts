@@ -11,6 +11,8 @@ export const ROUTES = {
 
 export const ASSET_BASE_TOKEN = '__WMIT_ASSET_BASE__';
 export const ASSET_BASE_META_NAME = 'wmit-asset-base';
+export const REPORT_CONTEXT_TOKEN = '__WMIT_REPORT_CONTEXT__';
+export const REPORT_CONTEXT_META_NAME = 'wmit-report-context';
 
 export const ENV = {
   port: 'PORT',

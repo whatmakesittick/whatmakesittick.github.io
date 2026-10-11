@@ -3,6 +3,7 @@ import type { Tag } from './catalogue.ts';
 
 export const TOOL_SHOW_EXPLAINER = 'show_explainer' as const;
 export const TOOL_LIST_EXPLAINERS = 'list_explainers' as const;
+export const TOOL_REPORT_HOST_CONTEXT = 'report_host_context' as const;
 
 export const WIDGET_RESOURCE_URI = 'ui://wmit/explainer.html' as const;
 export const WIDGET_RESOURCE_NAME = 'What makes it tick explainer' as const;
@@ -74,4 +75,20 @@ export interface WidgetUiMeta {
     connectDomains: string[];
   };
   domain?: string;
+}
+
+export interface HostInsets {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
+export interface HostContextReport {
+  displayMode?: string;
+  platform?: string;
+  userAgent?: string;
+  safeAreaInsets?: HostInsets;
+  containerDimensions?: Record<string, number>;
+  viewport: { width: number; height: number };
 }

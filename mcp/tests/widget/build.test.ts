@@ -2,7 +2,13 @@ import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
-import { ASSET_BASE_META_NAME, ASSET_BASE_TOKEN, PATHS } from '../../shared/config.ts';
+import {
+  ASSET_BASE_META_NAME,
+  ASSET_BASE_TOKEN,
+  PATHS,
+  REPORT_CONTEXT_META_NAME,
+  REPORT_CONTEXT_TOKEN,
+} from '../../shared/config.ts';
 
 const file = resolve(__dirname, '../../..', PATHS.widget);
 const built = existsSync(file);
@@ -14,6 +20,14 @@ describe.skipIf(!built)('mcp/dist/widget/explainer.html', () => {
     expect(html.split(ASSET_BASE_TOKEN).length - 1).toBe(1);
     expect(html).toMatch(
       new RegExp(`<meta name="${ASSET_BASE_META_NAME}" content="${ASSET_BASE_TOKEN}"\\s*/?>`),
+    );
+  });
+
+  it('keeps the report context token in its meta tag', () => {
+    expect(html).toMatch(
+      new RegExp(
+        `<meta name="${REPORT_CONTEXT_META_NAME}" content="${REPORT_CONTEXT_TOKEN}"\\s*/?>`,
+      ),
     );
   });
 

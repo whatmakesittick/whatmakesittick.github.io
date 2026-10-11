@@ -53,6 +53,7 @@ const serverOptions: CreateServerOptions = {
   domain,
   excludeTags,
   widgetVersion,
+  ...(process.env[ENV.logRequests] ? { logHostContext: (line: string) => log(line) } : {}),
 };
 
 const health = (): HealthInfo => ({

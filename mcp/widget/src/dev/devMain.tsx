@@ -4,6 +4,7 @@ import type { BakedCatalogue } from '../../../shared/catalogue.ts';
 import { explainerUrl, isSlug } from '../../../shared/catalogue.ts';
 import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import { createHub, type DisplayMode, type WidgetHost } from '../bridge.ts';
+import { createContextReporter, hostContextReport } from '../hostReport.ts';
 import { hasWebGL2, urlLoader } from '../scene.ts';
 import '../styles.css';
 import { Widget } from '../Widget.tsx';
@@ -35,6 +36,8 @@ body.dark .dev-user{background:#141413}
 body.fs .dev-chat{display:none}
 body:not(.fs) .dev-bar{display:none}
 body.fs .wmit.is-fs{height:calc(100vh - 48px)}
+.dev-unsafe{position:fixed;z-index:99;pointer-events:none;background:rgb(255 0 80/.16);display:none}
+body.fs .dev-unsafe{display:block}
 .dev-log{position:fixed;right:8px;bottom:8px;max-width:420px;max-height:30vh;overflow:auto;font:11px/1.4 ui-monospace,monospace;background:rgb(0 0 0/.75);color:#9fe;padding:6px 8px;border-radius:6px;white-space:pre-wrap;display:none}
 body.showlog .dev-log{display:block}`;
 document.head.append(css);
@@ -47,18 +50,29 @@ const say = (line: string) => {
   log.textContent = `${line}\n${log.textContent ?? ''}`.slice(0, 4000);
 };
 
+function parseInsets(value: string | null) {
+  const [top = 0, right = 0, bottom = 0, left = 0] = (value ?? '')
+    .split(',')
+    .map((part) => Math.max(0, Number(part) || 0));
+  return { top, right, bottom, left };
+}
+
 const hub = createHub();
 const ctx: Partial<McpUiHostContext> = {
   displayMode: mode,
   availableDisplayModes: ['inline', 'fullscreen'],
   deviceCapabilities: { touch: q.get('touch') === '1', hover: q.get('touch') !== '1' },
-  safeAreaInsets: { top: 0, right: 0, bottom: 0, left: 0 },
+  safeAreaInsets: parseInsets(q.get('insets')),
   locale: 'en-US',
 };
+const report = createContextReporter((r) => say(`[HOST] host context ${JSON.stringify(r)}`));
+const reportContext = () =>
+  report(hostContextReport(ctx, { width: innerWidth, height: innerHeight }));
 const setMode = (m: DisplayMode) => {
   mode = m;
   ctx.displayMode = m;
   document.body.classList.toggle('fs', m === 'fullscreen');
+  reportContext();
   hub.emit('context', { ...ctx });
 };
 document.body.classList.toggle('fs', mode === 'fullscreen');
@@ -100,6 +114,20 @@ if (app) {
 <p class="dev-say">Here is an interactive 3D model. The magnet chapter shows the layers that keep its coils at −269 °C: drag to orbit, or step through the chapters below.</p><div id="widget"></div></div>`;
   app.querySelector('.x')?.addEventListener('click', () => setMode('inline'));
   document.body.append(log);
+  const insets = ctx.safeAreaInsets ?? { top: 0, right: 0, bottom: 0, left: 0 };
+  const unsafe: [number, string][] = [
+    [insets.top, 'left:0;right:0;top:48px'],
+    [insets.right, 'top:48px;bottom:0;right:0'],
+    [insets.bottom, 'left:0;right:0;bottom:0'],
+    [insets.left, 'top:48px;bottom:0;left:0'],
+  ];
+  unsafe.forEach(([size, edges], index) => {
+    if (size <= 0) return;
+    const band = document.createElement('div');
+    band.className = 'dev-unsafe';
+    band.style.cssText = `${edges};${index % 2 ? 'width' : 'height'}:${size}px`;
+    document.body.append(band);
+  });
   const mount = document.createElement('div');
   mount.id = 'widget-fs';
   const slot = app.querySelector('#widget');
@@ -120,6 +148,7 @@ if (app) {
   document.head.append(fsStyle);
 }
 
+reportContext();
 const args = state === 'unknown' ? { slug: 'toaster' } : { slug, chapter };
 setTimeout(() => hub.emit('input', args), 50);
 setTimeout(() => {
