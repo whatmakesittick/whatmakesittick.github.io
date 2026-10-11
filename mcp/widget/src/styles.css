@@ -969,7 +969,7 @@ button:focus-visible,
   container: wmit-bar / inline-size;
 }
 .prose .bar .sp {
-  display: none;
+  flex: 1;
 }
 .prose .bar > :not(.brand, .sp) {
   flex: none;
