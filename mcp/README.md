@@ -67,10 +67,19 @@ Hosts may cache the `ui://` resource, and Claude keeps it until the connector is
 resource URI is stable and the resource never changes with the widget. It is
 `widget/loader.html` with the asset base and the report flag filled in: about 5 KB, no build step.
 It imports `<asset base>widget.js`, built from `widget/src/start.tsx` by `npm run build:widget`
-into `dist/embed/v1/` (one file of about 310 KB, 87 KB gzipped, styles and catalogue included), and
+into `dist/embed/v1/` (about 320 KB, 89 KB gzipped, styles and the English catalogue included), and
 calls its `start(root, { assetBase, inbox, loaderVersion })`. Messages the host sends before the
 module runs wait in the loader's inbox and are replayed to the module's transport. If the module
 does not load, the loader shows a link to the explainer on the site and a retry button.
+
+The widget shows its strings, the catalogue and the scene in one of the site's eight languages. It
+takes the `lang` tool argument (it arrives early, with the tool input), then `structuredContent.lang`,
+then `hostContext.locale`, then English; a language the site does not have falls back to English.
+English is baked into `widget.js`; every other language is a chunk next to it,
+`widget-<lang>-<hash>.js` (about 7 KB gzipped: the catalogue, the widget strings and the site's core
+strings), loaded when that language is first asked for. A later tool call or host context change
+switches the language in place: the embed through `setLanguage`, or by mounting it again with the
+same chapter and state when the module is older than `setLanguage`.
 
 `LOADER_VERSION` in `shared/loader.ts` numbers the loader. A loader change is a breaking event: users
 get it only when their host reads the resource again (in Claude, by reconnecting the connector), so
@@ -86,6 +95,7 @@ npm run smoke:stdio    # tools/list, resources/read, tools/call over stdio, then
 npm run test:widget    # the widget on its dev page with a mock embed and with the real one, and the
                        # built module through the loader on a test host (host.html), a slow module too
 npm run dev:widget     # the dev page: http://localhost:5183/dev.html?slug=engine&chapter=strokes
+                       # add &lang=uk (tool argument) or &locale=de-DE (host context)
 ```
 
 ## Later
