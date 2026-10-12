@@ -18,6 +18,7 @@ export interface HttpHandlerOptions {
   siteDir: string;
   health: () => HealthInfo;
   allowedOrigins?: readonly string[];
+  drainMs?: number;
 }
 
 export type HttpHandler = (req: IncomingMessage, res: ServerResponse) => void;
@@ -153,15 +154,20 @@ function rpcError(code: number, message: string): string {
   return JSON.stringify({ jsonrpc: '2.0', error: { code, message }, id: null });
 }
 
-function refuseLargeBody(req: IncomingMessage, res: ServerResponse, streamed: boolean): void {
+function refuseLargeBody(
+  req: IncomingMessage,
+  res: ServerResponse,
+  streamed: boolean,
+  drainMs: number,
+): void {
   if (streamed) {
     res.setHeader('Connection', 'close');
     res.once('finish', () => req.destroy());
   } else {
     req.resume();
-    const timer = setTimeout(() => req.destroy(), DRAIN_MS);
+    const timer = setTimeout(() => req.destroy(), drainMs);
     timer.unref();
-    res.once('close', () => clearTimeout(timer));
+    req.once('close', () => clearTimeout(timer));
   }
   send(res, 413, rpcError(-32600, 'Request body too large'), 'application/json');
 }
@@ -170,6 +176,7 @@ async function serveMcp(
   make: () => McpServer | Promise<McpServer>,
   req: IncomingMessage,
   res: ServerResponse,
+  drainMs: number,
 ): Promise<void> {
   let body: unknown;
   if (req.method === 'POST') {
@@ -177,7 +184,7 @@ async function serveMcp(
       body = await readBody(req);
     } catch (error) {
       if (error instanceof BodyTooLargeError) {
-        refuseLargeBody(req, res, error.streamed);
+        refuseLargeBody(req, res, error.streamed, drainMs);
         return;
       }
       send(res, 400, rpcError(-32700, 'Parse error'), 'application/json');
@@ -231,7 +238,7 @@ export function createHttpHandler(options: HttpHandlerOptions): HttpHandler {
         send(res, 403, rpcError(-32000, 'Origin not allowed'), 'application/json');
         return;
       }
-      void serveMcp(options.createServer, req, res);
+      void serveMcp(options.createServer, req, res, options.drainMs ?? DRAIN_MS);
       return;
     }
     if (req.method === 'GET' || req.method === 'HEAD') {

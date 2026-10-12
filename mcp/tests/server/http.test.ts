@@ -307,3 +307,73 @@ describe('originAllowed', () => {
     expect(originAllowed('http://localhost')).toBe(true);
   });
 });
+
+describe('draining a refused body', () => {
+  const DRAIN = 300;
+  const declared = String(5 * 1024 * 1024);
+  let drainServer: Server;
+  let drainBase: string;
+
+  beforeAll(async () => {
+    drainServer = createHttpServer(
+      createHttpHandler({
+        createServer: async () => createServer(serverOptions()),
+        siteDir: dir,
+        drainMs: DRAIN,
+        health: () => ({ ok: true, name: 'whatmakesittick-mcp', version: 'test' }),
+      }),
+    );
+    await new Promise<void>((done) => drainServer.listen(0, '127.0.0.1', () => done()));
+    drainBase = `http://127.0.0.1:${(drainServer.address() as AddressInfo).port}`;
+  });
+
+  afterAll(() => {
+    drainServer.closeAllConnections();
+    drainServer.close();
+  });
+
+  function refused() {
+    const req = httpRequest(`${drainBase}/mcp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': declared },
+    });
+    let closed = false;
+    const closing = new Promise<void>((done) => {
+      req.on('close', () => {
+        closed = true;
+        done();
+      });
+    });
+    req.on('error', () => undefined);
+    const answered = new Promise<number | undefined>((resolve) => {
+      req.on('response', (res) => {
+        res.resume();
+        resolve(res.statusCode);
+      });
+    });
+    req.write('{"pad":"');
+    return { req, answered, closing, isClosed: () => closed };
+  }
+
+  it('destroys the connection of a client that keeps sending after the 413', async () => {
+    const { req, answered, closing, isClosed } = refused();
+    expect(await answered).toBe(413);
+    const keep = setInterval(() => req.write('x'), 20);
+    try {
+      await new Promise((done) => setTimeout(done, DRAIN / 2));
+      expect(isClosed()).toBe(false);
+      await closing;
+    } finally {
+      clearInterval(keep);
+    }
+  });
+
+  it('destroys nothing early for a client that stops', async () => {
+    const { req, answered, isClosed } = refused();
+    expect(await answered).toBe(413);
+    req.write('x'.repeat(100));
+    await new Promise((done) => setTimeout(done, DRAIN / 2));
+    expect(isClosed()).toBe(false);
+    req.destroy();
+  });
+});
