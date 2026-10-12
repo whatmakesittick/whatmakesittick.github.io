@@ -3,7 +3,7 @@ import { dirname, join } from 'node:path';
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import { EMBED_API_VERSION } from '../src/core/embed/manifest.ts';
 import type { EmbedManifest, EmbedManifestEntry } from '../src/core/embed/manifest.ts';
-import type { Dictionary } from '../src/core/i18n/resources.ts';
+import type { CatalogueEntry } from './catalogueModel.ts';
 import { chapterOutline } from './chapterOutline.ts';
 import { LOCALES_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
@@ -77,35 +77,23 @@ export function renderEmbedEntry({ manifest, directory, chapters }: LoadedExplai
   ].join('\n');
 }
 
-function lookup(dictionary: Dictionary | undefined, key: string): string {
-  let node: string | Dictionary | undefined = dictionary;
-  for (const part of key.split('.')) {
-    node = typeof node === 'object' ? node[part] : undefined;
-  }
-  return typeof node === 'string' ? node : key;
-}
-
-function manifestEntry(explainer: LoadedExplainer): EmbedManifestEntry {
-  const { manifest, meta, chapters, dictionaries } = explainer;
-  const english = dictionaries[DEFAULT_LANGUAGE];
+function manifestEntry(entry: CatalogueEntry): EmbedManifestEntry {
+  const { slug, cover, title, eyebrow, summary, tagline, tags, chapters } = entry;
   return {
-    slug: manifest.slug,
-    module: embedModuleFile(manifest.slug),
-    cover: `../../${manifest.slug}/${posix(manifest.cover)}`,
-    title: meta.title,
-    eyebrow: meta.eyebrow,
-    summary: meta.summary,
-    tagline: meta.tagline,
-    tags: manifest.tags,
-    chapters: chapterOutline(chapters).map(({ id }) => ({
-      id,
-      title: lookup(english, `sections.${id}.title`),
-    })),
+    slug,
+    module: embedModuleFile(slug),
+    cover,
+    title,
+    eyebrow,
+    summary,
+    tagline,
+    tags,
+    chapters: chapters.map(({ id, title: chapterTitle }) => ({ id, title: chapterTitle })),
   };
 }
 
-export function embedManifest(explainers: readonly LoadedExplainer[]): EmbedManifest {
-  return { apiVersion: EMBED_API_VERSION, explainers: explainers.map(manifestEntry) };
+export function embedManifest(entries: readonly CatalogueEntry[]): EmbedManifest {
+  return { apiVersion: EMBED_API_VERSION, explainers: entries.map(manifestEntry) };
 }
 
 export interface LegacyEmbedFile {

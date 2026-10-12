@@ -20,7 +20,7 @@ English. A `chapter` query matches chapter titles in any language and script.
 | Path               | What it holds                                                                     |
 | ------------------ | --------------------------------------------------------------------------------- |
 | `shared/`          | Types and constants shared by the server and the widget: catalogue, tools, config |
-| `catalogue/`       | The catalogue built from `explainers/*` with the site's own manifest loader       |
+| `catalogue/`       | The widget views of the catalogue `vite/catalogue.ts` builds, and `write.ts`      |
 | `data/topics.json` | One topic per explainer, for the `show_explainer` description                     |
 | `server/`          | `createServer` (platform independent), `http.ts` and the Node entry `node.ts`     |
 | `widget/`          | `loader.html` (the resource) and the widget module: Preact, without three.js      |

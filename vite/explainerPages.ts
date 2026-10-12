@@ -15,6 +15,7 @@ import {
 } from './embed.ts';
 import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
+import { catalogueEntry } from './catalogue.ts';
 import { renderCatalogueModule } from './page.ts';
 import { languagePreloads } from './preloads.ts';
 import {
@@ -201,7 +202,7 @@ function pagesPlugin(): Plugin {
       this.emitFile({
         type: 'asset',
         fileName: EMBED_MANIFEST_FILE,
-        source: `${JSON.stringify(embedManifest(explainers), null, 2)}\n`,
+        source: `${JSON.stringify(embedManifest(explainers.map(catalogueEntry)), null, 2)}\n`,
       });
       const resolveModule = createRequire(join(root, 'package.json')).resolve;
       for (const { fileName, source } of legacyEmbedFiles(explainers, resolveModule)) {

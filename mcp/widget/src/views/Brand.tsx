@@ -1,9 +1,9 @@
 import favicon from '../../../../public/favicon.svg?raw';
 import siteLink from '../../../../src/core/partials/site-link.html?raw';
-import { SITE_ORIGIN } from '../../../shared/catalogue.ts';
+import { SITE_URL } from '../../../shared/catalogue.ts';
 import { useStrings } from '../i18n/context.ts';
 
-export const SITE_HOME = `${SITE_ORIGIN}/`;
+export const SITE_HOME = `${SITE_URL}/`;
 
 const icon = favicon
   .replace(/<title>[^<]*<\/title>\s*/, '')

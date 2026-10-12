@@ -2,7 +2,8 @@ import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, test, type Page } from '@playwright/test';
-import { buildCatalogue, toWidgetCatalogue } from '../../catalogue/build.ts';
+import { buildCatalogue } from '../../../vite/catalogue.ts';
+import { toWidgetCatalogue } from '../../catalogue/build.ts';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const full = buildCatalogue(root);

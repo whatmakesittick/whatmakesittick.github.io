@@ -1,7 +1,7 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client, InMemoryTransport } from '@modelcontextprotocol/client';
-import { buildCatalogue } from '../../catalogue/build.ts';
+import { buildCatalogue } from '../../../vite/catalogue.ts';
 import { createServer, type CreateServerOptions } from '../../server/createServer.ts';
 import { loadTopics, loaderHtml } from '../../server/load.ts';
 

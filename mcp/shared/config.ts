@@ -30,5 +30,4 @@ export const PATHS = {
   widgetModule: 'dist/embed/v1/widget.js',
 } as const;
 
-export const SITE_ASSET_BASE = 'https://whatmakesittick.github.io/embed/v1/';
 export const ATTRIBUTION = 'What makes it tick, by Vitalii Elenhaupt, MIT';

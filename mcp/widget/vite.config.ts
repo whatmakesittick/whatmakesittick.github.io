@@ -3,7 +3,8 @@ import { basename, dirname, extname, join, normalize, resolve, sep } from 'node:
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import type { Plugin } from 'vite';
-import { buildCatalogue, toBakedCatalogue } from '../catalogue/build.ts';
+import { buildCatalogue } from '../../vite/catalogue.ts';
+import { toBakedCatalogue } from '../catalogue/build.ts';
 import type { Catalogue } from '../shared/catalogue.ts';
 import {
   DEFAULT_LANGUAGE,

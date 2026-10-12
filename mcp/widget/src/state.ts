@@ -1,4 +1,4 @@
-import { isSlug, SITE_ORIGIN, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
+import { isSlug, plainText, SITE_URL, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { EmbedInfo, EmbedState, LanguageCode } from '../../../src/core/embed/contract.ts';
 import type { ModelContextSnapshot } from '../../shared/tools.ts';
 
@@ -40,7 +40,7 @@ export function targetFromInput(
   return chapter ? { slug: args.slug, chapter } : { slug: args.slug };
 }
 
-const URL_RE = new RegExp(`${SITE_ORIGIN.replace(/[.]/g, '\\.')}/([a-z0-9-]+)/`);
+const URL_RE = new RegExp(`${SITE_URL.replace(/[.]/g, '\\.')}/([a-z0-9-]+)/`);
 const CHAPTER_ID_RE = /\(id: ([a-z0-9-]+)\)/i;
 
 export function targetFromResult(
@@ -86,19 +86,6 @@ export function shortLabel(label: string): string {
 export function chapterShort(id: string): string {
   const words = id.replace(/[-_]+/g, ' ').trim();
   return words.charAt(0).toUpperCase() + words.slice(1);
-}
-
-export function plainText(html: string): string {
-  return html
-    .replace(/<[^>]*>/g, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'")
-    .replace(/&amp;/g, '&')
-    .replace(/\s+/g, ' ')
-    .trim();
 }
 
 export function snapshotOf(

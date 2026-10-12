@@ -1,14 +1,14 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { buildCatalogue, toWidgetCatalogue } from '../../catalogue/build.ts';
+import { buildCatalogue } from '../../../vite/catalogue.ts';
+import { toWidgetCatalogue } from '../../catalogue/build.ts';
 import type { EmbedInfo, EmbedState } from '../../../src/core/embed/contract.ts';
 import {
   chapterShort,
   debounce,
   modelContextText,
   neighbour,
-  plainText,
   resolveChapter,
   shortLabel,
   snapshotOf,
@@ -95,11 +95,6 @@ describe('helpers', () => {
     expect(shortLabel('One cylinder')).toBe('One cylinder');
     expect(chapterShort('magnet')).toBe('Magnet');
     expect(chapterShort('four-stroke')).toBe('Four stroke');
-  });
-  it('plainText strips tags and decodes entities', () => {
-    expect(plainText('The <strong>main</strong> &amp; <em>only</em>  magnet')).toBe(
-      'The main & only magnet',
-    );
   });
   it('stripOrder puts the first explainer first', () => {
     expect(

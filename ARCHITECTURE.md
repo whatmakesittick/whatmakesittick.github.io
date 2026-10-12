@@ -760,7 +760,9 @@ paragraphs, phases, speed, toggles and choices, all in that language), `getState
 `setChapter`, `play`, `pause`, `togglePlaying`, `seek`, `setSpeed`, `setView`, `setChoice`,
 `resetCamera`, `setLanguage` and `dispose`, which unmounts the scene, releases the WebGL context
 and removes the styles it added. `/embed/v1/manifest.json` lists the explainers with their covers
-and chapter titles, in English.
+and chapter titles, in English: `embedManifest` takes them from the catalogue entries that
+`vite/catalogue.ts` builds for the MCP server and the chat widget, with the types, `plainText` and
+`localizeEntry` in `vite/catalogueModel.ts`, which the widget bundles too.
 
 The `language` option takes a language code or a BCP 47 tag (`de`, `pt-BR`, `zh-Hans-CN`);
 `resolveLanguage` in `src/core/i18n/languages.ts` keeps its base language when the site ships it

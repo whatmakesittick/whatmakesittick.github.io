@@ -1,13 +1,16 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { buildCatalogue } from './catalogue.ts';
 import {
   EMBED_DIRECTORY,
   EMBED_MANIFEST_FILE,
   LEGACY_FONTS,
+  embedManifest,
   legacyEmbedFiles,
   renderEmbedEntry,
 } from './embed.ts';
+import { EMBED_API_VERSION } from '../src/core/embed/manifest.ts';
 import type { EmbedManifest } from '../src/core/embed/manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 
@@ -52,6 +55,27 @@ describe('renderEmbedEntry', () => {
     expect(source).toContain(`uk: () => import('${locales}/uk.json')`);
     expect(source).not.toContain('fr:');
     expect(source).toContain('defineEmbed(explainer, { slug, locales, chapters, styles })');
+  });
+});
+
+describe('embedManifest', () => {
+  it('lists the catalogue entries with their module and English chapter titles', () => {
+    const entries = buildCatalogue(root).explainers;
+    const manifest = embedManifest(entries);
+    expect(manifest.apiVersion).toBe(EMBED_API_VERSION);
+    expect(manifest.explainers.map(({ slug }) => slug)).toEqual(entries.map(({ slug }) => slug));
+    const engine = entries.find(({ slug }) => slug === 'engine')!;
+    expect(manifest.explainers.find(({ slug }) => slug === 'engine')).toEqual({
+      slug: 'engine',
+      module: 'engine.js',
+      cover: engine.cover,
+      title: engine.title,
+      eyebrow: engine.eyebrow,
+      summary: engine.summary,
+      tagline: engine.tagline,
+      tags: engine.tags,
+      chapters: engine.chapters.map(({ id, title }) => ({ id, title })),
+    });
   });
 });
 

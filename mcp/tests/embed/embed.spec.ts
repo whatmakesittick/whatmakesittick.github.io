@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, test, type Frame, type Page } from '@playwright/test';
-import { buildCatalogue } from '../../catalogue/build.ts';
+import { buildCatalogue } from '../../../vite/catalogue.ts';
 import type { CatalogueEntry } from '../../shared/catalogue.ts';
 import type { EmbedInfo, EmbedState, EmbedUiMounted } from '../../../src/core/embed/contract.ts';
 import { startStaticServer, type StaticServer } from './server.ts';
