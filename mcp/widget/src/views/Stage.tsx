@@ -75,7 +75,7 @@ function StateLayer({ vm }: { vm: ViewModel }) {
             </div>
             <div class="row">
               <span>{s.loading.progress}</span>
-              <span class="mono">{Math.round(vm.progress * 100)}%</span>
+              <span class="number">{Math.round(vm.progress * 100)}%</span>
             </div>
           </div>
         </>

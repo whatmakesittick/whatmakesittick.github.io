@@ -141,7 +141,7 @@ const css = `
 .mock-lbl{position:absolute;width:0;height:0}
 .mock-lbl i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#f5a524;box-shadow:0 0 0 3px rgb(245 165 36/.22)}
 .mock-lbl b{position:absolute;left:0;top:0;width:30px;height:1px;background:linear-gradient(90deg,#f5a524,rgb(245 165 36/.45));transform:rotate(-32deg);transform-origin:0 50%}
-.mock-lbl span{position:absolute;left:24px;top:-34px;white-space:nowrap;padding:4px 10px;border:1px solid rgb(245 165 36/.55);border-radius:999px;background:rgb(20 24 30/.88);font:500 12px/1.2 var(--f-sans);color:#e6e9ee}
+.mock-lbl span{position:absolute;left:24px;top:-34px;white-space:nowrap;padding:4px 10px;border:1px solid rgb(245 165 36/.55);border-radius:999px;background:rgb(20 24 30/.88);font:500 12px/1.2 var(--font-sans);color:#e6e9ee}
 .mock-lbl.left b{transform:rotate(-148deg)}.mock-lbl.left span{left:auto;right:24px}
 .mock-scene.nolabels .mock-lbl{display:none}`;
 
