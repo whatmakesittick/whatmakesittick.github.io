@@ -271,6 +271,12 @@ for (const [width, height, stacked] of [
     }
     expect(dock.y).toBeGreaterThanOrEqual(stage.y);
     expect(dock.y + dock.height).toBeLessThanOrEqual(scene.y + scene.height);
+    await page.locator('.prose .bar [aria-expanded]').click();
+    await expect(page.locator('.drawer.open')).toBeVisible();
+    const drawer = await box(page, '.drawer.open');
+    expect(drawer.y).toBeGreaterThanOrEqual(top + 100);
+    if (stacked) expect(drawer.y + drawer.height).toBeLessThanOrEqual(scene.y + scene.height);
+    else expect(drawer.y).toBe(top + 162);
     expect(errors).toEqual([]);
   });
 }
