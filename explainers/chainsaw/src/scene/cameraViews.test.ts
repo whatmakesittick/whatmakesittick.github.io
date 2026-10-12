@@ -32,6 +32,10 @@ describe('camera views', () => {
     CAMERA_VIEW_IDS.forEach((id) => expect(framedViews('desktop')[id].follow, id).toBeUndefined());
   });
 
+  it('frames the whole saw closer on a phone so the bar nose stays in', () => {
+    expect(framedViews('phone').sawSide.margin).toBeLessThan(framedViews('desktop').sawSide.margin);
+  });
+
   it('picks the phone framing below 600 pixels of stage width', () => {
     expect(stageVariant(599)).toBe('phone');
     expect(stageVariant(600)).toBe('desktop');

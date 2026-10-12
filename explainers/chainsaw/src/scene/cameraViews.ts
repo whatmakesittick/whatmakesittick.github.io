@@ -27,8 +27,8 @@ function both(margin: number): PerVariant<number> {
 export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   sawSide: {
     region: 'saw',
-    direction: { phone: [0.3, 0.45, 1], desktop: [0.15, 0.35, 1] },
-    margin: both(1.1),
+    direction: { phone: [0.1, 0.4, 1], desktop: [0.15, 0.35, 1] },
+    margin: { phone: 0.8, desktop: 1.1 },
   },
   cylinderCut: {
     region: 'cylinder',
