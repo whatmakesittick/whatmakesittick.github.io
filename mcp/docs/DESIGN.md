@@ -91,6 +91,13 @@ tool call or host context change switches the language in place.
 - **Initial host context.** The widget reads it after `connect()` and replays it to late
   subscribers. Without that, fullscreen availability and the safe area insets are lost.
 
+## Accepted risk: no subresource integrity on the widget
+
+The loader imports `widget.js` from the asset base without subresource integrity, on purpose. The
+module has to change with each site deploy while the cached loader stays the same, so a pinned hash
+would break the widget after the first deploy. The CSP `resourceDomains` limits the import to the
+asset origin. Whoever can deploy the site controls the widget code.
+
 ## Testing strategy
 
 - **Strict CSP smoke** (`npm run smoke:embed`): every embed in a sandboxed iframe with an opaque
