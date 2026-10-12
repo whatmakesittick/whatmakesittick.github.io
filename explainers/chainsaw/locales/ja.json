@@ -85,6 +85,7 @@
     "rpm": "エンジン",
     "chain": "チェーン",
     "clutch": "クラッチ",
+    "phase": "行程",
     "clutchState": {
       "open": "切れている",
       "driving": "つながっている",

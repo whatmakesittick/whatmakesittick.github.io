@@ -85,6 +85,7 @@
     "rpm": "Motor",
     "chain": "Corrente",
     "clutch": "Embreagem",
+    "phase": "Fase",
     "clutchState": {
       "open": "Solta",
       "driving": "Tracionando",

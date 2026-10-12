@@ -85,6 +85,7 @@
     "rpm": "Moteur",
     "chain": "Chaîne",
     "clutch": "Embrayage",
+    "phase": "Temps",
     "clutchState": {
       "open": "Débrayé",
       "driving": "Embrayé",

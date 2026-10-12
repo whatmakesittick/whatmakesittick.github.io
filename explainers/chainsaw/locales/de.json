@@ -85,6 +85,7 @@
     "rpm": "Motor",
     "chain": "Kette",
     "clutch": "Kupplung",
+    "phase": "Takt",
     "clutchState": {
       "open": "Offen",
       "driving": "Greift",

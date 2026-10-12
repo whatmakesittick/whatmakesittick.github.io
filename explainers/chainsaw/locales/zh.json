@@ -85,6 +85,7 @@
     "rpm": "发动机",
     "chain": "锯链",
     "clutch": "离合器",
+    "phase": "冲程",
     "clutchState": {
       "open": "分离",
       "driving": "咬合",

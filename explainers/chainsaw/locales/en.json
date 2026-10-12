@@ -85,6 +85,7 @@
     "rpm": "Engine",
     "chain": "Chain",
     "clutch": "Clutch",
+    "phase": "Turn",
     "clutchState": {
       "open": "Open",
       "driving": "Driving",

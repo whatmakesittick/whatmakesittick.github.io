@@ -85,6 +85,7 @@
     "rpm": "Motor",
     "chain": "Cadena",
     "clutch": "Embrague",
+    "phase": "Fase",
     "clutchState": {
       "open": "Desembragado",
       "driving": "Embragado",
