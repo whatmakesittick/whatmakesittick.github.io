@@ -217,25 +217,33 @@ export function createSite(read: SiteReader, options: SiteOptions = {}): Site {
     return found;
   }
 
+  async function translation(slug: string, code: LanguageCode): Promise<Locale | undefined> {
+    try {
+      return await locale(slug, code);
+    } catch (error) {
+      log(`${localePath(slug, code)} unavailable, English instead:`, error);
+      return undefined;
+    }
+  }
+
   async function entry(slug: string, lang: LanguageCode): Promise<CatalogueEntry | undefined> {
     const indexed = await listed(slug);
     if (!indexed) return undefined;
     const published = await manifest(slug);
-    const codes =
-      lang !== DEFAULT_LANGUAGE && published.locales.includes(lang)
-        ? [DEFAULT_LANGUAGE, lang]
-        : [DEFAULT_LANGUAGE];
-    const [html, ...locales] = await Promise.all([
+    const asked = lang !== DEFAULT_LANGUAGE && published.locales.includes(lang);
+    const [html, english, translated] = await Promise.all([
       chapters(slug),
-      ...codes.map((code) => requiredLocale(slug, code)),
+      requiredLocale(slug, DEFAULT_LANGUAGE),
+      asked ? translation(slug, lang) : undefined,
     ]);
-    const byCode = new Map(codes.map((code, i) => [code, locales[i]!]));
+    const byCode = new Map([[DEFAULT_LANGUAGE, english]]);
+    if (translated) byCode.set(lang, translated);
     const pick = <K extends keyof Locale>(key: K) =>
       Object.fromEntries([...byCode].map(([code, found]) => [code, found[key]]));
     return publishedEntry(
       {
         manifest: published,
-        meta: byCode.get(DEFAULT_LANGUAGE)!.meta,
+        meta: english.meta,
         metas: pick('meta'),
         dictionaries: pick('dictionary'),
         chapters: html,
@@ -250,7 +258,7 @@ export function createSite(read: SiteReader, options: SiteOptions = {}): Site {
   ): Promise<ListExplainersItem | undefined> {
     const english = await listed(slug);
     if (!english) return undefined;
-    const found = lang === DEFAULT_LANGUAGE ? undefined : await locale(slug, lang);
+    const found = lang === DEFAULT_LANGUAGE ? undefined : await translation(slug, lang);
     return {
       slug,
       title: found?.meta.title || english.title,

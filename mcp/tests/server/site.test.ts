@@ -263,6 +263,34 @@ describe('createSite reads published data leniently', () => {
   });
 });
 
+describe('createSite falls back to English', () => {
+  const engine = catalogue.explainers.find((e) => e.slug === 'engine')!;
+
+  it.each([
+    ['cannot be read', () => Promise.reject(new Error('offline'))],
+    ['does not parse', () => Promise.resolve('{"meta":')],
+  ])('builds the English entry when the asked locale %s', async (_, broken) => {
+    const site = createSite((path) =>
+      path === 'explainers/engine/locales/uk.json' ? broken() : reader(path),
+    );
+    const entry = await site.entry('engine', 'uk');
+    expect(entry?.locales).toEqual({});
+    expect(localizeEntry(entry!, 'uk')).toEqual(localizeEntry(engine, 'en'));
+  });
+
+  it.each([
+    ['cannot be read', () => Promise.reject(new Error('offline'))],
+    ['does not parse', () => Promise.resolve('{"meta":')],
+  ])('gives the English summary when the asked locale %s', async (_, broken) => {
+    const site = createSite((path) =>
+      path === 'explainers/engine/locales/uk.json' ? broken() : reader(path),
+    );
+    expect(await site.summary('engine', 'uk')).toEqual(
+      await createSite(reader).summary('engine', 'en'),
+    );
+  });
+});
+
 describe('createSite summary', () => {
   it('localizes the title, summary and chapter titles without reading chapters.html', async () => {
     const spy = counting();

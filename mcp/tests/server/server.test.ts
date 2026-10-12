@@ -354,4 +354,15 @@ describe('list_explainers', () => {
     const res = await client.callTool({ name: 'list_explainers', arguments: { tag: 'kitchen' } });
     expect(res.isError).toBe(true);
   });
+
+  it('an unreadable site → a friendly isError without the cause', async () => {
+    const site = createSite(async () => {
+      throw new Error('https://example.com/embed/v1/manifest.json: HTTP 503');
+    });
+    const client = await connect({ site });
+    const res = await client.callTool({ name: 'list_explainers', arguments: {} });
+    expect(res.isError).toBe(true);
+    expect(textOf(res)).toContain('unavailable right now. Try again later.');
+    expect(textOf(res)).not.toMatch(/https?:|manifest\.json|503/);
+  });
 });
