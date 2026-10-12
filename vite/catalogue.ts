@@ -79,11 +79,16 @@ function partLabels(dictionary: Dictionary | undefined): string[] {
   return Object.values(parts).filter((part): part is string => typeof part === 'string');
 }
 
+export type CatalogueSource = Pick<
+  LoadedExplainer,
+  'manifest' | 'meta' | 'metas' | 'dictionaries' | 'chapters'
+>;
+
 function translations({
   metas,
   dictionaries,
   chapters,
-}: LoadedExplainer): Partial<Record<LanguageCode, CatalogueLocalized>> {
+}: CatalogueSource): Partial<Record<LanguageCode, CatalogueLocalized>> {
   const out: Partial<Record<LanguageCode, CatalogueLocalized>> = {};
   for (const lang of LANGUAGE_CODES) {
     const dictionary = dictionaries[lang];
@@ -102,7 +107,7 @@ function translations({
   return out;
 }
 
-export function catalogueEntry(loaded: LoadedExplainer): CatalogueEntry {
+export function catalogueEntry(loaded: CatalogueSource): CatalogueEntry {
   const { manifest, meta, dictionaries, chapters } = loaded;
   const dictionary = dictionaries[DEFAULT_LANGUAGE] ?? {};
   return {
