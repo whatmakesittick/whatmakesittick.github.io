@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { Client } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 import { DEFAULT_HOST, ENV } from '../../shared/config.ts';
-import { connect } from './helpers.ts';
+import { connect, serveSite } from './helpers.ts';
 
 const TOOLS = ['list_explainers', 'show_explainer'];
 const entry = resolve(dirname(fileURLToPath(import.meta.url)), '../../server/node.ts');
@@ -23,9 +23,11 @@ function freePort(): Promise<number> {
 }
 
 async function stdioToolNames(logRequests: boolean): Promise<string[]> {
+  const site = await serveSite();
   const env: Record<string, string> = {
     ...(process.env as Record<string, string>),
     PORT: String(await freePort()),
+    [ENV.assetBase]: site.assetBase,
   };
   delete env[ENV.logRequests];
   if (logRequests) env[ENV.logRequests] = '1';
@@ -42,6 +44,7 @@ async function stdioToolNames(logRequests: boolean): Promise<string[]> {
     return tools.map((t) => t.name).sort();
   } finally {
     await client.close();
+    site.close();
   }
 }
 

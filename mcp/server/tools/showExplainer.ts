@@ -3,28 +3,48 @@ import { EMBED_API_VERSION } from '../../../src/core/embed/manifest.ts';
 import { localizeEntry, resolveLanguage, type CatalogueEntry } from '../../shared/catalogue.ts';
 import type { ShowExplainerInput, ShowExplainerResult } from '../../shared/tools.ts';
 import { resolveChapter } from '../chapters.ts';
+import { log } from '../log.ts';
+import type { Site } from '../site.ts';
 import { showExplainerText } from '../text.ts';
 
-export function showExplainer(
-  entries: ReadonlyMap<string, CatalogueEntry>,
+function unavailable(slug: string): CallToolResult {
+  return {
+    isError: true,
+    content: [
+      {
+        type: 'text',
+        text: `The data for the explainer "${slug}" is unavailable right now. Try again later.`,
+      },
+    ],
+  };
+}
+
+export async function showExplainer(
+  site: Pick<Site, 'entry'>,
+  slugs: readonly string[],
   args: ShowExplainerInput,
-): CallToolResult {
-  const entry = entries.get(args.slug);
-  if (!entry) {
+): Promise<CallToolResult> {
+  if (!slugs.includes(args.slug)) {
     const why = `Unknown explainer slug "${args.slug}".`;
-    const have = [...entries.keys()];
     return {
       isError: true,
       content: [
         {
           type: 'text',
-          text: `${why} Available slugs: ${have.join(', ')}. Call list_explainers to see them with their chapters.`,
+          text: `${why} Available slugs: ${slugs.join(', ')}. Call list_explainers to see them with their chapters.`,
         },
       ],
     };
   }
 
   const lang = resolveLanguage(args.lang);
+  let entry: CatalogueEntry | undefined;
+  try {
+    entry = await site.entry(args.slug, lang);
+  } catch (error) {
+    log(`show_explainer ${args.slug}:`, error);
+  }
+  if (!entry) return unavailable(args.slug);
   const localized = localizeEntry(entry, lang);
   const res = resolveChapter(entry, args.chapter, lang);
   const { chapter } = res;

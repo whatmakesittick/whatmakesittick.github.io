@@ -14,7 +14,17 @@ import {
 import { claudeAppDomain } from '../../server/assets.ts';
 import { availableSlugs } from '../../server/createServer.ts';
 import { buildShowExplainerDescription } from '../../server/description.ts';
-import { ASSET_BASE, catalogue, connect, slugs as SLUGS, textOf, topics } from './helpers.ts';
+import { createSite } from '../../server/site.ts';
+import {
+  ASSET_BASE,
+  catalogue,
+  connect,
+  index,
+  reader,
+  slugs as SLUGS,
+  textOf,
+  topics,
+} from './helpers.ts';
 
 describe('tools/list', () => {
   it('show_explainer: slug enum, fixed resourceUri, read-only, description with every topic', async () => {
@@ -64,9 +74,8 @@ describe('tools/list', () => {
   });
 
   it('WMIT_EXCLUDE_TAGS hides catalogued explainers with that tag', () => {
-    const full = catalogue;
-    const hidden = full.explainers.filter((e) => e.tags.includes('biology')).map((e) => e.slug);
-    const slugs = availableSlugs(full, ['biology']);
+    const hidden = index.explainers.filter((e) => e.tags.includes('biology')).map((e) => e.slug);
+    const slugs = availableSlugs(index, ['biology']);
     expect(slugs).not.toContain('mri-scanner');
     expect(slugs).toHaveLength(SLUGS.length - hidden.length);
     expect(buildShowExplainerDescription(topics, slugs)).not.toContain('MRI scanner');
@@ -173,6 +182,17 @@ describe('show_explainer', () => {
     const res = await client.callTool({ name: 'show_explainer', arguments: { slug: 'toaster' } });
     expect(res.isError).toBe(true);
     expect(textOf(res)).toContain('mri-scanner');
+  });
+
+  it('unreadable explainer files → isError naming the slug', async () => {
+    const site = createSite(async (path) =>
+      path.startsWith('explainers/engine/') ? undefined : reader(path),
+    );
+    const client = await connect({ site });
+    const res = await client.callTool({ name: 'show_explainer', arguments: { slug: 'engine' } });
+    expect(res.isError).toBe(true);
+    expect(textOf(res)).toContain('"engine"');
+    expect(textOf(res)).toContain('unavailable');
   });
 
   it('modelText ≤ 4 KB for every chapter', async () => {

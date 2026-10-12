@@ -5,7 +5,8 @@ import {
 } from '@modelcontextprotocol/ext-apps/server';
 import { McpServer, type ReadResourceResult } from '@modelcontextprotocol/server';
 import { z } from 'zod';
-import { TAGS, type Catalogue, type CatalogueEntry, type Tag } from '../shared/catalogue.ts';
+import type { EmbedManifest } from '../../src/core/embed/manifest.ts';
+import { TAGS, type Tag } from '../shared/catalogue.ts';
 import { SERVER_NAME, SERVER_VERSION } from '../shared/config.ts';
 import {
   OPENAI_INVOCATION_META,
@@ -24,32 +25,33 @@ import {
   buildShowExplainerDescription,
 } from './description.ts';
 import { injectAssetBase, injectReportContext } from './html.ts';
+import type { Site } from './site.ts';
 import { listExplainers } from './tools/listExplainers.ts';
 import { showExplainer } from './tools/showExplainer.ts';
 
 export { SERVER_NAME, SERVER_VERSION };
 
 export interface CreateServerOptions {
-  catalogue: Catalogue;
+  index: EmbedManifest;
+  site: Site;
   loaderHtml: string;
   assetBase: string;
   domain?: string;
   excludeTags?: readonly Tag[];
 }
 
-export function availableSlugs(catalogue: Catalogue, excludeTags: readonly Tag[] = []): string[] {
-  return catalogue.explainers
-    .filter((e) => !e.tags.some((t) => excludeTags.includes(t)))
+export function availableSlugs(index: EmbedManifest, excludeTags: readonly Tag[] = []): string[] {
+  return index.explainers
+    .filter((e) => !e.tags.some((t) => (excludeTags as readonly string[]).includes(t)))
     .map((e) => e.slug)
     .sort();
 }
 
 export function createServer(options: CreateServerOptions): McpServer {
-  const { catalogue, assetBase, domain } = options;
-  const slugs = availableSlugs(catalogue, options.excludeTags);
-  const entries: CatalogueEntry[] = catalogue.explainers.filter((e) => slugs.includes(e.slug));
-  const topics = new Map(entries.map((e) => [e.slug, e.topic]));
-  const bySlug = new Map(entries.map((e) => [e.slug, e]));
+  const { index, site, assetBase, domain } = options;
+  const slugs = availableSlugs(index, options.excludeTags);
+  const listed = index.explainers.filter((e) => slugs.includes(e.slug));
+  const topics = new Map(listed.map((e) => [e.slug, e.topic]));
   const uiMeta = buildUiMeta(assetBase, domain);
 
   const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
@@ -68,7 +70,7 @@ export function createServer(options: CreateServerOptions): McpServer {
       annotations: { ...TOOL_ANNOTATIONS },
       _meta: { ui: { resourceUri: WIDGET_RESOURCE_URI }, ...OPENAI_INVOCATION_META },
     },
-    async (args) => showExplainer(bySlug, args),
+    async (args) => showExplainer(site, slugs, args),
   );
 
   server.registerTool(
@@ -82,7 +84,7 @@ export function createServer(options: CreateServerOptions): McpServer {
       }),
       annotations: { ...TOOL_ANNOTATIONS },
     },
-    async (args) => listExplainers(entries, args),
+    async (args) => listExplainers(site, listed, args),
   );
 
   registerAppResource(

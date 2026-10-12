@@ -1,4 +1,6 @@
 import { readFileSync } from 'node:fs';
+import { createServer as createHttpServer } from 'node:http';
+import type { AddressInfo } from 'node:net';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client, InMemoryTransport } from '@modelcontextprotocol/client';
@@ -7,7 +9,7 @@ import { EMBED_DIRECTORY, embedManifest, embedSourceFiles } from '../../../vite/
 import { loadExplainers } from '../../../vite/manifest.ts';
 import { createServer, type CreateServerOptions } from '../../server/createServer.ts';
 import { loaderHtml } from '../../server/load.ts';
-import type { SiteReader } from '../../server/site.ts';
+import { createSite, type SiteReader } from '../../server/site.ts';
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 export const catalogue = buildCatalogue(root, '2026-01-01T00:00:00.000Z');
@@ -26,9 +28,22 @@ export const reader: SiteReader = async (path) => files.get(path);
 
 export const ASSET_BASE = 'http://localhost:3999/embed/v1/';
 
+export async function serveSite(): Promise<{ assetBase: string; close: () => void }> {
+  const server = createHttpServer((req, res) => {
+    const path = (req.url ?? '').replace(/^\/embed\/v1\//, '');
+    const body = files.get(path);
+    res.writeHead(body === undefined ? 404 : 200);
+    res.end(body ?? 'Not found');
+  });
+  await new Promise<void>((done) => server.listen(0, '127.0.0.1', () => done()));
+  const { port } = server.address() as AddressInfo;
+  return { assetBase: `http://127.0.0.1:${port}/embed/v1/`, close: () => server.close() };
+}
+
 export function serverOptions(over: Partial<CreateServerOptions> = {}): CreateServerOptions {
   return {
-    catalogue,
+    index,
+    site: createSite(reader),
     loaderHtml: loaderHtml(root),
     assetBase: ASSET_BASE,
     ...over,

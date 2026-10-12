@@ -4,7 +4,7 @@ import {
   type CatalogueChapter,
   type LocalizedCatalogueEntry,
 } from '../shared/catalogue.ts';
-import { MODEL_TEXT_MAX_BYTES } from '../shared/tools.ts';
+import { MODEL_TEXT_MAX_BYTES, type ListExplainersItem } from '../shared/tools.ts';
 import type { ChapterResolution } from './chapters.ts';
 
 const encoder = new TextEncoder();
@@ -79,10 +79,7 @@ export function showExplainerText(
   return truncateBytes(text, MODEL_TEXT_MAX_BYTES);
 }
 
-export function listExplainersText(
-  entries: readonly LocalizedCatalogueEntry[],
-  tag?: string,
-): string {
+export function listExplainersText(entries: readonly ListExplainersItem[], tag?: string): string {
   if (entries.length === 0) {
     return tag ? `No explainers with the tag "${tag}".` : 'No explainers available.';
   }

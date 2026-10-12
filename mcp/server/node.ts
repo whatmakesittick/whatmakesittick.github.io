@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { createServer as createHttpServer, type Server } from 'node:http';
 import { StdioServerTransport } from '@modelcontextprotocol/server/stdio';
+import type { EmbedManifest } from '../../src/core/embed/manifest.ts';
 import {
   DEFAULT_HOST,
   DEFAULT_PORT,
@@ -13,12 +14,12 @@ import { LOADER_VERSION } from '../shared/loader.ts';
 import { claudeAppDomain, resolveAssetBase } from './assets.ts';
 import { createServer, type CreateServerOptions } from './createServer.ts';
 import { createHttpHandler, type HealthInfo, type HttpHandler } from './http.ts';
-import { loadCatalogue, loaderHtml, parseExcludeTags, siteDir, widgetModuleKind } from './load.ts';
+import { loaderHtml, parseExcludeTags, siteDir, widgetModuleKind } from './load.ts';
 import { log } from './log.ts';
+import { SITE_INDEX_FILE, createSite, httpReader } from './site.ts';
 
 const stdio = process.argv.includes('--stdio');
 const port = Number.parseInt(process.env[ENV.port] ?? '', 10) || DEFAULT_PORT;
-const { catalogue, kind: catalogueKind } = loadCatalogue();
 const site = siteDir();
 const publicUrl = stdio ? undefined : process.env[ENV.publicUrl] || undefined;
 const assetBase = resolveAssetBase({
@@ -28,21 +29,42 @@ const assetBase = resolveAssetBase({
 });
 const domain = await claudeAppDomain(publicUrl);
 const excludeTags = parseExcludeTags(process.env[ENV.excludeTags]);
+const loader = loaderHtml();
+const explainers = createSite(httpReader(assetBase));
+let lastIndex: EmbedManifest | undefined;
 
-const serverOptions: CreateServerOptions = {
-  catalogue,
-  loaderHtml: loaderHtml(),
-  assetBase,
-  domain,
-  excludeTags,
-};
+async function readIndex(): Promise<EmbedManifest> {
+  lastIndex = await explainers.index();
+  return lastIndex;
+}
+
+async function startIndex(): Promise<void> {
+  try {
+    await readIndex();
+  } catch (error) {
+    log(`catalogue unavailable at ${assetBase}${SITE_INDEX_FILE} (npm run build)`);
+    log(error);
+    process.exit(1);
+  }
+}
+
+async function serverOptions(): Promise<CreateServerOptions> {
+  return {
+    index: await readIndex(),
+    site: explainers,
+    loaderHtml: loader,
+    assetBase,
+    domain,
+    excludeTags,
+  };
+}
 
 const health = (): HealthInfo => ({
   ok: true,
   name: SERVER_NAME,
   version: SERVER_VERSION,
   mode: stdio ? 'stdio-assets' : 'http',
-  catalogue: { source: catalogueKind, explainers: catalogue.explainers.length },
+  catalogue: { source: assetBase, explainers: lastIndex?.explainers.length ?? 0 },
   widget: { loader: LOADER_VERSION, module: widgetModuleKind() },
   site: existsSync(site) ? 'built' : 'missing',
   assetBase,
@@ -87,12 +109,13 @@ async function ensureAssetServer(): Promise<void> {
 async function startHttp(): Promise<void> {
   const server = await listen(
     createHttpHandler({
-      createServer: () => createServer(serverOptions),
+      createServer: async () => createServer(await serverOptions()),
       siteDir: site,
       health,
     }),
     '0.0.0.0',
   );
+  await startIndex();
   log(
     `MCP on http://localhost:${port}${ROUTES.mcp}, assets ${assetBase}, health http://localhost:${port}${ROUTES.healthz}`,
   );
@@ -104,12 +127,13 @@ async function startHttp(): Promise<void> {
 
 async function startStdio(): Promise<void> {
   await ensureAssetServer();
+  await startIndex();
   const transport = new StdioServerTransport();
   transport.onclose = () => process.exit(0);
   process.stdin.on('end', () => process.exit(0));
-  await createServer(serverOptions).connect(transport);
+  await createServer(await serverOptions()).connect(transport);
   log(
-    `stdio ready (catalogue: ${catalogueKind}, loader v${LOADER_VERSION}, widget module ${widgetModuleKind()}, assets ${assetBase})`,
+    `stdio ready (${lastIndex?.explainers.length ?? 0} explainers, loader v${LOADER_VERSION}, widget module ${widgetModuleKind()}, assets ${assetBase})`,
   );
 }
 

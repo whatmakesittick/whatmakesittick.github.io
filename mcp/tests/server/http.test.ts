@@ -23,7 +23,7 @@ beforeAll(async () => {
   writeFileSync(join(dir, 'embed', 'v1', 'manifest.json'), '{"apiVersion":1}');
   writeFileSync(join(dir, 'mri-scanner', 'cover.webp'), 'RIFF');
   const handler = createHttpHandler({
-    createServer: () => createServer(serverOptions()),
+    createServer: async () => createServer(serverOptions()),
     siteDir: dir,
     health: () => ({ ok: true, name: 'whatmakesittick-mcp', version: 'test' }),
   });
@@ -102,5 +102,28 @@ describe('/healthz and /mcp', () => {
     });
     expect(res.structuredContent).toMatchObject({ chapter: 'magnet' });
     await client.close();
+  });
+
+  it('answers 500 when the server for a request cannot be made', async () => {
+    const failing = createHttpServer(
+      createHttpHandler({
+        createServer: async () => {
+          throw new Error('index unavailable');
+        },
+        siteDir: dir,
+        health: () => ({ ok: true, name: 'whatmakesittick-mcp', version: 'test' }),
+      }),
+    );
+    await new Promise<void>((done) => failing.listen(0, '127.0.0.1', () => done()));
+    try {
+      const res = await fetch(`http://127.0.0.1:${(failing.address() as AddressInfo).port}/mcp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
+      });
+      expect(res.status).toBe(500);
+    } finally {
+      failing.close();
+    }
   });
 });

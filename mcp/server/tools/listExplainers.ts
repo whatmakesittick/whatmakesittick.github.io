@@ -1,32 +1,27 @@
 import type { CallToolResult } from '@modelcontextprotocol/server';
-import {
-  localizeEntry,
-  resolveLanguage,
-  type CatalogueEntry,
-  type Tag,
-} from '../../shared/catalogue.ts';
-import type { ListExplainersInput, ListExplainersResult } from '../../shared/tools.ts';
+import type { EmbedManifestEntry } from '../../../src/core/embed/manifest.ts';
+import { resolveLanguage } from '../../shared/catalogue.ts';
+import type {
+  ListExplainersInput,
+  ListExplainersItem,
+  ListExplainersResult,
+} from '../../shared/tools.ts';
+import type { Site } from '../site.ts';
 import { listExplainersText } from '../text.ts';
 
-export function listExplainers(
-  entries: readonly CatalogueEntry[],
+export async function listExplainers(
+  site: Pick<Site, 'summary'>,
+  listed: readonly EmbedManifestEntry[],
   args: ListExplainersInput,
-): CallToolResult {
+): Promise<CallToolResult> {
   const lang = resolveLanguage(args.lang);
-  const picked = (args.tag ? entries.filter((e) => e.tags.includes(args.tag as Tag)) : entries).map(
-    (e) => localizeEntry(e, lang),
-  );
+  const tagged = args.tag ? listed.filter((e) => e.tags.includes(args.tag as string)) : listed;
+  const summaries = await Promise.all(tagged.map((e) => site.summary(e.slug, lang)));
   const result: ListExplainersResult = {
-    explainers: picked.map(({ slug, title, summary, tags, chapters }) => ({
-      slug,
-      title,
-      summary,
-      tags,
-      chapters: chapters.map(({ id, title: t }) => ({ id, title: t })),
-    })),
+    explainers: summaries.filter((s): s is ListExplainersItem => s !== undefined),
   };
   return {
-    content: [{ type: 'text', text: listExplainersText(picked, args.tag) }],
+    content: [{ type: 'text', text: listExplainersText(result.explainers, args.tag) }],
     structuredContent: { ...result },
   };
 }

@@ -14,7 +14,7 @@ export interface HealthInfo {
 }
 
 export interface HttpHandlerOptions {
-  createServer?: () => McpServer;
+  createServer?: () => McpServer | Promise<McpServer>;
   siteDir: string;
   health: () => HealthInfo;
 }
@@ -128,7 +128,7 @@ function rpcError(code: number, message: string): string {
 }
 
 async function serveMcp(
-  make: () => McpServer,
+  make: () => McpServer | Promise<McpServer>,
   req: IncomingMessage,
   res: ServerResponse,
 ): Promise<void> {
@@ -142,16 +142,16 @@ async function serveMcp(
     }
   }
   if (logging()) log(`${req.method} ${ROUTES.mcp} ${describeCall(body)}`.trim());
-  const server = make();
-  const transport = new NodeStreamableHTTPServerTransport({
-    sessionIdGenerator: undefined,
-  });
-  res.on('close', () => {
-    transport.close().catch(() => {});
-    server.close().catch(() => {});
-  });
   for (const [name, value] of Object.entries(CORS_HEADERS)) res.setHeader(name, value);
   try {
+    const server = await make();
+    const transport = new NodeStreamableHTTPServerTransport({
+      sessionIdGenerator: undefined,
+    });
+    res.on('close', () => {
+      transport.close().catch(() => {});
+      server.close().catch(() => {});
+    });
     await server.connect(transport);
     await transport.handleRequest(req, res, body);
   } catch (error) {
