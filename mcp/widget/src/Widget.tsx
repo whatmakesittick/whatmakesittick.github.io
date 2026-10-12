@@ -13,15 +13,11 @@ import {
   chapterViews,
   debounce,
   frameOf,
-  mergeTarget,
   modelContextText,
   neighbour,
   sameSnapshot,
   snapshotOf,
   stripOrder,
-  targetFromInput,
-  targetFromResult,
-  type Target,
 } from './state.ts';
 import { ChapterSection } from './views/Chapter.tsx';
 import { Drawer, ExploreStrip } from './views/Explore.tsx';
@@ -33,6 +29,7 @@ import { Unknown, Waiting } from './views/Empty.tsx';
 import { useKeyboard } from './keyboard.ts';
 import { useSceneSession } from './useSceneSession.ts';
 import { useSceneSync } from './useSceneSync.ts';
+import { useTarget } from './useTarget.ts';
 import { useWidgetLanguage } from './useWidgetLanguage.ts';
 
 export interface WidgetProps {
@@ -44,9 +41,6 @@ export interface WidgetProps {
 }
 
 export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
-  const [inputSeen, setInputSeen] = useState(false);
-  const [target, setTarget] = useState<Target | undefined>();
-  const [resultSeen, setResultSeen] = useState(false);
   const [ctx, setCtx] = useState(host.context() ?? {});
   const [mode, setMode] = useState<DisplayMode>(
     toDisplayMode(host.context()?.displayMode) ?? 'inline',
@@ -69,21 +63,10 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   entriesRef.current = entries;
   const find = (slug: string): WidgetCatalogueEntry | undefined =>
     entriesRef.current.find((e) => e.slug === slug);
+  const { target, setTarget, inputSeen, resultSeen } = useTarget(host, find, session);
 
   useEffect(() => {
     const offs = [
-      host.on('input', (args) => {
-        setInputSeen(true);
-        const t = targetFromInput(args, find);
-        if (!t) return;
-        session.prefetch(t.slug);
-        setTarget((prev) => prev ?? t);
-      }),
-      host.on('result', (result) => {
-        setResultSeen(true);
-        const t = targetFromResult(result, find);
-        if (t) setTarget((prev) => mergeTarget(prev, t));
-      }),
       host.on('context', (c) => {
         setCtx({ ...c });
         setMode((current) => toDisplayMode(c.displayMode) ?? current);
