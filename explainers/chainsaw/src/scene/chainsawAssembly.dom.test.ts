@@ -113,6 +113,16 @@ describe('chainsaw assembly', () => {
     assembly.dispose();
   });
 
+  it('shows the bar oil whenever the pump oils, with or without the flow view', () => {
+    const assembly = createChainsawAssembly(resources(), stateWith({ view: { flow: false } }));
+    const oil = named(assembly.root, 'barOil');
+    expect(isShown(oil)).toBe(true);
+    expect(isShown(named(assembly.root, 'flow'))).toBe(false);
+    assembly.setState(stateWith({ brake: true, view: { flow: true } }));
+    expect(isShown(oil)).toBe(false);
+    assembly.dispose();
+  });
+
   it('opens the cutaway and shows the zone only when asked', () => {
     const assembly = createChainsawAssembly(resources(), stateWith());
     const cover = named(assembly.root, 'clutchCover');

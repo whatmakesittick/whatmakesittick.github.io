@@ -257,7 +257,7 @@ export function buildFlow(
     oil,
     setState: (state: AssemblyState) => {
       root.visible = state.view.flow;
-      oil.visible = state.view.flow && state.drive.oiling;
+      oil.visible = state.drive.oiling;
       if (!state.view.flow) return;
       writers.forEach((write) => write(state));
     },
