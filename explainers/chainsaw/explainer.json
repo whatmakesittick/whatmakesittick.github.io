@@ -1,0 +1,12 @@
+{
+  "slug": "chainsaw",
+  "tags": ["tools", "engines", "mechanics"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "Placeholder social card for How a chainsaw works"
+  }
+}
