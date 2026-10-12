@@ -1,6 +1,7 @@
 {
   "slug": "heart",
   "tags": ["biology", "physics"],
+  "topic": "human heart",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

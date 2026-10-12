@@ -1,6 +1,7 @@
 {
   "slug": "raptor",
   "tags": ["engines", "physics", "vehicles"],
+  "topic": "rocket engine",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

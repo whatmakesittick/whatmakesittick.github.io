@@ -1,6 +1,7 @@
 {
   "slug": "mri-scanner",
   "tags": ["physics", "biology"],
+  "topic": "MRI scanner",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

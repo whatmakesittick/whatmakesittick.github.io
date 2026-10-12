@@ -1,7 +1,6 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import topics from '../../data/topics.json' with { type: 'json' };
 import { toBakedCatalogue, toWidgetCatalogue } from '../../catalogue/build.ts';
 import { LANGUAGE_CODES } from '../../../src/core/i18n/languages.ts';
 import { resolveLanguage as coreResolveLanguage } from '../../../src/core/i18n/embedded.ts';
@@ -13,11 +12,6 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 describe('catalogue for the MCP server and the widget', () => {
   const catalogue = buildCatalogue(root, '2026-01-01T00:00:00.000Z');
   const bySlug = new Map(catalogue.explainers.map((e) => [e.slug, e]));
-
-  it('lists every explainer with a topic for the tool description', () => {
-    expect(catalogue.explainers.length).toBeGreaterThanOrEqual(18);
-    expect(Object.keys(topics).sort()).toEqual(catalogue.explainers.map((e) => e.slug).sort());
-  });
 
   it('keeps the widget catalogue thin', () => {
     const thin = toWidgetCatalogue(catalogue);

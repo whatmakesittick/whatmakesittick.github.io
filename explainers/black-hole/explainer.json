@@ -1,6 +1,7 @@
 {
   "slug": "black-hole",
   "tags": ["physics", "space"],
+  "topic": "black hole",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

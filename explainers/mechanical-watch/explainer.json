@@ -1,6 +1,7 @@
 {
   "slug": "mechanical-watch",
   "tags": ["mechanics", "physics"],
+  "topic": "mechanical watch",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

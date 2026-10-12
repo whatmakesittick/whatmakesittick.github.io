@@ -22,7 +22,6 @@ import {
   LANG_DESCRIBE,
   LIST_EXPLAINERS_DESCRIPTION,
   buildShowExplainerDescription,
-  type Topics,
 } from './description.ts';
 import { injectAssetBase, injectReportContext } from './html.ts';
 import { listExplainers } from './tools/listExplainers.ts';
@@ -32,7 +31,6 @@ export { SERVER_NAME, SERVER_VERSION };
 
 export interface CreateServerOptions {
   catalogue: Catalogue;
-  topics: Topics;
   loaderHtml: string;
   assetBase: string;
   domain?: string;
@@ -47,9 +45,10 @@ export function availableSlugs(catalogue: Catalogue, excludeTags: readonly Tag[]
 }
 
 export function createServer(options: CreateServerOptions): McpServer {
-  const { catalogue, topics, assetBase, domain } = options;
+  const { catalogue, assetBase, domain } = options;
   const slugs = availableSlugs(catalogue, options.excludeTags);
   const entries: CatalogueEntry[] = catalogue.explainers.filter((e) => slugs.includes(e.slug));
+  const topics = new Map(entries.map((e) => [e.slug, e.topic]));
   const bySlug = new Map(entries.map((e) => [e.slug, e]));
   const uiMeta = buildUiMeta(assetBase, domain);
 

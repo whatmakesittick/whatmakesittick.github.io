@@ -7,6 +7,7 @@ function entry(slug: string, published: string): CatalogueEntry {
     manifest: {
       slug,
       tags: ['mechanics'],
+      topic: 'thing',
       cover: 'cover.webp',
       entry: 'src/index.ts',
       chapters: 'chapters.html',

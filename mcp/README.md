@@ -17,17 +17,16 @@ English. A `chapter` query matches chapter titles in any language and script.
 
 ## Layout
 
-| Path               | What it holds                                                                     |
-| ------------------ | --------------------------------------------------------------------------------- |
-| `shared/`          | Types and constants shared by the server and the widget: catalogue, tools, config |
-| `catalogue/`       | The widget views of the catalogue `vite/catalogue.ts` builds, and `write.ts`      |
-| `data/topics.json` | One topic per explainer, for the `show_explainer` description                     |
-| `server/`          | `createServer` (platform independent), `http.ts` and the Node entry `node.ts`     |
-| `widget/`          | `loader.html` (the resource) and the widget module: Preact, without three.js      |
-| `scripts/`         | `smoke-stdio.ts`, the stdio round trip the way Claude Desktop runs the server     |
-| `tests/`           | Vitest unit tests, the embed smoke and the widget Playwright specs                |
-| `docs/`            | `DESIGN.md`: why the app is built this way, host findings and open questions      |
-| `dist/`            | Build output, ignored: `catalogue.json`                                           |
+| Path         | What it holds                                                                     |
+| ------------ | --------------------------------------------------------------------------------- |
+| `shared/`    | Types and constants shared by the server and the widget: catalogue, tools, config |
+| `catalogue/` | The widget views of the catalogue `vite/catalogue.ts` builds, and `write.ts`      |
+| `server/`    | `createServer` (platform independent), `http.ts` and the Node entry `node.ts`     |
+| `widget/`    | `loader.html` (the resource) and the widget module: Preact, without three.js      |
+| `scripts/`   | `smoke-stdio.ts`, the stdio round trip the way Claude Desktop runs the server     |
+| `tests/`     | Vitest unit tests, the embed smoke and the widget Playwright specs                |
+| `docs/`      | `DESIGN.md`: why the app is built this way, host findings and open questions      |
+| `dist/`      | Build output, ignored: `catalogue.json`                                           |
 
 The embed contract (`EmbedModule`, `MountOptions`, `EmbedController`) is
 `src/core/embed/contract.ts`; the server and the widget import it from there.
@@ -124,6 +123,6 @@ npm run dev:widget     # the dev page: http://localhost:5183/dev.html?slug=engin
 
 ## Later
 
-`createServer` takes the catalogue, the topics and a widget loader and touches no Node API, so a
+`createServer` takes the catalogue (whose entries carry each explainer's `topic`) and a widget loader and touches no Node API, so a
 Cloudflare Worker can serve `/mcp` with the web standard transport and point `WMIT_ASSET_BASE` at
 the site on GitHub Pages, which already serves `/embed/v1/` with `Access-Control-Allow-Origin: *`.

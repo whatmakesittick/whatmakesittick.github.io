@@ -113,6 +113,7 @@ export function catalogueEntry(loaded: LoadedExplainer): CatalogueEntry {
     description: meta.description,
     summary: meta.summary,
     tags: [...manifest.tags],
+    topic: manifest.topic,
     url: explainerUrl(manifest.slug),
     cover: `../../${manifest.slug}/${manifest.cover}`,
     parts: partLabels(dictionary),

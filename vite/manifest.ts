@@ -116,6 +116,7 @@ export function parseManifest(
   return {
     slug: readSlug(value, folder, reserved),
     tags: readTags(value, folder),
+    topic: readString(value, 'topic', folder),
     cover: readString(value, 'cover', folder),
     entry: readString(value, 'entry', folder),
     chapters: readString(value, 'chapters', folder),

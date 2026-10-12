@@ -1,6 +1,7 @@
 {
   "slug": "sewing-machine",
   "tags": ["home", "mechanics", "tools"],
+  "topic": "sewing machine",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

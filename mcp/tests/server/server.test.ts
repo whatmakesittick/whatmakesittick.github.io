@@ -31,7 +31,7 @@ describe('tools/list', () => {
     });
     const description = show.description ?? '';
     expect(description.length).toBeLessThanOrEqual(SHOW_EXPLAINER_DESCRIPTION_MAX);
-    for (const slug of SLUGS) expect(description).toContain(topics[slug]);
+    for (const slug of SLUGS) expect(description).toContain(topics.get(slug));
   });
 
   it('both tools take an optional free-form lang and the description asks for it', async () => {

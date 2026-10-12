@@ -15,6 +15,7 @@ export interface EmbedManifestEntry {
   summary: string;
   tagline: string;
   tags: readonly string[];
+  topic: string;
   chapters: readonly { id: string; title: string }[];
 }
 

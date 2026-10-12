@@ -78,7 +78,7 @@ export function renderEmbedEntry({ manifest, directory, chapters }: LoadedExplai
 }
 
 function manifestEntry(entry: CatalogueEntry): EmbedManifestEntry {
-  const { slug, cover, title, eyebrow, summary, tagline, tags, chapters } = entry;
+  const { slug, cover, title, eyebrow, summary, tagline, tags, topic, chapters } = entry;
   return {
     slug,
     module: embedModuleFile(slug),
@@ -88,6 +88,7 @@ function manifestEntry(entry: CatalogueEntry): EmbedManifestEntry {
     summary,
     tagline,
     tags,
+    topic,
     chapters: chapters.map(({ id, title: chapterTitle }) => ({ id, title: chapterTitle })),
   };
 }

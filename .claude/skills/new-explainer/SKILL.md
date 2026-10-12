@@ -11,7 +11,7 @@ Rules for the coordinator: read only the "Corrections" and "Safe numbers" sectio
 
 ## Steps
 
-1. **Pitch.** Agree the subject with the user in one paragraph: the angle, what the timeline measures and its phases, six chapters, the widgets and dock choices, the tags from `src/core/manifest.ts`, the main design risk.
+1. **Pitch.** Agree the subject with the user in one paragraph: the angle, what the timeline measures and its phases, six chapters, the widgets and dock choices, the tags from `src/core/manifest.ts`, the topic (a short English noun phrase for `explainer.json`), the main design risk.
 2. **Facts.** Spawn a research agent with `prompts/researcher.md`; it fills `templates/facts.md` in the session scratchpad. Fold its corrections into the pitch.
 3. **Spec and frozen files.** Spawn a Plan agent with `prompts/plan.md`; it drafts the spec from `templates/spec.md` next to the facts sheet. Review the spec, then let the same agent write and commit the frozen files with their tests on `feat/<slug>`.
 4. **Build.** Create `../wt-<slug>-scene` and `../wt-<slug>-copy` from `feat/<slug>` (`git worktree add`, then `npm ci` in each), add `explainers/<slug>/chapters.html` and `explainers/<slug>/locales/` to `.git/info/exclude`, then spawn in parallel the modeller (`prompts/modeller.md`, scene worktree), the builder (`prompts/builder.md`, main checkout) and the writer (`prompts/writer.md`, copy worktree). Within the first hour check the modeller's handedness screenshots against the real thing and the builder's phone contact sheet of the six views. When a frozen file must change, change it yourself, commit, and tell the agents.

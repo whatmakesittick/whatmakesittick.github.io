@@ -21,6 +21,7 @@ function explainer(
     manifest: {
       slug,
       tags: ['tools', 'mechanics'],
+      topic: 'thing',
       cover: 'cover.webp',
       entry: 'src/index.ts',
       chapters: 'chapters.html',

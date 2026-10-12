@@ -1,6 +1,7 @@
 {
   "slug": "naval-drone",
   "tags": ["vehicles", "physics", "weapons"],
+  "topic": "naval drone",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

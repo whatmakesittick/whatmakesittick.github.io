@@ -1,6 +1,7 @@
 {
   "slug": "solar-panel",
   "tags": ["energy", "physics", "home"],
+  "topic": "solar panel",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

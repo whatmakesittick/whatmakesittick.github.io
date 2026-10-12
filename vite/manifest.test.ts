@@ -7,6 +7,7 @@ import { loadExplainers, parseManifest, parseMeta, reservedSlugs } from './manif
 const valid = {
   slug: 'engine',
   tags: ['engines', 'mechanics'],
+  topic: 'car engine',
   cover: 'cover.webp',
   entry: 'src/index.ts',
   chapters: 'chapters.html',
@@ -43,6 +44,8 @@ describe('parseManifest', () => {
     ['tags that are not a list', { tags: 'engines' }, 'engine', '"tags" must list at least one'],
     ['an unknown tag', { tags: ['engines', 'toys'] }, 'engine', '"tags" must be among mechanics'],
     ['a repeated tag', { tags: ['home', 'home'] }, 'engine', '"tags" lists "home" more than once'],
+    ['no topic', { topic: undefined }, 'engine', '"topic" must be a string'],
+    ['an empty topic', { topic: ' ' }, 'engine', '"topic" must be a string'],
     ['an unknown language', { locales: ['en', 'xx'] }, 'engine', 'unknown language'],
     ['no English', { locales: ['uk'] }, 'engine', 'must include "en"'],
     [

@@ -1,6 +1,7 @@
 {
   "slug": "oil-rig",
   "tags": ["energy", "earth", "physics"],
+  "topic": "oil rig",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

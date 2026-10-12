@@ -74,6 +74,7 @@ describe('embedManifest', () => {
       summary: engine.summary,
       tagline: engine.tagline,
       tags: engine.tags,
+      topic: 'car engine',
       chapters: engine.chapters.map(({ id, title }) => ({ id, title })),
     });
   });

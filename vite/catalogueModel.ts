@@ -45,6 +45,7 @@ export interface LocalizedCatalogueEntry {
   description: string;
   summary: string;
   tags: Tag[];
+  topic: string;
   url: string;
   cover: string;
   parts: string[];

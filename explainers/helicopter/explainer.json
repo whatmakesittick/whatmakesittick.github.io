@@ -1,6 +1,7 @@
 {
   "slug": "helicopter",
   "tags": ["aircraft", "flight", "mechanics"],
+  "topic": "helicopter",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

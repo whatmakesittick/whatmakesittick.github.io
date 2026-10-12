@@ -1,6 +1,7 @@
 {
   "slug": "glider",
   "tags": ["aircraft", "flight", "physics", "weather"],
+  "topic": "glider",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

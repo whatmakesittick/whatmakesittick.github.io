@@ -1,6 +1,7 @@
 {
   "slug": "microscope",
   "tags": ["tools", "optics", "physics"],
+  "topic": "microscope",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

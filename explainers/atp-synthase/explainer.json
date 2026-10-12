@@ -1,6 +1,7 @@
 {
   "slug": "atp-synthase",
   "tags": ["biology", "energy"],
+  "topic": "ATP synthase",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

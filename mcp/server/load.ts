@@ -2,10 +2,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildCatalogue } from '../../vite/catalogue.ts';
-import topicsJson from '../data/topics.json' with { type: 'json' };
 import { isTag, type Catalogue, type Tag } from '../shared/catalogue.ts';
 import { PATHS } from '../shared/config.ts';
-import { validateTopics, type Topics } from './description.ts';
 import { log } from './log.ts';
 
 export const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -25,13 +23,6 @@ export function loadCatalogue(root: string = REPOSITORY_ROOT): {
   }
   log(`${PATHS.catalogue} missing (npm run build:mcp), reading the explainers`);
   return { catalogue: buildCatalogue(root), kind: 'sources' };
-}
-
-export function loadTopics(catalogue: Catalogue): Topics {
-  return validateTopics(
-    topicsJson,
-    catalogue.explainers.map((e) => e.slug),
-  );
 }
 
 export type WidgetModuleKind = 'built' | 'missing';

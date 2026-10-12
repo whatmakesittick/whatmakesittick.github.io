@@ -1,6 +1,7 @@
 {
   "slug": "wind-farm",
   "tags": ["energy", "mechanics", "weather"],
+  "topic": "wind farm",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

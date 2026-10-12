@@ -44,7 +44,7 @@ pages), so a language folder or the about page never clashes with an explainer.
 
 ```
 explainers/engine/
-  explainer.json      slug, tags, cover, entry, chapters, locales, social
+  explainer.json      slug, tags, topic, cover, entry, chapters, locales, social
   chapters.html       the prose column: <section class="chapter" data-preset="…"> blocks
   locales/en.json …   everything the explainer says, including meta.title, meta.eyebrow,
                       meta.tagline, meta.description, meta.summary and the optional
@@ -65,6 +65,7 @@ explainers/engine/
 {
   "slug": "engine",
   "tags": ["engines", "mechanics", "vehicles"],
+  "topic": "car engine",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",
@@ -79,7 +80,9 @@ The slug must match the folder and must not clash with a root folder
 from `TAGS` in `src/core/manifest.ts`: mechanics, engines, vehicles, aircraft,
 flight, physics, weather, home, tools, optics, energy, earth and biology. Every tag has a label under
 `catalogue.tags.<id>` in all eight core locales, which a test enforces, so a new
-tag goes into `TAGS` and every core locale together. `cover` and `social.image` are paths inside `public/`;
+tag goes into `TAGS` and every core locale together. `topic` is one short English noun phrase for
+the thing, as people say it ("car engine", "MQ-9 Reaper drone"); the MCP tool description lists it, and
+`/embed/v1/manifest.json` carries it. `cover` and `social.image` are paths inside `public/`;
 the social image is 1200 × 630. The page head describes it with `meta.socialAlt` from the
 page's locale when the locale has it, and with `social.alt` otherwise. The plugin validates all of this and fails the
 build with the manifest's path in the message.
@@ -759,8 +762,8 @@ controller once the first frame is drawn: `info` (its `language`, title, chapter
 paragraphs, phases, speed, toggles and choices, all in that language), `getState` and `subscribe`,
 `setChapter`, `play`, `pause`, `togglePlaying`, `seek`, `setSpeed`, `setView`, `setChoice`,
 `resetCamera`, `setLanguage` and `dispose`, which unmounts the scene, releases the WebGL context
-and removes the styles it added. `/embed/v1/manifest.json` lists the explainers with their covers
-and chapter titles, in English: `embedManifest` takes them from the catalogue entries that
+and removes the styles it added. `/embed/v1/manifest.json` lists the explainers with their covers,
+topics and chapter titles, in English: `embedManifest` takes them from the catalogue entries that
 `vite/catalogue.ts` builds for the MCP server and the chat widget, with the types, `plainText` and
 `localizeEntry` in `vite/catalogueModel.ts`, which the widget bundles too.
 

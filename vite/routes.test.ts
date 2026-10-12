@@ -9,6 +9,7 @@ function explainer(slug: string, modified: string): LoadedExplainer {
     manifest: {
       slug,
       tags: ['tools'],
+      topic: 'thing',
       cover: 'cover.webp',
       entry: 'src/index.ts',
       chapters: 'chapters.html',

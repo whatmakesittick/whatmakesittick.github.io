@@ -13,20 +13,12 @@ import { LOADER_VERSION } from '../shared/loader.ts';
 import { claudeAppDomain, resolveAssetBase } from './assets.ts';
 import { createServer, type CreateServerOptions } from './createServer.ts';
 import { createHttpHandler, type HealthInfo, type HttpHandler } from './http.ts';
-import {
-  loadTopics,
-  loadCatalogue,
-  loaderHtml,
-  parseExcludeTags,
-  siteDir,
-  widgetModuleKind,
-} from './load.ts';
+import { loadCatalogue, loaderHtml, parseExcludeTags, siteDir, widgetModuleKind } from './load.ts';
 import { log } from './log.ts';
 
 const stdio = process.argv.includes('--stdio');
 const port = Number.parseInt(process.env[ENV.port] ?? '', 10) || DEFAULT_PORT;
 const { catalogue, kind: catalogueKind } = loadCatalogue();
-const topics = loadTopics(catalogue);
 const site = siteDir();
 const publicUrl = stdio ? undefined : process.env[ENV.publicUrl] || undefined;
 const assetBase = resolveAssetBase({
@@ -39,7 +31,6 @@ const excludeTags = parseExcludeTags(process.env[ENV.excludeTags]);
 
 const serverOptions: CreateServerOptions = {
   catalogue,
-  topics,
   loaderHtml: loaderHtml(),
   assetBase,
   domain,

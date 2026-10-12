@@ -176,6 +176,7 @@ describe('localizeEntry', () => {
     description: 'Description',
     summary: 'Summary',
     tags: ['energy'],
+    topic: 'thing',
     url: 'https://example.com/x/',
     cover: 'cover.webp',
     parts: ['Part'],

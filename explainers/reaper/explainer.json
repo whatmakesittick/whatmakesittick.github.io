@@ -1,6 +1,7 @@
 {
   "slug": "reaper",
   "tags": ["aircraft", "flight", "weapons"],
+  "topic": "MQ-9 Reaper drone",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

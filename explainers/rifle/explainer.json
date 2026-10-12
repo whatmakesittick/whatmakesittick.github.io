@@ -1,6 +1,7 @@
 {
   "slug": "rifle",
   "tags": ["mechanics", "physics", "weapons"],
+  "topic": "self-loading rifle",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",

@@ -33,6 +33,7 @@ const explainer: LoadedExplainer = {
   manifest: {
     slug: 'thing',
     tags: ['tools'],
+    topic: 'thing',
     cover: 'cover.webp',
     entry: 'src/index.ts',
     chapters: 'chapters.html',
