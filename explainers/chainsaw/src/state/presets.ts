@@ -130,6 +130,14 @@ export const PRESETS: Record<PresetId, Preset> = {
       'chainBrakeBand',
       'chainCatcher',
     ],
-    highlight: ['kickbackZone', 'barNose', 'handGuard', 'chainBrakeBand', 'chainCatcher'],
+    highlight: [
+      'powerhead',
+      'bar',
+      'kickbackZone',
+      'barNose',
+      'handGuard',
+      'chainBrakeBand',
+      'chainCatcher',
+    ],
   },
 };
