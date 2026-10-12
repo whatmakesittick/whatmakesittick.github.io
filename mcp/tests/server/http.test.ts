@@ -3,10 +3,13 @@ import { createServer as createHttpServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { once } from 'node:events';
+import { request as httpRequest } from 'node:http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
 import { createServer } from '../../server/createServer.ts';
-import { cacheControl, createHttpHandler } from '../../server/http.ts';
+import { parseAllowedOrigins } from '../../server/load.ts';
+import { cacheControl, createHttpHandler, originAllowed } from '../../server/http.ts';
 import { serverLog, serverOptions } from './helpers.ts';
 
 let dir: string;
@@ -94,6 +97,20 @@ describe('/healthz and /mcp', () => {
     expect(await res.json()).toMatchObject({ ok: true, name: 'whatmakesittick-mcp' });
   });
 
+  it('answers a POST with plain JSON, not an event stream', async () => {
+    const res = await fetch(`${base}/mcp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json, text/event-stream',
+      },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
+    });
+    expect(res.status).toBe(200);
+    expect(res.headers.get('content-type')).toMatch(/^application\/json/);
+    expect(await res.json()).toMatchObject({ id: 1, result: { tools: expect.any(Array) } });
+  });
+
   it('stateless Streamable HTTP: tools/list and a tool call over /mcp', async () => {
     const client = new Client({ name: 'http-test', version: '0.0.0' });
     await client.connect(new StreamableHTTPClientTransport(new URL(`${base}/mcp`)));
@@ -165,12 +182,86 @@ describe('origin check on /mcp', () => {
     expect((await post()).status).toBe(200);
   });
 
+  it.each(['null', 'http://localhost.evil.com', 'http://127.0.0.1.evil.com', 'not a url'])(
+    'refuses the origin %s',
+    async (origin) => {
+      expect((await post(origin)).status).toBe(403);
+    },
+  );
+
+  it.each(['GET', 'DELETE'])('refuses a foreign origin on %s', async (method) => {
+    const res = await fetch(`${base}/mcp`, {
+      method,
+      headers: { Origin: 'https://evil.example.com' },
+    });
+    expect(res.status).toBe(403);
+  });
+
   it('serves a static file to a foreign origin', async () => {
     const res = await fetch(`${base}/embed/v1/manifest.json`, {
       headers: { Origin: 'https://evil.example.com' },
     });
     expect(res.status).toBe(200);
     expect(res.headers.get('access-control-allow-origin')).toBe('*');
+  });
+
+  it('lets an allowed browser origin read the error responses', async () => {
+    const refused = await post('https://evil.example.com');
+    expect(refused.headers.get('access-control-allow-origin')).toBeTruthy();
+    const large = await fetch(`${base}/mcp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Origin: 'https://chat.example.com' },
+      body: JSON.stringify({ pad: 'x'.repeat(5 * 1024 * 1024) }),
+    });
+    expect(large.status).toBe(413);
+    expect(large.headers.get('access-control-allow-origin')).toBeTruthy();
+    const broken = await fetch(`${base}/mcp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Origin: 'https://chat.example.com' },
+      body: '{',
+    });
+    expect(broken.status).toBe(400);
+    expect(broken.headers.get('access-control-allow-origin')).toBeTruthy();
+  });
+
+  it('answers 413 at once when Content-Length is over the cap', async () => {
+    const req = httpRequest(`${base}/mcp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': String(5 * 1024 * 1024) },
+    });
+    const answered = new Promise<number | undefined>((resolve) => {
+      req.on('response', (res) => {
+        res.resume();
+        resolve(res.statusCode);
+      });
+    });
+    req.on('error', () => undefined);
+    req.write('{"pad":"');
+    expect(await answered).toBe(413);
+    req.destroy();
+  });
+
+  it('answers 413 and closes when a streamed body grows past the cap', async () => {
+    const req = httpRequest(`${base}/mcp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const answered = new Promise<{ status?: number; connection?: string }>((resolve, reject) => {
+      req.on('response', (res) => {
+        res.resume();
+        resolve({ status: res.statusCode, connection: res.headers.connection });
+      });
+      req.on('error', reject);
+    });
+    const chunk = 'x'.repeat(1024 * 1024);
+    for (let sent = 0; sent < 4; sent += 1) {
+      await new Promise<void>((done) => req.write(chunk, () => done()));
+    }
+    req.write('x');
+    const { status, connection } = await answered;
+    expect(status).toBe(413);
+    expect(connection).toBe('close');
+    await once(req, 'close');
   });
 
   it('answers 413 for an oversized body', async () => {
@@ -183,5 +274,36 @@ describe('origin check on /mcp', () => {
     expect(await res.json()).toMatchObject({
       error: { message: expect.stringMatching(/too large/) },
     });
+  });
+});
+
+describe('originAllowed', () => {
+  const allowed = ['https://chat.example.com'];
+
+  it.each([
+    ['http://localhost:5173', true],
+    ['http://127.0.0.1', true],
+    ['http://[::1]:3000', true],
+    ['https://chat.example.com', true],
+    ['https://chat.example.com:8443', false],
+    ['http://chat.example.com', false],
+    ['null', false],
+    ['', false],
+    ['http://localhost.evil.com', false],
+    ['http://evil.com/localhost', false],
+    ['not a url', false],
+  ])('%s gives %s', (origin, expected) => {
+    expect(originAllowed(origin, allowed)).toBe(expected);
+  });
+
+  it('matches an entry written with a trailing slash or in upper case', () => {
+    const list = parseAllowedOrigins('https://Chat.Example.com/, HTTPS://OTHER.example.com');
+    expect(originAllowed('https://chat.example.com', list)).toBe(true);
+    expect(originAllowed('https://other.example.com', list)).toBe(true);
+  });
+
+  it('allows only loopback without a list', () => {
+    expect(originAllowed('https://chat.example.com')).toBe(false);
+    expect(originAllowed('http://localhost')).toBe(true);
   });
 });

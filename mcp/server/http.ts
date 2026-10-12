@@ -41,7 +41,14 @@ const CORS_HEADERS = {
   'Access-Control-Expose-Headers': 'mcp-session-id, mcp-protocol-version',
 };
 
-class BodyTooLargeError extends Error {}
+class BodyTooLargeError extends Error {
+  streamed: boolean;
+
+  constructor(streamed: boolean) {
+    super('Request body too large');
+    this.streamed = streamed;
+  }
+}
 
 const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]']);
 
@@ -56,6 +63,7 @@ export function originAllowed(origin: string, allowed: readonly string[] = []): 
 
 const HASHED_ASSETS = '/assets/';
 const MAX_BODY_BYTES = 4 * 1024 * 1024;
+const DRAIN_MS = 5000;
 
 export function cacheControl(path: string): string {
   return path.startsWith(HASHED_ASSETS) ? 'public, max-age=31536000, immutable' : 'no-cache';
@@ -109,17 +117,22 @@ function serveStatic(root: string, req: IncomingMessage, res: ServerResponse, pa
 
 function readBody(req: IncomingMessage): Promise<unknown> {
   return new Promise((resolve, reject) => {
+    if (Number(req.headers['content-length']) > MAX_BODY_BYTES) {
+      reject(new BodyTooLargeError(false));
+      return;
+    }
     const chunks: Buffer[] = [];
     let size = 0;
     req.on('data', (chunk: Buffer) => {
       size += chunk.length;
-      if (size <= MAX_BODY_BYTES) chunks.push(chunk);
-    });
-    req.on('end', () => {
       if (size > MAX_BODY_BYTES) {
-        reject(new BodyTooLargeError());
+        chunks.length = 0;
+        reject(new BodyTooLargeError(true));
         return;
       }
+      chunks.push(chunk);
+    });
+    req.on('end', () => {
       const text = Buffer.concat(chunks).toString('utf8');
       try {
         resolve(text ? JSON.parse(text) : undefined);
@@ -140,6 +153,19 @@ function rpcError(code: number, message: string): string {
   return JSON.stringify({ jsonrpc: '2.0', error: { code, message }, id: null });
 }
 
+function refuseLargeBody(req: IncomingMessage, res: ServerResponse, streamed: boolean): void {
+  if (streamed) {
+    res.setHeader('Connection', 'close');
+    res.once('finish', () => req.destroy());
+  } else {
+    req.resume();
+    const timer = setTimeout(() => req.destroy(), DRAIN_MS);
+    timer.unref();
+    res.once('close', () => clearTimeout(timer));
+  }
+  send(res, 413, rpcError(-32600, 'Request body too large'), 'application/json');
+}
+
 async function serveMcp(
   make: () => McpServer | Promise<McpServer>,
   req: IncomingMessage,
@@ -151,7 +177,7 @@ async function serveMcp(
       body = await readBody(req);
     } catch (error) {
       if (error instanceof BodyTooLargeError) {
-        send(res, 413, rpcError(-32600, 'Request body too large'), 'application/json');
+        refuseLargeBody(req, res, error.streamed);
         return;
       }
       send(res, 400, rpcError(-32700, 'Parse error'), 'application/json');
@@ -164,6 +190,7 @@ async function serveMcp(
     const server = await make();
     const transport = new NodeStreamableHTTPServerTransport({
       sessionIdGenerator: undefined,
+      enableJsonResponse: true,
     });
     res.on('close', () => {
       transport.close().catch(() => {});
