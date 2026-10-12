@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import coreEnglish from '../locales/en.json';
 import coreGerman from '../locales/de.json';
 import coreUkrainian from '../locales/uk.json';
-import { resolveLanguage, useEnglishOnly, useLanguage } from './embedded';
+import { resolveLanguage, useLanguage } from './embedded';
 import { currentLanguage, t } from './index';
 import type { LocaleLoaders } from './resources';
 
@@ -80,9 +80,9 @@ describe('useLanguage', () => {
     expect(t('controls.play')).toBe(coreGerman.controls.play);
   });
 
-  it('returns to English for useEnglishOnly', async () => {
+  it('returns to English when asked for English', async () => {
     await useLanguage(loaders(), 'uk');
-    useEnglishOnly(english);
+    await useLanguage({ en: () => Promise.resolve(english) }, 'en');
     expect(currentLanguage()).toBe('en');
     expect(t('demo.hello')).toBe('Hello');
     expect(t('controls.play')).toBe(coreEnglish.controls.play);

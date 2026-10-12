@@ -782,7 +782,7 @@ lack it, so a widget checks for it.
 
 `mountEmbed` in `src/core/embed/mount.ts` does what `mountExplainer` does for a page, minus the
 page: `useLanguage` from `src/core/i18n/embedded.ts` sets the core and explainer strings in the
-asked language without detection (`useEnglishOnly` is its English shortcut for tests), the
+asked language without detection, the
 container and the control slots get a matching `lang` attribute, the store applies the requested chapter before the scene exists, so
 the camera starts there, and the scene host mounts into the given container. A host may pass
 `ui: { dock, gauge }`, two empty elements inside its `[data-stage]`: the embed fills them with the

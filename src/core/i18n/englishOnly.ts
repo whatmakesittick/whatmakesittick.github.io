@@ -1,1 +1,0 @@
-export { useEnglishOnly } from './embedded';

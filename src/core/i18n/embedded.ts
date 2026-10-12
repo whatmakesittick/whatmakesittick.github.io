@@ -1,5 +1,4 @@
 import i18next from 'i18next';
-import en from '../locales/en.json';
 import { NAMESPACE, TRANSLATION_OPTIONS } from './config';
 import { CORE_LOCALES } from './coreLocales';
 import { DEFAULT_LANGUAGE, LANGUAGE_CODES } from './languages';
@@ -7,8 +6,7 @@ export { resolveLanguage } from './languages';
 import type { LanguageCode } from './languages';
 import { createDictionaryLoader } from './loader';
 import type { DictionaryLoader } from './loader';
-import { mergeDictionaries } from './resources';
-import type { Dictionary, LocaleLoaders } from './resources';
+import type { LocaleLoaders } from './resources';
 
 let owner: LocaleLoaders | undefined;
 let load: DictionaryLoader = createDictionaryLoader([CORE_LOCALES]);
@@ -46,11 +44,4 @@ export async function useLanguage(
   });
   if (requested === code && i18next.language !== code) await i18next.changeLanguage(code);
   return code;
-}
-
-export function useEnglishOnly(dictionary: Dictionary): void {
-  adopt({ [DEFAULT_LANGUAGE]: () => Promise.resolve(dictionary) });
-  requested = DEFAULT_LANGUAGE;
-  i18next.addResourceBundle(DEFAULT_LANGUAGE, NAMESPACE, mergeDictionaries(en, dictionary));
-  if (i18next.language !== DEFAULT_LANGUAGE) void i18next.changeLanguage(DEFAULT_LANGUAGE);
 }

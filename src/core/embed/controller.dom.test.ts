@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import type { Choice, Explainer, Playback, Timeline } from '../explainer';
-import { resolveLanguage, useEnglishOnly, useLanguage } from '../i18n/embedded';
+import { resolveLanguage, useLanguage } from '../i18n/embedded';
 import { currentLanguage } from '../i18n';
 import { createExplainerStore } from '../store';
 import { createController, describeExplainer } from './controller';
@@ -69,10 +69,14 @@ const german = {
   test: { in: 'Rein' },
 };
 
+const englishOnly = { en: () => Promise.resolve(dictionary) };
+
 const outline = [{ id: 'intro', paragraphs: ['sections.intro.p1'] }];
 
 describe('embed controller', () => {
-  useEnglishOnly(dictionary);
+  beforeAll(async () => {
+    await useLanguage(englishOnly, 'en');
+  });
 
   it('describes the explainer in English', () => {
     const info = describeExplainer('demo', explainer, [
@@ -139,6 +143,6 @@ describe('embed controller', () => {
     controller.dispose();
     await expect(controller.setLanguage?.('de')).resolves.toBe('en');
     expect(apply).toHaveBeenCalledTimes(2);
-    useEnglishOnly(dictionary);
+    await useLanguage(englishOnly, 'en');
   });
 });
