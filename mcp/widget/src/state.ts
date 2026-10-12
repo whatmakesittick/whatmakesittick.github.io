@@ -68,9 +68,8 @@ export function targetFromResult(
 }
 
 export function mergeTarget(prev: Target | undefined, next: Target): Target {
-  return prev && prev.slug === next.slug && prev.chapter === next.chapter
-    ? prev
-    : { ...prev, ...next };
+  if (!prev || prev.slug !== next.slug) return next;
+  return prev.chapter === next.chapter ? prev : { ...prev, ...next };
 }
 
 export function wantedChapter(entry: WidgetCatalogueEntry, chapter: string | undefined): string {

@@ -100,8 +100,17 @@ describe('target', () => {
       slug: 'engine',
       chapter: 'strokes',
     });
+  });
+
+  it('drops the previous chapter when the result names another explainer', () => {
     expect(mergeTarget({ slug: 'engine', chapter: 'strokes' }, { slug: 'mri-scanner' })).toEqual({
       slug: 'mri-scanner',
+    });
+  });
+
+  it('keeps the previous chapter when the result names the same explainer without one', () => {
+    expect(mergeTarget({ slug: 'engine', chapter: 'strokes' }, { slug: 'engine' })).toEqual({
+      slug: 'engine',
       chapter: 'strokes',
     });
   });
