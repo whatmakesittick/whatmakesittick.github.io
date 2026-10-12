@@ -198,20 +198,18 @@ test('a failed switch shows the error state', async ({ page }) => {
 const box = async (page: Page, selector: string) =>
   (await page.locator(selector).first().boundingBox())!;
 
-test('fallback dock (module without ui slots): below the scene inline, phase labels seek', async ({
-  page,
-}) => {
+test('inline: the dock fills its slot below the scene, phase buttons seek', async ({ page }) => {
   const { errors } = await open(page, 'slug=mri-scanner&chapter=magnet');
   await expect(page.locator('.wmit.st-ready')).toBeVisible();
-  await expect(page.locator('[data-stage] .dock-slot')).toBeAttached();
   await expect(page.locator('[data-stage] .gauge-slot')).toBeAttached();
-  const dock = page.locator('.dock-fallback');
+  const dock = page.locator('[data-stage] .dock-slot[data-embed-ui] [data-dock]');
   await expect(dock).toBeVisible();
-  expect((await box(page, '.dock-fallback')).y).toBeGreaterThanOrEqual(
+  expect((await box(page, '.dock-slot')).y).toBeGreaterThanOrEqual(
     (await box(page, '.stage')).y + (await box(page, '.stage')).height - 1,
   );
-  await dock.locator('.phases button', { hasText: 'Recover' }).click();
-  await expect(dock.locator('.phases button.on')).toHaveText('Recover');
+  const recover = dock.locator('[data-phase-buttons] button', { hasText: 'Recover' });
+  await recover.click();
+  await expect(recover).toHaveAttribute('aria-pressed', 'true');
   expect(errors).toEqual([]);
 });
 
@@ -293,7 +291,6 @@ test.describe('real embed (dist): the site dock and gauge in the slots', () => {
     await expect(page.locator('.wmit.st-ready')).toBeVisible({ timeout: 30_000 });
     const dock = page.locator('.dock-slot[data-embed-ui] [data-dock]');
     await expect(dock).toBeVisible();
-    await expect(page.locator('.dock-fallback')).toBeHidden();
     const phases = dock.locator('[data-phase-buttons] button');
     await expect(phases).toHaveText([
       'Letting go',

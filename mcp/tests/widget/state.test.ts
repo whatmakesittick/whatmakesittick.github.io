@@ -16,7 +16,6 @@ import {
   neighbour,
   resolveChapter,
   sameDiscrete,
-  shortLabel,
   snapshotOf,
   stripOrder,
   targetFromInput,
@@ -165,9 +164,6 @@ describe('helpers', () => {
     expect(neighbour(ids, 'zz', 1)).toBe('a');
   });
   it('labels', () => {
-    expect(shortLabel('T1-weighted')).toBe('T1');
-    expect(shortLabel('1.5 T')).toBe('1.5 T');
-    expect(shortLabel('One cylinder')).toBe('One cylinder');
     expect(chapterShort('magnet')).toBe('Magnet');
     expect(chapterShort('four-stroke')).toBe('Four stroke');
   });

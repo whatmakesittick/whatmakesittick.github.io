@@ -10,6 +10,9 @@ import type {
   LanguageCode,
   MountOptions,
 } from '../../../../src/core/embed/contract.ts';
+import { EMBED_DOM } from '../../../../src/core/embed/contract.ts';
+import { scopedControlsCss } from '../../../../src/core/embed/styles.ts';
+import dockMarkup from '../../../../src/core/partials/dock.html?raw';
 import type { Packs } from '../i18n/packs.ts';
 import type { ModuleLoader } from '../scene.ts';
 
@@ -142,6 +145,66 @@ const css = `
 .mock-lbl.left b{transform:rotate(-148deg)}.mock-lbl.left span{left:auto;right:24px}
 .mock-scene.nolabels .mock-lbl{display:none}`;
 
+interface MockDockActions {
+  togglePlaying(): void;
+  seek(progress: number): void;
+}
+
+function mockDock(
+  slot: HTMLElement,
+  info: EmbedInfo,
+  actions: MockDockActions,
+): (state: EmbedState) => void {
+  slot.innerHTML = dockMarkup;
+  slot.setAttribute(EMBED_DOM.uiAttr, '');
+  slot.querySelector('[data-language-select]')?.remove();
+  const dock = slot.querySelector<HTMLElement>('[data-dock]');
+  const play = slot.querySelector<HTMLButtonElement>('[data-control="play"]');
+  const scrubber = slot.querySelector<HTMLInputElement>('[data-control="scrubber"]');
+  const group = slot.querySelector<HTMLElement>('[data-phase-buttons]');
+  const more = slot.querySelector<HTMLButtonElement>('[data-control="more"]');
+  const name = slot.querySelector<HTMLElement>('[data-status="name"]');
+  if (!dock || !play || !scrubber || !group || !more) return () => {};
+  dock.style.removeProperty('visibility');
+  const { cycle, phases } = info;
+  const buttons = phases.map((phase) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = phase.label;
+    button.style.setProperty('--tone', phase.tone);
+    button.addEventListener('click', () => actions.seek(phase.start / cycle + 1e-4));
+    return button;
+  });
+  group.replaceChildren(...buttons);
+  group.style.setProperty(
+    '--phase-columns',
+    phases.map((p) => `minmax(0, ${(p.end - p.start) / cycle}fr)`).join(' '),
+  );
+  const stops = phases.map((p, i) =>
+    i === phases.length - 1
+      ? `${p.tone} 0`
+      : `${p.tone} 0 calc(${(p.end / cycle) * 100}% - var(--track-gap)), transparent 0 calc(${(p.end / cycle) * 100}% + var(--track-gap))`,
+  );
+  scrubber.style.setProperty('--phase-bands', `linear-gradient(90deg, ${stops.join(', ')})`);
+  scrubber.min = '0';
+  scrubber.max = String(cycle);
+  scrubber.addEventListener('input', () => actions.seek(Number(scrubber.value) / cycle));
+  play.addEventListener('click', () => actions.togglePlaying());
+  more.addEventListener('click', () => {
+    const expanded = more.getAttribute('aria-expanded') !== 'true';
+    more.setAttribute('aria-expanded', String(expanded));
+    dock.dataset.expanded = String(expanded);
+  });
+  return (state) => {
+    play.dataset.playing = String(state.playing);
+    scrubber.value = String(state.phase);
+    if (name) name.textContent = state.phaseLabel;
+    phases.forEach((phase, i) =>
+      buttons[i]?.setAttribute('aria-pressed', String(phase.id === state.phaseId)),
+    );
+  };
+}
+
 export interface MockOptions {
   catalogue: WidgetCatalogueEntry[];
   taglines: Record<string, string>;
@@ -169,7 +232,7 @@ export function mockModule(slug: string, opts: MockOptions): EmbedModule {
       let info = await describe(options.language);
       const style = document.createElement('style');
       style.setAttribute('data-embed-styles', slug);
-      style.textContent = css;
+      style.textContent = `${css}\n${scopedControlsCss()}`;
       document.head.append(style);
       const root = document.createElement('div');
       root.className = 'mock-scene';
@@ -196,6 +259,8 @@ export function mockModule(slug: string, opts: MockOptions): EmbedModule {
       container.append(root);
 
       const listeners = new Set<(s: EmbedState) => void>();
+      const dockSlot = options.ui?.dock;
+      let renderDock: (s: EmbedState) => void = () => {};
       const first = info.chapters[0]?.id ?? '';
       let state: EmbedState = {
         chapter:
@@ -223,8 +288,14 @@ export function mockModule(slug: string, opts: MockOptions): EmbedModule {
           phaseLabel: p?.label ?? '',
         };
         root.classList.toggle('nolabels', !state.view.labels);
+        renderDock(state);
         listeners.forEach((l) => l(state));
       };
+      if (dockSlot)
+        renderDock = mockDock(dockSlot, info, {
+          togglePlaying: () => set({ playing: !state.playing }),
+          seek: (p) => set({ phase: Math.min(0.9999, Math.max(0, p)) * info.cycle }),
+        });
       set({});
       let last = performance.now();
       let raf = 0;
@@ -246,6 +317,7 @@ export function mockModule(slug: string, opts: MockOptions): EmbedModule {
         get info() {
           return info;
         },
+        ui: { dock: dockSlot !== undefined, gauge: false },
         ...(opts.inPlace === false ? {} : { setLanguage: switchLanguage }),
         getState: () => state,
         subscribe(l) {
@@ -266,6 +338,8 @@ export function mockModule(slug: string, opts: MockOptions): EmbedModule {
           listeners.clear();
           root.remove();
           style.remove();
+          dockSlot?.replaceChildren();
+          dockSlot?.removeAttribute(EMBED_DOM.uiAttr);
         },
       };
     },

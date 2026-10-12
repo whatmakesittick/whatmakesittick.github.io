@@ -1,6 +1,5 @@
 import type { WidgetCatalogueEntry } from '../../../shared/catalogue.ts';
 import type { EmbedInfo } from '../../../../src/core/embed/contract.ts';
-import type { Live } from '../live.ts';
 import type { SceneStatus } from '../scene.ts';
 
 export interface ChapterView {
@@ -43,11 +42,9 @@ export interface ViewModel {
   chapter: string;
   chapters: ChapterView[];
   disc: Discrete;
-  live: Live;
   fullscreen: boolean;
   canFullscreen: boolean;
   drawerOpen: boolean;
-  siteDock: boolean;
   assetBase: string;
   catalogue: WidgetCatalogueEntry[];
   strip: WidgetCatalogueEntry[];

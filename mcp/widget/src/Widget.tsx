@@ -50,7 +50,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const entry = slug ? find(slug) : undefined;
   const hold = !painted.current && waiting;
 
-  const { chapter, chapterRef, setChapter, disc, live, stripFirst } = useSceneSync(
+  const { chapter, chapterRef, setChapter, disc, stripFirst } = useSceneSync(
     sceneSession,
     target,
     entry,
@@ -158,11 +158,9 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     chapter,
     chapters,
     disc,
-    live,
     fullscreen,
     canFullscreen,
     drawerOpen,
-    siteDock: controller?.info.slug === slug && controller.ui?.dock === true,
     assetBase,
     catalogue: entries,
     strip: stripOrder(entries, stripFirst ?? slug),

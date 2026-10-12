@@ -25,7 +25,6 @@
     radial-gradient(ellipse at 50% 42%, rgb(40 48 60 / 0.55), transparent 62%),
     linear-gradient(180deg, #0e1116, var(--background));
   --scrim: rgb(13 16 21 / 0.55);
-  --thumb: linear-gradient(180deg, #f6f8fb, #b4bcc8);
 
   --f-sans:
     'Inter Variable', var(--font-sans, system-ui), system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -35,7 +34,6 @@
   --radius-card: var(--border-radius-xl, 14px);
   --radius: 14px;
   --radius-small: 9px;
-  --radius-play: 12px;
   --radius-pill: 999px;
   --control-height: 30px;
 
@@ -74,8 +72,7 @@ button {
 button:disabled {
   cursor: default;
 }
-button:focus-visible,
-[role='slider']:focus-visible {
+button:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -91,10 +88,6 @@ button:focus-visible,
   stroke-linecap: round;
   stroke-linejoin: round;
   flex: none;
-}
-.icon.fill {
-  fill: currentColor;
-  stroke: none;
 }
 .mono {
   font-family: var(--f-mono);
@@ -188,25 +181,6 @@ button:focus-visible,
   width: 18px;
   height: 18px;
 }
-.play {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-play);
-  background: var(--accent);
-  color: var(--on-accent);
-  flex: none;
-}
-.play .icon {
-  width: 18px;
-  height: 18px;
-}
-.play:disabled {
-  opacity: 0.5;
-}
 .ghost {
   display: inline-flex;
   align-items: center;
@@ -259,113 +233,6 @@ button:focus-visible,
   padding: 0;
   color: var(--accent);
   font: 500 0.875rem/1 var(--f-sans);
-}
-
-/* Dock pieces */
-.scrub {
-  position: relative;
-  height: 22px;
-  flex: 1;
-  min-width: 0;
-  touch-action: none;
-  cursor: pointer;
-}
-.scrub .track {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 8px;
-  height: 6px;
-  border-radius: 3px;
-  display: flex;
-  gap: 1px;
-  overflow: hidden;
-  background: var(--wash-strong);
-}
-.scrub .track i {
-  height: 100%;
-  min-width: 0;
-}
-.scrub .knob {
-  position: absolute;
-  top: 3px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--thumb);
-  box-shadow: 0 1px 4px rgb(0 0 0 / 0.5);
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-.phases {
-  display: flex;
-  gap: 2px;
-}
-.phases button {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  font: var(--t-small);
-  color: var(--muted);
-  height: 24px;
-  line-height: 24px;
-  padding: 0 2px;
-  border: 0;
-  border-radius: 7px;
-  background: transparent;
-  white-space: nowrap;
-}
-.seg {
-  display: inline-flex;
-  gap: 2px;
-  padding: 2px;
-  border-radius: 11px;
-  background: var(--wash);
-  flex: none;
-}
-.seg button {
-  height: var(--control-height);
-  padding: 0 10px;
-  border: 0;
-  border-radius: var(--radius-small);
-  background: transparent;
-  color: var(--prose);
-  font: var(--t-control);
-  white-space: nowrap;
-}
-.seg button.on {
-  background: var(--text);
-  color: var(--background);
-}
-.seg button:disabled:not(.on) {
-  opacity: 0.5;
-}
-.tgl {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  height: var(--control-height);
-  min-width: var(--control-height);
-  padding: 0 9px;
-  border: 0;
-  border-radius: var(--radius-small);
-  background: var(--wash);
-  color: var(--prose);
-  font: var(--t-control);
-  flex: none;
-  white-space: nowrap;
-}
-.tgl.on {
-  background: var(--accent-tint);
-  color: var(--accent);
-}
-.tgl.icon-only {
-  padding: 0;
-}
-.tgl:disabled {
-  opacity: 0.5;
 }
 
 /* Chapter pills */
@@ -533,50 +400,6 @@ button:focus-visible,
 
 .wmit .dock-slot[data-embed-ui] .speed-field {
   flex: 1 0 260px;
-}
-.dock-fallback {
-  position: relative;
-  z-index: 4;
-  display: grid;
-  gap: 10px;
-  padding: 10px 12px;
-}
-.dock-fallback .r1 {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 12px;
-  align-items: start;
-}
-.dock-fallback .tl {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
-}
-.dock-fallback .r2 {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-}
-.dock-fallback .r2 .sp {
-  flex: 1;
-}
-@container wmit-scene (max-width: 520px) {
-  .dock-fallback .phases {
-    display: none;
-  }
-  .dock-fallback .r2 .tgl .txt {
-    display: none;
-  }
-  .dock-fallback .r2 .tgl {
-    width: var(--control-height);
-    padding: 0;
-  }
-  .dock-fallback .r2 .sp {
-    display: none;
-  }
 }
 .viewport,
 .scene-mount {
@@ -754,12 +577,10 @@ button:focus-visible,
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
-.is-inline .dock-slot[data-embed-ui],
-.is-inline .dock-fallback:not([hidden]) {
+.is-inline .dock-slot[data-embed-ui] {
   border-bottom: 1px solid var(--line);
 }
-.wmit.is-inline .dock-slot[data-embed-ui] .dock,
-.wmit.is-inline .dock-fallback {
+.wmit.is-inline .dock-slot[data-embed-ui] .dock {
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -917,15 +738,10 @@ button:focus-visible,
   .stage > .chip {
     display: none;
   }
-  .seg button {
-    padding: 0 8px;
-  }
-  .dock-fallback .seg .lg,
   .a-head .ghost .lg,
   .a-explore h4 .lg {
     display: none;
   }
-  .dock-fallback .seg .sh,
   .a-head .ghost .sh,
   .a-explore h4 .sh {
     display: inline;
@@ -956,8 +772,7 @@ button:focus-visible,
   position: absolute;
   inset: 0;
 }
-.is-fs .dock-slot,
-.is-fs .dock-fallback {
+.is-fs .dock-slot {
   position: absolute;
   left: calc(16px + var(--safe-left));
   right: 16px;
@@ -1154,8 +969,7 @@ button:focus-visible,
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
-  .is-fs .dock-slot,
-  .is-fs .dock-fallback {
+  .is-fs .dock-slot {
     left: 10px;
     right: 10px;
     bottom: 10px;

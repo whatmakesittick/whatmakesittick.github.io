@@ -1,7 +1,6 @@
 import { Component, type RefObject } from 'preact';
 import { pad2 } from '../state.ts';
 import { useStrings } from '../i18n/context.ts';
-import { FallbackDock } from './Dock.tsx';
 import { Brand } from './Brand.tsx';
 import { Icon } from './icons.tsx';
 import { coverUrl, type ViewModel } from './types.ts';
@@ -179,7 +178,6 @@ export function Stage({
         <Slot key="gauge" class="gauge-slot" slotRef={refs.gauge} />
       </div>
       <Slot key="dock" class="dock-slot" slotRef={refs.dock} />
-      <FallbackDock key="fallback" vm={vm} />
     </div>
   );
 }

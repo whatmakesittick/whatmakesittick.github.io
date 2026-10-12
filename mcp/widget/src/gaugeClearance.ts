@@ -2,8 +2,8 @@ export const GAUGE_DOCK_GAP = 8;
 export const GAUGE_CLASH_ATTR = 'data-gauge-clash';
 
 const GAUGE = '.gauge-slot .gauge';
-const DOCK = '.dock-slot .dock, .dock-fallback:not([hidden])';
-const SLOTS = '.gauge-slot, .dock-slot, .dock-fallback';
+const DOCK = '.dock-slot .dock';
+const SLOTS = '.gauge-slot, .dock-slot';
 
 interface Box {
   top: number;

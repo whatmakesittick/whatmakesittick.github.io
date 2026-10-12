@@ -101,12 +101,6 @@ export function neighbour(
 
 export const pad2 = (n: number): string => String(n).padStart(2, '0');
 
-export function shortLabel(label: string): string {
-  if (label.length <= 6) return label;
-  const head = label.split(/[-–]/)[0]?.trim();
-  return head && head.length >= 1 && head.length < label.length ? head : label;
-}
-
 export function chapterShort(id: string): string {
   const words = id.replace(/[-_]+/g, ' ').trim();
   return words.charAt(0).toUpperCase() + words.slice(1);

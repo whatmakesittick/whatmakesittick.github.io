@@ -11,19 +11,12 @@ export interface DockReserve {
 export function reserveDock(slot: HTMLElement): DockReserve {
   let last = 0;
   let mode: DockMode = { inline: false, ready: false };
-  const fallback = () =>
-    slot.parentElement?.querySelector<HTMLElement>('.dock-fallback') ?? undefined;
   const measure = () => {
     if (!mode.inline || !mode.ready) return;
-    const fb = fallback();
-    last =
-      slot.getBoundingClientRect().height +
-      (fb && !fb.hidden ? fb.getBoundingClientRect().height : 0);
+    last = slot.getBoundingClientRect().height;
   };
   const sizes = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
   sizes?.observe(slot);
-  const fb = fallback();
-  if (fb) sizes?.observe(fb);
   return {
     sync(next) {
       mode = next;
