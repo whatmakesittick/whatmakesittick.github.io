@@ -1,0 +1,69 @@
+:root {
+  --chainsaw-throttle: #e5534b;
+  --chainsaw-brake: #ff6a3d;
+  --chainsaw-zone: #e5534b;
+}
+
+.chapter .readouts {
+  --readout-min-width: 8rem;
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.chapter .readouts > div,
+.chapter .readouts :is(dt, dd) {
+  min-width: 0;
+}
+
+.chapter .readouts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.chapter .readouts dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chapter .readouts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.range-widget__header {
+  flex-wrap: wrap;
+}
+
+.range-widget__header label {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.chip[data-action='throttle'] {
+  --tone: var(--chainsaw-throttle);
+}
+
+.chip[data-action='brake'] {
+  --tone: var(--chainsaw-brake);
+}
+
+.chip[data-action='kickback'] {
+  --tone: var(--chainsaw-zone);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapter .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chapter .readouts > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}
