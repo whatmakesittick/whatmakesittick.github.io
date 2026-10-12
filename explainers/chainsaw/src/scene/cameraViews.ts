@@ -53,7 +53,7 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   kickbackWide: {
     region: 'kickback',
     direction: { phone: [0, 0.15, 1], desktop: [0.05, 0.2, 1] },
-    margin: both(1.1),
+    margin: { phone: 1, desktop: 1.1 },
   },
 };
 

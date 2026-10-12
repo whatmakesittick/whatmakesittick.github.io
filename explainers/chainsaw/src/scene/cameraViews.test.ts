@@ -36,6 +36,12 @@ describe('camera views', () => {
     expect(framedViews('phone').sawSide.margin).toBeLessThan(framedViews('desktop').sawSide.margin);
   });
 
+  it('frames the kickback closer on a phone so the saw spans the stage', () => {
+    expect(framedViews('phone').kickbackWide.margin).toBeLessThan(
+      framedViews('desktop').kickbackWide.margin,
+    );
+  });
+
   it('picks the phone framing below 600 pixels of stage width', () => {
     expect(stageVariant(599)).toBe('phone');
     expect(stageVariant(600)).toBe('desktop');
