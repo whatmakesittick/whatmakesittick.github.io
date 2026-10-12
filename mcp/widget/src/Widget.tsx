@@ -1,6 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { explainerUrl, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
-import type { EmbedController, EmbedInfo, EmbedState } from '../../../src/core/embed/contract.ts';
 import { EMBED_DOM } from '../../../src/core/embed/contract.ts';
 import { MODEL_CONTEXT_DEBOUNCE_MS, type ModelContextSnapshot } from '../../shared/tools.ts';
 import { toDisplayMode, type DisplayMode, type WidgetHost } from './bridge.ts';
@@ -9,35 +8,32 @@ import { watchGaugeClearance } from './gaugeClearance.ts';
 import { StringsContext } from './i18n/context.ts';
 import { NO_SIGNALS, languageOf, withContext, withInput, withResult } from './i18n/language.ts';
 import type { LanguagePack, Packs } from './i18n/packs.ts';
-import { createLive } from './live.ts';
-import { SceneSession, type ModuleLoader, type SceneStatus } from './scene.ts';
+import type { ModuleLoader, SceneStatus } from './scene.ts';
 import {
   allowsFullscreen,
   chapterViews,
   debounce,
-  discreteOf,
-  EMPTY_DISCRETE,
   frameOf,
   mergeTarget,
   modelContextText,
   neighbour,
-  sameDiscrete,
   sameSnapshot,
   snapshotOf,
   stripOrder,
   targetFromInput,
   targetFromResult,
-  wantedChapter,
   type Target,
 } from './state.ts';
 import { ChapterSection } from './views/Chapter.tsx';
 import { Drawer, ExploreStrip } from './views/Explore.tsx';
 import { ProseColumn } from './views/Prose.tsx';
 import { Header, Stage } from './views/Stage.tsx';
-import type { Actions, Discrete, ViewModel } from './views/types.ts';
+import type { Actions, ViewModel } from './views/types.ts';
 import { SITE_HOME } from './views/Brand.tsx';
 import { Unknown, Waiting } from './views/Empty.tsx';
 import { useKeyboard } from './keyboard.ts';
+import { useSceneSession } from './useSceneSession.ts';
+import { useSceneSync } from './useSceneSync.ts';
 
 export interface WidgetProps {
   host: WidgetHost;
@@ -65,25 +61,12 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
 
   const [target, setTarget] = useState<Target | undefined>();
   const [resultSeen, setResultSeen] = useState(false);
-  const [chapter, setChapterState] = useState<string>('');
-  const [status, setStatus] = useState<SceneStatus>('idle');
-  const [progress, setProgress] = useState(0);
-  const [controller, setController] = useState<EmbedController | undefined>();
-  const [info, setInfo] = useState<EmbedInfo | undefined>();
-  const [disc, setDisc] = useState<Discrete>(EMPTY_DISCRETE);
   const [ctx, setCtx] = useState(host.context() ?? {});
   const [mode, setMode] = useState<DisplayMode>(
     toDisplayMode(host.context()?.displayMode) ?? 'inline',
   );
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [stripFirst, setStripFirst] = useState<string | undefined>();
 
-  const live = useMemo(createLive, []);
-  const hostRef = useRef<HTMLDivElement>(null);
-  const dockRef = useRef<HTMLDivElement>(null);
-  const gaugeRef = useRef<HTMLDivElement>(null);
-  const ctrlRef = useRef<EmbedController | undefined>(undefined);
-  const chapterRef = useRef('');
   const wheelArmed = useRef(false);
   const resumeOnVisible = useRef(false);
   const userChanged = useRef(false);
@@ -93,32 +76,8 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const painted = useRef(false);
   const dockReserve = useRef<DockReserve | undefined>(undefined);
 
-  const session = useMemo(
-    () =>
-      new SceneSession({
-        loader,
-        webgl,
-        host: () => hostRef.current,
-        ui: () => ({
-          ...(dockRef.current ? { dock: dockRef.current } : {}),
-          ...(gaugeRef.current ? { gauge: gaugeRef.current } : {}),
-        }),
-        callbacks: {
-          status: (s, p) => {
-            setStatus(s);
-            setProgress(p);
-          },
-          controller: (c) => {
-            ctrlRef.current = c;
-            setController(c);
-          },
-          language: (c) => {
-            if (ctrlRef.current === c) setInfo({ ...c.info });
-          },
-        },
-      }),
-    [loader, webgl],
-  );
+  const sceneSession = useSceneSession(host, loader, webgl);
+  const { session, refs, ctrlRef, controller, status, progress, info, setInfo } = sceneSession;
 
   useEffect(() => {
     const offs = [
@@ -141,12 +100,9 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
         setSignals((s) => withContext(s, c));
         setMode((current) => toDisplayMode(c.displayMode) ?? current);
       }),
-      host.on('teardown', () => session.dispose()),
     ];
     return () => offs.forEach((off) => off());
   }, [host, session]);
-
-  useEffect(() => () => session.dispose(), [session]);
 
   useEffect(() => {
     void session.setLanguage(lang);
@@ -172,48 +128,13 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const entry = slug ? find(slug) : undefined;
   const hold = !painted.current && patient && settled !== lang;
 
-  useEffect(() => {
-    if (!target || !entry || hold) return;
-    setStripFirst((f) => f ?? target.slug);
-    const wanted = wantedChapter(entry, target.chapter);
-    const ctrl = ctrlRef.current;
-    if (ctrl && ctrl.info.slug === target.slug) {
-      if (ctrl.getState().chapter !== wanted) ctrl.setChapter(wanted);
-      chapterRef.current = wanted;
-      setChapterState(wanted);
-      return;
-    }
-    chapterRef.current = wanted;
-    setChapterState(wanted);
-    setInfo(undefined);
-    setDisc(EMPTY_DISCRETE);
-    live.reset(undefined);
-    setStatus(webgl() ? 'loading' : 'nowebgl');
-    setProgress(0.04);
-    void session.show(target.slug, wanted);
-  }, [target?.slug, target?.chapter, hold]);
-
-  useEffect(() => {
-    if (!controller) return;
-    setInfo(controller.info);
-    const apply = (s: EmbedState) => {
-      live.push(s);
-      setDisc((prev) => {
-        const next = discreteOf(s);
-        return sameDiscrete(prev, next) ? prev : next;
-      });
-      if (s.chapter && s.chapter !== chapterRef.current) {
-        chapterRef.current = s.chapter;
-        setChapterState(s.chapter);
-      }
-    };
-    const first = controller.getState();
-    if (chapterRef.current && first.chapter !== chapterRef.current)
-      controller.setChapter(chapterRef.current);
-    apply(controller.getState());
-    live.reset(controller.getState());
-    return controller.subscribe(apply);
-  }, [controller]);
+  const { chapter, chapterRef, setChapter, disc, live, stripFirst } = useSceneSync(
+    sceneSession,
+    target,
+    entry,
+    hold,
+    webgl,
+  );
 
   const sendContext = useMemo(
     () =>
@@ -244,13 +165,13 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   }, [fullscreen]);
 
   useEffect(() => {
-    const stage = hostRef.current?.closest<HTMLElement>('[data-stage]');
+    const stage = refs.host.current?.closest<HTMLElement>('[data-stage]');
     if (!stage || typeof ResizeObserver === 'undefined') return;
     return watchGaugeClearance(stage);
   }, [entry !== undefined]);
 
   useEffect(() => {
-    const slot = dockRef.current;
+    const slot = refs.dock.current;
     if (!slot) return;
     const reserve = reserveDock(slot);
     dockReserve.current = reserve;
@@ -266,7 +187,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   }, [sceneReady, fullscreen, entry !== undefined]);
 
   useEffect(() => {
-    const stage = hostRef.current?.closest('[data-stage]');
+    const stage = refs.host.current?.closest('[data-stage]');
     if (!stage || typeof IntersectionObserver === 'undefined') return;
     const io = new IntersectionObserver(([e]) => {
       const ctrl = ctrlRef.current;
@@ -286,7 +207,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   }, [entry !== undefined]);
 
   useEffect(() => {
-    const el = hostRef.current;
+    const el = refs.host.current;
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
       if (!fullscreen && !wheelArmed.current) e.stopPropagation();
@@ -304,8 +225,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const openCatalogue = () => void host.openLink(SITE_HOME);
   const actions: Actions = {
     setChapter: touched((id: string) => {
-      chapterRef.current = id;
-      setChapterState(id);
+      setChapter(id);
       ctrlRef.current?.setChapter(id);
     }),
     step(dir) {
@@ -402,7 +322,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
         <Stage
           key="stage"
           vm={vm}
-          refs={{ host: hostRef, dock: dockRef, gauge: gaugeRef }}
+          refs={refs}
           onPointerDown={() => (wheelArmed.current = true)}
           onPointerLeave={() => (wheelArmed.current = false)}
           onUserInput={() => (userChanged.current = true)}
