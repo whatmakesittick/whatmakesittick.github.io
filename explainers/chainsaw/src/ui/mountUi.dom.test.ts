@@ -3,6 +3,7 @@ import { mountActions } from '@core/ui/actions';
 import { createChainsawStore } from '../state';
 import type { ChainsawStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
+import { capitalise } from './format';
 import { CHAPTER_FIXTURE, TEST_LOCALE, fill, initTestLocale, isFilled } from './testing';
 import { mountChainsawUi } from '.';
 
@@ -91,7 +92,7 @@ describe('chapter widgets', () => {
   it('follows the crank in the engine and fuel readouts', () => {
     expect(readout('crankcase')).toBe(chapters.fuel.pressure.squeezing);
     store.getState().setPhase(300);
-    expect(readout('phaseNow')).toBe(timeline.detail.compression);
+    expect(readout('phaseNow')).toBe(capitalise(timeline.detail.compression, 'en'));
     expect(readout('crankcase')).toBe(chapters.fuel.pressure.drawing);
   });
 

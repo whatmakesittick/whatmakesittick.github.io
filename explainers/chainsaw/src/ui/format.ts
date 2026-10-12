@@ -1,5 +1,5 @@
 import { formatFixed, formatNumber } from '@core/format';
-import { t } from '@core/i18n';
+import { currentLanguage, t } from '@core/i18n';
 import type { ClutchStateId, PhaseId } from '../ids';
 import {
   CHAIN_MM_PER_TURN,
@@ -22,6 +22,11 @@ function unit(key: string, value: string): string {
 
 function roundTo(value: number, step: number): number {
   return Math.round(value / step) * step;
+}
+
+export function capitalise(text: string, language: string): string {
+  const [first = '', ...rest] = text;
+  return first.toLocaleUpperCase(language) + rest.join('');
 }
 
 function whole(value: number): string {
@@ -64,7 +69,7 @@ export function formatClutch(clutch: ClutchStateId): string {
 }
 
 export function formatPhaseNow(phase: PhaseId): string {
-  return t(`timeline.detail.${phase}`);
+  return capitalise(t(`timeline.detail.${phase}`), currentLanguage());
 }
 
 export function formatCrankcase(trend: CrankcaseTrend): string {
