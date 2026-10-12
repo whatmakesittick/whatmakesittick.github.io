@@ -299,6 +299,28 @@ for (const [width, height, stacked] of [
   });
 }
 
+test('fullscreen phone landscape with host insets: the dock collapses to one row between them', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 874, height: 402 });
+  const { errors } = await open(page, 'slug=engine&mode=fullscreen&insets=60,0,110,0');
+  await expect(page.locator('.wmit.is-fs.st-ready')).toBeVisible();
+  const frame = await box(page, '.wmit');
+  const more = page.locator('.dock-slot [data-control="more"]');
+  await expect(more).toBeVisible();
+  await expect(page.locator('.dock-slot .dock-extra')).toBeHidden();
+  const dock = await box(page, '.dock-slot');
+  expect(dock.width).toBeLessThanOrEqual(459);
+  expect(dock.y).toBeGreaterThanOrEqual(frame.y + 60);
+  expect(dock.y + dock.height).toBe(frame.y + frame.height - 120);
+  await more.click();
+  await expect(page.locator('.dock-slot .dock-extra')).toBeVisible();
+  const expanded = await box(page, '.dock-slot');
+  expect(expanded.y + expanded.height).toBe(dock.y + dock.height);
+  expect(expanded.y).toBeGreaterThanOrEqual(frame.y);
+  expect(errors).toEqual([]);
+});
+
 const realEmbed = existsSync(resolve(root, 'dist/embed/v1/black-hole.js'));
 test.describe('real embed (dist): the site dock and gauge in the slots', () => {
   test.skip(!realEmbed, 'npm run build first');
