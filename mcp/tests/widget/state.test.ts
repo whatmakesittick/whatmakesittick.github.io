@@ -5,9 +5,12 @@ import { buildCatalogue } from '../../../vite/catalogue.ts';
 import { toWidgetCatalogue } from '../../catalogue/build.ts';
 import type { EmbedInfo, EmbedState } from '../../../src/core/embed/contract.ts';
 import {
+  allowsFullscreen,
   chapterShort,
+  chapterViews,
   debounce,
   discreteOf,
+  frameOf,
   mergeTarget,
   modelContextText,
   neighbour,
@@ -255,6 +258,91 @@ describe('model context', () => {
     );
     expect(text).toContain('chapter 2/6');
     expect(text).not.toContain('Chapter text');
+  });
+});
+
+describe('chapter views', () => {
+  const known: EmbedInfo = {
+    slug: 'mri-scanner',
+    language: 'de',
+    title: mri.title,
+    eyebrow: mri.eyebrow,
+    tagline: '',
+    chapters: [{ id: 'magnet', index: 2, title: 'Der Magnet', paragraphsHtml: ['Text.'] }],
+    phases: [],
+    cycle: 1,
+    loop: true,
+    speed: { min: 1, max: 1, step: 1, label: 'Speed' },
+    toggles: [],
+    choices: [],
+  };
+
+  it('numbers the catalogue chapters and gives short english labels', () => {
+    const views = chapterViews(mri, undefined, undefined, 'en');
+    expect(views).toHaveLength(mri.chapters.length);
+    expect(views[1]).toEqual({
+      id: 'magnet',
+      index: 2,
+      title: mri.chapters[1]!.title,
+      short: 'Magnet',
+      paragraphsHtml: [],
+    });
+  });
+
+  it('takes the text from the scene and the titles only from a scene in the same language', () => {
+    expect(chapterViews(mri, known, known, 'de')[1]).toEqual({
+      id: 'magnet',
+      index: 2,
+      title: 'Der Magnet',
+      short: 'Der Magnet',
+      paragraphsHtml: ['Text.'],
+    });
+    expect(chapterViews(mri, known, undefined, 'fr')[1]).toEqual({
+      id: 'magnet',
+      index: 2,
+      title: mri.chapters[1]!.title,
+      short: mri.chapters[1]!.title,
+      paragraphsHtml: ['Text.'],
+    });
+  });
+});
+
+describe('frame', () => {
+  it('sets the safe area and the host radius', () => {
+    expect(
+      frameOf(
+        {
+          safeAreaInsets: { top: 1, right: 2, bottom: 3, left: 4 },
+          styles: { variables: { '--border-radius-xl': '12px' } },
+        } as Parameters<typeof frameOf>[0],
+        () => false,
+      ).style,
+    ).toEqual({
+      '--safe-top': '1px',
+      '--safe-right': '2px',
+      '--safe-bottom': '3px',
+      '--safe-left': '4px',
+      '--border-radius-xl': '12px',
+    });
+    expect(frameOf({}, () => false).style).toEqual({
+      '--safe-top': '0px',
+      '--safe-right': '0px',
+      '--safe-bottom': '0px',
+      '--safe-left': '0px',
+    });
+  });
+
+  it('asks the pointer only when the host does not say whether it is touch', () => {
+    const coarse = vi.fn(() => true);
+    expect(frameOf({ deviceCapabilities: { touch: false } }, coarse).touch).toBe(false);
+    expect(coarse).not.toHaveBeenCalled();
+    expect(frameOf({}, coarse).touch).toBe(true);
+  });
+
+  it('allows fullscreen unless the host leaves it out', () => {
+    expect(allowsFullscreen({})).toBe(true);
+    expect(allowsFullscreen({ availableDisplayModes: ['inline', 'fullscreen'] })).toBe(true);
+    expect(allowsFullscreen({ availableDisplayModes: ['inline'] })).toBe(false);
   });
 });
 

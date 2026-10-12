@@ -1,7 +1,8 @@
+import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import { isSlug, plainText, SITE_URL, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { EmbedInfo, EmbedState, LanguageCode } from '../../../src/core/embed/contract.ts';
 import type { ModelContextSnapshot } from '../../shared/tools.ts';
-import type { Discrete } from './views/types.ts';
+import type { ChapterView, Discrete } from './views/types.ts';
 
 export interface Target {
   slug: string;
@@ -111,6 +112,48 @@ export function chapterShort(id: string): string {
   const words = id.replace(/[-_]+/g, ' ').trim();
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
+
+export function chapterViews(
+  entry: WidgetCatalogueEntry,
+  known: EmbedInfo | undefined,
+  scene: EmbedInfo | undefined,
+  lang: LanguageCode,
+): ChapterView[] {
+  return entry.chapters.map((c, i) => {
+    const fromInfo = known?.chapters.find((x) => x.id === c.id);
+    const title = scene?.chapters.find((x) => x.id === c.id)?.title ?? c.title;
+    return {
+      id: c.id,
+      index: i + 1,
+      title,
+      short: lang === 'en' ? chapterShort(c.id) : title,
+      paragraphsHtml: fromInfo?.paragraphsHtml ?? [],
+    };
+  });
+}
+
+type HostContext = Partial<McpUiHostContext>;
+
+export function frameOf(
+  ctx: HostContext,
+  coarse: () => boolean,
+): { style: Record<string, string>; touch: boolean } {
+  const insets = ctx.safeAreaInsets;
+  const radius = (ctx.styles?.variables as Record<string, string | undefined> | undefined)?.[
+    '--border-radius-xl'
+  ];
+  const style: Record<string, string> = {
+    '--safe-top': `${insets?.top ?? 0}px`,
+    '--safe-right': `${insets?.right ?? 0}px`,
+    '--safe-bottom': `${insets?.bottom ?? 0}px`,
+    '--safe-left': `${insets?.left ?? 0}px`,
+  };
+  if (radius) style['--border-radius-xl'] = radius;
+  return { style, touch: ctx.deviceCapabilities?.touch ?? coarse() };
+}
+
+export const allowsFullscreen = (ctx: HostContext): boolean =>
+  ctx.availableDisplayModes === undefined || ctx.availableDisplayModes.includes('fullscreen');
 
 export function snapshotOf(
   slug: string,

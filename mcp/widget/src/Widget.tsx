@@ -12,10 +12,12 @@ import type { LanguagePack, Packs } from './i18n/packs.ts';
 import { createLive } from './live.ts';
 import { SceneSession, type ModuleLoader, type SceneStatus } from './scene.ts';
 import {
-  chapterShort,
+  allowsFullscreen,
+  chapterViews,
   debounce,
   discreteOf,
   EMPTY_DISCRETE,
+  frameOf,
   mergeTarget,
   modelContextText,
   neighbour,
@@ -32,7 +34,7 @@ import { ChapterSection } from './views/Chapter.tsx';
 import { Drawer, ExploreStrip } from './views/Explore.tsx';
 import { ProseColumn } from './views/Prose.tsx';
 import { Header, Stage } from './views/Stage.tsx';
-import type { Actions, ChapterView, Discrete, ViewModel } from './views/types.ts';
+import type { Actions, Discrete, ViewModel } from './views/types.ts';
 import { SITE_HOME } from './views/Brand.tsx';
 import { Unknown, Waiting } from './views/Empty.tsx';
 import { useKeyboard } from './keyboard.ts';
@@ -233,8 +235,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   }, [slug, chapter, disc, info, pack.lang]);
 
   const fullscreen = mode === 'fullscreen';
-  const canFullscreen =
-    ctx.availableDisplayModes === undefined || ctx.availableDisplayModes.includes('fullscreen');
+  const canFullscreen = allowsFullscreen(ctx);
   useEffect(() => {
     const root = document.documentElement;
     if (fullscreen) root.dataset[EMBED_DOM.stageExpandedKey] = '';
@@ -342,20 +343,10 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
 
   useKeyboard(actions, info, disc, status === 'ready' && controller?.info.slug === slug);
 
-  const insets = ctx.safeAreaInsets;
-  const radius = (ctx.styles?.variables as Record<string, string | undefined> | undefined)?.[
-    '--border-radius-xl'
-  ];
-  const touch =
-    ctx.deviceCapabilities?.touch ??
-    (typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches);
-  const style: Record<string, string> = {
-    '--safe-top': `${insets?.top ?? 0}px`,
-    '--safe-right': `${insets?.right ?? 0}px`,
-    '--safe-bottom': `${insets?.bottom ?? 0}px`,
-    '--safe-left': `${insets?.left ?? 0}px`,
-  };
-  if (radius) style['--border-radius-xl'] = radius;
+  const { style, touch } = frameOf(
+    ctx,
+    () => typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches,
+  );
   const rootClass = `wmit ${fullscreen ? 'is-fs' : 'is-inline'}${touch ? ' touch' : ''}`;
 
   if (!entry || !slug || hold) {
@@ -380,17 +371,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
 
   const known = info ?? (controller?.info.slug === slug ? controller.info : undefined);
   const scene = known?.language === pack.lang ? known : undefined;
-  const chapters: ChapterView[] = entry.chapters.map((c, i) => {
-    const fromInfo = known?.chapters.find((x) => x.id === c.id);
-    const title = scene?.chapters.find((x) => x.id === c.id)?.title ?? c.title;
-    return {
-      id: c.id,
-      index: i + 1,
-      title,
-      short: pack.lang === 'en' ? chapterShort(c.id) : title,
-      paragraphsHtml: fromInfo?.paragraphsHtml ?? [],
-    };
-  });
+  const chapters = chapterViews(entry, known, scene, pack.lang);
 
   const shownStatus: SceneStatus = status === 'ready' && !sceneReady ? 'loading' : status;
   const vm: ViewModel = {
