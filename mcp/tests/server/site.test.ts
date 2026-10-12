@@ -112,6 +112,49 @@ describe('createSite entry', () => {
   });
 });
 
+function withManifest(change: (fields: Record<string, unknown>) => void): SiteReader {
+  return async (path) => {
+    const text = await reader(path);
+    if (path !== 'explainers/engine/explainer.json' || text === undefined) return text;
+    const fields = JSON.parse(text) as Record<string, unknown>;
+    change(fields);
+    return JSON.stringify(fields);
+  };
+}
+
+describe('createSite reads published data leniently', () => {
+  const engine = catalogue.explainers.find((e) => e.slug === 'engine')!;
+
+  it('drops an unknown tag and an unknown locale code', async () => {
+    const read = withManifest((fields) => {
+      fields.tags = [...(fields.tags as string[]), 'toasters'];
+      fields.locales = [...(fields.locales as string[]), 'tlh'];
+    });
+    const entry = await createSite(read).entry('engine', 'uk');
+    expect(entry?.tags).toEqual(engine.tags);
+    expect(localizeEntry(entry!, 'uk')).toEqual(localizeEntry(engine, 'uk'));
+  });
+
+  it('needs none of the fields the server does not use', async () => {
+    const read = withManifest((fields) => {
+      delete fields.social;
+      delete fields.entry;
+      delete fields.cover;
+      delete fields.chapters;
+      fields.extra = { grows: true };
+    });
+    const entry = await createSite(read).entry('engine', 'en');
+    expect(localizeEntry(entry!, 'en')).toEqual(localizeEntry(engine, 'en'));
+  });
+
+  it('still fails when a field the server needs is missing', async () => {
+    const read = withManifest((fields) => {
+      delete fields.topic;
+    });
+    await expect(createSite(read).entry('engine', 'en')).rejects.toThrow('"topic"');
+  });
+});
+
 describe('createSite summary', () => {
   it('localizes the title, summary and chapter titles without reading chapters.html', async () => {
     const spy = counting();

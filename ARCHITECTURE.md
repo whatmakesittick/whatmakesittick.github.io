@@ -827,7 +827,9 @@ latin fonts to `/embed/v1/fonts/<file>.woff2` under their fontsource names, and 
 checks that they are in `dist/`. The build also publishes each explainer's `explainer.json`,
 `chapters.html` and `locales/<code>.json` verbatim under `/embed/v1/explainers/<slug>/`
 (`embedSourceFiles` in `vite/embed.ts`), so the MCP server reads them from the site; they are part
-of `v1`.
+of `v1`. Their fields and keys follow the same rule and only grow, so the server reads them
+leniently (`parsePublishedManifest` in `vite/manifestSchema.ts` drops a tag or language code it
+does not know).
 
 The loader is such a published widget, and it is never refreshed by a deploy. Within `v1`, the entry
 name `/embed/v1/widget.js` (not hashed, so a stale copy lives at most as long as the host's HTTP

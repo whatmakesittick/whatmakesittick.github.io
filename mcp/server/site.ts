@@ -1,13 +1,13 @@
 import type { EmbedManifest, EmbedManifestEntry } from '../../src/core/embed/manifest.ts';
 import { DEFAULT_LANGUAGE, type LanguageCode } from '../../src/core/i18n/languages.ts';
 import type { Dictionary } from '../../src/core/i18n/resources.ts';
-import { catalogueEntry, lookup } from '../../vite/catalogueEntry.ts';
+import { lookup, publishedEntry } from '../../vite/catalogueEntry.ts';
 import { embedSourcePath } from '../../vite/embedPaths.ts';
 import {
   LOCALES_DIRECTORY,
   MANIFEST_FILE,
-  parseManifest,
   parseMeta,
+  parsePublishedManifest,
 } from '../../vite/manifestSchema.ts';
 import { isTag, plainText, type CatalogueEntry } from '../shared/catalogue.ts';
 import type { ListExplainersItem } from '../shared/tools.ts';
@@ -96,12 +96,9 @@ export function createSite(read: SiteReader, options: SiteOptions = {}): Site {
   }
 
   async function entry(slug: string, lang: LanguageCode): Promise<CatalogueEntry | undefined> {
-    if (!(await listed(slug))) return undefined;
-    const manifest = parseManifest(
-      await json(embedSourcePath(slug, MANIFEST_FILE)),
-      slug,
-      new Set(),
-    );
+    const indexed = await listed(slug);
+    if (!indexed) return undefined;
+    const manifest = parsePublishedManifest(await json(embedSourcePath(slug, MANIFEST_FILE)), slug);
     const codes =
       lang !== DEFAULT_LANGUAGE && manifest.locales.includes(lang)
         ? [DEFAULT_LANGUAGE, lang]
@@ -112,13 +109,16 @@ export function createSite(read: SiteReader, options: SiteOptions = {}): Site {
     ]);
     const byCode = new Map(codes.map((code, i) => [code, dictionaries[i] as Dictionary]));
     const metas = new Map(codes.map((code) => [code, parseMeta(byCode.get(code), slug, code)]));
-    return catalogueEntry({
-      manifest,
-      meta: metas.get(DEFAULT_LANGUAGE)!,
-      metas: Object.fromEntries(metas),
-      dictionaries: Object.fromEntries(byCode),
-      chapters,
-    });
+    return publishedEntry(
+      {
+        manifest,
+        meta: metas.get(DEFAULT_LANGUAGE)!,
+        metas: Object.fromEntries(metas),
+        dictionaries: Object.fromEntries(byCode),
+        chapters,
+      },
+      indexed.cover,
+    );
   }
 
   async function summary(

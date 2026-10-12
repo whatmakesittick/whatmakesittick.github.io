@@ -77,19 +77,23 @@ function partLabels(dictionary: Dictionary | undefined): string[] {
   return Object.values(parts).filter((part): part is string => typeof part === 'string');
 }
 
-export interface CatalogueSource {
-  manifest: Pick<ExplainerManifest, 'slug' | 'tags' | 'topic' | 'cover'>;
+export interface PublishedSource {
+  manifest: Pick<ExplainerManifest, 'slug' | 'tags' | 'topic'>;
   meta: ExplainerMeta;
   metas: Partial<Record<LanguageCode, ExplainerMeta>>;
   dictionaries: Partial<Record<LanguageCode, Dictionary>>;
   chapters: string;
 }
 
+export interface CatalogueSource extends PublishedSource {
+  manifest: Pick<ExplainerManifest, 'slug' | 'tags' | 'topic' | 'cover'>;
+}
+
 function translations({
   metas,
   dictionaries,
   chapters,
-}: CatalogueSource): Partial<Record<LanguageCode, CatalogueLocalized>> {
+}: PublishedSource): Partial<Record<LanguageCode, CatalogueLocalized>> {
   const out: Partial<Record<LanguageCode, CatalogueLocalized>> = {};
   for (const lang of LANGUAGE_CODES) {
     const dictionary = dictionaries[lang];
@@ -108,8 +112,8 @@ function translations({
   return out;
 }
 
-export function catalogueEntry(loaded: CatalogueSource): CatalogueEntry {
-  const { manifest, meta, dictionaries, chapters } = loaded;
+export function publishedEntry(source: PublishedSource, cover: string): CatalogueEntry {
+  const { manifest, meta, dictionaries, chapters } = source;
   const dictionary = dictionaries[DEFAULT_LANGUAGE] ?? {};
   return {
     slug: manifest.slug,
@@ -121,9 +125,14 @@ export function catalogueEntry(loaded: CatalogueSource): CatalogueEntry {
     tags: [...manifest.tags],
     topic: manifest.topic,
     url: explainerUrl(manifest.slug),
-    cover: `../../${manifest.slug}/${manifest.cover}`,
+    cover,
     parts: partLabels(dictionary),
     chapters: extractChapters(chapters, dictionary, manifest.slug),
-    locales: translations(loaded),
+    locales: translations(source),
   };
+}
+
+export function catalogueEntry(loaded: CatalogueSource): CatalogueEntry {
+  const { slug, cover } = loaded.manifest;
+  return publishedEntry(loaded, `../../${slug}/${cover}`);
 }

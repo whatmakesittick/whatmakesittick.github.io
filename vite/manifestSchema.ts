@@ -88,6 +88,33 @@ export function parseManifest(
   };
 }
 
+export type PublishedManifest = Pick<ExplainerManifest, 'slug' | 'tags' | 'topic' | 'locales'>;
+
+function known<T>(
+  fields: Fields,
+  key: string,
+  folder: string,
+  test: (value: unknown) => value is T,
+): T[] {
+  const list = fields[key];
+  if (!Array.isArray(list)) fail(folder, `"${key}" must be a list`);
+  return [...new Set(list.filter(test))];
+}
+
+function isKnownLanguage(value: unknown): value is LanguageCode {
+  return typeof value === 'string' && isLanguageCode(value);
+}
+
+export function parsePublishedManifest(value: unknown, folder: string): PublishedManifest {
+  if (!isFields(value)) fail(folder, 'must be a JSON object');
+  return {
+    slug: readSlug(value, folder, new Set()),
+    tags: known(value, 'tags', folder, isTag),
+    topic: readString(value, 'topic', folder),
+    locales: known(value, 'locales', folder, isKnownLanguage),
+  };
+}
+
 export function parseMeta(value: unknown, folder: string, code: LanguageCode): ExplainerMeta {
   const meta = isFields(value) ? value.meta : undefined;
   if (!isFields(meta)) fail(folder, `${LOCALES_DIRECTORY}/${code}.json needs a "meta" block`);
