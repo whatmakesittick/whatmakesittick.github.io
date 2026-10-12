@@ -1,23 +1,12 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import { explainerUrl, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
-import { MODEL_CONTEXT_DEBOUNCE_MS, type ModelContextSnapshot } from '../../shared/tools.ts';
 import type { WidgetHost } from './bridge.ts';
 import { reserveDock, type DockReserve } from './dockReserve.ts';
 import { watchGaugeClearance } from './gaugeClearance.ts';
 import { StringsContext } from './i18n/context.ts';
 import type { Packs } from './i18n/packs.ts';
 import type { ModuleLoader, SceneStatus } from './scene.ts';
-import {
-  allowsFullscreen,
-  chapterViews,
-  debounce,
-  frameOf,
-  modelContextText,
-  neighbour,
-  sameSnapshot,
-  snapshotOf,
-  stripOrder,
-} from './state.ts';
+import { allowsFullscreen, chapterViews, frameOf, neighbour, stripOrder } from './state.ts';
 import { ChapterSection } from './views/Chapter.tsx';
 import { Drawer, ExploreStrip } from './views/Explore.tsx';
 import { ProseColumn } from './views/Prose.tsx';
@@ -28,6 +17,7 @@ import { Unknown, Waiting } from './views/Empty.tsx';
 import { useKeyboard } from './keyboard.ts';
 import { useDisplayMode } from './useDisplayMode.ts';
 import { useHostContext } from './useHostContext.ts';
+import { useModelContextSync } from './useModelContextSync.ts';
 import { useSceneSession } from './useSceneSession.ts';
 import { useSceneSync } from './useSceneSync.ts';
 import { useTarget } from './useTarget.ts';
@@ -46,8 +36,6 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
 
   const wheelArmed = useRef(false);
   const resumeOnVisible = useRef(false);
-  const userChanged = useRef(false);
-  const lastSent = useRef<ModelContextSnapshot | undefined>(undefined);
   const painted = useRef(false);
   const dockReserve = useRef<DockReserve | undefined>(undefined);
 
@@ -76,24 +64,15 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     webgl,
   );
 
-  const sendContext = useMemo(
-    () =>
-      debounce((snap: ModelContextSnapshot, text: string) => {
-        if (sameSnapshot(lastSent.current, snap)) return;
-        lastSent.current = snap;
-        void host
-          .updateModelContext(text, snap)
-          .catch((e: unknown) => console.warn('[wmit-widget] updateModelContext', e));
-      }, MODEL_CONTEXT_DEBOUNCE_MS),
-    [host],
-  );
-  useEffect(() => {
-    if (!slug || !entry || !host.canUpdateModelContext()) return;
-    const state = ctrlRef.current?.info.slug === slug ? ctrlRef.current.getState() : undefined;
-    if (!userChanged.current) return;
-    const snap = snapshotOf(slug, state, chapter);
-    sendContext(snap, modelContextText(entry, ctrlRef.current?.info, snap, state, pack.lang));
-  }, [slug, chapter, disc, info, pack.lang]);
+  const userChanged = useModelContextSync(host, {
+    slug,
+    entry,
+    chapter,
+    disc,
+    info,
+    lang: pack.lang,
+    ctrlRef,
+  });
 
   const { fullscreen, toggleFullscreen } = useDisplayMode(host);
   const canFullscreen = allowsFullscreen(ctx);
