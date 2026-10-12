@@ -7,6 +7,8 @@ import {
   EMBED_MANIFEST_FILE,
   LEGACY_FONTS,
   embedManifest,
+  embedSourceFiles,
+  embedSourcePath,
   legacyEmbedFiles,
   renderEmbedEntry,
 } from './embed.ts';
@@ -20,7 +22,12 @@ const slugs = ['engine', 'mri-scanner'];
 
 function explainer(slug: string): LoadedExplainer {
   return {
-    manifest: { slug, cover: 'cover.webp' },
+    manifest: {
+      slug,
+      cover: 'cover.webp',
+      chapters: 'chapters.html',
+      locales: ['en', 'de'],
+    },
     directory: join(root, 'explainers', slug),
   } as LoadedExplainer;
 }
@@ -38,6 +45,27 @@ describe('legacyEmbedFiles', () => {
     expect(files.map(({ fileName }) => fileName)).toEqual(legacyPaths);
     expect(files[0]?.source).toBe(join(root, 'explainers', 'engine', 'public', 'cover.webp'));
     expect(files.at(-1)?.source).toBe(`/modules/${LEGACY_FONTS[2]}`);
+  });
+});
+
+const sourcePaths = slugs.flatMap((slug) =>
+  ['explainer.json', 'chapters.html', 'locales/en.json', 'locales/de.json'].map(
+    (file) => `${EMBED_DIRECTORY}/${embedSourcePath(slug, file)}`,
+  ),
+);
+
+describe('embedSourceFiles', () => {
+  it('publishes each explainer source file under its slug', () => {
+    expect(embedSourcePath('engine', 'explainer.json')).toBe('explainers/engine/explainer.json');
+    const files = embedSourceFiles(slugs.map(explainer));
+    expect(files.map(({ fileName }) => fileName)).toEqual(sourcePaths);
+    expect(files.map(({ source }) => source.slice(root.length + 1))).toEqual(
+      slugs.flatMap((slug) =>
+        ['explainer.json', 'chapters.html', 'locales/en.json', 'locales/de.json'].map((file) =>
+          join('explainers', slug, file),
+        ),
+      ),
+    );
   });
 });
 
@@ -89,6 +117,9 @@ describe.skipIf(!built)('dist/embed/v1 legacy paths', () => {
   const paths = [
     ...manifest.explainers.map(({ slug }) => `${EMBED_DIRECTORY}/covers/${slug}.webp`),
     ...legacyPaths.filter((path) => path.includes('/fonts/')),
+    ...embedSourceFiles(manifest.explainers.map(({ slug }) => explainer(slug))).map(
+      ({ fileName }) => fileName,
+    ),
   ];
 
   it.each(paths)('%s exists', (path) => {

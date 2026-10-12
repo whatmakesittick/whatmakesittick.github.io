@@ -5,7 +5,7 @@ import { EMBED_API_VERSION } from '../src/core/embed/manifest.ts';
 import type { EmbedManifest, EmbedManifestEntry } from '../src/core/embed/manifest.ts';
 import type { CatalogueEntry } from './catalogueModel.ts';
 import { chapterOutline } from './chapterOutline.ts';
-import { LOCALES_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
+import { LOCALES_DIRECTORY, MANIFEST_FILE, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { localeLoader } from './page.ts';
 
@@ -97,7 +97,7 @@ export function embedManifest(entries: readonly CatalogueEntry[]): EmbedManifest
   return { apiVersion: EMBED_API_VERSION, explainers: entries.map(manifestEntry) };
 }
 
-export interface LegacyEmbedFile {
+export interface EmbedFile {
   fileName: string;
   source: string;
 }
@@ -105,7 +105,7 @@ export interface LegacyEmbedFile {
 export function legacyEmbedFiles(
   explainers: readonly LoadedExplainer[],
   resolveModule: (specifier: string) => string,
-): LegacyEmbedFile[] {
+): EmbedFile[] {
   const covers = explainers.map(({ manifest, directory }) => ({
     fileName: `${EMBED_DIRECTORY}/covers/${manifest.slug}.webp`,
     source: join(directory, PUBLIC_DIRECTORY, manifest.cover),
@@ -115,4 +115,23 @@ export function legacyEmbedFiles(
     source: resolveModule(specifier),
   }));
   return [...covers, ...fonts];
+}
+
+export function embedSourcePath(slug: string, file: string): string {
+  return `explainers/${slug}/${file}`;
+}
+
+export function embedSourceFiles(explainers: readonly LoadedExplainer[]): EmbedFile[] {
+  return explainers.flatMap(({ manifest, directory }) => {
+    const locales = manifest.locales.map((code) => `${LOCALES_DIRECTORY}/${code}.json`);
+    const files = [
+      { name: MANIFEST_FILE, file: MANIFEST_FILE },
+      { name: 'chapters.html', file: manifest.chapters },
+      ...locales.map((file) => ({ name: file, file })),
+    ];
+    return files.map(({ name, file }) => ({
+      fileName: `${EMBED_DIRECTORY}/${embedSourcePath(manifest.slug, name)}`,
+      source: join(directory, file),
+    }));
+  });
 }

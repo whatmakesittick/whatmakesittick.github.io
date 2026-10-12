@@ -824,7 +824,10 @@ published widget relies on. A breaking change goes to `/embed/v2/`, next to `v1`
 earlier widgets request are still emitted as static files, so GitHub Pages serves them too:
 `legacyEmbedFiles` in `vite/embed.ts` copies each cover to `/embed/v1/covers/<slug>.webp` and the
 latin fonts to `/embed/v1/fonts/<file>.woff2` under their fontsource names, and `vite/embed.test.ts`
-checks that they are in `dist/`.
+checks that they are in `dist/`. The build also publishes each explainer's `explainer.json`,
+`chapters.html` and `locales/<code>.json` verbatim under `/embed/v1/explainers/<slug>/`
+(`embedSourceFiles` in `vite/embed.ts`), so the MCP server reads them from the site; they are part
+of `v1`.
 
 The loader is such a published widget, and it is never refreshed by a deploy. Within `v1`, the entry
 name `/embed/v1/widget.js` (not hashed, so a stale copy lives at most as long as the host's HTTP

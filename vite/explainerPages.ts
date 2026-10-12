@@ -8,6 +8,7 @@ import {
   embedEntrySlug,
   embedInputs,
   embedManifest,
+  embedSourceFiles,
   entryFileNames,
   legacyEmbedFiles,
   renderEmbedEntry,
@@ -206,6 +207,9 @@ function pagesPlugin(): Plugin {
       });
       const resolveModule = createRequire(join(root, 'package.json')).resolve;
       for (const { fileName, source } of legacyEmbedFiles(explainers, resolveModule)) {
+        this.emitFile({ type: 'asset', fileName, source: readFileSync(source) });
+      }
+      for (const { fileName, source } of embedSourceFiles(explainers)) {
         this.emitFile({ type: 'asset', fileName, source: readFileSync(source) });
       }
       for (const { manifest, directory } of explainers) {
