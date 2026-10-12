@@ -125,6 +125,33 @@ test('a new host locale switches when the model passed no lang', async ({ page }
   expect(errors).toEqual([]);
 });
 
+for (const lang of ['en', 'uk']) {
+  test(`the stage guards the wheel and holds the dock height during a switch (${lang})`, async ({
+    page,
+  }) => {
+    const { errors } = await open(page, `slug=mri-scanner&chapter=magnet&lang=${lang}&delay=800`);
+    await expect(page.locator(`.wmit.st-ready[lang="${lang}"]`)).toBeVisible();
+    const escaped = await page.evaluate(() => {
+      let count = 0;
+      window.addEventListener('wheel', () => count++);
+      document
+        .querySelector('.viewport')
+        ?.dispatchEvent(new WheelEvent('wheel', { bubbles: true, deltaY: 40 }));
+      return count;
+    });
+    expect(escaped).toBe(0);
+    await page.waitForTimeout(400);
+    await page.locator('.strip .thumb[data-slug="engine"]').click();
+    await expect(page.locator('.wmit.st-loading[data-slug="engine"]')).toBeVisible();
+    expect(
+      await page
+        .locator('[data-stage] .dock-slot')
+        .evaluate((slot: HTMLElement) => slot.style.minHeight),
+    ).toMatch(/^[1-9][0-9.]*px$/);
+    expect(errors).toEqual([]);
+  });
+}
+
 for (const data of ['content', 'structured']) {
   test(`result only in ${data}`, async ({ page }) => {
     await open(page, `slug=engine&chapter=strokes&data=${data}`);

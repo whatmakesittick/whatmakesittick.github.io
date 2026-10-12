@@ -8,7 +8,7 @@ import type { StageRefs } from './views/Stage.tsx';
 export function useStage(
   refs: StageRefs,
   ctrlRef: RefObject<EmbedController | undefined>,
-  mounted: boolean,
+  stageShown: boolean,
   fullscreen: boolean,
   sceneReady: boolean,
 ) {
@@ -20,7 +20,7 @@ export function useStage(
     const stage = refs.host.current?.closest<HTMLElement>('[data-stage]');
     if (!stage || typeof ResizeObserver === 'undefined') return;
     return watchGaugeClearance(stage);
-  }, [mounted]);
+  }, [stageShown]);
 
   useEffect(() => {
     const slot = refs.dock.current;
@@ -31,11 +31,11 @@ export function useStage(
       reserve.dispose();
       dockReserve.current = undefined;
     };
-  }, [mounted]);
+  }, [stageShown]);
 
   useLayoutEffect(() => {
     dockReserve.current?.sync({ inline: !fullscreen, ready: sceneReady });
-  }, [sceneReady, fullscreen, mounted]);
+  }, [sceneReady, fullscreen, stageShown]);
 
   useEffect(() => {
     const stage = refs.host.current?.closest('[data-stage]');
@@ -55,7 +55,7 @@ export function useStage(
     });
     io.observe(stage);
     return () => io.disconnect();
-  }, [mounted]);
+  }, [stageShown]);
 
   useEffect(() => {
     const el = refs.host.current;
@@ -65,7 +65,7 @@ export function useStage(
     };
     el.addEventListener('wheel', onWheel, { capture: true });
     return () => el.removeEventListener('wheel', onWheel, { capture: true });
-  }, [fullscreen, mounted]);
+  }, [fullscreen, stageShown]);
 
   return wheelArmed;
 }

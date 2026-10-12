@@ -75,7 +75,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   }, [fullscreen]);
 
   const sceneReady = status === 'ready' && controller?.info.slug === slug;
-  const wheelArmed = useStage(refs, ctrlRef, entry !== undefined, fullscreen, sceneReady);
+  const wheelArmed = useStage(refs, ctrlRef, entry !== undefined && !hold, fullscreen, sceneReady);
 
   const touched =
     <A extends unknown[]>(fn: (...a: A) => void) =>
