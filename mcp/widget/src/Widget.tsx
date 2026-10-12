@@ -6,8 +6,7 @@ import { toDisplayMode, type DisplayMode, type WidgetHost } from './bridge.ts';
 import { reserveDock, type DockReserve } from './dockReserve.ts';
 import { watchGaugeClearance } from './gaugeClearance.ts';
 import { StringsContext } from './i18n/context.ts';
-import { NO_SIGNALS, languageOf, withContext, withInput, withResult } from './i18n/language.ts';
-import type { LanguagePack, Packs } from './i18n/packs.ts';
+import type { Packs } from './i18n/packs.ts';
 import type { ModuleLoader, SceneStatus } from './scene.ts';
 import {
   allowsFullscreen,
@@ -34,6 +33,7 @@ import { Unknown, Waiting } from './views/Empty.tsx';
 import { useKeyboard } from './keyboard.ts';
 import { useSceneSession } from './useSceneSession.ts';
 import { useSceneSync } from './useSceneSync.ts';
+import { useWidgetLanguage } from './useWidgetLanguage.ts';
 
 export interface WidgetProps {
   host: WidgetHost;
@@ -43,22 +43,8 @@ export interface WidgetProps {
   webgl: () => boolean;
 }
 
-const LANGUAGE_PATIENCE_MS = 1500;
-
 export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
-  const [signals, setSignals] = useState(() => withContext(NO_SIGNALS, host.context()));
-  const lang = languageOf(signals);
-  const [pack, setPack] = useState<LanguagePack>(() => packs.ready(lang) ?? packs.english);
-  const [settled, setSettled] = useState(() => (packs.ready(lang) ? lang : undefined));
-  const [patient, setPatient] = useState(true);
   const [inputSeen, setInputSeen] = useState(false);
-  const catalogue = pack.catalogue;
-  const entries = catalogue.explainers;
-  const entriesRef = useRef(entries);
-  entriesRef.current = entries;
-  const find = (slug: string): WidgetCatalogueEntry | undefined =>
-    entriesRef.current.find((e) => e.slug === slug);
-
   const [target, setTarget] = useState<Target | undefined>();
   const [resultSeen, setResultSeen] = useState(false);
   const [ctx, setCtx] = useState(host.context() ?? {});
@@ -71,19 +57,23 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const resumeOnVisible = useRef(false);
   const userChanged = useRef(false);
   const lastSent = useRef<ModelContextSnapshot | undefined>(undefined);
-  const langRef = useRef(lang);
-  langRef.current = lang;
   const painted = useRef(false);
   const dockReserve = useRef<DockReserve | undefined>(undefined);
 
   const sceneSession = useSceneSession(host, loader, webgl);
   const { session, refs, ctrlRef, controller, status, progress, info, setInfo } = sceneSession;
+  const { pack, waiting } = useWidgetLanguage(host, packs, session);
+  const catalogue = pack.catalogue;
+  const entries = catalogue.explainers;
+  const entriesRef = useRef(entries);
+  entriesRef.current = entries;
+  const find = (slug: string): WidgetCatalogueEntry | undefined =>
+    entriesRef.current.find((e) => e.slug === slug);
 
   useEffect(() => {
     const offs = [
       host.on('input', (args) => {
         setInputSeen(true);
-        setSignals((s) => withInput(s, args));
         const t = targetFromInput(args, find);
         if (!t) return;
         session.prefetch(t.slug);
@@ -91,42 +81,20 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
       }),
       host.on('result', (result) => {
         setResultSeen(true);
-        setSignals((s) => withResult(s, result));
         const t = targetFromResult(result, find);
         if (t) setTarget((prev) => mergeTarget(prev, t));
       }),
       host.on('context', (c) => {
         setCtx({ ...c });
-        setSignals((s) => withContext(s, c));
         setMode((current) => toDisplayMode(c.displayMode) ?? current);
       }),
     ];
     return () => offs.forEach((off) => off());
   }, [host, session]);
 
-  useEffect(() => {
-    void session.setLanguage(lang);
-    if (pack.lang === lang) return setSettled(lang);
-    let live = true;
-    const timer = setTimeout(() => setPatient(false), LANGUAGE_PATIENCE_MS);
-    packs
-      .load(lang)
-      .then((next) => live && langRef.current === next.lang && setPack(next))
-      .catch((error: unknown) => console.warn('[wmit-widget] language', lang, error))
-      .finally(() => live && langRef.current === lang && setSettled(lang));
-    return () => {
-      live = false;
-      clearTimeout(timer);
-    };
-  }, [lang, session]);
-
-  useEffect(() => {
-    document.documentElement.lang = pack.lang;
-  }, [pack.lang]);
-
   const slug = target?.slug;
   const entry = slug ? find(slug) : undefined;
-  const hold = !painted.current && patient && settled !== lang;
+  const hold = !painted.current && waiting;
 
   const { chapter, chapterRef, setChapter, disc, live, stripFirst } = useSceneSync(
     sceneSession,
