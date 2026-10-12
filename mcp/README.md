@@ -42,14 +42,16 @@ npm run mcp            # http://localhost:3003/mcp, the site files and /healthz
 npm run mcp:stdio      # MCP over stdio; serves the site files on 127.0.0.1:$PORT itself
 ```
 
-| Variable            | Effect                                                                                            |
-| ------------------- | ------------------------------------------------------------------------------------------------- |
-| `PORT`              | HTTP port, 3003 by default                                                                        |
-| `WMIT_ASSET_BASE`   | Where the widget and the server read the site, e.g. `https://whatmakesittick.github.io/embed/v1/` |
-| `MCP_PUBLIC_URL`    | The public `/mcp` URL behind a tunnel: sets the asset base origin and Claude's `ui.domain`        |
-| `WMIT_EXCLUDE_TAGS` | Comma separated tags whose explainers the tools leave out, e.g. `weapons`                         |
-| `WMIT_LOG_REQUESTS` | Logs every MCP method and file request to stderr                                                  |
-| `WMIT_SITE_DIR`     | The built site the server reads and serves, `dist` by default                                     |
+| Variable               | Effect                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------- |
+| `PORT`                 | HTTP port, 3003 by default                                                                        |
+| `WMIT_HOST`            | HTTP bind address, `127.0.0.1` by default; `0.0.0.0` behind a tunnel or in a container            |
+| `WMIT_ALLOWED_ORIGINS` | Comma separated origins besides loopback that may call `/mcp` with an `Origin` header             |
+| `WMIT_ASSET_BASE`      | Where the widget and the server read the site, e.g. `https://whatmakesittick.github.io/embed/v1/` |
+| `MCP_PUBLIC_URL`       | The public `/mcp` URL behind a tunnel: sets the asset base origin and Claude's `ui.domain`        |
+| `WMIT_EXCLUDE_TAGS`    | Comma separated tags whose explainers the tools leave out, e.g. `weapons`                         |
+| `WMIT_LOG_REQUESTS`    | Logs every MCP method and file request to stderr                                                  |
+| `WMIT_SITE_DIR`        | The built site the server reads and serves, `dist` by default                                     |
 
 Without `WMIT_ASSET_BASE` the asset base is the server's own origin (`MCP_PUBLIC_URL` or
 `http://localhost:$PORT`) and the server serves `dist/` with CORS and

@@ -25,6 +25,7 @@ beforeAll(async () => {
   const handler = createHttpHandler({
     createServer: async () => createServer(serverOptions()),
     siteDir: dir,
+    allowedOrigins: ['https://chat.example.com'],
     health: () => ({ ok: true, name: 'whatmakesittick-mcp', version: 'test' }),
   });
   server = createHttpServer(handler);
@@ -125,5 +126,59 @@ describe('/healthz and /mcp', () => {
     } finally {
       failing.close();
     }
+  });
+});
+
+describe('origin check on /mcp', () => {
+  const post = (origin?: string) =>
+    fetch(`${base}/mcp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json, text/event-stream',
+        ...(origin ? { Origin: origin } : {}),
+      },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
+    });
+
+  it('refuses a foreign origin with a JSON-RPC error', async () => {
+    const res = await post('https://evil.example.com');
+    expect(res.status).toBe(403);
+    expect(await res.json()).toMatchObject({ jsonrpc: '2.0', error: { code: -32000 } });
+  });
+
+  it.each(['http://localhost:5173', 'http://127.0.0.1:3003', 'http://[::1]:8080'])(
+    'lets the loopback origin %s through',
+    async (origin) => {
+      expect((await post(origin)).status).toBe(200);
+    },
+  );
+
+  it('lets a listed origin through', async () => {
+    expect((await post('https://chat.example.com')).status).toBe(200);
+  });
+
+  it('lets a request without an origin through', async () => {
+    expect((await post()).status).toBe(200);
+  });
+
+  it('serves a static file to a foreign origin', async () => {
+    const res = await fetch(`${base}/embed/v1/manifest.json`, {
+      headers: { Origin: 'https://evil.example.com' },
+    });
+    expect(res.status).toBe(200);
+    expect(res.headers.get('access-control-allow-origin')).toBe('*');
+  });
+
+  it('answers 413 for an oversized body', async () => {
+    const res = await fetch(`${base}/mcp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pad: 'x'.repeat(5 * 1024 * 1024) }),
+    });
+    expect(res.status).toBe(413);
+    expect(await res.json()).toMatchObject({
+      error: { message: expect.stringMatching(/too large/) },
+    });
   });
 });

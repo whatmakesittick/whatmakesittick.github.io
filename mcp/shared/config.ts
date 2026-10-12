@@ -16,6 +16,8 @@ export const REPORT_CONTEXT_META_NAME = 'wmit-report-context';
 
 export const ENV = {
   port: 'PORT',
+  host: 'WMIT_HOST',
+  allowedOrigins: 'WMIT_ALLOWED_ORIGINS',
   assetBase: 'WMIT_ASSET_BASE',
   publicUrl: 'MCP_PUBLIC_URL',
   excludeTags: 'WMIT_EXCLUDE_TAGS',

@@ -24,6 +24,11 @@ import { SITE_INDEX_FILE, createSite, httpReader } from './site.ts';
 const stdio = process.argv.includes('--stdio');
 const port = Number.parseInt(process.env[ENV.port] ?? '', 10) || DEFAULT_PORT;
 const localSite = process.env[ENV.siteDir] || PATHS.site;
+const bindHost = process.env[ENV.host] || DEFAULT_HOST;
+const allowedOrigins = (process.env[ENV.allowedOrigins] ?? '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 const site = siteDir(localSite);
 const publicUrl = stdio ? undefined : process.env[ENV.publicUrl] || undefined;
 const assetInput = { assetBase: process.env[ENV.assetBase] || undefined, publicUrl, port };
@@ -118,12 +123,13 @@ async function startHttp(): Promise<void> {
       createServer: async () => createServer(await serverOptions()),
       siteDir: site,
       health,
+      allowedOrigins,
     }),
-    '0.0.0.0',
+    bindHost,
   );
   await startIndex();
   log(
-    `MCP on http://localhost:${port}${ROUTES.mcp}, assets ${assetBase}, health http://localhost:${port}${ROUTES.healthz}`,
+    `MCP bound to ${bindHost}:${port}, http://localhost:${port}${ROUTES.mcp}, assets ${assetBase}, health http://localhost:${port}${ROUTES.healthz}`,
   );
   log(domain ? `ui.domain ${domain} (for ${publicUrl})` : 'ui.domain unset (no MCP_PUBLIC_URL)');
   const shutdown = () => server.close(() => process.exit(0));

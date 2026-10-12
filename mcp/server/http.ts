@@ -17,6 +17,7 @@ export interface HttpHandlerOptions {
   createServer?: () => McpServer | Promise<McpServer>;
   siteDir: string;
   health: () => HealthInfo;
+  allowedOrigins?: readonly string[];
 }
 
 export type HttpHandler = (req: IncomingMessage, res: ServerResponse) => void;
@@ -39,6 +40,19 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Methods': 'GET, HEAD, POST, DELETE, OPTIONS',
   'Access-Control-Expose-Headers': 'mcp-session-id, mcp-protocol-version',
 };
+
+class BodyTooLargeError extends Error {}
+
+const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]']);
+
+export function originAllowed(origin: string, allowed: readonly string[] = []): boolean {
+  if (allowed.includes(origin)) return true;
+  try {
+    return LOOPBACK_HOSTS.has(new URL(origin).hostname);
+  } catch {
+    return false;
+  }
+}
 
 const HASHED_ASSETS = '/assets/';
 const MAX_BODY_BYTES = 4 * 1024 * 1024;
@@ -99,14 +113,13 @@ function readBody(req: IncomingMessage): Promise<unknown> {
     let size = 0;
     req.on('data', (chunk: Buffer) => {
       size += chunk.length;
-      if (size > MAX_BODY_BYTES) {
-        reject(new Error('request body too large'));
-        req.destroy();
-        return;
-      }
-      chunks.push(chunk);
+      if (size <= MAX_BODY_BYTES) chunks.push(chunk);
     });
     req.on('end', () => {
+      if (size > MAX_BODY_BYTES) {
+        reject(new BodyTooLargeError());
+        return;
+      }
       const text = Buffer.concat(chunks).toString('utf8');
       try {
         resolve(text ? JSON.parse(text) : undefined);
@@ -136,7 +149,11 @@ async function serveMcp(
   if (req.method === 'POST') {
     try {
       body = await readBody(req);
-    } catch {
+    } catch (error) {
+      if (error instanceof BodyTooLargeError) {
+        send(res, 413, rpcError(-32600, 'Request body too large'), 'application/json');
+        return;
+      }
       send(res, 400, rpcError(-32700, 'Parse error'), 'application/json');
       return;
     }
@@ -182,6 +199,11 @@ export function createHttpHandler(options: HttpHandlerOptions): HttpHandler {
       return;
     }
     if (path === ROUTES.mcp && options.createServer) {
+      const origin = req.headers.origin;
+      if (origin !== undefined && !originAllowed(origin, options.allowedOrigins)) {
+        send(res, 403, rpcError(-32000, 'Origin not allowed'), 'application/json');
+        return;
+      }
       void serveMcp(options.createServer, req, res);
       return;
     }
