@@ -218,6 +218,28 @@ describe('createSite entry', () => {
     );
     await expect(site.entry('engine', 'en')).rejects.toThrow('explainers/engine/chapters.html');
   });
+
+  it('fails when chapters.html holds no chapters', async () => {
+    const site = createSite(async (path) =>
+      path.endsWith('chapters.html') ? '<html>busy</html>' : reader(path),
+    );
+    await expect(site.entry('engine', 'en')).rejects.toThrow('explainers/engine/chapters.html');
+  });
+
+  it('keeps the good chapters when a refresh returns a page with none', async () => {
+    let time = 0;
+    let bad = false;
+    const site = createSite(
+      async (path) => (bad && path.endsWith('chapters.html') ? '<html>busy</html>' : reader(path)),
+      { ttlMs: 10, now: () => time },
+    );
+    const first = await site.entry('engine', 'en');
+    bad = true;
+    time = 100;
+    await site.entry('engine', 'en');
+    await flush();
+    expect(await site.entry('engine', 'en')).toEqual(first);
+  });
 });
 
 function withManifest(change: (fields: Record<string, unknown>) => void): SiteReader {
@@ -341,6 +363,14 @@ describe('httpReader', () => {
   it('throws for any other failed status', async () => {
     const read = httpReader(base, async () => new Response('', { status: 503 }));
     await expect(read('manifest.json')).rejects.toThrow('503');
+  });
+
+  it.each([404, 503])('cancels the body of a %i response', async (status) => {
+    const cancel = vi.fn();
+    const body = new ReadableStream<Uint8Array>({ cancel });
+    const read = httpReader(base, async () => new Response(body, { status }));
+    await read('manifest.json').catch(() => undefined);
+    expect(cancel).toHaveBeenCalledTimes(1);
   });
 
   it('follows no redirect', async () => {

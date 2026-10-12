@@ -2,6 +2,7 @@ import type { EmbedManifest, EmbedManifestEntry } from '../../src/core/embed/man
 import { DEFAULT_LANGUAGE, type LanguageCode } from '../../src/core/i18n/languages.ts';
 import type { Dictionary } from '../../src/core/i18n/resources.ts';
 import type { ExplainerMeta } from '../../src/core/manifest.ts';
+import { chapterOutline } from '../../vite/chapterOutline.ts';
 import { lookup, publishedEntry } from '../../vite/catalogueEntry.ts';
 import { embedSourcePath } from '../../vite/embedPaths.ts';
 import {
@@ -75,6 +76,7 @@ export function httpReader(assetBase: string, fetchImpl: typeof fetch = fetch): 
       redirect: 'error',
       signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
+    if (!res.ok) await res.body?.cancel();
     if (res.status === 404) return undefined;
     if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
     return boundedText(url, res);
@@ -198,6 +200,7 @@ export function createSite(read: SiteReader, options: SiteOptions = {}): Site {
     const path = embedSourcePath(slug, CHAPTERS_FILE);
     return load(path, (text) => {
       if (text === undefined) throw new Error(`${path} not found`);
+      if (chapterOutline(text).length === 0) throw new Error(`${path}: no chapters`);
       return text;
     });
   }
