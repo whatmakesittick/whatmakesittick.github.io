@@ -1,9 +1,14 @@
 import type { EmbedManifest, EmbedManifestEntry } from '../../src/core/embed/manifest.ts';
 import { DEFAULT_LANGUAGE, type LanguageCode } from '../../src/core/i18n/languages.ts';
 import type { Dictionary } from '../../src/core/i18n/resources.ts';
-import { catalogueEntry } from '../../vite/catalogue.ts';
-import { embedSourcePath } from '../../vite/embed.ts';
-import { LOCALES_DIRECTORY, MANIFEST_FILE, parseManifest, parseMeta } from '../../vite/manifest.ts';
+import { catalogueEntry, lookup } from '../../vite/catalogueEntry.ts';
+import { embedSourcePath } from '../../vite/embedPaths.ts';
+import {
+  LOCALES_DIRECTORY,
+  MANIFEST_FILE,
+  parseManifest,
+  parseMeta,
+} from '../../vite/manifestSchema.ts';
 import { isTag, plainText, type CatalogueEntry } from '../shared/catalogue.ts';
 import type { ListExplainersItem } from '../shared/tools.ts';
 
@@ -65,10 +70,8 @@ function localePath(slug: string, code: LanguageCode): string {
 }
 
 function chapterTitle(dictionary: Dictionary | undefined, id: string): string | undefined {
-  const sections = dictionary?.sections;
-  const section = typeof sections === 'object' ? sections[id] : undefined;
-  const title = typeof section === 'object' ? section.title : undefined;
-  return typeof title === 'string' && title.trim() ? plainText(title) : undefined;
+  const title = lookup(dictionary, `sections.${id}.title`);
+  return title?.trim() ? plainText(title) : undefined;
 }
 
 export function createSite(read: SiteReader, options: SiteOptions = {}): Site {

@@ -8,8 +8,10 @@ import { chapterOutline } from './chapterOutline.ts';
 import { LOCALES_DIRECTORY, MANIFEST_FILE, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { localeLoader } from './page.ts';
+import { EMBED_DIRECTORY, embedSourcePath } from './embedPaths.ts';
 
-export const EMBED_DIRECTORY = 'embed/v1';
+export { EMBED_DIRECTORY, embedSourcePath };
+
 export const EMBED_MANIFEST_FILE = `${EMBED_DIRECTORY}/manifest.json`;
 export const EMBED_MOUNT_MODULE = '@core/embed/mount';
 
@@ -115,10 +117,6 @@ export function legacyEmbedFiles(
     source: resolveModule(specifier),
   }));
   return [...covers, ...fonts];
-}
-
-export function embedSourcePath(slug: string, file: string): string {
-  return `explainers/${slug}/${file}`;
 }
 
 export function embedSourceFiles(explainers: readonly LoadedExplainer[]): EmbedFile[] {
