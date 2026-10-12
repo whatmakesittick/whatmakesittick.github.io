@@ -9,6 +9,12 @@ the explainer's 3D scene from `/embed/v1/<slug>.js`, the embed module the site b
 explainer (see "Embed" in `ARCHITECTURE.md`), and mounts the site's own dock and gauge with it.
 A second tool, `list_explainers({ tag?, lang? })`, answers what is available and shows no widget.
 
+The `serverInfo` of the `initialize` response carries a title, the site URL and icons from the
+site (`buildServerIcons` in `server/assets.ts`). The icons live on the asset base origin when it is
+`https:`, otherwise on the site, since the spec allows only `https:` and `data:` icon URLs. Hosts
+see them only after connecting; a listing in a catalogue needs the MCP Registry or the host's
+directory.
+
 Both tools take an optional `lang`, the language the user writes in, as a BCP 47 tag the model
 fills in. `resolveLanguage` in `src/core/i18n/languages.ts` keeps its base language when the site
 has it (`en uk de es fr pt ja zh`) and falls back to English otherwise, so `ru` gives English.

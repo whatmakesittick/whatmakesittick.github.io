@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { ASSET_BASE_TOKEN } from '../../shared/config.ts';
-import { buildUiMeta, remoteSiteBase, resolveAssetBase } from '../../server/assets.ts';
+import { SITE_URL } from '../../../vite/site.ts';
+import {
+  buildServerIcons,
+  buildUiMeta,
+  remoteSiteBase,
+  resolveAssetBase,
+} from '../../server/assets.ts';
 import { injectAssetBase } from '../../server/html.ts';
 import { truncateBytes, byteLength } from '../../server/text.ts';
 import { parseExcludeTags } from '../../server/load.ts';
@@ -85,5 +91,29 @@ describe('parseExcludeTags', () => {
     expect(parseExcludeTags('weapons, space,kitchen')).toEqual(['weapons', 'space']);
     expect(logged()).toContain('unknown tag "kitchen"');
     expect(parseExcludeTags(undefined)).toEqual([]);
+  });
+});
+
+describe('buildServerIcons', () => {
+  const files = [
+    ['favicon.svg', 'image/svg+xml', ['any']],
+    ['icons/icon-192.png', 'image/png', ['192x192']],
+    ['icons/icon-512.png', 'image/png', ['512x512']],
+  ] as const;
+
+  it('uses the asset base origin when it is https', () => {
+    expect(buildServerIcons('https://a.example/embed/v1/')).toEqual(
+      files.map(([path, mimeType, sizes]) => ({
+        src: `https://a.example/${path}`,
+        mimeType,
+        sizes: [...sizes],
+      })),
+    );
+  });
+
+  it('uses the site when the asset base is http', () => {
+    expect(buildServerIcons('http://localhost:3003/embed/v1/').map((i) => i.src)).toEqual(
+      files.map(([path]) => `${SITE_URL}/${path}`),
+    );
   });
 });

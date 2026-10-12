@@ -1,4 +1,5 @@
 export const SERVER_NAME = 'whatmakesittick-mcp';
+export const SERVER_TITLE = 'What makes it tick';
 export const SERVER_VERSION = '0.1.0';
 export const DEFAULT_PORT = 3003;
 export const DEFAULT_HOST = '127.0.0.1';

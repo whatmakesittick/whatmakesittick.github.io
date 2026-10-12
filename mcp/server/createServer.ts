@@ -5,9 +5,10 @@ import {
 } from '@modelcontextprotocol/ext-apps/server';
 import { McpServer, type ReadResourceResult } from '@modelcontextprotocol/server';
 import { z } from 'zod';
+import { SITE_URL } from '../../vite/site.ts';
 import type { EmbedManifest } from '../../src/core/embed/manifest.ts';
 import { TAGS, type Tag } from '../shared/catalogue.ts';
-import { SERVER_NAME, SERVER_VERSION } from '../shared/config.ts';
+import { SERVER_NAME, SERVER_TITLE, SERVER_VERSION } from '../shared/config.ts';
 import {
   OPENAI_INVOCATION_META,
   SHOW_EXPLAINER_CHAPTER_DESCRIBE,
@@ -18,7 +19,7 @@ import {
   WIDGET_RESOURCE_NAME,
   WIDGET_RESOURCE_URI,
 } from '../shared/tools.ts';
-import { buildUiMeta } from './assets.ts';
+import { buildServerIcons, buildUiMeta } from './assets.ts';
 import {
   LANG_DESCRIBE,
   LIST_EXPLAINERS_DESCRIPTION,
@@ -54,7 +55,13 @@ export function createServer(options: CreateServerOptions): McpServer {
   const topics = new Map(listed.map((e) => [e.slug, e.topic]));
   const uiMeta = buildUiMeta(assetBase, domain);
 
-  const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
+  const server = new McpServer({
+    name: SERVER_NAME,
+    title: SERVER_TITLE,
+    version: SERVER_VERSION,
+    websiteUrl: `${SITE_URL}/`,
+    icons: buildServerIcons(assetBase),
+  });
 
   registerAppTool(
     server,

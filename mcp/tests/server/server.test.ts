@@ -11,6 +11,7 @@ import {
   type ListExplainersResult,
   type ShowExplainerResult,
 } from '../../shared/tools.ts';
+import { SITE_URL } from '../../../vite/site.ts';
 import { claudeAppDomain } from '../../server/assets.ts';
 import { availableSlugs } from '../../server/createServer.ts';
 import { buildShowExplainerDescription } from '../../server/description.ts';
@@ -28,6 +29,20 @@ import {
 } from './helpers.ts';
 
 const logged = serverLog();
+
+describe('initialize', () => {
+  it('serverInfo carries a title, the site url and the site icons', async () => {
+    const client = await connect();
+    const info = client.getServerVersion()!;
+    expect(info.title).toBe('What makes it tick');
+    expect(info.websiteUrl).toBe(`${SITE_URL}/`);
+    expect(info.icons).toEqual([
+      { src: `${SITE_URL}/favicon.svg`, mimeType: 'image/svg+xml', sizes: ['any'] },
+      { src: `${SITE_URL}/icons/icon-192.png`, mimeType: 'image/png', sizes: ['192x192'] },
+      { src: `${SITE_URL}/icons/icon-512.png`, mimeType: 'image/png', sizes: ['512x512'] },
+    ]);
+  });
+});
 
 describe('tools/list', () => {
   it('show_explainer: slug enum, fixed resourceUri, read-only, description with every topic', async () => {

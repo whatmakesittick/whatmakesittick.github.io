@@ -1,3 +1,4 @@
+import { SITE_URL } from '../../vite/site.ts';
 import { DEFAULT_HOST, ROUTES } from '../shared/config.ts';
 import type { WidgetUiMeta } from '../shared/tools.ts';
 
@@ -41,4 +42,26 @@ export function buildUiMeta(assetBase: string, domain: string | undefined): Widg
     csp: { resourceDomains: [assetOrigin(assetBase)], connectDomains: [] },
     ...(domain ? { domain } : {}),
   };
+}
+
+export interface ServerIcon {
+  src: string;
+  mimeType: string;
+  sizes: string[];
+}
+
+const SERVER_ICON_FILES = [
+  { path: 'favicon.svg', mimeType: 'image/svg+xml', sizes: ['any'] },
+  { path: 'icons/icon-192.png', mimeType: 'image/png', sizes: ['192x192'] },
+  { path: 'icons/icon-512.png', mimeType: 'image/png', sizes: ['512x512'] },
+] as const;
+
+export function buildServerIcons(assetBase: string): ServerIcon[] {
+  const url = new URL(assetBase);
+  const origin = url.protocol === 'https:' ? url.origin : SITE_URL;
+  return SERVER_ICON_FILES.map(({ path, mimeType, sizes }) => ({
+    src: `${origin}/${path}`,
+    mimeType,
+    sizes: [...sizes],
+  }));
 }
