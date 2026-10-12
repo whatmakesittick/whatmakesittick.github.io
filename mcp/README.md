@@ -67,7 +67,7 @@ To try it in `basic-host`: `SERVERS='["http://localhost:3003/mcp"]' npm start` i
 
 Hosts may cache the `ui://` resource, and Claude keeps it until the connector is reconnected, so the
 resource URI is stable and the resource never changes with the widget. It is
-`widget/loader.html` with the asset base and the report flag filled in: about 5 KB, no build step.
+`widget/loader.html` with the asset base filled in: about 5 KB, no build step.
 It imports `<asset base>widget.js`, built from `widget/src/start.tsx` by `npm run build:widget`
 into `dist/embed/v1/` (about 320 KB, 89 KB gzipped, styles and the English catalogue included), and
 calls its `start(root, { assetBase, inbox, loaderVersion })`. Messages the host sends before the
