@@ -795,6 +795,10 @@ Cyrillic files only for Ukrainian; Japanese and Chinese use system fonts, as on 
 On a stage container of at most 620px, where the controls styles hide the readouts, the embed hides
 the whole gauge, so no empty glass panel is left.
 
+A page mounts one embedded explainer at a time: the embeds share one i18next instance, and mounting
+another explainer replaces the dictionaries of the previous one (`adopt` in
+`src/core/i18n/embedded.ts`). The chat widget mounts one at a time.
+
 The build adds one entry per explainer (`vite/embed.ts`), generated from its manifest and the
 chapter outline of `chapters.html` (`vite/chapterOutline.ts`). The embeds share the `three`,
 `scene` and `shared` chunks and each explainer's own chunk with the pages, so a reader who has
