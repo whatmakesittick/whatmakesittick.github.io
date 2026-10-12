@@ -1,7 +1,7 @@
 import type { App, McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import type { ModelContextSnapshot } from '../../shared/tools.ts';
 
-export type DisplayMode = 'inline' | 'fullscreen' | 'pip';
+export type DisplayMode = 'inline' | 'fullscreen';
 
 export interface HostEvents {
   input: (args: unknown) => void;
