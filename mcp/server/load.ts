@@ -1,9 +1,12 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isTag, type Tag } from '../shared/catalogue.ts';
 import { PATHS } from '../shared/config.ts';
+import { sitePath } from './http.ts';
 import { log } from './log.ts';
+import type { SiteReader } from './site.ts';
 
 export const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -17,8 +20,16 @@ export function widgetModuleKind(root: string = REPOSITORY_ROOT): WidgetModuleKi
   return existsSync(resolve(root, PATHS.widgetModule)) ? 'built' : 'missing';
 }
 
-export function siteDir(root: string = REPOSITORY_ROOT): string {
-  return resolve(root, PATHS.site);
+export function siteDir(dir: string = PATHS.site, root: string = REPOSITORY_ROOT): string {
+  return resolve(root, dir);
+}
+
+export function fileReader(root: string): SiteReader {
+  const base = resolve(root);
+  return async (path) => {
+    const file = sitePath(base, path);
+    return file === undefined ? undefined : readFile(file, 'utf8');
+  };
 }
 
 export function parseExcludeTags(raw: string | undefined): Tag[] {

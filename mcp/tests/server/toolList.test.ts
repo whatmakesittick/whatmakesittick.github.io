@@ -1,11 +1,14 @@
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { createServer as createNetServer } from 'node:net';
-import { dirname, resolve } from 'node:path';
+import { tmpdir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { Client } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 import { DEFAULT_HOST, ENV } from '../../shared/config.ts';
-import { connect, serveSite } from './helpers.ts';
+import { EMBED_DIRECTORY } from '../../../vite/embedPaths.ts';
+import { connect, files } from './helpers.ts';
 
 const TOOLS = ['list_explainers', 'show_explainer'];
 const entry = resolve(dirname(fileURLToPath(import.meta.url)), '../../server/node.ts');
@@ -22,12 +25,22 @@ function freePort(): Promise<number> {
   });
 }
 
+function writeSite(): string {
+  const dir = mkdtempSync(join(tmpdir(), 'wmit-site-'));
+  for (const [path, text] of files) {
+    const file = join(dir, EMBED_DIRECTORY, path);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, text);
+  }
+  return dir;
+}
+
 async function stdioToolNames(logRequests: boolean): Promise<string[]> {
-  const site = await serveSite();
+  const site = writeSite();
   const env: Record<string, string> = {
     ...(process.env as Record<string, string>),
     PORT: String(await freePort()),
-    [ENV.assetBase]: site.assetBase,
+    [ENV.siteDir]: site,
   };
   delete env[ENV.logRequests];
   if (logRequests) env[ENV.logRequests] = '1';
@@ -44,7 +57,7 @@ async function stdioToolNames(logRequests: boolean): Promise<string[]> {
     return tools.map((t) => t.name).sort();
   } finally {
     await client.close();
-    site.close();
+    rmSync(site, { recursive: true, force: true });
   }
 }
 

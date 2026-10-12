@@ -20,6 +20,7 @@ export const ENV = {
   publicUrl: 'MCP_PUBLIC_URL',
   excludeTags: 'WMIT_EXCLUDE_TAGS',
   logRequests: 'WMIT_LOG_REQUESTS',
+  siteDir: 'WMIT_SITE_DIR',
 } as const;
 
 export const PATHS = {

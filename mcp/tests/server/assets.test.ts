@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ASSET_BASE_TOKEN } from '../../shared/config.ts';
-import { buildUiMeta, resolveAssetBase } from '../../server/assets.ts';
+import { buildUiMeta, remoteSiteBase, resolveAssetBase } from '../../server/assets.ts';
 import { injectAssetBase } from '../../server/html.ts';
 import { truncateBytes, byteLength } from '../../server/text.ts';
 import { parseExcludeTags } from '../../server/load.ts';
@@ -28,6 +28,30 @@ describe('resolveAssetBase', () => {
     expect(buildUiMeta('https://a.example/embed/v1/', 'd.claudemcpcontent.com').domain).toBe(
       'd.claudemcpcontent.com',
     );
+  });
+});
+
+describe('remoteSiteBase', () => {
+  it('reads the local files unless WMIT_ASSET_BASE names another origin', () => {
+    expect(remoteSiteBase({ port: 3003 })).toBeUndefined();
+    expect(remoteSiteBase({ publicUrl: 'https://x.example/mcp', port: 3003 })).toBeUndefined();
+    expect(
+      remoteSiteBase({
+        assetBase: 'https://x.example/embed/v1/',
+        publicUrl: 'https://x.example/mcp',
+        port: 3003,
+      }),
+    ).toBeUndefined();
+    expect(remoteSiteBase({ assetBase: 'http://localhost:3003/embed/v1/', port: 3003 })).toBe(
+      undefined,
+    );
+    expect(
+      remoteSiteBase({
+        assetBase: 'https://whatmakesittick.github.io/embed/v1',
+        publicUrl: 'https://x.example/mcp',
+        port: 3003,
+      }),
+    ).toBe('https://whatmakesittick.github.io/embed/v1/');
   });
 });
 

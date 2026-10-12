@@ -1,4 +1,4 @@
-import { ROUTES } from '../shared/config.ts';
+import { DEFAULT_HOST, ROUTES } from '../shared/config.ts';
 import type { WidgetUiMeta } from '../shared/tools.ts';
 
 export interface AssetBaseInput {
@@ -14,6 +14,14 @@ export function resolveAssetBase({ assetBase, publicUrl, port }: AssetBaseInput)
   }
   if (publicUrl) return `${new URL(publicUrl).origin}${ROUTES.embed}`;
   return `http://localhost:${port}${ROUTES.embed}`;
+}
+
+export function remoteSiteBase(input: AssetBaseInput): string | undefined {
+  if (!input.assetBase) return undefined;
+  const base = resolveAssetBase(input);
+  const own = [`http://localhost:${input.port}`, `http://${DEFAULT_HOST}:${input.port}`];
+  if (input.publicUrl) own.push(new URL(input.publicUrl).origin);
+  return own.includes(assetOrigin(base)) ? undefined : base;
 }
 
 export function assetOrigin(assetBase: string): string {
