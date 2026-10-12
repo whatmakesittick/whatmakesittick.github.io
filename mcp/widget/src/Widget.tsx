@@ -1,8 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { explainerUrl, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
-import { EMBED_DOM } from '../../../src/core/embed/contract.ts';
 import { MODEL_CONTEXT_DEBOUNCE_MS, type ModelContextSnapshot } from '../../shared/tools.ts';
-import { toDisplayMode, type DisplayMode, type WidgetHost } from './bridge.ts';
+import type { WidgetHost } from './bridge.ts';
 import { reserveDock, type DockReserve } from './dockReserve.ts';
 import { watchGaugeClearance } from './gaugeClearance.ts';
 import { StringsContext } from './i18n/context.ts';
@@ -27,6 +26,8 @@ import type { Actions, ViewModel } from './views/types.ts';
 import { SITE_HOME } from './views/Brand.tsx';
 import { Unknown, Waiting } from './views/Empty.tsx';
 import { useKeyboard } from './keyboard.ts';
+import { useDisplayMode } from './useDisplayMode.ts';
+import { useHostContext } from './useHostContext.ts';
 import { useSceneSession } from './useSceneSession.ts';
 import { useSceneSync } from './useSceneSync.ts';
 import { useTarget } from './useTarget.ts';
@@ -41,10 +42,6 @@ export interface WidgetProps {
 }
 
 export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
-  const [ctx, setCtx] = useState(host.context() ?? {});
-  const [mode, setMode] = useState<DisplayMode>(
-    toDisplayMode(host.context()?.displayMode) ?? 'inline',
-  );
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const wheelArmed = useRef(false);
@@ -65,15 +62,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     entriesRef.current.find((e) => e.slug === slug);
   const { target, setTarget, inputSeen, resultSeen } = useTarget(host, find, session);
 
-  useEffect(() => {
-    const offs = [
-      host.on('context', (c) => {
-        setCtx({ ...c });
-        setMode((current) => toDisplayMode(c.displayMode) ?? current);
-      }),
-    ];
-    return () => offs.forEach((off) => off());
-  }, [host, session]);
+  const ctx = useHostContext(host);
 
   const slug = target?.slug;
   const entry = slug ? find(slug) : undefined;
@@ -106,12 +95,9 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     sendContext(snap, modelContextText(entry, ctrlRef.current?.info, snap, state, pack.lang));
   }, [slug, chapter, disc, info, pack.lang]);
 
-  const fullscreen = mode === 'fullscreen';
+  const { fullscreen, toggleFullscreen } = useDisplayMode(host);
   const canFullscreen = allowsFullscreen(ctx);
   useEffect(() => {
-    const root = document.documentElement;
-    if (fullscreen) root.dataset[EMBED_DOM.stageExpandedKey] = '';
-    else delete root.dataset[EMBED_DOM.stageExpandedKey];
     if (!fullscreen) setDrawerOpen(false);
   }, [fullscreen]);
 
@@ -192,14 +178,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     resetCamera: () => ctrlRef.current?.resetCamera(),
     openSite: () => slug && void host.openLink(explainerUrl(slug)),
     openCatalogue,
-    async toggleFullscreen() {
-      const next: DisplayMode = fullscreen ? 'inline' : 'fullscreen';
-      try {
-        setMode(await host.requestDisplayMode(next));
-      } catch (e) {
-        console.warn('[wmit-widget] requestDisplayMode', e);
-      }
-    },
+    toggleFullscreen,
     switchTo: touched((next: string) => {
       setDrawerOpen(false);
       if (next !== slug) setTarget({ slug: next });
