@@ -2,7 +2,7 @@ import { AppBridge, PostMessageTransport } from '@modelcontextprotocol/ext-apps/
 import bakedCatalogue from 'virtual:wmit-catalogue';
 import type { BakedCatalogue } from '../../../shared/catalogue.ts';
 import { explainerUrl, resolveLanguage } from '../../../shared/catalogue.ts';
-import { ASSET_BASE_TOKEN, REPORT_CONTEXT_TOKEN } from '../../../shared/config.ts';
+import { ASSET_BASE_TOKEN } from '../../../shared/config.ts';
 import loaderHtml from '../../loader.html?raw';
 
 const catalogue = bakedCatalogue as BakedCatalogue;
@@ -86,8 +86,4 @@ frame.addEventListener('load', () => {
   post('ui/notifications/tool-result', result);
   say('sent tool input and result before the widget module loaded');
 });
-frame.srcdoc = loaderHtml
-  .split(ASSET_BASE_TOKEN)
-  .join(assetBase)
-  .split(REPORT_CONTEXT_TOKEN)
-  .join('0');
+frame.srcdoc = loaderHtml.split(ASSET_BASE_TOKEN).join(assetBase);

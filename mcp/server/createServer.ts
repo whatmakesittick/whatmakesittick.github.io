@@ -24,7 +24,7 @@ import {
   LIST_EXPLAINERS_DESCRIPTION,
   buildShowExplainerDescription,
 } from './description.ts';
-import { injectAssetBase, injectReportContext } from './html.ts';
+import { injectAssetBase } from './html.ts';
 import type { Site } from './site.ts';
 import { listExplainers } from './tools/listExplainers.ts';
 import { showExplainer } from './tools/showExplainer.ts';
@@ -97,7 +97,7 @@ export function createServer(options: CreateServerOptions): McpServer {
       _meta: { ui: uiMeta },
     },
     async (): Promise<ReadResourceResult> => {
-      const html = injectReportContext(injectAssetBase(options.loaderHtml, assetBase));
+      const html = injectAssetBase(options.loaderHtml, assetBase);
       return {
         contents: [
           {

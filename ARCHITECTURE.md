@@ -835,7 +835,7 @@ does not know).
 The loader is such a published widget, and it is never refreshed by a deploy. Within `v1`, the entry
 name `/embed/v1/widget.js` (not hashed, so a stale copy lives at most as long as the host's HTTP
 cache), the `start(root, options)` export, the `assetBase`, `inbox` and `loaderVersion` options, the
-inbox contract above and the `wmit-asset-base` and `wmit-report-context` meta tags stay backward
+inbox contract above and the `wmit-asset-base` meta tag stay backward
 compatible: a new option is optional, and the module works with every loader version still
 installed. `LOADER_VERSION` in `mcp/shared/loader.ts` numbers the loader. Changing the loader is a
 breaking event: it reaches a user only when their host reads the resource again, which in Claude
