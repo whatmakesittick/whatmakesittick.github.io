@@ -1,8 +1,5 @@
 const en = {
   brand: 'What makes it tick',
-  play: 'Play',
-  pause: 'Pause',
-  resetCamera: 'Reset camera',
   openOnSite: 'Open on site',
   openOnSiteShort: 'Site',
   fullscreen: 'Show the model full screen',
@@ -20,7 +17,6 @@ const en = {
   scrollLeft: 'Scroll left',
   scrollRight: 'Scroll right',
   close: 'Close',
-  timeline: 'Timeline',
   chapters: 'Chapters',
   loading: {
     title: 'Building the 3D scene',
@@ -52,9 +48,6 @@ export type Strings = Widen<typeof en>;
 
 export const CORE_KEYS = {
   brand: 'catalogue.title',
-  play: 'controls.play',
-  pause: 'controls.pause',
-  resetCamera: 'controls.resetCamera',
   fullscreen: 'stage.expand',
   exploreMore: 'page.moreExplainers',
 } as const satisfies Partial<Record<keyof Strings, string>>;

@@ -16,7 +16,6 @@ const ja: WidgetStrings = {
   scrollLeft: '左へスクロール',
   scrollRight: '右へスクロール',
   close: '閉じる',
-  timeline: 'タイムライン',
   chapters: '章',
   loading: {
     title: '3Dシーンを準備しています',

@@ -18,7 +18,6 @@ const fr: WidgetStrings = {
   scrollLeft: 'Faire défiler vers la gauche',
   scrollRight: 'Faire défiler vers la droite',
   close: 'Fermer',
-  timeline: 'Chronologie',
   chapters: 'Chapitres',
   loading: {
     title: 'Construction de la scène 3D',

@@ -16,7 +16,6 @@ const zh: WidgetStrings = {
   scrollLeft: '向左滚动',
   scrollRight: '向右滚动',
   close: '关闭',
-  timeline: '时间轴',
   chapters: '章节',
   loading: {
     title: '正在搭建 3D 场景',

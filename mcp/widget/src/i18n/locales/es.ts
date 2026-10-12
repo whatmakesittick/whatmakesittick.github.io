@@ -18,7 +18,6 @@ const es: WidgetStrings = {
   scrollLeft: 'Desplazar a la izquierda',
   scrollRight: 'Desplazar a la derecha',
   close: 'Cerrar',
-  timeline: 'Línea de tiempo',
   chapters: 'Capítulos',
   loading: {
     title: 'Montando la escena 3D',

@@ -18,7 +18,6 @@ const pt: WidgetStrings = {
   scrollLeft: 'Rolar para a esquerda',
   scrollRight: 'Rolar para a direita',
   close: 'Fechar',
-  timeline: 'Linha do tempo',
   chapters: 'Capítulos',
   loading: {
     title: 'Montando a cena 3D',

@@ -84,9 +84,9 @@ describe('widget strings', () => {
 
   it('reads the core keys from the site locale', () => {
     const s = stringsFor('de', coreLocale('de'));
-    expect(s.play).toBe('Abspielen');
-    expect(s.resetCamera).toBe('Kamera zurücksetzen');
-    expect(stringsFor('de').play).toBe('Play');
+    expect(s.fullscreen).toBe('Modell im Vollbild ansehen');
+    expect(s.exploreMore).toBe('Weitere Erklärungen');
+    expect(stringsFor('de').fullscreen).toBe('Show the model full screen');
   });
 
   it.each(LANGUAGE_CODES)('%s keeps the interpolated values', (lang) => {

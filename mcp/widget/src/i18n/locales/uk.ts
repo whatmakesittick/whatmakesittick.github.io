@@ -24,7 +24,6 @@ const uk: WidgetStrings = {
   scrollLeft: 'Прокрутити ліворуч',
   scrollRight: 'Прокрутити праворуч',
   close: 'Закрити',
-  timeline: 'Шкала часу',
   chapters: 'Розділи',
   loading: {
     title: 'Будуємо 3D-сцену',

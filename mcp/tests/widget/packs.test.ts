@@ -23,7 +23,7 @@ describe('language packs', () => {
     const uk = vi.fn();
     const packs = createPacks(catalogue('Engine'), { uk });
     expect(packs.english.lang).toBe('en');
-    expect(packs.english.strings.play).toBe('Play');
+    expect(packs.english.strings.fullscreen).toBe('Show the model full screen');
     expect(packs.english.catalogue.explainers[0]?.title).toBe('Engine');
     expect(packs.ready('en')).toBe(packs.english);
     expect(await packs.load('en')).toBe(packs.english);
@@ -33,7 +33,7 @@ describe('language packs', () => {
   it('loads a language once, with its catalogue and site strings', async () => {
     const uk = vi.fn(async () => ({
       catalogue: catalogue('Двигун'),
-      core: { controls: { play: 'Відтворити' } },
+      core: { stage: { expand: 'Показати модель на весь екран' } },
       widget: STRINGS.uk,
     }));
     const packs = createPacks(catalogue('Engine'), { uk });
@@ -42,9 +42,9 @@ describe('language packs', () => {
     expect(a).toBe(b);
     expect(a.lang).toBe('uk');
     expect(a.catalogue.explainers[0]?.title).toBe('Двигун');
-    expect(a.strings.play).toBe('Відтворити');
+    expect(a.strings.fullscreen).toBe('Показати модель на весь екран');
     expect(a.strings.exitFullscreen).toBe('Вийти з повноекранного режиму');
-    expect(a.strings.pause).toBe('Pause');
+    expect(a.strings.exploreMore).toBe('More explainers');
     expect(packs.ready('uk')).toBe(a);
     expect(uk).toHaveBeenCalledTimes(1);
   });

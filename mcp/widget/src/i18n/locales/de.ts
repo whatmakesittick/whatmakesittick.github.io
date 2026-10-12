@@ -18,7 +18,6 @@ const de: WidgetStrings = {
   scrollLeft: 'Nach links scrollen',
   scrollRight: 'Nach rechts scrollen',
   close: 'Schließen',
-  timeline: 'Zeitleiste',
   chapters: 'Kapitel',
   loading: {
     title: '3D-Szene wird aufgebaut',
