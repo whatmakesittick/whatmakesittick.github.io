@@ -20,13 +20,12 @@ English. A `chapter` query matches chapter titles in any language and script.
 | Path         | What it holds                                                                     |
 | ------------ | --------------------------------------------------------------------------------- |
 | `shared/`    | Types and constants shared by the server and the widget: catalogue, tools, config |
-| `catalogue/` | The widget views of the catalogue `vite/catalogue.ts` builds, and `write.ts`      |
+| `catalogue/` | The widget views of the catalogue `vite/catalogue.ts` builds                      |
 | `server/`    | `createServer` (platform independent), `http.ts` and the Node entry `node.ts`     |
 | `widget/`    | `loader.html` (the resource) and the widget module: Preact, without three.js      |
 | `scripts/`   | `smoke-stdio.ts`, the stdio round trip the way Claude Desktop runs the server     |
 | `tests/`     | Vitest unit tests, the embed smoke and the widget Playwright specs                |
 | `docs/`      | `DESIGN.md`: why the app is built this way, host findings and open questions      |
-| `dist/`      | Build output, ignored: `catalogue.json`                                           |
 
 The embed contract (`EmbedModule`, `MountOptions`, `EmbedController`) is
 `src/core/embed/contract.ts`; the server and the widget import it from there.
@@ -39,18 +38,17 @@ Node 24 (`.nvmrc`). The server runs its TypeScript directly with Node's type str
 npm ci
 npm run build          # the site, with /embed/v1/ and /embed/v1/widget.js in dist/
 npm run build:widget   # only dist/embed/v1/widget.js, after a widget change
-npm run build:mcp      # mcp/dist/catalogue.json
 npm run mcp            # http://localhost:3003/mcp, the site files and /healthz
 npm run mcp:stdio      # MCP over stdio; serves the site files on 127.0.0.1:$PORT itself
 ```
 
-| Variable            | Effect                                                                                     |
-| ------------------- | ------------------------------------------------------------------------------------------ |
-| `PORT`              | HTTP port, 3003 by default                                                                 |
-| `WMIT_ASSET_BASE`   | Where the widget loads embeds from, e.g. `https://whatmakesittick.github.io/embed/v1/`     |
-| `MCP_PUBLIC_URL`    | The public `/mcp` URL behind a tunnel: sets the asset base origin and Claude's `ui.domain` |
-| `WMIT_EXCLUDE_TAGS` | Comma separated tags whose explainers the tools leave out, e.g. `weapons`                  |
-| `WMIT_LOG_REQUESTS` | Logs every MCP method and file request to stderr                                           |
+| Variable            | Effect                                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------------- |
+| `PORT`              | HTTP port, 3003 by default                                                                        |
+| `WMIT_ASSET_BASE`   | Where the widget and the server read the site, e.g. `https://whatmakesittick.github.io/embed/v1/` |
+| `MCP_PUBLIC_URL`    | The public `/mcp` URL behind a tunnel: sets the asset base origin and Claude's `ui.domain`        |
+| `WMIT_EXCLUDE_TAGS` | Comma separated tags whose explainers the tools leave out, e.g. `weapons`                         |
+| `WMIT_LOG_REQUESTS` | Logs every MCP method and file request to stderr                                                  |
 
 Without `WMIT_ASSET_BASE` the asset base is the server's own origin (`MCP_PUBLIC_URL` or
 `http://localhost:$PORT`) and the server serves `dist/` with CORS and
@@ -99,8 +97,16 @@ When the user picks another explainer inline, the scene area keeps its height wh
 loads: the dock slot holds the last dock height and the chapter skeleton is as tall as the text.
 The height still changes once when the new explainer's dock is taller or shorter.
 
-`npm run build:mcp` writes `mcp/dist/catalogue.json` with all eight languages, paragraphs as html
-only (the plain text is derived from it), without indentation: about 2.2 MB, 0.77 MB gzipped.
+## Explainer data
+
+The server keeps no copy of the explainers. It reads what the site publishes, from the asset base:
+`/embed/v1/manifest.json` for the list of explainers, their tags, topics and chapter titles, and
+`/embed/v1/explainers/<slug>/` for each explainer's `explainer.json`, `chapters.html` and
+`locales/<code>.json`. It reads a file when a tool needs it and keeps it for 5 minutes
+(`createSite` in `server/site.ts`). When a refresh fails it serves the last copy it read. A
+`show_explainer` call reads the English locale and the asked one only; `list_explainers` reads the
+manifest and the asked locale. The server reads the manifest once at startup and stops when it
+cannot: run `npm run build` first, or point `WMIT_ASSET_BASE` at a site that has it.
 
 `LOADER_VERSION` in `shared/loader.ts` numbers the loader. A loader change is a breaking event: users
 get it only when their host reads the resource again (in Claude, by reconnecting the connector), so
@@ -123,6 +129,6 @@ npm run dev:widget     # the dev page: http://localhost:5183/dev.html?slug=engin
 
 ## Later
 
-`createServer` takes the catalogue (whose entries carry each explainer's `topic`) and a widget loader and touches no Node API, so a
+`createServer` takes the site's index, a `Site` that reads the explainers over `fetch` and a widget loader, and touches no Node API, so a
 Cloudflare Worker can serve `/mcp` with the web standard transport and point `WMIT_ASSET_BASE` at
 the site on GitHub Pages, which already serves `/embed/v1/` with `Access-Control-Allow-Origin: *`.

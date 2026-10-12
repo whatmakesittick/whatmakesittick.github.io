@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "tsc && tsc -p tsconfig.node.json && tsc -p tsconfig.e2e.json && tsc -p mcp/tsconfig.json && vite build && npm run build:widget",
     "build:widget": "vite build -c mcp/widget/vite.config.ts",
-    "build:mcp": "node mcp/catalogue/write.ts",
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",

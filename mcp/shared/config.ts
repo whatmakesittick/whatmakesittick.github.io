@@ -24,8 +24,6 @@ export const ENV = {
 
 export const PATHS = {
   site: 'dist',
-  build: 'mcp/dist',
-  catalogue: 'mcp/dist/catalogue.json',
   loader: 'mcp/widget/loader.html',
   widgetModule: 'dist/embed/v1/widget.js',
 } as const;

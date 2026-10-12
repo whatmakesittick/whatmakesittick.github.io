@@ -16,13 +16,13 @@ sees now.
 
 ## Layers
 
-| Layer         | Where                      | What it does                                                          |
-| ------------- | -------------------------- | --------------------------------------------------------------------- |
-| Loader        | `ui://wmit/explainer.html` | About 5 KB of plain HTML. Buffers host messages, imports the widget   |
-| Widget module | `/embed/v1/widget.js`      | The Preact widget, built with the site. Loads embeds, talks to host   |
-| Embed modules | `/embed/v1/<slug>.js`      | One per explainer, emitted by the site build. Mounts the 3D scene     |
-| MCP server    | `mcp/server/`              | `show_explainer` (widget) and `list_explainers` (text only)           |
-| Catalogue     | `mcp/dist/catalogue.json`  | Titles, chapters and text in all eight languages, built from the site |
+| Layer          | Where                      | What it does                                                         |
+| -------------- | -------------------------- | -------------------------------------------------------------------- |
+| Loader         | `ui://wmit/explainer.html` | About 5 KB of plain HTML. Buffers host messages, imports the widget  |
+| Widget module  | `/embed/v1/widget.js`      | The Preact widget, built with the site. Loads embeds, talks to host  |
+| Embed modules  | `/embed/v1/<slug>.js`      | One per explainer, emitted by the site build. Mounts the 3D scene    |
+| MCP server     | `mcp/server/`              | `show_explainer` (widget) and `list_explainers` (text only)          |
+| Explainer data | `/embed/v1/explainers/`    | Each explainer's source files, published by the site, read on demand |
 
 Each boundary exists for a reason.
 
@@ -42,6 +42,10 @@ Each boundary exists for a reason.
   `Access-Control-Allow-Origin: *`), but it cannot host `POST /mcp`: it answers 405. `createServer`
   touches no Node API, so the plan is a Cloudflare Worker for `/mcp`, with `WMIT_ASSET_BASE`
   pointing at the site on Pages. Locally, the Node server serves both.
+- **Server and explainer data.** The server keeps no copy of the explainers. It reads
+  `/embed/v1/manifest.json` and `/embed/v1/explainers/<slug>/...` from the asset base when a tool
+  needs them and keeps each file for 5 minutes, so a site deploy reaches the tools without a
+  server release. When a refresh fails, it serves the last copy it read.
 
 ## Language
 
