@@ -49,4 +49,8 @@ describe('chainsaw presets', () => {
     );
     expect(PRESETS.saw.highlight).toEqual([]);
   });
+
+  it('keeps the chain bright around the sprocket in the clutch chapter', () => {
+    expect(PRESETS.clutch.highlight).toContain('chain');
+  });
 });

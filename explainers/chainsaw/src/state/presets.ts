@@ -97,7 +97,15 @@ export const PRESETS: Record<PresetId, Preset> = {
       'oilPump',
       'chain',
     ],
-    highlight: ['clutch', 'clutchDrum', 'sprocket', 'chainBrakeBand', 'oilPump', 'oilFlow'],
+    highlight: [
+      'clutch',
+      'clutchDrum',
+      'sprocket',
+      'chainBrakeBand',
+      'oilPump',
+      'oilFlow',
+      'chain',
+    ],
   },
   chain: {
     camera: 'barChain',
