@@ -241,6 +241,40 @@ for (const [width, stacked] of [
   });
 }
 
+for (const [width, height, stacked] of [
+  [384, 854, true],
+  [1010, 723, false],
+] as const) {
+  test(`fullscreen ${width}px with host insets: the top inset sits over the ${stacked ? 'scene' : 'prose bar'}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height });
+    const { errors } = await open(page, 'slug=engine&mode=fullscreen&insets=100,0,120,0');
+    await expect(page.locator('.wmit.is-fs.st-ready')).toBeVisible();
+    const top = (await box(page, '.wmit')).y;
+    const scene = await box(page, '.scene-col');
+    const stage = await box(page, '.stage');
+    const dock = await box(page, '.dock-slot');
+    const barPad = await page
+      .locator('.prose .bar')
+      .evaluate((el) => parseFloat(getComputedStyle(el).paddingTop));
+    if (stacked) {
+      expect(barPad).toBeLessThan(100);
+      expect(stage.y).toBeGreaterThanOrEqual(top + 100);
+      const buttonTop = await page
+        .locator('.stage')
+        .evaluate((el) => getComputedStyle(el).getPropertyValue('--stage-button-top'));
+      expect(buttonTop).not.toContain('100px');
+    } else {
+      expect(barPad).toBe(104);
+      expect(stage.y).toBe(scene.y);
+    }
+    expect(dock.y).toBeGreaterThanOrEqual(stage.y);
+    expect(dock.y + dock.height).toBeLessThanOrEqual(scene.y + scene.height);
+    expect(errors).toEqual([]);
+  });
+}
+
 const realEmbed = existsSync(resolve(root, 'dist/embed/v1/black-hole.js'));
 test.describe('real embed (dist): the site dock and gauge in the slots', () => {
   test.skip(!realEmbed, 'npm run build first');

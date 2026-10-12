@@ -1161,13 +1161,15 @@ button:focus-visible,
     bottom: 10px;
   }
   .is-fs .stage {
+    top: var(--safe-top);
     --stage-inset: 10px;
+    --stage-button-top: 16px;
   }
   .prose {
     padding: 0 16px calc(24px + var(--safe-bottom));
   }
   .prose .bar {
-    padding-top: calc(4px + var(--safe-top));
+    padding-top: 4px;
   }
   .prose .masthead {
     padding-top: 8px;
