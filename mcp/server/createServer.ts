@@ -22,7 +22,7 @@ import {
   LANG_DESCRIBE,
   LIST_EXPLAINERS_DESCRIPTION,
   buildShowExplainerDescription,
-  type Aliases,
+  type Topics,
 } from './description.ts';
 import { injectAssetBase, injectReportContext } from './html.ts';
 import { listExplainers } from './tools/listExplainers.ts';
@@ -32,7 +32,7 @@ export { SERVER_NAME, SERVER_VERSION };
 
 export interface CreateServerOptions {
   catalogue: Catalogue;
-  aliases: Aliases;
+  topics: Topics;
   loaderHtml: string;
   assetBase: string;
   domain?: string;
@@ -47,7 +47,7 @@ export function availableSlugs(catalogue: Catalogue, excludeTags: readonly Tag[]
 }
 
 export function createServer(options: CreateServerOptions): McpServer {
-  const { catalogue, aliases, assetBase, domain } = options;
+  const { catalogue, topics, assetBase, domain } = options;
   const slugs = availableSlugs(catalogue, options.excludeTags);
   const entries: CatalogueEntry[] = catalogue.explainers.filter((e) => slugs.includes(e.slug));
   const bySlug = new Map(entries.map((e) => [e.slug, e]));
@@ -60,7 +60,7 @@ export function createServer(options: CreateServerOptions): McpServer {
     TOOL_SHOW_EXPLAINER,
     {
       title: 'Show a 3D explainer',
-      description: buildShowExplainerDescription(aliases, slugs),
+      description: buildShowExplainerDescription(topics, slugs),
       inputSchema: z.object({
         slug: z.enum(slugs as [string, ...string[]]).describe('Which explainer to show.'),
         chapter: z.string().optional().describe(SHOW_EXPLAINER_CHAPTER_DESCRIBE),

@@ -3,18 +3,18 @@ import { fileURLToPath } from 'node:url';
 import { Client, InMemoryTransport } from '@modelcontextprotocol/client';
 import { buildCatalogue } from '../../catalogue/build.ts';
 import { createServer, type CreateServerOptions } from '../../server/createServer.ts';
-import { loadAliases, loaderHtml } from '../../server/load.ts';
+import { loadTopics, loaderHtml } from '../../server/load.ts';
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 export const catalogue = buildCatalogue(root, '2026-01-01T00:00:00.000Z');
-export const aliases = loadAliases(catalogue);
+export const topics = loadTopics(catalogue);
 
 export const ASSET_BASE = 'http://localhost:3999/embed/v1/';
 
 export function serverOptions(over: Partial<CreateServerOptions> = {}): CreateServerOptions {
   return {
     catalogue,
-    aliases,
+    topics,
     loaderHtml: loaderHtml(root),
     assetBase: ASSET_BASE,
     ...over,

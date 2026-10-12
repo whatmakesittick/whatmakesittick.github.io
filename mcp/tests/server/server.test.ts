@@ -13,8 +13,8 @@ import {
 } from '../../shared/tools.ts';
 import { claudeAppDomain } from '../../server/assets.ts';
 import { availableSlugs } from '../../server/createServer.ts';
-import { buildShowExplainerDescription, topicLabel } from '../../server/description.ts';
-import { ASSET_BASE, aliases, catalogue, connect, slugs as SLUGS, textOf } from './helpers.ts';
+import { buildShowExplainerDescription } from '../../server/description.ts';
+import { ASSET_BASE, catalogue, connect, slugs as SLUGS, textOf, topics } from './helpers.ts';
 
 describe('tools/list', () => {
   it('show_explainer: slug enum, fixed resourceUri, read-only, description with every topic', async () => {
@@ -31,7 +31,7 @@ describe('tools/list', () => {
     });
     const description = show.description ?? '';
     expect(description.length).toBeLessThanOrEqual(SHOW_EXPLAINER_DESCRIPTION_MAX);
-    for (const slug of SLUGS) expect(description).toContain(topicLabel(aliases[slug] ?? []));
+    for (const slug of SLUGS) expect(description).toContain(topics[slug]);
   });
 
   it('both tools take an optional free-form lang and the description asks for it', async () => {
@@ -69,7 +69,7 @@ describe('tools/list', () => {
     const slugs = availableSlugs(full, ['biology']);
     expect(slugs).not.toContain('mri-scanner');
     expect(slugs).toHaveLength(SLUGS.length - hidden.length);
-    expect(buildShowExplainerDescription(aliases, slugs)).not.toContain('MRI scanner');
+    expect(buildShowExplainerDescription(topics, slugs)).not.toContain('MRI scanner');
   });
 });
 

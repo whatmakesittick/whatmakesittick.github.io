@@ -1,7 +1,7 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import aliases from '../../data/aliases.json' with { type: 'json' };
+import topics from '../../data/topics.json' with { type: 'json' };
 import { parse } from 'node-html-parser';
 import {
   buildCatalogue,
@@ -118,7 +118,7 @@ describe('catalogue from the explainers', () => {
 
   it('lists every explainer with a topic for the tool description', () => {
     expect(catalogue.explainers.length).toBeGreaterThanOrEqual(18);
-    expect(Object.keys(aliases).sort()).toEqual(catalogue.explainers.map((e) => e.slug).sort());
+    expect(Object.keys(topics).sort()).toEqual(catalogue.explainers.map((e) => e.slug).sort());
   });
 
   it('has the expected chapter counts and first chapters', () => {

@@ -2,10 +2,10 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildCatalogue } from '../catalogue/build.ts';
-import aliasesJson from '../data/aliases.json' with { type: 'json' };
+import topicsJson from '../data/topics.json' with { type: 'json' };
 import { isTag, type Catalogue, type Tag } from '../shared/catalogue.ts';
 import { PATHS } from '../shared/config.ts';
-import { validateAliases, type Aliases } from './description.ts';
+import { validateTopics, type Topics } from './description.ts';
 import { log } from './log.ts';
 
 export const REPOSITORY_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -27,9 +27,9 @@ export function loadCatalogue(root: string = REPOSITORY_ROOT): {
   return { catalogue: buildCatalogue(root), kind: 'sources' };
 }
 
-export function loadAliases(catalogue: Catalogue): Aliases {
-  return validateAliases(
-    aliasesJson,
+export function loadTopics(catalogue: Catalogue): Topics {
+  return validateTopics(
+    topicsJson,
     catalogue.explainers.map((e) => e.slug),
   );
 }
