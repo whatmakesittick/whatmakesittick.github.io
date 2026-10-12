@@ -50,6 +50,18 @@
   --t-mono-s: 500 0.75rem/1 var(--f-mono);
 }
 
+:root:lang(zh) {
+  --f-sans:
+    'Inter Variable', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC',
+    'Noto Sans SC', sans-serif;
+}
+
+:root:lang(ja) {
+  --f-sans:
+    'Inter Variable', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', Meiryo,
+    'Noto Sans CJK JP', 'Noto Sans JP', sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }

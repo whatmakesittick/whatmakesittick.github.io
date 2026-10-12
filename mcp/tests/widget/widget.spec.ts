@@ -125,6 +125,26 @@ test('a new host locale switches when the model passed no lang', async ({ page }
   expect(errors).toEqual([]);
 });
 
+for (const [lang, expected, absent] of [
+  ['zh', ['PingFang SC', 'Noto Sans SC'], ['Yu Gothic UI']],
+  ['ja', ['Hiragino Sans', 'Noto Sans JP'], ['PingFang SC']],
+  ['en', ['Inter Variable'], ['PingFang SC', 'Yu Gothic UI']],
+] as const) {
+  test(`the widget text uses the site font stack for ${lang}`, async ({ page }) => {
+    const { errors } = await open(page, `slug=mri-scanner&chapter=magnet&lang=${lang}`);
+    await expect(page.locator(`.wmit.st-ready[lang="${lang}"]`)).toBeVisible();
+    for (const selector of ['.a-head .title', '.a-chapter h3', '.a-head .ghost', '.pill']) {
+      const family = await page
+        .locator(selector)
+        .first()
+        .evaluate((el) => getComputedStyle(el).fontFamily);
+      for (const name of expected) expect(family, selector).toContain(name);
+      for (const name of absent) expect(family, selector).not.toContain(name);
+    }
+    expect(errors).toEqual([]);
+  });
+}
+
 for (const lang of ['en', 'uk']) {
   test(`the stage guards the wheel and holds the dock height during a switch (${lang})`, async ({
     page,
