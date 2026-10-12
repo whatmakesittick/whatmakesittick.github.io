@@ -1,14 +1,6 @@
 import type { SceneOptions } from '@core/scene/shell';
-import type { PartId } from '../ids';
 import { SCENE_LIMITS, SEE_THROUGH_DIM } from './constants';
-
-export const UNDIMMED_PARTS: readonly PartId[] = [
-  'log',
-  'chips',
-  'freshCharge',
-  'exhaustGas',
-  'oilFlow',
-];
+import { UNDIMMED_PARTS } from './partInfo';
 
 export const SCENE_OPTIONS: SceneOptions = {
   camera: {
