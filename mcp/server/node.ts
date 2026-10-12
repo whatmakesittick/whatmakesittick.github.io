@@ -17,7 +17,14 @@ import { LOADER_VERSION } from '../shared/loader.ts';
 import { claudeAppDomain, remoteSiteBase, resolveAssetBase } from './assets.ts';
 import { createServer, type CreateServerOptions } from './createServer.ts';
 import { createHttpHandler, type HealthInfo, type HttpHandler } from './http.ts';
-import { fileReader, loaderHtml, parseExcludeTags, siteDir, widgetModuleKind } from './load.ts';
+import {
+  fileReader,
+  loaderHtml,
+  parseAllowedOrigins,
+  parseExcludeTags,
+  siteDir,
+  widgetModuleKind,
+} from './load.ts';
 import { log } from './log.ts';
 import { SITE_INDEX_FILE, createSite, httpReader } from './site.ts';
 
@@ -25,10 +32,7 @@ const stdio = process.argv.includes('--stdio');
 const port = Number.parseInt(process.env[ENV.port] ?? '', 10) || DEFAULT_PORT;
 const localSite = process.env[ENV.siteDir] || PATHS.site;
 const bindHost = process.env[ENV.host] || DEFAULT_HOST;
-const allowedOrigins = (process.env[ENV.allowedOrigins] ?? '')
-  .split(',')
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const allowedOrigins = parseAllowedOrigins(process.env[ENV.allowedOrigins]);
 const site = siteDir(localSite);
 const publicUrl = stdio ? undefined : process.env[ENV.publicUrl] || undefined;
 const assetInput = { assetBase: process.env[ENV.assetBase] || undefined, publicUrl, port };

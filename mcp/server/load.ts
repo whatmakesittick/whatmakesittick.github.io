@@ -44,3 +44,18 @@ export function parseExcludeTags(raw: string | undefined): Tag[] {
   }
   return out;
 }
+
+export function parseAllowedOrigins(raw: string | undefined): string[] {
+  const out: string[] = [];
+  for (const entry of (raw ?? '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)) {
+    try {
+      out.push(new URL(entry).origin);
+    } catch {
+      log(`WMIT_ALLOWED_ORIGINS: "${entry}" is not an origin, ignored`);
+    }
+  }
+  return out;
+}
