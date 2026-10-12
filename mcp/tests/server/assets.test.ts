@@ -4,6 +4,7 @@ import { buildUiMeta, remoteSiteBase, resolveAssetBase } from '../../server/asse
 import { injectAssetBase } from '../../server/html.ts';
 import { truncateBytes, byteLength } from '../../server/text.ts';
 import { parseExcludeTags } from '../../server/load.ts';
+import { serverLog } from './helpers.ts';
 
 describe('resolveAssetBase', () => {
   it('WMIT_ASSET_BASE wins, then origin(MCP_PUBLIC_URL), then localhost:$PORT', () => {
@@ -78,8 +79,11 @@ describe('truncateBytes', () => {
 });
 
 describe('parseExcludeTags', () => {
+  const logged = serverLog();
+
   it('keeps known tags only', () => {
     expect(parseExcludeTags('weapons, space,kitchen')).toEqual(['weapons', 'space']);
+    expect(logged()).toContain('unknown tag "kitchen"');
     expect(parseExcludeTags(undefined)).toEqual([]);
   });
 });

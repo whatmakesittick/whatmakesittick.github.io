@@ -7,7 +7,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';
 import { createServer } from '../../server/createServer.ts';
 import { cacheControl, createHttpHandler } from '../../server/http.ts';
-import { serverOptions } from './helpers.ts';
+import { serverLog, serverOptions } from './helpers.ts';
 
 let dir: string;
 let server: Server;
@@ -86,6 +86,8 @@ describe('site files', () => {
 });
 
 describe('/healthz and /mcp', () => {
+  const logged = serverLog();
+
   it('healthz answers JSON', async () => {
     const res = await fetch(`${base}/healthz`);
     expect(res.status).toBe(200);
@@ -123,6 +125,7 @@ describe('/healthz and /mcp', () => {
         body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
       });
       expect(res.status).toBe(500);
+      expect(logged()).toContain('index unavailable');
     } finally {
       failing.close();
     }

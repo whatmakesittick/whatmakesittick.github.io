@@ -9,7 +9,9 @@ import {
   httpReader,
   type SiteReader,
 } from '../../server/site.ts';
-import { catalogue, files, reader } from './helpers.ts';
+import { catalogue, files, reader, serverLog } from './helpers.ts';
+
+const logged = serverLog();
 
 const mri = catalogue.explainers.find((e) => e.slug === 'mri-scanner')!;
 
@@ -59,6 +61,8 @@ describe('createSite cache', () => {
     fail = true;
     time = 100;
     expect(await site.index()).toEqual(first);
+    await flush();
+    expect(logged()).toContain('refresh manifest.json');
   });
 
   it('passes the error on when there is no good value yet', async () => {
@@ -130,6 +134,7 @@ describe('createSite refreshes', () => {
     time = 100 + SITE_BACKOFF_MS;
     expect(await site.index()).toEqual(first);
     expect(read).toHaveBeenCalledTimes(3);
+    expect(logged()).toContain('refresh manifest.json');
   });
 
   it('rejects without reading again within the wait when there is no good value', async () => {
@@ -164,6 +169,7 @@ describe('createSite refreshes', () => {
     await site.index();
     await flush();
     expect(await site.index()).toEqual(first);
+    expect(logged()).toContain('refresh manifest.json');
   });
 
   it('names the index when it is malformed at startup', async () => {
@@ -239,6 +245,7 @@ describe('createSite entry', () => {
     await site.entry('engine', 'en');
     await flush();
     expect(await site.entry('engine', 'en')).toEqual(first);
+    expect(logged()).toContain('refresh explainers/engine/chapters.html');
   });
 });
 
@@ -298,6 +305,7 @@ describe('createSite falls back to English', () => {
     const entry = await site.entry('engine', 'uk');
     expect(entry?.locales).toEqual({});
     expect(localizeEntry(entry!, 'uk')).toEqual(localizeEntry(engine, 'en'));
+    expect(logged()).toContain('locales/uk.json unavailable, English instead');
   });
 
   it.each([
@@ -310,6 +318,7 @@ describe('createSite falls back to English', () => {
     expect(await site.summary('engine', 'uk')).toEqual(
       await createSite(reader).summary('engine', 'en'),
     );
+    expect(logged()).toContain('locales/uk.json unavailable, English instead');
   });
 });
 

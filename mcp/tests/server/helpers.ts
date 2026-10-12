@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { afterEach, beforeEach, vi, type MockInstance } from 'vitest';
 import { Client, InMemoryTransport } from '@modelcontextprotocol/client';
 import { buildCatalogue } from '../../../vite/catalogue.ts';
 import { EMBED_DIRECTORY, embedManifest, embedSourceFiles } from '../../../vite/embed.ts';
@@ -49,3 +50,12 @@ export const textOf = (result: { content?: unknown }): string =>
     ?.text ?? '';
 
 export const slugs = catalogue.explainers.map((e) => e.slug).sort();
+
+export function serverLog(): () => string {
+  let spy: MockInstance<typeof console.error> | undefined;
+  beforeEach(() => {
+    spy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+  });
+  afterEach(() => spy?.mockRestore());
+  return () => (spy?.mock.calls ?? []).flat().map(String).join(' ');
+}

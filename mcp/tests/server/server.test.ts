@@ -22,9 +22,12 @@ import {
   index,
   reader,
   slugs as SLUGS,
+  serverLog,
   textOf,
   topics,
 } from './helpers.ts';
+
+const logged = serverLog();
 
 describe('tools/list', () => {
   it('show_explainer: slug enum, fixed resourceUri, read-only, description with every topic', async () => {
@@ -193,6 +196,7 @@ describe('show_explainer', () => {
     expect(res.isError).toBe(true);
     expect(textOf(res)).toContain('"engine"');
     expect(textOf(res)).toContain('unavailable');
+    expect(logged()).toContain('show_explainer engine');
   });
 
   it('modelText ≤ 4 KB for every chapter', async () => {
@@ -364,5 +368,6 @@ describe('list_explainers', () => {
     expect(res.isError).toBe(true);
     expect(textOf(res)).toContain('unavailable right now. Try again later.');
     expect(textOf(res)).not.toMatch(/https?:|manifest\.json|503/);
+    expect(logged()).toContain('list_explainers');
   });
 });
