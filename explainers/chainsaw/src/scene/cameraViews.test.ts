@@ -28,7 +28,7 @@ describe('camera views', () => {
   it('frames the cylinder wider on a desktop', () => {
     expect(framedViews('phone').cylinderCut.margin).toBe(1.15);
     expect(framedViews('desktop').cylinderCut.margin).toBe(1.3);
-    expect(framedViews('phone').barChain.direction).toEqual([0.05, 0.7, 1]);
+    expect(framedViews('phone').barChain.direction).toEqual([0.05, 1.5, 1]);
     CAMERA_VIEW_IDS.forEach((id) => expect(framedViews('desktop')[id].follow, id).toBeUndefined());
   });
 

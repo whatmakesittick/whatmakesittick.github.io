@@ -47,7 +47,7 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   },
   barChain: {
     region: 'bar',
-    direction: { phone: [0.05, 0.7, 1], desktop: [0.1, 0.55, 1] },
+    direction: { phone: [0.05, 1.5, 1], desktop: [0.1, 1.2, 1] },
     margin: both(1.05),
   },
   kickbackWide: {
