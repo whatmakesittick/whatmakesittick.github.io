@@ -1,8 +1,9 @@
 import type { Readout } from '@core/explainer';
-import { MAX_CHAIN_SPEED_MS, MAX_POWER_RPM } from '../model';
+import { t } from '@core/i18n';
+import { MAX_CHAIN_SPEED_MS, MAX_POWER_RPM, phaseOf } from '../model';
 import { liveReading } from '../state';
 import type { ChainsawStoreState } from '../state';
-import { CLUTCH_TONES, THEME } from '../theme';
+import { CLUTCH_TONES, PHASE_TONES, THEME } from '../theme';
 import { formatClutch, formatRpm, formatSpeedMs } from './format';
 
 export const CHAINSAW_READOUTS: readonly Readout<ChainsawStoreState>[] = [
@@ -29,5 +30,12 @@ export const CHAINSAW_READOUTS: readonly Readout<ChainsawStoreState>[] = [
     numeric: false,
     value: (state) => formatClutch(liveReading(state).clutch),
     tone: (state) => CLUTCH_TONES[liveReading(state).clutch],
+  },
+  {
+    id: 'phase',
+    labelKey: 'readouts.phase',
+    numeric: false,
+    value: (state) => t(`timeline.phase.${phaseOf(state.phase)}`),
+    tone: (state) => PHASE_TONES[phaseOf(state.phase)],
   },
 ];

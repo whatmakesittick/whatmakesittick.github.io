@@ -1,10 +1,10 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { createChainsawStore } from '../state';
-import { CLUTCH_TONES } from '../theme';
+import { CLUTCH_TONES, PHASE_TONES } from '../theme';
 import { CHAINSAW_READOUTS } from './readouts';
 import { TEST_LOCALE, fill, initTestLocale } from './testing';
 
-const { units, readouts } = TEST_LOCALE;
+const { units, readouts, timeline } = TEST_LOCALE;
 
 function row(id: string) {
   const found = CHAINSAW_READOUTS.find((readout) => readout.id === id);
@@ -15,10 +15,16 @@ function row(id: string) {
 describe('gauge readouts', () => {
   beforeAll(() => initTestLocale());
 
-  it('shows the engine, the chain and the clutch', () => {
-    expect(CHAINSAW_READOUTS.map((readout) => readout.id)).toEqual(['rpm', 'chain', 'clutch']);
+  it('shows the engine, the chain, the clutch and the stroke', () => {
+    expect(CHAINSAW_READOUTS.map((readout) => readout.id)).toEqual([
+      'rpm',
+      'chain',
+      'clutch',
+      'phase',
+    ]);
     CHAINSAW_READOUTS.forEach((readout) => expect(readout.labelKey).toBe(`readouts.${readout.id}`));
     expect(row('clutch').numeric).toBe(false);
+    expect(row('phase').numeric).toBe(false);
   });
 
   it('fills both meters at full throttle and empties the chain one at idle', () => {
@@ -32,5 +38,15 @@ describe('gauge readouts', () => {
     expect(row('chain').meter?.share(idle)).toBe(0);
     expect(row('clutch').value(idle)).toBe(readouts.clutchState.open);
     expect(row('clutch').tone?.(idle)).toBe(CLUTCH_TONES.open);
+  });
+
+  it('names the stroke under the crank as it turns', () => {
+    const store = createChainsawStore();
+    store.getState().setPhase(10);
+    expect(row('phase').value(store.getState())).toBe(timeline.phase.power);
+    expect(row('phase').tone?.(store.getState())).toBe(PHASE_TONES.power);
+    store.getState().setPhase(300);
+    expect(row('phase').value(store.getState())).toBe(timeline.phase.compression);
+    expect(row('phase').tone?.(store.getState())).toBe(PHASE_TONES.compression);
   });
 });
