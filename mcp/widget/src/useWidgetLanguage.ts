@@ -44,5 +44,5 @@ export function useWidgetLanguage(host: WidgetHost, packs: Packs, session: Scene
     document.documentElement.lang = pack.lang;
   }, [pack.lang]);
 
-  return { lang, pack, waiting: patient && settled !== lang };
+  return { pack, waiting: patient && settled !== lang };
 }

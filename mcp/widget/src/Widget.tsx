@@ -1,8 +1,6 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { explainerUrl, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { WidgetHost } from './bridge.ts';
-import { reserveDock, type DockReserve } from './dockReserve.ts';
-import { watchGaugeClearance } from './gaugeClearance.ts';
 import { StringsContext } from './i18n/context.ts';
 import type { Packs } from './i18n/packs.ts';
 import type { ModuleLoader, SceneStatus } from './scene.ts';
@@ -20,6 +18,7 @@ import { useHostContext } from './useHostContext.ts';
 import { useModelContextSync } from './useModelContextSync.ts';
 import { useSceneSession } from './useSceneSession.ts';
 import { useSceneSync } from './useSceneSync.ts';
+import { useStage } from './useStage.ts';
 import { useTarget } from './useTarget.ts';
 import { useWidgetLanguage } from './useWidgetLanguage.ts';
 
@@ -33,11 +32,7 @@ export interface WidgetProps {
 
 export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const wheelArmed = useRef(false);
-  const resumeOnVisible = useRef(false);
   const painted = useRef(false);
-  const dockReserve = useRef<DockReserve | undefined>(undefined);
 
   const sceneSession = useSceneSession(host, loader, webgl);
   const { session, refs, ctrlRef, controller, status, progress, info, setInfo } = sceneSession;
@@ -49,7 +44,6 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const find = (slug: string): WidgetCatalogueEntry | undefined =>
     entriesRef.current.find((e) => e.slug === slug);
   const { target, setTarget, inputSeen, resultSeen } = useTarget(host, find, session);
-
   const ctx = useHostContext(host);
 
   const slug = target?.slug;
@@ -80,57 +74,8 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     if (!fullscreen) setDrawerOpen(false);
   }, [fullscreen]);
 
-  useEffect(() => {
-    const stage = refs.host.current?.closest<HTMLElement>('[data-stage]');
-    if (!stage || typeof ResizeObserver === 'undefined') return;
-    return watchGaugeClearance(stage);
-  }, [entry !== undefined]);
-
-  useEffect(() => {
-    const slot = refs.dock.current;
-    if (!slot) return;
-    const reserve = reserveDock(slot);
-    dockReserve.current = reserve;
-    return () => {
-      reserve.dispose();
-      dockReserve.current = undefined;
-    };
-  }, [entry !== undefined]);
-
   const sceneReady = status === 'ready' && controller?.info.slug === slug;
-  useLayoutEffect(() => {
-    dockReserve.current?.sync({ inline: !fullscreen, ready: sceneReady });
-  }, [sceneReady, fullscreen, entry !== undefined]);
-
-  useEffect(() => {
-    const stage = refs.host.current?.closest('[data-stage]');
-    if (!stage || typeof IntersectionObserver === 'undefined') return;
-    const io = new IntersectionObserver(([e]) => {
-      const ctrl = ctrlRef.current;
-      if (!ctrl || !e) return;
-      if (!e.isIntersecting) {
-        if (ctrl.getState().playing) {
-          resumeOnVisible.current = true;
-          ctrl.pause();
-        }
-      } else if (resumeOnVisible.current) {
-        resumeOnVisible.current = false;
-        ctrl.play();
-      }
-    });
-    io.observe(stage);
-    return () => io.disconnect();
-  }, [entry !== undefined]);
-
-  useEffect(() => {
-    const el = refs.host.current;
-    if (!el) return;
-    const onWheel = (e: WheelEvent) => {
-      if (!fullscreen && !wheelArmed.current) e.stopPropagation();
-    };
-    el.addEventListener('wheel', onWheel, { capture: true });
-    return () => el.removeEventListener('wheel', onWheel, { capture: true });
-  }, [fullscreen, entry !== undefined]);
+  const wheelArmed = useStage(refs, ctrlRef, entry !== undefined, fullscreen, sceneReady);
 
   const touched =
     <A extends unknown[]>(fn: (...a: A) => void) =>
@@ -170,7 +115,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     toggleDrawer: (open) => setDrawerOpen((v) => open ?? !v),
   };
 
-  useKeyboard(actions, info, disc, status === 'ready' && controller?.info.slug === slug);
+  useKeyboard(actions, info, disc, sceneReady);
 
   const { style, touch } = frameOf(
     ctx,
