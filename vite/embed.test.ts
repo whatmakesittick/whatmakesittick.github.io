@@ -14,6 +14,7 @@ import {
 } from './embed.ts';
 import { EMBED_API_VERSION } from '../src/core/embed/manifest.ts';
 import type { EmbedManifest } from '../src/core/embed/manifest.ts';
+import { loadExplainers } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 
 const root = resolve(__dirname, '..');
@@ -69,6 +70,20 @@ describe('embedSourceFiles', () => {
   });
 });
 
+describe('embedSourceFiles chapters', () => {
+  it('publishes a chapters file of any name as chapters.html', () => {
+    const story = explainer('engine');
+    story.manifest = { ...story.manifest, chapters: 'story/chapters-v2.html' };
+    const chapters = embedSourceFiles([story]).find(({ fileName }) =>
+      fileName.endsWith('/chapters.html'),
+    );
+    expect(chapters).toEqual({
+      fileName: `${EMBED_DIRECTORY}/explainers/engine/chapters.html`,
+      source: join(root, 'explainers', 'engine', 'story', 'chapters-v2.html'),
+    });
+  });
+});
+
 describe('renderEmbedEntry', () => {
   it('bundles English and loads the other languages on demand', () => {
     const source = renderEmbedEntry({
@@ -117,9 +132,7 @@ describe.skipIf(!built)('dist/embed/v1 legacy paths', () => {
   const paths = [
     ...manifest.explainers.map(({ slug }) => `${EMBED_DIRECTORY}/covers/${slug}.webp`),
     ...legacyPaths.filter((path) => path.includes('/fonts/')),
-    ...embedSourceFiles(manifest.explainers.map(({ slug }) => explainer(slug))).map(
-      ({ fileName }) => fileName,
-    ),
+    ...embedSourceFiles(loadExplainers(root)).map(({ fileName }) => fileName),
   ];
 
   it.each(paths)('%s exists', (path) => {

@@ -2,6 +2,7 @@ import type { LoadedAbout } from './about.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { alternates, siteRoutes } from './routes.ts';
 import type { PageRoute } from './routes.ts';
+import { EMBED_DIRECTORY, EMBED_SOURCES_DIRECTORY } from './embedPaths.ts';
 import { pageUrl, siteUrl } from './site.ts';
 import type { SiteFile } from './siteFiles.ts';
 import { xmlBlock, xmlDocument, xmlElement, xmlEmptyElement } from './xml.ts';
@@ -41,7 +42,14 @@ export function renderSitemap(routes: readonly PageRoute[]): string {
 }
 
 export function renderRobots(): string {
-  return ['User-agent: *', 'Allow: /', '', `Sitemap: ${siteUrl(SITEMAP_FILE)}`, ''].join('\n');
+  return [
+    'User-agent: *',
+    'Allow: /',
+    `Disallow: /${EMBED_DIRECTORY}/${EMBED_SOURCES_DIRECTORY}/`,
+    '',
+    `Sitemap: ${siteUrl(SITEMAP_FILE)}`,
+    '',
+  ].join('\n');
 }
 
 export function crawlFiles(explainers: readonly LoadedExplainer[], about: LoadedAbout): SiteFile[] {

@@ -48,6 +48,4 @@ export const textOf = (result: { content?: unknown }): string =>
   ((result.content ?? []) as { type: string; text?: string }[]).find((c) => c.type === 'text')
     ?.text ?? '';
 
-export const fixture = catalogue;
 export const slugs = catalogue.explainers.map((e) => e.slug).sort();
-export const catalogues: [string, typeof catalogue][] = [['site', catalogue]];

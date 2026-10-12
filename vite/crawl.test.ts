@@ -57,9 +57,9 @@ describe('renderSitemap', () => {
 });
 
 describe('renderRobots', () => {
-  it('allows every crawler and points at the sitemap', () => {
+  it('allows every crawler but the published sources and points at the sitemap', () => {
     expect(renderRobots()).toBe(
-      'User-agent: *\nAllow: /\n\nSitemap: https://whatmakesittick.github.io/sitemap.xml\n',
+      'User-agent: *\nAllow: /\nDisallow: /embed/v1/explainers/\n\nSitemap: https://whatmakesittick.github.io/sitemap.xml\n',
     );
   });
 });

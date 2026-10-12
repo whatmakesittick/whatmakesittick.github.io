@@ -49,6 +49,7 @@ npm run mcp:stdio      # MCP over stdio; serves the site files on 127.0.0.1:$POR
 | `MCP_PUBLIC_URL`    | The public `/mcp` URL behind a tunnel: sets the asset base origin and Claude's `ui.domain`        |
 | `WMIT_EXCLUDE_TAGS` | Comma separated tags whose explainers the tools leave out, e.g. `weapons`                         |
 | `WMIT_LOG_REQUESTS` | Logs every MCP method and file request to stderr                                                  |
+| `WMIT_SITE_DIR`     | The built site the server reads and serves, `dist` by default                                     |
 
 Without `WMIT_ASSET_BASE` the asset base is the server's own origin (`MCP_PUBLIC_URL` or
 `http://localhost:$PORT`) and the server serves `dist/` with CORS and
@@ -99,14 +100,23 @@ The height still changes once when the new explainer's dock is taller or shorter
 
 ## Explainer data
 
-The server keeps no copy of the explainers. It reads what the site publishes, from the asset base:
-`/embed/v1/manifest.json` for the list of explainers, their tags, topics and chapter titles, and
-`/embed/v1/explainers/<slug>/` for each explainer's `explainer.json`, `chapters.html` and
-`locales/<code>.json`. It reads a file when a tool needs it and keeps it for 5 minutes
-(`createSite` in `server/site.ts`). When a refresh fails it serves the last copy it read. A
-`show_explainer` call reads the English locale and the asked one only; `list_explainers` reads the
-manifest and the asked locale. The server reads the manifest once at startup and stops when it
-cannot: run `npm run build` first, or point `WMIT_ASSET_BASE` at a site that has it.
+The server keeps no copy of the explainers. It reads what the site publishes: `manifest.json` for
+the list of explainers, their tags, topics and chapter titles, and `explainers/<slug>/` for each
+explainer's `explainer.json`, `chapters.html` and `locales/<code>.json`. Run locally, it reads them
+from `dist/embed/v1/` on disk (`fileReader` in `server/load.ts`), never from whatever answers on the
+asset port. When `WMIT_ASSET_BASE` names another origin, the HTTP server reads them from there
+(`httpReader` in `server/site.ts`): over https (plain http only on this machine), without following
+redirects, at most 4 MB a file and 10 seconds a request.
+
+Each file is parsed and checked as it is read, then kept for 5 minutes (`createSite` in
+`server/site.ts`). Calls that need the same file at once share one read. After 5 minutes the server
+answers with the copy it has and refreshes it in the background. A refresh that fails, or brings a
+body that does not parse or check, keeps the last good copy, and the server waits 30 seconds before
+it tries that file again. `explainer.json` is read leniently: a tag or language code the server does
+not know is dropped. A `show_explainer` call reads the English locale and the asked one only, and
+falls back to English when the asked one cannot be read; `list_explainers` reads the manifest and
+the asked locale. The server reads the manifest once at startup and stops when it cannot: run
+`npm run build` first.
 
 `LOADER_VERSION` in `shared/loader.ts` numbers the loader. A loader change is a breaking event: users
 get it only when their host reads the resource again (in Claude, by reconnecting the connector), so
@@ -129,6 +139,8 @@ npm run dev:widget     # the dev page: http://localhost:5183/dev.html?slug=engin
 
 ## Later
 
-`createServer` takes the site's index, a `Site` that reads the explainers over `fetch` and a widget loader, and touches no Node API, so a
-Cloudflare Worker can serve `/mcp` with the web standard transport and point `WMIT_ASSET_BASE` at
-the site on GitHub Pages, which already serves `/embed/v1/` with `Access-Control-Allow-Origin: *`.
+`createServer` takes the site's index, a `Site` and a widget loader, and touches no Node API.
+`server/site.ts` and every module it imports touch none either (`tests/server/pure.test.ts` checks
+it), so a Cloudflare Worker can serve `/mcp` with the web standard transport and read the site on
+GitHub Pages with `httpReader`, which already serves `/embed/v1/` with
+`Access-Control-Allow-Origin: *`.

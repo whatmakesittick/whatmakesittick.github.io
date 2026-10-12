@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { LANGUAGE_CODES } from '../../../src/core/i18n/languages.ts';
 import { localizeEntry } from '../../shared/catalogue.ts';
 import { resolveChapter, tokens } from '../../server/chapters.ts';
-import { catalogues, fixture } from './helpers.ts';
+import { catalogue } from './helpers.ts';
 
-const mri = fixture.explainers.find((e) => e.slug === 'mri-scanner')!;
-const engine = fixture.explainers.find((e) => e.slug === 'engine')!;
+const mri = catalogue.explainers.find((e) => e.slug === 'mri-scanner')!;
+const engine = catalogue.explainers.find((e) => e.slug === 'engine')!;
 
 describe('resolveChapter', () => {
   it.each([
@@ -49,18 +49,15 @@ describe('resolveChapter', () => {
     expect(resolveChapter(engine, '4 cylinders').chapter.id).toBe('inline4');
   });
 
-  it.each(catalogues)(
-    'resolves every chapter of the %s catalogue by id, number and title',
-    (_name, cat) => {
-      for (const e of cat.explainers) {
-        for (const c of e.chapters) {
-          expect(resolveChapter(e, c.id).chapter.id).toBe(c.id);
-          expect(resolveChapter(e, String(c.index)).chapter.id).toBe(c.id);
-          if (tokens(c.title).length > 0) expect(resolveChapter(e, c.title).chapter.id).toBe(c.id);
-        }
+  it('resolves every chapter of the site by id, number and title', () => {
+    for (const e of catalogue.explainers) {
+      for (const c of e.chapters) {
+        expect(resolveChapter(e, c.id).chapter.id).toBe(c.id);
+        expect(resolveChapter(e, String(c.index)).chapter.id).toBe(c.id);
+        if (tokens(c.title).length > 0) expect(resolveChapter(e, c.title).chapter.id).toBe(c.id);
       }
-    },
-  );
+    }
+  });
 });
 
 describe('tokens', () => {
@@ -108,7 +105,7 @@ describe('resolveChapter in other languages', () => {
   });
 
   it.each(LANGUAGE_CODES)('resolves every chapter by its %s title', (lang) => {
-    for (const e of fixture.explainers) {
+    for (const e of catalogue.explainers) {
       for (const c of localizeEntry(e, lang).chapters) {
         expect(resolveChapter(e, c.title, lang).chapter.id, `${e.slug}/${c.id}`).toBe(c.id);
       }

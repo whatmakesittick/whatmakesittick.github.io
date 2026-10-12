@@ -585,7 +585,8 @@ emitted at build and served by the dev server, never committed. The sitemap list
 every page in every language, each with `xhtml:link` alternates for all its language
 variants and `x-default`, and a `lastmod`: an explainer page's `dateModified`, and for
 the catalogue the newest `dateModified` among the explainers. `robots.txt` allows
-every crawler and points at the sitemap. `public/favicon.ico` holds the favicon at 16 and
+every crawler, keeps it out of the published sources in `/embed/v1/explainers/` and points at the
+sitemap. `public/favicon.ico` holds the favicon at 16 and
 32 pixels for browsers and crawlers that ask for it: `scripts/social-images.sh` renders
 `public/favicon.svg` at both sizes and `scripts/favicon-ico.ts` packs the PNG files with
 `encodeIco` from `vite/ico.ts`. Every page links it after the SVG icon.

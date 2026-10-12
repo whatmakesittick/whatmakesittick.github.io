@@ -43,9 +43,13 @@ Each boundary exists for a reason.
   touches no Node API, so the plan is a Cloudflare Worker for `/mcp`, with `WMIT_ASSET_BASE`
   pointing at the site on Pages. Locally, the Node server serves both.
 - **Server and explainer data.** The server keeps no copy of the explainers. It reads
-  `/embed/v1/manifest.json` and `/embed/v1/explainers/<slug>/...` from the asset base when a tool
-  needs them and keeps each file for 5 minutes, so a site deploy reaches the tools without a
-  server release. When a refresh fails, it serves the last copy it read.
+  `manifest.json` and `explainers/<slug>/...` of `/embed/v1/` when a tool needs them, so a site
+  deploy reaches the tools without a server release. Run locally, it reads them from
+  `dist/embed/v1/` on disk. A Worker, or the HTTP server with `WMIT_ASSET_BASE` on another origin,
+  reads them over https, follows no redirect and takes at most 4 MB a file. Each file is checked
+  and kept for 5 minutes; an older copy is served at once and refreshed in the background. A
+  refresh that fails or brings a bad body keeps the last good copy, and the file is not tried again
+  for 30 seconds.
 
 ## Language
 
