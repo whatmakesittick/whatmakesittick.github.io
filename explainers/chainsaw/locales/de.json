@@ -1,0 +1,268 @@
+{
+  "meta": {
+    "title": "So funktioniert eine Kettensäge",
+    "eyebrow": "Motorgeräte",
+    "tagline": "Eine Kurbelumdrehung in Zeitlupe: wie ein Funke, eine kreisende Kupplung und eine Schlaufe scharfer Zähne aus Kraftstoff Holzspäne machen.",
+    "description": "Eine 3D-Kettensäge, Umdrehung für Umdrehung: der Zweitaktmotor, der Kraftstoff, die Kupplung, die die Kette im Leerlauf stoppt, Zähne und Kettenbremse.",
+    "summary": "Die ganze Säge, der Zweitaktmotor, Kraftstoff und Vergaser, die Kupplung, die Sägekette sowie Rückschlag und Kettenbremse.",
+    "socialAlt": "Eine aufgeschnittene Benzin-Kettensäge mit der Schiene in einem Holzstamm, daneben der Titel „So funktioniert eine Kettensäge“"
+  },
+  "stage": {
+    "label": "Interaktives Modell einer Kettensäge",
+    "gauge": "Motor und Kette live"
+  },
+  "timeline": {
+    "label": "Kurbelumdrehung",
+    "phases": "Zu einem Abschnitt der Umdrehung springen",
+    "speed": "Wiedergabetempo",
+    "value": "{{share}} %",
+    "during": "{{share}} % der Umdrehung, {{phase}}",
+    "speedValue": "1/{{factor}}",
+    "slower": "{{factor}}-mal langsamer als in Wirklichkeit",
+    "phase": {
+      "power": "Arbeitstakt",
+      "exhaust": "Auslass",
+      "scavenge": "Spülung",
+      "compression": "Verdichtung"
+    },
+    "jump": {
+      "power": "Zum Arbeitstakt springen",
+      "exhaust": "Zum Öffnen des Auslasses springen",
+      "scavenge": "Zur Spülung springen",
+      "compression": "Zur Verdichtung springen"
+    },
+    "detail": {
+      "power": "brennendes Gas drückt den Kolben nach unten",
+      "exhaust": "verbranntes Gas strömt hinaus",
+      "scavenge": "frisches Gemisch schiebt das verbrannte Gas hinaus",
+      "compression": "der Kolben verdichtet das Gemisch, das Kurbelgehäuse füllt sich"
+    }
+  },
+  "controls": {
+    "label": "Steuerung des Modells",
+    "throttle": "Gas",
+    "throttleOptions": {
+      "idle": "Leerlauf",
+      "half": "Halbgas",
+      "full": "Vollgas"
+    },
+    "brakeOptions": {
+      "off": "Bremse aus",
+      "on": "Bremse an"
+    },
+    "kickbackOptions": {
+      "strong": "Rückschlag zeigen"
+    },
+    "groups": {
+      "throttle": "Gas",
+      "brake": "Kettenbremse",
+      "kickback": "Rückschlag zeigen"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Schnittbild",
+        "short": "Schnitt",
+        "hint": "Schnittbild (C)"
+      },
+      "flow": {
+        "name": "Gas- und Ölfluss",
+        "short": "Fluss",
+        "hint": "Gas- und Ölfluss (F)"
+      },
+      "zone": {
+        "name": "Rückschlagzone",
+        "short": "Zone",
+        "hint": "Rückschlagzone (K)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    }
+  },
+  "readouts": {
+    "rpm": "Motor",
+    "chain": "Kette",
+    "clutch": "Kupplung",
+    "clutchState": {
+      "open": "Offen",
+      "driving": "Greift",
+      "slipping": "Rutscht"
+    }
+  },
+  "units": {
+    "rpm": "{{value}} U/min",
+    "metresPerSecond": "{{value}} m/s",
+    "speedPair": "{{ms}} m/s, {{kmh}} km/h",
+    "milliseconds": "{{value}} ms",
+    "percent": "{{value}} %",
+    "count": "{{value}}"
+  },
+  "chapters": {
+    "saw": {
+      "throttle": "Gas",
+      "rpm": "Motordrehzahl",
+      "chain": "Kettengeschwindigkeit",
+      "displacement": "Hubraum",
+      "displacementValue": "70,6 cm³",
+      "power": "Leistung",
+      "powerValue": "4,3 kW",
+      "mass": "Gewicht",
+      "massValue": "6,6 kg ohne Schiene und Kette",
+      "bar": "Führungsschiene",
+      "barValue": "40 cm"
+    },
+    "engine": {
+      "turn": "Eine Umdrehung dauert",
+      "strokes": "Arbeitstakte pro Sekunde",
+      "now": "Im Zylinder gerade",
+      "gap": "Elektrodenabstand der Zündkerze",
+      "gapValue": "0,5 mm"
+    },
+    "fuel": {
+      "throttle": "Gas",
+      "mix": "Kraftstoff zu Öl",
+      "mixValue": "50 zu 1",
+      "dose": "Ölmenge",
+      "doseValue": "100 ml auf 5 l",
+      "crankcase": "Kurbelgehäuse gerade",
+      "pressure": {
+        "drawing": "Saugt Gemisch an",
+        "squeezing": "Drückt es zu den Überströmkanälen"
+      }
+    },
+    "clutch": {
+      "throttle": "Gas",
+      "rpm": "Motordrehzahl",
+      "state": "Kupplung",
+      "chain": "Kettengeschwindigkeit",
+      "idle": "Leerlaufdrehzahl",
+      "engage": "Kupplung greift ab",
+      "perTurn": "Kettenweg pro Umdrehung",
+      "perTurnValue": "{{mm}} mm, {{teeth}} Zähne × 2 Teilungen",
+      "oil": "Ölpumpe",
+      "oilState": {
+        "pumping": "Ölt die Schiene",
+        "stopped": "Steht"
+      }
+    },
+    "chain": {
+      "speed": "Kettengeschwindigkeit",
+      "cutters": "Schneidezähne pro Sekunde an einem Punkt",
+      "pitch": "Teilung",
+      "pitchValue": "3/8 Zoll, 9,525 mm",
+      "links": "Glieder",
+      "linksValue": "55 Treibglieder, 27 Schneidezähne",
+      "length": "Kettenlänge",
+      "lengthValue": "etwa 1,05 m",
+      "depth": "Tiefenbegrenzer unter dem Zahndach",
+      "depthValue": "0,65 mm"
+    },
+    "kickback": {
+      "brake": "Kettenbremse",
+      "brakeState": {
+        "off": "Aus, Kette frei",
+        "on": "An, Kette blockiert"
+      },
+      "rotation": "Drehung beim Rückschlag",
+      "rotationValue": "über 1.000° pro Sekunde",
+      "reaction": "Reaktionszeit eines Menschen",
+      "reactionValue": "etwa 0,1 bis 0,2 s",
+      "stop": "Kettenbremse stoppt die Kette",
+      "stopValue": "innerhalb von Sekundenbruchteilen",
+      "share": "Verletzungen durch Rückschlag",
+      "shareValue": "fast 1 von 4, USA, 1979"
+    }
+  },
+  "parts": {
+    "powerhead": "Motorgehäuse",
+    "rearHandle": "Hinterer Handgriff",
+    "throttleTrigger": "Gashebel",
+    "frontHandle": "Vorderer Handgriff",
+    "handGuard": "Vorderer Handschutz",
+    "starter": "Seilzugstarter",
+    "sparkPlug": "Zündkerze",
+    "cylinder": "Zylinder",
+    "piston": "Kolben",
+    "connectingRod": "Pleuel",
+    "crankshaft": "Kurbelwelle",
+    "crankcase": "Kurbelgehäuse",
+    "exhaustPort": "Auslasskanal",
+    "transferPorts": "Überströmkanäle",
+    "intakePort": "Einlass",
+    "muffler": "Schalldämpfer",
+    "carburettor": "Vergaser",
+    "throttleValve": "Drosselklappe",
+    "chokeValve": "Choke",
+    "airFilter": "Luftfilter",
+    "fuelTank": "Kraftstofftank",
+    "pulseLine": "Impulsleitung",
+    "clutch": "Kupplungsbacken",
+    "clutchDrum": "Kupplungstrommel",
+    "sprocket": "Kettenrad",
+    "chainBrakeBand": "Bremsband",
+    "oilPump": "Ölpumpe",
+    "oilTank": "Kettenöltank",
+    "bar": "Führungsschiene",
+    "barNose": "Schienenspitze",
+    "chain": "Sägekette",
+    "cutters": "Schneidezähne",
+    "depthGauges": "Tiefenbegrenzer",
+    "driveLinks": "Treibglieder",
+    "chainCatcher": "Kettenfänger",
+    "kickbackZone": "Rückschlagzone",
+    "freshCharge": "Frisches Gemisch",
+    "exhaustGas": "Verbranntes Gas",
+    "oilFlow": "Kettenöl",
+    "log": "Holzstamm",
+    "chips": "Holzspäne"
+  },
+  "sections": {
+    "saw": {
+      "title": "Ein Motor, eine Schlaufe aus Zähnen",
+      "p1": "Das ist eine <strong>Kettensäge</strong>, eine Profisäge wie die Husqvarna 572 XP. Der Motor sitzt im orangefarbenen <strong>Motorgehäuse</strong>. Vorn ragt eine flache Stahlschiene 40 cm heraus, die <strong>Führungsschiene</strong>. Um ihren Rand läuft eine Schlaufe aus scharfen Zähnen, die <strong>Sägekette</strong>. Ihre rechte Hand hält den <strong>hinteren Handgriff</strong> und drückt den <strong>Gashebel</strong>. Ihre linke Hand hält den <strong>vorderen Handgriff</strong>, direkt hinter dem <strong>vorderen Handschutz</strong>.",
+      "p2": "Die Größe eines Motors ist der Raum, den sein Kolben durchfährt. Man nennt ihn Hubraum und misst ihn in Kubikzentimetern (cm³). Eine Säge für Hobbygärtner hat etwa 30 bis 50 cm³ und leistet 1,4 bis 2,4 Kilowatt (kW). Eine Profisäge wie diese hat etwa 70 bis 80 cm³ und leistet 4,3 bis 5 kW. Trotzdem wiegt sie nur wenig mehr: Diese hier wiegt 6,6 kg ohne Schiene und Kette. So leicht waren Sägen nicht immer. Die Benzinsäge von Stihl aus dem Jahr 1929 wog 46 kg und brauchte zwei Leute. Erst um 1950 wurden Sägen leicht genug für eine Person.",
+      "p3": "Diese Seite folgt einer Umdrehung der <strong>Kurbelwelle</strong>. Das ist die Welle, die der Motor dreht. Bei voller Leistung dreht sie sich etwa 9.900-mal pro Minute, also mit 9.900 U/min (Umdrehungen pro Minute). Eine Umdrehung dauert damit etwa 6 ms, sechs Tausendstelsekunden. Auf dem Bildschirm wäre das nur ein Wischen. Darum spielt das Modell die Umdrehung 64- bis 2.048-mal langsamer ab als in Wirklichkeit. Wie langsam, stellen Sie unter „Wiedergabetempo“ ein.",
+      "p4": "So läuft eine Umdrehung ab. Ein Funke zündet, und brennendes Gas drückt den Kolben nach unten. Der Kolben dreht die Kurbelwelle, die Kurbelwelle dreht die Kupplung, und die Kupplung dreht ein Zahnrad, das die Kette zieht. Jeder Zahn der Kette hebt einen Holzspan ab. Das Modell vereinfacht einiges: Die Drehzahl folgt dem Gas in gerader Linie, vom Leerlauf bis Vollgas. Bei einer echten Säge ändert sie sich auch mit dem Schnitt. Ziehen Sie den Gasregler und sehen Sie, wie die Kettengeschwindigkeit mitgeht."
+    },
+    "engine": {
+      "title": "Ein Funke bei jeder Umdrehung",
+      "p1": "Der Motor ist ein <strong>Zweitakter</strong>. Ein Takt ist ein Weg des Kolbens, nach oben oder nach unten. Ein Zweitakter erledigt seine ganze Arbeit in nur zwei Takten, also in einer Umdrehung der Kurbelwelle. Darum zündet die <strong>Zündkerze</strong> bei jeder Umdrehung einmal.",
+      "p2": "Der <strong>Kolben</strong> hat zwei Aufgaben zugleich. Seine Oberseite arbeitet im <strong>Zylinder</strong>, wo der Kraftstoff verbrennt. Seine Unterseite pumpt im <strong>Kurbelgehäuse</strong>, dem geschlossenen Raum um die Kurbelwelle darunter. Steigt der Kolben, wird das Kurbelgehäuse größer und saugt frisches Gemisch an. Sinkt er, wird das Gehäuse kleiner und presst das Gemisch zusammen.",
+      "p3": "Verfolgen Sie die Umdrehung auf der Zeitleiste. Kurz vor dem oberen Ende zündet der Funke das verdichtete Gemisch aus Kraftstoff und Luft. Das brennende Gas drückt den Kolben nach unten. Das <strong>Pleuel</strong> macht aus diesem Stoß eine Drehung. Das ist der Arbeitstakt. Auf dem Weg nach unten gibt der Kolben Öffnungen in der Zylinderwand frei, die Kanäle. Zuerst öffnet der <strong>Auslasskanal</strong>, und das verbrannte Gas schießt hinaus in den <strong>Schalldämpfer</strong>.",
+      "p4": "Einen Augenblick später öffnen auch die <strong>Überströmkanäle</strong>. Sie führen vom Kurbelgehäuse nach oben. Das vorverdichtete frische Gemisch strömt durch sie hinauf und fegt den Rest des verbrannten Gases aus dem Auslasskanal. Das nennt man <strong>Spülung</strong>. Auf dem Weg zurück nach oben schließen sich die Kanäle, und der Kolben verdichtet das neue Gemisch. Gleichzeitig saugt das Kurbelgehäuse darunter durch den <strong>Einlass</strong> schon das nächste Gemisch an.",
+      "p5": "Bei 9.900 U/min zündet der Funke 165-mal pro Sekunde. Er springt über einen Spalt von 0,5 mm zwischen den beiden Elektroden der Kerze. Die Hersteller veröffentlichen nicht, wann genau die Kanäle öffnen oder der Funke zündet. Die Zeitpunkte im Modell sind deshalb frei gewählt. Darum zeigt die Zeitleiste, wie weit die Umdrehung fortgeschritten ist, und keinen genauen Winkel. „Schnittbild (C)“ öffnet den Motor, und „Gas- und Ölfluss (F)“ zeigt, wohin die Gase strömen."
+    },
+    "fuel": {
+      "title": "Kraftstoff, der in jeder Lage fließt",
+      "p1": "Die meisten Sägen mischen Kraftstoff und Luft in einem <strong>Vergaser</strong>. Die Luft kommt durch den <strong>Luftfilter</strong>, und der Vergaser sprüht feinen Kraftstoff hinein. Die <strong>Drosselklappe</strong> ist eine kleine Klappe, die der Gashebel dreht. Sie bestimmt, wie viel Gemisch in den Motor strömen kann. Wählen Sie „Leerlauf“, „Halbgas“ oder „Vollgas“ und sehen Sie, wie die Klappe aufgeht.",
+      "p2": "An einem kalten Morgen sperrt der <strong>Choke</strong> einen Teil der Luft ab. So wird das Gemisch fetter, es enthält also mehr Kraftstoff. Damit springt der kalte Motor leichter an. Sobald er läuft, öffnen Sie den Choke wieder. Der Kraftstoff selbst wartet im <strong>Kraftstofftank</strong> unter dem hinteren Handgriff.",
+      "p3": "Eine Säge halten Sie in jedem Winkel, sogar auf der Seite. Viele Motoren dosieren ihren Kraftstoff mit einem Schwimmer in einer kleinen Kammer. Das klappt aber nur aufrecht. Der Vergaser einer Säge dosiert den Kraftstoff deshalb mit einer <strong>Membran</strong>, einer dünnen, biegsamen Scheibe. Eine kleine Pumpe fördert ihn. Angetrieben wird diese Pumpe vom Kurbelgehäuse selbst. Bei jeder Umdrehung steigt und fällt dort der Druck, und die <strong>Impulsleitung</strong> trägt diesen Takt zur Pumpe. Darum läuft der Motor in jeder Lage weiter.",
+      "p4": "Ein Zweitakter hat keine Ölwanne unter der Kurbelwelle. Sein Öl reist stattdessen mit dem Kraftstoff. Sie mischen Zweitaktöl im Verhältnis 50 zu 1 ins Benzin: 100 ml Öl auf 5 Liter Benzin. Auf seinem Weg durch den Motor hält das Öl die beweglichen Teile geschmiert. Nicht jede Säge hat allerdings einen Vergaser: Manche Profisägen spritzen den Kraftstoff stattdessen elektronisch ein."
+    },
+    "clutch": {
+      "title": "Warum die Kette im Leerlauf steht",
+      "p1": "Zwischen Kurbelwelle und Kette sitzt eine <strong>Fliehkraftkupplung</strong>. Ihre Gewichte, die <strong>Kupplungsbacken</strong>, drehen sich mit der Kurbelwelle, und Federn halten sie innen fest. Um sie herum liegt eine Glocke aus Stahl, die <strong>Kupplungstrommel</strong>. Die Trommel trägt das <strong>Kettenrad</strong>, das Zahnrad, das die Kette antreibt. Dreht der Motor schneller, schleudert die Drehung die Backen nach außen gegen die Trommel. Die Reibung nimmt die Trommel dann mit.",
+      "p2": "Im Leerlauf, bei etwa 2.700 U/min, sind die Federn stärker, und die Backen bleiben innen. Die Trommel steht still, also bewegt sich die Kette nicht. Genau so soll es sein: Im Leerlauf darf die Kette nicht laufen. Bei dieser Säge greifen die Backen ab 3.700 U/min. Ziehen Sie den Gasregler langsam über diesen Punkt und sehen Sie, wie die Kette anläuft. Im Modell greift die Kupplung sofort voll, sobald der Motor 3.700 U/min überschreitet. Die Kette springt dann direkt auf etwa 8 m/s. Eine echte Kupplung rutscht einen Moment, während die Backen zupacken.",
+      "p3": "Das Kettenrad hat 7 Zähne, und jeder schiebt die Kette um zwei Teilungen weiter, also um zwei Gliedabstände. Eine Umdrehung bewegt die Kette so um etwa 133 mm. Bei 9.900 U/min sind das 22 Meter pro Sekunde (m/s), etwa 79 km/h. Bei dieser Drehzahl bringt der Motor seine volle Leistung, und beim Sägen arbeitet er in ihrer Nähe. Ohne Holz kann eine Säge höher drehen, bis zu einer eingebauten Grenze von 12.500 bis 14.000 U/min.",
+      "p4": "Eine Säge startet mit Startgas, also mit leicht geöffneter Drosselklappe. Das reicht schon, damit die Kupplung greift. Legen Sie deshalb vor dem Start die Kettenbremse ein. Wird die Kette festgehalten, während der Motor hochdreht, rutscht die Kupplung und wird sehr heiß. Die <strong>Ölpumpe</strong> schickt nur Öl zur Schiene, solange die Kette läuft: Im Leerlauf fließt kein Öl."
+    },
+    "chain": {
+      "title": "Zähne, die Späne abheben",
+      "p1": "Eine Sägekette besteht aus drei Arten von Teilen. <strong>Treibglieder</strong> ragen nach unten in eine Nut der Schiene, und die Zähne des Kettenrads schieben sie voran. <strong>Schneidezähne</strong> sind die eigentlichen Zähne, abwechselnd nach links und nach rechts geneigt. Kleine Platten, die Verbindungsglieder, halten alles zusammen, verbunden durch Niete.",
+      "p2": "Jeder Schneidezahn hat ein flaches Dach und eine Seitenwand. Wo sie sich treffen, sitzt eine scharfe Ecke, die das Holz schneidet. Direkt vor jedem Schneidezahn steht ein kleiner Höcker, der <strong>Tiefenbegrenzer</strong>. Er liegt 0,65 mm tiefer als das Dach des Zahns. Dieser Abstand bestimmt, wie dick der Span sein kann. Feilen Sie die Tiefenbegrenzer zu weit herunter, beißen die Zähne zu tief ein. Dann wird ein Rückschlag wahrscheinlicher.",
+      "p3": "Die Größe einer Kette ist ihre <strong>Teilung</strong>: Man misst über drei Niete in einer Reihe und halbiert den Abstand. Diese Kette hat eine Teilung von 3/8 Zoll, also 9,525 mm. Eine Kette wie diese hat auf einer 40-cm-Schiene 55 Treibglieder und ist etwa 1,05 m lang. Sie trägt etwa 27 Schneidezähne, einen auf je zwei Treibglieder.",
+      "p4": "Bei 22 m/s läuft die Kette etwa 21-mal pro Sekunde um die Schiene. So ziehen jede Sekunde etwa 570 Schneidezähne an einem Punkt vorbei, und jeder hebt einen Span ab. Wählen Sie „Leerlauf“, „Halbgas“ oder „Vollgas“ zum Vergleich. Im Schnitt läuft die Kette unter der Schiene von der <strong>Schienenspitze</strong> zurück zur Säge. Darum fliegen die Späne hinter dem Schnitt heraus.",
+      "p5": "Die ganze Zeit gleitet die Kette mit voller Geschwindigkeit über die Stahlschiene. Ohne Öl würde die Reibung die Schiene bald brennend heiß machen. Darum tropft die Ölpumpe <strong>Kettenöl</strong> auf die Kette, und die Kette trägt es um die Schiene. Bei einer kleinen Stihl-Säge ist das Kettenöl etwa zur selben Zeit leer wie der Kraftstoff. So können Sie beide Tanks zusammen füllen."
+    },
+    "kickback": {
+      "title": "Das obere Viertel der Spitze",
+      "p1": "Die gefährlichste Stelle einer Säge ist das obere Viertel der Schienenspitze, die <strong>Rückschlagzone</strong>. „Rückschlagzone (K)“ färbt sie rot. Berührt die laufende Kette dort Holz, können sich die Zähne verhaken. Dann wird die Schiene blitzschnell nach oben und hinten zu Ihnen geschleudert. Das ist der <strong>Rückschlag</strong>. Messungen zeigen: Eine Benzinsäge kann sich dabei mit über 1.000° pro Sekunde drehen.",
+      "p2": "Ein Mensch braucht etwa 0,1 bis 0,2 s, um zu reagieren. Bis dahin kann die Schiene schon weit genug herumgeschwungen sein, um Sie zu treffen. Reflexe allein können Sie also nicht retten. Der Rückschlag hat außerdem zwei Verwandte. Hakt die Kette an der Unterseite der Schiene, wird die Säge nach vorn gezogen. Das heißt <strong>Hineinziehen</strong>. Hakt sie an der Oberseite, wird die Säge gerade nach hinten gestoßen. Das ist der <strong>Rückstoß</strong>.",
+      "p3": "Die Antwort darauf ist die <strong>Kettenbremse</strong>. Ein <strong>Bremsband</strong> aus Stahl liegt um die Kupplungstrommel. Drückt Ihre linke Hand den <strong>vorderen Handschutz</strong> nach vorn, zieht eine Feder das Band schlagartig fest. Das Band packt die Trommel, und die Kette steht innerhalb von Sekundenbruchteilen still. Bei einem starken Rückschlag kann der Handschutz von selbst auslösen: Wenn die Säge hochschnellt, will sein eigenes Gewicht weiter, und das wirft ihn nach vorn. Das ist die Trägheitsauslösung.",
+      "p4": "Wählen Sie „Rückschlag zeigen“, um einen starken Rückschlag zu sehen, verlangsamt und kleiner als in Wirklichkeit. Achten Sie darauf, wie der Handschutz nach vorn schnellt und das Band die Trommel umklammert. Im Modell steht die Kette sofort still. Doch nicht jeder Rückschlag löst die Bremse von selbst aus: Bei einem schwächeren braucht es vielleicht Ihre Hand. Die Bremse senkt das Risiko, aber den Rückschlag selbst kann sie nicht verhindern. Dazu kommen zwei Helfer. Der <strong>Kettenfänger</strong>, ein Haken unter der Schiene, fängt eine Kette auf, die reißt oder abspringt. Und rückschlagarme Ketten, in Nordamerika mit grünem Etikett verkauft, senken das Risiko ebenfalls.",
+      "p5": "In den USA verursachte der Rückschlag 1979 fast jede vierte Verletzung durch Kettensägen. Heute kommen dort noch immer etwa 70 Menschen am Tag mit Kettensägenverletzungen in die Notaufnahme. Eine Säge ist außerdem laut: etwa 104 bis 107 Dezibel (dB(A)) an Ihrem Ohr. Ohne Gehörschutz sind 107 dB(A) nur etwa 3 Minuten am Tag unbedenklich. Tragen Sie also Gehörschutz, halten Sie die Säge mit beiden Händen und die Schienenspitze frei."
+    }
+  }
+}
