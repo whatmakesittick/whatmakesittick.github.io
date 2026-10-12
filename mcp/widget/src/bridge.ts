@@ -3,6 +3,10 @@ import type { ModelContextSnapshot } from '../../shared/tools.ts';
 
 export type DisplayMode = 'inline' | 'fullscreen';
 
+export function toDisplayMode(value: unknown): DisplayMode | undefined {
+  return value === 'inline' || value === 'fullscreen' ? value : undefined;
+}
+
 export interface HostEvents {
   input: (args: unknown) => void;
   result: (result: unknown) => void;
@@ -80,7 +84,7 @@ export function createAppHost(app: App): WidgetHost {
     },
     async requestDisplayMode(mode) {
       const res = await app.requestDisplayMode({ mode });
-      return res.mode as DisplayMode;
+      return toDisplayMode(res.mode) ?? 'inline';
     },
     async updateModelContext(text, snapshot) {
       await app.updateModelContext({

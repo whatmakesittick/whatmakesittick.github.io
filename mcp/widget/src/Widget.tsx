@@ -3,7 +3,7 @@ import { explainerUrl, type WidgetCatalogueEntry } from '../../shared/catalogue.
 import type { EmbedController, EmbedInfo, EmbedState } from '../../../src/core/embed/contract.ts';
 import { EMBED_DOM } from '../../../src/core/embed/contract.ts';
 import { MODEL_CONTEXT_DEBOUNCE_MS, type ModelContextSnapshot } from '../../shared/tools.ts';
-import type { DisplayMode, WidgetHost } from './bridge.ts';
+import { toDisplayMode, type DisplayMode, type WidgetHost } from './bridge.ts';
 import { reserveDock, type DockReserve } from './dockReserve.ts';
 import { watchGaugeClearance } from './gaugeClearance.ts';
 import { StringsContext } from './i18n/context.ts';
@@ -76,7 +76,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const [disc, setDisc] = useState<Discrete>(EMPTY);
   const [ctx, setCtx] = useState(host.context() ?? {});
   const [mode, setMode] = useState<DisplayMode>(
-    (host.context()?.displayMode as DisplayMode) ?? 'inline',
+    toDisplayMode(host.context()?.displayMode) ?? 'inline',
   );
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [stripFirst, setStripFirst] = useState<string | undefined>();
@@ -145,7 +145,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
       host.on('context', (c) => {
         setCtx({ ...c });
         setSignals((s) => withContext(s, c));
-        if (c.displayMode) setMode(c.displayMode as DisplayMode);
+        setMode((current) => toDisplayMode(c.displayMode) ?? current);
       }),
       host.on('teardown', () => session.dispose()),
     ];
