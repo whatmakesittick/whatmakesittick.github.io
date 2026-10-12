@@ -36,15 +36,26 @@ const allowedOrigins = parseAllowedOrigins(process.env[ENV.allowedOrigins]);
 const site = siteDir(localSite);
 const publicUrl = stdio ? undefined : process.env[ENV.publicUrl] || undefined;
 const assetInput = { assetBase: process.env[ENV.assetBase] || undefined, publicUrl, port };
-const assetBase = resolveAssetBase(assetInput);
-const remote = stdio ? undefined : remoteSiteBase(assetInput);
+
+function configured<T>(make: () => T): T {
+  try {
+    return make();
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    log(`${ENV.assetBase} "${assetInput.assetBase ?? ''}": ${reason}`);
+    process.exit(1);
+  }
+}
+
+const assetBase = configured(() => resolveAssetBase(assetInput));
+const remote = stdio ? undefined : configured(() => remoteSiteBase(assetInput));
 const source = remote ?? `${localSite}/${EMBED_DIRECTORY}`;
 const indexAt = remote ? new URL(SITE_INDEX_FILE, remote).href : `${source}/${SITE_INDEX_FILE}`;
 const domain = await claudeAppDomain(publicUrl);
 const excludeTags = parseExcludeTags(process.env[ENV.excludeTags]);
 const loader = loaderHtml();
 const explainers = createSite(
-  remote ? httpReader(remote) : fileReader(join(site, EMBED_DIRECTORY)),
+  remote ? configured(() => httpReader(remote)) : fileReader(join(site, EMBED_DIRECTORY)),
 );
 let lastIndex: EmbedManifest | undefined;
 
