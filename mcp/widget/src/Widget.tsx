@@ -14,13 +14,18 @@ import { SceneSession, type ModuleLoader, type SceneStatus } from './scene.ts';
 import {
   chapterShort,
   debounce,
+  discreteOf,
+  EMPTY_DISCRETE,
+  mergeTarget,
   modelContextText,
   neighbour,
+  sameDiscrete,
   sameSnapshot,
   snapshotOf,
   stripOrder,
   targetFromInput,
   targetFromResult,
+  wantedChapter,
   type Target,
 } from './state.ts';
 import { ChapterSection } from './views/Chapter.tsx';
@@ -41,16 +46,6 @@ export interface WidgetProps {
 }
 
 const LANGUAGE_PATIENCE_MS = 1500;
-
-const EMPTY: Discrete = { playing: false, view: {}, choices: {} };
-
-function discreteOf(s: EmbedState): Discrete {
-  return { playing: s.playing, view: s.view, choices: s.choices };
-}
-const sameDiscrete = (a: Discrete, b: Discrete) =>
-  a.playing === b.playing &&
-  JSON.stringify(a.view) === JSON.stringify(b.view) &&
-  JSON.stringify(a.choices) === JSON.stringify(b.choices);
 
 export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const [signals, setSignals] = useState(() => withContext(NO_SIGNALS, host.context()));
@@ -73,7 +68,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const [progress, setProgress] = useState(0);
   const [controller, setController] = useState<EmbedController | undefined>();
   const [info, setInfo] = useState<EmbedInfo | undefined>();
-  const [disc, setDisc] = useState<Discrete>(EMPTY);
+  const [disc, setDisc] = useState<Discrete>(EMPTY_DISCRETE);
   const [ctx, setCtx] = useState(host.context() ?? {});
   const [mode, setMode] = useState<DisplayMode>(
     toDisplayMode(host.context()?.displayMode) ?? 'inline',
@@ -137,10 +132,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
         setResultSeen(true);
         setSignals((s) => withResult(s, result));
         const t = targetFromResult(result, find);
-        if (t)
-          setTarget((prev) =>
-            prev && prev.slug === t.slug && prev.chapter === t.chapter ? prev : { ...prev, ...t },
-          );
+        if (t) setTarget((prev) => mergeTarget(prev, t));
       }),
       host.on('context', (c) => {
         setCtx({ ...c });
@@ -181,11 +173,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   useEffect(() => {
     if (!target || !entry || hold) return;
     setStripFirst((f) => f ?? target.slug);
-    const first = entry.chapters[0]?.id ?? '';
-    const wanted =
-      target.chapter && entry.chapters.some((c) => c.id === target.chapter)
-        ? target.chapter
-        : first;
+    const wanted = wantedChapter(entry, target.chapter);
     const ctrl = ctrlRef.current;
     if (ctrl && ctrl.info.slug === target.slug) {
       if (ctrl.getState().chapter !== wanted) ctrl.setChapter(wanted);
@@ -196,7 +184,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     chapterRef.current = wanted;
     setChapterState(wanted);
     setInfo(undefined);
-    setDisc(EMPTY);
+    setDisc(EMPTY_DISCRETE);
     live.reset(undefined);
     setStatus(webgl() ? 'loading' : 'nowebgl');
     setProgress(0.04);

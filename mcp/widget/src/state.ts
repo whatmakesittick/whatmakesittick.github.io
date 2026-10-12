@@ -1,6 +1,7 @@
 import { isSlug, plainText, SITE_URL, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { EmbedInfo, EmbedState, LanguageCode } from '../../../src/core/embed/contract.ts';
 import type { ModelContextSnapshot } from '../../shared/tools.ts';
+import type { Discrete } from './views/types.ts';
 
 export interface Target {
   slug: string;
@@ -64,6 +65,29 @@ export function targetFromResult(
   }
   return undefined;
 }
+
+export function mergeTarget(prev: Target | undefined, next: Target): Target {
+  return prev && prev.slug === next.slug && prev.chapter === next.chapter
+    ? prev
+    : { ...prev, ...next };
+}
+
+export function wantedChapter(entry: WidgetCatalogueEntry, chapter: string | undefined): string {
+  return chapter && entry.chapters.some((c) => c.id === chapter)
+    ? chapter
+    : (entry.chapters[0]?.id ?? '');
+}
+
+export const EMPTY_DISCRETE: Discrete = { playing: false, view: {}, choices: {} };
+
+export function discreteOf(s: EmbedState): Discrete {
+  return { playing: s.playing, view: s.view, choices: s.choices };
+}
+
+export const sameDiscrete = (a: Discrete, b: Discrete): boolean =>
+  a.playing === b.playing &&
+  JSON.stringify(a.view) === JSON.stringify(b.view) &&
+  JSON.stringify(a.choices) === JSON.stringify(b.choices);
 
 export function neighbour(
   ids: readonly string[],

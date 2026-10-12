@@ -7,14 +7,18 @@ import type { EmbedInfo, EmbedState } from '../../../src/core/embed/contract.ts'
 import {
   chapterShort,
   debounce,
+  discreteOf,
+  mergeTarget,
   modelContextText,
   neighbour,
   resolveChapter,
+  sameDiscrete,
   shortLabel,
   snapshotOf,
   stripOrder,
   targetFromInput,
   targetFromResult,
+  wantedChapter,
 } from '../../widget/src/state.ts';
 
 const full = buildCatalogue(resolve(dirname(fileURLToPath(import.meta.url)), '../../..'));
@@ -78,6 +82,65 @@ describe('tool input / result', () => {
     ).toBeUndefined();
     expect(targetFromResult(null, find)).toBeUndefined();
     expect(targetFromResult({ content: 'x' }, find)).toBeUndefined();
+  });
+});
+
+describe('target', () => {
+  it('keeps the previous target when the result names the same place', () => {
+    const prev = { slug: 'engine', chapter: 'strokes' };
+    expect(mergeTarget(prev, { slug: 'engine', chapter: 'strokes' })).toBe(prev);
+  });
+
+  it('takes the result over the previous target', () => {
+    expect(mergeTarget(undefined, { slug: 'engine' })).toEqual({ slug: 'engine' });
+    expect(mergeTarget({ slug: 'engine' }, { slug: 'engine', chapter: 'strokes' })).toEqual({
+      slug: 'engine',
+      chapter: 'strokes',
+    });
+    expect(mergeTarget({ slug: 'engine', chapter: 'strokes' }, { slug: 'mri-scanner' })).toEqual({
+      slug: 'mri-scanner',
+      chapter: 'strokes',
+    });
+  });
+
+  it('opens the wanted chapter when the explainer has it, else the first', () => {
+    const first = mri.chapters[0]!.id;
+    expect(wantedChapter(mri, 'magnet')).toBe('magnet');
+    expect(wantedChapter(mri, 'nope')).toBe(first);
+    expect(wantedChapter(mri, undefined)).toBe(first);
+    expect(wantedChapter({ ...mri, chapters: [] }, 'magnet')).toBe('');
+  });
+});
+
+describe('discrete state', () => {
+  const state: EmbedState = {
+    chapter: 'magnet',
+    playing: true,
+    phase: 0,
+    progress: 0,
+    phaseId: 'echo',
+    phaseLabel: 'Echo',
+    speed: 1,
+    view: { cutaway: true },
+    choices: { field: '3' },
+  };
+
+  it('keeps only what the controls show', () => {
+    expect(discreteOf(state)).toEqual({
+      playing: true,
+      view: { cutaway: true },
+      choices: { field: '3' },
+    });
+  });
+
+  it('compares by value', () => {
+    const a = discreteOf(state);
+    expect(
+      sameDiscrete(a, { playing: true, view: { cutaway: true }, choices: { field: '3' } }),
+    ).toBe(true);
+    expect(sameDiscrete(a, { ...a, playing: false })).toBe(false);
+    expect(sameDiscrete(a, { ...a, view: { cutaway: false } })).toBe(false);
+    expect(sameDiscrete(a, { ...a, choices: {} })).toBe(false);
   });
 });
 
