@@ -2,7 +2,7 @@
   "meta": {
     "title": "Como funciona uma motosserra",
     "eyebrow": "Ferramentas motorizadas",
-    "tagline": "Uma volta do virabrequim, em câmera lenta: como uma faísca, uma embreagem que gira e uma volta de dentes afiados transformam combustível em cavacos de madeira.",
+    "tagline": "Uma volta do virabrequim, em câmera lenta: como uma faísca, uma embreagem que gira e uma fileira fechada de dentes afiados transformam combustível em cavacos de madeira.",
     "description": "Motosserra 3D, uma volta por vez: o motor de dois tempos, o combustível, a embreagem que para a corrente em marcha lenta, os dentes e o freio da corrente.",
     "summary": "A motosserra inteira, o motor de dois tempos, o combustível e o carburador, a embreagem, a corrente de corte e o rebote com o freio da corrente.",
     "socialAlt": "Uma motosserra a gasolina aberta por dentro, com o sabre numa tora, ao lado do título “Como funciona uma motosserra”"
@@ -32,7 +32,7 @@
       "compression": "Ir para a compressão"
     },
     "detail": {
-      "power": "o gás em chamas empurra o pistão para baixo",
+      "power": "o gás em combustão empurra o pistão para baixo",
       "exhaust": "o gás queimado sai depressa",
       "scavenge": "a mistura nova empurra o gás queimado para fora",
       "compression": "o pistão comprime a mistura e o cárter se enche"
@@ -221,17 +221,17 @@
   },
   "sections": {
     "saw": {
-      "title": "Um motor e uma volta de dentes",
-      "p1": "Esta é uma <strong>motosserra</strong>, uma serra profissional como a Husqvarna 572 XP. O motor fica dentro da <strong>carcaça do motor</strong> laranja. Uma barra de aço achatada, o <strong>sabre</strong>, sai 40 cm para a frente. Em volta da borda dele corre uma volta de dentes afiados, a <strong>corrente</strong>. Sua mão direita segura o <strong>punho traseiro</strong> e aperta o <strong>gatilho do acelerador</strong>. Sua mão esquerda segura o <strong>punho dianteiro</strong>, logo atrás do <strong>protetor de mão dianteiro</strong>.",
+      "title": "Um motor e uma fileira de dentes",
+      "p1": "Esta é uma <strong>motosserra</strong>, uma serra profissional como a Husqvarna 572 XP. O motor fica dentro da <strong>carcaça do motor</strong> laranja. Uma barra de aço achatada, o <strong>sabre</strong>, sai 40 cm para a frente. Em volta da borda dele corre uma fileira fechada de dentes afiados, a <strong>corrente</strong>. Sua mão direita segura o <strong>punho traseiro</strong> e aperta o <strong>gatilho do acelerador</strong>. Sua mão esquerda segura o <strong>punho dianteiro</strong>, logo atrás do <strong>protetor de mão dianteiro</strong>.",
       "p2": "O tamanho de um motor, a cilindrada, é o espaço que o pistão percorre. Ela é medida em centímetros cúbicos (cm³). Uma motosserra doméstica tem cerca de 30 a 50 cm³ e gera de 1,4 a 2,4 quilowatts (kW) de potência. Uma profissional como esta tem cerca de 70 a 80 cm³ e gera de 4,3 a 5 kW. Mesmo assim, pesa só um pouco mais: esta tem 6,6 kg sem o sabre e a corrente. Nem sempre as motosserras foram tão leves. A motosserra a gasolina da Stihl, de 1929, pesava 46 kg e precisava de duas pessoas. Só por volta de 1950 as motosserras a gasolina ficaram leves o bastante para uma pessoa só.",
       "p3": "Esta página acompanha uma volta do <strong>virabrequim</strong>, o eixo que o motor faz girar. Na potência máxima, ele gira cerca de 9.900 vezes por minuto, ou 9.900 rpm (rotações por minuto). Então uma volta leva cerca de 6 ms, seis milésimos de segundo. Na tela, isso seria só um borrão. Por isso o modelo mostra a volta de 64 a 2.048 vezes mais devagar que na vida real. Você pode mudar essa lentidão em Velocidade de reprodução.",
-      "p4": "Esta é a história de uma volta. Salta uma faísca, e o gás em chamas empurra o pistão para baixo. O pistão gira o virabrequim, o virabrequim gira a embreagem, e a embreagem gira uma roda dentada que puxa a corrente. Cada dente da corrente arranca um cavaco de madeira. O modelo simplifica algumas coisas. Aqui, a rotação do motor segue o acelerador em linha reta, da marcha lenta até a potência máxima. Numa motosserra de verdade, a rotação também sobe e desce com o corte. Arraste o controle do acelerador e veja a velocidade da corrente acompanhar."
+      "p4": "Esta é a história de uma volta. Salta uma faísca, e o gás em combustão empurra o pistão para baixo. O pistão gira o virabrequim, o virabrequim gira a embreagem, e a embreagem gira uma roda dentada que puxa a corrente. Cada dente da corrente arranca um cavaco de madeira. O modelo simplifica algumas coisas. Aqui, a rotação do motor segue o acelerador em linha reta, da marcha lenta até a potência máxima. Numa motosserra de verdade, a rotação também sobe e desce com o corte. Arraste o controle do acelerador e veja a velocidade da corrente acompanhar."
     },
     "engine": {
       "title": "Uma faísca a cada volta",
       "p1": "O motor é de <strong>dois tempos</strong>. Um tempo é uma viagem do pistão, para cima ou para baixo. Um motor de dois tempos faz todo o trabalho em só dois tempos, ou seja, em uma volta do virabrequim. Por isso a <strong>vela de ignição</strong> solta uma faísca a cada volta.",
       "p2": "O <strong>pistão</strong> faz dois trabalhos ao mesmo tempo. A parte de cima trabalha no <strong>cilindro</strong>, onde o combustível queima. A parte de baixo bombeia o <strong>cárter</strong>, a caixa fechada em volta do virabrequim, logo abaixo. Quando o pistão sobe, o cárter fica maior e puxa mistura nova para dentro. Quando ele desce, o cárter fica menor e comprime essa mistura.",
-      "p3": "Acompanhe a volta na barra deslizante. Perto do topo, a faísca acende a mistura comprimida de combustível e ar. O gás em chamas empurra o pistão para baixo, e a <strong>biela</strong> transforma esse empurrão em giro. Este é o tempo de expansão, o que dá força ao motor. Na descida, o pistão descobre aberturas na parede do cilindro, chamadas janelas. A <strong>janela de escape</strong> abre primeiro, e o gás queimado sai depressa para o <strong>silenciador</strong>.",
+      "p3": "Acompanhe a volta na barra deslizante. Perto do topo, a faísca acende a mistura comprimida de combustível e ar. O gás em combustão empurra o pistão para baixo, e a <strong>biela</strong> transforma esse empurrão em giro. Este é o tempo de expansão, o que dá força ao motor. Na descida, o pistão descobre aberturas na parede do cilindro, chamadas janelas. A <strong>janela de escape</strong> abre primeiro, e o gás queimado sai depressa para o <strong>silenciador</strong>.",
       "p4": "Um instante depois, as <strong>janelas de transferência</strong> também se abrem. São canais que sobem desde o cárter. A mistura nova, já comprimida, sobe por eles e varre o resto do gás queimado para fora pela janela de escape. Isso se chama <strong>lavagem</strong>. Na subida, as janelas se fecham e o pistão comprime a mistura nova. Ao mesmo tempo, lá embaixo, o cárter puxa a próxima mistura pela <strong>admissão</strong>.",
       "p5": "A 9.900 rpm, a faísca salta 165 vezes por segundo. Ela pula uma folga de 0,5 mm entre as duas pontas da vela. Os fabricantes não publicam exatamente quando as janelas abrem nem quando a faísca salta. Então o tempo do modelo é só dele. É por isso que a barra mostra em que ponto da volta você está, e não um ângulo exato. Vista em corte (C) abre o motor, e Fluxo de gás e óleo (F) mostra para onde vão os gases."
     },
