@@ -1,0 +1,455 @@
+<section class="chapter" data-preset="saw" aria-labelledby="saw-title">
+  <p class="chapter-index">01</p>
+  <h2 id="saw-title" data-i18n="sections.saw.title">One engine, one loop of teeth</h2>
+  <p data-i18n-html="sections.saw.p1">
+    This is a <strong>chainsaw</strong>, a professional saw like the Husqvarna 572 XP. Its engine
+    sits inside the orange <strong>engine housing</strong>. A flat steel
+    <strong>guide bar</strong> sticks out 40 cm in front, and a loop of sharp teeth, the
+    <strong>saw chain</strong>, runs round its edge. Your right hand holds the
+    <strong>rear handle</strong> and squeezes the <strong>throttle trigger</strong>. Your left hand
+    holds the <strong>front handle</strong>, just behind the <strong>front hand guard</strong>.
+  </p>
+  <p data-i18n-html="sections.saw.p2">
+    An engine's size is the space its piston sweeps, measured in cubic centimetres (cm³). A
+    homeowner's saw has about 30 to 50 cm³ and makes 1.4 to 2.4 kilowatts (kW) of power. A
+    professional saw like this one has about 70 to 80 cm³ and makes 4.3 to 5 kW. Yet it weighs only
+    a little more: this one is 6.6 kg without its bar and chain. Saws were not always this light.
+    Stihl's gasoline saw of 1929 weighed 46 kg and needed two people. Only around 1950 did saws
+    become light enough for one.
+  </p>
+  <p data-i18n-html="sections.saw.p3">
+    This page follows one turn of the <strong>crankshaft</strong>, the shaft the engine spins. At
+    full power it turns about 9,900 times a minute, or 9,900 rpm (revolutions per minute). So one
+    turn takes about 6 ms, six thousandths of a second. On a screen that is just a blur, so the
+    model plays the turn 64 to 2,048 times slower than life. You can change how slow under Playback.
+  </p>
+  <p data-i18n-html="sections.saw.p4">
+    Here is the story of one turn. A spark fires, and burning gas pushes the piston down. The piston
+    turns the crankshaft, the crankshaft turns the clutch, and the clutch turns a toothed wheel that
+    pulls the chain. Each tooth on the chain takes a chip of wood. The model keeps some things
+    simple: the throttle sets the engine speed in a straight line from idle to full power, while a
+    real saw speeds up and slows down with the cut too. Drag the throttle slider and watch the chain
+    speed follow.
+  </p>
+  <div class="range-widget">
+    <div class="range-widget__header">
+      <label for="saw-throttle" data-i18n="chapters.saw.throttle">Throttle</label
+      ><output class="number" for="saw-throttle">100 %</output>
+    </div>
+    <input id="saw-throttle" type="range" class="range" data-control="throttle" />
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="chapters.saw.rpm">Engine speed</dt>
+        <dd class="number" data-readout="sawRpm">9,900 rpm</dd>
+      </div>
+      <div>
+        <dt data-i18n="chapters.saw.chain">Chain speed</dt>
+        <dd class="number" data-readout="sawChain">22.0 m/s, 79 km/h</dd>
+      </div>
+    </dl>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.saw.displacement">Engine size</dt>
+      <dd class="number" data-i18n="chapters.saw.displacementValue">70.6 cm³</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.saw.power">Power</dt>
+      <dd class="number" data-i18n="chapters.saw.powerValue">4.3 kW</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.saw.mass">Weight</dt>
+      <dd class="number" data-i18n="chapters.saw.massValue">6.6 kg without bar and chain</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.saw.bar">Guide bar</dt>
+      <dd class="number" data-i18n="chapters.saw.barValue">40 cm</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="engine" aria-labelledby="engine-title">
+  <p class="chapter-index">02</p>
+  <h2 id="engine-title" data-i18n="sections.engine.title">One spark every turn</h2>
+  <p data-i18n-html="sections.engine.p1">
+    The engine is a <strong>two-stroke</strong>. A stroke is one trip of the piston, up or down. A
+    two-stroke does all its work in just two strokes, which is one turn of the crankshaft. So the
+    <strong>spark plug</strong> fires once every turn.
+  </p>
+  <p data-i18n-html="sections.engine.p2">
+    The <strong>piston</strong> does two jobs at once. Its top works in the
+    <strong>cylinder</strong>, where the fuel burns. Its underside pumps the
+    <strong>crankcase</strong>, the closed box round the crankshaft below. As the piston rises, the
+    crankcase gets bigger and draws fresh mixture in. As it falls, the crankcase gets smaller and
+    squeezes that mixture.
+  </p>
+  <p data-i18n-html="sections.engine.p3">
+    Follow the turn on the scrubber. Near the top, the spark lights the squeezed mixture of fuel and
+    air. The burning gas pushes the piston down, and the <strong>connecting rod</strong> turns that
+    push into a spin. This is the power stroke. On the way down, the piston uncovers openings in the
+    cylinder wall, called ports. The <strong>exhaust port</strong> opens first, and the burnt gas
+    rushes out to the <strong>muffler</strong>.
+  </p>
+  <p data-i18n-html="sections.engine.p4">
+    A moment later, the <strong>transfer ports</strong> open too. They are channels that lead up
+    from the crankcase. The squeezed fresh mixture flows up through them and sweeps the last burnt
+    gas out of the exhaust port. This is called <strong>scavenging</strong>. On the way back up, the
+    ports close and the piston squeezes the new mixture. At the same time, underneath, the crankcase
+    draws the next mixture in through the <strong>intake</strong>.
+  </p>
+  <p data-i18n-html="sections.engine.p5">
+    At 9,900 rpm, the spark fires 165 times a second. It jumps a gap of 0.5 mm between the plug's
+    two tips. Makers do not publish exactly when the ports open or when the spark fires, so the
+    model's timing is its own. That is why the scrubber shows how far into the turn you are, not an
+    exact angle. Cutaway (C) opens the engine, and Gas and oil flow (F) shows where the gases go.
+  </p>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.engine.turn">One turn takes</dt>
+      <dd class="number" data-readout="turnTime">6.1 ms</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.engine.strokes">Power strokes a second</dt>
+      <dd class="number" data-readout="strokes">165</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.engine.now">In the cylinder now</dt>
+      <dd class="number" data-readout="phaseNow">Compression</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.engine.gap">Spark plug gap</dt>
+      <dd class="number" data-i18n="chapters.engine.gapValue">0.5 mm</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="fuel" aria-labelledby="fuel-title">
+  <p class="chapter-index">03</p>
+  <h2 id="fuel-title" data-i18n="sections.fuel.title">Fuel that runs at any angle</h2>
+  <p data-i18n-html="sections.fuel.p1">
+    Most saws mix their fuel and air in a <strong>carburettor</strong>. Air comes in through the
+    <strong>air filter</strong>, and the carburettor adds a fine spray of fuel to it. The
+    <strong>throttle valve</strong> is a small flap that the trigger turns. It sets how much mixture
+    can flow into the engine. Pick Idle, Half or Full and watch the flap open.
+  </p>
+  <p data-i18n-html="sections.fuel.p2">
+    On a cold morning, the <strong>choke</strong> closes off some of the air. That makes the mixture
+    richer in fuel, so the cold engine starts more easily. Once it runs, you open the choke again.
+    The fuel itself waits in the <strong>fuel tank</strong> under the rear handle.
+  </p>
+  <p data-i18n-html="sections.fuel.p3">
+    You hold a saw at every angle, even on its side. Many engines measure their fuel with a float in
+    a small bowl, which only works upright. So a saw's carburettor measures fuel with a
+    <strong>diaphragm</strong>, a thin flexible sheet, and a small pump feeds it. The pump is driven
+    by the crankcase itself. Every turn, the pressure in the crankcase rises and falls, and the
+    <strong>pulse line</strong> carries that beat to the pump. That is why the engine keeps running
+    at any angle.
+  </p>
+  <p data-i18n-html="sections.fuel.p4">
+    A two-stroke has no pool of oil under its crankshaft. Its oil travels with the fuel instead. You
+    mix two-stroke oil into the gasoline at 50 to 1: 100 ml of oil in 5 litres of gasoline. The oil
+    keeps the moving parts slippery on its way through the engine. Not every saw has a carburettor,
+    though: some professional saws use electronic fuel injection instead.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.throttle">
+    <button
+      type="button"
+      class="chip"
+      data-action="throttle"
+      data-value="idle"
+      data-i18n="controls.throttleOptions.idle"
+    >
+      Idle
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="throttle"
+      data-value="half"
+      data-i18n="controls.throttleOptions.half"
+    >
+      Half
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="throttle"
+      data-value="full"
+      data-i18n="controls.throttleOptions.full"
+    >
+      Full
+    </button>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.fuel.throttle">Throttle</dt>
+      <dd class="number" data-readout="throttleOpen">0 %</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.fuel.mix">Fuel to oil</dt>
+      <dd class="number" data-i18n="chapters.fuel.mixValue">50 to 1</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.fuel.dose">Oil dose</dt>
+      <dd class="number" data-i18n="chapters.fuel.doseValue">100 ml in 5 l</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.fuel.crankcase">Crankcase now</dt>
+      <dd class="number" data-readout="crankcase">Drawing mixture in</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="clutch" aria-labelledby="clutch-title">
+  <p class="chapter-index">04</p>
+  <h2 id="clutch-title" data-i18n="sections.clutch.title">Why the chain stops at idle</h2>
+  <p data-i18n-html="sections.clutch.p1">
+    Between the crankshaft and the chain sits a <strong>centrifugal clutch</strong>. Its weights,
+    the <strong>clutch shoes</strong>, spin with the crankshaft, and springs hold them in. Around
+    them is a steel cup, the <strong>clutch drum</strong>. The drum carries the
+    <strong>sprocket</strong>, the toothed wheel that drives the chain. As the engine speeds up, the
+    spin flings the shoes outward against the drum, and friction makes the drum turn with them.
+  </p>
+  <p data-i18n-html="sections.clutch.p2">
+    At idle, about 2,700 rpm, the springs win and the shoes stay in. The drum stands still, so the
+    chain does not move. That is how it should be: at idle, the chain must not run. On this saw, the
+    shoes grip at 3,700 rpm. Drag the throttle slowly past that point and watch the chain start. In
+    the model, the clutch grips fully the instant the engine passes 3,700 rpm, so the chain jumps
+    straight to about 8 m/s; a real clutch slips for a moment as the shoes bite.
+  </p>
+  <p data-i18n-html="sections.clutch.p3">
+    The sprocket has 7 teeth, and each one moves the chain by two pitches, two link spacings. So one
+    turn moves the chain about 133 mm. At 9,900 rpm, that is 22 metres per second (m/s), about 79
+    km/h. This is the speed where the engine makes its full power, and it works near it while
+    cutting. With nothing to cut, saws can rev higher, to a built-in limit of 12,500 to 14,000 rpm.
+  </p>
+  <p data-i18n-html="sections.clutch.p4">
+    A saw starts with the throttle held a little open. That is fast enough for the clutch to grip,
+    so you put the chain brake on before you start. If the chain is held still while the engine
+    races, the clutch slips and gets very hot. The <strong>oil pump</strong> sends oil to the bar
+    only while the chain runs: at idle, no oil flows.
+  </p>
+  <div class="range-widget">
+    <div class="range-widget__header">
+      <label for="clutch-throttle" data-i18n="chapters.clutch.throttle">Throttle</label
+      ><output class="number" for="clutch-throttle">100 %</output>
+    </div>
+    <input id="clutch-throttle" type="range" class="range" data-control="throttle" />
+    <dl class="range-widget__readouts">
+      <div>
+        <dt data-i18n="chapters.clutch.rpm">Engine speed</dt>
+        <dd class="number" data-readout="clutchRpm">2,700 rpm</dd>
+      </div>
+      <div>
+        <dt data-i18n="chapters.clutch.state">Clutch</dt>
+        <dd class="number" data-readout="clutchState">Open</dd>
+      </div>
+      <div>
+        <dt data-i18n="chapters.clutch.chain">Chain speed</dt>
+        <dd class="number" data-readout="clutchChain">0.0 m/s, 0 km/h</dd>
+      </div>
+    </dl>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.clutch.idle">Idle speed</dt>
+      <dd class="number" data-readout="idleRpm">2,700 rpm</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.clutch.engage">Clutch grips at</dt>
+      <dd class="number" data-readout="engageRpm">3,700 rpm</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.clutch.perTurn">Chain moved per turn</dt>
+      <dd class="number" data-readout="perTurn">133 mm, 7 teeth × 2 pitches</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.clutch.oil">Oil pump</dt>
+      <dd class="number" data-readout="oil">Stopped</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="chain" aria-labelledby="chain-title">
+  <p class="chapter-index">05</p>
+  <h2 id="chain-title" data-i18n="sections.chain.title">Teeth that take chips</h2>
+  <p data-i18n-html="sections.chain.p1">
+    A saw chain is built from three kinds of parts. <strong>Drive links</strong> hang down into a
+    groove in the bar, and the sprocket's teeth push them along. <strong>Cutters</strong> are the
+    teeth, one leaning left, the next leaning right. Small plates called tie straps join them, held
+    by rivets.
+  </p>
+  <p data-i18n-html="sections.chain.p2">
+    Each cutter has a flat top plate and a side plate. Where they meet is a sharp corner that slices
+    the wood. Just in front of each cutter stands a small hump, the <strong>depth gauge</strong>. It
+    sits 0.65 mm lower than the cutter's top, and that gap sets how thick a chip the cutter can
+    take. File the depth gauges too low and the cutters bite too deep, which makes kickback more
+    likely.
+  </p>
+  <p data-i18n-html="sections.chain.p3">
+    A chain's size is its <strong>pitch</strong>: take the distance across three rivets in a row and
+    halve it. This chain has a 3/8 inch pitch, 9.525 mm. A chain like this one on a 40 cm bar has 55
+    drive links and is about 1.05 m long. It carries about 27 cutters, one for every two drive
+    links.
+  </p>
+  <p data-i18n-html="sections.chain.p4">
+    At 22 m/s, the chain runs round the bar about 21 times a second. That sends about 570 cutters
+    past any one point every second, and each takes a chip. Pick Idle, Half or Full to compare. In
+    the cut, the chain under the bar runs back from the <strong>bar nose</strong> toward the saw, so
+    the chips fly out behind the cut.
+  </p>
+  <p data-i18n-html="sections.chain.p5">
+    All this time, the chain slides along the steel bar at full speed. Without oil, the rubbing
+    would soon make the bar burning hot. So the oil pump drips <strong>bar oil</strong> onto the
+    chain, and the chain carries it round the bar. On a small Stihl saw, the bar oil runs out at
+    about the same time as the fuel, so you can fill both tanks together.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.throttle">
+    <button
+      type="button"
+      class="chip"
+      data-action="throttle"
+      data-value="idle"
+      data-i18n="controls.throttleOptions.idle"
+    >
+      Idle
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="throttle"
+      data-value="half"
+      data-i18n="controls.throttleOptions.half"
+    >
+      Half
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="throttle"
+      data-value="full"
+      data-i18n="controls.throttleOptions.full"
+    >
+      Full
+    </button>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.chain.speed">Chain speed</dt>
+      <dd class="number" data-readout="chainSpeed">22.0 m/s, 79 km/h</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.chain.cutters">Cutters past one point each second</dt>
+      <dd class="number" data-readout="cuttersPerSecond">570</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.chain.pitch">Pitch</dt>
+      <dd class="number" data-i18n="chapters.chain.pitchValue">3/8 in, 9.525 mm</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.chain.links">Links</dt>
+      <dd class="number" data-i18n="chapters.chain.linksValue">55 drive links, 27 cutters</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.chain.length">Chain length</dt>
+      <dd class="number" data-i18n="chapters.chain.lengthValue">about 1.05 m</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.chain.depth">Depth gauge below the cutter</dt>
+      <dd class="number" data-i18n="chapters.chain.depthValue">0.65 mm</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="kickback" aria-labelledby="kickback-title">
+  <p class="chapter-index">06</p>
+  <h2 id="kickback-title" data-i18n="sections.kickback.title">The upper quarter of the nose</h2>
+  <p data-i18n-html="sections.kickback.p1">
+    The most dangerous part of a saw is the top quarter of the bar nose, the
+    <strong>kickback zone</strong>. Kickback zone (K) paints it red. If the moving chain touches
+    wood there, the cutters can catch. The bar is then flung up and back toward you in a flash. This
+    is <strong>kickback</strong>, and measurements show a gasoline saw can spin at over 1,000° a
+    second.
+  </p>
+  <p data-i18n-html="sections.kickback.p2">
+    A person needs about 0.1 to 0.2 s to react. By then, the bar can already have swung far enough
+    to reach you. So reflexes alone cannot save you. Kickback has two cousins too. If the chain on
+    the bottom of the bar snags, <strong>pull-in</strong> drags the saw forward. If the chain on top
+    snags, <strong>pushback</strong> drives the saw straight back.
+  </p>
+  <p data-i18n-html="sections.kickback.p3">
+    The <strong>chain brake</strong> is the answer. A steel <strong>brake band</strong> wraps round
+    the clutch drum. When your left hand pushes the <strong>front hand guard</strong> forward, a
+    spring snaps the band tight. The band grips the drum, and the chain stops within a fraction of a
+    second. In a strong kickback, the guard can trip by itself: as the saw flips up, the guard's own
+    weight wants to keep moving, and that throws it forward. This is the inertia brake.
+  </p>
+  <p data-i18n-html="sections.kickback.p4">
+    Pick Show a kickback to see a strong one, slowed down and smaller than life. Watch the guard
+    snap forward and the band clamp the drum. In the model, the chain stops at once. Not every
+    kickback trips the brake on its own, though: a milder one may need your hand. The brake lowers
+    the risk, but it cannot stop the kickback itself. Two more helpers: the
+    <strong>chain catcher</strong>, a hook under the bar, catches a chain that breaks or jumps off,
+    and low-kickback chain, sold with a green label in North America, lowers the risk too.
+  </p>
+  <p data-i18n-html="sections.kickback.p5">
+    In the United States in 1979, kickback caused nearly one in four chainsaw injuries. Today, about
+    70 people a day still go to emergency rooms there with chainsaw injuries. A saw is also loud:
+    about 104 to 107 decibels (dB(A)) at your ear. Without hearing protection, 107 dB(A) is safe for
+    only about 3 minutes a day. So wear ear protection, keep both hands on the saw and keep the nose
+    clear.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.kickback">
+    <button
+      type="button"
+      class="chip"
+      data-action="kickback"
+      data-value="strong"
+      data-i18n="controls.kickbackOptions.strong"
+    >
+      Show a kickback
+    </button>
+  </div>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.brake">
+    <button
+      type="button"
+      class="chip"
+      data-action="brake"
+      data-value="off"
+      data-i18n="controls.brakeOptions.off"
+    >
+      Brake off
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="brake"
+      data-value="on"
+      data-i18n="controls.brakeOptions.on"
+    >
+      Brake on
+    </button>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.kickback.brake">Chain brake</dt>
+      <dd class="number" data-readout="brakeState">Off, chain free</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.kickback.rotation">Kickback spin</dt>
+      <dd class="number" data-i18n="chapters.kickback.rotationValue">over 1,000° a second</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.kickback.reaction">Time a person needs to react</dt>
+      <dd class="number" data-i18n="chapters.kickback.reactionValue">about 0.1 to 0.2 s</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.kickback.stop">Chain brake stops the chain</dt>
+      <dd class="number" data-i18n="chapters.kickback.stopValue">within a fraction of a second</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.kickback.share">Injuries caused by kickback</dt>
+      <dd class="number" data-i18n="chapters.kickback.shareValue">nearly 1 in 4, US, 1979</dd>
+    </div>
+  </dl>
+</section>
