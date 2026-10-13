@@ -11,6 +11,7 @@ import {
   ENGINE_READOUTS,
   VIEW_TOGGLES,
   mountEngineUi,
+  mountGaugeDial,
 } from './ui';
 
 export default defineExplainer<EngineStoreState>({
@@ -24,5 +25,6 @@ export default defineExplainer<EngineStoreState>({
   actions: CHAPTER_ACTIONS,
   scene: SCENE_OPTIONS,
   mountScene: mountEngineScene,
+  mountGauge: mountGaugeDial,
   mountUi: mountEngineUi,
 });

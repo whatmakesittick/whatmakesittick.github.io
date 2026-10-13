@@ -1,6 +1,8 @@
 import { onLanguageChanged, t } from '@core/i18n';
 import { translateDom } from '@core/i18n/dom';
-import { html, requireElement, setText, svg } from '@core/ui/dom';
+import { html, setText, svg } from '@core/ui/dom';
+import { disposeAll } from '@core/ui/disposers';
+import type { Disposer } from '@core/ui/disposers';
 import { watch, watchLocalized, watchShallow } from '@core/ui/subscribe';
 import {
   ENGINE_SPECS,
@@ -131,7 +133,11 @@ function highlightStroke(arcs: StrokeArcs, label: SVGTextElement, current: Strok
   label.setAttribute('fill', STROKE_COLORS[current]);
 }
 
-function mountDial(container: HTMLElement, ignitionLegend: HTMLElement, store: EngineStore): void {
+function mountDial(
+  container: HTMLElement,
+  ignitionLegend: HTMLElement,
+  store: EngineStore,
+): Disposer {
   const arcs = createStrokeArcs();
   const marks = svg('g');
   const windows = svg('g');
@@ -157,28 +163,30 @@ function mountDial(container: HTMLElement, ignitionLegend: HTMLElement, store: E
     marks.replaceChildren(...createDeadCentreMarks());
   };
   translateStaticText();
-  onLanguageChanged(translateStaticText);
 
-  watchShallow(
-    store,
-    (state) => [state.engineType, state.compressionRatio] as const,
-    () => windows.replaceChildren(...createTimingWindows(currentSpec(store.getState()))),
-  );
-  watchLocalized(
-    store,
-    (state) => ENGINE_SPECS[state.engineType].ignition,
-    (ignition) => setText(ignitionLegend, t(IGNITION_LEGEND_KEYS[ignition])),
-  );
-  watchLocalized(
-    store,
-    (state) => strokeAt(state.phase),
-    (stroke) => highlightStroke(arcs, centreLabel, stroke),
-  );
-  watch(
-    store,
-    (state) => state.phase,
-    (angle) => needle.setAttribute('transform', dialRotation(angle)),
-  );
+  return disposeAll([
+    onLanguageChanged(translateStaticText),
+    watchShallow(
+      store,
+      (state) => [state.engineType, state.compressionRatio] as const,
+      () => windows.replaceChildren(...createTimingWindows(currentSpec(store.getState()))),
+    ),
+    watchLocalized(
+      store,
+      (state) => ENGINE_SPECS[state.engineType].ignition,
+      (ignition) => setText(ignitionLegend, t(IGNITION_LEGEND_KEYS[ignition])),
+    ),
+    watchLocalized(
+      store,
+      (state) => strokeAt(state.phase),
+      (stroke) => highlightStroke(arcs, centreLabel, stroke),
+    ),
+    watch(
+      store,
+      (state) => state.phase,
+      (angle) => needle.setAttribute('transform', dialRotation(angle)),
+    ),
+  ]);
 }
 
 function createLegend(ignition: HTMLElement): HTMLElement {
@@ -189,11 +197,15 @@ function createLegend(ignition: HTMLElement): HTMLElement {
   ]);
 }
 
-export function mountGaugeDial(root: Document, store: EngineStore): void {
+export function mountGaugeDial(gauge: HTMLElement, store: EngineStore): Disposer {
   const dial = html('div');
   const ignition = html('li', { 'data-tone': 'ignition' });
   const block = html('div', { class: 'gauge-dial' }, [dial, createLegend(ignition)]);
   translateDom(block);
-  requireElement(root, '[data-gauge]').prepend(block);
-  mountDial(dial, ignition, store);
+  gauge.prepend(block);
+  const unmountDial = mountDial(dial, ignition, store);
+  return () => {
+    unmountDial();
+    block.remove();
+  };
 }

@@ -429,6 +429,39 @@ test.describe('real embed (dist): the site dock and gauge in the slots', () => {
     expect(errors).toEqual([]);
   });
 
+  test('engine fullscreen: the gauge has the cycle dial and the keys are the site keys', async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const { errors } = await open(page, 'slug=engine&real=1&mode=fullscreen');
+    await expect(page.locator('.wmit.is-fs.st-ready')).toBeVisible({ timeout: 30_000 });
+    const gauge = page.locator('.gauge-slot [data-gauge]');
+    await expect(gauge.locator('.gauge-dial .dial')).toBeVisible();
+    await expect(gauge.locator('.readout').first()).toBeVisible();
+    await expect(page.locator('[data-stage]')).not.toHaveAttribute('data-gauge-clash');
+    const g = await box(page, '.gauge-slot [data-gauge]');
+    const d = await box(page, '.dock-slot [data-dock]');
+    expect(g.y + g.height).toBeLessThanOrEqual(d.y);
+    const needle = () => gauge.locator('.dial-needle').getAttribute('transform');
+    const scrubber = page.locator('.dock-slot [data-control="scrubber"]');
+    const at = Number(await scrubber.inputValue());
+    const before = await needle();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(async () => Number(await scrubber.inputValue())).toBeGreaterThan(at);
+    expect(await needle()).not.toBe(before);
+    const phases = page.locator('.dock-slot [data-phase-buttons] button');
+    await page.keyboard.press('3');
+    await expect(phases.nth(2)).toHaveAttribute('aria-pressed', 'true');
+    await page.keyboard.press('Shift+ArrowLeft');
+    await expect(phases.nth(1)).toHaveAttribute('aria-pressed', 'true');
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(gauge).toBeHidden();
+    expect(errors).toEqual([]);
+  });
+
   test('compact dock: a click on the center line of the scrubber seeks', async ({ page }) => {
     test.setTimeout(60_000);
     await page.setViewportSize({ width: 420, height: 800 });
