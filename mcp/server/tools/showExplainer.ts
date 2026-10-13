@@ -1,6 +1,12 @@
 import type { CallToolResult } from '@modelcontextprotocol/server';
 import { EMBED_API_VERSION } from '../../../src/core/embed/manifest.ts';
-import { localizeEntry, resolveLanguage, type CatalogueEntry } from '../../shared/catalogue.ts';
+import {
+  localizeEntry,
+  resolveLanguage,
+  resolveSlug,
+  type CatalogueEntry,
+  type SlugAliases,
+} from '../../shared/catalogue.ts';
 import type {
   ShowExplainerErrorResult,
   ShowExplainerInput,
@@ -21,9 +27,11 @@ export async function showExplainer(
   site: Pick<Site, 'entry'>,
   scope: WidgetScope,
   args: ShowExplainerInput,
+  aliases: SlugAliases = {},
 ): Promise<CallToolResult> {
   const { slugs } = scope;
-  if (!slugs.includes(args.slug)) {
+  const slug = resolveSlug(args.slug, aliases);
+  if (!slugs.includes(slug)) {
     return failure(
       scope,
       `Unknown explainer slug "${args.slug}". Available slugs: ${slugs.join(', ')}. Call list_explainers to see them with their chapters.`,
@@ -33,14 +41,14 @@ export async function showExplainer(
   const lang = resolveLanguage(args.lang);
   let entry: CatalogueEntry | undefined;
   try {
-    entry = await site.entry(args.slug, lang);
+    entry = await site.entry(slug, lang);
   } catch (error) {
-    log(`show_explainer ${args.slug}:`, error);
+    log(`show_explainer ${slug}:`, error);
   }
   if (!entry) {
     return failure(
       scope,
-      `The data for the explainer "${args.slug}" is unavailable right now. Try again later.`,
+      `The data for the explainer "${slug}" is unavailable right now. Try again later.`,
     );
   }
   const localized = localizeEntry(entry, lang);

@@ -12,7 +12,13 @@ import {
   parsePublishedManifest,
   type PublishedManifest,
 } from '../../vite/manifestSchema.ts';
-import { isTag, plainText, type CatalogueEntry } from '../shared/catalogue.ts';
+import {
+  isTag,
+  parseSlugAliases,
+  plainText,
+  resolveSlug,
+  type CatalogueEntry,
+} from '../shared/catalogue.ts';
 import type { ListExplainersItem } from '../shared/tools.ts';
 import { log } from './log.ts';
 
@@ -163,7 +169,8 @@ function parseIndex(text: string | undefined): EmbedManifest {
   const explainers = isRecord(value) ? value.explainers : undefined;
   if (!Array.isArray(explainers) || explainers.length === 0 || !explainers.every(isIndexEntry))
     throw new Error(`${SITE_INDEX_FILE}: not a list of explainers`);
-  return value as unknown as EmbedManifest;
+  const aliases = parseSlugAliases(isRecord(value) ? value.aliases : undefined);
+  return { ...(value as unknown as EmbedManifest), aliases };
 }
 
 interface Locale {
@@ -188,7 +195,9 @@ export function createSite(read: SiteReader, options: SiteOptions = {}): Site {
   }
 
   async function listed(slug: string): Promise<EmbedManifestEntry | undefined> {
-    return (await index()).explainers.find((e) => e.slug === slug);
+    const { explainers, aliases } = await index();
+    const current = resolveSlug(slug, aliases);
+    return explainers.find((e) => e.slug === current);
   }
 
   function manifest(slug: string): Promise<PublishedManifest> {
@@ -229,9 +238,10 @@ export function createSite(read: SiteReader, options: SiteOptions = {}): Site {
     }
   }
 
-  async function entry(slug: string, lang: LanguageCode): Promise<CatalogueEntry | undefined> {
-    const indexed = await listed(slug);
+  async function entry(requested: string, lang: LanguageCode): Promise<CatalogueEntry | undefined> {
+    const indexed = await listed(requested);
     if (!indexed) return undefined;
+    const { slug } = indexed;
     const published = await manifest(slug);
     const asked = lang !== DEFAULT_LANGUAGE && published.locales.includes(lang);
     const [html, english, translated] = await Promise.all([
@@ -256,11 +266,12 @@ export function createSite(read: SiteReader, options: SiteOptions = {}): Site {
   }
 
   async function summary(
-    slug: string,
+    requested: string,
     lang: LanguageCode,
   ): Promise<ListExplainersItem | undefined> {
-    const english = await listed(slug);
+    const english = await listed(requested);
     if (!english) return undefined;
+    const { slug } = english;
     const found = lang === DEFAULT_LANGUAGE ? undefined : await translation(slug, lang);
     return {
       slug,
