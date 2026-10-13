@@ -20,3 +20,7 @@ Rules for the coordinator: read only the "Corrections" and "Safe numbers" sectio
 7. **Images.** With the dev server on port 5180: `node e2e/tools/cover.ts <slug> <phase> cover.png`, then `cwebp -q 85 -resize 932 699 cover.png -o explainers/<slug>/public/cover.webp`. Copy `meta.tagline` from `locales/en.json` into `scripts/cards/<slug>.html`, run `bash scripts/social-images.sh <slug>`. Look at both once, commit.
 8. **Browser QA.** `SLUG=<slug> QA_OUT=<dir> npx playwright test --config=e2e/tools/qa.config.ts`, then `node e2e/tools/contact.ts <dir> <sheet.png> <prefix>` per device. Check the chips and sliders by hand on the page. Send the sheets to the user. Resume the writer for one native-reader pass per language (`prompts/writer.md`, final section) and merge it the same way as in step 5.
 9. **Finish.** `npm run lint`, `npm test`, `npm run build` (not while the QA walk runs). Open the PR with the `/pr` skill. After the merge, ask the user to delete the worktrees and branches.
+
+## Renaming
+
+To rename an explainer later, move `explainers/<old>/` to `explainers/<new>/`, set `slug` and the `id` in `src/index.ts` to `<new>`, and add `"formerSlugs": ["<old>"]` to `explainer.json`. The build keeps the old pages, the embed and the slug working (`ARCHITECTURE.md`, "Explainer package").
