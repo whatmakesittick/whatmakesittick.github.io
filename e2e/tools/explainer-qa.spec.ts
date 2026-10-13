@@ -3,12 +3,19 @@ import type { Page } from '@playwright/test';
 import type { LanguageCode } from '../../src/core/i18n/languages.ts';
 import { openExplainer, scrubTo, showChapter, visibleChapters } from '../driver.ts';
 import { boxesIntersect } from '../geometry.ts';
-import { dockBox, emptyReadouts, hasHorizontalOverflow, untranslatedCopy } from '../probes.ts';
+import {
+  dockBox,
+  dockCollisions,
+  emptyReadouts,
+  hasHorizontalOverflow,
+  openDockExtras,
+  untranslatedCopy,
+} from '../probes.ts';
 
 const SLUG = process.env.SLUG ?? '';
 const OUT = process.env.QA_OUT ?? '';
 const LANGUAGES = (process.env.QA_LANGUAGES ?? 'en,uk,ja').split(',') as LanguageCode[];
-const CHAPTER_COUNT = 6;
+const CHAPTER_COUNT = Number(process.env.QA_CHAPTERS ?? '6');
 const MID_CYCLE = 0.5;
 const GAUGE = '[data-gauge]';
 
@@ -49,6 +56,8 @@ for (const language of LANGUAGES) {
     }
     expect(await untranslatedCopy(page)).toEqual([]);
     expect(await hasHorizontalOverflow(page)).toBe(false);
+    await openDockExtras(page);
+    expect(await dockCollisions(page), 'dock controls collide or clip').toEqual([]);
     const before = await gaugeText(page);
     await scrubTo(page, MID_CYCLE);
     expect(await gaugeText(page)).not.toBe(before);
