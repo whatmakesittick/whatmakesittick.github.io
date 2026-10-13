@@ -36,8 +36,24 @@ Each boundary exists for a reason.
   with `import()` from the asset origin, which the resource declares in
   `_meta.ui.csp.resourceDomains`. three.js and the core load once; switching explainers loads only
   the new explainer's chunk.
-- **`/embed/v1/` is add only.** Widgets already cached in hosts keep loading these paths. Files are
-  added, never removed or renamed. A breaking change goes to `/embed/v2/`, next to `v1`.
+- **A few names in `/embed/v1/` are stable, the rest may change.** The stable names are
+  `widget.js` and its `start` export, `<slug>.js` for every explainer in `manifest.json`, the
+  `manifest.json` fields, `explainers/<slug>/`, `covers/<slug>.webp` and `fonts/<file>.woff2`. The
+  hashed chunks they import, in `/assets/` and `widget-<lang>-<hash>.js`, change with each deploy. A
+  slug can be renamed or removed; the manifest lists only the current ones. A breaking change to
+  the stable names or to the embed API goes to `/embed/v2/`, next to `v1`.
+- **The widget recovers after a deploy.** A Pages deploy replaces the whole site, and Pages sends
+  `Cache-Control: max-age=600` for every file. We cannot change that header. So for up to ten
+  minutes a browser can hold an entry whose chunks are gone, and a widget mounted before the deploy
+  still knows the old chunk names. When an embed fails to load or mount, the widget imports
+  `<slug>.js` once more with a `?v=<time>` query. That URL is not in the HTTP cache, so it brings
+  the current chunk names. A mounted scene whose language chunk is gone is mounted again from a
+  fresh entry, in the new language and at the same state. A widget language chunk that is gone is
+  taken from a fresh `widget.js?v=<time>`, through its `languageData` export. Each embed font lists
+  its copy in `fonts/` as a second source, and a cover that does not load is hidden. If the fresh
+  attempt fails too, the stage shows the error, a retry button and a link to the explainer on the
+  site. The widget does not read `manifest.json` for this: the resource declares no
+  `connectDomains`, so the widget cannot fetch it, and the `<slug>.js` names are stable anyway.
 - **Server and static files.** GitHub Pages can serve `/embed/v1/` (it already sends
   `Access-Control-Allow-Origin: *`), but it cannot host `POST /mcp`: it answers 405. `createServer`
   touches no Node API, so the plan is a Cloudflare Worker for `/mcp`, with `WMIT_ASSET_BASE`
@@ -110,7 +126,8 @@ asset origin. Whoever can deploy the site controls the widget code.
   errors, a scene that draws.
 - **Test host** (`mcp/widget/host.html`, `loader.spec.ts`): the built module through the real
   loader, including a slow module, messages that arrive before the module runs, and a module that
-  fails to load.
+  fails to load. It also plays a deploy: a cached entry or widget that points at chunks that are
+  gone, a hashed font that is gone, and an embed that is gone for good.
 - **Stage height** (`stage.spec.ts`): the widget and the scene area keep their height when the user
   switches explainers.
 - **Unit tests** cover the catalogue, the server, chapter matching, widget state and language.
@@ -121,7 +138,7 @@ asset origin. Whoever can deploy the site controls the widget code.
 1. The explainer page JavaScript budget went from 300 to 305 kB gzipped. Is that acceptable?
 2. New dependencies (`@modelcontextprotocol/*`, `zod`, `preact`) in the root package, or a separate
    `mcp/` workspace package?
-3. Should `/embed/v1/` on GitHub Pages become a public contract, with the add only rule?
+3. Should the stable names in `/embed/v1/` on GitHub Pages become a public contract?
 4. The server runs its TypeScript with Node 24 type stripping. Is that fine, or should it be built?
 5. Who owns the Cloudflare account and the domain for the `/mcp` Worker?
 6. Directory listings in Claude and ChatGPT need a privacy policy page. Where should it live?

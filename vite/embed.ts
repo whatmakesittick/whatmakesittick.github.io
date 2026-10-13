@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
+import { EMBED_FONTS, fontFileName } from '../src/core/embed/fontFiles.ts';
 import { EMBED_API_VERSION } from '../src/core/embed/manifest.ts';
 import type { EmbedManifest, EmbedManifestEntry } from '../src/core/embed/manifest.ts';
 import type { CatalogueEntry } from './catalogueModel.ts';
@@ -15,11 +16,7 @@ export { EMBED_DIRECTORY, embedSourcePath };
 export const EMBED_MANIFEST_FILE = `${EMBED_DIRECTORY}/manifest.json`;
 export const EMBED_MOUNT_MODULE = '@core/embed/mount';
 
-export const LEGACY_FONTS = [
-  '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2',
-  '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2',
-  '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2',
-] as const;
+export const LEGACY_FONTS = Object.values(EMBED_FONTS);
 
 const ENTRY_PREFIX = 'virtual:embed/';
 const RESOLVED_PREFIX = `\0${ENTRY_PREFIX}`;
@@ -113,7 +110,7 @@ export function legacyEmbedFiles(
     source: join(directory, PUBLIC_DIRECTORY, manifest.cover),
   }));
   const fonts = LEGACY_FONTS.map((specifier) => ({
-    fileName: `${EMBED_DIRECTORY}/fonts/${specifier.slice(specifier.lastIndexOf('/') + 1)}`,
+    fileName: `${EMBED_DIRECTORY}/fonts/${fontFileName(specifier)}`,
     source: resolveModule(specifier),
   }));
   return [...covers, ...fonts];

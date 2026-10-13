@@ -6,15 +6,12 @@ import { buildCatalogue } from '../../../vite/catalogue.ts';
 import { toWidgetCatalogue } from '../../catalogue/build.ts';
 import { PATHS } from '../../shared/config.ts';
 
-const engineIn = (lang: Parameters<typeof toWidgetCatalogue>[1]) =>
-  toWidgetCatalogue(
-    buildCatalogue(resolve(dirname(fileURLToPath(import.meta.url)), '../../..')),
-    lang,
-  ).explainers.find((e) => e.slug === 'engine')!;
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 
-const built = existsSync(
-  resolve(dirname(fileURLToPath(import.meta.url)), '../../..', PATHS.widgetModule),
-);
+const engineIn = (lang: Parameters<typeof toWidgetCatalogue>[1]) =>
+  toWidgetCatalogue(buildCatalogue(root), lang).explainers.find((e) => e.slug === 'engine')!;
+
+const built = existsSync(resolve(root, PATHS.widgetModule));
 
 const open = async (page: Page, query: string) => {
   const errors: string[] = [];
@@ -84,6 +81,107 @@ test.describe('the loader resource', () => {
       ja.chapters.find((c) => c.id === 'strokes')!.title,
     );
     expect(errors).toEqual([]);
+  });
+});
+
+const stale = (path: string) => (url: URL) => url.pathname.endsWith(path) && url.search === '';
+
+const servePublishedBefore = async (page: Page, path: string, from: RegExp, to: string) => {
+  await page.route(stale(path), async (route) => {
+    const response = await route.fetch();
+    const body = (await response.text()).replace(from, to);
+    await route.fulfill({ response, body });
+  });
+};
+
+const requested = (page: Page, path: string) => {
+  const urls: string[] = [];
+  page.on('request', (request) => {
+    const url = new URL(request.url());
+    if (url.pathname.endsWith(path)) urls.push(`${url.pathname.split('/').pop()}${url.search}`);
+  });
+  return urls;
+};
+
+test.describe('after a site deploy', () => {
+  test.skip(!built, `${PATHS.widgetModule} is missing (npm run build)`);
+
+  test('a cached embed whose chunks are gone is loaded again fresh', async ({ page }) => {
+    await servePublishedBefore(page, '/embed/v1/engine.js', /assets\/shared-/g, 'assets/gone-');
+    const urls = requested(page, '/embed/v1/engine.js');
+    const { errors, view } = await open(page, 'slug=engine&chapter=strokes');
+    await expect(view.locator('.wmit.st-ready[data-slug="engine"]')).toBeVisible({
+      timeout: 15_000,
+    });
+    expect(urls).toEqual(['engine.js', expect.stringMatching(/^engine\.js\?v=[0-9a-z]+$/)]);
+    expect(errors).toEqual([]);
+  });
+
+  test('a cached embed whose language chunk is gone is loaded again fresh', async ({ page }) => {
+    const uk = engineIn('uk');
+    await servePublishedBefore(page, '/embed/v1/engine.js', /assets\/uk-/g, 'assets/gone-');
+    const { errors, view } = await open(page, 'slug=engine&chapter=strokes&lang=uk');
+    await expect(view.locator('.wmit.st-ready[lang="uk"]')).toBeVisible({ timeout: 15_000 });
+    await expect(view.getByRole('button', { name: 'Скинути камеру' }).first()).toBeAttached();
+    await expect(view.locator('.a-head .title')).toHaveText(uk.title);
+    expect(errors).toEqual([]);
+  });
+
+  test('a cached widget whose language chunk is gone takes it from a fresh widget', async ({
+    page,
+  }) => {
+    const uk = engineIn('uk');
+    await servePublishedBefore(page, '/embed/v1/widget.js', /\.\/widget-uk-/g, './gone-');
+    const urls = requested(page, '/embed/v1/widget.js');
+    const { errors, view } = await open(page, 'slug=engine&chapter=strokes&lang=uk');
+    await expect(view.locator('.wmit.st-ready[lang="uk"]')).toBeVisible({ timeout: 15_000 });
+    await expect(view.locator('.a-head .title')).toHaveText(uk.title);
+    expect(urls).toEqual(['widget.js', expect.stringMatching(/^widget\.js\?v=[0-9a-z]+$/)]);
+    expect(errors).toEqual([]);
+  });
+
+  test('a hashed font that is gone loads from its stable path', async ({ page }) => {
+    const cors = { 'Access-Control-Allow-Origin': '*' };
+    await page.route(
+      (url) => /\/assets\/inter-latin-wght-normal-[\w-]+\.woff2$/.test(url.pathname),
+      (route) => route.fulfill({ status: 404, headers: cors, body: '' }),
+    );
+    await page.route(
+      (url) => url.pathname === '/embed/v1/fonts/inter-latin-wght-normal.woff2',
+      (route) =>
+        route.fulfill({
+          headers: { ...cors, 'Content-Type': 'font/woff2' },
+          path: resolve(root, PATHS.site, 'embed/v1/fonts/inter-latin-wght-normal.woff2'),
+        }),
+    );
+    const stable = page.waitForResponse((response) =>
+      response.url().endsWith('/embed/v1/fonts/inter-latin-wght-normal.woff2'),
+    );
+    const { errors, view } = await open(page, 'slug=engine&chapter=strokes');
+    await expect(view.locator('.wmit.st-ready[data-slug="engine"]')).toBeVisible({
+      timeout: 15_000,
+    });
+    expect((await stable).status()).toBe(200);
+    expect(errors).toEqual([]);
+  });
+
+  test('an embed that is gone for good shows the error with a link to the site', async ({
+    page,
+  }) => {
+    await page.route(
+      (url) => url.pathname.endsWith('/embed/v1/engine.js'),
+      (route) => route.fulfill({ status: 404, body: '' }),
+    );
+    const urls = requested(page, '/embed/v1/engine.js');
+    const { logs, view } = await open(page, 'slug=engine&chapter=strokes');
+    await expect(view.locator('.wmit.st-error[data-slug="engine"]')).toBeVisible({
+      timeout: 15_000,
+    });
+    expect(urls).toHaveLength(2);
+    await view.getByRole('button', { name: 'Open on site' }).last().click();
+    await expect
+      .poll(() => logs.find((line) => line.startsWith('[HOST] open-link')))
+      .toBe('[HOST] open-link https://whatmakesittick.github.io/engine/');
   });
 });
 

@@ -14,11 +14,13 @@ export interface ModuleLoader {
   load(slug: string, attempt: number): Promise<EmbedModule>;
 }
 
-export function urlLoader(assetBase: string): ModuleLoader {
+export const freshQuery = (now: () => number = Date.now): string => `?v=${now().toString(36)}`;
+
+export function urlLoader(assetBase: string, now: () => number = Date.now): ModuleLoader {
   return {
     load: (slug, attempt) =>
       import(
-        /* @vite-ignore */ `${assetBase}${slug}.js${attempt > 0 ? `?retry=${attempt}` : ''}`
+        /* @vite-ignore */ `${assetBase}${slug}.js${attempt > 0 ? freshQuery(now) : ''}`
       ) as Promise<EmbedModule>,
   };
 }
@@ -33,6 +35,11 @@ export function hasWebGL2(): boolean {
   } catch {
     return false;
   }
+}
+
+function lacksWebGL(error: unknown): boolean {
+  const message = String((error as Error)?.message ?? error);
+  return /webgl|context/i.test(message) && !(error instanceof TypeError);
 }
 
 export interface SceneCallbacks {
@@ -111,12 +118,14 @@ export class SceneSession {
     opts: { retry?: boolean; restore?: EmbedState } = {},
   ): Promise<void> {
     const gen = ++this.generation;
-    if (opts.retry) {
-      this.attempts.set(slug, (this.attempts.get(slug) ?? 0) + 1);
-      this.modules.delete(slug);
-    }
+    if (opts.retry) this.fresh(slug);
     this.queue = this.queue.then(() => this.run(gen, slug, chapter, opts.restore)).catch(() => {});
     return this.queue;
+  }
+
+  private fresh(slug: string): void {
+    this.attempts.set(slug, (this.attempts.get(slug) ?? 0) + 1);
+    this.modules.delete(slug);
   }
 
   setLanguage(language: LanguageCode): Promise<void> {
@@ -136,9 +145,23 @@ export class SceneSession {
     try {
       await cur.controller.setLanguage(language);
     } catch (error) {
-      console.warn('[wmit-widget] setLanguage failed', error);
+      console.warn('[wmit-widget] setLanguage failed, loading a fresh module', error);
+      return this.remountFresh(cur);
     }
     if (this.current === cur) this.opts.callbacks.language?.(cur.controller);
+  }
+
+  private async remountFresh(cur: Mounted): Promise<void> {
+    this.fresh(cur.slug);
+    try {
+      await this.module(cur.slug);
+    } catch (error) {
+      console.warn('[wmit-widget] no fresh module, the scene keeps its language', error);
+      return;
+    }
+    if (this.current !== cur || this.disposed) return;
+    const state = cur.controller.getState();
+    return this.show(cur.slug, state.chapter, { restore: state });
   }
 
   private progress(from: number, to: number, ms: number): void {
@@ -171,13 +194,17 @@ export class SceneSession {
     cur.root.remove();
   }
 
+  private stale(gen: number): boolean {
+    return gen !== this.generation || this.disposed;
+  }
+
   private async run(
     gen: number,
     slug: string,
     chapter: string | undefined,
     state?: EmbedState,
   ): Promise<void> {
-    if (gen !== this.generation || this.disposed) return;
+    if (this.stale(gen)) return;
     this.teardownCurrent();
     const cb = this.opts.callbacks;
     if (this.opts.webgl && !this.opts.webgl()) {
@@ -187,10 +214,30 @@ export class SceneSession {
     const host = this.opts.host();
     if (!host) return;
     this.progress(0.04, 0.62, 900);
+    let failure = await this.attempt(gen, host, slug, chapter, state);
+    if (failure && !this.stale(gen) && !lacksWebGL(failure.error)) {
+      console.warn('[wmit-widget] scene failed, loading a fresh module', failure.error);
+      this.fresh(slug);
+      failure = await this.attempt(gen, host, slug, chapter, state);
+    }
+    if (!failure) return;
+    this.stopProgress();
+    if (this.stale(gen)) return;
+    console.error('[wmit-widget] scene failed', failure.error);
+    cb.status(lacksWebGL(failure.error) ? 'nowebgl' : 'error', 0, failure.error);
+  }
+
+  private async attempt(
+    gen: number,
+    host: HTMLElement,
+    slug: string,
+    chapter: string | undefined,
+    state?: EmbedState,
+  ): Promise<{ error: unknown } | undefined> {
     let root: HTMLElement | undefined;
     try {
       const mod = await this.module(slug);
-      if (gen !== this.generation || this.disposed) return;
+      if (this.stale(gen)) return;
       this.progress(0.66, 0.96, 700);
       root = document.createElement('div');
       root.className = 'scene-mount';
@@ -203,7 +250,7 @@ export class SceneSession {
         ...(state ? { autoplay: state.playing } : {}),
         language,
       });
-      if (gen !== this.generation || this.disposed) {
+      if (this.stale(gen)) {
         controller.dispose();
         root.remove();
         return;
@@ -211,16 +258,13 @@ export class SceneSession {
       this.stopProgress();
       if (state) restore(controller, state);
       this.current = { slug, language, controller, root };
-      cb.controller(controller);
-      cb.status('ready', 1);
+      this.opts.callbacks.controller(controller);
+      this.opts.callbacks.status('ready', 1);
       void this.syncLanguage();
+      return;
     } catch (error) {
-      this.stopProgress();
       root?.remove();
-      if (gen !== this.generation || this.disposed) return;
-      console.error('[wmit-widget] scene failed', error);
-      const noGl = /webgl|context/i.test(String((error as Error)?.message ?? error));
-      cb.status(noGl && !(error instanceof TypeError) ? 'nowebgl' : 'error', 0, error);
+      return { error };
     }
   }
 

@@ -6,7 +6,7 @@ import type {
   LanguageCode,
   MountOptions,
 } from '../../../src/core/embed/contract.ts';
-import { SceneSession } from '../../widget/src/scene.ts';
+import { SceneSession, freshQuery } from '../../widget/src/scene.ts';
 
 interface Fake {
   mounts: MountOptions[];
@@ -155,5 +155,128 @@ describe('SceneSession language', () => {
     await shown;
     await vi.waitFor(() => expect(languages).toEqual(['zh']));
     expect(fake.mounts[0]?.language).toBe('en');
+  });
+});
+
+const gone = (path: string) =>
+  new TypeError(`Failed to fetch dynamically imported module: ${path}`);
+
+function redeployed(fake: Fake, failures: number) {
+  const host = document.createElement('div');
+  const attempts: number[] = [];
+  const statuses: string[] = [];
+  const scene = new SceneSession({
+    loader: {
+      load: async (slug, attempt) => {
+        attempts.push(attempt);
+        if (attempts.length <= failures) throw gone(`${slug}.js`);
+        return fake.module;
+      },
+    },
+    host: () => host,
+    callbacks: { status: (s) => statuses.push(s), controller: () => {} },
+  });
+  return { scene, attempts, statuses, host };
+}
+
+describe('SceneSession after a site deploy', () => {
+  it('loads a fresh module once when the cached one points at chunks that are gone', async () => {
+    const fake = fakeModule('engine', true);
+    const { scene, attempts, statuses } = redeployed(fake, 1);
+    await scene.show('engine', 'one');
+    expect(attempts).toEqual([0, 1]);
+    expect(statuses.at(-1)).toBe('ready');
+    expect(fake.mounts).toHaveLength(1);
+  });
+
+  it('loads a fresh module when mounting fails on a missing language chunk', async () => {
+    const fake = fakeModule('engine', true);
+    const mount = fake.module.mount;
+    let failed = false;
+    fake.module.mount = async (container, options) => {
+      if (!failed) {
+        failed = true;
+        throw gone('../../assets/de-old.js');
+      }
+      return mount(container, options);
+    };
+    const { scene, attempts, statuses, host } = redeployed(fake, 0);
+    await scene.show('engine', 'one');
+    expect(attempts).toEqual([0, 1]);
+    expect(statuses.at(-1)).toBe('ready');
+    expect(host.querySelectorAll('.scene-mount')).toHaveLength(1);
+  });
+
+  it('shows the error state when the fresh module fails too', async () => {
+    const fake = fakeModule('engine', true);
+    const { scene, attempts, statuses, host } = redeployed(fake, Infinity);
+    await scene.show('engine', 'one');
+    expect(attempts).toEqual([0, 1]);
+    expect(statuses.at(-1)).toBe('error');
+    expect(host.children).toHaveLength(0);
+    await scene.show('engine', 'one', { retry: true });
+    expect(attempts).toEqual([0, 1, 2, 3]);
+  });
+
+  it('does not reload a module when the browser has no WebGL context', async () => {
+    const fake = fakeModule('engine', true);
+    fake.module.mount = async () => {
+      throw new Error('WebGL context could not be created');
+    };
+    const { scene, attempts, statuses } = redeployed(fake, 0);
+    await scene.show('engine', 'one');
+    expect(attempts).toEqual([0]);
+    expect(statuses.at(-1)).toBe('nowebgl');
+  });
+
+  it('mounts a fresh module in the new language when the language chunk is gone', async () => {
+    const fake = fakeModule('engine', true);
+    const { scene, attempts, statuses } = redeployed(fake, 0);
+    await scene.show('engine', 'one');
+    const first = fake.controllers[0]!;
+    first.setChapter('two');
+    first.seek(0.3);
+    first.setLanguage = vi.fn(async () => {
+      throw gone('../../assets/ja-old.js');
+    });
+    await scene.setLanguage('ja');
+    await vi.waitFor(() => expect(fake.mounts).toHaveLength(2));
+    await vi.waitFor(() => expect(statuses.at(-1)).toBe('ready'));
+    expect(attempts).toEqual([0, 1]);
+    expect(first.dispose).toHaveBeenCalled();
+    expect(fake.mounts[1]).toMatchObject({ language: 'ja', chapter: 'two' });
+    expect(fake.controllers[1]!.getState()).toMatchObject({ chapter: 'two', progress: 0.3 });
+  });
+
+  it('keeps the scene in its language when no fresh module loads', async () => {
+    const fake = fakeModule('engine', true);
+    let offline = false;
+    const host = document.createElement('div');
+    const scene = new SceneSession({
+      loader: {
+        load: async (slug) => {
+          if (offline) throw gone(`${slug}.js`);
+          return fake.module;
+        },
+      },
+      host: () => host,
+      callbacks: { status: () => {}, controller: () => {} },
+    });
+    await scene.show('engine', 'one');
+    const first = fake.controllers[0]!;
+    first.setLanguage = vi.fn(async () => {
+      throw gone('../../assets/fr-old.js');
+    });
+    offline = true;
+    await scene.setLanguage('fr');
+    expect(fake.mounts).toHaveLength(1);
+    expect(first.dispose).not.toHaveBeenCalled();
+    expect(host.querySelectorAll('.scene-mount')).toHaveLength(1);
+  });
+});
+
+describe('freshQuery', () => {
+  it('asks for a copy the HTTP cache has not seen', () => {
+    expect(freshQuery(() => 36 ** 3)).toBe('?v=1000');
   });
 });

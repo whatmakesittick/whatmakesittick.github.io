@@ -9,6 +9,8 @@ import { hasWebGL2, urlLoader } from './scene.ts';
 import styles from './styles.css?inline';
 import { Widget } from './Widget.tsx';
 
+export { languageData } from './i18n/bundled.ts';
+
 const STYLE_ATTRIBUTE = 'data-wmit-widget';
 
 function addStyles(doc: Document): void {
@@ -32,7 +34,7 @@ export function start(root: HTMLElement, { assetBase, inbox }: WidgetStartOption
       host={host}
       loader={urlLoader(assetBase)}
       assetBase={assetBase}
-      packs={bundledPacks()}
+      packs={bundledPacks(assetBase)}
       webgl={hasWebGL2}
     />,
     root,

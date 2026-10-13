@@ -51,3 +51,7 @@ export interface ViewModel {
 
 export const coverUrl = (assetBase: string, entry: { cover: string }): string =>
   `${assetBase}${entry.cover}`;
+
+export const hideBroken = (event: Event): void => {
+  (event.currentTarget as HTMLImageElement).style.visibility = 'hidden';
+};

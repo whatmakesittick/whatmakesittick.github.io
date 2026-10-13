@@ -3,7 +3,7 @@ import { pad2 } from '../state.ts';
 import { useStrings } from '../i18n/context.ts';
 import { Brand } from './Brand.tsx';
 import { Icon } from './icons.tsx';
-import { coverUrl, type ViewModel } from './types.ts';
+import { coverUrl, hideBroken, type ViewModel } from './types.ts';
 
 class Slot extends Component<{ class: string; slotRef: RefObject<HTMLDivElement | null> }> {
   shouldComponentUpdate() {
@@ -53,7 +53,7 @@ function StateLayer({ vm }: { vm: ViewModel }) {
         class={status === 'nowebgl' ? 'still' : 'dim'}
         src={cover}
         alt={status === 'nowebgl' ? vm.entry.title : ''}
-        onError={(e) => ((e.currentTarget as HTMLImageElement).style.visibility = 'hidden')}
+        onError={hideBroken}
       />
       {(status === 'loading' || status === 'idle') && (
         <>
