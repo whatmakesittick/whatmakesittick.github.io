@@ -22,7 +22,7 @@ describe('ids', () => {
     );
   });
 
-  it('has six chapters, each with one camera view and a setting', () => {
+  it('has seven chapters, each with one camera view and a setting', () => {
     expect(PRESET_IDS).toHaveLength(CAMERA_VIEW_IDS.length);
     expect(Object.keys(PRESET_SETTINGS)).toEqual([...PRESET_IDS]);
     PRESET_IDS.forEach((id) => expect(SETTING_IDS).toContain(PRESET_SETTINGS[id]));
@@ -33,9 +33,14 @@ describe('ids', () => {
     expect(cutting).toEqual(['saw', 'chain']);
   });
 
+  it('starts the saw between the fuel and clutch chapters', () => {
+    expect(PRESET_IDS.indexOf('starting')).toBe(PRESET_IDS.indexOf('fuel') + 1);
+    expect(PRESET_IDS).toHaveLength(7);
+  });
+
   it('offers a single strong kickback and three throttle stops', () => {
     expect(KICKBACK_CHOICE_IDS).toEqual(['strong']);
     expect(THROTTLE_CHOICE_IDS).toEqual(['idle', 'half', 'full']);
-    expect(CHAPTER_ACTION_IDS).toEqual(['throttle', 'brake', 'kickback']);
+    expect(CHAPTER_ACTION_IDS).toEqual(['throttle', 'brake', 'kickback', 'start']);
   });
 });

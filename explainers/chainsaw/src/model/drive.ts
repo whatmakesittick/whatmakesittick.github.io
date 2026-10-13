@@ -1,5 +1,5 @@
 import { clamp, smoothstep } from '@core/math';
-import type { ClutchStateId, ThrottleChoiceId } from '../ids';
+import type { ClutchStateId, EngineStateId, ThrottleChoiceId } from '../ids';
 import {
   CUTTERS,
   DRIVE_LINKS,
@@ -37,6 +37,13 @@ export function snapThrottle(throttle: number): number {
 
 export function rpmOf(throttle: number): number {
   return IDLE_RPM + clamp(throttle, 0, 1) * (MAX_POWER_RPM - IDLE_RPM);
+}
+
+export const FAST_IDLE_RPM = 3800;
+
+export function engineRpm(engine: EngineStateId, throttle: number): number {
+  if (engine === 'running') return rpmOf(throttle);
+  return engine === 'fastIdle' ? FAST_IDLE_RPM : 0;
 }
 
 export function throttleOf(rpm: number): number {

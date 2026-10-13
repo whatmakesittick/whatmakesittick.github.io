@@ -9,6 +9,8 @@ import {
   chainSpeedMs,
   chainTravelMm,
   clutchOf,
+  engineRpm,
+  FAST_IDLE_RPM,
   cuttersPerSecond,
   drumDegrees,
   kmh,
@@ -40,6 +42,18 @@ describe('throttle and engine speed', () => {
     expect(turnMs(MAX_POWER_RPM)).toBeCloseTo(6.06, 2);
     expect(turnMs(IDLE_RPM)).toBeCloseTo(22.2, 1);
     expect(strokesPerSecond(MAX_POWER_RPM)).toBe(165);
+  });
+});
+
+describe('engine state', () => {
+  it('turns no rpm while stopped or cranking, fast idle above engagement, throttle when running', () => {
+    expect(engineRpm('stopped', 1)).toBe(0);
+    expect(engineRpm('cranking', 1)).toBe(0);
+    expect(engineRpm('fastIdle', 0)).toBe(FAST_IDLE_RPM);
+    expect(FAST_IDLE_RPM).toBeGreaterThan(ENGAGE_RPM);
+    expect(engineRpm('running', 0)).toBe(IDLE_RPM);
+    expect(clutchOf(engineRpm('stopped', 1), false)).toBe('open');
+    expect(clutchOf(engineRpm('fastIdle', 0), true)).toBe('slipping');
   });
 });
 

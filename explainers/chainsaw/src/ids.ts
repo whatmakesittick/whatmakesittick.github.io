@@ -40,6 +40,17 @@ export const PART_IDS = [
   'oilFlow',
   'log',
   'chips',
+  'fuelCap',
+  'oilCap',
+  'starterGrip',
+  'starterRope',
+  'starterPulley',
+  'pawls',
+  'flywheel',
+  'ignitionCoil',
+  'primerBulb',
+  'chokeLever',
+  'decompressionValve',
 ] as const;
 
 export type PartId = (typeof PART_IDS)[number];
@@ -66,7 +77,15 @@ export const PORT_IDS = ['exhaust', 'transfer', 'intake'] as const;
 
 export type PortId = (typeof PORT_IDS)[number];
 
-export const PRESET_IDS = ['saw', 'engine', 'fuel', 'clutch', 'chain', 'kickback'] as const;
+export const PRESET_IDS = [
+  'saw',
+  'engine',
+  'fuel',
+  'starting',
+  'clutch',
+  'chain',
+  'kickback',
+] as const;
 
 export type PresetId = (typeof PRESET_IDS)[number];
 
@@ -78,6 +97,7 @@ export const PRESET_SETTINGS: Readonly<Record<PresetId, SettingId>> = {
   saw: 'cutting',
   engine: 'bench',
   fuel: 'bench',
+  starting: 'bench',
   clutch: 'bench',
   chain: 'cutting',
   kickback: 'kickback',
@@ -95,6 +115,33 @@ export const KICKBACK_CHOICE_IDS = ['strong'] as const;
 
 export type KickbackChoiceId = (typeof KICKBACK_CHOICE_IDS)[number];
 
+export const START_CHOICE_IDS = ['cold'] as const;
+
+export type StartChoiceId = (typeof START_CHOICE_IDS)[number];
+
+export const ENGINE_STATE_IDS = ['stopped', 'cranking', 'fastIdle', 'running'] as const;
+
+export type EngineStateId = (typeof ENGINE_STATE_IDS)[number];
+
+export const START_STEP_IDS = [
+  'brake',
+  'choke',
+  'decompression',
+  'primer',
+  'firstPull',
+  'pop',
+  'chokeOff',
+  'secondPull',
+  'fastIdle',
+  'idle',
+] as const;
+
+export type StartStepId = (typeof START_STEP_IDS)[number];
+
+export const START_DISPLAY_IDS = ['ready', ...START_STEP_IDS, 'done'] as const;
+
+export type StartDisplayId = (typeof START_DISPLAY_IDS)[number];
+
 export const CLUTCH_STATE_IDS = ['open', 'driving', 'slipping'] as const;
 
 export type ClutchStateId = (typeof CLUTCH_STATE_IDS)[number];
@@ -103,7 +150,7 @@ export const CHOICE_IDS = ['throttle'] as const;
 
 export type ChoiceId = (typeof CHOICE_IDS)[number];
 
-export const CHAPTER_ACTION_IDS = ['throttle', 'brake', 'kickback'] as const;
+export const CHAPTER_ACTION_IDS = ['throttle', 'brake', 'kickback', 'start'] as const;
 
 export type ChapterActionId = (typeof CHAPTER_ACTION_IDS)[number];
 
@@ -117,6 +164,7 @@ export const CAMERA_VIEW_IDS = [
   'sawSide',
   'cylinderCut',
   'carburettor',
+  'starterSide',
   'clutchSprocket',
   'barChain',
   'kickbackWide',
@@ -124,7 +172,15 @@ export const CAMERA_VIEW_IDS = [
 
 export type CameraView = (typeof CAMERA_VIEW_IDS)[number];
 
-export const REGION_IDS = ['saw', 'cylinder', 'carb', 'clutch', 'bar', 'kickback'] as const;
+export const REGION_IDS = [
+  'saw',
+  'cylinder',
+  'carb',
+  'starter',
+  'clutch',
+  'bar',
+  'kickback',
+] as const;
 
 export type RegionId = (typeof REGION_IDS)[number];
 
@@ -177,6 +233,18 @@ export interface SafetyReading {
   guardForward: number;
 }
 
+export interface StartReading {
+  starting: boolean;
+  step: StartStepId;
+  engine: EngineStateId;
+  chokeLever: number;
+  decompressionIn: boolean;
+  primerSqueeze: number;
+  ropeOut: number;
+  pulleyDeg: number;
+  pawlsEngaged: boolean;
+}
+
 export interface AssemblyState {
   setting: SettingId;
   phase: number;
@@ -184,5 +252,6 @@ export interface AssemblyState {
   crank: CrankReading;
   drive: DriveReading;
   safety: SafetyReading;
+  start: StartReading;
   view: ViewOptions;
 }

@@ -1,5 +1,5 @@
 import { THEME as CORE_THEME } from '@core/theme';
-import type { ClutchStateId, PhaseId } from './ids';
+import type { ClutchStateId, EngineStateId, PhaseId } from './ids';
 
 export const THEME = {
   ...CORE_THEME,
@@ -26,6 +26,15 @@ export const THEME = {
   clutchOpen: '#8a8f99',
   clutchDriving: '#6fbf73',
   clutchSlipping: '#e5534b',
+  starterRope: '#e8e2d0',
+  flywheel: '#5d6168',
+  magnet: '#b5483b',
+  coil: '#3a3f46',
+  primer: '#f2efe2',
+  engineStopped: '#8a8f99',
+  engineCranking: '#f2b134',
+  engineFastIdle: '#e5534b',
+  engineRunning: '#6fbf73',
 } as const;
 
 export const PHASE_TONES: Readonly<Record<PhaseId, string>> = {
@@ -39,4 +48,11 @@ export const CLUTCH_TONES: Readonly<Record<ClutchStateId, string>> = {
   open: THEME.clutchOpen,
   driving: THEME.clutchDriving,
   slipping: THEME.clutchSlipping,
+};
+
+export const ENGINE_TONES: Readonly<Record<EngineStateId, string>> = {
+  stopped: THEME.engineStopped,
+  cranking: THEME.engineCranking,
+  fastIdle: THEME.engineFastIdle,
+  running: THEME.engineRunning,
 };

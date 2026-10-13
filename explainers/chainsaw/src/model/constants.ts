@@ -21,3 +21,8 @@ export const OIL_ML_PER_5_L = 100;
 
 export const KICKBACK_DEG_PER_S = 1000;
 export const REACTION_S = [0.1, 0.2] as const;
+
+export const COIL_GAP_MM = 0.25;
+export const PRIMER_PRESSES = 6;
+export const PRIMER_PRESSES_STIHL = 10;
+export const START_DISTANCE_M = 3;

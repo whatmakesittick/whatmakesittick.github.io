@@ -1,6 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { CUTTERS } from './constants';
-import { ANCHOR_POINTS, CHAIN_ELEMENTS, CHAIN_PATH, NOSE_X, pointOnLoop } from './chain';
+import {
+  ANCHOR_POINTS,
+  BAR_HEEL_HALF_HEIGHT,
+  CHAIN_ELEMENTS,
+  CHAIN_PATH,
+  KICKBACK_BRANCH_CENTRE,
+  KICKBACK_BRANCH_RADIUS,
+  NOSE_RADIUS,
+  NOSE_X,
+  SPROCKET_RADIUS,
+  pointOnLoop,
+  railY,
+} from './chain';
 import { CHAIN_LOOP_MM } from './drive';
 import { CRANK_Y } from './scale';
 
@@ -8,15 +20,38 @@ const LOOP_M = CHAIN_LOOP_MM / 1000;
 
 describe('chain path', () => {
   it('closes the 55-link loop round the sprocket and the nose', () => {
-    const { run, noseArc, sprocketArc } = CHAIN_PATH;
-    expect(2 * run + noseArc + sprocketArc).toBeCloseTo(LOOP_M, 9);
-    expect(NOSE_X).toBeCloseTo(0.458, 3);
+    const total = CHAIN_PATH.segments.reduce((sum, length) => sum + length, 0);
+    expect(total).toBeCloseTo(LOOP_M, 9);
+    expect(NOSE_X).toBeCloseTo(0.454, 3);
     expect(CHAIN_PATH.sprocketRadius).toBeCloseTo(0.02195, 5);
   });
 
+  it('draws the bar 12.5 % taller than the plain tangent loop', () => {
+    expect(BAR_HEEL_HALF_HEIGHT / SPROCKET_RADIUS).toBeCloseTo(1.125, 2);
+    expect(NOSE_RADIUS / 0.02).toBeCloseTo(1.125, 9);
+  });
+
+  it('rises from the sprocket onto the heel and tapers to the nose', () => {
+    expect(railY(CHAIN_PATH.heelX, 'upper')).toBeCloseTo(CRANK_Y + BAR_HEEL_HALF_HEIGHT, 9);
+    expect(railY(CHAIN_PATH.noseMeetX, 'upper')).toBeLessThan(CRANK_Y + BAR_HEEL_HALF_HEIGHT);
+    expect(railY(0.3, 'lower')).toBeCloseTo(2 * CRANK_Y - railY(0.3, 'upper'), 9);
+    const onRail = pointOnLoop((CHAIN_PATH.segments[0] + 0.1) * 1000);
+    expect(onRail.y).toBeCloseTo(railY(onRail.x, 'upper'), 6);
+  });
+
+  it('keeps the kickback branch touching the nose at 45 degrees', () => {
+    const [x, y] = KICKBACK_BRANCH_CENTRE;
+    expect(Math.hypot(x - NOSE_X, y - CRANK_Y)).toBeCloseTo(
+      NOSE_RADIUS + KICKBACK_BRANCH_RADIUS,
+      9,
+    );
+    expect(x - NOSE_X).toBeCloseTo(y - CRANK_Y, 9);
+  });
+
   it('runs the top toward the nose and the bottom back to the saw', () => {
-    const top = pointOnLoop(100);
-    const bottom = pointOnLoop((CHAIN_PATH.run + CHAIN_PATH.noseArc + 0.1) * 1000);
+    const top = pointOnLoop(200);
+    const [climb, rail, noseArc] = CHAIN_PATH.segments;
+    const bottom = pointOnLoop((climb + rail + noseArc + 0.1) * 1000);
     expect(top.y).toBeGreaterThan(CRANK_Y);
     expect(Math.cos(top.angle)).toBeGreaterThan(0.99);
     expect(bottom.y).toBeLessThan(CRANK_Y);
@@ -33,7 +68,8 @@ describe('chain path', () => {
   });
 
   it('reaches the nose tip ahead of the nose centre', () => {
-    const tip = pointOnLoop((CHAIN_PATH.run + CHAIN_PATH.noseArc / 2) * 1000);
+    const [climb, rail, noseArc] = CHAIN_PATH.segments;
+    const tip = pointOnLoop((climb + rail + noseArc / 2) * 1000);
     expect(tip.x).toBeGreaterThan(ANCHOR_POINTS.nose[0]);
   });
 });

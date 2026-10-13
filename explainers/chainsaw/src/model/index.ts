@@ -4,4 +4,6 @@ export * from './cycle';
 export * from './drive';
 export * from './playback';
 export * from './chain';
+export * from './layout';
+export * from './start';
 export * from './kickback';
