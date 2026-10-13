@@ -8,7 +8,7 @@ import { CAMERA_VIEW_IDS } from '../ids';
 import type { AssemblyState, RegionId } from '../ids';
 import { createAssemblyState, createChainsawStore } from '../state';
 import { createAssembly } from './assembly';
-import { CAMERA_VIEWS, STAGE_VARIANTS } from './cameraViews';
+import { CAMERA_VIEWS, STAGE_VARIANTS, framedRegion } from './cameraViews';
 import type { StageVariant } from './cameraViews';
 import { ChainsawController } from './controller';
 import type { ChainsawControllerDependencies } from './controller';
@@ -95,7 +95,8 @@ describe('chainsaw controller', () => {
       const spec = CAMERA_VIEWS[view];
       controller.views.frame(view, false);
       const pose = rig.jumpTo.mock.lastCall?.[0];
-      expect(pose?.target).toEqual(regionBox(spec.region).getCenter(new Vector3()));
+      const framed = framedRegion(regionBox(spec.region), spec.region, variant);
+      expect(pose?.target).toEqual(framed?.getCenter(new Vector3()));
       const direction = new Vector3(...spec.direction[variant]).normalize();
       expect(pose && viewDirection(pose)).toEqual(roundAll(direction.toArray()));
       expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);

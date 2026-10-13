@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { CAMERA_VIEW_IDS } from '../ids';
-import { CAMERA_VIEWS, STAGE_VARIANTS, framedViews, stageVariant } from './cameraViews';
+import { Box3, Vector3 } from 'three';
+import {
+  CAMERA_VIEWS,
+  STAGE_VARIANTS,
+  framedRegion,
+  framedViews,
+  stageVariant,
+} from './cameraViews';
 
 describe('camera views', () => {
   it('offers the seven fixed views on their regions', () => {
@@ -41,6 +48,17 @@ describe('camera views', () => {
     expect(framedViews('phone').kickbackWide.margin).toBeLessThan(
       framedViews('desktop').kickbackWide.margin,
     );
+  });
+
+  it('frames the starter lower on a desktop so the pulled grip rises past the gauge band', () => {
+    const box = new Box3(new Vector3(-1, 0, -1), new Vector3(1, 1, 1));
+    const desktop = framedRegion(box, 'starter', 'desktop');
+    expect(desktop?.min.y).toBeLessThan(0);
+    expect(desktop?.max).toEqual(box.max);
+    expect(box.min.y).toBe(0);
+    expect(framedRegion(box, 'starter', 'phone')).toBe(box);
+    expect(framedRegion(box, 'saw', 'desktop')).toBe(box);
+    expect(framedRegion(null, 'starter', 'desktop')).toBeNull();
   });
 
   it('picks the phone framing below 600 pixels of stage width', () => {

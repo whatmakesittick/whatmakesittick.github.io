@@ -1,3 +1,4 @@
+import type { Box3 } from 'three';
 import type { Direction, FramedView } from '@core/scene/cameraViews';
 import { CAMERA_VIEW_IDS } from '../ids';
 import type { CameraView, RegionId } from '../ids';
@@ -18,6 +19,19 @@ const PHONE_STAGE_WIDTH_PX = 600;
 
 export function stageVariant(width: number): StageVariant {
   return width < PHONE_STAGE_WIDTH_PX ? 'phone' : 'desktop';
+}
+
+const GAUGE_ROOM: PerVariant<Partial<Record<RegionId, number>>> = {
+  phone: {},
+  desktop: { starter: 0.1 },
+};
+
+export function framedRegion(box: Box3 | null, id: RegionId, variant: StageVariant): Box3 | null {
+  const room = GAUGE_ROOM[variant][id];
+  if (!box || room === undefined) return box;
+  const framed = box.clone();
+  framed.min.y -= room;
+  return framed;
 }
 
 function both(margin: number): PerVariant<number> {
@@ -43,7 +57,7 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
   starterSide: {
     region: 'starter',
     direction: { phone: [-0.25, 0.45, -1], desktop: [-0.3, 0.35, -1] },
-    margin: { phone: 1, desktop: 1.1 },
+    margin: { phone: 0.9, desktop: 0.56 },
   },
   clutchSprocket: {
     region: 'clutch',

@@ -5,7 +5,7 @@ import { whenIdle } from '@core/scene/warmUp';
 import type { AssemblyState, CameraView, RegionId, SettingId } from '../ids';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
-import { STAGE_VARIANTS, framedViews, stageVariant } from './cameraViews';
+import { STAGE_VARIANTS, framedRegion, framedViews, stageVariant } from './cameraViews';
 import type { StageVariant } from './cameraViews';
 import { BOUNDS_REGION, FLOOR_Y } from './constants';
 
@@ -30,11 +30,10 @@ export class ChainsawController {
 
   constructor(dependencies: ChainsawControllerDependencies) {
     this.dependencies = dependencies;
-    const region = (id: RegionId) => this.assembly?.region(id) ?? null;
     const viewsFor = (variant: StageVariant) =>
       new CameraViews<CameraView, RegionId>(dependencies.rig, {
         views: framedViews(variant),
-        region,
+        region: (id) => framedRegion(this.assembly?.region(id) ?? null, id, variant),
       });
     this.cameraViews = { phone: viewsFor('phone'), desktop: viewsFor('desktop') };
     this.views = {

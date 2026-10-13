@@ -9,7 +9,7 @@ import {
   rotateAboutZ,
 } from '../model';
 import { CYLINDER } from './constants';
-import { regionBox } from './regions';
+import { gripReach, regionBox } from './regions';
 
 const LIFT = 0.16;
 const NOSE_X = REGION_BOUNDS.bar.max[0];
@@ -32,6 +32,16 @@ describe('regions', () => {
     expect(box.getSize(new Vector3()).y).toBeLessThan(max[1] - min[1]);
     expect(box.max.x).toBe(max[0]);
     expect(box.containsPoint(new Vector3(...risenNose))).toBe(true);
+  });
+
+  it('frames the starter tighter than its model region, the caps and the pulled grip inside', () => {
+    const box = regionBox('starter', 0);
+    const { min, max } = REGION_BOUNDS.starter;
+    expect(box.getSize(new Vector3()).x).toBeLessThan(max[0] - min[0]);
+    expect(box.getSize(new Vector3()).z).toBeLessThan(max[2] - min[2]);
+    [gripReach(), SAW_GEOMETRY.fuelCap.centre, SAW_GEOMETRY.oilCap.centre].forEach((point) =>
+      expect(box.containsPoint(new Vector3(...point))).toBe(true),
+    );
   });
 
   it('lifts every region with the saw', () => {
