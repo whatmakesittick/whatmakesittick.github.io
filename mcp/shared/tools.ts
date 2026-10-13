@@ -42,7 +42,14 @@ export interface ShowExplainerResult {
   url: string;
   apiVersion: EmbedApiVersion;
   lang?: LanguageCode;
+  slugs: string[];
 }
+
+export interface ShowExplainerErrorResult {
+  slugs: string[];
+}
+
+export const WIDGET_SLUGS_LINE = 'Explainers in the widget: ';
 
 export interface ListExplainersInput {
   tag?: Tag;
