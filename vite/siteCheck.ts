@@ -1,10 +1,11 @@
 import { parse } from 'node-html-parser';
 import type { HTMLElement } from 'node-html-parser';
-import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
+import { DEFAULT_LANGUAGE, LANGUAGE_CODES } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { splitLanguagePath } from '../src/core/i18n/paths.ts';
 import { ABOUT_PAGE, CATALOGUE_PAGE } from '../src/core/pages.ts';
 import { descriptionLimit } from '../src/core/manifest.ts';
+import { embedCatalogueFile, parseEmbedCatalogue } from './embedCatalogue.ts';
 import { ANALYTICS, FEED_TYPE, SITE_URL, feedUrl } from './site.ts';
 
 export interface BuiltPage {
@@ -24,7 +25,12 @@ export interface BuiltSite {
   embedManifest?: string;
 }
 
-export const JS_BUDGET_GZIP = { site: 50_000, explainer: 305_000, embed: 300_000 } as const;
+export const JS_BUDGET_GZIP = {
+  site: 50_000,
+  explainer: 305_000,
+  embed: 300_000,
+  catalogue: 12_000,
+} as const;
 export const EMBED_PATH = '/embed/v1/';
 export const MORE_EXPLAINERS = 3;
 
@@ -247,11 +253,30 @@ function embedProblems(site: BuiltSite): string[] {
         `${entry} loads ${bytes} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.embed}`,
       );
   }
+  problems.push(...catalogueProblems(site, slugs));
   const listed = embedManifestSlugs(site.embedManifest);
   if (listed === undefined) return [...problems, 'the embed manifest is missing or does not parse'];
   if (listed.join('\n') !== slugs.join('\n'))
     problems.push('the embed manifest does not list exactly the built explainers');
   return problems;
+}
+
+function catalogueProblems(site: BuiltSite, slugs: readonly string[]): string[] {
+  return LANGUAGE_CODES.flatMap((code) => {
+    const href = `${EMBED_PATH}${embedCatalogueFile(code)}`;
+    const source = site.scripts.get(href);
+    if (source === undefined) return [`${href} is missing`];
+    const catalogue = parseEmbedCatalogue(source);
+    if (!catalogue) return [`${href} does not parse`];
+    const problems: string[] = [];
+    const listed = catalogue.explainers.map((entry) => entry.slug).sort();
+    if (listed.join('\n') !== slugs.join('\n'))
+      problems.push(`${href} does not list exactly the built explainers`);
+    const bytes = site.gzipBytes.get(href) ?? 0;
+    if (bytes > JS_BUDGET_GZIP.catalogue)
+      problems.push(`${href} is ${bytes} gzipped bytes, budget ${JS_BUDGET_GZIP.catalogue}`);
+    return problems;
+  });
 }
 
 export function checkSite(site: BuiltSite): string[] {

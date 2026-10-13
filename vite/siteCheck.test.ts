@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { JS_BUDGET_GZIP, checkSite, loadedScripts } from './siteCheck.ts';
 import type { BuiltSite } from './siteCheck.ts';
 import { parse } from 'node-html-parser';
+import { LANGUAGE_CODES } from '../src/core/i18n/languages.ts';
+import { renderEmbedCatalogue } from './embedCatalogue.ts';
+import type { EmbedCatalogueEntry } from './embedCatalogue.ts';
 
 const SITE = 'https://whatmakesittick.github.io';
 const EXPLAINERS = ['engine', 'glider'];
@@ -71,6 +74,13 @@ function feedXml(code: string, slugs: readonly string[]): string {
     .join('');
 }
 
+function catalogueModule(slugs: readonly string[]): string {
+  const explainers = slugs.map((slug) => ({ slug }) as EmbedCatalogueEntry);
+  return renderEmbedCatalogue({ explainers, taglines: {} });
+}
+
+const CATALOGUES = LANGUAGE_CODES.map((code) => `/embed/v1/catalogue/${code}.js`);
+
 function site(overrides: Partial<Record<string, PageOptions>> = {}): BuiltSite {
   const pages = LANGUAGES.flatMap((code) =>
     ['', ABOUT, ...EXPLAINERS].map((slug) => {
@@ -89,6 +99,7 @@ function site(overrides: Partial<Record<string, PageOptions>> = {}): BuiltSite {
       ['/embed/v1/engine.js', 'import"../../assets/embed.js";import"../../assets/three-x.js";'],
       ['/embed/v1/glider.js', 'import"../../assets/embed.js";'],
       ['/assets/embed.js', 'import"./shared.js";'],
+      ...CATALOGUES.map((href) => [href, catalogueModule(EXPLAINERS)] as const),
     ]),
     gzipBytes: new Map([
       ['/assets/main.js', 8_000],
@@ -99,6 +110,7 @@ function site(overrides: Partial<Record<string, PageOptions>> = {}): BuiltSite {
       ['/embed/v1/engine.js', 1_000],
       ['/embed/v1/glider.js', 1_000],
       ['/assets/embed.js', 7_000],
+      ...CATALOGUES.map((href) => [href, 4_000] as const),
     ]),
     feeds: new Map(LANGUAGES.map((code) => [code, feedXml(code, EXPLAINERS)])),
     sitemap: pages.map((page) => `<loc>${SITE}${page.path}</loc>`).join('\n'),
@@ -219,6 +231,22 @@ describe('loadedScripts', () => {
       `/embed/v1/engine.js loads ${JS_BUDGET_GZIP.embed + 186_000} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.embed}`,
       '/embed/v1/glider.js is missing',
       'the embed manifest does not list exactly the built explainers',
+    ]);
+  });
+
+  it('rejects a catalogue module that is missing, broken, heavy or lists other explainers', () => {
+    const built = site();
+    const scripts = new Map(built.scripts);
+    scripts.delete('/embed/v1/catalogue/uk.js');
+    scripts.set('/embed/v1/catalogue/de.js', 'export default {');
+    scripts.set('/embed/v1/catalogue/ja.js', catalogueModule(['engine']));
+    const gzipBytes = new Map(built.gzipBytes);
+    gzipBytes.set('/embed/v1/catalogue/fr.js', JS_BUDGET_GZIP.catalogue + 1);
+    expect(checkSite({ ...built, scripts, gzipBytes })).toEqual([
+      '/embed/v1/catalogue/uk.js is missing',
+      '/embed/v1/catalogue/fr.js is 12001 gzipped bytes, budget 12000',
+      '/embed/v1/catalogue/de.js does not parse',
+      '/embed/v1/catalogue/ja.js does not list exactly the built explainers',
     ]);
   });
 });

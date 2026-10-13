@@ -17,6 +17,7 @@ import {
 import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { catalogueEntry } from './catalogue.ts';
+import { embedCatalogueFiles } from './embedCatalogue.ts';
 import { renderCatalogueModule } from './page.ts';
 import { languagePreloads } from './preloads.ts';
 import {
@@ -197,14 +198,18 @@ function pagesPlugin(): Plugin {
     generateBundle() {
       if (!site) return;
       const { explainers } = site;
+      const entries = explainers.map(catalogueEntry);
       for (const { fileName, source } of siteFiles(siteContent(site))) {
         this.emitFile({ type: 'asset', fileName, source });
       }
       this.emitFile({
         type: 'asset',
         fileName: EMBED_MANIFEST_FILE,
-        source: `${JSON.stringify(embedManifest(explainers.map(catalogueEntry)), null, 2)}\n`,
+        source: `${JSON.stringify(embedManifest(entries), null, 2)}\n`,
       });
+      for (const { fileName, source } of embedCatalogueFiles(entries)) {
+        this.emitFile({ type: 'asset', fileName, source });
+      }
       const resolveModule = createRequire(join(root, 'package.json')).resolve;
       for (const { fileName, source } of legacyEmbedFiles(explainers, resolveModule)) {
         this.emitFile({ type: 'asset', fileName, source: readFileSync(source) });
