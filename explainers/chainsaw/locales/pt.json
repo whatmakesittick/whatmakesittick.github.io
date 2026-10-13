@@ -14,7 +14,7 @@
   "timeline": {
     "label": "Volta do virabrequim",
     "phases": "Ir para uma parte da volta",
-    "speed": "Velocidade de reprodução",
+    "speed": "Velocidade",
     "value": "{{share}}%",
     "during": "{{share}}% da volta, {{phase}}",
     "speedValue": "1/{{factor}}",
@@ -42,7 +42,7 @@
     "label": "Controles do modelo",
     "throttle": "Acelerador",
     "throttleOptions": {
-      "idle": "Marcha lenta",
+      "idle": "Lenta",
       "half": "Metade",
       "full": "Máximo"
     },
@@ -269,7 +269,7 @@
       "title": "Um motor e uma fileira de dentes",
       "p1": "Esta é uma <strong>motosserra</strong>, uma serra profissional como a Husqvarna 572 XP. O motor fica dentro da <strong>carcaça do motor</strong>, a parte laranja. Na frente, o <strong>sabre</strong>, uma barra de aço achatada, avança 40 cm. Em volta da borda dele corre uma fileira fechada de dentes afiados, a <strong>corrente</strong>. Sua mão direita segura o <strong>punho traseiro</strong> e aperta o <strong>gatilho do acelerador</strong>. Sua mão esquerda segura o <strong>punho dianteiro</strong>, logo atrás do <strong>protetor de mão dianteiro</strong>.",
       "p2": "O tamanho de um motor é o espaço que o pistão percorre, a cilindrada. Ela é medida em centímetros cúbicos (cm³). Uma motosserra de uso doméstico tem cerca de 30 a 50 cm³ e gera de 1,4 a 2,4 quilowatts (kW) de potência. Uma profissional como esta tem cerca de 70 a 80 cm³ e gera de 4,3 a 5 kW. Mesmo assim, pesa só um pouco mais: 6,6 kg sem o sabre e a corrente. Nem sempre as motosserras foram tão leves. A motosserra a gasolina da Stihl de 1929 pesava 46 kg e precisava de duas pessoas. Só por volta de 1950 as motosserras a gasolina ficaram leves o bastante para uma pessoa só.",
-      "p3": "Esta página acompanha uma volta do <strong>virabrequim</strong>, o eixo que o motor faz girar. Na potência máxima, ele dá cerca de 9.900 voltas por minuto. Ou seja, 9.900 rpm, rotações por minuto. Então uma volta leva cerca de 6 ms, seis milésimos de segundo. Na tela, isso seria só um borrão. Por isso o modelo mostra a volta de 64 a 2.048 vezes mais devagar que na vida real. Você escolhe quão devagar em Velocidade de reprodução.",
+      "p3": "Esta página acompanha uma volta do <strong>virabrequim</strong>, o eixo que o motor faz girar. Na potência máxima, ele dá cerca de 9.900 voltas por minuto. Ou seja, 9.900 rpm, rotações por minuto. Então uma volta leva cerca de 6 ms, seis milésimos de segundo. Na tela, isso seria só um borrão. Por isso o modelo mostra a volta de 64 a 2.048 vezes mais devagar que na vida real. Você escolhe quão devagar em Velocidade.",
       "p4": "Esta é a história de uma volta. Salta uma faísca, e o gás em combustão empurra o pistão para baixo. O pistão gira o virabrequim, e o virabrequim gira a embreagem. A embreagem gira uma roda dentada, e a roda puxa a corrente. Cada dente da corrente arranca um cavaco de madeira. Arraste o controle do acelerador e veja a velocidade da corrente acompanhar. O modelo simplifica isso: a rotação do motor acompanha o acelerador de forma linear, da marcha lenta até a potência máxima. Numa motosserra de verdade, a rotação também sobe e desce com o corte."
     },
     "engine": {
@@ -282,7 +282,7 @@
     },
     "fuel": {
       "title": "Combustível em qualquer ângulo",
-      "p1": "A maioria das motosserras mistura combustível e ar num <strong>carburador</strong>. O ar entra pelo <strong>filtro de ar</strong>, e o carburador junta a ele uma névoa fina de combustível. A <strong>borboleta do acelerador</strong> é uma pequena aba que o gatilho faz girar. Ela define quanta mistura pode entrar no motor. Escolha Marcha lenta, Metade ou Máximo e veja a borboleta abrir.",
+      "p1": "A maioria das motosserras mistura combustível e ar num <strong>carburador</strong>. O ar entra pelo <strong>filtro de ar</strong>, e o carburador junta a ele uma névoa fina de combustível. A <strong>borboleta do acelerador</strong> é uma pequena aba que o gatilho faz girar. Ela define quanta mistura pode entrar no motor. Escolha Lenta, Metade ou Máximo e veja a borboleta abrir.",
       "p2": "Numa manhã fria, o <strong>afogador</strong> fecha parte da entrada de ar. Assim a mistura fica mais rica em combustível, e o motor frio pega com mais facilidade. Depois que o motor pega, você abre o afogador de novo. O combustível em si fica no <strong>tanque de combustível</strong>, embaixo do punho traseiro.",
       "p3": "Você segura uma motosserra em todos os ângulos, até deitada de lado. Muitos motores medem o combustível com uma boia numa pequena cuba, e isso só funciona com o motor em pé. Já o carburador da motosserra usa um <strong>diafragma</strong>, uma lâmina fina e flexível. Uma pequena bomba manda combustível para ele, e quem move essa bomba é o próprio cárter. A cada volta, a pressão no cárter sobe e desce. A <strong>linha de pulso</strong> leva esse ritmo até a bomba. É por isso que o motor continua funcionando em qualquer ângulo.",
       "p4": "Um motor de dois tempos não tem uma reserva de óleo embaixo do virabrequim. O óleo viaja junto com o combustível. Você mistura óleo para dois tempos na gasolina, na proporção de 50 para 1: 100 ml de óleo em 5 litros de gasolina. No caminho pelo motor, o óleo mantém as peças móveis lubrificadas. Mas nem toda motosserra tem carburador. Algumas profissionais usam injeção eletrônica de combustível."
@@ -307,7 +307,7 @@
       "p1": "Uma corrente de motosserra é feita de três tipos de peças. Os <strong>elos de tração</strong> descem numa canaleta do sabre, e os dentes do pinhão os empurram. Os <strong>dentes de corte</strong> são as lâminas: um inclinado para a esquerda, o seguinte para a direita. Pequenas placas, os elos de ligação, unem tudo, presas por rebites.",
       "p2": "Cada dente de corte tem uma placa de cima, plana, e uma placa lateral. Onde elas se encontram há um canto afiado que fatia a madeira. Logo à frente de cada dente fica uma pequena saliência, o <strong>limitador de profundidade</strong>. Ele fica 0,65 mm abaixo do topo do dente. Essa diferença define a espessura do cavaco que o dente consegue tirar. Se você limar os limitadores baixo demais, os dentes mordem fundo demais. Aí o rebote fica mais provável.",
       "p3": "O tamanho de uma corrente é o <strong>passo</strong>. Para medir, pegue a distância entre três rebites seguidos e divida por dois. Esta corrente tem passo de 3/8 de polegada, ou 9,525 mm. Uma corrente como esta, num sabre de 40 cm, tem 55 elos de tração e cerca de 1,05 m de comprimento. Ela leva cerca de 27 dentes de corte, um para cada dois elos de tração.",
-      "p4": "A 9.900 rpm, a corrente anda a 22 m/s. Isso quer dizer que cerca de 570 dentes de corte passam por um mesmo ponto a cada segundo, e cada um arranca um cavaco. Escolha Marcha lenta, Metade ou Máximo para comparar. No corte, a corrente embaixo do sabre volta da <strong>ponta do sabre</strong> em direção à motosserra. É por isso que os cavacos voam para trás do corte.",
+      "p4": "A 9.900 rpm, a corrente anda a 22 m/s. Isso quer dizer que cerca de 570 dentes de corte passam por um mesmo ponto a cada segundo, e cada um arranca um cavaco. Escolha Lenta, Metade ou Máximo para comparar. No corte, a corrente embaixo do sabre volta da <strong>ponta do sabre</strong> em direção à motosserra. É por isso que os cavacos voam para trás do corte.",
       "p5": "O tempo todo, a corrente desliza pelo sabre de aço em velocidade máxima. Sem óleo, o atrito logo deixaria o sabre quente a ponto de queimar. Por isso a bomba pinga <strong>óleo da corrente</strong> sobre a corrente, e a corrente o leva em volta do sabre. Numa motosserra Stihl pequena, o óleo da corrente acaba mais ou menos junto com o combustível. Assim você pode encher os dois tanques de uma vez."
     },
     "kickback": {

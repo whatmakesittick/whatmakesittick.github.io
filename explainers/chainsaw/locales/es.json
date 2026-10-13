@@ -14,7 +14,7 @@
   "timeline": {
     "label": "Vuelta del cigüeñal",
     "phases": "Saltar a una parte de la vuelta",
-    "speed": "Velocidad de reproducción",
+    "speed": "Velocidad",
     "value": "{{share}} %",
     "during": "{{share}} % de la vuelta, {{phase}}",
     "speedValue": "1/{{factor}}",
@@ -269,7 +269,7 @@
       "title": "Un motor y un lazo de dientes",
       "p1": "Esto es una <strong>motosierra</strong>, una sierra profesional como la Husqvarna 572 XP. Su motor va dentro de la <strong>carcasa del motor</strong>, la parte naranja. Por delante sobresale 40 cm la <strong>espada</strong>, una guía plana de acero. Por su borde corre un lazo de dientes afilados: la <strong>cadena</strong>. Con la mano derecha sujetas la <strong>empuñadura trasera</strong> y aprietas el <strong>gatillo del acelerador</strong>. Con la izquierda sujetas la <strong>empuñadura delantera</strong>, justo detrás del <strong>protector de mano delantero</strong>.",
       "p2": "El tamaño de un motor es el volumen que barre su pistón, y se mide en centímetros cúbicos (cm³). Una motosierra doméstica tiene unos 30 a 50 cm³ y da de 1,4 a 2,4 kilovatios (kW) de potencia. Una profesional como esta tiene unos 70 a 80 cm³ y da de 4,3 a 5 kW. Y sin embargo pesa solo un poco más: 6,6 kg sin la espada ni la cadena. Las motosierras no siempre fueron tan ligeras. La motosierra de gasolina que Stihl sacó en 1929 pesaba 46 kg y hacían falta dos personas para manejarla. Solo hacia 1950 las de gasolina se volvieron lo bastante ligeras para una sola persona.",
-      "p3": "Esta página sigue una vuelta del <strong>cigüeñal</strong>, el eje que hace girar el motor. A plena potencia da unas 9900 vueltas por minuto. Eso se escribe 9900 rpm, revoluciones por minuto. Así que una vuelta dura unos 6 ms, seis milésimas de segundo. En una pantalla, eso no sería más que un borrón. Por eso el modelo reproduce la vuelta entre 64 y 2048 veces más despacio que en la realidad. Puedes elegir cuánto en Velocidad de reproducción.",
+      "p3": "Esta página sigue una vuelta del <strong>cigüeñal</strong>, el eje que hace girar el motor. A plena potencia da unas 9900 vueltas por minuto. Eso se escribe 9900 rpm, revoluciones por minuto. Así que una vuelta dura unos 6 ms, seis milésimas de segundo. En una pantalla, eso no sería más que un borrón. Por eso el modelo reproduce la vuelta entre 64 y 2048 veces más despacio que en la realidad. Puedes elegir cuánto en Velocidad.",
       "p4": "Esta es la historia de una vuelta. Salta una chispa, y el gas que arde empuja el pistón hacia abajo. El pistón hace girar el cigüeñal, y el cigüeñal hace girar el embrague. El embrague mueve una rueda dentada, y la rueda tira de la cadena. Cada diente de la cadena arranca una viruta de madera. Arrastra el control del acelerador y mira cómo lo sigue la velocidad de la cadena. El modelo lo simplifica: la velocidad del motor sigue al acelerador de forma lineal, del ralentí a plena potencia. En una motosierra de verdad, la velocidad también sube y baja según el corte."
     },
     "engine": {
