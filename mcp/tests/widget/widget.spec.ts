@@ -25,6 +25,10 @@ const open = async (page: Page, query: string) => {
   return { errors, logs };
 };
 
+test.afterEach(async ({ page }) => {
+  await page.unrouteAll({ behavior: 'ignoreErrors' });
+});
+
 test('inline: opens MRI at the requested chapter, chapter nav sends model context', async ({
   page,
 }) => {
