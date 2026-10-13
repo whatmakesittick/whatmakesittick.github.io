@@ -8,10 +8,20 @@ import {
   MAX_POWER_RPM,
   RISE_DEG,
   RISE_SECONDS,
+  FAST_IDLE_RPM,
+  PULL_CRANK_DEG_PER_S,
   SPARK_DEG,
+  START_STEP_SECONDS,
   rate,
+  startPose,
 } from '../model';
-import { createAssemblyState, crankcaseTrend, liveReading, writeAssemblyState } from './derived';
+import {
+  createAssemblyState,
+  crankcaseTrend,
+  liveReading,
+  startDisplayOf,
+  writeAssemblyState,
+} from './derived';
 import type { AssemblySource } from './derived';
 import { DEFAULT_VIEW } from './store';
 
@@ -27,6 +37,9 @@ function source(overrides: Partial<AssemblySource> = {}): AssemblySource {
     kickbackSeconds: 0,
     chainMm: 0,
     view: { ...DEFAULT_VIEW },
+    engine: 'running',
+    starting: false,
+    startSeconds: 0,
     ...overrides,
   };
 }
@@ -125,5 +138,38 @@ describe('assembly state', () => {
     expect(next.crank.angle).toBe(200);
     expect(next.setting).toBe('bench');
     expect(next.view.cutaway).toBe(true);
+  });
+
+  it('stops the engine and gates the spark and the burn until it fires', () => {
+    const stopped = createAssemblyState(source({ engine: 'stopped', phase: SPARK_DEG + 1 }));
+    expect(stopped.crank).toMatchObject({ rpm: 0, sparkGlow: 0 });
+    expect(stopped.crank.flows.burn).toBe(0);
+    expect(stopped.drive).toMatchObject({ clutch: 'open', chainSpeed: 0, shoesOut: 0 });
+    expect(stopped.start).toMatchObject({ starting: false, step: 'brake', engine: 'stopped' });
+    const fastIdle = createAssemblyState(source({ engine: 'fastIdle', phase: SPARK_DEG + 1 }));
+    expect(fastIdle.crank).toMatchObject({ rpm: FAST_IDLE_RPM, sparkGlow: 1 });
+  });
+
+  it('writes the start pose while starting and turns the crank at the pull rate', () => {
+    const seconds = START_STEP_SECONDS.brake + START_STEP_SECONDS.choke + 3;
+    const pose = startPose(seconds);
+    const state = createAssemblyState(
+      source({ engine: 'cranking', starting: true, startSeconds: seconds, playing: false }),
+    );
+    expect(state.start).toMatchObject({
+      starting: true,
+      step: pose.step,
+      ropeOut: pose.ropeOut,
+      pulleyDeg: pose.pulleyDeg,
+      pawlsEngaged: pose.pawlsEngaged,
+      chokeLever: pose.chokeLever,
+    });
+    expect(state.crank.degPerSecond).toBe(PULL_CRANK_DEG_PER_S);
+  });
+
+  it('shows ready, each step, then done', () => {
+    expect(startDisplayOf({ engine: 'stopped', starting: false, startSeconds: 0 })).toBe('ready');
+    expect(startDisplayOf({ engine: 'stopped', starting: true, startSeconds: 0.1 })).toBe('brake');
+    expect(startDisplayOf({ engine: 'running', starting: false, startSeconds: 0 })).toBe('done');
   });
 });

@@ -7,7 +7,11 @@ import {
   KICKBACK_SHOW_SECONDS,
   MAX_POWER_RPM,
   rate,
+  START_SHOW_SECONDS,
+  START_STEP_SECONDS,
   screenTurnSeconds,
+  startPose,
+  wrapDegrees,
 } from '../model';
 import { PRESETS } from './presets';
 import {
@@ -131,5 +135,68 @@ describe('chainsaw store', () => {
   it('trips the brake even when one long frame skips past the whole kickback', () => {
     const next = kickbackAfter({ kickback: true, kickbackSeconds: 0, brake: false }, 5);
     expect(next).toEqual({ kickback: false, kickbackSeconds: 0, brake: true });
+  });
+
+  it('starts a stopped saw: brake, pulls, a pop, the catch, then idles with the brake on', () => {
+    const store = createChainsawStore({ playing: false, phase: 40 });
+    store.getState().applyPreset('starting');
+    const startedAt = store.getState().phase;
+    expect(store.getState()).toMatchObject({ engine: 'stopped', throttle: 0, brake: false });
+    runFor(store, 1);
+    expect(store.getState().phase).toBe(startedAt);
+    store.getState().startSaw();
+    expect(store.getState()).toMatchObject({
+      starting: true,
+      playing: true,
+      startPhase: startedAt,
+    });
+    const seen = new Set<string>();
+    let chainMoved = false;
+    for (let elapsed = 0; elapsed < START_SHOW_SECONDS + FRAME; elapsed += FRAME) {
+      store.getState().tick(FRAME);
+      seen.add(store.getState().engine);
+      chainMoved ||= store.getState().chainMm !== 0;
+    }
+    expect([...seen]).toEqual(['stopped', 'cranking', 'fastIdle', 'running']);
+    expect(chainMoved).toBe(false);
+    expect(store.getState()).toMatchObject({
+      starting: false,
+      startSeconds: 0,
+      engine: 'running',
+      throttle: 0,
+      brake: true,
+    });
+  });
+
+  it('takes the crank from the pull while turning over, even when paused', () => {
+    const store = createChainsawStore({ playing: false, phase: 10 });
+    store.getState().applyPreset('starting');
+    store.getState().startSaw();
+    store.getState().pause();
+    const seconds = START_STEP_SECONDS.brake + START_STEP_SECONDS.choke + 3;
+    runFor(store, seconds);
+    const { startSeconds, startPhase, phase } = store.getState();
+    expect(startSeconds).toBeCloseTo(seconds, 1);
+    expect(store.getState().engine).toBe('cranking');
+    expect(phase).toBeCloseTo(wrapDegrees(startPhase + startPose(startSeconds).crankDeg), 6);
+  });
+
+  it('locks the throttle and the brake while starting', () => {
+    const store = createChainsawStore();
+    store.getState().applyPreset('starting');
+    store.getState().startSaw();
+    store.getState().setThrottle(1);
+    store.getState().setBrake(false);
+    runFor(store, START_STEP_SECONDS.brake);
+    store.getState().setBrake(false);
+    expect(store.getState()).toMatchObject({ throttle: 0, brake: true });
+  });
+
+  it('runs again at full throttle in the next chapter', () => {
+    const store = createChainsawStore();
+    store.getState().applyPreset('starting');
+    store.getState().startSaw();
+    store.getState().applyPreset('clutch');
+    expect(store.getState()).toMatchObject({ starting: false, engine: 'running', startSeconds: 0 });
   });
 });

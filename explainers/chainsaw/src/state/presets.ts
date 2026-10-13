@@ -1,5 +1,5 @@
 import type { ScenePreset } from '@core/scene/presetBinder';
-import type { CameraView, PartId, PresetId, ViewOptions } from '../ids';
+import type { CameraView, EngineStateId, PartId, PresetId, ViewOptions } from '../ids';
 import { DEFAULT_SPEED, SLOW_SPEED, THROTTLE_PRESETS } from '../model';
 
 export interface ChapterControls {
@@ -7,6 +7,10 @@ export interface ChapterControls {
   brake: boolean;
   kickback: boolean;
   kickbackSeconds: number;
+  engine: EngineStateId;
+  starting: boolean;
+  startSeconds: number;
+  startPhase: number;
 }
 
 export interface Preset extends ScenePreset<PartId, CameraView> {
@@ -101,7 +105,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: DEFAULT_SPEED,
     view: { cutaway: true, flow: false, zone: false },
     startAt: TOP_OF_TURN,
-    start: { throttle: THROTTLE_PRESETS.idle, brake: false },
+    start: { throttle: THROTTLE_PRESETS.idle, brake: false, engine: 'stopped' },
     labels: STARTING_LABELS,
     highlight: [...STARTING_LABELS, 'starterRope', 'starter', 'sparkPlug', 'chainBrakeBand'],
   },

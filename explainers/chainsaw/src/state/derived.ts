@@ -1,32 +1,53 @@
-import type { AssemblyState, ClutchStateId, SettingId } from '../ids';
+import type {
+  AssemblyState,
+  ClutchStateId,
+  EngineStateId,
+  SettingId,
+  StartDisplayId,
+} from '../ids';
 import { PRESET_SETTINGS } from '../ids';
 import {
   HALF_TURN_DEG,
+  PULL_CRANK_DEG_PER_S,
+  READY_POSE,
   chainSpeedMs,
   clutchOf,
   crankcasePressure,
   drumDegrees,
+  engineRpm,
   flowsAt,
   kickbackPose,
   oiling,
   phaseOf,
   portsAt,
   rate,
-  rpmOf,
   rpmScale,
   shoesOut,
   sparkGlow,
+  startPose,
   wrapDegrees,
 } from '../model';
+import type { StartPose } from '../model';
 import type { ChainsawState } from './store';
 
-export type LiveSource = Pick<ChainsawState, 'throttle' | 'brake'>;
+export type LiveSource = Pick<ChainsawState, 'throttle' | 'brake' | 'engine'>;
 
 export type AssemblySource = LiveSource &
   Pick<
     ChainsawState,
-    'phase' | 'playing' | 'speed' | 'preset' | 'kickback' | 'kickbackSeconds' | 'chainMm' | 'view'
+    | 'phase'
+    | 'playing'
+    | 'speed'
+    | 'preset'
+    | 'kickback'
+    | 'kickbackSeconds'
+    | 'chainMm'
+    | 'view'
+    | 'starting'
+    | 'startSeconds'
   >;
+
+export type StartSource = Pick<ChainsawState, 'engine' | 'starting' | 'startSeconds'>;
 
 export type CrankcaseTrend = 'drawing' | 'squeezing';
 
@@ -39,8 +60,10 @@ export interface LiveReading {
 
 const NOT_KICKING = -1;
 
-function readingOf({ throttle, brake }: LiveSource): LiveReading {
-  const rpm = rpmOf(throttle);
+const FIRING: ReadonlySet<EngineStateId> = new Set<EngineStateId>(['fastIdle', 'running']);
+
+function readingOf({ throttle, brake, engine }: LiveSource): LiveReading {
+  const rpm = engineRpm(engine, throttle);
   const clutch = clutchOf(rpm, brake);
   return { rpm, clutch, chainSpeed: chainSpeedMs(rpm, clutch), oiling: oiling(clutch) };
 }
@@ -53,11 +76,12 @@ export function liveReading(source: LiveSource): LiveReading {
     lastReading &&
     lastSource &&
     lastSource.throttle === source.throttle &&
-    lastSource.brake === source.brake
+    lastSource.brake === source.brake &&
+    lastSource.engine === source.engine
   ) {
     return lastReading;
   }
-  lastSource = { throttle: source.throttle, brake: source.brake };
+  lastSource = { throttle: source.throttle, brake: source.brake, engine: source.engine };
   lastReading = readingOf(source);
   return lastReading;
 }
@@ -66,20 +90,45 @@ export function crankcaseTrend(angle: number): CrankcaseTrend {
   return wrapDegrees(angle) < HALF_TURN_DEG ? 'squeezing' : 'drawing';
 }
 
+export function isFiring(engine: EngineStateId): boolean {
+  return FIRING.has(engine);
+}
+
+export function startPoseOf(source: StartSource): Readonly<StartPose> {
+  return source.starting ? startPose(source.startSeconds) : READY_POSE;
+}
+
+export function startDisplayOf(source: StartSource): StartDisplayId {
+  if (source.starting) return startPoseOf(source).step;
+  return source.engine === 'stopped' ? 'ready' : 'done';
+}
+
+function crankRate(source: AssemblySource, reading: LiveReading): number {
+  if (source.starting && source.engine === 'cranking') return PULL_CRANK_DEG_PER_S;
+  return source.playing ? rate(source.speed) * rpmScale(reading.rpm) : 0;
+}
+
 export function settingOf(source: Pick<ChainsawState, 'preset'>): SettingId {
   return PRESET_SETTINGS[source.preset];
 }
 
-function writeCrank(target: AssemblyState, source: AssemblySource, reading: LiveReading): void {
+function writeCrank(
+  target: AssemblyState,
+  source: AssemblySource,
+  reading: LiveReading,
+  pose: Readonly<StartPose>,
+): void {
   const { crank } = target;
   const angle = source.phase;
+  const firing = isFiring(source.engine);
   crank.angle = angle;
   crank.phase = phaseOf(angle);
   crank.rpm = reading.rpm;
-  crank.degPerSecond = source.playing ? rate(source.speed) * rpmScale(reading.rpm) : 0;
-  crank.sparkGlow = sparkGlow(angle);
+  crank.degPerSecond = crankRate(source, reading);
+  crank.sparkGlow = pose.ignition || firing ? sparkGlow(angle) : 0;
   Object.assign(crank.ports, portsAt(angle));
   Object.assign(crank.flows, flowsAt(angle));
+  if (!pose.burn && !firing) crank.flows.burn = 0;
   crank.crankcasePressure = crankcasePressure(angle);
 }
 
@@ -103,14 +152,33 @@ function writeSafety(target: AssemblyState, source: AssemblySource): void {
   safety.guardForward = source.brake ? 1 : pose.guardForward;
 }
 
+function writeStart(
+  target: AssemblyState,
+  source: AssemblySource,
+  pose: Readonly<StartPose>,
+): void {
+  const { start } = target;
+  start.starting = source.starting;
+  start.step = pose.step;
+  start.engine = source.engine;
+  start.chokeLever = pose.chokeLever;
+  start.decompressionIn = pose.decompressionIn;
+  start.primerSqueeze = pose.primerSqueeze;
+  start.ropeOut = pose.ropeOut;
+  start.pulleyDeg = pose.pulleyDeg;
+  start.pawlsEngaged = pose.pawlsEngaged;
+}
+
 export function writeAssemblyState(target: AssemblyState, source: AssemblySource): AssemblyState {
   const reading = liveReading(source);
+  const pose = startPoseOf(source);
   target.setting = settingOf(source);
   target.phase = source.phase;
   target.playing = source.playing;
-  writeCrank(target, source, reading);
+  writeCrank(target, source, reading, pose);
   writeDrive(target, source, reading);
   writeSafety(target, source);
+  writeStart(target, source, pose);
   Object.assign(target.view, source.view);
   return target;
 }
