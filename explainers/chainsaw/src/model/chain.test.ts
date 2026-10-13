@@ -22,13 +22,16 @@ describe('chain path', () => {
   it('closes the 55-link loop round the sprocket and the nose', () => {
     const total = CHAIN_PATH.segments.reduce((sum, length) => sum + length, 0);
     expect(total).toBeCloseTo(LOOP_M, 9);
-    expect(NOSE_X).toBeCloseTo(0.454, 3);
+    expect(NOSE_X).toBeCloseTo(0.4506, 4);
     expect(CHAIN_PATH.sprocketRadius).toBeCloseTo(0.02195, 5);
   });
 
-  it('draws the bar 12.5 % taller than the plain tangent loop', () => {
-    expect(BAR_HEEL_HALF_HEIGHT / SPROCKET_RADIUS).toBeCloseTo(1.125, 2);
-    expect(NOSE_RADIUS / 0.02).toBeCloseTo(1.125, 9);
+  it('draws the bar 10 % deeper at the heel than the v2.1 bar, and its nose about 9 % taller', () => {
+    const V21_HEEL_HALF_HEIGHT = 0.0247;
+    const V21_NOSE_RADIUS = 0.0225;
+    expect(BAR_HEEL_HALF_HEIGHT / V21_HEEL_HALF_HEIGHT).toBeCloseTo(1.1, 9);
+    expect(NOSE_RADIUS / V21_NOSE_RADIUS).toBeCloseTo(1.089, 3);
+    expect(BAR_HEEL_HALF_HEIGHT).toBeGreaterThan(SPROCKET_RADIUS);
   });
 
   it('rises from the sprocket onto the heel and tapers to the nose', () => {

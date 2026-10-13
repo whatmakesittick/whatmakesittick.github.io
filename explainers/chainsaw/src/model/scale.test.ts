@@ -18,6 +18,11 @@ describe('scale', () => {
     expect(cutting * 100).toBeCloseTo(BAR_CM, 0);
   });
 
+  it('draws the kickback zone past the cutters riding over the nose', () => {
+    const CUTTER_REACH = 0.01;
+    expect(SAW_GEOMETRY.zoneRadius).toBeGreaterThan(NOSE_RADIUS + CUTTER_REACH);
+  });
+
   it('lifts the nose up and back in a positive rise', () => {
     const nose = rotateAboutZ([0.46, 0.1, 0], SAW_GEOMETRY.rearGrip, 30);
     expect(nose[1]).toBeGreaterThan(0.1);

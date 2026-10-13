@@ -8,9 +8,9 @@ const SOLVE_STEPS = 60;
 
 export const SPROCKET_RADIUS =
   DRIVE_LINK_MM / MM_PER_METRE / (2 * Math.sin(Math.PI / SPROCKET_TEETH));
-export const NOSE_RADIUS = 0.0225;
+export const NOSE_RADIUS = 0.0245;
 export const BAR_HEEL_X = 0.045;
-export const BAR_HEEL_HALF_HEIGHT = 0.0247;
+export const BAR_HEEL_HALF_HEIGHT = 0.02717;
 
 const FULL_TURN_RAD = 2 * Math.PI;
 

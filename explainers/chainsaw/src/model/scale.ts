@@ -45,7 +45,7 @@ export const SAW_GEOMETRY = {
   drumZ: [0.058, 0.08],
   clutchCover: { min: [-0.03, 0.04, 0.08], max: [0.12, 0.16, 0.11] },
   chainCatcher: [0.07, 0.065, BAR_PLANE_Z],
-  zoneRadius: 0.035,
+  zoneRadius: 0.038,
   starterFaceZ: -0.068,
   fuelCap: { centre: [-0.212, 0.042, -0.068], radius: 0.02, height: 0.012 },
   oilCap: { centre: [0.059, 0.032, -0.068], radius: 0.0165, height: 0.012 },
