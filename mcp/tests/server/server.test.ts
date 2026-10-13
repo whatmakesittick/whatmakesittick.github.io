@@ -8,6 +8,7 @@ import {
   MODEL_TEXT_MAX_BYTES,
   SHOW_EXPLAINER_DESCRIPTION_MAX,
   WIDGET_RESOURCE_URI,
+  WIDGET_TAGS_META,
   type ListExplainersResult,
   type ShowExplainerResult,
 } from '../../shared/tools.ts';
@@ -52,6 +53,7 @@ describe('tools/list', () => {
     expect((show.inputSchema.properties?.slug as { enum: string[] }).enum).toEqual([...SLUGS]);
     expect(show.inputSchema.required).toEqual(['slug']);
     expect(show._meta?.ui).toEqual({ resourceUri: WIDGET_RESOURCE_URI });
+    expect(show._meta?.[WIDGET_TAGS_META]).toEqual([...TAGS]);
     expect(show.annotations).toMatchObject({
       readOnlyHint: true,
       openWorldHint: false,
@@ -165,6 +167,7 @@ describe('show_explainer', () => {
       url: 'https://whatmakesittick.github.io/mri-scanner/',
       apiVersion: EMBED_API_VERSION,
       slugs: SLUGS,
+      allowedTags: [...TAGS],
     } satisfies ShowExplainerResult);
     const text = textOf(res);
     expect(text).toContain(

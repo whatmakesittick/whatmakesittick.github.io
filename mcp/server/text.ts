@@ -7,7 +7,9 @@ import {
 import {
   MODEL_TEXT_MAX_BYTES,
   WIDGET_SLUGS_LINE,
+  WIDGET_TAGS_LINE,
   type ListExplainersItem,
+  type WidgetScope,
 } from '../shared/tools.ts';
 import type { ChapterResolution } from './chapters.ts';
 
@@ -45,7 +47,7 @@ const snippet = (c: CatalogueChapter): string => {
 export function showExplainerText(
   entry: LocalizedCatalogueEntry,
   res: ChapterResolution,
-  slugs: readonly string[],
+  scope: WidgetScope,
   requested?: string,
 ): string {
   const { chapter } = res;
@@ -67,7 +69,8 @@ export function showExplainerText(
   const tail = [
     "The user can rotate and zoom the model, play the cycle, toggle views and switch chapters or other explainers in the widget. Answer follow-ups from this text; don't paste it back verbatim.",
     `Website: ${entry.url}`,
-    `${WIDGET_SLUGS_LINE}${slugs.join(', ')}`,
+    `${WIDGET_SLUGS_LINE}${scope.slugs.join(', ')}`,
+    `${WIDGET_TAGS_LINE}${scope.tags.join(', ')}`,
   ];
 
   const assemble = (current: string, chapterLines: string[]): string =>

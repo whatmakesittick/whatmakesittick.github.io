@@ -5,25 +5,27 @@ import type {
   ShowExplainerErrorResult,
   ShowExplainerInput,
   ShowExplainerResult,
+  WidgetScope,
 } from '../../shared/tools.ts';
 import { resolveChapter } from '../chapters.ts';
 import { log } from '../log.ts';
 import type { Site } from '../site.ts';
 import { showExplainerText } from '../text.ts';
 
-function failure(slugs: readonly string[], text: string): CallToolResult {
-  const structured: ShowExplainerErrorResult = { slugs: [...slugs] };
+function failure({ slugs, tags }: WidgetScope, text: string): CallToolResult {
+  const structured: ShowExplainerErrorResult = { slugs: [...slugs], allowedTags: [...tags] };
   return { isError: true, content: [{ type: 'text', text }], structuredContent: { ...structured } };
 }
 
 export async function showExplainer(
   site: Pick<Site, 'entry'>,
-  slugs: readonly string[],
+  scope: WidgetScope,
   args: ShowExplainerInput,
 ): Promise<CallToolResult> {
+  const { slugs } = scope;
   if (!slugs.includes(args.slug)) {
     return failure(
-      slugs,
+      scope,
       `Unknown explainer slug "${args.slug}". Available slugs: ${slugs.join(', ')}. Call list_explainers to see them with their chapters.`,
     );
   }
@@ -37,7 +39,7 @@ export async function showExplainer(
   }
   if (!entry) {
     return failure(
-      slugs,
+      scope,
       `The data for the explainer "${args.slug}" is unavailable right now. Try again later.`,
     );
   }
@@ -55,9 +57,10 @@ export async function showExplainer(
     apiVersion: EMBED_API_VERSION,
     ...(args.lang === undefined ? {} : { lang }),
     slugs: [...slugs],
+    allowedTags: [...scope.tags],
   };
   return {
-    content: [{ type: 'text', text: showExplainerText(localized, res, slugs, args.chapter) }],
+    content: [{ type: 'text', text: showExplainerText(localized, res, scope, args.chapter) }],
     structuredContent: { ...result },
   };
 }

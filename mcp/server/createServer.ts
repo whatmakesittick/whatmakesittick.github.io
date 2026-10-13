@@ -18,6 +18,8 @@ import {
   WIDGET_RESOURCE_DESCRIPTION,
   WIDGET_RESOURCE_NAME,
   WIDGET_RESOURCE_URI,
+  WIDGET_TAGS_META,
+  type WidgetScope,
 } from '../shared/tools.ts';
 import { buildServerIcons, buildUiMeta } from './assets.ts';
 import {
@@ -55,6 +57,8 @@ export function availableTags(excludeTags: readonly Tag[] = []): [Tag, ...Tag[]]
 export function createServer(options: CreateServerOptions): McpServer {
   const { index, site, assetBase, domain } = options;
   const slugs = availableSlugs(index, options.excludeTags);
+  const tags = availableTags(options.excludeTags);
+  const scope: WidgetScope = { slugs, tags };
   const listed = index.explainers.filter((e) => slugs.includes(e.slug));
   const topics = new Map(listed.map((e) => [e.slug, e.topic]));
   const uiMeta = buildUiMeta(assetBase, domain);
@@ -79,9 +83,13 @@ export function createServer(options: CreateServerOptions): McpServer {
         lang: z.string().max(35).optional().describe(LANG_DESCRIBE),
       }),
       annotations: { ...TOOL_ANNOTATIONS },
-      _meta: { ui: { resourceUri: WIDGET_RESOURCE_URI }, ...OPENAI_INVOCATION_META },
+      _meta: {
+        ui: { resourceUri: WIDGET_RESOURCE_URI },
+        [WIDGET_TAGS_META]: [...tags],
+        ...OPENAI_INVOCATION_META,
+      },
     },
-    async (args) => showExplainer(site, slugs, args),
+    async (args) => showExplainer(site, scope, args),
   );
 
   server.registerTool(
@@ -90,10 +98,7 @@ export function createServer(options: CreateServerOptions): McpServer {
       title: 'List 3D explainers',
       description: LIST_EXPLAINERS_DESCRIPTION,
       inputSchema: z.object({
-        tag: z
-          .enum(availableTags(options.excludeTags))
-          .optional()
-          .describe('Only explainers with this tag.'),
+        tag: z.enum(tags).optional().describe('Only explainers with this tag.'),
         lang: z.string().max(35).optional().describe(LANG_DESCRIBE),
       }),
       annotations: { ...TOOL_ANNOTATIONS },
