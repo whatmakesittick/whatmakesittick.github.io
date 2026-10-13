@@ -19,6 +19,7 @@ import { mergeParts } from '../geometry/merge';
 import { sectorAroundZ } from '../geometry/sector';
 import { tubeThrough } from '../geometry/profile';
 import { Ease } from './ease';
+import { PrimerFill } from './primer';
 import { addPart, label, namedGroup, partMesh, registeredMaterial } from './context';
 import type { PartContext, Section } from './context';
 
@@ -344,6 +345,7 @@ export function buildStarter(context: PartContext, parent: Object3D): Section {
   const swing = new Ease(0);
   const sink = new Ease(0);
   const gripAt = new Vector3();
+  const primerFill = new PrimerFill();
   const pose = () => {
     pawls.forEach(({ pawl, base }) => {
       pawl.rotation.z = base - toRadians(PAWL.swingDeg) * swing.value;
@@ -369,12 +371,7 @@ export function buildStarter(context: PartContext, parent: Object3D): Section {
       coilSpark.visible = crank.sparkGlow > 0;
       coilSpark.scale.setScalar(SPARK_SIZE * Math.max(crank.sparkGlow, 0.001));
       primer.scale.set(1, 1, 1 - PRIMER_SQUASH * start.primerSqueeze);
-      const primed =
-        start.engine !== 'stopped' ||
-        (start.starting &&
-          start.step !== 'brake' &&
-          start.step !== 'choke' &&
-          start.step !== 'decompression');
+      const primed = primerFill.primed(start);
       filled.visible = primed;
       clear.visible = !primed;
       choke.rotation.x = -toRadians(SAW_GEOMETRY.chokeLever.onDeg) * start.chokeLever;
