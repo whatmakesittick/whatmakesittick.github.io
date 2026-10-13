@@ -251,6 +251,9 @@ function placeOil(cloud: PointCloud, chainMm: number, shown: boolean): void {
   cloud.commit();
 }
 
+const CHAIN_LABEL_X = 0.4;
+const CHAIN_LABEL_DROP = 0.002;
+
 export function buildBar(context: PartContext, parent: Object3D, oilParent: Object3D): Section {
   const root = namedGroup('barAndChain', parent);
   const split = CHAIN_PATH.noseX - BAR.noseLength;
@@ -278,10 +281,9 @@ export function buildBar(context: PartContext, parent: Object3D, oilParent: Obje
   ]);
 
   const chain = buildChain(context, root);
-  const topY = (x: number) => railY(x, 'upper');
   label(context, 'chain', root, [
-    0.2,
-    topY(0.2) + 0.002,
+    CHAIN_LABEL_X,
+    railY(CHAIN_LABEL_X, 'lower') - CHAIN_LABEL_DROP,
     BAR_PLANE_Z + CHAIN_LINKS.sideOffset + 0.0005,
   ]);
   const conveyor = conveyorLabels(context, root);
