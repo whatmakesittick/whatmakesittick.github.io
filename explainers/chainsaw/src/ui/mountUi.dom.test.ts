@@ -70,6 +70,13 @@ describe('chapter widgets', () => {
     expect(readout('oil')).toBe(chapters.clutch.oilState.pumping);
   });
 
+  it('times the turn at the throttle setting while the engine is stopped', () => {
+    store.getState().applyPreset('starting');
+    expect(store.getState().engine).toBe('stopped');
+    expect(readout('turnTime')).toBe(fill(units.milliseconds, { value: '22.2' }));
+    expect(readout('strokes')).toBe(fill(units.count, { value: '45' }));
+  });
+
   it('stops the chain and the oil at idle from either slider', () => {
     slide('clutch-throttle', 0);
     expect(store.getState().throttle).toBe(0);

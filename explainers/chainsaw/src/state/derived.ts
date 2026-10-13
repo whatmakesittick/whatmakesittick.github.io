@@ -21,6 +21,7 @@ import {
   phaseOf,
   portsAt,
   rate,
+  rpmOf,
   rpmScale,
   shoesOut,
   sparkGlow,
@@ -84,6 +85,11 @@ export function liveReading(source: LiveSource): LiveReading {
   lastSource = { throttle: source.throttle, brake: source.brake, engine: source.engine };
   lastReading = readingOf(source);
   return lastReading;
+}
+
+export function turningRpm(source: LiveSource): number {
+  const { rpm } = liveReading(source);
+  return rpm > 0 ? rpm : rpmOf(source.throttle);
 }
 
 export function crankcaseTrend(angle: number): CrankcaseTrend {
