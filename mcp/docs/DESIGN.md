@@ -21,6 +21,7 @@ sees now.
 | Loader         | `ui://wmit/explainer.html` | About 5 KB of plain HTML. Buffers host messages, imports the widget  |
 | Widget module  | `/embed/v1/widget.js`      | The Preact widget, built with the site. Loads embeds, talks to host  |
 | Embed modules  | `/embed/v1/<slug>.js`      | One per explainer, emitted by the site build. Mounts the 3D scene    |
+| Catalogue      | `/embed/v1/catalogue/`     | One module per language, emitted by the site build. What to show     |
 | MCP server     | `mcp/server/`              | `show_explainer` (widget) and `list_explainers` (text only)          |
 | Explainer data | `/embed/v1/explainers/`    | Each explainer's source files, published by the site, read on demand |
 
@@ -38,7 +39,8 @@ Each boundary exists for a reason.
   the new explainer's chunk.
 - **A few names in `/embed/v1/` are stable, the rest may change.** The stable names are
   `widget.js` and its `start` export, `<slug>.js` for every explainer in `manifest.json`, the
-  `manifest.json` fields, `explainers/<slug>/`, `covers/<slug>.webp` and `fonts/<file>.woff2`. The
+  `manifest.json` fields, `catalogue/<lang>.js` for every site language and its fields,
+  `explainers/<slug>/`, `covers/<slug>.webp` and `fonts/<file>.woff2`. The
   hashed chunks they import, in `/assets/` and `widget-<lang>-<hash>.js`, change with each deploy. A
   slug can be renamed or removed; the manifest lists only the current ones. A breaking change to
   the stable names or to the embed API goes to `/embed/v2/`, next to `v1`.
@@ -54,6 +56,27 @@ Each boundary exists for a reason.
   attempt fails too, the stage shows the error, a retry button and a link to the explainer on the
   site. The widget does not read `manifest.json` for this: the resource declares no
   `connectDomains`, so the widget cannot fetch it, and the `<slug>.js` names are stable anyway.
+- **The catalogue loads at runtime.** A widget can stay open in a chat for days, across many
+  deploys, so it does not bake the list of explainers. The site build publishes it as
+  `catalogue/<lang>.js`, a plain ES module whose default export holds the titles, eyebrows,
+  summaries, tags, covers, chapter titles and taglines in that language. A module, because the
+  resource declares no `connectDomains`: the widget cannot fetch JSON, but it may import a script
+  from the asset origin. The widget starts the English import as soon as it runs, next to the host
+  handshake, and holds its first paint (the same waiting view as before a tool call) until a
+  catalogue is there. A language other than English loads its module and its strings chunk side by
+  side. When the user moves into the strip or the picker, the widget imports the module again with
+  a `?v=<time>` query: at once after a first load that may have come from the cache, then at most
+  every five minutes. A refresh that fails or brings the same list changes nothing. There is no
+  baked fallback: the catalogue comes from the same origin and the same deploy as the scenes, so a
+  failure that takes the catalogue also takes the scenes.
+- **Exclusion with a fresh catalogue.** `WMIT_EXCLUDE_TAGS` hides explainers by tag. A list of
+  allowed slugs, fixed when the tool is called, would also hide every explainer published later.
+  So `show_explainer` sends the allowed tags too, as `structuredContent.allowedTags`, as a
+  `Tags in the widget:` text line and as `_meta["wmit/allowedTags"]` on the tool. The widget shows
+  an explainer when every one of its tags is allowed. It names allowed tags, not excluded ones, so
+  no excluded tag reaches the model, and an explainer with a tag newer than the server stays
+  hidden until the server knows it. The allowed slugs are still sent, for widgets built before this
+  and as a fallback. With neither, the widget shows only the open explainer.
 - **Server and static files.** GitHub Pages can serve `/embed/v1/` (it already sends
   `Access-Control-Allow-Origin: *`), but it cannot host `POST /mcp`: it answers 405. `createServer`
   touches no Node API, so the plan is a Cloudflare Worker for `/mcp`, with `WMIT_ASSET_BASE`
@@ -79,8 +102,9 @@ takes the first signal it has, in this order:
 
 A language the site does not have, such as `ru`, gives English. It does not fall through to the
 next signal. `resolveLanguage` in `src/core/i18n/languages.ts` keeps the base language of the tag.
-English is built into `widget.js`; other languages are small chunks loaded on first use. A later
-tool call or host context change switches the language in place.
+The English strings are built into `widget.js`; the strings of other languages are small chunks
+loaded on first use, next to that language's catalogue module. A later tool call or host context
+change switches the language in place.
 
 ## Display modes
 
@@ -130,6 +154,8 @@ asset origin. Whoever can deploy the site controls the widget code.
   gone, a hashed font that is gone, and an embed that is gone for good.
 - **Stage height** (`stage.spec.ts`): the widget and the scene area keep their height when the user
   switches explainers.
+- **Catalogue refresh** (`widget.spec.ts`): an explainer published while the widget is open shows
+  up in the strip and the picker after the user moves into them, and an excluded tag stays hidden.
 - **Unit tests** cover the catalogue, the server, chapter matching, widget state and language.
 - **Real hosts** are checked by hand: basic-host, then Claude Desktop through a tunnel.
 

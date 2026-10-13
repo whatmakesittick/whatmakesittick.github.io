@@ -75,7 +75,7 @@ Hosts may cache the `ui://` resource, and Claude keeps it until the connector is
 resource URI is stable and the resource never changes with the widget. It is
 `widget/loader.html` with the asset base filled in: about 5 KB, no build step.
 It imports `<asset base>widget.js`, built from `widget/src/start.tsx` by `npm run build:widget`
-into `dist/embed/v1/` (about 320 KB, 89 KB gzipped, styles and the English catalogue included), and
+into `dist/embed/v1/` (about 300 KB, 83 KB gzipped, styles and the English strings included), and
 calls its `start(root, { assetBase, inbox, loaderVersion })`. Messages the host sends before the
 module runs wait in the loader's inbox and are replayed to the module's transport. If the module
 does not load, the loader shows a link to the explainer on the site and a retry button.
@@ -83,9 +83,12 @@ does not load, the loader shows a link to the explainer on the site and a retry 
 The widget shows its strings, the catalogue and the scene in one of the site's eight languages. It
 takes the `lang` tool argument (it arrives early, with the tool input), then `structuredContent.lang`,
 then `hostContext.locale`, then English; a language the site does not have falls back to English.
-English is baked into `widget.js`; every other language is a chunk next to it,
-`widget-<lang>-<hash>.js` (7 to 8 KB gzipped: the catalogue, the widget strings and the site's core
-strings), loaded when that language is first asked for. A later tool call or host context change
+The English strings are baked into `widget.js`; every other language is a chunk next to it,
+`widget-<lang>-<hash>.js` (about 2 KB gzipped: the widget strings and the site's core strings),
+loaded when that language is first asked for. The catalogue is not baked: the widget imports
+`catalogue/<lang>.js` (5 to 7 KB gzipped), which the site build publishes, and imports it again
+with a `?v=<time>` query when the user moves into the strip or the picker, at most every five
+minutes after the first refresh. A later tool call or host context change
 switches the language in place: the embed through `setLanguage`, or by mounting it again with the
 same chapter and state when the module is older than `setLanguage`. The widget strings are in
 `widget/src/i18n/`; the six it shares with the site (`CORE_KEYS`) are read from the site's core

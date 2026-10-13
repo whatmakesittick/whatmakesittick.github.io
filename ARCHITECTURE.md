@@ -811,8 +811,15 @@ chat widget on these modules.
 
 The chat widget is a module here too, `/embed/v1/widget.js`. `npm run build:widget`, the last step
 of `npm run build`, bundles `mcp/widget/` into that file: the Preact UI, its
-styles (added as a `<style data-wmit-widget>` element), the ext-apps bridge and the thin English catalogue;
-every other language is a `widget-<lang>-<hash>.js` chunk next to it, loaded when first asked for.
+styles (added as a `<style data-wmit-widget>` element), the ext-apps bridge and the English strings;
+the strings of every other language are a `widget-<lang>-<hash>.js` chunk next to it, loaded when
+first asked for. The catalogue the widget shows is not in the bundle. The site build publishes it
+as one plain ES module per language, `/embed/v1/catalogue/<lang>.js`, whose default export lists
+each explainer's slug, title, eyebrow, summary, tags, cover and chapter titles, and the taglines
+(`embedCatalogueFiles` in `vite/embedCatalogue.ts`). The widget cannot `fetch` JSON (the resource
+declares no `connectDomains`), but it may `import()` a script from the asset origin. The site
+check wants a module per language that lists exactly the built explainers, within
+`JS_BUDGET_GZIP.catalogue`.
 Chat hosts cache the `ui://` resource until the connector is reconnected, so the resource is only a
 loader, `mcp/widget/loader.html` (at most 8 KB): it reads the asset base from its
 `wmit-asset-base` meta tag, imports `<asset base>widget.js` and calls
@@ -825,8 +832,9 @@ site's name, a plain link to the explainer on the site and a retry button, and g
 itself so the frame gets a size.
 
 Within `v1`, a few names are stable: `/embed/v1/widget.js`, `/embed/v1/<slug>.js` for every
-explainer in the manifest, `manifest.json`, `covers/<slug>.webp`, `fonts/<file>.woff2` and
-`explainers/<slug>/`. Never rename or remove an export, a `MountOptions` field or a DOM attribute
+explainer in the manifest, `manifest.json`, `catalogue/<lang>.js` for every site language,
+`covers/<slug>.webp`, `fonts/<file>.woff2` and `explainers/<slug>/`. The fields of a catalogue
+module only grow. Never rename or remove an export, a `MountOptions` field or a DOM attribute
 a widget relies on. A breaking change goes to `/embed/v2/`, next to `v1`. The hashed chunks the
 entries import, in `/assets/` and `widget-<lang>-<hash>.js`, change with each deploy, and a slug
 may be renamed or removed: the site check wants the manifest to list exactly the built explainers.
@@ -845,7 +853,12 @@ widget mounted before the deploy keeps the old chunk names. The widget recovers 
 relying on old files. `SceneSession` in `mcp/widget/src/scene.ts` imports the entry once more with
 a `?v=<time>` query (`freshQuery`) when loading or mounting it fails, and mounts a fresh entry at
 the same state when `setLanguage` fails. `createPacks` takes a widget language that fails to load
-from a fresh `widget.js?v=<time>`, through its `languageData` export. `loadFonts` lists the stable
+from a fresh `widget.js?v=<time>`, through its `languageData` export, which still returns the
+language's catalogue for widgets built before the catalogue moved out. `createCatalogues` in
+`mcp/widget/src/catalogue.ts` imports a catalogue module once more with the query when it fails,
+and again when the user moves into the strip or the picker: at once after a first load that may
+have come from the cache, then at most every five minutes (`CATALOGUE_REFRESH_MS`). So a widget
+that stays open across a deploy shows the explainers published since. `loadFonts` lists the stable
 copy in `/embed/v1/fonts/` as the second source of each face, and the widget hides a cover that
 does not load. When the fresh attempt fails too, the stage shows its error with a retry and a link
 to the explainer on the site.
