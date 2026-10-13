@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import type { WidgetCatalogueEntry } from '../../../shared/catalogue.ts';
 import { useStrings } from '../i18n/context.ts';
 import { Icon } from './icons.tsx';
-import { coverUrl, type ViewModel } from './types.ts';
+import { coverUrl, hideBroken, type ViewModel } from './types.ts';
 
 function Tile({
   vm,
@@ -34,6 +34,7 @@ function Tile({
         decoding="async"
         width={932}
         height={699}
+        onError={hideBroken}
       />
       <span class="t">
         {eyebrow && <span class="e">{entry.eyebrow}</span>}

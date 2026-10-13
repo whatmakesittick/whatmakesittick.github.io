@@ -1,6 +1,7 @@
 import type { WidgetCatalogueEntry } from '../../../shared/catalogue.ts';
 import { useStrings } from '../i18n/context.ts';
 import { Brand } from './Brand.tsx';
+import { hideBroken } from './types.ts';
 
 function BrandRow({ onOpen }: { onOpen: () => void }) {
   return (
@@ -65,7 +66,14 @@ export function Unknown({
               data-slug={e.slug}
               onClick={() => onPick(e.slug)}
             >
-              <img src={`${assetBase}${e.cover}`} alt="" loading="lazy" width={932} height={699} />
+              <img
+                src={`${assetBase}${e.cover}`}
+                alt=""
+                loading="lazy"
+                width={932}
+                height={699}
+                onError={hideBroken}
+              />
               <span class="t">
                 <span class="e">{e.eyebrow}</span>
                 {e.title}
