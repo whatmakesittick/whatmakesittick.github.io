@@ -22,6 +22,7 @@ export interface EmbedCatalogueEntry {
 export interface EmbedCatalogue {
   explainers: EmbedCatalogueEntry[];
   taglines: Record<string, string>;
+  aliases: Record<string, string>;
 }
 
 export function embedCatalogueFile(lang: LanguageCode): string {
@@ -31,6 +32,7 @@ export function embedCatalogueFile(lang: LanguageCode): string {
 export function embedCatalogue(
   entries: readonly CatalogueEntry[],
   lang: LanguageCode = DEFAULT_LANGUAGE,
+  aliases: Readonly<Record<string, string>> = {},
 ): EmbedCatalogue {
   const localized = entries.map((entry) => localizeEntry(entry, lang));
   return {
@@ -44,6 +46,7 @@ export function embedCatalogue(
       chapters: chapters.map(({ id, title: chapterTitle }) => ({ id, title: chapterTitle })),
     })),
     taglines: Object.fromEntries(localized.map(({ slug, tagline }) => [slug, tagline])),
+    aliases: { ...aliases },
   };
 }
 
@@ -67,9 +70,10 @@ export function parseEmbedCatalogue(source: string): EmbedCatalogue | undefined 
 
 export function embedCatalogueFiles(
   entries: readonly CatalogueEntry[],
+  aliases: Readonly<Record<string, string>> = {},
 ): { fileName: string; source: string }[] {
   return LANGUAGE_CODES.map((lang) => ({
     fileName: `${EMBED_DIRECTORY}/${embedCatalogueFile(lang)}`,
-    source: renderEmbedCatalogue(embedCatalogue(entries, lang)),
+    source: renderEmbedCatalogue(embedCatalogue(entries, lang, aliases)),
   }));
 }

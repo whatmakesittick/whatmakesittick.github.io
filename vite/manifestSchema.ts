@@ -38,6 +38,27 @@ function readSlug(fields: Fields, folder: string, reserved: ReadonlySet<string>)
   return slug;
 }
 
+function readFormerSlugs(
+  fields: Fields,
+  folder: string,
+  reserved: ReadonlySet<string>,
+): string[] | undefined {
+  const former = fields.formerSlugs;
+  if (former === undefined) return undefined;
+  if (!Array.isArray(former) || former.length === 0)
+    fail(folder, '"formerSlugs" must list at least one slug');
+  for (const slug of former) {
+    if (typeof slug !== 'string' || !SLUG_PATTERN.test(slug))
+      fail(folder, '"formerSlugs" must be lowercase words joined by dashes');
+    if (slug === folder) fail(folder, `"formerSlugs" lists the current slug "${slug}"`);
+    if (reserved.has(slug)) fail(folder, `"formerSlugs" lists the reserved "${slug}"`);
+  }
+  const slugs = former as string[];
+  const repeated = slugs.find((slug, index) => slugs.indexOf(slug) !== index);
+  if (repeated) fail(folder, `"formerSlugs" lists "${repeated}" more than once`);
+  return slugs;
+}
+
 function isTag(value: unknown): value is Tag {
   return TAGS.some((tag) => tag === value);
 }
@@ -76,6 +97,7 @@ export function parseManifest(
   reserved: ReadonlySet<string>,
 ): ExplainerManifest {
   if (!isFields(value)) fail(folder, 'must be a JSON object');
+  const formerSlugs = readFormerSlugs(value, folder, reserved);
   return {
     slug: readSlug(value, folder, reserved),
     tags: readTags(value, folder),
@@ -85,7 +107,24 @@ export function parseManifest(
     chapters: readString(value, 'chapters', folder),
     locales: readLocales(value, folder),
     social: readSocial(value, folder),
+    ...(formerSlugs ? { formerSlugs } : {}),
   };
+}
+
+export function checkFormerSlugs(
+  manifests: readonly Pick<ExplainerManifest, 'slug' | 'formerSlugs'>[],
+): void {
+  const current = new Set(manifests.map(({ slug }) => slug));
+  const owners = new Map<string, string>();
+  for (const { slug, formerSlugs = [] } of manifests) {
+    for (const former of formerSlugs) {
+      if (current.has(former))
+        fail(slug, `"formerSlugs" lists "${former}", the slug of another explainer`);
+      const owner = owners.get(former);
+      if (owner) fail(slug, `"formerSlugs" lists "${former}", which ${owner} lists too`);
+      owners.set(former, `${EXPLAINERS_DIRECTORY}/${slug}/${MANIFEST_FILE}`);
+    }
+  }
 }
 
 export type PublishedManifest = Pick<ExplainerManifest, 'slug' | 'tags' | 'topic' | 'locales'>;

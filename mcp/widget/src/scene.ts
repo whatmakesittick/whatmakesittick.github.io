@@ -46,6 +46,7 @@ export interface SceneCallbacks {
   status(status: SceneStatus, progress: number, error?: unknown): void;
   controller(controller: EmbedController | undefined): void;
   language?(controller: EmbedController): void;
+  renamed?(from: string, to: string): void;
 }
 
 interface Mounted {
@@ -253,8 +254,10 @@ export class SceneSession {
       }
       this.stopProgress();
       if (state) restore(controller, state);
-      this.current = { slug, language, controller, root };
+      const mounted = typeof controller.info?.slug === 'string' ? controller.info.slug : slug;
+      this.current = { slug: mounted, language, controller, root };
       this.opts.callbacks.controller(controller);
+      if (mounted !== slug) this.opts.callbacks.renamed?.(slug, mounted);
       this.opts.callbacks.status('ready', 1);
       void this.syncLanguage();
       return;

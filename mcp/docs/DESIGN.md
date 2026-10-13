@@ -38,12 +38,28 @@ Each boundary exists for a reason.
   `_meta.ui.csp.resourceDomains`. three.js and the core load once; switching explainers loads only
   the new explainer's chunk.
 - **A few names in `/embed/v1/` are stable, the rest may change.** The stable names are
-  `widget.js` and its `start` export, `<slug>.js` for every explainer in `manifest.json`, the
-  `manifest.json` fields, `catalogue/<lang>.js` for every site language and its fields,
-  `explainers/<slug>/` and `fonts/<file>.woff2`. The
+  `widget.js` and its `start` export, `<slug>.js` for every explainer in `manifest.json` and for
+  every former slug, the `manifest.json` fields, `catalogue/<lang>.js` for every site language and
+  its fields, `explainers/<slug>/` and `fonts/<file>.woff2`. The
   hashed chunks they import, in `/assets/` and `widget-<lang>-<hash>.js`, change with each deploy. A
-  slug can be renamed or removed; the manifest lists only the current ones. A breaking change to
+  slug can be removed or renamed; the manifest lists only the current ones. A breaking change to
   the stable names or to the embed API goes to `/embed/v2/`, next to `v1`.
+- **A rename keeps the old slug working.** A widget can stay open for days with an old list, a
+  model can remember an old slug, and links to the old page live on. So whoever renames an
+  explainer lists the old slug in `formerSlugs` in its `explainer.json`, and the build does the
+  rest. `<old>.js` re-exports `<new>.js`, so the module mounts the renamed explainer and reports
+  the new slug. `manifest.json` and every catalogue module carry `aliases`, old to new. The widget
+  names every explainer by its current slug: in the tool input and result, in the strip and the
+  picker, and in `updateModelContext`. It resolves the slug first and then checks the explainer's
+  tags against the allowed tags. A tile from a list loaded before the deploy still opens: the
+  widget imports `<old>.js`, sees the module mount another slug, learns the rename and refreshes
+  the catalogue at once. Until then the old tile's cover may not load, and the widget hides it.
+  The server reads the aliases from `manifest.json` with the rest of the data, so a rename needs
+  no server release. The `show_explainer` input schema lists only the current slugs; a preprocess
+  step maps a former slug to its current one before the enum check, so a model that sends an old
+  slug gets the explainer and the new slug back. A host that checks the arguments against the
+  schema itself would refuse an old slug; the model then sees the current slugs in the error. Each
+  old page on the site becomes a `noindex` stub that refreshes to the new page.
 - **The widget recovers after a deploy.** A Pages deploy replaces the whole site, and Pages sends
   `Cache-Control: max-age=600` for every file. We cannot change that header. So for up to ten
   minutes a browser can hold an entry whose chunks are gone, and a widget mounted before the deploy
@@ -171,6 +187,9 @@ asset origin. Whoever can deploy the site controls the widget code.
   switches explainers.
 - **Catalogue refresh** (`widget.spec.ts`): an explainer published while the widget is open shows
   up in the strip and the picker after the user moves into them, and an excluded tag stays hidden.
+- **Rename** (`widget.spec.ts`): a strip tile from a list older than a rename opens the renamed
+  explainer through `<old>.js` and reports the new slug, and a former slug in the tool call opens
+  the new one.
 - **Unit tests** cover the catalogue, the server, chapter matching, widget state and language.
 - **Real hosts** are checked by hand: basic-host, then Claude Desktop through a tunnel.
 

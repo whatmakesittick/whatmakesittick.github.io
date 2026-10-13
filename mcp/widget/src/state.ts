@@ -43,7 +43,7 @@ export function targetFromInput(
   const entry = find(args.slug);
   if (!entry) return undefined;
   const chapter = resolveChapter(entry, args.chapter);
-  return chapter ? { slug: args.slug, chapter } : { slug: args.slug };
+  return chapter ? { slug: entry.slug, chapter } : { slug: entry.slug };
 }
 
 const URL_RE = new RegExp(`${SITE_URL.replace(/[.]/g, '\\.')}/([a-z0-9-]+)/`);
@@ -55,16 +55,18 @@ export function targetFromResult(
 ): Target | undefined {
   if (!isObj(result)) return undefined;
   const sc = result.structuredContent;
-  if (isObj(sc) && typeof sc.slug === 'string' && find(sc.slug)) {
+  const named = isObj(sc) && typeof sc.slug === 'string' ? find(sc.slug) : undefined;
+  if (isObj(sc) && named) {
     return typeof sc.chapter === 'string' && sc.chapter
-      ? { slug: sc.slug, chapter: sc.chapter }
-      : { slug: sc.slug };
+      ? { slug: named.slug, chapter: sc.chapter }
+      : { slug: named.slug };
   }
   const content = Array.isArray(result.content) ? result.content : [];
   for (const block of content) {
     if (!isObj(block) || block.type !== 'text' || typeof block.text !== 'string') continue;
-    const slug = URL_RE.exec(block.text)?.[1];
-    if (!slug || !find(slug)) continue;
+    const linked = URL_RE.exec(block.text)?.[1];
+    const slug = linked ? find(linked)?.slug : undefined;
+    if (!slug) continue;
     const chapter = CHAPTER_ID_RE.exec(block.text)?.[1];
     return chapter ? { slug, chapter } : { slug };
   }
@@ -106,6 +108,22 @@ export function scopeFromToolInfo(ctx: Partial<McpUiHostContext>): Scope | undef
 }
 
 export const resultFailed = (result: unknown): boolean => isObj(result) && result.isError === true;
+
+export type ResolveSlug = (slug: string) => string;
+
+export function canonicalEntries<T extends { slug: string }>(
+  items: readonly T[],
+  resolve: ResolveSlug,
+): T[] {
+  const named = new Set(items.map((i) => i.slug));
+  const kept = new Set<string>();
+  return items.flatMap((i) => {
+    const slug = resolve(i.slug);
+    if (kept.has(slug) || (slug !== i.slug && named.has(slug))) return [];
+    kept.add(slug);
+    return [slug === i.slug ? i : { ...i, slug }];
+  });
+}
 
 export function inScope(entry: { slug: string; tags: readonly string[] }, scope: Scope): boolean {
   return entry.tags.every((t) => scope.tags.includes(t));

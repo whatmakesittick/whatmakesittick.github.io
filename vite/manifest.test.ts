@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { loadExplainers, parseManifest, parseMeta, reservedSlugs } from './manifest.ts';
+import { checkFormerSlugs } from './manifestSchema.ts';
 
 const valid = {
   slug: 'engine',
@@ -62,6 +63,52 @@ describe('parseManifest', () => {
 
   it('names the manifest in its errors', () => {
     expect(() => parseManifest([], 'engine', reserved)).toThrow('explainers/engine/explainer.json');
+  });
+
+  it('reads the slugs the explainer had before', () => {
+    const renamed = { ...valid, formerSlugs: ['car-engine', 'motor'] };
+    expect(parseManifest(renamed, 'engine', reserved)).toEqual(renamed);
+  });
+
+  it.each([
+    ['an empty list', [], 'must list at least one slug'],
+    ['a list of other things', 'motor', 'must list at least one slug'],
+    ['a slug with capitals', ['Motor'], 'lowercase words joined by dashes'],
+    ['a slug that is not text', [7], 'lowercase words joined by dashes'],
+    ['the current slug', ['engine'], 'lists the current slug "engine"'],
+    ['a reserved name', ['assets'], 'lists the reserved "assets"'],
+    ['a repeated slug', ['motor', 'motor'], 'lists "motor" more than once'],
+  ])('rejects former slugs with %s', (_case, formerSlugs, message) => {
+    expect(() => parseManifest({ ...valid, formerSlugs }, 'engine', reserved)).toThrow(message);
+  });
+});
+
+describe('checkFormerSlugs', () => {
+  it('accepts former slugs that no explainer uses', () => {
+    expect(() =>
+      checkFormerSlugs([
+        { slug: 'engine', formerSlugs: ['motor'] },
+        { slug: 'glider', formerSlugs: ['sailplane'] },
+        { slug: 'heart' },
+      ]),
+    ).not.toThrow();
+  });
+
+  it('rejects a former slug that is the slug of another explainer', () => {
+    expect(() =>
+      checkFormerSlugs([{ slug: 'engine', formerSlugs: ['glider'] }, { slug: 'glider' }]),
+    ).toThrow(
+      'explainers/engine/explainer.json: "formerSlugs" lists "glider", the slug of another',
+    );
+  });
+
+  it('rejects a former slug that two explainers list', () => {
+    expect(() =>
+      checkFormerSlugs([
+        { slug: 'engine', formerSlugs: ['motor'] },
+        { slug: 'glider', formerSlugs: ['motor'] },
+      ]),
+    ).toThrow('which explainers/engine/explainer.json lists too');
   });
 });
 

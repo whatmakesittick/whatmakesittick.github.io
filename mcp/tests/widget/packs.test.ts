@@ -18,6 +18,7 @@ const catalogue = (title: string): WidgetCatalogue => ({
     },
   ],
   taglines: { engine: title },
+  aliases: {},
 });
 
 const TITLES: Partial<Record<LanguageCode, string>> = { en: 'Engine', uk: 'Двигун', de: 'Motor' };

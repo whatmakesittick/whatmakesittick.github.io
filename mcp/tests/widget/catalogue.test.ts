@@ -55,6 +55,18 @@ describe('catalogueOf', () => {
     expect(got?.taglines).toEqual({ engine: 'Four strokes' });
   });
 
+  it('keeps the aliases that are slug pairs and reads none from an older module', () => {
+    const got = catalogueOf({
+      default: {
+        explainers: [entry('engine')],
+        taglines: {},
+        aliases: { motor: 'engine', Bad: 'engine', worse: 1 },
+      },
+    });
+    expect(got?.aliases).toEqual({ motor: 'engine' });
+    expect(catalogueOf(moduleWith('engine'))?.aliases).toEqual({});
+  });
+
   it('refuses a module without a catalogue', () => {
     expect(catalogueOf({})).toBeUndefined();
     expect(catalogueOf({ default: { explainers: [] } })).toBeUndefined();
@@ -108,6 +120,20 @@ describe('runtime catalogue', () => {
       'catalogue/en.js',
       expect.stringMatching(/\?v=/),
       expect.stringMatching(/\?v=/),
+    ]);
+  });
+
+  it('refreshes at once when asked to, as after a rename the list did not know', async () => {
+    const { catalogues, served, tick } = setup();
+    served.set('catalogue/en.js', moduleWith('engine'));
+    await catalogues.load('en');
+    served.set('catalogue/en.js?fresh', moduleWith('engine', 'glider'));
+    await catalogues.refresh('en');
+    served.set('catalogue/en.js?fresh', moduleWith('motor'));
+    tick(1);
+    expect(await catalogues.refresh('en')).toBeUndefined();
+    expect((await catalogues.refresh('en', true))?.explainers.map((e) => e.slug)).toEqual([
+      'motor',
     ]);
   });
 

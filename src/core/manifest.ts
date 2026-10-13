@@ -34,6 +34,7 @@ export interface ExplainerManifest {
   chapters: string;
   locales: LanguageCode[];
   social: SocialImage;
+  formerSlugs?: string[];
 }
 
 export interface ExplainerMeta {

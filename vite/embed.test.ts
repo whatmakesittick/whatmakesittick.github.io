@@ -1,10 +1,11 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { buildCatalogue } from './catalogue.ts';
 import {
   EMBED_DIRECTORY,
   EMBED_MANIFEST_FILE,
+  aliasModules,
   embedManifest,
   embedSourceFiles,
   embedSourcePath,
@@ -17,7 +18,7 @@ import {
   stableFontPath,
   type EmbedFont,
 } from '../src/core/embed/fontFiles.ts';
-import { EMBED_API_VERSION } from '../src/core/embed/manifest.ts';
+import { EMBED_API_VERSION, type EmbedManifest } from '../src/core/embed/manifest.ts';
 import { loadExplainers } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 
@@ -25,13 +26,14 @@ const root = resolve(__dirname, '..');
 const dist = join(root, 'dist');
 const slugs = ['engine', 'mri-scanner'];
 
-function explainer(slug: string): LoadedExplainer {
+function explainer(slug: string, formerSlugs?: string[]): LoadedExplainer {
   return {
     manifest: {
       slug,
       cover: 'cover.webp',
       chapters: 'chapters.html',
       locales: ['en', 'de'],
+      ...(formerSlugs ? { formerSlugs } : {}),
     },
     directory: join(root, 'explainers', slug),
   } as LoadedExplainer;
@@ -70,7 +72,7 @@ const sourcePaths = slugs.flatMap((slug) =>
 describe('embedSourceFiles', () => {
   it('publishes each explainer source file under its slug', () => {
     expect(embedSourcePath('engine', 'explainer.json')).toBe('explainers/engine/explainer.json');
-    const files = embedSourceFiles(slugs.map(explainer));
+    const files = embedSourceFiles(slugs.map((slug) => explainer(slug)));
     expect(files.map(({ fileName }) => fileName)).toEqual(sourcePaths);
     expect(files.map(({ source }) => source.slice(root.length + 1))).toEqual(
       slugs.flatMap((slug) =>
@@ -113,7 +115,24 @@ describe('renderEmbedEntry', () => {
   });
 });
 
+describe('aliasModules', () => {
+  it('publishes a module under each former slug that re-exports the current one', () => {
+    expect(
+      aliasModules([explainer('engine', ['motor', 'car-engine']), explainer('glider')]),
+    ).toEqual([
+      { fileName: `${EMBED_DIRECTORY}/car-engine.js`, source: 'export * from "./engine.js";\n' },
+      { fileName: `${EMBED_DIRECTORY}/motor.js`, source: 'export * from "./engine.js";\n' },
+    ]);
+  });
+});
+
 describe('embedManifest', () => {
+  it('carries the aliases of renamed explainers', () => {
+    const entries = buildCatalogue(root).explainers;
+    expect(embedManifest(entries).aliases).toEqual({});
+    expect(embedManifest(entries, { motor: 'engine' }).aliases).toEqual({ motor: 'engine' });
+  });
+
   it('lists the catalogue entries with their module and English chapter titles', () => {
     const entries = buildCatalogue(root).explainers;
     const manifest = embedManifest(entries);
@@ -138,8 +157,15 @@ describe('embedManifest', () => {
 const built = existsSync(join(dist, EMBED_MANIFEST_FILE));
 
 describe.skipIf(!built)('dist/embed/v1 stable paths', () => {
+  const manifest: EmbedManifest = built
+    ? JSON.parse(readFileSync(join(dist, EMBED_MANIFEST_FILE), 'utf8'))
+    : { apiVersion: 1, explainers: [] };
   const paths = [
     ...fontPaths,
+    ...Object.keys(manifest.aliases ?? {}).flatMap((former) => [
+      `${EMBED_DIRECTORY}/${former}.js`,
+      `${former}/index.html`,
+    ]),
     ...embedSourceFiles(loadExplainers(root)).map(({ fileName }) => fileName),
   ];
 

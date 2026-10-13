@@ -256,6 +256,35 @@ describe('SceneSession after a site deploy', () => {
   });
 });
 
+describe('SceneSession after a rename', () => {
+  it('reports the slug the module mounts when it differs from the one asked for', async () => {
+    const fake = fakeModule('engine');
+    const host = document.createElement('div');
+    const renamed: [string, string][] = [];
+    const loaded: string[] = [];
+    const scene = new SceneSession({
+      loader: {
+        load: async (slug) => {
+          loaded.push(slug);
+          return fake.module;
+        },
+      },
+      host: () => host,
+      callbacks: {
+        status: () => {},
+        controller: () => {},
+        renamed: (from, to) => renamed.push([from, to]),
+      },
+    });
+    await scene.show('motor', 'one');
+    expect(renamed).toEqual([['motor', 'engine']]);
+    void scene.setLanguage('uk');
+    await scene.show('engine', 'one');
+    expect(renamed).toEqual([['motor', 'engine']]);
+    expect(loaded).toEqual(['motor', 'engine']);
+  });
+});
+
 describe('freshQuery', () => {
   it('asks for a copy the HTTP cache has not seen', () => {
     expect(freshQuery(() => 36 ** 3)).toBe('?v=1000');

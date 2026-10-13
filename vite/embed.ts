@@ -10,6 +10,7 @@ import { LOCALES_DIRECTORY, MANIFEST_FILE } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { localeLoader } from './page.ts';
 import { EMBED_DIRECTORY, embedSourcePath } from './embedPaths.ts';
+import { slugAliases } from './slugAliases.ts';
 
 export { EMBED_DIRECTORY, embedSourcePath };
 
@@ -90,8 +91,24 @@ function manifestEntry(entry: CatalogueEntry): EmbedManifestEntry {
   };
 }
 
-export function embedManifest(entries: readonly CatalogueEntry[]): EmbedManifest {
-  return { apiVersion: EMBED_API_VERSION, explainers: entries.map(manifestEntry) };
+export function embedManifest(
+  entries: readonly CatalogueEntry[],
+  aliases: Readonly<Record<string, string>> = {},
+): EmbedManifest {
+  return { apiVersion: EMBED_API_VERSION, explainers: entries.map(manifestEntry), aliases };
+}
+
+export function renderAliasModule(slug: string): string {
+  return `export * from "./${embedModuleFile(slug)}";\n`;
+}
+
+export function aliasModules(explainers: readonly LoadedExplainer[]): EmbedFile[] {
+  return Object.entries(slugAliases(explainers.map(({ manifest }) => manifest))).map(
+    ([former, slug]) => ({
+      fileName: `${EMBED_DIRECTORY}/${embedModuleFile(former)}`,
+      source: renderAliasModule(slug),
+    }),
+  );
 }
 
 export interface EmbedFile {

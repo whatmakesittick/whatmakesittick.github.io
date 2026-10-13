@@ -1,12 +1,15 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
 import { gzipSync } from 'node:zlib';
-import type { Plugin } from 'vite';
+import type { Logger, Plugin } from 'vite';
 import { LANGUAGES } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { ROBOTS_FILE, SITEMAP_FILE } from './crawl.ts';
 import { feedPath } from './site.ts';
 import { EMBED_MANIFEST_FILE } from './embed.ts';
+import { loadExplainers } from './manifest.ts';
+import { isRedirectStub } from './redirects.ts';
+import { checkSlugHistory, gitIn, readRemovedSlugs } from './slugHistory.ts';
 import { checkSite } from './siteCheck.ts';
 import type { BuiltPage, BuiltSite } from './siteCheck.ts';
 import { NOT_FOUND_ENTRY, SITE_ENTRY } from './sitePages.ts';
@@ -59,8 +62,10 @@ function readFeeds(outDir: string): Map<LanguageCode, string> {
 
 export function readBuiltSite(outDir: string, base: string): BuiltSite {
   const text = (file: string) => readFileSync(join(outDir, file), 'utf8');
+  const pages = readPages(outDir);
   return {
-    pages: readPages(outDir),
+    pages: pages.filter((page) => !isRedirectStub(page.html)),
+    redirects: pages.filter((page) => isRedirectStub(page.html)),
     ...readScripts(outDir, base),
     sitemap: text(SITEMAP_FILE),
     robots: text(ROBOTS_FILE),
@@ -73,9 +78,19 @@ export function readBuiltSite(outDir: string, base: string): BuiltSite {
   };
 }
 
+export function checkRenames(root: string, logger: Pick<Logger, 'info'>): void {
+  const manifests = loadExplainers(root).map(({ manifest }) => manifest);
+  const history = checkSlugHistory(gitIn(root), manifests, readRemovedSlugs(root));
+  if (history.note) logger.info(`site-check: ${history.note}`);
+  if (history.problems.length === 0) return;
+  throw new Error(['Explainer slugs went missing:', ...history.problems].join('\n'));
+}
+
 export function siteCheck(): Plugin {
   let base = '/';
   let outDir = 'dist';
+  let root = process.cwd();
+  let logger: Logger | undefined;
 
   return {
     name: 'site-check',
@@ -83,7 +98,13 @@ export function siteCheck(): Plugin {
 
     configResolved(config) {
       base = config.base;
+      root = config.root;
+      logger = config.logger;
       outDir = resolve(config.root, config.build.outDir);
+    },
+
+    buildStart() {
+      if (logger) checkRenames(root, logger);
     },
 
     closeBundle() {

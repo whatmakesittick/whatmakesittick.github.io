@@ -44,7 +44,7 @@ pages), so a language folder or the about page never clashes with an explainer.
 
 ```
 explainers/engine/
-  explainer.json      slug, tags, topic, cover, entry, chapters, locales, social
+  explainer.json      slug, tags, topic, cover, entry, chapters, locales, social, formerSlugs
   chapters.html       the prose column: <section class="chapter" data-preset="…"> blocks
   locales/en.json …   everything the explainer says, including meta.title, meta.eyebrow,
                       meta.tagline, meta.description, meta.summary and the optional
@@ -86,6 +86,18 @@ the thing, as people say it ("car engine", "MQ-9 Reaper drone"); the MCP tool de
 the social image is 1200 × 630. The page head describes it with `meta.socialAlt` from the
 page's locale when the locale has it, and with `social.alt` otherwise. The plugin validates all of this and fails the
 build with the manifest's path in the message.
+
+`formerSlugs` is optional and lists the slugs the explainer had before. To rename an
+explainer, move `explainers/<old>/` to `explainers/<new>/`, set `slug` and the `id` in
+`src/index.ts` to the new slug, and add `"formerSlugs": ["<old>"]`. Keep the list forever and
+add to it on each further rename. A former slug follows the slug rules, is not the current slug
+and is not reserved, and no other explainer may use it as a slug or list it too. The build does
+the rest from the list (`vite/slugAliases.ts`): an alias module under `/embed/v1/`
+(see "Embed"), the `aliases` in the embed manifest and the catalogue modules, and a redirect
+stub for every old page in every language (`vite/redirects.ts`). A stub is a small HTML page
+with `noindex`, a canonical link to the new page and a `refresh` to it, relative to the old path
+so it works under any base. It has no script and stays out of the sitemap, the feeds and the
+hreflang links. An explainer removed for good goes into `vite/removedSlugs.json` instead.
 
 The explainer imports the toolkit through the `@core/*` alias, which resolves to
 `src/core/*`. Explainers carry no tooling of their own; the repository's lint,
@@ -639,8 +651,18 @@ on a site page, a `modulepreload` on every translated page, one card per explain
 catalogue, the noscript cover and the more-explainers links on an explainer page, a sitemap
 that lists exactly the built pages, a feed link to the page language on every page, a feed per
 language that lists exactly its built explainers, `robots.txt`, a `noindex` 404 page without scripts and a
-real `favicon.ico`. When it fails, fix the page rather than the rule, and raise a budget only
+real `favicon.ico`. It reads the redirect stubs apart from the pages and checks that each one
+leads to a built page, names it as canonical, is `noindex` and loads no script, and that every
+alias in the embed manifest has its module, its stub and a built target, with the same aliases in
+every catalogue module. When it fails, fix the page rather than the rule, and raise a budget only
 with a measurement.
+
+Before the build, `vite/slugHistory.ts` lists the explainer folders at the fork point of `HEAD`
+with `origin/main` (`git merge-base`, then `git ls-tree`). A slug there that is no explainer now,
+no former slug and not in `vite/removedSlugs.json` fails the build with a message that says what
+to add. Without `origin/main` or the history to find the fork point, as in a shallow clone, the
+check is skipped with a note. The checks and deploy workflows check out with `fetch-depth: 0`,
+so they run it.
 
 ## Catalogue
 
@@ -841,15 +863,25 @@ site's name, a plain link to the explainer on the site and a retry button, and g
 itself so the frame gets a size.
 
 Within `v1`, a few names are stable: `/embed/v1/widget.js`, `/embed/v1/<slug>.js` for every
-explainer in the manifest, `manifest.json`, `catalogue/<lang>.js` for every site language,
-`fonts/<file>.woff2` and `explainers/<slug>/`. The fields of a catalogue
-module only grow. Never rename or remove an export, a `MountOptions` field or a DOM attribute
-a widget relies on. A breaking change goes to `/embed/v2/`, next to `v1`. The hashed chunks the
-entries import, in `/assets/` and `widget-<lang>-<hash>.js`, change with each deploy, and a slug
-may be renamed or removed: the site check wants the manifest to list exactly the built explainers.
+explainer in the manifest and for every former slug, `manifest.json`, `catalogue/<lang>.js` for
+every site language, `fonts/<file>.woff2` and `explainers/<slug>/` for current slugs. The fields
+of a catalogue module only grow. Never rename or remove an export, a `MountOptions` field or a DOM
+attribute a widget relies on. A breaking change goes to `/embed/v2/`, next to `v1`. The hashed
+chunks the entries import, in `/assets/` and `widget-<lang>-<hash>.js`, change with each deploy.
+A slug may be removed or renamed: the site check wants the manifest to list exactly the built
+explainers, and a rename keeps the old name working. `aliasModules` in `vite/embed.ts` writes
+`/embed/v1/<old>.js` as `export * from "./<new>.js"`, so a widget or page that still imports the
+old name mounts the renamed explainer, whose `slug` export is the new one. `manifest.json` and
+every catalogue module carry `aliases`, a map from each former slug to the current one. The server
+and the widget resolve a slug through it before they use it, and the widget also learns a rename
+when a module it loaded by an old name mounts another slug. `explainers/<old>/` is not copied: the
+server resolves the alias before it reads the files, and the published `explainer.json` names the
+new slug, so a copy under the old folder would not parse. Covers are not copied either: a widget
+takes the cover path from the catalogue, which names the hashed file of the current build.
 `stableFontFiles` in `vite/embed.ts` copies the embed fonts to `/embed/v1/fonts/<file>.woff2`
 under their fontsource names (the list is `EMBED_FONTS` in `src/core/embed/fontFiles.ts`), and
-`vite/embed.test.ts` checks that they are in `dist/`. The build also publishes each explainer's `explainer.json`, `chapters.html` and
+`vite/embed.test.ts` checks that they are in `dist/`. The build also publishes each explainer's
+`explainer.json`, `chapters.html` and
 `locales/<code>.json` verbatim under `/embed/v1/explainers/<slug>/` (`embedSourceFiles` in
 `vite/embed.ts`), so the MCP server reads them from the site; they are part of `v1`. Their fields
 and keys only grow, so the server reads them leniently (`parsePublishedManifest` in

@@ -35,6 +35,14 @@ describe('embed catalogue modules', () => {
     expect(catalogue.explainers.map((e) => e.slug)).toEqual(explainers.map((e) => e.slug));
   });
 
+  it('carries the aliases of renamed explainers in every language', () => {
+    const aliases = { motor: 'engine' };
+    expect(embedCatalogue(explainers, 'en').aliases).toEqual({});
+    for (const { source } of embedCatalogueFiles(explainers, aliases)) {
+      expect(parseEmbedCatalogue(source)?.aliases).toEqual(aliases);
+    }
+  });
+
   it('renders a module with a default export that parses back', () => {
     const catalogue = embedCatalogue(explainers, 'uk');
     const source = renderEmbedCatalogue(catalogue);

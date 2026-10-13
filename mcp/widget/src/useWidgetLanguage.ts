@@ -61,13 +61,16 @@ export function useWidgetLanguage(host: WidgetHost, packs: Packs, session: Scene
     if (pack) document.documentElement.lang = pack.lang;
   }, [pack?.lang]);
 
-  const refresh = useCallback(() => {
-    const current = packRef.current;
-    if (!current) return;
-    void packs
-      .refresh(current.lang)
-      .then((next) => next && setPack((p) => (p?.lang === next.lang ? next : p)));
-  }, [packs]);
+  const refresh = useCallback(
+    (force = false) => {
+      const current = packRef.current;
+      if (!current) return;
+      void packs
+        .refresh(current.lang, force)
+        .then((next) => next && setPack((p) => (p?.lang === next.lang ? next : p)));
+    },
+    [packs],
+  );
 
   const shown: LanguagePack = pack ?? {
     lang: DEFAULT_LANGUAGE,

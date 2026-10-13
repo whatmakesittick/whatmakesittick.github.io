@@ -6,6 +6,7 @@ import { toWidgetCatalogue } from '../../catalogue/build.ts';
 import type { EmbedInfo, EmbedState } from '../../../src/core/embed/contract.ts';
 import {
   allowsFullscreen,
+  canonicalEntries,
   chapterShort,
   chapterViews,
   debounce,
@@ -89,6 +90,55 @@ describe('tool input / result', () => {
     ).toBeUndefined();
     expect(targetFromResult(null, find)).toBeUndefined();
     expect(targetFromResult({ content: 'x' }, find)).toBeUndefined();
+  });
+});
+
+describe('renamed explainers', () => {
+  const aliases: Record<string, string> = { motor: 'engine', 'old-heart': 'heart' };
+  const resolve = (slug: string) => aliases[slug] ?? slug;
+  const stale = [
+    { slug: 'motor', tags: ['engines'] },
+    { slug: 'glider', tags: ['flight'] },
+  ];
+
+  it('names each entry by its current slug and drops a stale twin', () => {
+    expect(canonicalEntries(stale, resolve).map((e) => e.slug)).toEqual(['engine', 'glider']);
+    const both = [{ slug: 'motor' }, { slug: 'engine' }, { slug: 'glider' }];
+    expect(canonicalEntries(both, resolve).map((e) => e.slug)).toEqual(['engine', 'glider']);
+    const same = [{ slug: 'glider' }];
+    expect(canonicalEntries(same, resolve)[0]).toBe(same[0]);
+  });
+
+  it('opens the current slug when the tool input or result names a former one', () => {
+    const entries = canonicalEntries(catalogue.explainers, resolve);
+    const findRenamed = (slug: string) => entries.find((e) => e.slug === resolve(slug));
+    expect(targetFromInput({ slug: 'old-heart', chapter: '2' }, findRenamed)).toEqual({
+      slug: 'heart',
+      chapter: catalogue.explainers.find((e) => e.slug === 'heart')!.chapters[1]!.id,
+    });
+    expect(targetFromResult({ structuredContent: { slug: 'old-heart' } }, findRenamed)).toEqual({
+      slug: 'heart',
+    });
+    expect(
+      targetFromResult(
+        {
+          content: [
+            { type: 'text', text: 'Website: https://whatmakesittick.github.io/old-heart/' },
+          ],
+        },
+        findRenamed,
+      ),
+    ).toEqual({ slug: 'heart' });
+  });
+
+  it('scopes a renamed explainer by its tags once the slug is resolved', () => {
+    const entries = canonicalEntries(stale, resolve);
+    const findRenamed = (slug: string) => entries.find((e) => e.slug === resolve(slug));
+    expect(mayShow(findRenamed('motor'), { tags: ['engines'] }, false)).toBe(true);
+    expect(mayShow(findRenamed('motor'), { tags: ['flight'] }, false)).toBe(false);
+    expect(shownEntries(entries, { tags: ['engines'] })).toEqual([
+      { slug: 'engine', tags: ['engines'] },
+    ]);
   });
 });
 

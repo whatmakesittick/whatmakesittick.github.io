@@ -574,3 +574,76 @@ test('the picker shows an explainer published after the call, but not an exclude
   await expect(page.locator('.thumb[data-slug="rifle"]')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
+
+const renamedLater = async (page: Page) => {
+  const state = { deployed: false, refreshes: 0, aliasImports: 0 };
+  await page.route(
+    (url) => url.pathname.endsWith('/embed/v1/catalogue/en.js'),
+    async (route) => {
+      const fresh = new URL(route.request().url()).search.startsWith('?v=');
+      const deployed = state.deployed;
+      const response = await route.fetch();
+      const catalogue = parseEmbedCatalogue(await response.text()) as EmbedCatalogue;
+      const body = deployed
+        ? { ...catalogue, aliases: { 'old-heart': 'heart' } }
+        : {
+            ...catalogue,
+            explainers: catalogue.explainers.map((e) =>
+              e.slug === 'heart' ? { ...e, slug: 'old-heart' } : e,
+            ),
+          };
+      await route.fulfill({ response, body: renderEmbedCatalogue(body) });
+      if (fresh) state.refreshes++;
+    },
+  );
+  await page.route(
+    (url) => url.pathname.endsWith('/embed/v1/old-heart.js'),
+    async (route) => {
+      state.aliasImports++;
+      await route.fulfill({
+        contentType: 'text/javascript',
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        body: 'export * from "./heart.js";\n',
+      });
+    },
+  );
+  return state;
+};
+
+test.describe('a renamed explainer', () => {
+  test('a strip tile from a list older than the rename opens the new explainer', async ({
+    page,
+  }) => {
+    test.skip(!existsSync(resolve(root, 'dist/embed/v1/heart.js')), 'needs npm run build');
+    const site = await renamedLater(page);
+    const { errors, logs } = await open(page, 'slug=mri-scanner&chapter=magnet&real=1');
+    await expect(page.locator('.wmit.st-ready[data-slug="mri-scanner"]')).toBeVisible({
+      timeout: 20_000,
+    });
+    await page.locator('.a-explore h4').hover();
+    await expect.poll(() => site.refreshes).toBe(1);
+    site.deployed = true;
+    await page.locator('.strip .thumb[data-slug="old-heart"]').click();
+    await expect(page.locator('.wmit.st-ready[data-slug="heart"]')).toBeVisible({
+      timeout: 20_000,
+    });
+    expect(site.aliasImports).toBe(1);
+    await expect
+      .poll(() => logs.filter((l) => l.startsWith('[HOST] ui/update-model-context')).at(-1))
+      .toContain('"slug":"heart"');
+    await expect(page.locator('.strip .thumb.cur[data-slug="heart"]')).toBeAttached();
+    await expect(page.locator('.thumb[data-slug="old-heart"]')).toHaveCount(0);
+    await expect.poll(() => site.refreshes).toBe(2);
+    expect(errors).toEqual([]);
+  });
+
+  test('a former slug in the tool call opens the new explainer', async ({ page }) => {
+    const site = await renamedLater(page);
+    site.deployed = true;
+    const { errors } = await open(page, 'slug=old-heart');
+    await expect(page.locator('.wmit.st-ready[data-slug="heart"]')).toBeVisible();
+    await expect(page.locator('.strip .thumb.cur[data-slug="heart"]')).toBeAttached();
+    expect(site.aliasImports).toBe(0);
+    expect(errors).toEqual([]);
+  });
+});

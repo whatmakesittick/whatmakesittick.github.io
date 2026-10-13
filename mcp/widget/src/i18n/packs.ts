@@ -22,7 +22,7 @@ export interface Packs {
   englishStrings: Strings;
   ready(lang: LanguageCode): LanguagePack | undefined;
   load(lang: LanguageCode): Promise<LanguagePack>;
-  refresh(lang: LanguageCode): Promise<LanguagePack | undefined>;
+  refresh(lang: LanguageCode, force?: boolean): Promise<LanguagePack | undefined>;
 }
 
 export function createPacks(
@@ -84,9 +84,9 @@ export function createPacks(
       await Promise.all([loadStrings(lang), catalogues.load(lang)]);
       return ready(lang) as LanguagePack;
     },
-    async refresh(wanted) {
+    async refresh(wanted, force) {
       const lang = supported(wanted);
-      return (await catalogues.refresh(lang)) ? ready(lang) : undefined;
+      return (await catalogues.refresh(lang, force)) ? ready(lang) : undefined;
     },
   };
 }

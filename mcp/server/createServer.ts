@@ -7,7 +7,7 @@ import { McpServer, type ReadResourceResult } from '@modelcontextprotocol/server
 import { z } from 'zod';
 import { SITE_URL } from '../../vite/site.ts';
 import type { EmbedManifest, EmbedManifestEntry } from '../../src/core/embed/manifest.ts';
-import { isSlug } from '../shared/catalogue.ts';
+import { isSlug, resolveSlug, type SlugAliases } from '../shared/catalogue.ts';
 import { SERVER_NAME, SERVER_TITLE, SERVER_VERSION } from '../shared/config.ts';
 import {
   OPENAI_INVOCATION_META,
@@ -64,11 +64,27 @@ export function availableTags(index: EmbedManifest, excludeTags: readonly string
   return [...new Set(tags.filter(isSlug))].sort();
 }
 
+export function knownAliases(index: EmbedManifest, slugs: readonly string[]): SlugAliases {
+  return Object.fromEntries(
+    Object.entries(index.aliases ?? {}).filter(([, slug]) =>
+      slugs.includes(resolveSlug(slug, index.aliases)),
+    ),
+  );
+}
+
+export function slugInput(slugs: readonly string[], aliases: SlugAliases) {
+  return z.preprocess(
+    (value) => (typeof value === 'string' ? resolveSlug(value, aliases) : value),
+    z.enum(slugs as [string, ...string[]]),
+  );
+}
+
 export function createServer(options: CreateServerOptions): McpServer {
   const { index, site, assetBase, domain } = options;
   const slugs = availableSlugs(index, options.excludeTags);
   const tags = availableTags(index, options.excludeTags);
   const scope: WidgetScope = { slugs, tags };
+  const aliases = knownAliases(index, slugs);
   const listed = index.explainers.filter((e) => slugs.includes(e.slug));
   const topics = new Map(listed.map((e) => [e.slug, e.topic]));
   const uiMeta = buildUiMeta(assetBase, domain);
@@ -88,7 +104,7 @@ export function createServer(options: CreateServerOptions): McpServer {
       title: 'Show a 3D explainer',
       description: buildShowExplainerDescription(topics, slugs),
       inputSchema: z.object({
-        slug: z.enum(slugs as [string, ...string[]]).describe('Which explainer to show.'),
+        slug: slugInput(slugs, aliases).describe('Which explainer to show.'),
         chapter: z.string().optional().describe(SHOW_EXPLAINER_CHAPTER_DESCRIBE),
         lang: z.string().max(35).optional().describe(LANG_DESCRIBE),
       }),
@@ -99,7 +115,7 @@ export function createServer(options: CreateServerOptions): McpServer {
         ...OPENAI_INVOCATION_META,
       },
     },
-    async (args) => showExplainer(site, scope, args),
+    async (args) => showExplainer(site, scope, args, aliases),
   );
 
   server.registerTool(
