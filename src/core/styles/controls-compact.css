@@ -58,6 +58,7 @@
   --speed-range-width: 150px;
 
   flex-basis: 100%;
+  min-width: 0;
 }
 
 .dock-language {
@@ -66,6 +67,6 @@
   padding-block: 0;
 }
 
-.field-value {
-  min-width: 0;
+.speed-field .range {
+  flex-shrink: 1;
 }

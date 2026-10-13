@@ -24,6 +24,9 @@ const KEY_SEPARATOR = ':';
 const READOUT_VALUE = '[data-readout] dd';
 const SCENE_LABEL = '.scene-label';
 const DOCK = '[data-dock]';
+const DOCK_PARTS =
+  '[data-dock] :is(button, input, select, label:not(.visually-hidden), .field-value-number, .segmented)';
+const DOCK_MORE = '[data-dock] [data-control="more"]';
 
 function isUntranslated(value: string | undefined, key: string): boolean {
   const shown = value?.trim() ?? '';
@@ -129,4 +132,37 @@ export function waitForSceneTime(page: Page, wait: SceneTimeWait): Promise<boole
       }),
     wait,
   );
+}
+
+export function dockCollisions(page: Page): Promise<string[]> {
+  return page.$$eval(DOCK_PARTS, (parts) => {
+    const dock = parts[0]?.closest('[data-dock]')?.getBoundingClientRect();
+    const shown = parts.filter((part) => part.checkVisibility());
+    const name = (part: Element) =>
+      `${part.tagName.toLowerCase()} "${part.textContent?.trim() ?? ''}"`;
+    const crossing = (a: DOMRect, b: DOMRect) =>
+      Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 &&
+      Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1;
+    const clipped = shown
+      .filter((part) => part.tagName !== 'INPUT' && part.scrollWidth > part.clientWidth + 1)
+      .map((part) => `clipped ${name(part)}`);
+    const outside = shown
+      .map((part) => [part, part.getBoundingClientRect()] as const)
+      .filter(([, box]) => dock && (box.left < dock.left || box.right > dock.right))
+      .map(([part]) => `outside ${name(part)}`);
+    const overlaps = shown.flatMap((a, index) =>
+      shown
+        .slice(index + 1)
+        .filter((b) => !a.contains(b) && !b.contains(a))
+        .filter((b) => crossing(a.getBoundingClientRect(), b.getBoundingClientRect()))
+        .map((b) => `${name(a)} over ${name(b)}`),
+    );
+    return [...clipped, ...outside, ...overlaps];
+  });
+}
+
+export async function openDockExtras(page: Page): Promise<void> {
+  const more = page.locator(DOCK_MORE);
+  if (!(await more.isVisible())) return;
+  if ((await more.getAttribute('aria-expanded')) !== 'true') await more.click();
 }
