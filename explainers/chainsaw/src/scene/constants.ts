@@ -136,7 +136,8 @@ export const BAR = {
   rail: 0.003,
   rearX: 0.042,
   noseLength: 0.034,
-  noseSprocket: 0.0163,
+  noseSprocket: 0.0177,
+  noseToothDepth: 0.003,
   noseTeeth: 11,
   rearRound: 0.006,
 } as const;

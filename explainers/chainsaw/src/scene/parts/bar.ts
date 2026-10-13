@@ -75,7 +75,7 @@ function barSpan() {
 
 function noseDetails(): BufferGeometry {
   const sprocket = extrudeAlongZ(
-    starShape(BAR.noseTeeth, BAR.noseSprocket, BAR.noseSprocket - 0.0028, 0),
+    starShape(BAR.noseTeeth, BAR.noseSprocket, BAR.noseSprocket - BAR.noseToothDepth, 0),
     {
       from: BAR_PLANE_Z - BAR_THICKNESS / 2 - 0.0004,
       to: BAR_PLANE_Z + BAR_THICKNESS / 2 + 0.0004,
