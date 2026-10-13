@@ -71,8 +71,13 @@ tool call or host context change switches the language in place.
 - **Inline** follows design variant A, "viewer and reader": the scene on top, the chapter text and
   chapter pills below, other explainers in a horizontal strip. While the next explainer loads, the
   scene area keeps its height.
-- **Fullscreen** uses the site's page layout: the scene on the left, the text on the right. Below
-  640 px wide they stack.
+- **Fullscreen** is the site's expanded stage: the scene fills the frame, with the site's round
+  button in the top right corner (now the exit control), the gauge under it, the labels and the
+  dock at the bottom. The button styles are the site's (`src/core/styles/stage-expand.css`), X and
+  Escape come from the site's `stageShortcuts`, and both go through `requestDisplayMode`. As on the
+  site, a viewport of at most 899 px gets the phone dock and no gauge: the embed keys its phone dock
+  rules to the dock slot, so the widget adds the site's rules keyed to the viewport for fullscreen
+  (`fullscreenDock.ts`). The chapter text, the explainer list and the site link stay inline.
 - **Safe areas.** The widget reads `safeAreaInsets` from the host context into `--safe-*` CSS
   variables and keeps its controls inside them.
 

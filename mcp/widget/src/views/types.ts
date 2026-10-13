@@ -29,7 +29,6 @@ export interface Actions {
   toggleFullscreen(): void;
   switchTo(slug: string): void;
   retry(): void;
-  toggleDrawer(open?: boolean): void;
 }
 
 export interface ViewModel {
@@ -44,7 +43,6 @@ export interface ViewModel {
   disc: Discrete;
   fullscreen: boolean;
   canFullscreen: boolean;
-  drawerOpen: boolean;
   assetBase: string;
   catalogue: WidgetCatalogueEntry[];
   strip: WidgetCatalogueEntry[];

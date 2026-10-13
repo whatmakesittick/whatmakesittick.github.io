@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks';
 import type { EmbedInfo } from '../../../src/core/embed/contract.ts';
+import { stageShortcuts, type ExpandableStage } from '../../../src/core/ui/stageShortcuts.ts';
 import type { Actions, Discrete } from './views/types.ts';
 
 export function useKeyboard(
@@ -7,16 +8,21 @@ export function useKeyboard(
   info: EmbedInfo | undefined,
   disc: Discrete,
   ready: boolean,
+  stage?: ExpandableStage,
 ): void {
-  const latest = useRef({ actions, info, disc, ready });
-  latest.current = { actions, info, disc, ready };
+  const latest = useRef({ actions, info, disc, ready, stage });
+  latest.current = { actions, info, disc, ready, stage };
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return;
       const el = e.target as HTMLElement | null;
       if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))) return;
-      const { actions: a, info: i, disc: d, ready: r } = latest.current;
+      const { actions: a, info: i, disc: d, ready: r, stage: st } = latest.current;
       const onButton = el?.tagName === 'BUTTON';
+      if (st && stageShortcuts(st)[e.key.toLowerCase()]?.()) {
+        e.preventDefault();
+        return;
+      }
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
         a.step(e.key === 'ArrowLeft' ? -1 : 1);
         e.preventDefault();

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useRef } from 'preact/hooks';
 import { explainerUrl, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { WidgetHost } from './bridge.ts';
 import { StringsContext } from './i18n/context.ts';
@@ -6,8 +6,7 @@ import type { Packs } from './i18n/packs.ts';
 import type { ModuleLoader, SceneStatus } from './scene.ts';
 import { allowsFullscreen, chapterViews, frameOf, neighbour, stripOrder } from './state.ts';
 import { ChapterSection } from './views/Chapter.tsx';
-import { Drawer, ExploreStrip } from './views/Explore.tsx';
-import { ProseColumn } from './views/Prose.tsx';
+import { ExploreStrip } from './views/Explore.tsx';
 import { Header, Stage } from './views/Stage.tsx';
 import type { Actions, ViewModel } from './views/types.ts';
 import { SITE_HOME } from './views/Brand.tsx';
@@ -31,7 +30,6 @@ export interface WidgetProps {
 }
 
 export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const painted = useRef(false);
 
   const sceneSession = useSceneSession(host, loader, webgl);
@@ -68,11 +66,8 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     ctrlRef,
   });
 
-  const { fullscreen, toggleFullscreen } = useDisplayMode(host);
+  const { fullscreen, toggleFullscreen, stage } = useDisplayMode(host);
   const canFullscreen = allowsFullscreen(ctx);
-  useEffect(() => {
-    if (!fullscreen) setDrawerOpen(false);
-  }, [fullscreen]);
 
   const sceneReady = status === 'ready' && controller?.info.slug === slug;
   const wheelArmed = useStage(refs, ctrlRef, entry !== undefined && !hold, fullscreen, sceneReady);
@@ -104,7 +99,6 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     openCatalogue,
     toggleFullscreen,
     switchTo: touched((next: string) => {
-      setDrawerOpen(false);
       if (next !== slug) setTarget({ slug: next });
     }),
     retry() {
@@ -112,10 +106,9 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
       setInfo(undefined);
       void session.show(slug, chapterRef.current, { retry: true });
     },
-    toggleDrawer: (open) => setDrawerOpen((v) => open ?? !v),
   };
 
-  useKeyboard(actions, info, disc, sceneReady);
+  useKeyboard(actions, info, disc, sceneReady, canFullscreen || fullscreen ? stage : undefined);
 
   const { style, touch } = frameOf(
     ctx,
@@ -160,7 +153,6 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     disc,
     fullscreen,
     canFullscreen,
-    drawerOpen,
     assetBase,
     catalogue: entries,
     strip: stripOrder(entries, stripFirst ?? slug),
@@ -179,8 +171,6 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
           onPointerLeave={() => (wheelArmed.current = false)}
           onUserInput={() => (userChanged.current = true)}
         />
-        <ProseColumn key="prose" vm={vm} />
-        <Drawer key="drawer" vm={vm} />
         <ChapterSection key="chapter" vm={vm} />
         <ExploreStrip key="explore" vm={vm} />
       </div>

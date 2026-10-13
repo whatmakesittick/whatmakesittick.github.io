@@ -139,7 +139,8 @@ export function Stage({
   const s = useStrings();
   const current = vm.chapters.find((c) => c.id === vm.chapter);
   const ready = vm.status === 'ready';
-  const showFs = vm.canFullscreen && vm.status !== 'nowebgl' && !vm.fullscreen;
+  const showExpand = vm.fullscreen || (vm.canFullscreen && vm.status !== 'nowebgl');
+  const expandLabel = vm.fullscreen ? s.exitFullscreen : s.fullscreen;
   return (
     <div
       class={`scene-col${ready ? ' is-ready' : ''}`}
@@ -167,13 +168,16 @@ export function Stage({
         <button
           key="expand"
           type="button"
-          class="round-btn stage-expand inline-only"
-          hidden={!showFs}
-          aria-label={s.fullscreen}
-          title={s.fullscreen}
+          class={`stage-expand${vm.fullscreen ? '' : ' round-btn'}`}
+          hidden={!showExpand}
+          aria-pressed={vm.fullscreen}
+          aria-keyshortcuts="X"
+          aria-label={expandLabel}
+          title={expandLabel}
           onClick={vm.actions.toggleFullscreen}
         >
           <Icon.expand />
+          <Icon.collapse />
         </button>
         <Slot key="gauge" class="gauge-slot" slotRef={refs.gauge} />
       </div>

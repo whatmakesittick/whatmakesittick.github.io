@@ -5,6 +5,7 @@ import { createHub, type DisplayMode, type WidgetHost } from '../bridge.ts';
 import { bundledPacks } from '../i18n/bundled.ts';
 import { hasWebGL2, urlLoader } from '../scene.ts';
 import '../styles.css';
+import { fullscreenDockCss } from '../fullscreenDock.ts';
 import { Widget } from '../Widget.tsx';
 import { mockLoader } from './mockEmbed.ts';
 
@@ -42,6 +43,9 @@ body.fs .dev-unsafe{display:block}
 .dev-log{position:fixed;right:8px;bottom:8px;max-width:420px;max-height:30vh;overflow:auto;font:11px/1.4 ui-monospace,monospace;background:rgb(0 0 0/.75);color:#9fe;padding:6px 8px;border-radius:6px;white-space:pre-wrap;display:none}
 body.showlog .dev-log{display:block}`;
 document.head.append(css);
+const dockCss = document.createElement('style');
+dockCss.textContent = fullscreenDockCss();
+document.head.append(dockCss);
 document.body.className = `dev ${hostTheme}${q.get('log') === '1' ? ' showlog' : ''}`;
 
 const log = document.createElement('div');

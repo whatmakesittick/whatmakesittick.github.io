@@ -24,7 +24,7 @@ function Tile({
       aria-current={cur ? 'true' : undefined}
       title={entry.summary}
       data-slug={entry.slug}
-      onClick={() => (cur ? vm.actions.toggleDrawer(false) : vm.actions.switchTo(entry.slug))}
+      onClick={cur ? undefined : () => vm.actions.switchTo(entry.slug)}
     >
       {cur && <span class="badge">{s.watching}</span>}
       <img
@@ -93,48 +93,5 @@ export function ExploreStrip({ vm }: { vm: ViewModel }) {
         ))}
       </div>
     </section>
-  );
-}
-
-export function DrawerButton({ vm }: { vm: ViewModel }) {
-  const s = useStrings();
-  return (
-    <button
-      type="button"
-      class="ghost scrim"
-      aria-expanded={vm.drawerOpen}
-      aria-label={s.explainers(vm.catalogue.length)}
-      onClick={() => vm.actions.toggleDrawer()}
-    >
-      <Icon.grid />
-      <span class="txt-n">{s.explainers(vm.catalogue.length)}</span>
-    </button>
-  );
-}
-
-export function Drawer({ vm }: { vm: ViewModel }) {
-  const s = useStrings();
-  return (
-    <div
-      class={`drawer glass fs-only${vm.drawerOpen ? ' open' : ''}`}
-      data-gauge
-      aria-hidden={!vm.drawerOpen}
-    >
-      <div class="hd">
-        <h4>{s.explainers(vm.catalogue.length)}</h4>
-        <button
-          type="button"
-          class="icon-btn"
-          aria-label={s.close}
-          onClick={() => vm.actions.toggleDrawer(false)}
-        >
-          <Icon.close />
-        </button>
-      </div>
-      <div class="grid">
-        {vm.drawerOpen &&
-          vm.catalogue.map((e) => <Tile key={e.slug} vm={vm} entry={e} eyebrow eager />)}
-      </div>
-    </div>
   );
 }

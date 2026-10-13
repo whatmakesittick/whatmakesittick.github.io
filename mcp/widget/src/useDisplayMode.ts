@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { EMBED_DOM } from '../../../src/core/embed/contract.ts';
+import type { ExpandableStage } from '../../../src/core/ui/stageShortcuts.ts';
 import { toDisplayMode, type DisplayMode, type WidgetHost } from './bridge.ts';
 
 export function useDisplayMode(host: WidgetHost) {
@@ -18,14 +19,18 @@ export function useDisplayMode(host: WidgetHost) {
     else delete root.dataset[EMBED_DOM.stageExpandedKey];
   }, [fullscreen]);
 
-  const toggleFullscreen = async () => {
-    const next: DisplayMode = fullscreen ? 'inline' : 'fullscreen';
+  const request = async (next: DisplayMode) => {
     try {
       setMode(await host.requestDisplayMode(next));
     } catch (e) {
       console.warn('[wmit-widget] requestDisplayMode', e);
     }
   };
+  const toggleFullscreen = () => void request(fullscreen ? 'inline' : 'fullscreen');
+  const collapse = () => {
+    if (fullscreen) void request('inline');
+  };
 
-  return { fullscreen, toggleFullscreen };
+  const stage: ExpandableStage = { expanded: fullscreen, toggle: toggleFullscreen, collapse };
+  return { fullscreen, toggleFullscreen, stage };
 }

@@ -233,68 +233,78 @@ test('inline: the dock fills its slot below the scene, phase buttons seek', asyn
   expect(errors).toEqual([]);
 });
 
-for (const [width, stacked] of [
-  [840, false],
-  [420, true],
+for (const [width, height, compact] of [
+  [1440, 900, false],
+  [390, 844, true],
+  [844, 390, true],
 ] as const) {
-  test(`fullscreen ${width}px: prose ${stacked ? 'below' : 'beside'} the scene, never over it`, async ({
+  test(`fullscreen ${width}x${height}: the scene fills the frame like the expanded stage on the site`, async ({
     page,
   }) => {
-    await page.setViewportSize({ width, height: 900 });
+    await page.setViewportSize({ width, height });
     const { errors } = await open(page, 'slug=mri-scanner&chapter=magnet&mode=fullscreen');
     await expect(page.locator('.wmit.is-fs.st-ready')).toBeVisible();
-    const scene = await box(page, '.scene-col');
-    const prose = await box(page, '.prose');
-    if (stacked) expect(prose.y).toBeGreaterThanOrEqual(scene.y + scene.height - 1);
-    else expect(prose.x).toBeGreaterThanOrEqual(scene.x + scene.width - 1);
-    await expect(page.locator('.prose .chapter.is-active .chapter-title')).toHaveText(
-      'A magnet that never switches off',
-    );
-    await page.locator('.prose .chapter-head', { hasText: 'Hydrogen leans and wobbles' }).click();
-    await expect(page.locator('.prose .chapter.is-active .chapter-title')).toHaveText(
-      'Hydrogen leans and wobbles',
-    );
-    await expect(page.locator('.prose .chapter.is-active .ch-text p').first()).toBeVisible();
+    const frame = await box(page, '.wmit');
+    const stage = await box(page, '.stage');
+    expect(stage).toEqual(frame);
+    await expect(page.locator('.a-head, .a-chapter, .a-explore')).toHaveCount(3);
+    for (const part of await page.locator('.a-head, .a-chapter, .a-explore').all())
+      await expect(part).toBeHidden();
+    const exit = page.getByRole('button', { name: 'Exit fullscreen' });
+    await expect(exit).toHaveAttribute('aria-pressed', 'true');
+    const button = await box(page, '.stage-expand');
+    const inset = compact ? 10 : 16;
+    expect(button.y).toBe(frame.y + inset);
+    expect(button.x + button.width).toBe(frame.x + frame.width - inset);
+    const dock = await box(page, '.dock-slot');
+    expect(dock.x).toBe(frame.x + inset);
+    expect(dock.x + dock.width).toBe(frame.x + frame.width - inset);
+    expect(dock.y + dock.height).toBe(frame.y + frame.height - (compact ? 10 : 26));
+    await expect(page.locator('.dock-slot .dock-more')).toBeVisible({ visible: compact });
+    await expect(page.locator('.dock-slot [data-phase-buttons]')).toBeVisible({
+      visible: !compact,
+    });
+    await exit.click();
+    await expect(page.locator('.wmit.is-inline')).toBeVisible();
     expect(errors).toEqual([]);
   });
 }
 
-for (const [width, height, stacked] of [
-  [384, 854, true],
-  [1010, 723, false],
+test('fullscreen keys: X toggles the display mode and Escape leaves it, as on the site', async ({
+  page,
+}) => {
+  const { errors, logs } = await open(page, 'slug=engine');
+  await expect(page.locator('.wmit.is-inline.st-ready')).toBeVisible();
+  await page.keyboard.press('x');
+  await expect(page.locator('.wmit.is-fs')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.wmit.is-inline')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.wmit.is-inline')).toBeVisible();
+  expect(logs.filter((l) => l.startsWith('[HOST] ui/request-display-mode'))).toEqual([
+    '[HOST] ui/request-display-mode fullscreen',
+    '[HOST] ui/request-display-mode inline',
+  ]);
+  expect(errors).toEqual([]);
+});
+
+for (const [width, height] of [
+  [384, 854],
+  [1010, 723],
 ] as const) {
-  test(`fullscreen ${width}px with host insets: the top inset sits over the ${stacked ? 'scene' : 'prose bar'}`, async ({
+  test(`fullscreen ${width}px with host insets: the overlays stay inside them`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height });
     const { errors } = await open(page, 'slug=engine&mode=fullscreen&insets=100,0,120,0');
     await expect(page.locator('.wmit.is-fs.st-ready')).toBeVisible();
-    const top = (await box(page, '.wmit')).y;
-    const scene = await box(page, '.scene-col');
-    const stage = await box(page, '.stage');
+    const frame = await box(page, '.wmit');
+    expect(await box(page, '.stage')).toEqual(frame);
+    const inset = width < 900 ? 10 : 16;
+    expect((await box(page, '.stage-expand')).y).toBe(frame.y + 100 + inset);
     const dock = await box(page, '.dock-slot');
-    const barPad = await page
-      .locator('.prose .bar')
-      .evaluate((el) => parseFloat(getComputedStyle(el).paddingTop));
-    if (stacked) {
-      expect(barPad).toBeLessThan(100);
-      expect(stage.y).toBeGreaterThanOrEqual(top + 100);
-      const buttonTop = await page
-        .locator('.stage')
-        .evaluate((el) => getComputedStyle(el).getPropertyValue('--stage-button-top'));
-      expect(buttonTop).not.toContain('100px');
-    } else {
-      expect(barPad).toBe(104);
-      expect(stage.y).toBe(scene.y);
-    }
-    expect(dock.y).toBeGreaterThanOrEqual(stage.y);
-    expect(dock.y + dock.height).toBeLessThanOrEqual(scene.y + scene.height);
-    await page.locator('.prose .bar [aria-expanded]').click();
-    await expect(page.locator('.drawer.open')).toBeVisible();
-    const drawer = await box(page, '.drawer.open');
-    expect(drawer.y).toBeGreaterThanOrEqual(top + 100);
-    if (stacked) expect(drawer.y + drawer.height).toBeLessThanOrEqual(scene.y + scene.height);
-    else expect(drawer.y).toBe(top + 162);
+    expect(dock.y).toBeGreaterThanOrEqual(frame.y + 100);
+    expect(dock.y + dock.height).toBeLessThanOrEqual(frame.y + frame.height - 120);
     expect(errors).toEqual([]);
   });
 }
@@ -310,7 +320,7 @@ test('fullscreen phone landscape with host insets: the dock collapses to one row
   await expect(more).toBeVisible();
   await expect(page.locator('.dock-slot .dock-extra')).toBeHidden();
   const dock = await box(page, '.dock-slot');
-  expect(dock.width).toBeLessThanOrEqual(459);
+  expect(dock.width).toBe(frame.width - 20);
   expect(dock.y).toBeGreaterThanOrEqual(frame.y + 60);
   expect(dock.y + dock.height).toBe(frame.y + frame.height - 120);
   await more.click();
@@ -328,7 +338,7 @@ test.describe('real embed (dist): the site dock and gauge in the slots', () => {
     page,
   }) => {
     test.setTimeout(60_000);
-    await page.setViewportSize({ width: 840, height: 1000 });
+    await page.setViewportSize({ width: 1200, height: 1000 });
     const { errors } = await open(page, 'slug=black-hole&real=1');
     await expect(page.locator('.wmit.st-ready')).toBeVisible({ timeout: 30_000 });
     const dock = page.locator('.dock-slot[data-embed-ui] [data-dock]');

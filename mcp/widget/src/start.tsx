@@ -2,6 +2,7 @@ import { App } from '@modelcontextprotocol/ext-apps';
 import { render } from 'preact';
 import type { WidgetStartOptions } from '../../shared/loader.ts';
 import { createAppHost } from './bridge.ts';
+import { fullscreenDockCss } from './fullscreenDock.ts';
 import { bundledPacks } from './i18n/bundled.ts';
 import { InboxTransport } from './inbox.ts';
 import { hasWebGL2, urlLoader } from './scene.ts';
@@ -14,7 +15,7 @@ function addStyles(doc: Document): void {
   if (doc.head.querySelector(`style[${STYLE_ATTRIBUTE}]`)) return;
   const style = doc.createElement('style');
   style.setAttribute(STYLE_ATTRIBUTE, '');
-  style.textContent = styles;
+  style.textContent = `${styles}\n${fullscreenDockCss()}`;
   doc.head.append(style);
 }
 
