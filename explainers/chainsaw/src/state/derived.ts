@@ -10,6 +10,7 @@ import {
   HALF_TURN_DEG,
   PULL_CRANK_DEG_PER_S,
   READY_POSE,
+  THROTTLE_PRESETS,
   chainSpeedMs,
   clutchOf,
   crankcasePressure,
@@ -60,6 +61,7 @@ export interface LiveReading {
 }
 
 const NOT_KICKING = -1;
+const RUNNING: EngineStateId = 'running';
 
 const FIRING: ReadonlySet<EngineStateId> = new Set<EngineStateId>(['fastIdle', 'running']);
 
@@ -102,6 +104,10 @@ export function isFiring(engine: EngineStateId): boolean {
 
 export function startPoseOf(source: StartSource): Readonly<StartPose> {
   return source.starting ? startPose(source.startSeconds) : READY_POSE;
+}
+
+export function revvedUp(source: Pick<ChainsawState, 'engine' | 'throttle'>): boolean {
+  return source.engine === RUNNING && source.throttle > THROTTLE_PRESETS.idle;
 }
 
 export function startDisplayOf(source: StartSource): StartDisplayId {

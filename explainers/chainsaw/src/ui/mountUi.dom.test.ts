@@ -129,5 +129,12 @@ describe('chapter widgets', () => {
     expect(readout('engineState')).toBe(readouts.engineState.running);
     expect(readout('brakeState')).toBe(chapters.kickback.brakeState.on);
     expect(pressed('start', 'cold')).toBe('false');
+    click('throttle', 'half');
+    const half = fill(units.rpm, { value: '6,300' });
+    expect(readout('startStep')).toBe(half);
+    expect(readout('engineState')).toBe(half);
+    click('throttle', 'idle');
+    expect(readout('startStep')).toBe(chapters.starting.steps.done);
+    expect(readout('engineState')).toBe(readouts.engineState.running);
   });
 });
