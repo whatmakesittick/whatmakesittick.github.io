@@ -4,7 +4,7 @@
     "eyebrow": "Motorgeräte",
     "tagline": "Eine Kurbelumdrehung in Zeitlupe: wie ein Funke, eine kreisende Kupplung und eine Kette aus scharfen Zähnen Kraftstoff in Holzspäne verwandeln.",
     "description": "Eine Kettensäge in 3D, Umdrehung für Umdrehung: Zweitaktmotor, Kraftstoff, die Kupplung, die die Kette im Leerlauf stoppt, Schneidezähne und Kettenbremse.",
-    "summary": "Die ganze Säge, der Zweitaktmotor, Kraftstoff und Vergaser, die Kupplung, die Sägekette sowie Rückschlag und Kettenbremse.",
+    "summary": "Die ganze Säge, der Zweitaktmotor, Kraftstoff und Vergaser, das Starten, die Kupplung, die Sägekette sowie Rückschlag und Kettenbremse.",
     "socialAlt": "Eine orangefarbene Benzin-Kettensäge, deren Schiene über einem Holzstamm liegt, daneben der Titel „So funktioniert eine Kettensäge“"
   },
   "stage": {
@@ -53,10 +53,14 @@
     "kickbackOptions": {
       "strong": "Rückschlag zeigen"
     },
+    "startOptions": {
+      "cold": "Kalte Säge starten"
+    },
     "groups": {
       "throttle": "Gas",
       "brake": "Kettenbremse",
-      "kickback": "Rückschlag zeigen"
+      "kickback": "Rückschlag zeigen",
+      "start": "Säge starten"
     },
     "views": {
       "cutaway": {
@@ -90,6 +94,12 @@
       "open": "Offen",
       "driving": "Greift",
       "slipping": "Rutscht"
+    },
+    "engineState": {
+      "stopped": "Aus",
+      "cranking": "Wird angeworfen",
+      "fastIdle": "Startgas",
+      "running": "Leerlauf"
     }
   },
   "units": {
@@ -132,6 +142,30 @@
         "drawing": "Saugt Gemisch an",
         "squeezing": "Drückt es zu den Überströmkanälen"
       }
+    },
+    "starting": {
+      "step": "Jetzt",
+      "steps": {
+        "ready": "Kalt und aus",
+        "brake": "Kettenbremse an",
+        "choke": "Choke an",
+        "decompression": "Dekompressionsventil offen",
+        "primer": "Kraftstoffhandpumpe gedrückt",
+        "firstPull": "Erster Zug",
+        "pop": "Ein Plopp: Er zündet einmal",
+        "chokeOff": "Choke aus",
+        "secondPull": "Zweiter Zug",
+        "fastIdle": "Läuft mit Startgas, Bremse an",
+        "idle": "Kurz Gas gegeben, Leerlauf",
+        "done": "Leerlauf. Jetzt die Bremse lösen."
+      },
+      "engine": "Motor",
+      "primer": "Kraftstoffhandpumpe",
+      "primerValue": "etwa 6-mal drücken, bei manchen Sägen mindestens 10-mal",
+      "coilGap": "Abstand zwischen Magnet und Zündspule",
+      "coilGapValue": "0,25 mm",
+      "distance": "Nicht dort starten, wo Sie getankt haben",
+      "distanceValue": "mindestens 3 m Abstand"
     },
     "clutch": {
       "throttle": "Gas",
@@ -182,7 +216,7 @@
     "throttleTrigger": "Gashebel",
     "frontHandle": "Vorderer Handgriff",
     "handGuard": "Vorderer Handschutz",
-    "starter": "Seilzugstarter",
+    "starter": "Startergehäuse",
     "sparkPlug": "Zündkerze",
     "cylinder": "Zylinder",
     "piston": "Kolben",
@@ -217,7 +251,18 @@
     "exhaustGas": "Verbranntes Gas",
     "oilFlow": "Kettenöl",
     "log": "Holzstamm",
-    "chips": "Holzspäne"
+    "chips": "Holzspäne",
+    "fuelCap": "Tankdeckel",
+    "oilCap": "Kettenöldeckel",
+    "starterGrip": "Anwerfgriff",
+    "starterRope": "Anwerfseil",
+    "starterPulley": "Seilrolle",
+    "pawls": "Klinken",
+    "flywheel": "Schwungrad und Lüfter",
+    "ignitionCoil": "Zündspule",
+    "primerBulb": "Kraftstoffhandpumpe",
+    "chokeLever": "Choke- und Stoppschalter",
+    "decompressionValve": "Dekompressionsventil"
   },
   "sections": {
     "saw": {
@@ -242,11 +287,19 @@
       "p3": "Eine Säge halten Sie in jedem Winkel, sogar auf der Seite. Viele Motoren dosieren ihren Kraftstoff mit einem Schwimmer in einer kleinen Kammer. Das klappt aber nur, wenn der Motor aufrecht steht. Der Vergaser einer Säge nutzt stattdessen eine <strong>Membran</strong>, eine dünne, biegsame Scheibe. Eine kleine Pumpe versorgt sie mit Kraftstoff. Angetrieben wird die Pumpe vom Kurbelgehäuse selbst. Bei jeder Umdrehung steigt und fällt dort der Druck. Die <strong>Impulsleitung</strong> trägt diesen Takt zur Pumpe. Darum läuft der Motor in jeder Lage weiter.",
       "p4": "Ein Zweitakter hat keine Ölwanne unter der Kurbelwelle. Sein Öl reist stattdessen mit dem Kraftstoff. Sie mischen Zweitaktöl im Verhältnis 50 zu 1 ins Benzin: 100 ml Öl auf 5 Liter Benzin. Auf seinem Weg durch den Motor hält das Öl die beweglichen Teile geschmeidig. Allerdings hat nicht jede Säge einen Vergaser. Manche Profisägen haben stattdessen eine elektronische Einspritzung."
     },
+    "starting": {
+      "title": "Den Motor wecken",
+      "p1": "Um eine Säge zu starten, drehen Sie ihren Motor von Hand, bis er zündet. Stellen Sie die Säge auf den Boden, mindestens 3 m von der Stelle entfernt, an der Sie getankt haben. Beide Tanks haben ihren Deckel unten auf der linken Seite: hinten den <strong>Tankdeckel</strong> für den Kraftstoff, vorn den <strong>Kettenöldeckel</strong>. Halten Sie den vorderen Handgriff mit der linken Hand und stellen Sie den rechten Fuß in den hinteren Handgriff. Dann legen Sie die Kettenbremse ein, und zwar jedes Mal: Drücken Sie den <strong>vorderen Handschutz</strong> nach vorn. Die Startstellung hält das Gas so weit offen, dass die Kupplung greift. Ohne Bremse würde die Kette also laufen.",
+      "p2": "Ein kalter Motor braucht Hilfe. Der <strong>Choke- und Stoppschalter</strong> schließt den Choke und hält das Gas ein wenig offen. Größere Sägen haben außerdem ein <strong>Dekompressionsventil</strong>. Drücken Sie es hinein, lässt es etwas Druck aus dem Zylinder entweichen. So lässt sich das Seil leichter ziehen. Sobald der Motor zündet, schließt es von selbst. Danach drücken Sie die <strong>Kraftstoffhandpumpe</strong> etwa 6-mal, bei manchen Sägen mindestens 10-mal. Sie spritzt keinen Kraftstoff in den Zylinder. Sie drückt Luft aus der Kraftstoffleitung und zieht Kraftstoff bis zum Vergaser hoch.",
+      "p3": "Nehmen Sie jetzt den <strong>Anwerfgriff</strong>. Sein <strong>Anwerfseil</strong> ist auf eine <strong>Seilrolle</strong> gewickelt. Kleine Haken, die <strong>Klinken</strong>, kuppeln die Seilrolle mit dem <strong>Schwungrad</strong>, dem Rad am Ende der Kurbelwelle. Ziehen Sie langsam, bis Sie spüren, dass sie greifen, dann ziehen Sie zügig durch. Jeder Zug dreht die Kurbelwelle ein paar Mal. Wickeln Sie das Seil nie um die Hand, und ziehen Sie es nie bis zum Anschlag heraus. Lassen Sie es auch nicht zurückschnellen: Führen Sie es zurück, während eine Feder es aufwickelt. Und werfen Sie eine Säge nie aus der Hand an, indem Sie sie beim Ziehen von sich wegstoßen.",
+      "p4": "Das Schwungrad dreht sich nicht nur. Seine Schaufeln sind der Lüfter, der den Motor kühlt. Magnete darin streichen an der <strong>Zündspule</strong> vorbei, nur 0,25 mm entfernt, und erzeugen so den Funken. Darum braucht die Säge keine Batterie. Wählen Sie „Kalte Säge starten“, um einen ganzen Start zu sehen. Der erste Zug endet mit einem Plopp: Der Motor zündet einmal und geht wieder aus. Dieser Plopp ist Ihr Zeichen, den Choke auszuschalten, denn eine Säge läuft nie mit vollem Choke. Ziehen Sie nach dem Plopp mit vollem Choke weiter, säuft der Motor ab: Er bekommt zu viel Kraftstoff.",
+      "p5": "Beim zweiten Zug springt der Motor mit Startgas an, die Bremse ist noch eingelegt. Geben Sie kurz Gas, dann fällt der Motor in den Leerlauf. Erst jetzt lösen Sie die Bremse. Dreht sich die Kette im Leerlauf trotzdem, muss die Säge eingestellt werden. Das Modell zeichnet den Start nach, statt ihn genau zu takten: Der Zug läuft in einem Tempo, dem Sie folgen können, und die Zeitlupe beginnt erst, wenn der Motor läuft. Die Hersteller nennen keine Drehzahl beim Anwerfen oder mit Startgas. Darum zeigt die Anzeige dort Worte statt Zahlen. „Schnittbild (C)“ nimmt das Startergehäuse ab, und den Spalt an der Zündspule zeichnet das Modell breiter als in Wirklichkeit, damit Sie ihn sehen."
+    },
     "clutch": {
       "title": "Warum die Kette im Leerlauf steht",
       "p1": "Zwischen Kurbelwelle und Kette sitzt eine <strong>Fliehkraftkupplung</strong>, eine Kupplung, die durch Drehen greift. Ihre Gewichte, die <strong>Kupplungsbacken</strong>, drehen sich mit der Kurbelwelle. Federn halten sie innen fest. Um sie herum liegt eine Glocke aus Stahl, die <strong>Kupplungstrommel</strong>. Die Trommel trägt das <strong>Kettenrad</strong>, das Zahnrad, das die Kette antreibt. Dreht der Motor schneller, schleudert die Drehung die Backen nach außen gegen die Trommel. Durch die Reibung dreht sich die Trommel dann mit.",
       "p2": "Im Leerlauf, bei etwa 2.700 U/min, sind die Federn stärker, und die Backen bleiben innen. Die Trommel steht still, also bewegt sich auch die Kette nicht. Genau so soll es sein: Im Leerlauf darf die Kette nicht laufen. Bei dieser Säge greifen die Backen ab 3.700 U/min. Ziehen Sie den Gasregler langsam über diesen Punkt und sehen Sie zu, wie die Kette anläuft. Im Modell greift die Kupplung sofort voll, sobald der Motor 3.700 U/min überschreitet. Die Kette springt dann direkt auf etwa 8 m/s. Eine echte Kupplung rutscht einen Moment lang, während die Backen zupacken.",
-      "p3": "Das Kettenrad hat 7 Zähne, und jeder schiebt die Kette um zwei Teilungen weiter. Eine Teilung ist der Abstand von einem Niet der Kette zum nächsten. Eine Umdrehung bewegt die Kette also um etwa 133 mm. Bei 9.900 U/min sind das 22 Meter pro Sekunde (m/s), etwa 79 km/h. Bei dieser Drehzahl bringt der Motor seine volle Leistung. Beim Sägen arbeitet er nah an diesem Wert. Ohne Holz kann eine Säge noch schneller drehen, bis zu einer eingebauten Grenze von 12.500 bis 14.000 U/min.",
+      "p3": "Das Kettenrad hat 7 Zähne, und jeder schiebt die Kette um zwei Teilungen weiter. Eine Teilung ist der Abstand von einem Niet der Kette zum nächsten. Eine Umdrehung bewegt die Kette also um etwa 133 mm. Bei 9.900 U/min ergibt das rechnerisch 22 Meter pro Sekunde (m/s), etwa 79 km/h. Der Hersteller selbst nennt für eine Säge wie diese etwa 21 m/s. Bei dieser Drehzahl bringt der Motor seine volle Leistung. Beim Sägen arbeitet er nah an diesem Wert. Ohne Holz kann eine Säge noch schneller drehen, bis zu einer eingebauten Grenze von 12.500 bis 14.000 U/min.",
       "p4": "Sie starten eine Säge mit leicht geöffnetem Gas. Das reicht schon, damit die Kupplung greift. Legen Sie deshalb vor dem Start die Kettenbremse ein. Wird die Kette festgehalten, während der Motor hochdreht, rutscht die Kupplung und wird sehr heiß. Die <strong>Ölpumpe</strong> schickt nur Öl zur Schiene, solange die Kette läuft. Im Leerlauf fließt kein Öl."
     },
     "chain": {
@@ -254,7 +307,7 @@
       "p1": "Eine Sägekette besteht aus drei Arten von Teilen. <strong>Treibglieder</strong> ragen nach unten in eine Nut der Schiene, und die Zähne des Kettenrads schieben sie voran. <strong>Schneidezähne</strong> sind die eigentlichen Zähne, abwechselnd nach links und nach rechts geneigt. Kleine Platten, die Verbindungsglieder, verbinden sie. Niete halten alles zusammen.",
       "p2": "Jeder Schneidezahn hat ein flaches Dach und eine Seitenwand. Wo beide sich treffen, sitzt eine scharfe Ecke, die das Holz schneidet. Direkt vor jedem Schneidezahn steht ein kleiner Höcker, der <strong>Tiefenbegrenzer</strong>. Er liegt 0,65 mm tiefer als das Dach des Zahns. Dieser Abstand bestimmt, wie dick ein Span werden kann. Feilen Sie die Tiefenbegrenzer zu weit herunter, beißen die Zähne zu tief ein. Dann wird ein Rückschlag wahrscheinlicher.",
       "p3": "Die Größe einer Kette ist ihre <strong>Teilung</strong>. Um sie zu messen, nehmen Sie den Abstand über drei Niete in einer Reihe und halbieren ihn. Diese Kette hat eine Teilung von 3/8 Zoll, also 9,525 mm. Eine Kette wie diese hat auf einer 40-cm-Schiene 55 Treibglieder und ist etwa 1,05 m lang. Sie trägt etwa 27 Schneidezähne, einen auf je zwei Treibglieder.",
-      "p4": "Bei 22 m/s läuft die Kette etwa 21-mal pro Sekunde um die Schiene. So ziehen jede Sekunde etwa 570 Schneidezähne an einem Punkt vorbei, und jeder hebt einen Span ab. Wählen Sie „Leerlauf“, „Halbgas“ oder „Vollgas“ zum Vergleich. Im Schnitt läuft die Kette unter der Schiene von der <strong>Schienenspitze</strong> zurück zur Säge. Darum fliegen die Späne hinter dem Schnitt heraus.",
+      "p4": "Bei 9.900 U/min läuft die Kette mit 22 m/s, also etwa 21-mal pro Sekunde um die Schiene. So ziehen jede Sekunde etwa 570 Schneidezähne an einem Punkt vorbei, und jeder hebt einen Span ab. Wählen Sie „Leerlauf“, „Halbgas“ oder „Vollgas“ zum Vergleich. Im Schnitt läuft die Kette unter der Schiene von der <strong>Schienenspitze</strong> zurück zur Säge. Darum fliegen die Späne hinter dem Schnitt heraus.",
       "p5": "Die ganze Zeit gleitet die Kette mit voller Geschwindigkeit über die Stahlschiene. Ohne Öl würde die Reibung die Schiene schnell glühend heiß machen. Darum tropft die Ölpumpe <strong>Kettenöl</strong> auf die Kette, und die Kette trägt es rund um die Schiene. Bei einer kleinen Stihl-Säge ist das Kettenöl etwa zur selben Zeit leer wie der Kraftstoff. So können Sie beide Tanks zusammen auffüllen."
     },
     "kickback": {
