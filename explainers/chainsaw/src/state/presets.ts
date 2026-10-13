@@ -57,9 +57,6 @@ const STARTING_LABELS: readonly PartId[] = [
   'primerBulb',
   'chokeLever',
   'decompressionValve',
-  'handGuard',
-  'fuelCap',
-  'oilCap',
 ];
 
 const STARTING_CONTEXT: readonly PartId[] = [
@@ -68,6 +65,9 @@ const STARTING_CONTEXT: readonly PartId[] = [
   'starterRope',
   'sparkPlug',
   'chainBrakeBand',
+  'handGuard',
+  'fuelCap',
+  'oilCap',
 ];
 
 export const PRESETS: Record<PresetId, Preset> = {
