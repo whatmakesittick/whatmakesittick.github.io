@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<ChainsawStoreState>({
-  id: 'chainsaw',
   timeline: CHAINSAW_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

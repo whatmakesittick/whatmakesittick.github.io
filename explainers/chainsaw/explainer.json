@@ -1,6 +1,7 @@
 {
   "slug": "chainsaw",
   "tags": ["tools", "engines", "mechanics"],
+  "topic": "chainsaw",
   "cover": "cover.webp",
   "entry": "src/index.ts",
   "chapters": "chapters.html",
