@@ -12,6 +12,12 @@ import {
   legacyEmbedFiles,
   renderEmbedEntry,
 } from './embed.ts';
+import {
+  EMBED_FONTS,
+  STABLE_FONT_DIRECTORY,
+  stableFontPath,
+  type EmbedFont,
+} from '../src/core/embed/fontFiles.ts';
 import { EMBED_API_VERSION } from '../src/core/embed/manifest.ts';
 import type { EmbedManifest } from '../src/core/embed/manifest.ts';
 import { loadExplainers } from './manifest.ts';
@@ -38,6 +44,9 @@ const legacyPaths = [
   `${EMBED_DIRECTORY}/fonts/inter-latin-wght-normal.woff2`,
   `${EMBED_DIRECTORY}/fonts/jetbrains-mono-latin-400-normal.woff2`,
   `${EMBED_DIRECTORY}/fonts/jetbrains-mono-latin-500-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/inter-cyrillic-wght-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/jetbrains-mono-cyrillic-400-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/jetbrains-mono-cyrillic-500-normal.woff2`,
 ];
 
 describe('legacyEmbedFiles', () => {
@@ -45,7 +54,14 @@ describe('legacyEmbedFiles', () => {
     const files = legacyEmbedFiles(slugs.map(explainer), (specifier) => `/modules/${specifier}`);
     expect(files.map(({ fileName }) => fileName)).toEqual(legacyPaths);
     expect(files[0]?.source).toBe(join(root, 'explainers', 'engine', 'public', 'cover.webp'));
-    expect(files.at(-1)?.source).toBe(`/modules/${LEGACY_FONTS[2]}`);
+    expect(files.at(-1)?.source).toBe(`/modules/${LEGACY_FONTS.at(-1)}`);
+  });
+
+  it('puts the fonts where the embed looks for them when a hashed file is gone', () => {
+    expect(`/${EMBED_DIRECTORY}/fonts/`).toBe(STABLE_FONT_DIRECTORY);
+    for (const font of Object.keys(EMBED_FONTS) as EmbedFont[]) {
+      expect(legacyPaths).toContain(stableFontPath(font).slice(1));
+    }
   });
 });
 
