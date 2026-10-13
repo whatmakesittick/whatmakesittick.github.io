@@ -294,6 +294,28 @@ test('fullscreen keys: X toggles the display mode and Escape leaves it, as on th
   expect(errors).toEqual([]);
 });
 
+test('arrow keys: fullscreen hands them to the embed, inline binds none', async ({ page }) => {
+  const { errors, logs } = await open(page, 'slug=mri-scanner&chapter=magnet');
+  await expect(page.locator('.wmit.is-inline.st-ready')).toBeVisible();
+  const title = page.locator('.a-chapter h3');
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowLeft');
+  await expect(title).toHaveText('A magnet that never switches off');
+  expect(logs.filter((l) => l.startsWith('[HOST] ui/update-model-context'))).toEqual([]);
+
+  await page.keyboard.press('x');
+  await expect(page.locator('.wmit.is-fs')).toBeVisible();
+  await page.keyboard.press(' ');
+  const scrubber = page.locator('.dock-slot [data-control="scrubber"]');
+  const at = Number(await scrubber.inputValue());
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(async () => Number(await scrubber.inputValue())).toBeGreaterThan(at);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.wmit.is-inline')).toBeVisible();
+  await expect(title).toHaveText('A magnet that never switches off');
+  expect(errors).toEqual([]);
+});
+
 for (const [width, height] of [
   [384, 854],
   [1010, 723],
@@ -410,6 +432,39 @@ test.describe('real embed (dist): the site dock and gauge in the slots', () => {
       await page.mouse.up();
       await expect(toggle).toHaveAttribute('aria-pressed', before === 'true' ? 'false' : 'true');
     }
+    expect(errors).toEqual([]);
+  });
+
+  test('engine fullscreen: the gauge has the cycle dial and the keys are the site keys', async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const { errors } = await open(page, 'slug=engine&real=1&mode=fullscreen');
+    await expect(page.locator('.wmit.is-fs.st-ready')).toBeVisible({ timeout: 30_000 });
+    const gauge = page.locator('.gauge-slot [data-gauge]');
+    await expect(gauge.locator('.gauge-dial .dial')).toBeVisible();
+    await expect(gauge.locator('.readout').first()).toBeVisible();
+    await expect(page.locator('[data-stage]')).not.toHaveAttribute('data-gauge-clash');
+    const g = await box(page, '.gauge-slot [data-gauge]');
+    const d = await box(page, '.dock-slot [data-dock]');
+    expect(g.y + g.height).toBeLessThanOrEqual(d.y);
+    const needle = () => gauge.locator('.dial-needle').getAttribute('transform');
+    const scrubber = page.locator('.dock-slot [data-control="scrubber"]');
+    const at = Number(await scrubber.inputValue());
+    const before = await needle();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(async () => Number(await scrubber.inputValue())).toBeGreaterThan(at);
+    expect(await needle()).not.toBe(before);
+    const phases = page.locator('.dock-slot [data-phase-buttons] button');
+    await page.keyboard.press('3');
+    await expect(phases.nth(2)).toHaveAttribute('aria-pressed', 'true');
+    await page.keyboard.press('Shift+ArrowLeft');
+    await expect(phases.nth(1)).toHaveAttribute('aria-pressed', 'true');
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(gauge).toBeHidden();
     expect(errors).toEqual([]);
   });
 

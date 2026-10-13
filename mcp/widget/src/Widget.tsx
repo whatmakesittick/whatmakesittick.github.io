@@ -113,6 +113,11 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     setView: touched((id: string, on: boolean) => ctrlRef.current?.setView(id, on)),
     setChoice: touched((id: string, value: string) => ctrlRef.current?.setChoice(id, value)),
     resetCamera: () => ctrlRef.current?.resetCamera(),
+    handleKey(event) {
+      const handled = ctrlRef.current?.handleKey?.(event) ?? false;
+      if (handled) userChanged.current = true;
+      return handled;
+    },
     openSite: () => slug && void host.openLink(explainerUrl(slug)),
     openCatalogue,
     browse: refresh,

@@ -24,6 +24,8 @@ const PHASES: [string, string, number, string][] = [
   ['recover', 'Recover', 36, '#8b929c'],
 ];
 
+const ARROW_STEPS: Readonly<Record<string, number>> = { ArrowLeft: -40, ArrowRight: 40 };
+
 const ICONS = {
   cutaway:
     '<rect x="3.5" y="5" width="17" height="14" rx="7"/><circle cx="12" cy="12" r="3.2"/><path d="M12 5v4M12 15v4"/>',
@@ -333,6 +335,13 @@ export function mockModule(slug: string, opts: MockOptions): EmbedModule {
         setView: (id, on) => set({ view: { ...state.view, [id]: on } }),
         setChoice: (id, value) => set({ choices: { ...state.choices, [id]: value } }),
         resetCamera: () => {},
+        handleKey(event) {
+          const dir = ARROW_STEPS[event.key];
+          if (dir === undefined) return false;
+          event.preventDefault();
+          set({ phase: Math.min(info.cycle * 0.9999, Math.max(0, state.phase + dir)) });
+          return true;
+        },
         dispose() {
           cancelAnimationFrame(raf);
           listeners.clear();

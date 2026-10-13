@@ -23,12 +23,8 @@ export function useKeyboard(
         e.preventDefault();
         return;
       }
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-        a.step(e.key === 'ArrowLeft' ? -1 : 1);
-        e.preventDefault();
-        return;
-      }
       if (!r || !i) return;
+      if (st?.expanded && a.handleKey(e)) return;
       if (e.key === ' ' && !onButton) {
         a.togglePlay();
         e.preventDefault();

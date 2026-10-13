@@ -13,6 +13,7 @@ import type { EmbedUiMounted, EmbedUiSlots } from './contract';
 
 const LANGUAGE_SELECT = '[data-language-select]';
 const PHASE_MIN_WIDTH = '--phase-min-width';
+const GAUGE_SELECTOR = `[${EMBED_DOM.gaugeAttr}]`;
 
 export interface EmbedControls {
   mounted: EmbedUiMounted;
@@ -74,6 +75,17 @@ export function fitPhaseButtons(dock: HTMLElement): Disposer {
   return () => observer.disconnect();
 }
 
+function mountGauge<S extends Playback>(
+  root: HTMLElement,
+  store: ExplainerStore<S>,
+  explainer: Explainer<S>,
+): Disposer {
+  const unmountReadouts = mountReadouts(root, store, explainer.readouts);
+  const gauge = root.querySelector<HTMLElement>(GAUGE_SELECTOR);
+  const unmountPanel = gauge ? explainer.mountGauge?.(gauge, store) : undefined;
+  return disposeAll([unmountPanel ?? (() => {}), unmountReadouts]);
+}
+
 function overlaps(box: DOMRect, rect: DOMRect | undefined): rect is DOMRect {
   return (
     rect !== undefined &&
@@ -128,14 +140,12 @@ export function mountEmbedControls<S extends Playback>(
     mountDock(root, store, explainer),
   );
   const unmountGauge =
-    explainer.readouts.length > 0
-      ? mountInto(slots.gauge, gaugeMarkup, (root) =>
-          mountReadouts(root, store, explainer.readouts),
-        )
+    explainer.readouts.length > 0 || explainer.mountGauge
+      ? mountInto(slots.gauge, gaugeMarkup, (root) => mountGauge(root, store, explainer))
       : undefined;
   const dock = unmountDock ? (slots.dock?.querySelector<HTMLElement>('[data-dock]') ?? null) : null;
   const gauge = unmountGauge
-    ? (slots.gauge?.querySelector<HTMLElement>('[data-gauge]') ?? null)
+    ? (slots.gauge?.querySelector<HTMLElement>(GAUGE_SELECTOR) ?? null)
     : null;
   const disposers: Disposer[] = [];
   if (dock) disposers.push(fitPhaseButtons(dock));

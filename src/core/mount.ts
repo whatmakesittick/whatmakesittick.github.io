@@ -20,6 +20,7 @@ import { stageShortcuts } from './ui/stageShortcuts';
 
 const SITE_NAME_KEY = 'catalogue.title';
 const SCENE_SELECTOR = '#scene';
+const GAUGE_SELECTOR = '[data-gauge]';
 
 function mountScene<S extends Playback>(
   root: Document,
@@ -49,6 +50,7 @@ export async function mountExplainer<S extends Playback>(
   respectReducedMotion(store);
   mountDock(document, store, explainer);
   mountReadouts(document, store, explainer.readouts);
+  const unmountGauge = explainer.mountGauge?.(requireElement(document, GAUGE_SELECTOR), store);
   mountLanguage(document, languages);
   mountSiteLinks(document);
   mountFooter(document, SITE_NAME_KEY);
@@ -63,5 +65,6 @@ export async function mountExplainer<S extends Playback>(
     unmountScene();
     unmountKeyboard();
     stage.dispose();
+    unmountGauge?.();
   };
 }

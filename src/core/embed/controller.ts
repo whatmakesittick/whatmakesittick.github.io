@@ -2,6 +2,7 @@ import { isLooping } from '../explainer';
 import type { Explainer, ExplainerStore, Playback } from '../explainer';
 import { currentLanguage, t } from '../i18n';
 import { clamp } from '../math';
+import { createKeyHandler } from '../ui/keyboard';
 import type {
   EmbedChapterOutline,
   EmbedController,
@@ -85,6 +86,7 @@ export function createController<S extends Playback>(
   let info = described;
   const listeners = new Set<EmbedStateListener>();
   const choices = new Map(explainer.dock.choices.map((choice) => [choice.id, choice]));
+  const keys = createKeyHandler(store, explainer);
   let disposed = false;
   let cached: { source: S; state: EmbedState } | undefined;
 
@@ -161,6 +163,7 @@ export function createController<S extends Playback>(
       act((state) => choice.apply(state, value));
     },
     resetCamera: () => act((state) => state.resetCamera()),
+    handleKey: (event) => !disposed && keys(event),
     dispose() {
       if (disposed) return;
       disposed = true;

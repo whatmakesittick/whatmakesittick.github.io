@@ -137,6 +137,7 @@ export interface Explainer<S extends Playback = Playback> {
   shortcuts?: Readonly<Record<string, (state: S) => void>>;
   scene?: SceneOptions;
   mountScene(shell: SceneShell, store: ExplainerStore<S>): () => void;
+  mountGauge?(gauge: HTMLElement, store: ExplainerStore<S>): () => void;
   mountUi?(root: Document, store: ExplainerStore<S>): void;
 }
 

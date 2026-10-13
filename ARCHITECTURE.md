@@ -181,9 +181,15 @@ interface Explainer<S extends Playback = Playback> {
   shortcuts?: Record<string, (state: S) => void>; // extra keys
   scene?: SceneOptions; // sky, fog, stage and camera limits
   mountScene(shell: SceneShell, store: ExplainerStore<S>): () => void;
+  mountGauge?(gauge: HTMLElement, store: ExplainerStore<S>): () => void; // extra gauge content
   mountUi?(root: Document, store: ExplainerStore<S>): void;
 }
 ```
+
+`mountUi` is for the page only: it reaches into the chapters and the prose column, and the embed
+never calls it. Whatever the explainer adds to the gauge, such as the engine's cycle dial, goes
+through `mountGauge` instead: the page calls it on its `[data-gauge]` and the embed on the gauge it
+mounts in the host's gauge slot, after the readouts, and the function it returns removes it again.
 
 An explainer's presets extend `ScenePreset` from `src/core/scene/presetBinder.ts`,
 which the preset binder reads (see "Scene toolkit").
@@ -208,7 +214,7 @@ the page with, stays when the reader moves on to the next chapter.
 
 Core mounts the shell (`src/core/mount.ts`): the dock (play, scrubber with phase
 bands, status, speed slider, choices, toggles, reset camera, more), the gauge
-readouts, language, footer, `mountUi`, chapter actions, the full screen toggle,
+readouts and `mountGauge`, language, footer, `mountUi`, chapter actions, the full screen toggle,
 the keyboard (space, arrows, digits for phases, R, X and Escape for full screen,
 choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
 safe area: the dock reserves the bottom of the stage and the gauge the right, or
@@ -251,7 +257,9 @@ chapters while the stage is expanded and measure the reading line again after it
 collapses, so expanding never changes the chapter. X toggles it and Escape closes
 it; the keyboard runs these shell keys before the explainer's bindings, and Escape
 passes through when nothing is expanded; these keys are `stageShortcuts` in
-`stageShortcuts.ts`, which the chat widget binds to the host's display mode. The gauge sits under the button, and the
+`stageShortcuts.ts`, which the chat widget binds to the host's display mode. The rest of the keyboard is
+`createKeyHandler` in `keyboard.ts`, which the embed controller also offers as `handleKey`, so the
+widget's fullscreen answers the same keys as the expanded stage. The gauge sits under the button, and the
 button is 44px on a touch screen.
 
 A choice's `shortcut` cycles through its options. Chapter buttons use
@@ -763,7 +771,7 @@ outside the site such as a chat widget. It exports `apiVersion` (1), `slug` and
 controller once the first frame is drawn: `info` (its `language`, title, chapters with their
 paragraphs, phases, speed, toggles and choices, all in that language), `getState` and `subscribe`,
 `setChapter`, `play`, `pause`, `togglePlaying`, `seek`, `setSpeed`, `setView`, `setChoice`,
-`resetCamera`, `setLanguage` and `dispose`, which unmounts the scene, releases the WebGL context
+`resetCamera`, `handleKey`, `setLanguage` and `dispose`, which unmounts the scene, releases the WebGL context
 and removes the styles it added. `/embed/v1/manifest.json` lists the explainers with their covers,
 topics and chapter titles, in English: `embedManifest` takes them from the catalogue entries that
 `vite/catalogue.ts` builds for the MCP server and the chat widget, with the types, `plainText` and
@@ -779,7 +787,9 @@ whose `phaseLabel` is in the new language. Each language is the core and the exp
 merged, and a key a language lacks falls back to English (`fallbackLng`). The English dictionaries
 are in the module; the others are the same dynamic chunks the pages load, fetched only when a
 language is asked for. `setLanguage` is optional in the type because modules built before it
-lack it, so a widget checks for it.
+lack it, so a widget checks for it. `handleKey(event)` runs the page's keyboard on the store (space,
+arrows, digits for phases, R, choice, toggle and explainer shortcuts, never X or Escape) and
+returns whether it used the key; it is optional for the same reason.
 
 `mountEmbed` in `src/core/embed/mount.ts` does what `mountExplainer` does for a page, minus the
 page: `useLanguage` from `src/core/i18n/embedded.ts` sets the core and explainer strings in the
@@ -787,8 +797,8 @@ asked language without detection, the container and the control slots get a matc
 attribute, the store applies the requested chapter before the scene exists, so the camera starts
 there, and the scene host mounts into the given container. A host may pass
 `ui: { dock, gauge }`, two empty elements inside its `[data-stage]`: the embed fills them with the
-`dock` and `gauge` partials, binds them with `mountDock` and `mountReadouts` and drops the language
-select. Their styles are the controls parts of the stylesheet, nested under `[data-embed-ui]`, with
+`dock` and `gauge` partials, binds them with `mountDock`, `mountReadouts` and the explainer's `mountGauge` and drops the
+language select. Their styles are the controls parts of the stylesheet, nested under `[data-embed-ui]`, with
 the phone dock rules keyed to an `embed-dock` container of at most 459px instead of the viewport.
 The scene styles and an explainer's `style.css` are added as `<style data-embed-styles>` elements
 while a scene is mounted. The embed loads the latin Inter and JetBrains Mono files the pages use, and their

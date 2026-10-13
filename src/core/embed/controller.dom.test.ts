@@ -115,6 +115,26 @@ describe('embed controller', () => {
     expect(unmount).toHaveBeenCalledOnce();
   });
 
+  it('handles the site keys until it is disposed', () => {
+    const store = createStore();
+    const controller = createController(
+      describeExplainer('demo', explainer, []),
+      explainer,
+      store,
+      undefined,
+      vi.fn(),
+    );
+    store.getState().pause();
+    const right = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
+    expect(controller.handleKey?.(right)).toBe(true);
+    expect(right.defaultPrevented).toBe(true);
+    expect(store.getState().phase).toBe(timeline.nudge.fine);
+    expect(controller.handleKey?.(new KeyboardEvent('keydown', { key: 'q' }))).toBe(false);
+    controller.dispose();
+    expect(controller.handleKey?.(new KeyboardEvent('keydown', { key: 'ArrowRight' }))).toBe(false);
+    expect(store.getState().phase).toBe(timeline.nudge.fine);
+  });
+
   it('switches language in place and tells its subscribers', async () => {
     const locales = {
       en: () => Promise.resolve(dictionary),
