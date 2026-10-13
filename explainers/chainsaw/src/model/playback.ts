@@ -1,8 +1,7 @@
 import { slowMotionFactor } from '@core/playback';
 import { MAX_POWER_RPM } from './constants';
 import { CYCLE_DEG } from './cycle';
-
-const SECONDS_PER_MINUTE = 60;
+import { SECONDS_PER_MINUTE } from './drive';
 
 export const REAL_TIME_SPEED = 12;
 export const DEFAULT_SPEED = 3;

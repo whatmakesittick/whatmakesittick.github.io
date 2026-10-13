@@ -1,9 +1,9 @@
-import type { AnchorId, Point } from '../ids';
+import { FULL_TURN } from '@core/math';
+import type { AnchorId, PlanePoint, Point } from '../ids';
 import { DRIVE_LINKS, SPROCKET_TEETH } from './constants';
-import { CHAIN_LOOP_MM, DRIVE_LINK_MM, wrapChain } from './drive';
+import { CHAIN_LOOP_MM, DRIVE_LINK_MM, MM_PER_METRE, wrapChain } from './drive';
 import { BAR_PLANE_Z, CRANK_Y, SAW_GEOMETRY } from './scale';
 
-const MM_PER_METRE = 1000;
 const SOLVE_STEPS = 60;
 
 export const SPROCKET_RADIUS =
@@ -11,8 +11,6 @@ export const SPROCKET_RADIUS =
 export const NOSE_RADIUS = 0.0245;
 export const BAR_HEEL_X = 0.045;
 export const BAR_HEEL_HALF_HEIGHT = 0.02717;
-
-const FULL_TURN_RAD = 2 * Math.PI;
 
 interface Shape {
   sprocketLeave: number;
@@ -52,7 +50,7 @@ function shapeFor(noseX: number): Shape {
     climb,
     rail,
     noseArc: 2 * NOSE_RADIUS * noseMeet,
-    sprocketArc: SPROCKET_RADIUS * (FULL_TURN_RAD - 2 * sprocketLeave),
+    sprocketArc: SPROCKET_RADIUS * (FULL_TURN - 2 * sprocketLeave),
   };
 }
 
@@ -82,16 +80,14 @@ export interface LoopPoint {
   angle: number;
 }
 
-type Plane = readonly [x: number, y: number];
-
-function circlePoint(centreX: number, radius: number, normal: number): Plane {
+function circlePoint(centreX: number, radius: number, normal: number): PlanePoint {
   return [centreX + radius * Math.cos(normal), CRANK_Y + radius * Math.sin(normal)];
 }
 
 const SPROCKET_TOP = circlePoint(0, SPROCKET_RADIUS, SHAPE.sprocketLeave);
 const SPROCKET_BOTTOM = circlePoint(0, SPROCKET_RADIUS, -SHAPE.sprocketLeave);
-const HEEL_TOP: Plane = [BAR_HEEL_X, CRANK_Y + BAR_HEEL_HALF_HEIGHT];
-const HEEL_BOTTOM: Plane = [BAR_HEEL_X, CRANK_Y - BAR_HEEL_HALF_HEIGHT];
+const HEEL_TOP: PlanePoint = [BAR_HEEL_X, CRANK_Y + BAR_HEEL_HALF_HEIGHT];
+const HEEL_BOTTOM: PlanePoint = [BAR_HEEL_X, CRANK_Y - BAR_HEEL_HALF_HEIGHT];
 const NOSE_TOP = circlePoint(NOSE_X, NOSE_RADIUS, SHAPE.noseMeet);
 const NOSE_BOTTOM = circlePoint(NOSE_X, NOSE_RADIUS, -SHAPE.noseMeet);
 
@@ -109,7 +105,7 @@ export const CHAIN_PATH = {
   segments: [SHAPE.climb, SHAPE.rail, SHAPE.noseArc, SHAPE.rail, SHAPE.climb, SHAPE.sprocketArc],
 } as const;
 
-function onLine(from: Plane, to: Plane, distance: number): LoopPoint {
+function onLine(from: PlanePoint, to: PlanePoint, distance: number): LoopPoint {
   const angle = Math.atan2(to[1] - from[1], to[0] - from[0]);
   return {
     x: from[0] + distance * Math.cos(angle),
@@ -169,10 +165,6 @@ export const CHAIN_ELEMENTS: readonly ChainElement[] = Array.from(
   { length: DRIVE_LINKS },
   (_, index) => ({ index, offsetMm: index * DRIVE_LINK_MM, kind: kindOf(index) }),
 );
-
-export function elementPosition(element: ChainElement, chainMm: number): LoopPoint {
-  return pointOnLoop(element.offsetMm + chainMm);
-}
 
 const BRANCH_RADIUS = 0.05;
 const BRANCH_TOUCH_RAD = Math.PI / 4;

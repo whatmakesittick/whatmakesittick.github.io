@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { toRadians } from '@core/math';
-import { ENGAGE_RPM, IDLE_RPM, MAX_POWER_RPM, SPROCKET_TEETH } from './constants';
+import { ENGAGE_RPM, IDLE_RPM, MAX_POWER_RPM } from './constants';
 import {
   CHAIN_LOOP_MM,
   CHAIN_MM_PER_TURN,
@@ -105,10 +105,10 @@ describe('chain', () => {
     expect(Math.cos(toRadians(drumDegrees(CHAIN_MM_PER_TURN)))).toBeCloseTo(1, 9);
   });
 
-  it('jumps the drum by whole sprocket teeth when the chain wraps', () => {
-    const jump = drumDegrees(CHAIN_LOOP_MM - 0.001) - drumDegrees(0);
-    const tooth = 360 / SPROCKET_TEETH;
-    expect(Math.abs(jump / tooth - Math.round(jump / tooth))).toBeLessThan(0.001);
+  it('turns the drum smoothly past a full chain loop', () => {
+    const step = 0.001;
+    const turned = drumDegrees(CHAIN_LOOP_MM + step) - drumDegrees(CHAIN_LOOP_MM - step);
+    expect(turned).toBeCloseTo((2 * step * 360) / CHAIN_MM_PER_TURN, 6);
   });
 
   it('oils the bar only while the chain is driven', () => {

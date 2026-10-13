@@ -29,7 +29,7 @@ describe('chain label conveyor', () => {
       const spacing = CONVEYOR_SPACING_MM[part];
       let previous = ridingMm(part, 0, ride);
       let restarts = 0;
-      for (let chainMm = STEP_MM; chainMm <= ride.length * 2; chainMm += STEP_MM) {
+      for (let chainMm = STEP_MM; chainMm <= CHAIN_LOOP_MM + ride.length; chainMm += STEP_MM) {
         const current = ridingMm(part, chainMm, ride);
         const moved = wrapChain(current - previous);
         if (Math.abs(moved - STEP_MM) > 1e-6) {
@@ -45,7 +45,7 @@ describe('chain label conveyor', () => {
         previous = current;
       }
       expect(restarts).toBeGreaterThanOrEqual(1);
-      expect(restarts).toBeLessThanOrEqual(2);
+      expect(restarts).toBeLessThanOrEqual(Math.ceil((CHAIN_LOOP_MM + ride.length) / ride.length));
     });
   });
 });

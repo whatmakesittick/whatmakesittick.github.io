@@ -89,9 +89,3 @@ export function sectorAroundZ(spec: SectorSpec): BufferGeometry {
   geometry.rotateX(Math.PI / 2);
   return geometry;
 }
-
-export function sectorAroundX(spec: SectorSpec): BufferGeometry {
-  const geometry = sector(spec);
-  geometry.rotateZ(-Math.PI / 2);
-  return geometry;
-}

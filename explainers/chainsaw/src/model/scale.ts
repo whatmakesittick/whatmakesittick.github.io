@@ -6,9 +6,6 @@ export interface Bounds {
   max: Point;
 }
 
-export const WORLD_UNITS_PER_METRE = 1;
-export const SUBJECT_SCALE = 1;
-
 export const CRANK_Y = 0.1;
 export const BAR_PLANE_Z = 0.088;
 export const BAR_THICKNESS = 0.005;

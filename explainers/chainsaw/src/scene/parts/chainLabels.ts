@@ -3,13 +3,13 @@ import {
   CHAIN_LOOP_MM,
   CHAIN_PATH,
   DRIVE_LINK_MM,
+  MM_PER_METRE,
   pointOnLoop,
   wrapChain,
 } from '../../model';
 
 export type ConveyorPart = 'driveLinks' | 'cutters' | 'depthGauges';
 
-const MM_PER_METRE = 1000;
 const HALF_LINK_MM = DRIVE_LINK_MM / 2;
 const SCAN_STEP_MM = 0.25;
 const CUTTERS_PER_SIDE_CYCLE = 4;

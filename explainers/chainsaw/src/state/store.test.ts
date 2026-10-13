@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  CHAIN_LOOP_MM,
   CHAIN_MM_PER_TURN,
   GUARD_TRIP_SECONDS,
   IDLE_RPM,
@@ -76,14 +75,14 @@ describe('chainsaw store', () => {
     expect(braked.getState().chainMm).toBe(0);
   });
 
-  it('steps the chain with a scrub, both ways, and wraps it round the loop', () => {
+  it('steps the chain with a scrub, both ways, without wrapping it', () => {
     const store = createChainsawStore({ playing: false });
     store.getState().setPhase(QUARTER_TURN);
     expect(store.getState().chainMm).toBeCloseTo(CHAIN_MM_PER_TURN / 4, 6);
     store.getState().setPhase(0);
     expect(store.getState().chainMm).toBeCloseTo(0, 6);
     store.getState().setPhase(360 - QUARTER_TURN);
-    expect(store.getState().chainMm).toBeCloseTo(CHAIN_LOOP_MM - CHAIN_MM_PER_TURN / 4, 6);
+    expect(store.getState().chainMm).toBeCloseTo(-CHAIN_MM_PER_TURN / 4, 6);
     store.getState().jumpToPhase('power');
     expect(store.getState().chainMm).toBeCloseTo(0, 6);
   });

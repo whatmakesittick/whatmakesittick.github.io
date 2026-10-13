@@ -1,4 +1,5 @@
 import { clamp, smoothstep } from '@core/math';
+import { wrapPhase } from '@core/store';
 import type { ClutchStateId, EngineStateId, ThrottleChoiceId } from '../ids';
 import {
   CUTTERS,
@@ -12,8 +13,8 @@ import {
 } from './constants';
 import { CYCLE_DEG } from './cycle';
 
-const SECONDS_PER_MINUTE = 60;
-const MM_PER_METRE = 1000;
+export const SECONDS_PER_MINUTE = 60;
+export const MM_PER_METRE = 1000;
 const MS_PER_SECOND = 1000;
 const KMH_PER_MS = 3.6;
 
@@ -71,11 +72,11 @@ export function chainTravelMm(crankDeg: number, clutch: ClutchStateId): number {
 }
 
 export function wrapChain(mm: number): number {
-  return ((mm % CHAIN_LOOP_MM) + CHAIN_LOOP_MM) % CHAIN_LOOP_MM;
+  return wrapPhase(mm, CHAIN_LOOP_MM);
 }
 
 export function drumDegrees(chainMm: number): number {
-  return ((wrapChain(chainMm) % CHAIN_MM_PER_TURN) / CHAIN_MM_PER_TURN) * CYCLE_DEG;
+  return (wrapPhase(chainMm, CHAIN_MM_PER_TURN) / CHAIN_MM_PER_TURN) * CYCLE_DEG;
 }
 
 export function turnMs(rpm: number): number {

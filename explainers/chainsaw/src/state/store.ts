@@ -15,7 +15,6 @@ import {
   shortestDelta,
   snapThrottle,
   startPose,
-  wrapChain,
   wrapDegrees,
 } from '../model';
 import { CHAINSAW_TIMELINE } from '../timeline';
@@ -114,7 +113,7 @@ export function engineTurns(state: Pick<ChainsawState, 'engine'>): boolean {
 
 function chainMoved(chainMm: number, crankDeg: number, state: ChainsawState): number {
   const rpm = engineRpm(state.engine, state.throttle);
-  return wrapChain(chainMm + chainTravelMm(crankDeg, clutchOf(rpm, state.brake)));
+  return chainMm + chainTravelMm(crankDeg, clutchOf(rpm, state.brake));
 }
 
 function driveChain(store: ChainsawStore): ChainsawStore {

@@ -29,8 +29,6 @@ export const SPARK_LIGHT = {
 
 export const EASE_SECONDS = 0.35;
 
-export const CUT_PLANE_Z = 0;
-
 export const CYLINDER = {
   bore: 0.025,
   wall: 0.0055,

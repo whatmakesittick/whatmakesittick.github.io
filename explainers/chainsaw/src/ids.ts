@@ -146,10 +146,6 @@ export const CLUTCH_STATE_IDS = ['open', 'driving', 'slipping'] as const;
 
 export type ClutchStateId = (typeof CLUTCH_STATE_IDS)[number];
 
-export const CHOICE_IDS = ['throttle'] as const;
-
-export type ChoiceId = (typeof CHOICE_IDS)[number];
-
 export const CHAPTER_ACTION_IDS = ['throttle', 'brake', 'kickback', 'start'] as const;
 
 export type ChapterActionId = (typeof CHAPTER_ACTION_IDS)[number];

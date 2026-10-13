@@ -1,3 +1,4 @@
+import { wrapPhase } from '@core/store';
 import { clamp, toRadians } from '@core/math';
 import { PHASE_IDS } from '../ids';
 import type { FlowReading, MomentId, PhaseId, PlanePoint, PortId, PortReading } from '../ids';
@@ -36,7 +37,7 @@ export const MOMENTS: Readonly<Record<MomentId, number>> = {
 };
 
 export function wrapDegrees(angle: number): number {
-  return ((angle % CYCLE_DEG) + CYCLE_DEG) % CYCLE_DEG;
+  return wrapPhase(angle, CYCLE_DEG);
 }
 
 export function shortestDelta(from: number, to: number): number {
@@ -57,11 +58,6 @@ export function crankPin(angle: number): PlanePoint {
   const radians = toRadians(angle);
   const { throw: crankThrow } = ENGINE_GEOMETRY;
   return [crankThrow * Math.sin(radians), CRANK_Y + crankThrow * Math.cos(radians)];
-}
-
-export function rodAngle(angle: number): number {
-  const [pinX] = crankPin(angle);
-  return Math.asin(-pinX / ENGINE_GEOMETRY.rod);
 }
 
 function pistonPinY(angle: number): number {
