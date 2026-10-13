@@ -1,0 +1,12 @@
+{
+  "slug": "chainsaw",
+  "tags": ["tools", "engines", "mechanics"],
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "An orange gasoline chainsaw with its bar over a log, beside the title How a chainsaw works"
+  }
+}

@@ -1,0 +1,322 @@
+{
+  "meta": {
+    "title": "Comment fonctionne une tronçonneuse",
+    "eyebrow": "Outillage motorisé",
+    "tagline": "Un tour de vilebrequin, au ralenti : comment une étincelle, un embrayage qui tourne et une boucle de dents tranchantes transforment l’essence en copeaux de bois.",
+    "description": "Une tronçonneuse en 3D, un tour de vilebrequin à la fois : le deux-temps, l’essence, l’embrayage qui arrête la chaîne au ralenti, les gouges et le frein.",
+    "summary": "La tronçonneuse entière, le moteur deux-temps, l’essence et le carburateur, le démarrage, l’embrayage, la chaîne de coupe, puis le rebond et le frein de chaîne.",
+    "socialAlt": "Une tronçonneuse à essence orange, le guide au-dessus d’une bûche, à côté du titre « Comment fonctionne une tronçonneuse »"
+  },
+  "stage": {
+    "label": "Modèle interactif de tronçonneuse",
+    "gauge": "Moteur et chaîne en direct"
+  },
+  "timeline": {
+    "label": "Tour de vilebrequin",
+    "phases": "Aller à un moment du tour",
+    "speed": "Vitesse",
+    "value": "{{share}} %",
+    "during": "À {{share}} % du tour, {{phase}}",
+    "speedValue": "1/{{factor}}",
+    "slower": "{{factor}} fois plus lent qu’en réalité",
+    "phase": {
+      "power": "Temps moteur",
+      "exhaust": "Échappement",
+      "scavenge": "Balayage",
+      "compression": "Compression"
+    },
+    "jump": {
+      "power": "Aller au temps moteur",
+      "exhaust": "Aller à l’ouverture de l’échappement",
+      "scavenge": "Aller au balayage",
+      "compression": "Aller à la compression"
+    },
+    "detail": {
+      "power": "les gaz en combustion poussent le piston vers le bas",
+      "exhaust": "les gaz brûlés s’échappent",
+      "scavenge": "le mélange frais chasse les gaz brûlés",
+      "compression": "le piston comprime le mélange et le carter se remplit"
+    }
+  },
+  "controls": {
+    "label": "Commandes du modèle",
+    "throttle": "Accélérateur",
+    "throttleOptions": {
+      "idle": "Ralenti",
+      "half": "Mi-gaz",
+      "full": "Plein gaz"
+    },
+    "brakeOptions": {
+      "off": "Frein desserré",
+      "on": "Frein serré"
+    },
+    "kickbackOptions": {
+      "strong": "Montrer un rebond"
+    },
+    "startOptions": {
+      "cold": "Démarrer à froid"
+    },
+    "groups": {
+      "throttle": "Accélérateur",
+      "brake": "Frein de chaîne",
+      "kickback": "Montrer un rebond",
+      "start": "Démarrer la tronçonneuse"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Vue en coupe",
+        "short": "Coupe",
+        "hint": "Vue en coupe (C)"
+      },
+      "flow": {
+        "name": "Flux de gaz et d’huile",
+        "short": "Flux",
+        "hint": "Flux de gaz et d’huile (F)"
+      },
+      "zone": {
+        "name": "Zone de rebond",
+        "short": "Zone",
+        "hint": "Zone de rebond (K)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    }
+  },
+  "readouts": {
+    "rpm": "Moteur",
+    "chain": "Chaîne",
+    "clutch": "Embrayage",
+    "phase": "Phase",
+    "clutchState": {
+      "open": "Débrayé",
+      "driving": "Embrayé",
+      "slipping": "Patine"
+    },
+    "engineState": {
+      "stopped": "Arrêté",
+      "cranking": "Lancement",
+      "fastIdle": "Ralenti accéléré",
+      "running": "Au ralenti"
+    }
+  },
+  "units": {
+    "rpm": "{{value}} tr/min",
+    "metresPerSecond": "{{value}} m/s",
+    "speedPair": "{{ms}} m/s, {{kmh}} km/h",
+    "milliseconds": "{{value}} ms",
+    "percent": "{{value}} %",
+    "count": "{{value}}"
+  },
+  "chapters": {
+    "saw": {
+      "throttle": "Accélérateur",
+      "rpm": "Régime moteur",
+      "chain": "Vitesse de la chaîne",
+      "displacement": "Cylindrée",
+      "displacementValue": "70,6 cm³",
+      "power": "Puissance",
+      "powerValue": "4,3 kW",
+      "mass": "Poids",
+      "massValue": "6,6 kg sans guide ni chaîne",
+      "bar": "Guide-chaîne",
+      "barValue": "40 cm"
+    },
+    "engine": {
+      "turn": "Durée d’un tour",
+      "strokes": "Temps moteur par seconde",
+      "now": "Dans le cylindre, en ce moment",
+      "gap": "Écartement des électrodes",
+      "gapValue": "0,5 mm"
+    },
+    "fuel": {
+      "throttle": "Accélérateur",
+      "mix": "Mélange essence-huile",
+      "mixValue": "50 pour 1",
+      "dose": "Dose d’huile",
+      "doseValue": "100 ml pour 5 l",
+      "crankcase": "Le carter, en ce moment",
+      "pressure": {
+        "drawing": "Aspire le mélange",
+        "squeezing": "Pousse le mélange vers les canaux de transfert"
+      }
+    },
+    "starting": {
+      "step": "Maintenant",
+      "steps": {
+        "ready": "Moteur froid, à l’arrêt",
+        "brake": "Frein de chaîne serré",
+        "choke": "Starter mis",
+        "decompression": "Soupape de décompression ouverte",
+        "primer": "Poire d’amorçage pressée",
+        "firstPull": "Premier tirage",
+        "pop": "Un toussotement : une seule explosion",
+        "chokeOff": "Starter coupé",
+        "secondPull": "Deuxième tirage",
+        "fastIdle": "Ralenti accéléré, frein serré",
+        "idle": "Petit coup de gâchette, puis ralenti",
+        "done": "Au ralenti. Desserrez maintenant le frein."
+      },
+      "engine": "Moteur",
+      "primer": "Poire d’amorçage",
+      "primerValue": "environ 6 pressions, au moins 10 sur certains modèles",
+      "coilGap": "Écart entre aimant et bobine",
+      "coilGapValue": "0,25 mm",
+      "distance": "Démarrer loin du lieu de remplissage",
+      "distanceValue": "au moins 3 m"
+    },
+    "clutch": {
+      "throttle": "Accélérateur",
+      "rpm": "Régime moteur",
+      "state": "Embrayage",
+      "chain": "Vitesse de la chaîne",
+      "idle": "Régime de ralenti",
+      "engage": "L’embrayage accroche à",
+      "perTurn": "Avance de la chaîne par tour",
+      "perTurnValue": "{{mm}} mm, {{teeth}} dents × 2 pas",
+      "oil": "Pompe à huile",
+      "oilState": {
+        "pumping": "Lubrifie le guide",
+        "stopped": "À l’arrêt"
+      }
+    },
+    "chain": {
+      "speed": "Vitesse de la chaîne",
+      "cutters": "Gouges qui passent en un point, par seconde",
+      "pitch": "Pas",
+      "pitchValue": "3/8 de pouce, 9,525 mm",
+      "links": "Maillons",
+      "linksValue": "55 maillons entraîneurs, 27 gouges",
+      "length": "Longueur de la chaîne",
+      "lengthValue": "environ 1,05 m",
+      "depth": "Limiteur de profondeur sous la gouge",
+      "depthValue": "0,65 mm"
+    },
+    "kickback": {
+      "brake": "Frein de chaîne",
+      "brakeState": {
+        "off": "Desserré, chaîne libre",
+        "on": "Serré, chaîne bloquée"
+      },
+      "rotation": "Rotation lors du rebond",
+      "rotationValue": "plus de 1 000° par seconde",
+      "reaction": "Temps de réaction d’une personne",
+      "reactionValue": "environ 0,1 à 0,2 s",
+      "stop": "Le frein de chaîne arrête la chaîne",
+      "stopValue": "en une fraction de seconde",
+      "share": "Blessures dues au rebond",
+      "shareValue": "près de 1 sur 4, États-Unis, 1979"
+    }
+  },
+  "parts": {
+    "powerhead": "Capot moteur",
+    "rearHandle": "Poignée arrière",
+    "throttleTrigger": "Gâchette d’accélérateur",
+    "frontHandle": "Poignée avant",
+    "handGuard": "Protège-main avant",
+    "starter": "Couvercle du lanceur",
+    "sparkPlug": "Bougie",
+    "cylinder": "Cylindre",
+    "piston": "Piston",
+    "connectingRod": "Bielle",
+    "crankshaft": "Vilebrequin",
+    "crankcase": "Carter",
+    "exhaustPort": "Lumière d’échappement",
+    "transferPorts": "Canaux de transfert",
+    "intakePort": "Admission",
+    "muffler": "Silencieux",
+    "carburettor": "Carburateur",
+    "throttleValve": "Papillon des gaz",
+    "chokeValve": "Starter",
+    "airFilter": "Filtre à air",
+    "fuelTank": "Réservoir d’essence",
+    "pulseLine": "Tuyau d’impulsion",
+    "clutch": "Masselottes d’embrayage",
+    "clutchDrum": "Cloche d’embrayage",
+    "sprocket": "Pignon",
+    "chainBrakeBand": "Bande de frein",
+    "oilPump": "Pompe à huile",
+    "oilTank": "Réservoir d’huile de chaîne",
+    "bar": "Guide-chaîne",
+    "barNose": "Nez du guide",
+    "chain": "Chaîne de coupe",
+    "cutters": "Gouges",
+    "depthGauges": "Limiteurs de profondeur",
+    "driveLinks": "Maillons entraîneurs",
+    "chainCatcher": "Capteur de chaîne",
+    "kickbackZone": "Zone de rebond",
+    "freshCharge": "Mélange frais",
+    "exhaustGas": "Gaz brûlés",
+    "oilFlow": "Huile de chaîne",
+    "log": "Bûche",
+    "chips": "Copeaux de bois",
+    "fuelCap": "Bouchon d’essence",
+    "oilCap": "Bouchon d’huile de chaîne",
+    "starterGrip": "Poignée du lanceur",
+    "starterRope": "Cordon du lanceur",
+    "starterPulley": "Poulie du lanceur",
+    "pawls": "Cliquets",
+    "flywheel": "Volant et ventilateur",
+    "ignitionCoil": "Bobine d’allumage",
+    "primerBulb": "Poire d’amorçage",
+    "chokeLever": "Manette de starter",
+    "decompressionValve": "Soupape de décompression"
+  },
+  "sections": {
+    "saw": {
+      "title": "Un moteur, une boucle de dents",
+      "p1": "Voici une <strong>tronçonneuse</strong>, un modèle professionnel comme la Husqvarna 572 XP. Son moteur se cache sous le <strong>capot moteur</strong> orange. Devant, une lame plate en acier dépasse de 40 cm : c’est le <strong>guide-chaîne</strong>. Une boucle de dents tranchantes, la <strong>chaîne de coupe</strong>, court tout autour de son bord. Votre main droite tient la <strong>poignée arrière</strong> et presse la <strong>gâchette d’accélérateur</strong>. Votre main gauche tient la <strong>poignée avant</strong>, juste derrière le <strong>protège-main avant</strong>.",
+      "p2": "La taille d’un moteur, c’est sa cylindrée : le volume que balaie son piston, mesuré en centimètres cubes (cm³). Une tronçonneuse de particulier fait environ 30 à 50 cm³ et développe 1,4 à 2,4 kilowatts (kW). Une tronçonneuse professionnelle comme celle-ci fait environ 70 à 80 cm³ et développe 4,3 à 5 kW. Pourtant, elle n’est qu’un peu plus lourde : 6,6 kg sans guide ni chaîne. Les tronçonneuses n’ont pas toujours été aussi légères. En 1929, la tronçonneuse à essence de Stihl pesait 46 kg et se maniait à deux. Ce n’est que vers 1950 que les tronçonneuses à essence sont devenues assez légères pour une seule personne.",
+      "p3": "Cette page suit un tour du <strong>vilebrequin</strong>, l’arbre que le moteur fait tourner. À pleine puissance, il tourne environ 9 900 fois par minute. On note 9 900 tr/min, pour « tours par minute ». Un tour dure donc environ 6 ms, soit six millièmes de seconde. À l’écran, ce ne serait qu’un flou. Le modèle déroule donc le tour 64 à 2 048 fois plus lentement qu’en réalité. Le curseur « Vitesse » permet de régler ce ralentissement.",
+      "p4": "Voici l’histoire d’un tour. Une étincelle jaillit, et les gaz en combustion poussent le piston vers le bas. Le piston fait tourner le vilebrequin, et le vilebrequin entraîne l’embrayage. L’embrayage fait tourner une roue dentée, et cette roue tire la chaîne. Chaque dent de la chaîne arrache un copeau de bois. Faites glisser le curseur de l’accélérateur : la vitesse de la chaîne suit. Ici, le modèle simplifie : le régime suit l’accélérateur de façon linéaire, du ralenti à pleine puissance. Sur une vraie tronçonneuse, le régime monte et descend aussi avec la coupe."
+    },
+    "engine": {
+      "title": "Une étincelle à chaque tour",
+      "p1": "Le moteur est un <strong>deux-temps</strong>. Un temps, c’est un trajet du piston, vers le haut ou vers le bas. Un deux-temps fait tout son travail en deux temps seulement, soit un tour de vilebrequin. La <strong>bougie</strong> produit donc une étincelle à chaque tour.",
+      "p2": "Le <strong>piston</strong> fait deux choses à la fois. Sa face supérieure travaille dans le <strong>cylindre</strong>, où brûle l’essence. Sa face inférieure sert de pompe dans le <strong>carter</strong>, la boîte fermée, en dessous, qui entoure le vilebrequin. Quand le piston monte, le carter s’agrandit et aspire du mélange frais, c’est-à-dire de l’essence et de l’air mêlés. Quand le piston descend, le carter rétrécit et comprime ce mélange.",
+      "p3": "Suivez le tour sur la barre colorée, sous le modèle. Quand le piston approche du haut, l’étincelle enflamme le mélange comprimé. Les gaz en combustion poussent le piston vers le bas. La <strong>bielle</strong> transforme cette poussée en rotation. C’est le temps moteur. En descendant, le piston découvre des ouvertures dans la paroi du cylindre, qu’on appelle des lumières. La <strong>lumière d’échappement</strong> s’ouvre en premier, et les gaz brûlés filent vers le <strong>silencieux</strong>.",
+      "p4": "Un instant plus tard, les <strong>canaux de transfert</strong> s’ouvrent à leur tour. Ce sont des conduits qui montent depuis le carter. Le mélange frais comprimé monte par ces canaux. Il chasse les derniers gaz brûlés par la lumière d’échappement. C’est ce qu’on appelle le <strong>balayage</strong>. En remontant, le piston ferme les lumières et comprime le nouveau mélange. Au même moment, en dessous, le carter aspire le mélange suivant par l’<strong>admission</strong>.",
+      "p5": "À 9 900 tr/min, l’étincelle jaillit 165 fois par seconde. Elle franchit un espace de 0,5 mm entre les deux électrodes de la bougie. Les fabricants ne publient pas le moment exact où s’ouvrent les lumières, ni celui de l’étincelle. Le modèle a donc son propre calage, et la barre indique où vous en êtes dans le tour, pas un angle précis. « Vue en coupe (C) » ouvre le moteur. « Flux de gaz et d’huile (F) » montre où vont les gaz."
+    },
+    "fuel": {
+      "title": "Un moteur qui marche dans toutes les positions",
+      "p1": "La plupart des tronçonneuses mélangent l’essence et l’air dans un <strong>carburateur</strong>. L’air entre par le <strong>filtre à air</strong>, et le carburateur y ajoute une fine pulvérisation d’essence. Le <strong>papillon des gaz</strong> est un petit volet que la gâchette fait pivoter. Il règle la quantité de mélange qui entre dans le moteur. Choisissez « Ralenti », « Mi-gaz » ou « Plein gaz » et regardez le volet s’ouvrir.",
+      "p2": "Par un matin froid, le <strong>starter</strong> ferme une partie de l’arrivée d’air. Le mélange devient plus riche en essence, et le moteur froid démarre plus facilement. Une fois le moteur lancé, vous coupez le starter. L’essence, elle, est stockée dans le <strong>réservoir d’essence</strong>, sous la poignée arrière.",
+      "p3": "Vous tenez une tronçonneuse dans tous les sens, même couchée sur le côté. Beaucoup de moteurs dosent leur essence avec un flotteur dans une petite cuve, un système qui ne fonctionne que si le moteur reste droit. Le carburateur d’une tronçonneuse utilise plutôt une <strong>membrane</strong>, une fine feuille souple. Une petite pompe lui envoie l’essence, et c’est le carter lui-même qui actionne cette pompe. À chaque tour, la pression dans le carter monte et descend. Le <strong>tuyau d’impulsion</strong> transmet ces impulsions à la pompe. Voilà pourquoi le moteur continue de tourner dans n’importe quelle position.",
+      "p4": "Un deux-temps n’a pas de réserve d’huile sous son vilebrequin. Son huile voyage avec l’essence. Vous mélangez de l’huile deux-temps à l’essence à 50 pour 1 : 100 ml d’huile pour 5 litres d’essence. En traversant le moteur, l’huile lubrifie les pièces mobiles. Cela dit, toutes les tronçonneuses n’ont pas de carburateur. Certains modèles professionnels utilisent plutôt l’injection électronique."
+    },
+    "starting": {
+      "title": "Réveiller le moteur",
+      "p1": "Pour démarrer une tronçonneuse, vous faites tourner son moteur à la main jusqu’à ce qu’il parte. Posez-la au sol, à 3 m au moins de l’endroit où vous avez fait le plein. Les deux bouchons se trouvent en bas, sur le côté gauche : le <strong>bouchon d’essence</strong> à l’arrière, le <strong>bouchon d’huile de chaîne</strong> à l’avant. Tenez la poignée avant de la main gauche et glissez le pied droit dans la poignée arrière. Ensuite, poussez le <strong>protège-main avant</strong> vers l’avant pour serrer le frein de chaîne. Faites-le à chaque démarrage. Vous démarrez avec l’accélérateur légèrement ouvert. Cela suffit pour que l’embrayage accroche : sans le frein, la chaîne tournerait.",
+      "p2": "Un moteur froid a besoin d’un coup de main. La <strong>manette de starter</strong> ferme le starter et maintient l’accélérateur légèrement ouvert. Les grosses tronçonneuses ont aussi une <strong>soupape de décompression</strong>. Quand vous l’enfoncez, elle laisse s’échapper un peu de l’air comprimé du cylindre, et le cordon se tire plus facilement. Elle se referme toute seule dès la première explosion. Ensuite, pressez la <strong>poire d’amorçage</strong> environ 6 fois, ou au moins 10 fois sur certains modèles. Elle n’injecte pas d’essence dans le cylindre. Elle chasse l’air du tuyau d’essence et fait monter l’essence jusqu’au carburateur.",
+      "p3": "Prenez maintenant la <strong>poignée du lanceur</strong>. Elle est attachée au bout du <strong>cordon du lanceur</strong>, enroulé sur la <strong>poulie du lanceur</strong>. De petits crochets, les <strong>cliquets</strong>, relient cette poulie au <strong>volant</strong>, une roue fixée au bout du vilebrequin. Tirez doucement jusqu’à sentir qu’ils accrochent, puis tirez vite. Chaque tirage fait faire quelques tours au vilebrequin. N’enroulez jamais le cordon autour de votre main, et ne le tirez jamais jusqu’au bout. Ne le laissez pas non plus revenir d’un coup : accompagnez-le pendant qu’un ressort le rembobine. Et ne démarrez jamais une tronçonneuse à la volée, en la poussant loin de vous pendant que vous tirez.",
+      "p4": "Le volant ne sert pas qu’à tourner. Ses ailettes forment le ventilateur qui refroidit le moteur. Des aimants logés dedans passent devant la <strong>bobine d’allumage</strong>, à 0,25 mm seulement, et produisent l’étincelle. La tronçonneuse n’a donc pas besoin de batterie. Choisissez « Démarrer à froid » pour suivre un démarrage complet. Le premier tirage se termine par un toussotement : le moteur fait une seule explosion, puis s’arrête. Ce toussotement vous dit de couper le starter, car une tronçonneuse ne tourne jamais avec le starter mis. Si vous continuez à tirer avec le starter mis après le toussotement, vous noyez le moteur.",
+      "p5": "Au deuxième tirage, le moteur démarre au ralenti accéléré, c’est-à-dire un peu plus vite qu’au ralenti normal. Le frein reste serré. Donnez un petit coup de gâchette, et le moteur redescend au ralenti. Alors seulement, desserrez le frein. Si la chaîne tourne encore au ralenti, la tronçonneuse doit être réglée. Le modèle montre les étapes, pas leur vraie durée. Le tirage est montré à un rythme facile à suivre, puis l’animation ralentit une fois le moteur en marche. Les fabricants ne publient ni la vitesse à laquelle un tirage fait tourner le moteur, ni le régime de ralenti accéléré. La jauge affiche donc des mots à la place des chiffres. « Vue en coupe (C) » retire le couvercle du lanceur, et l’écart entre l’aimant et la bobine est dessiné plus large qu’en réalité pour que vous puissiez le voir."
+    },
+    "clutch": {
+      "title": "Pourquoi la chaîne s’arrête au ralenti",
+      "p1": "Entre le vilebrequin et la chaîne se trouve un <strong>embrayage centrifuge</strong>, un embrayage qui fonctionne grâce à la rotation. Des pièces lourdes, les <strong>masselottes d’embrayage</strong>, tournent avec le vilebrequin, et des ressorts les retiennent vers l’intérieur. Autour d’elles, il y a une coupelle en acier, la <strong>cloche d’embrayage</strong>. La cloche porte le <strong>pignon</strong>, la roue dentée qui entraîne la chaîne. Quand le moteur accélère, la rotation projette les masselottes vers l’extérieur, contre la cloche. Le frottement fait alors tourner la cloche avec elles.",
+      "p2": "Au ralenti, vers 2 700 tr/min, les ressorts l’emportent et les masselottes restent rentrées. La cloche ne bouge pas, donc la chaîne non plus. C’est voulu : au ralenti, la chaîne ne doit pas tourner. Sur cette tronçonneuse, les masselottes accrochent à 3 700 tr/min. Faites glisser l’accélérateur lentement au-delà de ce seuil et regardez la chaîne démarrer. Dans le modèle, l’embrayage accroche d’un coup dès que le moteur dépasse 3 700 tr/min. La chaîne passe donc directement à environ 8 m/s. Un vrai embrayage patine un instant, le temps que les masselottes mordent.",
+      "p3": "Le pignon a 7 dents, et chacune fait avancer la chaîne de deux pas. Le pas, c’est l’écart entre deux rivets voisins de la chaîne. Un tour fait donc avancer la chaîne d’environ 133 mm. À 9 900 tr/min, le calcul donne 22 mètres par seconde (m/s), environ 79 km/h. Pour une tronçonneuse comme celle-ci, le fabricant annonce lui-même environ 21 m/s. À ce régime, le moteur donne toute sa puissance, et pendant la coupe, il tourne tout près de ce régime. À vide, une tronçonneuse peut tourner plus vite, jusqu’à un régime maximal fixé entre 12 500 et 14 000 tr/min.",
+      "p4": "C’est pour cela, vous l’avez vu au démarrage, que vous serrez d’abord le frein de chaîne : en position de démarrage, le moteur tourne assez vite pour que l’embrayage accroche. Si la chaîne est bloquée pendant que le moteur s’emballe, l’embrayage patine et chauffe beaucoup. La <strong>pompe à huile</strong> n’envoie de l’huile au guide que lorsque la chaîne tourne. Au ralenti, aucune huile ne coule."
+    },
+    "chain": {
+      "title": "Des dents qui arrachent des copeaux",
+      "p1": "Une chaîne de tronçonneuse se compose de trois sortes de pièces. Les <strong>maillons entraîneurs</strong> plongent dans une rainure du guide, et les dents du pignon les poussent. Les <strong>gouges</strong> sont les dents qui coupent, l’une penchée à gauche, la suivante à droite. De petites plaques, les maillons de liaison, relient le tout grâce à des rivets.",
+      "p2": "Chaque gouge a une plaque supérieure plate et une plaque latérale. Là où elles se rejoignent, un angle tranchant coupe le bois. Juste devant chaque gouge se dresse une petite bosse, le <strong>limiteur de profondeur</strong>. Il est 0,65 mm plus bas que le haut de la gouge. Cet écart fixe l’épaisseur du copeau que la gouge peut prendre. Si vous limez les limiteurs trop bas, les gouges mordent trop profond, et le rebond devient plus probable.",
+      "p3": "La taille d’une chaîne, c’est son <strong>pas</strong>. Pour le mesurer, prenez la distance entre trois rivets qui se suivent et divisez-la par deux. Cette chaîne a un pas de 3/8 de pouce, soit 9,525 mm. Une chaîne comme celle-ci, sur un guide de 40 cm, compte 55 maillons entraîneurs et mesure environ 1,05 m. Elle porte environ 27 gouges, une pour deux maillons entraîneurs.",
+      "p4": "À 9 900 tr/min, la chaîne avance à 22 m/s. Autrement dit, environ 570 gouges passent devant un même point chaque seconde, et chacune arrache un copeau. Choisissez « Ralenti », « Mi-gaz » ou « Plein gaz » pour comparer. Dans la coupe, la chaîne sous le guide revient du <strong>nez du guide</strong> vers la tronçonneuse. Voilà pourquoi les copeaux sont projetés en arrière de la coupe.",
+      "p5": "Pendant tout ce temps, la chaîne glisse à pleine vitesse sur le guide en acier. Sans huile, le frottement le rendrait vite brûlant. La pompe à huile verse donc de l’<strong>huile de chaîne</strong> sur la chaîne, qui l’emporte tout autour du guide. Sur une petite Stihl, l’huile de chaîne s’épuise à peu près en même temps que l’essence. Vous pouvez donc remplir les deux réservoirs ensemble."
+    },
+    "kickback": {
+      "title": "Le quart supérieur du nez",
+      "p1": "La partie la plus dangereuse d’une tronçonneuse, c’est le quart supérieur du nez du guide : la <strong>zone de rebond</strong>. « Zone de rebond (K) » la colore en rouge. Si la chaîne en marche touche du bois à cet endroit, les gouges peuvent accrocher. Le guide est alors projeté en un éclair vers le haut et vers l’arrière, dans votre direction. C’est le <strong>rebond</strong>. D’après les mesures, une tronçonneuse à essence peut alors pivoter à plus de 1 000° par seconde.",
+      "p2": "Une personne a besoin d’environ 0,1 à 0,2 s pour réagir. Pendant ce temps, le guide peut déjà avoir assez basculé pour vous atteindre. Les réflexes seuls ne suffisent donc pas. Le rebond a aussi deux cousins. Si la chaîne accroche sous le guide, le <strong>happement</strong> tire la tronçonneuse vers l’avant. Si elle accroche sur le dessus, le <strong>rejet</strong> repousse la tronçonneuse droit vers l’arrière.",
+      "p3": "La parade, c’est le <strong>frein de chaîne</strong>. Une <strong>bande de frein</strong> en acier entoure la cloche d’embrayage. Quand votre main gauche pousse le <strong>protège-main avant</strong> vers l’avant, un ressort serre la bande d’un coup. La bande bloque la cloche, et la chaîne s’arrête en une fraction de seconde. Lors d’un rebond violent, le protège-main peut se déclencher tout seul. La tronçonneuse se relève, mais le protège-main continue sur sa lancée : c’est l’inertie, la tendance d’un objet en mouvement à poursuivre sa course. Il bascule donc vers l’avant. C’est le frein à inertie.",
+      "p4": "Choisissez « Montrer un rebond » pour en voir un violent, au ralenti et en plus petit que dans la réalité. Regardez le protège-main basculer vers l’avant et la bande serrer la cloche. Dans le modèle, la chaîne s’arrête aussitôt. Mais tous les rebonds ne déclenchent pas le frein tout seuls. Pour un rebond moins fort, il faut parfois actionner le frein à la main. Le frein réduit le risque, mais il ne peut pas empêcher le rebond lui-même. Le <strong>capteur de chaîne</strong>, un crochet sous le guide, retient une chaîne qui casse ou qui saute. La chaîne à faible rebond, vendue avec une étiquette verte en Amérique du Nord, réduit aussi le risque.",
+      "p5": "Aux États-Unis, en 1979, le rebond causait près d’une blessure par tronçonneuse sur quatre. Aujourd’hui encore, dans ce pays, environ 70 personnes par jour arrivent aux urgences blessées par une tronçonneuse. Une tronçonneuse fait aussi beaucoup de bruit. À votre oreille, elle atteint environ 104 à 107 décibels, notés dB(A), l’unité de mesure du bruit. Sans protection auditive, 107 dB(A) ne sont sans danger que pendant environ 3 minutes par jour. Alors protégez vos oreilles, gardez les deux mains sur la tronçonneuse et ne laissez rien toucher le nez du guide."
+    }
+  }
+}

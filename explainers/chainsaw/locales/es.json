@@ -1,0 +1,322 @@
+{
+  "meta": {
+    "title": "Cómo funciona una motosierra",
+    "eyebrow": "Herramientas a motor",
+    "tagline": "Una vuelta del cigüeñal, a cámara lenta: así es como una chispa, un embrague que gira y un anillo de dientes afilados convierten el combustible en virutas de madera.",
+    "description": "Una motosierra en 3D, vuelta a vuelta: el motor de dos tiempos, el combustible, el embrague que para la cadena al ralentí, los dientes y el freno.",
+    "summary": "La motosierra entera, el motor de dos tiempos, el combustible y el carburador, cómo se arranca, el embrague, la cadena de corte y el rebote con el freno de cadena.",
+    "socialAlt": "Una motosierra naranja de gasolina con la espada sobre un tronco, junto al título «Cómo funciona una motosierra»"
+  },
+  "stage": {
+    "label": "Modelo interactivo de una motosierra",
+    "gauge": "Motor y cadena en directo"
+  },
+  "timeline": {
+    "label": "Vuelta del cigüeñal",
+    "phases": "Saltar a una parte de la vuelta",
+    "speed": "Velocidad",
+    "value": "{{share}} %",
+    "during": "{{share}} % de la vuelta, {{phase}}",
+    "speedValue": "1/{{factor}}",
+    "slower": "{{factor}} veces más lento que en la realidad",
+    "phase": {
+      "power": "Expansión",
+      "exhaust": "Escape",
+      "scavenge": "Barrido",
+      "compression": "Compresión"
+    },
+    "jump": {
+      "power": "Saltar a la expansión",
+      "exhaust": "Saltar a la apertura del escape",
+      "scavenge": "Saltar al barrido",
+      "compression": "Saltar a la compresión"
+    },
+    "detail": {
+      "power": "el gas en combustión empuja el pistón hacia abajo",
+      "exhaust": "el gas quemado sale de golpe",
+      "scavenge": "la mezcla fresca expulsa el gas quemado",
+      "compression": "el pistón comprime la mezcla y el cárter se llena"
+    }
+  },
+  "controls": {
+    "label": "Controles del modelo",
+    "throttle": "Acelerador",
+    "throttleOptions": {
+      "idle": "Ralentí",
+      "half": "Medio",
+      "full": "A fondo"
+    },
+    "brakeOptions": {
+      "off": "Freno quitado",
+      "on": "Freno puesto"
+    },
+    "kickbackOptions": {
+      "strong": "Mostrar un rebote"
+    },
+    "startOptions": {
+      "cold": "Arrancar en frío"
+    },
+    "groups": {
+      "throttle": "Acelerador",
+      "brake": "Freno de cadena",
+      "kickback": "Mostrar un rebote",
+      "start": "Arrancar la motosierra"
+    },
+    "views": {
+      "cutaway": {
+        "name": "Vista en corte",
+        "short": "Corte",
+        "hint": "Vista en corte (C)"
+      },
+      "flow": {
+        "name": "Flujo de gases y aceite",
+        "short": "Flujo",
+        "hint": "Flujo de gases y aceite (F)"
+      },
+      "zone": {
+        "name": "Zona de rebote",
+        "short": "Zona",
+        "hint": "Zona de rebote (K)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      }
+    }
+  },
+  "readouts": {
+    "rpm": "Motor",
+    "chain": "Cadena",
+    "clutch": "Embrague",
+    "phase": "Fase",
+    "clutchState": {
+      "open": "Desembragado",
+      "driving": "Embragado",
+      "slipping": "Patinando"
+    },
+    "engineState": {
+      "stopped": "Parado",
+      "cranking": "Girando con la cuerda",
+      "fastIdle": "Ralentí acelerado",
+      "running": "Al ralentí"
+    }
+  },
+  "units": {
+    "rpm": "{{value}} rpm",
+    "metresPerSecond": "{{value}} m/s",
+    "speedPair": "{{ms}} m/s, {{kmh}} km/h",
+    "milliseconds": "{{value}} ms",
+    "percent": "{{value}} %",
+    "count": "{{value}}"
+  },
+  "chapters": {
+    "saw": {
+      "throttle": "Acelerador",
+      "rpm": "Velocidad del motor",
+      "chain": "Velocidad de la cadena",
+      "displacement": "Cilindrada",
+      "displacementValue": "70,6 cm³",
+      "power": "Potencia",
+      "powerValue": "4,3 kW",
+      "mass": "Peso",
+      "massValue": "6,6 kg sin espada ni cadena",
+      "bar": "Espada",
+      "barValue": "40 cm"
+    },
+    "engine": {
+      "turn": "Una vuelta dura",
+      "strokes": "Expansiones por segundo",
+      "now": "En el cilindro ahora",
+      "gap": "Separación de electrodos",
+      "gapValue": "0,5 mm"
+    },
+    "fuel": {
+      "throttle": "Acelerador",
+      "mix": "Gasolina y aceite",
+      "mixValue": "50 a 1",
+      "dose": "Dosis de aceite",
+      "doseValue": "100 ml en 5 l",
+      "crankcase": "El cárter ahora",
+      "pressure": {
+        "drawing": "Aspira mezcla",
+        "squeezing": "La empuja a las lumbreras de transferencia"
+      }
+    },
+    "starting": {
+      "step": "Ahora",
+      "steps": {
+        "ready": "Frío y parado",
+        "brake": "Freno de cadena puesto",
+        "choke": "Estrangulador cerrado",
+        "decompression": "Válvula de descompresión abierta",
+        "primer": "Bomba de cebado pulsada",
+        "firstPull": "Primer tirón",
+        "pop": "Un petardeo: prende una vez",
+        "chokeOff": "Estrangulador abierto",
+        "secondPull": "Segundo tirón",
+        "fastIdle": "En ralentí acelerado, con el freno puesto",
+        "idle": "Toque al gatillo, ya al ralentí",
+        "done": "Al ralentí. Ahora quita el freno."
+      },
+      "engine": "Motor",
+      "primer": "Bomba de cebado",
+      "primerValue": "unas 6 pulsaciones, al menos 10 en algunas motosierras",
+      "coilGap": "Distancia entre imán y bobina",
+      "coilGapValue": "0,25 mm",
+      "distance": "Arranca lejos de donde repostaste",
+      "distanceValue": "al menos 3 m"
+    },
+    "clutch": {
+      "throttle": "Acelerador",
+      "rpm": "Velocidad del motor",
+      "state": "Embrague",
+      "chain": "Velocidad de la cadena",
+      "idle": "Ralentí",
+      "engage": "El embrague agarra a",
+      "perTurn": "Avance de la cadena por vuelta",
+      "perTurnValue": "{{mm}} mm, {{teeth}} dientes × 2 pasos",
+      "oil": "Bomba de aceite",
+      "oilState": {
+        "pumping": "Engrasando la espada",
+        "stopped": "Parada"
+      }
+    },
+    "chain": {
+      "speed": "Velocidad de la cadena",
+      "cutters": "Dientes que pasan por un punto cada segundo",
+      "pitch": "Paso",
+      "pitchValue": "3/8 de pulgada, 9,525 mm",
+      "links": "Eslabones",
+      "linksValue": "55 eslabones motrices, 27 dientes",
+      "length": "Longitud de la cadena",
+      "lengthValue": "unos 1,05 m",
+      "depth": "Limitador por debajo del diente",
+      "depthValue": "0,65 mm"
+    },
+    "kickback": {
+      "brake": "Freno de cadena",
+      "brakeState": {
+        "off": "Quitado, cadena libre",
+        "on": "Puesto, cadena frenada"
+      },
+      "rotation": "Giro del rebote",
+      "rotationValue": "más de 1000° por segundo",
+      "reaction": "Tiempo de reacción de una persona",
+      "reactionValue": "unos 0,1 a 0,2 s",
+      "stop": "El freno para la cadena",
+      "stopValue": "en una fracción de segundo",
+      "share": "Lesiones causadas por el rebote",
+      "shareValue": "casi 1 de cada 4, EE. UU., 1979"
+    }
+  },
+  "parts": {
+    "powerhead": "Carcasa del motor",
+    "rearHandle": "Empuñadura trasera",
+    "throttleTrigger": "Gatillo del acelerador",
+    "frontHandle": "Empuñadura delantera",
+    "handGuard": "Protector de mano delantero",
+    "starter": "Carcasa del arrancador",
+    "sparkPlug": "Bujía",
+    "cylinder": "Cilindro",
+    "piston": "Pistón",
+    "connectingRod": "Biela",
+    "crankshaft": "Cigüeñal",
+    "crankcase": "Cárter",
+    "exhaustPort": "Lumbrera de escape",
+    "transferPorts": "Lumbreras de transferencia",
+    "intakePort": "Admisión",
+    "muffler": "Silenciador",
+    "carburettor": "Carburador",
+    "throttleValve": "Mariposa del acelerador",
+    "chokeValve": "Estrangulador",
+    "airFilter": "Filtro de aire",
+    "fuelTank": "Depósito de combustible",
+    "pulseLine": "Conducto de impulsos",
+    "clutch": "Zapatas del embrague",
+    "clutchDrum": "Campana del embrague",
+    "sprocket": "Piñón",
+    "chainBrakeBand": "Cinta de freno",
+    "oilPump": "Bomba de aceite",
+    "oilTank": "Depósito de aceite de cadena",
+    "bar": "Espada",
+    "barNose": "Punta de la espada",
+    "chain": "Cadena",
+    "cutters": "Dientes de corte",
+    "depthGauges": "Limitadores de profundidad",
+    "driveLinks": "Eslabones motrices",
+    "chainCatcher": "Captor de cadena",
+    "kickbackZone": "Zona de rebote",
+    "freshCharge": "Mezcla fresca",
+    "exhaustGas": "Gas quemado",
+    "oilFlow": "Aceite de cadena",
+    "log": "Tronco",
+    "chips": "Virutas",
+    "fuelCap": "Tapón del combustible",
+    "oilCap": "Tapón del aceite de cadena",
+    "starterGrip": "Tirador de arranque",
+    "starterRope": "Cuerda de arranque",
+    "starterPulley": "Polea de arranque",
+    "pawls": "Trinquetes",
+    "flywheel": "Volante y ventilador",
+    "ignitionCoil": "Bobina de encendido",
+    "primerBulb": "Bomba de cebado",
+    "chokeLever": "Palanca del estrangulador",
+    "decompressionValve": "Válvula de descompresión"
+  },
+  "sections": {
+    "saw": {
+      "title": "Un motor y un anillo de dientes",
+      "p1": "Esto es una <strong>motosierra</strong>, una sierra profesional como la Husqvarna 572 XP. Su motor va dentro de la <strong>carcasa del motor</strong>, la parte naranja. Por delante sobresale 40 cm la <strong>espada</strong>, una guía plana de acero. Por su borde corre un anillo de dientes afilados: la <strong>cadena</strong>. Con la mano derecha sujetas la <strong>empuñadura trasera</strong> y aprietas el <strong>gatillo del acelerador</strong>. Con la izquierda sujetas la <strong>empuñadura delantera</strong>, justo detrás del <strong>protector de mano delantero</strong>.",
+      "p2": "El tamaño de un motor, su cilindrada, es el volumen que barre su pistón. Se mide en centímetros cúbicos (cm³). Una motosierra doméstica tiene unos 30 a 50 cm³ y da de 1,4 a 2,4 kilovatios (kW) de potencia. Una profesional como esta tiene unos 70 a 80 cm³ y da de 4,3 a 5 kW. Y sin embargo pesa solo un poco más: 6,6 kg sin la espada ni la cadena. Las motosierras no siempre fueron tan ligeras. La motosierra de gasolina que Stihl sacó en 1929 pesaba 46 kg y hacían falta dos personas para manejarla. Las de gasolina no se volvieron lo bastante ligeras para una sola persona hasta alrededor de 1950.",
+      "p3": "Esta página sigue una vuelta del <strong>cigüeñal</strong>, el eje que el motor hace girar. A plena potencia da unas 9900 vueltas por minuto. Eso se escribe 9900 rpm, revoluciones por minuto. Así que una vuelta dura unos 6 ms, seis milésimas de segundo. En una pantalla, eso no sería más que un borrón. Por eso el modelo reproduce la vuelta entre 64 y 2048 veces más despacio que en la realidad. Puedes elegir cuánto en Velocidad.",
+      "p4": "Esta es la historia de una vuelta. Salta una chispa, y el gas que arde empuja el pistón hacia abajo. El pistón hace girar el cigüeñal, y el cigüeñal hace girar el embrague. El embrague mueve una rueda dentada, y la rueda tira de la cadena. Cada diente de la cadena arranca una viruta de madera. Arrastra el control del acelerador y mira cómo lo sigue la velocidad de la cadena. El modelo lo simplifica: la velocidad del motor sigue al acelerador de forma lineal, del ralentí a plena potencia. En una motosierra de verdad, la velocidad también sube y baja según el corte."
+    },
+    "engine": {
+      "title": "Una chispa en cada vuelta",
+      "p1": "El motor es de <strong>dos tiempos</strong>. Un tiempo es un recorrido del pistón, hacia arriba o hacia abajo. Un motor de dos tiempos hace todo su trabajo en solo dos recorridos, es decir, en una vuelta del cigüeñal. Por eso la <strong>bujía</strong> da una chispa en cada vuelta.",
+      "p2": "El <strong>pistón</strong> hace dos trabajos a la vez. Su parte de arriba trabaja en el <strong>cilindro</strong>, donde se quema el combustible. Su parte de abajo hace de bomba en el <strong>cárter</strong>, la caja cerrada que rodea el cigüeñal, más abajo. Cuando el pistón sube, el cárter se agranda y aspira mezcla fresca, es decir, combustible y aire mezclados. Cuando el pistón baja, el cárter se encoge y comprime esa mezcla.",
+      "p3": "Sigue la vuelta en la barra de colores que hay bajo el modelo. Con el pistón casi arriba del todo, la chispa enciende la mezcla comprimida. El gas que arde empuja el pistón hacia abajo. La <strong>biela</strong> convierte ese empujón en giro. Es la expansión, el tiempo que da la fuerza. Al bajar, el pistón destapa unas aberturas en la pared del cilindro, llamadas lumbreras. Primero se abre la <strong>lumbrera de escape</strong>, y el gas quemado sale de golpe hacia el <strong>silenciador</strong>.",
+      "p4": "Un instante después se abren también las <strong>lumbreras de transferencia</strong>. Son conductos que suben desde el cárter. La mezcla fresca comprimida sube por ellos. Al entrar, empuja los últimos restos de gas quemado hacia la lumbrera de escape. Esto se llama <strong>barrido</strong>. Cuando el pistón vuelve a subir, las lumbreras se cierran y el pistón comprime la mezcla nueva. Al mismo tiempo, por debajo, el cárter aspira la siguiente mezcla por la <strong>admisión</strong>.",
+      "p5": "A 9900 rpm, la chispa salta 165 veces por segundo. Cruza un hueco de 0,5 mm entre los dos electrodos de la bujía. Los fabricantes no publican exactamente cuándo se abren las lumbreras ni cuándo salta la chispa. Así que el modelo fija esos momentos a su manera, y la barra muestra cuánto has avanzado en la vuelta, no un ángulo exacto. Vista en corte (C) abre el motor. Flujo de gases y aceite (F) muestra por dónde van los gases."
+    },
+    "fuel": {
+      "title": "Combustible en cualquier posición",
+      "p1": "La mayoría de las motosierras mezclan el combustible y el aire en un <strong>carburador</strong>. El aire entra por el <strong>filtro de aire</strong>, y el carburador le añade una fina pulverización de combustible. La <strong>mariposa del acelerador</strong> es una pequeña trampilla que gira con el gatillo. Decide cuánta mezcla puede entrar en el motor. Elige Ralentí, Medio o A fondo y mira cómo se abre la trampilla.",
+      "p2": "Una mañana fría, el <strong>estrangulador</strong> cierra parte del paso de aire. Así la mezcla lleva más combustible, y el motor frío arranca con más facilidad. En cuanto el motor arranca, vuelves a abrir el estrangulador. El combustible espera en el <strong>depósito de combustible</strong>, bajo la empuñadura trasera.",
+      "p3": "Una motosierra se usa en cualquier posición, incluso de lado. Muchos motores dosifican el combustible con un flotador en una pequeña cuba, y eso solo funciona en vertical. El carburador de una motosierra usa en su lugar una <strong>membrana</strong>, una lámina fina y flexible. Una pequeña bomba le lleva el combustible, y esa bomba la mueve el propio cárter. En cada vuelta, la presión del cárter sube y baja. El <strong>conducto de impulsos</strong> lleva ese latido hasta la bomba. Por eso el motor sigue funcionando en cualquier ángulo.",
+      "p4": "Un motor de dos tiempos no tiene un baño de aceite bajo el cigüeñal. Su aceite viaja con el combustible. Mezclas aceite de dos tiempos con la gasolina en proporción 50 a 1: 100 ml de aceite por cada 5 litros de gasolina. A su paso por el motor, el aceite lubrica las piezas que se mueven. Eso sí, no todas las motosierras llevan carburador. Algunas profesionales usan inyección electrónica de combustible."
+    },
+    "starting": {
+      "title": "Despertar el motor",
+      "p1": "Para arrancar una motosierra, haces girar su motor a mano hasta que prende. Deja la motosierra en el suelo, como mínimo a 3 m del sitio donde repostaste. Los dos tapones están abajo, en el lado izquierdo: el <strong>tapón del combustible</strong> detrás y el <strong>tapón del aceite de cadena</strong> delante. Sujeta la empuñadura delantera con la mano izquierda y mete el pie derecho en la empuñadura trasera. Luego empuja hacia delante el <strong>protector de mano delantero</strong> para poner el freno de cadena. Hazlo siempre. Se arranca con el acelerador un poco abierto. Eso basta para que el embrague agarre, así que sin el freno la cadena giraría.",
+      "p2": "Un motor frío necesita ayuda. La <strong>palanca del estrangulador</strong> cierra el estrangulador y deja el acelerador así, un poco abierto. Las motosierras más grandes tienen además una <strong>válvula de descompresión</strong>. Al apretarla, deja salir un poco del aire comprimido en el cilindro, y así cuesta menos tirar de la cuerda. Se cierra sola en cuanto el motor prende. Después pulsas la <strong>bomba de cebado</strong> unas 6 veces, o al menos 10 en algunas motosierras. No echa combustible en el cilindro. Saca el aire del conducto de combustible y hace subir el combustible hasta el carburador.",
+      "p3": "Ahora agarra el <strong>tirador de arranque</strong>. Su <strong>cuerda de arranque</strong> va enrollada en una <strong>polea de arranque</strong>. Unos pequeños ganchos, los <strong>trinquetes</strong>, unen la polea al <strong>volante</strong>, una rueda que va en el extremo del cigüeñal. Tira despacio hasta que notes que enganchan, y entonces tira rápido. Cada tirón le da unas cuantas vueltas al cigüeñal. Nunca te enrolles la cuerda en la mano ni la saques hasta el final. Tampoco la sueltes de golpe: acompáñala mientras un resorte la recoge. Y nunca arranques la motosierra en el aire, empujándola lejos de ti mientras tiras.",
+      "p4": "El volante no solo gira. Sus aletas son el ventilador que enfría el motor. Lleva unos imanes que pasan junto a la <strong>bobina de encendido</strong>, a solo 0,25 mm, y crean la chispa. Por eso la motosierra no necesita batería. Elige Arrancar en frío para ver un arranque completo. El primer tirón acaba en un petardeo: el motor prende una vez y se para. Ese petardeo te dice que es hora de abrir el estrangulador, porque una motosierra nunca funciona con el estrangulador cerrado del todo. Si sigues tirando con el estrangulador cerrado después del petardeo, ahogas el motor.",
+      "p5": "Con el segundo tirón, el motor arranca en ralentí acelerado, un poco más rápido que el ralentí normal, y todavía con el freno puesto. Dale un toque al gatillo del acelerador y el motor baja al ralentí. Solo entonces quitas el freno. Si la cadena sigue girando al ralentí, hay que ajustar la motosierra. El modelo enseña los pasos, no su ritmo real. El tirón va a una velocidad que puedes seguir, y la cámara lenta empieza cuando el motor ya funciona. Los fabricantes no publican a qué velocidad gira el motor con cada tirón, ni en ralentí acelerado, así que ahí el indicador muestra palabras. Vista en corte (C) quita la tapa del arrancador, y la distancia entre imán y bobina se dibuja más grande que en la realidad para que puedas verla."
+    },
+    "clutch": {
+      "title": "Por qué la cadena se para al ralentí",
+      "p1": "Entre el cigüeñal y la cadena hay un <strong>embrague centrífugo</strong>, un embrague que funciona al girar. Sus contrapesos, las <strong>zapatas del embrague</strong>, giran con el cigüeñal, y unos resortes las mantienen recogidas. A su alrededor hay una copa de acero, la <strong>campana del embrague</strong>. La campana lleva el <strong>piñón</strong>, la rueda dentada que mueve la cadena. Cuando el motor se acelera, el giro lanza las zapatas hacia fuera, contra la campana. Entonces el rozamiento hace que la campana gire con ellas.",
+      "p2": "Al ralentí, a unas 2700 rpm, ganan los resortes y las zapatas se quedan dentro. La campana está quieta, así que la cadena no se mueve. Es lo correcto: al ralentí, la cadena no debe girar. En esta motosierra, las zapatas agarran a 3700 rpm. Arrastra el acelerador despacio más allá de ese punto y mira cómo arranca la cadena. En el modelo, el embrague agarra del todo en el instante en que el motor pasa de 3700 rpm, así que la cadena salta directamente a unos 8 m/s. Un embrague real patina un momento mientras las zapatas muerden.",
+      "p3": "El piñón tiene 7 dientes, y cada uno hace avanzar la cadena dos pasos. Un paso es la distancia de un remache de la cadena al siguiente. Así, una vuelta mueve la cadena unos 133 mm. A 9900 rpm, la cuenta da 22 metros por segundo (m/s), unos 79 km/h. El propio fabricante da unos 21 m/s para una motosierra como esta. A esa velocidad el motor da toda su potencia, y al cortar gira casi así de rápido. Sin nada que cortar, una motosierra puede girar más rápido, hasta un límite de fábrica de 12 500 a 14 000 rpm.",
+      "p4": "Ya lo viste al arrancar la motosierra: primero va el freno de cadena, porque la posición de arranque hace girar el motor lo bastante rápido para que el embrague agarre. Si la cadena está sujeta mientras el motor va a tope, el embrague patina y se calienta muchísimo. La <strong>bomba de aceite</strong> manda aceite a la espada solo mientras la cadena gira. Al ralentí no sale nada de aceite."
+    },
+    "chain": {
+      "title": "Dientes que arrancan virutas",
+      "p1": "Una cadena de motosierra tiene tres tipos de piezas. Los <strong>eslabones motrices</strong> asoman hacia abajo dentro de una ranura de la espada, y los dientes del piñón los empujan. Los <strong>dientes de corte</strong> son los que cortan: uno mira a la izquierda y el siguiente, a la derecha. Unas pequeñas placas, los eslabones de unión, los mantienen juntos con remaches.",
+      "p2": "Cada diente tiene una placa superior plana y una placa lateral. Donde se juntan hay una esquina afilada que corta la madera. Justo delante de cada diente hay un pequeño saliente, el <strong>limitador de profundidad</strong>. Queda 0,65 mm más bajo que la parte de arriba del diente. Esa diferencia decide lo gruesa que puede ser la viruta. Si limas demasiado los limitadores, los dientes muerden demasiado hondo, y el rebote se vuelve más probable.",
+      "p3": "El tamaño de una cadena es su <strong>paso</strong>. Para medirlo, toma la distancia que ocupan tres remaches seguidos y divídela entre dos. Esta cadena tiene un paso de 3/8 de pulgada, 9,525 mm. Una cadena como esta, en una espada de 40 cm, tiene 55 eslabones motrices y mide unos 1,05 m. Lleva unos 27 dientes de corte, uno por cada dos eslabones motrices.",
+      "p4": "A 9900 rpm, la cadena va a 22 m/s. Eso quiere decir que por cualquier punto pasan unos 570 dientes cada segundo, y cada uno arranca una viruta. Elige Ralentí, Medio o A fondo para comparar. En el corte, la cadena de la parte de abajo de la espada vuelve desde la <strong>punta de la espada</strong> hacia la motosierra. De ahí que las virutas salgan despedidas por detrás del corte.",
+      "p5": "Mientras tanto, la cadena roza contra la espada de acero a toda velocidad. Sin aceite, ese roce pronto pondría la espada ardiendo. Por eso la bomba de aceite echa gotas de <strong>aceite de cadena</strong> sobre la cadena, y la cadena lo reparte por toda la espada. En una motosierra pequeña de Stihl, el aceite de cadena se acaba más o menos a la vez que el combustible. Así puedes llenar los dos depósitos a la vez."
+    },
+    "kickback": {
+      "title": "El cuarto superior de la punta",
+      "p1": "La parte más peligrosa de una motosierra es el cuarto superior de la punta de la espada, la <strong>zona de rebote</strong>. Zona de rebote (K) la pinta de rojo. Si la cadena en marcha toca madera ahí, los dientes pueden engancharse. Entonces la espada sale lanzada hacia arriba y hacia atrás, hacia ti, en un instante. Esto es el <strong>rebote</strong>. Según las mediciones, una motosierra de gasolina puede girar a más de 1000° por segundo.",
+      "p2": "Una persona necesita unos 0,1 a 0,2 s para reaccionar. Para entonces, la espada ya puede haber girado lo bastante como para alcanzarte. Así que los reflejos no bastan para salvarte. Además, el rebote tiene dos parientes cercanos. Si se engancha la cadena de la parte de abajo de la espada, el <strong>tirón</strong> arrastra la motosierra hacia delante. Si se engancha la de arriba, el <strong>retroceso</strong> empuja la motosierra hacia atrás en línea recta.",
+      "p3": "La respuesta es el <strong>freno de cadena</strong>. Una <strong>cinta de freno</strong> de acero rodea la campana del embrague. Cuando tu mano izquierda empuja hacia delante el <strong>protector de mano delantero</strong>, un resorte tensa la cinta de golpe. La cinta aprieta la campana, y la cadena se para en una fracción de segundo. En un rebote fuerte, el protector puede saltar solo. La motosierra se levanta de golpe, pero el protector sigue moviéndose por inercia, igual que todo lo que se mueve tiende a seguir moviéndose. Por eso se va hacia delante. Es el freno por inercia.",
+      "p4": "Elige Mostrar un rebote para ver uno fuerte, a cámara lenta y más pequeño que en la realidad. Mira cómo el protector salta hacia delante y la cinta aprieta la campana. En el modelo, la cadena se para al momento. Pero no todos los rebotes activan el freno por sí solos. Uno más suave puede necesitar tu mano. El freno reduce el riesgo, pero no puede impedir el rebote en sí. El <strong>captor de cadena</strong>, un gancho bajo la espada, atrapa la cadena si se rompe o se sale. Y la cadena de bajo rebote, que en Norteamérica se vende con una etiqueta verde, también reduce el riesgo.",
+      "p5": "En Estados Unidos, en 1979, el rebote causó casi una de cada cuatro lesiones con motosierra. Hoy, unas 70 personas al día siguen yendo allí a urgencias por heridas de motosierra. Una motosierra también hace mucho ruido. Junto a tu oído llega a unos 104 a 107 decibelios, que se escriben dB(A), la unidad del volumen del sonido. Sin protección auditiva, un ruido de 107 dB(A) solo es seguro durante unos 3 minutos al día. Así que ponte protección para los oídos, sujeta la motosierra con las dos manos y mantén la punta despejada."
+    }
+  }
+}
