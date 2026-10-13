@@ -10,6 +10,8 @@ export interface LanguageData {
 
 export type LanguageSources = Partial<Record<LanguageCode, () => Promise<LanguageData>>>;
 
+export type FreshLanguage = (lang: LanguageCode) => Promise<LanguageData>;
+
 export interface LanguagePack {
   lang: LanguageCode;
   catalogue: BakedCatalogue;
@@ -22,7 +24,11 @@ export interface Packs {
   load(lang: LanguageCode): Promise<LanguagePack>;
 }
 
-export function createPacks(english: BakedCatalogue, sources: LanguageSources): Packs {
+export function createPacks(
+  english: BakedCatalogue,
+  sources: LanguageSources,
+  fresh?: FreshLanguage,
+): Packs {
   const base: LanguagePack = {
     lang: DEFAULT_LANGUAGE,
     catalogue: english,
@@ -40,7 +46,13 @@ export function createPacks(english: BakedCatalogue, sources: LanguageSources): 
       if (!source) return Promise.resolve(base);
       let promise = pending.get(lang);
       if (!promise) {
-        promise = source().then(({ catalogue, core, widget }) => {
+        const data = fresh
+          ? source().catch((error: unknown) => {
+              console.warn('[wmit-widget] language chunk failed, loading a fresh module', error);
+              return fresh(lang);
+            })
+          : source();
+        promise = data.then(({ catalogue, core, widget }) => {
           const pack = { lang, catalogue, strings: resolveStrings(widget, core) };
           loaded.set(lang, pack);
           return pack;

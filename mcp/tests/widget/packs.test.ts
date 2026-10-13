@@ -59,6 +59,32 @@ describe('language packs', () => {
     expect((await packs.load('de')).catalogue.explainers[0]?.title).toBe('Motor');
   });
 
+  it('takes the language from a fresh widget module when its chunk is gone', async () => {
+    const de = vi.fn().mockRejectedValue(new TypeError('Failed to fetch widget-de-old.js'));
+    const fresh = vi.fn(async () => ({
+      catalogue: catalogue('Motor'),
+      core: {},
+      widget: STRINGS.de,
+    }));
+    const packs = createPacks(catalogue('Engine'), { de }, fresh);
+    const pack = await packs.load('de');
+    expect(pack.catalogue.explainers[0]?.title).toBe('Motor');
+    expect(fresh).toHaveBeenCalledWith('de');
+    expect(packs.ready('de')).toBe(pack);
+  });
+
+  it('fails when the fresh widget module fails too, and tries again later', async () => {
+    const de = vi.fn().mockRejectedValue(new TypeError('Failed to fetch widget-de-old.js'));
+    const fresh = vi
+      .fn()
+      .mockRejectedValueOnce(new TypeError('Failed to fetch widget.js'))
+      .mockResolvedValueOnce({ catalogue: catalogue('Motor'), core: {}, widget: STRINGS.de });
+    const packs = createPacks(catalogue('Engine'), { de }, fresh);
+    await expect(packs.load('de')).rejects.toThrow('widget.js');
+    expect(packs.ready('de')).toBeUndefined();
+    expect((await packs.load('de')).catalogue.explainers[0]?.title).toBe('Motor');
+  });
+
   it('answers English for a language without a source', async () => {
     const packs = createPacks(catalogue('Engine'), {});
     expect(await packs.load('ja')).toBe(packs.english);
