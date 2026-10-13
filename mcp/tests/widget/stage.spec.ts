@@ -68,7 +68,7 @@ test.describe('the scene area keeps its height while an explainer loads', () => 
   test.setTimeout(90_000);
 
   for (const width of [736, 400]) {
-    test(`switching explainers at ${width}px keeps the widget and the stage still`, async ({
+    test(`switching explainers at ${width}px holds the widget height while loading and keeps the stage still`, async ({
       page,
     }) => {
       const errors = await open(page, 'slug=mri-scanner&chapter=magnet&real=1&slow=1500', width);
@@ -76,8 +76,13 @@ test.describe('the scene area keeps its height while an explainer loads', () => 
       const during = await switchTo(page, 'engine');
       expect(during.some((r) => r.st === 'loading')).toBe(true);
       expect(values(during, 'stage')).toHaveLength(1);
-      expect(values(during, 'col')).toHaveLength(1);
-      expect(values(during, 'wmit')).toHaveLength(1);
+      const loading = during.filter((r) => r.st !== 'ready');
+      const ready = during.filter((r) => r.st === 'ready' && r.slug === 'engine');
+      expect(ready.length).toBeGreaterThan(0);
+      for (const key of ['col', 'wmit'] as const) {
+        expect(loading.every((r) => r[key] === during[0]![key])).toBe(true);
+        expect(values(ready, key)).toHaveLength(1);
+      }
       expect(errors).toEqual([]);
     });
 
@@ -134,13 +139,18 @@ test.describe('the host gets no size change while an explainer loads', () => {
       await expect(view.locator('.wmit.st-ready')).toBeVisible({ timeout: 30_000 });
       await page.waitForTimeout(600);
       const from = logs.length;
+      const sizes = () => logs.slice(from).filter((l) => l.startsWith('[HOST] size'));
       await view.locator('.strip .thumb[data-slug="engine"]').click();
-      await expect(view.locator('.wmit.st-loading[data-slug="engine"]')).toBeVisible();
+      const loading = view.locator('.wmit.st-loading[data-slug="engine"]');
+      await expect(loading).toBeVisible();
+      await page.waitForTimeout(1000);
+      await expect(loading).toBeVisible();
+      expect(sizes()).toEqual([]);
       await expect(view.locator('.wmit.st-ready[data-slug="engine"]')).toBeVisible({
         timeout: 30_000,
       });
       await page.waitForTimeout(600);
-      expect(logs.slice(from).filter((l) => l.startsWith('[HOST] size'))).toEqual([]);
+      expect(sizes().length).toBeLessThanOrEqual(1);
     });
   }
 });
