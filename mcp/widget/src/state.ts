@@ -1,7 +1,7 @@
 import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import { isSlug, plainText, SITE_URL, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { EmbedInfo, EmbedState, LanguageCode } from '../../../src/core/embed/contract.ts';
-import type { ModelContextSnapshot } from '../../shared/tools.ts';
+import { WIDGET_SLUGS_LINE, type ModelContextSnapshot } from '../../shared/tools.ts';
 import type { ChapterView, Discrete } from './views/types.ts';
 
 export interface Target {
@@ -65,6 +65,48 @@ export function targetFromResult(
     return chapter ? { slug, chapter } : { slug };
   }
   return undefined;
+}
+
+const slugList = (value: unknown): string[] | undefined =>
+  Array.isArray(value)
+    ? value.filter((s): s is string => typeof s === 'string' && isSlug(s))
+    : undefined;
+
+export function slugsFromResult(result: unknown): string[] | undefined {
+  if (!isObj(result)) return undefined;
+  const sc = result.structuredContent;
+  const structured = isObj(sc) ? slugList(sc.slugs) : undefined;
+  if (structured) return structured;
+  const content = Array.isArray(result.content) ? result.content : [];
+  for (const block of content) {
+    if (!isObj(block) || block.type !== 'text' || typeof block.text !== 'string') continue;
+    const line = block.text.split('\n').find((l) => l.startsWith(WIDGET_SLUGS_LINE));
+    if (line) return slugList(line.slice(WIDGET_SLUGS_LINE.length).split(/,\s*/));
+  }
+  return undefined;
+}
+
+export function slugsFromToolInfo(ctx: Partial<McpUiHostContext>): string[] | undefined {
+  const slug = ctx.toolInfo?.tool.inputSchema.properties?.slug;
+  return isObj(slug) ? slugList(slug.enum) : undefined;
+}
+
+export const resultFailed = (result: unknown): boolean => isObj(result) && result.isError === true;
+
+export function mayShow(
+  slug: string,
+  allowed: readonly string[] | undefined,
+  failed: boolean,
+): boolean {
+  return allowed ? allowed.includes(slug) : !failed;
+}
+
+export function shownEntries<T extends { slug: string }>(
+  items: readonly T[],
+  allowed: readonly string[] | undefined,
+  current?: string,
+): T[] {
+  return items.filter((i) => (allowed ? allowed.includes(i.slug) : i.slug === current));
 }
 
 export function mergeTarget(prev: Target | undefined, next: Target): Target {

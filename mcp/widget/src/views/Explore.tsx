@@ -17,14 +17,19 @@ function Tile({
 }) {
   const s = useStrings();
   const cur = entry.slug === vm.slug;
+  const held = !vm.catalogue.some((e) => e.slug === entry.slug);
   return (
     <button
       type="button"
-      class={`thumb${cur ? ' cur' : ''}`}
+      class={`thumb${cur ? ' cur' : ''}${held ? ' held' : ''}`}
       aria-current={cur ? 'true' : undefined}
+      aria-hidden={held ? 'true' : undefined}
+      inert={held}
       title={entry.summary}
       data-slug={entry.slug}
-      onClick={() => (cur ? vm.actions.toggleDrawer(false) : vm.actions.switchTo(entry.slug))}
+      onClick={() =>
+        held ? undefined : cur ? vm.actions.toggleDrawer(false) : vm.actions.switchTo(entry.slug)
+      }
     >
       {cur && <span class="badge">{s.watching}</span>}
       <img

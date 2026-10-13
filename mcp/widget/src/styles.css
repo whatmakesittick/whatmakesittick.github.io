@@ -690,6 +690,9 @@ button:focus-visible {
 .strip .thumb {
   scroll-snap-align: start;
 }
+.strip .thumb.held {
+  visibility: hidden;
+}
 .a-explore.unknown .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));

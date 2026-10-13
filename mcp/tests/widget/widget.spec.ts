@@ -424,3 +424,17 @@ test.describe('real embed (dist): the site dock and gauge in the slots', () => {
     expect(errors).toEqual([]);
   });
 });
+
+test('excluded explainers stay out of the strip and the picker', async ({ page }) => {
+  const { errors, logs } = await open(page, 'slug=mri-scanner&exclude=weapons');
+  await expect(page.locator('.wmit.st-ready')).toBeVisible();
+  await expect(page.locator('.strip .thumb[data-slug="heart"]')).toBeAttached();
+  await expect(page.locator('.thumb[data-slug="rifle"]')).toHaveCount(0);
+  await expect(page.locator('.thumb[data-slug="reaper"]')).toHaveCount(0);
+  await open(page, 'state=unknown&exclude=weapons');
+  await expect(page.getByText('Pick an explainer')).toBeVisible();
+  await expect(page.locator('.thumb[data-slug="heart"]')).toBeAttached();
+  await expect(page.locator('.thumb[data-slug="rifle"]')).toHaveCount(0);
+  expect(logs.filter((l) => l.includes('rifle'))).toEqual([]);
+  expect(errors).toEqual([]);
+});
