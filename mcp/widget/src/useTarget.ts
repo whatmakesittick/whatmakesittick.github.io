@@ -9,6 +9,7 @@ import {
   scopeFromResult,
   targetFromInput,
   targetFromResult,
+  type ResolveSlug,
   type Scope,
   type Target,
 } from './state.ts';
@@ -24,6 +25,7 @@ export function useTarget(
   session: SceneSession,
   toolScope: Scope | undefined,
   entries: readonly WidgetCatalogueEntry[],
+  resolve: ResolveSlug,
 ) {
   const [target, setTarget] = useState<Target | undefined>();
   const [inputSeen, setInputSeen] = useState(false);
@@ -37,7 +39,7 @@ export function useTarget(
   const findAllowed = (slug: string) => {
     const { scope, failed } = knownRef.current;
     const entry = find(slug);
-    return mayShow(entry, scope ?? toolScopeRef.current, failed) ? entry : undefined;
+    return mayShow(entry, scope ?? toolScopeRef.current, failed, resolve) ? entry : undefined;
   };
   const findRef = useRef(findAllowed);
   findRef.current = findAllowed;

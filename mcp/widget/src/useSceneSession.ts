@@ -9,6 +9,7 @@ export function useSceneSession(host: WidgetHost, loader: ModuleLoader, webgl: (
   const [progress, setProgress] = useState(0);
   const [controller, setController] = useState<EmbedController | undefined>();
   const [info, setInfo] = useState<EmbedInfo | undefined>();
+  const [renames, setRenames] = useState<Readonly<Record<string, string>>>({});
   const hostRef = useRef<HTMLDivElement>(null);
   const dockRef = useRef<HTMLDivElement>(null);
   const gaugeRef = useRef<HTMLDivElement>(null);
@@ -36,6 +37,7 @@ export function useSceneSession(host: WidgetHost, loader: ModuleLoader, webgl: (
           language: (c) => {
             if (ctrlRef.current === c) setInfo({ ...c.info });
           },
+          renamed: (from, to) => setRenames((known) => ({ ...known, [from]: to })),
         },
       }),
     [loader, webgl],
@@ -57,6 +59,7 @@ export function useSceneSession(host: WidgetHost, loader: ModuleLoader, webgl: (
     setProgress,
     info,
     setInfo,
+    renames,
   };
 }
 

@@ -1,11 +1,12 @@
-import { useMemo, useRef } from 'preact/hooks';
-import { explainerUrl, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
+import { useEffect, useMemo, useRef } from 'preact/hooks';
+import { explainerUrl, resolveSlug, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { WidgetHost } from './bridge.ts';
 import { StringsContext } from './i18n/context.ts';
 import type { Packs } from './i18n/packs.ts';
 import type { ModuleLoader, SceneStatus } from './scene.ts';
 import {
   allowsFullscreen,
+  canonicalEntries,
   chapterViews,
   frameOf,
   mayShow,
@@ -42,27 +43,48 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const painted = useRef(false);
 
   const sceneSession = useSceneSession(host, loader, webgl);
-  const { session, refs, ctrlRef, controller, status, progress, info, setInfo } = sceneSession;
+  const { session, refs, ctrlRef, controller, status, progress, info, setInfo, renames } =
+    sceneSession;
   const { pack, waiting, refresh } = useWidgetLanguage(host, packs, session);
   const catalogue = pack.catalogue;
-  const entries = catalogue.explainers;
+  const aliases = useMemo(
+    () => ({ ...catalogue.aliases, ...renames }),
+    [catalogue.aliases, renames],
+  );
+  const resolve = (s: string) => resolveSlug(s, aliases);
+  const entries = useMemo(
+    () => canonicalEntries(catalogue.explainers, resolve),
+    [catalogue.explainers, aliases],
+  );
   const entriesRef = useRef(entries);
   entriesRef.current = entries;
-  const find = (slug: string): WidgetCatalogueEntry | undefined =>
-    entriesRef.current.find((e) => e.slug === slug);
+  const resolveRef = useRef(resolve);
+  resolveRef.current = resolve;
+  const find = (s: string): WidgetCatalogueEntry | undefined =>
+    entriesRef.current.find((e) => e.slug === resolveRef.current(s));
   const ctx = useHostContext(host);
   const toolScope = useMemo(() => scopeFromToolInfo(ctx), [ctx]);
-  const { target, setTarget, inputSeen, resultSeen, scope, failed } = useTarget(
-    host,
-    find,
-    session,
-    toolScope,
-    entries,
+  const {
+    target: asked,
+    setTarget,
+    inputSeen,
+    resultSeen,
+    scope,
+    failed,
+  } = useTarget(host, find, session, toolScope, entries, (s) => resolveRef.current(s));
+  const askedSlug = asked ? resolve(asked.slug) : undefined;
+  const target = useMemo(
+    () => (asked && askedSlug ? { ...asked, slug: askedSlug } : undefined),
+    [askedSlug, asked?.chapter],
   );
   const slug = target?.slug;
   const found = slug ? find(slug) : undefined;
-  const entry = mayShow(found, scope, failed) ? found : undefined;
-  const shown = shownEntries(entries, scope, entry?.slug);
+  const entry = mayShow(found, scope, failed, resolve) ? found : undefined;
+  const shown = shownEntries(entries, scope, entry?.slug, resolve);
+
+  useEffect(() => {
+    if (Object.keys(renames).length > 0) refresh(true);
+  }, [renames]);
   const canOpen = (next: string) => shown.some((e) => e.slug === next);
   const hold = !painted.current && waiting;
 
@@ -115,10 +137,10 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     resetCamera: () => ctrlRef.current?.resetCamera(),
     openSite: () => slug && void host.openLink(explainerUrl(slug)),
     openCatalogue,
-    browse: refresh,
+    browse: () => refresh(),
     toggleFullscreen,
     switchTo: touched((next: string) => {
-      if (next !== slug && canOpen(next)) setTarget({ slug: next });
+      if (resolve(next) !== slug && canOpen(next)) setTarget({ slug: resolve(next) });
     }),
     retry() {
       if (!slug) return;
@@ -143,9 +165,9 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
             <Unknown
               catalogue={shown}
               assetBase={assetBase}
-              onPick={(s) => canOpen(s) && setTarget({ slug: s })}
+              onPick={(s) => canOpen(s) && setTarget({ slug: resolve(s) })}
               onOpen={openCatalogue}
-              onBrowse={refresh}
+              onBrowse={() => refresh()}
             />
           ) : (
             <Waiting onOpen={openCatalogue} quiet={hold || !inputSeen} />
