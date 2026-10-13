@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PRESET_IDS, PRESET_SETTINGS } from '../ids';
+import type { PartId } from '../ids';
 import { DEFAULT_SPEED, SLOW_SPEED } from '../model';
 import { PRESETS } from './presets';
 
@@ -51,6 +52,21 @@ describe('chainsaw presets', () => {
         .forEach((part) => expect(PRESETS[id].highlight, `${id} ${part}`).toContain(part)),
     );
     expect(PRESETS.saw.highlight).toEqual([]);
+  });
+
+  it('keeps the housing and everything round the starter bright in the starting chapter', () => {
+    const lit: readonly PartId[] = [
+      'powerhead',
+      'starter',
+      'starterGrip',
+      'starterRope',
+      'fuelCap',
+      'oilCap',
+      'primerBulb',
+      'chokeLever',
+      'decompressionValve',
+    ];
+    lit.forEach((part) => expect(PRESETS.starting.highlight, part).toContain(part));
   });
 
   it('keeps the chain bright around the sprocket in the clutch chapter', () => {

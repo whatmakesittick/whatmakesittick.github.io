@@ -62,6 +62,14 @@ const STARTING_LABELS: readonly PartId[] = [
   'oilCap',
 ];
 
+const STARTING_CONTEXT: readonly PartId[] = [
+  'powerhead',
+  'starter',
+  'starterRope',
+  'sparkPlug',
+  'chainBrakeBand',
+];
+
 export const PRESETS: Record<PresetId, Preset> = {
   saw: {
     camera: 'sawSide',
@@ -107,7 +115,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     startAt: TOP_OF_TURN,
     start: { throttle: THROTTLE_PRESETS.idle, brake: false, engine: 'stopped' },
     labels: STARTING_LABELS,
-    highlight: [...STARTING_LABELS, 'starterRope', 'starter', 'sparkPlug', 'chainBrakeBand'],
+    highlight: [...STARTING_LABELS, ...STARTING_CONTEXT],
   },
   clutch: {
     camera: 'clutchSprocket',
