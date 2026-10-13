@@ -823,20 +823,33 @@ arrives while the module loads is not lost. If the import or `start` fails, the 
 site's name, a plain link to the explainer on the site and a retry button, and greets the host
 itself so the frame gets a size.
 
-Published widgets stay cached in chat hosts long after a release, so `/embed/v1/` only grows:
-within `v1`, never remove or rename a path, an export, a `MountOptions` field or a DOM attribute a
-published widget relies on. A breaking change goes to `/embed/v2/`, next to `v1`. Paths that only
-earlier widgets request are still emitted as static files, so GitHub Pages serves them too:
+Within `v1`, a few names are stable: `/embed/v1/widget.js`, `/embed/v1/<slug>.js` for every
+explainer in the manifest, `manifest.json`, `covers/<slug>.webp`, `fonts/<file>.woff2` and
+`explainers/<slug>/`. Never rename or remove an export, a `MountOptions` field or a DOM attribute
+a widget relies on. A breaking change goes to `/embed/v2/`, next to `v1`. The hashed chunks the
+entries import, in `/assets/` and `widget-<lang>-<hash>.js`, change with each deploy, and a slug
+may be renamed or removed: the site check wants the manifest to list exactly the built explainers.
 `legacyEmbedFiles` in `vite/embed.ts` copies each cover to `/embed/v1/covers/<slug>.webp` and the
-latin fonts to `/embed/v1/fonts/<file>.woff2` under their fontsource names, and `vite/embed.test.ts`
-checks that they are in `dist/`. The build also publishes each explainer's `explainer.json`,
-`chapters.html` and `locales/<code>.json` verbatim under `/embed/v1/explainers/<slug>/`
-(`embedSourceFiles` in `vite/embed.ts`), so the MCP server reads them from the site; they are part
-of `v1`. Their fields and keys follow the same rule and only grow, so the server reads them
-leniently (`parsePublishedManifest` in `vite/manifestSchema.ts` drops a tag or language code it
-does not know).
+embed fonts to `/embed/v1/fonts/<file>.woff2` under their fontsource names (the list is
+`EMBED_FONTS` in `src/core/embed/fontFiles.ts`), and `vite/embed.test.ts` checks that they are in
+`dist/`. The build also publishes each explainer's `explainer.json`, `chapters.html` and
+`locales/<code>.json` verbatim under `/embed/v1/explainers/<slug>/` (`embedSourceFiles` in
+`vite/embed.ts`), so the MCP server reads them from the site; they are part of `v1`. Their fields
+and keys only grow, so the server reads them leniently (`parsePublishedManifest` in
+`vite/manifestSchema.ts` drops a tag or language code it does not know).
 
-The loader is such a published widget, and it is never refreshed by a deploy. Within `v1`, the entry
+A deploy replaces the whole site, and GitHub Pages sends `Cache-Control: max-age=600` for every
+file, so for up to ten minutes a browser can hold an entry whose hashed chunks are gone, and a
+widget mounted before the deploy keeps the old chunk names. The widget recovers instead of
+relying on old files. `SceneSession` in `mcp/widget/src/scene.ts` imports the entry once more with
+a `?v=<time>` query (`freshQuery`) when loading or mounting it fails, and mounts a fresh entry at
+the same state when `setLanguage` fails. `createPacks` takes a widget language that fails to load
+from a fresh `widget.js?v=<time>`, through its `languageData` export. `loadFonts` lists the stable
+copy in `/embed/v1/fonts/` as the second source of each face, and the widget hides a cover that
+does not load. When the fresh attempt fails too, the stage shows its error with a retry and a link
+to the explainer on the site.
+
+The loader stays cached in chat hosts long after a release, and a deploy never refreshes it. Within `v1`, the entry
 name `/embed/v1/widget.js` (not hashed, so a stale copy lives at most as long as the host's HTTP
 cache), the `start(root, options)` export, the `assetBase`, `inbox` and `loaderVersion` options, the
 inbox contract above and the `wmit-asset-base` meta tag stay backward
