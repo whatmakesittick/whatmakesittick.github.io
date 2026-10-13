@@ -863,8 +863,7 @@ widget mounted before the deploy keeps the old chunk names. The widget recovers 
 relying on old files. `SceneSession` in `mcp/widget/src/scene.ts` imports the entry once more with
 a `?v=<time>` query (`freshQuery`) when loading or mounting it fails, and mounts a fresh entry at
 the same state when `setLanguage` fails. `createPacks` takes a widget language that fails to load
-from a fresh `widget.js?v=<time>`, through its `languageData` export, which still returns the
-language's catalogue for widgets built before the catalogue moved out. `createCatalogues` in
+from a fresh `widget.js?v=<time>`, through its `languageData` export. `createCatalogues` in
 `mcp/widget/src/catalogue.ts` imports a catalogue module once more with the query when it fails,
 and again when the user moves into the strip or the picker: at once after a first load that may
 have come from the cache, then at most every five minutes (`CATALOGUE_REFRESH_MS`). So a widget
