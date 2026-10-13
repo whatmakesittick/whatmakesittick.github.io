@@ -1,8 +1,8 @@
-import english from 'virtual:wmit-catalogue';
 import sources from 'virtual:wmit-languages';
-import type { BakedCatalogue } from '../../../shared/catalogue.ts';
+import { embedCatalogueFile, type WidgetCatalogue } from '../../../shared/catalogue.ts';
 import { WIDGET_MODULE_FILE } from '../../../shared/loader.ts';
 import type { LanguageCode } from '../../../../src/core/i18n/languages.ts';
+import { catalogueOf, createCatalogues } from '../catalogue.ts';
 import { freshQuery } from '../scene.ts';
 import {
   createPacks,
@@ -12,10 +12,19 @@ import {
 } from './packs.ts';
 
 const bundled = sources as LanguageSources;
+const moduleUrl = import.meta.url;
 
-export function languageData(lang: LanguageCode): Promise<LanguageData> {
+export async function languageData(
+  lang: LanguageCode,
+): Promise<LanguageData & { catalogue: WidgetCatalogue | undefined }> {
   const source = bundled[lang];
-  return source ? source() : Promise.reject(new Error(`no language chunk for ${lang}`));
+  if (!source) throw new Error(`no language chunk for ${lang}`);
+  const url = new URL(`${embedCatalogueFile(lang)}${freshQuery()}`, moduleUrl).href;
+  const [data, catalogue] = await Promise.all([
+    source(),
+    import(/* @vite-ignore */ url).then(catalogueOf, () => undefined),
+  ]);
+  return { ...data, catalogue };
 }
 
 interface FreshWidget {
@@ -31,9 +40,9 @@ export const freshLanguage =
     return widget.languageData(lang);
   };
 
-export const bundledPacks = (assetBase?: string) =>
+export const bundledPacks = (assetBase: string, freshWidget = true) =>
   createPacks(
-    english as BakedCatalogue,
+    createCatalogues(assetBase),
     bundled,
-    assetBase === undefined ? undefined : freshLanguage(assetBase),
+    freshWidget ? freshLanguage(assetBase) : undefined,
   );

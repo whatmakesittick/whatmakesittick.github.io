@@ -63,7 +63,11 @@ export function ExploreStrip({ vm }: { vm: ViewModel }) {
   const by = (dir: -1 | 1) =>
     strip.current?.scrollBy({ left: dir * (strip.current.clientWidth - 60), behavior: 'smooth' });
   return (
-    <section class="a-explore inline-only">
+    <section
+      class="a-explore inline-only"
+      onPointerEnter={vm.actions.browse}
+      onFocusIn={vm.actions.browse}
+    >
       <div class="top">
         <h4>
           {s.exploreMore}
@@ -91,7 +95,14 @@ export function ExploreStrip({ vm }: { vm: ViewModel }) {
           </button>
         </div>
       </div>
-      <div class={`strip${edges.end ? ' at-end' : ''}`} ref={strip} onScroll={update}>
+      <div
+        class={`strip${edges.end ? ' at-end' : ''}`}
+        ref={strip}
+        onScroll={() => {
+          update();
+          vm.actions.browse();
+        }}
+      >
         {vm.strip.map((e, i) => (
           <Tile key={e.slug} vm={vm} entry={e} eager={i < 6} />
         ))}

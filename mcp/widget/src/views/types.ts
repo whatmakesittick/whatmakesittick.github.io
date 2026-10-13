@@ -26,6 +26,7 @@ export interface Actions {
   resetCamera(): void;
   openSite(): void;
   openCatalogue(): void;
+  browse(): void;
   toggleFullscreen(): void;
   switchTo(slug: string): void;
   retry(): void;

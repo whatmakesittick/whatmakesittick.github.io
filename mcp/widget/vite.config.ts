@@ -4,8 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import type { Plugin } from 'vite';
 import { buildCatalogue } from '../../vite/catalogue.ts';
-import { toBakedCatalogue } from '../catalogue/build.ts';
-import type { Catalogue } from '../shared/catalogue.ts';
+import { embedCatalogue, renderEmbedCatalogue } from '../../vite/embedCatalogue.ts';
 import {
   DEFAULT_LANGUAGE,
   LANGUAGE_CODES,
@@ -16,11 +15,11 @@ import { PATHS } from '../shared/config.ts';
 
 const MCP_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const REPOSITORY_ROOT = resolve(MCP_ROOT, '..');
-const CATALOGUE_MODULE = 'virtual:wmit-catalogue';
 const LANGUAGES_MODULE = 'virtual:wmit-languages';
 const LANGUAGE_PREFIX = 'virtual:wmit-language/';
 const SITE_PREFIX = '/site/';
 const SLOW_PREFIX = /^slow\/(\d+)\//;
+const CATALOGUE_PATH = /^embed\/v1\/catalogue\/([a-z]+)\.js$/;
 const CONTENT_TYPES: Record<string, string> = {
   '.webp': 'image/webp',
   '.woff2': 'font/woff2',
@@ -28,12 +27,12 @@ const CONTENT_TYPES: Record<string, string> = {
   '.json': 'application/json',
 };
 
-function languageModule(full: Catalogue, lang: LanguageCode): string {
+function languageModule(lang: LanguageCode): string {
   const core: unknown = JSON.parse(
     readFileSync(resolve(REPOSITORY_ROOT, `src/core/locales/${lang}.json`), 'utf8'),
   );
   const strings = resolve(MCP_ROOT, `widget/src/i18n/locales/${lang}.ts`);
-  const data = JSON.stringify({ catalogue: toBakedCatalogue(full, lang), core });
+  const data = JSON.stringify({ core });
   return `import widget from ${JSON.stringify(strings)};\nexport default { ...${data}, widget };`;
 }
 
@@ -44,25 +43,25 @@ function languagesModule(): string {
   return `export default {\n${entries.join('\n')}\n};`;
 }
 
-function catalogue(): Plugin {
-  let full: Catalogue | undefined;
-  const load = () => (full ??= buildCatalogue(REPOSITORY_ROOT));
-  const virtual = (id: string) =>
-    id === CATALOGUE_MODULE || id === LANGUAGES_MODULE || id.startsWith(LANGUAGE_PREFIX);
+function languages(): Plugin {
+  const virtual = (id: string) => id === LANGUAGES_MODULE || id.startsWith(LANGUAGE_PREFIX);
   return {
-    name: 'wmit-widget-catalogue',
-    buildStart: () => void (full = undefined),
+    name: 'wmit-widget-languages',
     resolveId: (id) => (virtual(id) ? `\0${id}` : undefined),
     load(id) {
       if (!id.startsWith('\0') || !virtual(id.slice(1))) return undefined;
       const name = id.slice(1);
-      if (name === CATALOGUE_MODULE)
-        return `export default ${JSON.stringify(toBakedCatalogue(load()))};`;
       if (name === LANGUAGES_MODULE) return languagesModule();
       const lang = name.slice(LANGUAGE_PREFIX.length);
-      return isLanguageCode(lang) ? languageModule(load(), lang) : undefined;
+      return isLanguageCode(lang) ? languageModule(lang) : undefined;
     },
   };
+}
+
+function catalogueModule(path: string): string | undefined {
+  const lang = CATALOGUE_PATH.exec(path)?.[1];
+  if (!lang || !isLanguageCode(lang)) return undefined;
+  return renderEmbedCatalogue(embedCatalogue(buildCatalogue(REPOSITORY_ROOT).explainers, lang));
 }
 
 function pruneChunks(): Plugin {
@@ -98,15 +97,20 @@ function devSite(): Plugin {
         if (!url.startsWith(SITE_PREFIX)) return next();
         const path = decodeURIComponent(url.slice(SITE_PREFIX.length));
         const slow = SLOW_PREFIX.exec(path);
-        const file = siteFile(slow ? path.slice(slow[0].length) : path);
-        if (!file) {
+        const local = slow ? path.slice(slow[0].length) : path;
+        const generated = catalogueModule(local);
+        const file = generated === undefined ? siteFile(local) : undefined;
+        if (generated === undefined && !file) {
           res.statusCode = 404;
           return res.end();
         }
-        res.setHeader('Content-Type', CONTENT_TYPES[extname(file)] ?? 'application/octet-stream');
+        res.setHeader('Content-Type', CONTENT_TYPES[extname(local)] ?? 'application/octet-stream');
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Cache-Control', 'no-store');
-        setTimeout(() => createReadStream(file).pipe(res), Number(slow?.[1] ?? 0));
+        setTimeout(
+          () => (file ? createReadStream(file).pipe(res) : res.end(generated)),
+          Number(slow?.[1] ?? 0),
+        );
       });
     },
   };
@@ -121,7 +125,7 @@ export default defineConfig({
   logLevel: 'warn',
   oxc: { jsx: { runtime: 'automatic', importSource: 'preact' } },
   server: { port: 5183, fs: { allow: [REPOSITORY_ROOT] } },
-  plugins: [catalogue(), devSite(), pruneChunks()],
+  plugins: [languages(), devSite(), pruneChunks()],
   build: {
     outDir: dirname(resolve(REPOSITORY_ROOT, PATHS.widgetModule)),
     emptyOutDir: false,

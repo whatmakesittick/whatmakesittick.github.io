@@ -1,7 +1,7 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { toBakedCatalogue, toWidgetCatalogue } from '../../catalogue/build.ts';
+import { toWidgetCatalogue } from '../../catalogue/build.ts';
 import { LANGUAGE_CODES } from '../../../src/core/i18n/languages.ts';
 import { resolveLanguage as coreResolveLanguage } from '../../../src/core/i18n/embedded.ts';
 import { buildCatalogue } from '../../../vite/catalogue.ts';
@@ -29,13 +29,11 @@ describe('catalogue for the MCP server and the widget', () => {
     expect(mri.chapters.map((c) => c.id)).toEqual(localized.chapters.map((c) => c.id));
   });
 
-  it('bakes the taglines in the widget language', () => {
-    const baked = toBakedCatalogue(catalogue, 'uk');
-    expect(baked.explainers).toEqual(toWidgetCatalogue(catalogue, 'uk').explainers);
-    expect(baked.taglines['mri-scanner']).toBe(
+  it('carries the taglines in the widget language', () => {
+    const thin = toWidgetCatalogue(catalogue, 'uk');
+    expect(thin.taglines['mri-scanner']).toBe(
       localizeEntry(bySlug.get('mri-scanner')!, 'uk').tagline,
     );
-    expect(JSON.stringify(baked).length).toBeLessThan(20_000);
   });
 });
 

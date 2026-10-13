@@ -1,11 +1,14 @@
 import { AppBridge, PostMessageTransport } from '@modelcontextprotocol/ext-apps/app-bridge';
-import bakedCatalogue from 'virtual:wmit-catalogue';
-import type { BakedCatalogue } from '../../../shared/catalogue.ts';
-import { explainerUrl, resolveLanguage } from '../../../shared/catalogue.ts';
+import {
+  TAGS,
+  embedCatalogueFile,
+  explainerUrl,
+  resolveLanguage,
+  type WidgetCatalogue,
+} from '../../../shared/catalogue.ts';
 import { ASSET_BASE_TOKEN } from '../../../shared/config.ts';
 import loaderHtml from '../../loader.html?raw';
 
-const catalogue = bakedCatalogue as BakedCatalogue;
 const q = new URLSearchParams(location.search);
 const slug = q.get('slug') ?? 'engine';
 const delay = Number(q.get('delay') ?? 0);
@@ -19,6 +22,9 @@ const assetBase =
     : `${site}${delay > 0 ? `slow/${delay}/` : ''}embed/v1/`;
 
 const say = (line: string) => console.log(`[HOST] ${line}`);
+const catalogueUrl = `${site}embed/v1/${embedCatalogueFile('en')}`;
+const catalogue = ((await import(/* @vite-ignore */ catalogueUrl)) as { default: WidgetCatalogue })
+  .default;
 const entry = catalogue.explainers.find((e) => e.slug === slug);
 const chapter = q.get('chapter') ?? entry?.chapters[0]?.id ?? '';
 const index = Math.max(0, entry?.chapters.findIndex((c) => c.id === chapter) ?? 0);
@@ -36,6 +42,7 @@ const result = {
     apiVersion: 1,
     ...(lang ? { lang: resolveLanguage(lang) } : {}),
     slugs: catalogue.explainers.map((e) => e.slug).sort(),
+    allowedTags: [...TAGS],
   },
 };
 

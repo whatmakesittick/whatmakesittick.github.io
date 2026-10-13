@@ -1,4 +1,5 @@
 import { App } from '@modelcontextprotocol/ext-apps';
+import { DEFAULT_LANGUAGE } from '../../../src/core/i18n/languages.ts';
 import { render } from 'preact';
 import type { WidgetStartOptions } from '../../shared/loader.ts';
 import { createAppHost } from './bridge.ts';
@@ -29,12 +30,14 @@ export function start(root: HTMLElement, { assetBase, inbox }: WidgetStartOption
     { autoResize: true },
   );
   const host = createAppHost(app);
+  const packs = bundledPacks(assetBase);
+  void packs.load(DEFAULT_LANGUAGE).catch(() => undefined);
   render(
     <Widget
       host={host}
       loader={urlLoader(assetBase)}
       assetBase={assetBase}
-      packs={bundledPacks(assetBase)}
+      packs={packs}
       webgl={hasWebGL2}
     />,
     root,

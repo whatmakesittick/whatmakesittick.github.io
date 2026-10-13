@@ -18,9 +18,9 @@ import {
   resolveChapter,
   resultFailed,
   sameDiscrete,
+  scopeFromResult,
+  scopeFromToolInfo,
   shownEntries,
-  slugsFromResult,
-  slugsFromToolInfo,
   snapshotOf,
   stripOrder,
   targetFromInput,
@@ -93,23 +93,39 @@ describe('tool input / result', () => {
 });
 
 describe('allowed explainers', () => {
-  it('reads the allowed slugs from structuredContent, then from the text', () => {
+  it('reads the allowed tags and slugs from structuredContent, then from the text', () => {
     expect(
-      slugsFromResult({ structuredContent: { slug: 'engine', slugs: ['engine', 'heart'] } }),
-    ).toEqual(['engine', 'heart']);
+      scopeFromResult({
+        structuredContent: { slug: 'engine', slugs: ['engine', 'heart'], allowedTags: ['physics'] },
+      }),
+    ).toEqual({ tags: ['physics'], slugs: ['engine', 'heart'] });
     expect(
-      slugsFromResult({
+      scopeFromResult({ structuredContent: { slug: 'engine', slugs: ['engine', 'heart'] } }),
+    ).toEqual({ slugs: ['engine', 'heart'] });
+    expect(
+      scopeFromResult({
+        content: [
+          {
+            type: 'text',
+            text: 'Showing.\nExplainers in the widget: engine, heart\nTags in the widget: physics, biology',
+          },
+        ],
+      }),
+    ).toEqual({ tags: ['physics', 'biology'], slugs: ['engine', 'heart'] });
+    expect(
+      scopeFromResult({
         content: [{ type: 'text', text: 'Showing.\nExplainers in the widget: engine, heart' }],
       }),
-    ).toEqual(['engine', 'heart']);
-    expect(slugsFromResult({ structuredContent: { slugs: ['engine', 7, 'Bad Slug'] } })).toEqual([
-      'engine',
-    ]);
-    expect(slugsFromResult({ structuredContent: { slug: 'engine' } })).toBeUndefined();
-    expect(slugsFromResult(null)).toBeUndefined();
+    ).toEqual({ slugs: ['engine', 'heart'] });
+    expect(scopeFromResult({ structuredContent: { slugs: ['engine', 7, 'Bad Slug'] } })).toEqual({
+      slugs: ['engine'],
+    });
+    expect(scopeFromResult({ structuredContent: { allowedTags: [] } })).toEqual({ tags: [] });
+    expect(scopeFromResult({ structuredContent: { slug: 'engine' } })).toBeUndefined();
+    expect(scopeFromResult(null)).toBeUndefined();
   });
 
-  it('reads the slug enum of the tool the host reports', () => {
+  it('reads the allowed tags and the slug enum of the tool the host reports', () => {
     const tool = {
       name: 'show_explainer',
       inputSchema: {
@@ -117,23 +133,41 @@ describe('allowed explainers', () => {
         properties: { slug: { type: 'string', enum: ['engine', 'heart'] } },
       },
     };
-    expect(slugsFromToolInfo({ toolInfo: { tool } })).toEqual(['engine', 'heart']);
-    expect(slugsFromToolInfo({})).toBeUndefined();
+    expect(scopeFromToolInfo({ toolInfo: { tool } })).toEqual({ slugs: ['engine', 'heart'] });
+    expect(
+      scopeFromToolInfo({
+        toolInfo: { tool: { ...tool, _meta: { 'wmit/allowedTags': ['physics'] } } },
+      }),
+    ).toEqual({ tags: ['physics'], slugs: ['engine', 'heart'] });
+    expect(scopeFromToolInfo({})).toBeUndefined();
   });
 
-  it('shows only allowed explainers, and only the open one while the list is unknown', () => {
-    const items = [{ slug: 'engine' }, { slug: 'rifle' }];
-    expect(shownEntries(items, ['engine'])).toEqual([{ slug: 'engine' }]);
-    expect(shownEntries(items, ['engine'], 'rifle')).toEqual([{ slug: 'engine' }]);
-    expect(shownEntries(items, undefined, 'rifle')).toEqual([{ slug: 'rifle' }]);
+  const engine = { slug: 'engine', tags: ['physics'] };
+  const rifle = { slug: 'rifle', tags: ['physics', 'weapons'] };
+  const fresh = { slug: 'fresh', tags: ['physics'] };
+  const items = [engine, rifle, fresh];
+
+  it('filters by the allowed tags, so an explainer newer than the call shows up', () => {
+    expect(shownEntries(items, { tags: ['physics'], slugs: ['engine'] })).toEqual([engine, fresh]);
+    expect(shownEntries(items, { tags: [] })).toEqual([]);
+    expect(shownEntries([{ slug: 'plain', tags: [] }], { tags: [] })).toHaveLength(1);
+  });
+
+  it('falls back to the allowed slugs, then to the open explainer only', () => {
+    expect(shownEntries(items, { slugs: ['engine'] })).toEqual([engine]);
+    expect(shownEntries(items, { slugs: ['engine'] }, 'rifle')).toEqual([engine]);
+    expect(shownEntries(items, undefined, 'rifle')).toEqual([rifle]);
     expect(shownEntries(items, undefined)).toEqual([]);
   });
 
   it('opens a target the server accepted, never one it refused or left out', () => {
-    expect(mayShow('rifle', ['engine'], false)).toBe(false);
-    expect(mayShow('engine', ['engine'], true)).toBe(true);
-    expect(mayShow('rifle', undefined, false)).toBe(true);
-    expect(mayShow('rifle', undefined, true)).toBe(false);
+    expect(mayShow(rifle, { tags: ['physics'] }, false)).toBe(false);
+    expect(mayShow(fresh, { tags: ['physics'] }, false)).toBe(true);
+    expect(mayShow(rifle, { slugs: ['engine'] }, false)).toBe(false);
+    expect(mayShow(engine, { slugs: ['engine'] }, true)).toBe(true);
+    expect(mayShow(rifle, undefined, false)).toBe(true);
+    expect(mayShow(rifle, undefined, true)).toBe(false);
+    expect(mayShow(undefined, undefined, false)).toBe(false);
     expect(resultFailed({ isError: true })).toBe(true);
     expect(resultFailed({ content: [] })).toBe(false);
   });

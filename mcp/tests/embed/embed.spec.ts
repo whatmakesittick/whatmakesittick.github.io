@@ -176,6 +176,19 @@ test.describe('embed v1 under the strict spec CSP', () => {
       .toEqual([expect.stringMatching(/^csp: connect-src/)]);
   });
 
+  test('the catalogue modules import as scripts, fresh or cached', async ({ page }) => {
+    const frame = await openHarness(page);
+    const assets = `http://localhost:${server.port}/embed/v1/`;
+    const counts = await frame.evaluate(async (base) => {
+      const count = async (path: string) =>
+        ((await import(base + path)) as { default: { explainers: unknown[] } }).default.explainers
+          .length;
+      return [await count('catalogue/en.js'), await count('catalogue/uk.js?v=1')];
+    }, assets);
+    expect(counts).toEqual([catalogue.explainers.length, catalogue.explainers.length]);
+    expect(await frameErrors(frame)).toEqual([]);
+  });
+
   for (const entry of catalogue.explainers) {
     test(`${entry.slug}: mounts, renders, controller works, disposes`, async ({ page }) => {
       const problems = watchConsole(page);

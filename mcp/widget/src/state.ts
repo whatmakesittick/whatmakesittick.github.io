@@ -1,7 +1,12 @@
 import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import { isSlug, plainText, SITE_URL, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { EmbedInfo, EmbedState, LanguageCode } from '../../../src/core/embed/contract.ts';
-import { WIDGET_SLUGS_LINE, type ModelContextSnapshot } from '../../shared/tools.ts';
+import {
+  WIDGET_SLUGS_LINE,
+  WIDGET_TAGS_LINE,
+  WIDGET_TAGS_META,
+  type ModelContextSnapshot,
+} from '../../shared/tools.ts';
 import type { ChapterView, Discrete } from './views/types.ts';
 
 export interface Target {
@@ -67,46 +72,70 @@ export function targetFromResult(
   return undefined;
 }
 
-const slugList = (value: unknown): string[] | undefined =>
+const nameList = (value: unknown): string[] | undefined =>
   Array.isArray(value)
     ? value.filter((s): s is string => typeof s === 'string' && isSlug(s))
     : undefined;
 
-export function slugsFromResult(result: unknown): string[] | undefined {
+export interface Scope {
+  tags?: readonly string[];
+  slugs?: readonly string[];
+}
+
+const scopeOf = (tags: string[] | undefined, slugs: string[] | undefined): Scope | undefined =>
+  tags || slugs ? { ...(tags ? { tags } : {}), ...(slugs ? { slugs } : {}) } : undefined;
+
+const lineList = (lines: readonly string[], prefix: string): string[] | undefined => {
+  const line = lines.find((l) => l.startsWith(prefix));
+  return line === undefined ? undefined : nameList(line.slice(prefix.length).split(/,\s*/));
+};
+
+export function scopeFromResult(result: unknown): Scope | undefined {
   if (!isObj(result)) return undefined;
   const sc = result.structuredContent;
-  const structured = isObj(sc) ? slugList(sc.slugs) : undefined;
+  const structured = isObj(sc) ? scopeOf(nameList(sc.allowedTags), nameList(sc.slugs)) : undefined;
   if (structured) return structured;
   const content = Array.isArray(result.content) ? result.content : [];
   for (const block of content) {
     if (!isObj(block) || block.type !== 'text' || typeof block.text !== 'string') continue;
-    const line = block.text.split('\n').find((l) => l.startsWith(WIDGET_SLUGS_LINE));
-    if (line) return slugList(line.slice(WIDGET_SLUGS_LINE.length).split(/,\s*/));
+    const lines = block.text.split('\n');
+    const scope = scopeOf(lineList(lines, WIDGET_TAGS_LINE), lineList(lines, WIDGET_SLUGS_LINE));
+    if (scope) return scope;
   }
   return undefined;
 }
 
-export function slugsFromToolInfo(ctx: Partial<McpUiHostContext>): string[] | undefined {
-  const slug = ctx.toolInfo?.tool.inputSchema.properties?.slug;
-  return isObj(slug) ? slugList(slug.enum) : undefined;
+export function scopeFromToolInfo(ctx: Partial<McpUiHostContext>): Scope | undefined {
+  const tool = ctx.toolInfo?.tool;
+  const slug = tool?.inputSchema.properties?.slug;
+  return scopeOf(
+    nameList(tool?._meta?.[WIDGET_TAGS_META]),
+    isObj(slug) ? nameList(slug.enum) : undefined,
+  );
 }
 
 export const resultFailed = (result: unknown): boolean => isObj(result) && result.isError === true;
 
-export function mayShow(
-  slug: string,
-  allowed: readonly string[] | undefined,
-  failed: boolean,
-): boolean {
-  return allowed ? allowed.includes(slug) : !failed;
+export function inScope(entry: { slug: string; tags: readonly string[] }, scope: Scope): boolean {
+  const { tags, slugs } = scope;
+  return tags ? entry.tags.every((t) => tags.includes(t)) : (slugs ?? []).includes(entry.slug);
 }
 
-export function shownEntries<T extends { slug: string }>(
+export function mayShow<T extends { slug: string; tags: readonly string[] }>(
+  entry: T | undefined,
+  scope: Scope | undefined,
+  failed: boolean,
+): entry is T {
+  if (!entry) return false;
+  return scope ? inScope(entry, scope) : !failed;
+}
+
+export function shownEntries<T extends { slug: string; tags: readonly string[] }>(
   items: readonly T[],
-  allowed: readonly string[] | undefined,
+  scope: Scope | undefined,
   current?: string,
 ): T[] {
-  return items.filter((i) => (allowed ? allowed.includes(i.slug) : i.slug === current));
+  return items.filter((i) => (scope ? inScope(i, scope) : i.slug === current));
 }
 
 export function mergeTarget(prev: Target | undefined, next: Target): Target {

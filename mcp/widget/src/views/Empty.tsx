@@ -43,11 +43,13 @@ export function Unknown({
   assetBase,
   onPick,
   onOpen,
+  onBrowse,
 }: {
   catalogue: WidgetCatalogueEntry[];
   assetBase: string;
   onPick: (slug: string) => void;
   onOpen: () => void;
+  onBrowse: () => void;
 }) {
   const s = useStrings();
   return (
@@ -56,7 +58,7 @@ export function Unknown({
         <BrandRow onOpen={onOpen} />
         <h2 class="title">{s.unknown}</h2>
       </header>
-      <section class="a-explore unknown">
+      <section class="a-explore unknown" onPointerEnter={onBrowse} onFocusIn={onBrowse}>
         <div class="grid">
           {catalogue.map((e) => (
             <button

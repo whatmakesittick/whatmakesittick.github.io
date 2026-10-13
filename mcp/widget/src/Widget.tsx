@@ -10,8 +10,8 @@ import {
   frameOf,
   mayShow,
   neighbour,
+  scopeFromToolInfo,
   shownEntries,
-  slugsFromToolInfo,
   stripOrder,
 } from './state.ts';
 import { ChapterSection } from './views/Chapter.tsx';
@@ -43,7 +43,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
 
   const sceneSession = useSceneSession(host, loader, webgl);
   const { session, refs, ctrlRef, controller, status, progress, info, setInfo } = sceneSession;
-  const { pack, waiting } = useWidgetLanguage(host, packs, session);
+  const { pack, waiting, refresh } = useWidgetLanguage(host, packs, session);
   const catalogue = pack.catalogue;
   const entries = catalogue.explainers;
   const entriesRef = useRef(entries);
@@ -51,16 +51,18 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   const find = (slug: string): WidgetCatalogueEntry | undefined =>
     entriesRef.current.find((e) => e.slug === slug);
   const ctx = useHostContext(host);
-  const toolSlugs = useMemo(() => slugsFromToolInfo(ctx), [ctx]);
-  const { target, setTarget, inputSeen, resultSeen, allowed, failed } = useTarget(
+  const toolScope = useMemo(() => scopeFromToolInfo(ctx), [ctx]);
+  const { target, setTarget, inputSeen, resultSeen, scope, failed } = useTarget(
     host,
     find,
     session,
-    toolSlugs,
+    toolScope,
+    entries,
   );
   const slug = target?.slug;
-  const entry = slug && mayShow(slug, allowed, failed) ? find(slug) : undefined;
-  const shown = shownEntries(entries, allowed, entry?.slug);
+  const found = slug ? find(slug) : undefined;
+  const entry = mayShow(found, scope, failed) ? found : undefined;
+  const shown = shownEntries(entries, scope, entry?.slug);
   const canOpen = (next: string) => shown.some((e) => e.slug === next);
   const hold = !painted.current && waiting;
 
@@ -113,6 +115,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     resetCamera: () => ctrlRef.current?.resetCamera(),
     openSite: () => slug && void host.openLink(explainerUrl(slug)),
     openCatalogue,
+    browse: refresh,
     toggleFullscreen,
     switchTo: touched((next: string) => {
       if (next !== slug && canOpen(next)) setTarget({ slug: next });
@@ -142,6 +145,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
               assetBase={assetBase}
               onPick={(s) => canOpen(s) && setTarget({ slug: s })}
               onOpen={openCatalogue}
+              onBrowse={refresh}
             />
           ) : (
             <Waiting onOpen={openCatalogue} quiet={hold || !inputSeen} />
@@ -171,7 +175,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     canFullscreen,
     assetBase,
     catalogue: shown,
-    strip: stripOrder(allowed ? shown : entries, stripFirst ?? slug),
+    strip: stripOrder(scope ? shown : entries, stripFirst ?? slug),
     actions,
   };
 

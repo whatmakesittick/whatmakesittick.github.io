@@ -1,17 +1,14 @@
 import { render } from 'preact';
-import { explainerUrl, isSlug, resolveLanguage } from '../../../shared/catalogue.ts';
+import { TAGS, explainerUrl, isSlug, resolveLanguage } from '../../../shared/catalogue.ts';
 import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import { createHub, type DisplayMode, type WidgetHost } from '../bridge.ts';
 import { bundledPacks } from '../i18n/bundled.ts';
 import { hasWebGL2, urlLoader } from '../scene.ts';
-import { WIDGET_SLUGS_LINE } from '../../../shared/tools.ts';
+import { WIDGET_SLUGS_LINE, WIDGET_TAGS_LINE } from '../../../shared/tools.ts';
 import '../styles.css';
 import { fullscreenDockCss } from '../fullscreenDock.ts';
 import { Widget } from '../Widget.tsx';
 import { mockLoader } from './mockEmbed.ts';
-
-const packs = bundledPacks();
-const catalogue = packs.english.catalogue;
 
 const q = new URLSearchParams(location.search);
 const slug = q.get('slug') ?? 'mri-scanner';
@@ -21,11 +18,14 @@ const real = q.get('real') === '1';
 const lang = q.get('lang');
 const slow = Number(q.get('slow') ?? 0);
 const excluded = (q.get('exclude') ?? '').split(',').filter(Boolean);
+const assetBase = `${location.origin}/site/${slow > 0 ? `slow/${slow}/` : ''}embed/v1/`;
+const packs = bundledPacks(assetBase, false);
+const { catalogue } = await packs.load('en');
+const allowedTags = TAGS.filter((t) => !excluded.includes(t));
 const slugs = catalogue.explainers
   .filter((e) => !e.tags.some((t) => excluded.includes(t)))
   .map((e) => e.slug)
   .sort();
-const assetBase = `${location.origin}/site/${slow > 0 ? `slow/${slow}/` : ''}embed/v1/`;
 let mode: DisplayMode = q.get('mode') === 'fullscreen' ? 'fullscreen' : 'inline';
 const hostTheme =
   q.get('host') ?? (Number(q.get('width')) && Number(q.get('width')) < 500 ? 'dark' : 'light');
@@ -171,7 +171,7 @@ setTimeout(async () => {
     hub.emit('result', {
       isError: true,
       content: [{ type: 'text', text: 'No explainer matches.' }],
-      structuredContent: { slugs },
+      structuredContent: { slugs, allowedTags },
     });
     return;
   }
@@ -189,8 +189,9 @@ setTimeout(async () => {
     apiVersion: 1,
     ...(lang ? { lang: resolveLanguage(lang) } : {}),
     slugs,
+    allowedTags,
   };
-  const text = `Showing the interactive 3D explainer "${structured.title}".\nOpened at chapter ${ci + 1} of ${structured.chapterCount}: "${structured.chapterTitle}" (id: ${chapter}).\nWebsite: ${structured.url}\n${WIDGET_SLUGS_LINE}${slugs.join(', ')}`;
+  const text = `Showing the interactive 3D explainer "${structured.title}".\nOpened at chapter ${ci + 1} of ${structured.chapterCount}: "${structured.chapterTitle}" (id: ${chapter}).\nWebsite: ${structured.url}\n${WIDGET_SLUGS_LINE}${slugs.join(', ')}\n${WIDGET_TAGS_LINE}${allowedTags.join(', ')}`;
   const data = q.get('data');
   hub.emit(
     'result',

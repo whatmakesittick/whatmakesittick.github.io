@@ -1,9 +1,9 @@
-import type { BakedCatalogue } from '../../../shared/catalogue.ts';
+import type { WidgetCatalogue } from '../../../shared/catalogue.ts';
 import { DEFAULT_LANGUAGE, type LanguageCode } from '../../../../src/core/i18n/languages.ts';
+import type { Catalogues } from '../catalogue.ts';
 import { resolveStrings, type Strings, type WidgetStrings } from './strings.ts';
 
 export interface LanguageData {
-  catalogue: BakedCatalogue;
   core: object;
   widget: WidgetStrings;
 }
@@ -14,56 +14,79 @@ export type FreshLanguage = (lang: LanguageCode) => Promise<LanguageData>;
 
 export interface LanguagePack {
   lang: LanguageCode;
-  catalogue: BakedCatalogue;
+  catalogue: WidgetCatalogue;
   strings: Strings;
 }
 
 export interface Packs {
-  english: LanguagePack;
+  englishStrings: Strings;
   ready(lang: LanguageCode): LanguagePack | undefined;
   load(lang: LanguageCode): Promise<LanguagePack>;
+  refresh(lang: LanguageCode): Promise<LanguagePack | undefined>;
 }
 
 export function createPacks(
-  english: BakedCatalogue,
+  catalogues: Catalogues,
   sources: LanguageSources,
   fresh?: FreshLanguage,
 ): Packs {
-  const base: LanguagePack = {
-    lang: DEFAULT_LANGUAGE,
-    catalogue: english,
-    strings: resolveStrings(),
+  const englishStrings = resolveStrings();
+  const strings = new Map<LanguageCode, Strings>([[DEFAULT_LANGUAGE, englishStrings]]);
+  const pendingStrings = new Map<LanguageCode, Promise<Strings>>();
+  const packs = new Map<LanguageCode, LanguagePack>();
+
+  const supported = (lang: LanguageCode): LanguageCode =>
+    lang === DEFAULT_LANGUAGE || sources[lang] ? lang : DEFAULT_LANGUAGE;
+
+  const loadStrings = (lang: LanguageCode): Promise<Strings> => {
+    const done = strings.get(lang);
+    if (done) return Promise.resolve(done);
+    let promise = pendingStrings.get(lang);
+    if (!promise) {
+      const source = sources[lang] as () => Promise<LanguageData>;
+      const data = fresh
+        ? source().catch((error: unknown) => {
+            console.warn('[wmit-widget] language chunk failed, loading a fresh module', error);
+            return fresh(lang);
+          })
+        : source();
+      promise = data.then(({ core, widget }) => {
+        const resolved = resolveStrings(widget, core);
+        strings.set(lang, resolved);
+        return resolved;
+      });
+      promise.then(
+        () => pendingStrings.delete(lang),
+        () => pendingStrings.delete(lang),
+      );
+      pendingStrings.set(lang, promise);
+    }
+    return promise;
   };
-  const loaded = new Map<LanguageCode, LanguagePack>([[DEFAULT_LANGUAGE, base]]);
-  const pending = new Map<LanguageCode, Promise<LanguagePack>>();
+
+  const ready = (wanted: LanguageCode): LanguagePack | undefined => {
+    const lang = supported(wanted);
+    const text = strings.get(lang);
+    const catalogue = catalogues.ready(lang);
+    if (!text || !catalogue) return undefined;
+    const known = packs.get(lang);
+    if (known?.catalogue === catalogue && known.strings === text) return known;
+    const pack = { lang, catalogue, strings: text };
+    packs.set(lang, pack);
+    return pack;
+  };
+
   return {
-    english: base,
-    ready: (lang) => loaded.get(lang),
-    load(lang) {
-      const done = loaded.get(lang);
-      if (done) return Promise.resolve(done);
-      const source = sources[lang];
-      if (!source) return Promise.resolve(base);
-      let promise = pending.get(lang);
-      if (!promise) {
-        const data = fresh
-          ? source().catch((error: unknown) => {
-              console.warn('[wmit-widget] language chunk failed, loading a fresh module', error);
-              return fresh(lang);
-            })
-          : source();
-        promise = data.then(({ catalogue, core, widget }) => {
-          const pack = { lang, catalogue, strings: resolveStrings(widget, core) };
-          loaded.set(lang, pack);
-          return pack;
-        });
-        promise.then(
-          () => pending.delete(lang),
-          () => pending.delete(lang),
-        );
-        pending.set(lang, promise);
-      }
-      return promise;
+    englishStrings,
+    ready,
+    async load(wanted) {
+      const lang = supported(wanted);
+      await Promise.all([loadStrings(lang), catalogues.load(lang)]);
+      return ready(lang) as LanguagePack;
+    },
+    async refresh(wanted) {
+      const lang = supported(wanted);
+      return (await catalogues.refresh(lang)) ? ready(lang) : undefined;
     },
   };
 }

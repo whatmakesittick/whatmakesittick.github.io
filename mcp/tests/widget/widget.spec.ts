@@ -3,6 +3,12 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, test, type Page } from '@playwright/test';
 import { buildCatalogue } from '../../../vite/catalogue.ts';
+import {
+  parseEmbedCatalogue,
+  renderEmbedCatalogue,
+  type EmbedCatalogue,
+  type EmbedCatalogueEntry,
+} from '../../../vite/embedCatalogue.ts';
 import { toWidgetCatalogue } from '../../catalogue/build.ts';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
@@ -446,5 +452,75 @@ test('excluded explainers stay out of the strip and the picker', async ({ page }
   await expect(page.locator('.thumb[data-slug="heart"]')).toBeAttached();
   await expect(page.locator('.thumb[data-slug="rifle"]')).toHaveCount(0);
   expect(logs.filter((l) => l.includes('rifle'))).toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+const publishLater = async (page: Page) => {
+  const requests: string[] = [];
+  let added: Pick<EmbedCatalogueEntry, 'slug' | 'tags'>[] = [];
+  await page.route(
+    (url) => url.pathname.endsWith('/embed/v1/catalogue/en.js') && url.search.startsWith('?v='),
+    async (route) => {
+      requests.push(route.request().url());
+      const response = await route.fetch();
+      const catalogue = parseEmbedCatalogue(await response.text()) as EmbedCatalogue;
+      const heart = catalogue.explainers.find((e) => e.slug === 'heart')!;
+      const explainers = [
+        ...catalogue.explainers,
+        ...added.map((a) => ({ ...heart, ...a, title: `New ${a.slug}` })),
+      ];
+      await route.fulfill({ response, body: renderEmbedCatalogue({ ...catalogue, explainers }) });
+    },
+  );
+  return {
+    requests,
+    publish: (entries: typeof added) => void (added = entries),
+  };
+};
+
+const NEW_EXPLAINERS = [
+  { slug: 'lathe', tags: ['tools' as const, 'mechanics' as const] },
+  { slug: 'cannon', tags: ['weapons' as const, 'physics' as const] },
+];
+
+test('a catalogue published while the widget is open shows up when the user opens the strip', async ({
+  page,
+}) => {
+  await page.clock.install();
+  const site = await publishLater(page);
+  const { errors } = await open(page, 'slug=mri-scanner&exclude=weapons');
+  await expect(page.locator('.wmit.st-ready')).toBeVisible();
+  await page.locator('.a-explore h4').hover();
+  await expect.poll(() => site.requests.length).toBe(1);
+  await page.locator('.a-head').hover();
+  site.publish(NEW_EXPLAINERS);
+  await page.locator('.a-explore h4').hover();
+  await page.locator('.a-head').hover();
+  await expect(page.locator('.strip .thumb[data-slug="lathe"]')).toHaveCount(0);
+  expect(site.requests).toHaveLength(1);
+  await page.clock.fastForward('05:01');
+  await page.locator('.a-explore h4').hover();
+  await expect(page.locator('.strip .thumb[data-slug="lathe"]')).toBeAttached();
+  await expect(page.locator('.strip .thumb[data-slug="lathe"] .t')).toHaveText('New lathe');
+  await expect(page.locator('.thumb[data-slug="cannon"]')).toHaveCount(0);
+  await expect(page.locator('.thumb[data-slug="rifle"]')).toHaveCount(0);
+  await expect(page.locator('.wmit.st-ready[data-slug="mri-scanner"]')).toBeVisible();
+  expect(site.requests).toHaveLength(2);
+  expect(errors).toEqual([]);
+});
+
+test('the picker shows an explainer published after the call, but not an excluded one', async ({
+  page,
+}) => {
+  const site = await publishLater(page);
+  site.publish(NEW_EXPLAINERS);
+  const { errors } = await open(page, 'state=unknown&exclude=weapons');
+  await expect(page.getByText('Pick an explainer')).toBeVisible();
+  await expect(page.locator('.thumb[data-slug="heart"]')).toBeAttached();
+  await expect(page.locator('.thumb[data-slug="lathe"]')).toHaveCount(0);
+  await page.locator('.a-explore.unknown').hover();
+  await expect(page.locator('.thumb[data-slug="lathe"]')).toBeAttached();
+  await expect(page.locator('.thumb[data-slug="cannon"]')).toHaveCount(0);
+  await expect(page.locator('.thumb[data-slug="rifle"]')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
