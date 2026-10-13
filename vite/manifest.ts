@@ -8,6 +8,7 @@ import type { ExplainerManifest, ExplainerMeta } from '../src/core/manifest.ts';
 import { readPageDates } from './dates.ts';
 import type { PageDates } from './dates.ts';
 import {
+  checkFormerSlugs,
   EXPLAINERS_DIRECTORY,
   LOCALES_DIRECTORY,
   MANIFEST_FILE,
@@ -105,9 +106,11 @@ export function loadExplainers(root: string): LoadedExplainer[] {
   const explainersDirectory = join(root, EXPLAINERS_DIRECTORY);
   if (!existsSync(explainersDirectory)) return [];
   const reserved = reservedSlugs(root);
-  return readdirSync(explainersDirectory, { withFileTypes: true })
+  const explainers = readdirSync(explainersDirectory, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .filter((entry) => existsSync(join(explainersDirectory, entry.name, MANIFEST_FILE)))
     .map((entry) => loadExplainer(root, entry.name, reserved))
     .sort((a, b) => a.manifest.slug.localeCompare(b.manifest.slug));
+  checkFormerSlugs(explainers.map(({ manifest }) => manifest));
+  return explainers;
 }
