@@ -4,7 +4,7 @@
     "eyebrow": "Ferramentas motorizadas",
     "tagline": "Uma volta do virabrequim, em câmera lenta: como uma faísca, uma embreagem que gira e uma fileira fechada de dentes afiados transformam combustível em cavacos de madeira.",
     "description": "Motosserra 3D, uma volta por vez: o motor de dois tempos, o combustível, a embreagem que para a corrente em marcha lenta, os dentes e o freio da corrente.",
-    "summary": "A motosserra inteira, o motor de dois tempos, o combustível e o carburador, a embreagem, a corrente de corte e o rebote com o freio da corrente.",
+    "summary": "A motosserra inteira, o motor de dois tempos, o combustível e o carburador, a partida, a embreagem, a corrente de corte e o rebote com o freio da corrente.",
     "socialAlt": "Uma motosserra laranja a gasolina, com o sabre sobre uma tora, ao lado do título “Como funciona uma motosserra”"
   },
   "stage": {
@@ -53,10 +53,14 @@
     "kickbackOptions": {
       "strong": "Mostrar um rebote"
     },
+    "startOptions": {
+      "cold": "Ligar a motosserra fria"
+    },
     "groups": {
       "throttle": "Acelerador",
       "brake": "Freio da corrente",
-      "kickback": "Mostrar um rebote"
+      "kickback": "Mostrar um rebote",
+      "start": "Dar a partida"
     },
     "views": {
       "cutaway": {
@@ -90,6 +94,12 @@
       "open": "Solta",
       "driving": "Tracionando",
       "slipping": "Patinando"
+    },
+    "engineState": {
+      "stopped": "Parado",
+      "cranking": "Girando na partida",
+      "fastIdle": "Marcha lenta acelerada",
+      "running": "Em marcha lenta"
     }
   },
   "units": {
@@ -132,6 +142,30 @@
         "drawing": "Puxando mistura para dentro",
         "squeezing": "Empurrando a mistura para as janelas de transferência"
       }
+    },
+    "starting": {
+      "step": "Agora",
+      "steps": {
+        "ready": "Fria e parada",
+        "brake": "Freio da corrente acionado",
+        "choke": "Afogador fechado",
+        "decompression": "Válvula de descompressão aberta",
+        "primer": "Primer apertado",
+        "firstPull": "Primeiro puxão",
+        "pop": "Um estouro: o motor pega uma vez",
+        "chokeOff": "Afogador aberto",
+        "secondPull": "Segundo puxão",
+        "fastIdle": "Marcha lenta acelerada, freio acionado",
+        "idle": "Um toque no acelerador, marcha lenta",
+        "done": "Em marcha lenta. Agora solte o freio."
+      },
+      "engine": "Motor",
+      "primer": "Primer",
+      "primerValue": "cerca de 6 apertos, pelo menos 10 em algumas motosserras",
+      "coilGap": "Folga entre ímã e bobina",
+      "coilGapValue": "0,25 mm",
+      "distance": "Ligue longe de onde abasteceu",
+      "distanceValue": "pelo menos 3 m"
     },
     "clutch": {
       "throttle": "Acelerador",
@@ -182,7 +216,7 @@
     "throttleTrigger": "Gatilho do acelerador",
     "frontHandle": "Punho dianteiro",
     "handGuard": "Protetor de mão dianteiro",
-    "starter": "Partida",
+    "starter": "Carcaça da partida",
     "sparkPlug": "Vela de ignição",
     "cylinder": "Cilindro",
     "piston": "Pistão",
@@ -217,7 +251,18 @@
     "exhaustGas": "Gás queimado",
     "oilFlow": "Óleo da corrente",
     "log": "Tora",
-    "chips": "Cavacos de madeira"
+    "chips": "Cavacos de madeira",
+    "fuelCap": "Tampa do combustível",
+    "oilCap": "Tampa do óleo da corrente",
+    "starterGrip": "Manopla de partida",
+    "starterRope": "Corda de partida",
+    "starterPulley": "Polia da corda",
+    "pawls": "Linguetas",
+    "flywheel": "Volante e ventoinha",
+    "ignitionCoil": "Bobina de ignição",
+    "primerBulb": "Bulbo do primer",
+    "chokeLever": "Alavanca do afogador e de parada",
+    "decompressionValve": "Válvula de descompressão"
   },
   "sections": {
     "saw": {
@@ -242,11 +287,19 @@
       "p3": "Você segura uma motosserra em todos os ângulos, até deitada de lado. Muitos motores medem o combustível com uma boia numa pequena cuba, e isso só funciona com o motor em pé. Já o carburador da motosserra usa um <strong>diafragma</strong>, uma lâmina fina e flexível. Uma pequena bomba manda combustível para ele, e quem move essa bomba é o próprio cárter. A cada volta, a pressão no cárter sobe e desce. A <strong>linha de pulso</strong> leva esse ritmo até a bomba. É por isso que o motor continua funcionando em qualquer ângulo.",
       "p4": "Um motor de dois tempos não tem uma reserva de óleo embaixo do virabrequim. O óleo viaja junto com o combustível. Você mistura óleo para dois tempos na gasolina, na proporção de 50 para 1: 100 ml de óleo em 5 litros de gasolina. No caminho pelo motor, o óleo mantém as peças móveis lubrificadas. Mas nem toda motosserra tem carburador. Algumas profissionais usam injeção eletrônica de combustível."
     },
+    "starting": {
+      "title": "Acordando o motor",
+      "p1": "Para ligar uma motosserra, você gira o motor com a mão até ele pegar. Coloque a motosserra no chão, a pelo menos 3 m de onde você a abasteceu. As duas tampas ficam embaixo, do lado esquerdo: a <strong>tampa do combustível</strong> atrás, a <strong>tampa do óleo da corrente</strong> na frente. Segure o punho dianteiro com a mão esquerda e ponha o pé direito dentro do punho traseiro. Depois empurre o <strong>protetor de mão dianteiro</strong> para a frente e acione o freio da corrente, sempre. Na posição de partida, o acelerador fica aberto o bastante para a embreagem agarrar. Sem o freio, a corrente sairia girando.",
+      "p2": "Um motor frio precisa de ajuda. A <strong>alavanca do afogador e de parada</strong> fecha o afogador e deixa o acelerador um pouco aberto. Motosserras maiores também têm uma <strong>válvula de descompressão</strong>. Quando você aperta essa válvula, ela solta parte da compressão do cilindro, e a corda fica mais leve de puxar. Ela se fecha sozinha assim que o motor pega. Depois você aperta o <strong>bulbo do primer</strong> cerca de 6 vezes, ou pelo menos 10 em algumas motosserras. Ele não esguicha combustível no cilindro. Ele tira o ar da mangueira e puxa o combustível até o carburador.",
+      "p3": "Agora pegue a <strong>manopla de partida</strong>. A <strong>corda de partida</strong> fica enrolada numa <strong>polia da corda</strong>. Pequenos ganchos, as <strong>linguetas</strong>, prendem a polia ao <strong>volante</strong>, a roda na ponta do virabrequim. Puxe devagar até sentir que elas engataram, e então puxe rápido. Cada puxão gira o virabrequim algumas vezes. Nunca enrole a corda na mão, e nunca puxe até o fim. Também não solte a corda para ela voltar sozinha: acompanhe com a mão enquanto uma mola a enrola de novo. E nunca dê a partida jogando a motosserra para longe enquanto puxa a corda.",
+      "p4": "O volante faz mais do que girar. As aletas dele são a ventoinha que esfria o motor. Os ímãs presos nele passam pela <strong>bobina de ignição</strong>, a só 0,25 mm de distância, e geram a faísca. Por isso a motosserra não precisa de bateria. Escolha Ligar a motosserra fria para ver uma partida inteira. O primeiro puxão termina num estouro: o motor pega uma vez e para. Esse estouro é o sinal para abrir o afogador, porque uma motosserra nunca funciona com o afogador todo fechado. Se você continuar puxando com o afogador fechado depois do estouro, o motor fica afogado de combustível.",
+      "p5": "O segundo puxão liga o motor em marcha lenta acelerada, ainda com o freio acionado. Dê um toque rápido no gatilho do acelerador, e o motor cai para a marcha lenta. Só então você solta o freio. Se a corrente continuar girando em marcha lenta, a motosserra precisa de regulagem. O modelo desenha a partida, mas não marca o tempo dela: o puxão aparece num ritmo que dá para acompanhar, e a câmera lenta só começa quando o motor já está funcionando. Os fabricantes não publicam a rotação na partida nem a da marcha lenta acelerada, então o mostrador mostra palavras nesses momentos, não números. Vista em corte (C) tira a tampa da partida, e a folga da bobina aparece mais larga que na vida real para você conseguir ver."
+    },
     "clutch": {
       "title": "Por que a corrente para na marcha lenta",
       "p1": "Entre o virabrequim e a corrente fica uma <strong>embreagem centrífuga</strong>, uma embreagem que funciona girando. Os pesos dela, as <strong>sapatas da embreagem</strong>, giram com o virabrequim, e molas as seguram para dentro. Em volta delas há um copo de aço, o <strong>tambor da embreagem</strong>. O tambor leva o <strong>pinhão</strong>, a roda dentada que movimenta a corrente. Quando o motor acelera, o giro joga as sapatas para fora, contra o tambor. Aí o atrito faz o tambor girar junto.",
       "p2": "Em marcha lenta, cerca de 2.700 rpm, as molas vencem e as sapatas ficam recolhidas. O tambor fica parado, então a corrente não se move. É assim que deve ser: em marcha lenta, a corrente não pode girar. Nesta motosserra, as sapatas agarram a 3.700 rpm. Arraste o acelerador devagar além desse ponto e veja a corrente começar a andar. No modelo, a embreagem agarra por completo no instante em que o motor passa de 3.700 rpm. Por isso a corrente salta direto para cerca de 8 m/s. Uma embreagem de verdade patina por um momento, enquanto as sapatas pegam.",
-      "p3": "O pinhão tem 7 dentes, e cada um avança a corrente dois passos. Um passo é a distância de um rebite da corrente até o seguinte. Assim, uma volta move a corrente cerca de 133 mm. A 9.900 rpm, isso dá 22 metros por segundo (m/s), cerca de 79 km/h. Nessa rotação o motor dá a potência máxima, e no corte ele trabalha perto dela. Sem nada para cortar, a motosserra pode girar mais rápido, até um limite de fábrica de 12.500 a 14.000 rpm.",
+      "p3": "O pinhão tem 7 dentes, e cada um avança a corrente dois passos. Um passo é a distância de um rebite da corrente até o seguinte. Assim, uma volta move a corrente cerca de 133 mm. A 9.900 rpm, a conta dá 22 metros por segundo (m/s), cerca de 79 km/h. O próprio fabricante informa cerca de 21 m/s para uma motosserra como esta. Nessa rotação o motor dá a potência máxima, e no corte ele trabalha perto dela. Sem nada para cortar, a motosserra pode girar mais rápido, até um limite de fábrica de 12.500 a 14.000 rpm.",
       "p4": "Você dá a partida com o acelerador um pouco aberto. Isso já basta para a embreagem agarrar. Por isso você aciona o freio da corrente antes de dar a partida. Se a corrente fica presa enquanto o motor acelera, a embreagem patina e esquenta muito. A <strong>bomba de óleo</strong> só manda óleo para o sabre enquanto a corrente gira. Em marcha lenta, não passa óleo nenhum."
     },
     "chain": {
@@ -254,7 +307,7 @@
       "p1": "Uma corrente de motosserra é feita de três tipos de peças. Os <strong>elos de tração</strong> descem numa canaleta do sabre, e os dentes do pinhão os empurram. Os <strong>dentes de corte</strong> são as lâminas: um inclinado para a esquerda, o seguinte para a direita. Pequenas placas, os elos de ligação, unem tudo, presas por rebites.",
       "p2": "Cada dente de corte tem uma placa de cima, plana, e uma placa lateral. Onde elas se encontram há um canto afiado que fatia a madeira. Logo à frente de cada dente fica uma pequena saliência, o <strong>limitador de profundidade</strong>. Ele fica 0,65 mm abaixo do topo do dente. Essa diferença define a espessura do cavaco que o dente consegue tirar. Se você limar os limitadores baixo demais, os dentes mordem fundo demais. Aí o rebote fica mais provável.",
       "p3": "O tamanho de uma corrente é o <strong>passo</strong>. Para medir, pegue a distância entre três rebites seguidos e divida por dois. Esta corrente tem passo de 3/8 de polegada, ou 9,525 mm. Uma corrente como esta, num sabre de 40 cm, tem 55 elos de tração e cerca de 1,05 m de comprimento. Ela leva cerca de 27 dentes de corte, um para cada dois elos de tração.",
-      "p4": "A 22 m/s, a corrente dá cerca de 21 voltas no sabre por segundo. Assim, cerca de 570 dentes de corte passam por um mesmo ponto a cada segundo, e cada um arranca um cavaco. Escolha Marcha lenta, Metade ou Máximo para comparar. No corte, a corrente embaixo do sabre volta da <strong>ponta do sabre</strong> em direção à motosserra. Por isso os cavacos voam para trás do corte.",
+      "p4": "A 9.900 rpm, a corrente anda a 22 m/s, então dá cerca de 21 voltas no sabre por segundo. Assim, cerca de 570 dentes de corte passam por um mesmo ponto a cada segundo, e cada um arranca um cavaco. Escolha Marcha lenta, Metade ou Máximo para comparar. No corte, a corrente embaixo do sabre volta da <strong>ponta do sabre</strong> em direção à motosserra. Por isso os cavacos voam para trás do corte.",
       "p5": "O tempo todo, a corrente desliza pelo sabre de aço em velocidade máxima. Sem óleo, o atrito logo deixaria o sabre quente a ponto de queimar. Por isso a bomba pinga <strong>óleo da corrente</strong> sobre a corrente, e a corrente o leva em volta do sabre. Numa motosserra Stihl pequena, o óleo da corrente acaba mais ou menos junto com o combustível. Assim você pode encher os dois tanques de uma vez."
     },
     "kickback": {
