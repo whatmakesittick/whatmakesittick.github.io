@@ -18,12 +18,13 @@ import {
   SphereGeometry,
   Vector3,
 } from 'three';
-import type { Object3D } from 'three';
+import type { BufferGeometry, Object3D } from 'three';
 import { smoothstep } from '@core/math';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import type { AssemblyState } from '../../ids';
 import { REGION_BOUNDS, SETTING_LAYOUT } from '../../model';
 import { FOREST } from '../constants';
+import { mergeParts } from '../geometry/merge';
 import { namedGroup, registeredMaterial } from './context';
 import type { PartContext } from './context';
 import { seededRandom } from './random';
@@ -62,7 +63,8 @@ const SKY_SEGMENTS = [32, 16] as const;
 const GROUND_SEGMENTS = 48;
 const LEAF_SPOTS = 900;
 const LEAF_SPOT_SIZE = [3, 9] as const;
-const TRUNK_TAPER = 0.72;
+const STUMP_TAPER = 0.82;
+const STUMP_SEGMENTS = 14;
 const LEAF_TILT = 0.35;
 
 export interface Backdrop {
@@ -204,40 +206,123 @@ function leaves(context: PartContext, parent: Object3D): MeshStandardMaterial {
   return material;
 }
 
-function trees(context: PartContext, parent: Object3D): MeshStandardMaterial {
+function stumps(context: PartContext, parent: Object3D): MeshStandardMaterial {
   const material = registeredMaterial(
     context,
     UNDIMMED_GROUP,
     new MeshStandardMaterial({ roughness: 0.95, metalness: 0 }),
   );
-  const geometry = new CylinderGeometry(TRUNK_TAPER * 0.5, 0.5, 1, FOREST.trunkSegments);
+  const geometry = new CylinderGeometry(STUMP_TAPER * 0.5, 0.5, 1, STUMP_SEGMENTS);
   geometry.translate(0, 0.5, 0);
-  const count = FOREST.trunkCount + FOREST.stumps.length;
   const mesh = context.tracker.track(
-    new InstancedMesh(context.tracker.track(geometry), material, count),
+    new InstancedMesh(context.tracker.track(geometry), material, FOREST.stumps.length),
   );
-  const random = seededRandom(FOREST.seed + 2);
-  const [near, far] = FOREST.trunkReach;
-  const [thin, thick] = FOREST.trunkRadius;
   const turn = new Quaternion();
   scatter(mesh, (index, matrix, colour) => {
-    const stump = FOREST.stumps[index - FOREST.trunkCount];
-    if (stump) {
-      const [x, z, radius, height] = stump;
-      matrix.compose(new Vector3(x, 0, z), turn, new Vector3(radius * 2, height, radius * 2));
-      colour.set(FOREST.stumpTop);
-      return;
+    const [x, z, radius, height] = FOREST.stumps[index];
+    matrix.compose(new Vector3(x, 0, z), turn, new Vector3(radius * 2, height, radius * 2));
+    colour.set(FOREST.stumpTop);
+  });
+  parent.add(mesh);
+  return material;
+}
+
+function bushTexture(context: PartContext): CanvasTexture {
+  const size = FOREST.bushTexture;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const paint = canvas.getContext('2d');
+  const random = seededRandom(FOREST.seed + 3);
+  if (paint) {
+    for (let blob = 0; blob < FOREST.bushBlobs; blob += 1) {
+      const across = random() - 0.5;
+      const rise = random() * Math.sqrt(1 - (2 * across) ** 2);
+      const radius = size * (0.025 + random() * 0.05);
+      paint.fillStyle = pick(FOREST.bushGreens, random);
+      paint.beginPath();
+      paint.ellipse(
+        size * (0.5 + across * 0.9),
+        size * (1 - rise * 0.92) - radius * 0.5,
+        radius,
+        radius * 0.7,
+        random() * Math.PI,
+        0,
+        FULL_TURN,
+      );
+      paint.fill();
     }
-    const angle = random() * FULL_TURN;
-    const reach = near + (far - near) * random();
-    const width = (thin + (thick - thin) * random()) * 2;
-    turn.setFromAxisAngle(new Vector3(0, 1, 0), random() * FULL_TURN);
+  }
+  const texture = context.tracker.track(new CanvasTexture(canvas));
+  texture.colorSpace = SRGBColorSpace;
+  return texture;
+}
+
+function bushCards(): BufferGeometry {
+  const cards = Array.from({ length: FOREST.bushCards }, (_, index) => {
+    const card = new PlaneGeometry(1, 1);
+    card.translate(0, 0.5, 0);
+    card.rotateY((Math.PI * index) / FOREST.bushCards);
+    return card;
+  });
+  return mergeParts(cards);
+}
+
+interface Ring {
+  count: number;
+  reach: readonly [number, number];
+  size: readonly [number, number];
+  accept(x: number, z: number): boolean;
+}
+
+function bushes(context: PartContext, parent: Object3D): MeshStandardMaterial {
+  const material = registeredMaterial(
+    context,
+    UNDIMMED_GROUP,
+    new MeshStandardMaterial({
+      map: bushTexture(context),
+      alphaTest: FOREST.bushAlphaTest,
+      side: DoubleSide,
+      roughness: 0.95,
+      metalness: 0,
+    }),
+  );
+  const rings: readonly Ring[] = [
+    { count: FOREST.bushCount, reach: FOREST.bushReach, size: FOREST.bushSize, accept: () => true },
+    {
+      count: FOREST.fernCount,
+      reach: FOREST.fernReach,
+      size: FOREST.fernSize,
+      accept: (x) => Math.abs(x) > FOREST.fernSideX,
+    },
+  ];
+  const total = rings.reduce((sum, ring) => sum + ring.count, 0);
+  const mesh = context.tracker.track(
+    new InstancedMesh(context.tracker.track(bushCards()), material, total),
+  );
+  const random = seededRandom(FOREST.seed + 4);
+  const places = rings.flatMap((ring) => {
+    const found: [number, number, number][] = [];
+    while (found.length < ring.count) {
+      const angle = random() * FULL_TURN;
+      const reach = ring.reach[0] + (ring.reach[1] - ring.reach[0]) * Math.sqrt(random());
+      const [x, z] = [Math.cos(angle) * reach, Math.sin(angle) * reach];
+      if (ring.accept(x, z))
+        found.push([x, z, ring.size[0] + (ring.size[1] - ring.size[0]) * random()]);
+    }
+    return found;
+  });
+  const turn = new Quaternion();
+  const up = new Vector3(0, 1, 0);
+  scatter(mesh, (index, matrix, colour) => {
+    const [x, z, size] = places[index];
+    turn.setFromAxisAngle(up, random() * FULL_TURN);
     matrix.compose(
-      new Vector3(Math.cos(angle) * reach, 0, Math.sin(angle) * reach),
+      new Vector3(x, 0, z),
       turn,
-      new Vector3(width, FOREST.trunkHeight, width),
+      new Vector3(size * (1.2 + random() * 0.6), size, size * (1.2 + random() * 0.6)),
     );
-    colour.set(pick(FOREST.bark, random));
+    colour.set(pick(FOREST.bushTint, random));
   });
   parent.add(mesh);
   return material;
@@ -270,7 +355,12 @@ function contactShadow(context: PartContext, parent: Object3D): void {
 export function buildBackdrop(context: PartContext, parent: Object3D): Backdrop {
   const root = namedGroup('forest', parent);
   const skyMaterial = sky(context, root);
-  const lit = [ground(context, root), leaves(context, root), trees(context, root)];
+  const lit = [
+    ground(context, root),
+    leaves(context, root),
+    stumps(context, root),
+    bushes(context, root),
+  ];
   const bases = lit.map((material) => material.color.clone());
   const close = new Color(FOREST.closeHaze);
   contactShadow(context, root);
