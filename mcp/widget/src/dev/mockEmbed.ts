@@ -351,7 +351,7 @@ export function mockLoader(opts: MockOptions): ModuleLoader {
     async load(slug, attempt) {
       await new Promise((r) => setTimeout(r, opts.delay ?? 600));
       if (opts.fail === 'loading' && attempt === 0) await new Promise(() => {});
-      if ((opts.fail === 'error' && attempt === 0) || opts.failSlugs?.includes(slug)) {
+      if ((opts.fail === 'error' && attempt < 2) || opts.failSlugs?.includes(slug)) {
         throw new TypeError(`Failed to fetch dynamically imported module: mock/${slug}.js`);
       }
       return mockModule(slug, opts);
