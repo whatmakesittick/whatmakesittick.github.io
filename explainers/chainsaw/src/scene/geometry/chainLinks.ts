@@ -8,6 +8,7 @@ import type { Outline } from './profile';
 export type CutterSide = 'left' | 'right';
 
 const ROUNDING = 0.45 * MM;
+const ROUNDING_SEGMENTS = 3;
 
 function millimetres(points: readonly (readonly [number, number])[]): Outline {
   return points.map(([x, y]) => [x * MM, y * MM] as const);
@@ -63,10 +64,12 @@ const TOP_PLATE = {
 } as const;
 
 function plate(outline: Outline, centreZ: number, thickness: number): BufferGeometry {
-  return extrudeAlongZ(roundedOutline(outline, ROUNDING), {
-    from: centreZ - thickness / 2,
-    to: centreZ + thickness / 2,
-  });
+  return extrudeAlongZ(
+    roundedOutline(outline, ROUNDING),
+    { from: centreZ - thickness / 2, to: centreZ + thickness / 2 },
+    0,
+    ROUNDING_SEGMENTS,
+  );
 }
 
 export function driveLinkGeometry(): BufferGeometry {

@@ -98,7 +98,11 @@ class ChainsawAssembly implements Assembly {
 
   update(deltaSeconds: number, cameraDistance: number = FOREST.closeFrom): boolean {
     this.backdrop.setCloseness(cameraDistance);
-    return this.sections.map((section) => section.update?.(deltaSeconds) ?? false).some(Boolean);
+    let moving = false;
+    for (const section of this.sections) {
+      if (section.update?.(deltaSeconds)) moving = true;
+    }
+    return moving;
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {

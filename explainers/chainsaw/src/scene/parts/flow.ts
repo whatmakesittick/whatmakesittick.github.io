@@ -130,7 +130,7 @@ function cloudFor(
     part,
     createPointMaterial(context.textures.dot, size),
   );
-  const cloud = new PointCloud(count, material);
+  const cloud = context.tracker.track(new PointCloud(count, material));
   parent.add(cloud.points);
   return cloud;
 }
@@ -251,6 +251,8 @@ export function buildFlow(
   label(context, 'freshCharge', root, [0, 0.145, -0.03]);
   label(context, 'exhaustGas', root, [0.112, 0.166, 0.015]);
   label(context, 'oilFlow', oil, [0.09, CRANK_Y + 0.025, 0.09]);
+  let drawnAngle = Number.NaN;
+  let drawnBurn = Number.NaN;
   return {
     root,
     glow,
@@ -258,7 +260,10 @@ export function buildFlow(
     setState: (state: AssemblyState) => {
       root.visible = state.view.flow;
       oil.visible = state.drive.oiling;
-      if (!state.view.flow) return;
+      const { angle, flows } = state.crank;
+      if (!state.view.flow || (angle === drawnAngle && flows.burn === drawnBurn)) return;
+      drawnAngle = angle;
+      drawnBurn = flows.burn;
       writers.forEach((write) => write(state));
     },
   };

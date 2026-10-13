@@ -56,6 +56,9 @@ const PRIMER_SQUASH = 0.65;
 const CHOKE = { width: 0.008, thickness: 0.004, knob: 0.005 } as const;
 const BUTTON_HEIGHT = 0.006;
 const UNIT_Y = new Vector3(0, 1, 0);
+const ROPE_DIRECTION = new Vector3(...STARTER_GEOMETRY.ropeDirection);
+const ropeSpan = new Vector3();
+const ropeTurn = new Quaternion();
 
 function zDisc(radius: number, from: number, to: number, x = 0, y = 0): BufferGeometry {
   const geometry = new CylinderGeometry(radius, radius, to - from, 24);
@@ -218,10 +221,10 @@ function sparkSprite(context: PartContext, parent: Object3D, at: Point): Sprite 
 }
 
 function stretch(mesh: Mesh, from: Vector3, to: Vector3): void {
-  const span = to.clone().sub(from);
+  const span = ropeSpan.subVectors(to, from);
   const length = Math.max(span.length(), 1e-4);
   mesh.position.copy(from).addScaledVector(span, 0.5);
-  mesh.quaternion.copy(new Quaternion().setFromUnitVectors(UNIT_Y, span.divideScalar(length)));
+  mesh.quaternion.copy(ropeTurn.setFromUnitVectors(UNIT_Y, span.divideScalar(length)));
   mesh.scale.set(1, length, 1);
 }
 
@@ -363,9 +366,7 @@ export function buildStarter(context: PartContext, parent: Object3D): Section {
       flywheel.rotation.z = -toRadians(crank.angle);
       pulley.rotation.z = -toRadians(start.pulleyDeg);
       const reach = start.ropeOut * STARTER_GEOMETRY.ropeDrawM;
-      gripAt
-        .set(...STARTER_GEOMETRY.gripRest)
-        .addScaledVector(new Vector3(...STARTER_GEOMETRY.ropeDirection), reach);
+      gripAt.set(...STARTER_GEOMETRY.gripRest).addScaledVector(ROPE_DIRECTION, reach);
       grip.position.copy(gripAt);
       stretch(drawnRope, eye, gripAt);
       coilSpark.visible = crank.sparkGlow > 0;

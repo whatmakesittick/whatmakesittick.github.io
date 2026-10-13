@@ -237,7 +237,7 @@ function oilCloud(context: PartContext, parent: Object3D): PointCloud {
     'oilFlow',
     createPointMaterial(context.textures.dot, OIL_SIZE),
   );
-  const cloud = new PointCloud(OIL.drops, material);
+  const cloud = context.tracker.track(new PointCloud(OIL.drops, material));
   parent.add(cloud.points);
   return cloud;
 }
@@ -322,15 +322,20 @@ export function buildBar(context: PartContext, parent: Object3D, oilParent: Obje
   ]);
 
   const oil = oilCloud(context, oilParent);
+  let placedMm = Number.NaN;
+  let placedOiling = false;
 
   return {
     root,
     setState: (state: AssemblyState) => {
       const { chainMm, oiling } = state.drive;
+      zone.visible = state.view.zone;
+      if (chainMm === placedMm && oiling === placedOiling) return;
+      placedMm = chainMm;
+      placedOiling = oiling;
       chain.place(chainMm);
       conveyor(chainMm);
       noseSprocket.rotation.z = -(chainMm * MM) / CHAIN_PATH.noseRadius;
-      zone.visible = state.view.zone;
       placeOil(oil, chainMm, oiling);
     },
   };

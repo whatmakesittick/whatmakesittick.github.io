@@ -165,6 +165,7 @@ export function buildFuel(context: PartContext, parent: Object3D): Section {
   label(context, 'pulseLine', root, [...PULSE_LINE[2]]);
   addPart(context, root, tubeThrough(FUEL_LINE, 0.0022), 'fuelTank', 'fuelLine');
 
+  const fronts = [front];
   const opening = new Ease(0);
   const pose = () => {
     const idle = OPEN_DEG - CARB.plateClosedDeg;
@@ -173,7 +174,7 @@ export function buildFuel(context: PartContext, parent: Object3D): Section {
   return {
     root,
     setState: (state: AssemblyState) => {
-      setFronts([front], state.view.cutaway);
+      setFronts(fronts, state.view.cutaway);
       opening.aim(state.drive.throttle);
       pose();
     },

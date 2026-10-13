@@ -48,7 +48,12 @@ export function rectShape(
   return roundedRectShape({ minA: minX, minB: minY, maxA: maxX, maxB: maxY }, radius);
 }
 
-export function extrudeAlongZ(shape: Shape, depth: Span, bevel = 0): BufferGeometry {
+export function extrudeAlongZ(
+  shape: Shape,
+  depth: Span,
+  bevel = 0,
+  curveSegments = CURVE_SEGMENTS,
+): BufferGeometry {
   const thickness = depth.to - depth.from;
   const bevelDepth = Math.min(bevel, thickness / 3);
   const geometry = new ExtrudeGeometry(shape, {
@@ -58,7 +63,7 @@ export function extrudeAlongZ(shape: Shape, depth: Span, bevel = 0): BufferGeome
     bevelSize: bevel,
     bevelOffset: -bevel,
     bevelSegments: BEVEL_SEGMENTS,
-    curveSegments: CURVE_SEGMENTS,
+    curveSegments,
   });
   geometry.translate(0, 0, depth.from + bevelDepth);
   return geometry;
