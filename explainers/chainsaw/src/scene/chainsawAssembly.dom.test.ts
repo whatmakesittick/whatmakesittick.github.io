@@ -203,4 +203,17 @@ describe('chainsaw assembly', () => {
     expect(((magnetDeg % 360) + 360) % 360).toBeCloseTo(STARTER_GEOMETRY.coilAngleDeg, 6);
     assembly.dispose();
   });
+
+  it('carries the cutter, depth gauge and drive link labels along with the chain', () => {
+    const assembly = createChainsawAssembly(resources(), stateWith());
+    const anchors = (['cutters', 'depthGauges', 'driveLinks'] as const).map(
+      (id) => assembly.labelAnchors().get(id) as Object3D,
+    );
+    const before = anchors.map((anchor) => anchor.position.x);
+    assembly.setState(stateWith({ chainMm: 1 }));
+    anchors.forEach((anchor, index) =>
+      expect(anchor.position.x - before[index]).toBeCloseTo(0.001, 4),
+    );
+    assembly.dispose();
+  });
 });

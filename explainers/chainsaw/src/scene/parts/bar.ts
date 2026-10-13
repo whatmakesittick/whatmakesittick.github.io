@@ -26,6 +26,8 @@ import {
 } from '../geometry/chainLinks';
 import { extrudeAlongZ, starShape } from '../geometry/profile';
 import { sectorAroundZ } from '../geometry/sector';
+import { conveyorPoint, windowStartAt } from './chainLabels';
+import type { ConveyorPart } from './chainLabels';
 import { addPart, instancedPart, label, namedGroup, partMesh, registeredMaterial } from './context';
 import type { PartContext, Section } from './context';
 
@@ -67,6 +69,39 @@ function plateShape(fromX: number, toX: number, withNose: boolean): Shape {
     .forEach(([x, y]) => shape.lineTo(x, y));
   shape.closePath();
   return shape;
+}
+
+interface ConveyorLabel {
+  part: ConveyorPart;
+  centreX: number;
+  along: number;
+  lift: number;
+  z: number;
+}
+
+const CONVEYOR_LABELS: readonly ConveyorLabel[] = [
+  { part: 'driveLinks', centreX: 0.15, along: 0, lift: -0.001, z: CHAIN_LINKS.driveThickness / 2 },
+  { part: 'cutters', centreX: 0.27, along: -0.0027, lift: 0.0066, z: CHAIN_LINKS.sideOffset },
+  { part: 'depthGauges', centreX: 0.36, along: 0.0055, lift: 0.0058, z: CHAIN_LINKS.sideOffset },
+];
+
+function conveyorLabels(context: PartContext, parent: Object3D): (chainMm: number) => void {
+  const riders = CONVEYOR_LABELS.map((spec) => {
+    label(context, spec.part, parent, [spec.centreX, CRANK_Y, BAR_PLANE_Z]);
+    const anchor = context.labels.get(spec.part);
+    if (!anchor) throw new Error(`No anchor for ${spec.part}`);
+    return { spec, anchor, start: windowStartAt(spec.part, spec.centreX) };
+  });
+  return (chainMm) =>
+    riders.forEach(({ spec, anchor, start }) => {
+      const point = conveyorPoint(spec.part, chainMm, start);
+      const normal = point.angle + Math.PI / 2;
+      anchor.position.set(
+        point.x + Math.cos(point.angle) * spec.along + Math.cos(normal) * spec.lift,
+        point.y + Math.sin(point.angle) * spec.along + Math.sin(normal) * spec.lift,
+        BAR_PLANE_Z + spec.z,
+      );
+    });
 }
 
 function barSpan() {
@@ -249,9 +284,7 @@ export function buildBar(context: PartContext, parent: Object3D, oilParent: Obje
     topY(0.2) + 0.002,
     BAR_PLANE_Z + CHAIN_LINKS.sideOffset + 0.0005,
   ]);
-  label(context, 'cutters', root, [0.3, topY(0.3) + 0.0066, BAR_PLANE_Z]);
-  label(context, 'depthGauges', root, [0.33, topY(0.33) + 0.0055, BAR_PLANE_Z]);
-  label(context, 'driveLinks', root, [0.15, topY(0.15) - 0.001, BAR_PLANE_Z + 0.0007]);
+  const conveyor = conveyorLabels(context, root);
 
   const zone = partMesh(
     context,
@@ -283,6 +316,7 @@ export function buildBar(context: PartContext, parent: Object3D, oilParent: Obje
     setState: (state: AssemblyState) => {
       const { chainMm, oiling } = state.drive;
       chain.place(chainMm);
+      conveyor(chainMm);
       noseSprocket.rotation.z = -(chainMm * MM) / CHAIN_PATH.noseRadius;
       zone.visible = state.view.zone;
       placeOil(oil, chainMm, oiling);
