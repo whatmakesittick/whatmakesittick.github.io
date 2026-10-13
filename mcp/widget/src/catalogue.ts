@@ -1,6 +1,7 @@
 import {
   embedCatalogueFile,
   isSlug,
+  parseSlugAliases,
   type Tag,
   type WidgetCatalogue,
   type WidgetCatalogueEntry,
@@ -10,14 +11,14 @@ import { freshQuery } from './scene.ts';
 
 export const CATALOGUE_REFRESH_MS = 5 * 60_000;
 
-export const EMPTY_CATALOGUE: WidgetCatalogue = { explainers: [], taglines: {} };
+export const EMPTY_CATALOGUE: WidgetCatalogue = { explainers: [], taglines: {}, aliases: {} };
 
 export type ImportModule = (url: string) => Promise<unknown>;
 
 export interface Catalogues {
   ready(lang: LanguageCode): WidgetCatalogue | undefined;
   load(lang: LanguageCode): Promise<WidgetCatalogue>;
-  refresh(lang: LanguageCode): Promise<WidgetCatalogue | undefined>;
+  refresh(lang: LanguageCode, force?: boolean): Promise<WidgetCatalogue | undefined>;
 }
 
 type Obj = Record<string, unknown>;
@@ -56,7 +57,7 @@ export function catalogueOf(module: unknown): WidgetCatalogue | undefined {
         ),
       )
     : {};
-  return { explainers, taglines };
+  return { explainers, taglines, aliases: parseSlugAliases(value.aliases) };
 }
 
 const importUrl: ImportModule = (url) => import(/* @vite-ignore */ url);
@@ -104,10 +105,10 @@ export function createCatalogues(
       }
       return promise;
     },
-    async refresh(lang) {
+    async refresh(lang, force = false) {
       const done = loaded.get(lang);
       const at = now();
-      if (!done || at - done.at < CATALOGUE_REFRESH_MS) return undefined;
+      if (!done || (!force && at - done.at < CATALOGUE_REFRESH_MS)) return undefined;
       loaded.set(lang, { ...done, at });
       try {
         const catalogue = await fetchCatalogue(lang, freshQuery(now));

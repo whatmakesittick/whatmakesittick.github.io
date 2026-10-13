@@ -3,6 +3,7 @@ import { crawlFiles } from './crawl.ts';
 import { feedFiles } from './feed.ts';
 import type { Dictionaries } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
+import { redirectStubs } from './redirects.ts';
 
 export interface SiteFile {
   fileName: string;
@@ -17,5 +18,9 @@ export interface SiteContent {
 }
 
 export function siteFiles({ explainers, about, core }: SiteContent): SiteFile[] {
-  return [...crawlFiles(explainers, about), ...feedFiles(explainers, core)];
+  return [
+    ...crawlFiles(explainers, about),
+    ...feedFiles(explainers, core),
+    ...redirectStubs(explainers),
+  ];
 }

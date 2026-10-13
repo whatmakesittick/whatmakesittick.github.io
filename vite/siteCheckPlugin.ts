@@ -7,6 +7,7 @@ import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { ROBOTS_FILE, SITEMAP_FILE } from './crawl.ts';
 import { feedPath } from './site.ts';
 import { EMBED_MANIFEST_FILE } from './embed.ts';
+import { isRedirectStub } from './redirects.ts';
 import { checkSite } from './siteCheck.ts';
 import type { BuiltPage, BuiltSite } from './siteCheck.ts';
 import { NOT_FOUND_ENTRY, SITE_ENTRY } from './sitePages.ts';
@@ -59,8 +60,10 @@ function readFeeds(outDir: string): Map<LanguageCode, string> {
 
 export function readBuiltSite(outDir: string, base: string): BuiltSite {
   const text = (file: string) => readFileSync(join(outDir, file), 'utf8');
+  const pages = readPages(outDir);
   return {
-    pages: readPages(outDir),
+    pages: pages.filter((page) => !isRedirectStub(page.html)),
+    redirects: pages.filter((page) => isRedirectStub(page.html)),
     ...readScripts(outDir, base),
     sitemap: text(SITEMAP_FILE),
     robots: text(ROBOTS_FILE),

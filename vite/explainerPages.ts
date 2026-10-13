@@ -5,6 +5,7 @@ import sirv from 'sirv';
 import type { Plugin, ViteDevServer } from 'vite';
 import {
   EMBED_MANIFEST_FILE,
+  aliasModules,
   embedEntrySlug,
   embedInputs,
   embedManifest,
@@ -31,11 +32,13 @@ import {
 } from './sitePages.ts';
 import type { Site } from './sitePages.ts';
 import { siteFiles } from './siteFiles.ts';
+import { slugAliases } from './slugAliases.ts';
 import type { SiteContent } from './siteFiles.ts';
 
 const WATCHED_DIRECTORIES = [EXPLAINERS_DIRECTORY, CORE_DIRECTORY, SITE_DIRECTORY];
 const PAGE_SOURCES = /(?:explainer\.json|\.html|locales[\\/]\w+\.json)$/;
 const MOVED_PERMANENTLY = 301;
+const PAGE_ENTRY_NAME = /index\.html$/;
 const PLUGIN_NAME = 'explainer-pages';
 const CATALOGUE_MODULE = 'virtual:explainer-catalogue';
 const RESOLVED_CATALOGUE_MODULE = `\0${CATALOGUE_MODULE}`;
@@ -83,8 +86,10 @@ function serveSiteFiles(server: ViteDevServer, site: () => Site | undefined): vo
     const [path] = (request.url ?? '').split('?');
     const current = site();
     if (!current) return next();
-    const file = siteFiles(siteContent(current)).find(
-      ({ fileName }) => path === `${server.config.base}${fileName}`,
+    const file = siteFiles(siteContent(current)).find(({ fileName }) =>
+      [fileName, fileName.replace(PAGE_ENTRY_NAME, '')].some(
+        (name) => path === `${server.config.base}${name}`,
+      ),
     );
     if (!file) return next();
     response.setHeader('Content-Type', file.contentType);
@@ -199,15 +204,19 @@ function pagesPlugin(): Plugin {
       if (!site) return;
       const { explainers } = site;
       const entries = explainers.map(catalogueEntry);
+      const aliases = slugAliases(explainers.map(({ manifest }) => manifest));
       for (const { fileName, source } of siteFiles(siteContent(site))) {
         this.emitFile({ type: 'asset', fileName, source });
       }
       this.emitFile({
         type: 'asset',
         fileName: EMBED_MANIFEST_FILE,
-        source: `${JSON.stringify(embedManifest(entries), null, 2)}\n`,
+        source: `${JSON.stringify(embedManifest(entries, aliases), null, 2)}\n`,
       });
-      for (const { fileName, source } of embedCatalogueFiles(entries)) {
+      for (const { fileName, source } of [
+        ...embedCatalogueFiles(entries, aliases),
+        ...aliasModules(explainers),
+      ]) {
         this.emitFile({ type: 'asset', fileName, source });
       }
       const resolveModule = createRequire(join(root, 'package.json')).resolve;

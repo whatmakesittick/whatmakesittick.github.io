@@ -6,6 +6,8 @@ import { splitLanguagePath } from '../src/core/i18n/paths.ts';
 import { ABOUT_PAGE, CATALOGUE_PAGE } from '../src/core/pages.ts';
 import { descriptionLimit } from '../src/core/manifest.ts';
 import { embedCatalogueFile, parseEmbedCatalogue } from './embedCatalogue.ts';
+import { redirectTarget } from './redirects.ts';
+import { parseSlugAliases } from './slugAliases.ts';
 import { ANALYTICS, FEED_TYPE, SITE_URL, feedUrl } from './site.ts';
 
 export interface BuiltPage {
@@ -15,6 +17,7 @@ export interface BuiltPage {
 
 export interface BuiltSite {
   pages: readonly BuiltPage[];
+  redirects?: readonly BuiltPage[];
   scripts: ReadonlyMap<string, string>;
   gzipBytes: ReadonlyMap<string, number>;
   sitemap: string;
@@ -222,13 +225,63 @@ export function moduleClosure(entry: string, scripts: ReadonlyMap<string, string
   return [...loaded];
 }
 
-function embedManifestSlugs(manifest: string | undefined): string[] | undefined {
+interface ParsedEmbedManifest {
+  slugs: string[];
+  aliases: Record<string, string>;
+}
+
+function parseEmbedManifest(manifest: string | undefined): ParsedEmbedManifest | undefined {
   try {
-    const parsed = JSON.parse(manifest ?? '') as { explainers?: { slug: string }[] };
-    return (parsed.explainers ?? []).map((entry) => entry.slug).sort();
+    const parsed = JSON.parse(manifest ?? '') as {
+      explainers?: { slug: string }[];
+      aliases?: unknown;
+    };
+    return {
+      slugs: (parsed.explainers ?? []).map((entry) => entry.slug).sort(),
+      aliases: parseSlugAliases(parsed.aliases),
+    };
   } catch {
     return undefined;
   }
+}
+
+function redirectProblems(site: BuiltSite): string[] {
+  const pages = new Set(site.pages.map((page) => page.path));
+  return (site.redirects ?? []).flatMap((stub) => {
+    const root = parse(stub.html);
+    const target = redirectTarget(stub.html) ?? '';
+    const path = new URL(target, `${RESOLVE_BASE}${stub.path}`).pathname;
+    const problems: string[] = [];
+    if (!pages.has(path)) problems.push(`redirects to ${path}, which is not a built page`);
+    if (attribute(root, 'link[rel="canonical"]', 'href') !== `${SITE_URL}${path}`)
+      problems.push(`canonical is not ${SITE_URL}${path}`);
+    if (attribute(root, 'meta[name="robots"]', 'content') !== 'noindex')
+      problems.push('is not noindex');
+    if (stub.html.includes('<script')) problems.push('loads scripts');
+    return problems.map((problem) => `${stub.path}: ${problem}`);
+  });
+}
+
+function aliasProblems(
+  site: BuiltSite,
+  aliases: Record<string, string>,
+  slugs: string[],
+): string[] {
+  const redirects = new Set((site.redirects ?? []).map((stub) => stub.path));
+  return Object.entries(aliases).flatMap(([former, slug]) => {
+    const entry = `${EMBED_PATH}${former}.js`;
+    const problems: string[] = [];
+    if (!slugs.includes(slug))
+      problems.push(`${former} is an alias of ${slug}, which is not built`);
+    if (slugs.includes(former)) problems.push(`${former} is both an alias and an explainer`);
+    if (!site.scripts.has(entry)) problems.push(`${entry} is missing`);
+    else
+      moduleClosure(entry, site.scripts)
+        .filter((href) => !site.scripts.has(href))
+        .forEach((href) => problems.push(`${entry} imports the missing ${href}`));
+    if (!redirects.has(`/${former}/`)) problems.push(`/${former}/ does not redirect`);
+    return problems;
+  });
 }
 
 function embedProblems(site: BuiltSite): string[] {
@@ -253,15 +306,25 @@ function embedProblems(site: BuiltSite): string[] {
         `${entry} loads ${bytes} gzipped bytes of JavaScript, budget ${JS_BUDGET_GZIP.embed}`,
       );
   }
-  problems.push(...catalogueProblems(site, slugs));
-  const listed = embedManifestSlugs(site.embedManifest);
-  if (listed === undefined) return [...problems, 'the embed manifest is missing or does not parse'];
-  if (listed.join('\n') !== slugs.join('\n'))
+  const manifest = parseEmbedManifest(site.embedManifest);
+  if (manifest === undefined)
+    return [
+      ...problems,
+      ...catalogueProblems(site, slugs, {}),
+      'the embed manifest is missing or does not parse',
+    ];
+  problems.push(...catalogueProblems(site, slugs, manifest.aliases));
+  if (manifest.slugs.join('\n') !== slugs.join('\n'))
     problems.push('the embed manifest does not list exactly the built explainers');
+  problems.push(...aliasProblems(site, manifest.aliases, slugs));
   return problems;
 }
 
-function catalogueProblems(site: BuiltSite, slugs: readonly string[]): string[] {
+function catalogueProblems(
+  site: BuiltSite,
+  slugs: readonly string[],
+  aliases: Record<string, string>,
+): string[] {
   return LANGUAGE_CODES.flatMap((code) => {
     const href = `${EMBED_PATH}${embedCatalogueFile(code)}`;
     const source = site.scripts.get(href);
@@ -272,6 +335,8 @@ function catalogueProblems(site: BuiltSite, slugs: readonly string[]): string[] 
     const listed = catalogue.explainers.map((entry) => entry.slug).sort();
     if (listed.join('\n') !== slugs.join('\n'))
       problems.push(`${href} does not list exactly the built explainers`);
+    if (JSON.stringify(parseSlugAliases(catalogue.aliases)) !== JSON.stringify(aliases))
+      problems.push(`${href} does not carry the aliases of the embed manifest`);
     const bytes = site.gzipBytes.get(href) ?? 0;
     if (bytes > JS_BUDGET_GZIP.catalogue)
       problems.push(`${href} is ${bytes} gzipped bytes, budget ${JS_BUDGET_GZIP.catalogue}`);
@@ -291,5 +356,10 @@ export function checkSite(site: BuiltSite): string[] {
       ...contentProblems(page, root, explainers),
     ].map((problem) => `${page.path}: ${problem}`);
   });
-  return [...pageProblems, ...siteProblems(site), ...embedProblems(site)];
+  return [
+    ...pageProblems,
+    ...siteProblems(site),
+    ...redirectProblems(site),
+    ...embedProblems(site),
+  ];
 }

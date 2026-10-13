@@ -11,6 +11,7 @@ export type {
 } from '../../vite/catalogueModel.ts';
 export { SITE_URL, explainerUrl } from '../../vite/site.ts';
 export { embedCatalogueFile } from '../../vite/embedCatalogue.ts';
+export { parseSlugAliases, resolveSlug, type SlugAliases } from '../../vite/slugAliases.ts';
 export type {
   EmbedCatalogue as WidgetCatalogue,
   EmbedCatalogueEntry as WidgetCatalogueEntry,

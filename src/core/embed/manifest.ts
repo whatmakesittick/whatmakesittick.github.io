@@ -22,4 +22,5 @@ export interface EmbedManifestEntry {
 export interface EmbedManifest {
   apiVersion: EmbedApiVersion;
   explainers: readonly EmbedManifestEntry[];
+  aliases?: Readonly<Record<string, string>>;
 }
