@@ -9,7 +9,7 @@ import type { AssemblyState, RegionId } from '../ids';
 import { createAssemblyState, createChainsawStore } from '../state';
 import { createAssembly } from './assembly';
 import { frameBox } from '@core/scene/frameBox';
-import { CAMERA_VIEWS, FRAME_LIFT, STAGE_VARIANTS, framedRegion, liftedPose } from './cameraViews';
+import { CAMERA_VIEWS, STAGE_VARIANTS, frameLift, framedRegion, liftedPose } from './cameraViews';
 import type { StageVariant } from './cameraViews';
 import { ChainsawController } from './controller';
 import type { ChainsawControllerDependencies } from './controller';
@@ -99,9 +99,10 @@ describe('chainsaw controller', () => {
       const framed = framedRegion(regionBox(spec.region), spec.region, variant);
       const direction = new Vector3(...spec.direction[variant]).normalize();
       const framedPose = framed && frameBox(framed, direction, FRAMING, spec.margin[variant]);
-      const lifted = framedPose && liftedPose(framedPose, FRAMING, FRAME_LIFT[variant]);
+      const lift = frameLift(view, variant);
+      const lifted = framedPose && liftedPose(framedPose, FRAMING, lift);
       expect(pose?.target).toEqual(lifted?.target);
-      expect(pose?.target.y).toBeLessThan(framed?.getCenter(new Vector3()).y ?? 0);
+      if (lift > 0) expect(pose?.target.y).toBeLessThan(framedPose?.target.y ?? 0);
       expect(pose && viewDirection(pose)).toEqual(roundAll(direction.toArray()));
       expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
     }

@@ -91,6 +91,14 @@ export function framedViews(variant: StageVariant): Record<CameraView, FramedVie
 
 export const FRAME_LIFT: PerVariant<number> = { phone: 0.1, desktop: 0.2 };
 
+const FRAME_LIFT_EXCEPTIONS: Partial<Record<CameraView, Partial<PerVariant<number>>>> = {
+  sawSide: { phone: 0 },
+};
+
+export function frameLift(view: CameraView, variant: StageVariant): number {
+  return FRAME_LIFT_EXCEPTIONS[view]?.[variant] ?? FRAME_LIFT[variant];
+}
+
 const WORLD_UP = new Vector3(0, 1, 0);
 
 export function liftedPose(pose: CameraPose, slopes: FramingSlopes, lift: number): CameraPose {
@@ -113,7 +121,7 @@ export function liftedViews(
       const pose = (slopes: FramingSlopes): CameraPose | null => {
         const box = region(spec.region);
         if (!box) return null;
-        return liftedPose(frameBox(box, toward, slopes, margin), slopes, FRAME_LIFT[variant]);
+        return liftedPose(frameBox(box, toward, slopes, margin), slopes, frameLift(id, variant));
       };
       return [id, { pose }];
     }),

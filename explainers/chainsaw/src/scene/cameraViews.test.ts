@@ -5,6 +5,7 @@ import {
   CAMERA_VIEWS,
   STAGE_VARIANTS,
   FRAME_LIFT,
+  frameLift,
   framedRegion,
   framedViews,
   liftedPose,
@@ -72,6 +73,12 @@ describe('camera views', () => {
     expect(lifted.position.z).toBeCloseTo(10);
     expect(pose.target.y).toBe(0);
     STAGE_VARIANTS.forEach((variant) => expect(FRAME_LIFT[variant]).toBeGreaterThan(0));
+  });
+
+  it('keeps the whole-saw view unlifted on a phone and lifts every other view', () => {
+    expect(frameLift('sawSide', 'phone')).toBe(0);
+    expect(frameLift('sawSide', 'desktop')).toBe(FRAME_LIFT.desktop);
+    expect(frameLift('cylinderCut', 'phone')).toBe(FRAME_LIFT.phone);
   });
 
   it('picks the phone framing below 600 pixels of stage width', () => {
