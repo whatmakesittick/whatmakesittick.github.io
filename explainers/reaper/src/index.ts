@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<ReaperStoreState>({
-  id: 'reaper',
   timeline: REAPER_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

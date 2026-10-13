@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<NavalDroneStoreState>({
-  id: 'naval-drone',
   timeline: NAVAL_DRONE_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

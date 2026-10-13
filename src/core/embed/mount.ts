@@ -146,8 +146,5 @@ export function defineEmbed<S extends Playback>(
   explainer: Explainer<S>,
   content: EmbedContent,
 ): EmbedMount {
-  if (explainer.id !== content.slug) {
-    throw new Error(`The embed ${content.slug} wraps the explainer ${explainer.id}`);
-  }
   return (container, options = {}) => mountEmbed(container, explainer, { ...options, ...content });
 }

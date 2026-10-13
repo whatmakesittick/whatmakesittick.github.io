@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<SewingStoreState>({
-  id: 'sewing-machine',
   timeline: SEWING_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

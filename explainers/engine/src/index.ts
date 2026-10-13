@@ -15,7 +15,6 @@ import {
 } from './ui';
 
 export default defineExplainer<EngineStoreState>({
-  id: 'engine',
   timeline: ENGINE_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

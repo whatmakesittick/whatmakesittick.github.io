@@ -8,7 +8,6 @@ import { FPV_TIMELINE } from './timeline';
 import { CHAPTER_ACTIONS, FPV_CHOICES, FPV_READOUTS, VIEW_TOGGLES, mountFpvUi } from './ui';
 
 export default defineExplainer<FpvStoreState>({
-  id: 'fpv-drone',
   timeline: FPV_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

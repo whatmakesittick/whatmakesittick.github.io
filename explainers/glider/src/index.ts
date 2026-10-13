@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<GliderStoreState>({
-  id: 'glider',
   timeline: GLIDER_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

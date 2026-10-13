@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<HelicopterStoreState>({
-  id: 'helicopter',
   timeline: HELICOPTER_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

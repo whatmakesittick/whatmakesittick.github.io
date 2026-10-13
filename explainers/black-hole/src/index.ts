@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<BlackHoleStoreState>({
-  id: 'black-hole',
   timeline: BLACK_HOLE_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<AtpSynthaseStoreState>({
-  id: 'atp-synthase',
   timeline: ATP_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

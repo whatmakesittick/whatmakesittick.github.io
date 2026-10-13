@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<WindFarmStoreState>({
-  id: 'wind-farm',
   timeline: WIND_FARM_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

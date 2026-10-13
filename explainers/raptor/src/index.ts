@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<RaptorStoreState>({
-  id: 'raptor',
   timeline: RAPTOR_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

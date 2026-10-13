@@ -8,7 +8,6 @@ import { WATCH_TIMELINE } from './timeline';
 import { CHAPTER_ACTIONS, VIEW_TOGGLES, WATCH_CHOICES, WATCH_READOUTS, mountWatchUi } from './ui';
 
 export default defineExplainer<WatchStoreState>({
-  id: 'mechanical-watch',
   timeline: WATCH_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

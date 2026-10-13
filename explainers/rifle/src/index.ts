@@ -8,7 +8,6 @@ import { RIFLE_TIMELINE } from './timeline';
 import { CHAPTER_ACTIONS, RIFLE_CHOICES, RIFLE_READOUTS, VIEW_TOGGLES, mountRifleUi } from './ui';
 
 export default defineExplainer<RifleStoreState>({
-  id: 'rifle',
   timeline: RIFLE_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

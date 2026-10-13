@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<MriScannerStoreState>({
-  id: 'mri-scanner',
   timeline: MRI_SCANNER_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

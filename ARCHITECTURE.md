@@ -88,8 +88,9 @@ page's locale when the locale has it, and with `social.alt` otherwise. The plugi
 build with the manifest's path in the message.
 
 `formerSlugs` is optional and lists the slugs the explainer had before. To rename an
-explainer, move `explainers/<old>/` to `explainers/<new>/`, set `slug` and the `id` in
-`src/index.ts` to the new slug, and add `"formerSlugs": ["<old>"]`. Keep the list forever and
+explainer, move `explainers/<old>/` to `explainers/<new>/` and, in its `explainer.json`, set
+`slug` to `<new>` and add `"formerSlugs": ["<old>"]`. Nothing else names the slug, since the
+code has no id of its own. Keep the list forever and
 add to it on each further rename. A former slug follows the slug rules, is not the current slug
 and is not reserved, and no other explainer may use it as a slug or list it too. The build does
 the rest from the list (`vite/slugAliases.ts`): an alias module under `/embed/v1/`
@@ -179,7 +180,6 @@ interface SceneOptions {
 }
 
 interface Explainer<S extends Playback = Playback> {
-  id: string;
   timeline: Timeline;
   presets: Record<string, Preset>; // chapter data-preset values are checked against these
   parts: Record<string, { labelKey: string; side: 'left' | 'right' }>; // labels and highlight groups
@@ -197,6 +197,9 @@ interface Explainer<S extends Playback = Playback> {
   mountUi?(root: Document, store: ExplainerStore<S>): void;
 }
 ```
+
+The explainer has no id. Its slug is the folder name, and the build takes it from there: the
+embed entry passes it to `defineEmbed`, so the code never repeats it.
 
 `mountUi` is for the page only: it reaches into the chapters and the prose column, and the embed
 never calls it. Whatever the explainer adds to the gauge, such as the engine's cycle dial, goes

@@ -23,4 +23,4 @@ Rules for the coordinator: read only the "Corrections" and "Safe numbers" sectio
 
 ## Renaming
 
-To rename an explainer later, move `explainers/<old>/` to `explainers/<new>/`, set `slug` and the `id` in `src/index.ts` to `<new>`, and add `"formerSlugs": ["<old>"]` to `explainer.json`. The build keeps the old pages, the embed and the slug working (`ARCHITECTURE.md`, "Explainer package").
+To rename an explainer later, move `explainers/<old>/` to `explainers/<new>/` and, in `explainer.json`, set `slug` to `<new>` and add `"formerSlugs": ["<old>"]`. The code never names the slug, so nothing else changes. The build keeps the old pages, the embed and the slug working (`ARCHITECTURE.md`, "Explainer package").

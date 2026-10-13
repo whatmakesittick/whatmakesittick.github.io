@@ -123,7 +123,6 @@ export interface PartInfo {
 }
 
 export interface Explainer<S extends Playback = Playback> {
-  id: string;
   timeline: Timeline;
   presets: Readonly<Record<string, Preset>>;
   parts: Readonly<Record<string, PartInfo>>;

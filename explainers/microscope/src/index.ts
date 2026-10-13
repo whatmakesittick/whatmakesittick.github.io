@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<MicroscopeStoreState>({
-  id: 'microscope',
   timeline: MICROSCOPE_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<OilRigStoreState>({
-  id: 'oil-rig',
   timeline: OIL_RIG_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

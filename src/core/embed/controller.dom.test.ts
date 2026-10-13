@@ -51,7 +51,6 @@ const size: Choice<State> = {
 };
 
 const explainer = {
-  id: 'demo',
   timeline,
   presets: { intro: {}, detail: {} },
   dock: { choices: [size], toggles: [] },

@@ -8,7 +8,6 @@ import { HEART_TIMELINE } from './timeline';
 import { CHAPTER_ACTIONS, HEART_CHOICES, HEART_READOUTS, VIEW_TOGGLES, mountHeartUi } from './ui';
 
 export default defineExplainer<HeartStoreState>({
-  id: 'heart',
   timeline: HEART_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,

@@ -34,7 +34,6 @@ const READOUTS: readonly Readout<State>[] = [
 
 function demo(overrides: Partial<Explainer<State>>): Explainer<State> {
   return {
-    id: 'demo',
     timeline,
     presets: { intro: {} },
     dock: { choices: [], toggles: [] },

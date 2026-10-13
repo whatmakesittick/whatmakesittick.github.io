@@ -14,7 +14,6 @@ import {
 } from './ui';
 
 export default defineExplainer<SolarPanelStoreState>({
-  id: 'solar-panel',
   timeline: SOLAR_PANEL_TIMELINE,
   presets: PRESETS,
   parts: PART_INFO,
