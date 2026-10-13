@@ -16,21 +16,24 @@ describe('chainsaw presets', () => {
       'sawSide',
       'cylinderCut',
       'carburettor',
+      'starterSide',
       'clutchSprocket',
       'barChain',
       'kickbackWide',
     ]);
   });
 
-  it('opens the cutaway in the engine, fuel, clutch and kickback chapters', () => {
+  it('opens the cutaway in the engine, fuel, starting, clutch and kickback chapters', () => {
     const cut = PRESET_IDS.filter((id) => PRESETS[id].view.cutaway);
-    expect(cut).toEqual(['engine', 'fuel', 'clutch', 'kickback']);
+    expect(cut).toEqual(['engine', 'fuel', 'starting', 'clutch', 'kickback']);
     expect(PRESET_IDS.filter((id) => PRESETS[id].view.zone)).toEqual(['kickback']);
   });
 
-  it('idles the fuel and clutch chapters and runs the others at full throttle', () => {
+  it('idles the fuel, starting and clutch chapters and runs the others at full throttle', () => {
     PRESET_IDS.forEach((id) =>
-      expect(PRESETS[id].start?.throttle, id).toBe(['fuel', 'clutch'].includes(id) ? 0 : 1),
+      expect(PRESETS[id].start?.throttle, id).toBe(
+        ['fuel', 'starting', 'clutch'].includes(id) ? 0 : 1,
+      ),
     );
     expect(PRESETS.kickback.start?.brake).toBe(false);
   });

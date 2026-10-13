@@ -3,23 +3,24 @@ import { CAMERA_VIEW_IDS } from '../ids';
 import { CAMERA_VIEWS, STAGE_VARIANTS, framedViews, stageVariant } from './cameraViews';
 
 describe('camera views', () => {
-  it('offers the six fixed views on their regions', () => {
+  it('offers the seven fixed views on their regions', () => {
     expect(Object.keys(CAMERA_VIEWS)).toEqual([...CAMERA_VIEW_IDS]);
     expect(CAMERA_VIEW_IDS.map((id) => CAMERA_VIEWS[id].region)).toEqual([
       'saw',
       'cylinder',
       'carb',
+      'starter',
       'clutch',
       'bar',
       'kickback',
     ]);
   });
 
-  it('looks from the bar side, above the floor', () => {
+  it('looks from the bar side, above the floor, except on the starter side', () => {
     CAMERA_VIEW_IDS.forEach((id) =>
       STAGE_VARIANTS.forEach((variant) => {
         const [, y, z] = CAMERA_VIEWS[id].direction[variant];
-        expect(z, id).toBeGreaterThan(0);
+        expect(z, id)[id === 'starterSide' ? 'toBeLessThan' : 'toBeGreaterThan'](0);
         expect(y, id).toBeGreaterThanOrEqual(0);
       }),
     );

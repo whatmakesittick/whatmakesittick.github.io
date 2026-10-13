@@ -40,6 +40,11 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, StageView>> = {
     direction: { phone: [-0.35, 0.3, 1], desktop: [-0.3, 0.25, 1] },
     margin: both(1.15),
   },
+  starterSide: {
+    region: 'starter',
+    direction: { phone: [-0.25, 0.45, -1], desktop: [-0.3, 0.35, -1] },
+    margin: { phone: 1, desktop: 1.1 },
+  },
   clutchSprocket: {
     region: 'clutch',
     direction: { phone: [0.3, 0.25, 1], desktop: [0.35, 0.3, 1] },

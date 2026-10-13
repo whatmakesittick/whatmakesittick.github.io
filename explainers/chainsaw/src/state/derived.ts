@@ -140,6 +140,17 @@ export function createAssemblyState(source: AssemblySource): AssemblyState {
       oiling: false,
     },
     safety: { brake: false, kickback: false, riseDeg: 0, guardForward: 0 },
+    start: {
+      starting: false,
+      step: 'brake',
+      engine: 'running',
+      chokeLever: 0,
+      decompressionIn: false,
+      primerSqueeze: 0,
+      ropeOut: 0,
+      pulleyDeg: 0,
+      pawlsEngaged: false,
+    },
     view: { ...source.view },
   };
   return writeAssemblyState(target, source);

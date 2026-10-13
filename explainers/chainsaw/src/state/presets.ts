@@ -44,6 +44,20 @@ const FUEL_LABELS: readonly PartId[] = [
   'crankcase',
 ];
 
+const STARTING_LABELS: readonly PartId[] = [
+  'starterGrip',
+  'starterPulley',
+  'pawls',
+  'flywheel',
+  'ignitionCoil',
+  'primerBulb',
+  'chokeLever',
+  'decompressionValve',
+  'handGuard',
+  'fuelCap',
+  'oilCap',
+];
+
 export const PRESETS: Record<PresetId, Preset> = {
   saw: {
     camera: 'sawSide',
@@ -81,6 +95,15 @@ export const PRESETS: Record<PresetId, Preset> = {
     start: IDLE,
     labels: FUEL_LABELS,
     highlight: [...FUEL_LABELS, 'freshCharge'],
+  },
+  starting: {
+    camera: 'starterSide',
+    speed: DEFAULT_SPEED,
+    view: { cutaway: true, flow: false, zone: false },
+    startAt: TOP_OF_TURN,
+    start: { throttle: THROTTLE_PRESETS.idle, brake: false },
+    labels: STARTING_LABELS,
+    highlight: [...STARTING_LABELS, 'starterRope', 'starter', 'sparkPlug', 'chainBrakeBand'],
   },
   clutch: {
     camera: 'clutchSprocket',

@@ -53,6 +53,17 @@ function stateWith({
       oiling: !brake,
     },
     safety: { brake, kickback: riseDeg > 0, riseDeg, guardForward: brake ? 1 : 0 },
+    start: {
+      starting: false,
+      step: 'brake',
+      engine: 'running',
+      chokeLever: 0,
+      decompressionIn: false,
+      primerSqueeze: 0,
+      ropeOut: 0,
+      pulleyDeg: 0,
+      pawlsEngaged: false,
+    },
     view: { cutaway: false, flow: true, zone: false, labels: true, ...view },
   };
 }

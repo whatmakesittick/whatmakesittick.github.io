@@ -2,8 +2,8 @@ import { CylinderGeometry, TorusGeometry } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { toRadians } from '@core/math';
 import { box } from '@core/scene/geometry/box';
-import type { AssemblyState } from '../../ids';
-import { GUARD_SWING_SECONDS, SAW_GEOMETRY } from '../../model';
+import type { AssemblyState, PartId, Point } from '../../ids';
+import { CRANK_Y, GUARD_SWING_SECONDS, SAW_GEOMETRY, STARTER_GEOMETRY } from '../../model';
 import { GUARD, TRIGGER } from '../constants';
 import { mergeParts } from '../geometry/merge';
 import { extrudeAlongZ, rectShape, roundedOutline, tubeThrough } from '../geometry/profile';
@@ -43,6 +43,18 @@ const FUEL_CAP: CapSpec = {
 };
 const OIL_CAP: CapSpec = { ...FUEL_CAP, x: 0.059, y: 0.032, radius: 0.0165, bail: 0.011 };
 const SHELL_WALL = 0.0025;
+
+const STARTER_LABELS: readonly (readonly [PartId, Point])[] = [
+  ['starterGrip', STARTER_GEOMETRY.gripRest],
+  ['starterRope', STARTER_GEOMETRY.ropeEye],
+  ['starterPulley', STARTER_GEOMETRY.pulley.centre],
+  ['pawls', [0, CRANK_Y + STARTER_GEOMETRY.pawls.radius, STARTER_GEOMETRY.pawls.z]],
+  ['flywheel', STARTER_GEOMETRY.flywheel.centre],
+  ['ignitionCoil', [0.022, 0.131, STARTER_GEOMETRY.flywheel.centre[2]]],
+  ['primerBulb', SAW_GEOMETRY.primerBulb.centre],
+  ['chokeLever', SAW_GEOMETRY.chokeLever.pivot],
+  ['decompressionValve', SAW_GEOMETRY.decompressionValve.centre],
+];
 
 const TOP_COVER: ShellSpec = {
   outline: [
@@ -300,14 +312,17 @@ export function buildHousing(context: PartContext, parent: Object3D): Section {
   label(context, 'starter', root, [-0.02, 0.15, SAW_GEOMETRY.starter.min[2]]);
 
   addPart(context, root, tankGeometry(), 'fuelTank');
-  addPart(context, root, capBody(FUEL_CAP), 'fuelTank');
-  addPart(context, root, capBail(FUEL_CAP), 'fuelTank', 'grip');
+  addPart(context, root, capBody(FUEL_CAP), 'fuelCap');
+  addPart(context, root, capBail(FUEL_CAP), 'fuelCap', 'grip');
   label(context, 'fuelTank', root, [-0.17, SAW_GEOMETRY.fuelTank.max[1], 0.03]);
 
   addPart(context, root, oilTankGeometry(), 'oilTank');
-  addPart(context, root, capBody(OIL_CAP), 'oilTank', 'plastic');
-  addPart(context, root, capBail(OIL_CAP), 'oilTank', 'grip');
+  addPart(context, root, capBody(OIL_CAP), 'oilCap', 'plastic');
+  addPart(context, root, capBail(OIL_CAP), 'oilCap', 'grip');
   label(context, 'oilTank', root, [0.09, 0.03, SAW_GEOMETRY.oilTank.max[2]]);
+  label(context, 'fuelCap', root, SAW_GEOMETRY.fuelCap.centre);
+  label(context, 'oilCap', root, SAW_GEOMETRY.oilCap.centre);
+  STARTER_LABELS.forEach(([part, point]) => label(context, part, root, point));
 
   addPart(context, root, tubeThrough(REAR_HANDLE, 0.0135), 'rearHandle');
   label(context, 'rearHandle', root, [-0.29, 0.178, 0]);
