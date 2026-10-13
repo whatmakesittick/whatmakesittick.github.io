@@ -10,6 +10,8 @@ import {
   RISE_SECONDS,
   FAST_IDLE_RPM,
   PULL_CRANK_DEG_PER_S,
+  POP_COAST_DEG,
+  TAKE_UP_SECONDS,
   SPARK_DEG,
   START_STEP_SECONDS,
   rate,
@@ -19,6 +21,7 @@ import {
   createAssemblyState,
   crankcaseTrend,
   liveReading,
+  startCrankRate,
   startDisplayOf,
   writeAssemblyState,
 } from './derived';
@@ -164,7 +167,24 @@ describe('assembly state', () => {
       pawlsEngaged: pose.pawlsEngaged,
       chokeLever: pose.chokeLever,
     });
-    expect(state.crank.degPerSecond).toBe(PULL_CRANK_DEG_PER_S);
+    expect(state.crank.degPerSecond).toBeCloseTo(PULL_CRANK_DEG_PER_S, 6);
+  });
+
+  it('reads the crank rate off the start pose through the take-up and the pop coast', () => {
+    const pullFrom =
+      START_STEP_SECONDS.brake +
+      START_STEP_SECONDS.choke +
+      START_STEP_SECONDS.decompression +
+      START_STEP_SECONDS.primer;
+    const takeUp = startCrankRate(pullFrom + TAKE_UP_SECONDS / 2);
+    expect(takeUp).toBeGreaterThan(0);
+    expect(takeUp).toBeLessThan(PULL_CRANK_DEG_PER_S / 2);
+    const popMiddle = pullFrom + START_STEP_SECONDS.firstPull + START_STEP_SECONDS.pop / 2;
+    const smoothstepPeak = 1.5;
+    expect(startCrankRate(popMiddle)).toBeCloseTo(
+      (smoothstepPeak * POP_COAST_DEG) / START_STEP_SECONDS.pop,
+      0,
+    );
   });
 
   it('shows ready, each step, then done', () => {

@@ -8,7 +8,6 @@ import type {
 import { PRESET_SETTINGS } from '../ids';
 import {
   HALF_TURN_DEG,
-  PULL_CRANK_DEG_PER_S,
   READY_POSE,
   THROTTLE_PRESETS,
   chainSpeedMs,
@@ -115,8 +114,15 @@ export function startDisplayOf(source: StartSource): StartDisplayId {
   return source.engine === 'stopped' ? 'ready' : 'done';
 }
 
+const RATE_PROBE_SECONDS = 0.005;
+
+export function startCrankRate(seconds: number): number {
+  const ahead = startPose(seconds + RATE_PROBE_SECONDS).crankDeg;
+  return (ahead - startPose(seconds).crankDeg) / RATE_PROBE_SECONDS;
+}
+
 function crankRate(source: AssemblySource, reading: LiveReading): number {
-  if (source.starting && source.engine === 'cranking') return PULL_CRANK_DEG_PER_S;
+  if (source.starting && source.engine === 'cranking') return startCrankRate(source.startSeconds);
   return source.playing ? rate(source.speed) * rpmScale(reading.rpm) : 0;
 }
 
