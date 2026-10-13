@@ -137,7 +137,6 @@ export function createController<S extends Playback>(
       return info;
     },
     ...(ui ? { ui } : {}),
-    ...(translation ? { setLanguage } : {}),
     getState: snapshot,
     subscribe(listener) {
       if (disposed) return () => {};
@@ -164,6 +163,7 @@ export function createController<S extends Playback>(
     },
     resetCamera: () => act((state) => state.resetCamera()),
     handleKey: (event) => !disposed && keys(event),
+    setLanguage,
     dispose() {
       if (disposed) return;
       disposed = true;

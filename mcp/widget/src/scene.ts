@@ -138,10 +138,6 @@ export class SceneSession {
     const language = this.language;
     if (!cur || cur.language === language || this.disposed) return;
     cur.language = language;
-    if (typeof cur.controller.setLanguage !== 'function') {
-      const state = cur.controller.getState();
-      return this.show(cur.slug, state.chapter, { restore: state });
-    }
     try {
       await cur.controller.setLanguage(language);
     } catch (error) {

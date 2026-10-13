@@ -114,7 +114,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     setChoice: touched((id: string, value: string) => ctrlRef.current?.setChoice(id, value)),
     resetCamera: () => ctrlRef.current?.resetCamera(),
     handleKey(event) {
-      const handled = ctrlRef.current?.handleKey?.(event) ?? false;
+      const handled = ctrlRef.current?.handleKey(event) ?? false;
       if (handled) userChanged.current = true;
       return handled;
     },

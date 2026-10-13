@@ -126,12 +126,12 @@ describe('embed controller', () => {
     );
     store.getState().pause();
     const right = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
-    expect(controller.handleKey?.(right)).toBe(true);
+    expect(controller.handleKey(right)).toBe(true);
     expect(right.defaultPrevented).toBe(true);
     expect(store.getState().phase).toBe(timeline.nudge.fine);
-    expect(controller.handleKey?.(new KeyboardEvent('keydown', { key: 'q' }))).toBe(false);
+    expect(controller.handleKey(new KeyboardEvent('keydown', { key: 'q' }))).toBe(false);
     controller.dispose();
-    expect(controller.handleKey?.(new KeyboardEvent('keydown', { key: 'ArrowRight' }))).toBe(false);
+    expect(controller.handleKey(new KeyboardEvent('keydown', { key: 'ArrowRight' }))).toBe(false);
     expect(store.getState().phase).toBe(timeline.nudge.fine);
   });
 
@@ -149,7 +149,7 @@ describe('embed controller', () => {
     });
     const listener = vi.fn();
     controller.subscribe(listener);
-    await expect(controller.setLanguage?.('de-AT')).resolves.toBe('de');
+    await expect(controller.setLanguage('de-AT')).resolves.toBe('de');
     expect(apply).toHaveBeenCalledWith('de-AT');
     expect(currentLanguage()).toBe('de');
     expect(controller.info.language).toBe('de');
@@ -158,10 +158,10 @@ describe('embed controller', () => {
     expect(controller.info.chapters[0]?.paragraphsHtml).toEqual(['Erster <strong>Teil</strong>']);
     expect(controller.getState().phaseLabel).toBe('Rein');
     expect(listener).toHaveBeenLastCalledWith(expect.objectContaining({ phaseLabel: 'Rein' }));
-    await expect(controller.setLanguage?.('ru')).resolves.toBe('en');
+    await expect(controller.setLanguage('ru')).resolves.toBe('en');
     expect(controller.info.title).toBe('Demo');
     controller.dispose();
-    await expect(controller.setLanguage?.('de')).resolves.toBe('en');
+    await expect(controller.setLanguage('de')).resolves.toBe('en');
     expect(apply).toHaveBeenCalledTimes(2);
     await useLanguage(englishOnly, 'en');
   });

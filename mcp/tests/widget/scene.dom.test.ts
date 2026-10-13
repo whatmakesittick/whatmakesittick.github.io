@@ -14,7 +14,7 @@ interface Fake {
   module: EmbedModule;
 }
 
-function fakeModule(slug: string, withSetLanguage: boolean, gate?: Promise<void>): Fake {
+function fakeModule(slug: string, gate?: Promise<void>): Fake {
   const mounts: MountOptions[] = [];
   const controllers: EmbedController[] = [];
   const module: EmbedModule = {
@@ -64,15 +64,12 @@ function fakeModule(slug: string, withSetLanguage: boolean, gate?: Promise<void>
         setChoice: (id, value) =>
           void (state = { ...state, choices: { ...state.choices, [id]: value } }),
         resetCamera: () => {},
+        handleKey: () => false,
+        setLanguage: vi.fn(async (next: string) => {
+          language = next as LanguageCode;
+          return language;
+        }),
         dispose: vi.fn(),
-        ...(withSetLanguage
-          ? {
-              setLanguage: vi.fn(async (next: string) => {
-                language = next as LanguageCode;
-                return language;
-              }),
-            }
-          : {}),
       };
       controllers.push(controller);
       return controller;
@@ -99,7 +96,7 @@ function session(fake: Fake) {
 
 describe('SceneSession language', () => {
   it('mounts in the language it was given', async () => {
-    const fake = fakeModule('engine', true);
+    const fake = fakeModule('engine');
     const { scene } = session(fake);
     void scene.setLanguage('uk');
     await scene.show('engine', 'one');
@@ -107,7 +104,7 @@ describe('SceneSession language', () => {
   });
 
   it('switches a mounted module in place when it can', async () => {
-    const fake = fakeModule('engine', true);
+    const fake = fakeModule('engine');
     const { scene, controllers, languages } = session(fake);
     await scene.show('engine', 'one');
     await scene.setLanguage('de');
@@ -119,34 +116,9 @@ describe('SceneSession language', () => {
     expect(fake.controllers[0]?.setLanguage).toHaveBeenCalledTimes(1);
   });
 
-  it('mounts an old module again and keeps its state', async () => {
-    const fake = fakeModule('engine', false);
-    const { scene, controllers } = session(fake);
-    await scene.show('engine', 'one');
-    const first = fake.controllers[0]!;
-    first.setChapter('two');
-    first.setView('labels', false);
-    first.setChoice('field', 'b');
-    first.pause();
-    first.seek(0.4);
-    await scene.setLanguage('ja');
-    expect(fake.mounts).toHaveLength(2);
-    expect(fake.mounts[1]).toMatchObject({ language: 'ja', chapter: 'two' });
-    expect(first.dispose).toHaveBeenCalled();
-    const second = fake.controllers[1]!;
-    expect(controllers.at(-1)).toBe(second);
-    expect(second.getState()).toMatchObject({
-      chapter: 'two',
-      playing: false,
-      progress: 0.4,
-      view: { labels: false },
-      choices: { field: 'b' },
-    });
-  });
-
   it('catches up when the language changes while a module mounts', async () => {
     let open = () => {};
-    const fake = fakeModule('engine', true, new Promise((resolve) => (open = resolve)));
+    const fake = fakeModule('engine', new Promise((resolve) => (open = resolve)));
     const { scene, languages } = session(fake);
     const shown = scene.show('engine', 'one');
     await vi.waitFor(() => expect(fake.mounts).toHaveLength(1));
@@ -181,7 +153,7 @@ function redeployed(fake: Fake, failures: number) {
 
 describe('SceneSession after a site deploy', () => {
   it('loads a fresh module once when the cached one points at chunks that are gone', async () => {
-    const fake = fakeModule('engine', true);
+    const fake = fakeModule('engine');
     const { scene, attempts, statuses } = redeployed(fake, 1);
     await scene.show('engine', 'one');
     expect(attempts).toEqual([0, 1]);
@@ -190,7 +162,7 @@ describe('SceneSession after a site deploy', () => {
   });
 
   it('loads a fresh module when mounting fails on a missing language chunk', async () => {
-    const fake = fakeModule('engine', true);
+    const fake = fakeModule('engine');
     const mount = fake.module.mount;
     let failed = false;
     fake.module.mount = async (container, options) => {
@@ -208,7 +180,7 @@ describe('SceneSession after a site deploy', () => {
   });
 
   it('shows the error state when the fresh module fails too', async () => {
-    const fake = fakeModule('engine', true);
+    const fake = fakeModule('engine');
     const { scene, attempts, statuses, host } = redeployed(fake, Infinity);
     await scene.show('engine', 'one');
     expect(attempts).toEqual([0, 1]);
@@ -219,7 +191,7 @@ describe('SceneSession after a site deploy', () => {
   });
 
   it('does not reload a module when the browser has no WebGL context', async () => {
-    const fake = fakeModule('engine', true);
+    const fake = fakeModule('engine');
     fake.module.mount = async () => {
       throw new Error('WebGL context could not be created');
     };
@@ -230,11 +202,14 @@ describe('SceneSession after a site deploy', () => {
   });
 
   it('mounts a fresh module in the new language when the language chunk is gone', async () => {
-    const fake = fakeModule('engine', true);
+    const fake = fakeModule('engine');
     const { scene, attempts, statuses } = redeployed(fake, 0);
     await scene.show('engine', 'one');
     const first = fake.controllers[0]!;
     first.setChapter('two');
+    first.setView('labels', false);
+    first.setChoice('field', 'b');
+    first.pause();
     first.seek(0.3);
     first.setLanguage = vi.fn(async () => {
       throw gone('../../assets/ja-old.js');
@@ -245,11 +220,17 @@ describe('SceneSession after a site deploy', () => {
     expect(attempts).toEqual([0, 1]);
     expect(first.dispose).toHaveBeenCalled();
     expect(fake.mounts[1]).toMatchObject({ language: 'ja', chapter: 'two' });
-    expect(fake.controllers[1]!.getState()).toMatchObject({ chapter: 'two', progress: 0.3 });
+    expect(fake.controllers[1]!.getState()).toMatchObject({
+      chapter: 'two',
+      playing: false,
+      progress: 0.3,
+      view: { labels: false },
+      choices: { field: 'b' },
+    });
   });
 
   it('keeps the scene in its language when no fresh module loads', async () => {
-    const fake = fakeModule('engine', true);
+    const fake = fakeModule('engine');
     let offline = false;
     const host = document.createElement('div');
     const scene = new SceneSession({

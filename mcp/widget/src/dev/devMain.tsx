@@ -112,7 +112,6 @@ const loader = real
       failSlugs: (q.get('failSlugs') ?? '').split(',').filter(Boolean),
       delay: Number(q.get('delay') ?? 600),
       packs,
-      inPlace: q.get('oldModule') !== '1',
     });
 
 const width = Number(q.get('width') ?? 720);

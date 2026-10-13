@@ -786,10 +786,9 @@ are loaded, the controls are translated again and `info` is replaced; subscriber
 whose `phaseLabel` is in the new language. Each language is the core and the explainer dictionary
 merged, and a key a language lacks falls back to English (`fallbackLng`). The English dictionaries
 are in the module; the others are the same dynamic chunks the pages load, fetched only when a
-language is asked for. `setLanguage` is optional in the type because modules built before it
-lack it, so a widget checks for it. `handleKey(event)` runs the page's keyboard on the store (space,
+language is asked for. `handleKey(event)` runs the page's keyboard on the store (space,
 arrows, digits for phases, R, choice, toggle and explainer shortcuts, never X or Escape) and
-returns whether it used the key; it is optional for the same reason.
+returns whether it used the key.
 
 `mountEmbed` in `src/core/embed/mount.ts` does what `mountExplainer` does for a page, minus the
 page: `useLanguage` from `src/core/i18n/embedded.ts` sets the core and explainer strings in the

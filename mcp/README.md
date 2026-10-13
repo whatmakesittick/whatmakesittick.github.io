@@ -89,8 +89,7 @@ loaded when that language is first asked for. The catalogue is not baked: the wi
 `catalogue/<lang>.js` (5 to 7 KB gzipped), which the site build publishes, and imports it again
 with a `?v=<time>` query when the user moves into the strip or the picker, at most every five
 minutes after the first refresh. A later tool call or host context change
-switches the language in place: the embed through `setLanguage`, or by mounting it again with the
-same chapter and state when the module is older than `setLanguage`. The widget strings are in
+switches the language in place through the embed's `setLanguage`. The widget strings are in
 `widget/src/i18n/`; the six it shares with the site (`CORE_KEYS`) are read from the site's core
 locales.
 

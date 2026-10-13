@@ -124,8 +124,8 @@ export interface EmbedController {
   setView(id: string, on: boolean): void;
   setChoice(id: string, value: string): void;
   resetCamera(): void;
-  handleKey?(event: KeyboardEvent): boolean;
-  setLanguage?(language: string): Promise<LanguageCode>;
+  handleKey(event: KeyboardEvent): boolean;
+  setLanguage(language: string): Promise<LanguageCode>;
   dispose(): void;
 }
 

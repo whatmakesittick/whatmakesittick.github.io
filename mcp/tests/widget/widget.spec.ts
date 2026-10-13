@@ -87,36 +87,29 @@ test('an unsupported lang argument falls back to English', async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
-for (const oldModule of [false, true]) {
-  test(`a later call switches the language ${oldModule ? 'by mounting again' : 'in place'}`, async ({
-    page,
-  }) => {
-    const ja = mriIn('ja');
-    const { errors } = await open(
-      page,
-      `slug=mri-scanner&chapter=magnet&lang=uk${oldModule ? '&oldModule=1' : ''}`,
-    );
-    await expect(page.locator('.wmit.st-ready[lang="uk"]')).toBeVisible();
-    await page.getByRole('button', { name: 'Наступний розділ' }).first().click();
-    await page.evaluate(() =>
-      (
-        window as unknown as { wmitDev: { hub: { emit: (e: string, a: unknown) => void } } }
-      ).wmitDev.hub.emit('input', { slug: 'mri-scanner', lang: 'ja' }),
-    );
-    await expect(page.locator('.wmit.st-ready[lang="ja"]')).toBeVisible();
-    await expect(page.locator('html')).toHaveAttribute('lang', 'ja');
-    await expect(page.locator('.a-chapter h3')).toHaveText(ja.chapters[2]!.title);
-    await expect(page.locator('.a-chapter .ch-text')).toContainText(ja.chapters[2]!.title);
-    await expect(page.getByRole('button', { name: '次の章' })).toBeVisible();
-    await page.evaluate(() =>
-      (window as unknown as { wmitDev: { setLocale: (l: string) => void } }).wmitDev.setLocale(
-        'zh-CN',
-      ),
-    );
-    await expect(page.locator('.wmit[lang="ja"]')).toBeVisible();
-    expect(errors).toEqual([]);
-  });
-}
+test('a later call switches the language in place', async ({ page }) => {
+  const ja = mriIn('ja');
+  const { errors } = await open(page, 'slug=mri-scanner&chapter=magnet&lang=uk');
+  await expect(page.locator('.wmit.st-ready[lang="uk"]')).toBeVisible();
+  await page.getByRole('button', { name: 'Наступний розділ' }).first().click();
+  await page.evaluate(() =>
+    (
+      window as unknown as { wmitDev: { hub: { emit: (e: string, a: unknown) => void } } }
+    ).wmitDev.hub.emit('input', { slug: 'mri-scanner', lang: 'ja' }),
+  );
+  await expect(page.locator('.wmit.st-ready[lang="ja"]')).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ja');
+  await expect(page.locator('.a-chapter h3')).toHaveText(ja.chapters[2]!.title);
+  await expect(page.locator('.a-chapter .ch-text')).toContainText(ja.chapters[2]!.title);
+  await expect(page.getByRole('button', { name: '次の章' })).toBeVisible();
+  await page.evaluate(() =>
+    (window as unknown as { wmitDev: { setLocale: (l: string) => void } }).wmitDev.setLocale(
+      'zh-CN',
+    ),
+  );
+  await expect(page.locator('.wmit[lang="ja"]')).toBeVisible();
+  expect(errors).toEqual([]);
+});
 
 test('a new host locale switches when the model passed no lang', async ({ page }) => {
   const { errors } = await open(page, 'slug=mri-scanner&chapter=magnet');

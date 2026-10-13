@@ -215,7 +215,6 @@ export interface MockOptions {
   fail?: 'error' | 'loading';
   failSlugs?: string[];
   packs?: Packs;
-  inPlace?: boolean;
 }
 
 export function mockModule(slug: string, opts: MockOptions): EmbedModule {
@@ -320,7 +319,7 @@ export function mockModule(slug: string, opts: MockOptions): EmbedModule {
           return info;
         },
         ui: { dock: dockSlot !== undefined, gauge: false },
-        ...(opts.inPlace === false ? {} : { setLanguage: switchLanguage }),
+        setLanguage: switchLanguage,
         getState: () => state,
         subscribe(l) {
           listeners.add(l);
@@ -337,9 +336,10 @@ export function mockModule(slug: string, opts: MockOptions): EmbedModule {
         resetCamera: () => {},
         handleKey(event) {
           const dir = ARROW_STEPS[event.key];
-          if (dir === undefined) return false;
+          if (event.key === ' ') set({ playing: !state.playing });
+          else if (dir === undefined) return false;
+          else set({ phase: Math.min(info.cycle * 0.9999, Math.max(0, state.phase + dir)) });
           event.preventDefault();
-          set({ phase: Math.min(info.cycle * 0.9999, Math.max(0, state.phase + dir)) });
           return true;
         },
         dispose() {
