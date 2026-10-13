@@ -250,7 +250,8 @@ refits the renderer, the lens and the labels, and the reading-line sections igno
 chapters while the stage is expanded and measure the reading line again after it
 collapses, so expanding never changes the chapter. X toggles it and Escape closes
 it; the keyboard runs these shell keys before the explainer's bindings, and Escape
-passes through when nothing is expanded. The gauge sits under the button, and the
+passes through when nothing is expanded; these keys are `stageShortcuts` in
+`stageShortcuts.ts`, which the chat widget binds to the host's display mode. The gauge sits under the button, and the
 button is 44px on a touch screen.
 
 A choice's `shortcut` cycles through its options. Chapter buttons use
@@ -733,7 +734,7 @@ default, no all-caps text, `data-i18n`, `data-i18n-html`, `data-i18n-attr` and
 (`vite/`, `src/core/manifest.ts`) import with explicit `.ts` extensions.
 
 `src/core/style.css` imports the parts of `src/core/styles/` in cascade order: tokens, base,
-primitives, layout, controls, the phone dock rules under `(max-width: 899px)`, prose, and the
+primitives, layout, the full screen toggle (`stage-expand.css`, which the chat widget reuses), controls, the phone dock rules under `(max-width: 899px)`, prose, and the
 touch sizes of the controls under `(pointer: coarse)`. The controls parts style only the dock and
 the gauge, so the embed reuses them; a rule for the page goes into the page parts.
 

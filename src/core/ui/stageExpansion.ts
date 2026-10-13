@@ -2,14 +2,11 @@ import { t } from '../i18n';
 import { formatAttributeKeys } from '../i18n/markup';
 import { Listeners } from '../scene/listeners';
 import { requireElement, setPressed } from './dom';
-import type { ShellKeys } from './keyboard';
 import { createScrollLock } from './scrollLock';
 import type { ScrollLock } from './scrollLock';
+import type { ExpandableStage } from './stageShortcuts';
 
-export interface StageExpansion {
-  readonly expanded: boolean;
-  toggle(): void;
-  collapse(): void;
+export interface StageExpansion extends ExpandableStage {
   onChange(listener: (expanded: boolean) => void): () => void;
   dispose(): void;
 }
@@ -20,8 +17,6 @@ const EXPANDED_ATTRIBUTE = 'data-stage-expanded';
 const LABELLED_ATTRIBUTES = ['aria-label', 'title'] as const;
 const EXPAND_KEY = 'stage.expand';
 const COLLAPSE_KEY = 'stage.collapse';
-const TOGGLE_SHORTCUT = 'x';
-const CLOSE_SHORTCUT = 'escape';
 const FULLSCREEN_OPTIONS: FullscreenOptions = { navigationUI: 'hide' };
 
 function canGoFullscreen(root: Document, element: HTMLElement): boolean {
@@ -120,18 +115,4 @@ class StageExpander implements StageExpansion {
 
 export function mountStageExpansion(root: Document): StageExpansion {
   return new StageExpander(root);
-}
-
-export function stageShortcuts(stage: StageExpansion): ShellKeys {
-  return {
-    [TOGGLE_SHORTCUT]: () => {
-      stage.toggle();
-      return true;
-    },
-    [CLOSE_SHORTCUT]: () => {
-      if (!stage.expanded) return false;
-      stage.collapse();
-      return true;
-    },
-  };
 }

@@ -1,7 +1,8 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { initI18n, setLanguage } from '../i18n';
 import { translateDom } from '../i18n/dom';
-import { mountStageExpansion, stageShortcuts } from './stageExpansion';
+import { mountStageExpansion } from './stageExpansion';
+import { stageShortcuts } from './stageShortcuts';
 import type { StageExpansion } from './stageExpansion';
 
 const PAGE = `

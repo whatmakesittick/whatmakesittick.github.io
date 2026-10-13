@@ -15,7 +15,8 @@ import { respectReducedMotion } from './ui/motion';
 import { mountReadouts } from './ui/readouts';
 import { mountSafeArea } from './ui/safeArea';
 import { mountSections } from './ui/sections';
-import { mountStageExpansion, stageShortcuts } from './ui/stageExpansion';
+import { mountStageExpansion } from './ui/stageExpansion';
+import { stageShortcuts } from './ui/stageShortcuts';
 
 const SITE_NAME_KEY = 'catalogue.title';
 const SCENE_SELECTOR = '#scene';
