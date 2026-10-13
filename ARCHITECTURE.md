@@ -181,9 +181,15 @@ interface Explainer<S extends Playback = Playback> {
   shortcuts?: Record<string, (state: S) => void>; // extra keys
   scene?: SceneOptions; // sky, fog, stage and camera limits
   mountScene(shell: SceneShell, store: ExplainerStore<S>): () => void;
+  mountGauge?(gauge: HTMLElement, store: ExplainerStore<S>): () => void; // extra gauge content
   mountUi?(root: Document, store: ExplainerStore<S>): void;
 }
 ```
+
+`mountUi` is for the page only: it reaches into the chapters and the prose column, and the embed
+never calls it. Whatever the explainer adds to the gauge, such as the engine's cycle dial, goes
+through `mountGauge` instead: the page calls it on its `[data-gauge]` and the embed on the gauge it
+mounts in the host's gauge slot, after the readouts, and the function it returns removes it again.
 
 An explainer's presets extend `ScenePreset` from `src/core/scene/presetBinder.ts`,
 which the preset binder reads (see "Scene toolkit").
@@ -208,7 +214,7 @@ the page with, stays when the reader moves on to the next chapter.
 
 Core mounts the shell (`src/core/mount.ts`): the dock (play, scrubber with phase
 bands, status, speed slider, choices, toggles, reset camera, more), the gauge
-readouts, language, footer, `mountUi`, chapter actions, the full screen toggle,
+readouts and `mountGauge`, language, footer, `mountUi`, chapter actions, the full screen toggle,
 the keyboard (space, arrows, digits for phases, R, X and Escape for full screen,
 choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
 safe area: the dock reserves the bottom of the stage and the gauge the right, or
@@ -791,8 +797,8 @@ asked language without detection, the container and the control slots get a matc
 attribute, the store applies the requested chapter before the scene exists, so the camera starts
 there, and the scene host mounts into the given container. A host may pass
 `ui: { dock, gauge }`, two empty elements inside its `[data-stage]`: the embed fills them with the
-`dock` and `gauge` partials, binds them with `mountDock` and `mountReadouts` and drops the language
-select. Their styles are the controls parts of the stylesheet, nested under `[data-embed-ui]`, with
+`dock` and `gauge` partials, binds them with `mountDock`, `mountReadouts` and the explainer's `mountGauge` and drops the
+language select. Their styles are the controls parts of the stylesheet, nested under `[data-embed-ui]`, with
 the phone dock rules keyed to an `embed-dock` container of at most 459px instead of the viewport.
 The scene styles and an explainer's `style.css` are added as `<style data-embed-styles>` elements
 while a scene is mounted. The embed loads the latin Inter and JetBrains Mono files the pages use, and their
