@@ -200,8 +200,88 @@
   </dl>
 </section>
 
-<section class="chapter" data-preset="clutch" aria-labelledby="clutch-title">
+<section class="chapter" data-preset="starting" aria-labelledby="starting-title">
   <p class="chapter-index">04</p>
+  <h2 id="starting-title" data-i18n="sections.starting.title">Waking the engine up</h2>
+  <p data-i18n-html="sections.starting.p1">
+    To start a saw, you turn its engine by hand until it fires. Put the saw on the ground, at least
+    3 m from where you filled it. Both tank caps sit low on its left side: the
+    <strong>fuel cap</strong> at the back, the <strong>bar oil cap</strong> at the front. Hold the
+    front handle with your left hand and put your right foot in the rear handle. Then push the
+    <strong>front hand guard</strong> forward to set the chain brake, every time. The start setting
+    holds the throttle open far enough for the clutch to grip, so without the brake the chain would
+    run.
+  </p>
+  <p data-i18n-html="sections.starting.p2">
+    A cold engine needs help. The <strong>choke and stop switch</strong> closes the choke and holds
+    the throttle a little open. Bigger saws also have a <strong>decompression valve</strong>.
+    Pressed in, it lets some of the squeeze out of the cylinder, so the cord pulls more easily. It
+    closes by itself the moment the engine fires. Then you press the
+    <strong>primer bulb</strong> about 6 times, or at least 10 on some saws. It does not squirt fuel
+    into the cylinder. It pushes air out of the fuel line and draws fuel up to the carburettor.
+  </p>
+  <p data-i18n-html="sections.starting.p3">
+    Now take the <strong>starter grip</strong>. Its <strong>starter cord</strong> is wound on a
+    <strong>rope pulley</strong>. Small hooks called <strong>pawls</strong> lock the pulley to the
+    <strong>flywheel</strong>, the wheel on the end of the crankshaft. Pull slowly until you feel
+    them catch, then pull fast. Each pull turns the crank a few times. Never wrap the cord round
+    your hand, and never pull it out to its end. Do not let it snap back either: guide it in while a
+    spring rewinds it. And never drop-start a saw by pushing it away as you pull.
+  </p>
+  <p data-i18n-html="sections.starting.p4">
+    The flywheel does more than spin. Its vanes are the fan that cools the engine. Magnets in it
+    sweep past the <strong>ignition coil</strong>, just 0.25 mm away, and make the spark. So the saw
+    needs no battery. Pick Start a cold saw to watch a whole start. The first pull ends in a pop:
+    the engine fires once and stops. That pop is your cue to switch the choke off, because a saw
+    never runs on full choke. Keep pulling on full choke after the pop, and you flood the engine
+    with fuel.
+  </p>
+  <p data-i18n-html="sections.starting.p5">
+    The second pull starts the engine at fast idle, with the brake still on. Blip the throttle
+    trigger, and the engine drops to idle. Only then do you release the brake. If the chain still
+    turns at idle, the saw needs adjusting. The model draws the start rather than timing it: the
+    pull plays at a pace you can follow, and the slow motion begins once the engine runs. Makers do
+    not publish the cranking or fast idle speed, so the gauge shows words there, not numbers.
+    Cutaway (C) takes the starter cover off, and the coil's gap is drawn wider than life so you can
+    see it.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.start">
+    <button
+      type="button"
+      class="chip"
+      data-action="start"
+      data-value="cold"
+      data-i18n="controls.startOptions.cold"
+    >
+      Start a cold saw
+    </button>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.starting.step">Now</dt>
+      <dd data-readout="startStep">Cold and stopped</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.starting.engine">Engine</dt>
+      <dd data-readout="engineState">Stopped</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.starting.primer">Primer bulb</dt>
+      <dd data-i18n="chapters.starting.primerValue">about 6 presses, at least 10 on some saws</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.starting.coilGap">Gap between magnet and coil</dt>
+      <dd class="number" data-i18n="chapters.starting.coilGapValue">0.25 mm</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.starting.distance">Start away from where you fuelled</dt>
+      <dd class="number" data-i18n="chapters.starting.distanceValue">at least 3 m</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="clutch" aria-labelledby="clutch-title">
+  <p class="chapter-index">05</p>
   <h2 id="clutch-title" data-i18n="sections.clutch.title">Why the chain stops at idle</h2>
   <p data-i18n-html="sections.clutch.p1">
     Between the crankshaft and the chain sits a <strong>centrifugal clutch</strong>, a clutch that
@@ -221,9 +301,10 @@
   <p data-i18n-html="sections.clutch.p3">
     The sprocket has 7 teeth, and each one moves the chain by two pitches. A pitch is the gap from
     one rivet in the chain to the next. So one turn moves the chain about 133 mm. At 9,900 rpm, that
-    is 22 metres per second (m/s), about 79 km/h. At this speed the engine makes its full power, and
-    while cutting it runs close to it. With nothing to cut, a saw can spin faster, up to a built-in
-    limit of 12,500 to 14,000 rpm.
+    works out to 22 metres per second (m/s), about 79 km/h. The maker's own figure for a saw like
+    this is about 21 m/s. At this speed the engine makes its full power, and while cutting it runs
+    close to it. With nothing to cut, a saw can spin faster, up to a built-in limit of 12,500 to
+    14,000 rpm.
   </p>
   <p data-i18n-html="sections.clutch.p4">
     You start a saw with the throttle held a little open. That is fast enough for the clutch to
@@ -273,7 +354,7 @@
 </section>
 
 <section class="chapter" data-preset="chain" aria-labelledby="chain-title">
-  <p class="chapter-index">05</p>
+  <p class="chapter-index">06</p>
   <h2 id="chain-title" data-i18n="sections.chain.title">Teeth that take chips</h2>
   <p data-i18n-html="sections.chain.p1">
     A saw chain is built from three kinds of parts. <strong>Drive links</strong> hang down into a
@@ -294,10 +375,10 @@
     every two drive links.
   </p>
   <p data-i18n-html="sections.chain.p4">
-    At 22 m/s, the chain runs round the bar about 21 times a second. So about 570 cutters pass any
-    one point every second, and each takes a chip. Pick Idle, Half or Full to compare. In the cut,
-    the chain under the bar runs back from the <strong>bar nose</strong> toward the saw. So the
-    chips fly out behind the cut.
+    At 9,900 rpm, the chain moves 22 m/s, so it runs round the bar about 21 times a second. So about
+    570 cutters pass any one point every second, and each takes a chip. Pick Idle, Half or Full to
+    compare. In the cut, the chain under the bar runs back from the <strong>bar nose</strong> toward
+    the saw. So the chips fly out behind the cut.
   </p>
   <p data-i18n-html="sections.chain.p5">
     All this time, the chain slides along the steel bar at full speed. Without oil, the rubbing
@@ -363,7 +444,7 @@
 </section>
 
 <section class="chapter" data-preset="kickback" aria-labelledby="kickback-title">
-  <p class="chapter-index">06</p>
+  <p class="chapter-index">07</p>
   <h2 id="kickback-title" data-i18n="sections.kickback.title">The upper quarter of the nose</h2>
   <p data-i18n-html="sections.kickback.p1">
     The most dangerous part of a saw is the top quarter of the bar nose, the
