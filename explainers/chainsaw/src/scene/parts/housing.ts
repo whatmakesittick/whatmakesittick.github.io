@@ -1,4 +1,4 @@
-import { CylinderGeometry } from 'three';
+import { CylinderGeometry, TorusGeometry } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { toRadians } from '@core/math';
 import { box } from '@core/scene/geometry/box';
@@ -17,6 +17,31 @@ import type { PartContext, Section } from './context';
 
 const ROUND = 20;
 const HEX = 6;
+const BODY_FACE_Z = -0.07;
+const CAP_SEGMENTS = 28;
+interface CapSpec {
+  readonly x: number;
+  readonly y: number;
+  readonly radius: number;
+  readonly height: number;
+  readonly flange: number;
+  readonly face: number;
+  readonly bail: number;
+  readonly bailTube: number;
+}
+
+const STARTER_SIDE_FACE = BODY_FACE_Z + 0.002;
+const FUEL_CAP: CapSpec = {
+  x: -0.212,
+  y: 0.042,
+  radius: 0.02,
+  height: 0.012,
+  flange: 0.0015,
+  face: STARTER_SIDE_FACE,
+  bail: 0.0135,
+  bailTube: 0.0022,
+};
+const OIL_CAP: CapSpec = { ...FUEL_CAP, x: 0.059, y: 0.032, radius: 0.0165, bail: 0.011 };
 const SHELL_WALL = 0.0025;
 
 const TOP_COVER: ShellSpec = {
@@ -44,7 +69,7 @@ const BODY: ShellSpec = {
   ],
   radius: 0.016,
   wall: SHELL_WALL,
-  depth: { from: -0.07, to: 0.056 },
+  depth: { from: BODY_FACE_Z, to: 0.056 },
   bevel: 0.01,
 };
 
@@ -132,18 +157,6 @@ function zCylinder(
   return geometry;
 }
 
-function yCylinder(
-  radius: number,
-  bottom: number,
-  top: number,
-  x: number,
-  z: number,
-): BufferGeometry {
-  const geometry = new CylinderGeometry(radius, radius, top - bottom, ROUND);
-  geometry.translate(x, (bottom + top) / 2, z);
-  return geometry;
-}
-
 function xCylinder(radius: number, from: number, to: number, y: number, z: number): BufferGeometry {
   const geometry = new CylinderGeometry(radius, radius, to - from, ROUND);
   geometry.rotateZ(Math.PI / 2);
@@ -190,6 +203,30 @@ function starterDetails(): BufferGeometry {
     }),
   );
   return mergeParts([...slots, xCylinder(0.0024, -0.012, 0.012, 0.186, -0.088)]);
+}
+
+function capBody(spec: CapSpec): BufferGeometry {
+  const { x, y, radius, height, flange, face } = spec;
+  const body = zCylinder(radius, face - height, face, x, y, CAP_SEGMENTS);
+  const rim = zCylinder(radius + flange, face - flange, face + flange, x, y, CAP_SEGMENTS);
+  return mergeParts([body, rim]);
+}
+
+function capBail(spec: CapSpec): BufferGeometry {
+  const { x, y, face, height, bail, bailTube } = spec;
+  const front = face - height - bailTube;
+  const loop = new TorusGeometry(bail, bailTube, 8, 18, Math.PI);
+  loop.translate(x, y, front);
+  const hinge = (side: number) =>
+    box({
+      minX: x + side * bail - 0.003,
+      maxX: x + side * bail + 0.003,
+      minY: y - 0.003,
+      maxY: y + 0.003,
+      minZ: front - bailTube,
+      maxZ: face - height,
+    });
+  return mergeParts([loop, hinge(1), hinge(-1)]);
 }
 
 function tankGeometry(): BufferGeometry {
@@ -263,11 +300,13 @@ export function buildHousing(context: PartContext, parent: Object3D): Section {
   label(context, 'starter', root, [-0.02, 0.15, SAW_GEOMETRY.starter.min[2]]);
 
   addPart(context, root, tankGeometry(), 'fuelTank');
-  addPart(context, root, yCylinder(0.017, 0.078, 0.092, -0.205, -0.035), 'fuelTank', 'housing');
+  addPart(context, root, capBody(FUEL_CAP), 'fuelTank');
+  addPart(context, root, capBail(FUEL_CAP), 'fuelTank', 'grip');
   label(context, 'fuelTank', root, [-0.17, SAW_GEOMETRY.fuelTank.max[1], 0.03]);
 
   addPart(context, root, oilTankGeometry(), 'oilTank');
-  addPart(context, root, yCylinder(0.012, 0.058, 0.068, 0.078, 0.058), 'oilTank', 'oilCap');
+  addPart(context, root, capBody(OIL_CAP), 'oilTank', 'plastic');
+  addPart(context, root, capBail(OIL_CAP), 'oilTank', 'grip');
   label(context, 'oilTank', root, [0.09, 0.03, SAW_GEOMETRY.oilTank.max[2]]);
 
   addPart(context, root, tubeThrough(REAR_HANDLE, 0.0135), 'rearHandle');
