@@ -2,8 +2,8 @@ import { CylinderGeometry, TorusGeometry } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { toRadians } from '@core/math';
 import { box } from '@core/scene/geometry/box';
-import type { AssemblyState, PartId, Point } from '../../ids';
-import { CRANK_Y, GUARD_SWING_SECONDS, SAW_GEOMETRY, STARTER_GEOMETRY } from '../../model';
+import type { AssemblyState, Point } from '../../ids';
+import { GUARD_SWING_SECONDS, SAW_GEOMETRY } from '../../model';
 import { GUARD, TRIGGER } from '../constants';
 import { mergeParts } from '../geometry/merge';
 import { extrudeAlongZ, rectShape, roundedOutline, tubeThrough } from '../geometry/profile';
@@ -43,18 +43,6 @@ const FUEL_CAP: CapSpec = {
 };
 const OIL_CAP: CapSpec = { ...FUEL_CAP, x: 0.059, y: 0.032, radius: 0.0165, bail: 0.011 };
 const SHELL_WALL = 0.0025;
-
-const STARTER_LABELS: readonly (readonly [PartId, Point])[] = [
-  ['starterGrip', STARTER_GEOMETRY.gripRest],
-  ['starterRope', STARTER_GEOMETRY.ropeEye],
-  ['starterPulley', STARTER_GEOMETRY.pulley.centre],
-  ['pawls', [0, CRANK_Y + STARTER_GEOMETRY.pawls.radius, STARTER_GEOMETRY.pawls.z]],
-  ['flywheel', STARTER_GEOMETRY.flywheel.centre],
-  ['ignitionCoil', [0.022, 0.131, STARTER_GEOMETRY.flywheel.centre[2]]],
-  ['primerBulb', SAW_GEOMETRY.primerBulb.centre],
-  ['chokeLever', SAW_GEOMETRY.chokeLever.pivot],
-  ['decompressionValve', SAW_GEOMETRY.decompressionValve.centre],
-];
 
 const TOP_COVER: ShellSpec = {
   outline: [
@@ -169,13 +157,6 @@ function zCylinder(
   return geometry;
 }
 
-function xCylinder(radius: number, from: number, to: number, y: number, z: number): BufferGeometry {
-  const geometry = new CylinderGeometry(radius, radius, to - from, ROUND);
-  geometry.rotateZ(Math.PI / 2);
-  geometry.translate((from + to) / 2, y, z);
-  return geometry;
-}
-
 function guardGeometry(): BufferGeometry {
   const plate = extrudeAlongZ(
     roundedOutline(GUARD_OUTLINE, 0.008),
@@ -196,14 +177,27 @@ function guardGeometry(): BufferGeometry {
   return mergeParts([plate, arm(1), arm(-1)]);
 }
 
-function starterGeometry(): BufferGeometry {
-  const [minX, minY, minZ] = SAW_GEOMETRY.starter.min;
-  const [, maxY, maxZ] = SAW_GEOMETRY.starter.max;
-  return extrudeAlongZ(rectShape(minX, minY, 0.04, maxY, 0.03), { from: minZ, to: maxZ }, 0.008);
+const STARTER_RING_WALL = 0.004;
+const STARTER_PLATE = 0.003;
+const STARTER_ROUND = 0.03;
+
+function starterOutline(inset: number) {
+  const [minX, minY] = SAW_GEOMETRY.starter.min;
+  const [maxX, maxY] = SAW_GEOMETRY.starter.max;
+  return rectShape(minX + inset, minY + inset, maxX - inset, maxY - inset, STARTER_ROUND - inset);
 }
 
-function starterDetails(): BufferGeometry {
-  const face = SAW_GEOMETRY.starter.min[2];
+function starterRing(): BufferGeometry {
+  const [, , minZ] = SAW_GEOMETRY.starter.min;
+  const [, , maxZ] = SAW_GEOMETRY.starter.max;
+  const ring = starterOutline(0);
+  ring.holes.push(starterOutline(STARTER_RING_WALL));
+  return extrudeAlongZ(ring, { from: minZ + STARTER_PLATE, to: maxZ });
+}
+
+function starterPlate(): BufferGeometry {
+  const [, , minZ] = SAW_GEOMETRY.starter.min;
+  const face = minZ;
   const slots = [0.07, 0.085, 0.1, 0.115].map((y) =>
     box({
       minX: -0.055,
@@ -211,10 +205,18 @@ function starterDetails(): BufferGeometry {
       minY: y,
       maxY: y + 0.006,
       minZ: face - 0.001,
-      maxZ: face + 0.002,
+      maxZ: face + 0.001,
     }),
   );
-  return mergeParts([...slots, xCylinder(0.0024, -0.012, 0.012, 0.186, -0.088)]);
+  return mergeParts([
+    extrudeAlongZ(starterOutline(0), { from: face, to: face + STARTER_PLATE + 0.0005 }, 0.0025),
+    ...slots,
+  ]);
+}
+
+function capFace(cap: { centre: Point; height: number }): Point {
+  const [x, y, z] = cap.centre;
+  return [x, y, z - cap.height];
 }
 
 function capBody(spec: CapSpec): BufferGeometry {
@@ -306,23 +308,26 @@ export function buildHousing(context: PartContext, parent: Object3D): Section {
   );
   addPart(context, cover, coverNuts(), 'powerhead', 'steel');
 
-  addPart(context, root, starterGeometry(), 'starter');
-  addPart(context, root, starterDetails(), 'starter', 'grip');
-  addPart(context, root, xCylinder(0.0072, -0.032, 0.032, 0.192, -0.088), 'starter', 'grip');
-  label(context, 'starter', root, [-0.02, 0.15, SAW_GEOMETRY.starter.min[2]]);
+  addPart(context, root, starterRing(), 'starter');
+  const starterFace = namedGroup('starterFace', root);
+  addPart(context, starterFace, starterPlate(), 'starter');
+  label(context, 'starter', root, [
+    -0.05,
+    SAW_GEOMETRY.starter.max[1],
+    SAW_GEOMETRY.starter.min[2] + 0.004,
+  ]);
 
   addPart(context, root, tankGeometry(), 'fuelTank');
   addPart(context, root, capBody(FUEL_CAP), 'fuelCap');
-  addPart(context, root, capBail(FUEL_CAP), 'fuelCap', 'grip');
+  addPart(context, root, capBail(FUEL_CAP), 'fuelCap', 'capGrip');
   label(context, 'fuelTank', root, [-0.17, SAW_GEOMETRY.fuelTank.max[1], 0.03]);
 
   addPart(context, root, oilTankGeometry(), 'oilTank');
-  addPart(context, root, capBody(OIL_CAP), 'oilCap', 'plastic');
-  addPart(context, root, capBail(OIL_CAP), 'oilCap', 'grip');
+  addPart(context, root, capBody(OIL_CAP), 'oilCap');
+  addPart(context, root, capBail(OIL_CAP), 'oilCap', 'oilGrip');
   label(context, 'oilTank', root, [0.09, 0.03, SAW_GEOMETRY.oilTank.max[2]]);
-  label(context, 'fuelCap', root, SAW_GEOMETRY.fuelCap.centre);
-  label(context, 'oilCap', root, SAW_GEOMETRY.oilCap.centre);
-  STARTER_LABELS.forEach(([part, point]) => label(context, part, root, point));
+  label(context, 'fuelCap', root, capFace(SAW_GEOMETRY.fuelCap));
+  label(context, 'oilCap', root, capFace(SAW_GEOMETRY.oilCap));
 
   addPart(context, root, tubeThrough(REAR_HANDLE, 0.0135), 'rearHandle');
   label(context, 'rearHandle', root, [-0.29, 0.178, 0]);
@@ -371,6 +376,7 @@ export function buildHousing(context: PartContext, parent: Object3D): Section {
       solids.visible = !cutaway;
       shells.visible = cutaway;
       cover.visible = !cutaway;
+      starterFace.visible = !cutaway;
       pull.aim(state.drive.throttle);
       tip.aim(state.safety.guardForward);
       pose();

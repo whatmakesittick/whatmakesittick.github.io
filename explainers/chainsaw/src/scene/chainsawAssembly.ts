@@ -18,6 +18,7 @@ import { buildEngine } from './parts/engine';
 import { buildFlow } from './parts/flow';
 import { buildFuel } from './parts/fuel';
 import { buildHousing } from './parts/housing';
+import { buildStarter } from './parts/starter';
 import { buildWood } from './parts/wood';
 import { FOREST } from './constants';
 import { regionBox } from './regions';
@@ -76,6 +77,7 @@ class ChainsawAssembly implements Assembly {
       buildEngine(context, this.saw, flow.glow),
       buildFuel(context, this.saw),
       buildClutch(context, this.saw),
+      buildStarter(context, this.saw),
       buildBar(context, this.saw, flow.oil),
       flow,
       buildWood(context, this.root),

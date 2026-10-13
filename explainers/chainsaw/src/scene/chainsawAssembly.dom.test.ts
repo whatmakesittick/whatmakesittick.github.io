@@ -6,7 +6,15 @@ import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
 import { ANCHOR_IDS, PART_IDS, REGION_IDS } from '../ids';
 import type { AssemblyState, SettingId, ViewOptions } from '../ids';
-import { ENGINE_GEOMETRY, crownY, flowsAt, portsAt, sparkGlow } from '../model';
+import {
+  ENGINE_GEOMETRY,
+  SPARK_DEG,
+  STARTER_GEOMETRY,
+  crownY,
+  flowsAt,
+  portsAt,
+  sparkGlow,
+} from '../model';
 import { createChainsawAssembly } from './chainsawAssembly';
 
 const FRAME = 1 / 60;
@@ -170,6 +178,29 @@ describe('chainsaw assembly', () => {
     for (let frame = 0; frame < 400; frame += 1) assembly.update(FRAME, 1);
     expect(chips.count).toBe(0);
     expect(assembly.update(FRAME, 1)).toBe(false);
+    assembly.dispose();
+  });
+
+  it('pulls the starter rope out along its line and turns the magnet to the coil at the spark', () => {
+    const resting = stateWith({ view: { cutaway: true } });
+    const assembly = createChainsawAssembly(resources(), resting);
+    expect(isShown(named(assembly.root, 'starterFace'))).toBe(false);
+    const grip = named(assembly.root, 'starterGrip');
+    const rest = world(grip);
+    const pulled = { ...resting, start: { ...resting.start, ropeOut: 0.5, decompressionIn: true } };
+    assembly.setState(pulled);
+    const moved = world(grip).sub(rest);
+    const [, upward, outward] = STARTER_GEOMETRY.ropeDirection;
+    expect(moved.length()).toBeCloseTo(0.5 * STARTER_GEOMETRY.ropeDrawM, 6);
+    expect(moved.y / moved.length()).toBeCloseTo(upward, 6);
+    expect(moved.z / moved.length()).toBeCloseTo(outward, 6);
+    expect(assembly.update(FRAME, 1)).toBe(true);
+    expect(settle(assembly)).toBe(false);
+    assembly.setState({ ...stateWith({ angle: SPARK_DEG }), start: pulled.start });
+    const flywheel = named(assembly.root, 'flywheel');
+    const magnetDeg =
+      STARTER_GEOMETRY.coilAngleDeg + SPARK_DEG + (flywheel.rotation.z * 180) / Math.PI;
+    expect(((magnetDeg % 360) + 360) % 360).toBeCloseTo(STARTER_GEOMETRY.coilAngleDeg, 6);
     assembly.dispose();
   });
 });

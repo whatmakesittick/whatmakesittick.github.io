@@ -23,6 +23,7 @@ import type { PartContext, Section } from './context';
 const ROUND = 40;
 const SCAN_STEPS = 2000;
 const CUTTER_REACH = 0.0066;
+const LOG_LABEL = { across: 0.3, up: 0.954, along: 0.6 } as const;
 
 interface Chip {
   position: Vector3;
@@ -116,7 +117,11 @@ function buildLog(context: PartContext, parent: Object3D): Object3D {
     [context.materials.get('log', FINISHES.wood), context.materials.get('log', FINISHES.bark)],
   );
   group.add(slice, ...endRings(context, z + half + 0.0004));
-  label(context, 'log', group, [log.radius * 0.45, -log.radius * 0.35, z + half]);
+  label(context, 'log', group, [
+    log.radius * LOG_LABEL.across,
+    log.radius * LOG_LABEL.up,
+    z + half * LOG_LABEL.along,
+  ]);
   return group;
 }
 
