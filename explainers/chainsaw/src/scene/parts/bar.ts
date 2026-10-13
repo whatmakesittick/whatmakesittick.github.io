@@ -12,8 +12,9 @@ import {
   DRIVE_LINK_MM,
   SAW_GEOMETRY,
   pointOnLoop,
+  railY,
 } from '../../model';
-import type { ChainElement } from '../../model';
+import type { ChainElement, RailSide } from '../../model';
 import { THEME } from '../../theme';
 import { BAR, CHAIN_LINKS, MM, OIL, ZONE } from '../constants';
 import {
@@ -28,8 +29,6 @@ import { sectorAroundZ } from '../geometry/sector';
 import { addPart, instancedPart, label, namedGroup, partMesh, registeredMaterial } from './context';
 import type { PartContext, Section } from './context';
 
-const ALPHA = Math.asin((CHAIN_PATH.sprocketRadius - CHAIN_PATH.noseRadius) / CHAIN_PATH.noseX);
-const NORMAL = Math.PI / 2 - ALPHA;
 const HALF_PITCH_MM = DRIVE_LINK_MM / 2;
 const RIVET_OFFSET_MM = DRIVE_LINK_MM / 4;
 const ZONE_SEGMENTS = 24;
@@ -37,24 +36,35 @@ const OIL_SIZE = 0.008;
 
 type SideKind = 'cutterLeft' | 'cutterRight' | 'tie';
 
-function railLine(x: number, radius: number, sign: number): number {
-  return CRANK_Y + (sign * (radius - x * Math.cos(NORMAL))) / Math.sin(NORMAL);
+function plateEdge(x: number, side: RailSide): number {
+  const sign = side === 'upper' ? 1 : -1;
+  if (x <= CHAIN_PATH.heelX) return CRANK_Y + sign * (CHAIN_PATH.heelHalfHeight - BAR.rail);
+  return railY(x, side) - sign * BAR.rail;
 }
 
-function plateShape(fromX: number, withNose: boolean, toX: number): Shape {
-  const sprocketRail = CHAIN_PATH.sprocketRadius - BAR.rail;
-  const noseRail = CHAIN_PATH.noseRadius - BAR.rail;
+function edgePoints(fromX: number, toX: number, side: RailSide): [number, number][] {
+  const xs = [
+    fromX,
+    ...(fromX < CHAIN_PATH.heelX && toX > CHAIN_PATH.heelX ? [CHAIN_PATH.heelX] : []),
+    toX,
+  ];
+  return xs.map((x) => [x, plateEdge(x, side)]);
+}
+
+function plateShape(fromX: number, toX: number, withNose: boolean): Shape {
+  const end = withNose ? CHAIN_PATH.noseMeetX : toX;
   const shape = new Shape();
-  shape.moveTo(fromX, railLine(fromX, sprocketRail, -1));
+  edgePoints(fromX, end, 'lower').forEach(([x, y], index) =>
+    index === 0 ? shape.moveTo(x, y) : shape.lineTo(x, y),
+  );
   if (withNose) {
-    const { noseX } = CHAIN_PATH;
-    shape.lineTo(noseX + noseRail * Math.cos(-NORMAL), CRANK_Y + noseRail * Math.sin(-NORMAL));
-    shape.absarc(noseX, CRANK_Y, noseRail, -NORMAL, NORMAL, false);
-  } else {
-    shape.lineTo(toX, railLine(toX, sprocketRail, -1));
-    shape.lineTo(toX, railLine(toX, sprocketRail, 1));
+    const radius = CHAIN_PATH.noseRadius - BAR.rail;
+    const meet = CHAIN_PATH.noseMeet;
+    shape.absarc(CHAIN_PATH.noseX, CRANK_Y, radius, -meet, meet, false);
   }
-  shape.lineTo(fromX, railLine(fromX, sprocketRail, 1));
+  edgePoints(fromX, end, 'upper')
+    .reverse()
+    .forEach(([x, y]) => shape.lineTo(x, y));
   shape.closePath();
   return shape;
 }
@@ -212,13 +222,13 @@ export function buildBar(context: PartContext, parent: Object3D, oilParent: Obje
   addPart(
     context,
     root,
-    extrudeAlongZ(plateShape(BAR.rearX, false, split), barSpan(), 0.0012),
+    extrudeAlongZ(plateShape(BAR.rearX, split, false), barSpan(), 0.0012),
     'bar',
   );
   addPart(
     context,
     root,
-    extrudeAlongZ(plateShape(split, true, split), barSpan(), 0.0012),
+    extrudeAlongZ(plateShape(split, split, true), barSpan(), 0.0012),
     'barNose',
   );
   label(context, 'bar', root, [0.26, CRANK_Y - 0.006, BAR_PLANE_Z + BAR_THICKNESS / 2]);
@@ -233,7 +243,7 @@ export function buildBar(context: PartContext, parent: Object3D, oilParent: Obje
   ]);
 
   const chain = buildChain(context, root);
-  const topY = (x: number) => railLine(x, CHAIN_PATH.sprocketRadius, 1);
+  const topY = (x: number) => railY(x, 'upper');
   label(context, 'chain', root, [
     0.2,
     topY(0.2) + 0.002,

@@ -14,8 +14,6 @@ import { addPart, label, namedGroup } from './context';
 import type { PartContext, Section } from './context';
 
 const ROUND = 24;
-const TOP_NORMAL =
-  Math.PI / 2 - Math.asin((CHAIN_PATH.sprocketRadius - CHAIN_PATH.noseRadius) / CHAIN_PATH.noseX);
 const PUMP = { x: 0.03, y: 0.068, z: 0.064 } as const;
 const OIL_LINE: readonly Vec3[] = [
   [PUMP.x + 0.006, PUMP.y + 0.004, PUMP.z + 0.006],
@@ -57,7 +55,12 @@ function shoe(centreDeg: number, lining: boolean): BufferGeometry {
 }
 
 function sprocket(): BufferGeometry {
-  const teeth = starShape(SPROCKET_TEETH, CLUTCH.sprocketTip, CLUTCH.sprocketRoot, TOP_NORMAL);
+  const teeth = starShape(
+    SPROCKET_TEETH,
+    CLUTCH.sprocketTip,
+    CLUTCH.sprocketRoot,
+    CHAIN_PATH.sprocketLeave,
+  );
   return mergeParts([
     extrudeAlongZ(
       teeth,

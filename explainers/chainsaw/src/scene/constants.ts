@@ -80,7 +80,7 @@ export const CRANK = {
   web: 0.029,
   webThickness: 0.0065,
   webGap: 0.0035,
-  shaftFrom: -0.06,
+  shaftFrom: -0.086,
   shaftTo: 0.076,
 } as const;
 
@@ -136,7 +136,7 @@ export const BAR = {
   rail: 0.003,
   rearX: 0.042,
   noseLength: 0.034,
-  noseSprocket: 0.0145,
+  noseSprocket: 0.0163,
   noseTeeth: 11,
   rearRound: 0.006,
 } as const;
