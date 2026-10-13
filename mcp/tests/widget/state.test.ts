@@ -93,39 +93,24 @@ describe('tool input / result', () => {
 });
 
 describe('allowed explainers', () => {
-  it('reads the allowed tags and slugs from structuredContent, then from the text', () => {
+  it('reads the allowed tags from structuredContent, then from the text', () => {
+    expect(
+      scopeFromResult({ structuredContent: { slug: 'engine', allowedTags: ['physics'] } }),
+    ).toEqual({ tags: ['physics'] });
     expect(
       scopeFromResult({
-        structuredContent: { slug: 'engine', slugs: ['engine', 'heart'], allowedTags: ['physics'] },
+        content: [{ type: 'text', text: 'Showing.\nTags in the widget: physics, biology' }],
       }),
-    ).toEqual({ tags: ['physics'], slugs: ['engine', 'heart'] });
+    ).toEqual({ tags: ['physics', 'biology'] });
     expect(
-      scopeFromResult({ structuredContent: { slug: 'engine', slugs: ['engine', 'heart'] } }),
-    ).toEqual({ slugs: ['engine', 'heart'] });
-    expect(
-      scopeFromResult({
-        content: [
-          {
-            type: 'text',
-            text: 'Showing.\nExplainers in the widget: engine, heart\nTags in the widget: physics, biology',
-          },
-        ],
-      }),
-    ).toEqual({ tags: ['physics', 'biology'], slugs: ['engine', 'heart'] });
-    expect(
-      scopeFromResult({
-        content: [{ type: 'text', text: 'Showing.\nExplainers in the widget: engine, heart' }],
-      }),
-    ).toEqual({ slugs: ['engine', 'heart'] });
-    expect(scopeFromResult({ structuredContent: { slugs: ['engine', 7, 'Bad Slug'] } })).toEqual({
-      slugs: ['engine'],
-    });
+      scopeFromResult({ structuredContent: { allowedTags: ['physics', 7, 'Bad Tag'] } }),
+    ).toEqual({ tags: ['physics'] });
     expect(scopeFromResult({ structuredContent: { allowedTags: [] } })).toEqual({ tags: [] });
     expect(scopeFromResult({ structuredContent: { slug: 'engine' } })).toBeUndefined();
     expect(scopeFromResult(null)).toBeUndefined();
   });
 
-  it('reads the allowed tags and the slug enum of the tool the host reports', () => {
+  it('reads the allowed tags of the tool the host reports', () => {
     const tool = {
       name: 'show_explainer',
       inputSchema: {
@@ -133,12 +118,12 @@ describe('allowed explainers', () => {
         properties: { slug: { type: 'string', enum: ['engine', 'heart'] } },
       },
     };
-    expect(scopeFromToolInfo({ toolInfo: { tool } })).toEqual({ slugs: ['engine', 'heart'] });
+    expect(scopeFromToolInfo({ toolInfo: { tool } })).toBeUndefined();
     expect(
       scopeFromToolInfo({
         toolInfo: { tool: { ...tool, _meta: { 'wmit/allowedTags': ['physics'] } } },
       }),
-    ).toEqual({ tags: ['physics'], slugs: ['engine', 'heart'] });
+    ).toEqual({ tags: ['physics'] });
     expect(scopeFromToolInfo({})).toBeUndefined();
   });
 
@@ -148,14 +133,13 @@ describe('allowed explainers', () => {
   const items = [engine, rifle, fresh];
 
   it('filters by the allowed tags, so an explainer newer than the call shows up', () => {
-    expect(shownEntries(items, { tags: ['physics'], slugs: ['engine'] })).toEqual([engine, fresh]);
+    expect(shownEntries(items, { tags: ['physics'] })).toEqual([engine, fresh]);
     expect(shownEntries(items, { tags: [] })).toEqual([]);
     expect(shownEntries([{ slug: 'plain', tags: [] }], { tags: [] })).toHaveLength(1);
   });
 
-  it('falls back to the allowed slugs, then to the open explainer only', () => {
-    expect(shownEntries(items, { slugs: ['engine'] })).toEqual([engine]);
-    expect(shownEntries(items, { slugs: ['engine'] }, 'rifle')).toEqual([engine]);
+  it('shows only the open explainer without allowed tags', () => {
+    expect(shownEntries(items, { tags: ['physics'] }, 'rifle')).toEqual([engine, fresh]);
     expect(shownEntries(items, undefined, 'rifle')).toEqual([rifle]);
     expect(shownEntries(items, undefined)).toEqual([]);
   });
@@ -163,8 +147,7 @@ describe('allowed explainers', () => {
   it('opens a target the server accepted, never one it refused or left out', () => {
     expect(mayShow(rifle, { tags: ['physics'] }, false)).toBe(false);
     expect(mayShow(fresh, { tags: ['physics'] }, false)).toBe(true);
-    expect(mayShow(rifle, { slugs: ['engine'] }, false)).toBe(false);
-    expect(mayShow(engine, { slugs: ['engine'] }, true)).toBe(true);
+    expect(mayShow(engine, { tags: ['physics'] }, true)).toBe(true);
     expect(mayShow(rifle, undefined, false)).toBe(true);
     expect(mayShow(rifle, undefined, true)).toBe(false);
     expect(mayShow(undefined, undefined, false)).toBe(false);

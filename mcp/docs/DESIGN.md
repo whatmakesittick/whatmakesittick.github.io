@@ -75,8 +75,7 @@ Each boundary exists for a reason.
   `Tags in the widget:` text line and as `_meta["wmit/allowedTags"]` on the tool. The widget shows
   an explainer when every one of its tags is allowed. It names allowed tags, not excluded ones, so
   no excluded tag reaches the model, and an explainer with a tag newer than the server stays
-  hidden until the server knows it. The allowed slugs are still sent, for widgets built before this
-  and as a fallback. With neither, the widget shows only the open explainer.
+  hidden until the server knows it. Without allowed tags, the widget shows only the open explainer.
 - **Server and static files.** GitHub Pages can serve `/embed/v1/` (it already sends
   `Access-Control-Allow-Origin: *`), but it cannot host `POST /mcp`: it answers 405. `createServer`
   touches no Node API, so the plan is a Cloudflare Worker for `/mcp`, with `WMIT_ASSET_BASE`

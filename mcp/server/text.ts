@@ -6,7 +6,6 @@ import {
 } from '../shared/catalogue.ts';
 import {
   MODEL_TEXT_MAX_BYTES,
-  WIDGET_SLUGS_LINE,
   WIDGET_TAGS_LINE,
   type ListExplainersItem,
   type WidgetScope,
@@ -69,7 +68,6 @@ export function showExplainerText(
   const tail = [
     "The user can rotate and zoom the model, play the cycle, toggle views and switch chapters or other explainers in the widget. Answer follow-ups from this text; don't paste it back verbatim.",
     `Website: ${entry.url}`,
-    `${WIDGET_SLUGS_LINE}${scope.slugs.join(', ')}`,
     `${WIDGET_TAGS_LINE}${scope.tags.join(', ')}`,
   ];
 

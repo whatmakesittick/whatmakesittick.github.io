@@ -41,7 +41,6 @@ const result = {
     url: explainerUrl(slug),
     apiVersion: 1,
     ...(lang ? { lang: resolveLanguage(lang) } : {}),
-    slugs: catalogue.explainers.map((e) => e.slug).sort(),
     allowedTags: [...TAGS],
   },
 };

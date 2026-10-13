@@ -166,7 +166,6 @@ describe('show_explainer', () => {
       chapterTitle: 'A magnet that never switches off',
       url: 'https://whatmakesittick.github.io/mri-scanner/',
       apiVersion: EMBED_API_VERSION,
-      slugs: SLUGS,
       allowedTags: [...TAGS],
     } satisfies ShowExplainerResult);
     const text = textOf(res);

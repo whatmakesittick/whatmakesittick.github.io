@@ -2,7 +2,6 @@ import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import { isSlug, plainText, SITE_URL, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { EmbedInfo, EmbedState, LanguageCode } from '../../../src/core/embed/contract.ts';
 import {
-  WIDGET_SLUGS_LINE,
   WIDGET_TAGS_LINE,
   WIDGET_TAGS_META,
   type ModelContextSnapshot,
@@ -78,12 +77,10 @@ const nameList = (value: unknown): string[] | undefined =>
     : undefined;
 
 export interface Scope {
-  tags?: readonly string[];
-  slugs?: readonly string[];
+  tags: readonly string[];
 }
 
-const scopeOf = (tags: string[] | undefined, slugs: string[] | undefined): Scope | undefined =>
-  tags || slugs ? { ...(tags ? { tags } : {}), ...(slugs ? { slugs } : {}) } : undefined;
+const scopeOf = (tags: string[] | undefined): Scope | undefined => (tags ? { tags } : undefined);
 
 const lineList = (lines: readonly string[], prefix: string): string[] | undefined => {
   const line = lines.find((l) => l.startsWith(prefix));
@@ -93,32 +90,25 @@ const lineList = (lines: readonly string[], prefix: string): string[] | undefine
 export function scopeFromResult(result: unknown): Scope | undefined {
   if (!isObj(result)) return undefined;
   const sc = result.structuredContent;
-  const structured = isObj(sc) ? scopeOf(nameList(sc.allowedTags), nameList(sc.slugs)) : undefined;
+  const structured = isObj(sc) ? scopeOf(nameList(sc.allowedTags)) : undefined;
   if (structured) return structured;
   const content = Array.isArray(result.content) ? result.content : [];
   for (const block of content) {
     if (!isObj(block) || block.type !== 'text' || typeof block.text !== 'string') continue;
-    const lines = block.text.split('\n');
-    const scope = scopeOf(lineList(lines, WIDGET_TAGS_LINE), lineList(lines, WIDGET_SLUGS_LINE));
+    const scope = scopeOf(lineList(block.text.split('\n'), WIDGET_TAGS_LINE));
     if (scope) return scope;
   }
   return undefined;
 }
 
 export function scopeFromToolInfo(ctx: Partial<McpUiHostContext>): Scope | undefined {
-  const tool = ctx.toolInfo?.tool;
-  const slug = tool?.inputSchema.properties?.slug;
-  return scopeOf(
-    nameList(tool?._meta?.[WIDGET_TAGS_META]),
-    isObj(slug) ? nameList(slug.enum) : undefined,
-  );
+  return scopeOf(nameList(ctx.toolInfo?.tool._meta?.[WIDGET_TAGS_META]));
 }
 
 export const resultFailed = (result: unknown): boolean => isObj(result) && result.isError === true;
 
 export function inScope(entry: { slug: string; tags: readonly string[] }, scope: Scope): boolean {
-  const { tags, slugs } = scope;
-  return tags ? entry.tags.every((t) => tags.includes(t)) : (slugs ?? []).includes(entry.slug);
+  return entry.tags.every((t) => scope.tags.includes(t));
 }
 
 export function mayShow<T extends { slug: string; tags: readonly string[] }>(

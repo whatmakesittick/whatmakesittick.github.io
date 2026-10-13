@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { TAGS } from '../../shared/catalogue.ts';
 import {
-  WIDGET_SLUGS_LINE,
   WIDGET_TAGS_LINE,
   WIDGET_TAGS_META,
   type ListExplainersResult,
@@ -52,25 +51,23 @@ describe('WMIT_EXCLUDE_TAGS=weapons', () => {
     expect(res.isError).toBe(true);
   });
 
-  it('show_explainer names only the allowed slugs and tags, in structuredContent and in the text', async () => {
+  it('show_explainer names only the allowed tags, in structuredContent and in the text', async () => {
     const client = await connect(options);
     const res = await client.callTool({ name: 'show_explainer', arguments: { slug: 'engine' } });
     expect(res.isError).toBeFalsy();
     const sc = res.structuredContent as unknown as ShowExplainerResult;
-    expect(sc.slugs).toEqual(allowed);
+    expect(sc).not.toHaveProperty('slugs');
     expect(sc.allowedTags).toEqual(tags);
     const text = textOf(res);
-    expect(text).toContain(`${WIDGET_SLUGS_LINE}${allowed.join(', ')}`);
     expect(text).toContain(`${WIDGET_TAGS_LINE}${tags.join(', ')}`);
     expect(text).not.toContain('weapons');
     for (const slug of weapons) expect(text).not.toContain(slug);
   });
 
-  it('an error result carries the allowed slugs and tags for the widget', async () => {
+  it('an error result carries the allowed tags for the widget', async () => {
     const res = await showExplainer(createSite(reader), scope, { slug: 'rifle' });
     expect(res.isError).toBe(true);
     expect(res.structuredContent as unknown as ShowExplainerErrorResult).toEqual({
-      slugs: allowed,
       allowedTags: tags,
     });
     const missing = await showExplainer(
@@ -82,7 +79,6 @@ describe('WMIT_EXCLUDE_TAGS=weapons', () => {
     );
     expect(missing.isError).toBe(true);
     expect(missing.structuredContent as unknown as ShowExplainerErrorResult).toEqual({
-      slugs: allowed,
       allowedTags: tags,
     });
   });

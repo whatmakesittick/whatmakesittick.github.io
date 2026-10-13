@@ -42,12 +42,10 @@ export interface ShowExplainerResult {
   url: string;
   apiVersion: EmbedApiVersion;
   lang?: LanguageCode;
-  slugs: string[];
   allowedTags: Tag[];
 }
 
 export interface ShowExplainerErrorResult {
-  slugs: string[];
   allowedTags: Tag[];
 }
 
@@ -56,7 +54,6 @@ export interface WidgetScope {
   tags: readonly Tag[];
 }
 
-export const WIDGET_SLUGS_LINE = 'Explainers in the widget: ';
 export const WIDGET_TAGS_LINE = 'Tags in the widget: ';
 export const WIDGET_TAGS_META = 'wmit/allowedTags';
 

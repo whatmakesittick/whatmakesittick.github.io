@@ -12,8 +12,8 @@ import { log } from '../log.ts';
 import type { Site } from '../site.ts';
 import { showExplainerText } from '../text.ts';
 
-function failure({ slugs, tags }: WidgetScope, text: string): CallToolResult {
-  const structured: ShowExplainerErrorResult = { slugs: [...slugs], allowedTags: [...tags] };
+function failure({ tags }: WidgetScope, text: string): CallToolResult {
+  const structured: ShowExplainerErrorResult = { allowedTags: [...tags] };
   return { isError: true, content: [{ type: 'text', text }], structuredContent: { ...structured } };
 }
 
@@ -56,7 +56,6 @@ export async function showExplainer(
     url: entry.url,
     apiVersion: EMBED_API_VERSION,
     ...(args.lang === undefined ? {} : { lang }),
-    slugs: [...slugs],
     allowedTags: [...scope.tags],
   };
   return {
