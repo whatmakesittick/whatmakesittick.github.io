@@ -251,7 +251,9 @@ chapters while the stage is expanded and measure the reading line again after it
 collapses, so expanding never changes the chapter. X toggles it and Escape closes
 it; the keyboard runs these shell keys before the explainer's bindings, and Escape
 passes through when nothing is expanded; these keys are `stageShortcuts` in
-`stageShortcuts.ts`, which the chat widget binds to the host's display mode. The gauge sits under the button, and the
+`stageShortcuts.ts`, which the chat widget binds to the host's display mode. The rest of the keyboard is
+`createKeyHandler` in `keyboard.ts`, which the embed controller also offers as `handleKey`, so the
+widget's fullscreen answers the same keys as the expanded stage. The gauge sits under the button, and the
 button is 44px on a touch screen.
 
 A choice's `shortcut` cycles through its options. Chapter buttons use
@@ -763,7 +765,7 @@ outside the site such as a chat widget. It exports `apiVersion` (1), `slug` and
 controller once the first frame is drawn: `info` (its `language`, title, chapters with their
 paragraphs, phases, speed, toggles and choices, all in that language), `getState` and `subscribe`,
 `setChapter`, `play`, `pause`, `togglePlaying`, `seek`, `setSpeed`, `setView`, `setChoice`,
-`resetCamera`, `setLanguage` and `dispose`, which unmounts the scene, releases the WebGL context
+`resetCamera`, `handleKey`, `setLanguage` and `dispose`, which unmounts the scene, releases the WebGL context
 and removes the styles it added. `/embed/v1/manifest.json` lists the explainers with their covers,
 topics and chapter titles, in English: `embedManifest` takes them from the catalogue entries that
 `vite/catalogue.ts` builds for the MCP server and the chat widget, with the types, `plainText` and
@@ -779,7 +781,9 @@ whose `phaseLabel` is in the new language. Each language is the core and the exp
 merged, and a key a language lacks falls back to English (`fallbackLng`). The English dictionaries
 are in the module; the others are the same dynamic chunks the pages load, fetched only when a
 language is asked for. `setLanguage` is optional in the type because modules built before it
-lack it, so a widget checks for it.
+lack it, so a widget checks for it. `handleKey(event)` runs the page's keyboard on the store (space,
+arrows, digits for phases, R, choice, toggle and explainer shortcuts, never X or Escape) and
+returns whether it used the key; it is optional for the same reason.
 
 `mountEmbed` in `src/core/embed/mount.ts` does what `mountExplainer` does for a page, minus the
 page: `useLanguage` from `src/core/i18n/embedded.ts` sets the core and explainer strings in the

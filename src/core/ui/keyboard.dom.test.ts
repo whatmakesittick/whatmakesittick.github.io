@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Explainer, ExplainerStore } from '../explainer';
-import { mountKeyboard } from './keyboard';
+import { createKeyHandler, mountKeyboard } from './keyboard';
 
 const explainer = {
   timeline: { phases: [], nudge: { fine: 1, coarse: 10 }, speed: { step: 1 } },
@@ -47,5 +47,44 @@ describe('keyboard shell keys', () => {
     unmount();
     press('x');
     expect(toggle).not.toHaveBeenCalled();
+  });
+});
+
+describe('key handler', () => {
+  const playback = { step: vi.fn(), setSpeed: vi.fn(), speed: 2 };
+  const playbackStore = { getState: () => playback } as unknown as ExplainerStore;
+
+  function key(name: string, init: KeyboardEventInit = {}, target: Element = document.body) {
+    const event = new KeyboardEvent('keydown', {
+      key: name,
+      bubbles: true,
+      cancelable: true,
+      ...init,
+    });
+    Object.defineProperty(event, 'target', { value: target });
+    return event;
+  }
+
+  beforeEach(() => vi.clearAllMocks());
+
+  it('moves the timeline with the arrows and consumes them', () => {
+    const handle = createKeyHandler(playbackStore, explainer);
+    const right = key('ArrowRight');
+    expect(handle(right)).toBe(true);
+    expect(right.defaultPrevented).toBe(true);
+    expect(handle(key('ArrowLeft', { shiftKey: true }))).toBe(true);
+    expect(handle(key('ArrowUp'))).toBe(true);
+    expect(playback.step.mock.calls).toEqual([[1], [-10]]);
+    expect(playback.setSpeed).toHaveBeenCalledWith(3);
+  });
+
+  it('leaves keys to a focused field, to modifiers and to unbound keys', () => {
+    const handle = createKeyHandler(playbackStore, explainer);
+    const inField = key('ArrowRight', {}, document.createElement('input'));
+    expect(handle(inField)).toBe(false);
+    expect(inField.defaultPrevented).toBe(false);
+    expect(handle(key('ArrowRight', { metaKey: true }))).toBe(false);
+    expect(handle(key('q'))).toBe(false);
+    expect(playback.step).not.toHaveBeenCalled();
   });
 });

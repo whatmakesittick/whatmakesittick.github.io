@@ -58,12 +58,13 @@ function shouldIgnore(event: KeyboardEvent): boolean {
   return event.defaultPrevented || hasBlockingModifier(event) || isHandledByTarget(event);
 }
 
-export function mountKeyboard<S extends Playback>(
-  root: Document,
+export type KeyboardHandler = (event: KeyboardEvent) => boolean;
+
+export function createKeyHandler<S extends Playback>(
   store: ExplainerStore<S>,
   explainer: Explainer<S>,
   shellKeys: ShellKeys = {},
-): () => void {
+): KeyboardHandler {
   const bindings = keyBindings(explainer);
   const handle = (event: KeyboardEvent): boolean => {
     const key = event.key.toLowerCase();
@@ -72,9 +73,20 @@ export function mountKeyboard<S extends Playback>(
     handler?.(store.getState(), event);
     return handler !== undefined;
   };
-  const onKeyDown = (event: KeyboardEvent) => {
-    if (!shouldIgnore(event) && handle(event)) event.preventDefault();
+  return (event) => {
+    if (shouldIgnore(event) || !handle(event)) return false;
+    event.preventDefault();
+    return true;
   };
+}
+
+export function mountKeyboard<S extends Playback>(
+  root: Document,
+  store: ExplainerStore<S>,
+  explainer: Explainer<S>,
+  shellKeys: ShellKeys = {},
+): () => void {
+  const onKeyDown = createKeyHandler(store, explainer, shellKeys);
   root.addEventListener('keydown', onKeyDown);
   return () => root.removeEventListener('keydown', onKeyDown);
 }
