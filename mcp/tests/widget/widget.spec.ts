@@ -450,6 +450,8 @@ test.describe('real embed (dist): the site dock and gauge in the slots', () => {
     const g = await box(page, '.gauge-slot [data-gauge]');
     const d = await box(page, '.dock-slot [data-dock]');
     expect(g.y + g.height).toBeLessThanOrEqual(d.y);
+    await expect(gauge.locator('.readout dt').first()).toHaveCSS('line-height', '16.5px');
+    await expect(gauge.locator('.readout dd').first()).toHaveCSS('line-height', '21px');
     const needle = () => gauge.locator('.dial-needle').getAttribute('transform');
     const scrubber = page.locator('.dock-slot [data-control="scrubber"]');
     const at = Number(await scrubber.inputValue());
