@@ -87,10 +87,15 @@ tool call or host context change switches the language in place.
 - **Inline** follows design variant A, "viewer and reader": the scene on top, the chapter text and
   chapter pills below, other explainers in a horizontal strip. While the next explainer loads, the
   scene area keeps its height.
+  Inline binds no arrow keys: a focused scrubber, speed slider or button keeps its own keys, and
+  the chapter buttons below the scene step the chapters. Space, R, X and the toggle and choice
+  shortcuts work once the widget has focus.
 - **Fullscreen** is the site's expanded stage: the scene fills the frame, with the site's round
   button in the top right corner (now the exit control), the gauge under it, the labels and the
   dock at the bottom. The button styles are the site's (`src/core/styles/stage-expand.css`), X and
-  Escape come from the site's `stageShortcuts`, and both go through `requestDisplayMode`. As on the
+  Escape come from the site's `stageShortcuts`, and both go through `requestDisplayMode`. Every
+  other key goes to the embed's `handleKey`, the site's own keyboard, so the arrows move the timeline
+  and Shift moves it further, up and down change the speed and the digits jump to a phase. As on the
   site, a viewport of at most 899 px gets the phone dock and no gauge: the embed keys its phone dock
   rules to the dock slot, so the widget adds the site's rules keyed to the viewport for fullscreen
   (`fullscreenDock.ts`). The chapter text, the explainer list and the site link stay inline.

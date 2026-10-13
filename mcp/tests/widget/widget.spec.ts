@@ -288,6 +288,28 @@ test('fullscreen keys: X toggles the display mode and Escape leaves it, as on th
   expect(errors).toEqual([]);
 });
 
+test('arrow keys: fullscreen hands them to the embed, inline binds none', async ({ page }) => {
+  const { errors, logs } = await open(page, 'slug=mri-scanner&chapter=magnet');
+  await expect(page.locator('.wmit.is-inline.st-ready')).toBeVisible();
+  const title = page.locator('.a-chapter h3');
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('ArrowLeft');
+  await expect(title).toHaveText('A magnet that never switches off');
+  expect(logs.filter((l) => l.startsWith('[HOST] ui/update-model-context'))).toEqual([]);
+
+  await page.keyboard.press('x');
+  await expect(page.locator('.wmit.is-fs')).toBeVisible();
+  await page.keyboard.press(' ');
+  const scrubber = page.locator('.dock-slot [data-control="scrubber"]');
+  const at = Number(await scrubber.inputValue());
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(async () => Number(await scrubber.inputValue())).toBeGreaterThan(at);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.wmit.is-inline')).toBeVisible();
+  await expect(title).toHaveText('A magnet that never switches off');
+  expect(errors).toEqual([]);
+});
+
 for (const [width, height] of [
   [384, 854],
   [1010, 723],
