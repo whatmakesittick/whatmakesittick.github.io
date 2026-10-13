@@ -6,8 +6,8 @@ import {
 import { McpServer, type ReadResourceResult } from '@modelcontextprotocol/server';
 import { z } from 'zod';
 import { SITE_URL } from '../../vite/site.ts';
-import type { EmbedManifest } from '../../src/core/embed/manifest.ts';
-import { TAGS, type Tag } from '../shared/catalogue.ts';
+import type { EmbedManifest, EmbedManifestEntry } from '../../src/core/embed/manifest.ts';
+import { isSlug } from '../shared/catalogue.ts';
 import { SERVER_NAME, SERVER_TITLE, SERVER_VERSION } from '../shared/config.ts';
 import {
   OPENAI_INVOCATION_META,
@@ -40,24 +40,34 @@ export interface CreateServerOptions {
   loaderHtml: string;
   assetBase: string;
   domain?: string;
-  excludeTags?: readonly Tag[];
+  excludeTags?: readonly string[];
 }
 
-export function availableSlugs(index: EmbedManifest, excludeTags: readonly Tag[] = []): string[] {
-  return index.explainers
-    .filter((e) => !e.tags.some((t) => (excludeTags as readonly string[]).includes(t)))
+function availableExplainers(
+  index: EmbedManifest,
+  excludeTags: readonly string[],
+): EmbedManifestEntry[] {
+  return index.explainers.filter((e) => !e.tags.some((t) => excludeTags.includes(t)));
+}
+
+export function availableSlugs(
+  index: EmbedManifest,
+  excludeTags: readonly string[] = [],
+): string[] {
+  return availableExplainers(index, excludeTags)
     .map((e) => e.slug)
     .sort();
 }
 
-export function availableTags(excludeTags: readonly Tag[] = []): [Tag, ...Tag[]] {
-  return TAGS.filter((t) => !excludeTags.includes(t)) as [Tag, ...Tag[]];
+export function availableTags(index: EmbedManifest, excludeTags: readonly string[] = []): string[] {
+  const tags = availableExplainers(index, excludeTags).flatMap((e) => e.tags);
+  return [...new Set(tags.filter(isSlug))].sort();
 }
 
 export function createServer(options: CreateServerOptions): McpServer {
   const { index, site, assetBase, domain } = options;
   const slugs = availableSlugs(index, options.excludeTags);
-  const tags = availableTags(options.excludeTags);
+  const tags = availableTags(index, options.excludeTags);
   const scope: WidgetScope = { slugs, tags };
   const listed = index.explainers.filter((e) => slugs.includes(e.slug));
   const topics = new Map(listed.map((e) => [e.slug, e.topic]));
@@ -98,7 +108,10 @@ export function createServer(options: CreateServerOptions): McpServer {
       title: 'List 3D explainers',
       description: LIST_EXPLAINERS_DESCRIPTION,
       inputSchema: z.object({
-        tag: z.enum(tags).optional().describe('Only explainers with this tag.'),
+        tag: z
+          .enum(tags as [string, ...string[]])
+          .optional()
+          .describe('Only explainers with this tag.'),
         lang: z.string().max(35).optional().describe(LANG_DESCRIBE),
       }),
       annotations: { ...TOOL_ANNOTATIONS },

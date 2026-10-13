@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { TAGS } from '../../shared/catalogue.ts';
 import {
   WIDGET_TAGS_LINE,
   WIDGET_TAGS_META,
@@ -14,7 +13,9 @@ import { connect, index, reader, slugs as ALL, textOf, topics } from './helpers.
 const weapons = index.explainers.filter((e) => e.tags.includes('weapons')).map((e) => e.slug);
 const allowed = ALL.filter((s) => !weapons.includes(s));
 const options = { excludeTags: ['weapons' as const] };
-const tags = TAGS.filter((t) => t !== 'weapons');
+const tags = [
+  ...new Set(index.explainers.filter((e) => !weapons.includes(e.slug)).flatMap((e) => e.tags)),
+].sort();
 const scope = { slugs: allowed, tags };
 
 describe('WMIT_EXCLUDE_TAGS=weapons', () => {
@@ -81,5 +82,78 @@ describe('WMIT_EXCLUDE_TAGS=weapons', () => {
     expect(missing.structuredContent as unknown as ShowExplainerErrorResult).toEqual({
       allowedTags: tags,
     });
+  });
+});
+
+describe('tags come from the published manifest', () => {
+  const published = {
+    ...index,
+    explainers: index.explainers.map((e) =>
+      e.slug === 'heart' ? { ...e, tags: [...e.tags, 'gardening'] } : e,
+    ),
+  } as typeof index;
+  const siteWith = (manifest: typeof index) =>
+    createSite(async (path) =>
+      path === 'manifest.json' ? JSON.stringify(manifest) : reader(path),
+    );
+
+  it('a tag the server was not built with reaches the tools without a release', async () => {
+    const client = await connect({ index: published, site: siteWith(published) });
+    const { tools } = await client.listTools();
+    const show = tools.find((t) => t.name === 'show_explainer')!;
+    const list = tools.find((t) => t.name === 'list_explainers')!;
+    expect(show._meta?.[WIDGET_TAGS_META]).toContain('gardening');
+    expect((list.inputSchema.properties?.tag as { enum: string[] }).enum).toContain('gardening');
+    const res = await client.callTool({ name: 'show_explainer', arguments: { slug: 'engine' } });
+    expect((res.structuredContent as unknown as ShowExplainerResult).allowedTags).toContain(
+      'gardening',
+    );
+    const listed = await client.callTool({
+      name: 'list_explainers',
+      arguments: { tag: 'gardening' },
+    });
+    const sc = listed.structuredContent as unknown as ListExplainersResult;
+    expect(sc.explainers.map((e) => e.slug)).toEqual(['heart']);
+    expect(sc.explainers[0]!.tags).toContain('gardening');
+  });
+
+  it('a server reads the new tag once its manifest cache expires', async () => {
+    let manifest = index;
+    let now = 0;
+    const site = createSite(
+      async (path) => (path === 'manifest.json' ? JSON.stringify(manifest) : reader(path)),
+      { ttlMs: 1000, now: () => now },
+    );
+    const tagsOf = async () => {
+      const client = await connect({ index: await site.index(), site });
+      const { tools } = await client.listTools();
+      return tools.find((t) => t.name === 'show_explainer')!._meta?.[WIDGET_TAGS_META];
+    };
+    expect(await tagsOf()).not.toContain('gardening');
+    manifest = published;
+    now = 2000;
+    await site.index();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(await tagsOf()).toContain('gardening');
+  });
+
+  it('an excluded tag reaches nothing, before and after it is published', async () => {
+    for (const manifest of [index, published]) {
+      const client = await connect({
+        index: manifest,
+        site: siteWith(manifest),
+        excludeTags: ['gardening'],
+      });
+      const { tools } = await client.listTools();
+      const show = await client.callTool({ name: 'show_explainer', arguments: { slug: 'engine' } });
+      const refused = await client.callTool({
+        name: 'show_explainer',
+        arguments: { slug: 'heart' },
+      });
+      const list = await client.callTool({ name: 'list_explainers', arguments: {} });
+      const seen = JSON.stringify([tools, show, refused, list]);
+      expect(seen).not.toContain('gardening');
+      expect(seen.includes('"heart"')).toBe(manifest === index);
+    }
   });
 });

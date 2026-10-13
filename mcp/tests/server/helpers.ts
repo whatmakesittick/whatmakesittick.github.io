@@ -51,6 +51,8 @@ export const textOf = (result: { content?: unknown }): string =>
 
 export const slugs = catalogue.explainers.map((e) => e.slug).sort();
 
+export const tags = [...new Set(catalogue.explainers.flatMap((e) => e.tags))].sort();
+
 export function serverLog(): () => string {
   let spy: MockInstance<typeof console.error> | undefined;
   beforeEach(() => {

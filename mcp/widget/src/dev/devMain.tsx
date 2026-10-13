@@ -1,5 +1,5 @@
 import { render } from 'preact';
-import { TAGS, explainerUrl, isSlug, resolveLanguage } from '../../../shared/catalogue.ts';
+import { explainerUrl, isSlug, resolveLanguage } from '../../../shared/catalogue.ts';
 import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import { createHub, type DisplayMode, type WidgetHost } from '../bridge.ts';
 import { bundledPacks } from '../i18n/bundled.ts';
@@ -21,7 +21,13 @@ const excluded = (q.get('exclude') ?? '').split(',').filter(Boolean);
 const assetBase = `${location.origin}/site/${slow > 0 ? `slow/${slow}/` : ''}embed/v1/`;
 const packs = bundledPacks(assetBase, false);
 const { catalogue } = await packs.load('en');
-const allowedTags = TAGS.filter((t) => !excluded.includes(t));
+const allowedTags = [
+  ...new Set(
+    catalogue.explainers
+      .filter((e) => !e.tags.some((t) => excluded.includes(t)))
+      .flatMap((e) => e.tags),
+  ),
+].sort();
 let mode: DisplayMode = q.get('mode') === 'fullscreen' ? 'fullscreen' : 'inline';
 const hostTheme =
   q.get('host') ?? (Number(q.get('width')) && Number(q.get('width')) < 500 ? 'dark' : 'light');

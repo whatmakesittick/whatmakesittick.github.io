@@ -1,6 +1,5 @@
 import { AppBridge, PostMessageTransport } from '@modelcontextprotocol/ext-apps/app-bridge';
 import {
-  TAGS,
   embedCatalogueFile,
   explainerUrl,
   resolveLanguage,
@@ -41,7 +40,7 @@ const result = {
     url: explainerUrl(slug),
     apiVersion: 1,
     ...(lang ? { lang: resolveLanguage(lang) } : {}),
-    allowedTags: [...TAGS],
+    allowedTags: [...new Set(catalogue.explainers.flatMap((e) => e.tags))].sort(),
   },
 };
 

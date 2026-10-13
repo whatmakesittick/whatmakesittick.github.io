@@ -87,9 +87,10 @@ describe('truncateBytes', () => {
 describe('parseExcludeTags', () => {
   const logged = serverLog();
 
-  it('keeps known tags only', () => {
-    expect(parseExcludeTags('weapons, space,kitchen')).toEqual(['weapons', 'space']);
-    expect(logged()).toContain('unknown tag "kitchen"');
+  it('keeps every tag name, published or not yet', () => {
+    expect(parseExcludeTags('weapons, space,kitchen')).toEqual(['weapons', 'space', 'kitchen']);
+    expect(parseExcludeTags('weapons,Big Guns,')).toEqual(['weapons']);
+    expect(logged()).toContain('"Big Guns" is not a tag name');
     expect(parseExcludeTags(undefined)).toEqual([]);
   });
 });

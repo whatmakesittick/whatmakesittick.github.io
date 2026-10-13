@@ -12,7 +12,7 @@ import {
   parsePublishedManifest,
   type PublishedManifest,
 } from '../../vite/manifestSchema.ts';
-import { isTag, plainText, type CatalogueEntry } from '../shared/catalogue.ts';
+import { isSlug, plainText, type CatalogueEntry } from '../shared/catalogue.ts';
 import type { ListExplainersItem } from '../shared/tools.ts';
 import { log } from './log.ts';
 
@@ -266,7 +266,7 @@ export function createSite(read: SiteReader, options: SiteOptions = {}): Site {
       slug,
       title: found?.meta.title || english.title,
       summary: found?.meta.summary || english.summary,
-      tags: english.tags.filter(isTag),
+      tags: english.tags.filter(isSlug),
       chapters: english.chapters.map(({ id, title }) => ({
         id,
         title: chapterTitle(found?.dictionary, id) || title,

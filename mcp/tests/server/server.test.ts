@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { LANGUAGE_CODES } from '../../../src/core/i18n/languages.ts';
-import { TAGS, localizeEntry, plainText } from '../../shared/catalogue.ts';
+import { localizeEntry, plainText } from '../../shared/catalogue.ts';
 import { ASSET_BASE_TOKEN } from '../../shared/config.ts';
 import { EMBED_API_VERSION } from '../../../src/core/embed/manifest.ts';
 import {
@@ -25,6 +25,7 @@ import {
   reader,
   slugs as SLUGS,
   serverLog,
+  tags as ALL_TAGS,
   textOf,
   topics,
 } from './helpers.ts';
@@ -53,7 +54,7 @@ describe('tools/list', () => {
     expect((show.inputSchema.properties?.slug as { enum: string[] }).enum).toEqual([...SLUGS]);
     expect(show.inputSchema.required).toEqual(['slug']);
     expect(show._meta?.ui).toEqual({ resourceUri: WIDGET_RESOURCE_URI });
-    expect(show._meta?.[WIDGET_TAGS_META]).toEqual([...TAGS]);
+    expect(show._meta?.[WIDGET_TAGS_META]).toEqual([...ALL_TAGS]);
     expect(show.annotations).toMatchObject({
       readOnlyHint: true,
       openWorldHint: false,
@@ -88,7 +89,7 @@ describe('tools/list', () => {
     const client = await connect();
     const { tools } = await client.listTools();
     const list = tools.find((t) => t.name === 'list_explainers')!;
-    expect((list.inputSchema.properties?.tag as { enum: string[] }).enum).toEqual([...TAGS]);
+    expect((list.inputSchema.properties?.tag as { enum: string[] }).enum).toEqual([...ALL_TAGS]);
     expect(list._meta?.ui).toBeUndefined();
     expect(list.annotations).toMatchObject({ readOnlyHint: true });
   });
@@ -166,7 +167,7 @@ describe('show_explainer', () => {
       chapterTitle: 'A magnet that never switches off',
       url: 'https://whatmakesittick.github.io/mri-scanner/',
       apiVersion: EMBED_API_VERSION,
-      allowedTags: [...TAGS],
+      allowedTags: [...ALL_TAGS],
     } satisfies ShowExplainerResult);
     const text = textOf(res);
     expect(text).toContain(
@@ -333,7 +334,7 @@ describe('list_explainers', () => {
 
   it('tag filter is exact', async () => {
     const client = await connect();
-    for (const tag of TAGS) {
+    for (const tag of ALL_TAGS) {
       const res = await client.callTool({ name: 'list_explainers', arguments: { tag } });
       const got = (res.structuredContent as unknown as ListExplainersResult).explainers.map(
         (e) => e.slug,

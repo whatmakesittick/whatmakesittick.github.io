@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { isTag, type Tag } from '../shared/catalogue.ts';
+import { isSlug } from '../shared/catalogue.ts';
 import { PATHS } from '../shared/config.ts';
 import { sitePath } from './http.ts';
 import { log } from './log.ts';
@@ -32,15 +32,15 @@ export function fileReader(root: string): SiteReader {
   };
 }
 
-export function parseExcludeTags(raw: string | undefined): Tag[] {
+export function parseExcludeTags(raw: string | undefined): string[] {
   if (!raw) return [];
-  const out: Tag[] = [];
+  const out: string[] = [];
   for (const tag of raw
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)) {
-    if (isTag(tag)) out.push(tag);
-    else log(`WMIT_EXCLUDE_TAGS: unknown tag "${tag}" ignored`);
+    if (isSlug(tag)) out.push(tag);
+    else log(`WMIT_EXCLUDE_TAGS: "${tag}" is not a tag name, ignored`);
   }
   return out;
 }

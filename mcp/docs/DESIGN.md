@@ -71,11 +71,22 @@ Each boundary exists for a reason.
   failure that takes the catalogue also takes the scenes.
 - **Exclusion with a fresh catalogue.** `WMIT_EXCLUDE_TAGS` hides explainers by tag. A list of
   allowed slugs, fixed when the tool is called, would also hide every explainer published later.
-  So `show_explainer` sends the allowed tags too, as `structuredContent.allowedTags`, as a
+  So `show_explainer` sends the allowed tags, as `structuredContent.allowedTags`, as a
   `Tags in the widget:` text line and as `_meta["wmit/allowedTags"]` on the tool. The widget shows
   an explainer when every one of its tags is allowed. It names allowed tags, not excluded ones, so
-  no excluded tag reaches the model, and an explainer with a tag newer than the server stays
-  hidden until the server knows it. Without allowed tags, the widget shows only the open explainer.
+  no excluded tag reaches the model. Without allowed tags, the widget shows only the open explainer.
+- **Allowed tags come from the site.** The server builds no tag list in. The allowed tags are the
+  tags of the explainers in `manifest.json` that no excluded tag hides, so they follow the manifest
+  cache: a deploy with a new tag reaches the tools within 5 minutes, without a server release. The
+  `list_explainers` tag enum and `_meta["wmit/allowedTags"]` are read the same way, but hosts cache
+  the tool list, often until the connector is reconnected. Until then the model sees the old enum
+  and cannot ask for the new tag by name; the server checks the tag against its current list. The
+  result of each `show_explainer` call is always current, and the widget prefers it over the tool's
+  `_meta`. One window stays: a tag published after the widget's last `show_explainer` call is not
+  in its allowed tags, so an explainer with that tag stays hidden in that widget until the next
+  call. The widget fails closed. `WMIT_EXCLUDE_TAGS` takes any tag name, so a tag can be excluded
+  before it is published. Over stdio the server is built once at start, so its tools keep the
+  manifest of that moment until the process restarts.
 - **Server and static files.** GitHub Pages can serve `/embed/v1/` (it already sends
   `Access-Control-Allow-Origin: *`), but it cannot host `POST /mcp`: it answers 405. `createServer`
   touches no Node API, so the plan is a Cloudflare Worker for `/mcp`, with `WMIT_ASSET_BASE`

@@ -1,6 +1,5 @@
 import type { EmbedApiVersion } from '../../src/core/embed/manifest.ts';
 import type { LanguageCode } from '../../src/core/i18n/languages.ts';
-import type { Tag } from './catalogue.ts';
 
 export const TOOL_SHOW_EXPLAINER = 'show_explainer' as const;
 export const TOOL_LIST_EXPLAINERS = 'list_explainers' as const;
@@ -42,23 +41,23 @@ export interface ShowExplainerResult {
   url: string;
   apiVersion: EmbedApiVersion;
   lang?: LanguageCode;
-  allowedTags: Tag[];
+  allowedTags: string[];
 }
 
 export interface ShowExplainerErrorResult {
-  allowedTags: Tag[];
+  allowedTags: string[];
 }
 
 export interface WidgetScope {
   slugs: readonly string[];
-  tags: readonly Tag[];
+  tags: readonly string[];
 }
 
 export const WIDGET_TAGS_LINE = 'Tags in the widget: ';
 export const WIDGET_TAGS_META = 'wmit/allowedTags';
 
 export interface ListExplainersInput {
-  tag?: Tag;
+  tag?: string;
   lang?: string;
 }
 
@@ -66,7 +65,7 @@ export interface ListExplainersItem {
   slug: string;
   title: string;
   summary: string;
-  tags: Tag[];
+  tags: string[];
   chapters: { id: string; title: string }[];
 }
 

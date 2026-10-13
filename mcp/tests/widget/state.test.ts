@@ -144,6 +144,17 @@ describe('allowed explainers', () => {
     expect(shownEntries(items, undefined)).toEqual([]);
   });
 
+  it('hides an explainer with a tag newer than the last call until the next call', () => {
+    const garden = { slug: 'garden', tags: ['biology', 'gardening'] };
+    const before = scopeFromResult({ structuredContent: { allowedTags: ['biology', 'physics'] } });
+    expect(shownEntries([engine, garden], before)).toEqual([engine]);
+    expect(mayShow(garden, before, false)).toBe(false);
+    const after = scopeFromResult({
+      structuredContent: { allowedTags: ['biology', 'gardening', 'physics'] },
+    });
+    expect(shownEntries([engine, garden], after)).toEqual([engine, garden]);
+  });
+
   it('opens a target the server accepted, never one it refused or left out', () => {
     expect(mayShow(rifle, { tags: ['physics'] }, false)).toBe(false);
     expect(mayShow(fresh, { tags: ['physics'] }, false)).toBe(true);
