@@ -95,12 +95,11 @@ describe('widget strings', () => {
     expect(s.chapterIndex('3', '7')).toContain('7');
     expect(s.nextNamed('Ignition')).toContain('Ignition');
     expect(s.count(12)).toContain('12');
-    expect(s.explainers(12)).toContain('12');
   });
 
   it('declines the Ukrainian count', () => {
     const s = stringsFor('uk');
-    expect([1, 3, 5, 11, 22, 25].map((n) => s.explainers(n))).toEqual([
+    expect([1, 3, 5, 11, 22, 25].map((n) => s.count(n))).toEqual([
       '1 пояснення',
       '3 пояснення',
       '5 пояснень',

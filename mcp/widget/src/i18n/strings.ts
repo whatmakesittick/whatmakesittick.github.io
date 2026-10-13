@@ -12,11 +12,9 @@ const en = {
   nextNamed: (chapter: string) => `Next: ${chapter}`,
   exploreMore: 'More explainers',
   count: (n: number) => `${n} explainers`,
-  explainers: (n: number) => `${n} explainers`,
   watching: 'Watching',
   scrollLeft: 'Scroll left',
   scrollRight: 'Scroll right',
-  close: 'Close',
   chapters: 'Chapters',
   loading: {
     title: 'Building the 3D scene',

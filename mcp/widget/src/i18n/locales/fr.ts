@@ -13,11 +13,9 @@ const fr: WidgetStrings = {
   readLess: 'Afficher moins',
   nextNamed: (chapter) => `Ensuite\u00a0: ${chapter}`,
   count: frExplainers,
-  explainers: frExplainers,
   watching: 'En cours',
   scrollLeft: 'Faire défiler vers la gauche',
   scrollRight: 'Faire défiler vers la droite',
-  close: 'Fermer',
   chapters: 'Chapitres',
   loading: {
     title: 'Construction de la scène 3D',

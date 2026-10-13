@@ -13,11 +13,9 @@ const pt: WidgetStrings = {
   readLess: 'Mostrar menos',
   nextNamed: (chapter) => `A seguir: ${chapter}`,
   count: ptExplainers,
-  explainers: ptExplainers,
   watching: 'Assistindo',
   scrollLeft: 'Rolar para a esquerda',
   scrollRight: 'Rolar para a direita',
-  close: 'Fechar',
   chapters: 'Capítulos',
   loading: {
     title: 'Montando a cena 3D',

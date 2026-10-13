@@ -13,11 +13,9 @@ const es: WidgetStrings = {
   readLess: 'Ver menos',
   nextNamed: (chapter) => `Siguiente: ${chapter}`,
   count: esExplainers,
-  explainers: esExplainers,
   watching: 'Viendo ahora',
   scrollLeft: 'Desplazar a la izquierda',
   scrollRight: 'Desplazar a la derecha',
-  close: 'Cerrar',
   chapters: 'Capítulos',
   loading: {
     title: 'Montando la escena 3D',

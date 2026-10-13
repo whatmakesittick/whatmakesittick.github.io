@@ -11,11 +11,9 @@ const zh: WidgetStrings = {
   readLess: '收起',
   nextNamed: (chapter) => `下一章：${chapter}`,
   count: (n) => `${n} 篇图解`,
-  explainers: (n) => `${n} 篇图解`,
   watching: '正在观看',
   scrollLeft: '向左滚动',
   scrollRight: '向右滚动',
-  close: '关闭',
   chapters: '章节',
   loading: {
     title: '正在搭建 3D 场景',

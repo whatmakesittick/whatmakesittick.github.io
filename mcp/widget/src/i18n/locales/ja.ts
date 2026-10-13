@@ -11,11 +11,9 @@ const ja: WidgetStrings = {
   readLess: '閉じる',
   nextNamed: (chapter) => `次は：${chapter}`,
   count: (n) => `${n}本の解説`,
-  explainers: (n) => `${n}本の解説`,
   watching: '表示中',
   scrollLeft: '左へスクロール',
   scrollRight: '右へスクロール',
-  close: '閉じる',
   chapters: '章',
   loading: {
     title: '3Dシーンを準備しています',

@@ -19,11 +19,9 @@ const uk: WidgetStrings = {
   readLess: 'Згорнути',
   nextNamed: (chapter) => `Далі: ${chapter}`,
   count: ukExplainers,
-  explainers: ukExplainers,
   watching: 'Зараз відкрито',
   scrollLeft: 'Прокрутити ліворуч',
   scrollRight: 'Прокрутити праворуч',
-  close: 'Закрити',
   chapters: 'Розділи',
   loading: {
     title: 'Будуємо 3D-сцену',

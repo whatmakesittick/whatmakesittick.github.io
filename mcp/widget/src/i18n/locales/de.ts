@@ -13,11 +13,9 @@ const de: WidgetStrings = {
   readLess: 'Weniger anzeigen',
   nextNamed: (chapter) => `Als Nächstes: ${chapter}`,
   count: deExplainers,
-  explainers: deExplainers,
   watching: 'Wird angezeigt',
   scrollLeft: 'Nach links scrollen',
   scrollRight: 'Nach rechts scrollen',
-  close: 'Schließen',
   chapters: 'Kapitel',
   loading: {
     title: '3D-Szene wird aufgebaut',
