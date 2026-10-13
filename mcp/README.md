@@ -55,7 +55,7 @@ npm run mcp:stdio      # MCP over stdio; serves the site files on 127.0.0.1:$POR
 | `WMIT_ALLOWED_ORIGINS` | Comma separated origins such as `https://chat.example.com`, besides loopback, that may call `/mcp` |
 | `WMIT_ASSET_BASE`      | Where the widget and the server read the site, e.g. `https://whatmakesittick.github.io/embed/v1/`  |
 | `MCP_PUBLIC_URL`       | The public `/mcp` URL behind a tunnel: sets the asset base origin and Claude's `ui.domain`         |
-| `WMIT_EXCLUDE_TAGS`    | Comma separated tags whose explainers the tools leave out, e.g. `weapons`                          |
+| `WMIT_EXCLUDE_TAGS`    | Comma separated tags whose explainers the tools and the widget leave out, e.g. `weapons`           |
 | `WMIT_LOG_REQUESTS`    | Logs every MCP method and file request to stderr                                                   |
 | `WMIT_SITE_DIR`        | The built site the server reads and serves, `dist` by default                                      |
 

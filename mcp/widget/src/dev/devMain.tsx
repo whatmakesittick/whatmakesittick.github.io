@@ -4,6 +4,7 @@ import type { McpUiHostContext } from '@modelcontextprotocol/ext-apps';
 import { createHub, type DisplayMode, type WidgetHost } from '../bridge.ts';
 import { bundledPacks } from '../i18n/bundled.ts';
 import { hasWebGL2, urlLoader } from '../scene.ts';
+import { WIDGET_SLUGS_LINE } from '../../../shared/tools.ts';
 import '../styles.css';
 import { fullscreenDockCss } from '../fullscreenDock.ts';
 import { Widget } from '../Widget.tsx';
@@ -19,6 +20,11 @@ const state = q.get('state');
 const real = q.get('real') === '1';
 const lang = q.get('lang');
 const slow = Number(q.get('slow') ?? 0);
+const excluded = (q.get('exclude') ?? '').split(',').filter(Boolean);
+const slugs = catalogue.explainers
+  .filter((e) => !e.tags.some((t) => excluded.includes(t)))
+  .map((e) => e.slug)
+  .sort();
 const assetBase = `${location.origin}/site/${slow > 0 ? `slow/${slow}/` : ''}embed/v1/`;
 let mode: DisplayMode = q.get('mode') === 'fullscreen' ? 'fullscreen' : 'inline';
 const hostTheme =
@@ -162,7 +168,11 @@ const args = {
 setTimeout(() => hub.emit('input', args), 50);
 setTimeout(async () => {
   if (state === 'unknown') {
-    hub.emit('result', { content: [{ type: 'text', text: 'No explainer matches.' }] });
+    hub.emit('result', {
+      isError: true,
+      content: [{ type: 'text', text: 'No explainer matches.' }],
+      structuredContent: { slugs },
+    });
     return;
   }
   const shown = lang ? (await packs.load(resolveLanguage(lang))).catalogue : catalogue;
@@ -178,8 +188,9 @@ setTimeout(async () => {
     url: isSlug(slug) ? explainerUrl(slug) : '',
     apiVersion: 1,
     ...(lang ? { lang: resolveLanguage(lang) } : {}),
+    slugs,
   };
-  const text = `Showing the interactive 3D explainer "${structured.title}".\nOpened at chapter ${ci + 1} of ${structured.chapterCount}: "${structured.chapterTitle}" (id: ${chapter}).\nWebsite: ${structured.url}`;
+  const text = `Showing the interactive 3D explainer "${structured.title}".\nOpened at chapter ${ci + 1} of ${structured.chapterCount}: "${structured.chapterTitle}" (id: ${chapter}).\nWebsite: ${structured.url}\n${WIDGET_SLUGS_LINE}${slugs.join(', ')}`;
   const data = q.get('data');
   hub.emit(
     'result',

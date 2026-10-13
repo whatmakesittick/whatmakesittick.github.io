@@ -1,22 +1,19 @@
 import type { CallToolResult } from '@modelcontextprotocol/server';
 import { EMBED_API_VERSION } from '../../../src/core/embed/manifest.ts';
 import { localizeEntry, resolveLanguage, type CatalogueEntry } from '../../shared/catalogue.ts';
-import type { ShowExplainerInput, ShowExplainerResult } from '../../shared/tools.ts';
+import type {
+  ShowExplainerErrorResult,
+  ShowExplainerInput,
+  ShowExplainerResult,
+} from '../../shared/tools.ts';
 import { resolveChapter } from '../chapters.ts';
 import { log } from '../log.ts';
 import type { Site } from '../site.ts';
 import { showExplainerText } from '../text.ts';
 
-function unavailable(slug: string): CallToolResult {
-  return {
-    isError: true,
-    content: [
-      {
-        type: 'text',
-        text: `The data for the explainer "${slug}" is unavailable right now. Try again later.`,
-      },
-    ],
-  };
+function failure(slugs: readonly string[], text: string): CallToolResult {
+  const structured: ShowExplainerErrorResult = { slugs: [...slugs] };
+  return { isError: true, content: [{ type: 'text', text }], structuredContent: { ...structured } };
 }
 
 export async function showExplainer(
@@ -25,16 +22,10 @@ export async function showExplainer(
   args: ShowExplainerInput,
 ): Promise<CallToolResult> {
   if (!slugs.includes(args.slug)) {
-    const why = `Unknown explainer slug "${args.slug}".`;
-    return {
-      isError: true,
-      content: [
-        {
-          type: 'text',
-          text: `${why} Available slugs: ${slugs.join(', ')}. Call list_explainers to see them with their chapters.`,
-        },
-      ],
-    };
+    return failure(
+      slugs,
+      `Unknown explainer slug "${args.slug}". Available slugs: ${slugs.join(', ')}. Call list_explainers to see them with their chapters.`,
+    );
   }
 
   const lang = resolveLanguage(args.lang);
@@ -44,7 +35,12 @@ export async function showExplainer(
   } catch (error) {
     log(`show_explainer ${args.slug}:`, error);
   }
-  if (!entry) return unavailable(args.slug);
+  if (!entry) {
+    return failure(
+      slugs,
+      `The data for the explainer "${args.slug}" is unavailable right now. Try again later.`,
+    );
+  }
   const localized = localizeEntry(entry, lang);
   const res = resolveChapter(entry, args.chapter, lang);
   const { chapter } = res;
@@ -58,9 +54,10 @@ export async function showExplainer(
     url: entry.url,
     apiVersion: EMBED_API_VERSION,
     ...(args.lang === undefined ? {} : { lang }),
+    slugs: [...slugs],
   };
   return {
-    content: [{ type: 'text', text: showExplainerText(localized, res, args.chapter) }],
+    content: [{ type: 'text', text: showExplainerText(localized, res, slugs, args.chapter) }],
     structuredContent: { ...result },
   };
 }

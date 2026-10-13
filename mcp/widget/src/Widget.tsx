@@ -1,10 +1,19 @@
-import { useRef } from 'preact/hooks';
+import { useMemo, useRef } from 'preact/hooks';
 import { explainerUrl, type WidgetCatalogueEntry } from '../../shared/catalogue.ts';
 import type { WidgetHost } from './bridge.ts';
 import { StringsContext } from './i18n/context.ts';
 import type { Packs } from './i18n/packs.ts';
 import type { ModuleLoader, SceneStatus } from './scene.ts';
-import { allowsFullscreen, chapterViews, frameOf, neighbour, stripOrder } from './state.ts';
+import {
+  allowsFullscreen,
+  chapterViews,
+  frameOf,
+  mayShow,
+  neighbour,
+  shownEntries,
+  slugsFromToolInfo,
+  stripOrder,
+} from './state.ts';
 import { ChapterSection } from './views/Chapter.tsx';
 import { ExploreStrip } from './views/Explore.tsx';
 import { Header, Stage } from './views/Stage.tsx';
@@ -41,11 +50,18 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
   entriesRef.current = entries;
   const find = (slug: string): WidgetCatalogueEntry | undefined =>
     entriesRef.current.find((e) => e.slug === slug);
-  const { target, setTarget, inputSeen, resultSeen } = useTarget(host, find, session);
   const ctx = useHostContext(host);
-
+  const toolSlugs = useMemo(() => slugsFromToolInfo(ctx), [ctx]);
+  const { target, setTarget, inputSeen, resultSeen, allowed, failed } = useTarget(
+    host,
+    find,
+    session,
+    toolSlugs,
+  );
   const slug = target?.slug;
-  const entry = slug ? find(slug) : undefined;
+  const entry = slug && mayShow(slug, allowed, failed) ? find(slug) : undefined;
+  const shown = shownEntries(entries, allowed, entry?.slug);
+  const canOpen = (next: string) => shown.some((e) => e.slug === next);
   const hold = !painted.current && waiting;
 
   const { chapter, chapterRef, setChapter, disc, stripFirst } = useSceneSync(
@@ -99,7 +115,7 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     openCatalogue,
     toggleFullscreen,
     switchTo: touched((next: string) => {
-      if (next !== slug) setTarget({ slug: next });
+      if (next !== slug && canOpen(next)) setTarget({ slug: next });
     }),
     retry() {
       if (!slug) return;
@@ -122,9 +138,9 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
         <div class={rootClass} style={style} lang={pack.lang}>
           {resultSeen && !hold ? (
             <Unknown
-              catalogue={entries}
+              catalogue={shown}
               assetBase={assetBase}
-              onPick={(s) => setTarget({ slug: s })}
+              onPick={(s) => canOpen(s) && setTarget({ slug: s })}
               onOpen={openCatalogue}
             />
           ) : (
@@ -154,8 +170,8 @@ export function Widget({ host, loader, assetBase, packs, webgl }: WidgetProps) {
     fullscreen,
     canFullscreen,
     assetBase,
-    catalogue: entries,
-    strip: stripOrder(entries, stripFirst ?? slug),
+    catalogue: shown,
+    strip: stripOrder(allowed ? shown : entries, stripFirst ?? slug),
     actions,
   };
 

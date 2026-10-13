@@ -48,6 +48,10 @@ export function availableSlugs(index: EmbedManifest, excludeTags: readonly Tag[]
     .sort();
 }
 
+export function availableTags(excludeTags: readonly Tag[] = []): [Tag, ...Tag[]] {
+  return TAGS.filter((t) => !excludeTags.includes(t)) as [Tag, ...Tag[]];
+}
+
 export function createServer(options: CreateServerOptions): McpServer {
   const { index, site, assetBase, domain } = options;
   const slugs = availableSlugs(index, options.excludeTags);
@@ -86,7 +90,10 @@ export function createServer(options: CreateServerOptions): McpServer {
       title: 'List 3D explainers',
       description: LIST_EXPLAINERS_DESCRIPTION,
       inputSchema: z.object({
-        tag: z.enum(TAGS).optional().describe('Only explainers with this tag.'),
+        tag: z
+          .enum(availableTags(options.excludeTags))
+          .optional()
+          .describe('Only explainers with this tag.'),
         lang: z.string().max(35).optional().describe(LANG_DESCRIBE),
       }),
       annotations: { ...TOOL_ANNOTATIONS },

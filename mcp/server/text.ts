@@ -4,7 +4,11 @@ import {
   type CatalogueChapter,
   type LocalizedCatalogueEntry,
 } from '../shared/catalogue.ts';
-import { MODEL_TEXT_MAX_BYTES, type ListExplainersItem } from '../shared/tools.ts';
+import {
+  MODEL_TEXT_MAX_BYTES,
+  WIDGET_SLUGS_LINE,
+  type ListExplainersItem,
+} from '../shared/tools.ts';
 import type { ChapterResolution } from './chapters.ts';
 
 const encoder = new TextEncoder();
@@ -41,6 +45,7 @@ const snippet = (c: CatalogueChapter): string => {
 export function showExplainerText(
   entry: LocalizedCatalogueEntry,
   res: ChapterResolution,
+  slugs: readonly string[],
   requested?: string,
 ): string {
   const { chapter } = res;
@@ -62,6 +67,7 @@ export function showExplainerText(
   const tail = [
     "The user can rotate and zoom the model, play the cycle, toggle views and switch chapters or other explainers in the widget. Answer follow-ups from this text; don't paste it back verbatim.",
     `Website: ${entry.url}`,
+    `${WIDGET_SLUGS_LINE}${slugs.join(', ')}`,
   ];
 
   const assemble = (current: string, chapterLines: string[]): string =>
