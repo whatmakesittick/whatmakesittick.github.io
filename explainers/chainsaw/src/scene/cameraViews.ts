@@ -1,5 +1,9 @@
+import { Vector3 } from 'three';
 import type { Box3 } from 'three';
-import type { Direction, FramedView } from '@core/scene/cameraViews';
+import type { CustomView, Direction, FramedView } from '@core/scene/cameraViews';
+import { frameBox } from '@core/scene/frameBox';
+import type { CameraPose } from '@core/scene/frameBox';
+import type { FramingSlopes } from '@core/scene/lens';
 import { CAMERA_VIEW_IDS } from '../ids';
 import type { CameraView, RegionId } from '../ids';
 
@@ -83,4 +87,35 @@ export function framedViews(variant: StageVariant): Record<CameraView, FramedVie
       return [id, { region, direction: direction[variant], margin: margin[variant] }];
     }),
   ) as Record<CameraView, FramedView<RegionId>>;
+}
+
+export const FRAME_LIFT: PerVariant<number> = { phone: 0.1, desktop: 0.2 };
+
+const WORLD_UP = new Vector3(0, 1, 0);
+
+export function liftedPose(pose: CameraPose, slopes: FramingSlopes, lift: number): CameraPose {
+  const forward = pose.target.clone().sub(pose.position);
+  const right = new Vector3().crossVectors(forward, WORLD_UP).normalize();
+  const up = new Vector3().crossVectors(right, forward).normalize();
+  const shift = up.multiplyScalar(-lift * forward.length() * slopes.vertical);
+  return { position: pose.position.clone().add(shift), target: pose.target.clone().add(shift) };
+}
+
+export function liftedViews(
+  variant: StageVariant,
+  region: (id: RegionId) => Box3 | null,
+): Record<CameraView, CustomView> {
+  return Object.fromEntries(
+    CAMERA_VIEW_IDS.map((id) => {
+      const spec = CAMERA_VIEWS[id];
+      const toward = new Vector3(...spec.direction[variant]).normalize();
+      const margin = spec.margin[variant];
+      const pose = (slopes: FramingSlopes): CameraPose | null => {
+        const box = region(spec.region);
+        if (!box) return null;
+        return liftedPose(frameBox(box, toward, slopes, margin), slopes, FRAME_LIFT[variant]);
+      };
+      return [id, { pose }];
+    }),
+  ) as Record<CameraView, CustomView>;
 }

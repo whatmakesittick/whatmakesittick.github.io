@@ -4,8 +4,10 @@ import { Box3, Vector3 } from 'three';
 import {
   CAMERA_VIEWS,
   STAGE_VARIANTS,
+  FRAME_LIFT,
   framedRegion,
   framedViews,
+  liftedPose,
   stageVariant,
 } from './cameraViews';
 
@@ -59,6 +61,17 @@ describe('camera views', () => {
     expect(framedRegion(box, 'starter', 'phone')).toBe(box);
     expect(framedRegion(box, 'saw', 'desktop')).toBe(box);
     expect(framedRegion(null, 'starter', 'desktop')).toBeNull();
+  });
+
+  it('lowers the camera and its target together so the subject sits higher in the frame', () => {
+    const pose = { position: new Vector3(0, 0, 10), target: new Vector3(0, 0, 0) };
+    const slopes = { vertical: 0.5, horizontal: 0.5 };
+    const lifted = liftedPose(pose, slopes, 0.2);
+    expect(lifted.target.y).toBeCloseTo(-1);
+    expect(lifted.position.y).toBeCloseTo(-1);
+    expect(lifted.position.z).toBeCloseTo(10);
+    expect(pose.target.y).toBe(0);
+    STAGE_VARIANTS.forEach((variant) => expect(FRAME_LIFT[variant]).toBeGreaterThan(0));
   });
 
   it('picks the phone framing below 600 pixels of stage width', () => {
