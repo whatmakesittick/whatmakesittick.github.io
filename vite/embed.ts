@@ -6,7 +6,7 @@ import { EMBED_API_VERSION } from '../src/core/embed/manifest.ts';
 import type { EmbedManifest, EmbedManifestEntry } from '../src/core/embed/manifest.ts';
 import type { CatalogueEntry } from './catalogueModel.ts';
 import { chapterOutline } from './chapterOutline.ts';
-import { LOCALES_DIRECTORY, MANIFEST_FILE, PUBLIC_DIRECTORY } from './manifest.ts';
+import { LOCALES_DIRECTORY, MANIFEST_FILE } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { localeLoader } from './page.ts';
 import { EMBED_DIRECTORY, embedSourcePath } from './embedPaths.ts';
@@ -15,8 +15,6 @@ export { EMBED_DIRECTORY, embedSourcePath };
 
 export const EMBED_MANIFEST_FILE = `${EMBED_DIRECTORY}/manifest.json`;
 export const EMBED_MOUNT_MODULE = '@core/embed/mount';
-
-export const LEGACY_FONTS = Object.values(EMBED_FONTS);
 
 const ENTRY_PREFIX = 'virtual:embed/';
 const RESOLVED_PREFIX = `\0${ENTRY_PREFIX}`;
@@ -101,19 +99,11 @@ export interface EmbedFile {
   source: string;
 }
 
-export function legacyEmbedFiles(
-  explainers: readonly LoadedExplainer[],
-  resolveModule: (specifier: string) => string,
-): EmbedFile[] {
-  const covers = explainers.map(({ manifest, directory }) => ({
-    fileName: `${EMBED_DIRECTORY}/covers/${manifest.slug}.webp`,
-    source: join(directory, PUBLIC_DIRECTORY, manifest.cover),
-  }));
-  const fonts = LEGACY_FONTS.map((specifier) => ({
+export function stableFontFiles(resolveModule: (specifier: string) => string): EmbedFile[] {
+  return Object.values(EMBED_FONTS).map((specifier) => ({
     fileName: `${EMBED_DIRECTORY}/fonts/${fontFileName(specifier)}`,
     source: resolveModule(specifier),
   }));
-  return [...covers, ...fonts];
 }
 
 export function embedSourceFiles(explainers: readonly LoadedExplainer[]): EmbedFile[] {

@@ -10,7 +10,7 @@ import {
   embedManifest,
   embedSourceFiles,
   entryFileNames,
-  legacyEmbedFiles,
+  stableFontFiles,
   renderEmbedEntry,
   resolveEmbedEntry,
 } from './embed.ts';
@@ -211,7 +211,7 @@ function pagesPlugin(): Plugin {
         this.emitFile({ type: 'asset', fileName, source });
       }
       const resolveModule = createRequire(join(root, 'package.json')).resolve;
-      for (const { fileName, source } of legacyEmbedFiles(explainers, resolveModule)) {
+      for (const { fileName, source } of stableFontFiles(resolveModule)) {
         this.emitFile({ type: 'asset', fileName, source: readFileSync(source) });
       }
       for (const { fileName, source } of embedSourceFiles(explainers)) {

@@ -40,7 +40,7 @@ Each boundary exists for a reason.
 - **A few names in `/embed/v1/` are stable, the rest may change.** The stable names are
   `widget.js` and its `start` export, `<slug>.js` for every explainer in `manifest.json`, the
   `manifest.json` fields, `catalogue/<lang>.js` for every site language and its fields,
-  `explainers/<slug>/`, `covers/<slug>.webp` and `fonts/<file>.woff2`. The
+  `explainers/<slug>/` and `fonts/<file>.woff2`. The
   hashed chunks they import, in `/assets/` and `widget-<lang>-<hash>.js`, change with each deploy. A
   slug can be renamed or removed; the manifest lists only the current ones. A breaking change to
   the stable names or to the embed API goes to `/embed/v2/`, next to `v1`.

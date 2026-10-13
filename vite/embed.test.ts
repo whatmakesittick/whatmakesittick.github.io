@@ -1,16 +1,15 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { buildCatalogue } from './catalogue.ts';
 import {
   EMBED_DIRECTORY,
   EMBED_MANIFEST_FILE,
-  LEGACY_FONTS,
   embedManifest,
   embedSourceFiles,
   embedSourcePath,
-  legacyEmbedFiles,
   renderEmbedEntry,
+  stableFontFiles,
 } from './embed.ts';
 import {
   EMBED_FONTS,
@@ -19,7 +18,6 @@ import {
   type EmbedFont,
 } from '../src/core/embed/fontFiles.ts';
 import { EMBED_API_VERSION } from '../src/core/embed/manifest.ts';
-import type { EmbedManifest } from '../src/core/embed/manifest.ts';
 import { loadExplainers } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 
@@ -39,8 +37,7 @@ function explainer(slug: string): LoadedExplainer {
   } as LoadedExplainer;
 }
 
-const legacyPaths = [
-  ...slugs.map((slug) => `${EMBED_DIRECTORY}/covers/${slug}.webp`),
+const fontPaths = [
   `${EMBED_DIRECTORY}/fonts/inter-latin-wght-normal.woff2`,
   `${EMBED_DIRECTORY}/fonts/jetbrains-mono-latin-400-normal.woff2`,
   `${EMBED_DIRECTORY}/fonts/jetbrains-mono-latin-500-normal.woff2`,
@@ -49,18 +46,17 @@ const legacyPaths = [
   `${EMBED_DIRECTORY}/fonts/jetbrains-mono-cyrillic-500-normal.woff2`,
 ];
 
-describe('legacyEmbedFiles', () => {
-  it('keeps the cover and font paths published widgets request', () => {
-    const files = legacyEmbedFiles(slugs.map(explainer), (specifier) => `/modules/${specifier}`);
-    expect(files.map(({ fileName }) => fileName)).toEqual(legacyPaths);
-    expect(files[0]?.source).toBe(join(root, 'explainers', 'engine', 'public', 'cover.webp'));
-    expect(files.at(-1)?.source).toBe(`/modules/${LEGACY_FONTS.at(-1)}`);
+describe('stableFontFiles', () => {
+  it('copies the embed fonts under their fontsource names', () => {
+    const files = stableFontFiles((specifier) => `/modules/${specifier}`);
+    expect(files.map(({ fileName }) => fileName)).toEqual(fontPaths);
+    expect(files.at(-1)?.source).toBe(`/modules/${Object.values(EMBED_FONTS).at(-1)}`);
   });
 
   it('puts the fonts where the embed looks for them when a hashed file is gone', () => {
     expect(`/${EMBED_DIRECTORY}/fonts/`).toBe(STABLE_FONT_DIRECTORY);
     for (const font of Object.keys(EMBED_FONTS) as EmbedFont[]) {
-      expect(legacyPaths).toContain(stableFontPath(font).slice(1));
+      expect(fontPaths).toContain(stableFontPath(font).slice(1));
     }
   });
 });
@@ -141,13 +137,9 @@ describe('embedManifest', () => {
 
 const built = existsSync(join(dist, EMBED_MANIFEST_FILE));
 
-describe.skipIf(!built)('dist/embed/v1 legacy paths', () => {
-  const manifest: EmbedManifest = built
-    ? JSON.parse(readFileSync(join(dist, EMBED_MANIFEST_FILE), 'utf8'))
-    : { apiVersion: 1, explainers: [] };
+describe.skipIf(!built)('dist/embed/v1 stable paths', () => {
   const paths = [
-    ...manifest.explainers.map(({ slug }) => `${EMBED_DIRECTORY}/covers/${slug}.webp`),
-    ...legacyPaths.filter((path) => path.includes('/fonts/')),
+    ...fontPaths,
     ...embedSourceFiles(loadExplainers(root)).map(({ fileName }) => fileName),
   ];
 

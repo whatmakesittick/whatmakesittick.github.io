@@ -842,15 +842,14 @@ itself so the frame gets a size.
 
 Within `v1`, a few names are stable: `/embed/v1/widget.js`, `/embed/v1/<slug>.js` for every
 explainer in the manifest, `manifest.json`, `catalogue/<lang>.js` for every site language,
-`covers/<slug>.webp`, `fonts/<file>.woff2` and `explainers/<slug>/`. The fields of a catalogue
+`fonts/<file>.woff2` and `explainers/<slug>/`. The fields of a catalogue
 module only grow. Never rename or remove an export, a `MountOptions` field or a DOM attribute
 a widget relies on. A breaking change goes to `/embed/v2/`, next to `v1`. The hashed chunks the
 entries import, in `/assets/` and `widget-<lang>-<hash>.js`, change with each deploy, and a slug
 may be renamed or removed: the site check wants the manifest to list exactly the built explainers.
-`legacyEmbedFiles` in `vite/embed.ts` copies each cover to `/embed/v1/covers/<slug>.webp` and the
-embed fonts to `/embed/v1/fonts/<file>.woff2` under their fontsource names (the list is
-`EMBED_FONTS` in `src/core/embed/fontFiles.ts`), and `vite/embed.test.ts` checks that they are in
-`dist/`. The build also publishes each explainer's `explainer.json`, `chapters.html` and
+`stableFontFiles` in `vite/embed.ts` copies the embed fonts to `/embed/v1/fonts/<file>.woff2`
+under their fontsource names (the list is `EMBED_FONTS` in `src/core/embed/fontFiles.ts`), and
+`vite/embed.test.ts` checks that they are in `dist/`. The build also publishes each explainer's `explainer.json`, `chapters.html` and
 `locales/<code>.json` verbatim under `/embed/v1/explainers/<slug>/` (`embedSourceFiles` in
 `vite/embed.ts`), so the MCP server reads them from the site; they are part of `v1`. Their fields
 and keys only grow, so the server reads them leniently (`parsePublishedManifest` in
