@@ -42,7 +42,14 @@ describe('chainsaw presets', () => {
   it('never pauses and shows the log only where the bar cuts', () => {
     PRESET_IDS.forEach((id) => expect(PRESETS[id].pauseAt, id).toBeUndefined());
     expect(PRESET_SETTINGS.saw).toBe('cutting');
-    expect(PRESETS.saw.labels).toContain('log');
+  });
+
+  it('never labels the log or the handles', () => {
+    const unlabelled: readonly PartId[] = ['log', 'rearHandle', 'frontHandle'];
+    PRESET_IDS.forEach((id) =>
+      unlabelled.forEach((part) => expect(PRESETS[id].labels, `${id} ${part}`).not.toContain(part)),
+    );
+    expect(PRESETS.starting.labels).toContain('fuelCap');
   });
 
   it('highlights every label it shows in the engine, fuel and chain chapters', () => {
