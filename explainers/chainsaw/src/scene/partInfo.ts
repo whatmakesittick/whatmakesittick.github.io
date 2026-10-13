@@ -70,7 +70,10 @@ export const PART_INFO: Record<PartId, PartInfo> = Object.fromEntries(
   PART_IDS.map((id) => [id, { labelKey: `parts.${id}`, side: labelSide(id) }]),
 ) as Record<PartId, PartInfo>;
 
+const RANKED_LAST: readonly PartId[] = ['fuelCap', 'oilCap'];
+
 export const LABEL_PRIORITY: readonly PartId[] = [
   ...RANKED_FIRST,
-  ...PART_IDS.filter((id) => !RANKED_FIRST.includes(id)),
+  ...PART_IDS.filter((id) => !RANKED_FIRST.includes(id) && !RANKED_LAST.includes(id)),
+  ...RANKED_LAST,
 ];

@@ -59,6 +59,8 @@ const STARTING_LABELS: readonly PartId[] = [
   'decompressionValve',
 ];
 
+const CAP_LABELS: readonly PartId[] = ['fuelCap', 'oilCap'];
+
 const STARTING_CONTEXT: readonly PartId[] = [
   'powerhead',
   'starter',
@@ -114,7 +116,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: { cutaway: true, flow: false, zone: false },
     startAt: TOP_OF_TURN,
     start: { throttle: THROTTLE_PRESETS.idle, brake: false, engine: 'stopped' },
-    labels: STARTING_LABELS,
+    labels: [...STARTING_LABELS, ...CAP_LABELS],
     highlight: [...STARTING_LABELS, ...STARTING_CONTEXT],
   },
   clutch: {

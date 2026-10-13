@@ -3,6 +3,7 @@ import { PART_IDS } from '../ids';
 import { LABEL_PRIORITY, PART_INFO, UNDIMMED_PARTS } from './partInfo';
 
 const RANKED_COUNT = 25;
+const LAST_COUNT = 2;
 
 describe('part labels', () => {
   it('names every part from its locale key', () => {
@@ -14,8 +15,12 @@ describe('part labels', () => {
     expect([...LABEL_PRIORITY].sort()).toEqual([...PART_IDS].sort());
     expect(LABEL_PRIORITY.slice(0, 3)).toEqual(['bar', 'chain', 'cutters']);
     expect(LABEL_PRIORITY[RANKED_COUNT - 1]).toBe('powerhead');
-    const rest = LABEL_PRIORITY.slice(RANKED_COUNT);
+    const rest = LABEL_PRIORITY.slice(RANKED_COUNT, -LAST_COUNT);
     expect(rest).toEqual(PART_IDS.filter((id) => rest.includes(id)));
+  });
+
+  it('gives the caps the lowest rank so they yield to the starter parts', () => {
+    expect(LABEL_PRIORITY.slice(-LAST_COUNT)).toEqual(['fuelCap', 'oilCap']);
   });
 
   it('labels the rear of the saw on the left and the front on the right', () => {
