@@ -4,7 +4,7 @@
     "eyebrow": "Herramientas a motor",
     "tagline": "Una vuelta del cigüeñal, a cámara lenta: así una chispa, un embrague que gira y un lazo de dientes afilados convierten el combustible en virutas de madera.",
     "description": "Una motosierra en 3D, vuelta a vuelta: el motor de dos tiempos, el combustible, el embrague que para la cadena al ralentí, los dientes y el freno.",
-    "summary": "La motosierra entera, el motor de dos tiempos, el combustible y el carburador, el embrague, la cadena de corte, y el rebote con el freno de cadena.",
+    "summary": "La motosierra entera, el motor de dos tiempos, el combustible y el carburador, cómo se arranca, el embrague, la cadena de corte, y el rebote con el freno de cadena.",
     "socialAlt": "Una motosierra de gasolina naranja con la espada sobre un tronco, junto al título «Cómo funciona una motosierra»"
   },
   "stage": {
@@ -53,10 +53,14 @@
     "kickbackOptions": {
       "strong": "Mostrar un rebote"
     },
+    "startOptions": {
+      "cold": "Arrancar en frío"
+    },
     "groups": {
       "throttle": "Acelerador",
       "brake": "Freno de cadena",
-      "kickback": "Mostrar un rebote"
+      "kickback": "Mostrar un rebote",
+      "start": "Arrancar la motosierra"
     },
     "views": {
       "cutaway": {
@@ -90,6 +94,12 @@
       "open": "Desembragado",
       "driving": "Embragado",
       "slipping": "Patinando"
+    },
+    "engineState": {
+      "stopped": "Parado",
+      "cranking": "Girando a mano",
+      "fastIdle": "Ralentí acelerado",
+      "running": "Al ralentí"
     }
   },
   "units": {
@@ -132,6 +142,30 @@
         "drawing": "Aspira mezcla",
         "squeezing": "La empuja a las lumbreras de transferencia"
       }
+    },
+    "starting": {
+      "step": "Ahora",
+      "steps": {
+        "ready": "Frío y parado",
+        "brake": "Freno de cadena puesto",
+        "choke": "Estárter puesto",
+        "decompression": "Válvula de descompresión abierta",
+        "primer": "Bomba de cebado pulsada",
+        "firstPull": "Primer tirón",
+        "pop": "Un petardeo: prende una vez",
+        "chokeOff": "Estárter quitado",
+        "secondPull": "Segundo tirón",
+        "fastIdle": "En ralentí acelerado, con el freno puesto",
+        "idle": "Un toque al gatillo, y al ralentí",
+        "done": "Al ralentí. Ahora quita el freno."
+      },
+      "engine": "Motor",
+      "primer": "Bomba de cebado",
+      "primerValue": "unas 6 pulsaciones, al menos 10 en algunas motosierras",
+      "coilGap": "Distancia entre imán y bobina",
+      "coilGapValue": "0,25 mm",
+      "distance": "Arranca lejos de donde repostaste",
+      "distanceValue": "al menos 3 m"
     },
     "clutch": {
       "throttle": "Acelerador",
@@ -182,7 +216,7 @@
     "throttleTrigger": "Gatillo del acelerador",
     "frontHandle": "Empuñadura delantera",
     "handGuard": "Protector de mano delantero",
-    "starter": "Arrancador",
+    "starter": "Carcasa del arrancador",
     "sparkPlug": "Bujía",
     "cylinder": "Cilindro",
     "piston": "Pistón",
@@ -217,7 +251,18 @@
     "exhaustGas": "Gas quemado",
     "oilFlow": "Aceite de cadena",
     "log": "Tronco",
-    "chips": "Virutas"
+    "chips": "Virutas",
+    "fuelCap": "Tapón del combustible",
+    "oilCap": "Tapón del aceite de cadena",
+    "starterGrip": "Tirador de arranque",
+    "starterRope": "Cuerda de arranque",
+    "starterPulley": "Polea de arranque",
+    "pawls": "Trinquetes",
+    "flywheel": "Volante y ventilador",
+    "ignitionCoil": "Bobina de encendido",
+    "primerBulb": "Bomba de cebado",
+    "chokeLever": "Mando del estárter y de parada",
+    "decompressionValve": "Válvula de descompresión"
   },
   "sections": {
     "saw": {
@@ -242,11 +287,19 @@
       "p3": "Una motosierra se usa en cualquier postura, incluso de lado. Muchos motores dosifican el combustible con un flotador en una pequeña cuba, y eso solo funciona en vertical. El carburador de una motosierra usa en su lugar una <strong>membrana</strong>, una lámina fina y flexible. Una pequeña bomba le lleva el combustible, y esa bomba la mueve el propio cárter. En cada vuelta, la presión del cárter sube y baja. El <strong>conducto de impulsos</strong> lleva ese latido hasta la bomba. Por eso el motor sigue funcionando en cualquier ángulo.",
       "p4": "Un motor de dos tiempos no tiene un baño de aceite bajo el cigüeñal. Su aceite viaja con el combustible. Mezclas aceite de dos tiempos con la gasolina en proporción 50 a 1: 100 ml de aceite por cada 5 litros de gasolina. A su paso por el motor, el aceite lubrica las piezas que se mueven. Eso sí, no todas las motosierras llevan carburador. Algunas profesionales usan inyección electrónica de combustible."
     },
+    "starting": {
+      "title": "Despertar el motor",
+      "p1": "Para arrancar una motosierra, haces girar su motor a mano hasta que prende. Deja la motosierra en el suelo, como mínimo a 3 m del sitio donde la llenaste. Los dos tapones están abajo, en su lado izquierdo: el <strong>tapón del combustible</strong> detrás y el <strong>tapón del aceite de cadena</strong> delante. Sujeta la empuñadura delantera con la mano izquierda y mete el pie derecho en la empuñadura trasera. Luego empuja hacia delante el <strong>protector de mano delantero</strong> para poner el freno de cadena. Hazlo siempre. La posición de arranque deja el acelerador lo bastante abierto para que el embrague agarre, así que sin el freno la cadena giraría.",
+      "p2": "Un motor frío necesita ayuda. El <strong>mando del estárter y de parada</strong> cierra el estárter y deja el acelerador un poco abierto. Las motosierras más grandes tienen además una <strong>válvula de descompresión</strong>. Al apretarla, deja escapar parte de la compresión del cilindro, y así cuesta menos tirar de la cuerda. Se cierra sola en cuanto el motor prende. Después pulsas la <strong>bomba de cebado</strong> unas 6 veces, o al menos 10 en algunas motosierras. No echa combustible en el cilindro. Saca el aire del conducto de combustible y hace subir el combustible hasta el carburador.",
+      "p3": "Ahora coge el <strong>tirador de arranque</strong>. Su <strong>cuerda de arranque</strong> va enrollada en una <strong>polea de arranque</strong>. Unos pequeños ganchos, los <strong>trinquetes</strong>, unen la polea al <strong>volante</strong>, la rueda que va en el extremo del cigüeñal. Tira despacio hasta que notes que enganchan, y entonces tira rápido. Cada tirón hace girar el cigüeñal unas cuantas veces. No te enrolles nunca la cuerda en la mano, y no la saques nunca hasta el final. Tampoco la sueltes de golpe: acompáñala mientras un muelle la recoge. Y nunca arranques una motosierra al vuelo, empujándola lejos de ti mientras tiras.",
+      "p4": "El volante no solo gira. Sus aletas son el ventilador que enfría el motor. Lleva unos imanes que pasan junto a la <strong>bobina de encendido</strong>, a solo 0,25 mm, y crean la chispa. Por eso la motosierra no necesita batería. Elige Arrancar en frío para ver un arranque completo. El primer tirón acaba en un petardeo: el motor prende una vez y se para. Ese petardeo te avisa de que toca quitar el estárter, porque una motosierra nunca funciona con el estárter puesto del todo. Si sigues tirando con el estárter puesto después del petardeo, ahogas el motor de combustible.",
+      "p5": "Con el segundo tirón, el motor arranca en ralentí acelerado, todavía con el freno puesto. Dale un toque al gatillo del acelerador, y el motor baja al ralentí. Solo entonces quitas el freno. Si la cadena sigue girando al ralentí, hay que ajustar la motosierra. El modelo enseña los pasos del arranque, no su ritmo real: el tirón va a una velocidad que puedes seguir, y la cámara lenta empieza cuando el motor ya funciona. Los fabricantes no publican a qué velocidad gira el motor al tirar de la cuerda ni en ralentí acelerado, así que ahí el indicador muestra palabras, no números. Vista en corte (C) quita la tapa del arrancador, y la distancia de la bobina se dibuja más grande que en la realidad para que puedas verla."
+    },
     "clutch": {
       "title": "Por qué la cadena se para al ralentí",
       "p1": "Entre el cigüeñal y la cadena hay un <strong>embrague centrífugo</strong>, un embrague que funciona al girar. Sus contrapesos, las <strong>zapatas del embrague</strong>, giran con el cigüeñal, y unos muelles las mantienen recogidas. A su alrededor hay una copa de acero, la <strong>campana del embrague</strong>. La campana lleva el <strong>piñón</strong>, la rueda dentada que mueve la cadena. Cuando el motor se acelera, el giro lanza las zapatas hacia fuera, contra la campana. Entonces el rozamiento hace que la campana gire con ellas.",
       "p2": "Al ralentí, a unas 2700 rpm, ganan los muelles y las zapatas se quedan dentro. La campana está quieta, así que la cadena no se mueve. Así debe ser: al ralentí, la cadena no puede girar. En esta motosierra, las zapatas agarran a 3700 rpm. Arrastra el acelerador despacio más allá de ese punto y mira cómo arranca la cadena. En el modelo, el embrague agarra del todo en el instante en que el motor pasa de 3700 rpm, así que la cadena salta directamente a unos 8 m/s. Un embrague real patina un momento mientras las zapatas muerden.",
-      "p3": "El piñón tiene 7 dientes, y cada uno hace avanzar la cadena dos pasos. Un paso es la distancia de un remache de la cadena al siguiente. Así, una vuelta mueve la cadena unos 133 mm. A 9900 rpm, eso son 22 metros por segundo (m/s), unos 79 km/h. A esa velocidad el motor da toda su potencia, y al cortar trabaja cerca de ella. Sin nada que cortar, una motosierra puede girar más rápido, hasta un límite de fábrica de 12 500 a 14 000 rpm.",
+      "p3": "El piñón tiene 7 dientes, y cada uno hace avanzar la cadena dos pasos. Un paso es la distancia de un remache de la cadena al siguiente. Así, una vuelta mueve la cadena unos 133 mm. A 9900 rpm, la cuenta da 22 metros por segundo (m/s), unos 79 km/h. El propio fabricante da unos 21 m/s para una motosierra como esta. A esa velocidad el motor da toda su potencia, y al cortar trabaja cerca de ella. Sin nada que cortar, una motosierra puede girar más rápido, hasta un límite de fábrica de 12 500 a 14 000 rpm.",
       "p4": "Una motosierra se arranca con el acelerador un poco abierto. Eso ya basta para que el embrague agarre. Por eso pones el freno de cadena antes de arrancar. Si la cadena está sujeta mientras el motor va a tope, el embrague patina y se calienta muchísimo. La <strong>bomba de aceite</strong> manda aceite a la espada solo mientras la cadena gira. Al ralentí no sale nada de aceite."
     },
     "chain": {
@@ -254,7 +307,7 @@
       "p1": "Una cadena de motosierra tiene tres tipos de piezas. Los <strong>eslabones motrices</strong> asoman hacia abajo dentro de una ranura de la espada, y los dientes del piñón los empujan. Los <strong>dientes de corte</strong> son los que cortan: uno mira a la izquierda y el siguiente, a la derecha. Unas pequeñas placas, los eslabones de unión, los mantienen juntos con remaches.",
       "p2": "Cada diente tiene una placa superior plana y una placa lateral. Donde se juntan hay una esquina afilada que corta la madera. Justo delante de cada diente hay un pequeño saliente, el <strong>limitador de profundidad</strong>. Queda 0,65 mm más bajo que la parte de arriba del diente. Esa diferencia decide lo gruesa que puede ser la viruta. Si limas demasiado los limitadores, los dientes muerden demasiado hondo, y el rebote se vuelve más probable.",
       "p3": "El tamaño de una cadena es su <strong>paso</strong>. Para medirlo, toma la distancia que ocupan tres remaches seguidos y divídela entre dos. Esta cadena tiene un paso de 3/8 de pulgada, 9,525 mm. Una cadena como esta, en una espada de 40 cm, tiene 55 eslabones motrices y mide unos 1,05 m. Lleva unos 27 dientes de corte, uno por cada dos eslabones motrices.",
-      "p4": "A 22 m/s, la cadena da la vuelta a la espada unas 21 veces por segundo. Así pasan unos 570 dientes por cualquier punto cada segundo, y cada uno arranca una viruta. Elige Ralentí, Medio o A fondo para comparar. En el corte, la cadena de la parte de abajo de la espada vuelve desde la <strong>punta de la espada</strong> hacia la motosierra. Por eso las virutas salen despedidas por detrás del corte.",
+      "p4": "A 9900 rpm, la cadena va a 22 m/s, así que da la vuelta a la espada unas 21 veces por segundo. Por eso pasan unos 570 dientes por cualquier punto cada segundo, y cada uno arranca una viruta. Elige Ralentí, Medio o A fondo para comparar. En el corte, la cadena de la parte de abajo de la espada vuelve desde la <strong>punta de la espada</strong> hacia la motosierra. Por eso las virutas salen despedidas por detrás del corte.",
       "p5": "Mientras tanto, la cadena roza contra la espada de acero a toda velocidad. Sin aceite, ese roce pronto pondría la espada ardiendo. Por eso la bomba de aceite echa gotas de <strong>aceite de cadena</strong> sobre la cadena, y la cadena lo reparte por toda la espada. En una motosierra pequeña de Stihl, el aceite de cadena se acaba más o menos a la vez que el combustible. Así puedes llenar los dos depósitos a la vez."
     },
     "kickback": {
