@@ -38,10 +38,8 @@ function fakeShell(stageWidth: number = STAGE_WIDTH_PX.desktop) {
     controls: { target: new Vector3(0, 0.1, 0) },
   };
   const scene = { add: vi.fn<(object: Object3D) => void>() };
-  const stage = { fit: vi.fn<(bounds: Box3, floor: number) => void>() };
   const shell = {
     scene,
-    stage,
     materials: new MaterialLibrary(),
     textures: createSceneTextures(),
     labels: { attach: vi.fn(), show: vi.fn() },
@@ -51,7 +49,7 @@ function fakeShell(stageWidth: number = STAGE_WIDTH_PX.desktop) {
       element: { clientWidth: stageWidth },
     },
   };
-  return { rig, scene, stage, shell: shell as unknown as ChainsawControllerDependencies };
+  return { rig, scene, shell: shell as unknown as ChainsawControllerDependencies };
 }
 
 function roundAll(values: readonly number[]): number[] {
@@ -64,14 +62,13 @@ function viewDirection(pose: CameraPose): number[] {
 
 describe('chainsaw controller', () => {
   it('adds the assembly, attaches its labels and bounds the camera on the floor', () => {
-    const { rig, scene, stage, shell } = fakeShell();
+    const { rig, scene, shell } = fakeShell();
     new ChainsawController(shell).build(assemblyState());
     expect(scene.add).toHaveBeenCalledTimes(1);
     expect(shell.labels.attach).toHaveBeenCalledTimes(1);
     const [bounds, floor] = rig.setBounds.mock.lastCall ?? [];
     expect(bounds).toEqual(regionBox('saw'));
     expect(floor).toBe(0);
-    expect(stage.fit).toHaveBeenCalledWith(bounds, floor);
   });
 
   it('rebounds the camera only when the setting changes', () => {

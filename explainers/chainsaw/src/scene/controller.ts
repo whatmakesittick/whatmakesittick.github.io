@@ -11,7 +11,7 @@ import { BOUNDS_REGION, FLOOR_Y } from './constants';
 
 export type ChainsawControllerDependencies = Pick<
   SceneShell,
-  'scene' | 'materials' | 'textures' | 'labels' | 'stage' | 'rig' | 'viewport'
+  'scene' | 'materials' | 'textures' | 'labels' | 'rig' | 'viewport'
 >;
 
 export type ViewFramer = Pick<CameraViews<CameraView>, 'frame'>;
@@ -75,10 +75,7 @@ export class ChainsawController {
 
   private boundTo(setting: SettingId): void {
     if (!this.assembly || setting === this.boundSetting) return;
-    const { stage, rig } = this.dependencies;
-    const bounds = this.assembly.region(BOUNDS_REGION);
-    stage.fit(bounds, FLOOR_Y);
-    rig.setBounds(bounds, FLOOR_Y);
+    this.dependencies.rig.setBounds(this.assembly.region(BOUNDS_REGION), FLOOR_Y);
     this.boundSetting = setting;
   }
 
