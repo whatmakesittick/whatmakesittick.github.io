@@ -8,6 +8,8 @@ import { ANCHOR_IDS, PART_IDS } from '../ids';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
 import { ANCHOR_POINTS, SAW_GEOMETRY, SETTING_LAYOUT } from '../model';
 import type { Assembly, AssemblyResources } from './assembly';
+import { buildBackdrop } from './parts/backdrop';
+import type { Backdrop } from './parts/backdrop';
 import { buildBar } from './parts/bar';
 import { buildClutch } from './parts/clutch';
 import { namedGroup } from './parts/context';
@@ -17,6 +19,7 @@ import { buildFlow } from './parts/flow';
 import { buildFuel } from './parts/fuel';
 import { buildHousing } from './parts/housing';
 import { buildWood } from './parts/wood';
+import { FOREST } from './constants';
 import { regionBox } from './regions';
 
 type Drawable = Mesh | Line | Points | Sprite;
@@ -49,6 +52,7 @@ class ChainsawAssembly implements Assembly {
   private readonly sections: readonly Section[];
   private readonly labels: ReadonlyMap<PartId, Object3D>;
   private readonly anchors: ReadonlyMap<AnchorId, Object3D>;
+  private readonly backdrop: Backdrop;
   private lift = 0;
 
   constructor(resources: AssemblyResources, state: AssemblyState) {
@@ -65,6 +69,7 @@ class ChainsawAssembly implements Assembly {
       tracker: this.tracker,
       labels: new Map(),
     };
+    this.backdrop = buildBackdrop(context, this.root);
     const flow = buildFlow(context, this.saw);
     this.sections = [
       buildHousing(context, this.saw),
@@ -85,10 +90,12 @@ class ChainsawAssembly implements Assembly {
     this.lift = SETTING_LAYOUT[state.setting].lift;
     this.root.position.y = this.lift;
     this.pivot.rotation.z = toRadians(state.safety.riseDeg);
+    this.backdrop.setState(state);
     this.sections.forEach((section) => section.setState(state));
   }
 
-  update(deltaSeconds: number): boolean {
+  update(deltaSeconds: number, cameraDistance: number = FOREST.closeFrom): boolean {
+    this.backdrop.setCloseness(cameraDistance);
     return this.sections.map((section) => section.update?.(deltaSeconds) ?? false).some(Boolean);
   }
 

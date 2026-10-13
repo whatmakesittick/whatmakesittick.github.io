@@ -15,7 +15,7 @@ export const SEE_THROUGH_DIM = { opacity: 0.35 } as const;
 export const LIGHT_RIG = {
   distance: 40,
   key: { color: '#fff1e0', intensity: 2.6, direction: [0.45, 0.85, 0.6] as Triple },
-  fill: { color: '#bcd6ff', intensity: 0.75, direction: [-0.75, 0.25, 0.4] as Triple },
+  fill: { color: '#c4d8c4', intensity: 0.8, direction: [-0.75, 0.25, 0.4] as Triple },
   rim: { color: '#ffd9b0', intensity: 1.5, direction: [-0.3, 0.6, -0.85] as Triple },
 } as const;
 
@@ -177,3 +177,43 @@ export const GUARD = {
 
 export const FLOOR_Y = 0;
 export const BOUNDS_REGION = 'saw';
+
+export const FOREST = {
+  haze: '#4b5649',
+  hazeNear: 2.8,
+  hazeFar: 17,
+  closeHaze: '#262c27',
+  closeFrom: 1.5,
+  closeTo: 0.6,
+  closeShare: 0.85,
+  skyTop: '#1d2620',
+  skyHorizon: '#56614f',
+  skyGap: '#a3b18f',
+  skyRadius: 45,
+  groundRadius: 40,
+  groundTile: 2.2,
+  groundTexture: 256,
+  litter: ['#3f3224', '#4a3a29', '#54422d', '#3a3022', '#46412b', '#5a4630'],
+  groundBase: '#30271c',
+  litterAlpha: 0.45,
+  leafCount: 240,
+  leafSize: [0.05, 0.032] as const,
+  leafReach: [0.12, 1.5] as const,
+  leafCentre: [0.1, 0.12] as const,
+  trunkCount: 34,
+  trunkReach: [4.5, 15] as const,
+  trunkRadius: [0.12, 0.32] as const,
+  trunkHeight: 16,
+  trunkSegments: 12,
+  bark: ['#3b3029', '#2f2823', '#463a30', '#353a2c'],
+  stumps: [
+    [-1.6, -3.4, 0.24, 0.32],
+    [2.3, -3.6, 0.2, 0.24],
+    [-3.4, -1.6, 0.18, 0.4],
+  ] as const,
+  stumpTop: '#5e4c37',
+  shadowOpacity: 0.85,
+  shadowScale: 1.35,
+  shadowLift: 0.002,
+  seed: 97,
+} as const;
