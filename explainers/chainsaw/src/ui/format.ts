@@ -1,6 +1,6 @@
 import { formatFixed, formatNumber } from '@core/format';
 import { currentLanguage, t } from '@core/i18n';
-import type { ClutchStateId, PhaseId } from '../ids';
+import type { ClutchStateId, EngineStateId, PhaseId, StartDisplayId } from '../ids';
 import {
   CHAIN_MM_PER_TURN,
   SPROCKET_TEETH,
@@ -89,4 +89,16 @@ export function formatOil(oiling: boolean): string {
 
 export function formatBrake(brake: boolean): string {
   return t(`chapters.kickback.brakeState.${brake ? 'on' : 'off'}`);
+}
+
+export function formatEngineState(engine: EngineStateId): string {
+  return t(`readouts.engineState.${engine}`);
+}
+
+export function formatEngineSpeed(engine: EngineStateId, rpm: number): string {
+  return engine === 'running' ? formatRpm(rpm) : formatEngineState(engine);
+}
+
+export function formatStartStep(display: StartDisplayId): string {
+  return t(`chapters.starting.steps.${display}`);
 }

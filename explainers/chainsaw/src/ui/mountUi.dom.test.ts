@@ -8,6 +8,8 @@ import { CHAPTER_FIXTURE, TEST_LOCALE, fill, initTestLocale, isFilled } from './
 import { mountChainsawUi } from '.';
 
 const { units, chapters, readouts, timeline } = TEST_LOCALE;
+const FRAME = 1 / 60;
+const SEQUENCE_SECONDS = 12;
 
 function readout(id: string): string | null | undefined {
   return document.querySelector(`[data-readout="${id}"]`)?.textContent;
@@ -51,7 +53,7 @@ describe('chapter widgets', () => {
 
   it('fills every readout with a finished text', () => {
     const texts = [...document.querySelectorAll('[data-readout]')].map((node) => node.textContent);
-    expect(texts).toHaveLength(17);
+    expect(texts).toHaveLength(19);
     texts.forEach((text) => expect(isFilled(text), text ?? '').toBe(true));
   });
 
@@ -105,5 +107,20 @@ describe('chapter widgets', () => {
     expect(store.getState().kickback).toBe(true);
     expect(pressed('kickback', 'strong')).toBe('true');
     expect(readout('brakeState')).toBe(chapters.kickback.brakeState.off);
+  });
+
+  it('walks the cold start from a stopped saw to idling with the brake on', () => {
+    store.getState().applyPreset('starting');
+    expect(readout('startStep')).toBe(chapters.starting.steps.ready);
+    expect(readout('engineState')).toBe(readouts.engineState.stopped);
+    click('start', 'cold');
+    expect(pressed('start', 'cold')).toBe('true');
+    expect(readout('startStep')).toBe(chapters.starting.steps.brake);
+    for (let elapsed = 0; elapsed < SEQUENCE_SECONDS; elapsed += FRAME)
+      store.getState().tick(FRAME);
+    expect(readout('startStep')).toBe(chapters.starting.steps.done);
+    expect(readout('engineState')).toBe(readouts.engineState.running);
+    expect(readout('brakeState')).toBe(chapters.kickback.brakeState.on);
+    expect(pressed('start', 'cold')).toBe('false');
   });
 });

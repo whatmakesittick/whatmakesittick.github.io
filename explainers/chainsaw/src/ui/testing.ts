@@ -1,7 +1,51 @@
 import { initI18n } from '@core/i18n';
 import en from '../../locales/en.json';
 
-export const TEST_LOCALE = en;
+const STARTING_DRAFTS = {
+  readouts: {
+    engineState: {
+      stopped: 'Stopped',
+      cranking: 'Turning over',
+      fastIdle: 'Fast idle',
+      running: 'Idling',
+    },
+  },
+  chapters: {
+    starting: {
+      steps: {
+        ready: 'Cold and stopped',
+        brake: 'Chain brake on',
+        choke: 'Choke on',
+        decompression: 'Decompression valve open',
+        primer: 'Primer bulb pressed',
+        firstPull: 'First pull',
+        pop: 'A pop: it fires once',
+        chokeOff: 'Choke off',
+        secondPull: 'Second pull',
+        fastIdle: 'Running at fast idle, brake on',
+        idle: 'Throttle blipped, idling',
+        done: 'Idling. Now release the brake.',
+      },
+    },
+  },
+};
+
+type Dictionary = { [key: string]: string | Dictionary };
+
+function isDictionary(value: unknown): value is Dictionary {
+  return typeof value === 'object' && value !== null;
+}
+
+function merged(base: Dictionary, over: Dictionary): Dictionary {
+  const result: Dictionary = { ...base };
+  for (const [key, value] of Object.entries(over)) {
+    const current = result[key];
+    result[key] = isDictionary(current) && isDictionary(value) ? merged(current, value) : value;
+  }
+  return result;
+}
+
+export const TEST_LOCALE = merged(STARTING_DRAFTS, en) as typeof en & typeof STARTING_DRAFTS;
 
 export function initTestLocale(): Promise<void> {
   return initI18n({ en: () => Promise.resolve(TEST_LOCALE) });
@@ -41,6 +85,8 @@ export const CHAPTER_FIXTURE = [
   readouts(['turnTime', 'strokes', 'phaseNow']),
   chips('throttle', ['idle', 'half', 'full']),
   readouts(['throttleOpen', 'crankcase']),
+  chips('start', ['cold']),
+  readouts(['startStep', 'engineState']),
   throttleRange('clutch-throttle', ['clutchRpm', 'clutchState', 'clutchChain']),
   readouts(['idleRpm', 'engageRpm', 'perTurn', 'oil']),
   readouts(['chainSpeed', 'cuttersPerSecond']),

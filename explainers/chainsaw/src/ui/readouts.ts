@@ -3,15 +3,16 @@ import { t } from '@core/i18n';
 import { MAX_CHAIN_SPEED_MS, MAX_POWER_RPM, phaseOf } from '../model';
 import { liveReading } from '../state';
 import type { ChainsawStoreState } from '../state';
-import { CLUTCH_TONES, PHASE_TONES, THEME } from '../theme';
-import { formatClutch, formatRpm, formatSpeedMs } from './format';
+import { CLUTCH_TONES, ENGINE_TONES, PHASE_TONES, THEME } from '../theme';
+import { formatClutch, formatEngineSpeed, formatSpeedMs } from './format';
 
 export const CHAINSAW_READOUTS: readonly Readout<ChainsawStoreState>[] = [
   {
     id: 'rpm',
     labelKey: 'readouts.rpm',
     numeric: true,
-    value: (state) => formatRpm(liveReading(state).rpm),
+    value: (state) => formatEngineSpeed(state.engine, liveReading(state).rpm),
+    tone: (state) => ENGINE_TONES[state.engine],
     meter: { share: (state) => liveReading(state).rpm / MAX_POWER_RPM, fill: THEME.power },
   },
   {

@@ -1,13 +1,14 @@
 import type { ChapterAction } from '@core/explainer';
 import { parseOption } from '@core/ui/parse';
 import { BRAKE_CHOICE_IDS, KICKBACK_CHOICE_IDS, START_CHOICE_IDS } from '../ids';
-import type { BrakeChoiceId, ChapterActionId, KickbackChoiceId } from '../ids';
+import type { BrakeChoiceId, ChapterActionId, KickbackChoiceId, StartChoiceId } from '../ids';
 import type { ChainsawStoreState } from '../state';
 import { applyThrottleChoice, throttleChoiceOf } from './dock';
 
 const BRAKE_ON: BrakeChoiceId = 'on';
 const BRAKE_OFF: BrakeChoiceId = 'off';
 const STRONG: KickbackChoiceId = 'strong';
+const COLD: StartChoiceId = 'cold';
 const NOTHING_CURRENT = '';
 
 export const CHAPTER_ACTIONS: Record<ChapterActionId, ChapterAction<ChainsawStoreState>> = {
@@ -27,9 +28,10 @@ export const CHAPTER_ACTIONS: Record<ChapterActionId, ChapterAction<ChainsawStor
     current: (state) => (state.kickback ? STRONG : NOTHING_CURRENT),
   },
   start: {
-    run: (_state, value) => {
+    run: (state, value) => {
       parseOption(value, START_CHOICE_IDS);
+      state.startSaw();
     },
-    current: () => NOTHING_CURRENT,
+    current: (state) => (state.starting ? COLD : NOTHING_CURRENT),
   },
 };

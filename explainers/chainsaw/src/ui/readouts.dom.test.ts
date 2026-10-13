@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { createChainsawStore } from '../state';
-import { CLUTCH_TONES, PHASE_TONES } from '../theme';
+import { FAST_IDLE_RPM, MAX_POWER_RPM } from '../model';
+import { CLUTCH_TONES, ENGINE_TONES, PHASE_TONES } from '../theme';
 import { CHAINSAW_READOUTS } from './readouts';
 import { TEST_LOCALE, fill, initTestLocale } from './testing';
 
@@ -48,5 +49,18 @@ describe('gauge readouts', () => {
     store.getState().setPhase(300);
     expect(row('phase').value(store.getState())).toBe(timeline.phase.compression);
     expect(row('phase').tone?.(store.getState())).toBe(PHASE_TONES.compression);
+  });
+
+  it('names the engine state in words until it runs, toned by the state', () => {
+    const stopped = createChainsawStore({ engine: 'stopped' }).getState();
+    expect(row('rpm').value(stopped)).toBe(readouts.engineState.stopped);
+    expect(row('rpm').tone?.(stopped)).toBe(ENGINE_TONES.stopped);
+    expect(row('rpm').meter?.share(stopped)).toBe(0);
+    const fastIdle = createChainsawStore({ engine: 'fastIdle' }).getState();
+    expect(row('rpm').value(fastIdle)).toBe(readouts.engineState.fastIdle);
+    expect(row('rpm').meter?.share(fastIdle)).toBeCloseTo(FAST_IDLE_RPM / MAX_POWER_RPM, 9);
+    const running = createChainsawStore().getState();
+    expect(row('rpm').value(running)).toBe(fill(units.rpm, { value: '9,900' }));
+    expect(row('rpm').tone?.(running)).toBe(ENGINE_TONES.running);
   });
 });

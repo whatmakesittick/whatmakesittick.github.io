@@ -46,4 +46,13 @@ describe('chapter actions and dock', () => {
     ]);
     expect(CHAINSAW_CHOICES[0].shortcut).toBe('T');
   });
+
+  it('starts a cold saw and marks the chip while it runs', () => {
+    const store = createChainsawStore();
+    expect(CHAPTER_ACTIONS.start.current?.(store.getState())).toBe('');
+    CHAPTER_ACTIONS.start.run(store.getState(), 'cold');
+    expect(store.getState()).toMatchObject({ starting: true, engine: 'stopped', throttle: 0 });
+    expect(CHAPTER_ACTIONS.start.current?.(store.getState())).toBe('cold');
+    expect(() => CHAPTER_ACTIONS.start.run(store.getState(), 'warm')).toThrow();
+  });
 });
