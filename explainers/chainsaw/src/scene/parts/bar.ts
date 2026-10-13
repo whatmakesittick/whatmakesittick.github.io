@@ -26,7 +26,7 @@ import {
 } from '../geometry/chainLinks';
 import { extrudeAlongZ, starShape } from '../geometry/profile';
 import { sectorAroundZ } from '../geometry/sector';
-import { conveyorPoint, windowStartAt } from './chainLabels';
+import { rideAlong, ridingMm } from './chainLabels';
 import type { ConveyorPart } from './chainLabels';
 import { addPart, instancedPart, label, namedGroup, partMesh, registeredMaterial } from './context';
 import type { PartContext, Section } from './context';
@@ -73,28 +73,37 @@ function plateShape(fromX: number, toX: number, withNose: boolean): Shape {
 
 interface ConveyorLabel {
   part: ConveyorPart;
-  centreX: number;
+  phaseShare: number;
   along: number;
   lift: number;
   z: number;
 }
 
+const RIDE_FROM_X = 0.13;
+const RIDE_TO_X = 0.42;
+
 const CONVEYOR_LABELS: readonly ConveyorLabel[] = [
-  { part: 'driveLinks', centreX: 0.15, along: 0, lift: -0.001, z: CHAIN_LINKS.driveThickness / 2 },
-  { part: 'cutters', centreX: 0.27, along: -0.0027, lift: 0.0066, z: CHAIN_LINKS.sideOffset },
-  { part: 'depthGauges', centreX: 0.36, along: 0.0055, lift: 0.0058, z: CHAIN_LINKS.sideOffset },
+  { part: 'driveLinks', phaseShare: 0, along: 0, lift: -0.001, z: CHAIN_LINKS.driveThickness / 2 },
+  { part: 'cutters', phaseShare: 1 / 3, along: -0.0027, lift: 0.0066, z: CHAIN_LINKS.sideOffset },
+  {
+    part: 'depthGauges',
+    phaseShare: 2 / 3,
+    along: 0.0055,
+    lift: 0.0058,
+    z: CHAIN_LINKS.sideOffset,
+  },
 ];
 
 function conveyorLabels(context: PartContext, parent: Object3D): (chainMm: number) => void {
   const riders = CONVEYOR_LABELS.map((spec) => {
-    label(context, spec.part, parent, [spec.centreX, CRANK_Y, BAR_PLANE_Z]);
+    label(context, spec.part, parent, [RIDE_FROM_X, CRANK_Y, BAR_PLANE_Z]);
     const anchor = context.labels.get(spec.part);
     if (!anchor) throw new Error(`No anchor for ${spec.part}`);
-    return { spec, anchor, start: windowStartAt(spec.part, spec.centreX) };
+    return { spec, anchor, ride: rideAlong(RIDE_FROM_X, RIDE_TO_X, spec.phaseShare) };
   });
   return (chainMm) =>
-    riders.forEach(({ spec, anchor, start }) => {
-      const point = conveyorPoint(spec.part, chainMm, start);
+    riders.forEach(({ spec, anchor, ride }) => {
+      const point = pointOnLoop(ridingMm(spec.part, chainMm, ride));
       const normal = point.angle + Math.PI / 2;
       anchor.position.set(
         point.x + Math.cos(point.angle) * spec.along + Math.cos(normal) * spec.lift,
@@ -251,7 +260,7 @@ function placeOil(cloud: PointCloud, chainMm: number, shown: boolean): void {
   cloud.commit();
 }
 
-const CHAIN_LABEL_X = 0.4;
+const CHAIN_LABEL_X = 0.12;
 const CHAIN_LABEL_DROP = 0.002;
 
 export function buildBar(context: PartContext, parent: Object3D, oilParent: Object3D): Section {

@@ -6,7 +6,6 @@ import {
   pointOnLoop,
   wrapChain,
 } from '../../model';
-import type { LoopPoint } from '../../model';
 
 export type ConveyorPart = 'driveLinks' | 'cutters' | 'depthGauges';
 
@@ -48,10 +47,6 @@ export function topRunMm(x: number): number {
   return best;
 }
 
-export function windowStartAt(part: ConveyorPart, centreX: number): number {
-  return wrapChain(topRunMm(centreX) - CONVEYOR_SPACING_MM[part] / 2);
-}
-
 export function conveyorMm(part: ConveyorPart, chainMm: number, windowStart: number): number {
   let best = 0;
   let bestAhead = CHAIN_LOOP_MM;
@@ -66,6 +61,21 @@ export function conveyorMm(part: ConveyorPart, chainMm: number, windowStart: num
   return best;
 }
 
-export function conveyorPoint(part: ConveyorPart, chainMm: number, windowStart: number): LoopPoint {
-  return pointOnLoop(conveyorMm(part, chainMm, windowStart));
+export interface ConveyorRide {
+  start: number;
+  length: number;
+  phase: number;
+}
+
+export function rideAlong(fromX: number, toX: number, phaseShare: number): ConveyorRide {
+  const start = topRunMm(fromX);
+  const length = topRunMm(toX) - start;
+  return { start, length, phase: length * phaseShare };
+}
+
+export function ridingMm(part: ConveyorPart, chainMm: number, ride: ConveyorRide): number {
+  const shifted = chainMm + ride.phase;
+  const restart = Math.floor(shifted / ride.length) * ride.length - ride.phase;
+  const boarded = conveyorMm(part, restart, ride.start);
+  return wrapChain(boarded + chainMm - restart);
 }

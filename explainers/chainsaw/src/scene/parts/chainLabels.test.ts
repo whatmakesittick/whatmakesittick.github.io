@@ -3,9 +3,9 @@ import { CHAIN_ELEMENTS, CHAIN_LOOP_MM, pointOnLoop, wrapChain } from '../../mod
 import {
   CONVEYOR_OFFSETS,
   CONVEYOR_SPACING_MM,
-  conveyorMm,
+  rideAlong,
+  ridingMm,
   topRunMm,
-  windowStartAt,
 } from './chainLabels';
 import type { ConveyorPart } from './chainLabels';
 
@@ -23,29 +23,29 @@ describe('chain label conveyor', () => {
     expect(CONVEYOR_OFFSETS.cutters).toHaveLength(seen);
   });
 
-  PARTS.forEach((part) => {
-    it(`rides one ${part} part and hands over by one spacing`, () => {
-      const start = windowStartAt(part, CENTRE_X);
+  PARTS.forEach((part, index) => {
+    it(`rides one ${part} part along the whole top run, then boards the next at the heel`, () => {
+      const ride = rideAlong(0.07, 0.4, index / PARTS.length);
       const spacing = CONVEYOR_SPACING_MM[part];
-      let previous = conveyorMm(part, 0, start);
-      let handovers = 0;
-      for (let chainMm = STEP_MM; chainMm <= spacing * 2; chainMm += STEP_MM) {
-        const current = conveyorMm(part, chainMm, start);
+      let previous = ridingMm(part, 0, ride);
+      let restarts = 0;
+      for (let chainMm = STEP_MM; chainMm <= ride.length * 2; chainMm += STEP_MM) {
+        const current = ridingMm(part, chainMm, ride);
         const moved = wrapChain(current - previous);
-        if (moved === STEP_MM || Math.abs(moved - STEP_MM) < 1e-9) {
-          expect(wrapChain(current - start)).toBeLessThan(spacing);
-        } else {
-          handovers += 1;
-          expect(moved - CHAIN_LOOP_MM).toBeCloseTo(STEP_MM - spacing, 9);
+        if (Math.abs(moved - STEP_MM) > 1e-6) {
+          restarts += 1;
+          expect(CHAIN_LOOP_MM - moved).toBeGreaterThan(ride.length - spacing * 2);
         }
+        expect(wrapChain(current - ride.start)).toBeLessThan(ride.length + spacing * 2);
         expect(
           CONVEYOR_OFFSETS[part].some(
-            (offset) => Math.abs(wrapChain(offset + chainMm) - current) < 1e-9,
+            (offset) => Math.abs(wrapChain(offset + chainMm) - current) < 1e-6,
           ),
         ).toBe(true);
         previous = current;
       }
-      expect(handovers).toBeGreaterThan(0);
+      expect(restarts).toBeGreaterThanOrEqual(1);
+      expect(restarts).toBeLessThanOrEqual(2);
     });
   });
 });
