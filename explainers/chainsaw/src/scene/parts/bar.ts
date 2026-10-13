@@ -79,6 +79,7 @@ interface ConveyorLabel {
   z: number;
 }
 
+const NOSE_LABEL_DROP = 0.012;
 const RIDE_FROM_X = 0.13;
 const RIDE_TO_X = 0.42;
 
@@ -285,7 +286,7 @@ export function buildBar(context: PartContext, parent: Object3D, oilParent: Obje
   addPart(context, root, noseHub().translate(CHAIN_PATH.noseX, CRANK_Y, 0), 'barNose', 'steel');
   label(context, 'barNose', root, [
     CHAIN_PATH.noseX - 0.006,
-    CRANK_Y + 0.006,
+    CRANK_Y - NOSE_LABEL_DROP,
     BAR_PLANE_Z + BAR_THICKNESS / 2,
   ]);
 
