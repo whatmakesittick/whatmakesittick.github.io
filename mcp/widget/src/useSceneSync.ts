@@ -12,11 +12,12 @@ export function useSceneSync(
   hold: boolean,
   webgl: () => boolean,
 ) {
-  const { session, ctrlRef, controller, setInfo, setStatus, setProgress } = scene;
+  const { session, ctrlRef, controller, status, setInfo, setStatus, setProgress } = scene;
   const [chapter, setChapterState] = useState<string>('');
   const [disc, setDisc] = useState<Discrete>(EMPTY_DISCRETE);
   const [stripFirst, setStripFirst] = useState<string | undefined>();
   const chapterRef = useRef('');
+  const loadingRef = useRef<string | undefined>(undefined);
   const setChapter = (id: string) => {
     chapterRef.current = id;
     setChapterState(id);
@@ -32,11 +33,16 @@ export function useSceneSync(
       setChapter(wanted);
       return;
     }
+    if (loadingRef.current === target.slug && status === 'loading') {
+      setChapter(wanted);
+      return;
+    }
     setChapter(wanted);
     setInfo(undefined);
     setDisc(EMPTY_DISCRETE);
     setStatus(webgl() ? 'loading' : 'nowebgl');
     setProgress(0.04);
+    loadingRef.current = target.slug;
     void session.show(target.slug, wanted);
   }, [target?.slug, target?.chapter, hold]);
 
