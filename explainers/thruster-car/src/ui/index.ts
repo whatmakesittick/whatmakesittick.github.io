@@ -3,7 +3,7 @@ import type { Disposer } from '@core/ui/disposers';
 import type { ThrusterCarStore } from '../state';
 import { mountBoostReadouts } from './mountBoostReadouts';
 import { mountFlipReadouts } from './mountFlipReadouts';
-import { mountHopReadouts } from './mountHopReadouts';
+import { mountHookReadouts } from './mountHookReadouts';
 import { mountLimitsReadouts } from './mountLimitsReadouts';
 import { mountNozzleReadouts } from './mountNozzleReadouts';
 import { mountTankReadouts } from './mountTankReadouts';
@@ -17,7 +17,7 @@ export function mountThrusterCarUi(root: Document, store: ThrusterCarStore): Dis
     mountTankReadouts(root, store),
     mountNozzleReadouts(root, store),
     mountBoostReadouts(root, store),
-    mountHopReadouts(root, store),
+    mountHookReadouts(root, store),
     mountFlipReadouts(root, store),
     mountLimitsReadouts(root, store),
   ]);

@@ -34,6 +34,8 @@ export const SITE = {
 
 const RAMP_RADIUS = 5;
 
+export const DECK_HEIGHT = 2 * RAMP_RADIUS;
+
 export const RAMP = {
   entryX: 60,
   radius: RAMP_RADIUS,

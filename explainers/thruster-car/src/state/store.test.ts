@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { TANK_CHOICE_IDS } from '../ids';
-import { DEFAULT_TANK_LITRES, EXIT_SPEED_MS, RUN_SECONDS, TANK_LITRES } from '../model';
+import { DEFAULT_TANK_LITRES, ENTRY_SPEED_MS, RUN_SECONDS, TANK_LITRES } from '../model';
 import { PRESETS } from './presets';
 import {
   CALCULATOR_DEFAULTS,
@@ -35,38 +35,41 @@ describe('thruster car store', () => {
       fillShare: 1,
       pressureBar: 700,
       rearThrustKn: 80,
+      entrySpeed: 18,
       rollInertia: 600,
     });
-    expect(CALCULATOR_DEFAULTS.launchSpeed).toBe(11.3);
-    expect(CALCULATOR_DEFAULTS.launchSpeed).toBeCloseTo(EXIT_SPEED_MS, 1);
+    expect(CALCULATOR_DEFAULTS.entrySpeed).toBe(ENTRY_SPEED_MS);
     expect(state).toMatchObject(CALCULATOR_DEFAULTS);
   });
 
   it('clamps and snaps every calculator to its range', () => {
     const store = createThrusterCarStore();
-    const { setFillShare, setPressureBar, setRearThrustKn, setLaunchSpeed, setRollInertia } =
+    const { setFillShare, setPressureBar, setRearThrustKn, setEntrySpeed, setRollInertia } =
       store.getState();
     setFillShare(0.37);
     setPressureBar(420);
     setRearThrustKn(3);
-    setLaunchSpeed(13.36);
+    setEntrySpeed(19.3);
     setRollInertia(2000);
     expect(store.getState()).toMatchObject({
       fillShare: 0.35,
       pressureBar: 400,
       rearThrustKn: 10,
-      launchSpeed: 13.4,
+      entrySpeed: 19.5,
       rollInertia: 900,
     });
     setFillShare(-1);
     setPressureBar(10_000);
-    expect(store.getState()).toMatchObject({ fillShare: 0, pressureBar: 700 });
+    setEntrySpeed(9);
+    expect(store.getState()).toMatchObject({ fillShare: 0, pressureBar: 700, entrySpeed: 15 });
+    setEntrySpeed(30);
+    expect(store.getState().entrySpeed).toBe(24);
   });
 
   it('snaps without float noise', () => {
     expect(snapToRange(0.149, CALCULATOR_RANGES.fillShare)).toBe(0.15);
     expect(snapToRange(0.7, CALCULATOR_RANGES.fillShare)).toBe(0.7);
-    expect(snapToRange(8.26, CALCULATOR_RANGES.launchSpeed)).toBe(8.3);
+    expect(snapToRange(17.76, CALCULATOR_RANGES.entrySpeed)).toBe(18);
   });
 
   it('sets the gas and the tank size', () => {
@@ -91,6 +94,7 @@ describe('thruster car store', () => {
     state.setGas('helium');
     state.setTankLitres(400);
     state.setFillShare(0.5);
+    state.setEntrySpeed(22);
     state.setRollInertia(800);
     state.applyPreset('nozzle');
     expect(store.getState()).toMatchObject({

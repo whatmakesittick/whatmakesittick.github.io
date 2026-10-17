@@ -4,7 +4,7 @@ import { createExplainerStore } from '@core/store';
 import type { GasId, PresetId, TankChoiceId, ViewOptions } from '../ids';
 import {
   DEFAULT_TANK_LITRES,
-  EXIT_SPEED_MS,
+  ENTRY_SPEED_MS,
   NEWTONS_PER_KILONEWTON,
   REAR_THRUST_FULL_N,
   ROLL_INERTIA_KG_M2,
@@ -26,7 +26,7 @@ export interface CalculatorFields {
   fillShare: number;
   pressureBar: number;
   rearThrustKn: number;
-  launchSpeed: number;
+  entrySpeed: number;
   rollInertia: number;
 }
 
@@ -49,7 +49,7 @@ export interface ThrusterCarOwnActions {
   setFillShare(share: number): void;
   setPressureBar(bar: number): void;
   setRearThrustKn(kn: number): void;
-  setLaunchSpeed(ms: number): void;
+  setEntrySpeed(ms: number): void;
   setRollInertia(kgm2: number): void;
 }
 
@@ -73,7 +73,7 @@ export const CALCULATOR_RANGES: Readonly<Record<keyof CalculatorFields, SteppedR
   fillShare: { min: 0, max: 1, step: 0.05 },
   pressureBar: { min: 100, max: TANK_PRESSURE_BAR, step: 50 },
   rearThrustKn: { min: 10, max: REAR_THRUST_FULL_N / NEWTONS_PER_KILONEWTON, step: 5 },
-  launchSpeed: { min: 8, max: 18, step: 0.1 },
+  entrySpeed: { min: 15, max: 24, step: 0.5 },
   rollInertia: { min: 500, max: 900, step: 50 },
 };
 
@@ -81,7 +81,7 @@ export const CALCULATOR_DEFAULTS: Readonly<CalculatorFields> = {
   fillShare: 1,
   pressureBar: TANK_PRESSURE_BAR,
   rearThrustKn: REAR_THRUST_FULL_N / NEWTONS_PER_KILONEWTON,
-  launchSpeed: snapToRange(EXIT_SPEED_MS, CALCULATOR_RANGES.launchSpeed),
+  entrySpeed: ENTRY_SPEED_MS,
   rollInertia: ROLL_INERTIA_KG_M2,
 };
 
@@ -133,7 +133,7 @@ export function createThrusterCarStore(
           setFillShare: snapped('fillShare'),
           setPressureBar: snapped('pressureBar'),
           setRearThrustKn: snapped('rearThrustKn'),
-          setLaunchSpeed: snapped('launchSpeed'),
+          setEntrySpeed: snapped('entrySpeed'),
           setRollInertia: snapped('rollInertia'),
         };
       },

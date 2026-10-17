@@ -8,7 +8,7 @@ import { mountThrusterCarUi } from '.';
 
 const { units, chapters } = TEST_LOCALE;
 const { outcomeState } = chapters.limits;
-const READOUT_COUNT = 25;
+const READOUT_COUNT = 31;
 const SCRUBBED_PHASE = 9;
 
 function readout(id: string): string | null | undefined {
@@ -85,11 +85,12 @@ describe('chapter widgets', () => {
     expect(readout('zeroToSixty')).toBe(fill(units.seconds, { value: '0.57' }));
     expect(readout('boostFlow')).toBe(fill(units.kgPerSecond, { value: '115' }));
     expect(readout('boostLasts')).toBe(fill(units.seconds, { value: '2.8' }));
-    expect(output('launch-speed')).toBe(fill(units.metresPerSecond, { value: '11.3' }));
-    expect(thumb('launch-speed')).toEqual({ value: '11.3', step: '0.1' });
-    expect(readout('peakHeight')).toBe(fill(units.metres, { value: '10.0' }));
-    expect(readout('airTime')).toBe(fill(units.seconds, { value: '1.4' }));
-    expect(readout('hopRange')).toBe(fill(units.metres, { value: '16' }));
+    expect(output('entry-speed')).toBe(fill(units.metresPerSecond, { value: '18.0' }));
+    expect(thumb('entry-speed')).toEqual({ value: '18', step: '0.5' });
+    expect(readout('loopTopSpeed')).toBe(fill(units.metresPerSecond, { value: '11.3' }));
+    expect(readout('loopBottomG')).toBe(fill(units.gees, { value: '6.6' }));
+    expect(readout('loopTopG')).toBe(fill(units.gees, { value: '1.6' }));
+    expect(readout('dropTime')).toBe(fill(units.seconds, { value: '1.43' }));
     expect(output('roll-inertia')).toBe(fill(units.kgm2, { value: '600' }));
     expect(readout('rollTime')).toBe(fill(units.seconds, { value: '0.84' }));
     expect(readout('rollTorque')).toBe(fill(units.kilonewtonMetres, { value: '10.8' }));
@@ -117,10 +118,16 @@ describe('chapter widgets', () => {
     expect(readout('boostAccel')).toBe(fill(units.gees, { value: '2.4' }));
     expect(readout('zeroToSixty')).toBe(fill(units.seconds, { value: '1.14' }));
     expect(readout('boostLasts')).toBe(fill(units.seconds, { value: '5.5' }));
-    slide('launch-speed', 18);
-    expect(readout('peakHeight')).toBe(fill(units.metres, { value: '10.0' }));
-    expect(readout('airTime')).toBe(fill(units.seconds, { value: '1.4' }));
-    expect(readout('hopRange')).toBe(fill(units.metres, { value: '26' }));
+    slide('entry-speed', 15);
+    expect(store.getState().entrySpeed).toBe(15);
+    expect(output('entry-speed')).toBe(fill(units.metresPerSecond, { value: '15.0' }));
+    expect(readout('loopTopSpeed')).toBe(fill(units.metresPerSecond, { value: '5.4' }));
+    expect(readout('loopBottomG')).toBe(fill(units.gees, { value: '4.6' }));
+    expect(readout('loopTopG')).toBe(fill(units.gees, { value: '-0.4' }));
+    expect(readout('dropTime')).toBe(fill(units.seconds, { value: '1.43' }));
+    slide('entry-speed', 24);
+    expect(readout('loopTopSpeed')).toBe(fill(units.metresPerSecond, { value: '19.5' }));
+    expect(readout('loopTopG')).toBe(fill(units.gees, { value: '6.7' }));
     slide('roll-inertia', 900);
     expect(readout('rollTime')).toBe(fill(units.seconds, { value: '1.02' }));
     expect(readout('rollRate')).toBe(fill(units.degreesPerSecond, { value: '352' }));
@@ -129,9 +136,12 @@ describe('chapter widgets', () => {
 
   it('puts the calculators back on a chapter change but keeps the gas and the tank', () => {
     slide('tank-fill', 0.5);
+    slide('entry-speed', 22);
     click('gas', 'helium');
     store.getState().applyPreset('nozzle');
     expect(output('tank-fill')).toBe(fill(units.percent, { value: '100' }));
+    expect(output('entry-speed')).toBe(fill(units.metresPerSecond, { value: '18.0' }));
+    expect(readout('loopTopSpeed')).toBe(fill(units.metresPerSecond, { value: '11.3' }));
     expect(readout('fillMass')).toBe(fill(units.kilograms, { value: '51' }));
     expect(pressed('gas', 'helium')).toEqual(['true', 'true', 'true']);
   });
