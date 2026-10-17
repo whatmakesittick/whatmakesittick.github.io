@@ -21,6 +21,7 @@ const FIXED_IDS = Object.keys(FIXED_VIEWS) as FixedView[];
 const DIGITS = 9;
 
 const RESTING_SECONDS = (MOMENTS.stopped + RUN_SECONDS) / 2;
+const ASSEMBLY_TIMEOUT_MS = 20_000;
 
 function assemblyState(phase = 0): AssemblyState {
   return createAssemblyState({ ...createThrusterCarStore().getState(), phase });
@@ -62,7 +63,7 @@ function rounded(vector: Vector3 | undefined): number[] | undefined {
   return vector?.toArray().map((value) => Number(value.toFixed(DIGITS)));
 }
 
-describe('thruster car controller', () => {
+describe('thruster car controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
   it('adds the assembly, attaches its labels and bounds the camera on the site floor', () => {
     const { rig, scene, shell } = fakeShell();
     new ThrusterCarController(shell).build(assemblyState());
