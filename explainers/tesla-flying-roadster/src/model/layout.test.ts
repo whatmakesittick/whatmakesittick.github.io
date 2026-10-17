@@ -16,10 +16,13 @@ import {
   SEAT,
   SITE,
   SITE_ANCHORS,
+  CHORD_SAG_M,
   SITE_REGIONS,
   TANK,
+  rampCarPoint,
   rampPitch,
   rampPoint,
+  rampSag,
 } from './layout';
 
 describe('layout', () => {
@@ -43,6 +46,36 @@ describe('layout', () => {
     expect(rampPitch(RAMP_LENGTH)).toBeCloseTo(Math.PI, 9);
     expect(rampPoint(RAMP_LENGTH + 5)).toEqual(rampPoint(RAMP_LENGTH));
     expect(SITE_ANCHORS.rampExit).toEqual(rampPoint(RAMP_LENGTH));
+  });
+
+  it('sets the car in by the wheelbase chord so both wheels touch the loop', () => {
+    expect(CHORD_SAG_M).toBeCloseTo(0.204, 3);
+    const centre = [RAMP.entryX, RAMP.radius];
+    [1.5, LOOP_LENGTH / 3, LOOP_LENGTH / 2, LOOP_LENGTH - 1.5].forEach((distance) => {
+      const [x, y] = rampCarPoint(distance);
+      const pitch = rampPitch(distance);
+      [-1, 1].forEach((side) => {
+        const reach = (side * CAR.wheelbase) / 2;
+        const wheel = [x + reach * Math.cos(pitch), y + reach * Math.sin(pitch)];
+        const fromCentre = Math.hypot(wheel[0] - centre[0], wheel[1] - centre[1]);
+        expect(fromCentre, `${distance} m`).toBeCloseTo(RAMP.radius, 9);
+      });
+    });
+  });
+
+  it('blends the chord sag in from nothing at the loop entry and out before the deck', () => {
+    expect(rampCarPoint(0)).toEqual(rampPoint(0));
+    expect(rampSag(LOOP_LENGTH)).toBe(0);
+    expect(rampSag(LOOP_LENGTH + 4)).toBe(0);
+    expect(rampSag(1)).toBeCloseTo(CHORD_SAG_M, 9);
+    expect(rampSag(0.5)).toBeGreaterThan(0);
+    expect(rampSag(0.5)).toBeLessThan(CHORD_SAG_M);
+    const step = 1e-3;
+    for (let distance = 0; distance < RAMP_LENGTH; distance += step) {
+      const [x, y] = rampCarPoint(distance);
+      const [nextX, nextY] = rampCarPoint(distance + step);
+      expect(Math.hypot(nextX - x, nextY - y)).toBeLessThan(2 * step);
+    }
   });
 
   it('parks a truck and four cars between the leap point and the second landing box', () => {

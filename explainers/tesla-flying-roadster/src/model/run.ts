@@ -27,7 +27,15 @@ import {
   SIXTY_MPH_MS,
   TOUCHDOWN_SPEED_MS,
 } from './constants';
-import { DECK_END_X, DECK_HEIGHT, DECK_STOP_X, JUMP, RAMP, rampPitch, rampPoint } from './layout';
+import {
+  DECK_END_X,
+  DECK_HEIGHT,
+  DECK_STOP_X,
+  JUMP,
+  RAMP,
+  rampCarPoint,
+  rampPitch,
+} from './layout';
 import { leapAccel, leapSpeedFor, loopAngleAt, loopSpeedAt, loopTimetable, topSpeed } from './loop';
 import { rollAngleAt, rollSeconds } from './roll';
 
@@ -294,7 +302,7 @@ function settleAt(time: number): CarReading {
 
 function rampAt(time: number): CarReading {
   const distance = RAMP.radius * loopAngleAt(LOOP_TIMES, time - RAMP_START);
-  const [x, y] = rampPoint(distance);
+  const [x, y] = rampCarPoint(distance);
   const pitch = rampPitch(distance);
   const speed = loopSpeedAt(ENTRY_SPEED_MS, RAMP.radius, pitch);
   const fall = { height: y, verticalSpeed: speed * Math.sin(pitch) };

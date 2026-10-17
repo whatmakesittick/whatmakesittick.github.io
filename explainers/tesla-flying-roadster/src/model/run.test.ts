@@ -153,6 +153,16 @@ describe('run', () => {
     });
   });
 
+  it('moves the car smoothly round the loop with no step at the entry or the deck', () => {
+    const { start, end } = PHASE_RANGES.ramp;
+    const step = 1e-3;
+    for (let time = start - 0.05; time < end + 0.05; time += step) {
+      const [x, y] = carAt(time).position;
+      const [nextX, nextY] = carAt(time + step).position;
+      expect(Math.hypot(nextX - x, nextY - y), `${time} s`).toBeLessThan(ENTRY_SPEED_MS * 2 * step);
+    }
+  });
+
   it('reads the same at any second whichever way the scrubber moves', () => {
     const seconds = [0.5, 2, 3.6, 4.5, 6.2, 8, 10, 12, 15];
     const forward = seconds.map((t) => track(carAt(t)));

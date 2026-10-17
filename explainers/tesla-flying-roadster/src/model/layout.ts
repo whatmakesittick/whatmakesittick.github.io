@@ -1,4 +1,4 @@
-import { clamp } from '@core/math';
+import { clamp, smoothstep } from '@core/math';
 import type { Extent, RegionSpec } from '@core/scene/regions';
 import type { CarAnchorId, CarRegionId, NozzleId, Point, SiteAnchorId, SiteRegionId } from '../ids';
 
@@ -103,6 +103,23 @@ export const CAR = {
   wheelRadius: 0.34,
   mass: 1700,
 } as const;
+
+export const CHORD_SAG_M = RAMP.radius - Math.sqrt(RAMP.radius ** 2 - (CAR.wheelbase / 2) ** 2);
+
+const SAG_BLEND_M = 1;
+
+export function rampSag(distance: number): number {
+  const along = alongRamp(distance);
+  if (along >= LOOP_LENGTH) return 0;
+  return CHORD_SAG_M * smoothstep(Math.min(along, LOOP_LENGTH - along), 0, SAG_BLEND_M);
+}
+
+export function rampCarPoint(distance: number): Point {
+  const [x, y, z] = rampPoint(distance);
+  const pitch = rampPitch(distance);
+  const sag = rampSag(distance);
+  return [x - sag * Math.sin(pitch), y + sag * Math.cos(pitch), z];
+}
 
 export const DRIVER_Z = -0.45;
 export const TANK_Z = 0.45;
