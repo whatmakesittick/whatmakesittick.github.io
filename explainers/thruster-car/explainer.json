@@ -1,0 +1,13 @@
+{
+  "slug": "thruster-car",
+  "tags": ["vehicles", "physics", "flight"],
+  "topic": "cold-gas thruster car",
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A grey single-seat sports car upside down above a curled ramp at dusk, white gas jets at its corners, beside the title How a cold-gas thruster hops a car"
+  }
+}
