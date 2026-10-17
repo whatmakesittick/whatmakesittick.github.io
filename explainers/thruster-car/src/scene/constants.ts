@@ -6,11 +6,11 @@ type Triple = readonly [number, number, number];
 
 export const SCENE_LIMITS = {
   fogNear: SITE.fogNear,
-  fogFar: 450,
+  fogFar: 1100,
   cameraNear: 0.1,
-  cameraFar: 800,
+  cameraFar: 1300,
   cameraMinDistance: 1.2,
-  cameraMaxDistance: 260,
+  cameraMaxDistance: 700,
   maxPolarAngle: Math.PI * 0.54,
   targetFloorMargin: 0.2,
 } as const;
