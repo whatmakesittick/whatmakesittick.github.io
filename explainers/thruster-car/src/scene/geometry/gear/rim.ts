@@ -37,7 +37,7 @@ const HUB_PROFILE: Profile = [
 
 const HUB_SEGMENTS = 18;
 
-export const HUB_FACE_Z = 0.083;
+const HUB_FACE_Z = 0.083;
 
 const NUTS = {
   count: 5,
@@ -49,7 +49,7 @@ const NUTS = {
   blurSoft: 0.4,
 } as const;
 
-export const SPOKES = {
+const SPOKES = {
   pairs: 5,
   hubRadius: 0.07,
   rimRadius: 0.231,
@@ -209,7 +209,7 @@ function spokeCover(radius: number): number {
   return (SPOKES.pairs * 2 * width) / (FULL_TURN * radius);
 }
 
-export function blurAlpha(radius: number): number {
+function blurAlpha(radius: number): number {
   const spokes = spokeCover(radius);
   const cover = spokes > 0 ? Math.max(BLUR.floor, spokes * BLUR.gain) : nutCover(radius);
   return Math.min(BLUR.maxCover, cover);

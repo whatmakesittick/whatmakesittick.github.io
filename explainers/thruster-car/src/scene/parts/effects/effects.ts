@@ -13,7 +13,7 @@ import { jetMaterial } from './puffMaterial';
 
 export type EffectLabel = Extract<PartId, 'jets' | 'forceArrows' | 'fans' | 'ghostPath'>;
 
-export const EFFECTS_NAME = 'effects';
+const EFFECTS_NAME = 'effects';
 
 export class EffectsPart implements EffectsView {
   readonly object = new Group();

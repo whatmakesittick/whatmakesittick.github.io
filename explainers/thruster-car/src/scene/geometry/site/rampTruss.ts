@@ -67,7 +67,7 @@ function brace(from: Vector3, to: Vector3): Member {
   return member(from, to, SUPPORT.brace, true);
 }
 
-export function outerChordStart(): number {
+function outerChordStart(): number {
   for (let distance = 0; distance < RAMP_LENGTH; distance += SUPPORT.chordStep) {
     if (framePoint(rampFrame(distance), 0, OUTER_CHORD).y >= TRUSS.groundClear) return distance;
   }
@@ -131,7 +131,7 @@ function tower(tops: Vector3[], plan: TrussPlan): Station {
   return { kind: 'tower', tops: standing, feet };
 }
 
-export function beamHeight(frame: RampFrame): number {
+function beamHeight(frame: RampFrame): number {
   let highest = -Infinity;
   for (let step = 0; step <= SUPPORT.reachSamples; step += 1) {
     const offset = (step / SUPPORT.reachSamples - 0.5) * 2 * SUPPORT.reach;
@@ -164,7 +164,7 @@ function portal(frame: RampFrame, x: number, plan: TrussPlan): Station {
   return { kind: 'portal', tops, feet };
 }
 
-export function supportKinds(frames: readonly RampFrame[], chordStart: number): SupportKind[] {
+function supportKinds(frames: readonly RampFrame[], chordStart: number): SupportKind[] {
   let portals = 0;
   return frames.map((frame, index) => {
     const depth = frame.distance >= chordStart ? OUTER_CHORD : INNER_CHORD;

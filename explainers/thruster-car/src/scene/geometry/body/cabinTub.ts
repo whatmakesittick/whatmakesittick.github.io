@@ -94,7 +94,7 @@ function firewall(): BufferGeometry {
   );
 }
 
-export function doorLiner(surface = new BodySurface()): BufferGeometry {
+function doorLiner(surface = new BodySurface()): BufferGeometry {
   const builder = new MeshBuilder();
   const { columns, rows, offset, edge } = LINER;
   const [fromX, toX] = [BODY_X.doorRear + edge, BODY_X.doorFront - edge];

@@ -66,7 +66,7 @@ export const TREE_LINE = {
   seed: 97,
 } as const;
 
-export const ATLAS = { columns: 2, rows: 2 } as const;
+const ATLAS = { columns: 2, rows: 2 } as const;
 const VARIANTS = ATLAS.columns * ATLAS.rows;
 const CANDIDATES_PER_CARD = 4;
 const XYZ = 3;
@@ -141,7 +141,7 @@ export function scatterScrubCards(): Card[] {
   );
 }
 
-export function treeLineOpen(angle: number): boolean {
+function treeLineOpen(angle: number): boolean {
   const { cycles, from } = TREE_LINE.gaps;
   const around = (angle / FULL_TURN) * cycles;
   return fractalNoise(around, 0, GAP_OCTAVES, TREE_LINE.seed) > from;
@@ -246,7 +246,7 @@ function inMargin(x: number, y: number): boolean {
   return x > margin && x < 1 - margin && y > 0 && y < 1 - margin;
 }
 
-export function bushCardShade(u: number, v: number): Rgba {
+function bushCardShade(u: number, v: number): Rgba {
   const { variant, x, y } = cell(u, v);
   if (!inMargin(x, y)) return CLEAR;
   const edge = 1 + SHAPE.ragged * (NOISE.edge(u, v) - 0.5);
@@ -255,7 +255,7 @@ export function bushCardShade(u: number, v: number): Rgba {
   return foliage(y / (y + depth), u, v);
 }
 
-export function treeCardShade(u: number, v: number): Rgba {
+function treeCardShade(u: number, v: number): Rgba {
   const { variant, x, y } = cell(u, v);
   if (!inMargin(x, y)) return CLEAR;
   const edge = 1 + SHAPE.ragged * (NOISE.crown(u, v) - 0.5);

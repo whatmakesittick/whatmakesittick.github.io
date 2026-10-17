@@ -35,7 +35,7 @@ function sizeKey({ kind, length, width, height }: ParkedVehicle): string {
   return [kind, length, width, height].join(':');
 }
 
-export function shadowLayout(model: VehicleModel, vehicle: ParkedVehicle): ShadowPadLayout {
+function shadowLayout(model: VehicleModel, vehicle: ParkedVehicle): ShadowPadLayout {
   const prints = wheelPrints(model, vehicle);
   const [first] = prints;
   return {

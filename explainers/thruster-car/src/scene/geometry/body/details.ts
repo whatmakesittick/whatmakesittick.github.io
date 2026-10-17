@@ -56,7 +56,7 @@ function outwardOf(points: readonly Vec3[], index: number): Vec3 {
   return normalize([before[2] - after[2], 0, after[0] - before[0]]);
 }
 
-export function splitter(surface: BodySurface): BufferGeometry {
+function splitter(surface: BodySurface): BufferGeometry {
   const outline = noseOutline(surface);
   const builder = new MeshBuilder();
   const rings = outline.map((point, index) => {
@@ -102,7 +102,7 @@ function finShape(surface: BodySurface): Shape {
   return shape;
 }
 
-export function diffuserFins(surface: BodySurface): BufferGeometry[] {
+function diffuserFins(surface: BodySurface): BufferGeometry[] {
   const shape = finShape(surface);
   const zs = FINS.zs.flatMap((z) => (z === 0 ? [0] : [z, -z]));
   return zs.map((z) => {
@@ -149,7 +149,7 @@ interface CapBarSize {
   margin: number;
 }
 
-export function intakeSlats(surface: BodySurface): BufferGeometry[] {
+function intakeSlats(surface: BodySurface): BufferGeometry[] {
   const section = surface.section(BODY.halfLength);
   const [low, high] = [section.point('sill', 0)[1], section.point('sill', 1)[1]];
   return INTAKE.shares.map((share) =>

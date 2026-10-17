@@ -7,7 +7,7 @@ import { fractalNoise, hash2, tileNoise } from './noise';
 import { mixRgb, paintTexture, shade, srgb } from './textures';
 import type { Rgb, Rgba } from './textures';
 
-export const SCRUB = {
+const SCRUB = {
   metres: 12,
   size: 384,
   tufts: {
@@ -31,7 +31,7 @@ export const SCRUB = {
   seed: 23,
 } as const;
 
-export const GROUND_TINT = {
+const GROUND_TINT = {
   patches: { metres: 60, depth: 0.42 },
   fields: { metres: 26, from: 0.5, to: 0.7, warmth: 0.6 },
   burns: { metres: 90, from: 0.6, to: 0.75, depth: 0.35 },
@@ -101,7 +101,7 @@ function bladeAt(dx: number, dy: number, phase: number): number {
   return unitWave(Math.atan2(dy, dx) * SCRUB.tufts.blades + phase);
 }
 
-export function tuftAt(u: number, v: number): Tuft {
+function tuftAt(u: number, v: number): Tuft {
   const { cells, edge, shift, spikes, core, bladeShade, shadowSoft } = SCRUB.tufts;
   const x = (u - Math.floor(u)) * cells;
   const y = (v - Math.floor(v)) * cells;

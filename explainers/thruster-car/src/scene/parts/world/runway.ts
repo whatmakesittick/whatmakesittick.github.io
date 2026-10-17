@@ -30,7 +30,7 @@ export interface RunwayPart {
   padLabel: Object3D;
 }
 
-export const CONES = { spacing: 5, yaw: 0.6, seed: 71 } as const;
+const CONES = { spacing: 5, yaw: 0.6, seed: 71 } as const;
 
 const RUNWAY_LABEL = { x: 12, z: -4 } as const;
 const UP = new Vector3(0, 1, 0);

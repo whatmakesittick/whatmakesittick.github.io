@@ -9,7 +9,7 @@ export interface StationDensity {
   breakpoints: boolean;
 }
 
-export const DETAILED_STATIONS: StationDensity = {
+const DETAILED_STATIONS: StationDensity = {
   open: 0.045,
   arch: 0.028,
   rounding: 8,

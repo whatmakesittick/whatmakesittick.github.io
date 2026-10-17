@@ -3,7 +3,7 @@ import type { Texture } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../../../theme';
 
-export const WORLD_PAINT = {
+const WORLD_PAINT = {
   startLine: '#c9a646',
   deckUnderside: '#6f7a87',
   supportSteel: '#76828f',

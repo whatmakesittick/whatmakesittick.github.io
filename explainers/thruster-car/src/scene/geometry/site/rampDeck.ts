@@ -48,7 +48,7 @@ function apronUv(x: number, z: number): [number, number] {
   return [(x - APRON.to) / DECK.plateLength, (DECK.halfWidth - z) / (DECK.halfWidth * 2)];
 }
 
-export function apronGeometry(): BufferGeometry {
+function apronGeometry(): BufferGeometry {
   const { from, to, lift, chamfer } = APRON;
   const half = DECK.halfWidth;
   const ridge = from + chamfer;
@@ -85,7 +85,7 @@ function deckSlabGeometry(sweep: Sweep): BufferGeometry {
   ]);
 }
 
-export function ribLoop(): CrossPoint[] {
+function ribLoop(): CrossPoint[] {
   const reach = DECK.halfWidth - RIB.edgeInset;
   const back = -DECK.thickness;
   return [
@@ -102,7 +102,7 @@ function shifted(frame: RampFrame, distance: number): RampFrame {
   return { ...frame, centre: frame.centre.clone().addScaledVector(frame.tangent, distance) };
 }
 
-export function ribGeometry(frame: RampFrame): BufferGeometry {
+function ribGeometry(frame: RampFrame): BufferGeometry {
   const half = RIB.thickness / 2;
   const prism: Sweep = {
     frames: [shifted(frame, -half), shifted(frame, half)],

@@ -11,7 +11,7 @@ import type { Rgba } from './textures';
 
 type PathPoint = readonly [x: number, z: number];
 
-export const DIRT_TRACKS = {
+const DIRT_TRACKS = {
   width: 3.2,
   lift: 0.012,
   step: 3,
@@ -127,7 +127,7 @@ export function tracksGeometry(): BufferGeometry {
   return arrayGeometry({ position: positions, normal: upNormals(positions), uv: uvs }, indices);
 }
 
-export function trackShade(u: number, v: number): Rgba {
+function trackShade(u: number, v: number): Rgba {
   const { ruts, crown, edge, pebbles, wear, seed, size } = DIRT_TRACKS;
   const across = Math.abs(u - 0.5) * 2;
   const rut = Math.max(

@@ -17,7 +17,7 @@ export interface CockpitGeometry {
 
 const DRIVER_Z = SEAT[2];
 
-export const DASH = {
+const DASH = {
   rear: 0.93,
   front: 1.24,
   inboard: -0.06,
@@ -32,7 +32,7 @@ export const DASH = {
   curveSteps: 5,
 } as const;
 
-export const WHEEL_RIM = {
+const WHEEL_RIM = {
   hub: [SEAT[0] + 0.48, 0.56, DRIVER_Z] as Vec3,
   rise: toRadians(8),
   radius: 0.17,
@@ -135,13 +135,13 @@ function column(): BufferGeometry[] {
   ];
 }
 
-export function dashTop(): number {
+function dashTop(): number {
   const outboard = -dashOutboard();
   const ceilings = [DASH.rear, DASH.front].map((x) => shellCeiling(x, outboard) - DASH.headroom);
   return Math.min(DASH.topLimit, ...ceilings);
 }
 
-export function dashOutboard(): number {
+function dashOutboard(): number {
   return -(shellHalfWidth(DASH.front, DASH.topLimit) - DASH.sideGap);
 }
 

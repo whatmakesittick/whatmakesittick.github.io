@@ -15,7 +15,7 @@ export type ThrusterCarControllerDependencies = Pick<
 >;
 
 export const BOUNDS_REGION: RegionId = 'site';
-export const FOLLOW_ANCHOR: AnchorId = 'car';
+const FOLLOW_ANCHOR: AnchorId = 'car';
 export const FLOOR_Y = 0;
 
 export class ThrusterCarController {

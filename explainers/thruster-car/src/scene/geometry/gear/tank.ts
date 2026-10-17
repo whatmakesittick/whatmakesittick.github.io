@@ -23,15 +23,15 @@ export const SHELL = {
   segments: 40,
 } as const;
 
-export const STRAIGHT_HALF = SHELL.halfLength - SHELL.domeDepth;
+const STRAIGHT_HALF = SHELL.halfLength - SHELL.domeDepth;
 const WINDOW_HALF = STRAIGHT_HALF - SHELL.windowMargin;
 const POLE_ANGLE = Math.acos(SHELL.bossRadius / SHELL.radius);
-export const POLE = STRAIGHT_HALF + SHELL.domeDepth * Math.sin(POLE_ANGLE);
+const POLE = STRAIGHT_HALF + SHELL.domeDepth * Math.sin(POLE_ANGLE);
 
 const WINDOW_SWEEP: Sweep = { start: 3 * QUARTER_TURN, length: QUARTER_TURN };
 const CUT_SWEEP: Sweep = { start: 0, length: 3 * QUARTER_TURN };
 
-export const CORE = {
+const CORE = {
   radius: 0.268,
   inset: 0.03,
   segments: 32,
@@ -92,7 +92,7 @@ function domePoints(sign: 1 | -1): Profile {
   });
 }
 
-export const SHELL_PROFILE: Profile = [
+const SHELL_PROFILE: Profile = [
   ...[...domePoints(-1)].reverse(),
   [SHELL.radius, -WINDOW_HALF],
   [SHELL.radius, WINDOW_HALF],
@@ -265,7 +265,7 @@ function towShade(family: number): number {
   return waveDip(WINDING.towDepth, FULL_TURN * WINDING.tows * family);
 }
 
-export function windingShade(u: number, v: number): number {
+function windingShade(u: number, v: number): number {
   const rising = u * WINDING.around + v * WINDING.along;
   const falling = u * WINDING.around - v * WINDING.along;
   const edges = Math.max(

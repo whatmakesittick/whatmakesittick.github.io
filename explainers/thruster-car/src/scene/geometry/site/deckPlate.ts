@@ -6,7 +6,7 @@ import { DECK } from './rampSpec';
 import { band, mixRgb, normalTexture, paintTexture, shade, srgb } from './textures';
 import type { Rgba } from './textures';
 
-export const DECK_PLATE = {
+const DECK_PLATE = {
   size: { width: 128, height: 256 },
   hazard: { period: 0.3, edge: 0.012, wear: 0.22, wearFrom: 0.55, wearTo: 0.8 },
   grip: { spacing: 0.75, width: 0.15, soft: 0.01, edge: 0.012, edgeLight: 0.75 },
@@ -20,7 +20,7 @@ export const DECK_PLATE = {
   seed: 31,
 } as const;
 
-export const HAZARD_YELLOW = '#e2b23a';
+const HAZARD_YELLOW = '#e2b23a';
 const STEEL = mixRgb(srgb(THEME.rampSteel), srgb('#c3ccd8'), DECK_PLATE.lift);
 const BRIGHT = srgb('#d3d8de');
 const YELLOW = srgb(HAZARD_YELLOW);

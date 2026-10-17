@@ -5,7 +5,7 @@ import { THEME } from '../theme';
 import { swatchOf } from './geometry/body/palette';
 import type { Palette } from './geometry/body/palette';
 
-export const PAINT = {
+const PAINT = {
   body: THEME.carBody,
   trim: THEME.carTrim,
   frame: '#15171a',
@@ -54,7 +54,7 @@ function lamp(color: string, glow: string, intensity: number): MaterialFinish {
   };
 }
 
-export const BODY_FINISHES = {
+const BODY_FINISHES = {
   paint: {
     color: PAINT.body,
     roughness: 0.22,
@@ -94,7 +94,7 @@ export const BODY_FINISHES = {
   },
 } as const satisfies Record<string, MaterialFinish>;
 
-export const CABIN_FINISHES = {
+const CABIN_FINISHES = {
   seatShell: satin(PAINT.seatShell, 0.42, 0.25),
   seatCushion: matte(PAINT.seatCushion, 0.95),
   harness: matte(PAINT.harness, 0.85),

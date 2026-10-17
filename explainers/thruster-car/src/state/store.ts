@@ -70,7 +70,7 @@ export const DEFAULT_VIEW: ViewState = {
   labels: true,
 };
 
-export const DEFAULT_GAS: GasId = 'air';
+const DEFAULT_GAS: GasId = 'air';
 
 export const CALCULATOR_RANGES: Readonly<Record<keyof CalculatorFields, SteppedRange>> = {
   fillShare: { min: 0, max: 1, step: 0.05 },

@@ -15,7 +15,7 @@ import { CONTACT_SHADOW } from './constants';
 
 export const CONTACT_SHADOW_NAME = 'contactShadow';
 
-export function contactShadowLayout(): ShadowPadLayout {
+function contactShadowLayout(): ShadowPadLayout {
   const { size, pad, padCorner, padBlur, padAlpha, tyre, tyreAlpha } = CONTACT_SHADOW;
   const across = [-WHEEL.trackHalfZ, WHEEL.trackHalfZ];
   return {

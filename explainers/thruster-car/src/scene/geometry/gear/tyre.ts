@@ -24,7 +24,7 @@ const HALF_PROFILE: Profile = [
 
 const CROWN: Profile = [[WHEEL.radius + CROWN_BULGE, 0]];
 
-export const TYRE_PROFILE: Profile = [
+const TYRE_PROFILE: Profile = [
   ...HALF_PROFILE.map(([radius, axial]): Profile[number] => [radius, -axial]),
   ...CROWN,
   ...[...HALF_PROFILE].reverse(),
@@ -56,7 +56,7 @@ export function tyreGeometry(): BufferGeometry {
   return latheAround(TYRE_PROFILE, { axis: 'z', segments: WHEEL_SEGMENTS });
 }
 
-export function treadBand(): readonly [start: number, end: number] {
+function treadBand(): readonly [start: number, end: number] {
   const shares = arcShares(TYRE_PROFILE);
   return [shares[TREAD_EDGE_INDEX], shares[TYRE_PROFILE.length - 1 - TREAD_EDGE_INDEX]];
 }

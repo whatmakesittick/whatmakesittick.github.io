@@ -9,7 +9,7 @@ import { hash2, tileNoise } from './noise';
 import { paintTexture } from './textures';
 import type { Rgba } from './textures';
 
-export const MARKINGS = {
+const MARKINGS = {
   lift: 0.002,
   line: 0.12,
   startLine: { width: 0.25, halfSpan: 3 },

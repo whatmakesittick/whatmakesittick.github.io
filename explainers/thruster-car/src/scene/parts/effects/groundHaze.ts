@@ -34,7 +34,7 @@ interface HazePuff {
   strength: number;
 }
 
-export function hazeStrength(thrustEach: number, height: number): number {
+function hazeStrength(thrustEach: number, height: number): number {
   const share = clamp(thrustEach / FULL_THRUST_EACH, 0, 1);
   const { full, none } = GROUND_HAZE.near;
   return share * (1 - smoothstep(height, full, none));

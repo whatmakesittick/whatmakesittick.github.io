@@ -45,8 +45,8 @@ const TANK_PART = 'tank';
 const VALVE_PART = 'tankValve';
 
 export const CORE_NAME = 'tankCore';
-export const FULL_SHELL_NAME = 'tankShell';
-export const CUT_SHELL_NAME = 'tankCutaway';
+const FULL_SHELL_NAME = 'tankShell';
+const CUT_SHELL_NAME = 'tankCutaway';
 
 const MIN_CORE_LENGTH = 0.002;
 const GHOST_ORDER = 1;

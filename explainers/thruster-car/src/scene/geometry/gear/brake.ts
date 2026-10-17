@@ -9,7 +9,7 @@ import { waveDip } from '../wave';
 import type { Profile } from './lathe';
 import { grey, paintTexture, ridge, seamDistance } from './maps';
 
-export const DISC = {
+const DISC = {
   inner: 0.105,
   outer: 0.19,
   centreZ: -0.025,

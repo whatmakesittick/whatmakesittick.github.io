@@ -3,7 +3,7 @@ import type { BufferGeometry } from 'three';
 import { QUARTER_TURN } from '../turns';
 import type { Footprint } from '../../../model/layout';
 
-export const SLAB = {
+const SLAB = {
   thickness: 0.16,
   bevel: 0.035,
   bevelSegments: 2,

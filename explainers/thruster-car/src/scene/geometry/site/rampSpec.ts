@@ -41,7 +41,7 @@ export const INNER_CHORD = -DECK.thickness - TRUSS.gap - TRUSS.chord / 2;
 
 export const OUTER_CHORD = INNER_CHORD - TRUSS.depth;
 
-export function ribDepth(across: number): number {
+function ribDepth(across: number): number {
   const reach = DECK.halfWidth - RIB.edgeInset;
   const share = (Math.abs(across) - RIB.hubHalfWidth) / (reach - RIB.hubHalfWidth);
   const clamped = Math.min(Math.max(share, 0), 1);

@@ -21,7 +21,7 @@ import type { Profile } from './lathe';
 import { grey, paintTexture, seamDistance } from './maps';
 import type { Rgba } from './maps';
 
-export const BLOCK = {
+const BLOCK = {
   front: -0.02,
   back: -0.12,
   halfZ: 0.045,
@@ -73,7 +73,7 @@ const BULKHEAD = { radius: 0.016, length: 0.024, sides: 6 } as const;
 
 const LINE = { radius: 0.0085, tubular: 20, radial: 8 } as const;
 
-export const LINE_PATHS: readonly (readonly Point[])[] = [
+const LINE_PATHS: readonly (readonly Point[])[] = [
   [
     [BLOCK.back - FITTING.length, -0.01, -0.022],
     [-0.22, -0.02, -0.04],
@@ -109,7 +109,7 @@ const DIAL_MAP = { width: 128, height: 128 } as const;
 
 const BRAID = { crossings: 2, floor: 0.42, lift: 0.58, sharpness: 0.6 } as const;
 const BRAID_MAP = { width: 64, height: 64, repeat: true } as const;
-export const BRAID_REPEAT = { along: 16, around: 2 } as const;
+const BRAID_REPEAT = { along: 16, around: 2 } as const;
 
 function hexAlongX(radius: number, length: number, at: Point, sides: number): BufferGeometry {
   const nut = new CylinderGeometry(radius, radius, length, sides);

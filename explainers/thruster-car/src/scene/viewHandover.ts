@@ -5,7 +5,7 @@ export interface ViewFramer {
   frame(view: CameraView, animate: boolean, variant?: string): void;
 }
 
-export const HANDOVER_VIEWS: Readonly<Partial<Record<CameraView, CameraView>>> = {
+const HANDOVER_VIEWS: Readonly<Partial<Record<CameraView, CameraView>>> = {
   tankClose: 'boostSide',
 };
 

@@ -25,7 +25,7 @@ function setting(name: LightName): LightSetting {
   return { color, intensity, position: placed(direction) };
 }
 
-export const THRUSTER_CAR_LIGHT: Readonly<Record<LightName, LightSetting>> = {
+const THRUSTER_CAR_LIGHT: Readonly<Record<LightName, LightSetting>> = {
   key: setting('key'),
   fill: setting('fill'),
   rim: setting('rim'),

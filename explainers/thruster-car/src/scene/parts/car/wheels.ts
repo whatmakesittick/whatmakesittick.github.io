@@ -53,11 +53,11 @@ export function forwardTravel(car: CarReading): number {
   return x * Math.cos(car.pitch) + y * Math.sin(car.pitch);
 }
 
-export function isBlurred(speed: number): boolean {
+function isBlurred(speed: number): boolean {
   return Math.abs(speed) > BLUR_FROM_SPEED_MS;
 }
 
-export function isLeftWheel(centre: Point): boolean {
+function isLeftWheel(centre: Point): boolean {
   return centre[2] < 0;
 }
 
