@@ -9,7 +9,7 @@ import type { RampFrame } from './rampFrame';
 import { ribBack } from './rampSpec';
 import { rampStations } from './stations';
 
-export type SupportKind = 'trestle' | 'portal';
+export type SupportKind = 'trestle' | 'portal' | 'free';
 
 export interface Member {
   from: Vector3;
@@ -27,9 +27,10 @@ export interface SupportPlan {
 export const SUPPORT = {
   postAcross: 0.9,
   post: 0.12,
-  leg: 0.16,
-  beam: 0.18,
-  tie: 0.12,
+  leg: 0.15,
+  beam: 0.16,
+  tie: 0.1,
+  portalEvery: 2,
   hanger: 0.1,
   braceRadius: 0.03,
   braceSides: 6,
@@ -56,8 +57,18 @@ interface Station {
   feet: Vector3[];
 }
 
-function supportKind(frame: RampFrame): SupportKind {
-  return frame.normal.y > SUPPORT.trestleMinUp ? 'trestle' : 'portal';
+function facesDown(frame: RampFrame): boolean {
+  return frame.normal.y > SUPPORT.trestleMinUp;
+}
+
+export function supportKinds(frames: readonly RampFrame[]): SupportKind[] {
+  let portals = 0;
+  return frames.map((frame, index) => {
+    if (facesDown(frame)) return 'trestle';
+    const due = portals % SUPPORT.portalEvery === 0 || index === frames.length - 1;
+    portals += 1;
+    return due ? 'portal' : 'free';
+  });
 }
 
 function member(from: Vector3, to: Vector3, size: number, round = false): Member {
@@ -165,14 +176,27 @@ function connect(from: Station, to: Station, plan: SupportPlan): void {
   else connectPortals(from, to, plan);
 }
 
+function standUp(
+  frame: RampFrame,
+  kind: SupportKind,
+  ground: GroundLevel,
+  plan: SupportPlan,
+): Station | null {
+  if (kind === 'trestle') return trestle(frame, ground, plan);
+  if (kind === 'portal') return portal(frame, ground, plan);
+  return null;
+}
+
 export function supportPlan(ground: GroundLevel): SupportPlan {
-  const plan: SupportPlan = { members: [], footings: [], kinds: [] };
-  const stations = rampStations().map((frame) =>
-    supportKind(frame) === 'trestle' ? trestle(frame, ground, plan) : portal(frame, ground, plan),
-  );
-  stations.forEach((station, index) => {
-    plan.kinds.push(station.kind);
-    if (index > 0) connect(stations[index - 1], station, plan);
+  const frames = rampStations();
+  const kinds = supportKinds(frames);
+  const plan: SupportPlan = { members: [], footings: [], kinds };
+  let previous: Station | null = null;
+  frames.forEach((frame, index) => {
+    const station = standUp(frame, kinds[index], ground, plan);
+    if (!station) return;
+    if (previous) connect(previous, station, plan);
+    previous = station;
   });
   return plan;
 }

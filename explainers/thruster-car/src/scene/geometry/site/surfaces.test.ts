@@ -59,7 +59,7 @@ describe('scrub ground', () => {
     const samples = grid(scrubShade);
     const warm = samples.filter(([r, , b]) => r - b > 0.12).length / samples.length;
     const dark = samples.filter(([r, g, b]) => r + g + b < 0.5).length / samples.length;
-    expect(warm).toBeGreaterThan(0.05);
+    expect(warm).toBeGreaterThan(0.03);
     expect(dark).toBeGreaterThan(0.2);
   });
 

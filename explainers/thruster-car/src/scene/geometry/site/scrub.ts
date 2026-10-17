@@ -7,45 +7,46 @@ import { mixRgb, paintTexture, shade, srgb } from './textures';
 import type { Rgb, Rgba } from './textures';
 
 export const SCRUB = {
-  metres: 9,
+  metres: 12,
   size: 256,
-  dirt: { from: 0.56, to: 0.7 },
-  straw: { density: 0.55, from: 0.35, to: 0.75 },
-  gaps: 0.28,
+  dirt: { from: 0.58, to: 0.78, share: 0.55 },
+  straw: { density: 0.26, from: 0.42, to: 0.85, haze: 0.18 },
+  gaps: 0.22,
   seed: 23,
 } as const;
 
 export const GROUND_TINT = {
-  patches: { metres: 70, depth: 0.32 },
-  fields: { metres: 32, from: 0.55, to: 0.72, warmth: 0.35 },
-  verge: { reach: 5, lift: 0.35 },
+  patches: { metres: 60, depth: 0.42 },
+  fields: { metres: 26, from: 0.5, to: 0.7, warmth: 0.7 },
+  verge: { reach: 5, lift: 0.3 },
   seed: 41,
 } as const;
 
 const BASE = srgb(THEME.scrub);
-const STRAW = srgb('#7a6a4b');
+const STRAW = srgb('#6b5d43');
 const DIRT = srgb('#5a4d3d');
 const DIRT_TINT: Rgb = [1.18, 1.04, 0.86];
 const PLAIN: Rgb = [1, 1, 1];
 const OCTAVES = 3;
 const TINT_OCTAVES = 4;
-const CELLS = { dirt: { u: 4, v: 4 }, tufts: { u: 18, v: 18 }, blades: { u: 64, v: 64 } } as const;
+const BLADE_OCTAVES = 2;
 const SEEDS = { dirt: 1, tufts: 2, blades: 3, speck: 4, patches: 5, fields: 6 } as const;
+const NOISE = {
+  dirt: tileNoise({ u: 4, v: 4 }, OCTAVES, SCRUB.seed + SEEDS.dirt),
+  tufts: tileNoise({ u: 18, v: 18 }, OCTAVES, SCRUB.seed + SEEDS.tufts),
+  blades: tileNoise({ u: 64, v: 64 }, BLADE_OCTAVES, SCRUB.seed + SEEDS.blades),
+} as const;
 
 export function scrubShade(u: number, v: number): Rgba {
   const { dirt, straw, gaps, seed, size } = SCRUB;
-  const bare = smoothstep(
-    tileNoise(u, v, CELLS.dirt, OCTAVES, seed + SEEDS.dirt),
-    dirt.from,
-    dirt.to,
-  );
-  const tufts = tileNoise(u, v, CELLS.tufts, OCTAVES, seed + SEEDS.tufts);
-  const blades = tileNoise(u, v, CELLS.blades, 2, seed + SEEDS.blades);
+  const bare = smoothstep(NOISE.dirt(u, v), dirt.from, dirt.to);
+  const tufts = NOISE.tufts(u, v);
+  const blades = NOISE.blades(u, v);
   const speck = hash2(Math.floor(u * size), Math.floor(v * size), seed + SEEDS.speck);
   const dry = smoothstep(tufts, straw.from, straw.to) * (1 - bare);
   const fleck = speck > 1 - straw.density * dry ? 1 : 0;
-  const ground = mixRgb(BASE, DIRT, bare);
-  const colour = mixRgb(ground, STRAW, Math.max(fleck, dry * 0.35));
+  const ground = mixRgb(BASE, DIRT, bare * dirt.share);
+  const colour = mixRgb(ground, STRAW, Math.max(fleck, dry * straw.haze));
   return shade(colour, 1 - gaps * (1 - blades) * (1 - bare));
 }
 

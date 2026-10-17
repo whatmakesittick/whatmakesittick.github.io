@@ -165,8 +165,10 @@ describe('ramp supports', () => {
   it('stands trestles where the back faces down and portals where it faces up', () => {
     const stations = rampStations();
     plan.kinds.forEach((kind, index) => {
-      expect(kind).toBe(stations[index].normal.y > SUPPORT.trestleMinUp ? 'trestle' : 'portal');
+      const down = stations[index].normal.y > SUPPORT.trestleMinUp;
+      expect(kind === 'trestle').toBe(down);
       if (kind === 'trestle') expect(stations[index].normal.y).toBeGreaterThan(0);
+      if (kind === 'free') expect(plan.kinds[index - 1]).toBe('portal');
     });
     expect(plan.kinds[0]).toBe('trestle');
     expect(plan.kinds[plan.kinds.length - 1]).toBe('portal');

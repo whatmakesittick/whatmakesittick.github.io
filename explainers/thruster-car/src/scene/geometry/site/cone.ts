@@ -13,7 +13,7 @@ export const CONE = {
     [0.3, 0.42],
     [0.48, 0.56],
   ],
-  segments: 18,
+  segments: 14,
   plateColour: '#2a2a2d',
 } as const;
 

@@ -23,36 +23,44 @@ export const CONCRETE = {
 
 const BASE = srgb(THEME.concrete);
 const WARM = srgb('#8a7c6c');
-const CELLS = { mottle: { u: 16, v: 8 }, stain: { u: 8, v: 4 }, rubber: { u: 48, v: 2 } } as const;
-const GRIT_CELLS = { u: 24, v: 24 };
 const OCTAVES = 3;
 const SEEDS = { slab: 1, mottle: 2, stain: 3, rubber: 4, warm: 5, grit: 6, pits: 7 } as const;
 const PIT_SHARE = 0.965;
-const LANES = [-CONCRETE.laneEdge, CONCRETE.laneEdge] as const;
+const PIT_DEPTH = 0.6;
+const WARM_SHARE = 0.5;
+const BAND_REACH = 3;
+const NOISE = {
+  mottle: tileNoise({ u: 16, v: 8 }, OCTAVES, CONCRETE.seed + SEEDS.mottle),
+  stain: tileNoise({ u: 8, v: 4 }, OCTAVES, CONCRETE.seed + SEEDS.stain),
+  warm: tileNoise({ u: 8, v: 4 }, OCTAVES, CONCRETE.seed + SEEDS.warm),
+  rubber: tileNoise({ u: 48, v: 2 }, OCTAVES, CONCRETE.seed + SEEDS.rubber),
+  grit: tileNoise({ u: 24, v: 24 }, OCTAVES, CONCRETE.seed + SEEDS.grit),
+} as const;
 
 function nearestJoint(x: number, z: number): number {
-  const along = Math.abs(
-    ((x + CONCRETE.slabLength / 2) % CONCRETE.slabLength) - CONCRETE.slabLength / 2,
-  );
-  const across = Math.min(...LANES.map((lane) => Math.abs(z - lane)));
+  const { slabLength, laneEdge } = CONCRETE;
+  const along = Math.abs(((x + slabLength / 2) % slabLength) - slabLength / 2);
+  const across = Math.abs(Math.abs(z) - laneEdge);
   return Math.min(along, across);
 }
 
 function slabTint(x: number, z: number): number {
   const column = Math.floor(x / CONCRETE.slabLength);
-  const lane = z < LANES[0] ? 0 : z < LANES[1] ? 1 : 2;
+  const lane = Math.sign(Math.trunc(z / CONCRETE.laneEdge));
   return 1 + (hash2(column, lane, CONCRETE.seed + SEEDS.slab) - 0.5) * CONCRETE.slabTint * 2;
 }
 
 function jointShade(x: number, z: number): number {
   const { width, depth, lip, lipLight } = CONCRETE.joint;
   const distance = nearestJoint(x, z);
+  if (distance > lip + width * BAND_REACH) return 1;
   return 1 - depth * band(distance, 0, width) + lipLight * band(distance, lip, width);
 }
 
 function tyreShade(u: number, v: number, z: number): number {
   const { track, width, depth, haze, hazeDepth } = CONCRETE.tyre;
-  const rubber = tileNoise(u, v, CELLS.rubber, OCTAVES, CONCRETE.seed + SEEDS.rubber);
+  if (Math.abs(z) > haze * BAND_REACH) return 1;
+  const rubber = NOISE.rubber(u, v);
   const streak = Math.max(band(z, -track, width), band(z, track, width));
   return 1 - depth * streak * smoothstep(rubber, 0.3, 0.75) - hazeDepth * band(z, 0, haze);
 }
@@ -61,14 +69,14 @@ export function concreteShade(u: number, v: number): Rgba {
   const { tile, mottle, grain, stain, seed } = CONCRETE;
   const x = u * tile.length;
   const z = v * tile.width - tile.width / 2;
-  const cloud = tileNoise(u, v, CELLS.mottle, OCTAVES, seed + SEEDS.mottle);
-  const blot = tileNoise(u, v, CELLS.stain, OCTAVES, seed + SEEDS.stain);
+  const cloud = NOISE.mottle(u, v);
+  const blot = NOISE.stain(u, v);
   const speck = hash2(
     Math.floor(u * CONCRETE.size.width),
     Math.floor(v * CONCRETE.size.height),
     seed,
   );
-  const warmth = tileNoise(u, v, CELLS.stain, OCTAVES, seed + SEEDS.warm);
+  const warmth = NOISE.warm(u, v);
   const level =
     slabTint(x, z) *
     (1 + mottle * (cloud - 0.5)) *
@@ -76,14 +84,13 @@ export function concreteShade(u: number, v: number): Rgba {
     jointShade(x, z) *
     tyreShade(u, v, z) *
     (1 - stain.depth * smoothstep(blot, stain.from, stain.to));
-  return shade(mixRgb(BASE, WARM, smoothstep(warmth, 0.45, 0.8) * 0.5), level);
+  return shade(mixRgb(BASE, WARM, smoothstep(warmth, 0.45, 0.8) * WARM_SHARE), level);
 }
 
 export function gritHeight(u: number, v: number): number {
   const { size } = CONCRETE.grit;
-  const surface = tileNoise(u, v, GRIT_CELLS, OCTAVES, CONCRETE.seed + SEEDS.grit);
   const pit = hash2(Math.floor(u * size), Math.floor(v * size), CONCRETE.seed + SEEDS.pits);
-  return surface - (pit > PIT_SHARE ? 1 : 0) * 0.6;
+  return NOISE.grit(u, v) - (pit > PIT_SHARE ? PIT_DEPTH : 0);
 }
 
 export interface ConcreteMaps {

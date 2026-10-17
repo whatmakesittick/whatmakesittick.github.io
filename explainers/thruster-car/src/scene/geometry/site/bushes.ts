@@ -16,17 +16,17 @@ export interface Bush {
 }
 
 export const BUSHES = {
-  count: 44,
+  count: 56,
   area: { x: [-90, 190], z: [-95, 95] },
   keepOut: { x: 8, z: 5 },
-  size: [0.5, 1.3],
-  blobs: [2, 4],
-  squash: 0.55,
-  lumps: { scale: 1.6, depth: 0.28 },
+  size: [0.45, 1.25],
+  blobs: [3, 5],
+  squash: 0.68,
+  lumps: { scale: 2.4, depth: 0.42 },
   detail: 1,
-  sink: 0.25,
-  shadow: 0.45,
-  tones: ['#3b3a26', '#4f4630', '#3a4031', '#2f2c20'],
+  sink: 0.3,
+  shadow: 0.5,
+  tones: ['#4f4d34', '#5f5538', '#46503a', '#585036'],
   seed: 61,
 } as const;
 
@@ -93,16 +93,12 @@ function shaded(geometry: BufferGeometry, tone: Color, height: number): void {
   geometry.setAttribute('color', new Float32BufferAttribute(colours, RGB));
 }
 
-function blob(bush: Bush, index: number): BufferGeometry {
+function blob(bush: Bush, index: number, template: BufferGeometry): BufferGeometry {
   const seed = bush.seed * 7 + index;
   const radius = bush.size * lerp(0.55, 1, hash2(seed, BUSHES.seed + SEEDS.size));
   const angle = hash2(seed, BUSHES.seed + SEEDS.offset) * Math.PI * 2;
   const reach = index === 0 ? 0 : bush.size * 0.6;
-  const sphere = new IcosahedronGeometry(1, BUSHES.detail);
-  sphere.deleteAttribute('uv');
-  sphere.deleteAttribute('normal');
-  const geometry = mergeVertices(sphere);
-  sphere.dispose();
+  const geometry = template.clone();
   lumpy(geometry, seed);
   geometry.scale(radius, radius * BUSHES.squash, radius);
   geometry.translate(
@@ -113,16 +109,30 @@ function blob(bush: Bush, index: number): BufferGeometry {
   return geometry;
 }
 
-function bushGeometry(bush: Bush): BufferGeometry {
+function blobTemplate(): BufferGeometry {
+  const sphere = new IcosahedronGeometry(1, BUSHES.detail);
+  sphere.deleteAttribute('uv');
+  sphere.deleteAttribute('normal');
+  const welded = mergeVertices(sphere);
+  sphere.dispose();
+  return welded;
+}
+
+function bushGeometry(bush: Bush, template: BufferGeometry): BufferGeometry {
   const { blobs, tones } = BUSHES;
   const count = Math.round(lerp(blobs[0], blobs[1], hash2(bush.seed, BUSHES.seed + SEEDS.blobs)));
   const tone = new Color(tones[Math.floor(bush.tone * tones.length)]);
-  const geometry = mergeParts(Array.from({ length: count }, (_, index) => blob(bush, index)));
+  const geometry = mergeParts(
+    Array.from({ length: count }, (_, index) => blob(bush, index, template)),
+  );
   geometry.computeVertexNormals();
   shaded(geometry, tone, bush.size * BUSHES.squash * 2);
   return geometry;
 }
 
 export function bushesGeometry(bushes: readonly Bush[]): BufferGeometry {
-  return mergeParts(bushes.map(bushGeometry));
+  const template = blobTemplate();
+  const geometry = mergeParts(bushes.map((bush) => bushGeometry(bush, template)));
+  template.dispose();
+  return geometry;
 }

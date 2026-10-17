@@ -7,7 +7,7 @@ import { band, mixRgb, normalTexture, paintTexture, shade, srgb } from './textur
 import type { Rgba } from './textures';
 
 export const DECK_PLATE = {
-  size: { width: 256, height: 512 },
+  size: { width: 128, height: 256 },
   hazard: { period: 0.3, edge: 0.012, wear: 0.22 },
   grip: { spacing: 0.75, width: 0.15, soft: 0.01 },
   seam: { width: 0.008, depth: 0.55 },
@@ -23,8 +23,11 @@ const YELLOW = srgb(HAZARD_YELLOW);
 const DARK = srgb('#24262b');
 const GRIT = srgb('#33353a');
 const OCTAVES = 3;
-const CELLS = { mottle: { u: 6, v: 12 }, wear: { u: 20, v: 40 } } as const;
 const SEEDS = { mottle: 1, wear: 2, grit: 3 } as const;
+const NOISE = {
+  mottle: tileNoise({ u: 6, v: 12 }, OCTAVES, DECK_PLATE.seed + SEEDS.mottle),
+  wear: tileNoise({ u: 20, v: 40 }, OCTAVES, DECK_PLATE.seed + SEEDS.wear),
+} as const;
 const DIAGONAL = Math.SQRT1_2;
 
 function hazardShade(along: number, across: number, wear: number): Rgba {
@@ -57,11 +60,11 @@ export function deckShade(u: number, v: number): Rgba {
   const { size, hazard, mottle, seed } = DECK_PLATE;
   const along = u * DECK.plateLength;
   const across = DECK.halfWidth - v * DECK.halfWidth * 2;
-  const wear = smoothstep(tileNoise(u, v, CELLS.wear, OCTAVES, seed + SEEDS.wear), 0.55, 0.8);
+  const wear = smoothstep(NOISE.wear(u, v), 0.55, 0.8);
   if (Math.abs(across) > DECK.halfWidth - DECK.hazardWidth) {
     return hazardShade(along, across, wear * hazard.wear);
   }
-  const cloud = tileNoise(u, v, CELLS.mottle, OCTAVES, seed + SEEDS.mottle);
+  const cloud = NOISE.mottle(u, v);
   const speck = hash2(Math.floor(u * size.width), Math.floor(v * size.height), seed + SEEDS.grit);
   const grit = mixRgb(GRIT, STEEL, speck > 0.82 ? 0.6 : 0);
   const plate = mixRgb(STEEL, grit, gripShare(along));
