@@ -110,7 +110,7 @@
     "tankState": {
       "full": "Cheio",
       "draining": "Esvaziando",
-      "empty": "Vazio"
+      "empty": "Abaixo do limite"
     }
   },
   "units": {
@@ -136,7 +136,7 @@
     "limits": {
       "outcomeState": {
         "cushioned": "Pouso suave a {{speed}} m/s",
-        "ranDry": "O gás acaba em T+{{seconds}} s, pouso a {{speed}} m/s"
+        "ranDry": "Os jatos param em T+{{seconds}} s, pouso a {{speed}} m/s"
       },
       "hoverFlow": "Gás para pairar",
       "hoverTime": "Tempo máximo pairando",
@@ -259,7 +259,7 @@
       "p1": "Para pairar, os jatos precisam empurrar para cima com todo o peso do carro: 16,7 kN para 1,7 tonelada. Com o ar saindo a cerca de 700 m/s, isso exige cerca de 24 kg de ar por segundo. Um <strong>tanque de ar</strong> de 600 L cheio guarda cerca de 315 kg. Então, mesmo que desse para usar cada quilo, o carro pairaria por uns 13 s no máximo. Na prática é menos, porque a pressão cai conforme o tanque esvazia.",
       "p2": "Por que tão pouco? Jatos rápidos desperdiçam potência. Sustentar o carro com ar a 700 m/s exige cerca de 5,8 megawatts (MW). Um rotor ideal de 10 m de diâmetro sustenta o mesmo peso empurrando muito ar devagar, a cerca de 9 m/s, e precisa de só uns 0,16 MW. Isso é cerca de 37 vezes menos. Um helicóptero consegue ficar no ar por horas com combustível. Este tanque dura segundos.",
       "p3": "Então por que não usar hélio? Ele sai cerca de 2,6 vezes mais rápido, a uns 1.800 m/s. Mas o hélio é muito leve, então o mesmo tanque de 600 L guarda só 51 kg, um sexto do ar. O que conta é o empurrão total, chamado impulso: o empuxo vezes o tempo que ele dura. O hélio dá 93 kN·s, contra 220 kN·s do ar, menos da metade. Ele só leva vantagem quando o peso importa mais que o espaço, como numa nave espacial.",
-      "p4": "Experimente as opções e veja quanto gás o percurso gasta. Com ar no tanque de 600 L, o percurso usa cerca de um quarto do gás, e o carro pousa com muita sobra. Com hélio no tanque de 400 L, o percurso termina com o tanque quase vazio. A trajetória continua a mesma, seja qual for a escolha. Só mudam o gás gasto, a pressão e os jatos.",
+      "p4": "Experimente as opções e veja quanto gás o percurso gasta. Com ar no tanque de 600 L, o percurso usa cerca de um quarto do gás, e o carro pousa com muita sobra. O modelo desliga os jatos assim que a pressão cai abaixo de uns 5 bar, um limite do próprio modelo, então cerca de um quinto do gás sempre fica a bordo. Com hélio no tanque de 400 L, esse limite chega durante o amortecimento, e o carro toca o chão cerca de 3 m/s mais rápido. A trajetória continua a mesma, seja qual for a escolha. Só mudam o gás gasto, a pressão, os jatos e a velocidade do pouso.",
       "p5": "Roger Conner, curador de voo vertical do Museu Nacional do Ar e do Espaço do Smithsonian, disse à CNN: “Estamos falando literalmente de pular.” A FAA, a agência de aviação dos Estados Unidos, disse à CBS que o carro não se encaixa na definição de aeronave dela. Então este é um carro que salta por alguns segundos, não um carro que voa."
     }
   }

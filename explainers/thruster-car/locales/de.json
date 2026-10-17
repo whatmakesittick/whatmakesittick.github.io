@@ -110,7 +110,7 @@
     "tankState": {
       "full": "Voll",
       "draining": "Leert sich",
-      "empty": "Leer"
+      "empty": "Unter der Grenze"
     }
   },
   "units": {
@@ -136,7 +136,7 @@
     "limits": {
       "outcomeState": {
         "cushioned": "Sanfte Landung mit {{speed}} m/s",
-        "ranDry": "Kein Gas mehr ab T+{{seconds}} s, Landung mit {{speed}} m/s"
+        "ranDry": "Düsen aus ab T+{{seconds}} s, Landung mit {{speed}} m/s"
       },
       "hoverFlow": "Gasbedarf zum Schweben",
       "hoverTime": "Längstes Schweben",
@@ -259,7 +259,7 @@
       "p1": "Zum Schweben müssten die Düsen mit dem ganzen Gewicht des Autos nach oben drücken, also mit 16,7 kN bei 1,7 Tonnen. Tritt die Luft mit etwa 700 m/s aus, braucht das etwa 24 kg Luft pro Sekunde. Ein voller <strong>Lufttank</strong> mit 600 l fasst etwa 315 kg. Selbst wenn sich jedes Kilogramm nutzen ließe, könnte das Auto also höchstens etwa 13 s schweben. In der Praxis ist es weniger, weil der Druck sinkt, während sich der Tank leert.",
       "p2": "Warum so kurz? Schnelle Strahlen verschwenden Leistung. Mit Luft, die mit 700 m/s ausströmt, braucht es etwa 5,8 Megawatt (MW), um das Auto oben zu halten. Ein idealer Rotor mit 10 m Durchmesser trägt dasselbe Gewicht, indem er viel Luft langsam bewegt, mit etwa 9 m/s. Er braucht nur etwa 0,16 MW, rund 37-mal weniger. Ein Hubschrauber bleibt mit Treibstoff stundenlang oben, dieser Tank reicht für Sekunden.",
       "p3": "Warum dann nicht Helium? Es strömt etwa 2,6-mal so schnell aus, mit rund 1.800 m/s. Aber Helium ist sehr leicht. Derselbe 600-l-Tank fasst davon nur 51 kg, ein Sechstel der Luftmenge. Was zählt, ist der gesamte Stoß, den das Gas liefert. Man nennt ihn Impuls: Schub mal Dauer. Helium kommt auf 93 kN·s, Luft auf 220 kN·s, Helium also auf weniger als die Hälfte. Es gewinnt nur, wo Gewicht mehr zählt als Platz, etwa in einem Raumfahrzeug.",
-      "p4": "Probieren Sie die Optionen für Gas und Tank aus und behalten Sie das Gasbudget der Fahrt im Blick. Mit Luft im 600-l-Tank verbraucht die Fahrt etwa ein Viertel des Gases, und das Auto landet mit reichlich Reserve. Mit Helium im 400-l-Tank ist der Tank am Ende der Fahrt fast leer. Die Bahn bleibt gleich, egal was Sie wählen. Nur Gasverbrauch, Druck und Düsenstrahlen ändern sich.",
+      "p4": "Probieren Sie die Optionen für Gas und Tank aus und behalten Sie das Gasbudget der Fahrt im Blick. Mit Luft im 600-l-Tank verbraucht die Fahrt etwa ein Viertel des Gases, und das Auto landet mit reichlich Reserve. Das Modell schaltet die Düsen ab, sobald der Druck unter etwa 5 bar fällt. Diese Grenze legt das Modell selbst fest, und so bleibt immer etwa ein Fünftel des Gases an Bord. Mit Helium im 400-l-Tank ist diese Grenze schon beim Abfangen erreicht, und das Auto setzt etwa 3 m/s schneller auf. Die Bahn bleibt gleich, egal was Sie wählen. Nur Gasverbrauch, Druck, Düsenstrahlen und Landetempo ändern sich.",
       "p5": "Roger Conner, Kurator für Vertikalflug am National Air and Space Museum des Smithsonian, sagte zu CNN: „Wir reden hier buchstäblich vom Hüpfen.“ Die FAA, die US-Luftfahrtbehörde, erklärte gegenüber CBS, das Auto erfülle ihre Definition eines Luftfahrzeugs nicht. Das hier ist also ein Auto, das ein paar Sekunden lang hüpft, und keins, das fliegt."
     }
   }

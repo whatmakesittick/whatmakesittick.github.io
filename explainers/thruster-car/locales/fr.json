@@ -110,7 +110,7 @@
     "tankState": {
       "full": "Plein",
       "draining": "Se vide",
-      "empty": "Vide"
+      "empty": "Sous le seuil"
     }
   },
   "units": {
@@ -136,7 +136,7 @@
     "limits": {
       "outcomeState": {
         "cushioned": "Atterrissage en douceur à {{speed}} m/s",
-        "ranDry": "Plus de gaz à T+{{seconds}} s, atterrissage à {{speed}} m/s"
+        "ranDry": "Jets coupés à T+{{seconds}} s, atterrissage à {{speed}} m/s"
       },
       "hoverFlow": "Gaz pour tenir en l’air",
       "hoverTime": "Tenue en l’air maximale",
@@ -259,7 +259,7 @@
       "p1": "Pour tenir en l’air sans bouger, les jets doivent pousser vers le haut avec une force égale à tout le poids de la voiture, soit 16,7 kN pour 1,7 tonne. Avec de l’air qui sort à environ 700 m/s, il faut environ 24 kg d’air par seconde. Plein, un <strong>réservoir d’air</strong> de 600 L en contient environ 315 kg. Même si chaque kilogramme pouvait servir, la voiture tiendrait donc en l’air 13 s au maximum. En pratique, c’est moins, car la pression baisse à mesure que le réservoir se vide.",
       "p2": "Pourquoi si peu ? Parce que des jets rapides gaspillent de la puissance. Tenir la voiture en l’air avec de l’air à 700 m/s demande environ 5,8 mégawatts (MW). Un rotor idéal de 10 m de diamètre porte le même poids en poussant beaucoup d’air lentement, à environ 9 m/s, et il ne lui faut qu’environ 0,16 MW. C’est environ 37 fois moins. Un hélicoptère peut rester en l’air pendant des heures avec son carburant. Ce réservoir, lui, tient quelques secondes.",
       "p3": "Alors pourquoi pas de l’hélium ? Il sort environ 2,6 fois plus vite, autour de 1 800 m/s. Mais l’hélium est très léger, donc le même réservoir de 600 L n’en contient que 51 kg, un sixième de la masse d’air. Ce qui compte, c’est la poussée totale, qu’on appelle l’impulsion : la poussée multipliée par sa durée. L’hélium donne 93 kN·s, contre 220 kN·s pour l’air, soit moins de la moitié. Il ne l’emporte que là où le poids compte plus que la place, comme dans un engin spatial.",
-      "p4": "Essayez les différents gaz et réservoirs, et regardez le budget de gaz du parcours. Avec de l’air dans le réservoir de 600 L, le parcours consomme environ un quart du gaz, et la voiture se pose avec une belle réserve. Avec de l’hélium dans le réservoir de 400 L, le réservoir est presque vide à la fin du parcours. La trajectoire reste la même quel que soit votre choix : seuls changent le gaz consommé, la pression et les jets.",
+      "p4": "Essayez les différents gaz et réservoirs, et regardez le budget de gaz du parcours. Avec de l’air dans le réservoir de 600 L, le parcours consomme environ un quart du gaz, et la voiture se pose avec une belle réserve. Le modèle coupe les jets dès que la pression passe sous environ 5 bar, un seuil qui lui est propre : environ un cinquième du gaz reste donc toujours à bord. Avec de l’hélium dans le réservoir de 400 L, ce seuil est atteint pendant l’amorti, et la voiture touche le sol environ 3 m/s plus vite. La trajectoire reste la même quel que soit votre choix : seuls changent le gaz consommé, la pression, les jets et la vitesse d’atterrissage.",
       "p5": "Roger Conner, conservateur chargé du vol vertical au National Air and Space Museum de la Smithsonian, a déclaré à CNN : « On parle littéralement de faire des bonds. » La FAA, l’autorité américaine de l’aviation civile, a indiqué à CBS que la voiture ne correspond pas à sa définition d’un aéronef. C’est donc une voiture qui saute pendant quelques secondes, pas une voiture qui vole."
     }
   }
