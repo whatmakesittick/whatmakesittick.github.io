@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   BoxGeometry,
+  InstancedMesh,
   Group,
-  Mesh,
   Object3D,
   Points,
   PointsMaterial,
@@ -14,14 +14,22 @@ import { isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import { CAR_ANCHOR_IDS, NOZZLE_IDS } from '../../../ids';
 import type { AssemblyState, CarAnchorId, NozzleId, ViewOptions } from '../../../ids';
-import { CAR_ANCHORS, MOMENTS, NOZZLES, runAt, tankAt } from '../../../model';
+import {
+  CAR_ANCHORS,
+  LAUNCH_HOLD_SECONDS,
+  MOMENTS,
+  NOZZLES,
+  PHASE_RANGES,
+  runAt,
+  tankAt,
+} from '../../../model';
 import { applyCarPose } from '../../pose';
 import type { PartContext } from '../context';
 import type { CarView } from '../types';
 import { CONTACT_SHADOW, PLUME_PUFFS } from './constants';
 import { CONTACT_SHADOW_NAME } from './contactShadow';
 import { EffectsPart } from './effects';
-import { GHOST_MOMENTS } from './ghostPath';
+import { GHOST_ARCS, GHOST_MOMENTS, GHOST_NAME, ghostArc } from './ghostPath';
 import { GROUND_HAZE_NAME } from './groundHaze';
 import { PLUME_GROUPS, plumeName } from './plumes';
 import { PUFF_SCALE_ATTRIBUTE } from './puffMaterial';
@@ -36,10 +44,10 @@ const QUIET: ViewOptions = {
   ghost: false,
   labels: true,
 };
-const BOOST_SECONDS = 1;
-const RAMP_SECONDS = 3.5;
-const FLIP_SECONDS = 4.3;
-const REST_SECONDS = MOMENTS.stopped + 1;
+const BOOST_SECONDS = MOMENTS.sixty / 2;
+const RAMP_SECONDS = PHASE_RANGES.ramp.start + 0.2;
+const FLIP_SECONDS = MOMENTS.leavesRamp + LAUNCH_HOLD_SECONDS + 0.05;
+const REST_SECONDS = MOMENTS.stopped + 0.5;
 
 class StubCar implements CarView {
   readonly object = new Group();
@@ -283,7 +291,7 @@ describe('effects part', () => {
     const carX = runAt(BOOST_SECONDS).car.position[0];
     expect(Math.abs((shadow?.position.x ?? 0) - carX)).toBeLessThan(CONTACT_SHADOW.size[0]);
     expect(shadow?.position.y).toBeGreaterThan(0);
-    set(stateAt(MOMENTS.peak));
+    set(stateAt(MOMENTS.apex));
     expect(shadow?.visible).toBe(false);
   });
 
@@ -291,10 +299,26 @@ describe('effects part', () => {
     const { effects, set } = scene();
     set(stateAt(REST_SECONDS, { ghost: true }));
     expect(shown(effects, 'ghostPath')).toBe(true);
-    const ghosts: Mesh[] = [];
-    effects.labels.get('ghostPath')?.parent?.traverse((node) => {
-      if (node instanceof Mesh) ghosts.push(node);
+    const ghosts = effects.object.getObjectByName(GHOST_NAME);
+    expect(ghosts).toBeInstanceOf(InstancedMesh);
+    expect((ghosts as InstancedMesh).count).toBe(GHOST_MOMENTS.length);
+  });
+
+  it('dots both the hook fall and the jump in a single cloud', () => {
+    const { effects } = scene();
+    const ghost = effects.labels.get('ghostPath')?.parent;
+    const clouds: Points[] = [];
+    ghost?.traverse((node) => {
+      if (node instanceof Points) clouds.push(node);
     });
-    expect(ghosts).toHaveLength(GHOST_MOMENTS.length);
+    expect(clouds).toHaveLength(1);
+    const xs = Array.from(
+      { length: clouds[0].geometry.getAttribute('position').count },
+      (_, index) => clouds[0].geometry.getAttribute('position').getX(index),
+    );
+    const dots = GHOST_ARCS.map(ghostArc);
+    expect(xs).toHaveLength(dots[0].length + dots[1].length);
+    expect(Math.max(...xs)).toBeCloseTo(Math.max(...dots[0].map((dot) => dot.x)));
+    expect(Math.min(...xs)).toBeCloseTo(Math.min(...dots[1].map((dot) => dot.x)));
   });
 });
