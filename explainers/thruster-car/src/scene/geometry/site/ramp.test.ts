@@ -5,7 +5,7 @@ import { deckBodyGeometry, deckSweep, deckTopGeometry } from './rampDeck';
 import { rampFrame, rampFrames } from './rampFrame';
 import type { RampFrame } from './rampFrame';
 import { APRON, CLEARANCE, DECK, RAIL_TOP } from './rampSpec';
-import { LOOP_CENTRE, SUPPORT, standsClear, trussPlan } from './rampTruss';
+import { LOOP_CENTRE, SUPPORT, gussetsGeometry, standsClear, trussPlan } from './rampTruss';
 import type { Member } from './rampTruss';
 import { STATION_SPACING, rampStations } from './stations';
 
@@ -153,9 +153,16 @@ describe('hook ramp truss', () => {
 
   it('keeps every member out of the deck and the car clearance', () => {
     plan.members.forEach((member) => {
-      const margin = member.round ? member.size : member.size / 2;
+      const margin = member.size / 2;
       memberPoints(member).forEach((point) => expect(clashes(point, margin)).toBe(false));
     });
+  });
+
+  it('keeps the gusset plates out of the deck and the car clearance', () => {
+    const corners = gussetsGeometry(plan).getAttribute('position');
+    for (let index = 0; index < corners.count; index += 1) {
+      expect(clashes(new Vector3().fromBufferAttribute(corners, index), 0)).toBe(false);
+    }
   });
 
   it('leaves the fall path below the deck end clear', () => {
@@ -169,7 +176,7 @@ describe('hook ramp truss', () => {
   it('puts the portal legs outside 2.4 m either side', () => {
     plan.members
       .filter(
-        (member) => !member.round && member.from.x === member.to.x && member.from.z === member.to.z,
+        (member) => !member.brace && member.from.x === member.to.x && member.from.z === member.to.z,
       )
       .filter((member) => Math.abs(member.from.z) > 2)
       .forEach((member) =>

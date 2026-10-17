@@ -5,9 +5,9 @@ import { THEME } from '../../../theme';
 
 export const WORLD_PAINT = {
   startLine: '#c9a646',
-  deckUnderside: '#555c66',
-  supportSteel: '#5a6068',
-  railSteel: '#a9b0b8',
+  deckUnderside: '#6f7a87',
+  supportSteel: '#76828f',
+  railSteel: '#bcc5cf',
   pitConcrete: '#9b958d',
   white: '#ffffff',
 } as const;
@@ -17,6 +17,8 @@ const CARD_ALPHA_TEST = 0.45;
 const PAINT_OFFSET = -2;
 const CONCRETE_RELIEF = 0.55;
 const TREAD_RELIEF = 0.9;
+const STEEL_REFLECTION = 0.8;
+const DECK_REFLECTION = 0.55;
 
 export const WORLD_FINISHES = {
   bushes: {
@@ -27,10 +29,27 @@ export const WORLD_FINISHES = {
     envMapIntensity: 0,
   },
   cones: { color: WORLD_PAINT.white, vertexColors: true, roughness: 0.55, metalness: 0 },
-  deckUnderside: { color: WORLD_PAINT.deckUnderside, roughness: 0.62, metalness: 0.55 },
-  rails: { color: WORLD_PAINT.railSteel, roughness: 0.32, metalness: 0.85 },
-  supports: { color: WORLD_PAINT.supportSteel, roughness: 0.58, metalness: 0.5 },
 } as const satisfies Record<string, MaterialFinish>;
+
+export interface SteelFinishes {
+  deckUnderside: MaterialFinish;
+  rails: MaterialFinish;
+  supports: MaterialFinish;
+}
+
+export function steelFinishes(envMap: Texture): SteelFinishes {
+  return {
+    deckUnderside: { color: WORLD_PAINT.deckUnderside, roughness: 0.5, metalness: 0.6, envMap },
+    rails: { color: WORLD_PAINT.railSteel, roughness: 0.26, metalness: 0.9, envMap },
+    supports: {
+      color: WORLD_PAINT.supportSteel,
+      roughness: 0.42,
+      metalness: 0.62,
+      envMap,
+      envMapIntensity: STEEL_REFLECTION,
+    },
+  };
+}
 
 export function groundFinish(map: Texture): MaterialFinish {
   return {
@@ -95,14 +114,16 @@ export function concreteFinish(
   };
 }
 
-export function deckFinish(map: Texture, normalMap: Texture): MaterialFinish {
+export function deckFinish(map: Texture, normalMap: Texture, envMap: Texture): MaterialFinish {
   return {
     color: WORLD_PAINT.white,
     map,
     normalMap,
+    envMap,
     normalScale: new Vector2(TREAD_RELIEF, TREAD_RELIEF),
     roughness: 0.5,
-    metalness: 0.45,
+    metalness: 0.32,
+    envMapIntensity: DECK_REFLECTION,
   };
 }
 

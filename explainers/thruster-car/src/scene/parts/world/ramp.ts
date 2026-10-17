@@ -15,7 +15,8 @@ import { trussGeometry } from '../../geometry/site/rampTruss';
 import type { TrussPlan } from '../../geometry/site/rampTruss';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
-import { WORLD_FINISHES, deckFinish } from './finishes';
+import { duskEnvironment } from '../../environment';
+import { deckFinish, steelFinishes } from './finishes';
 
 export interface RampPart {
   object: Group;
@@ -31,11 +32,13 @@ export function createRamp(context: PartContext, plan: TrussPlan): RampPart {
   context.tracker.track(maps.map);
   context.tracker.track(maps.normal);
   const sweep = deckSweep();
+  const env = duskEnvironment(context.tracker);
+  const steel = steelFinishes(env);
   object.add(
-    partMesh(context, deckTopGeometry(sweep), 'ramp', deckFinish(maps.map, maps.normal)),
-    partMesh(context, deckBodyGeometry(sweep), 'ramp', WORLD_FINISHES.deckUnderside),
-    partMesh(context, railsGeometry(sweep), 'ramp', WORLD_FINISHES.rails),
-    partMesh(context, trussGeometry(plan), STRUCTURE_GROUP, WORLD_FINISHES.supports),
+    partMesh(context, deckTopGeometry(sweep), 'ramp', deckFinish(maps.map, maps.normal, env)),
+    partMesh(context, deckBodyGeometry(sweep), 'ramp', steel.deckUnderside),
+    partMesh(context, railsGeometry(sweep), 'ramp', steel.rails),
+    partMesh(context, trussGeometry(plan), STRUCTURE_GROUP, steel.supports),
   );
   const label = rampSurfacePoint(LABEL.distance, 0, LABEL.lift);
   return { object, label: anchorAt(object, label.x, label.y, label.z) };

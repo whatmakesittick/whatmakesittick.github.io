@@ -1,4 +1,4 @@
-import { BoxGeometry, CylinderGeometry, Quaternion, Vector3 } from 'three';
+import { BoxGeometry, Matrix4, Quaternion, Vector3 } from 'three';
 import type { BufferGeometry } from 'three';
 import { box } from '@core/scene/geometry/box';
 import { RAMP, RAMP_LENGTH } from '../../../model/layout';
@@ -15,7 +15,7 @@ export interface Member {
   from: Vector3;
   to: Vector3;
   size: number;
-  round: boolean;
+  brace: boolean;
 }
 
 export interface TrussPlan {
@@ -31,8 +31,8 @@ export const SUPPORT = {
   beam: 0.16,
   tie: 0.1,
   web: 0.07,
-  braceRadius: 0.028,
-  braceSides: 6,
+  brace: 0.09,
+  gusset: { size: 0.2, thickness: 0.014, inset: 0.14 },
   portalHalfSpan: 2.6,
   portalEvery: 3,
   beamOverhang: 0.15,
@@ -59,12 +59,12 @@ interface Station {
   feet: Vector3[];
 }
 
-function member(from: Vector3, to: Vector3, size: number, round = false): Member {
-  return { from, to, size, round };
+function member(from: Vector3, to: Vector3, size: number, isBrace = false): Member {
+  return { from, to, size, brace: isBrace };
 }
 
 function brace(from: Vector3, to: Vector3): Member {
-  return member(from, to, SUPPORT.braceRadius, true);
+  return member(from, to, SUPPORT.brace, true);
 }
 
 export function outerChordStart(): number {
@@ -229,15 +229,38 @@ function chordGeometry(depth: number, from: number): BufferGeometry {
   );
 }
 
-function memberGeometry({ from, to, size, round }: Member): BufferGeometry {
+function memberGeometry({ from, to, size }: Member): BufferGeometry {
   const span = new Vector3().subVectors(to, from);
-  const length = span.length();
-  const geometry = round
-    ? new CylinderGeometry(size, size, length, SUPPORT.braceSides, 1, true)
-    : new BoxGeometry(size, length, size);
+  const geometry = new BoxGeometry(size, span.length(), size);
   geometry.applyQuaternion(rotation.setFromUnitVectors(UP, span.normalize()));
   geometry.translate((from.x + to.x) / 2, (from.y + to.y) / 2, (from.z + to.z) / 2);
   return geometry;
+}
+
+function plateNormal(along: Vector3): Vector3 {
+  const normal = new Vector3().crossVectors(along, UP);
+  if (normal.lengthSq() < Number.EPSILON) normal.set(0, 0, 1);
+  return normal.normalize();
+}
+
+function gussetGeometry(joint: Vector3, along: Vector3): BufferGeometry {
+  const { size, thickness, inset } = SUPPORT.gusset;
+  const normal = plateNormal(along);
+  const across = new Vector3().crossVectors(normal, along).normalize();
+  const geometry = new BoxGeometry(size, size, thickness);
+  geometry.applyMatrix4(new Matrix4().makeBasis(along, across, normal));
+  const centre = joint.clone().addScaledVector(along, inset);
+  geometry.translate(centre.x, centre.y, centre.z);
+  return geometry;
+}
+
+function gussets({ from, to }: Member): BufferGeometry[] {
+  const along = new Vector3().subVectors(to, from).normalize();
+  return [gussetGeometry(from, along), gussetGeometry(to, along.clone().negate())];
+}
+
+export function gussetsGeometry(plan: TrussPlan): BufferGeometry {
+  return mergeParts(plan.members.filter((item) => item.brace).flatMap(gussets));
 }
 
 export function trussGeometry(plan: TrussPlan): BufferGeometry {
@@ -245,6 +268,7 @@ export function trussGeometry(plan: TrussPlan): BufferGeometry {
     chordGeometry(INNER_CHORD, 0),
     chordGeometry(OUTER_CHORD, plan.chordStart),
     ...plan.members.map(memberGeometry),
+    gussetsGeometry(plan),
   ]);
 }
 

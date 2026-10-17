@@ -9,7 +9,9 @@ import type { Rgba } from './textures';
 export const DECK_PLATE = {
   size: { width: 128, height: 256 },
   hazard: { period: 0.3, edge: 0.012, wear: 0.22, wearFrom: 0.55, wearTo: 0.8 },
-  grip: { spacing: 0.75, width: 0.15, soft: 0.01 },
+  grip: { spacing: 0.75, width: 0.15, soft: 0.01, edge: 0.012, edgeLight: 0.75 },
+  scuff: { track: 0.85, width: 0.32, light: 0.35 },
+  lift: 0.3,
   seam: { width: 0.008, depth: 0.55 },
   bolt: { spacing: 0.25, inset: 0.05, radius: 0.012, depth: 0.35 },
   grit: { speck: 0.82, light: 0.6 },
@@ -19,7 +21,8 @@ export const DECK_PLATE = {
 } as const;
 
 export const HAZARD_YELLOW = '#e2b23a';
-const STEEL = srgb(THEME.rampSteel);
+const STEEL = mixRgb(srgb(THEME.rampSteel), srgb('#c3ccd8'), DECK_PLATE.lift);
+const BRIGHT = srgb('#d3d8de');
 const YELLOW = srgb(HAZARD_YELLOW);
 const DARK = srgb('#24262b');
 const GRIT = srgb('#33353a');
@@ -52,10 +55,24 @@ function seamShade(along: number, across: number): number {
   );
 }
 
+function gripOffset(along: number): number {
+  const { spacing } = DECK_PLATE.grip;
+  return Math.abs((along % spacing) - spacing / 2);
+}
+
 function gripShare(along: number): number {
-  const { spacing, width, soft } = DECK_PLATE.grip;
-  const offset = Math.abs((along % spacing) - spacing / 2);
-  return 1 - smoothstep(offset, width / 2 - soft, width / 2 + soft);
+  const { width, soft } = DECK_PLATE.grip;
+  return 1 - smoothstep(gripOffset(along), width / 2 - soft, width / 2 + soft);
+}
+
+function gripEdge(along: number): number {
+  const { width, edge } = DECK_PLATE.grip;
+  return band(gripOffset(along), width / 2 + edge, edge);
+}
+
+function scuffShare(across: number, wear: number): number {
+  const { track, width, light } = DECK_PLATE.scuff;
+  return Math.max(band(across, -track, width), band(across, track, width)) * light * wear;
 }
 
 export function deckShade(u: number, v: number): Rgba {
@@ -69,7 +86,12 @@ export function deckShade(u: number, v: number): Rgba {
   const cloud = NOISE.mottle(u, v);
   const speck = hash2(Math.floor(u * size.width), Math.floor(v * size.height), seed + SEEDS.grit);
   const grit = mixRgb(GRIT, STEEL, speck > DECK_PLATE.grit.speck ? DECK_PLATE.grit.light : 0);
-  const plate = mixRgb(STEEL, grit, gripShare(along));
+  const worn = mixRgb(STEEL, BRIGHT, scuffShare(across, cloud));
+  const plate = mixRgb(
+    mixRgb(worn, grit, gripShare(along)),
+    BRIGHT,
+    gripEdge(along) * DECK_PLATE.grip.edgeLight,
+  );
   return shade(plate, (1 + mottle * (cloud - 0.5)) * seamShade(along, across));
 }
 
