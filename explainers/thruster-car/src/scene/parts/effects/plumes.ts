@@ -109,8 +109,7 @@ class Emitter {
     this.span.length = plumeLength(firingThrust(state, this.id), state.gas);
     this.span.reach = plumeReach(this.span.length, this.group);
     this.gas = state.gas;
-    if (this.firing) this.layout();
-    else if (wasFiring) this.clear();
+    if (wasFiring && !this.firing) this.clear();
   }
 
   advance(deltaSeconds: number): boolean {
@@ -211,7 +210,6 @@ class PlumeCloud {
       if (this.emitters[index].firing) firing = true;
     }
     this.points.visible = firing;
-    this.commit();
   }
 
   advance(deltaSeconds: number): boolean {

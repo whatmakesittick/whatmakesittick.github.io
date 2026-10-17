@@ -4,7 +4,7 @@ import type { MaterialLibrary } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import { CAR_REGION_IDS } from '../ids';
-import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
+import type { AnchorId, AssemblyState, CarRegionId, PartId, RegionId } from '../ids';
 import { CAR } from '../model/layout';
 import type { Assembly, AssemblyResources, ChaseTarget } from './assembly';
 import { CarPart } from './parts/car/car';
@@ -21,6 +21,10 @@ function isDrawable(object: Object3D): object is Drawable {
   return drawable && !Array.isArray((object as Drawable).material);
 }
 
+function isCarRegion(id: RegionId): id is CarRegionId {
+  return (CAR_REGION_IDS as readonly RegionId[]).includes(id);
+}
+
 export class ThrusterCarAssembly implements Assembly {
   readonly root = new Group();
   private readonly tracker = new ResourceTracker();
@@ -30,7 +34,7 @@ export class ThrusterCarAssembly implements Assembly {
   private readonly labels: ReadonlyMap<PartId, Object3D>;
   private readonly named: Readonly<Record<AnchorId, Object3D>>;
   private readonly regions: Readonly<Record<RegionId, Box3>>;
-  private chase: ChaseTarget = {
+  private readonly chase: ChaseTarget = {
     position: [0, 0, 0],
     heading: 0,
     pitch: 0,
@@ -59,14 +63,15 @@ export class ThrusterCarAssembly implements Assembly {
 
   setState(state: AssemblyState): void {
     const { position, pitch, roll } = state.car;
-    this.chase = { ...this.chase, position, pitch, roll };
+    this.chase.position = position;
+    this.chase.pitch = pitch;
+    this.chase.roll = roll;
     this.car.setState(state);
-    this.root.updateMatrixWorld();
-    CAR_REGION_IDS.forEach((id) => carRegion(id, this.car.object, this.regions[id]));
+    this.car.object.updateMatrixWorld();
     this.effects.setState(state);
   }
 
-  update(deltaSeconds: number, _cameraDistance: number): boolean {
+  update(deltaSeconds: number): boolean {
     return this.effects.advance(deltaSeconds);
   }
 
@@ -79,7 +84,8 @@ export class ThrusterCarAssembly implements Assembly {
   }
 
   region(id: RegionId): Box3 {
-    return this.regions[id];
+    const box = this.regions[id];
+    return isCarRegion(id) ? carRegion(id, this.car.object, box) : box;
   }
 
   chaseTarget(): ChaseTarget {

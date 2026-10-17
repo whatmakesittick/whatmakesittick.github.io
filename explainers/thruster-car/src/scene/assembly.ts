@@ -14,7 +14,7 @@ export interface AssemblyResources {
 export interface Assembly {
   readonly root: Group;
   setState(state: AssemblyState): void;
-  update(deltaSeconds: number, cameraDistance: number): boolean;
+  update(deltaSeconds: number): boolean;
   labelAnchors(): ReadonlyMap<PartId, Object3D>;
   anchor(id: AnchorId): Object3D;
   region(id: RegionId): Box3;

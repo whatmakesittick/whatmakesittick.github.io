@@ -40,11 +40,20 @@ function leapFor(height: number): Leap {
   return { upSpeed, burnSeconds, airSeconds: airTimeFrom(burnRise, upSpeed) };
 }
 
+function createLeapReader(): (height: number) => Leap {
+  let last: { height: number; leap: Leap } | null = null;
+  return (height) => {
+    if (last?.height !== height) last = { height, leap: leapFor(height) };
+    return last.leap;
+  };
+}
+
 function jumpRange({ burnSeconds, airSeconds }: Leap): number {
   return RUN_UP_SPEED_MS * (burnSeconds + airSeconds);
 }
 
 export function mountJumpReadouts(root: Document, store: ThrusterCarStore): Disposer {
+  const leapAt = createLeapReader();
   return mountRangeWidget(root, store, {
     control: JUMP_HEIGHT_CONTROL,
     range: CALCULATOR_RANGES.jumpHeight,
@@ -53,12 +62,12 @@ export function mountJumpReadouts(root: Document, store: ThrusterCarStore): Disp
     format: ([height]) => formatMetres(height, TENTHS),
     set: (state, height) => state.setJumpHeight(height),
     readouts: {
-      leapSpeed: ([height]) => formatSpeedMs(leapFor(height).upSpeed, TENTHS),
-      leapBurn: ([height]) => formatSeconds(leapFor(height).burnSeconds, HUNDREDTHS),
+      leapSpeed: ([height]) => formatSpeedMs(leapAt(height).upSpeed, TENTHS),
+      leapBurn: ([height]) => formatSeconds(leapAt(height).burnSeconds, HUNDREDTHS),
       leapGas: ([height, gas]) =>
-        formatKilograms(massFlow(LEAP_THRUST_N, gas) * leapFor(height).burnSeconds),
-      jumpAir: ([height]) => formatSeconds(leapFor(height).airSeconds, TENTHS),
-      jumpRange: ([height]) => formatMetres(jumpRange(leapFor(height)), WHOLE),
+        formatKilograms(massFlow(LEAP_THRUST_N, gas) * leapAt(height).burnSeconds),
+      jumpAir: ([height]) => formatSeconds(leapAt(height).airSeconds, TENTHS),
+      jumpRange: ([height]) => formatMetres(jumpRange(leapAt(height)), WHOLE),
     },
   });
 }

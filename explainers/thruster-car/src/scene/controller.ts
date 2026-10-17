@@ -54,9 +54,7 @@ export class ThrusterCarController {
   }
 
   update(deltaSeconds: number): boolean {
-    const { camera, controls } = this.dependencies.rig;
-    const cameraDistance = camera.position.distanceTo(controls.target);
-    return this.assembly?.update(deltaSeconds, cameraDistance) ?? false;
+    return this.assembly?.update(deltaSeconds) ?? false;
   }
 
   dispose(): void {

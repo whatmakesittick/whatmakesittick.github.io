@@ -18,7 +18,6 @@ const INTO_BURN_SECONDS = 0.1;
 const RUN_UP_SECONDS = MOMENTS.touchdown + INTO_BURN_SECONDS;
 const LEAP_SECONDS = MOMENTS.liftOff + INTO_BURN_SECONDS;
 const REST_SECONDS = MOMENTS.stopped + 0.5;
-const CAMERA_DISTANCE = 10;
 const VIEW = { nozzles: false, forces: false, tank: false, ghost: false, labels: true };
 
 function stateAt(seconds: number, empty = false): AssemblyState {
@@ -127,9 +126,9 @@ describe('thruster car assembly', () => {
 
   it('animates while a plume puffs, even when paused, and rests when nothing moves', () => {
     assembly.setState(stateAt(SPRINT_SECONDS));
-    expect(assembly.update(FRAME, CAMERA_DISTANCE)).toBe(true);
+    expect(assembly.update(FRAME)).toBe(true);
     assembly.setState(stateAt(REST_SECONDS));
-    expect(assembly.update(FRAME, CAMERA_DISTANCE)).toBe(false);
+    expect(assembly.update(FRAME)).toBe(false);
   });
 
   it('compiles every hidden material once when warming up', () => {

@@ -99,7 +99,7 @@ export class GroundHaze {
     this.speed = state.car.speed;
     const jumped = Math.abs(this.origin.x - this.last.x) > GROUND_HAZE.rescatter;
     if (jumped || !this.points.visible) this.scatter();
-    this.layout();
+    this.points.visible = this.anyAlive();
   }
 
   advance(deltaSeconds: number): boolean {
@@ -111,6 +111,13 @@ export class GroundHaze {
     }
     this.layout();
     return this.points.visible;
+  }
+
+  private anyAlive(): boolean {
+    for (let index = 0; index < this.puffs.length; index++) {
+      if (this.puffs[index].alive) return true;
+    }
+    return false;
   }
 
   private emitting(): boolean {
