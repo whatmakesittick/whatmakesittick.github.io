@@ -107,7 +107,7 @@ describe('chapter widgets', () => {
     expect(store.getState().fillShare).toBe(0.5);
     expect(output('tank-fill')).toBe(fill(units.percent, { value: '50' }));
     expect(readout('fillMass')).toBe(fill(units.kilograms, { value: '158' }));
-    expect(readout('fillPressure')).toBe(fill(units.bar, { value: '88' }));
+    expect(readout('fillPressure')).toBe(fill(units.bar, { value: '257' }));
     expect(readout('fillTime')).toBe(fill(units.minutes, { value: '24' }));
     slide('nozzle-pressure', 350);
     expect(readout('nozzleThrust')).toBe(fill(units.kilonewtons, { value: '4.0' }));

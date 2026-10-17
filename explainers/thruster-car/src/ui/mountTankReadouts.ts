@@ -3,7 +3,7 @@ import type { Disposer } from '@core/ui/disposers';
 import { mountLiveReadouts } from '@core/ui/liveReadouts';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import type { GasId } from '../ids';
-import { fillMinutes, pressureAt, storedMass, storedWorkMj, tankShellKg } from '../model';
+import { fillMinutes, fillPressureAt, storedMass, storedWorkMj, tankShellKg } from '../model';
 import { CALCULATOR_RANGES } from '../state';
 import type { ThrusterCarStore } from '../state';
 import { formatBar, formatKilograms, formatMinutes, formatPercent, formatWork } from './format';
@@ -24,7 +24,7 @@ export function mountTankReadouts(root: Document, store: ThrusterCarStore): Disp
       readouts: {
         fillMass: ([share, gas, litres]) => formatKilograms(storedMass(gas, litres) * share),
         fillWork: ([share, gas, litres]) => formatWork(storedWorkMj(gas, litres) * share),
-        fillPressure: ([share]) => formatBar(pressureAt(share)),
+        fillPressure: ([share]) => formatBar(fillPressureAt(share)),
         fillTime: ([share, gas, litres]) => formatMinutes(fillMinutes(gas, litres, share)),
       },
     }),
