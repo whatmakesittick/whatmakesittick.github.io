@@ -6,6 +6,7 @@ import type { Profile } from './lathe';
 import { grey, hash, paintTexture, ridge, seamDistance } from './maps';
 
 export const WHEEL_SEGMENTS = 32;
+export const SIDEWALL_TEXEL = [0.5, 0.02] as const;
 
 const HALF_WIDTH = WHEEL.tyreWidth / 2;
 const BEAD_RADIUS = 0.243;

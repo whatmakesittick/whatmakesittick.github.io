@@ -2,13 +2,13 @@ import { CylinderGeometry, Vector3 } from 'three';
 import type { BufferGeometry, DataTexture } from 'three';
 import { FULL_TURN, clamp, lerp } from '@core/math';
 import { mergeParts } from '../../parts/context';
-import { tinted } from './attributes';
+import { pinnedUv, tinted } from './attributes';
 import { QUARTER_TURN, latheAround } from './lathe';
 import type { Profile } from './lathe';
 import { loftFaceted } from './loft';
 import type { Section, Station } from './loft';
 import { grey, hash, paintTexture, ridge } from './maps';
-import { WHEEL_SEGMENTS } from './tyre';
+import { SIDEWALL_TEXEL, WHEEL_SEGMENTS } from './tyre';
 
 const LIP_PROFILE: Profile = [
   [0.249, 0.104],
@@ -92,18 +92,18 @@ const BLUR_MAP = { width: 4, height: 128 } as const;
 
 export interface RimTones {
   lip: string;
-  inner: string;
+  hub: string;
 }
 
 export function rimHubGeometry(tones: RimTones): BufferGeometry {
   const lip = latheAround(LIP_PROFILE, { axis: 'z', segments: WHEEL_SEGMENTS });
-  const barrel = latheAround(BARREL_PROFILE, { axis: 'z', segments: WHEEL_SEGMENTS });
   const hub = latheAround(HUB_PROFILE, { axis: 'z', segments: HUB_SEGMENTS });
-  return mergeParts([
-    tinted(lip, tones.lip),
-    tinted(barrel, tones.inner),
-    tinted(hub, tones.inner),
-  ]);
+  return mergeParts([tinted(lip, tones.lip), tinted(hub, tones.hub)]);
+}
+
+export function barrelGeometry(): BufferGeometry {
+  const barrel = latheAround(BARREL_PROFILE, { axis: 'z', segments: WHEEL_SEGMENTS });
+  return pinnedUv(barrel, ...SIDEWALL_TEXEL);
 }
 
 function spokeTop(share: number): number {

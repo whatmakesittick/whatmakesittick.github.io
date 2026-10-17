@@ -8,7 +8,7 @@ export const GEAR_PAINT = {
   vertexBase: '#ffffff',
   nozzleBody: THEME.nozzleBody,
   graphite: '#2e3136',
-  rimInner: '#1a1c1f',
+  rimHub: '#26292d',
   blur: '#4a4e55',
   machined: '#c9ced4',
   rotor: '#75787c',

@@ -4,8 +4,15 @@ import { anchorAt } from '@core/scene/parts';
 import type { AssemblyState, Point } from '../../../ids';
 import { CALIPER, caliperGeometry, discGeometry, discTexture } from '../../geometry/gear/brake';
 import { HALF_TURN } from '../../geometry/gear/lathe';
-import { blurGeometry, blurTexture, rimHubGeometry, spokesGeometry } from '../../geometry/gear/rim';
+import {
+  barrelGeometry,
+  blurGeometry,
+  blurTexture,
+  rimHubGeometry,
+  spokesGeometry,
+} from '../../geometry/gear/rim';
 import { treadTexture, tyreGeometry } from '../../geometry/gear/tyre';
+import { mergeParts } from '../context';
 import type { PartContext } from '../context';
 import { WHEEL, WHEEL_CENTRES } from './dimensions';
 import { GEAR_FINISHES, GEAR_PAINT, rimBlurFinish, rotorFinish, tyreFinish } from './gearFinishes';
@@ -64,7 +71,8 @@ function instanced(
 
 function spinners(context: PartContext): Spinners {
   const { materials, tracker } = context;
-  const tones = { lip: GEAR_PAINT.machined, inner: GEAR_PAINT.rimInner };
+  const tones = { lip: GEAR_PAINT.machined, hub: GEAR_PAINT.rimHub };
+  const tyre = mergeParts([tyreGeometry(), barrelGeometry()]);
   const blur = instanced(
     context,
     blurGeometry(),
@@ -72,11 +80,7 @@ function spinners(context: PartContext): Spinners {
   );
   blur.visible = false;
   return {
-    tyre: instanced(
-      context,
-      tyreGeometry(),
-      materials.get(PART, tyreFinish(tracker.track(treadTexture()))),
-    ),
+    tyre: instanced(context, tyre, materials.get(PART, tyreFinish(tracker.track(treadTexture())))),
     hub: instanced(context, rimHubGeometry(tones), materials.get(PART, GEAR_FINISHES.rimHub)),
     spokes: instanced(context, spokesGeometry(), materials.get(PART, GEAR_FINISHES.rimGraphite)),
     disc: instanced(
