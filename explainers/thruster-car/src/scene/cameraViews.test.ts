@@ -5,7 +5,16 @@ import type { CameraPose } from '@core/scene/frameBox';
 import type { FramingSlopes } from '@core/scene/lens';
 import { CAMERA_VIEW_IDS } from '../ids';
 import type { ChaseTarget, MomentId } from '../ids';
-import { CAR, CAR_ANCHORS, CAR_REGIONS, MOMENTS, PHASE_RANGES, RAMP, carAt } from '../model';
+import {
+  CAR,
+  CAR_ANCHORS,
+  CAR_REGIONS,
+  DECK_END_X,
+  MOMENTS,
+  PHASE_RANGES,
+  RAMP,
+  carAt,
+} from '../model';
 import type { PhaseRange } from '../model';
 import { PRESETS } from '../state';
 import {
@@ -147,19 +156,19 @@ describe('camera views', () => {
     expect(nozzle.z).toBeGreaterThan(0);
   });
 
-  it('chases the roll from behind the car once it heads back along the runway', () => {
+  it('leads the roll from the runway side, level with the car', () => {
     const flip = offsetOf(followPose(CHASE, FOLLOW_VIEWS.flipChase, PHONE));
-    expect(flip.x).toBeGreaterThan(0);
-    expect(flip.z).toBeLessThan(0);
-    expect(Math.asin(flip.y / flip.length())).toBeCloseTo(toRadians(18), 9);
+    expect(flip.x).toBeLessThan(0);
+    expect(flip.z).toBeGreaterThan(0);
+    expect(Math.asin(flip.y / flip.length())).toBeCloseTo(toRadians(2), 9);
   });
 
-  it('keeps the chase camera behind the car and clear of the loop and the deck', () => {
+  it('keeps the chase camera ahead of the car, short of the deck end and clear of the ramp', () => {
     CHASE_MOMENTS.forEach((moment) =>
       STAGES.forEach((slopes) => {
         const chase = chaseAt(MOMENTS[moment]);
         const { position } = followPose(chase, FOLLOW_VIEWS.flipChase, slopes);
-        expect(position.x, moment).toBeGreaterThan(chase.position[0]);
+        expect(position.x, moment).toBeLessThan(Math.min(chase.position[0], DECK_END_X));
         expect(Math.abs(position.z), moment).toBeGreaterThan(RAMP.width / 2 + RAMP_CLEARANCE_M);
       }),
     );
@@ -215,17 +224,16 @@ describe('camera views', () => {
     expect(ratio).toBeCloseTo(DESKTOP.vertical / PHONE.horizontal, 9);
   });
 
-  it('frames the hook, the jump and the whole site from the tank side, above the ground', () => {
-    expect(FIXED_VIEWS.rampWide).toEqual({ region: 'arc', direction: [0.1, 0.35, 1], margin: 1.1 });
-    expect(FIXED_VIEWS.jumpWide).toEqual({
-      region: 'jump',
-      direction: [-0.1, 0.3, 1],
-      margin: 1.1,
-    });
-    expect(FIXED_VIEWS.siteWide).toEqual({
-      region: 'site',
-      direction: [0.2, 0.45, 1],
-      margin: 1.05,
+  it('frames the ramp, the jump and the whole site low from the tank side', () => {
+    expect(FIXED_VIEWS.rampWide.region).toBe('ramp');
+    expect(FIXED_VIEWS.jumpWide.region).toBe('jump');
+    expect(FIXED_VIEWS.siteWide.region).toBe('site');
+    Object.values(FIXED_VIEWS).forEach(({ direction }) => {
+      const [, up, side] = direction as readonly number[];
+      expect(side).toBeGreaterThan(0);
+      expect(up / Math.hypot(...(direction as readonly number[]))).toBeLessThan(
+        Math.sin(toRadians(20)),
+      );
     });
   });
 });

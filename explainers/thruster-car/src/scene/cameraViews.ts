@@ -28,13 +28,13 @@ export const FOLLOW_VIEWS: Readonly<Record<FollowView, FollowSpec>> = {
   tankClose: { bearing: toRadians(40), elevation: toRadians(25), spans: 1.3 },
   nozzleClose: { bearing: toRadians(150), elevation: toRadians(10), spans: 1.2 },
   boostSide: { bearing: toRadians(90), elevation: toRadians(6), spans: 2.2 },
-  flipChase: { bearing: toRadians(-30), elevation: toRadians(18), spans: 2.4 },
+  flipChase: { bearing: toRadians(150), elevation: toRadians(2), spans: 2.4 },
 };
 
 export const FIXED_VIEWS: Readonly<Record<FixedView, FramedView<RegionId>>> = {
-  rampWide: { region: 'arc', direction: [0.1, 0.35, 1], margin: 1.1 },
-  jumpWide: { region: 'jump', direction: [-0.1, 0.3, 1], margin: 1.1 },
-  siteWide: { region: 'site', direction: [0.2, 0.45, 1], margin: 1.05 },
+  rampWide: { region: 'ramp', direction: [-0.3, 0.22, 1], margin: 1.35 },
+  jumpWide: { region: 'jump', direction: [-0.35, 0.14, 1], margin: 0.55 },
+  siteWide: { region: 'site', direction: [0.9, 0.25, 0.7], margin: 0.65 },
 };
 
 const CENTRE_LIFT = CAR.rideHeight + CAR_ANCHORS.car[1];
