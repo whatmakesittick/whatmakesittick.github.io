@@ -1,4 +1,5 @@
 import {
+  ClampToEdgeWrapping,
   Color,
   DataTexture,
   LinearFilter,
@@ -76,6 +77,13 @@ function dataTexture(size: TextureSize, pixels: Uint8Array, colour: boolean): Da
 
 export function paintTexture(size: TextureSize, painter: Painter): DataTexture {
   return dataTexture(size, encode(size, painter), true);
+}
+
+export function paintDecal(size: TextureSize, painter: Painter): DataTexture {
+  const texture = paintTexture(size, painter);
+  texture.wrapS = ClampToEdgeWrapping;
+  texture.wrapT = ClampToEdgeWrapping;
+  return texture;
 }
 
 function sampleHeights(size: TextureSize, field: HeightField): Float32Array {

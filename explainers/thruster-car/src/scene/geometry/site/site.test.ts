@@ -8,6 +8,7 @@ import { GROUND, groundGeometry, gridLines, onRun } from './groundGrid';
 import { landingMarks, pitMarks, startMarks } from './markings';
 import type { MarkRect } from './markings';
 import { rampPit } from './pit';
+import { trackPaths, trackPoints, tracksGeometry } from './tracks';
 
 function overlaps(a: MarkRect, b: MarkRect): boolean {
   return a.x[0] < b.x[1] && b.x[0] < a.x[1] && a.z[0] < b.z[1] && b.z[0] < a.z[1];
@@ -111,5 +112,24 @@ describe('paint markings', () => {
       expect(mark.z[1]).toBeLessThan(SITE.run.z[1]);
       expect(overlaps(mark, { x: pit.x, z: pit.z })).toBe(false);
     });
+  });
+});
+
+describe('dirt tracks', () => {
+  it('lays the track ribbons face up beside the runway', () => {
+    const geometry = tracksGeometry();
+    const position = geometry.getAttribute('position');
+    const index = geometry.getIndex();
+    if (!index) throw new Error('Tracks are not indexed');
+    const corners = [0, 1, 2].map((k) =>
+      new Vector3().fromBufferAttribute(position, index.getX(k)),
+    );
+    const facing = new Vector3()
+      .subVectors(corners[1], corners[0])
+      .cross(new Vector3().subVectors(corners[2], corners[0]));
+    expect(facing.y).toBeGreaterThan(0);
+    trackPaths().forEach((path) =>
+      trackPoints(path).forEach((point) => expect(onRun(point.x, point.z)).toBe(false)),
+    );
   });
 });

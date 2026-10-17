@@ -3,9 +3,11 @@ import type { BufferGeometry } from 'three';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { lerp, smoothstep } from '@core/math';
 import { SITE } from '../../../model/layout';
+import { LIGHT_RIG } from '../../constants';
 import { mergeParts } from '../../parts/context';
 import { GROUND } from './groundGrid';
 import { fractalNoise, hash2 } from './noise';
+import { onTrack } from './tracks';
 
 export interface Bush {
   x: number;
@@ -16,20 +18,21 @@ export interface Bush {
 }
 
 export const BUSHES = {
-  count: 56,
-  area: { x: [-90, 190], z: [-95, 95] },
+  count: 64,
+  area: { x: [-70, 170], z: [-80, 80] },
   keepOut: { x: 8, z: 5 },
   size: [0.45, 1.25],
-  blobs: [3, 5],
+  blobs: [2, 4],
   blobScale: [0.55, 1],
   spread: 0.6,
   shadeReach: 2,
   squash: 0.68,
-  lumps: { scale: 2.4, depth: 0.42 },
+  lumps: { scale: 3.2, depth: 0.5 },
   detail: 1,
   sink: 0.3,
-  shadow: 0.5,
-  tones: ['#4f4d34', '#5f5538', '#46503a', '#585036'],
+  shadow: 0.4,
+  warmTop: { colour: '#8f7c4b', share: 0.32 },
+  tones: ['#3e4128', '#4f4329', '#3a4530', '#4a3c26'],
   seed: 61,
 } as const;
 
@@ -38,6 +41,8 @@ const CANDIDATES_PER_BUSH = 4;
 const LUMP_OCTAVES = 2;
 const SEEDS = { x: 0, z: 1, size: 2, tone: 3, blobs: 4, offset: 5 } as const;
 const BLOB_SEED_STRIDE = 7;
+const SUN = new Vector3(...LIGHT_RIG.key.direction).normalize();
+const WARM_TOP = new Color(BUSHES.warmTop.colour);
 
 export function nearRun(x: number, z: number): boolean {
   const { x: runX, z: runZ } = SITE.run;
@@ -56,7 +61,7 @@ export function scatterBushes(): Bush[] {
   for (let index = 0; index < count * CANDIDATES_PER_BUSH && bushes.length < count; index += 1) {
     const x = lerp(area.x[0], area.x[1], hash2(index, seed + SEEDS.x));
     const z = lerp(area.z[0], area.z[1], hash2(index, seed + SEEDS.z));
-    if (nearRun(x, z)) continue;
+    if (nearRun(x, z) || onTrack(x, z, BUSHES.size[1])) continue;
     bushes.push({
       x,
       z,
@@ -87,11 +92,15 @@ function lumpy(geometry: BufferGeometry, seed: number): void {
 
 function shaded(geometry: BufferGeometry, tone: Color, height: number): void {
   const position = geometry.getAttribute('position');
+  const normal = geometry.getAttribute('normal');
+  const facing = new Vector3();
   const colours: number[] = [];
   const colour = new Color();
   for (let index = 0; index < position.count; index += 1) {
     const lift = smoothstep(position.getY(index) - GROUND.level, 0, height);
+    const sunlit = Math.max(facing.fromBufferAttribute(normal, index).dot(SUN), 0) * lift;
     colour.copy(tone).multiplyScalar(lerp(BUSHES.shadow, 1, lift));
+    colour.lerp(WARM_TOP, BUSHES.warmTop.share * sunlit);
     colours.push(colour.r, colour.g, colour.b);
   }
   geometry.setAttribute('color', new Float32BufferAttribute(colours, RGB));

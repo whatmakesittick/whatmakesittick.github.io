@@ -10,7 +10,8 @@ export const CONCRETE = {
   tile: { length: 24, width: SITE.run.z[1] - SITE.run.z[0] },
   slabLength: 6,
   laneEdge: 3,
-  slabTint: 0.09,
+  slabTint: 0.16,
+  slabWarmth: 0.7,
   mottle: 0.16,
   grain: 0.07,
   joint: { width: 0.03, depth: 0.5, lip: 0.05, lipLight: 0.08 },
@@ -25,7 +26,7 @@ export const CONCRETE = {
 const BASE = srgb(THEME.concrete);
 const WARM = srgb('#8a7c6c');
 const OCTAVES = 3;
-const SEEDS = { slab: 1, mottle: 2, stain: 3, rubber: 4, warm: 5, grit: 6, pits: 7 } as const;
+const SEEDS = { slab: 1, mottle: 2, stain: 3, rubber: 4, warm: 5, grit: 6, pits: 7, slabWarm: 8 };
 const PIT_SHARE = 0.965;
 const PIT_DEPTH = 0.6;
 const BAND_REACH = 3;
@@ -44,10 +45,14 @@ function nearestJoint(x: number, z: number): number {
   return Math.min(along, across);
 }
 
-function slabTint(x: number, z: number): number {
+function slabHash(x: number, z: number, seed: number): number {
   const column = Math.floor(x / CONCRETE.slabLength);
   const lane = Math.sign(Math.trunc(z / CONCRETE.laneEdge));
-  return 1 + (hash2(column, lane, CONCRETE.seed + SEEDS.slab) - 0.5) * CONCRETE.slabTint * 2;
+  return hash2(column, lane, CONCRETE.seed + seed);
+}
+
+function slabTint(x: number, z: number): number {
+  return 1 + (slabHash(x, z, SEEDS.slab) - 0.5) * CONCRETE.slabTint * 2;
 }
 
 function jointShade(x: number, z: number): number {
@@ -85,7 +90,8 @@ export function concreteShade(u: number, v: number): Rgba {
     tyreShade(u, v, z) *
     (1 - stain.depth * smoothstep(blot, stain.from, stain.to));
   const { from, to, share } = CONCRETE.warm;
-  return shade(mixRgb(BASE, WARM, smoothstep(warmth, from, to) * share), level);
+  const slabWarm = slabHash(x, z, SEEDS.slabWarm) * CONCRETE.slabWarmth;
+  return shade(mixRgb(BASE, WARM, Math.max(smoothstep(warmth, from, to), slabWarm) * share), level);
 }
 
 export function gritHeight(u: number, v: number): number {
