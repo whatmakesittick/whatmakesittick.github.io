@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { PART_IDS } from '../ids';
 import { LABEL_PRIORITY, PART_INFO, UNDIMMED_PARTS } from './partInfo';
 
-const LEFT_PARTS = ['seat', 'frontNozzles', 'fans', 'runway', 'ramp'] as const;
+const LEFT_PARTS = ['seat', 'frontNozzles', 'fans', 'runway', 'ramp', 'parkedRow'] as const;
 
 describe('part labels', () => {
   it('names every part from its locale key', () => {
@@ -23,6 +23,11 @@ describe('part labels', () => {
       ),
     );
     expect(PART_INFO.tank.side).toBe('right');
+    expect(PART_INFO.parkedRow.side).toBe('left');
+  });
+
+  it('ranks the parked row low, after the car and its nozzles', () => {
+    expect(LABEL_PRIORITY.indexOf('parkedRow')).toBeGreaterThan(LABEL_PRIORITY.indexOf('body'));
   });
 
   it('never dims the runway and the landing pad', () => {

@@ -11,6 +11,7 @@ const LEFT_PARTS: ReadonlySet<PartId> = new Set<PartId>([
   'fans',
   'runway',
   'ramp',
+  'parkedRow',
 ]);
 
 export const UNDIMMED_PARTS: readonly PartId[] = ['runway', 'landingPad'];
