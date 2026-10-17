@@ -64,7 +64,7 @@ export function rampPoint(distance: number): Point {
 
 export const JUMP = { leapX: -3 } as const;
 
-export type ParkedKind = 'car' | 'truck';
+export type ParkedKind = 'car' | 'pickup' | 'truck';
 
 export interface ParkedVehicle {
   kind: ParkedKind;
@@ -74,12 +74,14 @@ export interface ParkedVehicle {
   height: number;
 }
 
-const PARKED_CAR = { kind: 'car', length: 4.7, width: 1.9, height: 1.5 } as const;
+const PARKED_CAR = { kind: 'car', length: 4.5, width: 1.85, height: 1.45 } as const;
+const PARKED_PICKUP = { kind: 'pickup', length: 3.4, width: 2.0, height: 1.9 } as const;
 const PARKED_TRUCK = { kind: 'truck', length: 8, width: 2.6, height: 4 } as const;
 
 export const PARKED_ROW: readonly ParkedVehicle[] = [
   { ...PARKED_CAR, centreX: -15 },
   { ...PARKED_CAR, centreX: -20 },
+  { ...PARKED_PICKUP, centreX: -24 },
   { ...PARKED_TRUCK, centreX: -31 },
   { ...PARKED_CAR, centreX: -39 },
 ];

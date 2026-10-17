@@ -42,8 +42,15 @@ describe('layout', () => {
     expect(SITE_ANCHORS.rampExit).toEqual(rampPoint(RAMP_LENGTH));
   });
 
-  it('parks a truck and three cars between the leap point and the second landing box', () => {
+  it('parks a truck and four cars between the leap point and the second landing box', () => {
+    expect(PARKED_ROW).toHaveLength(5);
     expect(PARKED_ROW.filter((vehicle) => vehicle.kind === 'truck')).toHaveLength(1);
+    PARKED_ROW.slice(1).forEach((vehicle, index) => {
+      const ahead = PARKED_ROW[index];
+      expect(ahead.centreX - ahead.length / 2).toBeGreaterThan(
+        vehicle.centreX + vehicle.length / 2,
+      );
+    });
     expect(ROW_TOP).toBe(4);
     PARKED_ROW.forEach((vehicle) => {
       expect(vehicle.centreX + vehicle.length / 2).toBeLessThan(JUMP.leapX);
