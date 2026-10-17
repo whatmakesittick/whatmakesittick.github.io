@@ -5,6 +5,7 @@ cd "$(dirname "$0")/.."
 
 background='#0b0d10'
 favicon=public/favicon.svg
+maskable=scripts/icons/maskable.svg
 icons=public/icons
 
 card_output() {
@@ -20,6 +21,7 @@ rsvg-convert --width 180 --height 180 --background-color "$background" \
   --output "$icons/apple-touch-icon.png" "$favicon"
 for size in 192 512; do
   rsvg-convert --width "$size" --height "$size" --output "$icons/icon-$size.png" "$favicon"
+  rsvg-convert --width "$size" --height "$size" --output "$icons/maskable-$size.png" "$maskable"
 done
 oxipng --opt 4 --strip safe "$icons"/*.png
 
