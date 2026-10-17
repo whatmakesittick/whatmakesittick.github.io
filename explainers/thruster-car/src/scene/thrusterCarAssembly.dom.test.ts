@@ -4,9 +4,10 @@ import type { BufferGeometry, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
-import { ANCHOR_IDS, NOZZLE_IDS, PART_IDS, REAR_NOZZLE_IDS, REGION_IDS } from '../ids';
-import type { AssemblyState, NozzleId } from '../ids';
+import { ANCHOR_IDS, PART_IDS, REGION_IDS } from '../ids';
+import type { AssemblyState, NozzlePartId } from '../ids';
 import { CAR, MOMENTS, SITE_ANCHORS, runAt, tankAt } from '../model';
+import { PLUME_GROUPS, plumeName } from './parts/effects/plumes';
 import { ThrusterCarAssembly, createThrusterCarAssembly } from './thrusterCarAssembly';
 
 const FRAME = 1 / 60;
@@ -36,18 +37,12 @@ let materials: MaterialLibrary;
 let textures: ReturnType<typeof createSceneTextures>;
 let assembly: ThrusterCarAssembly;
 
-function plumeOf(id: NozzleId): Points {
-  const bell = assembly.root.getObjectByName(id);
-  let plume: Points | undefined;
-  bell?.parent?.traverse((object) => {
-    if (object instanceof Points) plume = object;
+function firing(): NozzlePartId[] {
+  return PLUME_GROUPS.filter((group) => {
+    const cloud = assembly.root.getObjectByName(plumeName(group));
+    if (!cloud) throw new Error(`No plume for ${group}`);
+    return isShown(cloud);
   });
-  if (!plume) throw new Error(`No plume for ${id}`);
-  return plume;
-}
-
-function firing(): NozzleId[] {
-  return NOZZLE_IDS.filter((id) => plumeOf(id).visible);
 }
 
 function worldOf(object: Object3D): Vector3 {
@@ -98,12 +93,11 @@ describe('thruster car assembly', () => {
 
   it('fires the nozzles the run asks for and none once the tank is empty', () => {
     assembly.setState(stateAt(BOOST_SECONDS));
-    expect(firing()).toEqual([...REAR_NOZZLE_IDS]);
+    expect(firing()).toEqual(['rearNozzles']);
     assembly.setState(stateAt(COAST_SECONDS));
     expect(firing()).toEqual([]);
     assembly.setState(stateAt(CATCH_SECONDS));
-    expect(firing().every((id) => id.startsWith('corner'))).toBe(true);
-    expect(firing()).toHaveLength(4);
+    expect(firing()).toEqual(['cornerNozzles']);
     assembly.setState(stateAt(CATCH_SECONDS, true));
     expect(firing()).toEqual([]);
   });
