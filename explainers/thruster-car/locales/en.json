@@ -212,7 +212,7 @@
     "limits": {
       "outcomeState": {
         "cushioned": "Soft landing at {{speed}} m/s",
-        "ranDry": "Jets cut off at T+{{seconds}} s, lands at {{speed}} m/s"
+        "ranDry": "Jets cut off at T+{{seconds}} s, lands {{speed}} m/s harder"
       },
       "hoverFlow": "Gas flow to hover",
       "hoverTime": "Longest hover",
@@ -293,7 +293,7 @@
       "p1": "To hover, the jets must push up with the car's whole weight, 16.7 kN for 1.7 tonnes. With air leaving at about 700 m/s, that takes about 24 kg of air every second. A full 600 L <strong>air tank</strong> holds about 315 kg. So even if every kilogram could be used, the car could hover for about 13 s at most. In practice it is less, because the pressure falls as the tank empties.",
       "p2": "Why so short? Fast jets waste power. Holding the car up with air at 700 m/s takes about 5.8 megawatts (MW). An ideal rotor 10 m across holds the same weight by pushing a lot of air slowly, at about 9 m/s, and needs only about 0.16 MW. That is about 37 times less. A helicopter can stay up for hours on fuel; this tank lasts seconds.",
       "p3": "So why not helium? It leaves about 2.6 times faster, at around 1,800 m/s. But helium is very light, so the same 600 L tank holds only 51 kg, a sixth of the air. What counts is the total push, called impulse: thrust times how long it lasts. Helium gives 93 kN·s against 220 kN·s for air, less than half. It wins only where weight matters more than space, as on a spacecraft.",
-      "p4": "Try the chips and watch the run's gas budget. With air in the 600 L tank, the three tests use about two thirds of the air, and the car finishes with about a third left, at roughly 25 bar. The model stops the jets once the pressure drops below about 5 bar, its own cut-off, so about a fifth of the gas always stays aboard. With air in the 400 L tank, the jets reach that cut-off during the jump's landing, so the small tank cannot finish both stunts. Helium runs out even sooner, during the hook's catch. The path stays the same whatever you pick; only the gas used, the pressure, the jets and the landing speed change.",
+      "p4": "Try the chips and watch the run's gas budget. With air in the 600 L tank, the car finishes the three tests with about 29 percent of its air left, at about 18 bar. The model stops the jets once the pressure drops below about 5 bar, its own cut-off, so about a fifth of the gas always stays aboard. With air in the 400 L tank, the jets reach that cut-off during the twist, so the jump's landing gets no cushion at all and the car comes down about 10 m/s harder. Helium runs out even sooner: in the 600 L tank during the hook's catch, and in the 400 L tank already during the flip. The path stays the same whatever you pick; only the gas used, the pressure, the jets and the landing speed change.",
       "p5": "Roger Conner, a curator of vertical flight at the Smithsonian's National Air and Space Museum, told CNN: \"We are literally talking about hopping.\" The FAA told CBS the car does not meet its definition of an aircraft. So this is a car that hops for a few seconds, not one that flies."
     }
   }
