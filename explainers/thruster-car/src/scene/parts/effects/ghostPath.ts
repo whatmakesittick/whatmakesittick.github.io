@@ -24,7 +24,6 @@ export const GHOST_MOMENTS: readonly MomentId[] = [
   'rollComplete',
   'liftOff',
   'apex',
-  'twistComplete',
 ];
 
 export const GHOST_NAME = 'ghostSilhouettes';
