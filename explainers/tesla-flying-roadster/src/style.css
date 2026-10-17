@@ -12,7 +12,7 @@
   --twist: #ff7aa8;
   --landing: #3fc1a5;
   --rest: #8a8f99;
-  --thruster-car-gas: #5fa8ff;
+  --roadster-gas: #5fa8ff;
 }
 
 .chapter .readouts {
@@ -53,7 +53,7 @@
 
 .chip[data-action='gas'],
 .chip[data-action='tank'] {
-  --tone: var(--thruster-car-gas);
+  --tone: var(--roadster-gas);
 }
 
 .chip[data-action='replay'] {
