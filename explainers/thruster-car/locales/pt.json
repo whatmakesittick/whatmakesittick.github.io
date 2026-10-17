@@ -1,0 +1,266 @@
+{
+  "meta": {
+    "title": "Como um propulsor de gás frio faz um carro saltar",
+    "eyebrow": "Carro com propulsores",
+    "tagline": "Dez jatos de ar e um tanque de ar comprimido: como um carro acelera, sai de uma rampa de cabeça para baixo, se desvira no ar e pousa de leve.",
+    "description": "Um carro 3D com propulsores de gás frio: o tanque de ar a 700 bar, os bocais, a largada sem aderência, o salto da rampa, o giro no ar e o pouso suave.",
+    "summary": "O tanque de ar, como um bocal gera empuxo, uma arrancada sem aderência, a rampa e o salto, o giro e o amortecimento, e por que um salto não é um voo.",
+    "socialAlt": "Um esportivo cinza de um lugar só, de cabeça para baixo sobre uma rampa curvada ao entardecer, com jatos de gás brancos nos cantos, ao lado do título “Como um propulsor de gás frio faz um carro saltar”"
+  },
+  "stage": {
+    "label": "Modelo interativo do carro com propulsores",
+    "gauge": "Tanque e jatos ao vivo"
+  },
+  "timeline": {
+    "label": "Tempo do percurso",
+    "phases": "Ir para uma parte do percurso",
+    "speed": "Velocidade de reprodução",
+    "value": "T+{{seconds}} s",
+    "during": "T+{{seconds}} s, {{phase}}",
+    "speedValue": "{{factor}}x",
+    "speedDescribe": "{{factor}} vezes a velocidade real",
+    "phase": {
+      "boost": "Arrancada",
+      "ramp": "Rampa",
+      "launch": "Lançamento",
+      "flip": "Virada",
+      "catch": "Amortecimento",
+      "rest": "Frenagem"
+    },
+    "jump": {
+      "boost": "Ir para a arrancada",
+      "ramp": "Ir para a rampa",
+      "launch": "Ir para o lançamento",
+      "flip": "Ir para a virada",
+      "catch": "Ir para o amortecimento",
+      "rest": "Ir para a frenagem"
+    },
+    "detail": {
+      "boost": "os quatro jatos traseiros levam o carro de 0 a 16 m/s",
+      "ramp": "ventiladores seguram o carro na rampa torcida enquanto ele gira até ficar com o teto para baixo",
+      "launch": "o carro sai da rampa de cabeça para baixo, a 4 m de altura, sem nenhum jato ligado",
+      "flip": "os jatos de canto desviram o carro perto do ponto mais alto do salto de 8 m",
+      "catch": "os quatro jatos de canto sopram para baixo e freiam a queda até 2,5 m/s",
+      "rest": "o carro pousa, freia e roda até parar a cerca de 86 m da largada"
+    },
+    "moment": {
+      "leavesRamp": "Sai da rampa",
+      "peak": "Topo do salto",
+      "rollComplete": "Desvirado",
+      "touchdown": "Toque no chão",
+      "stopped": "Parado"
+    }
+  },
+  "controls": {
+    "label": "Controles do modelo",
+    "gas": "Gás",
+    "gasOptions": {
+      "air": "Ar",
+      "nitrogen": "Nitrogênio",
+      "helium": "Hélio"
+    },
+    "tank": "Tanque",
+    "tankOptions": {
+      "400": "400 L",
+      "600": "600 L"
+    },
+    "replayOptions": {
+      "run": "Ver o percurso de novo"
+    },
+    "groups": {
+      "gas": "Gás no tanque",
+      "tank": "Tamanho do tanque",
+      "replay": "Ver o percurso de novo"
+    },
+    "views": {
+      "nozzles": {
+        "name": "Direção dos bocais",
+        "short": "Bocais",
+        "hint": "Direção dos bocais (N)"
+      },
+      "forces": {
+        "name": "Forças",
+        "short": "Forças",
+        "hint": "Forças (F)"
+      },
+      "tank": {
+        "name": "Tanque em corte",
+        "short": "Tanque",
+        "hint": "Tanque em corte (T)"
+      },
+      "ghost": {
+        "name": "Trajetória fantasma",
+        "short": "Trajetória",
+        "hint": "Trajetória fantasma (G)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    }
+  },
+  "readouts": {
+    "pressure": "Tanque",
+    "thrust": "Empuxo",
+    "massFlow": "Vazão de gás",
+    "height": "Altura",
+    "speed": "Velocidade",
+    "gasLeft": "Gás restante",
+    "tankState": {
+      "full": "Cheio",
+      "draining": "Esvaziando",
+      "empty": "Vazio"
+    }
+  },
+  "units": {
+    "bar": "{{value}} bar",
+    "kilonewtons": "{{value}} kN",
+    "kilonewtonMetres": "{{value}} kN·m",
+    "kilonewtonSeconds": "{{value}} kN·s",
+    "kgPerSecond": "{{value}} kg/s",
+    "kilograms": "{{value}} kg",
+    "metres": "{{value}} m",
+    "metresPerSecond": "{{value}} m/s",
+    "kmh": "{{value}} km/h",
+    "seconds": "{{value}} s",
+    "minutes": "{{value}} min",
+    "percent": "{{value}}%",
+    "megawatts": "{{value}} MW",
+    "megajoulesPair": "{{mj}} MJ, {{kwh}} kWh",
+    "gees": "{{value}} g",
+    "kgm2": "{{value}} kg·m²",
+    "degreesPerSecond": "{{value}}°/s"
+  },
+  "chapters": {
+    "limits": {
+      "outcomeState": {
+        "cushioned": "Pouso suave a {{speed}} m/s",
+        "ranDry": "O gás acaba em T+{{seconds}} s, pouso a {{speed}} m/s"
+      },
+      "hoverFlow": "Gás para pairar",
+      "hoverTime": "Tempo máximo pairando",
+      "jetPower": "Potência dos jatos para pairar",
+      "impulse": "Empurrão total",
+      "used": "Gás gasto no percurso",
+      "outcome": "Pouso",
+      "rotor": "Rotor ideal",
+      "rotorValue": "cerca de 0,16 MW para um rotor de 10 m"
+    },
+    "tank": {
+      "fill": "Enchimento",
+      "mass": "Gás no tanque",
+      "work": "Trabalho que ele pode fazer",
+      "pressure": "Pressão",
+      "fillTime": "Enchimento ideal a 50 kW",
+      "shell": "Casco do tanque na proporção do Mirai",
+      "mirai": "Tanques do Toyota Mirai",
+      "miraiValue": "122,4 L, 87,5 kg, 5,0 kg de hidrogênio"
+    },
+    "nozzle": {
+      "pressure": "Pressão do tanque",
+      "flow": "Vazão mássica",
+      "thrust": "Empuxo de um bocal de canto",
+      "exhaust": "Velocidade de exaustão",
+      "isp": "Impulso específico"
+    },
+    "boost": {
+      "thrust": "Empuxo traseiro",
+      "accel": "Aceleração",
+      "sixty": "0 a 60 mph",
+      "flow": "Gás gasto",
+      "lasts": "Um tanque cheio dura",
+      "runThrust": "Empuxo traseiro no percurso",
+      "runThrustValue": "9,1 kN, ajuste do próprio modelo",
+      "claim": "0 a 60 mph da Rocket",
+      "claimValue": "menos de 0,59 s, segundo a Tesla; 0,81 s na demonstração ao vivo"
+    },
+    "hop": {
+      "launch": "Velocidade de lançamento",
+      "peak": "Ponto mais alto",
+      "airTime": "Tempo no ar sem amortecimento",
+      "range": "Distância da rampa",
+      "exit": "Saída da rampa",
+      "exitValue": "4 m de altura, 42 graus, a rampa do próprio modelo",
+      "entry": "Velocidade na entrada da rampa",
+      "entryValue": "16 m/s, 58 km/h",
+      "tesla": "O salto da Tesla",
+      "teslaValue": "cerca de 8 m (27 pés), número da Tesla"
+    },
+    "flip": {
+      "inertia": "Inércia de rolagem",
+      "time": "Meio giro leva",
+      "torque": "Torque de um par",
+      "rate": "Giro mais rápido",
+      "catch": "Empuxo do amortecimento",
+      "catchValue": "28 kN, 7 kN por bocal, cálculo do próprio modelo",
+      "touchdown": "Velocidade ao tocar o chão",
+      "touchdownValue": "2,5 m/s para baixo"
+    }
+  },
+  "parts": {
+    "body": "Carroceria",
+    "wheels": "Rodas",
+    "seat": "Banco do motorista",
+    "tank": "Tanque de ar",
+    "tankValve": "Válvula do tanque",
+    "cornerNozzles": "Bocais de canto",
+    "frontNozzles": "Bocais dianteiros",
+    "rearNozzles": "Bocais traseiros",
+    "jets": "Jatos de gás",
+    "forceArrows": "Forças",
+    "fans": "Ventiladores de sucção",
+    "runway": "Pista",
+    "ramp": "Rampa",
+    "landingPad": "Área de pouso",
+    "ghostPath": "Trajetória fantasma"
+  },
+  "sections": {
+    "tank": {
+      "title": "Um tanque de ar comprimido",
+      "p1": "Em 15 de outubro de 2026, a Tesla mostrou seu novo Roadster num campo de testes de foguetes da SpaceX em McGregor, no Texas. Não havia ninguém a bordo. Segundo a Tesla, uma das versões, a Rocket, leva dez <strong>propulsores de gás frio</strong>. São jatos de ar: eles empurram o carro soprando ar comprimido para fora, sem queimar nada. A Tesla promete o carro para 2028, e a própria página da empresa diz que a versão Rocket não tem homologação para rodar em vias públicas.",
+      "p2": "O carro desta página é genérico, não o da Tesla. É um esportivo elétrico de um lugar só, com 1,7 tonelada, o peso que a Tesla tem como meta. O <strong>banco do motorista</strong> fica à esquerda. No lugar onde iria um segundo banco fica o <strong>tanque de ar</strong>, e a <strong>válvula do tanque</strong> libera o gás para os bocais. Segundo reportagens, o tanque de verdade é enchido a cerca de 700 bar, ou seja, 700 vezes a pressão do ar ao seu redor.",
+      "p3": "Qual é o tamanho do tanque? As reportagens falam em 400 L e em 600 L, e as fontes não batem. Por isso o modelo usa 600 L e deixa você testar 400 L. A 700 bar, o ar fica bem compactado: em 100 L cabem cerca de 53 kg dele, então em 600 L cabem cerca de 315 kg. Paredes que aguentam isso precisam ser fortes e leves, por isso são feitas de fibra de carbono enrolada. Os tanques de hidrogênio do Mirai, da Toyota, trabalham na mesma pressão. Eles pesam cerca de 0,71 kg para cada litro que comportam. Por essa conta, um tanque de 600 L pesaria cerca de 430 kg antes mesmo de receber gás.",
+      "p4": "Ar comprimido guarda energia, como uma mola apertada. Quando 100 L dele se expandem, podem realizar cerca de 24 megajoules (MJ) de trabalho, ou 6,6 quilowatts-hora (kWh). Um tanque de 600 L cheio guarda cerca de 40 kWh. A Tesla diz que hoje encher o tanque leva seis ou sete horas, e quer chegar a 30 minutos. Arraste o controle de enchimento: ele mostra o mínimo de trabalho que um compressor perfeito precisaria fazer, e quanto tempo isso leva a 50 kW. Compressores de verdade gastam mais.",
+      "p5": "Naquele dia, a Tesla mostrou várias manobras, algumas com carros diferentes. Esta página junta tudo num só percurso de 14 segundos, mostrado em tempo real. O carro acelera com os jatos, sobe uma rampa torcida, sai dela de cabeça para baixo, se desvira e pousa. O movimento segue um roteiro do próprio modelo. O gás e o tanque que você escolhe mudam só quanto gás o percurso gasta, a pressão e os jatos, nunca a trajetória."
+    },
+    "nozzle": {
+      "title": "Jogue gás para trás, vá para a frente",
+      "p1": "Abra uma válvula e o gás comprimido escapa por um bocal, uma abertura com um formato feito para acelerá-lo. O gás sai disparado para um lado, e o carro é empurrado para o outro. É a terceira lei de Newton: todo empurrão vem com um empurrão igual de volta. O carro tem dez bocais. Quatro <strong>bocais traseiros</strong> o empurram para a frente, quatro <strong>bocais de canto</strong> apontam para baixo, e dois <strong>bocais dianteiros</strong> viram a frente do carro para a esquerda ou para a direita.",
+      "p2": "Esse empurrão se chama empuxo. Ele é igual à massa de gás que sai a cada segundo, a vazão mássica, vezes a velocidade com que ela sai, a velocidade de exaustão. O ar de um tanque a 700 bar sai a cerca de 700 m/s. Os engenheiros também avaliam um gás pelo impulso específico, ou Isp. Ele diz por quantos segundos um quilo de gás conseguiria empurrar com uma força igual ao próprio peso. Para o ar frio, fica em cerca de 70 s.",
+      "p3": "Você pode achar que mais pressão quer dizer gás mais rápido. Em geral, não. A velocidade de exaustão depende do gás e da temperatura dele. A pressão define quanto gás passa pelo bocal a cada segundo, e quanto cabe no tanque. Arraste o controle de pressão: a vazão e o empuxo caem junto, enquanto a velocidade de exaustão continua a mesma.",
+      "p4": "Ao se expandir, o gás esfria muito, bem abaixo de zero. É daí que vem a nuvem branca nos <strong>jatos de gás</strong>: parte do ar vira gotinhas minúsculas, e a umidade do ar em volta congela. É também por isso que eles se chamam propulsores de gás frio. Nada queima, então não há peças quentes, e basta uma válvula por bocal. O preço é o empurrão mais fraco por quilo entre todos os tipos de propulsor, porque nenhum combustível acrescenta energia.",
+      "p5": "Por ser simples e seguro, esse sistema é usado em naves espaciais. Satélites pequenos se orientam com jatos de gás frio, e o primeiro estágio de um Falcon 9 dá meia-volta com jatos de nitrogênio perto do topo. O modelo também simplifica as coisas. Ele mantém a velocidade de exaustão fixa para cada gás. Num bocal de verdade, o ar sai um pouco mais devagar conforme o tanque esvazia, até cerca de 660 m/s a 300 bar. A Tesla não disse qual é a força de cada bocal, então o modelo escolhe seus próprios valores."
+    },
+    "boost": {
+      "title": "Um empurrão que não precisa de aderência",
+      "p1": "Um carro normal acelera pelas <strong>rodas</strong>. Se você força demais, os pneus patinam, então quem dá o limite é a aderência. Os <strong>bocais traseiros</strong> empurram o próprio carro, e não o chão, então a aderência não importa. A Tesla afirma que seus propulsores geram de quatro a cinco vezes a força que os pneus conseguem.",
+      "p2": "Segundo o Electrek, os jatos traseiros geram cerca de 80 kN. Num carro de 1,7 tonelada, isso dá 4,8 g. Um g é a atração da gravidade que você sente quando está parado em pé, então o empurrão pareceria quase cinco vezes o seu peso. Só que a 80 kN os jatos engolem cerca de 115 kg de ar por segundo. Um tanque de 600 L cheio ficaria vazio em 2,7 s.",
+      "p3": "A Tesla divulga três tempos de 0 a 60 mph (97 km/h): menos de 1,6 s para a versão Performance, que não tem propulsores, menos de 0,9 s para a Thrust e menos de 0,59 s para a Rocket. Esse último tempo exige praticamente os 80 kN inteiros. Na demonstração ao vivo, a Tesla diz que o carro levou 0,81 s, mas ninguém mais cronometrou. Até esse tempo exige um empurrão médio de cerca de 56 kN, ou 3,4 g.",
+      "p4": "O percurso do modelo é mais tranquilo. Os quatro jatos traseiros empurram com 9,1 kN no total, um nono de 80 kN, durante três segundos ao longo da <strong>pista</strong>. Isso leva o carro a 16 m/s (58 km/h) na rampa e ainda deixa gás para a virada e o amortecimento. Esse ajuste é escolha do modelo. O modelo também mantém constante o empuxo de cada jato, embora um tanque de verdade perca pressão ao esvaziar, e os jatos dele enfraqueçam."
+    },
+    "hop": {
+      "title": "Os ventiladores seguram, a rampa arremessa",
+      "p1": "A 16 m/s, o carro chega à <strong>rampa</strong>. No modelo, a pista se torce enquanto sobe, e o carro gira até ficar com o teto para baixo. O que o mantém preso assim não são os jatos. Na demonstração real, <strong>ventiladores de sucção</strong> embaixo do carro o puxavam contra a pista. Eram quatro, de cerca de 20 kW cada, segundo o Electrek. O modelo os mostra como um brilho azul e não calcula a força deles.",
+      "p2": "O carro sai da rampa de cabeça para baixo, a 4 m de altura, a 13,3 m/s, apontando 42 graus para cima. Daqui em diante, nenhum jato o empurra para a frente ou para cima. Ele é arremessado, como uma bola, e só a gravidade curva o caminho dele num arco. A <strong>trajetória fantasma</strong> desenha esse arco à frente do carro, até a <strong>área de pouso</strong>.",
+      "p3": "A altura que ele alcança depende só da velocidade com que sobe. A 42 graus, 13,3 m/s dão cerca de 8,9 m/s na vertical, e isso ergue o carro mais 4 m. Então ele chega a cerca de 8 m do chão. A Tesla falou em cerca de 8 m (27 pés) para um dos seus saltos, mas não ficou claro se era altura ou comprimento. Sem ajuda, o carro tocaria o chão 2,2 s depois de sair da rampa. O amortecimento freia a queda, então no percurso ele fica cerca de 2,6 s no ar.",
+      "p4": "Arraste o controle de lançamento para arremessar o carro mais rápido ou mais devagar. Aqui a velocidade conta em dobro: a subida cresce com o quadrado da velocidade para cima, então 10% a mais de velocidade dão cerca de 21% a mais de subida. A Tesla não divulgou o tamanho da rampa de verdade. As reportagens descrevem uma pista que sobe e se curva por cima, num meio loop. A torção, a saída a 4 m, o ângulo de 42 graus e a entrada a 16 m/s são todos do próprio modelo."
+    },
+    "flip": {
+      "title": "Desvirar no ar, depois amortecer a queda",
+      "p1": "De cabeça para baixo, perto do topo do salto, o carro precisa se desvirar antes de pousar. Quem faz isso são os <strong>bocais de canto</strong>. Eles funcionam como os pequenos jatos de manobra de uma nave espacial, que a fazem girar sem sair do lugar. Um empurrão longe do centro faz o carro girar, e a força de giro que isso cria se chama torque. Os dois bocais de um lado disparam primeiro para começar o giro. Depois, os dois do outro lado disparam para pará-lo, como um freio.",
+      "p2": "A rapidez com que o carro gira depende de quanto ele resiste a girar, a inércia de rolagem, medida em kg·m². Quanto mais peso fica longe do centro, mais difícil é fazer girar. Testes com carros reais encontraram cerca de 390 kg·m² num carro pequeno e 630 num grande. Ninguém publicou um valor para um esportivo com os tanques cheios, então o modelo escolhe 600 e deixa você testar de 500 a 900.",
+      "p3": "No percurso, cada bocal de canto empurra com 2 kN, a 0,9 m do centro, então um par gera 3,6 kN·m de torque. Com 600 kg·m², meio giro leva cerca de 1,45 s: o carro acelera na primeira metade e freia na segunda. Isso cabe no salto com folga. Esses números dos bocais são um exemplo do modelo, não da Tesla. O modelo também nivela a frente do carro durante o giro, para ele descer reto.",
+      "p4": "Já desvirado, o carro cai a cerca de 8 m/s. Os quatro bocais de canto disparam para baixo ao mesmo tempo, e as setas de <strong>forças</strong> mostram o empurrão deles. Juntos, eles dão cerca de 28 kN, mais que o peso do carro, de 16,7 kN, e a queda perde velocidade. Em 0,85 s, a velocidade cai para 2,5 m/s, e as rodas tocam a área de pouso. A Tesla diz que seus propulsores também suavizaram o pouso, mas não disse com que força empurraram. Por isso, esses números do amortecimento são calculados pelo modelo.",
+      "p5": "Depois de tocar o chão, o carro freia e roda até parar a cerca de 86 m da largada, aos 11,45 s do percurso. Aqui a virada passa na metade da velocidade, para você acompanhar cada par de jatos. Aperte o botão de repetir para ver o percurso inteiro outra vez."
+    },
+    "limits": {
+      "title": "Por que um salto não é um voo",
+      "p1": "Para pairar, os jatos precisam empurrar para cima com todo o peso do carro: 16,7 kN para 1,7 tonelada. Com o ar saindo a cerca de 700 m/s, isso exige cerca de 24 kg de ar por segundo. Um <strong>tanque de ar</strong> de 600 L cheio guarda cerca de 315 kg. Então, mesmo que desse para usar cada quilo, o carro pairaria por uns 13 s no máximo. Na prática é menos, porque a pressão cai conforme o tanque esvazia.",
+      "p2": "Por que tão pouco? Jatos rápidos desperdiçam potência. Sustentar o carro com ar a 700 m/s exige cerca de 5,8 megawatts (MW). Um rotor ideal de 10 m de diâmetro sustenta o mesmo peso empurrando muito ar devagar, a cerca de 9 m/s, e precisa de só uns 0,16 MW. Isso é cerca de 37 vezes menos. Um helicóptero consegue ficar no ar por horas com combustível. Este tanque dura segundos.",
+      "p3": "Então por que não usar hélio? Ele sai cerca de 2,6 vezes mais rápido, a uns 1.800 m/s. Mas o hélio é muito leve, então o mesmo tanque de 600 L guarda só 51 kg, um sexto do ar. O que conta é o empurrão total, chamado impulso: o empuxo vezes o tempo que ele dura. O hélio dá 93 kN·s, contra 220 kN·s do ar, menos da metade. Ele só leva vantagem quando o peso importa mais que o espaço, como numa nave espacial.",
+      "p4": "Experimente as opções e veja quanto gás o percurso gasta. Com ar no tanque de 600 L, o percurso usa cerca de um quarto do gás, e o carro pousa com muita sobra. Com hélio no tanque de 400 L, o percurso termina com o tanque quase vazio. A trajetória continua a mesma, seja qual for a escolha. Só mudam o gás gasto, a pressão e os jatos.",
+      "p5": "Roger Conner, curador de voo vertical do Museu Nacional do Ar e do Espaço do Smithsonian, disse à CNN: “Estamos falando literalmente de pular.” A FAA, a agência de aviação dos Estados Unidos, disse à CBS que o carro não se encaixa na definição de aeronave dela. Então este é um carro que salta por alguns segundos, não um carro que voa."
+    }
+  }
+}
