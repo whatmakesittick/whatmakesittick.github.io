@@ -1,0 +1,137 @@
+import type { ExplainerStore, Playback, PlaybackState } from '@core/explainer';
+import { clamp } from '@core/math';
+import { createExplainerStore } from '@core/store';
+import type { GasId, PresetId, ViewOptions } from '../ids';
+import {
+  DEFAULT_TANK_LITRES,
+  EXIT_SPEED_MS,
+  REAR_THRUST_FULL_N,
+  ROLL_INERTIA_KG_M2,
+  SPEED_RANGE,
+  TANK_LITRES,
+  TANK_PRESSURE_BAR,
+} from '../model';
+import { THRUSTER_CAR_TIMELINE } from '../timeline';
+import { PRESETS } from './presets';
+import type { Preset } from './presets';
+
+export type ViewState = { [Key in keyof ViewOptions]: ViewOptions[Key] };
+
+export interface CalculatorFields {
+  fillShare: number;
+  pressureBar: number;
+  rearThrustKn: number;
+  launchSpeed: number;
+  rollInertia: number;
+}
+
+export interface SteppedRange {
+  min: number;
+  max: number;
+  step: number;
+}
+
+export interface ThrusterCarFields extends CalculatorFields {
+  gas: GasId;
+  tankLitres: number;
+  view: ViewState;
+  preset: PresetId;
+}
+
+export interface ThrusterCarOwnActions {
+  setGas(gas: GasId): void;
+  setTankLitres(litres: number): void;
+  setFillShare(share: number): void;
+  setPressureBar(bar: number): void;
+  setRearThrustKn(kn: number): void;
+  setLaunchSpeed(ms: number): void;
+  setRollInertia(kgm2: number): void;
+}
+
+export type ThrusterCarState = PlaybackState & ThrusterCarFields;
+export type ThrusterCarStoreState = Playback & ThrusterCarFields & ThrusterCarOwnActions;
+export type ThrusterCarStore = ExplainerStore<ThrusterCarStoreState>;
+
+const NEWTONS_PER_KILONEWTON = 1000;
+const SNAP_DIGITS = 2;
+
+export const DEFAULT_VIEW: ViewState = {
+  nozzles: false,
+  forces: false,
+  tank: false,
+  ghost: true,
+  labels: true,
+};
+
+export const DEFAULT_GAS: GasId = 'air';
+
+export const CALCULATOR_DEFAULTS: Readonly<CalculatorFields> = {
+  fillShare: 1,
+  pressureBar: TANK_PRESSURE_BAR,
+  rearThrustKn: REAR_THRUST_FULL_N / NEWTONS_PER_KILONEWTON,
+  launchSpeed: EXIT_SPEED_MS,
+  rollInertia: ROLL_INERTIA_KG_M2,
+};
+
+export const CALCULATOR_RANGES: Readonly<Record<keyof CalculatorFields, SteppedRange>> = {
+  fillShare: { min: 0, max: 1, step: 0.05 },
+  pressureBar: { min: 100, max: TANK_PRESSURE_BAR, step: 50 },
+  rearThrustKn: { min: 10, max: REAR_THRUST_FULL_N / NEWTONS_PER_KILONEWTON, step: 5 },
+  launchSpeed: { min: 8, max: 18, step: 0.5 },
+  rollInertia: { min: 500, max: 900, step: 50 },
+};
+
+const TANK_CHOICES: ReadonlySet<number> = new Set(Object.values(TANK_LITRES));
+
+const START_PRESET: PresetId = 'tank';
+const START = PRESETS[START_PRESET];
+const START_SPEED = START.speed ?? SPEED_RANGE.default;
+const START_PAUSED = START.pauseAt !== undefined;
+export const START_PHASE = START.pauseAt ?? START.startAt ?? 0;
+export const START_VIEW: ViewState = { ...DEFAULT_VIEW, ...START.view };
+
+export function snapToRange(value: number, { min, max, step }: SteppedRange): number {
+  const steps = Math.round((clamp(value, min, max) - min) / step);
+  return Number(clamp(min + steps * step, min, max).toFixed(SNAP_DIGITS));
+}
+
+export function isTankChoice(litres: number): boolean {
+  return TANK_CHOICES.has(litres);
+}
+
+function presetFields(preset: Preset, state: ThrusterCarFields): Partial<ThrusterCarFields> {
+  if (PRESETS[state.preset] === preset) return {};
+  return { ...CALCULATOR_DEFAULTS };
+}
+
+export function createThrusterCarStore(
+  overrides: Partial<ThrusterCarStoreState> = {},
+): ThrusterCarStore {
+  return createExplainerStore<ThrusterCarFields & ThrusterCarOwnActions, Preset>(
+    {
+      timeline: THRUSTER_CAR_TIMELINE,
+      presets: PRESETS,
+      defaults: { preset: START_PRESET, speed: START_SPEED, view: START_VIEW },
+      extend: (set) => {
+        const snapped = (field: keyof CalculatorFields) => (value: number) =>
+          set({ [field]: snapToRange(value, CALCULATOR_RANGES[field]) });
+        return {
+          ...CALCULATOR_DEFAULTS,
+          gas: DEFAULT_GAS,
+          tankLitres: DEFAULT_TANK_LITRES,
+          setGas: (gas) => set({ gas }),
+          setTankLitres: (litres) => {
+            if (isTankChoice(litres)) set({ tankLitres: litres });
+          },
+          setFillShare: snapped('fillShare'),
+          setPressureBar: snapped('pressureBar'),
+          setRearThrustKn: snapped('rearThrustKn'),
+          setLaunchSpeed: snapped('launchSpeed'),
+          setRollInertia: snapped('rollInertia'),
+        };
+      },
+      presetState: presetFields,
+    },
+    { phase: START_PHASE, playing: !START_PAUSED, pausedByPreset: START_PAUSED, ...overrides },
+  );
+}
