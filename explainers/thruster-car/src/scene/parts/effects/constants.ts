@@ -128,6 +128,7 @@ export const GHOST_PATH = {
   diameter: 0.16,
   opacity: 0.8,
   taperDots: 4,
+  labelLift: 1,
   tone: THEME.text,
 } as const;
 
