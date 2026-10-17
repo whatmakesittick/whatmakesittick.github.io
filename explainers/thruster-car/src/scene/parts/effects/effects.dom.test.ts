@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { BoxGeometry, Group, Mesh, Object3D, Texture, Vector3 } from 'three';
+import {
+  BoxGeometry,
+  Group,
+  Mesh,
+  Object3D,
+  Points,
+  PointsMaterial,
+  Texture,
+  Vector3,
+} from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
@@ -9,9 +18,12 @@ import { CAR_ANCHORS, MOMENTS, NOZZLES, runAt, tankAt } from '../../../model';
 import { applyCarPose } from '../../pose';
 import type { PartContext } from '../context';
 import type { CarView } from '../types';
+import { PLUME } from './constants';
 import { CONTACT_SHADOW_NAME } from './contactShadow';
 import { EffectsPart } from './effects';
 import { GHOST_MOMENTS } from './ghostPath';
+import { PLUME_GROUPS, plumeName } from './plumes';
+import { PUFF_SCALE_ATTRIBUTE } from './puffMaterial';
 
 const FRAME = 1 / 60;
 const SETTLE_FRAMES = 600;
@@ -25,6 +37,7 @@ const QUIET: ViewOptions = {
 };
 const BOOST_SECONDS = 1;
 const RAMP_SECONDS = 3.5;
+const FLIP_SECONDS = 4.3;
 const REST_SECONDS = MOMENTS.stopped + 1;
 
 class StubCar implements CarView {
@@ -106,6 +119,32 @@ function settle(effects: EffectsPart): number {
   return frames;
 }
 
+function plumeClouds(car: StubCar): Points[] {
+  const clouds: Points[] = [];
+  car.object.traverse((node) => {
+    if (
+      node instanceof Points &&
+      node.material instanceof PointsMaterial &&
+      node.geometry.getAttribute(PUFF_SCALE_ATTRIBUTE)
+    ) {
+      clouds.push(node);
+    }
+  });
+  return clouds;
+}
+
+function scales(cloud: Points): number[] {
+  return Array.from(cloud.geometry.getAttribute(PUFF_SCALE_ATTRIBUTE).array);
+}
+
+function slotRange(cloud: Points, nozzle: number): { alphas: number[]; scales: number[] } {
+  const from = nozzle * PLUME.puffs;
+  const to = from + PLUME.puffs;
+  const colour = cloud.geometry.getAttribute('color');
+  const alphas = Array.from({ length: PLUME.puffs }, (_, index) => colour.getW(from + index));
+  return { alphas, scales: scales(cloud).slice(from, to) };
+}
+
 function shown(effects: EffectsPart, id: 'jets' | 'forceArrows' | 'fans' | 'ghostPath'): boolean {
   const label = effects.labels.get(id);
   if (!label) throw new Error(`Missing label ${id}`);
@@ -136,12 +175,50 @@ describe('effects part', () => {
     expect(effects.advance(FRAME)).toBe(false);
   });
 
-  it('hangs the jets label on a plume that fires', () => {
-    const { car, effects, set } = scene();
+  it('hangs the jets label along the longest firing plume', () => {
+    const { effects, set } = scene();
     set(stateAt(MOMENTS.rollComplete + 0.1));
     const label = effects.labels.get('jets');
-    const corners = NOZZLE_IDS.filter((id) => id.startsWith('corner')).map((id) => car.nozzle(id));
-    expect(corners.some((mouth) => label?.parent?.parent === mouth)).toBe(true);
+    const [x, y, z] = NOZZLES.cornerFrontLeft.at;
+    expect(label?.position.x).toBeCloseTo(x);
+    expect(label?.position.z).toBeCloseTo(z);
+    expect(label?.position.y).toBeLessThan(y);
+  });
+
+  it('draws one plume cloud per nozzle group in the car frame', () => {
+    const { car, set } = scene();
+    set(stateAt(BOOST_SECONDS));
+    const clouds = plumeClouds(car);
+    expect(clouds.map((cloud) => cloud.name)).toEqual(PLUME_GROUPS.map(plumeName));
+    expect(clouds.map((cloud) => cloud.visible)).toEqual([false, false, true]);
+    expect(clouds.map((cloud) => scales(cloud).length)).toEqual(
+      [4, 2, 4].map((n) => n * PLUME.puffs),
+    );
+  });
+
+  it('keeps the slots of idle nozzles at zero size and alpha', () => {
+    const { car, set, effects } = scene();
+    set(stateAt(FLIP_SECONDS));
+    effects.advance(FRAME);
+    const corners = plumeClouds(car)[0];
+    const [frontLeft, frontRight, rearLeft, rearRight] = [0, 1, 2, 3].map((slot) =>
+      slotRange(corners, slot),
+    );
+    expect(Math.max(...frontLeft.alphas)).toBeGreaterThan(0);
+    expect(Math.max(...rearLeft.alphas)).toBeGreaterThan(0);
+    [frontRight, rearRight].forEach((idle) => {
+      expect(Math.max(...idle.alphas)).toBe(0);
+      expect(Math.max(...idle.scales)).toBe(0);
+    });
+  });
+
+  it('clears every slot once the tank runs empty', () => {
+    const { car, set } = scene();
+    set(stateAt(BOOST_SECONDS));
+    set(stateAt(BOOST_SECONDS, {}, true));
+    const rear = plumeClouds(car)[2];
+    expect(rear.visible).toBe(false);
+    expect(Math.max(...scales(rear))).toBe(0);
   });
 
   it('pulses the fan glow only while the fans run', () => {
