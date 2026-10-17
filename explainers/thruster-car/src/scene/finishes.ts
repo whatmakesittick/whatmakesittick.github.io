@@ -1,6 +1,8 @@
 import { DoubleSide } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../theme';
+import { swatchOf } from './geometry/body/palette';
+import type { Palette } from './geometry/body/palette';
 
 export const PAINT = {
   body: THEME.carBody,
@@ -94,3 +96,40 @@ export const CABIN_FINISHES = {
   tub: matte(PAINT.tub, 0.9),
   liner: matte(PAINT.liner, 0.85),
 } as const satisfies Record<string, MaterialFinish>;
+
+export const CAR_SWATCHES = {
+  paint: swatchOf(BODY_FINISHES.paint),
+  frame: swatchOf(BODY_FINISHES.frame),
+  trim: swatchOf(BODY_FINISHES.trim),
+  under: swatchOf(BODY_FINISHES.under),
+  mirror: swatchOf(BODY_FINISHES.mirror),
+  lampFront: swatchOf(BODY_FINISHES.lampFront),
+  lampRear: swatchOf(BODY_FINISHES.lampRear),
+  seatShell: swatchOf(CABIN_FINISHES.seatShell),
+  seatCushion: swatchOf(CABIN_FINISHES.seatCushion),
+  harness: swatchOf(CABIN_FINISHES.harness),
+  buckle: swatchOf(CABIN_FINISHES.buckle),
+  dash: swatchOf(CABIN_FINISHES.dash),
+  screen: swatchOf(CABIN_FINISHES.screen),
+  tub: swatchOf(CABIN_FINISHES.tub),
+  liner: swatchOf(CABIN_FINISHES.liner),
+} as const;
+
+export type CarSwatch = keyof typeof CAR_SWATCHES;
+
+export function paletteFinish(palette: Palette<CarSwatch>): MaterialFinish {
+  return {
+    color: '#ffffff',
+    map: palette.color,
+    roughness: 1,
+    roughnessMap: palette.surface,
+    metalness: 1,
+    metalnessMap: palette.surface,
+    aoMap: palette.surface,
+    emissive: '#ffffff',
+    emissiveMap: palette.glow,
+    emissiveIntensity: palette.glowIntensity,
+    envMapIntensity: palette.reflection,
+    side: DoubleSide,
+  };
+}
