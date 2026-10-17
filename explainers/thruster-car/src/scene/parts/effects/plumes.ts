@@ -1,21 +1,24 @@
 import { BufferAttribute, Color, Group, Object3D, Quaternion, Vector3 } from 'three';
 import type { PointsMaterial } from 'three';
-import { FULL_TURN } from '@core/math';
+import { FULL_TURN, smoothstep } from '@core/math';
 import { PointCloud } from '@core/scene/pointCloud';
 import { GAS_IDS, NOZZLE_IDS, NOZZLE_PARTS } from '../../../ids';
 import type { AssemblyState, GasId, NozzleId, NozzlePartId } from '../../../ids';
 import { PLUME_COLOURS } from '../../../theme';
-import { puffTexture } from '../../geometry/effects/puffTexture';
 import { between, seededRandom } from '../../geometry/effects/random';
 import type { Random } from '../../geometry/effects/random';
-import { registered } from '../context';
 import type { PartContext } from '../context';
 import type { CarView } from '../types';
-import { PLUME, PLUME_LOOKS, POINT_SIZE_PER_METRE, RENDER_ORDER } from './constants';
+import { LIGHT_RIG } from '../../constants';
+import { PLUME, PLUME_LOOKS, PLUME_PUFFS, PLUME_SHADING, RENDER_ORDER } from './constants';
 import { firingThrust } from './firing';
-import { plumeLength, puffShape } from './plumeShape';
-import type { PuffShape } from './plumeShape';
-import { PUFF_SCALE_ATTRIBUTE, puffMaterial } from './puffMaterial';
+import type { Mouth } from './mouth';
+import { mouthInCar } from './mouth';
+import { plumeLength, plumeReach, puffShape } from './plumeShape';
+import type { PlumeSpan, PuffShape } from './plumeShape';
+import { puffLight, shadePuff } from './plumeShading';
+import type { Tone } from './plumeShading';
+import { PUFF_SCALE_ATTRIBUTE } from './puffMaterial';
 
 export const PLUME_GROUPS: readonly NozzlePartId[] = [
   'cornerNozzles',
@@ -27,10 +30,8 @@ export function plumeName(group: NozzlePartId): string {
   return `${group}Plume`;
 }
 
-const PLUME_AXIS = new Vector3(0, 1, 0);
-const SIDE_HINT = new Vector3(0, 1, 0);
-const SIDE_FALLBACK = new Vector3(1, 0, 0);
-const PARALLEL = 0.9;
+const WORLD_UP = new Vector3(0, 1, 0);
+const SUN_DIRECTION = new Vector3(...LIGHT_RIG.key.direction).normalize();
 
 const PLUME_TONES = Object.fromEntries(
   GAS_IDS.map((gas) => [gas, new Color(PLUME_COLOURS[gas])]),
@@ -43,27 +44,6 @@ interface Puff {
   offset: number;
   phase: number;
   size: number;
-}
-
-export interface Mouth {
-  position: Vector3;
-  axis: Vector3;
-  side: Vector3;
-  lift: Vector3;
-}
-
-export function mouthInCar(car: Object3D, nozzle: Object3D): Mouth {
-  const turn = car.getWorldQuaternion(new Quaternion()).invert();
-  turn.multiply(nozzle.getWorldQuaternion(new Quaternion()));
-  const axis = PLUME_AXIS.clone().applyQuaternion(turn).normalize();
-  const hint = Math.abs(axis.dot(SIDE_HINT)) < PARALLEL ? SIDE_HINT : SIDE_FALLBACK;
-  const side = new Vector3().crossVectors(axis, hint).normalize();
-  return {
-    position: car.worldToLocal(nozzle.getWorldPosition(new Vector3())),
-    axis,
-    side,
-    lift: new Vector3().crossVectors(axis, side),
-  };
 }
 
 function respawn(puff: Puff, random: Random, progress: number): Puff {
@@ -86,35 +66,47 @@ function newPuff(random: Random): Puff {
   return respawn(puff, random, 0);
 }
 
+export interface PlumeLight {
+  sun: Vector3;
+  up: Vector3;
+}
+
 class Emitter {
   readonly id: NozzleId;
   readonly mouth: Mouth;
-  length = 0;
+  readonly span: PlumeSpan;
+  private readonly group: NozzlePartId;
+  private readonly light: PlumeLight;
   private readonly slots: Slots;
   private readonly first: number;
   private readonly puffs: Puff[];
   private readonly random: Random;
-  private readonly shape: PuffShape = { distance: 0, radius: 0, diameter: 0, alpha: 0 };
+  private readonly shape: PuffShape = { distance: 0, radius: 0, diameter: 0, rise: 0, alpha: 0 };
+  private readonly tone: Tone = { r: 0, g: 0, b: 0 };
   private gas: GasId = 'air';
   private time = 0;
 
-  constructor(id: NozzleId, mouth: Mouth, slots: Slots, first: number) {
+  constructor(id: NozzleId, mouth: Mouth, light: PlumeLight, slots: Slots, first: number) {
     this.id = id;
     this.mouth = mouth;
+    this.group = NOZZLE_PARTS[id];
+    this.span = { length: 0, reach: 0, puffs: PLUME_PUFFS[this.group] };
+    this.light = light;
     this.slots = slots;
     this.first = first;
     this.random = seededRandom(PLUME.seed + NOZZLE_IDS.indexOf(id));
-    this.puffs = Array.from({ length: PLUME.puffs }, () => newPuff(this.random));
+    this.puffs = Array.from({ length: this.span.puffs }, () => newPuff(this.random));
     this.clear();
   }
 
   get firing(): boolean {
-    return this.length > 0;
+    return this.span.length > 0;
   }
 
   setState(state: AssemblyState): void {
     const wasFiring = this.firing;
-    this.length = plumeLength(firingThrust(state, this.id), state.gas);
+    this.span.length = plumeLength(firingThrust(state, this.id), state.gas);
+    this.span.reach = plumeReach(this.span.length, this.group);
     this.gas = state.gas;
     if (this.firing) this.layout();
     else if (wasFiring) this.clear();
@@ -123,7 +115,8 @@ class Emitter {
   advance(deltaSeconds: number): boolean {
     if (!this.firing) return false;
     this.time += deltaSeconds;
-    for (let index = 0; index < PLUME.puffs; index++) this.age(this.puffs[index], deltaSeconds);
+    for (let index = 0; index < this.puffs.length; index++)
+      this.age(this.puffs[index], deltaSeconds);
     this.layout();
     return true;
   }
@@ -136,8 +129,8 @@ class Emitter {
 
   private clear(): void {
     this.time = 0;
-    for (let index = 0; index < PLUME.puffs; index++) {
-      respawn(this.puffs[index], this.random, (index + this.random()) / PLUME.puffs);
+    for (let index = 0; index < this.puffs.length; index++) {
+      respawn(this.puffs[index], this.random, (index + this.random()) / this.puffs.length);
       this.slots.cloud.setColor(this.first + index, 0, 0, 0, 0);
       this.slots.scales[this.first + index] = 0;
     }
@@ -145,33 +138,47 @@ class Emitter {
 
   private layout(): void {
     const look = PLUME_LOOKS[this.gas];
-    const { r, g, b } = PLUME_TONES[this.gas];
-    for (let index = 0; index < PLUME.puffs; index++) {
+    const base = PLUME_TONES[this.gas];
+    const { side, lift } = this.mouth;
+    const { sun, up } = this.light;
+    const sideSun = side.dot(sun);
+    const liftSun = lift.dot(sun);
+    const sideUp = side.dot(up);
+    const liftUp = lift.dot(up);
+    const { depth, rate } = PLUME.flicker;
+    for (let index = 0; index < this.puffs.length; index++) {
       const puff = this.puffs[index];
-      const shape = puffShape(puff.progress, this.length, look, this.shape);
+      const shape = puffShape(puff.progress, this.span, look, this.shape);
       const slot = this.first + index;
-      this.place(slot, puff, shape);
-      const { depth, rate } = PLUME.flicker;
+      const across = Math.cos(puff.angle);
+      const over = Math.sin(puff.angle);
+      this.place(slot, puff, shape, across, over);
+      const light = puffLight(across * sideSun + over * liftSun, across * sideUp + over * liftUp);
+      const clear =
+        1 -
+        smoothstep(shape.distance, this.span.length * PLUME_SHADING.coreClear, this.span.length);
+      const { r, g, b } = shadePuff(light, clear, base, this.tone);
       const shimmer = 1 - depth * (0.5 + 0.5 * Math.sin(this.time * rate + puff.phase));
       this.slots.cloud.setColor(slot, r, g, b, shape.alpha * shimmer);
       this.slots.scales[slot] = shape.diameter * puff.size;
     }
   }
 
-  private place(slot: number, puff: Puff, shape: PuffShape): void {
-    const { amplitude, rate, lag, ratio } = PLUME.sway;
+  private place(slot: number, puff: Puff, shape: PuffShape, across: number, over: number): void {
+    const { amplitude, wake, rate, lag, ratio } = PLUME.sway;
     const { position, axis, side, lift } = this.mouth;
-    const swing = amplitude * shape.distance;
-    const turn = this.time * rate + puff.phase + shape.distance * lag;
-    const across = shape.radius * puff.offset;
-    const sideways = Math.cos(puff.angle) * across + swing * Math.sin(turn);
-    const upward = Math.sin(puff.angle) * across + swing * Math.cos(turn * ratio);
+    const { up } = this.light;
     const along = shape.distance;
+    const swing = amplitude * along + wake * Math.max(0, along - this.span.length);
+    const turn = this.time * rate + puff.phase + along * lag;
+    const spread = shape.radius * puff.offset;
+    const sideways = across * spread + swing * Math.sin(turn);
+    const upward = over * spread + swing * Math.cos(turn * ratio);
     this.slots.cloud.setPoint(
       slot,
-      position.x + axis.x * along + side.x * sideways + lift.x * upward,
-      position.y + axis.y * along + side.y * sideways + lift.y * upward,
-      position.z + axis.z * along + side.z * sideways + lift.z * upward,
+      position.x + axis.x * along + side.x * sideways + lift.x * upward + up.x * shape.rise,
+      position.y + axis.y * along + side.y * sideways + lift.y * upward + up.y * shape.rise,
+      position.z + axis.z * along + side.z * sideways + lift.z * upward + up.z * shape.rise,
     );
   }
 }
@@ -182,9 +189,10 @@ class PlumeCloud {
   private readonly scaleAttribute: BufferAttribute;
 
   constructor(material: PointsMaterial, group: NozzlePartId, count: number) {
-    const cloud = new PointCloud(count * PLUME.puffs, material, RENDER_ORDER.plume);
+    const slots = count * PLUME_PUFFS[group];
+    const cloud = new PointCloud(slots, material, RENDER_ORDER.plume);
     cloud.points.name = plumeName(group);
-    const scales = new Float32Array(count * PLUME.puffs);
+    const scales = new Float32Array(slots);
     this.scaleAttribute = new BufferAttribute(scales, 1);
     cloud.points.geometry.setAttribute(PUFF_SCALE_ATTRIBUTE, this.scaleAttribute);
     cloud.points.visible = false;
@@ -224,10 +232,12 @@ export class Plumes {
   readonly object = new Group();
   readonly label = new Object3D();
   private readonly clouds: PlumeCloud[];
+  private readonly light: PlumeLight = { sun: new Vector3(), up: new Vector3() };
+  private readonly turn = new Quaternion();
+  private readonly car: Object3D;
 
-  constructor(context: PartContext, car: CarView) {
-    const texture = context.tracker.track(puffTexture());
-    const material = registered(context, 'jets', puffMaterial(texture, POINT_SIZE_PER_METRE));
+  constructor(context: PartContext, car: CarView, material: PointsMaterial) {
+    this.car = car.object;
     this.clouds = PLUME_GROUPS.map((group) => this.cloudFor(context, material, car, group));
     this.clouds.forEach((cloud) => this.object.add(cloud.points));
     this.object.add(this.label);
@@ -236,13 +246,14 @@ export class Plumes {
   }
 
   setState(state: AssemblyState): void {
+    this.aimLight();
     let lead: Emitter | undefined;
     for (let group = 0; group < this.clouds.length; group++) {
       const cloud = this.clouds[group];
       cloud.setState(state);
       for (let index = 0; index < cloud.emitters.length; index++) {
         const emitter = cloud.emitters[index];
-        if (emitter.firing && (!lead || emitter.length > lead.length)) lead = emitter;
+        if (emitter.firing && (!lead || emitter.span.length > lead.span.length)) lead = emitter;
       }
     }
     this.object.visible = lead !== undefined;
@@ -257,6 +268,12 @@ export class Plumes {
     return moving;
   }
 
+  private aimLight(): void {
+    this.car.getWorldQuaternion(this.turn).invert();
+    this.light.sun.copy(SUN_DIRECTION).applyQuaternion(this.turn);
+    this.light.up.copy(WORLD_UP).applyQuaternion(this.turn);
+  }
+
   private cloudFor(
     context: PartContext,
     material: PointsMaterial,
@@ -268,7 +285,8 @@ export class Plumes {
     context.tracker.track(cloud.slots.cloud);
     ids.forEach((id, index) => {
       const mouth = mouthInCar(car.object, car.nozzle(id));
-      cloud.emitters.push(new Emitter(id, mouth, cloud.slots, index * PLUME.puffs));
+      const first = index * PLUME_PUFFS[group];
+      cloud.emitters.push(new Emitter(id, mouth, this.light, cloud.slots, first));
     });
     return cloud;
   }
@@ -277,7 +295,7 @@ export class Plumes {
     const { position, axis } = lead.mouth;
     this.label.position
       .copy(axis)
-      .multiplyScalar(lead.length * PLUME.labelShare)
+      .multiplyScalar(lead.span.length * PLUME.labelShare)
       .add(position);
   }
 }

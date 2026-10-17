@@ -1,6 +1,10 @@
 import { NormalBlending } from 'three';
 import type { Blending, PointsMaterial, Texture } from 'three';
 import { createPointMaterial } from '@core/scene/pointCloud';
+import { puffTexture } from '../../geometry/effects/puffTexture';
+import { registered } from '../context';
+import type { PartContext } from '../context';
+import { POINT_SIZE_PER_METRE } from './constants';
 
 export const PUFF_SCALE_ATTRIBUTE = 'aScale';
 
@@ -21,4 +25,9 @@ export function puffMaterial(
   };
   material.customProgramCacheKey = () => CACHE_KEY;
   return material;
+}
+
+export function jetMaterial(context: PartContext): PointsMaterial {
+  const texture = context.tracker.track(puffTexture());
+  return registered(context, 'jets', puffMaterial(texture, POINT_SIZE_PER_METRE));
 }

@@ -18,10 +18,11 @@ import { CAR_ANCHORS, MOMENTS, NOZZLES, runAt, tankAt } from '../../../model';
 import { applyCarPose } from '../../pose';
 import type { PartContext } from '../context';
 import type { CarView } from '../types';
-import { PLUME } from './constants';
+import { CONTACT_SHADOW, PLUME_PUFFS } from './constants';
 import { CONTACT_SHADOW_NAME } from './contactShadow';
 import { EffectsPart } from './effects';
 import { GHOST_MOMENTS } from './ghostPath';
+import { GROUND_HAZE_NAME } from './groundHaze';
 import { PLUME_GROUPS, plumeName } from './plumes';
 import { PUFF_SCALE_ATTRIBUTE } from './puffMaterial';
 
@@ -138,11 +139,26 @@ function scales(cloud: Points): number[] {
 }
 
 function slotRange(cloud: Points, nozzle: number): { alphas: number[]; scales: number[] } {
-  const from = nozzle * PLUME.puffs;
-  const to = from + PLUME.puffs;
+  const puffs = PLUME_PUFFS.cornerNozzles;
+  const from = nozzle * puffs;
+  const to = from + puffs;
   const colour = cloud.geometry.getAttribute('color');
-  const alphas = Array.from({ length: PLUME.puffs }, (_, index) => colour.getW(from + index));
+  const alphas = Array.from({ length: puffs }, (_, index) => colour.getW(from + index));
   return { alphas, scales: scales(cloud).slice(from, to) };
+}
+
+function hazeOf(effects: EffectsPart): Points {
+  const haze = effects.object.getObjectByName(GROUND_HAZE_NAME);
+  if (!(haze instanceof Points)) throw new Error('Missing ground haze');
+  return haze;
+}
+
+function livePositions(haze: Points): number[] {
+  const position = haze.geometry.getAttribute('position');
+  const colour = haze.geometry.getAttribute('color');
+  return Array.from({ length: position.count }, (_, index) => index)
+    .filter((index) => colour.getW(index) > 0)
+    .map((index) => position.getX(index));
 }
 
 function shown(effects: EffectsPart, id: 'jets' | 'forceArrows' | 'fans' | 'ghostPath'): boolean {
@@ -172,6 +188,9 @@ describe('effects part', () => {
     expect(effects.advance(FRAME)).toBe(true);
     set(stateAt(BOOST_SECONDS, {}, true));
     expect(shown(effects, 'jets')).toBe(false);
+    expect(hazeOf(effects).visible).toBe(true);
+    expect(settle(effects)).toBeLessThan(SETTLE_FRAMES);
+    expect(hazeOf(effects).visible).toBe(false);
     expect(effects.advance(FRAME)).toBe(false);
   });
 
@@ -192,7 +211,7 @@ describe('effects part', () => {
     expect(clouds.map((cloud) => cloud.name)).toEqual(PLUME_GROUPS.map(plumeName));
     expect(clouds.map((cloud) => cloud.visible)).toEqual([false, false, true]);
     expect(clouds.map((cloud) => scales(cloud).length)).toEqual(
-      [4, 2, 4].map((n) => n * PLUME.puffs),
+      PLUME_GROUPS.map((group, index) => [4, 2, 4][index] * PLUME_PUFFS[group]),
     );
   });
 
@@ -221,6 +240,25 @@ describe('effects part', () => {
     expect(Math.max(...scales(rear))).toBe(0);
   });
 
+  it('rolls a ground haze behind the car while the rear jets fire near the concrete', () => {
+    const { effects, set } = scene();
+    set(stateAt(BOOST_SECONDS));
+    const haze = hazeOf(effects);
+    expect(haze.visible).toBe(true);
+    expect(effects.advance(FRAME)).toBe(true);
+    const carX = runAt(BOOST_SECONDS).car.position[0];
+    const alive = livePositions(haze);
+    expect(alive.length).toBeGreaterThan(0);
+    alive.forEach((x) => expect(x).toBeLessThan(carX));
+  });
+
+  it('clears the haze at once when the scrubber jumps away from the sprint', () => {
+    const { effects, set } = scene();
+    set(stateAt(BOOST_SECONDS));
+    set(stateAt(REST_SECONDS));
+    expect(hazeOf(effects).visible).toBe(false);
+  });
+
   it('pulses the fan glow only while the fans run', () => {
     const { effects, set } = scene();
     set(stateAt(RAMP_SECONDS));
@@ -242,7 +280,9 @@ describe('effects part', () => {
     const shadow = effects.object.getObjectByName(CONTACT_SHADOW_NAME);
     set(stateAt(BOOST_SECONDS));
     expect(shadow?.visible).toBe(true);
-    expect(shadow?.position.x).toBeCloseTo(runAt(BOOST_SECONDS).car.position[0]);
+    const carX = runAt(BOOST_SECONDS).car.position[0];
+    expect(Math.abs((shadow?.position.x ?? 0) - carX)).toBeLessThan(CONTACT_SHADOW.size[0]);
+    expect(shadow?.position.y).toBeGreaterThan(0);
     set(stateAt(MOMENTS.peak));
     expect(shadow?.visible).toBe(false);
   });

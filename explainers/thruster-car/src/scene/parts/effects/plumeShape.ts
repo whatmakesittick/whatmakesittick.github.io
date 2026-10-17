@@ -1,5 +1,5 @@
 import { lerp, smoothstep } from '@core/math';
-import type { GasId } from '../../../ids';
+import type { GasId, NozzlePartId } from '../../../ids';
 import { CORNER_NOZZLE_MAX_N } from '../../../model/constants';
 import {
   PLUME,
@@ -9,10 +9,17 @@ import {
 } from './constants';
 import type { PlumeLook } from './constants';
 
+export interface PlumeSpan {
+  length: number;
+  reach: number;
+  puffs: number;
+}
+
 export interface PuffShape {
   distance: number;
   radius: number;
   diameter: number;
+  rise: number;
   alpha: number;
 }
 
@@ -21,39 +28,52 @@ export function plumeLength(thrust: number, gas: GasId): number {
   return PLUME_LENGTH_AT_MAX_THRUST_M * share * PLUME_LENGTH_SCALE[gas];
 }
 
-export function plumeReach(length: number): number {
-  return length * PLUME_WAKE_SHARE;
+export function plumeReach(length: number, group: NozzlePartId): number {
+  return length * PLUME_WAKE_SHARE[group];
 }
 
-export function puffDistance(progress: number, length: number): number {
-  return plumeReach(length) * (1 - (1 - progress) ** PLUME.drift);
+export function puffDistance(progress: number, span: PlumeSpan): number {
+  return span.reach * (1 - (1 - progress) ** PLUME.drift);
 }
 
-function columnOpacity(distance: number, length: number, look: PlumeLook): number {
+function wakeShare(distance: number, span: PlumeSpan): number {
+  const wake = span.reach - span.length;
+  return wake > 0 ? Math.max(0, distance - span.length) / wake : 0;
+}
+
+function columnOpacity(distance: number, span: PlumeSpan, look: PlumeLook): number {
+  const { length } = span;
   const thinning = smoothstep(distance, length * PLUME.coreHold, length);
-  const dispersal = 1 - smoothstep(distance, length, plumeReach(length));
+  const dispersal = 1 - smoothstep(wakeShare(distance, span), PLUME.wakeHold, 1);
   const mouth = lerp(PLUME.mouthFloor, 1, smoothstep(distance, 0, length * PLUME.fadeInShare));
   return mouth * lerp(look.coreOpacity, look.wakeOpacity, thinning) * dispersal;
 }
 
-function stackedAlpha(column: number, diameter: number, length: number): number {
-  const overlap = Math.max(1, (PLUME.puffs * diameter) / plumeReach(length));
+function puffsPerMetre(progress: number, span: PlumeSpan): number {
+  const pace = Math.max((1 - progress) ** (PLUME.drift - 1), PLUME.slowest);
+  return span.puffs / (span.reach * PLUME.drift * pace);
+}
+
+function stackedAlpha(column: number, diameter: number, progress: number, span: PlumeSpan): number {
+  const overlap = Math.max(1, puffsPerMetre(progress, span) * diameter);
   return Math.min(1, (1 - (1 - column) ** (1 / overlap)) / PLUME.textureFill);
 }
 
 export function puffShape(
   progress: number,
-  length: number,
+  span: PlumeSpan,
   look: PlumeLook,
   target: PuffShape,
 ): PuffShape {
-  const distance = puffDistance(progress, length);
-  const beyond = Math.max(0, distance - length);
+  const distance = puffDistance(progress, span);
+  const beyond = Math.max(0, distance - span.length);
+  const wake = wakeShare(distance, span);
   target.distance = distance;
   target.radius = PLUME.mouthRadius + look.spread * distance + look.wakeSpread * beyond;
-  target.diameter =
-    (PLUME.mouthDiameter + PLUME.growth * distance + PLUME.wakeGrowth * beyond) * look.scale;
-  target.alpha =
-    length > 0 ? stackedAlpha(columnOpacity(distance, length, look), target.diameter, length) : 0;
+  const growth = PLUME.mouthDiameter + PLUME.growth * distance + PLUME.wakeGrowth * beyond;
+  target.diameter = Math.min(growth, PLUME.maxDiameter) * look.scale;
+  target.rise = PLUME.rise * (span.reach - span.length) * wake * wake;
+  const column = span.length > 0 ? columnOpacity(distance, span, look) : 0;
+  target.alpha = column > 0 ? stackedAlpha(column, target.diameter, progress, span) : 0;
   return target;
 }
