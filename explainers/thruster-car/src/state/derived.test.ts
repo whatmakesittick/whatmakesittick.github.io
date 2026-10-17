@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { CORNER_NOZZLE_IDS, NOZZLE_IDS, REAR_NOZZLE_IDS } from '../ids';
 import type { AssemblyState } from '../ids';
-import { MOMENTS, RUN_SECONDS, SPRINT_THRUST_N, TOUCHDOWN_SPEED_MS, emptyShare } from '../model';
+import {
+  PHASE_RANGES,
+  RUN_SECONDS,
+  SPRINT_THRUST_N,
+  TOUCHDOWN_SPEED_MS,
+  emptyShare,
+} from '../model';
 import {
   createAssemblyState,
   createLiveReader,
@@ -37,12 +43,12 @@ describe('live reading', () => {
     expect(reading.tank).toMatchObject({ massShare: 1, pressureBar: 700, empty: false });
   });
 
-  it('rolls the car on the right corner pair at 5.5 s, 7.6 m up', () => {
-    const reading = liveReading({ ...AIR_600, phase: 5.5 });
+  it('rolls the car on the right corner pair at 11.5 s, 7.5 m up', () => {
+    const reading = liveReading({ ...AIR_600, phase: 11.5 });
     expect(reading.phase).toBe('flip');
-    expect(reading.car.position[0]).toBeCloseTo(44.0, 1);
-    expect(reading.car.height).toBeCloseTo(7.6, 1);
-    expect(degrees(reading.car.roll)).toBeCloseTo(152, 0);
+    expect(reading.car.position[0]).toBeCloseTo(39.0, 1);
+    expect(reading.car.height).toBeCloseTo(7.5, 1);
+    expect(degrees(reading.car.roll)).toBeCloseTo(154, 0);
     expect(reading.nozzles.cornerFrontRight).toBe(6000);
     expect(reading.nozzles.cornerRearRight).toBe(6000);
     expect(reading.nozzles.cornerFrontLeft).toBe(0);
@@ -50,23 +56,23 @@ describe('live reading', () => {
     expect(reading.massFlowKgS).toBeCloseTo(12000 / 698, 6);
   });
 
-  it('stands still at 17 s near x -81 with under a third of the air left', () => {
+  it('stands still at 23 s near x -81 with about a fifth of the air left', () => {
     const reading = liveReading({ ...AIR_600, phase: RUN_SECONDS });
     expect(reading.phase).toBe('rest');
     expect(reading.car.position[0]).toBeCloseTo(-81.5, 0);
     expect(reading.car.speed).toBeCloseTo(0, 6);
     expect(reading.thrustN).toBe(0);
     expect(reading.massFlowKgS).toBe(0);
-    expect(reading.tank.massShare).toBeCloseTo(0.294, 3);
-    expect(reading.tank.pressureBar).toBeCloseTo(17.8, 0);
+    expect(reading.tank.massShare).toBeCloseTo(0.207, 3);
+    expect(reading.tank.pressureBar).toBeCloseTo(6.2, 0);
   });
 
-  it('shuts every nozzle once a 400 L helium tank runs dry in the flip', () => {
-    const before = liveReading({ ...HELIUM_400, phase: 5.2 });
+  it('shuts every nozzle once a 400 L helium tank runs dry in the deck push', () => {
+    const before = liveReading({ ...HELIUM_400, phase: 9.3 });
     expect(before.tank.empty).toBe(false);
     expect(before.thrustN).toBeGreaterThan(0);
-    const dry = liveReading({ ...HELIUM_400, phase: 5.31 });
-    expect(dry.phase).toBe('flip');
+    const dry = liveReading({ ...HELIUM_400, phase: 9.45 });
+    expect(dry.phase).toBe('deck');
     expect(dry.tank.empty).toBe(true);
     expect(dry.tank.massShare).toBeCloseTo(emptyShare(), 9);
     expect(dry.thrustN).toBe(0);
@@ -96,21 +102,21 @@ describe('live reading', () => {
 });
 
 describe('run outcome', () => {
-  it('lands air in a 600 L tank at 2.5 m/s with about 71 percent used', () => {
+  it('lands air in a 600 L tank at 2.5 m/s with about 79 percent used', () => {
     expect(runOutcome('air', 600)).toEqual({
       ranDry: false,
       emptyAtSeconds: null,
       touchdownMs: TOUCHDOWN_SPEED_MS,
     });
     expect(TOUCHDOWN_SPEED_MS).toBeCloseTo(2.5, 1);
-    expect(runUsedShare('air', 600)).toBeCloseTo(0.706, 3);
+    expect(runUsedShare('air', 600)).toBeCloseTo(0.793, 3);
   });
 
-  it('runs a 400 L helium tank dry 0.51 s into the flip and lands 11.5 m/s harder', () => {
+  it('runs a 400 L helium tank dry 0.93 s into the deck push and lands 11.5 m/s harder', () => {
     const outcome = runOutcome('helium', 400);
     expect(outcome.ranDry).toBe(true);
-    expect(outcome.emptyAtSeconds).toBeCloseTo(5.3, 2);
-    expect((outcome.emptyAtSeconds ?? 0) - MOMENTS.leavesRamp).toBeCloseTo(0.51, 2);
+    expect(outcome.emptyAtSeconds).toBeCloseTo(9.44, 2);
+    expect((outcome.emptyAtSeconds ?? 0) - PHASE_RANGES.deck.start).toBeCloseTo(0.93, 2);
     expect(outcome.touchdownMs - TOUCHDOWN_SPEED_MS).toBeCloseTo(11.5, 1);
     expect(runUsedShare('helium', 400)).toBeCloseTo(1 - emptyShare(), 9);
   });
@@ -136,14 +142,14 @@ describe('assembly state', () => {
     const { car, nozzles, tank, view } = target;
     const result = writeAssemblyState(
       target,
-      source({ phase: 6, gas: 'nitrogen', view: { ...DEFAULT_VIEW, forces: true } }),
+      source({ phase: 12, gas: 'nitrogen', view: { ...DEFAULT_VIEW, forces: true } }),
     );
     expect(result).toBe(target);
     expect(target.car).toBe(car);
     expect(target.nozzles).toBe(nozzles);
     expect(target.tank).toBe(tank);
     expect(target.view).toBe(view);
-    expect(target).toMatchObject({ phase: 6, gas: 'nitrogen', fans: false });
+    expect(target).toMatchObject({ phase: 12, gas: 'nitrogen', fans: false });
     expect(target.car.airborne).toBe(true);
     CORNER_NOZZLE_IDS.forEach((id) => expect(target.nozzles[id], id).toBeCloseTo(7068.5, 0));
     expect(target.nozzles.rearInnerLeft).toBe(0);

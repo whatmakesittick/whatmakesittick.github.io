@@ -117,7 +117,7 @@ describe('chapter widgets', () => {
     expect(readout('hoverTime')).toBe(fill(units.seconds, { value: '13.2' }));
     expect(readout('jetPower')).toBe(fill(units.megawatts, { value: '5.8' }));
     expect(readout('totalImpulse')).toBe(fill(units.kilonewtonSeconds, { value: '220' }));
-    expect(readout('runUsed')).toBe(fill(units.percent, { value: '71' }));
+    expect(readout('runUsed')).toBe(fill(units.percent, { value: '79' }));
     expect(readout('runOutcome')).toBe(fill(outcomeState.cushioned, { speed: '2.5' }));
   });
 
@@ -197,7 +197,7 @@ describe('chapter widgets', () => {
     expect(readout('totalImpulse')).toBe(fill(units.kilonewtonSeconds, { value: '62' }));
     expect(readout('runUsed')).toBe(fill(units.percent, { value: '81' }));
     expect(readout('runOutcome')).toBe(
-      fill(outcomeState.ranDry, { seconds: '5.3', speed: '14.0' }),
+      fill(outcomeState.ranDry, { seconds: '9.4', speed: '14.0' }),
     );
   });
 

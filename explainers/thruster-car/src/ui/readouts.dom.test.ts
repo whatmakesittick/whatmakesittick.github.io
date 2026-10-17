@@ -7,8 +7,8 @@ import { THRUSTER_CAR_READOUTS } from './readouts';
 import { TEST_LOCALE, fill, initTestLocale } from './testing';
 
 const { units } = TEST_LOCALE;
-const CATCH_SECONDS_IN = 6;
-const AFTER_DRY_SECONDS = 7;
+const CATCH_SECONDS_IN = 12;
+const AFTER_DRY_SECONDS = 10;
 
 function row(id: string) {
   const found = THRUSTER_CAR_READOUTS.find((readout) => readout.id === id);
@@ -61,7 +61,7 @@ describe('gauge readouts', () => {
     store.getState().setPhase(CATCH_SECONDS_IN);
     expect(text('thrust', store.getState())).toBe(fill(units.kilonewtons, { value: '28.3' }));
     expect(text('massFlow', store.getState())).toBe(fill(units.kgPerSecond, { value: '40.5' }));
-    expect(text('height', store.getState())).toBe(fill(units.metres, { value: '3.5' }));
+    expect(text('height', store.getState())).toBe(fill(units.metres, { value: '3.4' }));
     expect(row('thrust').meter?.share(store.getState())).toBeCloseTo(
       CATCH_THRUST_N / SPRINT_THRUST_N,
       9,
@@ -69,8 +69,8 @@ describe('gauge readouts', () => {
     store.getState().setPhase(RUN_SECONDS);
     expect(text('thrust', store.getState())).toBe(fill(units.kilonewtons, { value: '0.0' }));
     expect(text('speed', store.getState())).toBe(fill(units.kmh, { value: '0' }));
-    expect(text('gasLeft', store.getState())).toBe(fill(units.percent, { value: '29' }));
-    expect(text('pressure', store.getState())).toBe(fill(units.bar, { value: '18' }));
+    expect(text('gasLeft', store.getState())).toBe(fill(units.percent, { value: '21' }));
+    expect(text('pressure', store.getState())).toBe(fill(units.bar, { value: '6' }));
   });
 
   it('scales the thrust meter to the sprint so the leap reads below full', () => {
