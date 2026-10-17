@@ -3,6 +3,7 @@ import { CORNER_NOZZLE_IDS, FRONT_NOZZLE_IDS, REAR_NOZZLE_IDS } from '../ids';
 import {
   CAR,
   DECK_END_X,
+  DECK_HEIGHT,
   JUMP,
   LOOP_LENGTH,
   NOZZLES,
@@ -35,7 +36,7 @@ describe('layout', () => {
 
   it('runs an 8 m inverted deck 10 m up back toward the start', () => {
     expect(RAMP_LENGTH).toBeCloseTo(Math.PI * RAMP.radius + RAMP.deckLength, 9);
-    expect(rampPoint(RAMP_LENGTH)).toEqual([DECK_END_X, RAMP.exitHeight, 0]);
+    expect(rampPoint(RAMP_LENGTH)).toEqual([DECK_END_X, DECK_HEIGHT, 0]);
     expect(DECK_END_X).toBe(52);
     expect(rampPitch(RAMP_LENGTH)).toBeCloseTo(Math.PI, 9);
     expect(rampPoint(RAMP_LENGTH + 5)).toEqual(rampPoint(RAMP_LENGTH));

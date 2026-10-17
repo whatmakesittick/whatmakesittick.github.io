@@ -25,7 +25,7 @@ import {
   SIXTY_MPH_MS,
   TOUCHDOWN_SPEED_MS,
 } from './constants';
-import { DECK_END_X, JUMP, LOOP_LENGTH, RAMP, rampPitch, rampPoint } from './layout';
+import { DECK_END_X, DECK_HEIGHT, JUMP, LOOP_LENGTH, RAMP, rampPitch, rampPoint } from './layout';
 import { leapAccel, leapSpeedFor, loopAngleAt, loopSpeedAt, loopTimetable, topSpeed } from './loop';
 import { rollAngleAt, rollSeconds } from './roll';
 
@@ -95,7 +95,7 @@ const FLIP_START = RAMP_START + RAMP_SECONDS;
 const ROLL_START = FLIP_START + LAUNCH_HOLD_SECONDS;
 const CATCH_START = FLIP_START + FLIP_SECONDS;
 
-const CATCH_FROM = freeFall(RAMP.exitHeight, 0, FLIP_SECONDS);
+const CATCH_FROM = freeFall(DECK_HEIGHT, 0, FLIP_SECONDS);
 const CATCH_ACCEL =
   (CATCH_FROM.verticalSpeed ** 2 - TOUCHDOWN_SPEED_MS ** 2) / (2 * CATCH_FROM.height);
 const CATCH = cushionFrom(CATCH_FROM, CATCH_ACCEL);
@@ -289,7 +289,7 @@ function hookX(time: number): number {
 }
 
 function flipAt(time: number): CarReading {
-  const fall = freeFall(RAMP.exitHeight, 0, time - FLIP_START);
+  const fall = freeFall(DECK_HEIGHT, 0, time - FLIP_START);
   const roll = rollAngleAt(time - ROLL_START, ROLL_INERTIA_KG_M2, ROLL_NOZZLE_N);
   return reading(hookX(time), fall, EXIT_SPEED_MS, roll, Math.PI, 'flip');
 }

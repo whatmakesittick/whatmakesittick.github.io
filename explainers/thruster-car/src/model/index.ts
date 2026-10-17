@@ -4,7 +4,6 @@ export * from './layout';
 export * from './gas';
 export * from './hover';
 export * from './boost';
-export * from './ballistic';
 export * from './loop';
 export * from './roll';
 export * from './run';

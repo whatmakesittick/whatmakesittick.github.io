@@ -41,8 +41,6 @@ export const RAMP = {
   radius: RAMP_RADIUS,
   deckLength: 8,
   width: 3,
-  exitHeight: 2 * RAMP_RADIUS,
-  exitAngleDeg: 0,
 } as const;
 
 export const LOOP_LENGTH = Math.PI * RAMP.radius;
@@ -59,7 +57,7 @@ export function rampPitch(distance: number): number {
 
 export function rampPoint(distance: number): Point {
   const along = alongRamp(distance);
-  if (along >= LOOP_LENGTH) return [RAMP.entryX - (along - LOOP_LENGTH), RAMP.exitHeight, 0];
+  if (along >= LOOP_LENGTH) return [RAMP.entryX - (along - LOOP_LENGTH), DECK_HEIGHT, 0];
   const angle = along / RAMP.radius;
   return [RAMP.entryX + RAMP.radius * Math.sin(angle), RAMP.radius * (1 - Math.cos(angle)), 0];
 }
@@ -155,7 +153,7 @@ export const CAR_REGIONS: Readonly<Record<CarRegionId, RegionSpec>> = {
 
 export const SITE_REGIONS: Readonly<Record<SiteRegionId, RegionSpec>> = {
   site: { x: SITE.run.x, y: [0, 13], z: SITE.run.z },
-  ramp: { x: [DECK_END_X, RAMP.entryX + RAMP.radius], y: [0, RAMP.exitHeight + 1], z: [-2, 2] },
+  ramp: { x: [DECK_END_X, RAMP.entryX + RAMP.radius], y: [0, DECK_HEIGHT + 1], z: [-2, 2] },
   arc: { x: [20, 70], y: [0, 13], z: [-3, 3] },
   jump: { x: [-64, 5], y: [0, 12], z: [-4, 4] },
 };
