@@ -1,6 +1,5 @@
 import type { Readout } from '@core/explainer';
-import { CORNER_NOZZLE_IDS } from '../ids';
-import { CORNER_NOZZLE_MAX_N, TANK_PRESSURE_BAR } from '../model';
+import { SPRINT_THRUST_N, TANK_PRESSURE_BAR } from '../model';
 import { liveReading } from '../state';
 import type { ThrusterCarStoreState } from '../state';
 import { THEME } from '../theme';
@@ -13,8 +12,6 @@ import {
   formatPercent,
   formatThrust,
 } from './format';
-
-const GAUGE_FULL_THRUST_N = CORNER_NOZZLE_IDS.length * CORNER_NOZZLE_MAX_N;
 
 export const THRUSTER_CAR_READOUTS: readonly Readout<ThrusterCarStoreState>[] = [
   {
@@ -33,7 +30,7 @@ export const THRUSTER_CAR_READOUTS: readonly Readout<ThrusterCarStoreState>[] = 
     numeric: true,
     value: (state) => formatThrust(liveReading(state).thrustN),
     meter: {
-      share: (state) => Math.min(1, liveReading(state).thrustN / GAUGE_FULL_THRUST_N),
+      share: (state) => Math.min(1, liveReading(state).thrustN / SPRINT_THRUST_N),
       fill: THEME.netThrust,
     },
   },

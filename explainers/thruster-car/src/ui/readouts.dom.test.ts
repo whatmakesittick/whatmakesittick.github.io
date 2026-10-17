@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { RUN_SECONDS } from '../model';
+import { CATCH_THRUST_N, LEAP_THRUST_N, MOMENTS, RUN_SECONDS, SPRINT_THRUST_N } from '../model';
 import { createThrusterCarStore } from '../state';
 import type { ThrusterCarStoreState } from '../state';
 import { THEME } from '../theme';
@@ -62,11 +62,24 @@ describe('gauge readouts', () => {
     expect(text('thrust', store.getState())).toBe(fill(units.kilonewtons, { value: '28.3' }));
     expect(text('massFlow', store.getState())).toBe(fill(units.kgPerSecond, { value: '40.5' }));
     expect(text('height', store.getState())).toBe(fill(units.metres, { value: '3.5' }));
+    expect(row('thrust').meter?.share(store.getState())).toBeCloseTo(
+      CATCH_THRUST_N / SPRINT_THRUST_N,
+      9,
+    );
     store.getState().setPhase(RUN_SECONDS);
     expect(text('thrust', store.getState())).toBe(fill(units.kilonewtons, { value: '0.0' }));
     expect(text('speed', store.getState())).toBe(fill(units.kmh, { value: '0' }));
     expect(text('gasLeft', store.getState())).toBe(fill(units.percent, { value: '29' }));
     expect(text('pressure', store.getState())).toBe(fill(units.bar, { value: '18' }));
+  });
+
+  it('scales the thrust meter to the sprint so the leap reads below full', () => {
+    const store = createThrusterCarStore({ playing: false, phase: MOMENTS.liftOff });
+    expect(text('thrust', store.getState())).toBe(fill(units.kilonewtons, { value: '40.0' }));
+    expect(row('thrust').meter?.share(store.getState())).toBeCloseTo(
+      LEAP_THRUST_N / SPRINT_THRUST_N,
+      9,
+    );
   });
 
   it('turns the gas gauge red and stops the jets once helium in the small tank runs dry', () => {
