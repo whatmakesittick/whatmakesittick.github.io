@@ -1,17 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { Mesh, Quaternion, Vector3 } from 'three';
-import type { MeshStandardMaterial, Object3D } from 'three';
+import { InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three';
+import type { Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
-import { isShown } from '@core/scene/parts';
+import type { MaterialFinish } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
 import { CORNER_NOZZLE_IDS, NOZZLE_IDS, NOZZLE_PARTS } from '../../../ids';
-import type { AssemblyState, NozzleId, NozzleThrusts } from '../../../ids';
+import type { AssemblyState, NozzleId, NozzlePartId, NozzleThrusts } from '../../../ids';
 import { NOZZLES, runAt, tankAt } from '../../../model';
 import { CONE } from '../../geometry/gear/nozzle';
 import type { PartContext } from '../context';
-import { BODY } from './dimensions';
+import { BODY, drawnNozzleAt } from './dimensions';
+import { CONE_FINISHES, GEAR_FINISHES } from './gearFinishes';
 import { createNozzles } from './nozzles';
+
+const GROUPS: readonly NozzlePartId[] = ['cornerNozzles', 'frontNozzles', 'rearNozzles'];
 
 function context(): PartContext {
   return {
@@ -47,25 +50,33 @@ function worldAxis(object: Object3D): Vector3 {
   return new Vector3(0, 1, 0).applyQuaternion(object.getWorldQuaternion(new Quaternion()));
 }
 
-function bell(root: Object3D, id: NozzleId): Mesh {
-  const found = root.getObjectByName(id);
-  if (!(found instanceof Mesh)) throw new Error(`Missing bell ${id}`);
+function idsOf(part: NozzlePartId): NozzleId[] {
+  return NOZZLE_IDS.filter((id) => NOZZLE_PARTS[id] === part);
+}
+
+function meshOf(parts: PartContext, root: Object3D, part: NozzlePartId, finish: MaterialFinish) {
+  const material = parts.materials.get(part, finish);
+  let found: InstancedMesh | undefined;
+  root.traverse((node) => {
+    if (node instanceof InstancedMesh && node.material === material) found = node;
+  });
+  if (!found) throw new Error(`Missing ${part} mesh`);
   return found;
 }
 
-function cone(set: ReturnType<typeof createNozzles>, id: NozzleId): Mesh {
-  const found = set.mouth(id).children.find((child) => child instanceof Mesh);
-  if (!found) throw new Error(`Missing cone ${id}`);
-  return found as Mesh;
+function at(mesh: InstancedMesh, index: number, local = new Vector3()): Vector3 {
+  const matrix = new Matrix4();
+  mesh.getMatrixAt(index, matrix);
+  return local.applyMatrix4(matrix);
 }
 
 describe('nozzles', () => {
-  it('points every mouth along its nozzle direction', () => {
+  it('points every mouth along its nozzle direction and names it by nozzle', () => {
     const set = createNozzles(context());
     NOZZLE_IDS.forEach((id) => {
       const axis = worldAxis(set.mouth(id));
-      const dir = new Vector3(...NOZZLES[id].dir);
-      expect(axis.distanceTo(dir)).toBeLessThan(1e-6);
+      expect(axis.distanceTo(new Vector3(...NOZZLES[id].dir))).toBeLessThan(1e-6);
+      expect(set.object.getObjectByName(id)).toBe(set.mouth(id));
     });
   });
 
@@ -76,44 +87,64 @@ describe('nozzles', () => {
     });
   });
 
-  it('names each bell and draws it with its group material', () => {
+  it('draws a group with one body, one frost and one cone mesh', () => {
     const parts = context();
     const set = createNozzles(parts);
-    NOZZLE_IDS.forEach((id) => {
-      const material = bell(set.object, id).material as MeshStandardMaterial;
-      expect(parts.materials.groupOf(material)).toBe(NOZZLE_PARTS[id]);
+    let meshes = 0;
+    set.object.traverse((node) => {
+      if (!(node instanceof InstancedMesh)) return;
+      meshes += 1;
+      expect(GROUPS).toContain(parts.materials.groupOf(node.material as never));
+    });
+    expect(meshes).toBe(GROUPS.length * 3);
+    GROUPS.forEach((part) => {
+      const body = meshOf(parts, set.object, part, GEAR_FINISHES.nozzleBody);
+      idsOf(part).forEach((id, index) =>
+        expect(at(body, index).distanceTo(new Vector3(...drawnNozzleAt(id)))).toBeLessThan(1e-6),
+      );
     });
   });
 
   it('frosts only the bells that fire', () => {
-    const set = createNozzles(context());
+    const parts = context();
+    const set = createNozzles(parts);
+    const body = meshOf(parts, set.object, 'rearNozzles', GEAR_FINISHES.nozzleBody);
+    const frost = meshOf(parts, set.object, 'rearNozzles', GEAR_FINISHES.frost);
     set.setState(stateWith([], false));
-    const idle = bell(set.object, 'rearInnerLeft').material;
+    expect([body.count, frost.count, frost.visible]).toEqual([4, 0, false]);
     set.setState(stateWith(['rearInnerLeft'], false));
-    expect(bell(set.object, 'rearInnerLeft').material).not.toBe(idle);
-    expect(bell(set.object, 'rearInnerRight').material).toBe(idle);
+    expect([body.count, frost.count, frost.visible]).toEqual([3, 1, true]);
+    const lit = new Vector3(...drawnNozzleAt('rearInnerLeft'));
+    expect(at(frost, 0).distanceTo(lit)).toBeLessThan(1e-6);
   });
 
   it('shows a direction cone per nozzle only in the nozzle view', () => {
-    const set = createNozzles(context());
+    const parts = context();
+    const set = createNozzles(parts);
+    const cones = GROUPS.map((part) => meshOf(parts, set.object, part, CONE_FINISHES[part]));
     set.setState(stateWith([], false));
-    NOZZLE_IDS.forEach((id) => expect(isShown(cone(set, id))).toBe(false));
+    cones.forEach((mesh) => expect(mesh.visible).toBe(false));
     set.setState(stateWith([], true));
-    NOZZLE_IDS.forEach((id) => {
-      const shape = cone(set, id);
-      expect(isShown(shape)).toBe(true);
-      shape.geometry.computeBoundingBox();
-      const tip = shape.geometry.boundingBox?.max.y ?? 0;
-      expect(tip).toBeCloseTo(CONE.length + CONE.gap);
-      const tipWorld = shape.localToWorld(new Vector3(0, tip, 0));
-      const base = set.mouth(id).getWorldPosition(new Vector3());
-      const along = tipWorld.sub(base).normalize();
-      expect(along.distanceTo(new Vector3(...NOZZLES[id].dir))).toBeLessThan(1e-6);
+    GROUPS.forEach((part, group) => {
+      const mesh = cones[group];
+      expect(mesh.visible).toBe(true);
+      idsOf(part).forEach((id, index) => {
+        const base = at(mesh, index);
+        const tip = at(mesh, index, new Vector3(0, CONE.length + CONE.gap, 0));
+        const mouth = set.mouth(id).getWorldPosition(new Vector3());
+        expect(base.distanceTo(mouth)).toBeLessThan(1e-6);
+        expect(
+          tip
+            .sub(base)
+            .normalize()
+            .distanceTo(new Vector3(...NOZZLES[id].dir)),
+        ).toBeLessThan(1e-6);
+      });
     });
   });
 
   it('puts one label anchor per nozzle group', () => {
     const set = createNozzles(context());
-    expect([...set.labels.keys()].sort()).toEqual(['cornerNozzles', 'frontNozzles', 'rearNozzles']);
+    expect([...set.labels.keys()].sort()).toEqual([...GROUPS]);
   });
 });

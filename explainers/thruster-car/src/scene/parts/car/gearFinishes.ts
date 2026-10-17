@@ -86,8 +86,7 @@ export const GEAR_FINISHES = {
   tankMounts: tintedMetal(0.42, 0.7),
   valveMetal: tintedMetal(0.32, 0.85),
   needle: satin(GEAR_PAINT.needle, 0.4),
-  nozzleBody: metal(THEME.nozzleBody, 0.4, 0.6),
-  collar: metal(GEAR_PAINT.collar, 0.3),
+  nozzleBody: tintedMetal(0.38, 0.65),
   frost: {
     color: GEAR_PAINT.frost,
     emissive: GEAR_PAINT.frostGlow,

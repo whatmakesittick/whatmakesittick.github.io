@@ -1,20 +1,15 @@
-import { Group, Mesh, Vector3 } from 'three';
-import type { BufferGeometry, Material, Object3D } from 'three';
+import { Group, InstancedMesh, Matrix4, Object3D, Vector3 } from 'three';
+import type { BufferGeometry, Material } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import { NOZZLE_IDS, NOZZLE_PARTS } from '../../../ids';
 import type { AssemblyState, NozzleId, NozzlePartId, PartId } from '../../../ids';
 import { NOZZLES } from '../../../model/layout';
-import {
-  BELL_LENGTH,
-  bellGeometry,
-  collarGeometry,
-  coneGeometry,
-  nozzleReach,
-  stemGeometry,
-} from '../../geometry/gear/nozzle';
+import { BELL_LENGTH, coneGeometry, nozzleGeometry, nozzleReach } from '../../geometry/gear/nozzle';
 import type { PartContext } from '../context';
 import { drawnNozzleAt } from './dimensions';
-import { CONE_FINISHES, GEAR_FINISHES } from './gearFinishes';
+import { CONE_FINISHES, GEAR_FINISHES, GEAR_PAINT } from './gearFinishes';
+
+const NOZZLE_GROUPS: readonly NozzlePartId[] = ['cornerNozzles', 'frontNozzles', 'rearNozzles'];
 
 const LABELLED: Readonly<Record<NozzlePartId, NozzleId>> = {
   cornerNozzles: 'cornerFrontRight',
@@ -24,6 +19,8 @@ const LABELLED: Readonly<Record<NozzlePartId, NozzleId>> = {
 
 const BELL_UP = new Vector3(0, 1, 0);
 
+const TONES = { bell: GEAR_PAINT.nozzleBody, collar: GEAR_PAINT.collar } as const;
+
 export interface NozzleSet {
   readonly object: Group;
   readonly labels: ReadonlyMap<PartId, Object3D>;
@@ -31,113 +28,133 @@ export interface NozzleSet {
   setState(state: AssemblyState): void;
 }
 
-interface NozzleShapes {
-  bell: BufferGeometry;
-  collar: BufferGeometry;
-  stem: BufferGeometry;
-  cone: BufferGeometry;
+interface NozzleGroup {
+  ids: readonly NozzleId[];
+  frames: readonly Matrix4[];
+  body: InstancedMesh;
+  frost: InstancedMesh;
+  cones: InstancedMesh;
+  firing: number;
 }
 
-interface NozzleLooks {
-  body: Material;
-  frost: Material;
-  collar: Material;
-  cone: Material;
+function nozzleFrame(id: NozzleId): Object3D {
+  const frame = new Object3D();
+  frame.position.set(...drawnNozzleAt(id));
+  frame.quaternion.setFromUnitVectors(BELL_UP, new Vector3(...NOZZLES[id].dir).normalize());
+  frame.updateMatrix();
+  return frame;
 }
 
-interface Nozzle {
-  object: Group;
-  bell: Mesh;
-  mouth: Object3D;
-  cone: Mesh;
-  looks: NozzleLooks;
+function addMouth(frame: Object3D, id: NozzleId): Object3D {
+  const mouth = anchorAt(frame, 0, nozzleReach(id), 0);
+  mouth.name = id;
+  return mouth;
 }
 
-function nozzleShapes(context: PartContext): NozzleShapes {
-  const track = (geometry: BufferGeometry) => context.tracker.track(geometry);
+function instanced(
+  geometry: BufferGeometry,
+  material: Material,
+  frames: readonly Matrix4[],
+): InstancedMesh {
+  const mesh = new InstancedMesh(geometry, material, frames.length);
+  frames.forEach((frame, index) => mesh.setMatrixAt(index, frame));
+  mesh.computeBoundingSphere();
+  mesh.computeBoundingBox();
+  return mesh;
+}
+
+function idsOf(part: NozzlePartId): NozzleId[] {
+  return NOZZLE_IDS.filter((id) => NOZZLE_PARTS[id] === part);
+}
+
+function buildGroup(
+  context: PartContext,
+  part: NozzlePartId,
+  frames: readonly Object3D[],
+): NozzleGroup {
+  const { materials, tracker } = context;
+  const ids = idsOf(part);
+  const poses = frames.map((frame) => frame.matrix);
+  const reach = nozzleReach(ids[0]);
+  const shape = tracker.track(nozzleGeometry(reach, TONES));
+  const lift = new Matrix4().makeTranslation(0, reach, 0);
+  const tips = poses.map((pose) => pose.clone().multiply(lift));
+  const cones = instanced(
+    tracker.track(coneGeometry()),
+    materials.get(part, CONE_FINISHES[part]),
+    tips,
+  );
+  cones.visible = false;
   return {
-    bell: track(bellGeometry()),
-    collar: track(collarGeometry()),
-    stem: track(stemGeometry()),
-    cone: track(coneGeometry()),
+    ids,
+    frames: poses,
+    body: instanced(shape, materials.get(part, GEAR_FINISHES.nozzleBody), poses),
+    frost: instanced(shape, materials.get(part, GEAR_FINISHES.frost), poses),
+    cones,
+    firing: -1,
   };
 }
 
-function nozzleLooks(context: PartContext, group: NozzlePartId): NozzleLooks {
-  const { materials } = context;
-  return {
-    body: materials.get(group, GEAR_FINISHES.nozzleBody),
-    frost: materials.get(group, GEAR_FINISHES.frost),
-    collar: materials.get(group, GEAR_FINISHES.collar),
-    cone: materials.get(group, CONE_FINISHES[group]),
-  };
+function firingMask(group: NozzleGroup, state: AssemblyState): number {
+  let mask = 0;
+  for (let index = 0; index < group.ids.length; index += 1) {
+    if (state.nozzles[group.ids[index]] > 0) mask |= 1 << index;
+  }
+  return mask;
 }
 
-function addFeedStem(object: Group, id: NozzleId, shapes: NozzleShapes, looks: NozzleLooks): void {
-  const length = nozzleReach(id) - BELL_LENGTH;
-  if (length <= 0) return;
-  const stem = new Mesh(shapes.stem, looks.body);
-  stem.scale.y = length;
-  object.add(stem);
-}
-
-function buildNozzle(id: NozzleId, shapes: NozzleShapes, looks: NozzleLooks): Nozzle {
-  const reach = nozzleReach(id);
-  const object = new Group();
-  object.position.set(...drawnNozzleAt(id));
-  object.quaternion.setFromUnitVectors(BELL_UP, new Vector3(...NOZZLES[id].dir).normalize());
-  const bell = new Mesh(shapes.bell, looks.body);
-  bell.name = id;
-  const collar = new Mesh(shapes.collar, looks.collar);
-  bell.position.y = reach - BELL_LENGTH;
-  collar.position.y = bell.position.y;
-  const mouth = anchorAt(object, 0, reach, 0);
-  const cone = new Mesh(shapes.cone, looks.cone);
-  cone.visible = false;
-  mouth.add(cone);
-  object.add(bell, collar);
-  addFeedStem(object, id, shapes, looks);
-  return { object, bell, mouth, cone, looks };
-}
-
-function labelAnchor(nozzle: Nozzle, id: NozzleId): Object3D {
-  return anchorAt(nozzle.object, 0, nozzleReach(id) - BELL_LENGTH / 2, 0);
-}
-
-function byGroup<T>(make: (group: NozzlePartId) => T): Record<NozzlePartId, T> {
-  return {
-    cornerNozzles: make('cornerNozzles'),
-    frontNozzles: make('frontNozzles'),
-    rearNozzles: make('rearNozzles'),
-  };
+function showFiring(group: NozzleGroup, mask: number): void {
+  let frosted = 0;
+  let plain = 0;
+  for (let index = 0; index < group.ids.length; index += 1) {
+    const lit = (mask & (1 << index)) !== 0;
+    if (lit) group.frost.setMatrixAt(frosted++, group.frames[index]);
+    else group.body.setMatrixAt(plain++, group.frames[index]);
+  }
+  group.frost.count = frosted;
+  group.body.count = plain;
+  group.frost.visible = frosted > 0;
+  group.body.visible = plain > 0;
+  group.frost.instanceMatrix.needsUpdate = true;
+  group.body.instanceMatrix.needsUpdate = true;
+  group.firing = mask;
 }
 
 export function createNozzles(context: PartContext): NozzleSet {
-  const shapes = nozzleShapes(context);
-  const looks = byGroup((group) => nozzleLooks(context, group));
-  const groups = byGroup(() => new Group());
-  const nozzles = Object.fromEntries(
-    NOZZLE_IDS.map((id) => [id, buildNozzle(id, shapes, looks[NOZZLE_PARTS[id]])]),
-  ) as Record<NozzleId, Nozzle>;
-  NOZZLE_IDS.forEach((id) => groups[NOZZLE_PARTS[id]].add(nozzles[id].object));
   const object = new Group();
-  object.add(...Object.values(groups));
+  const frames = Object.fromEntries(NOZZLE_IDS.map((id) => [id, nozzleFrame(id)])) as Record<
+    NozzleId,
+    Object3D
+  >;
+  const mouths = Object.fromEntries(
+    NOZZLE_IDS.map((id) => [id, addMouth(frames[id], id)]),
+  ) as Record<NozzleId, Object3D>;
+  const groups = NOZZLE_GROUPS.map((part) => {
+    const own = idsOf(part).map((id) => frames[id]);
+    const group = buildGroup(context, part, own);
+    const holder = new Group();
+    holder.add(...own, group.body, group.frost, group.cones);
+    object.add(holder);
+    showFiring(group, 0);
+    return group;
+  });
   const labels = new Map<PartId, Object3D>(
-    Object.entries(LABELLED).map(([group, id]) => [
-      group as NozzlePartId,
-      labelAnchor(nozzles[id], id),
-    ]),
+    NOZZLE_GROUPS.map((part) => {
+      const id = LABELLED[part];
+      return [part, anchorAt(frames[id], 0, nozzleReach(id) - BELL_LENGTH / 2, 0)];
+    }),
   );
   return {
     object,
     labels,
-    mouth: (id) => nozzles[id].mouth,
+    mouth: (id) => mouths[id],
     setState(state) {
-      NOZZLE_IDS.forEach((id) => {
-        const nozzle = nozzles[id];
-        nozzle.bell.material = state.nozzles[id] > 0 ? nozzle.looks.frost : nozzle.looks.body;
-        nozzle.cone.visible = state.view.nozzles;
-      });
+      for (let index = 0; index < groups.length; index += 1) {
+        const group = groups[index];
+        const mask = firingMask(group, state);
+        if (mask !== group.firing) showFiring(group, mask);
+        group.cones.visible = state.view.nozzles;
+      }
     },
   };
 }

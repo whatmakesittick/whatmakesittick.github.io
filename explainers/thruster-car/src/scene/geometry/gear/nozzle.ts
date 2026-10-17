@@ -3,6 +3,8 @@ import type { BufferGeometry } from 'three';
 import { NOZZLE_PARTS } from '../../../ids';
 import type { NozzleId } from '../../../ids';
 import { BODY, drawnNozzleAt } from '../../parts/car/dimensions';
+import { mergeParts } from '../../parts/context';
+import { tinted } from './attributes';
 import { latheAround } from './lathe';
 import type { Profile } from './lathe';
 
@@ -49,18 +51,26 @@ export function nozzleReach(id: NozzleId): number {
   }
 }
 
-export function bellGeometry(): BufferGeometry {
-  return latheAround(BELL_PROFILE, { axis: 'y', segments: SEGMENTS });
+export interface NozzleTones {
+  bell: string;
+  collar: string;
 }
 
-export function collarGeometry(): BufferGeometry {
-  return latheAround(COLLAR_PROFILE, { axis: 'y', segments: SEGMENTS });
-}
-
-export function stemGeometry(): BufferGeometry {
-  const stem = new CylinderGeometry(STEM.radius, STEM.radius, 1, STEM.segments, 1, true);
-  stem.translate(0, 1 / 2, 0);
+function stemGeometry(length: number): BufferGeometry {
+  const stem = new CylinderGeometry(STEM.radius, STEM.radius, length, STEM.segments, 1, true);
+  stem.translate(0, length / 2, 0);
   return stem;
+}
+
+export function nozzleGeometry(reach: number, tones: NozzleTones): BufferGeometry {
+  const lift = reach - BELL_LENGTH;
+  const bell = latheAround(BELL_PROFILE, { axis: 'y', segments: SEGMENTS });
+  const collar = latheAround(COLLAR_PROFILE, { axis: 'y', segments: SEGMENTS });
+  bell.translate(0, lift, 0);
+  collar.translate(0, lift, 0);
+  const parts = [tinted(bell, tones.bell), tinted(collar, tones.collar)];
+  if (lift > 0) parts.push(tinted(stemGeometry(lift), tones.bell));
+  return mergeParts(parts);
 }
 
 export function coneGeometry(): BufferGeometry {
