@@ -7,7 +7,7 @@ import { SEGMENT_CELLS } from './section';
 import { spot } from './surface';
 import type { BodySurface } from './surface';
 
-export type LineFinish = 'frame' | 'lampFront';
+export type LineFinish = 'frame' | 'trim' | 'lampFront';
 
 const SHUT = { width: 0.005, lift: 0.0015, steps: 24 } as const;
 const LAMP = { width: 0.024, lift: 0.003, steps: 32, frontX: 2.262 } as const;
@@ -95,12 +95,13 @@ function ribbons(surface: BodySurface, specs: readonly RibbonSpec[]): BufferGeom
 
 export function bodyLines(surface: BodySurface): Map<LineFinish, BufferGeometry[]> {
   const frame = [
-    ...ribbons(surface, [...shutLines(), ...ventSlats()]),
+    ...ribbons(surface, shutLines()),
     surfaceRibbon(surface, handle(), -1),
     surfaceRibbon(surface, chargeFlap(), -1),
   ];
   return new Map<LineFinish, BufferGeometry[]>([
     ['frame', frame],
+    ['trim', ribbons(surface, ventSlats())],
     ['lampFront', ribbons(surface, [lampBar(LAMP.frontX)])],
   ]);
 }

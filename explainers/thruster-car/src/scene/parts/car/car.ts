@@ -10,6 +10,7 @@ import type { CarView } from '../types';
 import { createBody } from './body';
 import type { BodyUnit } from './body';
 import { createCabin } from './cabin';
+import { createCarLook } from './look';
 import { createNozzles } from './nozzles';
 import type { NozzleSet } from './nozzles';
 import { carSilhouette } from './silhouette';
@@ -39,8 +40,9 @@ export class CarPart implements CarView {
 
   constructor(context: PartContext) {
     this.context = context;
-    this.body = createBody(context);
-    const cabin = createCabin(context);
+    const look = createCarLook(context);
+    this.body = createBody(context, look);
+    const cabin = createCabin(context, look);
     this.wheels = createWheels(context);
     this.tank = createTank(context);
     this.nozzles = createNozzles(context);

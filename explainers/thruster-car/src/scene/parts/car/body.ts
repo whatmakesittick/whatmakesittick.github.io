@@ -1,8 +1,10 @@
 import { Group } from 'three';
 import type { BufferGeometry, Material, Mesh, Object3D } from 'three';
+import type { MaterialFinish } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import type { PartId } from '../../../ids';
 import { BODY_FINISHES } from '../../finishes';
+import type { CarSwatch } from '../../finishes';
 import { bodyDetails } from '../../geometry/body/details';
 import { bodyLines, rightDoorLines } from '../../geometry/body/lines';
 import type { BodyRegion } from '../../geometry/body/regions';
@@ -11,8 +13,7 @@ import { bodyStations } from '../../geometry/body/stations';
 import { BodySurface } from '../../geometry/body/surface';
 import { mergeParts, partMesh } from '../context';
 import type { PartContext } from '../context';
-
-type BodyFinish = keyof typeof BODY_FINISHES;
+import type { CarLook } from './look';
 
 export interface BodyUnit {
   readonly object: Group;
@@ -26,9 +27,11 @@ interface CutawayPanel {
   solid: Material;
 }
 
+type RegionLook = CarSwatch | 'glass';
+
 const BODY_PART: PartId = 'body';
 
-const REGION_FINISH: Readonly<Record<BodyRegion, BodyFinish>> = {
+const REGION_LOOK: Readonly<Record<BodyRegion, RegionLook>> = {
   paint: 'paint',
   roof: 'paint',
   doorRight: 'paint',
@@ -40,82 +43,102 @@ const REGION_FINISH: Readonly<Record<BodyRegion, BodyFinish>> = {
   dark: 'under',
 };
 
-const OWN_MESH_REGIONS: readonly BodyRegion[] = ['roof', 'doorRight', 'doorLeft', 'windowRight'];
-const CUTAWAY_REGIONS: ReadonlySet<BodyRegion> = new Set(['roof', 'doorRight', 'windowRight']);
-const SHARED_FINISHES: readonly BodyFinish[] = [
-  'paint',
-  'glass',
-  'frame',
-  'trim',
-  'under',
-  'mirror',
-  'lampFront',
-  'lampRear',
-];
+const CUTAWAY_REGIONS: readonly BodyRegion[] = ['roof', 'doorRight', 'windowRight'];
 const LABEL_SPOT = [1.25, 0.7, 0.86] as const;
-
-function collect(
-  shell: ReadonlyMap<BodyRegion, BufferGeometry>,
-  extras: readonly ReadonlyMap<string, BufferGeometry[]>[],
-): Map<BodyFinish, BufferGeometry[]> {
-  const byFinish = new Map<BodyFinish, BufferGeometry[]>(SHARED_FINISHES.map((id) => [id, []]));
-  shell.forEach((geometry, region) => {
-    if (!OWN_MESH_REGIONS.includes(region)) byFinish.get(REGION_FINISH[region])?.push(geometry);
-  });
-  extras.forEach((parts) =>
-    parts.forEach((geometries, finish) => byFinish.get(finish as BodyFinish)?.push(...geometries)),
-  );
-  return byFinish;
-}
 
 class Body implements BodyUnit {
   readonly object = new Group();
   readonly label: Object3D;
-  private readonly cutaway: CutawayPanel[] = [];
-  private readonly ghost: Material;
-  private readonly doorTrim: Mesh;
-  private readonly meshes: Mesh[] = [];
   private readonly context: PartContext;
+  private readonly look: CarLook;
+  private readonly ghost: Material;
+  private readonly cutaway: CutawayPanel[] = [];
+  private readonly meshes: Mesh[] = [];
   private open = false;
 
-  constructor(context: PartContext) {
+  constructor(context: PartContext, look: CarLook) {
     this.context = context;
+    this.look = look;
+    this.ghost = context.materials.get(BODY_PART, BODY_FINISHES.ghost);
     const surface = new BodySurface();
     const shell = buildShell(bodyStations());
-    this.ghost = context.materials.get(BODY_PART, BODY_FINISHES.ghost);
-    collect(shell, [bodyDetails(surface), bodyLines(surface)]).forEach((parts, finish) => {
-      if (parts.length > 0) this.add(mergeParts(parts), finish);
-    });
-    OWN_MESH_REGIONS.forEach((region) => {
-      const geometry = shell.get(region);
-      if (!geometry) return;
-      const mesh = this.add(geometry, REGION_FINISH[region]);
-      if (CUTAWAY_REGIONS.has(region))
-        this.cutaway.push({ mesh, solid: mesh.material as Material });
-    });
-    this.doorTrim = this.add(mergeParts(rightDoorLines(surface)), 'frame');
-    this.label = anchorAt(this.meshes[0], ...LABEL_SPOT);
+    const painted = this.add(mergeParts(this.staticParts(shell, surface)), look.finish);
+    this.add(mergeParts(this.regions(shell, ['glass'])), BODY_FINISHES.glass);
+    CUTAWAY_REGIONS.forEach((region) => this.addPanel(shell, region, surface));
+    this.label = anchorAt(painted, ...LABEL_SPOT);
   }
 
   setCutaway(open: boolean): void {
     if (open === this.open) return;
     this.open = open;
-    this.cutaway.forEach(({ mesh, solid }) => (mesh.material = open ? this.ghost : solid));
-    this.doorTrim.visible = !open;
+    for (let index = 0; index < this.cutaway.length; index += 1) {
+      const panel = this.cutaway[index];
+      panel.mesh.material = open ? this.ghost : panel.solid;
+    }
   }
 
   silhouetteParts(): BufferGeometry[] {
     return this.meshes.map((mesh) => mesh.geometry.clone());
   }
 
-  private add(geometry: BufferGeometry, finish: BodyFinish): Mesh {
-    const mesh = partMesh(this.context, geometry, BODY_PART, BODY_FINISHES[finish]);
+  private staticParts(
+    shell: ReadonlyMap<BodyRegion, BufferGeometry>,
+    surface: BodySurface,
+  ): BufferGeometry[] {
+    const { palette } = this.look;
+    const fixed = [...shell].filter(
+      ([region]) => !CUTAWAY_REGIONS.includes(region) && REGION_LOOK[region] !== 'glass',
+    );
+    const extras = [...bodyDetails(surface), ...bodyLines(surface)];
+    return [
+      ...fixed.map(([region, geometry]) =>
+        palette.paint(geometry, REGION_LOOK[region] as CarSwatch),
+      ),
+      ...extras.flatMap(([swatch, parts]) => parts.map((part) => palette.paint(part, swatch))),
+    ];
+  }
+
+  private regions(
+    shell: ReadonlyMap<BodyRegion, BufferGeometry>,
+    regions: readonly BodyRegion[],
+  ): BufferGeometry[] {
+    return regions.flatMap((region) => shell.get(region) ?? []);
+  }
+
+  private addPanel(
+    shell: ReadonlyMap<BodyRegion, BufferGeometry>,
+    region: BodyRegion,
+    surface: BodySurface,
+  ): void {
+    const geometry = shell.get(region);
+    if (!geometry) return;
+    const look = REGION_LOOK[region];
+    const mesh =
+      look === 'glass'
+        ? this.add(geometry, BODY_FINISHES.glass)
+        : this.add(mergeParts(this.panelParts(geometry, look, region, surface)), this.look.finish);
+    this.cutaway.push({ mesh, solid: mesh.material as Material });
+  }
+
+  private panelParts(
+    geometry: BufferGeometry,
+    look: CarSwatch,
+    region: BodyRegion,
+    surface: BodySurface,
+  ): BufferGeometry[] {
+    const { palette } = this.look;
+    const trim = region === 'doorRight' ? rightDoorLines(surface) : [];
+    return [palette.paint(geometry, look), ...trim.map((part) => palette.paint(part, 'frame'))];
+  }
+
+  private add(geometry: BufferGeometry, finish: MaterialFinish): Mesh {
+    const mesh = partMesh(this.context, geometry, BODY_PART, finish);
     this.object.add(mesh);
     this.meshes.push(mesh);
     return mesh;
   }
 }
 
-export function createBody(context: PartContext): BodyUnit {
-  return new Body(context);
+export function createBody(context: PartContext, look: CarLook): BodyUnit {
+  return new Body(context, look);
 }

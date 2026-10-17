@@ -22,6 +22,8 @@ const LABELS: readonly PartId[] = [
   'rearNozzles',
 ];
 const MIRROR_REACH = 0.15;
+const BODY_AND_CABIN_MESHES = 7;
+const OWN_GROUPS = new Set(['body', 'seat']);
 const GHOST_OPACITY_LIMIT = 0.2;
 
 function context(): PartContext {
@@ -70,6 +72,19 @@ describe('CarPart', () => {
       expect(part.anchors[id].position.toArray()).toEqual([...CAR_ANCHORS[id]]),
     );
     NOZZLE_IDS.forEach((id) => expect(part.nozzle(id)).toBeDefined());
+  });
+
+  it('draws the body and cabin in a handful of meshes', () => {
+    const parts = context();
+    const part = new CarPart(parts);
+    let own = 0;
+    part.object.traverse((node) => {
+      const mesh = node as Mesh;
+      if (!mesh.isMesh) return;
+      const group = parts.materials.groupOf(mesh.material as Material);
+      if (group && OWN_GROUPS.has(group)) own += 1;
+    });
+    expect(own).toBeLessThanOrEqual(BODY_AND_CABIN_MESHES);
   });
 
   it('turns the roof, right door and right window to ghosts for the tank view', () => {

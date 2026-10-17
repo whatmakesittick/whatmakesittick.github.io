@@ -1,44 +1,46 @@
 import { Group } from 'three';
 import type { BufferGeometry, Mesh, Object3D } from 'three';
-import type { MaterialFinish } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import { SEAT } from '../../../model/layout';
-import { CABIN_FINISHES } from '../../finishes';
+import type { CarSwatch } from '../../finishes';
 import { buildCockpit } from '../../geometry/body/cabinCockpit';
 import { buildSeat } from '../../geometry/body/cabinSeat';
 import { buildTub } from '../../geometry/body/cabinTub';
 import { mergeParts, partMesh } from '../context';
 import type { EmphasisGroup, PartContext } from '../context';
+import type { CarLook } from './look';
 
 export interface CabinUnit {
   readonly object: Group;
   readonly label: Object3D;
 }
 
-function merged(
-  context: PartContext,
-  parts: readonly BufferGeometry[],
-  group: EmphasisGroup,
-  finish: MaterialFinish,
-): Mesh {
-  return partMesh(context, mergeParts(parts), group, finish);
+type Swatched = readonly (readonly [CarSwatch, readonly BufferGeometry[]])[];
+
+function painted(context: PartContext, look: CarLook, group: EmphasisGroup, parts: Swatched): Mesh {
+  const geometries = parts.flatMap(([swatch, list]) =>
+    list.map((geometry) => look.palette.paint(geometry, swatch)),
+  );
+  return partMesh(context, mergeParts(geometries), group, look.finish);
 }
 
-export function createCabin(context: PartContext): CabinUnit {
+export function createCabin(context: PartContext, look: CarLook): CabinUnit {
   const seat = buildSeat();
   const cockpit = buildCockpit();
   const tub = buildTub();
-  const shell = merged(context, seat.shell, 'seat', CABIN_FINISHES.seatShell);
+  const seatMesh = painted(context, look, 'seat', [
+    ['seatShell', seat.shell],
+    ['seatCushion', seat.cushion],
+    ['harness', seat.harness],
+    ['buckle', seat.buckle],
+  ]);
+  const cockpitMesh = painted(context, look, 'body', [
+    ['dash', [...cockpit.wheel, ...cockpit.dash]],
+    ['screen', cockpit.screen],
+    ['tub', tub.floor],
+    ['liner', tub.walls],
+  ]);
   const object = new Group();
-  object.add(
-    shell,
-    merged(context, seat.cushion, 'seat', CABIN_FINISHES.seatCushion),
-    merged(context, seat.harness, 'seat', CABIN_FINISHES.harness),
-    merged(context, seat.buckle, 'seat', CABIN_FINISHES.buckle),
-    merged(context, [...cockpit.wheel, ...cockpit.dash], 'body', CABIN_FINISHES.dash),
-    merged(context, cockpit.screen, 'body', CABIN_FINISHES.screen),
-    merged(context, tub.floor, 'body', CABIN_FINISHES.tub),
-    merged(context, tub.walls, 'body', CABIN_FINISHES.liner),
-  );
-  return { object, label: anchorAt(shell, ...SEAT) };
+  object.add(seatMesh, cockpitMesh);
+  return { object, label: anchorAt(seatMesh, ...SEAT) };
 }

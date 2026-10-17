@@ -7,8 +7,9 @@ import type { SceneTextures } from '@core/scene/textures';
 import { SEAT } from '../../../model/layout';
 import type { PartContext } from '../context';
 import { createCabin } from './cabin';
+import { createCarLook } from './look';
 
-const MESH_BUDGET = 8;
+const MESH_BUDGET = 2;
 
 function context(): PartContext {
   return {
@@ -19,9 +20,9 @@ function context(): PartContext {
 }
 
 describe('createCabin', () => {
-  it('builds a few merged meshes split between the seat and the body', () => {
+  it('draws the seat and the cockpit in one mesh each', () => {
     const parts = context();
-    const { object } = createCabin(parts);
+    const { object } = createCabin(parts, createCarLook(parts));
     const meshes = object.children as Mesh[];
     const groups = meshes.map((mesh) => parts.materials.groupOf(mesh.material as Material));
     expect(meshes.length).toBeLessThanOrEqual(MESH_BUDGET);
@@ -30,7 +31,7 @@ describe('createCabin', () => {
 
   it('anchors the seat label under a seat mesh so it hides with it', () => {
     const parts = context();
-    const { label } = createCabin(parts);
+    const { label } = createCabin(parts, createCarLook(parts));
     const seatMesh = label.parent as Mesh;
     expect(parts.materials.groupOf(seatMesh.material as Material)).toBe('seat');
     expect(label.position.toArray()).toEqual([...SEAT]);
