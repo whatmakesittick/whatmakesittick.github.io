@@ -1,6 +1,6 @@
 import { ConeGeometry, CylinderGeometry } from 'three';
 import type { BufferGeometry } from 'three';
-import { CORNER_NOZZLE_IDS } from '../../../ids';
+import { NOZZLE_PARTS } from '../../../ids';
 import type { NozzleId } from '../../../ids';
 import { BODY, drawnNozzleAt } from '../../parts/car/dimensions';
 import { latheAround } from './lathe';
@@ -30,17 +30,23 @@ const BELL_PROFILE: Profile = [
 
 export const BELL_LENGTH = 0.103;
 
-const STEM = { radius: 0.016, segments: 10 } as const;
+const STEM = { radius: 0.026, segments: 14 } as const;
 
 export const CONE = { radius: 0.055, length: 0.35, gap: 0.012, segments: 16 } as const;
 
 const CORNER_EXIT_DROP = 0.03;
-
-const CORNER_IDS: ReadonlySet<NozzleId> = new Set(CORNER_NOZZLE_IDS);
+const FRONT_EXIT_SIDE_Z = 0.765;
 
 export function nozzleReach(id: NozzleId): number {
-  if (!CORNER_IDS.has(id)) return BELL_LENGTH;
-  return drawnNozzleAt(id)[1] - BODY.floorY + CORNER_EXIT_DROP;
+  const [, y, z] = drawnNozzleAt(id);
+  switch (NOZZLE_PARTS[id]) {
+    case 'cornerNozzles':
+      return y - BODY.floorY + CORNER_EXIT_DROP;
+    case 'frontNozzles':
+      return Math.max(BELL_LENGTH, FRONT_EXIT_SIDE_Z - Math.abs(z));
+    default:
+      return BELL_LENGTH;
+  }
 }
 
 export function bellGeometry(): BufferGeometry {

@@ -76,7 +76,7 @@ function nozzleLooks(context: PartContext, group: NozzlePartId): NozzleLooks {
 function addFeedStem(object: Group, id: NozzleId, shapes: NozzleShapes, looks: NozzleLooks): void {
   const length = nozzleReach(id) - BELL_LENGTH;
   if (length <= 0) return;
-  const stem = new Mesh(shapes.stem, looks.collar);
+  const stem = new Mesh(shapes.stem, looks.body);
   stem.scale.y = length;
   object.add(stem);
 }
