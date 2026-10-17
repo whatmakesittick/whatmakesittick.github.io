@@ -68,7 +68,7 @@ export class CarPart implements CarView {
   }
 
   silhouette(): BufferGeometry {
-    this.outline ??= this.context.tracker.track(carSilhouette(this.body.silhouetteParts()));
+    this.outline ??= this.context.tracker.track(carSilhouette());
     return this.outline;
   }
 

@@ -28,8 +28,13 @@ const WELD_EPSILON = 1e-12;
 const MAX_ROWS = 16;
 const CAP_KEY_OFFSET = 1e7;
 
-function samplePatch(sections: readonly StationSection[], segment: SegmentId): Patch {
-  const cells = SEGMENT_CELLS[segment];
+export type SegmentCells = Readonly<Record<SegmentId, number>>;
+
+function samplePatch(
+  sections: readonly StationSection[],
+  segment: SegmentId,
+  cells: number,
+): Patch {
   const points = sections.map((section) =>
     Array.from({ length: cells + 1 }, (_, row): Vec3 => {
       const [z, y] = section.point(segment, row / cells);
@@ -194,9 +199,12 @@ function emitCap(regions: RegionSet, patches: readonly Patch[], end: 'tail' | 'n
   });
 }
 
-export function buildShell(stations: readonly number[]): Map<BodyRegion, BufferGeometry> {
+export function buildShell(
+  stations: readonly number[],
+  cells: SegmentCells = SEGMENT_CELLS,
+): Map<BodyRegion, BufferGeometry> {
   const sections = stations.map((x) => new StationSection(x));
-  const patches = SEGMENTS.map((segment) => samplePatch(sections, segment));
+  const patches = SEGMENTS.map((segment) => samplePatch(sections, segment, cells[segment]));
   patches.forEach(accumulateNormals);
   weldJunctions(patches);
   settleCentreline(patches);

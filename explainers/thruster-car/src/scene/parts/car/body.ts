@@ -18,7 +18,6 @@ export interface BodyUnit {
   readonly object: Group;
   readonly label: Object3D;
   setCutaway(open: boolean): void;
-  silhouetteParts(): BufferGeometry[];
 }
 
 interface CutawayPanel {
@@ -52,7 +51,6 @@ class Body implements BodyUnit {
   private readonly look: CarLook;
   private readonly ghost: Material;
   private readonly cutaway: CutawayPanel[] = [];
-  private readonly meshes: Mesh[] = [];
   private open = false;
 
   constructor(context: PartContext, look: CarLook) {
@@ -74,10 +72,6 @@ class Body implements BodyUnit {
       const panel = this.cutaway[index];
       panel.mesh.material = open ? this.ghost : panel.solid;
     }
-  }
-
-  silhouetteParts(): BufferGeometry[] {
-    return this.meshes.map((mesh) => mesh.geometry.clone());
   }
 
   private staticParts(
@@ -136,7 +130,6 @@ class Body implements BodyUnit {
   private add(geometry: BufferGeometry, finish: MaterialFinish): Mesh {
     const mesh = partMesh(this.context, geometry, BODY_PART, finish);
     this.object.add(mesh);
-    this.meshes.push(mesh);
     return mesh;
   }
 }
