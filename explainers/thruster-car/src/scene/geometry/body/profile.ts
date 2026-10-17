@@ -17,6 +17,7 @@ export const BODY_X = {
   ventRear: -0.96,
   rearGlass: -1.3,
   deck: -1.35,
+  tailPanel: -2.04,
   tailRound: -2.14,
 } as const;
 
@@ -131,8 +132,8 @@ const TOP_Y = smoothCurve([
   [1.5, 0.7],
   [1.6, 0.668],
   [1.8, 0.628],
-  [2.05, 0.59],
-  [BODY.halfLength, 0.555],
+  [2.05, 0.598],
+  [BODY.halfLength, 0.57],
 ]);
 
 const RAIL_Z = smoothCurve([

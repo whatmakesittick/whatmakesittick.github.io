@@ -24,11 +24,15 @@ function fill(from: number, to: number): number[] {
 export function bodyStations(): number[] {
   const tail = roundingStart(-1);
   const nose = roundingStart(1);
-  const breaks = [...Object.values(BODY_X), ...archEdges()]
-    .filter((x) => x > tail && x < nose)
-    .concat(tail, nose)
+  const breakpoints = [...Object.values(BODY_X), ...archEdges()];
+  const breaks = ordered([...breakpoints.filter((x) => x > tail && x < nose), tail, nose]);
+  const middle = breaks.slice(0, -1).flatMap((x, index) => fill(x, breaks[index + 1]));
+  const ends = breakpoints.filter((x) => x < tail || x > nose);
+  return ordered([...roundingStations(-1), ...middle, ...ends, ...roundingStations(1)]);
+}
+
+function ordered(stations: readonly number[]): number[] {
+  return [...stations]
     .sort((a, b) => a - b)
     .filter((x, index, all) => index === 0 || x - all[index - 1] > MERGE_GAP);
-  const middle = breaks.slice(0, -1).flatMap((x, index) => fill(x, breaks[index + 1]));
-  return [...roundingStations(-1).reverse(), ...middle.slice(1), ...roundingStations(1)];
 }

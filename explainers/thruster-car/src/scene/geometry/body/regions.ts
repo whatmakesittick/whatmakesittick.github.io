@@ -68,7 +68,7 @@ export function classifyCell(spot: CellSpot): BodyRegion {
     case 'wellRoof':
       return 'dark';
     case 'sill':
-      return 'trim';
+      return spot.x < BODY_X.tailPanel ? 'frame' : 'trim';
     case 'side':
       return sideRegion(spot);
     case 'shoulder':
