@@ -12,6 +12,7 @@ export function staticRegions(): Record<SiteRegionId, Box3> {
     site: regionFromSpec(SITE_REGIONS.site),
     ramp: regionFromSpec(SITE_REGIONS.ramp),
     arc: regionFromSpec(SITE_REGIONS.arc),
+    jump: regionFromSpec(SITE_REGIONS.jump),
   };
 }
 

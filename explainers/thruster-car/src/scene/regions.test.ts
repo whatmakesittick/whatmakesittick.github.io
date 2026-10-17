@@ -1,10 +1,16 @@
 import { Box3, Group, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
-import { CAR, CAR_ANCHORS, MOMENTS, SITE_ANCHORS, carAt, rampPoint } from '../model';
+import { CAR, CAR_ANCHORS, MOMENTS, RAMP_LENGTH, SITE_ANCHORS, carAt, rampPoint } from '../model';
+import type { MomentId } from '../ids';
 import { applyCarPose } from './pose';
 import { carRegion, staticRegions } from './regions';
 
 const ABOVE_GROUND = 0.5;
+
+function carPoint(moment: MomentId): Vector3 {
+  const point = new Vector3(...carAt(MOMENTS[moment]).position);
+  return point.setY(Math.max(point.y, ABOVE_GROUND));
+}
 
 function posedCar(seconds: number): Group {
   const car = new Group();
@@ -18,18 +24,31 @@ function worldPoint(car: Group, point: readonly [number, number, number]): Vecto
 }
 
 describe('static regions', () => {
-  it('hold the ramp, the arc to the pad and the whole run', () => {
-    const regions = staticRegions();
-    expect(regions.ramp.containsPoint(new Vector3(...rampPoint(0.5)))).toBe(true);
-    expect(regions.ramp.containsPoint(new Vector3(...rampPoint(1)))).toBe(true);
-    expect(regions.arc.containsPoint(new Vector3(...carAt(MOMENTS.peak).position))).toBe(true);
-    expect(regions.arc.containsPoint(new Vector3(...SITE_ANCHORS.pad).setY(ABOVE_GROUND))).toBe(
-      true,
+  it('hold the hook ramp and the arc down to the first landing box', () => {
+    const { ramp, arc } = staticRegions();
+    expect(ramp.containsPoint(new Vector3(...rampPoint(RAMP_LENGTH / 2)))).toBe(true);
+    expect(ramp.containsPoint(new Vector3(...rampPoint(RAMP_LENGTH)))).toBe(true);
+    expect(arc.containsBox(ramp)).toBe(true);
+    (['inverted', 'leavesRamp', 'rollComplete', 'touchdown'] as const).forEach((moment) =>
+      expect(arc.containsPoint(carPoint(moment))).toBe(true),
     );
-    expect(regions.site.containsBox(regions.ramp)).toBe(true);
-    expect(regions.site.containsBox(regions.arc)).toBe(true);
-    const stop = new Vector3(...carAt(MOMENTS.stopped).position).setY(ABOVE_GROUND);
-    expect(regions.site.containsPoint(stop)).toBe(true);
+    expect(arc.containsPoint(new Vector3(...SITE_ANCHORS.pad).setY(ABOVE_GROUND))).toBe(true);
+  });
+
+  it('hold the jump from the lift-off over the parked row to the landing', () => {
+    const { jump } = staticRegions();
+    (['liftOff', 'apex', 'twistComplete', 'landed'] as const).forEach((moment) =>
+      expect(jump.containsPoint(carPoint(moment))).toBe(true),
+    );
+    expect(jump.containsPoint(new Vector3(...SITE_ANCHORS.row))).toBe(true);
+  });
+
+  it('hold the whole run in the site', () => {
+    const { site, ramp, arc, jump } = staticRegions();
+    [ramp, arc, jump].forEach((region) => expect(site.containsBox(region)).toBe(true));
+    (['sixty', 'stopped'] as const).forEach((moment) =>
+      expect(site.containsPoint(carPoint(moment))).toBe(true),
+    );
   });
 
   it('hands out fresh boxes every time', () => {
@@ -41,7 +60,7 @@ describe('static regions', () => {
 
 describe('car regions', () => {
   it('follow the car along the run and hold its centre', () => {
-    [0, 3.5, MOMENTS.peak, MOMENTS.stopped].forEach((seconds) => {
+    [0, MOMENTS.inverted, MOMENTS.apex, MOMENTS.stopped].forEach((seconds) => {
       const car = posedCar(seconds);
       const centre = worldPoint(car, CAR_ANCHORS.car);
       expect(carRegion('car', car).containsPoint(centre)).toBe(true);
