@@ -33,7 +33,7 @@ export const THRUSTER_CAR_READOUTS: readonly Readout<ThrusterCarStoreState>[] = 
     numeric: true,
     value: (state) => formatThrust(liveReading(state).thrustN),
     meter: {
-      share: (state) => liveReading(state).thrustN / GAUGE_FULL_THRUST_N,
+      share: (state) => Math.min(1, liveReading(state).thrustN / GAUGE_FULL_THRUST_N),
       fill: THEME.netThrust,
     },
   },

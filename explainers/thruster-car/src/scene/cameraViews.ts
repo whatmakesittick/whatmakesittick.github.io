@@ -33,6 +33,7 @@ export const FOLLOW_VIEWS: Readonly<Record<FollowView, FollowSpec>> = {
 
 export const FIXED_VIEWS: Readonly<Record<FixedView, FramedView<RegionId>>> = {
   rampWide: { region: 'arc', direction: [0.15, 0.3, 1], margin: 1.1 },
+  jumpWide: { region: 'jump', direction: [-0.1, 0.3, 1], margin: 1.1 },
   siteWide: { region: 'site', direction: [0.2, 0.45, 1], margin: 1.05 },
 };
 

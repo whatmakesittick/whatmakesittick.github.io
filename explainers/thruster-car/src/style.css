@@ -1,9 +1,13 @@
 :root {
-  --boost: #f2b134;
+  --sprint: #f2b134;
+  --settle: #c9a227;
   --ramp: #5fa8ff;
-  --launch: #9b7fd1;
   --flip: #e5534b;
   --catch: #6fbf73;
+  --runUp: #e07b2e;
+  --leap: #9b7fd1;
+  --twist: #ff7aa8;
+  --landing: #3fc1a5;
   --rest: #8a8f99;
   --thruster-car-gas: #5fa8ff;
 }
@@ -50,7 +54,7 @@
 }
 
 .chip[data-action='replay'] {
-  --tone: var(--boost);
+  --tone: var(--sprint);
 }
 
 @media (pointer: coarse) {

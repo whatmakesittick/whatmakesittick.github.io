@@ -10,7 +10,7 @@ const REAL_TIME = SPEED_RANGE.default;
 const HALF_SPEED = 0.5;
 
 const STANDING_START_S = 0;
-const NOZZLES_FIRING_S = 1;
+const NOZZLES_FIRING_S = 0.5;
 const BEFORE_RAMP_S = 2;
 
 const NOZZLE_PARTS: readonly PartId[] = ['rearNozzles', 'cornerNozzles', 'frontNozzles', 'jets'];
@@ -40,7 +40,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     labels: ['rearNozzles', 'jets', 'wheels', 'runway'],
     highlight: ['rearNozzles', 'jets', 'wheels'],
   },
-  hop: {
+  hook: {
     camera: 'rampWide',
     speed: REAL_TIME,
     view: { nozzles: false, forces: false, tank: false, ghost: true },
@@ -55,6 +55,14 @@ export const PRESETS: Record<PresetId, Preset> = {
     startAt: MOMENTS.leavesRamp,
     labels: ['cornerNozzles', 'jets', 'forceArrows', 'landingPad'],
     highlight: ['cornerNozzles', 'jets', 'forceArrows', 'body'],
+  },
+  jump: {
+    camera: 'jumpWide',
+    speed: REAL_TIME,
+    view: { nozzles: true, forces: true, tank: false, ghost: true },
+    startAt: MOMENTS.touchdown,
+    labels: ['parkedRow', 'cornerNozzles', 'jets', 'landingPad'],
+    highlight: ['parkedRow', 'cornerNozzles', 'jets', 'body'],
   },
   limits: {
     camera: 'siteWide',
