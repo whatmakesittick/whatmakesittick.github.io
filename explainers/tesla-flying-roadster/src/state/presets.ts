@@ -14,6 +14,8 @@ const NOZZLES_FIRING_AFTER_S = 0.5;
 const NOZZLES_FIRING_S = STANDING_START_S + NOZZLES_FIRING_AFTER_S;
 const LOOP_LEAD_IN_S = 0.5;
 const SETTLING_TO_LOOP_S = PHASE_RANGES.ramp.start - LOOP_LEAD_IN_S;
+const CLEAR_OF_DECK_S = 0.35;
+const CLEAR_OF_DECK_AT_S = MOMENTS.leavesRamp + CLEAR_OF_DECK_S;
 const LEAP_LEAD_IN_S = 0.7;
 const RUNNING_AT_ROW_S = MOMENTS.liftOff - LEAP_LEAD_IN_S;
 
@@ -56,7 +58,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'flipChase',
     speed: HALF_SPEED,
     view: { nozzles: true, forces: true, tank: false, ghost: true },
-    startAt: MOMENTS.leavesRamp,
+    startAt: CLEAR_OF_DECK_AT_S,
     labels: ['cornerNozzles', 'jets', 'forceArrows', 'landingPad'],
     highlight: ['cornerNozzles', 'jets', 'forceArrows', 'body'],
   },
