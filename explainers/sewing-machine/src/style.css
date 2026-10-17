@@ -42,6 +42,6 @@
 
 @media (pointer: coarse) {
   .chip[data-action='tension'] {
-    height: 44px;
+    min-height: 44px;
   }
 }

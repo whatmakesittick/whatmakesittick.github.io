@@ -7,6 +7,7 @@ const REPOSITORY_ROOT = fileURLToPath(new URL('..', import.meta.url));
 
 export interface ExplainerUnderTest {
   slug: string;
+  locales: readonly LanguageCode[];
   secondLanguage: LanguageCode | undefined;
 }
 
@@ -18,6 +19,7 @@ function secondLanguage(locales: readonly LanguageCode[]): LanguageCode | undefi
 export function discoverExplainers(): ExplainerUnderTest[] {
   return loadExplainers(REPOSITORY_ROOT).map(({ manifest }) => ({
     slug: manifest.slug,
+    locales: manifest.locales,
     secondLanguage: secondLanguage(manifest.locales),
   }));
 }

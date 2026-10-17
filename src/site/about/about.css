@@ -37,6 +37,7 @@
 
 .about-steps {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
   margin: 8px 0 0;
   padding: 0;
@@ -46,6 +47,7 @@
 
 .about-step {
   position: relative;
+  overflow-wrap: break-word;
   padding: 20px 22px 20px 66px;
   border: 1px solid var(--line);
   border-radius: var(--radius);

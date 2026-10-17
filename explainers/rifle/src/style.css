@@ -97,7 +97,7 @@
   .chip[data-action='moment'],
   .chip[data-action='gasPort'],
   .chip[data-action='comparison'] {
-    height: 44px;
+    min-height: 44px;
   }
 }
 

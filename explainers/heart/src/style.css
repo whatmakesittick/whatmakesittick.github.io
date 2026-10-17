@@ -133,7 +133,7 @@
   .chip[data-action='valve'],
   .chip[data-action='wave'],
   .chip[data-action='fitness'] {
-    height: 44px;
+    min-height: 44px;
   }
 }
 

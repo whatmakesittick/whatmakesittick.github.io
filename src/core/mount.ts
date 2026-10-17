@@ -17,6 +17,7 @@ import { mountSafeArea } from './ui/safeArea';
 import { mountSections } from './ui/sections';
 import { mountStageExpansion } from './ui/stageExpansion';
 import { stageShortcuts } from './ui/stageShortcuts';
+import { followSystemTextSize } from './ui/textSize';
 
 const SITE_NAME_KEY = 'catalogue.title';
 const SCENE_SELECTOR = '#scene';
@@ -44,6 +45,7 @@ export async function mountExplainer<S extends Playback>(
   explainer: Explainer<S>,
   locales: LocaleLoaders,
 ): Promise<() => void> {
+  followSystemTextSize();
   await initI18n(locales);
   const languages = shippedLanguages(locales);
   const store = explainer.createStore();

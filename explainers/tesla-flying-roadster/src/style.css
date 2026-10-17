@@ -62,7 +62,7 @@
 
 @media (pointer: coarse) {
   .chip[data-action] {
-    height: 44px;
+    min-height: 44px;
   }
 }
 

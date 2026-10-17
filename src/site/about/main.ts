@@ -7,6 +7,7 @@ import { loadersByLanguage } from '@core/i18n/loader';
 import { mountFooter } from '@core/ui/footer';
 import { mountLanguage } from '@core/ui/language';
 import { mountSiteLinks } from '@core/ui/siteLinks';
+import { followSystemTextSize } from '@core/ui/textSize';
 import en from './locales/en.json';
 
 const TITLE_KEY = 'catalogue.title';
@@ -26,5 +27,6 @@ function mountAbout(): void {
   mountFooter(document, TITLE_KEY);
 }
 
+followSystemTextSize();
 await initI18n(ABOUT_LOCALES);
 mountAbout();

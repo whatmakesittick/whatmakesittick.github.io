@@ -161,6 +161,15 @@ export function dockCollisions(page: Page): Promise<string[]> {
   });
 }
 
+export function tallerThanButtons(page: Page): Promise<string[]> {
+  return page.$$eval('button', (buttons) =>
+    buttons
+      .filter((button) => button.checkVisibility())
+      .filter((button) => button.scrollHeight > button.clientHeight + 1)
+      .map((button) => button.textContent?.trim() ?? ''),
+  );
+}
+
 export async function openDockExtras(page: Page): Promise<void> {
   const more = page.locator(DOCK_MORE);
   if (!(await more.isVisible())) return;

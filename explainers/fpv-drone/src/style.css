@@ -159,7 +159,7 @@
   .chip[data-action='video'],
   .chip[data-action='packetRate'],
   .chip[data-action='speedster'] {
-    height: 44px;
+    min-height: 44px;
   }
 }
 

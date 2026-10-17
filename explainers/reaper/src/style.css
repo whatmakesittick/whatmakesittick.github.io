@@ -151,7 +151,7 @@
   .chip[data-action='comparison'],
   .chip[data-action='sensorMode'],
   .chip[data-action='load'] {
-    height: 44px;
+    min-height: 44px;
   }
 }
 

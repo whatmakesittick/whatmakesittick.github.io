@@ -63,7 +63,7 @@
 
 .dock-language {
   display: inline-block;
-  height: var(--control-height);
+  min-height: var(--control-height);
   padding-block: 0;
 }
 

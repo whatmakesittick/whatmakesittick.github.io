@@ -38,6 +38,6 @@
 @media (pointer: coarse) {
   .chip[data-action='objective'],
   .chip[data-action='eyepiece'] {
-    height: 44px;
+    min-height: 44px;
   }
 }

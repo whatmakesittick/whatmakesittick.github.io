@@ -149,6 +149,6 @@
   .chip[data-action='layer'],
   .chip[data-action='layout'],
   .chip[data-action='followDay'] {
-    height: 44px;
+    min-height: 44px;
   }
 }

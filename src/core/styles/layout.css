@@ -64,6 +64,10 @@
   min-width: 0;
 }
 
+.prose li {
+  min-width: 0;
+}
+
 .site-footer {
   grid-area: footer;
   padding: 24px var(--gutter) 32px;
@@ -224,6 +228,7 @@
 
 .masthead-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -231,11 +236,13 @@
 }
 
 .masthead-row .eyebrow {
+  flex: 1 1 5rem;
   margin: 0;
 }
 
 .masthead-actions {
   display: flex;
+  flex-wrap: wrap;
   flex-shrink: 0;
   align-items: stretch;
   gap: 8px;

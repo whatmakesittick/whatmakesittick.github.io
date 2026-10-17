@@ -42,6 +42,7 @@
   .draft-control .range-widget__readouts > div,
   .section-readouts > div {
     display: flex;
+    flex-wrap: wrap;
     grid-column: 1 / -1;
     justify-content: space-between;
     align-items: baseline;
@@ -194,6 +195,6 @@
   .chip[data-action='section'],
   .chip[data-action='layer'],
   .chip[data-action='mudPlan'] {
-    height: 44px;
+    min-height: 44px;
   }
 }

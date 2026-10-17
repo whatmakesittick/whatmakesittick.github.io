@@ -4,6 +4,7 @@ import { entries } from 'virtual:explainer-catalogue';
 import { LANGUAGES, initI18n } from '@core/i18n';
 import { mountSiteLinks } from '@core/ui/siteLinks';
 import { mountFooter } from '@core/ui/footer';
+import { followSystemTextSize } from '@core/ui/textSize';
 import { mountLanguage } from '@core/ui/language';
 import { mountCards } from './cards';
 
@@ -17,5 +18,6 @@ function mountCatalogue(): void {
   mountFooter(document, TITLE_KEY);
 }
 
+followSystemTextSize();
 await initI18n();
 mountCatalogue();

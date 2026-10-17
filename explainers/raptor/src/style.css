@@ -130,7 +130,7 @@
   .chip[data-action='propellant'],
   .chip[data-action='engine'],
   .chip[data-action='moment'] {
-    height: 44px;
+    min-height: 44px;
   }
 }
 

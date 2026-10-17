@@ -33,6 +33,7 @@
   .wheel-readouts > div,
   .escapement-readouts > div {
     display: flex;
+    flex-wrap: wrap;
     grid-column: 1 / -1;
     justify-content: space-between;
     align-items: baseline;
@@ -136,6 +137,6 @@
   .chip[data-action='wheel'],
   .chip[data-action='moment'],
   .chip[data-action='beatRate'] {
-    height: 44px;
+    min-height: 44px;
   }
 }

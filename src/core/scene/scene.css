@@ -71,7 +71,7 @@
   background: rgb(20 24 30 / 88%);
   color: var(--text, #e6e9ee);
   font:
-    500 12px/1.2 ui-sans-serif,
+    500 0.75rem/1.2 ui-sans-serif,
     system-ui,
     -apple-system,
     'Segoe UI',
