@@ -8,3 +8,5 @@ export * from './ballistic';
 export * from './roll';
 export * from './run';
 export * from './budget';
+export * from './playback';
+export * from './plume';
