@@ -2,6 +2,7 @@ import type { GasId } from '../ids';
 import {
   EXHAUST_SPEED_MS,
   FILL_POWER_KW,
+  FULL_COMPRESSIBILITY,
   G,
   GAS_DENSITY_KG_M3,
   PRESSURE_EXPONENT,
@@ -48,6 +49,11 @@ export function fillMinutes(gas: GasId, litres: number, share: number): number {
 
 export function pressureAt(massShare: number): number {
   return TANK_PRESSURE_BAR * massShare ** PRESSURE_EXPONENT;
+}
+
+export function fillPressureAt(massShare: number): number {
+  const idealPressure = (TANK_PRESSURE_BAR / FULL_COMPRESSIBILITY) * massShare;
+  return idealPressure * (1 + (FULL_COMPRESSIBILITY - 1) * massShare ** 2);
 }
 
 export function shareAtPressure(pressureBar: number): number {

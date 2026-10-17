@@ -9,6 +9,7 @@ import {
   shareAtPressure,
   storedMass,
   storedWorkMj,
+  fillPressureAt,
   tankShellKg,
   thrust,
 } from './gas';
@@ -27,7 +28,7 @@ describe('gas', () => {
   });
 
   it('weighs the carbon shell at 0.71 kg a litre', () => {
-    expect(tankShellKg(600)).toBeCloseTo(426, 9);
+    expect(tankShellKg(600)).toBeCloseTo(428.9, 0);
   });
 
   it('turns thrust into mass flow through the exhaust speed and back', () => {
@@ -47,6 +48,13 @@ describe('gas', () => {
     expect(pressureAt(0.67)).toBeCloseTo(210, -1);
     expect(pressureAt(0.5)).toBeCloseTo(87.5, 9);
     expect(shareAtPressure(pressureAt(0.42))).toBeCloseTo(0.42, 9);
+  });
+
+  it('fills to 700 bar at 300 K with real-gas pressure rising faster than the mass', () => {
+    expect(fillPressureAt(1)).toBeCloseTo(700, 9);
+    expect(fillPressureAt(0.5)).toBeCloseTo(257, 0);
+    expect(fillPressureAt(0.25)).toBeCloseTo(117, 0);
+    expect(fillPressureAt(0)).toBe(0);
   });
 
   it('scales a choked nozzle with the tank pressure', () => {

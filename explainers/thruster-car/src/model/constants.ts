@@ -25,7 +25,10 @@ export const WORK_PER_KG_KJ: Readonly<Record<GasId, number>> = {
   helium: 3461,
 };
 
-export const TANK_SHELL_KG_PER_L = 0.71;
+export const MIRAI_TANK_L = 122.4;
+export const MIRAI_TANK_KG = 87.5;
+export const TANK_SHELL_KG_PER_L = MIRAI_TANK_KG / MIRAI_TANK_L;
+export const FULL_COMPRESSIBILITY = 1.55;
 
 export const TANK_LITRES: Readonly<Record<TankChoiceId, number>> = { '400': 400, '600': 600 };
 export const DEFAULT_TANK_LITRES = TANK_LITRES['600'];

@@ -69,7 +69,7 @@ describe('chapter widgets', () => {
     expect(readout('fillWork')).toBe(fill(units.megajoulesPair, { mj: '143', kwh: '39.6' }));
     expect(readout('fillPressure')).toBe(fill(units.bar, { value: '700' }));
     expect(readout('fillTime')).toBe(fill(units.minutes, { value: '48' }));
-    expect(readout('tankShell')).toBe(fill(units.kilograms, { value: '426' }));
+    expect(readout('tankShell')).toBe(fill(units.kilograms, { value: '429' }));
     expect(output('nozzle-pressure')).toBe(fill(units.bar, { value: '700' }));
     expect(readout('nozzleThrust')).toBe(fill(units.kilonewtons, { value: '8.0' }));
     expect(readout('nozzleFlow')).toBe(fill(units.kgPerSecond, { value: '11.5' }));
@@ -141,7 +141,7 @@ describe('chapter widgets', () => {
     click('tank', '400');
     expect(store.getState().tankLitres).toBe(400);
     expect(pressed('tank', '400')).toEqual(['true', 'true']);
-    expect(readout('tankShell')).toBe(fill(units.kilograms, { value: '284' }));
+    expect(readout('tankShell')).toBe(fill(units.kilograms, { value: '286' }));
     expect(readout('hoverFlow')).toBe(fill(units.kgPerSecond, { value: '9.1' }));
     expect(readout('hoverTime')).toBe(fill(units.seconds, { value: '3.7' }));
     expect(readout('jetPower')).toBe(fill(units.megawatts, { value: '15.2' }));
