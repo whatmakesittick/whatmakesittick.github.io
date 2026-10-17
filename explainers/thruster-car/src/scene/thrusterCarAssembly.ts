@@ -10,6 +10,7 @@ import type { Assembly, AssemblyResources, ChaseTarget } from './assembly';
 import { CarPart } from './parts/car/car';
 import type { PartContext } from './parts/context';
 import { EffectsPart } from './parts/effects/effects';
+import { createParkedRow } from './parts/row/parkedRow';
 import { createWorld } from './parts/world/world';
 import { carRegion, staticRegions } from './regions';
 
@@ -41,12 +42,14 @@ export class ThrusterCarAssembly implements Assembly {
     this.materials = resources.materials;
     const context: PartContext = { ...resources, tracker: this.tracker };
     const world = createWorld(context);
+    const row = createParkedRow(context);
     this.car = new CarPart(context);
     this.effects = new EffectsPart(context, this.car);
-    this.root.add(world.object, this.car.object, this.effects.object);
+    this.root.add(world.object, row.object, this.car.object, this.effects.object);
     this.labels = new Map<PartId, Object3D>([
       ...this.car.labels,
       ...world.labels,
+      ['parkedRow', row.label],
       ...this.effects.labels,
     ]);
     this.named = { ...this.car.anchors, ...world.anchors };
