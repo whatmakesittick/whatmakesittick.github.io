@@ -26,15 +26,13 @@ const TYRE = {
 const RIM = {
   lipInset: 0.014,
   lipDrop: 0.008,
-  spokeEnd: 0.68,
-  spokeDish: 0.034,
-  hub: 0.3,
-  hubDrop: 0.016,
-  capDrop: 0.01,
+  spokeEnd: 0.5,
+  spokeDish: 0.03,
+  capDrop: 0.012,
 } as const;
 
 const TRIANGLES_PER_QUAD = 2;
-const SPOKE_BANDS: ReadonlySet<number> = new Set([1, 2]);
+const SPOKE_BAND = 1;
 
 function tyreProfile(spec: WheelSpec): Profile {
   const outer = spec.width / 2;
@@ -42,7 +40,6 @@ function tyreProfile(spec: WheelSpec): Profile {
   const tread = outer - TYRE.treadInset;
   const groove: Profile = spec.dual ? [[spec.radius - TYRE.groove, 0]] : [];
   return [
-    [spec.radius - TYRE.shoulder, -(outer - TYRE.shoulderInset)],
     [spec.radius, -tread],
     ...groove,
     [spec.radius, tread],
@@ -58,7 +55,6 @@ function rimProfile(spec: WheelSpec): Profile {
     [spec.rim + TYRE.bead, face],
     [spec.rim - RIM.lipInset, face - RIM.lipDrop],
     [spec.rim * RIM.spokeEnd, face - RIM.spokeDish],
-    [spec.rim * RIM.hub, face - RIM.hubDrop],
     [0, face - RIM.capDrop],
   ];
 }
@@ -78,7 +74,7 @@ function lathePainted(
 }
 
 function rimSwatch(segment: number, band: number): RowSwatch {
-  if (!SPOKE_BANDS.has(band)) return 'rim';
+  if (band !== SPOKE_BAND) return 'rim';
   return segment % 2 === 0 ? 'rim' : 'rimDark';
 }
 

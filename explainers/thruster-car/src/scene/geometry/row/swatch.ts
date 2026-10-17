@@ -15,7 +15,8 @@ export type RowSwatch =
   | 'rimDark'
   | 'lampHead'
   | 'lampRear'
-  | 'lampAmber';
+  | 'lampAmber'
+  | 'plate';
 
 export type BodyPaint = Extract<RowSwatch, `paint${string}`>;
 

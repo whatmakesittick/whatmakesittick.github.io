@@ -4,7 +4,7 @@ import { mergeParts } from '../../parts/context';
 import { HALF_TURN } from '../gear/lathe';
 import { wheelGeometry } from './wheel';
 import type { WheelSpec } from './wheel';
-import type { SwatchUv } from './swatch';
+import type { BodyPaint, SwatchUv } from './swatch';
 
 export interface VehicleSize {
   length: number;
@@ -16,6 +16,19 @@ export interface Axle {
   x: number;
   z: number;
   spec: WheelSpec;
+}
+
+export interface VehicleModel {
+  readonly design: VehicleSize;
+  readonly axles: readonly Axle[];
+  geometry(size: VehicleSize, paint: BodyPaint, uv: SwatchUv): BufferGeometry;
+}
+
+export interface WheelPrint {
+  x: number;
+  z: number;
+  radius: number;
+  width: number;
 }
 
 export interface Stretch {
@@ -41,12 +54,29 @@ function scaledSpec(spec: WheelSpec, factor: number): WheelSpec {
   };
 }
 
+function wheelScale(stretch: Stretch): number {
+  return Math.min(stretch.x, stretch.y);
+}
+
+export function wheelPrints(model: VehicleModel, size: VehicleSize): WheelPrint[] {
+  const stretch = stretchOf(size, model.design);
+  const factor = wheelScale(stretch);
+  return model.axles.flatMap((axle) =>
+    [1, -1].map((side) => ({
+      x: axle.x * stretch.x,
+      z: side * axle.z * stretch.z,
+      radius: axle.spec.radius * factor,
+      width: axle.spec.width * factor,
+    })),
+  );
+}
+
 export function axleWheels(
   axles: readonly Axle[],
   stretch: Stretch,
   uv: SwatchUv,
 ): BufferGeometry[] {
-  const factor = Math.min(stretch.x, stretch.y);
+  const factor = wheelScale(stretch);
   return axles.flatMap((axle) => {
     const spec = scaledSpec(axle.spec, factor);
     const wheel = wheelGeometry(spec, uv);
