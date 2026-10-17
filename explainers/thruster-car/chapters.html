@@ -19,23 +19,25 @@
     How big is the tank? Reports give 400 L and 600 L, and the sources disagree. So the model uses
     600 L and lets you try 400 L. At 700 bar, air is packed tight: 100 L of it holds about 53 kg, so
     600 L holds about 315 kg. Walls that hold this must be strong and light, so they are wound from
-    carbon fibre. The hydrogen tanks of Toyota's Mirai work at the same pressure. They weigh about
-    0.71 kg for every litre they hold. By that measure, a 600 L tank would weigh about 430 kg before
-    any gas goes in.
+    carbon fibre. The hydrogen tanks of the first Toyota Mirai work at the same pressure. They weigh
+    about 0.71 kg for every litre they hold. By that measure, a 600 L tank would weigh about 430 kg
+    before any gas goes in.
   </p>
   <p data-i18n-html="sections.tank.p4">
     Squeezed air stores energy, like a wound spring. As 100 L of it expands, it can do about 24
-    megajoules (MJ) of work, which is 6.6 kilowatt hours (kWh). A full 600 L tank holds about 40
-    kWh. Tesla says a refill takes six or seven hours today, and it aims for 30 minutes. Drag the
-    fill slider: it shows the least work a perfect pump would need, and how long that takes at 50
-    kW. Real pumps need more.
+    megajoules (MJ) of work, or 6.6 kilowatt hours (kWh). Tesla says a refill takes six or seven
+    hours today, and it aims for 30 minutes. Drag the fill slider to see the least work a perfect
+    pump would need, and how long that takes at 50 kW. Real pumps need more. The pressure it shows
+    follows the model's curve for air at room temperature. It climbs faster than the mass, because
+    tightly packed air resists being squeezed further. Like every slider on this page, this one is a
+    calculator: it shows the sums and leaves the 3D run alone.
   </p>
   <p data-i18n-html="sections.tank.p5">
     On the day, Tesla showed several stunts, some with different cars. This page folds them into one
     run of 14 seconds, played in real time. The car speeds up on its jets, climbs a twisting ramp,
     leaves it upside down, rolls upright and lands. The motion is the model's own script. The gas
-    and the tank you pick change only how much gas the run uses, the pressure and the jets, never
-    the path.
+    and the tank you pick change how much gas the run uses, the pressure and the jets. If the tank
+    runs down to its cut-off, your choice changes the landing speed too. It never changes the path.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.gas">
     <button
@@ -139,7 +141,7 @@
     The push is called thrust. It equals the mass of gas leaving each second, the mass flow, times
     the speed it leaves at, the exhaust speed. Air from a 700 bar tank leaves at about 700 m/s.
     Engineers also rate a gas by its specific impulse, or Isp. It counts how many seconds a kilogram
-    of gas could push with a force equal to its own weight, and for cold air it is about 70 s.
+    of gas could push with a force equal to its own weight. For cold air it is about 70 s.
   </p>
   <p data-i18n-html="sections.nozzle.p3">
     You might think more pressure means faster gas. It mostly does not. The exhaust speed depends on
@@ -149,10 +151,10 @@
   </p>
   <p data-i18n-html="sections.nozzle.p4">
     As the gas expands, it cools far below freezing. That is where the white cloud in the
-    <strong>gas jets</strong> comes from: some of the air turns into tiny drops, and moisture in the
-    air around it freezes. This is also why they are called cold-gas thrusters. Nothing burns, so
-    there are no hot parts and only one valve per nozzle. The price is the weakest push per kilogram
-    of any kind of thruster, because no fuel adds energy.
+    <strong>gas jets</strong> comes from: some of the air may even turn into tiny drops, and
+    moisture in the air around it freezes. This is also why they are called cold-gas thrusters.
+    Nothing burns, so there are no hot parts and only one valve per nozzle. The price is the weakest
+    push per kilogram of any kind of thruster, because no fuel adds energy.
   </p>
   <p data-i18n-html="sections.nozzle.p5">
     That simple, safe design is why spacecraft use it. Small satellites steer with cold-gas jets,
@@ -199,11 +201,11 @@
     <dl class="range-widget__readouts">
       <div>
         <dt data-i18n="chapters.nozzle.flow">Mass flow</dt>
-        <dd class="number" data-readout="nozzleFlow">10.1 kg/s</dd>
+        <dd class="number" data-readout="nozzleFlow">11.5 kg/s</dd>
       </div>
       <div>
         <dt data-i18n="chapters.nozzle.thrust">Thrust of one corner nozzle</dt>
-        <dd class="number" data-readout="nozzleThrust">7.0 kN</dd>
+        <dd class="number" data-readout="nozzleThrust">8.0 kN</dd>
       </div>
       <div>
         <dt data-i18n="chapters.nozzle.exhaust">Exhaust speed</dt>
@@ -230,7 +232,7 @@
     Electrek reports about 80 kN from the rear jets. On a 1.7 tonne car, that gives 4.8 g. One g is
     the pull of gravity you feel when you stand still, so the push would feel nearly five times your
     weight. But at 80 kN the jets gulp about 115 kg of air every second. A full 600 L tank would be
-    empty in 2.7 s.
+    empty in about 2.8 s.
   </p>
   <p data-i18n-html="sections.boost.p3">
     Tesla quotes three times from 0 to 60 mph (97 km/h): under 1.6 s for the Performance version
@@ -243,7 +245,8 @@
     three seconds along the <strong>runway</strong>. That brings the car to 16 m/s (58 km/h) at the
     ramp and leaves gas for the flip and the catch. This setting is the model's choice. It also
     holds each jet's thrust steady, though a real tank loses pressure as it empties and its jets
-    weaken.
+    weaken. Drag the thrust slider to see the push, the 0 to 60 mph time and the gas use. The run on
+    screen keeps its own 9.1 kN.
   </p>
   <div class="range-widget">
     <div class="range-widget__header">
@@ -261,12 +264,12 @@
         <dd class="number" data-readout="zeroToSixty">0.57 s</dd>
       </div>
       <div>
-        <dt data-i18n="chapters.boost.flow">Gas used</dt>
+        <dt data-i18n="chapters.boost.flow">Gas used each second</dt>
         <dd class="number" data-readout="boostFlow">115 kg/s</dd>
       </div>
       <div>
         <dt data-i18n="chapters.boost.lasts">A full tank lasts</dt>
-        <dd class="number" data-readout="boostLasts">2.7 s</dd>
+        <dd class="number" data-readout="boostLasts">2.8 s</dd>
       </div>
     </dl>
   </div>
@@ -298,21 +301,23 @@
     The car leaves the ramp upside down, 4 m up, at 13.3 m/s and pointing 42 degrees up. From here
     no jet pushes it forward or up. It is thrown, like a ball, and gravity alone bends its path into
     an arc. The <strong>ghost path</strong> draws that arc ahead of the car, down to the
-    <strong>landing pad</strong>.
+    <strong>landing pad</strong>. The chips below jump to the moment the car leaves the ramp, or to
+    the top of its hop.
   </p>
   <p data-i18n-html="sections.hop.p3">
-    How high it goes depends only on how fast it moves upward. At 42 degrees, 13.3 m/s gives about
-    8.9 m/s straight up, and that lifts the car another 4 m. So it tops out about 8 m above the
-    ground. Tesla gave about 8 m (27 ft) for one of its jumps, though it is not clear whether that
-    was height or length. With no help, the car would land 2.2 s after leaving the ramp. The catch
-    slows its fall, so in the run it stays in the air about 2.6 s.
+    How much higher it climbs depends only on how fast it moves upward. At 42 degrees, 13.3 m/s
+    gives about 8.9 m/s straight up, and that lifts the car another 4 m. So it tops out about 8 m
+    above the ground. Tesla gave about 8 m (27 ft) for one of its jumps, though it is not clear
+    whether that was height or length. With no help, the car would land 2.2 s after leaving the
+    ramp. The catch slows its fall, so in the run it stays in the air about 2.6 s.
   </p>
   <p data-i18n-html="sections.hop.p4">
-    Drag the launch slider to throw the car faster or slower. Speed counts twice here: the climb
-    grows with the square of the upward speed, so 10 % more speed gives about 21 % more climb. Tesla
-    has not published the real ramp's size; reports describe a track that curls up and over in a
-    half loop. The twist, the 4 m exit, the 42 degree angle and the 16 m/s entry are all the model's
-    own.
+    Drag the launch slider to see how a faster or slower throw changes the numbers below. Like every
+    slider on this page, it is a calculator: it shows the sums, and the run on screen keeps its own
+    path. Speed counts twice: the climb grows with the square of the upward speed, so 10 % more
+    speed gives about 21 % more climb. Tesla has not published the real ramp's size; reports
+    describe a track that curls up and over in a half loop. The twist, the 4 m exit, the 42 degree
+    angle and the 16 m/s entry are all the model's own.
   </p>
   <div class="range-widget">
     <div class="range-widget__header">
@@ -351,6 +356,26 @@
       <dd class="number" data-i18n="chapters.hop.teslaValue">about 8 m (27 ft), Tesla's figure</dd>
     </div>
   </dl>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.moment">
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="leavesRamp"
+      data-i18n="timeline.moment.leavesRamp"
+    >
+      Leaves the ramp
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="peak"
+      data-i18n="timeline.moment.peak"
+    >
+      Top of the hop
+    </button>
+  </div>
 </section>
 
 <section class="chapter" data-preset="flip" aria-labelledby="flip-title">
@@ -359,15 +384,16 @@
   <p data-i18n-html="sections.flip.p1">
     Upside down near the top of its hop, the car must turn over before it lands. The
     <strong>corner nozzles</strong> do this. They work like the small steering jets on a spacecraft,
-    which turn it in place. A push away from the centre makes the car spin, and the strength of that
-    turning is called torque. The two nozzles on one side fire first to start the roll, then the two
+    which turn it in place. A push away from the centre makes the car spin. How strongly it turns
+    the car is called torque. The two nozzles on one side fire first to start the roll, then the two
     on the other side fire to stop it, like a brake.
   </p>
   <p data-i18n-html="sections.flip.p2">
     How fast the car turns depends on how hard it is to spin, its roll inertia, measured in kg·m².
     The more weight sits far from the centre, the harder it is to spin. Tests on real cars found
     about 390 kg·m² for a small car and 630 for a large one. Nobody has published a figure for a
-    sports car with full tanks, so the model picks 600 and lets you try 500 to 900.
+    sports car with full tanks, so the model picks 600. The slider lets you try 500 to 900, while
+    the run itself keeps 600.
   </p>
   <p data-i18n-html="sections.flip.p3">
     In the run, each corner nozzle pushes with 2 kN, 0.9 m from the centre, so a pair makes 3.6 kN·m
@@ -384,8 +410,9 @@
   </p>
   <p data-i18n-html="sections.flip.p5">
     After touchdown the car brakes and rolls to a stop about 86 m from the start, 11.45 s into the
-    run. The flip plays at half speed here so you can follow each pair of jets. Press replay to
-    watch the whole run again.
+    run. The flip plays at half speed here so you can follow each pair of jets. Use the chips to
+    jump to the moment the car is upright again or touches down, or press replay to watch the whole
+    run again.
   </p>
   <div class="range-widget">
     <div class="range-widget__header">
@@ -404,7 +431,7 @@
       </div>
       <div>
         <dt data-i18n="chapters.flip.rate">Fastest roll</dt>
-        <dd class="number" data-readout="rollRate">248°/s</dd>
+        <dd class="number" data-readout="rollRate">249°/s</dd>
       </div>
     </dl>
   </div>
@@ -420,6 +447,26 @@
       <dd class="number" data-i18n="chapters.flip.touchdownValue">2.5 m/s down</dd>
     </div>
   </dl>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.moment">
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="rollComplete"
+      data-i18n="timeline.moment.rollComplete"
+    >
+      Upright again
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="touchdown"
+      data-i18n="timeline.moment.touchdown"
+    >
+      Touchdown
+    </button>
+  </div>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.replay">
     <button
       type="button"
@@ -519,7 +566,7 @@
   </div>
   <dl class="readouts">
     <div>
-      <dt data-i18n="chapters.limits.hoverFlow">Gas to hover</dt>
+      <dt data-i18n="chapters.limits.hoverFlow">Gas flow to hover</dt>
       <dd class="number" data-readout="hoverFlow">23.9 kg/s</dd>
     </div>
     <div>
