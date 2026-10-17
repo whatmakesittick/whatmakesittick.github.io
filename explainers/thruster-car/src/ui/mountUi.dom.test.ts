@@ -34,6 +34,11 @@ function slide(id: string, value: number): void {
   input.dispatchEvent(new Event('input'));
 }
 
+function thumb(id: string): { value?: string; step?: string } {
+  const input = document.querySelector<HTMLInputElement>(`#${id}`);
+  return { value: input?.value, step: input?.step };
+}
+
 function output(id: string): string | null | undefined {
   return document.querySelector(`output[for="${id}"]`)?.textContent;
 }
@@ -81,7 +86,8 @@ describe('chapter widgets', () => {
     expect(readout('boostFlow')).toBe(fill(units.kgPerSecond, { value: '115' }));
     expect(readout('boostLasts')).toBe(fill(units.seconds, { value: '2.8' }));
     expect(output('launch-speed')).toBe(fill(units.metresPerSecond, { value: '13.3' }));
-    expect(readout('peakHeight')).toBe(fill(units.metres, { value: '8.1' }));
+    expect(thumb('launch-speed')).toEqual({ value: '13.3', step: '0.1' });
+    expect(readout('peakHeight')).toBe(fill(units.metres, { value: '8.0' }));
     expect(readout('airTime')).toBe(fill(units.seconds, { value: '2.2' }));
     expect(readout('hopRange')).toBe(fill(units.metres, { value: '22' }));
     expect(output('roll-inertia')).toBe(fill(units.kgm2, { value: '600' }));

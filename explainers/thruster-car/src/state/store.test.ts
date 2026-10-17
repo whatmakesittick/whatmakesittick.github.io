@@ -34,8 +34,8 @@ describe('thruster car store', () => {
       rearThrustKn: 80,
       rollInertia: 600,
     });
-    expect(CALCULATOR_DEFAULTS.launchSpeed).toBe(EXIT_SPEED_MS);
-    expect(CALCULATOR_DEFAULTS.launchSpeed).toBeCloseTo(13.3, 1);
+    expect(CALCULATOR_DEFAULTS.launchSpeed).toBe(13.3);
+    expect(CALCULATOR_DEFAULTS.launchSpeed).toBeCloseTo(EXIT_SPEED_MS, 1);
     expect(state).toMatchObject(CALCULATOR_DEFAULTS);
   });
 
@@ -46,13 +46,13 @@ describe('thruster car store', () => {
     setFillShare(0.37);
     setPressureBar(420);
     setRearThrustKn(3);
-    setLaunchSpeed(13.3);
+    setLaunchSpeed(13.36);
     setRollInertia(2000);
     expect(store.getState()).toMatchObject({
       fillShare: 0.35,
       pressureBar: 400,
       rearThrustKn: 10,
-      launchSpeed: 13.5,
+      launchSpeed: 13.4,
       rollInertia: 900,
     });
     setFillShare(-1);
@@ -63,7 +63,7 @@ describe('thruster car store', () => {
   it('snaps without float noise', () => {
     expect(snapToRange(0.149, CALCULATOR_RANGES.fillShare)).toBe(0.15);
     expect(snapToRange(0.7, CALCULATOR_RANGES.fillShare)).toBe(0.7);
-    expect(snapToRange(8.26, CALCULATOR_RANGES.launchSpeed)).toBe(8.5);
+    expect(snapToRange(8.26, CALCULATOR_RANGES.launchSpeed)).toBe(8.3);
   });
 
   it('sets the gas and takes only the two tank sizes', () => {

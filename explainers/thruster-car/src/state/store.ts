@@ -65,20 +65,20 @@ export const DEFAULT_VIEW: ViewState = {
 
 export const DEFAULT_GAS: GasId = 'air';
 
-export const CALCULATOR_DEFAULTS: Readonly<CalculatorFields> = {
-  fillShare: 1,
-  pressureBar: TANK_PRESSURE_BAR,
-  rearThrustKn: REAR_THRUST_FULL_N / NEWTONS_PER_KILONEWTON,
-  launchSpeed: EXIT_SPEED_MS,
-  rollInertia: ROLL_INERTIA_KG_M2,
-};
-
 export const CALCULATOR_RANGES: Readonly<Record<keyof CalculatorFields, SteppedRange>> = {
   fillShare: { min: 0, max: 1, step: 0.05 },
   pressureBar: { min: 100, max: TANK_PRESSURE_BAR, step: 50 },
   rearThrustKn: { min: 10, max: REAR_THRUST_FULL_N / NEWTONS_PER_KILONEWTON, step: 5 },
-  launchSpeed: { min: 8, max: 18, step: 0.5 },
+  launchSpeed: { min: 8, max: 18, step: 0.1 },
   rollInertia: { min: 500, max: 900, step: 50 },
+};
+
+export const CALCULATOR_DEFAULTS: Readonly<CalculatorFields> = {
+  fillShare: 1,
+  pressureBar: TANK_PRESSURE_BAR,
+  rearThrustKn: REAR_THRUST_FULL_N / NEWTONS_PER_KILONEWTON,
+  launchSpeed: snapToRange(EXIT_SPEED_MS, CALCULATOR_RANGES.launchSpeed),
+  rollInertia: ROLL_INERTIA_KG_M2,
 };
 
 const TANK_CHOICES: ReadonlySet<number> = new Set(Object.values(TANK_LITRES));
