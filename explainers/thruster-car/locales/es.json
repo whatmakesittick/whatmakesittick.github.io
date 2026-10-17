@@ -4,8 +4,8 @@
     "eyebrow": "Tesla Roadster",
     "tagline": "El Tesla Roadster al que todos llaman coche volador, a cámara lenta: diez chorros de aire lo empujan, lo enderezan en el aire y suavizan su aterrizaje.",
     "description": "La demo de Tesla del 15 de octubre de 2026 en el campo de SpaceX en McGregor, en 3D: así hacen saltar un coche los propulsores de gas frío.",
-    "summary": "El tanque de aire comprimido, cómo empuja una tobera, una salida sin agarre, el salto, el giro y la amortiguación, y por qué un salto no es un vuelo.",
-    "socialAlt": "Un deportivo gris de una plaza, boca abajo sobre una rampa curvada al atardecer, con chorros blancos de gas en las esquinas, junto al título «Cómo salta de verdad el Roadster volador de Tesla»"
+    "summary": "El tanque de aire, cómo empuja una tobera, la prueba del 0 a 60, el gancho, el giro y la amortiguación, el salto sobre coches aparcados y por qué un salto no es un vuelo.",
+    "socialAlt": "Un deportivo gris de una plaza, boca abajo sobre una rampa con forma de gancho al atardecer, con chorros blancos de gas en las esquinas, junto al título «Cómo salta de verdad el Roadster volador de Tesla»"
   },
   "stage": {
     "label": "Modelo interactivo del coche con propulsores",
@@ -13,41 +13,58 @@
   },
   "timeline": {
     "label": "Tiempo del recorrido",
-    "phases": "Saltar a una parte del recorrido",
+    "phases": "Ir a una parte del recorrido",
     "speed": "Velocidad de reproducción",
     "value": "T+{{seconds}} s",
     "during": "T+{{seconds}} s, {{phase}}",
     "speedValue": "{{factor}}x",
     "speedDescribe": "{{factor}} veces la velocidad real",
     "phase": {
-      "boost": "Aceleración",
-      "ramp": "Rampa",
-      "launch": "Lanzamiento",
+      "sprint": "Aceleración",
+      "settle": "Frenada",
+      "ramp": "Gancho",
       "flip": "Giro",
       "catch": "Amortiguación",
+      "runUp": "Carrerilla",
+      "leap": "Salto",
+      "twist": "Tirabuzón",
+      "landing": "Aterrizaje",
       "rest": "Parada"
     },
     "jump": {
-      "boost": "Saltar a la aceleración",
-      "ramp": "Saltar a la rampa",
-      "launch": "Saltar al lanzamiento",
-      "flip": "Saltar al giro",
-      "catch": "Saltar a la amortiguación",
-      "rest": "Saltar a la parada"
+      "sprint": "Ir a la aceleración",
+      "settle": "Ir a la frenada",
+      "ramp": "Ir al gancho",
+      "flip": "Ir al giro",
+      "catch": "Ir a la amortiguación",
+      "runUp": "Ir a la carrerilla",
+      "leap": "Ir al salto",
+      "twist": "Ir al tirabuzón",
+      "landing": "Ir al aterrizaje",
+      "rest": "Ir a la parada"
     },
     "detail": {
-      "boost": "los cuatro chorros traseros llevan el coche desde parado hasta 16 m/s",
-      "ramp": "unos ventiladores sujetan el coche a la rampa retorcida mientras se pone boca abajo",
-      "launch": "el coche sale de la rampa boca abajo, a 4 m de altura, sin ningún chorro encendido",
-      "flip": "los chorros de las esquinas enderezan el coche cerca de lo más alto de su salto de 8 m",
-      "catch": "los cuatro chorros de las esquinas soplan hacia abajo y frenan la caída hasta 2,5 m/s",
-      "rest": "el coche aterriza, frena y se detiene a unos 86 m del punto de partida"
+      "sprint": "los cuatro chorros traseros llevan el coche de 0 a 60 mph en unos 0,81 s",
+      "settle": "los chorros se apagan y el coche frena hasta 18 m/s antes de la rampa",
+      "ramp": "el coche sube por el rizo, pasa por arriba y recorre el tramo recto boca abajo",
+      "flip": "el coche cae del tramo recto y los chorros de las esquinas lo enderezan",
+      "catch": "los cuatro chorros de las esquinas soplan hacia abajo y frenan la caída hasta unos 2,5 m/s",
+      "runUp": "los chorros traseros llevan el coche de unos 11 a 15 m/s",
+      "leap": "los cuatro chorros de las esquinas empujan hacia abajo con unos 40 kN y levantan el coche",
+      "twist": "el coche traza un arco sobre los vehículos aparcados y da una vuelta entera",
+      "landing": "los chorros de las esquinas vuelven a soplar hacia abajo y posan el coche con suavidad",
+      "rest": "el coche frena hasta quedarse parado"
     },
     "moment": {
+      "sixty": "60 mph",
+      "inverted": "Boca abajo en lo más alto",
       "leavesRamp": "Sale de la rampa",
-      "peak": "Lo más alto del salto",
-      "rollComplete": "Ya enderezado",
-      "touchdown": "Toca el suelo",
+      "rollComplete": "Otra vez derecho",
+      "touchdown": "Primer aterrizaje",
+      "liftOff": "Deja el suelo",
+      "apex": "Lo más alto del salto",
+      "twistComplete": "Tirabuzón completo",
+      "landed": "Segundo aterrizaje",
       "stopped": "Parado"
     }
   },
@@ -71,7 +88,7 @@
       "gas": "Gas del tanque",
       "tank": "Tamaño del tanque",
       "replay": "Repetir el recorrido",
-      "moment": "Saltar a un momento"
+      "moment": "Ir a un momento"
     },
     "views": {
       "nozzles": {
@@ -85,14 +102,14 @@
         "hint": "Fuerzas (F)"
       },
       "tank": {
-        "name": "Tanque en corte",
+        "name": "Tanque por dentro",
         "short": "Tanque",
-        "hint": "Tanque en corte (T)"
+        "hint": "Tanque por dentro (T)"
       },
       "ghost": {
-        "name": "Trayectoria fantasma",
+        "name": "Trayectoria del salto",
         "short": "Trayectoria",
-        "hint": "Trayectoria fantasma (G)"
+        "hint": "Trayectoria del salto (G)"
       },
       "labels": {
         "name": "Etiquetas",
@@ -129,20 +146,6 @@
     "degreesPerSecond": "{{value}}°/s"
   },
   "chapters": {
-    "limits": {
-      "outcomeState": {
-        "cushioned": "Aterrizaje suave a {{speed}} m/s",
-        "ranDry": "Los chorros se cortan en T+{{seconds}} s, aterriza a {{speed}} m/s"
-      },
-      "hoverFlow": "Caudal para mantenerse en el aire",
-      "hoverTime": "Tiempo máximo suspendido",
-      "jetPower": "Potencia para mantenerse en el aire",
-      "impulse": "Empuje total",
-      "used": "Gas que usa el recorrido",
-      "outcome": "Aterrizaje",
-      "rotor": "Rotor ideal",
-      "rotorValue": "unos 0,16 MW con un rotor de 10 m"
-    },
     "tank": {
       "fill": "Llenado",
       "mass": "Gas en el tanque",
@@ -164,34 +167,61 @@
       "thrust": "Empuje trasero",
       "accel": "Aceleración",
       "sixty": "De 0 a 60 mph",
-      "flow": "Gas gastado por segundo",
+      "flow": "Gas que gasta por segundo",
       "lasts": "Un tanque lleno dura",
       "runThrust": "Empuje trasero en el recorrido",
-      "runThrustValue": "9,1 kN, el ajuste del modelo",
-      "claim": "Rocket, de 0 a 60 mph",
-      "claimValue": "menos de 0,59 s según Tesla; 0,81 s en la demostración en directo"
+      "runThrustValue": "unos 56 kN, la cifra del modelo para hacerlo en 0,81 s",
+      "claim": "De 0 a 60 mph",
+      "claimValue": "0,81 s en la prueba en directo; Tesla promete menos de 0,59 s con la Rocket"
     },
-    "hop": {
-      "launch": "Velocidad de lanzamiento",
-      "peak": "Punto más alto",
-      "airTime": "Tiempo en el aire sin amortiguación",
-      "range": "Distancia desde la rampa",
-      "exit": "Salida de la rampa",
-      "exitValue": "4 m de alto, 42 grados, la rampa del modelo",
-      "entry": "Velocidad al entrar en la rampa",
-      "entryValue": "16 m/s, 58 km/h",
+    "hook": {
+      "entry": "Velocidad al entrar en el rizo",
+      "topSpeed": "Velocidad en lo más alto",
+      "bottomG": "Fuerza g al entrar en el rizo",
+      "topG": "Fuerza g en lo más alto",
+      "dropTime": "Caída sin chorros desde el tramo recto",
+      "track": "Rampa",
+      "trackValue": "un rizo de 5 m de radio y un tramo recto de 8 m a 10 m de altura, la rampa del modelo",
+      "fans": "Succión de los ventiladores",
+      "fansValue": "hasta 2 g de succión, cifra de Tesla",
       "tesla": "El salto de Tesla",
-      "teslaValue": "unos 8 m (27 pies), cifra de Tesla"
+      "teslaValue": "unos 8 m (27 pies) por encima de los coches aparcados, cifra de Tesla"
     },
     "flip": {
       "inertia": "Inercia de giro",
       "time": "Media vuelta tarda",
       "torque": "Par de giro de una pareja de toberas",
-      "rate": "Giro más rápido",
+      "rate": "Velocidad de giro máxima",
       "catch": "Empuje de amortiguación",
       "catchValue": "28 kN, 7 kN por tobera, la amortiguación del modelo",
       "touchdown": "Velocidad al tocar el suelo",
       "touchdownValue": "2,5 m/s hacia abajo"
+    },
+    "jump": {
+      "height": "Altura del salto",
+      "leapSpeed": "Velocidad hacia arriba necesaria",
+      "burn": "Tiempo de empuje a 40 kN",
+      "gas": "Gas para ese empuje",
+      "airTime": "Tiempo en el aire, sin chorros",
+      "range": "Distancia a 15 m/s",
+      "row": "Vehículos aparcados",
+      "rowValue": "un camión y cuatro coches en unos 24 m, la fila del modelo",
+      "tesla": "El salto de Tesla",
+      "teslaValue": "unos 8 m (27 pies), cifra de Tesla"
+    },
+    "limits": {
+      "outcomeState": {
+        "cushioned": "Aterrizaje suave a {{speed}} m/s",
+        "ranDry": "Los chorros se apagan en T+{{seconds}} s y aterriza a {{speed}} m/s"
+      },
+      "hoverFlow": "Caudal para mantenerse en el aire",
+      "hoverTime": "Tiempo máximo suspendido",
+      "jetPower": "Potencia para mantenerse en el aire",
+      "impulse": "Empuje total",
+      "used": "Gas que usa el recorrido",
+      "outcome": "Aterrizaje",
+      "rotor": "Rotor ideal",
+      "rotorValue": "unos 0,16 MW con un rotor de 10 m"
     }
   },
   "parts": {
@@ -209,7 +239,8 @@
     "runway": "Pista",
     "ramp": "Rampa",
     "landingPad": "Zona de aterrizaje",
-    "ghostPath": "Trayectoria fantasma"
+    "ghostPath": "Trayectoria del salto",
+    "parkedRow": "Vehículos aparcados"
   },
   "sections": {
     "tank": {
@@ -218,7 +249,7 @@
       "p2": "El coche de esta página es genérico, no el de Tesla. Es un deportivo eléctrico de una sola plaza y 1,7 toneladas, el peso al que aspira Tesla. El <strong>asiento del conductor</strong> está a la izquierda. Donde iría un segundo asiento va el <strong>tanque de aire</strong>, y la <strong>válvula del tanque</strong> deja salir el gas hacia las toberas, las boquillas por donde sale el chorro. Según la prensa, el tanque real se llena a unos 700 bar, es decir, 700 veces la presión del aire que te rodea.",
       "p3": "¿Qué tamaño tiene el tanque? La prensa habla de 400 l y de 600 l, y las fuentes no se ponen de acuerdo. Por eso el modelo usa 600 l y te deja probar con 400 l. A 700 bar, el aire va muy apretado: en 100 l caben unos 53 kg, así que en 600 l caben unos 315 kg. Las paredes que aguantan esa presión tienen que ser resistentes y ligeras, así que se fabrican enrollando fibra de carbono. Los tanques de hidrógeno del Toyota Mirai de primera generación trabajan a la misma presión, y pesan unos 0,71 kg por cada litro de capacidad. Con esa proporción, un tanque de 600 l pesaría unos 430 kg antes de llenarlo de gas.",
       "p4": "El aire comprimido guarda energía, igual que un resorte tensado. Cuando 100 l se expanden, pueden hacer unos 24 megajulios (MJ) de trabajo, o 6,6 kilovatios hora (kWh). Tesla dice que hoy llenar el tanque lleva seis o siete horas, y su objetivo es bajarlo a 30 minutos. Arrastra el control de llenado para ver el trabajo mínimo que necesitaría una bomba perfecta y cuánto tardaría a 50 kW. Las bombas reales necesitan más. La presión que indica sigue la curva que usa el modelo para el aire a temperatura ambiente. Crece más deprisa que la masa de gas, porque el aire muy apretado se resiste a comprimirse todavía más. Como todos los controles de esta página, funciona como una calculadora: hace las cuentas y deja intacto el recorrido en 3D.",
-      "p5": "Ese día, Tesla hizo varias acrobacias, algunas con coches distintos. Esta página las junta en un solo recorrido de 14 segundos, que se reproduce en tiempo real. El coche acelera con sus chorros, sube por una rampa retorcida, sale de ella boca abajo, se endereza y aterriza. El movimiento sigue un guion propio del modelo. El gas y el tanque que elijas cambian cuánto gas usa el recorrido, la presión y los chorros. Si el tanque se vacía hasta el punto en que se cortan los chorros, tu elección también cambia la velocidad de aterrizaje. La trayectoria no cambia nunca."
+      "p5": "Aquel día, Tesla hizo tres pruebas, con coches distintos: una aceleración cronometrada de 0 a 60 mph, una pasada por una rampa con forma de gancho y un salto por encima de vehículos aparcados. Esta página encadena las tres en un solo recorrido de 17 segundos, que se reproduce en tiempo real. El movimiento sigue un guion propio del modelo. El gas y el tanque que elijas cambian cuánto gas usa el recorrido, la presión y los chorros. Si el tanque baja hasta el punto en que se cortan los chorros, tu elección también cambia la velocidad de aterrizaje. La trayectoria no cambia nunca."
     },
     "nozzle": {
       "title": "Gas hacia atrás, coche hacia adelante",
@@ -226,36 +257,43 @@
       "p2": "Al empujón que da el chorro se le llama empuje. Es igual a la masa de gas que sale cada segundo, llamada caudal másico, multiplicada por la rapidez con que sale, llamada velocidad de salida. El aire de un tanque a 700 bar sale a unos 700 m/s. Los ingenieros también comparan los gases por su impulso específico, o Isp. Indica cuántos segundos podría empujar un kilo de gas con una fuerza igual a su propio peso. Para el aire frío, ronda los 70 s.",
       "p3": "Quizá pienses que más presión significa un gas más rápido. En general, no es así. La velocidad de salida depende del gas y de su temperatura. La presión marca cuánto gas pasa por la tobera cada segundo y cuánto cabe en el tanque. Arrastra el control de presión: el caudal y el empuje bajan con ella, mientras que la velocidad de salida no cambia.",
       "p4": "Al expandirse, el gas se enfría hasta muy por debajo de cero grados. De ahí sale la nube blanca de los <strong>chorros de gas</strong>: parte del aire puede incluso convertirse en gotitas, y la humedad del aire de alrededor se congela. Por eso también se llaman propulsores de gas frío. No se quema nada, así que no hay piezas calientes y basta con una válvula por tobera. El precio a pagar es el empuje más débil por kilo de todos los propulsores, porque ningún combustible le aporta energía.",
-      "p5": "Las naves espaciales usan este sistema precisamente por ser sencillo y seguro. Los satélites pequeños se orientan con chorros de gas frío, y la primera etapa de un Falcon 9 se da la vuelta con chorros de nitrógeno situados cerca de su extremo superior. El modelo también simplifica. Mantiene fija la velocidad de salida de cada gas; en una tobera real, el aire sale algo más despacio a medida que se vacía el tanque, hasta unos 660 m/s a 300 bar. Tesla no ha dicho cuánto empuja cada tobera, así que el modelo elige sus propias cifras."
+      "p5": "Las naves espaciales usan este sistema precisamente por ser sencillo y seguro. Los satélites pequeños se orientan con chorros de gas frío, y la primera etapa de un Falcon 9 se da la vuelta con chorros de nitrógeno situados cerca de su extremo superior. El modelo también simplifica las cosas. Mantiene fija la velocidad de salida de cada gas; en una tobera real, el aire sale algo más despacio a medida que se vacía el tanque, hasta unos 660 m/s a 300 bar. Tesla no ha dicho cuánto empuja cada tobera, así que el modelo elige sus propias cifras."
     },
     "boost": {
-      "title": "Un empujón que no necesita agarre",
-      "p1": "Un coche normal acelera gracias a sus <strong>ruedas</strong>. Si aceleras demasiado fuerte, los neumáticos patinan, así que el agarre marca el límite. Las <strong>toberas traseras</strong> empujan el propio coche, no el suelo, así que el agarre da igual. Tesla asegura que sus propulsores dan entre cuatro y cinco veces la fuerza que pueden dar los neumáticos.",
-      "p2": "Según Electrek, los chorros traseros dan unos 80 kN. En un coche de 1,7 toneladas, eso son 4,8 g. Un g es la fuerza de la gravedad que notas cuando estás de pie y quieto, así que el empujón se sentiría como casi cinco veces tu peso. Pero a 80 kN, los chorros se tragan unos 115 kg de aire cada segundo. Un tanque lleno de 600 l se vaciaría en unos 2,8 s.",
-      "p3": "Tesla da tres tiempos de 0 a 60 mph (97 km/h): menos de 1,6 s para la versión Performance, que no lleva propulsores, menos de 0,9 s para la Thrust y menos de 0,59 s para la Rocket. Para ese último hace falta casi todo el empuje de 80 kN. En la demostración en directo, Tesla dice que el coche tardó 0,81 s, pero nadie más lo cronometró. Incluso eso exige un empujón medio de unos 56 kN, o 3,4 g.",
-      "p4": "El recorrido del modelo es más suave. Sus cuatro chorros traseros empujan con 9,1 kN en total, una novena parte de 80 kN, durante tres segundos por la <strong>pista</strong>. Así el coche llega a la rampa a 16 m/s (58 km/h), y aún le queda gas para el giro y para amortiguar la caída. Este ajuste es una elección del modelo, que además mantiene fijo el empuje de cada chorro, aunque un tanque real pierde presión al vaciarse y sus chorros se debilitan. Arrastra el control de empuje para ver el empujón, el tiempo de 0 a 60 mph y el gas que se gasta. El recorrido que ves en pantalla sigue con sus 9,1 kN."
+      "title": "La prueba del 0 a 60",
+      "p1": "La primera prueba fue de aceleración. Según Tesla, en la prueba en directo el coche pasó de 0 a 60 mph (97 km/h) en 0,81 s, aunque nadie más lo cronometró. Un coche normal acelera gracias a sus <strong>ruedas</strong>, y el agarre pone el límite: si aprietas demasiado, los neumáticos patinan. Las <strong>toberas traseras</strong>, en cambio, empujan el propio coche, no el suelo. Tesla asegura que sus propulsores dan entre cuatro y cinco veces la fuerza que pueden dar los neumáticos.",
+      "p2": "Llegar a 60 mph en 0,81 s exige una aceleración media de unos 3,4 g. Un g es el tirón de la gravedad que notas cuando estás de pie y quieto, así que el empujón se sentiría como más de tres veces tu peso. En un coche de 1,7 toneladas, eso son unos 56 kN. En el modelo, las cuatro toberas traseras ponen todo ese empuje, unos 14 kN cada una; en el coche real también ayudan los motores, y el modelo los cuenta dentro de esa cifra. El coche recorre unos 11 m hasta llegar a 60 mph.",
+      "p3": "Para la Rocket, Tesla promete algo aún más rápido: menos de 0,59 s. Eso exige unos 77 kN, cerca de los 80 kN que, según Electrek, dan los chorros traseros. Para las demás versiones, Tesla da menos de 1,6 s en la Performance, que no lleva propulsores, y menos de 0,9 s en la Thrust. Pero a 80 kN los chorros se tragan unos 115 kg de aire cada segundo. Un tanque lleno de 600 l se vaciaría en unos 2,8 s.",
+      "p4": "Tras la aceleración, el modelo hace algo por su cuenta. Apaga los chorros y frena de unos 27 m/s a 18 m/s, para que el coche llegue al gancho justo a la velocidad que necesita el rizo. Esta frenada es una decisión del modelo, no forma parte de la prueba real. El modelo también mantiene fijo el empuje de cada chorro, aunque un tanque real pierde presión al vaciarse y sus chorros se debilitan. Arrastra el control de empuje para ver el empujón, el tiempo de 0 a 60 mph y el gas que se gasta. El recorrido en pantalla sigue con sus propios 56 kN."
     },
-    "hop": {
-      "title": "Los ventiladores lo sujetan, la rampa lo lanza",
-      "p1": "A 16 m/s, el coche llega a la <strong>rampa</strong>. En el modelo, la rampa se retuerce mientras sube, así que el coche gira hasta quedar boca abajo. Lo que lo mantiene pegado boca abajo no son los chorros. En la demostración real, unos <strong>ventiladores de succión</strong> bajo el coche lo aspiraban contra la rampa: eran cuatro, de unos 20 kW cada uno, según Electrek. El modelo los muestra como un brillo azul y no calcula su fuerza.",
-      "p2": "El coche sale de la rampa boca abajo, a 4 m de altura, a 13,3 m/s y apuntando 42 grados hacia arriba. A partir de aquí, ningún chorro lo empuja hacia adelante ni hacia arriba. Va lanzado, como una pelota, y solo la gravedad curva su camino en forma de arco. La <strong>trayectoria fantasma</strong> dibuja ese arco por delante del coche, hasta la <strong>zona de aterrizaje</strong>. Los botones de abajo te llevan al momento en que el coche sale de la rampa o al punto más alto del salto.",
-      "p3": "Cuánto sube a partir de ahí depende solo de la rapidez con que se mueve hacia arriba. A 42 grados, 13,3 m/s dan unos 8,9 m/s en vertical, y eso eleva el coche otros 4 m. Así que llega a unos 8 m sobre el suelo. Tesla habló de unos 8 m (27 pies) en uno de sus saltos, aunque no está claro si se refería a la altura o a la longitud. Sin ayuda, el coche tocaría el suelo 2,2 s después de dejar la rampa. Como los chorros amortiguan la caída, en el recorrido pasa unos 2,6 s en el aire.",
-      "p4": "Arrastra el control de lanzamiento para ver cómo cambian las cifras de abajo con un lanzamiento más rápido o más lento. Como todos los controles de esta página, funciona como una calculadora: hace las cuentas, y el recorrido en pantalla mantiene su propia trayectoria. La velocidad cuenta doble: la subida crece con el cuadrado de la velocidad hacia arriba, así que con un 10 % más de velocidad el coche sube alrededor de un 21 % más. Tesla no ha publicado el tamaño de la rampa real; la prensa describe una pista que sube y se dobla por encima formando medio rizo. La torsión, la salida a 4 m, el ángulo de 42 grados y la entrada a 16 m/s son decisiones del modelo."
+    "hook": {
+      "title": "El gancho",
+      "p1": "La segunda prueba fue el gancho. El coche llega a la <strong>rampa</strong> a unos 18 m/s. La pista se curva hacia arriba en un medio rizo de unos 5 m de radio, así que el coche sube, se pone en vertical y pasa por arriba boca abajo. Después recorre un tramo recto de 8 m, todavía boca abajo, a 10 m del suelo. Al final del tramo sale de la rampa, boca abajo y de vuelta hacia donde venía.",
+      "p2": "Al recorrer el rizo, la curva aprieta el coche contra la pista. Abajo, donde empieza la curva, lo aprieta con unos 6,6 g, porque gira muy cerrado y a mucha velocidad. Subir le cuesta velocidad, así que pasa por lo más alto a unos 11 m/s. Aun así, eso basta para apretarlo contra la pista con unos 1,6 g, incluso boca abajo, así que el rizo lo sujeta sin ayuda.",
+      "p3": "En el tramo recto la cosa cambia. Como es recto, nada aprieta el coche contra la pista, y la gravedad tira de él hacia abajo. Aquí entran en juego los <strong>ventiladores de succión</strong> que lleva debajo: sujetan todo su peso contra la pista. Tesla dice que pueden aspirar con hasta 2 g, así que 1 g lo aguantan de sobra. Según Electrek, son cuatro, de unos 20 kW cada uno. El modelo los muestra como un brillo azul y no calcula su fuerza.",
+      "p4": "Arrastra el control de velocidad de entrada para ver cómo cambia el rizo. Por debajo de unos 14 m/s, el coche ni siquiera llegaría arriba. Como todos los controles de esta página, funciona como una calculadora: el recorrido en pantalla mantiene sus propios 18 m/s. Si se soltara del tramo recto sin ninguna ayuda, el coche llegaría al suelo en unos 1,4 s; la <strong>trayectoria del salto</strong> muestra por dónde caería, hasta la <strong>zona de aterrizaje</strong>. Tesla no ha publicado el tamaño de la rampa, así que el rizo, el tramo recto y la velocidad de entrada son propios del modelo. Los botones de abajo te llevan a lo más alto del rizo o al momento en que el coche sale de la rampa."
     },
     "flip": {
       "title": "Enderezarse y amortiguar la caída",
-      "p1": "Boca abajo y cerca de lo más alto del salto, el coche tiene que darse la vuelta antes de aterrizar. De eso se encargan las <strong>toberas de las esquinas</strong>. Funcionan como los pequeños chorros de maniobra de una nave espacial, que la hacen girar sin moverla de sitio. Un empujón lejos del centro hace girar el coche. La intensidad con que ese empujón lo hace girar se llama par de giro. Primero se encienden las dos toberas de un lado para iniciar el giro, y luego las dos del otro lado para pararlo, como un freno.",
+      "p1": "Al salir del tramo recto, el coche va boca abajo y tiene que darse la vuelta antes de aterrizar. Cae libremente durante una décima de segundo, y entonces entran en acción las <strong>toberas de las esquinas</strong>. Funcionan como los pequeños chorros de maniobra de una nave espacial, que la hacen girar sin moverla de sitio. Un empujón lejos del centro hace girar el coche. Lo fuerte que ese empujón lo hace girar se llama par de giro. Primero se encienden las dos toberas de un lado para iniciar el giro, y luego las dos del otro lado para pararlo, como un freno.",
       "p2": "Lo rápido que gira el coche depende de cuánto cuesta hacerlo girar: su inercia de giro, que se mide en kg·m². Cuanto más peso hay lejos del centro, más cuesta. En pruebas con coches reales salieron unos 390 kg·m² para un coche pequeño y 630 para uno grande. Nadie ha publicado una cifra para un deportivo con los tanques llenos, así que el modelo elige 600. Con el control puedes probar de 500 a 900, pero el recorrido sigue con 600.",
-      "p3": "En el recorrido, cada tobera de esquina empuja con 2 kN, a 0,9 m del centro, así que cada pareja da 3,6 kN·m de par de giro. Con 600 kg·m², media vuelta tarda unos 1,45 s: la mitad del tiempo acelera el giro y la otra mitad lo frena. Cabe en el salto con tiempo de sobra. Estas cifras de las toberas son un ejemplo del modelo, no datos de Tesla. El modelo también nivela el morro durante el giro, para que el coche baje plano.",
-      "p4": "Ya enderezado, el coche cae a unos 8 m/s. Las cuatro toberas de las esquinas soplan hacia abajo a la vez, y las flechas de <strong>fuerzas</strong> muestran su empuje. Juntas dan unos 28 kN, más que el peso del coche, que es de 16,7 kN, así que la caída se frena. En 0,85 s, la velocidad de caída baja a 2,5 m/s, y las ruedas tocan la zona de aterrizaje. Tesla dice que sus propulsores también suavizaron el aterrizaje, pero no con cuánta fuerza empujaron, así que estas cifras de la amortiguación las calcula el modelo.",
-      "p5": "Tras tocar el suelo, el coche frena y se detiene a unos 86 m del punto de partida, a los 11,45 s del recorrido. Aquí el giro va a media velocidad para que puedas seguir cada pareja de chorros. Usa los botones para saltar al momento en que el coche vuelve a estar derecho o toca el suelo, o pulsa repetir para ver todo el recorrido otra vez."
+      "p3": "En el recorrido, cada tobera de esquina empuja con unos 6 kN, a 0,9 m del centro, así que una pareja da unos 10,8 kN·m de par de giro. Con 600 kg·m², media vuelta tarda unos 0,84 s: la mitad del tiempo acelera el giro y la otra mitad lo frena. Estas cifras de las toberas son propias del modelo, no de Tesla.",
+      "p4": "Cuando ya está derecho, el coche ha caído unos 4 m y baja a unos 9 m/s. Las cuatro toberas de las esquinas soplan hacia abajo a la vez, y las flechas de <strong>fuerzas</strong> muestran su empuje. Juntas dan unos 28 kN, más que el peso del coche, que es de 16,7 kN, así que la caída se frena. En más o menos un segundo, la velocidad de caída baja a unos 2,5 m/s, y las ruedas tocan la primera zona de aterrizaje. Tesla dice que sus propulsores también suavizaron el aterrizaje, pero no con cuánta fuerza empujaron, así que estas cifras de la amortiguación las calcula el modelo.",
+      "p5": "Al tocar el suelo, el coche no se detiene: sigue adelante hacia el salto. Aquí el giro va a media velocidad para que puedas seguir cada pareja de chorros. Usa los botones para ir al momento en que el coche vuelve a estar derecho o toca el suelo, o pulsa repetir para ver todo el recorrido otra vez."
+    },
+    "jump": {
+      "title": "El salto",
+      "p1": "La tercera prueba fue un salto por encima de una fila de <strong>vehículos aparcados</strong>. En el modelo, el coche sigue adelante tras su primer aterrizaje. Las <strong>toberas traseras</strong> vuelven a encenderse y lo llevan de unos 11 m/s a unos 15 m/s. Al llegar al punto de salto, las cuatro <strong>toberas de las esquinas</strong> soplan hacia abajo a la vez.",
+      "p2": "Empujan con unos 40 kN durante unos 0,7 s, más del doble del peso del coche. Cuando se apagan, el coche sube a unos 9,6 m/s. A partir de ahí sigue subiendo solo, trazando un arco como una pelota lanzada, y llega a unos 8 m sobre el suelo. Tesla habló de unos 8 m (27 pies) para su salto, aunque no está claro si se refería a la altura o a la longitud.",
+      "p3": "Por el camino, el coche da una vuelta entera sobre sí mismo, 360 grados. Lo hacen las mismas parejas de toberas de las esquinas que lo enderezaron tras el gancho: una pareja inicia el giro y la otra lo para. Debajo quedan un camión de unos 4 m de alto y cuatro coches, que en el modelo son formas sencillas. Al bajar, las toberas de las esquinas vuelven a soplar hacia abajo y reducen la velocidad de bajada a unos 2,5 m/s para que aterrice con suavidad. Luego el coche frena hasta quedarse parado.",
+      "p4": "Arrastra el control de altura para ver lo que cuesta un salto más alto o más bajo: la velocidad hacia arriba que necesita, cuánto dura el empuje, cuánto gas gasta, cuánto tiempo pasa el coche en el aire y qué distancia recorre. Como los demás controles, funciona como una calculadora, así que el recorrido en pantalla mantiene sus 8 m. La fila de vehículos, la velocidad de la carrerilla y el empuje son decisiones propias del modelo, porque Tesla no ha dicho con cuánta fuerza empujaron sus propulsores. Los botones de abajo te llevan al momento en que deja el suelo, a lo más alto del salto o al aterrizaje."
     },
     "limits": {
       "title": "Por qué un salto no es un vuelo",
       "p1": "Para que el coche se quede suspendido en el aire, los chorros tendrían que empujar hacia arriba con todo su peso: 16,7 kN para 1,7 toneladas. Si el aire sale a unos 700 m/s, eso exige unos 24 kg de aire por segundo. Un <strong>tanque de aire</strong> lleno de 600 l guarda unos 315 kg. Así que, aunque se pudiera aprovechar hasta el último kilo, el coche aguantaría suspendido unos 13 s como mucho. En la práctica, menos, porque la presión baja a medida que se vacía el tanque.",
       "p2": "¿Por qué tan poco? Porque los chorros rápidos desperdician potencia. Sostener el coche con aire a 700 m/s exige unos 5,8 megavatios (MW). Un rotor ideal de 10 m de diámetro sostiene el mismo peso moviendo mucho aire despacio, a unos 9 m/s, y solo necesita unos 0,16 MW. Es unas 37 veces menos. Un helicóptero aguanta horas en el aire con su combustible; este tanque dura segundos.",
       "p3": "¿Y por qué no usar helio? Sale unas 2,6 veces más rápido, a unos 1800 m/s. Pero el helio es muy ligero, así que en el mismo tanque de 600 l solo caben 51 kg, una sexta parte de lo que cabe de aire. Lo que cuenta es el empuje total, llamado impulso: el empuje multiplicado por el tiempo que dura. El helio da 93 kN·s, frente a los 220 kN·s del aire, menos de la mitad. Solo sale ganando donde el peso importa más que el espacio, como en una nave espacial.",
-      "p4": "Toca los botones y mira cuánto gas consume el recorrido. Con aire en el tanque de 600 l, el recorrido usa más o menos una cuarta parte del gas, y el coche aterriza con gas de sobra. El modelo apaga los chorros en cuanto la presión baja de unos 5 bar, su propio límite, así que siempre queda a bordo alrededor de una quinta parte del gas. Con helio en el tanque de 400 l, se llega a ese límite durante la amortiguación de la caída. El coche aterriza con unos 3 m/s más de velocidad. La trayectoria es la misma elijas lo que elijas; solo cambian el gas usado, la presión, los chorros y la velocidad de aterrizaje.",
+      "p4": "Toca los botones y fíjate en cuánto gas consume el recorrido. Con aire en el tanque de 600 l, las tres pruebas gastan unas dos terceras partes del aire, y el coche termina con alrededor de un tercio, a unos 25 bar. El modelo apaga los chorros en cuanto la presión baja de unos 5 bar, su propio límite, así que siempre queda a bordo alrededor de una quinta parte del gas. Con aire en el tanque de 400 l, los chorros llegan a ese límite durante el aterrizaje del salto, así que el tanque pequeño no da para las dos acrobacias. Con helio se acaba aún antes, durante la amortiguación tras el gancho. La trayectoria es la misma elijas lo que elijas; solo cambian el gas usado, la presión, los chorros y la velocidad de aterrizaje.",
       "p5": "Roger Conner, conservador de la colección de vuelo vertical del Museo Nacional del Aire y el Espacio del Smithsonian, dijo a CNN: «Estamos hablando, literalmente, de dar saltos». La FAA, la autoridad de aviación de Estados Unidos, dijo a CBS que el coche no cumple su definición de aeronave. Así que es un coche que salta durante unos segundos, no uno que vuela."
     }
   }
