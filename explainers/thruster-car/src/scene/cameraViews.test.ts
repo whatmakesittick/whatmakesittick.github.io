@@ -1,11 +1,12 @@
-import { Vector3 } from 'three';
+import { Object3D, Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { toRadians } from '@core/math';
 import type { CameraPose } from '@core/scene/frameBox';
 import type { FramingSlopes } from '@core/scene/lens';
 import { CAMERA_VIEW_IDS } from '../ids';
 import type { ChaseTarget, MomentId } from '../ids';
-import { CAR, CAR_REGIONS, MOMENTS, RAMP, carAt } from '../model';
+import { CAR, CAR_ANCHORS, CAR_REGIONS, MOMENTS, PHASE_RANGES, RAMP, carAt } from '../model';
+import type { PhaseRange } from '../model';
 import { PRESETS } from '../state';
 import {
   FIXED_VIEWS,
@@ -16,12 +17,14 @@ import {
   followPose,
 } from './cameraViews';
 import type { FollowView } from './cameraViews';
+import { applyCarPose } from './pose';
 
 const PHONE: FramingSlopes = { vertical: 0.2, horizontal: 0.13 };
 const DESKTOP: FramingSlopes = { vertical: 0.27, horizontal: 0.45 };
 const STAGES: readonly FramingSlopes[] = [PHONE, DESKTOP];
 const MIN_FRAME_SHARE = 1 / 3;
 const RAMP_CLEARANCE_M = 2;
+const CENTRE_DIGITS = 6;
 const CHASE_MOMENTS: readonly MomentId[] = [
   'leavesRamp',
   'rollComplete',
@@ -40,6 +43,37 @@ const CHASE: ChaseTarget = {
 };
 
 const FOLLOW_IDS = Object.keys(FOLLOW_VIEWS) as FollowView[];
+
+function middle({ start, end }: PhaseRange): number {
+  return (start + end) / 2;
+}
+
+const RUN_MOMENTS: Readonly<Record<string, number>> = {
+  sprint: middle(PHASE_RANGES.sprint),
+  loopTop: MOMENTS.inverted,
+  deck: (MOMENTS.inverted + MOMENTS.leavesRamp) / 2,
+  flip: middle(PHASE_RANGES.flip),
+  jumpApex: MOMENTS.apex,
+};
+
+const FOLLOW_CASES = Object.entries(RUN_MOMENTS).flatMap(([moment, seconds]) =>
+  FOLLOW_IDS.flatMap((id) => STAGES.map((slopes) => ({ moment, seconds, id, slopes }))),
+);
+
+function posedCentre(seconds: number): Vector3 {
+  const car = new Object3D();
+  applyCarPose(car, carAt(seconds));
+  car.updateMatrixWorld();
+  return car.localToWorld(new Vector3(...CAR_ANCHORS.car));
+}
+
+function viewOffset({ position, target }: CameraPose, point: Vector3): Vector3 {
+  const forward = target.clone().sub(position).normalize();
+  const right = new Vector3().crossVectors(forward, WORLD_UP).normalize();
+  const up = new Vector3().crossVectors(right, forward);
+  const toPoint = point.clone().sub(position);
+  return new Vector3(toPoint.dot(right), toPoint.dot(up), toPoint.dot(forward));
+}
 
 function chaseAt(seconds: number): ChaseTarget {
   const { position, pitch, roll } = carAt(seconds);
@@ -143,6 +177,17 @@ describe('camera views', () => {
     const offset = offsetOf(turned);
     expect(offset.x).toBeLessThan(0);
     expect(Math.abs(offset.z)).toBeLessThan(1e-9);
+  });
+
+  it('keeps the posed car centre in front of every follow camera, mid frame, all run long', () => {
+    FOLLOW_CASES.forEach(({ moment, seconds, id, slopes }) => {
+      const pose = followPose(chaseAt(seconds), FOLLOW_VIEWS[id], slopes);
+      const { x, y, z } = viewOffset(pose, posedCentre(seconds));
+      const label = `${id} ${moment}`;
+      expect(z, label).toBeGreaterThan(0);
+      expect(x / z, label).toBeCloseTo(0, CENTRE_DIGITS);
+      expect(y / z, label).toBeCloseTo(0, CENTRE_DIGITS);
+    });
   });
 
   it('fills at least a third of the width of a phone, its short side, with the car', () => {
