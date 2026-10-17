@@ -15,7 +15,14 @@ import { treadTexture, tyreGeometry } from '../../geometry/gear/tyre';
 import { mergeParts } from '../context';
 import type { PartContext } from '../context';
 import { WHEEL, WHEEL_CENTRES } from './dimensions';
-import { GEAR_FINISHES, GEAR_PAINT, rimBlurFinish, rotorFinish, tyreFinish } from './gearFinishes';
+import { duskEnvironment } from '../../environment';
+import {
+  GEAR_PAINT,
+  reflectiveFinishes,
+  rimBlurFinish,
+  rotorFinish,
+  tyreFinish,
+} from './gearFinishes';
 
 const PART = 'wheels';
 
@@ -71,22 +78,24 @@ function instanced(
 
 function spinners(context: PartContext): Spinners {
   const { materials, tracker } = context;
+  const env = duskEnvironment(tracker);
+  const finishes = reflectiveFinishes(env);
   const tones = { lip: GEAR_PAINT.machined, hub: GEAR_PAINT.rimHub };
   const tyre = mergeParts([tyreGeometry(), barrelGeometry()]);
   const blur = instanced(
     context,
     blurGeometry(),
-    materials.get(PART, rimBlurFinish(tracker.track(blurTexture()))),
+    materials.get(PART, rimBlurFinish(tracker.track(blurTexture()), env)),
   );
   blur.visible = false;
   return {
     tyre: instanced(context, tyre, materials.get(PART, tyreFinish(tracker.track(treadTexture())))),
-    hub: instanced(context, rimHubGeometry(tones), materials.get(PART, GEAR_FINISHES.rimHub)),
-    spokes: instanced(context, spokesGeometry(), materials.get(PART, GEAR_FINISHES.rimGraphite)),
+    hub: instanced(context, rimHubGeometry(tones), materials.get(PART, finishes.rimHub)),
+    spokes: instanced(context, spokesGeometry(), materials.get(PART, finishes.rimGraphite)),
     disc: instanced(
       context,
       discGeometry(),
-      materials.get(PART, rotorFinish(tracker.track(discTexture()))),
+      materials.get(PART, rotorFinish(tracker.track(discTexture()), env)),
     ),
     blur,
   };
@@ -96,7 +105,7 @@ function calipers(context: PartContext): InstancedMesh {
   const mesh = instanced(
     context,
     caliperGeometry(),
-    context.materials.get(PART, GEAR_FINISHES.caliper),
+    context.materials.get(PART, reflectiveFinishes(duskEnvironment(context.tracker)).caliper),
   );
   WHEEL_CENTRES.forEach((centre, index) => mesh.setMatrixAt(index, caliperPose(centre)));
   mesh.computeBoundingSphere();

@@ -31,7 +31,15 @@ import {
 } from '../../geometry/gear/valve';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
-import { GEAR_FINISHES, GEAR_PAINT, braidFinish, dialFinish, shellFinish } from './gearFinishes';
+import { duskEnvironment } from '../../environment';
+import {
+  GEAR_FINISHES,
+  GEAR_PAINT,
+  braidFinish,
+  dialFinish,
+  reflectiveFinishes,
+  shellFinish,
+} from './gearFinishes';
 
 const TANK_PART = 'tank';
 const VALVE_PART = 'tankValve';
@@ -72,7 +80,8 @@ function mesh(context: PartContext, geometry: BufferGeometry, material: Material
 }
 
 function buildCutaway(context: PartContext, shellLook: Material): Group {
-  const ghost = partMesh(context, windowGhostGeometry(), TANK_PART, GEAR_FINISHES.tankGhost);
+  const { tankGhost } = reflectiveFinishes(duskEnvironment(context.tracker));
+  const ghost = partMesh(context, windowGhostGeometry(), TANK_PART, tankGhost);
   ghost.renderOrder = GHOST_ORDER;
   const cut = new Group();
   cut.name = CUT_SHELL_NAME;
@@ -87,7 +96,8 @@ function buildCutaway(context: PartContext, shellLook: Material): Group {
 
 function buildShell(context: PartContext, tank: Group): ShellViews {
   const { materials, tracker } = context;
-  const shellLook = materials.get(TANK_PART, shellFinish(tracker.track(windingTexture())));
+  const env = duskEnvironment(tracker);
+  const shellLook = materials.get(TANK_PART, shellFinish(tracker.track(windingTexture()), env));
   const full = mesh(context, fullShellGeometry(), shellLook);
   full.name = FULL_SHELL_NAME;
   const cut = buildCutaway(context, shellLook);
@@ -99,7 +109,8 @@ function buildShell(context: PartContext, tank: Group): ShellViews {
   core.position.x = CORE_FRONT;
   core.visible = false;
   core.add(coreMesh);
-  const mounts = partMesh(context, mountGeometry(MOUNT_TONES), TANK_PART, GEAR_FINISHES.tankMounts);
+  const { tankMounts } = reflectiveFinishes(env);
+  const mounts = partMesh(context, mountGeometry(MOUNT_TONES), TANK_PART, tankMounts);
   tank.add(full, cut, core, mounts);
   return { full, cut, core, coreMesh, pressure, empty };
 }
@@ -110,11 +121,17 @@ function buildValve(context: PartContext, valve: Group): Mesh {
   gauge.applyMatrix4(gaugePose());
   const needle = partMesh(context, needleGeometry(), VALVE_PART, GEAR_FINISHES.needle);
   needle.position.z = GAUGE.needleLift;
-  const dialLook = dialFinish(tracker.track(dialTexture()));
+  const env = duskEnvironment(tracker);
+  const dialLook = dialFinish(tracker.track(dialTexture()), env);
   gauge.add(partMesh(context, dialGeometry(), VALVE_PART, dialLook), needle);
   valve.add(
-    partMesh(context, valveMetalGeometry(VALVE_TONES), VALVE_PART, GEAR_FINISHES.valveMetal),
-    partMesh(context, lineGeometry(), VALVE_PART, braidFinish(tracker.track(braidTexture()))),
+    partMesh(
+      context,
+      valveMetalGeometry(VALVE_TONES),
+      VALVE_PART,
+      reflectiveFinishes(env).valveMetal,
+    ),
+    partMesh(context, lineGeometry(), VALVE_PART, braidFinish(tracker.track(braidTexture()), env)),
     gauge,
   );
   return needle;

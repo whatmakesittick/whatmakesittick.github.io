@@ -7,7 +7,8 @@ import { NOZZLES } from '../../../model/layout';
 import { BELL_LENGTH, coneGeometry, nozzleGeometry, nozzleReach } from '../../geometry/gear/nozzle';
 import type { PartContext } from '../context';
 import { drawnNozzleAt } from './dimensions';
-import { CONE_FINISHES, GEAR_FINISHES, GEAR_PAINT } from './gearFinishes';
+import { duskEnvironment } from '../../environment';
+import { CONE_FINISHES, GEAR_FINISHES, GEAR_PAINT, reflectiveFinishes } from './gearFinishes';
 
 const NOZZLE_GROUPS: readonly NozzlePartId[] = ['cornerNozzles', 'frontNozzles', 'rearNozzles'];
 
@@ -88,7 +89,11 @@ function buildGroup(
   return {
     ids,
     frames: poses,
-    body: instanced(shape, materials.get(part, GEAR_FINISHES.nozzleBody), poses),
+    body: instanced(
+      shape,
+      materials.get(part, reflectiveFinishes(duskEnvironment(tracker)).nozzleBody),
+      poses,
+    ),
     frost: instanced(shape, materials.get(part, GEAR_FINISHES.frost), poses),
     cones,
     firing: -1,

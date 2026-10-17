@@ -11,7 +11,8 @@ import { NOZZLES, runAt, tankAt } from '../../../model';
 import { CONE } from '../../geometry/gear/nozzle';
 import type { PartContext } from '../context';
 import { BODY, drawnNozzleAt } from './dimensions';
-import { CONE_FINISHES, GEAR_FINISHES } from './gearFinishes';
+import { duskEnvironment } from '../../environment';
+import { CONE_FINISHES, GEAR_FINISHES, reflectiveFinishes } from './gearFinishes';
 import { createNozzles } from './nozzles';
 
 const GROUPS: readonly NozzlePartId[] = ['cornerNozzles', 'frontNozzles', 'rearNozzles'];
@@ -48,6 +49,10 @@ function stateWith(firing: readonly NozzleId[], showNozzles: boolean): AssemblyS
 function worldAxis(object: Object3D): Vector3 {
   object.updateWorldMatrix(true, false);
   return new Vector3(0, 1, 0).applyQuaternion(object.getWorldQuaternion(new Quaternion()));
+}
+
+function bodyFinish(parts: PartContext): MaterialFinish {
+  return reflectiveFinishes(duskEnvironment(parts.tracker)).nozzleBody;
 }
 
 function idsOf(part: NozzlePartId): NozzleId[] {
@@ -98,7 +103,7 @@ describe('nozzles', () => {
     });
     expect(meshes).toBe(GROUPS.length * 3);
     GROUPS.forEach((part) => {
-      const body = meshOf(parts, set.object, part, GEAR_FINISHES.nozzleBody);
+      const body = meshOf(parts, set.object, part, bodyFinish(parts));
       idsOf(part).forEach((id, index) =>
         expect(at(body, index).distanceTo(new Vector3(...drawnNozzleAt(id)))).toBeLessThan(1e-6),
       );
@@ -108,7 +113,7 @@ describe('nozzles', () => {
   it('frosts only the bells that fire', () => {
     const parts = context();
     const set = createNozzles(parts);
-    const body = meshOf(parts, set.object, 'rearNozzles', GEAR_FINISHES.nozzleBody);
+    const body = meshOf(parts, set.object, 'rearNozzles', bodyFinish(parts));
     const frost = meshOf(parts, set.object, 'rearNozzles', GEAR_FINISHES.frost);
     set.setState(stateWith([], false));
     expect([body.count, frost.count, frost.visible]).toEqual([4, 0, false]);

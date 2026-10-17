@@ -29,9 +29,14 @@ export const GEAR_PAINT = {
   frostGlow: '#9cc8ff',
 } as const;
 
-const METAL_REFLECTION = 1.4;
+const CHROME_REFLECTION = 1.5;
+const METAL_REFLECTION = 1.1;
 const PAINT_REFLECTION = 1.2;
-const RUBBER_REFLECTION = 0.4;
+const GLASS_REFLECTION = 0.7;
+const GHOST_REFLECTION = 0.5;
+const BLUR_REFLECTION = 0.6;
+const SHEEN_REFLECTION = 0.35;
+const RUBBER_REFLECTION = 0.25;
 const GLOW_REFLECTION = 0.15;
 const GLOW_BODY_SHARE = 0.15;
 const LINER_REFLECTION = 0.3;
@@ -69,24 +74,12 @@ function glowing(color: string, emissiveIntensity: number, opacity: number): Mat
 }
 
 export const GEAR_FINISHES = {
-  rimGraphite: metal(GEAR_PAINT.graphite, 0.38, 0.7),
-  rimHub: tintedMetal(0.4, 0.8),
-  caliper: metal(GEAR_PAINT.caliper, 0.42, 0.6),
   liner: {
     ...satin(GEAR_PAINT.liner, 0.85, 0),
     envMapIntensity: LINER_REFLECTION,
     side: BackSide,
   },
-  tankGhost: {
-    ...satin(THEME.tankShell, 0.3, 0.2),
-    transparent: true,
-    opacity: GHOST_OPACITY,
-    depthWrite: false,
-  },
-  tankMounts: tintedMetal(0.42, 0.7),
-  valveMetal: tintedMetal(0.32, 0.85),
   needle: satin(GEAR_PAINT.needle, 0.4),
-  nozzleBody: tintedMetal(0.38, 0.65),
   frost: {
     color: GEAR_PAINT.frost,
     emissive: GEAR_PAINT.frostGlow,
@@ -98,6 +91,53 @@ export const GEAR_FINISHES = {
   corePressure: glowing(THEME.pressure, 0.7, GLOW_OPACITY),
   coreEmpty: glowing(THEME.empty, 0.7, GLOW_OPACITY),
 } as const satisfies Record<string, MaterialFinish>;
+
+export interface ReflectiveFinishes {
+  rimGraphite: MaterialFinish;
+  rimHub: MaterialFinish;
+  caliper: MaterialFinish;
+  tankGhost: MaterialFinish;
+  tankMounts: MaterialFinish;
+  valveMetal: MaterialFinish;
+  nozzleBody: MaterialFinish;
+}
+
+const reflectiveCache = new WeakMap<Texture, ReflectiveFinishes>();
+
+function reflecting(
+  finish: MaterialFinish,
+  envMap: Texture,
+  envMapIntensity: number,
+): MaterialFinish {
+  return { ...finish, envMap, envMapIntensity };
+}
+
+function buildReflective(env: Texture): ReflectiveFinishes {
+  const ghost = {
+    ...satin(THEME.tankShell, 0.3, 0.2),
+    transparent: true,
+    opacity: GHOST_OPACITY,
+    depthWrite: false,
+  };
+  return {
+    rimGraphite: reflecting(metal(GEAR_PAINT.graphite, 0.36, 0.75), env, METAL_REFLECTION),
+    rimHub: reflecting(tintedMetal(0.3, 0.85), env, CHROME_REFLECTION),
+    caliper: reflecting(metal(GEAR_PAINT.caliper, 0.4, 0.65), env, METAL_REFLECTION),
+    tankGhost: reflecting(ghost, env, GHOST_REFLECTION),
+    tankMounts: reflecting(tintedMetal(0.38, 0.75), env, METAL_REFLECTION),
+    valveMetal: reflecting(tintedMetal(0.28, 0.85), env, CHROME_REFLECTION),
+    nozzleBody: reflecting(tintedMetal(0.36, 0.7), env, METAL_REFLECTION),
+  };
+}
+
+export function reflectiveFinishes(env: Texture): ReflectiveFinishes {
+  let finishes = reflectiveCache.get(env);
+  if (!finishes) {
+    finishes = buildReflective(env);
+    reflectiveCache.set(env, finishes);
+  }
+  return finishes;
+}
 
 export const CONE_FINISHES: Readonly<Record<NozzlePartId, MaterialFinish>> = {
   cornerNozzles: { ...glowing(THEME.flip, 0.6, CONE_OPACITY), depthTest: false },
@@ -117,40 +157,41 @@ export function tyreFinish(tread: Texture): MaterialFinish {
   };
 }
 
-export function rotorFinish(slots: Texture): MaterialFinish {
-  return { ...metal(GEAR_PAINT.rotor, 0.48, 0.8), map: slots };
+export function rotorFinish(slots: Texture, env: Texture): MaterialFinish {
+  return { ...reflecting(metal(GEAR_PAINT.rotor, 0.45, 0.8), env, METAL_REFLECTION), map: slots };
 }
 
-export function rimBlurFinish(blur: Texture): MaterialFinish {
+export function rimBlurFinish(blur: Texture, env: Texture): MaterialFinish {
   return {
-    ...metal(GEAR_PAINT.blur, 0.5, 0.45),
+    ...reflecting(metal(GEAR_PAINT.blur, 0.5, 0.45), env, BLUR_REFLECTION),
     map: blur,
     transparent: true,
     depthWrite: false,
   };
 }
 
-export function shellFinish(winding: Texture): MaterialFinish {
+export function shellFinish(winding: Texture, env: Texture): MaterialFinish {
   return {
     color: THEME.tankShell,
     map: winding,
     bumpMap: winding,
     bumpScale: SHELL_BUMP_SCALE,
-    metalness: 0.25,
-    roughness: 0.3,
-    envMapIntensity: PAINT_REFLECTION,
+    metalness: 0.1,
+    roughness: 0.42,
+    envMap: env,
+    envMapIntensity: SHEEN_REFLECTION,
   };
 }
 
-export function braidFinish(braid: Texture): MaterialFinish {
+export function braidFinish(braid: Texture, env: Texture): MaterialFinish {
   return {
-    ...metal(GEAR_PAINT.braid, 0.42, 0.8),
+    ...reflecting(metal(GEAR_PAINT.braid, 0.42, 0.8), env, METAL_REFLECTION),
     map: braid,
     bumpMap: braid,
     bumpScale: BUMP_SCALE,
   };
 }
 
-export function dialFinish(dial: Texture): MaterialFinish {
-  return { ...satin(GEAR_PAINT.dial, 0.4, 0), map: dial };
+export function dialFinish(dial: Texture, env: Texture): MaterialFinish {
+  return { ...reflecting(satin(GEAR_PAINT.dial, 0.16, 0), env, GLASS_REFLECTION), map: dial };
 }
