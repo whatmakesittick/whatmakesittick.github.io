@@ -1,11 +1,11 @@
 {
   "meta": {
-    "title": "Comment des propulseurs à gaz froid font bondir une voiture",
-    "eyebrow": "Voiture à propulseurs",
-    "tagline": "Dix jets d’air et un réservoir d’air comprimé : comment une voiture prend de la vitesse, quitte une rampe à l’envers, se remet sur ses roues et se pose en douceur.",
-    "description": "Une voiture 3D à propulseurs à gaz froid : réservoir à 700 bar, tuyères, départ sans adhérence, saut de rampe, retournement en l’air, atterrissage amorti.",
-    "summary": "Le réservoir d’air, comment une tuyère crée une poussée, une accélération sans adhérence, la rampe et le saut, le retournement en l’air et l’amorti, et pourquoi un saut n’est pas un vol.",
-    "socialAlt": "Une sportive monoplace grise, à l’envers au-dessus d’une rampe enroulée, au crépuscule, des jets de gaz blancs à ses quatre coins, à côté du titre « Comment des propulseurs à gaz froid font bondir une voiture »"
+    "title": "Comment le Roadster volant de Tesla bondit vraiment",
+    "eyebrow": "Tesla Roadster",
+    "tagline": "Le Tesla Roadster que tout le monde appelle voiture volante, au ralenti : dix jets d’air le poussent, le remettent à l’endroit en l’air et amortissent sa chute.",
+    "description": "La démo Tesla du 15 octobre 2026 sur le site SpaceX de McGregor, en 3D : comment des propulseurs à gaz froid et de l’air comprimé font bondir une voiture.",
+    "summary": "Le réservoir d’air, la poussée d’une tuyère, un départ sans adhérence, le bond, le retournement et l’amorti, et pourquoi un bond n’est pas un vol.",
+    "socialAlt": "Une sportive monoplace grise, à l’envers au-dessus d’une rampe enroulée, au crépuscule, des jets de gaz blancs à ses quatre coins, à côté du titre « Comment le Roadster volant de Tesla bondit vraiment »"
   },
   "stage": {
     "label": "Modèle interactif de la voiture à propulseurs",
@@ -214,7 +214,7 @@
   "sections": {
     "tank": {
       "title": "Un réservoir d’air comprimé",
-      "p1": "Le 15 octobre 2026, Tesla a présenté son nouveau Roadster sur un site d’essais de fusées de SpaceX, à McGregor, au Texas. Personne n’était à bord. Selon Tesla, une version, la Rocket, embarque dix <strong>propulseurs à gaz froid</strong>. Ce sont des jets d’air : ils poussent la voiture en soufflant de l’air comprimé, sans rien brûler. Tesla promet la voiture pour 2028, et sa propre page indique que la Rocket n’est pas homologuée pour la route.",
+      "p1": "Le 15 octobre 2026, Tesla a présenté son nouveau Roadster sur le site d’essais de fusées de SpaceX, à McGregor, au Texas. Les médias l’ont appelé voiture volante, mais il n’a fait que de courts bonds, sans personne à bord. Selon Tesla, une version, la Rocket, embarque dix <strong>propulseurs à gaz froid</strong>. Ce sont des jets d’air : ils poussent la voiture en soufflant de l’air comprimé, sans rien brûler. Tesla promet la voiture pour 2028, et sa propre page indique que la Rocket n’est pas homologuée pour la route.",
       "p2": "La voiture présentée ici est générique, ce n’est pas celle de Tesla. C’est une sportive électrique monoplace de 1,7 tonne, le poids que vise Tesla. Le <strong>siège du conducteur</strong> est à gauche. À la place d’un second siège se trouve le <strong>réservoir d’air</strong>, et la <strong>vanne du réservoir</strong> laisse partir le gaz vers les tuyères, les orifices qui l’éjectent. D’après certains articles, le vrai réservoir est rempli à environ 700 bar, soit 700 fois la pression de l’air autour de vous.",
       "p3": "Quelle est la taille du réservoir ? Les articles parlent de 400 L ou de 600 L, et les sources ne sont pas d’accord. Le modèle prend donc 600 L et vous laisse essayer 400 L. À 700 bar, l’air est très tassé : 100 L en renferment environ 53 kg, donc 600 L environ 315 kg. Pour tenir cette pression, les parois doivent être à la fois solides et légères. Elles sont donc faites de fibre de carbone enroulée. Les réservoirs d’hydrogène de la Toyota Mirai de première génération fonctionnent à la même pression. Ils pèsent environ 0,71 kg par litre de contenance. Sur cette base, un réservoir de 600 L pèserait environ 430 kg à vide.",
       "p4": "L’air comprimé stocke de l’énergie, comme un ressort tendu. En se détendant, 100 L de cet air peuvent fournir un travail d’environ 24 mégajoules (MJ), soit 6,6 kilowattheures (kWh). Selon Tesla, un remplissage prend aujourd’hui six ou sept heures, et la marque vise 30 minutes. Faites glisser le curseur de remplissage pour voir le travail minimal dont aurait besoin une pompe parfaite, et le temps que cela prendrait à 50 kW. Une vraie pompe en demande davantage. La pression affichée suit la courbe du modèle pour de l’air à température ambiante. Elle monte plus vite que la masse, car plus l’air est tassé, plus il résiste à la compression. Comme tous les curseurs de cette page, celui-ci sert de calculatrice : il affiche les calculs sans rien changer au parcours en 3D.",

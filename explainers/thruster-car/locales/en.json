@@ -1,11 +1,11 @@
 {
   "meta": {
-    "title": "How a cold-gas thruster hops a car",
-    "eyebrow": "Thruster car",
-    "tagline": "Ten air jets and a tank of squeezed air: how a car speeds up, leaves a ramp upside down, rolls upright and lands softly.",
-    "description": "A 3D car with cold-gas thrusters: the 700 bar air tank, the nozzles, a start with no grip, the hop off a ramp, the roll in the air and the soft landing.",
-    "summary": "The air tank, how a nozzle makes thrust, a boost with no grip, the ramp and the hop, the roll and the catch, and why a hop is not a flight.",
-    "socialAlt": "A grey single-seat sports car upside down above a curled ramp at dusk, white gas jets at its corners, beside the title How a cold-gas thruster hops a car"
+    "title": "How Tesla's flying Roadster really hops",
+    "eyebrow": "Tesla Roadster",
+    "tagline": "The Tesla Roadster everyone calls a flying car, slowed down: ten air jets push it, roll it upright in midair and soften its landing.",
+    "description": "Tesla's 15 October 2026 demo at SpaceX's McGregor site, in 3D: how cold-gas thrusters and a tank of compressed air make a car jump, roll and land.",
+    "summary": "The air tank, how a nozzle makes thrust, a boost with no grip, the hop, the roll and the soft catch, and why a hop is not a flight.",
+    "socialAlt": "A grey single-seat sports car upside down above a curled ramp at dusk, white gas jets at its corners, beside the title How Tesla's flying Roadster really hops"
   },
   "stage": {
     "label": "Interactive thruster car model",
@@ -214,7 +214,7 @@
   "sections": {
     "tank": {
       "title": "A tank of squeezed air",
-      "p1": "On 15 October 2026, Tesla showed its new Roadster at a SpaceX rocket test site in McGregor, Texas. Nobody was aboard. Tesla says one version, the Rocket, carries ten <strong>cold-gas thrusters</strong>. These are air jets: they push the car by blowing out squeezed air, and they burn nothing. Tesla promises the car for 2028, and its own page says the Rocket is not approved for public roads.",
+      "p1": "On 15 October 2026, Tesla showed its new Roadster at SpaceX's rocket test site in McGregor, Texas. The news called it a flying car, though it only made short hops, with nobody aboard. Tesla says one version, the Rocket, carries ten <strong>cold-gas thrusters</strong>. These are air jets: they push the car by blowing out squeezed air, and they burn nothing. Tesla promises the car for 2028, and its own page says the Rocket is not approved for public roads.",
       "p2": "The car on this page is a generic one, not Tesla's. It is a single-seat electric sports car of 1.7 tonnes, the weight Tesla aims for. The <strong>driver's seat</strong> is on the left. Where a second seat would be sits the <strong>air tank</strong>, and its <strong>tank valve</strong> lets the gas out to the nozzles. Reports say the real tank is filled to about 700 bar, which is 700 times the air pressure around you.",
       "p3": "How big is the tank? Reports give 400 L and 600 L, and the sources disagree. So the model uses 600 L and lets you try 400 L. At 700 bar, air is packed tight: 100 L of it holds about 53 kg, so 600 L holds about 315 kg. Walls that hold this must be strong and light, so they are wound from carbon fibre. The hydrogen tanks of the first Toyota Mirai work at the same pressure. They weigh about 0.71 kg for every litre they hold. By that measure, a 600 L tank would weigh about 430 kg before any gas goes in.",
       "p4": "Squeezed air stores energy, like a wound spring. As 100 L of it expands, it can do about 24 megajoules (MJ) of work, or 6.6 kilowatt hours (kWh). Tesla says a refill takes six or seven hours today, and it aims for 30 minutes. Drag the fill slider to see the least work a perfect pump would need, and how long that takes at 50 kW. Real pumps need more. The pressure it shows follows the model's curve for air at room temperature. It climbs faster than the mass, because tightly packed air resists being squeezed further. Like every slider on this page, this one is a calculator: it shows the sums and leaves the 3D run alone.",

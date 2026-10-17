@@ -1,11 +1,11 @@
 {
   "meta": {
-    "title": "So springt ein Auto mit Kaltgastriebwerken",
-    "eyebrow": "Auto mit Schubdüsen",
-    "tagline": "Zehn Luftdüsen und ein Tank voll Druckluft: wie ein Auto beschleunigt, kopfüber von einer Rampe springt, sich in der Luft zurück auf die Räder dreht und sanft landet.",
-    "description": "Ein 3D-Auto mit Kaltgastriebwerken: 700-bar-Lufttank, Düsen, Start ohne Reifenhaftung, Sprung von der Rampe, Drehung in der Luft und sanfte Landung.",
-    "summary": "Der Lufttank, wie eine Düse Schub erzeugt, Beschleunigen ohne Reifenhaftung, Rampe und Sprung, Drehung und Abfangen, und warum ein Hüpfer kein Flug ist.",
-    "socialAlt": "Ein grauer einsitziger Sportwagen kopfüber über einer geschwungenen Rampe in der Abenddämmerung, weiße Gasstrahlen an seinen Ecken, daneben der Titel „So springt ein Auto mit Kaltgastriebwerken“"
+    "title": "Wie Teslas fliegender Roadster wirklich springt",
+    "eyebrow": "Tesla Roadster",
+    "tagline": "Der Tesla Roadster, den alle ein fliegendes Auto nennen, in Zeitlupe: Zehn Luftdüsen schieben ihn an, drehen ihn in der Luft zurück und federn die Landung ab.",
+    "description": "Teslas Vorführung vom 15. Oktober 2026 auf dem SpaceX-Gelände in McGregor in 3D: wie Kaltgastriebwerke und Druckluft ein Auto springen lassen.",
+    "summary": "Der Lufttank, wie eine Düse Schub erzeugt, ein Start ohne Reifenhaftung, der Sprung, die Drehung und das Abfangen, und warum ein Hüpfer kein Flug ist.",
+    "socialAlt": "Ein grauer einsitziger Sportwagen kopfüber über einer geschwungenen Rampe in der Abenddämmerung, weiße Gasstrahlen an seinen Ecken, daneben der Titel „Wie Teslas fliegender Roadster wirklich springt“"
   },
   "stage": {
     "label": "Interaktives Modell des Autos mit Schubdüsen",
@@ -214,7 +214,7 @@
   "sections": {
     "tank": {
       "title": "Ein Tank voll Druckluft",
-      "p1": "Am 15. Oktober 2026 zeigte Tesla seinen neuen Roadster auf einem Raketentestgelände von SpaceX in McGregor, Texas. Im Auto saß niemand. Laut Tesla hat eine Version, die Rocket, zehn <strong>Kaltgastriebwerke</strong>. Das sind Luftdüsen: Sie schieben das Auto an, indem sie Druckluft ausblasen, und sie verbrennen nichts. Tesla verspricht das Auto für 2028. Auf Teslas eigener Website steht, dass die Rocket nicht für öffentliche Straßen zugelassen ist.",
+      "p1": "Am 15. Oktober 2026 zeigte Tesla seinen neuen Roadster auf dem Raketentestgelände von SpaceX in McGregor, Texas. In den Nachrichten hieß er fliegendes Auto, dabei machte er nur kurze Sprünge, und niemand saß darin. Laut Tesla hat eine Version, die Rocket, zehn <strong>Kaltgastriebwerke</strong>. Das sind Luftdüsen: Sie schieben das Auto an, indem sie Druckluft ausblasen, und sie verbrennen nichts. Tesla verspricht das Auto für 2028. Auf Teslas eigener Website steht, dass die Rocket nicht für öffentliche Straßen zugelassen ist.",
       "p2": "Das Auto auf dieser Seite ist ein Beispielauto, nicht das von Tesla. Es ist ein einsitziger elektrischer Sportwagen. Er wiegt 1,7 Tonnen, so viel, wie Tesla anstrebt. Der <strong>Fahrersitz</strong> ist links. Wo sonst der Beifahrer säße, steckt der <strong>Lufttank</strong>. Sein <strong>Tankventil</strong> lässt das Gas zu den Düsen strömen. Berichten zufolge wird der echte Tank mit etwa 700 bar gefüllt. Das ist das 700-Fache des Luftdrucks um Sie herum.",
       "p3": "Wie groß ist der Tank? Berichte nennen 400 l und 600 l, die Quellen sind sich nicht einig. Darum rechnet das Modell mit 600 l, und Sie können 400 l ausprobieren. Bei 700 bar ist Luft dicht gepackt: 100 l davon wiegen etwa 53 kg, in 600 l passen also etwa 315 kg. Wände, die das aushalten, müssen stark und leicht sein. Darum wickelt man sie aus Kohlefaser. Die Wasserstofftanks des ersten Toyota Mirai arbeiten mit demselben Druck. Auf jeden Liter, den sie fassen, kommen etwa 0,71 kg Tank. Nach diesem Maßstab wöge ein 600-Liter-Tank etwa 430 kg, noch bevor Gas hineinkommt.",
       "p4": "Druckluft speichert Energie, wie eine gespannte Feder. Wenn sich 100 l davon ausdehnen, können sie etwa 24 Megajoule (MJ) Arbeit leisten, das sind 6,6 Kilowattstunden (kWh). Laut Tesla dauert das Nachfüllen heute sechs oder sieben Stunden, das Ziel sind 30 Minuten. Ziehen Sie am Füllregler, dann sehen Sie die geringste Arbeit, die eine perfekte Pumpe bräuchte, und wie lange das bei 50 kW dauert. Echte Pumpen brauchen mehr. Der angezeigte Druck folgt der Kurve des Modells für Luft bei Raumtemperatur. Er steigt schneller als die eingefüllte Masse, denn dicht gepackte Luft wehrt sich dagegen, noch weiter zusammengedrückt zu werden. Wie jeder Regler auf dieser Seite ist auch dieser ein Rechner: Er rechnet vor und lässt die 3D-Fahrt, wie sie ist.",

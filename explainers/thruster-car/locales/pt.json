@@ -1,11 +1,11 @@
 {
   "meta": {
-    "title": "Como um propulsor de gás frio faz um carro saltar",
-    "eyebrow": "Carro com propulsores",
-    "tagline": "Dez jatos de ar e um tanque de ar comprimido: como um carro acelera, sai de uma rampa de cabeça para baixo, se desvira no ar e pousa de leve.",
-    "description": "Um carro 3D com propulsores de gás frio: o tanque de ar a 700 bar, os bocais, a largada sem aderência, o salto da rampa, o giro no ar e o pouso suave.",
-    "summary": "O tanque de ar, como um bocal gera empuxo, uma arrancada sem aderência, a rampa e o salto, o giro e o amortecimento, e por que um salto não é um voo.",
-    "socialAlt": "Um esportivo cinza de um lugar só, de cabeça para baixo sobre uma rampa curvada ao entardecer, com jatos de gás brancos nos cantos, ao lado do título “Como um propulsor de gás frio faz um carro saltar”"
+    "title": "Como o Roadster voador da Tesla salta de verdade",
+    "eyebrow": "Tesla Roadster",
+    "tagline": "O Tesla Roadster que todo mundo chama de carro voador, em câmera lenta: dez jatos de ar o empurram, o desviram no ar e amortecem o pouso.",
+    "description": "A demonstração da Tesla de 15 de outubro de 2026 na SpaceX em McGregor, em 3D: como propulsores de gás frio e ar comprimido fazem um carro saltar.",
+    "summary": "O tanque de ar, como um bocal gera empuxo, uma arrancada sem aderência, o salto, o giro e o amortecimento, e por que um salto não é um voo.",
+    "socialAlt": "Um esportivo cinza de um lugar só, de cabeça para baixo sobre uma rampa curvada ao entardecer, com jatos de gás brancos nos cantos, ao lado do título “Como o Roadster voador da Tesla salta de verdade”"
   },
   "stage": {
     "label": "Modelo interativo do carro com propulsores",
@@ -214,7 +214,7 @@
   "sections": {
     "tank": {
       "title": "Um tanque de ar comprimido",
-      "p1": "Em 15 de outubro de 2026, a Tesla mostrou seu novo Roadster num campo de testes de foguetes da SpaceX em McGregor, no Texas. Não havia ninguém a bordo. Segundo a Tesla, uma das versões, a Rocket, leva dez <strong>propulsores de gás frio</strong>. São jatos de ar: eles empurram o carro soprando ar comprimido para fora, sem queimar nada. A Tesla promete o carro para 2028, e a própria página da empresa diz que a versão Rocket não tem homologação para rodar em vias públicas.",
+      "p1": "Em 15 de outubro de 2026, a Tesla mostrou seu novo Roadster no campo de testes de foguetes da SpaceX em McGregor, no Texas. Os jornais o chamaram de carro voador, mas ele só deu saltos curtos, sem ninguém a bordo. Segundo a Tesla, uma das versões, a Rocket, leva dez <strong>propulsores de gás frio</strong>. São jatos de ar: eles empurram o carro soprando ar comprimido para fora, sem queimar nada. A Tesla promete o carro para 2028, e a própria página da empresa diz que a versão Rocket não tem homologação para rodar em vias públicas.",
       "p2": "O carro desta página é genérico, não o da Tesla. É um esportivo elétrico de um lugar só, com 1,7 tonelada, o peso que a Tesla tem como meta. O <strong>banco do motorista</strong> fica à esquerda. No lugar onde iria um segundo banco fica o <strong>tanque de ar</strong>, e a <strong>válvula do tanque</strong> libera o gás para os bocais. Segundo reportagens, o tanque de verdade é enchido a cerca de 700 bar, ou seja, 700 vezes a pressão do ar ao seu redor.",
       "p3": "Qual é o tamanho do tanque? As reportagens falam em 400 L e em 600 L, e as fontes não batem. Por isso o modelo usa 600 L e deixa você testar 400 L. A 700 bar, o ar fica bem compactado: em 100 L cabem cerca de 53 kg dele, então em 600 L cabem cerca de 315 kg. Paredes que aguentam isso precisam ser fortes e leves, por isso são feitas de fibra de carbono enrolada. Os tanques de hidrogênio da primeira geração do Toyota Mirai trabalham na mesma pressão. Eles pesam cerca de 0,71 kg para cada litro que comportam. Por essa conta, um tanque de 600 L pesaria cerca de 430 kg antes mesmo de receber gás.",
       "p4": "Ar comprimido guarda energia, como uma mola apertada. Quando 100 L dele se expandem, podem realizar cerca de 24 megajoules (MJ) de trabalho, ou 6,6 quilowatts-hora (kWh). A Tesla diz que hoje encher o tanque leva seis ou sete horas, e quer chegar a 30 minutos. Arraste o controle de enchimento para ver o mínimo de trabalho que um compressor perfeito precisaria fazer, e quanto tempo isso leva a 50 kW. Compressores de verdade gastam mais. A pressão mostrada segue a curva do modelo para o ar em temperatura ambiente. Ela sobe mais rápido que a massa de ar, porque o ar muito compactado resiste a ser apertado ainda mais. Como todos os controles desta página, este é uma calculadora: ele mostra as contas e não mexe no percurso em 3D.",

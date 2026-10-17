@@ -1,11 +1,11 @@
 {
   "meta": {
-    "title": "Cómo un propulsor de gas frío hace saltar un coche",
-    "eyebrow": "Coche con propulsores",
-    "tagline": "Diez chorros de aire y un tanque de aire comprimido: así acelera un coche, sale de una rampa boca abajo, se endereza en el aire y aterriza con suavidad.",
-    "description": "Un coche en 3D con propulsores de gas frío: el tanque de aire a 700 bar, las toberas, la salida sin agarre, el salto, el giro y el aterrizaje suave.",
-    "summary": "El tanque de aire, cómo una tobera crea empuje, una aceleración sin agarre, la rampa y el salto, el giro y la amortiguación de la caída, y por qué un salto no es un vuelo.",
-    "socialAlt": "Un deportivo gris de una plaza, boca abajo sobre una rampa curvada al atardecer, con chorros blancos de gas en las esquinas, junto al título «Cómo un propulsor de gas frío hace saltar un coche»"
+    "title": "Cómo salta de verdad el Roadster volador de Tesla",
+    "eyebrow": "Tesla Roadster",
+    "tagline": "El Tesla Roadster al que todos llaman coche volador, a cámara lenta: diez chorros de aire lo empujan, lo enderezan en el aire y suavizan su aterrizaje.",
+    "description": "La demo de Tesla del 15 de octubre de 2026 en el campo de SpaceX en McGregor, en 3D: así hacen saltar un coche los propulsores de gas frío.",
+    "summary": "El tanque de aire comprimido, cómo empuja una tobera, una salida sin agarre, el salto, el giro y la amortiguación, y por qué un salto no es un vuelo.",
+    "socialAlt": "Un deportivo gris de una plaza, boca abajo sobre una rampa curvada al atardecer, con chorros blancos de gas en las esquinas, junto al título «Cómo salta de verdad el Roadster volador de Tesla»"
   },
   "stage": {
     "label": "Modelo interactivo del coche con propulsores",
@@ -214,7 +214,7 @@
   "sections": {
     "tank": {
       "title": "Un tanque de aire comprimido",
-      "p1": "El 15 de octubre de 2026, Tesla presentó su nuevo Roadster en un campo de pruebas de cohetes de SpaceX, en McGregor, Texas. No iba nadie dentro. Tesla dice que una de sus versiones, la Rocket, lleva diez <strong>propulsores de gas frío</strong>. Son chorros de aire: empujan el coche soltando aire comprimido, y no queman nada. Tesla promete el coche para 2028, y su propia web dice que la Rocket no está homologada para circular por la vía pública.",
+      "p1": "El 15 de octubre de 2026, Tesla presentó su nuevo Roadster en el campo de pruebas de cohetes de SpaceX en McGregor, Texas. La prensa lo llamó coche volador, aunque solo dio saltos cortos y no iba nadie dentro. Tesla dice que una de sus versiones, la Rocket, lleva diez <strong>propulsores de gas frío</strong>. Son chorros de aire: empujan el coche soltando aire comprimido, y no queman nada. Tesla promete el coche para 2028, y su propia web dice que la Rocket no está homologada para circular por la vía pública.",
       "p2": "El coche de esta página es genérico, no el de Tesla. Es un deportivo eléctrico de una sola plaza y 1,7 toneladas, el peso al que aspira Tesla. El <strong>asiento del conductor</strong> está a la izquierda. Donde iría un segundo asiento va el <strong>tanque de aire</strong>, y la <strong>válvula del tanque</strong> deja salir el gas hacia las toberas, las boquillas por donde sale el chorro. Según la prensa, el tanque real se llena a unos 700 bar, es decir, 700 veces la presión del aire que te rodea.",
       "p3": "¿Qué tamaño tiene el tanque? La prensa habla de 400 l y de 600 l, y las fuentes no se ponen de acuerdo. Por eso el modelo usa 600 l y te deja probar con 400 l. A 700 bar, el aire va muy apretado: en 100 l caben unos 53 kg, así que en 600 l caben unos 315 kg. Las paredes que aguantan esa presión tienen que ser resistentes y ligeras, así que se fabrican enrollando fibra de carbono. Los tanques de hidrógeno del Toyota Mirai de primera generación trabajan a la misma presión, y pesan unos 0,71 kg por cada litro de capacidad. Con esa proporción, un tanque de 600 l pesaría unos 430 kg antes de llenarlo de gas.",
       "p4": "El aire comprimido guarda energía, igual que un resorte tensado. Cuando 100 l se expanden, pueden hacer unos 24 megajulios (MJ) de trabajo, o 6,6 kilovatios hora (kWh). Tesla dice que hoy llenar el tanque lleva seis o siete horas, y su objetivo es bajarlo a 30 minutos. Arrastra el control de llenado para ver el trabajo mínimo que necesitaría una bomba perfecta y cuánto tardaría a 50 kW. Las bombas reales necesitan más. La presión que indica sigue la curva que usa el modelo para el aire a temperatura ambiente. Crece más deprisa que la masa de gas, porque el aire muy apretado se resiste a comprimirse todavía más. Como todos los controles de esta página, funciona como una calculadora: hace las cuentas y deja intacto el recorrido en 3D.",
