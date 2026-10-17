@@ -1,6 +1,6 @@
 import type { ScenePreset } from '@core/scene/presetBinder';
 import type { CameraView, PartId, PresetId, ViewOptions } from '../ids';
-import { MOMENTS, SPEED_RANGE } from '../model';
+import { MOMENTS, PHASE_RANGES, SPEED_RANGE } from '../model';
 
 export interface Preset extends ScenePreset<PartId, CameraView> {
   view: Partial<ViewOptions>;
@@ -9,9 +9,13 @@ export interface Preset extends ScenePreset<PartId, CameraView> {
 const REAL_TIME = SPEED_RANGE.default;
 const HALF_SPEED = 0.5;
 
-const STANDING_START_S = 0;
-const NOZZLES_FIRING_S = 0.5;
-const SETTLING_TO_LOOP_S = 2.5;
+const STANDING_START_S = PHASE_RANGES.sprint.start;
+const NOZZLES_FIRING_AFTER_S = 0.5;
+const NOZZLES_FIRING_S = STANDING_START_S + NOZZLES_FIRING_AFTER_S;
+const LOOP_LEAD_IN_S = 0.5;
+const SETTLING_TO_LOOP_S = PHASE_RANGES.ramp.start - LOOP_LEAD_IN_S;
+const LEAP_LEAD_IN_S = 0.7;
+const RUNNING_AT_ROW_S = MOMENTS.liftOff - LEAP_LEAD_IN_S;
 
 const NOZZLE_PARTS: readonly PartId[] = ['rearNozzles', 'cornerNozzles', 'frontNozzles', 'jets'];
 
@@ -60,7 +64,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'jumpWide',
     speed: REAL_TIME,
     view: { nozzles: true, forces: true, tank: false, ghost: true },
-    startAt: MOMENTS.touchdown,
+    startAt: RUNNING_AT_ROW_S,
     labels: ['parkedRow', 'landingPad', 'cornerNozzles', 'jets', 'ghostPath'],
     highlight: ['parkedRow', 'cornerNozzles', 'jets', 'ghostPath', 'body'],
   },

@@ -44,10 +44,9 @@ describe('thruster car presets', () => {
     expect(PRESETS.tank.pauseAt).toBe(0);
     expect(PRESETS.nozzle.pauseAt).toBe(0.5);
     expect(PRESETS.boost.startAt).toBe(0);
-    expect(PRESETS.hook.startAt).toBe(2.5);
+    expect(PRESETS.hook.startAt).toBeCloseTo(PHASE_RANGES.ramp.start - 0.5, 9);
     expect(PRESETS.flip.startAt).toBe(MOMENTS.leavesRamp);
-    expect(PRESETS.jump.startAt).toBe(MOMENTS.touchdown);
-    expect(PRESETS.jump.startAt).toBeCloseTo(6.7, 1);
+    expect(PRESETS.jump.startAt).toBeCloseTo(MOMENTS.liftOff - 0.7, 9);
     expect(PRESETS.limits.startAt).toBe(0);
   });
 
