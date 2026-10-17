@@ -5,9 +5,10 @@ import { MOMENTS, PHASE_RANGES, RUN_SECONDS } from './run';
 
 const PHASE_IMPULSE_KNS: Readonly<Partial<Record<PhaseId, number>>> = {
   sprint: 45.6,
+  deck: 11.9,
   flip: 10.0,
   catch: 27.7,
-  runUp: 6.3,
+  runUp: 13.6,
   leap: 27.9,
   twist: 14.2,
   landing: 23.8,
@@ -23,7 +24,7 @@ describe('budget', () => {
     Object.entries(PHASE_IMPULSE_KNS).forEach(([id, kns]) =>
       expect(phaseImpulse(id as PhaseId), id).toBeCloseTo(kns, 1),
     );
-    expect(impulseUsedKns(RUN_SECONDS)).toBeCloseTo(155.4, 1);
+    expect(impulseUsedKns(RUN_SECONDS)).toBeCloseTo(174.7, 1);
     expect(impulseUsedKns(RUN_SECONDS)).toBeCloseTo(impulseUsedKns(PHASE_RANGES.landing.end), 9);
   });
 
@@ -35,14 +36,13 @@ describe('budget', () => {
     expect(start.empty).toBe(false);
   });
 
-  it('ends the air run with about 29 percent left at about 18 bar', () => {
+  it('ends the air run with about 21 percent left at about 6 bar', () => {
     const end = tankAt(RUN_SECONDS, 'air', 600);
-    expect(end.massShare).toBeCloseTo(0.29, 2);
-    expect(end.pressureBar).toBeCloseTo(18, 0);
+    expect(end.massShare).toBeCloseTo(0.207, 3);
+    expect(end.pressureBar).toBeCloseTo(6.2, 1);
     expect(end.empty).toBe(false);
     expect(end.emptyAtSeconds).toBeNull();
     expect(end.shortfallMs).toBe(0);
-    expect(tankAt(RUN_SECONDS, 'nitrogen', 600).empty).toBe(false);
   });
 
   it('runs the small air tank dry over the jump, so the last landing loses its cushion', () => {
@@ -50,6 +50,13 @@ describe('budget', () => {
     expect(emptyAt).toBeGreaterThan(MOMENTS.liftOff);
     expect(emptyAt).toBeLessThan(MOMENTS.landed);
     expect(shortfallMs('air', 400)).toBeCloseTo(10, 0);
+  });
+
+  it('runs a 600 L nitrogen tank to the cut-off in the jump landing', () => {
+    const emptyAt = emptyAtSeconds('nitrogen', 600) ?? Number.NaN;
+    expect(emptyAt).toBeGreaterThan(PHASE_RANGES.landing.start);
+    expect(emptyAt).toBeLessThan(MOMENTS.landed);
+    expect(shortfallMs('nitrogen', 600)).toBeGreaterThan(0);
   });
 
   it('runs helium dry before the hook touchdown in either tank', () => {

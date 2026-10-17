@@ -4,6 +4,8 @@ import { CORNER_NOZZLE_IDS, MOMENT_IDS, PHASE_IDS, REAR_NOZZLE_IDS } from '../id
 import type { CarReading } from '../ids';
 import {
   CORNER_NOZZLE_MAX_N,
+  DECK_LAUNCH_SPEED_MS,
+  HOLD_SECONDS,
   ENTRY_SPEED_MS,
   LANDING_SQUAT_M,
   ROLL_NOZZLE_N,
@@ -11,11 +13,10 @@ import {
   SIXTY_MPH_MS,
   TOUCHDOWN_SPEED_MS,
 } from './constants';
-import { CAR, DECK_END_X, JUMP, RAMP, SITE } from './layout';
+import { CAR, DECK_END_X, DECK_STOP_X, JUMP, RAMP, SITE } from './layout';
 import {
   CATCH_SECONDS,
   CATCH_THRUST_N,
-  EXIT_SPEED_MS,
   LANDING_SECONDS,
   LEAP_THRUST_N,
   MOMENTS,
@@ -47,7 +48,7 @@ function firing(seconds: number): Record<string, number> {
 }
 
 describe('run', () => {
-  it('covers the 17 s run with ten touching phases', () => {
+  it('covers the 23 s run with thirteen touching phases', () => {
     expect(PHASE_RANGES.sprint.start).toBe(0);
     expect(PHASE_RANGES.rest.end).toBe(RUN_SECONDS);
     PHASE_IDS.slice(1).forEach((id, index) =>
@@ -57,7 +58,7 @@ describe('run', () => {
     expect(phaseAt(RUN_SECONDS)).toBe('rest');
   });
 
-  it('marks the ten moments in order inside the run', () => {
+  it('marks the eleven moments in order inside the run', () => {
     MOMENT_IDS.slice(1).forEach((id, index) =>
       expect(MOMENTS[id]).toBeGreaterThan(MOMENTS[MOMENT_IDS[index]]),
     );
@@ -83,7 +84,29 @@ describe('run', () => {
     expect(top.roll).toBe(0);
     const exit = carAt(MOMENTS.leavesRamp);
     expect(exit.position[0]).toBeCloseTo(DECK_END_X, 6);
-    expect(exit.speed).toBeCloseTo(EXIT_SPEED_MS, 9);
+    expect(exit.speed).toBeCloseTo(DECK_LAUNCH_SPEED_MS, 9);
+  });
+
+  it('brakes to a stop half way along the deck and hangs there still for 3 s', () => {
+    expect(PHASE_RANGES.brake.end - PHASE_RANGES.brake.start).toBeCloseTo(1.4, 1);
+    expect(PHASE_RANGES.hold.end - PHASE_RANGES.hold.start).toBeCloseTo(HOLD_SECONDS, 9);
+    expect(PHASE_RANGES.deck.end - PHASE_RANGES.deck.start).toBeCloseTo(2.3, 1);
+    expect(MOMENTS.held).toBe(PHASE_RANGES.hold.start);
+    for (let t = PHASE_RANGES.hold.start; t < PHASE_RANGES.hold.end; t += 0.25) {
+      const held = carAt(t);
+      expect(held.speed).toBe(0);
+      expect(held.position).toEqual([DECK_STOP_X, 2 * RAMP.radius, 0]);
+      expect(held.onRamp).toBe(true);
+    }
+  });
+
+  it('keeps the car pitched over from the top of the loop to the end of the run', () => {
+    for (let t = MOMENTS.inverted; t <= RUN_SECONDS; t += 0.25) {
+      expect(carAt(t).pitch, `at ${t}`).toBeCloseTo(Math.PI, 9);
+    }
+    for (let t = MOMENTS.inverted; t < PHASE_RANGES.flip.start; t += 0.25) {
+      expect(carAt(t).roll, `at ${t}`).toBe(0);
+    }
   });
 
   it('rolls upright in the air and lands near x 30 in the first landing box', () => {
@@ -141,11 +164,11 @@ describe('run', () => {
 
   it('flags the car on the ground, on the ramp and in the air', () => {
     expect(carAt(2).onGround).toBe(true);
-    expect(carAt(4).onRamp).toBe(true);
-    expect(carAt(5).airborne).toBe(true);
-    expect(carAt(8).onGround).toBe(true);
-    expect(carAt(10).airborne).toBe(true);
-    expect(carAt(15).onGround).toBe(true);
+    [4, 5, 7, 9.5].forEach((t) => expect(carAt(t).onRamp, `at ${t}`).toBe(true));
+    expect(carAt(11).airborne).toBe(true);
+    expect(carAt(14).onGround).toBe(true);
+    expect(carAt(16.5).airborne).toBe(true);
+    expect(carAt(21).onGround).toBe(true);
   });
 
   it('squats the suspension on landing without touching the body down', () => {
@@ -160,24 +183,25 @@ describe('run', () => {
 
   it('fires the nozzles in the order of the three tests', () => {
     REAR_NOZZLE_IDS.forEach((id) => expect(nozzlesAt(0.5)[id]).toBeCloseTo(14072, 0));
-    [2, 4, 4.85, 8, 11.2, 14].forEach((t) => expect(firing(t), `at ${t}`).toEqual({}));
-    expect(firing(5)).toEqual({ cornerFrontLeft: ROLL_NOZZLE_N, cornerRearLeft: ROLL_NOZZLE_N });
-    expect(firing(5.5)).toEqual({
+    [2, 4, 5, 7, 10.85, 14.5, 17.5, 20].forEach((t) => expect(firing(t), `at ${t}`).toEqual({}));
+    REAR_NOZZLE_IDS.forEach((id) => expect(nozzlesAt(9.5)[id]).toBeCloseTo(1301.6, 1));
+    expect(firing(11)).toEqual({ cornerFrontLeft: ROLL_NOZZLE_N, cornerRearLeft: ROLL_NOZZLE_N });
+    expect(firing(11.5)).toEqual({
       cornerFrontRight: ROLL_NOZZLE_N,
       cornerRearRight: ROLL_NOZZLE_N,
     });
-    expect(Object.keys(firing(6.2))).toEqual([...CORNER_NOZZLE_IDS]);
-    REAR_NOZZLE_IDS.forEach((id) => expect(nozzlesAt(6.9)[id]).toBeCloseTo(2550, 0));
-    CORNER_NOZZLE_IDS.forEach((id) => expect(nozzlesAt(9.3)[id]).toBe(CORNER_NOZZLE_MAX_N));
-    expect(Object.keys(firing(9.9))).toEqual(['cornerFrontLeft', 'cornerRearLeft']);
-    expect(Object.keys(firing(10.5))).toEqual(['cornerFrontRight', 'cornerRearRight']);
-    expect(Object.keys(firing(12))).toEqual([...CORNER_NOZZLE_IDS]);
+    expect(Object.keys(firing(12.2))).toEqual([...CORNER_NOZZLE_IDS]);
+    REAR_NOZZLE_IDS.forEach((id) => expect(nozzlesAt(13)[id]).toBeCloseTo(2550, 0));
+    CORNER_NOZZLE_IDS.forEach((id) => expect(nozzlesAt(15.5)[id]).toBe(CORNER_NOZZLE_MAX_N));
+    expect(Object.keys(firing(16.2))).toEqual(['cornerFrontLeft', 'cornerRearLeft']);
+    expect(Object.keys(firing(16.8))).toEqual(['cornerFrontRight', 'cornerRearRight']);
+    expect(Object.keys(firing(18.2))).toEqual([...CORNER_NOZZLE_IDS]);
   });
 
-  it('turns the fans on along the ramp only', () => {
+  it('turns the fans on from the loop to the deck end only', () => {
     expect(fansAt(2.9)).toBe(false);
-    expect(fansAt(4)).toBe(true);
-    expect(fansAt(5)).toBe(false);
+    [4, 5, 7, 10].forEach((t) => expect(fansAt(t), `at ${t}`).toBe(true));
+    expect(fansAt(11)).toBe(false);
     expect(runAt(4)).toEqual({ phase: 'ramp', car: carAt(4), nozzles: nozzlesAt(4), fans: true });
   });
 });

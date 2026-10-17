@@ -42,6 +42,9 @@ export const PHASE_IDS = [
   'sprint',
   'settle',
   'ramp',
+  'brake',
+  'hold',
+  'deck',
   'flip',
   'catch',
   'runUp',
@@ -56,6 +59,7 @@ export type PhaseId = (typeof PHASE_IDS)[number];
 export const MOMENT_IDS = [
   'sixty',
   'inverted',
+  'held',
   'leavesRamp',
   'rollComplete',
   'touchdown',

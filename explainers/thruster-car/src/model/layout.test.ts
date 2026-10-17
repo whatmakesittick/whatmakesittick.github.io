@@ -4,6 +4,7 @@ import {
   CAR,
   DECK_END_X,
   DECK_HEIGHT,
+  DECK_STOP_X,
   JUMP,
   LOOP_LENGTH,
   NOZZLES,
@@ -34,10 +35,11 @@ describe('layout', () => {
     expect(rampPitch(LOOP_LENGTH / 2)).toBeCloseTo(Math.PI / 2, 9);
   });
 
-  it('runs an 8 m inverted deck 10 m up back toward the start', () => {
+  it('runs a 16 m inverted deck 10 m up back toward the start, stopping half way', () => {
     expect(RAMP_LENGTH).toBeCloseTo(Math.PI * RAMP.radius + RAMP.deckLength, 9);
     expect(rampPoint(RAMP_LENGTH)).toEqual([DECK_END_X, DECK_HEIGHT, 0]);
-    expect(DECK_END_X).toBe(52);
+    expect(DECK_END_X).toBe(44);
+    expect(DECK_STOP_X).toBe(52);
     expect(rampPitch(RAMP_LENGTH)).toBeCloseTo(Math.PI, 9);
     expect(rampPoint(RAMP_LENGTH + 5)).toEqual(rampPoint(RAMP_LENGTH));
     expect(SITE_ANCHORS.rampExit).toEqual(rampPoint(RAMP_LENGTH));

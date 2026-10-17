@@ -39,13 +39,15 @@ export const DECK_HEIGHT = 2 * RAMP_RADIUS;
 export const RAMP = {
   entryX: 60,
   radius: RAMP_RADIUS,
-  deckLength: 8,
+  deckLength: 16,
+  brakeLength: 8,
   width: 3,
 } as const;
 
 export const LOOP_LENGTH = Math.PI * RAMP.radius;
 export const RAMP_LENGTH = LOOP_LENGTH + RAMP.deckLength;
 export const DECK_END_X = RAMP.entryX - RAMP.deckLength;
+export const DECK_STOP_X = RAMP.entryX - RAMP.brakeLength;
 
 function alongRamp(distance: number): number {
   return clamp(distance, 0, RAMP_LENGTH);

@@ -14,8 +14,10 @@ import {
   BRAKE_DECEL,
   CAR_MASS_KG,
   CORNER_NOZZLE_MAX_N,
+  DECK_LAUNCH_SPEED_MS,
   ENTRY_SPEED_MS,
   G,
+  HOLD_SECONDS,
   JUMP_HEIGHT_M,
   LANDING_SQUAT_M,
   ROLL_INERTIA_KG_M2,
@@ -25,7 +27,7 @@ import {
   SIXTY_MPH_MS,
   TOUCHDOWN_SPEED_MS,
 } from './constants';
-import { DECK_END_X, DECK_HEIGHT, JUMP, LOOP_LENGTH, RAMP, rampPitch, rampPoint } from './layout';
+import { DECK_END_X, DECK_HEIGHT, DECK_STOP_X, JUMP, RAMP, rampPitch, rampPoint } from './layout';
 import { leapAccel, leapSpeedFor, loopAngleAt, loopSpeedAt, loopTimetable, topSpeed } from './loop';
 import { rollAngleAt, rollSeconds } from './roll';
 
@@ -59,14 +61,20 @@ interface Cushion {
   seconds: number;
 }
 
-export const RUN_SECONDS = 17;
+export const RUN_SECONDS = 23;
 export const LAUNCH_HOLD_SECONDS = 0.1;
 
 const LOOP_TIMES = loopTimetable(ENTRY_SPEED_MS, RAMP.radius);
 export const LOOP_SECONDS = LOOP_TIMES[LOOP_TIMES.length - 1];
-export const EXIT_SPEED_MS = topSpeed(ENTRY_SPEED_MS, RAMP.radius);
-export const DECK_SECONDS = RAMP.deckLength / EXIT_SPEED_MS;
-export const RAMP_SECONDS = LOOP_SECONDS + DECK_SECONDS;
+export const TOP_SPEED_MS = topSpeed(ENTRY_SPEED_MS, RAMP.radius);
+export const RAMP_SECONDS = LOOP_SECONDS;
+export const DECK_BRAKE_DECEL = TOP_SPEED_MS ** 2 / (2 * RAMP.brakeLength);
+export const BRAKE_SECONDS = TOP_SPEED_MS / DECK_BRAKE_DECEL;
+const PUSH_LENGTH = RAMP.deckLength - RAMP.brakeLength;
+export const DECK_ACCEL = DECK_LAUNCH_SPEED_MS ** 2 / (2 * PUSH_LENGTH);
+export const DECK_SECONDS = DECK_LAUNCH_SPEED_MS / DECK_ACCEL;
+export const DECK_PUSH_N = CAR_MASS_KG * DECK_ACCEL;
+const LAUNCH_SPEED = DECK_LAUNCH_SPEED_MS;
 const FLIP_ROLL_SECONDS = rollSeconds(ROLL_INERTIA_KG_M2, ROLL_NOZZLE_N);
 export const FLIP_SECONDS = LAUNCH_HOLD_SECONDS + FLIP_ROLL_SECONDS;
 export const TWIST_SECONDS = rollSeconds(ROLL_INERTIA_KG_M2, ROLL_NOZZLE_N, FULL_TURN);
@@ -91,7 +99,10 @@ function cushionAt({ from, accel, seconds }: Cushion, elapsed: number): FallStat
 }
 
 const RAMP_START = SPRINT_SECONDS + SETTLE_SECONDS;
-const FLIP_START = RAMP_START + RAMP_SECONDS;
+const BRAKE_START = RAMP_START + RAMP_SECONDS;
+const HOLD_START = BRAKE_START + BRAKE_SECONDS;
+const DECK_START = HOLD_START + HOLD_SECONDS;
+const FLIP_START = DECK_START + DECK_SECONDS;
 const ROLL_START = FLIP_START + LAUNCH_HOLD_SECONDS;
 const CATCH_START = FLIP_START + FLIP_SECONDS;
 
@@ -102,11 +113,11 @@ const CATCH = cushionFrom(CATCH_FROM, CATCH_ACCEL);
 export const CATCH_SECONDS = CATCH.seconds;
 export const CATCH_THRUST_N = CAR_MASS_KG * (G + CATCH_ACCEL);
 const TOUCHDOWN = CATCH_START + CATCH_SECONDS;
-const TOUCHDOWN_X = DECK_END_X - EXIT_SPEED_MS * (TOUCHDOWN - FLIP_START);
+const TOUCHDOWN_X = DECK_END_X - LAUNCH_SPEED * (TOUCHDOWN - FLIP_START);
 
 const RUN_UP_ACCEL = boostAccel(RUN_UP_THRUST_N);
-const RUN_UP_BURN_SECONDS = (RUN_UP_SPEED_MS - EXIT_SPEED_MS) / RUN_UP_ACCEL;
-const RUN_UP_BURN_M = (RUN_UP_SPEED_MS ** 2 - EXIT_SPEED_MS ** 2) / (2 * RUN_UP_ACCEL);
+const RUN_UP_BURN_SECONDS = (RUN_UP_SPEED_MS - LAUNCH_SPEED) / RUN_UP_ACCEL;
+const RUN_UP_BURN_M = (RUN_UP_SPEED_MS ** 2 - LAUNCH_SPEED ** 2) / (2 * RUN_UP_ACCEL);
 const RUN_UP_SECONDS =
   RUN_UP_BURN_SECONDS + (TOUCHDOWN_X - RUN_UP_BURN_M - JUMP.leapX) / RUN_UP_SPEED_MS;
 const LIFT_OFF = TOUCHDOWN + RUN_UP_SECONDS;
@@ -135,7 +146,10 @@ const SQUAT_RATE = TOUCHDOWN_SPEED_MS / (LANDING_SQUAT_M * Math.E);
 export const PHASE_RANGES: Readonly<Record<PhaseId, PhaseRange>> = {
   sprint: { start: 0, end: SPRINT_SECONDS },
   settle: { start: SPRINT_SECONDS, end: RAMP_START },
-  ramp: { start: RAMP_START, end: FLIP_START },
+  ramp: { start: RAMP_START, end: BRAKE_START },
+  brake: { start: BRAKE_START, end: HOLD_START },
+  hold: { start: HOLD_START, end: DECK_START },
+  deck: { start: DECK_START, end: FLIP_START },
   flip: { start: FLIP_START, end: CATCH_START },
   catch: { start: CATCH_START, end: TOUCHDOWN },
   runUp: { start: TOUCHDOWN, end: LIFT_OFF },
@@ -147,7 +161,8 @@ export const PHASE_RANGES: Readonly<Record<PhaseId, PhaseRange>> = {
 
 export const MOMENTS: Readonly<Record<MomentId, number>> = {
   sixty: SPRINT_SECONDS,
-  inverted: RAMP_START + LOOP_SECONDS,
+  inverted: BRAKE_START,
+  held: HOLD_START,
   leavesRamp: FLIP_START,
   rollComplete: CATCH_START,
   touchdown: TOUCHDOWN,
@@ -177,6 +192,12 @@ export const BURNS: readonly Burn[] = [
     end: SPRINT_SECONDS,
     nozzles: REAR_NOZZLE_IDS,
     thrustEach: SPRINT_THRUST_N / REAR_COUNT,
+  },
+  {
+    start: DECK_START,
+    end: FLIP_START,
+    nozzles: REAR_NOZZLE_IDS,
+    thrustEach: DECK_PUSH_N / REAR_COUNT,
   },
   ...rollBurns(ROLL_START, FLIP_ROLL_SECONDS),
   {
@@ -235,6 +256,7 @@ function squatAt(elapsed: number): FallState {
   };
 }
 
+const ON_RAMP: ReadonlySet<PhaseId> = new Set(['ramp', 'brake', 'hold', 'deck']);
 const AIRBORNE: ReadonlySet<PhaseId> = new Set(['flip', 'catch', 'leap', 'twist', 'landing']);
 const GROUNDED: ReadonlySet<PhaseId> = new Set(['sprint', 'settle', 'runUp', 'rest']);
 
@@ -253,7 +275,7 @@ function reading(
     roll,
     pitch,
     onGround: GROUNDED.has(phase),
-    onRamp: phase === 'ramp',
+    onRamp: ON_RAMP.has(phase),
     airborne: AIRBORNE.has(phase),
   };
 }
@@ -270,13 +292,8 @@ function settleAt(time: number): CarReading {
   return reading(x, LEVEL, SIXTY_MPH_MS - SETTLE_DECEL * elapsed, 0, 0, 'settle');
 }
 
-function rampDistanceAt(elapsed: number): number {
-  if (elapsed < LOOP_SECONDS) return RAMP.radius * loopAngleAt(LOOP_TIMES, elapsed);
-  return LOOP_LENGTH + EXIT_SPEED_MS * (elapsed - LOOP_SECONDS);
-}
-
 function rampAt(time: number): CarReading {
-  const distance = rampDistanceAt(time - RAMP_START);
+  const distance = RAMP.radius * loopAngleAt(LOOP_TIMES, time - RAMP_START);
   const [x, y] = rampPoint(distance);
   const pitch = rampPitch(distance);
   const speed = loopSpeedAt(ENTRY_SPEED_MS, RAMP.radius, pitch);
@@ -284,27 +301,46 @@ function rampAt(time: number): CarReading {
   return reading(x, fall, speed * Math.cos(pitch), 0, pitch, 'ramp');
 }
 
+const ON_DECK: FallState = { height: DECK_HEIGHT, verticalSpeed: 0 };
+
+function brakeAt(time: number): CarReading {
+  const elapsed = time - BRAKE_START;
+  const travelled = TOP_SPEED_MS * elapsed - 0.5 * DECK_BRAKE_DECEL * elapsed ** 2;
+  const speed = TOP_SPEED_MS - DECK_BRAKE_DECEL * elapsed;
+  return reading(RAMP.entryX - travelled, ON_DECK, speed, 0, Math.PI, 'brake');
+}
+
+function holdAt(): CarReading {
+  return reading(DECK_STOP_X, ON_DECK, 0, 0, Math.PI, 'hold');
+}
+
+function deckAt(time: number): CarReading {
+  const elapsed = time - DECK_START;
+  const x = DECK_STOP_X - 0.5 * DECK_ACCEL * elapsed ** 2;
+  return reading(x, ON_DECK, DECK_ACCEL * elapsed, 0, Math.PI, 'deck');
+}
+
 function hookX(time: number): number {
-  return DECK_END_X - EXIT_SPEED_MS * (time - FLIP_START);
+  return DECK_END_X - LAUNCH_SPEED * (time - FLIP_START);
 }
 
 function flipAt(time: number): CarReading {
   const fall = freeFall(DECK_HEIGHT, 0, time - FLIP_START);
   const roll = rollAngleAt(time - ROLL_START, ROLL_INERTIA_KG_M2, ROLL_NOZZLE_N);
-  return reading(hookX(time), fall, EXIT_SPEED_MS, roll, Math.PI, 'flip');
+  return reading(hookX(time), fall, LAUNCH_SPEED, roll, Math.PI, 'flip');
 }
 
 function catchAt(time: number): CarReading {
   const fall = catchFallAt(time - CATCH_START);
-  return reading(hookX(time), fall, EXIT_SPEED_MS, Math.PI, Math.PI, 'catch');
+  return reading(hookX(time), fall, LAUNCH_SPEED, Math.PI, Math.PI, 'catch');
 }
 
 function runUpAt(time: number): CarReading {
   const elapsed = time - TOUCHDOWN;
   const burn = Math.min(elapsed, RUN_UP_BURN_SECONDS);
   const cruise = elapsed - burn;
-  const distance = EXIT_SPEED_MS * burn + 0.5 * RUN_UP_ACCEL * burn ** 2 + RUN_UP_SPEED_MS * cruise;
-  const groundSpeed = EXIT_SPEED_MS + RUN_UP_ACCEL * burn;
+  const distance = LAUNCH_SPEED * burn + 0.5 * RUN_UP_ACCEL * burn ** 2 + RUN_UP_SPEED_MS * cruise;
+  const groundSpeed = LAUNCH_SPEED + RUN_UP_ACCEL * burn;
   return reading(TOUCHDOWN_X - distance, squatAt(elapsed), groundSpeed, Math.PI, Math.PI, 'runUp');
 }
 
@@ -341,6 +377,9 @@ const PHASE_MOTION: Readonly<Record<PhaseId, (time: number) => CarReading>> = {
   sprint: sprintAt,
   settle: settleAt,
   ramp: rampAt,
+  brake: brakeAt,
+  hold: holdAt,
+  deck: deckAt,
   flip: flipAt,
   catch: catchAt,
   runUp: runUpAt,
@@ -369,7 +408,7 @@ export function nozzlesAt(seconds: number): NozzleThrusts {
 }
 
 export function fansAt(seconds: number): boolean {
-  return phaseAt(seconds) === 'ramp';
+  return ON_RAMP.has(phaseAt(seconds));
 }
 
 export function runAt(seconds: number): RunReading {
