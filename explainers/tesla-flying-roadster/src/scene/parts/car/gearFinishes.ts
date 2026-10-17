@@ -34,7 +34,7 @@ const METAL_REFLECTION = 1.1;
 const PAINT_REFLECTION = 1.2;
 const GLASS_REFLECTION = 0.7;
 const GHOST_REFLECTION = 0.5;
-const BLUR_REFLECTION = 0.6;
+const BLUR_REFLECTION = 0.2;
 const SHEEN_REFLECTION = 0.35;
 const RUBBER_REFLECTION = 0.25;
 const GLOW_REFLECTION = 0.15;
@@ -163,7 +163,7 @@ export function rotorFinish(slots: Texture, env: Texture): MaterialFinish {
 
 export function rimBlurFinish(blur: Texture, env: Texture): MaterialFinish {
   return {
-    ...reflecting(metal(GEAR_PAINT.blur, 0.5, 0.45), env, BLUR_REFLECTION),
+    ...reflecting(metal(GEAR_PAINT.blur, 0.75, 0.2), env, BLUR_REFLECTION),
     map: blur,
     transparent: true,
     depthWrite: false,

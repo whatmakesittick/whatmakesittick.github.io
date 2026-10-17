@@ -83,8 +83,8 @@ const BLUR = {
   hubTop: 0.0975,
   hubEdge: 0.084,
   dishStart: 0.09,
-  maxCover: 0.9,
-  floor: 0.42,
+  maxCover: 0.6,
+  floor: 0.28,
   gain: 1.6,
   streak: 0.18,
 } as const;
