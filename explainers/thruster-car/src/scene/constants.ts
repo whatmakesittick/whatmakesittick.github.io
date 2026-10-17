@@ -1,10 +1,8 @@
 import type { PartId } from '../ids';
-import { SITE } from '../model/layout';
-
 type Triple = readonly [number, number, number];
 
 export const SCENE_LIMITS = {
-  fogNear: SITE.fogNear,
+  fogNear: 220,
   fogFar: 1100,
   cameraNear: 0.1,
   cameraFar: 1300,

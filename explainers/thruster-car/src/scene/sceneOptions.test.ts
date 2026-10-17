@@ -8,6 +8,7 @@ import { regionFromSpec } from '@core/scene/regions';
 import { SITE, SITE_REGIONS } from '../model/layout';
 import { THEME } from '../theme';
 import { FIXED_VIEWS } from './cameraViews';
+import { SCENE_LIMITS } from './constants';
 import { GROUND } from './geometry/site/groundGrid';
 import { SCENE_OPTIONS } from './sceneOptions';
 
@@ -50,7 +51,7 @@ describe('scene options', () => {
     expect(SCENE_OPTIONS.stage).toBe(false);
     expect(SCENE_OPTIONS.background).toBe(THEME.fog);
     expect(fog.color).toBe(SCENE_OPTIONS.background);
-    expect(fog.near).toBe(SITE.fogNear);
+    expect(fog.near).toBe(SCENE_LIMITS.fogNear);
     expect(SCENE_OPTIONS.gaugeSide).toBe('right');
   });
 
