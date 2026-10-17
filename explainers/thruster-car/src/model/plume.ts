@@ -38,5 +38,7 @@ export function plumeStyle(gas: GasId): Readonly<PlumeStyle> {
 }
 
 export function plumeLength(thrustN: number, gas: GasId): number {
-  return ((PLUME_LENGTH_M * thrustN) / CORNER_NOZZLE_MAX_N) * plumeStyle(gas).lengthScale;
+  return (
+    ((PLUME_LENGTH_M * Math.max(thrustN, 0)) / CORNER_NOZZLE_MAX_N) * plumeStyle(gas).lengthScale
+  );
 }

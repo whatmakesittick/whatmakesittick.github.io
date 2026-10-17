@@ -8,12 +8,6 @@ export const POINT_SIZE_PER_METRE = 1 / Math.tan(toRadians(CAMERA_FOV) / 2);
 
 export const RENDER_ORDER = { ghost: 1, plume: 2, arrow: 10 } as const;
 
-export const PLUME_LENGTH_AT_MAX_THRUST_M = 1.5;
-export const PLUME_LENGTH_SCALE: Readonly<Record<GasId, number>> = {
-  air: 1,
-  nitrogen: 1,
-  helium: 1.6,
-};
 export const PLUME_WAKE_SHARE: Readonly<Record<NozzlePartId, number>> = {
   cornerNozzles: 2,
   frontNozzles: 2,

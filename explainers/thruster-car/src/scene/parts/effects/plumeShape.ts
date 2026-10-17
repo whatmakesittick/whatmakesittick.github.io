@@ -1,12 +1,6 @@
 import { lerp, smoothstep } from '@core/math';
-import type { GasId, NozzlePartId } from '../../../ids';
-import { CORNER_NOZZLE_MAX_N } from '../../../model/constants';
-import {
-  PLUME,
-  PLUME_LENGTH_AT_MAX_THRUST_M,
-  PLUME_LENGTH_SCALE,
-  PLUME_WAKE_SHARE,
-} from './constants';
+import type { NozzlePartId } from '../../../ids';
+import { PLUME, PLUME_WAKE_SHARE } from './constants';
 import type { PlumeLook } from './constants';
 
 export interface PlumeSpan {
@@ -21,11 +15,6 @@ export interface PuffShape {
   diameter: number;
   rise: number;
   alpha: number;
-}
-
-export function plumeLength(thrust: number, gas: GasId): number {
-  const share = Math.max(thrust, 0) / CORNER_NOZZLE_MAX_N;
-  return PLUME_LENGTH_AT_MAX_THRUST_M * share * PLUME_LENGTH_SCALE[gas];
 }
 
 export function plumeReach(length: number, group: NozzlePartId): number {

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import type { NozzlePartId } from '../../../ids';
 import { CORNER_NOZZLE_MAX_N } from '../../../model/constants';
 import { PLUME, PLUME_LOOKS, PLUME_PUFFS, PLUME_WAKE_SHARE } from './constants';
-import { plumeLength, plumeReach, puffDistance, puffShape } from './plumeShape';
+import { plumeLength } from '../../../model/plume';
+import { plumeReach, puffDistance, puffShape } from './plumeShape';
 import type { PlumeSpan, PuffShape } from './plumeShape';
 
 const HELIUM_SCALE = 1.6;

@@ -14,7 +14,8 @@ import { PLUME, PLUME_LOOKS, PLUME_PUFFS, PLUME_SHADING, RENDER_ORDER } from './
 import { firingThrust } from './firing';
 import type { Mouth } from './mouth';
 import { mouthInCar } from './mouth';
-import { plumeLength, plumeReach, puffShape } from './plumeShape';
+import { plumeLength } from '../../../model/plume';
+import { plumeReach, puffShape } from './plumeShape';
 import type { PlumeSpan, PuffShape } from './plumeShape';
 import { puffLight, shadePuff } from './plumeShading';
 import type { Tone } from './plumeShading';

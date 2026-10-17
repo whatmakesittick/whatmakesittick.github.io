@@ -11,7 +11,8 @@ import type { PartContext } from '../context';
 import type { CarView } from '../types';
 import { GROUND_HAZE, RENDER_ORDER } from './constants';
 import { firingThrust } from './firing';
-import { plumeLength, plumeReach } from './plumeShape';
+import { plumeLength } from '../../../model/plume';
+import { plumeReach } from './plumeShape';
 import { mouthInCar } from './mouth';
 import { PUFF_SCALE_ATTRIBUTE } from './puffMaterial';
 
