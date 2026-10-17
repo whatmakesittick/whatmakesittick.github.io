@@ -1,0 +1,266 @@
+{
+  "meta": {
+    "title": "Comment des propulseurs à gaz froid font sauter une voiture",
+    "eyebrow": "Voiture à propulseurs",
+    "tagline": "Dix jets d’air et un réservoir d’air comprimé : comment une voiture prend de la vitesse, quitte une rampe à l’envers, se remet sur ses roues et se pose en douceur.",
+    "description": "Une voiture en 3D à propulseurs à gaz froid : réservoir à 700 bar, tuyères, départ sans adhérence, saut de rampe, tonneau et atterrissage en douceur.",
+    "summary": "Le réservoir d’air, comment une tuyère crée une poussée, une accélération sans adhérence, la rampe et le saut, le tonneau et l’amorti, et pourquoi un saut n’est pas un vol.",
+    "socialAlt": "Une sportive monoplace grise, à l’envers au-dessus d’une rampe enroulée, au crépuscule, des jets de gaz blancs à ses quatre coins, à côté du titre « Comment des propulseurs à gaz froid font sauter une voiture »"
+  },
+  "stage": {
+    "label": "Modèle interactif de la voiture à propulseurs",
+    "gauge": "Réservoir et jets en direct"
+  },
+  "timeline": {
+    "label": "Temps du parcours",
+    "phases": "Aller à une étape du parcours",
+    "speed": "Vitesse de lecture",
+    "value": "T+{{seconds}} s",
+    "during": "T+{{seconds}} s, {{phase}}",
+    "speedValue": "x{{factor}}",
+    "speedDescribe": "{{factor}} fois la vitesse réelle",
+    "phase": {
+      "boost": "Accélération",
+      "ramp": "Rampe",
+      "launch": "Saut",
+      "flip": "Retournement",
+      "catch": "Amorti",
+      "rest": "Fin de course"
+    },
+    "jump": {
+      "boost": "Aller à l’accélération",
+      "ramp": "Aller à la rampe",
+      "launch": "Aller au saut",
+      "flip": "Aller au retournement",
+      "catch": "Aller à l’amorti",
+      "rest": "Aller à la fin de course"
+    },
+    "detail": {
+      "boost": "les quatre jets arrière font passer la voiture de l’arrêt à 16 m/s",
+      "ramp": "des ventilateurs plaquent la voiture sur la rampe torsadée, qui la fait basculer sur le toit",
+      "launch": "la voiture quitte la rampe à l’envers, à 4 m de haut, sans aucun jet allumé",
+      "flip": "les jets d’angle remettent la voiture sur ses roues près du sommet de son saut de 8 m",
+      "catch": "les quatre jets d’angle soufflent vers le bas et ralentissent la chute à 2,5 m/s",
+      "rest": "la voiture se pose, freine et s’arrête à environ 86 m du départ"
+    },
+    "moment": {
+      "leavesRamp": "Quitte la rampe",
+      "peak": "Sommet du saut",
+      "rollComplete": "De nouveau sur ses roues",
+      "touchdown": "Contact avec le sol",
+      "stopped": "À l’arrêt"
+    }
+  },
+  "controls": {
+    "label": "Commandes du modèle",
+    "gas": "Gaz",
+    "gasOptions": {
+      "air": "Air",
+      "nitrogen": "Azote",
+      "helium": "Hélium"
+    },
+    "tank": "Réservoir",
+    "tankOptions": {
+      "400": "400 L",
+      "600": "600 L"
+    },
+    "replayOptions": {
+      "run": "Rejouer le parcours"
+    },
+    "groups": {
+      "gas": "Gaz dans le réservoir",
+      "tank": "Taille du réservoir",
+      "replay": "Rejouer le parcours"
+    },
+    "views": {
+      "nozzles": {
+        "name": "Orientation des tuyères",
+        "short": "Tuyères",
+        "hint": "Orientation des tuyères (N)"
+      },
+      "forces": {
+        "name": "Forces",
+        "short": "Forces",
+        "hint": "Forces (F)"
+      },
+      "tank": {
+        "name": "Réservoir en coupe",
+        "short": "Réservoir",
+        "hint": "Réservoir en coupe (T)"
+      },
+      "ghost": {
+        "name": "Trajectoire fantôme",
+        "short": "Trajectoire",
+        "hint": "Trajectoire fantôme (G)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    }
+  },
+  "readouts": {
+    "pressure": "Réservoir",
+    "thrust": "Poussée",
+    "massFlow": "Débit de gaz",
+    "height": "Hauteur",
+    "speed": "Vitesse",
+    "gasLeft": "Gaz restant",
+    "tankState": {
+      "full": "Plein",
+      "draining": "Se vide",
+      "empty": "Vide"
+    }
+  },
+  "units": {
+    "bar": "{{value}} bar",
+    "kilonewtons": "{{value}} kN",
+    "kilonewtonMetres": "{{value}} kN·m",
+    "kilonewtonSeconds": "{{value}} kN·s",
+    "kgPerSecond": "{{value}} kg/s",
+    "kilograms": "{{value}} kg",
+    "metres": "{{value}} m",
+    "metresPerSecond": "{{value}} m/s",
+    "kmh": "{{value}} km/h",
+    "seconds": "{{value}} s",
+    "minutes": "{{value}} min",
+    "percent": "{{value}} %",
+    "megawatts": "{{value}} MW",
+    "megajoulesPair": "{{mj}} MJ, {{kwh}} kWh",
+    "gees": "{{value}} g",
+    "kgm2": "{{value}} kg·m²",
+    "degreesPerSecond": "{{value}}°/s"
+  },
+  "chapters": {
+    "limits": {
+      "outcomeState": {
+        "cushioned": "Atterrissage en douceur à {{speed}} m/s",
+        "ranDry": "Plus de gaz à T+{{seconds}} s, atterrissage à {{speed}} m/s"
+      },
+      "hoverFlow": "Gaz pour tenir en l’air",
+      "hoverTime": "Tenue en l’air maximale",
+      "jetPower": "Puissance des jets pour tenir en l’air",
+      "impulse": "Poussée totale",
+      "used": "Gaz consommé sur le parcours",
+      "outcome": "Atterrissage",
+      "rotor": "Rotor idéal",
+      "rotorValue": "environ 0,16 MW pour un rotor de 10 m"
+    },
+    "tank": {
+      "fill": "Remplissage",
+      "mass": "Gaz dans le réservoir",
+      "work": "Travail qu’il peut fournir",
+      "pressure": "Pression",
+      "fillTime": "Remplissage idéal à 50 kW",
+      "shell": "Coque du réservoir, base Mirai",
+      "mirai": "Réservoirs de la Toyota Mirai",
+      "miraiValue": "122,4 L, 87,5 kg, 5,0 kg d’hydrogène"
+    },
+    "nozzle": {
+      "pressure": "Pression du réservoir",
+      "flow": "Débit massique",
+      "thrust": "Poussée d’une tuyère d’angle",
+      "exhaust": "Vitesse d’éjection",
+      "isp": "Impulsion spécifique"
+    },
+    "boost": {
+      "thrust": "Poussée arrière",
+      "accel": "Accélération",
+      "sixty": "De 0 à 60 mph",
+      "flow": "Gaz consommé",
+      "lasts": "Un plein dure",
+      "runThrust": "Poussée arrière sur le parcours",
+      "runThrustValue": "9,1 kN, réglage du modèle",
+      "claim": "Rocket, de 0 à 60 mph",
+      "claimValue": "moins de 0,59 s selon Tesla ; 0,81 s lors de la démo en direct"
+    },
+    "hop": {
+      "launch": "Vitesse de lancement",
+      "peak": "Point le plus haut",
+      "airTime": "Temps en l’air sans amorti",
+      "range": "Distance depuis la rampe",
+      "exit": "Sortie de rampe",
+      "exitValue": "4 m de haut, 42 degrés, rampe du modèle",
+      "entry": "Vitesse à l’entrée de la rampe",
+      "entryValue": "16 m/s, 58 km/h",
+      "tesla": "Le saut de Tesla",
+      "teslaValue": "environ 8 m (27 pieds), chiffre de Tesla"
+    },
+    "flip": {
+      "inertia": "Inertie en roulis",
+      "time": "Durée d’un demi-tonneau",
+      "torque": "Couple d’une paire",
+      "rate": "Rotation la plus rapide",
+      "catch": "Poussée d’amorti",
+      "catchValue": "28 kN, 7 kN par tuyère, amorti du modèle",
+      "touchdown": "Vitesse au contact du sol",
+      "touchdownValue": "2,5 m/s vers le bas"
+    }
+  },
+  "parts": {
+    "body": "Carrosserie",
+    "wheels": "Roues",
+    "seat": "Siège du conducteur",
+    "tank": "Réservoir d’air",
+    "tankValve": "Vanne du réservoir",
+    "cornerNozzles": "Tuyères d’angle",
+    "frontNozzles": "Tuyères avant",
+    "rearNozzles": "Tuyères arrière",
+    "jets": "Jets de gaz",
+    "forceArrows": "Forces",
+    "fans": "Ventilateurs d’aspiration",
+    "runway": "Piste d’élan",
+    "ramp": "Rampe",
+    "landingPad": "Aire d’atterrissage",
+    "ghostPath": "Trajectoire fantôme"
+  },
+  "sections": {
+    "tank": {
+      "title": "Un réservoir d’air comprimé",
+      "p1": "Le 15 octobre 2026, Tesla a présenté son nouveau Roadster sur un site d’essais de fusées de SpaceX, à McGregor, au Texas. Personne n’était à bord. Selon Tesla, une version, la Rocket, embarque dix <strong>propulseurs à gaz froid</strong>. Ce sont des jets d’air : ils poussent la voiture en soufflant de l’air comprimé, sans rien brûler. Tesla promet la voiture pour 2028, et sa propre page indique que la Rocket n’est pas homologuée pour la route.",
+      "p2": "La voiture présentée ici est générique, ce n’est pas celle de Tesla. C’est une sportive électrique monoplace de 1,7 tonne, le poids que vise Tesla. Le <strong>siège du conducteur</strong> est à gauche. À la place d’un second siège se trouve le <strong>réservoir d’air</strong>, et la <strong>vanne du réservoir</strong> laisse partir le gaz vers les tuyères. D’après certains articles, le vrai réservoir est rempli à environ 700 bar, soit 700 fois la pression de l’air autour de vous.",
+      "p3": "Quelle est la taille du réservoir ? Les articles parlent de 400 L ou de 600 L, et les sources ne sont pas d’accord. Le modèle prend donc 600 L et vous laisse essayer 400 L. À 700 bar, l’air est très tassé : 100 L en renferment environ 53 kg, donc 600 L environ 315 kg. Pour tenir cette pression, les parois doivent être à la fois solides et légères. On les fabrique donc en fibre de carbone enroulée. Les réservoirs d’hydrogène de la Toyota Mirai fonctionnent à la même pression. Ils pèsent environ 0,71 kg par litre de contenance. Sur cette base, un réservoir de 600 L pèserait environ 430 kg à vide.",
+      "p4": "L’air comprimé stocke de l’énergie, comme un ressort tendu. En se détendant, 100 L de cet air peuvent fournir un travail d’environ 24 mégajoules (MJ), soit 6,6 kilowattheures (kWh). Un réservoir de 600 L rempli stocke environ 40 kWh. Selon Tesla, un remplissage prend aujourd’hui six ou sept heures, et la marque vise 30 minutes. Faites glisser le curseur de remplissage : il montre le travail minimal dont aurait besoin une pompe parfaite, et le temps que cela prend à 50 kW. Une vraie pompe en demande davantage.",
+      "p5": "Ce jour-là, Tesla a montré plusieurs cascades, certaines avec des voitures différentes. Cette page les réunit en un seul parcours de 14 secondes, joué en temps réel. La voiture prend de la vitesse grâce à ses jets, monte une rampe torsadée, la quitte à l’envers, se remet sur ses roues et se pose. Ce mouvement suit un scénario propre au modèle. Le gaz et le réservoir que vous choisissez changent seulement la quantité de gaz consommée, la pression et les jets, jamais la trajectoire."
+    },
+    "nozzle": {
+      "title": "Rejeter du gaz vers l’arrière pour avancer",
+      "p1": "Ouvrez une vanne, et le gaz comprimé s’échappe en trombe par une tuyère, une ouverture de forme étudiée qui l’accélère. Le gaz part d’un côté, alors la voiture est poussée de l’autre. C’est la troisième loi de Newton : toute force s’accompagne d’une force égale en sens inverse. La voiture compte dix tuyères. Quatre <strong>tuyères arrière</strong> la poussent vers l’avant, quatre <strong>tuyères d’angle</strong> pointent vers le bas, et deux <strong>tuyères avant</strong> font pivoter le nez de la voiture vers la gauche ou la droite.",
+      "p2": "Cette force qui pousse la voiture s’appelle la poussée. Elle est égale à la masse de gaz qui sort chaque seconde, le débit massique, multipliée par la vitesse à laquelle il sort, la vitesse d’éjection. L’air d’un réservoir à 700 bar sort à environ 700 m/s. Les ingénieurs évaluent aussi un gaz par son impulsion spécifique, ou Isp. Elle indique pendant combien de secondes un kilogramme de gaz pourrait pousser avec une force égale à son propre poids. Pour de l’air froid, c’est environ 70 s.",
+      "p3": "On pourrait croire qu’avec plus de pression, le gaz sort plus vite. Pas vraiment. La vitesse d’éjection dépend du gaz et de sa température. La pression, elle, fixe la quantité de gaz qui traverse la tuyère chaque seconde, et la quantité qui tient dans le réservoir. Faites glisser le curseur de pression : le débit et la poussée baissent avec elle, alors que la vitesse d’éjection ne bouge pas.",
+      "p4": "En se détendant, le gaz se refroidit bien en dessous de zéro. C’est de là que vient le nuage blanc des <strong>jets de gaz</strong> : une partie de l’air se condense en fines gouttelettes, et l’humidité de l’air ambiant gèle. C’est aussi pour cela qu’on parle de propulseurs à gaz froid. Rien ne brûle, donc aucune pièce ne chauffe, et il suffit d’une vanne par tuyère. Le prix à payer : la poussée la plus faible par kilogramme de tous les types de propulseurs, car aucun carburant n’apporte d’énergie.",
+      "p5": "C’est pour sa simplicité et sa sûreté que les engins spatiaux utilisent ce système. Les petits satellites se pilotent avec des jets de gaz froid, et le premier étage d’une Falcon 9 se retourne grâce à des jets d’azote placés près de son sommet. Le modèle reste simple, lui aussi. Il garde une vitesse d’éjection fixe pour chaque gaz. Dans une vraie tuyère, l’air ralentit un peu à mesure que le réservoir se vide, jusqu’à environ 660 m/s à 300 bar. Tesla n’a pas dit quelle est la force de chaque tuyère, alors le modèle fixe ses propres valeurs."
+    },
+    "boost": {
+      "title": "Une poussée qui se passe d’adhérence",
+      "p1": "Une voiture normale accélère grâce à ses <strong>roues</strong>. Si on force trop, les pneus patinent, donc c’est l’adhérence, l’accroche des pneus sur la route, qui fixe la limite. Les <strong>tuyères arrière</strong> poussent sur la voiture elle-même, pas sur la route, alors l’adhérence ne compte plus. Tesla affirme que ses propulseurs produisent quatre à cinq fois la force que peuvent transmettre les pneus.",
+      "p2": "Selon Electrek, les jets arrière fournissent environ 80 kN. Sur une voiture de 1,7 tonne, cela donne 4,8 g. Un g, c’est la pesanteur que vous ressentez quand vous restez immobile. Avec cette poussée, vous sentiriez donc presque cinq fois votre poids. Mais à 80 kN, les jets avalent environ 115 kg d’air par seconde. Un réservoir de 600 L, plein au départ, serait vide en 2,7 s.",
+      "p3": "Tesla annonce trois temps de 0 à 60 mph (97 km/h) : moins de 1,6 s pour la version Performance, sans propulseurs, moins de 0,9 s pour la Thrust et moins de 0,59 s pour la Rocket. Ce dernier temps exige à peu près la totalité des 80 kN. Lors de la démo en direct, Tesla dit que la voiture a mis 0,81 s, mais personne d’autre ne l’a chronométrée. Même ce temps-là demande une poussée moyenne d’environ 56 kN, soit 3,4 g.",
+      "p4": "Le parcours du modèle est plus doux. Ses quatre jets arrière poussent avec 9,1 kN au total, un neuvième des 80 kN, pendant trois secondes le long de la <strong>piste d’élan</strong>. La voiture arrive ainsi à la rampe à 16 m/s (58 km/h), et il reste du gaz pour le retournement et pour amortir la chute. Ce réglage est un choix du modèle. Le modèle garde aussi constante la poussée de chaque jet, alors qu’un vrai réservoir perd de la pression en se vidant et que ses jets faiblissent."
+    },
+    "hop": {
+      "title": "Les ventilateurs la retiennent, la rampe la lance",
+      "p1": "À 16 m/s, la voiture arrive sur la <strong>rampe</strong>. Dans le modèle, la piste se vrille en montant, si bien que la voiture bascule sur le toit. Ce qui la retient à l’envers, ce ne sont pas les jets. Lors de la vraie démo, des <strong>ventilateurs d’aspiration</strong> sous la voiture la plaquaient contre la piste. Il y en avait quatre, d’environ 20 kW chacun, selon Electrek. Le modèle les montre par une lueur bleue, sans calculer leur force d’aspiration.",
+      "p2": "La voiture quitte la rampe à l’envers, à 4 m de haut, à 13,3 m/s, en montant selon un angle de 42 degrés. À partir de là, aucun jet ne la pousse vers l’avant ni vers le haut. Elle est lancée comme une balle, et seule la pesanteur courbe sa trajectoire en arc. La <strong>trajectoire fantôme</strong> dessine cet arc devant la voiture, jusqu’à l’<strong>aire d’atterrissage</strong>.",
+      "p3": "La hauteur atteinte ne dépend que de sa vitesse vers le haut. À 42 degrés, 13,3 m/s donnent environ 8,9 m/s à la verticale, de quoi faire monter la voiture de 4 m de plus. Elle culmine donc à environ 8 m du sol. Tesla a annoncé environ 8 m (27 pieds) pour l’un de ses sauts, sans préciser s’il s’agissait de la hauteur ou de la longueur. Sans aide, la voiture retomberait 2,2 s après avoir quitté la rampe. Comme les jets freinent sa chute, elle reste en l’air environ 2,6 s sur le parcours.",
+      "p4": "Faites glisser le curseur de vitesse de lancement pour envoyer la voiture plus ou moins vite. La vitesse compte double ici : la montée croît avec le carré de la vitesse vers le haut, donc 10 % de vitesse en plus donnent environ 21 % de montée en plus. Tesla n’a pas publié les dimensions de la vraie rampe. Les articles décrivent une piste qui s’enroule vers le haut puis par-dessus, en demi-boucle. La vrille, la sortie à 4 m, l’angle de 42 degrés et l’entrée à 16 m/s sont tous propres au modèle."
+    },
+    "flip": {
+      "title": "Se remettre sur ses roues, puis amortir la chute",
+      "p1": "À l’envers, près du sommet de son saut, la voiture doit se retourner avant de retomber. Ce sont les <strong>tuyères d’angle</strong> qui s’en chargent. Elles fonctionnent comme les petits jets de pilotage d’un engin spatial, qui le font tourner sur place. Une poussée appliquée loin du centre fait tourner la voiture, et la force de cet effet de rotation s’appelle le couple. Les deux tuyères d’un côté soufflent d’abord pour lancer la rotation, puis les deux de l’autre côté soufflent pour l’arrêter, comme un frein.",
+      "p2": "La vitesse de rotation dépend de la difficulté à faire tourner la voiture : son inertie en roulis, mesurée en kg·m². Le roulis, c’est la rotation autour de l’axe qui va de l’avant à l’arrière. Plus le poids se trouve loin du centre, plus la voiture est dure à faire tourner. Des essais sur de vraies voitures ont mesuré environ 390 kg·m² pour une petite voiture et 630 pour une grande. Personne n’a publié de chiffre pour une sportive aux réservoirs pleins, alors le modèle choisit 600 et vous laisse essayer de 500 à 900.",
+      "p3": "Sur le parcours, chaque tuyère d’angle pousse avec 2 kN, à 0,9 m du centre, donc une paire produit un couple de 3,6 kN·m. À 600 kg·m², un demi-tonneau prend environ 1,45 s : on accélère la rotation pendant la moitié du temps, on la freine pendant l’autre moitié. Cela tient largement dans la durée du saut. Ces valeurs de tuyères sont un exemple choisi par le modèle, pas des chiffres de Tesla. Le modèle remet aussi l’avant à l’horizontale pendant la rotation, pour que la voiture redescende à plat.",
+      "p4": "Remise à l’endroit, la voiture tombe à environ 8 m/s. Les quatre tuyères d’angle soufflent vers le bas en même temps, et les flèches des <strong>forces</strong> montrent leur poussée. Ensemble, elles donnent environ 28 kN, plus que les 16,7 kN du poids de la voiture, donc la chute ralentit. En 0,85 s, sa vitesse tombe à 2,5 m/s, et les roues touchent l’aire d’atterrissage. Tesla affirme que ses propulseurs ont aussi adouci l’atterrissage, sans dire avec quelle force ils poussaient. Ces valeurs d’amorti sont donc calculées par le modèle.",
+      "p5": "Une fois au sol, la voiture freine et s’arrête à environ 86 m du départ, 11,45 s après le début du parcours. Ici, le retournement passe à mi-vitesse pour que vous puissiez suivre chaque paire de jets. Appuyez sur « Rejouer le parcours » pour tout revoir."
+    },
+    "limits": {
+      "title": "Pourquoi un saut n’est pas un vol",
+      "p1": "Pour tenir en l’air sans bouger, les jets doivent pousser vers le haut avec une force égale à tout le poids de la voiture, soit 16,7 kN pour 1,7 tonne. Avec de l’air qui sort à environ 700 m/s, il faut environ 24 kg d’air par seconde. Plein, un <strong>réservoir d’air</strong> de 600 L en contient environ 315 kg. Même si chaque kilogramme pouvait servir, la voiture tiendrait donc en l’air 13 s au maximum. En pratique, c’est moins, car la pression baisse à mesure que le réservoir se vide.",
+      "p2": "Pourquoi si peu ? Parce que des jets rapides gaspillent de la puissance. Tenir la voiture en l’air avec de l’air à 700 m/s demande environ 5,8 mégawatts (MW). Un rotor idéal de 10 m de diamètre porte le même poids en poussant beaucoup d’air lentement, à environ 9 m/s, et il ne lui faut qu’environ 0,16 MW. C’est environ 37 fois moins. Un hélicoptère peut rester en l’air pendant des heures avec son carburant. Ce réservoir, lui, tient quelques secondes.",
+      "p3": "Alors pourquoi pas de l’hélium ? Il sort environ 2,6 fois plus vite, autour de 1 800 m/s. Mais l’hélium est très léger, donc le même réservoir de 600 L n’en contient que 51 kg, un sixième de la masse d’air. Ce qui compte, c’est la poussée totale, qu’on appelle l’impulsion : la poussée multipliée par sa durée. L’hélium donne 93 kN·s, contre 220 kN·s pour l’air, soit moins de la moitié. Il ne l’emporte que là où le poids compte plus que la place, comme dans un engin spatial.",
+      "p4": "Essayez les différents gaz et réservoirs, et regardez le budget de gaz du parcours. Avec de l’air dans le réservoir de 600 L, le parcours consomme environ un quart du gaz, et la voiture se pose avec une belle réserve. Avec de l’hélium dans le réservoir de 400 L, le réservoir est presque vide à la fin du parcours. La trajectoire reste la même quel que soit votre choix : seuls changent le gaz consommé, la pression et les jets.",
+      "p5": "Roger Conner, conservateur chargé du vol vertical au National Air and Space Museum de la Smithsonian, a déclaré à CNN : « On parle littéralement de faire des bonds. » La FAA, l’autorité américaine de l’aviation civile, a indiqué à CBS que la voiture ne correspond pas à sa définition d’un aéronef. C’est donc une voiture qui saute pendant quelques secondes, pas une voiture qui vole."
+    }
+  }
+}
