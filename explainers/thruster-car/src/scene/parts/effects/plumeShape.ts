@@ -38,7 +38,7 @@ function columnOpacity(distance: number, length: number, look: PlumeLook): numbe
 
 function stackedAlpha(column: number, diameter: number, length: number): number {
   const overlap = Math.max(1, (PLUME.puffs * diameter) / plumeReach(length));
-  return 1 - (1 - column) ** (1 / overlap);
+  return Math.min(1, (1 - (1 - column) ** (1 / overlap)) / PLUME.textureFill);
 }
 
 export function puffShape(

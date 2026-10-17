@@ -25,16 +25,16 @@ export interface PlumeLook {
 }
 
 const CONDENSATION: PlumeLook = {
-  coreOpacity: 0.9,
-  wakeOpacity: 0.32,
+  coreOpacity: 0.95,
+  wakeOpacity: 0.42,
   spread: 0.14,
-  wakeSpread: 0.6,
+  wakeSpread: 0.8,
   scale: 1,
 };
 
 const HELIUM_HAZE: PlumeLook = {
-  coreOpacity: 0.42,
-  wakeOpacity: 0.1,
+  coreOpacity: 0.5,
+  wakeOpacity: 0.14,
   spread: 0.09,
   wakeSpread: 0.38,
   scale: 0.78,
@@ -52,12 +52,13 @@ export const PLUME = {
   mouthRadius: 0.03,
   mouthDiameter: 0.09,
   growth: 0.5,
-  wakeGrowth: 1.1,
+  wakeGrowth: 1.6,
   sizeJitter: [0.75, 1.25],
   lifeSeconds: 0.3,
   lifeJitter: 0.35,
   drift: 1.3,
-  coreHold: 0.4,
+  coreHold: 0.55,
+  textureFill: 0.32,
   mouthFloor: 0.5,
   fadeInShare: 0.12,
   sway: { amplitude: 0.06, rate: 11, lag: 5, ratio: 0.83 },
@@ -115,7 +116,7 @@ export const FAN_GLOW = {
   drop: 0.03,
   diameter: 1.3,
   opacity: 0.5,
-  pool: { length: 1.05, width: 1.25, lift: 0.02, opacity: 0.65, glow: 1.4, swell: 0.05 },
+  pool: { length: 1.05, width: 1.25, lift: 0.04, opacity: 0.6, glow: 1.1, swell: 0.05 },
   pulse: { rate: 4.5, depth: 0.35, wave: 1.2 },
   label: [0, -0.06, 1] as const,
 } as const;
