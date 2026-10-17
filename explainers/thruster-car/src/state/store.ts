@@ -1,7 +1,7 @@
 import type { ExplainerStore, Playback, PlaybackState } from '@core/explainer';
 import { clamp } from '@core/math';
 import { createExplainerStore } from '@core/store';
-import type { GasId, PresetId, ViewOptions } from '../ids';
+import type { GasId, PresetId, TankChoiceId, ViewOptions } from '../ids';
 import {
   DEFAULT_TANK_LITRES,
   EXIT_SPEED_MS,
@@ -17,6 +17,10 @@ import { PRESETS } from './presets';
 import type { Preset } from './presets';
 
 export type ViewState = { [Key in keyof ViewOptions]: ViewOptions[Key] };
+
+type NumberOf<Text> = Text extends `${infer Value extends number}` ? Value : never;
+
+export type TankLitres = NumberOf<TankChoiceId>;
 
 export interface CalculatorFields {
   fillShare: number;
@@ -34,14 +38,14 @@ export interface SteppedRange {
 
 export interface ThrusterCarFields extends CalculatorFields {
   gas: GasId;
-  tankLitres: number;
+  tankLitres: TankLitres;
   view: ViewState;
   preset: PresetId;
 }
 
 export interface ThrusterCarOwnActions {
   setGas(gas: GasId): void;
-  setTankLitres(litres: number): void;
+  setTankLitres(litres: TankLitres): void;
   setFillShare(share: number): void;
   setPressureBar(bar: number): void;
   setRearThrustKn(kn: number): void;
@@ -95,8 +99,13 @@ export function snapToRange(value: number, { min, max, step }: SteppedRange): nu
   return Number(clamp(min + steps * step, min, max).toFixed(SNAP_DIGITS));
 }
 
-export function isTankChoice(litres: number): boolean {
+export function isTankChoice(litres: number): litres is TankLitres {
   return TANK_CHOICES.has(litres);
+}
+
+export function toTankLitres(litres: number): TankLitres {
+  if (!isTankChoice(litres)) throw new Error(`No ${litres} L tank`);
+  return litres;
 }
 
 function presetFields(preset: Preset, state: ThrusterCarFields): Partial<ThrusterCarFields> {
@@ -118,11 +127,9 @@ export function createThrusterCarStore(
         return {
           ...CALCULATOR_DEFAULTS,
           gas: DEFAULT_GAS,
-          tankLitres: DEFAULT_TANK_LITRES,
+          tankLitres: toTankLitres(DEFAULT_TANK_LITRES),
           setGas: (gas) => set({ gas }),
-          setTankLitres: (litres) => {
-            if (isTankChoice(litres)) set({ tankLitres: litres });
-          },
+          setTankLitres: (tankLitres) => set({ tankLitres }),
           setFillShare: snapped('fillShare'),
           setPressureBar: snapped('pressureBar'),
           setRearThrustKn: snapped('rearThrustKn'),

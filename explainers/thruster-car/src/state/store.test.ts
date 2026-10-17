@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_TANK_LITRES, EXIT_SPEED_MS, RUN_SECONDS } from '../model';
+import { TANK_CHOICE_IDS } from '../ids';
+import { DEFAULT_TANK_LITRES, EXIT_SPEED_MS, RUN_SECONDS, TANK_LITRES } from '../model';
 import { PRESETS } from './presets';
 import {
   CALCULATOR_DEFAULTS,
@@ -8,7 +9,9 @@ import {
   START_PHASE,
   START_VIEW,
   createThrusterCarStore,
+  isTankChoice,
   snapToRange,
+  toTankLitres,
 } from './store';
 
 describe('thruster car store', () => {
@@ -66,13 +69,20 @@ describe('thruster car store', () => {
     expect(snapToRange(8.26, CALCULATOR_RANGES.launchSpeed)).toBe(8.3);
   });
 
-  it('sets the gas and takes only the two tank sizes', () => {
+  it('sets the gas and the tank size', () => {
     const store = createThrusterCarStore();
     store.getState().setGas('helium');
     store.getState().setTankLitres(400);
     expect(store.getState()).toMatchObject({ gas: 'helium', tankLitres: 400 });
-    store.getState().setTankLitres(500);
-    expect(store.getState().tankLitres).toBe(400);
+  });
+
+  it('takes only the two tank sizes', () => {
+    TANK_CHOICE_IDS.forEach((id) => {
+      expect(isTankChoice(TANK_LITRES[id])).toBe(true);
+      expect(toTankLitres(TANK_LITRES[id])).toBe(Number(id));
+    });
+    expect(isTankChoice(500)).toBe(false);
+    expect(() => toTankLitres(500)).toThrow();
   });
 
   it('resets the calculators on a chapter change and keeps the gas and the tank', () => {

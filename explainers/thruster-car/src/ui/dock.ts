@@ -3,6 +3,7 @@ import { parseOption } from '@core/ui/parse';
 import { GAS_IDS, TANK_CHOICE_IDS } from '../ids';
 import type { ViewId } from '../ids';
 import { TANK_LITRES } from '../model';
+import { toTankLitres } from '../state';
 import type { ThrusterCarStoreState } from '../state';
 
 const NOZZLES_ICON =
@@ -21,7 +22,7 @@ export function applyGasChoice(state: ThrusterCarStoreState, value: string): voi
 }
 
 export function applyTankChoice(state: ThrusterCarStoreState, value: string): void {
-  state.setTankLitres(TANK_LITRES[parseOption(value, TANK_CHOICE_IDS)]);
+  state.setTankLitres(toTankLitres(TANK_LITRES[parseOption(value, TANK_CHOICE_IDS)]));
 }
 
 export function tankChoiceOf(state: ThrusterCarStoreState): string {
