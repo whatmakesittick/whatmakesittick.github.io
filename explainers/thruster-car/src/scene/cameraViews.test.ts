@@ -4,8 +4,8 @@ import { toRadians } from '@core/math';
 import type { CameraPose } from '@core/scene/frameBox';
 import type { FramingSlopes } from '@core/scene/lens';
 import { CAMERA_VIEW_IDS } from '../ids';
-import type { ChaseTarget } from '../ids';
-import { CAR, CAR_REGIONS } from '../model';
+import type { ChaseTarget, MomentId } from '../ids';
+import { CAR, CAR_REGIONS, MOMENTS, RAMP, carAt } from '../model';
 import { PRESETS } from '../state';
 import {
   FIXED_VIEWS,
@@ -19,7 +19,16 @@ import type { FollowView } from './cameraViews';
 
 const PHONE: FramingSlopes = { vertical: 0.2, horizontal: 0.13 };
 const DESKTOP: FramingSlopes = { vertical: 0.27, horizontal: 0.45 };
+const STAGES: readonly FramingSlopes[] = [PHONE, DESKTOP];
 const MIN_FRAME_SHARE = 1 / 3;
+const RAMP_CLEARANCE_M = 2;
+const CHASE_MOMENTS: readonly MomentId[] = [
+  'leavesRamp',
+  'rollComplete',
+  'touchdown',
+  'apex',
+  'landed',
+];
 const WORLD_UP = new Vector3(0, 1, 0);
 
 const CHASE: ChaseTarget = {
@@ -31,6 +40,11 @@ const CHASE: ChaseTarget = {
 };
 
 const FOLLOW_IDS = Object.keys(FOLLOW_VIEWS) as FollowView[];
+
+function chaseAt(seconds: number): ChaseTarget {
+  const { position, pitch, roll } = carAt(seconds);
+  return { position, heading: 0, pitch, roll, span: CAR.wheelbase };
+}
 
 function offsetOf({ position, target }: CameraPose): Vector3 {
   return position.clone().sub(target);
@@ -93,14 +107,28 @@ describe('camera views', () => {
     expect(Math.asin(offset.y / offset.length())).toBeCloseTo(toRadians(25), 9);
   });
 
-  it('sees the rear nozzles from behind on the right and the roll from behind on the left', () => {
+  it('sees the rear nozzles from behind on the right', () => {
     const nozzle = offsetOf(followPose(CHASE, FOLLOW_VIEWS.nozzleClose, PHONE));
     expect(nozzle.x).toBeLessThan(0);
     expect(nozzle.z).toBeGreaterThan(0);
+  });
+
+  it('chases the roll from behind the car once it heads back along the runway', () => {
     const flip = offsetOf(followPose(CHASE, FOLLOW_VIEWS.flipChase, PHONE));
-    expect(flip.x).toBeLessThan(0);
+    expect(flip.x).toBeGreaterThan(0);
     expect(flip.z).toBeLessThan(0);
     expect(Math.asin(flip.y / flip.length())).toBeCloseTo(toRadians(18), 9);
+  });
+
+  it('keeps the chase camera behind the car and clear of the loop and the deck', () => {
+    CHASE_MOMENTS.forEach((moment) =>
+      STAGES.forEach((slopes) => {
+        const chase = chaseAt(MOMENTS[moment]);
+        const { position } = followPose(chase, FOLLOW_VIEWS.flipChase, slopes);
+        expect(position.x, moment).toBeGreaterThan(chase.position[0]);
+        expect(Math.abs(position.z), moment).toBeGreaterThan(RAMP.width / 2 + RAMP_CLEARANCE_M);
+      }),
+    );
   });
 
   it('watches the boost abeam from the tank side, close to the ground', () => {
@@ -142,8 +170,13 @@ describe('camera views', () => {
     expect(ratio).toBeCloseTo(DESKTOP.vertical / PHONE.horizontal, 9);
   });
 
-  it('frames the ramp arc and the whole site from the tank side, above the ground', () => {
-    expect(FIXED_VIEWS.rampWide).toEqual({ region: 'arc', direction: [0.15, 0.3, 1], margin: 1.1 });
+  it('frames the hook, the jump and the whole site from the tank side, above the ground', () => {
+    expect(FIXED_VIEWS.rampWide).toEqual({ region: 'arc', direction: [0.1, 0.35, 1], margin: 1.1 });
+    expect(FIXED_VIEWS.jumpWide).toEqual({
+      region: 'jump',
+      direction: [-0.1, 0.3, 1],
+      margin: 1.1,
+    });
     expect(FIXED_VIEWS.siteWide).toEqual({
       region: 'site',
       direction: [0.2, 0.45, 1],
