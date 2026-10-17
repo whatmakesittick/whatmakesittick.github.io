@@ -1,4 +1,5 @@
 import { DoubleSide } from 'three';
+import type { Texture } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../theme';
 import { swatchOf } from './geometry/body/palette';
@@ -9,7 +10,7 @@ export const PAINT = {
   trim: THEME.carTrim,
   frame: '#15171a',
   under: '#111214',
-  glass: '#0b0f14',
+  glass: '#030406',
   lampWhite: '#f2f6ff',
   lampRed: '#ff1010',
   lampRedLens: '#3a0507',
@@ -25,12 +26,14 @@ export const PAINT = {
   liner: '#3a3d44',
 } as const;
 
-const PAINT_REFLECTION = 1.8;
-const GLASS_REFLECTION = 2.6;
-const TRIM_REFLECTION = 1.2;
-const MATTE_REFLECTION = 0.4;
+const PAINT_REFLECTION = 0.65;
+const GLOSS_REFLECTION = 0.9;
+const GLASS_REFLECTION = 1.6;
+const CHROME_REFLECTION = 1.3;
+const TRIM_REFLECTION = 0.55;
+const MATTE_REFLECTION = 0.2;
 const GHOST_OPACITY = 0.12;
-const GLASS_OPACITY = 0.82;
+const GLASS_OPACITY = 0.9;
 
 function satin(color: string, roughness: number, metalness = 0.1): MaterialFinish {
   return { color, roughness, metalness, envMapIntensity: TRIM_REFLECTION };
@@ -54,18 +57,18 @@ function lamp(color: string, glow: string, intensity: number): MaterialFinish {
 export const BODY_FINISHES = {
   paint: {
     color: PAINT.body,
-    roughness: 0.28,
-    metalness: 0.35,
+    roughness: 0.22,
+    metalness: 0.5,
     envMapIntensity: PAINT_REFLECTION,
     side: DoubleSide,
   },
-  frame: { ...satin(PAINT.frame, 0.18, 0.3), envMapIntensity: PAINT_REFLECTION },
+  frame: { ...satin(PAINT.frame, 0.14, 0.3), envMapIntensity: GLOSS_REFLECTION },
   trim: satin(PAINT.trim, 0.55, 0.15),
   under: { ...matte(PAINT.under, 0.85), side: DoubleSide },
   glass: {
     color: PAINT.glass,
-    roughness: 0.04,
-    metalness: 0.5,
+    roughness: 0.02,
+    metalness: 0.7,
     envMapIntensity: GLASS_REFLECTION,
     transparent: true,
     opacity: GLASS_OPACITY,
@@ -83,14 +86,19 @@ export const BODY_FINISHES = {
   },
   lampFront: lamp(PAINT.lampWhite, PAINT.lampWhite, 2.4),
   lampRear: lamp(PAINT.lampRedLens, PAINT.lampRed, 1.3),
-  mirror: { color: PAINT.mirror, roughness: 0.04, metalness: 1, envMapIntensity: GLASS_REFLECTION },
+  mirror: {
+    color: PAINT.mirror,
+    roughness: 0.04,
+    metalness: 1,
+    envMapIntensity: CHROME_REFLECTION,
+  },
 } as const satisfies Record<string, MaterialFinish>;
 
 export const CABIN_FINISHES = {
   seatShell: satin(PAINT.seatShell, 0.42, 0.25),
   seatCushion: matte(PAINT.seatCushion, 0.95),
   harness: matte(PAINT.harness, 0.85),
-  buckle: { ...satin(PAINT.buckle, 0.3, 0.9), envMapIntensity: PAINT_REFLECTION },
+  buckle: { ...satin(PAINT.buckle, 0.3, 0.9), envMapIntensity: CHROME_REFLECTION },
   dash: satin(PAINT.dash, 0.6, 0.05),
   screen: lamp(PAINT.screen, PAINT.screenGlow, 0.6),
   tub: matte(PAINT.tub, 0.9),
@@ -117,7 +125,13 @@ export const CAR_SWATCHES = {
 
 export type CarSwatch = keyof typeof CAR_SWATCHES;
 
-export function paletteFinish(palette: Palette<CarSwatch>): MaterialFinish {
+export interface CarFinishes {
+  solid: MaterialFinish;
+  glass: MaterialFinish;
+  ghost: MaterialFinish;
+}
+
+function paletteFinish(palette: Palette<CarSwatch>): MaterialFinish {
   return {
     color: '#ffffff',
     map: palette.color,
@@ -131,5 +145,13 @@ export function paletteFinish(palette: Palette<CarSwatch>): MaterialFinish {
     emissiveIntensity: palette.glowIntensity,
     envMapIntensity: palette.reflection,
     side: DoubleSide,
+  };
+}
+
+export function carFinishes(palette: Palette<CarSwatch>, environment: Texture): CarFinishes {
+  return {
+    solid: { ...paletteFinish(palette), envMap: environment },
+    glass: { ...BODY_FINISHES.glass, envMap: environment },
+    ghost: { ...BODY_FINISHES.ghost, envMap: environment },
   };
 }

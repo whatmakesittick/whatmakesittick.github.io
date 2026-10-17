@@ -21,7 +21,7 @@ function painted(context: PartContext, look: CarLook, group: EmphasisGroup, part
   const geometries = parts.flatMap(([swatch, list]) =>
     list.map((geometry) => look.palette.paint(geometry, swatch)),
   );
-  return partMesh(context, mergeParts(geometries), group, look.finish);
+  return partMesh(context, mergeParts(geometries), group, look.finishes.solid);
 }
 
 export function createCabin(context: PartContext, look: CarLook): CabinUnit {

@@ -3,7 +3,6 @@ import type { BufferGeometry, Material, Mesh, Object3D } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import type { PartId } from '../../../ids';
-import { BODY_FINISHES } from '../../finishes';
 import type { CarSwatch } from '../../finishes';
 import { bodyDetails } from '../../geometry/body/details';
 import { bodyLines, rightDoorLines } from '../../geometry/body/lines';
@@ -59,11 +58,11 @@ class Body implements BodyUnit {
   constructor(context: PartContext, look: CarLook) {
     this.context = context;
     this.look = look;
-    this.ghost = context.materials.get(BODY_PART, BODY_FINISHES.ghost);
+    this.ghost = context.materials.get(BODY_PART, look.finishes.ghost);
     const surface = new BodySurface();
     const shell = buildShell(bodyStations());
-    const painted = this.add(mergeParts(this.staticParts(shell, surface)), look.finish);
-    this.add(mergeParts(this.regions(shell, ['glass'])), BODY_FINISHES.glass);
+    const painted = this.add(mergeParts(this.staticParts(shell, surface)), look.finishes.solid);
+    this.add(mergeParts(this.regions(shell, ['glass'])), look.finishes.glass);
     CUTAWAY_REGIONS.forEach((region) => this.addPanel(shell, region, surface));
     this.label = anchorAt(painted, ...LABEL_SPOT);
   }
@@ -115,8 +114,11 @@ class Body implements BodyUnit {
     const look = REGION_LOOK[region];
     const mesh =
       look === 'glass'
-        ? this.add(geometry, BODY_FINISHES.glass)
-        : this.add(mergeParts(this.panelParts(geometry, look, region, surface)), this.look.finish);
+        ? this.add(geometry, this.look.finishes.glass)
+        : this.add(
+            mergeParts(this.panelParts(geometry, look, region, surface)),
+            this.look.finishes.solid,
+          );
     this.cutaway.push({ mesh, solid: mesh.material as Material });
   }
 
