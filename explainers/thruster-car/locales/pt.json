@@ -21,33 +21,33 @@
     "speedDescribe": "{{factor}} vezes a velocidade real",
     "phase": {
       "sprint": "Arrancada",
-      "settle": "Desaceleração",
+      "settle": "Frenagem",
       "ramp": "Gancho",
-      "brake": "Frenagem",
+      "brake": "Parada",
       "hold": "Pendurado",
       "deck": "Empurrão",
       "flip": "Virada",
-      "catch": "Amortecimento",
+      "catch": "Descida",
       "runUp": "Embalo",
       "leap": "Impulsão",
       "twist": "Giro",
       "landing": "Pouso",
-      "rest": "Parada"
+      "rest": "Final"
     },
     "jump": {
       "sprint": "Ir para a arrancada",
-      "settle": "Ir para a desaceleração",
+      "settle": "Ir para a frenagem",
       "ramp": "Ir para o gancho",
-      "brake": "Ir para a frenagem",
+      "brake": "Ir para a parada",
       "hold": "Ir para o carro pendurado",
       "deck": "Ir para o empurrão",
       "flip": "Ir para a virada",
-      "catch": "Ir para o amortecimento",
+      "catch": "Ir para a descida",
       "runUp": "Ir para o embalo",
       "leap": "Ir para a impulsão",
       "twist": "Ir para o giro",
       "landing": "Ir para o pouso",
-      "rest": "Ir para a parada"
+      "rest": "Ir para o final"
     },
     "detail": {
       "sprint": "os quatro jatos traseiros levam o carro de 0 a 60 mph em cerca de 0,81 s",
