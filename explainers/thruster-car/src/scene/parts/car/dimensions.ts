@@ -1,6 +1,5 @@
-import { CORNER_NOZZLE_IDS } from '../../../ids';
-import type { NozzleId, Point } from '../../../ids';
-import { CAR, NOZZLES } from '../../../model/layout';
+import type { Point } from '../../../ids';
+import { CAR } from '../../../model/layout';
 
 export const WHEEL = {
   radius: CAR.wheelRadius,
@@ -22,13 +21,3 @@ export const BODY = {
   floorY: 0,
   roofY: CAR.height - CAR.rideHeight,
 } as const;
-
-const CORNER_NOZZLE_CLEAR_X = 1.95;
-
-const CORNER_IDS: ReadonlySet<NozzleId> = new Set(CORNER_NOZZLE_IDS);
-
-export function drawnNozzleAt(id: NozzleId): Point {
-  const [x, y, z] = NOZZLES[id].at;
-  if (!CORNER_IDS.has(id)) return [x, y, z];
-  return [Math.sign(x) * CORNER_NOZZLE_CLEAR_X, y, z];
-}

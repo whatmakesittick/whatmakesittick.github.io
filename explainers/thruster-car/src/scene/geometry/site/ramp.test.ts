@@ -1,6 +1,13 @@
 import { Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
-import { DECK_END_X, LOOP_LENGTH, RAMP, RAMP_LENGTH, rampPoint } from '../../../model/layout';
+import {
+  DECK_END_X,
+  DECK_HEIGHT,
+  LOOP_LENGTH,
+  RAMP,
+  RAMP_LENGTH,
+  rampPoint,
+} from '../../../model/layout';
 import { deckBodyGeometry, deckSweep, deckTopGeometry } from './rampDeck';
 import { rampFrame, rampFrames } from './rampFrame';
 import type { RampFrame } from './rampFrame';
@@ -115,7 +122,7 @@ describe('hook ramp deck', () => {
   it('starts with a lead-in apron and ends 10 m up at the deck end', () => {
     top.computeBoundingBox();
     expect(top.boundingBox?.min.x).toBeCloseTo(Math.min(APRON.from, DECK_END_X), 6);
-    expect(top.boundingBox?.max.y).toBeCloseTo(RAMP.exitHeight, 3);
+    expect(top.boundingBox?.max.y).toBeCloseTo(DECK_HEIGHT, 3);
     expect(top.boundingBox?.max.x).toBeCloseTo(RAMP.entryX + RAMP.radius, 3);
   });
 

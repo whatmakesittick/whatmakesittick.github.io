@@ -10,7 +10,7 @@ import type { AssemblyState, NozzleId, NozzlePartId, NozzleThrusts } from '../..
 import { NOZZLES, runAt, tankAt } from '../../../model';
 import { CONE } from '../../geometry/gear/nozzle';
 import type { PartContext } from '../context';
-import { BODY, drawnNozzleAt } from './dimensions';
+import { BODY } from './dimensions';
 import { duskEnvironment } from '../../environment';
 import { CONE_FINISHES, GEAR_FINISHES, reflectiveFinishes } from './gearFinishes';
 import { createNozzles } from './nozzles';
@@ -105,7 +105,7 @@ describe('nozzles', () => {
     GROUPS.forEach((part) => {
       const body = meshOf(parts, set.object, part, bodyFinish(parts));
       idsOf(part).forEach((id, index) =>
-        expect(at(body, index).distanceTo(new Vector3(...drawnNozzleAt(id)))).toBeLessThan(1e-6),
+        expect(at(body, index).distanceTo(new Vector3(...NOZZLES[id].at))).toBeLessThan(1e-6),
       );
     });
   });
@@ -119,7 +119,7 @@ describe('nozzles', () => {
     expect([body.count, frost.count, frost.visible]).toEqual([4, 0, false]);
     set.setState(stateWith(['rearInnerLeft'], false));
     expect([body.count, frost.count, frost.visible]).toEqual([3, 1, true]);
-    const lit = new Vector3(...drawnNozzleAt('rearInnerLeft'));
+    const lit = new Vector3(...NOZZLES.rearInnerLeft.at);
     expect(at(frost, 0).distanceTo(lit)).toBeLessThan(1e-6);
   });
 

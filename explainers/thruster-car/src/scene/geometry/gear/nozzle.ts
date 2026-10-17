@@ -2,7 +2,8 @@ import { ConeGeometry, CylinderGeometry } from 'three';
 import type { BufferGeometry } from 'three';
 import { NOZZLE_PARTS } from '../../../ids';
 import type { NozzleId } from '../../../ids';
-import { BODY, drawnNozzleAt } from '../../parts/car/dimensions';
+import { NOZZLES } from '../../../model/layout';
+import { BODY } from '../../parts/car/dimensions';
 import { mergeParts } from '../../parts/context';
 import { tinted } from './attributes';
 import { latheAround } from './lathe';
@@ -40,7 +41,7 @@ const CORNER_EXIT_DROP = 0.03;
 const FRONT_EXIT_SIDE_Z = 0.765;
 
 export function nozzleReach(id: NozzleId): number {
-  const [, y, z] = drawnNozzleAt(id);
+  const [, y, z] = NOZZLES[id].at;
   switch (NOZZLE_PARTS[id]) {
     case 'cornerNozzles':
       return y - BODY.floorY + CORNER_EXIT_DROP;

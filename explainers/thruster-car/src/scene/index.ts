@@ -2,6 +2,7 @@ import { createLabelVisibility } from '@core/scene/presetBinder';
 import type { SceneShell } from '@core/scene/shell';
 import type { ThrusterCarStore } from '../state';
 import { bindStore } from './bindings';
+import { thrusterCarLight } from './lighting';
 import { ThrusterCarController } from './controller';
 import { LABEL_PRIORITY } from './partInfo';
 
@@ -12,6 +13,7 @@ export type { ThrusterCarControllerDependencies, ViewFramer } from './controller
 export { SCENE_OPTIONS } from './sceneOptions';
 
 export function mountThrusterCarScene(shell: SceneShell, store: ThrusterCarStore): () => void {
+  const restoreLight = thrusterCarLight(shell.lighting);
   const car = new ThrusterCarController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => car.update(deltaSeconds));
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
@@ -21,5 +23,6 @@ export function mountThrusterCarScene(shell: SceneShell, store: ThrusterCarStore
     labelVisibility.dispose();
     unbind();
     car.dispose();
+    restoreLight();
   };
 }

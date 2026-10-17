@@ -20,6 +20,8 @@ const FOLLOW_IDS = Object.keys(FOLLOW_VIEWS) as FollowView[];
 const FIXED_IDS = Object.keys(FIXED_VIEWS) as FixedView[];
 const DIGITS = 9;
 
+const RESTING_SECONDS = 16;
+
 function assemblyState(phase = 0): AssemblyState {
   return createAssemblyState({ ...createThrusterCarStore().getState(), phase });
 }
@@ -137,7 +139,7 @@ describe('thruster car controller', () => {
     const { scene, shell } = fakeShell();
     const controller = new ThrusterCarController(shell);
     expect(controller.update(1)).toBe(false);
-    controller.build(assemblyState());
+    controller.build(assemblyState(RESTING_SECONDS));
     expect(controller.update(1)).toBe(false);
     const removed = vi.spyOn(scene.add.mock.lastCall?.[0] as Object3D, 'removeFromParent');
     controller.dispose();

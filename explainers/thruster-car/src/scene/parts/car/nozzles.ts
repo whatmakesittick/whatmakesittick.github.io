@@ -6,7 +6,6 @@ import type { AssemblyState, NozzleId, NozzlePartId, PartId } from '../../../ids
 import { NOZZLES } from '../../../model/layout';
 import { BELL_LENGTH, coneGeometry, nozzleGeometry, nozzleReach } from '../../geometry/gear/nozzle';
 import type { PartContext } from '../context';
-import { drawnNozzleAt } from './dimensions';
 import { duskEnvironment } from '../../environment';
 import { CONE_FINISHES, GEAR_FINISHES, GEAR_PAINT, reflectiveFinishes } from './gearFinishes';
 
@@ -40,7 +39,7 @@ interface NozzleGroup {
 
 function nozzleFrame(id: NozzleId): Object3D {
   const frame = new Object3D();
-  frame.position.set(...drawnNozzleAt(id));
+  frame.position.set(...NOZZLES[id].at);
   frame.quaternion.setFromUnitVectors(BELL_UP, new Vector3(...NOZZLES[id].dir).normalize());
   frame.updateMatrix();
   return frame;
