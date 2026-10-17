@@ -142,7 +142,7 @@ export function reflectiveFinishes(env: Texture): ReflectiveFinishes {
 export const CONE_FINISHES: Readonly<Record<NozzlePartId, MaterialFinish>> = {
   cornerNozzles: { ...glowing(THEME.flip, 0.6, CONE_OPACITY), depthTest: false },
   frontNozzles: glowing(THEME.ramp, 0.6, CONE_OPACITY),
-  rearNozzles: glowing(THEME.boost, 0.6, CONE_OPACITY),
+  rearNozzles: glowing(THEME.sprint, 0.6, CONE_OPACITY),
 };
 
 export function tyreFinish(tread: Texture): MaterialFinish {
