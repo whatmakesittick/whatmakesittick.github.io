@@ -86,9 +86,9 @@ export function deckTopGeometry(sweep: Sweep): BufferGeometry {
 }
 
 function deckSlabGeometry(sweep: Sweep): BufferGeometry {
-  const [bottomLeft, bottomRight, topRight, topLeft] = rectLoop(deckRect());
-  const { frames } = sweep;
   const loop = rectLoop(deckRect());
+  const [bottomLeft, bottomRight, topRight, topLeft] = loop;
+  const { frames } = sweep;
   return mergeParts([
     sweepLoop(sweep, [topLeft, bottomLeft, bottomRight, topRight], DECK.plateLength, false),
     frameCap(frames[0], loop, -1),

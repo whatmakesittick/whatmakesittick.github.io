@@ -8,12 +8,13 @@ import type { Rgba } from './textures';
 
 export const DECK_PLATE = {
   size: { width: 128, height: 256 },
-  hazard: { period: 0.3, edge: 0.012, wear: 0.22 },
+  hazard: { period: 0.3, edge: 0.012, wear: 0.22, wearFrom: 0.55, wearTo: 0.8 },
   grip: { spacing: 0.75, width: 0.15, soft: 0.01 },
   seam: { width: 0.008, depth: 0.55 },
-  bolt: { spacing: 0.25, inset: 0.05, radius: 0.012 },
+  bolt: { spacing: 0.25, inset: 0.05, radius: 0.012, depth: 0.35 },
+  grit: { speck: 0.82, light: 0.6 },
   mottle: 0.14,
-  tread: { metres: 0.24, size: 128, cells: 4, length: 0.4, width: 0.085, strength: 3 },
+  tread: { metres: 0.24, size: 128, cells: 4, length: 0.4, width: 0.085, soft: 0.35, strength: 3 },
   seed: 31,
 } as const;
 
@@ -46,7 +47,8 @@ function seamShade(along: number, across: number): number {
   );
   const boltRing = Math.hypot(toSeam - bolt.inset, boltAcross);
   return (
-    (1 - seam.depth * band(toSeam, 0, seam.width)) * (1 - 0.35 * band(boltRing, 0, bolt.radius))
+    (1 - seam.depth * band(toSeam, 0, seam.width)) *
+    (1 - bolt.depth * band(boltRing, 0, bolt.radius))
   );
 }
 
@@ -60,13 +62,13 @@ export function deckShade(u: number, v: number): Rgba {
   const { size, hazard, mottle, seed } = DECK_PLATE;
   const along = u * DECK.plateLength;
   const across = DECK.halfWidth - v * DECK.halfWidth * 2;
-  const wear = smoothstep(NOISE.wear(u, v), 0.55, 0.8);
+  const wear = smoothstep(NOISE.wear(u, v), hazard.wearFrom, hazard.wearTo);
   if (Math.abs(across) > DECK.halfWidth - DECK.hazardWidth) {
     return hazardShade(along, across, wear * hazard.wear);
   }
   const cloud = NOISE.mottle(u, v);
   const speck = hash2(Math.floor(u * size.width), Math.floor(v * size.height), seed + SEEDS.grit);
-  const grit = mixRgb(GRIT, STEEL, speck > 0.82 ? 0.6 : 0);
+  const grit = mixRgb(GRIT, STEEL, speck > DECK_PLATE.grit.speck ? DECK_PLATE.grit.light : 0);
   const plate = mixRgb(STEEL, grit, gripShare(along));
   return shade(plate, (1 + mottle * (cloud - 0.5)) * seamShade(along, across));
 }
@@ -81,7 +83,7 @@ export function treadHeight(u: number, v: number): number {
   const along = (x + turn * y) * DIAGONAL;
   const across = (turn * x - y) * DIAGONAL;
   const lens = 1 - (along / length) ** 2 - (across / width) ** 2;
-  return smoothstep(lens, 0, 0.35);
+  return smoothstep(lens, 0, DECK_PLATE.tread.soft);
 }
 
 export interface DeckMaps {

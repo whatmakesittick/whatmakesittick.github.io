@@ -15,7 +15,7 @@ export const MARKINGS = {
   startLine: { width: 0.25, halfSpan: 3 },
   landing: { line: 0.15, corner: 1.2, cornerWidth: 0.25, cornerGap: 0.4, cross: 1.2 },
   pitBand: { gap: 0.08, width: 0.18 },
-  wear: { metres: 1.6, size: 128, from: 0.62, to: 0.68, seed: 53 },
+  wear: { metres: 1.6, size: 128, from: 0.62, to: 0.68, patches: 0.7, seed: 53 },
 } as const;
 
 const QUARTER_TURN = Math.PI / 2;
@@ -112,11 +112,11 @@ export function marksGeometry(marks: readonly MarkRect[]): BufferGeometry {
 }
 
 export function wornPaint(u: number, v: number): Rgba {
-  const { from, to, seed, size } = MARKINGS.wear;
+  const { from, to, seed, size, patches: share } = MARKINGS.wear;
   const patches = NOISE.patches(u, v);
   const scuffs = NOISE.scuffs(u, v);
   const speck = hash2(Math.floor(u * size), Math.floor(v * size), seed);
-  const worn = smoothstep(patches * 0.7 + scuffs * 0.3, from, to);
+  const worn = smoothstep(patches * share + scuffs * (1 - share), from, to);
   const level = 1 - DIRT * scuffs;
   return [level, level, level, speck > SPECK ? 0 : 1 - worn];
 }

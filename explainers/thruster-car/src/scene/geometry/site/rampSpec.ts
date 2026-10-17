@@ -26,7 +26,7 @@ export const RIB = {
 
 export const CLEARANCE = { halfWidth: 1.1, height: 1.4 } as const;
 
-export const APRON = { from: 22, to: RAMP.entryX, lift: 0.012, chamfer: 0.25 } as const;
+export const APRON = { from: 22, to: RAMP.entryX, lift: 0.02, chamfer: 0.25 } as const;
 
 export const RAIL_TOP = RAIL.height + RAIL.tubeRadius * 2;
 

@@ -14,7 +14,8 @@ export const CONCRETE = {
   mottle: 0.16,
   grain: 0.07,
   joint: { width: 0.03, depth: 0.5, lip: 0.05, lipLight: 0.08 },
-  tyre: { track: 0.82, width: 0.11, depth: 0.2, haze: 1.1, hazeDepth: 0.05 },
+  tyre: { track: 0.82, width: 0.11, depth: 0.2, haze: 1.1, hazeDepth: 0.05, rubber: [0.3, 0.75] },
+  warm: { from: 0.45, to: 0.8, share: 0.5 },
   stain: { from: 0.66, to: 0.78, depth: 0.16 },
   size: { width: 512, height: 256 },
   grit: { metres: 2, size: 256, strength: 2.2 },
@@ -27,7 +28,6 @@ const OCTAVES = 3;
 const SEEDS = { slab: 1, mottle: 2, stain: 3, rubber: 4, warm: 5, grit: 6, pits: 7 } as const;
 const PIT_SHARE = 0.965;
 const PIT_DEPTH = 0.6;
-const WARM_SHARE = 0.5;
 const BAND_REACH = 3;
 const NOISE = {
   mottle: tileNoise({ u: 16, v: 8 }, OCTAVES, CONCRETE.seed + SEEDS.mottle),
@@ -58,11 +58,11 @@ function jointShade(x: number, z: number): number {
 }
 
 function tyreShade(u: number, v: number, z: number): number {
-  const { track, width, depth, haze, hazeDepth } = CONCRETE.tyre;
+  const { track, width, depth, haze, hazeDepth, rubber: wear } = CONCRETE.tyre;
   if (Math.abs(z) > haze * BAND_REACH) return 1;
   const rubber = NOISE.rubber(u, v);
   const streak = Math.max(band(z, -track, width), band(z, track, width));
-  return 1 - depth * streak * smoothstep(rubber, 0.3, 0.75) - hazeDepth * band(z, 0, haze);
+  return 1 - depth * streak * smoothstep(rubber, wear[0], wear[1]) - hazeDepth * band(z, 0, haze);
 }
 
 export function concreteShade(u: number, v: number): Rgba {
@@ -84,7 +84,8 @@ export function concreteShade(u: number, v: number): Rgba {
     jointShade(x, z) *
     tyreShade(u, v, z) *
     (1 - stain.depth * smoothstep(blot, stain.from, stain.to));
-  return shade(mixRgb(BASE, WARM, smoothstep(warmth, 0.45, 0.8) * WARM_SHARE), level);
+  const { from, to, share } = CONCRETE.warm;
+  return shade(mixRgb(BASE, WARM, smoothstep(warmth, from, to) * share), level);
 }
 
 export function gritHeight(u: number, v: number): number {
