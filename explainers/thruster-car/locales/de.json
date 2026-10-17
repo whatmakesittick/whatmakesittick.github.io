@@ -23,6 +23,9 @@
       "sprint": "Sprint",
       "settle": "Abbremsen",
       "ramp": "Hakenrampe",
+      "brake": "Anhalten",
+      "hold": "Hängepause",
+      "deck": "Anschieben",
       "flip": "Umdrehen",
       "catch": "Abfangen",
       "runUp": "Anlauf",
@@ -35,6 +38,9 @@
       "sprint": "Direkt zum Sprint",
       "settle": "Direkt zum Abbremsen",
       "ramp": "Direkt zur Hakenrampe",
+      "brake": "Direkt zum Anhalten",
+      "hold": "Direkt zur Hängepause",
+      "deck": "Direkt zum Anschieben",
       "flip": "Direkt zum Umdrehen",
       "catch": "Direkt zum Abfangen",
       "runUp": "Direkt zum Anlauf",
@@ -46,10 +52,13 @@
     "detail": {
       "sprint": "die vier Heckdüsen bringen das Auto in etwa 0,81 s von 0 auf 60 mph",
       "settle": "die Düsen gehen aus, und das Auto bremst vor der Rampe auf 18 m/s ab",
-      "ramp": "das Auto fährt den Looping hinauf, kommt kopfüber oben an und rollt die Gerade entlang",
+      "ramp": "das Auto fährt den Looping hinauf und kommt kopfüber oben an",
+      "brake": "das Auto bremst bis zum Stehen und hängt kopfüber unter der Geraden",
+      "hold": "das Auto hängt reglos unter der Geraden, gehalten allein von seinen Gebläsen",
+      "deck": "die Heckdüsen schieben das Auto die Gerade entlang und mit etwa 7 m/s über ihr Ende hinaus",
       "flip": "das Auto fällt von der Geraden, und die Eckdüsen drehen es zurück auf die Räder",
       "catch": "alle vier Eckdüsen blasen nach unten und bremsen den Fall auf etwa 2,5 m/s",
-      "runUp": "die Heckdüsen bringen das Auto von etwa 11 auf 15 m/s",
+      "runUp": "die Heckdüsen bringen das Auto von etwa 7 auf 15 m/s",
       "leap": "die vier Eckdüsen blasen mit etwa 40 kN Schub nach unten und heben das Auto an",
       "twist": "das Auto springt im Bogen über die parkenden Fahrzeuge und dreht sich dabei einmal ganz herum",
       "landing": "die Eckdüsen blasen wieder nach unten und setzen das Auto sanft ab",
@@ -58,6 +67,7 @@
     "moment": {
       "sixty": "60 mph",
       "inverted": "Kopfüber ganz oben",
+      "held": "Hängt an der Hakenrampe",
       "leavesRamp": "Verlässt die Rampe",
       "rollComplete": "Wieder aufrecht",
       "touchdown": "Erstes Aufsetzen",
@@ -181,7 +191,7 @@
       "topG": "Andruck ganz oben",
       "dropTime": "Fallzeit von der Geraden, ohne Düsen",
       "track": "Rampe",
-      "trackValue": "ein Looping mit 5 m Radius und eine 8 m lange Gerade in 10 m Höhe, die Rampe des Modells",
+      "trackValue": "ein Looping mit 5 m Radius und eine 16 m lange Gerade in 10 m Höhe, die Rampe des Modells",
       "fans": "Saugkraft der Gebläse",
       "fansValue": "bis zu 2 g Saugkraft, Teslas Angabe",
       "tesla": "Teslas Sprung",
@@ -249,7 +259,7 @@
       "p2": "Das Auto auf dieser Seite ist kein Tesla, sondern ein allgemeines Beispiel. Es ist ein einsitziger Elektrosportwagen mit 1,7 Tonnen, dem Gewicht, das Tesla anpeilt. Der <strong>Fahrersitz</strong> ist links. Wo sonst der Beifahrer säße, steckt der <strong>Lufttank</strong>. Sein <strong>Tankventil</strong> lässt das Gas zu den Düsen strömen. Berichten zufolge wird der echte Tank auf etwa 700 bar gefüllt. Das ist das 700-Fache des Luftdrucks um Sie herum.",
       "p3": "Wie groß ist der Tank? Berichte nennen mal 400 l, mal 600 l. Die Quellen widersprechen sich. Darum rechnet das Modell mit 600 l, und Sie können 400 l ausprobieren. Bei 700 bar ist Luft dicht gepackt: 100 l davon wiegen etwa 53 kg, in 600 l passen also etwa 315 kg. Wände, die das aushalten, müssen fest und leicht sein. Darum wickelt man sie aus Kohlefaser. Die Wasserstofftanks des ersten Toyota Mirai arbeiten mit demselben Druck. Sie wiegen etwa 0,71 kg pro Liter Fassungsvermögen. Ein 600-Liter-Tank wöge danach etwa 430 kg, und das noch ganz ohne Gas.",
       "p4": "Druckluft speichert Energie, wie eine gespannte Feder. Dehnen sich 100 l davon aus, können sie etwa 24 Megajoule (MJ) Arbeit leisten. Das sind 6,6 Kilowattstunden (kWh). Laut Tesla dauert das Befüllen heute sechs bis sieben Stunden. Ziel sind 30 Minuten. Ziehen Sie am Füllregler: Er zeigt, wie viel Arbeit eine perfekte Pumpe mindestens bräuchte und wie lange das bei 50 kW dauert. Echte Pumpen brauchen mehr. Der Druck am Regler folgt der Kurve des Modells für Luft bei Raumtemperatur. Er steigt schneller als die Masse, denn dicht gepackte Luft wehrt sich dagegen, noch weiter zusammengedrückt zu werden. Wie jeder Regler auf dieser Seite ist auch dieser ein Rechner: Er zeigt die Rechnung und lässt die 3D-Fahrt unverändert.",
-      "p5": "Tesla führte an dem Tag drei Tests mit verschiedenen Autos vor: einen Sprint von 0 auf 60 mph mit Zeitmessung, eine Fahrt über eine hakenförmige Rampe und einen Sprung über parkende Fahrzeuge. Diese Seite verbindet alle drei zu einer Fahrt von 17 Sekunden, abgespielt in Echtzeit. Die Bewegung folgt dem eigenen Drehbuch des Modells. Gas und Tank, die Sie wählen, ändern den Gasverbrauch der Fahrt, den Druck und die Düsenstrahlen. Das Modell schaltet die Düsen ab, sobald der Tankdruck unter etwa 5 bar fällt. Das ist seine eigene Abschaltgrenze. Passiert das vor einer Landung, ändert Ihre Wahl auch das Landetempo. Die Bahn ändert sie nie."
+      "p5": "Tesla führte an dem Tag drei Tests mit verschiedenen Autos vor: einen Sprint von 0 auf 60 mph mit Zeitmessung, eine Fahrt über eine hakenförmige Rampe und einen Sprung über parkende Fahrzeuge. Diese Seite verbindet alle drei zu einer Fahrt von 23 Sekunden, abgespielt in Echtzeit. Die Bewegung folgt dem eigenen Drehbuch des Modells. Gas und Tank, die Sie wählen, ändern den Gasverbrauch der Fahrt, den Druck und die Düsenstrahlen. Das Modell schaltet die Düsen ab, sobald der Tankdruck unter etwa 5 bar fällt. Das ist seine eigene Abschaltgrenze. Passiert das vor einer Landung, ändert Ihre Wahl auch das Landetempo. Die Bahn ändert sie nie."
     },
     "nozzle": {
       "title": "Gas nach hinten, Auto nach vorn",
@@ -268,10 +278,10 @@
     },
     "hook": {
       "title": "Die Hakenrampe",
-      "p1": "Der zweite Test führte über die Hakenrampe. Das Auto erreicht die <strong>Rampe</strong> mit etwa 18 m/s. Die Bahn biegt sich nach oben zu einem halben Looping mit etwa 5 m Radius. Das Auto fährt hinauf, steht kurz senkrecht und kommt oben kopfüber an. Dann fährt es weiter kopfüber eine 8 m lange Gerade entlang, 10 m über dem Boden. Am Ende der Geraden verlässt es die Rampe, immer noch kopfüber und zurück in die Richtung, aus der es kam.",
+      "p1": "Der zweite Test führte über die Hakenrampe. Das Auto erreicht die <strong>Rampe</strong> mit etwa 18 m/s. Die Bahn biegt sich nach oben zu einem halben Looping mit etwa 5 m Radius. Das Auto fährt hinauf, steht kurz senkrecht und kommt oben kopfüber an. Dann rollt es, weiter kopfüber, auf eine 16 m lange Gerade, 10 m über dem Boden. Dort bremst es bis zum Stehen und hängt etwa drei Sekunden lang unter der Geraden. Danach schieben die <strong>Heckdüsen</strong> es den Rest der Geraden entlang und mit etwa 7 m/s über das Ende hinaus, immer noch kopfüber und zurück in die Richtung, aus der es kam.",
       "p2": "Im Looping wird das Auto in die Bahn gedrückt. Die Kraft, mit der die Bahn dagegenhält, nennt man Andruck. Unten in der Kurve beträgt der Andruck etwa 6,6 g, weil das Auto schnell durch eine enge Kurve fährt. Das Steigen kostet Tempo, deshalb kommt das Auto oben nur noch mit etwa 11 m/s an. Das reicht trotzdem, um es dort mit etwa 1,6 g in die Bahn zu drücken, obwohl es kopfüber fährt. Der Looping hält das Auto also von selbst.",
-      "p3": "Auf der Geraden ist das anders. Sie ist nicht gekrümmt, also drückt nichts das Auto an die Bahn. Die Schwerkraft zieht es sogar von ihr weg. Hier übernehmen die <strong>Sauggebläse</strong> unter dem Auto: Sie halten sein ganzes Gewicht an der Bahn fest. Laut Tesla können die Gebläse mit bis zu 2 g ziehen, 1 g schaffen sie also mühelos. Electrek berichtet von vier Gebläsen mit je etwa 20 kW. Das Modell zeigt sie als blaues Leuchten, ihre Saugkraft berechnet es nicht.",
-      "p4": "Ziehen Sie am Regler für das Einfahrtstempo und sehen Sie, wie sich der Looping verändert. Unter etwa 14 m/s käme das Auto nicht einmal oben an. Wie jeder Regler auf dieser Seite ist auch dieser ein Rechner: Die Fahrt auf dem Bildschirm behält ihre eigenen 18 m/s. Fiele das Auto ohne Hilfe von der Geraden, schlüge es nach etwa 1,4 s auf dem Boden auf. Die <strong>Bahnkurve</strong> zeigt, wohin es fällt, bis hinunter zur <strong>Landefläche</strong>. Tesla hat die Maße der Rampe nicht veröffentlicht. Looping, Gerade und Einfahrtstempo sind darum eigene Werte des Modells. Mit den Schaltflächen weiter oben springen Sie zum höchsten Punkt des Loopings oder zu dem Moment, in dem das Auto die Rampe verlässt."
+      "p3": "In voller Fahrt hält der Looping das Auto an der Bahn. Ein stehendes Auto hat dafür kein Tempo mehr, also fällt das Halten ganz den <strong>Sauggebläsen</strong> unter ihm zu. Hängt das Auto still, zieht sein volles Gewicht von 1,7 Tonnen es von der Geraden weg. Die Gebläse müssen genauso stark dagegenhalten, mit 1 g. Laut Tesla können sie mit bis zu 2 g ziehen, sie haben also reichlich Reserve. Electrek berichtet von vier Gebläsen mit je etwa 20 kW. Das Modell zeigt sie als blaues Leuchten, ihre Saugkraft berechnet es nicht.",
+      "p4": "Ziehen Sie am Regler für das Einfahrtstempo und sehen Sie, wie sich der Looping verändert. Unter etwa 14 m/s käme das Auto nicht einmal oben an. Wie jeder Regler auf dieser Seite ist auch dieser ein Rechner: Die Fahrt auf dem Bildschirm behält ihre eigenen 18 m/s. Fiele das Auto ohne Hilfe von der Geraden, schlüge es nach etwa 1,4 s auf dem Boden auf. Die <strong>Bahnkurve</strong> zeigt, wohin es fällt, bis hinunter zur <strong>Landefläche</strong>. Tesla hat die Maße der Rampe nicht veröffentlicht. Looping, Gerade, Einfahrts- und Ausfahrtstempo sind darum eigene Werte des Modells. Mit den Schaltflächen weiter oben springen Sie zum höchsten Punkt des Loopings, zum Auto, das unter der Geraden hängt, oder zu dem Moment, in dem es die Rampe verlässt."
     },
     "flip": {
       "title": "Erst aufrichten, dann den Fall bremsen",
@@ -283,7 +293,7 @@
     },
     "jump": {
       "title": "Der Sprung",
-      "p1": "Der dritte Test war ein Sprung über eine Reihe <strong>parkender Fahrzeuge</strong>. Im Modell fährt das Auto nach der ersten Landung einfach weiter. Die <strong>Heckdüsen</strong> blasen wieder und bringen es von etwa 11 m/s auf etwa 15 m/s. Am Absprungpunkt blasen dann alle vier <strong>Eckdüsen</strong> gleichzeitig nach unten.",
+      "p1": "Der dritte Test war ein Sprung über eine Reihe <strong>parkender Fahrzeuge</strong>. Im Modell fährt das Auto nach der ersten Landung einfach weiter. Die <strong>Heckdüsen</strong> blasen wieder und bringen es von etwa 7 m/s auf etwa 15 m/s. Am Absprungpunkt blasen dann alle vier <strong>Eckdüsen</strong> gleichzeitig nach unten.",
       "p2": "Sie schieben etwa 0,7 s lang mit etwa 40 kN, mehr als das Doppelte des Autogewichts. Wenn sie aufhören, bewegt sich das Auto mit etwa 9,6 m/s nach oben. Danach steigt es ohne Schub weiter, im Bogen wie ein geworfener Ball. Sein höchster Punkt liegt etwa 8 m über dem Boden. Tesla nannte für seinen Sprung etwa 8 m (27 ft). Ob damit die Höhe oder die Weite gemeint war, ist unklar.",
       "p3": "Unterwegs dreht das Auto eine volle Schraube: einmal ganz um die Längsachse, um 360 Grad. Das erledigen dieselben Eckdüsenpaare, die es an der Hakenrampe umgedreht haben: Ein Paar startet die Drehung, das andere stoppt sie. Unter ihm stehen ein etwa 4 m hoher Lkw und vier Autos, im Modell nur einfache Formen. Beim Herunterkommen blasen die Eckdüsen wieder nach unten und dämpfen die Landung auf etwa 2,5 m/s. Dann bremst das Auto bis zum Stillstand.",
       "p4": "Ziehen Sie am Höhenregler und sehen Sie, was ein höherer oder niedrigerer Sprung kostet: das nötige Tempo nach oben, wie lange die Düsen schieben müssen, wie viel Gas sie dabei verbrauchen, wie lange das Auto in der Luft bleibt und wie weit es kommt. Wie die anderen Regler ist auch dieser ein Rechner. Die Fahrt auf dem Bildschirm behält ihre 8 m. Tesla hat nicht gesagt, wie stark seine Kaltgastriebwerke geschoben haben. Darum sind Fahrzeugreihe, Anlauftempo und Schubdauer eigene Werte des Modells. Mit den Schaltflächen weiter oben springen Sie zum Abheben, zum höchsten Punkt des Sprungs oder zur Landung."
@@ -293,7 +303,7 @@
       "p1": "Um zu schweben, müssten die Düsen das ganze Gewicht des Autos tragen: 16,7 kN bei 1,7 Tonnen. Tritt die Luft mit etwa 700 m/s aus, braucht das etwa 24 kg Luft pro Sekunde. Ein voller <strong>Lufttank</strong> mit 600 l fasst etwa 315 kg. Selbst wenn sich jedes Kilogramm nutzen ließe, könnte das Auto also höchstens etwa 13 s schweben. In der Praxis ist es weniger, weil der Druck sinkt, während sich der Tank leert.",
       "p2": "Warum so kurz? Schnelle Strahlen verschwenden Leistung. Mit Strahlen von 700 m/s braucht es etwa 5,8 Megawatt (MW), um das Auto in der Schwebe zu halten. Ein idealer Hubschrauberrotor mit 10 m Durchmesser trägt dasselbe Gewicht anders: Er bewegt viel Luft langsam nach unten, mit etwa 9 m/s. Dafür braucht er nur etwa 0,16 MW. Das ist rund 37-mal weniger. Ein Hubschrauber bleibt mit Treibstoff stundenlang in der Luft, dieser Tank reicht nur für Sekunden.",
       "p3": "Warum dann nicht Helium? Es strömt etwa 2,6-mal so schnell aus, mit rund 1.800 m/s. Aber Helium ist sehr leicht. Derselbe 600-Liter-Tank fasst davon nur 51 kg, ein Sechstel der Luftmenge. Was zählt, ist der gesamte Stoß, den das Gas liefert. Man nennt ihn Impuls: Schub mal Dauer. Helium kommt auf 93 kN·s, Luft auf 220 kN·s. Das ist weniger als die Hälfte. Helium lohnt sich nur dort, wo Gewicht mehr zählt als Platz, etwa bei einem Raumfahrzeug.",
-      "p4": "Probieren Sie die Schaltflächen für Gas und Tank aus und behalten Sie den Gasvorrat der Fahrt im Blick. Mit Luft im 600-Liter-Tank hat das Auto nach den drei Tests noch etwa 29 % seiner Luft übrig, bei etwa 18 bar. Das Modell schaltet die Düsen ab, sobald der Druck unter etwa 5 bar fällt. Das ist seine eigene Abschaltgrenze. Durch sie bleibt immer etwa ein Fünftel des Gases an Bord. Mit Luft im 400-Liter-Tank ist diese Grenze schon während der Schraube erreicht. Dann wird die Landung nach dem Sprung gar nicht abgefedert, und das Auto setzt etwa 10 m/s schneller auf. Helium geht noch früher aus: im 600-Liter-Tank beim Abfangen nach der Hakenrampe, im 400-Liter-Tank sogar schon beim Umdrehen. Was Sie auch wählen, die Bahn bleibt dieselbe. Nur Gasverbrauch, Druck, Düsenstrahlen und Landetempo ändern sich.",
+      "p4": "Probieren Sie die Schaltflächen für Gas und Tank aus und behalten Sie den Gasvorrat der Fahrt im Blick. Mit Luft im 600-Liter-Tank hat das Auto nach den drei Tests noch etwa 23 % seiner Luft übrig. Das Modell schaltet die Düsen ab, sobald der Druck unter etwa 5 bar fällt. Das ist seine eigene Abschaltgrenze. Durch sie bleibt immer etwa ein Fünftel des Gases an Bord. Mit Stickstoff im selben Tank sinkt der Druck gerade eben bis auf diese Grenze. Mit Luft im 400-Liter-Tank ist diese Grenze schon während der Schraube erreicht. Dann wird die Landung nach dem Sprung gar nicht abgefedert, und das Auto setzt etwa 10 m/s schneller auf. Helium geht noch früher aus: im 600-Liter-Tank beim Abfangen nach der Hakenrampe, im 400-Liter-Tank sogar schon beim Umdrehen. Was Sie auch wählen, die Bahn bleibt dieselbe. Nur Gasverbrauch, Druck, Düsenstrahlen und Landetempo ändern sich.",
       "p5": "Roger Conner, Kurator für Vertikalflug am National Air and Space Museum des Smithsonian, sagte zu CNN: „Wir reden hier buchstäblich vom Hüpfen.“ Die FAA, die US-Luftfahrtbehörde, erklärte gegenüber CBS, das Auto erfülle ihre Definition eines Luftfahrzeugs nicht. Das hier ist also ein Auto, das ein paar Sekunden lang hüpft, und keines, das fliegt."
     }
   }
