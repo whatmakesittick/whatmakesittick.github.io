@@ -19,6 +19,10 @@ function jumpKey(id: PhaseId): string {
   return `timeline.jump.${id}`;
 }
 
+function detailKey(id: PhaseId): string {
+  return `timeline.detail.${id}`;
+}
+
 function runSeconds(seconds: number): string {
   return formatFixed(seconds, SECONDS_DIGITS);
 }
@@ -30,7 +34,7 @@ export function formatPhase(seconds: number): string {
 export function describePhase(seconds: number): string {
   return t('timeline.during', {
     seconds: runSeconds(seconds),
-    phase: t(phaseKey(phaseAt(seconds))),
+    phase: t(detailKey(phaseAt(seconds))),
   });
 }
 

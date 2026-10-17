@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { CHAPTER_ACTION_IDS, GAS_IDS, TANK_CHOICE_IDS } from '../ids';
-import { TANK_LITRES } from '../model';
+import { CHAPTER_ACTION_IDS, GAS_IDS, MOMENT_IDS, TANK_CHOICE_IDS } from '../ids';
+import { MOMENTS, TANK_LITRES } from '../model';
 import { createThrusterCarStore } from '../state';
-import { CHAPTER_ACTIONS } from './actions';
+import { CHAPTER_ACTIONS, MOMENT_TOLERANCE_S } from './actions';
 import { THRUSTER_CAR_CHOICES, VIEW_TOGGLES } from './dock';
 
 function choice(id: string) {
@@ -49,6 +49,23 @@ describe('chapter actions and dock', () => {
     expect(store.getState()).toMatchObject({ phase: 0, playing: true });
     expect(CHAPTER_ACTIONS.replay.current?.(store.getState())).toBe('');
     expect(() => CHAPTER_ACTIONS.replay.run(store.getState(), 'again')).toThrow();
+  });
+
+  it('seeks to each moment, pauses there and marks its chip', () => {
+    const store = createThrusterCarStore({ phase: 1, playing: true });
+    MOMENT_IDS.forEach((moment) => {
+      CHAPTER_ACTIONS.moment.run(store.getState(), moment);
+      expect(store.getState()).toMatchObject({ phase: MOMENTS[moment], playing: false });
+      expect(CHAPTER_ACTIONS.moment.current?.(store.getState())).toBe(moment);
+    });
+    expect(() => CHAPTER_ACTIONS.moment.run(store.getState(), 'liftoff')).toThrow();
+  });
+
+  it('marks a moment only within its tolerance', () => {
+    const store = createThrusterCarStore({ phase: MOMENTS.peak + MOMENT_TOLERANCE_S / 2 });
+    expect(CHAPTER_ACTIONS.moment.current?.(store.getState())).toBe('peak');
+    store.getState().setPhase(MOMENTS.peak + MOMENT_TOLERANCE_S * 2);
+    expect(CHAPTER_ACTIONS.moment.current?.(store.getState())).toBe('');
   });
 
   it('offers the gas and tank choices and the five view toggles with their keys', () => {

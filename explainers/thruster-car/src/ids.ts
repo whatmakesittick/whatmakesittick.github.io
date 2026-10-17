@@ -48,7 +48,7 @@ export const PRESET_IDS = ['tank', 'nozzle', 'boost', 'hop', 'flip', 'limits'] a
 
 export type PresetId = (typeof PRESET_IDS)[number];
 
-export const CHAPTER_ACTION_IDS = ['gas', 'tank', 'replay'] as const;
+export const CHAPTER_ACTION_IDS = ['gas', 'tank', 'replay', 'moment'] as const;
 
 export type ChapterActionId = (typeof CHAPTER_ACTION_IDS)[number];
 

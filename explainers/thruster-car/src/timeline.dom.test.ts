@@ -13,7 +13,7 @@ import {
   formatSpeed,
 } from './timeline';
 
-const { value, during, speedValue, speedDescribe, phase } = en.timeline;
+const { value, during, speedValue, speedDescribe, detail } = en.timeline;
 
 function fill(template: string, values: Readonly<Record<string, string>>): string {
   return template.replace(/\{\{(\w+)\}\}/g, (_, name: string) => values[name] ?? '');
@@ -43,9 +43,9 @@ describe('thruster car timeline', () => {
   it('shows the run time to a tenth of a second and names the part', () => {
     expect(formatPhase(0)).toBe(fill(value, { seconds: '0.0' }));
     expect(formatPhase(MOMENTS.peak)).toBe(fill(value, { seconds: '4.8' }));
-    expect(describePhase(1)).toBe(fill(during, { seconds: '1.0', phase: phase.boost }));
-    expect(describePhase(5)).toBe(fill(during, { seconds: '5.0', phase: phase.flip }));
-    expect(describePhase(RUN_SECONDS)).toBe(fill(during, { seconds: '14.0', phase: phase.rest }));
+    expect(describePhase(1)).toBe(fill(during, { seconds: '1.0', phase: detail.boost }));
+    expect(describePhase(5)).toBe(fill(during, { seconds: '5.0', phase: detail.flip }));
+    expect(describePhase(RUN_SECONDS)).toBe(fill(during, { seconds: '14.0', phase: detail.rest }));
   });
 
   it('plays in real time by default as a plain speed factor', () => {
