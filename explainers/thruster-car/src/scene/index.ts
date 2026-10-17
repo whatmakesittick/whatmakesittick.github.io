@@ -9,7 +9,8 @@ import { LABEL_PRIORITY } from './partInfo';
 export { bindStore } from './bindings';
 export type { SceneTargets } from './bindings';
 export { ThrusterCarController } from './controller';
-export type { ThrusterCarControllerDependencies, ViewFramer } from './controller';
+export type { ThrusterCarControllerDependencies } from './controller';
+export type { ViewFramer } from './viewHandover';
 export { SCENE_OPTIONS } from './sceneOptions';
 
 export function mountThrusterCarScene(shell: SceneShell, store: ThrusterCarStore): () => void {

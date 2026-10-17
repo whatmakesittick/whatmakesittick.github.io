@@ -6,13 +6,13 @@ import type { AnchorId, AssemblyState, CameraView, RegionId } from '../ids';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
 import { cameraViews } from './cameraViews';
+import { ViewHandover } from './viewHandover';
+import type { ViewFramer } from './viewHandover';
 
 export type ThrusterCarControllerDependencies = Pick<
   SceneShell,
   'scene' | 'materials' | 'textures' | 'labels' | 'rig' | 'viewport'
 >;
-
-export type ViewFramer = Pick<CameraViews<CameraView, RegionId>, 'frame'>;
 
 export const BOUNDS_REGION: RegionId = 'site';
 export const FOLLOW_ANCHOR: AnchorId = 'car';
@@ -20,17 +20,21 @@ export const FLOOR_Y = 0;
 
 export class ThrusterCarController {
   readonly views: ViewFramer;
+  private readonly handover: ViewHandover;
   private readonly dependencies: ThrusterCarControllerDependencies;
   private assembly: Assembly | null = null;
   private cancelWarmUp: () => void = () => {};
 
   constructor(dependencies: ThrusterCarControllerDependencies) {
     this.dependencies = dependencies;
-    this.views = new CameraViews<CameraView, RegionId>(dependencies.rig, {
-      views: cameraViews(() => this.assembly?.chaseTarget() ?? null),
-      region: (id) => this.assembly?.region(id) ?? null,
-      anchor: () => this.assembly?.anchor(FOLLOW_ANCHOR) ?? null,
-    });
+    this.handover = new ViewHandover(
+      new CameraViews<CameraView, RegionId>(dependencies.rig, {
+        views: cameraViews(() => this.assembly?.chaseTarget() ?? null),
+        region: (id) => this.assembly?.region(id) ?? null,
+        anchor: () => this.assembly?.anchor(FOLLOW_ANCHOR) ?? null,
+      }),
+    );
+    this.views = this.handover;
   }
 
   build(state: AssemblyState): void {
@@ -46,6 +50,7 @@ export class ThrusterCarController {
 
   setState(state: AssemblyState): void {
     this.assembly?.setState(state);
+    this.handover.setPhase(state.phase);
   }
 
   update(deltaSeconds: number): boolean {
