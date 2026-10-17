@@ -1,6 +1,7 @@
 import { BufferGeometry, Float32BufferAttribute, Vector3 } from 'three';
 import { mergeParts } from '../../parts/context';
-import { framePoint, rampArcLength, rampFrame } from './rampFrame';
+import { RAMP_LENGTH } from '../../../model/layout';
+import { framePoint, rampFrames } from './rampFrame';
 import type { RampFrame } from './rampFrame';
 
 export type CrossPoint = readonly [across: number, depth: number];
@@ -66,11 +67,9 @@ function pushGrid(buffers: Buffers, rows: number, columns: number): void {
   }
 }
 
-export function rampSweep(sections: number, from = 0, to = 1): Sweep {
-  const frames = Array.from({ length: sections + 1 }, (_, index) =>
-    rampFrame(from + ((to - from) * index) / sections),
-  );
-  return { frames, arc: frames.map((frame) => rampArcLength(frame.u)) };
+export function rampSweep(sections: number, from = 0, to = RAMP_LENGTH): Sweep {
+  const frames = rampFrames(sections, from, to);
+  return { frames, arc: frames.map((frame) => frame.distance) };
 }
 
 export function sweepStrip(

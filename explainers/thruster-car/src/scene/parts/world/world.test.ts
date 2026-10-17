@@ -65,6 +65,7 @@ describe('world', () => {
   it('places the ramp exit and pad anchors', () => {
     expect(worldPosition(world.anchors.rampExit).toArray()).toEqual([...SITE_ANCHORS.rampExit]);
     expect(worldPosition(world.anchors.pad).toArray()).toEqual([...SITE_ANCHORS.pad]);
+    expect(worldPosition(world.anchors.row).toArray()).toEqual([...SITE_ANCHORS.row]);
   });
 
   it('stays inside the triangle and draw call budget', () => {

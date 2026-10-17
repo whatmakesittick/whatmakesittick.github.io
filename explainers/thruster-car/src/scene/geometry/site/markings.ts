@@ -5,7 +5,6 @@ import type { Footprint } from '../../../model/layout';
 import { SITE } from '../../../model/layout';
 import { mergeParts } from '../../parts/context';
 import { hash2, tileNoise } from './noise';
-import type { Pit } from './pit';
 import { paintTexture } from './textures';
 import type { Rgba } from './textures';
 
@@ -14,7 +13,7 @@ export const MARKINGS = {
   line: 0.12,
   startLine: { width: 0.25, halfSpan: 3 },
   landing: { line: 0.15, corner: 1.2, cornerWidth: 0.25, cornerGap: 0.4, cross: 1.2 },
-  pitBand: { gap: 0.08, width: 0.18 },
+  finish: { square: 0.4, rows: 2, inset: 0.2 },
   wear: { metres: 1.6, size: 128, from: 0.62, to: 0.68, patches: 0.7, seed: 53 },
 } as const;
 
@@ -69,8 +68,7 @@ function cornerMark(box: Footprint, sideX: number, sideZ: number): MarkRect[] {
   ];
 }
 
-export function landingMarks(): MarkRect[] {
-  const box = SITE.landingBox;
+export function landingMarks(box: Footprint): MarkRect[] {
   const { line, cross } = MARKINGS.landing;
   const centreX = (box.x[0] + box.x[1]) / 2;
   const centreZ = (box.z[0] + box.z[1]) / 2;
@@ -84,13 +82,20 @@ export function landingMarks(): MarkRect[] {
   ];
 }
 
-export function pitMarks(pit: Pit): MarkRect[] {
-  const { gap, width } = MARKINGS.pitBand;
-  const reach = gap + width;
-  return outline(
-    { x: [pit.x[0] - reach, pit.x[1] + reach], z: [pit.z[0] - reach, pit.z[1] + reach] },
-    width,
-  );
+export function finishMarks(): MarkRect[] {
+  const { square, rows, inset } = MARKINGS.finish;
+  const [from, to] = [SITE.run.z[0] + inset, SITE.run.z[1] - inset];
+  const columns = Math.floor((to - from) / square);
+  const start = (from + to - columns * square) / 2;
+  const marks: MarkRect[] = [];
+  for (let row = 0; row < rows; row += 1) {
+    const x = SITE.finishLineX + (row - rows / 2) * square;
+    for (let column = row % 2; column < columns; column += 2) {
+      const z = start + column * square;
+      marks.push(rect(x, x + square, z, z + square));
+    }
+  }
+  return marks;
 }
 
 function markQuad(mark: MarkRect): BufferGeometry {

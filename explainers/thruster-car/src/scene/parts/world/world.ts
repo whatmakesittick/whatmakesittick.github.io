@@ -4,8 +4,7 @@ import { anchorAt } from '@core/scene/parts';
 import { SITE_ANCHORS } from '../../../model/layout';
 import type { PartId, SiteAnchorId } from '../../../ids';
 import { concreteMaps } from '../../geometry/site/concrete';
-import { groundLevel, rampPit } from '../../geometry/site/pit';
-import { supportPlan } from '../../geometry/site/rampSupports';
+import { trussPlan } from '../../geometry/site/rampTruss';
 import type { PartContext } from '../context';
 import type { WorldView } from '../types';
 import { createGround } from './ground';
@@ -18,25 +17,25 @@ function siteAnchors(parent: Object3D): Record<SiteAnchorId, Object3D> {
   return {
     rampExit: anchorAt(parent, ...SITE_ANCHORS.rampExit),
     pad: anchorAt(parent, ...SITE_ANCHORS.pad),
+    row: anchorAt(parent, ...SITE_ANCHORS.row),
   };
 }
 
 export function createWorld(context: PartContext): WorldView {
   const object = new Group();
   object.name = 'world';
-  const pit = rampPit();
-  const plan = supportPlan(groundLevel(pit));
+  const plan = trussPlan();
   const concrete = concreteMaps();
   context.tracker.track(concrete.map);
   context.tracker.track(concrete.normal);
-  const runway = createRunway(context, concrete, pit);
+  const runway = createRunway(context, concrete);
   const ramp = createRamp(context, plan);
   object.add(
     createSky(context),
     createGround(context),
     runway.object,
     ramp.object,
-    createGroundworks(context, concrete, pit, plan),
+    createGroundworks(context, concrete, plan),
   );
   const labels = new Map<PartId, Object3D>([
     ['runway', runway.runwayLabel],

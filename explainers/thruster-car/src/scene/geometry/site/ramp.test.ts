@@ -1,24 +1,50 @@
 import { Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
-import { RAMP, SITE, rampPoint } from '../../../model/layout';
-import { groundLevel, insidePit, rampPit, sunkenPoints } from './pit';
+import { DECK_END_X, LOOP_LENGTH, RAMP, RAMP_LENGTH, rampPoint } from '../../../model/layout';
 import { deckBodyGeometry, deckSweep, deckTopGeometry } from './rampDeck';
-import { rampFrame, rampLocal, rampSurfacePoint } from './rampFrame';
-import { CLEARANCE, DECK, RAIL_TOP } from './rampSpec';
-import { SUPPORT, supportPlan } from './rampSupports';
-import type { Member } from './rampSupports';
-import { rampStations, STATION_SPACING } from './stations';
-
-const SAMPLES = [0, 0.1, 0.25, 0.4, 0.5, 0.6, 0.75, 0.9, 1];
-const MEMBER_SAMPLES = 24;
-const TOLERANCE = 0.01;
+import { rampFrame, rampFrames } from './rampFrame';
+import type { RampFrame } from './rampFrame';
+import { APRON, CLEARANCE, DECK, RAIL_TOP } from './rampSpec';
+import { LOOP_CENTRE, SUPPORT, standsClear, trussPlan } from './rampTruss';
+import type { Member } from './rampTruss';
+import { STATION_SPACING, rampStations } from './stations';
 
 const DIGITS = 4;
+const SAMPLES = [0, 2, LOOP_LENGTH / 2, LOOP_LENGTH - 1, LOOP_LENGTH, LOOP_LENGTH + 4, RAMP_LENGTH];
+const SLICES = 1200;
+const MEMBER_SAMPLES = 24;
+const TOLERANCE = 0.01;
+const FALL_CLEAR_Z = 2.4;
+const slices = rampFrames(SLICES);
+const sliceHalf = RAMP_LENGTH / SLICES / 2;
 
 function expectPoint(actual: Vector3, expected: readonly number[]): void {
   expect(actual.x).toBeCloseTo(expected[0], DIGITS);
   expect(actual.y).toBeCloseTo(expected[1], DIGITS);
   expect(actual.z).toBeCloseTo(expected[2], DIGITS);
+}
+
+function local(frame: RampFrame, point: Vector3) {
+  const offset = new Vector3().subVectors(point, frame.centre);
+  return {
+    along: offset.dot(frame.tangent),
+    across: Math.abs(offset.dot(frame.side)),
+    depth: offset.dot(frame.normal),
+  };
+}
+
+function clashes(point: Vector3, margin: number): boolean {
+  return slices.some((frame) => {
+    const { along, across, depth } = local(frame, point);
+    if (Math.abs(along) > sliceHalf + margin) return false;
+    const inCar =
+      across < CLEARANCE.halfWidth + margin && depth > -margin && depth < CLEARANCE.height + margin;
+    const inDeck =
+      across < DECK.halfWidth + margin &&
+      depth > -DECK.thickness + margin - TOLERANCE &&
+      depth < RAIL_TOP + margin;
+    return inCar || inDeck;
+  });
 }
 
 function memberPoints(member: Member): Vector3[] {
@@ -27,58 +53,29 @@ function memberPoints(member: Member): Vector3[] {
   );
 }
 
-function clashes(point: Vector3, margin: number): boolean {
-  const local = rampLocal(point);
-  if (!local) return false;
-  const across = Math.abs(local.across);
-  const inCar =
-    across < CLEARANCE.halfWidth + margin &&
-    local.depth > -margin &&
-    local.depth < CLEARANCE.height + margin;
-  const inDeck =
-    across < DECK.halfWidth + margin &&
-    local.depth > -DECK.thickness + margin - TOLERANCE * 2 &&
-    local.depth < RAIL_TOP + margin;
-  return inCar || inDeck;
-}
-
-describe('ramp frame', () => {
-  it('runs the ribbon centre along the ramp centre line', () => {
-    SAMPLES.forEach((u) => expectPoint(rampFrame(u).centre, rampPoint(u)));
+describe('hook ramp frame', () => {
+  it('runs the deck centre along the ramp centre line', () => {
+    SAMPLES.forEach((distance) => expectPoint(rampFrame(distance).centre, rampPoint(distance)));
   });
 
-  it('faces the driving face up at the entry and down at the exit', () => {
+  it('turns the driving face from up, to the loop centre, to down', () => {
     expectPoint(rampFrame(0).normal, [0, 1, 0]);
-    expect(rampFrame(1).normal.y).toBeLessThan(-0.7);
-    expect(rampFrame(1).normal.z).toBeCloseTo(0, 6);
+    const side = rampFrame(LOOP_LENGTH / 2);
+    const toCentre = new Vector3().subVectors(LOOP_CENTRE, side.centre).normalize();
+    expectPoint(side.normal, toCentre.toArray());
+    expectPoint(rampFrame(LOOP_LENGTH + 2).normal, [0, -1, 0]);
   });
 
-  it('drops the right edge first', () => {
-    const left = rampSurfacePoint(0.5, -DECK.halfWidth);
-    const right = rampSurfacePoint(0.5, DECK.halfWidth);
-    expect(right.y).toBeLessThan(left.y);
-    expect(rampSurfacePoint(0.2, DECK.halfWidth).y).toBeLessThan(rampPoint(0.2)[1]);
-  });
-
-  it('keeps the frame orthonormal', () => {
-    SAMPLES.forEach((u) => {
-      const { tangent, normal, side } = rampFrame(u);
+  it('keeps the frame orthonormal with the side along z', () => {
+    SAMPLES.forEach((distance) => {
+      const { tangent, normal, side } = rampFrame(distance);
       expect(tangent.dot(normal)).toBeCloseTo(0, 6);
-      expect(tangent.dot(side)).toBeCloseTo(0, 6);
-      expect(new Vector3().crossVectors(tangent, normal).dot(side)).toBeCloseTo(1, 6);
+      expectPoint(side, [0, 0, 1]);
     });
-  });
-
-  it('reads a point back into the ramp frame', () => {
-    const point = rampSurfacePoint(0.37, 0.6, -0.2);
-    const local = rampLocal(point);
-    expect(local?.u).toBeCloseTo(0.37, 4);
-    expect(local?.across).toBeCloseTo(0.6, 4);
-    expect(local?.depth).toBeCloseTo(-0.2, 4);
   });
 });
 
-describe('ramp deck', () => {
+describe('hook ramp deck', () => {
   const sweep = deckSweep();
   const top = deckTopGeometry(sweep);
   const position = top.getAttribute('position');
@@ -88,14 +85,14 @@ describe('ramp deck', () => {
     sweep.frames.forEach((frame, index) => {
       const left = new Vector3().fromBufferAttribute(position, index * 2);
       const right = new Vector3().fromBufferAttribute(position, index * 2 + 1);
-      expectPoint(left.add(right).multiplyScalar(0.5), rampPoint(frame.u));
+      expectPoint(left.add(right).multiplyScalar(0.5), rampPoint(frame.distance));
     });
   });
 
-  it('turns the face normal from up at the entry to down at the exit', () => {
+  it('points the face normal up at the entry and down on the deck', () => {
     const last = (sweep.frames.length - 1) * 2;
     expectPoint(new Vector3().fromBufferAttribute(normal, 0), [0, 1, 0]);
-    expect(new Vector3().fromBufferAttribute(normal, last).y).toBeLessThan(-0.7);
+    expectPoint(new Vector3().fromBufferAttribute(normal, last), [0, -1, 0]);
   });
 
   it('winds the triangles to face the way the normals point', () => {
@@ -109,69 +106,49 @@ describe('ramp deck', () => {
       const facing = new Vector3()
         .subVectors(corners[1], corners[0])
         .cross(new Vector3().subVectors(corners[2], corners[0]));
-      const expected = new Vector3().fromBufferAttribute(normal, index.getX(face * 6));
-      expect(facing.dot(expected)).toBeGreaterThan(0);
+      expect(
+        facing.dot(new Vector3().fromBufferAttribute(normal, index.getX(face * 6))),
+      ).toBeGreaterThan(0);
     }
   });
 
-  it('starts the lead-in apron on the ground before the entry', () => {
+  it('starts with a lead-in apron and ends 10 m up at the deck end', () => {
     top.computeBoundingBox();
-    expect(top.boundingBox?.min.x).toBeCloseTo(22, 6);
-    expect(top.boundingBox?.max.y).toBeCloseTo(RAMP.exitHeight + DECK.halfWidth * 0, 1);
+    expect(top.boundingBox?.min.x).toBeCloseTo(Math.min(APRON.from, DECK_END_X), 6);
+    expect(top.boundingBox?.max.y).toBeCloseTo(RAMP.exitHeight, 3);
+    expect(top.boundingBox?.max.x).toBeCloseTo(RAMP.entryX + RAMP.radius, 3);
   });
 
   it('keeps the deck body behind the driving face', () => {
     const body = deckBodyGeometry(sweep).getAttribute('position');
-    for (let index = 0; index < body.count; index += 7) {
-      const local = rampLocal(new Vector3().fromBufferAttribute(body, index));
-      if (local) expect(local.depth).toBeLessThan(TOLERANCE);
+    for (let index = 0; index < body.count; index += 5) {
+      const point = new Vector3().fromBufferAttribute(body, index);
+      const nearest = slices.reduce((best, frame) =>
+        frame.centre.distanceTo(point) < best.centre.distanceTo(point) ? frame : best,
+      );
+      expect(local(nearest, point).depth).toBeLessThan(TOLERANCE);
     }
   });
 });
 
-describe('ramp pit', () => {
-  const pit = rampPit();
-
-  it('digs a pit where the twisted deck and the car dip below the runway', () => {
-    expect(pit).not.toBeNull();
-    sunkenPoints().forEach((point) => {
-      expect(insidePit(pit, point.x, point.z)).toBe(true);
-      expect(point.y).toBeGreaterThan(pit?.floor ?? 0);
-    });
-  });
-
-  it('stays inside the runway and clear of the portal legs', () => {
-    if (!pit) throw new Error('No pit');
-    expect(pit.x[0]).toBeGreaterThan(SITE.run.x[0]);
-    expect(pit.x[1]).toBeLessThan(RAMP.entryX + RAMP.lengthX);
-    expect(pit.z[0]).toBeGreaterThan(-SUPPORT.portalHalfSpan + SUPPORT.leg);
-    expect(pit.z[1]).toBeLessThan(SUPPORT.portalHalfSpan - SUPPORT.leg);
-  });
-});
-
-describe('ramp supports', () => {
-  const plan = supportPlan(groundLevel(rampPit()));
+describe('hook ramp truss', () => {
+  const plan = trussPlan();
 
   it('spaces the stations 1 to 1.5 m apart', () => {
     const stations = rampStations();
     for (let index = 1; index < stations.length; index += 1) {
-      const gap = stations[index].centre.distanceTo(stations[index - 1].centre);
+      const gap = stations[index].distance - stations[index - 1].distance;
       expect(gap).toBeGreaterThan(1);
       expect(gap).toBeLessThan(1.5);
     }
     expect(STATION_SPACING).toBeGreaterThan(1);
   });
 
-  it('stands trestles where the back faces down and portals where it faces up', () => {
-    const stations = rampStations();
-    plan.kinds.forEach((kind, index) => {
-      const down = stations[index].normal.y > SUPPORT.trestleMinUp;
-      expect(kind === 'trestle').toBe(down);
-      if (kind === 'trestle') expect(stations[index].normal.y).toBeGreaterThan(0);
-      if (kind === 'free') expect(plan.kinds[index - 1]).toBe('portal');
-    });
-    expect(plan.kinds[0]).toBe('trestle');
-    expect(plan.kinds[plan.kinds.length - 1]).toBe('portal');
+  it('stands towers behind the loop and portals over the top and the deck', () => {
+    expect(plan.kinds[0]).toBe('tower');
+    expect(plan.kinds.at(-1)).toBe('portal');
+    expect(plan.kinds.filter((kind) => kind === 'portal').length).toBeGreaterThan(2);
+    expect(standsClear(new Vector3(LOOP_CENTRE.x + 1, LOOP_CENTRE.y + 1, 0))).toBe(false);
   });
 
   it('keeps every member out of the deck and the car clearance', () => {
@@ -181,21 +158,31 @@ describe('ramp supports', () => {
     });
   });
 
-  it('puts the portal legs outside 2.4 m either side', () => {
-    const legs = plan.members.filter(
-      (member) => !member.round && member.from.x === member.to.x && member.from.z === member.to.z,
+  it('leaves the fall path below the deck end clear', () => {
+    plan.members.forEach((member) =>
+      memberPoints(member)
+        .filter((point) => point.x < DECK_END_X - TOLERANCE)
+        .forEach((point) => expect(Math.abs(point.z)).toBeGreaterThan(FALL_CLEAR_Z)),
     );
-    legs
+  });
+
+  it('puts the portal legs outside 2.4 m either side', () => {
+    plan.members
+      .filter(
+        (member) => !member.round && member.from.x === member.to.x && member.from.z === member.to.z,
+      )
       .filter((member) => Math.abs(member.from.z) > 2)
       .forEach((member) =>
-        expect(Math.abs(member.from.z) - member.size / 2).toBeGreaterThanOrEqual(2.4),
+        expect(Math.abs(member.from.z) - member.size / 2).toBeGreaterThanOrEqual(FALL_CLEAR_Z),
       );
   });
 
-  it('stands every footing on the runway or the pit floor', () => {
-    const ground = groundLevel(rampPit());
-    plan.footings.forEach((footing) =>
-      expect(footing.y).toBeCloseTo(ground(footing.x, footing.z), 6),
+  it('stands every member above the runway on footings', () => {
+    plan.members.forEach((member) =>
+      [member.from, member.to].forEach((end) => expect(end.y).toBeGreaterThan(-TOLERANCE)),
     );
+    plan.footings.forEach((footing) => expect(footing.y).toBe(0));
+    expect(plan.footings.length).toBeGreaterThan(8);
+    expect(SUPPORT.portalHalfSpan).toBeGreaterThan(FALL_CLEAR_Z);
   });
 });

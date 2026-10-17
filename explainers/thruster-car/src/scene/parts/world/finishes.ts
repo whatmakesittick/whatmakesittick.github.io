@@ -78,7 +78,7 @@ export interface ConcreteLook {
 
 export const CONCRETE_LOOKS = {
   runway: { color: WORLD_PAINT.white, roughness: 0.7, envMapIntensity: 0.45 },
-  pit: { color: WORLD_PAINT.pitConcrete, roughness: 0.93, envMapIntensity: 1 },
+  footing: { color: WORLD_PAINT.pitConcrete, roughness: 0.93, envMapIntensity: 1 },
 } as const satisfies Record<string, ConcreteLook>;
 
 export function concreteFinish(
@@ -119,4 +119,8 @@ export function paintFinish(map: Texture, color: string): MaterialFinish {
   };
 }
 
-export const MARK_COLOURS = { start: WORLD_PAINT.startLine, landing: THEME.paint } as const;
+export const MARK_COLOURS = {
+  start: WORLD_PAINT.startLine,
+  landing: THEME.paint,
+  finish: THEME.paint,
+} as const;

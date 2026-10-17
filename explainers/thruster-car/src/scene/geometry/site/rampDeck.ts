@@ -1,7 +1,7 @@
 import { BufferGeometry, Float32BufferAttribute, Vector3 } from 'three';
 import { mergeParts } from '../../parts/context';
 import type { RampFrame } from './rampFrame';
-import { APRON, DECK, RAIL, RIB, SPINE, ribBack } from './rampSpec';
+import { APRON, DECK, RAIL, RIB, ribBack } from './rampSpec';
 import { rampStations } from './stations';
 import {
   frameCap,
@@ -96,20 +96,6 @@ function deckSlabGeometry(sweep: Sweep): BufferGeometry {
   ]);
 }
 
-function spineGeometry(sweep: Sweep): BufferGeometry {
-  const back = -DECK.thickness;
-  return sweepCapped(
-    sweep,
-    rectLoop({
-      minAcross: -SPINE.halfWidth,
-      maxAcross: SPINE.halfWidth,
-      minDepth: back - SPINE.depth,
-      maxDepth: back,
-    }),
-    DECK.plateLength,
-  );
-}
-
 export function ribLoop(): CrossPoint[] {
   const reach = DECK.halfWidth - RIB.edgeInset;
   const back = -DECK.thickness;
@@ -137,11 +123,7 @@ export function ribGeometry(frame: RampFrame): BufferGeometry {
 }
 
 export function deckBodyGeometry(sweep: Sweep): BufferGeometry {
-  return mergeParts([
-    deckSlabGeometry(sweep),
-    spineGeometry(sweep),
-    ...rampStations().map(ribGeometry),
-  ]);
+  return mergeParts([deckSlabGeometry(sweep), ...rampStations().map(ribGeometry)]);
 }
 
 function kerbRect(side: 1 | -1): CrossRect {

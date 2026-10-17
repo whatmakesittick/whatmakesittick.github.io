@@ -19,7 +19,7 @@ export interface Bush {
 
 export const BUSHES = {
   count: 64,
-  area: { x: [-70, 170], z: [-80, 80] },
+  area: { before: 60, after: 95, z: 80 },
   keepOut: { x: 8, z: 5 },
   size: [0.45, 1.25],
   blobs: [2, 4],
@@ -59,8 +59,12 @@ export function scatterBushes(): Bush[] {
   const { count, area, size, seed } = BUSHES;
   const bushes: Bush[] = [];
   for (let index = 0; index < count * CANDIDATES_PER_BUSH && bushes.length < count; index += 1) {
-    const x = lerp(area.x[0], area.x[1], hash2(index, seed + SEEDS.x));
-    const z = lerp(area.z[0], area.z[1], hash2(index, seed + SEEDS.z));
+    const x = lerp(
+      SITE.run.x[0] - area.before,
+      SITE.run.x[1] + area.after,
+      hash2(index, seed + SEEDS.x),
+    );
+    const z = lerp(-area.z, area.z, hash2(index, seed + SEEDS.z));
     if (nearRun(x, z) || onTrack(x, z, BUSHES.size[1])) continue;
     bushes.push({
       x,

@@ -1,10 +1,8 @@
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import type { Mesh } from 'three';
 import type { ConcreteMaps } from '../../geometry/site/concrete';
-import type { Pit } from '../../geometry/site/pit';
-import type { SupportPlan } from '../../geometry/site/rampSupports';
-import { footingsGeometry } from '../../geometry/site/rampSupports';
-import { pitLinerGeometry } from '../../geometry/site/slab';
+import { footingsGeometry } from '../../geometry/site/rampTruss';
+import type { TrussPlan } from '../../geometry/site/rampTruss';
 import { mergeParts, partMesh } from '../context';
 import type { PartContext } from '../context';
 import { CONCRETE_LOOKS, concreteFinish } from './finishes';
@@ -12,15 +10,13 @@ import { CONCRETE_LOOKS, concreteFinish } from './finishes';
 export function createGroundworks(
   context: PartContext,
   concrete: ConcreteMaps,
-  pit: Pit | null,
-  plan: SupportPlan,
+  plan: TrussPlan,
 ): Mesh {
-  const parts = [...(pit ? [pitLinerGeometry(pit)] : []), ...footingsGeometry(plan)];
   const mesh = partMesh(
     context,
-    mergeParts(parts),
+    mergeParts(footingsGeometry(plan)),
     STRUCTURE_GROUP,
-    concreteFinish(concrete.map, concrete.normal, CONCRETE_LOOKS.pit),
+    concreteFinish(concrete.map, concrete.normal, CONCRETE_LOOKS.footing),
   );
   mesh.name = 'groundworks';
   return mesh;

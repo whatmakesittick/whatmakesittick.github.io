@@ -5,9 +5,8 @@ import { THEME } from '../../../theme';
 import { BUSHES, nearRun, scatterBushes } from './bushes';
 import { CONE, coneGeometry } from './cone';
 import { GROUND, groundGeometry, gridLines, onRun } from './groundGrid';
-import { landingMarks, pitMarks, startMarks } from './markings';
+import { finishMarks, landingMarks, startMarks } from './markings';
 import type { MarkRect } from './markings';
-import { rampPit } from './pit';
 import { trackPaths, trackPoints, tracksGeometry } from './tracks';
 
 function overlaps(a: MarkRect, b: MarkRect): boolean {
@@ -82,36 +81,38 @@ describe('paint markings', () => {
     expect(line.z[1] - line.z[0]).toBeGreaterThan(SITE.startBox.z[1] - SITE.startBox.z[0]);
   });
 
-  it('frames the landing box with corner marks and a centre cross', () => {
-    const marks = landingMarks();
-    expectApart(marks);
-    const { x, z } = SITE.landingBox;
-    const centre = { x: (x[0] + x[1]) / 2, z: (z[0] + z[1]) / 2 };
-    expect(
-      marks.some(
-        (mark) =>
-          mark.x[0] < centre.x &&
-          mark.x[1] > centre.x &&
-          mark.z[0] <= centre.z &&
-          mark.z[1] >= centre.z,
-      ),
-    ).toBe(true);
-    const outside = marks.filter(
-      (mark) => mark.x[1] <= x[0] || mark.x[0] >= x[1] || mark.z[1] <= z[0] || mark.z[0] >= z[1],
-    );
-    expect(outside.length).toBe(8);
-  });
+  it.each([SITE.landingBox, SITE.jumpLandingBox])(
+    'frames a landing box with corners and a cross',
+    (box) => {
+      const marks = landingMarks(box);
+      expectApart(marks);
+      const { x, z } = box;
+      const centre = { x: (x[0] + x[1]) / 2, z: (z[0] + z[1]) / 2 };
+      expect(
+        marks.some(
+          (mark) =>
+            mark.x[0] < centre.x &&
+            mark.x[1] > centre.x &&
+            mark.z[0] <= centre.z &&
+            mark.z[1] >= centre.z,
+        ),
+      ).toBe(true);
+      const outside = marks.filter(
+        (mark) => mark.x[1] <= x[0] || mark.x[0] >= x[1] || mark.z[1] <= z[0] || mark.z[0] >= z[1],
+      );
+      expect(outside.length).toBe(8);
+    },
+  );
 
-  it('rings the pit with a safety band that stays on the runway', () => {
-    const pit = rampPit();
-    if (!pit) throw new Error('No pit');
-    const marks = pitMarks(pit);
+  it('checkers a finish line across the runway at the 0 to 60 mark', () => {
+    const marks = finishMarks();
     expectApart(marks);
     marks.forEach((mark) => {
-      expect(mark.z[0]).toBeGreaterThan(SITE.run.z[0]);
-      expect(mark.z[1]).toBeLessThan(SITE.run.z[1]);
-      expect(overlaps(mark, { x: pit.x, z: pit.z })).toBe(false);
+      expect(Math.abs((mark.x[0] + mark.x[1]) / 2 - SITE.finishLineX)).toBeLessThan(0.5);
+      expect(mark.z[0]).toBeGreaterThanOrEqual(SITE.run.z[0]);
+      expect(mark.z[1]).toBeLessThanOrEqual(SITE.run.z[1]);
     });
+    expect(marks.length).toBeGreaterThan(20);
   });
 });
 

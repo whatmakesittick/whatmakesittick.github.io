@@ -1,6 +1,6 @@
 import { Group, InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three';
 import type { Object3D } from 'three';
-import { UNDIMMED_GROUP } from '@core/scene/materials';
+import { STRUCTURE_GROUP, UNDIMMED_GROUP } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import { SITE, SITE_ANCHORS } from '../../../model/layout';
 import type { ConcreteMaps } from '../../geometry/site/concrete';
@@ -8,12 +8,11 @@ import { coneGeometry } from '../../geometry/site/cone';
 import {
   landingMarks,
   marksGeometry,
-  pitMarks,
+  finishMarks,
   startMarks,
   wornPaintMap,
 } from '../../geometry/site/markings';
 import { hash2 } from '../../geometry/site/noise';
-import type { Pit } from '../../geometry/site/pit';
 import { slabGeometry } from '../../geometry/site/slab';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
@@ -64,33 +63,35 @@ function createCones(context: PartContext): InstancedMesh {
   return cones;
 }
 
-export function createRunway(
-  context: PartContext,
-  concrete: ConcreteMaps,
-  pit: Pit | null,
-): RunwayPart {
+export function createRunway(context: PartContext, concrete: ConcreteMaps): RunwayPart {
   const object = new Group();
   object.name = 'runway';
   const wear = context.tracker.track(wornPaintMap());
   const slab = partMesh(
     context,
-    slabGeometry(SITE.run, pit),
+    slabGeometry(SITE.run),
     'runway',
     concreteFinish(concrete.map, concrete.normal, CONCRETE_LOOKS.runway),
   );
   const start = partMesh(
     context,
-    marksGeometry([...startMarks(), ...(pit ? pitMarks(pit) : [])]),
+    marksGeometry(startMarks()),
     'runway',
     paintFinish(wear, MARK_COLOURS.start),
   );
   const landing = partMesh(
     context,
-    marksGeometry(landingMarks()),
+    marksGeometry([...landingMarks(SITE.landingBox), ...landingMarks(SITE.jumpLandingBox)]),
     'landingPad',
     paintFinish(wear, MARK_COLOURS.landing),
   );
-  object.add(slab, start, landing, createCones(context));
+  const finish = partMesh(
+    context,
+    marksGeometry(finishMarks()),
+    STRUCTURE_GROUP,
+    paintFinish(wear, MARK_COLOURS.finish),
+  );
+  object.add(slab, start, landing, finish, createCones(context));
   const [padX, padY, padZ] = SITE_ANCHORS.pad;
   return {
     object,
