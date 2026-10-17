@@ -84,10 +84,11 @@
   <p data-i18n-html="sections.tank.p5">
     On the day, Tesla ran three tests, with different cars: a timed sprint from 0 to 60 mph, a drive
     round a hook-shaped ramp, and a jump over parked vehicles. This page chains all three into one
-    run of 23 seconds, played in real time. The motion is the model's own script. The gas and the
-    tank you pick change how much gas the run uses, the pressure and the jets. The model stops the
-    jets when the tank drops below about 5 bar, its own cut-off. If that happens before a landing,
-    your choice changes the landing speed too. It never changes the path.
+    run of 23 seconds, played in real time unless a chapter slows it down. The motion is the model's
+    own script. The gas and the tank you pick change how much gas the run uses, the pressure and the
+    jets. The model treats the last 5 percent of the gas as unusable, because by then the pressure
+    has collapsed. If a tank reaches that cut-off before a landing, your choice changes the landing
+    speed too. It never changes the path.
   </p>
   <div class="range-widget">
     <div class="range-widget__header">
@@ -116,7 +117,7 @@
   </div>
   <dl class="readouts">
     <div>
-      <dt data-i18n="chapters.tank.shell">Tank shell at Mirai weight</dt>
+      <dt data-i18n="chapters.tank.shell">Empty tank, scaled from the Mirai</dt>
       <dd class="number" data-readout="tankShell">429 kg</dd>
     </div>
     <div>
@@ -183,9 +184,9 @@
   <p data-i18n-html="sections.nozzle.p4">
     As the gas expands, it cools far below freezing. That is where the white cloud in the
     <strong>gas jets</strong> comes from: some of the air may even turn into tiny drops, and
-    moisture in the air around it freezes. This is also why they are called cold-gas thrusters.
-    Nothing burns, so there are no hot parts and only one valve per nozzle. The price is the weakest
-    push per kilogram of any kind of thruster, because no fuel adds energy.
+    moisture in the air around it freezes. They are called cold-gas thrusters because nothing heats
+    the gas. Nothing burns, so there are no hot parts and only one valve per nozzle. The price is
+    the weakest push per kilogram of any kind of thruster, because no fuel adds energy.
   </p>
   <p data-i18n-html="sections.nozzle.p5">
     That simple, safe design is why spacecraft use it. Small satellites steer with cold-gas jets,
@@ -246,11 +247,11 @@
     use about 115 kg of air every second. A full 600 L tank would be empty in about 2.8 s.
   </p>
   <p data-i18n-html="sections.boost.p4">
-    After the sprint, the model does something of its own. It stops the jets and brakes from about
-    27 m/s to 18 m/s, so the car reaches the hook at the speed the loop needs. This braking is the
-    model's choice, not part of the real test. The model also holds each jet's thrust steady, though
-    a real tank loses pressure as it empties and its jets weaken. Drag the thrust slider to see the
-    push, the 0 to 60 mph time and the gas use. The run on screen keeps its own 56 kN.
+    After the sprint, the model does something of its own. It stops the jets and brakes from 60 mph,
+    about 27 m/s, to 18 m/s, so the car reaches the hook at the speed the loop needs. This braking
+    is the model's choice, not part of the real test. The model also holds each jet's thrust steady,
+    though a real tank loses pressure as it empties and its jets weaken. Drag the thrust slider to
+    see the push, the 0 to 60 mph time and the gas use. The run on screen keeps its own 56 kN.
   </p>
   <div class="range-widget">
     <div class="range-widget__header">
@@ -285,9 +286,9 @@
       </dd>
     </div>
     <div>
-      <dt data-i18n="chapters.boost.claim">0 to 60 mph</dt>
+      <dt data-i18n="chapters.boost.claim">Tesla's 0 to 60 mph times</dt>
       <dd class="number" data-i18n="chapters.boost.claimValue">
-        0.81 s timed live; Tesla claims under 0.59 s for the Rocket
+        0.81 s on the live run, Tesla's figure; under 0.59 s claimed for the Rocket
       </dd>
     </div>
   </dl>
@@ -300,7 +301,8 @@
     The second test was the hook. The car reaches the <strong>ramp</strong> at about 18 m/s. The
     track curves up into a half loop about 5 m in radius, so the car climbs, goes vertical and comes
     over the top upside down. It runs onto a straight deck 16 m long, still upside down, 10 m above
-    the ground. There it brakes to a stop and hangs under the deck for about three seconds. Then the
+    the ground. There it brakes to a stop and hangs under the deck for about three seconds. The real
+    car did this too: in the test it stopped upside down on the ramp, held only by suction. Then the
     <strong>rear nozzles</strong> push it along the rest of the deck and off the end at about 7 m/s,
     upside down and heading back the way it came.
   </p>
@@ -321,7 +323,7 @@
       data-value="held"
       data-i18n="timeline.moment.held"
     >
-      Held on the hook
+      Hanging under the deck
     </button>
     <button
       type="button"
@@ -335,25 +337,27 @@
   </div>
   <p data-i18n-html="sections.hook.p2">
     Going round the loop presses the car into the track. That push from the track is called the
-    load. At the bottom of the curve the load is about 6.6 g, because the car turns hard at speed.
-    Climbing costs speed, so the car comes over the top at about 11 m/s. That is still enough to
-    press it into the track at about 1.6 g, even upside down, so the loop holds it on by itself.
+    load. At the bottom of the curve the load is about 7.6 g: the track carries the car's weight and
+    also bends its path hard at speed. Climbing costs speed, so the car comes over the top at about
+    11 m/s. That is still enough to press it into the track at about 1.6 g, even upside down, so the
+    loop holds it on by itself.
   </p>
   <p data-i18n-html="sections.hook.p3">
     At speed, the curve holds the car on. A stopped car has no speed to do that, so all the holding
     falls to the <strong>suction fans</strong> under it. Hanging still, the car's whole 1.7 tonnes
-    pulls away from the deck, and the fans must pull back just as hard, with 1 g. Tesla says they
-    can pull with up to 2 g, so they have room to spare. Electrek reports four fans of about 20 kW
-    each. The model draws them as a blue glow and does not work out their pull.
+    pulls away from the deck, and the fans must pull back just as hard, with 1 g. Lars Moravy, who
+    leads vehicle engineering at Tesla, says they can pull with up to 2 g, so they have room to
+    spare. Electrek reports four fans of about 20 kW each. The model draws them as a blue glow and
+    does not work out their pull.
   </p>
   <p data-i18n-html="sections.hook.p4">
     Drag the entry speed slider to see how the loop changes. Below about 14 m/s, the car would not
     even reach the top. Like every slider on this page, it is a calculator: the run on screen keeps
     its own 18 m/s. Dropped from the deck with no help, the car would hit the ground in about 1.4 s.
     The <strong>ghost path</strong> shows where it falls, down to the <strong>landing pad</strong>.
-    Tesla has not published the ramp's size, so the loop, the deck, the entry speed and the push-off
-    speed are the model's own. The chips above jump to the top of the loop, to the car hanging on
-    the deck, or to the moment it leaves the ramp.
+    Tesla has not published the ramp's size, so the loop, the deck, the entry speed, the
+    three-second hold and the 7 m/s push-off are the model's own. The chips above jump to the top of
+    the loop, to the car hanging under the deck, or to the moment it leaves the ramp.
   </p>
   <div class="range-widget">
     <div class="range-widget__header">
@@ -368,7 +372,7 @@
       </div>
       <div>
         <dt data-i18n="chapters.hook.bottomG">Load at the loop entry</dt>
-        <dd class="number" data-readout="loopBottomG">6.6 g</dd>
+        <dd class="number" data-readout="loopBottomG">7.6 g</dd>
       </div>
       <div>
         <dt data-i18n="chapters.hook.topG">Load at the top</dt>
@@ -384,18 +388,12 @@
     <div>
       <dt data-i18n="chapters.hook.track">Ramp</dt>
       <dd class="number" data-i18n="chapters.hook.trackValue">
-        a 5 m loop and a 16 m deck 10 m up, the model's ramp
+        a half loop of 5 m radius and a 16 m deck 10 m up, the model's ramp
       </dd>
     </div>
     <div>
       <dt data-i18n="chapters.hook.fans">Fan pull</dt>
       <dd class="number" data-i18n="chapters.hook.fansValue">up to 2 g of pull, Tesla's figure</dd>
-    </div>
-    <div>
-      <dt data-i18n="chapters.hook.tesla">Tesla's jump</dt>
-      <dd class="number" data-i18n="chapters.hook.teslaValue">
-        about 8 m (27 ft) over the parked cars, Tesla's figure
-      </dd>
     </div>
   </dl>
 </section>
@@ -406,9 +404,10 @@
   <p data-i18n-html="sections.flip.p1">
     Upside down as it leaves the deck, the car must turn over before it lands. It falls freely for a
     tenth of a second, then the <strong>corner nozzles</strong> take over. They work like the small
-    steering jets on a spacecraft, which turn it in place. A push away from the centre makes the car
-    spin. How strongly it turns the car is called torque. The two nozzles on one side fire first to
-    start the roll, then the two on the other side fire to stop it, like a brake.
+    steering jets that turn a spacecraft in place. A push at one side of the car, away from its
+    centre, makes it spin. How strongly that push turns the car is called torque. The two nozzles on
+    one side fire first to start the roll, then the two on the other side fire to stop it, like a
+    brake.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.moment">
     <button
@@ -455,11 +454,11 @@
   </p>
   <p data-i18n-html="sections.flip.p4">
     By the time it is upright, the car has fallen about 4 m and drops at about 9 m/s. All four
-    corner nozzles fire down at once, and the <strong>forces</strong> arrows show their push.
+    corner nozzles fire down at once, and the <strong>force arrows</strong> show their push.
     Together they give about 28 kN, more than the car's weight of 16.7 kN, so the fall slows. In
-    about a second it drops to about 2.5 m/s, and the wheels touch the first landing pad. Tesla says
-    its thrusters softened the landing too, but not how hard they pushed. So these catch numbers are
-    the model's own.
+    about a second the fall slows to about 2.5 m/s, and the wheels touch the first landing pad.
+    Tesla says its thrusters softened the landing too, but not how hard they pushed. So these catch
+    numbers are the model's own.
   </p>
   <p data-i18n-html="sections.flip.p5">
     After touchdown the car does not stop: it drives on toward the jump. The flip plays at half
@@ -518,7 +517,7 @@
       data-value="liftOff"
       data-i18n="timeline.moment.liftOff"
     >
-      Lift-off
+      Take-off
     </button>
     <button
       type="button"
@@ -540,7 +539,7 @@
     </button>
   </div>
   <p data-i18n-html="sections.jump.p2">
-    They push with about 40 kN for about 0.7 s, more than twice the car's weight. When they stop,
+    They push with about 40 kN, more than twice the car's weight, for about 0.7 s. When they stop,
     the car is rising at about 9.6 m/s. From there it coasts up on an arc, like a thrown ball, and
     tops out about 8 m above the ground. Tesla gave about 8 m (27 ft) for its jump, though it is not
     clear whether that was height or length.
@@ -579,11 +578,11 @@
         <dd class="number" data-readout="leapGas">40 kg</dd>
       </div>
       <div>
-        <dt data-i18n="chapters.jump.airTime">Time in the air, no jets</dt>
+        <dt data-i18n="chapters.jump.airTime">Coasting time after the push</dt>
         <dd class="number" data-readout="jumpAir">2.3 s</dd>
       </div>
       <div>
-        <dt data-i18n="chapters.jump.range">Distance at 15 m/s</dt>
+        <dt data-i18n="chapters.jump.range">Distance from take-off at 15 m/s</dt>
         <dd class="number" data-readout="jumpRange">44 m</dd>
       </div>
     </dl>
@@ -670,19 +669,21 @@
   <p data-i18n-html="sections.limits.p3">
     So why not helium? It leaves about 2.6 times faster, at around 1,800 m/s. But helium is very
     light, so the same 600 L tank holds only 51 kg, a sixth of the air. What counts is the total
-    push, called impulse: thrust times how long it lasts. Helium gives 93 kN·s against 220 kN·s for
-    air, less than half. It wins only where weight matters more than space, as on a spacecraft.
+    push, called impulse: thrust times how long it lasts. Helium gives 93 kilonewton seconds (kN·s)
+    against 220 kN·s for air, less than half. It wins only where weight matters more than space, as
+    on a spacecraft.
   </p>
   <p data-i18n-html="sections.limits.p4">
-    Try the chips and watch the run's gas budget. The model stops the jets once the pressure drops
-    below about 5 bar, its own cut-off, so about a fifth of the gas always stays aboard. With air in
-    the 600 L tank, the car finishes the three tests just above that cut-off. Nitrogen in the same
-    tank reaches it during the jump's landing, and the car comes down about 2 m/s harder. In the 400
-    L tank, air and nitrogen both run out during the take-off, so the jump's landing gets no cushion
-    at all and the car comes down about 10 m/s harder. Helium runs out even sooner: in the 600 L
-    tank during the hook's catch, landing about 8 m/s harder, and in the 400 L tank already during
-    the push along the deck. The path stays the same whatever you pick; only the gas used, the
-    pressure, the jets and the landing speed change.
+    Try the chips and watch the run's gas budget. The model treats the last 5 percent of the gas as
+    unusable, because by then the pressure has collapsed. That is its own cut-off. With air in the
+    600 L tank, the car finishes all three tests with about a fifth of its air left, so it never
+    reaches the cut-off. Nitrogen in the same tank finishes with a little less. In the 400 L tank,
+    the jump's landing gets no cushion at all, and the car comes down about 10 m/s harder: air runs
+    dry during the twist, and nitrogen even earlier, during the take-off. Helium runs dry even
+    sooner. In the 600 L tank that happens during the catch after the hook, and the car lands about
+    3 m/s harder. In the 400 L tank it happens already during the flip, and the car lands about 11
+    m/s harder. The path stays the same whatever you pick; only the gas used, the pressure, the jets
+    and the landing speed change.
   </p>
   <p data-i18n-html="sections.limits.p5">
     Roger Conner, a curator of vertical flight at the Smithsonian's National Air and Space Museum,
@@ -708,7 +709,7 @@
     </div>
     <div>
       <dt data-i18n="chapters.limits.used">Gas the run uses</dt>
-      <dd class="number" data-readout="runUsed">71 %</dd>
+      <dd class="number" data-readout="runUsed">79 %</dd>
     </div>
     <div>
       <dt data-i18n="chapters.limits.outcome">Landing</dt>
