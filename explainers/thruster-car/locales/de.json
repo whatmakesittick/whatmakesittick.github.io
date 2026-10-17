@@ -1,0 +1,266 @@
+{
+  "meta": {
+    "title": "So springt ein Auto mit Kaltgastriebwerken",
+    "eyebrow": "Auto mit Schubdüsen",
+    "tagline": "Zehn Luftdüsen und ein Tank voll Druckluft: wie ein Auto beschleunigt, kopfüber von einer Rampe springt, sich in der Luft zurück auf die Räder dreht und sanft landet.",
+    "description": "Ein 3D-Auto mit Kaltgastriebwerken: 700-bar-Lufttank, Düsen, Start ohne Reifenhaftung, Sprung von der Rampe, Drehung in der Luft und sanfte Landung.",
+    "summary": "Der Lufttank, wie eine Düse Schub erzeugt, Beschleunigen ohne Reifenhaftung, Rampe und Sprung, Drehung und Abfangen, und warum ein Hüpfer kein Flug ist.",
+    "socialAlt": "Ein grauer einsitziger Sportwagen kopfüber über einer geschwungenen Rampe in der Abenddämmerung, weiße Gasstrahlen an seinen Ecken, daneben der Titel „So springt ein Auto mit Kaltgastriebwerken“"
+  },
+  "stage": {
+    "label": "Interaktives Modell des Autos mit Schubdüsen",
+    "gauge": "Tank und Düsen live"
+  },
+  "timeline": {
+    "label": "Fahrzeit",
+    "phases": "Zu einem Abschnitt der Fahrt springen",
+    "speed": "Wiedergabetempo",
+    "value": "T+{{seconds}} s",
+    "during": "T+{{seconds}} s, {{phase}}",
+    "speedValue": "{{factor}}x",
+    "speedDescribe": "{{factor}}-fache Echtzeit",
+    "phase": {
+      "boost": "Anschub",
+      "ramp": "Rampe",
+      "launch": "Absprung",
+      "flip": "Drehung",
+      "catch": "Abfangen",
+      "rest": "Ausrollen"
+    },
+    "jump": {
+      "boost": "Zum Anschub springen",
+      "ramp": "Zur Rampe springen",
+      "launch": "Zum Absprung springen",
+      "flip": "Zur Drehung springen",
+      "catch": "Zum Abfangen springen",
+      "rest": "Zum Ausrollen springen"
+    },
+    "detail": {
+      "boost": "die vier Heckdüsen schieben das Auto aus dem Stand auf 16 m/s",
+      "ramp": "Sauggebläse halten das Auto auf der gewundenen Rampe, während es sich aufs Dach dreht",
+      "launch": "das Auto verlässt die Rampe kopfüber in 4 m Höhe, keine Düse bläst",
+      "flip": "die Eckdüsen drehen das Auto nahe dem höchsten Punkt seines 8-m-Sprungs zurück auf die Räder",
+      "catch": "alle vier Eckdüsen blasen nach unten und bremsen den Fall auf 2,5 m/s",
+      "rest": "das Auto landet, bremst und rollt etwa 86 m hinter dem Start aus"
+    },
+    "moment": {
+      "leavesRamp": "Verlässt die Rampe",
+      "peak": "Höchster Punkt",
+      "rollComplete": "Wieder richtig herum",
+      "touchdown": "Aufsetzen",
+      "stopped": "Steht still"
+    }
+  },
+  "controls": {
+    "label": "Steuerung des Modells",
+    "gas": "Gas",
+    "gasOptions": {
+      "air": "Luft",
+      "nitrogen": "Stickstoff",
+      "helium": "Helium"
+    },
+    "tank": "Tank",
+    "tankOptions": {
+      "400": "400 l",
+      "600": "600 l"
+    },
+    "replayOptions": {
+      "run": "Fahrt neu abspielen"
+    },
+    "groups": {
+      "gas": "Gas im Tank",
+      "tank": "Tankgröße",
+      "replay": "Fahrt neu abspielen"
+    },
+    "views": {
+      "nozzles": {
+        "name": "Düsenrichtungen",
+        "short": "Düsen",
+        "hint": "Düsenrichtungen (N)"
+      },
+      "forces": {
+        "name": "Kräfte",
+        "short": "Kräfte",
+        "hint": "Kräfte (F)"
+      },
+      "tank": {
+        "name": "Tank im Schnitt",
+        "short": "Tank",
+        "hint": "Tank im Schnitt (T)"
+      },
+      "ghost": {
+        "name": "Bahnvorschau",
+        "short": "Bahn",
+        "hint": "Bahnvorschau (G)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    }
+  },
+  "readouts": {
+    "pressure": "Tank",
+    "thrust": "Schub",
+    "massFlow": "Gasstrom",
+    "height": "Höhe",
+    "speed": "Tempo",
+    "gasLeft": "Restgas",
+    "tankState": {
+      "full": "Voll",
+      "draining": "Leert sich",
+      "empty": "Leer"
+    }
+  },
+  "units": {
+    "bar": "{{value}} bar",
+    "kilonewtons": "{{value}} kN",
+    "kilonewtonMetres": "{{value}} kN·m",
+    "kilonewtonSeconds": "{{value}} kN·s",
+    "kgPerSecond": "{{value}} kg/s",
+    "kilograms": "{{value}} kg",
+    "metres": "{{value}} m",
+    "metresPerSecond": "{{value}} m/s",
+    "kmh": "{{value}} km/h",
+    "seconds": "{{value}} s",
+    "minutes": "{{value}} min",
+    "percent": "{{value}} %",
+    "megawatts": "{{value}} MW",
+    "megajoulesPair": "{{mj}} MJ, {{kwh}} kWh",
+    "gees": "{{value}} g",
+    "kgm2": "{{value}} kg·m²",
+    "degreesPerSecond": "{{value}}°/s"
+  },
+  "chapters": {
+    "limits": {
+      "outcomeState": {
+        "cushioned": "Sanfte Landung mit {{speed}} m/s",
+        "ranDry": "Kein Gas mehr ab T+{{seconds}} s, Landung mit {{speed}} m/s"
+      },
+      "hoverFlow": "Gasbedarf zum Schweben",
+      "hoverTime": "Längstes Schweben",
+      "jetPower": "Strahlleistung zum Schweben",
+      "impulse": "Gesamtimpuls",
+      "used": "Gasverbrauch der Fahrt",
+      "outcome": "Landung",
+      "rotor": "Idealer Rotor",
+      "rotorValue": "etwa 0,16 MW bei 10 m Durchmesser"
+    },
+    "tank": {
+      "fill": "Füllstand",
+      "mass": "Gas im Tank",
+      "work": "Mögliche Arbeit",
+      "pressure": "Druck",
+      "fillTime": "Ideale Füllzeit bei 50 kW",
+      "shell": "Tankhülle nach Mirai-Maßstab",
+      "mirai": "Tanks des Toyota Mirai",
+      "miraiValue": "122,4 l, 87,5 kg, 5,0 kg Wasserstoff"
+    },
+    "nozzle": {
+      "pressure": "Tankdruck",
+      "flow": "Massenstrom",
+      "thrust": "Schub einer Eckdüse",
+      "exhaust": "Austrittsgeschwindigkeit",
+      "isp": "Spezifischer Impuls"
+    },
+    "boost": {
+      "thrust": "Heckschub",
+      "accel": "Beschleunigung",
+      "sixty": "0 auf 60 mph",
+      "flow": "Gasverbrauch",
+      "lasts": "Ein voller Tank reicht für",
+      "runThrust": "Heckschub in der Fahrt",
+      "runThrustValue": "9,1 kN, vom Modell gewählt",
+      "claim": "Rocket, 0 auf 60 mph",
+      "claimValue": "unter 0,59 s laut Tesla; 0,81 s bei der Live-Fahrt"
+    },
+    "hop": {
+      "launch": "Tempo beim Absprung",
+      "peak": "Höchster Punkt",
+      "airTime": "Zeit in der Luft ohne Abfangen",
+      "range": "Weite ab der Rampe",
+      "exit": "Rampenende",
+      "exitValue": "4 m hoch, 42 Grad, die Rampe des Modells",
+      "entry": "Tempo bei der Auffahrt",
+      "entryValue": "16 m/s, 58 km/h",
+      "tesla": "Teslas Sprung",
+      "teslaValue": "etwa 8 m (27 ft), Teslas Angabe"
+    },
+    "flip": {
+      "inertia": "Rollträgheit",
+      "time": "Eine halbe Drehung dauert",
+      "torque": "Drehmoment eines Paars",
+      "rate": "Schnellste Drehung",
+      "catch": "Schub beim Abfangen",
+      "catchValue": "28 kN, 7 kN je Düse, eigener Wert des Modells",
+      "touchdown": "Tempo beim Aufsetzen",
+      "touchdownValue": "2,5 m/s nach unten"
+    }
+  },
+  "parts": {
+    "body": "Karosserie",
+    "wheels": "Räder",
+    "seat": "Fahrersitz",
+    "tank": "Lufttank",
+    "tankValve": "Tankventil",
+    "cornerNozzles": "Eckdüsen",
+    "frontNozzles": "Frontdüsen",
+    "rearNozzles": "Heckdüsen",
+    "jets": "Gasstrahlen",
+    "forceArrows": "Kräfte",
+    "fans": "Sauggebläse",
+    "runway": "Anlaufstrecke",
+    "ramp": "Rampe",
+    "landingPad": "Landefläche",
+    "ghostPath": "Bahnvorschau"
+  },
+  "sections": {
+    "tank": {
+      "title": "Ein Tank voll Druckluft",
+      "p1": "Am 15. Oktober 2026 zeigte Tesla seinen neuen Roadster auf einem Raketentestgelände von SpaceX in McGregor, Texas. Im Auto saß niemand. Laut Tesla hat eine Version, die Rocket, zehn <strong>Kaltgastriebwerke</strong>. Das sind Luftdüsen: Sie schieben das Auto an, indem sie Druckluft ausblasen, und sie verbrennen nichts. Tesla verspricht das Auto für 2028. Auf Teslas eigener Website steht, dass die Rocket nicht für öffentliche Straßen zugelassen ist.",
+      "p2": "Das Auto auf dieser Seite ist ein Beispielauto, nicht das von Tesla. Es ist ein einsitziger elektrischer Sportwagen. Er wiegt 1,7 Tonnen, so viel, wie Tesla anstrebt. Der <strong>Fahrersitz</strong> ist links. Wo sonst der Beifahrer säße, steckt der <strong>Lufttank</strong>. Sein <strong>Tankventil</strong> lässt das Gas zu den Düsen strömen. Berichten zufolge wird der echte Tank mit etwa 700 bar gefüllt. Das ist das 700-Fache des Luftdrucks um Sie herum.",
+      "p3": "Wie groß ist der Tank? Berichte nennen 400 l und 600 l, die Quellen sind sich nicht einig. Darum rechnet das Modell mit 600 l, und Sie können 400 l ausprobieren. Bei 700 bar ist Luft dicht gepackt: 100 l davon wiegen etwa 53 kg, in 600 l passen also etwa 315 kg. Wände, die das aushalten, müssen stark und leicht sein. Darum wickelt man sie aus Kohlefaser. Die Wasserstofftanks des Toyota Mirai arbeiten mit demselben Druck. Auf jeden Liter, den sie fassen, kommen etwa 0,71 kg Tank. Nach diesem Maßstab wöge ein 600-l-Tank etwa 430 kg, noch bevor Gas hineinkommt.",
+      "p4": "Druckluft speichert Energie, wie eine gespannte Feder. Wenn sich 100 l davon ausdehnen, können sie etwa 24 Megajoule (MJ) Arbeit leisten, also 6,6 Kilowattstunden (kWh). Ein voller 600-l-Tank speichert etwa 40 kWh. Laut Tesla dauert das Nachfüllen heute sechs oder sieben Stunden, das Ziel sind 30 Minuten. Ziehen Sie den Füllregler: Er zeigt die geringste Arbeit, die eine perfekte Pumpe bräuchte, und wie lange das bei 50 kW dauert. Echte Pumpen brauchen mehr.",
+      "p5": "An dem Tag zeigte Tesla mehrere Stunts, manche mit anderen Autos. Diese Seite fasst sie zu einer einzigen Fahrt von 14 Sekunden zusammen, abgespielt in Echtzeit. Das Auto beschleunigt mit seinen Düsen, fährt eine gewundene Rampe hinauf, verlässt sie kopfüber, dreht sich zurück auf die Räder und landet. Die Bewegung folgt einem festen Drehbuch des Modells. Das Gas und der Tank, die Sie wählen, ändern nur den Gasverbrauch, den Druck und die Düsenstrahlen, nie die Bahn."
+    },
+    "nozzle": {
+      "title": "Gas nach hinten, Auto nach vorn",
+      "p1": "Geht ein Ventil auf, schießt das Druckgas durch eine Düse ins Freie. Eine Düse ist eine geformte Öffnung, die das Gas beschleunigt. Das Gas strömt in die eine Richtung, also wird das Auto in die andere geschoben. Das ist Newtons drittes Gesetz: Zu jeder Kraft gehört eine gleich große Gegenkraft. Das Auto hat zehn Düsen. Vier <strong>Heckdüsen</strong> schieben es nach vorn, vier <strong>Eckdüsen</strong> zeigen nach unten, und zwei <strong>Frontdüsen</strong> lenken die Front nach links oder rechts.",
+      "p2": "Diese Kraft heißt Schub. Man rechnet sie so: die Masse an Gas, die pro Sekunde austritt, mal die Geschwindigkeit, mit der sie austritt. Das Erste heißt Massenstrom, das Zweite Austrittsgeschwindigkeit. Luft aus einem 700-bar-Tank tritt mit etwa 700 m/s aus. Fachleute bewerten ein Gas außerdem nach seinem spezifischen Impuls, kurz Isp. Er gibt an, wie viele Sekunden ein Kilogramm Gas mit einer Kraft so groß wie sein eigenes Gewicht schieben könnte. Für kalte Luft sind das etwa 70 s.",
+      "p3": "Sie denken vielleicht, mehr Druck heißt schnelleres Gas. Meistens nicht. Die Austrittsgeschwindigkeit hängt vom Gas und seiner Temperatur ab. Der Druck bestimmt, wie viel Gas pro Sekunde durch die Düse strömt und wie viel in den Tank passt. Ziehen Sie den Druckregler: Massenstrom und Schub sinken mit, die Austrittsgeschwindigkeit bleibt gleich.",
+      "p4": "Beim Ausdehnen kühlt das Gas weit unter den Gefrierpunkt ab. Daher kommt die weiße Wolke in den <strong>Gasstrahlen</strong>: Ein Teil der Luft wird zu winzigen Tröpfchen, und die Feuchtigkeit in der Luft drumherum gefriert. Deshalb heißen sie auch Kaltgastriebwerke. Nichts verbrennt, also gibt es keine heißen Teile und nur ein Ventil pro Düse. Der Preis dafür: Pro Kilogramm Gas schiebt keine andere Triebwerksart so schwach, denn kein Treibstoff liefert zusätzliche Energie.",
+      "p5": "Gerade weil diese Bauweise so einfach und sicher ist, nutzt man sie in der Raumfahrt. Kleine Satelliten steuern mit Kaltgasdüsen, und die Erststufe einer Falcon 9 dreht sich mit Stickstoffdüsen nahe ihrer Spitze um. Auch das Modell macht es sich einfach. Es nimmt für jedes Gas eine feste Austrittsgeschwindigkeit an. In einer echten Düse wird Luft etwas langsamer, wenn sich der Tank leert, bei 300 bar auf etwa 660 m/s. Tesla hat nicht verraten, wie stark die einzelnen Düsen sind. Darum legt das Modell eigene Werte fest."
+    },
+    "boost": {
+      "title": "Schub, der keine Haftung braucht",
+      "p1": "Ein normales Auto beschleunigt über seine <strong>Räder</strong>. Ist der Antrieb zu stark, drehen die Reifen durch. Wie gut sie auf der Straße haften, setzt also die Grenze. Die <strong>Heckdüsen</strong> drücken auf das Auto selbst, nicht auf die Straße, deshalb spielt die Haftung keine Rolle. Laut Tesla erzeugen die Kaltgastriebwerke vier- bis fünfmal so viel Kraft, wie die Reifen übertragen können.",
+      "p2": "Electrek berichtet von etwa 80 kN aus den Heckdüsen. Bei einem Auto mit 1,7 Tonnen ergibt das 4,8 g. Ein g ist die Schwerkraft, die Sie spüren, wenn Sie still stehen. Der Schub würde sich also anfühlen wie fast das Fünffache Ihres Gewichts. Doch bei 80 kN schlucken die Düsen etwa 115 kg Luft pro Sekunde. Ein voller 600-l-Tank wäre nach 2,7 s leer.",
+      "p3": "Tesla nennt drei Zeiten von 0 auf 60 mph (97 km/h): unter 1,6 s für die Version Performance ohne Kaltgastriebwerke, unter 0,9 s für die Thrust und unter 0,59 s für die Rocket. Die letzte Zeit verlangt etwa die vollen 80 kN. Bei der Live-Fahrt hat das Auto laut Tesla 0,81 s gebraucht, aber unabhängig gemessen hat das niemand. Selbst dafür braucht es im Schnitt etwa 56 kN, also 3,4 g.",
+      "p4": "Im Modell geht es sanfter zu. Seine vier Heckdüsen schieben zusammen mit 9,1 kN, einem Neuntel von 80 kN, drei Sekunden lang über die <strong>Anlaufstrecke</strong>. So kommt das Auto mit 16 m/s (58 km/h) an der Rampe an, und es bleibt Gas für die Drehung und das Abfangen übrig. Diesen Wert hat das Modell gewählt. Außerdem hält es den Schub jeder Düse konstant. Ein echter Tank verliert dagegen beim Leeren Druck, und seine Düsen werden schwächer."
+    },
+    "hop": {
+      "title": "Gebläse halten, die Rampe wirft",
+      "p1": "Mit 16 m/s erreicht das Auto die <strong>Rampe</strong>. Im Modell verdreht sich die Bahn beim Anstieg, sodass das Auto aufs Dach rollt. Was es kopfüber auf der Bahn hält, sind nicht die Düsen. Bei der echten Vorführung zogen es <strong>Sauggebläse</strong> unter dem Wagen an die Bahn, laut Electrek vier Stück mit je etwa 20 kW. Das Modell zeigt sie als blaues Leuchten, ihre Saugkraft berechnet es nicht.",
+      "p2": "Das Auto verlässt die Rampe kopfüber in 4 m Höhe, mit 13,3 m/s und 42 Grad schräg nach oben. Ab jetzt schiebt keine Düse es nach vorn oder oben. Es ist jetzt wie ein geworfener Ball: Nur die Schwerkraft biegt seine Bahn zu einem Bogen. Die <strong>Bahnvorschau</strong> zeichnet diesen Bogen vor dem Auto ein, bis hinunter zur <strong>Landefläche</strong>.",
+      "p3": "Wie hoch es steigt, hängt nur davon ab, wie schnell es sich nach oben bewegt. Bei 42 Grad stecken in 13,3 m/s etwa 8,9 m/s senkrecht nach oben, und das hebt das Auto um weitere 4 m. Am höchsten Punkt ist es also etwa 8 m über dem Boden. Tesla nannte für einen seiner Sprünge etwa 8 m (27 ft). Ob damit die Höhe oder die Weite gemeint war, ist unklar. Ohne Hilfe würde das Auto 2,2 s nach dem Absprung landen. Das Abfangen bremst den Fall, deshalb bleibt es in der Fahrt etwa 2,6 s in der Luft.",
+      "p4": "Ziehen Sie den Absprungregler, um das Auto schneller oder langsamer zu werfen. Das Tempo zählt hier doppelt: Die Steighöhe wächst mit dem Quadrat der Geschwindigkeit nach oben. Mit 10 % mehr Tempo steigt das Auto also etwa 21 % höher. Tesla hat die Maße der echten Rampe nicht veröffentlicht. Berichte beschreiben eine Bahn, die sich in einem halben Looping nach oben und über Kopf windet. Die Verdrehung, das Rampenende in 4 m Höhe, der Winkel von 42 Grad und die 16 m/s bei der Auffahrt sind alles eigene Werte des Modells."
+    },
+    "flip": {
+      "title": "Erst aufrichten, dann den Fall bremsen",
+      "p1": "Kopfüber nahe dem höchsten Punkt muss sich das Auto umdrehen, bevor es landet. Das übernehmen die <strong>Eckdüsen</strong>. Sie arbeiten wie die kleinen Steuerdüsen eines Raumfahrzeugs, die es auf der Stelle drehen. Ein Stoß abseits der Mitte versetzt das Auto in Drehung. Die Stärke dieser Drehwirkung heißt Drehmoment. Zuerst blasen die zwei Düsen auf einer Seite und starten die Drehung. Dann blasen die zwei auf der anderen Seite und stoppen sie wie eine Bremse.",
+      "p2": "Wie schnell sich das Auto dreht, hängt davon ab, wie schwer es sich in Drehung bringen lässt. Das ist seine Rollträgheit, gemessen in kg·m². Je mehr Gewicht weit weg von der Mitte sitzt, desto schwerer dreht es sich. Messungen an echten Autos ergaben etwa 390 kg·m² für einen Kleinwagen und 630 für ein großes Auto. Für einen Sportwagen mit vollen Tanks hat niemand einen Wert veröffentlicht. Darum wählt das Modell 600, und Sie können 500 bis 900 ausprobieren.",
+      "p3": "In der Fahrt schiebt jede Eckdüse mit 2 kN, 0,9 m von der Mitte entfernt. Ein Paar erzeugt also 3,6 kN·m Drehmoment. Bei 600 kg·m² dauert eine halbe Drehung etwa 1,45 s: die eine Hälfte beschleunigen, die andere bremsen. Das passt locker in den Sprung. Diese Düsenwerte sind ein Beispiel des Modells, keine Angaben von Tesla. Während der Drehung bringt das Modell außerdem die Front in die Waagerechte, damit das Auto flach aufkommt.",
+      "p4": "Jetzt ist das Auto richtig herum und fällt mit etwa 8 m/s. Alle vier Eckdüsen blasen gleichzeitig nach unten, und die Pfeile für die <strong>Kräfte</strong> zeigen ihren Schub. Zusammen kommen sie auf etwa 28 kN. Das ist mehr als das Gewicht des Autos von 16,7 kN, also wird der Fall langsamer. In 0,85 s sinkt das Tempo auf 2,5 m/s, und die Räder setzen auf der Landefläche auf. Tesla sagt, die Kaltgastriebwerke hätten auch die Landung abgefedert, aber nicht, wie stark sie geschoben haben. Diese Werte fürs Abfangen hat also das Modell selbst berechnet.",
+      "p5": "Nach dem Aufsetzen bremst das Auto und rollt etwa 86 m hinter dem Start aus, 11,45 s nach Beginn der Fahrt. Die Drehung läuft hier in halber Geschwindigkeit, damit Sie jedes Düsenpaar verfolgen können. Mit „Fahrt neu abspielen“ sehen Sie die ganze Fahrt noch einmal."
+    },
+    "limits": {
+      "title": "Warum ein Hüpfer kein Flug ist",
+      "p1": "Zum Schweben müssten die Düsen mit dem ganzen Gewicht des Autos nach oben drücken, also mit 16,7 kN bei 1,7 Tonnen. Tritt die Luft mit etwa 700 m/s aus, braucht das etwa 24 kg Luft pro Sekunde. Ein voller <strong>Lufttank</strong> mit 600 l fasst etwa 315 kg. Selbst wenn sich jedes Kilogramm nutzen ließe, könnte das Auto also höchstens etwa 13 s schweben. In der Praxis ist es weniger, weil der Druck sinkt, während sich der Tank leert.",
+      "p2": "Warum so kurz? Schnelle Strahlen verschwenden Leistung. Mit Luft, die mit 700 m/s ausströmt, braucht es etwa 5,8 Megawatt (MW), um das Auto oben zu halten. Ein idealer Rotor mit 10 m Durchmesser trägt dasselbe Gewicht, indem er viel Luft langsam bewegt, mit etwa 9 m/s. Er braucht nur etwa 0,16 MW, rund 37-mal weniger. Ein Hubschrauber bleibt mit Treibstoff stundenlang oben, dieser Tank reicht für Sekunden.",
+      "p3": "Warum dann nicht Helium? Es strömt etwa 2,6-mal so schnell aus, mit rund 1.800 m/s. Aber Helium ist sehr leicht. Derselbe 600-l-Tank fasst davon nur 51 kg, ein Sechstel der Luftmenge. Was zählt, ist der gesamte Stoß, den das Gas liefert. Man nennt ihn Impuls: Schub mal Dauer. Helium kommt auf 93 kN·s, Luft auf 220 kN·s, Helium also auf weniger als die Hälfte. Es gewinnt nur, wo Gewicht mehr zählt als Platz, etwa in einem Raumfahrzeug.",
+      "p4": "Probieren Sie die Optionen für Gas und Tank aus und behalten Sie das Gasbudget der Fahrt im Blick. Mit Luft im 600-l-Tank verbraucht die Fahrt etwa ein Viertel des Gases, und das Auto landet mit reichlich Reserve. Mit Helium im 400-l-Tank ist der Tank am Ende der Fahrt fast leer. Die Bahn bleibt gleich, egal was Sie wählen. Nur Gasverbrauch, Druck und Düsenstrahlen ändern sich.",
+      "p5": "Roger Conner, Kurator für Vertikalflug am National Air and Space Museum des Smithsonian, sagte zu CNN: „Wir reden hier buchstäblich vom Hüpfen.“ Die FAA, die US-Luftfahrtbehörde, erklärte gegenüber CBS, das Auto erfülle ihre Definition eines Luftfahrzeugs nicht. Das hier ist also ein Auto, das ein paar Sekunden lang hüpft, und keins, das fliegt."
+    }
+  }
+}
