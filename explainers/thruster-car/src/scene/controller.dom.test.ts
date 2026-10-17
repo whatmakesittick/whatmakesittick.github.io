@@ -80,7 +80,7 @@ describe('thruster car controller', () => {
 
   it.each([
     ['standing at the start', 0],
-    ['rolling over at the peak', MOMENTS.peak],
+    ['upside down over the loop', MOMENTS.inverted],
   ])('aims every follow view at the car centre and rides along, %s', (_moment, phase) => {
     const { rig, shell } = fakeShell();
     const controller = new ThrusterCarController(shell);
@@ -129,7 +129,7 @@ describe('thruster car controller', () => {
     controller.views.frame('boostSide', false);
     const anchor = rig.follow.mock.lastCall?.[0];
     const start = anchor?.getWorldPosition(new Vector3()).x ?? 0;
-    controller.setState(assemblyState(MOMENTS.peak));
+    controller.setState(assemblyState(MOMENTS.inverted));
     expect(anchor?.getWorldPosition(new Vector3()).x).toBeGreaterThan(start);
   });
 

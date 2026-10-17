@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { RUN_BOOST_N, RUN_SECONDS } from '../model';
+import { RUN_SECONDS } from '../model';
 import { createThrusterCarStore } from '../state';
 import type { ThrusterCarStoreState } from '../state';
 import { THEME } from '../theme';
@@ -9,7 +9,6 @@ import { TEST_LOCALE, fill, initTestLocale } from './testing';
 const { units } = TEST_LOCALE;
 const CATCH_SECONDS_IN = 6;
 const AFTER_DRY_SECONDS = 7;
-const FULL_THRUST_N = 32000;
 
 function row(id: string) {
   const found = THRUSTER_CAR_READOUTS.find((readout) => readout.id === id);
@@ -48,9 +47,9 @@ describe('gauge readouts', () => {
     const start = createThrusterCarStore({ phase: 0, playing: false }).getState();
     expect(text('pressure', start)).toBe(fill(units.bar, { value: '700' }));
     expect(row('pressure').meter?.share(start)).toBe(1);
-    expect(text('thrust', start)).toBe(fill(units.kilonewtons, { value: '9.1' }));
-    expect(row('thrust').meter?.share(start)).toBeCloseTo(RUN_BOOST_N / FULL_THRUST_N, 9);
-    expect(text('massFlow', start)).toBe(fill(units.kgPerSecond, { value: '13.0' }));
+    expect(text('thrust', start)).toBe(fill(units.kilonewtons, { value: '56.3' }));
+    expect(row('thrust').meter?.share(start)).toBe(1);
+    expect(text('massFlow', start)).toBe(fill(units.kgPerSecond, { value: '80.6' }));
     expect(text('height', start)).toBe(fill(units.metres, { value: '0.0' }));
     expect(text('speed', start)).toBe(fill(units.kmh, { value: '0' }));
     expect(text('gasLeft', start)).toBe(fill(units.percent, { value: '100' }));
@@ -60,14 +59,14 @@ describe('gauge readouts', () => {
   it('follows the catch and the end of the run as the phase is scrubbed', () => {
     const store = createThrusterCarStore({ playing: false });
     store.getState().setPhase(CATCH_SECONDS_IN);
-    expect(text('thrust', store.getState())).toBe(fill(units.kilonewtons, { value: '28.1' }));
-    expect(text('massFlow', store.getState())).toBe(fill(units.kgPerSecond, { value: '40.3' }));
-    expect(text('height', store.getState())).toBe(fill(units.metres, { value: '2.1' }));
+    expect(text('thrust', store.getState())).toBe(fill(units.kilonewtons, { value: '28.3' }));
+    expect(text('massFlow', store.getState())).toBe(fill(units.kgPerSecond, { value: '40.5' }));
+    expect(text('height', store.getState())).toBe(fill(units.metres, { value: '3.5' }));
     store.getState().setPhase(RUN_SECONDS);
     expect(text('thrust', store.getState())).toBe(fill(units.kilonewtons, { value: '0.0' }));
     expect(text('speed', store.getState())).toBe(fill(units.kmh, { value: '0' }));
-    expect(text('gasLeft', store.getState())).toBe(fill(units.percent, { value: '74' }));
-    expect(text('pressure', store.getState())).toBe(fill(units.bar, { value: '286' }));
+    expect(text('gasLeft', store.getState())).toBe(fill(units.percent, { value: '29' }));
+    expect(text('pressure', store.getState())).toBe(fill(units.bar, { value: '18' }));
   });
 
   it('turns the gas gauge red and stops the jets once helium in the small tank runs dry', () => {

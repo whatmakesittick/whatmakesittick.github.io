@@ -26,9 +26,10 @@ describe('thruster car presets', () => {
 
   it('pauses on the tank and the firing nozzles and plays the rest from its start', () => {
     expect(PRESETS.tank.pauseAt).toBe(0);
-    expect(PRESETS.nozzle.pauseAt).toBe(1);
+    expect(PRESETS.nozzle.pauseAt).toBe(0.5);
     expect(PRESETS.boost.startAt).toBe(0);
-    expect(PRESETS.hop.startAt).toBe(2);
+    expect(PRESETS.hook.startAt).toBe(2);
+    expect(PRESETS.jump.startAt).toBe(MOMENTS.touchdown);
     expect(PRESETS.flip.startAt).toBe(MOMENTS.leavesRamp);
     expect(PRESETS.limits.startAt).toBe(0);
   });
@@ -40,7 +41,12 @@ describe('thruster car presets', () => {
       );
     });
     expect(PRESET_IDS.filter((id) => PRESETS[id].view.tank)).toEqual(['tank', 'limits']);
-    expect(PRESET_IDS.filter((id) => PRESETS[id].view.forces)).toEqual(['nozzle', 'boost', 'flip']);
+    expect(PRESET_IDS.filter((id) => PRESETS[id].view.forces)).toEqual([
+      'nozzle',
+      'boost',
+      'flip',
+      'jump',
+    ]);
   });
 
   it('dims nothing in the limits chapter', () => {

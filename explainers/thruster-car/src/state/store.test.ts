@@ -37,7 +37,7 @@ describe('thruster car store', () => {
       rearThrustKn: 80,
       rollInertia: 600,
     });
-    expect(CALCULATOR_DEFAULTS.launchSpeed).toBe(13.3);
+    expect(CALCULATOR_DEFAULTS.launchSpeed).toBe(11.3);
     expect(CALCULATOR_DEFAULTS.launchSpeed).toBeCloseTo(EXIT_SPEED_MS, 1);
     expect(state).toMatchObject(CALCULATOR_DEFAULTS);
   });
@@ -118,7 +118,7 @@ describe('thruster car store', () => {
     expect(flip.phase).toBe(PRESETS.flip.startAt);
     expect(flip.playing).toBe(true);
     store.getState().applyPreset('nozzle');
-    expect(store.getState()).toMatchObject({ phase: 1, playing: false });
+    expect(store.getState()).toMatchObject({ phase: 0.5, playing: false });
   });
 
   it('plays the run once at the chosen speed and stops at the end', () => {

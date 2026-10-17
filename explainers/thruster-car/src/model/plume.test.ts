@@ -7,7 +7,7 @@ import { PLUME_LENGTH_M, plumeLength, plumeStyle } from './plume';
 describe('plume', () => {
   it('reaches 1.5 m from a corner nozzle at full thrust and nothing when shut', () => {
     expect(plumeLength(CORNER_NOZZLE_MAX_N, 'air')).toBe(PLUME_LENGTH_M);
-    expect(plumeLength(ROLL_NOZZLE_N, 'air')).toBeCloseTo(0.375, 9);
+    expect(plumeLength(ROLL_NOZZLE_N, 'air')).toBeCloseTo(0.9, 9);
     expect(plumeLength(0, 'helium')).toBe(0);
   });
 

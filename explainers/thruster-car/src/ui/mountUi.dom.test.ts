@@ -76,8 +76,8 @@ describe('chapter widgets', () => {
     expect(readout('fillTime')).toBe(fill(units.minutes, { value: '48' }));
     expect(readout('tankShell')).toBe(fill(units.kilograms, { value: '429' }));
     expect(output('nozzle-pressure')).toBe(fill(units.bar, { value: '700' }));
-    expect(readout('nozzleThrust')).toBe(fill(units.kilonewtons, { value: '8.0' }));
-    expect(readout('nozzleFlow')).toBe(fill(units.kgPerSecond, { value: '11.5' }));
+    expect(readout('nozzleThrust')).toBe(fill(units.kilonewtons, { value: '10.0' }));
+    expect(readout('nozzleFlow')).toBe(fill(units.kgPerSecond, { value: '14.3' }));
     expect(readout('exhaustSpeed')).toBe(fill(units.metresPerSecond, { value: '698' }));
     expect(readout('isp')).toBe(fill(units.seconds, { value: '71' }));
     expect(output('rear-thrust')).toBe(fill(units.kilonewtons, { value: '80' }));
@@ -85,20 +85,20 @@ describe('chapter widgets', () => {
     expect(readout('zeroToSixty')).toBe(fill(units.seconds, { value: '0.57' }));
     expect(readout('boostFlow')).toBe(fill(units.kgPerSecond, { value: '115' }));
     expect(readout('boostLasts')).toBe(fill(units.seconds, { value: '2.8' }));
-    expect(output('launch-speed')).toBe(fill(units.metresPerSecond, { value: '13.3' }));
-    expect(thumb('launch-speed')).toEqual({ value: '13.3', step: '0.1' });
-    expect(readout('peakHeight')).toBe(fill(units.metres, { value: '8.0' }));
-    expect(readout('airTime')).toBe(fill(units.seconds, { value: '2.2' }));
-    expect(readout('hopRange')).toBe(fill(units.metres, { value: '22' }));
+    expect(output('launch-speed')).toBe(fill(units.metresPerSecond, { value: '11.3' }));
+    expect(thumb('launch-speed')).toEqual({ value: '11.3', step: '0.1' });
+    expect(readout('peakHeight')).toBe(fill(units.metres, { value: '10.0' }));
+    expect(readout('airTime')).toBe(fill(units.seconds, { value: '1.4' }));
+    expect(readout('hopRange')).toBe(fill(units.metres, { value: '16' }));
     expect(output('roll-inertia')).toBe(fill(units.kgm2, { value: '600' }));
-    expect(readout('rollTime')).toBe(fill(units.seconds, { value: '1.45' }));
-    expect(readout('rollTorque')).toBe(fill(units.kilonewtonMetres, { value: '3.6' }));
-    expect(readout('rollRate')).toBe(fill(units.degreesPerSecond, { value: '249' }));
+    expect(readout('rollTime')).toBe(fill(units.seconds, { value: '0.84' }));
+    expect(readout('rollTorque')).toBe(fill(units.kilonewtonMetres, { value: '10.8' }));
+    expect(readout('rollRate')).toBe(fill(units.degreesPerSecond, { value: '431' }));
     expect(readout('hoverFlow')).toBe(fill(units.kgPerSecond, { value: '23.9' }));
     expect(readout('hoverTime')).toBe(fill(units.seconds, { value: '13.2' }));
     expect(readout('jetPower')).toBe(fill(units.megawatts, { value: '5.8' }));
     expect(readout('totalImpulse')).toBe(fill(units.kilonewtonSeconds, { value: '220' }));
-    expect(readout('runUsed')).toBe(fill(units.percent, { value: '26' }));
+    expect(readout('runUsed')).toBe(fill(units.percent, { value: '71' }));
     expect(readout('runOutcome')).toBe(fill(outcomeState.cushioned, { speed: '2.5' }));
   });
 
@@ -110,21 +110,21 @@ describe('chapter widgets', () => {
     expect(readout('fillPressure')).toBe(fill(units.bar, { value: '257' }));
     expect(readout('fillTime')).toBe(fill(units.minutes, { value: '24' }));
     slide('nozzle-pressure', 350);
-    expect(readout('nozzleThrust')).toBe(fill(units.kilonewtons, { value: '4.0' }));
-    expect(readout('nozzleFlow')).toBe(fill(units.kgPerSecond, { value: '5.7' }));
+    expect(readout('nozzleThrust')).toBe(fill(units.kilonewtons, { value: '5.0' }));
+    expect(readout('nozzleFlow')).toBe(fill(units.kgPerSecond, { value: '7.2' }));
     expect(readout('exhaustSpeed')).toBe(fill(units.metresPerSecond, { value: '698' }));
     slide('rear-thrust', 40);
     expect(readout('boostAccel')).toBe(fill(units.gees, { value: '2.4' }));
     expect(readout('zeroToSixty')).toBe(fill(units.seconds, { value: '1.14' }));
     expect(readout('boostLasts')).toBe(fill(units.seconds, { value: '5.5' }));
     slide('launch-speed', 18);
-    expect(readout('peakHeight')).toBe(fill(units.metres, { value: '11.4' }));
-    expect(readout('airTime')).toBe(fill(units.seconds, { value: '2.8' }));
-    expect(readout('hopRange')).toBe(fill(units.metres, { value: '37' }));
+    expect(readout('peakHeight')).toBe(fill(units.metres, { value: '10.0' }));
+    expect(readout('airTime')).toBe(fill(units.seconds, { value: '1.4' }));
+    expect(readout('hopRange')).toBe(fill(units.metres, { value: '26' }));
     slide('roll-inertia', 900);
-    expect(readout('rollTime')).toBe(fill(units.seconds, { value: '1.77' }));
-    expect(readout('rollRate')).toBe(fill(units.degreesPerSecond, { value: '203' }));
-    expect(readout('rollTorque')).toBe(fill(units.kilonewtonMetres, { value: '3.6' }));
+    expect(readout('rollTime')).toBe(fill(units.seconds, { value: '1.02' }));
+    expect(readout('rollRate')).toBe(fill(units.degreesPerSecond, { value: '352' }));
+    expect(readout('rollTorque')).toBe(fill(units.kilonewtonMetres, { value: '10.8' }));
   });
 
   it('puts the calculators back on a chapter change but keeps the gas and the tank', () => {
@@ -153,7 +153,9 @@ describe('chapter widgets', () => {
     expect(readout('jetPower')).toBe(fill(units.megawatts, { value: '15.2' }));
     expect(readout('totalImpulse')).toBe(fill(units.kilonewtonSeconds, { value: '62' }));
     expect(readout('runUsed')).toBe(fill(units.percent, { value: '81' }));
-    expect(readout('runOutcome')).toBe(fill(outcomeState.ranDry, { seconds: '6.3', speed: '5.6' }));
+    expect(readout('runOutcome')).toBe(
+      fill(outcomeState.ranDry, { seconds: '5.3', speed: '14.0' }),
+    );
   });
 
   it('replays the run from the start and leaves the calculators alone when scrubbed', () => {

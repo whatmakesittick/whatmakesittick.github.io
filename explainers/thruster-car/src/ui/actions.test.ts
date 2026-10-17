@@ -62,9 +62,9 @@ describe('chapter actions and dock', () => {
   });
 
   it('marks a moment only within its tolerance', () => {
-    const store = createThrusterCarStore({ phase: MOMENTS.peak + MOMENT_TOLERANCE_S / 2 });
-    expect(CHAPTER_ACTIONS.moment.current?.(store.getState())).toBe('peak');
-    store.getState().setPhase(MOMENTS.peak + MOMENT_TOLERANCE_S * 2);
+    const store = createThrusterCarStore({ phase: MOMENTS.apex + MOMENT_TOLERANCE_S / 2 });
+    expect(CHAPTER_ACTIONS.moment.current?.(store.getState())).toBe('apex');
+    store.getState().setPhase(MOMENTS.apex + MOMENT_TOLERANCE_S * 2);
     expect(CHAPTER_ACTIONS.moment.current?.(store.getState())).toBe('');
   });
 

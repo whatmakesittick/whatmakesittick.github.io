@@ -42,10 +42,10 @@ describe('thruster car timeline', () => {
 
   it('shows the run time to a tenth of a second and names the part', () => {
     expect(formatPhase(0)).toBe(fill(value, { seconds: '0.0' }));
-    expect(formatPhase(MOMENTS.peak)).toBe(fill(value, { seconds: '4.8' }));
-    expect(describePhase(1)).toBe(fill(during, { seconds: '1.0', phase: detail.boost }));
+    expect(formatPhase(MOMENTS.inverted)).toBe(fill(value, { seconds: '4.1' }));
+    expect(describePhase(4)).toBe(fill(during, { seconds: '4.0', phase: detail.ramp }));
     expect(describePhase(5)).toBe(fill(during, { seconds: '5.0', phase: detail.flip }));
-    expect(describePhase(RUN_SECONDS)).toBe(fill(during, { seconds: '14.0', phase: detail.rest }));
+    expect(describePhase(RUN_SECONDS)).toBe(fill(during, { seconds: '17.0', phase: detail.rest }));
   });
 
   it('plays in real time by default as a plain speed factor', () => {
