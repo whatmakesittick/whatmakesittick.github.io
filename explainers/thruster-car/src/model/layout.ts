@@ -113,12 +113,12 @@ const RIGHT: Point = [0, 0, 1];
 const BACK: Point = [-1, 0, 0];
 
 export const NOZZLES: Readonly<Record<NozzleId, NozzleMount>> = {
-  cornerFrontLeft: { at: [1.6, 0.35, -0.9], dir: DOWN },
-  cornerFrontRight: { at: [1.6, 0.35, 0.9], dir: DOWN },
-  cornerRearLeft: { at: [-1.6, 0.35, -0.9], dir: DOWN },
-  cornerRearRight: { at: [-1.6, 0.35, 0.9], dir: DOWN },
-  frontLeft: { at: [2.2, 0.5, -0.5], dir: LEFT },
-  frontRight: { at: [2.2, 0.5, 0.5], dir: RIGHT },
+  cornerFrontLeft: { at: [1.95, 0.35, -0.9], dir: DOWN },
+  cornerFrontRight: { at: [1.95, 0.35, 0.9], dir: DOWN },
+  cornerRearLeft: { at: [-1.95, 0.35, -0.9], dir: DOWN },
+  cornerRearRight: { at: [-1.95, 0.35, 0.9], dir: DOWN },
+  frontLeft: { at: [2.2, 0.5, -0.765], dir: LEFT },
+  frontRight: { at: [2.2, 0.5, 0.765], dir: RIGHT },
   rearOuterLeft: { at: [-2.25, 0.5, -0.65], dir: BACK },
   rearInnerLeft: { at: [-2.25, 0.5, -0.3], dir: BACK },
   rearInnerRight: { at: [-2.25, 0.5, 0.3], dir: BACK },
