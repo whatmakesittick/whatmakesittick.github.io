@@ -92,7 +92,7 @@ describe('world', () => {
   });
 
   it('lines the cones along the run every 5 m', () => {
-    const cones = all.find((mesh) => mesh instanceof InstancedMesh) as InstancedMesh;
+    const cones = world.object.getObjectByName('cones') as InstancedMesh;
     expect(cones.count).toBe(conePositions().length);
     expect(conePositions()[0]).toBe(SITE.run.x[0]);
     expect(conePositions().at(-1)).toBe(SITE.run.x[1]);

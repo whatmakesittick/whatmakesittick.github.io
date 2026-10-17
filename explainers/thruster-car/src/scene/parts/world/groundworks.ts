@@ -7,7 +7,7 @@ import { footingsGeometry } from '../../geometry/site/rampSupports';
 import { pitLinerGeometry } from '../../geometry/site/slab';
 import { mergeParts, partMesh } from '../context';
 import type { PartContext } from '../context';
-import { WORLD_PAINT, concreteFinish } from './finishes';
+import { CONCRETE_LOOKS, concreteFinish } from './finishes';
 
 export function createGroundworks(
   context: PartContext,
@@ -20,7 +20,7 @@ export function createGroundworks(
     context,
     mergeParts(parts),
     STRUCTURE_GROUP,
-    concreteFinish(concrete.map, concrete.normal, WORLD_PAINT.pitConcrete),
+    concreteFinish(concrete.map, concrete.normal, CONCRETE_LOOKS.pit),
   );
   mesh.name = 'groundworks';
   return mesh;

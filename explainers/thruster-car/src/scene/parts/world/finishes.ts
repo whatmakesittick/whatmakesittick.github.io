@@ -13,12 +13,19 @@ export const WORLD_PAINT = {
 } as const;
 
 const PAINT_ALPHA_TEST = 0.5;
+const CARD_ALPHA_TEST = 0.45;
 const PAINT_OFFSET = -2;
 const CONCRETE_RELIEF = 0.55;
 const TREAD_RELIEF = 0.9;
 
 export const WORLD_FINISHES = {
-  bushes: { color: WORLD_PAINT.white, vertexColors: true, roughness: 0.95, metalness: 0 },
+  bushes: {
+    color: WORLD_PAINT.white,
+    vertexColors: true,
+    roughness: 1,
+    metalness: 0,
+    envMapIntensity: 0,
+  },
   cones: { color: WORLD_PAINT.white, vertexColors: true, roughness: 0.55, metalness: 0 },
   deckUnderside: { color: WORLD_PAINT.deckUnderside, roughness: 0.62, metalness: 0.55 },
   rails: { color: WORLD_PAINT.railSteel, roughness: 0.32, metalness: 0.85 },
@@ -26,16 +33,64 @@ export const WORLD_FINISHES = {
 } as const satisfies Record<string, MaterialFinish>;
 
 export function groundFinish(map: Texture): MaterialFinish {
-  return { color: WORLD_PAINT.white, map, vertexColors: true, roughness: 1, metalness: 0 };
+  return {
+    color: WORLD_PAINT.white,
+    map,
+    vertexColors: true,
+    roughness: 1,
+    metalness: 0,
+    envMapIntensity: 0,
+  };
 }
 
-export function concreteFinish(map: Texture, normalMap: Texture, color: string): MaterialFinish {
+export function decalFinish(map: Texture): MaterialFinish {
   return {
-    color,
+    color: WORLD_PAINT.white,
+    map,
+    transparent: true,
+    depthWrite: false,
+    roughness: 1,
+    metalness: 0,
+    envMapIntensity: 0,
+    polygonOffset: true,
+    polygonOffsetFactor: PAINT_OFFSET,
+    polygonOffsetUnits: PAINT_OFFSET,
+  };
+}
+
+export function cardFinish(map: Texture): MaterialFinish {
+  return {
+    color: WORLD_PAINT.white,
+    map,
+    vertexColors: true,
+    alphaTest: CARD_ALPHA_TEST,
+    roughness: 1,
+    metalness: 0,
+    envMapIntensity: 0,
+  };
+}
+
+export interface ConcreteLook {
+  color: string;
+  roughness: number;
+  envMapIntensity: number;
+}
+
+export const CONCRETE_LOOKS = {
+  runway: { color: WORLD_PAINT.white, roughness: 0.7, envMapIntensity: 0.45 },
+  pit: { color: WORLD_PAINT.pitConcrete, roughness: 0.93, envMapIntensity: 1 },
+} as const satisfies Record<string, ConcreteLook>;
+
+export function concreteFinish(
+  map: Texture,
+  normalMap: Texture,
+  look: ConcreteLook,
+): MaterialFinish {
+  return {
+    ...look,
     map,
     normalMap,
     normalScale: new Vector2(CONCRETE_RELIEF, CONCRETE_RELIEF),
-    roughness: 0.93,
     metalness: 0,
   };
 }

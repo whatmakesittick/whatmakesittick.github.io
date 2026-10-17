@@ -18,12 +18,13 @@ export const SKY = {
   widthSegments: 32,
   heightSegments: 16,
   renderOrder: -1000,
-  haze: 0.075,
-  middle: 0.2,
+  haze: 0.012,
   zenith: 0.85,
-  warmthPower: 2.4,
-  awayMix: 0.4,
-  glow: { elevation: 0.035, core: 600, coreStrength: 0.85, halo: 9, haloStrength: 0.5, white: 0.4 },
+  warmthPower: 2,
+  reach: { low: [0.035, 0.1], middle: [0.16, 0.4] },
+  peach: 0.45,
+  away: { low: 0.5, high: 0.3 },
+  glow: { elevation: 0.03, core: 500, coreStrength: 0.9, halo: 7, haloStrength: 0.55, white: 0.45 },
   clouds: {
     scale: 0.7,
     lift: 0.1,
@@ -35,6 +36,7 @@ export const SKY = {
     stretch: [0.3, 3.2],
     lit: 0.15,
     shade: 0.5,
+    rim: { reach: 0.35, contrast: 6, white: 0.55 },
   },
 } as const;
 
@@ -51,13 +53,18 @@ const FRAGMENT = /* glsl */ `
 uniform vec3 uZenith;
 uniform vec3 uMiddle;
 uniform vec3 uHorizon;
-uniform vec3 uAway;
+uniform vec3 uPeach;
+uniform vec3 uAwayLow;
+uniform vec3 uAwayHigh;
 uniform vec3 uFog;
 uniform vec3 uGlow;
 uniform vec3 uCloudLit;
 uniform vec3 uCloudShade;
+uniform vec3 uCloudRim;
+uniform vec4 uReach;
+uniform vec2 uRim;
 uniform vec3 uSun;
-uniform vec4 uBands;
+uniform vec3 uBands;
 uniform vec4 uGlowShape;
 uniform vec4 uCloud;
 uniform vec4 uCloudBand;
@@ -93,10 +100,15 @@ float fbm(vec2 p) {
 }
 
 vec3 gradient(float up, float warmth) {
-  vec3 horizon = mix(uAway, uHorizon, warmth);
-  float reach = uBands.y * mix(0.7, 1.7, warmth);
-  vec3 sky = mix(horizon, uMiddle, smoothstep(0.0, reach, up));
-  return mix(sky, uZenith, smoothstep(uBands.y * 0.6, uBands.z, up));
+  float low = mix(uReach.x, uReach.y, warmth);
+  float middle = mix(uReach.z, uReach.w, warmth);
+  vec3 sky = mix(mix(uAwayLow, uPeach, warmth), mix(uAwayHigh, uHorizon, warmth), smoothstep(0.0, low, up));
+  sky = mix(sky, uMiddle, smoothstep(low * 0.5, middle, up));
+  return mix(sky, uZenith, smoothstep(middle * 0.7, uBands.y, up));
+}
+
+float cloudShape(vec2 plane) {
+  return fbm(plane * uStretch + vec2(3.1, 7.7)) * 0.7 + fbm(plane * 1.7 + vec2(11.0, 2.0)) * 0.3;
 }
 
 float glow(vec3 direction) {
@@ -110,12 +122,16 @@ vec3 clouds(vec3 sky, vec3 direction, float up, float warmth) {
   if (band <= 0.0) return sky;
   float c = cos(uCloudBand.w);
   float s = sin(uCloudBand.w);
-  vec2 plane = mat2(c, -s, s, c) * (direction.xz / (up + uCloud.y) * uCloud.x);
-  float streaks = fbm(plane * uStretch + vec2(3.1, 7.7));
-  float breakup = fbm(plane * 1.7 + vec2(11.0, 2.0));
-  float cover = smoothstep(uCloud.z, uCloud.z + uCloud.w, streaks * 0.7 + breakup * 0.3);
+  mat2 turn = mat2(c, -s, s, c);
+  vec2 plane = turn * (direction.xz / (up + uCloud.y) * uCloud.x);
+  float shape = cloudShape(plane);
+  float cover = smoothstep(uCloud.z, uCloud.z + uCloud.w, shape);
+  if (cover <= 0.0) return sky;
   float under = 1.0 - smoothstep(0.0, uCloudBand.y, up);
   vec3 cloud = mix(uCloudShade, uCloudLit, clamp(warmth * 0.8 + under * 0.3, 0.0, 1.0));
+  float ahead = cloudShape(plane + turn * normalize(uSun.xz) * uRim.x);
+  float rim = clamp((shape - ahead) * uRim.y, 0.0, 1.0) * warmth;
+  cloud = mix(cloud, uCloudRim, rim);
   return mix(sky, cloud, cover * band * uCloudBand.z);
 }
 
@@ -123,7 +139,7 @@ void main() {
   vec3 direction = normalize(vDirection);
   float up = max(direction.y, 0.0);
   vec2 bearing = normalize(direction.xz + vec2(1e-5));
-  float warmth = pow(dot(bearing, normalize(uSun.xz)) * 0.5 + 0.5, uBands.w);
+  float warmth = pow(dot(bearing, normalize(uSun.xz)) * 0.5 + 0.5, uBands.z);
   vec3 sky = gradient(up, warmth);
   sky = mix(sky, uGlow, clamp(glow(direction), 0.0, 1.0));
   sky = clouds(sky, direction, up, warmth);
@@ -142,20 +158,26 @@ export function glowDirection(): Vector3 {
 }
 
 export function skyUniforms() {
-  const { glow, clouds } = SKY;
+  const { glow, clouds, reach, away } = SKY;
   const white = new Color(1, 1, 1);
+  const horizon = new Color(THEME.skyHorizon);
   const shade = new Color(THEME.skyMiddle).lerp(new Color(THEME.skyZenith), clouds.shade);
   return {
     uZenith: { value: new Color(THEME.skyZenith) },
     uMiddle: { value: new Color(THEME.skyMiddle) },
-    uHorizon: { value: new Color(THEME.skyHorizon) },
-    uAway: { value: new Color(THEME.fog).lerp(new Color(THEME.skyMiddle), SKY.awayMix) },
+    uHorizon: { value: horizon },
+    uPeach: { value: horizon.clone().lerp(white, SKY.peach) },
+    uAwayLow: { value: new Color(THEME.fog).lerp(horizon, away.low) },
+    uAwayHigh: { value: new Color(THEME.skyMiddle).lerp(horizon, away.high) },
+    uReach: { value: new Vector4(...reach.low, ...reach.middle) },
+    uRim: { value: new Vector2(clouds.rim.reach, clouds.rim.contrast) },
+    uCloudRim: { value: new Color(THEME.keyLight).lerp(white, clouds.rim.white) },
     uFog: { value: new Color(THEME.fog) },
     uGlow: { value: new Color(THEME.keyLight).lerp(white, glow.white) },
     uCloudLit: { value: new Color(THEME.keyLight).lerp(white, clouds.lit) },
     uCloudShade: { value: shade },
     uSun: { value: glowDirection() },
-    uBands: { value: new Vector4(SKY.haze, SKY.middle, SKY.zenith, SKY.warmthPower) },
+    uBands: { value: new Vector3(SKY.haze, SKY.zenith, SKY.warmthPower) },
     uGlowShape: {
       value: new Vector4(glow.core, glow.coreStrength, glow.halo, glow.haloStrength),
     },

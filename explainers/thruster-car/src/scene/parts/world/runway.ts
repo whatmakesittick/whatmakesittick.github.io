@@ -17,7 +17,13 @@ import type { Pit } from '../../geometry/site/pit';
 import { slabGeometry } from '../../geometry/site/slab';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
-import { MARK_COLOURS, WORLD_FINISHES, WORLD_PAINT, concreteFinish, paintFinish } from './finishes';
+import {
+  CONCRETE_LOOKS,
+  MARK_COLOURS,
+  WORLD_FINISHES,
+  concreteFinish,
+  paintFinish,
+} from './finishes';
 
 export interface RunwayPart {
   object: Group;
@@ -51,6 +57,7 @@ function createCones(context: PartContext): InstancedMesh {
     matrix.compose(new Vector3(x, 0, SITE.coneLineZ), turn, scale);
     cones.setMatrixAt(index, matrix);
   });
+  cones.name = 'cones';
   cones.instanceMatrix.needsUpdate = true;
   cones.computeBoundingSphere();
   context.tracker.track(cones);
@@ -69,7 +76,7 @@ export function createRunway(
     context,
     slabGeometry(SITE.run, pit),
     'runway',
-    concreteFinish(concrete.map, concrete.normal, WORLD_PAINT.white),
+    concreteFinish(concrete.map, concrete.normal, CONCRETE_LOOKS.runway),
   );
   const start = partMesh(
     context,
