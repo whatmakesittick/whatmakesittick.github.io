@@ -4,6 +4,7 @@ import type { ThrusterCarStore } from '../state';
 import { mountBoostReadouts } from './mountBoostReadouts';
 import { mountFlipReadouts } from './mountFlipReadouts';
 import { mountHookReadouts } from './mountHookReadouts';
+import { mountJumpReadouts } from './mountJumpReadouts';
 import { mountLimitsReadouts } from './mountLimitsReadouts';
 import { mountNozzleReadouts } from './mountNozzleReadouts';
 import { mountTankReadouts } from './mountTankReadouts';
@@ -19,6 +20,7 @@ export function mountThrusterCarUi(root: Document, store: ThrusterCarStore): Dis
     mountBoostReadouts(root, store),
     mountHookReadouts(root, store),
     mountFlipReadouts(root, store),
+    mountJumpReadouts(root, store),
     mountLimitsReadouts(root, store),
   ]);
 }

@@ -5,6 +5,7 @@ import type { GasId, PresetId, TankChoiceId, ViewOptions } from '../ids';
 import {
   DEFAULT_TANK_LITRES,
   ENTRY_SPEED_MS,
+  JUMP_HEIGHT_M,
   NEWTONS_PER_KILONEWTON,
   REAR_THRUST_FULL_N,
   ROLL_INERTIA_KG_M2,
@@ -28,6 +29,7 @@ export interface CalculatorFields {
   rearThrustKn: number;
   entrySpeed: number;
   rollInertia: number;
+  jumpHeight: number;
 }
 
 export interface SteppedRange {
@@ -51,6 +53,7 @@ export interface ThrusterCarOwnActions {
   setRearThrustKn(kn: number): void;
   setEntrySpeed(ms: number): void;
   setRollInertia(kgm2: number): void;
+  setJumpHeight(metres: number): void;
 }
 
 export type ThrusterCarState = PlaybackState & ThrusterCarFields;
@@ -75,6 +78,7 @@ export const CALCULATOR_RANGES: Readonly<Record<keyof CalculatorFields, SteppedR
   rearThrustKn: { min: 10, max: REAR_THRUST_FULL_N / NEWTONS_PER_KILONEWTON, step: 5 },
   entrySpeed: { min: 15, max: 24, step: 0.5 },
   rollInertia: { min: 500, max: 900, step: 50 },
+  jumpHeight: { min: 4, max: 12, step: 0.5 },
 };
 
 export const CALCULATOR_DEFAULTS: Readonly<CalculatorFields> = {
@@ -83,6 +87,7 @@ export const CALCULATOR_DEFAULTS: Readonly<CalculatorFields> = {
   rearThrustKn: REAR_THRUST_FULL_N / NEWTONS_PER_KILONEWTON,
   entrySpeed: ENTRY_SPEED_MS,
   rollInertia: ROLL_INERTIA_KG_M2,
+  jumpHeight: JUMP_HEIGHT_M,
 };
 
 const TANK_CHOICES: ReadonlySet<number> = new Set(Object.values(TANK_LITRES));
@@ -135,6 +140,7 @@ export function createThrusterCarStore(
           setRearThrustKn: snapped('rearThrustKn'),
           setEntrySpeed: snapped('entrySpeed'),
           setRollInertia: snapped('rollInertia'),
+          setJumpHeight: snapped('jumpHeight'),
         };
       },
       presetState: presetFields,

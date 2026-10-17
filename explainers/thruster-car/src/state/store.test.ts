@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { TANK_CHOICE_IDS } from '../ids';
-import { DEFAULT_TANK_LITRES, ENTRY_SPEED_MS, RUN_SECONDS, TANK_LITRES } from '../model';
+import {
+  DEFAULT_TANK_LITRES,
+  ENTRY_SPEED_MS,
+  JUMP_HEIGHT_M,
+  RUN_SECONDS,
+  TANK_LITRES,
+} from '../model';
 import { PRESETS } from './presets';
 import {
   CALCULATOR_DEFAULTS,
@@ -37,33 +43,43 @@ describe('thruster car store', () => {
       rearThrustKn: 80,
       entrySpeed: 18,
       rollInertia: 600,
+      jumpHeight: 8,
     });
     expect(CALCULATOR_DEFAULTS.entrySpeed).toBe(ENTRY_SPEED_MS);
+    expect(CALCULATOR_DEFAULTS.jumpHeight).toBe(JUMP_HEIGHT_M);
     expect(state).toMatchObject(CALCULATOR_DEFAULTS);
   });
 
   it('clamps and snaps every calculator to its range', () => {
     const store = createThrusterCarStore();
-    const { setFillShare, setPressureBar, setRearThrustKn, setEntrySpeed, setRollInertia } =
-      store.getState();
-    setFillShare(0.37);
-    setPressureBar(420);
-    setRearThrustKn(3);
-    setEntrySpeed(19.3);
-    setRollInertia(2000);
+    const state = store.getState();
+    state.setFillShare(0.37);
+    state.setPressureBar(420);
+    state.setRearThrustKn(3);
+    state.setEntrySpeed(19.3);
+    state.setRollInertia(2000);
+    state.setJumpHeight(9.8);
     expect(store.getState()).toMatchObject({
       fillShare: 0.35,
       pressureBar: 400,
       rearThrustKn: 10,
       entrySpeed: 19.5,
       rollInertia: 900,
+      jumpHeight: 10,
     });
-    setFillShare(-1);
-    setPressureBar(10_000);
-    setEntrySpeed(9);
-    expect(store.getState()).toMatchObject({ fillShare: 0, pressureBar: 700, entrySpeed: 15 });
-    setEntrySpeed(30);
-    expect(store.getState().entrySpeed).toBe(24);
+    state.setFillShare(-1);
+    state.setPressureBar(10_000);
+    state.setEntrySpeed(9);
+    state.setJumpHeight(1);
+    expect(store.getState()).toMatchObject({
+      fillShare: 0,
+      pressureBar: 700,
+      entrySpeed: 15,
+      jumpHeight: 4,
+    });
+    state.setEntrySpeed(30);
+    state.setJumpHeight(20);
+    expect(store.getState()).toMatchObject({ entrySpeed: 24, jumpHeight: 12 });
   });
 
   it('snaps without float noise', () => {
@@ -96,6 +112,7 @@ describe('thruster car store', () => {
     state.setFillShare(0.5);
     state.setEntrySpeed(22);
     state.setRollInertia(800);
+    state.setJumpHeight(11.5);
     state.applyPreset('nozzle');
     expect(store.getState()).toMatchObject({
       ...CALCULATOR_DEFAULTS,

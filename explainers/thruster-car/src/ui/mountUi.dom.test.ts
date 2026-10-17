@@ -1,5 +1,7 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { mountActions } from '@core/ui/actions';
+import type { MomentId } from '../ids';
+import { MOMENTS } from '../model';
 import { createThrusterCarStore } from '../state';
 import type { ThrusterCarStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
@@ -10,6 +12,15 @@ const { units, chapters } = TEST_LOCALE;
 const { outcomeState } = chapters.limits;
 const READOUT_COUNT = 31;
 const SCRUBBED_PHASE = 9;
+const CHAPTER_MOMENTS: readonly MomentId[] = [
+  'inverted',
+  'leavesRamp',
+  'rollComplete',
+  'touchdown',
+  'liftOff',
+  'apex',
+  'landed',
+];
 
 function readout(id: string): string | null | undefined {
   return document.querySelector(`[data-readout="${id}"]`)?.textContent;
@@ -95,6 +106,13 @@ describe('chapter widgets', () => {
     expect(readout('rollTime')).toBe(fill(units.seconds, { value: '0.84' }));
     expect(readout('rollTorque')).toBe(fill(units.kilonewtonMetres, { value: '10.8' }));
     expect(readout('rollRate')).toBe(fill(units.degreesPerSecond, { value: '431' }));
+    expect(output('jump-height')).toBe(fill(units.metres, { value: '8.0' }));
+    expect(thumb('jump-height')).toEqual({ value: '8', step: '0.5' });
+    expect(readout('leapSpeed')).toBe(fill(units.metresPerSecond, { value: '9.6' }));
+    expect(readout('leapBurn')).toBe(fill(units.seconds, { value: '0.70' }));
+    expect(readout('leapGas')).toBe(fill(units.kilograms, { value: '40' }));
+    expect(readout('jumpAir')).toBe(fill(units.seconds, { value: '2.3' }));
+    expect(readout('jumpRange')).toBe(fill(units.metres, { value: '44' }));
     expect(readout('hoverFlow')).toBe(fill(units.kgPerSecond, { value: '23.9' }));
     expect(readout('hoverTime')).toBe(fill(units.seconds, { value: '13.2' }));
     expect(readout('jetPower')).toBe(fill(units.megawatts, { value: '5.8' }));
@@ -132,16 +150,30 @@ describe('chapter widgets', () => {
     expect(readout('rollTime')).toBe(fill(units.seconds, { value: '1.02' }));
     expect(readout('rollRate')).toBe(fill(units.degreesPerSecond, { value: '352' }));
     expect(readout('rollTorque')).toBe(fill(units.kilonewtonMetres, { value: '10.8' }));
+    slide('jump-height', 12);
+    expect(store.getState().jumpHeight).toBe(12);
+    expect(output('jump-height')).toBe(fill(units.metres, { value: '12.0' }));
+    expect(readout('leapSpeed')).toBe(fill(units.metresPerSecond, { value: '11.7' }));
+    expect(readout('leapBurn')).toBe(fill(units.seconds, { value: '0.85' }));
+    expect(readout('leapGas')).toBe(fill(units.kilograms, { value: '49' }));
+    expect(readout('jumpAir')).toBe(fill(units.seconds, { value: '2.8' }));
+    expect(readout('jumpRange')).toBe(fill(units.metres, { value: '54' }));
+    slide('jump-height', 4);
+    expect(readout('leapSpeed')).toBe(fill(units.metresPerSecond, { value: '6.8' }));
+    expect(readout('jumpRange')).toBe(fill(units.metres, { value: '31' }));
   });
 
   it('puts the calculators back on a chapter change but keeps the gas and the tank', () => {
     slide('tank-fill', 0.5);
     slide('entry-speed', 22);
+    slide('jump-height', 11);
     click('gas', 'helium');
     store.getState().applyPreset('nozzle');
     expect(output('tank-fill')).toBe(fill(units.percent, { value: '100' }));
     expect(output('entry-speed')).toBe(fill(units.metresPerSecond, { value: '18.0' }));
     expect(readout('loopTopSpeed')).toBe(fill(units.metresPerSecond, { value: '11.3' }));
+    expect(output('jump-height')).toBe(fill(units.metres, { value: '8.0' }));
+    expect(readout('leapGas')).toBe(fill(units.kilograms, { value: '15' }));
     expect(readout('fillMass')).toBe(fill(units.kilograms, { value: '51' }));
     expect(pressed('gas', 'helium')).toEqual(['true', 'true', 'true']);
   });
@@ -154,6 +186,7 @@ describe('chapter widgets', () => {
     expect(readout('exhaustSpeed')).toBe(fill(units.metresPerSecond, { value: '1,823' }));
     expect(readout('isp')).toBe(fill(units.seconds, { value: '186' }));
     expect(readout('fillWork')).toBe(fill(units.megajoulesPair, { mj: '178', kwh: '49.4' }));
+    expect(readout('leapGas')).toBe(fill(units.kilograms, { value: '15' }));
     click('tank', '400');
     expect(store.getState().tankLitres).toBe(400);
     expect(pressed('tank', '400')).toEqual(['true', 'true']);
@@ -166,6 +199,19 @@ describe('chapter widgets', () => {
     expect(readout('runOutcome')).toBe(
       fill(outcomeState.ranDry, { seconds: '5.3', speed: '14.0' }),
     );
+  });
+
+  it('seeks to each moment chip, pauses there and marks only that chip', () => {
+    const chips = [...document.querySelectorAll<HTMLElement>('[data-action="moment"]')];
+    expect(chips.map((chip) => chip.dataset.value)).toEqual(CHAPTER_MOMENTS);
+    store.getState().play();
+    CHAPTER_MOMENTS.forEach((moment) => {
+      click('moment', moment);
+      expect(store.getState()).toMatchObject({ phase: MOMENTS[moment], playing: false });
+      CHAPTER_MOMENTS.forEach((other) =>
+        expect(pressed('moment', other), other).toEqual([String(other === moment)]),
+      );
+    });
   });
 
   it('replays the run from the start and leaves the calculators alone when scrubbed', () => {
