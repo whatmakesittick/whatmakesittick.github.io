@@ -81,10 +81,10 @@ export class FanGlow {
 
   private paint(): void {
     const { r, g, b } = this.colour;
-    SPOTS.forEach(([x], index) => {
-      const alpha = FAN_GLOW.opacity * pulse(this.time, x * FAN_GLOW.pulse.wave);
+    for (let index = 0; index < SPOTS.length; index++) {
+      const alpha = FAN_GLOW.opacity * pulse(this.time, SPOTS[index][0] * FAN_GLOW.pulse.wave);
       this.spots.setColor(index, r, g, b, alpha);
-    });
+    }
     this.spots.commit();
     this.pool.scale.setScalar(1 + FAN_GLOW.pool.swell * (pulse(this.time, 0) - 1));
   }

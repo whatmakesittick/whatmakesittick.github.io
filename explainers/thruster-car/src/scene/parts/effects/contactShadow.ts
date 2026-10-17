@@ -43,7 +43,6 @@ export class ContactShadow {
   setState(car: CarReading): void {
     this.mesh.visible = car.onGround;
     if (!car.onGround) return;
-    const [x, , z] = car.position;
-    this.mesh.position.set(x, CONTACT_SHADOW.lift, z);
+    this.mesh.position.set(car.position[0], CONTACT_SHADOW.lift, car.position[2]);
   }
 }

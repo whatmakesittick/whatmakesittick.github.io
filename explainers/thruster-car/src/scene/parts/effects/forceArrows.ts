@@ -1,6 +1,6 @@
 import { Group, Object3D, Quaternion, Vector3 } from 'three';
 import { NOZZLE_IDS } from '../../../ids';
-import type { AssemblyState, NozzleId } from '../../../ids';
+import type { AssemblyState } from '../../../ids';
 import { NOZZLES } from '../../../model/layout';
 import { CAR_MASS_KG, G } from '../../../model/constants';
 import { unitHead, unitShaft } from '../../geometry/effects/arrow';
@@ -29,13 +29,14 @@ export const WEIGHT_LENGTH = forceLength(CAR_MASS_KG * G);
 
 export function netThrustInCar(state: FiringState, target: Vector3): Vector3 {
   target.set(0, 0, 0);
-  NOZZLE_IDS.forEach((id) => {
-    const [x, y, z] = NOZZLES[id].dir;
+  for (let index = 0; index < NOZZLE_IDS.length; index++) {
+    const id = NOZZLE_IDS[index];
+    const dir = NOZZLES[id].dir;
     const thrust = firingThrust(state, id);
-    target.x -= x * thrust;
-    target.y -= y * thrust;
-    target.z -= z * thrust;
-  });
+    target.x -= dir[0] * thrust;
+    target.y -= dir[1] * thrust;
+    target.z -= dir[2] * thrust;
+  }
   return target;
 }
 
@@ -44,7 +45,9 @@ export class ForceArrows {
   readonly label = new Object3D();
   private readonly weight: ForceArrow;
   private readonly net: ForceArrow;
-  private readonly pushes: Readonly<Record<NozzleId, ForceArrow>>;
+  private readonly pushes: readonly ForceArrow[];
+  private readonly all: readonly ForceArrow[];
+  private readonly mouths: readonly Object3D[];
   private readonly centre = new Vector3();
   private readonly mouth = new Vector3();
   private readonly turn = new Quaternion();
@@ -61,17 +64,17 @@ export class ForceArrows {
     const thrustTone = context.materials.get('forceArrows', ARROW_FINISHES.thrust);
     this.weight = new ForceArrow(shapes, weightTone, MAIN_ARROW);
     this.net = new ForceArrow(shapes, thrustTone, MAIN_ARROW);
-    this.pushes = Object.fromEntries(
-      NOZZLE_IDS.map((id) => [id, new ForceArrow(shapes, thrustTone, NOZZLE_ARROW, true)]),
-    ) as Record<NozzleId, ForceArrow>;
-    this.arrows().forEach((arrow) => this.object.add(arrow.object));
+    this.pushes = NOZZLE_IDS.map(() => new ForceArrow(shapes, thrustTone, NOZZLE_ARROW, true));
+    this.mouths = NOZZLE_IDS.map((id) => car.nozzle(id));
+    this.all = [this.weight, this.net, ...this.pushes];
+    this.all.forEach((arrow) => this.object.add(arrow.object));
     this.object.add(this.label);
     this.object.visible = false;
   }
 
   setState(state: AssemblyState): void {
     const shown = state.view.forces;
-    if (!shown && this.object.visible) this.arrows().forEach((arrow) => arrow.reset());
+    if (!shown && this.object.visible) this.resetAll();
     this.object.visible = shown;
     if (!shown) return;
     this.car.anchors.car.getWorldPosition(this.centre);
@@ -80,33 +83,36 @@ export class ForceArrows {
     const net = netThrustInCar(state, this.direction).applyQuaternion(this.turn);
     const netLength = forceLength(net.length());
     this.net.aim(this.centre, net.normalize(), netLength);
-    NOZZLE_IDS.forEach((id) => this.aimPush(id, firingThrust(state, id)));
+    for (let index = 0; index < NOZZLE_IDS.length; index++) {
+      this.aimPush(index, firingThrust(state, NOZZLE_IDS[index]));
+    }
     this.placeLabel();
   }
 
   advance(deltaSeconds: number): boolean {
     if (!this.object.visible) return false;
-    const moving = this.arrows()
-      .map((arrow) => arrow.advance(deltaSeconds))
-      .some(Boolean);
+    let moving = false;
+    for (let index = 0; index < this.all.length; index++) {
+      if (this.all[index].advance(deltaSeconds)) moving = true;
+    }
     if (moving) this.placeLabel();
     return moving;
   }
 
-  private aimPush(id: NozzleId, thrust: number): void {
-    const nozzle = this.car.nozzle(id);
+  private resetAll(): void {
+    for (let index = 0; index < this.all.length; index++) this.all[index].reset();
+  }
+
+  private aimPush(index: number, thrust: number): void {
+    const nozzle = this.mouths[index];
     nozzle.getWorldPosition(this.mouth);
     nozzle.getWorldQuaternion(this.turn);
     const push = this.direction.copy(PLUME_AXIS).applyQuaternion(this.turn).negate();
-    this.pushes[id].aim(this.mouth, push, forceLength(thrust));
+    this.pushes[index].aim(this.mouth, push, forceLength(thrust));
   }
 
   private placeLabel(): void {
     this.weight.object.updateMatrix();
     this.weight.tip(this.label.position);
-  }
-
-  private arrows(): ForceArrow[] {
-    return [this.weight, this.net, ...NOZZLE_IDS.map((id) => this.pushes[id])];
   }
 }
