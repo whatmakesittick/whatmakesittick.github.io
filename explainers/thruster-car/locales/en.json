@@ -23,6 +23,9 @@
       "sprint": "Sprint",
       "settle": "Slowdown",
       "ramp": "Hook",
+      "brake": "Braking",
+      "hold": "Hold",
+      "deck": "Push-off",
       "flip": "Flip",
       "catch": "Catch",
       "runUp": "Run-up",
@@ -35,6 +38,9 @@
       "sprint": "Jump to the sprint",
       "settle": "Jump to the slowdown",
       "ramp": "Jump to the hook",
+      "brake": "Jump to the braking",
+      "hold": "Jump to the hold",
+      "deck": "Jump to the push-off",
       "flip": "Jump to the flip",
       "catch": "Jump to the catch",
       "runUp": "Jump to the run-up",
@@ -46,10 +52,13 @@
     "detail": {
       "sprint": "the four rear jets push the car from 0 to 60 mph in about 0.81 s",
       "settle": "the jets stop and the car brakes to 18 m/s before the ramp",
-      "ramp": "the car climbs the loop, comes over the top and runs the deck upside down",
+      "ramp": "the car climbs the loop and comes over the top upside down",
+      "brake": "the car brakes to a stop, hanging upside down under the deck",
+      "hold": "the car hangs still under the deck, held by its fans alone",
+      "deck": "the rear jets push the car along the deck and off the end at about 7 m/s",
       "flip": "the car drops off the deck and the corner jets roll it upright",
       "catch": "all four corner jets fire down and slow the fall to about 2.5 m/s",
-      "runUp": "the rear jets take the car from about 11 to 15 m/s",
+      "runUp": "the rear jets take the car from about 7 to 15 m/s",
       "leap": "the four corner jets push down with about 40 kN and lift the car",
       "twist": "the car arcs over the parked row and rolls through a full turn",
       "landing": "the corner jets fire down again and set the car down softly",
@@ -58,6 +67,7 @@
     "moment": {
       "sixty": "60 mph",
       "inverted": "Upside down at the top",
+      "held": "Held on the hook",
       "leavesRamp": "Leaves the ramp",
       "rollComplete": "Upright again",
       "touchdown": "First touchdown",
@@ -181,7 +191,7 @@
       "topG": "Load at the top",
       "dropTime": "Fall from the deck, no jets",
       "track": "Ramp",
-      "trackValue": "a 5 m loop and an 8 m deck 10 m up, the model's ramp",
+      "trackValue": "a 5 m loop and a 16 m deck 10 m up, the model's ramp",
       "fans": "Fan pull",
       "fansValue": "up to 2 g of pull, Tesla's figure",
       "tesla": "Tesla's jump",
@@ -249,7 +259,7 @@
       "p2": "The car on this page is a generic one, not Tesla's. It is a single-seat electric sports car of 1.7 tonnes, the weight Tesla aims for. The <strong>driver's seat</strong> is on the left. Where a second seat would be sits the <strong>air tank</strong>, and its <strong>tank valve</strong> lets the gas out to the nozzles. Reports say the real tank is filled to about 700 bar, which is 700 times the air pressure around you.",
       "p3": "How big is the tank? Reports give 400 L and 600 L, and the sources disagree. So the model uses 600 L and lets you try 400 L. At 700 bar, air is packed tight: 100 L of it holds about 53 kg, so 600 L holds about 315 kg. Walls that hold this must be strong and light, so they are wound from carbon fibre. The hydrogen tanks of the first Toyota Mirai work at the same pressure. They weigh about 0.71 kg for every litre they hold. By that measure, a 600 L tank would weigh about 430 kg before any gas goes in.",
       "p4": "Squeezed air stores energy, like a wound spring. As 100 L of it expands, it can do about 24 megajoules (MJ) of work, or 6.6 kilowatt hours (kWh). Tesla says a refill takes six or seven hours today, and it aims for 30 minutes. Drag the fill slider to see the least work a perfect pump would need, and how long that takes at 50 kW. Real pumps need more. The pressure on the slider follows the model's curve for air at room temperature. It climbs faster than the mass, because tightly packed air resists being squeezed further. Like every slider on this page, this one is a calculator: it shows the sums and leaves the 3D run alone.",
-      "p5": "On the day, Tesla ran three tests, with different cars: a timed sprint from 0 to 60 mph, a drive round a hook-shaped ramp, and a jump over parked vehicles. This page chains all three into one run of 17 seconds, played in real time. The motion is the model's own script. The gas and the tank you pick change how much gas the run uses, the pressure and the jets. The model stops the jets when the tank drops below about 5 bar, its own cut-off. If that happens before a landing, your choice changes the landing speed too. It never changes the path."
+      "p5": "On the day, Tesla ran three tests, with different cars: a timed sprint from 0 to 60 mph, a drive round a hook-shaped ramp, and a jump over parked vehicles. This page chains all three into one run of 23 seconds, played in real time. The motion is the model's own script. The gas and the tank you pick change how much gas the run uses, the pressure and the jets. The model stops the jets when the tank drops below about 5 bar, its own cut-off. If that happens before a landing, your choice changes the landing speed too. It never changes the path."
     },
     "nozzle": {
       "title": "Throw gas back, go forward",
@@ -268,10 +278,10 @@
     },
     "hook": {
       "title": "The hook",
-      "p1": "The second test was the hook. The car reaches the <strong>ramp</strong> at about 18 m/s. The track curves up into a half loop about 5 m in radius, so the car climbs, goes vertical and comes over the top upside down. Then it runs along a straight deck 8 m long, still upside down, 10 m above the ground. At the end of the deck it leaves the ramp, upside down and heading back the way it came.",
+      "p1": "The second test was the hook. The car reaches the <strong>ramp</strong> at about 18 m/s. The track curves up into a half loop about 5 m in radius, so the car climbs, goes vertical and comes over the top upside down. It runs onto a straight deck 16 m long, still upside down, 10 m above the ground. There it brakes to a stop and hangs under the deck for about three seconds. Then the <strong>rear nozzles</strong> push it along the rest of the deck and off the end at about 7 m/s, upside down and heading back the way it came.",
       "p2": "Going round the loop presses the car into the track. That push from the track is called the load. At the bottom of the curve the load is about 6.6 g, because the car turns hard at speed. Climbing costs speed, so the car comes over the top at about 11 m/s. That is still enough to press it into the track at about 1.6 g, even upside down, so the loop holds it on by itself.",
-      "p3": "The deck is different. It is straight, so nothing presses the car into it, and gravity pulls it away. Here the <strong>suction fans</strong> under the car do the work: they hold its whole weight against the track. Tesla says the fans can pull with up to 2 g, so 1 g is well within reach. Electrek reports four fans of about 20 kW each. The model draws them as a blue glow and does not work out their pull.",
-      "p4": "Drag the entry speed slider to see how the loop changes. Below about 14 m/s, the car would not even reach the top. Like every slider on this page, it is a calculator: the run on screen keeps its own 18 m/s. Dropped from the deck with no help, the car would hit the ground in about 1.4 s. The <strong>ghost path</strong> shows where it falls, down to the <strong>landing pad</strong>. Tesla has not published the ramp's size, so the loop, the deck and the entry speed are the model's own. The chips above jump to the top of the loop or to the moment the car leaves the ramp."
+      "p3": "At speed, the curve holds the car on. A stopped car has no speed to do that, so all the holding falls to the <strong>suction fans</strong> under it. Hanging still, the car's whole 1.7 tonnes pulls away from the deck, and the fans must pull back just as hard, with 1 g. Tesla says they can pull with up to 2 g, so they have room to spare. Electrek reports four fans of about 20 kW each. The model draws them as a blue glow and does not work out their pull.",
+      "p4": "Drag the entry speed slider to see how the loop changes. Below about 14 m/s, the car would not even reach the top. Like every slider on this page, it is a calculator: the run on screen keeps its own 18 m/s. Dropped from the deck with no help, the car would hit the ground in about 1.4 s. The <strong>ghost path</strong> shows where it falls, down to the <strong>landing pad</strong>. Tesla has not published the ramp's size, so the loop, the deck, the entry speed and the push-off speed are the model's own. The chips above jump to the top of the loop, to the car hanging on the deck, or to the moment it leaves the ramp."
     },
     "flip": {
       "title": "Roll upright, then soften the fall",
@@ -283,7 +293,7 @@
     },
     "jump": {
       "title": "The jump",
-      "p1": "The third test was a jump over a row of <strong>parked vehicles</strong>. In the model, the car keeps going after its first landing. The <strong>rear nozzles</strong> fire again and take it from about 11 m/s to about 15 m/s. At the take-off point, all four <strong>corner nozzles</strong> fire down together.",
+      "p1": "The third test was a jump over a row of <strong>parked vehicles</strong>. In the model, the car keeps going after its first landing. The <strong>rear nozzles</strong> fire again and take it from about 7 m/s to about 15 m/s. At the take-off point, all four <strong>corner nozzles</strong> fire down together.",
       "p2": "They push with about 40 kN for about 0.7 s, more than twice the car's weight. When they stop, the car is rising at about 9.6 m/s. From there it coasts up on an arc, like a thrown ball, and tops out about 8 m above the ground. Tesla gave about 8 m (27 ft) for its jump, though it is not clear whether that was height or length.",
       "p3": "On the way over, the car twists through a full turn, 360 degrees. The same corner pairs that flipped it on the hook do this: one pair starts the roll, the other stops it. Below it pass a truck about 4 m tall and four cars, plain shapes in the model. As it comes down, the corner nozzles fire down again and cushion the landing to about 2.5 m/s. Then the car brakes to a stop.",
       "p4": "Drag the height slider to see what a higher or lower jump costs: the upward speed it needs, how long the jets must fire, how much gas it uses, and how long and how far the car stays in the air. Like the other sliders, it is a calculator, so the run on screen keeps its 8 m. The row, the run-up speed and the length of the push are the model's own choices, because Tesla has not said how hard its thrusters pushed. The chips above jump to the lift-off, the top of the jump or the landing."
@@ -293,7 +303,7 @@
       "p1": "To hover, the jets must push up with the car's whole weight, 16.7 kN for 1.7 tonnes. With air leaving at about 700 m/s, that takes about 24 kg of air every second. A full 600 L <strong>air tank</strong> holds about 315 kg. So even if every kilogram could be used, the car could hover for about 13 s at most. In practice it is less, because the pressure falls as the tank empties.",
       "p2": "Why so short? Fast jets waste power. Holding the car up with air at 700 m/s takes about 5.8 megawatts (MW). An ideal helicopter rotor 10 m across holds the same weight by pushing a lot of air slowly, at about 9 m/s, and needs only about 0.16 MW. That is about 37 times less. A helicopter can stay up for hours on fuel; this tank lasts seconds.",
       "p3": "So why not helium? It leaves about 2.6 times faster, at around 1,800 m/s. But helium is very light, so the same 600 L tank holds only 51 kg, a sixth of the air. What counts is the total push, called impulse: thrust times how long it lasts. Helium gives 93 kN·s against 220 kN·s for air, less than half. It wins only where weight matters more than space, as on a spacecraft.",
-      "p4": "Try the chips and watch the run's gas budget. With air in the 600 L tank, the car finishes the three tests with about 29 percent of its air left, at about 18 bar. The model stops the jets once the pressure drops below about 5 bar, its own cut-off, so about a fifth of the gas always stays aboard. With air in the 400 L tank, the jets reach that cut-off during the twist, so the jump's landing gets no cushion at all and the car comes down about 10 m/s harder. Helium runs out even sooner: in the 600 L tank during the hook's catch, and in the 400 L tank already during the flip. The path stays the same whatever you pick; only the gas used, the pressure, the jets and the landing speed change.",
+      "p4": "Try the chips and watch the run's gas budget. With air in the 600 L tank, the car finishes the three tests with about 23 percent of its air left. The model stops the jets once the pressure drops below about 5 bar, its own cut-off, so about a fifth of the gas always stays aboard. Nitrogen in the same tank only just reaches that cut-off. With air in the 400 L tank, the jets reach that cut-off during the twist, so the jump's landing gets no cushion at all and the car comes down about 10 m/s harder. Helium runs out even sooner: in the 600 L tank during the hook's catch, and in the 400 L tank already during the flip. The path stays the same whatever you pick; only the gas used, the pressure, the jets and the landing speed change.",
       "p5": "Roger Conner, a curator of vertical flight at the Smithsonian's National Air and Space Museum, told CNN: \"We are literally talking about hopping.\" The FAA told CBS the car does not meet its definition of an aircraft. So this is a car that hops for a few seconds, not one that flies."
     }
   }

@@ -84,7 +84,7 @@
   <p data-i18n-html="sections.tank.p5">
     On the day, Tesla ran three tests, with different cars: a timed sprint from 0 to 60 mph, a drive
     round a hook-shaped ramp, and a jump over parked vehicles. This page chains all three into one
-    run of 17 seconds, played in real time. The motion is the model's own script. The gas and the
+    run of 23 seconds, played in real time. The motion is the model's own script. The gas and the
     tank you pick change how much gas the run uses, the pressure and the jets. The model stops the
     jets when the tank drops below about 5 bar, its own cut-off. If that happens before a landing,
     your choice changes the landing speed too. It never changes the path.
@@ -299,9 +299,10 @@
   <p data-i18n-html="sections.hook.p1">
     The second test was the hook. The car reaches the <strong>ramp</strong> at about 18 m/s. The
     track curves up into a half loop about 5 m in radius, so the car climbs, goes vertical and comes
-    over the top upside down. Then it runs along a straight deck 8 m long, still upside down, 10 m
-    above the ground. At the end of the deck it leaves the ramp, upside down and heading back the
-    way it came.
+    over the top upside down. It runs onto a straight deck 16 m long, still upside down, 10 m above
+    the ground. There it brakes to a stop and hangs under the deck for about three seconds. Then the
+    <strong>rear nozzles</strong> push it along the rest of the deck and off the end at about 7 m/s,
+    upside down and heading back the way it came.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.moment">
     <button
@@ -312,6 +313,15 @@
       data-i18n="timeline.moment.inverted"
     >
       Upside down at the top
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="held"
+      data-i18n="timeline.moment.held"
+    >
+      Held on the hook
     </button>
     <button
       type="button"
@@ -330,20 +340,20 @@
     press it into the track at about 1.6 g, even upside down, so the loop holds it on by itself.
   </p>
   <p data-i18n-html="sections.hook.p3">
-    The deck is different. It is straight, so nothing presses the car into it, and gravity pulls it
-    away. Here the <strong>suction fans</strong> under the car do the work: they hold its whole
-    weight against the track. Tesla says the fans can pull with up to 2 g, so 1 g is well within
-    reach. Electrek reports four fans of about 20 kW each. The model draws them as a blue glow and
-    does not work out their pull.
+    At speed, the curve holds the car on. A stopped car has no speed to do that, so all the holding
+    falls to the <strong>suction fans</strong> under it. Hanging still, the car's whole 1.7 tonnes
+    pulls away from the deck, and the fans must pull back just as hard, with 1 g. Tesla says they
+    can pull with up to 2 g, so they have room to spare. Electrek reports four fans of about 20 kW
+    each. The model draws them as a blue glow and does not work out their pull.
   </p>
   <p data-i18n-html="sections.hook.p4">
     Drag the entry speed slider to see how the loop changes. Below about 14 m/s, the car would not
     even reach the top. Like every slider on this page, it is a calculator: the run on screen keeps
     its own 18 m/s. Dropped from the deck with no help, the car would hit the ground in about 1.4 s.
     The <strong>ghost path</strong> shows where it falls, down to the <strong>landing pad</strong>.
-    Tesla has not published the ramp's size, so the loop, the deck and the entry speed are the
-    model's own. The chips above jump to the top of the loop or to the moment the car leaves the
-    ramp.
+    Tesla has not published the ramp's size, so the loop, the deck, the entry speed and the push-off
+    speed are the model's own. The chips above jump to the top of the loop, to the car hanging on
+    the deck, or to the moment it leaves the ramp.
   </p>
   <div class="range-widget">
     <div class="range-widget__header">
@@ -374,7 +384,7 @@
     <div>
       <dt data-i18n="chapters.hook.track">Ramp</dt>
       <dd class="number" data-i18n="chapters.hook.trackValue">
-        a 5 m loop and an 8 m deck 10 m up, the model's ramp
+        a 5 m loop and a 16 m deck 10 m up, the model's ramp
       </dd>
     </div>
     <div>
@@ -497,7 +507,7 @@
   <p data-i18n-html="sections.jump.p1">
     The third test was a jump over a row of <strong>parked vehicles</strong>. In the model, the car
     keeps going after its first landing. The <strong>rear nozzles</strong> fire again and take it
-    from about 11 m/s to about 15 m/s. At the take-off point, all four
+    from about 7 m/s to about 15 m/s. At the take-off point, all four
     <strong>corner nozzles</strong> fire down together.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.moment">
@@ -665,13 +675,13 @@
   </p>
   <p data-i18n-html="sections.limits.p4">
     Try the chips and watch the run's gas budget. With air in the 600 L tank, the car finishes the
-    three tests with about 29 percent of its air left, at about 18 bar. The model stops the jets
-    once the pressure drops below about 5 bar, its own cut-off, so about a fifth of the gas always
-    stays aboard. With air in the 400 L tank, the jets reach that cut-off during the twist, so the
-    jump's landing gets no cushion at all and the car comes down about 10 m/s harder. Helium runs
-    out even sooner: in the 600 L tank during the hook's catch, and in the 400 L tank already during
-    the flip. The path stays the same whatever you pick; only the gas used, the pressure, the jets
-    and the landing speed change.
+    three tests with about 23 percent of its air left. The model stops the jets once the pressure
+    drops below about 5 bar, its own cut-off, so about a fifth of the gas always stays aboard.
+    Nitrogen in the same tank only just reaches that cut-off. With air in the 400 L tank, the jets
+    reach that cut-off during the twist, so the jump's landing gets no cushion at all and the car
+    comes down about 10 m/s harder. Helium runs out even sooner: in the 600 L tank during the hook's
+    catch, and in the 400 L tank already during the flip. The path stays the same whatever you pick;
+    only the gas used, the pressure, the jets and the landing speed change.
   </p>
   <p data-i18n-html="sections.limits.p5">
     Roger Conner, a curator of vertical flight at the Smithsonian's National Air and Space Museum,
