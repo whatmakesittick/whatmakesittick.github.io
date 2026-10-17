@@ -9,7 +9,7 @@ import { runAt, tankAt } from '../../../model';
 import { CALIPER } from '../../geometry/gear/brake';
 import type { PartContext } from '../context';
 import { WHEEL, WHEEL_CENTRES } from './dimensions';
-import { BLUR_FROM_SPEED_MS, createWheels, wheelTurn } from './wheels';
+import { BLUR_FROM_SPEED_MS, createWheels, forwardTravel, wheelTurn } from './wheels';
 import type { WheelSet } from './wheels';
 
 const WHEEL_TRIANGLE_LIMIT = 2500;
@@ -89,6 +89,14 @@ describe('wheels', () => {
       expect(moved(tyre, index, new Vector3(0, WHEEL.radius, 0)).x).toBeGreaterThan(0);
       expect(moved(tyre, index, new Vector3(0, -WHEEL.radius, 0)).x).toBeLessThan(0);
     });
+  });
+
+  it('counts travel along the nose after the loop turns the car around', () => {
+    const { car } = stateWith(0, 0);
+    const turned = { ...car, pitch: Math.PI, roll: Math.PI };
+    const ahead = forwardTravel({ ...turned, position: [-2, 0, 0] });
+    const behind = forwardTravel({ ...turned, position: [-1, 0, 0] });
+    expect(ahead - behind).toBeCloseTo(1);
   });
 
   it('turns every wheel by the distance driven', () => {

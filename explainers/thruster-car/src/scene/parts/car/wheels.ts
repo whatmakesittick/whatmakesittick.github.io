@@ -1,7 +1,7 @@
 import { DynamicDrawUsage, Group, InstancedMesh, Matrix4 } from 'three';
 import type { BufferGeometry, Material, Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
-import type { AssemblyState, Point } from '../../../ids';
+import type { AssemblyState, CarReading, Point } from '../../../ids';
 import { CALIPER, caliperGeometry, discGeometry, discTexture } from '../../geometry/gear/brake';
 import { HALF_TURN } from '../../geometry/gear/lathe';
 import {
@@ -46,6 +46,11 @@ interface Spinners {
 
 export function wheelTurn(distance: number): number {
   return -distance / WHEEL.radius;
+}
+
+export function forwardTravel(car: CarReading): number {
+  const [x, y] = car.position;
+  return x * Math.cos(car.pitch) + y * Math.sin(car.pitch);
 }
 
 export function isBlurred(speed: number): boolean {
@@ -143,7 +148,7 @@ export function createWheels(context: PartContext): WheelSet {
     object,
     label,
     setState(state) {
-      turnTo(wheelTurn(state.car.position[0]));
+      turnTo(wheelTurn(forwardTravel(state.car)));
       const blurred = isBlurred(state.car.speed);
       meshes.spokes.visible = !blurred;
       meshes.blur.visible = blurred;
