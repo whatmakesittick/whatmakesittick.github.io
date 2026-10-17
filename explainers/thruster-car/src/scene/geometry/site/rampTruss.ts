@@ -27,14 +27,14 @@ export interface TrussPlan {
 
 export const SUPPORT = {
   post: 0.12,
-  leg: 0.15,
+  leg: 0.18,
   beam: 0.16,
   tie: 0.1,
   web: 0.07,
   braceRadius: 0.028,
   braceSides: 6,
   portalHalfSpan: 2.6,
-  portalEvery: 2,
+  portalEvery: 3,
   beamOverhang: 0.15,
   knee: 0.6,
   loopMargin: 0.35,
@@ -97,14 +97,16 @@ function web(inner: Vector3[], outer: Vector3[], plan: TrussPlan): void {
   plan.members.push(member(outer[0], outer[1], SUPPORT.tie));
 }
 
-function bay(from: Station, to: Station, chords: Vector3[][][], plan: TrussPlan): void {
-  const [innerFrom, outerFrom] = chords[0];
-  const [, outerTo] = chords[1];
-  if (outerFrom.length && outerTo.length) {
-    SIDES.forEach((_, index) => plan.members.push(brace(innerFrom[index], outerTo[index])));
-    plan.members.push(brace(outerFrom[0], outerTo[1]));
-  }
-  if (from.kind !== to.kind || from.kind === 'free') return;
+function trussBay(from: Vector3[][], to: Vector3[][], plan: TrussPlan): void {
+  const [innerFrom, outerFrom] = from;
+  const [, outerTo] = to;
+  if (!outerFrom.length || !outerTo.length) return;
+  SIDES.forEach((_, index) => plan.members.push(brace(innerFrom[index], outerTo[index])));
+  plan.members.push(brace(outerFrom[0], outerTo[1]));
+}
+
+function connectSupports(from: Station, to: Station, plan: TrussPlan): void {
+  if (from.kind !== to.kind) return;
   from.tops.forEach((top, index) => {
     const next = to.tops[index];
     if (from.kind === 'tower') plan.members.push(brace(top, to.feet[index]));
@@ -199,8 +201,10 @@ export function trussPlan(): TrussPlan {
   frames.forEach((frame, index) => {
     const [inner, outer] = chords[index];
     if (outer.length) web(inner, outer, plan);
+    if (index > 0) trussBay(chords[index - 1], chords[index], plan);
     const station = standUp(frame, kinds[index], chords[index], plan);
-    if (previous) bay(previous, station, [chords[index - 1], chords[index]], plan);
+    if (station.kind === 'free') return;
+    if (previous) connectSupports(previous, station, plan);
     previous = station;
   });
   return plan;
