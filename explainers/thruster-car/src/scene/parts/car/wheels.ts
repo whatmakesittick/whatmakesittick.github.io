@@ -1,5 +1,5 @@
-import { DynamicDrawUsage, Group, InstancedMesh, Matrix4 } from 'three';
-import type { BufferGeometry, Material, Object3D } from 'three';
+import { DynamicDrawUsage, Group, Matrix4 } from 'three';
+import type { BufferGeometry, InstancedMesh, Material, Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import type { AssemblyState, CarReading, Point } from '../../../ids';
 import { CALIPER, caliperGeometry, discGeometry, discTexture } from '../../geometry/gear/brake';
@@ -12,7 +12,7 @@ import {
   spokesGeometry,
 } from '../../geometry/gear/rim';
 import { treadTexture, tyreGeometry } from '../../geometry/gear/tyre';
-import { mergeParts } from '../context';
+import { instancedPart, mergeParts } from '../context';
 import type { PartContext } from '../context';
 import { WHEEL, WHEEL_CENTRES } from './dimensions';
 import { duskEnvironment } from '../../environment';
@@ -76,7 +76,7 @@ function instanced(
   geometry: BufferGeometry,
   material: Material,
 ): InstancedMesh {
-  const mesh = new InstancedMesh(context.tracker.track(geometry), material, WHEEL_CENTRES.length);
+  const mesh = instancedPart(context, geometry, material, WHEEL_CENTRES.length);
   mesh.instanceMatrix.setUsage(DynamicDrawUsage);
   return mesh;
 }

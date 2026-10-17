@@ -1,10 +1,11 @@
-import { Group, InstancedMesh, Matrix4, Object3D, Vector3 } from 'three';
-import type { BufferGeometry, Material } from 'three';
+import { Group, Matrix4, Object3D, Vector3 } from 'three';
+import type { BufferGeometry, InstancedMesh, Material } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import { NOZZLE_IDS, NOZZLE_PARTS } from '../../../ids';
 import type { AssemblyState, NozzleId, NozzlePartId, PartId } from '../../../ids';
 import { NOZZLES } from '../../../model/layout';
 import { BELL_LENGTH, coneGeometry, nozzleGeometry, nozzleReach } from '../../geometry/gear/nozzle';
+import { instancedPart } from '../context';
 import type { PartContext } from '../context';
 import { duskEnvironment } from '../../environment';
 import { CONE_FINISHES, GEAR_FINISHES, GEAR_PAINT, reflectiveFinishes } from './gearFinishes';
@@ -52,11 +53,12 @@ function addMouth(frame: Object3D, id: NozzleId): Object3D {
 }
 
 function instanced(
+  context: PartContext,
   geometry: BufferGeometry,
   material: Material,
   frames: readonly Matrix4[],
 ): InstancedMesh {
-  const mesh = new InstancedMesh(geometry, material, frames.length);
+  const mesh = instancedPart(context, geometry, material, frames.length);
   frames.forEach((frame, index) => mesh.setMatrixAt(index, frame));
   mesh.computeBoundingSphere();
   mesh.computeBoundingBox();
@@ -76,24 +78,21 @@ function buildGroup(
   const ids = idsOf(part);
   const poses = frames.map((frame) => frame.matrix);
   const reach = nozzleReach(ids[0]);
-  const shape = tracker.track(nozzleGeometry(reach, TONES));
+  const shape = nozzleGeometry(reach, TONES);
   const lift = new Matrix4().makeTranslation(0, reach, 0);
   const tips = poses.map((pose) => pose.clone().multiply(lift));
-  const cones = instanced(
-    tracker.track(coneGeometry()),
-    materials.get(part, CONE_FINISHES[part]),
-    tips,
-  );
+  const cones = instanced(context, coneGeometry(), materials.get(part, CONE_FINISHES[part]), tips);
   cones.visible = false;
   return {
     ids,
     frames: poses,
     body: instanced(
+      context,
       shape,
       materials.get(part, reflectiveFinishes(duskEnvironment(tracker)).nozzleBody),
       poses,
     ),
-    frost: instanced(shape, materials.get(part, GEAR_FINISHES.frost), poses),
+    frost: instanced(context, shape, materials.get(part, GEAR_FINISHES.frost), poses),
     cones,
     firing: -1,
   };

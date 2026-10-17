@@ -1,4 +1,4 @@
-import { Mesh } from 'three';
+import { InstancedMesh, Mesh } from 'three';
 import type { BufferGeometry, Material } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type {
@@ -26,6 +26,16 @@ export function partMesh(
   finish: MaterialFinish,
 ): Mesh {
   return new Mesh(context.tracker.track(geometry), context.materials.get(group, finish));
+}
+
+export function instancedPart(
+  context: PartContext,
+  geometry: BufferGeometry,
+  material: Material,
+  count: number,
+): InstancedMesh {
+  const { tracker } = context;
+  return tracker.track(new InstancedMesh(tracker.track(geometry), material, count));
 }
 
 export function registered<T extends Material>(

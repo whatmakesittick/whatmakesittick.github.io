@@ -1,5 +1,5 @@
-import { Color, Group, InstancedMesh, Object3D, Vector3 } from 'three';
-import type { BufferGeometry } from 'three';
+import { Color, Group, Object3D, Vector3 } from 'three';
+import type { BufferGeometry, InstancedMesh } from 'three';
 import { lerp } from '@core/math';
 import { createPointMaterial, PointCloud } from '@core/scene/pointCloud';
 import type { MomentId } from '../../../ids';
@@ -7,7 +7,7 @@ import { CAR_ANCHORS } from '../../../model/layout';
 import { carAt, MOMENTS } from '../../../model/run';
 import { evenlySpaced } from '../../geometry/effects/path';
 import { applyCarPose } from '../../pose';
-import { registered } from '../context';
+import { instancedPart, registered } from '../context';
 import type { PartContext } from '../context';
 import { GHOST_FINISH, GHOST_PATH, POINT_SIZE_PER_METRE, RENDER_ORDER } from './constants';
 
@@ -57,7 +57,7 @@ function highest(points: readonly Vector3[]): Vector3 {
 
 function silhouettes(context: PartContext, silhouette: BufferGeometry): InstancedMesh {
   const material = context.materials.get('ghostPath', GHOST_FINISH);
-  const mesh = new InstancedMesh(silhouette, material, GHOST_MOMENTS.length);
+  const mesh = instancedPart(context, silhouette, material, GHOST_MOMENTS.length);
   const pose = new Object3D();
   GHOST_MOMENTS.forEach((id, index) => {
     applyCarPose(pose, carAt(MOMENTS[id]));

@@ -1,5 +1,5 @@
-import { Group, InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three';
-import type { Object3D } from 'three';
+import { Group, Matrix4, Quaternion, Vector3 } from 'three';
+import type { InstancedMesh, Object3D } from 'three';
 import { STRUCTURE_GROUP, UNDIMMED_GROUP } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import { SITE, SITE_ANCHORS } from '../../../model/layout';
@@ -14,7 +14,7 @@ import {
 } from '../../geometry/site/markings';
 import { hash2 } from '../../geometry/site/noise';
 import { slabGeometry } from '../../geometry/site/slab';
-import { partMesh } from '../context';
+import { instancedPart, partMesh } from '../context';
 import type { PartContext } from '../context';
 import {
   CONCRETE_LOOKS,
@@ -43,8 +43,9 @@ export function conePositions(): number[] {
 
 function createCones(context: PartContext): InstancedMesh {
   const positions = conePositions();
-  const cones = new InstancedMesh(
-    context.tracker.track(coneGeometry()),
+  const cones = instancedPart(
+    context,
+    coneGeometry(),
     context.materials.get(UNDIMMED_GROUP, WORLD_FINISHES.cones),
     positions.length,
   );
@@ -59,7 +60,6 @@ function createCones(context: PartContext): InstancedMesh {
   cones.name = 'cones';
   cones.instanceMatrix.needsUpdate = true;
   cones.computeBoundingSphere();
-  context.tracker.track(cones);
   return cones;
 }
 

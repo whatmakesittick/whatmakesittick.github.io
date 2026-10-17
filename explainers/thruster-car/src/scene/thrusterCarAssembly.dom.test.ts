@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
-import { Mesh, Points, Vector3 } from 'three';
+import { InstancedMesh, Mesh, Points, Vector3 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
@@ -141,19 +141,22 @@ describe('thruster car assembly', () => {
     expect(compiled.every((object) => !isShown(object))).toBe(true);
   });
 
-  it('frees its geometries and the materials it registered on dispose', () => {
+  it('frees its geometries, instance buffers and registered materials on dispose', () => {
     const library = new MaterialLibrary();
     const register = vi.spyOn(library, 'register');
     const extra = createThrusterCarAssembly({ materials: library, textures }, stateAt(0));
     const geometries = new Set<BufferGeometry>();
+    const instanced: InstancedMesh[] = [];
     extra.root.traverse((object) => {
       if (object instanceof Mesh || object instanceof Points) geometries.add(object.geometry);
+      if (object instanceof InstancedMesh) instanced.push(object);
     });
     const registeredMaterials = register.mock.calls.map(([, material]) => material);
-    const freed = [...geometries, ...registeredMaterials].map(onDispose);
+    const freed = [...geometries, ...registeredMaterials, ...instanced].map(onDispose);
     extra.dispose();
     expect(extra.root.parent).toBeNull();
     expect(registeredMaterials.length).toBeGreaterThan(0);
+    expect(instanced.length).toBeGreaterThan(0);
     expect(freed.every(({ done }) => done)).toBe(true);
     library.dispose();
   });
