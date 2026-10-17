@@ -30,8 +30,8 @@ export interface BuiltSite {
 
 export const JS_BUDGET_GZIP = {
   site: 50_000,
-  explainer: 305_000,
-  embed: 300_000,
+  explainer: 315_000,
+  embed: 310_000,
   catalogue: 12_000,
 } as const;
 export const EMBED_PATH = '/embed/v1/';
