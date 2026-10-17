@@ -65,12 +65,12 @@
     to about 700 bar, which is 700 times the air pressure around you.
   </p>
   <p data-i18n-html="sections.tank.p3">
-    How big is the tank? Reports give 400 L and 600 L, and the sources disagree. So the model uses
-    600 L and lets you try 400 L. At 700 bar, air is packed tight: 100 L of it holds about 53 kg, so
-    600 L holds about 315 kg. Walls that hold this must be strong and light, so they are wound from
-    carbon fibre. The hydrogen tanks of the first Toyota Mirai work at the same pressure. They weigh
-    about 0.71 kg for every litre they hold. By that measure, a 600 L tank would weigh about 430 kg
-    before any gas goes in.
+    How big is the tank? Reports disagree: some say 400 L, others 600 L. So the model uses 600 L and
+    lets you try 400 L. At 700 bar, air is packed tight: 100 L of tank space holds about 53 kg of
+    it, so 600 L holds about 315 kg. Walls that hold this must be strong and light, so they are
+    wound from carbon fibre. The hydrogen tanks of the first Toyota Mirai work at the same pressure.
+    They weigh about 0.71 kg for every litre they hold. By that measure, a 600 L tank would weigh
+    about 430 kg before any gas goes in.
   </p>
   <p data-i18n-html="sections.tank.p4">
     Squeezed air stores energy, like a wound spring. As 100 L of it expands, it can do about 24
@@ -85,8 +85,8 @@
     On the day, Tesla ran three tests, with different cars: a timed sprint from 0 to 60 mph, a drive
     round a hook-shaped ramp, and a jump over parked vehicles. This page chains all three into one
     run of 23 seconds, played in real time unless a chapter slows it down. The motion is the model's
-    own script. The gas and the tank you pick change how much gas the run uses, the pressure and the
-    jets. The model treats the last 5 percent of the gas as unusable, because by then the pressure
+    own script. The gas and the tank you pick change the pressure, the jets and how much gas the run
+    uses. The model treats the last 5 percent of the gas as unusable, because by then the pressure
     has collapsed. If a tank reaches that cut-off before a landing, your choice changes the landing
     speed too. It never changes the path.
   </p>
@@ -441,10 +441,10 @@
     </button>
   </div>
   <p data-i18n-html="sections.flip.p2">
-    How fast the car turns depends on how hard it is to spin, its roll inertia, measured in kg·m².
-    The more weight sits far from the centre, the harder it is to spin. Tests on real cars found
-    about 390 kg·m² for a small car and 630 for a large one. Nobody has published a figure for a
-    sports car with full tanks, so the model picks 600. The slider lets you try 500 to 900, while
+    How fast the car turns depends on how hard it is to spin. This is its roll inertia, measured in
+    kg·m². The more weight sits far from the centre, the harder it is to spin. Tests on real cars
+    found about 390 kg·m² for a small car and 630 for a large one. Nobody has published a figure for
+    a sports car with full tanks, so the model picks 600. The slider lets you try 500 to 900, while
     the run itself keeps 600.
   </p>
   <p data-i18n-html="sections.flip.p3">
@@ -456,8 +456,8 @@
     By the time it is upright, the car has fallen about 4 m and drops at about 9 m/s. All four
     corner nozzles fire down at once, and the <strong>force arrows</strong> show their push.
     Together they give about 28 kN, more than the car's weight of 16.7 kN, so the fall slows. In
-    about a second the fall slows to about 2.5 m/s, and the wheels touch the first landing pad.
-    Tesla says its thrusters softened the landing too, but not how hard they pushed. So these catch
+    about a second it is down to about 2.5 m/s, and the wheels touch the first landing pad. Tesla
+    says its thrusters softened the landing too, but not how hard they pushed. So these catch
     numbers are the model's own.
   </p>
   <p data-i18n-html="sections.flip.p5">
@@ -555,7 +555,7 @@
     long the jets must fire, how much gas it uses, and how long and how far the car stays in the
     air. Like the other sliders, it is a calculator, so the run on screen keeps its 8 m. The row,
     the run-up speed and the length of the push are the model's own choices, because Tesla has not
-    said how hard its thrusters pushed. The chips above jump to the lift-off, the top of the jump or
+    said how hard its thrusters pushed. The chips above jump to the take-off, the top of the jump or
     the landing.
   </p>
   <div class="range-widget">
@@ -674,16 +674,16 @@
     on a spacecraft.
   </p>
   <p data-i18n-html="sections.limits.p4">
-    Try the chips and watch the run's gas budget. The model treats the last 5 percent of the gas as
-    unusable, because by then the pressure has collapsed. That is its own cut-off. With air in the
-    600 L tank, the car finishes all three tests with about a fifth of its air left, so it never
-    reaches the cut-off. Nitrogen in the same tank finishes with a little less. In the 400 L tank,
-    the jump's landing gets no cushion at all, and the car comes down about 10 m/s harder: air runs
-    dry during the twist, and nitrogen even earlier, during the take-off. Helium runs dry even
-    sooner. In the 600 L tank that happens during the catch after the hook, and the car lands about
-    3 m/s harder. In the 400 L tank it happens already during the flip, and the car lands about 11
-    m/s harder. The path stays the same whatever you pick; only the gas used, the pressure, the jets
-    and the landing speed change.
+    Pick a gas and a tank with the chips, and watch how much gas is left. The model treats the last
+    5 percent of the gas as unusable, because by then the pressure has collapsed. That is its own
+    cut-off. With air in the 600 L tank, the car finishes all three tests with about a fifth of its
+    air left, so it never reaches the cut-off. Nitrogen in the same tank finishes with a little
+    less. In the 400 L tank, the jump's landing gets no cushion at all, and the car comes down about
+    10 m/s harder: air runs dry during the twist, and nitrogen even earlier, during the take-off.
+    Helium runs dry even sooner. In the 600 L tank that happens during the catch after the hook, and
+    the car lands about 3 m/s harder. In the 400 L tank it happens as early as the flip, and the car
+    lands about 11 m/s harder. The path stays the same whatever you pick; only the gas used, the
+    pressure, the jets and the landing speed change.
   </p>
   <p data-i18n-html="sections.limits.p5">
     Roger Conner, a curator of vertical flight at the Smithsonian's National Air and Space Museum,
