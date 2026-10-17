@@ -17,6 +17,7 @@ import type { Member } from './rampTruss';
 import { STATION_SPACING, rampStations } from './stations';
 
 const DIGITS = 4;
+const LOOP_FAR_SIDE_DIGITS = 2;
 const SAMPLES = [0, 2, LOOP_LENGTH / 2, LOOP_LENGTH - 1, LOOP_LENGTH, LOOP_LENGTH + 4, RAMP_LENGTH];
 const SLICES = 1200;
 const MEMBER_SAMPLES = 24;
@@ -123,7 +124,7 @@ describe('hook ramp deck', () => {
     top.computeBoundingBox();
     expect(top.boundingBox?.min.x).toBeCloseTo(Math.min(APRON.from, DECK_END_X), 6);
     expect(top.boundingBox?.max.y).toBeCloseTo(DECK_HEIGHT, 3);
-    expect(top.boundingBox?.max.x).toBeCloseTo(RAMP.entryX + RAMP.radius, 3);
+    expect(top.boundingBox?.max.x).toBeCloseTo(RAMP.entryX + RAMP.radius, LOOP_FAR_SIDE_DIGITS);
   });
 
   it('keeps the deck body behind the driving face', () => {

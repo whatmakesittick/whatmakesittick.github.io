@@ -14,6 +14,7 @@ const READOUT_COUNT = 31;
 const SCRUBBED_PHASE = 9;
 const CHAPTER_MOMENTS: readonly MomentId[] = [
   'inverted',
+  'held',
   'leavesRamp',
   'rollComplete',
   'touchdown',

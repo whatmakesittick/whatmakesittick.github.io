@@ -6,7 +6,7 @@ import type { CameraPose } from '@core/scene/frameBox';
 import { MaterialLibrary } from '@core/scene/materials';
 import { createSceneTextures } from '@core/scene/textures';
 import type { AssemblyState, RegionId } from '../ids';
-import { MOMENTS } from '../model';
+import { MOMENTS, RUN_SECONDS } from '../model';
 import { createAssemblyState, createThrusterCarStore } from '../state';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
@@ -20,7 +20,7 @@ const FOLLOW_IDS = Object.keys(FOLLOW_VIEWS) as FollowView[];
 const FIXED_IDS = Object.keys(FIXED_VIEWS) as FixedView[];
 const DIGITS = 9;
 
-const RESTING_SECONDS = 16;
+const RESTING_SECONDS = (MOMENTS.stopped + RUN_SECONDS) / 2;
 
 function assemblyState(phase = 0): AssemblyState {
   return createAssemblyState({ ...createThrusterCarStore().getState(), phase });

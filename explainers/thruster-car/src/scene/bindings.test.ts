@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { AssemblyState } from '../ids';
+import { PHASE_RANGES } from '../model';
 import { PRESETS, createThrusterCarStore } from '../state';
 import { bindStore } from './bindings';
 import type { SceneTargets } from './bindings';
 
-const LATER_PHASE = 5;
+const LATER_PHASE = (PHASE_RANGES.flip.start + PHASE_RANGES.flip.end) / 2;
 
 function fakeTargets() {
   const received: AssemblyState[] = [];
