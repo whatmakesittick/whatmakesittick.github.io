@@ -39,7 +39,7 @@ export const ROLL_NOZZLE_N = 6000;
 export const ROLL_INERTIA_KG_M2 = 600;
 
 export const PRESSURE_EXPONENT = 3;
-export const EMPTY_BELOW_BAR = 5;
+export const EMPTY_BELOW_SHARE = 0.05;
 
 export const FILL_POWER_KW = 50;
 export const ROTOR_HOVER_KW = 155;

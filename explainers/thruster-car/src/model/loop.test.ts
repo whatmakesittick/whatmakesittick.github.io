@@ -25,8 +25,8 @@ describe('loop', () => {
     expect(topSpeed(minimumEntrySpeed(5), 5)).toBeCloseTo(0, 6);
   });
 
-  it('presses the car into the track at 6.6 g at the entry and 1.6 g at the top', () => {
-    expect(bottomLoadG(18, 5)).toBeCloseTo(6.6, 1);
+  it('loads the car at 7.6 g at the entry and 1.6 g at the top', () => {
+    expect(bottomLoadG(18, 5)).toBeCloseTo(7.6, 1);
     expect(topLoadG(18, 5)).toBeCloseTo(1.6, 1);
     expect(topLoadG(15, 5)).toBeLessThan(0);
   });

@@ -12,7 +12,7 @@ export function topSpeed(entrySpeed: number, radius: number): number {
 }
 
 export function bottomLoadG(entrySpeed: number, radius: number): number {
-  return entrySpeed ** 2 / (G * radius);
+  return (entrySpeed ** 2 / radius + G) / G;
 }
 
 export function topLoadG(entrySpeed: number, radius: number): number {

@@ -8,7 +8,7 @@ import { TEST_LOCALE, fill, initTestLocale } from './testing';
 
 const { units } = TEST_LOCALE;
 const CATCH_SECONDS_IN = 12;
-const AFTER_DRY_SECONDS = 10;
+const AFTER_DRY_SECONDS = 11.5;
 
 function row(id: string) {
   const found = THRUSTER_CAR_READOUTS.find((readout) => readout.id === id);
@@ -87,7 +87,7 @@ describe('gauge readouts', () => {
     store.getState().setPhase(AFTER_DRY_SECONDS);
     const state = store.getState();
     expect(row('gasLeft').tone?.(state)).toBe(THEME.empty);
-    expect(text('gasLeft', state)).toBe(fill(units.percent, { value: '19' }));
+    expect(text('gasLeft', state)).toBe(fill(units.percent, { value: '5' }));
     expect(text('thrust', state)).toBe(fill(units.kilonewtons, { value: '0.0' }));
     expect(row('thrust').meter?.share(state)).toBe(0);
   });

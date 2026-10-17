@@ -100,7 +100,7 @@ describe('chapter widgets', () => {
     expect(output('entry-speed')).toBe(fill(units.metresPerSecond, { value: '18.0' }));
     expect(thumb('entry-speed')).toEqual({ value: '18', step: '0.5' });
     expect(readout('loopTopSpeed')).toBe(fill(units.metresPerSecond, { value: '11.3' }));
-    expect(readout('loopBottomG')).toBe(fill(units.gees, { value: '6.6' }));
+    expect(readout('loopBottomG')).toBe(fill(units.gees, { value: '7.6' }));
     expect(readout('loopTopG')).toBe(fill(units.gees, { value: '1.6' }));
     expect(readout('dropTime')).toBe(fill(units.seconds, { value: '1.43' }));
     expect(output('roll-inertia')).toBe(fill(units.kgm2, { value: '600' }));
@@ -141,7 +141,7 @@ describe('chapter widgets', () => {
     expect(store.getState().entrySpeed).toBe(15);
     expect(output('entry-speed')).toBe(fill(units.metresPerSecond, { value: '15.0' }));
     expect(readout('loopTopSpeed')).toBe(fill(units.metresPerSecond, { value: '5.4' }));
-    expect(readout('loopBottomG')).toBe(fill(units.gees, { value: '4.6' }));
+    expect(readout('loopBottomG')).toBe(fill(units.gees, { value: '5.6' }));
     expect(readout('loopTopG')).toBe(fill(units.gees, { value: '-0.4' }));
     expect(readout('dropTime')).toBe(fill(units.seconds, { value: '1.43' }));
     slide('entry-speed', 24);
@@ -196,9 +196,9 @@ describe('chapter widgets', () => {
     expect(readout('hoverTime')).toBe(fill(units.seconds, { value: '3.7' }));
     expect(readout('jetPower')).toBe(fill(units.megawatts, { value: '15.2' }));
     expect(readout('totalImpulse')).toBe(fill(units.kilonewtonSeconds, { value: '62' }));
-    expect(readout('runUsed')).toBe(fill(units.percent, { value: '81' }));
+    expect(readout('runUsed')).toBe(fill(units.percent, { value: '95' }));
     expect(readout('runOutcome')).toBe(
-      fill(outcomeState.ranDry, { seconds: '9.4', speed: '14.0' }),
+      fill(outcomeState.ranDry, { seconds: '11.0', speed: '14.0' }),
     );
   });
 

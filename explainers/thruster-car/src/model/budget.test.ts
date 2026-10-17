@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import type { PhaseId } from '../ids';
-import { emptyAtSeconds, impulseUsedKns, shortfallMs, tankAt } from './budget';
-import { MOMENTS, PHASE_RANGES, RUN_SECONDS } from './run';
+import type { GasId, PhaseId } from '../ids';
+import { emptyAtSeconds, emptyShare, impulseUsedKns, shortfallMs, tankAt } from './budget';
+import { MOMENTS, PHASE_RANGES, RUN_SECONDS, phaseAt } from './run';
 
 const PHASE_IMPULSE_KNS: Readonly<Partial<Record<PhaseId, number>>> = {
   sprint: 45.6,
@@ -18,6 +18,24 @@ function phaseImpulse(id: PhaseId): number {
   const { start, end } = PHASE_RANGES[id];
   return impulseUsedKns(end) - impulseUsedKns(start);
 }
+
+interface TankOutcome {
+  gas: GasId;
+  litres: number;
+  share: number;
+  dryIn: PhaseId | null;
+  emptyAt: number;
+  shortfall: number;
+}
+
+const TANK_OUTCOMES: readonly TankOutcome[] = [
+  { gas: 'air', litres: 600, share: 0.207, dryIn: null, emptyAt: 0, shortfall: 0 },
+  { gas: 'nitrogen', litres: 600, share: 0.175, dryIn: null, emptyAt: 0, shortfall: 0 },
+  { gas: 'helium', litres: 600, share: 0.05, dryIn: 'catch', emptyAt: 12.49, shortfall: 2.94 },
+  { gas: 'air', litres: 400, share: 0.05, dryIn: 'twist', emptyAt: 16.23, shortfall: 10.03 },
+  { gas: 'nitrogen', litres: 400, share: 0.05, dryIn: 'leap', emptyAt: 15.93, shortfall: 10.03 },
+  { gas: 'helium', litres: 400, share: 0.05, dryIn: 'flip', emptyAt: 11.05, shortfall: 11.5 },
+];
 
 describe('budget', () => {
   it('spends the impulse of each burn in its own phase', () => {
@@ -52,11 +70,24 @@ describe('budget', () => {
     expect(shortfallMs('air', 400)).toBeCloseTo(10, 0);
   });
 
-  it('runs a 600 L nitrogen tank to the cut-off in the jump landing', () => {
-    const emptyAt = emptyAtSeconds('nitrogen', 600) ?? Number.NaN;
-    expect(emptyAt).toBeGreaterThan(PHASE_RANGES.landing.start);
-    expect(emptyAt).toBeLessThan(MOMENTS.landed);
-    expect(shortfallMs('nitrogen', 600)).toBeGreaterThan(0);
+  it('keeps the last 5 percent of the gas unusable', () => {
+    expect(emptyShare()).toBe(0.05);
+    expect(tankAt(RUN_SECONDS, 'helium', 400).massShare).toBe(emptyShare());
+  });
+
+  it('finishes or runs dry where each gas and tank runs out', () => {
+    TANK_OUTCOMES.forEach(({ gas, litres, share, dryIn, emptyAt, shortfall }) => {
+      const label = `${gas} ${litres} L`;
+      const end = tankAt(RUN_SECONDS, gas, litres);
+      expect(end.massShare, label).toBeCloseTo(share, 3);
+      expect(end.shortfallMs, label).toBeCloseTo(shortfall, 2);
+      if (dryIn === null) {
+        expect(end.emptyAtSeconds, label).toBeNull();
+        return;
+      }
+      expect(end.emptyAtSeconds, label).toBeCloseTo(emptyAt, 2);
+      expect(phaseAt(emptyAt), label).toBe(dryIn);
+    });
   });
 
   it('runs helium dry before the hook touchdown in either tank', () => {

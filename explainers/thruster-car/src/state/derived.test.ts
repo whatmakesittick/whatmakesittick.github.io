@@ -67,12 +67,12 @@ describe('live reading', () => {
     expect(reading.tank.pressureBar).toBeCloseTo(6.2, 0);
   });
 
-  it('shuts every nozzle once a 400 L helium tank runs dry in the deck push', () => {
-    const before = liveReading({ ...HELIUM_400, phase: 9.3 });
+  it('shuts every nozzle once a 400 L helium tank runs dry in the flip', () => {
+    const before = liveReading({ ...HELIUM_400, phase: 10.95 });
     expect(before.tank.empty).toBe(false);
     expect(before.thrustN).toBeGreaterThan(0);
-    const dry = liveReading({ ...HELIUM_400, phase: 9.45 });
-    expect(dry.phase).toBe('deck');
+    const dry = liveReading({ ...HELIUM_400, phase: 11.06 });
+    expect(dry.phase).toBe('flip');
     expect(dry.tank.empty).toBe(true);
     expect(dry.tank.massShare).toBeCloseTo(emptyShare(), 9);
     expect(dry.thrustN).toBe(0);
@@ -112,11 +112,11 @@ describe('run outcome', () => {
     expect(runUsedShare('air', 600)).toBeCloseTo(0.793, 3);
   });
 
-  it('runs a 400 L helium tank dry 0.93 s into the deck push and lands 11.5 m/s harder', () => {
+  it('runs a 400 L helium tank dry 0.26 s into the flip and lands 11.5 m/s harder', () => {
     const outcome = runOutcome('helium', 400);
     expect(outcome.ranDry).toBe(true);
-    expect(outcome.emptyAtSeconds).toBeCloseTo(9.44, 2);
-    expect((outcome.emptyAtSeconds ?? 0) - PHASE_RANGES.deck.start).toBeCloseTo(0.93, 2);
+    expect(outcome.emptyAtSeconds).toBeCloseTo(11.05, 2);
+    expect((outcome.emptyAtSeconds ?? 0) - PHASE_RANGES.flip.start).toBeCloseTo(0.26, 2);
     expect(outcome.touchdownMs - TOUCHDOWN_SPEED_MS).toBeCloseTo(11.5, 1);
     expect(runUsedShare('helium', 400)).toBeCloseTo(1 - emptyShare(), 9);
   });

@@ -1,7 +1,7 @@
 import { clamp } from '@core/math';
 import type { GasId, TankReading } from '../ids';
-import { EMPTY_BELOW_BAR, G, TOUCHDOWN_SPEED_MS } from './constants';
-import { exhaustSpeed, pressureAt, shareAtPressure, storedMass } from './gas';
+import { EMPTY_BELOW_SHARE, G, TOUCHDOWN_SPEED_MS } from './constants';
+import { exhaustSpeed, pressureAt, storedMass } from './gas';
 import { NEWTONS_PER_KILONEWTON } from './units';
 import { BURNS, PHASE_RANGES, burnThrust, catchFallAt, landingFallAt } from './run';
 import type { FallState, PhaseRange } from './run';
@@ -27,7 +27,7 @@ function secondsAtImpulse(kns: number): number | null {
 }
 
 export function emptyShare(): number {
-  return shareAtPressure(EMPTY_BELOW_BAR);
+  return EMPTY_BELOW_SHARE;
 }
 
 export function usableMassKg(gas: GasId, litres: number): number {
