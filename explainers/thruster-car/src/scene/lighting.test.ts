@@ -1,7 +1,9 @@
 import { DirectionalLight } from 'three';
 import { describe, expect, it } from 'vitest';
-import { THEME } from '../theme';
 import { thrusterCarLight } from './lighting';
+
+const SHELL_KEY_INTENSITY = 2.4;
+const VIOLET_RED_SHARE = 0.9;
 
 function shellLights() {
   return {
@@ -19,15 +21,19 @@ describe('thruster car light', () => {
     expect(key.x).toBeLessThan(-0.6);
     expect(key.y).toBeGreaterThan(0.2);
     expect(key.y).toBeLessThan(0.5);
-    expect(lights.key.color.getHexString()).toBe(THEME.keyLight.slice(1));
-    expect(lights.key.color.r).toBeGreaterThan(lights.key.color.b);
+    expect(lights.key.color.r).toBeGreaterThan(lights.key.color.g);
+    expect(lights.key.color.g).toBeGreaterThan(lights.key.color.b);
+    expect(lights.key.intensity).toBeGreaterThan(SHELL_KEY_INTENSITY);
   });
 
-  it('fills cool and soft from the sky and rims cool from the far side', () => {
+  it('fills violet-blue from the sky on the shade side and rims cool from the far side', () => {
     const lights = shellLights();
     thrusterCarLight(lights);
-    expect(lights.fill.color.getHexString()).toBe(THEME.fillLight.slice(1));
-    expect(lights.fill.color.b).toBeGreaterThan(lights.fill.color.r);
+    const fill = lights.fill.position.clone().normalize();
+    expect(fill.y).toBeGreaterThan(0.6);
+    expect(fill.dot(lights.key.position.clone().normalize())).toBeLessThan(0);
+    expect(lights.fill.color.b).toBeGreaterThan(lights.fill.color.g);
+    expect(lights.fill.color.r).toBeGreaterThan(lights.fill.color.g * VIOLET_RED_SHARE);
     expect(lights.rim.color.b).toBeGreaterThan(lights.rim.color.r);
     expect(lights.fill.intensity).toBeLessThan(lights.rim.intensity);
     expect(lights.rim.intensity).toBeLessThan(lights.key.intensity);

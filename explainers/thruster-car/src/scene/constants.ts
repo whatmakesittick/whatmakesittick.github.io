@@ -1,6 +1,5 @@
 import type { PartId } from '../ids';
 import { SITE } from '../model/layout';
-import { THEME } from '../theme';
 
 type Triple = readonly [number, number, number];
 
@@ -21,7 +20,7 @@ export const UNDIMMED_PARTS: readonly PartId[] = ['runway', 'landingPad'];
 
 export const LIGHT_RIG = {
   distance: 400,
-  key: { color: THEME.keyLight, intensity: 2.8, direction: [-1, 0.5, 0.6] as Triple },
-  fill: { color: THEME.fillLight, intensity: 0.6, direction: [0.4, 1, 0.5] as Triple },
-  rim: { color: '#c6cfff', intensity: 1.3, direction: [1, 0.3, -1] as Triple },
+  key: { color: '#ff9c5c', intensity: 4, direction: [-1, 0.5, 0.6] as Triple },
+  fill: { color: '#8d8cff', intensity: 0.95, direction: [0.5, 1, -0.5] as Triple },
+  rim: { color: '#d2dbff', intensity: 1.8, direction: [1, 0.3, -1] as Triple },
 } as const;
