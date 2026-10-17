@@ -14,6 +14,7 @@ export const PART_IDS = [
   'ramp',
   'landingPad',
   'ghostPath',
+  'parkedRow',
 ] as const;
 
 export type PartId = (typeof PART_IDS)[number];
@@ -33,18 +34,41 @@ export const LABEL_PRIORITY: readonly PartId[] = [
   'fans',
   'wheels',
   'body',
+  'parkedRow',
   'runway',
 ];
 
-export const PHASE_IDS = ['boost', 'ramp', 'launch', 'flip', 'catch', 'rest'] as const;
+export const PHASE_IDS = [
+  'sprint',
+  'settle',
+  'ramp',
+  'flip',
+  'catch',
+  'runUp',
+  'leap',
+  'twist',
+  'landing',
+  'rest',
+] as const;
 
 export type PhaseId = (typeof PHASE_IDS)[number];
 
-export const MOMENT_IDS = ['leavesRamp', 'peak', 'rollComplete', 'touchdown', 'stopped'] as const;
+export const MOMENT_IDS = [
+  'sixty',
+  'inverted',
+  'leavesRamp',
+  'rollComplete',
+  'touchdown',
+  'liftOff',
+  'apex',
+  'twistComplete',
+  'landed',
+  'stopped',
+] as const;
 
 export type MomentId = (typeof MOMENT_IDS)[number];
 
-export const PRESET_IDS = ['tank', 'nozzle', 'boost', 'hop', 'flip', 'limits'] as const;
+export const PRESET_IDS = ['tank', 'nozzle', 'boost', 'hook', 'flip', 'jump', 'limits'] as const;
 
 export type PresetId = (typeof PRESET_IDS)[number];
 
@@ -109,12 +133,13 @@ export const CAMERA_VIEW_IDS = [
   'boostSide',
   'rampWide',
   'flipChase',
+  'jumpWide',
   'siteWide',
 ] as const;
 
 export type CameraView = (typeof CAMERA_VIEW_IDS)[number];
 
-export const REGION_IDS = ['site', 'car', 'cabin', 'tail', 'ramp', 'arc'] as const;
+export const REGION_IDS = ['site', 'car', 'cabin', 'tail', 'ramp', 'arc', 'jump'] as const;
 
 export type RegionId = (typeof REGION_IDS)[number];
 
@@ -124,7 +149,7 @@ export type CarRegionId = (typeof CAR_REGION_IDS)[number];
 
 export type SiteRegionId = Exclude<RegionId, CarRegionId>;
 
-export const ANCHOR_IDS = ['car', 'tank', 'tail', 'rampExit', 'pad'] as const;
+export const ANCHOR_IDS = ['car', 'tank', 'tail', 'rampExit', 'pad', 'row'] as const;
 
 export type AnchorId = (typeof ANCHOR_IDS)[number];
 

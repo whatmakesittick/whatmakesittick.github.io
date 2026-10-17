@@ -34,8 +34,8 @@ export const TANK_LITRES: Readonly<Record<TankChoiceId, number>> = { '400': 400,
 export const DEFAULT_TANK_LITRES = TANK_LITRES['600'];
 
 export const REAR_THRUST_FULL_N = 80000;
-export const CORNER_NOZZLE_MAX_N = 8000;
-export const ROLL_NOZZLE_N = 2000;
+export const CORNER_NOZZLE_MAX_N = 10000;
+export const ROLL_NOZZLE_N = 6000;
 export const ROLL_INERTIA_KG_M2 = 600;
 
 export const PRESSURE_EXPONENT = 3;
@@ -44,5 +44,10 @@ export const EMPTY_BELOW_BAR = 5;
 export const FILL_POWER_KW = 50;
 export const ROTOR_HOVER_KW = 155;
 export const SIXTY_MPH_MS = 26.82;
-export const BRAKE_DECEL = 2.0;
+export const BRAKE_DECEL = 4;
+export const ENTRY_SPEED_MS = 18;
+export const RUN_UP_THRUST_N = 10200;
+export const RUN_UP_SPEED_MS = 15;
+export const JUMP_HEIGHT_M = 8;
+export const TOUCHDOWN_SPEED_MS = 2.5;
 export const LANDING_SQUAT_M = 0.08;

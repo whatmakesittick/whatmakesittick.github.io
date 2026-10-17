@@ -1,16 +1,30 @@
 import { describe, expect, it } from 'vitest';
-import { GAS_IDS } from '../ids';
-import { TANK_LITRES } from './constants';
+import type { PhaseId } from '../ids';
 import { emptyAtSeconds, impulseUsedKns, shortfallMs, tankAt } from './budget';
 import { MOMENTS, PHASE_RANGES, RUN_SECONDS } from './run';
 
+const PHASE_IMPULSE_KNS: Readonly<Partial<Record<PhaseId, number>>> = {
+  sprint: 45.6,
+  flip: 10.0,
+  catch: 27.7,
+  runUp: 6.3,
+  leap: 27.9,
+  twist: 14.2,
+  landing: 23.8,
+};
+
+function phaseImpulse(id: PhaseId): number {
+  const { start, end } = PHASE_RANGES[id];
+  return impulseUsedKns(end) - impulseUsedKns(start);
+}
+
 describe('budget', () => {
-  it('spends 27.2 kN s on the boost, 5.8 on the flip and 23.9 on the catch', () => {
-    const { boost, flip, catch: cushion } = PHASE_RANGES;
-    expect(impulseUsedKns(boost.end)).toBeCloseTo(27.2, 1);
-    expect(impulseUsedKns(flip.end) - impulseUsedKns(flip.start)).toBeCloseTo(5.8, 1);
-    expect(impulseUsedKns(cushion.end) - impulseUsedKns(cushion.start)).toBeCloseTo(23.9, 1);
-    expect(impulseUsedKns(RUN_SECONDS)).toBeCloseTo(impulseUsedKns(cushion.end), 9);
+  it('spends the impulse of each burn in its own phase', () => {
+    Object.entries(PHASE_IMPULSE_KNS).forEach(([id, kns]) =>
+      expect(phaseImpulse(id as PhaseId), id).toBeCloseTo(kns, 1),
+    );
+    expect(impulseUsedKns(RUN_SECONDS)).toBeCloseTo(155.4, 1);
+    expect(impulseUsedKns(RUN_SECONDS)).toBeCloseTo(impulseUsedKns(PHASE_RANGES.landing.end), 9);
   });
 
   it('starts every tank full at 700 bar', () => {
@@ -21,31 +35,33 @@ describe('budget', () => {
     expect(start.empty).toBe(false);
   });
 
-  it('ends the air run with about 74 percent left at about 285 bar', () => {
+  it('ends the air run with about 29 percent left at about 18 bar', () => {
     const end = tankAt(RUN_SECONDS, 'air', 600);
-    expect(end.massShare).toBeCloseTo(0.74, 2);
-    expect(end.pressureBar).toBeCloseTo(285, -1);
+    expect(end.massShare).toBeCloseTo(0.29, 2);
+    expect(end.pressureBar).toBeCloseTo(18, 0);
     expect(end.empty).toBe(false);
     expect(end.emptyAtSeconds).toBeNull();
     expect(end.shortfallMs).toBe(0);
+    expect(tankAt(RUN_SECONDS, 'nitrogen', 600).empty).toBe(false);
   });
 
-  it('runs the small helium tank dry about 0.6 s into the catch and lands harder', () => {
-    const emptyAt = emptyAtSeconds('helium', 400);
-    expect(emptyAt).not.toBeNull();
-    expect(emptyAt! - PHASE_RANGES.catch.start).toBeCloseTo(0.6, 1);
-    expect(emptyAt!).toBeLessThan(MOMENTS.touchdown);
-    expect(shortfallMs('helium', 400)).toBeGreaterThan(0);
-    expect(tankAt(emptyAt! - 0.01, 'helium', 400).empty).toBe(false);
-    expect(tankAt(emptyAt!, 'helium', 400).empty).toBe(true);
+  it('runs the small air tank dry over the jump, so the last landing loses its cushion', () => {
+    const emptyAt = emptyAtSeconds('air', 400) ?? Number.NaN;
+    expect(emptyAt).toBeGreaterThan(MOMENTS.liftOff);
+    expect(emptyAt).toBeLessThan(MOMENTS.landed);
+    expect(shortfallMs('air', 400)).toBeCloseTo(10, 0);
   });
 
-  it('lands every other gas and tank with gas to spare', () => {
-    GAS_IDS.forEach((gas) =>
-      Object.values(TANK_LITRES)
-        .filter((litres) => gas !== 'helium' || litres !== TANK_LITRES['400'])
-        .forEach((litres) => expect(tankAt(RUN_SECONDS, gas, litres).empty).toBe(false)),
-    );
+  it('runs helium dry before the hook touchdown in either tank', () => {
+    const small = emptyAtSeconds('helium', 400) ?? Number.NaN;
+    const large = emptyAtSeconds('helium', 600) ?? Number.NaN;
+    expect(small).toBeLessThan(PHASE_RANGES.catch.start);
+    expect(large).toBeGreaterThan(PHASE_RANGES.catch.start);
+    expect(large).toBeLessThan(MOMENTS.touchdown);
+    expect(shortfallMs('helium', 600)).toBeGreaterThan(0);
+    expect(shortfallMs('helium', 400)).toBeGreaterThan(shortfallMs('helium', 600));
+    expect(tankAt(large - 0.01, 'helium', 600).empty).toBe(false);
+    expect(tankAt(large, 'helium', 600).empty).toBe(true);
   });
 
   it('never refills the tank as the run goes on', () => {

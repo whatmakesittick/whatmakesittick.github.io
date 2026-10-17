@@ -11,18 +11,23 @@ function rollAccel(inertia: number, nozzleN: number): number {
   return rollTorque(nozzleN) / inertia;
 }
 
-export function rollSeconds(inertia: number, nozzleN: number): number {
-  return 2 * Math.sqrt((HALF_TURN * inertia) / rollTorque(nozzleN));
+export function rollSeconds(inertia: number, nozzleN: number, angle = HALF_TURN): number {
+  return 2 * Math.sqrt((angle * inertia) / rollTorque(nozzleN));
 }
 
-export function rollAngleAt(secondsIntoFlip: number, inertia: number, nozzleN: number): number {
-  const total = rollSeconds(inertia, nozzleN);
-  const elapsed = clamp(secondsIntoFlip, 0, total);
+export function rollAngleAt(
+  secondsIntoRoll: number,
+  inertia: number,
+  nozzleN: number,
+  angle = HALF_TURN,
+): number {
+  const total = rollSeconds(inertia, nozzleN, angle);
+  const elapsed = clamp(secondsIntoRoll, 0, total);
   const accel = rollAccel(inertia, nozzleN);
   if (elapsed <= total / 2) return 0.5 * accel * elapsed ** 2;
-  return HALF_TURN - 0.5 * accel * (total - elapsed) ** 2;
+  return angle - 0.5 * accel * (total - elapsed) ** 2;
 }
 
-export function peakRollRate(inertia: number, nozzleN: number): number {
-  return (rollAccel(inertia, nozzleN) * rollSeconds(inertia, nozzleN)) / 2;
+export function peakRollRate(inertia: number, nozzleN: number, angle = HALF_TURN): number {
+  return (rollAccel(inertia, nozzleN) * rollSeconds(inertia, nozzleN, angle)) / 2;
 }

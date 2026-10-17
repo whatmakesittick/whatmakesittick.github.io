@@ -2,7 +2,6 @@ import {
   BufferGeometry,
   CylinderGeometry,
   DoubleSide,
-  Euler,
   Float32BufferAttribute,
   Group,
   Mesh,
@@ -33,7 +32,9 @@ import {
   CAR_REGIONS,
   MOMENTS,
   NOZZLES,
+  PARKED_ROW,
   RAMP,
+  RAMP_LENGTH,
   SEAT,
   SITE,
   SITE_ANCHORS,
@@ -41,15 +42,14 @@ import {
   TANK,
   TANK_VALVE,
   carAt,
-  rampPitch,
   rampPoint,
-  rampRoll,
 } from '../model';
+import type { Footprint, ParkedVehicle } from '../model';
 import { THEME } from '../theme';
 import type { Assembly, AssemblyResources } from './assembly';
-import { CAR_EULER_ORDER, applyCarPose } from './pose';
+import { applyCarPose } from './pose';
 
-const RAMP_SECTIONS = 48;
+const RAMP_SECTIONS = 96;
 const NOZZLE_RADIUS = 0.07;
 const NOZZLE_LENGTH = 0.18;
 const WHEEL_WIDTH = 0.25;
@@ -67,7 +67,7 @@ const RUNWAY_LABEL: Point = [12, 0, -4];
 const BODY_TOP = CAR.height - CAR.rideHeight;
 const WHEEL_CENTRE_Y = CAR.wheelRadius - CAR.rideHeight;
 const UP = new Vector3(0, 1, 0);
-const ACROSS = new Vector3(0, 0, 1);
+const HALF_WIDTH = new Vector3(0, 0, RAMP.width / 2);
 
 const FINISHES = {
   body: { color: THEME.carBody, roughness: 0.45, metalness: 0.6 },
@@ -81,6 +81,8 @@ const FINISHES = {
   runway: { color: THEME.concrete, roughness: 0.95, metalness: 0 },
   paint: { color: THEME.paint, roughness: 0.8, metalness: 0 },
   ground: { color: THEME.scrub, roughness: 1, metalness: 0 },
+  parkedCar: { color: THEME.parkedCar, roughness: 0.5, metalness: 0.4 },
+  parkedTruck: { color: THEME.parkedTruck, roughness: 0.6, metalness: 0.3 },
 } as const satisfies Record<string, MaterialFinish>;
 
 const CAR_LABEL_SPOTS: Readonly<Partial<Record<PartId, Point>>> = {
@@ -99,9 +101,10 @@ const CAR_LABEL_SPOTS: Readonly<Partial<Record<PartId, Point>>> = {
 
 const SITE_LABEL_SPOTS: Readonly<Partial<Record<PartId, Point>>> = {
   runway: RUNWAY_LABEL,
-  ramp: rampPoint(0.5),
+  ramp: rampPoint(RAMP_LENGTH / 2),
   landingPad: SITE_ANCHORS.pad,
-  ghostPath: carAt(MOMENTS.peak).position,
+  ghostPath: carAt(MOMENTS.rollComplete).position,
+  parkedRow: SITE_ANCHORS.row,
 };
 
 const carRegion = localRegions(CAR_REGIONS);
@@ -124,15 +127,12 @@ function centredBox([x, y, z]: Point, [halfX, halfY, halfZ]: Point): BufferGeome
 function ribbonGeometry(): BufferGeometry {
   const positions: number[] = [];
   const indices: number[] = [];
-  const side = new Vector3();
   for (let section = 0; section <= RAMP_SECTIONS; section += 1) {
-    const u = section / RAMP_SECTIONS;
-    const centre = new Vector3(...rampPoint(u));
-    side
-      .copy(ACROSS)
-      .applyEuler(new Euler(rampRoll(u), 0, rampPitch(u), CAR_EULER_ORDER))
-      .multiplyScalar(RAMP.width / 2);
-    positions.push(...centre.clone().sub(side).toArray(), ...centre.clone().add(side).toArray());
+    const centre = new Vector3(...rampPoint((RAMP_LENGTH * section) / RAMP_SECTIONS));
+    positions.push(
+      ...centre.clone().sub(HALF_WIDTH).toArray(),
+      ...centre.clone().add(HALF_WIDTH).toArray(),
+    );
     if (section > 0) {
       const base = 2 * (section - 1);
       indices.push(base, base + 1, base + 2, base + 1, base + 3, base + 2);
@@ -143,6 +143,14 @@ function ribbonGeometry(): BufferGeometry {
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
   return geometry;
+}
+
+function paintGeometry({ x, z }: Footprint): BufferGeometry {
+  return box({ minX: x[0], maxX: x[1], minY: 0, maxY: PAINT_THICKNESS, minZ: z[0], maxZ: z[1] });
+}
+
+function parkedGeometry({ centreX, length, width, height }: ParkedVehicle): BufferGeometry {
+  return centredBox([centreX, height / 2, 0], [length / 2, height / 2, width / 2]);
 }
 
 class PlaceholderAssembly implements Assembly {
@@ -207,7 +215,7 @@ class PlaceholderAssembly implements Assembly {
     );
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -GROUND_DROP;
-    const { run, landingBox } = SITE;
+    const { run, landingBox, jumpLandingBox } = SITE;
     this.mesh(
       this.site,
       'runway',
@@ -221,18 +229,15 @@ class PlaceholderAssembly implements Assembly {
         maxZ: run.z[1],
       }),
     );
-    this.mesh(
-      this.site,
-      'landingPad',
-      FINISHES.paint,
-      box({
-        minX: landingBox.x[0],
-        maxX: landingBox.x[1],
-        minY: 0,
-        maxY: PAINT_THICKNESS,
-        minZ: landingBox.z[0],
-        maxZ: landingBox.z[1],
-      }),
+    this.mesh(this.site, 'landingPad', FINISHES.paint, paintGeometry(landingBox));
+    this.mesh(this.site, 'landingPad', FINISHES.paint, paintGeometry(jumpLandingBox));
+    PARKED_ROW.forEach((vehicle) =>
+      this.mesh(
+        this.site,
+        'parkedRow',
+        vehicle.kind === 'truck' ? FINISHES.parkedTruck : FINISHES.parkedCar,
+        parkedGeometry(vehicle),
+      ),
     );
     this.mesh(this.site, 'ramp', FINISHES.ramp, ribbonGeometry());
   }

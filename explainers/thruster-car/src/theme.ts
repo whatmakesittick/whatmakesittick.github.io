@@ -3,11 +3,15 @@ import type { GasId, PhaseId } from './ids';
 
 export const THEME = {
   ...CORE_THEME,
-  boost: '#f2b134',
+  sprint: '#f2b134',
+  settle: '#c9a227',
   ramp: '#5fa8ff',
-  launch: '#9b7fd1',
   flip: '#e5534b',
   catch: '#6fbf73',
+  runUp: '#e07b2e',
+  leap: '#9b7fd1',
+  twist: '#ff7aa8',
+  landing: '#3fc1a5',
   rest: '#8a8f99',
   carBody: '#9aa0a8',
   carTrim: '#2f3237',
@@ -21,6 +25,8 @@ export const THEME = {
   empty: '#e5534b',
   weight: '#f2b134',
   netThrust: '#6fbf73',
+  parkedCar: '#4a5260',
+  parkedTruck: '#5d6a78',
   rampSteel: '#6f7782',
   concrete: '#7c766f',
   paint: '#e9e7e1',
@@ -35,11 +41,15 @@ export const THEME = {
 } as const;
 
 export const PHASE_TONES: Readonly<Record<PhaseId, string>> = {
-  boost: THEME.boost,
+  sprint: THEME.sprint,
+  settle: THEME.settle,
   ramp: THEME.ramp,
-  launch: THEME.launch,
   flip: THEME.flip,
   catch: THEME.catch,
+  runUp: THEME.runUp,
+  leap: THEME.leap,
+  twist: THEME.twist,
+  landing: THEME.landing,
   rest: THEME.rest,
 };
 

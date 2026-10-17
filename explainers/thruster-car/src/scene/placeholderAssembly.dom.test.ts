@@ -53,9 +53,9 @@ describe('placeholder assembly', () => {
 
   it('poses the car along the run and keeps the chase target on it', () => {
     const assembly = createAssembly(resources(), stateAt(0));
-    assembly.setState(stateAt(MOMENTS.peak));
+    assembly.setState(stateAt(MOMENTS.inverted));
     assembly.root.updateMatrixWorld(true);
-    const peak = runAt(MOMENTS.peak).car;
+    const peak = runAt(MOMENTS.inverted).car;
     expect(worldOf(assembly.anchor('car')).x).toBeCloseTo(peak.position[0], 0);
     expect(assembly.chaseTarget().position).toEqual(peak.position);
     expect(assembly.chaseTarget().span).toBe(CAR.wheelbase);
@@ -66,18 +66,18 @@ describe('placeholder assembly', () => {
   });
 
   it('lights the nozzles that fire and goes dark when the tank is empty', () => {
-    const assembly = createAssembly(resources(), stateAt(1));
+    const assembly = createAssembly(resources(), stateAt(0.5));
     expect(lit(assembly)).toEqual([
       'rearOuterLeft',
       'rearInnerLeft',
       'rearInnerRight',
       'rearOuterRight',
     ]);
-    assembly.setState(stateAt(3.5));
+    assembly.setState(stateAt(4));
     expect(lit(assembly)).toEqual([]);
-    assembly.setState(stateAt(6));
+    assembly.setState(stateAt(6.2));
     expect(lit(assembly)).toHaveLength(4);
-    assembly.setState(stateAt(6, true));
+    assembly.setState(stateAt(6.2, true));
     expect(lit(assembly)).toEqual([]);
     assembly.dispose();
   });

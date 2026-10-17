@@ -25,4 +25,12 @@ describe('roll', () => {
   it('peaks at about 250 degrees a second half way through', () => {
     expect(toDegrees(peakRollRate(600, 2000))).toBeCloseTo(249, 0);
   });
+
+  it('rolls half a turn in 0.84 s and a full turn in 1.18 s on 6 kN nozzles', () => {
+    expect(rollSeconds(600, 6000)).toBeCloseTo(0.84, 2);
+    const full = rollSeconds(600, 6000, 2 * Math.PI);
+    expect(full).toBeCloseTo(1.18, 2);
+    expect(rollAngleAt(full / 2, 600, 6000, 2 * Math.PI)).toBeCloseTo(Math.PI, 9);
+    expect(rollAngleAt(full, 600, 6000, 2 * Math.PI)).toBeCloseTo(2 * Math.PI, 9);
+  });
 });

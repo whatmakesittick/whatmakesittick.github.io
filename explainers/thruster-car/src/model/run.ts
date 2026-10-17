@@ -1,17 +1,32 @@
-import { clamp, smoothstep } from '@core/math';
+import { FULL_TURN, clamp } from '@core/math';
 import { CORNER_NOZZLE_IDS, NOZZLE_IDS, PHASE_IDS, REAR_NOZZLE_IDS } from '../ids';
-import type { CarReading, MomentId, NozzleId, NozzleThrusts, PhaseId, Point } from '../ids';
-import { launchSpeed } from './ballistic';
-import { BOOST_SECONDS, RAMP_ENTRY_SPEED_MS, RUN_BOOST_N } from './boost';
+import type { CarReading, MomentId, NozzleId, NozzleThrusts, PhaseId } from '../ids';
+import {
+  SETTLE_DECEL,
+  SETTLE_SECONDS,
+  SPRINT_ACCEL,
+  SPRINT_DISTANCE_M,
+  SPRINT_SECONDS,
+  SPRINT_THRUST_N,
+  boostAccel,
+} from './boost';
 import {
   BRAKE_DECEL,
   CAR_MASS_KG,
+  CORNER_NOZZLE_MAX_N,
+  ENTRY_SPEED_MS,
   G,
+  JUMP_HEIGHT_M,
   LANDING_SQUAT_M,
   ROLL_INERTIA_KG_M2,
   ROLL_NOZZLE_N,
+  RUN_UP_SPEED_MS,
+  RUN_UP_THRUST_N,
+  SIXTY_MPH_MS,
+  TOUCHDOWN_SPEED_MS,
 } from './constants';
-import { RAMP, RAMP_EXIT_X, rampHeight, rampPitch, rampRoll, rampSlope } from './layout';
+import { DECK_END_X, JUMP, LOOP_LENGTH, RAMP, rampPitch, rampPoint } from './layout';
+import { leapAccel, leapSpeedFor, loopAngleAt, loopSpeedAt, loopTimetable, topSpeed } from './loop';
 import { rollAngleAt, rollSeconds } from './roll';
 
 export interface PhaseRange {
@@ -38,83 +53,156 @@ export interface RunReading {
   fans: boolean;
 }
 
-export const RUN_SECONDS = 14;
-export const RAMP_SECONDS = 0.9;
-export const LAUNCH_HOLD_SECONDS = 0.3;
-export const FLIP_SECONDS = 1.45;
-export const CATCH_SECONDS = 0.85;
+interface Cushion {
+  from: FallState;
+  accel: number;
+  seconds: number;
+}
 
-const RAMP_START = BOOST_SECONDS;
-const LAUNCH_START = RAMP_START + RAMP_SECONDS;
-const FLIP_START = LAUNCH_START + LAUNCH_HOLD_SECONDS;
-const CATCH_START = FLIP_START + FLIP_SECONDS;
-const TOUCHDOWN = CATCH_START + CATCH_SECONDS;
+export const RUN_SECONDS = 17;
+export const LAUNCH_HOLD_SECONDS = 0.1;
 
-export const PHASE_RANGES: Readonly<Record<PhaseId, PhaseRange>> = {
-  boost: { start: 0, end: RAMP_START },
-  ramp: { start: RAMP_START, end: LAUNCH_START },
-  launch: { start: LAUNCH_START, end: FLIP_START },
-  flip: { start: FLIP_START, end: CATCH_START },
-  catch: { start: CATCH_START, end: TOUCHDOWN },
-  rest: { start: TOUCHDOWN, end: RUN_SECONDS },
-};
+const LOOP_TIMES = loopTimetable(ENTRY_SPEED_MS, RAMP.radius);
+export const LOOP_SECONDS = LOOP_TIMES[LOOP_TIMES.length - 1];
+export const EXIT_SPEED_MS = topSpeed(ENTRY_SPEED_MS, RAMP.radius);
+export const DECK_SECONDS = RAMP.deckLength / EXIT_SPEED_MS;
+export const RAMP_SECONDS = LOOP_SECONDS + DECK_SECONDS;
+const FLIP_ROLL_SECONDS = rollSeconds(ROLL_INERTIA_KG_M2, ROLL_NOZZLE_N);
+export const FLIP_SECONDS = LAUNCH_HOLD_SECONDS + FLIP_ROLL_SECONDS;
+export const TWIST_SECONDS = rollSeconds(ROLL_INERTIA_KG_M2, ROLL_NOZZLE_N, FULL_TURN);
 
-const BOOST_ACCEL = RAMP_ENTRY_SPEED_MS / BOOST_SECONDS;
-export const EXIT_SPEED_MS = launchSpeed(RAMP_ENTRY_SPEED_MS, RAMP.exitHeight);
-const EXIT_ANGLE = rampPitch(1);
-const LAUNCH_VX = EXIT_SPEED_MS * Math.cos(EXIT_ANGLE);
-const LAUNCH_VY = EXIT_SPEED_MS * Math.sin(EXIT_ANGLE);
-const ROLL_BURN_SECONDS = rollSeconds(ROLL_INERTIA_KG_M2, ROLL_NOZZLE_N) / 2;
-
-const RAMP_ENTRY_RATE = (RAMP_ENTRY_SPEED_MS * RAMP_SECONDS) / RAMP.lengthX;
-const RAMP_EXIT_RATE =
-  (EXIT_SPEED_MS * RAMP_SECONDS) / (RAMP.lengthX * Math.hypot(1, rampSlope(1)));
-
-function flightAt(secondsAfterExit: number): FallState {
+function freeFall(height: number, upSpeed: number, elapsed: number): FallState {
   return {
-    height: RAMP.exitHeight + LAUNCH_VY * secondsAfterExit - 0.5 * G * secondsAfterExit ** 2,
-    verticalSpeed: LAUNCH_VY - G * secondsAfterExit,
+    height: height + upSpeed * elapsed - 0.5 * G * elapsed ** 2,
+    verticalSpeed: upSpeed - G * elapsed,
   };
 }
 
-const CATCH_FROM = flightAt(CATCH_START - LAUNCH_START);
+function cushionFrom(from: FallState, accel: number): Cushion {
+  return { from, accel, seconds: (-from.verticalSpeed - TOUCHDOWN_SPEED_MS) / accel };
+}
+
+function cushionAt({ from, accel, seconds }: Cushion, elapsed: number): FallState {
+  const time = clamp(elapsed, 0, seconds);
+  return {
+    height: from.height + from.verticalSpeed * time + 0.5 * accel * time ** 2,
+    verticalSpeed: from.verticalSpeed + accel * time,
+  };
+}
+
+const RAMP_START = SPRINT_SECONDS + SETTLE_SECONDS;
+const FLIP_START = RAMP_START + RAMP_SECONDS;
+const ROLL_START = FLIP_START + LAUNCH_HOLD_SECONDS;
+const CATCH_START = FLIP_START + FLIP_SECONDS;
+
+const CATCH_FROM = freeFall(RAMP.exitHeight, 0, FLIP_SECONDS);
 const CATCH_ACCEL =
-  (-2 * (CATCH_FROM.height + CATCH_FROM.verticalSpeed * CATCH_SECONDS)) / CATCH_SECONDS ** 2;
+  (CATCH_FROM.verticalSpeed ** 2 - TOUCHDOWN_SPEED_MS ** 2) / (2 * CATCH_FROM.height);
+const CATCH = cushionFrom(CATCH_FROM, CATCH_ACCEL);
+export const CATCH_SECONDS = CATCH.seconds;
 export const CATCH_THRUST_N = CAR_MASS_KG * (G + CATCH_ACCEL);
-export const TOUCHDOWN_SPEED_MS = -(CATCH_FROM.verticalSpeed + CATCH_ACCEL * CATCH_SECONDS);
-const TOUCHDOWN_X = RAMP_EXIT_X + LAUNCH_VX * (TOUCHDOWN - LAUNCH_START);
+const TOUCHDOWN = CATCH_START + CATCH_SECONDS;
+const TOUCHDOWN_X = DECK_END_X - EXIT_SPEED_MS * (TOUCHDOWN - FLIP_START);
+
+const RUN_UP_ACCEL = boostAccel(RUN_UP_THRUST_N);
+const RUN_UP_BURN_SECONDS = (RUN_UP_SPEED_MS - EXIT_SPEED_MS) / RUN_UP_ACCEL;
+const RUN_UP_BURN_M = (RUN_UP_SPEED_MS ** 2 - EXIT_SPEED_MS ** 2) / (2 * RUN_UP_ACCEL);
+const RUN_UP_SECONDS =
+  RUN_UP_BURN_SECONDS + (TOUCHDOWN_X - RUN_UP_BURN_M - JUMP.leapX) / RUN_UP_SPEED_MS;
+const LIFT_OFF = TOUCHDOWN + RUN_UP_SECONDS;
+
+export const LEAP_THRUST_N = CORNER_NOZZLE_IDS.length * CORNER_NOZZLE_MAX_N;
+const LEAP_ACCEL = leapAccel(LEAP_THRUST_N);
+const LEAP_UP_SPEED = leapSpeedFor(JUMP_HEIGHT_M, LEAP_ACCEL);
+export const LEAP_SECONDS = LEAP_UP_SPEED / LEAP_ACCEL;
+const LEAP_TOP = 0.5 * LEAP_ACCEL * LEAP_SECONDS ** 2;
+const TWIST_START = LIFT_OFF + LEAP_SECONDS;
+const APEX = TWIST_START + LEAP_UP_SPEED / G;
+
+const LANDING_START_HEIGHT =
+  (2 * G * JUMP_HEIGHT_M - TOUCHDOWN_SPEED_MS ** 2) / (2 * (CATCH_ACCEL + G));
+const LANDING_START = APEX + Math.sqrt((2 * (JUMP_HEIGHT_M - LANDING_START_HEIGHT)) / G);
+const LANDING = cushionFrom(
+  freeFall(LEAP_TOP, LEAP_UP_SPEED, LANDING_START - TWIST_START),
+  CATCH_ACCEL,
+);
+export const LANDING_SECONDS = LANDING.seconds;
+export const LANDING_THRUST_N = CATCH_THRUST_N;
+const LANDED = LANDING_START + LANDING_SECONDS;
+const LANDED_X = JUMP.leapX - RUN_UP_SPEED_MS * (LANDED - LIFT_OFF);
 const SQUAT_RATE = TOUCHDOWN_SPEED_MS / (LANDING_SQUAT_M * Math.E);
 
+export const PHASE_RANGES: Readonly<Record<PhaseId, PhaseRange>> = {
+  sprint: { start: 0, end: SPRINT_SECONDS },
+  settle: { start: SPRINT_SECONDS, end: RAMP_START },
+  ramp: { start: RAMP_START, end: FLIP_START },
+  flip: { start: FLIP_START, end: CATCH_START },
+  catch: { start: CATCH_START, end: TOUCHDOWN },
+  runUp: { start: TOUCHDOWN, end: LIFT_OFF },
+  leap: { start: LIFT_OFF, end: TWIST_START },
+  twist: { start: TWIST_START, end: LANDING_START },
+  landing: { start: LANDING_START, end: LANDED },
+  rest: { start: LANDED, end: RUN_SECONDS },
+};
+
 export const MOMENTS: Readonly<Record<MomentId, number>> = {
-  leavesRamp: LAUNCH_START,
-  peak: LAUNCH_START + LAUNCH_VY / G,
+  sixty: SPRINT_SECONDS,
+  inverted: RAMP_START + LOOP_SECONDS,
+  leavesRamp: FLIP_START,
   rollComplete: CATCH_START,
   touchdown: TOUCHDOWN,
-  stopped: TOUCHDOWN + LAUNCH_VX / BRAKE_DECEL,
+  liftOff: LIFT_OFF,
+  apex: APEX,
+  twistComplete: TWIST_START + TWIST_SECONDS,
+  landed: LANDED,
+  stopped: LANDED + RUN_UP_SPEED_MS / BRAKE_DECEL,
 };
 
 const LEFT_CORNERS: readonly NozzleId[] = ['cornerFrontLeft', 'cornerRearLeft'];
 const RIGHT_CORNERS: readonly NozzleId[] = ['cornerFrontRight', 'cornerRearRight'];
+const REAR_COUNT = REAR_NOZZLE_IDS.length;
+const CORNER_COUNT = CORNER_NOZZLE_IDS.length;
+
+function rollBurns(start: number, seconds: number): Burn[] {
+  const half = start + seconds / 2;
+  return [
+    { start, end: half, nozzles: LEFT_CORNERS, thrustEach: ROLL_NOZZLE_N },
+    { start: half, end: start + seconds, nozzles: RIGHT_CORNERS, thrustEach: ROLL_NOZZLE_N },
+  ];
+}
 
 export const BURNS: readonly Burn[] = [
-  { start: 0, end: BOOST_SECONDS, nozzles: REAR_NOZZLE_IDS, thrustEach: RUN_BOOST_N / 4 },
   {
-    start: FLIP_START,
-    end: FLIP_START + ROLL_BURN_SECONDS,
-    nozzles: LEFT_CORNERS,
-    thrustEach: ROLL_NOZZLE_N,
+    start: 0,
+    end: SPRINT_SECONDS,
+    nozzles: REAR_NOZZLE_IDS,
+    thrustEach: SPRINT_THRUST_N / REAR_COUNT,
   },
-  {
-    start: FLIP_START + ROLL_BURN_SECONDS,
-    end: FLIP_START + 2 * ROLL_BURN_SECONDS,
-    nozzles: RIGHT_CORNERS,
-    thrustEach: ROLL_NOZZLE_N,
-  },
+  ...rollBurns(ROLL_START, FLIP_ROLL_SECONDS),
   {
     start: CATCH_START,
     end: TOUCHDOWN,
     nozzles: CORNER_NOZZLE_IDS,
-    thrustEach: CATCH_THRUST_N / CORNER_NOZZLE_IDS.length,
+    thrustEach: CATCH_THRUST_N / CORNER_COUNT,
+  },
+  {
+    start: TOUCHDOWN,
+    end: TOUCHDOWN + RUN_UP_BURN_SECONDS,
+    nozzles: REAR_NOZZLE_IDS,
+    thrustEach: RUN_UP_THRUST_N / REAR_COUNT,
+  },
+  {
+    start: LIFT_OFF,
+    end: TWIST_START,
+    nozzles: CORNER_NOZZLE_IDS,
+    thrustEach: CORNER_NOZZLE_MAX_N,
+  },
+  ...rollBurns(TWIST_START, TWIST_SECONDS),
+  {
+    start: LANDING_START,
+    end: LANDED,
+    nozzles: CORNER_NOZZLE_IDS,
+    thrustEach: LANDING_THRUST_N / CORNER_COUNT,
   },
 ];
 
@@ -131,111 +219,140 @@ export function phaseAt(seconds: number): PhaseId {
   return PHASE_IDS.find((id) => time < PHASE_RANGES[id].end) ?? 'rest';
 }
 
-function rampProgress(share: number): number {
-  const square = share ** 2;
-  const cube = share ** 3;
-  return (
-    RAMP_ENTRY_RATE * (cube - 2 * square + share) +
-    (3 * square - 2 * cube) +
-    RAMP_EXIT_RATE * (cube - square)
-  );
+export function catchFallAt(secondsIntoCatch: number): FallState {
+  return cushionAt(CATCH, secondsIntoCatch);
 }
 
-interface Motion {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
+export function landingFallAt(secondsIntoLanding: number): FallState {
+  return cushionAt(LANDING, secondsIntoLanding);
 }
 
-function reading(motion: Motion, roll: number, pitch: number, phase: PhaseId): CarReading {
-  const position: Point = [motion.x, motion.y, 0];
+function squatAt(elapsed: number): FallState {
+  const settle = Math.exp(-SQUAT_RATE * elapsed);
   return {
-    position,
-    speed: Math.hypot(motion.vx, motion.vy),
-    height: Math.max(0, motion.y),
-    roll,
-    pitch,
-    onGround: phase === 'boost' || phase === 'rest',
-    onRamp: phase === 'ramp',
-    airborne: phase === 'launch' || phase === 'flip' || phase === 'catch',
+    height: -TOUCHDOWN_SPEED_MS * elapsed * settle,
+    verticalSpeed: -TOUCHDOWN_SPEED_MS * settle * (1 - SQUAT_RATE * elapsed),
   };
 }
 
-function boostAt(time: number): CarReading {
-  const motion = { x: 0.5 * BOOST_ACCEL * time ** 2, y: 0, vx: BOOST_ACCEL * time, vy: 0 };
-  return reading(motion, 0, 0, 'boost');
+const AIRBORNE: ReadonlySet<PhaseId> = new Set(['flip', 'catch', 'leap', 'twist', 'landing']);
+const GROUNDED: ReadonlySet<PhaseId> = new Set(['sprint', 'settle', 'runUp', 'rest']);
+
+function reading(
+  x: number,
+  fall: FallState,
+  groundSpeed: number,
+  roll: number,
+  pitch: number,
+  phase: PhaseId,
+): CarReading {
+  return {
+    position: [x, fall.height, 0],
+    speed: Math.hypot(groundSpeed, fall.verticalSpeed),
+    height: Math.max(0, fall.height),
+    roll,
+    pitch,
+    onGround: GROUNDED.has(phase),
+    onRamp: phase === 'ramp',
+    airborne: AIRBORNE.has(phase),
+  };
+}
+
+const LEVEL: FallState = { height: 0, verticalSpeed: 0 };
+
+function sprintAt(time: number): CarReading {
+  return reading(0.5 * SPRINT_ACCEL * time ** 2, LEVEL, SPRINT_ACCEL * time, 0, 0, 'sprint');
+}
+
+function settleAt(time: number): CarReading {
+  const elapsed = time - SPRINT_SECONDS;
+  const x = SPRINT_DISTANCE_M + SIXTY_MPH_MS * elapsed - 0.5 * SETTLE_DECEL * elapsed ** 2;
+  return reading(x, LEVEL, SIXTY_MPH_MS - SETTLE_DECEL * elapsed, 0, 0, 'settle');
+}
+
+function rampDistanceAt(elapsed: number): number {
+  if (elapsed < LOOP_SECONDS) return RAMP.radius * loopAngleAt(LOOP_TIMES, elapsed);
+  return LOOP_LENGTH + EXIT_SPEED_MS * (elapsed - LOOP_SECONDS);
 }
 
 function rampAt(time: number): CarReading {
-  const u = rampProgress((time - RAMP_START) / RAMP_SECONDS);
-  const height = rampHeight(u);
-  const speed = launchSpeed(RAMP_ENTRY_SPEED_MS, height);
-  const pitch = rampPitch(u);
-  const motion = {
-    x: RAMP.entryX + RAMP.lengthX * u,
-    y: height,
-    vx: speed * Math.cos(pitch),
-    vy: speed * Math.sin(pitch),
-  };
-  return reading(motion, rampRoll(u), pitch, 'ramp');
+  const distance = rampDistanceAt(time - RAMP_START);
+  const [x, y] = rampPoint(distance);
+  const pitch = rampPitch(distance);
+  const speed = loopSpeedAt(ENTRY_SPEED_MS, RAMP.radius, pitch);
+  const fall = { height: y, verticalSpeed: speed * Math.sin(pitch) };
+  return reading(x, fall, speed * Math.cos(pitch), 0, pitch, 'ramp');
 }
 
-function flightReading(time: number, phase: PhaseId): CarReading {
-  const elapsed = time - LAUNCH_START;
-  const fall = flightAt(elapsed);
-  const motion = {
-    x: RAMP_EXIT_X + LAUNCH_VX * elapsed,
-    y: fall.height,
-    vx: LAUNCH_VX,
-    vy: fall.verticalSpeed,
-  };
-  const roll = Math.PI + rollAngleAt(time - FLIP_START, ROLL_INERTIA_KG_M2, ROLL_NOZZLE_N);
-  const pitch = EXIT_ANGLE * (1 - smoothstep(time, FLIP_START, CATCH_START));
-  return reading(motion, roll, pitch, phase);
+function hookX(time: number): number {
+  return DECK_END_X - EXIT_SPEED_MS * (time - FLIP_START);
 }
 
-export function catchFallAt(secondsIntoCatch: number): FallState {
-  const elapsed = clamp(secondsIntoCatch, 0, CATCH_SECONDS);
-  return {
-    height:
-      CATCH_FROM.height + CATCH_FROM.verticalSpeed * elapsed + 0.5 * CATCH_ACCEL * elapsed ** 2,
-    verticalSpeed: CATCH_FROM.verticalSpeed + CATCH_ACCEL * elapsed,
-  };
+function flipAt(time: number): CarReading {
+  const fall = freeFall(RAMP.exitHeight, 0, time - FLIP_START);
+  const roll = rollAngleAt(time - ROLL_START, ROLL_INERTIA_KG_M2, ROLL_NOZZLE_N);
+  return reading(hookX(time), fall, EXIT_SPEED_MS, roll, Math.PI, 'flip');
 }
 
 function catchAt(time: number): CarReading {
   const fall = catchFallAt(time - CATCH_START);
-  const motion = {
-    x: RAMP_EXIT_X + LAUNCH_VX * (time - LAUNCH_START),
-    y: fall.height,
-    vx: LAUNCH_VX,
-    vy: fall.verticalSpeed,
-  };
-  return reading(motion, 2 * Math.PI, 0, 'catch');
+  return reading(hookX(time), fall, EXIT_SPEED_MS, Math.PI, Math.PI, 'catch');
+}
+
+function runUpAt(time: number): CarReading {
+  const elapsed = time - TOUCHDOWN;
+  const burn = Math.min(elapsed, RUN_UP_BURN_SECONDS);
+  const cruise = elapsed - burn;
+  const distance = EXIT_SPEED_MS * burn + 0.5 * RUN_UP_ACCEL * burn ** 2 + RUN_UP_SPEED_MS * cruise;
+  const groundSpeed = EXIT_SPEED_MS + RUN_UP_ACCEL * burn;
+  return reading(TOUCHDOWN_X - distance, squatAt(elapsed), groundSpeed, Math.PI, Math.PI, 'runUp');
+}
+
+function jumpX(time: number): number {
+  return JUMP.leapX - RUN_UP_SPEED_MS * (time - LIFT_OFF);
+}
+
+function leapAt(time: number): CarReading {
+  const elapsed = time - LIFT_OFF;
+  const fall = { height: 0.5 * LEAP_ACCEL * elapsed ** 2, verticalSpeed: LEAP_ACCEL * elapsed };
+  return reading(jumpX(time), fall, RUN_UP_SPEED_MS, Math.PI, Math.PI, 'leap');
+}
+
+function twistAt(time: number): CarReading {
+  const elapsed = time - TWIST_START;
+  const fall = freeFall(LEAP_TOP, LEAP_UP_SPEED, elapsed);
+  const twist = rollAngleAt(elapsed, ROLL_INERTIA_KG_M2, ROLL_NOZZLE_N, FULL_TURN);
+  return reading(jumpX(time), fall, RUN_UP_SPEED_MS, Math.PI + twist, Math.PI, 'twist');
+}
+
+function landingAt(time: number): CarReading {
+  const fall = landingFallAt(time - LANDING_START);
+  return reading(jumpX(time), fall, RUN_UP_SPEED_MS, Math.PI + FULL_TURN, Math.PI, 'landing');
 }
 
 function restAt(time: number): CarReading {
-  const elapsed = time - TOUCHDOWN;
-  const groundSpeed = Math.max(0, LAUNCH_VX - BRAKE_DECEL * elapsed);
-  const settle = Math.exp(-SQUAT_RATE * elapsed);
-  const motion = {
-    x: TOUCHDOWN_X + (LAUNCH_VX ** 2 - groundSpeed ** 2) / (2 * BRAKE_DECEL),
-    y: -TOUCHDOWN_SPEED_MS * elapsed * settle,
-    vx: groundSpeed,
-    vy: -TOUCHDOWN_SPEED_MS * settle * (1 - SQUAT_RATE * elapsed),
-  };
-  return reading(motion, 2 * Math.PI, 0, 'rest');
+  const elapsed = time - LANDED;
+  const groundSpeed = Math.max(0, RUN_UP_SPEED_MS - BRAKE_DECEL * elapsed);
+  const x = LANDED_X - (RUN_UP_SPEED_MS ** 2 - groundSpeed ** 2) / (2 * BRAKE_DECEL);
+  return reading(x, squatAt(elapsed), groundSpeed, Math.PI + FULL_TURN, Math.PI, 'rest');
 }
+
+const PHASE_MOTION: Readonly<Record<PhaseId, (time: number) => CarReading>> = {
+  sprint: sprintAt,
+  settle: settleAt,
+  ramp: rampAt,
+  flip: flipAt,
+  catch: catchAt,
+  runUp: runUpAt,
+  leap: leapAt,
+  twist: twistAt,
+  landing: landingAt,
+  rest: restAt,
+};
 
 export function carAt(seconds: number): CarReading {
   const time = runClock(seconds);
-  const phase = phaseAt(time);
-  if (phase === 'boost') return boostAt(time);
-  if (phase === 'ramp') return rampAt(time);
-  if (phase === 'launch' || phase === 'flip') return flightReading(time, phase);
-  if (phase === 'catch') return catchAt(time);
-  return restAt(time);
+  return PHASE_MOTION[phaseAt(time)](time);
 }
 
 function silentNozzles(): Record<NozzleId, number> {

@@ -1,4 +1,4 @@
-import { smoothstep } from '@core/math';
+import { clamp } from '@core/math';
 import type { Extent, RegionSpec } from '@core/scene/regions';
 import type { CarAnchorId, CarRegionId, NozzleId, Point, SiteAnchorId, SiteRegionId } from '../ids';
 
@@ -13,52 +13,83 @@ export interface NozzleMount {
 }
 
 export const SITE = {
-  run: { x: [-10, 100], z: [-6, 6] },
+  run: { x: [-90, 75], z: [-6, 6] },
   startBox: { x: [-2, 2], z: [-1.5, 1.5] },
-  landingBox: { x: [56, 70], z: [-3, 3] },
+  finishLineX: 10.9,
+  landingBox: { x: [25, 39], z: [-3, 3] },
+  jumpLandingBox: { x: [-60, -46], z: [-3, 3] },
   groundSize: 600,
   fogNear: 120,
   coneLineZ: 5,
 } as const satisfies {
   run: Footprint;
   startBox: Footprint;
+  finishLineX: number;
   landingBox: Footprint;
+  jumpLandingBox: Footprint;
   groundSize: number;
   fogNear: number;
   coneLineZ: number;
 };
 
+const RAMP_RADIUS = 5;
+
 export const RAMP = {
-  entryX: 24,
-  lengthX: 12,
-  exitHeight: 4,
-  exitAngleDeg: 42,
+  entryX: 60,
+  radius: RAMP_RADIUS,
+  deckLength: 8,
   width: 3,
+  exitHeight: 2 * RAMP_RADIUS,
+  exitAngleDeg: 0,
 } as const;
 
-export const RAMP_EXIT_X = RAMP.entryX + RAMP.lengthX;
+export const LOOP_LENGTH = Math.PI * RAMP.radius;
+export const RAMP_LENGTH = LOOP_LENGTH + RAMP.deckLength;
+export const DECK_END_X = RAMP.entryX - RAMP.deckLength;
 
-const RAMP_SQUARE_M = 1.2;
-const RAMP_CUBE_M = 2.8;
-
-export function rampHeight(u: number): number {
-  return RAMP_SQUARE_M * u ** 2 + RAMP_CUBE_M * u ** 3;
+function alongRamp(distance: number): number {
+  return clamp(distance, 0, RAMP_LENGTH);
 }
 
-export function rampSlope(u: number): number {
-  return (2 * RAMP_SQUARE_M * u + 3 * RAMP_CUBE_M * u ** 2) / RAMP.lengthX;
+export function rampPitch(distance: number): number {
+  return Math.min(alongRamp(distance), LOOP_LENGTH) / RAMP.radius;
 }
 
-export function rampPitch(u: number): number {
-  return Math.atan(rampSlope(u));
+export function rampPoint(distance: number): Point {
+  const along = alongRamp(distance);
+  if (along >= LOOP_LENGTH) return [RAMP.entryX - (along - LOOP_LENGTH), RAMP.exitHeight, 0];
+  const angle = along / RAMP.radius;
+  return [RAMP.entryX + RAMP.radius * Math.sin(angle), RAMP.radius * (1 - Math.cos(angle)), 0];
 }
 
-export function rampRoll(u: number): number {
-  return Math.PI * smoothstep(u);
+export const JUMP = { leapX: -3 } as const;
+
+export type ParkedKind = 'car' | 'truck';
+
+export interface ParkedVehicle {
+  kind: ParkedKind;
+  centreX: number;
+  length: number;
+  width: number;
+  height: number;
 }
 
-export function rampPoint(u: number): Point {
-  return [RAMP.entryX + RAMP.lengthX * u, rampHeight(u), 0];
+const PARKED_CAR = { kind: 'car', length: 4.7, width: 1.9, height: 1.5 } as const;
+const PARKED_TRUCK = { kind: 'truck', length: 8, width: 2.6, height: 4 } as const;
+
+export const PARKED_ROW: readonly ParkedVehicle[] = [
+  { ...PARKED_CAR, centreX: -15 },
+  { ...PARKED_CAR, centreX: -20 },
+  { ...PARKED_TRUCK, centreX: -31 },
+  { ...PARKED_CAR, centreX: -39 },
+];
+
+const ROW_START_X = Math.max(...PARKED_ROW.map((car) => car.centreX + car.length / 2));
+const ROW_END_X = Math.min(...PARKED_ROW.map((car) => car.centreX - car.length / 2));
+export const ROW_TOP = Math.max(...PARKED_ROW.map((car) => car.height));
+
+function middle([from, to]: Extent): number {
+  return (from + to) / 2;
 }
 
 export const CAR = {
@@ -107,8 +138,9 @@ export const CAR_ANCHORS: Readonly<Record<CarAnchorId, Point>> = {
 };
 
 export const SITE_ANCHORS: Readonly<Record<SiteAnchorId, Point>> = {
-  rampExit: rampPoint(1),
-  pad: [(SITE.landingBox.x[0] + SITE.landingBox.x[1]) / 2, 0, 0],
+  rampExit: rampPoint(RAMP_LENGTH),
+  pad: [middle(SITE.landingBox.x), 0, 0],
+  row: [(ROW_START_X + ROW_END_X) / 2, ROW_TOP, 0],
 };
 
 export const CAR_REGIONS: Readonly<Record<CarRegionId, RegionSpec>> = {
@@ -118,7 +150,8 @@ export const CAR_REGIONS: Readonly<Record<CarRegionId, RegionSpec>> = {
 };
 
 export const SITE_REGIONS: Readonly<Record<SiteRegionId, RegionSpec>> = {
-  site: { x: SITE.run.x, y: [0, 10], z: SITE.run.z },
-  ramp: { x: [RAMP.entryX, RAMP_EXIT_X], y: [0, RAMP.exitHeight + 1], z: [-2, 2] },
-  arc: { x: [20, 70], y: [0, 10], z: [-3, 3] },
+  site: { x: SITE.run.x, y: [0, 13], z: SITE.run.z },
+  ramp: { x: [DECK_END_X, RAMP.entryX + RAMP.radius], y: [0, RAMP.exitHeight + 1], z: [-2, 2] },
+  arc: { x: [20, 70], y: [0, 13], z: [-3, 3] },
+  jump: { x: [-64, 5], y: [0, 12], z: [-4, 4] },
 };

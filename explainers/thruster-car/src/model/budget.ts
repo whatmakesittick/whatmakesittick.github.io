@@ -1,10 +1,10 @@
 import { clamp } from '@core/math';
 import type { GasId, TankReading } from '../ids';
-import { EMPTY_BELOW_BAR, G } from './constants';
+import { EMPTY_BELOW_BAR, G, TOUCHDOWN_SPEED_MS } from './constants';
 import { exhaustSpeed, pressureAt, shareAtPressure, storedMass } from './gas';
-import { BURNS, MOMENTS, PHASE_RANGES, TOUCHDOWN_SPEED_MS, burnThrust, catchFallAt } from './run';
-
-const NEWTONS_PER_KILONEWTON = 1000;
+import { NEWTONS_PER_KILONEWTON } from './units';
+import { BURNS, PHASE_RANGES, burnThrust, catchFallAt, landingFallAt } from './run';
+import type { FallState, PhaseRange } from './run';
 
 export function impulseUsedKns(seconds: number): number {
   const newtonSeconds = BURNS.reduce(
@@ -39,11 +39,23 @@ export function emptyAtSeconds(gas: GasId, litres: number): number | null {
   return secondsAtImpulse(usableKns);
 }
 
+interface CushionedFall {
+  range: PhaseRange;
+  fallAt(elapsed: number): FallState;
+}
+
+const CUSHIONS: readonly CushionedFall[] = [
+  { range: PHASE_RANGES.catch, fallAt: catchFallAt },
+  { range: PHASE_RANGES.landing, fallAt: landingFallAt },
+];
+
 export function shortfallMs(gas: GasId, litres: number): number {
   const emptyAt = emptyAtSeconds(gas, litres);
-  if (emptyAt === null || emptyAt >= MOMENTS.touchdown) return 0;
-  const cut = Math.max(emptyAt, PHASE_RANGES.catch.start);
-  const fall = catchFallAt(cut - PHASE_RANGES.catch.start);
+  if (emptyAt === null) return 0;
+  const lost = CUSHIONS.find(({ range }) => emptyAt < range.end);
+  if (!lost) return 0;
+  const cut = Math.max(emptyAt, lost.range.start);
+  const fall = lost.fallAt(cut - lost.range.start);
   return Math.sqrt(fall.verticalSpeed ** 2 + 2 * G * fall.height) - TOUCHDOWN_SPEED_MS;
 }
 
