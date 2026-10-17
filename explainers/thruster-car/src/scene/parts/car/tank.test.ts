@@ -11,6 +11,9 @@ import { CORE_LENGTH } from '../../geometry/gear/tank';
 import type { PartContext } from '../context';
 import { CORE_NAME, coreLength, createTank } from './tank';
 
+const OPAQUE_DRAWS = 6;
+const CUTAWAY_DRAWS = 9;
+
 function context(): PartContext {
   return {
     materials: new MaterialLibrary(),
@@ -84,6 +87,21 @@ describe('tank', () => {
     const dry = coreOf(tank.object).material;
     expect(dry).not.toBe(full);
     expect(parts.materials.groupOf(dry as never)).toBe('tank');
+  });
+
+  it('keeps the tank and the valve to a few draw calls in either view', () => {
+    const tank = createTank(context());
+    const drawn = () => {
+      let count = 0;
+      tank.object.traverse((node) => {
+        if ((node as Mesh).isMesh && isShown(node)) count += 1;
+      });
+      return count;
+    };
+    tank.setState(stateWith(0.6, false));
+    expect(drawn()).toBe(OPAQUE_DRAWS);
+    tank.setState(stateWith(0.6, true));
+    expect(drawn()).toBe(CUTAWAY_DRAWS);
   });
 
   it('anchors the tank and the valve labels on their own parts', () => {

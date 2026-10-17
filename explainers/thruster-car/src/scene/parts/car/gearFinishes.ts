@@ -1,4 +1,4 @@
-import { BackSide, Color, DoubleSide } from 'three';
+import { BackSide, Color } from 'three';
 import type { Texture } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import type { NozzlePartId } from '../../../ids';
@@ -14,7 +14,6 @@ export const GEAR_PAINT = {
   rotor: '#75787c',
   caliper: '#5b6067',
   liner: '#4b5058',
-  cutEdge: '#4a4d55',
   strap: '#aab0b8',
   bracket: '#3b3f45',
   pad: '#1d1e21',
@@ -84,14 +83,6 @@ export const GEAR_FINISHES = {
     opacity: GHOST_OPACITY,
     depthWrite: false,
   },
-  cutEdge: { ...satin(GEAR_PAINT.cutEdge, 0.7, 0.05), side: DoubleSide },
-  strap: metal(GEAR_PAINT.strap, 0.34),
-  bracket: metal(GEAR_PAINT.bracket, 0.55, 0.45),
-  strapPad: satin(GEAR_PAINT.pad, 0.9, 0),
-  aluminium: metal(GEAR_PAINT.aluminium, 0.28, 0.9),
-  bonnet: metal(GEAR_PAINT.bonnet, 0.35),
-  knob: { ...satin(GEAR_PAINT.knob, 0.6, 0.1), flatShading: true },
-  brass: metal(GEAR_PAINT.brass, 0.32),
   tankMounts: tintedMetal(0.42, 0.7),
   valveMetal: tintedMetal(0.32, 0.85),
   needle: satin(GEAR_PAINT.needle, 0.4),

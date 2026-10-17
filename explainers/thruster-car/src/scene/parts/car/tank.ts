@@ -9,12 +9,10 @@ import {
   CORE_LENGTH,
   SHELL,
   coreGeometry,
-  cutEdgeGeometry,
   cutShellGeometry,
   fullShellGeometry,
-  bracketGeometry,
-  strapGeometry,
-  strapPadGeometry,
+  linerGeometry,
+  mountGeometry,
   windingTexture,
   windowGhostGeometry,
 } from '../../geometry/gear/tank';
@@ -22,30 +20,37 @@ import {
   GAUGE,
   KNOB_TOP,
   REGULATOR_X,
-  bezelGeometry,
-  blockGeometry,
-  bonnetGeometry,
   braidTexture,
-  bulkheadGeometry,
   dialGeometry,
   dialTexture,
-  knobGeometry,
+  gaugePose,
   lineGeometry,
   needleAngle,
   needleGeometry,
+  valveMetalGeometry,
 } from '../../geometry/gear/valve';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
-import { GEAR_FINISHES, braidFinish, dialFinish, shellFinish } from './gearFinishes';
+import { GEAR_FINISHES, GEAR_PAINT, braidFinish, dialFinish, shellFinish } from './gearFinishes';
 
 const TANK_PART = 'tank';
 const VALVE_PART = 'tankValve';
 
 export const CORE_NAME = 'tankCore';
+export const FULL_SHELL_NAME = 'tankShell';
+export const CUT_SHELL_NAME = 'tankCutaway';
 
 const MIN_CORE_LENGTH = 0.002;
 const GHOST_ORDER = 1;
 const LABEL_LIFT = 0.04;
+
+const MOUNT_TONES = { strap: GEAR_PAINT.strap, bracket: GEAR_PAINT.bracket, pad: GEAR_PAINT.pad };
+const VALVE_TONES = {
+  aluminium: GEAR_PAINT.aluminium,
+  bonnet: GEAR_PAINT.bonnet,
+  knob: GEAR_PAINT.knob,
+  brass: GEAR_PAINT.brass,
+};
 
 export interface TankUnit {
   readonly object: Group;
@@ -66,66 +71,50 @@ function mesh(context: PartContext, geometry: BufferGeometry, material: Material
   return new Mesh(context.tracker.track(geometry), material);
 }
 
-function buildShell(context: PartContext, tank: Group): ShellViews {
-  const { materials, tracker } = context;
-  const shellLook = materials.get(TANK_PART, shellFinish(tracker.track(windingTexture())));
-  const fullGeometry = tracker.track(fullShellGeometry());
-  const full = new Mesh(fullGeometry, shellLook);
-  const liner = new Mesh(fullGeometry, materials.get(TANK_PART, GEAR_FINISHES.liner));
-  liner.scale.setScalar(SHELL.linerScale);
+function buildCutaway(context: PartContext, shellLook: Material): Group {
   const ghost = partMesh(context, windowGhostGeometry(), TANK_PART, GEAR_FINISHES.tankGhost);
   ghost.renderOrder = GHOST_ORDER;
   const cut = new Group();
+  cut.name = CUT_SHELL_NAME;
   cut.add(
     mesh(context, cutShellGeometry(), shellLook),
-    partMesh(context, cutEdgeGeometry(), TANK_PART, GEAR_FINISHES.cutEdge),
-    liner,
+    partMesh(context, linerGeometry(), TANK_PART, GEAR_FINISHES.liner),
     ghost,
   );
+  cut.visible = false;
+  return cut;
+}
+
+function buildShell(context: PartContext, tank: Group): ShellViews {
+  const { materials, tracker } = context;
+  const shellLook = materials.get(TANK_PART, shellFinish(tracker.track(windingTexture())));
+  const full = mesh(context, fullShellGeometry(), shellLook);
+  full.name = FULL_SHELL_NAME;
+  const cut = buildCutaway(context, shellLook);
   const pressure = materials.get(TANK_PART, GEAR_FINISHES.corePressure);
   const empty = materials.get(TANK_PART, GEAR_FINISHES.coreEmpty);
   const coreMesh = mesh(context, coreGeometry(), pressure);
   coreMesh.name = CORE_NAME;
   const core = new Group();
   core.position.x = CORE_FRONT;
-  core.add(coreMesh);
-  cut.visible = false;
   core.visible = false;
-  tank.add(
-    full,
-    cut,
-    core,
-    partMesh(context, strapGeometry(), TANK_PART, GEAR_FINISHES.strap),
-    partMesh(context, bracketGeometry(), TANK_PART, GEAR_FINISHES.bracket),
-    partMesh(context, strapPadGeometry(), TANK_PART, GEAR_FINISHES.strapPad),
-  );
+  core.add(coreMesh);
+  const mounts = partMesh(context, mountGeometry(MOUNT_TONES), TANK_PART, GEAR_FINISHES.tankMounts);
+  tank.add(full, cut, core, mounts);
   return { full, cut, core, coreMesh, pressure, empty };
 }
 
-function buildGauge(context: PartContext): { gauge: Group; needle: Mesh } {
+function buildValve(context: PartContext, valve: Group): Mesh {
+  const { tracker } = context;
   const gauge = new Group();
-  gauge.position.set(...GAUGE.centre);
-  gauge.rotation.x = GAUGE.tilt;
-  const dialLook = dialFinish(context.tracker.track(dialTexture()));
+  gauge.applyMatrix4(gaugePose());
   const needle = partMesh(context, needleGeometry(), VALVE_PART, GEAR_FINISHES.needle);
   needle.position.z = GAUGE.needleLift;
-  gauge.add(
-    partMesh(context, bezelGeometry(), VALVE_PART, GEAR_FINISHES.aluminium),
-    partMesh(context, dialGeometry(), VALVE_PART, dialLook),
-    needle,
-  );
-  return { gauge, needle };
-}
-
-function buildValve(context: PartContext, valve: Group): Mesh {
-  const braidLook = braidFinish(context.tracker.track(braidTexture()));
-  const { gauge, needle } = buildGauge(context);
+  const dialLook = dialFinish(tracker.track(dialTexture()));
+  gauge.add(partMesh(context, dialGeometry(), VALVE_PART, dialLook), needle);
   valve.add(
-    partMesh(context, blockGeometry(), VALVE_PART, GEAR_FINISHES.aluminium),
-    partMesh(context, bonnetGeometry(), VALVE_PART, GEAR_FINISHES.bonnet),
-    partMesh(context, knobGeometry(), VALVE_PART, GEAR_FINISHES.knob),
-    partMesh(context, lineGeometry(), VALVE_PART, braidLook),
-    partMesh(context, bulkheadGeometry(), VALVE_PART, GEAR_FINISHES.brass),
+    partMesh(context, valveMetalGeometry(VALVE_TONES), VALVE_PART, GEAR_FINISHES.valveMetal),
+    partMesh(context, lineGeometry(), VALVE_PART, braidFinish(tracker.track(braidTexture()))),
     gauge,
   );
   return needle;

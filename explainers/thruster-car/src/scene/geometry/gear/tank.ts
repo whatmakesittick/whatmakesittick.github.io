@@ -5,6 +5,7 @@ import { box } from '@core/scene/geometry/box';
 import { extrudeProfileAlongX } from '@core/scene/geometry/extrude';
 import { TANK } from '../../../model/layout';
 import { mergeParts } from '../../parts/context';
+import { tinted } from './attributes';
 import { HALF_TURN, QUARTER_TURN, latheAround } from './lathe';
 import type { Profile, Sweep } from './lathe';
 import { grey, hash, paintTexture, ridge, seamDistance } from './maps';
@@ -127,28 +128,35 @@ function wallThickness(): number {
   return SHELL.radius * (1 - SHELL.linerScale);
 }
 
-function windowEnd(axial: number): BufferGeometry {
+function windowEnd(sign: 1 | -1): BufferGeometry {
   const ring = new RingGeometry(
     SHELL.radius * SHELL.linerScale,
     SHELL.radius,
     SHELL.segments / 4,
     1,
-    QUARTER_TURN,
+    sign > 0 ? QUARTER_TURN : 0,
     QUARTER_TURN,
   );
-  ring.rotateY(QUARTER_TURN);
-  ring.translate(axial, 0, 0);
+  ring.rotateY(sign * QUARTER_TURN);
+  ring.translate(sign * WINDOW_HALF, 0, 0);
   return ring;
 }
 
-export function cutEdgeGeometry(): BufferGeometry {
+function cutEdgeGeometry(): BufferGeometry {
   const length = 2 * WINDOW_HALF;
   const side = new PlaneGeometry(length, wallThickness());
-  side.rotateX(-QUARTER_TURN);
+  side.rotateX(QUARTER_TURN);
   side.translate(0, 0, wallMiddle());
   const top = new PlaneGeometry(length, wallThickness());
+  top.rotateY(HALF_TURN);
   top.translate(0, wallMiddle(), 0);
-  return mergeParts([side, top, windowEnd(-WINDOW_HALF), windowEnd(WINDOW_HALF)]);
+  return mergeParts([side, top, windowEnd(-1), windowEnd(1)]);
+}
+
+export function linerGeometry(): BufferGeometry {
+  const liner = fullShellGeometry();
+  liner.scale(SHELL.linerScale, SHELL.linerScale, SHELL.linerScale);
+  return mergeParts([liner, cutEdgeGeometry()]);
 }
 
 export function coreGeometry(): BufferGeometry {
@@ -235,20 +243,20 @@ function bossGeometry(sign: 1 | -1): BufferGeometry {
   return latheAround(ordered, { axis: 'x', segments: BOSS_SEGMENTS });
 }
 
-export function strapGeometry(): BufferGeometry {
+export interface MountTones {
+  strap: string;
+  bracket: string;
+  pad: string;
+}
+
+export function mountGeometry(tones: MountTones): BufferGeometry {
+  const straps = STRAPS.offsets.flatMap((centre) => [strapRing(centre), clampLug(centre)]);
+  const metal = [...straps, bossGeometry(-1), bossGeometry(1)];
   return mergeParts([
-    ...STRAPS.offsets.flatMap((centre) => [strapRing(centre), clampLug(centre)]),
-    bossGeometry(-1),
-    bossGeometry(1),
+    ...metal.map((part) => tinted(part, tones.strap)),
+    ...STRAPS.offsets.map((centre) => tinted(bracket(centre), tones.bracket)),
+    ...STRAPS.offsets.map((centre) => tinted(strapPad(centre), tones.pad)),
   ]);
-}
-
-export function bracketGeometry(): BufferGeometry {
-  return mergeParts(STRAPS.offsets.map(bracket));
-}
-
-export function strapPadGeometry(): BufferGeometry {
-  return mergeParts(STRAPS.offsets.map(strapPad));
 }
 
 function towShade(family: number): number {

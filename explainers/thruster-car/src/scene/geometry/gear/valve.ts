@@ -1,10 +1,20 @@
-import { CatmullRomCurve3, CircleGeometry, CylinderGeometry, TubeGeometry, Vector3 } from 'three';
+import {
+  CatmullRomCurve3,
+  CircleGeometry,
+  CylinderGeometry,
+  Euler,
+  Matrix4,
+  Quaternion,
+  TubeGeometry,
+  Vector3,
+} from 'three';
 import type { BufferGeometry, DataTexture } from 'three';
 import { FULL_TURN, lerp } from '@core/math';
 import { box } from '@core/scene/geometry/box';
 import { extrudeProfileAlongX, roundedRectShape } from '@core/scene/geometry/extrude';
 import type { Point } from '../../../ids';
 import { mergeParts } from '../../parts/context';
+import { tinted } from './attributes';
 import { QUARTER_TURN, latheAround } from './lathe';
 import type { Profile } from './lathe';
 import { grey, paintTexture, seamDistance } from './maps';
@@ -113,7 +123,7 @@ function upright(radius: number, height: number, segments: number, base: number)
   return cylinder;
 }
 
-export function blockGeometry(): BufferGeometry {
+function blockGeometry(): BufferGeometry {
   const shape = roundedRectShape(
     { minA: -BLOCK.halfZ, minB: BLOCK.bottom, maxA: BLOCK.halfZ, maxB: BLOCK.top },
     BLOCK.corner,
@@ -129,7 +139,7 @@ export function blockGeometry(): BufferGeometry {
   return mergeParts([extrudeProfileAlongX(shape, BLOCK.back, BLOCK.front), ...ports]);
 }
 
-export function bonnetGeometry(): BufferGeometry {
+function bonnetGeometry(): BufferGeometry {
   const { bonnet } = REGULATOR;
   const stem = new CylinderGeometry(
     GAUGE.stem.radius,
@@ -142,13 +152,20 @@ export function bonnetGeometry(): BufferGeometry {
   return mergeParts([upright(bonnet.radius, bonnet.height, bonnet.segments, BLOCK.top), stem]);
 }
 
-export function knobGeometry(): BufferGeometry {
+function knobGeometry(): BufferGeometry {
   const { knob, bonnet } = REGULATOR;
   return upright(knob.radius, knob.height, knob.segments, BLOCK.top + bonnet.height);
 }
 
-export function bezelGeometry(): BufferGeometry {
-  return latheAround(BEZEL_PROFILE, { axis: 'z', segments: GAUGE.segments });
+function bezelGeometry(): BufferGeometry {
+  return latheAround(BEZEL_PROFILE, { axis: 'z', segments: GAUGE.segments }).applyMatrix4(
+    gaugePose(),
+  );
+}
+
+export function gaugePose(): Matrix4 {
+  const turn = new Quaternion().setFromEuler(new Euler(GAUGE.tilt, 0, 0));
+  return new Matrix4().compose(new Vector3(...GAUGE.centre), turn, new Vector3(1, 1, 1));
 }
 
 export function dialGeometry(): BufferGeometry {
@@ -188,7 +205,7 @@ export function lineGeometry(): BufferGeometry {
   return mergeParts(lines);
 }
 
-export function bulkheadGeometry(): BufferGeometry {
+function bulkheadGeometry(): BufferGeometry {
   return mergeParts(
     LINE_PATHS.map((path) => {
       const [x, y, z] = path[path.length - 1];
@@ -200,6 +217,23 @@ export function bulkheadGeometry(): BufferGeometry {
       );
     }),
   );
+}
+
+export interface ValveTones {
+  aluminium: string;
+  bonnet: string;
+  knob: string;
+  brass: string;
+}
+
+export function valveMetalGeometry(tones: ValveTones): BufferGeometry {
+  return mergeParts([
+    tinted(blockGeometry(), tones.aluminium),
+    tinted(bezelGeometry(), tones.aluminium),
+    tinted(bonnetGeometry(), tones.bonnet),
+    tinted(knobGeometry(), tones.knob),
+    tinted(bulkheadGeometry(), tones.brass),
+  ]);
 }
 
 function dialAngleShare(angle: number): number {
