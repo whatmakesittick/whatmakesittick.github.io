@@ -53,9 +53,9 @@ function shutLines(): RibbonSpec[] {
   return [...doors, hood, deck].map((path) => ({ path, width: SHUT.width, lift: SHUT.lift }));
 }
 
-function handles(): RibbonSpec[] {
+function handle(): RibbonSpec {
   const path = rowLine(spot('shoulder', HANDLE.height), HANDLE.from, HANDLE.to, SHUT.steps);
-  return [{ path, width: HANDLE.width, lift: HANDLE.lift }];
+  return { path, width: HANDLE.width, lift: HANDLE.lift };
 }
 
 function chargeFlap(): RibbonSpec {
@@ -95,11 +95,16 @@ function ribbons(surface: BodySurface, specs: readonly RibbonSpec[]): BufferGeom
 
 export function bodyLines(surface: BodySurface): Map<LineFinish, BufferGeometry[]> {
   const frame = [
-    ...ribbons(surface, [...shutLines(), ...handles(), ...ventSlats()]),
+    ...ribbons(surface, [...shutLines(), ...ventSlats()]),
+    surfaceRibbon(surface, handle(), -1),
     surfaceRibbon(surface, chargeFlap(), -1),
   ];
   return new Map<LineFinish, BufferGeometry[]>([
     ['frame', frame],
     ['lampFront', ribbons(surface, [lampBar(LAMP.frontX)])],
   ]);
+}
+
+export function rightDoorLines(surface: BodySurface): BufferGeometry[] {
+  return [surfaceRibbon(surface, handle(), 1)];
 }
