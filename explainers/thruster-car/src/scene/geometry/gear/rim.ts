@@ -2,6 +2,7 @@ import { CylinderGeometry, Vector3 } from 'three';
 import type { BufferGeometry, DataTexture } from 'three';
 import { FULL_TURN, clamp, lerp } from '@core/math';
 import { mergeParts } from '../../parts/context';
+import { tinted } from './attributes';
 import { QUARTER_TURN, latheAround } from './lathe';
 import type { Profile } from './lathe';
 import { loftFaceted } from './loft';
@@ -89,14 +90,20 @@ const BLUR = {
 
 const BLUR_MAP = { width: 4, height: 128 } as const;
 
-export function lipGeometry(): BufferGeometry {
-  return latheAround(LIP_PROFILE, { axis: 'z', segments: WHEEL_SEGMENTS });
+export interface RimTones {
+  lip: string;
+  inner: string;
 }
 
-export function barrelGeometry(): BufferGeometry {
+export function rimHubGeometry(tones: RimTones): BufferGeometry {
+  const lip = latheAround(LIP_PROFILE, { axis: 'z', segments: WHEEL_SEGMENTS });
   const barrel = latheAround(BARREL_PROFILE, { axis: 'z', segments: WHEEL_SEGMENTS });
   const hub = latheAround(HUB_PROFILE, { axis: 'z', segments: HUB_SEGMENTS });
-  return mergeParts([barrel, hub]);
+  return mergeParts([
+    tinted(lip, tones.lip),
+    tinted(barrel, tones.inner),
+    tinted(hub, tones.inner),
+  ]);
 }
 
 function spokeTop(share: number): number {

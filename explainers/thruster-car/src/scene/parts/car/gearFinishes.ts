@@ -5,11 +5,13 @@ import type { NozzlePartId } from '../../../ids';
 import { THEME } from '../../../theme';
 
 export const GEAR_PAINT = {
+  vertexBase: '#ffffff',
+  nozzleBody: THEME.nozzleBody,
   graphite: '#2e3136',
+  rimInner: '#1a1c1f',
   blur: '#4a4e55',
   machined: '#c9ced4',
   rotor: '#75787c',
-  hat: '#3a3d42',
   caliper: '#5b6067',
   liner: '#4b5058',
   cutEdge: '#4a4d55',
@@ -44,6 +46,10 @@ function metal(color: string, roughness: number, metalness = 0.85): MaterialFini
   return { color, metalness, roughness, envMapIntensity: METAL_REFLECTION };
 }
 
+function tintedMetal(roughness: number, metalness: number): MaterialFinish {
+  return { ...metal(GEAR_PAINT.vertexBase, roughness, metalness), vertexColors: true };
+}
+
 function satin(color: string, roughness: number, metalness = 0.15): MaterialFinish {
   return { color, metalness, roughness, envMapIntensity: PAINT_REFLECTION };
 }
@@ -65,30 +71,30 @@ function glowing(color: string, emissiveIntensity: number, opacity: number): Mat
 
 export const GEAR_FINISHES = {
   rimGraphite: metal(GEAR_PAINT.graphite, 0.38, 0.7),
-  rimInner: metal(GEAR_PAINT.graphite, 0.6, 0.5),
-  rimLip: metal(GEAR_PAINT.machined, 0.2, 0.95),
-  discHat: metal(GEAR_PAINT.hat, 0.45, 0.7),
+  rimHub: tintedMetal(0.4, 0.8),
   caliper: metal(GEAR_PAINT.caliper, 0.42, 0.6),
   liner: {
     ...satin(GEAR_PAINT.liner, 0.85, 0),
     envMapIntensity: LINER_REFLECTION,
     side: BackSide,
   },
-  cutEdge: { ...satin(GEAR_PAINT.cutEdge, 0.7, 0.05), side: DoubleSide },
   tankGhost: {
     ...satin(THEME.tankShell, 0.3, 0.2),
     transparent: true,
     opacity: GHOST_OPACITY,
     depthWrite: false,
   },
+  cutEdge: { ...satin(GEAR_PAINT.cutEdge, 0.7, 0.05), side: DoubleSide },
   strap: metal(GEAR_PAINT.strap, 0.34),
   bracket: metal(GEAR_PAINT.bracket, 0.55, 0.45),
   strapPad: satin(GEAR_PAINT.pad, 0.9, 0),
   aluminium: metal(GEAR_PAINT.aluminium, 0.28, 0.9),
   bonnet: metal(GEAR_PAINT.bonnet, 0.35),
   knob: { ...satin(GEAR_PAINT.knob, 0.6, 0.1), flatShading: true },
-  needle: satin(GEAR_PAINT.needle, 0.4),
   brass: metal(GEAR_PAINT.brass, 0.32),
+  tankMounts: tintedMetal(0.42, 0.7),
+  valveMetal: tintedMetal(0.32, 0.85),
+  needle: satin(GEAR_PAINT.needle, 0.4),
   nozzleBody: metal(THEME.nozzleBody, 0.4, 0.6),
   collar: metal(GEAR_PAINT.collar, 0.3),
   frost: {

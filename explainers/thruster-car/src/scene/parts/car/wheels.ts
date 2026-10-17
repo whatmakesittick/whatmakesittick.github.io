@@ -1,24 +1,14 @@
-import { Group, Mesh } from 'three';
+import { DynamicDrawUsage, Group, InstancedMesh, Matrix4 } from 'three';
 import type { BufferGeometry, Material, Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import type { AssemblyState, Point } from '../../../ids';
-import {
-  caliperGeometry,
-  discBodyGeometry,
-  discFaceGeometry,
-  discTexture,
-} from '../../geometry/gear/brake';
-import {
-  barrelGeometry,
-  blurGeometry,
-  blurTexture,
-  lipGeometry,
-  spokesGeometry,
-} from '../../geometry/gear/rim';
+import { CALIPER, caliperGeometry, discGeometry, discTexture } from '../../geometry/gear/brake';
+import { HALF_TURN } from '../../geometry/gear/lathe';
+import { blurGeometry, blurTexture, rimHubGeometry, spokesGeometry } from '../../geometry/gear/rim';
 import { treadTexture, tyreGeometry } from '../../geometry/gear/tyre';
 import type { PartContext } from '../context';
 import { WHEEL, WHEEL_CENTRES } from './dimensions';
-import { GEAR_FINISHES, rimBlurFinish, rotorFinish, tyreFinish } from './gearFinishes';
+import { GEAR_FINISHES, GEAR_PAINT, rimBlurFinish, rotorFinish, tyreFinish } from './gearFinishes';
 
 const PART = 'wheels';
 
@@ -32,33 +22,12 @@ export interface WheelSet {
   setState(state: AssemblyState): void;
 }
 
-interface WheelLooks {
-  tyre: Material;
-  rotor: Material;
-  blur: Material;
-  graphite: Material;
-  inner: Material;
-  lip: Material;
-  hat: Material;
-  caliper: Material;
-}
-
-interface WheelGeometries {
-  tyre: BufferGeometry;
-  lip: BufferGeometry;
-  barrel: BufferGeometry;
-  spokes: BufferGeometry;
-  discFaces: BufferGeometry;
-  discBody: BufferGeometry;
-  caliper: BufferGeometry;
-  blur: BufferGeometry;
-}
-
-interface Wheel {
-  object: Group;
-  spinner: Group;
-  spokes: Mesh;
-  blur: Mesh;
+interface Spinners {
+  tyre: InstancedMesh;
+  hub: InstancedMesh;
+  spokes: InstancedMesh;
+  disc: InstancedMesh;
+  blur: InstancedMesh;
 }
 
 export function wheelTurn(distance: number): number {
@@ -69,74 +38,102 @@ export function isBlurred(speed: number): boolean {
   return Math.abs(speed) > BLUR_FROM_SPEED_MS;
 }
 
-function wheelLooks(context: PartContext): WheelLooks {
+export function isLeftWheel(centre: Point): boolean {
+  return centre[2] < 0;
+}
+
+function wheelBase(centre: Point): Matrix4 {
+  const base = new Matrix4().makeTranslation(...centre);
+  return isLeftWheel(centre) ? base.multiply(new Matrix4().makeRotationY(HALF_TURN)) : base;
+}
+
+function caliperPose(centre: Point): Matrix4 {
+  const turn = isLeftWheel(centre) ? HALF_TURN - 2 * CALIPER.angle : 0;
+  return wheelBase(centre).multiply(new Matrix4().makeRotationZ(turn));
+}
+
+function instanced(
+  context: PartContext,
+  geometry: BufferGeometry,
+  material: Material,
+): InstancedMesh {
+  const mesh = new InstancedMesh(context.tracker.track(geometry), material, WHEEL_CENTRES.length);
+  mesh.instanceMatrix.setUsage(DynamicDrawUsage);
+  return mesh;
+}
+
+function spinners(context: PartContext): Spinners {
   const { materials, tracker } = context;
-  return {
-    tyre: materials.get(PART, tyreFinish(tracker.track(treadTexture()))),
-    rotor: materials.get(PART, rotorFinish(tracker.track(discTexture()))),
-    blur: materials.get(PART, rimBlurFinish(tracker.track(blurTexture()))),
-    graphite: materials.get(PART, GEAR_FINISHES.rimGraphite),
-    inner: materials.get(PART, GEAR_FINISHES.rimInner),
-    lip: materials.get(PART, GEAR_FINISHES.rimLip),
-    hat: materials.get(PART, GEAR_FINISHES.discHat),
-    caliper: materials.get(PART, GEAR_FINISHES.caliper),
-  };
-}
-
-function wheelGeometries(context: PartContext): WheelGeometries {
-  const track = (geometry: BufferGeometry) => context.tracker.track(geometry);
-  return {
-    tyre: track(tyreGeometry()),
-    lip: track(lipGeometry()),
-    barrel: track(barrelGeometry()),
-    spokes: track(spokesGeometry()),
-    discFaces: track(discFaceGeometry()),
-    discBody: track(discBodyGeometry()),
-    caliper: track(caliperGeometry()),
-    blur: track(blurGeometry()),
-  };
-}
-
-function buildWheel(centre: Point, shapes: WheelGeometries, looks: WheelLooks): Wheel {
-  const object = new Group();
-  object.position.set(...centre);
-  object.scale.z = Math.sign(centre[2]) || 1;
-  const spinner = new Group();
-  const spokes = new Mesh(shapes.spokes, looks.graphite);
-  const blur = new Mesh(shapes.blur, looks.blur);
-  blur.visible = false;
-  spinner.add(
-    new Mesh(shapes.tyre, looks.tyre),
-    new Mesh(shapes.lip, looks.lip),
-    new Mesh(shapes.barrel, looks.inner),
-    spokes,
-    new Mesh(shapes.discFaces, looks.rotor),
-    new Mesh(shapes.discBody, looks.hat),
-    blur,
+  const tones = { lip: GEAR_PAINT.machined, inner: GEAR_PAINT.rimInner };
+  const blur = instanced(
+    context,
+    blurGeometry(),
+    materials.get(PART, rimBlurFinish(tracker.track(blurTexture()))),
   );
-  object.add(spinner, new Mesh(shapes.caliper, looks.caliper));
-  return { object, spinner, spokes, blur };
+  blur.visible = false;
+  return {
+    tyre: instanced(
+      context,
+      tyreGeometry(),
+      materials.get(PART, tyreFinish(tracker.track(treadTexture()))),
+    ),
+    hub: instanced(context, rimHubGeometry(tones), materials.get(PART, GEAR_FINISHES.rimHub)),
+    spokes: instanced(context, spokesGeometry(), materials.get(PART, GEAR_FINISHES.rimGraphite)),
+    disc: instanced(
+      context,
+      discGeometry(),
+      materials.get(PART, rotorFinish(tracker.track(discTexture()))),
+    ),
+    blur,
+  };
+}
+
+function calipers(context: PartContext): InstancedMesh {
+  const mesh = instanced(
+    context,
+    caliperGeometry(),
+    context.materials.get(PART, GEAR_FINISHES.caliper),
+  );
+  WHEEL_CENTRES.forEach((centre, index) => mesh.setMatrixAt(index, caliperPose(centre)));
+  mesh.computeBoundingSphere();
+  return mesh;
+}
+
+function labelledCentre(): Point {
+  return WHEEL_CENTRES.find((centre) => centre[0] > 0 && !isLeftWheel(centre)) ?? WHEEL_CENTRES[0];
 }
 
 export function createWheels(context: PartContext): WheelSet {
-  const shapes = wheelGeometries(context);
-  const looks = wheelLooks(context);
-  const wheels = WHEEL_CENTRES.map((centre) => buildWheel(centre, shapes, looks));
+  const meshes = spinners(context);
+  const spinning = Object.values(meshes);
+  const bases = WHEEL_CENTRES.map(wheelBase);
+  const sides = WHEEL_CENTRES.map((centre) => (isLeftWheel(centre) ? -1 : 1));
+  const spin = new Matrix4();
+  const pose = new Matrix4();
   const object = new Group();
-  wheels.forEach((wheel) => object.add(wheel.object));
-  const labelled = wheels.find(({ object: wheel }) => wheel.position.x > 0 && wheel.position.z > 0);
-  const label = anchorAt((labelled ?? wheels[0]).object, 0, 0, LABEL_OUTSET);
+  object.add(...spinning, calipers(context));
+  const [x, y, z] = labelledCentre();
+  const label = anchorAt(object, x, y, z + LABEL_OUTSET);
+  const turnTo = (turn: number) => {
+    for (let wheel = 0; wheel < bases.length; wheel += 1) {
+      pose.multiplyMatrices(bases[wheel], spin.makeRotationZ(sides[wheel] * turn));
+      for (let index = 0; index < spinning.length; index += 1)
+        spinning[index].setMatrixAt(wheel, pose);
+    }
+    for (let index = 0; index < spinning.length; index += 1) {
+      spinning[index].instanceMatrix.needsUpdate = true;
+    }
+  };
+  turnTo(0);
+  spinning.forEach((mesh) => mesh.computeBoundingSphere());
   return {
     object,
     label,
     setState(state) {
-      const turn = wheelTurn(state.car.position[0]);
+      turnTo(wheelTurn(state.car.position[0]));
       const blurred = isBlurred(state.car.speed);
-      wheels.forEach((wheel) => {
-        wheel.spinner.rotation.z = turn;
-        wheel.spokes.visible = !blurred;
-        wheel.blur.visible = blurred;
-      });
+      meshes.spokes.visible = !blurred;
+      meshes.blur.visible = blurred;
     },
   };
 }

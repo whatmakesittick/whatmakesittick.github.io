@@ -2,6 +2,7 @@ import { CylinderGeometry, ExtrudeGeometry, RingGeometry, Shape } from 'three';
 import type { BufferGeometry, DataTexture } from 'three';
 import { FULL_TURN, lerp } from '@core/math';
 import { mergeParts } from '../../parts/context';
+import { pinnedUv } from './attributes';
 import { HALF_TURN, QUARTER_TURN, latheAround } from './lathe';
 import type { Profile } from './lathe';
 import { grey, paintTexture, ridge, seamDistance } from './maps';
@@ -21,6 +22,7 @@ const HAT_PROFILE: Profile = [
 ];
 
 const HAT_SEGMENTS = 18;
+const HAT_TEXEL = [0.02, 0.02] as const;
 
 export const CALIPER = {
   inner: 0.158,
@@ -46,6 +48,8 @@ const SLOTS = {
   ringDepth: 0.05,
   rim: 0.97,
   rimShade: 0.6,
+  hatZone: 1.2,
+  hatShade: 0.45,
 } as const;
 
 const DISC_MAP = { width: 256, height: 256 } as const;
@@ -64,16 +68,14 @@ function discEdge(): BufferGeometry {
   return edge;
 }
 
-export function discFaceGeometry(): BufferGeometry {
+export function discGeometry(): BufferGeometry {
+  const hat = latheAround(HAT_PROFILE, { axis: 'z', segments: HAT_SEGMENTS });
   return mergeParts([
     discFace(DISC.centreZ + DISC.thickness / 2, 1),
     discFace(DISC.centreZ - DISC.thickness / 2, -1),
+    pinnedUv(discEdge(), ...HAT_TEXEL),
+    pinnedUv(hat, ...HAT_TEXEL),
   ]);
-}
-
-export function discBodyGeometry(): BufferGeometry {
-  const hat = latheAround(HAT_PROFILE, { axis: 'z', segments: HAT_SEGMENTS });
-  return mergeParts([discEdge(), hat]);
 }
 
 function caliperShape(): Shape {
@@ -114,6 +116,7 @@ export function discTexture(): DataTexture {
     const y = 2 * v - 1;
     const radius = Math.hypot(x, y);
     const rings = 1 - SLOTS.ringDepth * (0.5 + 0.5 * Math.sin(radius * SLOTS.rings));
+    if (radius > SLOTS.hatZone) return grey(SLOTS.hatShade);
     const base = radius > SLOTS.rim ? SLOTS.rimShade : SLOTS.base * rings;
     return grey(lerp(base, SLOTS.shade, slotShade(radius, Math.atan2(y, x))));
   });
