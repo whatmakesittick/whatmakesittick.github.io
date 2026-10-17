@@ -1,10 +1,12 @@
-import { BufferGeometry, Float32BufferAttribute, Vector3 } from 'three';
+import { Vector3 } from 'three';
+import type { BufferGeometry } from 'three';
 import { mergeParts } from '../../parts/context';
+import { arrayGeometry } from './arrays';
 import type { RampFrame } from './rampFrame';
 import { APRON, DECK, RAIL, RIB, ribBack } from './rampSpec';
 import { rampStations } from './stations';
 import {
-  frameCap,
+  endCaps,
   rampSweep,
   rectLoop,
   sweepCapped,
@@ -15,8 +17,6 @@ import {
 import type { CrossPoint, CrossRect, Sweep } from './sweep';
 
 const SIDES = [1, -1] as const;
-const XYZ = 3;
-const UV = 2;
 const QUAD = [0, 1, 2, 0, 2, 3];
 
 export function deckSweep(): Sweep {
@@ -33,24 +33,14 @@ function quad(
   normal: Vector3,
   uvs: readonly number[],
 ): BufferGeometry {
-  const geometry = new BufferGeometry();
-  geometry.setAttribute(
-    'position',
-    new Float32BufferAttribute(
-      corners.flatMap((corner) => corner.toArray()),
-      XYZ,
-    ),
+  return arrayGeometry(
+    {
+      position: corners.flatMap((corner) => corner.toArray()),
+      normal: corners.flatMap(() => normal.toArray()),
+      uv: [...uvs],
+    },
+    QUAD,
   );
-  geometry.setAttribute(
-    'normal',
-    new Float32BufferAttribute(
-      corners.flatMap(() => normal.toArray()),
-      XYZ,
-    ),
-  );
-  geometry.setAttribute('uv', new Float32BufferAttribute([...uvs], UV));
-  geometry.setIndex(QUAD);
-  return geometry;
 }
 
 function apronUv(x: number, z: number): [number, number] {
@@ -88,11 +78,9 @@ export function deckTopGeometry(sweep: Sweep): BufferGeometry {
 function deckSlabGeometry(sweep: Sweep): BufferGeometry {
   const loop = rectLoop(deckRect());
   const [bottomLeft, bottomRight, topRight, topLeft] = loop;
-  const { frames } = sweep;
   return mergeParts([
     sweepLoop(sweep, [topLeft, bottomLeft, bottomRight, topRight], DECK.plateLength, false),
-    frameCap(frames[0], loop, -1),
-    frameCap(frames[frames.length - 1], loop, 1),
+    ...endCaps(sweep, loop),
   ]);
 }
 
@@ -151,17 +139,11 @@ function railGeometry(sweep: Sweep, side: 1 | -1): BufferGeometry {
   const rect = kerbRect(side);
   const [bottomLeft, bottomRight, topRight, topLeft] = rectLoop(rect);
   const centre: CrossPoint = [(rect.minAcross + rect.maxAcross) / 2, RAIL.height + RAIL.tubeRadius];
-  const { frames } = sweep;
-  const ends = [frames[0], frames[frames.length - 1]] as const;
-  const caps = (loop: readonly CrossPoint[]) => [
-    frameCap(ends[0], loop, -1),
-    frameCap(ends[1], loop, 1),
-  ];
   return mergeParts([
     sweepLoop(sweep, [bottomRight, topRight, topLeft, bottomLeft], DECK.plateLength, false),
     sweepTube(sweep, centre, RAIL.tubeRadius, RAIL.tubeSegments, DECK.plateLength),
-    ...caps(rectLoop(rect)),
-    ...caps(tubeOutline(centre)),
+    ...endCaps(sweep, rectLoop(rect)),
+    ...endCaps(sweep, tubeOutline(centre)),
   ]);
 }
 

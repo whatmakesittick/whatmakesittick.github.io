@@ -1,8 +1,10 @@
-import { BufferGeometry, Float32BufferAttribute, Vector3 } from 'three';
+import { Vector3 } from 'three';
+import type { BufferGeometry } from 'three';
 import { mergeParts } from '../../parts/context';
 import { RAMP_LENGTH } from '../../../model/layout';
 import { framePoint, rampFrames } from './rampFrame';
 import type { RampFrame } from './rampFrame';
+import { arrayGeometry } from './arrays';
 
 export type CrossPoint = readonly [across: number, depth: number];
 
@@ -19,29 +21,22 @@ export interface CrossRect {
 }
 
 interface Buffers {
-  positions: number[];
-  normals: number[];
-  uvs: number[];
+  position: number[];
+  normal: number[];
+  uv: number[];
   indices: number[];
 }
 
-const XYZ = 3;
-const UV = 2;
 const FULL_TURN = Math.PI * 2;
 const point = new Vector3();
 const direction = new Vector3();
 
 function emptyBuffers(): Buffers {
-  return { positions: [], normals: [], uvs: [], indices: [] };
+  return { position: [], normal: [], uv: [], indices: [] };
 }
 
-function toGeometry({ positions, normals, uvs, indices }: Buffers): BufferGeometry {
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(positions, XYZ));
-  geometry.setAttribute('normal', new Float32BufferAttribute(normals, XYZ));
-  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, UV));
-  geometry.setIndex(indices);
-  return geometry;
+function toGeometry({ indices, ...arrays }: Buffers): BufferGeometry {
+  return arrayGeometry(arrays, indices);
 }
 
 function crossDirection(frame: RampFrame, across: number, depth: number): Vector3 {
@@ -52,9 +47,9 @@ function crossDirection(frame: RampFrame, across: number, depth: number): Vector
 }
 
 function pushVertex(buffers: Buffers, at: Vector3, normal: Vector3, u: number, v: number): void {
-  buffers.positions.push(at.x, at.y, at.z);
-  buffers.normals.push(normal.x, normal.y, normal.z);
-  buffers.uvs.push(u, v);
+  buffers.position.push(at.x, at.y, at.z);
+  buffers.normal.push(normal.x, normal.y, normal.z);
+  buffers.uv.push(u, v);
 }
 
 function pushGrid(buffers: Buffers, rows: number, columns: number): void {
@@ -136,7 +131,7 @@ export function sweepTube(
   return toGeometry(buffers);
 }
 
-export function frameCap(
+function frameCap(
   frame: RampFrame,
   polygon: readonly CrossPoint[],
   facing: 1 | -1,
@@ -153,15 +148,15 @@ export function frameCap(
   return toGeometry(buffers);
 }
 
+export function endCaps(sweep: Sweep, loop: readonly CrossPoint[]): BufferGeometry[] {
+  const { frames } = sweep;
+  return [frameCap(frames[0], loop, -1), frameCap(frames[frames.length - 1], loop, 1)];
+}
+
 export function sweepCapped(
   sweep: Sweep,
   loop: readonly CrossPoint[],
   uvLength: number,
 ): BufferGeometry {
-  const { frames } = sweep;
-  return mergeParts([
-    sweepLoop(sweep, loop, uvLength),
-    frameCap(frames[0], loop, -1),
-    frameCap(frames[frames.length - 1], loop, 1),
-  ]);
+  return mergeParts([sweepLoop(sweep, loop, uvLength), ...endCaps(sweep, loop)]);
 }

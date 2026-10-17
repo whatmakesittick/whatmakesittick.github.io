@@ -1,6 +1,7 @@
-import { BufferGeometry, Float32BufferAttribute } from 'three';
+import type { BufferGeometry } from 'three';
 import type { Extent } from '@core/scene/regions';
 import { SITE } from '../../../model/layout';
+import { arrayGeometry, upNormals } from './arrays';
 import { groundTint } from './scrub';
 
 export const GROUND = {
@@ -10,10 +11,6 @@ export const GROUND = {
   verge: [2, 5, 9],
   skirt: [150, 400, 900],
 } as const;
-
-const XYZ = 3;
-const RGB = 3;
-const UV = 2;
 
 export function gridLines(extent: Extent, step: number, extras: readonly number[]): number[] {
   const lines = new Set<number>(extras);
@@ -59,17 +56,8 @@ export function groundGeometry(): BufferGeometry {
       indices.push(a, b, a + 1, b, b + 1, a + 1);
     }
   }
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(positions, XYZ));
-  geometry.setAttribute(
-    'normal',
-    new Float32BufferAttribute(
-      positions.map((_, i) => (i % XYZ === 1 ? 1 : 0)),
-      XYZ,
-    ),
+  return arrayGeometry(
+    { position: positions, normal: upNormals(positions), color: colours, uv: uvs },
+    indices,
   );
-  geometry.setAttribute('color', new Float32BufferAttribute(colours, RGB));
-  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, UV));
-  geometry.setIndex(indices);
-  return geometry;
 }

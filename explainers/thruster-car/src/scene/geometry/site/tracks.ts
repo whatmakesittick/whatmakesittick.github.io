@@ -1,8 +1,9 @@
 import { smoothstep } from '@core/math';
-import { BufferGeometry, CatmullRomCurve3, Float32BufferAttribute, Vector3 } from 'three';
-import type { DataTexture } from 'three';
+import { CatmullRomCurve3, Vector3 } from 'three';
+import type { BufferGeometry, DataTexture } from 'three';
 import { SITE } from '../../../model/layout';
 import { THEME } from '../../../theme';
+import { arrayGeometry, upNormals } from './arrays';
 import { GROUND } from './groundGrid';
 import { hash2, tileNoise } from './noise';
 import { band, mixRgb, paintTexture, srgb } from './textures';
@@ -48,7 +49,6 @@ export const DIRT_TRACKS = {
 } as const;
 
 const XYZ = 3;
-const UV = 2;
 const DIRT = srgb('#6a5a46');
 const RUT = srgb('#4a3e31');
 const GRASS = srgb(THEME.scrub);
@@ -124,18 +124,7 @@ export function tracksGeometry(): BufferGeometry {
   const uvs: number[] = [];
   const indices: number[] = [];
   allTrackPoints().forEach((points) => ribbon(points, positions, uvs, indices));
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(positions, XYZ));
-  geometry.setAttribute(
-    'normal',
-    new Float32BufferAttribute(
-      positions.map((_, index) => (index % XYZ === 1 ? 1 : 0)),
-      XYZ,
-    ),
-  );
-  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, UV));
-  geometry.setIndex(indices);
-  return geometry;
+  return arrayGeometry({ position: positions, normal: upNormals(positions), uv: uvs }, indices);
 }
 
 export function trackShade(u: number, v: number): Rgba {

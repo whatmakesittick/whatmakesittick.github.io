@@ -1,6 +1,7 @@
 import { lerp, smoothstep } from '@core/math';
-import { BufferGeometry, Color, Float32BufferAttribute } from 'three';
-import type { DataTexture } from 'three';
+import { Color } from 'three';
+import type { BufferGeometry, DataTexture } from 'three';
+import { arrayGeometry } from './arrays';
 import { nearRun } from './bushes';
 import { GROUND } from './groundGrid';
 import { fractalNoise, hash2, tileNoise } from './noise';
@@ -69,8 +70,6 @@ export const ATLAS = { columns: 2, rows: 2 } as const;
 const VARIANTS = ATLAS.columns * ATLAS.rows;
 const CANDIDATES_PER_CARD = 4;
 const XYZ = 3;
-const RGB = 3;
-const UV = 2;
 const GAP_OCTAVES = 3;
 const TONE_SPREAD = 7;
 const SEEDS = { angle: 0, radius: 1, height: 2, yaw: 3, tone: 4, aspect: 5, variant: 6 } as const;
@@ -189,14 +188,8 @@ export function cardsGeometry(
 ): BufferGeometry {
   const buffers: number[][] = [[], [], [], [], []];
   cards.forEach((card) => pushCard(card, sink, tint, buffers));
-  const [positions, normals, colours, uvs, indices] = buffers;
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(positions, XYZ));
-  geometry.setAttribute('normal', new Float32BufferAttribute(normals, XYZ));
-  geometry.setAttribute('color', new Float32BufferAttribute(colours, RGB));
-  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, UV));
-  geometry.setIndex(indices);
-  return geometry;
+  const [position, normal, color, uv, indices] = buffers;
+  return arrayGeometry({ position, normal, color, uv }, indices);
 }
 
 interface BlobLayout {

@@ -1,15 +1,6 @@
-import {
-  ClampToEdgeWrapping,
-  Color,
-  DataTexture,
-  LinearFilter,
-  LinearMipmapLinearFilter,
-  NoColorSpace,
-  RGBAFormat,
-  RepeatWrapping,
-  SRGBColorSpace,
-} from 'three';
-import { clamp } from '@core/math';
+import { Color, NoColorSpace, SRGBColorSpace } from 'three';
+import type { DataTexture } from 'three';
+import { paintTexture as paintMap } from '../gear/maps';
 
 export type Rgb = readonly [r: number, g: number, b: number];
 export type Rgba = readonly [r: number, g: number, b: number, a: number];
@@ -21,8 +12,6 @@ export interface TextureSize {
   height: number;
 }
 
-const CHANNELS = 4;
-const BYTE = 255;
 const OPAQUE = 1;
 const ANISOTROPY = 8;
 
@@ -47,43 +36,17 @@ export function band(value: number, centre: number, width: number): number {
   return Math.exp(-(((value - centre) / width) ** 2));
 }
 
-function encode(size: TextureSize, painter: Painter): Uint8Array {
-  const { width, height } = size;
-  const pixels = new Uint8Array(width * height * CHANNELS);
-  for (let row = 0; row < height; row += 1) {
-    for (let column = 0; column < width; column += 1) {
-      const colour = painter((column + 0.5) / width, (row + 0.5) / height);
-      const offset = (row * width + column) * CHANNELS;
-      for (let channel = 0; channel < CHANNELS; channel += 1) {
-        pixels[offset + channel] = Math.round(clamp(colour[channel], 0, 1) * BYTE);
-      }
-    }
-  }
-  return pixels;
-}
-
-function dataTexture(size: TextureSize, pixels: Uint8Array, colour: boolean): DataTexture {
-  const texture = new DataTexture(pixels, size.width, size.height, RGBAFormat);
-  texture.wrapS = RepeatWrapping;
-  texture.wrapT = RepeatWrapping;
-  texture.magFilter = LinearFilter;
-  texture.minFilter = LinearMipmapLinearFilter;
-  texture.generateMipmaps = true;
+function sharpened(texture: DataTexture): DataTexture {
   texture.anisotropy = ANISOTROPY;
-  texture.colorSpace = colour ? SRGBColorSpace : NoColorSpace;
-  texture.needsUpdate = true;
   return texture;
 }
 
 export function paintTexture(size: TextureSize, painter: Painter): DataTexture {
-  return dataTexture(size, encode(size, painter), true);
+  return sharpened(paintMap({ ...size, repeat: true }, painter));
 }
 
 export function paintDecal(size: TextureSize, painter: Painter): DataTexture {
-  const texture = paintTexture(size, painter);
-  texture.wrapS = ClampToEdgeWrapping;
-  texture.wrapT = ClampToEdgeWrapping;
-  return texture;
+  return sharpened(paintMap(size, painter));
 }
 
 function sampleHeights(size: TextureSize, field: HeightField): Float32Array {
@@ -117,5 +80,7 @@ export function normalTexture(
   field: HeightField,
   strength: number,
 ): DataTexture {
-  return dataTexture(size, encode(size, normalPainter(size, field, strength)), false);
+  const texture = paintTexture(size, normalPainter(size, field, strength));
+  texture.colorSpace = NoColorSpace;
+  return texture;
 }
