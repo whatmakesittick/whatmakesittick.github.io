@@ -19,7 +19,6 @@ export const SITE = {
   landingBox: { x: [25, 39], z: [-3, 3] },
   jumpLandingBox: { x: [-60, -46], z: [-3, 3] },
   groundSize: 600,
-  fogNear: 120,
   coneLineZ: 5,
 } as const satisfies {
   run: Footprint;
@@ -28,7 +27,6 @@ export const SITE = {
   landingBox: Footprint;
   jumpLandingBox: Footprint;
   groundSize: number;
-  fogNear: number;
   coneLineZ: number;
 };
 
