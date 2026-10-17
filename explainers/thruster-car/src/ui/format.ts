@@ -1,12 +1,11 @@
 import { formatFixed } from '@core/format';
 import { t } from '@core/i18n';
-import { toKmh } from '../model';
+import { NEWTONS_PER_KILONEWTON, toKmh } from '../model';
 import type { RunOutcome } from '../state';
 
 export const WHOLE = 0;
 export const TENTHS = 1;
 export const HUNDREDTHS = 2;
-export const NEWTONS_PER_KILONEWTON = 1000;
 
 const PERCENT = 100;
 const MEGAJOULES_PER_KWH = 3.6;

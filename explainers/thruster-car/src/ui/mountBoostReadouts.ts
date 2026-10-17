@@ -1,12 +1,18 @@
 import type { Disposer } from '@core/ui/disposers';
 import { mountRangeWidget } from '@core/ui/rangeWidget';
 import type { GasId } from '../ids';
-import { G, boostAccel, boostLastsSeconds, massFlow, zeroToSixtySeconds } from '../model';
+import {
+  G,
+  NEWTONS_PER_KILONEWTON,
+  boostAccel,
+  boostLastsSeconds,
+  massFlow,
+  zeroToSixtySeconds,
+} from '../model';
 import { CALCULATOR_RANGES } from '../state';
 import type { ThrusterCarStore } from '../state';
 import {
   HUNDREDTHS,
-  NEWTONS_PER_KILONEWTON,
   TENTHS,
   WHOLE,
   formatGees,

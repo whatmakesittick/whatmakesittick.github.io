@@ -1,0 +1,1 @@
+export const NEWTONS_PER_KILONEWTON = 1000;

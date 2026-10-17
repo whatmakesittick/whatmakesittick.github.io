@@ -5,6 +5,7 @@ import type { GasId, PresetId, ViewOptions } from '../ids';
 import {
   DEFAULT_TANK_LITRES,
   EXIT_SPEED_MS,
+  NEWTONS_PER_KILONEWTON,
   REAR_THRUST_FULL_N,
   ROLL_INERTIA_KG_M2,
   SPEED_RANGE,
@@ -52,7 +53,6 @@ export type ThrusterCarState = PlaybackState & ThrusterCarFields;
 export type ThrusterCarStoreState = Playback & ThrusterCarFields & ThrusterCarOwnActions;
 export type ThrusterCarStore = ExplainerStore<ThrusterCarStoreState>;
 
-const NEWTONS_PER_KILONEWTON = 1000;
 const SNAP_DIGITS = 2;
 
 export const DEFAULT_VIEW: ViewState = {
