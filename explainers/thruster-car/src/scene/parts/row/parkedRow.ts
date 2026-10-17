@@ -6,7 +6,7 @@ import { PARKED_ROW } from '../../../model/layout';
 import type { ParkedKind, ParkedVehicle } from '../../../model/layout';
 import { duskEnvironment } from '../../environment';
 import { createPalette } from '../../geometry/body/palette';
-import { HALF_TURN } from '../../geometry/gear/lathe';
+import { HALF_TURN } from '../../geometry/turns';
 import { CAR_MODEL } from '../../geometry/row/car';
 import { PICKUP_MODEL } from '../../geometry/row/pickup';
 import { TRUCK_MODEL } from '../../geometry/row/truck';

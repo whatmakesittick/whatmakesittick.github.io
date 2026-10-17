@@ -16,10 +16,10 @@ import {
 import { firingThrust } from './firing';
 import type { FiringState } from './firing';
 import { ForceArrow } from './forceArrow';
+import { PLUME_AXIS } from './mouth';
 import type { ArrowShapes } from './forceArrow';
 
 const DOWN = new Vector3(0, -1, 0);
-const PLUME_AXIS = new Vector3(0, 1, 0);
 
 export function forceLength(newtons: number): number {
   return (newtons / NEWTONS_PER_KN) * METRES_PER_KN;

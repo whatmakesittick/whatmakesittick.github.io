@@ -1,5 +1,6 @@
 import { CanvasTexture, EquirectangularReflectionMapping, SRGBColorSpace } from 'three';
 import type { Texture } from 'three';
+import { FULL_TURN } from '@core/math';
 import type { ResourceTracker } from '@core/scene/resources';
 import { THEME } from '../theme';
 import { LIGHT_RIG } from './constants';
@@ -41,7 +42,7 @@ const cache = new WeakMap<ResourceTracker, Texture>();
 export function equirectSpot(direction: Triple): readonly [x: number, y: number] {
   const [x, y, z] = direction;
   const length = Math.hypot(x, y, z);
-  const u = Math.atan2(z, x) / (2 * Math.PI) + 0.5;
+  const u = Math.atan2(z, x) / FULL_TURN + 0.5;
   const v = Math.asin(y / length) / Math.PI + 0.5;
   return [u * SIZE.width, (1 - v) * SIZE.height];
 }

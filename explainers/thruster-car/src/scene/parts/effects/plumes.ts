@@ -7,6 +7,7 @@ import type { AssemblyState, GasId, NozzleId, NozzlePartId } from '../../../ids'
 import { PLUME_COLOURS } from '../../../theme';
 import { between, seededRandom } from '../../geometry/effects/random';
 import type { Random } from '../../geometry/effects/random';
+import { waveDip } from '../../geometry/wave';
 import type { PartContext } from '../context';
 import type { CarView } from '../types';
 import { LIGHT_RIG } from '../../constants';
@@ -158,7 +159,7 @@ class Emitter {
         1 -
         smoothstep(shape.distance, this.span.length * PLUME_SHADING.coreClear, this.span.length);
       const { r, g, b } = shadePuff(light, clear, base, this.tone);
-      const shimmer = 1 - depth * (0.5 + 0.5 * Math.sin(this.time * rate + puff.phase));
+      const shimmer = waveDip(depth, this.time * rate + puff.phase);
       this.slots.cloud.setColor(slot, r, g, b, shape.alpha * shimmer);
       this.slots.scales[slot] = shape.diameter * puff.size;
     }

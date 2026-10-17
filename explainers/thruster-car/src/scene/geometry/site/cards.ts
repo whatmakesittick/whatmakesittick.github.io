@@ -1,4 +1,4 @@
-import { lerp, smoothstep } from '@core/math';
+import { FULL_TURN, lerp, smoothstep } from '@core/math';
 import { Color } from 'three';
 import type { BufferGeometry, DataTexture } from 'three';
 import { arrayGeometry } from './arrays';
@@ -127,7 +127,7 @@ function scatter(ring: Ring, keep: (card: Card, angle: number) => boolean): Card
   const cards: Card[] = [];
   const tries = ring.count * CANDIDATES_PER_CARD;
   for (let index = 0; cards.length < ring.count && index < tries; index += 1) {
-    const angle = hash2(index, ring.seed + SEEDS.angle) * Math.PI * 2;
+    const angle = hash2(index, ring.seed + SEEDS.angle) * FULL_TURN;
     const card = cardAt(ring, index, angle);
     if (keep(card, angle)) cards.push(card);
   }
@@ -143,7 +143,7 @@ export function scatterScrubCards(): Card[] {
 
 export function treeLineOpen(angle: number): boolean {
   const { cycles, from } = TREE_LINE.gaps;
-  const around = (angle / (Math.PI * 2)) * cycles;
+  const around = (angle / FULL_TURN) * cycles;
   return fractalNoise(around, 0, GAP_OCTAVES, TREE_LINE.seed) > from;
 }
 

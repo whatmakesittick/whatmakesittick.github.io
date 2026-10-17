@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PART_IDS } from '../ids';
-import { LABEL_PRIORITY, PART_INFO, UNDIMMED_PARTS } from './partInfo';
+import { UNDIMMED_PARTS } from './constants';
+import { LABEL_PRIORITY, PART_INFO } from './partInfo';
 
 const LEFT_PARTS = ['seat', 'frontNozzles', 'fans', 'runway', 'ramp', 'parkedRow'] as const;
 

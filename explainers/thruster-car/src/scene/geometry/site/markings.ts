@@ -4,6 +4,7 @@ import type { BufferGeometry, DataTexture } from 'three';
 import type { Footprint } from '../../../model/layout';
 import { SITE } from '../../../model/layout';
 import { mergeParts } from '../../parts/context';
+import { QUARTER_TURN } from '../turns';
 import { hash2, tileNoise } from './noise';
 import { paintTexture } from './textures';
 import type { Rgba } from './textures';
@@ -17,7 +18,6 @@ export const MARKINGS = {
   wear: { metres: 1.6, size: 128, from: 0.62, to: 0.68, patches: 0.7, seed: 53 },
 } as const;
 
-const QUARTER_TURN = Math.PI / 2;
 const OCTAVES = 3;
 const NOISE = {
   patches: tileNoise({ u: 6, v: 6 }, OCTAVES, MARKINGS.wear.seed),

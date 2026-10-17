@@ -1,7 +1,7 @@
 import type { BufferGeometry } from 'three';
 import { mergeParts } from '../../parts/context';
 import { smoothCurve } from '../body/curve';
-import { HALF_TURN, QUARTER_TURN } from '../gear/lathe';
+import { HALF_TURN, QUARTER_TURN } from '../turns';
 import { loft } from './loft';
 import type { SectionPoint } from './loft';
 import { mirroredBoxes, paintedBox } from './paint';

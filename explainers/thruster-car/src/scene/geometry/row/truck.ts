@@ -8,7 +8,7 @@ import {
 } from '@core/scene/geometry/extrude';
 import { mergeParts } from '../../parts/context';
 import { smoothCurve } from '../body/curve';
-import { HALF_TURN, QUARTER_TURN } from '../gear/lathe';
+import { HALF_TURN, QUARTER_TURN } from '../turns';
 import { loft } from './loft';
 import { mirroredBoxes, painted, paintedBox } from './paint';
 import { RoundBody, seamStations } from './roundBody';

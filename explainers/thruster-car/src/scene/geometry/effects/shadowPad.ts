@@ -1,5 +1,7 @@
-import { DataTexture, LinearFilter, RGBAFormat } from 'three';
+import { DataTexture, LinearFilter, MeshBasicMaterial, PlaneGeometry, RGBAFormat } from 'three';
+import type { Texture } from 'three';
 import { smoothstep } from '@core/math';
+import { QUARTER_TURN } from '../turns';
 
 type Pair = readonly [number, number];
 
@@ -19,6 +21,9 @@ const RGBA = 4;
 const ALPHA = 3;
 const BYTE = 255;
 const SPOT_CORE = 0.25;
+const FLAT = -QUARTER_TURN;
+const SHADE = '#000000';
+const LAYER_OFFSET = -2;
 
 function roundedBoxDistance(x: number, z: number, layout: ShadowPadLayout): number {
   const corner = layout.padCorner;
@@ -60,4 +65,20 @@ export function shadowPadTexture(layout: ShadowPadLayout): DataTexture {
   texture.generateMipmaps = false;
   texture.needsUpdate = true;
   return texture;
+}
+
+export function shadowPadPlane(layout: ShadowPadLayout): PlaneGeometry {
+  return new PlaneGeometry(...layout.size).rotateX(FLAT);
+}
+
+export function shadowPadMaterial(map: Texture): MeshBasicMaterial {
+  return new MeshBasicMaterial({
+    map,
+    color: SHADE,
+    transparent: true,
+    depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: LAYER_OFFSET,
+    polygonOffsetUnits: LAYER_OFFSET,
+  });
 }

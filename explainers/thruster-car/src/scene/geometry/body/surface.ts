@@ -1,3 +1,4 @@
+import { clamp } from '@core/math';
 import { SEGMENTS, StationSection } from './section';
 import type { SegmentId } from './section';
 import { cross, normalize, sub } from './mesh';
@@ -16,8 +17,8 @@ export class BodySurface {
   private readonly sections = new Map<number, StationSection>();
 
   point(x: number, s: number, mirror = 1): Vec3 {
-    const index = Math.min(LAST_SEGMENT, Math.max(0, Math.floor(s)));
-    const u = Math.min(1, Math.max(0, s - index));
+    const index = clamp(Math.floor(s), 0, LAST_SEGMENT);
+    const u = clamp(s - index, 0, 1);
     const [z, y] = this.section(x).point(SEGMENTS[index], u);
     return [x, y, z * mirror];
   }

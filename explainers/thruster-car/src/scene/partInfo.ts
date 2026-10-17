@@ -14,8 +14,6 @@ const LEFT_PARTS: ReadonlySet<PartId> = new Set<PartId>([
   'parkedRow',
 ]);
 
-export const UNDIMMED_PARTS: readonly PartId[] = ['runway', 'landingPad'];
-
 function labelSide(id: PartId): LabelSide {
   return LEFT_PARTS.has(id) ? 'left' : 'right';
 }

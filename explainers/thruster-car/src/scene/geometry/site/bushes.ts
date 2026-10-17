@@ -1,7 +1,7 @@
 import { Color, Float32BufferAttribute, IcosahedronGeometry, Vector3 } from 'three';
 import type { BufferGeometry } from 'three';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
-import { lerp, smoothstep } from '@core/math';
+import { FULL_TURN, lerp, smoothstep } from '@core/math';
 import { SITE } from '../../../model/layout';
 import { LIGHT_RIG } from '../../constants';
 import { mergeParts } from '../../parts/context';
@@ -113,7 +113,7 @@ function shaded(geometry: BufferGeometry, tone: Color, height: number): void {
 function blob(bush: Bush, index: number, template: BufferGeometry): BufferGeometry {
   const seed = bush.seed * BLOB_SEED_STRIDE + index;
   const radius = bush.size * lerp(...BUSHES.blobScale, hash2(seed, BUSHES.seed + SEEDS.size));
-  const angle = hash2(seed, BUSHES.seed + SEEDS.offset) * Math.PI * 2;
+  const angle = hash2(seed, BUSHES.seed + SEEDS.offset) * FULL_TURN;
   const reach = index === 0 ? 0 : bush.size * BUSHES.spread;
   const geometry = template.clone();
   lumpy(geometry, seed);

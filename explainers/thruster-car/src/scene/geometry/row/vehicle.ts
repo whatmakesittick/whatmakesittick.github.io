@@ -1,7 +1,7 @@
 import { Matrix4 } from 'three';
 import type { BufferGeometry } from 'three';
 import { mergeParts } from '../../parts/context';
-import { HALF_TURN } from '../gear/lathe';
+import { HALF_TURN } from '../turns';
 import { wheelGeometry } from './wheel';
 import type { WheelSpec } from './wheel';
 import type { BodyPaint, SwatchUv } from './swatch';

@@ -1,7 +1,8 @@
-import { lerp, smoothstep } from '@core/math';
+import { FULL_TURN, lerp, smoothstep } from '@core/math';
 import type { DataTexture } from 'three';
 import { SITE } from '../../../model/layout';
 import { THEME } from '../../../theme';
+import { unitWave } from '../wave';
 import { fractalNoise, hash2, tileNoise } from './noise';
 import { mixRgb, paintTexture, shade, srgb } from './textures';
 import type { Rgb, Rgba } from './textures';
@@ -83,7 +84,7 @@ function tuftField(): TuftField {
     field.x[index] = lerp(spread[0], spread[1], hash2(index, 1, seed));
     field.y[index] = lerp(spread[0], spread[1], hash2(index, 2, seed));
     field.radius[index] = lerp(radius[0], radius[1], hash2(index, 3, seed));
-    field.phase[index] = hash2(index, 4, seed) * Math.PI * 2;
+    field.phase[index] = hash2(index, 4, seed) * FULL_TURN;
   }
   return field;
 }
@@ -97,7 +98,7 @@ export interface Tuft {
 }
 
 function bladeAt(dx: number, dy: number, phase: number): number {
-  return 0.5 + 0.5 * Math.sin(Math.atan2(dy, dx) * SCRUB.tufts.blades + phase);
+  return unitWave(Math.atan2(dy, dx) * SCRUB.tufts.blades + phase);
 }
 
 export function tuftAt(u: number, v: number): Tuft {

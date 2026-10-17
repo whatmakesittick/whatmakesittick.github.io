@@ -1,4 +1,5 @@
 import { Vector3 } from 'three';
+import { FULL_TURN } from '@core/math';
 import type { BufferGeometry } from 'three';
 import { mergeParts } from '../../parts/context';
 import { RAMP_LENGTH } from '../../../model/layout';
@@ -27,7 +28,6 @@ interface Buffers {
   indices: number[];
 }
 
-const FULL_TURN = Math.PI * 2;
 const point = new Vector3();
 const direction = new Vector3();
 

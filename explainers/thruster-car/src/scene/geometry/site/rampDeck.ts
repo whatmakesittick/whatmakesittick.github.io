@@ -1,5 +1,6 @@
 import { Vector3 } from 'three';
 import type { BufferGeometry } from 'three';
+import { FULL_TURN } from '@core/math';
 import { mergeParts } from '../../parts/context';
 import { arrayGeometry } from './arrays';
 import type { RampFrame } from './rampFrame';
@@ -127,7 +128,7 @@ function kerbRect(side: 1 | -1): CrossRect {
 
 function tubeOutline(centre: CrossPoint): CrossPoint[] {
   return Array.from({ length: RAIL.tubeSegments }, (_, step) => {
-    const angle = (Math.PI * 2 * step) / RAIL.tubeSegments;
+    const angle = (FULL_TURN * step) / RAIL.tubeSegments;
     return [
       centre[0] + Math.cos(angle) * RAIL.tubeRadius,
       centre[1] + Math.sin(angle) * RAIL.tubeRadius,

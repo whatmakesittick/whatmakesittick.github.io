@@ -1,17 +1,17 @@
-import { Mesh, MeshBasicMaterial, PlaneGeometry } from 'three';
+import { Mesh } from 'three';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import type { CarReading } from '../../../ids';
 import { CAR } from '../../../model/layout';
-import { shadowPadTexture } from '../../geometry/effects/shadowPad';
+import {
+  shadowPadMaterial,
+  shadowPadPlane,
+  shadowPadTexture,
+} from '../../geometry/effects/shadowPad';
 import type { ShadowPadLayout } from '../../geometry/effects/shadowPad';
 import { WHEEL } from '../car/dimensions';
 import { registered } from '../context';
 import type { PartContext } from '../context';
 import { CONTACT_SHADOW } from './constants';
-
-const FLAT = -Math.PI / 2;
-const SHADE = '#000000';
-const LAYER_OFFSET = -2;
 
 export const CONTACT_SHADOW_NAME = 'contactShadow';
 
@@ -35,20 +35,11 @@ export class ContactShadow {
 
   constructor(context: PartContext) {
     const layout = contactShadowLayout();
-    const geometry = new PlaneGeometry(layout.size[0], layout.size[1]);
-    geometry.rotateX(FLAT);
+    const geometry = shadowPadPlane(layout);
     const material = registered(
       context,
       STRUCTURE_GROUP,
-      new MeshBasicMaterial({
-        map: context.tracker.track(shadowPadTexture(layout)),
-        color: SHADE,
-        transparent: true,
-        depthWrite: false,
-        polygonOffset: true,
-        polygonOffsetFactor: LAYER_OFFSET,
-        polygonOffsetUnits: LAYER_OFFSET,
-      }),
+      shadowPadMaterial(context.tracker.track(shadowPadTexture(layout))),
     );
     this.mesh = new Mesh(context.tracker.track(geometry), material);
     this.mesh.name = CONTACT_SHADOW_NAME;

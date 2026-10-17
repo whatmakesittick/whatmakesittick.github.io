@@ -1,8 +1,12 @@
-import { Matrix4, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three';
+import { Matrix4, Mesh } from 'three';
 import type { BufferGeometry } from 'three';
 import type { PartId } from '../../../ids';
 import type { ParkedVehicle } from '../../../model/layout';
-import { shadowPadTexture } from '../../geometry/effects/shadowPad';
+import {
+  shadowPadMaterial,
+  shadowPadPlane,
+  shadowPadTexture,
+} from '../../geometry/effects/shadowPad';
 import type { ShadowPadLayout } from '../../geometry/effects/shadowPad';
 import { wheelPrints } from '../../geometry/row/vehicle';
 import type { VehicleModel } from '../../geometry/row/vehicle';
@@ -26,10 +30,6 @@ const SHADOW = {
   lift: 0.011,
   driftPerMetre: [0.08, -0.05],
 } as const;
-
-const FLAT = -Math.PI / 2;
-const SHADE = '#000000';
-const LAYER_OFFSET = -2;
 
 function sizeKey({ kind, length, width, height }: ParkedVehicle): string {
   return [kind, length, width, height].join(':');
@@ -57,10 +57,7 @@ function shadowQuad(layout: ShadowPadLayout, entry: ShadowedVehicle): BufferGeom
     SHADOW.lift,
     SHADOW.driftPerMetre[1] * height,
   );
-  return new PlaneGeometry(...layout.size)
-    .rotateX(FLAT)
-    .applyMatrix4(entry.placement)
-    .applyMatrix4(drift);
+  return shadowPadPlane(layout).applyMatrix4(entry.placement).applyMatrix4(drift);
 }
 
 function shadowMesh(context: PartContext, group: PartId, entries: ShadowedVehicle[]): Mesh {
@@ -68,15 +65,7 @@ function shadowMesh(context: PartContext, group: PartId, entries: ShadowedVehicl
   const material = registered(
     context,
     group,
-    new MeshBasicMaterial({
-      map: context.tracker.track(shadowPadTexture(layout)),
-      color: SHADE,
-      transparent: true,
-      depthWrite: false,
-      polygonOffset: true,
-      polygonOffsetFactor: LAYER_OFFSET,
-      polygonOffsetUnits: LAYER_OFFSET,
-    }),
+    shadowPadMaterial(context.tracker.track(shadowPadTexture(layout))),
   );
   const quads = entries.map((entry) => shadowQuad(layout, entry));
   return new Mesh(context.tracker.track(mergeParts(quads)), material);

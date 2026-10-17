@@ -1,10 +1,10 @@
 import { Color, NoColorSpace, SRGBColorSpace } from 'three';
 import type { DataTexture } from 'three';
 import { paintTexture as paintMap } from '../gear/maps';
+import type { Painter, Rgba } from '../gear/maps';
 
 export type Rgb = readonly [r: number, g: number, b: number];
-export type Rgba = readonly [r: number, g: number, b: number, a: number];
-export type Painter = (u: number, v: number) => Rgba;
+export type { Painter, Rgba };
 export type HeightField = (u: number, v: number) => number;
 
 export interface TextureSize {

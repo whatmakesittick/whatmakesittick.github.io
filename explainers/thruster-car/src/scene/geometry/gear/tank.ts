@@ -6,7 +6,9 @@ import { extrudeProfileAlongX } from '@core/scene/geometry/extrude';
 import { TANK } from '../../../model/layout';
 import { mergeParts } from '../../parts/context';
 import { tinted } from './attributes';
-import { HALF_TURN, QUARTER_TURN, latheAround } from './lathe';
+import { latheAround } from './lathe';
+import { HALF_TURN, QUARTER_TURN } from '../turns';
+import { waveDip } from '../wave';
 import type { Profile, Sweep } from './lathe';
 import { grey, hash, paintTexture, ridge, seamDistance } from './maps';
 
@@ -260,7 +262,7 @@ export function mountGeometry(tones: MountTones): BufferGeometry {
 }
 
 function towShade(family: number): number {
-  return 1 - WINDING.towDepth * (0.5 + 0.5 * Math.sin(FULL_TURN * WINDING.tows * family));
+  return waveDip(WINDING.towDepth, FULL_TURN * WINDING.tows * family);
 }
 
 export function windingShade(u: number, v: number): number {

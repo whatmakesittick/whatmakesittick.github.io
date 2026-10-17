@@ -1,5 +1,6 @@
 import { ExtrudeGeometry, Shape } from 'three';
 import type { BufferGeometry } from 'three';
+import { QUARTER_TURN } from '../turns';
 import type { Footprint } from '../../../model/layout';
 
 export const SLAB = {
@@ -7,8 +8,6 @@ export const SLAB = {
   bevel: 0.035,
   bevelSegments: 2,
 } as const;
-
-const QUARTER_TURN = Math.PI / 2;
 
 function rectPath(path: Shape, area: Footprint): Shape {
   const [x0, x1] = area.x;

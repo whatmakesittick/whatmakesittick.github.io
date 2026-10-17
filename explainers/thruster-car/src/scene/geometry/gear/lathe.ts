@@ -1,6 +1,7 @@
 import { LatheGeometry, Vector2 } from 'three';
 import type { BufferGeometry } from 'three';
 import { FULL_TURN } from '@core/math';
+import { QUARTER_TURN } from '../turns';
 
 export type Axis = 'x' | 'y' | 'z';
 
@@ -19,8 +20,6 @@ export interface LatheOptions {
 }
 
 const FULL_SWEEP: Sweep = { start: 0, length: FULL_TURN };
-export const QUARTER_TURN = FULL_TURN / 4;
-export const HALF_TURN = FULL_TURN / 2;
 
 export function arcShares(profile: Profile): number[] {
   const lengths = profile.map((point, index) =>

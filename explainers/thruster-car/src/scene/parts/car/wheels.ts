@@ -3,7 +3,7 @@ import type { BufferGeometry, InstancedMesh, Material, Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import type { AssemblyState, CarReading, Point } from '../../../ids';
 import { CALIPER, caliperGeometry, discGeometry, discTexture } from '../../geometry/gear/brake';
-import { HALF_TURN } from '../../geometry/gear/lathe';
+import { HALF_TURN } from '../../geometry/turns';
 import {
   barrelGeometry,
   blurGeometry,

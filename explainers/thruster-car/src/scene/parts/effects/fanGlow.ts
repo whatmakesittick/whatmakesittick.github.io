@@ -4,6 +4,7 @@ import type { MaterialFinish } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import { createPointMaterial, PointCloud } from '@core/scene/pointCloud';
 import { CAR } from '../../../model/layout';
+import { waveDip } from '../../geometry/wave';
 import { THEME } from '../../../theme';
 import { partMesh, registered } from '../context';
 import type { PartContext } from '../context';
@@ -39,7 +40,7 @@ function poolGeometry(): PlaneGeometry {
 
 function pulse(seconds: number, phase: number): number {
   const { rate, depth } = FAN_GLOW.pulse;
-  return 1 - depth * (0.5 + 0.5 * Math.sin(seconds * rate - phase));
+  return waveDip(depth, seconds * rate - phase);
 }
 
 export class FanGlow {

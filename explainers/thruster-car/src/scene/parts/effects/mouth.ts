@@ -1,7 +1,7 @@
 import { Quaternion, Vector3 } from 'three';
 import type { Object3D } from 'three';
 
-const PLUME_AXIS = new Vector3(0, 1, 0);
+export const PLUME_AXIS = new Vector3(0, 1, 0);
 const SIDE_HINT = new Vector3(0, 1, 0);
 const SIDE_FALLBACK = new Vector3(1, 0, 0);
 const PARALLEL = 0.9;

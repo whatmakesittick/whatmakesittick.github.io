@@ -1,6 +1,6 @@
 import type { BufferGeometry } from 'three';
 import { CylinderGeometry, ExtrudeGeometry, Shape, TorusGeometry } from 'three';
-import { toRadians } from '@core/math';
+import { FULL_TURN, toRadians } from '@core/math';
 import { SEAT } from '../../../model/layout';
 import { orientedBox, placed } from './cabinFrame';
 import type { Basis } from './cabinFrame';
@@ -72,13 +72,13 @@ function wheelBasis(): Basis {
 }
 
 function chordHeight(): number {
-  const gap = 2 * Math.PI - WHEEL_RIM.sweep;
+  const gap = FULL_TURN - WHEEL_RIM.sweep;
   return WHEEL_RIM.radius * Math.cos(gap / 2);
 }
 
 function rim(): BufferGeometry[] {
   const { radius, grip, radialSteps, ringSteps, sweep, hub } = WHEEL_RIM;
-  const gap = 2 * Math.PI - sweep;
+  const gap = FULL_TURN - sweep;
   const ring = new TorusGeometry(radius, grip, radialSteps, ringSteps, sweep);
   ring.rotateZ(-Math.PI / 2 + gap / 2);
   const chord = 2 * radius * Math.sin(gap / 2);

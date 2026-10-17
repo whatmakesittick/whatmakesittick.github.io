@@ -1,6 +1,6 @@
 import type { BufferGeometry } from 'three';
 import type { Curve } from '../body/curve';
-import { HALF_TURN, QUARTER_TURN } from '../gear/lathe';
+import { HALF_TURN, QUARTER_TURN } from '../turns';
 import { mirroredBoxes } from './paint';
 import { loft } from './loft';
 import type { SectionPoint } from './loft';

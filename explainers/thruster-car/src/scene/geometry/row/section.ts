@@ -1,5 +1,5 @@
 import { clamp } from '@core/math';
-import { QUARTER_TURN } from '../gear/lathe';
+import { QUARTER_TURN } from '../turns';
 import type { SectionPoint } from './loft';
 
 export interface RoundSection {

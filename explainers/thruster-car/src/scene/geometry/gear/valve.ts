@@ -15,7 +15,8 @@ import { extrudeProfileAlongX, roundedRectShape } from '@core/scene/geometry/ext
 import type { Point } from '../../../ids';
 import { mergeParts } from '../../parts/context';
 import { tinted } from './attributes';
-import { QUARTER_TURN, latheAround } from './lathe';
+import { latheAround } from './lathe';
+import { QUARTER_TURN } from '../turns';
 import type { Profile } from './lathe';
 import { grey, paintTexture, seamDistance } from './maps';
 import type { Rgba } from './maps';

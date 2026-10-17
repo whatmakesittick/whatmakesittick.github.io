@@ -8,6 +8,7 @@ import {
   UnsignedByteType,
 } from 'three';
 import type { BufferGeometry, ColorRepresentation, RGB } from 'three';
+import { clamp } from '@core/math';
 import type { MaterialFinish } from '@core/scene/materials';
 
 export interface Swatch {
@@ -41,9 +42,7 @@ export function swatchOf(finish: MaterialFinish): Swatch {
 }
 
 function bytes(rgb: RGB, alpha = 1): number[] {
-  return [rgb.r, rgb.g, rgb.b, alpha].map((value) =>
-    Math.round(FULL * Math.min(1, Math.max(0, value))),
-  );
+  return [rgb.r, rgb.g, rgb.b, alpha].map((value) => Math.round(FULL * clamp(value, 0, 1)));
 }
 
 function srgb(color: Color): RGB {
