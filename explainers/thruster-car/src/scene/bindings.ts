@@ -1,7 +1,7 @@
 import { bindPresets } from '@core/scene/presetBinder';
 import type { LabelPolicy, PresetTargets } from '@core/scene/presetBinder';
 import type { AssemblyState } from '../ids';
-import { PRESETS, createAssemblyState, writeAssemblyState } from '../state';
+import { PRESETS, createAssemblyState, createLiveReader, writeAssemblyState } from '../state';
 import type { AssemblySource, Preset, ThrusterCarStore, ThrusterCarStoreState } from '../state';
 import type { ThrusterCarController } from './controller';
 
@@ -11,16 +11,17 @@ export interface SceneTargets extends PresetTargets {
 }
 
 class DoubleBufferedAssemblyState {
+  private readonly read = createLiveReader();
   private heldByAssembly: AssemblyState;
   private free: AssemblyState;
 
   constructor(source: AssemblySource) {
-    this.heldByAssembly = createAssemblyState(source);
-    this.free = createAssemblyState(source);
+    this.heldByAssembly = createAssemblyState(source, this.read);
+    this.free = createAssemblyState(source, this.read);
   }
 
   handOver(source: AssemblySource): AssemblyState {
-    const next = writeAssemblyState(this.free, source);
+    const next = writeAssemblyState(this.free, source, this.read);
     this.free = this.heldByAssembly;
     this.heldByAssembly = next;
     return next;

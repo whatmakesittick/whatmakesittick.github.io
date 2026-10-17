@@ -39,7 +39,9 @@ function totalThrust(nozzles: NozzleThrusts): number {
   return NOZZLE_IDS.reduce((sum, id) => sum + nozzles[id], 0);
 }
 
-function readingOf({ phase, gas, tankLitres }: LiveSource): LiveReading {
+export type LiveReader = (source: LiveSource) => LiveReading;
+
+export function liveReading({ phase, gas, tankLitres }: LiveSource): LiveReading {
   const run = runAt(phase);
   const tank = tankAt(phase, gas, tankLitres);
   const nozzles = tank.empty ? SILENT_NOZZLES : run.nozzles;
@@ -47,22 +49,19 @@ function readingOf({ phase, gas, tankLitres }: LiveSource): LiveReading {
   return { ...run, nozzles, tank, thrustN, massFlowKgS: massFlow(thrustN, gas) };
 }
 
-let lastSource: LiveSource | null = null;
-let lastReading: LiveReading | null = null;
+function sameSource(last: LiveSource, next: LiveSource): boolean {
+  return last.phase === next.phase && last.gas === next.gas && last.tankLitres === next.tankLitres;
+}
 
-export function liveReading(source: LiveSource): LiveReading {
-  if (
-    lastReading &&
-    lastSource &&
-    lastSource.phase === source.phase &&
-    lastSource.gas === source.gas &&
-    lastSource.tankLitres === source.tankLitres
-  ) {
-    return lastReading;
-  }
-  lastSource = { phase: source.phase, gas: source.gas, tankLitres: source.tankLitres };
-  lastReading = readingOf(source);
-  return lastReading;
+export function createLiveReader(): LiveReader {
+  let last: { source: LiveSource; reading: LiveReading } | null = null;
+  return (source) => {
+    if (!last || !sameSource(last.source, source)) {
+      const { phase, gas, tankLitres } = source;
+      last = { source: { phase, gas, tankLitres }, reading: liveReading(source) };
+    }
+    return last.reading;
+  };
 }
 
 export function runOutcome(gas: GasId, litres: number): RunOutcome {
@@ -78,8 +77,12 @@ export function runUsedShare(gas: GasId, litres: number): number {
   return 1 - tankAt(RUN_SECONDS, gas, litres).massShare;
 }
 
-export function writeAssemblyState(target: AssemblyState, source: AssemblySource): AssemblyState {
-  const reading = liveReading(source);
+export function writeAssemblyState(
+  target: AssemblyState,
+  source: AssemblySource,
+  read: LiveReader = liveReading,
+): AssemblyState {
+  const reading = read(source);
   target.phase = source.phase;
   target.playing = source.playing;
   target.gas = source.gas;
@@ -92,8 +95,11 @@ export function writeAssemblyState(target: AssemblyState, source: AssemblySource
   return target;
 }
 
-export function createAssemblyState(source: AssemblySource): AssemblyState {
-  const reading = liveReading(source);
+export function createAssemblyState(
+  source: AssemblySource,
+  read: LiveReader = liveReading,
+): AssemblyState {
+  const reading = read(source);
   const target: AssemblyState = {
     phase: source.phase,
     playing: source.playing,
@@ -105,5 +111,5 @@ export function createAssemblyState(source: AssemblySource): AssemblyState {
     fans: reading.fans,
     view: { ...source.view },
   };
-  return writeAssemblyState(target, source);
+  return writeAssemblyState(target, source, read);
 }

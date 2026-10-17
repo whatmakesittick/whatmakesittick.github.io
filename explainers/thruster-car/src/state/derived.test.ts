@@ -4,6 +4,7 @@ import type { AssemblyState } from '../ids';
 import { MOMENTS, RUN_BOOST_N, RUN_SECONDS, TOUCHDOWN_SPEED_MS, emptyShare } from '../model';
 import {
   createAssemblyState,
+  createLiveReader,
   liveReading,
   runOutcome,
   runUsedShare,
@@ -74,15 +75,23 @@ describe('live reading', () => {
   });
 
   it('returns the same reading until the phase, gas or tank changes', () => {
-    const first = liveReading({ ...AIR_600, phase: 2 });
-    expect(liveReading({ ...AIR_600, phase: 2 })).toBe(first);
-    expect(liveReading({ ...AIR_600, phase: 2.1 })).not.toBe(first);
-    const air = liveReading({ ...AIR_600, phase: 2 });
-    expect(liveReading({ ...AIR_600, phase: 2, gas: 'nitrogen' })).not.toBe(air);
-    const nitrogen = liveReading({ ...AIR_600, phase: 2, gas: 'nitrogen' });
-    expect(liveReading({ ...AIR_600, phase: 2, gas: 'nitrogen', tankLitres: 400 })).not.toBe(
-      nitrogen,
-    );
+    const read = createLiveReader();
+    const first = read({ ...AIR_600, phase: 2 });
+    expect(read({ ...AIR_600, phase: 2 })).toBe(first);
+    expect(read({ ...AIR_600, phase: 2.1 })).not.toBe(first);
+    const air = read({ ...AIR_600, phase: 2 });
+    expect(read({ ...AIR_600, phase: 2, gas: 'nitrogen' })).not.toBe(air);
+    const nitrogen = read({ ...AIR_600, phase: 2, gas: 'nitrogen' });
+    expect(read({ ...AIR_600, phase: 2, gas: 'nitrogen', tankLitres: 400 })).not.toBe(nitrogen);
+  });
+
+  it('keeps a separate reading for each reader', () => {
+    const first = createLiveReader();
+    const second = createLiveReader();
+    const reading = first({ ...AIR_600, phase: 2 });
+    expect(second({ ...AIR_600, phase: 2 })).not.toBe(reading);
+    expect(second({ ...AIR_600, phase: 2 })).toEqual(reading);
+    expect(first({ ...AIR_600, phase: 2 })).toBe(reading);
   });
 });
 
