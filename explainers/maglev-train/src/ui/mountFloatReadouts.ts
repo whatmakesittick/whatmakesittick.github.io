@@ -7,11 +7,12 @@ import { createLiveReader } from '../state';
 import type { MaglevTrainStore } from '../state';
 import { WHOLE, formatMm, formatMmRange, whole } from './format';
 
-type LiftState = 'skids' | 'lifting' | 'floating';
+type LiftState = 'skids' | 'lifting' | 'floating' | 'settling';
 
 function liftStateOf({ phase, onSkids, gapMm }: MotionReading): LiftState {
   if (onSkids) return 'skids';
-  return phase === 'liftOff' && gapMm > GAP_MM ? 'lifting' : 'floating';
+  if (gapMm <= GAP_MM) return 'floating';
+  return phase === 'liftOff' ? 'lifting' : 'settling';
 }
 
 export function mountFloatReadouts(root: Document, store: MaglevTrainStore): Disposer {

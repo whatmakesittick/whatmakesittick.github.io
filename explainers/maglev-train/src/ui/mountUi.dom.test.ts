@@ -1,7 +1,7 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { mountActions } from '@core/ui/actions';
 import { MOMENT_IDS } from '../ids';
-import { MOMENTS } from '../model';
+import { MOMENTS, PHASE_RANGES } from '../model';
 import { createMaglevTrainStore } from '../state';
 import type { MaglevTrainStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
@@ -13,6 +13,9 @@ const { ride, float, centre, motor, stop, compare } = chapters;
 const READOUT_COUNT = 26;
 const LIFTING_PHASE = 30;
 const BRAKING_PHASE = 700;
+const SETTLING_PHASE = 962;
+const POWER_CUT_SETTLING_PHASE = 933;
+const POWER_CUT_SKIDDING_PHASE = 936;
 const LIVE_READOUTS = ['ghost', 'lift', 'frequency', 'section', 'flow', 'onboard'];
 
 function readout(id: string): string | null | undefined {
@@ -106,6 +109,25 @@ describe('chapter widgets', () => {
     expect(readout('onboard')).toBe(stop.onboardValue.generator);
     store.getState().setPhase(BRAKING_PHASE);
     expect(readout('flow')).toBe(stop.flowValue.regen);
+  });
+
+  it('sets the train down at the platform before it rests on its skids', () => {
+    store.getState().setPhase(PHASE_RANGES.settle.start);
+    expect(readout('lift')).toBe(float.liftValue.floating);
+    store.getState().setPhase(SETTLING_PHASE);
+    expect(readout('lift')).toBe(float.liftValue.settling);
+    store.getState().setPhase(MOMENTS.touchdown);
+    expect(readout('lift')).toBe(float.liftValue.skids);
+  });
+
+  it('sets the train down below the skid speed after a power cut', () => {
+    store.getState().setPhase(BRAKING_PHASE);
+    click('brakeMode', 'eddy');
+    expect(readout('lift')).toBe(float.liftValue.floating);
+    store.getState().setPhase(POWER_CUT_SETTLING_PHASE);
+    expect(readout('lift')).toBe(float.liftValue.settling);
+    store.getState().setPhase(POWER_CUT_SKIDDING_PHASE);
+    expect(readout('lift')).toBe(float.liftValue.skids);
   });
 
   it('cuts the motor and runs on batteries after a power cut', () => {
