@@ -2,13 +2,13 @@
   "meta": {
     "title": "Comment fonctionne un train maglev",
     "eyebrow": "Transport à grande vitesse",
-    "tagline": "Voyagez en 3D à bord du maglev de Shanghai : il se hisse jusqu’à ce que ses aimants soient à 10 mm sous la voie, et le moteur qui le propulse est logé dans la voie elle-même.",
-    "description": "Montez dans le maglev de Shanghai en 3D : il se hisse jusqu’à ce que ses aimants soient à 10 mm sous sa voie, et la voie elle-même lui sert de moteur.",
-    "summary": "Le trajet jusqu’à l’aéroport, comment les aimants soulèvent le train, ce qui le garde centré, le moteur intégré à la voie, comment il freine et ce qui le distingue d’autres trains rapides.",
-    "socialAlt": "Un train maglev Transrapid blanc sur sa voie surélevée en béton, à côté du titre « Comment fonctionne un train maglev »"
+    "tagline": "Un voyage en 3D à bord du maglev de Shanghai. Attirés par la voie, ses aimants remontent jusqu’à 10 mm sous elle et soulèvent le train. Et cette même voie lui sert de moteur.",
+    "description": "À bord du maglev de Shanghai, en 3D : comment ses aimants le soulèvent jusqu’à 10 mm sous sa voie, et pourquoi le moteur est dans la voie.",
+    "summary": "Le trajet jusqu’à l’aéroport, les aimants qui soulèvent le train, ce qui le garde dans l’axe, le moteur logé dans la voie, le freinage, et ce qu’il vaut face aux autres trains rapides.",
+    "socialAlt": "Un maglev Transrapid blanc file sur sa voie surélevée en béton, à côté du titre « Comment fonctionne un train maglev »"
   },
   "stage": {
-    "label": "Modèle interactif du train maglev",
+    "label": "Modèle interactif du maglev",
     "gauge": "Mesures du trajet en direct"
   },
   "timeline": {
@@ -16,33 +16,33 @@
     "phases": "Aller à une étape",
     "speed": "Vitesse de lecture",
     "value": "Étape {{step}} sur {{total}}",
-    "during": "Étape {{step}} sur {{total}}, {{detail}}",
+    "during": "Étape {{step}} sur {{total}} : {{detail}}",
     "speedValue": "×{{factor}}",
-    "speedDescribe": "Tout le trajet en {{seconds}} secondes",
+    "speedDescribe": "Le trajet complet en {{seconds}} secondes",
     "phase": {
       "liftOff": "Décollage",
       "accelerate": "Accélération",
-      "cruise": "Croisière",
+      "cruise": "Pleine vitesse",
       "brake": "Freinage",
       "settle": "Atterrissage"
     },
     "jump": {
       "liftOff": "Aller au décollage",
       "accelerate": "Aller à l’accélération",
-      "cruise": "Aller à la vitesse de croisière",
+      "cruise": "Aller à la pleine vitesse",
       "brake": "Aller au freinage",
       "settle": "Aller à l’atterrissage"
     },
     "detail": {
-      "liftOff": "le train décolle de ses patins",
+      "liftOff": "le train quitte ses patins",
       "accelerate": "le moteur de la voie fait accélérer le train",
-      "cruise": "le train file à sa vitesse de croisière",
+      "cruise": "le train file à pleine vitesse",
       "brake": "le train ralentit à l’approche de l’aéroport",
       "settle": "le train se pose sur ses patins"
     },
     "moment": {
       "lifted": "En lévitation",
-      "fullSpeed": "En croisière",
+      "fullSpeed": "À pleine vitesse",
       "brakeStart": "Début du freinage",
       "touchdown": "Retour sur les patins"
     }
@@ -60,7 +60,7 @@
     },
     "nudgeOptions": {
       "bump": "Secousse",
-      "gust": "Rafale latérale"
+      "gust": "Vent de travers"
     },
     "compareOptions": {
       "transrapid": "Maglev de Shanghai",
@@ -69,7 +69,7 @@
     },
     "groups": {
       "topSpeed": "Vitesse de pointe",
-      "brakeMode": "Comment le train s’arrête",
+      "brakeMode": "Type d’arrêt",
       "nudge": "Bousculer le train",
       "compare": "Train à comparer",
       "moment": "Aller à un moment"
@@ -81,14 +81,14 @@
         "hint": "Onde progressive (W)"
       },
       "gap": {
-        "name": "Gros plan sur l’écart",
-        "short": "Écart",
-        "hint": "Gros plan sur l’écart (G)"
+        "name": "Gros plan sur l’entrefer",
+        "short": "Entrefer",
+        "hint": "Gros plan sur l’entrefer (G)"
       },
       "ghost": {
-        "name": "Fantôme d’un train à grande vitesse",
+        "name": "Train fantôme",
         "short": "Fantôme",
-        "hint": "Fantôme d’un train à grande vitesse (H)"
+        "hint": "Train fantôme (H)"
       },
       "labels": {
         "name": "Étiquettes",
@@ -101,7 +101,7 @@
     "speed": "Vitesse",
     "distance": "Distance",
     "time": "Temps",
-    "gap": "Écart aimant-voie"
+    "gap": "Entrefer"
   },
   "units": {
     "kmh": "{{value}} km/h",
@@ -117,51 +117,51 @@
   },
   "chapters": {
     "ride": {
-      "trip": "Durée du trajet dans ce modèle",
+      "trip": "Durée du trajet dans le modèle",
       "tripValue": "{{time}}, de quai à quai",
       "top": "Vitesse de pointe",
       "topValue": {
-        "kmh430": "430 km/h, la vitesse pour laquelle il a été conçu",
-        "kmh300": "300 km/h, la vitesse de tous les trajets depuis 2021"
+        "kmh430": "430 km/h, sa vitesse de conception",
+        "kmh300": "300 km/h, pour tous les trajets depuis 2021"
       },
       "line": "Ligne",
       "lineValue": "environ {{km}} km, de Longyang Road à l’aéroport",
-      "ghost": "Fantôme d’un train à grande vitesse",
-      "ghostValue": "{{km}} km derrière, à {{kmh}} km/h",
+      "ghost": "Train fantôme",
+      "ghostValue": "{{km}} km de retard, à {{kmh}} km/h",
       "ghostStanding": "encore à quai"
     },
     "float": {
       "lift": "En ce moment",
       "liftValue": {
         "skids": "posé sur ses patins",
-        "lifting": "en train de se soulever",
+        "lifting": "en plein décollage",
         "floating": "en lévitation",
-        "settling": "en train de se poser sur ses patins"
+        "settling": "en train de se poser"
       },
-      "target": "Écart aimant-voie visé",
-      "band": "Plage autorisée",
-      "clearance": "Espace libre sous la caisse",
+      "target": "Entrefer visé",
+      "band": "Plage tolérée",
+      "clearance": "Espace sous la caisse",
       "mass": "Poids à vide",
       "massValue": "environ {{tonnes}} t par voiture, {{sections}} voitures"
     },
     "centre": {
       "guideGap": "Écart latéral",
       "guideGapValue": "environ {{value}} mm",
-      "curves": "Courbes de la vraie ligne",
+      "curves": "Courbes de la ligne réelle",
       "curvesValue": "rayons de {{small}} m et {{large}} m",
       "beam": "Poutre principale de la voie",
-      "beamValue": "environ {{metres}} m de long, environ {{tonnes}} t",
+      "beamValue": "environ {{metres}} m de long, pour environ {{tonnes}} t",
       "switches": "Aiguillages",
-      "switchesValue": "{{count}} aiguillages flexibles en acier"
+      "switchesValue": "{{count}} aiguillages flexibles en acier"
     },
     "motor": {
       "frequency": "Fréquence de l’onde",
       "pitch": "Pas polaire",
-      "wavelength": "Une onde complète",
+      "wavelength": "Longueur d’onde",
       "converter": "Plage des convertisseurs",
-      "section": "Section alimentée",
-      "sectionValue": "section {{index}} sur {{count}}",
-      "sectionOff": "aucune, le moteur est à l’arrêt"
+      "section": "Tronçon alimenté",
+      "sectionValue": "tronçon {{index}} sur {{count}}",
+      "sectionOff": "aucun, le moteur est coupé"
     },
     "stop": {
       "flow": "Flux d’énergie",
@@ -169,7 +169,7 @@
         "none": "aucun",
         "drive": "du réseau vers le moteur",
         "regen": "du moteur vers le réseau",
-        "battery": "batteries de bord uniquement"
+        "battery": "batteries de bord seulement"
       },
       "onboard": "Électricité à bord",
       "onboardValue": {
@@ -177,25 +177,25 @@
         "generator": "générateurs dans les aimants",
         "battery": "batteries de bord"
       },
-      "distance": "Distance de freinage dans ce modèle",
+      "distance": "Distance de freinage dans le modèle",
       "distanceValue": "environ {{km}} km à partir de {{kmh}} km/h",
-      "skid": "Arrêt sans danger après une coupure de courant",
-      "skidValue": "freins à courants de Foucault jusqu’à {{kmh}} km/h, puis glissade sur les patins"
+      "skid": "Arrêt sûr en cas de coupure",
+      "skidValue": "freins à courants de Foucault jusqu’à {{kmh}} km/h, puis sur patins"
     },
     "compare": {
-      "gap": "Écart aimant-voie",
-      "gapWheels": "aucun, des roues en acier sur des rails",
+      "gap": "Entrefer",
+      "gapWheels": "aucun, roues en acier sur rails",
       "record": "Record de vitesse en essai",
       "recordValue": "{{kmh}} km/h en {{year}}",
-      "lift": "Comment il est porté",
+      "lift": "Ce qui le porte",
       "liftValue": {
-        "transrapid": "tiré vers le haut, par en dessous",
-        "scmaglev": "poussé vers le haut à vitesse élevée, sur roues sous 150 km/h environ",
-        "wheelRail": "porté par des roues en acier"
+        "transrapid": "des aimants qui l’attirent vers le haut, par en dessous",
+        "scmaglev": "des aimants qui le repoussent vers le haut en vitesse, et des roues sous 150 km/h environ",
+        "wheelRail": "des roues en acier"
       },
-      "energy": "Énergie par place, chiffres du constructeur",
+      "energy": "Énergie par place, selon le constructeur",
       "energyValue": "{{maglev}} Wh par place et par km à {{kmh}} km/h, contre {{wheel}} pour un ICE 3",
-      "energyFast": "{{maglev}} Wh par place et par km à {{kmh}} km/h, une vitesse hors de portée d’un ICE 3"
+      "energyFast": "{{maglev}} Wh par place et par km à {{kmh}} km/h, une vitesse hors de portée de l’ICE 3"
     }
   },
   "parts": {
@@ -211,57 +211,57 @@
     "feederCable": "Câble d’alimentation",
     "piers": "Piliers",
     "stations": "Gares",
-    "poweredSection": "Section alimentée",
+    "poweredSection": "Tronçon alimenté",
     "travellingWave": "Onde progressive",
-    "gapInset": "Gros plan sur l’écart, agrandi 20 fois",
+    "gapInset": "Gros plan sur l’entrefer, agrandi 20 fois",
     "powerFlow": "Flux d’énergie",
-    "ghostTrain": "Fantôme d’un train à grande vitesse",
+    "ghostTrain": "Train fantôme",
     "scmaglev": "SCMaglev",
     "wheelRail": "Train à roues",
-    "gapCallouts": "Écarts aimant-voie"
+    "gapCallouts": "Entrefers"
   },
   "sections": {
     "ride": {
       "title": "Un train sans roues",
-      "p1": "Voici le maglev de Shanghai, un <strong>train</strong> qui flotte au lieu de rouler. Maglev vient de l’anglais magnetic levitation, la lévitation magnétique : des aimants portent le train, qui n’a donc aucune roue. Il file sur une voie surélevée en béton, la <strong>voie de guidage</strong>. Elle relie Longyang Road, en ville, à l’aéroport international de Pudong, sur environ 30 km. Le train a fait son premier trajet le 31 décembre 2002, et le service régulier complet a démarré en 2004.",
-      "p2": "La ligne a été conçue pour 430 km/h. Pendant des années, certains trajets de la journée se faisaient à cette vitesse : on rejoignait alors l’aéroport en moins de huit minutes. Depuis mai 2021, tous les trajets se font à 300 km/h, et il faut un peu plus de huit minutes. Le réglage « Vitesse de pointe » vous permet de faire le trajet à l’une ou l’autre vitesse. L’indicateur de durée du trajet montre combien de temps chacun prend dans ce modèle.",
-      "p3": "Le train compte six voitures et mesure environ 150 m de long, 3,7 m de large et 4,2 m de haut. La voie repose sur des <strong>piliers</strong> en béton, en général hauts de 8 m et espacés de 25 m. Il y a des <strong>gares</strong> aux deux bouts. Dans ce modèle, le train reste sur place et c’est la ligne qui défile sous lui : il ne quitte donc jamais votre champ de vision. La ligne du modèle est aussi toute droite, alors que la vraie décrit de douces courbes en S.",
-      "p4": "À côté de vous roule, tout transparent, le <strong>fantôme d’un train à grande vitesse</strong> : un train ordinaire sur roues en acier, parti au même instant. Selon le constructeur, un tel train a besoin de plus de 28 km pour atteindre 300 km/h. Le maglev, lui, y parvient dans les 5 premiers kilomètres. Dans ce modèle, le fantôme accélère à un rythme constant : regardez de combien il se laisse distancer. L’animation n’est pas en temps réel : le décollage et l’atterrissage sont ralentis pour que vous puissiez les voir. L’indicateur « Temps », lui, suit toujours l’horloge réelle."
+      "p1": "À Shanghai, il existe un <strong>train</strong> qui ne roule pas : il flotte. C’est le maglev, abréviation de l’anglais « magnetic levitation », la lévitation magnétique. Des aimants le maintiennent en l’air : il n’a donc aucune roue. En français, on parle de train à sustentation magnétique. Il circule sur une piste en béton surélevée, la <strong>voie de guidage</strong>. Celle-ci relie Longyang Road, en ville, à l’aéroport international de Pudong, sur une trentaine de kilomètres. Le premier trajet remonte au 31 décembre 2002, et le service régulier complet a commencé en 2004.",
+      "p2": "La ligne a été conçue pour 430 km/h. Pendant des années, certains trajets en journée se faisaient à cette vitesse : on rejoignait alors l’aéroport en moins de huit minutes. Depuis mai 2021, tous les trajets se font à 300 km/h, et il faut un peu plus de huit minutes. Le réglage de vitesse de pointe vous permet d’essayer les deux. Dans ce modèle, l’indicateur de durée du trajet affiche le temps de chacun.",
+      "p3": "Le train compte six voitures. Il mesure environ 150 m de long, 3,7 m de large et 4,2 m de haut. La voie repose sur des <strong>piliers</strong> en béton, en général hauts de 8 m et espacés de 25 m. Une <strong>gare</strong> se trouve à chaque extrémité. Dans ce modèle, c’est le décor qui bouge : le train reste sur place et la ligne défile sous lui. Il ne sort donc jamais de votre champ de vision. Autre différence : la ligne du modèle est droite, alors que la vraie dessine de douces courbes en S.",
+      "p4": "Juste à côté de vous file un <strong>train fantôme</strong>, tout transparent. C’est un train à grande vitesse classique, sur roues en acier, parti au même instant que vous. D’après le constructeur, un tel train a besoin de plus de 28 km pour atteindre 300 km/h. Le maglev, lui, y parvient dans les 5 premiers kilomètres. Dans ce modèle, le fantôme accélère toujours au même rythme : regardez l’écart se creuser. L’animation n’est pas en temps réel, et le décollage comme l’atterrissage sont ralentis pour que vous puissiez les voir. Le compteur de temps, lui, suit toujours la vraie horloge."
     },
     "float": {
-      "title": "Tiré vers le haut, par en dessous",
-      "p1": "À quai, le train repose sur des <strong>patins</strong>, des sortes de semelles plates sous sa caisse. Pour flotter, il fait quelque chose d’étonnant : il se hisse vers la voie. Ses <strong>bras enveloppants</strong> descendent le long des bords de la voie, puis se recourbent par en dessous. Là, des <strong>aimants porteurs</strong> sont tournés vers le haut, face aux <strong>blocs de stator</strong> : des rangées de plaques d’acier fixées sous la voie.",
-      "p2": "Les aimants porteurs sont des électroaimants : ils ne deviennent des aimants que lorsqu’un courant les traverse. Une fois allumés, ils sont attirés par l’acier au-dessus d’eux et entraînent tout le train vers le haut. Pendant que le train monte, l’écart entre les aimants et les blocs de stator se réduit à environ 10 mm. C’est l’écart aimant-voie affiché sur la jauge. Dans le même temps, l’espace sous la caisse du train grandit jusqu’à environ 150 mm, assez pour passer au-dessus de la neige ou de petits objets.",
-      "p3": "Cette attraction magnétique est instable par nature. Plus un aimant s’approche de l’acier, plus il tire fort. Livré à lui-même, il irait se coller contre l’acier, ou bien il laisserait le train redescendre. Un régulateur mesure donc l’écart en permanence et ajuste le courant de nombreuses fois par seconde, ce qui maintient l’écart entre 8 et 12 mm. Appuyez sur « Secousse » pour bousculer le train, et regardez l’écart osciller puis revenir à la normale.",
-      "p4": "Flotter consomme de l’énergie, mais moins que la climatisation du train, selon le constructeur. Un écart de 10 mm est bien trop fin pour se voir à côté d’un train de 150 m : le <strong>gros plan sur l’écart</strong> le montre donc 20 fois plus grand. Dans ce modèle, le décollage dure 6 secondes, et le train posé sur ses patins se trouve 20 mm plus bas qu’en lévitation. Ces deux valeurs sont des choix du modèle, pas des chiffres publiés."
+      "title": "Suspendu à sa voie",
+      "p1": "À quai, le train repose sur des <strong>patins</strong>, des semelles plates placées sous sa caisse. Pour flotter, il s’y prend d’une façon surprenante : il monte vers la voie, comme aimanté par elle. Ses <strong>bras enveloppants</strong> descendent de part et d’autre de la voie, puis se replient en dessous. C’est là que se trouvent les <strong>aimants porteurs</strong>, tournés vers le haut. Ils font face aux <strong>blocs de stator</strong>, des rangées de plaques d’acier fixées sous la voie.",
+      "p2": "Les aimants porteurs sont des électroaimants : ils ne deviennent des aimants que lorsqu’un courant les traverse. Une fois sous tension, ils sont attirés par l’acier situé au-dessus d’eux, et ils soulèvent tout le train. À mesure que le train monte, l’écart entre les aimants et les blocs de stator se réduit jusqu’à environ 10 mm. Cet écart s’appelle l’entrefer : c’est lui qu’affiche la jauge. Dans le même temps, la hauteur libre sous la caisse grandit jusqu’à environ 150 mm. De quoi passer au-dessus de la neige ou de petits objets.",
+      "p3": "Ce type d’attraction magnétique est instable par nature. Plus un aimant s’approche de l’acier, plus il tire fort. Livré à lui-même, il irait se coller contre l’acier, ou au contraire laisserait le train s’affaisser. Un régulateur mesure donc l’entrefer en permanence. Il ajuste le courant de nombreuses fois par seconde, et l’entrefer reste ainsi entre 8 et 12 mm. Appuyez sur « Secousse » pour bousculer le train, et regardez l’entrefer osciller puis revenir à la normale.",
+      "p4": "Flotter consomme de l’électricité, mais moins que la climatisation du train, selon le constructeur. À côté d’un train de 150 m, un entrefer de 10 mm est bien trop mince pour se voir. Le <strong>gros plan sur l’entrefer</strong> le montre donc 20 fois plus grand. Dans ce modèle, le décollage dure 6 secondes, et le train posé sur ses patins se trouve 20 mm plus bas qu’en lévitation. Ces deux valeurs sont des choix du modèle, pas des chiffres publiés."
     },
     "centre": {
-      "title": "Rester bien centré",
-      "p1": "Flotter, ce n’est que la moitié du travail : le train doit aussi rester centré. Des <strong>rails de guidage</strong> en acier longent les deux côtés de la voie. Sur les bras, des <strong>aimants de guidage</strong> leur font face, à environ 10 mm. Chaque côté attire le train vers son rail, et le régulateur garde ces deux attractions en équilibre.",
-      "p2": "Appuyez sur « Rafale latérale » pour pousser le train sur le côté. L’écart se réduit d’un côté et grandit de l’autre. Le régulateur tire plus fort du côté qui s’est éloigné, et le train se recentre. Pendant tout ce temps, les <strong>aimants porteurs</strong> gardent leur propre écart. L’ampleur et le rythme de ce balancement sont choisis pour le modèle, pas mesurés.",
-      "p3": "Comme ses <strong>bras enveloppants</strong> passent sous la voie, le train s’y agrippe des deux côtés et par en dessous. C’est pourquoi, selon le constructeur, il ne peut pratiquement pas dérailler. La vue en coupe ouvre le train pour vous le montrer : les aimants porteurs sous les <strong>blocs de stator</strong>, les aimants de guidage à côté des rails.",
-      "p4": "Tout cela exige une <strong>voie de guidage</strong> très précise. Chaque poutre principale mesure environ 25 m de long et pèse environ 190 t. Ses pièces en acier sont taillées à 0,2 mm près. Les courbes en S de la vraie ligne sont larges, avec des rayons de 2 257 m et de 4 502 m. Pour que les trains puissent changer de voie, la ligne compte huit aiguillages en acier : de longues poutres d’acier qui se courbent pour envoyer le train sur une autre voie."
+      "title": "Rester dans l’axe",
+      "p1": "Flotter, ce n’est que la moitié du travail : le train doit aussi rester bien centré. Des <strong>rails de guidage</strong> en acier longent la voie des deux côtés. Sur les bras, des <strong>aimants de guidage</strong> leur font face, à environ 10 mm. Chaque côté attire le train vers son rail, et le régulateur veille à ce que les deux forces s’équilibrent.",
+      "p2": "Appuyez sur « Vent de travers » pour pousser le train sur le côté. L’écart se resserre d’un côté et s’élargit de l’autre. Le régulateur tire alors plus fort du côté qui s’est éloigné, et le train revient au milieu. Pendant tout ce temps, les <strong>aimants porteurs</strong> gardent leur propre entrefer. L’ampleur et le rythme de ce balancement sont choisis pour le modèle, pas mesurés.",
+      "p3": "Comme ses <strong>bras enveloppants</strong> passent sous la voie, le train l’enserre des deux côtés et par en dessous. Voilà pourquoi, selon le constructeur, il ne peut pratiquement pas dérailler. La vue en coupe ouvre le train pour que vous puissiez le constater : les aimants porteurs sont sous les <strong>blocs de stator</strong>, les aimants de guidage à côté des rails.",
+      "p4": "Tout cela exige une <strong>voie de guidage</strong> d’une grande précision. Chaque poutre principale mesure environ 25 m de long et pèse environ 190 t. Ses pièces en acier sont usinées à 0,2 mm près. Sur la vraie ligne, les courbes en S sont larges, avec des rayons de 2 257 m et de 4 502 m. Pour faire passer les trains d’une voie à l’autre, la ligne compte huit aiguillages en acier. Ce sont de longues poutres d’acier qui se courbent pour envoyer le train sur une autre voie."
     },
     "motor": {
-      "title": "La voie, c’est le moteur",
-      "p1": "Imaginez un moteur électrique ordinaire, ouvert puis déroulé à plat le long de la voie. C’est lui qui fait avancer ce train. Un moteur a une partie fixe, le stator, et une partie mobile, le rotor. Ici, le stator, c’est la rangée de <strong>blocs de stator</strong>, traversés par des câbles. Le rotor, ce sont les <strong>aimants porteurs</strong> du train lui-même. Les blocs de stator jouent donc deux rôles : ils portent le train, et ils le font avancer.",
-      "p2": "Ces câbles transportent un courant triphasé : trois courants qui montent et descendent à tour de rôle. Ensemble, ils créent un champ magnétique qui se déplace le long de la voie, l’<strong>onde progressive</strong>. Sur le modèle, on la voit sous forme de couleurs qui glissent le long des blocs de stator. Les aimants porteurs s’y accrochent et se laissent emporter, comme un surfeur sur une vague. Le train ne prend jamais de retard sur l’onde, et ne la devance jamais. Les ingénieurs parlent de moteur synchrone : il avance au rythme exact de l’onde.",
-      "p3": "La vitesse du train dépend donc de la cadence à laquelle le courant va et vient. Cette cadence s’appelle la fréquence. Une onde complète comprend un pôle nord et un pôle sud. Chaque pôle mesure 258 mm, une longueur qu’on appelle le pas polaire : une onde mesure donc 516 mm. À 430 km/h, le courant fait environ 230 allers-retours par seconde, soit 230 hertz (Hz). À 300 km/h, c’est environ 160 Hz. Essayez les boutons « 430 km/h » et « 300 km/h », et regardez l’indicateur de fréquence suivre le mouvement.",
-      "p4": "L’électricité vient de deux sous-stations installées le long de la ligne. À l’intérieur, des machines appelées convertisseurs transforment le courant du réseau en un courant de n’importe quelle fréquence, de 0 à 300 Hz. Un <strong>câble d’alimentation</strong> l’amène jusqu’à la <strong>section alimentée</strong>, le tronçon de voie situé sous le train. Seule la section où se trouve un train est sous tension. Selon le constructeur, cela évite que deux trains entrent en collision. Dans ce modèle, chaque section mesure 1 200 m, un chiffre tiré d’un article de recherche. En dehors du gros plan sur l’écart, l’onde est dessinée quatre fois plus longue qu’en réalité, pour que vous puissiez la suivre."
+      "title": "Le moteur est dans la voie",
+      "p1": "Imaginez un moteur électrique ordinaire, que l’on ouvrirait pour l’étaler à plat tout le long de la voie. Voilà ce qui propulse ce train. Un moteur comporte une partie fixe, le stator, et une partie mobile, le rotor. Ici, le stator, c’est la rangée de <strong>blocs de stator</strong>, dans lesquels serpentent des câbles. Et le rotor, ce sont les <strong>aimants porteurs</strong> du train lui-même. Les blocs de stator jouent donc un double rôle : ils portent le train et le font avancer.",
+      "p2": "Ces câbles transportent du courant triphasé : trois courants qui montent et descendent chacun à son tour. Ensemble, ils créent un champ magnétique qui se déplace le long de la voie : l’<strong>onde progressive</strong>. Sur le modèle, on la voit sous la forme d’une couleur qui glisse le long des blocs de stator. Les aimants porteurs s’y accrochent et se laissent emporter, comme un surfeur sur une vague. Le train ne prend jamais de retard sur l’onde, ni d’avance. Les ingénieurs parlent de moteur synchrone : il reste toujours au pas de l’onde.",
+      "p3": "La vitesse du train dépend donc de la cadence à laquelle le courant va et vient. Cette cadence s’appelle la fréquence. Une onde complète réunit un pôle nord et un pôle sud. Chaque pôle mesure 258 mm : c’est ce qu’on appelle le pas polaire. L’onde entière mesure donc 516 mm : c’est sa longueur d’onde. À 430 km/h, le courant va et vient environ 230 fois par seconde, soit 230 hertz (Hz). À 300 km/h, c’est environ 160 Hz. Essayez les boutons 430 et 300 km/h, et regardez la fréquence suivre.",
+      "p4": "L’électricité vient de deux sous-stations installées le long de la ligne. À l’intérieur, des machines appelées convertisseurs transforment le courant du réseau en courant de n’importe quelle fréquence, de 0 à 300 Hz. Un <strong>câble d’alimentation</strong> l’achemine jusqu’au <strong>tronçon alimenté</strong>, c’est-à-dire le morceau de voie situé sous le train. Seul le tronçon où se trouve un train est sous tension. D’après le constructeur, cela empêche deux trains de se percuter. Dans ce modèle, chaque tronçon mesure 1 200 m, une valeur tirée d’un article de recherche. En dehors du gros plan sur l’entrefer, l’onde est dessinée quatre fois plus longue qu’en réalité, pour que vous puissiez la suivre des yeux."
     },
     "stop": {
-      "title": "Freiner en produisant de l’électricité",
-      "p1": "Pour freiner, la voie fait courir l’onde progressive dans l’autre sens. L’onde retient alors les aimants du train. Le moteur fonctionne à l’envers, comme un générateur : l’élan du train redevient de l’électricité. Cette électricité peut repartir vers le réseau public. Regardez le <strong>flux d’énergie</strong> circuler en sens inverse dans le <strong>câble d’alimentation</strong>.",
-      "p2": "Le train a aussi besoin d’électricité à bord, pour ses aimants, son éclairage et sa climatisation. Au-delà de 100 km/h environ, des générateurs intégrés aux aimants porteurs la produisent sans toucher la voie. À basse vitesse, près des gares, elle vient de rails d’alimentation posés sur la voie. Des batteries, rechargées pendant le trajet, servent de secours.",
-      "p3": "Appuyez sur « Coupure de courant » pour voir ce qui se passe si le courant du réseau est coupé. Seule la propulsion disparaît. Les batteries gardent les aimants allumés, et le train continue de flotter. Les <strong>freins à courants de Foucault</strong>, qui sont eux aussi des aimants, le ralentissent alors. Ils font naître dans l’acier de la voie des courants qui tourbillonnent, appelés courants de Foucault, et ces courants freinent le train sans le toucher. À 10 km/h, le train se pose sur ses <strong>patins</strong> et glisse jusqu’à l’arrêt.",
-      "p4": "Dans ce modèle, les deux types d’arrêt utilisent le même freinage régulier : ils demandent donc la même distance. La vraie distance d’arrêt après une coupure de courant n’est pas publiée. À partir de 430 km/h, le modèle freine pendant environ 3 minutes, soit à peu près les trois minutes de freinage de la vraie ligne. Lors d’un arrêt normal, le train s’immobilise en flottant, puis se pose sur ses patins. Le fait qu’il repose sur ses patins à quai est une hypothèse du modèle."
+      "title": "Un freinage qui produit du courant",
+      "p1": "Pour freiner, la voie inverse le sens de l’onde progressive. L’onde retient alors les aimants du train. Le moteur fonctionne à l’envers, comme un générateur : il reconvertit l’élan du train en électricité. Ce courant peut repartir dans le réseau public. Regardez le <strong>flux d’énergie</strong> remonter le <strong>câble d’alimentation</strong>.",
+      "p2": "Le train a aussi besoin d’électricité à bord, pour ses aimants, son éclairage et sa climatisation. Au-delà de 100 km/h environ, des générateurs logés dans les aimants porteurs la produisent sans toucher la voie. À basse vitesse, près des gares, elle arrive par des rails d’alimentation posés sur la voie. Des batteries, rechargées pendant le trajet, servent de secours.",
+      "p3": "Appuyez sur « Coupure de courant » pour voir ce qui se passe en cas de panne du réseau. Le train ne perd que sa propulsion. Les batteries gardent ses aimants sous tension, et il continue de flotter. Les <strong>freins à courants de Foucault</strong>, qui sont eux aussi des aimants, prennent alors le relais pour le ralentir. Ils font naître dans l’acier de la voie des courants qui tourbillonnent, les courants de Foucault. Ces courants freinent le train sans le toucher. À 10 km/h, le train se pose sur ses <strong>patins</strong> et glisse jusqu’à l’arrêt.",
+      "p4": "Dans ce modèle, les deux types d’arrêt utilisent le même freinage régulier : il leur faut donc la même distance. La vraie distance d’arrêt après une coupure de courant n’a pas été publiée. À partir de 430 km/h, le modèle freine pendant environ 3 minutes, à peu près comme sur la vraie ligne, où le freinage dure trois minutes. Lors d’un arrêt normal, le train s’immobilise en flottant, puis s’abaisse sur ses patins. À quai, le train repose sur ses patins : c’est une hypothèse du modèle."
     },
     "compare": {
-      "title": "D’autres façons d’aller vite",
-      "p1": "Ici, trois trains sont alignés côte à côte et ouverts en coupe, pour que vous puissiez comparer la façon dont chacun est porté. Le <strong>SCMaglev</strong> japonais, mis au point par JR Central, utilise des aimants supraconducteurs. Refroidies à l’hélium liquide jusqu’à environ −269 °C, leurs bobines conduisent le courant sans aucune perte. Le train flotte à environ 100 mm au-dessus de sa voie, soit dix fois l’écart aimant-voie de Shanghai. Ses aimants le poussent vers le haut au lieu de le tirer. Cette poussée ne fonctionne qu’à vitesse élevée : le train roule donc sur des roues jusqu’à environ 150 km/h.",
-      "p2": "En 2015, une rame d’essai du SCMaglev, la L0, a atteint 603 km/h : c’est le record de vitesse, tous trains confondus. Un <strong>train à roues</strong>, comme la plupart des trains à grande vitesse, avance grâce à l’adhérence de ses roues en acier sur des rails en acier. Plus il va vite, moins ses roues ont d’adhérence en réserve. Malgré cela, un TGV français a atteint 574,8 km/h lors d’un essai en 2007, le record pour un train à roues.",
-      "p3": "Le maglev de Shanghai a établi son propre record, 501 km/h, lors d’un essai en novembre 2003. À 430 km/h, c’était le train le plus rapide en service régulier. Les <strong>écarts aimant-voie</strong> montrent la différence d’un coup d’œil : environ 10 mm à Shanghai, environ 100 mm pour le SCMaglev, et aucun écart sous des roues en acier. Choisissez un train pour lire ses chiffres ci-dessous.",
-      "p4": "Le constructeur affirme aussi que son maglev consomme moins d’énergie et fait moins de bruit. D’après ses chiffres, à 300 km/h, il lui faut 34 wattheures (Wh) pour transporter une place sur un kilomètre. Un train à grande vitesse allemand, l’ICE 3, en demande 51. À 300 km/h et à 25 m de distance, le maglev fait un bruit de 80 décibels, contre 90 à 92 pour l’ICE et le TGV. Ce sont les affirmations du constructeur lui-même, tirées de ses propres essais."
+      "title": "Aller vite autrement",
+      "p1": "Dans cette vue, trois trains sont alignés côte à côte, ouverts en coupe pour que vous puissiez comparer ce qui porte chacun d’eux. Au Japon, JR Central a mis au point le <strong>SCMaglev</strong>, qui utilise des aimants supraconducteurs. Refroidies à l’hélium liquide à environ −269 °C, leurs bobines laissent passer le courant sans la moindre perte. Le train flotte à environ 100 mm de hauteur, soit dix fois l’entrefer de Shanghai. Ses aimants le repoussent vers le haut au lieu de l’attirer. Mais cette poussée ne fonctionne qu’en vitesse : jusqu’à 150 km/h environ, le train roule sur des roues.",
+      "p2": "En 2015, une rame d’essai du SCMaglev, la L0, a atteint 603 km/h : c’est le record de vitesse, tous trains confondus. Un <strong>train à roues</strong>, comme la plupart des trains à grande vitesse, avance grâce à l’adhérence de ses roues en acier sur des rails en acier. Plus il va vite, moins il lui reste d’adhérence en réserve. Malgré cela, lors d’un essai en 2007, un TGV français a atteint 574,8 km/h : c’est le record pour un train à roues.",
+      "p3": "Le maglev de Shanghai a établi son propre record lors d’un essai, en novembre 2003 : 501 km/h. À 430 km/h, c’était le train le plus rapide en service régulier. Les <strong>entrefers</strong> montrent la différence d’un coup d’œil : environ 10 mm à Shanghai, environ 100 mm pour le SCMaglev, et aucun sous des roues en acier. Choisissez un train pour lire ses chiffres ci-dessous.",
+      "p4": "Le constructeur affirme aussi que son maglev consomme moins d’énergie et fait moins de bruit. D’après ses chiffres, à 300 km/h, il lui faut 34 wattheures (Wh) pour transporter une place sur un kilomètre. Un ICE 3, train à grande vitesse allemand, en demande 51. À 300 km/h et à 25 m de distance, le bruit du maglev atteint 80 décibels, contre 90 à 92 pour l’ICE et le TGV. Ce sont les chiffres du constructeur lui-même, issus de ses propres essais."
     }
   }
 }
