@@ -4,14 +4,15 @@ import { describe, expect, it, vi } from 'vitest';
 import { frameBox } from '@core/scene/frameBox';
 import type { CameraPose } from '@core/scene/frameBox';
 import { MaterialLibrary } from '@core/scene/materials';
+import { regionFromSpec } from '@core/scene/regions';
 import { createSceneTextures } from '@core/scene/textures';
 import type { AssemblyState, RegionId } from '../ids';
 import { MOMENTS } from '../model';
 import { createAssemblyState, createMaglevTrainStore } from '../state';
 import type * as AssemblyModule from './assembly';
 import type { Assembly } from './assembly';
-import { FIXED_VIEWS, FOLLOW_MODE, FOLLOW_VIEWS, followPose } from './cameraViews';
-import type { FixedView, FollowView } from './cameraViews';
+import { FOLLOW_MODE, FOLLOW_VIEWS, LINE_UP_VIEW, REGION_VIEWS, followPose } from './cameraViews';
+import type { FollowView, RegionView } from './cameraViews';
 import { BOUNDS_REGION, FOLLOW_ANCHOR, GROUND_Y, MaglevTrainController } from './controller';
 import type { MaglevTrainControllerDependencies } from './controller';
 
@@ -31,7 +32,7 @@ vi.mock('./assembly', async (importOriginal) => {
 
 const FRAMING = { vertical: 0.2, horizontal: 0.13 };
 const FOLLOW_IDS = Object.keys(FOLLOW_VIEWS) as FollowView[];
-const FIXED_IDS = Object.keys(FIXED_VIEWS) as FixedView[];
+const REGION_IDS = Object.keys(REGION_VIEWS) as RegionView[];
 const DIGITS = 9;
 const FRAME_SECONDS = 1 / 60;
 const CAMERA_POSITION = new Vector3(0, 3, 12);
@@ -121,8 +122,8 @@ describe('maglev train controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
 
   it('frames the fixed views on their regions without following', () => {
     const { rig, controller } = builtController();
-    for (const view of FIXED_IDS) {
-      const { region, direction, margin } = FIXED_VIEWS[view];
+    for (const view of REGION_IDS) {
+      const { region, direction, margin } = REGION_VIEWS[view];
       controller.views.frame(view, false);
       const toward = new Vector3(...(direction as readonly [number, number, number])).normalize();
       const expected = frameBox(regionBox(region), toward, FRAMING, margin);
@@ -131,6 +132,18 @@ describe('maglev train controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
       expect(rounded(pose?.target), view).toEqual(rounded(expected.target));
       expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
     }
+  });
+
+  it('frames the line-up on its own box without following', () => {
+    const { rig, controller } = builtController();
+    const { box, direction, margin } = LINE_UP_VIEW;
+    controller.views.frame('lineUp', false);
+    const toward = new Vector3(...direction).normalize();
+    const expected = frameBox(regionFromSpec(box), toward, FRAMING, margin);
+    const pose = rig.jumpTo.mock.lastCall?.[0];
+    expect(rounded(pose?.position)).toEqual(rounded(expected.position));
+    expect(rounded(pose?.target)).toEqual(rounded(expected.target));
+    expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
   });
 
   it('tweens when animated', () => {

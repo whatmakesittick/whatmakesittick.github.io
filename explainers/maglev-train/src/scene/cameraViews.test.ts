@@ -1,29 +1,36 @@
+import type { Box3 } from 'three';
 import { Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import type { CustomView } from '@core/scene/cameraViews';
+import { frameBox } from '@core/scene/frameBox';
 import type { CameraPose } from '@core/scene/frameBox';
 import type { FramingSlopes } from '@core/scene/lens';
+import { regionFromSpec } from '@core/scene/regions';
 import { CAMERA_VIEW_IDS } from '../ids';
-import type { ChaseTarget, Point } from '../ids';
+import type { CameraView, ChaseTarget, Point } from '../ids';
 import {
   ARM_ANCHOR,
   INSET,
   INSET_CENTRE,
   LIFT_TRAVEL_MM,
+  REGION_SPECS,
   SECTION_EXTENTS,
   STATOR_BOTTOM,
   TRAIN,
 } from '../model';
 import { PRESETS } from '../state';
 import {
-  FIXED_VIEWS,
   FOLLOW_MODE,
   FOLLOW_VIEWS,
+  LINE_UP_VIEW,
+  REGION_VIEWS,
+  WAVE_AIM,
+  WHEEL_RAIL_TOP,
   aimPoint,
   cameraViews,
   followPose,
 } from './cameraViews';
-import type { FollowView } from './cameraViews';
+import type { FixedView, FollowView, RegionView } from './cameraViews';
 import { chaseTargetFor } from './pose';
 
 const PHONE: FramingSlopes = { vertical: 0.2, horizontal: 0.13 };
@@ -34,6 +41,9 @@ const DIGITS = 9;
 const FLOATING: ChaseTarget = chaseTargetFor({ liftMm: LIFT_TRAVEL_MM });
 const MOVED: ChaseTarget = { ...FLOATING, position: [3, FLOATING.position[1] - 0.02, 0.002] };
 const FOLLOW_IDS = Object.keys(FOLLOW_VIEWS) as FollowView[];
+const REGION_IDS = Object.keys(REGION_VIEWS) as RegionView[];
+const FIXED_IDS: readonly FixedView[] = [...REGION_IDS, 'lineUp'];
+const GROUND_Y = 0;
 const HALF_WIDTH = TRAIN.width / 2;
 const THIRD_SECTION_END = SECTION_EXTENTS[2][0];
 const FIFTH_SECTION_FRONT = SECTION_EXTENTS[4][1];
@@ -83,8 +93,24 @@ function rounded(vector: Vector3): number[] {
   return vector.toArray().map((value) => Number(value.toFixed(DIGITS)));
 }
 
-function poseOf(view: CustomView): CameraPose | null {
-  return view.pose(PHONE);
+function poseOf(view: CustomView, slopes: FramingSlopes = PHONE): CameraPose | null {
+  return view.pose(slopes);
+}
+
+function regionPose(view: RegionView, slopes: FramingSlopes): CameraPose {
+  const { region, direction, margin } = REGION_VIEWS[view];
+  const facing = new Vector3(...(direction as readonly [number, number, number])).normalize();
+  return frameBox(regionFromSpec(REGION_SPECS[region]), facing, slopes, margin);
+}
+
+function viewPose(id: CameraView, slopes: FramingSlopes): CameraPose | null {
+  if (id in REGION_VIEWS) return regionPose(id as RegionView, slopes);
+  return poseOf(cameraViews(() => FLOATING)[id] as CustomView, slopes);
+}
+
+function boxCorners(box: Box3): Point[] {
+  const { min, max } = box;
+  return corners([min.x, max.x], [min.y, max.y], [min.z, max.z]);
 }
 
 describe('maglev camera views', () => {
@@ -98,9 +124,7 @@ describe('maglev camera views', () => {
   it('rides along with the train in the fly-along views and stays put in the fixed ones', () => {
     FOLLOW_IDS.forEach((id) => expect(views[id].follow, id).toBe(FOLLOW_MODE));
     expect(FOLLOW_MODE).toBe('position');
-    Object.keys(FIXED_VIEWS).forEach((id) =>
-      expect(views[id as keyof typeof FIXED_VIEWS].follow, id).toBeUndefined(),
-    );
+    FIXED_IDS.forEach((id) => expect(views[id].follow, id).toBeUndefined());
   });
 
   it('leaves the camera alone until the train exists', () => {
@@ -126,7 +150,7 @@ describe('maglev camera views', () => {
 
   it('aims at train points measured on the floating train', () => {
     expect(aimPoint(FLOATING, ARM_ANCHOR).toArray()).toEqual([...ARM_ANCHOR]);
-    expect(followPose(FLOATING, FOLLOW_VIEWS.wave).target.toArray()).toEqual([...ARM_ANCHOR]);
+    expect(followPose(FLOATING, FOLLOW_VIEWS.wave).target.toArray()).toEqual([...WAVE_AIM]);
   });
 
   it('turns the views with the heading', () => {
@@ -168,20 +192,55 @@ describe('maglev camera views', () => {
   });
 
   it('frames the arm from the left and below, the cut and the line-up from ahead', () => {
-    expect(FIXED_VIEWS.arm.region).toBe('arm');
-    expect(FIXED_VIEWS.section.region).toBe('crossSection');
-    expect(FIXED_VIEWS.lineUp.region).toBe('lineUp');
-    const [, armUp, armSide] = FIXED_VIEWS.arm.direction as readonly number[];
+    expect(REGION_VIEWS.arm.region).toBe('arm');
+    expect(REGION_VIEWS.section.region).toBe('crossSection');
+    const [, armUp, armSide] = REGION_VIEWS.arm.direction as readonly number[];
     expect(armSide).toBeLessThan(0);
     expect(armUp).toBeLessThan(0);
-    const [sectionAhead, sectionUp, sectionSide] = FIXED_VIEWS.section
+    const [sectionAhead, sectionUp, sectionSide] = REGION_VIEWS.section
       .direction as readonly number[];
     expect(sectionAhead).toBeGreaterThan(0);
     expect(sectionUp).toBeGreaterThan(0);
     expect(sectionSide).toBeLessThan(0);
-    const [lineUpAhead, lineUpUp, lineUpSide] = FIXED_VIEWS.lineUp.direction as readonly number[];
+    const [lineUpAhead, lineUpUp, lineUpSide] = LINE_UP_VIEW.direction;
     expect(lineUpAhead).toBeGreaterThan(0);
     expect(lineUpUp).toBeGreaterThan(0);
     expect(lineUpSide).toBe(0);
+  });
+
+  it('frames the line-up tall enough for the wheel-rail roof and pantograph', () => {
+    const { box } = LINE_UP_VIEW;
+    expect(box.y[1]).toBe(WHEEL_RAIL_TOP);
+    expect(WHEEL_RAIL_TOP).toBeGreaterThan(REGION_SPECS.lineUp.y[1]);
+    expect(box.x).toEqual(REGION_SPECS.lineUp.x);
+    expect(box.z).toEqual(REGION_SPECS.lineUp.z);
+  });
+
+  it('keeps each fixed view on its whole subject on a phone and a desktop', () => {
+    STAGES.forEach((slopes) => {
+      REGION_IDS.forEach((id) => {
+        const pose = regionPose(id, slopes);
+        const box = regionFromSpec(REGION_SPECS[REGION_VIEWS[id].region]);
+        boxCorners(box).forEach((point) =>
+          expect(inFrame(pose, point, slopes), `${id} ${point.join(', ')}`).toBe(true),
+        );
+      });
+      const lineUp = viewPose('lineUp', slopes);
+      expect(lineUp).not.toBeNull();
+      if (!lineUp) return;
+      boxCorners(regionFromSpec(LINE_UP_VIEW.box)).forEach((point) =>
+        expect(inFrame(lineUp, point, slopes), `lineUp ${point.join(', ')}`).toBe(true),
+      );
+    });
+  });
+
+  it('keeps every camera above the one-sided ground', () => {
+    STAGES.forEach((slopes) =>
+      CAMERA_VIEW_IDS.forEach((id) => {
+        const pose = viewPose(id, slopes);
+        expect(pose, id).not.toBeNull();
+        expect(pose?.position.y, id).toBeGreaterThan(GROUND_Y);
+      }),
+    );
   });
 });
