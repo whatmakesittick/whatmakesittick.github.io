@@ -32,6 +32,7 @@ export interface GuidewayLooks {
 export interface Guideway {
   readonly group: Group;
   slide(distance: number): void;
+  showFeeder(shown: boolean): void;
 }
 
 function slotted(
@@ -77,6 +78,10 @@ export function buildGuideway(context: PartContext, looks: GuidewayLooks): Guide
   const concrete = cutLook(LINE_GROUP, looks.concrete, PIER_LEVELS.concrete);
   const steel = cutLook('guideway', LINE_FINISHES.paintedSteel);
   const tray = cutLook('feederCable', FINISHES.tray);
+  const feeder = [
+    slotted(context, cableModule(), cutLook('feederCable', FINISHES.cable), NEAR_SLOTS),
+    ...byDetail(context, trayModule, tray),
+  ];
   group.add(
     toneBeams(slotted(context, concreteModule(true), concrete, NEAR_SLOTS), NEAR_SLOTS),
     toneBeams(slotted(context, concreteModule(false), concrete, FAR_SLOTS), FAR_SLOTS),
@@ -88,15 +93,17 @@ export function buildGuideway(context: PartContext, looks: GuidewayLooks): Guide
     ),
     slotted(context, stripModule(), cutLook('guideway', FINISHES.slideStrip), ALL_SLOTS),
     slotted(context, railModule(), cutLook('guidanceRails', FINISHES.guidanceRail), ALL_SLOTS),
-    slotted(context, cableModule(), cutLook('feederCable', FINISHES.cable), NEAR_SLOTS),
     ...byDetail(context, cantileverModule, steel),
     ...byDetail(context, statorModule, looks.stator),
-    ...byDetail(context, trayModule, tray),
+    ...feeder,
   );
   return {
     group,
     slide(distance) {
       group.position.x = wrapOffset(distance, BEAM_M);
+    },
+    showFeeder(shown) {
+      feeder.forEach((mesh) => (mesh.visible = shown));
     },
   };
 }

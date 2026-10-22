@@ -1,4 +1,4 @@
-import { Path, Vector2 } from 'three';
+import { Path, ShapeUtils, Vector2 } from 'three';
 import type { Shape } from 'three';
 import { CANTILEVER, DECK, PACKS, RAIL, STRIP, TRAY } from './constants';
 import { mirrored, profileShape } from './geometry';
@@ -76,8 +76,23 @@ export const STRIP_PROFILE = rectangle(
   DECK.top + STRIP.proud,
 );
 
+function vectors(points: readonly ProfilePoint[]): Vector2[] {
+  return points.map(([z, y]) => new Vector2(z, y));
+}
+
 export function girderShape(): Shape {
-  const shape = profileShape(mirrored(GIRDER_HALF));
-  shape.holes.push(new Path(mirrored(VOID_HALF).map(([z, y]) => new Vector2(z, y))));
+  const outer = mirrored(GIRDER_HALF);
+  const hole = vectors(mirrored(VOID_HALF));
+  const sameTurn = ShapeUtils.isClockWise(vectors(outer)) === ShapeUtils.isClockWise(hole);
+  const shape = profileShape(outer);
+  shape.holes.push(new Path(sameTurn ? hole.reverse() : hole));
   return shape;
+}
+
+export function voidLiningProfile(inset: number): ProfilePoint[] {
+  const middle = (DECK.voidTop + DECK.voidBottom) / 2;
+  const halfHeight = (DECK.voidTop - DECK.voidBottom) / 2;
+  const across = 1 - inset / DECK.voidTopHalf;
+  const up = 1 - inset / halfHeight;
+  return mirrored(VOID_HALF).map(([z, y]) => [z * across, middle + (y - middle) * up]);
 }

@@ -58,7 +58,8 @@ export function buildLine(context: PartContext): Section {
       guideway.slide(state.motion.distance);
       stations.place(state.motion.distance);
       wave.setState(state);
-      flow.setFlow(state.power.flow);
+      flow.setFlow(state.view.cutaway ? 'none' : state.power.flow);
+      guideway.showFeeder(!state.view.cutaway);
       setCut(cut, state.view.cutaway);
       cap.visible = state.view.cutaway;
       labelsAhead.position.x = state.view.cutaway ? CUT_LABEL_X - LABEL_X : 0;

@@ -1,4 +1,4 @@
-import { Mesh, Shape, ShapeGeometry } from 'three';
+import { BackSide, Mesh, Shape, ShapeGeometry } from 'three';
 import type { BufferGeometry, Group, Material } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { CUT_X, SIDE_SIGNS } from '../../../model';
@@ -6,25 +6,31 @@ import { FINISHES } from '../../finishes';
 import type { Finish } from '../../finishes';
 import { LINE_GROUP, namedGroup } from '../context';
 import type { EmphasisGroup, PartContext } from '../context';
-import { CABLES, TRAY } from './constants';
-import { mergeParts, sideProfile } from './geometry';
+import { extrudeAlongX, mergeParts, profileShape, sideProfile } from './geometry';
 import type { ProfilePoint } from './geometry';
 import {
   CANTILEVER_PROFILE,
   PACK_PROFILE,
   RAIL_PROFILE,
   STRIP_PROFILE,
-  TRAY_PROFILE,
   girderShape,
+  voidLiningProfile,
 } from './profiles';
 
 const QUARTER_TURN = Math.PI / 2;
 const CAP_X = CUT_X - 0.003;
-const CABLE_SEGMENTS = 12;
+const CURVE_SEGMENTS = 12;
 const CUT_CONCRETE: MaterialFinish = { color: '#c9c6be', roughness: 0.95, metalness: 0 };
+const HOLLOW_CONCRETE: MaterialFinish = {
+  color: '#4f4c47',
+  roughness: 1,
+  metalness: 0,
+  side: BackSide,
+};
+const LINING = { depth: 4, inset: 0.01 } as const;
 
 function facingAhead(shape: Shape): BufferGeometry {
-  const geometry = new ShapeGeometry(shape, CABLE_SEGMENTS);
+  const geometry = new ShapeGeometry(shape, CURVE_SEGMENTS);
   geometry.rotateY(QUARTER_TURN);
   geometry.translate(CAP_X, 0, 0);
   return geometry;
@@ -52,17 +58,9 @@ function girderFace(): BufferGeometry {
   return facingAhead(shape);
 }
 
-function cableFaces(): BufferGeometry {
-  const y = TRAY.bottom + TRAY.wall + CABLES.radius;
-  return mergeParts(
-    SIDE_SIGNS.flatMap((side) =>
-      CABLES.offsets.map((offset) => {
-        const shape = new Shape();
-        shape.absarc(-side * offset, y, CABLES.radius, 0, Math.PI * 2, false);
-        return facingAhead(shape);
-      }),
-    ),
-  );
+function voidLining(): BufferGeometry {
+  const shape = profileShape(voidLiningProfile(LINING.inset));
+  return extrudeAlongX(shape, CAP_X - LINING.depth, CAP_X);
 }
 
 interface CapPiece {
@@ -83,8 +81,7 @@ export function buildCutCap(context: PartContext, steel: MaterialFinish): Group 
     piece(bothSides(STRIP_PROFILE), 'guideway', 'slideStrip'),
     piece(bothSides(PACK_PROFILE), 'statorPacks', 'stator'),
     piece(bothSides(RAIL_PROFILE), 'guidanceRails', 'guidanceRail'),
-    piece(bothSides(TRAY_PROFILE), 'feederCable', 'tray'),
-    piece(cableFaces(), 'feederCable', 'cable'),
+    { geometry: voidLining(), group: LINE_GROUP, finish: HOLLOW_CONCRETE },
   ];
   pieces.forEach(({ geometry, group: emphasis, finish }) => {
     const material: Material = context.materials.get(emphasis, finish);
