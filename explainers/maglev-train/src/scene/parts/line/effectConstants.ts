@@ -21,11 +21,14 @@ export const STATOR_SHADING = {
 const LANE_Z = RAIL.outer + 0.03;
 
 export const POWERED_STRIP = {
-  y: 9.72,
+  y: RAIL.bottom + 0.02,
   z: LANE_Z,
-  halfHeight: 0.42,
-  opacity: 0.42,
-  core: 0.55,
+  halfHeight: 0.26,
+  opacity: 0.85,
+  core: 0.5,
+  coreFrom: 0.55,
+  coreTo: 0.9,
+  wash: 0.4,
 } as const;
 
 export const WAVE_HALO = {
@@ -38,10 +41,10 @@ export const WAVE_HALO = {
 export const POWER_FLOW = {
   y: (TRAY.bottom + TRAY.top) / 2,
   z: TRAY.outer + 0.05,
-  halfHeight: 0.2,
-  spacing: 2.6,
-  slant: 0.32,
-  stroke: 0.14,
+  halfHeight: 0.15,
+  spacing: 2.4,
+  slant: 0.26,
+  stroke: 0.15,
   outline: 0.06,
   speed: 9,
   trainEnd: TRAIN.noseX,
