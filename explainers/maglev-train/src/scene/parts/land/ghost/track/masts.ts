@@ -3,8 +3,8 @@ import type { BufferGeometry, Vector3Tuple } from 'three';
 import { box } from '@core/scene/geometry/box';
 import { extrudePlan, planShape } from '@core/scene/geometry/extrude';
 import { TRACK_TONES } from '../finishes';
-import { mergeParts } from '../../../line/geometry';
 import { painted } from '../geometry/paint';
+import { mergeParts } from '../../../line/geometry';
 import { alongSegment, rod, segmentLength } from '../geometry/rod';
 import { CANTILEVER, INSULATOR, MAST } from './constants';
 import { cantileverPoints, towards } from './cantilever';
@@ -17,30 +17,26 @@ interface Tube {
 
 const { steel, insulator, footing } = TRACK_TONES.mast;
 
-function footingBlock(): BufferGeometry {
-  const { halfWidth, top, bottom } = MAST.footing;
-  const geometry = box({
-    minX: -halfWidth,
-    maxX: halfWidth,
-    minY: bottom,
-    maxY: top,
-    minZ: MAST.z - halfWidth,
-    maxZ: MAST.z + halfWidth,
-  });
-  return painted(geometry, footing);
-}
-
-function capPlate(): BufferGeometry {
-  const half = MAST.section / 2 + MAST.capThickness;
+function mastBlock(half: number, bottom: number, top: number, tone: string): BufferGeometry {
   const geometry = box({
     minX: -half,
     maxX: half,
-    minY: MAST.top,
-    maxY: MAST.top + MAST.capThickness,
+    minY: bottom,
+    maxY: top,
     minZ: MAST.z - half,
     maxZ: MAST.z + half,
   });
-  return painted(geometry, steel);
+  return painted(geometry, tone);
+}
+
+function footingBlock(): BufferGeometry {
+  const { halfWidth, top, bottom } = MAST.footing;
+  return mastBlock(halfWidth, bottom, top, footing);
+}
+
+function capPlate(): BufferGeometry {
+  const { section, top, capThickness } = MAST;
+  return mastBlock(section / 2 + capThickness, top, top + capThickness, steel);
 }
 
 function hColumn(): BufferGeometry {
@@ -48,16 +44,7 @@ function hColumn(): BufferGeometry {
 }
 
 function squareColumn(): BufferGeometry {
-  const half = MAST.section / 2;
-  const geometry = box({
-    minX: -half,
-    maxX: half,
-    minY: MAST.footing.top,
-    maxY: MAST.top,
-    minZ: MAST.z - half,
-    maxZ: MAST.z + half,
-  });
-  return painted(geometry, steel);
+  return mastBlock(MAST.section / 2, MAST.footing.top, MAST.top, steel);
 }
 
 function tube(from: Vector3Tuple, to: Vector3Tuple, { radius, sides }: Tube): BufferGeometry {

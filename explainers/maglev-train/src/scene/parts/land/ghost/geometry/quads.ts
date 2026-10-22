@@ -8,7 +8,7 @@ export type QuadUv = readonly [Uv, Uv, Uv, Uv];
 
 type Uv = readonly [number, number];
 
-export type BoxFace = 'top' | 'minX' | 'maxX' | 'minZ' | 'maxZ';
+export type BoxFace = 'top' | 'minX' | 'maxX';
 
 const XYZ = 3;
 const UV = 2;
@@ -34,18 +34,6 @@ function faceCorners(bounds: BoxBounds, face: BoxFace): Quad {
       [x0, y0, z1],
       [x0, y1, z1],
       [x0, y1, z0],
-    ],
-    maxZ: [
-      [x0, y0, z1],
-      [x1, y0, z1],
-      [x1, y1, z1],
-      [x0, y1, z1],
-    ],
-    minZ: [
-      [x1, y0, z0],
-      [x0, y0, z0],
-      [x0, y1, z0],
-      [x1, y1, z0],
     ],
   };
   return corners[face];
