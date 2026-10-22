@@ -19,8 +19,9 @@ const BAND_TOP_SHARE = (CONTOUR.firstRow.shoulder - ROW_LOW) / (ROW_HIGH - ROW_L
 
 export function windscreenSpan(share: number): [front: number, rear: number] {
   const rake = smoothstep(share, BAND_TOP_SHARE, 1);
+  const sweep = 1 - (1 - share) ** 2;
   return [
-    lerp(WINDSCREEN.frontLow, WINDSCREEN.frontHigh, share),
+    lerp(WINDSCREEN.frontLow, WINDSCREEN.frontHigh, sweep),
     lerp(WINDSCREEN.rearLow, WINDSCREEN.rearHigh, rake),
   ];
 }

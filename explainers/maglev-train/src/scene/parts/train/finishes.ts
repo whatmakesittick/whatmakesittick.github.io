@@ -1,11 +1,17 @@
 import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../../../theme';
 
+function overlay(offset: number): MaterialFinish {
+  return { polygonOffset: true, polygonOffsetFactor: offset, polygonOffsetUnits: offset };
+}
+
 export const TRAIN_FINISHES = {
   pane: { color: '#6f8aa6', roughness: 0.06, metalness: 0.7 },
-  screen: { color: '#2e4157', roughness: 0.04, metalness: 0.9 },
-  lamp: { color: '#fff6dc', emissive: '#fff1cc', emissiveIntensity: 0.6, roughness: 0.2 },
-  tailLamp: { color: '#c8323a', emissive: '#d0343c', emissiveIntensity: 0.5, roughness: 0.3 },
+  screen: { ...overlay(-4), color: '#2e4157', roughness: 0.04, metalness: 0.9 },
+  screenFrame: { ...overlay(-2), color: THEME.trainBand, roughness: 0.12, metalness: 0.6 },
+  lamp: { color: '#fffaf0', emissive: '#fff4d6', emissiveIntensity: 1.4, roughness: 0.15 },
+  bezel: { color: '#22282f', roughness: 0.3, metalness: 0.5 },
+  tailLamp: { color: '#d8343c', emissive: '#e03a40', emissiveIntensity: 1.1, roughness: 0.3 },
   lining: { color: '#e4e2dc', roughness: 0.8, metalness: 0 },
   carpet: { color: '#56606c', roughness: 0.95, metalness: 0 },
   seat: { color: '#3d5f8c', roughness: 0.85, metalness: 0 },

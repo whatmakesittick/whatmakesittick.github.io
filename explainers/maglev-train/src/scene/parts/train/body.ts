@@ -13,6 +13,7 @@ import { mergeAll } from './mirror';
 import type { SectionEnds } from './nose';
 import type { BodyRegion } from './profile';
 import { buildShell } from './shell';
+import { LAMP_FINISHES, buildLamps } from './lamps';
 import { buildWindscreens } from './windscreen';
 
 const REGION_FINISH: Readonly<Record<BodyRegion, Finish>> = {
@@ -112,12 +113,30 @@ export function buildBody(context: PartContext, behind: Object3D, ahead: Object3
     [lead, ahead],
     [tail, behind],
   ] as const;
+  buildLamps(
+    context,
+    sectionEnds(LEAD_SECTION),
+    SECTION_EXTENTS[LEAD_SECTION][1],
+    LAMP_FINISHES.head,
+    ahead,
+  );
+  buildLamps(
+    context,
+    sectionEnds(TAIL_SECTION),
+    SECTION_EXTENTS[TAIL_SECTION][0],
+    LAMP_FINISHES.tail,
+    behind,
+  );
   screens.forEach(([screen, parent]) => {
-    if (screen.frame) parent.add(partMesh(context, screen.frame, 'train', 'windowBand'));
-    if (screen.glass) {
-      const glass = finishMesh(context, screen.glass, 'train', TRAIN_FINISHES.screen);
-      glass.name = 'train';
-      parent.add(glass);
-    }
+    const layers = [
+      [screen.frame, TRAIN_FINISHES.screenFrame],
+      [screen.glass, TRAIN_FINISHES.screen],
+    ] as const;
+    layers.forEach(([geometry, finish]) => {
+      if (!geometry) return;
+      const mesh = finishMesh(context, geometry, 'train', finish);
+      mesh.name = 'train';
+      parent.add(mesh);
+    });
   });
 }

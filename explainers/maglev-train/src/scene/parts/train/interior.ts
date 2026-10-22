@@ -180,7 +180,7 @@ export function buildInterior(context: PartContext, parent: Object3D): void {
     [seating.fabric, TRAIN_FINISHES.seat],
     [seating.frames, TRAIN_FINISHES.seatFrame],
     [extras.racks, TRAIN_FINISHES.seatFrame],
-    [extras.glass, TRAIN_FINISHES.screen],
+    [extras.glass, TRAIN_FINISHES.pane],
     [extras.lamp, TRAIN_FINISHES.lamp],
   ] as const;
   parts.forEach(([geometry, finish]) => {

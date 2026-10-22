@@ -132,6 +132,7 @@ export const MAGNET_MODULE = {
   poleFace: 0.035,
   spineShare: 0.62,
   coilBulge: 0.006,
+  recess: 0.008,
   eddyRibs: 7,
   eddyRibDepth: 0.018,
 } as const;
@@ -190,4 +191,16 @@ export const INTERIOR = {
   lightThickness: 0.02,
   doorWidth: 0.82,
   doorHeight: 2.0,
+} as const;
+
+export const LAMP = {
+  distance: 0.24,
+  h: 0.27,
+  width: 0.3,
+  height: 0.085,
+  depth: 0.022,
+  bezelGrow: 1.4,
+  lift: mm(4),
+  segments: 16,
+  rings: 8,
 } as const;

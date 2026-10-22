@@ -11,6 +11,7 @@ import { TRAIN_LAYOUT } from './layout';
 import { mergeAll, mirroredPair } from './mirror';
 
 const LENGTH = MAGNETS.moduleLength - MAGNET_MODULE.gap;
+const RECESS = MAGNET_MODULE.recess;
 const HALF = LENGTH / 2;
 const SUPPORT = {
   bottom: MAGNETS.support.top - MAGNETS.support.height,
@@ -50,7 +51,7 @@ function supportCore(): BufferGeometry {
     box({
       minX: -HALF,
       maxX: HALF,
-      minY: SUPPORT.bottom,
+      minY: SUPPORT.bottom + RECESS,
       maxY: faceBottom,
       minZ: middle - width / 2,
       maxZ: middle + width / 2,
@@ -91,7 +92,7 @@ function guidanceCore(): BufferGeometry {
       minY: middle - height / 2,
       maxY: middle + height / 2,
       minZ: faceBack,
-      maxZ: GUIDANCE.back,
+      maxZ: GUIDANCE.back - RECESS,
     }),
   ]);
 }
