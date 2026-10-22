@@ -49,7 +49,7 @@ export class InsetDrawing {
     this.thrust = new ThrustArrow(context);
     this.panel.add(...buildPanel(context));
     buildStator(context, this.panel);
-    this.panel.add(this.field.mesh, this.magnet.group, this.gauge.group, this.thrust.group);
+    this.panel.add(this.field.group, this.magnet.group, this.gauge.group, this.thrust.group);
     label(context, 'gapInset', this.panel, [0, INSET.height / 2, 0]);
   }
 

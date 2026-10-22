@@ -74,7 +74,8 @@ function found(name: string): Object3D {
 }
 
 function mapOf(name: string): Texture {
-  const object = found(name);
+  const host = found(name);
+  const object = host instanceof Mesh ? host : host.children[0];
   if (!(object instanceof Mesh) || !(object.material instanceof MeshBasicMaterial)) {
     throw new Error(`${name} is not a flat mesh`);
   }

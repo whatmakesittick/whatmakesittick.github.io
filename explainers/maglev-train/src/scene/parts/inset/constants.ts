@@ -29,7 +29,6 @@ export const INK = {
   cantilever: '#6b7580',
   stator: '#5a6672',
   statorEdge: '#a9b8c8',
-  bolt: '#9aa5b1',
   sheath: '#161b21',
   insulation: '#c9d1d9',
   conductor: '#9aa5b0',

@@ -12,6 +12,7 @@ const FIELD = {
   faceRows: 5,
   topAlpha: 0.14,
   faceAlpha: 0.62,
+  spillAlpha: 0.42,
 } as const;
 const POLES = {
   width: 1024,
@@ -171,6 +172,21 @@ export function fadeTexture(): CanvasTexture {
 
 export function hatchTexture(): CanvasTexture {
   return canvasTexture(HATCH.size, HATCH.size, paintHatch, true);
+}
+
+const paintSpill: Paint = (context, width, height) => {
+  context.fillStyle = fieldGradient(context, width);
+  context.fillRect(0, 0, width, height);
+  const fade = context.createLinearGradient(0, 0, 0, height);
+  fade.addColorStop(0, `rgba(0,0,0,${FIELD.spillAlpha})`);
+  fade.addColorStop(1, 'rgba(0,0,0,0)');
+  context.globalCompositeOperation = 'destination-in';
+  context.fillStyle = fade;
+  context.fillRect(0, 0, width, height);
+};
+
+export function fieldSpillTexture(): CanvasTexture {
+  return canvasTexture(FIELD.width, FIELD.height, paintSpill);
 }
 
 export function fieldTexture(): CanvasTexture {

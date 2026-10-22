@@ -89,23 +89,27 @@ function bolt(x: number): BufferGeometry {
   return positionsOnly(geometry);
 }
 
-function cantilever(context: PartContext): Object3D[] {
+function bolts(): BufferGeometry {
+  const count = Math.floor(CONTENT.right / BOLT_SPACING);
+  const xs = Array.from({ length: count * 2 + 1 }, (_, index) => (index - count) * BOLT_SPACING);
+  return merged(xs.map(bolt));
+}
+
+function cantilever(context: PartContext): Object3D {
   const strip: Point2[] = [
     [CONTENT.left, top],
     [CONTENT.right, top],
     [CONTENT.right, CONTENT.top],
     [CONTENT.left, CONTENT.top],
   ];
-  const count = Math.floor(CONTENT.right / BOLT_SPACING);
-  const xs = Array.from({ length: count * 2 + 1 }, (_, index) => (index - count) * BOLT_SPACING);
-  return [
-    hatchedMesh(context, filledShape(strip), INK.cantilever, LAYER.cantilever),
-    insetMesh(context, merged(xs.map(bolt)), { colour: INK.bolt }, LAYER.outline),
-  ];
+  return hatchedMesh(context, filledShape(strip), INK.cantilever, LAYER.cantilever);
 }
 
 function outlines(context: PartContext): Object3D {
-  const edges = merged(PIECES.map((piece) => polyline(packOutline(piece), STROKE.edge)));
+  const edges = merged([
+    ...PIECES.map((piece) => polyline(packOutline(piece), STROKE.edge)),
+    bolts(),
+  ]);
   return insetMesh(context, edges, { colour: INK.statorEdge }, LAYER.outline);
 }
 
@@ -116,5 +120,5 @@ export function buildStator(context: PartContext, parent: Object3D): void {
     INK.stator,
     LAYER.stator,
   );
-  parent.add(...cantilever(context), fill, ...cables(context), outlines(context));
+  parent.add(cantilever(context), fill, ...cables(context), outlines(context));
 }
