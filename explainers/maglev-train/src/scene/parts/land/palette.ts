@@ -44,12 +44,12 @@ export const LAND_PAINT = {
   greenhouseEdge: '#a8ab9f',
   pondBank: '#7a8655',
   pondInset: 2.6,
-  water: { edge: '#687d81', middle: '#97aaab', glint: '#eef3f2', glintAlpha: 0.55 },
+  water: { edge: '#687d81', middle: '#97aaab', glint: '#c9d6d8', glintAlpha: 0.3 },
   waterBank: '#6c7346',
   road: { verge: '#a29a82', surface: '#6d6c68', line: '#e6e4dc', lineWidth: 0.16 },
   lane: { verge: '#918b6d', surface: '#b1ab9b' },
   dash: { length: 3, gap: 6 },
-  glint: { length: [2, 9], width: 0.35, density: 0.05 },
+  glint: { length: [1.5, 5], width: 0.22, density: 0.04 },
 } as const;
 
 export const CORRIDOR_PAINT = {

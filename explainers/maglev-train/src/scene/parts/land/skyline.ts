@@ -90,7 +90,7 @@ vec3 skyline(vec3 sky, vec3 direction) {
 
 export const SKYLINE = {
   colour: '#a9b4bd',
-  suburbs: { base: 0.0014, rise: 0.0062, cell: 0.0047, strength: 0.3 },
+  suburbs: { base: 0.0012, rise: 0.0055, cell: 0.0047, strength: 0.16 },
   city: { azimuth: -2.86, halfWidth: 0.075, unit: 0.0034, strength: 0.42 },
 } as const;
 
