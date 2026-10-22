@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   GAP_BAND_MM,
   GAP_MM,
+  GUIDE_GAP_MM,
   INSET,
   POLE_PITCH_M,
   REST_GAP_MM,
@@ -16,8 +17,9 @@ import {
   STATOR_DRAWING,
   TOLERANCE_DRAWING,
   drawnGap,
+  drawnGuidanceGap,
   gapText,
-  gustShift,
+  leftGuidanceGapMm,
   magnetTop,
   slotCentres,
 } from './layout';
@@ -78,10 +80,13 @@ describe('inset layout', () => {
     expect(STATOR_DRAWING.cableRadius * 2).toBeLessThan(STATOR_DRAWING.slotDepth);
   });
 
-  it('draws a gust at twenty times, clamped', () => {
-    expect(gustShift(1)).toBeCloseTo(INSET.gapScale / 1000, CLOSE);
-    expect(gustShift(BIG_GUST_MM)).toBe(-gustShift(-BIG_GUST_MM));
-    expect(Math.abs(gustShift(BIG_GUST_MM))).toBeLessThan(STATOR_DRAWING.slotPitch);
+  it('closes the left guidance gap when the train moves toward plus z', () => {
+    expect(leftGuidanceGapMm(0)).toBe(GUIDE_GAP_MM);
+    expect(leftGuidanceGapMm(2)).toBe(GUIDE_GAP_MM - 2);
+    expect(leftGuidanceGapMm(-2)).toBe(GUIDE_GAP_MM + 2);
+    expect(drawnGuidanceGap(0)).toBeCloseTo(FLOATING_DRAWN, CLOSE);
+    expect(leftGuidanceGapMm(BIG_GUST_MM)).toBe(0);
+    expect(leftGuidanceGapMm(-BIG_GUST_MM)).toBeLessThan(BIG_GUST_MM);
   });
 
   it('writes the gap in whole millimetres', () => {

@@ -7,7 +7,8 @@ import { Ease } from '../ease';
 import { RESTING_NUDGE } from '../nudge';
 import { FieldBands } from './field';
 import { GapGauge } from './gapGauge';
-import { gustShift, magnetTop } from './layout';
+import { GuidanceDetail } from './guidance';
+import { magnetTop } from './layout';
 import { MagnetDrawing } from './magnet';
 import { fieldLead, insetPace, patternOffset } from './pace';
 import { buildPanel } from './panel';
@@ -33,6 +34,7 @@ export class InsetDrawing {
   private readonly magnet: MagnetDrawing;
   private readonly gauge: GapGauge;
   private readonly thrust: ThrustArrow;
+  private readonly guidance: GuidanceDetail;
   private reading: Reading = { gapMm: REST_GAP_MM, speedMs: 0 };
   private nudge: NudgeSample = RESTING_NUDGE;
   private lead: Ease | null = null;
@@ -47,9 +49,16 @@ export class InsetDrawing {
     this.magnet = new MagnetDrawing(context);
     this.gauge = new GapGauge(context);
     this.thrust = new ThrustArrow(context);
+    this.guidance = new GuidanceDetail(context);
     this.panel.add(...buildPanel(context));
     buildStator(context, this.panel);
-    this.panel.add(this.field.group, this.magnet.group, this.gauge.group, this.thrust.group);
+    this.panel.add(
+      this.field.group,
+      this.magnet.group,
+      this.gauge.group,
+      this.thrust.group,
+      this.guidance.group,
+    );
     label(context, 'gapInset', this.panel, [0, INSET.height / 2, 0]);
   }
 
@@ -93,7 +102,8 @@ export class InsetDrawing {
     this.magnet.place(top);
     this.thrust.place(top);
     this.gauge.show(gapMm);
-    this.magnet.scroll(patternOffset(this.shift + gustShift(this.nudge.lateralMm)));
+    this.guidance.show(this.nudge.lateralMm);
+    this.magnet.scroll(patternOffset(this.shift));
     this.field.scroll(patternOffset(this.shift + (this.lead?.value ?? 0)));
     this.field.fade(this.strength?.value ?? 0);
   }

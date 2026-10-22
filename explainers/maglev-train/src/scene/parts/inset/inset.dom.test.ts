@@ -11,7 +11,8 @@ import type { Frame, NudgeSample, PartContext, Section } from '../context';
 import { RESTING_NUDGE } from '../nudge';
 import { FIELD_NAME } from './field';
 import { buildInset } from './index';
-import { magnetTop } from './layout';
+import { GUIDANCE_MAGNET_NAME } from './guidance';
+import { drawnGuidanceGap, magnetTop } from './layout';
 import { POLES_NAME } from './magnet';
 import { THRUST_ARROW_NAME, THRUST_NAME } from './thrust';
 
@@ -193,15 +194,22 @@ describe('gap inset', () => {
     expect(polesTop()).toBeCloseTo(magnetTop(GAP_MM), CLOSE);
   });
 
-  it('sways the magnet under a gust and leaves the stator field in place', () => {
+  it('closes the left guidance gap under a gust toward plus z and leaves the support gap', () => {
     const lifted = stateAt(MOMENTS.lifted);
     settle(lifted);
+    const guidance = found(GUIDANCE_MAGNET_NAME);
     const poles = mapOf(POLES_NAME).offset.x;
-    const field = mapOf(FIELD_NAME).offset.x;
+    const resting = guidance.position.x;
     const gust: NudgeSample = { id: 'gust', gapMm: 0, lateralMm: 2, active: true };
     built.section.animate?.(frame(FRAME_SECONDS, gust), lifted);
-    expect(mapOf(POLES_NAME).offset.x).not.toBeCloseTo(poles, CLOSE);
-    expect(mapOf(FIELD_NAME).offset.x).toBeCloseTo(field, CLOSE);
+    expect(guidance.position.x).toBeCloseTo(
+      resting - drawnGuidanceGap(0) + drawnGuidanceGap(2),
+      CLOSE,
+    );
+    expect(guidance.position.x).toBeLessThan(resting);
+    expect(mapOf(POLES_NAME).offset.x).toBeCloseTo(poles, CLOSE);
     expect(polesTop()).toBeCloseTo(magnetTop(GAP_MM), CLOSE);
+    built.section.animate?.(frame(), lifted);
+    expect(guidance.position.x).toBeCloseTo(resting, CLOSE);
   });
 });

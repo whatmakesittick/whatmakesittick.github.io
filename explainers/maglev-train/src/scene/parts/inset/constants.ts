@@ -17,8 +17,10 @@ export const LAYER = {
   bracket: 70,
   thrustHalo: 71,
   thrust: 72,
-  text: 73,
-  frame: 74,
+  card: 73,
+  cardInk: 74,
+  text: 75,
+  frame: 76,
 } as const;
 
 export const LAYER_DEPTH = 0.0015;
@@ -45,6 +47,10 @@ export const INK = {
   text: '#ffffff',
   thrust: '#ffffff',
   thrustHalo: '#0b1016',
+  card: '#161d25',
+  rail: THEME.guidanceRail,
+  guidanceMagnet: '#9a6a3c',
+  girder: '#8f8b83',
 } as const;
 
 export const OPACITY = {
@@ -83,6 +89,8 @@ export const GAP_PLATE = {
   rim: THEME.insetLine,
   depthTest: false,
 } as const;
+
+export const GUIDE_PLATE = { ...GAP_PLATE, width: 0.27, height: 0.1 } as const;
 
 export const BRACKET_X = 0.92;
 export const PLATE_GAP = 0.05;

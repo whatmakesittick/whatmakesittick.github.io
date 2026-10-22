@@ -1,5 +1,5 @@
 import { Group } from 'three';
-import type { BufferGeometry, Mesh } from 'three';
+import type { Mesh } from 'three';
 import type { PartContext } from '../context';
 import {
   BRACKET_X,
@@ -15,11 +15,18 @@ import {
 import { insetMesh } from './insetMesh';
 import { GAP_MM } from '../../../model';
 import { CONTENT, STATOR_DRAWING, TOLERANCE_DRAWING, drawnGap, gapText, magnetTop } from './layout';
-import { dashed, merged, rect, segment, triangle } from './strokes';
+import { dimensionGeometry, redrawDimension } from './dimension';
+import { dashed, merged, rect } from './strokes';
+import type { Point2 } from './strokes';
 import { TextPlate } from './textPlate';
 
-const HALF_TICK = STROKE.tick / 2;
 const PLATE_X = BRACKET_X + PLATE_GAP + GAP_PLATE.width / 2;
+const BRACKET_STYLE = {
+  line: STROKE.bracket,
+  tick: STROKE.tick,
+  arrowLength: STROKE.arrowLength,
+  arrowWidth: STROKE.arrowWidth,
+} as const;
 
 function toleranceBand(context: PartContext): Mesh[] {
   const { top, bottom } = TOLERANCE_DRAWING;
@@ -45,26 +52,11 @@ function toleranceBand(context: PartContext): Mesh[] {
   ];
 }
 
-function arrowEnd(y: number, pointing: 1 | -1): BufferGeometry[] {
-  const tick = segment([BRACKET_X - HALF_TICK, y], [BRACKET_X + HALF_TICK, y], STROKE.bracket);
-  const base = y - pointing * STROKE.arrowLength;
-  const head = triangle(
-    [BRACKET_X, y],
-    [BRACKET_X + STROKE.arrowWidth / 2, base],
-    [BRACKET_X - STROKE.arrowWidth / 2, base],
-  );
-  return [tick, head];
-}
-
-export function bracketGeometry(gapMm: number): BufferGeometry {
-  const top = STATOR_DRAWING.bottom;
-  const bottom = magnetTop(gapMm);
-  const halfLine = STROKE.bracket / 2;
-  return merged([
-    ...arrowEnd(top, 1),
-    ...arrowEnd(bottom, -1),
-    rect(BRACKET_X - halfLine, bottom, BRACKET_X + halfLine, top),
-  ]);
+function bracketEnds(gapMm: number): readonly [Point2, Point2] {
+  return [
+    [BRACKET_X, STATOR_DRAWING.bottom],
+    [BRACKET_X, magnetTop(gapMm)],
+  ];
 }
 
 export class GapGauge {
@@ -73,12 +65,8 @@ export class GapGauge {
   private readonly plate: TextPlate;
 
   constructor(context: PartContext) {
-    this.bracket = insetMesh(
-      context,
-      bracketGeometry(GAP_MM),
-      { colour: INK.bracket },
-      LAYER.bracket,
-    );
+    const geometry = dimensionGeometry(...bracketEnds(GAP_MM), BRACKET_STYLE);
+    this.bracket = insetMesh(context, geometry, { colour: INK.bracket }, LAYER.bracket);
     this.bracket.frustumCulled = false;
     this.plate = new TextPlate(context, INSET_GROUP, GAP_PLATE, LAYER.text);
     this.plate.mesh.position.set(PLATE_X, 0, (LAYER.text - LAYER.ground) * LAYER_DEPTH);
@@ -86,11 +74,7 @@ export class GapGauge {
   }
 
   show(gapMm: number): void {
-    const fresh = bracketGeometry(gapMm);
-    const positions = this.bracket.geometry.getAttribute('position');
-    positions.array.set(fresh.getAttribute('position').array);
-    positions.needsUpdate = true;
-    fresh.dispose();
+    redrawDimension(this.bracket, ...bracketEnds(gapMm), BRACKET_STYLE);
     this.plate.mesh.position.y = STATOR_DRAWING.bottom - drawnGap(gapMm) / 2;
     this.plate.show(gapText(gapMm));
   }

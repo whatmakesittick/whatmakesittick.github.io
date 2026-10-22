@@ -2,6 +2,7 @@ import { clamp } from '@core/math';
 import {
   GAP_BAND_MM,
   GAP_MM,
+  GUIDE_GAP_MM,
   INSET,
   POLE_PITCH_M,
   STATOR,
@@ -18,7 +19,7 @@ const CABLE_FILL_SHARE = 0.84;
 const POLE_STRIP_DRAWN = 0.16;
 const MIN_BODY_DRAWN = 0.12;
 const PACK_JOINT_DRAWN = 0.014;
-const GUST_LIMIT_DRAWN = 0.06;
+const GUIDE_GAP_LIMIT_MM = 14;
 
 export const DRAW_SCALE = INSET.alongScale;
 
@@ -69,8 +70,12 @@ export const TOLERANCE_DRAWING = {
   floating: magnetTop(GAP_MM),
 } as const;
 
-export function gustShift(lateralMm: number): number {
-  return clamp(lateralMm * mm(INSET.gapScale), -GUST_LIMIT_DRAWN, GUST_LIMIT_DRAWN);
+export function leftGuidanceGapMm(lateralMm: number): number {
+  return clamp(GUIDE_GAP_MM - lateralMm, 0, GUIDE_GAP_LIMIT_MM);
+}
+
+export function drawnGuidanceGap(lateralMm: number): number {
+  return leftGuidanceGapMm(lateralMm) * mm(INSET.gapScale);
 }
 
 export function gapText(gapMm: number): string {
