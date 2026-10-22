@@ -1,8 +1,9 @@
-import { CylinderGeometry } from 'three';
+import { CylinderGeometry, Vector3 } from 'three';
 import type { BufferGeometry } from 'three';
 import { SIDE_SIGNS } from '../../../../model';
 import {
   boxOver,
+  cylinderBetween,
   evenlySpaced,
   extrudeAlongX,
   mergeParts,
@@ -10,7 +11,8 @@ import {
   sideProfile,
 } from '../geometry';
 import type { ProfilePoint } from '../geometry';
-import { FLOOR, HALF_LENGTH, PLATFORM, SCREEN, SUPPORT } from './constants';
+import { arcHeight } from './canopy';
+import { CANOPY, FLOOR, FURNITURE, HALF_LENGTH, PLATFORM, SCREEN, SUPPORT } from './constants';
 
 type Span = [number, number];
 
@@ -140,5 +142,83 @@ export function screenFrame(): BufferGeometry {
       boxOver(RUN, [top - SCREEN.railHeight, top + SCREEN.railHeight / 2], across(side, ...depth)),
       ...mullions.map((x) => boxOver([x - half, x + half], [bottom, top], across(side, ...depth))),
     ]),
+  );
+}
+
+function bench(x: number, side: number): BufferGeometry[] {
+  const { benchZ, benchLength, benchDepth, benchSeat, benchThickness, benchBack } = FURNITURE;
+  const half = benchLength / 2;
+  const along: Span = [x - half, x + half];
+  const seat = across(side, benchZ - benchDepth / 2, benchZ + benchDepth / 2);
+  const back = across(side, benchZ + benchDepth / 2 - benchThickness, benchZ + benchDepth / 2);
+  const legs = [-1, 1].map((end) => {
+    const legX = x + end * (half - benchThickness);
+    return boxOver(
+      [legX - benchThickness / 2, legX + benchThickness / 2],
+      [FLOOR, FLOOR + benchSeat],
+      seat,
+    );
+  });
+  return [
+    boxOver(along, [FLOOR + benchSeat - benchThickness, FLOOR + benchSeat], seat),
+    boxOver(along, [FLOOR + benchSeat, FLOOR + benchSeat + benchBack], back),
+    ...legs,
+  ];
+}
+
+function supportSpots(every: number): number[] {
+  const count = Math.round((2 * HALF_LENGTH) / SUPPORT.columnSpacing);
+  return evenlySpaced(count, -HALF_LENGTH, HALF_LENGTH).filter((_, index) => index % every === 0);
+}
+
+export function benches(): BufferGeometry {
+  return mergeParts(
+    supportSpots(FURNITURE.benchEvery).flatMap((x) =>
+      SIDE_SIGNS.flatMap((side) => bench(x + SUPPORT.columnSpacing / 2, side)),
+    ),
+  );
+}
+
+function signSpan(x: number, side: number, [bottom, top]: Span, thickness: number): BufferGeometry {
+  const half = FURNITURE.signLength / 2;
+  const z = side * FURNITURE.signZ;
+  return boxOver([x - half, x + half], [bottom, top], [z - thickness / 2, z + thickness / 2]);
+}
+
+function signRods(x: number, side: number, top: number): BufferGeometry[] {
+  const z = side * FURNITURE.signZ;
+  const ceiling = arcHeight(FURNITURE.signZ) - CANOPY.glazing;
+  const offset = FURNITURE.signLength / 2 - FURNITURE.signThickness;
+  return [-1, 1].map((end) =>
+    cylinderBetween(
+      new Vector3(x + end * offset, top, z),
+      new Vector3(x + end * offset, ceiling, z),
+      [FURNITURE.rodRadius, FURNITURE.rodRadius],
+      FURNITURE.rodSegments,
+    ),
+  );
+}
+
+export function signBoards(): BufferGeometry {
+  const bottom = FLOOR + FURNITURE.signBottom;
+  const top = bottom + FURNITURE.signHeight;
+  return mergeParts(
+    supportSpots(FURNITURE.signEvery).flatMap((x) =>
+      SIDE_SIGNS.flatMap((side) => [
+        signSpan(x, side, [bottom, top], FURNITURE.signThickness),
+        ...signRods(x, side, top),
+      ]),
+    ),
+  );
+}
+
+export function signBands(): BufferGeometry {
+  const middle = FLOOR + FURNITURE.signBottom + FURNITURE.signHeight / 2;
+  const span: Span = [middle - FURNITURE.signBand / 2, middle + FURNITURE.signBand / 2];
+  const thickness = FURNITURE.signThickness + FURNITURE.bandProud * 2;
+  return mergeParts(
+    supportSpots(FURNITURE.signEvery).flatMap((x) =>
+      SIDE_SIGNS.map((side) => signSpan(x, side, span, thickness)),
+    ),
   );
 }

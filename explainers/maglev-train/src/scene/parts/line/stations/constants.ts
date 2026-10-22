@@ -98,6 +98,7 @@ export interface BuildingSpec {
   readonly height: number;
   readonly finSpacing: number;
   readonly bands: number;
+  readonly roofRise: number;
 }
 
 export interface StationStyle {
@@ -109,12 +110,12 @@ export interface StationStyle {
 export const STATION_STYLES: Readonly<Record<StationId, StationStyle>> = {
   longyangRoad: {
     escalatorX: -58,
-    hall: { x: [-62, 28], z: [13, 30], height: 8, finSpacing: 3, bands: 1 },
+    hall: { x: [-62, 28], z: [13, 30], height: 8, finSpacing: 3, bands: 1, roofRise: 1.2 },
     link: false,
   },
   airport: {
     escalatorX: 40,
-    hall: { x: [-36, 96], z: [22, 58], height: 15, finSpacing: 3.6, bands: 3 },
+    hall: { x: [-36, 96], z: [22, 58], height: 15, finSpacing: 3.6, bands: 3, roofRise: 3.2 },
     link: true,
   },
 };
@@ -127,6 +128,8 @@ export const HALL = {
   finWidth: 0.12,
   finDepth: 0.35,
   bandHeight: 0.6,
+  roofSteps: 16,
+  roofChamfer: 0.12,
 } as const;
 
 export const LINK = {
@@ -140,7 +143,7 @@ export const STATION_FINISHES = {
   nosing: { color: '#3d4045', roughness: 0.8, metalness: 0 },
   paint: { color: '#dfe2e4', roughness: 0.45, metalness: 0.25 },
   trim: { color: '#9aa2a9', roughness: 0.4, metalness: 0.55 },
-  facade: { color: '#88a2b2', roughness: 0.1, metalness: 0.55 },
+  facade: { color: '#6d8b9c', roughness: 0.1, metalness: 0.55 },
   glazing: {
     color: '#e4edf1',
     roughness: 0.18,
@@ -154,3 +157,23 @@ export const STATION_FINISHES = {
 } as const satisfies Record<string, MaterialFinish>;
 
 export const LABEL_POINT = [0, FLOOR + 2, -PLATFORM.edge - 2] as const;
+
+export const FURNITURE = {
+  benchZ: 7.6,
+  benchLength: 2.4,
+  benchDepth: 0.5,
+  benchSeat: 0.45,
+  benchThickness: 0.06,
+  benchBack: 0.45,
+  benchEvery: 2,
+  signZ: PLATFORM.edge + 3.4,
+  signLength: 3.2,
+  signHeight: 0.55,
+  signThickness: 0.1,
+  signBottom: 3.3,
+  signBand: 0.08,
+  signEvery: 4,
+  bandProud: 0.006,
+  rodRadius: 0.02,
+  rodSegments: 6,
+} as const;

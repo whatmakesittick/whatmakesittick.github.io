@@ -12,11 +12,14 @@ import { stationBuildings, merged } from './buildings';
 import { canopyColumns, canopyEdges, canopyFrame, glazing, lightStrips } from './canopy';
 import { HALF_LENGTH, LABEL_POINT, STATION_FINISHES, STATION_STYLES } from './constants';
 import {
+  benches,
   platformFloor,
   platformNosing,
   platformStructure,
   screenFrame,
   screenGlass,
+  signBands,
+  signBoards,
   tactileStrips,
 } from './platforms';
 
@@ -51,18 +54,18 @@ function buildStation(context: PartContext, id: StationId, looks: Looks): Group 
   const pieces: readonly (readonly [BufferGeometry | null, Material])[] = [
     [merged([platformStructure(), ...buildings.concrete]), looks.concrete],
     [platformFloor(), looks.get(FINISHES.platform)],
-    [platformNosing(), looks.get(STATION_FINISHES.nosing)],
+    [merged([platformNosing(), signBoards()]), looks.get(STATION_FINISHES.nosing)],
     [tactileStrips(), looks.get(STATION_FINISHES.tactile)],
     [merged([screenGlass(), ...buildings.glass]), looks.get(FINISHES.glass)],
     [merged([screenFrame(), ...buildings.trim]), looks.get(STATION_FINISHES.trim)],
     [canopyEdges(), looks.get(FINISHES.canopy)],
     [glazing(), looks.get(STATION_FINISHES.glazing)],
     [
-      merged([canopyFrame(), canopyColumns(), ...buildings.paint]),
+      merged([canopyFrame(), canopyColumns(), benches(), ...buildings.paint]),
       looks.get(STATION_FINISHES.paint),
     ],
     [merged(buildings.facade), looks.get(STATION_FINISHES.facade)],
-    [lightStrips(), looks.get(STATION_FINISHES.lamp)],
+    [merged([lightStrips(), signBands()]), looks.get(STATION_FINISHES.lamp)],
   ];
   pieces.forEach(([geometry, material]) => addMesh(context, station, geometry, material));
   return station;
