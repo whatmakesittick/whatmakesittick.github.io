@@ -2,8 +2,8 @@
   "meta": {
     "title": "Cómo funciona un tren maglev",
     "eyebrow": "Transporte de alta velocidad",
-    "tagline": "Sube al maglev de Shanghái en 3D: unos imanes tiran de él hacia arriba para que flote a 10 mm de su vía, y el motor que lo impulsa va dentro de la propia vía.",
-    "description": "Sube al maglev de Shanghái en 3D y descubre cómo tira de sí mismo hacia arriba para flotar a 10 mm de su vía, y por qué la propia vía es el motor.",
+    "tagline": "Sube al maglev de Shanghái en 3D: tira de sí mismo hacia arriba hasta que sus imanes quedan a 10 mm bajo la vía, y el motor que lo impulsa va dentro de la propia vía.",
+    "description": "Descubre cómo el maglev de Shanghái tira de sí mismo hasta dejar sus imanes a 10 mm bajo la vía, y por qué la propia vía es el motor, en un modelo 3D.",
     "summary": "El viaje al aeropuerto, cómo lo levantan los imanes, qué lo mantiene centrado, el motor que va en la vía, cómo frena y cómo se compara con otros trenes rápidos.",
     "socialAlt": "Un tren maglev Transrapid blanco que recorre su vía elevada de hormigón, junto al título «Cómo funciona un tren maglev»"
   },
@@ -20,23 +20,23 @@
     "speedValue": "×{{factor}}",
     "speedDescribe": "Todo el viaje en {{seconds}} segundos",
     "phase": {
-      "liftOff": "Elevación",
+      "liftOff": "Despegue",
       "accelerate": "Aceleración",
-      "cruise": "Velocidad máxima",
+      "cruise": "A toda velocidad",
       "brake": "Frenada",
-      "settle": "Bajada"
+      "settle": "Aterrizaje"
     },
     "jump": {
-      "liftOff": "Ir a la elevación",
+      "liftOff": "Ir al despegue",
       "accelerate": "Ir a la aceleración",
-      "cruise": "Ir a la velocidad máxima",
+      "cruise": "Ir a la etapa a toda velocidad",
       "brake": "Ir a la frenada",
-      "settle": "Ir a la bajada"
+      "settle": "Ir al aterrizaje"
     },
     "detail": {
       "liftOff": "el tren se levanta de sus patines",
       "accelerate": "el motor de la vía acelera el tren",
-      "cruise": "el tren mantiene su velocidad máxima",
+      "cruise": "el tren va a toda velocidad",
       "brake": "el tren frena al acercarse al aeropuerto",
       "settle": "el tren se posa sobre sus patines"
     },
@@ -44,7 +44,7 @@
       "lifted": "Flotando",
       "fullSpeed": "A toda velocidad",
       "brakeStart": "Empieza la frenada",
-      "touchdown": "Otra vez sobre los patines"
+      "touchdown": "Ya en los patines"
     }
   },
   "controls": {
@@ -136,9 +136,9 @@
         "skids": "apoyado en sus patines",
         "lifting": "elevándose",
         "floating": "flotando",
-        "settling": "posándose"
+        "settling": "posándose sobre sus patines"
       },
-      "target": "Hueco objetivo",
+      "target": "Hueco objetivo del imán",
       "band": "Margen permitido",
       "clearance": "Altura libre bajo la carrocería",
       "mass": "Peso en vacío",
@@ -152,7 +152,7 @@
       "beam": "Viga principal de la vía",
       "beamValue": "unos {{metres}} m de largo, unas {{tonnes}} t",
       "switches": "Desvíos",
-      "switchesValue": "{{count}} desvíos de acero que se curvan"
+      "switchesValue": "{{count}} desvíos flexibles de acero"
     },
     "motor": {
       "frequency": "Frecuencia de la onda",
@@ -180,17 +180,17 @@
       "distance": "Distancia de frenado en este modelo",
       "distanceValue": "unos {{km}} km desde {{kmh}} km/h",
       "skid": "Parada segura tras un corte de corriente",
-      "skidValue": "frenos de Foucault hasta {{kmh}} km/h y luego patines"
+      "skidValue": "frenos de corrientes de Foucault hasta {{kmh}} km/h y después sobre los patines"
     },
     "compare": {
-      "gap": "Hueco de flotación",
+      "gap": "Hueco del imán",
       "gapWheels": "ninguno, ruedas de acero sobre rieles",
       "record": "Récord de velocidad en pruebas",
       "recordValue": "{{kmh}} km/h en {{year}}",
       "lift": "Cómo se sostiene",
       "liftValue": {
         "transrapid": "atraído hacia la vía desde abajo",
-        "scmaglev": "empujado hacia arriba cuando va rápido, sobre ruedas por debajo de unos 150 km/h",
+        "scmaglev": "empujado hacia arriba a gran velocidad, sobre ruedas por debajo de unos 150 km/h",
         "wheelRail": "va sobre ruedas de acero"
       },
       "energy": "Energía por plaza, según el fabricante",
@@ -218,50 +218,50 @@
     "ghostTrain": "Tren fantasma con ruedas",
     "scmaglev": "SCMaglev",
     "wheelRail": "Tren con ruedas",
-    "gapCallouts": "Huecos de flotación"
+    "gapCallouts": "Huecos de los imanes"
   },
   "sections": {
     "ride": {
       "title": "Un tren sin ruedas",
       "p1": "Este es el <strong>maglev de Shanghái</strong>, un tren que flota en vez de rodar. Maglev viene del inglés magnetic levitation, es decir, levitación magnética: unos imanes sostienen el tren, así que no tiene ni una sola rueda. Circula por una <strong>vía elevada</strong> de hormigón a lo largo de unos 30 km, desde Longyang Road, en la ciudad, hasta el aeropuerto internacional de Pudong. Hizo su primer viaje el 31 de diciembre de 2002, y el servicio completo empezó en 2004.",
-      "p2": "La línea se construyó para ir a 430 km/h, y durante años sus viajes de día circularon a esa velocidad: llegaban al aeropuerto en menos de ocho minutos. Desde mayo de 2021, todos los viajes van a 300 km/h y tardan algo más de ocho minutos. Con el control Velocidad máxima puedes probar los dos. El dato de duración del viaje te dice cuánto tarda cada uno en este modelo.",
+      "p2": "La línea se construyó para ir a 430 km/h. Durante años, algunos de sus trenes de día iban a esa velocidad y llegaban al aeropuerto en menos de ocho minutos. Desde mayo de 2021, todos los viajes van a 300 km/h y tardan algo más de ocho minutos. Con el control Velocidad máxima puedes probar los dos. El dato de duración del viaje te dice cuánto tarda cada uno en este modelo.",
       "p3": "El tren tiene seis secciones y mide unos 150 m de largo, 3,7 m de ancho y 4,2 m de alto. La vía se apoya en <strong>pilares</strong> de hormigón que suelen medir 8 m de alto y estar a 25 m unos de otros, con <strong>estaciones</strong> en los dos extremos. En este modelo, el tren se queda quieto y es la línea la que se desliza a su lado, así que nunca lo pierdes de vista. Además, la línea del modelo es recta, mientras que la real tiene suaves curvas en forma de S.",
-      "p4": "A tu lado corre un <strong>tren fantasma con ruedas</strong>, transparente: un tren de alta velocidad normal que sale en el mismo instante. Según el fabricante, un tren así necesita más de 28 km para llegar a 300 km/h, mientras que el maglev lo consigue dentro de los primeros 5 km, en unos dos minutos. En este modelo, el fantasma acelera siempre al mismo ritmo y llega a 300 km/h tras 28 km, así que fíjate en cuánto se va quedando atrás. La reproducción no va en tiempo real: el despegue y la bajada a los patines duran más para que puedas verlos, pero el dato de tiempo sigue el reloj real."
+      "p4": "A tu lado corre un <strong>tren fantasma con ruedas</strong>. Es transparente y representa un tren de alta velocidad normal que sale en el mismo instante. Según el fabricante, un tren así necesita más de 28 km para llegar a 300 km/h, mientras que el maglev lo consigue en los primeros 5 km, en unos dos minutos. En este modelo, el fantasma acelera siempre al mismo ritmo y llega a 300 km/h a los 28 km. Fíjate en cuánto se va quedando atrás. La reproducción no va en tiempo real. El despegue y el aterrizaje van a cámara lenta para que puedas verlos, pero el dato de tiempo siempre sigue el reloj real."
     },
     "float": {
       "title": "Imanes que tiran hacia arriba",
       "p1": "En el andén, el tren descansa sobre sus <strong>patines</strong>, unas piezas planas que lleva bajo la carrocería. Para flotar, hace algo sorprendente: tira de sí mismo hacia arriba, hacia la vía. Sus <strong>brazos envolventes</strong> bajan por los bordes de la vía y se curvan hacia dentro por debajo de ella. Ahí, los <strong>imanes de sustentación</strong> miran hacia arriba, hacia los <strong>bloques del estátor</strong>: filas de placas de acero fijadas a la cara inferior de la vía.",
-      "p2": "Los imanes de sustentación son electroimanes: solo funcionan como imanes mientras pasa corriente por ellos. Al encenderse, tiran hacia arriba, hacia el acero que tienen encima, y levantan todo el tren. A medida que sube, el hueco entre el imán y el estátor se cierra hasta unos 10 mm. Al mismo tiempo, se abre el espacio bajo la carrocería: ahora el tren queda unos 150 mm por encima de la vía, suficiente para pasar sobre la nieve o sobre objetos pequeños.",
+      "p2": "Los imanes de sustentación son electroimanes: solo funcionan como imanes mientras pasa corriente por ellos. Al encenderse, tiran hacia arriba, hacia el acero que tienen encima, y levantan todo el tren. A medida que sube, el hueco entre el imán y el bloque del estátor se cierra hasta unos 10 mm. Al mismo tiempo, se abre el espacio bajo la carrocería: ahora el tren queda unos 150 mm por encima de la vía, suficiente para pasar sobre la nieve o sobre objetos pequeños.",
       "p3": "Una atracción magnética así no se mantiene estable por sí sola. Cuanto más se acerca el imán al acero, más fuerte tira. Sin ayuda, o se pegaría de golpe al acero o dejaría que el tren se hundiera. Un controlador mide el hueco sin parar y ajusta la corriente muchas veces por segundo para mantenerlo entre 8 y 12 mm. Pulsa Bache para darle una sacudida al tren y verás cómo el hueco oscila y vuelve a su sitio.",
       "p4": "Flotar no sale gratis, pero según el fabricante consume menos que el aire acondicionado del tren. Un hueco de 10 mm es demasiado fino para verlo al lado de un tren de 150 m, así que el <strong>hueco ampliado</strong> lo muestra 20 veces más grande. En este modelo, el despegue dura 6 segundos, y el tren apoyado en sus patines queda 20 mm más bajo que cuando flota. Las dos cifras son decisiones del modelo, no datos publicados."
     },
     "centre": {
       "title": "Siempre centrado",
       "p1": "Flotar es solo la mitad del trabajo, porque el tren también tiene que ir centrado. A los dos lados de la vía hay unos <strong>rieles de guiado</strong> de acero. En los brazos, los <strong>imanes de guiado</strong> quedan frente a ellos, a unos 10 mm. Los imanes de cada lado tiran del tren hacia su riel, y el controlador mantiene las dos fuerzas en equilibrio.",
-      "p2": "Pulsa Ráfaga lateral para empujar el tren de lado. El hueco de un lado se estrecha y el del otro se ensancha. El controlador tira con más fuerza desde el lado más alejado y devuelve el tren al centro, mientras los <strong>imanes de sustentación</strong> mantienen su propio hueco. El tamaño y el ritmo de ese vaivén se han dibujado para el modelo, no se han medido.",
+      "p2": "Pulsa Ráfaga lateral para empujar el tren de lado. El hueco de un lado se estrecha y el del otro se ensancha. El controlador tira con más fuerza en el lado que se ha alejado de su riel y devuelve el tren al centro, mientras los <strong>imanes de sustentación</strong> mantienen su propio hueco. El tamaño y el ritmo de ese vaivén se han dibujado para el modelo, no se han medido.",
       "p3": "Como sus <strong>brazos envolventes</strong> pasan por debajo de la vía, el tren se agarra por los dos lados y por abajo. Por eso el fabricante dice que prácticamente no puede descarrilar. La vista en corte abre el tren para que lo veas: los imanes de sustentación bajo los <strong>bloques del estátor</strong> y los imanes de guiado junto a los rieles.",
       "p4": "Todo esto exige una <strong>vía elevada</strong> muy precisa. Cada viga principal mide unos 25 m de largo y pesa unas 190 t, y sus piezas de acero están fresadas con una precisión de 0,2 mm. La línea real traza suaves curvas en S, con radios de 2257 m y 4502 m. Para cambiar de vía, la línea tiene ocho desvíos de acero: largas vigas de acero que se curvan para llevar el tren a otra vía."
     },
     "motor": {
       "title": "La vía es el motor",
-      "p1": "Imagina un motor eléctrico normal, abierto y desenrollado en plano a lo largo de la vía. Eso es lo que mueve este tren. Un motor tiene una parte fija, el estátor, y una parte que se mueve, el rotor. Aquí, el estátor es la fila de <strong>bloques del estátor</strong>, con cables trifásicos que pasan por dentro, y el rotor son los propios <strong>imanes de sustentación</strong> del tren. Así que los bloques del estátor hacen dos trabajos: son el riel del que cuelga el tren y el motor que lo impulsa.",
-      "p2": "Por esos cables circulan tres corrientes que suben y bajan por turnos. Juntas crean un patrón magnético que recorre la vía: la <strong>onda viajera</strong>. Los imanes de sustentación se enganchan a ella y avanzan con ella, como un surfista sobre una ola. El tren nunca se queda detrás de la onda ni se le adelanta: los dos van siempre juntos. Los ingenieros lo llaman motor síncrono, que quiere decir que va al mismo ritmo que la onda.",
-      "p3": "Por eso la velocidad depende de lo rápido que la corriente va y viene, es decir, de su frecuencia. Una onda completa mide 516 mm: un polo norte y un polo sur de 258 mm cada uno, una longitud que se llama paso polar. A 430 km/h, la corriente va y viene unas 230 veces por segundo, o 230 hercios (Hz), y a 300 km/h, unos 160 Hz. Los convertidores de dos subestaciones transforman la corriente de la red en cualquier frecuencia de 0 a 300 Hz. Prueba las dos velocidades y mira cómo cambia el dato de frecuencia.",
-      "p4": "Solo se enciende el tramo que está bajo el tren: el <strong>tramo activo</strong>, que recibe la corriente por un <strong>cable de alimentación</strong>. Un tren solo puede ir adonde lo lleve la onda, así que, según el fabricante, esto descarta los choques entre trenes. En este modelo, cada tramo mide 1200 m, una cifra sacada de un artículo de investigación. En la vía a tamaño real, la onda se dibuja cuatro veces más larga de lo que es, para que puedas seguirla desde el tren."
+      "p1": "Imagina un motor eléctrico normal, abierto y desenrollado en plano a lo largo de la vía. Eso es lo que mueve este tren. Un motor tiene una parte fija, el estátor, y una parte que se mueve, el rotor. Aquí, el estátor es la fila de <strong>bloques del estátor</strong>, con cables que pasan por dentro, y el rotor son los propios <strong>imanes de sustentación</strong> del tren. Así que los bloques del estátor hacen dos trabajos: son el riel del que cuelga el tren y el motor que lo impulsa.",
+      "p2": "Por esos cables circula corriente trifásica: tres corrientes que suben y bajan por turnos. Juntas crean un campo magnético que avanza a lo largo de la vía, la <strong>onda viajera</strong>. Los imanes de sustentación se enganchan a la onda y se dejan llevar, como un surfista sobre una ola. El tren nunca se queda detrás de la onda ni se le adelanta, así que los ingenieros lo llaman motor síncrono: va siempre al compás de la onda.",
+      "p3": "Por eso la velocidad del tren depende de lo rápido que la corriente va y viene, es decir, de su frecuencia. Una onda completa tiene un polo norte y un polo sur. Cada uno mide 258 mm, una longitud que se llama paso polar, así que una onda mide 516 mm. A 430 km/h, la corriente va y viene unas 230 veces por segundo, o 230 hercios (Hz), y a 300 km/h, unos 160 Hz. Prueba las dos velocidades y mira cómo cambia el dato de frecuencia.",
+      "p4": "La línea recibe corriente de dos subestaciones. Dentro de ellas hay unas máquinas, llamadas convertidores, que transforman la corriente de la red en corriente de cualquier frecuencia de 0 a 300 Hz. Un <strong>cable de alimentación</strong> la lleva hasta el <strong>tramo activo</strong>, la parte de la vía que queda bajo el tren. Solo está encendido el tramo que hay bajo cada tren, así que, según el fabricante, dos trenes no pueden chocar entre sí. En este modelo, cada tramo mide 1200 m, una cifra sacada de un artículo de investigación, y fuera del primer plano la onda se dibuja cuatro veces más larga de lo que es."
     },
     "stop": {
       "title": "Un freno que genera electricidad",
-      "p1": "Para frenar, la vía invierte el sentido de la onda viajera. Ahora la onda retiene los imanes del tren, y el motor funciona como generador. La velocidad del tren se convierte otra vez en electricidad, que puede volver a la red eléctrica pública. Mira cómo el <strong>flujo de energía</strong> cambia de sentido en el <strong>cable de alimentación</strong>.",
+      "p1": "Para frenar, la vía invierte el sentido de la onda viajera. Ahora la onda retiene los imanes del tren, y el motor funciona como generador. La velocidad del tren se convierte otra vez en electricidad, que puede volver a la red eléctrica pública. Mira cómo el <strong>flujo de energía</strong> vuelve por el <strong>cable de alimentación</strong>.",
       "p2": "El tren también necesita energía a bordo para sus imanes, sus luces y el aire acondicionado. Por encima de unos 100 km/h, la producen unos generadores integrados en los imanes de sustentación, sin tocar nada. A poca velocidad, cerca de las estaciones, le llega de unos rieles de corriente en la vía. Las baterías, que se cargan durante el viaje, quedan como reserva.",
-      "p3": "Pulsa Corte de corriente para ver qué pasa si falla la alimentación. Solo se pierde la tracción: las baterías mantienen encendidos los imanes, así que el tren sigue flotando. Después, los <strong>frenos de corrientes de Foucault</strong> reducen su velocidad. Estos imanes generan corrientes en remolino, llamadas corrientes de Foucault, en el acero de la vía, y esas corrientes tiran del tren hacia atrás sin tocarlo. A 10 km/h, el tren se posa sobre sus <strong>patines</strong> y se desliza hasta pararse.",
-      "p4": "En este modelo, los dos tipos de parada usan la misma frenada constante, así que necesitan la misma distancia. La distancia real de frenado tras un corte de corriente no se ha publicado. Desde 430 km/h, el modelo frena durante unos 3 minutos, un tiempo parecido al del viaje real. En una parada normal, el tren flota hasta detenerse y luego baja hasta apoyarse en sus patines. Que descanse sobre los patines en el andén es una suposición de este modelo."
+      "p3": "Pulsa Corte de corriente para ver qué pasa si falla la alimentación. Solo se pierde la tracción: las baterías mantienen encendidos los imanes, así que el tren sigue flotando. Después, los <strong>frenos de corrientes de Foucault</strong>, que también son imanes, reducen su velocidad. Generan corrientes en remolino, llamadas corrientes de Foucault, en el acero de la vía, y esas corrientes tiran del tren hacia atrás sin tocarlo. A 10 km/h, el tren se posa sobre sus <strong>patines</strong> y se desliza hasta pararse.",
+      "p4": "En este modelo, los dos tipos de parada usan la misma frenada constante, así que necesitan la misma distancia. La distancia real de frenado tras un corte de corriente no se ha publicado. Desde 430 km/h, el modelo frena durante unos 3 minutos, un tiempo parecido a los tres minutos que dura la frenada en la línea real. En una parada normal, el tren flota hasta detenerse y luego baja hasta apoyarse en sus patines. Que descanse sobre los patines en el andén es una suposición de este modelo."
     },
     "compare": {
       "title": "Otras formas de ir rápido",
-      "p1": "Aquí tienes tres trenes uno al lado del otro, abiertos para que compares cómo se sostiene cada uno. El <strong>SCMaglev</strong> de Japón, desarrollado por JR Central, usa imanes superconductores enfriados con helio líquido a unos −269 °C. Flota a unos 10 cm, diez veces el hueco de Shanghái. A este no lo atraen hacia arriba, sino que lo empujan, y ese empuje solo funciona cuando ya va rápido. Por eso el tren va sobre ruedas hasta unos 150 km/h.",
-      "p2": "En 2015, un tren de pruebas L0 de ese sistema llegó a 603 km/h, el récord de velocidad de cualquier tren. Un <strong>tren con ruedas</strong> avanza gracias al agarre de sus ruedas de acero sobre los rieles de acero. Cuanto más rápido va, menos da de sí ese agarre. Aun así, un TGV francés alcanzó 574,8 km/h en una prueba en 2007, el récord para un tren sobre ruedas.",
-      "p3": "El maglev de Shanghái marcó su propio récord, 501 km/h, en una prueba en noviembre de 2003. A 430 km/h, era el tren más rápido en servicio regular. Los <strong>huecos de flotación</strong> muestran la diferencia de un vistazo: unos 10 mm en Shanghái, unos 100 mm en el SCMaglev y ninguno bajo las ruedas de acero. Elige un tren y verás sus cifras más abajo.",
-      "p4": "El fabricante también dice que su maglev gasta menos energía y hace menos ruido. Según sus cifras, a 300 km/h consume 34 Wh por plaza en cada kilómetro, frente a 51 de un tren alemán de alta velocidad ICE 3. Oído desde 25 m a 300 km/h, marca 80 decibelios, frente a los 90 a 92 del ICE y del TGV. Son afirmaciones del propio fabricante, basadas en sus propias pruebas."
+      "p1": "Aquí tienes tres trenes uno al lado del otro, abiertos para que compares cómo se sostiene cada uno. El <strong>SCMaglev</strong> de Japón, desarrollado por JR Central, usa imanes superconductores. Enfriadas con helio líquido a unos −269 °C, sus bobinas conducen la corriente sin perder nada de energía. El tren flota a unos 100 mm de altura, diez veces más que el hueco del imán en Shanghái. Sus imanes no lo atraen, sino que lo empujan hacia arriba. Ese empuje solo funciona a gran velocidad, así que va sobre ruedas hasta unos 150 km/h.",
+      "p2": "En 2015, un tren de pruebas L0 de ese sistema llegó a 603 km/h, el récord de velocidad de cualquier tren. Un <strong>tren con ruedas</strong> avanza gracias al agarre de sus ruedas de acero sobre los rieles de acero. Cuanto más rápido va, menos agarre de sobra tienen sus ruedas. Aun así, un TGV francés alcanzó 574,8 km/h en una prueba en 2007, el récord para un tren sobre ruedas.",
+      "p3": "El maglev de Shanghái marcó su propio récord, 501 km/h, en una prueba en noviembre de 2003. A 430 km/h, era el tren más rápido en servicio regular. Los <strong>huecos de los imanes</strong> muestran la diferencia de un vistazo: unos 10 mm en Shanghái, unos 100 mm en el SCMaglev y ningún hueco bajo las ruedas de acero. Elige un tren y verás sus cifras más abajo.",
+      "p4": "El fabricante también dice que su maglev gasta menos energía y hace menos ruido. Según sus cifras, a 300 km/h necesita 34 vatios hora (Wh) de energía para llevar una plaza un kilómetro, frente a 51 de un tren alemán de alta velocidad ICE 3. Oído desde 25 m mientras pasa a 300 km/h, marca 80 decibelios. El ICE y el TGV marcan de 90 a 92. Son afirmaciones del propio fabricante, basadas en sus propias pruebas."
     }
   }
 }
