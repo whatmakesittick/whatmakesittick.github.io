@@ -2,7 +2,7 @@
   "meta": {
     "title": "So funktioniert eine Magnetschwebebahn",
     "eyebrow": "Hochgeschwindigkeitsverkehr",
-    "tagline": "Fahren Sie in 3D mit dem Transrapid in Shanghai: Er zieht sich hoch, bis seine Magnete 10 mm unter dem Fahrweg sitzen, und sein Motor ist in den Fahrweg eingebaut.",
+    "tagline": "Fahren Sie in 3D mit dem Transrapid in Shanghai: Er zieht sich hoch, bis seine Magnete 10 mm unter dem Fahrweg sitzen, und der Motor, der ihn antreibt, steckt im Fahrweg.",
     "description": "Wie sich der Transrapid in Shanghai hochzieht, bis seine Magnete 10 mm unter dem Fahrweg sitzen, und warum der Fahrweg der Motor ist. Zum Mitfahren in 3D.",
     "summary": "Die Fahrt zum Flughafen, wie Magnete den Zug anheben, was ihn in der Mitte hält, der Motor im Fahrweg, wie er bremst und wie er im Vergleich mit anderen schnellen Zügen abschneidet.",
     "socialAlt": "Ein weißer Transrapid fährt auf seinem aufgeständerten Fahrweg aus Beton, daneben der Titel „So funktioniert eine Magnetschwebebahn“"
@@ -13,7 +13,7 @@
   },
   "timeline": {
     "label": "Fahrt von Longyang Road zum Flughafen",
-    "phases": "Zu einer Phase der Fahrt springen",
+    "phases": "Zu einer Phase springen",
     "speed": "Wiedergabetempo",
     "value": "Phase {{step}} von {{total}}",
     "during": "Phase {{step}} von {{total}}, {{detail}}",
@@ -36,7 +36,7 @@
     "detail": {
       "liftOff": "der Zug hebt von seinen Gleitkufen ab",
       "accelerate": "der Motor im Fahrweg beschleunigt den Zug",
-      "cruise": "der Zug fährt mit vollem Tempo",
+      "cruise": "der Zug hält sein volles Tempo",
       "brake": "der Zug bremst vor dem Flughafen ab",
       "settle": "der Zug kommt auf seinen Gleitkufen zur Ruhe"
     },
@@ -65,7 +65,7 @@
     "compareOptions": {
       "transrapid": "Transrapid Shanghai",
       "scmaglev": "SCMaglev",
-      "wheelRail": "Rad-Schiene-Zug"
+      "wheelRail": "Zug auf Rädern"
     },
     "groups": {
       "topSpeed": "Höchsttempo",
@@ -121,28 +121,28 @@
       "tripValue": "{{time}}, von Bahnsteig zu Bahnsteig",
       "top": "Höchsttempo",
       "topValue": {
-        "kmh430": "430 km/h, dafür wurde die Bahn gebaut",
+        "kmh430": "430 km/h, dafür wurde die Strecke gebaut",
         "kmh300": "300 km/h, bei jeder Fahrt seit 2021"
       },
       "line": "Streckenlänge",
       "lineValue": "etwa {{km}} km, von Longyang Road zum Flughafen",
       "ghost": "Geisterzug",
-      "ghostValue": "{{km}} km Rückstand, bei {{kmh}} km/h",
+      "ghostValue": "liegt {{km}} km zurück, fährt {{kmh}} km/h",
       "ghostStanding": "steht noch am Bahnsteig"
     },
     "float": {
       "lift": "Im Moment",
       "liftValue": {
-        "skids": "liegt auf seinen Kufen",
-        "lifting": "hebt ab",
-        "floating": "schwebt",
-        "settling": "senkt sich auf seine Kufen"
+        "skids": "auf den Kufen",
+        "lifting": "beim Abheben",
+        "floating": "in der Schwebe",
+        "settling": "beim Aufsetzen"
       },
       "target": "Angestrebter Magnetspalt",
       "band": "Erlaubter Bereich",
-      "clearance": "Luft unter dem Wagen",
+      "clearance": "Luft unter dem Zug",
       "mass": "Leergewicht",
-      "massValue": "etwa {{tonnes}} t je Sektion, {{sections}} Sektionen"
+      "massValue": "etwa {{tonnes}} t pro Wagen, {{sections}} Wagen"
     },
     "centre": {
       "guideGap": "Seitlicher Spalt",
@@ -159,8 +159,8 @@
       "pitch": "Polteilung",
       "wavelength": "Eine volle Welle",
       "converter": "Frequenzbereich der Umrichter",
-      "section": "Aktiver Abschnitt",
-      "sectionValue": "Abschnitt {{index}} von {{count}}",
+      "section": "Abschnitt unter Strom",
+      "sectionValue": "Nr. {{index}} von {{count}}",
       "sectionOff": "keiner, der Motor ist aus"
     },
     "stop": {
@@ -187,11 +187,11 @@
       "gapWheels": "keiner, Stahlräder auf Schienen",
       "record": "Rekord bei einer Testfahrt",
       "recordValue": "{{kmh}} km/h im Jahr {{year}}",
-      "lift": "Wie er getragen wird",
+      "lift": "Wie der Zug getragen wird",
       "liftValue": {
         "transrapid": "von unten hochgezogen",
         "scmaglev": "bei hohem Tempo hochgedrückt, unter etwa 150 km/h auf Rädern",
-        "wheelRail": "rollt auf Stahlrädern"
+        "wheelRail": "auf Stahlrädern"
       },
       "energy": "Energie pro Sitzplatz, laut Hersteller",
       "energyValue": "{{maglev}} Wh pro Sitzplatz-km bei {{kmh}} km/h, {{wheel}} beim ICE 3",
@@ -211,57 +211,57 @@
     "feederCable": "Speisekabel",
     "piers": "Stützen",
     "stations": "Stationen",
-    "poweredSection": "Aktiver Abschnitt",
+    "poweredSection": "Abschnitt unter Strom",
     "travellingWave": "Wanderfeld",
     "gapInset": "Spalt unter der Lupe, 20-fach vergrößert",
     "powerFlow": "Stromfluss",
     "ghostTrain": "Geisterzug auf Rädern",
     "scmaglev": "SCMaglev",
-    "wheelRail": "Rad-Schiene-Zug",
+    "wheelRail": "Zug auf Rädern",
     "gapCallouts": "Magnetspalte"
   },
   "sections": {
     "ride": {
       "title": "Ein Zug ohne Räder",
-      "p1": "Das ist der <strong>Transrapid</strong> in Shanghai, ein Zug, der schwebt, statt zu rollen. Er ist eine Magnetschwebebahn, und der Name verrät es schon: Magnete halten den Zug in der Schwebe, Räder hat er gar keine. Er fährt auf einer erhöhten Bahn aus Beton, dem <strong>Fahrweg</strong>. Die Strecke ist etwa 30 km lang und führt von Longyang Road in der Stadt bis zum internationalen Flughafen Pudong. Seine erste Fahrt machte er am 31. Dezember 2002, der volle Linienbetrieb begann 2004.",
-      "p2": "Gebaut wurde die Bahn für 430 km/h. Jahrelang fuhren manche Züge tagsüber auch so schnell und waren in weniger als acht Minuten am Flughafen. Seit Mai 2021 fährt jeder Zug mit 300 km/h und braucht etwas mehr als acht Minuten. Unter „Höchsttempo“ können Sie beide Varianten ausprobieren. „Fahrzeit im Modell“ zeigt, wie lange jede davon dauert.",
-      "p3": "Der Zug hat sechs Sektionen und ist etwa 150 m lang, 3,7 m breit und 4,2 m hoch. Der Fahrweg steht auf <strong>Stützen</strong> aus Beton, meist 8 m hoch und 25 m voneinander entfernt. An beiden Enden liegen die <strong>Stationen</strong>. Im Modell bleibt der Zug an seinem Platz, und die Strecke gleitet an ihm vorbei. So haben Sie ihn immer im Blick. Außerdem ist die Strecke im Modell gerade, die echte hat sanfte S-Kurven.",
-      "p4": "Neben Ihnen fährt ein durchsichtiger <strong>Geisterzug auf Rädern</strong>, ein gewöhnlicher Hochgeschwindigkeitszug, der im selben Moment losfährt. Laut Hersteller braucht so ein Zug mehr als 28 km, bis er 300 km/h erreicht. Der Transrapid schafft das innerhalb von 5 km, in etwa zwei Minuten. Im Modell beschleunigt der Geisterzug immer gleich stark und erreicht 300 km/h nach 28 km. Achten Sie darauf, wie weit er zurückfällt. Die Wiedergabe läuft nicht in Echtzeit. Abheben und Aufsetzen sind verlangsamt, damit Sie sie gut sehen. Die Anzeige „Zeit“ gibt trotzdem immer die echte Fahrzeit an."
+      "p1": "Das ist der <strong>Transrapid</strong> in Shanghai, ein Zug, der schwebt, statt zu rollen. Der Name Magnetschwebebahn sagt es schon: Magnete halten den Zug in der Schwebe, Räder hat er gar keine. Er fährt auf einer erhöhten Bahn aus Beton, dem <strong>Fahrweg</strong>. Die Strecke ist etwa 30 km lang. Sie führt von der Station Longyang Road in der Stadt bis zum internationalen Flughafen Pudong. Seine erste Fahrt machte der Zug am 31. Dezember 2002, der volle Linienbetrieb begann 2004.",
+      "p2": "Gebaut wurde die Strecke für 430 km/h. Jahrelang fuhren manche Züge tagsüber auch so schnell und waren in weniger als acht Minuten am Flughafen. Seit Mai 2021 fährt jeder Zug mit 300 km/h und braucht etwas mehr als acht Minuten. Unter „Höchsttempo“ können Sie beides ausprobieren. Die Anzeige „Fahrzeit im Modell“ zeigt, wie lange die Fahrt jeweils dauert.",
+      "p3": "Der Zug hat sechs Wagen und ist etwa 150 m lang, 3,7 m breit und 4,2 m hoch. Der Fahrweg steht auf <strong>Stützen</strong> aus Beton, meist 8 m hoch und 25 m voneinander entfernt. An den beiden Enden liegen die <strong>Stationen</strong>. Im Modell bleibt der Zug an seinem Platz, und die Strecke gleitet an ihm vorbei. So haben Sie ihn immer im Blick. Außerdem ist die Strecke im Modell gerade, die echte hat sanfte S-Kurven.",
+      "p4": "Neben Ihnen fährt ein durchsichtiger <strong>Geisterzug auf Rädern</strong>: ein gewöhnlicher Hochgeschwindigkeitszug auf Stahlrädern, der im selben Moment losfährt. Laut Hersteller braucht so ein Zug mehr als 28 km, bis er 300 km/h erreicht. Der Transrapid schafft das innerhalb von 5 km. Im Modell beschleunigt der Geisterzug immer gleich stark. Sehen Sie zu, wie weit er zurückfällt. Die Wiedergabe läuft nicht in Echtzeit, und Abheben und Aufsetzen sind verlangsamt, damit Sie sie gut sehen. Die Anzeige „Zeit“ gibt trotzdem immer die echte Fahrzeit an."
     },
     "float": {
       "title": "Von unten hochgezogen",
       "p1": "Am Bahnsteig ruht der Zug auf seinen <strong>Gleitkufen</strong>, flachen Gleitflächen unter dem Wagenboden. Um zu schweben, tut er etwas Überraschendes: Er zieht sich nach oben, zum Fahrweg hin. Seine <strong>umgreifenden Arme</strong> reichen seitlich am Fahrweg vorbei nach unten und greifen darunter nach innen. Dort zeigen die <strong>Tragmagnete</strong> nach oben, auf die <strong>Statorpakete</strong>. Das sind Reihen aus Stahlblechen, die an der Unterseite des Fahrwegs befestigt sind.",
-      "p2": "Die Tragmagnete sind Elektromagnete. Sie wirken nur als Magnet, solange Strom durch sie fließt. Werden sie eingeschaltet, ziehen sie sich zum Stahl über ihnen hin und heben so den ganzen Zug an. Während er steigt, wird der Spalt zwischen Magnet und Statorpaket immer kleiner, bis er etwa 10 mm misst. Gleichzeitig wird der Raum unter dem Wagen größer: Zwischen Zug und Oberseite des Fahrwegs bleiben jetzt etwa 150 mm Luft. Das reicht, um über Schnee oder kleine Gegenstände hinwegzufahren.",
-      "p3": "Eine solche magnetische Anziehung hält sich nicht von selbst im Gleichgewicht. Je näher der Magnet dem Stahl kommt, desto stärker zieht er. Allein würde er also entweder nach oben schnellen und am Stahl kleben oder den Zug absacken lassen. Deshalb misst ein Regler den Spalt ständig und passt den Strom viele Male pro Sekunde an. So bleibt der Spalt zwischen 8 und 12 mm. Tippen Sie auf „Stoß“, um den Zug durchzurütteln, und sehen Sie zu, wie der Spalt schwankt und sich wieder einpendelt.",
-      "p4": "Umsonst ist das Schweben nicht. Nach Angaben des Herstellers braucht es aber weniger Strom als die Klimaanlage des Zuges. Neben einem 150 m langen Zug ist ein Spalt von 10 mm viel zu schmal, um ihn zu erkennen. Darum zeigt ihn die Ansicht <strong>Spalt unter der Lupe</strong> 20-fach vergrößert. Im Modell dauert das Abheben 6 Sekunden, und auf seinen Kufen liegt der Zug 20 mm tiefer als beim Schweben. Beide Werte sind für das Modell gewählt, es sind keine veröffentlichten Zahlen."
+      "p2": "Die Tragmagnete sind Elektromagnete: Sie wirken nur als Magnet, solange Strom durch sie fließt. Eingeschaltet ziehen sie sich zum Stahl über ihnen hin und heben so den ganzen Zug an. Während der Zug steigt, schrumpft der Spalt zwischen Magnet und Statorpaket auf etwa 10 mm. Diesen Wert zeigt die Anzeige „Magnetspalt“. Gleichzeitig wächst die Luft unter dem Zug auf etwa 150 mm. Das reicht, um über Schnee oder kleine Gegenstände hinwegzufahren.",
+      "p3": "Eine solche magnetische Anziehung ist von allein nicht stabil. Je näher ein Magnet dem Stahl kommt, desto stärker zieht er. Sich selbst überlassen, würde er entweder nach oben schnellen und am Stahl kleben oder den Zug absacken lassen. Deshalb misst ein Regler den Spalt ständig und passt den Strom viele Male pro Sekunde an. So bleibt der Spalt zwischen 8 und 12 mm. Tippen Sie auf „Stoß“, dann bekommt der Zug einen Ruck. Sehen Sie zu, wie der Spalt schwankt und sich wieder einpendelt.",
+      "p4": "Schweben kostet Strom, laut Hersteller aber weniger als die Klimaanlage des Zuges. Neben einem 150 m langen Zug ist ein Spalt von 10 mm viel zu schmal, um ihn zu erkennen. Darum zeigt ihn die Ansicht <strong>Spalt unter der Lupe</strong> 20-fach vergrößert. Im Modell dauert das Abheben 6 Sekunden, und auf seinen Kufen liegt der Zug 20 mm tiefer als beim Schweben. Beides sind Annahmen des Modells, keine veröffentlichten Zahlen."
     },
     "centre": {
       "title": "In der Mitte bleiben",
-      "p1": "Schweben ist nur die halbe Arbeit, denn der Zug muss auch in der Mitte bleiben. An beiden Seiten des Fahrwegs verlaufen <strong>Seitenführschienen</strong> aus Stahl. Ihnen gegenüber sitzen an den Armen die <strong>Führmagnete</strong>, etwa 10 mm entfernt. Jede Seite zieht den Zug zu ihrer Schiene hin, und der Regler hält beide Kräfte im Gleichgewicht.",
-      "p2": "Tippen Sie auf „Seitenböe“, dann wird der Zug zur Seite gestoßen. Auf der einen Seite wird der Spalt kleiner, auf der anderen größer. Der Regler zieht auf der Seite stärker, von der sich der Zug entfernt hat, und holt ihn zurück in die Mitte. Die <strong>Tragmagnete</strong> halten währenddessen ihren eigenen Spalt. Wie stark und wie lange der Zug dabei pendelt, ist für das Modell gezeichnet, nicht gemessen.",
+      "p1": "Schweben ist nur die halbe Miete, denn der Zug muss auch in der Mitte bleiben. An beiden Seiten des Fahrwegs verlaufen <strong>Seitenführschienen</strong> aus Stahl. Ihnen gegenüber sitzen an den Armen die <strong>Führmagnete</strong>, etwa 10 mm entfernt. Jede Seite zieht den Zug zu ihrer Schiene hin, und der Regler hält beide Kräfte im Gleichgewicht.",
+      "p2": "Tippen Sie auf „Seitenböe“, dann wird der Zug zur Seite gedrückt. Auf der einen Seite wird der Spalt kleiner, auf der anderen größer. Der Regler zieht auf der Seite stärker, von der sich der Zug entfernt hat, und der Zug gleitet zurück in die Mitte. Die <strong>Tragmagnete</strong> halten dabei die ganze Zeit ihren eigenen Spalt. Wie stark und wie lange der Zug pendelt, ist für das Modell gezeichnet, nicht gemessen.",
       "p3": "Weil seine <strong>umgreifenden Arme</strong> unter den Fahrweg reichen, hält sich der Zug von beiden Seiten und von unten fest. Deshalb sagt der Hersteller, er könne praktisch nicht entgleisen. Im Modell ist der Zug aufgeschnitten, damit Sie das sehen: die Tragmagnete unter den <strong>Statorpaketen</strong>, die Führmagnete neben den Schienen.",
-      "p4": "Für all das braucht es einen sehr genauen <strong>Fahrweg</strong>. Jeder Fahrwegträger ist etwa 25 m lang und wiegt etwa 190 t, und seine Stahlteile sind auf 0,2 mm genau gefräst. Die echte Strecke schwingt in sanften S-Kurven mit Radien von 2.257 m und 4.502 m. Damit der Zug auf einen anderen Fahrweg wechseln kann, hat die Strecke acht Biegeweichen. Das sind lange Träger aus Stahl, die sich biegen und den Zug so auf den anderen Fahrweg lenken."
+      "p4": "Für all das braucht es einen sehr genauen <strong>Fahrweg</strong>. Jeder Fahrwegträger ist etwa 25 m lang und wiegt etwa 190 t. Seine Stahlteile sind auf 0,2 mm genau gefertigt. Die echte Strecke hat weit geschwungene S-Kurven, mit Radien von 2.257 m und 4.502 m. Damit der Zug auf einen anderen Fahrweg wechseln kann, hat die Strecke acht Biegeweichen. Das sind lange Träger aus Stahl, die sich biegen und den Zug so auf den anderen Fahrweg lenken."
     },
     "motor": {
       "title": "Der Fahrweg ist der Motor",
-      "p1": "Stellen Sie sich einen gewöhnlichen Elektromotor vor, aufgeschnitten und flach am Fahrweg entlang ausgerollt. Genau so ein Motor treibt diesen Zug an. Ein Motor hat einen festen Teil, den Stator, und einen beweglichen, den Rotor. Hier ist der Stator die lange Reihe der <strong>Statorpakete</strong>, in denen Kabel verlegt sind. Den Rotor bilden die <strong>Tragmagnete</strong> des Zuges selbst. Die Statorpakete haben also zwei Aufgaben: Sie sind die Schiene, an der der Zug hängt, und der Motor, der ihn antreibt.",
-      "p2": "Durch diese Kabel fließt Drehstrom: drei Ströme, die reihum steigen und fallen. Zusammen erzeugen sie ein magnetisches Muster, das den Fahrweg entlangläuft: das <strong>Wanderfeld</strong>, eine Art magnetische Welle. Die Tragmagnete rasten darin ein und werden mitgenommen, so wie ein Surfer auf einer Welle reitet. Der Zug fällt nie hinter das Wanderfeld zurück und eilt ihm auch nie voraus. Darum nennen Fachleute das einen Synchronmotor, also einen Motor, der im Gleichschritt läuft.",
-      "p3": "Das Tempo des Zuges hängt deshalb davon ab, wie schnell der Strom hin und her schwingt, also von seiner Frequenz. Eine volle Welle umfasst einen Nordpol und einen Südpol. Jeder ist 258 mm lang, diese Länge heißt Polteilung. Eine Welle ist also 516 mm lang. Bei 430 km/h schwingt der Strom etwa 230-mal pro Sekunde hin und her, das sind 230 Hertz (Hz). Bei 300 km/h sind es etwa 160 Hz. Probieren Sie beide Geschwindigkeiten aus und sehen Sie, wie die Frequenz mitgeht.",
-      "p4": "Zwei Unterwerke versorgen die Strecke mit Strom. Darin stehen Maschinen, sogenannte Umrichter. Sie wandeln den Strom aus dem Netz so um, dass er jede Frequenz von 0 bis 300 Hz haben kann. Ein <strong>Speisekabel</strong> bringt ihn zum Stück Fahrweg unter dem Zug, dem <strong>aktiven Abschnitt</strong>. Eingeschaltet ist immer nur der Abschnitt unter einem Zug. Darum können laut Hersteller zwei Züge nicht zusammenstoßen. Im Modell ist jeder Abschnitt 1.200 m lang, ein Wert aus einer Forschungsarbeit. Außerhalb der Lupe ist das Wanderfeld viermal länger gezeichnet, als es wirklich ist."
+      "p1": "Stellen Sie sich einen gewöhnlichen Elektromotor vor, aufgeschnitten und flach am Fahrweg entlang ausgebreitet. Genau so ein Motor treibt diesen Zug an. Ein Motor hat einen festen Teil, den Stator, und einen beweglichen, den Rotor. Hier ist der Stator die lange Reihe der <strong>Statorpakete</strong>, in denen Kabel verlegt sind. Den Rotor bilden die <strong>Tragmagnete</strong> des Zuges selbst. Die Statorpakete haben also zwei Aufgaben: Sie tragen den Zug, und sie treiben ihn an.",
+      "p2": "Durch diese Kabel fließt Drehstrom: drei Ströme, die reihum steigen und fallen. Zusammen erzeugen sie ein magnetisches Muster, das den Fahrweg entlangläuft: das <strong>Wanderfeld</strong>, eine Art magnetische Welle. Im Modell erkennen Sie es an der Farbe, die an den Statorpaketen entlangwandert. Die Tragmagnete rasten darin ein und werden mitgenommen, so wie ein Surfer auf einer Welle reitet. Der Zug fällt nie hinter das Wanderfeld zurück und eilt ihm auch nie voraus. Fachleute nennen das einen Synchronmotor, also einen Motor, der im Gleichschritt läuft.",
+      "p3": "Das Tempo des Zuges hängt also davon ab, wie schnell der Strom hin und her schwingt. Wie oft er das pro Sekunde tut, heißt Frequenz. Eine volle Welle umfasst einen Nordpol und einen Südpol. Jeder Pol ist 258 mm lang, diese Länge heißt Polteilung. Eine Welle ist also 516 mm lang. Bei 430 km/h schwingt der Strom etwa 230-mal pro Sekunde hin und her, das sind 230 Hertz (Hz). Bei 300 km/h sind es etwa 160 Hz. Tippen Sie abwechselnd auf „430 km/h“ und „300 km/h“ und sehen Sie, wie die Frequenz in der Anzeige mitgeht.",
+      "p4": "Der Strom kommt aus zwei Unterwerken neben der Strecke. Darin stehen Maschinen, sogenannte Umrichter. Sie wandeln den Strom aus dem Netz in Strom mit jeder beliebigen Frequenz von 0 bis 300 Hz um. Ein <strong>Speisekabel</strong> bringt ihn zum <strong>Abschnitt unter Strom</strong>, also zum Stück Fahrweg unter dem Zug. Eingeschaltet ist immer nur der Abschnitt unter einem Zug. Laut Hersteller können so zwei Züge nicht zusammenstoßen. Im Modell ist jeder Abschnitt 1.200 m lang, ein Wert aus einer Forschungsarbeit. Außerhalb von „Spalt unter der Lupe“ ist das Wanderfeld viermal länger gezeichnet, als es wirklich ist, damit Sie ihm folgen können."
     },
     "stop": {
       "title": "Bremsen macht Strom",
-      "p1": "Zum Bremsen lässt der Fahrweg das Wanderfeld andersherum laufen. Jetzt hält das Wanderfeld die Magnete des Zuges zurück, und der Motor arbeitet als Generator. Aus dem Schwung des Zuges wird wieder Strom, und der kann ins öffentliche Netz fließen. Sehen Sie zu, wie der <strong>Stromfluss</strong> durch das <strong>Speisekabel</strong> zurückläuft.",
-      "p2": "Auch an Bord braucht der Zug Strom: für seine Magnete, das Licht und die Klimaanlage. Ab rund 100 km/h erzeugen ihn Generatoren in den Tragmagneten, ganz ohne Berührung. Bei langsamer Fahrt in der Nähe der Stationen kommt er aus Stromschienen am Fahrweg. Batterien, die während der Fahrt geladen werden, dienen als Reserve.",
-      "p3": "Tippen Sie auf „Stromausfall“ und sehen Sie, was passiert, wenn der Strom wegbleibt. Nur der Antrieb fällt aus: Die Batterien halten die Magnete eingeschaltet, also schwebt der Zug weiter. Dann bremsen ihn die <strong>Wirbelstrombremsen</strong> ab, die ebenfalls Magnete sind. Sie erzeugen im Stahl des Fahrwegs kreisende Ströme, sogenannte Wirbelströme. Diese Ströme halten den Zug zurück, ohne ihn zu berühren. Bei 10 km/h setzt sich der Zug auf seine <strong>Gleitkufen</strong> und rutscht bis zum Stillstand.",
+      "p1": "Zum Bremsen lässt der Fahrweg das Wanderfeld in die andere Richtung laufen. Jetzt hält das Wanderfeld die Magnete des Zuges zurück. Der Motor arbeitet umgekehrt, als Generator, und macht aus dem Schwung des Zuges wieder Strom. Dieser Strom kann ins öffentliche Netz fließen. Sehen Sie zu, wie der <strong>Stromfluss</strong> durch das <strong>Speisekabel</strong> zurückläuft.",
+      "p2": "Auch an Bord braucht der Zug Strom: für seine Magnete, das Licht und die Klimaanlage. Ab rund 100 km/h erzeugen ihn Generatoren, die in die Tragmagnete eingebaut sind, ohne den Fahrweg zu berühren. Bei langsamer Fahrt, in der Nähe der Stationen, kommt er aus Stromschienen am Fahrweg. Batterien, die während der Fahrt geladen werden, dienen als Reserve.",
+      "p3": "Tippen Sie auf „Stromausfall“ und sehen Sie, was passiert, wenn der Strom aus dem Netz wegbleibt. Verloren geht nur der Antrieb. Die Batterien halten die Magnete eingeschaltet, also schwebt der Zug weiter. Abgebremst wird er dann von den <strong>Wirbelstrombremsen</strong>, die ebenfalls Magnete sind. Sie erzeugen im Stahl des Fahrwegs kreisende Ströme, sogenannte Wirbelströme. Diese Ströme halten den Zug zurück, ohne ihn zu berühren. Bei 10 km/h setzt sich der Zug auf seine <strong>Gleitkufen</strong> und rutscht bis zum Stillstand.",
       "p4": "Im Modell bremst der Zug bei beiden Arten von Halt gleich stark und gleichmäßig, deshalb ist der Bremsweg derselbe. Wie lang der echte Bremsweg nach einem Stromausfall ist, wurde nicht veröffentlicht. Aus 430 km/h bremst das Modell etwa 3 Minuten lang. Das kommt den drei Minuten Bremszeit auf der echten Strecke nahe. Bei einem normalen Halt schwebt der Zug bis zum Stillstand und senkt sich dann auf seine Kufen. Dass er am Bahnsteig auf den Kufen liegt, ist eine Annahme dieses Modells."
     },
     "compare": {
       "title": "Schnell geht es auch anders",
-      "p1": "Im Vergleich stehen drei Züge nebeneinander, aufgeschnitten, damit Sie sehen, wie jeder getragen wird. Der japanische <strong>SCMaglev</strong>, entwickelt von JR Central, hat supraleitende Magnete. Ihre Spulen werden mit flüssigem Helium auf etwa −269 °C gekühlt und leiten den Strom dann ganz ohne Verlust. Der Zug schwebt etwa 100 mm hoch, zehnmal so viel wie der Magnetspalt in Shanghai. Er wird nach oben gedrückt statt gezogen, und das funktioniert erst bei hohem Tempo. Bis etwa 150 km/h rollt er deshalb auf Rädern.",
-      "p2": "2015 erreichte ein Testzug vom Typ L0 auf diesem System 603 km/h. Das ist der Geschwindigkeitsrekord für Züge überhaupt. Ein <strong>Rad-Schiene-Zug</strong> treibt sich durch die Haftung seiner Stahlräder auf den Stahlschienen voran. Je schneller er fährt, desto weniger Kraft können die Räder so übertragen. Trotzdem schaffte ein französischer TGV 2007 auf einer Testfahrt 574,8 km/h, den Rekord für Züge auf Rädern.",
+      "p1": "Im Vergleich stehen drei Züge nebeneinander, aufgeschnitten, damit Sie sehen, wie jeder getragen wird. Der japanische <strong>SCMaglev</strong>, entwickelt von JR Central, hat supraleitende Magnete. Ihre Spulen werden mit flüssigem Helium auf etwa −269 °C gekühlt und leiten den Strom dann ganz ohne Verlust. Der Zug schwebt etwa 100 mm hoch, das Zehnfache des Magnetspalts in Shanghai. Seine Magnete drücken ihn nach oben, statt ihn zu ziehen. Das klappt erst bei hohem Tempo, deshalb rollt der Zug bis etwa 150 km/h auf Rädern.",
+      "p2": "2015 erreichte ein Testzug des SCMaglev, der L0, 603 km/h. Das ist der Geschwindigkeitsrekord für Züge überhaupt. Die meisten Hochgeschwindigkeitszüge fahren dagegen auf Rädern. So ein <strong>Zug auf Rädern</strong> kommt voran, weil seine Stahlräder auf den Stahlschienen haften. Je schneller er fährt, desto weniger Haftung haben die Räder noch übrig. Trotzdem schaffte ein französischer TGV 2007 auf einer Testfahrt 574,8 km/h, den Rekord für Züge auf Rädern.",
       "p3": "Der Transrapid in Shanghai stellte im November 2003 bei einer Testfahrt seinen eigenen Rekord auf: 501 km/h. Mit 430 km/h war er der schnellste Zug im regulären Linienbetrieb. Die <strong>Magnetspalte</strong> zeigen den Unterschied auf einen Blick: etwa 10 mm in Shanghai, etwa 100 mm beim SCMaglev und gar keiner unter Stahlrädern. Wählen Sie einen Zug, dann stehen seine Werte darunter.",
-      "p4": "Der Hersteller sagt außerdem, sein Transrapid verbrauche weniger Energie und sei leiser. Nach seinen Zahlen braucht er bei 300 km/h 34 Wattstunden (Wh) Energie, um einen Sitzplatz einen Kilometer weit zu befördern. Ein ICE 3 braucht dafür 51 Wh. Aus 25 m Abstand gemessen, kommt er bei 300 km/h auf 80 Dezibel, ICE und TGV auf 90 bis 92. Das sind Angaben des Herstellers, aus seinen eigenen Tests."
+      "p4": "Der Hersteller sagt außerdem, sein Transrapid verbrauche weniger Energie und sei leiser. Nach seinen Zahlen braucht er bei 300 km/h 34 Wattstunden (Wh) Energie, um einen Sitzplatz einen Kilometer weit zu befördern. Ein ICE 3 braucht dafür 51 Wh. Bei 300 km/h und aus 25 m Abstand ist der Transrapid 80 Dezibel laut, ICE und TGV kommen auf 90 bis 92. Das sind Angaben des Herstellers, aus seinen eigenen Tests."
     }
   }
 }
