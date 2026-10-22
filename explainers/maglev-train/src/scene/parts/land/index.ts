@@ -4,19 +4,23 @@ import { namedGroup } from '../context';
 import type { PartContext, Section } from '../context';
 import { GROUND } from './constants';
 import { buildGhost } from './ghost';
-import { groundPlane } from './ground';
+import { groundMesh, groundPlan } from './ground';
+import { buildScenery } from './scenery';
 import { skyDome } from './sky';
 
 export function buildLand(context: PartContext): Section {
   const root = namedGroup('land');
-  const streaming = namedGroup('landStream', root);
-  streaming.add(groundPlane(context));
+  const plan = groundPlan();
+  const ground = namedGroup('groundStream', root);
+  ground.add(groundMesh(context, plan));
+  const scenery = buildScenery(context, plan);
   const ghost = buildGhost(context);
-  root.add(skyDome(context), ghost.root);
+  root.add(skyDome(context), scenery.root, ghost.root);
   return {
     root,
     setState(state: AssemblyState) {
-      streaming.position.x = wrapOffset(state.motion.distance, GROUND.period);
+      ground.position.x = wrapOffset(state.motion.distance, GROUND.period);
+      scenery.slide(state.motion.distance);
       ghost.setState(state);
     },
   };
