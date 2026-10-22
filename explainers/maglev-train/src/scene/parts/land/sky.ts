@@ -14,6 +14,7 @@ import { HAZE, SKY, SUN_DIRECTION } from '../../constants';
 import { LINE_GROUP, registeredMaterial } from '../context';
 import type { PartContext } from '../context';
 import { SKY_DOME } from './constants';
+import { SKYLINE_GLSL, skylineUniforms } from './skyline';
 
 const VERTEX = /* glsl */ `
 varying vec3 vDirection;
@@ -25,6 +26,7 @@ void main() {
 `;
 
 const FRAGMENT = /* glsl */ `
+${SKYLINE_GLSL}
 uniform vec3 uTop;
 uniform vec3 uHorizon;
 uniform vec3 uHaze;
@@ -103,6 +105,7 @@ void main() {
   sky = clouds(sky, direction, up, warmth);
   sky = mix(sky, uGlow, clamp(glow(direction), 0.0, 1.0));
   sky = mix(uHorizon, sky, smoothstep(-uShape.y, uShape.y, direction.y));
+  sky = skyline(sky, direction);
   gl_FragColor = vec4(sky, 1.0);
   #include <colorspace_fragment>
   gl_FragColor.rgb += (hash(gl_FragCoord.xy) - 0.5) * DITHER;
@@ -129,6 +132,7 @@ function skyUniforms() {
     },
     uStretch: { value: new Vector2(...clouds.stretch) },
     uWarmth: { value: new Vector2(horizonWarmth.strength, horizonWarmth.tightness) },
+    ...skylineUniforms(),
   };
 }
 
