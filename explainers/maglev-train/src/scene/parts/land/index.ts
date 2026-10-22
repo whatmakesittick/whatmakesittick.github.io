@@ -3,7 +3,7 @@ import { wrapOffset } from '../../pose';
 import { namedGroup } from '../context';
 import type { PartContext, Section } from '../context';
 import { GROUND } from './constants';
-import { buildGhostTrain } from './ghostTrain';
+import { buildGhost } from './ghost';
 import { groundPlane } from './ground';
 import { skyDome } from './sky';
 
@@ -11,7 +11,7 @@ export function buildLand(context: PartContext): Section {
   const root = namedGroup('land');
   const streaming = namedGroup('landStream', root);
   streaming.add(groundPlane(context));
-  const ghost = buildGhostTrain(context);
+  const ghost = buildGhost(context);
   root.add(skyDome(context), ghost.root);
   return {
     root,

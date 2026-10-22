@@ -1,10 +1,10 @@
 import { BoxGeometry } from 'three';
-import type { AssemblyState } from '../../../ids';
-import { GHOST_TRACK_Z, TRAIN } from '../../../model';
-import { LINE_DRAW } from '../../constants';
-import { lineX } from '../../pose';
-import { label, namedGroup, partMesh } from '../context';
-import type { PartContext, Section } from '../context';
+import type { AssemblyState } from '../../../../ids';
+import { GHOST_TRACK_Z, TRAIN } from '../../../../model';
+import { LINE_DRAW } from '../../../constants';
+import { lineX } from '../../../pose';
+import { label, namedGroup, partMesh } from '../../context';
+import type { PartContext, Section } from '../../context';
 
 const GHOST_HEIGHT = 3.9;
 const GHOST_WIDTH = 3.4;
