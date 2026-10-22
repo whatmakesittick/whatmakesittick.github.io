@@ -2,6 +2,7 @@ import { BufferGeometry, Float32BufferAttribute } from 'three';
 import type { Vec3 } from './nose';
 
 const AREA_EPSILON = 1e-14;
+const XYZ = 3;
 
 export function sub(a: Vec3, b: Vec3): Vec3 {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
@@ -37,7 +38,7 @@ export class MeshBuilder {
   vertex(position: Vec3, normal: Vec3, key?: string): number {
     const known = key === undefined ? undefined : this.keys.get(key);
     if (known !== undefined) return known;
-    const index = this.positions.length / 3;
+    const index = this.positions.length / XYZ;
     this.positions.push(...position);
     this.normals.push(...normal);
     if (key !== undefined) this.keys.set(key, index);
@@ -46,9 +47,9 @@ export class MeshBuilder {
 
   triangle(a: number, b: number, c: number): void {
     const corner = (index: number): Vec3 => [
-      this.positions[index * 3],
-      this.positions[index * 3 + 1],
-      this.positions[index * 3 + 2],
+      this.positions[index * XYZ],
+      this.positions[index * XYZ + 1],
+      this.positions[index * XYZ + 2],
     ];
     const normal = cross(sub(corner(b), corner(a)), sub(corner(c), corner(a)));
     if (dot(normal, normal) < AREA_EPSILON) return;

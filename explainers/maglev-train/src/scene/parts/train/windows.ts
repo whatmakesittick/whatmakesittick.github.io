@@ -50,13 +50,27 @@ function outline(inset: number): Vector2[] {
     { minA: -half, maxA: half, minB: DOOR.bottom + inset, maxB: DOOR.top - inset },
     DOOR.radius - inset,
   );
-  return path.getSpacedPoints(DOOR.frameSamples);
+  return path.getPoints(DOOR.cornerDivisions);
+}
+
+export function densified(outer: Vector2[], inner: Vector2[]): [Vector2[], Vector2[]] {
+  const dense: [Vector2[], Vector2[]] = [[], []];
+  outer.slice(0, -1).forEach((from, index) => {
+    const pieces = Math.max(1, Math.ceil(from.distanceTo(outer[index + 1]) / DOOR.step));
+    for (let piece = 0; piece < pieces; piece += 1) {
+      const share = piece / pieces;
+      dense[0].push(from.clone().lerp(outer[index + 1], share));
+      dense[1].push(inner[index].clone().lerp(inner[index + 1], share));
+    }
+  });
+  dense[0].push(outer[outer.length - 1].clone());
+  dense[1].push(inner[inner.length - 1].clone());
+  return dense;
 }
 
 export function doorFrameGeometry(): BufferGeometry {
   const builder = new MeshBuilder();
-  const outer = outline(0);
-  const inner = outline(DOOR.line);
+  const [outer, inner] = densified(outline(0), outline(DOOR.line));
   const vertex = (point: Vector2) => {
     const placed = onSide(point.x, point.y, DOOR.lift);
     return builder.vertex(placed.point, placed.normal);

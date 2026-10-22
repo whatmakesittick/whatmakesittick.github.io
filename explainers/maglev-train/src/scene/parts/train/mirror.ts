@@ -1,11 +1,13 @@
 import type { BufferGeometry } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
+const CORNERS = 3;
+
 function flipWinding(geometry: BufferGeometry): BufferGeometry {
   const index = geometry.getIndex();
   if (!index) return geometry;
   const values = index.array;
-  for (let at = 0; at < values.length; at += 3) {
+  for (let at = 0; at < values.length; at += CORNERS) {
     const swap = values[at + 1];
     values[at + 1] = values[at + 2];
     values[at + 2] = swap;
@@ -20,7 +22,7 @@ export function mirroredZ(geometry: BufferGeometry): BufferGeometry {
   if (copy.index) return flipWinding(copy);
   const position = copy.getAttribute('position');
   const normal = copy.getAttribute('normal');
-  for (let at = 0; at < position.count; at += 3) {
+  for (let at = 0; at < position.count; at += CORNERS) {
     [position, normal].forEach((attribute) => {
       if (!attribute) return;
       for (let axis = 0; axis < attribute.itemSize; axis += 1) {

@@ -85,7 +85,8 @@ export const DOOR = {
   windowWidth: 0.62,
   frontSlotFromNose: 4,
   rearSlot: 1,
-  frameSamples: 64,
+  cornerDivisions: 4,
+  step: 0.15,
 } as const;
 
 export const ROOF_FAIRING = {
@@ -139,15 +140,15 @@ export const MAGNET_MODULE = {
 
 export const SKID = {
   bottom: TRAIN.bodyBottom - SKIDS.height,
-  padHeight: 0.045,
-  toeRise: 0.05,
+  padHeight: 0.05,
+  toeRise: 0.028,
   toeLength: 0.12,
   mountShare: 0.6,
   bevel: 0.012,
 } as const;
 
 export const SPARK = {
-  size: 0.55,
+  size: 0.75,
   trail: 3,
   trailStep: 0.22,
   opacity: 0.55,
@@ -173,6 +174,7 @@ export const CUT_CAP = {
   markerLift: mm(8),
   markerLength: 0.3,
   markerThickness: 0.035,
+  floorPlate: 0.1,
 } as const;
 
 export const INTERIOR = {

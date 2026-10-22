@@ -2,10 +2,11 @@ import { Group, Shape, ShapeGeometry, Vector2 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { roundedRectShape } from '@core/scene/geometry/extrude';
 import { CUT_X, GUIDANCE_RAIL, MAGNETS, STATOR, STATOR_BOTTOM } from '../../../model';
+import { FINISHES } from '../../finishes';
 import { finishMesh, partMesh } from '../context';
 import type { PartContext } from '../context';
-import { bodyOutline, cabinOutline } from './cabin';
-import { CUT_CAP, SKIRT } from './constants';
+import { bodyOutline, cabinHalfWidth, cabinOutline } from './cabin';
+import { CABIN, CUT_CAP, SKIRT } from './constants';
 import { bevelledAlongX } from './extrude';
 import { TRAIN_FINISHES } from './finishes';
 import { buildInterior } from './interior';
@@ -13,6 +14,7 @@ import { mirroredPair } from './mirror';
 import { armProfile } from './skirt';
 
 const QUARTER_TURN = Math.PI / 2;
+const CAP_CURVE_SEGMENTS = 4;
 const SIDES = [1, -1] as const;
 
 function facingAhead(points: readonly Vector2[]): Vector2[] {
@@ -20,7 +22,7 @@ function facingAhead(points: readonly Vector2[]): Vector2[] {
 }
 
 function capGeometry(shapes: Shape[], lift: number): BufferGeometry {
-  const geometry = new ShapeGeometry(shapes, 4);
+  const geometry = new ShapeGeometry(shapes, CAP_CURVE_SEGMENTS);
   geometry.rotateY(QUARTER_TURN);
   geometry.translate(CUT_X + lift, 0, 0);
   geometry.deleteAttribute('uv');
@@ -58,6 +60,14 @@ export function gapMarkerShapes(): Shape[] {
   ]);
 }
 
+function floorPlate(): Shape {
+  const half = cabinHalfWidth(CABIN.floorY + CUT_CAP.floorPlate);
+  return roundedRectShape(
+    { minA: -half, maxA: half, minB: CABIN.floorY - CUT_CAP.floorPlate, maxB: CABIN.floorY },
+    CUT_CAP.floorPlate / 2,
+  );
+}
+
 function armStub(): BufferGeometry {
   return mirroredPair(bevelledAlongX(armProfile(SKIRT.top), CUT_X - CUT_CAP.stubLength, CUT_X, 0));
 }
@@ -74,6 +84,14 @@ export function buildCutaway(context: PartContext, parent: Object3D): Group {
   face.name = 'train';
   group.add(face);
   group.add(partMesh(context, armStub(), 'wrapArms'));
+  const floor = finishMesh(
+    context,
+    capGeometry([floorPlate()], CUT_CAP.markerLift / 2),
+    'train',
+    FINISHES.underbody,
+  );
+  floor.name = 'train';
+  group.add(floor);
   const markers = finishMesh(
     context,
     capGeometry(gapMarkerShapes(), CUT_CAP.markerLift),

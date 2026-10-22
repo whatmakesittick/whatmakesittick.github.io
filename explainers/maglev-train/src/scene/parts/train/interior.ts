@@ -15,6 +15,7 @@ import type { Vec3 } from './nose';
 const BACK_X = CUT_X - CABIN.depth;
 const FLOOR_EPSILON = 1e-6;
 const ROUND_SEGMENTS = 2;
+const SEAT_FILL = 0.92;
 const SIDES = [1, -1] as const;
 
 function orientedQuad(builder: MeshBuilder, corners: readonly Vec3[], normal: Vec3): void {
@@ -98,7 +99,7 @@ function seatCentres(): Vec3[] {
 }
 
 function seats(): { fabric: BufferGeometry; frames: BufferGeometry } {
-  const width = CABIN.seatWidth * 0.92;
+  const width = CABIN.seatWidth * SEAT_FILL;
   const { cushion, back } = INTERIOR;
   const fabric = seatCentres().flatMap(([x, y, z]) => [
     rounded(width, cushion.height, cushion.depth, [x, y, z]),

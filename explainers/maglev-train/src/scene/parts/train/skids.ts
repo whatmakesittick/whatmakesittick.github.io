@@ -17,15 +17,16 @@ import { mergeAll, mirroredPair } from './mirror';
 const SIDES = [1, -1] as const;
 const MOUNT_WIDTH_SHARE = 0.64;
 const SPARK_LIFT = 0.012;
+const TOE_HANDLE = 0.3;
 
 function padShape(): Shape {
   const half = SKIDS.length / 2;
   const { toeRise, toeLength, padHeight } = SKID;
   const shape = new Shape();
   shape.moveTo(-half, toeRise);
-  shape.quadraticCurveTo(-half + toeLength * 0.3, 0, -half + toeLength, 0);
+  shape.quadraticCurveTo(-half + toeLength * TOE_HANDLE, 0, -half + toeLength, 0);
   shape.lineTo(half - toeLength, 0);
-  shape.quadraticCurveTo(half - toeLength * 0.3, 0, half, toeRise);
+  shape.quadraticCurveTo(half - toeLength * TOE_HANDLE, 0, half, toeRise);
   shape.lineTo(half, padHeight);
   shape.lineTo(-half, padHeight);
   shape.closePath();
