@@ -19,10 +19,32 @@ export interface EnergyReading extends EnergyRow {
   atKmh: number;
 }
 
+const TRANSRAPID_RECORD_YEAR = 2003;
+const SCMAGLEV_GAP_MM = 100;
+const SCMAGLEV_RECORD_KMH = 603;
+const SCMAGLEV_RECORD_YEAR = 2015;
+const WHEEL_RAIL_RECORD_KMH = 574.8;
+const WHEEL_RAIL_RECORD_YEAR = 2007;
+
 export const COMPARE: Readonly<Record<CompareId, CompareEntry>> = {
-  transrapid: { gapMm: GAP_MM, recordKmh: RECORD_KMH, recordYear: 2003, lift: 'transrapid' },
-  scmaglev: { gapMm: 100, recordKmh: 603, recordYear: 2015, lift: 'scmaglev' },
-  wheelRail: { gapMm: null, recordKmh: 574.8, recordYear: 2007, lift: 'wheelRail' },
+  transrapid: {
+    gapMm: GAP_MM,
+    recordKmh: RECORD_KMH,
+    recordYear: TRANSRAPID_RECORD_YEAR,
+    lift: 'transrapid',
+  },
+  scmaglev: {
+    gapMm: SCMAGLEV_GAP_MM,
+    recordKmh: SCMAGLEV_RECORD_KMH,
+    recordYear: SCMAGLEV_RECORD_YEAR,
+    lift: 'scmaglev',
+  },
+  wheelRail: {
+    gapMm: null,
+    recordKmh: WHEEL_RAIL_RECORD_KMH,
+    recordYear: WHEEL_RAIL_RECORD_YEAR,
+    lift: 'wheelRail',
+  },
 };
 
 export const ENERGY_WH_PER_SEAT_KM: Readonly<Record<EnergyKmh, EnergyRow>> = {

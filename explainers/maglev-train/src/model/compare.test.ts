@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { COMPARE, ENERGY_WH_PER_SEAT_KM, energyFor } from './compare';
 
 describe('COMPARE', () => {
-  it('floats the Transrapid 10 mm, with the 501 km/h record of 2003', () => {
+  it('floats the Transrapid 10 mm, with the 501 km/h record of 2003 (F4.2, F1.14)', () => {
     expect(COMPARE.transrapid).toEqual({
       gapMm: 10,
       recordKmh: 501,
@@ -11,7 +11,7 @@ describe('COMPARE', () => {
     });
   });
 
-  it('floats the SCMaglev about 100 mm, with the 603 km/h record of 2015', () => {
+  it('floats the SCMaglev about 100 mm, with the 603 km/h record of 2015 (F9.1, F9.3)', () => {
     expect(COMPARE.scmaglev).toEqual({
       gapMm: 100,
       recordKmh: 603,
@@ -20,7 +20,7 @@ describe('COMPARE', () => {
     });
   });
 
-  it('gives the wheel-rail train no gap and the 574.8 km/h record of 2007', () => {
+  it('gives the wheel-rail train no gap and the 574.8 km/h record of 2007 (F9.6)', () => {
     expect(COMPARE.wheelRail).toEqual({
       gapMm: null,
       recordKmh: 574.8,
