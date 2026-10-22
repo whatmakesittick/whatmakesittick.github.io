@@ -42,7 +42,6 @@ export const INK = {
   south: '#3b6fc2',
   poleLetter: '#ffffff',
   tolerance: THEME.regen,
-  bracket: THEME.insetLine,
   plate: 'rgba(9, 13, 18, 0.92)',
   text: '#ffffff',
   thrust: '#ffffff',
@@ -86,7 +85,7 @@ export const GAP_PLATE = {
   fontShare: 0.62,
   ink: INK.text,
   plate: INK.plate,
-  rim: THEME.insetLine,
+  rim: INK.frame,
   depthTest: false,
 } as const;
 

@@ -21,13 +21,13 @@ export interface RibbonLane {
   readonly y: number;
   readonly z: number;
   readonly halfHeight: number;
+  readonly opacity?: number;
 }
 
 export interface RibbonSpec {
   readonly group: EmphasisGroup;
   readonly lane: RibbonLane;
   readonly span: Extent;
-  readonly opacity: number;
   readonly fragment: string;
   readonly uniforms: Record<string, IUniform>;
   readonly cut: CutUniform;
@@ -67,7 +67,7 @@ export function ribbonMesh(context: PartContext, spec: RibbonSpec): Mesh {
       ...UniformsUtils.clone(UniformsLib.fog),
       ...spec.uniforms,
       uTint: { value: tint },
-      uOpacity: { value: spec.opacity },
+      uOpacity: { value: spec.lane.opacity ?? 1 },
       uHalfHeight: { value: spec.lane.halfHeight },
       uCutX: spec.cut,
     },
@@ -81,6 +81,7 @@ export function ribbonMesh(context: PartContext, spec: RibbonSpec): Mesh {
   Object.assign(material, { color: tint });
   const geometry = context.tracker.track(ribbonGeometry(spec.lane, spec.span));
   const mesh = new Mesh(geometry, registeredMaterial(context, spec.group, material));
+  mesh.name = spec.group;
   mesh.frustumCulled = false;
   mesh.renderOrder = OVERLAY_RENDER_ORDER;
   return mesh;

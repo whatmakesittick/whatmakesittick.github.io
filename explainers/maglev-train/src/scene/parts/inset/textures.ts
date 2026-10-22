@@ -1,8 +1,10 @@
-import { CanvasTexture, Color, RepeatWrapping, SRGBColorSpace } from 'three';
+import { Color, RepeatWrapping } from 'three';
+import type { CanvasTexture } from 'three';
 import { WAVE_PHASE_COLOURS } from '../../../theme';
+import { canvasTexture } from '../canvasTexture';
+import type { CanvasPaint } from '../canvasTexture';
 import { INK } from './constants';
-
-type Paint = (context: CanvasRenderingContext2D, width: number, height: number) => void;
+import { FONT_FAMILY } from './textPlate';
 
 const HATCH = { size: 64, line: 5, base: '#c9c9c9', ink: '#ffffff' } as const;
 const FIELD = {
@@ -33,31 +35,21 @@ const BODY = {
 const FADE = { width: 4, height: 64 } as const;
 const POLE_COUNT = 2;
 const LETTERS = ['N', 'S'] as const;
-const FONT = "800 {size}px system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+const POLE_INKS = [INK.north, INK.south] as const;
+const LETTER_WEIGHT = 800;
 const SHEEN = 0.18;
 
-function canvasTexture(width: number, height: number, paint: Paint, wrapT = false): CanvasTexture {
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  const context = canvas.getContext('2d');
-  if (context) paint(context, width, height);
-  const texture = new CanvasTexture(canvas);
-  texture.colorSpace = SRGBColorSpace;
-  texture.wrapS = RepeatWrapping;
-  if (wrapT) texture.wrapT = RepeatWrapping;
-  return texture;
-}
+const TILED = { wrapT: RepeatWrapping } as const;
 
 function mix(from: string, to: string, share: number): string {
   return `#${new Color(from).lerp(new Color(to), share).getHexString()}`;
 }
 
-function lighter(colour: string, share = SHEEN): string {
-  return mix(colour, '#ffffff', share);
+function lighter(colour: string): string {
+  return mix(colour, '#ffffff', SHEEN);
 }
 
-const paintHatch: Paint = (context, size) => {
+const paintHatch: CanvasPaint = (context, size) => {
   context.fillStyle = HATCH.base;
   context.fillRect(0, 0, size, size);
   context.strokeStyle = HATCH.ink;
@@ -69,6 +61,29 @@ const paintHatch: Paint = (context, size) => {
     context.stroke();
   });
 };
+
+function verticalGradient(
+  context: CanvasRenderingContext2D,
+  height: number,
+  top: string,
+  bottom: string,
+): CanvasGradient {
+  const gradient = context.createLinearGradient(0, 0, 0, height);
+  gradient.addColorStop(0, top);
+  gradient.addColorStop(1, bottom);
+  return gradient;
+}
+
+function fillFade(
+  context: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  [top, bottom]: readonly [number, number],
+): void {
+  const alpha = (value: number) => `rgba(255,255,255,${value})`;
+  context.fillStyle = verticalGradient(context, height, alpha(top), alpha(bottom));
+  context.fillRect(0, 0, width, height);
+}
 
 function fieldGradient(context: CanvasRenderingContext2D, width: number): CanvasGradient {
   const gradient = context.createLinearGradient(0, 0, width, 0);
@@ -84,49 +99,55 @@ function fieldGradient(context: CanvasRenderingContext2D, width: number): Canvas
   return gradient;
 }
 
-const paintField: Paint = (context, width, height) => {
+function paintFadedField(
+  context: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  alphas: readonly [number, number],
+): CanvasGradient {
   const colours = fieldGradient(context, width);
   context.fillStyle = colours;
   context.fillRect(0, 0, width, height);
-  const fade = context.createLinearGradient(0, 0, 0, height);
-  fade.addColorStop(0, `rgba(0,0,0,${FIELD.topAlpha})`);
-  fade.addColorStop(1, `rgba(0,0,0,${FIELD.faceAlpha})`);
   context.globalCompositeOperation = 'destination-in';
-  context.fillStyle = fade;
-  context.fillRect(0, 0, width, height);
+  fillFade(context, width, height, alphas);
   context.globalCompositeOperation = 'source-over';
-  context.fillStyle = colours;
+  return colours;
+}
+
+const paintField: CanvasPaint = (context, width, height) => {
+  context.fillStyle = paintFadedField(context, width, height, [FIELD.topAlpha, FIELD.faceAlpha]);
   context.fillRect(0, height - FIELD.faceRows, width, FIELD.faceRows);
 };
 
-function paintPole(
-  context: CanvasRenderingContext2D,
-  index: number,
-  width: number,
-  height: number,
-): void {
+const paintSpill: CanvasPaint = (context, width, height) => {
+  paintFadedField(context, width, height, [FIELD.spillAlpha, 0]);
+};
+
+type PoleDraw = (left: number, size: number, index: number) => void;
+
+function eachPole(width: number, share: number, draw: PoleDraw): void {
   const pitch = width / POLE_COUNT;
-  const face = pitch * POLES.faceShare;
-  const left = index * pitch + (pitch - face) / 2;
-  const colour = index === 0 ? INK.north : INK.south;
-  const shade = context.createLinearGradient(0, 0, 0, height);
-  shade.addColorStop(0, lighter(colour));
-  shade.addColorStop(1, colour);
-  context.fillStyle = shade;
-  context.beginPath();
-  context.roundRect(left, 0, face, height, [POLES.corner, POLES.corner, 0, 0]);
-  context.fill();
-  context.fillStyle = INK.poleLetter;
-  context.font = FONT.replace('{size}', String(Math.round(height * POLES.letterShare)));
-  context.textAlign = 'center';
-  context.textBaseline = 'middle';
-  context.fillText(LETTERS[index], left + face / 2, height / 2);
+  const size = pitch * share;
+  Array.from({ length: POLE_COUNT }, (_, index) =>
+    draw(index * pitch + (pitch - size) / 2, size, index),
+  );
 }
 
-const paintPoles: Paint = (context, width, height) => {
+const paintPoles: CanvasPaint = (context, width, height) => {
   context.fillStyle = INK.coil;
   context.fillRect(0, height * POLES.coilTopShare, width, height);
-  Array.from({ length: POLE_COUNT }, (_, index) => paintPole(context, index, width, height));
+  context.font = `${LETTER_WEIGHT} ${Math.round(height * POLES.letterShare)}px ${FONT_FAMILY}`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  eachPole(width, POLES.faceShare, (left, face, index) => {
+    const colour = POLE_INKS[index];
+    context.fillStyle = verticalGradient(context, height, lighter(colour), colour);
+    context.beginPath();
+    context.roundRect(left, 0, face, height, [POLES.corner, POLES.corner, 0, 0]);
+    context.fill();
+    context.fillStyle = INK.poleLetter;
+    context.fillText(LETTERS[index], left + face / 2, height / 2);
+  });
 };
 
 function paintCoilTurns(context: CanvasRenderingContext2D, width: number, height: number): void {
@@ -136,10 +157,7 @@ function paintCoilTurns(context: CanvasRenderingContext2D, width: number, height
 }
 
 function paintCores(context: CanvasRenderingContext2D, width: number, height: number): void {
-  const pitch = width / POLE_COUNT;
-  const core = pitch * BODY.coreShare;
-  Array.from({ length: POLE_COUNT }, (_, index) => {
-    const left = index * pitch + (pitch - core) / 2;
+  eachPole(width, BODY.coreShare, (left, core) => {
     context.fillStyle = INK.core;
     context.fillRect(left, 0, core, height);
     context.fillStyle = lighter(INK.core);
@@ -148,42 +166,26 @@ function paintCores(context: CanvasRenderingContext2D, width: number, height: nu
     }
   });
   context.fillStyle = INK.sheath;
-  [0, pitch, width].forEach((x) => context.fillRect(x - BODY.divider / 2, 0, BODY.divider, height));
+  const dividers = [0, width / POLE_COUNT, width];
+  dividers.forEach((x) => context.fillRect(x - BODY.divider / 2, 0, BODY.divider, height));
 }
 
-const paintBody: Paint = (context, width, height) => {
+const paintBody: CanvasPaint = (context, width, height) => {
   context.fillStyle = INK.coil;
   context.fillRect(0, 0, width, height);
   paintCoilTurns(context, width, height);
   paintCores(context, width, height);
 };
 
-const paintFade: Paint = (context, width, height) => {
-  const fade = context.createLinearGradient(0, 0, 0, height);
-  fade.addColorStop(0, 'rgba(255,255,255,0)');
-  fade.addColorStop(1, 'rgba(255,255,255,1)');
-  context.fillStyle = fade;
-  context.fillRect(0, 0, width, height);
-};
+const paintFade: CanvasPaint = (context, width, height) => fillFade(context, width, height, [0, 1]);
 
 export function fadeTexture(): CanvasTexture {
   return canvasTexture(FADE.width, FADE.height, paintFade);
 }
 
 export function hatchTexture(): CanvasTexture {
-  return canvasTexture(HATCH.size, HATCH.size, paintHatch, true);
+  return canvasTexture(HATCH.size, HATCH.size, paintHatch, TILED);
 }
-
-const paintSpill: Paint = (context, width, height) => {
-  context.fillStyle = fieldGradient(context, width);
-  context.fillRect(0, 0, width, height);
-  const fade = context.createLinearGradient(0, 0, 0, height);
-  fade.addColorStop(0, `rgba(0,0,0,${FIELD.spillAlpha})`);
-  fade.addColorStop(1, 'rgba(0,0,0,0)');
-  context.globalCompositeOperation = 'destination-in';
-  context.fillStyle = fade;
-  context.fillRect(0, 0, width, height);
-};
 
 export function fieldSpillTexture(): CanvasTexture {
   return canvasTexture(FIELD.width, FIELD.height, paintSpill);
@@ -198,5 +200,5 @@ export function poleTexture(): CanvasTexture {
 }
 
 export function magnetBodyTexture(): CanvasTexture {
-  return canvasTexture(BODY.width, BODY.height, paintBody, true);
+  return canvasTexture(BODY.width, BODY.height, paintBody, TILED);
 }

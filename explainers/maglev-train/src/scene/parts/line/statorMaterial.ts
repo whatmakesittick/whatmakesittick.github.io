@@ -1,6 +1,7 @@
 import { MeshStandardMaterial } from 'three';
 import type { IUniform, WebGLProgramParametersWithUniforms } from 'three';
 import { FINISHES } from '../../finishes';
+import { glslFloat, inject } from '../shaderChunks';
 import { PACKS } from './constants';
 import { applyCut } from './cut';
 import type { CutUniform } from './cut';
@@ -10,7 +11,8 @@ import type { WaveUniforms } from './waveUniforms';
 
 const CACHE_KEY = 'maglev-stator-pack';
 
-const glslFloat = (value: number) => value.toFixed(6);
+const PRECISE_DIGITS = 6;
+const precise = (value: number) => glslFloat(value, PRECISE_DIGITS);
 
 const VERTEX_HEAD = /* glsl */ `
 varying vec3 vStatorWorld;
@@ -19,11 +21,7 @@ varying vec3 vStatorNormal;
 `;
 
 const VERTEX_BODY = /* glsl */ `
-vec4 statorWorld = vec4(transformed, 1.0);
-#ifdef USE_INSTANCING
-statorWorld = instanceMatrix * statorWorld;
-#endif
-vStatorWorld = (modelMatrix * statorWorld).xyz;
+vStatorWorld = (modelMatrix * cutWorld).xyz;
 vStatorLocal = position;
 vStatorNormal = normal;
 `;
@@ -53,22 +51,18 @@ const COLOUR_BODY = /* glsl */ `
 vec3 statorNormal = normalize(vStatorNormal);
 float statorAlong = 1.0 - abs(statorNormal.x);
 float statorBottom = step(0.5, -statorNormal.y);
-float statorPlates = statorLines(vStatorLocal.x / ${glslFloat(PACKS.pitch / PACKS.platesPerPack)}, ${glslFloat(STATOR_SHADING.plateWidth)});
-float statorCable = statorSlots(vStatorLocal.x / ${glslFloat(PACKS.slotPitch)}) * statorBottom;
-float statorRim = (1.0 - statorBottom) * statorAlong * (1.0 - step(${glslFloat(PACKS.bottom + STATOR_SHADING.cableBand)}, vStatorLocal.y));
-diffuseColor.rgb *= 1.0 - ${glslFloat(STATOR_SHADING.plateShade)} * statorPlates * statorAlong * uDetail;
-diffuseColor.rgb = mix(diffuseColor.rgb, vec3(${glslFloat(STATOR_SHADING.cableColour)}), ${glslFloat(STATOR_SHADING.slotShade)} * max(statorCable, statorRim * uDetail));
+float statorPlates = statorLines(vStatorLocal.x / ${precise(PACKS.pitch / PACKS.platesPerPack)}, ${precise(STATOR_SHADING.plateWidth)});
+float statorCable = statorSlots(vStatorLocal.x / ${precise(PACKS.slotPitch)}) * statorBottom;
+float statorRim = (1.0 - statorBottom) * statorAlong * (1.0 - step(${precise(PACKS.bottom + STATOR_SHADING.cableBand)}, vStatorLocal.y));
+diffuseColor.rgb *= 1.0 - ${precise(STATOR_SHADING.plateShade)} * statorPlates * statorAlong * uDetail;
+diffuseColor.rgb = mix(diffuseColor.rgb, vec3(${precise(STATOR_SHADING.cableColour)}), ${precise(STATOR_SHADING.slotShade)} * max(statorCable, statorRim * uDetail));
 `;
 
 const EMISSIVE_BODY = /* glsl */ `
-float statorWave = uWaveOn * sectionMask(vStatorWorld.x) * mix(${glslFloat(STATOR_SHADING.endFaceGlow)}, 1.0, statorAlong);
-diffuseColor.rgb *= 1.0 - ${glslFloat(STATOR_SHADING.bandShade)} * statorWave;
-totalEmissiveRadiance += waveBand(vStatorWorld.x) * ${glslFloat(STATOR_SHADING.bandGlow)} * statorWave;
+float statorWave = uWaveOn * sectionMask(vStatorWorld.x) * mix(${precise(STATOR_SHADING.endFaceGlow)}, 1.0, statorAlong);
+diffuseColor.rgb *= 1.0 - ${precise(STATOR_SHADING.bandShade)} * statorWave;
+totalEmissiveRadiance += waveBand(vStatorWorld.x) * ${precise(STATOR_SHADING.bandGlow)} * statorWave;
 `;
-
-function inject(source: string, anchor: string, addition: string): string {
-  return source.replace(anchor, `${anchor}\n${addition}`);
-}
 
 export interface StatorUniforms extends WaveUniforms {
   uDetail: IUniform<number>;
@@ -81,7 +75,6 @@ export function createStatorMaterial(
   const material = new MeshStandardMaterial(FINISHES.stator);
   material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms) => {
     Object.assign(shader.uniforms, uniforms);
-    applyCut(shader, cut);
     shader.vertexShader = inject(shader.vertexShader, '#include <common>', VERTEX_HEAD);
     shader.vertexShader = inject(shader.vertexShader, '#include <project_vertex>', VERTEX_BODY);
     shader.fragmentShader = inject(shader.fragmentShader, '#include <common>', FRAGMENT_HEAD);
@@ -91,6 +84,7 @@ export function createStatorMaterial(
       '#include <emissivemap_fragment>',
       EMISSIVE_BODY,
     );
+    applyCut(shader, cut);
   };
   material.customProgramCacheKey = () => CACHE_KEY;
   return material;

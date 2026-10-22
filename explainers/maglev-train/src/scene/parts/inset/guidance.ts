@@ -1,12 +1,12 @@
-import { Group, ShapeGeometry } from 'three';
-import type { BufferGeometry, Mesh } from 'three';
-import { roundedRectHole, roundedRectShape } from '@core/scene/geometry/extrude';
-import type { Rect } from '@core/scene/geometry/extrude';
+import { Group } from 'three';
+import type { Mesh } from 'three';
 import type { PartContext } from '../context';
-import { GUIDE_PLATE, INK, INSET_GROUP, LAYER, LAYER_DEPTH, STROKE } from './constants';
-import { dimensionGeometry, redrawDimension } from './dimension';
-import { insetMesh } from './insetMesh';
+import { GUIDE_PLATE, INK, INSET_GROUP, LAYER, STROKE } from './constants';
+import { dimensionMesh, redrawDimension } from './dimension';
+import { insetMesh, layerDepth } from './insetMesh';
+import type { InsetPart } from './insetMesh';
 import { drawnGuidanceGap, gapText, leftGuidanceGapMm } from './layout';
+import { roundedCard } from './panel';
 import { rect } from './strokes';
 import type { Point2 } from './strokes';
 import { TextPlate } from './textPlate';
@@ -17,28 +17,15 @@ const GIRDER_WIDTH = 0.05;
 const RAIL_FACE = -0.25;
 const BRACKET_Y = 0.085;
 const PLATE_CENTRE: Point2 = [0.25, -0.02];
-const BRACKET_STYLE = {
-  line: STROKE.edge,
-  tick: STROKE.tick / 2,
-  arrowLength: STROKE.arrowLength,
-  arrowWidth: STROKE.arrowWidth,
-} as const;
+const BRACKET_STYLE = { line: STROKE.edge, tick: STROKE.tick / 2 } as const;
 
 export const GUIDANCE_MAGNET_NAME = 'gapInsetGuidanceMagnet';
 
-function cardRect(inset: number): Rect {
-  const halfWidth = CARD.width / 2 - inset;
-  const halfHeight = CARD.height / 2 - inset;
-  return { minA: -halfWidth, minB: -halfHeight, maxA: halfWidth, maxB: halfHeight };
-}
-
 function cardMeshes(context: PartContext): Mesh[] {
-  const rim = roundedRectShape(cardRect(0), CARD.corner);
-  rim.holes.push(roundedRectHole(cardRect(CARD.rim), CARD.corner - CARD.rim));
-  const ground = new ShapeGeometry(roundedRectShape(cardRect(0), CARD.corner));
+  const [ground, rim] = roundedCard(CARD.width, CARD.height, CARD.corner, CARD.rim);
   return [
     insetMesh(context, ground, { colour: INK.card }, LAYER.card),
-    insetMesh(context, new ShapeGeometry(rim), { colour: INK.frame }, LAYER.cardInk),
+    insetMesh(context, rim, { colour: INK.frame }, LAYER.cardInk),
   ];
 }
 
@@ -60,43 +47,28 @@ function bracketEnds(gap: number): readonly [Point2, Point2] {
   ];
 }
 
-function bracketGeometry(gap: number): BufferGeometry {
-  return dimensionGeometry(...bracketEnds(gap), BRACKET_STYLE);
-}
-
-export class GuidanceDetail {
-  readonly group = new Group();
-  private readonly magnet: Mesh;
-  private readonly bracket: Mesh;
-  private readonly plate: TextPlate;
-
-  constructor(context: PartContext) {
-    const magnet = rect(RAIL_FACE, BAR.bottom, RAIL_FACE + BAR.width, BAR.top);
-    this.magnet = insetMesh(context, magnet, { colour: INK.guidanceMagnet }, LAYER.cardInk);
-    this.magnet.name = GUIDANCE_MAGNET_NAME;
-    this.bracket = insetMesh(
-      context,
-      bracketGeometry(drawnGuidanceGap(0)),
-      { colour: INK.bracket },
-      LAYER.cardInk,
-    );
-    this.bracket.frustumCulled = false;
-    this.plate = new TextPlate(context, INSET_GROUP, GUIDE_PLATE, LAYER.text);
-    this.plate.mesh.position.set(...PLATE_CENTRE, (LAYER.text - LAYER.ground) * LAYER_DEPTH);
-    this.group.position.set(CARD.x, CARD.y, 0);
-    this.group.add(
-      ...cardMeshes(context),
-      ...railMeshes(context),
-      this.magnet,
-      this.bracket,
-      this.plate.mesh,
-    );
-  }
-
-  show(lateralMm: number): void {
-    const gap = drawnGuidanceGap(lateralMm);
-    this.magnet.position.x = gap;
-    redrawDimension(this.bracket, ...bracketEnds(gap), BRACKET_STYLE);
-    this.plate.show(gapText(leftGuidanceGapMm(lateralMm)));
-  }
+export function guidanceDetail(context: PartContext): InsetPart<[lateralMm: number]> {
+  const bar = rect(RAIL_FACE, BAR.bottom, RAIL_FACE + BAR.width, BAR.top);
+  const magnet = insetMesh(context, bar, { colour: INK.guidanceMagnet }, LAYER.cardInk);
+  magnet.name = GUIDANCE_MAGNET_NAME;
+  const bracket = dimensionMesh(
+    context,
+    bracketEnds(drawnGuidanceGap(0)),
+    BRACKET_STYLE,
+    LAYER.cardInk,
+  );
+  const plate = new TextPlate(context, INSET_GROUP, GUIDE_PLATE, LAYER.text);
+  plate.mesh.position.set(...PLATE_CENTRE, layerDepth(LAYER.text));
+  const group = new Group();
+  group.position.set(CARD.x, CARD.y, 0);
+  group.add(...cardMeshes(context), ...railMeshes(context), magnet, bracket, plate.mesh);
+  return {
+    group,
+    draw(lateralMm) {
+      const gap = drawnGuidanceGap(lateralMm);
+      magnet.position.x = gap;
+      redrawDimension(bracket, bracketEnds(gap), BRACKET_STYLE);
+      plate.show(gapText(leftGuidanceGapMm(lateralMm)));
+    },
+  };
 }

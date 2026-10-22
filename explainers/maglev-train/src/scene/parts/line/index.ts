@@ -14,7 +14,7 @@ import {
 } from '../../../model';
 import { label, namedGroup } from '../context';
 import type { PartContext, Section } from '../context';
-import { concreteLooks } from './concreteLook';
+import { concreteFinish } from './concreteLook';
 import { LINE_FINISHES, TRAY } from './constants';
 import { createCut, setCut } from './cut';
 import { buildCutCap } from './cutCap';
@@ -39,15 +39,11 @@ function lineLabels(context: PartContext, parent: Object3D): void {
 export function buildLine(context: PartContext): Section {
   const root = namedGroup('line');
   const cut = createCut();
-  const concrete = concreteLooks(context);
+  const concrete = concreteFinish(context);
   const wave = buildWaveEffects(context, cut);
-  const guideway = buildGuideway(context, {
-    concrete: concrete.finish,
-    stator: wave.stator,
-    cut,
-  });
+  const guideway = buildGuideway(context, { concrete, stator: wave.stator, cut });
   const cap = buildCutCap(context, LINE_FINISHES.paintedSteel);
-  const stations = buildStations(context, concrete.stations);
+  const stations = buildStations(context, concrete);
   const flow = buildPowerFlow(context, cut);
   const labelsAhead = namedGroup('lineLabels', root);
   root.add(guideway.group, cap, stations.group, wave.powered, wave.travelling, flow.group);

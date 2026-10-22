@@ -1,6 +1,7 @@
 import { Color, Vector4 } from 'three';
 import type { IUniform } from 'three';
 import type { Extent } from '@core/scene/regions';
+import { wrapPhase } from '@core/store';
 import { WAVE_DRAWN_WAVELENGTH_M } from '../../../model';
 import { WAVE_PHASE_COLOURS } from '../../../theme';
 import { SECTION_EDGE } from './effectConstants';
@@ -36,7 +37,8 @@ export function setSection(uniforms: WaveUniforms, [from, to]: Extent): void {
 }
 
 export function driftBands(uniforms: WaveUniforms, metres: number): void {
-  const period = uniforms.uWavelength.value;
-  const shifted = (uniforms.uBandShift.value + metres) % period;
-  uniforms.uBandShift.value = (shifted + period) % period;
+  uniforms.uBandShift.value = wrapPhase(
+    uniforms.uBandShift.value + metres,
+    uniforms.uWavelength.value,
+  );
 }

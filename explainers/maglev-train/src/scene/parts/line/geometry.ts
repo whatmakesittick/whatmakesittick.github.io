@@ -13,6 +13,8 @@ import { box } from '@core/scene/geometry/box';
 
 export type ProfilePoint = readonly [z: number, y: number];
 
+export type Span = [from: number, to: number];
+
 const QUARTER_TURN = Math.PI / 2;
 const CURVE_SEGMENTS = 8;
 const UV = 2;
@@ -35,6 +37,14 @@ export function sideProfile(points: readonly ProfilePoint[], side: number): Prof
   return side < 0 ? placed.reverse() : placed;
 }
 
+export function sideSpan(side: number, inner: number, outer: number): Span {
+  return side > 0 ? [inner, outer] : [-outer, -inner];
+}
+
+export function around(centre: number, width: number): Span {
+  return [centre - width / 2, centre + width / 2];
+}
+
 export function extrudeAlongX(
   shape: Shape,
   start: number,
@@ -55,6 +65,15 @@ export function extrudeAlongX(
   geometry.rotateY(-QUARTER_TURN);
   geometry.translate(end - chamfer, 0, 0);
   return geometry;
+}
+
+export function extrudeSide(
+  points: readonly ProfilePoint[],
+  side: number,
+  start: number,
+  end: number,
+): BufferGeometry {
+  return extrudeAlongX(profileShape(sideProfile(points, side)), start, end);
 }
 
 export function boxOver(
@@ -122,9 +141,7 @@ export function extrudeAlongZ(shape: Shape, start: number, end: number): BufferG
   return geometry;
 }
 
-export function sideShape(points: readonly (readonly [number, number])[]): Shape {
-  return new Shape(points.map(([a, b]) => new Vector2(a, b)));
-}
+export const sideShape = profileShape;
 
 export function cylinderBetween(
   from: Vector3,

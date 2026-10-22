@@ -1,5 +1,7 @@
 import { BufferGeometry, CircleGeometry, Float32BufferAttribute, RingGeometry } from 'three';
-import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { mergeParts as merged } from '../line/geometry';
+
+export { merged };
 
 export type Point2 = readonly [x: number, y: number];
 
@@ -20,21 +22,6 @@ function triangles(points: readonly Point2[]): BufferGeometry {
 
 function quad(a: Point2, b: Point2, c: Point2, d: Point2): BufferGeometry {
   return triangles([a, b, c, a, c, d]);
-}
-
-export function positionsOnly(geometry: BufferGeometry): BufferGeometry {
-  const flat = geometry.index ? geometry.toNonIndexed() : geometry.clone();
-  Object.keys(flat.attributes)
-    .filter((name) => name !== POSITION)
-    .forEach((name) => flat.deleteAttribute(name));
-  geometry.dispose();
-  return flat;
-}
-
-export function merged(geometries: readonly BufferGeometry[]): BufferGeometry {
-  const result = mergeGeometries([...geometries]);
-  geometries.forEach((geometry) => geometry.dispose());
-  return result;
 }
 
 export function rect(minX: number, minY: number, maxX: number, maxY: number): BufferGeometry {
@@ -88,14 +75,10 @@ export function dashed(
   );
 }
 
-export function disc(centre: Point2, radius: number): BufferGeometry {
-  const geometry = new CircleGeometry(radius, CIRCLE_SEGMENTS);
-  geometry.translate(centre[0], centre[1], 0);
-  return positionsOnly(geometry);
+export function disc([x, y]: Point2, radius: number, sides = CIRCLE_SEGMENTS): BufferGeometry {
+  return new CircleGeometry(radius, sides).translate(x, y, 0);
 }
 
-export function ring(centre: Point2, inner: number, outer: number): BufferGeometry {
-  const geometry = new RingGeometry(inner, outer, CIRCLE_SEGMENTS);
-  geometry.translate(centre[0], centre[1], 0);
-  return positionsOnly(geometry);
+export function ring([x, y]: Point2, inner: number, outer: number): BufferGeometry {
+  return new RingGeometry(inner, outer, CIRCLE_SEGMENTS).translate(x, y, 0);
 }

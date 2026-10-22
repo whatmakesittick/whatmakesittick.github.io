@@ -1,18 +1,8 @@
-import { Color } from 'three';
-import type { Mesh } from 'three';
-import { LINE_DRAW } from '../../constants';
-import { THEME } from '../../../theme';
-import type { PartContext } from '../context';
-import type { CutUniform } from './cut';
-import { POWERED_STRIP, WAVE_HALO } from './effectConstants';
+import { glslFloat } from '../shaderChunks';
+import { POWERED_STRIP } from './effectConstants';
 import { WAVE_GLSL } from './glsl';
-import { ribbonMesh } from './ribbon';
-import type { WaveUniforms } from './waveUniforms';
 
-const SPAN = [-LINE_DRAW.behind, LINE_DRAW.ahead] as const;
-const glslFloat = (value: number) => value.toFixed(4);
-
-const POWERED_FRAGMENT = /* glsl */ `
+export const POWERED_FRAGMENT = /* glsl */ `
 ${WAVE_GLSL}
 uniform vec3 uGlow;
 
@@ -28,7 +18,7 @@ void main() {
 }
 `;
 
-const HALO_FRAGMENT = /* glsl */ `
+export const HALO_FRAGMENT = /* glsl */ `
 ${WAVE_GLSL}
 
 void main() {
@@ -39,31 +29,3 @@ void main() {
   #include <colorspace_fragment>
 }
 `;
-
-export function poweredStripMesh(context: PartContext, wave: WaveUniforms, cut: CutUniform): Mesh {
-  const mesh = ribbonMesh(context, {
-    group: 'poweredSection',
-    lane: POWERED_STRIP,
-    span: SPAN,
-    opacity: POWERED_STRIP.opacity,
-    fragment: POWERED_FRAGMENT,
-    uniforms: { ...wave, uGlow: { value: new Color(THEME.powered) } },
-    cut,
-  });
-  mesh.name = 'poweredSection';
-  return mesh;
-}
-
-export function waveHaloMesh(context: PartContext, wave: WaveUniforms, cut: CutUniform): Mesh {
-  const mesh = ribbonMesh(context, {
-    group: 'travellingWave',
-    lane: WAVE_HALO,
-    span: SPAN,
-    opacity: WAVE_HALO.opacity,
-    fragment: HALO_FRAGMENT,
-    uniforms: wave,
-    cut,
-  });
-  mesh.name = 'travellingWave';
-  return mesh;
-}

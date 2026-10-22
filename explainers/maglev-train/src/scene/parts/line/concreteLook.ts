@@ -1,7 +1,8 @@
-import { CanvasTexture, RepeatWrapping, SRGBColorSpace } from 'three';
-import type { Material } from 'three';
+import { RepeatWrapping } from 'three';
+import type { CanvasTexture } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { FINISHES } from '../../finishes';
+import { canvasTexture } from '../canvasTexture';
 import type { PartContext } from '../context';
 
 const SIZE = 256;
@@ -40,8 +41,8 @@ function grey(value: number, alpha: number): string {
   return `rgba(${level},${level},${level},${alpha})`;
 }
 
-function repeat(count: number, paint: () => void): void {
-  for (let index = 0; index < count; index += 1) paint();
+function repeat(count: number, paint: (index: number) => void): void {
+  for (let index = 0; index < count; index += 1) paint(index);
 }
 
 function paintBlotches(context: CanvasRenderingContext2D, random: Random): void {
@@ -79,40 +80,27 @@ function paintSpeckles(context: CanvasRenderingContext2D, random: Random): void 
 function paintPanelLines(context: CanvasRenderingContext2D): void {
   const { count, tone, alpha } = PAINT.panels;
   context.fillStyle = grey(tone, alpha);
-  for (let index = 0; index < count; index += 1) {
-    context.fillRect((index * SIZE) / count, 0, 1, SIZE);
-  }
+  repeat(count, (index) => context.fillRect((index * SIZE) / count, 0, 1, SIZE));
+}
+
+function paintConcrete(context: CanvasRenderingContext2D): void {
+  const random = seeded(SEED);
+  context.fillStyle = grey(BASE, 1);
+  context.fillRect(0, 0, SIZE, SIZE);
+  paintBlotches(context, random);
+  paintStreaks(context, random);
+  paintSpeckles(context, random);
+  paintPanelLines(context);
 }
 
 function concreteTexture(): CanvasTexture {
-  const canvas = document.createElement('canvas');
-  canvas.width = SIZE;
-  canvas.height = SIZE;
-  const context = canvas.getContext('2d');
-  if (context) {
-    const random = seeded(SEED);
-    context.fillStyle = grey(BASE, 1);
-    context.fillRect(0, 0, SIZE, SIZE);
-    paintBlotches(context, random);
-    paintStreaks(context, random);
-    paintSpeckles(context, random);
-    paintPanelLines(context);
-  }
-  const texture = new CanvasTexture(canvas);
-  texture.colorSpace = SRGBColorSpace;
-  texture.wrapS = RepeatWrapping;
-  texture.wrapT = RepeatWrapping;
-  texture.anisotropy = ANISOTROPY;
-  return texture;
+  return canvasTexture(SIZE, SIZE, paintConcrete, {
+    wrapT: RepeatWrapping,
+    anisotropy: ANISOTROPY,
+  });
 }
 
-export interface ConcreteLooks {
-  readonly finish: MaterialFinish;
-  readonly stations: Material;
-}
-
-export function concreteLooks(context: PartContext): ConcreteLooks {
+export function concreteFinish(context: PartContext): MaterialFinish {
   const map = context.tracker.track(concreteTexture());
-  const finish: MaterialFinish = { ...FINISHES.concrete, color: CONCRETE_COLOUR, map };
-  return { finish, stations: context.materials.get('stations', finish) };
+  return { ...FINISHES.concrete, color: CONCRETE_COLOUR, map };
 }

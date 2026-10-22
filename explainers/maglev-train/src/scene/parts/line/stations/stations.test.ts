@@ -19,9 +19,9 @@ describe('station layout', () => {
   });
 
   it('tucks the halls under the platforms, clear of the ghost track and the girders', () => {
+    expect(HALL.halfWidth + HALL.roofOverhang).toBeLessThan(ESCALATOR.inner);
+    expect(HALL.height + HALL.roofThickness).toBeLessThan(GIRDER.bottom);
     Object.values(STATION_STYLES).forEach(({ hall }) => {
-      expect(Math.max(...hall.z.map(Math.abs)) + HALL.roofOverhang).toBeLessThan(ESCALATOR.inner);
-      expect(hall.height + HALL.roofThickness).toBeLessThan(GIRDER.bottom);
       expect(hall.x[1]).toBeLessThanOrEqual(platformRun(-1)[1]);
     });
     expect(ESCALATOR.inner + ESCALATOR.width).toBeLessThan(GHOST_TRACK_Z - GHOST_HALF_WIDTH);

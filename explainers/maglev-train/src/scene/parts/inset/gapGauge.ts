@@ -7,26 +7,21 @@ import {
   INK,
   INSET_GROUP,
   LAYER,
-  LAYER_DEPTH,
   OPACITY,
   PLATE_GAP,
   STROKE,
 } from './constants';
-import { insetMesh } from './insetMesh';
+import { insetMesh, layerDepth } from './insetMesh';
+import type { InsetPart } from './insetMesh';
 import { GAP_MM } from '../../../model';
 import { CONTENT, STATOR_DRAWING, TOLERANCE_DRAWING, drawnGap, gapText, magnetTop } from './layout';
-import { dimensionGeometry, redrawDimension } from './dimension';
+import { dimensionMesh, redrawDimension } from './dimension';
 import { dashed, merged, rect } from './strokes';
 import type { Point2 } from './strokes';
 import { TextPlate } from './textPlate';
 
 const PLATE_X = BRACKET_X + PLATE_GAP + GAP_PLATE.width / 2;
-const BRACKET_STYLE = {
-  line: STROKE.bracket,
-  tick: STROKE.tick,
-  arrowLength: STROKE.arrowLength,
-  arrowWidth: STROKE.arrowWidth,
-} as const;
+const BRACKET_STYLE = { line: STROKE.bracket, tick: STROKE.tick } as const;
 
 function toleranceBand(context: PartContext): Mesh[] {
   const { top, bottom } = TOLERANCE_DRAWING;
@@ -59,23 +54,18 @@ function bracketEnds(gapMm: number): readonly [Point2, Point2] {
   ];
 }
 
-export class GapGauge {
-  readonly group = new Group();
-  private readonly bracket: Mesh;
-  private readonly plate: TextPlate;
-
-  constructor(context: PartContext) {
-    const geometry = dimensionGeometry(...bracketEnds(GAP_MM), BRACKET_STYLE);
-    this.bracket = insetMesh(context, geometry, { colour: INK.bracket }, LAYER.bracket);
-    this.bracket.frustumCulled = false;
-    this.plate = new TextPlate(context, INSET_GROUP, GAP_PLATE, LAYER.text);
-    this.plate.mesh.position.set(PLATE_X, 0, (LAYER.text - LAYER.ground) * LAYER_DEPTH);
-    this.group.add(...toleranceBand(context), this.bracket, this.plate.mesh);
-  }
-
-  show(gapMm: number): void {
-    redrawDimension(this.bracket, ...bracketEnds(gapMm), BRACKET_STYLE);
-    this.plate.mesh.position.y = STATOR_DRAWING.bottom - drawnGap(gapMm) / 2;
-    this.plate.show(gapText(gapMm));
-  }
+export function gapGauge(context: PartContext): InsetPart<[gapMm: number]> {
+  const bracket = dimensionMesh(context, bracketEnds(GAP_MM), BRACKET_STYLE, LAYER.bracket);
+  const plate = new TextPlate(context, INSET_GROUP, GAP_PLATE, LAYER.text);
+  plate.mesh.position.set(PLATE_X, 0, layerDepth(LAYER.text));
+  const group = new Group();
+  group.add(...toleranceBand(context), bracket, plate.mesh);
+  return {
+    group,
+    draw(gapMm) {
+      redrawDimension(bracket, bracketEnds(gapMm), BRACKET_STYLE);
+      plate.mesh.position.y = STATOR_DRAWING.bottom - drawnGap(gapMm) / 2;
+      plate.show(gapText(gapMm));
+    },
+  };
 }

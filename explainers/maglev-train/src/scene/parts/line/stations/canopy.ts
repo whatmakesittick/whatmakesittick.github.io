@@ -2,12 +2,14 @@ import { Vector3 } from 'three';
 import type { BufferGeometry } from 'three';
 import { SIDE_SIGNS } from '../../../../model';
 import {
+  around,
   boxOver,
   cylinderBetween,
   evenlySpaced,
   extrudeAlongX,
   mergeParts,
   profileShape,
+  sideSpan,
 } from '../geometry';
 import type { ProfilePoint } from '../geometry';
 import { CANOPY, CANOPY_COLUMN, FLOOR, HALF_LENGTH, LIGHT_STRIP, onPlatform } from './constants';
@@ -16,6 +18,9 @@ const RISE = CANOPY.crown - CANOPY.eave;
 const RADIUS = (CANOPY.halfSpan ** 2 + RISE ** 2) / (2 * RISE);
 const CENTRE_Y = CANOPY.crown - RADIUS;
 const UNDERSIDE = RADIUS - CANOPY.thickness;
+const RIB_FOOT = UNDERSIDE - CANOPY.ribDepth;
+const GUTTER_LIP = 0.04;
+const FULL_LENGTH = around(0, CANOPY.length);
 
 export function arcHeight(z: number, radius = RADIUS): number {
   return CENTRE_Y + Math.sqrt(radius * radius - z * z);
@@ -33,8 +38,7 @@ function band(from: number, to: number, outer: number, inner: number): ProfilePo
 }
 
 function alongCanopy(points: readonly ProfilePoint[]): BufferGeometry {
-  const half = CANOPY.length / 2;
-  return extrudeAlongX(profileShape(points), -half, half, CANOPY.endChamfer);
+  return extrudeAlongX(profileShape(points), ...FULL_LENGTH, CANOPY.endChamfer);
 }
 
 export function canopyEdges(): BufferGeometry {
@@ -52,10 +56,8 @@ export function glazing(): BufferGeometry {
 }
 
 function purlin(z: number): BufferGeometry {
-  const half = CANOPY.length / 2;
   const top = arcHeight(z, RADIUS - CANOPY.glazing);
-  const width = CANOPY.purlinWidth / 2;
-  return boxOver([-half, half], [top - CANOPY.purlinDepth, top], [z - width, z + width]);
+  return boxOver(FULL_LENGTH, [top - CANOPY.purlinDepth, top], around(z, CANOPY.purlinWidth));
 }
 
 function purlins(): BufferGeometry[] {
@@ -65,10 +67,9 @@ function purlins(): BufferGeometry[] {
 }
 
 function rib(x: number): BufferGeometry {
-  const half = CANOPY.ribWidth / 2;
   const reach = CANOPY.halfSpan - CANOPY.ribInset;
-  const points = band(-reach, reach, UNDERSIDE, UNDERSIDE - CANOPY.ribDepth);
-  return extrudeAlongX(profileShape(points), x - half, x + half);
+  const points = band(-reach, reach, UNDERSIDE, RIB_FOOT);
+  return extrudeAlongX(profileShape(points), ...around(x, CANOPY.ribWidth));
 }
 
 export function ribPositions(): number[] {
@@ -77,13 +78,10 @@ export function ribPositions(): number[] {
 }
 
 function gutter(side: number): BufferGeometry {
-  const half = CANOPY.length / 2;
-  const outer = side * CANOPY.halfSpan;
-  const inner = side * (CANOPY.halfSpan - CANOPY.gutterWidth);
   return boxOver(
-    [-half, half],
-    [CANOPY.eave - CANOPY.gutterDepth, CANOPY.eave + 0.04],
-    [Math.min(outer, inner), Math.max(outer, inner)],
+    FULL_LENGTH,
+    [CANOPY.eave - CANOPY.gutterDepth, CANOPY.eave + GUTTER_LIP],
+    sideSpan(side, CANOPY.halfSpan - CANOPY.gutterWidth, CANOPY.halfSpan),
   );
 }
 
@@ -95,10 +93,9 @@ function column(x: number, side: number): BufferGeometry[] {
   const { z, baseRadius, topRadius, forkHeight, forkSpread, strutRadius, segments } = CANOPY_COLUMN;
   const base = new Vector3(x, FLOOR, side * z);
   const fork = new Vector3(x, forkHeight, side * z);
-  const reach = UNDERSIDE - CANOPY.ribDepth;
   const tips = [-1, 1].map((lean) => {
     const tipZ = side * (z + lean * forkSpread);
-    return new Vector3(x, arcHeight(tipZ, reach), tipZ);
+    return new Vector3(x, arcHeight(tipZ, RIB_FOOT), tipZ);
   });
   return [
     cylinderBetween(base, fork, [baseRadius, topRadius], segments),
@@ -117,15 +114,14 @@ export function canopyColumns(): BufferGeometry {
 }
 
 export function lightStrips(): BufferGeometry {
+  const top = arcHeight(LIGHT_STRIP.z, RIB_FOOT) - LIGHT_STRIP.drop;
   return mergeParts(
-    SIDE_SIGNS.map((side) => {
-      const top = arcHeight(LIGHT_STRIP.z, UNDERSIDE - CANOPY.ribDepth) - LIGHT_STRIP.drop;
-      const centre = side * LIGHT_STRIP.z;
-      return boxOver(
+    SIDE_SIGNS.map((side) =>
+      boxOver(
         [-HALF_LENGTH, HALF_LENGTH],
         [top - LIGHT_STRIP.height, top],
-        [centre - LIGHT_STRIP.width / 2, centre + LIGHT_STRIP.width / 2],
-      );
-    }),
+        around(side * LIGHT_STRIP.z, LIGHT_STRIP.width),
+      ),
+    ),
   );
 }

@@ -2,6 +2,7 @@ import { MeshStandardMaterial } from 'three';
 import type { IUniform, WebGLProgramParametersWithUniforms } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { BEAM_M, CUT_X, GIRDER } from '../../../model';
+import { glslFloat, inject } from '../shaderChunks';
 
 export const NO_CUT = 1e6;
 
@@ -47,10 +48,6 @@ const FRAGMENT_BODY = /* glsl */ `
 if (vCutX > uCutX) discard;
 `;
 
-function inject(source: string, anchor: string, addition: string): string {
-  return source.replace(anchor, `${anchor}\n${addition}`);
-}
-
 export function applyCut(shader: WebGLProgramParametersWithUniforms, cut: CutUniform): void {
   shader.uniforms.uCutX = cut;
   shader.vertexShader = inject(shader.vertexShader, '#include <common>', VERTEX_HEAD);
@@ -70,8 +67,8 @@ export const PIER_LEVELS = {
 
 export function pierCutDefines(below: number): Record<string, string> {
   return {
-    CUT_PIER_BELOW: below.toFixed(4),
-    CUT_PIER_X: (-BEAM_M / 2).toFixed(4),
+    CUT_PIER_BELOW: glslFloat(below),
+    CUT_PIER_X: glslFloat(-BEAM_M / 2),
   };
 }
 

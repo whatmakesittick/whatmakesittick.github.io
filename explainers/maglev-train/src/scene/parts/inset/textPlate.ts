@@ -14,7 +14,7 @@ export interface PlateStyle {
   readonly depthTest?: boolean;
 }
 
-const FONT_FAMILY = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+export const FONT_FAMILY = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
 const FONT_WEIGHT = 700;
 const RIM_SHARE = 0.06;
 const BASELINE_NUDGE_SHARE = 0.04;

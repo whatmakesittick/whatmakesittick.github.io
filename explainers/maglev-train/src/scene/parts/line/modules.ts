@@ -1,20 +1,20 @@
-import { CylinderGeometry } from 'three';
+import { Vector3 } from 'three';
 import type { BufferGeometry } from 'three';
 import { BEAM_M, SIDE_SIGNS } from '../../../model';
-import { CABLES, DECK, PACKS, TRAY } from './constants';
+import { CABLES, PACKS, TRAY } from './constants';
 import {
+  around,
   boxOver,
+  cylinderBetween,
   evenlySpaced,
-  extrudeAlongX,
+  extrudeSide,
   mergeParts,
-  profileShape,
-  sideProfile,
+  sideSpan,
 } from './geometry';
+import type { Span } from './geometry';
 import { TRAY_PROFILE } from './profiles';
-import { packCentres } from './steel';
+import { HALF_RUN, packCentres } from './steel';
 
-const HALF_RUN = BEAM_M / 2 - DECK.joint / 2;
-const QUARTER_TURN = Math.PI / 2;
 const TOP_FACE = 2;
 const INDICES_PER_FACE = 6;
 
@@ -28,55 +28,43 @@ function withoutFace(geometry: BufferGeometry, face: number): BufferGeometry {
   return geometry;
 }
 
-function pack(x: number, side: number): BufferGeometry {
-  const half = (PACKS.pitch - PACKS.gap) / 2;
-  const z: [number, number] = side > 0 ? [PACKS.inner, PACKS.outer] : [-PACKS.outer, -PACKS.inner];
-  return withoutFace(boxOver([x - half, x + half], [PACKS.bottom, PACKS.top], z), TOP_FACE);
-}
-
-function packStrip(side: number): BufferGeometry {
-  const half = (PACKS.perBeam * PACKS.pitch) / 2;
-  const z: [number, number] = side > 0 ? [PACKS.inner, PACKS.outer] : [-PACKS.outer, -PACKS.inner];
-  return withoutFace(boxOver([-half, half], [PACKS.bottom, PACKS.top], z), TOP_FACE);
+function pack(along: Span, side: number): BufferGeometry {
+  const box = boxOver(along, [PACKS.bottom, PACKS.top], sideSpan(side, PACKS.inner, PACKS.outer));
+  return withoutFace(box, TOP_FACE);
 }
 
 export function statorModule(detailed: boolean): BufferGeometry {
-  return mergeParts(
-    SIDE_SIGNS.flatMap((side) =>
-      detailed ? packCentres().map((x) => pack(x, side)) : [packStrip(side)],
-    ),
-  );
+  const strip = around(0, PACKS.perBeam * PACKS.pitch);
+  const runs = detailed ? packCentres().map((x) => around(x, PACKS.pitch - PACKS.gap)) : [strip];
+  return mergeParts(SIDE_SIGNS.flatMap((side) => runs.map((along) => pack(along, side))));
 }
 
 function trayBracket(x: number, side: number): BufferGeometry {
-  const half = TRAY.bracketWidth / 2;
-  const z: [number, number] =
-    side > 0 ? [TRAY.bracketInner, TRAY.outer] : [-TRAY.outer, -TRAY.bracketInner];
-  return boxOver([x - half, x + half], [TRAY.bottom - TRAY.bracketDepth, TRAY.bottom], z);
+  return boxOver(
+    around(x, TRAY.bracketWidth),
+    [TRAY.bottom - TRAY.bracketDepth, TRAY.bottom],
+    sideSpan(side, TRAY.bracketInner, TRAY.outer),
+  );
 }
 
 export function trayModule(detailed: boolean): BufferGeometry {
   const brackets = detailed ? TRAY.bracketsPerBeam : 0;
   return mergeParts(
     SIDE_SIGNS.flatMap((side) => [
-      extrudeAlongX(profileShape(sideProfile(TRAY_PROFILE, side)), -HALF_RUN, HALF_RUN),
+      extrudeSide(TRAY_PROFILE, side, -HALF_RUN, HALF_RUN),
       ...evenlySpaced(brackets, -BEAM_M / 2, BEAM_M / 2).map((x) => trayBracket(x, side)),
     ]),
   );
 }
 
 function cable(z: number): BufferGeometry {
-  const geometry = new CylinderGeometry(
-    CABLES.radius,
-    CABLES.radius,
-    BEAM_M,
+  const y = TRAY.bottom + TRAY.wall + CABLES.radius;
+  return cylinderBetween(
+    new Vector3(BEAM_M / 2, y, z),
+    new Vector3(-BEAM_M / 2, y, z),
+    [CABLES.radius, CABLES.radius],
     CABLES.segments,
-    1,
-    true,
   );
-  geometry.rotateZ(QUARTER_TURN);
-  geometry.translate(0, TRAY.bottom + TRAY.wall + CABLES.radius, z);
-  return geometry;
 }
 
 export function cableModule(): BufferGeometry {

@@ -3,6 +3,7 @@ import type { BufferGeometry } from 'three';
 import { BEAM_M } from '../../../model';
 import { BEARING, DECK, PIER_SHAPE } from './constants';
 import {
+  around,
   boxOver,
   boxProjectUVs,
   extrudeAlongX,
@@ -10,6 +11,7 @@ import {
   mirrored,
   profileShape,
 } from './geometry';
+import type { Span } from './geometry';
 import { GIRDER_HALF, girderShape } from './profiles';
 import { extrudePlan, planShape } from '@core/scene/geometry/extrude';
 
@@ -69,9 +71,8 @@ export function concreteModule(detailed: boolean): BufferGeometry {
 }
 
 function bearing(x: number, z: number): BufferGeometry {
-  const pad = BEARING.size / 2;
-  const top = DECK.bottom;
-  return boxOver([x - pad, x + pad], [top - PIER_SHAPE.bearingHeight, top], [z - pad, z + pad]);
+  const height: Span = [DECK.bottom - PIER_SHAPE.bearingHeight, DECK.bottom];
+  return boxOver(around(x, BEARING.size), height, around(z, BEARING.size));
 }
 
 export function bearingModule(): BufferGeometry {

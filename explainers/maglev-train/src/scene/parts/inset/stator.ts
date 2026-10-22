@@ -1,10 +1,11 @@
-import { CircleGeometry, Shape, ShapeGeometry, Vector2 } from 'three';
+import { ShapeGeometry } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import type { PartContext } from '../context';
+import { profileShape } from '../line/geometry';
 import { INK, LAYER, STROKE } from './constants';
 import { insetMesh } from './insetMesh';
 import { CONTENT, FIELD_WAVELENGTH_DRAWN, STATOR_DRAWING, slotCentres } from './layout';
-import { disc, merged, polyline, positionsOnly, ring } from './strokes';
+import { disc, merged, polyline, ring } from './strokes';
 import type { Point2 } from './strokes';
 import { hatchTexture } from './textures';
 
@@ -47,7 +48,7 @@ export function packOutline([from, to]: Span): Point2[] {
 }
 
 function filledShape(points: readonly Point2[]): BufferGeometry {
-  return new ShapeGeometry(new Shape(points.map(([x, y]) => new Vector2(x, y))));
+  return new ShapeGeometry(profileShape(points));
 }
 
 function hatchedMesh(
@@ -70,29 +71,23 @@ function cableLayer(
 
 function cables(context: PartContext): Object3D[] {
   const centres = PIECES.flatMap(([from, to]) => slotCentres(from, to));
+  const inner = cableRadius * INSULATION_INNER;
   const layers: readonly [string, (centre: Point2) => BufferGeometry][] = [
     [INK.sheath, (centre) => disc(centre, cableRadius)],
-    [
-      INK.insulation,
-      (centre) => ring(centre, cableRadius * INSULATION_INNER, cableRadius * INSULATION_OUTER),
-    ],
-    [INK.conductor, (centre) => disc(centre, cableRadius * INSULATION_INNER)],
+    [INK.insulation, (centre) => ring(centre, inner, cableRadius * INSULATION_OUTER)],
+    [INK.conductor, (centre) => disc(centre, inner)],
   ];
   return layers.map(([colour, shape]) =>
     insetMesh(context, cableLayer(centres, shape), { colour }, LAYER.cables),
   );
 }
 
-function bolt(x: number): BufferGeometry {
-  const geometry = new CircleGeometry(BOLT_RADIUS, BOLT_SIDES);
-  geometry.translate(x, (top + CONTENT.top) / 2, 0);
-  return positionsOnly(geometry);
-}
-
-function bolts(): BufferGeometry {
+function bolts(): BufferGeometry[] {
   const count = Math.floor(CONTENT.right / BOLT_SPACING);
-  const xs = Array.from({ length: count * 2 + 1 }, (_, index) => (index - count) * BOLT_SPACING);
-  return merged(xs.map(bolt));
+  const y = (top + CONTENT.top) / 2;
+  return Array.from({ length: count * 2 + 1 }, (_, index) =>
+    disc([(index - count) * BOLT_SPACING, y], BOLT_RADIUS, BOLT_SIDES),
+  );
 }
 
 function cantilever(context: PartContext): Object3D {
@@ -108,7 +103,7 @@ function cantilever(context: PartContext): Object3D {
 function outlines(context: PartContext): Object3D {
   const edges = merged([
     ...PIECES.map((piece) => polyline(packOutline(piece), STROKE.edge)),
-    bolts(),
+    ...bolts(),
   ]);
   return insetMesh(context, edges, { colour: INK.statorEdge }, LAYER.outline);
 }

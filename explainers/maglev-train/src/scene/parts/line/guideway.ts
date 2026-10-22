@@ -1,11 +1,12 @@
-import { Color, InstancedMesh, Matrix4 } from 'three';
-import type { BufferGeometry, Group, Material } from 'three';
+import { Color, Matrix4 } from 'three';
+import type { BufferGeometry, Group, InstancedMesh, Material } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
+import { wrapPhase } from '@core/store';
 import { BEAM_M } from '../../../model';
 import { LINE_DRAW } from '../../constants';
 import { FINISHES } from '../../finishes';
 import { wrapOffset } from '../../pose';
-import { LINE_GROUP, namedGroup, registeredMaterial } from '../context';
+import { LINE_GROUP, instancesOf, namedGroup, registeredMaterial } from '../context';
 import type { EmphasisGroup, PartContext } from '../context';
 import { bearingModule, concreteModule } from './concrete';
 import { DETAIL, LINE_FINISHES } from './constants';
@@ -41,13 +42,10 @@ function slotted(
   material: Material,
   slots: readonly number[],
 ): InstancedMesh {
-  const mesh = new InstancedMesh(context.tracker.track(geometry), material, slots.length);
-  const matrix = new Matrix4();
-  slots.forEach((slot, index) => {
-    mesh.setMatrixAt(index, matrix.makeTranslation(slotCentre(slot, BEAM_M), 0, 0));
-  });
-  mesh.computeBoundingSphere();
-  return context.tracker.track(mesh);
+  const matrices = slots.map((slot) =>
+    new Matrix4().makeTranslation(slotCentre(slot, BEAM_M), 0, 0),
+  );
+  return instancesOf(context, geometry, material, matrices);
 }
 
 function byDetail(context: PartContext, build: Detailed, look: Material): InstancedMesh[] {
@@ -60,7 +58,7 @@ function byDetail(context: PartContext, build: Detailed, look: Material): Instan
 function toneBeams(mesh: InstancedMesh, slots: readonly number[]): InstancedMesh {
   const tone = new Color();
   slots.forEach((slot, index) => {
-    const step = (((slot * TONE.stride) % TONE.steps) + TONE.steps) % TONE.steps;
+    const step = wrapPhase(slot * TONE.stride, TONE.steps);
     const shade = 1 - TONE.spread / 2 + (TONE.spread * step) / (TONE.steps - 1);
     mesh.setColorAt(index, tone.setScalar(shade));
   });

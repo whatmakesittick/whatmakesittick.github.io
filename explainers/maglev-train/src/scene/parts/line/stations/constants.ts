@@ -104,15 +104,10 @@ export const ESCALATOR = {
   width: 1.6,
 } as const;
 
-const HALL_HALF_WIDTH = 9.6;
-
 export interface BuildingSpec {
   readonly x: readonly [number, number];
-  readonly z: readonly [number, number];
-  readonly height: number;
   readonly finSpacing: number;
   readonly bands: number;
-  readonly roofRise: number;
 }
 
 export interface StationStyle {
@@ -121,31 +116,13 @@ export interface StationStyle {
 }
 
 export const STATION_STYLES: Readonly<Record<StationId, StationStyle>> = {
-  longyangRoad: {
-    escalatorX: -58,
-    hall: {
-      x: [-62, 14],
-      z: [-HALL_HALF_WIDTH, HALL_HALF_WIDTH],
-      height: 6.4,
-      finSpacing: 3,
-      bands: 1,
-      roofRise: 0,
-    },
-  },
-  airport: {
-    escalatorX: -30,
-    hall: {
-      x: [-86, 14],
-      z: [-HALL_HALF_WIDTH, HALL_HALF_WIDTH],
-      height: 6.4,
-      finSpacing: 3.6,
-      bands: 2,
-      roofRise: 0,
-    },
-  },
+  longyangRoad: { escalatorX: -58, hall: { x: [-62, 14], finSpacing: 3, bands: 1 } },
+  airport: { escalatorX: -30, hall: { x: [-86, 14], finSpacing: 3.6, bands: 2 } },
 };
 
 export const HALL = {
+  halfWidth: 9.6,
+  height: 6.4,
   roofOverhang: 0.8,
   roofThickness: 0.7,
   plinth: 0.4,
@@ -153,13 +130,12 @@ export const HALL = {
   finWidth: 0.12,
   finDepth: 0.35,
   bandHeight: 0.6,
-  roofSteps: 16,
   roofChamfer: 0.12,
 } as const;
 
 export const STATION_FINISHES = {
-  tactile: { color: '#d9b43a', roughness: 0.7, metalness: 0 },
-  nosing: { color: '#3d4045', roughness: 0.8, metalness: 0 },
+  tactile: { color: '#d9b43a', roughness: 0.7 },
+  nosing: { color: '#3d4045', roughness: 0.8 },
   paint: { color: '#dfe2e4', roughness: 0.45, metalness: 0.25 },
   trim: { color: '#9aa2a9', roughness: 0.4, metalness: 0.55 },
   facade: { color: '#6d8b9c', roughness: 0.1, metalness: 0.55 },

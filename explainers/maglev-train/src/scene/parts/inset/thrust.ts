@@ -1,9 +1,12 @@
-import { Group, ShapeGeometry } from 'three';
+import { ShapeGeometry } from 'three';
 import type { BufferGeometry } from 'three';
 import { roundedRectShape } from '@core/scene/geometry/extrude';
+import { centredRect } from './panel';
+import { namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { INK, LAYER, OPACITY } from './constants';
 import { insetMesh } from './insetMesh';
+import type { InsetPart } from './insetMesh';
 import { MAGNET_DRAWING } from './layout';
 import { merged, rect, triangle } from './strokes';
 
@@ -26,35 +29,23 @@ function arrowGeometry(): BufferGeometry {
 }
 
 function haloGeometry(): BufferGeometry {
-  const halfWidth = HALO.width / 2;
-  const halfHeight = HALO.height / 2;
-  const shape = roundedRectShape(
-    { minA: -halfWidth, minB: -halfHeight, maxA: halfWidth, maxB: halfHeight },
-    halfHeight,
-  );
-  return new ShapeGeometry(shape);
+  return new ShapeGeometry(roundedRectShape(centredRect(HALO.width, HALO.height), HALO.height / 2));
 }
 
-export class ThrustArrow {
-  readonly group = new Group();
-  private readonly arrow: Group = new Group();
-
-  constructor(context: PartContext) {
-    const haloLook = { colour: INK.thrustHalo, opacity: OPACITY.thrustHalo };
-    const halo = insetMesh(context, haloGeometry(), haloLook, LAYER.thrustHalo);
-    this.arrow.add(insetMesh(context, arrowGeometry(), { colour: INK.thrust }, LAYER.thrust));
-    this.group.add(halo, this.arrow);
-    this.group.position.x = OFFSET.x;
-    this.group.name = THRUST_NAME;
-    this.arrow.name = THRUST_ARROW_NAME;
-  }
-
-  place(magnetTop: number): void {
-    this.group.position.y = magnetTop - MAGNET_DRAWING.poleStrip - OFFSET.belowPoles;
-  }
-
-  point(thrust: Thrust): void {
-    this.group.visible = thrust !== 'none';
-    this.arrow.scale.x = thrust === 'backward' ? -1 : 1;
-  }
+export function thrustArrow(context: PartContext): InsetPart<[magnetTop: number, thrust: Thrust]> {
+  const haloLook = { colour: INK.thrustHalo, opacity: OPACITY.thrustHalo };
+  const halo = insetMesh(context, haloGeometry(), haloLook, LAYER.thrustHalo);
+  const arrow = namedGroup(THRUST_ARROW_NAME);
+  arrow.add(insetMesh(context, arrowGeometry(), { colour: INK.thrust }, LAYER.thrust));
+  const group = namedGroup(THRUST_NAME);
+  group.add(halo, arrow);
+  group.position.x = OFFSET.x;
+  return {
+    group,
+    draw(magnetTop, thrust) {
+      group.position.y = magnetTop - MAGNET_DRAWING.poleStrip - OFFSET.belowPoles;
+      group.visible = thrust !== 'none';
+      arrow.scale.x = thrust === 'backward' ? -1 : 1;
+    },
+  };
 }

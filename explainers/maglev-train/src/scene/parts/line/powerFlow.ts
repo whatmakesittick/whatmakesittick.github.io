@@ -4,11 +4,11 @@ import type { PowerFlowId } from '../../../ids';
 import { THEME } from '../../../theme';
 import { label, namedGroup } from '../context';
 import type { PartContext } from '../context';
+import { glslFloat } from '../shaderChunks';
 import type { CutUniform } from './cut';
 import { POWER_FLOW } from './effectConstants';
 import { ribbonMesh } from './ribbon';
 
-const glslFloat = (value: number) => value.toFixed(4);
 const LABEL_X = POWER_FLOW.trainEnd + POWER_FLOW.spacing * 12;
 
 const FLOW_DIRECTION: Readonly<Record<PowerFlowId, number>> = {
@@ -59,11 +59,10 @@ export function buildPowerFlow(context: PartContext, cut: CutUniform): PowerFlow
   const group = namedGroup('powerFlow');
   const direction: IUniform<number> = { value: 0 };
   const travel: IUniform<number> = { value: 0 };
-  const mesh = ribbonMesh(context, {
+  const chevrons = ribbonMesh(context, {
     group: 'powerFlow',
     lane: POWER_FLOW,
     span: POWER_FLOW.window,
-    opacity: 1,
     fragment: CHEVRON_FRAGMENT,
     uniforms: {
       uDrive: { value: new Color(THEME.drive) },
@@ -73,8 +72,7 @@ export function buildPowerFlow(context: PartContext, cut: CutUniform): PowerFlow
     },
     cut,
   });
-  mesh.name = 'powerFlow';
-  group.add(mesh);
+  group.add(chevrons);
   label(context, 'powerFlow', group, [LABEL_X, POWER_FLOW.y, POWER_FLOW.z]);
   return {
     group,

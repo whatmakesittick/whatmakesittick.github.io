@@ -1,14 +1,14 @@
-import { Mesh } from 'three';
-import type { BufferGeometry, Group, Material } from 'three';
+import type { BufferGeometry, Group } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { STATIONS, STATION_IDS, VIEW_AHEAD_M, VIEW_BEHIND_M } from '../../../../model';
 import type { StationId } from '../../../../model';
 import { FINISHES } from '../../../finishes';
 import { lineX } from '../../../pose';
-import { label, namedGroup } from '../../context';
+import { finishMesh, label, namedGroup } from '../../context';
 import type { PartContext } from '../../context';
+import { mergeParts } from '../geometry';
 import { overlaps } from '../slots';
-import { stationBuildings, merged } from './buildings';
+import { stationBuildings } from './buildings';
 import { canopyColumns, canopyEdges, canopyFrame, glazing, lightStrips } from './canopy';
 import { HALF_LENGTH, LABEL_POINT, STATION_FINISHES, STATION_STYLES } from './constants';
 import {
@@ -31,43 +31,27 @@ export interface Stations {
   place(distance: number): void;
 }
 
-interface Looks {
-  readonly concrete: Material;
-  get(finish: MaterialFinish): Material;
-}
-
-function addMesh(
-  context: PartContext,
-  parent: Group,
-  geometry: BufferGeometry | null,
-  material: Material,
-): void {
-  if (!geometry) return;
-  const mesh = new Mesh(context.tracker.track(geometry), material);
-  mesh.name = STATION_GROUP;
-  parent.add(mesh);
-}
-
-function buildStation(context: PartContext, id: StationId, looks: Looks): Group {
+function buildStation(context: PartContext, id: StationId, concrete: MaterialFinish): Group {
   const station = namedGroup(`station-${id}`);
   const buildings = stationBuildings(STATION_STYLES[id]);
-  const pieces: readonly (readonly [BufferGeometry | null, Material])[] = [
-    [merged([platformStructure(), ...buildings.concrete]), looks.concrete],
-    [platformFloor(), looks.get(FINISHES.platform)],
-    [merged([platformNosing(), signBoards()]), looks.get(STATION_FINISHES.nosing)],
-    [tactileStrips(), looks.get(STATION_FINISHES.tactile)],
-    [merged([screenGlass(), ...buildings.glass]), looks.get(FINISHES.glass)],
-    [merged([screenFrame(), ...buildings.trim]), looks.get(STATION_FINISHES.trim)],
-    [canopyEdges(), looks.get(FINISHES.canopy)],
-    [glazing(), looks.get(STATION_FINISHES.glazing)],
-    [
-      merged([canopyFrame(), canopyColumns(), benches(), ...buildings.paint]),
-      looks.get(STATION_FINISHES.paint),
-    ],
-    [merged(buildings.facade), looks.get(STATION_FINISHES.facade)],
-    [merged([lightStrips(), signBands()]), looks.get(STATION_FINISHES.lamp)],
+  const pieces: readonly (readonly [BufferGeometry[], MaterialFinish])[] = [
+    [[platformStructure(), ...buildings.concrete], concrete],
+    [[platformFloor()], FINISHES.platform],
+    [[platformNosing(), signBoards()], STATION_FINISHES.nosing],
+    [[tactileStrips()], STATION_FINISHES.tactile],
+    [[screenGlass(), ...buildings.glass], FINISHES.glass],
+    [[screenFrame()], STATION_FINISHES.trim],
+    [[canopyEdges()], FINISHES.canopy],
+    [[glazing()], STATION_FINISHES.glazing],
+    [[canopyFrame(), canopyColumns(), benches(), ...buildings.paint], STATION_FINISHES.paint],
+    [buildings.facade, STATION_FINISHES.facade],
+    [[lightStrips(), signBands()], STATION_FINISHES.lamp],
   ];
-  pieces.forEach(([geometry, material]) => addMesh(context, station, geometry, material));
+  pieces.forEach(([parts, finish]) => {
+    const mesh = finishMesh(context, mergeParts(parts), STATION_GROUP, finish);
+    mesh.name = STATION_GROUP;
+    station.add(mesh);
+  });
   return station;
 }
 
@@ -77,13 +61,9 @@ function nearest(stations: readonly Group[]): Group {
   );
 }
 
-export function buildStations(context: PartContext, concrete: Material): Stations {
-  const group = namedGroup('stations');
-  const looks: Looks = {
-    concrete,
-    get: (finish) => context.materials.get(STATION_GROUP, finish),
-  };
-  const built = new Map(STATION_IDS.map((id) => [id, buildStation(context, id, looks)]));
+export function buildStations(context: PartContext, concrete: MaterialFinish): Stations {
+  const group = namedGroup(STATION_GROUP);
+  const built = new Map(STATION_IDS.map((id) => [id, buildStation(context, id, concrete)]));
   built.forEach((station) => group.add(station));
   const labelHost = namedGroup('stationLabel');
   label(context, 'stations', labelHost, [...LABEL_POINT]);

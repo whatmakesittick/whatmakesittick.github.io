@@ -1,15 +1,19 @@
-import type { Group, MeshStandardMaterial, Object3D } from 'three';
+import { Color } from 'three';
+import type { Group, MeshStandardMaterial } from 'three';
 import { clamp } from '@core/math';
 import type { Extent } from '@core/scene/regions';
-import type { AssemblyState } from '../../../ids';
+import type { AssemblyState, PartId } from '../../../ids';
 import { CUT_X, TRAIN } from '../../../model';
 import { LINE_DRAW } from '../../constants';
+import { THEME } from '../../../theme';
 import { namedGroup, registeredMaterial } from '../context';
 import type { Frame, PartContext } from '../context';
 import { anchorAt } from '@core/scene/parts';
 import type { CutUniform } from './cut';
 import { BAND_DRIFT_MS, POWERED_STRIP, STATOR_SHADING, WAVE_HALO } from './effectConstants';
-import { poweredStripMesh, waveHaloMesh } from './effects';
+import { HALO_FRAGMENT, POWERED_FRAGMENT } from './effects';
+import { ribbonMesh } from './ribbon';
+import type { RibbonSpec } from './ribbon';
 import { clipped, poweredStrip } from './slots';
 import { createStatorMaterial } from './statorMaterial';
 import type { StatorUniforms } from './statorMaterial';
@@ -37,21 +41,58 @@ function isLit(state: AssemblyState): boolean {
   return state.view.wave && state.wave.on;
 }
 
-function followStrip(anchor: Object3D, lead: number, [from, to]: Extent): void {
-  anchor.position.x = clamp(lead, from, Math.max(from, to));
+interface LabelledEffect {
+  readonly group: Group;
+  follow(from: number, to: number): void;
+}
+
+function labelledEffect(
+  context: PartContext,
+  spec: RibbonSpec & { readonly group: PartId },
+  lead: number,
+): LabelledEffect {
+  const group = namedGroup(spec.group);
+  group.add(ribbonMesh(context, spec));
+  const anchor = anchorAt(group, lead, spec.lane.y, -spec.lane.z);
+  context.labels.set(spec.group, anchor);
+  return {
+    group,
+    follow(from, to) {
+      anchor.position.x = clamp(lead, from, Math.max(from, to));
+    },
+  };
 }
 
 export function buildWaveEffects(context: PartContext, cut: CutUniform): WaveEffects {
   const uniforms: StatorUniforms = { ...createWaveUniforms(), uDetail: { value: 1 } };
   const stator = registeredMaterial(context, 'statorPacks', createStatorMaterial(uniforms, cut));
-  const powered = namedGroup('poweredSection');
-  const travelling = namedGroup('travellingWave');
-  powered.add(poweredStripMesh(context, uniforms, cut));
-  travelling.add(waveHaloMesh(context, uniforms, cut));
-  const poweredAnchor = anchorAt(powered, LABEL_LEAD.powered, POWERED_STRIP.y, -POWERED_STRIP.z);
-  const waveAnchor = anchorAt(travelling, LABEL_LEAD.wave, WAVE_HALO.y, -WAVE_HALO.z);
-  context.labels.set('poweredSection', poweredAnchor);
-  context.labels.set('travellingWave', waveAnchor);
+  const effects = [
+    labelledEffect(
+      context,
+      {
+        group: 'poweredSection',
+        lane: POWERED_STRIP,
+        span: DRAWN,
+        fragment: POWERED_FRAGMENT,
+        uniforms: { ...uniforms, uGlow: { value: new Color(THEME.powered) } },
+        cut,
+      },
+      LABEL_LEAD.powered,
+    ),
+    labelledEffect(
+      context,
+      {
+        group: 'travellingWave',
+        lane: WAVE_HALO,
+        span: DRAWN,
+        fragment: HALO_FRAGMENT,
+        uniforms,
+        cut,
+      },
+      LABEL_LEAD.wave,
+    ),
+  ];
+  const [powered, travelling] = effects.map((effect) => effect.group);
   return {
     powered,
     travelling,
@@ -65,8 +106,7 @@ export function buildWaveEffects(context: PartContext, cut: CutUniform): WaveEff
       setSection(uniforms, strip ?? NOWHERE);
       if (!strip) return;
       const end = state.view.cutaway ? Math.min(strip[1], CUT_X - CUT_LABEL_MARGIN) : strip[1];
-      followStrip(poweredAnchor, LABEL_LEAD.powered, [strip[0], end]);
-      followStrip(waveAnchor, LABEL_LEAD.wave, [strip[0], end]);
+      effects.forEach((effect) => effect.follow(strip[0], end));
     },
     animate(frame, state) {
       uniforms.uDetail.value = detailFor(frame.cameraDistance);

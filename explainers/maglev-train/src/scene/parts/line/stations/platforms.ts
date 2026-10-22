@@ -1,16 +1,16 @@
-import { CylinderGeometry, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import type { BufferGeometry } from 'three';
 import { SIDE_SIGNS } from '../../../../model';
 import {
+  around,
   boxOver,
   cylinderBetween,
   evenlySpaced,
-  extrudeAlongX,
+  extrudeSide,
   mergeParts,
-  profileShape,
-  sideProfile,
+  sideSpan,
 } from '../geometry';
-import type { ProfilePoint } from '../geometry';
+import type { ProfilePoint, Span } from '../geometry';
 import { arcHeight } from './canopy';
 import {
   CANOPY,
@@ -24,14 +24,15 @@ import {
   platformRun,
 } from './constants';
 
-type Span = [number, number];
+type Make = (x: number, side: number) => BufferGeometry[];
 
+const ENDS = [-1, 1] as const;
 const SLAB_BOTTOM = FLOOR - PLATFORM.slab;
 const FINISH_BOTTOM = FLOOR - PLATFORM.finish;
-
-function across(side: number, from: number, to: number): Span {
-  return side > 0 ? [from, to] : [-to, -from];
-}
+const SURFACE: Span = [FINISH_BOTTOM, FLOOR];
+const SCREEN_BOTTOM = FLOOR + PLATFORM.kerbHeight;
+const SCREEN_TOP = SCREEN_BOTTOM + SCREEN.height;
+const SCREEN_HEIGHT: Span = [SCREEN_BOTTOM, SCREEN_TOP];
 
 const SLAB_PROFILE: readonly ProfilePoint[] = [
   [PLATFORM.edge, FINISH_BOTTOM],
@@ -41,108 +42,74 @@ const SLAB_PROFILE: readonly ProfilePoint[] = [
   [PLATFORM.edge, SLAB_BOTTOM + PLATFORM.edgeChamfer],
 ];
 
-function slab(side: number): BufferGeometry {
-  return extrudeAlongX(profileShape(sideProfile(SLAB_PROFILE, side)), ...platformRun(side));
+function run(side: number, height: Span, inner: number, outer: number): BufferGeometry {
+  return boxOver(platformRun(side), height, sideSpan(side, inner, outer));
+}
+
+function bothRuns(height: Span, inner: number, outer: number): BufferGeometry {
+  return mergeParts(SIDE_SIGNS.map((side) => run(side, height, inner, outer)));
+}
+
+function supportSpots(every: number): number[] {
+  const count = Math.round((2 * HALF_LENGTH) / SUPPORT.columnSpacing);
+  return evenlySpaced(count, -HALF_LENGTH, HALF_LENGTH).filter((_, index) => index % every === 0);
+}
+
+function alongSides(spots: readonly number[], offset: number, make: Make): BufferGeometry[] {
+  return SIDE_SIGNS.flatMap((side) =>
+    spots
+      .map((x) => x + offset)
+      .filter((x) => onPlatform(x, side))
+      .flatMap((x) => make(x, side)),
+  );
 }
 
 function column(x: number, side: number): BufferGeometry[] {
   const z = side * SUPPORT.beamZ;
-  const height = SLAB_BOTTOM - SUPPORT.beamDepth;
-  const shaft = new CylinderGeometry(
-    SUPPORT.columnRadius,
-    SUPPORT.columnRadius,
-    height,
-    SUPPORT.segments,
-    1,
-    true,
-  );
-  shaft.translate(x, height / 2, z);
-  const pad = SUPPORT.footing / 2;
-  const footing = boxOver([x - pad, x + pad], [0, SUPPORT.footingHeight], [z - pad, z + pad]);
-  return [shaft, footing];
-}
-
-function supportBeam(side: number): BufferGeometry {
-  const half = SUPPORT.beamWidth / 2;
-  const z = side * SUPPORT.beamZ;
-  return boxOver(
-    platformRun(side),
-    [SLAB_BOTTOM - SUPPORT.beamDepth, SLAB_BOTTOM],
-    [z - half, z + half],
-  );
-}
-
-function kerb(side: number): BufferGeometry {
-  const z = across(side, PLATFORM.outer - PLATFORM.kerbWidth, PLATFORM.outer);
-  return boxOver(platformRun(side), [FLOOR, FLOOR + PLATFORM.kerbHeight], z);
+  const radius = SUPPORT.columnRadius;
+  const top = new Vector3(x, SLAB_BOTTOM - SUPPORT.beamDepth, z);
+  return [
+    cylinderBetween(new Vector3(x, 0, z), top, [radius, radius], SUPPORT.segments),
+    boxOver(around(x, SUPPORT.footing), [0, SUPPORT.footingHeight], around(z, SUPPORT.footing)),
+  ];
 }
 
 export function platformStructure(): BufferGeometry {
-  const columns = supportSpots(1);
-  return mergeParts(
-    SIDE_SIGNS.flatMap((side) => [
-      slab(side),
-      supportBeam(side),
-      kerb(side),
-      ...columns.filter((x) => onPlatform(x, side)).flatMap((x) => column(x, side)),
+  const beam = around(SUPPORT.beamZ, SUPPORT.beamWidth);
+  const kerb = [PLATFORM.outer - PLATFORM.kerbWidth, PLATFORM.outer] as const;
+  return mergeParts([
+    ...SIDE_SIGNS.flatMap((side) => [
+      extrudeSide(SLAB_PROFILE, side, ...platformRun(side)),
+      run(side, [SLAB_BOTTOM - SUPPORT.beamDepth, SLAB_BOTTOM], ...beam),
+      run(side, [FLOOR, FLOOR + PLATFORM.kerbHeight], ...kerb),
     ]),
-  );
+    ...alongSides(supportSpots(1), 0, column),
+  ]);
 }
 
 export function platformFloor(): BufferGeometry {
-  return mergeParts(
-    SIDE_SIGNS.map((side) =>
-      boxOver(
-        platformRun(side),
-        [FINISH_BOTTOM, FLOOR],
-        across(side, PLATFORM.edge + PLATFORM.nosing, PLATFORM.outer),
-      ),
-    ),
-  );
+  return bothRuns(SURFACE, PLATFORM.edge + PLATFORM.nosing, PLATFORM.outer);
 }
 
 export function platformNosing(): BufferGeometry {
-  return mergeParts(
-    SIDE_SIGNS.map((side) =>
-      boxOver(
-        platformRun(side),
-        [FINISH_BOTTOM, FLOOR],
-        across(side, PLATFORM.edge, PLATFORM.edge + PLATFORM.nosing),
-      ),
-    ),
-  );
+  return bothRuns(SURFACE, PLATFORM.edge, PLATFORM.edge + PLATFORM.nosing);
 }
 
 export function tactileStrips(): BufferGeometry {
   const from = PLATFORM.edge + PLATFORM.tactileOffset;
-  return mergeParts(
-    SIDE_SIGNS.map((side) =>
-      boxOver(
-        platformRun(side),
-        [FLOOR, FLOOR + PLATFORM.stripProud],
-        across(side, from, from + PLATFORM.tactileWidth),
-      ),
-    ),
-  );
+  return bothRuns([FLOOR, FLOOR + PLATFORM.stripProud], from, from + PLATFORM.tactileWidth);
 }
 
-function endScreens(side: number, bottom: number, top: number): BufferGeometry[] {
-  const half = SCREEN.thickness / 2;
-  const width = across(side, PLATFORM.edge + SCREEN.endGap, SCREEN.z);
-  return platformRun(side).map((x) => boxOver([x - half, x + half], [bottom, top], width));
+function endScreens(side: number): BufferGeometry[] {
+  const width = sideSpan(side, PLATFORM.edge + SCREEN.endGap, SCREEN.z);
+  return platformRun(side).map((x) => boxOver(around(x, SCREEN.thickness), SCREEN_HEIGHT, width));
 }
 
 export function screenGlass(): BufferGeometry {
-  const bottom = FLOOR + PLATFORM.kerbHeight;
-  const top = bottom + SCREEN.height;
   return mergeParts(
     SIDE_SIGNS.flatMap((side) => [
-      boxOver(
-        platformRun(side),
-        [bottom, top],
-        across(side, SCREEN.z, SCREEN.z + SCREEN.thickness),
-      ),
-      ...endScreens(side, bottom, top),
+      run(side, SCREEN_HEIGHT, SCREEN.z, SCREEN.z + SCREEN.thickness),
+      ...endScreens(side),
     ]),
   );
 }
@@ -154,58 +121,34 @@ function mullionSpots(side: number): number[] {
 }
 
 export function screenFrame(): BufferGeometry {
-  const bottom = FLOOR + PLATFORM.kerbHeight;
-  const top = bottom + SCREEN.height;
-  const half = SCREEN.mullionWidth / 2;
-  const depth: Span = [SCREEN.z - SCREEN.mullionDepth / 2, SCREEN.z + SCREEN.mullionDepth / 2];
-  const rail: Span = [top - SCREEN.railHeight, top + SCREEN.railHeight / 2];
+  const depth = around(SCREEN.z, SCREEN.mullionDepth);
+  const rail: Span = [SCREEN_TOP - SCREEN.railHeight, SCREEN_TOP + SCREEN.railHeight / 2];
+  const mullion = (x: number, side: number) =>
+    boxOver(around(x, SCREEN.mullionWidth), SCREEN_HEIGHT, sideSpan(side, ...depth));
   return mergeParts(
     SIDE_SIGNS.flatMap((side) => [
-      boxOver(platformRun(side), rail, across(side, ...depth)),
-      ...mullionSpots(side).map((x) =>
-        boxOver([x - half, x + half], [bottom, top], across(side, ...depth)),
-      ),
+      run(side, rail, ...depth),
+      ...mullionSpots(side).map((x) => mullion(x, side)),
     ]),
   );
 }
 
 function bench(x: number, side: number): BufferGeometry[] {
   const { benchZ, benchLength, benchDepth, benchSeat, benchThickness, benchBack } = FURNITURE;
-  const half = benchLength / 2;
-  const along: Span = [x - half, x + half];
-  const seat = across(side, benchZ - benchDepth / 2, benchZ + benchDepth / 2);
-  const back = across(side, benchZ + benchDepth / 2 - benchThickness, benchZ + benchDepth / 2);
-  const legs = [-1, 1].map((end) => {
-    const legX = x + end * (half - benchThickness);
-    return boxOver(
-      [legX - benchThickness / 2, legX + benchThickness / 2],
-      [FLOOR, FLOOR + benchSeat],
-      seat,
-    );
-  });
+  const along = around(x, benchLength);
+  const seat = sideSpan(side, ...around(benchZ, benchDepth));
+  const backEdge = benchZ + benchDepth / 2;
+  const back = sideSpan(side, backEdge - benchThickness, backEdge);
+  const seatTop = FLOOR + benchSeat;
+  const legReach = benchLength / 2 - benchThickness;
+  const legs = ENDS.map((end) =>
+    boxOver(around(x + end * legReach, benchThickness), [FLOOR, seatTop], seat),
+  );
   return [
-    boxOver(along, [FLOOR + benchSeat - benchThickness, FLOOR + benchSeat], seat),
-    boxOver(along, [FLOOR + benchSeat, FLOOR + benchSeat + benchBack], back),
+    boxOver(along, [seatTop - benchThickness, seatTop], seat),
+    boxOver(along, [seatTop, seatTop + benchBack], back),
     ...legs,
   ];
-}
-
-function supportSpots(every: number): number[] {
-  const count = Math.round((2 * HALF_LENGTH) / SUPPORT.columnSpacing);
-  return evenlySpaced(count, -HALF_LENGTH, HALF_LENGTH).filter((_, index) => index % every === 0);
-}
-
-function alongSides<T>(
-  spots: readonly number[],
-  offset: number,
-  make: (x: number, side: number) => T[],
-): T[] {
-  return SIDE_SIGNS.flatMap((side) =>
-    spots
-      .map((x) => x + offset)
-      .filter((x) => onPlatform(x, side))
-      .flatMap((x) => make(x, side)),
-  );
 }
 
 export function benches(): BufferGeometry {
@@ -214,44 +157,46 @@ export function benches(): BufferGeometry {
   );
 }
 
-function signSpan(x: number, side: number, [bottom, top]: Span, thickness: number): BufferGeometry {
-  const half = FURNITURE.signLength / 2;
-  const z = side * FURNITURE.signZ;
-  return boxOver([x - half, x + half], [bottom, top], [z - thickness / 2, z + thickness / 2]);
+function signSpan(x: number, side: number, height: Span, thickness: number): BufferGeometry {
+  return boxOver(
+    around(x, FURNITURE.signLength),
+    height,
+    around(side * FURNITURE.signZ, thickness),
+  );
 }
 
 function signRods(x: number, side: number, top: number): BufferGeometry[] {
   const z = side * FURNITURE.signZ;
   const ceiling = arcHeight(FURNITURE.signZ) - CANOPY.glazing;
-  const offset = FURNITURE.signLength / 2 - FURNITURE.signThickness;
-  return [-1, 1].map((end) =>
+  const reach = FURNITURE.signLength / 2 - FURNITURE.signThickness;
+  const radius = FURNITURE.rodRadius;
+  return ENDS.map((end) =>
     cylinderBetween(
-      new Vector3(x + end * offset, top, z),
-      new Vector3(x + end * offset, ceiling, z),
-      [FURNITURE.rodRadius, FURNITURE.rodRadius],
+      new Vector3(x + end * reach, top, z),
+      new Vector3(x + end * reach, ceiling, z),
+      [radius, radius],
       FURNITURE.rodSegments,
     ),
   );
 }
 
+function alongSigns(make: Make): BufferGeometry {
+  return mergeParts(alongSides(supportSpots(FURNITURE.signEvery), 0, make));
+}
+
 export function signBoards(): BufferGeometry {
   const bottom = FLOOR + FURNITURE.signBottom;
   const top = bottom + FURNITURE.signHeight;
-  return mergeParts(
-    alongSides(supportSpots(FURNITURE.signEvery), 0, (x, side) => [
-      signSpan(x, side, [bottom, top], FURNITURE.signThickness),
-      ...signRods(x, side, top),
-    ]),
-  );
+  return alongSigns((x, side) => [
+    signSpan(x, side, [bottom, top], FURNITURE.signThickness),
+    ...signRods(x, side, top),
+  ]);
 }
 
 export function signBands(): BufferGeometry {
   const middle = FLOOR + FURNITURE.signBottom + FURNITURE.signHeight / 2;
-  const span: Span = [middle - FURNITURE.signBand / 2, middle + FURNITURE.signBand / 2];
   const thickness = FURNITURE.signThickness + FURNITURE.bandProud * 2;
-  return mergeParts(
-    alongSides(supportSpots(FURNITURE.signEvery), 0, (x, side) => [
-      signSpan(x, side, span, thickness),
-    ]),
-  );
+  return alongSigns((x, side) => [
+    signSpan(x, side, around(middle, FURNITURE.signBand), thickness),
+  ]);
 }

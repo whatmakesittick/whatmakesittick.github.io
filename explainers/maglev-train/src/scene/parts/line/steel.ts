@@ -1,26 +1,14 @@
 import type { BufferGeometry } from 'three';
 import { BEAM_M, SIDE_SIGNS } from '../../../model';
 import { CANTILEVER, DECK, PACKS, RAIL } from './constants';
-import {
-  boxOver,
-  evenlySpaced,
-  extrudeAlongX,
-  mergeParts,
-  profileShape,
-  sideProfile,
-} from './geometry';
+import { around, boxOver, evenlySpaced, extrudeSide, mergeParts, sideSpan } from './geometry';
 import type { ProfilePoint } from './geometry';
 import { CANTILEVER_PROFILE, GUSSET_PROFILE, RAIL_PROFILE, STRIP_PROFILE } from './profiles';
 
-const HALF_RUN = BEAM_M / 2 - DECK.joint / 2;
+export const HALF_RUN = BEAM_M / 2 - DECK.joint / 2;
 
-function alongBeam(points: readonly ProfilePoint[], side: number): BufferGeometry {
-  return extrudeAlongX(profileShape(sideProfile(points, side)), -HALF_RUN, HALF_RUN);
-}
-
-function gusset(x: number, side: number): BufferGeometry {
-  const half = CANTILEVER.gussetThickness / 2;
-  return extrudeAlongX(profileShape(sideProfile(GUSSET_PROFILE, side)), x - half, x + half);
+function bothSides(points: readonly ProfilePoint[]): BufferGeometry {
+  return mergeParts(SIDE_SIGNS.map((side) => extrudeSide(points, side, -HALF_RUN, HALF_RUN)));
 }
 
 export function packCentres(): number[] {
@@ -28,10 +16,15 @@ export function packCentres(): number[] {
   return evenlySpaced(PACKS.perBeam, -run / 2, run / 2);
 }
 
-function railHanger(x: number, side: number): BufferGeometry {
-  const half = RAIL.hangerWidth / 2;
-  const z: [number, number] = side > 0 ? [RAIL.inner, RAIL.outer] : [-RAIL.outer, -RAIL.inner];
-  return boxOver([x - half, x + half], [RAIL.top, CANTILEVER.underside], z);
+function gussetParts(x: number, side: number): BufferGeometry[] {
+  return [
+    extrudeSide(GUSSET_PROFILE, side, ...around(x, CANTILEVER.gussetThickness)),
+    boxOver(
+      around(x, RAIL.hangerWidth),
+      [RAIL.top, CANTILEVER.underside],
+      sideSpan(side, RAIL.inner, RAIL.outer),
+    ),
+  ];
 }
 
 function gussetPositions(): number[] {
@@ -43,17 +36,16 @@ export function cantileverModule(detailed: boolean): BufferGeometry {
   const gussets = detailed ? gussetPositions() : [];
   return mergeParts(
     SIDE_SIGNS.flatMap((side) => [
-      alongBeam(CANTILEVER_PROFILE, side),
-      ...gussets.map((x) => gusset(x, side)),
-      ...gussets.map((x) => railHanger(x, side)),
+      extrudeSide(CANTILEVER_PROFILE, side, -HALF_RUN, HALF_RUN),
+      ...gussets.flatMap((x) => gussetParts(x, side)),
     ]),
   );
 }
 
 export function stripModule(): BufferGeometry {
-  return mergeParts(SIDE_SIGNS.map((side) => alongBeam(STRIP_PROFILE, side)));
+  return bothSides(STRIP_PROFILE);
 }
 
 export function railModule(): BufferGeometry {
-  return mergeParts(SIDE_SIGNS.map((side) => alongBeam(RAIL_PROFILE, side)));
+  return bothSides(RAIL_PROFILE);
 }

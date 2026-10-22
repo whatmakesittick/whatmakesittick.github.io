@@ -1,4 +1,3 @@
-import { Path, ShapeUtils, Vector2 } from 'three';
 import type { Shape } from 'three';
 import { CANTILEVER, DECK, PACKS, RAIL, STRIP, TRAY } from './constants';
 import { mirrored, profileShape } from './geometry';
@@ -58,7 +57,12 @@ export const TRAY_PROFILE: readonly ProfilePoint[] = [
   [TRAY.inner + TRAY.wall, TRAY.top],
 ];
 
-function rectangle(inner: number, outer: number, bottom: number, top: number): ProfilePoint[] {
+export function rectangle(
+  inner: number,
+  outer: number,
+  bottom: number,
+  top: number,
+): ProfilePoint[] {
   return [
     [inner, bottom],
     [outer, bottom],
@@ -76,16 +80,9 @@ export const STRIP_PROFILE = rectangle(
   DECK.top + STRIP.proud,
 );
 
-function vectors(points: readonly ProfilePoint[]): Vector2[] {
-  return points.map(([z, y]) => new Vector2(z, y));
-}
-
 export function girderShape(): Shape {
-  const outer = mirrored(GIRDER_HALF);
-  const hole = vectors(mirrored(VOID_HALF));
-  const sameTurn = ShapeUtils.isClockWise(vectors(outer)) === ShapeUtils.isClockWise(hole);
-  const shape = profileShape(outer);
-  shape.holes.push(new Path(sameTurn ? hole.reverse() : hole));
+  const shape = profileShape(mirrored(GIRDER_HALF));
+  shape.holes.push(profileShape(mirrored(VOID_HALF).reverse()));
   return shape;
 }
 
