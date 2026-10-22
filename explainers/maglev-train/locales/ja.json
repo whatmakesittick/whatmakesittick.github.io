@@ -113,11 +113,7 @@
     "mmRange": "{{min}}mmから{{max}}mm",
     "onSkids": "スキッドで着地中",
     "hz": "{{value}}Hz",
-    "hzRange": "{{min}}Hzから{{max}}Hz",
-    "km": "{{value}}km",
-    "metres": "{{value}}m",
-    "tonnes": "{{value}}トン",
-    "whPerSeatKm": "1席1kmあたり{{value}}Wh"
+    "hzRange": "{{min}}Hzから{{max}}Hz"
   },
   "chapters": {
     "ride": {
@@ -139,7 +135,8 @@
       "liftValue": {
         "skids": "スキッドで着地中",
         "lifting": "浮き上がる途中",
-        "floating": "浮上中"
+        "floating": "浮上中",
+        "settling": "スキッドに下りているところ"
       },
       "target": "磁石のすき間の目標",
       "band": "許容範囲",
@@ -149,6 +146,7 @@
     },
     "centre": {
       "guideGap": "横のすき間",
+      "guideGapValue": "約 {{value}} mm",
       "curves": "実際の路線のカーブ",
       "curvesValue": "半径{{small}}mと{{large}}m",
       "beam": "ガイドウェイの主桁",

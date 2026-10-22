@@ -113,11 +113,7 @@
     "mmRange": "de {{min}} à {{max}} mm",
     "onSkids": "Sur patins",
     "hz": "{{value}} Hz",
-    "hzRange": "de {{min}} à {{max}} Hz",
-    "km": "{{value}} km",
-    "metres": "{{value}} m",
-    "tonnes": "{{value}} t",
-    "whPerSeatKm": "{{value}} Wh par place et par km"
+    "hzRange": "de {{min}} à {{max}} Hz"
   },
   "chapters": {
     "ride": {
@@ -139,7 +135,8 @@
       "liftValue": {
         "skids": "posé sur ses patins",
         "lifting": "en train de se soulever",
-        "floating": "en lévitation"
+        "floating": "en lévitation",
+        "settling": "se repose sur ses patins"
       },
       "target": "Écart aimant-voie visé",
       "band": "Plage autorisée",
@@ -149,6 +146,7 @@
     },
     "centre": {
       "guideGap": "Écart latéral",
+      "guideGapValue": "environ {{value}} mm",
       "curves": "Courbes de la ligne réelle",
       "curvesValue": "rayons de {{small}} m et {{large}} m",
       "beam": "Poutre principale de la voie",

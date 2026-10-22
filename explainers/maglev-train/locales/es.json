@@ -113,11 +113,7 @@
     "mmRange": "de {{min}} a {{max}} mm",
     "onSkids": "Sobre los patines",
     "hz": "{{value}} Hz",
-    "hzRange": "de {{min}} a {{max}} Hz",
-    "km": "{{value}} km",
-    "metres": "{{value}} m",
-    "tonnes": "{{value}} t",
-    "whPerSeatKm": "{{value}} Wh por plaza y km"
+    "hzRange": "de {{min}} a {{max}} Hz"
   },
   "chapters": {
     "ride": {
@@ -139,7 +135,8 @@
       "liftValue": {
         "skids": "apoyado en sus patines",
         "lifting": "elevándose",
-        "floating": "flotando"
+        "floating": "flotando",
+        "settling": "posándose"
       },
       "target": "Hueco objetivo",
       "band": "Margen permitido",
@@ -149,6 +146,7 @@
     },
     "centre": {
       "guideGap": "Hueco lateral",
+      "guideGapValue": "unos {{value}} mm",
       "curves": "Curvas de la línea real",
       "curvesValue": "radios de {{small}} m y {{large}} m",
       "beam": "Viga principal de la vía",

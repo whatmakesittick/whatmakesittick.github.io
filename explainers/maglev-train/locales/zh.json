@@ -113,11 +113,7 @@
     "mmRange": "{{min}}到{{max}}毫米",
     "onSkids": "落在滑橇上",
     "hz": "{{value}}赫兹",
-    "hzRange": "{{min}}到{{max}}赫兹",
-    "km": "{{value}}公里",
-    "metres": "{{value}}米",
-    "tonnes": "{{value}}吨",
-    "whPerSeatKm": "每座公里{{value}}瓦时"
+    "hzRange": "{{min}}到{{max}}赫兹"
   },
   "chapters": {
     "ride": {
@@ -139,7 +135,8 @@
       "liftValue": {
         "skids": "落在滑橇上",
         "lifting": "正在浮起",
-        "floating": "悬浮中"
+        "floating": "悬浮中",
+        "settling": "正在落回滑靴"
       },
       "target": "目标间隙",
       "band": "允许范围",
@@ -149,6 +146,7 @@
     },
     "centre": {
       "guideGap": "侧向间隙",
+      "guideGapValue": "约 {{value}} mm",
       "curves": "真实线路的弯道",
       "curvesValue": "半径{{small}}米和{{large}}米",
       "beam": "轨道主梁",

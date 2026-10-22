@@ -113,11 +113,7 @@
     "mmRange": "від {{min}} до {{max}} мм",
     "onSkids": "На полозах",
     "hz": "{{value}} Гц",
-    "hzRange": "від {{min}} до {{max}} Гц",
-    "km": "{{value}} км",
-    "metres": "{{value}} м",
-    "tonnes": "{{value}} т",
-    "whPerSeatKm": "{{value}} Вт·год на місце на кілометр"
+    "hzRange": "від {{min}} до {{max}} Гц"
   },
   "chapters": {
     "ride": {
@@ -139,7 +135,8 @@
       "liftValue": {
         "skids": "стоїть на полозах",
         "lifting": "піднімається",
-        "floating": "ширяє"
+        "floating": "ширяє",
+        "settling": "опускається на полози"
       },
       "target": "Заданий магнітний зазор",
       "band": "Допустимі межі",
@@ -149,6 +146,7 @@
     },
     "centre": {
       "guideGap": "Бічний зазор",
+      "guideGapValue": "близько {{value}} мм",
       "curves": "Повороти справжньої лінії",
       "curvesValue": "радіуси {{small}} м і {{large}} м",
       "beam": "Основна балка колії",

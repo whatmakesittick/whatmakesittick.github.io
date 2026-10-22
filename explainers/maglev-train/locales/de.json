@@ -113,11 +113,7 @@
     "mmRange": "{{min}} bis {{max}} mm",
     "onSkids": "Auf den Kufen",
     "hz": "{{value}} Hz",
-    "hzRange": "{{min}} bis {{max}} Hz",
-    "km": "{{value}} km",
-    "metres": "{{value}} m",
-    "tonnes": "{{value}} t",
-    "whPerSeatKm": "{{value}} Wh pro Sitzplatz-km"
+    "hzRange": "{{min}} bis {{max}} Hz"
   },
   "chapters": {
     "ride": {
@@ -139,7 +135,8 @@
       "liftValue": {
         "skids": "liegt auf seinen Kufen",
         "lifting": "hebt ab",
-        "floating": "schwebt"
+        "floating": "schwebt",
+        "settling": "setzt sich ab"
       },
       "target": "Angestrebter Magnetspalt",
       "band": "Erlaubter Bereich",
@@ -149,6 +146,7 @@
     },
     "centre": {
       "guideGap": "Seitlicher Spalt",
+      "guideGapValue": "etwa {{value}} mm",
       "curves": "Kurven der echten Strecke",
       "curvesValue": "Radien von {{small}} m und {{large}} m",
       "beam": "Fahrwegträger",

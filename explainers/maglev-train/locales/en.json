@@ -113,11 +113,7 @@
     "mmRange": "{{min}} to {{max}} mm",
     "onSkids": "On skids",
     "hz": "{{value}} Hz",
-    "hzRange": "{{min}} to {{max}} Hz",
-    "km": "{{value}} km",
-    "metres": "{{value}} m",
-    "tonnes": "{{value}} t",
-    "whPerSeatKm": "{{value}} Wh per seat-km"
+    "hzRange": "{{min}} to {{max}} Hz"
   },
   "chapters": {
     "ride": {
@@ -139,7 +135,8 @@
       "liftValue": {
         "skids": "resting on its skids",
         "lifting": "lifting off",
-        "floating": "floating"
+        "floating": "floating",
+        "settling": "setting down"
       },
       "target": "Target magnet gap",
       "band": "Allowed range",
@@ -149,6 +146,7 @@
     },
     "centre": {
       "guideGap": "Side gap",
+      "guideGapValue": "about {{value}} mm",
       "curves": "Curves on the real line",
       "curvesValue": "radii of {{small}} m and {{large}} m",
       "beam": "Main guideway beam",
