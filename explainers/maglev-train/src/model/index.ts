@@ -2,3 +2,8 @@ export * from './constants';
 export * from './scale';
 export * from './layout';
 export * from './motion';
+export * from './motor';
+export * from './power';
+export * from './ghost';
+export * from './nudge';
+export * from './compare';
