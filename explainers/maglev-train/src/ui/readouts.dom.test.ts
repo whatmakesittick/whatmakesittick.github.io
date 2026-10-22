@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { GAP_BAND_MM, GAP_MM, LINE_M, MOMENTS, PROFILES, RUN_UNITS } from '../model';
+import { LINE_M, MOMENTS, PROFILES, RUN_UNITS } from '../model';
 import { createMaglevTrainStore } from '../state';
 import type { MaglevTrainStoreState } from '../state';
 import { MAGLEV_TRAIN_READOUTS } from './readouts';
@@ -59,13 +59,13 @@ describe('gauge readouts', () => {
     expect(share('speed', start)).toBe(0);
     expect(share('distance', start)).toBe(0);
     expect(share('time', start)).toBe(0);
-    expect(share('gap', start)).toBe(1);
+    expect(share('gap', start)).toBe(0);
   });
 
-  it('reads the 10 mm gap once the train floats', () => {
+  it('reads the 10 mm gap and fills the lift meter once the train floats', () => {
     const lifted = stateAt(MOMENTS.lifted);
     expect(text('gap', lifted)).toBe(fill(units.mm, { value: '10.0' }));
-    expect(share('gap', lifted)).toBeCloseTo(GAP_MM / GAP_BAND_MM.max, 9);
+    expect(share('gap', lifted)).toBeCloseTo(1, 9);
     expect(text('speed', lifted)).toBe(fill(units.kmh, { value: '0' }));
   });
 
@@ -86,6 +86,7 @@ describe('gauge readouts', () => {
     expect(text('distance', end)).toBe(fill(units.kmOf, { value: '30.0', total: '30' }));
     expect(text('time', end)).toBe(clockOf(clock('7', '29'), clock('7', '29')));
     expect(text('gap', end)).toBe(units.onSkids);
+    expect(share('gap', end)).toBe(0);
     expect(share('distance', end)).toBe(1);
     expect(share('time', end)).toBeCloseTo(1, 9);
   });

@@ -1,6 +1,6 @@
 import type { Readout } from '@core/explainer';
 import { clamp } from '@core/math';
-import { GAP_BAND_MM, LINE_M } from '../model';
+import { LIFT_TRAVEL_MM, LINE_M } from '../model';
 import { createLiveReader } from '../state';
 import type { MaglevTrainStoreState } from '../state';
 import { THEME } from '../theme';
@@ -49,7 +49,7 @@ export const MAGLEV_TRAIN_READOUTS: readonly Readout<MaglevTrainStoreState>[] = 
     numeric: true,
     value: (state) => formatGap(read(state).motion),
     meter: {
-      share: (state) => shareOf(read(state).motion.gapMm, GAP_BAND_MM.max),
+      share: (state) => shareOf(read(state).motion.liftMm, LIFT_TRAVEL_MM),
       fill: THEME.lift,
     },
   },
