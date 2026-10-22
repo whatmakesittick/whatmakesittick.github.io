@@ -49,7 +49,13 @@ export function nearSleepers(): BufferGeometry {
   });
 }
 
+function plateShare(): number {
+  const plates = SIDE_SIGNS.length * BASEPLATE.length * BASEPLATE.width;
+  return plates / (SLEEPER.length * SLEEPER.width);
+}
+
 export function farSleepers(): BufferGeometry {
-  const concrete = new Color(TRACK_TONES.sleeper);
-  return rack((sink, x) => sink.addBox(sleeperBounds(x), TOP_ONLY, concrete));
+  const plate = new Color(TRACK_TONES.baseplate);
+  const seen = new Color(TRACK_TONES.sleeper).lerp(plate, plateShare());
+  return rack((sink, x) => sink.addBox(sleeperBounds(x), TOP_ONLY, seen));
 }
