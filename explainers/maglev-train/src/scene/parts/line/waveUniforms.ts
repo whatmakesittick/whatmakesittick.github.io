@@ -37,5 +37,6 @@ export function setSection(uniforms: WaveUniforms, [from, to]: Extent): void {
 
 export function driftBands(uniforms: WaveUniforms, metres: number): void {
   const period = uniforms.uWavelength.value;
-  uniforms.uBandShift.value = (uniforms.uBandShift.value + metres + period) % period;
+  const shifted = (uniforms.uBandShift.value + metres) % period;
+  uniforms.uBandShift.value = (shifted + period) % period;
 }

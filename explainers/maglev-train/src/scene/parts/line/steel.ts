@@ -1,6 +1,6 @@
 import type { BufferGeometry } from 'three';
 import { BEAM_M, SIDE_SIGNS } from '../../../model';
-import { CANTILEVER, DECK, PACKS, RAIL, STRIP } from './constants';
+import { CANTILEVER, DECK, PACKS, RAIL } from './constants';
 import {
   boxOver,
   evenlySpaced,
@@ -10,32 +10,9 @@ import {
   sideProfile,
 } from './geometry';
 import type { ProfilePoint } from './geometry';
+import { CANTILEVER_PROFILE, GUSSET_PROFILE, RAIL_PROFILE, STRIP_PROFILE } from './profiles';
 
 const HALF_RUN = BEAM_M / 2 - DECK.joint / 2;
-
-const CANTILEVER_PROFILE: readonly ProfilePoint[] = [
-  [DECK.concreteEdge, DECK.top],
-  [DECK.edge - CANTILEVER.topChamfer, DECK.top],
-  [DECK.edge, DECK.top - CANTILEVER.topChamfer],
-  [DECK.edge, CANTILEVER.underside],
-  [CANTILEVER.innerFoot, CANTILEVER.underside],
-  [DECK.concreteEdge, DECK.flangeUnderside],
-];
-
-const GUSSET_PROFILE: readonly ProfilePoint[] = [
-  [CANTILEVER.innerFoot, CANTILEVER.underside],
-  [DECK.concreteEdge, DECK.flangeUnderside],
-  [CANTILEVER.gussetFoot.z, CANTILEVER.gussetFoot.y],
-];
-
-const RAIL_PROFILE: readonly ProfilePoint[] = [
-  [RAIL.inner, RAIL.top],
-  [RAIL.outer - RAIL.chamfer, RAIL.top],
-  [RAIL.outer, RAIL.top - RAIL.chamfer],
-  [RAIL.outer, RAIL.bottom + RAIL.chamfer],
-  [RAIL.outer - RAIL.chamfer, RAIL.bottom],
-  [RAIL.inner, RAIL.bottom],
-];
 
 function alongBeam(points: readonly ProfilePoint[], side: number): BufferGeometry {
   return extrudeAlongX(profileShape(sideProfile(points, side)), -HALF_RUN, HALF_RUN);
@@ -74,18 +51,7 @@ export function cantileverModule(detailed: boolean): BufferGeometry {
 }
 
 export function stripModule(): BufferGeometry {
-  const half = STRIP.width / 2;
-  const top = DECK.top + STRIP.proud;
-  return mergeParts(
-    SIDE_SIGNS.map((side) => {
-      const centre = side * STRIP.z;
-      return boxOver(
-        [-HALF_RUN, HALF_RUN],
-        [top - STRIP.thickness, top],
-        [centre - half, centre + half],
-      );
-    }),
-  );
+  return mergeParts(SIDE_SIGNS.map((side) => alongBeam(STRIP_PROFILE, side)));
 }
 
 export function railModule(): BufferGeometry {

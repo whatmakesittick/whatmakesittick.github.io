@@ -10,26 +10,16 @@ import {
   mirrored,
   profileShape,
 } from './geometry';
-import type { ProfilePoint } from './geometry';
+import { GIRDER_HALF, girderShape } from './profiles';
 import { extrudePlan, planShape } from '@core/scene/geometry/extrude';
 
 const CONCRETE_REPEAT_M = 6;
 const HALF_BEAM = BEAM_M / 2;
 
-const GIRDER_HALF: readonly ProfilePoint[] = [
-  [0, DECK.top],
-  [DECK.concreteEdge, DECK.top],
-  [DECK.concreteEdge, DECK.flangeUnderside],
-  [DECK.haunch.z, DECK.haunch.y],
-  [DECK.webFoot.z, DECK.webFoot.y],
-  [DECK.bottomHalf, DECK.bottom],
-  [0, DECK.bottom],
-];
-
-function girder(): BufferGeometry {
-  const shape = profileShape(mirrored(GIRDER_HALF));
+function girder(detailed: boolean): BufferGeometry {
   const half = HALF_BEAM - DECK.joint / 2;
-  return extrudeAlongX(shape, -half, half, DECK.endChamfer);
+  if (detailed) return extrudeAlongX(girderShape(), -half, half, DECK.endChamfer);
+  return extrudeAlongX(profileShape(mirrored(GIRDER_HALF)), -half, half);
 }
 
 function chamferedSquare(half: number, chamfer: number): Shape {
@@ -46,7 +36,7 @@ function chamferedSquare(half: number, chamfer: number): Shape {
   ]);
 }
 
-function pierCap(): BufferGeometry {
+function pierCap(curveSegments: number): BufferGeometry {
   const { half, capHalf, capFlareBottom, capFlareTop } = PIER_SHAPE;
   const top = DECK.bottom - PIER_SHAPE.bearingHeight;
   const shape = new Shape();
@@ -57,10 +47,10 @@ function pierCap(): BufferGeometry {
   shape.lineTo(-capHalf, top);
   shape.lineTo(-capHalf, capFlareTop);
   shape.quadraticCurveTo(-half, capFlareTop, -half, capFlareBottom);
-  return extrudeAlongX(shape, -half, half, PIER_SHAPE.chamfer / 2);
+  return extrudeAlongX(shape, -half, half, PIER_SHAPE.chamfer / 2, curveSegments);
 }
 
-function pier(): BufferGeometry {
+function pier(detailed: boolean): BufferGeometry {
   const { half, chamfer, footingHalf, footingChamfer, footingTop, footingBottom } = PIER_SHAPE;
   const shaft = extrudePlan(chamferedSquare(half, chamfer), footingTop, PIER_SHAPE.capFlareBottom);
   const footing = extrudePlan(
@@ -68,13 +58,14 @@ function pier(): BufferGeometry {
     footingBottom,
     footingTop,
   );
-  const parts = [shaft, footing, pierCap()];
+  const curves = detailed ? PIER_SHAPE.curveSegments : PIER_SHAPE.farCurveSegments;
+  const parts = [shaft, footing, pierCap(curves)];
   parts.forEach((part) => part.translate(-HALF_BEAM, 0, 0));
   return mergeParts(parts);
 }
 
-export function concreteModule(): BufferGeometry {
-  return boxProjectUVs(mergeParts([girder(), pier()]), CONCRETE_REPEAT_M);
+export function concreteModule(detailed: boolean): BufferGeometry {
+  return boxProjectUVs(mergeParts([girder(detailed), pier(detailed)]), CONCRETE_REPEAT_M);
 }
 
 function bearing(x: number, z: number): BufferGeometry {

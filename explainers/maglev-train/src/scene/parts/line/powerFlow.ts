@@ -4,6 +4,7 @@ import type { PowerFlowId } from '../../../ids';
 import { THEME } from '../../../theme';
 import { label, namedGroup } from '../context';
 import type { PartContext } from '../context';
+import type { CutUniform } from './cut';
 import { POWER_FLOW } from './effectConstants';
 import { ribbonMesh } from './ribbon';
 
@@ -28,6 +29,7 @@ float band(float f, float width, float fw) {
 }
 
 void main() {
+  if (beyondCut()) discard;
   float pointing = -sign(vX) * uDirection;
   float along = pointing * vX;
   float c = (along + abs(vAcross) * ${glslFloat(POWER_FLOW.slant)} - uTravel) / ${glslFloat(POWER_FLOW.spacing)};
@@ -53,7 +55,7 @@ export interface PowerFlow {
   stream(deltaSeconds: number): boolean;
 }
 
-export function buildPowerFlow(context: PartContext): PowerFlow {
+export function buildPowerFlow(context: PartContext, cut: CutUniform): PowerFlow {
   const group = namedGroup('powerFlow');
   const direction: IUniform<number> = { value: 0 };
   const travel: IUniform<number> = { value: 0 };
@@ -69,6 +71,7 @@ export function buildPowerFlow(context: PartContext): PowerFlow {
       uDirection: direction,
       uTravel: travel,
     },
+    cut,
   });
   mesh.name = 'powerFlow';
   group.add(mesh);

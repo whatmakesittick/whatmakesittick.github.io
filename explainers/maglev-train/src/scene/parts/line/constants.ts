@@ -1,3 +1,4 @@
+import type { MaterialFinish } from '@core/scene/materials';
 import {
   BEAM_M,
   GIRDER,
@@ -19,6 +20,11 @@ export const DECK = {
   webFoot: { z: 0.68, y: GIRDER.bottom + 0.08 },
   bottomHalf: 0.6,
   bottom: GIRDER.bottom,
+  voidTop: 9.9,
+  voidTopHalf: 0.5,
+  voidHaunch: 0.1,
+  voidFoot: { z: 0.47, y: 8.37 },
+  voidBottom: 8.27,
   joint: 0.06,
   endChamfer: 0.04,
 } as const;
@@ -92,6 +98,7 @@ export const PIER_SHAPE = {
   footingTop: 0.32,
   footingBottom: -0.1,
   curveSegments: 6,
+  farCurveSegments: 2,
 } as const;
 
 export const BEARING = {
@@ -99,6 +106,10 @@ export const BEARING = {
   z: 0.42,
   x: 0.4,
 } as const;
+
+export const LINE_FINISHES = {
+  paintedSteel: { color: '#8f989f', roughness: 0.48, metalness: 0.35 },
+} as const satisfies Record<string, MaterialFinish>;
 
 export const DETAIL = {
   nearReach: 320,

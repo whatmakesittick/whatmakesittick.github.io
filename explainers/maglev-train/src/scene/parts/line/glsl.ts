@@ -49,6 +49,7 @@ void main() {
 export const RIBBON_FRAGMENT_HEAD = /* glsl */ `
 uniform vec3 uTint;
 uniform float uOpacity;
+uniform float uCutX;
 uniform float fogNear;
 uniform float fogFar;
 varying float vAcross;
@@ -57,5 +58,9 @@ varying float vDepth;
 
 float fogFade() {
   return 1.0 - smoothstep(fogNear, fogFar, vDepth);
+}
+
+bool beyondCut() {
+  return vX > uCutX;
 }
 `;

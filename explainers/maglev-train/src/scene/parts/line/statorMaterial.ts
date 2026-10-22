@@ -2,6 +2,8 @@ import { MeshStandardMaterial } from 'three';
 import type { IUniform, WebGLProgramParametersWithUniforms } from 'three';
 import { FINISHES } from '../../finishes';
 import { PACKS } from './constants';
+import { applyCut } from './cut';
+import type { CutUniform } from './cut';
 import { STATOR_SHADING } from './effectConstants';
 import { WAVE_GLSL } from './glsl';
 import type { WaveUniforms } from './waveUniforms';
@@ -72,10 +74,14 @@ export interface StatorUniforms extends WaveUniforms {
   uDetail: IUniform<number>;
 }
 
-export function createStatorMaterial(uniforms: StatorUniforms): MeshStandardMaterial {
+export function createStatorMaterial(
+  uniforms: StatorUniforms,
+  cut: CutUniform,
+): MeshStandardMaterial {
   const material = new MeshStandardMaterial(FINISHES.stator);
   material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms) => {
     Object.assign(shader.uniforms, uniforms);
+    applyCut(shader, cut);
     shader.vertexShader = inject(shader.vertexShader, '#include <common>', VERTEX_HEAD);
     shader.vertexShader = inject(shader.vertexShader, '#include <project_vertex>', VERTEX_BODY);
     shader.fragmentShader = inject(shader.fragmentShader, '#include <common>', FRAGMENT_HEAD);

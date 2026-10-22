@@ -10,7 +10,7 @@ import {
   profileShape,
   sideProfile,
 } from './geometry';
-import type { ProfilePoint } from './geometry';
+import { TRAY_PROFILE } from './profiles';
 import { packCentres } from './steel';
 
 const HALF_RUN = BEAM_M / 2 - DECK.joint / 2;
@@ -47,17 +47,6 @@ export function statorModule(detailed: boolean): BufferGeometry {
     ),
   );
 }
-
-const TRAY_PROFILE: readonly ProfilePoint[] = [
-  [TRAY.inner, TRAY.top],
-  [TRAY.inner, TRAY.bottom],
-  [TRAY.outer, TRAY.bottom],
-  [TRAY.outer, TRAY.top],
-  [TRAY.outer - TRAY.wall, TRAY.top],
-  [TRAY.outer - TRAY.wall, TRAY.bottom + TRAY.wall],
-  [TRAY.inner + TRAY.wall, TRAY.bottom + TRAY.wall],
-  [TRAY.inner + TRAY.wall, TRAY.top],
-];
 
 function trayBracket(x: number, side: number): BufferGeometry {
   const half = TRAY.bracketWidth / 2;

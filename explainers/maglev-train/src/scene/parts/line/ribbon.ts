@@ -13,6 +13,7 @@ import type { Extent } from '@core/scene/regions';
 import { SIDE_SIGNS } from '../../../model';
 import { registeredMaterial } from '../context';
 import type { EmphasisGroup, PartContext } from '../context';
+import type { CutUniform } from './cut';
 import { OVERLAY_RENDER_ORDER } from './effectConstants';
 import { RIBBON_FRAGMENT_HEAD, RIBBON_VERTEX } from './glsl';
 
@@ -29,6 +30,7 @@ export interface RibbonSpec {
   readonly opacity: number;
   readonly fragment: string;
   readonly uniforms: Record<string, IUniform>;
+  readonly cut: CutUniform;
 }
 
 const XYZ = 3;
@@ -67,6 +69,7 @@ export function ribbonMesh(context: PartContext, spec: RibbonSpec): Mesh {
       uTint: { value: tint },
       uOpacity: { value: spec.opacity },
       uHalfHeight: { value: spec.lane.halfHeight },
+      uCutX: spec.cut,
     },
     vertexShader: RIBBON_VERTEX,
     fragmentShader: `${RIBBON_FRAGMENT_HEAD}\n${spec.fragment}`,

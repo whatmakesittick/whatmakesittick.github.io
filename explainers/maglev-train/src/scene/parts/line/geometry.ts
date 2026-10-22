@@ -40,6 +40,7 @@ export function extrudeAlongX(
   start: number,
   end: number,
   chamfer = 0,
+  curveSegments = CURVE_SEGMENTS,
 ): BufferGeometry {
   const bevel = chamfer > 0;
   const geometry = new ExtrudeGeometry(shape, {
@@ -49,7 +50,7 @@ export function extrudeAlongX(
     bevelSize: chamfer,
     bevelOffset: -chamfer,
     bevelSegments: 1,
-    curveSegments: CURVE_SEGMENTS,
+    curveSegments,
   });
   geometry.rotateY(-QUARTER_TURN);
   geometry.translate(end - chamfer, 0, 0);
