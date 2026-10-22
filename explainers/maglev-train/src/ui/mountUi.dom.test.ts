@@ -73,7 +73,7 @@ describe('chapter widgets', () => {
     expect(readout('band')).toBe(fill(units.mmRange, { min: '8', max: '12' }));
     expect(readout('clearance')).toBe(fill(units.mm, { value: '150' }));
     expect(readout('mass')).toBe(fill(float.massValue, { tonnes: '53', sections: '6' }));
-    expect(readout('guideGap')).toBe(fill(units.mm, { value: '10' }));
+    expect(readout('guideGap')).toBe(fill(centre.guideGapValue, { value: '10' }));
     expect(readout('curves')).toBe(fill(centre.curvesValue, { small: '2,257', large: '4,502' }));
     expect(readout('beam')).toBe(fill(centre.beamValue, { metres: '25', tonnes: '190' }));
     expect(readout('switches')).toBe(fill(centre.switchesValue, { count: '8' }));
