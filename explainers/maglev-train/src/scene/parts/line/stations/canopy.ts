@@ -37,19 +37,31 @@ function alongCanopy(points: readonly ProfilePoint[]): BufferGeometry {
   return extrudeAlongX(profileShape(points), -half, half, CANOPY.endChamfer);
 }
 
-export function canopyShell(): BufferGeometry {
+export function canopyEdges(): BufferGeometry {
   return mergeParts(
     SIDE_SIGNS.map((side) => {
-      const [from, to] = [side * CANOPY.skylightHalf, side * CANOPY.halfSpan];
+      const [from, to] = [side * (CANOPY.halfSpan - CANOPY.edgeBand), side * CANOPY.halfSpan];
       return alongCanopy(band(from, to, RADIUS, UNDERSIDE));
     }),
   );
 }
 
-export function skylight(): BufferGeometry {
-  const outer = RADIUS + CANOPY.skylightLift;
-  const reach = CANOPY.skylightHalf + CANOPY.gutterWidth;
-  return alongCanopy(band(-reach, reach, outer, outer - CANOPY.skylightThickness));
+export function glazing(): BufferGeometry {
+  const reach = CANOPY.halfSpan - CANOPY.edgeBand;
+  return alongCanopy(band(-reach, reach, RADIUS, RADIUS - CANOPY.glazing));
+}
+
+function purlin(z: number): BufferGeometry {
+  const half = CANOPY.length / 2;
+  const top = arcHeight(z, RADIUS - CANOPY.glazing);
+  const width = CANOPY.purlinWidth / 2;
+  return boxOver([-half, half], [top - CANOPY.purlinDepth, top], [z - width, z + width]);
+}
+
+function purlins(): BufferGeometry[] {
+  return CANOPY.purlins.flatMap((z) =>
+    z === 0 ? [purlin(0)] : SIDE_SIGNS.map((side) => purlin(side * z)),
+  );
 }
 
 function rib(x: number): BufferGeometry {
@@ -76,7 +88,7 @@ function gutter(side: number): BufferGeometry {
 }
 
 export function canopyFrame(): BufferGeometry {
-  return mergeParts([...ribPositions().map(rib), ...SIDE_SIGNS.map(gutter)]);
+  return mergeParts([...ribPositions().map(rib), ...SIDE_SIGNS.map(gutter), ...purlins()]);
 }
 
 function column(x: number, side: number): BufferGeometry[] {

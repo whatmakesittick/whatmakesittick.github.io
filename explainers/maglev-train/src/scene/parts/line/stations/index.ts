@@ -9,7 +9,7 @@ import { label, namedGroup } from '../../context';
 import type { PartContext } from '../../context';
 import { overlaps } from '../slots';
 import { stationBuildings, merged } from './buildings';
-import { canopyColumns, canopyFrame, canopyShell, lightStrips, skylight } from './canopy';
+import { canopyColumns, canopyEdges, canopyFrame, glazing, lightStrips } from './canopy';
 import { HALF_LENGTH, LABEL_POINT, STATION_FINISHES, STATION_STYLES } from './constants';
 import {
   platformFloor,
@@ -55,8 +55,8 @@ function buildStation(context: PartContext, id: StationId, looks: Looks): Group 
     [tactileStrips(), looks.get(STATION_FINISHES.tactile)],
     [merged([screenGlass(), ...buildings.glass]), looks.get(FINISHES.glass)],
     [merged([screenFrame(), ...buildings.trim]), looks.get(STATION_FINISHES.trim)],
-    [canopyShell(), looks.get(FINISHES.canopy)],
-    [skylight(), looks.get(STATION_FINISHES.skylight)],
+    [canopyEdges(), looks.get(FINISHES.canopy)],
+    [glazing(), looks.get(STATION_FINISHES.glazing)],
     [
       merged([canopyFrame(), canopyColumns(), ...buildings.paint]),
       looks.get(STATION_FINISHES.paint),
