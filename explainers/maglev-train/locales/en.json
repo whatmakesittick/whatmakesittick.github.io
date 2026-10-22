@@ -65,7 +65,7 @@
     "compareOptions": {
       "transrapid": "Shanghai maglev",
       "scmaglev": "SCMaglev",
-      "wheelRail": "Wheel-rail train"
+      "wheelRail": "Train on wheels"
     },
     "groups": {
       "topSpeed": "Top speed",
@@ -86,9 +86,9 @@
         "hint": "Gap close-up (G)"
       },
       "ghost": {
-        "name": "Wheel-rail ghost",
+        "name": "Ghost high-speed train",
         "short": "Ghost",
-        "hint": "Wheel-rail ghost (H)"
+        "hint": "Ghost high-speed train (H)"
       },
       "labels": {
         "name": "Labels",
@@ -126,7 +126,7 @@
       },
       "line": "Line",
       "lineValue": "about {{km}} km, Longyang Road to the airport",
-      "ghost": "Wheel-rail ghost",
+      "ghost": "Ghost high-speed train",
       "ghostValue": "{{km}} km behind at {{kmh}} km/h",
       "ghostStanding": "still at the platform"
     },
@@ -140,9 +140,9 @@
       },
       "target": "Target magnet gap",
       "band": "Allowed range",
-      "clearance": "Clearance under the body",
+      "clearance": "Space under the body",
       "mass": "Empty weight",
-      "massValue": "about {{tonnes}} t per section, {{sections}} sections"
+      "massValue": "about {{tonnes}} t per car, {{sections}} cars"
     },
     "centre": {
       "guideGap": "Side gap",
@@ -215,53 +215,53 @@
     "travellingWave": "Travelling wave",
     "gapInset": "Gap close-up, 20 times larger",
     "powerFlow": "Power flow",
-    "ghostTrain": "Wheel-rail ghost",
+    "ghostTrain": "Ghost high-speed train",
     "scmaglev": "SCMaglev",
-    "wheelRail": "Wheel-rail train",
+    "wheelRail": "Train on wheels",
     "gapCallouts": "Magnet gaps"
   },
   "sections": {
     "ride": {
       "title": "A train with no wheels",
       "p1": "This is the Shanghai maglev, a <strong>train</strong> that floats instead of rolling. Maglev is short for magnetic levitation: magnets hold the train up, so it has no wheels at all. It runs on a raised concrete track, the <strong>guideway</strong>, for about 30 km from Longyang Road in the city to Pudong International Airport. It made its first run on 31 December 2002, and full service began in 2004.",
-      "p2": "The line was built for 430 km/h. For years, some of its daytime trips ran at that speed and reached the airport in under eight minutes. Since May 2021, every trip has run at 300 km/h, which takes a little over eight minutes. Use the top speed control to ride either way. The trip readout shows how long each one takes in this model.",
-      "p3": "The train has six sections and is about 150 m long, 3.7 m wide and 4.2 m tall. The guideway stands on concrete <strong>piers</strong>, typically 8 m tall and 25 m apart, with <strong>stations</strong> at both ends. In this model the train stays put and the line slides past it, so the train never leaves your view. The model's line is also straight, while the real one has gentle S-shaped curves.",
-      "p4": "Beside you runs a see-through <strong>wheel-rail ghost</strong>, an ordinary high-speed train that leaves at the same moment. The maker says such a train needs more than 28 km to reach 300 km/h, while the maglev gets there within 5 km, in about two minutes. In this model the ghost speeds up at one steady rate and reaches 300 km/h after 28 km, so watch how far behind it falls. The playback is not real time. Lift-off and touchdown are slowed down so you can see them, but the time readout always shows the real clock."
+      "p2": "The line was built for 430 km/h. For years, some daytime trips ran at that speed and reached the airport in under eight minutes. Since May 2021, every trip has run at 300 km/h, which takes a little over eight minutes. The top speed control lets you ride either way. The trip readout shows how long each one takes in this model.",
+      "p3": "The train has six cars and is about 150 m long, 3.7 m wide and 4.2 m tall. The guideway stands on concrete <strong>piers</strong>, typically 8 m tall and 25 m apart. There are <strong>stations</strong> at both ends. In this model the train stays put and the line slides past it, so the train never leaves your view. The model's line is also straight, while the real one has gentle S-shaped curves.",
+      "p4": "Next to you runs a see-through <strong>ghost high-speed train</strong>: an ordinary train on steel wheels that leaves at the same moment. The maker says such a train needs more than 28 km to reach 300 km/h. The maglev gets there within 5 km. In this model the ghost speeds up at one steady rate, so watch how far behind it falls. The playback is not real time, and lift-off and touchdown are slowed down so you can see them. The time readout always shows the real clock."
     },
     "float": {
       "title": "Pulled up from below",
       "p1": "At the platform, the train rests on <strong>skids</strong>, flat runners under its body. To float, it does something surprising: it pulls itself up toward the track. Its <strong>wrap-around arms</strong> reach down past the guideway's edges and curl in underneath. There, <strong>support magnets</strong> face up at the <strong>stator packs</strong>, rows of steel plates fixed to the underside of the guideway.",
-      "p2": "The support magnets are electromagnets, which act as magnets only while current flows through them. When they switch on, they pull up toward the steel above them and lift the whole train. As it rises, the gap between magnet and stator pack closes to about 10 mm. At the same time, the space under the body opens up: the train now clears the top of the guideway by about 150 mm, enough to pass over snow or small objects.",
-      "p3": "A magnetic pull like this cannot hold itself steady. The closer the magnet gets to the steel, the harder it pulls, so on its own it would either snap up against the steel or let the train sink. A controller measures the gap constantly and trims the current many times a second, keeping the gap between 8 and 12 mm. Press Bump to jolt the train, and watch the gap wobble and settle back.",
-      "p4": "Floating is not free, but by the maker's account it takes less power than the train's air conditioning. A 10 mm gap is far too thin to see next to a 150 m train, so the <strong>gap close-up</strong> draws it 20 times larger. In this model, lift-off takes 6 seconds, and the train rests on its skids 20 mm lower than when it floats. Both are the model's own choices, not published figures."
+      "p2": "The support magnets are electromagnets: they only act as magnets while current flows through them. Switched on, they pull up toward the steel above them and lift the whole train. As the train rises, the gap between magnet and stator pack shrinks to about 10 mm. This is the magnet gap on the gauge. Meanwhile, the space under the train's body grows to about 150 mm, enough to pass over snow or small objects.",
+      "p3": "This kind of magnetic pull is not steady on its own. The closer a magnet gets to steel, the harder it pulls. Left alone, it would either snap up against the steel or let the train sink. So a controller measures the gap constantly and adjusts the current many times a second, which keeps the gap between 8 and 12 mm. Press Bump to jolt the train, and watch the gap wobble and settle back.",
+      "p4": "Floating takes power, but less than the train's air conditioning, the maker says. A 10 mm gap is far too thin to see next to a 150 m train, so the <strong>gap close-up</strong> draws it 20 times larger. In this model, lift-off takes 6 seconds, and the train rests on its skids 20 mm lower than when it floats. Both are the model's own choices, not published figures."
     },
     "centre": {
       "title": "Staying centred",
       "p1": "Floating is only half the job, because the train must also stay centred. Steel <strong>guidance rails</strong> run along both sides of the guideway. On the arms, <strong>guidance magnets</strong> face them about 10 mm away. Each side pulls the train toward its rail, and the controller keeps the two pulls in balance.",
-      "p2": "Press Side gust to shove the train sideways. The gap on one side shrinks while the other grows. The controller pulls harder on the side that drifted away and draws the train back to the middle, while the <strong>support magnets</strong> keep their own gap. The size and timing of that wobble are drawn for the model, not measured.",
+      "p2": "Press Side gust to shove the train sideways. The gap on one side shrinks while the other grows. The controller pulls harder on the side that drifted away, and the train slides back to the middle. The <strong>support magnets</strong> hold their own gap the whole time. The size and timing of that wobble are drawn for the model, not measured.",
       "p3": "Because its <strong>wrap-around arms</strong> reach under the track, the train holds on from both sides and from below. That is why the maker says it virtually cannot derail. The cutaway slices through the train so you can see it: support magnets under the <strong>stator packs</strong>, guidance magnets beside the rails.",
-      "p4": "All this needs a very precise <strong>guideway</strong>. Each main beam is about 25 m long and weighs about 190 t, and its steel parts are milled to within 0.2 mm. The real line bends through gentle S-curves with radii of 2,257 m and 4,502 m. To change tracks, the line has eight steel switches: long steel beams that bend to steer the train onto another track."
+      "p4": "All this needs a very precise <strong>guideway</strong>. Each main beam is about 25 m long and weighs about 190 t. Its steel parts are cut to within 0.2 mm. The real line's S-curves are wide, with radii of 2,257 m and 4,502 m. To change tracks, the line has eight steel switches: long steel beams that bend to steer the train onto another track."
     },
     "motor": {
       "title": "The track is the motor",
-      "p1": "Picture an ordinary electric motor, cut open and laid out flat along the guideway. That is what drives this train. A motor has a fixed part, the stator, and a moving part, the rotor. Here the stator is the row of <strong>stator packs</strong>, with cables wound through them, and the rotor is the train's own <strong>support magnets</strong>. So the stator packs do two jobs: they are the rail the train hangs from, and the motor that drives it.",
-      "p2": "Those cables carry three-phase current: three currents that rise and fall in turn. Together they build a magnetic pattern that runs along the guideway, the <strong>travelling wave</strong>. The support magnets lock onto it and are carried along, the way a surfer rides a wave. The train never falls behind the wave or gets ahead of it, so engineers call this a synchronous motor: one that keeps in step.",
-      "p3": "So the train's speed depends on how fast the current swings back and forth, its frequency. One full wave holds a north and a south pole. Each is 258 mm long, a length called the pole pitch, so one wave is 516 mm. At 430 km/h the current swings about 230 times a second, or 230 hertz (Hz), and at 300 km/h about 160 Hz. Try both speeds and watch the frequency readout follow.",
-      "p4": "Two substations feed the line. Machines inside them, called converters, turn grid power into current of any frequency from 0 to 300 Hz. A <strong>feeder cable</strong> carries it to the <strong>powered section</strong>, the stretch of guideway under the train. Only the section under each train is on, so the maker says two trains cannot run into each other. In this model each section is 1,200 m long, a figure from one research paper, and outside the close-up the wave is drawn four times longer than it really is."
+      "p1": "Picture an ordinary electric motor, cut open and laid out flat along the guideway. That is what drives this train. A motor has a fixed part, the stator, and a moving part, the rotor. Here the stator is the row of <strong>stator packs</strong>, with cables wound through them. The rotor is the train's own <strong>support magnets</strong>. So the stator packs do two jobs: they hold the train up, and they drive it.",
+      "p2": "Those cables carry three-phase current: three currents that rise and fall in turn. Together they build a magnetic pattern that runs along the guideway, the <strong>travelling wave</strong>. On the model it shows as colour moving along the stator packs. The support magnets lock onto it and are carried along, the way a surfer rides a wave. The train never falls behind the wave or gets ahead of it. Engineers call this a synchronous motor, one that keeps in step.",
+      "p3": "So the train's speed depends on how fast the current swings back and forth. That rate is called the frequency. One full wave holds a north and a south pole. Each pole is 258 mm long, a length called the pole pitch, so one wave is 516 mm. At 430 km/h the current swings about 230 times a second, which is 230 hertz (Hz). At 300 km/h it is about 160 Hz. Try the 430 and 300 km/h buttons and watch the frequency readout follow.",
+      "p4": "The power comes from two substations beside the line. Inside them, machines called converters turn grid power into current of any frequency from 0 to 300 Hz. A <strong>feeder cable</strong> carries it to the <strong>powered section</strong>, the stretch of guideway under the train. Only the section under a train is switched on, and the maker says this keeps two trains from running into each other. In this model each section is 1,200 m long, a figure from one research paper. Outside the gap close-up, the wave is drawn four times longer than it really is, so you can follow it."
     },
     "stop": {
       "title": "Braking that makes power",
-      "p1": "To brake, the guideway runs the travelling wave the other way. Now the wave holds the train's magnets back, and the motor works as a generator. The train's speed turns back into electricity, which can flow into the public grid. Watch the <strong>power flow</strong> run back along the <strong>feeder cable</strong>.",
-      "p2": "The train needs power on board too, for its magnets, lights and air conditioning. Above roughly 100 km/h, generators built into the support magnets make it without touching anything. At low speed, near the stations, it comes from power rails on the guideway. Batteries, charged during the trip, are kept as a backup.",
-      "p3": "Press Power cut to see what happens if the power fails. Only the drive is lost: the batteries keep the magnets on, so the train keeps floating. Then the <strong>eddy-current brakes</strong>, which are magnets too, slow it down. They stir up swirling currents, called eddy currents, in the guideway's steel, and those currents drag on the train without touching it. At 10 km/h the train sits down on its <strong>skids</strong> and slides to a stop.",
+      "p1": "To brake, the guideway runs the travelling wave the other way. Now the wave holds the train's magnets back. The motor works in reverse, as a generator, and turns the train's speed back into electricity. That electricity can flow into the public grid. Watch the <strong>power flow</strong> run back along the <strong>feeder cable</strong>.",
+      "p2": "The train needs power on board too, for its magnets, lights and air conditioning. Above roughly 100 km/h, generators built into the support magnets make it without touching the track. At low speed, near the stations, it comes from power rails on the guideway. Batteries, charged during the trip, are kept as a backup.",
+      "p3": "Press Power cut to see what happens if the grid power fails. Only the drive is lost. The batteries keep the magnets on, so the train keeps floating. Then the <strong>eddy-current brakes</strong>, which are magnets too, slow it down. They stir up swirling currents, called eddy currents, in the guideway's steel, and those currents drag on the train without touching it. At 10 km/h the train sits down on its <strong>skids</strong> and slides to a stop.",
       "p4": "In this model, both kinds of stop use the same steady braking, so they take the same distance. The real stopping distance after a power cut is not published. From 430 km/h, the model brakes for about 3 minutes, close to the three minutes of braking on the real line. In a normal stop, the train floats to a halt and then lowers itself onto its skids. Resting on skids at the platform is this model's assumption."
     },
     "compare": {
       "title": "Other ways to go fast",
-      "p1": "The line-up puts three trains side by side, cut open so you can compare how each one is held up. Japan's <strong>SCMaglev</strong>, developed by JR Central, uses superconducting magnets. Cooled by liquid helium to about −269 °C, their coils carry current without any loss. The train floats about 100 mm up, ten times the Shanghai magnet gap. It is pushed up rather than pulled, and that push only works at speed, so it rolls on wheels until about 150 km/h.",
-      "p2": "In 2015, an L0 test train on that system reached 603 km/h, the speed record for any train. A <strong>wheel-rail train</strong> drives itself forward by the grip of steel wheels on steel rails. The faster it goes, the less grip its wheels have to spare. Even so, a French TGV reached 574.8 km/h on a test run in 2007, the record for a train on wheels.",
+      "p1": "The line-up puts three trains side by side, cut open so you can compare how each one is held up. Japan's <strong>SCMaglev</strong>, developed by JR Central, uses superconducting magnets. Cooled by liquid helium to about −269 °C, their coils carry current without any loss. The train floats about 100 mm up, ten times the Shanghai magnet gap. Its magnets push it up instead of pulling. That push only works at speed, so the train rolls on wheels until about 150 km/h.",
+      "p2": "In 2015, an SCMaglev test train, the L0, reached 603 km/h, the speed record for any train. A <strong>train on wheels</strong>, like most high-speed trains, is pushed forward by the grip of its steel wheels on steel rails. The faster it goes, the less grip its wheels have to spare. Even so, a French TGV reached 574.8 km/h on a test run in 2007, the record for a train on wheels.",
       "p3": "The Shanghai maglev set its own record of 501 km/h on a test run in November 2003. At 430 km/h, it was the fastest train in regular service. The <strong>magnet gaps</strong> show the difference at a glance: about 10 mm in Shanghai, about 100 mm on the SCMaglev, and no gap at all under steel wheels. Pick a train to read its numbers below.",
-      "p4": "The maker also says its maglev uses less energy and makes less noise. By its figures, at 300 km/h it needs 34 watt-hours (Wh) of energy to carry one seat for one kilometre, against 51 for a German ICE 3 high-speed train. Heard from 25 m away at 300 km/h, it measures 80 decibels, against 90 to 92 for the ICE and the TGV. These are the maker's own claims, from its own tests."
+      "p4": "The maker also says its maglev uses less energy and makes less noise. By its figures, at 300 km/h it needs 34 watt-hours (Wh) of energy to carry one seat for one kilometre. A German ICE 3 high-speed train needs 51. At 300 km/h and 25 m away, the maglev makes 80 decibels of noise, while the ICE and the TGV make 90 to 92. These are the maker's own claims, from its own tests."
     }
   }
 }
