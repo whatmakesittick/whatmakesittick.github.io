@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { BEAM_M, PIER } from '../../../model';
+import { BEAM_M, PIER, SUBSTATIONS, TRAIN } from '../../../model';
+import { AIR, airStrength, dustBehindNose } from './air';
 import { CLEAR, CORRIDOR, GROUND, SCENERY } from './constants';
 import { footprint, landBlocks } from './ground/blocks';
 import { tileFields } from './ground/fields';
@@ -10,6 +11,8 @@ import { periodicCopies } from './scenery/copies';
 import { tileTrees } from './scenery/treePlacement';
 import { tileVillages } from './scenery/villagePlacement';
 import { groundShadow } from './shadow';
+import { SUBSTATION, substationLines, substationTileX } from './substationPlan';
+import { trainShadowOutline } from './trainShadow';
 
 const CORRIDOR_BAND = [CORRIDOR.ghostVerge[0], CORRIDOR.service[1]] as const;
 const blocks = landBlocks();
@@ -114,5 +117,56 @@ describe('ground shadows', () => {
     expect(Math.max(...outline.map(([, z]) => z))).toBeCloseTo(
       groundShadow(0, PIER.height, PIER.depth / 2)[1],
     );
+  });
+});
+
+describe('substations', () => {
+  it('sit beside the line clear of roads, canals and greenhouses', () => {
+    const half = SUBSTATION.length / 2;
+    const zSpan = [
+      SUBSTATION.centreZ - SUBSTATION.depth / 2,
+      SUBSTATION.centreZ + SUBSTATION.depth / 2,
+    ];
+    expect(zSpan[1]).toBeLessThan(CORRIDOR.ghostVerge[0]);
+    expect(zSpan[0]).toBeGreaterThan(CLEAR.left);
+    substationLines().forEach((line, index) => {
+      expect(Math.abs(line - SUBSTATIONS[index])).toBeLessThan(GROUND.period);
+      const x = substationTileX(line);
+      const shifts = [-GROUND.period, 0, GROUND.period];
+      LINEARS.filter((linear) => linear.axis === 'z' && overlaps(linear.span, zSpan)).forEach(
+        (linear) => {
+          const [from, to] = footprint(linear);
+          shifts.forEach((shift) =>
+            expect(overlaps([from + shift, to + shift], [x - half, x + half])).toBe(false),
+          );
+        },
+      );
+      fields
+        .filter((field) => field.kind === 'greenhouse' && overlaps(field.z, zSpan))
+        .forEach((field) =>
+          shifts.forEach((shift) =>
+            expect(overlaps([field.x[0] + shift, field.x[1] + shift], [x - half, x + half])).toBe(
+              false,
+            ),
+          ),
+        );
+    });
+  });
+});
+
+describe('train shadow and wake', () => {
+  it('lays the train shadow beyond the guideway shadow', () => {
+    const outline = trainShadowOutline();
+    expect(Math.min(...outline.map(([, z]) => z))).toBeGreaterThan(guidewayShadowBand()[1]);
+  });
+
+  it('lifts the wake only at speed and keeps the dust along the train', () => {
+    expect(airStrength(0)).toBe(0);
+    expect(airStrength(120)).toBe(1);
+    [0, 13.7, 1e5, -42].forEach((distance) => {
+      const behind = dustBehindNose(0.4, distance);
+      expect(behind).toBeGreaterThanOrEqual(0);
+      expect(behind).toBeLessThan(TRAIN.length + AIR.wake);
+    });
   });
 });

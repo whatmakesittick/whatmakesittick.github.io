@@ -1,4 +1,6 @@
-import { BufferGeometry, Float32BufferAttribute } from 'three';
+import { BufferGeometry, DoubleSide, Float32BufferAttribute, MeshBasicMaterial } from 'three';
+import { LINE_GROUP, registeredMaterial } from '../context';
+import type { PartContext } from '../context';
 import type { GroundPoint } from './shadow';
 
 const RGBA = 4;
@@ -73,4 +75,27 @@ export function featherGeometry(
   geometry.setAttribute('color', new Float32BufferAttribute(colours, RGBA));
   geometry.setIndex(indices);
   return geometry;
+}
+
+export interface ShadowLook {
+  readonly colour: string;
+  readonly opacity: number;
+}
+
+export function featherShadowMaterial(context: PartContext, look: ShadowLook): MeshBasicMaterial {
+  return registeredMaterial(
+    context,
+    LINE_GROUP,
+    new MeshBasicMaterial({
+      color: look.colour,
+      vertexColors: true,
+      transparent: true,
+      opacity: look.opacity,
+      depthWrite: false,
+      side: DoubleSide,
+      polygonOffset: true,
+      polygonOffsetFactor: -4,
+      polygonOffsetUnits: -4,
+    }),
+  );
 }

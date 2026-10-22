@@ -7,6 +7,7 @@ import { buildGhost } from './ghost';
 import { groundMesh, groundPlan } from './ground';
 import { buildScenery } from './scenery';
 import { skyDome } from './sky';
+import { buildSubstations } from './substation';
 import { trainShadow } from './trainShadow';
 import { buildAir } from './air';
 
@@ -18,13 +19,22 @@ export function buildLand(context: PartContext): Section {
   const scenery = buildScenery(context, plan);
   const ghost = buildGhost(context);
   const air = buildAir(context);
-  root.add(skyDome(context), scenery.root, trainShadow(context), air.root, ghost.root);
+  const substations = buildSubstations(context);
+  root.add(
+    skyDome(context),
+    scenery.root,
+    substations.root,
+    trainShadow(context),
+    air.root,
+    ghost.root,
+  );
   return {
     root,
     setState(state: AssemblyState) {
       ground.position.x = wrapOffset(state.motion.distance, GROUND.period);
       scenery.slide(state.motion.distance);
       air.setState(state.motion);
+      substations.setState(state.motion.distance);
       ghost.setState(state);
     },
   };

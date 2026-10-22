@@ -1,8 +1,7 @@
-import { DoubleSide, Mesh, MeshBasicMaterial } from 'three';
+import { Mesh } from 'three';
 import { TRAIN } from '../../../model';
-import { LINE_GROUP, registeredMaterial } from '../context';
 import type { PartContext } from '../context';
-import { clipBelow, featherGeometry } from './feather';
+import { clipBelow, featherGeometry, featherShadowMaterial } from './feather';
 import { guidewayShadowBand } from './ground/paintShadows';
 import { prismShadow } from './shadow';
 import type { GroundPoint } from './shadow';
@@ -29,21 +28,7 @@ export function trainShadow(context: PartContext): Mesh {
   const geometry = context.tracker.track(
     featherGeometry(trainShadowOutline(), TRAIN_SHADOW.feather, TRAIN_SHADOW.lift),
   );
-  const material = registeredMaterial(
-    context,
-    LINE_GROUP,
-    new MeshBasicMaterial({
-      color: TRAIN_SHADOW.colour,
-      vertexColors: true,
-      transparent: true,
-      opacity: TRAIN_SHADOW.opacity,
-      depthWrite: false,
-      side: DoubleSide,
-      polygonOffset: true,
-      polygonOffsetFactor: -4,
-      polygonOffsetUnits: -4,
-    }),
-  );
+  const material = featherShadowMaterial(context, TRAIN_SHADOW);
   const mesh = new Mesh(geometry, material);
   mesh.name = 'trainShadow';
   mesh.renderOrder = 1;
