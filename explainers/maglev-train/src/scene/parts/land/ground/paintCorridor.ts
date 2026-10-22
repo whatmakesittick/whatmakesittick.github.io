@@ -1,4 +1,3 @@
-import { BEAM_M } from '../../../../model';
 import { CORRIDOR } from '../constants';
 import { CORRIDOR_PAINT } from '../palette';
 import type { Range } from '../random';
@@ -6,7 +5,6 @@ import { shade } from './colour';
 import { fillBox } from './painter';
 import type { Painter } from './painter';
 
-const HALF = 0.5;
 const REED_WIDTH = 0.6;
 const JOINT_WIDTH = 0.12;
 
@@ -49,19 +47,9 @@ function ghostBed(painter: Painter): void {
   fillBox(painter, tile, CORRIDOR.ditch, CORRIDOR_PAINT.ditch);
 }
 
-function footings(painter: Painter): void {
-  const half = CORRIDOR.footing * HALF;
-  const count = Math.round(painter.period / BEAM_M);
-  for (let index = 0; index < count; index += 1) {
-    const x = index * BEAM_M;
-    fillBox(painter, [x - half, x + half], [-half, half], CORRIDOR_PAINT.footing);
-  }
-}
-
 export function paintCorridor(painter: Painter): void {
   ghostBed(painter);
   mownStrip(painter);
   serviceRoad(painter);
   fences(painter);
-  footings(painter);
 }

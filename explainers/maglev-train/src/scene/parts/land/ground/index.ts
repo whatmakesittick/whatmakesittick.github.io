@@ -1,6 +1,8 @@
-import { Mesh } from 'three';
+import { Mesh, MeshStandardMaterial } from 'three';
 import type { PartContext } from '../../context';
-import { LINE_GROUP } from '../../context';
+import { LINE_GROUP, registeredMaterial } from '../../context';
+import type { CutUniform } from '../../line/cut';
+import { shadeBehindCut } from '../casterCut';
 import { GROUND } from '../constants';
 import { landBlocks } from './blocks';
 import { tileFields } from './fields';
@@ -12,6 +14,7 @@ import { centredWarp } from './warp';
 
 const GROUND_RENDER_ORDER = -10;
 const GROUND_REFLECTION = 0.4;
+const GROUND_PROGRAM = 'maglevGroundShade';
 
 export function groundPlan(): GroundPlan {
   return {
@@ -21,9 +24,9 @@ export function groundPlan(): GroundPlan {
   };
 }
 
-export function groundMesh(context: PartContext, plan: GroundPlan): Mesh {
+export function groundMesh(context: PartContext, plan: GroundPlan, cut: CutUniform): Mesh {
   const maps = groundMaps(context, plan);
-  const material = context.materials.get(LINE_GROUP, {
+  const material = new MeshStandardMaterial({
     color: '#ffffff',
     map: maps.colour,
     roughnessMap: maps.roughness,
@@ -31,6 +34,9 @@ export function groundMesh(context: PartContext, plan: GroundPlan): Mesh {
     metalness: 0,
     envMapIntensity: GROUND_REFLECTION,
   });
+  material.onBeforeCompile = (shader) => shadeBehindCut(shader, maps.shade, cut);
+  material.customProgramCacheKey = () => GROUND_PROGRAM;
+  registeredMaterial(context, LINE_GROUP, material);
   const mesh = new Mesh(context.tracker.track(groundGeometry(plan.warp)), material);
   mesh.name = 'ground';
   mesh.renderOrder = GROUND_RENDER_ORDER;

@@ -1,6 +1,8 @@
 import { Mesh } from 'three';
 import { TRAIN } from '../../../model';
 import type { PartContext } from '../context';
+import type { CutUniform } from '../line/cut';
+import { dropShadowAheadOfCut } from './casterCut';
 import { clipBelow, featherGeometry, featherShadowMaterial } from './feather';
 import { guidewayShadowBand } from './ground/paintShadows';
 import { prismShadow } from './shadow';
@@ -24,11 +26,15 @@ export function trainShadowOutline(): GroundPoint[] {
   return clipBelow(outline, guidewayShadowBand()[1] + TRAIN_SHADOW.feather - TRAIN_SHADOW.overlap);
 }
 
-export function trainShadow(context: PartContext): Mesh {
+const TRAIN_SHADOW_PROGRAM = 'maglevTrainShadowCut';
+
+export function trainShadow(context: PartContext, cut: CutUniform): Mesh {
   const geometry = context.tracker.track(
     featherGeometry(trainShadowOutline(), TRAIN_SHADOW.feather, TRAIN_SHADOW.lift),
   );
   const material = featherShadowMaterial(context, TRAIN_SHADOW);
+  material.onBeforeCompile = (shader) => dropShadowAheadOfCut(shader, cut);
+  material.customProgramCacheKey = () => TRAIN_SHADOW_PROGRAM;
   const mesh = new Mesh(geometry, material);
   mesh.name = 'trainShadow';
   mesh.renderOrder = 1;

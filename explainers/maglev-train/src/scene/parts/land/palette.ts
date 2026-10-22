@@ -63,10 +63,9 @@ export const CORRIDOR_PAINT = {
   formation: '#9a9282',
   ditch: '#52604f',
   reeds: '#6d7a45',
-  footing: '#a19d93',
 } as const;
 
-export const SHADOW_PAINT = { tint: '#6f7889', strength: 0.62, reduction: 8 } as const;
+export const SHADOW_PAINT = { tint: '#6f7889', strength: 0.62, maskSize: 256 } as const;
 export const MOTTLE = [
   { cells: [24, 40], amount: 0.16 },
   { cells: [160, 260], amount: 0.1 },

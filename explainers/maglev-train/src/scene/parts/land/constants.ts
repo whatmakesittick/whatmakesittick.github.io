@@ -18,7 +18,7 @@ export const GROUND = {
   period: TILE_M,
   reach: GROUND_REACH,
   rows: 256,
-  texture: { size: 2048, roughSize: 1024, softness: 45, anisotropy: 8 },
+  texture: { size: 2048, roughSize: 1024, shadeSize: 1024, softness: 45, anisotropy: 8 },
 } as const;
 
 export const SCENERY = {
@@ -36,7 +36,6 @@ export const CORRIDOR = {
   ghostVerge: [-21.6, -8.6],
   formation: [-17.4, -10.6],
   ditch: [-20.7, -19.1],
-  footing: 3.4,
   mowStripe: 2.4,
 } as const;
 

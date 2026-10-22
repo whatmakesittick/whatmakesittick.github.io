@@ -6,6 +6,7 @@ import { fillBox, tracePolygon, wrapShifts } from './painter';
 import type { Painter } from './painter';
 
 const TRACE_STEP = 1.5;
+const UNSHADED = '#ffffff';
 
 export function guidewayShadowBand(): [number, number] {
   const half = GIRDER.topWidth / 2;
@@ -38,24 +39,25 @@ function pierShadows(painter: Painter): void {
 
 function shadowMask(painter: Painter): HTMLCanvasElement | null {
   const canvas = document.createElement('canvas');
-  canvas.width = Math.round(painter.width / SHADOW_PAINT.reduction);
-  canvas.height = Math.round(painter.height / SHADOW_PAINT.reduction);
+  canvas.width = SHADOW_PAINT.maskSize;
+  canvas.height = SHADOW_PAINT.maskSize;
   const context = canvas.getContext('2d');
   if (!context) return null;
   const small: Painter = { ...painter, context, width: canvas.width, height: canvas.height };
-  context.fillStyle = '#ffffff';
+  context.fillStyle = UNSHADED;
   context.fillRect(0, 0, canvas.width, canvas.height);
   fillBox(small, [0, painter.period], guidewayShadowBand(), SHADOW_PAINT.tint);
   pierShadows(small);
   return canvas;
 }
 
-export function paintShadows(painter: Painter): void {
+export function paintLineShade(painter: Painter): void {
+  const { context } = painter;
+  context.fillStyle = UNSHADED;
+  context.fillRect(0, 0, painter.width, painter.height);
   const mask = shadowMask(painter);
   if (!mask) return;
-  const { context } = painter;
   context.save();
-  context.globalCompositeOperation = 'multiply';
   context.globalAlpha = SHADOW_PAINT.strength;
   context.imageSmoothingEnabled = true;
   context.imageSmoothingQuality = 'high';

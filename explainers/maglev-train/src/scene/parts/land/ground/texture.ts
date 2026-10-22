@@ -10,7 +10,7 @@ import { paintLinears } from './paintLinears';
 import { paintMottle } from './mottle';
 import type { Painter } from './painter';
 import { paintRoughness } from './roughness';
-import { paintShadows } from './paintShadows';
+import { paintLineShade } from './paintShadows';
 import type { AxisWarp } from './warp';
 
 export interface GroundPlan {
@@ -22,6 +22,7 @@ export interface GroundPlan {
 export interface GroundMaps {
   readonly colour: Texture;
   readonly roughness: Texture;
+  readonly shade: Texture;
 }
 
 function canvasTexture(
@@ -45,17 +46,18 @@ function paintColour(painter: Painter, plan: GroundPlan): void {
   paintFields(painter, plan.fields);
   paintCorridor(painter);
   paintLinears(painter, plan.linears);
-  paintShadows(painter);
   paintMottle(painter);
 }
 
 export function groundMaps(context: PartContext, plan: GroundPlan): GroundMaps {
-  const { size, roughSize } = GROUND.texture;
+  const { size, roughSize, shadeSize } = GROUND.texture;
   const colour = canvasTexture(context, size, plan.warp, (painter) => paintColour(painter, plan));
   colour.colorSpace = SRGBColorSpace;
   const roughness = canvasTexture(context, roughSize, plan.warp, (painter) =>
     paintRoughness(painter, plan.fields, plan.linears),
   );
   roughness.colorSpace = NoColorSpace;
-  return { colour, roughness };
+  const shade = canvasTexture(context, shadeSize, plan.warp, paintLineShade);
+  shade.colorSpace = SRGBColorSpace;
+  return { colour, roughness, shade };
 }
