@@ -59,7 +59,7 @@ export class InsetDrawing {
       this.thrust.group,
       this.guidance.group,
     );
-    label(context, 'gapInset', this.panel, [0, INSET.height / 2, 0]);
+    label(context, 'gapInset', this.panel, [INSET.width / 2, INSET.height / 2, 0]);
   }
 
   get moving(): boolean {

@@ -27,6 +27,7 @@ const LABEL_X = TRAIN.noseX + BEAM_M;
 const WEB_Z = GIRDER.topWidth / 4;
 const [ARM_X] = ARM_ANCHOR;
 const CUT_LABEL_X = CUT_X - 2;
+const STATOR_LABEL_X = ARM_X - 2.6;
 
 function lineLabels(context: PartContext, parent: Object3D): void {
   label(context, 'guideway', parent, [LABEL_X, (GIRDER.bottom + GUIDEWAY_TOP) / 2, WEB_Z]);
@@ -51,7 +52,7 @@ export function buildLine(context: PartContext): Section {
   const labelsAhead = namedGroup('lineLabels', root);
   root.add(guideway.group, cap, stations.group, wave.powered, wave.travelling, flow.group);
   lineLabels(context, labelsAhead);
-  label(context, 'statorPacks', root, [ARM_X, STATOR_BOTTOM, -STATOR.sideZ]);
+  label(context, 'statorPacks', root, [STATOR_LABEL_X, STATOR_BOTTOM, -STATOR.sideZ]);
   return {
     root,
     setState(state: AssemblyState) {
