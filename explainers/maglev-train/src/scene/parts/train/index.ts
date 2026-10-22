@@ -7,6 +7,7 @@ import { Ease } from '../ease';
 import { RESTING_NUDGE } from '../nudge';
 import { buildBody } from './body';
 import { EDDY_GLOW } from './constants';
+import { buildCutaway } from './cutaway';
 import { LABEL_POINTS } from './labels';
 import { buildMagnets } from './magnets';
 import { buildSkids } from './skids';
@@ -24,6 +25,7 @@ export function buildTrain(context: PartContext): Section {
   const skirt = buildSkirt(context, posed, ahead);
   const magnets = buildMagnets(context, posed);
   const skids = buildSkids(context, posed, ahead);
+  const cutaway = buildCutaway(context, posed);
   const cutSets = [windows, skirt, magnets, skids];
   (Object.keys(LABEL_POINTS) as (keyof typeof LABEL_POINTS)[]).forEach((part) =>
     label(context, part, posed, LABEL_POINTS[part]),
@@ -42,6 +44,7 @@ export function buildTrain(context: PartContext): Section {
       pose(state.motion);
       const whole = !state.view.cutaway;
       ahead.visible = whole;
+      cutaway.visible = !whole;
       cutSets.forEach((set) => set.showAhead(whole));
       skids.setSliding(state.motion.sliding);
       glow.aim(state.power.eddy ? 1 : 0);
