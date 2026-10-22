@@ -66,7 +66,7 @@ export function buildLine(context: PartContext): Section {
     },
     animate(frame, state) {
       const drifting = wave.animate(frame, state);
-      const streaming = flow.stream(frame.delta);
+      const streaming = state.playing && flow.stream(frame.delta);
       return drifting || streaming;
     },
   };

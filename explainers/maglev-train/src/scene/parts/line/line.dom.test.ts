@@ -120,14 +120,19 @@ describe('line section', () => {
     expect(labelShown('travellingWave')).toBe(false);
   });
 
-  it('streams the power arrows for drive and regen only', () => {
+  it('streams the power arrows for drive and regen only while playing', () => {
     (['drive', 'regen'] as const).forEach((flow) => {
-      line.setState(stateAt({ flow, wave: false }));
-      expect(line.animate?.(FRAME, stateAt({ flow, wave: false }))).toBe(true);
+      const playing = stateAt({ flow, wave: false, playing: true });
+      line.setState(playing);
+      expect(line.animate?.(FRAME, playing)).toBe(true);
       expect(labelShown('powerFlow')).toBe(true);
+      const paused = stateAt({ flow, wave: false });
+      line.setState(paused);
+      expect(line.animate?.(FRAME, paused)).toBe(false);
     });
-    line.setState(stateAt({ flow: 'battery', wave: false }));
-    expect(line.animate?.(FRAME, stateAt({ flow: 'battery', wave: false }))).toBe(false);
+    const battery = stateAt({ flow: 'battery', wave: false, playing: true });
+    line.setState(battery);
+    expect(line.animate?.(FRAME, battery)).toBe(false);
     expect(labelShown('powerFlow')).toBe(false);
   });
 
