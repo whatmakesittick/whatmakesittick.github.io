@@ -1,0 +1,267 @@
+{
+  "meta": {
+    "title": "Como funciona o trem maglev",
+    "eyebrow": "Transporte de alta velocidade",
+    "tagline": "Uma viagem em 3D no maglev de Xangai: os ímãs agarram a via por baixo e erguem o trem até ficarem a 10 mm dela, e o motor que o empurra faz parte da própria pista.",
+    "description": "O maglev de Xangai num modelo 3D para você embarcar: como ele se ergue até os ímãs ficarem a 10 mm da via e por que a própria pista é o motor.",
+    "summary": "A viagem até o aeroporto, como os ímãs erguem o trem, o que o mantém no centro da via, o motor embutido na pista, a frenagem e a comparação com outros trens rápidos.",
+    "socialAlt": "Um trem maglev Transrapid branco sobre a via elevada de concreto, ao lado do título “Como funciona o trem maglev”"
+  },
+  "stage": {
+    "label": "Modelo interativo do trem maglev",
+    "gauge": "Dados da viagem em tempo real"
+  },
+  "timeline": {
+    "label": "Viagem de Longyang Road ao aeroporto",
+    "phases": "Ir para uma etapa",
+    "speed": "Velocidade de reprodução",
+    "value": "Etapa {{step}} de {{total}}",
+    "during": "Etapa {{step}} de {{total}}: {{detail}}",
+    "speedValue": "×{{factor}}",
+    "speedDescribe": "A viagem completa em {{seconds}} segundos",
+    "phase": {
+      "liftOff": "Subida",
+      "accelerate": "Aceleração",
+      "cruise": "Velocidade máxima",
+      "brake": "Frenagem",
+      "settle": "Pouso"
+    },
+    "jump": {
+      "liftOff": "Ir para a subida",
+      "accelerate": "Ir para a aceleração",
+      "cruise": "Ir para a velocidade máxima",
+      "brake": "Ir para a frenagem",
+      "settle": "Ir para o pouso"
+    },
+    "detail": {
+      "liftOff": "o trem levanta dos patins",
+      "accelerate": "o motor da via acelera o trem",
+      "cruise": "o trem segue na velocidade máxima",
+      "brake": "o trem vai freando até o aeroporto",
+      "settle": "o trem volta a se apoiar nos patins"
+    },
+    "moment": {
+      "lifted": "Flutuando",
+      "fullSpeed": "Velocidade máxima",
+      "brakeStart": "Início da frenagem",
+      "touchdown": "De volta aos patins"
+    }
+  },
+  "controls": {
+    "label": "Controles do modelo",
+    "topSpeed": "Velocidade máxima",
+    "topSpeedOptions": {
+      "kmh430": "430 km/h",
+      "kmh300": "300 km/h"
+    },
+    "brakeModeOptions": {
+      "regen": "Parada normal",
+      "eddy": "Queda de energia"
+    },
+    "nudgeOptions": {
+      "bump": "Solavanco",
+      "gust": "Rajada lateral"
+    },
+    "compareOptions": {
+      "transrapid": "Maglev de Xangai",
+      "scmaglev": "SCMaglev",
+      "wheelRail": "Trem com rodas"
+    },
+    "groups": {
+      "topSpeed": "Velocidade máxima",
+      "brakeMode": "Como o trem para",
+      "nudge": "Empurrar o trem",
+      "compare": "Trem para comparar",
+      "moment": "Ir para um momento"
+    },
+    "views": {
+      "wave": {
+        "name": "Onda viajante",
+        "short": "Onda",
+        "hint": "Onda viajante (W)"
+      },
+      "gap": {
+        "name": "Zoom na folga",
+        "short": "Folga",
+        "hint": "Zoom na folga (G)"
+      },
+      "ghost": {
+        "name": "Trem-bala fantasma",
+        "short": "Fantasma",
+        "hint": "Trem-bala fantasma (H)"
+      },
+      "labels": {
+        "name": "Nomes das peças",
+        "short": "Nomes",
+        "hint": "Nomes das peças (L)"
+      }
+    }
+  },
+  "readouts": {
+    "speed": "Velocidade",
+    "distance": "Distância",
+    "time": "Tempo",
+    "gap": "Folga dos ímãs"
+  },
+  "units": {
+    "kmh": "{{value}} km/h",
+    "kmOf": "{{value}} de {{total}} km",
+    "clockOf": "{{elapsed}} de {{total}}",
+    "clock": "{{minutes}}:{{seconds}}",
+    "minutesSeconds": "{{minutes}} min {{seconds}} s",
+    "mm": "{{value}} mm",
+    "mmRange": "de {{min}} a {{max}} mm",
+    "onSkids": "Nos patins",
+    "hz": "{{value}} Hz",
+    "hzRange": "de {{min}} a {{max}} Hz"
+  },
+  "chapters": {
+    "ride": {
+      "trip": "Duração da viagem no modelo",
+      "tripValue": "{{time}}, de plataforma a plataforma",
+      "top": "Velocidade máxima",
+      "topValue": {
+        "kmh430": "430 km/h, a velocidade para a qual foi projetado",
+        "kmh300": "300 km/h, em todas as viagens desde 2021"
+      },
+      "line": "Linha",
+      "lineValue": "cerca de {{km}} km, de Longyang Road ao aeroporto",
+      "ghost": "Trem-bala fantasma",
+      "ghostValue": "{{km}} km atrás, a {{kmh}} km/h",
+      "ghostStanding": "ainda parado na plataforma"
+    },
+    "float": {
+      "lift": "Agora",
+      "liftValue": {
+        "skids": "apoiado nos patins",
+        "lifting": "subindo",
+        "floating": "flutuando",
+        "settling": "descendo até os patins"
+      },
+      "target": "Folga ideal dos ímãs",
+      "band": "Faixa permitida",
+      "clearance": "Espaço sob a carroceria",
+      "mass": "Peso vazio",
+      "massValue": "cerca de {{tonnes}} t por vagão, {{sections}} vagões"
+    },
+    "centre": {
+      "guideGap": "Folga lateral",
+      "guideGapValue": "cerca de {{value}} mm",
+      "curves": "Curvas da linha de verdade",
+      "curvesValue": "raios de {{small}} m e {{large}} m",
+      "beam": "Viga principal da via",
+      "beamValue": "cerca de {{metres}} m de comprimento e {{tonnes}} t",
+      "switches": "Desvios",
+      "switchesValue": "{{count}} desvios de aço flexíveis"
+    },
+    "motor": {
+      "frequency": "Frequência da onda",
+      "pitch": "Passo polar",
+      "wavelength": "Uma onda completa",
+      "converter": "Faixa dos conversores",
+      "section": "Trecho energizado",
+      "sectionValue": "trecho {{index}} de {{count}}",
+      "sectionOff": "nenhum, o motor está desligado"
+    },
+    "stop": {
+      "flow": "Fluxo de energia",
+      "flowValue": {
+        "none": "nenhum",
+        "drive": "da rede para o motor",
+        "regen": "do motor de volta para a rede",
+        "battery": "só as baterias de bordo"
+      },
+      "onboard": "Energia a bordo",
+      "onboardValue": {
+        "rails": "trilhos de energia na via",
+        "generator": "geradores nos ímãs",
+        "battery": "baterias de bordo"
+      },
+      "distance": "Distância de frenagem no modelo",
+      "distanceValue": "cerca de {{km}} km, saindo de {{kmh}} km/h",
+      "skid": "Parada segura numa queda de energia",
+      "skidValue": "freios de correntes parasitas até {{kmh}} km/h, depois os patins"
+    },
+    "compare": {
+      "gap": "Folga dos ímãs",
+      "gapWheels": "nenhuma, rodas de aço sobre trilhos",
+      "record": "Recorde de velocidade em teste",
+      "recordValue": "{{kmh}} km/h em {{year}}",
+      "lift": "Como se sustenta",
+      "liftValue": {
+        "transrapid": "puxado de baixo para cima",
+        "scmaglev": "empurrado para cima em alta velocidade; abaixo de cerca de 150 km/h, anda sobre rodas",
+        "wheelRail": "anda sobre rodas de aço"
+      },
+      "energy": "Energia por assento, segundo o fabricante",
+      "energyValue": "{{maglev}} Wh por assento-km a {{kmh}} km/h, contra {{wheel}} do ICE 3",
+      "energyFast": "{{maglev}} Wh por assento-km a {{kmh}} km/h, velocidade que o ICE 3 não alcança"
+    }
+  },
+  "parts": {
+    "train": "Maglev de Xangai",
+    "wrapArms": "Braços em gancho",
+    "supportMagnets": "Ímãs de sustentação",
+    "guidanceMagnets": "Ímãs-guia",
+    "eddyBrakes": "Freios de correntes parasitas",
+    "skids": "Patins",
+    "guideway": "Via elevada",
+    "statorPacks": "Pacotes do estator",
+    "guidanceRails": "Trilhos-guia",
+    "feederCable": "Cabo de alimentação",
+    "piers": "Pilares",
+    "stations": "Estações",
+    "poweredSection": "Trecho energizado",
+    "travellingWave": "Onda viajante",
+    "gapInset": "Zoom de 20 vezes na folga",
+    "powerFlow": "Fluxo de energia",
+    "ghostTrain": "Trem-bala fantasma",
+    "scmaglev": "SCMaglev",
+    "wheelRail": "Trem com rodas",
+    "gapCallouts": "Folgas dos ímãs"
+  },
+  "sections": {
+    "ride": {
+      "title": "Um trem sem rodas",
+      "p1": "O <strong>maglev de Xangai</strong> não roda: ele flutua. É um trem de levitação magnética, ou maglev, abreviação do inglês magnetic levitation. Ímãs seguram o trem no ar, por isso ele não tem roda nenhuma. Ele percorre cerca de 30 km sobre uma <strong>via elevada</strong> de concreto, da estação Longyang Road, na cidade, até o Aeroporto Internacional de Pudong. A primeira viagem foi em 31 de dezembro de 2002, e a linha começou a funcionar por completo em 2004.",
+      "p2": "A linha foi projetada para 430 km/h. Por anos, algumas viagens durante o dia andavam nessa velocidade e chegavam ao aeroporto em menos de oito minutos. Desde maio de 2021, todas as viagens são feitas a 300 km/h e levam pouco mais de oito minutos. No controle de velocidade máxima, você escolhe entre as duas velocidades. Logo abaixo, a duração da viagem mostra quanto tempo cada opção leva neste modelo.",
+      "p3": "O trem tem seis vagões e mede cerca de 150 m de comprimento, 3,7 m de largura e 4,2 m de altura. Os <strong>pilares</strong> de concreto que sustentam a via costumam ter 8 m de altura e ficar a 25 m um do outro. Nas duas pontas ficam as <strong>estações</strong>. Neste modelo, o trem não sai do lugar: é a linha que vai passando por ele. Assim, você nunca o perde de vista. Além disso, a linha do modelo é reta, enquanto a de verdade faz curvas suaves em forma de S.",
+      "p4": "Ao seu lado corre um <strong>trem-bala fantasma</strong>, transparente. É um trem-bala comum, com rodas de aço, que sai no mesmo instante que o maglev. Segundo o fabricante, um trem desses precisa de mais de 28 km para chegar a 300 km/h. O maglev chega lá em 5 km ou menos. Neste modelo, o fantasma acelera sempre no mesmo ritmo, então repare o quanto ele vai ficando para trás. A reprodução não é em tempo real, e a subida e o pouso passam em câmera lenta, para dar tempo de você ver. Já o tempo no painel mostra sempre o relógio de verdade."
+    },
+    "float": {
+      "title": "Puxado de baixo para cima",
+      "p1": "Na plataforma, o trem fica apoiado em <strong>patins</strong>, peças planas presas embaixo da carroceria. Para flutuar, ele faz algo surpreendente: sobe, atraído pela própria via. Seus <strong>braços em gancho</strong> descem pelas laterais da via e se dobram para dentro, por baixo dela. Ali, os <strong>ímãs de sustentação</strong> ficam virados para cima, de frente para os <strong>pacotes do estator</strong>. São fileiras de chapas de aço presas na parte de baixo da via.",
+      "p2": "Os ímãs de sustentação são eletroímãs: só funcionam como ímã enquanto passa corrente elétrica por eles. Quando ligados, são atraídos pelo aço logo acima e erguem o trem inteiro. Conforme o trem sobe, a folga entre o ímã e o pacote do estator diminui até cerca de 10 mm. É essa a folga dos ímãs que aparece no painel. Ao mesmo tempo, o espaço livre embaixo da carroceria cresce até cerca de 150 mm, o bastante para passar por cima de neve ou de pequenos objetos.",
+      "p3": "Só que essa atração magnética não se equilibra sozinha. Quanto mais o ímã se aproxima do aço, mais forte ele puxa. Por conta própria, ele grudaria de vez no aço ou deixaria o trem afundar. Por isso, um sistema de controle mede a folga o tempo todo e ajusta a corrente muitas vezes por segundo. Assim, a folga fica sempre entre 8 e 12 mm. Aperte Solavanco para dar um tranco no trem e veja a folga balançar e voltar ao normal.",
+      "p4": "Flutuar gasta energia, mas, segundo o fabricante, menos que o ar-condicionado do trem. Ao lado de um trem de 150 m, uma folga de 10 mm é fina demais para enxergar. Por isso, o <strong>zoom na folga</strong> mostra esse espaço 20 vezes maior. Neste modelo, o trem leva 6 segundos para subir. Nos patins, ele fica 20 mm mais baixo do que quando flutua. Esses dois números são escolhas do próprio modelo, não dados publicados."
+    },
+    "centre": {
+      "title": "Sempre no centro",
+      "p1": "Flutuar resolve só metade do problema: o trem também precisa ficar no centro. Dos dois lados da via correm <strong>trilhos-guia</strong> de aço. Nos braços, <strong>ímãs-guia</strong> ficam de frente para eles, a cerca de 10 mm. Cada lado puxa o trem para o seu trilho, e o sistema de controle mantém as duas forças em equilíbrio.",
+      "p2": "Aperte Rajada lateral para dar um empurrão de lado no trem. A folga de um lado diminui, e a do outro aumenta. O sistema de controle puxa com mais força o lado que se afastou, e o trem desliza de volta para o meio. Os <strong>ímãs de sustentação</strong> mantêm a própria folga o tempo todo. O tamanho e o ritmo desse balanço são do próprio modelo, não vêm de medições.",
+      "p3": "Como os <strong>braços em gancho</strong> passam por baixo da via, o trem fica agarrado a ela pelos dois lados e por baixo. Por isso, o fabricante diz que ele praticamente não tem como descarrilar. O modelo mostra o trem em corte para você ver isso: os ímãs de sustentação sob os <strong>pacotes do estator</strong> e os ímãs-guia ao lado dos trilhos.",
+      "p4": "Tudo isso exige uma <strong>via elevada</strong> muito precisa. Cada viga principal mede cerca de 25 m de comprimento e pesa por volta de 190 t. Suas peças de aço são cortadas com precisão de 0,2 mm. Na linha de verdade, as curvas em S são bem abertas, com raios de 2.257 m e 4.502 m. Para o trem passar de uma via para outra, a linha tem oito desvios de aço. São longas vigas de aço que se curvam para desviar o trem para a outra via."
+    },
+    "motor": {
+      "title": "A via é o motor",
+      "p1": "Imagine um motor elétrico comum cortado e desenrolado ao longo da via. É ele que move este trem. Todo motor tem uma parte fixa, o estator, e uma parte que se move, o rotor. Aqui, o estator é a fileira de <strong>pacotes do estator</strong>, com cabos passando por dentro deles. O papel de rotor fica com os próprios <strong>ímãs de sustentação</strong> do trem. Ou seja, os pacotes do estator fazem dois serviços: sustentam o trem e o fazem andar.",
+      "p2": "Por esses cabos passa corrente trifásica: três correntes que sobem e descem, uma após a outra. Juntas, elas criam um padrão magnético que corre pela via: a <strong>onda viajante</strong>. No modelo, ela aparece como cores que deslizam pelos pacotes do estator. Os ímãs de sustentação se prendem a essa onda e vão junto com ela, como um surfista pegando onda. O trem nunca se atrasa nem se adianta em relação à onda. Os engenheiros chamam isso de motor síncrono, um motor que segue no mesmo compasso da onda.",
+      "p3": "Então, a velocidade do trem depende da rapidez com que a corrente vai e volta. Esse ritmo se chama frequência. Uma onda completa tem um polo norte e um polo sul. Cada polo mede 258 mm. Essa medida se chama passo polar. Logo, uma onda inteira tem 516 mm. A 430 km/h, a corrente vai e volta cerca de 230 vezes por segundo, ou seja, 230 hertz (Hz). A 300 km/h, são cerca de 160 Hz. Experimente os botões de 430 e 300 km/h e veja a frequência mudar junto.",
+      "p4": "A energia vem de duas subestações à beira da linha. Lá dentro, máquinas chamadas conversores transformam a energia da rede elétrica em corrente de qualquer frequência, de 0 a 300 Hz. Um <strong>cabo de alimentação</strong> leva essa corrente até o <strong>trecho energizado</strong>, o pedaço da via que está embaixo do trem. Só o trecho que tem um trem em cima fica ligado, e, segundo o fabricante, isso evita que dois trens se choquem. Neste modelo, cada trecho tem 1.200 m, valor tirado de um artigo científico. Fora do zoom na folga, a onda aparece quatro vezes mais longa do que é de verdade, para você conseguir acompanhá-la."
+    },
+    "stop": {
+      "title": "Freios que geram energia",
+      "p1": "Para frear, a via faz a onda viajante correr no sentido contrário. Agora, em vez de levar os ímãs do trem, a onda os segura. O motor inverte o papel e vira um gerador: transforma o embalo do trem de volta em eletricidade. Essa eletricidade pode ir para a rede elétrica pública. Veja o <strong>fluxo de energia</strong> voltando pelo <strong>cabo de alimentação</strong>.",
+      "p2": "O trem também precisa de energia a bordo, para os ímãs, as luzes e o ar-condicionado. Acima de uns 100 km/h, geradores embutidos nos ímãs de sustentação produzem essa energia sem encostar na via. Em baixa velocidade, perto das estações, ela vem de trilhos de energia instalados na via. Também há baterias de reserva, que vão sendo carregadas durante a viagem.",
+      "p3": "Aperte Queda de energia para ver o que acontece se a rede elétrica falhar. O trem perde só a tração, o empurrão do motor. As baterias mantêm os ímãs ligados, então ele continua flutuando. Aí entram em ação os <strong>freios de correntes parasitas</strong>, que também são ímãs, e o trem começa a perder velocidade. Eles geram no aço da via correntes que giram em redemoinho, chamadas correntes parasitas. Essas correntes seguram o trem sem tocar nele. A 10 km/h, o trem pousa nos <strong>patins</strong> e vai deslizando até parar.",
+      "p4": "Neste modelo, os dois tipos de parada usam a mesma frenagem constante e, por isso, precisam da mesma distância. A distância real de parada numa queda de energia não foi divulgada. Saindo de 430 km/h, o modelo freia por cerca de 3 minutos, perto dos três minutos de frenagem da linha de verdade. Numa parada normal, o trem flutua até parar e só depois desce até os patins. O modelo supõe que, na plataforma, o trem fica apoiado nos patins."
+    },
+    "compare": {
+      "title": "Outros jeitos de andar rápido",
+      "p1": "Aqui, três trens aparecem lado a lado, abertos em corte, para você comparar como cada um se sustenta. O <strong>SCMaglev</strong> japonês, desenvolvido pela JR Central, usa ímãs supercondutores. As bobinas desses ímãs são resfriadas com hélio líquido a cerca de −269 °C e, assim, conduzem corrente sem perda nenhuma. O trem flutua a cerca de 100 mm de altura, dez vezes a folga dos ímãs em Xangai. Os ímãs dele empurram o trem para cima, em vez de puxar. Esse empurrão só funciona em alta velocidade. Por isso, até cerca de 150 km/h, o trem anda sobre rodas.",
+      "p2": "Em 2015, um trem de teste do SCMaglev, o L0, chegou a 603 km/h, o recorde de velocidade para qualquer tipo de trem. Um <strong>trem com rodas</strong>, como a maioria dos trens-bala, avança graças à aderência das rodas de aço nos trilhos de aço. Quanto mais rápido ele vai, menos aderência sobra nas rodas. Mesmo assim, um TGV francês chegou a 574,8 km/h num teste em 2007, o recorde para trens com rodas.",
+      "p3": "O maglev de Xangai tem um recorde próprio: 501 km/h, num teste em novembro de 2003. Com seus 430 km/h, ele foi o trem mais rápido em operação regular. As <strong>folgas dos ímãs</strong> deixam a diferença bem à vista: cerca de 10 mm em Xangai, cerca de 100 mm no SCMaglev e nenhuma folga sob rodas de aço. Escolha um trem para ver os números dele logo abaixo.",
+      "p4": "O fabricante diz ainda que seu maglev gasta menos energia e faz menos barulho. Pelas contas dele, a 300 km/h o trem precisa de 34 watts-hora (Wh) para levar um assento por um quilômetro. O trem-bala alemão ICE 3 precisa de 51. A 300 km/h e a 25 m de distância, o maglev faz 80 decibéis de barulho, contra 90 a 92 do ICE e do TGV. São números do próprio fabricante, tirados dos testes dele."
+    }
+  }
+}

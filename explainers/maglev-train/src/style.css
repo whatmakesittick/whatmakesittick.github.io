@@ -1,0 +1,87 @@
+:root {
+  --lift: #9b7fe0;
+  --drive: #f2a33a;
+  --cruise: #3fc4dc;
+  --regen: #5cc98a;
+  --rest: #8a8f99;
+  --eddy: #ff7a2f;
+}
+
+.chapter .readouts {
+  --readout-min-width: 8rem;
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.chapter .readouts > div,
+.chapter .readouts :is(dt, dd) {
+  min-width: 0;
+}
+
+.chapter .readouts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.chapter .readouts dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chapter .readouts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.chip[data-action='topSpeed'] {
+  --tone: var(--drive);
+}
+
+.chip[data-action='brakeMode'][data-value='regen'] {
+  --tone: var(--regen);
+}
+
+.chip[data-action='brakeMode'][data-value='eddy'] {
+  --tone: var(--eddy);
+}
+
+.chip[data-action='nudge'] {
+  --tone: var(--lift);
+}
+
+.chip[data-action='compare'] {
+  --tone: var(--cruise);
+}
+
+.chip[data-action='moment'][data-value='lifted'] {
+  --tone: var(--lift);
+}
+
+.chip[data-action='moment'][data-value='fullSpeed'] {
+  --tone: var(--cruise);
+}
+
+.chip[data-action='moment'][data-value='brakeStart'] {
+  --tone: var(--regen);
+}
+
+.chip[data-action='moment'][data-value='touchdown'] {
+  --tone: var(--rest);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapter .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chapter .readouts > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}

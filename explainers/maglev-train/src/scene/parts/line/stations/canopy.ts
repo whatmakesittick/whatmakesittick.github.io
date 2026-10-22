@@ -1,0 +1,127 @@
+import { Vector3 } from 'three';
+import type { BufferGeometry } from 'three';
+import { SIDE_SIGNS } from '../../../../model';
+import {
+  around,
+  boxOver,
+  cylinderBetween,
+  evenlySpaced,
+  extrudeAlongX,
+  mergeParts,
+  profileShape,
+  sideSpan,
+} from '../geometry';
+import type { ProfilePoint } from '../geometry';
+import { CANOPY, CANOPY_COLUMN, FLOOR, HALF_LENGTH, LIGHT_STRIP, onPlatform } from './constants';
+
+const RISE = CANOPY.crown - CANOPY.eave;
+const RADIUS = (CANOPY.halfSpan ** 2 + RISE ** 2) / (2 * RISE);
+const CENTRE_Y = CANOPY.crown - RADIUS;
+const UNDERSIDE = RADIUS - CANOPY.thickness;
+const RIB_FOOT = UNDERSIDE - CANOPY.ribDepth;
+const GUTTER_LIP = 0.04;
+const FULL_LENGTH = around(0, CANOPY.length);
+
+export function arcHeight(z: number, radius = RADIUS): number {
+  return CENTRE_Y + Math.sqrt(radius * radius - z * z);
+}
+
+function arcPoints(from: number, to: number, radius: number): ProfilePoint[] {
+  return Array.from({ length: CANOPY.steps + 1 }, (_, step) => {
+    const z = from + ((to - from) * step) / CANOPY.steps;
+    return [z, arcHeight(z, radius)];
+  });
+}
+
+function band(from: number, to: number, outer: number, inner: number): ProfilePoint[] {
+  return [...arcPoints(from, to, outer), ...arcPoints(to, from, inner)];
+}
+
+function alongCanopy(points: readonly ProfilePoint[]): BufferGeometry {
+  return extrudeAlongX(profileShape(points), ...FULL_LENGTH, CANOPY.endChamfer);
+}
+
+export function canopyEdges(): BufferGeometry {
+  return mergeParts(
+    SIDE_SIGNS.map((side) => {
+      const [from, to] = [side * (CANOPY.halfSpan - CANOPY.edgeBand), side * CANOPY.halfSpan];
+      return alongCanopy(band(from, to, RADIUS, UNDERSIDE));
+    }),
+  );
+}
+
+export function glazing(): BufferGeometry {
+  const reach = CANOPY.halfSpan - CANOPY.edgeBand;
+  return alongCanopy(band(-reach, reach, RADIUS, RADIUS - CANOPY.glazing));
+}
+
+function purlin(z: number): BufferGeometry {
+  const top = arcHeight(z, RADIUS - CANOPY.glazing);
+  return boxOver(FULL_LENGTH, [top - CANOPY.purlinDepth, top], around(z, CANOPY.purlinWidth));
+}
+
+function purlins(): BufferGeometry[] {
+  return CANOPY.purlins.flatMap((z) =>
+    z === 0 ? [purlin(0)] : SIDE_SIGNS.map((side) => purlin(side * z)),
+  );
+}
+
+function rib(x: number): BufferGeometry {
+  const reach = CANOPY.halfSpan - CANOPY.ribInset;
+  const points = band(-reach, reach, UNDERSIDE, RIB_FOOT);
+  return extrudeAlongX(profileShape(points), ...around(x, CANOPY.ribWidth));
+}
+
+export function ribPositions(): number[] {
+  const count = Math.floor(CANOPY.length / CANOPY.ribSpacing);
+  return evenlySpaced(count, -CANOPY.length / 2, CANOPY.length / 2);
+}
+
+function gutter(side: number): BufferGeometry {
+  return boxOver(
+    FULL_LENGTH,
+    [CANOPY.eave - CANOPY.gutterDepth, CANOPY.eave + GUTTER_LIP],
+    sideSpan(side, CANOPY.halfSpan - CANOPY.gutterWidth, CANOPY.halfSpan),
+  );
+}
+
+export function canopyFrame(): BufferGeometry {
+  return mergeParts([...ribPositions().map(rib), ...SIDE_SIGNS.map(gutter), ...purlins()]);
+}
+
+function column(x: number, side: number): BufferGeometry[] {
+  const { z, baseRadius, topRadius, forkHeight, forkSpread, strutRadius, segments } = CANOPY_COLUMN;
+  const base = new Vector3(x, FLOOR, side * z);
+  const fork = new Vector3(x, forkHeight, side * z);
+  const tips = [-1, 1].map((lean) => {
+    const tipZ = side * (z + lean * forkSpread);
+    return new Vector3(x, arcHeight(tipZ, RIB_FOOT), tipZ);
+  });
+  return [
+    cylinderBetween(base, fork, [baseRadius, topRadius], segments),
+    ...tips.map((tip) => cylinderBetween(fork, tip, [topRadius, strutRadius], segments)),
+  ];
+}
+
+export function canopyColumns(): BufferGeometry {
+  return mergeParts(
+    SIDE_SIGNS.flatMap((side) =>
+      ribPositions()
+        .filter((x) => onPlatform(x, side))
+        .flatMap((x) => column(x, side)),
+    ),
+  );
+}
+
+export function lightStrips(): BufferGeometry {
+  const top = arcHeight(LIGHT_STRIP.z, RIB_FOOT) - LIGHT_STRIP.drop;
+  return mergeParts(
+    SIDE_SIGNS.map((side) =>
+      boxOver(
+        [-HALF_LENGTH, HALF_LENGTH],
+        [top - LIGHT_STRIP.height, top],
+        around(side * LIGHT_STRIP.z, LIGHT_STRIP.width),
+      ),
+    ),
+  );
+}
