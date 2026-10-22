@@ -192,4 +192,16 @@ describe('gap inset', () => {
     expect(built.section.animate?.(frame(), lifted)).toBe(false);
     expect(polesTop()).toBeCloseTo(magnetTop(GAP_MM), CLOSE);
   });
+
+  it('sways the magnet under a gust and leaves the stator field in place', () => {
+    const lifted = stateAt(MOMENTS.lifted);
+    settle(lifted);
+    const poles = mapOf(POLES_NAME).offset.x;
+    const field = mapOf(FIELD_NAME).offset.x;
+    const gust: NudgeSample = { id: 'gust', gapMm: 0, lateralMm: 2, active: true };
+    built.section.animate?.(frame(FRAME_SECONDS, gust), lifted);
+    expect(mapOf(POLES_NAME).offset.x).not.toBeCloseTo(poles, CLOSE);
+    expect(mapOf(FIELD_NAME).offset.x).toBeCloseTo(field, CLOSE);
+    expect(polesTop()).toBeCloseTo(magnetTop(GAP_MM), CLOSE);
+  });
 });

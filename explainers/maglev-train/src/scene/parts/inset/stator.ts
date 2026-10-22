@@ -3,7 +3,7 @@ import type { BufferGeometry, Object3D } from 'three';
 import type { PartContext } from '../context';
 import { INK, LAYER, STROKE } from './constants';
 import { insetMesh } from './insetMesh';
-import { CONTENT, STATOR_DRAWING, slotCentres } from './layout';
+import { CONTENT, FIELD_WAVELENGTH_DRAWN, STATOR_DRAWING, slotCentres } from './layout';
 import { disc, merged, polyline, positionsOnly, ring } from './strokes';
 import type { Point2 } from './strokes';
 import { hatchTexture } from './textures';
@@ -16,7 +16,7 @@ const INSULATION_INNER = 0.6;
 const INSULATION_OUTER = 0.84;
 const BOLT_RADIUS = 0.022;
 const BOLT_SIDES = 6;
-const BOLT_SPACING = 0.774;
+const BOLT_SPACING = FIELD_WAVELENGTH_DRAWN / 2;
 
 const { top, bottom, packHalf, jointHalf, slotWidth, slotDepth, cableRadius } = STATOR_DRAWING;
 const slotRadius = slotWidth / 2;
