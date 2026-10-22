@@ -1,6 +1,6 @@
-import { DoubleSide, FrontSide, MeshBasicMaterial } from 'three';
-import type { BufferGeometry, Mesh, Texture } from 'three';
-import { registeredMesh } from '../context';
+import { DoubleSide, FrontSide, Mesh, MeshBasicMaterial } from 'three';
+import type { BufferGeometry, Texture } from 'three';
+import { registeredMaterial } from '../context';
 import type { EmphasisGroup, PartContext } from '../context';
 
 export interface FlatLook {
@@ -31,8 +31,9 @@ export function flatMesh(
   group: EmphasisGroup,
   look: FlatLook,
   order: number,
-): Mesh {
-  const mesh = registeredMesh(context, geometry, group, flatMaterial(look));
+): Mesh<BufferGeometry, MeshBasicMaterial> {
+  const material = registeredMaterial(context, group, flatMaterial(look));
+  const mesh = new Mesh(context.tracker.track(geometry), material);
   mesh.renderOrder = order;
   return mesh;
 }
