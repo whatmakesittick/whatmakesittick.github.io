@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
-import { InstancedMesh, Mesh, Vector3 } from 'three';
+import { InstancedMesh, Matrix4, Mesh, Sphere, Vector3 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
@@ -15,6 +15,7 @@ import { chaseTargetFor } from './pose';
 const FRAME = 1 / 60;
 const SETTLED_SECONDS = 4;
 const POSITION_DIGITS = 3;
+const BOUNDS_TOLERANCE = 1e-3;
 const ALL_VIEWS: ViewOptions = {
   wave: true,
   gap: true,
@@ -95,6 +96,22 @@ function settle(state: AssemblyState): void {
   assembly.update(SETTLED_SECONDS, 0);
 }
 
+function instancesOutside(mesh: InstancedMesh): number[] {
+  const bounds = mesh.boundingSphere;
+  if (!bounds) return [-1];
+  const geometry = mesh.geometry;
+  if (!geometry.boundingSphere) geometry.computeBoundingSphere();
+  const local = geometry.boundingSphere ?? new Sphere();
+  const matrix = new Matrix4();
+  const sphere = new Sphere();
+  const slack = BOUNDS_TOLERANCE * Math.max(1, bounds.radius);
+  return Array.from({ length: mesh.count }, (_, index) => index).filter((index) => {
+    mesh.getMatrixAt(index, matrix);
+    sphere.copy(local).applyMatrix4(matrix);
+    return sphere.center.distanceTo(bounds.center) + sphere.radius > bounds.radius + slack;
+  });
+}
+
 function onDispose(resource: { addEventListener(type: 'dispose', listener: () => void): void }) {
   const freed = { done: false };
   resource.addEventListener('dispose', () => (freed.done = true));
@@ -147,6 +164,19 @@ describe('maglev train assembly', () => {
       settle(stateAt(MOMENTS.lifted, { [flag]: false }));
       expect(labelShown(id), id).toBe(false);
     });
+  });
+
+  it('bounds every culled instanced mesh around all of its instances', () => {
+    const loose: string[] = [];
+    [false, true].forEach((cutaway) => {
+      settle(stateAt(MOMENTS.fullSpeed, { cutaway }));
+      assembly.root.traverse((object) => {
+        if (!(object instanceof InstancedMesh) || !object.frustumCulled) return;
+        if (instancesOutside(object).length > 0)
+          loose.push(`${object.parent?.name}/${object.name}`);
+      });
+    });
+    expect(loose).toEqual([]);
   });
 
   it('stops animating once paused and idle', () => {

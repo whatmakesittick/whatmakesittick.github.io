@@ -50,6 +50,7 @@ function racks(
   slots.forEach((slot, index) =>
     mesh.setMatrixAt(index, matrix.makeTranslation(slot * TRACK_PERIOD, 0, 0)),
   );
+  mesh.computeBoundingSphere();
   return context.tracker.track(mesh);
 }
 
