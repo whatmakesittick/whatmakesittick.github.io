@@ -9,7 +9,7 @@ const GLOSS = 0.28;
 const METAL = 0.7;
 const GLOW = 0.9;
 const GLASS_OPACITY = 0.45;
-const GHOST_OPACITY = 0.32;
+const GHOST_OPACITY = 0.45;
 const INSET_OPACITY = 0.9;
 
 function matte(color: string): MaterialFinish {
