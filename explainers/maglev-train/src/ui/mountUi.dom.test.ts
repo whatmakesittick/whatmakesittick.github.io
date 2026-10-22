@@ -77,7 +77,7 @@ describe('chapter widgets', () => {
     expect(readout('pitch')).toBe(fill(units.mm, { value: '258' }));
     expect(readout('wavelength')).toBe(fill(units.mm, { value: '516' }));
     expect(readout('converter')).toBe(fill(units.hzRange, { min: '0', max: '300' }));
-    expect(readout('brakeDistance')).toBe(fill(stop.distanceValue, { km: '11.0', kmh: '430' }));
+    expect(readout('brakeDistance')).toBe(fill(stop.distanceValue, { km: '11', kmh: '430' }));
     expect(readout('skid')).toBe(fill(stop.skidValue, { kmh: '10' }));
     expect(readout('energy')).toBe(fill(compare.energyFast, { maglev: '52', kmh: '400' }));
   });

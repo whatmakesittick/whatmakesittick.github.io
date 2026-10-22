@@ -1,3 +1,4 @@
+import { formatSignificant } from '@core/format';
 import { t } from '@core/i18n';
 import type { Disposer } from '@core/ui/disposers';
 import { mountLiveReadouts } from '@core/ui/liveReadouts';
@@ -5,11 +6,13 @@ import type { TopSpeedId } from '../ids';
 import { PROFILES, SKID_KMH, TOP_SPEED_KMH } from '../model';
 import { createLiveReader } from '../state';
 import type { MaglevTrainStore } from '../state';
-import { tenths, toKilometres, whole } from './format';
+import { toKilometres, whole } from './format';
+
+const BRAKE_DISTANCE_DIGITS = 2;
 
 function formatBrakeDistance(topSpeed: TopSpeedId): string {
   return t('chapters.stop.distanceValue', {
-    km: tenths(toKilometres(PROFILES[topSpeed].brakeMetres)),
+    km: formatSignificant(toKilometres(PROFILES[topSpeed].brakeMetres), BRAKE_DISTANCE_DIGITS),
     kmh: whole(TOP_SPEED_KMH[topSpeed]),
   });
 }
