@@ -33,4 +33,4 @@ export const TRACK_TONES = {
 
 export const WIRE_LINE = { color: '#463d35', opacity: 0.85 } as const;
 
-export const GHOST_LINE = { color: '#eef5ff', opacity: 0.5 } as const;
+export const GHOST_LINE = { color: '#eef5ff', opacity: 0.6 } as const;

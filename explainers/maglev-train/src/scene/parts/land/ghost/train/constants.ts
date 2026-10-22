@@ -43,6 +43,8 @@ export const LOFT = { ring: 15, noseStations: 16, noseBias: 1.7 } as const;
 
 export const OUTER_SIDE = -1;
 
+export const PROFILE_LINES = [0.62, 2.75] as const;
+
 export const WINDOW_BAND = { bottom: 1.95, top: 2.6, doorClearance: 0.4 } as const;
 
 export const DOOR = { width: 1.0, bottom: 1.2, top: 3.0, inset: 1.1, edgeSegments: 4 } as const;

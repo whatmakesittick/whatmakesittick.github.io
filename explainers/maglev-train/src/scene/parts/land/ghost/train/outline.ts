@@ -1,9 +1,10 @@
 import { BufferGeometry, Float32BufferAttribute, LineBasicMaterial, LineSegments } from 'three';
+import { FULL_TURN } from '@core/math';
 import { SIDE_SIGNS } from '../../../../../model';
 import { registeredMaterial } from '../../../context';
 import type { PartContext } from '../../../context';
 import { GHOST_LINE } from '../finishes';
-import { NOSE_TIPS, bodySection } from './bodyShape';
+import { NOSE_TIPS, bodySection, bodyStations } from './bodyShape';
 import type { NoseTip } from './bodyShape';
 import {
   BODY,
@@ -12,6 +13,7 @@ import {
   LOFT,
   NOSE,
   OUTER_SIDE,
+  PROFILE_LINES,
   WINDOW_BAND,
   WINDSCREEN,
 } from './constants';
@@ -22,7 +24,7 @@ import { halfRing, halfWidthAt, noseSection, sectionPoint } from './section';
 type Point = readonly [number, number, number];
 
 const XYZ = 3;
-const FULL_TURN = Math.PI * 2;
+const UNMIRRORED = 1;
 
 function polyline(points: readonly Point[], closed = false): number[] {
   const count = closed ? points.length : points.length - 1;
@@ -93,9 +95,18 @@ function noseMark(tip: NoseTip, mark: NoseMark, side: number): number[] {
 
 function noseMarks(tip: NoseTip): number[] {
   return [
-    ...noseMark(tip, WINDSCREEN, 1),
+    ...noseMark(tip, WINDSCREEN, UNMIRRORED),
     ...SIDE_SIGNS.flatMap((side) => noseMark(tip, HEADLIGHT, side)),
   ];
+}
+
+function profileLine(theta: number): number[] {
+  return polyline(
+    bodyStations().map((x): Point => {
+      const [z, y] = sectionPoint(bodySection(x), theta);
+      return [x, y, OUTER_SIDE * z];
+    }),
+  );
 }
 
 function carOutline(car: CarSpan): number[] {
@@ -107,7 +118,11 @@ function carOutline(car: CarSpan): number[] {
 }
 
 export function outlinePositions(cars: readonly CarSpan[]): number[] {
-  return [...cars.flatMap(carOutline), ...NOSE_TIPS.flatMap(noseMarks)];
+  return [
+    ...cars.flatMap(carOutline),
+    ...NOSE_TIPS.flatMap(noseMarks),
+    ...PROFILE_LINES.flatMap(profileLine),
+  ];
 }
 
 export function ghostOutline(context: PartContext, cars: readonly CarSpan[]): LineSegments {
