@@ -81,6 +81,7 @@ export const GAP_PLATE = {
   ink: INK.text,
   plate: INK.plate,
   rim: THEME.insetLine,
+  depthTest: false,
 } as const;
 
 export const BRACKET_X = 0.92;

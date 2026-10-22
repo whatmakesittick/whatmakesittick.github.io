@@ -128,6 +128,16 @@ describe('gap inset', () => {
     expect(localLeft.x).toBeCloseTo(1, CLOSE);
   });
 
+  it('draws the panel flat, unfogged and over the scenery', () => {
+    const meshes: Mesh[] = [];
+    found('gapInsetPanel').traverse((node) => node instanceof Mesh && meshes.push(node));
+    expect(meshes.length).toBeGreaterThan(0);
+    meshes.forEach((mesh) => {
+      expect(mesh.material).toBeInstanceOf(MeshBasicMaterial);
+      expect(mesh.material).toMatchObject({ depthTest: false, depthWrite: false, fog: false });
+    });
+  });
+
   it('hides with the gap view and keeps its label with it', () => {
     settle(stateAt(0, { view: { ...VIEWS, gap: false } }));
     expect(isShown(built.context.labels.get('gapInset') as Object3D)).toBe(false);
