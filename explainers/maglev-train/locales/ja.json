@@ -15,10 +15,10 @@
     "label": "龍陽路駅から空港までの乗車",
     "phases": "走行の場面へ移動",
     "speed": "再生速度",
-    "value": "{{phase}}",
+    "value": "全{{total}}場面の{{step}}番目",
     "during": "全{{total}}場面の{{step}}番目、{{detail}}",
     "speedValue": "×{{factor}}",
-    "speedDescribe": "×{{factor}}、乗車全体を{{seconds}}秒で再生",
+    "speedDescribe": "乗車全体を{{seconds}}秒で再生",
     "phase": {
       "liftOff": "浮上",
       "accelerate": "加速",

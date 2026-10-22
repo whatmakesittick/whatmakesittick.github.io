@@ -15,10 +15,10 @@
     "label": "从龙阳路坐到机场",
     "phases": "跳到某个阶段",
     "speed": "播放速度",
-    "value": "{{phase}}",
+    "value": "第{{step}}阶段，共{{total}}个",
     "during": "第{{step}}阶段，共{{total}}个：{{detail}}",
     "speedValue": "×{{factor}}",
-    "speedDescribe": "×{{factor}}，整段行程{{seconds}}秒看完",
+    "speedDescribe": "整段行程{{seconds}}秒看完",
     "phase": {
       "liftOff": "浮起",
       "accelerate": "加速",

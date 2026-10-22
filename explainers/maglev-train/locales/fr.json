@@ -15,10 +15,10 @@
     "label": "Trajet de Longyang Road à l’aéroport",
     "phases": "Aller à une étape",
     "speed": "Vitesse de lecture",
-    "value": "{{phase}}",
+    "value": "Étape {{step}} sur {{total}}",
     "during": "Étape {{step}} sur {{total}}, {{detail}}",
     "speedValue": "×{{factor}}",
-    "speedDescribe": "×{{factor}}, tout le trajet en {{seconds}} secondes",
+    "speedDescribe": "Tout le trajet en {{seconds}} secondes",
     "phase": {
       "liftOff": "Décollage",
       "accelerate": "Accélération",

@@ -15,10 +15,10 @@
     "label": "Fahrt von Longyang Road zum Flughafen",
     "phases": "Zu einem Abschnitt der Fahrt springen",
     "speed": "Wiedergabetempo",
-    "value": "{{phase}}",
+    "value": "Abschnitt {{step}} von {{total}}",
     "during": "Abschnitt {{step}} von {{total}}, {{detail}}",
     "speedValue": "×{{factor}}",
-    "speedDescribe": "×{{factor}}, die ganze Fahrt in {{seconds}} Sekunden",
+    "speedDescribe": "Die ganze Fahrt in {{seconds}} Sekunden",
     "phase": {
       "liftOff": "Abheben",
       "accelerate": "Beschleunigen",

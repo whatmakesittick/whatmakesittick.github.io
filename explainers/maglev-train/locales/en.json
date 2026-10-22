@@ -15,10 +15,10 @@
     "label": "Ride from Longyang Road to the airport",
     "phases": "Jump to a stage",
     "speed": "Playback speed",
-    "value": "{{phase}}",
+    "value": "Stage {{step}} of {{total}}",
     "during": "Stage {{step}} of {{total}}, {{detail}}",
     "speedValue": "×{{factor}}",
-    "speedDescribe": "×{{factor}}, the whole ride in {{seconds}} seconds",
+    "speedDescribe": "The whole ride in {{seconds}} seconds",
     "phase": {
       "liftOff": "Lift-off",
       "accelerate": "Speeding up",

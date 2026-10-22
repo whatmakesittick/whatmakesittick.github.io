@@ -15,10 +15,10 @@
     "label": "Viagem de Longyang Road até o aeroporto",
     "phases": "Ir para uma etapa",
     "speed": "Velocidade de reprodução",
-    "value": "{{phase}}",
+    "value": "Etapa {{step}} de {{total}}",
     "during": "Etapa {{step}} de {{total}}, {{detail}}",
     "speedValue": "×{{factor}}",
-    "speedDescribe": "×{{factor}}, a viagem inteira em {{seconds}} segundos",
+    "speedDescribe": "A viagem inteira em {{seconds}} segundos",
     "phase": {
       "liftOff": "Levitação",
       "accelerate": "Aceleração",

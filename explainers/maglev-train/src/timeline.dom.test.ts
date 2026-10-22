@@ -13,7 +13,7 @@ import {
   formatSpeed,
 } from './timeline';
 
-const { value, during, speedValue, speedDescribe, phase, detail } = en.timeline;
+const { value, during, speedValue, speedDescribe, detail } = en.timeline;
 
 function fill(template: string, values: Readonly<Record<string, string>>): string {
   return template.replace(/\{\{(\w+)\}\}/g, (_, name: string) => values[name] ?? '');
@@ -41,13 +41,13 @@ describe('maglev train timeline', () => {
     expect(MAGLEV_TRAIN_TIMELINE.nudge).toEqual({ fine: 5, coarse: 50 });
   });
 
-  it('names the stage at each moment', () => {
-    expect(formatPhase(0)).toBe(fill(value, { phase: phase.liftOff }));
-    expect(formatPhase(MOMENTS.lifted)).toBe(fill(value, { phase: phase.liftOff }));
-    expect(formatPhase(MOMENTS.fullSpeed)).toBe(fill(value, { phase: phase.cruise }));
-    expect(formatPhase(MOMENTS.brakeStart)).toBe(fill(value, { phase: phase.brake }));
-    expect(formatPhase(MOMENTS.touchdown)).toBe(fill(value, { phase: phase.settle }));
-    expect(formatPhase(RUN_UNITS)).toBe(fill(value, { phase: phase.settle }));
+  it('numbers the stage at each moment', () => {
+    expect(formatPhase(0)).toBe(fill(value, { step: '1', total: '5' }));
+    expect(formatPhase(MOMENTS.lifted)).toBe(fill(value, { step: '1', total: '5' }));
+    expect(formatPhase(MOMENTS.fullSpeed)).toBe(fill(value, { step: '3', total: '5' }));
+    expect(formatPhase(MOMENTS.brakeStart)).toBe(fill(value, { step: '4', total: '5' }));
+    expect(formatPhase(MOMENTS.touchdown)).toBe(fill(value, { step: '5', total: '5' }));
+    expect(formatPhase(RUN_UNITS)).toBe(fill(value, { step: '5', total: '5' }));
   });
 
   it('describes the stage by its number out of five', () => {

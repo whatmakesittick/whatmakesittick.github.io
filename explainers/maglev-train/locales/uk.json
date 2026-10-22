@@ -15,10 +15,10 @@
     "label": "Поїздка від Лун’ян-роуд до аеропорту",
     "phases": "Перейти до етапу",
     "speed": "Швидкість відтворення",
-    "value": "{{phase}}",
+    "value": "Етап {{step}} з {{total}}",
     "during": "Етап {{step}} з {{total}}, {{detail}}",
     "speedValue": "×{{factor}}",
-    "speedDescribe": "×{{factor}}, уся поїздка за {{seconds}} с",
+    "speedDescribe": "Уся поїздка за {{seconds}} с",
     "phase": {
       "liftOff": "Підйом",
       "accelerate": "Розгін",

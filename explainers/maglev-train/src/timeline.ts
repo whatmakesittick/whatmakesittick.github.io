@@ -30,17 +30,20 @@ function rideSeconds(speed: number): number {
   return Math.round(BASE_RIDE_SECONDS / speed);
 }
 
+function stageCount(id: PhaseId): Record<string, string> {
+  return {
+    step: formatNumber(stageNumber(id)),
+    total: formatNumber(PHASE_IDS.length),
+  };
+}
+
 export function formatPhase(units: number): string {
-  return t('timeline.value', { phase: t(phaseKey(phaseAt(units))) });
+  return t('timeline.value', stageCount(phaseAt(units)));
 }
 
 export function describePhase(units: number): string {
   const id = phaseAt(units);
-  return t('timeline.during', {
-    step: formatNumber(stageNumber(id)),
-    total: formatNumber(PHASE_IDS.length),
-    detail: t(detailKey(id)),
-  });
+  return t('timeline.during', { ...stageCount(id), detail: t(detailKey(id)) });
 }
 
 export function formatSpeed(speed: number): string {
