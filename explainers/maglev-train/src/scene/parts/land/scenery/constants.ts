@@ -48,7 +48,7 @@ export const DISTANT = {
   clusters: 7,
   perCluster: [3, 9] as Range,
   spread: [60, 160] as Range,
-  slab: { length: [40, 70] as Range, depth: [12, 16] as Range, height: [30, 60] as Range },
+  slab: { length: [40, 70] as Range, depth: [12, 16] as Range, height: [18, 36] as Range },
   shed: { length: [50, 110] as Range, depth: [30, 60] as Range, height: [8, 14] as Range },
   slabShare: 0.55,
 } as const;
