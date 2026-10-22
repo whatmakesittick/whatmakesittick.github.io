@@ -2,29 +2,19 @@ import { Matrix4 } from 'three';
 import type { Object3D } from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import type { PartContext } from '../context';
-import { merged } from '../inset/strokes';
 import type { Point2 } from '../inset/strokes';
 import { buildBody } from './body';
-import type { BodySpec } from './body';
 import { CUT_FACE_LIFT, L0 } from './constants';
-import { cutFaceGeometry, finishMesh, instances } from './cut';
+import { cutFaceMesh, instances } from './cut';
 import { LINE_UP_FINISHES } from './finishes';
-import { lifted, roundedRect } from './profile';
+import { rectOutline } from './layout';
+import { roundedRect } from './profile';
 import { SIDE_SIGNS } from '../../../model';
 
 const PART = 'scmaglev';
 const MAGNET_SEGMENTS = 2;
 const MAGNET_EMBED = 0.05;
 const BOX_FACES = 6;
-
-export const L0_BODY: BodySpec = {
-  outline: L0.outline,
-  bottom: L0.bottom,
-  shell: L0.shell,
-  cabinFloor: L0.cabinFloor,
-  seats: L0.seats,
-  windows: L0.windows,
-};
 
 function magnetMatrices(): Matrix4[] {
   const { depth, length, centre, starts } = L0.magnet;
@@ -45,12 +35,14 @@ function coilSections(): Point2[][] {
   const { depth, centre, coilWidth, coilHeight } = L0.magnet;
   const a = L0.outline.halfWidth + depth / 2;
   const y = L0.floor + centre - L0.bottom;
-  return SIDE_SIGNS.map((side): Point2[] => [
-    [side * a - coilWidth / 2, y - coilHeight / 2],
-    [side * a + coilWidth / 2, y - coilHeight / 2],
-    [side * a + coilWidth / 2, y + coilHeight / 2],
-    [side * a - coilWidth / 2, y + coilHeight / 2],
-  ]);
+  return SIDE_SIGNS.map((side) =>
+    rectOutline(
+      side * a - coilWidth / 2,
+      side * a + coilWidth / 2,
+      y - coilHeight / 2,
+      y + coilHeight / 2,
+    ),
+  );
 }
 
 function addMagnets(context: PartContext, parent: Object3D): void {
@@ -63,12 +55,10 @@ function addMagnets(context: PartContext, parent: Object3D): void {
     radius,
   );
   parent.add(instances(context, geometry, PART, MAGNET_FACES, magnetMatrices()));
-  const coils = merged(
-    coilSections().map((outline) =>
-      cutFaceGeometry(lifted(outline, L0.bottom), CUT_FACE_LIFT.cabin),
-    ),
+  const { superconductor } = LINE_UP_FINISHES;
+  parent.add(
+    cutFaceMesh(context, PART, superconductor, coilSections(), L0.bottom, CUT_FACE_LIFT.cabin),
   );
-  parent.add(finishMesh(context, coils, PART, LINE_UP_FINISHES.superconductor));
 }
 
 function wheelOutlines(inset: number): Point2[][] {
@@ -89,12 +79,14 @@ function wheelOutlines(inset: number): Point2[][] {
 function strutOutlines(): Point2[][] {
   const { sideA, bottom, height, strutWidth } = L0.landingWheels;
   const top = L0.cabinFloor;
-  return SIDE_SIGNS.map((side): Point2[] => [
-    [side * sideA - strutWidth / 2, bottom + height / 2],
-    [side * sideA + strutWidth / 2, bottom + height / 2],
-    [side * sideA + strutWidth / 2, top],
-    [side * sideA - strutWidth / 2, top],
-  ]);
+  return SIDE_SIGNS.map((side) =>
+    rectOutline(
+      side * sideA - strutWidth / 2,
+      side * sideA + strutWidth / 2,
+      bottom + height / 2,
+      top,
+    ),
+  );
 }
 
 function addLandingWheels(context: PartContext, parent: Object3D): void {
@@ -107,16 +99,13 @@ function addLandingWheels(context: PartContext, parent: Object3D): void {
       lift: CUT_FACE_LIFT.accent + CUT_FACE_LIFT.cabin,
     },
   ];
-  layers.forEach(({ outlines, finish, lift }) => {
-    const geometry = merged(
-      outlines.map((outline) => cutFaceGeometry(lifted(outline, L0.bottom), lift)),
-    );
-    parent.add(finishMesh(context, geometry, PART, finish));
-  });
+  layers.forEach(({ outlines, finish, lift }) =>
+    parent.add(cutFaceMesh(context, PART, finish, outlines, L0.bottom, lift)),
+  );
 }
 
 export function buildL0Vehicle(context: PartContext, parent: Object3D): void {
-  parent.add(buildBody(context, L0_BODY, PART));
+  parent.add(buildBody(context, L0, PART));
   addMagnets(context, parent);
   addLandingWheels(context, parent);
 }

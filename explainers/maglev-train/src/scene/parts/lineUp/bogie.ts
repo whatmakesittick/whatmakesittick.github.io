@@ -1,11 +1,12 @@
 import { CylinderGeometry, LatheGeometry, Matrix4, Vector2 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
-import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { box } from '@core/scene/geometry/box';
 import { SIDE_SIGNS } from '../../../model';
+import { finishMesh } from '../context';
 import type { PartContext } from '../context';
+import { merged } from '../inset/strokes';
 import { WHEEL_RAIL } from './constants';
-import { finishMesh, instances } from './cut';
+import { instances } from './cut';
 import { LINE_UP_FINISHES } from './finishes';
 
 const PART = 'wheelRail';
@@ -92,9 +93,7 @@ function frameGeometry(): BufferGeometry {
     ),
   );
   const parts = [...sides, transom, ...boxes];
-  const geometry = mergeGeometries(parts);
-  parts.forEach((part) => part.dispose());
-  return geometry;
+  return merged(parts);
 }
 
 function airSprings(context: PartContext): Object3D {

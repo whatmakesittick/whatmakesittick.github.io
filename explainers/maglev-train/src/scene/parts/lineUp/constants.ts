@@ -47,7 +47,6 @@ const L0_WALL_THICKNESS = 0.3;
 export const L0 = {
   z: -LINE_UP_SPACING,
   floor: L0_FLOOR,
-  gap: L0_GAP,
   bottom: L0_FLOOR + L0_GAP,
   outline: {
     halfWidth: L0_HALF_WIDTH,
@@ -69,7 +68,6 @@ export const L0 = {
     starts: [SLICE.start + 0.4, SLICE.end - 2.2 - 0.002],
     coilWidth: 0.16,
     coilHeight: 0.3,
-    clearance: L0_MAGNET_CLEARANCE,
     radius: 0.06,
   },
   coils: {
@@ -121,15 +119,9 @@ export const WHEEL_RAIL = {
   z: LINE_UP_SPACING,
   ballast: { top: BALLAST_TOP, topHalf: 1.7, slope: 1.5, tile: 0.7 },
   sleeper: { top: SLEEPER_TOP, height: 0.2, length: 2.6, width: 0.26, pitch: 0.6 },
-  rail: {
-    base: RAIL_BASE,
-    top: RAIL_TOP,
-    height: RAIL_HEIGHT,
-    centre: GAUGE / 2 + RAIL_HEAD_HALF,
-    headHalf: RAIL_HEAD_HALF,
-  },
+  rail: { base: RAIL_BASE, centre: GAUGE / 2 + RAIL_HEAD_HALF },
   clip: { width: 0.1, height: 0.05, length: 0.12, offset: 0.12 },
-  wheel: { radius: WHEEL_RADIUS, backToBack: 1.36, segments: 24 },
+  wheel: { backToBack: 1.36, segments: 24 },
   axle: { y: AXLE_Y, radius: 0.085, xs: [SLICE.start + 1.4, SLICE.start + 3.9] },
   bogie: {
     sideA: 1.03,

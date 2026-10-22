@@ -1,10 +1,12 @@
 import { ExtrudeGeometry, InstancedMesh, Mesh, ShapeGeometry } from 'three';
 import type { BufferGeometry, Matrix4 } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
+import { finishMesh } from '../context';
 import type { EmphasisGroup, PartContext } from '../context';
+import { merged } from '../inset/strokes';
 import type { Point2 } from '../inset/strokes';
 import { SLICE } from './constants';
-import { shapeOf } from './profile';
+import { lifted, shapeOf } from './profile';
 
 const QUARTER_TURN = Math.PI / 2;
 const CURVE_SEGMENTS = 4;
@@ -23,15 +25,6 @@ export function sliceGeometry(
   return geometry;
 }
 
-export function finishMesh(
-  context: PartContext,
-  geometry: BufferGeometry,
-  group: EmphasisGroup,
-  finish: MaterialFinish,
-): Mesh {
-  return new Mesh(context.tracker.track(geometry), context.materials.get(group, finish));
-}
-
 export function cutMesh(
   context: PartContext,
   geometry: BufferGeometry,
@@ -48,6 +41,18 @@ export function cutFaceGeometry(points: readonly Point2[], lift: number): Buffer
   geometry.rotateY(QUARTER_TURN);
   geometry.translate(SLICE.end + lift, 0, 0);
   return geometry;
+}
+
+export function cutFaceMesh(
+  context: PartContext,
+  group: EmphasisGroup,
+  finish: MaterialFinish,
+  outlines: readonly (readonly Point2[])[],
+  bottom: number,
+  lift: number,
+): Mesh {
+  const faces = outlines.map((outline) => cutFaceGeometry(lifted(outline, bottom), lift));
+  return finishMesh(context, merged(faces), group, finish);
 }
 
 export function instances(

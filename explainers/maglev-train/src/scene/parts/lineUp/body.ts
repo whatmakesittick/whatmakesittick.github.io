@@ -1,12 +1,12 @@
 import type { Object3D } from 'three';
 import type { PartId } from '../../../ids';
-import { namedGroup } from '../context';
+import { finishMesh, namedGroup } from '../context';
 import type { PartContext } from '../context';
 import type { Point2 } from '../inset/strokes';
 import { CUT_FACE_LIFT, SEAT } from './constants';
-import { cutFaceGeometry, cutMesh, finishMesh, sliceGeometry } from './cut';
-import { merged } from '../inset/strokes';
+import { cutFaceMesh, cutMesh, sliceGeometry } from './cut';
 import { LINE_UP_FINISHES } from './finishes';
+import { mirrorOutline, rectOutline, trapezoid } from './layout';
 import {
   band,
   between,
@@ -31,10 +31,6 @@ export interface BodySpec {
 
 const FLOOR_THICKNESS = 0.06;
 
-function mirrorBand(points: readonly Point2[]): Point2[] {
-  return points.map(([a, y]): Point2 => [-a, y]).reverse();
-}
-
 export function innerOutline(spec: BodySpec, from: number, to: number): Point2[] {
   const side = offset(between(halfOutline(spec.outline), from, to), -spec.shell).map(
     ([a, y]): Point2 => [Math.max(0, a), Math.min(Math.max(y, from), to)],
@@ -53,22 +49,7 @@ function underframeOutline(spec: BodySpec): Point2[] {
 
 function floorStrip(spec: BodySpec): Point2[] {
   const half = widthAt(halfOutline(spec.outline), spec.cabinFloor) - spec.shell;
-  const { cabinFloor } = spec;
-  return [
-    [-half, cabinFloor - FLOOR_THICKNESS],
-    [half, cabinFloor - FLOOR_THICKNESS],
-    [half, cabinFloor],
-    [-half, cabinFloor],
-  ];
-}
-
-function rectOutline(minA: number, maxA: number, minB: number, maxB: number): Point2[] {
-  return [
-    [minA, minB],
-    [maxA, minB],
-    [maxA, maxB],
-    [minA, maxB],
-  ];
+  return trapezoid(half, half, spec.cabinFloor - FLOOR_THICKNESS, spec.cabinFloor);
 }
 
 export function seatOutlines(spec: BodySpec): Point2[][] {
@@ -91,27 +72,26 @@ export function seatOutlines(spec: BodySpec): Point2[][] {
 }
 
 function addSeats(context: PartContext, parent: Object3D, spec: BodySpec, part: PartId): void {
-  const geometry = merged(
-    seatOutlines(spec).map((outline) =>
-      cutFaceGeometry(lifted(outline, spec.bottom), CUT_FACE_LIFT.detail),
-    ),
+  const { seat } = LINE_UP_FINISHES;
+  parent.add(
+    cutFaceMesh(context, part, seat, seatOutlines(spec), spec.bottom, CUT_FACE_LIFT.detail),
   );
-  parent.add(finishMesh(context, geometry, part, LINE_UP_FINISHES.seat));
 }
 
 function addCutFace(context: PartContext, parent: Object3D, spec: BodySpec, part: PartId): void {
-  const cabin = cutFaceGeometry(lifted(cabinOutline(spec), spec.bottom), CUT_FACE_LIFT.cabin);
-  const floor = cutFaceGeometry(lifted(floorStrip(spec), spec.bottom), CUT_FACE_LIFT.detail);
-  const under = cutFaceGeometry(lifted(underframeOutline(spec), spec.bottom), CUT_FACE_LIFT.cabin);
-  parent.add(finishMesh(context, under, part, LINE_UP_FINISHES.underframe));
-  parent.add(finishMesh(context, cabin, part, LINE_UP_FINISHES.cabin));
-  parent.add(finishMesh(context, floor, part, LINE_UP_FINISHES.cabinFloor));
+  const { underframe, cabin, cabinFloor } = LINE_UP_FINISHES;
+  const { bottom } = spec;
+  parent.add(
+    cutFaceMesh(context, part, underframe, [underframeOutline(spec)], bottom, CUT_FACE_LIFT.cabin),
+    cutFaceMesh(context, part, cabin, [cabinOutline(spec)], bottom, CUT_FACE_LIFT.cabin),
+    cutFaceMesh(context, part, cabinFloor, [floorStrip(spec)], bottom, CUT_FACE_LIFT.detail),
+  );
 }
 
 function addWindows(context: PartContext, parent: Object3D, spec: BodySpec, part: PartId): void {
   const { from, to, thickness } = spec.windows;
   const right = lifted(band(halfOutline(spec.outline), from, to, thickness), spec.bottom);
-  const geometry = sliceGeometry([right, mirrorBand(right)]);
+  const geometry = sliceGeometry([right, mirrorOutline(right)]);
   parent.add(finishMesh(context, geometry, part, LINE_UP_FINISHES.windowBand));
 }
 

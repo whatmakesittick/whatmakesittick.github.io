@@ -29,6 +29,15 @@ export function mirrorOutline(points: readonly Point2[]): Point2[] {
   return points.map(([a, y]): Point2 => [-a, y]).reverse();
 }
 
+export function rectOutline(minA: number, maxA: number, minB: number, maxB: number): Point2[] {
+  return [
+    [minA, minB],
+    [maxA, minB],
+    [maxA, maxB],
+    [minA, maxB],
+  ];
+}
+
 export function trapezoid(
   bottomHalf: number,
   topHalf: number,

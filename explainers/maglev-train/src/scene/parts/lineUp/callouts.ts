@@ -28,37 +28,23 @@ interface CalloutSpec {
   readonly text: string;
 }
 
-function transrapidCallout(): CalloutSpec {
-  const spec = CALLOUTS.transrapid;
+type GapCallout = (typeof CALLOUTS)['transrapid'] | (typeof CALLOUTS)['scmaglev'];
+
+function callout(spec: GapCallout, extension: (line: number) => [number, number]): CalloutSpec {
   const line = towardViewer(spec.lineZ);
   return {
-    bracket: {
-      line,
-      top: spec.top,
-      bottom: spec.bottom,
-      extension: [towardViewer(spec.fromZ), line + CALLOUTS.overshoot],
-    },
+    bracket: { line, top: spec.top, bottom: spec.bottom, extension: extension(line) },
     plate: { u: towardViewer(spec.plate.z), y: spec.plate.y, width: spec.plate.width },
     text: spec.text,
   };
 }
 
-function scmaglevCallout(): CalloutSpec {
-  const spec = CALLOUTS.scmaglev;
-  const line = towardViewer(spec.lineZ);
-  return {
-    bracket: {
-      line,
-      top: spec.top,
-      bottom: spec.bottom,
-      extension: [line - spec.extentZ, line + spec.extentZ],
-    },
-    plate: { u: towardViewer(spec.plate.z), y: spec.plate.y, width: spec.plate.width },
-    text: spec.text,
-  };
-}
+const { transrapid, scmaglev, overshoot } = CALLOUTS;
 
-export const CALLOUT_SPECS: readonly CalloutSpec[] = [transrapidCallout(), scmaglevCallout()];
+export const CALLOUT_SPECS: readonly CalloutSpec[] = [
+  callout(transrapid, (line) => [towardViewer(transrapid.fromZ), line + overshoot]),
+  callout(scmaglev, (line) => [line - scmaglev.extentZ, line + scmaglev.extentZ]),
+];
 
 function strokes(brackets: readonly Bracket[], width: number, grow: number) {
   return merged(
