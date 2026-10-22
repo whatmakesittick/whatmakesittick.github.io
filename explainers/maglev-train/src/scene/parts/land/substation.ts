@@ -37,15 +37,24 @@ const FINISH: MaterialFinish = {
   roughness: 0.8,
   metalness: 0.1,
 };
-const YARD_LIFT = 0.05;
+const YARD = { lift: 0.05, thickness: 0.04 } as const;
 const FENCE = { height: 2.2, plinth: 0.45, post: 0.12, spacing: 3, panel: 0.05 } as const;
 const HALL: Box = [-11, 0, 4.5, 16, 5.6, 9];
 const HALL_WINDOWS = { count: 5, inset: 1.4, pitch: 3, width: 1.8, sill: 2.4, top: 3.8 } as const;
 const ROOF_RIM = { height: 0.5, overhang: 0.3 } as const;
 const FACE_OUT = 0.03;
 const TRANSFORMERS = [-2, 6.5, 15] as const;
-const TRANSFORMER = { length: 4.2, height: 3, depth: 3.2, z: -6, bushing: 1.6 } as const;
-const GANTRY = { height: 11, z: -6, span: 26, post: 0.35 } as const;
+const TRANSFORMER = {
+  length: 4.2,
+  height: 3,
+  depth: 3.2,
+  z: -6,
+  plinth: 0.4,
+  apron: 1,
+  radiator: { lift: 0.6, out: 0.3, length: 0.9, height: 0.8, depth: 0.5 },
+  bushing: { height: 1.6, top: 0.12, bottom: 0.18, spread: 0.3 },
+} as const;
+const GANTRY = { height: 11, z: -6, span: 26, post: 0.35, beam: 0.6, beamDepth: 1.4 } as const;
 const BUSHING_SIDES = 6;
 const SHADOW = { feather: 1.2, lift: 0.1, colour: '#1f2633', opacity: 0.5 } as const;
 const HALF = 0.5;
@@ -118,32 +127,51 @@ function hall(): BufferGeometry[] {
 }
 
 function transformer(x: number): BufferGeometry[] {
-  const { length, height, depth, z, bushing } = TRANSFORMER;
+  const { length, height, depth, z, plinth, apron, radiator, bushing } = TRANSFORMER;
   const parts = [
-    block([x, 0, z, length + 1, 0.4, depth + 1], COLOURS.concrete),
-    block([x, 0.4, z, length, height, depth], COLOURS.transformer),
-    block([x, 0.6, z + depth / 2 + 0.3, length * 0.9, height * 0.8, 0.5], COLOURS.transformer),
+    block([x, 0, z, length + apron, plinth, depth + apron], COLOURS.concrete),
+    block([x, plinth, z, length, height, depth], COLOURS.transformer),
+    block(
+      [
+        x,
+        radiator.lift,
+        z + depth / 2 + radiator.out,
+        length * radiator.length,
+        height * radiator.height,
+        radiator.depth,
+      ],
+      COLOURS.transformer,
+    ),
   ];
   [-1, 0, 1].forEach((offset) => {
-    const geometry = new CylinderGeometry(0.12, 0.18, bushing, BUSHING_SIDES);
-    geometry.translate(x + offset * length * 0.3, 0.4 + height + bushing / 2, z);
+    const geometry = new CylinderGeometry(
+      bushing.top,
+      bushing.bottom,
+      bushing.height,
+      BUSHING_SIDES,
+    );
+    geometry.translate(
+      x + offset * length * bushing.spread,
+      plinth + height + bushing.height / 2,
+      z,
+    );
     parts.push(painted(geometry, COLOURS.porcelain));
   });
   return parts;
 }
 
 function gantry(): BufferGeometry[] {
-  const { height, z, span, post } = GANTRY;
+  const { height, z, span, post, beam, beamDepth } = GANTRY;
   return [
     block([-span / 2, 0, z, post, height, post], COLOURS.steel),
     block([span / 2, 0, z, post, height, post], COLOURS.steel),
-    block([0, height - 0.6, z, span + post, 0.6, post * 1.4], COLOURS.steel),
+    block([0, height - beam, z, span + post, beam, post * beamDepth], COLOURS.steel),
   ];
 }
 
 function yard(): BufferGeometry {
   const { length, depth } = SUBSTATION;
-  return block([0, YARD_LIFT - 0.04, 0, length, 0.04, depth], COLOURS.gravel);
+  return block([0, YARD.lift - YARD.thickness, 0, length, YARD.thickness, depth], COLOURS.gravel);
 }
 
 export function substationGeometry(): BufferGeometry {

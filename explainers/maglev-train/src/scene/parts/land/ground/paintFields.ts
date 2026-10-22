@@ -8,6 +8,7 @@ import type { Painter } from './painter';
 const DETAIL_REACH = 700;
 const MIN_STRIPE_PX = 2.5;
 const TONE_SCRAMBLE = 7.31;
+const FLIP_SCRAMBLE = 21.93;
 const HALF = 0.5;
 const RIDGE_SHARE = 0.3;
 const EDGE_SHARE = 0.12;
@@ -45,7 +46,7 @@ function lengthGradient(painter: Painter, field: Field): CanvasGradient {
           pixelX(painter, field.x[1]),
           0,
         );
-  const flip = fract(field.tone * TONE_SCRAMBLE * 3) > HALF ? 1 : -1;
+  const flip = fract(field.tone * FLIP_SCRAMBLE) > HALF ? 1 : -1;
   gradient.addColorStop(0, fieldColour(field, 1 + flip * spread));
   gradient.addColorStop(1, fieldColour(field, 1 - flip * spread));
   return gradient;

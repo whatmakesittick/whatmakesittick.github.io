@@ -24,6 +24,7 @@ export interface ShadowCaster {
 
 const SHADOW_DECAL = { opacity: 0.62, lift: 0.08, colour: '#1d2430', spread: 1.2 } as const;
 const QUARTER_TURN = Math.PI / 2;
+const CONE_SHADOW_SHARE = 0.8;
 const SLOPE = Math.hypot(...SHADOW_SLOPE);
 const DIRECTION = [SHADOW_SLOPE[0] / SLOPE, SHADOW_SLOPE[1] / SLOPE] as const;
 const HEADING = Math.atan2(DIRECTION[0], DIRECTION[1]);
@@ -62,7 +63,7 @@ export function treeCaster(spot: TreeSpot, heightScale: number): ShadowCaster {
       x: spot.x,
       z: spot.z,
       height: reach / 2,
-      along: reach * SLOPE * 0.8,
+      along: reach * SLOPE * CONE_SHADOW_SHARE,
       across: 2 * radius * spot.scale,
     };
   }

@@ -21,6 +21,8 @@ const CROWN_COLOUR: Rgb = [1, 1, 1];
 const LUMP = 0.16;
 const LUMP_SEED = 41;
 const TIER_INSET = 0.62;
+const TIER_DROOP = 0.04;
+const CONIFER_CENTRE = 0.35;
 
 interface TrunkShape {
   readonly top: number;
@@ -108,7 +110,7 @@ function coniferProfile(detail: Detail): Vector2[] {
   for (let tier = 0; tier < tiers; tier += 1) {
     const bottom = base + (height * tier) / tiers;
     const reach = radius * (1 - tier / tiers);
-    points.push(new Vector2(reach, bottom + height * 0.04));
+    points.push(new Vector2(reach, bottom + height * TIER_DROOP));
     points.push(new Vector2(reach * TIER_INSET, bottom + height / tiers));
   }
   points.push(new Vector2(0, base + height));
@@ -118,7 +120,7 @@ function coniferProfile(detail: Detail): Vector2[] {
 function coniferCrown(detail: Detail): BufferGeometry {
   const { radius, base, height } = TREE_SHAPES.conifer.crown;
   const geometry = new LatheGeometry(coniferProfile(detail), CONIFER_SIDES[detail]);
-  const centre = new Vector3(0, base + height * 0.35, 0);
+  const centre = new Vector3(0, base + height * CONIFER_CENTRE, 0);
   return paint(lumpy(geometry, centre, new Vector3(radius, height / 2, radius)), CROWN_COLOUR);
 }
 

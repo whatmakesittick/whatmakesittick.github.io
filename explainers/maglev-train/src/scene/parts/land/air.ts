@@ -15,19 +15,19 @@ import type { MotionReading } from '../../../ids';
 import { TRAIN } from '../../../model';
 import { LINE_GROUP, registeredMaterial } from '../context';
 import type { PartContext } from '../context';
-import { seededRandom } from './random';
+import { between, seededRandom } from './random';
 
 export const AIR = {
   speed: [25, 110] as const,
   wake: 220,
   count: 420,
-  size: 2.2,
+  size: 1.4,
   colour: '#cdc4ae',
   height: [0.15, 4.5] as const,
-  spread: [2.2, 9] as const,
+  spread: [2.2, 7] as const,
   swirl: 1.4,
   swirlWave: 0.045,
-  alpha: 0.4,
+  alpha: 0.32,
   streaks: {
     count: 9,
     opacity: 0.3,
@@ -41,6 +41,9 @@ export const AIR = {
 const QUARTER_TURN = Math.PI / 2;
 const FULL_TURN = Math.PI * 2;
 const SPAN = TRAIN.length + AIR.wake;
+const WAKE_SHAPE = { riseFrom: 0.35, fadeFrom: 0.3 } as const;
+const STREAK_LAYOUT = { lead: 0.32, scatter: 0.4 } as const;
+const HALF = 0.5;
 
 export interface Air {
   readonly root: Group;
@@ -56,8 +59,8 @@ export function dustBehindNose(phase: number, distance: number): number {
 }
 
 function wakeAlpha(behind: number): number {
-  const rise = smoothstep(behind, TRAIN.length * 0.35, TRAIN.length);
-  return rise * (1 - smoothstep(behind, TRAIN.length + AIR.wake * 0.3, SPAN));
+  const rise = smoothstep(behind, TRAIN.length * WAKE_SHAPE.riseFrom, TRAIN.length);
+  return rise * (1 - smoothstep(behind, TRAIN.length + AIR.wake * WAKE_SHAPE.fadeFrom, SPAN));
 }
 
 function streaks(context: PartContext): InstancedMesh {
@@ -82,10 +85,11 @@ function streaks(context: PartContext): InstancedMesh {
   const random = seededRandom(AIR.seed);
   const matrix = new Matrix4();
   for (let index = 0; index < count; index += 1) {
-    const long = length[0] + (length[1] - length[0]) * random();
-    const wide = width[0] + (width[1] - width[0]) * random();
-    const x = TRAIN.tailX - long * 0.32 + (random() - 0.5) * TRAIN.length * 0.4;
-    const z = (random() - 0.5) * AIR.spread[0] * 2;
+    const long = between(random, length);
+    const wide = between(random, width);
+    const scatter = (random() - HALF) * TRAIN.length * STREAK_LAYOUT.scatter;
+    const x = TRAIN.tailX - long * STREAK_LAYOUT.lead + scatter;
+    const z = (random() - HALF) * AIR.spread[0] * 2;
     mesh.setMatrixAt(
       index,
       matrix.compose(new Vector3(x, lift, z), new Quaternion(), new Vector3(long, 1, wide)),
