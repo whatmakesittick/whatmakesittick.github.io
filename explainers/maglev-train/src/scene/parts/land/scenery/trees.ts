@@ -3,11 +3,11 @@ import type { InstancedMesh } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import type { PartContext } from '../../context';
 import { between, pick, seededRandom } from '../random';
-import type { Range } from '../random';
+import type { Random, Range } from '../random';
 import { periodicCopies } from './copies';
 import { instanced } from './instances';
 import type { Instance } from './instances';
-import { treeGeometry } from './treeGeometry';
+import { TREE_KINDS, treeGeometry } from './treeGeometry';
 import type { Detail } from './treeGeometry';
 import { TREE_ROWS } from './constants';
 import type { TreeKind, TreeSpot } from './treePlacement';
@@ -26,11 +26,20 @@ export const TREE_FINISH: MaterialFinish = {
 
 export const TREE_TINTS: Readonly<Record<TreeKind, readonly string[]>> = {
   round: ['#4e6a36', '#5b783d', '#445f32', '#68824a', '#55703a'],
-  conifer: ['#4a6235', '#536d39', '#5d723c', '#7d6b3f'],
+  poplar: ['#5f7b3c', '#6b8442', '#56713a', '#7a8a45'],
+  conifer: ['#4a6235', '#536d39', '#5d723c', '#4f6838', '#6c6c3e'],
 };
 
+function treeRandom(spot: TreeSpot): Random {
+  return seededRandom(Math.floor(spot.seed * SEED_SCALE));
+}
+
+export function treeHeightScale(spot: TreeSpot): number {
+  return spot.scale * between(treeRandom(spot), STRETCH);
+}
+
 function treeInstance(spot: TreeSpot): Instance {
-  const random = seededRandom(Math.floor(spot.seed * SEED_SCALE));
+  const random = treeRandom(spot);
   const height = spot.scale * between(random, STRETCH);
   const colour = new Color(pick(random, TREE_TINTS[spot.kind])).multiplyScalar(
     between(random, LIGHTNESS),
@@ -44,7 +53,6 @@ function treeInstance(spot: TreeSpot): Instance {
 }
 
 const DETAILS = ['near', 'far'] as const;
-const KINDS = ['round', 'conifer'] as const;
 
 function detailOf(spot: TreeSpot): Detail {
   return Math.abs(spot.z) < TREE_ROWS.near ? 'near' : 'far';
@@ -58,7 +66,7 @@ export function plantTrees(
   name: string,
 ): InstancedMesh[] {
   const copies = periodicCopies(spots, period, reach);
-  return KINDS.flatMap((kind) =>
+  return TREE_KINDS.flatMap((kind) =>
     DETAILS.map((detail) =>
       instanced(
         context,

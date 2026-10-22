@@ -7,8 +7,9 @@ import type { Linear } from '../ground/linears';
 import { between, seededRandom } from '../random';
 import type { Random, Range } from '../random';
 import { COPSES, TREE_ROWS } from './constants';
+import type { TreeKind } from './treeGeometry';
 
-export type TreeKind = 'round' | 'conifer';
+export type { TreeKind } from './treeGeometry';
 
 export interface TreeSpot {
   readonly x: number;
@@ -30,9 +31,8 @@ function inRange(value: number, [from, to]: Range): boolean {
 }
 
 function rowKind(linear: Linear, random: Random): TreeKind {
-  const { kind } = TREE_ROWS.byKind[linear.kind];
-  if (kind !== 'mixed') return kind;
-  return random() < HALF ? 'conifer' : 'round';
+  const { kinds } = TREE_ROWS.byKind[linear.kind];
+  return kinds[Math.floor(random() * kinds.length)];
 }
 
 function blockedBy(

@@ -10,10 +10,10 @@ export const TREE_ROWS = {
   reach: 420,
   near: 160,
   byKind: {
-    road: { sides: 2, spacing: [10, 13] as Range, kind: 'conifer' },
-    lane: { sides: 1, spacing: [10, 14] as Range, kind: 'mixed' },
-    canal: { sides: 1, spacing: [9, 13] as Range, kind: 'round' },
-    river: { sides: 1, spacing: [11, 16] as Range, kind: 'round' },
+    road: { sides: 2, spacing: [9, 12] as Range, kinds: ['poplar', 'conifer'] },
+    lane: { sides: 1, spacing: [10, 14] as Range, kinds: ['round', 'poplar'] },
+    canal: { sides: 1, spacing: [9, 13] as Range, kinds: ['round'] },
+    river: { sides: 1, spacing: [11, 16] as Range, kinds: ['round'] },
   },
 } as const;
 

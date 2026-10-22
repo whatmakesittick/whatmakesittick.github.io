@@ -93,7 +93,7 @@ describe('scenery', () => {
       SCENERY.villagePeriod,
       SCENERY.treeReach,
     ).length;
-    expect(rowTrees + villageTrees).toBeLessThan(1300);
+    expect(rowTrees + villageTrees).toBeLessThan(1400);
     expect(houses).toBeLessThan(260);
   });
 

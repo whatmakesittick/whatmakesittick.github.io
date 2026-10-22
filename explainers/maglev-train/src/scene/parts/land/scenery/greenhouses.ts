@@ -6,7 +6,7 @@ import type { Field } from '../ground/fields';
 import { periodicCopies } from './copies';
 import { instanced } from './instances';
 
-const TUNNEL = { height: 2.8, sides: 10 } as const;
+export const TUNNEL = { height: 2.8, sides: 10 } as const;
 const HALF_TURN = Math.PI;
 const QUARTER_TURN = Math.PI / 2;
 const PLASTIC = new Color('#ffffff');
