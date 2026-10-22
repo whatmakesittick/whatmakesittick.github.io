@@ -78,18 +78,9 @@ export function concreteModule(): BufferGeometry {
 }
 
 function bearing(x: number, z: number): BufferGeometry {
-  const top = DECK.bottom;
-  const plinthTop = top - PIER_SHAPE.bearingHeight + BEARING.plinthHeight;
-  const plinth = BEARING.plinthSize / 2;
   const pad = BEARING.size / 2;
-  return mergeParts([
-    boxOver(
-      [x - plinth, x + plinth],
-      [top - PIER_SHAPE.bearingHeight, plinthTop],
-      [z - plinth, z + plinth],
-    ),
-    boxOver([x - pad, x + pad], [plinthTop, top], [z - pad, z + pad]),
-  ]);
+  const top = DECK.bottom;
+  return boxOver([x - pad, x + pad], [top - PIER_SHAPE.bearingHeight, top], [z - pad, z + pad]);
 }
 
 export function bearingModule(): BufferGeometry {

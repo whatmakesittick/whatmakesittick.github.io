@@ -1,4 +1,12 @@
-import { BufferAttribute, ExtrudeGeometry, Shape, Vector2 } from 'three';
+import {
+  BufferAttribute,
+  CylinderGeometry,
+  ExtrudeGeometry,
+  Quaternion,
+  Shape,
+  Vector2,
+  Vector3,
+} from 'three';
 import type { BufferGeometry } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { box } from '@core/scene/geometry/box';
@@ -8,6 +16,7 @@ export type ProfilePoint = readonly [z: number, y: number];
 const QUARTER_TURN = Math.PI / 2;
 const CURVE_SEGMENTS = 8;
 const UV = 2;
+const UP = new Vector3(0, 1, 0);
 
 export function profileShape(points: readonly ProfilePoint[]): Shape {
   return new Shape(points.map(([z, y]) => new Vector2(z, y)));
@@ -100,4 +109,31 @@ export function boxProjectUVs(geometry: BufferGeometry, metresPerRepeat: number)
 export function evenlySpaced(count: number, from: number, to: number): number[] {
   const step = (to - from) / count;
   return Array.from({ length: count }, (_, index) => from + step * (index + 0.5));
+}
+
+export function extrudeAlongZ(shape: Shape, start: number, end: number): BufferGeometry {
+  const geometry = new ExtrudeGeometry(shape, {
+    depth: end - start,
+    bevelEnabled: false,
+    curveSegments: CURVE_SEGMENTS,
+  });
+  geometry.translate(0, 0, start);
+  return geometry;
+}
+
+export function sideShape(points: readonly (readonly [number, number])[]): Shape {
+  return new Shape(points.map(([a, b]) => new Vector2(a, b)));
+}
+
+export function cylinderBetween(
+  from: Vector3,
+  to: Vector3,
+  [startRadius, endRadius]: readonly [number, number],
+  segments: number,
+): BufferGeometry {
+  const axis = new Vector3().subVectors(to, from);
+  const geometry = new CylinderGeometry(endRadius, startRadius, axis.length(), segments, 1, true);
+  geometry.applyQuaternion(new Quaternion().setFromUnitVectors(UP, axis.normalize()));
+  geometry.translate((from.x + to.x) / 2, (from.y + to.y) / 2, (from.z + to.z) / 2);
+  return geometry;
 }

@@ -34,8 +34,18 @@ function pack(x: number, side: number): BufferGeometry {
   return withoutFace(boxOver([x - half, x + half], [PACKS.bottom, PACKS.top], z), TOP_FACE);
 }
 
-export function statorModule(): BufferGeometry {
-  return mergeParts(SIDE_SIGNS.flatMap((side) => packCentres().map((x) => pack(x, side))));
+function packStrip(side: number): BufferGeometry {
+  const half = (PACKS.perBeam * PACKS.pitch) / 2;
+  const z: [number, number] = side > 0 ? [PACKS.inner, PACKS.outer] : [-PACKS.outer, -PACKS.inner];
+  return withoutFace(boxOver([-half, half], [PACKS.bottom, PACKS.top], z), TOP_FACE);
+}
+
+export function statorModule(detailed: boolean): BufferGeometry {
+  return mergeParts(
+    SIDE_SIGNS.flatMap((side) =>
+      detailed ? packCentres().map((x) => pack(x, side)) : [packStrip(side)],
+    ),
+  );
 }
 
 const TRAY_PROFILE: readonly ProfilePoint[] = [
@@ -56,8 +66,8 @@ function trayBracket(x: number, side: number): BufferGeometry {
   return boxOver([x - half, x + half], [TRAY.bottom - TRAY.bracketDepth, TRAY.bottom], z);
 }
 
-export function trayModule(): BufferGeometry {
-  const brackets = Math.round(BEAM_M / TRAY.bracketSpacing);
+export function trayModule(detailed: boolean): BufferGeometry {
+  const brackets = detailed ? TRAY.bracketsPerBeam : 0;
   return mergeParts(
     SIDE_SIGNS.flatMap((side) => [
       extrudeAlongX(profileShape(sideProfile(TRAY_PROFILE, side)), -HALF_RUN, HALF_RUN),

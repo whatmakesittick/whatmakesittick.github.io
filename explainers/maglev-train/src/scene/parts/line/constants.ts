@@ -47,8 +47,7 @@ export const RAIL = {
   top: GUIDANCE_RAIL.centreY + GUIDANCE_RAIL.height / 2,
   bottom: GUIDANCE_RAIL.centreY - GUIDANCE_RAIL.height / 2,
   chamfer: 0.006,
-  tabWidth: 0.012,
-  tabEvery: 2,
+  hangerWidth: 0.08,
 } as const;
 
 export const PACKS = {
@@ -69,7 +68,7 @@ export const TRAY = {
   bottom: 9.04,
   top: 9.2,
   wall: 0.012,
-  bracketSpacing: BEAM_M / 10,
+  bracketsPerBeam: 6,
   bracketWidth: 0.05,
   bracketDepth: 0.05,
   bracketInner: 0.76,
@@ -78,7 +77,7 @@ export const TRAY = {
 export const CABLES = {
   radius: 0.032,
   offsets: [0.9, 0.98, 1.06],
-  segments: 8,
+  segments: 6,
 } as const;
 
 export const PIER_SHAPE = {
@@ -99,6 +98,8 @@ export const BEARING = {
   size: 0.46,
   z: 0.42,
   x: 0.4,
-  plinthSize: 0.62,
-  plinthHeight: 0.05,
+} as const;
+
+export const DETAIL = {
+  nearReach: 320,
 } as const;

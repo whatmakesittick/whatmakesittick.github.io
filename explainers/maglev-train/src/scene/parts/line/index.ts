@@ -10,13 +10,14 @@ import {
   STATOR_BOTTOM,
   TRAIN,
 } from '../../../model';
-import { FINISHES } from '../../finishes';
-import { label, namedGroup, registeredMaterial } from '../context';
+import { label, namedGroup } from '../context';
 import type { PartContext, Section } from '../context';
+import { concreteLooks } from './concreteLook';
 import { TRAY } from './constants';
 import { buildGuideway } from './guideway';
+import { buildPowerFlow } from './powerFlow';
 import { buildStations } from './stations';
-import { createMaterial } from '@core/scene/materials';
+import { buildWaveEffects } from './wave';
 
 const LABEL_X = TRAIN.noseX + BEAM_M;
 const WEB_Z = GIRDER.topWidth / 4;
@@ -31,24 +32,25 @@ function lineLabels(context: PartContext, parent: Object3D): void {
 
 export function buildLine(context: PartContext): Section {
   const root = namedGroup('line');
-  const stator = registeredMaterial(context, 'statorPacks', createMaterial(FINISHES.stator));
-  const guideway = buildGuideway(context, stator);
-  const stations = buildStations(context);
-  const wave = namedGroup('wave', root);
-  const flow = namedGroup('powerFlow', root);
-  root.add(guideway.group, stations.group);
+  const concrete = concreteLooks(context);
+  const wave = buildWaveEffects(context);
+  const guideway = buildGuideway(context, concrete.line, wave.stator);
+  const stations = buildStations(context, concrete.stations);
+  const flow = buildPowerFlow(context);
+  root.add(guideway.group, stations.group, wave.powered, wave.travelling, flow.group);
   lineLabels(context, root);
-  label(context, 'poweredSection', wave, [LABEL_X, STATOR_BOTTOM, -STATOR.sideZ]);
-  label(context, 'travellingWave', wave, [TRAIN.noseX, STATOR_BOTTOM, STATOR.sideZ]);
-  label(context, 'powerFlow', flow, [LABEL_X + BEAM_M, TRAY.bottom, TRAY.outer]);
   return {
     root,
     setState(state: AssemblyState) {
-      const { distance } = state.motion;
-      guideway.slide(distance);
-      stations.place(distance);
-      wave.visible = state.view.wave && state.wave.on;
-      flow.visible = state.power.flow === 'drive' || state.power.flow === 'regen';
+      guideway.slide(state.motion.distance);
+      stations.place(state.motion.distance);
+      wave.setState(state);
+      flow.setFlow(state.power.flow);
+    },
+    animate(frame, state) {
+      const drifting = wave.animate(frame, state);
+      const streaming = flow.stream(frame.delta);
+      return drifting || streaming;
     },
   };
 }
