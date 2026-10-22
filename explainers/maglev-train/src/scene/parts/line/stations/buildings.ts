@@ -10,7 +10,7 @@ import {
   sideShape,
 } from '../geometry';
 import type { ProfilePoint } from '../geometry';
-import { ESCALATOR, FLOOR, HALL, LINK, PLATFORM } from './constants';
+import { ESCALATOR, FLOOR, HALL } from './constants';
 import type { BuildingSpec, StationStyle } from './constants';
 
 type Span = readonly [number, number];
@@ -138,23 +138,6 @@ function escalator(start: number, side: number): BuildingParts {
   };
 }
 
-function link(spec: BuildingSpec): BuildingParts {
-  const z: Span = [PLATFORM.outer, spec.z[0]];
-  return {
-    concrete: [boxOver(LINK.x, [FLOOR - LINK.floorThickness, FLOOR], z)],
-    glass: [boxOver(LINK.x, [FLOOR, FLOOR + LINK.height], z)],
-    facade: [],
-    trim: [],
-    paint: [
-      boxOver(
-        grown(LINK.x, HALL.roofOverhang / 4),
-        [FLOOR + LINK.height, FLOOR + LINK.height + LINK.floorThickness],
-        z,
-      ),
-    ],
-  };
-}
-
 function combine(parts: readonly BuildingParts[]): BuildingParts {
   const pick = (key: keyof BuildingParts) => parts.flatMap((part) => part[key]);
   return {
@@ -170,7 +153,6 @@ export function stationBuildings(style: StationStyle): BuildingParts {
   return combine([
     hall(style.hall),
     ...SIDE_SIGNS.map((side) => escalator(style.escalatorX - side * ESCALATOR.run, side)),
-    ...(style.link ? [link(style.hall)] : []),
   ]);
 }
 

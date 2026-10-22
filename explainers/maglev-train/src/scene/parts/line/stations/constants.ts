@@ -104,6 +104,8 @@ export const ESCALATOR = {
   width: 1.6,
 } as const;
 
+const HALL_HALF_WIDTH = 9.6;
+
 export interface BuildingSpec {
   readonly x: readonly [number, number];
   readonly z: readonly [number, number];
@@ -116,24 +118,35 @@ export interface BuildingSpec {
 export interface StationStyle {
   readonly escalatorX: number;
   readonly hall: BuildingSpec;
-  readonly link: boolean;
 }
 
 export const STATION_STYLES: Readonly<Record<StationId, StationStyle>> = {
   longyangRoad: {
     escalatorX: -58,
-    hall: { x: [-62, 28], z: [13, 30], height: 8, finSpacing: 3, bands: 1, roofRise: 1.2 },
-    link: false,
+    hall: {
+      x: [-62, 14],
+      z: [-HALL_HALF_WIDTH, HALL_HALF_WIDTH],
+      height: 6.4,
+      finSpacing: 3,
+      bands: 1,
+      roofRise: 0,
+    },
   },
   airport: {
     escalatorX: -30,
-    hall: { x: [-36, 96], z: [22, 58], height: 15, finSpacing: 3.6, bands: 3, roofRise: 3.2 },
-    link: true,
+    hall: {
+      x: [-86, 14],
+      z: [-HALL_HALF_WIDTH, HALL_HALF_WIDTH],
+      height: 6.4,
+      finSpacing: 3.6,
+      bands: 2,
+      roofRise: 0,
+    },
   },
 };
 
 export const HALL = {
-  roofOverhang: 1.6,
+  roofOverhang: 0.8,
   roofThickness: 0.7,
   plinth: 0.4,
   glassInset: 0.6,
@@ -142,12 +155,6 @@ export const HALL = {
   bandHeight: 0.6,
   roofSteps: 16,
   roofChamfer: 0.12,
-} as const;
-
-export const LINK = {
-  x: [-9, 9] as const,
-  height: 3.2,
-  floorThickness: 0.35,
 } as const;
 
 export const STATION_FINISHES = {

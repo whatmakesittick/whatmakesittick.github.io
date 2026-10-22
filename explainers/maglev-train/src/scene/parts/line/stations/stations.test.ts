@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { GHOST_TRACK_Z, INSET, INSET_CENTRE, TRAIN } from '../../../../model';
+import { GHOST_TRACK_Z, GIRDER, INSET, INSET_CENTRE, TRAIN } from '../../../../model';
 import { arcHeight } from './canopy';
-import { CANOPY, ESCALATOR, PLATFORM, STATION_STYLES, platformRun } from './constants';
+import { CANOPY, ESCALATOR, HALL, PLATFORM, STATION_STYLES, platformRun } from './constants';
 
 const GHOST_HALF_WIDTH = 1.7;
 const ARM_VIEW_MARGIN = 20;
@@ -18,9 +18,11 @@ describe('station layout', () => {
     expect(arcHeight(TRAIN.width / 2) - CANOPY.thickness).toBeGreaterThan(TRAIN.roof + 2);
   });
 
-  it('keeps the halls and the left escalator off the ghost track', () => {
+  it('tucks the halls under the platforms, clear of the ghost track and the girders', () => {
     Object.values(STATION_STYLES).forEach(({ hall }) => {
-      expect(hall.z[0]).toBeGreaterThan(0);
+      expect(Math.max(...hall.z.map(Math.abs)) + HALL.roofOverhang).toBeLessThan(ESCALATOR.inner);
+      expect(hall.height + HALL.roofThickness).toBeLessThan(GIRDER.bottom);
+      expect(hall.x[1]).toBeLessThanOrEqual(platformRun(-1)[1]);
     });
     expect(ESCALATOR.inner + ESCALATOR.width).toBeLessThan(GHOST_TRACK_Z - GHOST_HALF_WIDTH);
   });
