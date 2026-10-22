@@ -11,7 +11,7 @@ function metal(color: string, roughness: number): MaterialFinish {
 
 export const LINE_UP_FINISHES = {
   body: FINISHES.compareBody,
-  bodyCap: { color: '#858e96', roughness: 0.75, metalness: 0.05 },
+  bodyCap: FINISHES.cutFace,
   cabin: matte('#4d545c'),
   cabinFloor: matte('#aab1b8'),
   underframe: matte('#33383f'),

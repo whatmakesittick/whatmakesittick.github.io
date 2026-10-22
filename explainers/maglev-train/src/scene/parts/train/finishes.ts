@@ -1,5 +1,6 @@
 import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../../../theme';
+import { FINISHES } from '../../finishes';
 
 function overlay(offset: number): MaterialFinish {
   return { polygonOffset: true, polygonOffsetFactor: offset, polygonOffsetUnits: offset };
@@ -16,6 +17,6 @@ export const TRAIN_FINISHES = {
   carpet: { color: '#56606c', roughness: 0.95, metalness: 0 },
   seat: { color: '#3d5f8c', roughness: 0.85, metalness: 0 },
   seatFrame: { color: '#9aa3ad', roughness: 0.4, metalness: 0.6 },
-  cutFace: { color: '#e6e1d6', roughness: 0.7, metalness: 0 },
+  cutFace: FINISHES.cutFace,
   marker: { color: THEME.insetLine, emissive: '#bff3ff', emissiveIntensity: 1.2, roughness: 0.5 },
 } as const satisfies Record<string, MaterialFinish>;

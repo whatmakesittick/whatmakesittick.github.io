@@ -8,7 +8,7 @@ export const SKY = { top: '#8fb0cc', horizon: THEME.sky, sun: THEME.keyLight } a
 
 export const LINE_DRAW = { behind: 1300, ahead: 1300 } as const;
 
-export const HIGHLIGHT_DIM = { saturation: 0.4, brightness: 0.55, emissive: 0.3 } as const;
+export const HIGHLIGHT_DIM = { saturation: 0.4, brightness: 0.7, emissive: 0.3 } as const;
 
 export const SCENE_LIMITS = {
   cameraNear: 0.05,
@@ -20,7 +20,7 @@ export const SCENE_LIMITS = {
 
 export const LIGHT_RIG = {
   distance: 300,
-  key: { color: THEME.keyLight, intensity: 2.5, direction: [0.62, 0.32, -0.72] as Triple },
+  key: { color: '#fff0dc', intensity: 2.5, direction: [0.62, 0.32, -0.72] as Triple },
   fill: { color: THEME.fillLight, intensity: 0.75, direction: [-0.45, 0.8, 0.4] as Triple },
   rim: { color: '#fff4e6', intensity: 1.0, direction: [-0.75, 0.3, 0.6] as Triple },
 } as const;

@@ -5,12 +5,13 @@ import { THEME } from '../theme';
 
 const MATTE = 0.9;
 const SATIN = 0.5;
-const GLOSS = 0.28;
+const GLOSS = 0.2;
 const METAL = 0.7;
 const GLOW = 0.9;
 const GLASS_OPACITY = 0.45;
 const GHOST_OPACITY = 0.45;
 const INSET_OPACITY = 0.9;
+const TRAIN_WHITE: MaterialFinish = { color: '#eef3f9', roughness: GLOSS, metalness: 0.04 };
 
 function matte(color: string): MaterialFinish {
   return { color, roughness: MATTE, metalness: 0 };
@@ -40,8 +41,9 @@ function veil(color: string, opacity: number): MaterialFinish {
 }
 
 export const FINISHES = {
-  trainWhite: { color: THEME.trainBody, roughness: GLOSS, metalness: 0.08 },
-  trainShade: satin('#d8d4cb'),
+  trainWhite: TRAIN_WHITE,
+  trainShade: satin('#d5dae0'),
+  cutFace: { color: '#dde2e8', roughness: 0.7, metalness: 0 },
   windowBand: { color: THEME.trainBand, roughness: 0.12, metalness: 0.6 },
   underbody: matte('#3b4047'),
   joint: matte('#2b3037'),
@@ -78,7 +80,7 @@ export const FINISHES = {
   plinth: matte('#9a968e'),
   channel: matte('#a19d95'),
   coil: metal('#b07a45'),
-  compareBody: satin('#c9d2da'),
+  compareBody: TRAIN_WHITE,
   callout: glowing(THEME.insetLine),
   powered: glowing(THEME.powered),
 } as const satisfies Record<string, MaterialFinish>;
