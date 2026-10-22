@@ -72,7 +72,7 @@ describe('chapter widgets', () => {
     expect(readout('mass')).toBe(fill(float.massValue, { tonnes: '53', sections: '6' }));
     expect(readout('guideGap')).toBe(fill(units.mm, { value: '10' }));
     expect(readout('curves')).toBe(fill(centre.curvesValue, { small: '2,257', large: '4,502' }));
-    expect(readout('beam')).toBe(fill(centre.beamValue, { metres: '24.8', tonnes: '190' }));
+    expect(readout('beam')).toBe(fill(centre.beamValue, { metres: '25', tonnes: '190' }));
     expect(readout('switches')).toBe(fill(centre.switchesValue, { count: '8' }));
     expect(readout('pitch')).toBe(fill(units.mm, { value: '258' }));
     expect(readout('wavelength')).toBe(fill(units.mm, { value: '516' }));
