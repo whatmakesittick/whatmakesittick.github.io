@@ -1,7 +1,7 @@
 import { namedGroup } from '../../context';
 import type { PartContext, Section } from '../../context';
 import { buildTrack } from './track';
-import { buildGhostTrain } from './ghostTrain';
+import { buildGhostTrain } from './train';
 
 export function buildGhost(context: PartContext): Section {
   const root = namedGroup('ghost');
