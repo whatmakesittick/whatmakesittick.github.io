@@ -73,18 +73,12 @@ describe('maglev train timeline', () => {
     expect(MAGLEV_TRAIN_TIMELINE.rate).toBe(rate);
     expect(rate(SPEED_RANGE.default) * 60).toBeCloseTo(RUN_UNITS, 9);
     expect(formatSpeed(SPEED_RANGE.default)).toBe(fill(speedValue, { factor: '8' }));
-    expect(describeSpeed(SPEED_RANGE.default)).toBe(
-      fill(speedDescribe, { factor: '8', seconds: '60' }),
-    );
+    expect(describeSpeed(SPEED_RANGE.default)).toBe(fill(speedDescribe, { seconds: '60' }));
   });
 
   it('rounds the ride time to whole seconds', () => {
-    expect(describeSpeed(SPEED_RANGE.min)).toBe(
-      fill(speedDescribe, { factor: '1', seconds: '480' }),
-    );
-    expect(describeSpeed(7)).toBe(fill(speedDescribe, { factor: '7', seconds: '69' }));
-    expect(describeSpeed(SPEED_RANGE.max)).toBe(
-      fill(speedDescribe, { factor: '32', seconds: '15' }),
-    );
+    expect(describeSpeed(SPEED_RANGE.min)).toBe(fill(speedDescribe, { seconds: '480' }));
+    expect(describeSpeed(7)).toBe(fill(speedDescribe, { seconds: '69' }));
+    expect(describeSpeed(SPEED_RANGE.max)).toBe(fill(speedDescribe, { seconds: '15' }));
   });
 });

@@ -51,10 +51,7 @@ export function formatSpeed(speed: number): string {
 }
 
 export function describeSpeed(speed: number): string {
-  return t('timeline.speedDescribe', {
-    factor: formatNumber(speed),
-    seconds: formatNumber(rideSeconds(speed)),
-  });
+  return t('timeline.speedDescribe', { seconds: formatNumber(rideSeconds(speed)) });
 }
 
 const RUN_PHASES: readonly Phase[] = PHASE_IDS.map((id) => ({
