@@ -1,15 +1,8 @@
 import { BufferGeometry, Float32BufferAttribute } from 'three';
+import { mirrored } from '../../../lineUp/profile';
 import type { SectionPoint } from './section';
 
 const XYZ = 3;
-
-export function fullRing(half: readonly SectionPoint[]): SectionPoint[] {
-  const mirrored = half
-    .slice(1, -1)
-    .reverse()
-    .map(([z, y]): SectionPoint => [-z, y]);
-  return [...half, ...mirrored];
-}
 
 function bandIndices(stations: number, width: number): number[] {
   const indices: number[] = [];
@@ -27,7 +20,7 @@ export function loft(
   stations: readonly number[],
   ringAt: (x: number) => readonly SectionPoint[],
 ): BufferGeometry {
-  const rings = stations.map((x) => fullRing(ringAt(x)));
+  const rings = stations.map((x) => mirrored(ringAt(x)));
   const positions = rings.flatMap((ring, index) =>
     ring.flatMap(([z, y]) => [stations[index], y, z]),
   );

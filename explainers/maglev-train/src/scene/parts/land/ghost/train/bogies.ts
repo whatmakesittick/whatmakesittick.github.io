@@ -3,7 +3,6 @@ import type { BufferGeometry } from 'three';
 import { box } from '@core/scene/geometry/box';
 import { SIDE_SIGNS } from '../../../../../model';
 import { RAIL } from '../constants';
-import { bare } from '../geometry/merge';
 import { rod } from '../geometry/rod';
 import { BOGIE } from './constants';
 
@@ -61,5 +60,5 @@ function wheelset(x: number): BufferGeometry[] {
 export function bogie(centre: number): BufferGeometry[] {
   const axles = AXLE_SIGNS.map((sign) => (sign * BOGIE.wheelbase) / 2);
   const parts = [...axles.flatMap(wheelset), ...SIDE_SIGNS.map(sideFrame), bolster()];
-  return parts.map((part) => bare(part.translate(centre, 0, 0)));
+  return parts.map((part) => part.translate(centre, 0, 0));
 }

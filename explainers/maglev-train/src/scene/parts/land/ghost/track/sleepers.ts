@@ -3,15 +3,16 @@ import type { BufferGeometry } from 'three';
 import { SIDE_SIGNS } from '../../../../../model';
 import { BED, RAIL } from '../constants';
 import { TRACK_TONES } from '../finishes';
+import type { BoxBounds } from '@core/scene/geometry/box';
+import { evenlySpaced } from '../../../line/geometry';
 import { QuadSink } from '../geometry/quads';
-import type { BoxFace, Bounds } from '../geometry/quads';
+import type { BoxFace } from '../geometry/quads';
 import { BASEPLATE, SLEEPER, TRACK_PERIOD } from './constants';
-import { evenCentres } from './slots';
 
 const SIDES: readonly BoxFace[] = ['top', 'minX', 'maxX'];
 const TOP_ONLY: readonly BoxFace[] = ['top'];
 
-function sleeperBounds(x: number): Bounds {
+function sleeperBounds(x: number): BoxBounds {
   return {
     minX: x - SLEEPER.width / 2,
     maxX: x + SLEEPER.width / 2,
@@ -22,7 +23,7 @@ function sleeperBounds(x: number): Bounds {
   };
 }
 
-function baseplateBounds(x: number, side: number): Bounds {
+function baseplateBounds(x: number, side: number): BoxBounds {
   const z = side * RAIL.centreZ;
   return {
     minX: x - BASEPLATE.length / 2,
@@ -36,7 +37,7 @@ function baseplateBounds(x: number, side: number): Bounds {
 
 function rack(addSleeper: (sink: QuadSink, x: number) => void): BufferGeometry {
   const sink = new QuadSink();
-  evenCentres(SLEEPER.perPeriod, TRACK_PERIOD).forEach((x) => addSleeper(sink, x));
+  evenlySpaced(SLEEPER.perPeriod, 0, TRACK_PERIOD).forEach((x) => addSleeper(sink, x));
   return sink.geometry();
 }
 

@@ -3,7 +3,8 @@ import type { BufferGeometry, Vector3Tuple } from 'three';
 import { box } from '@core/scene/geometry/box';
 import { extrudePlan, planShape } from '@core/scene/geometry/extrude';
 import { TRACK_TONES } from '../finishes';
-import { merged, painted } from '../geometry/merge';
+import { mergeParts } from '../../../line/geometry';
+import { painted } from '../geometry/paint';
 import { alongSegment, rod, segmentLength } from '../geometry/rod';
 import { CANTILEVER, INSULATOR, MAST } from './constants';
 import { cantileverPoints, towards } from './cantilever';
@@ -86,7 +87,7 @@ export function nearMast(): BufferGeometry {
   const upperInsulatorEnd = towards(points.upperMount, points.upperEnd, CANTILEVER.insulatorLength);
   const lowerInsulatorEnd = towards(points.lowerMount, points.apex, CANTILEVER.insulatorLength);
   const hook = { radius: CANTILEVER.hookRadius, sides: CANTILEVER.steadyArm.sides };
-  return merged([
+  return mergeParts([
     footingBlock(),
     hColumn(),
     capPlate(),
@@ -103,7 +104,7 @@ export function nearMast(): BufferGeometry {
 export function farMast(): BufferGeometry {
   const points = cantileverPoints();
   const tubeSpec = CANTILEVER.farTube;
-  return merged([
+  return mergeParts([
     footingBlock(),
     squareColumn(),
     tube(points.upperMount, points.upperEnd, tubeSpec),

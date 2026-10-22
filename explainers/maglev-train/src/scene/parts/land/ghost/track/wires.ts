@@ -1,22 +1,21 @@
-import { BufferGeometry, Float32BufferAttribute, LineBasicMaterial, LineSegments } from 'three';
-import { LINE_GROUP, registeredMaterial } from '../../../context';
+import type { LineSegments } from 'three';
+import { LINE_GROUP } from '../../../context';
 import type { PartContext } from '../../../context';
 import { WIRE_LINE } from '../finishes';
+import { lineSegments, polyline } from '../geometry/lines';
+import type { Point3 } from '../geometry/lines';
 import { CATENARY, MAST, TRACK_PERIOD } from './constants';
-import { sagAt, slotsOf } from './slots';
-import type { SlotRange } from './slots';
 
-const XYZ = 3;
+export function sagAt(share: number, sag: number): number {
+  return 4 * sag * share * (1 - share);
+}
 
 function spanPositions(start: number, end: number): number[] {
   const { contactY, messengerY, sag, sagSegments, dropperShares } = CATENARY;
   const x = (share: number) => start + (end - start) * share;
   const messenger = (share: number) => messengerY - sagAt(share, sag);
-  const sagging = Array.from({ length: sagSegments }, (_, index) => {
-    const from = index / sagSegments;
-    const to = (index + 1) / sagSegments;
-    return [x(from), messenger(from), 0, x(to), messenger(to), 0];
-  }).flat();
+  const shares = Array.from({ length: sagSegments + 1 }, (_, index) => index / sagSegments);
+  const sagging = polyline(shares.map((share): Point3 => [x(share), messenger(share), 0]));
   const droppers = dropperShares.flatMap((share) => [
     x(share),
     messenger(share),
@@ -28,19 +27,13 @@ function spanPositions(start: number, end: number): number[] {
   return [...sagging, ...droppers, start, contactY, 0, end, contactY, 0];
 }
 
-export function catenaryPositions(range: SlotRange): number[] {
-  const masts = slotsOf(range).map((slot) => slot * TRACK_PERIOD + MAST.phase);
+export function catenaryPositions(slots: readonly number[]): number[] {
+  const masts = slots.map((slot) => slot * TRACK_PERIOD + MAST.phase);
   return masts.slice(1).flatMap((end, index) => spanPositions(masts[index], end));
 }
 
-export function catenaryWires(context: PartContext, range: SlotRange): LineSegments {
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(catenaryPositions(range), XYZ));
-  const material = new LineBasicMaterial({ ...WIRE_LINE, transparent: true });
-  const wires = new LineSegments(
-    context.tracker.track(geometry),
-    registeredMaterial(context, LINE_GROUP, material),
-  );
+export function catenaryWires(context: PartContext, slots: readonly number[]): LineSegments {
+  const wires = lineSegments(context, LINE_GROUP, catenaryPositions(slots), WIRE_LINE);
   wires.name = 'ghostCatenary';
   return wires;
 }

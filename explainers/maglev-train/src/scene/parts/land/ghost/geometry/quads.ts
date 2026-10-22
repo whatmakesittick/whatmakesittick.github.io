@@ -1,5 +1,6 @@
 import { BufferGeometry, Float32BufferAttribute } from 'three';
 import type { Color, Vector3Tuple } from 'three';
+import type { BoxBounds } from '@core/scene/geometry/box';
 
 export type Quad = readonly [Vector3Tuple, Vector3Tuple, Vector3Tuple, Vector3Tuple];
 
@@ -7,22 +8,13 @@ export type QuadUv = readonly [Uv, Uv, Uv, Uv];
 
 type Uv = readonly [number, number];
 
-export interface Bounds {
-  readonly minX: number;
-  readonly maxX: number;
-  readonly minY: number;
-  readonly maxY: number;
-  readonly minZ: number;
-  readonly maxZ: number;
-}
-
 export type BoxFace = 'top' | 'minX' | 'maxX' | 'minZ' | 'maxZ';
 
 const XYZ = 3;
 const UV = 2;
 const QUAD_TRIANGLES = [0, 1, 2, 0, 2, 3] as const;
 
-function faceCorners(bounds: Bounds, face: BoxFace): Quad {
+function faceCorners(bounds: BoxBounds, face: BoxFace): Quad {
   const { minX: x0, maxX: x1, minY: y0, maxY: y1, minZ: z0, maxZ: z1 } = bounds;
   const corners: Record<BoxFace, Quad> = {
     top: [
@@ -73,7 +65,7 @@ export class QuadSink {
     });
   }
 
-  addBox(bounds: Bounds, faces: readonly BoxFace[], tone: Color): void {
+  addBox(bounds: BoxBounds, faces: readonly BoxFace[], tone: Color): void {
     faces.forEach((face) => this.add(faceCorners(bounds, face), [tone]));
   }
 

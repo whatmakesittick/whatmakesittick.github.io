@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { TRAIN } from '../../../../model';
-import { LINE_DRAW } from '../../../constants';
 import { wrapOffset } from '../../../pose';
+import { evenlySpaced } from '../../line/geometry';
+import { slotIndices } from '../../line/slots';
 import { CONTACT_WIRE_RISE, RAIL } from './constants';
 import { CATENARY, RACK_REACH, SLEEPER, TRACK_PERIOD } from './track/constants';
-import { evenCentres, sagAt, slotRange, slotsOf } from './track/slots';
+import { sagAt } from './track/wires';
 import { bodySection, bodyStations } from './train/bodyShape';
 import { BODY, CONSIST, NOSE } from './train/constants';
 import { carSpans, kneePoint } from './train/layout';
 import { halfRing, halfWidthAt, noseSection, rise, sectionPoint } from './train/section';
-import { isWithinWindow } from './train/window';
 
 const DIGITS = 6;
 const RING = 15;
@@ -18,7 +18,8 @@ const OFFSET_SAMPLES = [0, 0.1, 0.5, 0.9, 0.999];
 describe('ghost track slots', () => {
   it('covers the reach on both sides at every wrap offset', () => {
     [RACK_REACH.near, RACK_REACH.far].forEach((reach) => {
-      const { first, last } = slotRange(reach, TRACK_PERIOD);
+      const slots = slotIndices(TRACK_PERIOD, reach, reach);
+      const [first, last] = [slots[0], slots[slots.length - 1]];
       OFFSET_SAMPLES.forEach((share) => {
         const offset = wrapOffset(share * TRACK_PERIOD, TRACK_PERIOD);
         expect(first * TRACK_PERIOD + offset).toBeLessThanOrEqual(-reach);
@@ -27,16 +28,8 @@ describe('ghost track slots', () => {
     });
   });
 
-  it('leaves the near slots out of the far racks', () => {
-    const near = slotRange(RACK_REACH.near, TRACK_PERIOD);
-    const far = slotRange(RACK_REACH.far, TRACK_PERIOD);
-    const outer = slotsOf(far, near);
-    expect(outer.some((slot) => slot >= near.first && slot <= near.last)).toBe(false);
-    expect(outer.length + slotsOf(near).length).toBe(slotsOf(far).length);
-  });
-
   it('lays 80 sleepers 0.62 m apart in each 49.6 m period', () => {
-    const centres = evenCentres(SLEEPER.perPeriod, TRACK_PERIOD);
+    const centres = evenlySpaced(SLEEPER.perPeriod, 0, TRACK_PERIOD);
     expect(TRACK_PERIOD).toBeCloseTo(49.6, DIGITS);
     expect(centres).toHaveLength(80);
     expect(centres[1] - centres[0]).toBeCloseTo(0.62, DIGITS);
@@ -51,16 +44,6 @@ describe('ghost track slots', () => {
       expect(CATENARY.messengerY - sagAt(share, CATENARY.sag)).toBeGreaterThan(CATENARY.contactY),
     );
     expect(CATENARY.contactY - RAIL.top).toBeCloseTo(CONTACT_WIRE_RISE, DIGITS);
-  });
-});
-
-describe('ghost train window', () => {
-  it('shows the train while any part of it is inside the scenery', () => {
-    const half = TRAIN.length / 2;
-    expect(isWithinWindow(0, TRAIN.length, LINE_DRAW)).toBe(true);
-    expect(isWithinWindow(-LINE_DRAW.behind - half + 1, TRAIN.length, LINE_DRAW)).toBe(true);
-    expect(isWithinWindow(-LINE_DRAW.behind - half - 1, TRAIN.length, LINE_DRAW)).toBe(false);
-    expect(isWithinWindow(LINE_DRAW.ahead + half + 1, TRAIN.length, LINE_DRAW)).toBe(false);
   });
 });
 

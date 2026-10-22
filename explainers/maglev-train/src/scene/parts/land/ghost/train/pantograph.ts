@@ -1,7 +1,6 @@
 import type { BufferGeometry, Vector3Tuple } from 'three';
 import { box } from '@core/scene/geometry/box';
 import { SIDE_SIGNS } from '../../../../../model';
-import { bare } from '../geometry/merge';
 import { rod } from '../geometry/rod';
 import { BODY, PANTOGRAPH } from './constants';
 import { kneePoint } from './layout';
@@ -69,12 +68,11 @@ export function pantograph({ x, raised }: Pantograph): BufferGeometry[] {
   const hinge: Planar = [x - PANTOGRAPH.hingeBack, FRAME_TOP];
   const top = headPoint(x, raised);
   const knee = kneePoint(hinge, top, PANTOGRAPH.lowerArm, PANTOGRAPH.upperArm);
-  const parts = [
+  return [
     baseFrame(x),
     ...insulators(x),
     arm(hinge, knee, PANTOGRAPH.armRadius.lower),
     arm(knee, top, PANTOGRAPH.armRadius.upper),
     ...panHead(top),
   ];
-  return parts.map(bare);
 }

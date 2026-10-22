@@ -1,5 +1,5 @@
-import { InstancedMesh, Matrix4 } from 'three';
-import type { BufferGeometry, Mesh } from 'three';
+import { Matrix4 } from 'three';
+import type { BufferGeometry, InstancedMesh, Mesh } from 'three';
 import type { AssemblyState } from '../../../../../ids';
 import { SIDE_SIGNS } from '../../../../../model';
 import { wrapOffset } from '../../../../pose';
@@ -7,17 +7,19 @@ import { LINE_GROUP, finishMesh, namedGroup } from '../../../context';
 import type { PartContext, Section } from '../../../context';
 import { BED, RAIL, TRACK_Z } from '../constants';
 import { TRACK_FINISHES } from '../finishes';
-import { merged } from '../geometry/merge';
+import { mergeParts } from '../../../line/geometry';
+import { slotIndices } from '../../../line/slots';
+import { instances } from '../../../lineUp/cut';
 import { mirrored, profileStrip, shifted } from '../geometry/strip';
 import { RACK_REACH, STRIP_SPAN, TRACK_PERIOD } from './constants';
 import { gravelTexture } from './gravel';
 import { BALLAST_HALF_PROFILE, RAIL_HALF_PROFILE } from './profiles';
 import { farRack, nearRack } from './racks';
-import { slotRange, slotsOf } from './slots';
 import { catenaryWires } from './wires';
 
-const NEAR_SLOTS = slotRange(RACK_REACH.near, TRACK_PERIOD);
-const FAR_SLOTS = slotRange(RACK_REACH.far, TRACK_PERIOD);
+const NEAR_SLOTS = slotIndices(TRACK_PERIOD, RACK_REACH.near, RACK_REACH.near);
+const FAR_SLOTS = slotIndices(TRACK_PERIOD, RACK_REACH.far, RACK_REACH.far);
+const OUTER_SLOTS = FAR_SLOTS.filter((slot) => !NEAR_SLOTS.includes(slot));
 
 function ballast(context: PartContext): Mesh {
   const geometry = profileStrip(mirrored(BALLAST_HALF_PROFILE), STRIP_SPAN, true);
@@ -32,7 +34,7 @@ function rails(context: PartContext): Mesh {
   const strips = SIDE_SIGNS.map((side) =>
     profileStrip(shifted(profile, side * RAIL.centreZ, BED.railFoot), STRIP_SPAN),
   );
-  const mesh = finishMesh(context, merged(strips), LINE_GROUP, TRACK_FINISHES.rails);
+  const mesh = finishMesh(context, mergeParts(strips), LINE_GROUP, TRACK_FINISHES.rails);
   mesh.name = 'ghostRails';
   return mesh;
 }
@@ -43,15 +45,10 @@ function racks(
   geometry: BufferGeometry,
   slots: readonly number[],
 ): InstancedMesh {
-  const material = context.materials.get(LINE_GROUP, TRACK_FINISHES.trackside);
-  const mesh = new InstancedMesh(context.tracker.track(geometry), material, slots.length);
+  const matrices = slots.map((slot) => new Matrix4().makeTranslation(slot * TRACK_PERIOD, 0, 0));
+  const mesh = instances(context, geometry, LINE_GROUP, TRACK_FINISHES.trackside, matrices);
   mesh.name = name;
-  const matrix = new Matrix4();
-  slots.forEach((slot, index) =>
-    mesh.setMatrixAt(index, matrix.makeTranslation(slot * TRACK_PERIOD, 0, 0)),
-  );
-  mesh.computeBoundingSphere();
-  return context.tracker.track(mesh);
+  return mesh;
 }
 
 export function buildTrack(context: PartContext): Section {
@@ -61,8 +58,8 @@ export function buildTrack(context: PartContext): Section {
   stream.add(
     ballast(context),
     rails(context),
-    racks(context, 'ghostRacksNear', nearRack(), slotsOf(NEAR_SLOTS)),
-    racks(context, 'ghostRacksFar', farRack(), slotsOf(FAR_SLOTS, NEAR_SLOTS)),
+    racks(context, 'ghostRacksNear', nearRack(), NEAR_SLOTS),
+    racks(context, 'ghostRacksFar', farRack(), OUTER_SLOTS),
     catenaryWires(context, FAR_SLOTS),
   );
   return {

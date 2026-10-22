@@ -1,9 +1,10 @@
-import { BufferGeometry, Float32BufferAttribute, LineBasicMaterial, LineSegments } from 'three';
+import type { LineSegments } from 'three';
 import { FULL_TURN } from '@core/math';
 import { SIDE_SIGNS } from '../../../../../model';
-import { registeredMaterial } from '../../../context';
 import type { PartContext } from '../../../context';
 import { GHOST_LINE } from '../finishes';
+import { lineSegments, polyline } from '../geometry/lines';
+import type { Point3 } from '../geometry/lines';
 import { NOSE_TIPS, bodySection, bodyStations } from './bodyShape';
 import type { NoseTip } from './bodyShape';
 import {
@@ -21,20 +22,9 @@ import type { NoseMark } from './constants';
 import type { CarSpan } from './layout';
 import { halfRing, halfWidthAt, noseSection, sectionPoint } from './section';
 
-type Point = readonly [number, number, number];
-
-const XYZ = 3;
 const UNMIRRORED = 1;
 
-function polyline(points: readonly Point[], closed = false): number[] {
-  const count = closed ? points.length : points.length - 1;
-  return Array.from({ length: count }, (_, index) => [
-    ...points[index],
-    ...points[(index + 1) % points.length],
-  ]).flat();
-}
-
-function sidePoint(x: number, y: number, side: number): Point {
+function sidePoint(x: number, y: number, side: number): Point3 {
   return [x, y, side * halfWidthAt(BODY, y)];
 }
 
@@ -82,7 +72,7 @@ function squircle(value: number, roundness: number): number {
 }
 
 function noseMark(tip: NoseTip, mark: NoseMark, side: number): number[] {
-  const points = Array.from({ length: mark.segments }, (_, index): Point => {
+  const points = Array.from({ length: mark.segments }, (_, index): Point3 => {
     const phi = (FULL_TURN * index) / mark.segments;
     const along = mark.centre + mark.halfLength * squircle(Math.cos(phi), mark.roundness);
     const theta = mark.theta + mark.spread * squircle(Math.sin(phi), mark.roundness);
@@ -102,7 +92,7 @@ function noseMarks(tip: NoseTip): number[] {
 
 function profileLine(theta: number): number[] {
   return polyline(
-    bodyStations().map((x): Point => {
+    bodyStations().map((x): Point3 => {
       const [z, y] = sectionPoint(bodySection(x), theta);
       return [x, y, OUTER_SIDE * z];
     }),
@@ -126,13 +116,8 @@ export function outlinePositions(cars: readonly CarSpan[]): number[] {
 }
 
 export function ghostOutline(context: PartContext, cars: readonly CarSpan[]): LineSegments {
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(outlinePositions(cars), XYZ));
-  const material = new LineBasicMaterial({ ...GHOST_LINE, transparent: true, depthWrite: false });
-  const outline = new LineSegments(
-    context.tracker.track(geometry),
-    registeredMaterial(context, 'ghostTrain', material),
-  );
+  const look = { ...GHOST_LINE, depthWrite: false };
+  const outline = lineSegments(context, 'ghostTrain', outlinePositions(cars), look);
   outline.name = 'ghostTrainOutline';
   return outline;
 }

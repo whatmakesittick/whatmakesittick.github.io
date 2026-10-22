@@ -1,5 +1,6 @@
-import { CylinderGeometry, Quaternion, Vector3 } from 'three';
+import { Quaternion, Vector3 } from 'three';
 import type { BufferGeometry, Vector3Tuple } from 'three';
+import { cylinderBetween } from '../../../line/geometry';
 
 const UP = new Vector3(0, 1, 0);
 
@@ -27,8 +28,5 @@ export function segmentLength(from: Vector3Tuple, to: Vector3Tuple): number {
 }
 
 export function rod({ from, to, radius, sides }: Rod): BufferGeometry {
-  const length = segmentLength(from, to);
-  const geometry = new CylinderGeometry(radius, radius, length, sides, 1, true);
-  geometry.translate(0, length / 2, 0);
-  return alongSegment(geometry, from, to);
+  return cylinderBetween(new Vector3(...from), new Vector3(...to), [radius, radius], sides);
 }

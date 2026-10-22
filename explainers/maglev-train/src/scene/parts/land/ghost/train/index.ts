@@ -1,11 +1,13 @@
 import type { BufferGeometry } from 'three';
+import type { Extent } from '@core/scene/regions';
 import type { AssemblyState } from '../../../../../ids';
 import { LINE_DRAW } from '../../../../constants';
 import { lineX } from '../../../../pose';
 import { label, namedGroup, partMesh } from '../../../context';
 import type { PartContext, Section } from '../../../context';
 import { RAIL, TRACK_Z } from '../constants';
-import { merged } from '../geometry/merge';
+import { mergeParts } from '../../../line/geometry';
+import { overlaps } from '../../../line/slots';
 import { trainBody } from './body';
 import { bogie } from './bogies';
 import { BODY, CONSIST } from './constants';
@@ -13,10 +15,11 @@ import { bogieCentres, carSpans, pantographs } from './layout';
 import type { CarSpan } from './layout';
 import { ghostOutline } from './outline';
 import { pantograph } from './pantograph';
-import { isWithinWindow } from './window';
+
+const DRAWN: Extent = [-LINE_DRAW.behind, LINE_DRAW.ahead];
 
 function trainGeometry(cars: readonly CarSpan[]): BufferGeometry {
-  return merged([
+  return mergeParts([
     trainBody(),
     ...cars.flatMap((car) => bogieCentres(car).flatMap(bogie)),
     ...pantographs(cars).flatMap(pantograph),
@@ -34,7 +37,7 @@ export function buildGhostTrain(context: PartContext): Section {
     setState(state: AssemblyState) {
       const x = lineX(state.ghost.distance, state.motion.distance);
       root.position.x = x;
-      root.visible = state.view.ghost && isWithinWindow(x, CONSIST.length, LINE_DRAW);
+      root.visible = state.view.ghost && overlaps(x, CONSIST.length / 2, DRAWN);
     },
   };
 }
