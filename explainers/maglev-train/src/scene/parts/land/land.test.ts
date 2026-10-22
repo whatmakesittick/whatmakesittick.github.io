@@ -8,12 +8,16 @@ import { LINEARS } from './ground/linears';
 import { guidewayShadowBand, pierShadow } from './ground/paintShadows';
 import { centredWarp } from './ground/warp';
 import { periodicCopies } from './scenery/copies';
+import { LOW_BAND } from './scenery/constants';
+import { TREE_SHAPES } from './scenery/treeGeometry';
+import { TREE_STRETCH } from './scenery/trees';
 import { tileTrees } from './scenery/treePlacement';
 import { tileVillages } from './scenery/villagePlacement';
 import { groundShadow } from './shadow';
 import { SUBSTATION, substationLines, substationTileX } from './substationPlan';
 import { trainShadowOutline } from './trainShadow';
 
+const LOW_TREE_TOP = 6;
 const CORRIDOR_BAND = [CORRIDOR.ghostVerge[0], CORRIDOR.service[1]] as const;
 const blocks = landBlocks();
 const fields = tileFields(blocks);
@@ -77,6 +81,17 @@ describe('scenery', () => {
     [...trees, ...villages.houses, ...villages.trees].forEach(({ z }) =>
       expect(z < CLEAR.left || z > CLEAR.right).toBe(true),
     );
+  });
+
+  it('keeps tall trees and houses back from the line and only low trees near it', () => {
+    const { radius, centre } = TREE_SHAPES.round.crown;
+    const tallest = (centre + radius[1]) * TREE_STRETCH[1];
+    [...trees, ...villages.trees].forEach((spot) => {
+      if (Math.abs(spot.z) >= LOW_BAND.reach) return;
+      expect(spot.kind).toBe('round');
+      expect(spot.scale * tallest).toBeLessThan(LOW_TREE_TOP);
+    });
+    villages.houses.forEach(({ z }) => expect(Math.abs(z)).toBeGreaterThanOrEqual(LOW_BAND.reach));
   });
 
   it('keeps trees off the roads and canals they line', () => {

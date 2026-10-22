@@ -14,7 +14,7 @@ import type { TreeKind, TreeSpot } from './treePlacement';
 
 const SEED_SCALE = 2 ** 31;
 const FULL_TURN = Math.PI * 2;
-const STRETCH: Range = [0.9, 1.15];
+export const TREE_STRETCH: Range = [0.9, 1.15];
 const LIGHTNESS: Range = [0.88, 1.1];
 
 export const TREE_FINISH: MaterialFinish = {
@@ -35,12 +35,12 @@ function treeRandom(spot: TreeSpot): Random {
 }
 
 export function treeHeightScale(spot: TreeSpot): number {
-  return spot.scale * between(treeRandom(spot), STRETCH);
+  return spot.scale * between(treeRandom(spot), TREE_STRETCH);
 }
 
 function treeInstance(spot: TreeSpot): Instance {
   const random = treeRandom(spot);
-  const height = spot.scale * between(random, STRETCH);
+  const height = spot.scale * between(random, TREE_STRETCH);
   const colour = new Color(pick(random, TREE_TINTS[spot.kind])).multiplyScalar(
     between(random, LIGHTNESS),
   );

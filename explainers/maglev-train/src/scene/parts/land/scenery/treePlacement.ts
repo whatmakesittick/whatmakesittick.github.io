@@ -6,7 +6,7 @@ import { VERGES } from '../ground/linears';
 import type { Linear } from '../ground/linears';
 import { between, seededRandom } from '../random';
 import type { Random, Range } from '../random';
-import { COPSES, TREE_ROWS } from './constants';
+import { COPSES, LOW_BAND, TREE_ROWS } from './constants';
 import type { TreeKind } from './treeGeometry';
 
 export type { TreeKind } from './treeGeometry';
@@ -21,6 +21,20 @@ export interface TreeSpot {
 
 const VERGE_SHARE = 0.55;
 const HALF = 0.5;
+
+export function isNearLine(z: number): boolean {
+  return Math.abs(z) < LOW_BAND.reach;
+}
+
+export function isBandFarFromLine([from, to]: Range): boolean {
+  return from * to > 0 && Math.min(Math.abs(from), Math.abs(to)) >= LOW_BAND.reach;
+}
+
+function lowered(spot: TreeSpot, random: Random): TreeSpot[] {
+  if (!isNearLine(spot.z)) return [spot];
+  if (random() > LOW_BAND.keep) return [];
+  return [{ ...spot, kind: 'round', scale: between(random, LOW_BAND.scale) }];
+}
 
 export function isClearOfLine(z: number): boolean {
   return z < CLEAR.left || z > CLEAR.right;
@@ -78,7 +92,10 @@ function rowSpots(linear: Linear, linears: readonly Linear[], random: Random): T
       const crosswise = linear.axis === 'x' ? z : x;
       if (!isClearOfLine(z) || Math.abs(z) > TREE_ROWS.reach) return [];
       if (blockedBy(linears, linear.axis, lengthwise, crosswise)) return [];
-      return [{ x, z, scale: between(random, TREE_ROWS.scale), seed: random(), kind }];
+      return lowered(
+        { x, z, scale: between(random, TREE_ROWS.scale), seed: random(), kind },
+        random,
+      );
     });
   });
 }
@@ -117,8 +134,8 @@ function copses(blocks: readonly Block[], fields: readonly Field[], random: Rand
   return blocks
     .filter((block) => {
       const middle = Math.abs((block.z[0] + block.z[1]) / 2);
-      const clear = isClearOfLine(block.z[0]) && isClearOfLine(block.z[1]);
-      return clear && inRange(middle, COPSES.zRange) && !hasGreenhouse(block, fields);
+      const far = isBandFarFromLine(block.z) && middle <= COPSES.reach;
+      return far && !hasGreenhouse(block, fields);
     })
     .filter(() => random() < COPSES.chance)
     .flatMap((block) => copse(block, random));

@@ -4,7 +4,7 @@ import type { Field } from '../ground/fields';
 import { between, seededRandom, weighted } from '../random';
 import type { Random, Range } from '../random';
 import { VILLAGES } from './constants';
-import { isClearOfLine } from './treePlacement';
+import { isBandFarFromLine } from './treePlacement';
 import type { TreeSpot } from './treePlacement';
 
 export const HOUSE_KINDS = ['villa', 'house', 'workshop'] as const;
@@ -64,8 +64,7 @@ function fits(block: Block, fields: readonly Field[]): boolean {
   const [minLength, minDepth] = VILLAGES.minSize;
   const roomy =
     size(block.x) > minLength + VILLAGES.inset * 2 && size(block.z) > minDepth + VILLAGES.inset * 2;
-  const clear = isClearOfLine(block.z[0]) && isClearOfLine(block.z[1]);
-  const inZone = middle >= VILLAGES.zRange[0] && middle <= VILLAGES.zRange[1];
+  const inZone = isBandFarFromLine(block.z) && middle <= VILLAGES.reach;
   const greenhouse = fields.some(
     (field) =>
       field.kind === 'greenhouse' &&
@@ -74,7 +73,7 @@ function fits(block: Block, fields: readonly Field[]): boolean {
       field.z[0] >= block.z[0] &&
       field.z[1] <= block.z[1],
   );
-  return roomy && clear && inZone && !greenhouse;
+  return roomy && inZone && !greenhouse;
 }
 
 function placeWithin(range: Range, length: number, random: Random): Range {
