@@ -17,6 +17,18 @@ export const PLINTH = {
   top: LINE_UP.plinthTop,
   overhang: 0.2,
   chamfer: 0.06,
+  slab: 0.16,
+  slabLip: 0.05,
+  baseInset: 0.08,
+} as const;
+
+export const SEAT = {
+  width: 0.46,
+  cushion: 0.42,
+  cushionHeight: 0.12,
+  backTop: 1.12,
+  backWidth: 0.42,
+  radius: 0.06,
 } as const;
 
 export const CUT_FACE_LIFT = { cabin: 0.006, detail: 0.01, accent: 0.014 } as const;
@@ -47,6 +59,7 @@ export const L0 = {
   } satisfies BodyOutline,
   shell: 0.07,
   cabinFloor: 0.95,
+  seats: [-0.98, -0.5, 0.5, 0.98],
   windows: { from: 1.75, to: 2.15, thickness: 0.018 },
   magnet: {
     depth: L0_MAGNET_DEPTH,
@@ -142,6 +155,7 @@ export const WHEEL_RAIL = {
   bottom: WHEEL_RAIL_BOTTOM,
   shell: 0.07,
   cabinFloor: 0.35,
+  seats: [-1.0, -0.52, 0.52, 1.0],
   windows: { from: 1.15, to: 1.6, thickness: 0.018 },
   plinthHalfWidth: 2.35,
   pantograph: {
@@ -164,7 +178,7 @@ const TRANSRAPID_GAP_Z = -MAGNETS.support.sideZ;
 const STATOR_HALF = STATOR.width / 2;
 
 export const CALLOUTS = {
-  x: CUT_X + PLINTH.overhang + 0.1,
+  x: CUT_X + PLINTH.overhang + PLINTH.slabLip + 0.1,
   core: 0.05,
   halo: 0.12,
   arrow: { length: 0.32, half: 0.13, halo: 0.07 },

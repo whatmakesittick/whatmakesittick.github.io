@@ -10,6 +10,7 @@ import { ANCHOR_POINTS, CUT_X, LINE_UP, MOMENTS, mm, motionAt } from '../../../m
 import type { PartContext, Section } from '../context';
 import { CALLOUTS_NAME } from './callouts';
 import { buildLineUp } from './index';
+import { PLINTH_NAME } from './plinth';
 import { SCMAGLEV_NAME } from './scmaglev';
 
 const TRIANGLE_BUDGET = 25_000;
@@ -110,7 +111,7 @@ describe('line-up', () => {
   it('floats the L0 a true 100 mm above its channel floor', () => {
     const scmaglev = named(section.root, SCMAGLEV_NAME);
     const body = new Box3().setFromObject(named(scmaglev, 'scmaglevBody'));
-    const plinth = new Box3().setFromObject(named(scmaglev, 'lineUpPlinth'));
+    const plinth = new Box3().setFromObject(named(scmaglev, PLINTH_NAME));
     expect(body.min.y - plinth.max.y).toBeCloseTo(mm(LINE_UP.scmaglev.gapMm), DIGITS);
     expect(body.max.x - CUT_X).toBeGreaterThanOrEqual(0);
     expect(body.max.x - CUT_X).toBeLessThan(CUT_FACE_REACH);

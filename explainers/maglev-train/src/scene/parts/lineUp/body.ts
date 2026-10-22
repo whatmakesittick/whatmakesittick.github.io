@@ -3,10 +3,21 @@ import type { PartId } from '../../../ids';
 import { namedGroup } from '../context';
 import type { PartContext } from '../context';
 import type { Point2 } from '../inset/strokes';
-import { CUT_FACE_LIFT } from './constants';
+import { CUT_FACE_LIFT, SEAT } from './constants';
 import { cutFaceGeometry, cutMesh, finishMesh, sliceGeometry } from './cut';
+import { merged } from '../inset/strokes';
 import { LINE_UP_FINISHES } from './finishes';
-import { band, between, distinct, halfOutline, lifted, mirrored, offset, widthAt } from './profile';
+import {
+  band,
+  between,
+  distinct,
+  halfOutline,
+  lifted,
+  mirrored,
+  offset,
+  roundedRect,
+  widthAt,
+} from './profile';
 import type { BodyOutline } from './profile';
 
 export interface BodySpec {
@@ -14,6 +25,7 @@ export interface BodySpec {
   readonly bottom: number;
   readonly shell: number;
   readonly cabinFloor: number;
+  readonly seats: readonly number[];
   readonly windows: { readonly from: number; readonly to: number; readonly thickness: number };
 }
 
@@ -50,6 +62,43 @@ function floorStrip(spec: BodySpec): Point2[] {
   ];
 }
 
+function rectOutline(minA: number, maxA: number, minB: number, maxB: number): Point2[] {
+  return [
+    [minA, minB],
+    [maxA, minB],
+    [maxA, maxB],
+    [minA, maxB],
+  ];
+}
+
+export function seatOutlines(spec: BodySpec): Point2[][] {
+  const { width, cushion, cushionHeight, backTop, backWidth, radius } = SEAT;
+  const floor = spec.cabinFloor;
+  const seatTop = floor + cushion;
+  return spec.seats.flatMap((centre) => [
+    rectOutline(centre - width / 2, centre + width / 2, seatTop - cushionHeight, seatTop),
+    rectOutline(centre - width / 8, centre + width / 8, floor, seatTop - cushionHeight),
+    roundedRect(
+      {
+        minA: centre - backWidth / 2,
+        maxA: centre + backWidth / 2,
+        minB: seatTop - cushionHeight / 2,
+        maxB: floor + backTop,
+      },
+      radius,
+    ),
+  ]);
+}
+
+function addSeats(context: PartContext, parent: Object3D, spec: BodySpec, part: PartId): void {
+  const geometry = merged(
+    seatOutlines(spec).map((outline) =>
+      cutFaceGeometry(lifted(outline, spec.bottom), CUT_FACE_LIFT.detail),
+    ),
+  );
+  parent.add(finishMesh(context, geometry, part, LINE_UP_FINISHES.seat));
+}
+
 function addCutFace(context: PartContext, parent: Object3D, spec: BodySpec, part: PartId): void {
   const cabin = cutFaceGeometry(lifted(cabinOutline(spec), spec.bottom), CUT_FACE_LIFT.cabin);
   const floor = cutFaceGeometry(lifted(floorStrip(spec), spec.bottom), CUT_FACE_LIFT.detail);
@@ -80,5 +129,6 @@ export function buildBody(context: PartContext, spec: BodySpec, part: PartId): O
   );
   addWindows(context, body, spec, part);
   addCutFace(context, body, spec, part);
+  addSeats(context, body, spec, part);
   return body;
 }

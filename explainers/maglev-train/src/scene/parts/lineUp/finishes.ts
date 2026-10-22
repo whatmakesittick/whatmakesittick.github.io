@@ -26,6 +26,8 @@ export const LINE_UP_FINISHES = {
   channel: FINISHES.channel,
   channelCap: FINISHES.concreteDark,
   plinth: FINISHES.plinth,
+  plinthBase: matte('#868279'),
+  seat: { color: '#6a7c96', roughness: 0.7, metalness: 0 },
   ballastCap: matte('#6c6963'),
   sleeper: matte('#a39f97'),
   railSteel: metal('#80868d', 0.35),

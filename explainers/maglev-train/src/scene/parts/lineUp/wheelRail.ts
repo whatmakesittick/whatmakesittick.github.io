@@ -18,6 +18,7 @@ export const WHEEL_RAIL_BODY: BodySpec = {
   bottom: WHEEL_RAIL.bottom,
   shell: WHEEL_RAIL.shell,
   cabinFloor: WHEEL_RAIL.cabinFloor,
+  seats: WHEEL_RAIL.seats,
   windows: WHEEL_RAIL.windows,
 };
 

@@ -22,6 +22,7 @@ export const L0_BODY: BodySpec = {
   bottom: L0.bottom,
   shell: L0.shell,
   cabinFloor: L0.cabinFloor,
+  seats: L0.seats,
   windows: L0.windows,
 };
 
