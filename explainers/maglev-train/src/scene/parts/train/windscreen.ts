@@ -1,9 +1,11 @@
-import type { BufferGeometry } from 'three';
+import type { BufferGeometry, Object3D } from 'three';
 import { lerp, smoothstep } from '@core/math';
+import type { PartContext } from '../context';
 import { WINDSCREEN } from './constants';
-import { emitGrid, gridNormals } from './grid';
-import { RegionBuilders } from './mesh';
-import { surfacePoint } from './nose';
+import { TRAIN_FINISHES, trainMesh } from './finishes';
+import { emitGrid, gridNormals, shares } from './grid';
+import { MeshBuilder } from './mesh';
+import { noseTip, surfacePoint } from './nose';
 import type { SectionEnds, Vec3 } from './nose';
 import { CONTOUR } from './profile';
 
@@ -28,19 +30,16 @@ export function windscreenSpan(share: number): [front: number, rear: number] {
 
 function pointAt(rowIndex: number, x: number, ends: SectionEnds): Vec3 {
   const low = Math.min(Math.floor(rowIndex), ROW_HIGH - 1);
-  const share = rowIndex - low;
-  const a = surfacePoint(CONTOUR.rows[low], x, ends);
-  const b = surfacePoint(CONTOUR.rows[low + 1], x, ends);
-  return [lerp(a[0], b[0], share), lerp(a[1], b[1], share), lerp(a[2], b[2], share)];
+  const high = surfacePoint(CONTOUR.rows[low + 1], x, ends);
+  return surfacePoint(CONTOUR.rows[low], x, ends).map((value, axis) =>
+    lerp(value, high[axis], rowIndex - low),
+  ) as Vec3;
 }
 
-function windowGrid(ends: SectionEnds, tipX: number, window: Window): Vec3[][] {
-  const direction = tipX > (ends.rearX + ends.frontX) / 2 ? 1 : -1;
-  const rows = Array.from({ length: WINDSCREEN.rows + 1 }, (_, step) => step / WINDSCREEN.rows);
-  const columns = Array.from(
-    { length: WINDSCREEN.columns + 1 },
-    (_, step) => step / WINDSCREEN.columns,
-  );
+function windowGrid(ends: SectionEnds, window: Window): Vec3[][] {
+  const [tipX, direction] = noseTip(ends);
+  const rows = shares(WINDSCREEN.rows);
+  const columns = shares(WINDSCREEN.columns);
   const ordered = direction > 0 ? columns : [...columns].reverse();
   const rowSpan = ROW_HIGH - ROW_LOW - window.rowMargin;
   return ordered.map((column) =>
@@ -55,43 +54,33 @@ function windowGrid(ends: SectionEnds, tipX: number, window: Window): Vec3[][] {
 
 function lifted(points: Vec3[][], normals: Vec3[][], lift: number): Vec3[][] {
   return points.map((column, i) =>
-    column.map((point, j): Vec3 => {
-      const normal = normals[i][j];
-      return [
-        point[0] + normal[0] * lift,
-        point[1] + normal[1] * lift,
-        point[2] + normal[2] * lift,
-      ];
-    }),
+    column.map(
+      (point, j) => point.map((value, axis) => value + normals[i][j][axis] * lift) as Vec3,
+    ),
   );
 }
 
-function windowGeometry(
-  noses: readonly (readonly [SectionEnds, number])[],
-  window: Window,
-): BufferGeometry | undefined {
-  const builders = new RegionBuilders<'window'>();
-  noses.forEach(([ends, tipX], index) => {
-    const points = windowGrid(ends, tipX, window);
-    const normals = gridNormals(points, () => [0, 1, 0], { first: false, last: true });
-    emitGrid(
-      builders,
-      lifted(points, normals, window.lift),
-      normals,
-      () => 'window',
-      `screen${index}`,
-    );
-  });
-  return builders.build().get('window');
+function windowGeometry(ends: SectionEnds, window: Window): BufferGeometry {
+  const builder = new MeshBuilder();
+  const points = windowGrid(ends, window);
+  const normals = gridNormals(points, () => [0, 1, 0], false);
+  emitGrid(() => builder, lifted(points, normals, window.lift), normals, 'screen');
+  return builder.build();
 }
 
-export function buildWindscreens(noses: readonly (readonly [SectionEnds, number])[]) {
-  return {
-    frame: windowGeometry(noses, { margin: 0, rowMargin: 0, lift: WINDSCREEN.frameLift }),
-    glass: windowGeometry(noses, {
-      margin: WINDSCREEN.frameInset,
-      rowMargin: WINDSCREEN.frameRows,
-      lift: WINDSCREEN.glassLift,
-    }),
-  };
+export function buildWindscreen(context: PartContext, ends: SectionEnds, parent: Object3D): void {
+  const layers = [
+    [{ margin: 0, rowMargin: 0, lift: WINDSCREEN.frameLift }, TRAIN_FINISHES.screenFrame],
+    [
+      {
+        margin: WINDSCREEN.frameInset,
+        rowMargin: WINDSCREEN.frameRows,
+        lift: WINDSCREEN.glassLift,
+      },
+      TRAIN_FINISHES.screen,
+    ],
+  ] as const;
+  layers.forEach(([window, finish]) =>
+    parent.add(trainMesh(context, windowGeometry(ends, window), finish)),
+  );
 }

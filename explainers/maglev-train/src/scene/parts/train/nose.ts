@@ -1,7 +1,7 @@
 import { BODY, JOINT, NOSE, NOSE_REACH } from './constants';
 import type { ContourRow } from './profile';
 
-export type EndKind = 'joint' | 'nose' | 'open';
+export type EndKind = 'joint' | 'nose';
 
 export interface SectionEnds {
   readonly rearX: number;
@@ -66,6 +66,10 @@ export function noseDistance(x: number, ends: SectionEnds): number | null {
   if (ends.front === 'nose' && ends.frontX - x < NOSE_REACH) return Math.max(0, ends.frontX - x);
   if (ends.rear === 'nose' && x - ends.rearX < NOSE_REACH) return Math.max(0, x - ends.rearX);
   return null;
+}
+
+export function noseTip(ends: SectionEnds): readonly [tipX: number, direction: number] {
+  return ends.front === 'nose' ? [ends.frontX, 1] : [ends.rearX, -1];
 }
 
 export function surfacePoint(row: ContourRow, x: number, ends: SectionEnds, inset = 0): Vec3 {

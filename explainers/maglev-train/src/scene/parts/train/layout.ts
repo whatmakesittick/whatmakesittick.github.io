@@ -50,15 +50,11 @@ export function skidSlots(extent: Extent): number[] {
   return SKID_SHARES.slice(0, perSide).map((share) => extent[0] + share * length(extent));
 }
 
-function doorIndices(slotCount: number, index: number): number[] {
-  const front = index === LEAD_SECTION ? DOOR.frontSlotFromNose : DOOR.rearSlot;
-  return [DOOR.rearSlot, slotCount - 1 - front];
-}
-
 function ownLayout(extent: Extent, index: number): SectionLayout {
   const modules = sectionModules(extent);
   const slots = armSlots(extent);
-  const doorSet = new Set(doorIndices(slots.length, index));
+  const front = index === LEAD_SECTION ? DOOR.frontSlotFromNose : DOOR.rearSlot;
+  const doors = [DOOR.rearSlot, slots.length - 1 - front];
   const clearOfNose = (x: number) =>
     index !== LEAD_SECTION || TRAIN.noseX - x >= PANE.noseClearance;
   return {
@@ -67,14 +63,20 @@ function ownLayout(extent: Extent, index: number): SectionLayout {
     eddyModules: eddyModuleIndices(modules.length),
     arms: slots,
     skids: skidSlots(extent),
-    windows: slots.filter((x, slot) => !doorSet.has(slot) && clearOfNose(x)),
-    doors: slots.filter((_, slot) => doorSet.has(slot)),
+    windows: slots.filter((x, slot) => !doors.includes(slot) && clearOfNose(x)),
+    doors: doors.map((slot) => slots[slot]),
   };
 }
 
+function flip(values: readonly number[]): number[] {
+  return values.map((x) => -x).reverse();
+}
+
+function flipExtent([from, to]: Extent): Extent {
+  return [-to, -from];
+}
+
 function mirrored(layout: SectionLayout): SectionLayout {
-  const flip = (values: readonly number[]) => values.map((x) => -x).reverse();
-  const flipExtent = ([from, to]: Extent): Extent => [-to, -from];
   const count = layout.modules.length;
   return {
     extent: flipExtent(layout.extent),
@@ -87,20 +89,12 @@ function mirrored(layout: SectionLayout): SectionLayout {
   };
 }
 
-export function sectionLayout(index: number): SectionLayout {
-  if (index === TAIL_SECTION)
-    return mirrored(ownLayout(SECTION_EXTENTS[LEAD_SECTION], LEAD_SECTION));
-  return ownLayout(SECTION_EXTENTS[index], index);
-}
-
-export const TRAIN_LAYOUT: readonly SectionLayout[] = SECTION_EXTENTS.map((_, index) =>
-  sectionLayout(index),
+export const TRAIN_LAYOUT: readonly SectionLayout[] = SECTION_EXTENTS.map((extent, index) =>
+  index === TAIL_SECTION
+    ? mirrored(ownLayout(SECTION_EXTENTS[LEAD_SECTION], LEAD_SECTION))
+    : ownLayout(extent, index),
 );
 
 export function isAhead(x: number): boolean {
   return x > CUT_X;
-}
-
-export function isEndSection(index: number): boolean {
-  return index === LEAD_SECTION || index === TAIL_SECTION;
 }

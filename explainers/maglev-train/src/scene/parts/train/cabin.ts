@@ -1,9 +1,27 @@
-import { Vector2 } from 'three';
+import { Shape, ShapeGeometry, Vector2 } from 'three';
+import type { BufferGeometry } from 'three';
 import { CABIN } from './constants';
 import { CONTOUR } from './profile';
 
-export function bodyOutline(): Vector2[] {
-  const right = CONTOUR.rows.map((row) => new Vector2(row.z, row.y));
+const QUARTER_TURN = Math.PI / 2;
+const CAP_CURVE_SEGMENTS = 4;
+
+export function aheadShape(points: readonly Vector2[]): Shape {
+  return new Shape(points.map((point) => new Vector2(-point.x, point.y)));
+}
+
+export function capGeometry(shapes: Shape[], x: number): BufferGeometry {
+  const geometry = new ShapeGeometry(shapes, CAP_CURVE_SEGMENTS);
+  geometry.rotateY(QUARTER_TURN);
+  geometry.translate(x, 0, 0);
+  geometry.deleteAttribute('uv');
+  return geometry;
+}
+
+function contourOutline(inset: number): Vector2[] {
+  const right = CONTOUR.rows.map(
+    (row) => new Vector2(row.z - row.nz * inset, row.y - row.ny * inset),
+  );
   const left = right
     .slice(1, -1)
     .reverse()
@@ -11,16 +29,8 @@ export function bodyOutline(): Vector2[] {
   return [...right, ...left];
 }
 
-function innerOutline(): Vector2[] {
-  const rows = CONTOUR.rows;
-  const right = rows.map(
-    (row) => new Vector2(row.z - row.nz * CABIN.wall, row.y - row.ny * CABIN.wall),
-  );
-  const left = right
-    .slice(1, -1)
-    .reverse()
-    .map((point) => new Vector2(-point.x, point.y));
-  return [...right, ...left];
+export function bodyOutline(): Vector2[] {
+  return contourOutline(0);
 }
 
 function crossing(a: Vector2, b: Vector2, level: number): Vector2 {
@@ -40,7 +50,7 @@ export function clipAbove(polygon: readonly Vector2[], level: number): Vector2[]
 }
 
 export function cabinOutline(): Vector2[] {
-  return clipAbove(innerOutline(), CABIN.floorY);
+  return clipAbove(contourOutline(CABIN.wall), CABIN.floorY);
 }
 
 export function cabinHalfWidth(y: number): number {

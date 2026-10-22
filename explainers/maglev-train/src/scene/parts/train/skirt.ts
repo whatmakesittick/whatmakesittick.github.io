@@ -7,9 +7,10 @@ import { FINISHES } from '../../finishes';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
 import { ARM, JOINT, SKIRT } from './constants';
-import { bevelledAlongX, bevelledAlongZ } from './extrude';
-import { cutInstances, showAhead } from './instances';
-import type { CutInstances } from './instances';
+import { extrudeAlongX } from '../line/geometry';
+import { CURVE_SEGMENTS, bevelledAlongZ } from './extrude';
+import { cutInstances } from './instances';
+import type { ShowAhead } from './instances';
 import { LEAD_SECTION, TAIL_SECTION, TRAIN_LAYOUT, isAhead } from './layout';
 import type { SectionLayout } from './layout';
 import { mergeAll, mirroredPair } from './mirror';
@@ -23,18 +24,9 @@ interface Piece {
   top: number;
 }
 
-function skirtExtent(layout: SectionLayout, index: number): Extent {
-  const modules = layout.modules;
-  const rear =
-    index === TAIL_SECTION ? modules[0][0] - END_MARGIN : layout.extent[0] + JOINT.halfGap;
-  const front =
-    index === LEAD_SECTION
-      ? modules[modules.length - 1][1] + END_MARGIN
-      : layout.extent[1] - JOINT.halfGap;
-  return [rear, front];
-}
+type Placed = readonly [geometry: BufferGeometry, x: number];
 
-export function skirtPieces(extent: Extent, notches: readonly number[]): Piece[] {
+function skirtPieces(extent: Extent, notches: readonly number[]): Piece[] {
   const marks = notches
     .flatMap((x) => [x - SKIRT.notchHalfLength, x + SKIRT.notchHalfLength])
     .concat(extent[0] < CUT_X && extent[1] > CUT_X ? [CUT_X] : [])
@@ -48,50 +40,42 @@ export function skirtPieces(extent: Extent, notches: readonly number[]): Piece[]
   });
 }
 
-function profile(top: number): Shape {
-  return roundedRectShape(
+function pieceGeometry({ from, to, top }: Piece): BufferGeometry {
+  const profile = roundedRectShape(
     { minA: SKIRT.innerZ, maxA: SKIRT.outerZ, minB: SKIRT.bottom, maxB: top },
     SKIRT.outerRadius,
   );
+  return extrudeAlongX(profile, from, to, SKIRT.bevel, CURVE_SEGMENTS);
 }
 
-function nosePiece(from: number, to: number, forward: boolean): BufferGeometry {
+function nosePiece(base: number, tip: number): BufferGeometry {
   const radius = SKIRT.noseRadius;
   const shape = new Shape();
-  const [rear, front] = forward ? [from, to] : [to, from];
-  const sign = forward ? 1 : -1;
-  shape.moveTo(rear, SKIRT.bottom);
-  shape.lineTo(front - sign * radius, SKIRT.bottom);
-  shape.quadraticCurveTo(front, SKIRT.bottom, front, SKIRT.bottom + radius);
-  shape.lineTo(front, SKIRT.top);
-  shape.lineTo(rear, SKIRT.top);
+  shape.moveTo(base, SKIRT.bottom);
+  shape.lineTo(tip > base ? tip - radius : tip + radius, SKIRT.bottom);
+  shape.quadraticCurveTo(tip, SKIRT.bottom, tip, SKIRT.bottom + radius);
+  shape.lineTo(tip, SKIRT.top);
+  shape.lineTo(base, SKIRT.top);
   shape.closePath();
   return bevelledAlongZ(shape, SKIRT.innerZ, SKIRT.outerZ, SKIRT.bevel);
 }
 
-function pieceGeometry(piece: Piece): BufferGeometry {
-  return bevelledAlongX(profile(piece.top), piece.from, piece.to, SKIRT.bevel);
-}
-
-function sectionSkirt(layout: SectionLayout, index: number): Map<boolean, BufferGeometry[]> {
-  const [rear, front] = skirtExtent(layout, index);
+function sectionSkirt({ extent, modules, skids }: SectionLayout, index: number): Placed[] {
   const noseFront = index === LEAD_SECTION;
   const noseRear = index === TAIL_SECTION;
+  const rear = noseRear ? modules[0][0] - END_MARGIN : extent[0] + JOINT.halfGap;
+  const front = noseFront ? modules[modules.length - 1][1] + END_MARGIN : extent[1] - JOINT.halfGap;
   const inner: Extent = [
     noseRear ? rear + NOSE_PIECE : rear,
     noseFront ? front - NOSE_PIECE : front,
   ];
-  const byCut = new Map<boolean, BufferGeometry[]>([
-    [false, []],
-    [true, []],
+  const placed = skirtPieces(inner, skids).map((piece): Placed => [
+    pieceGeometry(piece),
+    (piece.from + piece.to) / 2,
   ]);
-  const add = (geometry: BufferGeometry, x: number) => byCut.get(isAhead(x))?.push(geometry);
-  skirtPieces(inner, layout.skids).forEach((piece) =>
-    add(pieceGeometry(piece), (piece.from + piece.to) / 2),
-  );
-  if (noseFront) add(nosePiece(inner[1], front, true), front);
-  if (noseRear) add(nosePiece(rear, inner[0], false), rear);
-  return byCut;
+  if (noseFront) placed.push([nosePiece(inner[1], front), front]);
+  if (noseRear) placed.push([nosePiece(inner[0], rear), rear]);
+  return placed;
 }
 
 export function armProfile(top: number = SKIRT.bottom + ARM.overlap): Shape {
@@ -114,26 +98,15 @@ export function armProfile(top: number = SKIRT.bottom + ARM.overlap): Shape {
 
 export function armGeometry(): BufferGeometry {
   const half = ARM.length / 2;
-  return mirroredPair(bevelledAlongX(armProfile(), -half, half, ARM.bevel));
+  return mirroredPair(extrudeAlongX(armProfile(), -half, half, ARM.bevel, CURVE_SEGMENTS));
 }
 
-export interface Skirt {
-  readonly arms: CutInstances;
-  showAhead(shown: boolean): void;
-}
-
-export function buildSkirt(context: PartContext, behind: Object3D, ahead: Object3D): Skirt {
-  const pieces = { behind: [] as BufferGeometry[], ahead: [] as BufferGeometry[] };
-  TRAIN_LAYOUT.forEach((layout, index) => {
-    const split = sectionSkirt(layout, index);
-    pieces.behind.push(...(split.get(false) ?? []));
-    pieces.ahead.push(...(split.get(true) ?? []));
+export function buildSkirt(context: PartContext, behind: Object3D, ahead: Object3D): ShowAhead {
+  const pieces = TRAIN_LAYOUT.flatMap(sectionSkirt);
+  [behind, ahead].forEach((parent, side) => {
+    const list = pieces.filter(([, x]) => isAhead(x) === side > 0).map(([geometry]) => geometry);
+    if (list.length > 0) parent.add(partMesh(context, mirroredPair(mergeAll(list)), 'wrapArms'));
   });
-  const sides = (list: BufferGeometry[]) => mirroredPair(mergeAll(list));
-  behind.add(partMesh(context, sides(pieces.behind), 'wrapArms'));
-  if (pieces.ahead.length > 0) ahead.add(partMesh(context, sides(pieces.ahead), 'wrapArms'));
   const slots = TRAIN_LAYOUT.flatMap((layout) => layout.arms);
-  const arms = cutInstances(context, armGeometry(), 'wrapArms', FINISHES.trainWhite, slots);
-  behind.add(arms.mesh);
-  return { arms, showAhead: (shown) => showAhead(arms, shown) };
+  return cutInstances(context, behind, armGeometry(), 'wrapArms', FINISHES.trainWhite, slots);
 }

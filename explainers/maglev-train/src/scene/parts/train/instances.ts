@@ -1,35 +1,31 @@
-import { InstancedMesh, Matrix4 } from 'three';
-import type { BufferGeometry } from 'three';
+import { Matrix4 } from 'three';
+import type { BufferGeometry, Object3D } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
+import { instancesOf } from '../context';
 import type { EmphasisGroup, PartContext } from '../context';
 import { isAhead } from './layout';
 
-export interface CutInstances {
-  readonly mesh: InstancedMesh;
-  readonly behind: number;
-  readonly total: number;
-}
+export type ShowAhead = (shown: boolean) => void;
 
 export function cutInstances(
   context: PartContext,
+  parent: Object3D,
   geometry: BufferGeometry,
   group: EmphasisGroup,
   finish: MaterialFinish,
   slots: readonly number[],
-): CutInstances {
+): ShowAhead {
   const sorted = [...slots].sort((a, b) => a - b);
-  const material = context.materials.get(group, finish);
-  const mesh = context.tracker.track(
-    new InstancedMesh(context.tracker.track(geometry), material, sorted.length),
-  );
-  const matrix = new Matrix4();
-  sorted.forEach((x, index) => mesh.setMatrixAt(index, matrix.makeTranslation(x, 0, 0)));
-  mesh.instanceMatrix.needsUpdate = true;
-  mesh.computeBoundingSphere();
+  const matrices = sorted.map((x) => new Matrix4().makeTranslation(x, 0, 0));
+  const mesh = instancesOf(context, geometry, context.materials.get(group, finish), matrices);
   mesh.name = group;
-  return { mesh, behind: sorted.filter((x) => !isAhead(x)).length, total: sorted.length };
+  parent.add(mesh);
+  const behind = sorted.filter((x) => !isAhead(x)).length;
+  return (shown) => {
+    mesh.count = shown ? sorted.length : behind;
+  };
 }
 
-export function showAhead(instances: CutInstances, shown: boolean): void {
-  instances.mesh.count = shown ? instances.total : instances.behind;
+export function allAhead(toggles: readonly ShowAhead[]): ShowAhead {
+  return (shown) => toggles.forEach((toggle) => toggle(shown));
 }

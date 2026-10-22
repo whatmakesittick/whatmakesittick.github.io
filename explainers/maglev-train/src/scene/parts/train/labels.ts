@@ -1,6 +1,6 @@
 import type { PartId, Point } from '../../../ids';
 import { ARM_ANCHOR, MAGNETS, SECTION_EXTENTS, SKIDS, TRAIN } from '../../../model';
-import { ARM, SKID, SKIRT } from './constants';
+import { ARM, GUIDANCE_BACK, SKID, SKIRT, SUPPORT_BOTTOM } from './constants';
 import { LEAD_SECTION, TAIL_SECTION, TRAIN_LAYOUT } from './layout';
 
 type TrainPart = Extract<
@@ -13,8 +13,6 @@ const TAIL = TRAIN_LAYOUT[TAIL_SECTION];
 const ARM_X = ARM_ANCHOR[0];
 const LABEL_SECTION = 1;
 const SUPPORT_LABEL_SHIFT_M = 1.8;
-const GUIDANCE_BACK = MAGNETS.guidance.faceZ + MAGNETS.guidance.depth;
-const SUPPORT_BOTTOM = MAGNETS.support.top - MAGNETS.support.height;
 
 function nearest(slots: readonly number[], x: number): number {
   return slots.reduce((best, slot) => (Math.abs(slot - x) < Math.abs(best - x) ? slot : best));

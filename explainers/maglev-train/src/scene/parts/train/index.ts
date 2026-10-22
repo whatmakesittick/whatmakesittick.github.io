@@ -1,4 +1,4 @@
-import type { AssemblyState, MotionReading } from '../../../ids';
+import type { AssemblyState, MotionReading, PartId } from '../../../ids';
 import { ANCHOR_POINTS } from '../../../model';
 import { applyTrainPose } from '../../pose';
 import { label, namedGroup, sceneAnchor } from '../context';
@@ -26,9 +26,9 @@ export function buildTrain(context: PartContext): Section {
   const magnets = buildMagnets(context, posed);
   const skids = buildSkids(context, posed, ahead);
   const cutaway = buildCutaway(context, posed);
-  const cutSets = [windows, skirt, magnets, skids];
-  (Object.keys(LABEL_POINTS) as (keyof typeof LABEL_POINTS)[]).forEach((part) =>
-    label(context, part, posed, LABEL_POINTS[part]),
+  const cutSets = [windows, skirt, magnets.showAhead, skids.showAhead];
+  Object.entries(LABEL_POINTS).forEach(([part, point]) =>
+    label(context, part as PartId, posed, point),
   );
   SCENE_ANCHORS.forEach((id) => sceneAnchor(context, id, posed, ANCHOR_POINTS[id]));
   const glow = new Ease(0);
@@ -45,7 +45,7 @@ export function buildTrain(context: PartContext): Section {
       const whole = !state.view.cutaway;
       ahead.visible = whole;
       cutaway.visible = !whole;
-      cutSets.forEach((set) => set.showAhead(whole));
+      cutSets.forEach((showAhead) => showAhead(whole));
       skids.setSliding(state.motion.sliding);
       glow.aim(state.power.eddy ? 1 : 0);
     },

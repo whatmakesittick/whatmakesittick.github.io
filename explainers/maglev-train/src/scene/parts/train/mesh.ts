@@ -1,7 +1,6 @@
 import { BufferGeometry, Float32BufferAttribute } from 'three';
 import type { Vec3 } from './nose';
 
-const AREA_EPSILON = 1e-14;
 const XYZ = 3;
 
 export function sub(a: Vec3, b: Vec3): Vec3 {
@@ -29,14 +28,10 @@ export class MeshBuilder {
   private readonly positions: number[] = [];
   private readonly normals: number[] = [];
   private readonly indices: number[] = [];
-  private readonly keys = new Map<string, number>();
-
-  get empty(): boolean {
-    return this.indices.length === 0;
-  }
+  private readonly keys = new Map<string | undefined, number>();
 
   vertex(position: Vec3, normal: Vec3, key?: string): number {
-    const known = key === undefined ? undefined : this.keys.get(key);
+    const known = this.keys.get(key);
     if (known !== undefined) return known;
     const index = this.positions.length / XYZ;
     this.positions.push(...position);
@@ -46,13 +41,6 @@ export class MeshBuilder {
   }
 
   triangle(a: number, b: number, c: number): void {
-    const corner = (index: number): Vec3 => [
-      this.positions[index * XYZ],
-      this.positions[index * XYZ + 1],
-      this.positions[index * XYZ + 2],
-    ];
-    const normal = cross(sub(corner(b), corner(a)), sub(corner(c), corner(a)));
-    if (dot(normal, normal) < AREA_EPSILON) return;
     this.indices.push(a, b, c);
   }
 
@@ -69,19 +57,11 @@ export class RegionBuilders<R extends string> {
   private readonly builders = new Map<R, MeshBuilder>();
 
   of(region: R): MeshBuilder {
-    let builder = this.builders.get(region);
-    if (!builder) {
-      builder = new MeshBuilder();
-      this.builders.set(region, builder);
-    }
-    return builder;
+    if (!this.builders.has(region)) this.builders.set(region, new MeshBuilder());
+    return this.builders.get(region) as MeshBuilder;
   }
 
   build(): Map<R, BufferGeometry> {
-    const built = new Map<R, BufferGeometry>();
-    this.builders.forEach((builder, region) => {
-      if (!builder.empty) built.set(region, builder.build());
-    });
-    return built;
+    return new Map([...this.builders].map(([region, builder]) => [region, builder.build()]));
   }
 }

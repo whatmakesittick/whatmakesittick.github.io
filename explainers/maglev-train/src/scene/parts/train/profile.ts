@@ -35,10 +35,6 @@ function point(z: number, y: number): Vector2 {
   return new Vector2(z, y);
 }
 
-function cubic(a: Vector2, b: Vector2, c: Vector2, d: Vector2): CubicBezierCurve {
-  return new CubicBezierCurve(a, b, c, d);
-}
-
 function segments(): SegmentSpec[] {
   const { floorY, roofY, floorEdgeZ, seamZ, seamY, halfWidth, bandBottom, bandTop } = BODY;
   const floorEdge = point(floorEdgeZ, floorY);
@@ -50,7 +46,7 @@ function segments(): SegmentSpec[] {
     {
       id: 'corner',
       region: 'underbody',
-      curve: cubic(
+      curve: new CubicBezierCurve(
         floorEdge,
         point(floorEdgeZ + CORNER_HANDLE, floorY),
         point(seamZ, seamY - CORNER_HANDLE),
@@ -60,7 +56,7 @@ function segments(): SegmentSpec[] {
     {
       id: 'lowerSide',
       region: 'white',
-      curve: cubic(
+      curve: new CubicBezierCurve(
         seam,
         point(seamZ, seamY + SIDE_HANDLE),
         point(halfWidth, bandBottom - SIDE_HANDLE),
@@ -71,7 +67,7 @@ function segments(): SegmentSpec[] {
     {
       id: 'shoulder',
       region: 'white',
-      curve: cubic(
+      curve: new CubicBezierCurve(
         bandHigh,
         point(BODY.bandTopZ - SHOULDER_LEAN, bandTop + SHOULDER_HANDLE),
         point(BODY.crownZ, roofY),

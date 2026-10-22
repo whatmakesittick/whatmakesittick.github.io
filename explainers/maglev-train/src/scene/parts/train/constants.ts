@@ -101,9 +101,12 @@ export const ROOF_FAIRING = {
 
 const SKIRT_TOP = TRAIN.bodyBottom + 0.01;
 
+export const SUPPORT_BOTTOM = MAGNETS.support.top - MAGNETS.support.height;
+export const GUIDANCE_BACK = MAGNETS.guidance.faceZ + MAGNETS.guidance.depth;
+
 export const SKIRT = {
   outerZ: BODY.seamZ,
-  innerZ: MAGNETS.guidance.faceZ + MAGNETS.guidance.depth,
+  innerZ: GUIDANCE_BACK,
   top: SKIRT_TOP,
   bottom: 9.8,
   notchBottom: GUIDEWAY_TOP - 0.04,
@@ -117,7 +120,7 @@ export const ARM = {
   length: 0.5,
   bottom: TRAIN.armBottom,
   footInnerZ: 1.04,
-  frameTop: MAGNETS.support.top - MAGNETS.support.height,
+  frameTop: SUPPORT_BOTTOM,
   frameOuterZ: STATOR.sideZ + 0.1,
   stepY: GUIDANCE_RAIL.centreY - GUIDANCE_RAIL.height / 2 - 0.025,
   cornerRadius: 0.09,

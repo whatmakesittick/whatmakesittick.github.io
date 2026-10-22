@@ -1,5 +1,5 @@
 import { Group, InstancedMesh, Mesh } from 'three';
-import type { BufferGeometry, Material, Object3D } from 'three';
+import type { BufferGeometry, Material, Matrix4, Object3D } from 'three';
 import type { MaterialFinish, MaterialLibrary, STRUCTURE_GROUP } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import type { ResourceTracker } from '@core/scene/resources';
@@ -117,4 +117,19 @@ export function instancedMesh(
 ): InstancedMesh {
   const material = context.materials.get(group, FINISHES[finish]);
   return context.tracker.track(new InstancedMesh(context.tracker.track(geometry), material, count));
+}
+
+export function instancesOf(
+  context: PartContext,
+  geometry: BufferGeometry,
+  material: Material,
+  matrices: readonly Matrix4[],
+): InstancedMesh {
+  const mesh = context.tracker.track(
+    new InstancedMesh(context.tracker.track(geometry), material, Math.max(1, matrices.length)),
+  );
+  mesh.count = matrices.length;
+  matrices.forEach((matrix, index) => mesh.setMatrixAt(index, matrix));
+  mesh.computeBoundingSphere();
+  return mesh;
 }

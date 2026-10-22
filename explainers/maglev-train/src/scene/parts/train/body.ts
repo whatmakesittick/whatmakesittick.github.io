@@ -1,9 +1,8 @@
 import { SphereGeometry } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
-import type { Extent } from '@core/scene/regions';
 import { CUT_X, SECTION_EXTENTS } from '../../../model';
 import type { Finish } from '../../finishes';
-import { finishMesh, partMesh } from '../context';
+import { partMesh } from '../context';
 import type { PartContext } from '../context';
 import { buildBellows } from './bellows';
 import { BODY, JOINT, ROOF_FAIRING } from './constants';
@@ -13,8 +12,8 @@ import { mergeAll } from './mirror';
 import type { SectionEnds } from './nose';
 import type { BodyRegion } from './profile';
 import { buildShell } from './shell';
-import { LAMP_FINISHES, buildLamps } from './lamps';
-import { buildWindscreens } from './windscreen';
+import { buildLamps } from './lamps';
+import { buildWindscreen } from './windscreen';
 
 const REGION_FINISH: Readonly<Record<BodyRegion, Finish>> = {
   underbody: 'underbody',
@@ -36,38 +35,21 @@ export function sectionEnds(index: number): SectionEnds {
   };
 }
 
-function collect(target: Pieces, built: Map<BodyRegion, BufferGeometry>): void {
-  built.forEach((geometry, region) => {
-    const list = target.get(region) ?? [];
-    list.push(geometry);
-    target.set(region, list);
-  });
-}
-
-function shellPieces(): { behind: Pieces; ahead: Pieces } {
-  const behind: Pieces = new Map();
-  const ahead: Pieces = new Map();
+function shellPieces(): Pieces[] {
+  const sides: Pieces[] = [new Map(), new Map()];
   SECTION_EXTENTS.forEach((_, index) => {
     const ends = sectionEnds(index);
-    const cut = ends.rearX < CUT_X && ends.frontX > CUT_X;
-    const ranges: Extent[] = cut
-      ? [
-          [ends.rearX, CUT_X],
-          [CUT_X, ends.frontX],
-        ]
-      : [[ends.rearX, ends.frontX]];
-    ranges.forEach((range, piece) => {
-      const built = buildShell(ends, range, cut ? [CUT_X] : [], `s${index}p${piece}`);
-      collect(isAhead((range[0] + range[1]) / 2) ? ahead : behind, built);
+    const splits = ends.rearX < CUT_X && ends.frontX > CUT_X ? [CUT_X] : [];
+    const edges = [ends.rearX, ...splits, ends.frontX];
+    edges.slice(1).forEach((to, piece) => {
+      const from = edges[piece];
+      const pieces = sides[isAhead((from + to) / 2) ? 1 : 0];
+      buildShell(ends, [from, to], splits).forEach((geometry, region) =>
+        pieces.set(region, [...(pieces.get(region) ?? []), geometry]),
+      );
     });
   });
-  return { behind, ahead };
-}
-
-function addPieces(context: PartContext, pieces: Pieces, parent: Object3D): void {
-  pieces.forEach((list, region) =>
-    parent.add(partMesh(context, mergeAll(list), 'train', REGION_FINISH[region])),
-  );
+  return sides;
 }
 
 function roofFairing(x: number): BufferGeometry {
@@ -91,52 +73,26 @@ function addRoofFairings(context: PartContext, behind: Object3D, ahead: Object3D
     if (index === TAIL_SECTION) return to - (to - from) * ROOF_FAIRING.endShare;
     return (from + to) / 2;
   });
-  const split = [centres.filter((x) => !isAhead(x)), centres.filter(isAhead)] as const;
-  split.forEach((xs, side) => {
-    if (xs.length === 0) return;
-    const mesh = partMesh(context, mergeAll(xs.map(roofFairing)), 'train', 'trainWhite');
-    (side === 0 ? behind : ahead).add(mesh);
+  [behind, ahead].forEach((parent, side) => {
+    const xs = centres.filter((x) => isAhead(x) === side > 0);
+    if (xs.length > 0)
+      parent.add(partMesh(context, mergeAll(xs.map(roofFairing)), 'train', 'trainWhite'));
   });
 }
 
 export function buildBody(context: PartContext, behind: Object3D, ahead: Object3D): void {
-  const { behind: rear, ahead: front } = shellPieces();
-  addPieces(context, rear, behind);
-  addPieces(context, front, ahead);
+  shellPieces().forEach((pieces, side) =>
+    pieces.forEach((list, region) =>
+      [behind, ahead][side].add(partMesh(context, mergeAll(list), 'train', REGION_FINISH[region])),
+    ),
+  );
   const boundaries = SECTION_EXTENTS.slice(1).map(([, to]) => to);
-  const bellows = buildBellows(boundaries);
-  if (bellows) behind.add(partMesh(context, bellows, 'train', 'joint'));
+  behind.add(partMesh(context, buildBellows(boundaries), 'train', 'joint'));
   addRoofFairings(context, behind, ahead);
-  const lead = buildWindscreens([[sectionEnds(LEAD_SECTION), SECTION_EXTENTS[LEAD_SECTION][1]]]);
-  const tail = buildWindscreens([[sectionEnds(TAIL_SECTION), SECTION_EXTENTS[TAIL_SECTION][0]]]);
-  const screens = [
-    [lead, ahead],
-    [tail, behind],
+  const noses = [
+    [sectionEnds(LEAD_SECTION), ahead, TRAIN_FINISHES.lamp],
+    [sectionEnds(TAIL_SECTION), behind, TRAIN_FINISHES.tailLamp],
   ] as const;
-  buildLamps(
-    context,
-    sectionEnds(LEAD_SECTION),
-    SECTION_EXTENTS[LEAD_SECTION][1],
-    LAMP_FINISHES.head,
-    ahead,
-  );
-  buildLamps(
-    context,
-    sectionEnds(TAIL_SECTION),
-    SECTION_EXTENTS[TAIL_SECTION][0],
-    LAMP_FINISHES.tail,
-    behind,
-  );
-  screens.forEach(([screen, parent]) => {
-    const layers = [
-      [screen.frame, TRAIN_FINISHES.screenFrame],
-      [screen.glass, TRAIN_FINISHES.screen],
-    ] as const;
-    layers.forEach(([geometry, finish]) => {
-      if (!geometry) return;
-      const mesh = finishMesh(context, geometry, 'train', finish);
-      mesh.name = 'train';
-      parent.add(mesh);
-    });
-  });
+  noses.forEach(([ends, parent, lamp]) => buildLamps(context, ends, lamp, parent));
+  noses.forEach(([ends, parent]) => buildWindscreen(context, ends, parent));
 }
