@@ -1,26 +1,46 @@
-import { ANCHOR_POINTS, MAGNETS, SECTION_EXTENTS, SKIDS, TRAIN } from '../../../model';
-import { label, namedGroup, sceneAnchor } from '../context';
-import type { PartContext, Section } from '../context';
-
-const LEAD_X = (SECTION_EXTENTS[0][0] + SECTION_EXTENTS[0][1]) / 2;
-const SECOND_X = (SECTION_EXTENTS[1][0] + SECTION_EXTENTS[1][1]) / 2;
-const GUIDANCE_OUTER_Z = MAGNETS.guidance.faceZ + MAGNETS.guidance.depth;
+import type { AssemblyState, Point } from '../../../ids';
+import { ANCHOR_POINTS, SECTION_EXTENTS, TRAIN } from '../../../model';
+import { box } from '@core/scene/geometry/box';
+import { applyTrainPose } from '../../pose';
+import { label, namedGroup, partMesh, sceneAnchor } from '../context';
+import type { Frame, PartContext, Section } from '../context';
+import { LABEL_POINTS } from './labels';
 
 export function buildTrain(context: PartContext): Section {
-  const root = namedGroup('train');
-  label(context, 'train', root, [LEAD_X, TRAIN.roof, 0]);
-  label(context, 'wrapArms', root, [LEAD_X, TRAIN.armBottom, -TRAIN.width / 2]);
-  label(context, 'supportMagnets', root, [
-    LEAD_X,
-    MAGNETS.support.top - MAGNETS.support.height,
-    -MAGNETS.support.sideZ,
-  ]);
-  label(context, 'guidanceMagnets', root, [LEAD_X, MAGNETS.guidance.centreY, GUIDANCE_OUTER_Z]);
-  label(context, 'eddyBrakes', root, [SECOND_X, MAGNETS.guidance.centreY, GUIDANCE_OUTER_Z]);
-  label(context, 'skids', root, [SECOND_X, TRAIN.bodyBottom - SKIDS.height, -SKIDS.stripZ]);
-  sceneAnchor(context, 'nose', root, ANCHOR_POINTS.nose);
-  sceneAnchor(context, 'tail', root, ANCHOR_POINTS.tail);
-  sceneAnchor(context, 'arm', root, ANCHOR_POINTS.arm);
-  sceneAnchor(context, 'cut', root, ANCHOR_POINTS.cut);
-  return { root, setState: () => undefined };
+  const root = namedGroup('trainRoot');
+  const posed = namedGroup('trainPosed', root);
+  const ahead = namedGroup('trainAhead', posed);
+  SECTION_EXTENTS.forEach(([from, to], index) => {
+    const geometry = box({
+      minX: from,
+      maxX: to,
+      minY: TRAIN.bodyBottom,
+      maxY: TRAIN.roof,
+      minZ: -TRAIN.width / 2,
+      maxZ: TRAIN.width / 2,
+    });
+    (index === 0 ? ahead : posed).add(partMesh(context, geometry, 'train'));
+  });
+  Object.entries(LABEL_POINTS).forEach(([part, point]) =>
+    label(context, part as keyof typeof LABEL_POINTS, posed, point as Point),
+  );
+  (['nose', 'tail', 'arm', 'cut'] as const).forEach((id) =>
+    sceneAnchor(context, id, posed, ANCHOR_POINTS[id]),
+  );
+  let lateralMm = 0;
+  let current: AssemblyState | null = null;
+
+  return {
+    root,
+    setState(state: AssemblyState) {
+      current = state;
+      applyTrainPose(posed, state.motion, lateralMm);
+      ahead.visible = !state.view.cutaway;
+    },
+    animate(frame: Frame, state: AssemblyState) {
+      lateralMm = frame.nudge.lateralMm;
+      applyTrainPose(posed, (current ?? state).motion, lateralMm);
+      return false;
+    },
+  };
 }
