@@ -38,8 +38,8 @@ export const ZONES: readonly Zone[] = [
       soil: 2,
       fallow: 1,
       orchard: 1,
-      flooded: 1.2,
-      pond: 0.6,
+      flooded: 0.5,
+      pond: 0.5,
     },
   },
   {
@@ -55,8 +55,8 @@ export const ZONES: readonly Zone[] = [
       soil: 1.5,
       fallow: 1.5,
       orchard: 1.2,
-      flooded: 1,
-      pond: 1,
+      flooded: 0.45,
+      pond: 0.7,
     },
   },
   {
@@ -72,8 +72,8 @@ export const ZONES: readonly Zone[] = [
       soil: 1,
       fallow: 2,
       orchard: 1.5,
-      flooded: 0.8,
-      pond: 0.8,
+      flooded: 0.4,
+      pond: 0.6,
     },
   },
 ];

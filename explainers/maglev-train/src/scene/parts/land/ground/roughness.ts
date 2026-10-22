@@ -7,7 +7,7 @@ import type { Painter } from './painter';
 import { pondWater } from './paintFields';
 import { isWater, waterBox } from './paintLinears';
 
-export const SURFACE_ROUGHNESS = { land: 1, water: 0.16, flooded: 0.45 } as const;
+export const SURFACE_ROUGHNESS = { land: 1, water: 0.34, flooded: 0.78 } as const;
 
 export function paintRoughness(
   painter: Painter,

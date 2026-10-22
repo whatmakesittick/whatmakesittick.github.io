@@ -11,6 +11,7 @@ import type { GroundPlan } from './texture';
 import { centredWarp } from './warp';
 
 const GROUND_RENDER_ORDER = -10;
+const GROUND_REFLECTION = 0.4;
 
 export function groundPlan(): GroundPlan {
   return {
@@ -28,6 +29,7 @@ export function groundMesh(context: PartContext, plan: GroundPlan): Mesh {
     roughnessMap: maps.roughness,
     roughness: 1,
     metalness: 0,
+    envMapIntensity: GROUND_REFLECTION,
   });
   const mesh = new Mesh(context.tracker.track(groundGeometry(plan.warp)), material);
   mesh.name = 'ground';

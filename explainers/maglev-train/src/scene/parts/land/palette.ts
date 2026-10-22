@@ -25,7 +25,7 @@ export const FIELD_LOOKS: Readonly<Record<FieldKind, KindLook>> = {
   fallow: { colours: ['#8c9562', '#838c59', '#979d6a'] },
   orchard: { colours: ['#748a4c', '#6b8246'] },
   flooded: {
-    colours: ['#98a8a2', '#8d9f98', '#a2afa6'],
+    colours: ['#8f9f86', '#87997f', '#97a58b'],
     beds: { spacing: 2.6, width: 0.7, shade: 0.88 },
   },
   greenhouse: { colours: ['#dcdfd8', '#d3d7cf', '#e2e3dd'] },
