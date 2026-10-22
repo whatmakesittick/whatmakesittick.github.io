@@ -6,6 +6,17 @@ import type { StationId } from '../../../../model';
 export const FLOOR = STATIONS.platformFloor;
 export const HALF_LENGTH = STATIONS.platformLength / 2;
 
+const LEFT_PLATFORM_END = 20;
+
+export function platformRun(side: number): [number, number] {
+  return side < 0 ? [-HALF_LENGTH, LEFT_PLATFORM_END] : [-HALF_LENGTH, HALF_LENGTH];
+}
+
+export function onPlatform(x: number, side: number): boolean {
+  const [from, to] = platformRun(side);
+  return x >= from && x <= to;
+}
+
 const EDGE_CLEARANCE = 0.12;
 const PLATFORM_WIDTH = 8.5;
 
@@ -73,6 +84,7 @@ export const SCREEN = {
   mullionWidth: 0.06,
   mullionDepth: 0.1,
   railHeight: 0.08,
+  endGap: 0.6,
 } as const;
 
 export const LIGHT_STRIP = {
@@ -114,7 +126,7 @@ export const STATION_STYLES: Readonly<Record<StationId, StationStyle>> = {
     link: false,
   },
   airport: {
-    escalatorX: 40,
+    escalatorX: -30,
     hall: { x: [-36, 96], z: [22, 58], height: 15, finSpacing: 3.6, bands: 3, roofRise: 3.2 },
     link: true,
   },

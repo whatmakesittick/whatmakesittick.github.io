@@ -10,7 +10,7 @@ import {
   profileShape,
 } from '../geometry';
 import type { ProfilePoint } from '../geometry';
-import { CANOPY, CANOPY_COLUMN, FLOOR, HALF_LENGTH, LIGHT_STRIP } from './constants';
+import { CANOPY, CANOPY_COLUMN, FLOOR, HALF_LENGTH, LIGHT_STRIP, onPlatform } from './constants';
 
 const RISE = CANOPY.crown - CANOPY.eave;
 const RADIUS = (CANOPY.halfSpan ** 2 + RISE ** 2) / (2 * RISE);
@@ -108,9 +108,11 @@ function column(x: number, side: number): BufferGeometry[] {
 
 export function canopyColumns(): BufferGeometry {
   return mergeParts(
-    ribPositions()
-      .filter((x) => Math.abs(x) <= HALF_LENGTH)
-      .flatMap((x) => SIDE_SIGNS.flatMap((side) => column(x, side))),
+    SIDE_SIGNS.flatMap((side) =>
+      ribPositions()
+        .filter((x) => onPlatform(x, side))
+        .flatMap((x) => column(x, side)),
+    ),
   );
 }
 

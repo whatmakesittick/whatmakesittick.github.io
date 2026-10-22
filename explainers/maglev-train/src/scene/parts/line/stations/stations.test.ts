@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { GHOST_TRACK_Z, TRAIN } from '../../../../model';
+import { GHOST_TRACK_Z, INSET, INSET_CENTRE, TRAIN } from '../../../../model';
 import { arcHeight } from './canopy';
-import { CANOPY, ESCALATOR, PLATFORM, STATION_STYLES } from './constants';
+import { CANOPY, ESCALATOR, PLATFORM, STATION_STYLES, platformRun } from './constants';
 
 const GHOST_HALF_WIDTH = 1.7;
+const ARM_VIEW_MARGIN = 20;
 
 describe('station layout', () => {
   it('keeps the platform edges just clear of the train', () => {
@@ -22,5 +23,10 @@ describe('station layout', () => {
       expect(hall.z[0]).toBeGreaterThan(0);
     });
     expect(ESCALATOR.inner + ESCALATOR.width).toBeLessThan(GHOST_TRACK_Z - GHOST_HALF_WIDTH);
+  });
+
+  it('ends the left platform short of the gap inset so the arm view stays open', () => {
+    const [, leftEnd] = platformRun(-1);
+    expect(leftEnd).toBeLessThan(INSET_CENTRE[0] - INSET.width / 2 - ARM_VIEW_MARGIN);
   });
 });
