@@ -27,30 +27,34 @@ function axle(x: number): BufferGeometry {
   });
 }
 
-function sideFrame(side: number): BufferGeometry {
-  const { halfLength, bottom, top, width, offset } = BOGIE.sideFrame;
-  const z = side * offset;
-  return box({
-    minX: -halfLength,
-    maxX: halfLength,
-    minY: bottom,
-    maxY: top,
-    minZ: z - width / 2,
-    maxZ: z + width / 2,
-  });
+interface FrameBlock {
+  readonly halfLength: number;
+  readonly bottom: number;
+  readonly top: number;
 }
 
-function bolster(): BufferGeometry {
-  const { halfLength, bottom, top } = BOGIE.bolster;
-  const reach = BOGIE.sideFrame.offset;
-  return box({
-    minX: -halfLength,
-    maxX: halfLength,
-    minY: bottom,
-    maxY: top,
-    minZ: -reach,
-    maxZ: reach,
-  });
+export interface BogieFrame {
+  readonly sideFrame: FrameBlock & { readonly width: number; readonly offset: number };
+  readonly bolster: FrameBlock;
+}
+
+export function bogieFrame({ sideFrame, bolster }: BogieFrame, centre = 0): BufferGeometry[] {
+  const block = ({ halfLength, bottom, top }: FrameBlock, minZ: number, maxZ: number) =>
+    box({
+      minX: centre - halfLength,
+      maxX: centre + halfLength,
+      minY: bottom,
+      maxY: top,
+      minZ,
+      maxZ,
+    });
+  const { width, offset } = sideFrame;
+  return [
+    ...SIDE_SIGNS.map((side) =>
+      block(sideFrame, side * offset - width / 2, side * offset + width / 2),
+    ),
+    block(bolster, -offset, offset),
+  ];
 }
 
 function wheelset(x: number): BufferGeometry[] {
@@ -59,6 +63,6 @@ function wheelset(x: number): BufferGeometry[] {
 
 export function bogie(centre: number): BufferGeometry[] {
   const axles = AXLE_SIGNS.map((sign) => (sign * BOGIE.wheelbase) / 2);
-  const parts = [...axles.flatMap(wheelset), ...SIDE_SIGNS.map(sideFrame), bolster()];
+  const parts = [...axles.flatMap(wheelset), ...bogieFrame(BOGIE)];
   return parts.map((part) => part.translate(centre, 0, 0));
 }

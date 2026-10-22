@@ -24,8 +24,8 @@ import { halfRing, halfWidthAt, noseSection, sectionPoint } from './section';
 
 const UNMIRRORED = 1;
 
-function sidePoint(x: number, y: number, side: number): Point3 {
-  return [x, y, side * halfWidthAt(BODY, y)];
+function sidePoint(x: number, y: number): Point3 {
+  return [x, y, OUTER_SIDE * halfWidthAt(BODY, y)];
 }
 
 function plainEnds(car: CarSpan): number[] {
@@ -42,14 +42,14 @@ function doorCentres(car: CarSpan): number[] {
   return plainEnds(car).map((x) => (x === car.start ? x + DOOR.inset : x - DOOR.inset));
 }
 
-function door(centre: number, side: number): number[] {
+function door(centre: number): number[] {
   const rows = Array.from(
     { length: DOOR.edgeSegments + 1 },
     (_, index) => DOOR.bottom + ((DOOR.top - DOOR.bottom) * index) / DOOR.edgeSegments,
   );
   const [left, right] = [centre - DOOR.width / 2, centre + DOOR.width / 2];
-  const up = rows.map((y) => sidePoint(right, y, side));
-  const down = [...rows].reverse().map((y) => sidePoint(left, y, side));
+  const up = rows.map((y) => sidePoint(right, y));
+  const down = [...rows].reverse().map((y) => sidePoint(left, y));
   return polyline([...up, ...down], true);
 }
 
@@ -60,10 +60,10 @@ function bandLimits(car: CarSpan): [number, number] {
   return [from, to];
 }
 
-function windowBand(car: CarSpan, side: number): number[] {
+function windowBand(car: CarSpan): number[] {
   const [from, to] = bandLimits(car);
   return [WINDOW_BAND.bottom, WINDOW_BAND.top].flatMap((y) =>
-    polyline([sidePoint(from, y, side), sidePoint(to, y, side)]),
+    polyline([sidePoint(from, y), sidePoint(to, y)]),
   );
 }
 
@@ -100,11 +100,7 @@ function profileLine(theta: number): number[] {
 }
 
 function carOutline(car: CarSpan): number[] {
-  return [
-    ...joints(car),
-    ...windowBand(car, OUTER_SIDE),
-    ...doorCentres(car).flatMap((centre) => door(centre, OUTER_SIDE)),
-  ];
+  return [...joints(car), ...windowBand(car), ...doorCentres(car).flatMap(door)];
 }
 
 export function outlinePositions(cars: readonly CarSpan[]): number[] {

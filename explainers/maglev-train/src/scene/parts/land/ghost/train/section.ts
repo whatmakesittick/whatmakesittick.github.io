@@ -67,18 +67,20 @@ export function halfRing(section: BodySection, count: number): SectionPoint[] {
   );
 }
 
+function superellipse(share: number, exponent: number): number {
+  return (1 - clamp(share, 0, 1) ** exponent) ** (1 / exponent);
+}
+
 export function halfWidthAt(section: BodySection, y: number): number {
   const upper = y >= section.waist;
   const height = upper ? section.top - section.waist : section.waist - section.bottom;
   const exponent = upper ? section.upper : section.lower;
-  const share = clamp(Math.abs(y - section.waist) / height, 0, 1);
-  return section.halfWidth * (1 - share ** exponent) ** (1 / exponent);
+  return section.halfWidth * superellipse(Math.abs(y - section.waist) / height, exponent);
 }
 
 export function roofHeightAt(section: BodySection, z: number): number {
-  const share = clamp(Math.abs(z) / section.halfWidth, 0, 1);
   const height = section.top - section.waist;
-  return section.waist + height * (1 - share ** section.upper) ** (1 / section.upper);
+  return section.waist + height * superellipse(Math.abs(z) / section.halfWidth, section.upper);
 }
 
 export function noseSection(distance: number, nose: NoseShape, body: BodySection): BodySection {

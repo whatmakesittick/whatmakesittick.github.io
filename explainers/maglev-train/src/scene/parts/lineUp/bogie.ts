@@ -5,6 +5,8 @@ import { SIDE_SIGNS } from '../../../model';
 import { finishMesh } from '../context';
 import type { PartContext } from '../context';
 import { merged } from '../inset/strokes';
+import { bogieFrame } from '../land/ghost/train/bogies';
+import type { BogieFrame } from '../land/ghost/train/bogies';
 import { WHEEL_RAIL } from './constants';
 import { instances } from './cut';
 import { LINE_UP_FINISHES } from './finishes';
@@ -58,28 +60,19 @@ function crossCylinder(radius: number, length: number): BufferGeometry {
   return geometry;
 }
 
+const FRAME: BogieFrame = {
+  sideFrame: {
+    halfLength: (axle.xs[1] - axle.xs[0]) / 2 + bogie.overhang,
+    bottom: axle.y - bogie.frameBelow,
+    top: axle.y + bogie.frameAbove,
+    width: bogie.frameWidth,
+    offset: bogie.sideA,
+  },
+  bolster: { halfLength: bogie.transomWidth / 2, bottom: axle.y, top: axle.y + bogie.frameAbove },
+};
+
 function frameGeometry(): BufferGeometry {
-  const { sideA, frameWidth, frameBelow, frameAbove, overhang, transomWidth, axleBox } = bogie;
-  const minX = axle.xs[0] - overhang;
-  const maxX = axle.xs[1] + overhang;
-  const sides = SIDE_SIGNS.map((side) =>
-    box({
-      minX,
-      maxX,
-      minY: axle.y - frameBelow,
-      maxY: axle.y + frameAbove,
-      minZ: side * sideA - frameWidth / 2,
-      maxZ: side * sideA + frameWidth / 2,
-    }),
-  );
-  const transom = box({
-    minX: BOGIE_CENTRE - transomWidth / 2,
-    maxX: BOGIE_CENTRE + transomWidth / 2,
-    minY: axle.y,
-    maxY: axle.y + frameAbove,
-    minZ: -sideA,
-    maxZ: sideA,
-  });
+  const { axleBox } = bogie;
   const boxes = axle.xs.flatMap((x) =>
     SIDE_SIGNS.map((side) =>
       box({
@@ -92,7 +85,7 @@ function frameGeometry(): BufferGeometry {
       }),
     ),
   );
-  const parts = [...sides, transom, ...boxes];
+  const parts = [...bogieFrame(FRAME, BOGIE_CENTRE), ...boxes];
   return merged(parts);
 }
 
