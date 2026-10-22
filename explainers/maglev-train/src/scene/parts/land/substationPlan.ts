@@ -1,3 +1,4 @@
+import { wrapPhase } from '@core/store';
 import { SUBSTATIONS } from '../../../model';
 import { GROUND } from './constants';
 import { footprint } from './ground/blocks';
@@ -12,10 +13,6 @@ export const SUBSTATION = {
   margin: 3,
 } as const;
 
-function tileX(line: number): number {
-  return ((line % GROUND.period) + GROUND.period) % GROUND.period;
-}
-
 function crossesAt(linear: Linear, from: number, to: number): boolean {
   const zFrom = SUBSTATION.centreZ - SUBSTATION.depth / 2;
   const zTo = SUBSTATION.centreZ + SUBSTATION.depth / 2;
@@ -27,7 +24,7 @@ function crossesAt(linear: Linear, from: number, to: number): boolean {
 }
 
 function isFree(line: number, linears: readonly Linear[]): boolean {
-  const x = tileX(line);
+  const x = substationTileX(line);
   const half = SUBSTATION.length / 2;
   return !linears.some((linear) => crossesAt(linear, x - half, x + half));
 }
@@ -45,5 +42,5 @@ export function substationLines(): number[] {
 }
 
 export function substationTileX(line: number): number {
-  return tileX(line);
+  return wrapPhase(line, GROUND.period);
 }

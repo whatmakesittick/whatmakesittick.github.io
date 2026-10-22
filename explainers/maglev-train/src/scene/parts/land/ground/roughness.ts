@@ -2,7 +2,7 @@ import { CORRIDOR } from '../constants';
 import { grey } from './colour';
 import type { Field } from './fields';
 import type { Linear } from './linears';
-import { fillBox } from './painter';
+import { fillArea, fillBox } from './painter';
 import type { Painter } from './painter';
 import { pondWater } from './paintFields';
 import { isWater, waterBox } from './paintLinears';
@@ -19,15 +19,9 @@ export function paintRoughness(
   context.fillRect(0, 0, width, height);
   const water = grey(SURFACE_ROUGHNESS.water);
   fields.forEach((field) => {
-    if (field.kind === 'flooded')
-      fillBox(painter, field.x, field.z, grey(SURFACE_ROUGHNESS.flooded));
-    if (field.kind !== 'pond') return;
-    const inner = pondWater(field);
-    fillBox(painter, inner.x, inner.z, water);
+    if (field.kind === 'flooded') fillArea(painter, field, grey(SURFACE_ROUGHNESS.flooded));
+    if (field.kind === 'pond') fillArea(painter, pondWater(field), water);
   });
-  linears.filter(isWater).forEach((linear) => {
-    const box = waterBox(linear);
-    fillBox(painter, box.x, box.z, water);
-  });
+  linears.filter(isWater).forEach((linear) => fillArea(painter, waterBox(linear), water));
   fillBox(painter, [0, period], CORRIDOR.ditch, water);
 }

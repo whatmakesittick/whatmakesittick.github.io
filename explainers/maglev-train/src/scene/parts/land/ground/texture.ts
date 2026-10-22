@@ -1,5 +1,7 @@
-import { CanvasTexture, NoColorSpace, RepeatWrapping, SRGBColorSpace } from 'three';
-import type { Texture } from 'three';
+import { NoColorSpace } from 'three';
+import type { CanvasTexture, Texture } from 'three';
+import { canvasTexture } from '../../canvasTexture';
+import type { CanvasLook } from '../../canvasTexture';
 import type { PartContext } from '../../context';
 import { GROUND } from '../constants';
 import type { Field } from './fields';
@@ -25,21 +27,21 @@ export interface GroundMaps {
   readonly shade: Texture;
 }
 
-function canvasTexture(
+function groundTexture(
   context: PartContext,
   size: number,
   warp: AxisWarp,
   paint: (painter: Painter) => void,
+  look: CanvasLook = {},
 ): CanvasTexture {
-  const canvas = document.createElement('canvas');
-  canvas.width = size;
-  canvas.height = size;
-  const drawing = canvas.getContext('2d');
-  if (drawing) paint({ context: drawing, width: size, height: size, period: GROUND.period, warp });
-  const texture = context.tracker.track(new CanvasTexture(canvas));
-  texture.wrapS = RepeatWrapping;
-  texture.anisotropy = GROUND.texture.anisotropy;
-  return texture;
+  const texture = canvasTexture(
+    size,
+    size,
+    (drawing) =>
+      paint({ context: drawing, width: size, height: size, period: GROUND.period, warp }),
+    { anisotropy: GROUND.texture.anisotropy, ...look },
+  );
+  return context.tracker.track(texture);
 }
 
 function paintColour(painter: Painter, plan: GroundPlan): void {
@@ -51,13 +53,15 @@ function paintColour(painter: Painter, plan: GroundPlan): void {
 
 export function groundMaps(context: PartContext, plan: GroundPlan): GroundMaps {
   const { size, roughSize, shadeSize } = GROUND.texture;
-  const colour = canvasTexture(context, size, plan.warp, (painter) => paintColour(painter, plan));
-  colour.colorSpace = SRGBColorSpace;
-  const roughness = canvasTexture(context, roughSize, plan.warp, (painter) =>
-    paintRoughness(painter, plan.fields, plan.linears),
-  );
-  roughness.colorSpace = NoColorSpace;
-  const shade = canvasTexture(context, shadeSize, plan.warp, paintLineShade);
-  shade.colorSpace = SRGBColorSpace;
-  return { colour, roughness, shade };
+  return {
+    colour: groundTexture(context, size, plan.warp, (painter) => paintColour(painter, plan)),
+    roughness: groundTexture(
+      context,
+      roughSize,
+      plan.warp,
+      (painter) => paintRoughness(painter, plan.fields, plan.linears),
+      { colorSpace: NoColorSpace },
+    ),
+    shade: groundTexture(context, shadeSize, plan.warp, paintLineShade),
+  };
 }

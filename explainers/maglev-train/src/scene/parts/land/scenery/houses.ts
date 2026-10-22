@@ -1,37 +1,23 @@
-import { Color, PlaneGeometry } from 'three';
 import type { InstancedMesh } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
-import { between, pick, seededRandom } from '../random';
+import { pick, seededRandom, spotRandom } from '../random';
 import type { Range } from '../random';
 import type { PartContext } from '../../context';
 import { periodicCopies } from './copies';
 import { HOUSE_DESIGNS, houseGeometries } from './houseGeometry';
-import { instanced } from './instances';
+import { groundQuad } from '../overlay';
+import { instanced, tinted, vertexFinish } from './instances';
 import type { Instance } from './instances';
 import { HOUSE_KINDS } from './villagePlacement';
 import type { HouseKind, HouseSpot, VillagePlan, YardSpot } from './villagePlacement';
 
-const SEED_SCALE = 2 ** 31;
 const YARD_LIFT = 0.06;
-const QUARTER_TURN = Math.PI / 2;
 const LIGHTNESS: Range = [0.94, 1.04];
 
-const WALL_FINISH: MaterialFinish = {
-  color: '#ffffff',
-  vertexColors: true,
-  roughness: 0.85,
-  metalness: 0,
-};
-const ROOF_FINISH: MaterialFinish = {
-  color: '#ffffff',
-  vertexColors: true,
-  roughness: 0.7,
-  metalness: 0.05,
-};
+const WALL_FINISH = vertexFinish(0.85);
+const ROOF_FINISH = vertexFinish(0.7, 0.05);
 const YARD_FINISH: MaterialFinish = {
-  color: '#ffffff',
   roughness: 0.95,
-  metalness: 0,
   polygonOffset: true,
   polygonOffsetFactor: -2,
   polygonOffsetUnits: -2,
@@ -45,10 +31,6 @@ const ROOF_TINTS: Readonly<Record<HouseKind, readonly string[]>> = {
 };
 const YARD_TINTS = ['#b3ada0', '#a9a397', '#bdb7aa'];
 
-function tinted(hex: string, random: () => number): Color {
-  return new Color(hex).multiplyScalar(between(random, LIGHTNESS));
-}
-
 function houseScale(spot: HouseSpot): [number, number, number] {
   const [length, height, depth] = HOUSE_DESIGNS[spot.kind].size;
   return [spot.length / length, spot.height / height, spot.depth / depth];
@@ -59,12 +41,12 @@ function houseInstances(
   tints: (spot: HouseSpot) => readonly string[],
 ): Instance[] {
   return spots.map((spot) => {
-    const random = seededRandom(Math.floor(spot.seed * SEED_SCALE));
+    const random = spotRandom(spot.seed);
     return {
       position: [spot.x, 0, spot.z],
       turn: spot.turn,
       scale: houseScale(spot),
-      colour: tinted(pick(random, tints(spot)), random),
+      colour: tinted(pick(random, tints(spot)), random, LIGHTNESS),
     };
   });
 }
@@ -75,15 +57,8 @@ function yardInstances(yards: readonly YardSpot[]): Instance[] {
     position: [yard.x, YARD_LIFT, yard.z],
     turn: yard.turn,
     scale: [yard.length, 1, yard.depth],
-    colour: tinted(pick(random, YARD_TINTS), random),
+    colour: tinted(pick(random, YARD_TINTS), random, LIGHTNESS),
   }));
-}
-
-function yardGeometry(): PlaneGeometry {
-  const geometry = new PlaneGeometry(1, 1);
-  geometry.rotateX(-QUARTER_TURN);
-  geometry.deleteAttribute('uv');
-  return geometry;
 }
 
 export function buildHouses(
@@ -116,6 +91,12 @@ export function buildHouses(
   const yards = periodicCopies(plan.yards, period, reach);
   return [
     ...meshes,
-    instanced(context, yardGeometry(), YARD_FINISH, yardInstances(yards), 'yards'),
+    instanced(
+      context,
+      groundQuad().deleteAttribute('uv'),
+      YARD_FINISH,
+      yardInstances(yards),
+      'yards',
+    ),
   ];
 }

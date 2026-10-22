@@ -5,10 +5,8 @@ import type { PartId } from '../ids';
 
 export { LABEL_PRIORITY } from '../ids';
 
-const LEFT_PARTS: ReadonlySet<PartId> = new Set(LEFT_LABEL_PARTS);
-
 function labelSide(id: PartId): LabelSide {
-  return LEFT_PARTS.has(id) ? 'left' : 'right';
+  return LEFT_LABEL_PARTS.includes(id) ? 'left' : 'right';
 }
 
 export const PART_INFO: Record<PartId, PartInfo> = Object.fromEntries(

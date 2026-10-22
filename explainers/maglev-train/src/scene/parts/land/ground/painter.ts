@@ -10,6 +10,11 @@ export interface Painter {
 }
 
 const WRAPS = [-1, 0, 1] as const;
+const SMOOTH = { imageSmoothingEnabled: true, imageSmoothingQuality: 'high' } as const;
+
+export type Blend = Partial<
+  Pick<CanvasRenderingContext2D, 'globalAlpha' | 'globalCompositeOperation'>
+>;
 
 export function pixelX(painter: Painter, x: number): number {
   return (x / painter.period) * painter.width;
@@ -17,10 +22,6 @@ export function pixelX(painter: Painter, x: number): number {
 
 export function pixelY(painter: Painter, z: number): number {
   return (1 - painter.warp.share(z)) * painter.height;
-}
-
-export function alongXPixels(painter: Painter, metres: number): number {
-  return (metres / painter.period) * painter.width;
 }
 
 export function acrossZPixels(painter: Painter, z: number, metres: number): number {
@@ -31,6 +32,22 @@ export function wrapShifts(painter: Painter, [from, to]: Range): number[] {
   return WRAPS.map((turn) => turn * painter.period).filter(
     (shift) => to + shift > 0 && from + shift < painter.period,
   );
+}
+
+export interface Area {
+  readonly x: Range;
+  readonly z: Range;
+}
+
+export function fillArea(painter: Painter, area: Area, style: string | CanvasGradient): void {
+  fillBox(painter, area.x, area.z, style);
+}
+
+export function linearGradient(painter: Painter, inZ: boolean, [from, to]: Range): CanvasGradient {
+  const { context } = painter;
+  return inZ
+    ? context.createLinearGradient(0, pixelY(painter, to), 0, pixelY(painter, from))
+    : context.createLinearGradient(pixelX(painter, from), 0, pixelX(painter, to), 0);
 }
 
 export function fillBox(
@@ -68,4 +85,24 @@ export function tracePolygon(
     }
   });
   context.closePath();
+}
+
+export function drawSmooth(
+  painter: Painter,
+  [width, height]: readonly [number, number],
+  paint: (context: CanvasRenderingContext2D) => void,
+  blend: Blend,
+  [left, drawnWidth]: Range = [0, painter.width],
+): void {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const scratch = canvas.getContext('2d');
+  if (!scratch) return;
+  paint(scratch);
+  const { context } = painter;
+  context.save();
+  Object.assign(context, SMOOTH, blend);
+  context.drawImage(canvas, left, 0, drawnWidth, painter.height);
+  context.restore();
 }

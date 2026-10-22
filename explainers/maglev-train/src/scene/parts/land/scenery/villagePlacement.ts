@@ -1,10 +1,12 @@
+import { FULL_TURN, clamp } from '@core/math';
+import { wrapPhase } from '@core/store';
 import { GROUND, SCENERY } from '../constants';
 import type { Block } from '../ground/blocks';
 import type { Field } from '../ground/fields';
-import { between, seededRandom, weighted } from '../random';
+import { between, extent, seededRandom, shrunk, weighted } from '../random';
 import type { Random, Range } from '../random';
 import { VILLAGES } from './constants';
-import { isBandFarFromLine } from './treePlacement';
+import { isOpenBlock } from './treePlacement';
 import type { TreeSpot } from './treePlacement';
 
 export const HOUSE_KINDS = ['villa', 'house', 'workshop'] as const;
@@ -55,29 +57,16 @@ const HOUSE_WEIGHTS: Readonly<Record<HouseKind, number>> = {
 const YARD = { grow: [4, 6], south: 2.5 } as const;
 const TREE_SCALE: Range = [0.8, 1.25];
 
-function size([from, to]: Range): number {
-  return to - from;
-}
-
 function fits(block: Block, fields: readonly Field[]): boolean {
-  const middle = Math.abs((block.z[0] + block.z[1]) / 2);
   const [minLength, minDepth] = VILLAGES.minSize;
-  const roomy =
-    size(block.x) > minLength + VILLAGES.inset * 2 && size(block.z) > minDepth + VILLAGES.inset * 2;
-  const inZone = isBandFarFromLine(block.z) && middle <= VILLAGES.reach;
-  const greenhouse = fields.some(
-    (field) =>
-      field.kind === 'greenhouse' &&
-      field.x[0] >= block.x[0] &&
-      field.x[1] <= block.x[1] &&
-      field.z[0] >= block.z[0] &&
-      field.z[1] <= block.z[1],
-  );
-  return roomy && inZone && !greenhouse;
+  const room = VILLAGES.inset * 2;
+  const roomy = extent(block.x) > minLength + room && extent(block.z) > minDepth + room;
+  return roomy && isOpenBlock(block, fields, VILLAGES.reach);
 }
 
 function placeWithin(range: Range, length: number, random: Random): Range {
-  const start = range[0] + VILLAGES.inset + random() * (size(range) - length - VILLAGES.inset * 2);
+  const [from, to] = shrunk(range, VILLAGES.inset);
+  const start = between(random, [from, to - length]);
   return [start, start + length];
 }
 
@@ -107,7 +96,7 @@ function yardOf(spot: HouseSpot): YardSpot {
 }
 
 function villageTree(spot: HouseSpot, random: Random): TreeSpot {
-  const angle = random() * Math.PI * 2;
+  const angle = random() * FULL_TURN;
   const reach = Math.max(spot.length, spot.depth) / 2 + between(random, VILLAGES.treeOffset);
   return {
     x: spot.x + Math.cos(angle) * reach,
@@ -118,32 +107,31 @@ function villageTree(spot: HouseSpot, random: Random): TreeSpot {
   };
 }
 
-function clampTo(value: number, [from, to]: Range): number {
-  return Math.min(to - VILLAGES.inset, Math.max(from + VILLAGES.inset, value));
+function clampTo(value: number, range: Range): number {
+  return clamp(value, ...shrunk(range, VILLAGES.inset));
 }
 
 function insideBlock(tree: TreeSpot, block: Block, shift: number): TreeSpot {
   return { ...tree, x: clampTo(tree.x - shift, block.x) + shift, z: clampTo(tree.z, block.z) };
 }
 
+function pitched(range: Range, pitch: Range, random: Random, visit: (at: number) => void): void {
+  const half = pitch[0] / 2;
+  for (let at = range[0] + half; at + half <= range[1]; at += between(random, pitch)) visit(at);
+}
+
 function village(block: Block, shift: number, random: Random): VillagePlan {
   const [maxLength, maxDepth] = VILLAGES.maxSize;
-  const length = Math.min(maxLength, size(block.x) - VILLAGES.inset * 2);
-  const depth = Math.min(maxDepth, size(block.z) - VILLAGES.inset * 2);
+  const length = Math.min(maxLength, extent(block.x) - VILLAGES.inset * 2);
+  const depth = Math.min(maxDepth, extent(block.z) - VILLAGES.inset * 2);
   const x = placeWithin(block.x, length, random);
   const z = placeWithin(block.z, depth, random);
   const houses: HouseSpot[] = [];
-  for (
-    let atZ = z[0] + VILLAGES.rowPitch[0] / 2;
-    atZ + VILLAGES.rowPitch[0] / 2 <= z[1];
-    atZ += between(random, VILLAGES.rowPitch)
-  )
-    for (
-      let atX = x[0] + VILLAGES.housePitch[0] / 2;
-      atX + VILLAGES.housePitch[0] / 2 <= x[1];
-      atX += between(random, VILLAGES.housePitch)
-    )
+  pitched(z, VILLAGES.rowPitch, random, (atZ) =>
+    pitched(x, VILLAGES.housePitch, random, (atX) => {
       if (random() < VILLAGES.houseChance) houses.push(house(atX + shift, atZ, random));
+    }),
+  );
   const trees = houses
     .filter(() => random() < VILLAGES.treeChance)
     .map((spot) => insideBlock(villageTree(spot, random), block, shift));
@@ -173,14 +161,11 @@ export function tileVillages(blocks: readonly Block[], fields: readonly Field[])
   const plans = Array.from({ length: tiles }, (_, tile) =>
     pickBlocks(candidates, random).map((block) => village(block, tile * GROUND.period, random)),
   ).flat();
-  const period = SCENERY.villagePeriod;
-  const wrap = <T extends { x: number }>(spot: T): T => ({
-    ...spot,
-    x: ((spot.x % period) + period) % period,
-  });
+  const wrapped = <T extends { x: number }>(spots: (plan: VillagePlan) => readonly T[]): T[] =>
+    plans.flatMap(spots).map((spot) => ({ ...spot, x: wrapPhase(spot.x, SCENERY.villagePeriod) }));
   return {
-    houses: plans.flatMap((plan) => plan.houses).map(wrap),
-    yards: plans.flatMap((plan) => plan.yards).map(wrap),
-    trees: plans.flatMap((plan) => plan.trees).map(wrap),
+    houses: wrapped((plan) => plan.houses),
+    yards: wrapped((plan) => plan.yards),
+    trees: wrapped((plan) => plan.trees),
   };
 }

@@ -1,10 +1,13 @@
+import { FULL_TURN, clamp } from '@core/math';
+import { wrapPhase } from '@core/store';
+import { SIDE_SIGNS } from '../../../../model';
 import { CLEAR, GROUND } from '../constants';
 import { footprint, landBlocks } from '../ground/blocks';
 import type { Block } from '../ground/blocks';
 import type { Field } from '../ground/fields';
 import { VERGES } from '../ground/linears';
 import type { Linear } from '../ground/linears';
-import { between, seededRandom } from '../random';
+import { between, middle, pick, seededRandom, shrunk } from '../random';
 import type { Random, Range } from '../random';
 import { COPSES, LOW_BAND, TREE_ROWS } from './constants';
 import type { TreeKind } from './treeGeometry';
@@ -20,7 +23,6 @@ export interface TreeSpot {
 }
 
 const VERGE_SHARE = 0.55;
-const HALF = 0.5;
 
 export function isNearLine(z: number): boolean {
   return Math.abs(z) < LOW_BAND.reach;
@@ -42,11 +44,6 @@ export function isClearOfLine(z: number): boolean {
 
 function inRange(value: number, [from, to]: Range): boolean {
   return value >= from && value <= to;
-}
-
-function rowKind(linear: Linear, random: Random): TreeKind {
-  const { kinds } = TREE_ROWS.byKind[linear.kind];
-  return kinds[Math.floor(random() * kinds.length)];
 }
 
 function blockedBy(
@@ -73,25 +70,22 @@ function runStops(span: Range, spacing: Range, random: Random): number[] {
   return stops;
 }
 
-function rowSides(linear: Linear, random: Random): number[] {
-  const { sides } = TREE_ROWS.byKind[linear.kind];
-  if (sides === 2) return [-1, 1];
-  return [random() < HALF ? -1 : 1];
+function rowSides(linear: Linear, random: Random): readonly number[] {
+  if (TREE_ROWS.byKind[linear.kind].sides === 2) return SIDE_SIGNS;
+  return [pick(random, SIDE_SIGNS)];
 }
 
 function rowSpots(linear: Linear, linears: readonly Linear[], random: Random): TreeSpot[] {
-  const kind = rowKind(linear, random);
-  const { spacing } = TREE_ROWS.byKind[linear.kind];
+  const { spacing, kinds } = TREE_ROWS.byKind[linear.kind];
+  const kind: TreeKind = pick(random, kinds);
   const offset = linear.width / 2 + VERGES[linear.kind] * VERGE_SHARE;
   return rowSides(linear, random).flatMap((side) => {
     const across = linear.centre + side * offset;
     return runStops(linear.span, spacing, random).flatMap((along): TreeSpot[] => {
-      const jitter = side * random() * TREE_ROWS.jitter;
-      const [x, z] = linear.axis === 'x' ? [along, across + jitter] : [across + jitter, along];
-      const lengthwise = linear.axis === 'x' ? x : z;
-      const crosswise = linear.axis === 'x' ? z : x;
+      const crosswise = across + side * random() * TREE_ROWS.jitter;
+      const [x, z] = linear.axis === 'x' ? [along, crosswise] : [crosswise, along];
       if (!isClearOfLine(z) || Math.abs(z) > TREE_ROWS.reach) return [];
-      if (blockedBy(linears, linear.axis, lengthwise, crosswise)) return [];
+      if (blockedBy(linears, linear.axis, along, crosswise)) return [];
       return lowered(
         { x, z, scale: between(random, TREE_ROWS.scale), seed: random(), kind },
         random,
@@ -107,36 +101,34 @@ function hasGreenhouse(block: Block, fields: readonly Field[]): boolean {
   );
 }
 
+export function isOpenBlock(block: Block, fields: readonly Field[], reach: number): boolean {
+  const far = isBandFarFromLine(block.z) && Math.abs(middle(block.z)) <= reach;
+  return far && !hasGreenhouse(block, fields);
+}
+
 function copse(block: Block, random: Random): TreeSpot[] {
   const { inset, count, radius, scale } = COPSES;
-  const atX = random() < 0.5 ? block.x[0] + inset : block.x[1] - inset;
-  const atZ = random() < 0.5 ? block.z[0] + inset : block.z[1] - inset;
+  const xs = shrunk(block.x, inset);
+  const zs = shrunk(block.z, inset);
+  const atX = pick(random, xs);
+  const atZ = pick(random, zs);
   const reach = between(random, radius);
-  const total = Math.round(between(random, count));
-  const spots: TreeSpot[] = [];
-  for (let index = 0; index < total; index += 1) {
-    const angle = random() * Math.PI * 2;
+  return Array.from({ length: Math.round(between(random, count)) }, (): TreeSpot => {
+    const angle = random() * FULL_TURN;
     const distance = Math.sqrt(random()) * reach;
-    const x = Math.min(
-      block.x[1] - inset,
-      Math.max(block.x[0] + inset, atX + Math.cos(angle) * distance),
-    );
-    const z = Math.min(
-      block.z[1] - inset,
-      Math.max(block.z[0] + inset, atZ + Math.sin(angle) * distance),
-    );
-    spots.push({ x, z, scale: between(random, scale), seed: random(), kind: 'round' });
-  }
-  return spots;
+    return {
+      x: clamp(atX + Math.cos(angle) * distance, ...xs),
+      z: clamp(atZ + Math.sin(angle) * distance, ...zs),
+      scale: between(random, scale),
+      seed: random(),
+      kind: 'round',
+    };
+  });
 }
 
 function copses(blocks: readonly Block[], fields: readonly Field[], random: Random): TreeSpot[] {
   return blocks
-    .filter((block) => {
-      const middle = Math.abs((block.z[0] + block.z[1]) / 2);
-      const far = isBandFarFromLine(block.z) && middle <= COPSES.reach;
-      return far && !hasGreenhouse(block, fields);
-    })
+    .filter((block) => isOpenBlock(block, fields, COPSES.reach))
     .filter(() => random() < COPSES.chance)
     .flatMap((block) => copse(block, random));
 }
@@ -151,6 +143,6 @@ export function tileTrees(
   const copseTrees = copses(blocks, fields, seededRandom(COPSES.seed));
   return [...rowTrees, ...copseTrees].map((spot) => ({
     ...spot,
-    x: ((spot.x % GROUND.period) + GROUND.period) % GROUND.period,
+    x: wrapPhase(spot.x, GROUND.period),
   }));
 }

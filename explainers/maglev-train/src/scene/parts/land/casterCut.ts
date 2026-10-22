@@ -1,8 +1,10 @@
 import type { Texture, WebGLProgramParametersWithUniforms } from 'three';
 import type { CutUniform } from '../line/cut';
+import { glslFloat, inject } from '../shaderChunks';
 import { SHADOW_SLOPE } from './shadow';
 
-const CASTER_RATIO = (SHADOW_SLOPE[0] / SHADOW_SLOPE[1]).toFixed(5);
+const RATIO_DIGITS = 5;
+const CASTER_RATIO = glslFloat(SHADOW_SLOPE[0] / SHADOW_SLOPE[1], RATIO_DIGITS);
 
 const VERTEX_HEAD = /* glsl */ `
 varying vec2 vGroundXZ;
@@ -31,10 +33,6 @@ if (!castAheadOfCut()) diffuseColor.rgb *= texture2D(uLineShade, vMapUv).rgb;
 const DISCARD_BODY = /* glsl */ `
 if (castAheadOfCut()) discard;
 `;
-
-function inject(source: string, anchor: string, addition: string): string {
-  return source.replace(anchor, `${anchor}\n${addition}`);
-}
 
 function trackGround(shader: WebGLProgramParametersWithUniforms, cut: CutUniform): void {
   shader.uniforms.uCutX = cut;

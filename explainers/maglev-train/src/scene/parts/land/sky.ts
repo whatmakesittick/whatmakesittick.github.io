@@ -113,25 +113,21 @@ void main() {
 `;
 
 function skyUniforms() {
-  const { rise, band, haze, glow, horizonWarmth, clouds } = SKY_DOME;
+  const { colours, shape, glow, warmth, clouds, cloudBand, stretch } = SKY_DOME;
   return {
     uTop: { value: new Color(SKY.top) },
-    uHorizon: { value: new Color(HAZE.colour) },
-    uHaze: { value: new Color(haze.colour) },
-    uGlow: { value: new Color(glow.colour) },
+    uHorizon: { value: new Color(HAZE.color) },
+    uHaze: { value: new Color(colours.haze) },
+    uGlow: { value: new Color(colours.glow) },
     uSun: { value: new Vector3(...SUN_DIRECTION).normalize() },
-    uCloudLit: { value: new Color(clouds.lit) },
-    uCloudShade: { value: new Color(clouds.shade) },
-    uShape: { value: new Vector4(rise, band, haze.height, haze.strength) },
-    uGlowShape: {
-      value: new Vector4(glow.wide, glow.wideTightness, glow.core, glow.coreTightness),
-    },
-    uCloud: { value: new Vector4(clouds.scale, clouds.lift, clouds.cover, clouds.softness) },
-    uCloudBand: {
-      value: new Vector4(clouds.band[0], clouds.band[1], clouds.strength, clouds.heading),
-    },
-    uStretch: { value: new Vector2(...clouds.stretch) },
-    uWarmth: { value: new Vector2(horizonWarmth.strength, horizonWarmth.tightness) },
+    uCloudLit: { value: new Color(colours.cloudLit) },
+    uCloudShade: { value: new Color(colours.cloudShade) },
+    uShape: { value: new Vector4(...shape) },
+    uGlowShape: { value: new Vector4(...glow) },
+    uCloud: { value: new Vector4(...clouds) },
+    uCloudBand: { value: new Vector4(...cloudBand) },
+    uStretch: { value: new Vector2(...stretch) },
+    uWarmth: { value: new Vector2(...warmth) },
     ...skylineUniforms(),
   };
 }
@@ -144,7 +140,6 @@ function skyMaterial(): ShaderMaterial {
     side: BackSide,
     depthTest: false,
     depthWrite: false,
-    fog: false,
     toneMapped: false,
   });
 }

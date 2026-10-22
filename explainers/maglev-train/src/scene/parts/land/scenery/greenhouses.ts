@@ -3,6 +3,7 @@ import type { InstancedMesh } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import type { PartContext } from '../../context';
 import type { Field } from '../ground/fields';
+import { extent, middle } from '../random';
 import { periodicCopies } from './copies';
 import { instanced } from './instances';
 
@@ -12,11 +13,7 @@ const QUARTER_TURN = Math.PI / 2;
 const PLASTIC = new Color('#ffffff');
 const TONE_SPREAD = 0.08;
 
-const GREENHOUSE_FINISH: MaterialFinish = {
-  color: '#e4e8e2',
-  roughness: 0.38,
-  metalness: 0,
-};
+const GREENHOUSE_FINISH: MaterialFinish = { color: '#e4e8e2', roughness: 0.38 };
 
 interface Tunnel {
   readonly x: number;
@@ -27,20 +24,19 @@ interface Tunnel {
 }
 
 function tunnelGeometry(): CylinderGeometry {
-  const geometry = new CylinderGeometry(1, 1, 1, TUNNEL.sides, 1, false, -QUARTER_TURN, HALF_TURN);
-  geometry.rotateX(-QUARTER_TURN);
-  geometry.deleteAttribute('uv');
-  return geometry;
+  return new CylinderGeometry(1, 1, 1, TUNNEL.sides, 1, false, -QUARTER_TURN, HALF_TURN)
+    .rotateX(-QUARTER_TURN)
+    .deleteAttribute('uv');
 }
 
 export function tunnels(fields: readonly Field[]): Tunnel[] {
   return fields
     .filter((field) => field.kind === 'greenhouse')
     .map((field) => ({
-      x: (field.x[0] + field.x[1]) / 2,
-      z: (field.z[0] + field.z[1]) / 2,
-      width: field.x[1] - field.x[0],
-      length: field.z[1] - field.z[0],
+      x: middle(field.x),
+      z: middle(field.z),
+      width: extent(field.x),
+      length: extent(field.z),
       tone: field.tone,
     }));
 }

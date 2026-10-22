@@ -1,4 +1,4 @@
-import { between, seededRandom, weighted } from '../random';
+import { between, extent, middle, seededRandom, shrunk, weighted } from '../random';
 import type { Random, Range } from '../random';
 import { landBlocks } from './blocks';
 import type { Block } from './blocks';
@@ -17,18 +17,10 @@ export interface Field {
 const FIELD_SEED = 20_190_101;
 const SPLIT_JITTER = 0.18;
 
-function size([from, to]: Range): number {
-  return to - from;
-}
-
-function middle([from, to]: Range): number {
-  return (from + to) / 2;
-}
-
 export function splitRange(range: Range, maxSize: number, gap: number, random: Random): Range[] {
-  const count = Math.ceil(size(range) / maxSize);
+  const count = Math.ceil(extent(range) / maxSize);
   if (count <= 1) return [range];
-  const piece = (size(range) - gap * (count - 1)) / count;
+  const piece = (extent(range) - gap * (count - 1)) / count;
   const pieces: Range[] = [];
   let start = range[0];
   for (let index = 0; index < count; index += 1) {
@@ -88,11 +80,10 @@ function cropFields(block: Block, zone: Zone, random: Random): Field[] {
 
 function greenhouseFields(block: Block, random: Random): Field[] {
   const { width, gap, maxLength, margin } = GREENHOUSE;
-  const inner = (range: Range): Range => [range[0] + margin, range[1] - margin];
   const ground: Field = { x: block.x, z: block.z, kind: 'soil', tone: random(), beds: 'z' };
-  const rows = splitRange(inner(block.z), maxLength, gap * 2, random);
+  const rows = splitRange(shrunk(block.z, margin), maxLength, gap * 2, random);
   const tunnels = rows.flatMap((z) => {
-    const [from, to] = inner(block.x);
+    const [from, to] = shrunk(block.x, margin);
     const count = Math.floor((to - from + gap) / (width + gap));
     return Array.from({ length: count }, (_, index): Field => {
       const start = from + index * (width + gap);
@@ -104,7 +95,7 @@ function greenhouseFields(block: Block, random: Random): Field[] {
 
 function blockFields(block: Block, random: Random): Field[] {
   const zone = zoneAt(middle(block.z));
-  const roomy = size(block.x) > GREENHOUSE.maxLength && size(block.z) > GREENHOUSE.width * 3;
+  const roomy = extent(block.x) > GREENHOUSE.maxLength && extent(block.z) > GREENHOUSE.width * 3;
   if (roomy && random() < zone.greenhouseChance) return greenhouseFields(block, random);
   return cropFields(block, zone, random);
 }

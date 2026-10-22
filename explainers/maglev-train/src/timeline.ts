@@ -10,29 +10,13 @@ const SCRUBBER_STEP_UNITS = 1;
 const FINE_STEP_UNITS = 5;
 const COARSE_STEP_UNITS = 50;
 
-function phaseKey(id: PhaseId): string {
-  return `timeline.phase.${id}`;
-}
-
-function jumpKey(id: PhaseId): string {
-  return `timeline.jump.${id}`;
-}
-
-function detailKey(id: PhaseId): string {
-  return `timeline.detail.${id}`;
-}
-
-function stageNumber(id: PhaseId): number {
-  return PHASE_IDS.indexOf(id) + 1;
-}
-
 function rideSeconds(speed: number): number {
   return Math.round(BASE_RIDE_SECONDS / speed);
 }
 
 function stageCount(id: PhaseId): Record<string, string> {
   return {
-    step: formatNumber(stageNumber(id)),
+    step: formatNumber(PHASE_IDS.indexOf(id) + 1),
     total: formatNumber(PHASE_IDS.length),
   };
 }
@@ -43,7 +27,7 @@ export function formatPhase(units: number): string {
 
 export function describePhase(units: number): string {
   const id = phaseAt(units);
-  return t('timeline.during', { ...stageCount(id), detail: t(detailKey(id)) });
+  return t('timeline.during', { ...stageCount(id), detail: t(`timeline.detail.${id}`) });
 }
 
 export function formatSpeed(speed: number): string {
@@ -56,10 +40,9 @@ export function describeSpeed(speed: number): string {
 
 const RUN_PHASES: readonly Phase[] = PHASE_IDS.map((id) => ({
   id,
-  start: PHASE_RANGES[id].start,
-  end: PHASE_RANGES[id].end,
-  labelKey: phaseKey(id),
-  jumpLabelKey: jumpKey(id),
+  ...PHASE_RANGES[id],
+  labelKey: `timeline.phase.${id}`,
+  jumpLabelKey: `timeline.jump.${id}`,
   tone: PHASE_TONES[id],
 }));
 

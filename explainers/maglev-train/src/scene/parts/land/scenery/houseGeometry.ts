@@ -1,6 +1,7 @@
 import type { BufferGeometry } from 'three';
+import { SIDE_SIGNS } from '../../../../model';
 import { FaceBuilder } from './faceBuilder';
-import type { Rgb } from './faceBuilder';
+import type { Rgb, Vertex } from './faceBuilder';
 import type { HouseKind } from './villagePlacement';
 
 interface Facade {
@@ -65,42 +66,45 @@ export const HOUSE_DESIGNS: Readonly<Record<HouseKind, HouseDesign>> = {
   },
 };
 
-const WALL: Rgb = [1, 1, 1];
+const WHITE: Rgb = [1, 1, 1];
 const GLASS: Rgb = [0.16, 0.2, 0.25];
 const DOOR: Rgb = [0.34, 0.27, 0.22];
 const PLINTH: Rgb = [0.62, 0.6, 0.56];
 const SOFFIT: Rgb = [0.55, 0.55, 0.55];
-const ROOF: Rgb = [1, 1, 1];
 const INSET = 0.04;
 const PLINTH_HEIGHT = 0.5;
 const PLINTH_OUT = 0.06;
+const HALF = 0.5;
 
-type Face = 'south' | 'north' | 'east' | 'west';
+type Normal = readonly [x: number, z: number];
+type Half = readonly [x: number, z: number];
+
+const SOUTH: Normal = [0, 1];
+const FACES: readonly Normal[] = [SOUTH, [0, -1], [1, 0], [-1, 0]];
+
+function isFront([, nz]: Normal): boolean {
+  return nz !== 0;
+}
+
+function faceWidth(face: Normal, [hx, hz]: Half): number {
+  return 2 * (isFront(face) ? hx : hz);
+}
 
 function facePoint(
-  face: Face,
+  [nx, nz]: Normal,
   along: number,
   up: number,
-  half: readonly [number, number],
-  out = 0,
-) {
-  const [hx, hz] = half;
-  switch (face) {
-    case 'south':
-      return [along, up, hz + out] as const;
-    case 'north':
-      return [-along, up, -hz - out] as const;
-    case 'east':
-      return [hx + out, up, -along] as const;
-    default:
-      return [-hx - out, up, along] as const;
-  }
+  [hx, hz]: Half,
+  out: number,
+): Vertex {
+  const reach = Math.abs(nx) * hx + Math.abs(nz) * hz + out;
+  return [along * nz + reach * nx, up, reach * nz - along * nx];
 }
 
 function panel(
   builder: FaceBuilder,
-  face: Face,
-  half: readonly [number, number],
+  face: Normal,
+  half: Half,
   [from, to]: readonly [number, number],
   [bottom, top]: readonly [number, number],
   colour: Rgb,
@@ -115,22 +119,16 @@ function panel(
   );
 }
 
-function windows(
-  builder: FaceBuilder,
-  design: HouseDesign,
-  face: Face,
-  half: readonly [number, number],
-) {
+function windows(builder: FaceBuilder, design: HouseDesign, face: Normal, half: Half) {
   const { facade, size } = design;
-  const width = face === 'south' || face === 'north' ? half[0] * 2 : half[1] * 2;
-  const count = face === 'south' || face === 'north' ? facade.across : facade.sideAcross;
+  const width = faceWidth(face, half);
+  const count = isFront(face) ? facade.across : facade.sideAcross;
   const storey = size[1] / facade.storeys;
-  const [windowWidth, windowHeight] = facade.window;
   for (let level = 0; level < facade.storeys; level += 1)
     for (let index = 0; index < count; index += 1) {
-      const centre = -width / 2 + (width * (index + 0.5)) / count;
-      const isDoor = face === 'south' && level === 0 && index === Math.floor(count / 2);
-      const [w, h] = isDoor ? facade.door : [windowWidth, windowHeight];
+      const centre = -width / 2 + (width * (index + HALF)) / count;
+      const isDoor = face === SOUTH && level === 0 && index === Math.floor(count / 2);
+      const [w, h] = isDoor ? facade.door : facade.window;
       const bottom = isDoor ? 0 : level * storey + facade.sill;
       panel(
         builder,
@@ -147,10 +145,9 @@ function walls(design: HouseDesign): BufferGeometry {
   const builder = new FaceBuilder();
   const [length, height, depth] = design.size;
   const half = [length / 2, depth / 2] as const;
-  const faces: Face[] = ['south', 'north', 'east', 'west'];
-  faces.forEach((face) => {
-    const width = face === 'south' || face === 'north' ? length : depth;
-    panel(builder, face, half, [-width / 2, width / 2], [0, height], WALL, 0);
+  FACES.forEach((face) => {
+    const width = faceWidth(face, half);
+    panel(builder, face, half, [-width / 2, width / 2], [0, height], WHITE, 0);
     panel(
       builder,
       face,
@@ -163,13 +160,13 @@ function walls(design: HouseDesign): BufferGeometry {
     windows(builder, design, face, half);
   });
   if (design.roof === 'gable')
-    [1, -1].forEach((side) => {
+    SIDE_SIGNS.forEach((side) => {
       const x = (side * length) / 2;
       builder.triangle(
         [x, height, side * half[1]],
         [x, height, -side * half[1]],
         [x, height + design.rise, 0],
-        WALL,
+        WHITE,
       );
     });
   return builder.geometry();
@@ -182,11 +179,11 @@ function roof(design: HouseDesign): BufferGeometry {
   const b = depth / 2 + design.overhang;
   const top = height + design.rise;
   const ridge = design.roof === 'hip' ? Math.max(0, a - b) : a;
-  builder.quad([-a, height, b], [a, height, b], [ridge, top, 0], [-ridge, top, 0], ROOF);
-  builder.quad([a, height, -b], [-a, height, -b], [-ridge, top, 0], [ridge, top, 0], ROOF);
+  builder.quad([-a, height, b], [a, height, b], [ridge, top, 0], [-ridge, top, 0], WHITE);
+  builder.quad([a, height, -b], [-a, height, -b], [-ridge, top, 0], [ridge, top, 0], WHITE);
   if (design.roof === 'hip') {
-    builder.triangle([a, height, b], [a, height, -b], [ridge, top, 0], ROOF);
-    builder.triangle([-a, height, -b], [-a, height, b], [-ridge, top, 0], ROOF);
+    builder.triangle([a, height, b], [a, height, -b], [ridge, top, 0], WHITE);
+    builder.triangle([-a, height, -b], [-a, height, b], [-ridge, top, 0], WHITE);
   }
   builder.quad([-a, height, -b], [a, height, -b], [a, height, b], [-a, height, b], SOFFIT);
   return builder.geometry();

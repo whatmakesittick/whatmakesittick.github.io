@@ -9,14 +9,12 @@ export function groundGeometry(warp: AxisWarp): BufferGeometry {
   const xs = [-reach, reach + period];
   const positions: number[] = [];
   const uvs: number[] = [];
-  const normals: number[] = [];
   for (let row = 0; row <= rows; row += 1) {
     const share = row / rows;
     const z = warp.value(share);
     xs.forEach((x) => {
       positions.push(x, 0, z);
       uvs.push(x / period, share);
-      normals.push(0, 1, 0);
     });
   }
   const indices: number[] = [];
@@ -33,8 +31,8 @@ export function groundGeometry(warp: AxisWarp): BufferGeometry {
   }
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
-  geometry.setAttribute('normal', new Float32BufferAttribute(normals, 3));
   geometry.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
   geometry.setIndex(indices);
+  geometry.computeVertexNormals();
   return geometry;
 }

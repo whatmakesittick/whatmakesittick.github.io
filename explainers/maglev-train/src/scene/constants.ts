@@ -2,9 +2,9 @@ import { THEME } from '../theme';
 
 type Triple = readonly [number, number, number];
 
-export const HAZE = { colour: THEME.fog, near: 520, far: 1000 } as const;
+export const HAZE = { color: THEME.fog, near: 520, far: 1000 } as const;
 
-export const SKY = { top: '#8fb0cc', horizon: THEME.sky, sun: THEME.keyLight } as const;
+export const SKY = { top: '#8fb0cc' } as const;
 
 export const LINE_DRAW = { behind: 1300, ahead: 1300 } as const;
 

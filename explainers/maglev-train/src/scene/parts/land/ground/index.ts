@@ -27,11 +27,8 @@ export function groundPlan(): GroundPlan {
 export function groundMesh(context: PartContext, plan: GroundPlan, cut: CutUniform): Mesh {
   const maps = groundMaps(context, plan);
   const material = new MeshStandardMaterial({
-    color: '#ffffff',
     map: maps.colour,
     roughnessMap: maps.roughness,
-    roughness: 1,
-    metalness: 0,
     envMapIntensity: GROUND_REFLECTION,
   });
   material.onBeforeCompile = (shader) => shadeBehindCut(shader, maps.shade, cut);

@@ -88,17 +88,19 @@ vec3 skyline(vec3 sky, vec3 direction) {
 }
 `;
 
+type Suburbs = readonly [base: number, rise: number, cell: number, strength: number];
+type City = readonly [azimuth: number, halfWidth: number, unit: number, strength: number];
+
 export const SKYLINE = {
   colour: '#a9b4bd',
-  suburbs: { base: 0.0012, rise: 0.0055, cell: 0.0047, strength: 0.16 },
-  city: { azimuth: -2.86, halfWidth: 0.075, unit: 0.0034, strength: 0.42 },
+  suburbs: [0.0012, 0.0055, 0.0047, 0.16] as Suburbs,
+  city: [-2.86, 0.075, 0.0034, 0.42] as City,
 } as const;
 
 export function skylineUniforms() {
-  const { suburbs, city } = SKYLINE;
   return {
-    uSkyline: { value: new Vector4(suburbs.base, suburbs.rise, suburbs.cell, suburbs.strength) },
-    uCity: { value: new Vector4(city.azimuth, city.halfWidth, city.unit, city.strength) },
+    uSkyline: { value: new Vector4(...SKYLINE.suburbs) },
+    uCity: { value: new Vector4(...SKYLINE.city) },
     uSkylineColour: { value: new Color(SKYLINE.colour) },
   };
 }

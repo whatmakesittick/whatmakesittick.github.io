@@ -1,56 +1,54 @@
 import type { Readout } from '@core/explainer';
+import type { ReadoutText } from '@core/ui/liveReadouts';
 import { clamp } from '@core/math';
 import { LIFT_TRAVEL_MM, LINE_M } from '../model';
 import { createLiveReader } from '../state';
-import type { MaglevTrainStoreState } from '../state';
+import type { LiveReading, MaglevTrainStoreState } from '../state';
 import { THEME } from '../theme';
-import { formatClockOf, formatGap, formatKmOf, formatKmh } from './format';
+import { formatClockOf, formatGap, formatKmOf, formatUnit } from './format';
+
+export type ChapterReadouts = Readonly<Record<string, ReadoutText<MaglevTrainStoreState>>>;
 
 const read = createLiveReader();
 
-function shareOf(value: number, full: number): number {
-  return clamp(value / full, 0, 1);
+function readout(
+  id: string,
+  value: (reading: LiveReading) => string,
+  share: (reading: LiveReading) => number,
+  fill: string,
+): Readout<MaglevTrainStoreState> {
+  return {
+    id,
+    labelKey: `readouts.${id}`,
+    numeric: true,
+    value: (state) => value(read(state)),
+    meter: { share: (state) => clamp(share(read(state)), 0, 1), fill },
+  };
 }
 
 export const MAGLEV_TRAIN_READOUTS: readonly Readout<MaglevTrainStoreState>[] = [
-  {
-    id: 'speed',
-    labelKey: 'readouts.speed',
-    numeric: true,
-    value: (state) => formatKmh(read(state).motion.speedKmh),
-    meter: {
-      share: (state) => shareOf(read(state).motion.speedMs, read(state).topMs),
-      fill: THEME.drive,
-    },
-  },
-  {
-    id: 'distance',
-    labelKey: 'readouts.distance',
-    numeric: true,
-    value: (state) => formatKmOf(read(state).motion.distance, LINE_M),
-    meter: {
-      share: (state) => shareOf(read(state).motion.distance, LINE_M),
-      fill: THEME.cruise,
-    },
-  },
-  {
-    id: 'time',
-    labelKey: 'readouts.time',
-    numeric: true,
-    value: (state) => formatClockOf(read(state).motion.realSeconds, read(state).tripSeconds),
-    meter: {
-      share: (state) => shareOf(read(state).motion.realSeconds, read(state).tripSeconds),
-      fill: THEME.powered,
-    },
-  },
-  {
-    id: 'gap',
-    labelKey: 'readouts.gap',
-    numeric: true,
-    value: (state) => formatGap(read(state).motion),
-    meter: {
-      share: (state) => shareOf(read(state).motion.liftMm, LIFT_TRAVEL_MM),
-      fill: THEME.lift,
-    },
-  },
+  readout(
+    'speed',
+    ({ motion }) => formatUnit('kmh', motion.speedKmh),
+    ({ motion, topMs }) => motion.speedMs / topMs,
+    THEME.drive,
+  ),
+  readout(
+    'distance',
+    ({ motion }) => formatKmOf(motion.distance, LINE_M),
+    ({ motion }) => motion.distance / LINE_M,
+    THEME.cruise,
+  ),
+  readout(
+    'time',
+    ({ motion, tripSeconds }) => formatClockOf(motion.realSeconds, tripSeconds),
+    ({ motion, tripSeconds }) => motion.realSeconds / tripSeconds,
+    THEME.powered,
+  ),
+  readout(
+    'gap',
+    ({ motion }) => formatGap(motion),
+    ({ motion }) => motion.liftMm / LIFT_TRAVEL_MM,
+    THEME.lift,
+  ),
 ];

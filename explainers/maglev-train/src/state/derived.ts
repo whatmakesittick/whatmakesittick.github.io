@@ -32,21 +32,17 @@ export function liveReading({ phase, topSpeed, brakeMode }: LiveSource): LiveRea
   };
 }
 
-function sameSource(last: LiveSource, next: LiveSource): boolean {
-  return (
-    last.phase === next.phase &&
-    last.topSpeed === next.topSpeed &&
-    last.brakeMode === next.brakeMode
-  );
+const READINGS = ['motion', 'wave', 'power', 'ghost'] as const;
+
+function sourceKey({ phase, topSpeed, brakeMode }: LiveSource): string {
+  return [phase, topSpeed, brakeMode].join();
 }
 
 export function createLiveReader(): LiveReader {
-  let last: { source: LiveSource; reading: LiveReading } | null = null;
+  let last: { key: string; reading: LiveReading } | null = null;
   return (source) => {
-    if (!last || !sameSource(last.source, source)) {
-      const { phase, topSpeed, brakeMode } = source;
-      last = { source: { phase, topSpeed, brakeMode }, reading: liveReading(source) };
-    }
+    const key = sourceKey(source);
+    if (last?.key !== key) last = { key, reading: liveReading(source) };
     return last.reading;
   };
 }
@@ -61,10 +57,7 @@ export function writeAssemblyState(
   target.playing = source.playing;
   target.topSpeed = source.topSpeed;
   target.brakeMode = source.brakeMode;
-  Object.assign(target.motion, reading.motion);
-  Object.assign(target.wave, reading.wave);
-  Object.assign(target.power, reading.power);
-  Object.assign(target.ghost, reading.ghost);
+  READINGS.forEach((key) => Object.assign(target[key], reading[key]));
   target.nudge.id = source.nudge;
   target.nudge.token = source.nudgeToken;
   target.compare = source.compare;
@@ -76,18 +69,6 @@ export function createAssemblyState(
   source: AssemblySource,
   read: LiveReader = liveReading,
 ): AssemblyState {
-  const reading = read(source);
-  return {
-    phase: source.phase,
-    playing: source.playing,
-    topSpeed: source.topSpeed,
-    brakeMode: source.brakeMode,
-    motion: { ...reading.motion },
-    wave: { ...reading.wave },
-    power: { ...reading.power },
-    ghost: { ...reading.ghost },
-    nudge: { id: source.nudge, token: source.nudgeToken },
-    compare: source.compare,
-    view: { ...source.view },
-  };
+  const empty = { motion: {}, wave: {}, power: {}, ghost: {}, nudge: {}, view: {} };
+  return writeAssemblyState(empty as AssemblyState, source, read);
 }

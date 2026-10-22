@@ -2,7 +2,7 @@ import { BEAM_M, GIRDER, GUIDEWAY_TOP, PIER } from '../../../../model';
 import { SHADOW_PAINT } from '../palette';
 import { prismShadow, shadowBand } from '../shadow';
 import type { GroundPoint } from '../shadow';
-import { fillBox, tracePolygon, wrapShifts } from './painter';
+import { drawSmooth, fillBox, tracePolygon, wrapShifts } from './painter';
 import type { Painter } from './painter';
 
 const TRACE_STEP = 1.5;
@@ -37,30 +37,27 @@ function pierShadows(painter: Painter): void {
   }
 }
 
-function shadowMask(painter: Painter): HTMLCanvasElement | null {
-  const canvas = document.createElement('canvas');
-  canvas.width = SHADOW_PAINT.maskSize;
-  canvas.height = SHADOW_PAINT.maskSize;
-  const context = canvas.getContext('2d');
-  if (!context) return null;
-  const small: Painter = { ...painter, context, width: canvas.width, height: canvas.height };
+function paintMask(painter: Painter, context: CanvasRenderingContext2D): void {
+  const small: Painter = {
+    ...painter,
+    context,
+    width: SHADOW_PAINT.maskSize,
+    height: SHADOW_PAINT.maskSize,
+  };
   context.fillStyle = UNSHADED;
-  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillRect(0, 0, small.width, small.height);
   fillBox(small, [0, painter.period], guidewayShadowBand(), SHADOW_PAINT.tint);
   pierShadows(small);
-  return canvas;
 }
 
 export function paintLineShade(painter: Painter): void {
   const { context } = painter;
   context.fillStyle = UNSHADED;
   context.fillRect(0, 0, painter.width, painter.height);
-  const mask = shadowMask(painter);
-  if (!mask) return;
-  context.save();
-  context.globalAlpha = SHADOW_PAINT.strength;
-  context.imageSmoothingEnabled = true;
-  context.imageSmoothingQuality = 'high';
-  context.drawImage(mask, 0, 0, painter.width, painter.height);
-  context.restore();
+  drawSmooth(
+    painter,
+    [SHADOW_PAINT.maskSize, SHADOW_PAINT.maskSize],
+    (mask) => paintMask(painter, mask),
+    { globalAlpha: SHADOW_PAINT.strength },
+  );
 }

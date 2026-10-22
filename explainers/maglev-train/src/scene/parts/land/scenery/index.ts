@@ -9,7 +9,7 @@ import { periodicCopies } from './copies';
 import { buildDistant } from './distant';
 import { TUNNEL, buildGreenhouses, tunnels } from './greenhouses';
 import { buildHouses } from './houses';
-import { houseCaster, shadowDecals, treeCaster, tunnelCaster } from './shadows';
+import { boxCaster, houseCaster, shadowDecals, treeCaster } from './shadows';
 import type { ShadowCaster } from './shadows';
 import { tileTrees } from './treePlacement';
 import type { TreeSpot } from './treePlacement';
@@ -37,7 +37,7 @@ function farmTile(context: PartContext, plan: GroundPlan, group: Group): void {
   const { period } = GROUND;
   const trees = tileTrees(plan.linears, plan.fields, landBlocks(plan.linears));
   const tunnelCasters = periodicCopies(tunnels(plan.fields), period, SCENERY.reach).map((tunnel) =>
-    tunnelCaster(tunnel.x, tunnel.z, tunnel.width, tunnel.length, TUNNEL.height),
+    boxCaster(tunnel.x, tunnel.z, tunnel.width, tunnel.length, TUNNEL.height),
   );
   group.add(
     ...plantTrees(context, trees, period, SCENERY.treeReach, 'row'),
@@ -62,19 +62,15 @@ function villages(context: PartContext, village: VillagePlan, group: Group): voi
 
 export function buildScenery(context: PartContext, plan: GroundPlan): Scenery {
   const root = namedGroup('scenery');
-  const tile: Streaming = { group: namedGroup('farmTile', root), period: GROUND.period };
-  const village: Streaming = {
-    group: namedGroup('villages', root),
-    period: SCENERY.villagePeriod,
-  };
-  const distant: Streaming = {
-    group: namedGroup('distant', root),
-    period: SCENERY.distantPeriod,
-  };
-  farmTile(context, plan, tile.group);
-  villages(context, tileVillages(landBlocks(plan.linears), plan.fields), village.group);
-  distant.group.add(buildDistant(context));
-  const streams = [tile, village, distant];
+  const streams: Streaming[] = [
+    { group: namedGroup('farmTile', root), period: GROUND.period },
+    { group: namedGroup('villages', root), period: SCENERY.villagePeriod },
+    { group: namedGroup('distant', root), period: SCENERY.distantPeriod },
+  ];
+  const [tile, village, distant] = streams.map(({ group }) => group);
+  farmTile(context, plan, tile);
+  villages(context, tileVillages(landBlocks(plan.linears), plan.fields), village);
+  distant.add(buildDistant(context));
   return {
     root,
     slide(distance) {

@@ -19,7 +19,7 @@ export interface Block3 {
   readonly tint: string;
 }
 
-const DISTANT_FINISH: MaterialFinish = { color: '#ffffff', roughness: 0.9, metalness: 0 };
+const DISTANT_FINISH: MaterialFinish = { roughness: 0.9 };
 const SLAB_TINTS = ['#e3ded4', '#d8d5ce', '#cfd3d6', '#e8e1d2'];
 const SHED_TINTS = ['#b9c2c9', '#c9c6bd', '#a9b6c0'];
 const TURN_JITTER = 0.08;

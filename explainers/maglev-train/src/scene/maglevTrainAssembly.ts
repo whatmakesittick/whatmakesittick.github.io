@@ -1,5 +1,5 @@
-import { Group, Line, Mesh, Points, Sprite } from 'three';
-import type { Box3, Material, Object3D } from 'three';
+import { Group } from 'three';
+import type { Box3, Line, Material, Mesh, Object3D, Points, Sprite } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
@@ -22,34 +22,19 @@ const SECTION_BUILDERS = [buildLand, buildLine, buildTrain, buildInset, buildLin
 type Drawable = Mesh | Line | Points | Sprite;
 
 function isDrawable(object: Object3D): object is Drawable {
-  return (
-    object instanceof Mesh ||
-    object instanceof Line ||
-    object instanceof Points ||
-    object instanceof Sprite
-  );
+  return 'material' in object;
 }
 
-function completeLabels(found: ReadonlyMap<PartId, Object3D>): ReadonlyMap<PartId, Object3D> {
-  return new Map(
-    PART_IDS.map((id) => {
-      const anchor = found.get(id);
-      if (!anchor) throw new Error(`No label anchor for part ${id}`);
-      return [id, anchor];
-    }),
-  );
-}
-
-function completeAnchors(
-  found: Partial<Record<AnchorId, Object3D>>,
-): Readonly<Record<AnchorId, Object3D>> {
-  return Object.fromEntries(
-    ANCHOR_IDS.map((id) => {
-      const anchor = found[id];
-      if (!anchor) throw new Error(`No scene anchor ${id}`);
-      return [id, anchor];
-    }),
-  ) as Record<AnchorId, Object3D>;
+function completed<Id extends string>(
+  ids: readonly Id[],
+  find: (id: Id) => Object3D | undefined,
+  missing: string,
+): [Id, Object3D][] {
+  return ids.map((id) => {
+    const anchor = find(id);
+    if (!anchor) throw new Error(`${missing} ${id}`);
+    return [id, anchor];
+  });
 }
 
 class MaglevTrainAssembly implements Assembly {
@@ -76,8 +61,12 @@ class MaglevTrainAssembly implements Assembly {
     };
     this.sections = SECTION_BUILDERS.map((build) => build(context));
     this.sections.forEach((section) => this.root.add(section.root));
-    this.labels = completeLabels(context.labels);
-    this.anchors = completeAnchors(context.anchors);
+    this.labels = new Map(
+      completed(PART_IDS, (id) => context.labels.get(id), 'No label anchor for part'),
+    );
+    this.anchors = Object.fromEntries(
+      completed(ANCHOR_IDS, (id) => context.anchors[id], 'No scene anchor'),
+    ) as Record<AnchorId, Object3D>;
     this.nudge = new NudgeResponse(state.nudge);
     this.state = state;
     this.setState(state);

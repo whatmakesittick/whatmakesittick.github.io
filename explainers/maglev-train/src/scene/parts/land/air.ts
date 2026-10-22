@@ -1,21 +1,15 @@
-import {
-  Color,
-  DoubleSide,
-  Group,
-  InstancedMesh,
-  Matrix4,
-  MeshBasicMaterial,
-  PlaneGeometry,
-  Quaternion,
-  Vector3,
-} from 'three';
-import { smoothstep } from '@core/math';
+import { Color, DoubleSide, Group } from 'three';
+import type { InstancedMesh, MeshBasicMaterial } from 'three';
+import { FULL_TURN, lerp, smoothstep } from '@core/math';
+import { wrapPhase } from '@core/store';
 import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import type { MotionReading } from '../../../ids';
 import { TRAIN } from '../../../model';
-import { LINE_GROUP, registeredMaterial } from '../context';
+import { LINE_GROUP, instancesOf, registeredMaterial } from '../context';
 import type { PartContext } from '../context';
+import { groundQuad, overlayMaterial } from './overlay';
 import { between, seededRandom } from './random';
+import { placement } from './scenery/instances';
 
 export const AIR = {
   speed: [25, 110] as const,
@@ -38,8 +32,6 @@ export const AIR = {
   seed: 8_803,
 } as const;
 
-const QUARTER_TURN = Math.PI / 2;
-const FULL_TURN = Math.PI * 2;
 const SPAN = TRAIN.length + AIR.wake;
 const WAKE_SHAPE = { riseFrom: 0.35, fadeFrom: 0.3 } as const;
 const STREAK_LAYOUT = { lead: 0.32, scatter: 0.4 } as const;
@@ -51,11 +43,11 @@ export interface Air {
 }
 
 export function airStrength(speedMs: number): number {
-  return smoothstep(speedMs, AIR.speed[0], AIR.speed[1]);
+  return smoothstep(speedMs, ...AIR.speed);
 }
 
 export function dustBehindNose(phase: number, distance: number): number {
-  return (((phase * SPAN + distance) % SPAN) + SPAN) % SPAN;
+  return wrapPhase(phase * SPAN + distance, SPAN);
 }
 
 function wakeAlpha(behind: number): number {
@@ -65,39 +57,24 @@ function wakeAlpha(behind: number): number {
 
 function streaks(context: PartContext): InstancedMesh {
   const { count, opacity, width, length, lift } = AIR.streaks;
-  const geometry = new PlaneGeometry(1, 1);
-  geometry.rotateX(-QUARTER_TURN);
-  const material = registeredMaterial(
-    context,
-    LINE_GROUP,
-    new MeshBasicMaterial({
-      color: AIR.colour,
-      map: context.textures.glow,
-      transparent: true,
-      opacity,
-      depthWrite: false,
-      side: DoubleSide,
-    }),
-  );
-  const mesh = context.tracker.track(
-    new InstancedMesh(context.tracker.track(geometry), material, count),
-  );
+  const material = overlayMaterial(context, {
+    color: AIR.colour,
+    map: context.textures.glow,
+    opacity,
+    side: DoubleSide,
+  });
   const random = seededRandom(AIR.seed);
-  const matrix = new Matrix4();
-  for (let index = 0; index < count; index += 1) {
+  const matrices = Array.from({ length: count }, () => {
     const long = between(random, length);
     const wide = between(random, width);
     const scatter = (random() - HALF) * TRAIN.length * STREAK_LAYOUT.scatter;
     const x = TRAIN.tailX - long * STREAK_LAYOUT.lead + scatter;
     const z = (random() - HALF) * AIR.spread[0] * 2;
-    mesh.setMatrixAt(
-      index,
-      matrix.compose(new Vector3(x, lift, z), new Quaternion(), new Vector3(long, 1, wide)),
-    );
-  }
+    return placement([x, lift, z], 0, [long, 1, wide]);
+  });
+  const mesh = instancesOf(context, groundQuad(), material, matrices);
   mesh.name = 'airStreaks';
   mesh.renderOrder = 2;
-  mesh.computeBoundingSphere();
   return mesh;
 }
 
@@ -124,8 +101,8 @@ export function buildAir(context: PartContext): Air {
         const behind = dustBehindNose(phase, distance);
         const share = behind / SPAN;
         const swirl = Math.sin(behind * AIR.swirlWave + side * FULL_TURN) * AIR.swirl * share;
-        const spread = AIR.spread[0] + (AIR.spread[1] - AIR.spread[0]) * share;
-        const height = AIR.height[0] + (AIR.height[1] - AIR.height[0]) * share * lift * strength;
+        const spread = lerp(...AIR.spread, share);
+        const height = lerp(...AIR.height, share * lift * strength);
         dust.setPoint(
           index,
           TRAIN.noseX - behind,

@@ -1,5 +1,7 @@
+import { SIDE_SIGNS } from '../../../../model';
 import { CORRIDOR } from '../constants';
 import { CORRIDOR_PAINT } from '../palette';
+import { around, shrunk } from '../random';
 import type { Range } from '../random';
 import { shade } from './colour';
 import { fillBox } from './painter';
@@ -22,10 +24,9 @@ function mownStrip(painter: Painter): void {
 
 function fences(painter: Painter): void {
   const { fence, fenceWidth } = CORRIDOR;
-  [-1, 1].forEach((side) => {
-    const at = side * fence;
-    fillBox(painter, tileRange(painter), [at - fenceWidth, at + fenceWidth], CORRIDOR_PAINT.fence);
-  });
+  SIDE_SIGNS.forEach((side) =>
+    fillBox(painter, tileRange(painter), around(side * fence, fenceWidth), CORRIDOR_PAINT.fence),
+  );
 }
 
 function serviceRoad(painter: Painter): void {
@@ -39,11 +40,10 @@ function serviceRoad(painter: Painter): void {
 
 function ghostBed(painter: Painter): void {
   const tile = tileRange(painter);
-  const [ditchFrom, ditchTo] = CORRIDOR.ditch;
   fillBox(painter, tile, CORRIDOR.ghostVerge, CORRIDOR_PAINT.grass);
   fillBox(painter, tile, [CORRIDOR.ghostVerge[1], -CORRIDOR.verge], CORRIDOR_PAINT.grass);
   fillBox(painter, tile, CORRIDOR.formation, CORRIDOR_PAINT.formation);
-  fillBox(painter, tile, [ditchFrom - REED_WIDTH, ditchTo + REED_WIDTH], CORRIDOR_PAINT.reeds);
+  fillBox(painter, tile, shrunk(CORRIDOR.ditch, -REED_WIDTH), CORRIDOR_PAINT.reeds);
   fillBox(painter, tile, CORRIDOR.ditch, CORRIDOR_PAINT.ditch);
 }
 

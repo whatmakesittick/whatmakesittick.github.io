@@ -1,15 +1,17 @@
-import { BoxGeometry, CylinderGeometry, Float32BufferAttribute, Group, Mesh } from 'three';
+import { BoxGeometry, Group, Mesh } from 'three';
 import type { BufferGeometry } from 'three';
-import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import type { MaterialFinish } from '@core/scene/materials';
+import { SIDE_SIGNS } from '../../../model';
 import { LINE_DRAW } from '../../constants';
 import { lineX } from '../../pose';
 import { LINE_GROUP } from '../context';
 import type { PartContext } from '../context';
-import { featherGeometry, featherShadowMaterial } from './feather';
-import { FaceBuilder } from './scenery/faceBuilder';
-import { prismShadow } from './shadow';
+import { mergeParts } from '../line/geometry';
+import { overlaps } from '../line/slots';
+import { FEATHER_SHADE, featherGeometry, featherShadowMaterial } from './feather';
+import { painted } from './scenery/faceBuilder';
 import type { Rgb } from './scenery/faceBuilder';
+import { vertexFinish } from './scenery/instances';
+import { prismShadow } from './shadow';
 import { SUBSTATION, substationLines } from './substationPlan';
 
 type Box = readonly [
@@ -20,6 +22,7 @@ type Box = readonly [
   height: number,
   depth: number,
 ];
+type Part = readonly [Box, Rgb];
 
 const COLOURS = {
   gravel: [0.5, 0.49, 0.46],
@@ -31,186 +34,100 @@ const COLOURS = {
   porcelain: [0.62, 0.48, 0.38],
 } as const satisfies Record<string, Rgb>;
 
-const FINISH: MaterialFinish = {
-  color: '#ffffff',
-  vertexColors: true,
-  roughness: 0.8,
-  metalness: 0.1,
-};
-const YARD = { lift: 0.05, thickness: 0.04 } as const;
-const FENCE = { height: 2.2, plinth: 0.45, post: 0.12, spacing: 3, panel: 0.05 } as const;
-const HALL: Box = [-11, 0, 4.5, 16, 5.6, 9];
-const HALL_WINDOWS = { count: 5, inset: 1.4, pitch: 3, width: 1.8, sill: 2.4, top: 3.8 } as const;
-const ROOF_RIM = { height: 0.5, overhang: 0.3 } as const;
-const FACE_OUT = 0.03;
-const TRANSFORMERS = [-2, 6.5, 15] as const;
-const TRANSFORMER = {
-  length: 4.2,
-  height: 3,
-  depth: 3.2,
-  z: -6,
-  plinth: 0.4,
-  apron: 1,
-  radiator: { lift: 0.6, out: 0.3, length: 0.9, height: 0.8, depth: 0.5 },
-  bushing: { height: 1.6, top: 0.12, bottom: 0.18, spread: 0.3 },
-} as const;
-const GANTRY = { height: 11, z: -6, span: 26, post: 0.35, beam: 0.6, beamDepth: 1.4 } as const;
-const BUSHING_SIDES = 6;
-const SHADOW = { feather: 1.2, lift: 0.1, colour: '#1f2633', opacity: 0.5 } as const;
-const HALF = 0.5;
-
-function painted(geometry: BufferGeometry, colour: Rgb): BufferGeometry {
-  const flat = geometry.index ? geometry.toNonIndexed() : geometry;
-  if (flat !== geometry) geometry.dispose();
-  flat.deleteAttribute('uv');
-  const count = flat.getAttribute('position').count;
-  const colours = new Float32Array(count * 3);
-  for (let index = 0; index < count; index += 1) colours.set(colour, index * 3);
-  flat.setAttribute('color', new Float32BufferAttribute(colours, 3));
-  return flat;
-}
+const FINISH = vertexFinish(0.8, 0.1);
+const YARD: Box = [0, 0.01, 0, SUBSTATION.length, 0.04, SUBSTATION.depth];
+const HALL: Box = [-11, 0, 4.5, 16, 6, 9];
+const ROOF: Box = [-11, 5.6, 4.5, 16.3, 0.5, 9.3];
+const WINDOWS = { count: 5, width: 1.8, sill: 2.4, height: 1.4, depth: 0.06 } as const;
+const FENCE = { height: 2.2, plinth: 0.45, post: 0.12, spacing: 3, wall: 0.2 } as const;
+const GANTRY: readonly Box[] = [
+  [-13, 0, -6, 0.35, 11, 0.35],
+  [13, 0, -6, 0.35, 11, 0.35],
+  [0, 10.4, -6, 26.35, 0.6, 0.49],
+];
+const TRANSFORMER_XS = [-2, 6.5, 15] as const;
+const TRANSFORMER_Z = -6;
+const TRANSFORMER_BODY: Box = [0, 0.4, 0, 4.2, 3, 3.2];
+const TRANSFORMER: readonly Part[] = [
+  [[0, 0, 0, 5.2, 0.4, 4.2], COLOURS.concrete],
+  [TRANSFORMER_BODY, COLOURS.transformer],
+  [[0, 0.6, 1.9, 3.8, 2.4, 0.5], COLOURS.transformer],
+  [[-1.26, 3.4, 0, 0.3, 1.6, 0.3], COLOURS.porcelain],
+  [[0, 3.4, 0, 0.3, 1.6, 0.3], COLOURS.porcelain],
+  [[1.26, 3.4, 0, 0.3, 1.6, 0.3], COLOURS.porcelain],
+];
+const SHADOW_FEATHER = 1.2;
 
 function block([x, y, z, length, height, depth]: Box, colour: Rgb): BufferGeometry {
-  const geometry = new BoxGeometry(length, height, depth);
-  geometry.translate(x, y + height * HALF, z);
-  return painted(geometry, colour);
+  return painted(new BoxGeometry(length, height, depth).translate(x, y + height / 2, z), colour);
 }
 
-function fence(): BufferGeometry[] {
+function moved([x, y, z, ...size]: Box, by: number): Box {
+  return [x + by, y, z + TRANSFORMER_Z, ...size];
+}
+
+function fence(): Box[] {
   const { length, depth } = SUBSTATION;
-  const parts: BufferGeometry[] = [];
-  const sides: Box[] = [
-    [0, 0, depth / 2, length, FENCE.plinth, FENCE.panel * 4],
-    [0, 0, -depth / 2, length, FENCE.plinth, FENCE.panel * 4],
-    [length / 2, 0, 0, FENCE.panel * 4, FENCE.plinth, depth],
-    [-length / 2, 0, 0, FENCE.panel * 4, FENCE.plinth, depth],
-  ];
-  sides.forEach((side) => parts.push(block(side, COLOURS.concrete)));
-  for (let x = -length / 2; x <= length / 2; x += FENCE.spacing)
-    [-1, 1].forEach((side) =>
-      parts.push(
-        block([x, 0, (side * depth) / 2, FENCE.post, FENCE.height, FENCE.post], COLOURS.steel),
-      ),
-    );
-  for (let z = -depth / 2 + FENCE.spacing; z < depth / 2; z += FENCE.spacing)
-    [-1, 1].forEach((side) =>
-      parts.push(
-        block([(side * length) / 2, 0, z, FENCE.post, FENCE.height, FENCE.post], COLOURS.steel),
-      ),
-    );
-  return parts;
+  const { height, plinth, post, spacing, wall } = FENCE;
+  const boxes = SIDE_SIGNS.flatMap((side): Box[] => [
+    [0, 0, (side * depth) / 2, length, plinth, wall],
+    [(side * length) / 2, 0, 0, wall, plinth, depth],
+  ]);
+  for (let x = -length / 2; x <= length / 2; x += spacing)
+    SIDE_SIGNS.forEach((side) => boxes.push([x, 0, (side * depth) / 2, post, height, post]));
+  for (let z = spacing - depth / 2; z < depth / 2; z += spacing)
+    SIDE_SIGNS.forEach((side) => boxes.push([(side * length) / 2, 0, z, post, height, post]));
+  return boxes;
 }
 
-function hall(): BufferGeometry[] {
-  const [x, , z, length, height, depth] = HALL;
-  const windows = new FaceBuilder();
-  const front = z + depth / 2 + FACE_OUT;
-  const { count, inset, pitch, width, sill, top } = HALL_WINDOWS;
-  for (let index = 0; index < count; index += 1) {
-    const left = x - length / 2 + inset + index * pitch;
-    windows.quad(
-      [left, sill, front],
-      [left + width, sill, front],
-      [left + width, top, front],
-      [left, top, front],
-      COLOURS.glass,
-    );
-  }
+function windows(): Box[] {
+  const [x, , z, length, , depth] = HALL;
+  const { count, width, sill, height } = WINDOWS;
+  return Array.from({ length: count }, (_, index) => [
+    x + length * ((index + 0.5) / count - 0.5),
+    sill,
+    z + depth / 2,
+    width,
+    height,
+    WINDOWS.depth,
+  ]);
+}
+
+function parts(): Part[] {
   return [
-    block(HALL, COLOURS.wall),
-    block(
-      [x, height, z, length + ROOF_RIM.overhang, ROOF_RIM.height, depth + ROOF_RIM.overhang],
-      COLOURS.concrete,
-    ),
-    windows.geometry(),
-  ];
-}
-
-function transformer(x: number): BufferGeometry[] {
-  const { length, height, depth, z, plinth, apron, radiator, bushing } = TRANSFORMER;
-  const parts = [
-    block([x, 0, z, length + apron, plinth, depth + apron], COLOURS.concrete),
-    block([x, plinth, z, length, height, depth], COLOURS.transformer),
-    block(
-      [
-        x,
-        radiator.lift,
-        z + depth / 2 + radiator.out,
-        length * radiator.length,
-        height * radiator.height,
-        radiator.depth,
-      ],
-      COLOURS.transformer,
+    [YARD, COLOURS.gravel],
+    [HALL, COLOURS.wall],
+    [ROOF, COLOURS.concrete],
+    ...[...fence(), ...GANTRY].map((box): Part => [box, COLOURS.steel]),
+    ...windows().map((box): Part => [box, COLOURS.glass]),
+    ...TRANSFORMER_XS.flatMap((at) =>
+      TRANSFORMER.map(([box, colour]): Part => [moved(box, at), colour]),
     ),
   ];
-  [-1, 0, 1].forEach((offset) => {
-    const geometry = new CylinderGeometry(
-      bushing.top,
-      bushing.bottom,
-      bushing.height,
-      BUSHING_SIDES,
-    );
-    geometry.translate(
-      x + offset * length * bushing.spread,
-      plinth + height + bushing.height / 2,
-      z,
-    );
-    parts.push(painted(geometry, COLOURS.porcelain));
-  });
-  return parts;
 }
 
-function gantry(): BufferGeometry[] {
-  const { height, z, span, post, beam, beamDepth } = GANTRY;
-  return [
-    block([-span / 2, 0, z, post, height, post], COLOURS.steel),
-    block([span / 2, 0, z, post, height, post], COLOURS.steel),
-    block([0, height - beam, z, span + post, beam, post * beamDepth], COLOURS.steel),
-  ];
-}
-
-function yard(): BufferGeometry {
-  const { length, depth } = SUBSTATION;
-  return block([0, YARD.lift - YARD.thickness, 0, length, YARD.thickness, depth], COLOURS.gravel);
+function shadowOf([x, y, z, length, height, depth]: Box): BufferGeometry {
+  const prism = {
+    x: [x - length / 2, x + length / 2],
+    y: [y, y + height],
+    z: [z - depth / 2, z + depth / 2],
+  } as const;
+  return featherGeometry(prismShadow(prism), SHADOW_FEATHER, FEATHER_SHADE.lift);
 }
 
 export function substationGeometry(): BufferGeometry {
-  const parts = [yard(), ...fence(), ...hall(), ...TRANSFORMERS.flatMap(transformer), ...gantry()];
-  const merged = mergeGeometries(parts);
-  parts.forEach((part) => part.dispose());
-  return merged;
+  return mergeParts(parts().map(([box, colour]) => block(box, colour)));
 }
 
 function shadowGeometry(): BufferGeometry {
-  const [x, , z, length, height, depth] = HALL;
-  const casters = [
-    prismShadow({
-      x: [x - length / 2, x + length / 2],
-      y: [0, height + ROOF_RIM.height],
-      z: [z - depth / 2, z + depth / 2],
-    }),
-    ...TRANSFORMERS.map((at) =>
-      prismShadow({
-        x: [at - TRANSFORMER.length / 2, at + TRANSFORMER.length / 2],
-        y: [0, TRANSFORMER.height],
-        z: [TRANSFORMER.z - TRANSFORMER.depth / 2, TRANSFORMER.z + TRANSFORMER.depth / 2],
-      }),
-    ),
-  ];
-  const parts = casters.map((outline) => featherGeometry(outline, SHADOW.feather, SHADOW.lift));
-  const merged = mergeGeometries(parts);
-  parts.forEach((part) => part.dispose());
-  return merged;
+  return mergeParts(
+    [HALL, ...TRANSFORMER_XS.map((at) => moved(TRANSFORMER_BODY, at))].map(shadowOf),
+  );
 }
 
 export interface Substations {
   readonly root: Group;
   setState(distance: number): void;
-}
-
-function isInWindow(x: number): boolean {
-  const half = SUBSTATION.length / 2;
-  return x + half > -LINE_DRAW.behind && x - half < LINE_DRAW.ahead;
 }
 
 export function buildSubstations(context: PartContext): Substations {
@@ -219,7 +136,7 @@ export function buildSubstations(context: PartContext): Substations {
   const geometry = context.tracker.track(substationGeometry());
   const material = context.materials.get(LINE_GROUP, FINISH);
   const shadow = context.tracker.track(shadowGeometry());
-  const shade = featherShadowMaterial(context, SHADOW);
+  const shade = featherShadowMaterial(context);
   const lines = substationLines();
   const meshes = lines.map(() => {
     const mesh = new Mesh(geometry, material);
@@ -231,12 +148,13 @@ export function buildSubstations(context: PartContext): Substations {
     root.add(mesh);
     return mesh;
   });
+  const drawn = [-LINE_DRAW.behind, LINE_DRAW.ahead] as const;
   return {
     root,
     setState(distance) {
       meshes.forEach((mesh, index) => {
         mesh.position.x = lineX(lines[index], distance);
-        mesh.visible = isInWindow(mesh.position.x);
+        mesh.visible = overlaps(mesh.position.x, SUBSTATION.length / 2, drawn);
       });
     },
   };

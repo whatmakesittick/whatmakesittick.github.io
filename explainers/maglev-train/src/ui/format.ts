@@ -32,32 +32,16 @@ export function toMillimetres(metres: number): number {
   return metres * MILLIMETRES_PER_METRE;
 }
 
-function unit(key: string, value: number, digits: number): string {
+export function formatUnit(key: string, value: number, digits = WHOLE): string {
   return t(`units.${key}`, { value: formatFixed(value, digits) });
 }
 
-function range(key: string, min: number, max: number): string {
+export function formatRange(key: string, min: number, max: number): string {
   return t(`units.${key}`, { min: whole(min), max: whole(max) });
 }
 
-export function formatKmh(kmh: number): string {
-  return unit('kmh', kmh, WHOLE);
-}
-
 export function formatMm(millimetres: number, digits: number): string {
-  return unit('mm', millimetres, digits);
-}
-
-export function formatMmRange(min: number, max: number): string {
-  return range('mmRange', min, max);
-}
-
-export function formatHz(hertz: number): string {
-  return unit('hz', hertz, WHOLE);
-}
-
-export function formatHzRange(min: number, max: number): string {
-  return range('hzRange', min, max);
+  return formatUnit('mm', millimetres, digits);
 }
 
 export function formatKmOf(metres: number, totalMetres: number): string {

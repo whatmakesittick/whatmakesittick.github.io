@@ -5,13 +5,11 @@ import {
   formatClock,
   formatClockOf,
   formatGap,
-  formatHz,
-  formatHzRange,
   formatKmOf,
-  formatKmh,
   formatMinutesSeconds,
   formatMm,
-  formatMmRange,
+  formatRange,
+  formatUnit,
   formatYear,
   toKilometres,
   toMillimetres,
@@ -24,12 +22,12 @@ describe('formatters', () => {
   beforeAll(() => initTestLocale());
 
   it('rounds each quantity to its own precision with grouped digits', () => {
-    expect(formatKmh(429.6)).toBe(fill(units.kmh, { value: '430' }));
+    expect(formatUnit('kmh', 429.6)).toBe(fill(units.kmh, { value: '430' }));
     expect(formatMm(10.04, TENTHS)).toBe(fill(units.mm, { value: '10.0' }));
     expect(formatMm(1516, WHOLE)).toBe(fill(units.mm, { value: '1,516' }));
-    expect(formatHz(231.5)).toBe(fill(units.hz, { value: '232' }));
-    expect(formatMmRange(8, 12)).toBe(fill(units.mmRange, { min: '8', max: '12' }));
-    expect(formatHzRange(0, 300)).toBe(fill(units.hzRange, { min: '0', max: '300' }));
+    expect(formatUnit('hz', 231.5)).toBe(fill(units.hz, { value: '232' }));
+    expect(formatRange('mmRange', 8, 12)).toBe(fill(units.mmRange, { min: '8', max: '12' }));
+    expect(formatRange('hzRange', 0, 300)).toBe(fill(units.hzRange, { min: '0', max: '300' }));
   });
 
   it('shows the distance in kilometres out of the whole line', () => {

@@ -27,7 +27,6 @@ export class NudgeResponse {
   }
 
   step(deltaSeconds: number): NudgeSample {
-    if (!this.running) return RESTING_NUDGE;
     this.elapsed = Math.min(NUDGE.settleSeconds, this.elapsed + deltaSeconds);
     if (!this.running) return RESTING_NUDGE;
     const swing =

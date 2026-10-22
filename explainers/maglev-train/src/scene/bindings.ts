@@ -10,29 +10,23 @@ export interface SceneTargets extends PresetTargets {
   labelVisibility: LabelPolicy;
 }
 
-class DoubleBufferedAssemblyState {
-  private readonly read = createLiveReader();
-  private heldByAssembly: AssemblyState;
-  private free: AssemblyState;
-
-  constructor(source: AssemblySource) {
-    this.heldByAssembly = createAssemblyState(source, this.read);
-    this.free = createAssemblyState(source, this.read);
-  }
-
-  handOver(source: AssemblySource): AssemblyState {
-    const next = writeAssemblyState(this.free, source, this.read);
-    this.free = this.heldByAssembly;
-    this.heldByAssembly = next;
-    return next;
-  }
+function doubleBuffered(source: AssemblySource): (next: AssemblySource) => AssemblyState {
+  const read = createLiveReader();
+  let heldByAssembly = createAssemblyState(source, read);
+  let free = createAssemblyState(source, read);
+  return (next) => {
+    const state = writeAssemblyState(free, next, read);
+    free = heldByAssembly;
+    heldByAssembly = state;
+    return state;
+  };
 }
 
 export function bindStore(store: MaglevTrainStore, targets: SceneTargets): () => void {
   const { train, labelVisibility } = targets;
-  const assemblyState = new DoubleBufferedAssemblyState(store.getState());
-  const push = (state: AssemblySource) => train.setState(assemblyState.handOver(state));
-  train.build(assemblyState.handOver(store.getState()));
+  const handOver = doubleBuffered(store.getState());
+  const push = (state: AssemblySource) => train.setState(handOver(state));
+  train.build(handOver(store.getState()));
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<MaglevTrainStoreState, Preset>(targets, store, {

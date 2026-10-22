@@ -9,12 +9,12 @@ import {
 import type { BufferGeometry } from 'three';
 import { mergeGeometries, mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { seededRandom } from '../random';
+import { painted } from './faceBuilder';
+import type { Rgb } from './faceBuilder';
 
 export const TREE_KINDS = ['round', 'poplar', 'conifer'] as const;
 export type TreeKind = (typeof TREE_KINDS)[number];
 export type Detail = 'near' | 'far';
-
-type Rgb = readonly [number, number, number];
 
 const TRUNK_COLOUR: Rgb = [0.55, 0.42, 0.35];
 const CROWN_COLOUR: Rgb = [1, 1, 1];
@@ -55,24 +55,11 @@ export const TREE_SHAPES = {
   },
 } as const;
 
-function paint(geometry: BufferGeometry, [r, g, b]: Rgb): BufferGeometry {
-  const count = geometry.getAttribute('position').count;
-  const colours = new Float32Array(count * 3);
-  for (let index = 0; index < count; index += 1) colours.set([r, g, b], index * 3);
-  geometry.setAttribute('color', new BufferAttribute(colours, 3));
-  return geometry;
-}
-
-function stripped(geometry: BufferGeometry): BufferGeometry {
+function lumpy(geometry: BufferGeometry, centre: Vector3, scale: Vector3): BufferGeometry {
   geometry.deleteAttribute('uv');
   geometry.deleteAttribute('normal');
   const merged = mergeVertices(geometry);
   geometry.dispose();
-  return merged;
-}
-
-function lumpy(geometry: BufferGeometry, centre: Vector3, scale: Vector3): BufferGeometry {
-  const merged = stripped(geometry);
   const random = seededRandom(LUMP_SEED);
   const position = merged.getAttribute('position');
   const point = new Vector3();
@@ -92,15 +79,14 @@ function trunk({ top, bottom, height }: TrunkShape, detail: Detail): BufferGeome
   const geometry = new CylinderGeometry(top, bottom, height, TRUNK_SIDES[detail], 1, true);
   geometry.translate(0, height / 2, 0);
   geometry.deleteAttribute('uv');
-  return paint(mergeVertices(geometry), TRUNK_COLOUR);
+  return painted(mergeVertices(geometry), TRUNK_COLOUR);
 }
 
 function blobCrown({ radius, centre }: BlobShape, detail: Detail): BufferGeometry {
-  const geometry = new IcosahedronGeometry(1, BLOB_DETAIL[detail]);
-  const scale = new Vector3(...radius);
-  geometry.scale(scale.x, scale.y, scale.z);
-  geometry.translate(0, centre, 0);
-  return paint(lumpy(geometry, new Vector3(0, centre, 0), scale), CROWN_COLOUR);
+  const geometry = new IcosahedronGeometry(1, BLOB_DETAIL[detail])
+    .scale(...radius)
+    .translate(0, centre, 0);
+  return painted(lumpy(geometry, new Vector3(0, centre, 0), new Vector3(...radius)), CROWN_COLOUR);
 }
 
 function coniferProfile(detail: Detail): Vector2[] {
@@ -121,7 +107,7 @@ function coniferCrown(detail: Detail): BufferGeometry {
   const { radius, base, height } = TREE_SHAPES.conifer.crown;
   const geometry = new LatheGeometry(coniferProfile(detail), CONIFER_SIDES[detail]);
   const centre = new Vector3(0, base + height * CONIFER_CENTRE, 0);
-  return paint(lumpy(geometry, centre, new Vector3(radius, height / 2, radius)), CROWN_COLOUR);
+  return painted(lumpy(geometry, centre, new Vector3(radius, height / 2, radius)), CROWN_COLOUR);
 }
 
 function crown(kind: TreeKind, detail: Detail): BufferGeometry {

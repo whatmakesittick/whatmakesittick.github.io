@@ -5,7 +5,7 @@ import { LINE_GROUP } from './parts/context';
 
 export const SCENE_OPTIONS: SceneOptions = {
   background: THEME.sky,
-  fog: { color: HAZE.colour, near: HAZE.near, far: HAZE.far },
+  fog: HAZE,
   stage: false,
   camera: {
     near: SCENE_LIMITS.cameraNear,
@@ -13,6 +13,5 @@ export const SCENE_OPTIONS: SceneOptions = {
     maxPolarAngle: SCENE_LIMITS.maxPolarAngle,
     distance: { min: SCENE_LIMITS.cameraMinDistance, max: SCENE_LIMITS.cameraMaxDistance },
   },
-  gaugeSide: 'right',
   highlight: { dim: HIGHLIGHT_DIM, undimmed: [LINE_GROUP] },
 };

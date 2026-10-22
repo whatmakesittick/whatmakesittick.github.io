@@ -5,6 +5,7 @@ const SHIFT_B = 7;
 const SHIFT_C = 14;
 const ODD_A = 1;
 const ODD_B = 61;
+const SEED_SCALE = 2 ** 31;
 
 export type Random = () => number;
 export type Range = readonly [number, number];
@@ -17,6 +18,26 @@ export function seededRandom(seed: number): Random {
     mixed ^= mixed + Math.imul(mixed ^ (mixed >>> SHIFT_B), ODD_B | mixed);
     return ((mixed ^ (mixed >>> SHIFT_C)) >>> 0) / UINT32;
   };
+}
+
+export function spotRandom(seed: number): Random {
+  return seededRandom(Math.floor(seed * SEED_SCALE));
+}
+
+export function extent([from, to]: Range): number {
+  return to - from;
+}
+
+export function middle([from, to]: Range): number {
+  return (from + to) / 2;
+}
+
+export function around(centre: number, half: number): Range {
+  return [centre - half, centre + half];
+}
+
+export function shrunk([from, to]: Range, margin: number): Range {
+  return [from + margin, to - margin];
 }
 
 export function between(random: Random, [from, to]: Range): number {

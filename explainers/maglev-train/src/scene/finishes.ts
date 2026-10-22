@@ -14,7 +14,7 @@ const INSET_OPACITY = 0.9;
 const TRAIN_WHITE: MaterialFinish = { color: '#eef3f9', roughness: GLOSS, metalness: 0.04 };
 
 function matte(color: string): MaterialFinish {
-  return { color, roughness: MATTE, metalness: 0 };
+  return { color, roughness: MATTE };
 }
 
 function satin(color: string): MaterialFinish {
@@ -42,8 +42,7 @@ function veil(color: string, opacity: number): MaterialFinish {
 
 export const FINISHES = {
   trainWhite: TRAIN_WHITE,
-  trainShade: satin('#d5dae0'),
-  cutFace: { color: '#dde2e8', roughness: 0.7, metalness: 0 },
+  cutFace: { color: '#dde2e8', roughness: 0.7 },
   windowBand: { color: THEME.trainBand, roughness: 0.12, metalness: 0.6 },
   underbody: matte('#3b4047'),
   joint: matte('#2b3037'),
@@ -71,12 +70,6 @@ export const FINISHES = {
   },
   ghost: veil(THEME.ghost, GHOST_OPACITY),
   insetPanel: { ...matte(THEME.inset), transparent: true, opacity: INSET_OPACITY },
-  field: matte(THEME.ground),
-  road: matte('#6d6d6a'),
-  water: { color: '#6f8fa0', roughness: 0.2, metalness: 0.1 },
-  building: matte('#cfc8bc'),
-  roof: matte('#8a5a48'),
-  tree: matte('#4f6b3a'),
   plinth: matte('#9a968e'),
   channel: matte('#a19d95'),
   coil: metal('#b07a45'),

@@ -41,25 +41,27 @@ export const CORRIDOR = {
 
 export const CLEAR = { left: -84, right: 36 } as const;
 
+type SkyShape = readonly [rise: number, band: number, hazeHeight: number, hazeStrength: number];
+type GlowShape = readonly [
+  wide: number,
+  wideTightness: number,
+  core: number,
+  coreTightness: number,
+];
+type Warmth = readonly [strength: number, tightness: number];
+type CloudShape = readonly [scale: number, lift: number, cover: number, softness: number];
+type CloudBand = readonly [bottom: number, top: number, strength: number, heading: number];
+type Stretch = readonly [along: number, across: number];
+
 export const SKY_DOME = {
   widthSegments: 48,
   heightSegments: 24,
   renderOrder: -1000,
-  rise: 3.2,
-  band: 0.02,
-  haze: { colour: '#e9e2d4', height: 0.09, strength: 0.45 },
-  glow: { colour: '#ffe6c2', wide: 0.55, wideTightness: 5, core: 0.9, coreTightness: 160 },
-  horizonWarmth: { strength: 0.35, tightness: 3 },
-  clouds: {
-    scale: 1.1,
-    lift: 0.12,
-    cover: 0.52,
-    softness: 0.22,
-    band: [0.04, 0.6],
-    strength: 0.42,
-    heading: 0.35,
-    stretch: [0.35, 2.6],
-    lit: '#fff4e4',
-    shade: '#c9d4de',
-  },
+  colours: { haze: '#e9e2d4', glow: '#ffe6c2', cloudLit: '#fff4e4', cloudShade: '#c9d4de' },
+  shape: [3.2, 0.02, 0.09, 0.45] as SkyShape,
+  glow: [0.55, 5, 0.9, 160] as GlowShape,
+  warmth: [0.35, 3] as Warmth,
+  clouds: [1.1, 0.12, 0.52, 0.22] as CloudShape,
+  cloudBand: [0.04, 0.6, 0.42, 0.35] as CloudBand,
+  stretch: [0.35, 2.6] as Stretch,
 } as const;

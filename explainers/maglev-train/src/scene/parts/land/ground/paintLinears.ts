@@ -1,45 +1,30 @@
+import { SIDE_SIGNS } from '../../../../model';
 import { LAND_PAINT } from '../palette';
-import { between, seededRandom } from '../random';
+import { around, between, extent, seededRandom } from '../random';
 import type { Random, Range } from '../random';
 import { footprint } from './blocks';
 import type { Linear } from './linears';
-import { fillBox, pixelX, pixelY } from './painter';
-import type { Painter } from './painter';
+import { fillArea, linearGradient } from './painter';
+import type { Area, Painter } from './painter';
 
 const HALF = 0.5;
 const GLINT_SEED = 7_301;
 const EDGE_INSET = 0.35;
 
-interface Box {
-  readonly x: Range;
-  readonly z: Range;
+function band(linear: Linear, across: Range, along = linear.span): Area {
+  return linear.axis === 'x' ? { x: along, z: across } : { x: across, z: along };
 }
 
-function band(linear: Linear, [from, to]: Range): Box {
-  return linear.axis === 'x'
-    ? { x: linear.span, z: [from, to] }
-    : { x: [from, to], z: linear.span };
+function centred(linear: Linear): Range {
+  return around(linear.centre, linear.width / 2);
 }
 
-function centred(linear: Linear, width: number): Range {
-  return [linear.centre - width / 2, linear.centre + width / 2];
+export function waterBox(linear: Linear): Area {
+  return band(linear, centred(linear));
 }
 
-function fill(painter: Painter, box: Box, style: string | CanvasGradient): void {
-  fillBox(painter, box.x, box.z, style);
-}
-
-export function waterBox(linear: Linear): Box {
-  return band(linear, centred(linear, linear.width));
-}
-
-function acrossGradient(painter: Painter, linear: Linear): CanvasGradient {
-  const [from, to] = centred(linear, linear.width);
-  const { context } = painter;
-  const gradient =
-    linear.axis === 'x'
-      ? context.createLinearGradient(0, pixelY(painter, to), 0, pixelY(painter, from))
-      : context.createLinearGradient(pixelX(painter, from), 0, pixelX(painter, to), 0);
+export function waterGradient(painter: Painter, inZ: boolean, range: Range): CanvasGradient {
+  const gradient = linearGradient(painter, inZ, range);
   gradient.addColorStop(0, LAND_PAINT.water.edge);
   gradient.addColorStop(HALF, LAND_PAINT.water.middle);
   gradient.addColorStop(1, LAND_PAINT.water.edge);
@@ -48,58 +33,53 @@ function acrossGradient(painter: Painter, linear: Linear): CanvasGradient {
 
 function glints(painter: Painter, linear: Linear, random: Random): void {
   const { length, width, density } = LAND_PAINT.glint;
-  const [from, to] = linear.span;
-  const count = Math.round((to - from) * density * (linear.width / 4));
+  const count = Math.round(extent(linear.span) * density * (linear.width / 4));
   painter.context.globalAlpha = LAND_PAINT.water.glintAlpha;
   for (let index = 0; index < count; index += 1) {
     const along = between(random, linear.span);
     const across = linear.centre + (random() - HALF) * linear.width * HALF;
     const streak: Range = [along, along + between(random, length)];
-    const thin: Range = [across, across + width];
-    fill(
-      painter,
-      linear.axis === 'x' ? { x: streak, z: thin } : { x: thin, z: streak },
-      LAND_PAINT.water.glint,
-    );
+    fillArea(painter, band(linear, [across, across + width], streak), LAND_PAINT.water.glint);
   }
   painter.context.globalAlpha = 1;
 }
 
+function surfaces(
+  painter: Painter,
+  linear: Linear,
+  verge: string,
+  surface: string | CanvasGradient,
+): void {
+  fillArea(painter, band(linear, footprint(linear)), verge);
+  fillArea(painter, waterBox(linear), surface);
+}
+
 function water(painter: Painter, linear: Linear, random: Random): void {
-  fill(painter, band(linear, footprint(linear)), LAND_PAINT.waterBank);
-  fill(painter, waterBox(linear), acrossGradient(painter, linear));
+  const gradient = waterGradient(painter, linear.axis === 'x', centred(linear));
+  surfaces(painter, linear, LAND_PAINT.waterBank, gradient);
   glints(painter, linear, random);
 }
 
 function dashes(painter: Painter, linear: Linear): void {
   const { length, gap } = LAND_PAINT.dash;
-  const thin = centred(linear, LAND_PAINT.road.lineWidth);
+  const thin = around(linear.centre, LAND_PAINT.road.lineWidth / 2);
   const [from, to] = linear.span;
-  for (let along = from; along < to; along += length + gap) {
-    const dash: Range = [along, along + length];
-    fill(
-      painter,
-      linear.axis === 'x' ? { x: dash, z: thin } : { x: thin, z: dash },
-      LAND_PAINT.road.line,
-    );
-  }
+  for (let along = from; along < to; along += length + gap)
+    fillArea(painter, band(linear, thin, [along, along + length]), LAND_PAINT.road.line);
 }
 
 function road(painter: Painter, linear: Linear): void {
   const { verge, surface, line, lineWidth } = LAND_PAINT.road;
-  fill(painter, band(linear, footprint(linear)), verge);
-  fill(painter, band(linear, centred(linear, linear.width)), surface);
+  surfaces(painter, linear, verge, surface);
   const edge = linear.width / 2 - EDGE_INSET;
-  [-1, 1].forEach((side) => {
-    const at = linear.centre + side * edge;
-    fill(painter, band(linear, [at - lineWidth / 2, at + lineWidth / 2]), line);
-  });
+  SIDE_SIGNS.forEach((side) =>
+    fillArea(painter, band(linear, around(linear.centre + side * edge, lineWidth / 2)), line),
+  );
   dashes(painter, linear);
 }
 
 function lane(painter: Painter, linear: Linear): void {
-  fill(painter, band(linear, footprint(linear)), LAND_PAINT.lane.verge);
-  fill(painter, band(linear, centred(linear, linear.width)), LAND_PAINT.lane.surface);
+  surfaces(painter, linear, LAND_PAINT.lane.verge, LAND_PAINT.lane.surface);
 }
 
 export function paintLinears(painter: Painter, linears: readonly Linear[]): void {

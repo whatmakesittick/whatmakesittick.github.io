@@ -1,28 +1,20 @@
-import { Color } from 'three';
 import type { InstancedMesh } from 'three';
-import type { MaterialFinish } from '@core/scene/materials';
+import { FULL_TURN } from '@core/math';
 import type { PartContext } from '../../context';
-import { between, pick, seededRandom } from '../random';
-import type { Random, Range } from '../random';
+import { between, pick, spotRandom } from '../random';
+import type { Range } from '../random';
 import { periodicCopies } from './copies';
-import { instanced } from './instances';
+import { instanced, tinted, vertexFinish } from './instances';
 import type { Instance } from './instances';
 import { TREE_KINDS, treeGeometry } from './treeGeometry';
 import type { Detail } from './treeGeometry';
 import { TREE_ROWS } from './constants';
 import type { TreeKind, TreeSpot } from './treePlacement';
 
-const SEED_SCALE = 2 ** 31;
-const FULL_TURN = Math.PI * 2;
 export const TREE_STRETCH: Range = [0.9, 1.15];
 const LIGHTNESS: Range = [0.88, 1.1];
 
-export const TREE_FINISH: MaterialFinish = {
-  color: '#ffffff',
-  vertexColors: true,
-  roughness: 0.92,
-  metalness: 0,
-};
+export const TREE_FINISH = vertexFinish(0.92);
 
 export const TREE_TINTS: Readonly<Record<TreeKind, readonly string[]>> = {
   round: ['#4e6a36', '#5b783d', '#445f32', '#68824a', '#55703a'],
@@ -30,20 +22,14 @@ export const TREE_TINTS: Readonly<Record<TreeKind, readonly string[]>> = {
   conifer: ['#4a6235', '#536d39', '#5d723c', '#4f6838', '#6c6c3e'],
 };
 
-function treeRandom(spot: TreeSpot): Random {
-  return seededRandom(Math.floor(spot.seed * SEED_SCALE));
-}
-
 export function treeHeightScale(spot: TreeSpot): number {
-  return spot.scale * between(treeRandom(spot), TREE_STRETCH);
+  return spot.scale * between(spotRandom(spot.seed), TREE_STRETCH);
 }
 
 function treeInstance(spot: TreeSpot): Instance {
-  const random = treeRandom(spot);
+  const random = spotRandom(spot.seed);
   const height = spot.scale * between(random, TREE_STRETCH);
-  const colour = new Color(pick(random, TREE_TINTS[spot.kind])).multiplyScalar(
-    between(random, LIGHTNESS),
-  );
+  const colour = tinted(pick(random, TREE_TINTS[spot.kind]), random, LIGHTNESS);
   return {
     position: [spot.x, 0, spot.z],
     turn: random() * FULL_TURN,

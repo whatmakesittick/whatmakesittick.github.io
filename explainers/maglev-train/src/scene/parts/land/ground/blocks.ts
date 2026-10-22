@@ -1,3 +1,4 @@
+import { around, middle } from '../random';
 import type { Range } from '../random';
 import { CORRIDOR, GROUND } from '../constants';
 import { LINEARS, VERGES } from './linears';
@@ -12,8 +13,7 @@ const REACH = GROUND.reach;
 const PERIOD = GROUND.period;
 
 export function footprint(linear: Linear): Range {
-  const half = linear.width / 2 + VERGES[linear.kind];
-  return [linear.centre - half, linear.centre + half];
+  return around(linear.centre, linear.width / 2 + VERGES[linear.kind]);
 }
 
 function occupiedBands(linears: readonly Linear[]): Range[] {
@@ -33,9 +33,9 @@ export function freeBands(linears: readonly Linear[] = LINEARS): Range[] {
   return free;
 }
 
-function crosses(linear: Linear, [from, to]: Range): boolean {
-  const middle = (from + to) / 2;
-  return linear.axis === 'z' && linear.span[0] <= middle && linear.span[1] >= middle;
+function crosses(linear: Linear, band: Range): boolean {
+  const centre = middle(band);
+  return linear.axis === 'z' && linear.span[0] <= centre && linear.span[1] >= centre;
 }
 
 function blocksBetween(band: Range, cuts: readonly Range[]): Block[] {
