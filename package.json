@@ -42,7 +42,7 @@
     "@modelcontextprotocol/node": "^2.1.1",
     "@modelcontextprotocol/server": "^2.3.1",
     "fft.js": "^4.0.4",
-    "i18next": "^26.4.5",
+    "i18next": "^26.5.4",
     "i18next-browser-languagedetector": "^8.2.1",
     "preact": "^11.0.1",
     "three": "^0.186.1",
