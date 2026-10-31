@@ -1,0 +1,83 @@
+:root {
+  --current: #ffb340;
+  --heat: #ff5a3d;
+  --cool: #3ec2dc;
+  --release: #3fb38f;
+  --protect: #9a7ce6;
+  --supply: #3d8bf2;
+  --packet: #5ad68c;
+}
+
+.chapter .readouts {
+  --readout-min-width: 8rem;
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.chapter .readouts > div,
+.chapter .readouts :is(dt, dd) {
+  min-width: 0;
+}
+
+.chapter .readouts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.chapter .readouts dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chapter .readouts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.chip[data-action='moment'][data-value='atRack'],
+.chip[data-action='load'] {
+  --tone: var(--current);
+}
+
+.chip[data-action='moment'][data-value='becomesHeat'],
+.chip[data-action='cooling'][data-value='air'] {
+  --tone: var(--heat);
+}
+
+.chip[data-action='moment'][data-value='inCoolant'] {
+  --tone: var(--cool);
+}
+
+.chip[data-action='moment'][data-value='onRoof'],
+.chip[data-action='benchmark'] {
+  --tone: var(--release);
+}
+
+.chip[data-action='outage'] {
+  --tone: var(--protect);
+}
+
+.chip[data-action='cooling'][data-value='liquid'] {
+  --tone: var(--supply);
+}
+
+.chip[data-action='distance'] {
+  --tone: var(--packet);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapter .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chapter .readouts > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}

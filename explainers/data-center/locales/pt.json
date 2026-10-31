@@ -1,0 +1,312 @@
+{
+  "meta": {
+    "title": "Como funciona um data center",
+    "eyebrow": "Computação",
+    "tagline": "Acompanhe a eletricidade num data center de IA em 3D: ela chega pela linha de transmissão, se transforma em calor num rack de 120 kW e sai pelo telhado.",
+    "description": "Acompanhe a energia num modelo 3D de data center: ela vem da rede elétrica, vira calor num rack de IA de 120 kW e sai pelo telhado.",
+    "summary": "O campus e sua energia, a reserva que mantém tudo ligado, um rack de IA de 120 kW por dentro, a rede de dados, o caminho do calor para fora e por que a água ganha do ar.",
+    "socialAlt": "Um campus de data center em 3D, aberto em corte, com o caminho da energia iluminado da subestação até um rack de IA resfriado a líquido e o calor subindo para o telhado, ao lado do título “Como funciona um data center”"
+  },
+  "stage": {
+    "label": "Modelo interativo do data center",
+    "gauge": "Leituras em tempo real"
+  },
+  "timeline": {
+    "label": "Percurso da energia",
+    "phases": "Ir para uma etapa",
+    "speed": "Velocidade de reprodução",
+    "value": "Tempo decorrido: {{time}}",
+    "during": "Etapa {{step}} de {{total}}: {{detail}}. Tempo decorrido: {{time}}",
+    "speedValue": "×{{factor}}",
+    "speedDescribe": "O percurso completo em {{seconds}} segundos",
+    "phase": {
+      "grid": "Rede elétrica",
+      "protect": "Reserva",
+      "distribute": "Distribuição",
+      "compute": "Chip",
+      "cool": "Resfriamento",
+      "release": "Saída"
+    },
+    "jump": {
+      "grid": "Ir para a rede elétrica",
+      "protect": "Ir para a reserva",
+      "distribute": "Ir para o barramento blindado",
+      "compute": "Ir para o chip",
+      "cool": "Ir para o resfriamento",
+      "release": "Ir para o telhado"
+    },
+    "detail": {
+      "grid": "a energia chega pela linha de transmissão, e a subestação reduz a tensão",
+      "protect": "a energia passa pelos painéis de manobra e pelo nobreak, com os geradores de prontidão",
+      "distribute": "a energia segue pelo barramento blindado até o salão",
+      "compute": "a energia entra numa GPU e se transforma em calor",
+      "cool": "o calor sai do rack e sobe até o telhado",
+      "release": "os equipamentos do telhado liberam o calor no ar"
+    },
+    "moment": {
+      "atRack": "No rack",
+      "becomesHeat": "Vira calor",
+      "inCoolant": "Sai do chip",
+      "onRoof": "No telhado"
+    }
+  },
+  "controls": {
+    "label": "Controles do modelo",
+    "cooling": "Resfriamento",
+    "coolingOptions": {
+      "liquid": "Líquido",
+      "air": "Ar"
+    },
+    "load": "Carga",
+    "loadOptions": {
+      "full": "Plena carga",
+      "idle": "Ocioso"
+    },
+    "benchmarkOptions": {
+      "average": "Média do setor",
+      "best": "Data centers do Google"
+    },
+    "distanceOptions": {
+      "km100": "A 100 km",
+      "km1000": "A 1.000 km"
+    },
+    "outageOptions": {
+      "cut": "Cortar a energia"
+    },
+    "groups": {
+      "moment": "Ir para um momento",
+      "outage": "Simulado de queda de energia",
+      "load": "Carga do rack",
+      "distance": "Distância até o usuário",
+      "cooling": "Resfriamento",
+      "benchmark": "Data center para comparar"
+    },
+    "views": {
+      "power": {
+        "name": "Caminho da energia",
+        "short": "Energia",
+        "hint": "Caminho da energia (P)"
+      },
+      "heat": {
+        "name": "Caminho do calor",
+        "short": "Calor",
+        "hint": "Caminho do calor (H)"
+      },
+      "packets": {
+        "name": "Tráfego de rede",
+        "short": "Dados",
+        "hint": "Tráfego de rede (N)"
+      },
+      "labels": {
+        "name": "Nomes das partes",
+        "short": "Nomes",
+        "hint": "Nomes das partes (L)"
+      },
+      "cutaway": {
+        "name": "Vista em corte",
+        "short": "Corte",
+        "hint": "Vista em corte (C)"
+      },
+      "follow": {
+        "name": "Seguir a energia",
+        "short": "Seguir",
+        "hint": "Seguir a energia (F)"
+      }
+    }
+  },
+  "readouts": {
+    "joule": "A energia está",
+    "carrier": {
+      "line": "na linha de transmissão",
+      "cable": "no cabo do campus",
+      "ups": "no nobreak",
+      "busway": "no barramento blindado",
+      "busbar": "no barramento CC",
+      "chip": "no chip",
+      "water": "na água de resfriamento",
+      "air": "no ar"
+    },
+    "rackPower": "Potência do rack",
+    "hallPower": "Computadores do salão",
+    "pue": "PUE",
+    "pueSite": {
+      "average": "média do setor",
+      "best": "data centers do Google"
+    },
+    "supply": "Entrada do rack",
+    "return": "Saída do rack"
+  },
+  "units": {
+    "ns": "{{value}} ns",
+    "us": "{{value}} µs",
+    "ms": "{{value}} ms",
+    "s": "{{value}} s",
+    "kw": "{{value}} kW",
+    "mw": "{{value}} MW",
+    "pueOf": "{{value}} ({{site}})",
+    "celsiusOf": "{{medium}} a {{value}} °C",
+    "medium": {
+      "water": "água",
+      "air": "ar"
+    },
+    "celsius": "{{value}} °C",
+    "kelvin": "{{value}} graus",
+    "m3h": "{{value}} m³/h",
+    "tonnes": "{{value}} t",
+    "percent": "{{value}}%"
+  },
+  "chapters": {
+    "building": {
+      "racks": "Racks neste modelo",
+      "racksValue": "{{racks}}, em {{rows}} fileiras",
+      "hallIt": "Potência dos computadores",
+      "facility": "Potência que vem da rede",
+      "facilityValue": "cerca de {{mw}} MW, com PUE de {{pue}}",
+      "world": "Todos os data centers do mundo",
+      "worldValue": "cerca de {{twh}} TWh em {{year}}, {{percent}}% da eletricidade mundial"
+    },
+    "powerIn": {
+      "chain": "Um exemplo de níveis de tensão",
+      "chainValue": "média tensão, depois 415 V CA, depois cerca de 50 V CC",
+      "takeover": "Entrada dos geradores",
+      "takeoverValue": "em até {{code}} s pela norma, de {{min}} a {{max}} s na prática",
+      "rideThrough": "Duração das baterias",
+      "rideThroughValue": "em geral, de {{min}} a {{max}} minutos",
+      "genset": "Um grupo gerador",
+      "gensetValue": "cerca de {{mw}} MW, pesando cerca de {{tonnes}} t",
+      "fuel": "Diesel a plena carga",
+      "fuelValue": "cerca de {{litres}} litros por hora",
+      "outages": "Paradas graves por falha de energia",
+      "outagesValue": "{{percent}}% em {{year}}"
+    },
+    "rack": {
+      "rackKw": "Potência do rack agora",
+      "chips": "Chips",
+      "chipsValue": "{{gpus}} GPUs, {{cpus}} CPUs",
+      "trays": "Bandejas",
+      "traysValue": "{{compute}} de computação, {{switch}} de switch",
+      "busbar": "Barramento CC",
+      "busbarValue": "até {{amps}} A a cerca de {{volts}} V",
+      "weight": "Peso",
+      "weightValue": "cerca de {{tonnes}} t",
+      "lost": "Perdas antes do chip",
+      "lostValue": "cerca de um décimo, dissipado como calor",
+      "fans": "Ventiladores",
+      "fansValue": {
+        "liquidFull": "pequenos, nas bandejas, girando rápido",
+        "liquidIdle": "pequenos, nas bandejas, girando devagar",
+        "airFull": "grandes, no rack, em velocidade máxima",
+        "airIdle": "grandes, no rack, a meia velocidade"
+      }
+    },
+    "network": {
+      "nvlink": "NVLink dentro do rack",
+      "nvlinkValue": "{{gpu}} TB/s por GPU, {{rack}} TB/s no total",
+      "switch": "Passagem por um switch",
+      "switchValue": "cerca de {{ns}} ns",
+      "fibre": "Luz na fibra óptica",
+      "fibreValue": "cerca de {{us}} µs por km",
+      "hall": "De ponta a ponta do salão",
+      "hallValue": "cerca de {{us}} µs, com três switches e a fibra",
+      "roundTrip": "Ida e volta até o usuário",
+      "roundTripValue": "cerca de {{ms}} ms, só na fibra"
+    },
+    "heatOut": {
+      "rise": "Aumento de temperatura no rack",
+      "riseValue": "{{medium}}: {{kelvin}} graus a mais na saída",
+      "facilityWater": "Água do prédio",
+      "facilityWaterValue": "cerca de {{celsius}} °C, {{approach}} graus mais fria que a do rack",
+      "cdu": "Uma CDU",
+      "cduValue": "{{mw}} MW de calor, ocupando cerca de {{area}} m²",
+      "wue": "Água por unidade de computação, EUA",
+      "wueValue": "cerca de {{litres}} L por kWh",
+      "usWater": "Data centers dos EUA, 2023",
+      "usWaterValue": "cerca de {{billion}} bilhões de litros usados no próprio local"
+    },
+    "compare": {
+      "rack": "Um rack a plena carga",
+      "airNeeded": "Ar para levar esse calor",
+      "homes": "Casas abastecidas por um ano",
+      "homesValue": "cerca de {{us}} casas nos EUA ou {{eu}} na UE",
+      "chargers": "Carregadores de notebook",
+      "chargersValue": "{{count}} de 40 W cada",
+      "pue": "PUE",
+      "overhead": "Não chega aos computadores",
+      "overheadValue": "{{percent}}% da energia do data center"
+    }
+  },
+  "parts": {
+    "gridLine": "Linha de transmissão",
+    "substation": "Subestação",
+    "transformers": "Transformadores",
+    "generators": "Geradores a diesel",
+    "switchgear": "Painéis de manobra",
+    "ups": "Nobreak",
+    "batteries": "Baterias",
+    "busway": "Barramento blindado",
+    "hall": "Salão dos computadores",
+    "racks": "Fileiras de racks",
+    "subjectRack": "Rack GB200 NVL72",
+    "powerShelves": "Fontes de alimentação",
+    "busbar": "Barramento CC",
+    "computeTrays": "Bandejas de computação",
+    "switchTrays": "Bandejas de switch",
+    "trayFans": "Ventiladores das bandejas",
+    "chipInset": "Chip ampliado 10 vezes",
+    "manifold": "Coletor",
+    "cdu": "Unidade de distribuição de resfriamento",
+    "facilityPipes": "Tubulação do prédio",
+    "chiller": "Chiller",
+    "dryCoolers": "Dry coolers",
+    "airHandlers": "Climatizadores",
+    "fibreEntry": "Entrada da fibra",
+    "spineSwitches": "Switches spine",
+    "leafSwitches": "Switches leaf",
+    "joule": "Marcador de energia",
+    "laptop": "Notebook"
+  },
+  "sections": {
+    "building": {
+      "title": "Entra eletricidade, sai calor",
+      "p1": "Um data center é um prédio cheio de computadores que rodam sites, aplicativos e IA. Seu ciclo de funcionamento é simples: entra eletricidade, sai calor. A energia chega por uma <strong>linha de transmissão</strong>, e a <strong>subestação</strong> reduz a tensão. Ao lado do <strong>salão dos computadores</strong> ficam fileiras de <strong>geradores a diesel</strong>. No telhado, um <strong>chiller</strong> resfria a água, como uma grande geladeira, e os <strong>dry coolers</strong> transferem o calor para o ar externo.",
+      "p2": "Dentro do salão ficam os <strong>racks</strong>, armários altos de aço cheios de computadores. O salão deste modelo tem 192 racks em 16 fileiras. Essa disposição é própria do modelo, já que os salões reais têm todos os tamanhos. Com todos os racks a plena carga, os computadores consomem cerca de 23 MW. Somando o resfriamento e as perdas no caminho, um data center médio precisa de cerca de 35 MW da rede. O último capítulo mostra como os mais eficientes conseguem gastar menos.",
+      "p3": "Juntos, os data centers do mundo consumiram cerca de 415 TWh de eletricidade em 2024. Isso equivale a cerca de 1,5% de toda a eletricidade usada no planeta. A Agência Internacional de Energia prevê que esse número chegue a cerca de 945 TWh até 2030. Os maiores são chamados de data centers de hiperescala, e no fim de 2024 havia 1.136 deles. O Google abriu seu primeiro data center em 2006, em The Dalles, no Oregon.",
+      "p4": "O <strong>marcador</strong> luminoso mostra onde está a energia em cada momento da animação: cor de âmbar enquanto é eletricidade, vermelho depois que se transforma em calor. A energia não se desloca em porções isoladas, mas acompanhar uma pequena quantidade dela mostra para onde vai o total. A eletricidade chega a um chip em menos de um microssegundo. O calor, depois, leva cerca de um minuto para sair pelo telhado. Por isso, a animação alonga a parte rápida e comprime a lenta. O relógio mostra o tempo do modelo, não uma medição."
+    },
+    "powerIn": {
+      "title": "Energia que não pode faltar",
+      "p1": "A eletricidade chega pela <strong>linha de transmissão</strong> em alta tensão, o que permite levá-la por longas distâncias com poucas perdas. Na <strong>subestação</strong>, os <strong>transformadores</strong> reduzem a tensão, e transformadores menores a reduzem de novo perto do salão. Cada um repassa cerca de 98 a 99% da energia. As tensões mostradas aqui são um exemplo: cada data center escolhe as suas.",
+      "p2": "Depois vêm os <strong>painéis de manobra</strong>, uma parede de grandes chaves elétricas que distribuem a energia e isolam qualquer parte que falhe. Em seguida, a energia passa pelo <strong>nobreak</strong>, também chamado de UPS, e por suas <strong>baterias</strong>. Se a rede cair, as baterias assumem imediatamente e mantêm o salão funcionando por alguns minutos, em geral de 5 a 15. Dali, o <strong>barramento blindado</strong>, feito de barras grossas de metal dentro de um invólucro comprido, leva a energia para o salão e ao longo das fileiras.",
+      "p3": "As baterias apenas ganham tempo. A verdadeira reserva são os <strong>geradores a diesel</strong>. As normas de segurança exigem que eles assumam a carga em até 10 segundos, e na prática os data centers levam de 10 a 60. Um desses grupos geradores, o Cat 3516C, da Caterpillar, fornece cerca de 1,8 MW e pesa cerca de 17 toneladas. A plena carga, queima cerca de 466 litros de diesel por hora. Versões maiores do mesmo modelo chegam a cerca de 2,5 MW.",
+      "p4": "Aperte Cortar a energia para fazer um simulado. As baterias sustentam o salão enquanto os geradores dão partida. Depois, os geradores assumem a carga, e as baterias são recarregadas. Neste modelo, a rede volta após 20 segundos, um intervalo escolhido para o simulado, e os geradores são desligados aos poucos. Os data centers são classificados pela forma como lidam com falhas: um data center Tier III pode passar por manutenção sem ser desligado, e um Tier IV continua funcionando mesmo durante um defeito. Ainda assim, problemas de energia causaram 45% das paradas graves em 2025."
+    },
+    "rack": {
+      "title": "Por dentro de um rack de 120 kW",
+      "p1": "A energia segue para um rack <strong>Nvidia GB200 NVL72</strong>. Ele abriga 72 GPUs, os chips que fazem os cálculos da IA, e 36 CPUs, os chips que gerenciam todo o resto. Eles ficam em 18 <strong>bandejas de computação</strong>, gavetas finas que deslizam para dentro do rack. Entre elas, 9 <strong>bandejas de switch</strong> interligam as 72 GPUs. A ordem das bandejas aqui é própria do modelo.",
+      "p2": "A energia entra por cima e por baixo do rack, em seis <strong>fontes de alimentação</strong>. Elas convertem a corrente alternada (CA) do salão em corrente contínua (CC), a cerca de 50 V. O <strong>barramento CC</strong>, um conjunto de barras grossas de cobre na parte de trás do rack, alimenta todas as bandejas com até 1.400 A. A cerca de 50 V, isso equivale a cerca de 70 kW, bem menos que os 120 kW do rack. Por isso, neste modelo, o barramento tem uma metade superior e uma inferior, cada uma alimentada por três fontes. A divisão real não foi divulgada.",
+      "p3": "A plena carga, o rack consome cerca de 120 kW, e a HPE informa 132 kW para a sua versão. Cerca de um décimo da energia que sai da rede se perde antes de chegar ao rack, dissipada como calor nos transformadores, no nobreak e nas fontes de alimentação. O rack pesa cerca de 1,4 tonelada, quase o mesmo que um carro elétrico de porte médio. Muitos salões têm piso elevado, com cabos e ar passando por baixo. Um piso elevado comum não foi feito para suportar tanto peso numa área tão pequena, por isso os salões de IA precisam de um piso mais resistente.",
+      "p4": "Dentro de uma GPU, a eletricidade liga e desliga transistores minúsculos para fazer os cálculos. Esse trabalho não retém nada da energia: quase toda ela se transforma em calor imediatamente, dentro do próprio chip. O <strong>chip ampliado</strong> mostra um chip 10 vezes maior, com dimensões apenas ilustrativas. Os pequenos <strong>ventiladores das bandejas</strong> ainda resfriam as placas de rede e o armazenamento. Escolha Ocioso para ver a carga cair. Neste modelo, um rack ocioso ainda consome 30% da sua potência a plena carga."
+    },
+    "network": {
+      "title": "A poucos microssegundos de distância",
+      "p1": "As grandes tarefas de IA são divididas entre muitas GPUs, por isso os chips trocam dados o tempo todo. Dentro do rack, eles usam o NVLink, conexões de cobre que passam pelas <strong>bandejas de switch</strong>. Cada GPU pode enviar e receber 1,8 TB/s, e o rack inteiro, 130 TB/s. TB/s significa terabytes por segundo, ou um trilhão de bytes a cada segundo.",
+      "p2": "De um rack para outro, os dados passam por switches de rede. Na ponta de cada fileira fica um <strong>switch leaf</strong>. Cada leaf se conecta a todos os <strong>switches spine</strong>, a espinha dorsal da rede, no centro do salão. Assim, qualquer rack alcança qualquer outro em três saltos: leaf, spine, leaf. O modelo mostra dois spines e um leaf por fileira, mas os salões reais têm muito mais.",
+      "p3": "Um switch rápido, como o 7060X6 da Arista, acrescenta cerca de 700 nanossegundos. Um nanossegundo é um bilionésimo de segundo. Na fibra óptica, que é feita de vidro, a luz leva cerca de 5 microssegundos para percorrer um quilômetro. Assim, atravessar o salão leva apenas alguns microssegundos, ou milionésimos de segundo. Observe os traços verdes que partem da <strong>entrada da fibra</strong>, passam pelos switches e chegam ao rack.",
+      "p4": "O maior atraso está no caminho até o usuário. Pela fibra, a ida e volta até uma cidade a 1.000 km leva cerca de 10 milissegundos. Para uma cidade a 100 km, cerca de 1 milissegundo. Essa conta considera apenas a fibra, e o software acrescenta o seu próprio tempo. Escolha uma distância para comparar."
+    },
+    "heatOut": {
+      "title": "Como o calor é retirado",
+      "p1": "Agora a energia é calor, e esse calor precisa ser retirado. Sobre cada chip há uma placa fria, um bloco de metal com água circulando por dentro. Numa apresentação, a Nvidia informou que a água entra no rack a cerca de 25 °C e sai a cerca de 45 °C. O modelo ajusta a vazão da bomba para que um rack a plena carga aqueça a água nesses mesmos 20 graus.",
+      "p2": "O <strong>coletor</strong>, um conjunto de tubos na lateral do rack, leva a água quente pela fileira até a <strong>unidade de distribuição de resfriamento</strong>, ou CDU, na sigla em inglês. Ali, o calor passa para um segundo circuito: a água do prédio, que circula pelo edifício inteiro. As duas águas nunca se misturam. A água do prédio trabalha cerca de 5 graus mais fria, por isso precisa chegar a cerca de 20 °C. Uma CDU, a CHx2000 da CoolIT, transfere 2 MW de calor e ocupa cerca de 1,2 m² de piso. Neste modelo, cada fileira tem a sua.",
+      "p3": "A <strong>tubulação do prédio</strong> leva o calor até o telhado. A 20 °C, a água está mais fria que o ar em muitos dias de verão, então o <strong>chiller</strong> primeiro retira calor dela. Depois, os <strong>dry coolers</strong> sopram ar externo sobre serpentinas quentes, e o calor deixa o data center na forma de ar morno. Aqui, todos os circuitos são fechados, por isso o consumo de água é muito baixo. Muitos data centers usam, em vez disso, torres de resfriamento, que funcionam pela evaporação de água. Em 2023, os data centers dos EUA consumiram cerca de 66 bilhões de litros de água no próprio local.",
+      "p4": "Escolha Ar para trocar os racks por modelos resfriados a ar, a abordagem tradicional. Ventiladores puxam ar frio pela frente de cada rack e o expelem pela traseira, num corredor quente: o espaço entre duas fileiras onde o ar quente se acumula. Os <strong>climatizadores</strong> então transferem o calor desse ar para a mesma água do prédio. O ar retém muito menos calor que a água, por isso cada kW exige cerca de 272 m³ de ar por hora. Alguns data centers aproveitam esse calor: em Odense e em Estocolmo, eles ajudam a aquecer residências."
+    },
+    "compare": {
+      "title": "Por que a água ganha",
+      "p1": "Agora encha o mesmo salão de racks resfriados a ar. Neste modelo, cada um consome 10 kW, então o salão inteiro opera com cerca de 12 vezes menos potência. O ar não permite ir muito além disso: na prática, um rack resfriado a ar chega no máximo a cerca de 20 a 35 kW. Para retirar 120 kW apenas com ar, seria preciso fazer passar cerca de 32.600 m³ de ar por um único armário a cada hora.",
+      "p2": "Ao lado do rack, há um <strong>notebook</strong> sobre uma mesa. O carregador dele é de 40 W, então um rack a plena carga equivale a 3.000 desses carregadores. Funcionando a plena carga durante um ano, um rack consome tanta eletricidade quanto cerca de 100 casas nos EUA, ou 270 na União Europeia. O ENIAC foi um dos primeiros computadores eletrônicos. Em 1945, ele consumia 150 kW, um pouco mais que este rack sozinho. Pesava cerca de 27 toneladas e ocupava uma sala inteira.",
+      "p3": "Os data centers também são comparados pelo PUE, sigla em inglês para eficiência no uso de energia. Ele é a potência total do data center dividida pela potência dos computadores, então um data center perfeito teria PUE igual a 1. A média do setor fica em torno de 1,5, o que significa que cerca de 35% da energia nunca chega a um computador. Em 2025, a média de todos os data centers do Google foi de 1,09. Apenas 8% da energia foi para o resfriamento e as perdas.",
+      "p4": "Este seletor muda o data center usado na comparação, não a forma de resfriar o rack. Nenhum estudo informa o PUE separadamente para o resfriamento a ar e a líquido, por isso o modelo não relaciona um ao outro. Qualquer que seja a escolha, o percurso da energia termina da mesma forma: como ar morno acima do telhado."
+    }
+  }
+}

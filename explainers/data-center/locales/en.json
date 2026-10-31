@@ -1,0 +1,312 @@
+{
+  "meta": {
+    "title": "How a data centre works",
+    "eyebrow": "Computing",
+    "tagline": "Follow the electricity through an AI data centre in 3D: from the grid line into a 120 kW rack, where it turns into heat, and out through the roof.",
+    "description": "Follow the power from the grid into a 120 kW AI rack, where it turns into heat, and out through the roof, in a 3D model of a data centre.",
+    "summary": "The campus and its power, the backup that keeps it running, inside a 120 kW AI rack, the network, how the heat gets out, and why water beats air.",
+    "socialAlt": "A 3D data centre campus cut open, with the power path glowing from the substation to a liquid-cooled AI rack and the heat rising to the roof, beside the title How a data centre works"
+  },
+  "stage": {
+    "label": "Interactive data centre model",
+    "gauge": "Live readings"
+  },
+  "timeline": {
+    "label": "Energy path",
+    "phases": "Jump to a stage",
+    "speed": "Playback speed",
+    "value": "{{time}} elapsed",
+    "during": "Stage {{step}} of {{total}}, {{detail}}, {{time}} elapsed",
+    "speedValue": "×{{factor}}",
+    "speedDescribe": "The whole path in {{seconds}} seconds",
+    "phase": {
+      "grid": "Grid",
+      "protect": "Backup",
+      "distribute": "To the rack",
+      "compute": "Chip",
+      "cool": "Cooling",
+      "release": "Into the air"
+    },
+    "jump": {
+      "grid": "Jump to the grid",
+      "protect": "Jump to the backup",
+      "distribute": "Jump to the busway",
+      "compute": "Jump to the chip",
+      "cool": "Jump to cooling",
+      "release": "Jump to the roof"
+    },
+    "detail": {
+      "grid": "power arrives on the grid line and steps down in the substation",
+      "protect": "power passes the switchgear and the UPS, with the generators standing by",
+      "distribute": "power runs along the busway into the hall",
+      "compute": "power enters a GPU and turns into heat",
+      "cool": "the heat leaves the rack and travels up to the roof",
+      "release": "the roof plant lets the heat out into the air"
+    },
+    "moment": {
+      "atRack": "At the rack",
+      "becomesHeat": "Turns into heat",
+      "inCoolant": "Leaves the chip",
+      "onRoof": "On the roof"
+    }
+  },
+  "controls": {
+    "label": "Model controls",
+    "cooling": "Cooling",
+    "coolingOptions": {
+      "liquid": "Liquid",
+      "air": "Air"
+    },
+    "load": "Load",
+    "loadOptions": {
+      "full": "Full",
+      "idle": "Idle"
+    },
+    "benchmarkOptions": {
+      "average": "Industry average",
+      "best": "Google fleet"
+    },
+    "distanceOptions": {
+      "km100": "100 km away",
+      "km1000": "1,000 km away"
+    },
+    "outageOptions": {
+      "cut": "Cut the grid"
+    },
+    "groups": {
+      "moment": "Jump to a moment",
+      "outage": "Power cut drill",
+      "load": "Rack load",
+      "distance": "Distance to the user",
+      "cooling": "Cooling",
+      "benchmark": "Site to compare"
+    },
+    "views": {
+      "power": {
+        "name": "Power path",
+        "short": "Power",
+        "hint": "Power path (P)"
+      },
+      "heat": {
+        "name": "Heat path",
+        "short": "Heat",
+        "hint": "Heat path (H)"
+      },
+      "packets": {
+        "name": "Network traffic",
+        "short": "Data",
+        "hint": "Network traffic (N)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      },
+      "cutaway": {
+        "name": "Cutaway",
+        "short": "Cutaway",
+        "hint": "Cutaway (C)"
+      },
+      "follow": {
+        "name": "Follow the energy",
+        "short": "Follow",
+        "hint": "Follow the energy (F)"
+      }
+    }
+  },
+  "readouts": {
+    "joule": "Energy now in",
+    "carrier": {
+      "line": "the grid line",
+      "cable": "the site cable",
+      "ups": "the UPS",
+      "busway": "the busway",
+      "busbar": "the rack busbar",
+      "chip": "the chip",
+      "water": "the cooling water",
+      "air": "the air"
+    },
+    "rackPower": "Rack power",
+    "hallPower": "Hall computers",
+    "pue": "PUE",
+    "pueSite": {
+      "average": "industry average",
+      "best": "Google fleet"
+    },
+    "supply": "Coolant into the rack",
+    "return": "Coolant out of the rack"
+  },
+  "units": {
+    "ns": "{{value}} ns",
+    "us": "{{value}} µs",
+    "ms": "{{value}} ms",
+    "s": "{{value}} s",
+    "kw": "{{value}} kW",
+    "mw": "{{value}} MW",
+    "pueOf": "{{value}}, {{site}}",
+    "celsiusOf": "{{value}} °C {{medium}}",
+    "medium": {
+      "water": "water",
+      "air": "air"
+    },
+    "celsius": "{{value}} °C",
+    "kelvin": "{{value}} degrees",
+    "m3h": "{{value}} m³/h",
+    "tonnes": "{{value}} t",
+    "percent": "{{value}}%"
+  },
+  "chapters": {
+    "building": {
+      "racks": "Racks in this model",
+      "racksValue": "{{racks}}, in {{rows}} rows",
+      "hallIt": "Power to the computers",
+      "facility": "Power from the grid",
+      "facilityValue": "about {{mw}} MW at a PUE of {{pue}}",
+      "world": "All data centres worldwide",
+      "worldValue": "about {{twh}} TWh in {{year}}, {{percent}}% of the world's electricity"
+    },
+    "powerIn": {
+      "chain": "Voltage steps, one example",
+      "chainValue": "medium voltage, then 415 V AC, then about 50 V DC",
+      "takeover": "Generators take over",
+      "takeoverValue": "within {{code}} s by code, {{min}} to {{max}} s at real sites",
+      "rideThrough": "Batteries last",
+      "rideThroughValue": "typically {{min}} to {{max}} minutes",
+      "genset": "One generator set",
+      "gensetValue": "about {{mw}} MW, about {{tonnes}} t",
+      "fuel": "Diesel at full load",
+      "fuelValue": "about {{litres}} litres an hour",
+      "outages": "Serious outages caused by power",
+      "outagesValue": "{{percent}}% in {{year}}"
+    },
+    "rack": {
+      "rackKw": "Rack power now",
+      "chips": "Chips",
+      "chipsValue": "{{gpus}} GPUs, {{cpus}} CPUs",
+      "trays": "Trays",
+      "traysValue": "{{compute}} compute, {{switch}} switch",
+      "busbar": "DC busbar",
+      "busbarValue": "up to {{amps}} A at about {{volts}} V",
+      "weight": "Weight",
+      "weightValue": "about {{tonnes}} t",
+      "lost": "Lost before the chip",
+      "lostValue": "roughly a tenth, as heat",
+      "fans": "Fans",
+      "fansValue": {
+        "liquidFull": "small tray fans, spinning fast",
+        "liquidIdle": "small tray fans, turning slowly",
+        "airFull": "big rack fans at full speed",
+        "airIdle": "big rack fans at half speed"
+      }
+    },
+    "network": {
+      "nvlink": "NVLink inside the rack",
+      "nvlinkValue": "{{gpu}} TB/s per GPU, {{rack}} TB/s in all",
+      "switch": "One switch hop",
+      "switchValue": "about {{ns}} ns",
+      "fibre": "Light in fibre",
+      "fibreValue": "about {{us}} µs per km",
+      "hall": "Across the hall",
+      "hallValue": "about {{us}} µs, three switches and the fibre",
+      "roundTrip": "Round trip to the user",
+      "roundTripValue": "about {{ms}} ms, fibre alone"
+    },
+    "heatOut": {
+      "rise": "Temperature rise through the rack",
+      "riseValue": "the {{medium}} leaves {{kelvin}} degrees warmer",
+      "facilityWater": "Facility water",
+      "facilityWaterValue": "about {{celsius}} °C, {{approach}} degrees below the rack loop",
+      "cdu": "One CDU",
+      "cduValue": "{{mw}} MW of heat on about {{area}} m²",
+      "wue": "Water per unit of computing, US",
+      "wueValue": "about {{litres}} L per kWh",
+      "usWater": "US data centres, 2023",
+      "usWaterValue": "about {{billion}} billion litres used on site"
+    },
+    "compare": {
+      "rack": "One rack at full load",
+      "airNeeded": "Air to carry that heat",
+      "homes": "Homes, over a full year",
+      "homesValue": "about {{us}} US or {{eu}} EU homes",
+      "chargers": "Laptop chargers",
+      "chargersValue": "{{count}} at 40 W each",
+      "pue": "PUE",
+      "overhead": "Not for computing",
+      "overheadValue": "{{percent}}% of site power"
+    }
+  },
+  "parts": {
+    "gridLine": "Grid line",
+    "substation": "Substation",
+    "transformers": "Transformers",
+    "generators": "Diesel generators",
+    "switchgear": "Switchgear",
+    "ups": "UPS",
+    "batteries": "Batteries",
+    "busway": "Busway",
+    "hall": "Data hall",
+    "racks": "Rack rows",
+    "subjectRack": "GB200 NVL72 rack",
+    "powerShelves": "Power shelves",
+    "busbar": "DC busbar",
+    "computeTrays": "Compute trays",
+    "switchTrays": "Switch trays",
+    "trayFans": "Tray fans",
+    "chipInset": "Chip close-up, 10 times larger",
+    "manifold": "Manifold",
+    "cdu": "Coolant distribution unit",
+    "facilityPipes": "Facility pipes",
+    "chiller": "Chiller",
+    "dryCoolers": "Dry coolers",
+    "airHandlers": "Air handlers",
+    "fibreEntry": "Fibre entry",
+    "spineSwitches": "Spine switches",
+    "leafSwitches": "Leaf switches",
+    "joule": "Energy marker",
+    "laptop": "Laptop"
+  },
+  "sections": {
+    "building": {
+      "title": "Electricity in, heat out",
+      "p1": "A data centre is a building full of computers that run websites, apps and AI. Its working cycle is simple: electricity comes in, and heat goes out. Power arrives on a <strong>grid line</strong> and steps down in the <strong>substation</strong>. Rows of <strong>diesel generators</strong> stand beside the <strong>data hall</strong>. On its roof, a <strong>chiller</strong> cools water much like a large fridge, and <strong>dry coolers</strong> pass the heat to the outside air.",
+      "p2": "Inside the hall stand the <strong>racks</strong>, tall steel cabinets packed with computers. This model's hall holds 192 racks in 16 rows, a layout of its own, since real halls come in every size. With every rack at full load, the computers draw about 23 MW. Add the cooling and the power lost on the way, and an average site takes about 35 MW from the grid. The last chapter shows how the best sites do better.",
+      "p3": "Together, the world's data centres used about 415 TWh of electricity in 2024. That is about 1.5 percent of all the electricity the world used. The International Energy Agency expects about 945 TWh by 2030. The very largest sites are called hyperscale, and there were 1,136 of them at the end of 2024. Google opened its first data centre in 2006, in The Dalles, Oregon.",
+      "p4": "The glowing <strong>marker</strong> shows where the energy is at each moment of the playback: amber while it is electricity, red once it has turned into heat. Energy does not travel in single lumps, but tracking one small amount of it shows where all of it goes. Electricity reaches a chip in under a microsecond, and the heat then needs about a minute to leave through the roof. So the playback stretches the fast part and compresses the slow one, and the clock shows the model's timing, not a measurement."
+    },
+    "powerIn": {
+      "title": "Power that must not stop",
+      "p1": "Electricity arrives on the <strong>grid line</strong> at high voltage, which carries power over long distances with little loss. The <strong>substation</strong> and its <strong>transformers</strong> step the voltage down, and smaller transformers step it down again near the hall. Each one passes on about 98 to 99 percent of the energy. The voltages here are one example; every site chooses its own.",
+      "p2": "Next comes the <strong>switchgear</strong>, a wall of large switches that route the power and isolate any part that fails. The power then passes through the <strong>UPS</strong>, short for uninterruptible power supply, and its <strong>batteries</strong>. If the grid fails, the batteries take over at once and can carry the hall for minutes, typically 5 to 15. From there the <strong>busway</strong>, thick metal bars inside a long case, carries the power into the hall and along the rows.",
+      "p3": "Batteries only buy time. The real backup is the <strong>diesel generators</strong>. Safety codes require them to take over within 10 seconds, and real sites take anywhere from 10 to 60. One such set, Caterpillar's Cat 3516C, delivers about 1.8 MW, weighs about 17 tonnes and burns about 466 litres of diesel an hour at full load. Larger versions reach about 2.5 MW.",
+      "p4": "Press Cut the grid to run a drill. The batteries carry the hall while the generators start. The generators then take over and the batteries recharge. In this model the grid returns after 20 seconds, a length chosen for the drill, and the generators wind down. Sites are rated by how well they handle failures: a Tier III site can be serviced without shutting down, and a Tier IV site keeps running through a fault. Even so, power problems caused 45 percent of serious outages in 2025."
+    },
+    "rack": {
+      "title": "Inside a 120 kW rack",
+      "p1": "The power is heading for an <strong>Nvidia GB200 NVL72</strong> rack. It holds 72 GPUs, the chips that do the maths for AI, and 36 CPUs, the chips that run everything around them. They sit on 18 <strong>compute trays</strong>, flat drawers that slide into the rack. Between them, 9 <strong>switch trays</strong> link all 72 GPUs together. The order of the trays here is the model's own.",
+      "p2": "Power enters at the top and the bottom, into six <strong>power shelves</strong>. They convert the hall's alternating current (AC) into direct current (DC) at about 50 V. The <strong>DC busbar</strong>, thick copper bars down the back of the rack, feeds every tray with up to 1,400 A. At about 50 V, that comes to about 70 kW, well short of the rack's 120 kW. So in this model the busbar has an upper and a lower half, each fed by three shelves. The real split is not published.",
+      "p3": "At full load the rack draws about 120 kW, and HPE lists 132 kW for its version. Roughly a tenth of the power from the grid is lost before it reaches the rack, as heat in the transformers, the UPS and the power shelves. The rack weighs roughly 1.4 tonnes, about as much as a mid-size electric car. Many halls stand on a raised floor, with cables and air running underneath. A standard one is not built for that much weight on a small area, so AI halls need a stronger floor.",
+      "p4": "Inside a GPU, the electricity switches tiny transistors on and off to do the maths. That work keeps none of the energy: almost all of it turns into heat at once, inside the chip. The <strong>chip close-up</strong> shows one chip 10 times larger, with its sizes drawn, not measured. Small <strong>tray fans</strong> still cool the network cards and storage. Switch to Idle to see the load drop. In this model an idle rack still draws 30 percent of its full power."
+    },
+    "network": {
+      "title": "A few microseconds apart",
+      "p1": "Large AI jobs are split across many GPUs, so the chips exchange data constantly. Inside the rack they use NVLink, copper links that run through the <strong>switch trays</strong>. Each GPU can send and receive 1.8 TB/s, and the whole rack 130 TB/s. TB/s means terabytes per second, a trillion bytes every second.",
+      "p2": "Between racks, the data goes through network switches. Each row has a <strong>leaf switch</strong> at its end. Every leaf is wired to every <strong>spine switch</strong>, the backbone in the middle. So any rack can reach any other in three hops: leaf, spine, leaf. This model draws two spines and one leaf per row, while real halls have far more.",
+      "p3": "A fast switch, such as Arista's 7060X6, adds about 700 nanoseconds. A nanosecond is a billionth of a second. In glass fibre, light needs about 5 microseconds to cover a kilometre. So crossing the hall takes just a few microseconds, or millionths of a second. Watch the green dashes run from the <strong>fibre entry</strong> through the switches to the rack.",
+      "p4": "The longest delay is the path to the user. A round trip through the fibre to a city 1,000 km away takes about 10 milliseconds. For a city 100 km away, it takes about 1. That counts the fibre alone. The software adds its own time on top. Pick a distance to compare."
+    },
+    "heatOut": {
+      "title": "Getting the heat out",
+      "p1": "The energy is now heat, and it has to be removed. On each chip sits a cold plate, a metal block with water flowing through it. In a keynote, Nvidia said the water enters the rack at about 25 °C and leaves at about 45 °C. This model sets its pump flow so that a full rack warms the water by those 20 degrees.",
+      "p2": "The <strong>manifold</strong>, pipes down the side of the rack, sends the warm water along the row to the <strong>coolant distribution unit</strong>, or CDU. There the heat passes into a second loop, the facility water that serves the whole building. The two waters never mix. The facility water runs about 5 degrees colder, so it must arrive at about 20 °C. One CDU, CoolIT's CHx2000, moves 2 MW of heat and stands on about 1.2 m² of floor. This model gives each row one.",
+      "p3": "The <strong>facility pipes</strong> carry the heat up to the roof. Water at 20 °C is cooler than many summer days, so the <strong>chiller</strong> first pumps heat out of it. Then the <strong>dry coolers</strong> blow outside air over hot coils, and the heat leaves the site as warm air. Here every loop is closed, so very little water is used. Many sites use cooling towers instead, which cool by evaporating water. US data centres used about 66 billion litres on site in 2023.",
+      "p4": "Pick Air to swap in air-cooled racks, the traditional approach. Fans pull cool air in at the front of each rack and blow it out the back, into a hot aisle: the gap between two rows where the warm air gathers. <strong>Air handlers</strong> then pass its heat into the same facility water. Air holds far less heat than water, so each kW needs about 272 m³ of air an hour. Some sites put their heat to use: in Odense and Stockholm, data centres help warm homes."
+    },
+    "compare": {
+      "title": "Why water wins",
+      "p1": "Now fill the same hall with air-cooled racks. In this model each one draws 10 kW, so the whole hall carries about a twelfth of the power. Air cannot do much better: in practice, an air-cooled rack tops out at about 20 to 35 kW. To carry away 120 kW with air, about 32,600 m³ of it would have to pass through one cabinet every hour.",
+      "p2": "Next to the rack, a <strong>laptop</strong> sits on a desk. Its charger is rated at 40 W, so one rack at full load matches 3,000 of them. Run at full load all year, one rack uses as much electricity as about 100 US homes, or 270 in the EU. ENIAC was one of the first electronic computers. In 1945 it drew 150 kW, a little more than this one rack. It weighed about 27 tonnes and filled a whole room.",
+      "p3": "Sites are also compared by their PUE, short for power usage effectiveness. It is the site's power divided by the computers' power, so a perfect site would score 1. The industry average is about 1.5, which means about 35 percent of the power never reaches a computer. Google's fleet averaged 1.09 in 2025, leaving only 8 percent for cooling and losses.",
+      "p4": "This toggle changes which site you compare against, not how the rack is cooled. No study gives PUE for air and liquid cooling separately, so the model does not tie the two together. Whichever you pick, the energy path ends the same way: as warm air above the roof."
+    }
+  }
+}

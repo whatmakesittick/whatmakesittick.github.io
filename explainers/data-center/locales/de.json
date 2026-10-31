@@ -1,0 +1,312 @@
+{
+  "meta": {
+    "title": "So funktioniert ein Rechenzentrum",
+    "eyebrow": "Computertechnik",
+    "tagline": "Verfolgen Sie den Strom in 3D durch ein KI-Rechenzentrum: von der Hochspannungsleitung bis in ein Rack mit 120 kW. Dort wird er zu Wärme, die über das Dach abgegeben wird.",
+    "description": "Verfolgen Sie im 3D-Modell eines Rechenzentrums den Strom: vom Netz in ein KI-Rack mit 120 kW, wo er zu Wärme wird, die über das Dach entweicht.",
+    "summary": "Das Gelände und seine Stromversorgung, die Notstromanlagen, die den Betrieb sichern, ein Blick in ein KI-Rack mit 120 kW, das Netzwerk, der Weg der Wärme nach draußen und warum Wasser besser kühlt als Luft.",
+    "socialAlt": "Das Gelände eines Rechenzentrums als aufgeschnittenes 3D-Modell: Der Weg des Stroms leuchtet vom Umspannwerk bis zu einem flüssigkeitsgekühlten KI-Rack, und die Wärme steigt zum Dach auf. Daneben steht der Titel „So funktioniert ein Rechenzentrum“"
+  },
+  "stage": {
+    "label": "Interaktives Modell eines Rechenzentrums",
+    "gauge": "Live-Werte"
+  },
+  "timeline": {
+    "label": "Weg der Energie",
+    "phases": "Zu einem Abschnitt springen",
+    "speed": "Wiedergabetempo",
+    "value": "{{time}} vergangen",
+    "during": "Abschnitt {{step}} von {{total}}, {{detail}}, {{time}} vergangen",
+    "speedValue": "×{{factor}}",
+    "speedDescribe": "Der ganze Weg in {{seconds}} Sekunden",
+    "phase": {
+      "grid": "Netz",
+      "protect": "Notstrom",
+      "distribute": "Zum Rack",
+      "compute": "Chip",
+      "cool": "Kühlung",
+      "release": "Ins Freie"
+    },
+    "jump": {
+      "grid": "Direkt zum Netz",
+      "protect": "Direkt zum Notstrom",
+      "distribute": "Direkt zum Schienenverteiler",
+      "compute": "Direkt zum Chip",
+      "cool": "Direkt zur Kühlung",
+      "release": "Direkt aufs Dach"
+    },
+    "detail": {
+      "grid": "der Strom kommt über die Hochspannungsleitung an, im Umspannwerk wird die Spannung gesenkt",
+      "protect": "der Strom durchläuft Schaltanlage und USV, die Generatoren stehen bereit",
+      "distribute": "der Strom fließt durch den Schienenverteiler in die Halle",
+      "compute": "der Strom erreicht eine GPU und wird zu Wärme",
+      "cool": "die Wärme verlässt das Rack und wird zum Dach geleitet",
+      "release": "die Anlagen auf dem Dach geben die Wärme an die Außenluft ab"
+    },
+    "moment": {
+      "atRack": "Am Rack",
+      "becomesHeat": "Wird zu Wärme",
+      "inCoolant": "Verlässt den Chip",
+      "onRoof": "Auf dem Dach"
+    }
+  },
+  "controls": {
+    "label": "Steuerung des Modells",
+    "cooling": "Kühlung",
+    "coolingOptions": {
+      "liquid": "Flüssigkühlung",
+      "air": "Luftkühlung"
+    },
+    "load": "Last",
+    "loadOptions": {
+      "full": "Volllast",
+      "idle": "Leerlauf"
+    },
+    "benchmarkOptions": {
+      "average": "Branchenschnitt",
+      "best": "Googles Rechenzentren"
+    },
+    "distanceOptions": {
+      "km100": "100 km entfernt",
+      "km1000": "1.000 km entfernt"
+    },
+    "outageOptions": {
+      "cut": "Netz abschalten"
+    },
+    "groups": {
+      "moment": "Zu einem Moment springen",
+      "outage": "Netzausfall simulieren",
+      "load": "Auslastung des Racks",
+      "distance": "Entfernung zum Nutzer",
+      "cooling": "Kühlung",
+      "benchmark": "Standort zum Vergleich"
+    },
+    "views": {
+      "power": {
+        "name": "Weg des Stroms",
+        "short": "Strom",
+        "hint": "Weg des Stroms (P)"
+      },
+      "heat": {
+        "name": "Weg der Wärme",
+        "short": "Wärme",
+        "hint": "Weg der Wärme (H)"
+      },
+      "packets": {
+        "name": "Netzwerkverkehr",
+        "short": "Daten",
+        "hint": "Netzwerkverkehr (N)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      },
+      "cutaway": {
+        "name": "Schnittansicht",
+        "short": "Schnitt",
+        "hint": "Schnittansicht (C)"
+      },
+      "follow": {
+        "name": "Der Energie folgen",
+        "short": "Folgen",
+        "hint": "Der Energie folgen (F)"
+      }
+    }
+  },
+  "readouts": {
+    "joule": "Energie jetzt",
+    "carrier": {
+      "line": "in der Hochspannungsleitung",
+      "cable": "im Kabel auf dem Gelände",
+      "ups": "in der USV",
+      "busway": "im Schienenverteiler",
+      "busbar": "in der DC-Stromschiene",
+      "chip": "im Chip",
+      "water": "im Kühlwasser",
+      "air": "in der Luft"
+    },
+    "rackPower": "Rackleistung",
+    "hallPower": "Computer in der Halle",
+    "pue": "PUE",
+    "pueSite": {
+      "average": "im Branchenschnitt",
+      "best": "bei Google"
+    },
+    "supply": "Ins Rack",
+    "return": "Aus dem Rack"
+  },
+  "units": {
+    "ns": "{{value}} ns",
+    "us": "{{value}} µs",
+    "ms": "{{value}} ms",
+    "s": "{{value}} s",
+    "kw": "{{value}} kW",
+    "mw": "{{value}} MW",
+    "pueOf": "{{value}} {{site}}",
+    "celsiusOf": "{{medium}} mit {{value}} °C",
+    "medium": {
+      "water": "Wasser",
+      "air": "Luft"
+    },
+    "celsius": "{{value}} °C",
+    "kelvin": "{{value}} Grad",
+    "m3h": "{{value}} m³/h",
+    "tonnes": "{{value}} t",
+    "percent": "{{value}} %"
+  },
+  "chapters": {
+    "building": {
+      "racks": "Racks im Modell",
+      "racksValue": "{{racks}} in {{rows}} Reihen",
+      "hallIt": "Leistung für die Computer",
+      "facility": "Leistung aus dem Netz",
+      "facilityValue": "etwa {{mw}} MW bei einer PUE von {{pue}}",
+      "world": "Alle Rechenzentren weltweit",
+      "worldValue": "etwa {{twh}} TWh im Jahr {{year}}, {{percent}} % des weltweiten Stromverbrauchs"
+    },
+    "powerIn": {
+      "chain": "Beispiel für die Spannungsstufen",
+      "chainValue": "Mittelspannung, dann 415 V Wechselstrom, dann etwa 50 V Gleichstrom",
+      "takeover": "Generatoren übernehmen",
+      "takeoverValue": "laut Vorschrift binnen {{code}} s, in der Praxis {{min}} bis {{max}} s",
+      "rideThrough": "Überbrückung durch Batterien",
+      "rideThroughValue": "in der Regel {{min}} bis {{max}} Minuten",
+      "genset": "Ein Dieselgenerator",
+      "gensetValue": "etwa {{mw}} MW, etwa {{tonnes}} t schwer",
+      "fuel": "Diesel bei Volllast",
+      "fuelValue": "etwa {{litres}} Liter pro Stunde",
+      "outages": "Schwere Ausfälle durch Stromprobleme",
+      "outagesValue": "{{percent}} % im Jahr {{year}}"
+    },
+    "rack": {
+      "rackKw": "Aktuelle Rackleistung",
+      "chips": "Chips",
+      "chipsValue": "{{gpus}} GPUs, {{cpus}} CPUs",
+      "trays": "Einschübe",
+      "traysValue": "{{compute}} Rechen-, {{switch}} Switch-Einschübe",
+      "busbar": "DC-Stromschiene",
+      "busbarValue": "bis {{amps}} A bei etwa {{volts}} V",
+      "weight": "Gewicht",
+      "weightValue": "etwa {{tonnes}} t",
+      "lost": "Verluste bis zum Chip",
+      "lostValue": "rund ein Zehntel, als Abwärme",
+      "fans": "Lüfter",
+      "fansValue": {
+        "liquidFull": "kleine Einschublüfter mit hoher Drehzahl",
+        "liquidIdle": "kleine Einschublüfter mit niedriger Drehzahl",
+        "airFull": "große Racklüfter mit voller Drehzahl",
+        "airIdle": "große Racklüfter mit halber Drehzahl"
+      }
+    },
+    "network": {
+      "nvlink": "NVLink im Rack",
+      "nvlinkValue": "{{gpu}} TB/s pro GPU, {{rack}} TB/s insgesamt",
+      "switch": "Verzögerung pro Switch",
+      "switchValue": "etwa {{ns}} ns",
+      "fibre": "Licht in der Glasfaser",
+      "fibreValue": "etwa {{us}} µs pro km",
+      "hall": "Quer durch die Halle",
+      "hallValue": "etwa {{us}} µs über drei Switches und Glasfaser",
+      "roundTrip": "Zum Nutzer und zurück",
+      "roundTripValue": "etwa {{ms}} ms, allein in der Glasfaser"
+    },
+    "heatOut": {
+      "rise": "Temperaturanstieg im Rack",
+      "riseValue": "{{medium}} tritt {{kelvin}} Grad wärmer aus",
+      "facilityWater": "Wasser im Gebäudekreislauf",
+      "facilityWaterValue": "etwa {{celsius}} °C, {{approach}} Grad kälter als der Kreislauf im Rack",
+      "cdu": "Eine CDU",
+      "cduValue": "{{mw}} MW Wärme auf etwa {{area}} m² Stellfläche",
+      "wue": "Wasserbedarf fürs Rechnen, USA",
+      "wueValue": "etwa {{litres}} L pro kWh",
+      "usWater": "US-Rechenzentren, 2023",
+      "usWaterValue": "etwa {{billion}} Milliarden Liter vor Ort verbraucht"
+    },
+    "compare": {
+      "rack": "Ein Rack unter Volllast",
+      "airNeeded": "Luftbedarf für diese Wärme",
+      "homes": "Jahresverbrauch",
+      "homesValue": "wie etwa {{us}} Haushalte in den USA oder {{eu}} in der EU",
+      "chargers": "Laptop-Netzteile",
+      "chargersValue": "{{count}} mit je 40 W",
+      "pue": "PUE",
+      "overhead": "Nicht fürs Rechnen",
+      "overheadValue": "{{percent}} % der Leistung des Standorts"
+    }
+  },
+  "parts": {
+    "gridLine": "Hochspannungsleitung",
+    "substation": "Umspannwerk",
+    "transformers": "Transformatoren",
+    "generators": "Dieselgeneratoren",
+    "switchgear": "Schaltanlage",
+    "ups": "USV",
+    "batteries": "Batterien",
+    "busway": "Schienenverteiler",
+    "hall": "Serverhalle",
+    "racks": "Rackreihen",
+    "subjectRack": "GB200-NVL72-Rack",
+    "powerShelves": "Netzteil-Einschübe",
+    "busbar": "DC-Stromschiene",
+    "computeTrays": "Recheneinschübe",
+    "switchTrays": "Switch-Einschübe",
+    "trayFans": "Einschublüfter",
+    "chipInset": "Chip unter der Lupe, zehnfach vergrößert",
+    "manifold": "Verteiler",
+    "cdu": "Kühlmittel-Verteileinheit",
+    "facilityPipes": "Kühlwasserleitungen",
+    "chiller": "Kältemaschine",
+    "dryCoolers": "Rückkühler",
+    "airHandlers": "Umluftkühlgeräte",
+    "fibreEntry": "Glasfaseranschluss",
+    "spineSwitches": "Spine-Switches",
+    "leafSwitches": "Leaf-Switches",
+    "joule": "Energiemarkierung",
+    "laptop": "Laptop"
+  },
+  "sections": {
+    "building": {
+      "title": "Strom hinein, Wärme hinaus",
+      "p1": "Ein Rechenzentrum ist ein Gebäude voller Computer, auf denen Websites, Apps und KI laufen. Sein Grundprinzip ist einfach: Strom fließt hinein, Wärme geht hinaus. Der Strom kommt über eine <strong>Hochspannungsleitung</strong> an, im <strong>Umspannwerk</strong> wird die Spannung gesenkt. Neben der <strong>Serverhalle</strong> stehen Reihen von <strong>Dieselgeneratoren</strong>. Auf dem Dach der Halle kühlt eine <strong>Kältemaschine</strong> Wasser, ähnlich wie ein großer Kühlschrank. <strong>Rückkühler</strong> geben die Wärme an die Außenluft ab.",
+      "p2": "In der Halle stehen die <strong>Racks</strong>: hohe Stahlschränke, dicht bestückt mit Computern. Die Halle im Modell fasst 192 Racks in 16 Reihen. Diese Aufteilung ist frei gewählt, denn echte Hallen gibt es in allen Größen. Laufen alle Racks unter Volllast, brauchen die Computer zusammen etwa 23 MW. Hinzu kommen die Kühlung und die Verluste auf dem Weg. Ein durchschnittlicher Standort bezieht deshalb etwa 35 MW aus dem Netz. Wie die besten Standorte das unterbieten, zeigt das letzte Kapitel.",
+      "p3": "Alle Rechenzentren der Welt zusammen haben 2024 etwa 415 TWh Strom verbraucht. Das sind etwa 1,5 Prozent des weltweiten Stromverbrauchs. Die Internationale Energieagentur rechnet bis 2030 mit etwa 945 TWh. Die größten Anlagen heißen Hyperscale-Rechenzentren. Ende 2024 gab es 1.136 davon. Google eröffnete sein erstes Rechenzentrum 2006 in The Dalles in Oregon.",
+      "p4": "Die leuchtende <strong>Markierung</strong> zeigt, wo sich die Energie im jeweiligen Moment der Wiedergabe befindet: bernsteinfarben, solange sie als Strom fließt, und rot, sobald sie zu Wärme geworden ist. In Wirklichkeit bewegt sich Energie nicht in einzelnen Portionen. Verfolgt man aber eine kleine Menge, wird sichtbar, wohin die gesamte Energie geht. Der Strom erreicht einen Chip in weniger als einer Mikrosekunde. Die Wärme braucht danach etwa eine Minute, bis sie über das Dach abgegeben wird. Deshalb zeigt die Wiedergabe den schnellen Teil in Zeitlupe und den langsamen im Zeitraffer. Die Uhr zeigt die Zeiten des Modells, keine Messwerte."
+    },
+    "powerIn": {
+      "title": "Strom, der nie ausfallen darf",
+      "p1": "Der Strom erreicht das Gelände über die <strong>Hochspannungsleitung</strong>. Bei hoher Spannung lässt er sich mit geringen Verlusten über weite Strecken übertragen. Im <strong>Umspannwerk</strong> senken <strong>Transformatoren</strong> die Spannung, und kleinere Transformatoren nahe der Halle senken sie ein weiteres Mal. Jeder Transformator gibt etwa 98 bis 99 Prozent der Energie weiter. Die Spannungen im Modell sind ein Beispiel. Jeder Standort legt seine eigenen fest.",
+      "p2": "Danach folgt die <strong>Schaltanlage</strong>, eine ganze Wand aus großen Schaltern. Sie verteilt den Strom und trennt jeden Abschnitt ab, in dem ein Fehler auftritt. Anschließend durchläuft der Strom die <strong>USV</strong> mit ihren <strong>Batterien</strong>. USV steht für unterbrechungsfreie Stromversorgung. Fällt das Netz aus, übernehmen die Batterien sofort. Sie können die Halle einige Minuten lang versorgen, in der Regel 5 bis 15. Von dort führt der <strong>Schienenverteiler</strong> den Strom in die Halle und an den Reihen entlang. Er besteht aus dicken Metallschienen in einem langen Gehäuse.",
+      "p3": "Batterien verschaffen nur Zeit. Die eigentliche Reserve sind die <strong>Dieselgeneratoren</strong>. Sicherheitsvorschriften verlangen, dass sie innerhalb von 10 Sekunden übernehmen. In der Praxis dauert es zwischen 10 und 60 Sekunden. Ein solches Aggregat ist der Cat 3516C von Caterpillar. Er liefert etwa 1,8 MW, wiegt etwa 17 Tonnen und verbrennt bei Volllast etwa 466 Liter Diesel pro Stunde. Größere Ausführungen kommen auf etwa 2,5 MW.",
+      "p4": "Drücken Sie „Netz abschalten“, um den Ernstfall zu proben. Die Batterien versorgen die Halle, während die Generatoren anlaufen. Dann übernehmen die Generatoren, und die Batterien werden wieder geladen. Im Modell kehrt das Netz nach 20 Sekunden zurück, und die Generatoren fahren herunter. Diese Dauer ist eigens für die Übung gewählt. Rechenzentren werden danach eingestuft, wie gut sie Störungen verkraften: Ein Standort der Stufe Tier III lässt sich im laufenden Betrieb warten, einer der Stufe Tier IV arbeitet auch bei einem Fehler weiter. Dennoch gingen 2025 noch 45 Prozent der schweren Ausfälle auf Stromprobleme zurück."
+    },
+    "rack": {
+      "title": "Blick in ein Rack mit 120 kW",
+      "p1": "Das Ziel des Stroms ist ein Rack vom Typ <strong>Nvidia GB200 NVL72</strong>. Es enthält 72 GPUs, die Chips, die die Rechenarbeit für die KI leisten. Dazu kommen 36 CPUs, die alles Übrige steuern. Die Chips sitzen in 18 <strong>Recheneinschüben</strong>, flachen Modulen, die sich ins Rack schieben lassen. Dazwischen verbinden 9 <strong>Switch-Einschübe</strong> alle 72 GPUs miteinander. Die Reihenfolge der Einschübe ist im Modell frei gewählt.",
+      "p2": "Der Strom fließt oben und unten ins Rack. Dort sitzen sechs <strong>Netzteil-Einschübe</strong>. Sie wandeln den Wechselstrom (AC) der Halle in Gleichstrom (DC) mit etwa 50 V um. Die <strong>DC-Stromschiene</strong> besteht aus dicken Kupferschienen an der Rückseite des Racks. Sie versorgt jeden Einschub und führt bis zu 1.400 A. Bei etwa 50 V sind das etwa 70 kW, deutlich weniger als die 120 kW des Racks. Deshalb hat die Stromschiene im Modell eine obere und eine untere Hälfte. Jede Hälfte wird von drei Netzteil-Einschüben gespeist. Die tatsächliche Aufteilung ist nicht veröffentlicht.",
+      "p3": "Unter Volllast braucht das Rack etwa 120 kW, HPE gibt für seine Version 132 kW an. Rund ein Zehntel des Stroms aus dem Netz geht verloren, bevor er das Rack erreicht: als Wärme in den Transformatoren, in der USV und in den Netzteil-Einschüben. Das Rack wiegt rund 1,4 Tonnen, etwa so viel wie ein mittelgroßes Elektroauto. Viele Hallen haben einen Doppelboden, unter dem Kabel verlaufen und Luft strömt. Ein üblicher Doppelboden ist nicht für so viel Gewicht auf so kleiner Fläche ausgelegt. KI-Hallen brauchen deshalb einen tragfähigeren Boden.",
+      "p4": "In einer GPU schaltet der Strom winzige Transistoren ein und aus, und so rechnet der Chip. Bei dieser Arbeit bleibt keine Energie gespeichert: Nahezu die gesamte Energie wird sofort zu Wärme, und zwar im Chip selbst. Der <strong>Chip unter der Lupe</strong> zeigt einen Chip in zehnfacher Vergrößerung. Seine Maße sind gezeichnet, nicht gemessen. Kleine <strong>Einschublüfter</strong> kühlen weiterhin die Netzwerkkarten und den Datenspeicher. Schalten Sie auf „Leerlauf“, um die Last sinken zu sehen. Im Modell braucht ein Rack auch im Leerlauf noch 30 Prozent seiner vollen Leistung."
+    },
+    "network": {
+      "title": "Nur wenige Mikrosekunden entfernt",
+      "p1": "Große KI-Aufgaben werden auf viele GPUs verteilt. Deshalb tauschen die Chips ständig Daten aus. Im Rack nutzen sie dafür NVLink: Kupferverbindungen, die durch die <strong>Switch-Einschübe</strong> laufen. Jede GPU kann 1,8 TB/s senden und empfangen, das ganze Rack 130 TB/s. TB/s steht für Terabyte pro Sekunde, also eine Billion Byte in jeder Sekunde.",
+      "p2": "Zwischen den Racks laufen die Daten über Netzwerk-Switches. Am Ende jeder Reihe sitzt ein <strong>Leaf-Switch</strong>. Jeder Leaf ist mit jedem <strong>Spine-Switch</strong> verkabelt, dem Rückgrat in der Mitte. So erreicht jedes Rack jedes andere über drei Stationen: Leaf, Spine, Leaf. Das Modell zeigt zwei Spines und einen Leaf pro Reihe. Echte Hallen haben weit mehr.",
+      "p3": "Ein schneller Switch wie der 7060X6 von Arista verzögert die Daten um etwa 700 Nanosekunden. Eine Nanosekunde ist eine Milliardstelsekunde. In der Glasfaser braucht Licht etwa 5 Mikrosekunden für einen Kilometer. Der Weg quer durch die Halle dauert deshalb nur wenige Mikrosekunden, also Millionstelsekunden. Achten Sie auf die grünen Striche: Sie laufen vom <strong>Glasfaseranschluss</strong> durch die Switches bis zum Rack.",
+      "p4": "Die größte Verzögerung entsteht auf dem Weg zum Nutzer. Hin und zurück durch die Glasfaser zu einer Stadt in 1.000 km Entfernung brauchen die Daten etwa 10 Millisekunden. Bei einer Stadt in 100 km Entfernung ist es etwa eine Millisekunde. Das ist allein die Laufzeit in der Glasfaser. Die Verarbeitung in der Software kommt noch hinzu. Wählen Sie eine Entfernung zum Vergleich."
+    },
+    "heatOut": {
+      "title": "Die Wärme muss hinaus",
+      "p1": "Die Energie liegt nun als Wärme vor und muss abgeführt werden. Auf jedem Chip sitzt eine Kühlplatte, ein Metallblock, durch den Wasser fließt. In einem Vortrag nannte Nvidia die Temperaturen: Das Wasser tritt mit etwa 25 °C ins Rack ein und verlässt es mit etwa 45 °C. Im Modell ist der Durchfluss der Pumpen so eingestellt, dass ein Rack unter Volllast das Wasser um genau diese 20 Grad erwärmt.",
+      "p2": "Der <strong>Verteiler</strong> besteht aus Rohren an der Seite des Racks. Er leitet das warme Wasser die Reihe entlang zur <strong>Kühlmittel-Verteileinheit</strong>, kurz CDU (vom englischen Coolant Distribution Unit). Dort geht die Wärme in einen zweiten Kreislauf über, der das ganze Gebäude versorgt: den Gebäudekreislauf. Das Wasser der beiden Kreisläufe vermischt sich nie. Im Gebäudekreislauf ist das Wasser etwa 5 Grad kälter. Es muss also mit etwa 20 °C ankommen. Eine CDU wie die CHx2000 von CoolIT überträgt 2 MW Wärme und braucht dafür etwa 1,2 m² Stellfläche. Im Modell hat jede Reihe eine eigene.",
+      "p3": "Die <strong>Kühlwasserleitungen</strong> bringen die Wärme hinauf aufs Dach. An vielen Sommertagen ist es draußen wärmer als 20 °C. Deshalb entzieht die <strong>Kältemaschine</strong> dem Wasser zuerst Wärme. Dann blasen die <strong>Rückkühler</strong> Außenluft über heiße Rohrschlangen, und die Wärme verlässt das Gelände als warme Luft. Hier sind alle Kreisläufe geschlossen, deshalb wird nur sehr wenig Wasser verbraucht. Viele Standorte setzen stattdessen auf Kühltürme. Sie kühlen, indem sie Wasser verdunsten lassen. Rechenzentren in den USA haben 2023 vor Ort etwa 66 Milliarden Liter Wasser verbraucht.",
+      "p4": "Wählen Sie „Luftkühlung“, und das Modell zeigt luftgekühlte Racks, die herkömmliche Bauweise. Lüfter saugen vorn kühle Luft in jedes Rack und blasen sie hinten wieder hinaus, in einen Warmgang. So heißt der Gang zwischen zwei Rackreihen, in dem sich die warme Luft sammelt. Anschließend nehmen <strong>Umluftkühlgeräte</strong> der Luft die Wärme ab und geben sie an dasselbe Wasser im Gebäudekreislauf weiter. Luft nimmt viel weniger Wärme auf als Wasser. Für jedes kW sind deshalb etwa 272 m³ Luft pro Stunde nötig. Manche Standorte nutzen ihre Abwärme: In Odense und Stockholm tragen Rechenzentren zur Beheizung von Wohnungen bei."
+    },
+    "compare": {
+      "title": "Wasser schlägt Luft",
+      "p1": "Füllen Sie nun dieselbe Halle mit luftgekühlten Racks. Im Modell braucht jedes davon 10 kW. Die ganze Halle kommt damit nur auf etwa ein Zwölftel der Leistung. Mehr lässt sich mit Luft kaum erreichen: In der Praxis liegt die Grenze für ein luftgekühltes Rack bei etwa 20 bis 35 kW. Um 120 kW mit Luft abzuführen, müssten jede Stunde etwa 32.600 m³ Luft durch einen einzigen Schrank strömen.",
+      "p2": "Neben dem Rack steht ein <strong>Laptop</strong> auf einem Schreibtisch. Sein Netzteil ist für 40 W ausgelegt. Ein Rack unter Volllast entspricht also 3.000 solchen Netzteilen. Läuft ein Rack das ganze Jahr unter Volllast, verbraucht es so viel Strom wie etwa 100 Haushalte in den USA oder 270 in der EU. Der ENIAC war einer der ersten elektronischen Computer. 1945 brauchte er 150 kW, etwas mehr als dieses eine Rack. Er wog etwa 27 Tonnen und füllte einen ganzen Raum.",
+      "p3": "Rechenzentren vergleicht man auch über ihre PUE. Die Abkürzung steht für das englische Power Usage Effectiveness, auf Deutsch Energieverbrauchseffektivität. Sie ergibt sich aus der Leistung des gesamten Standorts geteilt durch die Leistung der Rechner. Ein perfekter Standort käme also auf 1. Im Branchenschnitt liegt die PUE bei etwa 1,5. Das bedeutet: Etwa 35 Prozent des Stroms kommen nie bei einem Rechner an. Googles Rechenzentren kamen 2025 im Schnitt auf 1,09. Für Kühlung und Verluste bleiben damit nur 8 Prozent.",
+      "p4": "Diese Auswahl legt nur fest, mit welchem Standort Sie vergleichen. Wie das Rack gekühlt wird, ändert sie nicht. Keine Studie gibt die PUE für Luft- und Flüssigkühlung getrennt an. Deshalb verknüpft das Modell die PUE nicht mit der Kühlart. Unabhängig von Ihrer Wahl endet der Weg der Energie immer gleich: als warme Luft über dem Dach."
+    }
+  }
+}

@@ -1,0 +1,490 @@
+<section class="chapter" data-preset="building" aria-labelledby="building-title">
+  <p class="chapter-index">01</p>
+  <h2 id="building-title" data-i18n="sections.building.title">Electricity in, heat out</h2>
+  <p data-i18n-html="sections.building.p1">
+    A data centre is a building full of computers that run websites, apps and AI. Its working cycle
+    is simple: electricity comes in, and heat goes out. Power arrives on a
+    <strong>grid line</strong> and steps down in the <strong>substation</strong>. Rows of
+    <strong>diesel generators</strong> stand beside the <strong>data hall</strong>. On its roof, a
+    <strong>chiller</strong> cools water much like a large fridge, and
+    <strong>dry coolers</strong> pass the heat to the outside air.
+  </p>
+  <p data-i18n-html="sections.building.p2">
+    Inside the hall stand the <strong>racks</strong>, tall steel cabinets packed with computers.
+    This model's hall holds 192 racks in 16 rows, a layout of its own, since real halls come in
+    every size. With every rack at full load, the computers draw about 23 MW. Add the cooling and
+    the power lost on the way, and an average site takes about 35 MW from the grid. The last chapter
+    shows how the best sites do better.
+  </p>
+  <p data-i18n-html="sections.building.p3">
+    Together, the world's data centres used about 415 TWh of electricity in 2024. That is about 1.5
+    percent of all the electricity the world used. The International Energy Agency expects about 945
+    TWh by 2030. The very largest sites are called hyperscale, and there were 1,136 of them at the
+    end of 2024. Google opened its first data centre in 2006, in The Dalles, Oregon.
+  </p>
+  <p data-i18n-html="sections.building.p4">
+    The glowing <strong>marker</strong> shows where the energy is at each moment of the playback:
+    amber while it is electricity, red once it has turned into heat. Energy does not travel in
+    single lumps, but tracking one small amount of it shows where all of it goes. Electricity
+    reaches a chip in under a microsecond, and the heat then needs about a minute to leave through
+    the roof. So the playback stretches the fast part and compresses the slow one, and the clock
+    shows the model's timing, not a measurement.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.moment">
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="atRack"
+      data-i18n="timeline.moment.atRack"
+    >
+      At the rack
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="becomesHeat"
+      data-i18n="timeline.moment.becomesHeat"
+    >
+      Turns into heat
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="inCoolant"
+      data-i18n="timeline.moment.inCoolant"
+    >
+      Leaves the chip
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="moment"
+      data-value="onRoof"
+      data-i18n="timeline.moment.onRoof"
+    >
+      On the roof
+    </button>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.building.racks">Racks in this model</dt>
+      <dd class="number" data-readout="racks">192, in 16 rows</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.building.hallIt">Power to the computers</dt>
+      <dd class="number" data-readout="hallIt">23.0 MW</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.building.facility">Power from the grid</dt>
+      <dd class="number" data-readout="facility">about 35.5 MW at a PUE of 1.54</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.building.world">All data centres worldwide</dt>
+      <dd class="number" data-readout="world">
+        about 415 TWh in 2024, 1.5% of the world's electricity
+      </dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="powerIn" aria-labelledby="powerIn-title">
+  <p class="chapter-index">02</p>
+  <h2 id="powerIn-title" data-i18n="sections.powerIn.title">Power that must not stop</h2>
+  <p data-i18n-html="sections.powerIn.p1">
+    Electricity arrives on the <strong>grid line</strong> at high voltage, which carries power over
+    long distances with little loss. The <strong>substation</strong> and its
+    <strong>transformers</strong> step the voltage down, and smaller transformers step it down again
+    near the hall. Each one passes on about 98 to 99 percent of the energy. The voltages here are
+    one example; every site chooses its own.
+  </p>
+  <p data-i18n-html="sections.powerIn.p2">
+    Next comes the <strong>switchgear</strong>, a wall of large switches that route the power and
+    isolate any part that fails. The power then passes through the <strong>UPS</strong>, short for
+    uninterruptible power supply, and its <strong>batteries</strong>. If the grid fails, the
+    batteries take over at once and can carry the hall for minutes, typically 5 to 15. From there
+    the <strong>busway</strong>, thick metal bars inside a long case, carries the power into the
+    hall and along the rows.
+  </p>
+  <p data-i18n-html="sections.powerIn.p3">
+    Batteries only buy time. The real backup is the <strong>diesel generators</strong>. Safety codes
+    require them to take over within 10 seconds, and real sites take anywhere from 10 to 60. One
+    such set, Caterpillar's Cat 3516C, delivers about 1.8 MW, weighs about 17 tonnes and burns about
+    466 litres of diesel an hour at full load. Larger versions reach about 2.5 MW.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.outage">
+    <button
+      type="button"
+      class="chip"
+      data-action="outage"
+      data-value="cut"
+      data-i18n="controls.outageOptions.cut"
+    >
+      Cut the grid
+    </button>
+  </div>
+  <p data-i18n-html="sections.powerIn.p4">
+    Press Cut the grid to run a drill. The batteries carry the hall while the generators start. The
+    generators then take over and the batteries recharge. In this model the grid returns after 20
+    seconds, a length chosen for the drill, and the generators wind down. Sites are rated by how
+    well they handle failures: a Tier III site can be serviced without shutting down, and a Tier IV
+    site keeps running through a fault. Even so, power problems caused 45 percent of serious outages
+    in 2025.
+  </p>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.powerIn.chain">Voltage steps, one example</dt>
+      <dd class="number" data-readout="chain">medium voltage, then 415 V AC, then about 50 V DC</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.powerIn.takeover">Generators take over</dt>
+      <dd class="number" data-readout="takeover">within 10 s by code, 10 to 60 s at real sites</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.powerIn.rideThrough">Batteries last</dt>
+      <dd class="number" data-readout="rideThrough">typically 5 to 15 minutes</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.powerIn.genset">One generator set</dt>
+      <dd class="number" data-readout="genset">about 1.8 MW, about 17 t</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.powerIn.fuel">Diesel at full load</dt>
+      <dd class="number" data-readout="fuel">about 466 litres an hour</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.powerIn.outages">Serious outages caused by power</dt>
+      <dd class="number" data-readout="outages">45% in 2025</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="rack" aria-labelledby="rack-title">
+  <p class="chapter-index">03</p>
+  <h2 id="rack-title" data-i18n="sections.rack.title">Inside a 120 kW rack</h2>
+  <p data-i18n-html="sections.rack.p1">
+    The power is heading for an <strong>Nvidia GB200 NVL72</strong> rack. It holds 72 GPUs, the
+    chips that do the maths for AI, and 36 CPUs, the chips that run everything around them. They sit
+    on 18 <strong>compute trays</strong>, flat drawers that slide into the rack. Between them, 9
+    <strong>switch trays</strong> link all 72 GPUs together. The order of the trays here is the
+    model's own.
+  </p>
+  <p data-i18n-html="sections.rack.p2">
+    Power enters at the top and the bottom, into six <strong>power shelves</strong>. They convert
+    the hall's alternating current (AC) into direct current (DC) at about 50 V. The
+    <strong>DC busbar</strong>, thick copper bars down the back of the rack, feeds every tray with
+    up to 1,400 A. At about 50 V, that comes to about 70 kW, well short of the rack's 120 kW. So in
+    this model the busbar has an upper and a lower half, each fed by three shelves. The real split
+    is not published.
+  </p>
+  <p data-i18n-html="sections.rack.p3">
+    At full load the rack draws about 120 kW, and HPE lists 132 kW for its version. Roughly a tenth
+    of the power from the grid is lost before it reaches the rack, as heat in the transformers, the
+    UPS and the power shelves. The rack weighs roughly 1.4 tonnes, about as much as a mid-size
+    electric car. Many halls stand on a raised floor, with cables and air running underneath. A
+    standard one is not built for that much weight on a small area, so AI halls need a stronger
+    floor.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.load">
+    <button
+      type="button"
+      class="chip"
+      data-action="load"
+      data-value="full"
+      data-i18n="controls.loadOptions.full"
+    >
+      Full
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="load"
+      data-value="idle"
+      data-i18n="controls.loadOptions.idle"
+    >
+      Idle
+    </button>
+  </div>
+  <p data-i18n-html="sections.rack.p4">
+    Inside a GPU, the electricity switches tiny transistors on and off to do the maths. That work
+    keeps none of the energy: almost all of it turns into heat at once, inside the chip. The
+    <strong>chip close-up</strong> shows one chip 10 times larger, with its sizes drawn, not
+    measured. Small <strong>tray fans</strong> still cool the network cards and storage. Switch to
+    Idle to see the load drop. In this model an idle rack still draws 30 percent of its full power.
+  </p>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.rack.rackKw">Rack power now</dt>
+      <dd class="number" data-readout="rackKw">120 kW</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.rack.chips">Chips</dt>
+      <dd class="number" data-readout="chips">72 GPUs, 36 CPUs</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.rack.trays">Trays</dt>
+      <dd class="number" data-readout="trays">18 compute, 9 switch</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.rack.busbar">DC busbar</dt>
+      <dd class="number" data-readout="busbar">up to 1,400 A at about 50 V</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.rack.weight">Weight</dt>
+      <dd class="number" data-readout="weight">about 1.4 t</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.rack.lost">Lost before the chip</dt>
+      <dd class="number" data-readout="lost">roughly a tenth, as heat</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.rack.fans">Fans</dt>
+      <dd class="number" data-readout="fans">small tray fans, spinning fast</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="network" aria-labelledby="network-title">
+  <p class="chapter-index">04</p>
+  <h2 id="network-title" data-i18n="sections.network.title">A few microseconds apart</h2>
+  <p data-i18n-html="sections.network.p1">
+    Large AI jobs are split across many GPUs, so the chips exchange data constantly. Inside the rack
+    they use NVLink, copper links that run through the <strong>switch trays</strong>. Each GPU can
+    send and receive 1.8 TB/s, and the whole rack 130 TB/s. TB/s means terabytes per second, a
+    trillion bytes every second.
+  </p>
+  <p data-i18n-html="sections.network.p2">
+    Between racks, the data goes through network switches. Each row has a
+    <strong>leaf switch</strong> at its end. Every leaf is wired to every
+    <strong>spine switch</strong>, the backbone in the middle. So any rack can reach any other in
+    three hops: leaf, spine, leaf. This model draws two spines and one leaf per row, while real
+    halls have far more.
+  </p>
+  <p data-i18n-html="sections.network.p3">
+    A fast switch, such as Arista's 7060X6, adds about 700 nanoseconds. A nanosecond is a billionth
+    of a second. In glass fibre, light needs about 5 microseconds to cover a kilometre. So crossing
+    the hall takes just a few microseconds, or millionths of a second. Watch the green dashes run
+    from the <strong>fibre entry</strong> through the switches to the rack.
+  </p>
+  <p data-i18n-html="sections.network.p4">
+    The longest delay is the path to the user. A round trip through the fibre to a city 1,000 km
+    away takes about 10 milliseconds. For a city 100 km away, it takes about 1. That counts the
+    fibre alone. The software adds its own time on top. Pick a distance to compare.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.distance">
+    <button
+      type="button"
+      class="chip"
+      data-action="distance"
+      data-value="km100"
+      data-i18n="controls.distanceOptions.km100"
+    >
+      100 km away
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="distance"
+      data-value="km1000"
+      data-i18n="controls.distanceOptions.km1000"
+    >
+      1,000 km away
+    </button>
+  </div>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.network.nvlink">NVLink inside the rack</dt>
+      <dd class="number" data-readout="nvlink">1.8 TB/s per GPU, 130 TB/s in all</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.network.switch">One switch hop</dt>
+      <dd class="number" data-readout="switch">about 700 ns</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.network.fibre">Light in fibre</dt>
+      <dd class="number" data-readout="fibre">about 4.9 µs per km</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.network.hall">Across the hall</dt>
+      <dd class="number" data-readout="hall">about 2.6 µs, three switches and the fibre</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.network.roundTrip">Round trip to the user</dt>
+      <dd class="number" data-readout="roundTrip">about 9.8 ms, fibre alone</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="heatOut" aria-labelledby="heatOut-title">
+  <p class="chapter-index">05</p>
+  <h2 id="heatOut-title" data-i18n="sections.heatOut.title">Getting the heat out</h2>
+  <p data-i18n-html="sections.heatOut.p1">
+    The energy is now heat, and it has to be removed. On each chip sits a cold plate, a metal block
+    with water flowing through it. In a keynote, Nvidia said the water enters the rack at about 25
+    °C and leaves at about 45 °C. This model sets its pump flow so that a full rack warms the water
+    by those 20 degrees.
+  </p>
+  <p data-i18n-html="sections.heatOut.p2">
+    The <strong>manifold</strong>, pipes down the side of the rack, sends the warm water along the
+    row to the <strong>coolant distribution unit</strong>, or CDU. There the heat passes into a
+    second loop, the facility water that serves the whole building. The two waters never mix. The
+    facility water runs about 5 degrees colder, so it must arrive at about 20 °C. One CDU, CoolIT's
+    CHx2000, moves 2 MW of heat and stands on about 1.2 m² of floor. This model gives each row one.
+  </p>
+  <p data-i18n-html="sections.heatOut.p3">
+    The <strong>facility pipes</strong> carry the heat up to the roof. Water at 20 °C is cooler than
+    many summer days, so the <strong>chiller</strong> first pumps heat out of it. Then the
+    <strong>dry coolers</strong> blow outside air over hot coils, and the heat leaves the site as
+    warm air. Here every loop is closed, so very little water is used. Many sites use cooling towers
+    instead, which cool by evaporating water. US data centres used about 66 billion litres on site
+    in 2023.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.cooling">
+    <button
+      type="button"
+      class="chip"
+      data-action="cooling"
+      data-value="liquid"
+      data-i18n="controls.coolingOptions.liquid"
+    >
+      Liquid
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="cooling"
+      data-value="air"
+      data-i18n="controls.coolingOptions.air"
+    >
+      Air
+    </button>
+  </div>
+  <p data-i18n-html="sections.heatOut.p4">
+    Pick Air to swap in air-cooled racks, the traditional approach. Fans pull cool air in at the
+    front of each rack and blow it out the back, into a hot aisle: the gap between two rows where
+    the warm air gathers. <strong>Air handlers</strong> then pass its heat into the same facility
+    water. Air holds far less heat than water, so each kW needs about 272 m³ of air an hour. Some
+    sites put their heat to use: in Odense and Stockholm, data centres help warm homes.
+  </p>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.heatOut.rise">Temperature rise through the rack</dt>
+      <dd class="number" data-readout="rise">the water leaves 20 degrees warmer</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.heatOut.facilityWater">Facility water</dt>
+      <dd class="number" data-readout="facilityWater">
+        about 20 °C, 5 degrees below the rack loop
+      </dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.heatOut.cdu">One CDU</dt>
+      <dd class="number" data-readout="cdu">2 MW of heat on about 1.2 m²</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.heatOut.wue">Water per unit of computing, US</dt>
+      <dd class="number" data-readout="wue">about 0.36 L per kWh</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.heatOut.usWater">US data centres, 2023</dt>
+      <dd class="number" data-readout="usWater">about 66 billion litres used on site</dd>
+    </div>
+  </dl>
+</section>
+
+<section class="chapter" data-preset="compare" aria-labelledby="compare-title">
+  <p class="chapter-index">06</p>
+  <h2 id="compare-title" data-i18n="sections.compare.title">Why water wins</h2>
+  <p data-i18n-html="sections.compare.p1">
+    Now fill the same hall with air-cooled racks. In this model each one draws 10 kW, so the whole
+    hall carries about a twelfth of the power. Air cannot do much better: in practice, an air-cooled
+    rack tops out at about 20 to 35 kW. To carry away 120 kW with air, about 32,600 m³ of it would
+    have to pass through one cabinet every hour.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.cooling">
+    <button
+      type="button"
+      class="chip"
+      data-action="cooling"
+      data-value="liquid"
+      data-i18n="controls.coolingOptions.liquid"
+    >
+      Liquid
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="cooling"
+      data-value="air"
+      data-i18n="controls.coolingOptions.air"
+    >
+      Air
+    </button>
+  </div>
+  <p data-i18n-html="sections.compare.p2">
+    Next to the rack, a <strong>laptop</strong> sits on a desk. Its charger is rated at 40 W, so one
+    rack at full load matches 3,000 of them. Run at full load all year, one rack uses as much
+    electricity as about 100 US homes, or 270 in the EU. ENIAC was one of the first electronic
+    computers. In 1945 it drew 150 kW, a little more than this one rack. It weighed about 27 tonnes
+    and filled a whole room.
+  </p>
+  <p data-i18n-html="sections.compare.p3">
+    Sites are also compared by their PUE, short for power usage effectiveness. It is the site's
+    power divided by the computers' power, so a perfect site would score 1. The industry average is
+    about 1.5, which means about 35 percent of the power never reaches a computer. Google's fleet
+    averaged 1.09 in 2025, leaving only 8 percent for cooling and losses.
+  </p>
+  <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.benchmark">
+    <button
+      type="button"
+      class="chip"
+      data-action="benchmark"
+      data-value="average"
+      data-i18n="controls.benchmarkOptions.average"
+    >
+      Industry average
+    </button>
+    <button
+      type="button"
+      class="chip"
+      data-action="benchmark"
+      data-value="best"
+      data-i18n="controls.benchmarkOptions.best"
+    >
+      Google fleet
+    </button>
+  </div>
+  <p data-i18n-html="sections.compare.p4">
+    This toggle changes which site you compare against, not how the rack is cooled. No study gives
+    PUE for air and liquid cooling separately, so the model does not tie the two together. Whichever
+    you pick, the energy path ends the same way: as warm air above the roof.
+  </p>
+  <dl class="readouts">
+    <div>
+      <dt data-i18n="chapters.compare.rack">One rack at full load</dt>
+      <dd class="number" data-readout="cmpRack">120 kW</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.compare.airNeeded">Air to carry that heat</dt>
+      <dd class="number" data-readout="airNeeded">32,640 m³/h</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.compare.homes">Homes, over a full year</dt>
+      <dd class="number" data-readout="homes">about 97 US or 270 EU homes</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.compare.chargers">Laptop chargers</dt>
+      <dd class="number" data-readout="chargers">3,000 at 40 W each</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.compare.pue">PUE</dt>
+      <dd class="number" data-readout="cmpPue">1.54, industry average</dd>
+    </div>
+    <div>
+      <dt data-i18n="chapters.compare.overhead">Not for computing</dt>
+      <dd class="number" data-readout="overhead">35% of site power</dd>
+    </div>
+  </dl>
+</section>
