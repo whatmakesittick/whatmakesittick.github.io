@@ -2,9 +2,9 @@
   "meta": {
     "title": "Cómo funciona un centro de datos",
     "eyebrow": "Informática",
-    "tagline": "Acompaña a un julio de energía por un centro de datos de IA en 3D: llega por la línea eléctrica, entra en un rack de 120 kW, se vuelve calor y escapa por el tejado.",
-    "description": "Sigue a un julio por un centro de datos en 3D: llega de la red a un rack de IA de 120 kW, se convierte en calor y sale por el tejado.",
-    "summary": "El campus y su electricidad, el respaldo que nunca lo deja parar, el interior de un rack de IA de 120 kW, la red de datos, cómo sale el calor y por qué el agua le gana al aire.",
+    "tagline": "Sigue la electricidad por un centro de datos de IA en 3D: desde la red hasta un rack de 120 kW, donde se convierte en calor, y de ahí al exterior por el tejado.",
+    "description": "Un modelo 3D de un centro de datos: sigue la electricidad desde la red hasta un rack de IA de 120 kW, donde se convierte en calor que sale por el tejado.",
+    "summary": "El campus y su suministro eléctrico, el respaldo que lo mantiene en marcha, el interior de un rack de IA de 120 kW, la red de datos, cómo se evacua el calor y por qué el agua supera al aire.",
     "socialAlt": "Un centro de datos en 3D abierto en corte: un trazo luminoso lleva la electricidad desde la subestación hasta un rack de IA refrigerado por líquido, y el calor sube hacia el tejado. Al lado, el título «Cómo funciona un centro de datos»"
   },
   "stage": {
@@ -12,17 +12,17 @@
     "gauge": "Datos en tiempo real"
   },
   "timeline": {
-    "label": "El viaje de un julio",
+    "label": "Recorrido de la energía",
     "phases": "Ir a una etapa",
     "speed": "Velocidad de reproducción",
-    "value": "{{time}} de viaje",
-    "during": "Etapa {{step}} de {{total}}, {{detail}}, {{time}} de viaje",
+    "value": "{{time}} desde el inicio",
+    "during": "Etapa {{step}} de {{total}}, {{detail}}, {{time}} desde el inicio",
     "speedValue": "×{{factor}}",
-    "speedDescribe": "El viaje completo en {{seconds}} segundos",
+    "speedDescribe": "El recorrido completo en {{seconds}} segundos",
     "phase": {
       "grid": "Red eléctrica",
       "protect": "Respaldo",
-      "distribute": "Hacia el rack",
+      "distribute": "Distribución",
       "compute": "Chip",
       "cool": "Refrigeración",
       "release": "Al exterior"
@@ -36,16 +36,16 @@
       "release": "Ir al tejado"
     },
     "detail": {
-      "grid": "el julio viaja por la línea eléctrica y la subestación le baja la tensión",
-      "protect": "el julio cruza los cuadros eléctricos y el SAI, con los generadores listos para arrancar",
-      "distribute": "el julio recorre la blindobarra hasta la sala",
-      "compute": "el julio entra en una GPU y se convierte en calor",
+      "grid": "la corriente llega por la línea eléctrica y la subestación reduce su tensión",
+      "protect": "la corriente pasa por los cuadros eléctricos y el SAI, con los generadores en espera",
+      "distribute": "la corriente avanza por la blindobarra hasta la sala",
+      "compute": "la electricidad entra en una GPU y se convierte en calor",
       "cool": "el calor sale del rack y sube hasta el tejado",
-      "release": "los equipos del tejado sueltan el calor al aire"
+      "release": "los equipos del tejado liberan el calor al aire exterior"
     },
     "moment": {
       "atRack": "En el rack",
-      "becomesHeat": "Se convierte en calor",
+      "becomesHeat": "Se vuelve calor",
       "inCoolant": "Sale del chip",
       "onRoof": "En el tejado"
     }
@@ -77,7 +77,7 @@
       "moment": "Ir a un momento",
       "outage": "Simulacro de apagón",
       "load": "Carga del rack",
-      "distance": "A qué distancia estás",
+      "distance": "Distancia al usuario",
       "cooling": "Refrigeración",
       "benchmark": "Comparar con"
     },
@@ -108,14 +108,14 @@
         "hint": "Vista en corte (C)"
       },
       "follow": {
-        "name": "Seguir al julio",
+        "name": "Seguir la energía",
         "short": "Seguir",
-        "hint": "Seguir al julio (F)"
+        "hint": "Seguir la energía (F)"
       }
     }
   },
   "readouts": {
-    "joule": "El julio está ahora",
+    "joule": "La energía está",
     "carrier": {
       "line": "en la línea eléctrica",
       "cable": "en el cable del recinto",
@@ -190,12 +190,12 @@
       "weight": "Peso",
       "weightValue": "unas {{tonnes}} t",
       "lost": "Pérdidas antes del chip",
-      "lostValue": "más o menos una décima parte, en forma de calor",
+      "lostValue": "en torno a una décima parte, en forma de calor",
       "fans": "Ventiladores",
       "fansValue": {
-        "liquidFull": "pequeños, en las bandejas, girando deprisa",
-        "liquidIdle": "pequeños, en las bandejas, girando despacio",
-        "airFull": "grandes, en el rack, a toda velocidad",
+        "liquidFull": "pequeños, en las bandejas, a alta velocidad",
+        "liquidIdle": "pequeños, en las bandejas, a baja velocidad",
+        "airFull": "grandes, en el rack, a máxima velocidad",
         "airIdle": "grandes, en el rack, a media velocidad"
       }
     },
@@ -206,13 +206,13 @@
       "switchValue": "unos {{ns}} ns",
       "fibre": "La luz en la fibra",
       "fibreValue": "unos {{us}} µs por km",
-      "hall": "De punta a punta de la sala",
-      "hallValue": "unos {{us}} µs, contando tres conmutadores y la fibra",
-      "roundTrip": "Ida y vuelta hasta ti",
-      "roundTripValue": "unos {{ms}} ms, contando solo la fibra"
+      "hall": "De un extremo a otro de la sala",
+      "hallValue": "unos {{us}} µs, con tres conmutadores y la fibra",
+      "roundTrip": "Ida y vuelta hasta el usuario",
+      "roundTripValue": "unos {{ms}} ms, solo por la fibra"
     },
     "heatOut": {
-      "rise": "Subida de temperatura en el rack",
+      "rise": "Aumento de temperatura en el rack",
       "riseValue": "el {{medium}} sale {{kelvin}} grados más caliente",
       "facilityWater": "Agua de la instalación",
       "facilityWaterValue": "unos {{celsius}} °C, {{approach}} grados menos que el circuito del rack",
@@ -225,7 +225,7 @@
     },
     "compare": {
       "rack": "Un rack a plena carga",
-      "airNeeded": "Aire para llevarse ese calor",
+      "airNeeded": "Aire para evacuar ese calor",
       "homes": "Hogares con el mismo consumo anual",
       "homesValue": "unos {{us}} de EE. UU. o {{eu}} de la UE",
       "chargers": "Cargadores de portátil",
@@ -262,51 +262,51 @@
     "fibreEntry": "Entrada de fibra",
     "spineSwitches": "Conmutadores espina",
     "leafSwitches": "Conmutadores hoja",
-    "joule": "Un julio",
+    "joule": "Marcador de energía",
     "laptop": "Portátil"
   },
   "sections": {
     "building": {
       "title": "Entra electricidad, sale calor",
-      "p1": "Un centro de datos es un edificio lleno de ordenadores. En ellos funcionan las webs, las aplicaciones y la inteligencia artificial (IA). Imagínatelo como una gran máquina con un ciclo muy sencillo: entra electricidad y sale calor. La corriente llega por una <strong>línea eléctrica</strong>, y en la <strong>subestación</strong> se le baja la tensión. Junto a la <strong>sala de servidores</strong> aguardan filas de <strong>generadores diésel</strong>. En el tejado, una <strong>enfriadora</strong> hace de nevera gigante y baja la temperatura del agua. Al lado, los <strong>aerorrefrigeradores</strong> sueltan el calor al aire de fuera.",
-      "p2": "Dentro de la sala se alinean los <strong>racks</strong>, unos armarios altos de acero repletos de ordenadores. La sala de este modelo tiene 192, repartidos en 16 filas. Esa distribución es propia del modelo, porque en la vida real hay salas de todos los tamaños. Con todos los racks a pleno rendimiento, los ordenadores consumen unos 23 MW. Suma la refrigeración y la energía que se pierde por el camino, y un centro medio acaba tomando unos 35 MW de la red. En el último capítulo verás cómo los centros más eficientes rebajan esa cifra.",
-      "p3": "Entre todos, los centros de datos del mundo gastaron unos 415 TWh de electricidad en 2024. Es alrededor del 1,5 % de toda la que consumió el planeta. Para 2030, la Agencia Internacional de la Energía prevé que lleguen a unos 945 TWh. Los centros más grandes se llaman de hiperescala, y a finales de 2024 había 1136. Google abrió el primero de los suyos en 2006, en The Dalles (Oregón).",
-      "p4": "En este modelo vas a seguir a un <strong>julio</strong>, una pequeña cantidad de energía, en su recorrido por el centro. La energía real no viaja en paquetitos sueltos, pero seguir uno te enseña adónde va a parar toda. El julio es la bolita que brilla: ámbar mientras es electricidad, roja en cuanto se convierte en calor. Llega a su chip en menos de un microsegundo y luego tarda cerca de un minuto en salir por el tejado. Por eso la reproducción estira la parte rápida y encoge la lenta. El reloj marca los tiempos del modelo, no una medición."
+      "p1": "Un centro de datos es un edificio lleno de ordenadores que hacen funcionar webs, aplicaciones e inteligencia artificial (IA). Su principio es sencillo: entra electricidad y sale calor. La corriente llega por una <strong>línea eléctrica</strong>, y la <strong>subestación</strong> reduce su tensión. Junto a la <strong>sala de servidores</strong> hay filas de <strong>generadores diésel</strong>. En el tejado, una <strong>enfriadora</strong> baja la temperatura del agua, como un gran frigorífico. Los <strong>aerorrefrigeradores</strong> ceden después el calor al aire exterior.",
+      "p2": "En la sala se alinean los <strong>racks</strong>, armarios altos de acero llenos de ordenadores. La sala de este modelo tiene 192 racks en 16 filas. Es una distribución propia del modelo, porque las salas reales son de todos los tamaños. Con todos los racks a plena carga, los ordenadores consumen unos 23 MW. Si sumas la refrigeración y la energía que se pierde por el camino, un centro medio toma unos 35 MW de la red. En el último capítulo verás cómo los centros más eficientes mejoran esa cifra.",
+      "p3": "En conjunto, los centros de datos del mundo consumieron unos 415 TWh de electricidad en 2024. Es alrededor del 1,5 % de toda la electricidad que se usó en el planeta. Para 2030, la Agencia Internacional de la Energía prevé unos 945 TWh. Los más grandes se denominan centros de hiperescala, y a finales de 2024 había 1136. Google abrió su primer centro de datos en 2006, en The Dalles (Oregón).",
+      "p4": "El <strong>marcador</strong> luminoso indica dónde está la energía en cada momento de la reproducción: ámbar mientras es electricidad, rojo cuando ya se ha convertido en calor. La energía no circula en porciones aisladas, pero seguir una pequeña cantidad muestra adónde va el conjunto. La electricidad llega a un chip en menos de un microsegundo, y después el calor tarda cerca de un minuto en salir por el tejado. Por eso la reproducción alarga la parte rápida y comprime la lenta. El reloj muestra los tiempos del modelo, no una medición."
     },
     "powerIn": {
       "title": "Electricidad que no puede faltar",
-      "p1": "El julio llega por la <strong>línea eléctrica</strong> en alta tensión, que es la forma de llevar la electricidad muy lejos casi sin pérdidas. En la <strong>subestación</strong>, sus <strong>transformadores</strong> bajan la tensión. Cerca de la sala, otros más pequeños la vuelven a bajar. Cada uno deja pasar en torno al 98 o 99 % de la energía. Las tensiones que ves aquí son solo un ejemplo: cada centro elige las suyas.",
-      "p2": "Luego vienen los <strong>cuadros eléctricos</strong>, una pared de grandes interruptores que reparten la corriente y aíslan cualquier tramo que falle. Después, el julio atraviesa el <strong>SAI</strong> (sistema de alimentación ininterrumpida) y sus <strong>baterías</strong>. Si se va la red, las baterías entran en acción al instante. Pueden sostener la sala durante unos minutos, normalmente entre 5 y 15. A partir de ahí, la <strong>blindobarra</strong> lleva la corriente hasta la sala y la reparte a lo largo de las filas. Son unas gruesas barras de metal metidas en una carcasa alargada.",
-      "p3": "Las baterías solo sirven para ganar tiempo. El respaldo de verdad son los <strong>generadores diésel</strong>. Las normas de seguridad les exigen tomar el relevo en 10 segundos como máximo. En los centros reales, tardan entre 10 y 60. Un grupo electrógeno de este tipo, el Cat 3516C de Caterpillar, da unos 1,8 MW y pesa unas 17 toneladas. A plena carga, quema unos 466 litros de gasóleo por hora. Sus variantes más grandes llegan a unos 2,5 MW.",
-      "p4": "Pulsa «Cortar la red» para hacer un simulacro. Mientras arrancan los generadores, las baterías sostienen la sala. Después, los generadores toman el relevo y las baterías se recargan. En este modelo, la red vuelve a los 20 segundos, una duración elegida para el simulacro, y los generadores se van apagando. Los centros se clasifican según cómo resisten los fallos. A uno de nivel Tier III se le puede hacer mantenimiento sin apagarlo, y uno Tier IV sigue en marcha aunque se produzca una avería. Aun así, en 2025 los problemas eléctricos causaron el 45 % de las interrupciones graves."
+      "p1": "La corriente llega por la <strong>línea eléctrica</strong> en alta tensión, lo que permite transportar la energía lejos con pocas pérdidas. En la <strong>subestación</strong>, los <strong>transformadores</strong> reducen la tensión, y cerca de la sala otros más pequeños vuelven a reducirla. Cada transformador deja pasar en torno al 98 o 99 % de la energía. Las tensiones que se muestran son un ejemplo: cada centro elige las suyas.",
+      "p2": "Después vienen los <strong>cuadros eléctricos</strong>, una pared de grandes interruptores que distribuyen la corriente y aíslan cualquier tramo averiado. A continuación, la corriente pasa por el <strong>SAI</strong> (sistema de alimentación ininterrumpida) y sus <strong>baterías</strong>. Si falla la red, las baterías toman el relevo al instante y pueden alimentar la sala durante unos minutos, normalmente entre 5 y 15. Desde ahí, la <strong>blindobarra</strong> lleva la corriente hasta la sala y la reparte a lo largo de las filas. Está formada por gruesas barras metálicas dentro de una carcasa alargada.",
+      "p3": "Las baterías solo sirven para ganar tiempo. El verdadero respaldo son los <strong>generadores diésel</strong>. Las normas de seguridad les exigen tomar el relevo en 10 segundos como máximo, y en los centros reales tardan entre 10 y 60. Uno de estos grupos electrógenos, el Cat 3516C de Caterpillar, suministra unos 1,8 MW, pesa unas 17 toneladas y consume unos 466 litros de gasóleo por hora a plena carga. Sus versiones más grandes alcanzan unos 2,5 MW.",
+      "p4": "Pulsa «Cortar la red» para hacer un simulacro. Mientras arrancan los generadores, las baterías alimentan la sala. Después, los generadores toman el relevo y las baterías se recargan. En este modelo, la red se restablece a los 20 segundos, una duración elegida para el simulacro, y los generadores se van deteniendo. Los centros se clasifican según cómo responden a los fallos: en uno de nivel Tier III se puede hacer mantenimiento sin interrumpir el servicio, y uno de nivel Tier IV sigue funcionando ante una avería. Aun así, en 2025 los problemas eléctricos causaron el 45 % de las interrupciones graves."
     },
     "rack": {
       "title": "Dentro de un rack de 120 kW",
-      "p1": "Aquí es adonde se dirige el julio: un rack <strong>Nvidia GB200 NVL72</strong>. Dentro lleva 72 GPU, los chips que hacen los cálculos de la IA, y 36 CPU, los chips que se ocupan de todo lo demás. Van montados en 18 <strong>bandejas de cómputo</strong>, unos cajones planos que entran en el rack deslizándose. Entre ellas hay 9 <strong>bandejas de conmutación</strong>, que conectan las 72 GPU entre sí. El orden de las bandejas lo ha decidido el modelo.",
-      "p2": "La electricidad entra por arriba y por abajo, en seis <strong>módulos de alimentación</strong>. Ahí, la corriente alterna (CA) de la sala pasa a ser corriente continua (CC) a unos 50 V. Por la parte de atrás del rack baja la <strong>barra colectora de CC</strong>, unas gruesas barras de cobre que llevan hasta 1400 A a todas las bandejas. A unos 50 V, eso da unos 70 kW, muy por debajo de los 120 kW del rack. Por eso, en este modelo la barra está partida en dos mitades, una arriba y otra abajo, y cada una recibe corriente de tres módulos. El reparto real no se ha publicado.",
-      "p3": "A plena carga, el rack consume unos 120 kW, y HPE da 132 kW para su versión. Más o menos una décima parte de la energía que sale de la red se pierde antes de llegar aquí. Se queda por el camino en forma de calor, en los transformadores, el SAI y los módulos de alimentación. El rack pesa alrededor de 1,4 toneladas, más o menos como un coche eléctrico mediano. Muchas salas se montan sobre un suelo técnico, un suelo elevado bajo el que pasan los cables y el aire. Uno normal no está pensado para tanto peso en tan poco sitio, así que las salas de IA necesitan un suelo más resistente.",
-      "p4": "Por fin, dentro de una GPU, el julio hace su trabajo: enciende y apaga transistores diminutos para hacer los cálculos. Pero el cálculo no se queda con nada de energía. Casi toda se convierte en calor al instante, en el mismo chip. El <strong>primer plano del chip</strong> lo muestra ampliado 10 veces, aunque sus tamaños son orientativos, no medidos. Las tarjetas de red y el almacenamiento todavía se enfrían con unos pequeños <strong>ventiladores de las bandejas</strong>. Cambia a «En reposo» y verás cómo baja la carga. En este modelo, un rack en reposo sigue consumiendo el 30 % de lo que gasta a plena carga."
+      "p1": "La electricidad se dirige a un rack <strong>Nvidia GB200 NVL72</strong>. Contiene 72 GPU, los chips que hacen los cálculos de la IA, y 36 CPU, los chips que gestionan todo lo demás. Van montados en 18 <strong>bandejas de cómputo</strong>, cajones planos que se deslizan dentro del rack. Entre ellas hay 9 <strong>bandejas de conmutación</strong>, que conectan entre sí las 72 GPU. El orden de las bandejas es propio de este modelo.",
+      "p2": "La corriente entra por arriba y por abajo, en seis <strong>módulos de alimentación</strong>. Estos convierten la corriente alterna (CA) de la sala en corriente continua (CC) a unos 50 V. Por la parte trasera del rack baja la <strong>barra colectora de CC</strong>, un conjunto de gruesas barras de cobre que alimenta todas las bandejas con hasta 1400 A. A unos 50 V, eso equivale a unos 70 kW, muy por debajo de los 120 kW del rack. Por eso, en este modelo la barra se divide en una mitad superior y otra inferior, y cada una recibe corriente de tres módulos. El reparto real no se ha publicado.",
+      "p3": "A plena carga, el rack consume unos 120 kW, y HPE indica 132 kW para su versión. Aproximadamente una décima parte de la energía que sale de la red se pierde antes de llegar al rack. Se disipa en forma de calor en los transformadores, el SAI y los módulos de alimentación. El rack pesa alrededor de 1,4 toneladas, más o menos lo mismo que un coche eléctrico mediano. Muchas salas se construyen sobre un suelo técnico, un suelo elevado bajo el que pasan los cables y el aire. Uno estándar no está diseñado para tanto peso en tan poca superficie, así que las salas de IA necesitan un suelo más resistente.",
+      "p4": "Dentro de una GPU, la electricidad enciende y apaga transistores diminutos para hacer los cálculos. Ese trabajo no conserva nada de la energía: casi toda se convierte en calor al instante, en el propio chip. El <strong>primer plano del chip</strong> lo muestra ampliado 10 veces, con dimensiones orientativas, no medidas. Unos pequeños <strong>ventiladores de las bandejas</strong> siguen refrigerando las tarjetas de red y el almacenamiento. Cambia a «En reposo» para ver cómo baja la carga. En este modelo, un rack en reposo sigue consumiendo el 30 % de su potencia a plena carga."
     },
     "network": {
       "title": "A unos microsegundos de distancia",
-      "p1": "Los grandes trabajos de IA se reparten entre muchas GPU, así que los chips tienen que hablar entre sí todo el rato. Dentro del rack usan NVLink, unos enlaces de cobre que pasan por las <strong>bandejas de conmutación</strong>. Cada GPU puede enviar y recibir 1,8 TB/s, y el rack entero, 130 TB/s. TB/s quiere decir terabytes por segundo: un billón de bytes cada segundo.",
-      "p2": "Para ir de un rack a otro, los datos pasan por conmutadores de red. Al final de cada fila hay un <strong>conmutador hoja</strong>. Cada hoja está cableada a todos los <strong>conmutadores espina</strong>, que forman la espina dorsal de la red, en el centro. En inglés, este esquema se llama leaf-spine. Así, cualquier rack llega a cualquier otro en tres saltos: hoja, espina, hoja. Este modelo dibuja dos espinas y una hoja por fila, pero las salas reales tienen muchos más conmutadores.",
-      "p3": "Un conmutador rápido, como el 7060X6 de Arista, añade un retraso de unos 700 nanosegundos. Un nanosegundo es una milmillonésima de segundo. En la fibra óptica, la luz tarda unos 5 microsegundos en recorrer un kilómetro. Así que cruzar la sala lleva solo unos pocos microsegundos, es decir, millonésimas de segundo. Fíjate en las rayas verdes: salen de la <strong>entrada de fibra</strong>, pasan por los conmutadores y llegan al rack.",
-      "p4": "Lo que de verdad tarda es el viaje hasta ti. Ir por fibra hasta una ciudad a 1000 km y volver lleva unos 10 milisegundos. Si la ciudad está a 100 km, alrededor de 1. Y eso contando solo la fibra: el software añade su propio tiempo. Elige una distancia y compara."
+      "p1": "Las grandes tareas de IA se reparten entre muchas GPU, así que los chips intercambian datos constantemente. Dentro del rack usan NVLink, enlaces de cobre que pasan por las <strong>bandejas de conmutación</strong>. Cada GPU puede enviar y recibir 1,8 TB/s, y el rack entero, 130 TB/s. TB/s significa terabytes por segundo, es decir, un billón de bytes cada segundo.",
+      "p2": "Entre un rack y otro, los datos pasan por conmutadores de red. Al final de cada fila hay un <strong>conmutador hoja</strong>. Cada hoja está cableada a todos los <strong>conmutadores espina</strong>, que forman la espina dorsal de la red, en el centro. En inglés, este esquema se llama leaf-spine. Así, cualquier rack llega a cualquier otro en tres saltos: hoja, espina, hoja. Este modelo dibuja dos espinas y una hoja por fila, pero las salas reales tienen muchos más conmutadores.",
+      "p3": "Un conmutador rápido, como el 7060X6 de Arista, añade un retraso de unos 700 nanosegundos. Un nanosegundo es una milmillonésima de segundo. En la fibra óptica, la luz tarda unos 5 microsegundos en recorrer un kilómetro. Por eso, cruzar la sala lleva solo unos pocos microsegundos, es decir, millonésimas de segundo. Observa los trazos verdes: salen de la <strong>entrada de fibra</strong>, pasan por los conmutadores y llegan al rack.",
+      "p4": "El mayor retraso está en el trayecto hasta el usuario. Un recorrido de ida y vuelta por fibra hasta una ciudad situada a 1000 km tarda unos 10 milisegundos. Si la ciudad está a 100 km, alrededor de 1. Esa cifra solo cuenta la fibra: el software añade su propio tiempo. Elige una distancia para comparar."
     },
     "heatOut": {
-      "title": "Fuera el calor",
-      "p1": "Ahora el julio es calor, y hay que sacarlo de aquí. Encima de cada chip va una placa fría, un bloque de metal por el que circula agua. En una presentación, Nvidia explicó que el agua entra en el rack a unos 25 °C y sale a unos 45 °C. El modelo ajusta el caudal de su bomba para que un rack a plena carga caliente el agua esos 20 grados.",
-      "p2": "Por el lateral del rack bajan unos tubos, el <strong>colector</strong>, que llevan el agua caliente a lo largo de la fila hasta la <strong>unidad de distribución de refrigerante</strong> (CDU, por sus siglas en inglés). Allí el calor pasa a un segundo circuito, el agua de la instalación, que da servicio a todo el edificio. Las dos aguas nunca se mezclan. El agua de la instalación va unos 5 grados más fría, así que tiene que llegar a unos 20 °C. La CHx2000 de CoolIT, por ejemplo, mueve 2 MW de calor y ocupa unos 1,2 m² de suelo. En este modelo hay una CDU por fila.",
-      "p3": "Las <strong>tuberías de la instalación</strong> suben el calor hasta el tejado. Muchos días de verano, el aire exterior está a más de 20 °C, más caliente que el agua. Por eso, primero la <strong>enfriadora</strong> le saca calor al agua. Después, los <strong>aerorrefrigeradores</strong> soplan aire de fuera sobre unos serpentines calientes, y el julio por fin se va con el aire templado. Aquí todos los circuitos son cerrados, así que se gasta muy poca agua. Muchos centros, en cambio, usan torres de refrigeración, que enfrían evaporando agua. En 2023, los centros de datos de Estados Unidos gastaron unos 66 mil millones de litros de agua en sus propias instalaciones.",
-      "p4": "Elige «Por aire» y los racks pasarán a refrigerarse por aire, el método de toda la vida. Los ventiladores aspiran aire fresco por delante de cada rack y lo expulsan por detrás, hacia un pasillo caliente: el hueco entre dos filas donde se junta el aire caliente. Luego, los <strong>climatizadores</strong> pasan ese calor a la misma agua de la instalación. El aire puede llevar mucho menos calor que el agua, así que por cada kW hacen falta unos 272 m³ de aire a la hora. Algunos centros incluso aprovechan su calor: en Odense y en Estocolmo, ayudan a calentar viviendas."
+      "title": "Evacuar el calor",
+      "p1": "La energía ya es calor, y hay que evacuarlo. Sobre cada chip hay una placa fría, un bloque de metal por el que circula agua. En una presentación, Nvidia indicó que el agua entra en el rack a unos 25 °C y sale a unos 45 °C. El modelo ajusta el caudal de su bomba para que un rack a plena carga caliente el agua esos 20 grados.",
+      "p2": "Por el lateral del rack bajan unos tubos, el <strong>colector</strong>, que llevan el agua caliente a lo largo de la fila hasta la <strong>unidad de distribución de refrigerante</strong> (CDU, por sus siglas en inglés). Allí el calor pasa a un segundo circuito, el agua de la instalación, que da servicio a todo el edificio. Las dos aguas nunca se mezclan. El agua de la instalación circula unos 5 grados más fría, así que tiene que llegar a unos 20 °C. La CHx2000 de CoolIT, por ejemplo, transfiere 2 MW de calor y ocupa unos 1,2 m² de suelo. En este modelo hay una CDU por fila.",
+      "p3": "Las <strong>tuberías de la instalación</strong> suben el calor hasta el tejado. Muchos días de verano, el aire exterior supera los 20 °C del agua. Por eso, primero la <strong>enfriadora</strong> extrae calor del agua. Después, los <strong>aerorrefrigeradores</strong> hacen pasar aire exterior sobre unos serpentines calientes, y el calor sale del recinto con el aire templado. Aquí todos los circuitos son cerrados, así que el consumo de agua es muy bajo. Muchos centros usan, en cambio, torres de refrigeración, que enfrían evaporando agua. En 2023, los centros de datos de Estados Unidos consumieron unos 66 mil millones de litros de agua en sus propias instalaciones.",
+      "p4": "Elige «Por aire» para cambiar a racks refrigerados por aire, el método tradicional. Los ventiladores aspiran aire fresco por la parte delantera de cada rack y lo expulsan por detrás, hacia un pasillo caliente: el espacio entre dos filas donde se concentra el aire caliente. Después, los <strong>climatizadores</strong> transfieren ese calor a la misma agua de la instalación. El aire transporta mucho menos calor que el agua, así que cada kW necesita unos 272 m³ de aire por hora. Algunos centros aprovechan su calor: en Odense y en Estocolmo, ayudan a calentar viviendas."
     },
     "compare": {
       "title": "Por qué gana el agua",
-      "p1": "Ahora llena esa misma sala de racks refrigerados por aire. En este modelo, cada uno consume 10 kW, así que la sala entera se queda en más o menos la doceava parte de la potencia. El aire no da para mucho más: en la práctica, un rack refrigerado por aire no pasa de unos 20 a 35 kW. Para llevarse 120 kW con aire, tendrían que pasar por un solo armario unos 32 600 m³ de aire cada hora.",
-      "p2": "Junto al rack, sobre una mesa, hay un <strong>portátil</strong>. Su cargador es de 40 W, así que un rack a plena carga equivale a 3000 como ese. Si funcionara a plena carga todo el año, un rack gastaría tanta electricidad como unos 100 hogares de Estados Unidos, o 270 de la Unión Europea. El ENIAC fue uno de los primeros ordenadores electrónicos. En 1945 consumía 150 kW, algo más que este rack. Pesaba unas 27 toneladas y ocupaba una sala entera.",
-      "p3": "Los centros también se comparan por su PUE, las siglas en inglés de eficiencia en el uso de la energía. Se calcula dividiendo la potencia de todo el centro entre la de los ordenadores, así que un centro perfecto tendría un PUE de 1. La media del sector ronda el 1,5, lo que significa que cerca del 35 % de la potencia nunca llega a un ordenador. En 2025, los centros de Google tuvieron una media de 1,09: solo un 8 % se fue en refrigeración y pérdidas.",
-      "p4": "Este selector cambia el centro con el que comparas, no cómo se refrigera el rack. Ningún estudio da por separado el PUE de la refrigeración por aire y el de la líquida, así que el modelo no los relaciona. Elijas lo que elijas, el viaje del julio acaba igual: convertido en un poco de calor en el aire, sobre el tejado."
+      "p1": "Ahora llena esa misma sala de racks refrigerados por aire. En este modelo, cada uno consume 10 kW, así que la sala entera recibe más o menos una doceava parte de la potencia. El aire no permite mucho más: en la práctica, un rack refrigerado por aire alcanza como máximo unos 20 a 35 kW. Para evacuar 120 kW con aire, tendrían que pasar por un solo armario unos 32 600 m³ de aire cada hora.",
+      "p2": "Junto al rack, sobre una mesa, hay un <strong>portátil</strong>. Su cargador es de 40 W, así que un rack a plena carga equivale a 3000 cargadores como ese. A plena carga durante todo un año, un rack consume tanta electricidad como unos 100 hogares de Estados Unidos, o 270 de la Unión Europea. El ENIAC fue uno de los primeros ordenadores electrónicos. En 1945 consumía 150 kW, algo más que este rack. Pesaba unas 27 toneladas y ocupaba una sala entera.",
+      "p3": "Los centros también se comparan por su PUE, siglas en inglés de eficiencia en el uso de la energía. Se calcula dividiendo la potencia de todo el centro entre la de los ordenadores, así que un centro perfecto tendría un PUE de 1. La media del sector ronda el 1,5, lo que significa que cerca del 35 % de la potencia nunca llega a un ordenador. En 2025, los centros de Google tuvieron una media de 1,09: solo un 8 % se destinó a refrigeración y pérdidas.",
+      "p4": "Este selector cambia el centro con el que comparas, no cómo se refrigera el rack. Ningún estudio da por separado el PUE de la refrigeración por aire y el de la líquida, así que el modelo no vincula ambos datos. Elijas lo que elijas, el recorrido de la energía termina igual: como aire templado sobre el tejado."
     }
   }
 }
