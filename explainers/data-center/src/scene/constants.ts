@@ -18,8 +18,8 @@ export const SCENE_LIMITS = {
 export const LIGHT_RIG = {
   distance: 300,
   key: { color: THEME.keyLight, intensity: 1.9, direction: [-0.55, 0.62, 0.56] as Triple },
-  fill: { color: THEME.fillLight, intensity: 0.9, direction: [0.55, 0.7, -0.5] as Triple },
-  rim: { color: '#eef2f7', intensity: 0.8, direction: [0.35, 0.42, -0.84] as Triple },
+  fill: { color: THEME.fillLight, intensity: 0.85, direction: [0.55, 0.7, -0.5] as Triple },
+  rim: { color: '#eef2f7', intensity: 0.9, direction: [0.35, 0.42, -0.84] as Triple },
 } as const;
 
 export const OUTAGE_DRILL = {
