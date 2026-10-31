@@ -39,6 +39,7 @@ export const BEAD = {
   core: 0.026,
   halo: 0.11,
   minDistance: 0.6,
+  far: { from: 40, to: 160, boost: 1.6 },
   heatTint: THEME.heat,
   currentTint: THEME.current,
   coreTint: '#fff1cf',

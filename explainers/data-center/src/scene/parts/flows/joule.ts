@@ -1,4 +1,5 @@
 import type { Object3D } from 'three';
+import { clamp } from '@core/math';
 import type { JouleReading } from '../../../ids';
 import { label, namedGroup, sceneAnchor } from '../context';
 import type { PartContext } from '../context';
@@ -44,7 +45,9 @@ export class JouleBead {
   }
 
   scale(cameraDistance: number): void {
-    const distance = Math.max(cameraDistance, BEAD.minDistance);
+    const { from, to, boost } = BEAD.far;
+    const far = clamp((cameraDistance - from) / (to - from), 0, 1);
+    const distance = Math.max(cameraDistance, BEAD.minDistance) * (1 + (boost - 1) * far);
     this.core.material.size = BEAD.core * distance;
     this.halo.material.size = BEAD.halo * distance;
   }
