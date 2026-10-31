@@ -25,9 +25,9 @@ const EDGE_PAINT = { color: '#d6d3c8', roughness: 0.8 } as const;
 const DOME = { segments: 24, renderOrder: -1000 };
 const SKY_COLOURS = { uTop: THEME.sky, uHorizon: THEME.fog, uGlow: '#e4e7e8' };
 const MOTTLES: Readonly<Record<Surface, readonly number[]>> = {
-  grass: [0.42, 0.08, 0.55, 3.1],
-  road: [0.1, 0.07, 0, 0.7],
-  gravel: [0.16, 0.16, 0, 0.45],
+  grass: [0.36, 0.07, 0.6, 3.1, 0.88, 0.9, 0.76, 0.72],
+  road: [0.1, 0.07, 0, 0.7, 1, 1, 1, 1],
+  gravel: [0.16, 0.16, 0, 0.45, 1, 1, 1, 1],
 };
 const FENCE = { height: 2.4, pitch: 3, post: 0.07, rail: 0.04, low: 0.08, panel: 2.27 };
 const MESH = { tile: 0.6, pixels: 64, cells: 8 };
@@ -44,14 +44,15 @@ const SPUR: Rect = { x: SUBSTATION_GATE, z: [ROAD.z[1], SUBSTATION.z[0]] };
 
 const NOISE = /* glsl */ `#include <common>
 varying vec2 vSiteXZ;
-uniform vec4 uMottle;
+uniform vec4 uMottle, uGrade;
 float siteHash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float siteNoise(vec2 p) { vec2 i = floor(p), u = smoothstep(0.0, 1.0, fract(p)); return mix(mix(siteHash(i), siteHash(i + vec2(1, 0)), u.x), mix(siteHash(i + vec2(0, 1)), siteHash(i + 1.0), u.x), u.y); }`;
 
 const TONE = /* glsl */ `#include <color_fragment>
 float siteBroad = siteNoise(vSiteXZ / 61.0) * 0.6 + siteNoise(vSiteXZ / 17.0) * 0.4 - 0.5;
-float siteDry = smoothstep(0.5, 0.85, siteNoise(vSiteXZ / 150.0 + 7.0)) * uMottle.z;
-diffuseColor.rgb *= (1.0 + siteBroad * uMottle.x + (siteNoise(vSiteXZ / uMottle.w) - 0.5) * uMottle.y) * mix(vec3(1.0), vec3(1.16, 1.08, 0.78), siteDry);`;
+float siteDry = smoothstep(0.4, 0.8, siteNoise(vSiteXZ / 90.0 + 7.0)) * uMottle.z;
+vec3 siteTone = diffuseColor.rgb * uGrade.rgb * (1.0 + siteBroad * uMottle.x + (siteNoise(vSiteXZ / uMottle.w) - 0.5) * uMottle.y) * mix(vec3(1.0), vec3(1.08, 1.04, 0.88), siteDry);
+diffuseColor.rgb = mix(vec3(dot(siteTone, vec3(0.3, 0.59, 0.11))), siteTone, uGrade.a) * (1.0 - 0.22 * smoothstep(60.0, 420.0, length(vViewPosition)));`;
 
 const WORLD = /* glsl */ `#include <begin_vertex>
 vSiteXZ = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xz;`;
@@ -71,6 +72,7 @@ export function mottled(context: PartContext, group: EmphasisGroup, surface: Sur
   const material = createMaterial(FINISHES[surface]);
   material.onBeforeCompile = (shader) => {
     shader.uniforms.uMottle = { value: new Vector4().fromArray(MOTTLES[surface]) };
+    shader.uniforms.uGrade = { value: new Vector4().fromArray(MOTTLES[surface], 4) };
     const vertex = `varying vec2 vSiteXZ;\n${shader.vertexShader}`;
     shader.vertexShader = vertex.replace('#include <begin_vertex>', WORLD);
     const fragment = shader.fragmentShader.replace('#include <common>', NOISE);
