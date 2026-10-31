@@ -1,14 +1,14 @@
 {
   "meta": {
-    "title": "How a data center works",
+    "title": "How a data centre works",
     "eyebrow": "Computing",
-    "tagline": "Follow one joule through an AI data center in 3D: from the grid line into a 120 kW rack, where it turns into heat, and out through the roof.",
-    "description": "Follow one joule from the grid into a 120 kW AI rack, where it turns into heat, and out through the roof, in a 3D model of a data center.",
+    "tagline": "Follow one joule through an AI data centre in 3D: from the grid line into a 120 kW rack, where it turns into heat, and out through the roof.",
+    "description": "Follow one joule from the grid into a 120 kW AI rack, where it turns into heat, and out through the roof, in a 3D model of a data centre.",
     "summary": "The campus and its power, the backup that keeps it running, inside a 120 kW AI rack, the network, how the heat gets out, and why water beats air.",
-    "socialAlt": "A 3D data center campus cut open, with the power path glowing from the substation to a liquid-cooled AI rack and the heat rising to the roof, beside the title How a data center works"
+    "socialAlt": "A 3D data centre campus cut open, with the power path glowing from the substation to a liquid-cooled AI rack and the heat rising to the roof, beside the title How a data centre works"
   },
   "stage": {
-    "label": "Interactive data center model",
+    "label": "Interactive data centre model",
     "gauge": "Live readings"
   },
   "timeline": {
@@ -151,7 +151,7 @@
       "hallIt": "Power to the computers",
       "facility": "Power from the grid",
       "facilityValue": "about {{mw}} MW at a PUE of {{pue}}",
-      "world": "All data centers worldwide",
+      "world": "All data centres worldwide",
       "worldValue": "about {{twh}} TWh in {{year}}, {{percent}}% of the world's electricity"
     },
     "powerIn": {
@@ -209,7 +209,7 @@
       "cduValue": "{{mw}} MW of heat on about {{area}} m²",
       "wue": "Water per unit of computing, US",
       "wueValue": "about {{litres}} L per kWh",
-      "usWater": "US data centers, 2023",
+      "usWater": "US data centres, 2023",
       "usWaterValue": "about {{billion}} billion litres used on site"
     },
     "compare": {
@@ -257,9 +257,9 @@
   "sections": {
     "building": {
       "title": "Electricity in, heat out",
-      "p1": "A data center is a building full of computers that run websites, apps and AI. Think of it as one big machine with a simple cycle: electricity comes in, and heat goes out. Power arrives on a <strong>grid line</strong> and steps down in the <strong>substation</strong>. Rows of <strong>diesel generators</strong> wait beside the <strong>data hall</strong>, and on its roof a <strong>chiller</strong> and <strong>dry coolers</strong> send the heat away.",
+      "p1": "A data centre is a building full of computers that run websites, apps and AI. Think of it as one big machine with a simple cycle: electricity comes in, and heat goes out. Power arrives on a <strong>grid line</strong> and steps down in the <strong>substation</strong>. Rows of <strong>diesel generators</strong> wait beside the <strong>data hall</strong>, and on its roof a <strong>chiller</strong> and <strong>dry coolers</strong> send the heat away.",
       "p2": "Inside the hall stand the <strong>racks</strong>, tall steel cabinets packed with computers. This model's hall holds 192 racks in 16 rows, a layout of its own, since real halls come in every size. With every rack running flat out, the computers draw about 23 MW. Add the cooling and the power lost on the way, and an average site takes about 35 MW from the grid. The last chapter shows how the best sites do better.",
-      "p3": "Together, the world's data centers used about 415 TWh of electricity in 2024. That is about 1.5 percent of all the electricity the world used, and the International Energy Agency expects about 945 TWh by 2030. The very largest sites are called hyperscale, and there were 1,136 of them at the end of 2024. Google opened its first data center in 2006, in The Dalles, Oregon.",
+      "p3": "Together, the world's data centres used about 415 TWh of electricity in 2024. That is about 1.5 percent of all the electricity the world used, and the International Energy Agency expects about 945 TWh by 2030. The very largest sites are called hyperscale, and there were 1,136 of them at the end of 2024. Google opened its first data centre in 2006, in The Dalles, Oregon.",
       "p4": "This model follows one <strong>joule</strong>, a small amount of energy, on its trip through the site. Energy does not really travel in single lumps, but following one shows where all of it goes. As electricity, the joule reaches its chip in under a microsecond. As heat, it needs about a minute to leave through the roof. So the playback stretches the fast part and squeezes the slow one, and the clock shows the model's timing, not a measurement."
     },
     "powerIn": {
@@ -287,8 +287,8 @@
       "title": "Getting the heat out",
       "p1": "The joule is heat now, and it has to go. On each chip sits a cold plate, a metal block with water flowing through it. In a keynote, Nvidia said the water enters the rack at about 25 °C and leaves at about 45 °C. This model sets its pump flow so that a full rack warms the water by those 20 degrees.",
       "p2": "The <strong>manifold</strong>, pipes down the side of the rack, sends the warm water along the row to the <strong>coolant distribution unit</strong>, or CDU. There the heat passes into a second loop, the facility water, and the two waters never mix. The facility water runs about 5 degrees colder, so it must arrive at about 20 °C. One CDU, CoolIT's CHx2000, moves 2 MW of heat and stands on about 1.2 m² of floor. This model gives each row one.",
-      "p3": "The <strong>facility pipes</strong> carry the heat up to the roof. Water at 20 °C is cooler than many summer days, so a <strong>chiller</strong> first pumps heat out of it, much like a fridge. Then the <strong>dry coolers</strong> blow outside air over hot coils, and the joule finally leaves as warm air. Here every loop is closed, so very little water is used. Many sites use cooling towers instead, which cool by evaporating water, and US data centers used about 66 billion litres on site in 2023.",
-      "p4": "Pick Air to see the classic way. Fans push the hall's air through the racks into a hot aisle, and <strong>air handlers</strong> pass its heat into the same facility water. Air holds far less heat than water, so each kW needs about 272 m³ of air an hour. Some sites even put their heat to use: in Odense and Stockholm, data centers help warm homes."
+      "p3": "The <strong>facility pipes</strong> carry the heat up to the roof. Water at 20 °C is cooler than many summer days, so a <strong>chiller</strong> first pumps heat out of it, much like a fridge. Then the <strong>dry coolers</strong> blow outside air over hot coils, and the joule finally leaves as warm air. Here every loop is closed, so very little water is used. Many sites use cooling towers instead, which cool by evaporating water, and US data centres used about 66 billion litres on site in 2023.",
+      "p4": "Pick Air to see the classic way. Fans push the hall's air through the racks into a hot aisle, and <strong>air handlers</strong> pass its heat into the same facility water. Air holds far less heat than water, so each kW needs about 272 m³ of air an hour. Some sites even put their heat to use: in Odense and Stockholm, data centres help warm homes."
     },
     "compare": {
       "title": "Why water wins",
