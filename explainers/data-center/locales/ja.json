@@ -115,16 +115,16 @@
     }
   },
   "readouts": {
-    "joule": "The joule is in",
+    "joule": "ジュールの現在地",
     "carrier": {
-      "line": "the grid line",
-      "cable": "the site cable",
-      "ups": "the UPS",
-      "busway": "the busway",
-      "busbar": "the rack busbar",
-      "chip": "the chip",
-      "water": "the cooling water",
-      "air": "the outside air"
+      "line": "送電線",
+      "cable": "構内ケーブル",
+      "ups": "UPS",
+      "busway": "バスダクト",
+      "busbar": "直流バスバー",
+      "chip": "チップ",
+      "water": "冷却水",
+      "air": "空気"
     },
     "rackPower": "ラックの電力",
     "hallPower": "ホールの計算用電力",

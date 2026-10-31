@@ -124,7 +124,7 @@
       "busbar": "the rack busbar",
       "chip": "the chip",
       "water": "the cooling water",
-      "air": "the outside air"
+      "air": "the air"
     },
     "rackPower": "Rack power",
     "hallPower": "Hall computers",
