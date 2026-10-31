@@ -21,10 +21,11 @@
 .about-section h2 {
   margin: 0 0 18px;
   color: var(--text);
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 1.25rem + 0.9vw, 1.85rem);
-  font-weight: 650;
+  font-weight: 600;
   line-height: 1.2;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .about p {
@@ -51,7 +52,7 @@
   padding: 20px 22px 20px 66px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--glass);
+  background: var(--surface);
   counter-increment: step;
 }
 
@@ -98,7 +99,7 @@
   gap: 8px;
   padding: 4px 12px;
   border: 1px solid var(--line-strong);
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   color: var(--text);
   font-size: 0.8125rem;
   font-weight: 500;
@@ -111,7 +112,6 @@
   height: 8px;
   border-radius: 50%;
   background: var(--label-tone);
-  box-shadow: 0 0 8px var(--label-tone);
 }
 
 .fact-label--confirmed {
