@@ -771,11 +771,11 @@ primitives, layout, the full screen toggle (`stage-expand.css`, which the chat w
 touch sizes of the controls under `(pointer: coarse)`. The controls parts style only the dock and
 the gauge, so the embed reuses them; a rule for the page goes into the page parts.
 
-Fonts are self-hosted. `src/core/style.css` imports Inter (variable) and JetBrains
-Mono 400 and 500 from Fontsource, so Vite emits hashed woff2 files and each page
-downloads only the `unicode-range` subsets its text uses. Chinese and Japanese pages
-keep Inter for Latin glyphs and use the system CJK fonts for the rest. No page loads
-fonts from a third party.
+Fonts are self-hosted. `src/core/style.css` imports Source Serif 4 and Source Sans 3
+(both variable) and IBM Plex Mono 400 and 500 from Fontsource, so Vite emits hashed woff2
+files and each page downloads only the `unicode-range` subsets its text uses. Chinese and
+Japanese pages keep Source Serif 4 and Source Sans 3 for Latin glyphs and use the system CJK
+fonts for the rest. No page loads fonts from a third party.
 
 `npm run test:e2e` runs the Playwright smoke test in `e2e/` against `vite preview`
 of `dist/`, so build first and run `npx playwright install chromium` once. Chromium
@@ -825,7 +825,7 @@ there, and the scene host mounts into the given container. A host may pass
 language select. Their styles are the controls parts of the stylesheet, nested under `[data-embed-ui]`, with
 the phone dock rules keyed to an `embed-dock` container of at most 459px instead of the viewport.
 The scene styles and an explainer's `style.css` are added as `<style data-embed-styles>` elements
-while a scene is mounted. The embed loads the latin Inter and JetBrains Mono files the pages use, and their
+while a scene is mounted. The embed loads the latin Source Sans 3, Source Serif 4 and IBM Plex Mono files the pages use, and their
 Cyrillic files only for Ukrainian; Japanese and Chinese use system fonts, as on the pages.
 On a stage container of at most 620px, where the controls styles hide the readouts, the embed hides
 the whole gauge, so no empty glass panel is left.
@@ -882,7 +882,8 @@ server resolves the alias before it reads the files, and the published `explaine
 new slug, so a copy under the old folder would not parse. Covers are not copied either: a widget
 takes the cover path from the catalogue, which names the hashed file of the current build.
 `stableFontFiles` in `vite/embed.ts` copies the embed fonts to `/embed/v1/fonts/<file>.woff2`
-under their fontsource names (the list is `EMBED_FONTS` in `src/core/embed/fontFiles.ts`), and
+under their fontsource names (the list is `EMBED_FONTS` in `src/core/embed/fontFiles.ts`: the
+latin and Cyrillic files of Source Sans 3 and Source Serif 4, and of IBM Plex Mono 400 and 500), and
 `vite/embed.test.ts` checks that they are in `dist/`. The build also publishes each explainer's
 `explainer.json`, `chapters.html` and
 `locales/<code>.json` verbatim under `/embed/v1/explainers/<slug>/` (`embedSourceFiles` in
