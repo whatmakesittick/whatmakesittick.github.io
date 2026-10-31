@@ -4,8 +4,8 @@ import type { Ink } from './flat';
 export const INK = {
   frame: { colour: THEME.insetLine, opacity: 0.9 },
   line: { colour: THEME.insetLine, opacity: 0.8 },
-  leader: { colour: THEME.insetLine, opacity: 0.7, overlay: true },
-  wedge: { colour: THEME.insetLine, opacity: 0.06, doubleSided: true, overlay: true },
+  leader: { colour: THEME.insetLine, opacity: 0.7 },
+  wedge: { colour: THEME.insetLine, opacity: 0.06, doubleSided: true },
   board: { colour: '#1f5a43' },
   solder: { colour: '#c4c9cf' },
   substrate: { colour: '#6a5440' },

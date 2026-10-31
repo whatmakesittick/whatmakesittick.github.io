@@ -18,7 +18,6 @@ export interface Ink {
   readonly colour: string;
   readonly opacity?: number;
   readonly doubleSided?: boolean;
-  readonly overlay?: boolean;
 }
 
 export function flatMaterial(ink: Ink): MeshBasicMaterial {
@@ -27,7 +26,6 @@ export function flatMaterial(ink: Ink): MeshBasicMaterial {
     transparent: true,
     opacity: ink.opacity ?? 1,
     depthWrite: false,
-    depthTest: !ink.overlay,
     side: ink.doubleSided ? DoubleSide : FrontSide,
     polygonOffset: true,
     polygonOffsetFactor: OFFSET_FACTOR,
