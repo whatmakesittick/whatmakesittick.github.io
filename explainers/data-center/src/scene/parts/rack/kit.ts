@@ -1,4 +1,4 @@
-import { BoxGeometry, Matrix4, Quaternion, Vector3 } from 'three';
+import { BoxGeometry, Matrix4, PlaneGeometry, Quaternion, Vector3 } from 'three';
 import type { BufferGeometry, Group, InstancedMesh, Material } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import type { Extent } from '@core/scene/regions';
@@ -28,10 +28,12 @@ export interface Kit {
     matrices: readonly Matrix4[],
   ): InstancedMesh;
   boxes(parent: Group, part: PartId, look: Look, boxes: readonly BoxSpec[]): InstancedMesh;
+  faces(parent: Group, part: PartId, look: Look, boxes: readonly BoxSpec[]): InstancedMesh;
 }
 
 export function createKit(context: PartContext): Kit {
   const cube = context.tracker.track(new BoxGeometry());
+  const front = context.tracker.track(new PlaneGeometry().rotateY(Math.PI).translate(0, 0, -0.5));
   const material = (part: PartId, look: Look) =>
     context.materials.get(part, typeof look === 'string' ? FINISHES[look] : look);
   const copies: Kit['copies'] = (parent, part, look, geometry, matrices) => {
@@ -40,15 +42,17 @@ export function createKit(context: PartContext): Kit {
     parent.add(mesh);
     return mesh;
   };
-  const boxes: Kit['boxes'] = (parent, part, look, specs) =>
-    copies(
-      parent,
-      part,
-      look,
-      cube,
-      specs.map((spec) => boxMatrix(spec)),
-    );
-  return { context, cube, material, copies, boxes };
+  const shaped =
+    (geometry: BufferGeometry): Kit['boxes'] =>
+    (parent, part, look, specs) =>
+      copies(
+        parent,
+        part,
+        look,
+        geometry,
+        specs.map((spec) => boxMatrix(spec)),
+      );
+  return { context, cube, material, copies, boxes: shaped(cube), faces: shaped(front) };
 }
 
 export const box = spanning;

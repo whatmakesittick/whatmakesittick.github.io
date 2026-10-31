@@ -30,21 +30,21 @@ export interface ComputeTrays {
 const [, , CHIP_Z] = CHIP_ANCHOR;
 const PLATE_Z = [CHIP_Z, CHIP_Z + 0.3] as const;
 const PAN_M = 0.003;
+const WALL_TOP = { east: 0.04, west: 0.01, rear: 0.03 } as const;
 const BOARD_TOP = 0.0048;
 const PACKAGE_TOP = 0.0078;
 const PLATE_TOP = 0.022;
 const PLATE: Readonly<{ x: number; z: number }> = { x: 0.22, z: 0.15 };
 const PACKAGE: Readonly<{ x: number; z: number }> = { x: 0.2, z: 0.13 };
 const GLOW_GROW_M = 0.01;
+const INLET_PROUD_M = 0.003;
 const SINK_BASE_TOP = 0.012;
 const FIN_TOP = 0.046;
-const FINS = 12;
-const FIN_M = 0.0012;
-const FIN_SEGMENTS = 6;
-const FIN_CUT_M = 0.006;
+const FINS = 8;
+const FIN_M = 0.002;
 const HOSE_RADIUS = 0.005;
-const HOSE_SEGMENTS = 24;
-const HOSE_SIDES = 8;
+const HOSE_SEGMENTS = 12;
+const HOSE_SIDES = 5;
 export const QD_Y = 0.02;
 export const QD_Z = TRAY_Z[1] - 0.01;
 const HOSE_Y = 0.015;
@@ -56,9 +56,9 @@ function chassis(): BoxSpec[] {
   const [west, east] = TRAY_X;
   return [
     box(TRAY_X, [0, PAN_M], TRAY_Z),
-    box([east - PAN_M, east], [0, 0.04], TRAY_Z),
-    box([west, west + PAN_M], [0, 0.01], TRAY_Z),
-    box(TRAY_X, [0, 0.03], [TRAY_Z[1] - PAN_M, TRAY_Z[1]]),
+    box([east - PAN_M, east], [PAN_M, WALL_TOP.east], TRAY_Z),
+    box([west, west + PAN_M], [PAN_M, WALL_TOP.west], [TRAY_Z[0], TRAY_Z[1] - PAN_M]),
+    box([west, east - PAN_M], [PAN_M, WALL_TOP.rear], [TRAY_Z[1] - PAN_M, TRAY_Z[1]]),
   ];
 }
 
@@ -80,22 +80,22 @@ function components() {
   const plates = PLATE_Z.map((z) =>
     box(around(RACK_X, PLATE.x), [PACKAGE_TOP, PLATE_TOP], around(z, PLATE.z)),
   );
-  const inlet = box(around(RACK_X, 0.06), [0.006, 0.018], [TRAY_Z[1] - 0.03, TRAY_Z[1]]);
+  const inlet = box(
+    around(RACK_X, 0.06),
+    [0.006, 0.018],
+    [TRAY_Z[1] - 0.03, TRAY_Z[1] + INLET_PROUD_M],
+  );
   return { board, nics, connectors, packages, plates, inlet };
 }
 
-function finBlock(x: number, z: number): BufferGeometry[] {
-  const length = (PLATE.z - FIN_CUT_M * (FIN_SEGMENTS - 1)) / FIN_SEGMENTS;
-  return Array.from({ length: FIN_SEGMENTS }, (_, index) => {
-    const from = z - PLATE.z / 2 + index * (length + FIN_CUT_M);
-    return boxGeometry({
-      minX: x - FIN_M / 2,
-      maxX: x + FIN_M / 2,
-      minY: SINK_BASE_TOP,
-      maxY: FIN_TOP,
-      minZ: from,
-      maxZ: from + length,
-    });
+function fin(x: number, z: number): BufferGeometry {
+  return boxGeometry({
+    minX: x - FIN_M / 2,
+    maxX: x + FIN_M / 2,
+    minY: SINK_BASE_TOP,
+    maxY: FIN_TOP,
+    minZ: z - PLATE.z / 2,
+    maxZ: z + PLATE.z / 2,
   });
 }
 
@@ -111,8 +111,8 @@ function sink(): BufferGeometry {
       maxZ: z + PLATE.z / 2,
     }),
     ...Array.from({ length: FINS }, (_, index) =>
-      finBlock(RACK_X - HALF_PLATE + (index + 0.5) * pitch, z),
-    ).flat(),
+      fin(RACK_X - HALF_PLATE + (index + 0.5) * pitch, z),
+    ),
   ]);
   const merged = mergeGeometries(parts);
   parts.forEach((part) => part.dispose());
@@ -169,7 +169,12 @@ export function buildComputeTrays(kit: Kit, root: Group): ComputeTrays {
   add(group, 'tray', chassis());
   add(group, RACK_FINISHES.bezel, [bezel(TRAY_HEIGHT)]);
   add(group, 'steelLight', handles(TRAY_HEIGHT));
-  add(group, 'statusLight', [led(RACK_X - 0.115, TRAY_HEIGHT * 0.82)]);
+  kit.faces(
+    group,
+    'computeTrays',
+    'statusLight',
+    perBand(COMPUTE_BANDS, [led(RACK_X - 0.115, TRAY_HEIGHT * 0.82)]),
+  );
   add(group, RACK_FINISHES.board, [parts.board]);
   add(group, 'fan', parts.nics);
   add(group, RACK_FINISHES.port, parts.connectors);

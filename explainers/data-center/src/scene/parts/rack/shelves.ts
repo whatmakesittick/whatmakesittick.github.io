@@ -41,11 +41,11 @@ export function buildPowerShelves(kit: Kit, root: Group): void {
   const { faces, grilles, lights, pulls } = modules();
   const add = (look: Parameters<Kit['boxes']>[2], local: ReturnType<typeof box>[]) =>
     kit.boxes(group, 'powerShelves', look, perBand(SHELF_BANDS, local));
-  add('tray', [box(TRAY_X, [0, SHELF_TALL], TRAY_Z)]);
+  add(RACK_FINISHES.chassis, [box(TRAY_X, [0, SHELF_TALL], TRAY_Z)]);
   add(RACK_FINISHES.bezel, [bezel(SHELF_TALL)]);
   add('steelDark', faces);
-  add(RACK_FINISHES.port, grilles);
-  add('statusLight', lights);
+  kit.faces(group, 'powerShelves', RACK_FINISHES.port, perBand(SHELF_BANDS, grilles));
+  kit.faces(group, 'powerShelves', 'statusLight', perBand(SHELF_BANDS, lights));
   add('steelLight', [...pulls, ...handles(SHELF_TALL)]);
   label(kit.context, 'powerShelves', group, [
     SPAN.x[0],

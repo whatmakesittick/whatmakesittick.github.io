@@ -26,6 +26,7 @@ const CLIP = { width: 0.1, tall: 0.012 } as const;
 const STANDOFF_M = 0.016;
 const CROSSBAR = { tall: 0.03, depth: 0.012, gap: 0.003 } as const;
 const PIPE_RADIUS = 0.022;
+const SEGMENTS = { pipe: 12, collar: 8, stub: 6, hose: 16, hoseSides: 8 } as const;
 const PIPE_BOTTOM = 0.3;
 const PIPE_TOP = RACK.height + 0.06;
 const STUB_RADIUS = 0.008;
@@ -103,13 +104,20 @@ function riserHose(x: number) {
     [x, ROW_PIPE.y - 0.12, ROW_PIPE.z + HOSE_SWAY_M],
     [x, ROW_PIPE.y, ROW_PIPE.z],
   ].map(([px, py, pz]) => new Vector3(px, py, pz));
-  return new TubeGeometry(new CatmullRomCurve3(points), 20, HOSE_RADIUS, 10);
+  return new TubeGeometry(
+    new CatmullRomCurve3(points),
+    SEGMENTS.hose,
+    HOSE_RADIUS,
+    SEGMENTS.hoseSides,
+  );
 }
 
 export function buildManifold(kit: Kit, root: Group): Group {
   const group = namedGroup('manifold', root);
   const tracker = kit.context.tracker;
-  const cylinder = tracker.track(new CylinderGeometry(1, 1, 1, 18));
+  const cylinder = tracker.track(new CylinderGeometry(1, 1, 1, SEGMENTS.pipe));
+  const collar = tracker.track(new CylinderGeometry(1, 1, 1, SEGMENTS.collar));
+  const stub = tracker.track(new CylinderGeometry(1, 1, 1, SEGMENTS.stub, 1, true));
   const pipeLength = PIPE_TOP - PIPE_BOTTOM;
   const stubLength = MANIFOLD.z - QD_Z;
   const clampYs = Array.from(
@@ -131,7 +139,8 @@ export function buildManifold(kit: Kit, root: Group): Group {
         true,
       ),
     );
-    kit.copies(group, 'manifold', look, cylinder, [pipe, ...collars]);
+    kit.copies(group, 'manifold', look, cylinder, [pipe]);
+    kit.copies(group, 'manifold', look, collar, collars);
     kit.copies(group, 'manifold', 'steelLight', cylinder, [fitting]);
     kit.copies(group, 'manifold', RACK_FINISHES.insulator, tracker.track(riserHose(x)), [
       rod([0, 0, 0], 1, 1),
@@ -155,7 +164,7 @@ export function buildManifold(kit: Kit, root: Group): Group {
       rod([x, bottom + QD_Y, QD_Z + stubLength / 2], STUB_RADIUS, stubLength, true),
     ),
   );
-  kit.copies(group, 'manifold', 'steelLight', cylinder, stubs);
+  kit.copies(group, 'manifold', 'steelLight', stub, stubs);
   label(kit.context, 'manifold', group, [MANIFOLD.supplyX, BUSBAR.upper[0], MANIFOLD.z]);
   return group;
 }

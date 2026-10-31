@@ -1,11 +1,4 @@
-import {
-  CircleGeometry,
-  CylinderGeometry,
-  Matrix4,
-  Quaternion,
-  RingGeometry,
-  Vector3,
-} from 'three';
+import { CircleGeometry, Matrix4, PlaneGeometry, Quaternion, RingGeometry, Vector3 } from 'three';
 import type { BufferGeometry, Group, InstancedMesh } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { AssemblyState } from '../../../ids';
@@ -24,15 +17,15 @@ export interface TrayFans {
 const FAN_OFFSETS = [-0.165, -0.055, 0.055, 0.165] as const;
 const RADIUS = 0.017;
 const BLADES = 5;
-const BLADE = { width: 0.007, root: 0.005, thick: 0.001, pitch: 0.35 } as const;
-const HUB = { radius: 0.0055, depth: 0.003 } as const;
+const BLADE = { width: 0.007, root: 0.005, pitch: 0.35 } as const;
+const HUB = { radius: 0.0055, depth: 0.003, segments: 8 } as const;
 const GUARD = { inner: 0.0165, outer: 0.0185 } as const;
 const DEPTH = { backing: 0.0005, blades: 0.003, guard: 0.0048 } as const;
 const MAX_SPIN = 28;
 const EASE_S = 0.8;
 const REST = 0.01;
 const STAGGER = 0.9;
-const CIRCLE_SEGMENTS = 20;
+const CIRCLE_SEGMENTS = 12;
 const Z_AXIS = new Vector3(0, 0, 1);
 const ONE = new Vector3(1, 1, 1);
 const FACE = BEZEL_Z[0];
@@ -40,15 +33,14 @@ const FACE = BEZEL_Z[0];
 function rotor(): BufferGeometry {
   const length = RADIUS * 0.92 - BLADE.root;
   const blades = Array.from({ length: BLADES }, (_, index) => {
-    const blade = new CylinderGeometry(BLADE.width / 2, BLADE.width / 2, length, 4, 1);
-    blade.scale(1, 1, BLADE.thick / BLADE.width);
-    blade.rotateY(BLADE.pitch);
+    const blade = new PlaneGeometry(BLADE.width, length);
+    blade.rotateY(Math.PI + BLADE.pitch);
     blade.translate(0, BLADE.root + length / 2, 0);
     blade.rotateZ((index * Math.PI * 2) / BLADES);
     return blade;
   });
-  const hub = new CylinderGeometry(HUB.radius, HUB.radius, HUB.depth, 14);
-  hub.rotateX(Math.PI / 2);
+  const hub = facingFront(new CircleGeometry(HUB.radius, HUB.segments));
+  hub.translate(0, 0, -HUB.depth / 2);
   const parts = [...blades, hub];
   const merged = mergeGeometries(parts);
   parts.forEach((part) => part.dispose());

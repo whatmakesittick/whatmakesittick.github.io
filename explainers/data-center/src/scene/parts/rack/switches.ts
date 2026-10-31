@@ -1,4 +1,5 @@
 import type { Group } from 'three';
+import type { Extent } from '@core/scene/regions';
 import { RACK_STACK } from '../../../model';
 import type { BoxSpec } from '../../../model';
 import { label, namedGroup } from '../context';
@@ -21,10 +22,13 @@ const COLUMN_X = Array.from(
   (_, index) => RACK_X + (index - (COLUMNS - 1) / 2) * COLUMN_PITCH_M,
 );
 
+const CAGE_X: Extent = [COLUMN_X[0] - CAGE.x / 2, COLUMN_X[COLUMNS - 1] + CAGE.x / 2];
+
 function ports(): { cages: BoxSpec[]; mouths: BoxSpec[] } {
-  const cells = ROW_SHARES.flatMap((share) => COLUMN_X.map((x) => [x, share * SWITCH_TALL]));
+  const rows = ROW_SHARES.map((share) => share * SWITCH_TALL);
+  const cells = rows.flatMap((y) => COLUMN_X.map((x) => [x, y]));
   return {
-    cages: cells.map(([x, y]) => box(around(x, CAGE.x), around(y, CAGE.y), proud(CAGE.depth))),
+    cages: rows.map((y) => box(CAGE_X, around(y, CAGE.y), proud(CAGE.depth))),
     mouths: cells.map(([x, y]) =>
       box(around(x, MOUTH.x), around(y, MOUTH.y), proud(MOUTH.depth, CAGE.depth)),
     ),
@@ -44,11 +48,11 @@ export function buildSwitchTrays(kit: Kit, root: Group): void {
   const add = (look: Look, local: readonly BoxSpec[]) =>
     kit.boxes(group, 'switchTrays', look, perBand(SWITCH_BANDS, local));
   const { cages, mouths } = ports();
-  add('steelDark', [box(TRAY_X, [0, SWITCH_TALL], TRAY_Z)]);
+  add(RACK_FINISHES.chassis, [box(TRAY_X, [0, SWITCH_TALL], TRAY_Z)]);
   add(RACK_FINISHES.bezel, [bezel(SWITCH_TALL)]);
   add('steelLight', [...cages, ...handles(SWITCH_TALL)]);
-  add(RACK_FINISHES.port, mouths);
-  kit.boxes(group, 'switchTrays', 'fibre', linkLights());
+  kit.faces(group, 'switchTrays', RACK_FINISHES.port, perBand(SWITCH_BANDS, mouths));
+  kit.faces(group, 'switchTrays', 'fibre', linkLights());
   label(kit.context, 'switchTrays', group, [
     SPAN.x[0],
     middle(RACK_STACK.switchTrays),

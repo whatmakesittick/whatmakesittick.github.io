@@ -12,6 +12,7 @@ export const RACK_FINISHES = {
     emissiveIntensity: 1.1,
     roughness: 0.9,
   },
+  chassis: { color: '#3d434a', roughness: 0.6, metalness: 0.45 },
   bezel: { color: '#1d2126', roughness: 0.5, metalness: 0.35 },
   fanBlade: { color: '#3b4148', roughness: 0.6, metalness: 0.1 },
   port: { color: '#0b0d10', roughness: 0.9 },
