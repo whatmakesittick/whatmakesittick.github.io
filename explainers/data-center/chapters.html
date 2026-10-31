@@ -18,16 +18,17 @@
   </p>
   <p data-i18n-html="sections.building.p3">
     Together, the world's data centres used about 415 TWh of electricity in 2024. That is about 1.5
-    percent of all the electricity the world used, and the International Energy Agency expects about
-    945 TWh by 2030. The very largest sites are called hyperscale, and there were 1,136 of them at
-    the end of 2024. Google opened its first data centre in 2006, in The Dalles, Oregon.
+    percent of all the electricity the world used. The International Energy Agency expects about 945
+    TWh by 2030. The very largest sites are called hyperscale, and there were 1,136 of them at the
+    end of 2024. Google opened its first data centre in 2006, in The Dalles, Oregon.
   </p>
   <p data-i18n-html="sections.building.p4">
-    This model follows one <strong>joule</strong>, a small amount of energy, on its trip through the
-    site. Energy does not really travel in single lumps, but following one shows where all of it
-    goes. As electricity, the joule reaches its chip in under a microsecond. As heat, it needs about
-    a minute to leave through the roof. So the playback stretches the fast part and squeezes the
-    slow one, and the clock shows the model's timing, not a measurement.
+    This model follows one <strong>joule</strong>, a small amount of energy, through the site. Real
+    energy does not travel in single lumps, but following one shows where it all goes. The glowing
+    bead is the joule: amber as electricity, red once it turns into heat. It reaches its chip in
+    under a microsecond, then needs about a minute to leave through the roof. So the playback
+    stretches the fast part and squeezes the slow one, and the clock shows the model's timing, not a
+    measurement.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.moment">
     <button
@@ -125,11 +126,11 @@
     </button>
   </div>
   <p data-i18n-html="sections.powerIn.p4">
-    Press Cut the grid to run a drill. The batteries carry the hall while the generators start, then
+    Press Cut the grid to run a drill. The batteries carry the hall while the generators start. Then
     the generators take over and the batteries recharge. In this model the grid comes back after 20
-    seconds, a length chosen for the drill. Sites are graded by how well they handle failures: Tier
-    III can be serviced without shutting down, and Tier IV keeps running through a fault. Even so,
-    power problems caused 45 percent of serious outages in 2025.
+    seconds, a length chosen for the drill, and the generators wind down. Sites are graded by how
+    well they handle failures: Tier III can be serviced without shutting down, and Tier IV keeps
+    running through a fault. Even so, power problems caused 45 percent of serious outages in 2025.
   </p>
   <dl class="readouts">
     <div>
@@ -181,8 +182,8 @@
     At full load the rack draws about 120 kW, and HPE lists 132 kW for its version. Roughly a tenth
     of the power from the grid is lost before it gets here, as heat in the transformers, the UPS and
     the power shelves. The rack weighs roughly 1.4 tonnes, about as much as a mid-size electric car.
-    That is more weight on a small spot than a standard raised floor is built for, so AI halls need
-    a stronger floor.
+    Many halls stand on a raised floor, with cables and air running underneath. A standard one is
+    not built for that much weight on a small spot, so AI halls need a stronger floor.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.load">
     <button
@@ -209,7 +210,7 @@
     maths. The work keeps none of the energy: almost all of it turns into heat at once, right in the
     chip. The <strong>chip close-up</strong> shows one chip 10 times larger, with its sizes drawn,
     not measured. Small <strong>tray fans</strong> still cool the network cards and storage. Switch
-    to Idle to see the load drop; in this model an idle rack still draws 30 percent of its full
+    to Idle to see the load drop. In this model an idle rack still draws 30 percent of its full
     power.
   </p>
   <dl class="readouts">
@@ -255,9 +256,10 @@
   </p>
   <p data-i18n-html="sections.network.p2">
     Between racks, the data goes through network switches. Each row has a
-    <strong>leaf switch</strong>, and every leaf is wired to every <strong>spine switch</strong>. So
-    any rack can reach any other in three hops: leaf, spine, leaf. This model draws two spines and
-    one leaf per row, while real halls have far more.
+    <strong>leaf switch</strong> at its end. Every leaf is wired to every
+    <strong>spine switch</strong>, the backbone in the middle. So any rack can reach any other in
+    three hops: leaf, spine, leaf. This model draws two spines and one leaf per row, while real
+    halls have far more.
   </p>
   <p data-i18n-html="sections.network.p3">
     A fast switch, such as Arista's 7060X6, adds about 700 nanoseconds. A nanosecond is a billionth
@@ -268,7 +270,7 @@
   <p data-i18n-html="sections.network.p4">
     The slow part is the trip to you. A trip through the fibre to a city 1,000 km away and back
     takes about 10 milliseconds. For a city 100 km away, it takes about 1. That counts the fibre
-    alone; the software adds its own time on top. Pick a distance to compare.
+    alone. The software adds its own time on top. Pick a distance to compare.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.distance">
     <button
@@ -326,17 +328,17 @@
   <p data-i18n-html="sections.heatOut.p2">
     The <strong>manifold</strong>, pipes down the side of the rack, sends the warm water along the
     row to the <strong>coolant distribution unit</strong>, or CDU. There the heat passes into a
-    second loop, the facility water, and the two waters never mix. The facility water runs about 5
-    degrees colder, so it must arrive at about 20 °C. One CDU, CoolIT's CHx2000, moves 2 MW of heat
-    and stands on about 1.2 m² of floor. This model gives each row one.
+    second loop, the facility water that serves the whole building. The two waters never mix. The
+    facility water runs about 5 degrees colder, so it must arrive at about 20 °C. One CDU, CoolIT's
+    CHx2000, moves 2 MW of heat and stands on about 1.2 m² of floor. This model gives each row one.
   </p>
   <p data-i18n-html="sections.heatOut.p3">
     The <strong>facility pipes</strong> carry the heat up to the roof. Water at 20 °C is cooler than
     many summer days, so the <strong>chiller</strong> first pumps heat out of it. Then the
     <strong>dry coolers</strong> blow outside air over hot coils, and the joule finally leaves as
     warm air. Here every loop is closed, so very little water is used. Many sites use cooling towers
-    instead, which cool by evaporating water, and US data centres used about 66 billion litres on
-    site in 2023.
+    instead, which cool by evaporating water. US data centres used about 66 billion litres on site
+    in 2023.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.cooling">
     <button
@@ -359,8 +361,9 @@
     </button>
   </div>
   <p data-i18n-html="sections.heatOut.p4">
-    Pick Air to see the classic way. Fans pull cool air in at the front of each rack and blow it out
-    the back, into a hot aisle: the gap between two rows where the warm air gathers.
+    Pick Air to swap in air-cooled racks, the classic way. Fans pull cool air in at the front of
+    each rack and blow it out the back, into a hot aisle: the gap between two rows where the warm
+    air gathers.
     <strong>Air handlers</strong> then pass its heat into the same facility water. Air holds far
     less heat than water, so each kW needs about 272 m³ of air an hour. Some sites even put their
     heat to use: in Odense and Stockholm, data centres help warm homes.
@@ -423,8 +426,8 @@
   <p data-i18n-html="sections.compare.p2">
     Next to the rack, a <strong>laptop</strong> sits on a desk. Its charger is rated at 40 W, so one
     rack at full load matches 3,000 of them. Run at full load all year, one rack uses as much
-    electricity as about 100 US homes, or 270 in the EU. Back in 1945, ENIAC, one of the first
-    electronic computers, drew 150 kW, a little more than this one rack. It weighed about 27 tonnes
+    electricity as about 100 US homes, or 270 in the EU. ENIAC was one of the first electronic
+    computers. In 1945 it drew 150 kW, a little more than this one rack. It weighed about 27 tonnes
     and filled a whole room.
   </p>
   <p data-i18n-html="sections.compare.p3">
