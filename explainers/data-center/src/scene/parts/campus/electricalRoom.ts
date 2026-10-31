@@ -7,7 +7,7 @@ import { BATTERIES, MV_ENTRY, ROOM_TRAY_Y, SWITCHGEAR, UPS, spanning } from '../
 import type { BoxSpec } from '../../../model';
 import { groupMesh } from '../context';
 import type { PartContext } from '../context';
-import { ROOF_SLAB_Y } from './constants';
+import { ROOF_GIRDER, ROOF_GIRDER_TOP_Y, ROOF_GIRDER_X } from './constants';
 import { boxes, partGroup } from './kit';
 import type { PieceBuilder } from './kit';
 import { LINE_UPS, SIDES, around, batteryGlow, lineUp } from './roomCabinets';
@@ -44,8 +44,23 @@ const UPS_Z = UPS.base[2];
 const [MV_X, MV_Y, MV_Z] = MV_ENTRY;
 const AISLE_X = MV_X + CABLE_TURN_M;
 
+const HANGER_TOP = ROOF_GIRDER_TOP_Y - ROOF_GIRDER.depth;
+const HANGER_GIRDER = ROOF_GIRDER_X.reduce((best, x) =>
+  Math.abs(x - DROP_X) < Math.abs(best - DROP_X) ? x : best,
+);
+
 function rod(x: number, bottom: number): Member {
-  return [around(x, ROD.size), [bottom, ROOF_SLAB_Y], ROD.size];
+  return [around(x, ROD.size), [bottom, HANGER_TOP], ROD.size];
+}
+
+function strut(x: number): Member {
+  const reach = ROD.offset + BAR_M;
+  const flange = ROOF_GIRDER.width / 2;
+  return [
+    [Math.min(x - reach, HANGER_GIRDER - flange), Math.max(x + reach, HANGER_GIRDER + flange)],
+    [HANGER_TOP - BAR_M, HANGER_TOP],
+    BAR_M,
+  ];
 }
 
 const RUNS: readonly Run[] = [
@@ -61,6 +76,7 @@ const RUNS: readonly Run[] = [
     members: (x, bottom) => [
       [around(x, 2 * (ROD.offset + BAR_M)), [bottom - BAR_M, bottom], BAR_M],
       ...SIDES.map((side) => rod(x + side * ROD.offset, bottom)),
+      strut(x),
     ],
   },
   {
