@@ -48,7 +48,7 @@ function stack([from, to]: Extent, count: number, pitch = (to - from) / count): 
 
 function slab(band: Extent, depthShare = 1): BoxSpec {
   const inner: Extent = [SPAN.x[0] + PANEL_M, SPAN.x[1] - PANEL_M];
-  return spanning(inner, band, [SPAN.z[0], SPAN.z[0] + RACK.depth * depthShare]);
+  return spanning(inner, band, [SPAN.z[0], SPAN.z[0] + (RACK.depth - PANEL_M) * depthShare]);
 }
 
 function around(centre: number, size: number): Extent {

@@ -40,6 +40,7 @@ const ROAD_TOP_M = 0.02;
 const CONDUCTOR_M = 0.08;
 const SLAB_M = 0.3;
 const PAD_M = 0.15;
+const FLOOR_M = 0.01;
 const PIPE_M = 0.3;
 
 function conductor(index: number): BoxSpec {
@@ -106,6 +107,7 @@ export function buildCampus(context: PartContext): Section {
       spanning([east - WALL_THICKNESS, east], wallY, [north, south]),
       spanning([ROOM_WALL_X - WALL_THICKNESS, ROOM_WALL_X], wallY, [north, south]),
       spanning([CUTAWAY_ROOF_X[1], east], roofY, [north, south]),
+      spanning([west, east], [0, FLOOR_M], [north, south]),
     ],
     [ROOM_WALL_X, ROOF_Y, south],
   );
