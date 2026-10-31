@@ -56,6 +56,7 @@ const STRIP_REACH_M = 1;
 const FIBRE_LINES = [10.8, 13.0] as const;
 const RACEWAY_LIFT_M = 0.01;
 const SPINE_DROP_SHARE = 0.6;
+const ENTRY_LABEL_REACH_M = 3;
 
 interface Tray {
   axis: 'x' | 'z';
@@ -276,7 +277,7 @@ function buildFibre(context: PartContext, parent: Group, grid: CeilingGrid): voi
   group.add(
     instances(context, new BoxGeometry(), context.materials.get('fibreEntry', RACEWAY), legs),
   );
-  label(context, 'fibreEntry', group, [x, y + DUCT.entry, riseZ]);
+  label(context, 'fibreEntry', group, [x, trayY, riseZ - ENTRY_LABEL_REACH_M]);
 }
 
 export function buildNetwork(context: PartContext, parent: Group, grid: CeilingGrid): void {
