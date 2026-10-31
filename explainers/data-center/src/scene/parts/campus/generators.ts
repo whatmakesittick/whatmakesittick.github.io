@@ -28,7 +28,7 @@ type Row = readonly [keyof typeof LOOKS, ...number[]];
 
 const QUARTER = FULL_TURN / 4;
 const P = 1;
-const CYLINDER_SIDES = 16;
+const CYLINDER_SIDES = 8;
 const MIRROR_X = [-1, 1];
 const ALONG_X = [0, 0, 0, QUARTER] as const;
 const FLIP = new Matrix4().makeRotationY(FULL_TURN / 2);
@@ -82,7 +82,7 @@ function rowMatrices(row: Row): Matrix4[] {
   return paired ? [matrix, FLIP.clone().multiply(matrix)] : [matrix];
 }
 
-const LOUVRE = { slats: 9, tilt: 0.6, depth: 0.05, border: 0.05, slat: 0.09, blade: 0.012 };
+const LOUVRE = { slats: 4, tilt: 0.6, depth: 0.05, border: 0.05, slat: 0.09, blade: 0.012 };
 
 function louvreGeometry(): BufferGeometry {
   const { slats, tilt, depth, border, slat, blade } = LOUVRE;

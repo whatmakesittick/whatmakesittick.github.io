@@ -146,7 +146,7 @@ export function fence(context: PartContext, group: EmphasisGroup, lines: FenceLi
   texture.repeat.set(FENCE.pitch / MESH.tile, FENCE.panel / MESH.tile);
   const material = createMaterial({ ...PANEL, ...SEE_THROUGH, alphaMap: texture });
   const add = adder(context, group, parent);
-  add('fence', 'round', [...posts, ...rails]);
+  add('fence', 'bar', [...posts, ...rails]);
   add(registeredMaterial(context, group, material), 'panel', panels);
   return parent;
 }

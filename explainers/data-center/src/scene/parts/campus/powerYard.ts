@@ -15,9 +15,9 @@ import type { Cuboid } from './substationKit';
 const PART: PartId = 'substation';
 const SIDES = [-1, 1];
 const PHASES = [-1, 0, 1];
-const TOWER = { pitch: 85, count: 8, gap: 3.4, base: 1.6, top: 0.6, height: 14.2, panels: 10 };
-const ARM = { depth: 0.8, overhang: 0.5, panels: 9, peak: 1.8, peakTop: 0.15 };
-const WIRE = { diameter: 0.06, sagPerSquareMetre: 0.8 / 38 ** 2, segmentM: 3, string: 0.28 };
+const TOWER = { pitch: 85, count: 8, gap: 3.4, base: 1.6, top: 0.6, height: 14.2, panels: 6 };
+const ARM = { depth: 0.8, overhang: 0.5, panels: 5, peak: 1.8, peakTop: 0.15 };
+const WIRE = { diameter: 0.06, sagPerSquareMetre: 0.8 / 38 ** 2, segmentM: 7, string: 0.28 };
 const DARK_WIRE = { color: '#34383d', roughness: 0.8, metalness: 0.3 } as const;
 const FRAME = { column: [0.6, 0.6], beam: [0.4, 0.4], panel: 1.2, beamPanel: 0.6, overhang: 0.3 };
 const STAND = { x: -68, height: 5.2, beam: 0.3, post: 1.0, postDiameter: 0.3 };
@@ -116,7 +116,7 @@ function towers(): Matrix4[] {
   return TOWER_X.flatMap((x) => [
     ...LEG_Z.flatMap((z) => [
       ...lattice([x, GRASS_Y, z], [x, height, z], [base, top], panels),
-      ...lattice([x, height, z], [x, height + ARM.peak, z], [top, ARM.peakTop], 2),
+      ...lattice([x, height, z], [x, height + ARM.peak, z], [top, ARM.peakTop], 1),
     ]),
     ...lattice([x, armY, ARM_Z[0]], [x, armY, ARM_Z[1]], [ARM.depth, ARM.depth], ARM.panels),
   ]);
@@ -129,7 +129,7 @@ function gantry(): Matrix4[] {
     lattice([toX, YARD_Y, z], [toX, GANTRY_TOP_Y, z], FRAME.column, columnPanels);
   const beamPanels = Math.round((south - north) / FRAME.beamPanel);
   const beam = lattice([toX, BEAM_Y, north], [toX, BEAM_Y, south], FRAME.beam, beamPanels);
-  return [...BAY_Z.flatMap(column), ...beam, ...GALVANISED.map(cuboid)];
+  return [...BAY_Z.flatMap(column), ...beam];
 }
 
 function strings(): Matrix4[] {
@@ -210,12 +210,12 @@ function fenceLines(): number[][] {
 function buildGridLine(context: PartContext, root: Object3D): CampusPiece {
   const label: Point = [(fromX + toX) / 2, LINE_Y, LINE_Z];
   const add = adder(context, 'gridLine', partGroup(context, 'gridLine', root, label));
-  add('steel', 'box', towers());
+  add('steel', 'bar', towers());
   add('concrete', 'box', TOWER_FOOTINGS.map(cuboid));
   add('insulator', 'insulator', strings());
   const lit = materialOf(context, 'gridLine', 'conductor');
   const dark = materialOf(context, 'gridLine', DARK_WIRE);
-  const conductors = add(lit, 'round', wires());
+  const conductors = add(lit, 'bar', wires());
   return {
     animate({ outage }) {
       conductors.material = outage.gridOn ? lit : dark;
@@ -236,7 +236,8 @@ export const buildPowerYard: PieceBuilder = (context, root) => {
   const add = adder(context, PART, group);
   group.add(fence(context, PART, fenceLines()));
   add(mottled(context, PART, 'gravel'), 'box', [slab(SUBSTATION, YARD_Y)]);
-  add('steel', 'box', gantry());
+  add('steel', 'bar', gantry());
+  add('steel', 'box', GALVANISED.map(cuboid));
   add('concrete', 'box', GANTRY_FOOTINGS.map(cuboid));
   add('insulator', 'insulator', bayInsulators());
   add('conductor', 'round', buses());

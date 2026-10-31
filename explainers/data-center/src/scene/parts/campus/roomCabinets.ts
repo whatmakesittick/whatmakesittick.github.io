@@ -106,7 +106,6 @@ export const LINE_UPS: readonly LineUpKind[] = [
       ...SHELVES.flatMap((y) =>
         SLOTS.flatMap((x): Feature[] => [
           ['battery', x, 0.42, y, y + 0.4, 0, 0.6],
-          ['cabinet', x, 0.24, y + 0.22, y + 0.32, 0.31, 0.02],
           ['statusLight', x + 0.16, 0.03, y + 0.29, y + 0.32, 0.31, 0.02],
         ]),
       ),
