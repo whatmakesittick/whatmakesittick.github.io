@@ -79,7 +79,11 @@ export const AIR_ARROW = {
   floorY: 0.5,
 } as const;
 
-export const WATER_OFFSET = { indoor: 0.09, roof: 0.9, direction: [0.55, 0.45, 0.7] } as const;
+export const WATER = {
+  flank: { across: 0.13, up: 0.11 },
+  roofPipe: { radius: 0.15, wallClear: 0.05 },
+  supply: { rowGap: 0.15, dropZ: 0.3, riserZ: 0.16 },
+} as const;
 
 export const PLUME = {
   puffsPerCooler: 5,

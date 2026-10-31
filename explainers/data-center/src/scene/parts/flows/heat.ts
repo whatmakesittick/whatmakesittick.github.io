@@ -7,7 +7,7 @@ import {
   Vector3,
 } from 'three';
 import type { Group } from 'three';
-import type { AssemblyState, CoolingId, Point } from '../../../ids';
+import type { AssemblyState, CoolingId } from '../../../ids';
 import {
   AIR_CEILING_Y,
   DRY_COOLERS,
@@ -15,7 +15,6 @@ import {
   ENERGY_PATH,
   HOT_AISLE_Z,
   PLUME_TOP,
-  ROOF_Y,
   SUBJECT_ROW,
   boxTop,
   rackBase,
@@ -31,13 +30,13 @@ import {
   PITCH,
   PLUME,
   RENDER_ORDER,
-  WATER_OFFSET,
 } from './constants';
 import { lifeOf, puffCloud } from './puffs';
 import type { Cloud } from './points';
 import { Stream } from './stream';
-import { Track, fixedPitch, legPoints } from './track';
+import { Track, fixedPitch } from './track';
 import { Trail } from './trail';
+import { returnRoute, supplyRoute } from './water';
 
 interface Loop {
   readonly object: Group;
@@ -46,27 +45,11 @@ interface Loop {
 }
 
 const UP = new Vector3(0, 1, 0);
-const OFFSET = new Vector3(...WATER_OFFSET.direction).normalize();
 const ARROW_FADE = 0.35;
 const matrix = new Matrix4();
 const turn = new Quaternion();
 const spot = new Vector3();
 const size = new Vector3();
-
-function waterPoints(cooling: CoolingId): Point[] {
-  return legPoints(ENERGY_PATH[cooling].filter(({ carrier }) => carrier === 'water'));
-}
-
-function supplyOf(points: readonly Point[]): Point[] {
-  return [...points].reverse().map((point) => {
-    const metres = point[1] >= ROOF_Y ? WATER_OFFSET.roof : WATER_OFFSET.indoor;
-    return [
-      point[0] + OFFSET.x * metres,
-      point[1] + OFFSET.y * metres,
-      point[2] + OFFSET.z * metres,
-    ];
-  });
-}
 
 function airTracks(): Track[] {
   const leg = ENERGY_PATH.air.find(({ carrier }) => carrier === 'air');
@@ -161,8 +144,7 @@ class Plume {
 
 function loop(context: PartContext, parent: Group, cooling: CoolingId): Loop {
   const object = namedGroup(`water-${cooling}`, parent);
-  const back = waterPoints(cooling);
-  const tracks = [new Track(back), new Track(supplyOf(back))];
+  const tracks = [new Track(returnRoute(cooling)), new Track(supplyRoute(cooling))];
   const [hot, cold] = tracks.map((track, index) => {
     const color = index === 0 ? HEAT_TINTS.full : HEAT_TINTS.supply;
     const stream = new Stream(context, 'facilityPipes', track, PARTICLE_PX.water);
