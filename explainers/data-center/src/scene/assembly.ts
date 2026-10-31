@@ -2,7 +2,7 @@ import type { Box3, Group, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, ChaseTarget, PartId, RegionId } from '../ids';
-import { createPlaceholderAssembly } from './placeholderAssembly';
+import { createDataCenterAssembly } from './dataCenterAssembly';
 
 export type { ChaseTarget } from '../ids';
 
@@ -24,5 +24,5 @@ export interface Assembly {
 }
 
 export function createAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
-  return createPlaceholderAssembly(resources, state);
+  return createDataCenterAssembly(resources, state);
 }

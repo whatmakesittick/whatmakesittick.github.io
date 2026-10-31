@@ -12,7 +12,7 @@ export const SCENE_LIMITS = {
   cameraFar: 1200,
   maxPolarAngle: Math.PI * 0.495,
   cameraMinDistance: 0.6,
-  cameraMaxDistance: 260,
+  cameraMaxDistance: 320,
 } as const;
 
 export const LIGHT_RIG = {
