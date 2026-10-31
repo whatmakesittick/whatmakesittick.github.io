@@ -1,3 +1,5 @@
+import type { Box3 } from 'three';
+import { regionFromSpec } from '@core/scene/regions';
 import type { RegionSpec } from '@core/scene/regions';
 import { REGION_IDS } from '../ids';
 import type { RegionId } from '../ids';
@@ -21,4 +23,10 @@ export function isAssemblyRegion(id: FramedRegionId): id is RegionId {
 
 export function framedRegionSpec(id: FramedRegionId): RegionSpec {
   return isAssemblyRegion(id) ? REGION_SPECS[id] : VIEW_REGION_SPECS[id];
+}
+
+export function buildRegions(): Record<RegionId, Box3> {
+  return Object.fromEntries(
+    REGION_IDS.map((id) => [id, regionFromSpec(REGION_SPECS[id])]),
+  ) as Record<RegionId, Box3>;
 }
