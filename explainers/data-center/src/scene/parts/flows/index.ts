@@ -1,6 +1,7 @@
 import type { AssemblyState } from '../../../ids';
 import { namedGroup } from '../context';
-import type { Frame, PartContext, Section } from '../context';
+import type { Frame, OutageSample, PartContext, Section } from '../context';
+import { RESTING_OUTAGE } from '../outage';
 import { Exhaust } from './exhaust';
 import { HeatFlow } from './heat';
 import { JouleBead } from './joule';
@@ -19,6 +20,13 @@ export function buildFlows(context: PartContext): Section {
   const packets = new PacketFlow(context, root);
   const exhaust = new Exhaust(context, root);
   let time = 0;
+  let outage: OutageSample = RESTING_OUTAGE;
+  const place = () => {
+    power.animate(time, outage);
+    heat.animate(time);
+    packets.animate(time);
+    exhaust.animate(outage);
+  };
   return {
     root,
     setState(state: AssemblyState) {
@@ -26,15 +34,14 @@ export function buildFlows(context: PartContext): Section {
       power.setState(state);
       heat.setState(state);
       packets.setState(state);
+      place();
     },
     animate(frame: Frame, state: AssemblyState) {
       const moving = flowing(state) || frame.outage.active;
       if (moving) time += frame.delta;
+      outage = frame.outage;
       bead.scale(frame.cameraDistance);
-      power.animate(time, frame.outage);
-      heat.animate(time);
-      packets.animate(time);
-      exhaust.animate(frame.outage);
+      place();
       return moving;
     },
   };

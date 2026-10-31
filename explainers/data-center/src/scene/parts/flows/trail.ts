@@ -109,7 +109,7 @@ export class Trail {
 
   constructor(context: PartContext, group: EmphasisGroup, track: Track, style: TrailStyle) {
     const geometry = context.tracker.track(trailGeometry(track));
-    this.glows = [style.glow ?? TRAIL.glow, style.ghost ?? TRAIL.ghost];
+    this.glows = [style.glow ?? TRAIL.glow, style.ghost ?? TRAIL.ghost].filter((glow) => glow > 0);
     this.glows.forEach((glow, index) => {
       const ghost = index === 1;
       const uniforms = {

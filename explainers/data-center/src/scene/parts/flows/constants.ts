@@ -6,7 +6,7 @@ export const PITCH = {
   rack: 0.12,
   building: 0.8,
   outdoor: 2.4,
-  packets: 0.9,
+  packets: 1.2,
   arrows: 1.3,
 } as const;
 
@@ -36,8 +36,8 @@ export const PARTICLE_PX = { power: 7, water: 6, flicker: 5 } as const;
 export const IDLE_DENSITY = 2;
 
 export const BEAD = {
-  core: 0.022,
-  halo: 0.085,
+  core: 0.026,
+  halo: 0.11,
   minDistance: 0.6,
   heatTint: THEME.heat,
   currentTint: THEME.current,
@@ -52,6 +52,12 @@ export const HALO_STOPS = [
   { offset: 0.38, color: 'rgba(24,18,12,0.85)' },
   { offset: 0.44, color: 'rgba(24,18,12,0.2)' },
   { offset: 0.5, color: 'rgba(255,255,255,0.3)' },
+  { offset: 1, color: 'rgba(255,255,255,0)' },
+] as const;
+
+export const PUFF_STOPS = [
+  { offset: 0, color: 'rgba(255,255,255,0.55)' },
+  { offset: 0.45, color: 'rgba(255,255,255,0.3)' },
   { offset: 1, color: 'rgba(255,255,255,0)' },
 ] as const;
 
@@ -73,12 +79,12 @@ export const AIR_ARROW = {
   floorY: 0.5,
 } as const;
 
-export const WATER_OFFSET = { indoor: 0.09, roof: 0.55, direction: [0.55, 0.45, 0.7] } as const;
+export const WATER_OFFSET = { indoor: 0.09, roof: 0.9, direction: [0.55, 0.45, 0.7] } as const;
 
 export const PLUME = {
-  puffsPerCooler: 3,
+  puffsPerCooler: 5,
   rate: 0.09,
-  size: [3.5, 10],
+  size: [6, 17],
   alpha: { full: 0.2, idle: 0.12 },
   height: { full: 1, idle: 0.55 },
   converge: 0.45,
@@ -87,19 +93,17 @@ export const PLUME = {
 } as const;
 
 export const EXHAUST = {
-  puffsPerStack: 5,
+  puffsPerStack: 6,
   rate: 0.55,
   rise: 6,
   drift: 2.5,
-  size: [0.8, 3.6],
-  alpha: 0.55,
+  size: [1.8, 7],
+  alpha: 0.45,
   tint: '#4a4e55',
-  stackShareX: 0.32,
-  stackHeight: 1.3,
 } as const;
 
 export const PACKETS = {
-  width: 0.0032,
+  width: 0.006,
   rate: 2.2,
   lift: 0.08,
   flickerRate: 9,

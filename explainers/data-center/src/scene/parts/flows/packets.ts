@@ -68,6 +68,7 @@ export class PacketFlow {
       color: THEME.packet,
       width: PACKETS.width,
       glow: TRAIL.dashGlow,
+      ghost: 0,
       pulse: 1,
     });
     this.ports = new Cloud(context, 'switchTrays', this.spots.length, {

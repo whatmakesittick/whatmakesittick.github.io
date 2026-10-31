@@ -1,6 +1,5 @@
 import type { Group } from 'three';
-import type { Point } from '../../../ids';
-import { GENSET, GENSETS } from '../../../model';
+import { GENSET_STACK_TIPS } from '../campus/constants';
 import type { OutageSample, PartContext } from '../context';
 import { EXHAUST } from './constants';
 import type { Cloud } from './points';
@@ -8,17 +7,9 @@ import { lifeOf, puffCloud } from './puffs';
 
 const FADE_IN = 0.1;
 
-function stackTips(): Point[] {
-  return GENSETS.map(({ base: [x, y, z] }) => [
-    x + GENSET.width * EXHAUST.stackShareX,
-    y + GENSET.height + EXHAUST.stackHeight,
-    z,
-  ]);
-}
-
 export class Exhaust {
   private readonly cloud: Cloud;
-  private readonly tips = stackTips();
+  private readonly tips = GENSET_STACK_TIPS;
 
   constructor(context: PartContext, parent: Group) {
     this.cloud = puffCloud(context, 'generators', this.tips.length * EXHAUST.puffsPerStack);
