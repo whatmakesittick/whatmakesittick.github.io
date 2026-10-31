@@ -122,7 +122,7 @@ describe('data centre camera views', () => {
     expect(Object.fromEntries(FIXED_IDS.map((id) => [id, FIXED_VIEWS[id].region]))).toEqual({
       campus: 'campusAndLine',
       powerYard: 'yardAndRoom',
-      rackSide: 'rack',
+      rackSide: 'rackAndInset',
       networkRow: 'networkRow',
       coolingPlant: 'coolingLoop',
       lineUp: 'lineUp',

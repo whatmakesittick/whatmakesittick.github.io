@@ -28,6 +28,8 @@ import {
 import type { BoxSpec, FixedAnchorId } from '../model';
 import {
   GENSETS_IN_VIEW,
+  INSET_LABEL_ROOM_M,
+  PLANT_LABEL_ROOM_M,
   VIEW_REGION_IDS,
   VIEW_REGION_SPECS,
   buildRegions,
@@ -86,6 +88,13 @@ describe('framed regions', () => {
   it('holds the subject rack, its CDU and the roof plant in the cooling view, below the plume top', () => {
     expectHolds('coolingLoop', [SUBJECT_RACK_BOX, SUBJECT_CDU, CHILLER, ...DRY_COOLERS]);
     expect(VIEW_REGION_SPECS.coolingLoop.y[1]).toBeLessThan(PLUME_TOP[1]);
+  });
+
+  it('leaves room for the labels left of the subject rack and above the chip inset', () => {
+    const { rack, coolingPlant } = REGION_SPECS;
+    expect(VIEW_REGION_SPECS.coolingLoop.x[0]).toBe(coolingPlant.x[0] - PLANT_LABEL_ROOM_M);
+    expect(VIEW_REGION_SPECS.rackAndInset.y[1]).toBe(rack.y[1] + INSET_LABEL_ROOM_M);
+    expect(VIEW_REGION_SPECS.rackAndInset.x).toEqual(rack.x);
   });
 });
 

@@ -35,7 +35,7 @@ export const CHASE: FollowSpec = { bearing: toRadians(45), elevation: toRadians(
 export const COMPASS_VIEWS: Readonly<Record<FixedView, CompassView>> = {
   campus: { region: 'campusAndLine', bearing: 232, elevation: 40, margin: 1 },
   powerYard: { region: 'yardAndRoom', bearing: 215, elevation: 33, margin: 1 },
-  rackSide: { region: 'rack', bearing: 240, elevation: -2, margin: 1.03 },
+  rackSide: { region: 'rackAndInset', bearing: 240, elevation: -2, margin: 1.03 },
   networkRow: { region: 'networkRow', bearing: 80, elevation: 42, margin: 1 },
   coolingPlant: { region: 'coolingLoop', bearing: 157, elevation: 34, margin: 1 },
   lineUp: { region: 'lineUp', bearing: 250, elevation: 4, margin: 1 },

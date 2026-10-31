@@ -18,14 +18,22 @@ import {
 
 export const GENSETS_IN_VIEW = 3;
 export const PLUME_IN_VIEW_M = 2;
+export const INSET_LABEL_ROOM_M = 0.6;
+export const PLANT_LABEL_ROOM_M = 14;
 
-export const VIEW_REGION_IDS = ['campusAndLine', 'yardAndRoom', 'coolingLoop'] as const;
+export const VIEW_REGION_IDS = [
+  'campusAndLine',
+  'yardAndRoom',
+  'rackAndInset',
+  'coolingLoop',
+] as const;
 export type ViewRegionId = (typeof VIEW_REGION_IDS)[number];
 export type FramedRegionId = RegionId | ViewRegionId;
 
 const CAMPUS = REGION_SPECS.campus;
 const POWER_YARD = REGION_SPECS.powerYard;
 const COOLING_PLANT = REGION_SPECS.coolingPlant;
+const RACK_REGION = REGION_SPECS.rack;
 const ROOF_PLANT_TOP_Y = ROOF_Y + DRY_COOLER.height;
 const TRANSFORMERS_WEST_X = Math.min(...TRANSFORMERS.map((box) => boxSpan(box).x[0]));
 const SHOWN_GENSETS_EAST_X = Math.max(
@@ -43,7 +51,12 @@ export const VIEW_REGION_SPECS: Readonly<Record<ViewRegionId, RegionSpec>> = {
     y: [GROUND_Y, TRANSFORMER.height],
     z: [POWER_YARD.z[0], BUILDING.z[1]],
   },
-  coolingLoop: { ...COOLING_PLANT, y: [GROUND_Y, ROOF_PLANT_TOP_Y + PLUME_IN_VIEW_M] },
+  rackAndInset: { ...RACK_REGION, y: [RACK_REGION.y[0], RACK_REGION.y[1] + INSET_LABEL_ROOM_M] },
+  coolingLoop: {
+    x: [COOLING_PLANT.x[0] - PLANT_LABEL_ROOM_M, COOLING_PLANT.x[1]],
+    y: [GROUND_Y, ROOF_PLANT_TOP_Y + PLUME_IN_VIEW_M],
+    z: COOLING_PLANT.z,
+  },
 };
 
 export function isAssemblyRegion(id: FramedRegionId): id is RegionId {
