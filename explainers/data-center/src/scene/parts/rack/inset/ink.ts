@@ -18,7 +18,7 @@ export const INK = {
   supply: { colour: THEME.coolantSupply },
   return: { colour: THEME.coolantReturn },
   sink: { colour: '#97a2ad' },
-  coolAir: { colour: '#a9cdf0', opacity: 0.55 },
+  coolAir: { colour: '#a9cdf0', opacity: 0.75 },
   warmAir: { colour: THEME.heat, opacity: 0.55 },
   heat: { colour: THEME.heat },
   heatHalo: { colour: THEME.heat, opacity: 0.3 },
