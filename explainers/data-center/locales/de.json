@@ -3,13 +3,13 @@
     "title": "So funktioniert ein Rechenzentrum",
     "eyebrow": "Computertechnik",
     "tagline": "Folgen Sie einem Joule in 3D durch ein KI-Rechenzentrum: von der Hochspannungsleitung in ein 120-kW-Rack, wo es zu Wärme wird, und dann übers Dach hinaus.",
-    "description": "Folgen Sie einem Joule vom Stromnetz in ein 120-kW-KI-Rack, wo es zu Wärme wird, und übers Dach hinaus. Im 3D-Modell eines Rechenzentrums.",
+    "description": "Folgen Sie im 3D-Modell eines Rechenzentrums einem Joule vom Stromnetz in ein 120-kW-KI-Rack, wo es zu Wärme wird, und übers Dach hinaus.",
     "summary": "Das Gelände und sein Strom, die Reserve, die alles am Laufen hält, ein Blick in ein 120-kW-KI-Rack, das Netzwerk, der Weg der Wärme nach draußen und warum Wasser besser kühlt als Luft.",
     "socialAlt": "Ein aufgeschnittenes 3D-Modell eines Rechenzentrumsgeländes: Der Weg des Stroms leuchtet vom Umspannwerk bis zu einem flüssigkeitsgekühlten KI-Rack, die Wärme steigt zum Dach auf, daneben der Titel „So funktioniert ein Rechenzentrum“"
   },
   "stage": {
     "label": "Interaktives Modell eines Rechenzentrums",
-    "gauge": "Messwerte live"
+    "gauge": "Live-Messwerte"
   },
   "timeline": {
     "label": "Der Weg eines Joules",
@@ -36,7 +36,7 @@
       "release": "Direkt aufs Dach"
     },
     "detail": {
-      "grid": "das Joule kommt über die Hochspannungsleitung und wird im Umspannwerk heruntertransformiert",
+      "grid": "das Joule kommt über die Hochspannungsleitung ins Umspannwerk, wo die Spannung sinkt",
       "protect": "das Joule passiert Schaltanlage und USV, die Generatoren stehen bereit",
       "distribute": "das Joule fließt durch den Schienenverteiler in die Halle",
       "compute": "das Joule erreicht eine GPU und wird zu Wärme",
@@ -64,7 +64,7 @@
     },
     "benchmarkOptions": {
       "average": "Branchenschnitt",
-      "best": "Bester Betreiber"
+      "best": "Googles Rechenzentren"
     },
     "distanceOptions": {
       "km100": "100 km entfernt",
@@ -79,7 +79,7 @@
       "load": "Last im Rack",
       "distance": "Wie weit Sie entfernt sind",
       "cooling": "Kühlung",
-      "benchmark": "Vergleichswert"
+      "benchmark": "Standort zum Vergleich"
     },
     "views": {
       "power": {
@@ -122,8 +122,8 @@
       "average": "Branchenschnitt",
       "best": "Googles Rechenzentren"
     },
-    "supply": "Kühlmittel-Eintritt",
-    "return": "Kühlmittel-Austritt"
+    "supply": "Kühlmittel ins Rack",
+    "return": "Kühlmittel aus dem Rack"
   },
   "units": {
     "ns": "{{value}} ns",
@@ -152,7 +152,7 @@
       "facility": "Leistung aus dem Netz",
       "facilityValue": "etwa {{mw}} MW bei einer PUE von {{pue}}",
       "world": "Alle Rechenzentren weltweit",
-      "worldValue": "etwa {{twh}} TWh im Jahr {{year}}, {{percent}} % des Stroms der Welt"
+      "worldValue": "etwa {{twh}} TWh im Jahr {{year}}, {{percent}} % des weltweiten Stromverbrauchs"
     },
     "powerIn": {
       "chain": "Spannungsstufen, ein Beispiel",
@@ -161,7 +161,7 @@
       "takeoverValue": "laut Vorschrift binnen {{code}} s, an echten Standorten {{min}} bis {{max}} s",
       "rideThrough": "Batterien halten durch",
       "rideThroughValue": "in der Regel {{min}} bis {{max}} Minuten",
-      "genset": "Ein Aggregat",
+      "genset": "Ein Dieselgenerator",
       "gensetValue": "etwa {{mw}} MW, etwa {{tonnes}} t",
       "fuel": "Diesel bei Volllast",
       "fuelValue": "etwa {{litres}} Liter pro Stunde",
@@ -235,7 +235,7 @@
     "busway": "Schienenverteiler",
     "hall": "Serverhalle",
     "racks": "Rackreihen",
-    "subjectRack": "Rack GB200 NVL72",
+    "subjectRack": "GB200-NVL72-Rack",
     "powerShelves": "Netzteil-Einschübe",
     "busbar": "DC-Stromschiene",
     "computeTrays": "Recheneinschübe",
@@ -257,45 +257,45 @@
   "sections": {
     "building": {
       "title": "Strom rein, Wärme raus",
-      "p1": "Ein Rechenzentrum ist ein Gebäude voller Computer, auf denen Websites, Apps und KI laufen. Stellen Sie es sich als eine einzige große Maschine mit einem einfachen Kreislauf vor: Strom fließt hinein, Wärme geht hinaus. Der Strom kommt über eine <strong>Hochspannungsleitung</strong>, und im <strong>Umspannwerk</strong> sinkt seine Spannung. Neben der <strong>Serverhalle</strong> warten Reihen von <strong>Dieselgeneratoren</strong>. Auf dem Dach der Halle führen eine <strong>Kältemaschine</strong> und <strong>Rückkühler</strong> die Wärme ab.",
-      "p2": "In der Halle stehen die <strong>Racks</strong>: hohe Stahlschränke, dicht gepackt mit Computern. Die Halle in diesem Modell fasst 192 Racks in 16 Reihen. Diese Anordnung legt das Modell selbst fest, denn echte Hallen gibt es in allen Größen. Laufen alle Racks mit voller Leistung, brauchen die Computer etwa 23 MW. Rechnet man die Kühlung und die Verluste unterwegs dazu, bezieht ein durchschnittlicher Standort etwa 35 MW aus dem Netz. Wie die besten Standorte besser abschneiden, zeigt das letzte Kapitel.",
-      "p3": "Zusammen haben die Rechenzentren der Welt 2024 etwa 415 TWh Strom verbraucht. Das sind etwa 1,5 Prozent des gesamten Stromverbrauchs der Welt. Die Internationale Energieagentur rechnet bis 2030 mit etwa 945 TWh. Die allergrößten Anlagen nennt man Hyperscale-Rechenzentren. Ende 2024 gab es 1.136 davon. Google eröffnete sein erstes Rechenzentrum 2006 in The Dalles in Oregon.",
+      "p1": "Ein Rechenzentrum ist ein Gebäude voller Computer, auf denen Websites, Apps und KI laufen. Stellen Sie es sich als eine einzige große Maschine mit einem einfachen Kreislauf vor: Strom fließt hinein, Wärme geht hinaus. Der Strom kommt über eine <strong>Hochspannungsleitung</strong>, und im <strong>Umspannwerk</strong> sinkt seine Spannung. Neben der <strong>Serverhalle</strong> warten Reihen von <strong>Dieselgeneratoren</strong>. Auf dem Dach der Halle kühlt eine <strong>Kältemaschine</strong> Wasser, ganz ähnlich wie ein großer Kühlschrank, und <strong>Rückkühler</strong> geben die Wärme an die Außenluft ab.",
+      "p2": "In der Halle stehen die <strong>Racks</strong>: hohe Stahlschränke, dicht gepackt mit Computern. Die Halle in diesem Modell fasst 192 Racks in 16 Reihen. Diese Aufteilung gilt nur für das Modell, denn echte Hallen gibt es in allen Größen. Laufen alle Racks mit voller Leistung, brauchen die Computer etwa 23 MW. Rechnet man die Kühlung und die Verluste unterwegs dazu, bezieht ein durchschnittlicher Standort etwa 35 MW aus dem Netz. Wie es die besten Standorte besser machen, zeigt das letzte Kapitel.",
+      "p3": "Alle Rechenzentren der Welt zusammen haben 2024 etwa 415 TWh Strom verbraucht. Das sind etwa 1,5 Prozent des weltweiten Stromverbrauchs. Die Internationale Energieagentur rechnet bis 2030 mit etwa 945 TWh. Die allergrößten Anlagen nennt man Hyperscale-Rechenzentren. Ende 2024 gab es 1.136 davon. Google eröffnete sein erstes Rechenzentrum 2006 in The Dalles in Oregon.",
       "p4": "Dieses Modell folgt einem <strong>Joule</strong>, einer kleinen Menge Energie, auf seinem Weg durch die Anlage. In Wirklichkeit wandert Energie nicht in einzelnen Portionen. Doch wenn Sie einem Joule folgen, sehen Sie, wo die ganze Energie bleibt. Als Strom erreicht das Joule seinen Chip in weniger als einer Mikrosekunde. Als Wärme braucht es etwa eine Minute, bis es über das Dach entweicht. Deshalb dehnt die Wiedergabe den schnellen Teil und rafft den langsamen. Die Uhr zeigt die Zeiten des Modells, keine gemessenen Werte."
     },
     "powerIn": {
       "title": "Strom, der nie ausfallen darf",
       "p1": "Das Joule kommt über die <strong>Hochspannungsleitung</strong>. Bei hoher Spannung lässt sich Strom verlustarm über weite Strecken übertragen. Das <strong>Umspannwerk</strong> und seine <strong>Transformatoren</strong> senken die Spannung, und kleinere Transformatoren nahe der Halle senken sie noch einmal. Jeder Transformator gibt etwa 98 bis 99 Prozent der Energie weiter. Die Spannungen hier sind ein Beispiel, jeder Standort wählt seine eigenen.",
-      "p2": "Danach kommt die <strong>Schaltanlage</strong>, eine ganze Wand aus großen Schaltern. Sie verteilt den Strom und trennt jeden Abschnitt ab, in dem ein Fehler auftritt. Dann passiert das Joule die <strong>USV</strong> mit ihren <strong>Batterien</strong>. USV steht für unterbrechungsfreie Stromversorgung. Fällt das Netz aus, springen die Batterien sofort ein. Sie können die Halle einige Minuten lang versorgen, in der Regel 5 bis 15. Von dort bringt der <strong>Schienenverteiler</strong> den Strom in die Halle und an den Reihen entlang. Das sind dicke Metallschienen in einem langen Gehäuse.",
-      "p3": "Batterien verschaffen nur Zeit. Die eigentliche Reserve sind die <strong>Dieselgeneratoren</strong>. Sicherheitsvorschriften verlangen, dass sie innerhalb von 10 Sekunden übernehmen. An echten Standorten dauert es irgendwo zwischen 10 und 60 Sekunden. Ein Beispiel ist der Cat 3516C. Dieses Aggregat liefert etwa 1,8 MW, wiegt etwa 17 Tonnen und verbrennt bei Volllast etwa 466 Liter Diesel pro Stunde. Größere Ausführungen davon kommen auf etwa 2,5 MW.",
-      "p4": "Drücken Sie „Netz abschalten“, um den Ernstfall zu üben. Die Batterien versorgen die Halle, während die Generatoren anlaufen. Dann übernehmen die Generatoren, und die Batterien laden sich wieder auf. In diesem Modell kommt das Netz nach 20 Sekunden zurück. Diese Dauer ist für die Übung gewählt. Rechenzentren werden danach eingestuft, wie gut sie mit Störungen umgehen: Tier III lässt sich im laufenden Betrieb warten, und Tier IV läuft auch bei einem Fehler weiter. Trotzdem waren 2025 Probleme mit dem Strom die Ursache für 45 Prozent der schweren Ausfälle."
+      "p2": "Danach kommt die <strong>Schaltanlage</strong>, eine ganze Wand aus großen Schaltern. Sie verteilt den Strom und trennt jeden Abschnitt ab, in dem ein Fehler auftritt. Dann passiert das Joule die <strong>USV</strong> mit ihren <strong>Batterien</strong>. USV steht für unterbrechungsfreie Stromversorgung. Fällt das Netz aus, springen die Batterien sofort ein. Sie können die Halle einige Minuten lang versorgen, in der Regel 5 bis 15. Von dort führt der <strong>Schienenverteiler</strong> den Strom in die Halle und an den Reihen entlang. In seinem langen Gehäuse stecken dicke Metallschienen.",
+      "p3": "Batterien verschaffen nur Zeit. Die eigentliche Reserve sind die <strong>Dieselgeneratoren</strong>. Sicherheitsvorschriften verlangen, dass sie innerhalb von 10 Sekunden übernehmen. An echten Standorten dauert es irgendwo zwischen 10 und 60 Sekunden. Ein solcher Generator ist der Cat 3516C von Caterpillar. Er liefert etwa 1,8 MW, wiegt etwa 17 Tonnen und verbrennt bei Volllast etwa 466 Liter Diesel pro Stunde. Größere Ausführungen dieses Generators kommen auf etwa 2,5 MW.",
+      "p4": "Drücken Sie „Netz abschalten“, um den Ernstfall zu üben. Die Batterien versorgen die Halle, während die Generatoren anlaufen. Dann übernehmen die Generatoren, und die Batterien laden sich wieder auf. In diesem Modell kommt das Netz nach 20 Sekunden zurück. Diese Dauer ist für die Übung gewählt. Rechenzentren werden danach eingestuft, wie gut sie mit Störungen umgehen: Tier III lässt sich im laufenden Betrieb warten, und Tier IV läuft auch bei einem Fehler weiter. Trotzdem gingen 45 Prozent der schweren Ausfälle im Jahr 2025 auf Probleme mit dem Strom zurück."
     },
     "rack": {
       "title": "Im Inneren eines 120-kW-Racks",
-      "p1": "Hierhin ist das Joule unterwegs: in ein Rack vom Typ <strong>Nvidia GB200 NVL72</strong>. Es enthält 72 GPUs. Das sind die Chips, die für die KI rechnen. Dazu kommen 36 CPUs, die alles drumherum steuern. Die Chips stecken in 18 <strong>Recheneinschüben</strong>, flachen Schubladen, die man ins Rack schiebt. Dazwischen verbinden 9 <strong>Switch-Einschübe</strong> alle 72 GPUs miteinander. Die Reihenfolge der Einschübe legt das Modell selbst fest.",
-      "p2": "Der Strom kommt oben und unten herein, in sechs <strong>Netzteil-Einschübe</strong>. Sie wandeln den Wechselstrom (AC) der Halle in Gleichstrom (DC) mit etwa 50 V um. Die <strong>DC-Stromschiene</strong> besteht aus dicken Kupferschienen an der Rückseite des Racks. Sie versorgt jeden Einschub mit bis zu 1.400 A. Bei etwa 50 V ist das weniger Leistung, als das ganze Rack braucht. Deshalb hat die Stromschiene im Modell eine obere und eine untere Hälfte, und jede wird von drei Netzteil-Einschüben gespeist. Wie die echte Aufteilung aussieht, ist nicht veröffentlicht.",
-      "p3": "Unter Volllast zieht das Rack etwa 120 kW, und HPE gibt für seine Version 132 kW an. Rund ein Zehntel des Stroms aus dem Netz geht verloren, bevor er hier ankommt. Er wird unterwegs zu Wärme, in den Transformatoren, in der USV und in den Netzteil-Einschüben. Das Rack wiegt rund 1,4 Tonnen, etwa so viel wie ein mittelgroßes Elektroauto. So viel Gewicht auf so kleiner Fläche: Dafür ist ein üblicher Doppelboden nicht ausgelegt. KI-Hallen brauchen deshalb einen stärkeren Boden.",
-      "p4": "In einer GPU verrichtet das Joule endlich seine Arbeit. Es schaltet winzige Transistoren ein und aus und rechnet so. Von der Energie bleibt in der Rechnung nichts stecken: Fast alles wird sofort zu Wärme, direkt im Chip. Der <strong>Chip unter der Lupe</strong> ist zehnfach vergrößert. Seine Maße sind gezeichnet, nicht gemessen. Kleine <strong>Einschublüfter</strong> kühlen weiterhin Netzwerkkarten und Speicher. Schalten Sie auf „Leerlauf“, und die Last sinkt. Im Modell zieht ein Rack im Leerlauf immer noch 30 Prozent seiner vollen Leistung."
+      "p1": "Hier will das Joule hin: in ein Rack vom Typ <strong>Nvidia GB200 NVL72</strong>. Es enthält 72 GPUs. Das sind die Chips, die für die KI rechnen. Dazu kommen 36 CPUs, die alles drumherum steuern. Die Chips stecken in 18 <strong>Recheneinschüben</strong>, flachen Schubladen, die man ins Rack schiebt. Dazwischen verbinden 9 <strong>Switch-Einschübe</strong> alle 72 GPUs miteinander. Die Reihenfolge der Einschübe hat das Modell selbst gewählt.",
+      "p2": "Oben und unten im Rack fließt der Strom in sechs <strong>Netzteil-Einschübe</strong>. Sie wandeln den Wechselstrom (AC) der Halle in Gleichstrom (DC) mit etwa 50 V um. Die <strong>DC-Stromschiene</strong> besteht aus dicken Kupferschienen an der Rückseite des Racks. Sie versorgt jeden Einschub mit bis zu 1.400 A. Bei rund 50 V sind das etwa 70 kW, deutlich weniger als die 120 kW des Racks. Deshalb hat die Stromschiene in diesem Modell eine obere und eine untere Hälfte, und jede wird von drei Netzteil-Einschüben gespeist. Wie die Aufteilung in Wirklichkeit aussieht, ist nicht veröffentlicht.",
+      "p3": "Unter Volllast zieht das Rack etwa 120 kW, und HPE gibt für seine Version 132 kW an. Rund ein Zehntel des Stroms aus dem Netz kommt hier gar nicht erst an. Es wird unterwegs zu Wärme: in den Transformatoren, in der USV und in den Netzteil-Einschüben. Das Rack wiegt rund 1,4 Tonnen, etwa so viel wie ein mittelgroßes Elektroauto. So viel Gewicht auf so kleiner Fläche: Dafür ist ein üblicher Doppelboden nicht ausgelegt. KI-Hallen brauchen deshalb einen stärkeren Boden.",
+      "p4": "In einer GPU verrichtet das Joule endlich seine Arbeit. Es schaltet winzige Transistoren ein und aus und rechnet so. Die Rechenarbeit selbst behält keine Energie zurück: Fast alles wird sofort zu Wärme, direkt im Chip. Der <strong>Chip unter der Lupe</strong> ist zehnfach vergrößert. Seine Maße sind gezeichnet, nicht gemessen. Kleine <strong>Einschublüfter</strong> kühlen weiterhin Netzwerkkarten und Speicher. Schalten Sie auf „Leerlauf“, und die Last sinkt. Im Modell zieht ein Rack im Leerlauf immer noch 30 Prozent seiner vollen Leistung."
     },
     "network": {
       "title": "Nur ein paar Mikrosekunden entfernt",
       "p1": "Große KI-Aufgaben werden auf viele GPUs verteilt. Deshalb müssen die Chips ständig miteinander reden. Im Rack nutzen sie dafür NVLink, Kupferverbindungen, die durch die <strong>Switch-Einschübe</strong> laufen. Jede GPU kann 1,8 TB/s senden und empfangen, das ganze Rack 130 TB/s. TB/s steht für Terabyte pro Sekunde, also eine Billion Bytes in jeder Sekunde.",
       "p2": "Zwischen den Racks laufen die Daten über Netzwerk-Switches. Jede Reihe hat einen <strong>Leaf-Switch</strong>, und jeder Leaf ist mit jedem <strong>Spine-Switch</strong> verkabelt. So erreicht jedes Rack jedes andere über drei Stationen: Leaf, Spine, Leaf. Das Modell zeichnet zwei Spines und einen Leaf pro Reihe. Echte Hallen haben weit mehr.",
-      "p3": "Ein schneller Switch wie der Arista 7060X6 hält die Daten etwa 700 Nanosekunden auf. Eine Nanosekunde ist eine Milliardstelsekunde. In der Glasfaser braucht Licht etwa 5 Mikrosekunden für einen Kilometer. Quer durch die Halle dauert es deshalb nur wenige Mikrosekunden, das sind Millionstelsekunden. Sehen Sie zu, wie die grünen Striche vom <strong>Glasfaseranschluss</strong> durch die Switches zum Rack laufen.",
-      "p4": "Langsam wird es erst auf dem Weg zu Ihnen. Durch die Glasfaser zu einer Stadt in 1.000 km Entfernung und zurück dauert es etwa 10 Millisekunden. Bei einer Stadt in 100 km Entfernung ist es etwa eine Millisekunde. Das ist allein die Glasfaser. Die Software braucht zusätzlich ihre eigene Zeit. Wählen Sie eine Entfernung zum Vergleich."
+      "p3": "Ein schneller Switch wie der 7060X6 von Arista verzögert die Daten um etwa 700 Nanosekunden. Eine Nanosekunde ist eine Milliardstelsekunde. In der Glasfaser braucht Licht etwa 5 Mikrosekunden für einen Kilometer. Quer durch die Halle dauert es deshalb nur wenige Mikrosekunden, also Millionstelsekunden. Beobachten Sie, wie die grünen Striche vom <strong>Glasfaseranschluss</strong> durch die Switches zum Rack laufen.",
+      "p4": "Langsam wird es erst auf dem Weg zu Ihnen. Durch die Glasfaser zu einer Stadt in 1.000 km Entfernung und zurück dauert es etwa 10 Millisekunden. Bei einer Stadt in 100 km Entfernung ist es etwa eine Millisekunde. Dabei zählt nur die Glasfaser. Die Software braucht noch ihre eigene Zeit dazu. Wählen Sie eine Entfernung zum Vergleich."
     },
     "heatOut": {
       "title": "Die Wärme muss raus",
-      "p1": "Jetzt ist das Joule Wärme, und die muss weg. Auf jedem Chip sitzt eine Kühlplatte, ein Metallblock, durch den Wasser fließt. In einer Keynote sagte Nvidia, das Wasser fließe mit etwa 25 °C ins Rack und verlasse es mit etwa 45 °C. Im Modell ist der Pumpendurchfluss so eingestellt, dass ein Rack unter Volllast das Wasser um diese 20 Grad erwärmt.",
-      "p2": "Der <strong>Verteiler</strong>, Rohre an der Seite des Racks, leitet das warme Wasser die Reihe entlang zur <strong>Kühlmittel-Verteileinheit</strong>, kurz CDU. Dort geht die Wärme in einen zweiten Kreislauf über, den Gebäudekreislauf. Die beiden Wasserkreisläufe vermischen sich nie. Das Wasser im Gebäudekreislauf ist etwa 5 Grad kälter, es muss also mit etwa 20 °C ankommen. Eine CDU wie die CHx2000 von CoolIT überträgt 2 MW Wärme und braucht etwa 1,2 m² Stellfläche. Im Modell bekommt jede Reihe eine.",
-      "p3": "Die <strong>Kühlwasserleitungen</strong> des Gebäudes bringen die Wärme hinauf aufs Dach. Wasser mit 20 °C ist kühler als viele Sommertage. Deshalb pumpt zuerst eine <strong>Kältemaschine</strong> Wärme aus ihm heraus, ganz ähnlich wie ein Kühlschrank. Dann blasen die <strong>Rückkühler</strong> Außenluft über heiße Rohrschlangen, und das Joule entweicht schließlich als warme Luft. Hier sind alle Kreisläufe geschlossen, deshalb wird nur sehr wenig Wasser verbraucht. Viele Standorte setzen stattdessen auf Kühltürme. Sie kühlen, indem sie Wasser verdunsten lassen. US-Rechenzentren haben 2023 vor Ort etwa 66 Milliarden Liter Wasser verbraucht.",
-      "p4": "Wählen Sie „Luftkühlung“, um den klassischen Weg zu sehen. Lüfter drücken die Luft der Halle durch die Racks in einen Warmgang. <strong>Umluftkühlgeräte</strong> entziehen ihr dort die Wärme und geben sie an dasselbe Wasser im Gebäudekreislauf ab. Luft nimmt viel weniger Wärme auf als Wasser. Deshalb braucht jedes kW etwa 272 m³ Luft pro Stunde. Manche Standorte nutzen ihre Wärme sogar: In Odense und Stockholm heizen Rechenzentren Wohnungen mit."
+      "p1": "Jetzt ist das Joule Wärme, und die muss weg. Auf jedem Chip sitzt eine Kühlplatte, ein Metallblock, durch den Wasser fließt. In einem Vortrag sagte Nvidia, das Wasser fließe mit etwa 25 °C ins Rack und verlasse es mit etwa 45 °C. Im Modell ist der Pumpendurchfluss so eingestellt, dass ein Rack unter Volllast das Wasser um diese 20 Grad erwärmt.",
+      "p2": "Der <strong>Verteiler</strong> besteht aus Rohren an der Seite des Racks. Er leitet das warme Wasser die Reihe entlang zur <strong>Kühlmittel-Verteileinheit</strong>, kurz CDU (nach dem englischen Coolant Distribution Unit). Dort geht die Wärme in einen zweiten Kreislauf über, den Gebäudekreislauf. Das Wasser der beiden Kreisläufe vermischt sich nie. Im Gebäudekreislauf ist das Wasser etwa 5 Grad kälter, es muss also mit etwa 20 °C ankommen. Eine CDU wie die CHx2000 von CoolIT überträgt 2 MW Wärme und braucht etwa 1,2 m² Stellfläche. Im Modell bekommt jede Reihe eine.",
+      "p3": "Die <strong>Kühlwasserleitungen</strong> des Gebäudes bringen die Wärme hinauf aufs Dach. Wasser mit 20 °C ist kühler als viele Sommertage. Deshalb entzieht ihm zuerst die <strong>Kältemaschine</strong> Wärme. Dann blasen die <strong>Rückkühler</strong> Außenluft über heiße Rohrschlangen, und das Joule entweicht schließlich als warme Luft. Hier sind alle Kreisläufe geschlossen, deshalb wird nur sehr wenig Wasser verbraucht. Viele Standorte setzen stattdessen auf Kühltürme. Sie kühlen, indem sie Wasser verdunsten lassen. US-Rechenzentren haben 2023 vor Ort etwa 66 Milliarden Liter Wasser verbraucht.",
+      "p4": "Wählen Sie „Luftkühlung“, um den klassischen Weg zu sehen. Lüfter saugen vorn an jedem Rack kühle Luft an und blasen sie hinten wieder hinaus, in einen Warmgang. Das ist der Gang zwischen zwei Rackreihen, in dem sich die warme Luft sammelt. Anschließend nehmen <strong>Umluftkühlgeräte</strong> der Luft die Wärme ab und geben sie an dasselbe Wasser im Gebäudekreislauf weiter. Luft nimmt viel weniger Wärme auf als Wasser. Deshalb braucht jedes kW etwa 272 m³ Luft pro Stunde. Manche Standorte nutzen ihre Wärme sogar: In Odense und Stockholm heizen Rechenzentren Wohnungen mit."
     },
     "compare": {
       "title": "Warum Wasser gewinnt",
-      "p1": "Füllen Sie nun dieselbe Halle mit luftgekühlten Racks. Im Modell zieht jedes davon 10 kW, die ganze Halle kommt also auf etwa ein Zwölftel der Leistung. Viel mehr ist mit Luft nicht drin: In der Praxis ist bei einem luftgekühlten Rack bei etwa 20 bis 35 kW Schluss. Um 120 kW mit Luft abzuführen, müssten jede Stunde etwa 32.600 m³ davon durch ein Rack strömen.",
+      "p1": "Füllen Sie nun dieselbe Halle mit luftgekühlten Racks. Im Modell zieht jedes davon 10 kW, die ganze Halle kommt also auf etwa ein Zwölftel der Leistung. Viel mehr ist mit Luft nicht drin: In der Praxis ist bei einem luftgekühlten Rack bei etwa 20 bis 35 kW Schluss. Um 120 kW mit Luft abzuführen, müssten jede Stunde etwa 32.600 m³ Luft durch ein einziges Rack strömen.",
       "p2": "Neben dem Rack steht ein <strong>Laptop</strong> auf einem Schreibtisch. Sein Netzteil ist für 40 W ausgelegt. Ein Rack unter Volllast entspricht also 3.000 solchen Netzteilen. Läuft ein Rack das ganze Jahr unter Volllast, braucht es so viel Strom wie etwa 100 Haushalte in den USA oder 270 in der EU. Schon 1945 zog der ENIAC, einer der ersten elektronischen Computer, 150 kW, etwas mehr als dieses eine Rack. Er wog etwa 27 Tonnen und füllte einen ganzen Raum.",
-      "p3": "Rechenzentren vergleicht man auch über ihre PUE, kurz für das englische Power Usage Effectiveness. Die PUE ist die Leistung des ganzen Standorts geteilt durch die Leistung der Computer. Ein perfekter Standort käme also auf 1. Im Branchenschnitt liegt sie bei etwa 1,5. Das heißt, etwa 35 Prozent des Stroms kommen nie bei einem Computer an. Googles Rechenzentren kamen 2025 im Schnitt auf 1,09. Damit bleiben nur 8 Prozent für Kühlung und Verluste.",
-      "p4": "Diese Wahl wechselt den Standort, nicht die Kühlung. Keine Studie gibt die PUE für Luft- und Flüssigkühlung getrennt an, deshalb hält das Modell beides auseinander. Egal, was Sie wählen: Die Reise des Joules endet immer gleich, als ein wenig Wärme in der Luft über dem Dach."
+      "p3": "Rechenzentren vergleicht man auch über ihre PUE. Die Abkürzung steht für das englische Power Usage Effectiveness, auf Deutsch Energieverbrauchseffektivität. Die PUE ist die Leistung des ganzen Standorts geteilt durch die Leistung der Computer. Ein perfekter Standort käme also auf 1. Im Branchenschnitt liegt sie bei etwa 1,5. Das heißt, etwa 35 Prozent des Stroms kommen nie bei einem Computer an. Googles Rechenzentren kamen 2025 im Schnitt auf 1,09. Damit bleiben nur 8 Prozent für Kühlung und Verluste.",
+      "p4": "Diese Wahl ändert den Standort, mit dem Sie vergleichen, nicht die Kühlung des Racks. Keine Studie gibt die PUE für Luft- und Flüssigkühlung getrennt an. Deshalb koppelt das Modell die PUE nicht an die Kühlart. Egal, was Sie wählen, die Reise des Joules endet immer gleich: als ein wenig Wärme in der Luft über dem Dach."
     }
   }
 }
