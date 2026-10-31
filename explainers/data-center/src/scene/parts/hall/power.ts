@@ -16,7 +16,7 @@ import { FINISHES } from '../../finishes';
 import { label, namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { instances } from './instances';
-import { along, rodBetween, rodGeometry, runMatrix } from './shapes';
+import { along, openBox, rodBetween, rodGeometry, runMatrix } from './shapes';
 
 const MAIN: Profile = { wide: 0.24, tall: 0.2 };
 const ROW: Profile = { wide: 0.14, tall: 0.16 };
@@ -31,6 +31,8 @@ const HANGER_R = 0.008;
 const TAP = { x: 0.2, y: 0.26, z: 0.24, drop: 0.035 } as const;
 const TAP_Y = TAP_BOX[1] - 0.02;
 const WHIP_R = 0.018;
+const WHIP_SIDES = 6;
+const HANGER_SIDES = 3;
 const ROW_HANGERS = [1.2, 3.6, 6.0] as const;
 
 interface Profile {
@@ -145,9 +147,9 @@ export function buildBusway(context: PartContext, parent: Group): Group {
     all.map((run) => runMatrix(run.x, run.y, run.z)),
   );
   mesh('steelDark', all.flatMap(joints), cube.clone());
-  mesh('steel', tapBoxes(), cube.clone());
-  mesh('cable', whips(), rodGeometry(8));
-  mesh('steel', hangers(), rodGeometry(4));
+  mesh('steel', tapBoxes(), openBox(['py']));
+  mesh('cable', whips(), rodGeometry(WHIP_SIDES, true));
+  mesh('steel', hangers(), rodGeometry(HANGER_SIDES, true));
   label(context, 'busway', group, [BUSWAY.endX + 3, BUSWAY.mainY + MAIN.tall / 2, BUSWAY.mainZ]);
   return group;
 }

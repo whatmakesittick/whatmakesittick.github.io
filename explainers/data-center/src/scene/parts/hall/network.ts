@@ -29,6 +29,7 @@ import {
   facingPlacement,
   frontPlane,
   hashed,
+  openBox,
   rodBetween,
   rodGeometry,
   runMatrix,
@@ -46,6 +47,7 @@ const TRAY = { wide: 0.3, rail: 0.08, railM: 0.012, rung: 0.015, pitch: 0.3 } as
 const TRAY_INSET_M = 0.38;
 const TRUNK_GAP_M = 0.35;
 const HANGER_PITCH_M = 2.4;
+const HANGER_SIDES = 3;
 const DUCT = { wide: 0.14, tall: 0.08, entry: 0.3 } as const;
 const STRIP = { wide: 0.12, tall: 0.05, glow: 0.08 } as const;
 const COLD_AISLE_Z = [-8.6, -4.236, 0, 4.236, 8.6] as const;
@@ -161,23 +163,28 @@ function trayParts(tray: Tray) {
       return rodBetween(point(CABLE_TRAY_Y), point(CEILING_Y), 0.007);
     }),
   );
-  return { solid: [...rails, ...rungs], hangers };
+  return { rails, rungs, axis: tray.axis, hangers };
 }
 
 function buildTrays(context: PartContext, parent: Group): void {
   const group = namedGroup('cableTrays', parent);
   const parts = trays().map(trayParts);
   const material = (finish: MaterialFinish) => context.materials.get(STRUCTURE_GROUP, finish);
+  const steel = material(FINISHES.traySteel);
+  const rungs = (axis: Tray['axis']) =>
+    parts.filter((part) => part.axis === axis).flatMap((part) => part.rungs);
   group.add(
     instances(
       context,
       new BoxGeometry(),
-      material(FINISHES.traySteel),
-      parts.flatMap((part) => part.solid),
+      steel,
+      parts.flatMap((part) => part.rails),
     ),
+    instances(context, openBox(['pz', 'nz']), steel, rungs('x')),
+    instances(context, openBox(['px', 'nx']), steel, rungs('z')),
     instances(
       context,
-      rodGeometry(4),
+      rodGeometry(HANGER_SIDES, true),
       material(FINISHES.steel),
       parts.flatMap((part) => part.hangers),
     ),

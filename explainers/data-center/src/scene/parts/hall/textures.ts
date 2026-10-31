@@ -168,3 +168,31 @@ export function cduFrontTexture(): CanvasTexture {
     HEIGHT / 2,
   );
 }
+
+export interface Dot {
+  u: number;
+  v: number;
+  width: number;
+  height: number;
+  colour: string;
+}
+
+export function dotTexture(dots: readonly Dot[], width: number, height: number): CanvasTexture {
+  return texture(
+    (c, w, h) => {
+      c.fillStyle = '#000000';
+      c.fillRect(0, 0, w, h);
+      dots.forEach((dot) => {
+        c.fillStyle = dot.colour;
+        c.fillRect(
+          (dot.u - dot.width / 2) * w,
+          (1 - dot.v - dot.height / 2) * h,
+          dot.width * w,
+          dot.height * h,
+        );
+      });
+    },
+    width,
+    height,
+  );
+}

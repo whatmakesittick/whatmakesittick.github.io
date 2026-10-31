@@ -37,11 +37,11 @@ export function cabinetGeometry(size: CabinetSize): BufferGeometry {
   const panelTop = height - CAP_M;
   const recessZ = cabinetBackZ(size);
   const frame = merged([
-    boxAt([-outer, -inner], [0, height], [front, back]),
-    boxAt([inner, outer], [0, height], [front, back]),
-    boxAt([-inner, inner], [panelTop, height], [front, recessZ]),
+    boxAt([-outer, -inner], [0, height], [front, back], ['ny']),
+    boxAt([inner, outer], [0, height], [front, back], ['ny']),
+    boxAt([-inner, inner], [panelTop, height], [front, recessZ], ['ny']),
     boxAt([-inner, inner], [panelTop, height], [back - RAIL_M, back]),
-    boxAt([-inner, inner], [0, KICK_M], [recessZ, back]),
+    boxAt([-inner, inner], [0, KICK_M], [recessZ, back], ['ny', 'nz']),
   ]);
   return merged(
     [

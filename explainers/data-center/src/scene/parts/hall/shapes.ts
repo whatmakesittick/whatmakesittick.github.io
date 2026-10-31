@@ -18,15 +18,34 @@ import { boxMatrix, placement } from '../context';
 
 const UP = new Vector3(0, 1, 0);
 const PIPE_SEGMENTS = 10;
-const TUBE_SEGMENTS = 8;
-const TUBE_SIDES = 6;
+const TUBE_SEGMENTS = 4;
+const TUBE_SIDES = 4;
+const BOX_FACES = ['px', 'nx', 'py', 'ny', 'pz', 'nz'] as const;
+
+export type BoxFace = (typeof BOX_FACES)[number];
 
 export function along(centre: number, size: number): Extent {
   return [centre - size / 2, centre + size / 2];
 }
 
-export function boxAt(x: Extent, y: Extent, z: Extent): BufferGeometry {
-  const geometry = new BoxGeometry(x[1] - x[0], y[1] - y[0], z[1] - z[0]);
+export function openBox(skip: readonly BoxFace[], geometry = new BoxGeometry()): BufferGeometry {
+  const index = geometry.getIndex();
+  if (!index) return geometry;
+  const kept = geometry.groups
+    .filter((_, face) => !skip.includes(BOX_FACES[face]))
+    .flatMap(({ start, count }) => Array.from(index.array.slice(start, start + count)));
+  geometry.setIndex(kept);
+  geometry.clearGroups();
+  return geometry;
+}
+
+export function boxAt(
+  x: Extent,
+  y: Extent,
+  z: Extent,
+  skip: readonly BoxFace[] = [],
+): BufferGeometry {
+  const geometry = openBox(skip, new BoxGeometry(x[1] - x[0], y[1] - y[0], z[1] - z[0]));
   geometry.translate((x[0] + x[1]) / 2, (y[0] + y[1]) / 2, (z[0] + z[1]) / 2);
   return geometry;
 }
@@ -57,6 +76,18 @@ export function rodBetween(from: Point, to: Point, radius: number): Matrix4 {
 
 export function rodGeometryBetween(from: Point, to: Point, radius: number, sides = 6) {
   return rodGeometry(sides, true).applyMatrix4(rodBetween(from, to, radius));
+}
+
+export function ribbonBetween(from: Point, to: Point, width: number): BufferGeometry {
+  const start = new Vector3(...from);
+  const direction = new Vector3(...to).sub(start);
+  const length = direction.length();
+  const across = direction.normalize().multiplyScalar(direction.x < 0 ? -1 : 1);
+  const normal = new Vector3().crossVectors(across, UP);
+  const centre = start.addScaledVector(direction, length / 2);
+  return new PlaneGeometry(length, width).applyMatrix4(
+    new Matrix4().makeBasis(across, UP, normal).setPosition(centre),
+  );
 }
 
 export function tubeThrough(points: readonly Point[], radius: number): BufferGeometry {

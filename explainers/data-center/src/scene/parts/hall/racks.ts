@@ -1,5 +1,13 @@
-import { Color, Matrix4, MeshBasicMaterial, MeshStandardMaterial } from 'three';
-import type { Group, InstancedMesh } from 'three';
+import {
+  AdditiveBlending,
+  Color,
+  DoubleSide,
+  Matrix4,
+  MeshBasicMaterial,
+  MeshStandardMaterial,
+} from 'three';
+import type { Group, InstancedMesh, Material } from 'three';
+import type { Extent } from '@core/scene/regions';
 import type { CoolingId, Point } from '../../../ids';
 import {
   HALL_RACKS,
@@ -25,10 +33,11 @@ import {
   facingPlacement,
   hashed,
   merged,
+  ribbonBetween,
   rodGeometryBetween,
   tubeThrough,
 } from './shapes';
-import { perforatedTexture, rackFrontTexture } from './textures';
+import { dotTexture, perforatedTexture, rackFrontTexture } from './textures';
 
 export const RACK_CABINET: CabinetSize = { ...RACK, recess: 0.13 };
 export const MANIFOLD_LOCAL = { x: 0.22, z: 0.486 } as const;
@@ -39,9 +48,15 @@ const NEAR_M = 80;
 const MANIFOLD_R = 0.022;
 const STUB_R = 0.008;
 const HOSE_R = 0.016;
+const HOSE_SIDES = 5;
 const LIGHT_SIZE: Point = [0.012, 0.007, 1];
 const LIGHT_X = -0.236;
 const SECOND_LIGHT_X = -0.214;
+const STRIP_PAD_M = 0.012;
+const STRIP_X: Extent = [LIGHT_X - STRIP_PAD_M, SECOND_LIGHT_X + STRIP_PAD_M];
+const STRIP_Y: Extent = [RACK_STACK.lowerShelves[0], RACK_STACK.upperShelves[1]];
+const STRIP_PX = [32, 2048] as const;
+const MIRROR_SALT = 11;
 const AMBER_SHARE = 0.04;
 const DARK_SHARE = 0.06;
 const SECOND_SHARE = 0.3;
@@ -100,31 +115,67 @@ function tint(index: number): Color | undefined {
   return roll > 0.97 ? LIGHT_TINTS.blue : LIGHT_TINTS.green;
 }
 
-function lightMesh(context: PartContext, racks: readonly RackSpec[], frontZ: number) {
-  const matrices: Matrix4[] = [];
-  const colours: Color[] = [];
-  const unit = new Matrix4().makeScale(...LIGHT_SIZE);
-  const centres = unitCentres();
-  racks.forEach((rack, rackIndex) => {
-    const place = facingPlacement(rack.base, rack.facing);
-    centres.forEach((y, unitIndex) => {
-      const index = rackIndex * centres.length + unitIndex;
-      const xs = hashed(index, 7) < SECOND_SHARE ? [LIGHT_X, SECOND_LIGHT_X] : [LIGHT_X];
-      xs.forEach((x, light) => {
-        const colour = light === 0 ? tint(index) : LIGHT_TINTS.green;
-        if (!colour) return;
-        const offset = new Matrix4().makeTranslation(x, y, frontZ);
-        matrices.push(place.clone().multiply(offset).multiply(unit));
-        colours.push(colour);
-      });
+function span(value: number, [from, to]: Extent): number {
+  return (value - from) / (to - from);
+}
+
+function stripTexture() {
+  const size = [STRIP_X[1] - STRIP_X[0], STRIP_Y[1] - STRIP_Y[0]];
+  const dots = unitCentres().flatMap((y, index) => {
+    const xs = hashed(index, 7) < SECOND_SHARE ? [LIGHT_X, SECOND_LIGHT_X] : [LIGHT_X];
+    return xs.flatMap((x, light) => {
+      const colour = light === 0 ? tint(index) : LIGHT_TINTS.green;
+      if (!colour) return [];
+      return [
+        {
+          u: 1 - span(x, STRIP_X),
+          v: span(y, STRIP_Y),
+          width: LIGHT_SIZE[0] / size[0],
+          height: LIGHT_SIZE[1] / size[1],
+          colour: `#${colour.getHexString()}`,
+        },
+      ];
     });
   });
-  const material = registeredMaterial(
+  return dotTexture(dots, STRIP_PX[0], STRIP_PX[1]);
+}
+
+function lightMesh(
+  context: PartContext,
+  racks: readonly RackSpec[],
+  frontZ: number,
+  material: Material,
+) {
+  const centre = new Matrix4().makeTranslation(
+    (STRIP_X[0] + STRIP_X[1]) / 2,
+    (STRIP_Y[0] + STRIP_Y[1]) / 2,
+    frontZ,
+  );
+  const matrices = racks.map((rack, index) => {
+    const mirror = hashed(index, MIRROR_SALT) < 0.5 ? -1 : 1;
+    const scale = new Matrix4().makeScale(
+      mirror * (STRIP_X[1] - STRIP_X[0]),
+      STRIP_Y[1] - STRIP_Y[0],
+      1,
+    );
+    return facingPlacement(rack.base, rack.facing).multiply(centre).multiply(scale);
+  });
+  return instances(context, frontPlane(), material, matrices);
+}
+
+function lightMaterial(context: PartContext): Material {
+  return registeredMaterial(
     context,
     'racks',
-    new MeshBasicMaterial({ color: '#ffffff' }),
+    new MeshBasicMaterial({
+      map: context.tracker.track(stripTexture()),
+      blending: AdditiveBlending,
+      transparent: true,
+      depthWrite: false,
+      side: DoubleSide,
+      fog: false,
+    }),
   );
-  return instances(context, frontPlane(), material, matrices, colours);
 }
 
 function hoseGeometry(side: -1 | 1) {
@@ -145,13 +196,11 @@ function hoseGeometry(side: -1 | 1) {
           ],
           HOSE_R,
         )
-      : rodGeometryBetween([x, top - 0.04, z], [x, pipeY, z], HOSE_R, 8);
+      : rodGeometryBetween([x, top - 0.04, z], [x, pipeY, z], HOSE_R, HOSE_SIDES);
   return merged([
-    rodGeometryBetween([x, 0.3, z], [x, top, z], MANIFOLD_R, 8),
+    rodGeometryBetween([x, 0.3, z], [x, top, z], MANIFOLD_R, HOSE_SIDES),
     riser,
-    ...computeTrayCentres().map((y) =>
-      rodGeometryBetween([x * 0.55, y, back], [x, y, z], STUB_R, 4),
-    ),
+    ...computeTrayCentres().map((y) => ribbonBetween([x * 0.55, y, back], [x, y, z], STUB_R * 2)),
   ]);
 }
 
@@ -160,8 +209,8 @@ function doorGeometry() {
   const half = RACK.depth / 2;
   const y: [number, number] = [0.02, panelTopOf(RACK_CABINET)];
   return merged([
-    boxAt([-inner, inner], y, [-half - DOOR_GAP_M - DOOR_M, -half - DOOR_GAP_M]),
-    boxAt([-inner, inner], y, [half + DOOR_GAP_M, half + DOOR_GAP_M + DOOR_M]),
+    boxAt([-inner, inner], y, [-half - DOOR_GAP_M - DOOR_M, -half - DOOR_GAP_M], ['pz']),
+    boxAt([-inner, inner], y, [half + DOOR_GAP_M, half + DOOR_GAP_M + DOOR_M], ['nz']),
   ]);
 }
 
@@ -189,6 +238,7 @@ export function buildRacks(context: PartContext, parent: Group): Racks {
   const racks = otherRacks();
   const placements = racks.map((rack) => facingPlacement(rack.base, rack.facing));
   const front = context.tracker.track(rackFrontTexture());
+  const lights = lightMaterial(context);
   group.add(
     instances(
       context,
@@ -201,8 +251,8 @@ export function buildRacks(context: PartContext, parent: Group): Racks {
     hoses: pivot(group, 'rackHoses', ROW_PIPE.y),
     doors: pivot(group, 'rackDoors', panelTopOf(RACK_CABINET)),
     lights: {
-      liquid: lightMesh(context, racks, -RACK.depth / 2 + 0.008),
-      air: lightMesh(context, racks, -RACK.depth / 2 - DOOR_M - 0.006),
+      liquid: lightMesh(context, racks, -RACK.depth / 2 + 0.008, lights),
+      air: lightMesh(context, racks, -RACK.depth / 2 - DOOR_M - 0.006, lights),
     },
   };
   const finish = (name: 'pipeSupply' | 'pipeReturn') =>
