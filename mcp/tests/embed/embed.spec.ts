@@ -401,7 +401,11 @@ test.describe('embed v1 under the strict spec CSP', () => {
     );
     expect(await wmit(frame, 'langs')).toEqual(['uk', 'uk', 'uk']);
     expect(await wmit<string[]>(frame, 'cyrillicFonts')).toEqual(
-      expect.arrayContaining(['Inter Variable', 'JetBrains Mono']),
+      expect.arrayContaining([
+        'Source Sans 3 Variable',
+        'Source Serif 4 Variable',
+        'IBM Plex Mono',
+      ]),
     );
 
     const back = await wmit<{ resolved: string; info: EmbedInfo }>(frame, 'setLanguage', 'ru');
