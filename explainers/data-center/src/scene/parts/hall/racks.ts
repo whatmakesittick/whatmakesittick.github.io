@@ -1,4 +1,4 @@
-import { BoxGeometry, Color, Matrix4, MeshBasicMaterial, MeshStandardMaterial } from 'three';
+import { Color, Matrix4, MeshBasicMaterial, MeshStandardMaterial } from 'three';
 import type { Group, InstancedMesh } from 'three';
 import type { CoolingId, Point } from '../../../ids';
 import {
@@ -19,7 +19,15 @@ import type { PartContext } from '../context';
 import { cabinetBackZ, cabinetGeometry, cabinetMaterials, panelTopOf } from './cabinet';
 import type { CabinetSize } from './cabinet';
 import { instances } from './instances';
-import { boxAt, facingPlacement, hashed, merged, rodGeometryBetween, tubeThrough } from './shapes';
+import {
+  boxAt,
+  frontPlane,
+  facingPlacement,
+  hashed,
+  merged,
+  rodGeometryBetween,
+  tubeThrough,
+} from './shapes';
 import { perforatedTexture, rackFrontTexture } from './textures';
 
 export const RACK_CABINET: CabinetSize = { ...RACK, recess: 0.13 };
@@ -31,7 +39,7 @@ const NEAR_M = 80;
 const MANIFOLD_R = 0.022;
 const STUB_R = 0.008;
 const HOSE_R = 0.016;
-const LIGHT_SIZE: Point = [0.012, 0.007, 0.03];
+const LIGHT_SIZE: Point = [0.012, 0.007, 1];
 const LIGHT_X = -0.236;
 const SECOND_LIGHT_X = -0.214;
 const AMBER_SHARE = 0.04;
@@ -116,7 +124,7 @@ function lightMesh(context: PartContext, racks: readonly RackSpec[], frontZ: num
     'racks',
     new MeshBasicMaterial({ color: '#ffffff' }),
   );
-  return instances(context, new BoxGeometry(), material, matrices, colours);
+  return instances(context, frontPlane(), material, matrices, colours);
 }
 
 function hoseGeometry(side: -1 | 1) {

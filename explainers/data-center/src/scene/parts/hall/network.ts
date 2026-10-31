@@ -24,7 +24,15 @@ import type { PartContext } from '../context';
 import { cabinetGeometry, cabinetMaterials, frontPoint, panelTopOf } from './cabinet';
 import type { CabinetSize } from './cabinet';
 import { instances } from './instances';
-import { along, facingPlacement, hashed, rodBetween, rodGeometry, runMatrix } from './shapes';
+import {
+  along,
+  facingPlacement,
+  frontPlane,
+  hashed,
+  rodBetween,
+  rodGeometry,
+  runMatrix,
+} from './shapes';
 import { networkFrontTexture } from './textures';
 
 const NETWORK_CABINET: CabinetSize = { ...NETWORK_RACK, recess: 0.08 };
@@ -32,7 +40,7 @@ const NETWORK_FRAME: MaterialFinish = { color: '#15181b', roughness: 0.6, metaln
 const RACEWAY: MaterialFinish = { color: '#d9ad2f', roughness: 0.6, metalness: 0.05 };
 const UNITS = 22;
 const LINK_XS = [-0.22, -0.13, -0.04, 0.05, 0.14, 0.23] as const;
-const LINK_SIZE: Point = [0.01, 0.006, 0.012];
+const LINK_SIZE: Point = [0.01, 0.006, 1];
 const LINK_TINTS = [new Color('#6dff9e'), new Color('#b8ffcf'), new Color('#ffb547')] as const;
 const TRAY = { wide: 0.3, rail: 0.08, railM: 0.012, rung: 0.015, pitch: 0.3 } as const;
 const TRAY_INSET_M = 0.38;
@@ -101,7 +109,7 @@ function switchRacks(
   );
   const { matrices, colours } = linkLights(cabinets, id === 'spineSwitches' ? 1 : 2);
   const light = registeredMaterial(context, id, new MeshBasicMaterial({ color: '#ffffff' }));
-  group.add(instances(context, new BoxGeometry(), light, matrices, colours));
+  group.add(instances(context, frontPlane(), light, matrices, colours));
   label(context, id, group, labelAt);
   return group;
 }

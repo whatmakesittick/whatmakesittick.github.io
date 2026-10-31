@@ -38,6 +38,10 @@ export function panelAt(x: Extent, y: Extent, z: number, normal: Facing): Buffer
   return geometry;
 }
 
+export function frontPlane(): BufferGeometry {
+  return new PlaneGeometry().rotateY(Math.PI);
+}
+
 export function rodGeometry(sides = PIPE_SEGMENTS, openEnded = false): BufferGeometry {
   return new CylinderGeometry(1, 1, 1, sides, 1, openEnded);
 }

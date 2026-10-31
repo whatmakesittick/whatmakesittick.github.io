@@ -187,11 +187,13 @@ export function buildCdus(context: PartContext, parent: Group): Group {
     const riser = risers(row);
     supply.push(...rowRun.supply, riser.supply);
     ret.push(...rowRun.ret, riser.ret);
-    const supplyJacket = jackets(riser.supply);
-    const returnJacket = jackets(riser.ret);
-    jacketed.push(supplyJacket.jacket, returnJacket.jacket);
-    bands.supply.push(...supplyJacket.bands);
-    bands.ret.push(...returnJacket.bands);
+    if (row.index === SUBJECT_ROW_INDEX) {
+      const supplyJacket = jackets(riser.supply);
+      const returnJacket = jackets(riser.ret);
+      jacketed.push(supplyJacket.jacket, returnJacket.jacket);
+      bands.supply.push(...supplyJacket.bands);
+      bands.ret.push(...returnJacket.bands);
+    }
     struts.push(...supports(row));
     const rowValves = valves(row);
     valveParts.bodies.push(...rowValves.bodies);
