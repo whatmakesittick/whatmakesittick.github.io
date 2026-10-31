@@ -5,8 +5,9 @@
     A data centre is a building full of computers that run websites, apps and AI. Think of it as one
     big machine with a simple cycle: electricity comes in, and heat goes out. Power arrives on a
     <strong>grid line</strong> and steps down in the <strong>substation</strong>. Rows of
-    <strong>diesel generators</strong> wait beside the <strong>data hall</strong>, and on its roof a
-    <strong>chiller</strong> and <strong>dry coolers</strong> send the heat away.
+    <strong>diesel generators</strong> wait beside the <strong>data hall</strong>. On its roof, a
+    <strong>chiller</strong> cools water much like a big fridge, and
+    <strong>dry coolers</strong> hand the heat to the outside air.
   </p>
   <p data-i18n-html="sections.building.p2">
     Inside the hall stand the <strong>racks</strong>, tall steel cabinets packed with computers.
@@ -109,8 +110,8 @@
   <p data-i18n-html="sections.powerIn.p3">
     Batteries only buy time. The real backup is the <strong>diesel generators</strong>. Safety codes
     ask them to take over within 10 seconds, and real sites take anywhere from 10 to 60. One such
-    set, the Cat 3516C, gives about 1.8 MW, weighs about 17 tonnes and burns about 466 litres of
-    diesel an hour at full load. Larger versions of it reach about 2.5 MW.
+    set, Caterpillar's Cat 3516C, gives about 1.8 MW, weighs about 17 tonnes and burns about 466
+    litres of diesel an hour at full load. Larger versions of it reach about 2.5 MW.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.outage">
     <button
@@ -172,9 +173,9 @@
     Power enters at the top and the bottom, into six <strong>power shelves</strong>. They turn the
     hall's alternating current (AC) into direct current (DC) at about 50 V. The
     <strong>DC busbar</strong>, thick copper bars down the back of the rack, feeds every tray with
-    up to 1,400 A. At about 50 V, that is less power than the whole rack uses, so in this model the
-    busbar has an upper and a lower half, each fed by three shelves. The real split is not
-    published.
+    up to 1,400 A. At about 50 V, that comes to about 70 kW, well short of the rack's 120 kW. So in
+    this model the busbar has an upper and a lower half, each fed by three shelves. The real split
+    is not published.
   </p>
   <p data-i18n-html="sections.rack.p3">
     At full load the rack draws about 120 kW, and HPE lists 132 kW for its version. Roughly a tenth
@@ -331,11 +332,11 @@
   </p>
   <p data-i18n-html="sections.heatOut.p3">
     The <strong>facility pipes</strong> carry the heat up to the roof. Water at 20 °C is cooler than
-    many summer days, so a <strong>chiller</strong> first pumps heat out of it, much like a fridge.
-    Then the <strong>dry coolers</strong> blow outside air over hot coils, and the joule finally
-    leaves as warm air. Here every loop is closed, so very little water is used. Many sites use
-    cooling towers instead, which cool by evaporating water, and US data centres used about 66
-    billion litres on site in 2023.
+    many summer days, so the <strong>chiller</strong> first pumps heat out of it. Then the
+    <strong>dry coolers</strong> blow outside air over hot coils, and the joule finally leaves as
+    warm air. Here every loop is closed, so very little water is used. Many sites use cooling towers
+    instead, which cool by evaporating water, and US data centres used about 66 billion litres on
+    site in 2023.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.cooling">
     <button
@@ -358,10 +359,11 @@
     </button>
   </div>
   <p data-i18n-html="sections.heatOut.p4">
-    Pick Air to see the classic way. Fans push the hall's air through the racks into a hot aisle,
-    and <strong>air handlers</strong> pass its heat into the same facility water. Air holds far less
-    heat than water, so each kW needs about 272 m³ of air an hour. Some sites even put their heat to
-    use: in Odense and Stockholm, data centres help warm homes.
+    Pick Air to see the classic way. Fans pull cool air in at the front of each rack and blow it out
+    the back, into a hot aisle: the gap between two rows where the warm air gathers.
+    <strong>Air handlers</strong> then pass its heat into the same facility water. Air holds far
+    less heat than water, so each kW needs about 272 m³ of air an hour. Some sites even put their
+    heat to use: in Odense and Stockholm, data centres help warm homes.
   </p>
   <dl class="readouts">
     <div>
@@ -448,13 +450,13 @@
       data-value="best"
       data-i18n="controls.benchmarkOptions.best"
     >
-      Best fleet
+      Google fleet
     </button>
   </div>
   <p data-i18n-html="sections.compare.p4">
-    This choice changes the site, not the cooling. No study gives PUE for air and liquid cooling
-    separately, so the model keeps the two apart. Whichever you pick, the joule's trip ends the same
-    way: as a little warmth in the air above the roof.
+    This toggle changes which site you compare against, not how the rack is cooled. No study gives
+    PUE for air and liquid cooling separately, so the model does not tie the two together. Whichever
+    you pick, the joule's trip ends the same way: as a little warmth in the air above the roof.
   </p>
   <dl class="readouts">
     <div>

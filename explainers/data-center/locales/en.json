@@ -64,7 +64,7 @@
     },
     "benchmarkOptions": {
       "average": "Industry average",
-      "best": "Best fleet"
+      "best": "Google fleet"
     },
     "distanceOptions": {
       "km100": "100 km away",
@@ -122,8 +122,8 @@
       "average": "industry average",
       "best": "Google fleet"
     },
-    "supply": "Coolant in",
-    "return": "Coolant out"
+    "supply": "Coolant into the rack",
+    "return": "Coolant out of the rack"
   },
   "units": {
     "ns": "{{value}} ns",
@@ -257,7 +257,7 @@
   "sections": {
     "building": {
       "title": "Electricity in, heat out",
-      "p1": "A data centre is a building full of computers that run websites, apps and AI. Think of it as one big machine with a simple cycle: electricity comes in, and heat goes out. Power arrives on a <strong>grid line</strong> and steps down in the <strong>substation</strong>. Rows of <strong>diesel generators</strong> wait beside the <strong>data hall</strong>, and on its roof a <strong>chiller</strong> and <strong>dry coolers</strong> send the heat away.",
+      "p1": "A data centre is a building full of computers that run websites, apps and AI. Think of it as one big machine with a simple cycle: electricity comes in, and heat goes out. Power arrives on a <strong>grid line</strong> and steps down in the <strong>substation</strong>. Rows of <strong>diesel generators</strong> wait beside the <strong>data hall</strong>. On its roof, a <strong>chiller</strong> cools water much like a big fridge, and <strong>dry coolers</strong> hand the heat to the outside air.",
       "p2": "Inside the hall stand the <strong>racks</strong>, tall steel cabinets packed with computers. This model's hall holds 192 racks in 16 rows, a layout of its own, since real halls come in every size. With every rack running flat out, the computers draw about 23 MW. Add the cooling and the power lost on the way, and an average site takes about 35 MW from the grid. The last chapter shows how the best sites do better.",
       "p3": "Together, the world's data centres used about 415 TWh of electricity in 2024. That is about 1.5 percent of all the electricity the world used, and the International Energy Agency expects about 945 TWh by 2030. The very largest sites are called hyperscale, and there were 1,136 of them at the end of 2024. Google opened its first data centre in 2006, in The Dalles, Oregon.",
       "p4": "This model follows one <strong>joule</strong>, a small amount of energy, on its trip through the site. Energy does not really travel in single lumps, but following one shows where all of it goes. As electricity, the joule reaches its chip in under a microsecond. As heat, it needs about a minute to leave through the roof. So the playback stretches the fast part and squeezes the slow one, and the clock shows the model's timing, not a measurement."
@@ -266,13 +266,13 @@
       "title": "Power that must not stop",
       "p1": "The joule arrives on the <strong>grid line</strong> at high voltage, which carries power a long way with little loss. The <strong>substation</strong> and its <strong>transformers</strong> step the voltage down, and smaller transformers step it down again near the hall. Each one passes on about 98 to 99 percent of the energy. The voltages here are one example; every site picks its own.",
       "p2": "Next comes the <strong>switchgear</strong>, a wall of big switches that route the power and cut off any part that fails. Then the joule passes the <strong>UPS</strong>, short for uninterruptible power supply, with its <strong>batteries</strong>. If the grid fails, the batteries take over at once and can carry the hall for minutes, typically 5 to 15. From there the <strong>busway</strong>, thick metal bars inside a long case, carries the power into the hall and along the rows.",
-      "p3": "Batteries only buy time. The real backup is the <strong>diesel generators</strong>. Safety codes ask them to take over within 10 seconds, and real sites take anywhere from 10 to 60. One such set, the Cat 3516C, gives about 1.8 MW, weighs about 17 tonnes and burns about 466 litres of diesel an hour at full load. Larger versions of it reach about 2.5 MW.",
+      "p3": "Batteries only buy time. The real backup is the <strong>diesel generators</strong>. Safety codes ask them to take over within 10 seconds, and real sites take anywhere from 10 to 60. One such set, Caterpillar's Cat 3516C, gives about 1.8 MW, weighs about 17 tonnes and burns about 466 litres of diesel an hour at full load. Larger versions of it reach about 2.5 MW.",
       "p4": "Press Cut the grid to run a drill. The batteries carry the hall while the generators start, then the generators take over and the batteries recharge. In this model the grid comes back after 20 seconds, a length chosen for the drill. Sites are graded by how well they handle failures: Tier III can be serviced without shutting down, and Tier IV keeps running through a fault. Even so, power problems caused 45 percent of serious outages in 2025."
     },
     "rack": {
       "title": "Inside a 120 kW rack",
       "p1": "This is where the joule is heading: an <strong>Nvidia GB200 NVL72</strong> rack. It holds 72 GPUs, the chips that do the maths for AI, and 36 CPUs, the chips that run everything around them. They sit on 18 <strong>compute trays</strong>, flat drawers that slide into the rack. Between them, 9 <strong>switch trays</strong> link all 72 GPUs together. The order of the trays here is the model's own.",
-      "p2": "Power enters at the top and the bottom, into six <strong>power shelves</strong>. They turn the hall's alternating current (AC) into direct current (DC) at about 50 V. The <strong>DC busbar</strong>, thick copper bars down the back of the rack, feeds every tray with up to 1,400 A. At about 50 V, that is less power than the whole rack uses, so in this model the busbar has an upper and a lower half, each fed by three shelves. The real split is not published.",
+      "p2": "Power enters at the top and the bottom, into six <strong>power shelves</strong>. They turn the hall's alternating current (AC) into direct current (DC) at about 50 V. The <strong>DC busbar</strong>, thick copper bars down the back of the rack, feeds every tray with up to 1,400 A. At about 50 V, that comes to about 70 kW, well short of the rack's 120 kW. So in this model the busbar has an upper and a lower half, each fed by three shelves. The real split is not published.",
       "p3": "At full load the rack draws about 120 kW, and HPE lists 132 kW for its version. Roughly a tenth of the power from the grid is lost before it gets here, as heat in the transformers, the UPS and the power shelves. The rack weighs roughly 1.4 tonnes, about as much as a mid-size electric car. That is more weight on a small spot than a standard raised floor is built for, so AI halls need a stronger floor.",
       "p4": "In a GPU, the joule finally does its work, switching tiny transistors on and off to do the maths. The work keeps none of the energy: almost all of it turns into heat at once, right in the chip. The <strong>chip close-up</strong> shows one chip 10 times larger, with its sizes drawn, not measured. Small <strong>tray fans</strong> still cool the network cards and storage. Switch to Idle to see the load drop; in this model an idle rack still draws 30 percent of its full power."
     },
@@ -287,15 +287,15 @@
       "title": "Getting the heat out",
       "p1": "The joule is heat now, and it has to go. On each chip sits a cold plate, a metal block with water flowing through it. In a keynote, Nvidia said the water enters the rack at about 25 °C and leaves at about 45 °C. This model sets its pump flow so that a full rack warms the water by those 20 degrees.",
       "p2": "The <strong>manifold</strong>, pipes down the side of the rack, sends the warm water along the row to the <strong>coolant distribution unit</strong>, or CDU. There the heat passes into a second loop, the facility water, and the two waters never mix. The facility water runs about 5 degrees colder, so it must arrive at about 20 °C. One CDU, CoolIT's CHx2000, moves 2 MW of heat and stands on about 1.2 m² of floor. This model gives each row one.",
-      "p3": "The <strong>facility pipes</strong> carry the heat up to the roof. Water at 20 °C is cooler than many summer days, so a <strong>chiller</strong> first pumps heat out of it, much like a fridge. Then the <strong>dry coolers</strong> blow outside air over hot coils, and the joule finally leaves as warm air. Here every loop is closed, so very little water is used. Many sites use cooling towers instead, which cool by evaporating water, and US data centres used about 66 billion litres on site in 2023.",
-      "p4": "Pick Air to see the classic way. Fans push the hall's air through the racks into a hot aisle, and <strong>air handlers</strong> pass its heat into the same facility water. Air holds far less heat than water, so each kW needs about 272 m³ of air an hour. Some sites even put their heat to use: in Odense and Stockholm, data centres help warm homes."
+      "p3": "The <strong>facility pipes</strong> carry the heat up to the roof. Water at 20 °C is cooler than many summer days, so the <strong>chiller</strong> first pumps heat out of it. Then the <strong>dry coolers</strong> blow outside air over hot coils, and the joule finally leaves as warm air. Here every loop is closed, so very little water is used. Many sites use cooling towers instead, which cool by evaporating water, and US data centres used about 66 billion litres on site in 2023.",
+      "p4": "Pick Air to see the classic way. Fans pull cool air in at the front of each rack and blow it out the back, into a hot aisle: the gap between two rows where the warm air gathers. <strong>Air handlers</strong> then pass its heat into the same facility water. Air holds far less heat than water, so each kW needs about 272 m³ of air an hour. Some sites even put their heat to use: in Odense and Stockholm, data centres help warm homes."
     },
     "compare": {
       "title": "Why water wins",
       "p1": "Now fill the same hall with air-cooled racks. In this model each one draws 10 kW, so the whole hall carries about a twelfth of the power. Air cannot do much better: in practice, an air-cooled rack tops out at about 20 to 35 kW. To carry away 120 kW with air, about 32,600 m³ of it would have to pass through one cabinet every hour.",
       "p2": "Next to the rack, a <strong>laptop</strong> sits on a desk. Its charger is rated at 40 W, so one rack at full load matches 3,000 of them. Run at full load all year, one rack uses as much electricity as about 100 US homes, or 270 in the EU. Back in 1945, ENIAC, one of the first electronic computers, drew 150 kW, a little more than this one rack. It weighed about 27 tonnes and filled a whole room.",
       "p3": "Sites are also compared by their PUE, short for power usage effectiveness. It is the site's power divided by the computers' power, so a perfect site would score 1. The industry average is about 1.5, which means about 35 percent of the power never reaches a computer. Google's fleet averaged 1.09 in 2025, leaving only 8 percent for cooling and losses.",
-      "p4": "This choice changes the site, not the cooling. No study gives PUE for air and liquid cooling separately, so the model keeps the two apart. Whichever you pick, the joule's trip ends the same way: as a little warmth in the air above the roof."
+      "p4": "This toggle changes which site you compare against, not how the rack is cooled. No study gives PUE for air and liquid cooling separately, so the model does not tie the two together. Whichever you pick, the joule's trip ends the same way: as a little warmth in the air above the roof."
     }
   }
 }
