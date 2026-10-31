@@ -8,7 +8,7 @@ import { ROOF_PIPE_Y as Y, ROOF_Y, WALL_PIPE_X, boxSpan, legsFor } from '../../.
 import { CUTAWAY_ROOF_X, SUBJECT_ROW, behind } from '../../../model';
 import { namedGroup } from '../context';
 import type { PartContext } from '../context';
-import { CHILLER_BARREL } from './chiller';
+import { CHILLER_BARREL, CHILLER_DUNNAGE } from './chiller';
 import { INNER_WALL, PAD_TOP_Y } from './constants';
 import { DUNNAGE_TOP_Y, PIPE_R, at, drawer, dunnage, rod, spread } from './pipeKit';
 import type { Span } from './pipeKit';
@@ -149,9 +149,16 @@ function lay(network: Network) {
   return { ...laid, steel };
 }
 
+const NETWORKS = ['always', 'liquid', 'air'] as const;
+
+export const ROOF_STEEL: readonly BoxSpec[] = [
+  ...CHILLER_DUNNAGE,
+  ...NETWORKS.flatMap((network) => lay(network).steel),
+];
+
 export function buildFacilityPipes(context: PartContext, group: Object3D) {
   const elbow = new TorusGeometry(BEND_R, PIPE_R, ELBOW.tube, ELBOW.arc, FULL_TURN / 4);
-  const networks = (['always', 'liquid', 'air'] as const).map((network) => {
+  const networks = NETWORKS.map((network) => {
     const parent = network === 'always' ? group : namedGroup(`${network}Pipes`, group);
     const draw = drawer(context, 'facilityPipes', parent);
     const { straights, elbows, bands: rings, steel } = lay(network);

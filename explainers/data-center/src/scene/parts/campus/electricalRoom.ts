@@ -158,6 +158,8 @@ function buildRuns(context: PartContext, parents: Record<Run['part'], Object3D>)
   boxes(context, 'ups', 'steelDark', glands, parents.ups);
 }
 
+export const ROOM_TRAY_STEEL = trayBoxes(RUNS[0]);
+
 export const buildElectricalRoom: PieceBuilder = (context, root) => {
   const label = ({ base: [x, , z] }: BoxSpec): Point => [x, ROOM_TRAY_Y + LABEL_LIFT_M, z];
   const parents = {

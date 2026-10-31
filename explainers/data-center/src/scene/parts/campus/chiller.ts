@@ -66,13 +66,14 @@ export const CHILLER_BARREL = {
   north: CENTRE_Z - BARREL.radius,
 } as const;
 
+export const CHILLER_DUNNAGE = SIDES.map((side) =>
+  dunnage(CENTRE_X - HALF, CENTRE_X + HALF, CENTRE_Z + side * RAIL_Z),
+);
+
 export function buildChiller(context: PartContext, group: Object3D): FanSet {
   const draw = drawer(context, 'chiller', group);
-  const beams = SIDES.map((side) =>
-    dunnage(CENTRE_X - HALF, CENTRE_X + HALF, CENTRE_Z + side * RAIL_Z),
-  );
   const fans = buildCoilUnits(draw, UNIT, [[CENTRE_X + CABINET_M / 2, BASE_Y, CENTRE_Z]]);
-  draw.boxes('steel', beams);
+  draw.boxes('steel', CHILLER_DUNNAGE);
   draw.table([CHILLER.base], BOXES);
   const [foot, top] = [BASE_Y + BAY.rail, BASE_Y + BAY.rail + COMPRESSOR.height];
   const compressors = COMPRESSORS.map(([x, z]) =>

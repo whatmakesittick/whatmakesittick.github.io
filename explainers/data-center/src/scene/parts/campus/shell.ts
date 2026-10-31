@@ -11,6 +11,8 @@ import {
   spanning,
 } from '../../../model';
 import type { BoxSpec } from '../../../model';
+import { ROOM_TRAY_STEEL } from './electricalRoom';
+import { ROOF_STEEL } from './pipeRuns';
 import {
   GRASS_Y,
   INNER_WALL,
@@ -61,6 +63,8 @@ const GIRDER_BOTTOM_Y = ROOF_GIRDER_TOP_Y - ROOF_GIRDER.depth;
 const ROOM_WALL_TOP_Y = GIRDER_BOTTOM_Y + FLANGE_M / 2;
 const CAP = { margin: 0.003, depth: 0.02, inset: 0.01 } as const;
 const CUT_X = CUTAWAY_ROOF_X[1];
+const GIRDER_OVERRUN_M = 0.3;
+const GIRDER_LOADS = [...ROOF_STEEL, ...ROOM_TRAY_STEEL].map(boxSpan);
 const FIXTURE_FOOT_Y = GRASS_Y - 0.03;
 
 const PERSONNEL_DOOR = { width: 1.0, height: 2.2 } as const;
@@ -134,11 +138,30 @@ function capOver(box: BoxSpec, axis: 0 | 2, sign: 1 | -1, inset: number = CAP.in
   return piece('trim', spanning(grown[0], grown[1], grown[2]), 'cap');
 }
 
-function girder(x: number): ShellPiece[] {
+function girder(x: number, z: Extent, layer: ShellLayer): ShellPiece[] {
   const flange = (bottom: number) =>
-    piece('girder', inside(around(x, ROOF_GIRDER.width), [bottom, bottom + FLANGE_M]));
-  const web = inside(around(x, WEB_M), [GIRDER_BOTTOM_Y + FLANGE_M, ROOF_GIRDER_TOP_Y - FLANGE_M]);
-  return [flange(GIRDER_BOTTOM_Y), flange(ROOF_GIRDER_TOP_Y - FLANGE_M), piece('girder', web)];
+    piece('girder', spanning(around(x, ROOF_GIRDER.width), [bottom, bottom + FLANGE_M], z), layer);
+  const webY: Extent = [GIRDER_BOTTOM_Y + FLANGE_M, ROOF_GIRDER_TOP_Y - FLANGE_M];
+  const web = piece('girder', spanning(around(x, WEB_M), webY, z), layer);
+  return [flange(GIRDER_BOTTOM_Y), flange(ROOF_GIRDER_TOP_Y - FLANGE_M), web];
+}
+
+function roofGirder(x: number): ShellPiece[] {
+  if (x >= CUT_X) return girder(x, INSIDE_Z, 'kept');
+  const loads = GIRDER_LOADS.filter((load) => load.x[0] <= x && x <= load.x[1]);
+  if (!loads.length) return girder(x, INSIDE_Z, 'cut');
+  const end = Math.max(...loads.map((load) => load.z[1])) + GIRDER_OVERRUN_M;
+  const kept: Extent = [INSIDE_Z[0], end];
+  const outline = spanning(
+    around(x, ROOF_GIRDER.width),
+    [GIRDER_BOTTOM_Y, ROOF_GIRDER_TOP_Y],
+    kept,
+  );
+  return [
+    ...girder(x, kept, 'kept'),
+    ...girder(x, [end, INSIDE_Z[1]], 'cut'),
+    capOver(outline, 2, 1),
+  ];
 }
 
 function personnelDoor(fixture: Fixture): ShellPiece[] {
@@ -200,7 +223,7 @@ export const SHELL_PIECES: readonly ShellPiece[] = [
   piece('roomWall', ROOM_WALL),
   piece('roof', KEPT_SLAB),
   piece('roof', inside([INNER_WALL.west, CUT_X], SLAB_Y), 'cut'),
-  ...ROOF_GIRDER_X.flatMap(girder),
+  ...ROOF_GIRDER_X.flatMap(roofGirder),
   ...PERSONNEL_DOORS.flatMap(personnelDoor),
   ...LOADING_DOORS.flatMap(loadingDoor),
   ...LOUVRES.flatMap(louvre),
