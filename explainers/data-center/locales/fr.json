@@ -2,10 +2,10 @@
   "meta": {
     "title": "Comment fonctionne un centre de données",
     "eyebrow": "Informatique",
-    "tagline": "Suivez en 3D un joule à travers un centre de données d’IA : de la ligne haute tension à une baie de 120 kW, où il devient chaleur, jusqu’à sa sortie par le toit.",
-    "description": "Suivez un joule dans un centre de données en 3D : du réseau à une baie d’IA de 120 kW, où il devient chaleur, jusqu’à sa sortie par le toit.",
-    "summary": "Le site et son alimentation, le secours qui le maintient en marche, l’intérieur d’une baie d’IA de 120 kW, le réseau, l’évacuation de la chaleur, et pourquoi l’eau l’emporte sur l’air.",
-    "socialAlt": "Un campus de centre de données en 3D, ouvert en coupe : le chemin du courant brille du poste électrique jusqu’à une baie d’IA refroidie par liquide, et la chaleur monte vers le toit, à côté du titre « Comment fonctionne un centre de données »"
+    "tagline": "Suivez en 3D un joule dans un centre de données d’IA. Il arrive par la ligne haute tension, devient chaleur dans une baie de 120 kW, puis s’échappe par le toit.",
+    "description": "Suivez en 3D un joule venu du réseau : il traverse un centre de données, devient chaleur dans une baie d’IA de 120 kW et s’échappe par le toit.",
+    "summary": "Le site et son alimentation, les secours en cas de coupure, l’intérieur d’une baie d’IA de 120 kW, le réseau de données, l’évacuation de la chaleur, et pourquoi l’eau l’emporte sur l’air.",
+    "socialAlt": "Un centre de données en 3D, vu en coupe. Le trajet du courant s’illumine du poste électrique jusqu’à une baie d’IA refroidie par liquide, et la chaleur monte vers le toit. À côté, le titre « Comment fonctionne un centre de données »"
   },
   "stage": {
     "label": "Modèle interactif d’un centre de données",
@@ -18,7 +18,7 @@
     "value": "{{time}} après le départ",
     "during": "Étape {{step}} sur {{total}} : {{detail}}, {{time}} après le départ",
     "speedValue": "×{{factor}}",
-    "speedDescribe": "Le trajet complet en {{seconds}} secondes",
+    "speedDescribe": "Tout le trajet en {{seconds}} secondes",
     "phase": {
       "grid": "Réseau",
       "protect": "Secours",
@@ -36,8 +36,8 @@
       "release": "Aller au toit"
     },
     "detail": {
-      "grid": "le joule suit la ligne haute tension, puis le poste électrique abaisse sa tension",
-      "protect": "le joule traverse le tableau de distribution et l’onduleur, pendant que les groupes électrogènes se tiennent prêts",
+      "grid": "le joule arrive par la ligne haute tension, puis le poste électrique abaisse la tension",
+      "protect": "le joule traverse le tableau de distribution et l’onduleur, tandis que les groupes électrogènes restent prêts à démarrer",
       "distribute": "le joule suit la gaine à barres jusque dans la salle",
       "compute": "le joule entre dans un GPU et se change en chaleur",
       "cool": "la chaleur quitte la baie et monte jusqu’au toit",
@@ -64,22 +64,22 @@
     },
     "benchmarkOptions": {
       "average": "Moyenne du secteur",
-      "best": "Centres de Google"
+      "best": "Sites de Google"
     },
     "distanceOptions": {
       "km100": "À 100 km",
       "km1000": "À 1 000 km"
     },
     "outageOptions": {
-      "cut": "Couper le réseau"
+      "cut": "Couper le courant"
     },
     "groups": {
       "moment": "Aller à un moment",
-      "outage": "Simulation de panne de courant",
+      "outage": "Simuler une panne",
       "load": "Charge de la baie",
-      "distance": "Distance jusqu’à vous",
+      "distance": "À quelle distance êtes-vous ?",
       "cooling": "Refroidissement",
-      "benchmark": "Site de référence"
+      "benchmark": "Site à comparer"
     },
     "views": {
       "power": {
@@ -116,14 +116,14 @@
   },
   "readouts": {
     "rackPower": "Puissance de la baie",
-    "hallPower": "Ordinateurs de la salle",
+    "hallPower": "Puissance des serveurs",
     "pue": "PUE",
     "pueSite": {
       "average": "moyenne du secteur",
-      "best": "centres de Google"
+      "best": "sites de Google"
     },
-    "supply": "Fluide entrant dans la baie",
-    "return": "Fluide sortant de la baie"
+    "supply": "À l’entrée de la baie",
+    "return": "À la sortie de la baie"
   },
   "units": {
     "ns": "{{value}} ns",
@@ -147,18 +147,18 @@
   "chapters": {
     "building": {
       "racks": "Baies dans ce modèle",
-      "racksValue": "{{racks}}, sur {{rows}} rangées",
-      "hallIt": "Puissance des ordinateurs",
+      "racksValue": "{{racks}}, réparties en {{rows}} rangées",
+      "hallIt": "Puissance des serveurs",
       "facility": "Puissance tirée du réseau",
       "facilityValue": "environ {{mw}} MW, avec un PUE de {{pue}}",
       "world": "Tous les centres de données du monde",
       "worldValue": "environ {{twh}} TWh en {{year}}, soit {{percent}} % de l’électricité mondiale"
     },
     "powerIn": {
-      "chain": "Paliers de tension (exemple)",
+      "chain": "Exemple de paliers de tension",
       "chainValue": "moyenne tension, puis 415 V alternatif, puis environ 50 V continu",
       "takeover": "Relais des groupes électrogènes",
-      "takeoverValue": "en {{code}} s au plus selon les normes, de {{min}} à {{max}} s sur les sites réels",
+      "takeoverValue": "en {{code}} s au plus selon les normes, de {{min}} à {{max}} s sur le terrain",
       "rideThrough": "Autonomie des batteries",
       "rideThroughValue": "en général de {{min}} à {{max}} minutes",
       "genset": "Un groupe électrogène",
@@ -196,18 +196,18 @@
       "fibre": "Lumière dans la fibre",
       "fibreValue": "environ {{us}} µs par km",
       "hall": "Traversée de la salle",
-      "hallValue": "environ {{us}} µs, trois commutateurs et la fibre",
+      "hallValue": "environ {{us}} µs, fibre et trois commutateurs compris",
       "roundTrip": "Aller-retour jusqu’à vous",
-      "roundTripValue": "environ {{ms}} ms, fibre seule"
+      "roundTripValue": "environ {{ms}} ms, pour la fibre seule"
     },
     "heatOut": {
       "rise": "Échauffement dans la baie",
       "riseValue": "l’{{medium}} se réchauffe de {{kelvin}} degrés",
       "facilityWater": "Eau du bâtiment",
-      "facilityWaterValue": "environ {{celsius}} °C, {{approach}} degrés de moins que la boucle de la baie",
+      "facilityWaterValue": "environ {{celsius}} °C, soit {{approach}} degrés de moins que la boucle de la baie",
       "cdu": "Une CDU",
       "cduValue": "{{mw}} MW de chaleur sur environ {{area}} m²",
-      "wue": "Eau par unité de calcul, États-Unis",
+      "wue": "Eau utilisée pour le calcul, États-Unis",
       "wueValue": "environ {{litres}} L par kWh",
       "usWater": "Centres de données américains, 2023",
       "usWaterValue": "environ {{billion}} milliards de litres consommés sur place"
@@ -246,7 +246,7 @@
     "cdu": "Unité de distribution du liquide",
     "facilityPipes": "Tuyaux du bâtiment",
     "chiller": "Groupe froid",
-    "dryCoolers": "Aéroréfrigérants secs",
+    "dryCoolers": "Aéroréfrigérants",
     "airHandlers": "Centrales de traitement d’air",
     "fibreEntry": "Arrivée de la fibre",
     "spineSwitches": "Commutateurs spine",
@@ -257,45 +257,45 @@
   "sections": {
     "building": {
       "title": "L’électricité entre, la chaleur sort",
-      "p1": "Un centre de données, c’est un bâtiment rempli d’ordinateurs qui font tourner des sites web, des applications et l’IA. Voyez-le comme une seule grande machine au cycle tout simple : l’électricité entre, la chaleur sort. Le courant arrive par une <strong>ligne haute tension</strong>, puis le <strong>poste électrique</strong> abaisse sa tension. Des rangées de <strong>groupes électrogènes diesel</strong> attendent à côté de la <strong>salle informatique</strong>. Sur son toit, un <strong>groupe froid</strong> refroidit l’eau, un peu comme un gros réfrigérateur. Des <strong>aéroréfrigérants secs</strong> y rejettent la chaleur dans l’air extérieur.",
-      "p2": "Dans la salle se dressent les <strong>baies</strong> : de hautes armoires en acier remplies d’ordinateurs. La salle de ce modèle compte 192 baies, réparties en 16 rangées. Cette disposition est propre au modèle, car il existe des salles de toutes les tailles. Quand toutes les baies tournent à plein régime, les ordinateurs consomment environ 23 MW. Ajoutez le refroidissement et le courant perdu en chemin : un site moyen tire alors environ 35 MW du réseau. Le dernier chapitre montre comment les meilleurs sites font mieux.",
-      "p3": "Ensemble, les centres de données du monde entier ont consommé environ 415 TWh d’électricité en 2024. C’est environ 1,5 % de l’électricité mondiale. L’Agence internationale de l’énergie prévoit environ 945 TWh d’ici 2030. Les très grands sites sont dits « hyperscale » : on en comptait 1 136 fin 2024. Google a ouvert son premier centre de données en 2006, à The Dalles, dans l’Oregon.",
-      "p4": "Ce modèle suit un <strong>joule</strong>, une petite quantité d’énergie, à travers le site. En réalité, l’énergie ne voyage pas en petits paquets bien séparés. Mais suivre un seul joule permet de voir où va toute l’énergie. La perle lumineuse, c’est le joule : ambre sous forme d’électricité, rouge dès qu’il devient chaleur. Il atteint sa puce en moins d’une microseconde, puis met environ une minute à sortir par le toit. L’animation ralentit donc la partie rapide et accélère la partie lente. L’horloge indique le temps du modèle, pas une mesure."
+      "p1": "Un centre de données, c’est un bâtiment rempli d’ordinateurs, appelés serveurs, qui font tourner les sites web, les applications et l’IA. Le tout fonctionne comme une seule grosse machine, au cycle très simple : l’électricité entre, la chaleur sort. Le courant arrive par une <strong>ligne haute tension</strong>, et le <strong>poste électrique</strong> abaisse sa tension. Des rangées de <strong>groupes électrogènes diesel</strong> attendent à côté de la <strong>salle informatique</strong>. Sur son toit, un <strong>groupe froid</strong> refroidit l’eau, un peu comme un gros réfrigérateur. Des <strong>aéroréfrigérants</strong> rejettent ensuite la chaleur dans l’air extérieur.",
+      "p2": "Dans la salle se dressent les <strong>baies</strong> : de hautes armoires en acier remplies de serveurs. La salle de ce modèle compte 192 baies, réparties en 16 rangées. Cette disposition est propre au modèle : en réalité, il existe des salles de toutes les tailles. Quand toutes les baies tournent à plein régime, les serveurs consomment environ 23 MW. Ajoutez le refroidissement et le courant perdu en chemin : un site moyen tire alors environ 35 MW du réseau. Les meilleurs sites font mieux, comme le montre le dernier chapitre.",
+      "p3": "En 2024, l’ensemble des centres de données de la planète a consommé environ 415 TWh d’électricité. Cela représente environ 1,5 % de l’électricité consommée dans le monde. L’Agence internationale de l’énergie s’attend à environ 945 TWh d’ici 2030. Les sites géants sont dits « hyperscale » : on en comptait 1 136 fin 2024. Google a ouvert son premier centre de données en 2006, à The Dalles, dans l’Oregon.",
+      "p4": "Ce modèle suit un <strong>joule</strong>, une petite quantité d’énergie, dans son voyage à travers le site. En réalité, l’énergie ne circule pas par petits paquets séparés. Mais en suivre un seul permet de voir où va toute cette énergie. La perle lumineuse, c’est le joule : couleur ambre tant qu’il est électricité, rouge dès qu’il devient chaleur. Il atteint sa puce en moins d’une microseconde, puis met environ une minute à sortir par le toit. L’animation ralentit donc la partie rapide et accélère la partie lente. L’horloge affiche le temps du modèle, pas un temps mesuré."
     },
     "powerIn": {
       "title": "Un courant qui ne doit pas s’arrêter",
-      "p1": "Le joule arrive par la <strong>ligne haute tension</strong>. La haute tension permet de transporter le courant loin, avec peu de pertes. Le <strong>poste électrique</strong> et ses <strong>transformateurs</strong> abaissent la tension. Près de la salle, des transformateurs plus petits l’abaissent encore. Chacun laisse passer environ 98 à 99 % de l’énergie. Les tensions indiquées ici ne sont qu’un exemple : chaque site choisit les siennes.",
+      "p1": "Le joule arrive par la <strong>ligne haute tension</strong>. La haute tension permet de transporter le courant loin, avec peu de pertes. Le <strong>poste électrique</strong> et ses <strong>transformateurs</strong> abaissent la tension. Près de la salle, des transformateurs plus petits l’abaissent encore. Chacun transmet environ 98 à 99 % de l’énergie qu’il reçoit. Les tensions indiquées ici ne sont qu’un exemple : chaque site choisit les siennes.",
       "p2": "Vient ensuite le <strong>tableau de distribution</strong> : un mur de gros interrupteurs qui aiguillent le courant et isolent toute partie défaillante. Puis le joule traverse l’<strong>onduleur</strong>, ou ASI (alimentation sans interruption), et ses <strong>batteries</strong>. Si le réseau tombe en panne, les batteries prennent aussitôt le relais. Elles peuvent alimenter la salle pendant quelques minutes, en général de 5 à 15. De là, la <strong>gaine à barres</strong>, d’épaisses barres de métal dans un long boîtier, amène le courant dans la salle et le long des rangées.",
-      "p3": "Les batteries ne font que gagner du temps. Le vrai secours, ce sont les <strong>groupes électrogènes diesel</strong>. Les normes de sécurité leur demandent de prendre le relais en 10 secondes au plus. Sur les vrais sites, il leur faut entre 10 et 60 secondes. Prenons le Cat 3516C de Caterpillar : ce groupe fournit environ 1,8 MW. Il pèse environ 17 tonnes et brûle environ 466 litres de gazole par heure à pleine charge. Dans ses versions plus grosses, il atteint environ 2,5 MW.",
-      "p4": "Appuyez sur « Couper le réseau » pour lancer une simulation de panne. Les batteries alimentent la salle pendant que les groupes démarrent. Puis les groupes prennent le relais, et les batteries se rechargent. Dans ce modèle, le réseau revient au bout de 20 secondes, une durée choisie pour la simulation, et les groupes s’arrêtent peu à peu. Les sites sont classés selon leur résistance aux pannes. Un site Tier III peut être entretenu sans être arrêté. Un site Tier IV continue de tourner malgré une défaillance. Pourtant, les problèmes d’alimentation ont causé 45 % des pannes graves en 2025."
+      "p3": "Les batteries ne font que gagner du temps. Le vrai secours, ce sont les <strong>groupes électrogènes diesel</strong>. Les normes de sécurité leur imposent de prendre le relais en 10 secondes au plus. Sur le terrain, il leur faut de 10 à 60 secondes. Prenons le Cat 3516C de Caterpillar : ce groupe fournit environ 1,8 MW. Il pèse environ 17 tonnes et brûle environ 466 litres de gazole par heure à pleine charge. Ses versions plus puissantes atteignent environ 2,5 MW.",
+      "p4": "Appuyez sur « Couper le courant » pour lancer une simulation de panne. Les batteries alimentent la salle pendant que les groupes démarrent. Puis les groupes prennent le relais, et les batteries se rechargent. Dans ce modèle, le réseau revient au bout de 20 secondes, une durée choisie pour la simulation, et les groupes s’arrêtent peu à peu. Les sites sont classés selon leur résistance aux pannes. Un site Tier III peut être entretenu sans être arrêté. Un site Tier IV continue de tourner malgré une défaillance. Pourtant, en 2025, les problèmes d’alimentation étaient encore à l’origine de 45 % des pannes graves."
     },
     "rack": {
-      "title": "Dans une baie de 120 kW",
+      "title": "Au cœur d’une baie de 120 kW",
       "p1": "Voici la destination du joule : une baie <strong>Nvidia GB200 NVL72</strong>. Elle contient 72 GPU, les puces qui font les calculs de l’IA, et 36 CPU, les puces qui pilotent tout le reste. Ces puces sont réparties sur 18 <strong>tiroirs de calcul</strong>, de fins plateaux qui coulissent dans la baie. Glissés entre eux, 9 <strong>tiroirs de commutation</strong> relient les 72 GPU les uns aux autres. Ici, l’ordre des tiroirs est propre au modèle.",
-      "p2": "Le courant entre par le haut et par le bas de la baie, dans six <strong>blocs d’alimentation</strong>. Ils transforment le courant alternatif (CA) de la salle en courant continu (CC), sous environ 50 V. Le <strong>jeu de barres CC</strong>, d’épaisses barres de cuivre qui descendent au dos de la baie, alimente tous les tiroirs avec un courant pouvant atteindre 1 400 A. Sous environ 50 V, cela ne fait qu’environ 70 kW, bien moins que les 120 kW de la baie. Dans ce modèle, le jeu de barres a donc une moitié haute et une moitié basse, chacune alimentée par trois blocs. La vraie répartition n’est pas publiée.",
+      "p2": "Le courant entre par le haut et par le bas de la baie, dans six <strong>blocs d’alimentation</strong>. Ils transforment le courant alternatif (CA) de la salle en courant continu (CC), sous environ 50 V. Le <strong>jeu de barres CC</strong>, d’épaisses barres de cuivre qui courent au dos de la baie, alimente chaque tiroir, avec un courant qui peut atteindre 1 400 A. Sous environ 50 V, cela ne fait qu’environ 70 kW, bien moins que les 120 kW de la baie. Dans ce modèle, le jeu de barres a donc une moitié haute et une moitié basse, chacune alimentée par trois blocs. La répartition réelle n’est pas publiée.",
       "p3": "À pleine charge, la baie consomme environ 120 kW, et HPE annonce 132 kW pour sa propre version. À peu près un dixième de la puissance venue du réseau se perd en chemin, sous forme de chaleur, dans les transformateurs, l’onduleur et les blocs d’alimentation. La baie pèse environ 1,4 tonne, à peu près autant qu’une voiture électrique de taille moyenne. Beaucoup de salles ont un faux plancher : un sol surélevé, sous lequel passent les câbles et l’air. Un faux plancher standard n’est pas prévu pour autant de poids sur une si petite surface. Les salles d’IA ont donc besoin d’un sol plus solide.",
-      "p4": "Dans un GPU, le joule fait enfin son travail : il allume et éteint de minuscules transistors pour faire les calculs. Ce travail ne garde rien de l’énergie : elle se change presque tout entière en chaleur, aussitôt, au cœur même de la puce. Le <strong>gros plan sur la puce</strong> la montre agrandie 10 fois. Les dimensions y sont dessinées, pas mesurées. De petits <strong>ventilateurs de tiroir</strong> refroidissent tout de même les cartes réseau et le stockage. Choisissez « Au repos » pour voir la charge baisser. Dans ce modèle, une baie au repos consomme encore 30 % de sa pleine puissance."
+      "p4": "Dans un GPU, le joule fait enfin son travail : il allume et éteint de minuscules transistors pour faire les calculs. Le calcul ne garde rien de cette énergie : presque tout se change aussitôt en chaleur, au cœur même de la puce. Le <strong>gros plan sur la puce</strong> la montre agrandie 10 fois, avec des dimensions dessinées, pas mesurées. De petits <strong>ventilateurs de tiroir</strong> restent nécessaires pour refroidir les cartes réseau et le stockage. Choisissez « Au repos » pour voir la charge baisser. Dans ce modèle, une baie au repos consomme encore 30 % de sa pleine puissance."
     },
     "network": {
       "title": "Quelques microsecondes d’écart",
       "p1": "Les gros calculs d’IA sont répartis sur de nombreux GPU : les puces doivent donc se parler sans arrêt. Dans la baie, elles passent par NVLink, des liaisons en cuivre qui traversent les <strong>tiroirs de commutation</strong>. Chaque GPU peut envoyer et recevoir 1,8 To/s, et la baie entière 130 To/s. To/s veut dire téraoctets par seconde, soit mille milliards d’octets chaque seconde.",
-      "p2": "Entre les baies, les données passent par des commutateurs réseau. Au bout de chaque rangée se trouve un <strong>commutateur leaf</strong>, « feuille » en anglais. Chaque leaf est relié à tous les <strong>commutateurs spine</strong>, placés au milieu : c’est l’épine dorsale du réseau. Une baie peut ainsi joindre n’importe quelle autre en trois sauts : leaf, spine, leaf. Ce modèle dessine deux spines et un leaf par rangée, alors que les vraies salles en ont bien plus.",
+      "p2": "Entre les baies, les données passent par des commutateurs réseau. Au bout de chaque rangée se trouve un <strong>commutateur leaf</strong>, « feuille » en anglais. Chaque leaf est relié à tous les <strong>commutateurs spine</strong>, placés au milieu : c’est l’épine dorsale du réseau. Une baie peut ainsi joindre n’importe quelle autre en trois sauts : leaf, spine, leaf. Le modèle ne dessine que deux spines et un leaf par rangée. Les vraies salles en comptent bien plus.",
       "p3": "Un commutateur rapide, comme le 7060X6 d’Arista, ajoute environ 700 nanosecondes. Une nanoseconde, c’est un milliardième de seconde. Dans une fibre optique, la lumière met environ 5 microsecondes pour parcourir un kilomètre. Traverser la salle ne prend donc que quelques microsecondes, c’est-à-dire quelques millionièmes de seconde. Regardez les tirets verts filer de l’<strong>arrivée de la fibre</strong> jusqu’à la baie, en passant par les commutateurs.",
-      "p4": "Le plus lent, c’est le trajet jusqu’à vous. Pour une ville à 1 000 km, l’aller-retour dans la fibre prend environ 10 millisecondes. Pour une ville à 100 km, il faut environ 1 milliseconde. Ces chiffres ne comptent que la fibre. Les logiciels ajoutent leur propre délai par-dessus. Choisissez une distance pour comparer."
+      "p4": "Le plus lent, c’est le trajet jusqu’à vous. Pour une ville à 1 000 km, l’aller-retour dans la fibre prend environ 10 millisecondes. Pour une ville à 100 km, il faut environ 1 milliseconde. Ces chiffres ne comptent que la fibre. Les logiciels, eux, ajoutent leur propre délai. Choisissez une distance pour comparer."
     },
     "heatOut": {
       "title": "Évacuer la chaleur",
       "p1": "Le joule est devenu chaleur, et il doit s’en aller. Sur chaque puce repose une plaque froide : un bloc de métal parcouru par de l’eau. Lors d’une conférence, Nvidia a indiqué que l’eau entre dans la baie à environ 25 °C et en ressort à environ 45 °C. Ce modèle règle le débit de sa pompe pour qu’une baie à pleine charge réchauffe l’eau de ces 20 degrés.",
-      "p2": "Le <strong>collecteur</strong>, des tuyaux qui longent le côté de la baie, envoie l’eau chaude le long de la rangée jusqu’à l’<strong>unité de distribution du liquide</strong>, ou CDU selon son sigle anglais. Là, la chaleur passe dans une deuxième boucle, celle de l’eau du bâtiment, qui dessert tout le site. Les deux eaux ne se mélangent jamais. L’eau du bâtiment est environ 5 degrés plus froide : elle doit donc arriver à environ 20 °C. Une CDU comme la CHx2000 de CoolIT transfère 2 MW de chaleur et occupe environ 1,2 m² au sol. Ce modèle en place une par rangée.",
-      "p3": "Les <strong>tuyaux du bâtiment</strong> font monter la chaleur jusqu’au toit. De l’eau à 20 °C, c’est plus frais que bien des journées d’été. Le <strong>groupe froid</strong> commence donc par lui retirer de la chaleur. Ensuite, les <strong>aéroréfrigérants secs</strong> soufflent l’air extérieur sur des serpentins chauds, et le joule s’échappe enfin avec l’air réchauffé. Ici, toutes les boucles sont fermées : très peu d’eau est consommée. Beaucoup de sites utilisent plutôt des tours de refroidissement, qui évacuent la chaleur en évaporant de l’eau. Aux États-Unis, les centres de données ont consommé sur place environ 66 milliards de litres d’eau en 2023.",
-      "p4": "Choisissez « Air » pour passer à des baies refroidies par air, la méthode classique. Des ventilateurs aspirent l’air frais à l’avant de chaque baie et le rejettent à l’arrière, dans une allée chaude : le couloir entre deux rangées, où l’air chaud s’accumule. Des <strong>centrales de traitement d’air</strong> transmettent ensuite cette chaleur à la même eau du bâtiment. L’air retient bien moins de chaleur que l’eau : chaque kW demande environ 272 m³ d’air par heure. Certains sites vont même jusqu’à réutiliser leur chaleur. À Odense et à Stockholm, des centres de données aident à chauffer des logements."
+      "p2": "Le <strong>collecteur</strong> est un ensemble de tuyaux fixés sur le côté de la baie. Il envoie l’eau chaude le long de la rangée, jusqu’à l’<strong>unité de distribution du liquide</strong>, la CDU selon son sigle anglais. Là, la chaleur passe dans une deuxième boucle : l’eau du bâtiment, qui dessert tout le site. Les deux eaux ne se mélangent jamais. L’eau du bâtiment est environ 5 degrés plus froide : elle doit donc arriver à environ 20 °C. Une CDU comme la CHx2000 de CoolIT transfère 2 MW de chaleur et occupe environ 1,2 m² au sol. Ce modèle en place une par rangée.",
+      "p3": "Les <strong>tuyaux du bâtiment</strong> font monter la chaleur jusqu’au toit. Une eau à 20 °C est plus fraîche que l’air de bien des journées d’été. Le <strong>groupe froid</strong> commence donc par en extraire de la chaleur. Ensuite, les <strong>aéroréfrigérants</strong> soufflent l’air extérieur sur des serpentins chauds, et le joule s’échappe enfin avec l’air réchauffé. Ici, toutes les boucles sont fermées : on consomme donc très peu d’eau. Beaucoup de sites utilisent plutôt des tours de refroidissement, qui évacuent la chaleur en évaporant de l’eau. Aux États-Unis, les centres de données ont consommé sur place environ 66 milliards de litres d’eau en 2023.",
+      "p4": "Choisissez « Air » pour passer à des baies refroidies par air, la méthode classique. Des ventilateurs aspirent l’air frais à l’avant de chaque baie et le soufflent à l’arrière, dans une allée chaude : le couloir entre deux rangées, où l’air chaud s’accumule. Des <strong>centrales de traitement d’air</strong> transmettent ensuite cette chaleur à la même eau du bâtiment. L’air transporte bien moins de chaleur que l’eau : chaque kW demande environ 272 m³ d’air par heure. Certains sites récupèrent même leur chaleur : à Odense et à Stockholm, des centres de données aident à chauffer des logements."
     },
     "compare": {
       "title": "Pourquoi l’eau l’emporte",
-      "p1": "Remplissez maintenant la même salle de baies refroidies par air. Dans ce modèle, chacune tire 10 kW : la salle entière n’absorbe donc qu’environ un douzième de la puissance. L’air ne peut guère faire mieux : en pratique, une baie refroidie par air plafonne autour de 20 à 35 kW. Pour évacuer 120 kW avec de l’air, il faudrait en faire passer environ 32 600 m³ par heure dans une seule armoire.",
-      "p2": "À côté de la baie, un <strong>ordinateur portable</strong> est posé sur un bureau. Son chargeur est prévu pour 40 W : une baie à pleine charge équivaut donc à 3 000 chargeurs. Si elle tourne à plein régime toute l’année, une seule baie consomme autant d’électricité qu’environ 100 logements américains, ou 270 logements européens. L’ENIAC est l’un des premiers ordinateurs électroniques. En 1945, il consommait 150 kW, un peu plus que cette baie à elle seule. Il pesait environ 27 tonnes et occupait une pièce entière.",
-      "p3": "On compare aussi les sites par leur PUE, sigle anglais de « power usage effectiveness », soit l’efficacité d’utilisation de l’énergie. C’est la puissance du site divisée par celle des ordinateurs : un site parfait obtiendrait donc 1. La moyenne du secteur tourne autour de 1,5. Autrement dit, environ 35 % de la puissance n’atteint jamais un ordinateur. En 2025, le parc de centres de données de Google affichait en moyenne 1,09, ce qui ne laisse que 8 % pour le refroidissement et les pertes.",
-      "p4": "Le choix entre « Moyenne du secteur » et « Centres de Google » change le site de référence, pas la façon dont la baie est refroidie. Aucune étude ne donne de PUE distinct pour le refroidissement par air et par liquide. Le modèle ne lie donc pas le PUE au mode de refroidissement. Quel que soit votre choix, le voyage du joule se termine de la même façon : en un peu de tiédeur dans l’air, au-dessus du toit."
+      "p1": "Remplissez maintenant la même salle de baies refroidies par air. Dans ce modèle, chacune tire 10 kW : la salle entière consomme donc environ douze fois moins. L’air ne peut guère faire mieux : en pratique, une baie refroidie par air plafonne autour de 20 à 35 kW. Pour évacuer 120 kW avec de l’air, il faudrait en faire passer environ 32 600 m³ par heure dans une seule baie.",
+      "p2": "À côté de la baie, un <strong>ordinateur portable</strong> est posé sur un bureau. Son chargeur affiche 40 W : une baie à pleine charge équivaut donc à 3 000 chargeurs. Si elle tourne à plein régime toute l’année, une seule baie consomme autant d’électricité qu’environ 100 logements américains, ou 270 logements européens. L’ENIAC est l’un des premiers ordinateurs électroniques. En 1945, il consommait 150 kW, un peu plus que cette baie à elle seule. Il pesait environ 27 tonnes et occupait une pièce entière.",
+      "p3": "On compare aussi les sites grâce à l’indicateur d’efficacité énergétique PUE, pour « power usage effectiveness » en anglais. C’est la puissance du site divisée par celle des serveurs : un site parfait obtiendrait donc 1. La moyenne du secteur tourne autour de 1,5. Autrement dit, environ 35 % de la puissance n’atteint jamais un serveur. En 2025, les centres de données de Google affichaient en moyenne 1,09. Il ne restait donc que 8 % pour le refroidissement et les pertes.",
+      "p4": "Le choix entre « Moyenne du secteur » et « Sites de Google » change le site de comparaison, pas le refroidissement de la baie. Aucune étude ne donne de PUE distinct pour le refroidissement par air et par liquide. Le modèle ne relie donc pas le PUE au mode de refroidissement. Quel que soit votre choix, le voyage du joule s’achève de la même façon : dans un peu d’air tiède, au-dessus du toit."
     }
   }
 }
