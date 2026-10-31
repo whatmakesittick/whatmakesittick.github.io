@@ -20,7 +20,7 @@
 }
 
 .scene-label {
-  --scene-label-accent: var(--accent, #f5a524);
+  --scene-label-accent: var(--accent, #c9a24d);
   --scene-label-leader: 34px;
   --scene-label-angle: -32deg;
   --scene-label-shift: 0px;
@@ -47,7 +47,7 @@
   height: 8px;
   border-radius: 50%;
   background: var(--scene-label-accent);
-  box-shadow: 0 0 0 3px rgb(245 165 36 / 22%);
+  box-shadow: 0 0 0 2px var(--surface, #26231f);
 }
 
 .scene-label__leader {
@@ -56,7 +56,7 @@
   top: 0;
   width: var(--scene-label-leader);
   height: 1px;
-  background: linear-gradient(90deg, var(--scene-label-accent), rgb(245 165 36 / 45%));
+  background: var(--scene-label-accent);
   transform: rotate(var(--scene-label-angle));
   transform-origin: 0 50%;
 }
@@ -65,21 +65,16 @@
   position: absolute;
   top: calc(var(--scene-label-shift) - 18px);
   transform: translateY(-50%);
-  padding: 4px 10px;
-  border: 1px solid rgb(245 165 36 / 55%);
-  border-radius: 999px;
-  background: rgb(20 24 30 / 88%);
-  color: var(--text, #e6e9ee);
-  font:
-    500 0.75rem/1.2 ui-sans-serif,
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    sans-serif;
-  letter-spacing: 0.01em;
+  padding: 3px 8px;
+  border: 1px solid var(--line-strong, rgb(255 255 255 / 0.2));
+  border-radius: 3px;
+  background: var(--surface, #26231f);
+  color: var(--text, #efe7d8);
+  font-family: var(--font-sans, 'Source Sans 3 Variable', system-ui, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
   white-space: nowrap;
-  box-shadow: 0 4px 14px rgb(0 0 0 / 35%);
-  backdrop-filter: blur(6px);
 }
 
 .scene-label--glide .scene-label__leader {
