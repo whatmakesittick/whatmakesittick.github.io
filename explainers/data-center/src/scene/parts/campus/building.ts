@@ -1,4 +1,4 @@
-import type { Material, Object3D } from 'three';
+import type { Material } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import type { PartId } from '../../../ids';
 import { FINISHES } from '../../finishes';
@@ -12,7 +12,6 @@ import { HALL_LABEL_POINT, SHELL_PIECES } from './shell';
 import type { ShellLayer, ShellSurface } from './shell';
 
 const PART: PartId = 'hall';
-const LAYERS: readonly ShellLayer[] = ['kept', 'cut', 'cap'];
 
 const TRIM: MaterialFinish = { color: '#3a3f45', roughness: 0.7, metalness: 0.25 };
 const DOOR: MaterialFinish = { color: '#56606b', roughness: 0.5, metalness: 0.2 };
@@ -23,14 +22,15 @@ const BLOCK: MaterialFinish = { color: '#9d9fa0', roughness: 0.9 };
 
 const CLADDING_PATTERN: SurfacePattern = {
   name: 'cladding',
-  ribs: { axis: 'tangent', pitch: 0.25, crest: 0.2, flank: 0.1, tilt: 0.9, valley: 0.14 },
-  seams: { pitch: [0, 3.5, 0], width: 0.02, dark: 0.25 },
-  mottle: 0.05,
+  ribs: { axis: 'tangent', pitch: 0.25, crest: 0.2, flank: 0.1, depth: 0.035, valley: 0.16 },
+  seams: { pitch: [0, 3.5, 0], width: 0.03, dark: 0.3 },
+  mottle: 0.08,
+  grime: 0.14,
 };
 
 const ROLL_UP_PATTERN: SurfacePattern = {
   name: 'rollUp',
-  ribs: { axis: 'vertical', pitch: 0.1, crest: 0.6, flank: 0.15, tilt: 0.6, valley: 0.18 },
+  ribs: { axis: 'vertical', pitch: 0.1, crest: 0.6, flank: 0.15, depth: 0.012, valley: 0.18 },
 };
 
 const MEMBRANE_PATTERN: SurfacePattern = {
@@ -70,30 +70,22 @@ function surfaceMaterials(context: PartContext): Record<ShellSurface, Material> 
   };
 }
 
-function addLayer(
-  context: PartContext,
-  layer: ShellLayer,
-  materials: Record<ShellSurface, Material>,
-  parent: Object3D,
-) {
-  const pieces = SHELL_PIECES.filter((piece) => piece.layer === layer);
-  const surfaces = new Set(pieces.map((piece) => piece.surface));
-  surfaces.forEach((surface) => {
-    const matrices = pieces
-      .filter((piece) => piece.surface === surface)
-      .map(({ box }) => boxMatrix(box));
-    parent.add(instancesOf(context, unitCube(context), materials[surface], matrices));
-  });
-}
-
 export const buildBuilding: PieceBuilder = (context, root) => {
   const group = partGroup(context, PART, root, HALL_LABEL_POINT);
   const materials = surfaceMaterials(context);
-  const [, cut, caps] = LAYERS.map((layer) => {
-    const layerGroup = namedGroup(`hall-${layer}`, group);
-    addLayer(context, layer, materials, layerGroup);
-    return layerGroup;
-  });
+  const layerGroup = (layer: ShellLayer) => {
+    const parent = namedGroup(`hall-${layer}`, group);
+    const pieces = SHELL_PIECES.filter((piece) => piece.layer === layer);
+    new Set(pieces.map((piece) => piece.surface)).forEach((surface) => {
+      const own = pieces.filter((piece) => piece.surface === surface);
+      const matrices = own.map(({ box }) => boxMatrix(box));
+      parent.add(instancesOf(context, unitCube(context), materials[surface], matrices));
+    });
+    return parent;
+  };
+  layerGroup('kept');
+  const cut = layerGroup('cut');
+  const caps = layerGroup('cap');
   return {
     setState(state) {
       cut.visible = !state.view.cutaway;
