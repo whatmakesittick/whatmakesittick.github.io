@@ -1,29 +1,29 @@
 :root {
   color-scheme: dark;
 
-  --background: #0b0d10;
-  --surface: #14181e;
-  --text: #e6e9ee;
-  --muted: #8b929c;
-  --accent: #f5a524;
-  --metal-light: #b8bec8;
-  --metal: #6f7782;
-  --metal-dark: #3a404a;
-  --highlight: #f5a524;
+  --background: #1e1b17;
+  --surface: #26231f;
+  --text: #efe7d8;
+  --muted: #a29a8b;
+  --accent: #c9a24d;
+  --metal-light: #bbbec3;
+  --metal: #72777d;
+  --metal-dark: #3d4045;
+  --highlight: #c9a24d;
 
-  --prose: #c3c9d2;
-  --line: rgb(255 255 255 / 0.08);
-  --line-strong: rgb(255 255 255 / 0.16);
+  --prose: #d8cfbf;
+  --line: rgb(255 255 255 / 0.1);
+  --line-strong: rgb(255 255 255 / 0.2);
   --wash: rgb(255 255 255 / 0.05);
   --wash-strong: rgb(255 255 255 / 0.1);
-  --glass: linear-gradient(150deg, rgb(24 29 37 / 0.9), rgb(13 16 21 / 0.86));
-  --shadow: 0 18px 50px -20px rgb(0 0 0 / 0.75);
+  --glass: var(--surface);
+  --shadow: none;
 
   --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --radius: 14px;
-  --radius-small: 9px;
+  --radius: 8px;
+  --radius-small: 6px;
   --control-height: 30px;
   --stage-inset: 16px;
 }
