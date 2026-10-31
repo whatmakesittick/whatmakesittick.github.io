@@ -49,7 +49,7 @@ button {
 
 a {
   color: var(--text);
-  text-decoration-color: rgb(245 165 36 / 0.5);
+  text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
   text-underline-offset: 3px;
 }
 

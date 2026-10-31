@@ -39,8 +39,8 @@
 }
 
 .dock-more[aria-expanded='true'] {
-  background: var(--text);
-  color: var(--background);
+  background: var(--wash-strong);
+  color: var(--accent);
 }
 
 .dock-extra {
