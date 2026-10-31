@@ -21,7 +21,7 @@ import type { RowSpec } from '../../../model';
 import { FINISHES } from '../../finishes';
 import { label, namedGroup, registeredMaterial, sceneAnchor } from '../context';
 import type { PartContext } from '../context';
-import { CHANNEL_Y } from './ceiling';
+import { CHANNEL_Y, hungFromCeiling } from './ceiling';
 import type { CeilingGrid } from './ceiling';
 import { instances } from './instances';
 import { MANIFOLD_LOCAL, SUPPLY_PIPE_OFFSET } from './racks';
@@ -360,7 +360,16 @@ export function buildCdus(context: PartContext, parent: Group, grid: CeilingGrid
   });
   add('pipeInsulated', jacketed);
   add('steelDark', [...struts, ...valveParts.bodies], rodGeometry(STRUT_SIDES));
-  add('steelDark', hangers, rodGeometry(3, true));
+  pipes.add(
+    hungFromCeiling(
+      instances(
+        context,
+        rodGeometry(3, true),
+        context.materials.get(FACILITY_GROUP, FINISHES.steelDark),
+        hangers,
+      ),
+    ),
+  );
   add('steel', valveParts.wheels);
   return group;
 }

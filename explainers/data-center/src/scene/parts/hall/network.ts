@@ -20,7 +20,7 @@ import type { BoxSpec, Facing } from '../../../model';
 import { FINISHES } from '../../finishes';
 import { label, namedGroup, registeredMaterial } from '../context';
 import type { PartContext } from '../context';
-import { CHANNEL_Y } from './ceiling';
+import { CHANNEL_Y, hungFromCeiling } from './ceiling';
 import type { CeilingGrid } from './ceiling';
 import { cabinetGeometry, cabinetMaterials, frontPoint, panelTopOf } from './cabinet';
 import type { CabinetSize } from './cabinet';
@@ -195,11 +195,13 @@ function buildTrays(context: PartContext, parent: Group, grid: CeilingGrid): voi
     ),
     instances(context, openBox(['pz', 'nz']), steel, rungs('x')),
     instances(context, openBox(['px', 'nx']), steel, rungs('z')),
-    instances(
-      context,
-      rodGeometry(HANGER_SIDES, true),
-      material(FINISHES.steel),
-      parts.flatMap((part) => part.hangers),
+    hungFromCeiling(
+      instances(
+        context,
+        rodGeometry(HANGER_SIDES, true),
+        material(FINISHES.steel),
+        parts.flatMap((part) => part.hangers),
+      ),
     ),
   );
 }
@@ -262,11 +264,13 @@ function buildFibre(context: PartContext, parent: Group, grid: CeilingGrid): voi
     .hangers(DUCT.wide, riseZ)
     .map((z) => rodBetween([x, trayY + DUCT.tall / 2, z], [x, CHANNEL_Y, z], 0.007));
   group.add(
-    instances(
-      context,
-      rodGeometry(4),
-      context.materials.get('fibreEntry', FINISHES.steel),
-      hangers,
+    hungFromCeiling(
+      instances(
+        context,
+        rodGeometry(4),
+        context.materials.get('fibreEntry', FINISHES.steel),
+        hangers,
+      ),
     ),
   );
   group.add(

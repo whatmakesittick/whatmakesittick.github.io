@@ -15,7 +15,7 @@ import {
 import { FINISHES } from '../../finishes';
 import { label, namedGroup } from '../context';
 import type { PartContext } from '../context';
-import { BRACE_X, CHANNEL_Y } from './ceiling';
+import { BRACE_X, CHANNEL_Y, hungFromCeiling } from './ceiling';
 import type { CeilingGrid } from './ceiling';
 import { instances } from './instances';
 import { along, openBox, rodBetween, rodGeometry, runMatrix } from './shapes';
@@ -153,7 +153,16 @@ export function buildBusway(context: PartContext, parent: Group, grid: CeilingGr
   mesh('steelDark', all.flatMap(joints), cube.clone());
   mesh('steel', tapBoxes(), openBox(['py']));
   mesh('cable', whips(), rodGeometry(WHIP_SIDES, true));
-  mesh('steel', hangers(grid), rodGeometry(HANGER_SIDES, true));
+  group.add(
+    hungFromCeiling(
+      instances(
+        context,
+        rodGeometry(HANGER_SIDES, true),
+        context.materials.get('busway', FINISHES.steel),
+        hangers(grid),
+      ),
+    ),
+  );
   label(context, 'busway', group, [BUSWAY.endX + 3, BUSWAY.mainY + MAIN.tall / 2, BUSWAY.mainZ]);
   return group;
 }
