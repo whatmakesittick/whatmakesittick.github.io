@@ -25,7 +25,7 @@ const EDGE_PAINT = { color: '#d6d3c8', roughness: 0.8 } as const;
 const DOME = { segments: 24, renderOrder: -1000 };
 const SKY_COLOURS = { uTop: THEME.sky, uHorizon: THEME.fog, uGlow: '#e4e7e8' };
 const MOTTLES: Readonly<Record<Surface, readonly number[]>> = {
-  grass: [0.34, 0.08, 0.45, 3.1],
+  grass: [0.42, 0.08, 0.55, 3.1],
   road: [0.1, 0.07, 0, 0.7],
   gravel: [0.16, 0.16, 0, 0.45],
 };
