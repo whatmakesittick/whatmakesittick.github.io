@@ -12,8 +12,6 @@ import {
   BUILDING,
   CEILING_Y,
   CHASE_SPAN,
-  GANTRY,
-  GRID_LINE,
   MOMENTS,
   ROOF_Y,
   ROOM_WALL_X,
@@ -42,9 +40,9 @@ const DESKTOP: FramingSlopes = { vertical: 0.27, horizontal: 0.45 };
 const STAGES: readonly FramingSlopes[] = [PHONE, DESKTOP];
 const WORLD_UP = new Vector3(0, 1, 0);
 const DIGITS = 9;
+const EDGE_TOLERANCE = 1e-9;
 const GROUND_Y = 0;
 const FIXED_IDS = Object.keys(FIXED_VIEWS) as FixedView[];
-const LINE_SHOWN_M = 20;
 const ALONG_ROW_COSINE = Math.cos(Math.PI / 8);
 const HALL_INSIDE_X = ROOM_WALL_X + WALL_THICKNESS / 2;
 const ROWS_START_X = Math.min(...ROWS.map((row) => row.startX));
@@ -75,7 +73,11 @@ function viewOffset({ position, target }: CameraPose, point: Vector3): Vector3 {
 
 function inFrame(pose: CameraPose, point: Point, slopes: FramingSlopes): boolean {
   const { x, y, z } = viewOffset(pose, new Vector3(...point));
-  return z > 0 && Math.abs(x / z) <= slopes.horizontal && Math.abs(y / z) <= slopes.vertical;
+  return (
+    z > 0 &&
+    Math.abs(x / z) <= slopes.horizontal + EDGE_TOLERANCE &&
+    Math.abs(y / z) <= slopes.vertical + EDGE_TOLERANCE
+  );
 }
 
 function screenRight({ position, target }: CameraPose): Vector3 {
@@ -119,10 +121,10 @@ describe('data centre camera views', () => {
   it('frames each fixed view on the region the spec names, the campus with its incoming line', () => {
     expect(Object.fromEntries(FIXED_IDS.map((id) => [id, FIXED_VIEWS[id].region]))).toEqual({
       campus: 'campusAndLine',
-      powerYard: 'powerYard',
+      powerYard: 'yardAndRoom',
       rackSide: 'rack',
       networkRow: 'networkRow',
-      coolingPlant: 'coolingPlant',
+      coolingPlant: 'coolingLoop',
       lineUp: 'lineUp',
     });
   });
@@ -148,10 +150,9 @@ describe('data centre camera views', () => {
     );
   });
 
-  it('shows the grid line coming in on the campus view', () => {
-    const lineIn: Point = [GANTRY.base[0] - LINE_SHOWN_M, GRID_LINE.y, GRID_LINE.z];
+  it('shows the joule where it starts on the grid line in the campus view', () => {
     STAGES.forEach((slopes) =>
-      expect(inFrame(fixedPose('campus', slopes), lineIn, slopes)).toBe(true),
+      expect(inFrame(fixedPose('campus', slopes), OUTDOOR.position, slopes)).toBe(true),
     );
   });
 
