@@ -1,12 +1,16 @@
 import { beforeAll, describe, expect, it } from 'vitest';
+import { CARRIER_IDS } from '../ids';
 import type { BenchmarkId, CoolingId, LoadId, MediumId } from '../ids';
+import { MOMENTS, PHASE_RANGES } from '../model';
 import { createDataCenterStore } from '../state';
 import type { DataCenterStoreState } from '../state';
+import { THEME } from '../theme';
 import { DATA_CENTER_READOUTS } from './readouts';
 import { TEST_LOCALE, fill, initTestLocale } from './testing';
 
 const { units, readouts } = TEST_LOCALE;
 const METERED = ['rackPower', 'hallPower', 'return'];
+const WORDED = ['joule'];
 
 function row(id: string) {
   const found = DATA_CENTER_READOUTS.find((readout) => readout.id === id);
@@ -18,12 +22,20 @@ function text(id: string, state: DataCenterStoreState): string {
   return row(id).value(state);
 }
 
+function tone(id: string, state: DataCenterStoreState): string | undefined {
+  return row(id).tone?.(state);
+}
+
 function share(id: string, state: DataCenterStoreState): number | undefined {
   return row(id).meter?.share(state);
 }
 
 function stateWith(cooling: CoolingId, load: LoadId, benchmark: BenchmarkId = 'average') {
   return createDataCenterStore({ cooling, load, benchmark, playing: false }).getState();
+}
+
+function stateAt(phase: number, cooling: CoolingId = 'liquid') {
+  return createDataCenterStore({ phase, cooling, playing: false }).getState();
 }
 
 function celsius(value: string, medium: MediumId): string {
@@ -33,8 +45,9 @@ function celsius(value: string, medium: MediumId): string {
 describe('gauge readouts', () => {
   beforeAll(() => initTestLocale());
 
-  it('shows rack and hall power, the PUE and both coolant temperatures', () => {
+  it('shows where the joule is, rack and hall power, the PUE and both coolant temperatures', () => {
     expect(DATA_CENTER_READOUTS.map((readout) => readout.id)).toEqual([
+      'joule',
       'rackPower',
       'hallPower',
       'pue',
@@ -43,9 +56,33 @@ describe('gauge readouts', () => {
     ]);
     DATA_CENTER_READOUTS.forEach((readout) => {
       expect(readout.labelKey).toBe(`readouts.${readout.id}`);
-      expect(readout.numeric).toBe(true);
+      expect(readout.numeric, readout.id).toBe(!WORDED.includes(readout.id));
+      expect(readout.tone !== undefined, readout.id).toBe(WORDED.includes(readout.id));
       expect(readout.meter !== undefined, readout.id).toBe(METERED.includes(readout.id));
     });
+  });
+
+  it('names every carrier of the joule in English', () => {
+    CARRIER_IDS.forEach((carrier) => expect(readouts.carrier[carrier], carrier).toBeTruthy());
+    expect(Object.keys(readouts.carrier).sort()).toEqual([...CARRIER_IDS].sort());
+  });
+
+  it('follows the joule along the scrubber, amber as current and red as heat', () => {
+    const { carrier } = readouts;
+    expect(text('joule', stateAt(PHASE_RANGES.grid.start))).toBe(carrier.line);
+    expect(tone('joule', stateAt(PHASE_RANGES.grid.start))).toBe(THEME.current);
+    expect(text('joule', stateAt(MOMENTS.atRack))).toBe(carrier.busbar);
+    expect(tone('joule', stateAt(MOMENTS.atRack))).toBe(THEME.current);
+    expect(text('joule', stateAt(MOMENTS.becomesHeat))).toBe(carrier.chip);
+    expect(tone('joule', stateAt(MOMENTS.becomesHeat))).toBe(THEME.heat);
+    expect(text('joule', stateAt(MOMENTS.inCoolant))).toBe(carrier.water);
+    expect(tone('joule', stateAt(MOMENTS.inCoolant))).toBe(THEME.heat);
+  });
+
+  it('carries the heat away in air in the air hall', () => {
+    const air = stateAt(MOMENTS.inCoolant, 'air');
+    expect(text('joule', air)).toBe(readouts.carrier.air);
+    expect(tone('joule', air)).toBe(THEME.heat);
   });
 
   it('starts with a liquid rack at full load and every meter full', () => {

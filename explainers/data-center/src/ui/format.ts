@@ -1,6 +1,6 @@
 import { formatFixed, formatSignificant } from '@core/format';
 import { currentLanguage, t } from '@core/i18n';
-import type { BenchmarkId, MediumId } from '../ids';
+import type { BenchmarkId, CarrierId, MediumId } from '../ids';
 import { PUE } from '../model';
 
 export const WHOLE = 0;
@@ -46,6 +46,10 @@ export function formatPue(benchmark: BenchmarkId): string {
     value: hundredths(PUE[benchmark]),
     site: t(`readouts.pueSite.${benchmark}`),
   });
+}
+
+export function formatCarrier(carrier: CarrierId): string {
+  return t(`readouts.carrier.${carrier}`);
 }
 
 export function formatYear(year: number): string {

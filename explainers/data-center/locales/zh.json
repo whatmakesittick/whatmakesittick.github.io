@@ -115,6 +115,17 @@
     }
   },
   "readouts": {
+    "joule": "The joule is in",
+    "carrier": {
+      "line": "the grid line",
+      "cable": "the site cable",
+      "ups": "the UPS",
+      "busway": "the busway",
+      "busbar": "the rack busbar",
+      "chip": "the chip",
+      "water": "the cooling water",
+      "air": "the outside air"
+    },
     "rackPower": "机柜功率",
     "hallPower": "计算机总功率",
     "pue": "PUE",
