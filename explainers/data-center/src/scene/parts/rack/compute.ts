@@ -38,8 +38,10 @@ const PACKAGE: Readonly<{ x: number; z: number }> = { x: 0.2, z: 0.13 };
 const GLOW_GROW_M = 0.01;
 const SINK_BASE_TOP = 0.012;
 const FIN_TOP = 0.046;
-const FINS = 14;
+const FINS = 12;
 const FIN_M = 0.0012;
+const FIN_SEGMENTS = 6;
+const FIN_CUT_M = 0.006;
 const HOSE_RADIUS = 0.005;
 const HOSE_SEGMENTS = 24;
 const HOSE_SIDES = 8;
@@ -82,21 +84,23 @@ function components() {
   return { board, nics, connectors, packages, plates, inlet };
 }
 
-function sink(): BufferGeometry {
-  const fins = (z: number) => {
-    const pitch = PLATE.x / FINS;
-    return Array.from({ length: FINS }, (_, index) => {
-      const x = RACK_X - HALF_PLATE + (index + 0.5) * pitch;
-      return boxGeometry({
-        minX: x - FIN_M / 2,
-        maxX: x + FIN_M / 2,
-        minY: SINK_BASE_TOP,
-        maxY: FIN_TOP,
-        minZ: z - PLATE.z / 2,
-        maxZ: z + PLATE.z / 2,
-      });
+function finBlock(x: number, z: number): BufferGeometry[] {
+  const length = (PLATE.z - FIN_CUT_M * (FIN_SEGMENTS - 1)) / FIN_SEGMENTS;
+  return Array.from({ length: FIN_SEGMENTS }, (_, index) => {
+    const from = z - PLATE.z / 2 + index * (length + FIN_CUT_M);
+    return boxGeometry({
+      minX: x - FIN_M / 2,
+      maxX: x + FIN_M / 2,
+      minY: SINK_BASE_TOP,
+      maxY: FIN_TOP,
+      minZ: from,
+      maxZ: from + length,
     });
-  };
+  });
+}
+
+function sink(): BufferGeometry {
+  const pitch = PLATE.x / FINS;
   const parts = PLATE_Z.flatMap((z) => [
     boxGeometry({
       minX: RACK_X - HALF_PLATE,
@@ -106,7 +110,9 @@ function sink(): BufferGeometry {
       minZ: z - PLATE.z / 2,
       maxZ: z + PLATE.z / 2,
     }),
-    ...fins(z),
+    ...Array.from({ length: FINS }, (_, index) =>
+      finBlock(RACK_X - HALF_PLATE + (index + 0.5) * pitch, z),
+    ).flat(),
   ]);
   const merged = mergeGeometries(parts);
   parts.forEach((part) => part.dispose());

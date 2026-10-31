@@ -4,8 +4,8 @@ import { THEME } from '../../../theme';
 export const RACK_FINISHES = {
   board: { color: '#244334', roughness: 0.72, metalness: 0.05 },
   package: { color: '#39463f', roughness: 0.6, metalness: 0.1 },
-  coldPlate: { color: '#c2c7cc', roughness: 0.3, metalness: 0.85 },
-  heatSink: { color: '#a3abb3', roughness: 0.38, metalness: 0.75 },
+  coldPlate: { color: '#9aa2aa', roughness: 0.32, metalness: 0.85 },
+  heatSink: { color: '#868e97', roughness: 0.4, metalness: 0.75 },
   chipGlow: {
     color: THEME.current,
     emissive: THEME.current,
