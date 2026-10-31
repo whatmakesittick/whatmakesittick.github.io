@@ -1,5 +1,6 @@
 import { BoxGeometry, Matrix4, MeshStandardMaterial, SphereGeometry, Vector3 } from 'three';
 import type { Group } from 'three';
+import type { Extent } from '@core/scene/regions';
 import type { Point } from '../../../ids';
 import {
   ANCHOR_POINTS,
@@ -11,6 +12,7 @@ import {
   ROWS,
   ROW_PIPE,
   SUBJECT_CDU,
+  SUBJECT_ROW,
   SUBJECT_ROW_INDEX,
   behind,
   boxTop,
@@ -19,6 +21,8 @@ import type { RowSpec } from '../../../model';
 import { FINISHES } from '../../finishes';
 import { label, namedGroup, registeredMaterial, sceneAnchor } from '../context';
 import type { PartContext } from '../context';
+import { CHANNEL_Y } from './ceiling';
+import type { CeilingGrid } from './ceiling';
 import { instances } from './instances';
 import { MANIFOLD_LOCAL, SUPPLY_PIPE_OFFSET } from './racks';
 import { facingPlacement, rodBetween, rodGeometry } from './shapes';
@@ -44,6 +48,15 @@ const VALVE = { body: 0.11, stem: 0.07, wheel: 0.06 } as const;
 const SCREEN: Point = [0.157, 1.6, 0.2];
 const SCREEN_SIZE: Point = [0.2, 0.13, 0.004];
 const FACILITY_GROUP = 'facilityPipes';
+const HEADER_Y = CEILING_Y;
+const MAIN_Y = CEILING_Y - 0.25;
+const HEADER_OFFSET_M = 0.2;
+const TRAPEZE_X = [-1.2, 1.8, 4.8, 7.8, 10.8, 14.4, 17.1] as const;
+const LINES = ['supply', 'ret'] as const;
+const SIDE: Record<Line, number> = { supply: -1, ret: 1 };
+const TOLERANCE_M = 1e-6;
+
+type Line = (typeof LINES)[number];
 
 interface Pipe {
   from: Point;
@@ -87,15 +100,107 @@ function polyline(points: readonly Point[]): Pipe[] {
   return points.slice(1).map((to, index) => pipe(points[index], to));
 }
 
+function riserZ(row: RowSpec, line: Line): number {
+  return behind(row, line === 'supply' ? SUPPLY_RISER_Z : MANIFOLD_LOCAL.z);
+}
+
+function headerX(block: number, line: Line): number {
+  const row = ROWS.find((spec) => spec.block === block) ?? SUBJECT_ROW;
+  return CDUS[row.index].base[0] + SIDE[line] * HEADER_OFFSET_M;
+}
+
+const MAIN: Record<Line, { z: number; x: Extent }> = {
+  supply: { z: riserZ(SUBJECT_ROW, 'supply'), x: [headerX(0, 'supply'), headerX(1, 'supply')] },
+  ret: { z: RISER.z, x: [RISER.x, headerX(1, 'ret')] },
+};
+
+function endsOnMain(row: RowSpec, line: Line): boolean {
+  const x = CDUS[row.index].base[0];
+  const { z, x: span } = MAIN[line];
+  return Math.abs(riserZ(row, line) - z) < TOLERANCE_M && x > span[0] && x < span[1];
+}
+
+function riserTop(row: RowSpec, line: Line): number {
+  if (row.index === SUBJECT_ROW_INDEX) return RISER.top;
+  return endsOnMain(row, line) ? MAIN_Y : HEADER_Y;
+}
+
 function risers(row: RowSpec): { supply: Pipe; ret: Pipe } {
   const x = CDUS[row.index].base[0];
-  const top = row.index === SUBJECT_ROW_INDEX ? RISER.top : CEILING_Y;
-  const returnZ = row.index === SUBJECT_ROW_INDEX ? RISER.z : behind(row, MANIFOLD_LOCAL.z);
-  const supplyZ = behind(row, SUPPLY_RISER_Z);
+  const [supply, ret] = LINES.map((line) => {
+    const z = riserZ(row, line);
+    return pipe([x, RISER.bottom, z], [x, riserTop(row, line), z], RISER_R);
+  });
+  return { supply, ret };
+}
+
+interface WaterLine {
+  pipes: Pipe[];
+  elbows: Point[];
+}
+
+function waterLine(line: Line): WaterLine {
+  const main = MAIN[line];
+  const headers = [0, 1].map((block) => headerX(block, line));
+  const fed = ROWS.filter(
+    (row) => row.index !== SUBJECT_ROW_INDEX && riserTop(row, line) === HEADER_Y,
+  );
+  const stubs = fed.map((row): [Point, Point] => {
+    const z = riserZ(row, line);
+    return [
+      [CDUS[row.index].base[0], HEADER_Y, z],
+      [headerX(row.block, line), HEADER_Y, z],
+    ];
+  });
+  const runs = headers.map((x, block) => {
+    const zs = [
+      main.z,
+      ...fed.filter((row) => row.block === block).map((row) => riserZ(row, line)),
+    ];
+    return [Math.min(...zs), Math.max(...zs)].map((z): Point => [x, HEADER_Y, z]);
+  });
   return {
-    ret: pipe([x, RISER.bottom, returnZ], [x, top, returnZ], RISER_R),
-    supply: pipe([x, RISER.bottom, supplyZ], [x, top, supplyZ], RISER_R),
+    pipes: [
+      pipe([main.x[0], MAIN_Y, main.z], [main.x[1], MAIN_Y, main.z], RISER_R),
+      ...headers.map((x) => pipe([x, MAIN_Y, main.z], [x, HEADER_Y, main.z], RISER_R)),
+      ...runs.map(([from, to]) => pipe(from, to, RISER_R)),
+      ...stubs.map(([from, to]) => pipe(from, to, RISER_R)),
+    ],
+    elbows: [
+      ...main.x.filter((x) => headers.includes(x)).map((x): Point => [x, MAIN_Y, main.z]),
+      ...runs.flat(),
+      ...stubs.map(([from]) => from),
+    ],
   };
+}
+
+function mainSupports(grid: CeilingGrid): { struts: Matrix4[]; hangers: Matrix4[] } {
+  const zs = LINES.map((line) => MAIN[line].z);
+  const north = Math.max(...grid.lines.filter((z) => z < Math.min(...zs) - RISER_R));
+  const south = Math.min(...grid.lines.filter((z) => z > Math.max(...zs) + RISER_R));
+  const barY = MAIN_Y - RISER_R - STRUT.wide / 2;
+  const headerHangers = LINES.flatMap((line) =>
+    [0, 1].flatMap((block) => {
+      const x = headerX(block, line);
+      const zs = ROWS.filter((row) => row.block === block).map((row) => riserZ(row, line));
+      return grid
+        .hangers(Math.min(...zs), Math.max(...zs))
+        .map((z) => rodBetween([x, HEADER_Y + RISER_R, z], [x, CHANNEL_Y, z], STRUT.hanger));
+    }),
+  );
+  return {
+    struts: TRAPEZE_X.map((x) => rodBetween([x, barY, north], [x, barY, south], STRUT.wide)),
+    hangers: [
+      ...headerHangers,
+      ...TRAPEZE_X.flatMap((x) =>
+        [north, south].map((z) => rodBetween([x, barY, z], [x, CHANNEL_Y, z], STRUT.hanger)),
+      ),
+    ],
+  };
+}
+
+export function coolingLines(): number[] {
+  return ROWS.map((row) => behind(row, MANIFOLD_LOCAL.z + SUPPLY_PIPE_OFFSET + STRUT.reach / 2));
 }
 
 function jackets(riser: Pipe): { jacket: Matrix4; bands: Matrix4[] } {
@@ -120,7 +225,7 @@ function supports(row: RowSpec): { struts: Matrix4[]; hangers: Matrix4[] } {
   const xs = Array.from({ length: count }, (_, index) => west + (index + 0.5) * SUPPORT_PITCH);
   return {
     struts: xs.map((x) => rodBetween([x, strutY, nearZ], [x, strutY, farZ], STRUT.wide)),
-    hangers: xs.map((x) => rodBetween([x, strutY, farZ], [x, CEILING_Y, farZ], STRUT.hanger)),
+    hangers: xs.map((x) => rodBetween([x, strutY, farZ], [x, CHANNEL_Y, farZ], STRUT.hanger)),
   };
 }
 
@@ -179,7 +284,7 @@ function cduBodies(context: PartContext, group: Group) {
   );
 }
 
-export function buildCdus(context: PartContext, parent: Group): Group {
+export function buildCdus(context: PartContext, parent: Group, grid: CeilingGrid): Group {
   const group = namedGroup('cdu', parent);
   cduBodies(context, group);
   label(context, 'cdu', group, boxTop(SUBJECT_CDU));
@@ -193,9 +298,13 @@ export function buildCdus(context: PartContext, parent: Group): Group {
   const hangers: Matrix4[] = [];
   const valveParts: { bodies: Matrix4[]; wheels: Matrix4[] } = { bodies: [], wheels: [] };
   const elbows = {
-    near: { supply: [] as Point[], ret: [] as Point[] },
-    far: { supply: [] as Point[], ret: [] as Point[] },
+    near: { supply: [] as Matrix4[], ret: [] as Matrix4[] },
+    far: { supply: [] as Matrix4[], ret: [] as Matrix4[] },
   };
+  const balls = (points: Point[], radius = ROW_PIPE_R) =>
+    points.map((point) =>
+      new Matrix4().makeTranslation(...point).scale(new Vector3().setScalar(radius)),
+    );
   ROWS.forEach((row) => {
     const rowRun = rowPipes(row);
     const riser = risers(row);
@@ -203,8 +312,8 @@ export function buildCdus(context: PartContext, parent: Group): Group {
     supply.push(...polyline(rowRun.supply), riser.supply);
     ret.push(...polyline(rowRun.ret), riser.ret);
     const bends = subject ? elbows.near : elbows.far;
-    bends.supply.push(...rowRun.supply.slice(1, -1));
-    bends.ret.push(...rowRun.ret.slice(1, -1));
+    bends.supply.push(...balls(rowRun.supply.slice(1, -1)));
+    bends.ret.push(...balls(rowRun.ret.slice(1, -1)));
     if (subject) {
       const supplyJacket = jackets(riser.supply);
       const returnJacket = jackets(riser.ret);
@@ -219,6 +328,14 @@ export function buildCdus(context: PartContext, parent: Group): Group {
     valveParts.bodies.push(...rowValves.bodies);
     valveParts.wheels.push(...rowValves.wheels);
   });
+  const water = { supply: waterLine('supply'), ret: waterLine('ret') };
+  LINES.forEach((line) => {
+    (line === 'supply' ? supply : ret).push(...water[line].pipes);
+    elbows.far[line].push(...balls(water[line].elbows, RISER_R));
+  });
+  const mains = mainSupports(grid);
+  struts.push(...mains.struts);
+  hangers.push(...mains.hangers);
   const add = (
     finish: keyof typeof FINISHES,
     matrices: Matrix4[],
@@ -234,16 +351,12 @@ export function buildCdus(context: PartContext, parent: Group): Group {
     );
   const matrices = (list: Pipe[]) =>
     list.map(({ from, to, radius }) => rodBetween(from, to, radius));
-  const balls = (points: Point[]) =>
-    points.map((point) =>
-      new Matrix4().makeTranslation(...point).scale(new Vector3().setScalar(ROW_PIPE_R)),
-    );
   add('pipeSupply', [...matrices(supply), ...bands.supply]);
   add('pipeReturn', [...matrices(ret), ...bands.ret]);
   (['near', 'far'] as const).forEach((range) => {
     const [sides, rings] = ELBOW_DETAIL[range];
-    add('pipeSupply', balls(elbows[range].supply), new SphereGeometry(1, sides, rings));
-    add('pipeReturn', balls(elbows[range].ret), new SphereGeometry(1, sides, rings));
+    add('pipeSupply', elbows[range].supply, new SphereGeometry(1, sides, rings));
+    add('pipeReturn', elbows[range].ret, new SphereGeometry(1, sides, rings));
   });
   add('pipeInsulated', jacketed);
   add('steelDark', [...struts, ...valveParts.bodies], rodGeometry(STRUT_SIDES));

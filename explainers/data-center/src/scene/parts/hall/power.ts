@@ -3,10 +3,10 @@ import type { BufferGeometry, Group, Matrix4 } from 'three';
 import type { Extent } from '@core/scene/regions';
 import {
   BUSWAY,
-  CEILING_Y,
   HALL_RACKS,
   RACK,
   RACK_RUN_M,
+  ROOM_WALL_X,
   ROWS,
   ROW_Z,
   TAP_BOX,
@@ -15,6 +15,8 @@ import {
 import { FINISHES } from '../../finishes';
 import { label, namedGroup } from '../context';
 import type { PartContext } from '../context';
+import { BRACE_X, CHANNEL_Y } from './ceiling';
+import type { CeilingGrid } from './ceiling';
 import { instances } from './instances';
 import { along, openBox, rodBetween, rodGeometry, runMatrix } from './shapes';
 
@@ -26,7 +28,6 @@ const BLOCK_FEED_X = [BUSWAY.endX, 11.7] as const;
 const JOINT_PITCH_M = 3;
 const JOINT_M = 0.05;
 const JOINT_GROW = 1.12;
-const HANGER_PITCH_M = 2.4;
 const HANGER_R = 0.008;
 const TAP = { x: 0.2, y: 0.26, z: 0.24, drop: 0.035 } as const;
 const TAP_Y = TAP_BOX[1] - 0.02;
@@ -100,16 +101,19 @@ function joints(run: Run): Matrix4[] {
   });
 }
 
-function hangers(): Matrix4[] {
+export function buswayLines(): number[] {
+  return [...ROW_Z];
+}
+
+function hangers(grid: CeilingGrid): Matrix4[] {
   const rod = (x: number, top: number, z: number) =>
-    rodBetween([x, top, z], [x, CEILING_Y, z], HANGER_R);
+    rodBetween([x, top, z], [x, CHANNEL_Y, z], HANGER_R);
   const mainTop = BUSWAY.mainY + MAIN.tall / 2;
-  const mainLength = BLOCK_FEED_X[1] - UPS_AISLE_X;
-  const main = Array.from({ length: Math.floor(mainLength / HANGER_PITCH_M) }, (_, index) =>
-    rod(UPS_AISLE_X + (index + 0.5) * HANGER_PITCH_M, mainTop, BUSWAY.mainZ + MAIN.wide / 3),
+  const main = BRACE_X.filter((x) => x > ROOM_WALL_X && x < BLOCK_FEED_X[1]).map((x) =>
+    rod(x, mainTop, BUSWAY.mainZ + MAIN.wide / 3),
   );
   const cross = BLOCK_FEED_X.flatMap((x) =>
-    ROW_Z.map((z) => rod(x, mainTop, z + (z < 0 ? 0.6 : -0.6))),
+    grid.hangers(ROW_Z[0], ROW_Z[ROW_Z.length - 1]).map((z) => rod(x, mainTop, z)),
   );
   const rows = ROWS.flatMap((row) =>
     ROW_HANGERS.map((offset) => rod(row.startX + offset, BUSWAY.rowY + ROW.tall / 2, row.z)),
@@ -130,7 +134,7 @@ function whips(): Matrix4[] {
   );
 }
 
-export function buildBusway(context: PartContext, parent: Group): Group {
+export function buildBusway(context: PartContext, parent: Group, grid: CeilingGrid): Group {
   const group = namedGroup('busway', parent);
   const cube = new BoxGeometry();
   const all = runs();
@@ -149,7 +153,7 @@ export function buildBusway(context: PartContext, parent: Group): Group {
   mesh('steelDark', all.flatMap(joints), cube.clone());
   mesh('steel', tapBoxes(), openBox(['py']));
   mesh('cable', whips(), rodGeometry(WHIP_SIDES, true));
-  mesh('steel', hangers(), rodGeometry(HANGER_SIDES, true));
+  mesh('steel', hangers(grid), rodGeometry(HANGER_SIDES, true));
   label(context, 'busway', group, [BUSWAY.endX + 3, BUSWAY.mainY + MAIN.tall / 2, BUSWAY.mainZ]);
   return group;
 }

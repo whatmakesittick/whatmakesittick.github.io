@@ -6,7 +6,6 @@ import type { Extent } from '@core/scene/regions';
 import type { PartId, Point } from '../../../ids';
 import {
   CABLE_TRAY_Y,
-  CEILING_Y,
   FIBRE_ENTRY,
   LEAF_RACKS,
   NETWORK_RACK,
@@ -21,6 +20,8 @@ import type { BoxSpec, Facing } from '../../../model';
 import { FINISHES } from '../../finishes';
 import { label, namedGroup, registeredMaterial } from '../context';
 import type { PartContext } from '../context';
+import { CHANNEL_Y } from './ceiling';
+import type { CeilingGrid } from './ceiling';
 import { cabinetGeometry, cabinetMaterials, frontPoint, panelTopOf } from './cabinet';
 import type { CabinetSize } from './cabinet';
 import { instances } from './instances';
@@ -52,6 +53,7 @@ const DUCT = { wide: 0.14, tall: 0.08, entry: 0.3 } as const;
 const STRIP = { wide: 0.12, tall: 0.05, glow: 0.08 } as const;
 const COLD_AISLE_Z = [-8.6, -4.236, 0, 4.236, 8.6] as const;
 const STRIP_REACH_M = 1;
+const FIBRE_LINES = [10.8, 13.0] as const;
 const RACEWAY_LIFT_M = 0.01;
 const SPINE_DROP_SHARE = 0.6;
 
@@ -136,7 +138,14 @@ function trays(): Tray[] {
   ];
 }
 
-function trayParts(tray: Tray) {
+export function networkLines(): { fixed: number[]; lamps: number[] } {
+  const edges = trays()
+    .filter((tray) => tray.axis === 'x')
+    .flatMap((tray) => [tray.at - TRAY.wide / 2, tray.at + TRAY.wide / 2]);
+  return { fixed: [...edges, ...FIBRE_LINES], lamps: COLD_AISLE_Z.filter((z) => z !== 0) };
+}
+
+function trayParts(tray: Tray, grid: CeilingGrid) {
   const box = (lengthwise: Extent, y: Extent, across: Extent) =>
     tray.axis === 'x' ? runMatrix(lengthwise, y, across) : runMatrix(across, y, lengthwise);
   const half = TRAY.wide / 2;
@@ -153,22 +162,26 @@ function trayParts(tray: Tray) {
       [tray.at - half, tray.at + half],
     ),
   );
-  const hangers = Array.from(
-    { length: Math.max(1, Math.floor((tray.to - tray.from) / HANGER_PITCH_M)) },
-    (_, index) => tray.from + (index + 0.5) * HANGER_PITCH_M,
-  ).flatMap((along) =>
+  const stations =
+    tray.axis === 'x'
+      ? Array.from(
+          { length: Math.max(1, Math.floor((tray.to - tray.from) / HANGER_PITCH_M)) },
+          (_, index) => tray.from + (index + 0.5) * HANGER_PITCH_M,
+        )
+      : grid.hangers(tray.from, tray.to);
+  const hangers = stations.flatMap((along) =>
     [-half, half].map((edge) => {
       const point = (y: number): Point =>
         tray.axis === 'x' ? [along, y, tray.at + edge] : [tray.at + edge, y, along];
-      return rodBetween(point(CABLE_TRAY_Y), point(CEILING_Y), 0.007);
+      return rodBetween(point(CABLE_TRAY_Y), point(CHANNEL_Y), 0.007);
     }),
   );
   return { rails, rungs, axis: tray.axis, hangers };
 }
 
-function buildTrays(context: PartContext, parent: Group): void {
+function buildTrays(context: PartContext, parent: Group, grid: CeilingGrid): void {
   const group = namedGroup('cableTrays', parent);
-  const parts = trays().map(trayParts);
+  const parts = trays().map((tray) => trayParts(tray, grid));
   const material = (finish: MaterialFinish) => context.materials.get(STRUCTURE_GROUP, finish);
   const steel = material(FINISHES.traySteel);
   const rungs = (axis: Tray['axis']) =>
@@ -198,10 +211,10 @@ function buildLightStrips(context: PartContext, parent: Group): void {
     return COLD_AISLE_Z.map((z) => ({ x, z }));
   });
   const housing = strips.map(({ x, z }) =>
-    runMatrix(x, [CEILING_Y - STRIP.tall, CEILING_Y], along(z, STRIP.wide)),
+    runMatrix(x, [CHANNEL_Y - STRIP.tall, CHANNEL_Y], along(z, STRIP.wide)),
   );
   const glow = strips.map(({ x, z }) =>
-    runMatrix(x, along(CEILING_Y - STRIP.tall, 0.004), along(z, STRIP.glow)),
+    runMatrix(x, along(CHANNEL_Y - STRIP.tall, 0.004), along(z, STRIP.glow)),
   );
   const lamp = registeredMaterial(
     context,
@@ -219,7 +232,7 @@ function buildLightStrips(context: PartContext, parent: Group): void {
   );
 }
 
-function buildFibre(context: PartContext, parent: Group): void {
+function buildFibre(context: PartContext, parent: Group, grid: CeilingGrid): void {
   const group = namedGroup('fibreEntry', parent);
   const [x, y, wallZ] = FIBRE_ENTRY;
   const riseZ = wallZ - WALL_THICKNESS - DUCT.entry;
@@ -245,10 +258,9 @@ function buildFibre(context: PartContext, parent: Group): void {
       ];
     }),
   ];
-  const hangers = Array.from({ length: Math.floor(riseZ / HANGER_PITCH_M) }, (_, index) => {
-    const z = riseZ - (index + 0.5) * HANGER_PITCH_M;
-    return rodBetween([x, trayY + DUCT.tall / 2, z], [x, CEILING_Y, z], 0.007);
-  });
+  const hangers = grid
+    .hangers(DUCT.wide, riseZ)
+    .map((z) => rodBetween([x, trayY + DUCT.tall / 2, z], [x, CHANNEL_Y, z], 0.007));
   group.add(
     instances(
       context,
@@ -263,7 +275,7 @@ function buildFibre(context: PartContext, parent: Group): void {
   label(context, 'fibreEntry', group, [x, y + DUCT.entry, riseZ]);
 }
 
-export function buildNetwork(context: PartContext, parent: Group): void {
+export function buildNetwork(context: PartContext, parent: Group, grid: CeilingGrid): void {
   switchRacks(
     context,
     parent,
@@ -280,7 +292,7 @@ export function buildNetwork(context: PartContext, parent: Group): void {
     ROWS.map((row) => row.facing),
     boxTop(LEAF_RACKS[3]),
   );
-  buildFibre(context, parent);
-  buildTrays(context, parent);
+  buildFibre(context, parent, grid);
+  buildTrays(context, parent, grid);
   buildLightStrips(context, parent);
 }
