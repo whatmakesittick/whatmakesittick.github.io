@@ -36,6 +36,12 @@ function completed<Id extends string>(
   });
 }
 
+export function withChaseCutaway(state: AssemblyState): AssemblyState {
+  const { view } = state;
+  if (!view.follow || view.cutaway) return state;
+  return { ...state, view: { ...view, cutaway: true } };
+}
+
 class DataCenterAssembly implements Assembly {
   readonly root = new Group();
   private readonly materials: MaterialLibrary;
@@ -73,9 +79,10 @@ class DataCenterAssembly implements Assembly {
   }
 
   setState(state: AssemblyState): void {
-    this.state = state;
-    this.outage.observe(state.outage);
-    this.sections.forEach((section) => section.setState(state));
+    const shown = withChaseCutaway(state);
+    this.state = shown;
+    this.outage.observe(shown.outage);
+    this.sections.forEach((section) => section.setState(shown));
   }
 
   update(deltaSeconds: number, cameraDistance: number): boolean {

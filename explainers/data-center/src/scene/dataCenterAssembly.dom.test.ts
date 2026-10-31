@@ -10,7 +10,7 @@ import { ANCHOR_POINTS, MOMENTS, REGION_SPECS, jouleAt } from '../model';
 import type { FixedAnchorId } from '../model';
 import type { Assembly } from './assembly';
 import { OUTAGE_DRILL } from './constants';
-import { createDataCenterAssembly } from './dataCenterAssembly';
+import { createDataCenterAssembly, withChaseCutaway } from './dataCenterAssembly';
 
 const FRAME = 1 / 60;
 const CAMERA_DISTANCE = 20;
@@ -177,6 +177,13 @@ describe('data center assembly', () => {
       settle(stateAt(UNITS.inHall, 'liquid', { [flag]: false }));
       expect(labelShown(id), id).toBe(false);
     });
+  });
+
+  it('opens the cutaway while the camera follows the joule', () => {
+    const following = stateAt(UNITS.inHall, 'liquid', { follow: true });
+    const fixed = stateAt(UNITS.inHall, 'liquid', { cutaway: false });
+    expect(withChaseCutaway(following).view.cutaway).toBe(true);
+    expect(withChaseCutaway(fixed)).toBe(fixed);
   });
 
   it('bounds every culled instanced mesh around all of its instances', () => {
