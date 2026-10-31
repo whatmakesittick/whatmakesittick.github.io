@@ -1,0 +1,13 @@
+{
+  "slug": "data-center",
+  "tags": ["computing", "energy"],
+  "topic": "data centre",
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A 3D data centre campus cut open, with the power path glowing from the substation to a liquid-cooled AI rack and the heat rising to the roof, beside the title How a data centre works"
+  }
+}
