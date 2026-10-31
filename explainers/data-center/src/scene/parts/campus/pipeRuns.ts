@@ -5,12 +5,13 @@ import type { CoolingId, Point } from '../../../ids';
 import type { BoxSpec } from '../../../model';
 import { AIR_HANDLERS, CHILLER, DRY_COOLERS, DRY_COOLER_ROW_Z } from '../../../model';
 import { ROOF_PIPE_Y as Y, ROOF_Y, WALL_PIPE_X, boxSpan, legsFor } from '../../../model';
-import { CUTAWAY_ROOF_X } from '../../../model';
+import { CUTAWAY_ROOF_X, SUBJECT_ROW, behind } from '../../../model';
 import { namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { CHILLER_BARREL } from './chiller';
 import { INNER_WALL, PAD_TOP_Y } from './constants';
 import { DUNNAGE_TOP_Y, PIPE_R, at, drawer, dunnage, rod, spread } from './pipeKit';
+import type { Span } from './pipeKit';
 
 type Network = 'always' | CoolingId;
 
@@ -19,22 +20,37 @@ const ELBOW = { tube: 10, arc: 8 } as const;
 const BAND = { radius: 0.163, length: 0.06, pitch: 1.8 } as const;
 const STAND = { pitch: 3, minRun: 2.6, plate: 0.16, plateM: 0.04, post: 0.04 } as const;
 const SADDLE = { across: 0.19, along: 0.06, height: 0.06 } as const;
-const CURB = { half: 0.28, reach: 0.6, height: 0.14, wall: INNER_WALL.east - WALL_PIPE_X } as const;
-const STUB_DEPTH_M = 0.2;
+const CURB = { half: 0.28, margin: 0.22, height: 0.14, beamInset: 0.1 } as const;
+const BOOT = { radius: 0.2, height: 0.04 } as const;
+const SUPPLY_RISER_Z = behind(SUBJECT_ROW, 0.16);
+const WALL_CLEAR_M = 0.05;
 const OVERRUN_M = 0.4;
 const JOIN_M = 0.02;
 const LEVEL_EPSILON = 1e-6;
 
 const [riser, riserBend, riserNorth, , headerTurn, corner] = legsFor('liquid', 'release')[0].points;
-const [wallTop, wallBend, northCorner, westCorner] = legsFor('air', 'release')[0].points;
-const wallFoot = legsFor('air', 'cool')[1].points[1];
+const WALL_X = INNER_WALL.east - PIPE_R - WALL_CLEAR_M;
+const toWall = ([x, y, z]: Point): Point => [x === WALL_PIPE_X ? WALL_X : x, y, z];
+const [wallTop, wallBend, northCorner, westCorner] = legsFor('air', 'release')[0].points.map(
+  toWall,
+);
+const wallFoot = toWall(legsFor('air', 'cool')[1].points[1]);
 const [CHILLER_Z, HEADER_Z] = [riserNorth[2], corner[2]];
 const [NORTH_Z, SOUTH_Z] = DRY_COOLER_ROW_Z;
 const BRANCH_X = DRY_COOLERS.filter(({ base }) => base[2] === NORTH_Z).map(({ base }) => base[0]);
 const HANDLER_Z = AIR_HANDLERS.map(({ base }) => base[2]);
 const level = (x: number, z: number, y = Y): Point => [x, y, z];
 
-const STUB_FOOT = level(riser[0], riser[2], ROOF_Y - STUB_DEPTH_M);
+const STUB_FOOT = level(riser[0], riser[2], ROOF_Y);
+const RISER_CURB: Span = [
+  -CURB.half,
+  CURB.half,
+  DUNNAGE_TOP_Y - ROOF_Y,
+  CURB.height,
+  SUPPLY_RISER_Z - riser[2] - CURB.margin,
+  CURB.margin,
+];
+const CURB_BEAM_Z = [RISER_CURB[4] + CURB.beamInset, RISER_CURB[5] - CURB.beamInset];
 const LIQUID_END = level(boxSpan(CHILLER).x[0] + JOIN_M, CHILLER_Z);
 const CHILLER_EXIT = level(CHILLER_BARREL.east - JOIN_M, CHILLER_Z);
 const HEADER_END = level(Math.max(...BRANCH_X) + OVERRUN_M, HEADER_Z);
@@ -49,14 +65,23 @@ const ROUTES: Readonly<Record<Network, readonly (readonly Point[])[]>> = {
   liquid: [[STUB_FOOT, riserBend, riserNorth, LIQUID_END]],
   air: [
     [wallFoot, wallBend, northCorner, westCorner, AIR_END],
-    COLLECTOR_Z.map((z) => level(WALL_PIPE_X, z, wallFoot[1])),
+    COLLECTOR_Z.map((z) => level(WALL_X, z, wallFoot[1])),
   ],
 };
 
 const CURBS: Readonly<Record<Network, readonly BoxSpec[]>> = {
   always: [],
-  liquid: [at(riser, [-CURB.half, CURB.half, 0, CURB.height, -CURB.reach, CURB.half])],
-  air: [at(wallTop, [-CURB.half, CURB.wall, 0, CURB.height, -CURB.half, CURB.half])],
+  liquid: [
+    at(riser, RISER_CURB),
+    ...CURB_BEAM_Z.map((z) => dunnage(riser[0], riser[0], riser[2] + z)),
+  ],
+  air: [at(wallTop, [-CURB.half, INNER_WALL.east - WALL_X, 0, CURB.height, -CURB.half, CURB.half])],
+};
+
+const BOOTS: Readonly<Record<Network, readonly Point[]>> = {
+  always: [],
+  liquid: [riser],
+  air: [wallTop],
 };
 
 export const PIPE_LABEL = level((headerTurn[0] + Math.min(...BRANCH_X)) / 2, HEADER_Z, Y + PIPE_R);
@@ -66,6 +91,11 @@ function bend(corner: Vector3, incoming: Vector3, outgoing: Vector3): Matrix4 {
   const centre = new Vector3().subVectors(outgoing, incoming).multiplyScalar(BEND_R).add(corner);
   const normal = new Vector3().crossVectors(across, incoming);
   return new Matrix4().makeBasis(across, incoming, normal).setPosition(centre);
+}
+
+function boot([x, y, z]: Point): Matrix4 {
+  const top = y + CURB.height;
+  return rod([x, top, z], [x, top + BOOT.height, z], BOOT.radius);
 }
 
 function bands(from: Vector3, to: Vector3): Matrix4[] {
@@ -101,6 +131,7 @@ function stands(start: Vector3, end: Vector3): BoxSpec[] {
 function lay(network: Network) {
   const laid = { straights: [] as Matrix4[], elbows: [] as Matrix4[], bands: [] as Matrix4[] };
   const steel = [...CURBS[network]];
+  laid.bands.push(...BOOTS[network].map(boot));
   ROUTES[network].forEach((route) => {
     const points = route.map((point) => new Vector3(...point));
     points.slice(1).forEach((end, index) => {
