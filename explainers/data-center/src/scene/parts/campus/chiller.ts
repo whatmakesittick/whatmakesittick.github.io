@@ -1,5 +1,6 @@
 import type { Object3D } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
+import type { Point } from '../../../ids';
 import { CHILLER, ROOF_PIPE_Y, ROOF_Y } from '../../../model';
 import type { PartContext } from '../context';
 import { DECK_M, SHROUD_M, buildCoilUnits } from './dryCoolers';
@@ -17,6 +18,8 @@ const DECK_Y = HEIGHT - SHROUD_M * FAN_SCALE - DECK_M;
 const TOP = DECK_Y + DECK_M;
 const BAY = { rail: 0.2, top: 0.96, plate: 0.04 } as const;
 const RAIL_Z = EDGE - 0.08;
+const INNER_Z = EDGE - 0.16;
+const CROSS_X = [-4.92, -3, -0.5, 2, 4.92] as const;
 const PANEL_M = 0.98;
 const BARREL = { inset: 0.4, radius: 0.32 } as const;
 const COMPRESSOR = { radius: 0.22, height: 0.52, offset: 0.78 } as const;
@@ -40,15 +43,8 @@ const PANELS: readonly Span[] = [0.24, 1.28].flatMap((from) => [
   ...mirror([-HALF - 0.02, -HALF, from, from + PANEL_M, 0.02, EDGE - 0.03], [1], SIDES),
 ]);
 const DARK: readonly Span[] = [
-  ...mirror([-HALF, HALF, DUNNAGE_TOP_Y - ROOF_Y, BAY.rail, EDGE, EDGE - 0.16], [1], SIDES),
-  ...[-4.92, -3, -0.5, 2, 4.92].map((x): Span => [
-    x - 0.07,
-    x + 0.07,
-    0.06,
-    BAY.rail,
-    0.16 - EDGE,
-    EDGE - 0.16,
-  ]),
+  ...mirror([-HALF, HALF, DUNNAGE_TOP_Y - ROOF_Y, BAY.rail, EDGE, INNER_Z], [1], SIDES),
+  ...CROSS_X.map((x): Span => [x - 0.07, x + 0.07, 0.06, BAY.rail, -INNER_Z, INNER_Z]),
   ...[-2.95, -1.1, 1.1, 3.05, 4.95].flatMap((x) =>
     mirror([x - 0.05, x + 0.05, BAY.rail, BAY.top, RAIL_Z - 0.05, RAIL_Z + 0.05], [1], SIDES),
   ),
@@ -83,12 +79,9 @@ export function buildChiller(context: PartContext, group: Object3D): FanSet {
     rod([CENTRE_X + x, foot, CENTRE_Z + z], [CENTRE_X + x, top, CENTRE_Z + z], COMPRESSOR.radius),
   );
   draw.rods(COMPRESSOR_FINISH, compressors);
-  const barrelFrom = CENTRE_X - HALF + BARREL.inset;
-  const barrel = rod(
-    [barrelFrom, ROOF_PIPE_Y, CENTRE_Z],
-    [CHILLER_BARREL.east, ROOF_PIPE_Y, CENTRE_Z],
-    BARREL.radius,
-  );
-  draw.rods('cable', [barrel]);
+  const axis = (x: number): Point => [x, ROOF_PIPE_Y, CENTRE_Z];
+  draw.rods('cable', [
+    rod(axis(CENTRE_X - HALF + BARREL.inset), axis(CHILLER_BARREL.east), BARREL.radius),
+  ]);
   return fans;
 }

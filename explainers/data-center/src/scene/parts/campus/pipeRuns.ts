@@ -5,11 +5,12 @@ import type { CoolingId, Point } from '../../../ids';
 import type { BoxSpec } from '../../../model';
 import { AIR_HANDLERS, CHILLER, DRY_COOLERS, DRY_COOLER_ROW_Z } from '../../../model';
 import { ROOF_PIPE_Y as Y, ROOF_Y, WALL_PIPE_X, boxSpan, legsFor } from '../../../model';
+import { CUTAWAY_ROOF_X } from '../../../model';
 import { namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { CHILLER_BARREL } from './chiller';
 import { INNER_WALL, PAD_TOP_Y } from './constants';
-import { DUNNAGE_TOP_Y, PIPE_R, at, drawer, dunnage, onSteel, rod, spread } from './pipeKit';
+import { DUNNAGE_TOP_Y, PIPE_R, at, drawer, dunnage, rod, spread } from './pipeKit';
 
 type Network = 'always' | CoolingId;
 
@@ -18,7 +19,7 @@ const ELBOW = { tube: 10, arc: 8 } as const;
 const BAND = { radius: 0.163, length: 0.06, pitch: 1.8 } as const;
 const STAND = { pitch: 3, minRun: 2.6, plate: 0.16, plateM: 0.04, post: 0.04 } as const;
 const SADDLE = { across: 0.19, along: 0.06, height: 0.06 } as const;
-const CURB = { half: 0.28, reach: 0.6, height: 0.14 } as const;
+const CURB = { half: 0.28, reach: 0.6, height: 0.14, wall: INNER_WALL.east - WALL_PIPE_X } as const;
 const STUB_DEPTH_M = 0.2;
 const OVERRUN_M = 0.4;
 const JOIN_M = 0.02;
@@ -55,9 +56,7 @@ const ROUTES: Readonly<Record<Network, readonly (readonly Point[])[]>> = {
 const CURBS: Readonly<Record<Network, readonly BoxSpec[]>> = {
   always: [],
   liquid: [at(riser, [-CURB.half, CURB.half, 0, CURB.height, -CURB.reach, CURB.half])],
-  air: [
-    at(wallTop, [-CURB.half, INNER_WALL.east - WALL_PIPE_X, 0, CURB.height, -CURB.half, CURB.half]),
-  ],
+  air: [at(wallTop, [-CURB.half, CURB.wall, 0, CURB.height, -CURB.half, CURB.half])],
 };
 
 export const PIPE_LABEL = level((headerTurn[0] + Math.min(...BRANCH_X)) / 2, HEADER_Z, Y + PIPE_R);
@@ -78,8 +77,8 @@ function bands(from: Vector3, to: Vector3): Matrix4[] {
 }
 
 function stand({ x, y, z }: Vector3, alongX: boolean): BoxSpec[] {
-  const onRoof = y > ROOF_Y;
-  const foot = !onRoof ? PAD_TOP_Y : onSteel(x) ? DUNNAGE_TOP_Y : ROOF_Y;
+  const [onRoof, onSteel] = [y > ROOF_Y, y > ROOF_Y && x < CUTAWAY_ROOF_X[1]];
+  const foot = !onRoof ? PAD_TOP_Y : onSteel ? DUNNAGE_TOP_Y : ROOF_Y;
   const [top, plate] = [y - PIPE_R, foot + STAND.plateM];
   const [halfX, halfZ] = alongX ? [SADDLE.along, SADDLE.across] : [SADDLE.across, SADDLE.along];
   const parts = [
@@ -87,7 +86,7 @@ function stand({ x, y, z }: Vector3, alongX: boolean): BoxSpec[] {
     at([x, 0, z], [-STAND.post, STAND.post, plate, top - SADDLE.height, -STAND.post, STAND.post]),
     at([x, 0, z], [-halfX, halfX, top - SADDLE.height, top, -halfZ, halfZ]),
   ];
-  return onRoof && onSteel(x) ? [...parts, dunnage(x, x, z)] : parts;
+  return onSteel ? [...parts, dunnage(x, x, z)] : parts;
 }
 
 function stands(start: Vector3, end: Vector3): BoxSpec[] {

@@ -13,14 +13,12 @@ const FAN_TOP_SPEED = 2.5 * FULL_TURN;
 const FAN_EASE_S = 0.3;
 const FAN_SETTLED = 0.01;
 const [BANK_X, , BANK_Z] = DRY_COOLER_BANK_CENTRE;
+const BANK_TOP = [BANK_X, ROOF_Y + DRY_COOLER.height, BANK_Z] as const;
 
 export const buildRoofPlant: PieceBuilder = (context, root) => {
   const fans = [
     buildChiller(context, partGroup(context, 'chiller', root, boxTop(CHILLER))),
-    buildDryCoolers(
-      context,
-      partGroup(context, 'dryCoolers', root, [BANK_X, ROOF_Y + DRY_COOLER.height, BANK_Z]),
-    ),
+    buildDryCoolers(context, partGroup(context, 'dryCoolers', root, BANK_TOP)),
   ];
   const showPipes = buildFacilityPipes(
     context,

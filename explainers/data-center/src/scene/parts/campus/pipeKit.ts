@@ -4,7 +4,7 @@ import type { MaterialFinish } from '@core/scene/materials';
 import type { Extent } from '@core/scene/regions';
 import type { Point } from '../../../ids';
 import type { BoxSpec } from '../../../model';
-import { CUTAWAY_ROOF_X, ROOF_Y, spanning } from '../../../model';
+import { ROOF_Y, spanning } from '../../../model';
 import type { Finish } from '../../finishes';
 import { boxMatrix, instancesOf } from '../context';
 import type { EmphasisGroup, PartContext } from '../context';
@@ -55,10 +55,6 @@ export function rod(from: Point | Vector3, to: Point | Vector3, radius: number):
     new Quaternion().setFromUnitVectors(UP, axis.normalize()),
     new Vector3(radius, length, radius),
   );
-}
-
-export function onSteel(x: number): boolean {
-  return x < CUTAWAY_ROOF_X[1];
 }
 
 export function dunnage(fromX: number, toX: number, z: number): BoxSpec {

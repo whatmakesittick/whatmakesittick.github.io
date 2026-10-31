@@ -1,14 +1,13 @@
 import { BoxGeometry, CanvasTexture, CylinderGeometry, DoubleSide, Matrix4 } from 'three';
-import { Quaternion, RepeatWrapping, SRGBColorSpace, Shape, Vector2, Vector3 } from 'three';
+import { Quaternion, RepeatWrapping, SRGBColorSpace, Vector3 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { FULL_TURN } from '@core/math';
-import { extrudeProfileAlongX } from '@core/scene/geometry/extrude';
 import { createMaterial } from '@core/scene/materials';
 import type { Point } from '../../../ids';
 import { DRY_COOLER, DRY_COOLERS, ROOF_PIPE_Y } from '../../../model';
 import { FINISHES } from '../../finishes';
-import { boundInstances, placement, registeredMaterial } from '../context';
+import { boundInstances, registeredMaterial } from '../context';
 import type { PartContext } from '../context';
 import { PIPE_R, SIDES, at, drawer, mirror, rod } from './pipeKit';
 import type { Draw, Span } from './pipeKit';
@@ -27,7 +26,7 @@ export type FanSet = ReturnType<typeof buildCoilUnits>;
 
 export const DECK_M = 0.1;
 export const SHROUD_M = 0.25;
-const COIL = { thick: 0.1, inset: 0.06, gap: 0.1, drop: 0.08, skirt: 0.12, plate: 0.04 } as const;
+const COIL = { thick: 0.1, inset: 0.06, gap: 0.1, drop: 0.08, plate: 0.04 } as const;
 const FIN = { px: 64, tileM: 0.5, pitch: 4, tubes: 16, line: 2 } as const;
 const FIN_INK = ['#d3d8dc', '#8d949a', '#f0f2f4'] as const;
 const SHROUD = { top: 0.54, bottom: 0.5, sides: 28 } as const;
@@ -59,7 +58,7 @@ const FRAME: readonly Span[] = [
   ...mirror([HALF - 0.02, HALF - 0.08, 0.3, 0.42, -0.05, 0.05], SIDES),
 ];
 
-function finMaterial({ context, group }: Draw) {
+function finMaterial({ context, group }: Draw, length: number, slant: number) {
   const canvas = document.createElement('canvas');
   [canvas.width, canvas.height] = [FIN.px, FIN.px];
   const paint = canvas.getContext('2d');
@@ -75,25 +74,8 @@ function finMaterial({ context, group }: Draw) {
   }
   const map = context.tracker.track(new CanvasTexture(canvas));
   [map.wrapS, map.wrapT, map.colorSpace] = [RepeatWrapping, RepeatWrapping, SRGBColorSpace];
+  map.repeat.set(length / FIN.tileM, slant / FIN.tileM);
   return registeredMaterial(context, group, createMaterial({ ...FINISHES.coil, map }));
-}
-
-function coilGeometry(length: number, slant: number): BufferGeometry {
-  const geometry = new BoxGeometry(length, slant, COIL.thick);
-  const uv = geometry.getAttribute('uv');
-  for (let index = 0; index < uv.count; index += 1) {
-    uv.setXY(index, (uv.getX(index) * length) / FIN.tileM, (uv.getY(index) * slant) / FIN.tileM);
-  }
-  return geometry;
-}
-
-function endPanel({ edge, apexHalf, coilFrom, deckY }: CoilUnit, coilTo: number): BufferGeometry {
-  const [skirt, bottom] = [apexHalf + COIL.skirt, coilFrom - COIL.drop];
-  const outline = [-skirt, bottom, skirt, bottom, edge, coilTo, edge, deckY, -edge, deckY];
-  const points = [...outline, -edge, coilTo].flatMap((value, index, all) =>
-    index % 2 === 0 ? [new Vector2(value, all[index + 1])] : [],
-  );
-  return extrudeProfileAlongX(new Shape(points), -COIL.plate / 2, COIL.plate / 2);
 }
 
 function rotorGeometry(): BufferGeometry {
@@ -136,12 +118,9 @@ export function buildCoilUnits(
       ),
     ),
   );
-  const coil = coilGeometry(length - 2 * COIL.plate, Math.hypot(reach, coilTo - coilFrom));
-  draw.mesh(coil, finMaterial(draw), faces);
-  const ends = bases.flatMap(([x, y, z]) =>
-    unit.ends.map((side) => placement([x + side * (length / 2 - COIL.plate / 2), y, z])),
-  );
-  draw.mesh(endPanel(unit, coilTo), draw.look('steelLight'), ends);
+  const [coilLength, slant] = [length - 2 * COIL.plate, Math.hypot(reach, coilTo - coilFrom)];
+  const coil = new BoxGeometry(coilLength, slant, COIL.thick);
+  draw.mesh(coil, finMaterial(draw, coilLength, slant), faces);
   const [columns, rows, size] = fans;
   const hubs = bases.flatMap(([x, y, z]) =>
     Array.from({ length: columns * rows }, (_, index) => {
@@ -161,9 +140,13 @@ export function buildCoilUnits(
     ...mirror([-inner, inner, coilTo - COIL.drop, deckY, edge, edge - COIL.plate], [1], SIDES),
     ...frame,
   ];
+  const placed = (list: readonly Span[]) =>
+    bases.flatMap((base) => list.map((span) => at(base, span)));
+  draw.boxes('steel', placed(spans));
+  const bottom = coilFrom - COIL.drop;
   draw.boxes(
-    'steel',
-    bases.flatMap((base) => spans.map((span) => at(base, span))),
+    'steelLight',
+    placed(unit.ends.map((side): Span => [side * half, side * inner, bottom, deckY, -edge, edge])),
   );
   return { blades, hubs, scale };
 }
