@@ -1,28 +1,41 @@
-import { SphereGeometry } from 'three';
 import type { AssemblyState } from '../../../ids';
-import { FINISHES } from '../../finishes';
-import { label, namedGroup, partMesh, sceneAnchor } from '../context';
-import type { PartContext, Section } from '../context';
+import { namedGroup } from '../context';
+import type { Frame, PartContext, Section } from '../context';
+import { Exhaust } from './exhaust';
+import { HeatFlow } from './heat';
+import { JouleBead } from './joule';
+import { PacketFlow } from './packets';
+import { PowerFlow } from './power';
 
-const BEAD_RADIUS_M = 0.12;
-const BEAD_SEGMENTS = 20;
-const ORIGIN = [0, 0, 0] as const;
+function flowing({ playing, view }: AssemblyState): boolean {
+  return playing && (view.power || view.heat || view.packets);
+}
 
 export function buildFlows(context: PartContext): Section {
   const root = namedGroup('flows');
-  const joule = namedGroup('joule', root);
-  const geometry = new SphereGeometry(BEAD_RADIUS_M, BEAD_SEGMENTS, BEAD_SEGMENTS / 2);
-  const bead = partMesh(context, geometry, 'joule');
-  const heat = context.materials.get('joule', FINISHES.heat);
-  const current = bead.material;
-  joule.add(bead);
-  label(context, 'joule', joule, ORIGIN);
-  sceneAnchor(context, 'joule', joule, ORIGIN);
+  const bead = new JouleBead(context, root);
+  const power = new PowerFlow(context, root);
+  const heat = new HeatFlow(context, root);
+  const packets = new PacketFlow(context, root);
+  const exhaust = new Exhaust(context, root);
+  let time = 0;
   return {
     root,
-    setState({ joule: reading }: AssemblyState) {
-      joule.position.set(...reading.position);
-      bead.material = reading.form === 'heat' ? heat : current;
+    setState(state: AssemblyState) {
+      bead.setState(state.joule);
+      power.setState(state);
+      heat.setState(state);
+      packets.setState(state);
+    },
+    animate(frame: Frame, state: AssemblyState) {
+      const moving = flowing(state) || frame.outage.active;
+      if (moving) time += frame.delta;
+      bead.scale(frame.cameraDistance);
+      power.animate(time, frame.outage);
+      heat.animate(time);
+      packets.animate(time);
+      exhaust.animate(frame.outage);
+      return moving;
     },
   };
 }
