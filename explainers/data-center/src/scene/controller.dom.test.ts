@@ -4,8 +4,9 @@ import { describe, expect, it, vi } from 'vitest';
 import { frameBox } from '@core/scene/frameBox';
 import type { CameraPose } from '@core/scene/frameBox';
 import { MaterialLibrary } from '@core/scene/materials';
+import { regionFromSpec } from '@core/scene/regions';
 import { createSceneTextures } from '@core/scene/textures';
-import type { AssemblyState, RegionId } from '../ids';
+import type { AssemblyState } from '../ids';
 import { GROUND_Y, MOMENTS } from '../model';
 import { createAssemblyState, createDataCenterStore } from '../state';
 import type * as AssemblyModule from './assembly';
@@ -14,6 +15,8 @@ import { CHASE, CHASE_VIEW, FIXED_VIEWS, FOLLOW_MODE, chasePose } from './camera
 import type { FixedView } from './cameraViews';
 import { BOUNDS_REGION, DataCenterController, FOLLOW_ANCHOR } from './controller';
 import type { DataCenterControllerDependencies } from './controller';
+import { framedRegionSpec, isAssemblyRegion } from './regions';
+import type { FramedRegionId } from './regions';
 
 const created = vi.hoisted(() => [] as Assembly[]);
 
@@ -29,7 +32,7 @@ vi.mock('./assembly', async (importOriginal) => {
   };
 });
 
-const FRAMING = { vertical: 0.2, horizontal: 0.13 };
+const FRAMING = { vertical: 0.223, horizontal: 0.259 };
 const FIXED_IDS = Object.keys(FIXED_VIEWS) as FixedView[];
 const DIGITS = 9;
 const FRAME_SECONDS = 1 / 60;
@@ -81,8 +84,9 @@ function rounded(vector: Vector3 | undefined): number[] | undefined {
   return vector?.toArray().map((value) => Number(value.toFixed(DIGITS)));
 }
 
-function regionBox(region: RegionId): Box3 {
-  return lastAssembly().region(region);
+function regionBox(region: FramedRegionId): Box3 {
+  if (isAssemblyRegion(region)) return lastAssembly().region(region);
+  return regionFromSpec(framedRegionSpec(region));
 }
 
 describe('data centre controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {

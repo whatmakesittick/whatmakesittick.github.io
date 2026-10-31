@@ -1,5 +1,6 @@
-import type { Object3D } from 'three';
+import type { Box3, Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
+import { regionFromSpec } from '@core/scene/regions';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
 import type { AnchorId, AssemblyState, CameraView, RegionId } from '../ids';
@@ -7,6 +8,8 @@ import { GROUND_Y } from '../model';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
 import { cameraViews } from './cameraViews';
+import { VIEW_REGION_SPECS, isAssemblyRegion } from './regions';
+import type { FramedRegionId } from './regions';
 
 export type DataCenterControllerDependencies = Pick<
   SceneShell,
@@ -26,9 +29,9 @@ export class DataCenterController {
 
   constructor(dependencies: DataCenterControllerDependencies) {
     this.dependencies = dependencies;
-    this.views = new CameraViews<CameraView, RegionId>(dependencies.rig, {
+    this.views = new CameraViews<CameraView, FramedRegionId>(dependencies.rig, {
       views: cameraViews(() => this.assembly?.chaseTarget() ?? null),
-      region: (id) => this.assembly?.region(id) ?? null,
+      region: (id) => this.region(id),
       anchor: () => this.assembly?.anchor(FOLLOW_ANCHOR) ?? null,
     });
   }
@@ -57,6 +60,11 @@ export class DataCenterController {
     this.assembly?.root.removeFromParent();
     this.assembly?.dispose();
     this.assembly = null;
+  }
+
+  private region(id: FramedRegionId): Box3 | null {
+    if (!this.assembly) return null;
+    return isAssemblyRegion(id) ? this.assembly.region(id) : regionFromSpec(VIEW_REGION_SPECS[id]);
   }
 
   private cameraDistance(): number {

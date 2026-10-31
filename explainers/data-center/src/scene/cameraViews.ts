@@ -4,7 +4,8 @@ import type { FollowMode } from '@core/scene/camera';
 import type { CustomView, Direction, FramedView, ViewSpec } from '@core/scene/cameraViews';
 import type { CameraPose } from '@core/scene/frameBox';
 import type { FramingSlopes } from '@core/scene/lens';
-import type { CameraView, ChaseTarget, RegionId } from '../ids';
+import type { CameraView, ChaseTarget } from '../ids';
+import type { FramedRegionId } from './regions';
 
 export type ChaseSource = () => ChaseTarget | null;
 
@@ -12,7 +13,7 @@ export type FollowView = Extract<CameraView, 'chase'>;
 export type FixedView = Exclude<CameraView, FollowView>;
 
 export interface CompassView {
-  region: RegionId;
+  region: FramedRegionId;
   bearing: number;
   elevation: number;
   margin: number;
@@ -32,12 +33,12 @@ const BEHIND = Math.PI;
 export const CHASE: FollowSpec = { bearing: toRadians(45), elevation: toRadians(28), spans: 0.8 };
 
 export const COMPASS_VIEWS: Readonly<Record<FixedView, CompassView>> = {
-  campus: { region: 'campus', bearing: 235, elevation: 35, margin: 1.02 },
-  powerYard: { region: 'powerYard', bearing: 220, elevation: 32, margin: 1.02 },
-  rackSide: { region: 'rack', bearing: 240, elevation: -2, margin: 1.05 },
-  networkRow: { region: 'networkRow', bearing: 80, elevation: 42, margin: 1.02 },
-  coolingPlant: { region: 'coolingPlant', bearing: 157, elevation: 40, margin: 1.02 },
-  lineUp: { region: 'lineUp', bearing: 215, elevation: 4, margin: 1.05 },
+  campus: { region: 'campusAndLine', bearing: 220, elevation: 38, margin: 1.05 },
+  powerYard: { region: 'powerYard', bearing: 215, elevation: 36, margin: 1.08 },
+  rackSide: { region: 'rack', bearing: 240, elevation: -2, margin: 1.1 },
+  networkRow: { region: 'networkRow', bearing: 80, elevation: 42, margin: 1.1 },
+  coolingPlant: { region: 'coolingPlant', bearing: 157, elevation: 40, margin: 1.08 },
+  lineUp: { region: 'lineUp', bearing: 250, elevation: 4, margin: 1.1 },
 };
 
 export function compass(bearing: number, elevation: number): Direction {
@@ -47,13 +48,13 @@ export function compass(bearing: number, elevation: number): Direction {
   return [level * Math.sin(turn), Math.sin(rise), -level * Math.cos(turn)];
 }
 
-function framed({ region, bearing, elevation, margin }: CompassView): FramedView<RegionId> {
+function framed({ region, bearing, elevation, margin }: CompassView): FramedView<FramedRegionId> {
   return { region, direction: compass(bearing, elevation), margin };
 }
 
 export const FIXED_VIEWS = Object.fromEntries(
   Object.entries(COMPASS_VIEWS).map(([id, view]) => [id, framed(view)]),
-) as Readonly<Record<FixedView, FramedView<RegionId>>>;
+) as Readonly<Record<FixedView, FramedView<FramedRegionId>>>;
 
 function along(heading: number, elevation: number): Vector3 {
   const level = Math.cos(elevation);
@@ -81,6 +82,6 @@ function followView(source: ChaseSource, spec: FollowSpec): CustomView {
   };
 }
 
-export function cameraViews(source: ChaseSource): Record<CameraView, ViewSpec<RegionId>> {
+export function cameraViews(source: ChaseSource): Record<CameraView, ViewSpec<FramedRegionId>> {
   return { ...FIXED_VIEWS, chase: followView(source, CHASE) };
 }

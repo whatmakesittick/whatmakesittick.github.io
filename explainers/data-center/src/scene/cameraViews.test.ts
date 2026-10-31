@@ -15,7 +15,6 @@ import {
   GANTRY,
   GRID_LINE,
   MOMENTS,
-  REGION_SPECS,
   ROOF_Y,
   ROOM_WALL_X,
   ROWS,
@@ -36,8 +35,9 @@ import {
 } from './cameraViews';
 import type { FixedView } from './cameraViews';
 import { SCENE_OPTIONS } from './index';
+import { framedRegionSpec } from './regions';
 
-const PHONE: FramingSlopes = { vertical: 0.2, horizontal: 0.13 };
+const PHONE: FramingSlopes = { vertical: 0.223, horizontal: 0.259 };
 const DESKTOP: FramingSlopes = { vertical: 0.27, horizontal: 0.45 };
 const STAGES: readonly FramingSlopes[] = [PHONE, DESKTOP];
 const WORLD_UP = new Vector3(0, 1, 0);
@@ -84,7 +84,7 @@ function screenRight({ position, target }: CameraPose): Vector3 {
 }
 
 function regionBox(id: FixedView): Box3 {
-  return regionFromSpec(REGION_SPECS[FIXED_VIEWS[id].region]);
+  return regionFromSpec(framedRegionSpec(FIXED_VIEWS[id].region));
 }
 
 function fixedPose(id: FixedView, slopes: FramingSlopes): CameraPose {
@@ -116,9 +116,9 @@ describe('data centre camera views', () => {
     FIXED_IDS.forEach((id) => expect(views[id].follow, id).toBeUndefined());
   });
 
-  it('frames each fixed view on the region the spec names', () => {
+  it('frames each fixed view on the region the spec names, the campus with its incoming line', () => {
     expect(Object.fromEntries(FIXED_IDS.map((id) => [id, FIXED_VIEWS[id].region]))).toEqual({
-      campus: 'campus',
+      campus: 'campusAndLine',
       powerYard: 'powerYard',
       rackSide: 'rack',
       networkRow: 'networkRow',
