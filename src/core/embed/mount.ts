@@ -2,6 +2,7 @@ import type { Explainer, Playback } from '../explainer';
 import { currentLanguage, onLanguageChanged } from '../i18n';
 import { resolveLanguage, useLanguage } from '../i18n/embedded';
 import type { LocaleLoaders } from '../i18n/resources';
+import { DEFAULT_SCHEME } from '../scheme';
 import { createSceneHost } from '../scene/shell';
 import type { FrameUpdate, SceneHost } from '../scene/shell';
 import { respectReducedMotion } from '../ui/motion';
@@ -110,7 +111,7 @@ export async function mountEmbed<S extends Playback>(
   let host: SceneHost;
   let unmountScene: () => void;
   try {
-    host = createSceneHost(container, explainer.parts, explainer.scene);
+    host = createSceneHost(container, explainer.parts, explainer.scene, DEFAULT_SCHEME);
   } catch (error) {
     release();
     throw error;

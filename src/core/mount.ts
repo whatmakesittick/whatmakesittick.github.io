@@ -4,6 +4,7 @@ import type { Explainer, ExplainerStore, Playback } from './explainer';
 import { initI18n, shippedLanguages } from './i18n';
 import type { LocaleLoaders } from './i18n';
 import { createSceneHost } from './scene/shell';
+import { activeScheme } from './theme';
 import { mountActions } from './ui/actions';
 import { mountSiteLinks } from './ui/siteLinks';
 import { mountDock } from './ui/dock';
@@ -32,6 +33,7 @@ function mountScene<S extends Playback>(
     requireElement(root, SCENE_SELECTOR),
     explainer.parts,
     explainer.scene,
+    activeScheme(),
   );
   const unmount = explainer.mountScene(host.shell, store);
   host.start(store);

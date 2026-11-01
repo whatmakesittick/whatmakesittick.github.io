@@ -235,7 +235,8 @@ choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
 safe area: the dock reserves the bottom of the stage and the gauge the right, or
 the top strip when the scene options set `gaugeSide: 'top'` for a wide subject.
 Then it builds the scene host from the
-explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
+explainer's `scene` options and the page's scheme, `activeScheme()` from `src/core/theme.ts`,
+and calls `mountScene` with a `SceneShell`: viewport,
 scene, camera rig, label layer, highlighter, materials, textures, stage, lighting,
 `onFrame(update)` and `invalidate()`. Before the first frame the host compiles
 every material in the scene with `renderer.compileAsync`, so the shaders build in
@@ -347,8 +348,12 @@ what the policy asked for in `wanted()` and shows it minus the occluded labels;
 a label near it.
 
 The explainer's `scene` options shape the world around it. A mechanism keeps the
-defaults: dark background, grid floor with a contact shadow, an orbit that stops
-level with the target. A diorama such as a glider over terrain turns the stage
+defaults: the scheme's background, grid floor with a contact shadow, an orbit that stops
+level with the target. The scene host takes the scheme as an argument and reads the
+background, the grid colour, the shadow strength (`STAGE_LOOK` in `stage.ts`) and the lights
+(`LIGHTING` in `lighting.ts`) from it, never from the module-level `THEME`: the light scheme
+keeps the key light, raises the fill and the environment light and softens the rim and the
+contact shadow, so dark parts do not read as holes on the pale stage. A diorama such as a glider over terrain turns the stage
 off, sets a sky colour and fog, widens the camera planes and raises
 `maxPolarAngle` past a right angle so the camera can dip below the target and
 look up. The zoom range comes from the bounds a controller gives

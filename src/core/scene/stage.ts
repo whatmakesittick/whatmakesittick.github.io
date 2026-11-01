@@ -9,17 +9,32 @@ import {
   Vector3,
 } from 'three';
 import type { Box3, Texture } from 'three';
-import { THEME } from '../theme';
+import { SCHEMES } from '../theme';
+import type { Scheme } from '../theme';
 
 const GRID = {
   cellSize: 2,
   majorEvery: 5,
-  opacity: 0.55,
   sizeFactor: 6,
   fadeFactor: 2.6,
-  color: new Color(THEME.muted).lerp(new Color(THEME.background), 0.55),
+  backgroundMix: 0.55,
 } as const;
-const SHADOW = { sizeFactor: 1.35, opacity: 0.9, lift: 0.02, minDepthRatio: 0.5 } as const;
+const SHADOW = { sizeFactor: 1.35, lift: 0.02, minDepthRatio: 0.5 } as const;
+
+interface StageLook {
+  gridOpacity: number;
+  shadowOpacity: number;
+}
+
+export const STAGE_LOOK: Readonly<Record<Scheme, StageLook>> = {
+  dark: { gridOpacity: 0.55, shadowOpacity: 0.9 },
+  light: { gridOpacity: 0.55, shadowOpacity: 0.5 },
+};
+
+function gridColor(scheme: Scheme): Color {
+  const { muted, background } = SCHEMES[scheme];
+  return new Color(muted).lerp(new Color(background), GRID.backgroundMix);
+}
 
 const vertexShader = `
   varying vec3 vWorld;
@@ -58,19 +73,19 @@ const fragmentShader = `
   }
 `;
 
-function gridMaterial(): ShaderMaterial {
+function gridMaterial(scheme: Scheme): ShaderMaterial {
   return new ShaderMaterial({
     vertexShader,
     fragmentShader,
     transparent: true,
     depthWrite: false,
     uniforms: {
-      uColor: { value: GRID.color.clone() },
+      uColor: { value: gridColor(scheme) },
       uCell: { value: GRID.cellSize },
       uMajor: { value: GRID.majorEvery },
       uCenter: { value: new Vector2() },
       uRadius: { value: 1 },
-      uOpacity: { value: GRID.opacity },
+      uOpacity: { value: STAGE_LOOK[scheme].gridOpacity },
     },
   });
 }
@@ -81,16 +96,16 @@ export class Stage {
   private readonly grid: Mesh<PlaneGeometry, ShaderMaterial>;
   private readonly shadow: Mesh<PlaneGeometry, MeshBasicMaterial>;
 
-  constructor(shadowTexture: Texture) {
+  constructor(shadowTexture: Texture, scheme: Scheme) {
     this.plane.rotateX(-Math.PI / 2);
-    this.grid = new Mesh(this.plane, gridMaterial());
+    this.grid = new Mesh(this.plane, gridMaterial(scheme));
     this.shadow = new Mesh(
       this.plane,
       new MeshBasicMaterial({
         map: shadowTexture,
         transparent: true,
         depthWrite: false,
-        opacity: SHADOW.opacity,
+        opacity: STAGE_LOOK[scheme].shadowOpacity,
         color: new Color(0, 0, 0),
       }),
     );
