@@ -229,7 +229,7 @@ the page with, stays when the reader moves on to the next chapter.
 
 Core mounts the shell (`src/core/mount.ts`): the dock (play, scrubber with phase
 bands, status, speed slider, choices, toggles, reset camera, more), the gauge
-readouts and `mountGauge`, language, footer, `mountUi`, chapter actions, the full screen toggle,
+readouts and `mountGauge`, the theme toggle, language, footer, `mountUi`, chapter actions, the full screen toggle,
 the keyboard (space, arrows, digits for phases, R, X and Escape for full screen,
 choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
 safe area: the dock reserves the bottom of the stage and the gauge the right, or
@@ -555,7 +555,10 @@ build and the runtime. A page is rendered in two steps:
    `vite/schemeScript.ts` bundles from `src/core/schemeScript.ts`. Before any style loads, it sets
    `data-theme` on `<html>` to the reader's stored choice (`wmit-theme` in local storage) or else
    the system scheme, dark when neither is known, and points both `theme-color` tags at a stored
-   choice.
+   choice. The theme toggle in the header (`mountThemeToggle` in `src/core/ui/themeToggle.ts`,
+   on every page with the header) stores the other scheme and reloads the page: the scheme is
+   fixed for a page's lifetime, since the explainers read their three.js colours from `THEME`
+   once, when their modules load.
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
    element, in that order, the way `translateDom` does at runtime. A `data-i18n` element

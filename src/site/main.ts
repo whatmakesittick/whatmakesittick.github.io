@@ -6,6 +6,7 @@ import { mountSiteLinks } from '@core/ui/siteLinks';
 import { mountFooter } from '@core/ui/footer';
 import { followSystemTextSize } from '@core/ui/textSize';
 import { mountLanguage } from '@core/ui/language';
+import { mountThemeToggle } from '@core/ui/themeToggle';
 import { mountCards } from './cards';
 
 const TITLE_KEY = 'catalogue.title';
@@ -13,6 +14,7 @@ const CATALOGUE_LANGUAGES = LANGUAGES.map((language) => language.code);
 
 function mountCatalogue(): void {
   mountCards(document, entries);
+  mountThemeToggle(document);
   mountLanguage(document, CATALOGUE_LANGUAGES);
   mountSiteLinks(document);
   mountFooter(document, TITLE_KEY);

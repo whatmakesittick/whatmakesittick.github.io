@@ -7,7 +7,9 @@
   "header": {
     "language": "语言",
     "source": "GitHub",
-    "sourceLabel": "GitHub 上的源代码"
+    "sourceLabel": "GitHub 上的源代码",
+    "themeLight": "切换到浅色主题",
+    "themeDark": "切换到深色主题"
   },
   "stage": {
     "label": "交互式模型",

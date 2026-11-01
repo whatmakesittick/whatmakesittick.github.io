@@ -18,6 +18,7 @@ import { mountSafeArea } from './ui/safeArea';
 import { mountSections } from './ui/sections';
 import { mountStageExpansion } from './ui/stageExpansion';
 import { stageShortcuts } from './ui/stageShortcuts';
+import { mountThemeToggle } from './ui/themeToggle';
 import { followSystemTextSize } from './ui/textSize';
 
 const SITE_NAME_KEY = 'catalogue.title';
@@ -55,6 +56,7 @@ export async function mountExplainer<S extends Playback>(
   mountDock(document, store, explainer);
   mountReadouts(document, store, explainer.readouts);
   const unmountGauge = explainer.mountGauge?.(requireElement(document, GAUGE_SELECTOR), store);
+  mountThemeToggle(document);
   mountLanguage(document, languages);
   mountSiteLinks(document);
   mountFooter(document, SITE_NAME_KEY);
