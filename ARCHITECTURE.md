@@ -829,6 +829,13 @@ language is asked for. `handleKey(event)` runs the page's keyboard on the store 
 arrows, digits for phases, R, choice, toggle and explainer shortcuts, never X or Escape) and
 returns whether it used the key.
 
+The `theme` option takes `'light'` or `'dark'`; without it, or with any other value, the embed
+is dark, as before. `mountEmbed` sets `data-theme` on the container and the control slots, which
+the scoped tokens key off, and passes the scheme to the scene host, so the stage, the lights,
+the scene labels and the controls follow it; `dispose` restores the attribute the host had. An
+explainer's own three.js colours come from `THEME`, which resolves once from the host page's
+root when the explainer's modules load, so they follow the root's `data-theme`, not the option.
+
 `mountEmbed` in `src/core/embed/mount.ts` does what `mountExplainer` does for a page, minus the
 page: `useLanguage` from `src/core/i18n/embedded.ts` sets the core and explainer strings in the
 asked language without detection, the container and the control slots get a matching `lang`
@@ -839,7 +846,8 @@ there, and the scene host mounts into the given container. A host may pass
 language select. Their styles are the controls parts of the stylesheet, nested under `[data-embed-ui]`, with
 the phone dock rules keyed to an `embed-dock` container of at most 459px instead of the viewport.
 The scene styles and an explainer's `style.css` are added as `<style data-embed-styles>` elements
-while a scene is mounted. The embed loads the latin Source Sans 3, Source Serif 4 and IBM Plex Mono files the pages use, and their
+while a scene is mounted, with the tokens scoped onto a light scene container so its labels
+follow the light scheme; a dark container keeps the host's own values for them. The embed loads the latin Source Sans 3, Source Serif 4 and IBM Plex Mono files the pages use, and their
 Cyrillic files only for Ukrainian; Japanese and Chinese use system fonts, as on the pages.
 On a stage container of at most 620px, where the controls styles hide the readouts, the embed hides
 the whole gauge, so no empty glass panel is left.

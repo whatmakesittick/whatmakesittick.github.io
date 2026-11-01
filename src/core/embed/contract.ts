@@ -1,7 +1,9 @@
 import type { LanguageCode } from '../i18n/languages.ts';
+import type { Scheme } from '../scheme.ts';
 import type { EmbedApiVersion } from './manifest.ts';
 
 export type { LanguageCode } from '../i18n/languages.ts';
+export type { Scheme } from '../scheme.ts';
 
 export { EMBED_API_VERSION } from './manifest.ts';
 export type {
@@ -13,6 +15,7 @@ export type {
 
 export const EMBED_DOM = {
   stageAttr: 'data-stage',
+  themeAttr: 'data-theme',
   dockAttr: 'data-dock',
   gaugeAttr: 'data-gauge',
   stageExpandedKey: 'stageExpanded',
@@ -41,6 +44,7 @@ export interface MountOptions {
   reducedMotion?: boolean;
   ui?: EmbedUiSlots;
   language?: string;
+  theme?: Scheme;
 }
 
 export interface EmbedChapterInfo {

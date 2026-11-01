@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { scopedControlsCss } from './styles';
+import { scopedControlsCss, scopedSceneTokensCss } from './styles';
 
 const css = {
   tokens: ':root{--accent:#f5a524}:root:lang(zh){--font-sans:serif}',
@@ -16,6 +16,15 @@ describe('scopedControlsCss', () => {
         '@container (max-width: 620px){.gauge{display:none}}' +
         '@container embed-dock (max-width: 459px){.dock{gap:8px}}' +
         '@media (pointer: coarse){.range{height:44px}}}',
+    );
+  });
+});
+
+describe('scopedSceneTokensCss', () => {
+  it('gives a light scene container the light tokens for its labels', () => {
+    const tokens = ":root{--surface:#26231f}:root[data-theme='light']{--surface:#ffffff}";
+    expect(scopedSceneTokensCss(undefined, tokens)).toBe(
+      "[data-embed-scene][data-theme='light']{&{--surface:#26231f}&[data-theme='light']{--surface:#ffffff}}",
     );
   });
 });

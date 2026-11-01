@@ -26,6 +26,13 @@ export function scopedControlsCss(
   return `${scope}{${tokens}${css.primitives}${css.controls}${narrow}${compact}${touch}}`;
 }
 
+export function scopedSceneTokensCss(
+  scope = `[${EMBED_DOM.sceneAttr}][${EMBED_DOM.themeAttr}='light']`,
+  tokens = tokensCss,
+): string {
+  return `${scope}{${tokens.replaceAll(':root', '&')}}`;
+}
+
 function appendStyle(name: string, css: string): HTMLStyleElement {
   const style = document.createElement('style');
   style.setAttribute(EMBED_DOM.styleAttr, name);
@@ -41,7 +48,10 @@ export function attachStyles(slug: string, explainerCss: string): () => void {
   coreUsers += 1;
   if (!coreStyle?.isConnected) {
     coreStyle?.remove();
-    coreStyle = appendStyle(CORE_STYLES, `${sceneCss}\n${scopedControlsCss()}`);
+    coreStyle = appendStyle(
+      CORE_STYLES,
+      `${sceneCss}\n${scopedSceneTokensCss()}\n${scopedControlsCss()}`,
+    );
   }
   const own = appendStyle(slug, explainerCss);
   let attached = true;
