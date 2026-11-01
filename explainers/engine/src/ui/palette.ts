@@ -10,7 +10,7 @@ export const STROKE_COLORS: Record<Stroke, string> = {
 
 export const VALVE_COLORS = {
   intake: THEME.intake,
-  exhaust: THEME.metalLight,
+  exhaust: THEME.neutral,
 } as const;
 
 export const ENGINE_COLORS: Record<EngineType, string> = {

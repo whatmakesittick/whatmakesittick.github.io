@@ -5,11 +5,22 @@
   --burn: #d87a35;
   --flame: #e8c36a;
   --exhaust: #8c877d;
+  --neutral: #bbbec3;
 
   --stroke-intake: var(--intake);
   --stroke-compression: var(--compressed);
   --stroke-power: var(--burn);
   --stroke-exhaust: var(--exhaust);
+}
+
+:root[data-theme='light'] {
+  --intake: #2a8fc4;
+  --air: #7fa3b8;
+  --compressed: #5b63c9;
+  --burn: #d9531e;
+  --flame: #b8860b;
+  --exhaust: #7a7f87;
+  --neutral: #80858d;
 }
 
 /* Cycle dial */
@@ -110,7 +121,7 @@
 }
 
 .dial-legend [data-tone='exhaust'] {
-  --tone: var(--metal-light);
+  --tone: var(--neutral);
 }
 
 .dial-legend [data-tone='ignition'] {
@@ -189,7 +200,7 @@
 }
 
 .chip[data-action='layout'][data-value='single'] {
-  --tone: var(--metal-light);
+  --tone: var(--neutral);
 }
 
 /* Tables */
