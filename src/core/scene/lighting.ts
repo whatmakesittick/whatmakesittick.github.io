@@ -14,8 +14,8 @@ const ENVIRONMENT_INTENSITY = 0.32;
 
 const LIGHTS = {
   key: { color: '#fff1e0', intensity: 2.4, position: [45, 80, 60] },
-  fill: { color: '#bcd6ff', intensity: 0.55, position: [-70, 25, 35] },
-  rim: { color: '#9cc3ff', intensity: 1.6, position: [-25, 55, -90] },
+  fill: { color: '#dde4f0', intensity: 0.55, position: [-70, 25, 35] },
+  rim: { color: '#c4d6f3', intensity: 1.6, position: [-25, 55, -90] },
 } as const;
 
 type LightName = keyof typeof LIGHTS;

@@ -2,10 +2,10 @@ import { THEME as CORE_THEME } from '@core/theme';
 
 export const THEME = {
   ...CORE_THEME,
-  intake: '#4cc3ff',
-  air: '#b9d7e8',
-  compressed: '#7fa7ff',
-  burn: '#ff7a1a',
-  flame: '#ffd166',
-  exhaust: '#7a7f87',
+  intake: '#6aa9c9',
+  air: '#b4c9d6',
+  compressed: '#9d8fd1',
+  burn: '#d87a35',
+  flame: '#e8c36a',
+  exhaust: '#8c877d',
 } as const;

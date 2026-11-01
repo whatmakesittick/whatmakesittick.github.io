@@ -40,12 +40,14 @@ function explainer(slug: string, formerSlugs?: string[]): LoadedExplainer {
 }
 
 const fontPaths = [
-  `${EMBED_DIRECTORY}/fonts/inter-latin-wght-normal.woff2`,
-  `${EMBED_DIRECTORY}/fonts/jetbrains-mono-latin-400-normal.woff2`,
-  `${EMBED_DIRECTORY}/fonts/jetbrains-mono-latin-500-normal.woff2`,
-  `${EMBED_DIRECTORY}/fonts/inter-cyrillic-wght-normal.woff2`,
-  `${EMBED_DIRECTORY}/fonts/jetbrains-mono-cyrillic-400-normal.woff2`,
-  `${EMBED_DIRECTORY}/fonts/jetbrains-mono-cyrillic-500-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/source-sans-3-latin-wght-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/source-serif-4-latin-wght-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/ibm-plex-mono-latin-400-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/ibm-plex-mono-latin-500-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/source-sans-3-cyrillic-wght-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/source-serif-4-cyrillic-wght-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/ibm-plex-mono-cyrillic-400-normal.woff2`,
+  `${EMBED_DIRECTORY}/fonts/ibm-plex-mono-cyrillic-500-normal.woff2`,
 ];
 
 describe('stableFontFiles', () => {

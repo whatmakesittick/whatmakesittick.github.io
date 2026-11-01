@@ -143,19 +143,19 @@ test.describe('after a site deploy', () => {
   test('a hashed font that is gone loads from its stable path', async ({ page }) => {
     const cors = { 'Access-Control-Allow-Origin': '*' };
     await page.route(
-      (url) => /\/assets\/inter-latin-wght-normal-[\w-]+\.woff2$/.test(url.pathname),
+      (url) => /\/assets\/source-sans-3-latin-wght-normal-[\w-]+\.woff2$/.test(url.pathname),
       (route) => route.fulfill({ status: 404, headers: cors, body: '' }),
     );
     await page.route(
-      (url) => url.pathname === '/embed/v1/fonts/inter-latin-wght-normal.woff2',
+      (url) => url.pathname === '/embed/v1/fonts/source-sans-3-latin-wght-normal.woff2',
       (route) =>
         route.fulfill({
           headers: { ...cors, 'Content-Type': 'font/woff2' },
-          path: resolve(root, PATHS.site, 'embed/v1/fonts/inter-latin-wght-normal.woff2'),
+          path: resolve(root, PATHS.site, 'embed/v1/fonts/source-sans-3-latin-wght-normal.woff2'),
         }),
     );
     const stable = page.waitForResponse((response) =>
-      response.url().endsWith('/embed/v1/fonts/inter-latin-wght-normal.woff2'),
+      response.url().endsWith('/embed/v1/fonts/source-sans-3-latin-wght-normal.woff2'),
     );
     const { errors, view } = await open(page, 'slug=engine&chapter=strokes');
     await expect(view.locator('.wmit.st-ready[data-slug="engine"]')).toBeVisible({

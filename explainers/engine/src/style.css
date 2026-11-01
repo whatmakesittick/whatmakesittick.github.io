@@ -1,10 +1,10 @@
 :root {
-  --intake: #4cc3ff;
-  --air: #b9d7e8;
-  --compressed: #7fa7ff;
-  --burn: #ff7a1a;
-  --flame: #ffd166;
-  --exhaust: #7a7f87;
+  --intake: #6aa9c9;
+  --air: #b4c9d6;
+  --compressed: #9d8fd1;
+  --burn: #d87a35;
+  --flame: #e8c36a;
+  --exhaust: #8c877d;
 
   --stroke-intake: var(--intake);
   --stroke-compression: var(--compressed);
@@ -52,7 +52,7 @@
 
 .dial-tick-label {
   fill: var(--muted);
-  font: 500 14px var(--font-mono);
+  font: 500 14px var(--font-sans);
   text-anchor: middle;
   dominant-baseline: middle;
 }
@@ -147,8 +147,8 @@
   position: relative;
   padding: 14px 16px 16px 18px;
   border: 1px solid var(--line);
-  border-radius: 12px;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--tone) 7%, transparent), transparent);
+  border-radius: var(--radius);
+  background: var(--surface);
 }
 
 .stroke-list li::before {
@@ -268,7 +268,7 @@
   padding: 16px 14px 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.025), rgb(255 255 255 / 0.01));
+  background: var(--surface);
 }
 
 .diagram-canvas {
@@ -315,7 +315,7 @@
 .chart-axis-label,
 .chart-axis-detail {
   paint-order: stroke;
-  stroke: #0e1014;
+  stroke: var(--surface);
   stroke-width: 4px;
   stroke-linejoin: round;
 }
@@ -339,8 +339,8 @@
 
 .chart-axis-detail,
 .chart-tick-label {
-  font-family: var(--font-mono);
   font-size: 10px;
+  font-variant-numeric: tabular-nums;
 }
 
 .chart-axis-detail {
@@ -371,7 +371,7 @@
   font-weight: 600;
   text-anchor: middle;
   dominant-baseline: central;
-  fill: #1a0f06;
+  fill: var(--background);
 }
 
 .chart-grid {
@@ -414,7 +414,7 @@
 }
 
 .chart-point {
-  stroke: var(--background);
+  stroke: var(--surface);
   stroke-width: 2;
 }
 
@@ -425,7 +425,7 @@
 }
 
 .chart-cursor-dot {
-  stroke: var(--background);
+  stroke: var(--surface);
   stroke-width: 2;
 }
 
@@ -476,10 +476,12 @@
   place-items: center;
   min-width: 22px;
   height: 22px;
-  border-radius: 6px;
+  border-radius: var(--radius-small);
   background: var(--wash);
   color: var(--text);
-  font: 500 0.8125rem var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 
 .firing-step:first-of-type {
@@ -506,18 +508,17 @@
   align-items: center;
   min-width: 0;
   padding: 6px 8px;
-  border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--tone) 9%, transparent);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+  background: var(--wash);
   transition:
     background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    border-color 0.2s ease;
 }
 
 .cylinder-chip[data-stroke='power'] {
-  background: color-mix(in srgb, var(--tone) 22%, transparent);
-  box-shadow: 0 0 18px -6px var(--tone);
+  border-color: color-mix(in srgb, var(--tone) 60%, transparent);
+  background: color-mix(in srgb, var(--tone) 18%, transparent);
 }
 
 .cylinder-number {
@@ -526,10 +527,12 @@
   flex: none;
   width: 22px;
   height: 22px;
-  border-radius: 6px;
+  border-radius: var(--radius-small);
   background: var(--tone);
   color: var(--background);
-  font: 600 0.8125rem var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .cylinder-stroke {

@@ -4,7 +4,6 @@
   --cable: #ffb347;
   --wake: #7f9fc0;
   --cutaway: #c58b3a;
-  --screen: #1b1d20;
 }
 
 .chapter .readouts {
@@ -53,7 +52,7 @@
   height: auto;
   aspect-ratio: 2;
   border-radius: var(--radius-small);
-  background: var(--screen);
+  background: var(--surface);
 }
 
 .curve-widget figcaption {

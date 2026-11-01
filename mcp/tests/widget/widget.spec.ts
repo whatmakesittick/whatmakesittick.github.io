@@ -131,7 +131,7 @@ test('a new host locale switches when the model passed no lang', async ({ page }
 for (const [lang, expected, absent] of [
   ['zh', ['PingFang SC', 'Noto Sans SC'], ['Yu Gothic UI']],
   ['ja', ['Hiragino Sans', 'Noto Sans JP'], ['PingFang SC']],
-  ['en', ['Inter Variable'], ['PingFang SC', 'Yu Gothic UI']],
+  ['en', ['Source Sans 3 Variable'], ['PingFang SC', 'Yu Gothic UI']],
 ] as const) {
   test(`the widget text uses the site font stack for ${lang}`, async ({ page }) => {
     const { errors } = await open(page, `slug=mri-scanner&chapter=magnet&lang=${lang}`);
