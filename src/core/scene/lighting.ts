@@ -32,7 +32,7 @@ const POSITIONS: Readonly<Record<LightName, readonly [number, number, number]>> 
 
 const KEY: LightTone = { color: '#fff1e0', intensity: 2.4 };
 
-export const LIGHTING: Readonly<Record<Scheme, LightingLook>> = {
+const LIGHTING: Readonly<Record<Scheme, LightingLook>> = {
   dark: {
     environment: 0.32,
     lights: {

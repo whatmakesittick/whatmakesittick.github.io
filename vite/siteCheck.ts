@@ -52,6 +52,11 @@ const LOCATION = /<loc>([^<]+)<\/loc>/g;
 const FEED_ITEM = /<guid isPermaLink="true">([^<]+)<\/guid>/g;
 const NOSCRIPT_COVER = /<noscript>[\s\S]*?class="stage-cover"[\s\S]*?<\/noscript>/;
 const THEME_COLOR_TAG = 'meta[name="theme-color"]';
+const EXPECTED_THEME_COLORS = SCHEME_NAMES.map(
+  (scheme) => `${schemeQuery(scheme)} ${THEME_COLOR[scheme]}`,
+)
+  .sort()
+  .join('\n');
 const STYLES_AND_MODULES = 'link[rel="stylesheet"], style, script[type="module"]';
 
 function pageLanguage(path: string): LanguageCode {
@@ -108,25 +113,23 @@ function isSchemeScript(tag: HTMLElement): boolean {
   return !tag.hasAttribute('src') && tag.rawText.trim() === SCHEME_SCRIPT;
 }
 
-function themeColorProblems(root: HTMLElement): string[] {
-  const found = root
-    .querySelectorAll(THEME_COLOR_TAG)
+function themeColorProblems(tags: readonly HTMLElement[]): string[] {
+  const found = tags
     .map((tag) => `${tag.getAttribute('media')} ${tag.getAttribute('content')}`)
-    .sort();
-  const expected = SCHEME_NAMES.map((scheme) => `${schemeQuery(scheme)} ${THEME_COLOR[scheme]}`);
-  return found.join('\n') === expected.sort().join('\n')
-    ? []
-    : ['theme-color tags are not one per scheme'];
+    .sort()
+    .join('\n');
+  return found === EXPECTED_THEME_COLORS ? [] : ['theme-color tags are not one per scheme'];
 }
 
 export function schemeProblems(root: HTMLElement): string[] {
-  const problems = themeColorProblems(root);
+  const themeColors = root.querySelectorAll(THEME_COLOR_TAG);
+  const problems = themeColorProblems(themeColors);
   const scripts = root.querySelectorAll('script').filter(isSchemeScript);
   if (scripts.length !== 1) return [...problems, `${scripts.length} scheme scripts instead of 1`];
   const [script] = scripts;
   const start = script.range[0];
   if (!script.closest('head')) problems.push('scheme script is not in the head');
-  if (root.querySelectorAll(THEME_COLOR_TAG).some((tag) => tag.range[0] > start))
+  if (themeColors.some((tag) => tag.range[0] > start))
     problems.push('a theme-color tag follows the scheme script');
   const styled = root.querySelector(STYLES_AND_MODULES);
   if (styled && styled.range[0] < start) problems.push('scheme script runs after the styles');

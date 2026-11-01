@@ -127,7 +127,7 @@ export async function mountEmbed<S extends Playback>(
   let host: SceneHost;
   let unmountScene: () => void;
   try {
-    host = createSceneHost(container, explainer.parts, explainer.scene, scheme);
+    host = createSceneHost(container, explainer.parts, scheme, explainer.scene);
   } catch (error) {
     release();
     throw error;

@@ -83,8 +83,8 @@ function createScene(options: SceneOptions, scheme: Scheme): Scene {
 export function createSceneHost(
   container: HTMLElement,
   parts: Readonly<Record<string, PartInfo>>,
-  options: SceneOptions = {},
   scheme: Scheme,
+  options: SceneOptions = {},
 ): SceneHost {
   const viewport = createViewport(container);
   const scene = createScene(options, scheme);

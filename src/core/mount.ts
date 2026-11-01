@@ -33,8 +33,8 @@ function mountScene<S extends Playback>(
   const host = createSceneHost(
     requireElement(root, SCENE_SELECTOR),
     explainer.parts,
-    explainer.scene,
     activeScheme(),
+    explainer.scene,
   );
   const unmount = explainer.mountScene(host.shell, store);
   host.start(store);

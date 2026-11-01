@@ -15,21 +15,14 @@ import type { Scheme } from '../theme';
 const GRID = {
   cellSize: 2,
   majorEvery: 5,
+  opacity: 0.55,
   sizeFactor: 6,
   fadeFactor: 2.6,
   backgroundMix: 0.55,
 } as const;
 const SHADOW = { sizeFactor: 1.35, lift: 0.02, minDepthRatio: 0.5 } as const;
 
-interface StageLook {
-  gridOpacity: number;
-  shadowOpacity: number;
-}
-
-export const STAGE_LOOK: Readonly<Record<Scheme, StageLook>> = {
-  dark: { gridOpacity: 0.55, shadowOpacity: 0.9 },
-  light: { gridOpacity: 0.55, shadowOpacity: 0.5 },
-};
+const SHADOW_OPACITY: Readonly<Record<Scheme, number>> = { dark: 0.9, light: 0.5 };
 
 function gridColor(scheme: Scheme): Color {
   const { muted, background } = SCHEMES[scheme];
@@ -85,7 +78,7 @@ function gridMaterial(scheme: Scheme): ShaderMaterial {
       uMajor: { value: GRID.majorEvery },
       uCenter: { value: new Vector2() },
       uRadius: { value: 1 },
-      uOpacity: { value: STAGE_LOOK[scheme].gridOpacity },
+      uOpacity: { value: GRID.opacity },
     },
   });
 }
@@ -105,7 +98,7 @@ export class Stage {
         map: shadowTexture,
         transparent: true,
         depthWrite: false,
-        opacity: STAGE_LOOK[scheme].shadowOpacity,
+        opacity: SHADOW_OPACITY[scheme],
         color: new Color(0, 0, 0),
       }),
     );

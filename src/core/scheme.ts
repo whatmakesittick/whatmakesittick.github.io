@@ -1,6 +1,6 @@
-export type Scheme = 'dark' | 'light';
+export const SCHEME_NAMES = ['dark', 'light'] as const;
 
-export const SCHEME_NAMES: readonly Scheme[] = ['dark', 'light'];
+export type Scheme = (typeof SCHEME_NAMES)[number];
 export const DEFAULT_SCHEME: Scheme = 'dark';
 export const SCHEME_STORAGE_KEY = 'wmit-theme';
 export const THEME_COLOR: Readonly<Record<Scheme, string>> = {
@@ -19,7 +19,7 @@ export interface PreferredScheme {
 }
 
 export function isScheme(value: unknown): value is Scheme {
-  return value === 'dark' || value === 'light';
+  return typeof value === 'string' && (SCHEME_NAMES as readonly string[]).includes(value);
 }
 
 export function otherScheme(scheme: Scheme): Scheme {
