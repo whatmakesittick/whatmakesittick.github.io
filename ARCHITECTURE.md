@@ -545,7 +545,12 @@ build and the runtime. A page is rendered in two steps:
    The head's `{{languageRedirect}}` holds the inline language redirect on an English page
    (see "Translations") and nothing elsewhere. `{{analytics}}` holds the GoatCounter script
    tag built by `analyticsTag` in `vite/head.ts` from `ANALYTICS` in `vite/site.ts`; the 404
-   page ships no scripts, so it has none.
+   page has none. `{{scheme}}`, on every page including the 404, holds
+   the two `theme-color` tags, one per `prefers-color-scheme`, and the inline scheme script that
+   `vite/schemeScript.ts` bundles from `src/core/schemeScript.ts`. Before any style loads, it sets
+   `data-theme` on `<html>` to the reader's stored choice (`wmit-theme` in local storage) or else
+   the system scheme, dark when neither is known, and points both `theme-color` tags at a stored
+   choice.
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
    element, in that order, the way `translateDom` does at runtime. A `data-i18n` element
@@ -578,7 +583,7 @@ GitHub Pages serves for every missing path; the dev server serves it at `/404.ht
 has the masthead with the site link, `notFound.title` and `notFound.text`, a link to the
 catalogue and the shared footer, whose language links lead to the catalogue in every
 language. It carries `<meta name="robots" content="noindex">`, no canonical link and no
-script, stays out of the sitemap, and imports the core and catalogue styles inside an
+script but the scheme script, stays out of the sitemap, and imports the core and catalogue styles inside an
 inline `<style>`, which Vite inlines, so the page needs no other request and never joins
 the `shared` chunk.
 
@@ -646,14 +651,15 @@ explainer does not ship it.
 `vite/siteCheckPlugin.ts` reads `dist/` after every build and fails it when a page breaks a
 rule in `vite/siteCheck.ts`: the `lang` of the page, a title with the site name, a
 description within `descriptionLimit` of its language, the canonical URL, hreflang links with
-`x-default` and the page itself, one JSON-LD block that parses, one `h1`, no external
+`x-default` and the page itself, one JSON-LD block that parses, one `h1`, a `theme-color` tag
+per scheme and the scheme script after them and before any style or module script, no external
 stylesheet and no Google Fonts host, exactly one GoatCounter script, a gzipped JavaScript budget (`JS_BUDGET_GZIP`, summed
 over the module scripts and preloads of the page and their static imports, with the smaller
 `site` budget on the catalogue and the about page), no three.js chunk
 on a site page, a `modulepreload` on every translated page, one card per explainer on the
 catalogue, the noscript cover and the more-explainers links on an explainer page, a sitemap
 that lists exactly the built pages, a feed link to the page language on every page, a feed per
-language that lists exactly its built explainers, `robots.txt`, a `noindex` 404 page without scripts and a
+language that lists exactly its built explainers, `robots.txt`, a `noindex` 404 page with no script but the scheme script and a
 real `favicon.ico`. It reads the redirect stubs apart from the pages and checks that each one
 leads to a built page, names it as canonical, is `noindex` and loads no script, and that every
 alias in the embed manifest has its module, its stub and a built target, with the same aliases in

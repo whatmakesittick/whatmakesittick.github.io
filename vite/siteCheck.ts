@@ -5,8 +5,10 @@ import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { splitLanguagePath } from '../src/core/i18n/paths.ts';
 import { ABOUT_PAGE, CATALOGUE_PAGE } from '../src/core/pages.ts';
 import { descriptionLimit } from '../src/core/manifest.ts';
+import { SCHEME_NAMES, THEME_COLOR, schemeQuery } from '../src/core/scheme.ts';
 import { embedCatalogueFile, parseEmbedCatalogue } from './embedCatalogue.ts';
 import { redirectTarget } from './redirects.ts';
+import { SCHEME_SCRIPT } from './schemeScript.ts';
 import { parseSlugAliases } from './slugAliases.ts';
 import { ANALYTICS, FEED_TYPE, SITE_URL, feedUrl } from './site.ts';
 
@@ -49,6 +51,8 @@ const X_DEFAULT = 'x-default';
 const LOCATION = /<loc>([^<]+)<\/loc>/g;
 const FEED_ITEM = /<guid isPermaLink="true">([^<]+)<\/guid>/g;
 const NOSCRIPT_COVER = /<noscript>[\s\S]*?class="stage-cover"[\s\S]*?<\/noscript>/;
+const THEME_COLOR_TAG = 'meta[name="theme-color"]';
+const STYLES_AND_MODULES = 'link[rel="stylesheet"], style, script[type="module"]';
 
 function pageLanguage(path: string): LanguageCode {
   return splitLanguagePath(path).code ?? DEFAULT_LANGUAGE;
@@ -100,6 +104,35 @@ export function loadedScripts(root: HTMLElement, scripts: ReadonlyMap<string, st
   return [...loaded];
 }
 
+function isSchemeScript(tag: HTMLElement): boolean {
+  return !tag.hasAttribute('src') && tag.rawText.trim() === SCHEME_SCRIPT;
+}
+
+function themeColorProblems(root: HTMLElement): string[] {
+  const found = root
+    .querySelectorAll(THEME_COLOR_TAG)
+    .map((tag) => `${tag.getAttribute('media')} ${tag.getAttribute('content')}`)
+    .sort();
+  const expected = SCHEME_NAMES.map((scheme) => `${schemeQuery(scheme)} ${THEME_COLOR[scheme]}`);
+  return found.join('\n') === expected.sort().join('\n')
+    ? []
+    : ['theme-color tags are not one per scheme'];
+}
+
+export function schemeProblems(root: HTMLElement): string[] {
+  const problems = themeColorProblems(root);
+  const scripts = root.querySelectorAll('script').filter(isSchemeScript);
+  if (scripts.length !== 1) return [...problems, `${scripts.length} scheme scripts instead of 1`];
+  const [script] = scripts;
+  const start = script.range[0];
+  if (!script.closest('head')) problems.push('scheme script is not in the head');
+  if (root.querySelectorAll(THEME_COLOR_TAG).some((tag) => tag.range[0] > start))
+    problems.push('a theme-color tag follows the scheme script');
+  const styled = root.querySelector(STYLES_AND_MODULES);
+  if (styled && styled.range[0] < start) problems.push('scheme script runs after the styles');
+  return problems;
+}
+
 function headProblems(page: BuiltPage, root: HTMLElement): string[] {
   const problems: string[] = [];
   const language = pageLanguage(page.path);
@@ -130,7 +163,7 @@ function headProblems(page: BuiltPage, root: HTMLElement): string[] {
   const feed = attribute(root, `link[rel="alternate"][type="${FEED_TYPE}"]`, 'href');
   if (feed !== feedUrl(language)) problems.push(`feed link is not ${feedUrl(language)}`);
   if (root.querySelectorAll('h1').length !== 1) problems.push('not exactly one h1');
-  return problems;
+  return [...problems, ...schemeProblems(root)];
 }
 
 function deliveryProblems(page: BuiltPage, root: HTMLElement, site: BuiltSite): string[] {
@@ -205,7 +238,10 @@ function siteProblems(site: BuiltSite): string[] {
   if (!site.robots.includes('Sitemap:')) problems.push('robots.txt does not point at the sitemap');
   if (!site.notFound.includes('name="robots" content="noindex"'))
     problems.push('404.html is not noindex');
-  if (site.notFound.includes('<script')) problems.push('404.html loads scripts');
+  const notFound = parse(site.notFound);
+  if (notFound.querySelectorAll('script').some((tag) => !isSchemeScript(tag)))
+    problems.push('404.html loads scripts');
+  problems.push(...schemeProblems(notFound).map((problem) => `404.html: ${problem}`));
   if (ICO_HEADER.some((byte, index) => site.favicon[index] !== byte))
     problems.push('favicon.ico is not an ico file');
   return problems;

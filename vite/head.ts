@@ -1,8 +1,10 @@
 import { extname } from 'node:path';
 import { LANGUAGES } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
+import { SCHEME_NAMES, THEME_COLOR, schemeQuery } from '../src/core/scheme.ts';
 import { alternates } from './routes.ts';
 import type { PageRoute } from './routes.ts';
+import { SCHEME_SCRIPT } from './schemeScript.ts';
 import { ANALYTICS } from './site.ts';
 import { escapeHtml } from './template.ts';
 
@@ -50,4 +52,14 @@ export function jsonLd(data: object): string {
 
 export function analyticsTag(): string {
   return `<script data-goatcounter="${ANALYTICS.endpoint}" async src="${ANALYTICS.script}"></script>`;
+}
+
+export function schemeTags(): string {
+  return [
+    ...SCHEME_NAMES.map(
+      (scheme) =>
+        `<meta name="theme-color" content="${THEME_COLOR[scheme]}" media="${schemeQuery(scheme)}" />`,
+    ),
+    `<script>${SCHEME_SCRIPT}</script>`,
+  ].join('\n');
 }
