@@ -7,7 +7,9 @@
   "header": {
     "language": "Мова",
     "source": "GitHub",
-    "sourceLabel": "Вихідний код на GitHub"
+    "sourceLabel": "Вихідний код на GitHub",
+    "themeLight": "Увімкнути світлу тему",
+    "themeDark": "Увімкнути темну тему"
   },
   "stage": {
     "label": "Інтерактивна модель",

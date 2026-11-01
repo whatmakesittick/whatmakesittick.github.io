@@ -2,6 +2,7 @@
   color-scheme: dark;
 
   --background: #1e1b17;
+  --page: #1a1815;
   --surface: #26231f;
   --text: #efe7d8;
   --muted: #a29a8b;
@@ -27,6 +28,28 @@
   --radius-small: 6px;
   --control-height: 30px;
   --stage-inset: 16px;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --background: #e8e6e1;
+  --page: #f4f3ef;
+  --surface: #ffffff;
+  --text: #1a1b1e;
+  --muted: #6b6e75;
+  --accent: #8e6612;
+  --metal-light: #c3c6cc;
+  --metal: #80858d;
+  --metal-dark: #4b4f57;
+  --highlight: #b8902f;
+
+  --prose: #3a3c42;
+  --line: rgb(0 0 0 / 0.1);
+  --line-strong: rgb(0 0 0 / 0.22);
+  --wash: rgb(0 0 0 / 0.04);
+  --wash-strong: rgb(0 0 0 / 0.08);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.06);
 }
 
 :root:lang(zh) {

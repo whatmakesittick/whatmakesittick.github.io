@@ -4,6 +4,7 @@ import type { Explainer, ExplainerStore, Playback } from './explainer';
 import { initI18n, shippedLanguages } from './i18n';
 import type { LocaleLoaders } from './i18n';
 import { createSceneHost } from './scene/shell';
+import { activeScheme } from './theme';
 import { mountActions } from './ui/actions';
 import { mountSiteLinks } from './ui/siteLinks';
 import { mountDock } from './ui/dock';
@@ -17,6 +18,7 @@ import { mountSafeArea } from './ui/safeArea';
 import { mountSections } from './ui/sections';
 import { mountStageExpansion } from './ui/stageExpansion';
 import { stageShortcuts } from './ui/stageShortcuts';
+import { mountThemeToggle } from './ui/themeToggle';
 import { followSystemTextSize } from './ui/textSize';
 
 const SITE_NAME_KEY = 'catalogue.title';
@@ -31,6 +33,7 @@ function mountScene<S extends Playback>(
   const host = createSceneHost(
     requireElement(root, SCENE_SELECTOR),
     explainer.parts,
+    activeScheme(),
     explainer.scene,
   );
   const unmount = explainer.mountScene(host.shell, store);
@@ -53,6 +56,7 @@ export async function mountExplainer<S extends Playback>(
   mountDock(document, store, explainer);
   mountReadouts(document, store, explainer.readouts);
   const unmountGauge = explainer.mountGauge?.(requireElement(document, GAUGE_SELECTOR), store);
+  mountThemeToggle(document);
   mountLanguage(document, languages);
   mountSiteLinks(document);
   mountFooter(document, SITE_NAME_KEY);

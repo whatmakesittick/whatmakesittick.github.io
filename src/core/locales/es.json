@@ -7,7 +7,9 @@
   "header": {
     "language": "Idioma",
     "source": "GitHub",
-    "sourceLabel": "Código fuente en GitHub"
+    "sourceLabel": "Código fuente en GitHub",
+    "themeLight": "Cambiar al tema claro",
+    "themeDark": "Cambiar al tema oscuro"
   },
   "stage": {
     "label": "Modelo interactivo",

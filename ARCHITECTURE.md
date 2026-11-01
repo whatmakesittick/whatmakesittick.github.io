@@ -229,13 +229,14 @@ the page with, stays when the reader moves on to the next chapter.
 
 Core mounts the shell (`src/core/mount.ts`): the dock (play, scrubber with phase
 bands, status, speed slider, choices, toggles, reset camera, more), the gauge
-readouts and `mountGauge`, language, footer, `mountUi`, chapter actions, the full screen toggle,
+readouts and `mountGauge`, the theme toggle, language, footer, `mountUi`, chapter actions, the full screen toggle,
 the keyboard (space, arrows, digits for phases, R, X and Escape for full screen,
 choice and toggle shortcuts, explainer shortcuts), reading-line sections and the
 safe area: the dock reserves the bottom of the stage and the gauge the right, or
 the top strip when the scene options set `gaugeSide: 'top'` for a wide subject.
 Then it builds the scene host from the
-explainer's `scene` options and calls `mountScene` with a `SceneShell`: viewport,
+explainer's `scene` options and the page's scheme, `activeScheme()` from `src/core/theme.ts`,
+and calls `mountScene` with a `SceneShell`: viewport,
 scene, camera rig, label layer, highlighter, materials, textures, stage, lighting,
 `onFrame(update)` and `invalidate()`. Before the first frame the host compiles
 every material in the scene with `renderer.compileAsync`, so the shaders build in
@@ -347,8 +348,12 @@ what the policy asked for in `wanted()` and shows it minus the occluded labels;
 a label near it.
 
 The explainer's `scene` options shape the world around it. A mechanism keeps the
-defaults: dark background, grid floor with a contact shadow, an orbit that stops
-level with the target. A diorama such as a glider over terrain turns the stage
+defaults: the scheme's background, grid floor with a contact shadow, an orbit that stops
+level with the target. The scene host takes the scheme as an argument and reads the
+background, the grid colour, the shadow strength (`STAGE_LOOK` in `stage.ts`) and the lights
+(`LIGHTING` in `lighting.ts`) from it, never from the module-level `THEME`: the light scheme
+keeps the key light, raises the fill and the environment light and softens the rim and the
+contact shadow, so dark parts do not read as holes on the pale stage. A diorama such as a glider over terrain turns the stage
 off, sets a sky colour and fog, widens the camera planes and raises
 `maxPolarAngle` past a right angle so the camera can dip below the target and
 look up. The zoom range comes from the bounds a controller gives
@@ -545,7 +550,15 @@ build and the runtime. A page is rendered in two steps:
    The head's `{{languageRedirect}}` holds the inline language redirect on an English page
    (see "Translations") and nothing elsewhere. `{{analytics}}` holds the GoatCounter script
    tag built by `analyticsTag` in `vite/head.ts` from `ANALYTICS` in `vite/site.ts`; the 404
-   page ships no scripts, so it has none.
+   page has none. `{{scheme}}`, on every page including the 404, holds
+   the two `theme-color` tags, one per `prefers-color-scheme`, and the inline scheme script that
+   `vite/schemeScript.ts` bundles from `src/core/schemeScript.ts`. Before any style loads, it sets
+   `data-theme` on `<html>` to the reader's stored choice (`wmit-theme` in local storage) or else
+   the system scheme, dark when neither is known, and points both `theme-color` tags at a stored
+   choice. The theme toggle in the header (`mountThemeToggle` in `src/core/ui/themeToggle.ts`,
+   on every page with the header) stores the other scheme and reloads the page: the scheme is
+   fixed for a page's lifetime, since the explainers read their three.js colours from `THEME`
+   once, when their modules load.
 2. `vite/translateHtml.ts` parses the result with `node-html-parser` and translates
    every `data-i18n` (as text), `data-i18n-html` (as markup) and `data-i18n-attr`
    element, in that order, the way `translateDom` does at runtime. A `data-i18n` element
@@ -578,7 +591,7 @@ GitHub Pages serves for every missing path; the dev server serves it at `/404.ht
 has the masthead with the site link, `notFound.title` and `notFound.text`, a link to the
 catalogue and the shared footer, whose language links lead to the catalogue in every
 language. It carries `<meta name="robots" content="noindex">`, no canonical link and no
-script, stays out of the sitemap, and imports the core and catalogue styles inside an
+script but the scheme script, stays out of the sitemap, and imports the core and catalogue styles inside an
 inline `<style>`, which Vite inlines, so the page needs no other request and never joins
 the `shared` chunk.
 
@@ -646,14 +659,15 @@ explainer does not ship it.
 `vite/siteCheckPlugin.ts` reads `dist/` after every build and fails it when a page breaks a
 rule in `vite/siteCheck.ts`: the `lang` of the page, a title with the site name, a
 description within `descriptionLimit` of its language, the canonical URL, hreflang links with
-`x-default` and the page itself, one JSON-LD block that parses, one `h1`, no external
+`x-default` and the page itself, one JSON-LD block that parses, one `h1`, a `theme-color` tag
+per scheme and the scheme script after them and before any style or module script, no external
 stylesheet and no Google Fonts host, exactly one GoatCounter script, a gzipped JavaScript budget (`JS_BUDGET_GZIP`, summed
 over the module scripts and preloads of the page and their static imports, with the smaller
 `site` budget on the catalogue and the about page), no three.js chunk
 on a site page, a `modulepreload` on every translated page, one card per explainer on the
 catalogue, the noscript cover and the more-explainers links on an explainer page, a sitemap
 that lists exactly the built pages, a feed link to the page language on every page, a feed per
-language that lists exactly its built explainers, `robots.txt`, a `noindex` 404 page without scripts and a
+language that lists exactly its built explainers, `robots.txt`, a `noindex` 404 page with no script but the scheme script and a
 real `favicon.ico`. It reads the redirect stubs apart from the pages and checks that each one
 leads to a built page, names it as canonical, is `noindex` and loads no script, and that every
 alias in the embed manifest has its module, its stub and a built target, with the same aliases in
@@ -815,6 +829,13 @@ language is asked for. `handleKey(event)` runs the page's keyboard on the store 
 arrows, digits for phases, R, choice, toggle and explainer shortcuts, never X or Escape) and
 returns whether it used the key.
 
+The `theme` option takes `'light'` or `'dark'`; without it, or with any other value, the embed
+is dark, as before. `mountEmbed` sets `data-theme` on the container and the control slots, which
+the scoped tokens key off, and passes the scheme to the scene host, so the stage, the lights,
+the scene labels and the controls follow it; `dispose` restores the attribute the host had. An
+explainer's own three.js colours come from `THEME`, which resolves once from the host page's
+root when the explainer's modules load, so they follow the root's `data-theme`, not the option.
+
 `mountEmbed` in `src/core/embed/mount.ts` does what `mountExplainer` does for a page, minus the
 page: `useLanguage` from `src/core/i18n/embedded.ts` sets the core and explainer strings in the
 asked language without detection, the container and the control slots get a matching `lang`
@@ -825,7 +846,8 @@ there, and the scene host mounts into the given container. A host may pass
 language select. Their styles are the controls parts of the stylesheet, nested under `[data-embed-ui]`, with
 the phone dock rules keyed to an `embed-dock` container of at most 459px instead of the viewport.
 The scene styles and an explainer's `style.css` are added as `<style data-embed-styles>` elements
-while a scene is mounted. The embed loads the latin Source Sans 3, Source Serif 4 and IBM Plex Mono files the pages use, and their
+while a scene is mounted, with the tokens scoped onto a light scene container so its labels
+follow the light scheme; a dark container keeps the host's own values for them. The embed loads the latin Source Sans 3, Source Serif 4 and IBM Plex Mono files the pages use, and their
 Cyrillic files only for Ukrainian; Japanese and Chinese use system fonts, as on the pages.
 On a stage container of at most 620px, where the controls styles hide the readouts, the embed hides
 the whole gauge, so no empty glass panel is left.

@@ -2,6 +2,8 @@ import type { Explainer, Playback } from '../explainer';
 import { currentLanguage, onLanguageChanged } from '../i18n';
 import { resolveLanguage, useLanguage } from '../i18n/embedded';
 import type { LocaleLoaders } from '../i18n/resources';
+import { DEFAULT_SCHEME, isScheme } from '../scheme';
+import type { Scheme } from '../scheme';
 import { createSceneHost } from '../scene/shell';
 import type { FrameUpdate, SceneHost } from '../scene/shell';
 import { respectReducedMotion } from '../ui/motion';
@@ -53,8 +55,18 @@ function applyPlayback(
 
 const LANG_ATTR = 'lang';
 
+function keepAttribute(elements: readonly HTMLElement[], name: string): () => void {
+  const previous = elements.map((element) => element.getAttribute(name));
+  return () =>
+    elements.forEach((element, index) => {
+      const value = previous[index];
+      if (value === null || value === undefined) element.removeAttribute(name);
+      else element.setAttribute(name, value);
+    });
+}
+
 function markLanguage(elements: readonly HTMLElement[]): () => void {
-  const previous = elements.map((element) => element.getAttribute(LANG_ATTR));
+  const restore = keepAttribute(elements, LANG_ATTR);
   const mark = () => {
     const code = currentLanguage();
     elements.forEach((element) => element.setAttribute(LANG_ATTR, code));
@@ -63,12 +75,14 @@ function markLanguage(elements: readonly HTMLElement[]): () => void {
   const unwatch = onLanguageChanged(mark);
   return () => {
     unwatch();
-    elements.forEach((element, index) => {
-      const value = previous[index];
-      if (value === null || value === undefined) element.removeAttribute(LANG_ATTR);
-      else element.setAttribute(LANG_ATTR, value);
-    });
+    restore();
   };
+}
+
+function markScheme(elements: readonly HTMLElement[], scheme: Scheme): () => void {
+  const restore = keepAttribute(elements, EMBED_DOM.themeAttr);
+  elements.forEach((element) => element.setAttribute(EMBED_DOM.themeAttr, scheme));
+  return restore;
 }
 
 async function applyLanguage(locales: LocaleLoaders, language: string | undefined): Promise<void> {
@@ -89,7 +103,9 @@ export async function mountEmbed<S extends Playback>(
   const detachStyles = attachStyles(slug, styles);
   container.setAttribute(EMBED_DOM.sceneAttr, slug);
   const slots = [options.ui?.dock, options.ui?.gauge].filter((slot) => slot !== undefined);
+  const scheme = isScheme(options.theme) ? options.theme : DEFAULT_SCHEME;
   const unmarkLanguage = markLanguage([container, ...slots]);
+  const unmarkScheme = markScheme([container, ...slots], scheme);
 
   const store = explainer.createStore();
   if (options.chapter !== undefined && options.chapter in explainer.presets) {
@@ -100,6 +116,7 @@ export async function mountEmbed<S extends Playback>(
   const controls = options.ui ? mountEmbedControls(options.ui, store, explainer) : undefined;
   const release = () => {
     controls?.dispose();
+    unmarkScheme();
     unmarkLanguage();
     detachStyles();
     if (container.getAttribute(EMBED_DOM.sceneAttr) === slug) {
@@ -110,7 +127,7 @@ export async function mountEmbed<S extends Playback>(
   let host: SceneHost;
   let unmountScene: () => void;
   try {
-    host = createSceneHost(container, explainer.parts, explainer.scene);
+    host = createSceneHost(container, explainer.parts, scheme, explainer.scene);
   } catch (error) {
     release();
     throw error;

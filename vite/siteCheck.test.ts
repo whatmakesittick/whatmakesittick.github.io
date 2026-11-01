@@ -5,6 +5,7 @@ import { parse } from 'node-html-parser';
 import { LANGUAGE_CODES } from '../src/core/i18n/languages.ts';
 import { renderEmbedCatalogue } from './embedCatalogue.ts';
 import { renderRedirectStub } from './redirects.ts';
+import { schemeTags } from './head.ts';
 import type { EmbedCatalogueEntry } from './embedCatalogue.ts';
 
 const SITE = 'https://whatmakesittick.github.io';
@@ -22,6 +23,8 @@ interface PageOptions {
   preload?: boolean;
   feed?: boolean;
   counter?: boolean;
+  scheme?: string;
+  styleFirst?: boolean;
 }
 
 function pagePath(code: string, slug: string): string {
@@ -55,7 +58,12 @@ function pageHtml(code: string, slug: string, options: PageOptions = {}): string
       ? ''
       : `<link rel="alternate" type="application/rss+xml" href="${SITE}${pagePath(code, '')}feed.xml">`;
   const counter = options.counter === false ? '' : COUNTER;
+  const scheme = options.scheme ?? schemeTags();
+  const style = '<style>body{margin:0}</style>';
   return `<!doctype html><html lang="${code}"><head>
+    ${options.styleFirst ? style : ''}
+    ${scheme}
+    ${options.styleFirst ? '' : style}
     <title>How it works · What makes it tick</title>
     <meta name="description" content="${options.description ?? 'A short look inside.'}">
     <link rel="canonical" href="${SITE}${path}">
@@ -116,7 +124,7 @@ function site(overrides: Partial<Record<string, PageOptions>> = {}): BuiltSite {
     feeds: new Map(LANGUAGES.map((code) => [code, feedXml(code, EXPLAINERS)])),
     sitemap: pages.map((page) => `<loc>${SITE}${page.path}</loc>`).join('\n'),
     robots: 'Sitemap: x',
-    notFound: '<meta name="robots" content="noindex">',
+    notFound: `<head>${schemeTags()}<meta name="robots" content="noindex"></head>`,
     favicon: new Uint8Array([0, 0, 1, 0, 2, 0]),
     embedManifest: JSON.stringify({ explainers: EXPLAINERS.map((slug) => ({ slug })) }),
   };
@@ -187,6 +195,48 @@ describe('checkSite', () => {
     ]);
   });
 
+  it('rejects a page without the theme-color tags or the scheme script', () => {
+    const [darkColor, lightColor, script] = schemeTags().split('\n');
+    expect(
+      checkSite(
+        site({
+          '/': { scheme: script },
+          '/about/': { scheme: [lightColor, lightColor, script].join('') },
+          '/engine/': { scheme: [darkColor, lightColor].join('') },
+          '/glider/': { scheme: [darkColor, lightColor, script, script].join('') },
+        }),
+      ),
+    ).toEqual([
+      '/: theme-color tags are not one per scheme',
+      '/about/: theme-color tags are not one per scheme',
+      '/engine/: 0 scheme scripts instead of 1',
+      '/glider/: 2 scheme scripts instead of 1',
+    ]);
+  });
+
+  it('rejects a scheme script after the styles or before the theme-color tags', () => {
+    const [darkColor, lightColor, script] = schemeTags().split('\n');
+    expect(
+      checkSite(
+        site({
+          '/': { styleFirst: true },
+          '/engine/': { scheme: [darkColor, script, lightColor].join('') },
+        }),
+      ),
+    ).toEqual([
+      '/: scheme script runs after the styles',
+      '/engine/: a theme-color tag follows the scheme script',
+    ]);
+  });
+
+  it('rejects any other script on the 404 page', () => {
+    const problems = checkSite({
+      ...site(),
+      notFound: `<head>${schemeTags()}<meta name="robots" content="noindex"><script src="x"></script></head>`,
+    });
+    expect(problems).toEqual(['404.html loads scripts']);
+  });
+
   it('rejects a broken sitemap, a crawlable 404 and a fake favicon', () => {
     const broken = site();
     const problems = checkSite({
@@ -199,6 +249,8 @@ describe('checkSite', () => {
       'sitemap.xml does not list exactly the built pages',
       '404.html is not noindex',
       '404.html loads scripts',
+      '404.html: theme-color tags are not one per scheme',
+      '404.html: 0 scheme scripts instead of 1',
       'favicon.ico is not an ico file',
     ]);
   });

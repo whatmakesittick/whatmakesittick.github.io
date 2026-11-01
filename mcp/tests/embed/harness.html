@@ -124,6 +124,11 @@
       return { resolved, info: current.info, state: current.getState() };
     },
     langs: () => ['viewport', 'dock-slot', 'gauge-slot'].map((id) => document.getElementById(id).getAttribute('lang')),
+    themes: () => ['viewport', 'dock-slot', 'gauge-slot'].map((id) => document.getElementById(id).getAttribute('data-theme')),
+    surfaces: () => ['#viewport .scene-label__text', '#dock-slot .glass'].map((sel) => {
+      const element = document.querySelector(sel);
+      return element ? getComputedStyle(element).backgroundColor : null;
+    }),
     cyrillicFonts: () => [...document.fonts].filter((face) => /400-45F/i.test(face.unicodeRange)).map((face) => face.family.replaceAll('"', '')),
     env: () => ({ language: navigator.language, languages: [...navigator.languages] }),
   };

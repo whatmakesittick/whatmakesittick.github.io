@@ -7,6 +7,7 @@ import { loadersByLanguage } from '@core/i18n/loader';
 import { mountFooter } from '@core/ui/footer';
 import { mountLanguage } from '@core/ui/language';
 import { mountSiteLinks } from '@core/ui/siteLinks';
+import { mountThemeToggle } from '@core/ui/themeToggle';
 import { followSystemTextSize } from '@core/ui/textSize';
 import en from './locales/en.json';
 
@@ -22,6 +23,7 @@ const ABOUT_LOCALES: LocaleLoaders = {
 };
 
 function mountAbout(): void {
+  mountThemeToggle(document);
   mountLanguage(document, ABOUT_LANGUAGES);
   mountSiteLinks(document);
   mountFooter(document, TITLE_KEY);

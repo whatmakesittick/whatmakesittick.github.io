@@ -362,12 +362,25 @@ test.describe('embed v1 under the strict spec CSP', () => {
     expect([t('controls.play'), t('controls.pause')]).toContain(ui.play);
     expect(ui.texts).not.toMatch(/\b(controls|stage|timeline|readouts)\.[\w.]+/);
     expect(await wmit(frame, 'langs')).toEqual(['de', 'de', 'de']);
+    expect(await wmit(frame, 'themes')).toEqual(['dark', 'dark', 'dark']);
     const labels = await wmit<string[]>(frame, 'labels');
     expect(labels.length).toBeGreaterThan(0);
     for (const label of labels) expect(label).not.toMatch(/^[a-z][\w-]*(\.[\w-]+)+$/);
     expect(await wmit<string[]>(frame, 'cyrillicFonts')).toEqual([]);
     await wmit(frame, 'dispose');
     expect(await wmit(frame, 'langs')).toEqual([null, null, null]);
+    expect(await frameErrors(frame)).toEqual([]);
+    expect(problems).toEqual([]);
+  });
+
+  test('mounts in the theme it is asked for and restores the container', async ({ page }) => {
+    const problems = watchConsole(page);
+    const frame = await openHarness(page);
+    await wmit<Mounted>(frame, 'mount', 'engine', { ui: true, theme: 'light' });
+    expect(await wmit(frame, 'themes')).toEqual(['light', 'light', 'light']);
+    expect(await wmit(frame, 'surfaces')).toEqual(['rgb(255, 255, 255)', 'rgb(255, 255, 255)']);
+    await wmit(frame, 'dispose');
+    expect(await wmit(frame, 'themes')).toEqual([null, null, null]);
     expect(await frameErrors(frame)).toEqual([]);
     expect(problems).toEqual([]);
   });

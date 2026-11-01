@@ -1,3 +1,7 @@
+import type { DimStyle } from '@core/scene/materials';
+import { activeScheme } from '@core/theme';
+import type { Scheme } from '@core/theme';
+
 export const SCENE_UNITS_PER_MM = 0.1;
 
 export const RENDER_ORDER = { gas: 1, overlay: 2 } as const;
@@ -221,4 +225,9 @@ export const SPARK = {
   flickerMin: 0.65,
 } as const;
 
-export const SEE_THROUGH_DIM = { opacity: 0.6 } as const;
+const SEE_THROUGH_DIMS: Readonly<Record<Scheme, Partial<DimStyle>>> = {
+  dark: { opacity: 0.6 },
+  light: { opacity: 0.45, brightness: 0.85 },
+};
+
+export const SEE_THROUGH_DIM = SEE_THROUGH_DIMS[activeScheme()];

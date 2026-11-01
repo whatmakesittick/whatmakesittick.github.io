@@ -7,7 +7,9 @@
   "header": {
     "language": "言語",
     "source": "GitHub",
-    "sourceLabel": "GitHubのソースコード"
+    "sourceLabel": "GitHubのソースコード",
+    "themeLight": "ライトテーマに切り替える",
+    "themeDark": "ダークテーマに切り替える"
   },
   "stage": {
     "label": "操作できるモデル",

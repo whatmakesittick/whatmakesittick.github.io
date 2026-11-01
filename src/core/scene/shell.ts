@@ -1,6 +1,7 @@
 import { Color, Fog, Scene } from 'three';
 import type { PartInfo } from '../explainer';
-import { THEME } from '../theme';
+import { SCHEMES } from '../theme';
+import type { Scheme } from '../theme';
 import { CameraRig } from './camera';
 import type { CameraOptions } from './camera';
 import { MAX_FRAME_SECONDS } from './constants';
@@ -72,9 +73,9 @@ function runUpdates(updates: ReadonlySet<FrameUpdate>, deltaSeconds: number): bo
   return moving;
 }
 
-function createScene(options: SceneOptions): Scene {
+function createScene(options: SceneOptions, scheme: Scheme): Scene {
   const scene = new Scene();
-  scene.background = new Color(options.background ?? THEME.background);
+  scene.background = new Color(options.background ?? SCHEMES[scheme].background);
   if (options.fog) scene.fog = new Fog(options.fog.color, options.fog.near, options.fog.far);
   return scene;
 }
@@ -82,13 +83,14 @@ function createScene(options: SceneOptions): Scene {
 export function createSceneHost(
   container: HTMLElement,
   parts: Readonly<Record<string, PartInfo>>,
+  scheme: Scheme,
   options: SceneOptions = {},
 ): SceneHost {
   const viewport = createViewport(container);
-  const scene = createScene(options);
-  const lighting = createLighting(scene, viewport.renderer);
+  const scene = createScene(options, scheme);
+  const lighting = createLighting(scene, viewport.renderer, scheme);
   const textures = createSceneTextures();
-  const stage = new Stage(textures.shadow);
+  const stage = new Stage(textures.shadow, scheme);
   if (options.stage ?? true) scene.add(stage.group);
   const materials = new MaterialLibrary(options.highlight);
   const highlighter = new Highlighter(materials, [...Object.keys(parts), STRUCTURE_GROUP]);
