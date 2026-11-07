@@ -22,6 +22,7 @@ import { chaseTargetFor, hammerHeadTop } from './pose';
 const FRAME = 1 / 60;
 const SETTLE_SECONDS = 2;
 const DIGITS = 6;
+const RINGING_UNITS = 600;
 const STILL_VIEWS: ViewOptions = {
   sound: false,
   wave: false,
@@ -157,6 +158,13 @@ describe('piano assembly', () => {
 
   it('rests when nothing moves', () => {
     settle(stateAt(0));
+    expect(assembly.update(FRAME, 1)).toBe(false);
+  });
+
+  it('animates while a ringing string is drawn under the wave view', () => {
+    settle(stateAt(RINGING_UNITS, { view: { wave: true } }));
+    expect(assembly.update(FRAME, 1)).toBe(true);
+    settle(stateAt(RINGING_UNITS));
     expect(assembly.update(FRAME, 1)).toBe(false);
   });
 
