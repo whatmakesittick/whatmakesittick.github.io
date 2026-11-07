@@ -26,9 +26,12 @@ export function slab(z: Span, y: Span, halfWidth: number, round = 0, x = 0): Buf
   return profileAlongX(rectShape({ a: z, b: y }, round), x - halfWidth, x + halfWidth);
 }
 
+export function unitRod(): BufferGeometry {
+  return new CylinderGeometry(1, 1, 1, ROD_SIDES).rotateX(QUARTER_TURN);
+}
+
 export function rod(from: Point, to: Point, radius: number): BufferGeometry {
-  const unit = new CylinderGeometry(1, 1, 1, ROD_SIDES).rotateX(QUARTER_TURN);
-  return unit.applyMatrix4(segmentMatrix(from, to, radius));
+  return unitRod().applyMatrix4(segmentMatrix(from, to, radius));
 }
 
 export function planarRod(from: Planar, to: Planar, radius: number, x = 0): BufferGeometry {
