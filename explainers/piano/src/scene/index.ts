@@ -12,6 +12,7 @@ const SCENE_LIMITS = {
   cameraFar: 40,
   cameraMinDistance: 0.06,
   cameraMaxDistance: 9,
+  targetFloorMargin: 0.02,
 } as const;
 
 export const SCENE_OPTIONS: SceneOptions = {
@@ -20,6 +21,7 @@ export const SCENE_OPTIONS: SceneOptions = {
   camera: {
     near: SCENE_LIMITS.cameraNear,
     far: SCENE_LIMITS.cameraFar,
+    floorMargin: SCENE_LIMITS.targetFloorMargin,
     distance: { min: SCENE_LIMITS.cameraMinDistance, max: SCENE_LIMITS.cameraMaxDistance },
   },
 };
