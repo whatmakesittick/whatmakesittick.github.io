@@ -61,7 +61,14 @@ function pinSpots(string: PianoString): Vector3[] {
 
 function bridgePins(context: PartContext, breath: VertexPatch): InstancedMesh {
   const height = BRIDGE_PIN.sink + BRIDGE_PIN.rise;
-  const geometry = new CylinderGeometry(BRIDGE_PIN.radius, BRIDGE_PIN.radius, height, PIN_SIDES);
+  const geometry = new CylinderGeometry(
+    BRIDGE_PIN.radius,
+    BRIDGE_PIN.radius,
+    height,
+    PIN_SIDES,
+    1,
+    true,
+  );
   geometry.translate(0, height / 2, 0);
   const count = PIANO_STRINGS.length * PINS_PER_STRING;
   const material = patchedMaterial(context, {
