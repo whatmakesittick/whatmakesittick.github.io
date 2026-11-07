@@ -5,7 +5,7 @@
     "tagline": "Play one key of a concert grand in 3D: your finger never touches the string, and the felt hammer is flying free when it strikes.",
     "description": "Press one key of a concert grand in 3D, watch the hammer fly free to the string, and hear how your touch shapes the note.",
     "summary": "One key stroke from finger to string, the levers that throw the hammer, the escapement that lets it go, dampers and pedals, how the soundboard fills the room, and how the upright and the harpsichord compare.",
-    "socialAlt": "A black concert grand piano with its lid up on a dark stage, cut open at middle C to show one key's hammer action"
+    "socialAlt": "A black concert grand piano with its lid up on a dark stage, cut open at middle C to show one key's hammer action, beside the title How a grand piano works"
   },
   "stage": {
     "label": "Interactive grand piano model",
@@ -195,7 +195,7 @@
         "middle": "{{count}} steel strings",
         "treble": "{{count}} short steel strings"
       },
-      "stretch": "Stiff-string stretch",
+      "stretch": "Sharp partials",
       "stretchValue": "partial {{n}} is {{cents}} cents sharp",
       "stretchModel": "partial {{n}} is about {{cents}} cents sharp in this model",
       "decay": "Fade time",
@@ -276,7 +276,7 @@
     "dampers": {
       "title": "Dampers and pedals",
       "p1": "Most notes have a <strong>damper</strong>, a felt pad that rests on the strings and keeps them silent. Small lead weights hold it down. When you press a key, its back end lifts the damper before the hammer arrives. In one measured loud note, the damper left the strings about 15 ms before the strike.",
-      "p2": "In this model the damper lets go after the first millimetre of key travel. That point is an assumption, because no source gives it for a grand. A slower touch takes longer over the rest of the stroke, so the damper is up even longer before the strike, as the readout shows. When you let the key up, the damper drops back and the note stops. The top 18 to 21 notes have no dampers at all: pick Treble C7 and the note rings on after you let go.",
+      "p2": "In this model the damper lifts off after the first millimetre of key travel. That point is an assumption, because no source gives it for a grand. A slower touch takes longer over the rest of the stroke, so the damper is up even longer before the strike, as the readout shows. When you let the key up, the damper drops back and the note stops. The top 18 to 21 notes have no dampers at all: pick Treble C7 and the note rings on after you let go.",
       "p3": "The sustain pedal, on the right, lifts every damper at once. The note keeps ringing after you let the key go, and other strings start to ring along with it. Measured on a Yamaha concert grand, middle C took 9.5 s to fade with the key held down, and 15.3 s with the pedal. Turn on String vibration to see the other strings shimmer.",
       "p4": "The left pedal, called una corda, slides the keyboard and the whole action a little to the right. Each hammer then hits two of its three strings, or one of two in the bass. The string it misses still rings a little through the bridge, and the note comes out softer and duller. How far the action moves is not published, so the model shows the shift without a figure. On an upright the soft pedal works differently: it just moves the hammers closer to the strings."
     },
@@ -284,8 +284,8 @@
       "title": "From string to room",
       "p1": "A string is too thin to push much air on its own. Instead it presses on the <strong>bridge</strong>, a long wooden rail glued to the <strong>soundboard</strong>. The soundboard is a wide sheet of spruce, 6 to 9 mm thick, and it works like a loudspeaker. The vibration passes through the bridge into the board, and the board moves the air. String vibration is on here, so you can watch both move, greatly exaggerated.",
       "p2": "A concert grand has about 230 strings, each pulling with 700 to 900 newtons, about the weight of an adult. Together that makes about 20 tonnes of force, roughly what ten cars weigh. A wooden frame could not hold that, so a cast iron <strong>plate</strong>, 160 to 180 kg on a concert grand, takes the load together with the case. The <strong>wound bass strings</strong> are steel wrapped in copper, and they cross over the others. The copper adds weight, so the string sounds low without having to be very long.",
-      "p3": "A string vibrates at its main pitch and at a series of higher pitches at the same time, called partials. Steel wire is stiff, so its partials come out slightly sharp, above simple multiples of the main pitch. The readout counts this in cents, hundredths of the step from one key to the next. Tuners stretch their octaves a little wider to match. In the deep bass the soundboard can barely send out anything below about 100 Hz, so you hear those notes mostly through their partials.",
-      "p4": "A struck note fades in two stages: first a quick drop, the prompt sound, then a slow aftersound that can last many seconds. A faster hammer makes the note louder and brighter, because the felt gets harder as it squashes and brings out more high partials. The decay readout gives the time a note takes to fade by 60 decibels (dB). Those times were measured on a Yamaha concert grand, not this Steinway, and the C7 figures are this model's own estimates. On the gauge, the sound level counts dB below a hard strike in this model, not loudness in the room."
+      "p3": "A string vibrates at its main pitch and at a series of higher pitches at the same time, called partials. Steel wire is stiff, so its partials come out slightly sharp, above simple multiples of the main pitch. The readout counts this in cents, hundredths of the step from one key to the next. Tuners stretch their octaves a little wider to match. In the deep bass the soundboard can barely send out the lowest pitches, below roughly 100 Hz, so you hear those notes mostly through their partials.",
+      "p4": "A struck note fades in two stages: first a quick drop, the prompt sound, then a slow aftersound that can last many seconds. A faster hammer makes the note louder and brighter, because the felt gets harder as it squashes and brings out more high partials. The decay readout gives the time a note takes to fade by 60 decibels (dB). Those times were measured on a Yamaha concert grand, not this Steinway, and the C7 figures are this model's own estimates. The pedal does not always help: in the measured bass note, the fade was slightly shorter with it. On the gauge, the sound level counts dB below a hard strike in this model, not loudness in the room."
     },
     "compare": {
       "title": "Upright and harpsichord",
