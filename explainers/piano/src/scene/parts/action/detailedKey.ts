@@ -19,7 +19,7 @@ import type { Notch } from '../keyboard/layout';
 import { BACK_CHECK_BLOCK, CAPSTAN_PROFILE } from './dimensions';
 import { ACTION_FINISHES } from './finishes';
 import { backCheckFaceZ } from './layout';
-import { addMesh, pivotFrame, placeRod, rodGeometry } from './meshes';
+import { addMesh, pivotFrame, placeRod, rodGeometry, uprightRod } from './meshes';
 import type { Piece } from './meshes';
 
 const IVORY = { top: 0.003, front: 0.002, bevel: 0.0007, inset: 0.0003 } as const;
@@ -69,9 +69,18 @@ function keyGeometry(notch: Notch): KeyGeometry {
       right + LEAD.proud,
     ),
   );
+  const stick = profileAlongX(
+    roundedShape(STICK_PROFILE, STICK.round),
+    -STICK.halfWidth,
+    STICK.halfWidth,
+    STICK.bevel,
+  );
   return {
     ivory: mergeParts([planSlab(outline, under, KEY.top, IVORY.bevel), front]),
-    wood: planSlab(outline, KEY_PLAN.bottom, under).translate(0, 0, -IVORY.front),
+    wood: mergeParts([
+      planSlab(outline, KEY_PLAN.bottom, under).translate(0, 0, -IVORY.front),
+      stick,
+    ]),
     lead: mergeParts(lead),
   };
 }
@@ -116,15 +125,12 @@ function backCheck(context: PartContext, body: Object3D): (key: number) => void 
   };
 }
 
-function punchingMeshes(context: PartContext, parent: Object3D): (key: number) => void {
-  const meshes = [0, 1].map(() =>
-    addMesh(context, parent, rodGeometry(PUNCHING_SEGMENTS), 'key', FINISHES.cloth),
+function punchingGeometry(key: number): BufferGeometry {
+  return mergeParts(
+    punchings(key).map(({ position: [, y, z], radius, height }) =>
+      uprightRod([0, z], [y, y + height], radius, PUNCHING_SEGMENTS),
+    ),
   );
-  return (key) => {
-    punchings(key).forEach(({ position: [, y, z], radius, height }, index) =>
-      placeRod(meshes[index], [0, z], [y, y + height], radius),
-    );
-  };
 }
 
 export function buildKey(context: PartContext, parent: Object3D): Piece {
@@ -142,16 +148,16 @@ export function buildKey(context: PartContext, parent: Object3D): Piece {
   const ivory = addMesh(context, frame.body, first.ivory, 'key', FINISHES.ivory);
   const wood = addMesh(context, frame.body, first.wood, 'key', FINISHES.keyWood);
   const lead = addMesh(context, frame.body, first.lead, 'key', ACTION_FINISHES.lead);
-  const stick = profileAlongX(
-    roundedShape(STICK_PROFILE, STICK.round),
-    -STICK.halfWidth,
-    STICK.halfWidth,
-    STICK.bevel,
-  );
-  addMesh(context, frame.body, stick, 'key', FINISHES.keyWood);
   addMesh(context, frame.body, capstan(), 'capstan', FINISHES.brass);
   const placeBackCheck = backCheck(context, frame.body);
-  const placePunchings = punchingMeshes(context, parent);
+  const cloth = addMesh(
+    context,
+    parent,
+    punchingGeometry(PLAYED_KEY.middle),
+    'key',
+    FINISHES.cloth,
+  );
+  const clothFor = new Map<number, BufferGeometry>();
   const front: Point = [0, KEY.top, KEY.frontZ];
   label(context, 'key', frame.body, front);
   sceneAnchor(context, 'key', frame.body, front);
@@ -163,7 +169,8 @@ export function buildKey(context: PartContext, parent: Object3D): Piece {
       wood.geometry = geometry.wood;
       lead.geometry = geometry.lead;
       placeBackCheck(key);
-      placePunchings(key);
+      cloth.geometry = clothFor.get(key) ?? context.tracker.track(punchingGeometry(key));
+      clothFor.set(key, cloth.geometry);
     },
     pose(pose) {
       frame.pivot.rotation.x = pose.key;

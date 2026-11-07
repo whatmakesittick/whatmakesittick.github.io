@@ -106,7 +106,11 @@ export function createKeyboard(context: PartContext): Section {
   addPunchings(rows);
   shifted.add(keyFrame(context));
   root.add(partMesh(context, boxBetween(keybedBounds()), STRUCTURE_GROUP, FINISHES.darkWood));
-  const cap = sectionCap(context, [keybedRect(), ...FRAME_RAIL_RECTS, BACK_CLOTH_RECT]);
+  const cap = sectionCap(
+    context,
+    [keybedRect(), ...FRAME_RAIL_RECTS, BACK_CLOTH_RECT],
+    'keyboardCap',
+  );
   root.add(cap);
   const keyboardLabel = label(context, 'keyboard', shifted, [0, KEY.top, -LABEL_SET_BACK]);
   const shift = new LazyEase();

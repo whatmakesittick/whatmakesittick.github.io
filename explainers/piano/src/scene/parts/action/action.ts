@@ -33,8 +33,8 @@ export function createAction(context: PartContext): Section {
   const dampers = buildInstancedDampers(context, lifted);
   shifted.add(buildActionRails(context));
   root.add(buildDamperRails(context));
-  const actionCap = sectionCap(context, ACTION_RAILS);
-  const damperCap = sectionCap(context, DAMPER_RAILS);
+  const actionCap = sectionCap(context, ACTION_RAILS, 'actionCap');
+  const damperCap = sectionCap(context, DAMPER_RAILS, 'damperCap');
   root.add(actionCap, damperCap);
   const detailed = new DetailedAction(context);
   root.add(detailed.root, detailed.damper);

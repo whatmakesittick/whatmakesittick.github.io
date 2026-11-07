@@ -5,6 +5,7 @@ import { buildDamper } from './detailedDamper';
 import { buildHammer } from './detailedHammer';
 import { buildKey } from './detailedKey';
 import { buildLevers } from './detailedLevers';
+import { addFixtures } from './fixtures';
 import type { DetailedPose } from './layout';
 import type { Piece } from './meshes';
 
@@ -17,6 +18,7 @@ export class DetailedAction {
   constructor(context: PartContext) {
     this.root = namedGroup('playedAction');
     this.damper = namedGroup('playedDamper');
+    addFixtures(context, this.root);
     this.pieces = [
       buildKey(context, this.root),
       buildLevers(context, this.root),

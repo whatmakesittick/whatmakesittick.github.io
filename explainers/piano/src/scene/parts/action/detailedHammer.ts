@@ -1,12 +1,11 @@
 import { Shape } from 'three';
 import type { Object3D } from 'three';
-import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { HAMMER } from '../../../model';
 import { FINISHES } from '../../finishes';
 import { label, sceneAnchor } from '../context';
 import type { PartContext } from '../context';
-import { QUARTER_TURN, profileAlongX, rectShape } from '../keyboard/geometry';
-import { FLANGE, KNUCKLE, MOULDING_BOTTOM, SHANK_AXIS_Y, SHANK_SPAN } from './dimensions';
+import { QUARTER_TURN, profileAlongX } from '../keyboard/geometry';
+import { KNUCKLE, MOULDING_BOTTOM, SHANK_AXIS_Y, SHANK_SPAN } from './dimensions';
 import { ACTION_FINISHES } from './finishes';
 import { unitFelt, unitMoulding } from './headGeometry';
 import { headSize } from './layout';
@@ -17,8 +16,6 @@ import type { Piece } from './meshes';
 const SHANK_SEGMENTS = 12;
 const KNUCKLE_BEVEL = 0.0012;
 const KNUCKLE_CURVES = 14;
-const FLANGE_ROUND = 0.002;
-const FLANGE_BEVEL = 0.0005;
 const SQUASH_BULGE = 0.5;
 const LABEL_DROP = 0.012;
 
@@ -35,14 +32,7 @@ function knuckleShape(): Shape {
   );
 }
 
-function addFlange(context: PartContext, parent: Object3D): void {
-  const shape = rectShape({ a: FLANGE.z, b: FLANGE.y }, FLANGE_ROUND);
-  const flange = profileAlongX(shape, -FLANGE.halfWidth, FLANGE.halfWidth, FLANGE_BEVEL);
-  addMesh(context, parent, flange, STRUCTURE_GROUP, ACTION_FINISHES.rail);
-}
-
 export function buildHammer(context: PartContext, parent: Object3D): Piece {
-  addFlange(context, parent);
   const frame = pivotFrame(parent, 'hammer', HAMMER.pivotY, HAMMER.pivotZ);
   const shankGeometry = rodGeometry(SHANK_SEGMENTS).rotateX(QUARTER_TURN);
   const shank = addMesh(context, frame.body, shankGeometry, 'hammer', ACTION_FINISHES.shank);
