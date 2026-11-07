@@ -77,8 +77,8 @@ explainers/engine/
 The slug must match the folder and must not clash with a root folder
 (`assets`, `src`, `public` and the like) or with a name published from the root
 `public/` (`icons`, `social`). `tags` lists at least one tag, none twice, each
-from `TAGS` in `src/core/manifest.ts`: mechanics, engines, vehicles, aircraft,
-flight, physics, weather, home, tools, optics, energy, earth and biology. Every tag has a label under
+from `TAGS` in `src/core/manifest.ts`: mechanics, engines, vehicles, aircraft, flight, physics,
+weather, home, tools, weapons, optics, energy, earth, biology, space, computing and sound. Every tag has a label under
 `catalogue.tags.<id>` in all eight core locales, which a test enforces, so a new
 tag goes into `TAGS` and every core locale together. `topic` is one short English noun phrase for
 the thing, as people say it ("car engine", "MQ-9 Reaper drone"); the MCP tool description lists it, and

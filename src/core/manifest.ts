@@ -17,6 +17,7 @@ export const TAGS = [
   'biology',
   'space',
   'computing',
+  'sound',
 ] as const;
 
 export type Tag = (typeof TAGS)[number];
