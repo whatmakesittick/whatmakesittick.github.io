@@ -5,6 +5,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { Point } from '../../../ids';
 
 const UP = new Vector3(0, 1, 0);
+const MIDDLE = 0.5;
 
 export interface RodSpec {
   from: Point;
@@ -29,7 +30,7 @@ export function rod({ from, to, radius, topRadius = radius, segments }: RodSpec)
   const span = new Vector3(...to).sub(start);
   const geometry = new CylinderGeometry(topRadius, radius, span.length(), segments);
   geometry.applyQuaternion(new Quaternion().setFromUnitVectors(UP, span.clone().normalize()));
-  return geometry.translate(...start.addScaledVector(span, 0.5).toArray());
+  return geometry.translate(...start.addScaledVector(span, MIDDLE).toArray());
 }
 
 export function clipBehind(points: readonly PlanPoint[], limit: number): PlanPoint[] {

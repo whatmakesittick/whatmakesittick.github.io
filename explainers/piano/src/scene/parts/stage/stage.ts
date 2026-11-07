@@ -18,7 +18,13 @@ import { namedGroup, registeredMaterial } from '../context';
 const FLOOR_SEGMENTS = 96;
 const FLOOR_TEXTURE_SIZE = 1024;
 const CENTRE_Z = -1.15;
-const POOL = { x: -0.15, z: -1.25, radius: 2.5, strength: 0.32, core: 0.3 } as const;
+const POOL = { x: -0.15, z: -1.25, radius: 2.5, strength: 0.32 } as const;
+const POOL_FALLOFF: readonly (readonly [offset: number, share: number])[] = [
+  [0, 1],
+  [0.3, 0.8],
+  [0.55, 0.25],
+  [1, 0],
+];
 const EDGE_FADE = { start: 0.3, end: 0.82 } as const;
 const DITHER = 3;
 const RGBA = 4;
@@ -51,10 +57,9 @@ function paintFloor(context: CanvasRenderingContext2D, size: number): void {
   const poolX = half + POOL.x * toPixels;
   const poolY = half + (POOL.z - CENTRE_Z) * toPixels;
   const pool = context.createRadialGradient(poolX, poolY, 0, poolX, poolY, POOL.radius * toPixels);
-  pool.addColorStop(0, rgba(THEME.spot, POOL.strength));
-  pool.addColorStop(POOL.core, rgba(THEME.spot, POOL.strength * 0.8));
-  pool.addColorStop(0.55, rgba(THEME.spot, POOL.strength * 0.25));
-  pool.addColorStop(1, rgba(THEME.spot, 0));
+  POOL_FALLOFF.forEach(([offset, share]) =>
+    pool.addColorStop(offset, rgba(THEME.spot, POOL.strength * share)),
+  );
   context.fillStyle = pool;
   context.fillRect(0, 0, size, size);
   const edge = context.createRadialGradient(half, half, 0, half, half, half);
