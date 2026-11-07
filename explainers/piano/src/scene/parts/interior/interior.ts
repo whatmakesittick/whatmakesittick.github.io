@@ -1,6 +1,6 @@
 import type { Object3D } from 'three';
 import type { Point, RegisterId } from '../../../ids';
-import { PLAYED_KEY, SOUNDBOARD, stringPath } from '../../../model';
+import { PLATE, PLAYED_KEY, SOUNDBOARD, stringPath } from '../../../model';
 import { label, namedGroup, sceneAnchor } from '../context';
 import type { PartContext, Section } from '../context';
 import { BOARD_MODE } from './boardPlan';
@@ -9,12 +9,14 @@ import { TUNING_PIN } from './constants';
 import { midSpeaking, PIANO_STRINGS, unisonOf } from './layout';
 import type { PianoString } from './layout';
 import { breathPatch, shimmerPatch, wavePatch } from './patches';
+import { createPlate } from './plate';
 import { createPlayedStrings } from './played';
 import { createTuningPins, pinblockMesh } from './pins';
 import { createSoundboard } from './soundboard';
 import { createStringSets } from './strings';
 
 const LABEL_KEYS = { stringSet: 56, bassStrings: 8 } as const;
+const PLATE_LABEL: Point = [0.45, PLATE.topY, -0.108];
 const SOUNDBOARD_LABEL_Z = -0.65;
 const TUNING_PIN_LABEL_ORDER = 170;
 const BREAK_KEY = 32;
@@ -50,13 +52,15 @@ export function createInterior(context: PartContext): Section {
   const structure = namedGroup('structure', root);
   structure.add(soundboard.rail, pinblockMesh(context));
   const bridges = createBridges(context, breath);
+  const plate = createPlate(context);
   const pins = createTuningPins(context);
   const sets = createStringSets(context, shimmer);
   const played = createPlayedStrings(context, wave);
-  root.add(soundboard.group, bridges, pins, sets.bass, sets.steel, played.group);
+  root.add(soundboard.group, bridges, plate, pins, sets.bass, sets.steel, played.group);
 
   const pinTop = PIANO_STRINGS[TUNING_PIN_LABEL_ORDER].pin;
   label(context, 'soundboard', soundboard.group, soundboardSpot());
+  label(context, 'plate', plate, PLATE_LABEL);
   label(context, 'tuningPins', pins, [pinTop[0], TUNING_PIN.top, pinTop[2]]);
   label(context, 'stringSet', sets.steel, midSpeaking(middleOf(LABEL_KEYS.stringSet)));
   label(context, 'bassStrings', sets.bass, midSpeaking(middleOf(LABEL_KEYS.bassStrings)));
