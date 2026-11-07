@@ -79,11 +79,17 @@ export function blackKeys(): number[] {
   return ALL_KEYS.filter(isBlackKey);
 }
 
+export function tailSpan(notch: Notch): readonly [left: number, right: number] {
+  const half = KEY.whiteWidth / 2;
+  const left = notch === 'left' || notch === 'both' ? -KEY_PLAN.notchEdge : -half;
+  const right = notch === 'right' || notch === 'both' ? KEY_PLAN.notchEdge : half;
+  return [left, right];
+}
+
 export function whiteOutline(notch: Notch): Outline {
   const half = KEY.whiteWidth / 2;
-  const { headBackZ, topBackZ, notchEdge } = KEY_PLAN;
-  const left = notch === 'left' || notch === 'both' ? -notchEdge : -half;
-  const right = notch === 'right' || notch === 'both' ? notchEdge : half;
+  const { headBackZ, topBackZ } = KEY_PLAN;
+  const [left, right] = tailSpan(notch);
   const points: [number, number][] = [
     [-half, 0],
     [half, 0],
