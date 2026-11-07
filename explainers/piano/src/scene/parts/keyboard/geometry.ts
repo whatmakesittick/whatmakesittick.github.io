@@ -12,7 +12,7 @@ import type { BufferGeometry } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { FULL_TURN } from '@core/math';
 import type { BoxBounds } from '@core/scene/geometry/box';
-import { extrudePlan, extrudeProfileAlongX } from '@core/scene/geometry/extrude';
+import { extrudePlan } from '@core/scene/geometry/extrude';
 import type { Point } from '../../../ids';
 
 export type Outline = readonly (readonly [a: number, b: number])[];
@@ -22,7 +22,7 @@ export interface Rect {
   b: readonly [number, number];
 }
 
-const QUARTER_TURN = FULL_TURN / 4;
+export const QUARTER_TURN = FULL_TURN / 4;
 const CURVE_SEGMENTS = 6;
 const ALONG_Z = new Vector3(0, 0, 1);
 const NO_TURN = new Quaternion();
@@ -52,7 +52,7 @@ export function roundedShape(points: Outline, radius: number): Shape {
 function bevelled(shape: Shape, thickness: number, bevel: number, curveSegments: number) {
   const geometry = new ExtrudeGeometry(shape, {
     depth: thickness - 2 * bevel,
-    bevelEnabled: true,
+    bevelEnabled: bevel > 0,
     bevelThickness: bevel,
     bevelSize: bevel,
     bevelOffset: -bevel,
@@ -69,7 +69,6 @@ export function profileAlongX(
   bevel = 0,
   curveSegments = CURVE_SEGMENTS,
 ): BufferGeometry {
-  if (bevel <= 0) return extrudeProfileAlongX(shape, start, end);
   const geometry = bevelled(shape, end - start, bevel, curveSegments);
   geometry.rotateY(-QUARTER_TURN);
   return geometry.translate(end, 0, 0);
@@ -83,15 +82,7 @@ export function planSlab(shape: Shape, bottom: number, top: number, bevel = 0): 
 }
 
 export function capGeometry(rects: readonly Rect[]): BufferGeometry {
-  const shapes = rects.map(({ a, b }) =>
-    outlineShape([
-      [a[0], b[0]],
-      [a[1], b[0]],
-      [a[1], b[1]],
-      [a[0], b[1]],
-    ]),
-  );
-  return new ShapeGeometry(shapes).rotateY(-QUARTER_TURN);
+  return new ShapeGeometry(rects.map((rect) => rectShape(rect))).rotateY(-QUARTER_TURN);
 }
 
 export function boxBetween(bounds: BoxBounds): BufferGeometry {
@@ -112,11 +103,21 @@ export function mergeParts(parts: readonly BufferGeometry[]): BufferGeometry {
   return mergeGeometries(flat);
 }
 
-export function boxMatrix(bounds: BoxBounds, turn: Quaternion = NO_TURN): Matrix4 {
+export function rectShape({ a, b }: Rect, radius = 0): Shape {
+  const corners: Outline = [
+    [a[0], b[0]],
+    [a[1], b[0]],
+    [a[1], b[1]],
+    [a[0], b[1]],
+  ];
+  return radius > 0 ? roundedShape(corners, radius) : outlineShape(corners);
+}
+
+export function boxMatrix(bounds: BoxBounds): Matrix4 {
   const { minX, maxX, minY, maxY, minZ, maxZ } = bounds;
   return new Matrix4().compose(
     new Vector3((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2),
-    turn,
+    NO_TURN,
     new Vector3(maxX - minX, maxY - minY, maxZ - minZ),
   );
 }
