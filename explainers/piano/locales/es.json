@@ -19,7 +19,7 @@
     "during": "Paso {{step}} de {{total}}, {{detail}}",
     "speedValue": "{{seconds}} s por pulsación",
     "speedDescribe": "Una pulsación cada {{seconds}} segundos",
-    "speedDescribeReal": "Una pulsación cada {{seconds}} segundos, y la nota suena a su ritmo real",
+    "speedDescribeReal": "Una pulsación cada {{seconds}} segundos, y la nota dura lo mismo que en un piano real",
     "phase": {
       "press": "Pulsación",
       "escape": "Escape",
@@ -140,7 +140,7 @@
   },
   "chapters": {
     "key": {
-      "touchTime": "Del dedo a la cuerda",
+      "touchTime": "De la pulsación al golpe",
       "touchTimeValue": "unos {{ms}} ms",
       "dip": "Recorrido de la tecla",
       "blow": "Del macillo a la cuerda, en reposo",

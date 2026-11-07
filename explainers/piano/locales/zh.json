@@ -140,7 +140,7 @@
   },
   "chapters": {
     "key": {
-      "touchTime": "从指尖到琴弦",
+      "touchTime": "从触键到击弦",
       "touchTimeValue": "约{{ms}}毫秒",
       "dip": "琴键下沉",
       "blow": "静止时弦槌离弦",

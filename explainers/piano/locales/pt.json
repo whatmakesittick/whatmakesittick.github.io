@@ -140,7 +140,7 @@
   },
   "chapters": {
     "key": {
-      "touchTime": "Do dedo à corda",
+      "touchTime": "Do toque na tecla ao golpe",
       "touchTimeValue": "cerca de {{ms}} ms",
       "dip": "Curso da tecla",
       "blow": "Martelo até a corda, em repouso",

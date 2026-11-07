@@ -140,7 +140,7 @@
   },
   "chapters": {
     "key": {
-      "touchTime": "Finger to string",
+      "touchTime": "Key press to strike",
       "touchTimeValue": "about {{ms}} ms",
       "dip": "Key travel",
       "blow": "Hammer to string at rest",

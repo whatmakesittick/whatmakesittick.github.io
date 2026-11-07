@@ -140,7 +140,7 @@
   },
   "chapters": {
     "key": {
-      "touchTime": "Vom Finger bis zur Saite",
+      "touchTime": "Vom Tastendruck bis zum Anschlag",
       "touchTimeValue": "etwa {{ms}} ms",
       "dip": "Tastenweg",
       "blow": "Steighöhe des Hammers",

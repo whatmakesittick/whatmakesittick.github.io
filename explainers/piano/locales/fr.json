@@ -140,7 +140,7 @@
   },
   "chapters": {
     "key": {
-      "touchTime": "Du doigt à la corde",
+      "touchTime": "De l’appui à la frappe",
       "touchTimeValue": "environ {{ms}} ms",
       "dip": "Enfoncement de la touche",
       "blow": "Écart marteau-corde au repos",
