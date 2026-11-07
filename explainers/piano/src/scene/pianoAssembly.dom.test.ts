@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { InstancedMesh, Mesh, Vector3 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
+import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
 import { ANCHOR_IDS, PART_IDS, REGION_IDS, REGISTER_IDS } from '../ids';
 import type { AssemblyState, PartId, PedalId, RegisterId, TouchId, ViewOptions } from '../ids';
@@ -101,10 +102,8 @@ afterAll(() => {
 });
 
 describe('piano assembly', () => {
-  it('labels its parts, names every anchor and spans every region', () => {
-    const labelled = [...assembly.labelAnchors().keys()];
-    expect(labelled).toEqual(expect.arrayContaining<PartId>(['case', 'pedals']));
-    labelled.forEach((id) => expect(PART_IDS).toContain(id));
+  it('labels every part, names every anchor and spans every region', () => {
+    expect([...assembly.labelAnchors().keys()].sort()).toEqual([...PART_IDS].sort());
     ANCHOR_IDS.forEach((id) => expect(assembly.anchor(id)).toBeDefined());
     REGION_IDS.forEach((id) => expect(assembly.region(id).isEmpty()).toBe(false));
   });
@@ -131,6 +130,28 @@ describe('piano assembly', () => {
     expect(assembly.region('escapement').equals(escapement)).toBe(false);
     settle(stateAt(0, { view: { lineUp: true } }));
     expect(assembly.region('action').containsBox(action)).toBe(true);
+  });
+
+  it('hides the drawings whose view flags are off', () => {
+    const drawings: readonly [Partial<ViewOptions>, PartId][] = [
+      [{ inset: true }, 'inset'],
+      [{ ghost: true }, 'upright'],
+      [{ lineUp: true }, 'upright'],
+      [{ lineUp: true }, 'harpsichord'],
+    ];
+    drawings.forEach(([on, id]) => {
+      settle(stateAt(0, { view: on }));
+      expect(isShown(label(id))).toBe(true);
+      settle(stateAt(0));
+      expect(isShown(label(id))).toBe(false);
+    });
+  });
+
+  it('draws no damper on the treble note', () => {
+    settle(stateAt(0, { register: 'treble' }));
+    expect(isShown(label('damper'))).toBe(false);
+    settle(stateAt(0));
+    expect(isShown(label('damper'))).toBe(true);
   });
 
   it('presses the right pedal with sustain and the left with una corda', () => {
