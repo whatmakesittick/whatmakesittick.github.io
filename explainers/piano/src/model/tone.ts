@@ -35,6 +35,7 @@ export interface Decay {
 }
 
 export interface PartialTone {
+  n: number;
   hz: number;
   amplitude: number;
 }
@@ -197,7 +198,7 @@ export function partialAmplitudes(
 
 export function noteSpec(touch: TouchId, pedal: PedalId, register: RegisterId): NoteSpec {
   const partials = partialAmplitudes(touch, pedal, register)
-    .map((amplitude, index) => ({ hz: partialHz(index + 1, register), amplitude }))
+    .map((amplitude, index) => ({ n: index + 1, hz: partialHz(index + 1, register), amplitude }))
     .filter(({ amplitude }) => amplitude >= MIN_PARTIAL_AMPLITUDE);
   return {
     ...decayFor(pedal, register),

@@ -188,6 +188,7 @@ function voiceOutputs(context: FakeContext): FakeGain[] {
 function wideSpec(): NoteSpec {
   const spec = noteSpec('hard', 'none', 'middle');
   const partials = Array.from({ length: 20 }, (_, index) => ({
+    n: index + 1,
     hz: spec.partials[0].hz * (index + 1),
     amplitude: 1 / 20,
   }));

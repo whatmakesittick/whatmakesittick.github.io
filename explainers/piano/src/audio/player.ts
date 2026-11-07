@@ -84,10 +84,10 @@ function gainToDb(gain: number): number {
 export function voiceTones(spec: NoteSpec): Tone[] {
   const strings = spec.stringDetuneCents.length;
   const partials = spec.partials.slice(0, Math.floor(MAX_OSCILLATORS_PER_VOICE / strings));
-  return partials.flatMap(({ hz, amplitude }, index) => {
+  return partials.flatMap(({ n, hz, amplitude }) => {
     const peak = (spec.peakGain * amplitude) / strings;
     if (peak <= FLOOR_GAIN) return [];
-    const rateScale = 1 + spec.partialDampingStep * index;
+    const rateScale = 1 + spec.partialDampingStep * (n - 1);
     return spec.stringDetuneCents.map((cents) => ({ hz, cents, peak, rateScale }));
   });
 }

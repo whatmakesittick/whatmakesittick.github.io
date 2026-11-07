@@ -57,6 +57,12 @@ describe('partials', () => {
     );
   });
 
+  it('numbers each partial by its harmonic order, skipping the dropped ones', () => {
+    const numbers = noteSpec('medium', 'none', 'middle').partials.map(({ n }) => n);
+    expect(numbers).not.toContain(8);
+    expect(numbers.slice(0, 7)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+  });
+
   it('silences the 8th partial when the hammer strikes at one eighth', () => {
     const amplitudes = partialAmplitudes('medium', 'none', 'middle');
     expect(amplitudes.reduce((sum, value) => sum + value, 0)).toBeCloseTo(1, DIGITS);
