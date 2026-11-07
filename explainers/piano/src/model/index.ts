@@ -7,3 +7,4 @@ export * from './upright';
 export * from './harpsichord';
 export * from './tone';
 export * from './reading';
+export * from './chapters';
