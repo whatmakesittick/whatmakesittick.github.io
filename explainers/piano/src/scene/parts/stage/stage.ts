@@ -1,4 +1,11 @@
-import { CircleGeometry, Color, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three';
+import {
+  CircleGeometry,
+  Color,
+  Mesh,
+  MeshBasicMaterial,
+  PlaneGeometry,
+  SRGBColorSpace,
+} from 'three';
 import type { BufferGeometry, Texture } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -11,18 +18,19 @@ import { namedGroup, registeredMaterial } from '../context';
 const FLOOR_SEGMENTS = 96;
 const FLOOR_TEXTURE_SIZE = 1024;
 const CENTRE_Z = -1.15;
-const POOL = { x: -0.15, z: -1.25, radius: 2.6, strength: 0.34, core: 0.18 } as const;
+const POOL = { x: -0.15, z: -1.25, radius: 2.5, strength: 0.32, core: 0.3 } as const;
 const EDGE_FADE = { start: 0.3, end: 0.82 } as const;
 const DITHER = 3;
 const RGBA = 4;
+const BYTE = 255;
 const QUARTER_TURN = Math.PI / 2;
 const SHADOW_LIFT = 0.002;
 const CASE_SHADOW = { x: 0, z: -1.3, width: 2.1, depth: 3.35, opacity: 0.85 } as const;
 const FOOT_SHADOW = { size: 0.34, opacity: 0.9 } as const;
 
 function rgba(color: string, alpha: number): string {
-  const { r, g, b } = new Color(color);
-  const channel = (value: number) => Math.round(value * 255);
+  const { r, g, b } = new Color(color).getRGB({ r: 0, g: 0, b: 0 }, SRGBColorSpace);
+  const channel = (value: number) => Math.round(value * BYTE);
   return `rgba(${channel(r)},${channel(g)},${channel(b)},${alpha})`;
 }
 

@@ -17,7 +17,7 @@ export const LIGHT_RIG: Readonly<Record<LightName, LightSpec>> & { distance: num
   distance: 12,
   key: { color: THEME.keyLight, intensity: 2.6, direction: [-0.5, 0.78, 0.38] },
   fill: { color: THEME.fillLight, intensity: 0.55, direction: [0.85, 0.32, 0.25] },
-  rim: { color: '#fff6ea', intensity: 2.2, direction: [0.3, 0.42, -0.86] },
+  rim: { color: '#fff6ea', intensity: 1.9, direction: [-0.3, 0.58, -0.76] },
 };
 
 function apply(light: DirectionalLight, name: LightName): () => void {

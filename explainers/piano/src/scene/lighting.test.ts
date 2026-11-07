@@ -26,13 +26,14 @@ describe('piano light', () => {
     expect(lights.key.color.g).toBeGreaterThan(lights.key.color.b);
   });
 
-  it('fills cool from the treble side and rims strongly from behind the tail', () => {
+  it('fills cool from the treble side and rims from behind the tail', () => {
     const lights = shellLights();
     pianoLight(lights);
     expect(direction(lights.fill).x).toBeGreaterThan(0);
     expect(lights.fill.color.b).toBeGreaterThan(lights.fill.color.r);
     expect(direction(lights.rim).z).toBeLessThan(0);
-    expect(direction(lights.rim).dot(direction(lights.key))).toBeLessThan(0);
+    expect(direction(lights.rim).y).toBeGreaterThan(0);
+    expect(direction(lights.rim).dot(direction(lights.fill))).toBeLessThan(0);
     expect(lights.fill.intensity).toBeLessThan(lights.rim.intensity);
   });
 
