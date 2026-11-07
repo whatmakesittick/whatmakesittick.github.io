@@ -4,8 +4,8 @@
     "eyebrow": "Instruments de musique",
     "tagline": "Jouez une touche d’un piano de concert en 3D. Votre doigt ne touche jamais la corde, et le marteau de feutre vole librement au moment où il la frappe.",
     "description": "Enfoncez une touche d’un piano de concert en 3D, voyez le marteau s’envoler vers la corde et entendez comment votre toucher façonne la note.",
-    "summary": "Une frappe, du doigt jusqu’à la corde : les leviers qui lancent le marteau, l’échappement qui le libère, les étouffoirs et les pédales, la table d’harmonie qui remplit la salle, et la comparaison avec le piano droit et le clavecin.",
-    "socialAlt": "Un piano à queue de concert noir, couvercle ouvert, sur une scène sombre, coupé au niveau du do central pour montrer la mécanique d’une touche et son marteau"
+    "summary": "Une frappe, du doigt jusqu’à la corde : les leviers qui lancent le marteau, l’échappement qui le libère, les étouffoirs et les pédales, la table d’harmonie qui remplit la salle de son, et la comparaison avec le piano droit et le clavecin.",
+    "socialAlt": "Un piano à queue de concert noir, couvercle ouvert, sur une scène sombre, coupé au niveau du do central pour montrer la mécanique d’une touche et son marteau, à côté du titre « Comment fonctionne un piano à queue »"
   },
   "stage": {
     "label": "Modèle interactif du piano à queue",
@@ -38,7 +38,7 @@
       "press": "la touche s’enfonce et soulève le marteau",
       "escape": "le bâton d’échappement se dérobe et le marteau vole librement",
       "strike": "le marteau frappe la corde et rebondit",
-      "check": "l’attrape retient le marteau pendant que la note résonne",
+      "check": "l’attrape-marteau retient le marteau pendant que la note résonne",
       "release": "la touche remonte et la mécanique revient au repos"
     },
     "moment": {
@@ -103,9 +103,9 @@
         "hint": "Gros plan sur l’échappement (I)"
       },
       "ghost": {
-        "name": "Mécanique droite fantôme",
-        "short": "Fantôme",
-        "hint": "Mécanique droite fantôme (G)"
+        "name": "Fantôme du piano droit",
+        "short": "Piano droit",
+        "hint": "Fantôme du piano droit (G)"
       },
       "follow": {
         "name": "Suivre le marteau",
@@ -160,7 +160,7 @@
       "letOffValue": "de {{min}} à {{max}} mm, {{model}} mm dans ce modèle",
       "flight": "Vol libre",
       "flightValue": "{{ms}} ms de l’échappement à la corde",
-      "check": "Retenu par l’attrape",
+      "check": "Retenu par l’attrape-marteau",
       "checkValue": "environ {{mm}} mm sous la corde",
       "repeat": "Répétition, selon les fabricants",
       "repeatValue": "jusqu’à environ {{grand}} fois par seconde, contre environ {{upright}} sur un piano droit"
@@ -195,7 +195,7 @@
         "middle": "{{count}} cordes en acier",
         "treble": "{{count}} courtes cordes en acier"
       },
-      "stretch": "Raideur de la corde",
+      "stretch": "Décalage des partiels",
       "stretchValue": "le partiel {{n}} sonne {{cents}} cents trop haut",
       "stretchModel": "le partiel {{n}} sonne environ {{cents}} cents trop haut dans ce modèle",
       "decay": "Temps d’extinction",
@@ -207,7 +207,7 @@
     "compare": {
       "move": "Mise en vibration de la corde",
       "moveValue": {
-        "grand": "frappée par en dessous par un marteau de feutre",
+        "grand": "frappée d’en dessous par un marteau de feutre",
         "upright": "frappée de face par un marteau de feutre",
         "harpsichord": "pincée par un plectre"
       },
@@ -235,7 +235,7 @@
     "repetitionLever": "Levier de répétition",
     "knuckle": "Rouleau",
     "hammer": "Marteau",
-    "backCheck": "Attrape",
+    "backCheck": "Attrape-marteau",
     "damper": "Étouffoir",
     "actions": "Mécaniques des autres touches",
     "strings": "Cordes de cette note",
@@ -257,40 +257,40 @@
       "p1": "Voici un piano à queue de concert, un Steinway modèle D. Il mesure 274 cm de long, pèse environ 480 kg et compte plus de 12 000 pièces. Sous le couvercle ouvert, vous voyez les <strong>cordes</strong>, le <strong>cadre</strong> doré en fonte et, plus bas, la <strong>table d’harmonie</strong> en bois. Le piano compte 88 <strong>touches</strong>, qui jouent des notes de 27,5 à 4 186 hertz (Hz). Un hertz, c’est une vibration par seconde. Le modèle est ouvert en coupe au niveau du do central : vous pouvez ainsi voir une touche à l’œuvre.",
       "p2": "Appuyez sur une touche : elle s’enfonce d’environ 10 mm, et son extrémité arrière se soulève. Ce mouvement soulève l’<strong>étouffoir</strong>, un petit tampon de feutre, et l’écarte des cordes. Puis un <strong>marteau</strong> garni de feutre monte sur 45 à 47 mm et frappe les cordes par en dessous. La note résonne jusqu’à ce que vous relâchiez la touche. L’étouffoir retombe alors sur les cordes.",
       "p3": "Et voici la surprise : votre doigt ne touche jamais la corde. La touche est un levier qui lance le marteau. Sur le dernier millimètre, ou les deux derniers, le marteau vole tout seul : plus rien ne le pousse au moment où il frappe. Avec un toucher moyen, il atteint la corde environ 67 millisecondes (ms) après que votre doigt s’est posé sur la touche. Une milliseconde, c’est un millième de seconde. Ce délai tombe à environ 36 ms si vous appuyez fort, et monte à environ 160 ms si vous jouez doucement.",
-      "p4": "L’animation est ralentie, et pas de façon uniforme : les instants les plus rapides sont les plus étirés, pour que vous puissiez les voir. Sur la jauge, le temps affiché reste toujours le temps réel. À la vitesse de lecture par défaut, la note résonne à son vrai rythme. Activez le son pour l’entendre. Ce n’est pas un enregistrement : votre navigateur crée la note de toutes pièces, à partir des chiffres de ce modèle."
+      "p4": "L’animation est ralentie, et pas de façon uniforme : les instants les plus rapides sont les plus étirés, pour que vous puissiez les voir. Sur la jauge, le temps affiché reste toujours le temps réel. À la vitesse de lecture par défaut, la note résonne aussi longtemps que sur un vrai piano. Activez le son pour l’entendre. Ce n’est pas un enregistrement : votre navigateur crée la note de toutes pièces, à partir des chiffres de ce modèle."
     },
     "lever": {
       "title": "Un levier qui lance le marteau",
-      "p1": "La <strong>touche</strong> fonctionne comme une balançoire à bascule. Elle pivote sur une pointe : quand vous enfoncez l’avant, l’arrière se soulève. Là, une vis appelée <strong>pilote</strong> soulève le <strong>chevalet</strong>, un levier articulé. Le chevalet porte le <strong>bâton d’échappement</strong>, une pièce en forme de L. Ce bâton pousse vers le haut le <strong>rouleau</strong>, un petit cylindre gainé de cuir placé sous le manche du marteau.",
-      "p2": "Le <strong>marteau</strong> se relève en pivotant sur un axe, et sa tête de feutre se trouve au bout du manche, à environ 130 mm de cet axe. Ensemble, les leviers amplifient le mouvement de la touche. Dans le même temps, la tête du marteau parcourt environ 5 à 6 fois plus de chemin que l’avant de la touche. Elle va donc aussi à peu près 5 à 6 fois plus vite. Activez « Suivre le marteau » pour faire le voyage avec lui.",
+      "p1": "La <strong>touche</strong> fonctionne comme une balançoire à bascule. Elle pivote sur une pointe : quand vous enfoncez l’avant, l’arrière se soulève. Là, une vis appelée <strong>pilote</strong> soulève le <strong>chevalet de mécanique</strong>, un levier articulé. Ce levier porte le <strong>bâton d’échappement</strong>, une pièce en forme de L. Ce bâton pousse vers le haut le <strong>rouleau</strong>, un petit cylindre gainé de cuir placé sous le manche du marteau.",
+      "p2": "Le <strong>marteau</strong> se relève en pivotant sur un axe, et sa tête de feutre se trouve au bout du manche, à environ 130 mm de cet axe. Ensemble, les leviers amplifient le mouvement de la touche. Pendant que l’avant de la touche descend, la tête du marteau parcourt environ 5 à 6 fois plus de chemin : elle va donc aussi à peu près 5 à 6 fois plus vite. Activez « Suivre le marteau » pour faire le voyage avec lui.",
       "p3": "Avec un toucher moyen, la touche atteint 0,3 à 0,5 mètre par seconde (m/s), et le marteau environ 1,5 à 2,5 m/s. Une note douce envoie le marteau à environ 1 m/s, une note forte à environ 5 m/s, soit 18 km/h. Ce marteau-là frappe aussi fort qu’un objet lâché à hauteur d’épaule par une personne de grande taille. Choisissez un toucher et regardez les valeurs changer.",
       "p4": "Il suffit d’environ 50 g posés sur l’avant d’une touche pour la mettre en mouvement. Jouer demande davantage : environ 8 newtons (N) pour une note douce, et jusqu’à 50 N pour une note forte, soit le poids d’environ 5 kg. Dans ce modèle, chaque levier est parfaitement rigide, et la touche termine toujours sa course juste après la frappe. Une vraie mécanique fléchit un peu sous un coup violent, et l’ordre change avec la nuance. Pour une note douce, le marteau atteint la corde en premier. Pour une note forte, la touche termine sa course environ 3 ms avant que le marteau ne frappe."
     },
     "letGo": {
       "title": "Lâcher prise",
-      "p1": "Juste avant que le marteau n’atteigne la corde, le <strong>bâton d’échappement</strong> doit s’écarter de son chemin. Son talon, la petite branche du L, vient heurter le <strong>bouton d’échappement</strong>, une petite butée fixée au-dessus. Le bâton bascule et sa tête s’échappe de sous le <strong>rouleau</strong> : c’est l’échappement. Il se produit 1 à 3 mm sous la corde, à peu près l’épaisseur d’une ou deux pièces en euros. Le gros plan sur l’échappement montre la scène agrandie quatre fois.",
+      "p1": "Juste avant que le marteau n’atteigne la corde, le <strong>bâton d’échappement</strong> doit s’écarter de son chemin. Son talon, la petite branche du L, vient heurter le <strong>bouton d’échappement</strong>, une butée fixée au-dessus. Le bâton bascule et sa tête s’échappe de dessous le <strong>rouleau</strong> : c’est l’échappement. Il se produit 1 à 3 mm sous la corde, à peu près l’épaisseur d’une ou deux pièces en euros. Le gros plan sur l’échappement montre la scène agrandie quatre fois.",
       "p2": "À partir de là, le <strong>marteau</strong> vole librement. Dans ce modèle, l’écart est de 1,5 mm : le vol dure donc environ 1,5 ms pour une note douce, et 0,3 ms pour une note forte. Au do central, le marteau reste ensuite environ 2 ms sur la corde, le temps d’une photo prise au 1/500 de seconde, puis il rebondit. Une fois l’échappement passé, rien de ce que vous faites ne peut changer le coup. Votre toucher décide seulement de la vitesse du marteau au moment où le bâton le lâche. Et c’est cette vitesse qui fixe la puissance et la brillance de la note.",
-      "p3": "Après la frappe, le marteau retombe, et il faut bien que quelque chose le rattrape. C’est le rôle de l’<strong>attrape</strong>, un petit bloc garni de feutre placé à l’arrière de la touche. Elle le retient 13 à 16 mm sous la corde. Un coup violent fait rebondir le marteau plus vite : il est donc rattrapé plus bas. Tant que vous gardez la touche enfoncée, le marteau attend là, à l’écart de la corde, et la note résonne librement.",
+      "p3": "Après la frappe, le marteau retombe, et il faut bien que quelque chose le rattrape. C’est le rôle de l’<strong>attrape-marteau</strong>, un petit bloc garni de feutre placé à l’arrière de la touche. Il le retient 13 à 16 mm sous la corde. Un coup violent fait rebondir le marteau plus vite : il est donc rattrapé plus bas. Tant que vous gardez la touche enfoncée, le marteau attend là, à l’écart de la corde, et la note résonne librement.",
       "p4": "C’est le <strong>levier de répétition</strong> qui rend un piano à queue si rapide. Poussé par un ressort, il se relève sous le rouleau et garde le marteau en partie levé. Le bâton peut ainsi se remettre en place sous le rouleau plus tôt. La touche n’a besoin de remonter que d’environ un tiers de sa course pour frapper de nouveau. D’après les fabricants, on peut répéter une note jusqu’à environ 15 fois par seconde sur un piano à queue, contre environ 7 sur un piano droit. Bartolomeo Cristofori a doté son piano du premier échappement vers 1700, et Érard a breveté ce double échappement en 1821."
     },
     "dampers": {
       "title": "Étouffoirs et pédales",
       "p1": "La plupart des notes ont un <strong>étouffoir</strong>, un tampon de feutre posé sur les cordes pour les garder muettes. De petits poids en plomb le maintiennent en place. Quand vous enfoncez une touche, son extrémité arrière soulève l’étouffoir avant l’arrivée du marteau. Lors d’un essai sur une note forte, l’étouffoir a quitté les cordes environ 15 ms avant la frappe.",
-      "p2": "Dans ce modèle, l’étouffoir quitte les cordes dès que la touche a parcouru son premier millimètre. Ce point est une hypothèse, car aucune source ne le donne pour un piano à queue. Avec un toucher plus lent, le reste de la course prend plus de temps : l’étouffoir reste donc levé encore plus longtemps avant la frappe, comme l’indique l’affichage. Quand vous relâchez la touche, l’étouffoir retombe et la note s’arrête. Les 18 à 21 notes les plus aiguës n’ont pas d’étouffoir du tout. Choisissez « Do6 aigu » : la note sonne encore une fois la touche relâchée.",
-      "p3": "La pédale forte, à droite, soulève tous les étouffoirs d’un coup. La note continue de sonner quand vous lâchez la touche, et d’autres cordes se mettent à vibrer avec elle. Sur un piano de concert Yamaha, on a mesuré que le do central mettait 9,5 s à s’éteindre touche tenue, et 15,3 s avec la pédale. Activez « Vibration des cordes » pour voir frémir les autres cordes.",
-      "p4": "La pédale de gauche s’appelle una corda, « une corde » en italien. Elle décale légèrement le clavier et toute la mécanique vers la droite. Chaque marteau ne frappe alors plus que deux de ses trois cordes, ou une sur deux dans les basses. La corde épargnée vibre tout de même un peu, par l’intermédiaire du chevalet de la table d’harmonie, et la note sort plus douce et plus sourde. L’ampleur de ce décalage n’est pas publiée : le modèle le montre donc sans chiffre. Sur un piano droit, la pédale douce fonctionne autrement : elle se contente de rapprocher les marteaux des cordes."
+      "p2": "Dans ce modèle, l’étouffoir quitte les cordes dès que la touche a parcouru son premier millimètre. Ce point est une hypothèse, car aucune source ne le donne pour un piano à queue. Avec un toucher plus lent, le reste de la course prend plus de temps : l’étouffoir reste donc levé encore plus longtemps avant la frappe, comme l’indique l’affichage. Quand vous relâchez la touche, l’étouffoir retombe et la note s’arrête. Les 18 à 21 notes les plus aiguës n’ont pas d’étouffoir du tout. Choisissez « Do6 aigu » : la note résonne encore après que vous avez relâché la touche.",
+      "p3": "La pédale forte, à droite, soulève tous les étouffoirs d’un coup. La note continue de sonner quand vous relâchez la touche, et d’autres cordes se mettent à vibrer avec elle. Sur un piano de concert Yamaha, on a mesuré que le do central mettait 9,5 s à s’éteindre touche tenue, et 15,3 s avec la pédale. Activez « Vibration des cordes » pour voir frémir les autres cordes.",
+      "p4": "La pédale de gauche s’appelle una corda, « une corde » en italien. Elle décale légèrement le clavier et toute la mécanique vers la droite. Chaque marteau ne frappe alors plus que deux de ses trois cordes, ou une seule de ses deux cordes dans les basses. La corde épargnée vibre tout de même un peu, par l’intermédiaire du chevalet de la table d’harmonie, et la note sort plus douce et plus sourde. L’ampleur de ce décalage n’est pas publiée : le modèle le montre donc sans chiffre. Sur un piano droit, la pédale douce fonctionne autrement : elle se contente de rapprocher les marteaux des cordes."
     },
     "room": {
       "title": "De la corde à la salle",
       "p1": "Une corde est trop fine pour déplacer beaucoup d’air à elle seule. Elle appuie plutôt sur le <strong>chevalet</strong>, une longue baguette de bois collée sur la <strong>table d’harmonie</strong>. La table est une large feuille d’épicéa, épaisse de 6 à 9 mm, qui fonctionne comme un haut-parleur. La vibration traverse le chevalet jusqu’à la table, et c’est la table qui met l’air en mouvement. Ici, « Vibration des cordes » est activé : vous voyez bouger la corde et la table, avec une ampleur très exagérée.",
-      "p2": "Un piano à queue de concert compte environ 230 cordes. Chacune tire avec une force de 700 à 900 newtons, environ le poids d’un adulte. Au total, cela fait environ 20 tonnes-force, à peu près le poids de dix voitures. Un cadre en bois ne tiendrait pas : c’est donc un <strong>cadre</strong> en fonte, de 160 à 180 kg sur un piano de concert, qui supporte cette charge avec la caisse. Les <strong>cordes filées des basses</strong> sont en acier entouré de cuivre, et elles croisent les autres en passant par-dessus. Le cuivre les alourdit : la corde sonne grave sans devoir être très longue.",
-      "p3": "Une corde vibre sur sa fréquence principale et, en même temps, sur toute une série de fréquences plus élevées, qu’on appelle les partiels. Comme le fil d’acier est raide, ses partiels sortent un peu trop haut, au-dessus des multiples exacts de la fréquence principale. L’indicateur exprime cet écart en cents, c’est-à-dire en centièmes de l’intervalle entre deux touches voisines. Pour suivre ce décalage, les accordeurs élargissent légèrement leurs octaves. Dans l’extrême grave, la table d’harmonie n’émet presque rien en dessous de 100 Hz environ : ces notes, vous les entendez surtout par leurs partiels.",
-      "p4": "Une note frappée s’éteint en deux temps : d’abord une chute rapide, le son immédiat, puis un son rémanent, plus lent, qui peut durer de longues secondes. Un marteau plus rapide rend la note plus forte et plus brillante : en s’écrasant, le feutre durcit et fait ressortir davantage de partiels aigus. L’indicateur de temps d’extinction donne la durée qu’il faut à une note pour baisser de 60 décibels (dB). Ces durées ont été mesurées sur un piano de concert Yamaha, pas sur ce Steinway, et les valeurs du do6 sont des estimations propres à ce modèle. Sur la jauge, le niveau sonore indique combien de dB on se trouve en dessous d’une frappe forte dans ce modèle. Ce n’est pas le volume réel dans la salle."
+      "p2": "Un piano à queue de concert compte environ 230 cordes. Chacune tire avec une force de 700 à 900 newtons, environ le poids d’un adulte. Au total, cela fait environ 20 tonnes-force, à peu près le poids de dix voitures. Une structure en bois ne tiendrait pas : c’est donc un <strong>cadre</strong> en fonte, de 160 à 180 kg sur un piano de concert, qui supporte cette charge avec la caisse. Les <strong>cordes filées des basses</strong> sont en acier entouré de cuivre, et elles croisent les autres en passant par-dessus. Le cuivre les alourdit : la corde sonne grave sans devoir être très longue.",
+      "p3": "Une corde vibre à sa fréquence principale et, en même temps, à toute une série de fréquences plus élevées, qu’on appelle les partiels. Comme le fil d’acier est raide, ses partiels sortent un peu trop haut, au-dessus des multiples exacts de la fréquence principale. L’indicateur mesure ce décalage en cents, c’est-à-dire en centièmes de l’intervalle entre deux touches voisines. Pour en tenir compte, les accordeurs élargissent légèrement leurs octaves. Dans l’extrême grave, la table d’harmonie peine à émettre les fréquences les plus basses, en dessous de 100 Hz environ : ces notes, vous les entendez surtout par leurs partiels.",
+      "p4": "Une note frappée s’éteint en deux temps : d’abord une chute rapide, le son immédiat, puis un son rémanent, plus lent, qui peut durer de longues secondes. Un marteau plus rapide rend la note plus forte et plus brillante : en s’écrasant, le feutre durcit et fait ressortir davantage de partiels aigus. L’indicateur de temps d’extinction donne la durée qu’il faut à une note pour baisser de 60 décibels (dB). Ces durées ont été mesurées sur un piano de concert Yamaha, pas sur ce Steinway, et les valeurs du do6 sont des estimations propres à ce modèle. La pédale forte n’allonge pas toujours le son : sur la note grave mesurée, il s’éteignait même un peu plus vite avec elle. Sur la jauge, le niveau sonore est exprimé en dB par rapport à une frappe forte de ce modèle : ce n’est pas le volume réel entendu dans la salle."
     },
     "compare": {
       "title": "Piano droit et clavecin",
       "p1": "Cette vue aligne trois mécaniques côte à côte. Sur le piano à queue, le <strong>marteau</strong> monte par en dessous et retombe sous son propre poids. La <strong>mécanique de piano droit</strong> reprend la même idée, tournée d’un quart de tour. Ses cordes sont verticales : son marteau avance donc à l’horizontale vers elles. Des ressorts et une fine bande, la lanière, le ramènent en arrière.",
-      "p2": "De plus, la plupart des pianos droits n’ont pas de levier de répétition. Le bâton d’échappement ne se remet en place que lorsque la touche est remontée presque jusqu’en haut. D’après les fabricants, on peut répéter une note environ 7 fois par seconde sur un piano droit, contre jusqu’à environ 15 sur un piano à queue. Dans ce modèle, le piano droit reprend les distances de touche et de marteau du piano à queue, pour que la comparaison soit équitable. Activez « Mécanique droite fantôme » dans n’importe quel chapitre pour la voir à côté de celle du piano à queue.",
+      "p2": "De plus, la plupart des pianos droits n’ont pas de levier de répétition. Le bâton d’échappement ne se remet en place que lorsque la touche est remontée presque jusqu’en haut. D’après les fabricants, on peut répéter une note environ 7 fois par seconde sur un piano droit, contre jusqu’à environ 15 sur un piano à queue. Dans ce modèle, le piano droit reprend les distances de touche et de marteau du piano à queue, pour que la comparaison soit équitable. Activez « Fantôme du piano droit » dans n’importe quel chapitre pour voir sa mécanique à côté de celle du piano à queue.",
       "p3": "Le clavecin produit sa note autrement. Sa touche soulève une fine baguette de bois, le <strong>sautereau</strong>, et un petit plectre fixé dessus pince la corde. Que vous appuyiez vite ou lentement, le pincement reste le même : votre toucher ne peut pas rendre une note plus forte ou plus douce. À l’époque de Cristofori, le clavecin avait un son plus puissant et plus brillant que son piano, mais il ne pouvait pas répondre au toucher du musicien. Ce modèle dessine son sautereau sous une forme simplifiée, sans copier un instrument réel.",
       "p4": "En 1711, l’écrivain Scipione Maffei a décrit l’instrument de Cristofori comme un gravicembalo col piano, e forte : un clavecin qui joue doux et fort. Doux et fort, piano et forte en italien, c’était justement ce que les touches d’un clavecin ne pouvaient pas offrir. Le clavicorde, lui, en était capable, mais il sonnait si faiblement qu’on l’entendait à peine à quelques pas. Choisissez un instrument ci-dessous pour comparer les trois."
     }
