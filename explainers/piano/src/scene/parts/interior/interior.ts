@@ -1,19 +1,19 @@
 import type { Object3D } from 'three';
 import type { Point, RegisterId } from '../../../ids';
 import { PLATE, PLAYED_KEY, SOUNDBOARD, stringPath } from '../../../model';
+import { LOD_DISTANCE } from '../../constants';
 import { label, namedGroup, sceneAnchor } from '../context';
 import type { PartContext, Section } from '../context';
-import { BOARD_MODE } from './boardPlan';
 import { createBridges } from './bridges';
 import { TUNING_PIN } from './constants';
 import { midSpeaking, PIANO_STRINGS, unisonOf } from './layout';
 import type { PianoString } from './layout';
-import { breathPatch, shimmerPatch, wavePatch } from './patches';
 import { createPlate } from './plate';
 import { createPlayedStrings } from './played';
 import { createTuningPins, pinblockMesh } from './pins';
 import { createSoundboard } from './soundboard';
 import { createStringSets } from './strings';
+import { createWave } from './wave';
 
 const LABEL_KEYS = { stringSet: 56, bassStrings: 8 } as const;
 const PLATE_LABEL: Point = [0.45, PLATE.topY, -0.108];
@@ -45,17 +45,15 @@ function place(anchor: Object3D, [x, y, z]: Point): void {
 
 export function createInterior(context: PartContext): Section {
   const root = namedGroup('interior');
-  const breath = breathPatch({ uBreath: { value: 0 }, uBoardMode: { value: BOARD_MODE } });
-  const shimmer = shimmerPatch({ uShimmer: { value: 0 }, uShimmerPhase: { value: 0 } });
-  const wave = wavePatch({ uWaveAmp: { value: [0, 0, 0] }, uWavePhase: { value: 0 } });
-  const soundboard = createSoundboard(context, breath);
+  const wave = createWave();
+  const soundboard = createSoundboard(context, wave.breath);
   const structure = namedGroup('structure', root);
   structure.add(soundboard.rail, pinblockMesh(context));
-  const bridges = createBridges(context, breath);
+  const bridges = createBridges(context, wave.breath);
   const plate = createPlate(context);
   const pins = createTuningPins(context);
-  const sets = createStringSets(context, shimmer);
-  const played = createPlayedStrings(context, wave);
+  const sets = createStringSets(context, wave.shimmer);
+  const played = createPlayedStrings(context, wave.wave);
   root.add(soundboard.group, bridges, plate, pins, sets.bass, sets.steel, played.group);
 
   const pinTop = PIANO_STRINGS[TUNING_PIN_LABEL_ORDER].pin;
@@ -85,6 +83,12 @@ export function createInterior(context: PartContext): Section {
     root,
     setState(state) {
       if (state.register !== register) choose(state.register);
+      wave.setState(state);
+    },
+    animate(frame, state) {
+      const thin = frame.cameraDistance > LOD_DISTANCE.thinStrings;
+      sets.bands.forEach((band) => band.setThin(thin));
+      return wave.animate(frame, state);
     },
   };
 }
