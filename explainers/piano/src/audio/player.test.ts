@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { noteSpec } from '../model';
+import { THUMP, noteSpec } from '../model';
 import type { NoteSpec } from '../model';
 import {
   DAMPER_TIME_CONSTANT_S,
@@ -11,7 +11,6 @@ import {
   RESTRIKE_TIME_CONSTANT_S,
   SOUND_OFF_FADE_S,
   STOP_DELAY_S,
-  THUMP_DECAY_S,
   VOICE_CAP,
   createPianoPlayer,
   decayPoints,
@@ -193,6 +192,11 @@ function wideSpec(): NoteSpec {
     amplitude: 1 / 20,
   }));
   return { ...spec, partials };
+}
+
+function thumpGainCalls(context: FakeContext): ParamCall[][] {
+  const filters = context.bufferSources.map((source) => source.targets[0] as FakeNode);
+  return filters.map((filter) => (filter.targets[0] as FakeGain).gain.calls);
 }
 
 const C4 = noteSpec('medium', 'none', 'middle');
@@ -415,16 +419,26 @@ describe('piano player voice', () => {
   it('adds a hammer thump that is louder for a hard touch and gone within 20 ms', () => {
     const { context, player } = setup();
     player.on();
-    player.play(noteSpec('soft', 'none', 'middle'));
-    player.play(noteSpec('hard', 'none', 'middle'));
-    const thumps = context.bufferSources.map((source) => source.targets[0] as FakeNode);
-    expect(thumps).toHaveLength(2);
-    const gains = context.gains.filter((gain) =>
-      thumps.some((filter) => filter.targets.includes(gain)),
-    );
-    const [soft, hard] = gains.map((gain) => gain.gain.calls);
-    expect(hard[0].value).toBeGreaterThan(soft[0].value);
-    expect(hard[1]).toEqual({ method: 'exponential', value: FLOOR_GAIN, time: THUMP_DECAY_S });
+    const soft = noteSpec('soft', 'none', 'middle');
+    const hard = noteSpec('hard', 'none', 'middle');
+    player.play(soft);
+    player.play(hard);
+    const [softCalls, hardCalls] = thumpGainCalls(context);
+    expect(softCalls[0]).toEqual({ method: 'set', value: soft.thumpGain, time: 0 });
+    expect(hardCalls[0].value).toBe(hard.thumpGain);
+    expect(hardCalls[0].value).toBeGreaterThan(softCalls[0].value);
+    expect(hardCalls[1]).toEqual({ method: 'exponential', value: FLOOR_GAIN, time: THUMP.seconds });
+    const filter = context.bufferSources[0].targets[0] as FakeFilter;
+    expect(filter.frequency.value).toBe(THUMP.cutoffHz);
+  });
+
+  it('keeps the thump as loud with una corda, since only the touch changes it', () => {
+    const { context, player } = setup();
+    player.on();
+    player.play(noteSpec('medium', 'none', 'middle'));
+    player.play(noteSpec('medium', 'unaCorda', 'middle'));
+    const [full, unaCorda] = thumpGainCalls(context);
+    expect(unaCorda[0].value).toBe(full[0].value);
   });
 });
 

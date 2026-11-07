@@ -1,5 +1,5 @@
 import { lerp } from '@core/math';
-import { dbToGain, toMs } from '../model';
+import { THUMP, dbToGain, toMs } from '../model';
 import type { NoteSpec } from '../model';
 
 export const MASTER_GAIN = 0.25;
@@ -17,10 +17,6 @@ export const LIMITER_SETTINGS = {
   attackSeconds: 0.003,
   releaseSeconds: 0.25,
 } as const;
-export const THUMP_SECONDS = 0.02;
-export const THUMP_DECAY_S = 0.02;
-export const THUMP_CUTOFF_HZ = 700;
-export const THUMP_GAIN_SHARE = 0.3;
 export const PHASE_STEPS = 16;
 
 const VOICE_LEVEL = 1;
@@ -124,7 +120,7 @@ function phaseWave(context: AudioContext, phase: number): PeriodicWave {
 }
 
 function noiseBuffer(context: AudioContext): AudioBuffer {
-  const length = Math.ceil(context.sampleRate * THUMP_SECONDS);
+  const length = Math.ceil(context.sampleRate * THUMP.seconds);
   const buffer = context.createBuffer(MONO, length, context.sampleRate);
   const samples = buffer.getChannelData(0);
   for (let index = 0; index < length; index += 1) samples[index] = lerp(-1, 1, Math.random());
@@ -279,10 +275,10 @@ class WebAudioPianoPlayer implements PianoPlayer {
     source.buffer = noise;
     const filter = context.createBiquadFilter();
     filter.type = 'lowpass';
-    filter.frequency.value = THUMP_CUTOFF_HZ;
+    filter.frequency.value = THUMP.cutoffHz;
     const gain = context.createGain();
-    gain.gain.setValueAtTime(spec.peakGain * THUMP_GAIN_SHARE, now);
-    gain.gain.exponentialRampToValueAtTime(FLOOR_GAIN, now + THUMP_DECAY_S);
+    gain.gain.setValueAtTime(spec.thumpGain, now);
+    gain.gain.exponentialRampToValueAtTime(FLOOR_GAIN, now + THUMP.seconds);
     source.connect(filter).connect(gain).connect(voice.output);
     source.start(now);
     voice.sources.push(source);
