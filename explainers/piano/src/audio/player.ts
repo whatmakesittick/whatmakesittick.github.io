@@ -240,7 +240,7 @@ class WebAudioPianoPlayer implements PianoPlayer {
   private makeRoom(now: number): void {
     while (this.voices.length >= VOICE_CAP) {
       const oldest = this.voices.shift();
-      if (oldest) stopSources(oldest, now);
+      if (oldest) muteVoice(oldest, now);
     }
     this.voices.forEach((voice) => fadeVoice(voice, now, RESTRIKE_TIME_CONSTANT_S));
   }

@@ -329,9 +329,28 @@ describe('piano player voice', () => {
       player.play(wideSpec());
       context.currentTime += 0.01;
     }
+    context.currentTime += SOUND_OFF_FADE_S;
     expect(context.oscillators).toHaveLength(3 * MAX_OSCILLATORS_PER_VOICE);
     expect(context.liveOscillators()).toBe(VOICE_CAP * MAX_OSCILLATORS_PER_VOICE);
     expect(context.liveOscillators()).toBe(72);
+  });
+
+  it('fades the oldest voice to silence over 0.05 s when a third strike needs its room', () => {
+    const { context, player } = setup();
+    player.on();
+    player.play(C4);
+    context.currentTime = 0.1;
+    player.play(C4);
+    context.currentTime = 0.2;
+    player.play(C4);
+    const [oldest] = voiceOutputs(context);
+    expect(oldest.gain.calls.at(-1)).toEqual({
+      method: 'linear',
+      value: 0,
+      time: 0.2 + SOUND_OFF_FADE_S,
+    });
+    const first = context.oscillators.slice(0, C4.partials.length * C4.stringDetuneCents.length);
+    expect(first.every((oscillator) => oscillator.stopAt === 0.2 + SOUND_OFF_FADE_S)).toBe(true);
   });
 
   it('fades the ringing voice on a re-strike', () => {
