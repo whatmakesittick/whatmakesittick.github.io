@@ -8,6 +8,7 @@ import type { AssemblyState, PartId, PedalId, RegisterId, TouchId, ViewOptions }
 import {
   MOMENTS,
   PLAYED_KEY,
+  STRING_Y,
   actionPoseAt,
   harpsichordPoseAt,
   keyX,
@@ -16,7 +17,7 @@ import {
 } from '../model';
 import type { Assembly } from './assembly';
 import { createPianoAssembly } from './pianoAssembly';
-import { chaseTargetFor } from './pose';
+import { chaseTargetFor, hammerHeadTop } from './pose';
 
 const FRAME = 1 / 60;
 const SETTLE_SECONDS = 2;
@@ -157,6 +158,16 @@ describe('piano assembly', () => {
   it('rests when nothing moves', () => {
     settle(stateAt(0));
     expect(assembly.update(FRAME, 1)).toBe(false);
+  });
+
+  it('lifts the hammer anchor to the string at the strike', () => {
+    const state = stateAt(MOMENTS.strike);
+    settle(state);
+    const head = worldOf(assembly.anchor('hammer'));
+    expect(head.y).toBeCloseTo(STRING_Y, DIGITS);
+    hammerHeadTop(PLAYED_KEY.middle, state.action).forEach((value, axis) =>
+      expect(head.getComponent(axis)).toBeCloseTo(value, DIGITS),
+    );
   });
 
   it('chases the hammer head', () => {
