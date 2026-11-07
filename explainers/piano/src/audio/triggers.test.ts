@@ -75,6 +75,19 @@ describe('strike crossing while paused', () => {
     expect(pausedMove(MOMENTS.strike, 420)).toBe(false);
   });
 
+  it('fires on a jump of half a cycle or more across the strike in either direction', () => {
+    expect(pausedMove(MOMENTS.letOff, MOMENTS.repeatReady)).toBe(true);
+    expect(pausedMove(360, 910)).toBe(true);
+    expect(pausedMove(910, 360)).toBe(true);
+    expect(pausedMove(100, 700)).toBe(true);
+    expect(pausedMove(700, 100)).toBe(true);
+  });
+
+  it('stays quiet on a jump that does not reach the strike', () => {
+    expect(pausedMove(450, 950)).toBe(false);
+    expect(pausedMove(380, 10)).toBe(false);
+  });
+
   it('stays quiet on a step across the loop wrap', () => {
     expect(pausedMove(990, 40)).toBe(false);
     expect(pausedMove(20, 970)).toBe(false);
