@@ -5,6 +5,7 @@ import { LOD_DISTANCE } from '../../constants';
 import { label, namedGroup, sceneAnchor } from '../context';
 import type { PartContext, Section } from '../context';
 import { createBridges } from './bridges';
+import { createCaps } from './caps';
 import { TUNING_PIN } from './constants';
 import { midSpeaking, PIANO_STRINGS, unisonOf } from './layout';
 import type { PianoString } from './layout';
@@ -54,7 +55,8 @@ export function createInterior(context: PartContext): Section {
   const pins = createTuningPins(context);
   const sets = createStringSets(context, wave.shimmer);
   const played = createPlayedStrings(context, wave.wave);
-  root.add(soundboard.group, bridges, plate, pins, sets.bass, sets.steel, played.group);
+  const caps = createCaps(context, wave.breath);
+  root.add(soundboard.group, bridges, plate, pins, sets.bass, sets.steel, played.group, caps.root);
 
   const pinTop = PIANO_STRINGS[TUNING_PIN_LABEL_ORDER].pin;
   label(context, 'soundboard', soundboard.group, soundboardSpot());
@@ -83,12 +85,23 @@ export function createInterior(context: PartContext): Section {
     root,
     setState(state) {
       if (state.register !== register) choose(state.register);
+      caps.show(state.register, state.view.cutaway, context.cut.x.value);
       wave.setState(state);
     },
     animate(frame, state) {
+      caps.show(state.register, state.view.cutaway, context.cut.x.value);
       const thin = frame.cameraDistance > LOD_DISTANCE.thinStrings;
       sets.bands.forEach((band) => band.setThin(thin));
       return wave.animate(frame, state);
+    },
+    warmUp(compile) {
+      caps.prepareAll();
+      const hidden = [caps.root, ...caps.root.children, ...Object.values(played.meshes)].filter(
+        (object) => !object.visible,
+      );
+      hidden.forEach((object) => (object.visible = true));
+      compile(root);
+      hidden.forEach((object) => (object.visible = false));
     },
   };
 }
