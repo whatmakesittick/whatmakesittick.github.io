@@ -13,6 +13,7 @@ import {
   levelDbAfter,
   noteDamped,
   noteSpec,
+  thumpGain,
   partialAmplitudes,
   partialCount,
   partialHz,
@@ -38,6 +39,16 @@ describe('notes', () => {
     expect(NOTES.bass).toMatchObject({ strings: 2, wound: true, damper: true });
     expect(NOTES.middle).toMatchObject({ strings: 3, wound: false, damper: true });
     expect(NOTES.treble).toMatchObject({ strings: 3, wound: false, damper: false });
+  });
+});
+
+describe('thump', () => {
+  it('follows touch only, never the pedal', () => {
+    expect(thumpGain('hard')).toBeCloseTo(0.3, DIGITS);
+    expect(thumpGain('soft')).toBeLessThan(thumpGain('medium'));
+    expect(noteSpec('medium', 'unaCorda', 'middle').thumpGain).toBe(
+      noteSpec('medium', 'none', 'middle').thumpGain,
+    );
   });
 });
 

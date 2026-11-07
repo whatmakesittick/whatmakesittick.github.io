@@ -46,6 +46,7 @@ export interface NoteSpec extends Decay {
   peakGain: number;
   attackSeconds: number;
   partialDampingStep: number;
+  thumpGain: number;
   damped: boolean;
 }
 
@@ -79,6 +80,8 @@ export const STRETCH_PARTIAL: Readonly<Record<RegisterId, number>> = {
   treble: 4,
 };
 export const MIN_PARTIAL_AMPLITUDE = 1e-4;
+export const DAMPER_TIME_CONSTANT_S = 0.03;
+export const THUMP = { seconds: 0.02, cutoffHz: 700, gainShare: 0.3 } as const;
 
 const CENTS_PER_OCTAVE = 1200;
 const DB_PER_AMPLITUDE_DECADE = 20;
@@ -196,6 +199,10 @@ export function partialAmplitudes(
   return raw.map((value) => value / total);
 }
 
+export function thumpGain(touch: TouchId): number {
+  return THUMP.gainShare * (HAMMER_SPEED_MS[touch] / HAMMER_SPEED_MS.hard);
+}
+
 export function noteSpec(touch: TouchId, pedal: PedalId, register: RegisterId): NoteSpec {
   const partials = partialAmplitudes(touch, pedal, register)
     .map((amplitude, index) => ({ n: index + 1, hz: partialHz(index + 1, register), amplitude }))
@@ -207,6 +214,7 @@ export function noteSpec(touch: TouchId, pedal: PedalId, register: RegisterId): 
     peakGain: dbToGain(peakLevelDb(touch, pedal, register)),
     attackSeconds: Math.max(MIN_ATTACK_SECONDS, contactMs(touch, register) / MS_PER_SECOND),
     partialDampingStep: PARTIAL_DAMPING_STEP,
+    thumpGain: thumpGain(touch),
     damped: noteDamped(pedal, register),
   };
 }
