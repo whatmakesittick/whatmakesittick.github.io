@@ -1,8 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { THUMP, noteSpec } from '../model';
+import { DAMPER_TIME_CONSTANT_S, THUMP, noteSpec } from '../model';
 import type { NoteSpec } from '../model';
 import {
-  DAMPER_TIME_CONSTANT_S,
   FLOOR_GAIN,
   LIMITER_SETTINGS,
   MASTER_GAIN,

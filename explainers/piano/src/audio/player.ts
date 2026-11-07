@@ -1,9 +1,8 @@
 import { lerp } from '@core/math';
-import { THUMP, dbToGain, toMs } from '../model';
+import { DAMPER_TIME_CONSTANT_S, THUMP, dbToGain, toMs } from '../model';
 import type { NoteSpec } from '../model';
 
 export const MASTER_GAIN = 0.25;
-export const DAMPER_TIME_CONSTANT_S = 0.03;
 export const RESTRIKE_TIME_CONSTANT_S = 0.03;
 export const STOP_DELAY_S = 0.3;
 export const SOUND_OFF_FADE_S = 0.05;
