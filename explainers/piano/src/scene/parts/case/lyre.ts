@@ -31,8 +31,8 @@ const PRESS_ANGLE = 0.12;
 
 interface Pedal {
   readonly object: Object3D;
-  readonly ease: Ease;
   readonly pressedBy?: PedalId;
+  ease?: Ease;
 }
 
 export interface Lyre {
@@ -110,15 +110,20 @@ export function buildLyre(context: PartContext): Lyre {
     const object = partMesh(context, geometry, 'pedals', FINISHES.brass);
     object.position.set((index - 1) * LYRE.pedalSpacing, LYRE.pedalY, LYRE.z);
     root.add(object);
-    return { object, ease: new Ease(0), pressedBy };
+    return { object, pressedBy };
   });
   return {
     root,
     setState: ({ pedal }) =>
-      pedals.forEach(({ ease, pressedBy }) => ease.aim(pressedBy && pedal === pressedBy ? 1 : 0)),
+      pedals.forEach((entry) => {
+        const target = entry.pressedBy === pedal ? 1 : 0;
+        if (entry.ease) entry.ease.aim(target);
+        else entry.ease = new Ease(target);
+      }),
     animate: (delta) =>
       pedals
         .map(({ object, ease }) => {
+          if (!ease) return false;
           const running = ease.running;
           ease.step(delta);
           object.rotation.x = ease.value * PRESS_ANGLE;
