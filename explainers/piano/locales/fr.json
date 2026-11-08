@@ -17,7 +17,7 @@
     "speed": "Vitesse de lecture",
     "value": "Étape {{step}} sur {{total}}",
     "during": "Étape {{step}} sur {{total}} : {{detail}}",
-    "speedValue": "{{seconds}} s par frappe",
+    "speedValue": "{{seconds}} s par note",
     "speedDescribe": "Une frappe toutes les {{seconds}} secondes",
     "speedDescribeReal": "Une frappe toutes les {{seconds}} secondes, et la note résonne aussi longtemps qu’en vrai",
     "phase": {

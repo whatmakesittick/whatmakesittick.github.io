@@ -17,7 +17,7 @@
     "speed": "Швидкість відтворення",
     "value": "Етап {{step}} з {{total}}",
     "during": "Етап {{step}} з {{total}}: {{detail}}",
-    "speedValue": "{{seconds}} с на натискання",
+    "speedValue": "{{seconds}} с на ноту",
     "speedDescribe": "Одне натискання кожні {{seconds}} с",
     "speedDescribeReal": "Одне натискання кожні {{seconds}} с, а нота звучить стільки, скільки й насправді",
     "phase": {

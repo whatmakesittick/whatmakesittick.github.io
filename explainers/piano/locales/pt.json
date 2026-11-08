@@ -17,7 +17,7 @@
     "speed": "Velocidade de reprodução",
     "value": "Etapa {{step}} de {{total}}",
     "during": "Etapa {{step}} de {{total}}: {{detail}}",
-    "speedValue": "{{seconds}} s por toque",
+    "speedValue": "{{seconds}} s por nota",
     "speedDescribe": "Um toque na tecla a cada {{seconds}} segundos",
     "speedDescribeReal": "Um toque na tecla a cada {{seconds}} segundos, com a nota soando em tempo real",
     "phase": {

@@ -17,7 +17,7 @@
     "speed": "Reproducción",
     "value": "Paso {{step}} de {{total}}",
     "during": "Paso {{step}} de {{total}}, {{detail}}",
-    "speedValue": "{{seconds}} s por pulsación",
+    "speedValue": "{{seconds}} s por nota",
     "speedDescribe": "Una pulsación cada {{seconds}} segundos",
     "speedDescribeReal": "Una pulsación cada {{seconds}} segundos, y la nota dura lo mismo que en un piano real",
     "phase": {

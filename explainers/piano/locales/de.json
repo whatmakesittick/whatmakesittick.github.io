@@ -17,7 +17,7 @@
     "speed": "Wiedergabetempo",
     "value": "Schritt {{step}} von {{total}}",
     "during": "Schritt {{step}} von {{total}}, {{detail}}",
-    "speedValue": "{{seconds}} s pro Anschlag",
+    "speedValue": "{{seconds}} s pro Ton",
     "speedDescribe": "Alle {{seconds}} Sekunden ein Tastenanschlag",
     "speedDescribeReal": "Alle {{seconds}} Sekunden ein Tastenanschlag, der Ton klingt in Echtzeit aus",
     "phase": {
