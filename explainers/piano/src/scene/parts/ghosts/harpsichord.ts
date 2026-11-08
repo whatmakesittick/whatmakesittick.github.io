@@ -28,12 +28,12 @@ import type { Span } from './shapes';
 const GROUP = 'harpsichord';
 const HALF = { key: KEY.whiteWidth / 2, rail: 0.03, plectrum: 0.0015 } as const;
 const ROUND = { soft: 0.002, fine: 0.001 } as const;
-const REGISTER = { y: [0.772, 0.784], slot: JACK.halfThickness + 0.001 } as const;
+const REGISTER = { y: [0.758, 0.768], slot: JACK.halfThickness + 0.001 } as const;
 const RAIL_GAP = 0.002;
 const LABEL_BELOW_REGISTER = 0.02;
 const RAIL = { height: 0.018, felt: 0.005, reach: 0.03 } as const;
 const TONGUE = {
-  below: 0.028,
+  below: 0.024,
   above: 0.008,
   proud: 0.0015,
   inset: 0.0015,
@@ -41,11 +41,11 @@ const TONGUE = {
   axle: 0.02,
   axleRadius: 0.0012,
 } as const;
-const FELT = { height: 0.012, half: 0.0045, overhang: 0.003, grip: 0.002 } as const;
+const FELT = { pad: 0.004, height: 0.008, arm: 0.003, half: 0.0045, grip: 0.002 } as const;
 const BALANCE_RAIL = { half: 0.008, depth: 0.014 } as const;
 const NUT = { half: 0.003, depth: 0.014, side: 0.006 } as const;
 const STRING_SIDES = 8;
-const LABEL = { jack: 0.025, tongue: 0.02, damperRise: 0.002, stringShare: 0.75 } as const;
+const LABEL = { jack: 0.022, tongue: 0.018, stringShare: 0.75 } as const;
 
 export interface HarpsichordGhost {
   readonly root: Object3D;
@@ -108,10 +108,20 @@ function tongueParts(): BufferGeometry[] {
   ];
 }
 
+function damperArm(): BufferGeometry {
+  const top = DAMPER_BOTTOM + FELT.height;
+  return slab(
+    [JACK.z + JACK.halfThickness - FELT.grip, STRING.z + FELT.pad],
+    [top, top + FELT.arm],
+    FELT.half,
+    ROUND.fine,
+  );
+}
+
 function damperFelt(): BufferGeometry[] {
   return [
     slab(
-      [JACK.z + JACK.halfThickness - FELT.grip, STRING.z + FELT.overhang],
+      around(STRING.z, FELT.pad),
       [DAMPER_BOTTOM, DAMPER_BOTTOM + FELT.height],
       FELT.half,
       ROUND.fine,
@@ -183,7 +193,7 @@ export function buildHarpsichord(context: PartContext): HarpsichordGhost {
     'frame',
   );
   const jack = namedGroup('harpsichordJack', root);
-  painter.solid(jack, jackParts());
+  painter.solid(jack, [...jackParts(), damperArm()]);
   painter.solid(jack, tongueParts());
   painter.solid(jack, damperFelt(), 'felt');
   const plectrum = new Group();
@@ -199,8 +209,8 @@ export function buildHarpsichord(context: PartContext): HarpsichordGhost {
   details.add('plectrum', plectrum, [0, 0, (PLECTRUM.tipZ - PLECTRUM.rootZ) / 2]);
   details.add('harpsichordDamper', jack, [
     0,
-    DAMPER_BOTTOM + FELT.height + LABEL.damperRise,
-    STRING.z + FELT.overhang,
+    DAMPER_BOTTOM + FELT.height + FELT.arm,
+    STRING.z + FELT.pad,
   ]);
   details.add('harpsichordString', root, stringPoint(STRING.reach[1] * LABEL.stringShare));
 

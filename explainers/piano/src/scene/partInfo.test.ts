@@ -12,6 +12,11 @@ const LEFT_PARTS = [
   'bridge',
   'soundboard',
   'plate',
+  'uprightHammer',
+  'uprightDamper',
+  'uprightStrings',
+  'harpsichordJack',
+  'tongue',
 ] as const;
 
 describe('part labels', () => {

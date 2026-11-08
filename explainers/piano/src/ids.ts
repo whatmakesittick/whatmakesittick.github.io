@@ -46,6 +46,11 @@ export const LEFT_LABEL_PARTS: readonly PartId[] = [
   'bridge',
   'soundboard',
   'plate',
+  'uprightHammer',
+  'uprightDamper',
+  'uprightStrings',
+  'harpsichordJack',
+  'tongue',
 ];
 
 const RANKED_LABELS: readonly PartId[] = [
@@ -66,6 +71,16 @@ const RANKED_LABELS: readonly PartId[] = [
   'plate',
   'upright',
   'harpsichord',
+  'uprightHammer',
+  'uprightStrings',
+  'hammerButt',
+  'uprightDamper',
+  'bridleTape',
+  'harpsichordJack',
+  'plectrum',
+  'harpsichordString',
+  'tongue',
+  'harpsichordDamper',
 ];
 
 export const LABEL_PRIORITY: readonly PartId[] = [
