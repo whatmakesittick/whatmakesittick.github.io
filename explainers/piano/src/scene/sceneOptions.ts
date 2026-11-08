@@ -1,6 +1,7 @@
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import type { SceneOptions } from '@core/scene/shell';
 import { THEME } from '../theme';
+import { keepsCutHit } from './parts/cut';
 
 const FOG = { near: 7, far: 15 } as const;
 const CAMERA = {
@@ -23,4 +24,5 @@ export const SCENE_OPTIONS: SceneOptions = {
     distance: { min: CAMERA.minDistance, max: CAMERA.maxDistance },
   },
   highlight: { dim: HIGHLIGHT_DIM, undimmed: [UNDIMMED_GROUP] },
+  occlusionHitFilter: keepsCutHit,
 };

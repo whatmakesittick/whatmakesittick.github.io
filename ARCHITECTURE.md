@@ -331,7 +331,9 @@ that fades), through points, lines and sprites, through the stage, through a mes
 that opts out of frustum culling because its bounds are not kept up to date, such
 as a thread, and through the labelled part itself. A mesh belongs to the part whose
 group its material has in the material library, the same grouping the highlighter
-dims by, so the explainers mark nothing extra. `OCCLUSION_RULE` in `occlusion.ts`
+dims by, so the explainers mark nothing extra. A scene whose shader discards part
+of a mesh, such as a section cut, passes `occlusionHitFilter` in its scene options:
+the ray then drops the hits the filter rejects and looks for the next one behind. `OCCLUSION_RULE` in `occlusion.ts`
 keeps a label steady: a blocker must sit 3 % of the anchor's distance in front of
 it to hide the label and 1.5 % to keep it hidden, and the new verdict must hold for
 0.6 s to hide the label and 0.15 s to show it again, so a part that swings past or

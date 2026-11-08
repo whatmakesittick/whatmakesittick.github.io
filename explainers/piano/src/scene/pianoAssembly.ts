@@ -8,7 +8,7 @@ import type { AnchorId, AssemblyState, ChaseTarget, PartId, RegionId } from '../
 import { PLAYED_KEY, cutX, mm, restAnchorPoint } from '../model';
 import type { Assembly, AssemblyResources } from './assembly';
 import type { Frame, PartContext, Section, SectionFactory } from './parts/context';
-import { createCut, raycastThroughCut, setCut } from './parts/cut';
+import { createCut, setCut } from './parts/cut';
 import { Ease } from './parts/ease';
 import { createAction } from './parts/action/action';
 import { createCase } from './parts/case/case';
@@ -57,7 +57,6 @@ class PianoAssembly implements Assembly {
     };
     this.sections = SECTION_FACTORIES.map((create) => create(this.context));
     this.sections.forEach((section) => this.root.add(section.root));
-    raycastThroughCut(this.root, this.context.cut);
     this.anchors = Object.fromEntries(
       ANCHOR_IDS.map((id) => [id, this.context.anchors[id] ?? this.fallback(id)]),
     ) as Record<AnchorId, Object3D>;

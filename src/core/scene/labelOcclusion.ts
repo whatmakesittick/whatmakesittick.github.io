@@ -3,6 +3,7 @@ import type { Object3D, PerspectiveCamera } from 'three';
 import { blockingReach, isPending, nextOcclusion } from './occlusion';
 import type { OcclusionState, PartOf } from './occlusion';
 import { OcclusionRays } from './occlusionRays';
+import type { OcclusionHitFilter } from './occlusionRays';
 import { isShown } from './parts';
 
 export interface OccludedLabels {
@@ -17,6 +18,7 @@ export interface LabelOcclusionOptions {
   camera: PerspectiveCamera;
   partOf: PartOf;
   ignored?: readonly Object3D[];
+  hitFilter?: OcclusionHitFilter;
 }
 
 export const RUN_EVERY_FRAMES = 4;

@@ -8,6 +8,7 @@ import { MAX_FRAME_SECONDS } from './constants';
 import { Highlighter } from './highlight';
 import { LabelOcclusion } from './labelOcclusion';
 import { LabelLayer } from './labels';
+import type { OcclusionHitFilter } from './occlusionRays';
 import type { GaugeSide } from './lens';
 import { createLighting } from './lighting';
 import type { Lighting } from './lighting';
@@ -38,6 +39,7 @@ export interface SceneOptions {
   camera?: CameraOptions;
   highlight?: MaterialLibraryOptions;
   gaugeSide?: GaugeSide;
+  occlusionHitFilter?: OcclusionHitFilter;
 }
 
 export interface SceneShell {
@@ -101,6 +103,7 @@ export function createSceneHost(
     camera: rig.camera,
     partOf: (material) => materials.groupOf(material),
     ignored: [stage.group],
+    hitFilter: options.occlusionHitFilter,
   });
   const updates = new Set<FrameUpdate>();
   let loop: Loop | undefined;
