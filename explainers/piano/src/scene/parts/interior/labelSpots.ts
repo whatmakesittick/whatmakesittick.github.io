@@ -1,6 +1,6 @@
 import { lerp } from '@core/math';
 import type { Point } from '../../../ids';
-import { KEYS, PLATE, SOUNDBOARD, STRINGS, cutX, isWound } from '../../../model';
+import { KEYS, PLATE, SOUNDBOARD, STRINGS, cutX, isWound, stringPath } from '../../../model';
 import { TUNING_PIN } from './constants';
 import { midSpeaking, pointAlong, unisonOf } from './layout';
 import type { PianoString } from './layout';
@@ -13,6 +13,7 @@ const PLATE_BEFORE_FRONT = 0.023;
 const BASS_SHARE = 0.45;
 const BASS_CLEARANCE = 0.01;
 const BASS_SHORT_OF_BRIDGE = 0.04;
+const STRIKE_LABEL_BACK = 0.03;
 
 export function middleOf(key: number): PianoString {
   const unison = unisonOf(key);
@@ -21,6 +22,11 @@ export function middleOf(key: number): PianoString {
 
 export function stringSpot(key: number): Point {
   return midSpeaking(middleOf(key));
+}
+
+export function strikeSpot(key: number): Point {
+  const [x, y, z] = stringPath(key).strike;
+  return [x, y, z - STRIKE_LABEL_BACK];
 }
 
 export function soundboardSpot(key: number): Point {

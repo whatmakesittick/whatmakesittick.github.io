@@ -1,6 +1,8 @@
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import type { SceneOptions } from '@core/scene/shell';
 import { THEME } from '../theme';
+import type { Intersection } from 'three';
+import { keepsCloseHit } from './parts/closeMask';
 import { keepsCutHit } from './parts/cut';
 
 const FOG = { near: 7, far: 15 } as const;
@@ -26,5 +28,5 @@ export const SCENE_OPTIONS: SceneOptions = {
     distance: { min: CAMERA.minDistance, max: CAMERA.maxDistance },
   },
   highlight: { dim: HIGHLIGHT_DIM, undimmed: [UNDIMMED_GROUP] },
-  occlusionHitFilter: keepsCutHit,
+  occlusionHitFilter: (hit: Intersection) => keepsCutHit(hit) && keepsCloseHit(hit),
 };

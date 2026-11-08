@@ -32,6 +32,10 @@ export class KeyedInstances {
     this.parent = parent;
   }
 
+  get meshes(): readonly InstancedMesh[] {
+    return this.rows.map((row) => row.mesh);
+  }
+
   add({ geometry, group, finish, entries }: InstanceSpec): InstancedMesh {
     const mesh = partInstances(this.context, geometry, group, finish, entries.length);
     entries.forEach(([, matrix], index) => mesh.setMatrixAt(index, matrix));

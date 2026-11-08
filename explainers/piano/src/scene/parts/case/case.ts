@@ -2,6 +2,7 @@ import type { Section } from '../context';
 import { label, namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { LID, LYRE } from '../../../model';
+import { CloseLook } from '../closeLook';
 import { buildLegs } from './legs';
 import { buildLid, lidPoint } from './lid';
 import { buildLyre } from './lyre';
@@ -21,7 +22,8 @@ export function createCase(context: PartContext): Section {
   root.add(buildShell(context), buildLid(context), ...buildLegs(context), lyre.root);
   label(context, 'case', root, CASE_LABEL_POINT);
   label(context, 'pedals', lyre.root, [0, LYRE.pedalY, LYRE.z + LYRE.pedalLength]);
-  const xray = new CaseXray(context.cut);
+  const look = new CloseLook();
+  const xray = new CaseXray(context.cut, look.amount);
   xray.watch(root);
   return {
     root,
@@ -29,6 +31,10 @@ export function createCase(context: PartContext): Section {
       xray.setState(state);
       lyre.setState(state);
     },
-    animate: (frame) => lyre.animate(frame.delta),
+    animate: (frame) => {
+      const looking = look.step(frame.delta, frame.cameraDistance);
+      return lyre.animate(frame.delta) || looking;
+    },
+    focus: (view) => look.focus(view),
   };
 }

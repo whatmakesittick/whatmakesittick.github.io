@@ -13,10 +13,10 @@ const FAR_LOW: Point = [cutX(KEY) - 8, 0.8, JACK_Z];
 const OVERHEAD: Point = [cutX(KEY) - 0.5, CASE.rimTop + 0.6, JACK_Z];
 const SHADER_SOURCE = '#include <common>\n#include <clipping_planes_fragment>';
 
-function rig(lineUp = false) {
+function rig(lineUp = false, close = 0) {
   const cut = createCut();
   setCut(cut, true, cutX(KEY));
-  const xray = new CaseXray(cut);
+  const xray = new CaseXray(cut, { value: close });
   const material = new MeshStandardMaterial();
   const mesh = new Mesh(new BoxGeometry(), material);
   xray.watch(mesh);
@@ -52,6 +52,10 @@ describe('case x-ray', () => {
     const { dissolveSeenFrom } = rig();
     expect(dissolveSeenFrom(OVERHEAD)).toBe(0);
     expect(dissolveSeenFrom(FAR_LOW)).toBe(0);
+  });
+
+  it('dissolves the case from anywhere while a close view is framed', () => {
+    expect(rig(false, 1).dissolveSeenFrom(OVERHEAD)).toBe(1);
   });
 
   it('keeps the case dissolved through the line-up', () => {

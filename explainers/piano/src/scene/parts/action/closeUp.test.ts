@@ -1,9 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import type { RegionSpec } from '@core/scene/regions';
 import type { Point } from '../../../ids';
-import { INSET, KEY, PLAYED_KEY, keyX, regionSpecFor, stringPath } from '../../../model';
+import {
+  BACK_CHECK,
+  DAMPER,
+  KEY,
+  PLAYED_KEY,
+  jackAnchor,
+  keyX,
+  regionSpecFor,
+  stringPath,
+} from '../../../model';
 import type { RegionOptions } from '../../../model';
-import { labelPoint, panelCentre } from '../inset/window';
 import { closeUpRegion, isCloseUpRegion } from './closeUp';
 
 const PLAIN: RegionOptions = { ghost: false, inset: false };
@@ -26,11 +34,15 @@ describe('close-up regions', () => {
     expect(isCloseUpRegion('string')).toBe(false);
   });
 
-  it('frames the played key from its front to the strings label of its note', () => {
+  it('frames the played key from its front to its damper, leaving out the far string', () => {
     KEYS.forEach((key) => {
       const region = closeUpRegion('action', key, PLAIN);
       expect(holds(region, [keyX(key), KEY.top, KEY.frontZ])).toBe(true);
-      expect(holds(region, speakingMiddle(key))).toBe(true);
+      expect(holds(region, stringPath(key).strike)).toBe(true);
+      expect(holds(region, [keyX(key), stringPath(key).strike[1], DAMPER.z])).toBe(true);
+    });
+    [PLAYED_KEY.bass, PLAYED_KEY.middle].forEach((key) => {
+      expect(holds(closeUpRegion('action', key, PLAIN), speakingMiddle(key))).toBe(false);
     });
   });
 
@@ -42,17 +54,21 @@ describe('close-up regions', () => {
     expect(region.z[1]).toBeGreaterThanOrEqual(ghost.z[1]);
   });
 
-  it('adds the inset panel and its label to the escapement only while the inset shows', () => {
+  it('frames the escapement from the back check to the jack, with the hammer at its string', () => {
     KEYS.forEach((key) => {
-      const centre = panelCentre(key);
-      const corner: Point = [centre[0], centre[1] + INSET.height / 2, centre[2] - INSET.width / 2];
+      const region = closeUpRegion('escapement', key, PLAIN);
+      expect(holds(region, jackAnchor(key))).toBe(true);
+      expect(holds(region, [keyX(key), BACK_CHECK.y, BACK_CHECK.z])).toBe(true);
+      expect(holds(region, stringPath(key).strike)).toBe(true);
+    });
+  });
+
+  it('gives the escapement a little headroom while the inset shows', () => {
+    KEYS.forEach((key) => {
       const plain = closeUpRegion('escapement', key, PLAIN);
       const inset = closeUpRegion('escapement', key, { ghost: false, inset: true });
-      const model = regionSpecFor('escapement', key, PLAIN);
-      expect([plain.y, plain.z]).toEqual([model.y, model.z]);
-      expect(holds(plain, [keyX(key), model.y[0], model.z[0]])).toBe(true);
-      expect(holds(inset, corner)).toBe(true);
-      expect(holds(inset, labelPoint(centre))).toBe(true);
+      expect(inset.y[1]).toBeGreaterThan(plain.y[1]);
+      expect([inset.x, inset.y[0], inset.z]).toEqual([plain.x, plain.y[0], plain.z]);
     });
   });
 });

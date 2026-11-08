@@ -5,6 +5,8 @@ import type { MaterialFinish } from '@core/scene/materials';
 import type { AssemblyState } from '../../../ids';
 import { KEY, PLAYED_KEY, cutX, keyX, mm } from '../../../model';
 import { FINISHES } from '../../finishes';
+import { hidingMask, neighbourBox, neighbourMask, railCapMask } from '../closeKeep';
+import { CloseLook } from '../closeLook';
 import { label, namedGroup, partMesh } from '../context';
 import type { PartContext, Section } from '../context';
 import { sectionCap } from './caps';
@@ -38,6 +40,7 @@ import {
 import { LazyEase } from './lazyEase';
 
 const FRAME_WOOD: MaterialFinish = { color: '#5c4330', roughness: 0.75 };
+const BACK_CLOTH: MaterialFinish = { ...FINISHES.cloth };
 const WHITE_BEVEL = 0.0008;
 const BLACK_BEVEL = 0.0012;
 const PUNCHING_SEGMENTS = 10;
@@ -92,7 +95,7 @@ function keyFrame(context: PartContext): Object3D {
   const frame = namedGroup('keyFrame');
   const rails = mergeParts(FRAME_RAIL_RECTS.map((rect) => boxBetween(railBounds(rect))));
   frame.add(partMesh(context, rails, STRUCTURE_GROUP, FRAME_WOOD));
-  frame.add(partMesh(context, boxBetween(railBounds(BACK_CLOTH_RECT)), 'keyboard', FINISHES.cloth));
+  frame.add(partMesh(context, boxBetween(railBounds(BACK_CLOTH_RECT)), 'keyboard', BACK_CLOTH));
   return frame;
 }
 
@@ -104,6 +107,9 @@ export function createKeyboard(context: PartContext): Section {
   addBlackKeys(rows);
   addSticks(rows);
   addPunchings(rows);
+  const look = new CloseLook();
+  const neighbours = neighbourMask(look.amount);
+  rows.meshes.forEach((mesh) => neighbours.cover(mesh));
   shifted.add(keyFrame(context));
   root.add(partMesh(context, boxBetween(keybedBounds()), STRUCTURE_GROUP, FINISHES.darkWood));
   const cap = sectionCap(
@@ -113,6 +119,8 @@ export function createKeyboard(context: PartContext): Section {
   );
   root.add(cap);
   const keyboardLabel = label(context, 'keyboard', shifted, [0, KEY.top, -LABEL_SET_BACK]);
+  railCapMask(look.amount).cover(cap);
+  hidingMask(look.amount).cover(root);
   const shift = new LazyEase();
   let played = PLAYED_KEY.middle;
 
@@ -127,6 +135,7 @@ export function createKeyboard(context: PartContext): Section {
     setState(state: AssemblyState): void {
       played = PLAYED_KEY[state.register];
       rows.hide(played);
+      neighbours.keep(neighbourBox(played));
       keyboardLabel.position.x = keyX(keyboardLabelKey(played));
       cap.visible = state.view.cutaway;
       shift.aim(state.action.shiftMm);
@@ -135,7 +144,9 @@ export function createKeyboard(context: PartContext): Section {
     animate(frame): boolean {
       const moving = shift.step(frame.delta);
       if (moving) place();
-      return moving;
+      const looking = look.step(frame.delta, frame.cameraDistance);
+      return moving || looking;
     },
+    focus: (view) => look.focus(view),
   };
 }

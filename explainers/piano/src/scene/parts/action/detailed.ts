@@ -36,4 +36,8 @@ export class DetailedAction {
   pose(pose: DetailedPose): void {
     this.pieces.forEach((piece) => piece.pose?.(pose));
   }
+
+  focus(close: boolean): void {
+    this.pieces.forEach((piece) => piece.focus?.(close));
+  }
 }

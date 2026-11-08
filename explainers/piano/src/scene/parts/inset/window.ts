@@ -4,6 +4,9 @@ import type { Planar } from '../ghosts/shapes';
 
 const WINDOW_SHIFT: Planar = [-0.001, -0.006];
 const PLACE = { across: -0.03, bottom: 0.95, front: -0.5 } as const;
+const CLOSE_PLACE = { across: 0.708, y: 0.705, z: -0.449 } as const;
+
+export type InsetPlace = 'open' | 'close';
 const LABEL_INDENT = 0.015;
 
 export const WINDOW = {
@@ -21,12 +24,14 @@ export const PANEL = {
   lift: 0.012,
 } as const;
 
-export function panelCentre(key: number): Point {
+export function panelCentre(key: number, place: InsetPlace = 'open'): Point {
+  if (place === 'close') return [keyX(key) + CLOSE_PLACE.across, CLOSE_PLACE.y, CLOSE_PLACE.z];
   return [keyX(key) + PLACE.across, PLACE.bottom + INSET.height / 2, PLACE.front - INSET.width / 2];
 }
 
-export function labelPoint([x, y, z]: Point): Point {
-  return [x, y + INSET.height / 2, z - INSET.width / 2 + LABEL_INDENT];
+export function labelPoint([x, y, z]: Point, place: InsetPlace = 'open'): Point {
+  const edge = place === 'close' ? INSET.width / 2 - LABEL_INDENT : LABEL_INDENT - INSET.width / 2;
+  return [x, y + INSET.height / 2, z + edge];
 }
 
 export function drawnPoint([, centreY, centreZ]: Point, [y, z]: Planar): Planar {
@@ -50,8 +55,8 @@ export interface Leader {
   ring: Point;
 }
 
-export function leaderFor(key: number): Leader {
-  const centre = panelCentre(key);
+export function leaderFor(key: number, place: InsetPlace = 'open'): Leader {
+  const centre = panelCentre(key, place);
   const anchor = jackAnchor(key);
   const [, drawnZ] = drawnPoint(centre, [anchor[1], anchor[2]]);
   const start: Point = [centre[0] - INSET.depth / 2, centre[1] - INSET.height / 2, drawnZ];

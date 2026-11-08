@@ -15,6 +15,7 @@ export interface Pivot {
 export interface Piece {
   setKey?(key: number): void;
   pose?(pose: DetailedPose): void;
+  focus?(close: boolean): void;
 }
 
 export function pivotFrame(parent: Object3D, name: string, y: number, z: number): Pivot {

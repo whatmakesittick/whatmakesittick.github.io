@@ -49,7 +49,9 @@ class ClippedLibrary extends MaterialLibrary {
   }
 
   override get(_group: string, finish: MaterialFinish): MeshStandardMaterial {
-    return clipMaterial(this.source.get(INSET_GROUP, finish), this.clip);
+    const material = this.source.get(INSET_GROUP, finish);
+    material.fog = false;
+    return clipMaterial(material, this.clip);
   }
 }
 

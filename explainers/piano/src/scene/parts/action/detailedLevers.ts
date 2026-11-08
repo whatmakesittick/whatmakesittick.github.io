@@ -30,6 +30,7 @@ const SPRING_STEPS_PER_TURN = 10;
 const SPRING_SIDES = 4;
 const CHEEK_CENTRE = (CHEEK_X[0] + CHEEK_X[1]) / 2;
 const LABEL_INSET = 0.008;
+const CLOSE_JACK_LABEL = { out: 0.0005, up: 0.006 } as const;
 
 function alongX(rect: Rect, [start, end]: readonly [number, number], round = 0, bevel = 0) {
   return profileAlongX(rectShape(rect, round), start, end, bevel);
@@ -62,7 +63,7 @@ export function buildLevers(context: PartContext, parent: Object3D): Piece {
   const jackShape = roundedShape(JACK_PROFILE, ROUND.jack);
   const jackBody = profileAlongX(jackShape, -JACK_HALF_WIDTH, JACK_HALF_WIDTH, BEVEL.jack);
   addMesh(context, jack.body, jackBody, 'jack', ACTION_FINISHES.jack);
-  label(context, 'jack', jack.body, [0, JACK_ANCHOR_Y - LABEL_INSET, JACK_Z]);
+  const jackLabel = label(context, 'jack', jack.body, [0, JACK_ANCHOR_Y - LABEL_INSET, JACK_Z]);
 
   const repetition = pivotFrame(wippen.body, 'repetition', REPETITION_PIVOT.y, REPETITION_PIVOT.z);
   const leverShape = roundedShape(REPETITION_PROFILE, ROUND.repetition);
@@ -80,6 +81,17 @@ export function buildLevers(context: PartContext, parent: Object3D): Piece {
       jack.pivot.rotation.x = pose.jack;
       repetition.pivot.rotation.x = pose.repetition;
       spring.scale.y = pose.springScale;
+    },
+    focus(close) {
+      if (close) {
+        jackLabel.position.set(
+          -JACK_HALF_WIDTH - CLOSE_JACK_LABEL.out,
+          JACK_PIVOT.y + CLOSE_JACK_LABEL.up,
+          JACK_Z,
+        );
+      } else {
+        jackLabel.position.set(0, JACK_ANCHOR_Y - LABEL_INSET, JACK_Z);
+      }
     },
   };
 }

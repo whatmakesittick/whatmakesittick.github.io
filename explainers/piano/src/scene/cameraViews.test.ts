@@ -1,4 +1,4 @@
-import { Vector3 } from 'three';
+import { MathUtils, Vector3 } from 'three';
 import type { Box3 } from 'three';
 import { describe, expect, it } from 'vitest';
 import type { Direction } from '@core/scene/cameraViews';
@@ -23,6 +23,7 @@ const SIDE_VIEWS: readonly CameraView[] = ['lineUp'];
 const DOWN_THE_STRINGS_ELEVATION_LIMIT = 0.5;
 const CLOSE_VIEWS: readonly CameraView[] = ['action', 'escapement'];
 const CLOSE_YAW_LIMIT = 0.6;
+const CLOSE_ELEVATION = { min: 15, max: 25 } as const;
 const THREE_QUARTER_VIEWS: readonly CameraView[] = ['grand', 'dampers'];
 const PLAIN: RegionOptions = { ghost: false, inset: false };
 const OPTION_SETS: readonly RegionOptions[] = [false, true].flatMap((ghost) =>
@@ -114,14 +115,15 @@ describe('piano camera views', () => {
     expect(up / Math.hypot(across, along)).toBeLessThan(DOWN_THE_STRINGS_ELEVATION_LIMIT);
   });
 
-  it('looks at the close views from the bass side, a little in front and from below', () => {
+  it('looks at the close views three-quarter from the bass side front, raised over the keys', () => {
     CLOSE_VIEWS.forEach((view) => {
       const [across, up, along] = directionOf(view);
+      const degrees = MathUtils.radToDeg(Math.atan2(up, Math.hypot(across, along)));
       expect(across, view).toBeLessThan(0);
-      expect(up, view).toBeLessThan(0);
       expect(along, view).toBeGreaterThan(0);
       expect(along, view).toBeLessThan(Math.abs(across) * CLOSE_YAW_LIMIT);
-      expect(Math.abs(up), view).toBeLessThan(Math.abs(across) * SIDE_ELEVATION_LIMIT);
+      expect(degrees, view).toBeGreaterThanOrEqual(CLOSE_ELEVATION.min);
+      expect(degrees, view).toBeLessThanOrEqual(CLOSE_ELEVATION.max);
     });
   });
 

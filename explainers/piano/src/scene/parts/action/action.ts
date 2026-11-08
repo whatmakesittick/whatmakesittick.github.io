@@ -3,6 +3,8 @@ import type { ActionPose, AssemblyState } from '../../../ids';
 import { DAMPER_LIFT_MAX, KEYS, PLAYED_KEY, cutX, keyX, mm } from '../../../model';
 import { LOD_DISTANCE } from '../../constants';
 import { playedX } from '../../pose';
+import { neighbourBox, neighbourMask, railCapMask, railStubBox, railStubMask } from '../closeKeep';
+import { CloseLook, isCloseView } from '../closeLook';
 import { label, namedGroup } from '../context';
 import type { Frame, PartContext, Section } from '../context';
 import { sectionCap } from '../keyboard/caps';
@@ -31,11 +33,20 @@ export function createAction(context: PartContext): Section {
   const lifted = namedGroup('dampers', root);
   const actions = buildInstancedActions(context, shifted);
   const dampers = buildInstancedDampers(context, lifted);
-  shifted.add(buildActionRails(context));
-  root.add(buildDamperRails(context));
+  const actionRails = buildActionRails(context);
+  const damperRails = buildDamperRails(context);
+  shifted.add(actionRails);
+  root.add(damperRails);
   const actionCap = sectionCap(context, ACTION_RAILS, 'actionCap');
   const damperCap = sectionCap(context, DAMPER_RAILS, 'damperCap');
   root.add(actionCap, damperCap);
+  const look = new CloseLook();
+  const neighbours = neighbourMask(look.amount);
+  const railStub = railStubMask(look.amount);
+  const capMask = railCapMask(look.amount);
+  [...actions.rows.meshes, ...dampers.rows.meshes].forEach((mesh) => neighbours.cover(mesh));
+  [actionRails, damperRails].forEach((rails) => railStub.cover(rails));
+  [actionCap, damperCap].forEach((cap) => capMask.cover(cap));
   const detailed = new DetailedAction(context);
   root.add(detailed.root, detailed.damper);
   const actionsLabel = label(context, 'actions', shifted, [0, 0, 0]);
@@ -75,6 +86,8 @@ export function createAction(context: PartContext): Section {
       cutaway = state.view.cutaway;
       actions.rows.hide(played);
       dampers.rows.hide(played);
+      neighbours.keep(neighbourBox(played));
+      railStub.keep(railStubBox(played));
       placeLabel();
       shift.aim(state.action.shiftMm);
       pedal.aim(state.pedal === 'sustain' ? PEDAL_DOWN : 0);
@@ -90,7 +103,12 @@ export function createAction(context: PartContext): Section {
       small.forEach((mesh) => (mesh.visible = near));
       if (shifting || lifting) place();
       if (lifting) posePlayed();
-      return shifting || lifting;
+      const looking = look.step(frame.delta, frame.cameraDistance);
+      return shifting || lifting || looking;
+    },
+    focus(view): void {
+      look.focus(view);
+      detailed.focus(isCloseView(view));
     },
     warmUp(compile): void {
       compile(detailed.root);

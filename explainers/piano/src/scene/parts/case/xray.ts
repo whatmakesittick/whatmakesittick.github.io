@@ -2,21 +2,21 @@ import { LineSegments, MathUtils, Mesh, Vector3 } from 'three';
 import type { Camera, IUniform, Material, Object3D } from 'three';
 import type { AssemblyState } from '../../../ids';
 import { CASE, JACK_ANCHOR_Y, JACK_Z } from '../../../model';
+import { markDissolved } from '../closeMask';
 import type { CutUniforms } from '../cut';
-import { inject } from '../shaderChunks';
+import { DITHER_NOISE, inject } from '../shaderChunks';
 
 const SIDE_VIEW = { below: CASE.rimTop + 0.1, above: CASE.rimTop + 0.15 } as const;
 const CLOSE_UP = { inside: 2.8, outside: 3 } as const;
 const FULL = 1;
+const GONE = 0.5;
 
 const FRAGMENT_HEAD = /* glsl */ `
 uniform float uCaseXray;
-float interleavedGradientNoise(vec2 pixel) {
-  return fract(52.9829189 * fract(dot(pixel, vec2(0.06711056, 0.00583715))));
-}
+${DITHER_NOISE}
 `;
 const FRAGMENT_BODY = /* glsl */ `
-if (interleavedGradientNoise(gl_FragCoord.xy) < uCaseXray) discard;
+if (ditherNoise(gl_FragCoord.xy) < uCaseXray) discard;
 `;
 
 type Drawn = Mesh | LineSegments;
@@ -28,12 +28,14 @@ function isDrawn(object: Object3D): object is Drawn {
 export class CaseXray {
   private readonly amount: IUniform<number> = { value: 0 };
   private readonly cut: CutUniforms;
+  private readonly close: IUniform<number>;
   private readonly patched = new WeakSet<Material>();
   private readonly section = new Vector3();
   private lineUp = false;
 
-  constructor(cut: CutUniforms) {
+  constructor(cut: CutUniforms, close: IUniform<number>) {
     this.cut = cut;
+    this.close = close;
   }
 
   watch(root: Object3D): void {
@@ -49,7 +51,9 @@ export class CaseXray {
   }
 
   private follow(camera: Camera): void {
-    this.amount.value = this.lineUp ? FULL : this.closeUpShare(camera.position);
+    this.amount.value = this.lineUp
+      ? FULL
+      : Math.max(this.closeUpShare(camera.position), this.close.value);
   }
 
   private closeUpShare(eye: Vector3): number {
@@ -62,6 +66,7 @@ export class CaseXray {
   private patch(material: Material): void {
     if (this.patched.has(material)) return;
     this.patched.add(material);
+    markDissolved(material, () => this.close.value >= GONE);
     const compile = material.onBeforeCompile.bind(material);
     const cacheKey = material.customProgramCacheKey.bind(material);
     material.onBeforeCompile = (shader, renderer) => {

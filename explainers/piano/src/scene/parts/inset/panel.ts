@@ -1,5 +1,5 @@
 import { DoubleSide, Mesh, MeshBasicMaterial, RingGeometry } from 'three';
-import type { BufferGeometry, Object3D } from 'three';
+import type { BufferGeometry, Material, Object3D } from 'three';
 import {
   extrudeProfileAlongX,
   roundedRectHole,
@@ -46,9 +46,8 @@ function leaderGeometry(leader: Leader, centre: Point): BufferGeometry {
   ]);
 }
 
-export function buildPanel(context: PartContext, centre: Point, leader: Leader): Object3D[] {
-  const ground = roundedRectShape(centredRect(PANEL.rim), PANEL.corner - PANEL.rim);
-  const ink = registeredMaterial(
+export function insetInk(context: PartContext): Material {
+  return registeredMaterial(
     context,
     'inset',
     new MeshBasicMaterial({
@@ -59,13 +58,25 @@ export function buildPanel(context: PartContext, centre: Point, leader: Leader):
     }),
     false,
   );
-  const lines = new Mesh(
-    context.tracker.track(mergeParts([frameGeometry(), leaderGeometry(leader, centre)])),
-    ink,
-  );
-  lines.name = 'insetLines';
+}
+
+export function buildLeader(
+  context: PartContext,
+  ink: Material,
+  leader: Leader,
+  centre: Point,
+): Object3D {
+  const mesh = new Mesh(context.tracker.track(leaderGeometry(leader, centre)), ink);
+  mesh.name = 'insetLeader';
+  return mesh;
+}
+
+export function buildPanel(context: PartContext, ink: Material): Object3D[] {
+  const ground = roundedRectShape(centredRect(PANEL.rim), PANEL.corner - PANEL.rim);
+  const frame = new Mesh(context.tracker.track(frameGeometry()), ink);
+  frame.name = 'insetLines';
   return [
     partMesh(context, extrudeProfileAlongX(ground, 0, PANEL.back), 'inset', FINISHES.inset),
-    lines,
+    frame,
   ];
 }

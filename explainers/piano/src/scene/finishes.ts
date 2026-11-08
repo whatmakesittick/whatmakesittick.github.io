@@ -46,7 +46,7 @@ export const FINISHES = {
   section: { ...finish(THEME.section, 0.8), side: DoubleSide },
   glass: veil(THEME.glass, GLASS_OPACITY),
   ghost: { ...veil(THEME.ghost, GHOST_OPACITY), emissive: THEME.ghost, emissiveIntensity: 0.4 },
-  inset: { ...finish(THEME.inset, 0.9), transparent: true, opacity: INSET_OPACITY },
+  inset: { ...finish(THEME.inset, 0.9), transparent: true, opacity: INSET_OPACITY, fog: false },
 } as const satisfies Record<string, MaterialFinish>;
 
 export type Finish = keyof typeof FINISHES;
