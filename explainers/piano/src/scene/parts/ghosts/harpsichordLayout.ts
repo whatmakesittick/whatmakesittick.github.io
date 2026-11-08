@@ -16,7 +16,7 @@ export const JACK = {
   z: HARPSICHORD_KEY_BACK + 0.012,
   bottom: KEY.top,
   top: KEY.top + HARPSICHORD.jackHeight,
-  halfDepth: 0.0065,
+  halfDepth: 0.012,
   halfWidth: 0.0025,
 } as const;
 export const STRING = {
@@ -26,11 +26,12 @@ export const STRING = {
   back: JACK.z - 0.15,
   segments: 40,
 } as const;
+const PLECTRUM_HALF = 0.0011;
 export const PLECTRUM = {
   rootX: JACK.halfWidth + 0.0005,
   tipX: STRING.x + 0.0045,
-  half: 0.0004,
-  y: HARPSICHORD.stringY - STRING.radius - mm(PLUCK_START_MM) - 0.0004,
+  half: PLECTRUM_HALF,
+  y: HARPSICHORD.stringY - STRING.radius - mm(PLUCK_START_MM) - PLECTRUM_HALF,
   bend: 0.5,
 } as const;
 export const DAMPER_BOTTOM = HARPSICHORD.stringY + STRING.radius - mm(PLUCK_START_MM);

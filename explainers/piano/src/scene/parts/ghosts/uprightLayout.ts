@@ -29,7 +29,8 @@ export const PIVOT = {
 } as const satisfies Record<string, Planar>;
 
 export const CAPSTAN = { z: CAPSTAN_Z, top: 0.755 } as const;
-export const DAMPER_HEAD = { y: [0.88, 0.915], felt: 0.0095, block: 0.015 } as const;
+export const DAMPER_HEAD = { y: [0.878, 0.916], felt: 0.0095, gap: 0.0009 } as const;
+export const WIPPEN_TOP = 0.772;
 export const STRAP = {
   catcher: [UPRIGHT.hammerPivotY + 0.004, HAMMER_Z + 0.056],
   wire: [0.838, HAMMER_Z + 0.063],

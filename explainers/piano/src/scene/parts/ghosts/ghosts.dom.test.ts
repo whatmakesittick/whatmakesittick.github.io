@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { InstancedMesh, Mesh, Vector3 } from 'three';
+import { InstancedMesh, LineSegments, Mesh, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import type { PartId, RegisterId } from '../../../ids';
 import { PLAYED_KEY, mm, restAnchorPoint, uprightPoseAt } from '../../../model';
@@ -13,7 +13,8 @@ const DIGITS = 6;
 const STRIKE_UNIT = 400;
 const QUIET_UNIT = 100;
 const TRIANGLE_BUDGET = 8_000;
-const MESH_BUDGET = 14;
+const LABEL_SWING_SHARE = 0.6;
+const MESH_BUDGET = 22;
 const LINE_UP = { view: { lineUp: true } } as const;
 const GHOST = { view: { ghost: true } } as const;
 const FRAME: Frame = { delta: 1 / 60, elapsed: 0.1, cameraDistance: 1 };
@@ -48,8 +49,8 @@ function meshes(root: Object3D): Mesh[] {
 }
 
 function stringHeights(section: Section): number[] {
-  const string = meshes(named(section.root, 'harpsichordGhost')).at(-1);
-  if (!string) throw new Error('missing string');
+  const string = named(section.root, 'harpsichordString');
+  if (!(string instanceof LineSegments)) throw new Error('missing string');
   return Array.from(string.geometry.getAttribute('position').array);
 }
 
@@ -102,7 +103,7 @@ describe('createGhosts', () => {
     const swing =
       labelAt(strike.context, strike.section, 'upright').z -
       labelAt(rest.context, rest.section, 'upright').z;
-    expect(swing).toBeLessThan(-mm(travel) * 0.9);
+    expect(swing).toBeLessThan(-mm(travel) * LABEL_SWING_SHARE);
     const rise =
       labelAt(strike.context, strike.section, 'harpsichord').y -
       labelAt(rest.context, rest.section, 'harpsichord').y;

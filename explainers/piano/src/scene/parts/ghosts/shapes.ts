@@ -1,17 +1,8 @@
 import { CylinderGeometry } from 'three';
-import type { BufferGeometry, Mesh, Object3D } from 'three';
+import type { BufferGeometry } from 'three';
 import type { Point } from '../../../ids';
 import { keyX } from '../../../model';
-import { FINISHES } from '../../finishes';
-import { partMesh } from '../context';
-import type { EmphasisGroup, PartContext } from '../context';
-import {
-  QUARTER_TURN,
-  mergeParts,
-  profileAlongX,
-  rectShape,
-  segmentMatrix,
-} from '../keyboard/geometry';
+import { QUARTER_TURN, profileAlongX, rectShape, segmentMatrix } from '../keyboard/geometry';
 
 export type Span = readonly [number, number];
 export type Planar = readonly [y: number, z: number];
@@ -36,17 +27,6 @@ export function rod(from: Point, to: Point, radius: number): BufferGeometry {
 
 export function planarRod(from: Planar, to: Planar, radius: number, x = 0): BufferGeometry {
   return rod([x, ...from], [x, ...to], radius);
-}
-
-export function ghostMesh(
-  context: PartContext,
-  group: EmphasisGroup,
-  parent: Object3D,
-  parts: readonly BufferGeometry[],
-): Mesh {
-  const mesh = partMesh(context, mergeParts(parts), group, FINISHES.ghost);
-  parent.add(mesh);
-  return mesh;
 }
 
 export function turnAbout([y, z]: Planar, [pivotY, pivotZ]: Planar, angle: number): Planar {
