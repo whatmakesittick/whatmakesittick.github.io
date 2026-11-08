@@ -1,14 +1,13 @@
 import type { Object3D } from 'three';
 import type { Point, RegisterId } from '../../../ids';
-import { PLATE, PLAYED_KEY, SOUNDBOARD, stringPath } from '../../../model';
+import { PLAYED_KEY, stringPath } from '../../../model';
 import { LOD_DISTANCE } from '../../constants';
 import { label, namedGroup, sceneAnchor } from '../context';
 import type { PartContext, Section } from '../context';
 import { createBridges } from './bridges';
 import { createCaps } from './caps';
-import { TUNING_PIN } from './constants';
-import { midSpeaking, PIANO_STRINGS, unisonOf } from './layout';
-import type { PianoString } from './layout';
+import { bassSpot, plateSpot, soundboardSpot, stringSpot, tuningPinSpot } from './labelSpots';
+import { unisonOf } from './layout';
 import { createPlate } from './plate';
 import { createPlayedStrings } from './played';
 import { createTuningPins, pinblockMesh } from './pins';
@@ -16,29 +15,7 @@ import { createSoundboard } from './soundboard';
 import { createStringSets } from './strings';
 import { createWave } from './wave';
 
-const LABEL_KEYS = { stringSet: 56, bassStrings: 8 } as const;
-const PLATE_LABEL: Point = [0.45, PLATE.topY, -0.108];
-const SOUNDBOARD_LABEL_Z = -0.65;
-const TUNING_PIN_LABEL_ORDER = 170;
-const BREAK_KEY = 32;
-
-function xAt(string: PianoString, z: number): number {
-  const [x, , frontZ] = string.front;
-  const [dx, , dz] = string.direction;
-  return x + (dx * (z - frontZ)) / dz;
-}
-
-function soundboardSpot(): Point {
-  const below = unisonOf(BREAK_KEY);
-  const above = unisonOf(BREAK_KEY + 1)[0];
-  const x = (xAt(below[below.length - 1], SOUNDBOARD_LABEL_Z) + xAt(above, SOUNDBOARD_LABEL_Z)) / 2;
-  return [x, SOUNDBOARD.topY, SOUNDBOARD_LABEL_Z];
-}
-
-function middleOf(key: number): PianoString {
-  const unison = unisonOf(key);
-  return unison[Math.floor(unison.length / 2)];
-}
+const STRING_SET_LABEL_KEY = 56;
 
 function place(anchor: Object3D, [x, y, z]: Point): void {
   anchor.position.set(x, y, z);
@@ -47,25 +24,27 @@ function place(anchor: Object3D, [x, y, z]: Point): void {
 export function createInterior(context: PartContext): Section {
   const root = namedGroup('interior');
   const wave = createWave();
-  const soundboard = createSoundboard(context, wave.breath);
+  const soundboard = createSoundboard(context, wave.breath, wave.board);
   const structure = namedGroup('structure', root);
   structure.add(soundboard.rail, pinblockMesh(context));
   const bridges = createBridges(context, wave.breath);
   const plate = createPlate(context);
   const pins = createTuningPins(context);
   const sets = createStringSets(context, wave.shimmer);
-  const played = createPlayedStrings(context, wave.wave);
-  const caps = createCaps(context, wave.breath);
+  const played = createPlayedStrings(context, wave.wave, wave.blur);
+  const caps = createCaps(context, wave);
   root.add(soundboard.group, bridges, plate, pins, sets.bass, sets.steel, played.group, caps.root);
 
-  const pinTop = PIANO_STRINGS[TUNING_PIN_LABEL_ORDER].pin;
-  label(context, 'soundboard', soundboard.group, soundboardSpot());
-  label(context, 'plate', plate, PLATE_LABEL);
-  label(context, 'tuningPins', pins, [pinTop[0], TUNING_PIN.top, pinTop[2]]);
-  label(context, 'stringSet', sets.steel, midSpeaking(middleOf(LABEL_KEYS.stringSet)));
-  label(context, 'bassStrings', sets.bass, midSpeaking(middleOf(LABEL_KEYS.bassStrings)));
-  const stringsAnchor = label(context, 'strings', played.group, [0, 0, 0]);
-  const bridgeAnchor = sceneAnchor(context, 'bridge', bridges, [0, 0, 0]);
+  const origin: Point = [0, 0, 0];
+  label(context, 'stringSet', sets.steel, stringSpot(STRING_SET_LABEL_KEY));
+  const anchors = {
+    soundboard: label(context, 'soundboard', soundboard.group, origin),
+    plate: label(context, 'plate', plate, origin),
+    tuningPins: label(context, 'tuningPins', pins, origin),
+    bassStrings: label(context, 'bassStrings', sets.bass, origin),
+    strings: label(context, 'strings', played.group, origin),
+  };
+  const bridgeAnchor = sceneAnchor(context, 'bridge', bridges, origin);
   context.labels.set('bridge', bridgeAnchor);
 
   let register: RegisterId | null = null;
@@ -76,15 +55,21 @@ export function createInterior(context: PartContext): Section {
     register = next;
     const key = PLAYED_KEY[next];
     hidePlayed(key, true);
-    played.show(next);
-    place(stringsAnchor, midSpeaking(middleOf(key)));
+    place(anchors.strings, stringSpot(key));
+    place(anchors.soundboard, soundboardSpot(key));
+    place(anchors.plate, plateSpot(key));
+    place(anchors.tuningPins, tuningPinSpot(key));
     place(bridgeAnchor, stringPath(key).back);
+    const bass = bassSpot(key);
+    anchors.bassStrings.visible = bass !== null;
+    if (bass) place(anchors.bassStrings, bass);
   };
 
   return {
     root,
     setState(state) {
       if (state.register !== register) choose(state.register);
+      played.show(state.register, state.view.wave);
       caps.show(state.register, state.view.cutaway, context.cut.x.value);
       wave.setState(state);
     },
@@ -96,7 +81,7 @@ export function createInterior(context: PartContext): Section {
     },
     warmUp(compile) {
       caps.prepareAll();
-      const hidden = [caps.root, ...caps.root.children, ...Object.values(played.meshes)].filter(
+      const hidden = [caps.root, ...caps.root.children, ...played.group.children].filter(
         (object) => !object.visible,
       );
       hidden.forEach((object) => (object.visible = true));

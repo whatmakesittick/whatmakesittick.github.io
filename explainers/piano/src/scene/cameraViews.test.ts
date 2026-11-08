@@ -19,7 +19,8 @@ const STAGES: readonly FramingSlopes[] = [PHONE, DESKTOP];
 const WORLD_UP = new Vector3(0, 1, 0);
 const FLOOR_Y = 0;
 const SIDE_ELEVATION_LIMIT = 0.3;
-const SIDE_VIEWS: readonly CameraView[] = ['soundboard', 'lineUp'];
+const SIDE_VIEWS: readonly CameraView[] = ['lineUp'];
+const DOWN_THE_STRINGS_ELEVATION_LIMIT = 0.5;
 const CLOSE_VIEWS: readonly CameraView[] = ['action', 'escapement'];
 const CLOSE_YAW_LIMIT = 0.6;
 const THREE_QUARTER_VIEWS: readonly CameraView[] = ['grand', 'dampers'];
@@ -103,6 +104,14 @@ describe('piano camera views', () => {
       expect(up, view).toBeLessThan(0);
       expect(Math.abs(up), view).toBeLessThan(Math.abs(across) * SIDE_ELEVATION_LIMIT);
     });
+  });
+
+  it('looks down the strings from the front left and a little above, under the open lid', () => {
+    const [across, up, along] = directionOf('soundboard');
+    expect(across).toBeLessThan(0);
+    expect(up).toBeGreaterThan(0);
+    expect(along).toBeGreaterThan(Math.abs(across));
+    expect(up / Math.hypot(across, along)).toBeLessThan(DOWN_THE_STRINGS_ELEVATION_LIMIT);
   });
 
   it('looks at the close views from the bass side, a little in front and from below', () => {

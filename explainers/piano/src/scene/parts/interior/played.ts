@@ -1,17 +1,26 @@
-import { BufferGeometry, Float32BufferAttribute, Mesh, Vector3 } from 'three';
+import {
+  BufferGeometry,
+  DoubleSide,
+  Float32BufferAttribute,
+  Mesh,
+  MeshBasicMaterial,
+  Vector3,
+} from 'three';
 import type { Group, Material } from 'three';
 import { FULL_TURN } from '@core/math';
 import { REGISTER_IDS } from '../../../ids';
 import type { Point, RegisterId } from '../../../ids';
 import { PLAYED_KEY } from '../../../model';
+import { THEME } from '../../../theme';
 import { FINISHES } from '../../finishes';
-import { namedGroup } from '../context';
+import { namedGroup, registeredMaterial } from '../context';
 import type { PartContext } from '../context';
 import { STRING_RADIUS, WINDING } from './constants';
 import { pointAlong, unisonOf } from './layout';
 import type { PianoString } from './layout';
 import { patchedMaterial } from './materials';
-import type { VertexPatch } from './patches';
+import { patchShader } from './patches';
+import type { ShaderPatch } from './patches';
 import { distance, radiusOf, speakingEnd } from './stringEnds';
 import { WINDING_TILE, windingTexture } from './winding';
 
@@ -20,6 +29,7 @@ const RADIAL_SIDES = 8;
 const STILL = -1;
 const XYZ = 3;
 const UV = 2;
+const BLUR = { segments: 64, opacity: 0.9, sides: [-1, 1] } as const;
 
 interface Station {
   readonly along: number;
@@ -134,13 +144,64 @@ function unisonGeometry(strings: readonly PianoString[]): BufferGeometry {
   return geometry;
 }
 
+function averageOf(values: readonly number[]): number {
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function centreOf(points: readonly Point[]): Point {
+  return [
+    averageOf(points.map(([x]) => x)),
+    averageOf(points.map(([, y]) => y)),
+    averageOf(points.map(([, , z]) => z)),
+  ];
+}
+
+function blurGeometry(strings: readonly PianoString[]): BufferGeometry {
+  const front = centreOf(strings.map((string) => string.front));
+  const length = averageOf(strings.map((string) => distance(string.front, speakingEnd(string))));
+  const positions: number[] = [];
+  const spans: number[] = [];
+  const indices: number[] = [];
+  for (let station = 0; station <= BLUR.segments; station += 1) {
+    const along = station / BLUR.segments;
+    const centre = pointAlong(front, strings[0].direction, along * length);
+    BLUR.sides.forEach((side) => {
+      positions.push(...centre);
+      spans.push(along, side);
+    });
+    if (station === 0) continue;
+    const first = (station - 1) * BLUR.sides.length;
+    indices.push(first, first + 2, first + 1, first + 1, first + 2, first + 3);
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(positions, XYZ));
+  geometry.setAttribute('aBlur', new Float32BufferAttribute(spans, UV));
+  geometry.setIndex(indices);
+  return geometry;
+}
+
+function blurMaterial(context: PartContext, blur: ShaderPatch): MeshBasicMaterial {
+  const material = new MeshBasicMaterial({
+    color: THEME.check,
+    transparent: true,
+    opacity: BLUR.opacity,
+    depthWrite: false,
+    side: DoubleSide,
+  });
+  return registeredMaterial(context, 'strings', patchShader(material, blur), false);
+}
+
 export interface PlayedStrings {
   readonly group: Group;
   readonly meshes: Readonly<Record<RegisterId, Mesh>>;
-  show(register: RegisterId): void;
+  show(register: RegisterId, blurring: boolean): void;
 }
 
-export function createPlayedStrings(context: PartContext, wave: VertexPatch): PlayedStrings {
+export function createPlayedStrings(
+  context: PartContext,
+  wave: ShaderPatch,
+  blur: ShaderPatch,
+): PlayedStrings {
   const steel = patchedMaterial(context, { group: 'strings', finish: FINISHES.steel, patch: wave });
   const copper = patchedMaterial(context, {
     group: 'strings',
@@ -149,6 +210,15 @@ export function createPlayedStrings(context: PartContext, wave: VertexPatch): Pl
     extra: { bumpMap: windingTexture(context, 1) },
   });
   const group = namedGroup('strings');
+  const haze = blurMaterial(context, blur);
+  const blurFor = (register: RegisterId): Mesh => {
+    const geometry = blurGeometry(unisonOf(PLAYED_KEY[register]));
+    const mesh = new Mesh(context.tracker.track(geometry), haze);
+    mesh.name = 'stringBlur';
+    mesh.frustumCulled = false;
+    group.add(mesh);
+    return mesh;
+  };
   const meshFor = (register: RegisterId): Mesh => {
     const unison = unisonOf(PLAYED_KEY[register]);
     const material: Material = unison[0].band === 'bass' ? copper : steel;
@@ -160,11 +230,17 @@ export function createPlayedStrings(context: PartContext, wave: VertexPatch): Pl
   const meshes = Object.fromEntries(
     REGISTER_IDS.map((register) => [register, meshFor(register)]),
   ) as Record<RegisterId, Mesh>;
+  const blurs = Object.fromEntries(
+    REGISTER_IDS.map((register) => [register, blurFor(register)]),
+  ) as Record<RegisterId, Mesh>;
   return {
     group,
     meshes,
-    show(register) {
-      REGISTER_IDS.forEach((id) => (meshes[id].visible = id === register));
+    show(register, blurring) {
+      REGISTER_IDS.forEach((id) => {
+        meshes[id].visible = id === register;
+        blurs[id].visible = blurring && id === register;
+      });
     },
   };
 }

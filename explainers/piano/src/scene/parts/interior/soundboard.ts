@@ -19,7 +19,7 @@ import {
   boardBottom,
 } from './boardPlan';
 import { instances, patchedMaterial } from './materials';
-import type { VertexPatch } from './patches';
+import type { ShaderPatch } from './patches';
 import { dot, leftOf, sub } from './planMath';
 import { seeded } from './random';
 import { slabGeometry } from './slab';
@@ -74,7 +74,7 @@ function grainUv(point: PlanPoint): readonly [number, number] {
   return [dot(offset, GRAIN) / GRAIN_TILE.along, dot(offset, leftOf(GRAIN)) / GRAIN_TILE.across];
 }
 
-function boardMesh(context: PartContext, breath: VertexPatch): Mesh {
+function boardMesh(context: PartContext, board: ShaderPatch): Mesh {
   const grain = context.tracker.track(
     canvasTexture(GRAIN_PAINT.width, GRAIN_PAINT.height, paintGrain, {
       wrapT: RepeatWrapping,
@@ -91,7 +91,7 @@ function boardMesh(context: PartContext, breath: VertexPatch): Mesh {
   const material = patchedMaterial(context, {
     group: 'soundboard',
     finish: FINISHES.spruce,
-    patch: breath,
+    patch: board,
     extra: { map: grain },
   });
   const mesh = new Mesh(context.tracker.track(geometry), material);
@@ -99,7 +99,7 @@ function boardMesh(context: PartContext, breath: VertexPatch): Mesh {
   return mesh;
 }
 
-function ribMeshes(context: PartContext, breath: VertexPatch): Mesh {
+function ribMeshes(context: PartContext, breath: ShaderPatch): Mesh {
   const material = patchedMaterial(context, {
     group: 'soundboard',
     finish: FINISHES.rib,
@@ -136,8 +136,12 @@ export interface SoundboardParts {
   readonly rail: Mesh;
 }
 
-export function createSoundboard(context: PartContext, breath: VertexPatch): SoundboardParts {
+export function createSoundboard(
+  context: PartContext,
+  breath: ShaderPatch,
+  board: ShaderPatch,
+): SoundboardParts {
   const group = namedGroup('soundboard');
-  group.add(boardMesh(context, breath), ribMeshes(context, breath));
+  group.add(boardMesh(context, board), ribMeshes(context, breath));
   return { group, rail: bellyRail(context) };
 }

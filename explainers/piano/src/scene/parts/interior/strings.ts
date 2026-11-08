@@ -9,7 +9,7 @@ import { STRING_RADIUS, WINDING } from './constants';
 import { PIANO_STRINGS, pointAlong, stringsIn } from './layout';
 import type { Band, PianoString } from './layout';
 import { instances, patchedMaterial } from './materials';
-import type { VertexPatch } from './patches';
+import type { ShaderPatch } from './patches';
 import { distance, speakingEnd } from './stringEnds';
 import { WINDING_TILE, windingTexture } from './winding';
 
@@ -139,7 +139,7 @@ export interface StringSets {
   readonly bands: readonly StringBand[];
 }
 
-export function createStringSets(context: PartContext, shimmer: VertexPatch): StringSets {
+export function createStringSets(context: PartContext, shimmer: ShaderPatch): StringSets {
   const material = (
     group: EmphasisGroup,
     finish: MeshStandardMaterialParameters,

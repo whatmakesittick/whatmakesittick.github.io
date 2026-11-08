@@ -5,9 +5,11 @@ import { regionSpecFor } from '../model';
 import type { RegionOptions } from '../model';
 import { closeUpRegion, isCloseUpRegion } from './parts/action/closeUp';
 import { lineUpRegionSpec } from './parts/ghosts/lineUpRegion';
+import { stringRegionSpec } from './parts/interior/stringRegion';
 
 export function regionFor(id: RegionId, key: number, options: RegionOptions): Box3 {
   if (id === 'lineUp') return regionFromSpec(lineUpRegionSpec(key));
+  if (id === 'string') return regionFromSpec(stringRegionSpec(key));
   if (isCloseUpRegion(id)) return regionFromSpec(closeUpRegion(id, key, options));
   return regionFromSpec(regionSpecFor(id, key, options));
 }

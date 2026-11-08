@@ -13,7 +13,7 @@ import { BASS_BRIDGE, MAIN_BRIDGE } from './bridgePlan';
 import { BELLY_RAIL_BOUNDS, BOARD_RING, RIB_LEVELS, RIB_RINGS, boardBottom } from './boardPlan';
 import { BRIDGE_TOPS } from './bridges';
 import { patchedMaterial } from './materials';
-import type { VertexPatch } from './patches';
+import type { ShaderPatch } from './patches';
 import { PINBLOCK_BOUNDS } from './pins';
 import { PLATE_SLABS } from './plate';
 import { boundsRing } from './planMath';
@@ -25,17 +25,19 @@ interface SlabSpec {
   readonly top: number;
 }
 
+type CapMotion = 'still' | 'breath' | 'board';
+
 interface CapSet {
   readonly group: EmphasisGroup;
   readonly slabs: readonly SlabSpec[];
-  readonly breathes: boolean;
+  readonly motion: CapMotion;
 }
 
 const CAP_SETS: readonly CapSet[] = [
-  { group: 'plate', slabs: PLATE_SLABS, breathes: false },
+  { group: 'plate', slabs: PLATE_SLABS, motion: 'still' },
   {
     group: 'soundboard',
-    breathes: true,
+    motion: 'board',
     slabs: [
       { rings: [BOARD_RING], bottom: (x, z) => boardBottom({ x, z }), top: SOUNDBOARD.topY },
       ...RIB_RINGS.map((ring) => ({
@@ -47,7 +49,7 @@ const CAP_SETS: readonly CapSet[] = [
   },
   {
     group: 'bridge',
-    breathes: true,
+    motion: 'breath',
     slabs: [
       { rings: [MAIN_BRIDGE.ring], bottom: SOUNDBOARD.topY, top: BRIDGE_TOPS.main },
       { rings: [BASS_BRIDGE.ring], bottom: SOUNDBOARD.topY, top: BRIDGE_TOPS.bass },
@@ -55,7 +57,7 @@ const CAP_SETS: readonly CapSet[] = [
   },
   {
     group: 'structure',
-    breathes: false,
+    motion: 'still',
     slabs: [
       { rings: [boundsRing(PINBLOCK_BOUNDS)], bottom: PINBLOCK.bottom, top: PINBLOCK.top },
       { rings: [boundsRing(BELLY_RAIL_BOUNDS)], bottom: BELLY_RAIL.bottom, top: RAIL_TOP },
@@ -81,20 +83,23 @@ export interface Caps {
   prepareAll(): void;
 }
 
-export function createCaps(context: PartContext, breath: VertexPatch): Caps {
+export function createCaps(
+  context: PartContext,
+  patches: Readonly<Record<Exclude<CapMotion, 'still'>, ShaderPatch>>,
+): Caps {
   const root = namedGroup('caps');
   const sets = new Map<RegisterId, Group>();
-  const breathing = new Map<EmphasisGroup, Material>();
-  const breathingFor = (group: EmphasisGroup) => {
-    const found = breathing.get(group);
+  const moving = new Map<EmphasisGroup, Material>();
+  const movingFor = (group: EmphasisGroup, motion: Exclude<CapMotion, 'still'>) => {
+    const found = moving.get(group);
     if (found) return found;
     const material = patchedMaterial(context, {
       group,
       finish: FINISHES.section,
-      patch: breath,
+      patch: patches[motion],
       cut: false,
     });
-    breathing.set(group, material);
+    moving.set(group, material);
     return material;
   };
   const build = (register: RegisterId): Group => {
@@ -102,9 +107,10 @@ export function createCaps(context: PartContext, breath: VertexPatch): Caps {
     const group = namedGroup(`caps-${register}`, root);
     CAP_SETS.forEach((set) => {
       const geometry = capGeometry(x, slabsAt(x, set.slabs));
-      const mesh = set.breathes
-        ? new Mesh(context.tracker.track(geometry), breathingFor(set.group))
-        : partMesh(context, geometry, set.group, FINISHES.section);
+      const mesh =
+        set.motion === 'still'
+          ? partMesh(context, geometry, set.group, FINISHES.section)
+          : new Mesh(context.tracker.track(geometry), movingFor(set.group, set.motion));
       group.add(mesh);
     });
     sets.set(register, group);

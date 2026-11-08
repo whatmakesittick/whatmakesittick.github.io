@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { KNOT_UNITS } from '../../../model';
+import { REGISTER_IDS } from '../../../ids';
+import { KNOT_UNITS, PLAYED_KEY, stringDirection } from '../../../model';
 import { interiorState } from './testState';
-import { isRinging, unisonAmplitudes, wavePeak } from './wave';
+import { isRinging, swingFor, unisonAmplitudes, wavePeak } from './wave';
 
 const RINGING = KNOT_UNITS.strike + 20;
 const BEFORE_STRIKE = KNOT_UNITS.jackTouch;
@@ -14,12 +15,22 @@ describe('string wave', () => {
     expect(isRinging(state)).toBe(false);
   });
 
-  it('swings a few millimetres at the middle for a hard strike', () => {
+  it('swings a couple of centimetres at the middle for a hard strike', () => {
     const state = interiorState(RINGING, { view: { wave: true } });
     const peak = wavePeak(state) * MM;
-    expect(peak).toBeGreaterThan(2);
-    expect(peak).toBeLessThan(8);
+    expect(peak).toBeGreaterThan(15);
+    expect(peak).toBeLessThan(40);
     expect(isRinging(state)).toBe(true);
+  });
+
+  it('leans the swing across the string and keeps it a unit vector', () => {
+    REGISTER_IDS.forEach((register) => {
+      const [x, y, z] = swingFor(register);
+      const [dx, , dz] = stringDirection(PLAYED_KEY[register]);
+      expect(Math.hypot(x, y, z)).toBeCloseTo(1, 9);
+      expect(x * dx + z * dz).toBeCloseTo(0, 9);
+      expect(y).toBeGreaterThan(0);
+    });
   });
 
   it('scales with the string length and the touch', () => {

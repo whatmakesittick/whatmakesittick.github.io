@@ -12,7 +12,7 @@ import type { BridgeBand } from './bridgePlan';
 import { PIANO_STRINGS, pointAlong, stringsIn } from './layout';
 import type { PianoString } from './layout';
 import { instances, patchedMaterial } from './materials';
-import type { VertexPatch } from './patches';
+import type { ShaderPatch } from './patches';
 import { leftOf, plan } from './planMath';
 import { bridgeTop, radiusOf } from './stringEnds';
 
@@ -32,7 +32,7 @@ function bridgeSolid(band: BridgeBand, top: number) {
   return extrudePlan(planShape(band.ring), SOUNDBOARD.topY, top);
 }
 
-function bridgeMesh(context: PartContext, breath: VertexPatch): Mesh {
+function bridgeMesh(context: PartContext, breath: ShaderPatch): Mesh {
   const geometry = mergeGeometries([
     bridgeSolid(MAIN_BRIDGE, BRIDGE_TOPS.main),
     bridgeSolid(BASS_BRIDGE, BRIDGE_TOPS.bass),
@@ -59,7 +59,7 @@ function pinSpots(string: PianoString): Vector3[] {
   ];
 }
 
-function bridgePins(context: PartContext, breath: VertexPatch): InstancedMesh {
+function bridgePins(context: PartContext, breath: ShaderPatch): InstancedMesh {
   const height = BRIDGE_PIN.sink + BRIDGE_PIN.rise;
   const geometry = new CylinderGeometry(
     BRIDGE_PIN.radius,
@@ -86,7 +86,7 @@ function bridgePins(context: PartContext, breath: VertexPatch): InstancedMesh {
   return mesh;
 }
 
-export function createBridges(context: PartContext, breath: VertexPatch): Group {
+export function createBridges(context: PartContext, breath: ShaderPatch): Group {
   const group = namedGroup('bridge');
   group.add(bridgeMesh(context, breath), bridgePins(context, breath));
   return group;
