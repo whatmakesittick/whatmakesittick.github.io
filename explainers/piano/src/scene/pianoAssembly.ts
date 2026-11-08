@@ -4,7 +4,7 @@ import type { MaterialLibrary } from '@core/scene/materials';
 import { anchorAt } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import { ANCHOR_IDS } from '../ids';
-import type { AnchorId, AssemblyState, ChaseTarget, PartId, RegionId } from '../ids';
+import type { AnchorId, AssemblyState, CameraView, ChaseTarget, PartId, RegionId } from '../ids';
 import { PLAYED_KEY, cutX, mm, restAnchorPoint } from '../model';
 import type { Assembly, AssemblyResources } from './assembly';
 import type { Frame, PartContext, Section, SectionFactory } from './parts/context';
@@ -100,6 +100,10 @@ class PianoAssembly implements Assembly {
 
   chaseTarget(): ChaseTarget {
     return chaseTargetFor(this.playedKey(), this.state.action);
+  }
+
+  focus(view: CameraView): void {
+    this.sections.forEach((section) => section.focus?.(view));
   }
 
   warmUp(compile: (object: Object3D) => void): void {

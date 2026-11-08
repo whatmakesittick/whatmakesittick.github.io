@@ -5,7 +5,7 @@ import type { MaterialFinish, MaterialLibrary, STRUCTURE_GROUP } from '@core/sce
 import { anchorAt } from '@core/scene/parts';
 import type { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
-import type { AnchorId, AssemblyState, PartId, Point } from '../../ids';
+import type { AnchorId, AssemblyState, CameraView, PartId, Point } from '../../ids';
 import { UNCUT_FINISHES } from '../finishes';
 import { applyCut } from './cut';
 import type { CutMode, CutUniforms } from './cut';
@@ -41,6 +41,7 @@ export interface Section {
   readonly root: Object3D;
   setState(state: AssemblyState): void;
   animate?(frame: Frame, state: AssemblyState): boolean;
+  focus?(view: CameraView): void;
   warmUp?(compile: (object: Object3D) => void): void;
 }
 

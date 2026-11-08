@@ -123,6 +123,15 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     }
   });
 
+  it('tells the assembly which view it frames', () => {
+    const { controller, assembly } = builtController();
+    const focus = vi.spyOn(assembly, 'focus');
+    for (const view of CAMERA_VIEW_IDS) {
+      controller.views.frame(view, false);
+      expect(focus).toHaveBeenLastCalledWith(view);
+    }
+  });
+
   it('tweens when animated', () => {
     const { rig, controller } = builtController();
     controller.views.frame('dampers', true);

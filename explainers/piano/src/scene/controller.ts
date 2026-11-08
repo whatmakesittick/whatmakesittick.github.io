@@ -91,6 +91,7 @@ export class PianoController {
 
   private frame(camera: FramedCamera, animate: boolean): void {
     this.framed = camera;
+    this.assembly?.focus?.(camera.view);
     this.framedBox = this.regionOf(camera.view);
     this.cameraViews.frame(camera.view, animate, camera.variant);
     if (this.following) this.applyFollow();
