@@ -84,12 +84,12 @@ describe('action layout', () => {
     expect(damperLiftMm(0, 1)).toBe(DAMPER_LIFT_MAX_MM);
   });
 
-  it('tips the jack toward the let-off button and drops its tail under it', () => {
+  it('tips the jack top toward the player and drops its toe under the let-off button', () => {
     const escaped = detailedPose(actionPoseAt(LET_OFF_UNIT, 'medium', 'none', 'middle'), 0);
     const tail = turned(escaped.jack, JACK_PIVOT, [JACK_PIVOT.y + 0.012, LET_OFF_BUTTON.z]);
     const top = turned(escaped.jack, JACK_PIVOT, [JACK_PIVOT.y + 0.026, JACK_PIVOT.z]);
     expect(tail.y).toBeLessThan(JACK_PIVOT.y + 0.012);
-    expect(top.z).toBeLessThan(JACK_PIVOT.z);
+    expect(top.z).toBeGreaterThan(JACK_PIVOT.z);
   });
 
   it('pushes the repetition lever tip down while the hammer flies', () => {

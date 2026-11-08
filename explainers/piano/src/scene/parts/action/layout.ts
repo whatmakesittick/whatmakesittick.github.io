@@ -142,7 +142,7 @@ export function detailedPose(action: ActionPose, pedalShare: number): DetailedPo
   return {
     key: keyAngle(action.keyMm),
     wippen: wippenAngle(action.keyMm),
-    jack: -jackAngle(action.jackEscape),
+    jack: jackAngle(action.jackEscape),
     repetition,
     hammer: hammerAngle(action.hammerRiseMm + squashMm),
     feltSquash: mm(squashMm),
