@@ -8,6 +8,7 @@ import { buildCatalogue } from '../../../vite/catalogue.ts';
 import { localizeEntry, resolveLanguage } from '../../shared/catalogue.ts';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
+const THIN_CHARS_PER_EXPLAINER = 1_000;
 
 describe('catalogue for the MCP server and the widget', () => {
   const catalogue = buildCatalogue(root, '2026-01-01T00:00:00.000Z');
@@ -16,13 +17,17 @@ describe('catalogue for the MCP server and the widget', () => {
   it('keeps the widget catalogue thin', () => {
     const thin = toWidgetCatalogue(catalogue);
     expect(thin.explainers).toHaveLength(catalogue.explainers.length);
-    expect(JSON.stringify(thin).length).toBeLessThan(20_000);
+    expect(JSON.stringify(thin).length).toBeLessThan(
+      THIN_CHARS_PER_EXPLAINER * thin.explainers.length,
+    );
   });
 
   it.each(LANGUAGE_CODES)('keeps the %s widget catalogue thin and in that language', (lang) => {
     const thin = toWidgetCatalogue(catalogue, lang);
     expect(thin.explainers.map((e) => e.slug)).toEqual(catalogue.explainers.map((e) => e.slug));
-    expect(JSON.stringify(thin).length).toBeLessThan(20_000);
+    expect(JSON.stringify(thin).length).toBeLessThan(
+      THIN_CHARS_PER_EXPLAINER * thin.explainers.length,
+    );
     const mri = thin.explainers.find((e) => e.slug === 'mri-scanner')!;
     const localized = localizeEntry(bySlug.get('mri-scanner')!, lang);
     expect(mri.title).toBe(localized.title);
