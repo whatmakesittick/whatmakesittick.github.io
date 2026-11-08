@@ -8,6 +8,7 @@ const CLOSE_PLACE = { across: 0.708, y: 0.705, z: -0.449 } as const;
 
 export type InsetPlace = 'open' | 'close';
 const LABEL_INDENT = 0.015;
+const CLOSE_LABEL_INDENT = 0.045;
 
 export const WINDOW = {
   y: JACK_ANCHOR_Y + WINDOW_SHIFT[0],
@@ -30,7 +31,8 @@ export function panelCentre(key: number, place: InsetPlace = 'open'): Point {
 }
 
 export function labelPoint([x, y, z]: Point, place: InsetPlace = 'open'): Point {
-  const edge = place === 'close' ? INSET.width / 2 - LABEL_INDENT : LABEL_INDENT - INSET.width / 2;
+  const edge =
+    place === 'close' ? INSET.width / 2 - CLOSE_LABEL_INDENT : LABEL_INDENT - INSET.width / 2;
   return [x, y + INSET.height / 2, z + edge];
 }
 
