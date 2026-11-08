@@ -5,6 +5,7 @@ import {
   BACK_CHECK,
   DAMPER,
   KEY,
+  KEY_LEVER,
   PLAYED_KEY,
   jackAnchor,
   keyX,
@@ -34,10 +35,11 @@ describe('close-up regions', () => {
     expect(isCloseUpRegion('string')).toBe(false);
   });
 
-  it('frames the played key from its front to its damper, leaving out the far string', () => {
+  it('frames the played key from its balance rail to its damper, leaving out the far string', () => {
     KEYS.forEach((key) => {
       const region = closeUpRegion('action', key, PLAIN);
-      expect(holds(region, [keyX(key), KEY.top, KEY.frontZ])).toBe(true);
+      expect(holds(region, [keyX(key), KEY.top, KEY_LEVER.pivotZ])).toBe(true);
+      expect(holds(region, [keyX(key), KEY.top, KEY.frontZ])).toBe(false);
       expect(holds(region, stringPath(key).strike)).toBe(true);
       expect(holds(region, [keyX(key), stringPath(key).strike[1], DAMPER.z])).toBe(true);
     });

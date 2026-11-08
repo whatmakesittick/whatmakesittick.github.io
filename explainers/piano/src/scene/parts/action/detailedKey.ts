@@ -38,6 +38,7 @@ const LEAD = {
   proud: 0.0002,
 } as const;
 const LEAD_SEGMENTS = 14;
+const CLOSE_LABEL_Z = -0.19;
 const CAPSTAN_SEGMENTS = 18;
 const WIRE_SEGMENTS = 6;
 const WIRE_SET_BACK = 0.003;
@@ -159,7 +160,7 @@ export function buildKey(context: PartContext, parent: Object3D): Piece {
   );
   const clothFor = new Map<number, BufferGeometry>();
   const front: Point = [0, KEY.top, KEY.frontZ];
-  label(context, 'key', frame.body, front);
+  const keyLabel = label(context, 'key', frame.body, front);
   sceneAnchor(context, 'key', frame.body, front);
   label(context, 'capstan', frame.body, [0, CAPSTAN.top, CAPSTAN.z]);
   return {
@@ -174,6 +175,9 @@ export function buildKey(context: PartContext, parent: Object3D): Piece {
     },
     pose(pose) {
       frame.pivot.rotation.x = pose.key;
+    },
+    focus(close) {
+      keyLabel.position.z = close ? CLOSE_LABEL_Z : KEY.frontZ;
     },
   };
 }
