@@ -139,7 +139,7 @@ export const HAMMER = {
 } as const;
 export const STRIKE_Z = HAMMER.pivotZ + headTopOffset(hammerAngleForRise(BLOW_MM))[1];
 
-export const LET_OFF_BUTTON = { z: JACK_Z - 0.013, y: 0.775 } as const;
+export const LET_OFF_BUTTON = { z: JACK_Z + 0.013, y: 0.775 } as const;
 export const BACK_CHECK = { z: HAMMER.pivotZ - SHANK - 0.012, y: HAMMER_PIVOT_Y } as const;
 export const DAMPER = { z: -0.45, headHeight: 0.03, headDepth: 0.025 } as const;
 export const JACK_ANCHOR_Y = 0.785;
