@@ -1,0 +1,308 @@
+{
+  "meta": {
+    "title": "Como funciona o piano de cauda",
+    "eyebrow": "Instrumentos musicais",
+    "tagline": "Toque uma tecla de um piano de cauda de concerto em 3D: seu dedo nunca encosta na corda, e o martelo de feltro já está voando solto quando bate nela.",
+    "description": "Aperte uma tecla de um piano de cauda de concerto em 3D, veja o martelo voar solto até a corda e ouça como o seu toque muda a nota.",
+    "summary": "Um toque na tecla, do dedo até a corda: as alavancas que arremessam o martelo, o escape que o solta, os abafadores e os pedais, a tábua harmônica que enche a sala de som e a comparação com o piano vertical e o cravo.",
+    "socialAlt": "Um piano de cauda de concerto preto, de tampa aberta num palco escuro, cortado no dó central para mostrar o mecanismo do martelo de uma tecla, ao lado do título “Como funciona o piano de cauda”"
+  },
+  "stage": {
+    "label": "Modelo interativo do piano de cauda",
+    "gauge": "Dados da tecla e do martelo em tempo real"
+  },
+  "timeline": {
+    "label": "Um toque na tecla",
+    "phases": "Ir para uma etapa",
+    "speed": "Reprodução",
+    "value": "Etapa {{step}} de {{total}}",
+    "during": "Etapa {{step}} de {{total}}: {{detail}}",
+    "speedValue": "{{seconds}} s por nota",
+    "speedDescribe": "Um toque na tecla a cada {{seconds}} segundos",
+    "speedDescribeReal": "Um toque na tecla a cada {{seconds}} segundos, com a nota soando em tempo real",
+    "phase": {
+      "press": "Descida",
+      "escape": "Escape",
+      "strike": "Golpe",
+      "check": "Soando",
+      "release": "Retorno"
+    },
+    "jump": {
+      "press": "Ir para a descida da tecla",
+      "escape": "Ir para o escape",
+      "strike": "Ir para o golpe na corda",
+      "check": "Ir para a nota soando",
+      "release": "Ir para a volta da tecla"
+    },
+    "detail": {
+      "press": "a tecla desce e ergue o martelo",
+      "escape": "o lançador escapa e o martelo voa solto",
+      "strike": "o martelo bate na corda e quica de volta",
+      "check": "o contra-martelo segura o martelo enquanto a nota soa",
+      "release": "a tecla sobe e o mecanismo volta ao repouso"
+    },
+    "moment": {
+      "jackTouch": "Lançador encosta no botão",
+      "letOff": "Escape",
+      "strike": "Golpe",
+      "checked": "Martelo aparado",
+      "repeatReady": "Pronto para repetir",
+      "damped": "Abafador nas cordas"
+    }
+  },
+  "controls": {
+    "label": "Controles do modelo",
+    "touch": "Toque",
+    "touchOptions": {
+      "soft": "Suave",
+      "medium": "Médio",
+      "hard": "Forte"
+    },
+    "pedal": "Pedal",
+    "pedalOptions": {
+      "none": "Sem pedal",
+      "sustain": "Sustentação",
+      "unaCorda": "Una corda"
+    },
+    "registerOptions": {
+      "bass": "Dó2 grave",
+      "middle": "Dó central",
+      "treble": "Dó7 agudo"
+    },
+    "compareOptions": {
+      "grand": "Piano de cauda",
+      "upright": "Piano vertical",
+      "harpsichord": "Cravo"
+    },
+    "soundOptions": {
+      "on": "Som ligado",
+      "off": "Som desligado"
+    },
+    "groups": {
+      "touch": "Força do toque",
+      "pedal": "Pedal",
+      "register": "Qual nota",
+      "compare": "Instrumento para comparar",
+      "moment": "Ir para um momento",
+      "sound": "Som"
+    },
+    "views": {
+      "sound": {
+        "name": "Som",
+        "short": "Som",
+        "hint": "Som (S)"
+      },
+      "wave": {
+        "name": "Vibração das cordas",
+        "short": "Vibração",
+        "hint": "Vibração das cordas (W)"
+      },
+      "inset": {
+        "name": "Zoom no escape",
+        "short": "Zoom",
+        "hint": "Zoom no escape (I)"
+      },
+      "ghost": {
+        "name": "Mecanismo vertical fantasma",
+        "short": "Vertical",
+        "hint": "Mecanismo vertical fantasma (G)"
+      },
+      "follow": {
+        "name": "Seguir o martelo",
+        "short": "Seguir",
+        "hint": "Seguir o martelo (F)"
+      },
+      "labels": {
+        "name": "Nomes das peças",
+        "short": "Nomes",
+        "hint": "Nomes das peças (L)"
+      }
+    }
+  },
+  "readouts": {
+    "time": "Tempo real",
+    "key": "Curso da tecla",
+    "hammer": "Martelo até a corda",
+    "speed": "Velocidade do martelo",
+    "level": "Nível sonoro"
+  },
+  "units": {
+    "millis": "{{value}} ms",
+    "seconds": "{{value}} s",
+    "mm": "{{value}} mm",
+    "aboutMm": "cerca de {{value}} mm",
+    "mmRange": "de {{min}} a {{max}} mm",
+    "onString": "Na corda",
+    "metresPerSecond": "{{value}} m/s",
+    "db": "{{value}} dB",
+    "silent": "Sem som",
+    "hz": "{{value}} Hz"
+  },
+  "chapters": {
+    "key": {
+      "touchTime": "Do toque na tecla ao golpe",
+      "touchTimeValue": "cerca de {{ms}} ms",
+      "dip": "Curso da tecla",
+      "blow": "Martelo até a corda, em repouso",
+      "parts": "Peças",
+      "partsValue": "mais de {{count}} no piano inteiro"
+    },
+    "lever": {
+      "ratio": "Curso do martelo",
+      "ratioValue": "cerca de {{min}} a {{max}} vezes o curso da tecla",
+      "keySpeed": "Velocidade da tecla no escape, neste modelo",
+      "hammerSpeed": "Velocidade do martelo na corda",
+      "drop": "Bate como uma queda de",
+      "dropValue": "cerca de {{cm}} cm"
+    },
+    "letGo": {
+      "letOff": "Distância de escape",
+      "letOffValue": "de {{min}} a {{max}} mm, {{model}} mm neste modelo",
+      "flight": "Voo livre",
+      "flightValue": "{{ms}} ms do escape até a corda",
+      "check": "Aparado pelo contra-martelo",
+      "checkValue": "cerca de {{mm}} mm abaixo da corda",
+      "repeat": "Repetições, segundo os fabricantes",
+      "repeatValue": "até cerca de {{grand}} por segundo, contra cerca de {{upright}} num piano vertical"
+    },
+    "dampers": {
+      "damper": "Abafador desta nota",
+      "damperValue": {
+        "down": "Sobre as cordas",
+        "rising": "Subindo",
+        "up": "Fora das cordas",
+        "falling": "Descendo de volta",
+        "pedal": "Erguido pelo pedal",
+        "none": "Esta nota não tem abafador"
+      },
+      "lead": "Abafador sai das cordas",
+      "leadValue": "{{ms}} ms antes do golpe, neste modelo",
+      "struck": "Cordas que o martelo atinge",
+      "struckValue": "{{struck}} de {{total}} cordas",
+      "undamped": "Notas sem abafador",
+      "undampedValue": "as {{min}} a {{max}} mais agudas"
+    },
+    "room": {
+      "note": "Nota",
+      "noteValue": {
+        "bass": "Dó2, {{hz}} Hz",
+        "middle": "Dó central (Dó4), {{hz}} Hz",
+        "treble": "Dó7, {{hz}} Hz"
+      },
+      "strings": "Cordas desta nota",
+      "stringsValue": {
+        "bass": "{{count}} bordões revestidos de cobre",
+        "middle": "{{count}} cordas de aço",
+        "treble": "{{count}} cordas de aço curtas"
+      },
+      "stretch": "Desvio dos parciais",
+      "stretchValue": "o parcial {{n}} fica {{cents}} cents alto",
+      "stretchModel": "o parcial {{n}} fica cerca de {{cents}} cents alto, neste modelo",
+      "decay": "Tempo de decaimento",
+      "decayValue": "cerca de {{seconds}} s para cair 60 dB",
+      "decayModel": "cerca de {{seconds}} s neste modelo",
+      "tension": "Tensão das cordas",
+      "tensionValue": "cerca de {{tonnes}} toneladas de força, somando todas as cordas"
+    },
+    "compare": {
+      "move": "Como a corda é tocada",
+      "moveValue": {
+        "grand": "golpeada por baixo por um martelo de feltro",
+        "upright": "golpeada pela frente por um martelo de feltro",
+        "harpsichord": "pinçada por um plectro"
+      },
+      "return": "Como o martelo volta",
+      "returnValue": {
+        "grand": "cai de volta pelo próprio peso",
+        "upright": "é puxado de volta por molas e uma fita",
+        "harpsichord": "não há martelo para voltar"
+      },
+      "touch": "Toque",
+      "touchValue": {
+        "grand": "define o volume e o brilho",
+        "upright": "define o volume",
+        "harpsichord": "não muda o volume"
+      }
+    }
+  },
+  "parts": {
+    "key": "Esta tecla",
+    "keyboard": "Teclas",
+    "capstan": "Cabrestante",
+    "wippen": "Báscula",
+    "jack": "Lançador",
+    "letOffButton": "Botão de escape",
+    "repetitionLever": "Alavanca de repetição",
+    "knuckle": "Rolete",
+    "hammer": "Martelo",
+    "backCheck": "Contra-martelo",
+    "damper": "Abafador",
+    "actions": "Mecanismo das outras teclas",
+    "strings": "Cordas desta nota",
+    "stringSet": "Cordas de aço",
+    "bassStrings": "Bordões revestidos de cobre",
+    "bridge": "Cavalete",
+    "soundboard": "Tábua harmônica",
+    "plate": "Chapa de ferro fundido",
+    "tuningPins": "Cravelhas",
+    "case": "Caixa e tampa",
+    "pedals": "Pedais",
+    "inset": "Zoom no escape, 4 vezes maior",
+    "upright": "Mecanismo de piano vertical",
+    "harpsichord": "Saltarelo do cravo",
+    "uprightHammer": "Martelo",
+    "hammerButt": "Noz",
+    "bridleTape": "Correia",
+    "uprightDamper": "Abafador",
+    "uprightStrings": "Cordas",
+    "harpsichordJack": "Saltarelo",
+    "tongue": "Lingueta",
+    "plectrum": "Plectro",
+    "harpsichordDamper": "Abafador",
+    "harpsichordString": "Corda"
+  },
+  "sections": {
+    "key": {
+      "title": "Você nunca toca na corda",
+      "p1": "Este é um piano de cauda de concerto, um Steinway modelo D. Ele mede 274 cm de comprimento, pesa cerca de 480 kg e tem mais de 12.000 peças. Com a tampa aberta, você vê as <strong>cordas</strong>, a <strong>chapa</strong> dourada de ferro fundido e, mais embaixo, a <strong>tábua harmônica</strong> de madeira. As 88 <strong>teclas</strong> tocam notas de 27,5 a 4.186 hertz (Hz). Um hertz é uma vibração por segundo. O modelo foi cortado no dó central, a nota que fica perto do meio do teclado, para você ver uma tecla em ação.",
+      "p2": "Aperte uma tecla e ela desce cerca de 10 mm. A ponta de trás sobe e ergue o <strong>abafador</strong>, uma almofada de feltro que mantém as cordas em silêncio. Em seguida, um <strong>martelo</strong> de feltro sobe de 45 a 47 mm e bate nas cordas por baixo. A nota soa até você soltar a tecla e o abafador cair de volta.",
+      "p3": "E aqui vem a surpresa: seu dedo nunca toca na corda. A tecla é uma alavanca que arremessa o martelo. Nos últimos um ou dois milímetros, o martelo voa sozinho, então nada o empurra na hora em que ele bate. Com um toque médio, ele chega à corda cerca de 67 milissegundos (ms) depois que seu dedo encosta na tecla. Um milissegundo é um milésimo de segundo. Um toque forte leva cerca de 36 ms, e um suave, cerca de 160 ms.",
+      "p4": "A reprodução está em câmera lenta, e não por igual: os momentos mais rápidos são os mais esticados, para dar tempo de você vê-los. No painel, a linha Tempo real mostra sempre o tempo do relógio. Na velocidade padrão, a nota dura tanto quanto duraria num piano de verdade. Escolha Som ligado para ouvi-la. Não é uma gravação: seu navegador monta o som a partir dos números deste modelo."
+    },
+    "lever": {
+      "title": "Uma alavanca que arremessa",
+      "p1": "A <strong>tecla</strong> é uma gangorra. Ela balança sobre um pino: quando você empurra a frente para baixo, a ponta de trás sobe. Lá atrás, um parafuso chamado <strong>cabrestante</strong> ergue a <strong>báscula</strong>, uma alavanca articulada. A báscula carrega o <strong>lançador</strong>, uma pecinha em forma de L. O lançador empurra para cima o <strong>rolete</strong>, um pequeno rolo forrado de couro que fica embaixo do cabo do martelo.",
+      "p2": "O <strong>martelo</strong> gira para cima em torno de um eixo. A cabeça de feltro fica no cabo, a cerca de 130 mm desse eixo. Juntas, essas alavancas formam o chamado mecanismo, que multiplica o movimento da tecla. A cabeça do martelo percorre cerca de 5 a 6 vezes a distância que a frente da tecla anda. Como faz isso no mesmo tempo, ela também é mais ou menos 5 a 6 vezes mais rápida. Ligue Seguir o martelo para pegar carona com ele.",
+      "p3": "Com um toque médio, a tecla desce a uma velocidade de 0,3 a 0,5 metro por segundo (m/s), e o martelo sobe a cerca de 1,5 a 2,5 m/s. Numa nota suave, o martelo sobe a cerca de 1 m/s. Numa nota forte, chega a cerca de 5 m/s, ou 18 km/h. Aí ele bate como um objeto que cai da altura do ombro de uma pessoa alta. Escolha um toque e veja os números do painel mudarem.",
+      "p4": "Basta apoiar cerca de 50 g na frente de uma tecla para ela começar a descer. Para tocar, é preciso mais força: cerca de 8 newtons (N) numa nota suave e até 50 N numa forte, o peso de uns 5 kg. Neste modelo, toda alavanca é perfeitamente rígida, e a tecla sempre bate no fundo logo depois do golpe. Num mecanismo de verdade, as peças cedem um pouco num golpe forte, e a ordem muda conforme o volume. Numa nota suave, o martelo chega à corda primeiro. Já numa nota forte, a tecla bate no fundo cerca de 3 ms antes de o martelo atingir a corda."
+    },
+    "letGo": {
+      "title": "O martelo se solta",
+      "p1": "Pouco antes de o martelo chegar à corda, o <strong>lançador</strong> precisa sair do caminho. A outra ponta do L esbarra no <strong>botão de escape</strong>, um pequeno batente logo acima. O lançador tomba, e a ponta de cima escorrega de baixo do <strong>rolete</strong>. Esse momento em que o martelo fica livre se chama escape, e o sistema que faz isso é o mecanismo de escape. O escape acontece de 1 a 3 mm abaixo da corda, mais ou menos a espessura de uma ou duas moedas de euro. O zoom no escape mostra esse cantinho quatro vezes maior.",
+      "p2": "Daí em diante, o <strong>martelo</strong> voa solto. Neste modelo, a distância de escape é de 1,5 mm, então o voo dura cerca de 1,5 ms numa nota suave e 0,3 ms numa forte. No dó central, o martelo fica em contato com a corda por cerca de 2 ms, tão pouco quanto o clique de uma câmera a 1/500 de segundo. Depois do escape, nada do que você fizer muda o golpe: seu toque só define a velocidade do martelo naquele instante. É essa velocidade que decide o volume e o brilho da nota.",
+      "p3": "Depois do golpe, o martelo quica de volta para baixo, e alguma coisa precisa apará-lo. O <strong>contra-martelo</strong>, um bloco forrado de feltro na parte de trás da tecla, segura o martelo de 13 a 16 mm abaixo da corda. Num golpe forte, o martelo volta mais rápido e por isso é aparado mais embaixo. Enquanto você mantém a tecla apertada, ele espera ali, longe da corda, e a nota soa livre.",
+      "p4": "A <strong>alavanca de repetição</strong> é o que deixa o piano de cauda tão rápido. Empurrada por uma mola, ela sobe por baixo do rolete e mantém o martelo erguido no meio do caminho. Assim, o lançador pode voltar mais cedo para baixo do rolete. A tecla só precisa subir cerca de um terço do curso para poder tocar de novo. Segundo os fabricantes, uma tecla de piano de cauda consegue repetir até cerca de 15 vezes por segundo, contra cerca de 7 num piano vertical. Bartolomeo Cristofori pôs o primeiro mecanismo de escape no piano dele por volta de 1700, e Érard patenteou este duplo escape em 1821."
+    },
+    "dampers": {
+      "title": "Abafadores e pedais",
+      "p1": "A maioria das notas tem um <strong>abafador</strong>, uma almofada de feltro que fica apoiada nas cordas e as mantém em silêncio. Pequenos pesos de chumbo o seguram ali. Quando você aperta uma tecla, a ponta de trás dela ergue o abafador antes de o martelo chegar. Numa medição com uma nota forte, o abafador saiu das cordas cerca de 15 ms antes do golpe.",
+      "p2": "Neste modelo, o abafador sai das cordas depois do primeiro milímetro do curso da tecla. Esse ponto é uma suposição, porque nenhuma fonte informa esse valor para um piano de cauda. Com um toque mais lento, o resto do curso demora mais, e o abafador sai ainda mais cedo em relação ao golpe. Quando você solta a tecla, o abafador cai de volta e a nota para. As 18 a 21 notas mais agudas do piano não têm abafador nenhum: escolha Dó7 agudo, e a nota continua soando depois que você solta a tecla.",
+      "p3": "O pedal de sustentação, o da direita, ergue todos os abafadores de uma vez. A nota continua soando depois que você solta a tecla, e outras cordas começam a vibrar junto. Em medições num piano de cauda de concerto Yamaha, o dó central levou 9,5 s para sumir com a tecla apertada e 15,3 s com o pedal. Ligue Vibração das cordas para ver as outras cordas tremularem.",
+      "p4": "O pedal da esquerda, chamado una corda, desloca o teclado e todo o mecanismo um pouco para a direita. Assim, cada martelo atinge duas das três cordas da nota, ou uma das duas nos graves. A corda que fica de fora ainda vibra um pouco, por simpatia com as outras, e a nota sai mais suave e menos brilhante. A medida desse deslocamento não foi publicada, por isso o modelo mostra o movimento sem dar um número. No piano vertical, o pedal da esquerda funciona de outro jeito: ele só aproxima os martelos das cordas."
+    },
+    "room": {
+      "title": "Da corda para a sala",
+      "p1": "Uma corda é fina demais para empurrar muito ar sozinha. Por isso, ela pressiona o <strong>cavalete</strong>, uma longa régua de madeira colada na <strong>tábua harmônica</strong>. A tábua harmônica é uma placa larga de abeto, com 6 a 9 mm de espessura, e funciona como um alto-falante. A vibração passa da corda para o cavalete, do cavalete para a tábua, e a tábua move o ar. Aqui, Vibração das cordas já está ligada, para você ver a corda e a tábua se mexendo, com o movimento bem exagerado.",
+      "p2": "Um piano de cauda de concerto tem cerca de 230 cordas, e cada uma puxa com 700 a 900 newtons, mais ou menos o peso de um adulto. Somadas, dão cerca de 20 toneladas de força, algo como o peso de dez carros. Uma estrutura de madeira não aguentaria tanto. Por isso, uma <strong>chapa</strong> de ferro fundido, de 160 a 180 kg num piano de concerto, divide a carga com a caixa. Os <strong>bordões</strong>, as cordas graves, são fios de aço enrolados em cobre e passam cruzados por cima das outras. O cobre acrescenta peso, e assim a corda soa grave sem precisar ser muito comprida.",
+      "p3": "Uma corda vibra na nota principal e, ao mesmo tempo, numa série de notas mais agudas, chamadas parciais. Numa corda ideal, elas vibrariam exatamente 2, 3 ou 4 vezes mais rápido que a nota principal, e assim por diante. Mas o fio de aço é rígido, então cada parcial sai um pouco mais agudo. Os músicos dizem que ele fica alto. O valor abaixo mede esse desvio em cents, centésimos do intervalo entre uma tecla e a seguinte. Para compensar, os afinadores esticam um pouco as oitavas. No grave profundo, a tábua harmônica mal consegue passar para o ar as frequências mais baixas, abaixo de uns 100 Hz. Por isso, você ouve essas notas principalmente pelos parciais delas.",
+      "p4": "Uma nota tocada se apaga em duas etapas: primeiro uma queda rápida, chamada som imediato, e depois um som residual lento, que pode durar muitos segundos. Um martelo mais rápido deixa a nota mais forte e mais brilhante, porque o feltro endurece ao ser amassado e faz soar mais parciais agudos. O tempo de decaimento, abaixo, mostra quanto tempo uma nota leva para cair 60 decibéis (dB). Esses tempos foram medidos num piano de cauda de concerto Yamaha, não neste Steinway, e os valores do Dó7 são estimativas do próprio modelo. O pedal nem sempre ajuda: na nota grave medida, o som sumiu um pouco mais rápido com ele. No painel, o nível sonoro mostra quantos dB a nota está abaixo de um golpe forte neste modelo, e não o volume na sala."
+    },
+    "compare": {
+      "title": "Piano vertical e cravo",
+      "p1": "Aqui, três mecanismos aparecem lado a lado. No piano de cauda, o <strong>martelo</strong> sobe por baixo e cai de volta pelo próprio peso. O <strong>mecanismo de piano vertical</strong> é o daquele piano alto que fica encostado na parede. É a mesma ideia, só que virada de lado. As cordas ficam em pé, então o martelo vai até elas na horizontal. Molas e uma fita fina, chamada correia, puxam o martelo de volta.",
+      "p2": "A maioria dos pianos verticais também não tem alavanca de repetição. Por isso, o lançador só volta para o lugar quando a tecla sobe quase até o fim. Segundo os fabricantes, uma tecla de piano vertical repete cerca de 7 vezes por segundo, contra até cerca de 15 num piano de cauda. Neste modelo, o vertical usa as mesmas distâncias de tecla e de martelo do piano de cauda, para a comparação ser justa. Ligue Mecanismo vertical fantasma em qualquer capítulo para vê-lo ao lado do mecanismo de cauda.",
+      "p3": "O cravo faz a nota de outro jeito. A tecla ergue uma tira de madeira, o <strong>saltarelo</strong>. Nele vai preso um pequeno plectro, uma espécie de palheta, que belisca a corda. Não importa com que rapidez você aperte a tecla: a corda é beliscada sempre do mesmo jeito. Por isso, seu toque não deixa a nota mais forte nem mais fraca. Na época de Cristofori, o cravo soava mais alto e mais brilhante que o piano dele, mas não respondia ao toque de quem tocava. Este modelo desenha o saltarelo de forma simples, sem copiar um instrumento real.",
+      "p4": "Em 1711, o escritor Scipione Maffei descreveu o instrumento de Cristofori como um gravicembalo col piano, e forte, ou seja, um cravo capaz de tocar suave e forte. Tocar suave e forte, piano e forte em italiano, era justamente o que as teclas de um cravo não conseguiam. O clavicórdio, outro instrumento de teclado antigo, conseguia, mas soava tão baixo que mal dava para ouvi-lo a poucos passos de distância. Escolha um instrumento abaixo para comparar os três."
+    }
+  }
+}

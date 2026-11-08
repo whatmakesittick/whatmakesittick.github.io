@@ -1,5 +1,6 @@
 import {
   BoxGeometry,
+  DoubleSide,
   Group,
   Mesh,
   MeshBasicMaterial,
@@ -9,6 +10,7 @@ import {
 } from 'three';
 import { describe, expect, it, vi } from 'vitest';
 import { OcclusionRays, TREE_BUILDS_PER_PASS, TREE_MIN_TRIANGLES } from './occlusionRays';
+import type { OcclusionHitFilter } from './occlusionRays';
 
 const PART = 'wheel';
 const CAMERA_Z = 10;
@@ -26,10 +28,10 @@ function denseSphere(): Mesh {
   return mesh;
 }
 
-function prepared(scene: Group): OcclusionRays {
+function prepared(scene: Group, hitFilter?: OcclusionHitFilter): OcclusionRays {
   const camera = new PerspectiveCamera();
   camera.position.z = CAMERA_Z;
-  const rays = new OcclusionRays({ scene, partOf: () => undefined });
+  const rays = new OcclusionRays({ scene, partOf: () => undefined, hitFilter });
   rays.prepare(camera, true);
   return rays;
 }
@@ -99,5 +101,15 @@ describe('OcclusionRays', () => {
     box.visible = false;
     scene.add(box);
     expect(prepared(scene).isBlocked(ORIGIN, CAMERA_Z, PART)).toBe(false);
+  });
+
+  it('lets the hit filter drop hits, still finding a kept hit further along the ray', () => {
+    const scene = new Group();
+    const sphere = denseSphere();
+    sphere.material = new MeshBasicMaterial({ side: DoubleSide });
+    scene.add(sphere);
+    expect(prepared(scene, () => false).isBlocked(ORIGIN, CAMERA_Z, PART)).toBe(false);
+    const farSideOnly: OcclusionHitFilter = (hit) => hit.point.z < SPHERE_Z;
+    expect(prepared(scene, farSideOnly).isBlocked(ORIGIN, CAMERA_Z, PART)).toBe(true);
   });
 });

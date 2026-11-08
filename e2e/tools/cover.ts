@@ -1,6 +1,6 @@
 import { chromium } from '@playwright/test';
 
-const [, , slug, phaseArg, outFile] = process.argv;
+const [, , slug, phaseArg, outFile, chapterArg] = process.argv;
 const DEV_PORT = process.env.QA_PORT ?? '5180';
 const VIEWPORT = { width: 1600, height: 900 };
 const DEVICE_SCALE = 2;
@@ -14,7 +14,7 @@ const SOFTWARE_WEBGL_FLAGS = [
 ];
 
 if (!slug || !phaseArg || !outFile) {
-  throw new Error('usage: node e2e/tools/cover.ts <slug> <phase> <out.png>');
+  throw new Error('usage: node e2e/tools/cover.ts <slug> <phase> <out.png> [chapter]');
 }
 
 const browser = await chromium.launch({ args: SOFTWARE_WEBGL_FLAGS });
@@ -22,6 +22,13 @@ const page = await browser.newPage({ viewport: VIEWPORT, deviceScaleFactor: DEVI
 page.on('pageerror', (error) => console.error('pageerror', error.message));
 await page.goto(`http://localhost:${DEV_PORT}/${slug}/`, { waitUntil: 'networkidle' });
 await page.waitForSelector('#scene canvas');
+if (chapterArg) {
+  const chapter = `section.chapter[data-preset="${chapterArg}"]`;
+  await page
+    .locator(chapter)
+    .evaluate((section) => section.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  await page.waitForSelector(`${chapter}.is-active`);
+}
 const play = page.locator('[data-control="play"]');
 if ((await play.getAttribute('data-playing')) === 'true') await play.click();
 await page.locator('[data-control="scrubber"]').fill(phaseArg);

@@ -1,0 +1,13 @@
+{
+  "slug": "piano",
+  "tags": ["mechanics", "physics", "sound"],
+  "topic": "grand piano",
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A black concert grand piano with its lid up on a dark stage, cut open at middle C to show one key's hammer action, beside the title How a grand piano works"
+  }
+}

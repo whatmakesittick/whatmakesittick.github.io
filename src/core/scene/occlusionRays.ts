@@ -4,10 +4,13 @@ import { MeshBVH } from 'three-mesh-bvh';
 import { isBlocking, isMesh, isSolid } from './occlusion';
 import type { PartOf } from './occlusion';
 
+export type OcclusionHitFilter = (hit: Intersection) => boolean;
+
 export interface OcclusionRaysOptions {
   scene: Object3D;
   partOf: PartOf;
   ignored?: readonly Object3D[];
+  hitFilter?: OcclusionHitFilter;
 }
 
 interface Blocker {
@@ -46,6 +49,7 @@ export class OcclusionRays {
   private readonly scene: Object3D;
   private readonly partOf: PartOf;
   private readonly ignored: ReadonlySet<Object3D>;
+  private readonly hitFilter: OcclusionHitFilter | undefined;
   private readonly trees = new WeakMap<BufferGeometry, MeshBVH>();
   private readonly blockers: Blocker[] = [];
   private readonly raycaster = new Raycaster();
@@ -58,7 +62,8 @@ export class OcclusionRays {
     this.scene = options.scene;
     this.partOf = options.partOf;
     this.ignored = new Set(options.ignored);
-    this.raycaster.firstHitOnly = true;
+    this.hitFilter = options.hitFilter;
+    this.raycaster.firstHitOnly = !options.hitFilter;
   }
 
   prepare(camera: PerspectiveCamera, sceneChanged: boolean): void {
@@ -124,7 +129,9 @@ export class OcclusionRays {
   private blocks({ mesh }: Blocker, part: string): boolean {
     this.hits.length = 0;
     this.cast(mesh);
-    return this.hits.some((hit) => isBlocking(hit, part, this.partOf));
+    return this.hits.some(
+      (hit) => (this.hitFilter?.(hit) ?? true) && isBlocking(hit, part, this.partOf),
+    );
   }
 
   private cast(mesh: Mesh): void {

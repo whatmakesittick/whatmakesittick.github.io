@@ -1,0 +1,308 @@
+{
+  "meta": {
+    "title": "So funktioniert ein Flügel",
+    "eyebrow": "Musikinstrumente",
+    "tagline": "Drücken Sie in 3D eine Taste am Konzertflügel: Ihr Finger berührt die Saite nie, und der Filzhammer trifft sie im freien Flug.",
+    "description": "Drücken Sie in 3D eine Taste am Konzertflügel, sehen Sie den Hammer frei zur Saite fliegen und hören Sie, wie Ihr Anschlag den Ton formt.",
+    "summary": "Ein Tastenanschlag vom Finger bis zur Saite: die Hebel, die den Hammer schleudern, die Auslösung, die ihn freigibt, Dämpfer und Pedale, wie der Resonanzboden den Raum mit Klang füllt und was Klavier und Cembalo anders machen.",
+    "socialAlt": "Ein schwarzer Konzertflügel mit geöffnetem Deckel auf einer dunklen Bühne, beim eingestrichenen c aufgeschnitten, damit man die Hammermechanik einer Taste sieht, daneben der Titel „So funktioniert ein Flügel“"
+  },
+  "stage": {
+    "label": "Interaktives Modell eines Konzertflügels",
+    "gauge": "Live-Werte von Taste und Hammer"
+  },
+  "timeline": {
+    "label": "Ein Tastenanschlag",
+    "phases": "Zu einem Schritt springen",
+    "speed": "Wiedergabetempo",
+    "value": "Schritt {{step}} von {{total}}",
+    "during": "Schritt {{step}} von {{total}}, {{detail}}",
+    "speedValue": "{{seconds}} s pro Ton",
+    "speedDescribe": "Alle {{seconds}} Sekunden ein Tastenanschlag",
+    "speedDescribeReal": "Alle {{seconds}} Sekunden ein Tastenanschlag, der Ton klingt in Echtzeit aus",
+    "phase": {
+      "press": "Drücken",
+      "escape": "Auslösen",
+      "strike": "Anschlagen",
+      "check": "Klingen",
+      "release": "Loslassen"
+    },
+    "jump": {
+      "press": "Direkt zum Tastendruck",
+      "escape": "Direkt zur Auslösung",
+      "strike": "Direkt zum Anschlag",
+      "check": "Direkt zum klingenden Ton",
+      "release": "Direkt zum Loslassen"
+    },
+    "detail": {
+      "press": "die Taste geht nach unten und hebt den Hammer",
+      "escape": "die Stoßzunge weicht aus und der Hammer fliegt frei",
+      "strike": "der Hammer trifft die Saite und prallt zurück",
+      "check": "der Fänger hält den Hammer, während der Ton klingt",
+      "release": "die Taste geht wieder hoch und die Mechanik kehrt in ihre Ruhelage zurück"
+    },
+    "moment": {
+      "jackTouch": "Stoßzunge an der Puppe",
+      "letOff": "Auslösung",
+      "strike": "Anschlag",
+      "checked": "Aufgefangen",
+      "repeatReady": "Bereit zur Wiederholung",
+      "damped": "Dämpfer liegt auf"
+    }
+  },
+  "controls": {
+    "label": "Steuerung des Modells",
+    "touch": "Anschlag",
+    "touchOptions": {
+      "soft": "Sanft",
+      "medium": "Mittel",
+      "hard": "Kräftig"
+    },
+    "pedal": "Pedal",
+    "pedalOptions": {
+      "none": "Kein Pedal",
+      "sustain": "Haltepedal",
+      "unaCorda": "Una corda"
+    },
+    "registerOptions": {
+      "bass": "Tief (C)",
+      "middle": "Mitte (c¹)",
+      "treble": "Hoch (c⁴)"
+    },
+    "compareOptions": {
+      "grand": "Flügel",
+      "upright": "Klavier",
+      "harpsichord": "Cembalo"
+    },
+    "soundOptions": {
+      "on": "Ton an",
+      "off": "Ton aus"
+    },
+    "groups": {
+      "touch": "Wie fest Sie drücken",
+      "pedal": "Pedal",
+      "register": "Welcher Ton",
+      "compare": "Instrument zum Vergleich",
+      "moment": "Zu einem Moment springen",
+      "sound": "Ton"
+    },
+    "views": {
+      "sound": {
+        "name": "Ton",
+        "short": "Ton",
+        "hint": "Ton (S)"
+      },
+      "wave": {
+        "name": "Saitenschwingung",
+        "short": "Schwingung",
+        "hint": "Saitenschwingung (W)"
+      },
+      "inset": {
+        "name": "Auslösung unter der Lupe",
+        "short": "Lupe",
+        "hint": "Auslösung unter der Lupe (I)"
+      },
+      "ghost": {
+        "name": "Klaviermechanik zum Vergleich",
+        "short": "Klavier",
+        "hint": "Klaviermechanik zum Vergleich (G)"
+      },
+      "follow": {
+        "name": "Dem Hammer folgen",
+        "short": "Folgen",
+        "hint": "Dem Hammer folgen (F)"
+      },
+      "labels": {
+        "name": "Teilenamen",
+        "short": "Namen",
+        "hint": "Teilenamen (L)"
+      }
+    }
+  },
+  "readouts": {
+    "time": "Echtzeit",
+    "key": "Tastenweg",
+    "hammer": "Hammer bis zur Saite",
+    "speed": "Hammergeschwindigkeit",
+    "level": "Pegel"
+  },
+  "units": {
+    "millis": "{{value}} ms",
+    "seconds": "{{value}} s",
+    "mm": "{{value}} mm",
+    "aboutMm": "etwa {{value}} mm",
+    "mmRange": "{{min}} bis {{max}} mm",
+    "onString": "An der Saite",
+    "metresPerSecond": "{{value}} m/s",
+    "db": "{{value}} dB",
+    "silent": "Stille",
+    "hz": "{{value}} Hz"
+  },
+  "chapters": {
+    "key": {
+      "touchTime": "Vom Tastendruck bis zum Anschlag",
+      "touchTimeValue": "etwa {{ms}} ms",
+      "dip": "Tastenweg",
+      "blow": "Steighöhe des Hammers",
+      "parts": "Teile",
+      "partsValue": "mehr als {{count}} im ganzen Flügel"
+    },
+    "lever": {
+      "ratio": "Hammerweg",
+      "ratioValue": "etwa {{min}}- bis {{max}}-mal so weit wie die Taste",
+      "keySpeed": "Tastengeschwindigkeit beim Auslösen, im Modell",
+      "hammerSpeed": "Hammergeschwindigkeit an der Saite",
+      "drop": "Wucht wie bei einem Fall aus",
+      "dropValue": "etwa {{cm}} cm Höhe"
+    },
+    "letGo": {
+      "letOff": "Auslöseabstand zur Saite",
+      "letOffValue": "{{min}} bis {{max}} mm, im Modell {{model}} mm",
+      "flight": "Freier Flug",
+      "flightValue": "{{ms}} ms von der Auslösung bis zur Saite",
+      "check": "Vom Fänger aufgefangen",
+      "checkValue": "etwa {{mm}} mm unter der Saite",
+      "repeat": "Wiederholungen, laut Herstellern",
+      "repeatValue": "bis etwa {{grand}} pro Sekunde, beim aufrechten Klavier etwa {{upright}}"
+    },
+    "dampers": {
+      "damper": "Dämpfer dieses Tons",
+      "damperValue": {
+        "down": "Liegt auf den Saiten",
+        "rising": "Hebt ab",
+        "up": "Abgehoben",
+        "falling": "Fällt zurück",
+        "pedal": "Vom Pedal angehoben",
+        "none": "Nicht vorhanden"
+      },
+      "lead": "Dämpfer hebt ab",
+      "leadValue": "{{ms}} ms vor dem Anschlag, im Modell",
+      "struck": "Getroffene Saiten",
+      "struckValue": "{{struck}} von {{total}} Saiten",
+      "undamped": "Töne ohne Dämpfer",
+      "undampedValue": "die obersten {{min}} bis {{max}} Töne"
+    },
+    "room": {
+      "note": "Ton",
+      "noteValue": {
+        "bass": "Großes C, {{hz}} Hz",
+        "middle": "Eingestrichenes c (c¹), {{hz}} Hz",
+        "treble": "Viergestrichenes c (c⁴), {{hz}} Hz"
+      },
+      "strings": "Saiten für diesen Ton",
+      "stringsValue": {
+        "bass": "{{count}} kupferumsponnene Saiten",
+        "middle": "{{count}} Stahlsaiten",
+        "treble": "{{count}} kurze Stahlsaiten"
+      },
+      "stretch": "Zu hohe Teiltöne",
+      "stretchValue": "der {{n}}. Teilton liegt {{cents}} Cent zu hoch",
+      "stretchModel": "der {{n}}. Teilton liegt im Modell etwa {{cents}} Cent zu hoch",
+      "decay": "Abklingzeit",
+      "decayValue": "etwa {{seconds}} s, um 60 dB leiser zu werden",
+      "decayModel": "etwa {{seconds}} s im Modell",
+      "tension": "Saitenzug",
+      "tensionValue": "etwa {{tonnes}} Tonnen Zugkraft, alle Saiten zusammen"
+    },
+    "compare": {
+      "move": "Wie die Saite zum Klingen kommt",
+      "moveValue": {
+        "grand": "ein Filzhammer schlägt sie von unten an",
+        "upright": "ein Filzhammer schlägt sie von vorn an",
+        "harpsichord": "ein Plektrum zupft sie an"
+      },
+      "return": "Wie der Hammer zurückkommt",
+      "returnValue": {
+        "grand": "er fällt durch sein eigenes Gewicht zurück",
+        "upright": "Federn und ein Bändchen ziehen ihn zurück",
+        "harpsichord": "es gibt gar keinen Hammer"
+      },
+      "touch": "Anschlag",
+      "touchValue": {
+        "grand": "bestimmt, wie laut und wie hell der Ton ist",
+        "upright": "bestimmt, wie laut der Ton ist",
+        "harpsichord": "ändert nichts an der Lautstärke"
+      }
+    }
+  },
+  "parts": {
+    "key": "Diese Taste",
+    "keyboard": "Klaviatur",
+    "capstan": "Pilote",
+    "wippen": "Hebeglied",
+    "jack": "Stoßzunge",
+    "letOffButton": "Auslösepuppe",
+    "repetitionLever": "Repetierschenkel",
+    "knuckle": "Hammerrolle",
+    "hammer": "Hammer",
+    "backCheck": "Fänger",
+    "damper": "Dämpfer",
+    "actions": "Mechanik der übrigen Tasten",
+    "strings": "Saiten dieses Tons",
+    "stringSet": "Stahlsaiten",
+    "bassStrings": "Umsponnene Basssaiten",
+    "bridge": "Steg",
+    "soundboard": "Resonanzboden",
+    "plate": "Gussplatte",
+    "tuningPins": "Stimmwirbel",
+    "case": "Gehäuse und Deckel",
+    "pedals": "Pedale",
+    "inset": "Auslösung unter der Lupe, 4-fach vergrößert",
+    "upright": "Klaviermechanik",
+    "harpsichord": "Springer des Cembalos",
+    "uprightHammer": "Hammer",
+    "hammerButt": "Hammernuss",
+    "bridleTape": "Bändchen",
+    "uprightDamper": "Dämpfer",
+    "uprightStrings": "Saiten",
+    "harpsichordJack": "Springer",
+    "tongue": "Zunge",
+    "plectrum": "Plektrum",
+    "harpsichordDamper": "Dämpfer",
+    "harpsichordString": "Saite"
+  },
+  "sections": {
+    "key": {
+      "title": "Die Saite berühren Sie nie",
+      "p1": "Vor Ihnen steht ein Konzertflügel, ein Steinway Modell D. Er ist 274 cm lang, wiegt etwa 480 kg und besteht aus mehr als 12.000 Teilen. Unter dem geöffneten Deckel sehen Sie die <strong>Saiten</strong>, die goldfarbene <strong>Gussplatte</strong> aus Eisen und darunter den hölzernen <strong>Resonanzboden</strong>. Mit den 88 <strong>Tasten</strong> spielen Sie Töne von 27,5 bis 4.186 Hertz (Hz). Ein Hertz ist eine Schwingung pro Sekunde. Das Modell ist beim eingestrichenen c aufgeschnitten, dem c nahe der Mitte der Klaviatur. So können Sie einer einzelnen Taste bei der Arbeit zusehen.",
+      "p2": "Wenn Sie eine Taste drücken, sinkt sie etwa 10 mm ein. Ihr hinteres Ende geht dabei hoch und hebt den <strong>Dämpfer</strong> an, ein Filzpolster, das die Saiten ruhig hält. Dann schwingt ein mit Filz bezogener <strong>Hammer</strong> 45 bis 47 mm nach oben und schlägt die Saiten von unten an. Klavierbauer nennen diesen Weg die Steighöhe. Der Ton klingt, bis Sie die Taste loslassen und der Dämpfer wieder auf die Saiten fällt.",
+      "p3": "Und jetzt die Überraschung: Ihr Finger berührt die Saite nie. Die Taste ist ein Hebel, der den Hammer hochschleudert. Auf den letzten ein, zwei Millimetern fliegt der Hammer von allein. Wenn er auftrifft, schiebt ihn also nichts mehr an. Bei mittlerem Anschlag erreicht er die Saite etwa 67 Millisekunden (ms), nachdem Ihr Finger die Taste berührt hat. Eine Millisekunde ist eine Tausendstelsekunde. Bei kräftigem Anschlag sind es etwa 36 ms, bei sanftem etwa 160 ms.",
+      "p4": "Die Wiedergabe ist verlangsamt, und zwar nicht gleichmäßig: Die schnellsten Momente sind am stärksten gedehnt, damit Sie sie überhaupt sehen können. Der Wert „Echtzeit“ in der Anzeige zählt dagegen immer die tatsächlich vergangene Zeit. Beim voreingestellten Wiedergabetempo klingt der Ton so lange wie an einem echten Flügel. Mit „Ton an“ hören Sie ihn. Das ist keine Aufnahme: Ihr Browser erzeugt den Ton aus den Zahlen dieses Modells."
+    },
+    "lever": {
+      "title": "Ein Hebel als Schleuder",
+      "p1": "Die <strong>Taste</strong> ist eine Wippe. Sie kippt auf einem Stift hin und her: Drücken Sie das vordere Ende hinunter, geht das hintere hoch. Dort sitzt eine Schraube, die <strong>Pilote</strong>. Sie hebt das <strong>Hebeglied</strong> an, einen drehbar gelagerten Hebel. Das Hebeglied trägt die <strong>Stoßzunge</strong>, ein kleines L-förmiges Teil. Die Stoßzunge drückt von unten gegen die <strong>Hammerrolle</strong>, ein mit Leder bezogenes Röllchen unter dem Stiel des Hammers.",
+      "p2": "Der <strong>Hammer</strong> schwingt um eine Achse nach oben. Sein Filzkopf sitzt etwa 130 mm von dieser Achse entfernt am Stiel. All diese Hebel zusammen heißen die Mechanik. Sie vervielfachen die Bewegung der Taste: Der Hammerkopf legt etwa 5- bis 6-mal so viel Weg zurück wie die Vorderkante der Taste. Er braucht dafür aber nicht länger, also ist er auch ungefähr so viel schneller. Schalten Sie „Dem Hammer folgen“ ein und fliegen Sie mit.",
+      "p3": "Bei mittlerem Anschlag erreicht die Taste 0,3 bis 0,5 Meter pro Sekunde (m/s), der Hammer etwa 1,5 bis 2,5 m/s. Für einen leisen Ton fliegt der Hammer mit etwa 1 m/s nach oben, für einen lauten mit etwa 5 m/s, das sind 18 km/h. Ein so schneller Hammer trifft die Saite wie etwas, das einem großen Menschen von der Schulter fällt. Wählen Sie einen Anschlag und sehen Sie zu, wie sich die Werte ändern.",
+      "p4": "Schon etwa 50 g vorn auf einer Taste genügen, und sie setzt sich in Bewegung. Zum Spielen braucht es mehr Kraft: etwa 8 Newton (N) für einen leisen Ton und bis zu 50 N für einen lauten. Das entspricht dem Gewicht von etwa 5 kg. Im Modell ist jeder Hebel vollkommen starr, und die Taste setzt immer erst kurz nach dem Anschlag unten auf. Eine echte Mechanik gibt bei einem harten Schlag ein wenig nach, und die Reihenfolge hängt von der Lautstärke ab. Bei einem leisen Ton erreicht der Hammer zuerst die Saite. Bei einem lauten sitzt die Taste schon etwa 3 ms unten auf, bevor der Hammer trifft."
+    },
+    "letGo": {
+      "title": "Rechtzeitig loslassen",
+      "p1": "Kurz bevor der Hammer die Saite erreicht, muss ihm die <strong>Stoßzunge</strong> aus dem Weg gehen. Dazu stößt ihr waagerechter Arm gegen die <strong>Auslösepuppe</strong>, einen kleinen Knopf über ihr. Die Stoßzunge kippt, und ihre Spitze rutscht unter der <strong>Hammerrolle</strong> weg. Diesen Moment nennt man Auslösung, und so heißt auch die Vorrichtung, die ihn bewirkt. Die Auslösung geschieht 1 bis 3 mm unter der Saite. Das ist etwa die Dicke von einer oder zwei Euromünzen. Mit „Auslösung unter der Lupe“ sehen Sie diese Ecke viermal so groß.",
+      "p2": "Von hier an fliegt der <strong>Hammer</strong> frei. Im Modell liegt die Auslösung 1,5 mm unter der Saite. Der Flug dauert also bei einem leisen Ton etwa 1,5 ms, bei einem lauten 0,3 ms. Beim eingestrichenen c berührt der Hammer die Saite dann etwa 2 ms lang, so kurz, wie eine Kamera bei 1/500 Sekunde belichtet. Nach der Auslösung können Sie am Schlag nichts mehr ändern. Ihr Anschlag bestimmt nur, wie schnell der Hammer im Moment der Auslösung ist. Und diese Geschwindigkeit entscheidet, wie laut und wie hell der Ton klingt.",
+      "p3": "Nach dem Anschlag springt der Hammer nach unten zurück, und irgendetwas muss ihn auffangen. Das übernimmt der <strong>Fänger</strong>, ein mit Filz bezogener Klotz am hinteren Ende der Taste. Er hält den Hammer 13 bis 16 mm unter der Saite fest. Nach einem harten Schlag prallt der Hammer schneller zurück und wird deshalb tiefer aufgefangen. Solange Sie die Taste gedrückt halten, wartet der Hammer dort mit etwas Abstand zur Saite. So kann der Ton ungestört klingen.",
+      "p4": "Der <strong>Repetierschenkel</strong> macht den Flügel schnell. Er federt unter der Hammerrolle nach oben und hält den Hammer ein Stück weit angehoben. So kann die Stoßzunge schon früh wieder unter die Rolle schlüpfen. Die Taste muss nur etwa ein Drittel ihres Weges zurück nach oben, dann kann sie erneut anschlagen. Laut Herstellern lässt sich eine Flügeltaste bis zu etwa 15-mal pro Sekunde anschlagen, die Taste eines aufrechten Klaviers etwa 7-mal. Bartolomeo Cristofori baute um 1700 die erste Auslösung in sein Pianoforte ein. Die Mechanik mit Repetierschenkel heißt doppelte Auslösung, und Érard ließ sie sich 1821 patentieren."
+    },
+    "dampers": {
+      "title": "Dämpfer und Pedale",
+      "p1": "Die meisten Töne haben einen <strong>Dämpfer</strong>, ein Filzpolster, das auf den Saiten liegt und sie stumm hält. Kleine Bleigewichte halten ihn dort. Wenn Sie eine Taste drücken, hebt ihr hinteres Ende den Dämpfer an, noch bevor der Hammer ankommt. Bei einer Messung an einem lauten Ton hob der Dämpfer etwa 15 ms vor dem Anschlag von den Saiten ab.",
+      "p2": "Im Modell hebt der Dämpfer nach dem ersten Millimeter Tastenweg ab. Das ist eine Annahme, denn für einen Flügel nennt keine Quelle diesen Punkt. Bei einem langsameren Anschlag dauert der restliche Tastenweg länger. Deshalb vergeht dann noch mehr Zeit zwischen dem Abheben des Dämpfers und dem Anschlag. Lassen Sie die Taste los, fällt der Dämpfer zurück und der Ton verstummt. Die obersten 18 bis 21 Töne haben gar keine Dämpfer: Wählen Sie „Hoch (c⁴)“, dann klingt der Ton weiter, auch wenn Sie die Taste loslassen.",
+      "p3": "Das rechte Pedal, das Haltepedal, hebt alle Dämpfer auf einmal an. Der Ton klingt dann auch nach dem Loslassen weiter, und andere Saiten beginnen mitzuschwingen. Messungen an einem Konzertflügel von Yamaha ergaben: Bei gehaltener Taste brauchte das eingestrichene c 9,5 s zum Abklingen, mit Pedal 15,3 s. Schalten Sie „Saitenschwingung“ ein, dann sehen Sie die anderen Saiten flirren.",
+      "p4": "Das linke Pedal heißt una corda, italienisch für „eine Saite“. Auf Deutsch nennt man es auch Verschiebung, denn es schiebt die Klaviatur samt der ganzen Mechanik ein wenig nach rechts. Jeder Hammer trifft dann nur zwei seiner drei Saiten, im Bass eine von zwei. Die verfehlte Saite schwingt trotzdem ein wenig mit, und der Ton klingt leiser und dumpfer. Wie weit sich die Mechanik verschiebt, ist nicht veröffentlicht. Das Modell zeigt die Verschiebung deshalb ohne Zahl. Beim aufrechten Klavier arbeitet das Leisepedal anders: Es rückt nur die Hämmer näher an die Saiten heran."
+    },
+    "room": {
+      "title": "Von der Saite in den Raum",
+      "p1": "Eine Saite ist zu dünn, um allein viel Luft zu bewegen. Stattdessen drückt sie auf den <strong>Steg</strong>, eine lange Holzleiste, die auf den <strong>Resonanzboden</strong> geleimt ist. Der Resonanzboden ist eine breite Tafel aus Fichtenholz, 6 bis 9 mm dick, und arbeitet wie ein Lautsprecher. Die Schwingung wandert über den Steg in den Boden, und der Boden bewegt die Luft. In diesem Kapitel ist „Saitenschwingung“ eingeschaltet. So sehen Sie beide schwingen, stark übertrieben.",
+      "p2": "Ein Konzertflügel hat etwa 230 Saiten. Jede zieht mit 700 bis 900 Newton, das entspricht etwa dem Gewicht eines Erwachsenen. Zusammen ergibt das eine Zugkraft von etwa 20 Tonnen, ungefähr das Gewicht von zehn Autos. Ein Rahmen aus Holz würde das nicht aushalten. Deshalb trägt eine eiserne <strong>Gussplatte</strong> die Last, gemeinsam mit dem Gehäuse. Beim Konzertflügel wiegt sie 160 bis 180 kg. Die <strong>umsponnenen Basssaiten</strong> sind Stahlsaiten, um die Kupferdraht gewickelt ist. Sie laufen über die anderen Saiten hinweg und kreuzen sie. Das Kupfer macht die Saite schwerer. So klingt sie tief, ohne sehr lang sein zu müssen.",
+      "p3": "Eine Saite schwingt nicht nur in ihrem Grundton, sondern zugleich in einer Reihe höherer Töne, den Teiltönen. Bei einer idealen Saite lägen sie genau beim Zwei-, Drei- und Vierfachen des Grundtons, und so weiter. Doch Stahldraht ist steif, und so liegt jeder Teilton ein wenig zu hoch. Die Anzeige misst das in Cent. Ein Cent ist ein Hundertstel des Abstands von einer Taste zur nächsten. Klavierstimmer stimmen ihre Oktaven deshalb etwas weiter. Das nennt man Spreizen. Im tiefen Bass kann der Resonanzboden Grundtöne unter etwa 100 Hz kaum abstrahlen. Die tiefsten Basstöne hören Sie darum vor allem über ihre Teiltöne.",
+      "p4": "Ein angeschlagener Ton verklingt in zwei Stufen. Zuerst wird er rasch leiser, das ist der Sofortklang. Danach folgt ein langsamer Nachklang, der viele Sekunden dauern kann. Ein schnellerer Hammer macht den Ton lauter und heller. Sein Filz wird nämlich härter, je stärker er zusammengedrückt wird, und holt mehr hohe Teiltöne heraus. Die Abklingzeit gibt an, wie lange ein Ton braucht, um 60 Dezibel (dB) leiser zu werden. Diese Zeiten wurden an einem Konzertflügel von Yamaha gemessen, nicht an diesem Steinway. Die Werte für das hohe c⁴ schätzt das Modell selbst. Das Pedal hilft nicht immer: Der gemessene Basston klang mit Pedal sogar etwas schneller ab. Der Pegel in der Anzeige gibt an, um wie viel dB der Ton leiser ist als ein harter Anschlag im Modell. Die Lautstärke im Raum misst er nicht."
+    },
+    "compare": {
+      "title": "Klavier und Cembalo",
+      "p1": "Hier sehen Sie drei Mechaniken nebeneinander. Beim Flügel schwingt der <strong>Hammer</strong> von unten nach oben und fällt durch sein eigenes Gewicht zurück. Die <strong>Klaviermechanik</strong> folgt derselben Idee, nur auf die Seite gekippt. Sie stammt aus dem Klavier, dem hohen, aufrechten Instrument an der Wand, auch Pianino genannt. Weil dort die Saiten senkrecht stehen, bewegt sich der Hammer waagerecht auf sie zu. Federn und ein dünnes Band, das Bändchen, ziehen ihn zurück.",
+      "p2": "Den meisten Klavieren fehlt außerdem ein Repetierschenkel. Die Stoßzunge kehrt deshalb erst in ihre Ausgangsstellung zurück, wenn die Taste fast ganz oben ist. Laut Herstellern lässt sich eine Klaviertaste etwa 7-mal pro Sekunde anschlagen, eine Flügeltaste bis zu etwa 15-mal. Im Modell hat die Klaviermechanik dieselben Wege für Taste und Hammer wie der Flügel. So lassen sich beide fair vergleichen. Schalten Sie in einem beliebigen Kapitel „Klaviermechanik zum Vergleich“ ein, dann sehen Sie sie neben der Mechanik des Flügels.",
+      "p3": "Das Cembalo erzeugt seinen Ton auf andere Weise. Seine Taste hebt ein schmales Holzstück an, den <strong>Springer</strong>. Daran sitzt ein winziges Zupfplättchen, das Plektrum. Es zupft die Saite an. Wie schnell Sie auch drücken, das Zupfen bleibt gleich. Mit Ihrem Anschlag können Sie einen Ton also weder lauter noch leiser machen. Zu Cristoforis Zeit klang ein Cembalo lauter und brillanter als das Pianoforte, das er gebaut hatte. Auf den Anschlag des Spielers konnte es aber nicht reagieren. Das Modell zeigt den Springer vereinfacht, nicht nach dem Vorbild eines echten Instruments.",
+      "p4": "Im Jahr 1711 beschrieb der Schriftsteller Scipione Maffei Cristoforis Instrument als gravicembalo col piano, e forte, als Cembalo mit Leise und Laut. Leise und laut, auf Italienisch piano und forte: Genau das konnten die Tasten eines Cembalos nicht hergeben. Das Clavichord, ein anderes frühes Tasteninstrument, konnte es. Es war aber so leise, dass man es schon ein paar Schritte entfernt kaum noch hörte. Wählen Sie unten ein Instrument und vergleichen Sie die drei."
+    }
+  }
+}
