@@ -14,7 +14,7 @@
   "timeline": {
     "label": "Одне натискання клавіші",
     "phases": "Перейти до етапу",
-    "speed": "Швидкість відтворення",
+    "speed": "Відтворення",
     "value": "Етап {{step}} з {{total}}",
     "during": "Етап {{step}} з {{total}}: {{detail}}",
     "speedValue": "{{seconds}} с на ноту",

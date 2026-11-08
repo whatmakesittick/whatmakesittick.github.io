@@ -14,7 +14,7 @@
   "timeline": {
     "label": "Um toque na tecla",
     "phases": "Ir para uma etapa",
-    "speed": "Velocidade de reprodução",
+    "speed": "Reprodução",
     "value": "Etapa {{step}} de {{total}}",
     "during": "Etapa {{step}} de {{total}}: {{detail}}",
     "speedValue": "{{seconds}} s por nota",

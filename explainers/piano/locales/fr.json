@@ -14,7 +14,7 @@
   "timeline": {
     "label": "Une frappe de touche",
     "phases": "Aller à une étape",
-    "speed": "Vitesse de lecture",
+    "speed": "Lecture",
     "value": "Étape {{step}} sur {{total}}",
     "during": "Étape {{step}} sur {{total}} : {{detail}}",
     "speedValue": "{{seconds}} s par note",
