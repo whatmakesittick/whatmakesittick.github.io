@@ -3,7 +3,7 @@ import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../theme';
 
 const GLASS_OPACITY = 0.18;
-const GHOST_OPACITY = 0.38;
+const GHOST_OPACITY = 0.55;
 const INSET_OPACITY = 0.94;
 const DARK_WOOD = '#2b1e15';
 const BLACK_MATTE = '#0b0b0d';
@@ -45,7 +45,7 @@ export const FINISHES = {
   stage: finish(THEME.stage, 0.85),
   section: { ...finish(THEME.section, 0.8), side: DoubleSide },
   glass: veil(THEME.glass, GLASS_OPACITY),
-  ghost: { ...veil(THEME.ghost, GHOST_OPACITY), emissive: THEME.ghost, emissiveIntensity: 0.15 },
+  ghost: { ...veil(THEME.ghost, GHOST_OPACITY), emissive: THEME.ghost, emissiveIntensity: 0.4 },
   inset: { ...finish(THEME.inset, 0.9), transparent: true, opacity: INSET_OPACITY },
 } as const satisfies Record<string, MaterialFinish>;
 
