@@ -6,7 +6,7 @@ import type { CameraPose } from '@core/scene/frameBox';
 import { MaterialLibrary } from '@core/scene/materials';
 import { createSceneTextures } from '@core/scene/textures';
 import { CAMERA_VIEW_IDS } from '../ids';
-import type { CameraView, RegisterId, ViewOptions } from '../ids';
+import type { CameraView, CompareId, RegisterId, ViewOptions } from '../ids';
 import { MOMENTS } from '../model';
 import { createAssemblyState, createPianoStore } from '../state';
 import type * as AssemblyModule from './assembly';
@@ -39,12 +39,20 @@ const ASSEMBLY_TIMEOUT_MS = 20_000;
 interface StateChoices {
   phase?: number;
   register?: RegisterId;
+  compare?: CompareId;
   view?: Partial<ViewOptions>;
 }
 
-function assemblyState({ phase = 0, register = 'middle', view = {} }: StateChoices = {}) {
+function assemblyState(choices: StateChoices = {}) {
+  const { phase = 0, register = 'middle', compare = 'grand', view = {} } = choices;
   const state = createPianoStore().getState();
-  return createAssemblyState({ ...state, phase, register, view: { ...state.view, ...view } });
+  return createAssemblyState({
+    ...state,
+    phase,
+    register,
+    compare,
+    view: { ...state.view, ...view },
+  });
 }
 
 function lastAssembly(): Assembly {
@@ -166,6 +174,8 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     ['the register moves the string', 'soundboard', { register: 'bass' }],
     ['the ghost grows the action', 'action', { view: { ghost: true } }],
     ['the inset grows the escapement', 'escapement', { view: { inset: true } }],
+    ['a compare chip picks the upright', 'lineUp', { compare: 'upright' }],
+    ['a compare chip picks the harpsichord', 'lineUp', { compare: 'harpsichord' }],
   ] as const)('reframes the current view when %s', (_case, view, choices) => {
     const { rig, controller } = builtController();
     controller.views.frame(view, false);
@@ -181,6 +191,7 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     ['the register changes over the whole piano', 'grand', { register: 'treble' }],
     ['the ghost is shown beside the escapement', 'escapement', { view: { ghost: true } }],
     ['the hammer moves', 'action', { phase: MOMENTS.strike }],
+    ['a compare chip is picked outside the line-up', 'action', { compare: 'upright' }],
   ] as const)('leaves the camera alone when %s', (_case, view, choices) => {
     const { rig, controller } = builtController();
     controller.views.frame(view, false);

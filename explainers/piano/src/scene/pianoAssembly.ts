@@ -91,10 +91,11 @@ class PianoAssembly implements Assembly {
   }
 
   region(id: RegionId): Box3 {
-    const { view } = this.state;
+    const { view, compare } = this.state;
     return regionFor(id, this.playedKey(), {
       ghost: view.ghost || view.lineUp,
       inset: view.inset,
+      compare,
     });
   }
 

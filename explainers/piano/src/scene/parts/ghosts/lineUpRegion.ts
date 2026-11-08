@@ -1,10 +1,36 @@
 import type { RegionSpec } from '@core/scene/regions';
-import { HARPSICHORD, keyX } from '../../../model';
+import type { CompareId } from '../../../ids';
+import { HARPSICHORD, KEY, UPRIGHT, keyX } from '../../../model';
+import { JACK } from './harpsichordLayout';
+import { HEAD, HEAD_Y, KEY_BOTTOM } from './uprightLayout';
+
+type Extent = readonly [number, number];
+
+interface Span {
+  y: Extent;
+  z: Extent;
+}
 
 const HALF_DEPTH = 0.03;
-const SPAN = { y: [0.69, 1.32], z: [-0.47, HARPSICHORD.offsetZ + 0.01] } as const;
+const FLOOR = KEY_BOTTOM - 0.02;
+const FRONT = 0.01;
+const SPANS: Readonly<Record<CompareId, Span>> = {
+  grand: {
+    y: [0.69, 1.32],
+    z: [KEY.frontZ - KEY.length - 0.01, HARPSICHORD.offsetZ + FRONT],
+  },
+  upright: {
+    y: [FLOOR, HEAD_Y + HEAD.height / 2 + 0.025],
+    z: [UPRIGHT.stringZ - 0.045, UPRIGHT.offsetZ + FRONT],
+  },
+  harpsichord: {
+    y: [FLOOR, JACK.top + 0.035],
+    z: [HARPSICHORD.offsetZ - HARPSICHORD.keyLength - 0.035, HARPSICHORD.offsetZ + FRONT],
+  },
+};
 
-export function lineUpRegionSpec(key: number): RegionSpec {
+export function lineUpRegionSpec(key: number, compare: CompareId): RegionSpec {
   const x = keyX(key);
-  return { x: [x - HALF_DEPTH, x + HALF_DEPTH], y: SPAN.y, z: SPAN.z };
+  const { y, z } = SPANS[compare];
+  return { x: [x - HALF_DEPTH, x + HALF_DEPTH], y, z };
 }

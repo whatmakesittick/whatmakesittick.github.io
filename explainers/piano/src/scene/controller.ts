@@ -2,7 +2,7 @@ import type { Box3, Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
-import type { AnchorId, AssemblyState, CameraView, RegionId, RegisterId } from '../ids';
+import type { AnchorId, AssemblyState, CameraView, CompareId, RegionId, RegisterId } from '../ids';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
 import { CAMERA_VIEWS } from './cameraViews';
@@ -20,6 +20,7 @@ export const GROUND_Y = 0;
 
 interface FramingInputs {
   register: RegisterId;
+  compare: CompareId;
   ghost: boolean;
   inset: boolean;
 }
@@ -29,12 +30,17 @@ interface FramedCamera {
   variant?: string;
 }
 
-function framingInputs({ register, view }: AssemblyState): FramingInputs {
-  return { register, ghost: view.ghost, inset: view.inset };
+function framingInputs({ register, compare, view }: AssemblyState): FramingInputs {
+  return { register, compare, ghost: view.ghost, inset: view.inset };
 }
 
 function sameFraming(a: FramingInputs, b: FramingInputs): boolean {
-  return a.register === b.register && a.ghost === b.ghost && a.inset === b.inset;
+  return (
+    a.register === b.register &&
+    a.compare === b.compare &&
+    a.ghost === b.ghost &&
+    a.inset === b.inset
+  );
 }
 
 export class PianoController {
