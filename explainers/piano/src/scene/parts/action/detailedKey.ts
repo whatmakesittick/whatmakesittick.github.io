@@ -107,7 +107,7 @@ function backCheck(context: PartContext, body: Object3D): (key: number) => void 
     group,
     boxBetween({ ...block, minZ: -felt, maxZ: 0 }),
     'backCheck',
-    FINISHES.felt,
+    ACTION_FINISHES.buckskin,
   );
   addMesh(
     context,

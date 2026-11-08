@@ -51,7 +51,7 @@ export function buildHammer(context: PartContext, parent: Object3D): Piece {
     KNUCKLE_BEVEL,
     KNUCKLE_CURVES,
   );
-  addMesh(context, frame.body, knuckle, 'knuckle', FINISHES.cloth);
+  addMesh(context, frame.body, knuckle, 'knuckle', ACTION_FINISHES.buckskin);
   label(context, 'knuckle', frame.body, [0, KNUCKLE.y - KNUCKLE.radiusY, KNUCKLE.z]);
   const headLabel = label(context, 'hammer', frame.body, [0, 0, 0]);
   const headAnchor = sceneAnchor(context, 'hammer', frame.body, [0, 0, 0]);

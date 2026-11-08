@@ -52,7 +52,7 @@ export function buildLevers(context: PartContext, parent: Object3D): Piece {
     profileAlongX(roundedShape(WIPPEN_PROFILE, ROUND.wippen), ...WIPPEN_X, BEVEL.wippen),
     alongX(REPETITION_SUPPORT_RECT, CHEEK_X),
   ]);
-  addMesh(context, wippen.body, body, 'wippen', FINISHES.keyWood);
+  addMesh(context, wippen.body, body, 'wippen', ACTION_FINISHES.wippen);
   addMesh(context, wippen.body, alongX(CUSHION_RECT, WIPPEN_X), 'wippen', FINISHES.cloth);
   const spring = addMesh(context, wippen.body, springGeometry(), 'repetitionLever', FINISHES.steel);
   spring.position.set(CHEEK_CENTRE, SPRING.bottom, SPRING.z);

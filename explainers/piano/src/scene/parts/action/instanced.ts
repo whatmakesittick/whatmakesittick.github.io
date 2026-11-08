@@ -97,7 +97,7 @@ export function buildInstancedActions(context: PartContext, parent: Object3D): I
   const wippen = rows.add({
     geometry: profileAlongX(outlineShape(WIPPEN_PROFILE), WIPPEN_X[0], WIPPEN_X[1]),
     group: 'actions',
-    finish: FINISHES.keyWood,
+    finish: ACTION_FINISHES.wippen,
     entries: entries(ALL_KEYS, shifted),
   });
   const jack = rows.add({
