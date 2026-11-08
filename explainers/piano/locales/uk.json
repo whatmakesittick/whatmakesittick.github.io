@@ -249,7 +249,17 @@
     "pedals": "Педалі",
     "inset": "Вивільнення зблизька, збільшено вчетверо",
     "upright": "Механіка піаніно",
-    "harpsichord": "Штовхач клавесина"
+    "harpsichord": "Штовхач клавесина",
+    "uprightHammer": "Молоточок",
+    "hammerButt": "П’ятка",
+    "bridleTape": "Тасьма",
+    "uprightDamper": "Демпфер",
+    "uprightStrings": "Струни",
+    "harpsichordJack": "Штовхач",
+    "tongue": "Язичок",
+    "plectrum": "Плектр",
+    "harpsichordDamper": "Демпфер",
+    "harpsichordString": "Струна"
   },
   "sections": {
     "key": {

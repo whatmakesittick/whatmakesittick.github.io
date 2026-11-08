@@ -249,7 +249,17 @@
     "pedals": "踏板",
     "inset": "脱开特写（放大4倍）",
     "upright": "立式钢琴击弦机",
-    "harpsichord": "羽管键琴的跳杆"
+    "harpsichord": "羽管键琴的跳杆",
+    "uprightHammer": "弦槌",
+    "hammerButt": "槌座",
+    "bridleTape": "攀带",
+    "uprightDamper": "制音器",
+    "uprightStrings": "琴弦",
+    "harpsichordJack": "跳杆",
+    "tongue": "舌片",
+    "plectrum": "拨子",
+    "harpsichordDamper": "制音器",
+    "harpsichordString": "琴弦"
   },
   "sections": {
     "key": {

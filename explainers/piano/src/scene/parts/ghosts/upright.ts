@@ -1,13 +1,14 @@
 import { BoxGeometry } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
-import type { UprightPose } from '../../../ids';
+import type { CompareId, UprightPose } from '../../../ids';
 import { KEY, UPRIGHT } from '../../../model';
 import { unitFelt, unitMoulding } from '../action/headGeometry';
 import { applyMatrix, pivotFrame } from '../action/meshes';
 import type { Pivot } from '../action/meshes';
-import { label, namedGroup } from '../context';
+import { namedGroup } from '../context';
 import type { PartContext } from '../context';
 import { QUARTER_TURN, segmentMatrix } from '../keyboard/geometry';
+import { LabelSet } from './labelSet';
 import { ghostPainter, zigzag } from './paint';
 import type { GhostPainter } from './paint';
 import { planarRod, slab } from './shapes';
@@ -36,6 +37,8 @@ const TAPE = { halfWidth: 0.003, thickness: 0.0018 } as const;
 const SPRING = { turns: 4, amplitude: 0.0022 } as const;
 const MOULDING_SHARE = 0.85;
 const LABEL_BELOW_HEAD = 0.018;
+const STRINGS_LABEL_Y = 0.82;
+const DAMPER_LABEL_AHEAD = 0.02;
 const [HAMMER_Y, HAMMER_Z] = PIVOT.hammer;
 const [WIPPEN_Y, WIPPEN_Z] = PIVOT.wippen;
 const [DAMPER_Y, DAMPER_Z] = PIVOT.damper;
@@ -89,6 +92,11 @@ const BUTT_SPRING: readonly [Planar, Planar] = [
 export interface UprightGhost {
   readonly root: Object3D;
   pose(pose: UprightPose): void;
+  choose(chosen: CompareId): void;
+}
+
+function middle([from, to]: Span): number {
+  return (from + to) / 2;
 }
 
 function frame(parent: Object3D, name: string, [y, z]: Planar): Pivot {
@@ -225,6 +233,8 @@ function spring(painter: GhostPainter, parent: Object3D, [from, to]: readonly [P
 export function buildUpright(context: PartContext): UprightGhost {
   const root = namedGroup('uprightGhost');
   const painter = ghostPainter(context, GROUP);
+  const overview = new LabelSet(context);
+  const details = new LabelSet(context);
   buildUprightPanel(painter, root);
   painter.solid(root, railParts(), 'frame');
   painter.solid(root, [slab(LET_OFF.button.z, LET_OFF.button.y, HALF.felt, ROUND.fine)], 'felt');
@@ -247,7 +257,16 @@ export function buildUpright(context: PartContext): UprightGhost {
   painter.solid(damper.body, damperFelt(), 'felt');
   spring(painter, damper.body, DAMPER_SPRING);
   const tape = painter.solid(root, [tapeGeometry()], 'felt');
-  label(context, 'upright', hammer.body, [0, LABEL_Y, HAMMER_Z]);
+  overview.add('upright', hammer.body, [0, LABEL_Y, HAMMER_Z]);
+  details.add('uprightHammer', hammer.body, [0, HEAD_Y - HEAD.height / 2, CROWN_Z + HEAD.felt / 2]);
+  details.add('hammerButt', hammer.body, [0, middle(BUTT.y), middle(BUTT.z)]);
+  details.add('bridleTape', tape, [0, 0, 0]);
+  details.add('uprightDamper', damper.body, [
+    0,
+    middle(DAMPER_HEAD.y),
+    UPRIGHT.stringZ + DAMPER_LABEL_AHEAD,
+  ]);
+  details.add('uprightStrings', root, [0, STRINGS_LABEL_Y, UPRIGHT.stringZ]);
 
   return {
     root,
@@ -261,6 +280,12 @@ export function buildUpright(context: PartContext): UprightGhost {
       damper.pivot.rotation.x = angles.damper;
       const [catcher, wire] = strapEnds(angles);
       applyMatrix(tape, segmentMatrix([0, ...catcher], [0, ...wire], TAPE.thickness));
+    },
+    choose(chosen) {
+      const own = chosen === 'upright';
+      painter.choose(own);
+      details.show(own);
+      overview.show(chosen === 'grand');
     },
   };
 }

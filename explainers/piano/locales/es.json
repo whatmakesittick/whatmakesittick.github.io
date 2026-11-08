@@ -249,7 +249,17 @@
     "pedals": "Pedales",
     "inset": "Lupa sobre el escape, 4 veces más grande",
     "upright": "Mecánica de piano vertical",
-    "harpsichord": "Martinete del clavecín"
+    "harpsichord": "Martinete del clavecín",
+    "uprightHammer": "Macillo",
+    "hammerButt": "Nuez",
+    "bridleTape": "Brida",
+    "uprightDamper": "Apagador",
+    "uprightStrings": "Cuerdas",
+    "harpsichordJack": "Martinete",
+    "tongue": "Lengüeta",
+    "plectrum": "Plectro",
+    "harpsichordDamper": "Apagador",
+    "harpsichordString": "Cuerda"
   },
   "sections": {
     "key": {

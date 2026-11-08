@@ -249,7 +249,17 @@
     "pedals": "Pedals",
     "inset": "Let-off close-up, 4 times larger",
     "upright": "Upright action",
-    "harpsichord": "Harpsichord jack"
+    "harpsichord": "Harpsichord jack",
+    "uprightHammer": "Hammer",
+    "hammerButt": "Butt",
+    "bridleTape": "Bridle tape",
+    "uprightDamper": "Damper",
+    "uprightStrings": "Strings",
+    "harpsichordJack": "Jack",
+    "tongue": "Tongue",
+    "plectrum": "Plectrum",
+    "harpsichordDamper": "Damper",
+    "harpsichordString": "String"
   },
   "sections": {
     "key": {

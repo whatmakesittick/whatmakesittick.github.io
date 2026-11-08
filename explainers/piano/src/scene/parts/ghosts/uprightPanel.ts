@@ -6,10 +6,13 @@ import { planarRod, slab } from './shapes';
 
 const HALF_WIDTH = 0.05;
 const ROUND = 0.002;
-const BOARD = { z: [0.07, 0.087], y: [0.745, 1.285] } as const;
-const BRIDGE = { z: [BOARD.z[1], UPRIGHT.stringZ - 0.0012], y: [0.772, 0.806] } as const;
-const PIN_BLOCK = { z: [0.064, 0.11], y: [1.274, 1.314] } as const;
-const HITCH_RAIL = { z: [BOARD.z[1], 0.112], y: [0.735, UPRIGHT.stringBottom] } as const;
+const BEHIND = (offset: number) => UPRIGHT.stringZ - offset;
+const BOARD = { z: [BEHIND(0.05), BEHIND(0.033)], y: [0.745, 1.285] } as const;
+const BRIDGE = { z: [BOARD.z[1], BEHIND(0.0012)], y: [0.772, 0.806] } as const;
+const PIN_BLOCK = { z: [BEHIND(0.056), BEHIND(0.01)], y: [1.274, 1.314] } as const;
+const HITCH_RAIL = { z: [BOARD.z[1], BEHIND(0.008)], y: [0.735, UPRIGHT.stringBottom] } as const;
+
+export const PANEL_BACK = PIN_BLOCK.z[0];
 const TUNING_PIN = { z: [PIN_BLOCK.z[1], UPRIGHT.stringZ + 0.008], radius: 0.0022 } as const;
 const UNISON_SPACING = 0.0035;
 const UNISON = [-UNISON_SPACING, 0, UNISON_SPACING] as const;

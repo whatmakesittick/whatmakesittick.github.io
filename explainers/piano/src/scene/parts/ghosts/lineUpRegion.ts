@@ -20,12 +20,12 @@ const SPANS: Readonly<Record<CompareId, Span>> = {
     z: [KEY.frontZ - KEY.length - 0.01, HARPSICHORD.offsetZ + FRONT],
   },
   upright: {
-    y: [FLOOR, HEAD_Y + HEAD.height / 2 + 0.025],
-    z: [UPRIGHT.stringZ - 0.045, UPRIGHT.offsetZ + FRONT],
+    y: [FLOOR, HEAD_Y + HEAD.height / 2 + 0.05],
+    z: [UPRIGHT.stringZ - 0.045, UPRIGHT.stringZ + 0.33],
   },
   harpsichord: {
     y: [FLOOR, JACK.top + 0.035],
-    z: [HARPSICHORD.offsetZ - HARPSICHORD.keyLength - 0.035, HARPSICHORD.offsetZ + FRONT],
+    z: [JACK.z - 0.045, JACK.z + 0.2],
   },
 };
 

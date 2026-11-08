@@ -16,12 +16,14 @@ import {
   JACK,
   KEY_PIVOT,
   PLECTRUM,
+  PLUCK_SHARE,
   RING,
   STRING,
   harpsichordKeyAngle,
   plectrumAngle,
   ringPhase,
   stringLift,
+  stringPoint,
 } from './harpsichordLayout';
 
 const DIGITS = 9;
@@ -55,14 +57,22 @@ describe('harpsichord ghost layout', () => {
       DIGITS,
     );
     expect(JACK.bottom).toBe(KEY.top);
-    expect(plectrumAngle(1)).toBeLessThan(plectrumAngle(0));
+    expect(plectrumAngle(1)).toBeGreaterThan(plectrumAngle(0));
+  });
+
+  it('reaches the plectrum under the string from the jack face, seen side-on from the bass', () => {
+    expect(PLECTRUM.rootZ).toBeGreaterThan(JACK.z + JACK.halfThickness);
+    expect(PLECTRUM.tipZ).toBeGreaterThan(STRING.z + STRING.radius);
+    expect(stringPoint(0)[2]).toBe(STRING.z);
+    const [nearX, , nearZ] = stringPoint(STRING.reach[0]);
+    expect(nearZ > JACK.z + JACK.halfThickness || nearX < -JACK.halfWidth).toBe(true);
+    expect(stringPoint(STRING.reach[1])[2]).toBeLessThan(HARPSICHORD.offsetZ);
   });
 
   it('pushes the string up at the pluck point and rings it after the release', () => {
-    const pluckShare = (JACK.z - STRING.back) / (STRING.front - STRING.back);
     expect(stringLift(MIDDLE, STILL, 0)).toBe(0);
     const bending = { ...STILL, plectrumBend: 1 };
-    expect(stringLift(pluckShare, bending, 0)).toBeCloseTo(
+    expect(stringLift(PLUCK_SHARE, bending, 0)).toBeCloseTo(
       mm(PLUCK_RELEASE_MM - PLUCK_START_MM),
       DIGITS,
     );

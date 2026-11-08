@@ -18,7 +18,7 @@ export const HEAD_Y =
   (mm(BLOW_MM) + CROWN_AHEAD * (1 - Math.cos(STRIKE_ANGLE))) / -Math.sin(STRIKE_ANGLE);
 const WIPPEN_PIVOT: Planar = [0.765, KEY_BACK + 0.008];
 const CAPSTAN_Z = KEY_BACK + 0.065;
-const DAMPER_PIVOT: Planar = [0.842, 0.15];
+const DAMPER_PIVOT: Planar = [0.842, UPRIGHT.stringZ + 0.03];
 
 export const PIVOT = {
   key: [KEY_BOTTOM, UPRIGHT.offsetZ - KEY_LEVER.frontArm],

@@ -1,4 +1,4 @@
-import type { AssemblyState } from '../../../ids';
+import type { AssemblyState, CompareId } from '../../../ids';
 import { PLAYED_KEY, keyX, restAnchorPoint } from '../../../model';
 import { STILL_SHARE } from '../../constants';
 import { namedGroup, sceneAnchor } from '../context';
@@ -9,6 +9,10 @@ import { keyCentred } from './shapes';
 import { buildUpright } from './upright';
 
 const REFERENCE_KEY = PLAYED_KEY.middle;
+
+export function chosenMechanism({ view, compare }: AssemblyState): CompareId {
+  return view.lineUp ? compare : 'grand';
+}
 
 export function isRinging(state: AssemblyState): boolean {
   return state.view.lineUp && state.harpsichord.stringShare > STILL_SHARE;
@@ -38,6 +42,9 @@ export function createGhosts(context: PartContext): Section {
       leaders.visible = lineUp;
       upright.pose(state.upright);
       harpsichord.pose(state.harpsichord, elapsed);
+      const chosen = chosenMechanism(state);
+      upright.choose(chosen);
+      harpsichord.choose(chosen);
     },
     animate(frame, state) {
       if (!isRinging(state)) return false;

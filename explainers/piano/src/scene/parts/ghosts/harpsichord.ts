@@ -1,53 +1,56 @@
-import { Group } from 'three';
+import { CylinderGeometry, Group } from 'three';
 import type { BufferAttribute, BufferGeometry, Object3D } from 'three';
-import type { HarpsichordPose } from '../../../ids';
+import type { CompareId, HarpsichordPose } from '../../../ids';
 import { HARPSICHORD, KEY, KEY_DIP_MM, HARPSICHORD_JACK_RATIO, mm } from '../../../model';
 import { pivotFrame } from '../action/meshes';
-import { label, namedGroup } from '../context';
+import { namedGroup } from '../context';
 import type { PartContext } from '../context';
-import { ghostPainter, planarSegment } from './paint';
-import type { Segment } from './paint';
-import { rod, slab } from './shapes';
-import type { Span } from './shapes';
+import { QUARTER_TURN } from '../keyboard/geometry';
 import {
   DAMPER_BOTTOM,
   HARPSICHORD_KEY_BACK,
   JACK,
   KEY_PIVOT,
   PLECTRUM,
+  REGISTER_REACH,
   STRING,
   harpsichordKeyAngle,
   plectrumAngle,
   ringPhase,
   stringLift,
+  stringPoint,
 } from './harpsichordLayout';
+import { LabelSet } from './labelSet';
+import { ghostPainter } from './paint';
+import { rod, slab } from './shapes';
+import type { Span } from './shapes';
 
 const GROUP = 'harpsichord';
-const HALF = { key: KEY.whiteWidth / 2, rail: 0.03, block: 0.004, tongue: 0.002 } as const;
+const HALF = { key: KEY.whiteWidth / 2, rail: 0.03, plectrum: 0.0015 } as const;
 const ROUND = { soft: 0.002, fine: 0.001 } as const;
-const REGISTER = { y: [0.772, 0.784], reach: 0.03, slot: JACK.halfDepth + 0.001 } as const;
+const REGISTER = { y: [0.772, 0.784], slot: JACK.halfThickness + 0.001 } as const;
 const RAIL_GAP = 0.002;
 const LABEL_BELOW_REGISTER = 0.02;
 const RAIL = { height: 0.018, felt: 0.005, reach: 0.03 } as const;
 const TONGUE = {
   below: 0.028,
   above: 0.008,
+  proud: 0.0015,
+  inset: 0.0015,
   half: 0.0045,
   axle: 0.02,
   axleRadius: 0.0012,
 } as const;
-const FELT = { height: 0.012, half: 0.007, side: 0.0045 } as const;
-const PLECTRUM_HALF_DEPTH = 0.003;
-const PLECTRUM_HALF_REACH = (PLECTRUM.tipX - PLECTRUM.rootX) / 2;
-const NUT = { half: 0.003, drop: 0.014 } as const;
-const WREST_PLANK = { z: [STRING.front - 0.014, STRING.front + 0.034], depth: 0.026 } as const;
-const SOUNDBOARD = { z: [STRING.back - 0.03, STRING.back + 0.06], depth: 0.006 } as const;
-const TUNING_PIN = { ahead: 0.02, rise: 0.012, radius: 0.0022 } as const;
+const FELT = { height: 0.012, half: 0.0045, overhang: 0.003, grip: 0.002 } as const;
 const BALANCE_RAIL = { half: 0.008, depth: 0.014 } as const;
+const NUT = { half: 0.003, depth: 0.014, side: 0.006 } as const;
+const STRING_SIDES = 8;
+const LABEL = { jack: 0.025, tongue: 0.02, damperRise: 0.002, stringShare: 0.75 } as const;
 
 export interface HarpsichordGhost {
   readonly root: Object3D;
   pose(pose: HarpsichordPose, elapsed: number): void;
+  choose(chosen: CompareId): void;
 }
 
 function around(centre: number, half: number): Span {
@@ -59,33 +62,27 @@ function railBottom(): number {
 }
 
 function frameParts(): BufferGeometry[] {
-  const nutTop = HARPSICHORD.stringY - STRING.radius;
-  const plankTop = HARPSICHORD.stringY - NUT.drop;
-  const pinZ = STRING.front + TUNING_PIN.ahead;
   return [
     slab(
       around(KEY_PIVOT[1], BALANCE_RAIL.half),
       [KEY_PIVOT[0] - BALANCE_RAIL.depth, KEY_PIVOT[0]],
       HALF.rail,
     ),
-    slab([JACK.z - REGISTER.reach, JACK.z - REGISTER.slot], REGISTER.y, HALF.rail, ROUND.fine),
-    slab([JACK.z + REGISTER.slot, JACK.z + REGISTER.reach], REGISTER.y, HALF.rail, ROUND.fine),
+    slab([JACK.z - REGISTER_REACH, JACK.z - REGISTER.slot], REGISTER.y, HALF.rail, ROUND.fine),
+    slab([JACK.z + REGISTER.slot, JACK.z + REGISTER_REACH], REGISTER.y, HALF.rail, ROUND.fine),
     slab(
       around(JACK.z, RAIL.reach),
       [railBottom() + RAIL.felt, railBottom() + RAIL.height],
       HALF.rail,
       ROUND.soft,
     ),
-    slab(WREST_PLANK.z, [plankTop - WREST_PLANK.depth, plankTop], HALF.rail, ROUND.soft),
-    slab(around(STRING.front, NUT.half), [plankTop, nutTop], HALF.rail, ROUND.fine),
-    slab(SOUNDBOARD.z, [plankTop - SOUNDBOARD.depth, plankTop], HALF.rail),
-    slab(around(STRING.back, NUT.half), [plankTop, nutTop], HALF.block, ROUND.fine, STRING.x),
-    rod(
-      [STRING.x, plankTop, pinZ],
-      [STRING.x, HARPSICHORD.stringY + TUNING_PIN.rise, pinZ],
-      TUNING_PIN.radius,
-    ),
+    nut(),
   ];
+}
+
+function nut(): BufferGeometry {
+  const [x, y, z] = stringPoint(STRING.reach[1]);
+  return slab(around(z, NUT.half), [y - NUT.depth, y - STRING.radius], NUT.side, ROUND.fine, x);
 }
 
 function frameFelt(): BufferGeometry[] {
@@ -93,47 +90,52 @@ function frameFelt(): BufferGeometry[] {
 }
 
 function jackParts(): BufferGeometry[] {
-  const tongueTop = PLECTRUM.y + TONGUE.above;
   return [
-    slab(around(JACK.z, JACK.halfDepth), [JACK.bottom, JACK.top], JACK.halfWidth, ROUND.fine),
-    slab(
-      around(JACK.z, TONGUE.half),
-      [PLECTRUM.y - TONGUE.below, tongueTop],
-      JACK.halfWidth + HALF.tongue,
-      ROUND.fine,
-    ),
-    rod(
-      [-JACK.halfWidth - HALF.tongue, PLECTRUM.y - TONGUE.axle, JACK.z],
-      [JACK.halfWidth + HALF.tongue, PLECTRUM.y - TONGUE.axle, JACK.z],
-      TONGUE.axleRadius,
-    ),
+    slab(around(JACK.z, JACK.halfThickness), [JACK.bottom, JACK.top], JACK.halfWidth, ROUND.fine),
   ];
 }
 
-function jackFelt(): BufferGeometry[] {
+function tongueParts(): BufferGeometry[] {
+  const axleY = PLECTRUM.y - TONGUE.axle;
   return [
     slab(
-      around(JACK.z, FELT.half),
+      [JACK.z - JACK.halfThickness + TONGUE.inset, JACK.z + JACK.halfThickness + TONGUE.proud],
+      [PLECTRUM.y - TONGUE.below, PLECTRUM.y + TONGUE.above],
+      TONGUE.half,
+      ROUND.fine,
+    ),
+    rod([-JACK.halfWidth, axleY, JACK.z], [JACK.halfWidth, axleY, JACK.z], TONGUE.axleRadius),
+  ];
+}
+
+function damperFelt(): BufferGeometry[] {
+  return [
+    slab(
+      [JACK.z + JACK.halfThickness - FELT.grip, STRING.z + FELT.overhang],
       [DAMPER_BOTTOM, DAMPER_BOTTOM + FELT.height],
-      FELT.side,
+      FELT.half,
       ROUND.fine,
-      STRING.x - 0.0005,
     ),
   ];
 }
 
-function stringSegments(): Segment[] {
-  const length = STRING.front - STRING.back;
-  const pinZ = STRING.front + TUNING_PIN.ahead;
-  const along = Array.from({ length: STRING.segments }, (_, index) => {
-    const from = STRING.back + (length * index) / STRING.segments;
-    const to = STRING.back + (length * (index + 1)) / STRING.segments;
-    return planarSegment([HARPSICHORD.stringY, from], [HARPSICHORD.stringY, to], STRING.x);
-  });
-  return [
-    ...along,
-    planarSegment([HARPSICHORD.stringY, STRING.front], [HARPSICHORD.stringY, pinZ], STRING.x),
-  ];
+function plectrumParts(): BufferGeometry[] {
+  return [slab([0, PLECTRUM.tipZ - PLECTRUM.rootZ], around(0, PLECTRUM.half), HALF.plectrum)];
+}
+
+function stringGeometry(): BufferGeometry {
+  const [near, far] = STRING.reach;
+  return new CylinderGeometry(
+    STRING.radius,
+    STRING.radius,
+    far - near,
+    STRING_SIDES,
+    STRING.segments,
+  )
+    .rotateZ(-QUARTER_TURN)
+    .translate((near + far) / 2, 0, 0)
+    .rotateY(-STRING.angle)
+    .translate(0, HARPSICHORD.stringY, STRING.z);
 }
 
 class VibratingString {
@@ -146,9 +148,11 @@ class VibratingString {
   }
 
   draw(pose: HarpsichordPose, phase: number): void {
-    const length = STRING.front - STRING.back;
+    const [near, far] = STRING.reach;
+    const cos = Math.cos(STRING.angle);
     for (let vertex = 0; vertex < this.position.count; vertex += 1) {
-      const share = Math.min(1, (this.position.getZ(vertex) - STRING.back) / length);
+      const along = this.position.getX(vertex) / cos;
+      const share = (along - near) / (far - near);
       this.position.setY(
         vertex,
         this.base[vertex * this.position.itemSize + 1] + stringLift(share, pose, phase),
@@ -161,6 +165,8 @@ class VibratingString {
 export function buildHarpsichord(context: PartContext): HarpsichordGhost {
   const root = namedGroup('harpsichordGhost');
   const painter = ghostPainter(context, GROUP);
+  const overview = new LabelSet(context);
+  const details = new LabelSet(context);
   painter.solid(root, frameParts(), 'frame');
   painter.solid(root, frameFelt(), 'felt');
   const key = pivotFrame(root, 'harpsichordKey', ...KEY_PIVOT);
@@ -178,35 +184,39 @@ export function buildHarpsichord(context: PartContext): HarpsichordGhost {
   );
   const jack = namedGroup('harpsichordJack', root);
   painter.solid(jack, jackParts());
-  painter.solid(jack, jackFelt(), 'felt');
+  painter.solid(jack, tongueParts());
+  painter.solid(jack, damperFelt(), 'felt');
   const plectrum = new Group();
-  plectrum.position.set(PLECTRUM.rootX, PLECTRUM.y, JACK.z);
+  plectrum.position.set(0, PLECTRUM.y, PLECTRUM.rootZ);
   jack.add(plectrum);
-  painter.solid(
-    plectrum,
-    [
-      slab(
-        around(0, PLECTRUM_HALF_DEPTH),
-        around(0, PLECTRUM.half),
-        PLECTRUM_HALF_REACH,
-        0,
-        PLECTRUM_HALF_REACH,
-      ),
-    ],
-    'felt',
-  );
-  const lines = painter.lines(root, stringSegments(), 'string');
-  lines.name = 'harpsichordString';
-  const string = new VibratingString(lines.geometry);
-  label(context, 'harpsichord', jack, [0, REGISTER.y[0] - LABEL_BELOW_REGISTER, JACK.z]);
+  painter.solid(plectrum, plectrumParts());
+  const stringMesh = painter.body(root, stringGeometry(), 'string');
+  stringMesh.name = 'harpsichordString';
+  const string = new VibratingString(stringMesh.geometry);
+  overview.add('harpsichord', jack, [0, REGISTER.y[0] - LABEL_BELOW_REGISTER, JACK.z]);
+  details.add('harpsichordJack', jack, [0, JACK.bottom + LABEL.jack, JACK.z]);
+  details.add('tongue', jack, [0, PLECTRUM.y - LABEL.tongue, JACK.z]);
+  details.add('plectrum', plectrum, [0, 0, (PLECTRUM.tipZ - PLECTRUM.rootZ) / 2]);
+  details.add('harpsichordDamper', jack, [
+    0,
+    DAMPER_BOTTOM + FELT.height + LABEL.damperRise,
+    STRING.z + FELT.overhang,
+  ]);
+  details.add('harpsichordString', root, stringPoint(STRING.reach[1] * LABEL.stringShare));
 
   return {
     root,
     pose(pose, elapsed) {
       key.pivot.rotation.x = harpsichordKeyAngle(pose.keyMm);
       jack.position.y = mm(pose.jackRiseMm);
-      plectrum.rotation.z = plectrumAngle(pose.plectrumBend);
+      plectrum.rotation.x = plectrumAngle(pose.plectrumBend);
       string.draw(pose, ringPhase(elapsed));
+    },
+    choose(chosen) {
+      const own = chosen === 'harpsichord';
+      painter.choose(own);
+      details.show(own);
+      overview.show(chosen === 'grand');
     },
   };
 }

@@ -52,6 +52,22 @@ const ROOM_PARTS: readonly PartId[] = ['strings', 'bridge', 'soundboard', 'plate
 
 const LINE_UP_PARTS: readonly PartId[] = ['hammer', 'jack', 'upright', 'harpsichord'];
 
+const UPRIGHT_PARTS: readonly PartId[] = [
+  'uprightHammer',
+  'hammerButt',
+  'bridleTape',
+  'uprightDamper',
+  'uprightStrings',
+];
+
+const HARPSICHORD_PARTS: readonly PartId[] = [
+  'harpsichordJack',
+  'tongue',
+  'plectrum',
+  'harpsichordDamper',
+  'harpsichordString',
+];
+
 export const PRESETS: Record<PresetId, Preset> = {
   key: {
     camera: 'grand',
@@ -104,7 +120,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: chapterView({ cutaway: true, lineUp: true }),
     startAt: KEY_AT_REST,
     start: { compare: 'grand' },
-    labels: LINE_UP_PARTS,
+    labels: [...LINE_UP_PARTS, ...UPRIGHT_PARTS, ...HARPSICHORD_PARTS],
     highlight: ['key', ...LINE_UP_PARTS],
   },
 };

@@ -245,8 +245,8 @@ export function jackAnchor(key: number): Point {
 }
 
 export const UPRIGHT = {
-  offsetZ: 0.62,
-  stringZ: 0.12,
+  offsetZ: 0.58,
+  stringZ: 0.08,
   stringBottom: 0.75,
   stringTop: 1.3,
   shank: 0.12,
@@ -254,7 +254,7 @@ export const UPRIGHT = {
 } as const;
 
 export const HARPSICHORD = {
-  offsetZ: 1.1,
+  offsetZ: 0.96,
   keyLength: 0.34,
   stringY: 0.8,
   jackHeight: 0.12,

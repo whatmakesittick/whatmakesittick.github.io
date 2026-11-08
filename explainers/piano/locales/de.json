@@ -249,7 +249,17 @@
     "pedals": "Pedale",
     "inset": "Auslösung unter der Lupe, 4-fach vergrößert",
     "upright": "Klaviermechanik",
-    "harpsichord": "Springer des Cembalos"
+    "harpsichord": "Springer des Cembalos",
+    "uprightHammer": "Hammer",
+    "hammerButt": "Hammernuss",
+    "bridleTape": "Bändchen",
+    "uprightDamper": "Dämpfer",
+    "uprightStrings": "Saiten",
+    "harpsichordJack": "Springer",
+    "tongue": "Zunge",
+    "plectrum": "Plektrum",
+    "harpsichordDamper": "Dämpfer",
+    "harpsichordString": "Saite"
   },
   "sections": {
     "key": {

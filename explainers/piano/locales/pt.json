@@ -249,7 +249,17 @@
     "pedals": "Pedais",
     "inset": "Zoom no escape, 4 vezes maior",
     "upright": "Mecanismo de piano vertical",
-    "harpsichord": "Saltarelo do cravo"
+    "harpsichord": "Saltarelo do cravo",
+    "uprightHammer": "Martelo",
+    "hammerButt": "Noz",
+    "bridleTape": "Correia",
+    "uprightDamper": "Abafador",
+    "uprightStrings": "Cordas",
+    "harpsichordJack": "Saltarelo",
+    "tongue": "Lingueta",
+    "plectrum": "Plectro",
+    "harpsichordDamper": "Abafador",
+    "harpsichordString": "Corda"
   },
   "sections": {
     "key": {

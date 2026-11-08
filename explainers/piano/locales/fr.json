@@ -249,7 +249,17 @@
     "pedals": "Pédales",
     "inset": "Échappement en gros plan, agrandi 4 fois",
     "upright": "Mécanique de piano droit",
-    "harpsichord": "Sautereau de clavecin"
+    "harpsichord": "Sautereau de clavecin",
+    "uprightHammer": "Marteau",
+    "hammerButt": "Noix",
+    "bridleTape": "Lanière",
+    "uprightDamper": "Étouffoir",
+    "uprightStrings": "Cordes",
+    "harpsichordJack": "Sautereau",
+    "tongue": "Languette",
+    "plectrum": "Plectre",
+    "harpsichordDamper": "Étouffoir",
+    "harpsichordString": "Corde"
   },
   "sections": {
     "key": {

@@ -115,7 +115,22 @@ describe('piano presets', () => {
     const room = ['strings', 'bridge', 'soundboard', 'plate'];
     expect(PRESETS.room.labels).toEqual([...room, 'bassStrings', 'tuningPins']);
     expect(PRESETS.room.highlight).toEqual(room);
-    expect(PRESETS.compare.labels).toEqual(['hammer', 'jack', 'upright', 'harpsichord']);
+    expect(PRESETS.compare.labels).toEqual([
+      'hammer',
+      'jack',
+      'upright',
+      'harpsichord',
+      'uprightHammer',
+      'hammerButt',
+      'bridleTape',
+      'uprightDamper',
+      'uprightStrings',
+      'harpsichordJack',
+      'tongue',
+      'plectrum',
+      'harpsichordDamper',
+      'harpsichordString',
+    ]);
     expect(PRESETS.compare.highlight).toEqual(['key', 'hammer', 'jack', 'upright', 'harpsichord']);
   });
 });

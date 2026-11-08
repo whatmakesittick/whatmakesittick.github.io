@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { InstancedMesh, LineSegments, Mesh, Vector3 } from 'three';
+import { InstancedMesh, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 import type { Object3D } from 'three';
-import type { PartId, RegisterId } from '../../../ids';
+import { isShown } from '@core/scene/parts';
+import type { AssemblyState, CompareId, PartId, RegisterId } from '../../../ids';
 import { PLAYED_KEY, mm, restAnchorPoint, uprightPoseAt } from '../../../model';
 import { uprightHammerAngle } from '../../pose';
 import type { Frame, PartContext, Section } from '../context';
@@ -20,11 +21,47 @@ const GHOST = { view: { ghost: true } } as const;
 const FRAME: Frame = { delta: 1 / 60, elapsed: 0.1, cameraDistance: 1 };
 const LATER: Frame = { ...FRAME, elapsed: 0.2 };
 
+const UPRIGHT_LABELS: readonly PartId[] = [
+  'uprightHammer',
+  'hammerButt',
+  'bridleTape',
+  'uprightDamper',
+  'uprightStrings',
+];
+const HARPSICHORD_LABELS: readonly PartId[] = [
+  'harpsichordJack',
+  'tongue',
+  'plectrum',
+  'harpsichordDamper',
+  'harpsichordString',
+];
+
 function build(units = 0, choices: Choices = LINE_UP) {
   const context = testContext();
   const section = createGhosts(context);
   section.setState(stateAt(units, choices));
   return { context, section };
+}
+
+function comparing(compare: CompareId, choices: Choices = LINE_UP): AssemblyState {
+  return { ...stateAt(0, choices), compare };
+}
+
+function shownLabels(context: PartContext): PartId[] {
+  return [...context.labels]
+    .filter(([, anchor]) => isShown(anchor))
+    .map(([id]) => id)
+    .sort();
+}
+
+function bodyOpacity(section: Section, name: string): number {
+  const found: number[] = [];
+  named(section.root, name).traverse((node) => {
+    if (node instanceof Mesh && node.material instanceof MeshStandardMaterial) {
+      found.push(node.material.opacity);
+    }
+  });
+  return Math.min(...found);
 }
 
 function named(root: Object3D, name: string): Object3D {
@@ -50,7 +87,7 @@ function meshes(root: Object3D): Mesh[] {
 
 function stringHeights(section: Section): number[] {
   const string = named(section.root, 'harpsichordString');
-  if (!(string instanceof LineSegments)) throw new Error('missing string');
+  if (!(string instanceof Mesh)) throw new Error('missing string');
   return Array.from(string.geometry.getAttribute('position').array);
 }
 
@@ -79,7 +116,10 @@ describe('createGhosts', () => {
 
   it('labels both ghosts and anchors the line-up at the played key', () => {
     const { context, section } = build();
-    expect([...context.labels.keys()].sort()).toEqual(['harpsichord', 'upright']);
+    expect([...context.labels.keys()].sort()).toEqual(
+      ['harpsichord', 'upright', ...UPRIGHT_LABELS, ...HARPSICHORD_LABELS].sort(),
+    );
+    expect(shownLabels(context)).toEqual(['harpsichord', 'upright']);
     (Object.keys(PLAYED_KEY) as RegisterId[]).forEach((register) => {
       section.setState(stateAt(0, { ...LINE_UP, register }));
       section.root.updateMatrixWorld(true);
@@ -108,6 +148,30 @@ describe('createGhosts', () => {
       labelAt(strike.context, strike.section, 'harpsichord').y -
       labelAt(rest.context, rest.section, 'harpsichord').y;
     expect(rise).toBeCloseTo(mm(stateAt(STRIKE_UNIT).harpsichord.jackRiseMm), DIGITS);
+  });
+
+  it('brings the chosen mechanism forward with its own labels', () => {
+    const { context, section } = build();
+    const translucent = bodyOpacity(section, 'uprightGhost');
+    section.setState(comparing('upright'));
+    expect(shownLabels(context)).toEqual([...UPRIGHT_LABELS].sort());
+    expect(bodyOpacity(section, 'uprightGhost')).toBeGreaterThan(translucent);
+    expect(bodyOpacity(section, 'harpsichordGhost')).toBeLessThan(
+      bodyOpacity(section, 'uprightGhost'),
+    );
+    section.setState(comparing('harpsichord'));
+    expect(shownLabels(context)).toEqual([...HARPSICHORD_LABELS].sort());
+    expect(bodyOpacity(section, 'uprightGhost')).toBeCloseTo(translucent, DIGITS);
+    section.setState(comparing('grand'));
+    expect(shownLabels(context)).toEqual(['harpsichord', 'upright']);
+  });
+
+  it('keeps the plain ghost translucent whatever the compare choice', () => {
+    const { context, section } = build(0, GHOST);
+    const translucent = bodyOpacity(section, 'uprightGhost');
+    section.setState(comparing('upright', GHOST));
+    expect(shownLabels(context)).toEqual(['upright']);
+    expect(bodyOpacity(section, 'uprightGhost')).toBeCloseTo(translucent, DIGITS);
   });
 
   it('rings the harpsichord string only while the line-up shows a plucked note', () => {

@@ -249,7 +249,17 @@
     "pedals": "ペダル",
     "inset": "レットオフの拡大図（4倍）",
     "upright": "アップライトのアクション",
-    "harpsichord": "チェンバロのジャック"
+    "harpsichord": "チェンバロのジャック",
+    "uprightHammer": "ハンマー",
+    "hammerButt": "バット",
+    "bridleTape": "ブライドルテープ",
+    "uprightDamper": "ダンパー",
+    "uprightStrings": "弦",
+    "harpsichordJack": "ジャック",
+    "tongue": "タング",
+    "plectrum": "プレクトラム",
+    "harpsichordDamper": "ダンパー",
+    "harpsichordString": "弦"
   },
   "sections": {
     "key": {

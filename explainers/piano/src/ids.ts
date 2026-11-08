@@ -23,6 +23,16 @@ export const PART_IDS = [
   'inset',
   'upright',
   'harpsichord',
+  'uprightHammer',
+  'hammerButt',
+  'bridleTape',
+  'uprightDamper',
+  'uprightStrings',
+  'harpsichordJack',
+  'tongue',
+  'plectrum',
+  'harpsichordDamper',
+  'harpsichordString',
 ] as const;
 export type PartId = (typeof PART_IDS)[number];
 
