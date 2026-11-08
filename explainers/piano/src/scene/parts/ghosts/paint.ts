@@ -1,4 +1,4 @@
-import { EdgesGeometry, Vector2 } from 'three';
+import { Vector2 } from 'three';
 import type { BufferGeometry, Material, Mesh, Object3D } from 'three';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
@@ -7,6 +7,7 @@ import type { MaterialFinish } from '@core/scene/materials';
 import type { Point } from '../../../ids';
 import { THEME } from '../../../theme';
 import { FINISHES } from '../../finishes';
+import { edgeSegments } from '../../geometry/edges';
 import { partMesh, registeredMaterial } from '../context';
 import type { EmphasisGroup, PartContext } from '../context';
 import { mergeParts } from '../keyboard/geometry';
@@ -128,12 +129,8 @@ export function ghostPainter(context: PartContext, group: EmphasisGroup): GhostP
     levels.set(material, style.body);
     return made;
   };
-  const outline = (geometry: BufferGeometry, tone: Tone) => {
-    const edges = new EdgesGeometry(geometry, CREASE_DEGREES);
-    const lines = fatLines(edges.getAttribute('position').array, tone);
-    edges.dispose();
-    return lines;
-  };
+  const outline = (geometry: BufferGeometry, tone: Tone) =>
+    fatLines(edgeSegments(geometry, CREASE_DEGREES), tone);
 
   return {
     solid(parent, parts, tone = 'wood') {

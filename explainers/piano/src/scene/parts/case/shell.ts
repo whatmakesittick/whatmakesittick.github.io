@@ -1,4 +1,4 @@
-import { EdgesGeometry, Group, LineBasicMaterial, LineSegments, Mesh, Shape, Vector2 } from 'three';
+import { Group, LineBasicMaterial, LineSegments, Mesh, Shape, Vector2 } from 'three';
 import type { BufferGeometry } from 'three';
 import { box } from '@core/scene/geometry/box';
 import { extrudePlan, extrudeProfileAlongX, planShape } from '@core/scene/geometry/extrude';
@@ -6,6 +6,7 @@ import type { PlanPoint } from '@core/scene/geometry/extrude';
 import { CASE, KEY, SOUNDBOARD } from '../../../model';
 import { THEME } from '../../../theme';
 import { FINISHES } from '../../finishes';
+import { edgeGeometry } from '../../geometry/edges';
 import { CASE_OUTLINE, insetOutline } from '../../geometry/outline';
 import { cutPartMaterial, registeredMaterial } from '../context';
 import type { PartContext } from '../context';
@@ -101,7 +102,7 @@ function glassEdges(context: PartContext, geometry: BufferGeometry): LineSegment
     new LineBasicMaterial({ color: THEME.glass, transparent: true, opacity: EDGE_OPACITY }),
     false,
   );
-  const edges = context.tracker.track(new EdgesGeometry(geometry, EDGE_ANGLE_DEG));
+  const edges = context.tracker.track(edgeGeometry(geometry, EDGE_ANGLE_DEG));
   return new LineSegments(edges, applyCut(material, context.cut, 'keep'));
 }
 
