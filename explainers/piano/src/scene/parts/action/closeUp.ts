@@ -4,7 +4,7 @@ import { keyX, regionSpecFor, stringPath } from '../../../model';
 import type { RegionOptions } from '../../../model';
 
 const ACTION_HALF_DEPTH = 0.012;
-const ACTION_CLOSE = { bottom: 0.69, overString: 0.035, z: [-0.465, 0.015] } as const;
+const ACTION_CLOSE = { bottom: 0.693, overString: 0.033, z: [-0.465, 0.015] } as const;
 const ESCAPEMENT_CLOSE = { bottom: 0.745, overString: 0.015, z: [-0.435, -0.25] } as const;
 const INSET_FOOTROOM = 0.008;
 
