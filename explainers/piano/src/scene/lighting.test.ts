@@ -2,6 +2,8 @@ import { DirectionalLight } from 'three';
 import { describe, expect, it } from 'vitest';
 import { LIGHT_RIG, pianoLight } from './lighting';
 
+const KEY_TO_FILL = 6;
+
 function shellLights() {
   return {
     key: new DirectionalLight('#ffffff', 1),
@@ -35,6 +37,15 @@ describe('piano light', () => {
     expect(direction(lights.rim).y).toBeGreaterThan(0);
     expect(direction(lights.rim).dot(direction(lights.fill))).toBeLessThan(0);
     expect(lights.fill.intensity).toBeLessThan(lights.rim.intensity);
+  });
+
+  it('rakes the key across the cut so tops and edges outshine the cut faces', () => {
+    const lights = shellLights();
+    pianoLight(lights);
+    const key = direction(lights.key);
+    expect(key.y).toBeGreaterThan(2 * Math.abs(key.x));
+    expect(key.z).toBeGreaterThan(Math.abs(key.x));
+    expect(lights.key.intensity).toBeGreaterThan(KEY_TO_FILL * lights.fill.intensity);
   });
 
   it('places every light at the rig distance', () => {
