@@ -93,13 +93,13 @@ describe('piano camera views', () => {
     );
   });
 
-  it('looks at the side views square from the bass side, a little above', () => {
+  it('looks at the side views square from the bass side, a little from below under the lid', () => {
     SIDE_VIEWS.forEach((view) => {
       const [across, up, along] = directionOf(view);
       expect(along, view).toBe(0);
       expect(across, view).toBeLessThan(0);
-      expect(up, view).toBeGreaterThan(0);
-      expect(up, view).toBeLessThan(Math.abs(across) * SIDE_ELEVATION_LIMIT);
+      expect(up, view).toBeLessThan(0);
+      expect(Math.abs(up), view).toBeLessThan(Math.abs(across) * SIDE_ELEVATION_LIMIT);
     });
   });
 
