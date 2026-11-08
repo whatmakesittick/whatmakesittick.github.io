@@ -2,6 +2,7 @@ import type { Object3D } from 'three';
 import type { ActionPose, AssemblyState } from '../../../ids';
 import { DAMPER_LIFT_MAX, KEYS, PLAYED_KEY, cutX, keyX, mm } from '../../../model';
 import { LOD_DISTANCE } from '../../constants';
+import { CloseLights } from '../../lighting';
 import { playedX } from '../../pose';
 import { neighbourBox, neighbourMask, railCapMask, railStubBox, railStubMask } from '../closeKeep';
 import { CloseLook, isCloseView } from '../closeLook';
@@ -9,6 +10,7 @@ import { label, namedGroup } from '../context';
 import type { Frame, PartContext, Section } from '../context';
 import { sectionCap } from '../keyboard/caps';
 import { LazyEase } from '../keyboard/lazyEase';
+import { CloseFinish } from './closeFinish';
 import { DetailedAction } from './detailed';
 import { buildInstancedActions, buildInstancedDampers } from './instanced';
 import { detailedPose, headSize } from './layout';
@@ -49,6 +51,10 @@ export function createAction(context: PartContext): Section {
   [actionCap, damperCap].forEach((cap) => capMask.cover(cap));
   const detailed = new DetailedAction(context);
   root.add(detailed.root, detailed.damper);
+  const finish = new CloseFinish(look.amount, context.materials);
+  [detailed.root, detailed.damper].forEach((part) => finish.cover(part));
+  const lights = new CloseLights();
+  root.add(lights.root);
   const actionsLabel = label(context, 'actions', shifted, [0, 0, 0]);
   const small: readonly Object3D[] = [...actions.small, ...dampers.small];
   const shift = new LazyEase();
@@ -104,6 +110,7 @@ export function createAction(context: PartContext): Section {
       if (shifting || lifting) place();
       if (lifting) posePlayed();
       const looking = look.step(frame.delta, frame.cameraDistance);
+      lights.set(look.value);
       return shifting || lifting || looking;
     },
     focus(view): void {

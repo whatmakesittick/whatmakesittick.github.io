@@ -1,4 +1,4 @@
-import type { DirectionalLight } from 'three';
+import { DirectionalLight, Group } from 'three';
 import type { Lighting } from '@core/scene/lighting';
 import type { Point } from '../ids';
 import { THEME } from '../theme';
@@ -19,6 +19,35 @@ export const LIGHT_RIG: Readonly<Record<LightName, LightSpec>> & { distance: num
   fill: { color: THEME.fillLight, intensity: 0.4, direction: [0.85, 0.32, 0.25] },
   rim: { color: '#fff6ea', intensity: 1.9, direction: [-0.16, 0.55, -0.82] },
 };
+
+const CLOSE_LIGHT_NAMES = ['rake', 'rim'] as const;
+
+type CloseLightName = (typeof CLOSE_LIGHT_NAMES)[number];
+
+export const CLOSE_LIGHT_RIG: Readonly<Record<CloseLightName, LightSpec>> = {
+  rake: { color: '#ffe0b8', intensity: 2.4, direction: [-0.55, 0.8, -0.4] },
+  rim: { color: '#fff3e2', intensity: 2, direction: [0.7, 0.55, -0.55] },
+};
+
+export class CloseLights {
+  readonly root = new Group();
+  private readonly lights: readonly [DirectionalLight, LightSpec][];
+
+  constructor() {
+    this.root.name = 'closeLights';
+    this.lights = CLOSE_LIGHT_NAMES.map((name) => {
+      const spec = CLOSE_LIGHT_RIG[name];
+      const light = new DirectionalLight(spec.color, 0);
+      light.position.set(...spec.direction).setLength(LIGHT_RIG.distance);
+      this.root.add(light);
+      return [light, spec];
+    });
+  }
+
+  set(amount: number): void {
+    this.lights.forEach(([light, spec]) => (light.intensity = spec.intensity * amount));
+  }
+}
 
 function apply(light: DirectionalLight, name: LightName): () => void {
   const { color, intensity, direction } = LIGHT_RIG[name];

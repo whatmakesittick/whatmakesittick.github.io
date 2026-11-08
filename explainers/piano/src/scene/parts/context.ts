@@ -47,6 +47,12 @@ export interface Section {
 
 export type SectionFactory = (context: PartContext) => Section;
 
+const finishes = new WeakMap<Material, MaterialFinish>();
+
+export function finishOf(material: Material): MaterialFinish | undefined {
+  return finishes.get(material);
+}
+
 export function namedGroup(name: string, parent?: Object3D): Group {
   const group = new Group();
   group.name = name;
@@ -86,6 +92,7 @@ export function partMaterial(
   finish: MaterialFinish,
 ): Material {
   const material = context.materials.get(group, finish);
+  finishes.set(material, finish);
   return isCut(group, finish) ? applyCut(material, context.cut) : material;
 }
 

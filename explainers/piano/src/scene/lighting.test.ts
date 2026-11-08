@@ -1,6 +1,6 @@
 import { DirectionalLight } from 'three';
 import { describe, expect, it } from 'vitest';
-import { LIGHT_RIG, pianoLight } from './lighting';
+import { CloseLights, LIGHT_RIG, pianoLight } from './lighting';
 
 const KEY_TO_FILL = 6;
 
@@ -66,5 +66,14 @@ describe('piano light', () => {
       expect(light.color.getHexString()).toBe('ffffff');
     });
     expect(lights.key.position.toArray()).toEqual([1, 2, 3]);
+  });
+
+  it('keeps the close-view lights dark until a close view fades in', () => {
+    const close = new CloseLights();
+    const lights = close.root.children.filter((child) => child instanceof DirectionalLight);
+    expect(lights.length).toBeGreaterThan(0);
+    lights.forEach((light) => expect(light.intensity).toBe(0));
+    close.set(1);
+    lights.forEach((light) => expect(light.intensity).toBeGreaterThan(0));
   });
 });
