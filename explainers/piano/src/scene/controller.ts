@@ -30,6 +30,8 @@ interface FramedCamera {
   variant?: string;
 }
 
+type Reframe = 'tween' | 'jump';
+
 function framingInputs({ register, compare, view }: AssemblyState): FramingInputs {
   return { register, compare, ghost: view.ghost, inset: view.inset };
 }
@@ -51,6 +53,7 @@ export class PianoController {
   private framing: FramingInputs | null = null;
   private framed: FramedCamera | null = null;
   private framedBox: Box3 | null = null;
+  private reframe: Reframe | null = null;
   private following = false;
   private cancelWarmUp: () => void = () => {};
 
@@ -80,10 +83,11 @@ export class PianoController {
     if (!this.assembly) return;
     this.assembly.setState(state);
     this.followWhen(state.view.follow);
-    this.reframeWhenMoved(framingInputs(state));
+    this.queueReframe(framingInputs(state));
   }
 
   update(deltaSeconds: number): boolean {
+    this.applyReframe();
     return this.assembly?.update(deltaSeconds, this.cameraDistance()) ?? false;
   }
 
@@ -93,9 +97,11 @@ export class PianoController {
     this.assembly?.dispose();
     this.assembly = null;
     this.framing = null;
+    this.reframe = null;
   }
 
   private frame(camera: FramedCamera, animate: boolean): void {
+    this.reframe = null;
     this.framed = camera;
     this.assembly?.focus?.(camera.view);
     this.framedBox = this.regionOf(camera.view);
@@ -114,13 +120,21 @@ export class PianoController {
     this.dependencies.rig.follow(anchor);
   }
 
-  private reframeWhenMoved(next: FramingInputs): void {
+  private queueReframe(next: FramingInputs): void {
     const previous = this.framing;
     this.framing = next;
-    if (!previous || sameFraming(previous, next) || !this.framed) return;
+    if (!previous || sameFraming(previous, next)) return;
+    const move: Reframe = previous.register === next.register ? 'tween' : 'jump';
+    this.reframe = this.reframe === 'jump' ? 'jump' : move;
+  }
+
+  private applyReframe(): void {
+    const reframe = this.reframe;
+    this.reframe = null;
+    if (!reframe || !this.framed) return;
     const box = this.regionOf(this.framed.view);
     if (box && this.framedBox?.equals(box)) return;
-    this.frame(this.framed, true);
+    this.frame(this.framed, reframe === 'tween');
   }
 
   private regionOf(view: CameraView): Box3 | null {

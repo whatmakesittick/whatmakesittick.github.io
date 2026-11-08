@@ -171,20 +171,52 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
   });
 
   it.each([
-    ['the register moves the string', 'soundboard', { register: 'bass' }],
+    ['the treble string', 'soundboard', 'treble'],
+    ['the bass string', 'soundboard', 'bass'],
+    ['the treble dampers', 'dampers', 'treble'],
+    ['the bass dampers', 'dampers', 'bass'],
+  ] as const)(
+    'jumps to %s on the next frame with the cut and the played key',
+    (_case, view, register) => {
+      const { rig, controller } = builtController();
+      controller.views.frame(view, false);
+      const before = rig.jumpTo.mock.lastCall?.[0];
+      controller.setState(assemblyState({ register }));
+      controller.update(FRAME_SECONDS);
+      const pose = rig.jumpTo.mock.lastCall?.[0];
+      expect(rig.tweenTo).not.toHaveBeenCalled();
+      expect(rounded(pose?.target)).toEqual(rounded(expectedPose(view).target));
+      expect(rounded(pose?.target)).not.toEqual(rounded(before?.target));
+    },
+  );
+
+  it.each([
     ['the ghost grows the action', 'action', { view: { ghost: true } }],
     ['the inset grows the escapement', 'escapement', { view: { inset: true } }],
     ['a compare chip picks the upright', 'lineUp', { compare: 'upright' }],
     ['a compare chip picks the harpsichord', 'lineUp', { compare: 'harpsichord' }],
-  ] as const)('reframes the current view when %s', (_case, view, choices) => {
+  ] as const)('tweens the current view on the next frame when %s', (_case, view, choices) => {
     const { rig, controller } = builtController();
     controller.views.frame(view, false);
     const before = rig.jumpTo.mock.lastCall?.[0];
     controller.setState(assemblyState(choices));
+    controller.update(FRAME_SECONDS);
     const pose = rig.tweenTo.mock.lastCall?.[0];
-    expect(pose).toBeDefined();
+    expect(rig.jumpTo).toHaveBeenCalledTimes(1);
     expect(rounded(pose?.target)).toEqual(rounded(expectedPose(view).target));
     expect(rounded(pose?.target)).not.toEqual(rounded(before?.target));
+  });
+
+  it('lets a chapter that resets the register frame only its own view', () => {
+    const { rig, controller } = builtController({ register: 'treble' });
+    controller.views.frame('soundboard', false);
+    controller.setState(assemblyState());
+    controller.views.frame('lineUp', true);
+    controller.update(FRAME_SECONDS);
+    expect(rig.jumpTo).toHaveBeenCalledTimes(1);
+    expect(rig.tweenTo).toHaveBeenCalledTimes(1);
+    const pose = rig.tweenTo.mock.lastCall?.[0];
+    expect(rounded(pose?.target)).toEqual(rounded(expectedPose('lineUp').target));
   });
 
   it.each([
@@ -196,6 +228,7 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     const { rig, controller } = builtController();
     controller.views.frame(view, false);
     controller.setState(assemblyState(choices));
+    controller.update(FRAME_SECONDS);
     expect(rig.tweenTo).not.toHaveBeenCalled();
     expect(rig.jumpTo).toHaveBeenCalledTimes(1);
   });
