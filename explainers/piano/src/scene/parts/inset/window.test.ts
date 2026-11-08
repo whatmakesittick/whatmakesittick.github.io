@@ -1,14 +1,22 @@
 import { describe, expect, it } from 'vitest';
 import type { Point } from '../../../ids';
-import { BLOW_MM, HAMMER, INSET, PLAYED_KEY, insetCentre, jackAnchor } from '../../../model';
+import { BLOW_MM, DAMPER, HAMMER, INSET, PLAYED_KEY, STRING_Y, jackAnchor } from '../../../model';
 import { hammerAngle } from '../../pose';
 import { DROP_SCREW, KNUCKLE, LET_OFF_BUTTON_RECT, SPRING } from '../action/dimensions';
 import { turnAbout } from '../ghosts/shapes';
 import type { Planar } from '../ghosts/shapes';
-import { PANEL, WINDOW, clipBounds, drawnPoint, leaderFor } from './window';
+import {
+  PANEL,
+  WINDOW,
+  clipBounds,
+  drawnPoint,
+  labelPoint,
+  leaderFor,
+  panelCentre,
+} from './window';
 
 const DIGITS = 9;
-const CENTRE: Point = insetCentre(PLAYED_KEY.middle);
+const CENTRE: Point = panelCentre(PLAYED_KEY.middle);
 
 function inWindow([y, z]: Planar): boolean {
   return Math.abs(y - WINDOW.y) <= WINDOW.height / 2 && Math.abs(z - WINDOW.z) <= WINDOW.width / 2;
@@ -45,13 +53,24 @@ describe('inset window', () => {
   it('leads from the bottom of the panel to a ring around the jack', () => {
     Object.values(PLAYED_KEY).forEach((key) => {
       const { start, end, ring } = leaderFor(key);
-      const centre = insetCentre(key);
+      const centre = panelCentre(key);
       const anchor = jackAnchor(key);
       expect(start[1]).toBeCloseTo(centre[1] - INSET.height / 2, DIGITS);
       expect(Math.abs(start[2] - centre[2])).toBeLessThan(INSET.width / 2);
       expect([ring[1], ring[2]]).toEqual([anchor[1], anchor[2]]);
       expect(ring[0]).toBeLessThan(anchor[0]);
       expect(Math.hypot(end[1] - ring[1], end[2] - ring[2])).toBeCloseTo(PANEL.ringRadius, DIGITS);
+    });
+  });
+
+  it('hangs above the strings behind the damper, labelled over its top-left corner', () => {
+    Object.values(PLAYED_KEY).forEach((key) => {
+      const centre = panelCentre(key);
+      const [, labelY, labelZ] = labelPoint(centre);
+      expect(centre[1] - INSET.height / 2).toBeGreaterThan(STRING_Y);
+      expect(centre[2] + INSET.width / 2).toBeLessThan(DAMPER.z - DAMPER.headDepth / 2);
+      expect(labelY).toBeCloseTo(centre[1] + INSET.height / 2, DIGITS);
+      expect(labelZ).toBeLessThan(centre[2]);
     });
   });
 });

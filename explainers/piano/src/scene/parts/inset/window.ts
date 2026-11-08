@@ -1,8 +1,10 @@
 import type { Point } from '../../../ids';
-import { INSET, JACK_ANCHOR_Y, JACK_Z, insetCentre, jackAnchor } from '../../../model';
+import { INSET, JACK_ANCHOR_Y, JACK_Z, jackAnchor, keyX } from '../../../model';
 import type { Planar } from '../ghosts/shapes';
 
 const WINDOW_SHIFT: Planar = [-0.001, -0.006];
+const PLACE = { across: -0.03, bottom: 0.95, front: -0.5 } as const;
+const LABEL_INDENT = 0.015;
 
 export const WINDOW = {
   y: JACK_ANCHOR_Y + WINDOW_SHIFT[0],
@@ -18,6 +20,14 @@ export const PANEL = {
   ringRadius: 0.005,
   lift: 0.012,
 } as const;
+
+export function panelCentre(key: number): Point {
+  return [keyX(key) + PLACE.across, PLACE.bottom + INSET.height / 2, PLACE.front - INSET.width / 2];
+}
+
+export function labelPoint([x, y, z]: Point): Point {
+  return [x, y + INSET.height / 2, z - INSET.width / 2 + LABEL_INDENT];
+}
 
 export function drawnPoint([, centreY, centreZ]: Point, [y, z]: Planar): Planar {
   return [centreY + INSET.scale * (y - WINDOW.y), centreZ + INSET.scale * (z - WINDOW.z)];
@@ -41,7 +51,7 @@ export interface Leader {
 }
 
 export function leaderFor(key: number): Leader {
-  const centre = insetCentre(key);
+  const centre = panelCentre(key);
   const anchor = jackAnchor(key);
   const [, drawnZ] = drawnPoint(centre, [anchor[1], anchor[2]]);
   const start: Point = [centre[0] - INSET.depth / 2, centre[1] - INSET.height / 2, drawnZ];

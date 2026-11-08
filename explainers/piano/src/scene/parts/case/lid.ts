@@ -59,9 +59,10 @@ function lidHinges(): BufferGeometry {
   ]);
 }
 
-function lidPoint(reach: number, z: number): Point {
+export function lidPoint(reach: number, z: number, lift = 0): Point {
   const angle = toRadians(LID.angleDeg);
-  return [CASE.leftX + reach * Math.cos(angle), CASE.rimTop + reach * Math.sin(angle), z];
+  const [cos, sin] = [Math.cos(angle), Math.sin(angle)];
+  return [CASE.leftX + reach * cos - lift * sin, CASE.rimTop + reach * sin + lift * cos, z];
 }
 
 function rimMiddleAt(z: number): Point {

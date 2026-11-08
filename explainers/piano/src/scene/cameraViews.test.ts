@@ -19,7 +19,9 @@ const STAGES: readonly FramingSlopes[] = [PHONE, DESKTOP];
 const WORLD_UP = new Vector3(0, 1, 0);
 const FLOOR_Y = 0;
 const SIDE_ELEVATION_LIMIT = 0.3;
-const SIDE_VIEWS: readonly CameraView[] = ['action', 'escapement', 'soundboard', 'lineUp'];
+const SIDE_VIEWS: readonly CameraView[] = ['soundboard', 'lineUp'];
+const CLOSE_VIEWS: readonly CameraView[] = ['action', 'escapement'];
+const CLOSE_YAW_LIMIT = 0.6;
 const THREE_QUARTER_VIEWS: readonly CameraView[] = ['grand', 'dampers'];
 const PLAIN: RegionOptions = { ghost: false, inset: false };
 const OPTION_SETS: readonly RegionOptions[] = [false, true].flatMap((ghost) =>
@@ -99,6 +101,17 @@ describe('piano camera views', () => {
       expect(along, view).toBe(0);
       expect(across, view).toBeLessThan(0);
       expect(up, view).toBeLessThan(0);
+      expect(Math.abs(up), view).toBeLessThan(Math.abs(across) * SIDE_ELEVATION_LIMIT);
+    });
+  });
+
+  it('looks at the close views from the bass side, a little in front and from below', () => {
+    CLOSE_VIEWS.forEach((view) => {
+      const [across, up, along] = directionOf(view);
+      expect(across, view).toBeLessThan(0);
+      expect(up, view).toBeLessThan(0);
+      expect(along, view).toBeGreaterThan(0);
+      expect(along, view).toBeLessThan(Math.abs(across) * CLOSE_YAW_LIMIT);
       expect(Math.abs(up), view).toBeLessThan(Math.abs(across) * SIDE_ELEVATION_LIMIT);
     });
   });

@@ -2,12 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { Mesh, Vector3 } from 'three';
 import type { Material, Object3D } from 'three';
 import type { RegisterId } from '../../../ids';
-import { INSET, PLAYED_KEY, insetCentre } from '../../../model';
+import { INSET, PLAYED_KEY } from '../../../model';
 import { createAction } from '../action/action';
 import type { PartContext, Section } from '../context';
 import { stateAt, testContext } from '../keyboard/testState';
 import type { Choices } from '../keyboard/testState';
 import { createInset } from './inset';
+import { panelCentre } from './window';
 
 const DIGITS = 9;
 const TRIANGLE_BUDGET = 12_000;
@@ -53,12 +54,12 @@ describe('createInset', () => {
     expect([...context.labels.keys()]).toEqual(['inset']);
   });
 
-  it('sits at the inset centre of the played key for every register', () => {
+  it('sits at the panel centre of the played key for every register', () => {
     const { context, section } = build();
     (Object.keys(PLAYED_KEY) as RegisterId[]).forEach((register) => {
       section.setState(stateAt(0, { ...SHOWN, register }));
       expect(anchorAt(context, section).toArray()).toEqual(
-        insetCentre(PLAYED_KEY[register]).map((value) => expect.closeTo(value, DIGITS)),
+        panelCentre(PLAYED_KEY[register]).map((value) => expect.closeTo(value, DIGITS)),
       );
     });
   });
