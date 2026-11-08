@@ -1,4 +1,13 @@
-import type { IUniform, Material, WebGLProgramParametersWithUniforms } from 'three';
+import type {
+  IUniform,
+  Intersection,
+  Material,
+  Object3D,
+  Raycaster,
+  Vector3,
+  WebGLProgramParametersWithUniforms,
+} from 'three';
+import { isMesh } from '@core/scene/occlusion';
 import { CUT_TOP } from '../constants';
 import { glslFloat, inject } from './shaderChunks';
 
@@ -33,6 +42,9 @@ function fragmentBody(mode: CutMode): string {
 }
 
 const patched = new WeakMap<Material, CutMode>();
+const CUT_ON = 0.5;
+const PLAIN_MESH = 'Mesh';
+const CUT_MESH = 'CutMesh';
 
 export function createCut(): CutUniforms {
   return { x: { value: 0 }, on: { value: 0 } };
@@ -76,4 +88,31 @@ export function applyCut<M extends Material>(
   material.customProgramCacheKey = () => `${cacheKey()}|cut-${mode}`;
   material.needsUpdate = true;
   return material;
+}
+
+export function isCutAway(cut: CutUniforms, point: Vector3, mode: CutMode): boolean {
+  const inside = cut.on.value > CUT_ON && point.x < cut.x.value && point.y < CUT_TOP;
+  return mode === 'remove' ? inside : !inside;
+}
+
+function cutRaycast(object: Object3D, cut: CutUniforms, mode: CutMode): Object3D['raycast'] {
+  const raycast = object.raycast.bind(object);
+  return (raycaster: Raycaster, hits: Intersection[]) => {
+    const found: Intersection[] = [];
+    raycast(raycaster, found);
+    found.forEach((hit) => {
+      if (!isCutAway(cut, hit.point, mode)) hits.push(hit);
+    });
+  };
+}
+
+export function raycastThroughCut(root: Object3D, cut: CutUniforms): void {
+  root.traverse((object) => {
+    if (!isMesh(object) || Array.isArray(object.material)) return;
+    const mode = patched.get(object.material);
+    if (!mode) return;
+    object.raycast = cutRaycast(object, cut, mode);
+    // The label occlusion's bounds tree skips raycast() for plain meshes.
+    if (object.type === PLAIN_MESH) Object.defineProperty(object, 'type', { value: CUT_MESH });
+  });
 }
