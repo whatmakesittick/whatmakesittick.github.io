@@ -1,6 +1,8 @@
-import { BufferGeometry, EdgesGeometry, Float32BufferAttribute, LineBasicMaterial } from 'three';
-import { LineSegments } from 'three';
-import type { Material, Mesh, Object3D } from 'three';
+import { EdgesGeometry, Vector2 } from 'three';
+import type { BufferGeometry, Material, Mesh, Object3D } from 'three';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
 import type { MaterialFinish } from '@core/scene/materials';
 import type { Point } from '../../../ids';
 import { THEME } from '../../../theme';
@@ -27,6 +29,7 @@ interface ToneStyle {
 }
 
 const CREASE_DEGREES = 30;
+const LINE_PIXELS = 2;
 const TONES: Readonly<Record<Tone, ToneStyle>> = {
   frame: {
     finish: { ...FINISHES.ghost, emissiveIntensity: 0.2 },
@@ -58,7 +61,7 @@ const INKS: Readonly<Record<Ink, ToneStyle>> = { ...TONES, string: STRING_STYLE 
 export interface GhostPainter {
   solid(parent: Object3D, parts: readonly BufferGeometry[], tone?: Tone): Mesh;
   body(parent: Object3D, geometry: BufferGeometry, ink: Ink): Mesh;
-  lines(parent: Object3D, segments: readonly Segment[], ink?: Ink): LineSegments;
+  lines(parent: Object3D, segments: readonly Segment[], ink?: Ink): LineSegments2;
   choose(chosen: boolean): void;
 }
 
@@ -88,27 +91,36 @@ export function zigzag(from: Planar, to: Planar, turns: number, amplitude: numbe
   return polyline(points, x);
 }
 
-function inkMaterial(style: ToneStyle): LineBasicMaterial {
-  return new LineBasicMaterial({ color: style.ink, transparent: true, opacity: style.line.lineUp });
-}
-
-function segmentGeometry(positions: ArrayLike<number>): BufferGeometry {
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute(Array.from(positions), 3));
-  return geometry;
+function inkMaterial(style: ToneStyle): LineMaterial {
+  return new LineMaterial({
+    color: style.ink,
+    linewidth: LINE_PIXELS,
+    transparent: true,
+    opacity: style.line.lineUp,
+  });
 }
 
 export function ghostPainter(context: PartContext, group: EmphasisGroup): GhostPainter {
   const levels = new Map<Material, Opacity>();
+  const size = new Vector2();
   const inks = Object.fromEntries(
     (Object.keys(INKS) as Ink[]).map((ink) => {
       const material = registeredMaterial(context, group, inkMaterial(INKS[ink]), false);
       levels.set(material, INKS[ink].line);
       return [ink, material];
     }),
-  ) as Record<Ink, LineBasicMaterial>;
-  const inkLines = (positions: ArrayLike<number>, ink: Ink) =>
-    new LineSegments(context.tracker.track(segmentGeometry(positions)), inks[ink]);
+  ) as Record<Ink, LineMaterial>;
+  const fatLines = (positions: ArrayLike<number>, ink: Ink) => {
+    const geometry = context.tracker.track(new LineSegmentsGeometry());
+    geometry.setPositions(Array.from(positions));
+    const material = inks[ink];
+    const lines = new LineSegments2(geometry, material);
+    lines.raycast = () => {};
+    lines.onBeforeRender = (renderer) => {
+      material.resolution.copy(renderer.getSize(size));
+    };
+    return lines;
+  };
   const mesh = (geometry: BufferGeometry, style: ToneStyle) => {
     const made = partMesh(context, geometry, group, style.finish);
     const material = made.material as Material;
@@ -118,7 +130,7 @@ export function ghostPainter(context: PartContext, group: EmphasisGroup): GhostP
   };
   const outline = (geometry: BufferGeometry, tone: Tone) => {
     const edges = new EdgesGeometry(geometry, CREASE_DEGREES);
-    const lines = inkLines(edges.getAttribute('position').array, tone);
+    const lines = fatLines(edges.getAttribute('position').array, tone);
     edges.dispose();
     return lines;
   };
@@ -138,7 +150,7 @@ export function ghostPainter(context: PartContext, group: EmphasisGroup): GhostP
     },
     lines(parent, segments, ink = 'wood') {
       const flat = segments.flatMap(([from, to]) => [...from, ...to]);
-      const lines = inkLines(flat, ink);
+      const lines = fatLines(flat, ink);
       lines.name = `${group}Lines`;
       parent.add(lines);
       return lines;

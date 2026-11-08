@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { InstancedMesh, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 import type { Object3D } from 'three';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
 import { isShown } from '@core/scene/parts';
 import type { AssemblyState, CompareId, PartId, RegisterId } from '../../../ids';
 import { PLAYED_KEY, mm, restAnchorPoint, uprightPoseAt } from '../../../model';
@@ -80,7 +81,8 @@ function labelAt(context: PartContext, section: Section, part: PartId): Vector3 
 function meshes(root: Object3D): Mesh[] {
   const found: Mesh[] = [];
   root.traverse((node) => {
-    if (node instanceof Mesh && !(node instanceof InstancedMesh)) found.push(node);
+    const drawn = node instanceof Mesh && !(node instanceof LineSegments2);
+    if (drawn && !(node instanceof InstancedMesh)) found.push(node);
   });
   return found;
 }
