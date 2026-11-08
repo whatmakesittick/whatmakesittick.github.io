@@ -10,6 +10,7 @@ const CAMERA = {
   minDistance: 0.06,
   maxDistance: 9,
   floorMargin: 0.02,
+  maxPolarAngle: Math.PI * 0.56,
 } as const;
 const HIGHLIGHT_DIM = { saturation: 0.35, brightness: 0.55, emissive: 0.25 } as const;
 
@@ -21,6 +22,7 @@ export const SCENE_OPTIONS: SceneOptions = {
     near: CAMERA.near,
     far: CAMERA.far,
     floorMargin: CAMERA.floorMargin,
+    maxPolarAngle: CAMERA.maxPolarAngle,
     distance: { min: CAMERA.minDistance, max: CAMERA.maxDistance },
   },
   highlight: { dim: HIGHLIGHT_DIM, undimmed: [UNDIMMED_GROUP] },
