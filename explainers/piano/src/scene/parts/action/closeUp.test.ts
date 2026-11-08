@@ -63,12 +63,12 @@ describe('close-up regions', () => {
     });
   });
 
-  it('gives the escapement a little headroom while the inset shows', () => {
+  it('gives the escapement a little more room while the inset shows', () => {
     KEYS.forEach((key) => {
       const plain = closeUpRegion('escapement', key, PLAIN);
       const inset = closeUpRegion('escapement', key, { ghost: false, inset: true });
-      expect(inset.y[1]).toBeGreaterThan(plain.y[1]);
-      expect([inset.x, inset.y[0], inset.z]).toEqual([plain.x, plain.y[0], plain.z]);
+      expect(inset.y[0]).toBeLessThan(plain.y[0]);
+      expect([inset.x, inset.y[1], inset.z]).toEqual([plain.x, plain.y[1], plain.z]);
     });
   });
 });

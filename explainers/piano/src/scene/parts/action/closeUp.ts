@@ -6,7 +6,7 @@ import type { RegionOptions } from '../../../model';
 const ACTION_HALF_DEPTH = 0.012;
 const ACTION_CLOSE = { bottom: 0.69, overString: 0.035, z: [-0.465, 0.015] } as const;
 const ESCAPEMENT_CLOSE = { bottom: 0.745, overString: 0.015, z: [-0.435, -0.25] } as const;
-const INSET_HEADROOM = 0.008;
+const INSET_FOOTROOM = 0.008;
 
 function playedAction(key: number): Extent {
   const centre = keyX(key);
@@ -30,7 +30,7 @@ function escapementRegion(key: number, { inset }: RegionOptions): RegionSpec {
   const top = stringY(key) + ESCAPEMENT_CLOSE.overString;
   return {
     x: playedAction(key),
-    y: [ESCAPEMENT_CLOSE.bottom, inset ? top + INSET_HEADROOM : top],
+    y: [inset ? ESCAPEMENT_CLOSE.bottom - INSET_FOOTROOM : ESCAPEMENT_CLOSE.bottom, top],
     z: ESCAPEMENT_CLOSE.z,
   };
 }

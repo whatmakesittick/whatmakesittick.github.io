@@ -56,6 +56,12 @@ export function buildHammer(context: PartContext, parent: Object3D): Piece {
   const headLabel = label(context, 'hammer', frame.body, [0, 0, 0]);
   const headAnchor = sceneAnchor(context, 'hammer', frame.body, [0, 0, 0]);
   let size: HeadSize = headSize(1);
+  let close = false;
+
+  function placeLabel(): void {
+    if (close) headLabel.position.set(-size.mouldingWidth / 2, MOULDING_BOTTOM, size.centreZ);
+    else headLabel.position.set(0, size.top - LABEL_DROP, size.centreZ);
+  }
 
   function squash(amount: number): void {
     felt.scale.set(
@@ -76,12 +82,16 @@ export function buildHammer(context: PartContext, parent: Object3D): Piece {
       moulding.scale.set(size.mouldingWidth, size.mouldingHeight, size.depth);
       felt.position.set(0, size.feltBase, size.centreZ);
       squash(0);
-      headLabel.position.set(0, size.top - LABEL_DROP, size.centreZ);
+      placeLabel();
       headAnchor.position.set(0, size.top, size.centreZ);
     },
     pose(pose) {
       frame.pivot.rotation.x = pose.hammer;
       squash(pose.feltSquash);
+    },
+    focus(next) {
+      close = next;
+      placeLabel();
     },
   };
 }

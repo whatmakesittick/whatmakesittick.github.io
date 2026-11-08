@@ -1,5 +1,5 @@
 import { BoxGeometry, CylinderGeometry } from 'three';
-import type { Object3D } from 'three';
+import type { InstancedMesh, Object3D } from 'three';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import type { MaterialFinish } from '@core/scene/materials';
 import type { AssemblyState } from '../../../ids';
@@ -59,9 +59,9 @@ function addWhiteKeys(rows: KeyedInstances): void {
   });
 }
 
-function addBlackKeys(rows: KeyedInstances): void {
+function addBlackKeys(rows: KeyedInstances): InstancedMesh {
   const half = KEY.blackWidth / 2;
-  rows.add({
+  return rows.add({
     geometry: profileAlongX(outlineShape(blackProfile()), -half, half, BLACK_BEVEL),
     group: 'keyboard',
     finish: FINISHES.ebony,
@@ -104,11 +104,12 @@ export function createKeyboard(context: PartContext): Section {
   const shifted = namedGroup('keyboardShift', root);
   const rows = new KeyedInstances(context, shifted);
   addWhiteKeys(rows);
-  addBlackKeys(rows);
+  const blackKeys = addBlackKeys(rows);
   addSticks(rows);
   addPunchings(rows);
   const look = new CloseLook();
   const neighbours = neighbourMask(look.amount);
+  hidingMask(look.amount).cover(blackKeys);
   rows.meshes.forEach((mesh) => neighbours.cover(mesh));
   shifted.add(keyFrame(context));
   root.add(partMesh(context, boxBetween(keybedBounds()), STRUCTURE_GROUP, FINISHES.darkWood));
@@ -144,7 +145,7 @@ export function createKeyboard(context: PartContext): Section {
     animate(frame): boolean {
       const moving = shift.step(frame.delta);
       if (moving) place();
-      const looking = look.step(frame.delta, frame.cameraDistance);
+      const looking = look.step(frame.delta);
       return moving || looking;
     },
     focus: (view) => look.focus(view),

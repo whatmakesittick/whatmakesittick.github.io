@@ -98,7 +98,7 @@ export function createInterior(context: PartContext): Section {
       caps.show(state.register, state.view.cutaway, context.cut.x.value);
       const thin = frame.cameraDistance > LOD_DISTANCE.thinStrings;
       sets.bands.forEach((band) => band.setThin(thin));
-      const looking = look.step(frame.delta, frame.cameraDistance);
+      const looking = look.step(frame.delta);
       return wave.animate(frame, state) || looking;
     },
     focus(view: CameraView) {

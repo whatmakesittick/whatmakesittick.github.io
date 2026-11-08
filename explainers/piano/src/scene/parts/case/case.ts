@@ -32,7 +32,7 @@ export function createCase(context: PartContext): Section {
       lyre.setState(state);
     },
     animate: (frame) => {
-      const looking = look.step(frame.delta, frame.cameraDistance);
+      const looking = look.step(frame.delta);
       return lyre.animate(frame.delta) || looking;
     },
     focus: (view) => look.focus(view),

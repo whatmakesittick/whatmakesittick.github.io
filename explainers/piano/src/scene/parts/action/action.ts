@@ -109,7 +109,7 @@ export function createAction(context: PartContext): Section {
       small.forEach((mesh) => (mesh.visible = near));
       if (shifting || lifting) place();
       if (lifting) posePlayed();
-      const looking = look.step(frame.delta, frame.cameraDistance);
+      const looking = look.step(frame.delta);
       lights.set(look.value);
       return shifting || lifting || looking;
     },
