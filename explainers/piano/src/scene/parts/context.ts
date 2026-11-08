@@ -18,6 +18,7 @@ const UNCUT_GROUPS: ReadonlySet<EmphasisGroup> = new Set<EmphasisGroup>([
   'inset',
   'upright',
   'harpsichord',
+  'strings',
   UNDIMMED_GROUP,
 ]);
 
