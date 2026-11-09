@@ -26,9 +26,11 @@ export function bindSpeedSlider(
   const note = html('span', { class: 'field-value-note' });
   output.replaceChildren(value, note);
 
+  const field = output.parentElement ?? output;
+  const row = field.closest<HTMLElement>('.dock') ?? field.parentElement ?? field;
   const fitNote = () => {
     note.hidden = false;
-    note.hidden = !fitsWithin(output);
+    note.hidden = !fitsWithin(output) || !fitsWithin(row);
   };
   let fitPending = false;
   const fitNextFrame = () => {
@@ -40,7 +42,8 @@ export function bindSpeedSlider(
     });
   };
   const resizes = new ResizeObserver(fitNote);
-  resizes.observe(output.parentElement ?? output);
+  resizes.observe(field);
+  resizes.observe(row);
 
   input.addEventListener('input', () => store.getState().setSpeed(Number(input.value)));
   const unwatch = watchLocalized(
