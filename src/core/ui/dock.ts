@@ -5,6 +5,7 @@ import { bindChoice, createChoice } from './choices';
 import { disposeAll } from './disposers';
 import type { Disposer } from './disposers';
 import { phaseColumns } from './phases';
+import { wrapPhaseButtons } from './phaseWrap';
 import { bindPhaseButtons, bindPhaseStatus, bindScrubber, createPhaseButtons } from './scrubber';
 import { bindSpeedSlider } from './speedSlider';
 import { watchLocalized } from './subscribe';
@@ -59,6 +60,7 @@ function mountPlayback<S extends Playback>(
     bindPlayButton(find<HTMLButtonElement>('[data-control="play"]'), store),
     bindScrubber(find<HTMLInputElement>('[data-control="scrubber"]'), store, timeline),
     bindPhaseButtons(phaseButtons, store, timeline),
+    wrapPhaseButtons(dock),
     bindPhaseStatus(find('[data-status="phase"]'), find('[data-status="name"]'), store, timeline),
     bindSpeedSlider(
       find<HTMLInputElement>('[data-control="speed"]'),

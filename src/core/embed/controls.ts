@@ -12,7 +12,6 @@ import { EMBED_DOM } from './contract';
 import type { EmbedUiMounted, EmbedUiSlots } from './contract';
 
 const LANGUAGE_SELECT = '[data-language-select]';
-const PHASE_MIN_WIDTH = '--phase-min-width';
 const GAUGE_SELECTOR = `[${EMBED_DOM.gaugeAttr}]`;
 
 export interface EmbedControls {
@@ -53,26 +52,6 @@ function mountInto(
     clear(slot);
     return undefined;
   }
-}
-
-export function fitPhaseButtons(dock: HTMLElement): Disposer {
-  const group = dock.querySelector<HTMLElement>('[data-phase-buttons]');
-  const area = group?.parentElement;
-  if (!group || !area) return () => {};
-  const fit = () => {
-    group.style.removeProperty(PHASE_MIN_WIDTH);
-    const width = area.clientWidth;
-    const count = group.children.length;
-    if (width <= 0 || count === 0 || group.scrollWidth <= width + 1) return;
-    const gap = parseFloat(getComputedStyle(group).columnGap) || 0;
-    group.style.setProperty(
-      PHASE_MIN_WIDTH,
-      `${Math.floor((width - gap * (count - 1)) / count)}px`,
-    );
-  };
-  const observer = new ResizeObserver(fit);
-  observer.observe(area);
-  return () => observer.disconnect();
 }
 
 function mountGauge<S extends Playback>(
@@ -148,7 +127,6 @@ export function mountEmbedControls<S extends Playback>(
     ? (slots.gauge?.querySelector<HTMLElement>(GAUGE_SELECTOR) ?? null)
     : null;
   const disposers: Disposer[] = [];
-  if (dock) disposers.push(fitPhaseButtons(dock));
 
   return {
     mounted: { dock: dock !== null, gauge: gauge !== null },
