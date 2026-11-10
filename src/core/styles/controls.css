@@ -92,6 +92,7 @@
   left: var(--stage-inset);
   z-index: 4;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
   padding: 10px 12px;
 }
@@ -215,6 +216,11 @@
   grid-auto-columns: minmax(0, 1fr);
   grid-auto-flow: column;
   gap: 2px;
+}
+
+.phase-buttons[data-wrap] {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .phase-buttons button {
