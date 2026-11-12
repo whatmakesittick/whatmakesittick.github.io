@@ -30,6 +30,8 @@ const BOLT_PITCH = 0.12;
 const COVER = { halfX: 0.2, bottom: 0.04, top: 0.2, thick: 0.007 } as const;
 const STRIPE = { bottom: 0.11, tall: 0.02, thick: 0.004 } as const;
 const SIDE_COVER = { halfZ: 0.22, thick: 0.005 } as const;
+const TOP_PLATE = { inset: 0.03, thick: 0.006 } as const;
+const POCKETS = { columns: 3, rows: 2, halfZ: 0.2, gap: 0.02, rise: 0.002 } as const;
 const CHUCK_INNER = 0.6;
 const CLAMP_REACH = 0.004;
 const RAILS_Z = SIDES.map((side) => side * MASK_RAILS.z);
@@ -134,6 +136,31 @@ function addCarriage(bin: Bin): void {
   );
 }
 
+function addTop(bin: Bin): void {
+  const { halfX, halfZ, top } = MASK_CARRIAGE;
+  const x = MASK_AT[0];
+  const plateTop = top + TOP_PLATE.thick;
+  const plateHalfX = halfX - TOP_PLATE.inset;
+  const plateHalfZ = halfZ - TOP_PLATE.inset;
+  bin.add(
+    'panel',
+    slab([x - plateHalfX, top, -plateHalfZ], [x + plateHalfX, plateTop, plateHalfZ], ROUND / 2),
+  );
+  const { columns, rows, gap, rise } = POCKETS;
+  const width = (2 * (plateHalfX - gap) - gap * (columns - 1)) / columns;
+  const depth = (2 * POCKETS.halfZ - gap * (rows - 1)) / rows;
+  for (let column = 0; column < columns; column += 1) {
+    for (let row = 0; row < rows; row += 1) {
+      const left = x - plateHalfX + gap + column * (width + gap);
+      const back = -POCKETS.halfZ + row * (depth + gap);
+      bin.add(
+        'machined',
+        slab([left, plateTop, back], [left + width, plateTop + rise, back + depth], ROUND / 4),
+      );
+    }
+  }
+}
+
 function addChuck(bin: Bin): void {
   const x = MASK_AT[0];
   const bottom = PLATE_TOP;
@@ -161,16 +188,18 @@ function addChuck(bin: Bin): void {
   );
 }
 
-export function buildMaskStage(context: PartContext, groups: MaskStageGroups): void {
+export function buildMaskStage(context: PartContext, groups: MaskStageGroups): readonly Object3D[] {
   const chain = cableChain(MASK_CHAIN);
   const fixed = chain.fixed;
   addBridge(fixed);
   addRails(fixed);
   addShelf(fixed);
-  fixed.build(context, PART, groups.fixed);
+  const guides = fixed.build(context, PART, groups.fixed);
   chain.bend.build(context, PART, groups.bend);
   const moving = chain.moving;
   addCarriage(moving);
+  addTop(moving);
   addChuck(moving);
   moving.build(context, PART, groups.carriage);
+  return guides;
 }

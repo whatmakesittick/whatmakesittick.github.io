@@ -4,7 +4,7 @@ import { ANCHOR_POINTS, WAFER } from '../../model/layout';
 import { label, namedGroup, sceneAnchor } from './context';
 import type { PartContext, Section } from './context';
 import { MASK_AT, MASK_LABEL, PELLICLE_Y, PLATE_HALF, WAFER_AT, WAFER_LABEL } from './stages/dims';
-import { CloseUp } from './light/closeUp';
+import { CloseUp, Reveal } from './closeUp';
 import { buildMaskBand } from './stages/band';
 import { buildMask, buildPellicle } from './stages/mask';
 import { buildMaskModule } from './stages/maskModule';
@@ -22,7 +22,7 @@ export function* buildStages(context: PartContext): Steps<Section> {
   const maskBend = namedGroup('maskBend', root);
   const module = buildMaskModule(context, root);
   yield;
-  buildMaskStage(context, { fixed, carriage: maskCarriage, bend: maskBend });
+  const guides = buildMaskStage(context, { fixed, carriage: maskCarriage, bend: maskBend });
   const band = buildMaskBand(context, fixed);
   yield;
   buildMask(context, maskCarriage);
@@ -46,6 +46,7 @@ export function* buildStages(context: PartContext): Steps<Section> {
   sceneAnchor(context, 'mask', fixed, ANCHOR_POINTS.mask);
   sceneAnchor(context, 'wafer', fixed, ANCHOR_POINTS.wafer);
   const closeUp = new CloseUp();
+  const reveal = new Reveal().add(module.cover, ...guides);
   yield;
   return {
     root,
@@ -60,7 +61,8 @@ export function* buildStages(context: PartContext): Steps<Section> {
       module.setState(state);
     },
     animate(frame) {
-      if (!closeUp.follow(frame.cameraDistance)) return false;
+      const opened = reveal.follow(frame.cameraDistance);
+      if (!closeUp.follow(frame.cameraDistance)) return opened;
       slit.fit(closeUp.factor);
       band.fit(closeUp.factor);
       return true;

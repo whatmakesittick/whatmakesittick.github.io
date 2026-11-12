@@ -163,21 +163,27 @@ export function* buildIlluminator(context: PartContext): Steps<OpticsModule> {
   addPosts(fittings, min, max, POST_M);
   addInterior(solid);
   yield;
+  const brackets = new Bin();
   mirrorSet(context, {
     group: PART,
     ids: MIRRORS,
     parent: root,
-    bracketBin: fittings,
+    bracketBin: brackets,
     wallZ: min[2] + SKIN_M + LINER_M,
     sizeOf: (id) => mirrorSizeM(id, 'na033'),
   });
   yield;
   const cutaway = new Cutaway();
   const ghost = context.materials.get(PART, FINISHES.ghost);
-  front.build(context, PART, root).forEach((target) => cutaway.add(target, ghost));
-  solid.build(context, PART, root);
-  fittings.build(context, STRUCTURE_GROUP, root);
+  const fronts = front.build(context, PART, root);
+  fronts.forEach((target) => cutaway.add(target, ghost));
+  const covers = [
+    ...fronts,
+    ...solid.build(context, PART, root),
+    ...fittings.build(context, STRUCTURE_GROUP, root),
+  ];
+  brackets.build(context, STRUCTURE_GROUP, root);
   label(context, PART, root, [0.5, 3, mirrorSizeM('i2', 'na033') / 2 + RIM_LIFT_M]);
   yield;
-  return { root, setState: (state) => cutaway.set(state.view.cutaway) };
+  return { root, covers, setState: (state) => cutaway.set(state.view.cutaway) };
 }

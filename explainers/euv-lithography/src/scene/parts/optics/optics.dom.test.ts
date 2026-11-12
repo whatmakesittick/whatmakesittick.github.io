@@ -3,6 +3,7 @@ import { InstancedMesh, Matrix4, MeshPhysicalMaterial, Mesh, Quaternion, Vector3
 import type { Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { runNow } from '@core/scene/pacing';
+import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AssemblyState, PartId } from '../../../ids';
@@ -14,6 +15,7 @@ import { buildOptics } from '../optics';
 
 const FRAME = { delta: 1 / 60, elapsed: 0, cameraDistance: 10 };
 const SETTLE_FRAMES = 120;
+const CLOSE_M = 1.9;
 const TRIANGLE_BUDGET = 80000;
 const DRAW_CALL_BUDGET = 70;
 const MIRROR_ORDER: Record<string, WaypointId[]> = {
@@ -118,6 +120,17 @@ describe('optics section', () => {
     expect(moving).toBe(false);
     expect(scaleAt(face, 5)).toBeCloseTo(mirrorSizeM('p6', 'na055'), 3);
     section.setState(stateOf('na033'));
+  });
+
+  it('opens the covers in close views and keeps the far views whole', () => {
+    const shown = () => meshes(section.root).filter((target) => isShown(target)).length;
+    const whole = shown();
+    expect(section.animate?.({ ...FRAME, cameraDistance: CLOSE_M }, stateOf('na033'))).toBe(true);
+    expect(shown()).toBeLessThan(whole);
+    expect(isShown(faceOf(section, 'projection'))).toBe(false);
+    expect(isShown(faceOf(section, 'illuminator'))).toBe(true);
+    section.animate?.(FRAME, stateOf('na033'));
+    expect(shown()).toBe(whole);
   });
 
   it('stays inside the triangle and draw call budgets', () => {

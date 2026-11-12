@@ -3,7 +3,7 @@ import { ANCHOR_POINTS, PART_POINTS } from '../../model/layout';
 import { label, namedGroup, sceneAnchor } from './context';
 import type { PartContext, Section } from './context';
 import { BeamPart } from './light/beam';
-import { CloseUp } from './light/closeUp';
+import { CloseUp } from './closeUp';
 import { DropletsPart } from './light/droplets';
 import { MarkerPart } from './light/marker';
 import { PlasmaPart } from './light/plasma';

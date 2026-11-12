@@ -13,6 +13,10 @@ import { buildStages } from '../stages';
 const VIEWS = { beam: true, labels: true, cutaway: false, inset: true, follow: false };
 const PARTS: readonly PartId[] = ['maskStage', 'mask', 'pellicle', 'waferStage', 'wafer'];
 const TRIANGLE_LIMIT = 50_000;
+const MASK_BRIDGE_TOP = 5;
+const CLOSE_M = 0.85;
+const FAR_M = 10.9;
+const FRAME = { delta: 0, elapsed: 0, cameraDistance: FAR_M };
 const DRAW_CALL_LIMIT = 50;
 
 function stateAt(units: number, machine: MachineId = 'nxe3600d'): AssemblyState {
@@ -135,6 +139,21 @@ describe('stages section', () => {
     expect(band.every((part) => !part.visible)).toBe(true);
     section.setState(stateAt(800));
     expect(band.every((part) => part.visible)).toBe(true);
+  });
+
+  it('opens the mask module and the stage guides in close views', () => {
+    const { section } = build();
+    const module = named(section.root, 'maskModule');
+    const guides = named(section.root, 'stagesFixed').children.filter(
+      (child) => child instanceof Mesh && new Box3().setFromObject(child).max.y > MASK_BRIDGE_TOP,
+    );
+    expect(guides.length).toBeGreaterThan(0);
+    expect(section.animate?.({ ...FRAME, cameraDistance: CLOSE_M }, stateAt(700))).toBe(true);
+    expect(module.visible).toBe(false);
+    expect(guides.every((guide) => !guide.visible)).toBe(true);
+    section.animate?.({ ...FRAME, cameraDistance: FAR_M }, stateAt(700));
+    expect(module.visible).toBe(true);
+    expect(guides.every((guide) => guide.visible)).toBe(true);
   });
 
   it('keeps the part sizes real and the budget', () => {

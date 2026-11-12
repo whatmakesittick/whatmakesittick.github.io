@@ -51,6 +51,7 @@ const CLAMP_YS = [4.2, 4.7] as const;
 const CLAMP = { outer: 0.036, thick: 0.012 } as const;
 
 export interface MaskModule {
+  readonly cover: Object3D;
   setState(state: AssemblyState): void;
 }
 
@@ -187,5 +188,5 @@ export function buildMaskModule(context: PartContext, parent: Object3D): MaskMod
   const cutaway = new Cutaway();
   const ghost = context.materials.get(STRUCTURE_GROUP, FINISHES.ghost);
   front.build(context, STRUCTURE_GROUP, root).forEach((target) => cutaway.add(target, ghost));
-  return { setState: (state) => cutaway.set(state.view.cutaway) };
+  return { cover: root, setState: (state) => cutaway.set(state.view.cutaway) };
 }

@@ -108,9 +108,8 @@ export function* buildProjection(context: PartContext): Steps<OpticsModule> {
   });
   const cutaway = new Cutaway();
   const ghost = context.materials.get(PART, FINISHES.ghost);
-  front.build(context, PART, root).forEach((target) => cutaway.add(target, ghost));
-  solid.build(context, PART, root);
-  fittings.build(context, STRUCTURE_GROUP, root);
+  const fronts = front.build(context, PART, root);
+  fronts.forEach((target) => cutaway.add(target, ghost));
   const iris = mesh(
     context,
     ring('y', [0, 0, 0], IRIS.inner, IRIS.outer, IRIS.thickness),
@@ -119,6 +118,13 @@ export function* buildProjection(context: PartContext): Steps<OpticsModule> {
   );
   iris.position.set(BOTTOM_OPENING.x, min[1] + IRIS.thickness / 2, BOTTOM_OPENING.z);
   root.add(iris);
+  const covers = [
+    ...fronts,
+    ...solid.build(context, PART, root),
+    ...fittings.build(context, STRUCTURE_GROUP, root),
+    ...set.meshes,
+    iris,
+  ];
   label(context, PART, root, [(min[0] + max[0]) / 2, max[1] + LABEL_LIFT_M, max[2]]);
   yield;
   let ease: Ease | undefined;
@@ -129,6 +135,7 @@ export function* buildProjection(context: PartContext): Steps<OpticsModule> {
   };
   return {
     root,
+    covers,
     setState(state: AssemblyState) {
       cutaway.set(state.view.cutaway);
       const target = mirrorSizeM('p6', state.optics);

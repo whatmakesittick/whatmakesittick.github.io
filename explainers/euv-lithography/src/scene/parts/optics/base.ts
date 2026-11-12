@@ -139,20 +139,23 @@ function addSides(solid: Bin, front: Bin): void {
 
 export function* buildBase(context: PartContext): Steps<OpticsModule> {
   const root = namedGroup('base');
-  const solid = new Bin();
+  const footing = new Bin();
+  const shell = new Bin();
   const front = new Bin();
-  addPosts(solid, min, max, POST_M);
-  addFeet(solid);
-  solid.add('granite', slab([min[0], FOOT_TOP_Y, min[2]], [max[0], FOOT_TOP_Y + 0.06, max[2]]));
+  addPosts(shell, min, max, POST_M);
+  addFeet(footing);
+  footing.add('granite', slab([min[0], FOOT_TOP_Y, min[2]], [max[0], FOOT_TOP_Y + 0.06, max[2]]));
   yield;
-  addSides(solid, front);
-  addTopPlate(solid);
-  addBayWalls(solid);
+  addSides(shell, front);
+  addTopPlate(shell);
+  addBayWalls(shell);
   yield;
   const cutaway = new Cutaway();
   const ghost = context.materials.get(STRUCTURE_GROUP, FINISHES.ghost);
-  front.build(context, STRUCTURE_GROUP, root).forEach((target) => cutaway.add(target, ghost));
-  solid.build(context, STRUCTURE_GROUP, root);
+  const fronts = front.build(context, STRUCTURE_GROUP, root);
+  fronts.forEach((target) => cutaway.add(target, ghost));
+  const covers = [...fronts, ...shell.build(context, STRUCTURE_GROUP, root)];
+  footing.build(context, STRUCTURE_GROUP, root);
   yield;
-  return { root, setState: (state) => cutaway.set(state.view.cutaway) };
+  return { root, covers, setState: (state) => cutaway.set(state.view.cutaway) };
 }

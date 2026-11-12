@@ -3,7 +3,7 @@ import { PointLight, Sprite, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { isShown } from '@core/scene/parts';
 import { buildLight } from '../light';
-import { CLOSE_UP } from './dims';
+import { CLOSE_UP } from '../closeUp';
 import { FRAME, buildSection, drawCalls, stateAt, triangles } from './fixtures';
 
 const TRIANGLE_BUDGET = 40_000;
