@@ -5,6 +5,10 @@ import type { PageLanguage } from './i18n.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import {
   catalogueCards,
+  catalogueMetaMap,
+  catalogueMetas,
+  renderCatalogueLanguageModule,
+  renderCatalogueModule,
   redirectValues,
   renderAbout,
   renderCatalogue,
@@ -154,8 +158,9 @@ const kettle: LoadedExplainer = {
 
 describe('renderPage', () => {
   const more = catalogueCards([pump, kettle]);
-  const html = renderPage(template, partials, explainer, language('en'), more);
-  const ukrainian = renderPage(template, partials, explainer, language('uk'), more);
+  const metas = catalogueMetas([pump, kettle]);
+  const html = renderPage(template, partials, explainer, language('en'), more, metas);
+  const ukrainian = renderPage(template, partials, explainer, language('uk'), more, metas);
 
   it('escapes the explainer copy into the head', () => {
     expect(html).toContain('<title>How a &quot;thing&quot; works · What makes it tick</title>');
@@ -566,14 +571,10 @@ describe('renderEntry', () => {
 });
 
 describe('catalogueCards', () => {
-  it('keeps only what a card shows, in every shipped language, and the publish date', () => {
+  it('keeps the manifest fields and the publish date, no card text', () => {
     expect(catalogueCards([explainer])).toEqual([
       {
         manifest: { slug: 'thing', tags: ['tools'], cover: 'cover.webp', locales: ['en', 'uk'] },
-        meta: {
-          en: { title: meta.title, eyebrow: meta.eyebrow, summary: meta.summary },
-          uk: { title: 'Як працює річ', eyebrow: meta.eyebrow, summary: meta.summary },
-        },
         published: explainer.dates.published,
       },
     ]);
@@ -587,6 +588,32 @@ describe('catalogueCards', () => {
     };
     const slugs = catalogueCards([older, explainer]).map((card) => card.manifest.slug);
     expect(slugs).toEqual(['thing', 'older']);
+  });
+});
+
+describe('card text modules', () => {
+  const text = (title: string) => ({ title, eyebrow: meta.eyebrow, summary: meta.summary });
+
+  it('keeps the card text out of the main module and loads each language on demand', () => {
+    const source = renderCatalogueModule([explainer]);
+    expect(source).not.toContain(meta.title);
+    expect(source).not.toContain('Як працює річ');
+    expect(source).toContain("import('virtual:explainer-catalogue/uk')");
+    expect(source).toContain('export const metaLoader');
+  });
+
+  it('maps each slug to its card text in one language module', () => {
+    expect(catalogueMetaMap([explainer], 'uk')).toEqual({ thing: text('Як працює річ') });
+    expect(JSON.parse(renderCatalogueLanguageModule([explainer], 'en').slice(15, -2))).toEqual({
+      thing: text(meta.title),
+    });
+  });
+
+  it('leaves out explainers that do not ship the language', () => {
+    expect(catalogueMetaMap([pump, kettle], 'uk')).toEqual({
+      pump: text('Як працює насос'),
+    });
+    expect(catalogueMetas([kettle]).uk).toEqual({});
   });
 });
 

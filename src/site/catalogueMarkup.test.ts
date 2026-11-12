@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Tag } from '../core/manifest.ts';
-import type { CatalogueCard } from './catalogue.ts';
+import type { CardMetas, CatalogueCard } from './catalogue.ts';
 import { coverImage, explainerHref, renderCatalogueGrid } from './catalogueMarkup.ts';
 
 function card(
@@ -8,10 +8,8 @@ function card(
   tags: Tag[],
   locales: CatalogueCard['manifest']['locales'],
 ): CatalogueCard {
-  const meta = { title: `How a ${slug} works`, eyebrow: 'Opened up', summary: 'A "short" <look>' };
   return {
     manifest: { slug, tags, cover: 'cover.webp', locales },
-    meta: { en: meta, uk: { ...meta, title: `Як працює ${slug}` } },
     published: '2026-03-10T09:00:00Z',
   };
 }
@@ -22,8 +20,14 @@ const cards = [
   card('engine', ['engines', 'mechanics'], ['en', 'uk']),
   card('pump', ['home'], ['en', 'uk']),
 ];
+const names = ['watch', 'glider', 'engine', 'pump'];
+const text = { eyebrow: 'Opened up', summary: 'A "short" <look>' };
+const metas: CardMetas = {
+  en: Object.fromEntries(names.map((slug) => [slug, { ...text, title: `How a ${slug} works` }])),
+  uk: Object.fromEntries(names.map((slug) => [slug, { ...text, title: `Як працює ${slug}` }])),
+};
 const context = { code: 'uk', base: '/', translate: (key: string) => `[${key}]` } as const;
-const html = renderCatalogueGrid(cards, context);
+const html = renderCatalogueGrid(cards, metas, context);
 
 function covers(markup: string): string[] {
   return [...markup.matchAll(/<img [^>]*>/g)].map(([image]) => image);

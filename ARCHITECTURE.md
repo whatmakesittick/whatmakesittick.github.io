@@ -537,9 +537,11 @@ or the root `index.html` is added, changed or removed. A failed regeneration is
 logged and shown in the error overlay, and the next change retries it. At build it
 emits the same files into `dist/<slug>/`. It also serves
 `virtual:explainer-catalogue`: newest first, one card per explainer with its slug,
-tags, cover, languages, publish date and the title, eyebrow and summary of each
-shipped language. The build prerenders the catalogue from the same list, and the
-catalogue bundles only what a card shows.
+tags, cover, languages and publish date. The title, eyebrow and summary of each
+card live in one lazily loaded module per language,
+`virtual:explainer-catalogue/<code>`, which the home page fetches only when it has
+to render a language other than the prerendered one (plus English for the
+fallback). The build prerenders the catalogue from the same data.
 
 Every page is prerendered in every language it ships. English stays at `/<slug>/`
 and `/`; any other language lives at `/<lang>/<slug>/` and `/<lang>/`, where the
@@ -759,7 +761,7 @@ which is how the engine names its stage and dock. Each language loads once;
 falls back to its `en` copy. An explainer must ship `en.json`; any other language
 it ships must have the same keys, placeholders and markup, which a test enforces
 per explainer. The catalogue reads `meta.title`, `meta.eyebrow` and `meta.summary`
-of every explainer from `virtual:explainer-catalogue`, and the page head uses
+of every explainer from `virtual:explainer-catalogue/<code>`, and the page head uses
 `meta.title` and `meta.description`, with `page.metaTitle` around the title in the
 `<title>`.
 

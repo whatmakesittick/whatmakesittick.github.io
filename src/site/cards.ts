@@ -1,7 +1,7 @@
-import { currentLanguage, onLanguageChanged, t } from '@core/i18n';
+import { DEFAULT_LANGUAGE, currentLanguage, onLanguageChanged, t } from '@core/i18n';
 import type { LanguageCode } from '@core/i18n';
 import { queryAll, requireElement } from '@core/ui/dom';
-import type { CatalogueCard } from './catalogue';
+import type { CardMetaLoader, CardMetas, CatalogueCard } from './catalogue';
 import {
   CARD_ITEM_SELECTOR,
   CARD_TAGS_SELECTOR,
@@ -20,9 +20,19 @@ function renderedLanguage(container: HTMLElement): string | undefined {
   return container.querySelector<HTMLElement>(GRID_SELECTOR)?.dataset.language;
 }
 
-function render(container: HTMLElement, cards: readonly CatalogueCard[], code: LanguageCode): void {
+function render(
+  container: HTMLElement,
+  cards: readonly CatalogueCard[],
+  metas: CardMetas,
+  code: LanguageCode,
+): void {
   const context = { code, base: import.meta.env.BASE_URL, translate: (key: string) => t(key) };
-  container.innerHTML = renderCatalogueGrid(cards, context);
+  container.innerHTML = renderCatalogueGrid(cards, metas, context);
+}
+
+async function loadMetas(load: CardMetaLoader, code: LanguageCode): Promise<CardMetas> {
+  const [localized, fallback] = await Promise.all([load(code), load(DEFAULT_LANGUAGE)]);
+  return { [DEFAULT_LANGUAGE]: fallback, [code]: localized };
 }
 
 function showCards(container: HTMLElement, visible: readonly CatalogueCard[]): void {
@@ -48,7 +58,11 @@ function clickedChip(event: Event): HTMLElement | undefined {
   return target?.closest<HTMLElement>(CHIP_SELECTOR) ?? undefined;
 }
 
-export function mountCards(root: Document, cards: readonly CatalogueCard[]): void {
+export async function mountCards(
+  root: Document,
+  cards: readonly CatalogueCard[],
+  load: CardMetaLoader,
+): Promise<void> {
   const container = requireElement(root, CATALOGUE_SELECTOR);
   const tags = usedTags(cards);
   let selection = readTagQuery(window.location.search, tags);
@@ -57,8 +71,12 @@ export function mountCards(root: Document, cards: readonly CatalogueCard[]): voi
     showSelection(container, selection);
     showCards(container, filterByTag(cards, selection));
   };
-  const renderIn = (code: LanguageCode) => {
-    render(container, cards, code);
+  let latestRequest = 0;
+  const renderIn = async (code: LanguageCode) => {
+    const request = ++latestRequest;
+    const metas = await loadMetas(load, code);
+    if (request !== latestRequest) return;
+    render(container, cards, metas, code);
     show();
   };
 
@@ -71,8 +89,9 @@ export function mountCards(root: Document, cards: readonly CatalogueCard[]): voi
     if (chip.closest(CARD_TAGS_SELECTOR)) revealFilter(container);
   });
 
-  if (renderedLanguage(container) === currentLanguage()) show();
-  else renderIn(currentLanguage());
+  onLanguageChanged((code) => void renderIn(code));
+  const needsRender = renderedLanguage(container) !== currentLanguage();
+  if (needsRender) await renderIn(currentLanguage());
+  else show();
   storeSelection(selection);
-  onLanguageChanged(renderIn);
 }

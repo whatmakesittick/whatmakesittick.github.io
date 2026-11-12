@@ -3,7 +3,7 @@ import { basename, join } from 'node:path';
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import { loadAbout } from './about.ts';
 import type { LoadedAbout } from './about.ts';
-import type { CatalogueCard } from '../src/site/catalogue.ts';
+import type { CardMetas, CatalogueCard } from '../src/site/catalogue.ts';
 import { loadCoreDictionaries, mergeLocales, pageLanguage } from './i18n.ts';
 import type { Dictionaries } from './i18n.ts';
 import { loadExplainers } from './manifest.ts';
@@ -12,6 +12,7 @@ import { pickMoreExplainers } from './moreExplainers.ts';
 import {
   PAGE_ENTRY,
   catalogueCards,
+  catalogueMetas,
   renderAbout,
   renderCatalogue,
   renderEntry,
@@ -103,6 +104,7 @@ function explainerFolders(
   sources: Sources,
   explainer: LoadedExplainer,
   cards: readonly CatalogueCard[],
+  metas: CardMetas,
 ): PageFolder[] {
   const { manifest } = explainer;
   const dictionaries = mergeLocales(sources.core, explainer.dictionaries);
@@ -117,6 +119,7 @@ function explainerFolders(
         explainer,
         pageLanguage(dictionaries, code),
         moreExplainers,
+        metas,
       ),
       ...(code === DEFAULT_LANGUAGE ? entry : {}),
     },
@@ -127,10 +130,11 @@ export function generateSite(root: string): Site {
   const explainers = loadExplainers(root);
   const sources = readSources(root);
   const cards = catalogueCards(explainers);
+  const metas = catalogueMetas(explainers);
   const folders = [
     ...catalogueFolders(sources, explainers),
     ...aboutFolders(sources),
-    ...explainers.flatMap((explainer) => explainerFolders(sources, explainer, cards)),
+    ...explainers.flatMap((explainer) => explainerFolders(sources, explainer, cards, metas)),
   ];
   for (const { path, files } of folders) writePageFolder(root, path, files);
   const paths = folders.map(({ path }) => path);

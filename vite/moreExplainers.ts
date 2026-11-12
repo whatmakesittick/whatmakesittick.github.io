@@ -1,7 +1,7 @@
 import { DEFAULT_LANGUAGE } from '../src/core/i18n/languages.ts';
 import type { ExplainerManifest } from '../src/core/manifest.ts';
 import { localizedMeta } from '../src/site/catalogue.ts';
-import type { CatalogueCard } from '../src/site/catalogue.ts';
+import type { CardMetas, CatalogueCard } from '../src/site/catalogue.ts';
 import { coverImage, explainerHref } from '../src/site/catalogueMarkup.ts';
 import type { MarkupContext } from '../src/site/catalogueMarkup.ts';
 import { element } from '../src/site/html.ts';
@@ -24,8 +24,12 @@ export function pickMoreExplainers(
     .slice(0, MORE_EXPLAINERS_COUNT);
 }
 
-function moreExplainer(card: CatalogueCard, { code, base }: PageContext): Markup[] {
-  const meta = localizedMeta(card, code, DEFAULT_LANGUAGE);
+function moreExplainer(
+  card: CatalogueCard,
+  metas: CardMetas,
+  { code, base }: PageContext,
+): Markup[] {
+  const meta = localizedMeta(card, metas, code, DEFAULT_LANGUAGE);
   if (!meta) return [];
   const link = element('a', { class: 'more-explainer', href: explainerHref(card, code, base) }, [
     element('span', { class: 'more-explainer-cover' }, [
@@ -38,10 +42,11 @@ function moreExplainer(card: CatalogueCard, { code, base }: PageContext): Markup
 
 export function renderMoreExplainers(
   cards: readonly CatalogueCard[],
+  metas: CardMetas,
   context: PageContext,
 ): string {
   return cards
-    .flatMap((card) => moreExplainer(card, context))
+    .flatMap((card) => moreExplainer(card, metas, context))
     .map(({ html }) => html)
     .join('\n');
 }
