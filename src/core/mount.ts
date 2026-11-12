@@ -25,18 +25,24 @@ const SITE_NAME_KEY = 'catalogue.title';
 const SCENE_SELECTOR = '#scene';
 const GAUGE_SELECTOR = '[data-gauge]';
 
-function mountScene<S extends Playback>(
+async function mountScene<S extends Playback>(
   root: Document,
   store: ExplainerStore<S>,
   explainer: Explainer<S>,
-): () => void {
+): Promise<() => void> {
   const host = createSceneHost(
     requireElement(root, SCENE_SELECTOR),
     explainer.parts,
     activeScheme(),
     explainer.scene,
   );
-  const unmount = explainer.mountScene(host.shell, store);
+  let unmount: () => void;
+  try {
+    unmount = await explainer.mountScene(host.shell, store);
+  } catch (error) {
+    host.dispose();
+    throw error;
+  }
   host.start(store);
   return () => {
     unmount();
@@ -66,7 +72,7 @@ export async function mountExplainer<S extends Playback>(
   const unmountKeyboard = mountKeyboard(document, store, explainer, stageShortcuts(stage));
   mountSections(document, store, Object.keys(explainer.presets), stage);
   mountSafeArea(document, explainer.scene?.gaugeSide);
-  const unmountScene = mountScene(document, store, explainer);
+  const unmountScene = await mountScene(document, store, explainer);
   return () => {
     unmountScene();
     unmountKeyboard();

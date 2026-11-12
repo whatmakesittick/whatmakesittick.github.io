@@ -133,7 +133,7 @@ export async function mountEmbed<S extends Playback>(
     throw error;
   }
   try {
-    unmountScene = explainer.mountScene(host.shell, store);
+    unmountScene = await explainer.mountScene(host.shell, store);
   } catch (error) {
     host.dispose();
     release();
