@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "title": "Cómo funciona una máquina de chips EUV",
+    "eyebrow": "Óptica",
+    "tagline": "Sigue un destello de luz por una máquina de chips EUV en 3D, desde una gota de estaño hasta la oblea, y descubre cómo imprime líneas de 13 nm de ancho.",
+    "description": "Sigue un destello de luz por una máquina de chips EUV: una gota de estaño, un láser, 11 rebotes y la oblea, donde imprime líneas de 13 nm de ancho.",
+    "summary": "La gota de estaño y el láser, los espejos que pierden un tercio de la luz en cada rebote, la máscara, el barrido de la oblea y cómo se compara el EUV con la luz anterior.",
+    "socialAlt": "Una máquina de chips EUV en 3D abierta en corte: un haz luminoso va desde una gota de estaño, pasa por los espejos y llega a la oblea. Al lado, el título «Cómo funciona una máquina de chips EUV»"
+  },
+  "stage": {
+    "label": "Modelo interactivo de un escáner EUV",
+    "gauge": "Datos en tiempo real"
+  },
+  "timeline": {
+    "label": "Un destello",
+    "phases": "Ir a una etapa",
+    "speed": "Velocidad de reproducción",
+    "value": "{{time}}",
+    "during": "Etapa {{step}} de {{total}}, {{detail}}, {{time}}",
+    "speedValue": "×{{factor}}",
+    "speedDescribe": "El destello completo en {{seconds}} segundos",
+    "phase": {
+      "droplet": "Gota",
+      "prepulse": "Primer golpe",
+      "plasma": "Destello",
+      "collect": "Colector",
+      "mask": "Máscara",
+      "expose": "Oblea"
+    },
+    "jump": {
+      "droplet": "Ir a la gota",
+      "prepulse": "Ir al primer golpe",
+      "plasma": "Ir al destello",
+      "collect": "Ir al colector",
+      "mask": "Ir a la máscara",
+      "expose": "Ir a la oblea"
+    },
+    "detail": {
+      "droplet": "una gota de estaño cruza la cámara",
+      "prepulse": "el primer pulso aplasta la gota",
+      "plasma": "el segundo pulso crea el plasma y este destella",
+      "collect": "el espejo colector recoge la luz",
+      "mask": "cuatro espejos moldean la luz y la máscara le pone el dibujo",
+      "expose": "seis espejos reducen el dibujo sobre la oblea"
+    },
+    "moment": {
+      "launch": "Sale la gota",
+      "firstHit": "Primer golpe",
+      "flash": "El destello",
+      "atFocus": "En el foco",
+      "onMask": "En la máscara",
+      "onWafer": "En la oblea"
+    }
+  },
+  "clock": {
+    "before": "{{value}} antes del destello",
+    "after": "{{value}} después del destello"
+  },
+  "controls": {
+    "label": "Controles del modelo",
+    "machine": "Máquina",
+    "machineOptions": {
+      "nxe3600d": "NXE:3600D",
+      "nxe3800e": "NXE:3800E",
+      "exe5000": "EXE:5000 (High-NA)"
+    },
+    "groups": {
+      "moment": "Ir a un momento",
+      "bounce": "Rebotes en los espejos",
+      "machine": "Máquina que mostrar"
+    },
+    "views": {
+      "beam": {
+        "name": "Haz de luz",
+        "short": "Haz",
+        "hint": "Haz de luz (B)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      },
+      "cutaway": {
+        "name": "Vista en corte",
+        "short": "Corte",
+        "hint": "Vista en corte (C)"
+      },
+      "inset": {
+        "name": "Vista ampliada",
+        "short": "Zoom",
+        "hint": "Vista ampliada (I)"
+      },
+      "follow": {
+        "name": "Seguir el destello",
+        "short": "Seguir",
+        "hint": "Seguir el destello (F)"
+      }
+    }
+  },
+  "readouts": {
+    "where": "Dónde está la luz",
+    "lightLeft": "Luz restante",
+    "wavelength": "Longitud de onda",
+    "dropletRate": "Gotas por segundo",
+    "dropletRateExact": "{{value}}",
+    "dropletRateOrMore": "{{value}} o más",
+    "smallestLine": "Línea mínima (medio paso)",
+    "wafersPerHour": "Obleas por hora",
+    "wph": {
+      "about": "unas {{value}}"
+    },
+    "place": {
+      "generator": "En el generador de gotas",
+      "flight": "Gota en vuelo",
+      "plasma": "En el plasma",
+      "collector": "En el colector",
+      "illuminator": "En el iluminador",
+      "mask": "En la máscara",
+      "projection": "En los espejos de proyección",
+      "wafer": "En la oblea"
+    }
+  },
+  "units": {
+    "ns": "{{value}} ns",
+    "us": "{{value}} µs",
+    "ms": "{{value}} ms",
+    "s": "{{value}} s",
+    "nm": "{{value}} nm",
+    "um": "{{value}} µm",
+    "mm": "{{value}} mm",
+    "percent": "{{value}} %",
+    "perHour": "{{value}} por hora",
+    "tonnes": "{{value}} t",
+    "celsius": "{{value}} °C",
+    "pm": "{{value}} pm"
+  },
+  "parts": {
+    "flash": "El destello",
+    "droplets": "Gotas de estaño",
+    "driveLaser": "Láser de potencia",
+    "beamTransport": "Trayecto del láser",
+    "vessel": "Cámara de la fuente",
+    "collector": "Espejo colector",
+    "plasma": "Plasma",
+    "intermediateFocus": "Foco intermedio",
+    "illuminator": "Espejos del iluminador",
+    "maskStage": "Platina de la máscara",
+    "mask": "Máscara",
+    "pellicle": "Película protectora",
+    "projection": "Espejos de proyección",
+    "waferStage": "Platina de la oblea",
+    "wafer": "Oblea",
+    "dropletInset": "Gota, ampliada",
+    "patternInset": "Dibujo, ampliado",
+    "hair": "Cabello humano, unos 50 µm",
+    "virus": "Virus de la gripe, unos 100 nm"
+  },
+  "chapters": {
+    "machine": {
+      "weight": "Peso",
+      "weightValue": "más de {{tonnes}} t, High-NA",
+      "shipping": "Transporte",
+      "shippingValue": "{{crates}} cajas, {{containers}} contenedores, {{trucks}} camiones",
+      "sizes": "Tamaños en este modelo",
+      "sizesValue": "todas las medidas son propias del modelo"
+    },
+    "light": {
+      "droplet": "Tamaño de la gota",
+      "dropletValue": "unos {{um}} µm, de {{low}} a {{high}} µm",
+      "speed": "Velocidad de la gota",
+      "speedValue": "de {{low}} a {{high}} m/s",
+      "spacing": "Separación entre gotas",
+      "spacingValue": "separadas de {{low}} a {{high}} mm",
+      "pulses": "Pulsos del láser",
+      "pulsesValue": "{{count}} pulsos de láser por segundo",
+      "flattened": "Blanco aplastado",
+      "flattenedValue": "más de {{um}} µm de ancho",
+      "plasma": "Calor del plasma",
+      "plasmaValue": "unos {{celsius}} °C, de {{low}} a {{high}} veces la superficie del Sol",
+      "conversion": "Luz que se vuelve EUV",
+      "conversionValue": "alrededor del {{percent}} % de la luz del láser, en laboratorio"
+    },
+    "mirrors": {
+      "layers": "Capas de un espejo",
+      "layersValue": "más de {{count}} capas, cada una de pocos nm de grosor",
+      "reflect": "Luz que devuelve cada espejo",
+      "reflectValue": "alrededor del {{percent}} %",
+      "rough": "Rugosidad",
+      "roughValue": "unos {{pm}} pm",
+      "vacuum": "Por qué no hay lentes",
+      "vacuumValue": "1 mm de aire deja pasar un {{air}} %, y 1 µm de vidrio un {{glass}} %",
+      "bounce": {
+        "label": "Rebotes tras el foco intermedio",
+        "output": "{{count}} de 11",
+        "start": "Foco intermedio",
+        "end": "Oblea",
+        "light": "Luz restante",
+        "lost": "Perdida hasta ahora"
+      }
+    },
+    "mask": {
+      "plate": "Placa de la máscara",
+      "plateValue": "placa cuadrada de {{mm}} mm",
+      "area": "Zona del dibujo",
+      "areaValue": "{{w}} por {{h}} mm",
+      "tilt": "Inclinación del haz",
+      "tiltValue": "{{deg}} grados; entrada y salida separadas {{apart}} grados",
+      "pellicle": "Luz que cruza la película",
+      "pellicleValue": "más del {{percent}} % en cada paso, alrededor del {{both}} % entre ida y vuelta",
+      "reduction": "Reducción sobre la oblea",
+      "reductionValue": "{{n}} veces más pequeño en la oblea"
+    },
+    "scan": {
+      "wph": "Obleas por hora",
+      "perWafer": "Tiempo por oblea",
+      "perWaferValue": "unos {{seconds}} s por oblea, con carga y alineación",
+      "perField": "Tiempo por campo",
+      "perFieldValue": "unos {{seconds}} s por campo en este modelo",
+      "fields": "Campos en una oblea",
+      "fieldsValue": "de {{low}} a {{high}} campos completos",
+      "slit": "Rendija",
+      "slitValue": "rendija de {{w}} por {{h}} mm",
+      "sensing": "Medición de posición",
+      "sensingValue": "unos {{pm}} pm, {{rate}} veces por segundo",
+      "overlay": "Alineación entre capas",
+      "overlayValue": "{{nm}} nm, de una máquina a otra"
+    },
+    "compare": {
+      "shrink": "Reducción",
+      "field": "Campo",
+      "fieldValue": "{{w}} por {{h}} mm",
+      "line": "Línea mínima (medio paso)",
+      "lineValue": "{{width}} nm de ancho, {{gap}} nm de separación",
+      "duv": "Máquinas DUV anteriores",
+      "duvValue": "luz de 193 nm, líneas de {{low}} a {{high}} nm",
+      "photon": "Energía de un fotón",
+      "photonValue": "{{ev}} eV, unas {{times}} veces la de un fotón de 193 nm",
+      "price": "Precio",
+      "priceValue": "según lo publicado, unos {{eur}} millones de euros, {{high}} millones la High-NA",
+      "shrinkValue": {
+        "na033": "4×",
+        "na055": "4× / 8×"
+      }
+    }
+  },
+  "sections": {
+    "machine": {
+      "title": "Una máquina que fabrica su propia luz",
+      "p1": "Esta máquina imprime las capas más finas de los chips más avanzados, y es muy pesada. El modelo más nuevo, la <strong>High-NA</strong>, pesa más de 150 toneladas y se envió en más de 250 cajas, 43 contenedores y 20 camiones. (NA son las siglas de apertura numérica: lo ancho que es el cono de luz que recoge el último espejo. El último capítulo explica por qué importa.) Ningún fabricante publica el largo ni el alto de la máquina, así que todos los tamaños y posiciones de este modelo son propios.",
+      "p2": "Imprime con luz <strong>ultravioleta extrema</strong>, o EUV, que no se puede ver. Su longitud de onda es de solo 13,5 nm, y un nanómetro (nm) es una millonésima de milímetro. El aire y el vidrio absorben esta luz: 1 mm de aire deja pasar un 0,14 % y 1 µm de vidrio un 0,004 %. Por eso en la máquina no hay ni una lente. Todo lo que dirige la luz es un espejo, y la luz viaja en un casi vacío con un poco de hidrógeno.",
+      "p3": "La máquina fabrica su propia luz, un destello tras otro, a partir de una gota diminuta de estaño. Un <strong>láser de potencia</strong> está en la planta de abajo. Su haz sube por un largo <strong>trayecto</strong> de hasta 30 m hasta la <strong>cámara de la fuente</strong>. El láser entrega decenas de kilovatios y pesa más de 10 toneladas.",
+      "p4": "La <strong>oblea</strong> es un disco fino de silicio. Entra en la máquina, esta la imprime parcela a parcela y sale. Esta página sigue otra cosa: un solo destello, desde la gota de estaño hasta la oblea. El modelo es una simplificación. Nadie puede ver un haz en el vacío, y el EUV no es visible en absoluto, así que los colores del haz los hemos dibujado nosotros."
+    },
+    "light": {
+      "title": "Una gota, golpeada dos veces",
+      "p1": "Cada destello empieza con una gota de estaño de unos 30 µm de ancho, algo más de la mitad de un cabello humano, que mide unos 50 µm (cifra redondeada). Las <strong>gotas</strong> no caen: se disparan, a entre 60 y 120 metros por segundo. Pasan unas 50 000 cada segundo, separadas entre 1,2 y 2,4 mm, más o menos. La máquina real no publica en qué dirección vuelan, así que el modelo elige una.",
+      "p2": "Un láser golpea cada gota dos veces. El primer pulso, más suave, la aplasta hasta dejarla como una torta fina de más de 100 µm de ancho. Un blanco plano aprovecha mucho mejor el pulso siguiente que una bola. El segundo pulso es el fuerte: un láser de CO2 con luz de 10,6 µm, amplificada más de 10 000 veces a partir de un pulso inicial pequeño. Con dos pulsos por gota, salen unos 100 000 pulsos de láser por segundo.",
+      "p3": "El pulso fuerte calienta el estaño hasta unos 220 000 °C, de 30 a 40 veces más que la superficie del Sol. El estaño se convierte en <strong>plasma</strong>, un gas tan caliente que sus átomos pierden electrones y brillan. Los iones de estaño del plasma emiten luz de 13,5 nm, y por eso la máquina usa estaño; además, las gotas pequeñas dejan pocos residuos. Solo alrededor del 5 % de la luz del láser se convierte en EUV, y esa cifra es de laboratorio.",
+      "p4": "El <strong>espejo colector</strong>, un espejo grande y curvo, atrapa la luz y la reúne. La cámara contiene hidrógeno a baja presión, que frena las partículas de estaño y limpia el estaño que se pega al espejo. Se ha demostrado que un colector aguanta más de 100 000 millones de pulsos. El reloj es propio del modelo. Una gota vuela unos 20 ms, pero el destello dura unos 20 ns, así que la reproducción estira y comprime el tiempo."
+    },
+    "mirrors": {
+      "title": "Luz que solo rebota",
+      "p1": "Los espejos EUV no son de metal pulido. Cada uno es un <strong>espejo multicapa</strong>: más de 100 capas finas de silicio y molibdeno, cada una de pocos nm de grosor. Cada frontera entre capas devuelve un poco de luz. Las capas están separadas de 6,8 a 6,9 nm, la mitad de la longitud de onda, de modo que todos esos pequeños reflejos se suman.",
+      "p2": "Aun así, un espejo devuelve solo un 70 % de la luz, más o menos. Es lo mejor medido, no una garantía. Es decir, en cada rebote se pierde cerca de un tercio. El modelo cuenta 11 rebotes después del foco intermedio: cuatro espejos del iluminador, la máscara y seis espejos de proyección. A la oblea llega alrededor del 2 % de la luz, en un rango del 1 al 4 %. La cuenta se apoya en un artículo; otro cuenta 10.",
+      "p3": "Estos espejos tienen que ser extremadamente lisos. Su rugosidad es de unos 50 pm, y un picómetro (pm) es una milésima de nanómetro. Zeiss, la empresa que los fabrica, dice que en un espejo tan ancho como Alemania la mayor protuberancia mediría unos 0,1 mm.",
+      "p4": "El colector reúne la luz en un punto, el <strong>foco intermedio</strong>, y desde allí el haz vuelve a abrirse. Usa el control deslizante para seguir el haz rebote a rebote y ver cuánta luz queda. Los pliegues y las posiciones de los espejos los dibuja el modelo por su cuenta, a partir de esquemas publicados."
+    },
+    "mask": {
+      "title": "Un espejo con un mapa",
+      "p1": "La <strong>máscara</strong>, también llamada retículo, guarda el dibujo de una capa del chip. También es un espejo. Una película fina encima, el absorbente, se traga la luz allí donde el dibujo tiene una línea, así que la luz que rebota lleva el dibujo. La máscara va sobre una placa cuadrada de 152 mm de lado (seis pulgadas), y la zona del dibujo mide 104 por 132 mm.",
+      "p2": "Antes de la máscara está el <strong>iluminador</strong>, cuatro espejos que dan forma al haz. Sus superficies están hechas de muchas teselas pequeñas, las facetas, que se pueden inclinar. Esas inclinaciones fijan los ángulos con que la luz llega a la máscara. Un estudio midió 22 ajustes de este tipo en un solo iluminador, una cifra aproximada.",
+      "p3": "El haz llega a la máscara con una inclinación de 6 grados (5,4 en la High-NA). Así, la luz que entra y la que sale quedan separadas 12 grados, y los dos haces no chocan. En este modelo la máscara mira hacia abajo. Esa colocación es propia del modelo.",
+      "p4": "Una <strong>película protectora</strong> cubre la máscara. Es una lámina finísima que la libra del polvo, porque una mota sobre la máscara se imprimiría en todas las obleas. La luz la cruza dos veces, de ida y de vuelta. Pasa más del 90 % en cada cruce y alrededor del 81 % en los dos. Es una lámina, no una lente. Después de la máscara, los espejos de proyección reducen el dibujo cuatro veces."
+    },
+    "scan": {
+      "title": "Un campo cada vez",
+      "p1": "Una oblea lleva muchas copias de un chip, y la máquina las imprime parcela a parcela. Cada parcela es un <strong>campo</strong> de 26 por 33 mm. En una oblea caben de 76 a 80 campos completos. La luz no cubre un campo entero de una vez: pasa por una <strong>rendija</strong> curva de unos 26 por 2 mm.",
+      "p2": "Para cubrir el campo, la máscara y la oblea se mueven juntas en sentidos opuestos. La rendija recorre la máscara y el dibujo reducido recorre la oblea. A esto se le llama barrido. Una máquina puede barrer 160 obleas por hora (NXE:3600D) o hasta 220 (NXE:3800E). Son las especificaciones de los fabricantes, con una dosis de 30 mJ/cm2.",
+      "p3": "Esa dosis equivale a unos 20 fotones EUV sobre cada nm cuadrado de la oblea. Un fotón es una partícula de luz. Los movimientos tienen que ser muy exactos: los sensores de posición leen unos 60 pm, 20 000 veces por segundo. La alineación entre capas indica qué tan bien encaja una capa con la de abajo, y es de 1,1 nm en la 3600D y de 0,9 nm en la 3800E, de una máquina a otra.",
+      "p4": "El último tramo de la reproducción es lo que tarda en barrerse un campo. En este modelo son unos 0,29 s a 160 obleas por hora y 0,21 s a 220. Son tiempos aproximados. El tiempo por oblea incluye también la carga y la alineación, de modo que una exposición real es más corta. Elige una máquina y verás cambiar los números."
+    },
+    "compare": {
+      "title": "193 nm frente a 13,5 nm",
+      "p1": "Las máquinas anteriores usan luz ultravioleta profunda, o DUV, de 193 nm. Funcionan con lentes y con una capa de agua bajo la última. Imprimen líneas con un medio paso de de 36 a 38 nm. El <strong>medio paso</strong> es la mitad de la distancia entre una línea y la siguiente. El EUV imprime líneas de 13 nm separadas 13 nm, así que el paso es de 26 nm.",
+      "p2": "La luz EUV tiene una longitud de onda mucho más corta, y su fotón lleva 91,8 eV de energía, unas 14 veces la de un fotón DUV. La línea más pequeña sigue una regla: un número k1 por la longitud de onda, dividido entre la NA. La NA es la apertura numérica, el ancho del cono de luz que recoge el último espejo. Un cono más ancho distingue más detalle. Con un k1 de 0,3, la regla da 12,3 nm con una NA de 0,33 y 7,4 nm con 0,55.",
+      "p3": "La máquina High-NA tiene una NA de 0,55. Reduce el dibujo 4 veces en una dirección y 8 en la otra, así que un campo es la mitad de grande, de 26 por 16,5 mm. Imprime con un medio paso de 8 nm. Este modelo mantiene el mismo camino de espejos para la High-NA y cambia solo los últimos espejos, la reducción, el campo y las cifras, porque no se conoce el número real de espejos. La óptica de proyección pesa unas 12 toneladas y la de iluminación unas 6.",
+      "p4": "Para hacerse una idea de la escala: un virus de la gripe mide unos 100 nm de ancho, y a lo ancho le caben unas 8 de estas líneas. En un cabello caben miles. El «3 nm» de los nombres de los chips es solo un nombre. La separación real de sus cables más finos es de de 23 a 24 nm. En cuanto al precio, no hay cifra oficial. Según lo publicado, una máquina costaría unos 170 millones de euros, y una High-NA unos 350 millones."
+    }
+  }
+}
