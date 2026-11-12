@@ -40,7 +40,7 @@ function port(batch: Batch, spec: PortSpec): void {
   const direction = radialDirection(angle);
   const base = surfacePoint(x, angle, SHELL_R - 0.05);
   const tip = surfacePoint(x, angle, SHELL_R + STUB_REACH);
-  const finish = kind === 'coolant' ? 'copper' : 'frame';
+  const finish = kind === 'coolant' ? 'copper' : 'darkFrame';
   batch.add(GROUP, finish, rod(base, tip, radius, 14));
   batch.add(GROUP, 'flange', disc(tip, direction, radius * 1.5, 0.035, 16));
   const cover = surfacePoint(x, angle, SHELL_R + STUB_REACH + COVER_LIFT);
@@ -84,7 +84,7 @@ function gasLines(batch: Batch): void {
   ];
   lines.forEach((points) => batch.add(GROUP, 'flange', runPipe(points, GAS_RADIUS, GAS_BEND)));
   const [x, y, z] = GAS_PANEL;
-  batch.add(GROUP, 'panelShade', block(GAS_PANEL, GAS_PANEL_SIZE));
+  batch.add(GROUP, 'darkFrame', block(GAS_PANEL, GAS_PANEL_SIZE));
   batch.add(GROUP, 'accent', block([x, y + 0.2, z + GAS_PANEL_SIZE[2] / 2], [0.46, 0.05, 0.015]));
   batch.add(GROUP, 'darkFrame', block([x, 0.02, z], [0.58, 0.04, 0.42]));
   [-0.12, 0.12].forEach((offset) => {

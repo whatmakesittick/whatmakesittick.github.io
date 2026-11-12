@@ -10,7 +10,7 @@ import { buildSource } from '../source';
 import type { PartContext, Section } from '../context';
 
 const TRIANGLE_LIMIT = 40_000;
-const DRAW_CALL_LIMIT = 60;
+const DRAW_CALL_LIMIT = 50;
 const TRIANGLES_PER_FACE = 3;
 
 function createContext(): PartContext {
@@ -74,7 +74,7 @@ describe('source and fab sections', () => {
     });
     stats.forEach(({ tris, calls }) => {
       expect(tris).toBeLessThan(TRIANGLE_LIMIT);
-      expect(calls).toBeLessThan(DRAW_CALL_LIMIT);
+      expect(calls, JSON.stringify(stats)).toBeLessThan(DRAW_CALL_LIMIT);
     });
   });
 

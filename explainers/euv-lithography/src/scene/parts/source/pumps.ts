@@ -31,7 +31,7 @@ function along(x: number, distance: number): Point {
 
 function pump(batch: Batch, x: number): void {
   const direction = radialDirection(PUMP_ANGLE);
-  batch.add(GROUP, 'frame', rod(along(x, START), along(x, SPOOL_END), SPOOL_R, 18));
+  batch.add(GROUP, 'darkFrame', rod(along(x, START), along(x, SPOOL_END), SPOOL_R, 18));
   batch.add(GROUP, 'flange', disc(along(x, SPOOL_END + 0.02), direction, FLANGE_R, 0.04));
   batch.boltRing(GROUP, along(x, SPOOL_END + 0.04), direction, FLANGE_R * 0.84, 12, 0.018);
   batch.add(
@@ -59,26 +59,38 @@ function frameFor(batch: Batch, x: number): void {
   [-1, 1].forEach((side) => {
     const px = x + side * POST_OFFSET;
     batch.add(GROUP, 'darkFrame', block([px, top / 2, z], [POST_SIZE, top, POST_SIZE]));
-    batch.add(GROUP, 'frame', block([px, 0.015, z], [0.22, 0.03, 0.22]));
+    batch.add(GROUP, 'darkFrame', block([px, 0.015, z], [0.22, 0.03, 0.22]));
     batch.bolt(GROUP, [px, 0.03, z], UP, 0.02);
   });
-  batch.add(GROUP, 'frame', block([x, top + 0.02, z], [POST_OFFSET * 2 + POST_SIZE, 0.05, 0.12]));
+  batch.add(
+    GROUP,
+    'darkFrame',
+    block([x, top + 0.02, z], [POST_OFFSET * 2 + POST_SIZE, 0.05, 0.12]),
+  );
   batch.add(GROUP, 'darkFrame', block([x, top + 0.065, z], [0.3, 0.04, 0.2]));
 }
 
 function cableTray(batch: Batch): void {
   const [from, to] = TRAY_RANGE;
   const width = TRAY_WIDTH / 2;
-  batch.add(GROUP, 'tray', block([(from + to) / 2, TRAY_Y, TRAY_Z], [to - from, 0.03, TRAY_WIDTH]));
+  batch.add(
+    GROUP,
+    'flange',
+    block([(from + to) / 2, TRAY_Y, TRAY_Z], [to - from, 0.03, TRAY_WIDTH]),
+  );
   [-1, 1].forEach((side) => {
     const z = TRAY_Z + side * width;
-    batch.add(GROUP, 'tray', block([(from + to) / 2, TRAY_Y + 0.03, z], [to - from, 0.06, 0.025]));
+    batch.add(
+      GROUP,
+      'flange',
+      block([(from + to) / 2, TRAY_Y + 0.03, z], [to - from, 0.06, 0.025]),
+    );
   });
   [-0.07, 0.07].forEach((offset) => {
     const start: Point = [from, TRAY_Y + 0.03 + CABLE_R, TRAY_Z + offset];
     const bend: Point = [(from + to) / 2, TRAY_Y + 0.03 + CABLE_R * 2, TRAY_Z + offset];
     const end: Point = [to, TRAY_Y + 0.03 + CABLE_R, TRAY_Z + offset];
-    batch.add(GROUP, 'cable', runPipe([start, bend, end], CABLE_R, 0.3));
+    batch.add(GROUP, 'darkFrame', runPipe([start, bend, end], CABLE_R, 0.3));
   });
   [-4.4, -3.4, -2.4, -1.4].forEach((x) => {
     batch.add(GROUP, 'darkFrame', block([x, TRAY_Y - 0.1, TRAY_Z], [0.04, 0.2, 0.04]));
@@ -98,7 +110,7 @@ function generatorCable(batch: Batch): void {
     CABLE_R,
     0.15,
   );
-  batch.add(GROUP, 'cable', lead);
+  batch.add(GROUP, 'darkFrame', lead);
 }
 
 export function buildPumps(batch: Batch): void {

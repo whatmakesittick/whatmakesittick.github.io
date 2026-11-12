@@ -102,6 +102,35 @@ function lid(batch: Batch): void {
     'darkFrame',
     place(span([-0.02, -0.05, reach * 0.25], [0.02, 0, reach * 0.8])),
   );
+  const rim = LID_THICKNESS + 0.03;
+  const inset = LID_EDGE + 0.02;
+  const ribs: [Point, Point][] = [
+    [
+      [-wide + inset, LID_THICKNESS, inset],
+      [wide - inset, rim, inset + 0.05],
+    ],
+    [
+      [-wide + inset, LID_THICKNESS, reach - inset - 0.05],
+      [wide - inset, rim, reach - inset],
+    ],
+    [
+      [-wide + inset, LID_THICKNESS, inset],
+      [-wide + inset + 0.05, rim, reach - inset],
+    ],
+    [
+      [wide - inset - 0.05, LID_THICKNESS, inset],
+      [wide - inset, rim, reach - inset],
+    ],
+    [
+      [-0.025, LID_THICKNESS, inset],
+      [0.025, rim, reach - inset],
+    ],
+    [
+      [-wide + inset, LID_THICKNESS, reach / 2 - 0.025],
+      [wide - inset, rim, reach / 2 + 0.025],
+    ],
+  ];
+  ribs.forEach(([min, max]) => batch.add(STRUCTURE_GROUP, 'frame', place(span(min, max))));
   [-wide * 0.6, wide * 0.6].forEach((at) => {
     const hinge = rod(
       [x + at - 0.07, FRAME_TOP, hingeZ],

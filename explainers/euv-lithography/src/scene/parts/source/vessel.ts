@@ -71,12 +71,12 @@ function windowFrame(batch: Batch): void {
   const reach = 0.03;
   [x0, x1].forEach((x) => {
     const arc = { start: -half, length: half * 2 };
-    batch.add(GROUP, 'frame', ringAlongX(x, radius, reach / 2, arc, AXIS_Y));
+    batch.add(GROUP, 'darkFrame', ringAlongX(x, radius, reach / 2, arc, AXIS_Y));
   });
   [-1, 1].forEach((sign) => {
     const y = AXIS_Y + radius * Math.sin(sign * half);
     const z = radius * Math.cos(half);
-    batch.add(GROUP, 'frame', bar([x0, y, z], [x1, y, z], reach, reach));
+    batch.add(GROUP, 'darkFrame', bar([x0, y, z], [x1, y, z], reach, reach));
     batch.bolt(GROUP, [(x0 + x1) / 2, y + sign * 0.02, z], new Vector3(0, sign, 0), BOLT);
   });
   const glass = profileTube(
@@ -115,7 +115,11 @@ function joints(batch: Batch): void {
         BOLT,
       );
     });
-    batch.add(GROUP, 'rubber', washer([x, AXIS_Y, 0], AXIS_X, SHELL_R, JOINT_OUTER - 0.02, GASKET));
+    batch.add(
+      GROUP,
+      'darkFrame',
+      washer([x, AXIS_Y, 0], AXIS_X, SHELL_R, JOINT_OUTER - 0.02, GASKET),
+    );
   });
 }
 
@@ -124,7 +128,7 @@ function stiffeners(batch: Batch): void {
     const radius = x > BODY_END ? SHELL_R - (x - BODY_END) * CONE_SLOPE : SHELL_R;
     batch.add(
       GROUP,
-      'frame',
+      'darkFrame',
       washer([x, AXIS_Y, 0], AXIS_X, radius - 0.02, radius + 0.07, STIFFENER_WIDTH),
     );
   });
@@ -145,7 +149,7 @@ function saddles(batch: Batch): void {
     });
     batch.add(
       GROUP,
-      'frame',
+      'darkFrame',
       block([x, FOOT_T / 2, 0], [SADDLE_WIDTH + 0.06, FOOT_T, SHELL_R * 2.2]),
     );
   });

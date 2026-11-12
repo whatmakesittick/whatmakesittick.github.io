@@ -27,7 +27,7 @@ export function buildFocus(batch: Batch): void {
   );
   batch.add(
     GROUP,
-    'frame',
+    'darkFrame',
     washer([LOCK_X + LOCK_T / 2 + COLLAR_T / 2, AXIS_Y, 0], AXIS_X, NECK_R * 0.96, 0.17, COLLAR_T),
   );
   batch.add(
@@ -53,7 +53,7 @@ export function buildFocus(batch: Batch): void {
     );
   });
   const top = AXIS_Y + NECK_R;
-  batch.add(GROUP, 'frame', rod([LOCK_X, top, 0], [LOCK_X, top + 0.22, 0], PORT_R, 10));
+  batch.add(GROUP, 'darkFrame', rod([LOCK_X, top, 0], [LOCK_X, top + 0.22, 0], PORT_R, 10));
   batch.add(
     GROUP,
     'accent',

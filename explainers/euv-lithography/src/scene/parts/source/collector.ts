@@ -13,6 +13,7 @@ import {
   SHELL_R,
   STREAM_SLOT,
 } from './dims';
+import { LIT_RIM, MIRROR_BOWL } from './finishes';
 import { collectorProfile, sections } from './profiles';
 
 const GROUP = 'collector';
@@ -40,7 +41,7 @@ function onAxis(x: number, radius: number, angle: number): Point {
 function faces(batch: Batch, side: Side): void {
   const ghost = side === 'front';
   sections(collectorProfile(), side, STREAM_SLOT).forEach(({ profile, arc }) => {
-    batch.add(GROUP, 'collector', profileTube([...profile].reverse(), arc, AXIS_Y), ghost);
+    batch.add(GROUP, MIRROR_BOWL, profileTube([...profile].reverse(), arc, AXIS_Y), ghost);
   });
   sections(collectorProfile(-COLLECTOR_THICKNESS), side, STREAM_SLOT).forEach(
     ({ profile, arc }) => {
@@ -60,7 +61,7 @@ function rimRing(batch: Batch, side: Side): void {
     new Vector2(inner, x - thickness / 2),
   ];
   const arc = halfArc(side, STREAM_SLOT);
-  batch.add(GROUP, 'frame', profileTube(profile, arc, AXIS_Y), side === 'front');
+  batch.add(GROUP, LIT_RIM, profileTube(profile, arc, AXIS_Y), side === 'front');
   const hole = ringAlongX(
     COLLECTOR_APEX_X - COLLECTOR_THICKNESS / 2,
     collectorProfile()[0].x,
@@ -68,7 +69,7 @@ function rimRing(batch: Batch, side: Side): void {
     arc,
     AXIS_Y,
   );
-  batch.add(GROUP, 'flange', hole, side === 'front');
+  batch.add(GROUP, LIT_RIM, hole, side === 'front');
 }
 
 function cooling(batch: Batch, side: Side): void {
@@ -83,7 +84,7 @@ function ribs(batch: Batch): void {
   const surface = collectorProfile(-COLLECTOR_THICKNESS - 0.008);
   RIB_ANGLES.forEach((angle) => {
     const points = surface.map((point): Point => onAxis(point.y, point.x, angle));
-    batch.add(GROUP, 'frame', polyTube(points, RIB_TUBE), angle < 180 && angle > 0);
+    batch.add(GROUP, 'darkFrame', polyTube(points, RIB_TUBE), angle < 180 && angle > 0);
     const from = onAxis(COLLECTOR_RIM_X - RIM_FLANGE.thickness / 2, RIM_FLANGE.outer - 0.03, angle);
     const to = onAxis(STRUT_END_X, SHELL_R - 0.03, angle);
     batch.add(GROUP, 'darkFrame', bar(from, to, 0.05, 0.08), angle < 180 && angle > 0);

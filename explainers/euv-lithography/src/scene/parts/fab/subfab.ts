@@ -1,4 +1,4 @@
-import { BoxGeometry, TorusGeometry } from 'three';
+import { BoxGeometry, TorusGeometry, Vector3 } from 'three';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import type { Mesh, Object3D } from 'three';
 import type { Point } from '../../../ids';
@@ -19,7 +19,7 @@ import {
   UTILITY_Z,
   WALL_THICKNESS,
 } from './dims';
-import { bar, rod, runPipe, span } from './shapes';
+import { bar, rod, roundedBlock, runPipe, span, washer } from './shapes';
 
 const PLATE = 0.46;
 const PLATE_THICKNESS = 0.04;
@@ -71,28 +71,11 @@ function shell(batch: Batch): void {
     'granite',
     span([minX, floorTop, minZ], [maxX, SLAB_BOTTOM, minZ + WALL_THICKNESS]),
   );
-  batch.add(
-    group,
-    'granite',
-    span([minX, floorTop, minZ], [minX + WALL_THICKNESS, SLAB_BOTTOM, maxZ]),
-  );
-  batch.add(
-    group,
-    'granite',
-    span([maxX - WALL_THICKNESS, floorTop, minZ], [maxX, SLAB_BOTTOM, maxZ]),
-  );
   const rim = 0.04;
   batch.add(group, 'frame', span([minX, floorBottom, maxZ - rim], [maxX, floorTop, maxZ]));
-  batch.add(
-    group,
-    'frame',
-    span([minX, floorTop, maxZ - rim], [minX + WALL_THICKNESS, SLAB_BOTTOM, maxZ]),
-  );
-  batch.add(
-    group,
-    'frame',
-    span([maxX - WALL_THICKNESS, floorTop, maxZ - rim], [maxX, SLAB_BOTTOM, maxZ]),
-  );
+  [minX, maxX - rim].forEach((x) => {
+    batch.add(group, 'frame', span([x, floorBottom, minZ], [x + rim, floorTop, maxZ]));
+  });
 }
 
 function columns(context: PartContext, batch: Batch): Mesh[] {
@@ -143,6 +126,104 @@ function valve(batch: Batch, x: number, y: number, z: number): void {
     .rotateX(Math.PI / 2)
     .translate(x, y + 0.17, z);
   batch.add(STRUCTURE_GROUP, 'accent', wheel);
+}
+
+function pipeEnds(batch: Batch): void {
+  const ends = [RUN_MIN_X, RUN_MAX_X];
+  [...COPPER_RUNS, ...GAS_RUNS].forEach((run, index) => {
+    const radius = index < COPPER_RUNS.length ? COPPER_RADIUS : GAS_RADIUS;
+    ends.forEach((x, side) => {
+      const point = side === 0 ? run[0] : run[run.length - 1];
+      const normal = new Vector3(side === 0 ? -1 : 1, 0, 0);
+      batch.add(
+        STRUCTURE_GROUP,
+        'flange',
+        washer([x, point[1], point[2]], normal, radius * 0.5, radius * 1.7, 0.03),
+      );
+      batch.boltRing(STRUCTURE_GROUP, [x, point[1], point[2]], normal, radius * 1.3, 6, 0.012);
+    });
+  });
+}
+
+interface Skid {
+  x: number;
+  width: number;
+  height: number;
+  depth: number;
+  stripe: boolean;
+}
+
+const SKIDS: readonly Skid[] = [
+  { x: 2.2, width: 2.0, height: 1.2, depth: 0.9, stripe: true },
+  { x: -2.4, width: 1.8, height: 1.1, depth: 0.9, stripe: true },
+  { x: 5.3, width: 1.0, height: 1.9, depth: 0.7, stripe: false },
+  { x: 6.5, width: 0.8, height: 2.1, depth: 0.6, stripe: false },
+];
+const SKID_Z = FLOOR.minZ + WALL_THICKNESS + 0.1;
+
+function skids(batch: Batch): void {
+  SKIDS.forEach(({ x, width, height, depth, stripe }) => {
+    const bottom = SUBFLOOR_TOP + 0.08;
+    const front = SKID_Z + depth;
+    const group = STRUCTURE_GROUP;
+    batch.add(
+      group,
+      'darkFrame',
+      span([x - width / 2, SUBFLOOR_TOP, SKID_Z], [x + width / 2, bottom, front]),
+    );
+    batch.add(
+      group,
+      'granite',
+      roundedBlock([x, bottom + height / 2, SKID_Z + depth / 2], [width, height, depth], 0.03),
+    );
+    batch.add(
+      group,
+      'frame',
+      span(
+        [x - width / 2 + 0.06, bottom + 0.08, front],
+        [x + width / 2 - 0.06, bottom + height - 0.08, front + 0.012],
+      ),
+    );
+    batch.add(
+      group,
+      stripe ? 'accent' : 'safety',
+      span(
+        [x - width / 2 + 0.06, bottom + height - 0.22, front + 0.012],
+        [x + width / 2 - 0.06, bottom + height - 0.16, front + 0.02],
+      ),
+    );
+    const vents = Math.max(2, Math.round(width * 3));
+    for (let index = 0; index < vents; index += 1) {
+      const vx = x - width / 2 + 0.2 + ((width - 0.4) * index) / (vents - 1);
+      batch.add(
+        group,
+        'darkFrame',
+        span([vx - 0.015, bottom + 0.2, front + 0.012], [vx + 0.015, bottom + 0.6, front + 0.022]),
+      );
+    }
+    batch.add(
+      group,
+      'flange',
+      bar(
+        [x + width / 2 - 0.15, bottom + height * 0.45, front + 0.03],
+        [x + width / 2 - 0.15, bottom + height * 0.6, front + 0.03],
+        0.025,
+      ),
+    );
+  });
+  batch.add(
+    STRUCTURE_GROUP,
+    'copper',
+    runPipe(
+      [
+        [SKIDS[0].x - 0.5, SUBFLOOR_TOP + 1.28, SKID_Z + 0.3],
+        [SKIDS[0].x - 0.5, SUBFLOOR_TOP + 1.4, UTILITY_Z + 0.2 + 0.0],
+        [SKIDS[0].x - 0.5, -1.4, UTILITY_Z + 0.2],
+      ],
+      COPPER_RADIUS * 0.7,
+      0.15,
+    ),
+  );
 }
 
 function clamps(batch: Batch): void {
@@ -205,6 +286,8 @@ export function buildSubfab(context: PartContext, batch: Batch, parent: Object3D
   shell(batch);
   wallSeams(batch);
   copperRuns(batch);
+  pipeEnds(batch);
+  skids(batch);
   clamps(batch);
   parent.add(...columns(context, batch), cableTray(context, batch));
 }

@@ -32,6 +32,7 @@ const PLAIN_UV = 0.5;
 const ANISOTROPY = 8;
 const PLENUM_PANEL = 0.04;
 const STRINGER = 0.05;
+const ENDS_Z: readonly number[] = [-2.4, -1.8, -1.2, -0.6, 0, 0.6, 1.2, 1.8, 2.4];
 
 function tileTexture(context: PartContext): CanvasTexture {
   const canvas = document.createElement('canvas');
@@ -142,23 +143,9 @@ function nosing(batch: Batch): void {
 }
 
 function plenumPanels(batch: Batch): void {
-  const { minX, maxX, minZ, maxZ } = FLOOR;
-  const [bottom, top] = [PLENUM_BOTTOM, TILE_TOP];
-  batch.add(
-    STRUCTURE_GROUP,
-    'subfloor',
-    span([minX, bottom, minZ], [maxX, top, minZ + PLENUM_PANEL]),
-  );
-  batch.add(
-    STRUCTURE_GROUP,
-    'subfloor',
-    span([minX, bottom, minZ], [minX + PLENUM_PANEL, top, maxZ]),
-  );
-  batch.add(
-    STRUCTURE_GROUP,
-    'subfloor',
-    span([maxX - PLENUM_PANEL, bottom, minZ], [maxX, top, maxZ]),
-  );
+  const { minX, minZ } = FLOOR;
+  const span2 = span([minX, PLENUM_BOTTOM, minZ], [FLOOR.maxX, TILE_TOP, minZ + PLENUM_PANEL]);
+  batch.add(STRUCTURE_GROUP, 'subfloor', span2);
 }
 
 function shaft(batch: Batch): void {
@@ -199,7 +186,17 @@ function pedestals(context: PartContext, batch: Batch): InstancedMesh {
     const max: Point = [FLOOR.maxX, TILE_TOP, z + STRINGER / 2];
     batch.add(STRUCTURE_GROUP, 'tray', span(min, max));
   });
-  return instanced(context, geometry, STRUCTURE_GROUP, 'flange', matrices);
+  const ends = [0, 1, count - 2, count - 1].flatMap((column) =>
+    ENDS_Z.map((z) =>
+      placement([FLOOR.minX + PEDESTAL_PITCH * (column + 0.5), TILE_TOP - height / 2, z]),
+    ),
+  );
+  [FLOOR.minX + PEDESTAL_PITCH * 0.5, FLOOR.maxX - PEDESTAL_PITCH * 0.5].forEach((x) => {
+    const min: Point = [x - STRINGER / 2, TILE_TOP - STRINGER, FLOOR.minZ];
+    const max: Point = [x + STRINGER / 2, TILE_TOP, FLOOR.maxZ];
+    batch.add(STRUCTURE_GROUP, 'tray', span(min, max));
+  });
+  return instanced(context, geometry, STRUCTURE_GROUP, 'flange', [...matrices, ...ends]);
 }
 
 export function buildFloor(context: PartContext, batch: Batch): InstancedMesh {

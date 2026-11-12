@@ -37,7 +37,7 @@ function housing(batch: Batch): void {
   batch.add(GROUP, 'darkFrame', block([GX, NOZZLE_Y + 0.012, 0], [SIZE, 0.024, SIZE]));
   batch.add(GROUP, 'accent', block([GX, centre[1], SIZE / 2 + 0.002], [SIZE * 0.9, 0.035, 0.008]));
   const front = SIZE / 2 + 0.006;
-  batch.add(GROUP, 'frame', block([GX - 0.06, centre[1] - 0.01, front], [0.22, 0.12, 0.012]));
+  batch.add(GROUP, 'darkFrame', block([GX - 0.06, centre[1] - 0.01, front], [0.22, 0.12, 0.012]));
   batch.add(
     GROUP,
     'flange',
@@ -91,7 +91,11 @@ function reservoir(batch: Batch): void {
   });
   batch.add(GROUP, 'flange', disc([GX, RESERVOIR_TOP - 0.01, 0], UP, 0.2, 0.03, 24));
   batch.boltRing(GROUP, [GX, RESERVOIR_TOP + 0.005, 0], UP, 0.16, 8, BOLT);
-  batch.add(GROUP, 'frame', rod([GX, RESERVOIR_TOP, 0], [GX, RESERVOIR_TOP + 0.09, 0], 0.045, 12));
+  batch.add(
+    GROUP,
+    'darkFrame',
+    rod([GX, RESERVOIR_TOP, 0], [GX, RESERVOIR_TOP + 0.09, 0], 0.045, 12),
+  );
   const line: Point[] = [
     [GX, RESERVOIR_TOP + 0.09, 0],
     [GX, RESERVOIR_TOP + 0.26, 0],
@@ -99,7 +103,7 @@ function reservoir(batch: Batch): void {
     [GX + 0.4, NOZZLE_Y + 0.12, 0],
     [GX + SIZE / 2 + 0.01, NOZZLE_Y + 0.12, 0],
   ];
-  batch.add(GROUP, 'tray', runPipe(line, 0.025, 0.15));
+  batch.add(GROUP, 'flange', runPipe(line, 0.025, 0.15));
   [-0.1, 0.1].forEach((dz) => {
     const lead = runPipe(
       [
@@ -110,7 +114,7 @@ function reservoir(batch: Batch): void {
       0.012,
       0.06,
     );
-    batch.add(GROUP, 'cable', lead);
+    batch.add(GROUP, 'darkFrame', lead);
   });
 }
 
@@ -154,7 +158,7 @@ function catcher(batch: Batch): void {
   );
   batch.add(GROUP, 'shellInner', cone);
   batch.add(GROUP, 'tin', washer([x, top, 0], UP, outer - 0.012, outer + 0.025, 0.02));
-  batch.add(GROUP, 'frame', rod([x, DRAIN_BOTTOM, 0], [x, bottom, 0], inner, 12));
+  batch.add(GROUP, 'darkFrame', rod([x, DRAIN_BOTTOM, 0], [x, bottom, 0], inner, 12));
   batch.add(GROUP, 'flange', washer([x, AXIS_Y - 0.9 - 0.012, 0], UP, inner * 0.9, 0.12, 0.03));
   batch.boltRing(GROUP, [x, AXIS_Y - 0.9 - 0.027, 0], DOWN, 0.1, 6, 0.014);
   batch.add(GROUP, 'darkFrame', rod([x, CAN.bottom, 0], [x, CAN.top, 0], CAN.radius, 20));

@@ -140,7 +140,7 @@ function faceFitting(batch: Batch, face: Face): void {
 
 function mirrorBox(batch: Batch): void {
   const size = BOX_SIZE;
-  batch.add(GROUP, 'frame', roundedBlock([BOX_X, BOX_Y, BOX_Z], [size, size, size], 0.03));
+  batch.add(GROUP, 'darkFrame', roundedBlock([BOX_X, BOX_Y, BOX_Z], [size, size, size], 0.03));
   FACES.forEach((face) => faceFitting(batch, face));
 }
 
@@ -148,7 +148,7 @@ function posts(batch: Batch): void {
   POSTS.forEach((x) => {
     const top = BOX_Y - TUBE_R - 0.02;
     batch.add(GROUP, 'darkFrame', block([x, top / 2, BOX_Z], [POST_SIZE, top, POST_SIZE]));
-    batch.add(GROUP, 'frame', block([x, PLATE_T / 2, BOX_Z], [PLATE, PLATE_T, PLATE]));
+    batch.add(GROUP, 'darkFrame', block([x, PLATE_T / 2, BOX_Z], [PLATE, PLATE_T, PLATE]));
     batch.add(GROUP, 'darkFrame', block([x, top + 0.005, BOX_Z], [0.2, 0.05, 0.16]));
     batch.add(GROUP, 'flange', ringAlongX(x, TUBE_R + 0.012, 0.012, undefined, BOX_Y));
     [-1, 1].forEach((sx) =>
