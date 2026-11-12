@@ -1,3 +1,4 @@
+import type { Steps } from '@core/scene/pacing';
 import { label, namedGroup } from '../context';
 import type { PartContext, Section } from '../context';
 import { LAND_LABELS, TREE_SHAPE, TURBINE_TREE_LIMITS, TURBINE_TREES } from './constants';
@@ -33,14 +34,16 @@ export function turbineTreeArea(layout: FieldLayout): TreeArea {
   };
 }
 
-export function buildTurbineLand(context: PartContext): Section {
+export function* buildTurbineLand(context: PartContext): Steps<Section> {
   const root = namedGroup('turbineLand');
   const layout = turbineFieldLayout();
   const projection = turbineProjection();
   const texture = groundTexture(context, projection, (painter) =>
     paintTurbineGround(painter, layout),
   );
+  yield;
   const terrain = terrainMesh(context, turbineTerrainGeometry(projection), texture, 'land');
+  yield;
   const spots = placeTrees(turbineTreeArea(layout));
   const { crown, trunk } = plantTrees(
     context,

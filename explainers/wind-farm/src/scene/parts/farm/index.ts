@@ -1,4 +1,5 @@
 import type { Object3D } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import type { AssemblyState, FarmSite, SpacingD } from '../../../ids';
 import {
   HERO_SITE,
@@ -39,14 +40,18 @@ function placeAnchors(anchors: LayoutAnchors, sites: readonly FarmSite[]): void 
   anchors.heroSite.position.set(hero.x + HUB_X, heroHub, hero.z);
 }
 
-export function buildFarm(context: PartContext): Section {
+export function* buildFarm(context: PartContext): Steps<Section> {
   const root = namedGroup('farm');
   const fleet = new Fleet(context);
+  yield;
   const plumes = new WakePlumes(context);
+  yield;
   const roads = accessRoads(context);
+  yield;
   const cables = new CollectorCables(context);
   const marker = spacingMarker(context);
   const grid = new GridLine(context);
+  yield;
   const substation = new Substation(context);
   const layers = [roads, cables.layer, marker];
   root.add(fleet.group, plumes.group, grid.group, substation.group);

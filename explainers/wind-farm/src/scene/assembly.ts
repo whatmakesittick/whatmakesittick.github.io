@@ -2,6 +2,7 @@ import type { Box3, Group, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
+import type { Steps } from '@core/scene/pacing';
 import { createWindFarmAssembly } from './windFarmAssembly';
 
 export interface AssemblyResources {
@@ -20,6 +21,9 @@ export interface Assembly {
   dispose(): void;
 }
 
-export function createAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
+export function createAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Steps<Assembly> {
   return createWindFarmAssembly(resources, state);
 }

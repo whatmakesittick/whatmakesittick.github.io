@@ -1,6 +1,7 @@
 import { Group, Line, Mesh, Points, Sprite } from 'three';
 import type { Box3, Material, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
+import type { Steps } from '@core/scene/pacing';
 import { isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import { PART_IDS } from '../ids';
@@ -62,7 +63,7 @@ function completeAnchors(
 class WindFarmAssembly implements Assembly {
   readonly root = new Group();
   private readonly materials: MaterialLibrary;
-  private readonly tracker = new ResourceTracker();
+  private readonly tracker: ResourceTracker;
   private readonly scenes: Record<SceneId, Group>;
   private readonly sections: Record<SceneId, readonly Section[]>;
   private readonly labels: ReadonlyMap<PartId, Object3D>;
@@ -73,20 +74,16 @@ class WindFarmAssembly implements Assembly {
   private state: AssemblyState;
   private azimuth = 0;
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(
+    resources: AssemblyResources,
+    state: AssemblyState,
+    context: PartContext,
+    sections: Record<SceneId, readonly Section[]>,
+  ) {
     this.materials = resources.materials;
     this.root.name = ROOT_NAME;
-    const context: PartContext = {
-      materials: resources.materials,
-      textures: resources.textures,
-      tracker: this.tracker,
-      labels: new Map(),
-      anchors: {},
-    };
-    this.sections = {
-      turbine: [buildTurbineLand(context), buildHero(context), buildStreamlines(context)],
-      farm: [buildFarmLand(context), buildFarm(context), buildFarmAir(context)],
-    };
+    this.tracker = context.tracker;
+    this.sections = sections;
     this.scenes = {
       turbine: namedGroup('turbineScene', this.root),
       farm: namedGroup('farmScene', this.root),
@@ -164,9 +161,24 @@ class WindFarmAssembly implements Assembly {
   }
 }
 
-export function createWindFarmAssembly(
+export function* createWindFarmAssembly(
   resources: AssemblyResources,
   state: AssemblyState,
-): Assembly {
-  return new WindFarmAssembly(resources, state);
+): Steps<Assembly> {
+  const context: PartContext = {
+    materials: resources.materials,
+    textures: resources.textures,
+    tracker: new ResourceTracker(),
+    labels: new Map(),
+    anchors: {},
+  };
+  const turbineLand = yield* buildTurbineLand(context);
+  const hero = yield* buildHero(context);
+  const streamlines = buildStreamlines(context);
+  yield;
+  const farmLand = yield* buildFarmLand(context);
+  const farm = yield* buildFarm(context);
+  const farmAir = buildFarmAir(context);
+  const sections = { turbine: [turbineLand, hero, streamlines], farm: [farmLand, farm, farmAir] };
+  return new WindFarmAssembly(resources, state, context, sections);
 }

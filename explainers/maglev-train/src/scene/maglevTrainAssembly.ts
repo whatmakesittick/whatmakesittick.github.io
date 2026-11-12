@@ -1,6 +1,7 @@
 import { Group } from 'three';
 import type { Box3, Line, Material, Mesh, Object3D, Points, Sprite } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
+import type { Steps } from '@core/scene/pacing';
 import { isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import { ANCHOR_IDS, PART_IDS } from '../ids';
@@ -17,7 +18,6 @@ import { chaseTargetFor } from './pose';
 import { buildRegions } from './regions';
 
 const ROOT_NAME = 'maglevTrain';
-const SECTION_BUILDERS = [buildLand, buildLine, buildTrain, buildInset, buildLineUp] as const;
 
 type Drawable = Mesh | Line | Points | Sprite;
 
@@ -40,7 +40,7 @@ function completed<Id extends string>(
 class MaglevTrainAssembly implements Assembly {
   readonly root = new Group();
   private readonly materials: MaterialLibrary;
-  private readonly tracker = new ResourceTracker();
+  private readonly tracker: ResourceTracker;
   private readonly sections: readonly Section[];
   private readonly labels: ReadonlyMap<PartId, Object3D>;
   private readonly anchors: Readonly<Record<AnchorId, Object3D>>;
@@ -49,17 +49,16 @@ class MaglevTrainAssembly implements Assembly {
   private nudgeSample: NudgeSample = RESTING_NUDGE;
   private state: AssemblyState;
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(
+    resources: AssemblyResources,
+    state: AssemblyState,
+    context: PartContext,
+    sections: readonly Section[],
+  ) {
     this.materials = resources.materials;
     this.root.name = ROOT_NAME;
-    const context: PartContext = {
-      materials: resources.materials,
-      textures: resources.textures,
-      tracker: this.tracker,
-      labels: new Map(),
-      anchors: {},
-    };
-    this.sections = SECTION_BUILDERS.map((build) => build(context));
+    this.tracker = context.tracker;
+    this.sections = sections;
     this.sections.forEach((section) => this.root.add(section.root));
     this.labels = new Map(
       completed(PART_IDS, (id) => context.labels.get(id), 'No label anchor for part'),
@@ -123,9 +122,23 @@ class MaglevTrainAssembly implements Assembly {
   }
 }
 
-export function createMaglevTrainAssembly(
+export function* createMaglevTrainAssembly(
   resources: AssemblyResources,
   state: AssemblyState,
-): Assembly {
-  return new MaglevTrainAssembly(resources, state);
+): Steps<Assembly> {
+  const context: PartContext = {
+    materials: resources.materials,
+    textures: resources.textures,
+    tracker: new ResourceTracker(),
+    labels: new Map(),
+    anchors: {},
+  };
+  const land = yield* buildLand(context);
+  const line = buildLine(context);
+  yield;
+  const train = yield* buildTrain(context);
+  const inset = buildInset(context);
+  yield;
+  const sections = [land, line, train, inset, buildLineUp(context)];
+  return new MaglevTrainAssembly(resources, state, context, sections);
 }

@@ -2,6 +2,7 @@ import { Box3, InstancedMesh, Mesh, Texture, Vector3 } from 'three';
 import type { MeshStandardMaterial, Object3D } from 'three';
 import { describe, expect, it } from 'vitest';
 import { MaterialLibrary } from '@core/scene/materials';
+import { runNow } from '@core/scene/pacing';
 import { isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AssemblyState, PartId, ViewOptions } from '../../../ids';
@@ -75,7 +76,7 @@ function build() {
     labels: new Map(),
     anchors: {},
   };
-  const section = buildTrain(context);
+  const section = runNow(buildTrain(context));
   section.setState(stateAt(MOMENTS.lifted));
   return { context, section };
 }

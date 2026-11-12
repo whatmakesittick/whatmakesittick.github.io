@@ -27,11 +27,12 @@ class DoubleBufferedAssemblyState {
   }
 }
 
-export function bindStore(store: WindFarmStore, targets: SceneTargets): () => void {
+export async function bindStore(store: WindFarmStore, targets: SceneTargets): Promise<() => void> {
   const { windFarm, labelVisibility } = targets;
   const assemblyState = new DoubleBufferedAssemblyState(store.getState());
   const push = (state: AssemblySource) => windFarm.setState(assemblyState.handOver(state));
-  windFarm.build(assemblyState.handOver(store.getState()));
+  await windFarm.build(assemblyState.handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<WindFarmStoreState, Preset>(targets, store, {

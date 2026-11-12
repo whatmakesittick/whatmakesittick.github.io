@@ -1,3 +1,4 @@
+import type { Steps } from '@core/scene/pacing';
 import type { AssemblyState, Point } from '../../../ids';
 import { bearingTurn, label, namedGroup, sceneAnchor } from '../context';
 import type { Motion, PartContext, Section } from '../context';
@@ -16,18 +17,23 @@ import { buildHeroWake } from './wake';
 
 const PITCH_LABEL: Point = [HUB[0] + 1.4, HUB[1] - 0.3, 0.9];
 
-export function buildHero(context: PartContext): Section {
+export function* buildHero(context: PartContext): Steps<Section> {
   const root = namedGroup('hero');
   const tower = buildTower(context, root);
+  yield;
   buildTransformer(context, root);
   buildTowerCable(context, root);
   const yaw = namedGroup('yaw', root);
+  yield;
   const nacelle = buildNacelle(context, yaw);
+  yield;
   const spinner = buildSpinner(context, yaw);
   const rotor = buildRotor(context, yaw);
   buildSweptArea(context, yaw);
   const wake = buildHeroWake(context, yaw);
+  yield;
   const interior = buildInterior(context);
+  yield;
   const nacelleInterior = namedGroup('nacelleInterior', yaw);
   nacelleInterior.add(interior.root);
   label(context, 'pitchCylinders', nacelleInterior, PITCH_LABEL);

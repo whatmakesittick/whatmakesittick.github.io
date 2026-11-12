@@ -8,6 +8,7 @@ import { MaterialLibrary } from '@core/scene/materials';
 import { createSceneTextures } from '@core/scene/textures';
 import type { AssemblyState, CameraView, RegionId } from '../ids';
 import { createAssemblyState, createWindFarmStore } from '../state';
+import { runNow } from '@core/scene/pacing';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
 import { CAMERA_VIEWS, STAGE_VARIANTS } from './cameraViews';
@@ -30,7 +31,7 @@ function assemblyState(changes: Partial<AssemblyState> = {}): AssemblyState {
 
 function referenceAssembly(): Assembly {
   const resources = { materials: new MaterialLibrary(), textures: createSceneTextures() };
-  return createAssembly(resources, assemblyState());
+  return runNow(createAssembly(resources, assemblyState()));
 }
 
 function regionBox(region: RegionId): Box3 {
@@ -72,9 +73,9 @@ function roundAll(values: readonly number[]): number[] {
 }
 
 describe('wind farm controller', () => {
-  it('adds the assembly, attaches its labels and bounds the camera by the shown scene', () => {
+  it('adds the assembly, attaches its labels and bounds the camera by the shown scene', async () => {
     const { rig, scene, shell } = fakeShell();
-    new WindFarmController(shell).build(assemblyState());
+    await new WindFarmController(shell).build(assemblyState());
     expect(scene.add).toHaveBeenCalledTimes(1);
     expect(shell.labels.attach).toHaveBeenCalledTimes(1);
     const [bounds, floor] = rig.setBounds.mock.lastCall ?? [];
@@ -82,10 +83,10 @@ describe('wind farm controller', () => {
     expect(floor).toBe(bounds?.min.y);
   });
 
-  it('rebounds the camera only when the scene swaps', () => {
+  it('rebounds the camera only when the scene swaps', async () => {
     const { rig, shell } = fakeShell();
     const controller = new WindFarmController(shell);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     controller.setState(assemblyState());
     expect(rig.setBounds).toHaveBeenCalledTimes(1);
     controller.setState(assemblyState({ scene: 'turbine' }));
@@ -99,10 +100,10 @@ describe('wind farm controller', () => {
     expect(rig.jumpTo).not.toHaveBeenCalled();
   });
 
-  it.each(STAGE_VARIANTS)('frames every view on its region for a %s stage', (variant) => {
+  it.each(STAGE_VARIANTS)('frames every view on its region for a %s stage', async (variant) => {
     const { rig, shell } = fakeShell(STAGE_WIDTH_PX[variant]);
     const controller = new WindFarmController(shell);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     for (const view of VIEWS) {
       const spec = CAMERA_VIEWS[view];
       controller.views.frame(view, false);
@@ -114,10 +115,10 @@ describe('wind farm controller', () => {
     }
   });
 
-  it('turns the close-up views with the yaw pivot and keeps the rest still', () => {
+  it('turns the close-up views with the yaw pivot and keeps the rest still', async () => {
     const { rig, scene, shell } = fakeShell();
     const controller = new WindFarmController(shell);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     const root = scene.add.mock.lastCall?.[0];
     for (const view of VIEWS) {
       controller.views.frame(view, false);
@@ -141,10 +142,10 @@ describe('wind farm controller', () => {
     }
   });
 
-  it('tweens when animated and honours an explicit variant', () => {
+  it('tweens when animated and honours an explicit variant', async () => {
     const { rig, shell } = fakeShell(STAGE_WIDTH_PX.phone);
     const controller = new WindFarmController(shell);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     controller.views.frame('gridSubstation', true, 'desktop');
     const pose = rig.tweenTo.mock.lastCall?.[0];
     const desktop = new Vector3(...CAMERA_VIEWS.gridSubstation.direction.desktop).normalize();
@@ -152,24 +153,24 @@ describe('wind farm controller', () => {
     expect(rig.jumpTo).not.toHaveBeenCalled();
   });
 
-  it('reports no motion without an assembly and removes it on dispose', () => {
+  it('reports no motion without an assembly and removes it on dispose', async () => {
     const { scene, shell } = fakeShell();
     const controller = new WindFarmController(shell);
     expect(controller.update(1)).toBe(false);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     const removed = vi.spyOn(scene.add.mock.lastCall?.[0] as Object3D, 'removeFromParent');
     controller.dispose();
     expect(removed).toHaveBeenCalledTimes(1);
     expect(controller.update(1)).toBe(false);
   });
 
-  it('rebuilds without leaving the previous assembly behind', () => {
+  it('rebuilds without leaving the previous assembly behind', async () => {
     const { rig, scene, shell } = fakeShell();
     const controller = new WindFarmController(shell);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     const first = scene.add.mock.lastCall?.[0];
     const removed = vi.spyOn(first as Object3D, 'removeFromParent');
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     expect(removed).toHaveBeenCalledTimes(1);
     expect(scene.add).toHaveBeenCalledTimes(2);
     expect(rig.setBounds).toHaveBeenCalledTimes(2);

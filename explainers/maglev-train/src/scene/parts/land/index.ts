@@ -1,3 +1,4 @@
+import type { Steps } from '@core/scene/pacing';
 import type { AssemblyState } from '../../../ids';
 import { wrapOffset } from '../../pose';
 import { namedGroup } from '../context';
@@ -12,15 +13,19 @@ import { buildSubstations } from './substation';
 import { trainShadow } from './trainShadow';
 import { buildAir } from './air';
 
-export function buildLand(context: PartContext): Section {
+export function* buildLand(context: PartContext): Steps<Section> {
   const root = namedGroup('land');
   const plan = groundPlan();
   const cut = createCut();
   const ground = namedGroup('groundStream', root);
   ground.add(groundMesh(context, plan, cut));
+  yield;
   const scenery = buildScenery(context, plan);
+  yield;
   const ghost = buildGhost(context);
+  yield;
   const air = buildAir(context);
+  yield;
   const substations = buildSubstations(context);
   root.add(
     skyDome(context),

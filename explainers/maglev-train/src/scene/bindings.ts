@@ -22,11 +22,15 @@ function doubleBuffered(source: AssemblySource): (next: AssemblySource) => Assem
   };
 }
 
-export function bindStore(store: MaglevTrainStore, targets: SceneTargets): () => void {
+export async function bindStore(
+  store: MaglevTrainStore,
+  targets: SceneTargets,
+): Promise<() => void> {
   const { train, labelVisibility } = targets;
   const handOver = doubleBuffered(store.getState());
   const push = (state: AssemblySource) => train.setState(handOver(state));
-  train.build(handOver(store.getState()));
+  await train.build(handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<MaglevTrainStoreState, Preset>(targets, store, {

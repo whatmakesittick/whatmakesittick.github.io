@@ -1,4 +1,5 @@
 import type { Object3D } from 'three';
+import { runPaced } from '@core/scene/pacing';
 import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
@@ -33,10 +34,10 @@ export class MaglevTrainController {
     });
   }
 
-  build(state: AssemblyState): void {
+  async build(state: AssemblyState): Promise<void> {
     const { scene, materials, textures, labels, rig } = this.dependencies;
     this.dispose();
-    const assembly = createAssembly({ materials, textures }, state);
+    const assembly = await runPaced(createAssembly({ materials, textures }, state));
     this.assembly = assembly;
     scene.add(assembly.root);
     labels.attach(assembly.labelAnchors());

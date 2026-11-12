@@ -8,12 +8,15 @@ import { LABEL_PRIORITY } from './partInfo';
 
 export { SCENE_OPTIONS } from './sceneOptions';
 
-export function mountMaglevTrainScene(shell: SceneShell, store: MaglevTrainStore): () => void {
+export async function mountMaglevTrainScene(
+  shell: SceneShell,
+  store: MaglevTrainStore,
+): Promise<() => void> {
   const restoreLight = maglevTrainLight(shell.lighting);
   const train = new MaglevTrainController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => train.update(deltaSeconds));
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
-  const unbind = bindStore(store, { train, labelVisibility, ...shell });
+  const unbind = await bindStore(store, { train, labelVisibility, ...shell });
   return () => {
     removeFrame();
     labelVisibility.dispose();

@@ -15,7 +15,7 @@ function fakeTargets() {
   const frame = vi.fn();
   const setWanted = vi.fn();
   const targets: SceneTargets = {
-    train: { build: record, setState: record, views: { frame } },
+    train: { build: async (state) => record(state), setState: record, views: { frame } },
     labelVisibility: { setWanted },
     highlighter: { setHighlight: vi.fn() },
     labels: { show: vi.fn() },
@@ -24,19 +24,19 @@ function fakeTargets() {
 }
 
 describe('maglev train scene bindings', () => {
-  it('builds the train from the store and frames the first chapter', () => {
+  it('builds the train from the store and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createMaglevTrainStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const { phase, topSpeed, brakeMode, compare, view, preset } = store.getState();
     expect(received[0]).toMatchObject({ phase, topSpeed, brakeMode, compare, view });
     expect(frame).toHaveBeenCalledWith(PRESETS[preset].camera, false, undefined);
   });
 
-  it('hands over the chapter start and its views before framing the next camera', () => {
+  it('hands over the chapter start and its views before framing the next camera', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createMaglevTrainStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     let handedBeforeFrame: AssemblyState | undefined;
     frame.mockImplementationOnce(() => (handedBeforeFrame = received.at(-1)));
     store.getState().applyPreset('motor');
@@ -47,10 +47,10 @@ describe('maglev train scene bindings', () => {
     });
   });
 
-  it('applies a view toggle at once and refreshes the labels', () => {
+  it('applies a view toggle at once and refreshes the labels', async () => {
     const { received, setWanted, targets } = fakeTargets();
     const store = createMaglevTrainStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const before = setWanted.mock.calls.length;
     const ghost = store.getState().view.ghost;
     store.getState().toggleView('ghost');
@@ -58,10 +58,10 @@ describe('maglev train scene bindings', () => {
     expect(setWanted.mock.calls.length).toBeGreaterThan(before);
   });
 
-  it('hands over the top speed, the brake, the nudge and the comparison', () => {
+  it('hands over the top speed, the brake, the nudge and the comparison', async () => {
     const { received, targets } = fakeTargets();
     const store = createMaglevTrainStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setTopSpeed('kmh300');
     store.getState().setBrakeMode('eddy');
     store.getState().nudgeTrain('gust');
@@ -74,10 +74,10 @@ describe('maglev train scene bindings', () => {
     });
   });
 
-  it('alternates two buffers so the held state is never rewritten', () => {
+  it('alternates two buffers so the held state is never rewritten', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createMaglevTrainStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().pause();
     store.getState().setTopSpeed('kmh300');
     store.getState().setPhase(MOMENTS.fullSpeed);
@@ -89,10 +89,10 @@ describe('maglev train scene bindings', () => {
     expect(third?.motion.phase).toBe('cruise');
   });
 
-  it('stops handing over states once unbound', () => {
+  it('stops handing over states once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createMaglevTrainStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const count = received.length;
     store.getState().setPhase(MOMENTS.fullSpeed);

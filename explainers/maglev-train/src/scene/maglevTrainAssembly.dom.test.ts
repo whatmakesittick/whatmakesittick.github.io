@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { InstancedMesh, Matrix4, Mesh, Sphere, Vector3 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
+import { runNow } from '@core/scene/pacing';
 import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
 import { ANCHOR_IDS, PART_IDS, REGION_IDS, VIEW_IDS } from '../ids';
@@ -121,7 +122,7 @@ function onDispose(resource: { addEventListener(type: 'dispose', listener: () =>
 beforeAll(() => {
   materials = new MaterialLibrary();
   textures = createSceneTextures();
-  assembly = createMaglevTrainAssembly({ materials, textures }, stateAt(0));
+  assembly = runNow(createMaglevTrainAssembly({ materials, textures }, stateAt(0)));
 });
 
 afterAll(() => {
@@ -212,7 +213,7 @@ describe('maglev train assembly', () => {
   it('frees its geometries, instance buffers and registered materials on dispose', () => {
     const library = new MaterialLibrary();
     const register = vi.spyOn(library, 'register');
-    const extra = createMaglevTrainAssembly({ materials: library, textures }, stateAt(0));
+    const extra = runNow(createMaglevTrainAssembly({ materials: library, textures }, stateAt(0)));
     const geometries = new Set<BufferGeometry>();
     const instanced: InstancedMesh[] = [];
     extra.root.traverse((object) => {
