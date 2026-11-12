@@ -1,6 +1,8 @@
 import { Box3, Group, Mesh, Points, Sprite } from 'three';
 import type { Material, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
+import { runPaced } from '@core/scene/pacing';
+import type { Steps } from '@core/scene/pacing';
 import { isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, Point, RegionId } from '../ids';
@@ -13,10 +15,12 @@ import { AircraftPart } from './parts/aircraft/aircraft';
 import type { PartContext } from './parts/context';
 import { EffectsPart } from './parts/effects/effects';
 import { createAirfield } from './parts/world/airfield';
+import type { AirfieldPart } from './parts/world/airfield';
 import { CompoundPart } from './parts/world/compound';
 import { createGround } from './parts/world/ground';
 import { createMesas } from './parts/world/mesas';
 import { createSatellite } from './parts/world/satellite';
+import type { SatellitePart } from './parts/world/satellite';
 import { createShrubs } from './parts/world/shrubs';
 import { createSky } from './parts/world/sky';
 import { staticRegions } from './regions';
@@ -28,18 +32,62 @@ function isDrawable(object: Object3D): object is Drawable {
   return drawable && !Array.isArray((object as Drawable).material);
 }
 
-function createContext(resources: AssemblyResources, tracker: ResourceTracker): PartContext {
-  const looks = createAirframeLooks({
-    fuselage: tracker.track(panelTexture(FUSELAGE_PANELS)),
-    hump: tracker.track(panelTexture(HUMP_PANELS)),
-    wing: tracker.track(panelTexture(WING_PANELS)),
+interface AssemblyParts {
+  tracker: ResourceTracker;
+  airfield: AirfieldPart;
+  satellite: SatellitePart;
+  compound: CompoundPart;
+  aircraft: AircraftPart;
+  effects: EffectsPart;
+  world: { sky: Mesh; ground: Mesh; mesas: Mesh; shrubs: Points };
+}
+
+function* buildParts(resources: AssemblyResources): Steps<AssemblyParts> {
+  const tracker = new ResourceTracker();
+  const fuselage = tracker.track(panelTexture(FUSELAGE_PANELS));
+  yield;
+  const hump = tracker.track(panelTexture(HUMP_PANELS));
+  yield;
+  const wing = tracker.track(panelTexture(WING_PANELS));
+  const context: PartContext = {
+    ...resources,
+    tracker,
+    looks: createAirframeLooks({ fuselage, hump, wing }),
+  };
+  yield;
+  const airfield = createAirfield(context);
+  yield;
+  const satellite = createSatellite(context);
+  const compound = new CompoundPart(context);
+  yield;
+  const aircraft = new AircraftPart(context);
+  yield;
+  const effects = new EffectsPart(context, {
+    aircraft,
+    mastTop: airfield.mastTop,
+    satellite: satellite.anchor,
   });
-  return { ...resources, tracker, looks };
+  yield;
+  const sky = createSky(context);
+  yield;
+  const ground = yield* createGround(context);
+  yield;
+  const mesas = createMesas(context);
+  const shrubs = createShrubs(context);
+  return {
+    tracker,
+    airfield,
+    satellite,
+    compound,
+    aircraft,
+    effects,
+    world: { sky, ground, mesas, shrubs },
+  };
 }
 
 export class ReaperAssembly implements Assembly {
   readonly root = new Group();
-  private readonly tracker = new ResourceTracker();
+  private readonly tracker: ResourceTracker;
   private readonly materials: MaterialLibrary;
   private readonly aircraft: AircraftPart;
   private readonly compound: CompoundPart;
@@ -51,28 +99,23 @@ export class ReaperAssembly implements Assembly {
   private heading = 0;
   private playing = false;
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(resources: AssemblyResources, parts: AssemblyParts, state: AssemblyState) {
+    const { airfield, satellite, compound, aircraft, effects, world } = parts;
     this.materials = resources.materials;
-    const context = createContext(resources, this.tracker);
-    const airfield = createAirfield(context);
-    const satellite = createSatellite(context);
-    this.compound = new CompoundPart(context);
-    this.aircraft = new AircraftPart(context);
-    this.effects = new EffectsPart(context, {
-      aircraft: this.aircraft,
-      mastTop: airfield.mastTop,
-      satellite: satellite.anchor,
-    });
+    this.tracker = parts.tracker;
+    this.compound = compound;
+    this.aircraft = aircraft;
+    this.effects = effects;
     this.root.add(
-      createSky(context),
-      createGround(context),
-      createMesas(context),
-      createShrubs(context),
+      world.sky,
+      world.ground,
+      world.mesas,
+      world.shrubs,
       airfield.object,
-      this.compound.object,
+      compound.object,
       satellite.object,
-      this.aircraft.object,
-      this.effects.object,
+      aircraft.object,
+      effects.object,
     );
     this.labels = new Map<PartId, Object3D>([
       ...this.aircraft.labels,
@@ -146,6 +189,9 @@ export class ReaperAssembly implements Assembly {
   }
 }
 
-export function createReaperAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
-  return new ReaperAssembly(resources, state);
+export async function createReaperAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Promise<Assembly> {
+  return new ReaperAssembly(resources, await runPaced(buildParts(resources)), state);
 }

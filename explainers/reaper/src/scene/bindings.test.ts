@@ -28,9 +28,9 @@ function fakeTargets() {
 }
 
 describe('scene bindings', () => {
-  it('builds the scene at the store moment and frames the first chapter', () => {
+  it('builds the scene at the store moment and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
-    bindStore(createReaperStore({ phase: 50 }), targets);
+    await bindStore(createReaperStore({ phase: 50 }), targets);
     expect(received[0]).toEqual({
       phase: 50,
       clock: minutesAt(50),
@@ -45,10 +45,10 @@ describe('scene bindings', () => {
     expect(frame).toHaveBeenCalledWith('chase', false, undefined);
   });
 
-  it('hands the scene the readings for every change of time, load, sensor and view', () => {
+  it('hands the scene the readings for every change of time, load, sensor and view', async () => {
     const { received, targets } = fakeTargets();
     const store = createReaperStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().seekMoment('launch');
     expect(received.at(-1)?.strike.stage).toBe('flying');
     expect(received.at(-1)?.sensor.lasing).toBe(true);
@@ -63,20 +63,20 @@ describe('scene bindings', () => {
     expect(received.at(-1)?.phase).toBe(44);
   });
 
-  it('hands the scene each view change once', () => {
+  it('hands the scene each view change once', async () => {
     const { received, targets } = fakeTargets();
     const store = createReaperStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const calls = received.length;
     store.getState().toggleView('track');
     expect(received).toHaveLength(calls + 1);
     expect(received.at(-1)?.view.track).toBe(false);
   });
 
-  it('never changes the state object the assembly got last', () => {
+  it('never changes the state object the assembly got last', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createReaperStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setPhase(10);
     store.getState().setPhase(MOMENTS.impact);
     const last = received.length - 1;
@@ -84,19 +84,19 @@ describe('scene bindings', () => {
     expect(received[last - 1]).toEqual(snapshots[last - 1]);
   });
 
-  it('frames each chapter at its moment of the mission', () => {
+  it('frames each chapter at its moment of the mission', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createReaperStore({ phase: 90 });
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('strike');
     expect(frame).toHaveBeenLastCalledWith('strike', true, undefined);
     expect(received.at(-1)).toMatchObject({ phase: 60.5, clock: minutesAt(60.5) });
   });
 
-  it('labels only the parts the scene draws', () => {
+  it('labels only the parts the scene draws', async () => {
     const { targets } = fakeTargets();
     const store = createReaperStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const wanted = () =>
       targets.labelVisibility.setWanted.mock.lastCall?.[0] as ReadonlySet<string>;
     store.getState().applyPreset('strike');
@@ -109,10 +109,10 @@ describe('scene bindings', () => {
     expect(wanted()).not.toContain('missile');
   });
 
-  it('stops listening once unbound', () => {
+  it('stops listening once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createReaperStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const calls = received.length;
     store.getState().setPhase(50);

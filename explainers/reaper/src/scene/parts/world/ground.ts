@@ -1,5 +1,6 @@
 import type { Mesh } from 'three';
 import { BufferAttribute, BufferGeometry, Color } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { GROUND } from '../../constants';
 import { sandFinish } from '../../finishes';
@@ -47,8 +48,9 @@ export function groundGeometry(): BufferGeometry {
   return geometry;
 }
 
-export function createGround(context: PartContext): Mesh {
+export function* createGround(context: PartContext): Steps<Mesh> {
   const map = context.tracker.track(sandTexture(GROUND.sand));
+  yield;
   const ground = partMesh(context, groundGeometry(), UNDIMMED_GROUP, sandFinish(map));
   ground.frustumCulled = false;
   return ground;

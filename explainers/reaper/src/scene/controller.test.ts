@@ -65,34 +65,34 @@ function fakeShell() {
 }
 
 describe('reaper controller', () => {
-  it('adds the scene and sets the camera bounds to the whole diorama on the ground', () => {
+  it('adds the scene and sets the camera bounds to the whole diorama on the ground', async () => {
     const { rig, shell } = fakeShell();
     const reaper = new ReaperController(shell);
-    reaper.build(STATE);
+    await reaper.build(STATE);
     expect(shell.scene.add).toHaveBeenCalledTimes(1);
     expect(shell.labels.attach).toHaveBeenCalledTimes(1);
     expect(rig.setBounds).toHaveBeenCalledWith(expect.any(Box3), 0);
   });
 
-  it('frames a view around the aircraft and follows it once the scene is built', () => {
+  it('frames a view around the aircraft and follows it once the scene is built', async () => {
     const { rig, shell } = fakeShell();
     const reaper = new ReaperController(shell);
     reaper.views.frame('chase', true);
     expect(rig.tweenTo).not.toHaveBeenCalled();
     aircraft.position = [500, 300, 0];
-    reaper.build(STATE);
+    await reaper.build(STATE);
     reaper.views.frame('chase', true);
     const target = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
     expect(target?.toArray()).toEqual([500, 300, 0]);
     expect(rig.follow).toHaveBeenLastCalledWith(expect.anything(), 'position');
   });
 
-  it('frames the orbit and the strike on fixed layout regions without following', () => {
+  it('frames the orbit and the strike on fixed layout regions without following', async () => {
     const { rig, shell } = fakeShell();
     const reaper = new ReaperController(shell);
     reaper.views.frame('orbit', true);
     expect(rig.tweenTo).not.toHaveBeenCalled();
-    reaper.build(STATE);
+    await reaper.build(STATE);
     reaper.views.frame('orbit', true);
     expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
     const orbitTarget = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
@@ -103,11 +103,11 @@ describe('reaper controller', () => {
     expect(rig.jumpTo).toHaveBeenCalledTimes(1);
   });
 
-  it('hands the camera distance to the assembly each frame', () => {
+  it('hands the camera distance to the assembly each frame', async () => {
     const { shell } = fakeShell();
     const reaper = new ReaperController(shell);
     expect(reaper.update(0.016)).toBe(false);
-    reaper.build(STATE);
+    await reaper.build(STATE);
     expect(reaper.update(0.016)).toBe(true);
     reaper.dispose();
     expect(reaper.update(0.016)).toBe(false);

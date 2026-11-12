@@ -53,7 +53,7 @@ class DoubleBufferedAssemblyState {
   }
 }
 
-export function bindStore(store: ReaperStore, targets: SceneTargets): () => void {
+export async function bindStore(store: ReaperStore, targets: SceneTargets): Promise<() => void> {
   const { reaper, labelVisibility } = targets;
   const assemblyState = new DoubleBufferedAssemblyState();
   const drawnLabels = new DrawnLabels(labelVisibility);
@@ -63,7 +63,8 @@ export function bindStore(store: ReaperStore, targets: SceneTargets): () => void
     return next;
   };
   const push = (state: AssemblySource) => reaper.setState(handOver(state));
-  reaper.build(handOver(store.getState()));
+  await reaper.build(handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<ReaperStoreState, Preset>(targets, store, {
