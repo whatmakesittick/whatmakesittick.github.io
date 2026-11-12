@@ -74,7 +74,7 @@ describe('euv timeline', () => {
 
   it('shows the scan share after the flash lands', () => {
     const scanning = (percent: string) =>
-      fill((en.clock as Record<string, string>).scan, {
+      fill(en.clock.scan, {
         value: fill(en.units.percent, { value: percent }),
       });
     expect(formatPhase(RUN_UNITS)).toBe(scanning('100'));
