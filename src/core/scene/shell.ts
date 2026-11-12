@@ -12,6 +12,7 @@ import type { OcclusionHitFilter } from './occlusionRays';
 import type { GaugeSide } from './lens';
 import { createLighting } from './lighting';
 import type { Lighting } from './lighting';
+import type { Steps } from './pacing';
 import { startLoop } from './loop';
 import type { Loop } from './loop';
 import { MaterialLibrary, STRUCTURE_GROUP } from './materials';
@@ -82,15 +83,17 @@ function createScene(options: SceneOptions, scheme: Scheme): Scene {
   return scene;
 }
 
-export function createSceneHost(
+export function* createSceneHost(
   container: HTMLElement,
   parts: Readonly<Record<string, PartInfo>>,
   scheme: Scheme,
   options: SceneOptions = {},
-): SceneHost {
+): Steps<SceneHost> {
   const viewport = createViewport(container);
+  yield;
   const scene = createScene(options, scheme);
   const lighting = createLighting(scene, viewport.renderer, scheme);
+  yield;
   const textures = createSceneTextures();
   const stage = new Stage(textures.shadow, scheme);
   if (options.stage ?? true) scene.add(stage.group);

@@ -97,6 +97,7 @@ export function* buildCar(context: PartContext): Steps<CarPart> {
   const cabin = createCabin(context, look);
   yield;
   const wheels = createWheels(context);
+  yield;
   const tank = createTank(context);
   yield;
   const nozzles = createNozzles(context);

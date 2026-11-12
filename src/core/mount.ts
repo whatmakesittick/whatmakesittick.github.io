@@ -3,6 +3,7 @@ import './scene/scene.css';
 import type { Explainer, ExplainerStore, Playback } from './explainer';
 import { initI18n, shippedLanguages } from './i18n';
 import type { LocaleLoaders } from './i18n';
+import { runPaced, yieldToMain } from './scene/pacing';
 import { createSceneHost } from './scene/shell';
 import { activeScheme } from './theme';
 import { mountActions } from './ui/actions';
@@ -30,12 +31,15 @@ async function mountScene<S extends Playback>(
   store: ExplainerStore<S>,
   explainer: Explainer<S>,
 ): Promise<() => void> {
-  const host = createSceneHost(
-    requireElement(root, SCENE_SELECTOR),
-    explainer.parts,
-    activeScheme(),
-    explainer.scene,
+  const host = await runPaced(
+    createSceneHost(
+      requireElement(root, SCENE_SELECTOR),
+      explainer.parts,
+      activeScheme(),
+      explainer.scene,
+    ),
   );
+  await yieldToMain();
   let unmount: () => void;
   try {
     unmount = await explainer.mountScene(host.shell, store);
@@ -68,10 +72,12 @@ export async function mountExplainer<S extends Playback>(
   mountFooter(document, SITE_NAME_KEY);
   explainer.mountUi?.(document, store);
   mountActions(document, store, explainer.actions);
+  await yieldToMain();
   const stage = mountStageExpansion(document);
   const unmountKeyboard = mountKeyboard(document, store, explainer, stageShortcuts(stage));
   mountSections(document, store, Object.keys(explainer.presets), stage);
   mountSafeArea(document, explainer.scene?.gaugeSide);
+  await yieldToMain();
   const unmountScene = await mountScene(document, store, explainer);
   return () => {
     unmountScene();
