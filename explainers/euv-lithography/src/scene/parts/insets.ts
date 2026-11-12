@@ -1,16 +1,26 @@
 import type { Steps } from '@core/scene/pacing';
-import { ANCHOR_POINTS, PART_POINTS } from '../../model/layout';
-import { label, namedGroup, sceneAnchor } from './context';
+import { namedGroup } from './context';
 import type { PartContext, Section } from './context';
+import { DropletInset } from './insets/dropletInset';
+import { PatternInset } from './insets/patternInset';
 
 export function* buildInsets(context: PartContext): Steps<Section> {
   const root = namedGroup('insets');
-  label(context, 'dropletInset', root, PART_POINTS.dropletInset);
-  label(context, 'patternInset', root, PART_POINTS.patternInset);
-  label(context, 'hair', root, PART_POINTS.hair);
-  label(context, 'virus', root, PART_POINTS.virus);
-  sceneAnchor(context, 'dropletInset', root, ANCHOR_POINTS.dropletInset);
-  sceneAnchor(context, 'patternInset', root, ANCHOR_POINTS.patternInset);
+  const droplet = new DropletInset(context);
   yield;
-  return { root, setState: () => undefined };
+  const pattern = new PatternInset(context);
+  root.add(droplet.object, pattern.object);
+  yield;
+  return {
+    root,
+    setState(state) {
+      droplet.setState(state);
+      pattern.setState(state);
+    },
+    animate: (frame, state) => pattern.animate(frame, state),
+    warmUp(compile) {
+      compile(droplet.object);
+      compile(pattern.object);
+    },
+  };
 }
