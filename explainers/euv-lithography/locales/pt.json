@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "title": "Como funciona uma máquina de litografia EUV",
+    "eyebrow": "Óptica",
+    "tagline": "Acompanhe um único clarão de luz dentro de uma máquina EUV de chips, em 3D: da gota de estanho até a lâmina de silício, onde ele grava linhas de 13 nm de largura.",
+    "description": "Siga um clarão de luz numa máquina EUV de chips: uma gota de estanho, um laser, 11 reflexos e a lâmina de silício, onde ele grava linhas de 13 nm.",
+    "summary": "A gota de estanho e o laser, espelhos que perdem um terço da luz a cada reflexo, a máscara, a varredura da lâmina e como o EUV se compara à luz mais antiga.",
+    "socialAlt": "Uma máquina EUV de chips em 3D, aberta em corte, com um feixe brilhante que vai da gota de estanho à lâmina de silício passando pelos espelhos, ao lado do título “Como funciona uma máquina de litografia EUV”"
+  },
+  "stage": {
+    "label": "Modelo interativo do scanner EUV",
+    "gauge": "Leituras em tempo real"
+  },
+  "timeline": {
+    "label": "Um clarão",
+    "phases": "Ir para uma etapa",
+    "speed": "Velocidade de reprodução",
+    "value": "{{time}}",
+    "during": "Etapa {{step}} de {{total}}: {{detail}}. {{time}}",
+    "speedValue": "×{{factor}}",
+    "speedDescribe": "O clarão inteiro em {{seconds}} segundos",
+    "phase": {
+      "droplet": "Gota",
+      "prepulse": "1º disparo",
+      "plasma": "Clarão",
+      "collect": "Coletor",
+      "mask": "Máscara",
+      "expose": "Lâmina"
+    },
+    "jump": {
+      "droplet": "Ir para a gota",
+      "prepulse": "Ir para o primeiro disparo",
+      "plasma": "Ir para o clarão",
+      "collect": "Ir para o coletor",
+      "mask": "Ir para a máscara",
+      "expose": "Ir para a lâmina"
+    },
+    "detail": {
+      "droplet": "uma gota de estanho cruza a câmara",
+      "prepulse": "o primeiro pulso achata a gota",
+      "plasma": "o segundo pulso cria o plasma, que brilha num clarão",
+      "collect": "o espelho coletor junta a luz",
+      "mask": "quatro espelhos moldam a luz e a máscara desenha o padrão",
+      "expose": "seis espelhos reduzem o padrão sobre a lâmina"
+    },
+    "moment": {
+      "launch": "Gota lançada",
+      "firstHit": "1º disparo",
+      "flash": "O clarão",
+      "atFocus": "No foco",
+      "onMask": "Na máscara",
+      "onWafer": "Na lâmina"
+    }
+  },
+  "clock": {
+    "before": "{{value}} antes do clarão",
+    "after": "{{value}} depois do clarão"
+  },
+  "controls": {
+    "label": "Controles do modelo",
+    "machine": "Máquina",
+    "machineOptions": {
+      "nxe3600d": "NXE:3600D",
+      "nxe3800e": "NXE:3800E",
+      "exe5000": "EXE:5000 (High-NA)"
+    },
+    "groups": {
+      "moment": "Ir para um momento",
+      "bounce": "Reflexos nos espelhos",
+      "machine": "Máquina a mostrar"
+    },
+    "views": {
+      "beam": {
+        "name": "Feixe de luz",
+        "short": "Feixe",
+        "hint": "Feixe de luz (B)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      },
+      "cutaway": {
+        "name": "Corte",
+        "short": "Corte",
+        "hint": "Corte (C)"
+      },
+      "inset": {
+        "name": "Vista ampliada",
+        "short": "Zoom",
+        "hint": "Vista ampliada (I)"
+      },
+      "follow": {
+        "name": "Seguir o clarão",
+        "short": "Seguir",
+        "hint": "Seguir o clarão (F)"
+      }
+    }
+  },
+  "readouts": {
+    "where": "Onde está a luz",
+    "lightLeft": "Luz restante",
+    "wavelength": "Comprimento de onda",
+    "dropletRate": "Gotas por segundo",
+    "dropletRateExact": "{{value}}",
+    "dropletRateOrMore": "{{value}} ou mais",
+    "smallestLine": "Menor linha (meio passo)",
+    "wafersPerHour": "Lâminas por hora",
+    "wph": {
+      "about": "cerca de {{value}}"
+    },
+    "place": {
+      "generator": "No gerador de gotas",
+      "flight": "Gota em voo",
+      "plasma": "No plasma",
+      "collector": "No coletor",
+      "illuminator": "No iluminador",
+      "mask": "Na máscara",
+      "projection": "Nos espelhos de projeção",
+      "wafer": "Na lâmina"
+    }
+  },
+  "units": {
+    "ns": "{{value}} ns",
+    "us": "{{value}} µs",
+    "ms": "{{value}} ms",
+    "s": "{{value}} s",
+    "nm": "{{value}} nm",
+    "um": "{{value}} µm",
+    "mm": "{{value}} mm",
+    "percent": "{{value}}%",
+    "perHour": "{{value}} por hora",
+    "tonnes": "{{value}} t",
+    "celsius": "{{value}} °C",
+    "pm": "{{value}} pm"
+  },
+  "parts": {
+    "flash": "O clarão",
+    "droplets": "Gotas de estanho",
+    "driveLaser": "Laser de potência",
+    "beamTransport": "Trajeto do feixe",
+    "vessel": "Câmara da fonte",
+    "collector": "Espelho coletor",
+    "plasma": "Plasma",
+    "intermediateFocus": "Foco intermediário",
+    "illuminator": "Espelhos do iluminador",
+    "maskStage": "Mesa da máscara",
+    "mask": "Máscara",
+    "pellicle": "Película protetora",
+    "projection": "Espelhos de projeção",
+    "waferStage": "Mesa da lâmina",
+    "wafer": "Lâmina de silício",
+    "dropletInset": "Gota ampliada",
+    "patternInset": "Padrão ampliado",
+    "hair": "Fio de cabelo, cerca de 50 µm",
+    "virus": "Vírus da gripe, cerca de 100 nm"
+  },
+  "chapters": {
+    "machine": {
+      "weight": "Peso",
+      "weightValue": "mais de {{tonnes}} t, na High-NA",
+      "shipping": "Transporte",
+      "shippingValue": "{{crates}} caixotes, {{containers}} contêineres, {{trucks}} caminhões",
+      "sizes": "Tamanhos neste modelo",
+      "sizesValue": "todas as medidas aqui são do próprio modelo"
+    },
+    "light": {
+      "droplet": "Tamanho da gota",
+      "dropletValue": "cerca de {{um}} µm, de {{low}} a {{high}} µm",
+      "speed": "Velocidade da gota",
+      "speedValue": "de {{low}} a {{high}} m/s",
+      "spacing": "Distância entre gotas",
+      "spacingValue": "cerca de {{low}} a {{high}} mm de intervalo",
+      "pulses": "Pulsos do laser",
+      "pulsesValue": "{{count}} pulsos de laser por segundo",
+      "flattened": "Alvo achatado",
+      "flattenedValue": "mais de {{um}} µm de largura",
+      "plasma": "Calor do plasma",
+      "plasmaValue": "cerca de {{celsius}} °C, de {{low}} a {{high}} vezes a superfície do Sol",
+      "conversion": "Luz que vira EUV",
+      "conversionValue": "cerca de {{percent}} por cento da luz do laser, em laboratório"
+    },
+    "mirrors": {
+      "layers": "Camadas num espelho",
+      "layersValue": "mais de {{count}} camadas, cada uma com poucos nm de espessura",
+      "reflect": "Luz devolvida por espelho",
+      "reflectValue": "cerca de {{percent}} por cento",
+      "rough": "Rugosidade",
+      "roughValue": "cerca de {{pm}} pm",
+      "vacuum": "Por que não há lentes",
+      "vacuumValue": "1 mm de ar deixa passar cerca de {{air}} por cento; 1 µm de vidro, {{glass}} por cento",
+      "bounce": {
+        "label": "Reflexos depois do foco intermediário",
+        "output": "{{count}} de 11",
+        "start": "Foco intermediário",
+        "end": "Lâmina",
+        "light": "Luz restante",
+        "lost": "Perdido até aqui"
+      }
+    },
+    "mask": {
+      "plate": "Placa da máscara",
+      "plateValue": "placa quadrada de {{mm}} mm",
+      "area": "Área do padrão",
+      "areaValue": "{{w}} por {{h}} mm",
+      "tilt": "Inclinação do feixe",
+      "tiltValue": "{{deg}} graus; entrada e saída separadas por {{apart}} graus",
+      "pellicle": "Luz através da película",
+      "pellicleValue": "mais de {{percent}} por cento a cada passagem, cerca de {{both}} por cento na ida e na volta",
+      "reduction": "Redução na lâmina",
+      "reductionValue": "{{n}} vezes menor na lâmina"
+    },
+    "scan": {
+      "wph": "Lâminas por hora",
+      "perWafer": "Tempo por lâmina",
+      "perWaferValue": "cerca de {{seconds}} s por lâmina, com carga e alinhamento",
+      "perField": "Tempo por campo",
+      "perFieldValue": "cerca de {{seconds}} s por campo neste modelo",
+      "fields": "Campos numa lâmina",
+      "fieldsValue": "cerca de {{low}} a {{high}} campos inteiros",
+      "slit": "Fenda",
+      "slitValue": "fenda de {{w}} por {{h}} mm",
+      "sensing": "Medição de posição",
+      "sensingValue": "cerca de {{pm}} pm, {{rate}} vezes por segundo",
+      "overlay": "Alinhamento das camadas",
+      "overlayValue": "{{nm}} nm, de máquina para máquina"
+    },
+    "compare": {
+      "shrink": "Redução",
+      "field": "Campo",
+      "fieldValue": "{{w}} por {{h}} mm",
+      "line": "Menor linha (meio passo)",
+      "lineValue": "{{width}} nm de largura, {{gap}} nm de intervalo",
+      "duv": "Máquinas DUV mais antigas",
+      "duvValue": "luz de 193 nm, linhas de cerca de {{low}} a {{high}} nm",
+      "photon": "Energia de um fóton",
+      "photonValue": "{{ev}} eV, cerca de {{times}} vezes um fóton de 193 nm",
+      "price": "Preço",
+      "priceValue": "cerca de {{eur}} milhões de euros, segundo relatos; {{high}} milhões na High-NA",
+      "shrinkValue": {
+        "na033": "4×",
+        "na055": "4× / 8×"
+      }
+    }
+  },
+  "sections": {
+    "machine": {
+      "title": "Uma máquina que fabrica a própria luz",
+      "p1": "Esta máquina grava as camadas mais finas dos chips de computador mais avançados. E é pesada. O modelo mais novo, chamado <strong>High-NA</strong>, passa de 150 toneladas e foi enviado em mais de 250 caixotes, 43 contêineres e 20 caminhões. (NA vem de abertura numérica: a largura do cone de luz que o último espelho consegue captar. O último capítulo explica por que isso importa.) Nenhum fabricante divulga o comprimento nem a altura da máquina, então todos os tamanhos e posições deste modelo são do próprio modelo.",
+      "p2": "A máquina grava com luz <strong>ultravioleta extrema</strong>, o EUV. Ela é invisível. Seu comprimento de onda é de apenas 13,5 nm, e um nanômetro (nm) é a milionésima parte de um milímetro. O ar e o vidro absorvem essa luz: 1 mm de ar deixa passar cerca de 0,14 por cento, e 1 µm de vidro, cerca de 0,004 por cento. Por isso não existe nenhuma lente aqui. Tudo o que desvia a luz é espelho, e ela viaja num quase vácuo com um pouco de hidrogênio.",
+      "p3": "A máquina fabrica a própria luz, um clarão por vez, a partir de uma gotinha de estanho. Um <strong>laser de potência</strong> fica no andar de baixo. Seu feixe sobe por um longo <strong>trajeto do feixe</strong>, de até 30 m, até a <strong>câmara da fonte</strong>. O laser entrega dezenas de quilowatts e pesa mais de 10 toneladas.",
+      "p4": "A <strong>lâmina de silício</strong> (wafer) é um disco fino de silício. Ela entra, a máquina grava um pedaço de cada vez, e ela sai. Esta página acompanha outra coisa: um único clarão, da gota de estanho até a lâmina. O modelo é uma simplificação. Ninguém vê um feixe no vácuo, e o EUV não é visível de jeito nenhum, então as cores do feixe são nossa invenção."
+    },
+    "light": {
+      "title": "Uma gota, atingida duas vezes",
+      "p1": "Todo clarão começa com uma gota de estanho de uns 30 µm de largura. É um pouco mais da metade de um fio de cabelo humano, que mede cerca de 50 µm (valor arredondado). As <strong>gotas de estanho</strong> são disparadas, não largadas, de 60 a 120 metros por segundo. Cerca de 50.000 passam por segundo, a cerca de 1,2 a 2,4 mm uma da outra. A máquina real não divulga a direção em que elas voam, então o modelo escolhe uma.",
+      "p2": "Um laser atinge cada gota duas vezes. O primeiro pulso, mais fraco, achata a gota numa panqueca fina de mais de 100 µm de largura. Um alvo plano aproveita muito melhor o pulso seguinte do que uma bolinha. O segundo pulso é o forte: um laser de CO2 com luz de 10,6 µm, amplificado mais de 10.000 vezes a partir de um pequeno pulso inicial. Dois pulsos por gota dão cerca de 100.000 pulsos de laser por segundo.",
+      "p3": "O pulso forte aquece o estanho a cerca de 220.000 °C, de 30 a 40 vezes a temperatura da superfície do Sol. O estanho vira <strong>plasma</strong>, um gás tão quente que seus átomos perdem elétrons e brilham. Os íons de estanho no plasma emitem luz em 13,5 nm, e é por isso que a máquina usa estanho; gotas pequenas deixam pouco resíduo. Só cerca de 5 por cento da luz do laser vira EUV, e esse número vem do laboratório.",
+      "p4": "O <strong>espelho coletor</strong>, um espelho grande e curvo, capta a luz e a concentra. A câmara tem hidrogênio a baixa pressão, que barra respingos de estanho e limpa o estanho do espelho. Já se demonstrou que um coletor aguenta mais de 100 bilhões de pulsos. O relógio é do próprio modelo. Uma gota voa por cerca de 20 ms, mas o clarão dura cerca de 20 ns, então a reprodução estica e comprime o tempo."
+    },
+    "mirrors": {
+      "title": "Luz que só reflete",
+      "p1": "Os espelhos do EUV não são de metal polido. Cada um é um <strong>espelho multicamadas</strong>: mais de 100 camadas finas de silício e molibdênio, cada uma com poucos nm de espessura. Cada fronteira entre camadas reflete um pouquinho de luz. As camadas ficam a de 6,8 a 6,9 nm uma da outra, metade do comprimento de onda, e assim todos esses pequenos reflexos se somam.",
+      "p2": "Mesmo assim, um espelho devolve só cerca de 70 por cento da luz. É o melhor valor medido, não uma garantia. Ou seja, a cada reflexo se perde cerca de um terço. O modelo conta 11 reflexos depois do foco intermediário: quatro espelhos do iluminador, a máscara e seis espelhos de projeção. Cerca de 2 por cento da luz chega à lâmina, numa faixa de 1 a 4 por cento. A contagem se apoia num artigo; outro conta 10.",
+      "p3": "Esses espelhos precisam ser extremamente lisos. A rugosidade deles é de cerca de 50 pm, e um picômetro (pm) é a milésima parte de um nanômetro. A Zeiss, empresa que os fabrica, diz que num espelho do tamanho da Alemanha a maior elevação teria cerca de 0,1 mm.",
+      "p4": "O coletor concentra a luz num só ponto, o <strong>foco intermediário</strong>, e daí o feixe volta a se abrir. Use o controle deslizante para seguir o feixe reflexo a reflexo e ver quanta luz sobra. O modelo desenha por conta própria as dobras e as posições dos espelhos, com base em diagramas publicados."
+    },
+    "mask": {
+      "title": "Um espelho com um mapa",
+      "p1": "A <strong>máscara</strong>, também chamada de retículo, guarda o padrão de uma camada do chip. Ela também é um espelho. Uma camada fina por cima, o absorvedor, engole a luz onde o padrão tem uma linha, e assim a luz refletida já leva o desenho. A máscara fica numa placa quadrada de 152 mm de lado (seis polegadas), e a área do padrão mede 104 por 132 mm.",
+      "p2": "Antes da máscara vem o <strong>iluminador</strong>, quatro espelhos que dão forma ao feixe. A superfície deles é feita de muitas facetas pequenas que podem ser inclinadas. Essas inclinações definem os ângulos com que a luz chega à máscara. Um estudo mediu 22 ajustes desse tipo num único iluminador, um valor aproximado.",
+      "p3": "O feixe chega à máscara com uma inclinação de 6 graus (5,4 na High-NA). Assim, a luz que entra e a que sai ficam separadas por 12 graus, e os dois feixes não se chocam. Neste modelo, a máscara fica virada para baixo. Essa posição é do próprio modelo.",
+      "p4": "Uma <strong>película protetora</strong> (pellicle) cobre a máscara. É um filme finíssimo que barra a poeira, porque um grão na máscara sairia impresso em todas as lâminas. A luz atravessa a película duas vezes, na ida e na volta. Mais de 90 por cento passam a cada vez, e cerca de 81 por cento passam nas duas. A película é um filme, não uma lente. Depois da máscara, os espelhos de projeção reduzem o padrão quatro vezes."
+    },
+    "scan": {
+      "title": "Um campo de cada vez",
+      "p1": "Uma lâmina leva muitas cópias de um chip, e a máquina grava um pedaço por vez. Cada pedaço é um <strong>campo</strong>, de 26 por 33 mm. Numa lâmina cabem de 76 a 80 campos inteiros. A luz não cobre um campo de uma vez. Ela passa por uma <strong>fenda</strong> curva de cerca de 26 por 2 mm.",
+      "p2": "Para cobrir o campo, a máscara e a lâmina se movem juntas, em sentidos opostos. A fenda percorre a máscara, e o padrão reduzido percorre a lâmina. Isso se chama varredura. Uma máquina pode varrer 160 lâminas por hora (NXE:3600D) ou até 220 (NXE:3800E). São as especificações dos fabricantes, para uma dose de 30 mJ/cm2.",
+      "p3": "Essa dose equivale a cerca de 20 fótons de EUV em cada nm quadrado da lâmina. Um fóton é uma partícula de luz. Os movimentos precisam ser muito exatos. Os sensores de posição leem cerca de 60 pm, 20.000 vezes por segundo. A sobreposição (overlay) mede o quanto uma camada se alinha com a de baixo: 1,1 nm na 3600D e 0,9 nm na 3800E, de máquina para máquina.",
+      "p4": "O trecho final da reprodução é o tempo que um campo leva para ser varrido. Neste modelo, cerca de 0,29 s a 160 lâminas por hora e 0,21 s a 220. São tempos aproximados. O tempo por lâmina também inclui carga e alinhamento, então a exposição de verdade é mais curta. Escolha uma máquina para ver os números mudarem."
+    },
+    "compare": {
+      "title": "193 nm contra 13,5 nm",
+      "p1": "As máquinas mais antigas usam luz ultravioleta profunda, o DUV, de 193 nm. Elas usam lentes e uma camada de água sob a última lente. Gravam linhas com meio passo de de 36 a 38 nm. O <strong>meio passo</strong> é metade da distância de uma linha até a seguinte. O EUV grava linhas de 13 nm, separadas por 13 nm, então o passo é de 26 nm.",
+      "p2": "A luz EUV tem um comprimento de onda bem menor, e seu fóton carrega 91,8 eV de energia, cerca de 14 vezes o de um fóton DUV. A menor linha segue uma regra: um número k1 vezes o comprimento de onda, dividido pela NA. NA é a abertura numérica, a largura do cone de luz que o último espelho capta. Um cone mais largo enxerga detalhes mais finos. Com k1 de 0,3, a regra dá 12,3 nm para NA de 0,33 e 7,4 nm para 0,55.",
+      "p3": "A máquina High-NA tem NA de 0,55. Ela reduz o padrão 4 vezes numa direção e 8 vezes na outra, então um campo fica com metade do tamanho, 26 por 16,5 mm. Grava meio passo de 8 nm. Este modelo mantém o mesmo trajeto de espelhos para a High-NA e muda só os últimos espelhos, a redução, o campo e os números, porque o número real de espelhos não é conhecido. A óptica de projeção pesa cerca de 12 toneladas e a de iluminação, cerca de 6.",
+      "p4": "Para ter noção da escala: um vírus da gripe mede cerca de 100 nm de largura. Cabem umas 8 dessas linhas de um lado a outro dele. Num fio de cabelo cabem milhares. O “3 nm” nos nomes de chips é só um nome. O espaçamento real dos fios mais finos é de de 23 a 24 nm. Quanto ao preço, não há valor oficial. Segundo relatos, uma máquina custa cerca de 170 milhões de euros, e uma High-NA, cerca de 350 milhões."
+    }
+  }
+}
