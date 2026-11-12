@@ -2,9 +2,9 @@
   "meta": {
     "title": "Como funciona uma máquina de litografia EUV",
     "eyebrow": "Óptica",
-    "tagline": "Acompanhe um clarão de luz dentro de uma máquina EUV de chips, em 3D: da gota de estanho ao wafer, onde ele grava linhas de 13 nm de largura.",
-    "description": "Siga um clarão de luz numa máquina EUV de chips: uma gota de estanho, um laser, 11 reflexos e o wafer, onde ele grava linhas de 13 nm de largura.",
-    "summary": "A gota de estanho e o laser, espelhos que perdem um terço da luz a cada reflexo, a máscara, a varredura do wafer e como o EUV se compara à luz mais antiga.",
+    "tagline": "Acompanhe um clarão de luz dentro de uma máquina EUV de chips, em 3D: da gota de estanho ao wafer, onde ele desenha linhas de 13 nm de largura.",
+    "description": "Siga um clarão de luz numa máquina EUV de chips: uma gota de estanho, um laser, 11 reflexões e o wafer, onde ele grava linhas de 13 nm de largura.",
+    "summary": "A gota de estanho e o laser, espelhos que perdem um terço da luz a cada reflexão, a máscara, a varredura do wafer e como o EUV se compara à luz mais antiga.",
     "socialAlt": "Uma máquina EUV de chips em 3D, aberta em corte, com um feixe brilhante que vai da gota de estanho ao wafer passando pelos espelhos, ao lado do título “Como funciona uma máquina de litografia EUV”."
   },
   "stage": {
@@ -38,7 +38,7 @@
     "detail": {
       "droplet": "uma gota de estanho cruza a câmara",
       "prepulse": "o primeiro pulso achata a gota",
-      "plasma": "o segundo pulso cria o plasma, e ele brilha num clarão",
+      "plasma": "o segundo pulso gera o plasma, que brilha num clarão",
       "collect": "o espelho coletor reúne a luz",
       "mask": "quatro espelhos moldam a luz e a máscara acrescenta o padrão",
       "expose": "seis espelhos reduzem o padrão sobre o wafer"
@@ -67,7 +67,7 @@
     },
     "groups": {
       "moment": "Ir para um momento",
-      "bounce": "Reflexos nos espelhos",
+      "bounce": "Reflexões nos espelhos",
       "machine": "Máquina exibida"
     },
     "views": {
@@ -161,7 +161,7 @@
       "weight": "Peso, High-NA",
       "weightValue": "mais de {{tonnes}} t",
       "shipping": "Transporte",
-      "shippingValue": "mais de {{crates}} caixotes, {{containers}} contêineres, {{trucks}} caminhões",
+      "shippingValue": "mais de {{crates}} caixas, {{containers}} contêineres, {{trucks}} caminhões",
       "sizes": "Tamanhos neste modelo",
       "sizesValue": "todas as medidas aqui são do modelo"
     },
@@ -179,19 +179,19 @@
       "plasma": "Calor do plasma",
       "plasmaValue": "cerca de {{celsius}} °C, de {{low}} a {{high}} vezes a superfície do Sol",
       "conversion": "Luz que vira EUV",
-      "conversionValue": "cerca de {{percent}} por cento da luz do laser, em laboratório"
+      "conversionValue": "cerca de {{percent}}% da luz do laser, em laboratório"
     },
     "mirrors": {
       "layers": "Camadas de um espelho",
       "layersValue": "mais de {{count}} camadas, cada uma com poucos nm de espessura",
       "reflect": "Luz devolvida por espelho",
-      "reflectValue": "cerca de {{percent}} por cento",
+      "reflectValue": "cerca de {{percent}}%",
       "rough": "Rugosidade",
       "roughValue": "cerca de {{pm}} pm",
       "vacuum": "Por que não há lentes",
-      "vacuumValue": "1 mm de ar deixa passar cerca de {{air}} por cento, 1 µm de vidro, {{glass}} por cento",
+      "vacuumValue": "1 mm de ar deixa passar cerca de {{air}}%, 1 µm de vidro, {{glass}}%",
       "bounce": {
-        "label": "Reflexos após o foco intermediário",
+        "label": "Reflexões após o foco intermediário",
         "output": "{{count}} de 11",
         "start": "Foco intermediário",
         "end": "Wafer",
@@ -205,9 +205,9 @@
       "area": "Área do padrão",
       "areaValue": "{{w}} por {{h}} mm",
       "tilt": "Inclinação do feixe",
-      "tiltValue": "{{deg}} graus, entrada e saída {{apart}} graus separadas",
+      "tiltValue": "{{deg}} graus; entrada e saída a {{apart}} graus",
       "pellicle": "Luz pela película",
-      "pellicleValue": "mais de {{percent}} por cento a cada passagem, cerca de {{both}} por cento na ida e na volta",
+      "pellicleValue": "mais de {{percent}}% a cada passagem, cerca de {{both}}% na ida e na volta",
       "reduction": "Redução da máscara ao wafer"
     },
     "scan": {
@@ -246,45 +246,45 @@
   "sections": {
     "machine": {
       "title": "Uma máquina que faz a própria luz",
-      "p1": "Esta máquina grava as camadas mais finas dos chips mais avançados. E é enorme. O modelo mais novo se chama <strong>High-NA</strong>. Ele pesa mais de 150 toneladas e foi despachado em mais de 250 caixotes, 43 contêineres e 20 caminhões. NA quer dizer abertura numérica: a largura do cone de luz que o último espelho capta. O último capítulo mostra por que isso importa. Nenhum fabricante informa o comprimento nem a altura da máquina, então todos os tamanhos e posições deste modelo foram definidos por nós.",
-      "p2": "A máquina grava com luz <strong>ultravioleta extrema</strong>, o EUV. Não dá para ver essa luz. O comprimento de onda, o tamanho de uma onda, é de só 13,5 nm. Um nanômetro (nm) é a milionésima parte de um milímetro. O ar e o vidro engolem essa luz: 1 mm de ar deixa passar cerca de 0,14 por cento, e 1 µm de vidro, cerca de 0,004 por cento. Por isso não há lentes aqui. Tudo o que guia a luz é espelho, e ela viaja num quase vácuo com um pouco de hidrogênio.",
-      "p3": "A máquina faz a própria luz, um clarão por vez, a partir de uma gotinha de estanho. Um <strong>laser de potência</strong> fica no andar de baixo. O feixe sobe por um longo <strong>caminho do feixe</strong>, de até 30 m, até a <strong>câmara da fonte</strong>. O laser entrega dezenas de quilowatts e pesa mais de 10 toneladas.",
-      "p4": "O <strong>wafer</strong> é uma fatia fina e redonda de silício. Ele entra, a máquina grava um pedaço de cada vez, e ele sai. Esta página acompanha outra coisa: um único clarão, da gota de estanho até o wafer. O modelo é uma simplificação. Ninguém vê um feixe no vácuo, e o EUV nem é visível, então as cores do feixe são escolha nossa. O relógio também é do modelo. Uma gota voa por cerca de 20 ms, mas o clarão dura cerca de 20 ns, então a reprodução estica e comprime o tempo."
+      "p1": "Esta máquina grava as camadas mais finas dos chips mais avançados. E é enorme. O modelo mais novo se chama <strong>High-NA</strong>. Ele pesa mais de 150 toneladas e viajou em mais de 250 caixas, 43 contêineres e 20 caminhões. NA vem de abertura numérica: o quanto se abre o cone de luz que o último espelho capta. O último capítulo mostra por que isso importa. Nenhum fabricante divulga o comprimento nem a altura da máquina. Por isso, todos os tamanhos e posições deste modelo são escolha nossa.",
+      "p2": "A máquina grava com luz <strong>ultravioleta extrema</strong>, o EUV. Essa luz é invisível. O comprimento de onda, o tamanho de uma onda, é de apenas 13,5 nm. Um nanômetro (nm) é a milionésima parte de um milímetro. O ar e o vidro absorvem essa luz: 1 mm de ar deixa passar cerca de 0,14%, e 1 µm de vidro, cerca de 0,004%. Por isso a máquina não tem lentes. Tudo o que guia a luz é espelho, e ela viaja num quase vácuo, com um pouco de hidrogênio.",
+      "p3": "A máquina produz a própria luz, um clarão de cada vez, a partir de uma gotinha de estanho. Um <strong>laser de potência</strong> fica no andar de baixo. Seu feixe percorre um longo <strong>caminho do feixe</strong>, de até 30 m, e sobe até a <strong>câmara da fonte</strong>. O laser entrega dezenas de quilowatts e pesa mais de 10 toneladas.",
+      "p4": "O <strong>wafer</strong> é uma fatia fina e redonda de silício. Ele entra, a máquina grava um pedaço de cada vez, e ele sai. Aqui, porém, vamos seguir um único clarão, da gota de estanho até o wafer. O modelo é uma simplificação. Ninguém vê um feixe no vácuo, e o EUV nem é visível, então as cores do feixe são escolha nossa. O relógio também é do modelo. Uma gota voa por cerca de 20 ms, mas o clarão dura cerca de 20 ns, então a reprodução estica e comprime o tempo."
     },
     "light": {
       "title": "Uma gota, atingida duas vezes",
-      "p1": "Todo clarão começa com uma gota de estanho de cerca de 30 µm de largura. É um pouco mais da metade de um fio de cabelo, que mede uns 50 µm (valor arredondado). As <strong>gotas</strong> são lançadas, não soltas, a 60 a 120 metros por segundo. Passam cerca de 50.000 por segundo, mais ou menos 1,2 a 2,4 mm uma da outra. Os fabricantes não dizem em que direção as gotas voam, então o modelo escolhe uma.",
-      "p2": "Um laser atinge cada gota duas vezes. O primeiro pulso, mais suave, achata a gota numa panqueca fina, com mais de 100 µm de largura. Um alvo plano aproveita o pulso seguinte muito melhor que uma bolinha. O segundo pulso é o forte. Ele vem de um laser de CO2 cuja luz tem 10,6 µm de comprimento de onda, e nasce como um pequeno pulso inicial amplificado mais de 10.000 vezes. Dois pulsos por gota dão cerca de 100.000 pulsos de laser por segundo.",
-      "p3": "O pulso forte aquece o estanho a cerca de 220.000 °C, de 30 a 40 vezes a superfície do Sol. O estanho vira <strong>plasma</strong>, um gás tão quente que seus átomos perdem elétrons e brilham. Os íons de estanho no plasma emitem luz de 13,5 nm. É por isso que a máquina usa estanho. Gotas pequenas também deixam pouco resíduo. Só cerca de 5 por cento da luz do laser vira EUV, e esse número vem do laboratório.",
-      "p4": "O <strong>espelho coletor</strong>, um espelho grande e curvo, capta a luz e a reúne num ponto. A câmara contém hidrogênio a baixa pressão. Ele barra respingos de estanho e limpa o estanho do espelho. Já se mostrou que um coletor dura mais de 100 bilhões de pulsos."
+      "p1": "Todo clarão começa com uma gota de estanho de cerca de 30 µm de largura. É um pouco mais da metade da espessura de um fio de cabelo, que tem uns 50 µm (valor arredondado). As <strong>gotas</strong> são lançadas, não soltas, a uma velocidade de 60 a 120 metros por segundo. Passam cerca de 50.000 gotas por segundo, a uma distância de mais ou menos 1,2 a 2,4 mm uma da outra. Os fabricantes não dizem em que direção as gotas voam, então o modelo escolhe uma.",
+      "p2": "Um laser atinge cada gota duas vezes. O primeiro pulso, mais suave, achata a gota numa panqueca fina, com mais de 100 µm de largura. Um alvo plano recebe o pulso seguinte muito melhor que uma bolinha. O segundo pulso é o forte. Ele vem de um laser de CO2 cuja luz tem 10,6 µm de comprimento de onda, e começa como um pulso pequeno, que é amplificado mais de 10.000 vezes. Dois pulsos por gota dão cerca de 100.000 pulsos de laser por segundo.",
+      "p3": "O pulso forte aquece o estanho a cerca de 220.000 °C, de 30 a 40 vezes mais quente que a superfície do Sol. O estanho vira <strong>plasma</strong>, um gás tão quente que seus átomos perdem elétrons e brilham. Os íons de estanho no plasma emitem luz de 13,5 nm. É por isso que a máquina usa estanho. Gotas pequenas também deixam pouco resíduo. Só cerca de 5% da luz do laser vira EUV, e esse valor foi medido em laboratório.",
+      "p4": "O <strong>espelho coletor</strong>, um espelho grande e curvo, capta a luz e a reúne num ponto. A câmara contém hidrogênio a baixa pressão, que barra os respingos de estanho e limpa o estanho do espelho. Já se demonstrou que um coletor aguenta mais de 100 bilhões de pulsos."
     },
     "mirrors": {
       "title": "Luz que só reflete",
-      "p1": "Os espelhos do EUV não são de metal polido. Cada um é um <strong>espelho multicamadas</strong>: mais de 100 camadas finas de silício e molibdênio, cada uma com poucos nm de espessura. Cada limite entre camadas reflete um pouco de luz. As camadas ficam a cerca de 6,8 a 6,9 nm uma da outra, metade do comprimento de onda, e assim os reflexos pequenos se somam em vez de se anular.",
-      "p2": "Mesmo assim, um espelho devolve só cerca de 70 por cento da luz. É o melhor valor medido, não uma promessa. Então a luz perde cerca de um terço a cada reflexo. O modelo conta 11 reflexos do foco intermediário (explicado abaixo) até o wafer: quatro espelhos que moldam o feixe, a máscara e seis espelhos que reduzem o padrão. Cerca de 2 por cento da luz chega ao wafer, numa faixa de 1 a 4 por cento. A contagem se apoia num artigo, e outro conta 10.",
-      "p3": "Esses espelhos precisam ser extremamente lisos. A rugosidade é de cerca de 50 pm, e um picômetro (pm) é a milésima parte de um nanômetro. A Zeiss, que os fabrica, diz que num espelho do tamanho da Alemanha a maior saliência teria só cerca de 0,1 mm.",
-      "p4": "O coletor reúne a luz num ponto, o <strong>foco intermediário</strong>, e daí o feixe volta a se abrir. Use o controle deslizante para seguir o feixe reflexo a reflexo e ver quanta luz sobra. O próprio modelo desenha as dobras e as posições dos espelhos, com base em diagramas publicados."
+      "p1": "Os espelhos da máquina EUV não são de metal polido. Cada um é um <strong>espelho multicamadas</strong>: mais de 100 camadas finas de silício e molibdênio, cada uma com poucos nm de espessura. Cada fronteira entre camadas reflete um pouco de luz. As camadas ficam a cerca de 6,8 a 6,9 nm uma da outra, metade do comprimento de onda, e assim as pequenas reflexões se somam em vez de se anular.",
+      "p2": "Mesmo assim, um espelho devolve só cerca de 70% da luz. É o melhor valor medido, não uma promessa. Então a luz perde cerca de um terço a cada reflexão. O modelo conta 11 reflexões do foco intermediário (explicado abaixo) até o wafer: quatro espelhos que moldam o feixe, a máscara e seis espelhos que reduzem o padrão. Cerca de 2% da luz chega ao wafer, numa faixa de 1 a 4%. A contagem se baseia em um artigo, e outro conta 10.",
+      "p3": "Esses espelhos precisam ser lisos ao extremo. A rugosidade é de cerca de 50 pm, e um picômetro (pm) é a milésima parte de um nanômetro. A Zeiss, que os fabrica, diz que, se um espelho tivesse o tamanho da Alemanha, a maior saliência teria só cerca de 0,1 mm.",
+      "p4": "O coletor reúne a luz num ponto, o <strong>foco intermediário</strong>, e daí o feixe volta a se abrir. Use o controle deslizante para seguir o feixe reflexão a reflexão e ver quanta luz sobra. O próprio modelo desenha as dobras e as posições dos espelhos, com base em diagramas publicados."
     },
     "mask": {
       "title": "Um espelho com um mapa",
-      "p1": "A <strong>máscara</strong>, também chamada de retículo, guarda o padrão de uma camada do chip. Ela também é um espelho. Uma camada fina por cima, o absorvedor, engole a luz onde o padrão tem uma linha, e assim a luz que volta já leva o padrão. A máscara fica numa placa quadrada de 152 mm de lado (seis polegadas), e a área do padrão mede 104 por 132 mm.",
-      "p2": "Antes da máscara vem o <strong>iluminador</strong>, quatro espelhos que moldam o feixe. A superfície deles é feita de muitas peças pequenas, as facetas, que podem ser inclinadas. As inclinações definem os ângulos em que a luz chega à máscara. Um estudo mediu 22 desses ajustes num único iluminador, um valor aproximado.",
-      "p3": "O feixe encontra a máscara com uma inclinação de 6 graus (5,4 na High-NA). Assim, a luz que entra e a que sai ficam 12 graus separadas, e os dois feixes não se chocam. Neste modelo, a máscara fica virada para baixo. Essa posição foi escolha nossa.",
-      "p4": "Uma <strong>película protetora</strong> cobre a máscara. É um filme finíssimo que barra a poeira, porque um grão na máscara sairia impresso em todos os wafers. A luz a atravessa duas vezes, na ida e na volta. Mais de 90 por cento passam a cada vez, e cerca de 81 por cento passam nas duas. A película é um filme, não uma lente. Depois da máscara, os espelhos de projeção reduzem o padrão 4 vezes (8 vezes numa direção, na High-NA)."
+      "p1": "A <strong>máscara</strong>, também chamada de retículo, guarda o padrão de uma camada do chip. Ela também é um espelho. Uma camada fina por cima, o absorvedor, engole a luz onde o padrão tem uma linha, e assim a luz refletida já leva o padrão. A máscara fica numa placa quadrada de 152 mm de lado (seis polegadas), e a área do padrão mede 104 por 132 mm.",
+      "p2": "Antes da máscara vem o <strong>iluminador</strong>, quatro espelhos que moldam o feixe. Cada superfície é formada por muitas peças pequenas, as facetas, que podem ser inclinadas. As inclinações definem os ângulos em que a luz chega à máscara. Um estudo contou 22 desses ajustes num único iluminador, um valor aproximado.",
+      "p3": "O feixe encontra a máscara com uma inclinação de 6 graus (5,4 na High-NA). Assim, o feixe que chega e o que sai formam 12 graus entre si, e os dois não se chocam. Neste modelo, a máscara fica virada para baixo. Essa posição é escolha nossa.",
+      "p4": "Uma <strong>película protetora</strong> cobre a máscara. É um filme finíssimo que barra a poeira, porque um grão de poeira na máscara sairia impresso em todos os wafers. A luz a atravessa duas vezes, na ida e na volta. Mais de 90% passam a cada travessia, e cerca de 81% passam nas duas. A película é só um filme, não uma lente. Depois da máscara, os espelhos de projeção reduzem o padrão 4 vezes (na High-NA, 8 vezes em uma das direções)."
     },
     "scan": {
       "title": "Um campo de cada vez",
-      "p1": "Um wafer leva muitas cópias de um chip, e a máquina grava um pedaço de cada vez. Cada pedaço é um <strong>campo</strong>, de 26 por 33 mm. Cabem cerca de 76 a 80 campos inteiros num wafer. A luz não cobre um campo de uma vez. Ela passa por uma <strong>fenda</strong> curva de cerca de 26 por 2 mm.",
-      "p2": "Para cobrir um campo, a máscara e o wafer se movem juntos, em sentidos opostos. A fenda varre a máscara, e o padrão reduzido varre o wafer. Isso se chama varredura. Uma máquina pode varrer 160 wafers por hora (NXE:3600D) ou até 220 (NXE:3800E). São as especificações dos fabricantes, para uma dose de luz de 30 mJ/cm2, a energia que cai em cada centímetro quadrado.",
-      "p3": "Um fóton é uma partícula de luz. Essa dose equivale a cerca de 20 fótons de EUV em cada nm quadrado do wafer. Os movimentos precisam ser muito exatos. Os sensores de posição dizem onde cada peça está com precisão de cerca de 60 pm, 20.000 vezes por segundo. O overlay mede o quanto uma camada fica alinhada com a de baixo. De máquina para máquina, ele é de 1,1 nm na 3600D, 0,9 nm na 3800E e 1,1 nm na High-NA EXE:5000.",
-      "p4": "No trecho final da reprodução, o relógio mostra até onde foi a varredura de um campo. Neste modelo, um campo leva cerca de 0,29 s a 160 wafers por hora e 0,21 s a 220. São tempos aproximados. A exposição real é mais curta, porque o tempo por wafer inclui também carga e alinhamento. Escolha uma máquina para ver os números mudarem."
+      "p1": "Um wafer comporta muitas cópias de um chip, e a máquina grava um pedaço de cada vez. Cada pedaço é um <strong>campo</strong>, de 26 por 33 mm. Cabem cerca de 76 a 80 campos inteiros num wafer. A luz não cobre um campo de uma vez. Ela passa por uma <strong>fenda</strong> curva de cerca de 26 por 2 mm.",
+      "p2": "Para cobrir um campo, a máscara e o wafer se movem juntos, em sentidos opostos. A fenda varre a máscara, e o padrão reduzido varre o wafer. Isso se chama varredura. Uma máquina processa 160 wafers por hora (NXE:3600D) ou até 220 (NXE:3800E). Esses são os números dos fabricantes, para uma dose de luz de 30 mJ/cm2, a energia que chega a cada centímetro quadrado.",
+      "p3": "Um fóton é uma partícula de luz. Essa dose equivale a cerca de 20 fótons de EUV em cada nm quadrado do wafer. Os movimentos precisam ser muito exatos. Sensores medem a posição de cada peça com precisão de cerca de 60 pm, 20.000 vezes por segundo. O overlay mostra o quanto uma camada está alinhada com a de baixo. Depende da máquina: 1,1 nm na 3600D, 0,9 nm na 3800E e 1,1 nm na High-NA EXE:5000.",
+      "p4": "No trecho final da reprodução, o relógio mostra quanto da varredura de um campo já foi feito. Neste modelo, um campo leva cerca de 0,29 s a 160 wafers por hora e 0,21 s a 220. São tempos aproximados. A exposição real é mais curta, porque o tempo por wafer inclui ainda o carregamento e o alinhamento. Escolha uma máquina para ver os números mudarem."
     },
     "compare": {
       "title": "193 nm contra 13,5 nm",
-      "p1": "As máquinas mais antigas usam luz ultravioleta profunda, o DUV, com comprimento de onda de 193 nm. Elas usam lentes, com uma camada de água sob a última. O tamanho de uma linha é dado pelo <strong>meio passo</strong>: metade da distância entre uma linha e a seguinte. O DUV grava um meio passo de cerca de 36 a 38 nm. O EUV grava linhas de 13 nm com vãos de 13 nm, então o passo inteiro é de 26 nm.",
-      "p2": "A luz EUV tem um comprimento de onda bem menor. Cada fóton também carrega 91,8 eV de energia (elétron-volts, uma unidade de energia), cerca de 14 vezes a de um fóton DUV. Ondas mais curtas desenham detalhes mais finos. A menor linha segue uma regra simples: k1 vezes o comprimento de onda, dividido pela NA. O número k1 depende de quão bem o processo é ajustado, e um k1 menor é mais difícil de alcançar. A NA é o cone de luz que o último espelho capta, do primeiro capítulo. Um cone mais largo enxerga detalhes mais finos. Com k1 de 0,3, a regra dá 12,3 nm para NA de 0,33 e 7,4 nm para 0,55.",
-      "p3": "A máquina High-NA tem NA de 0,55. Ela reduz o padrão 4 vezes numa direção e 8 vezes na outra, então um campo fica com metade do tamanho, 26 por 16,5 mm. Ela grava um meio passo de 8 nm. O número real de espelhos da High-NA não é conhecido. Por isso este modelo mantém o mesmo caminho de espelhos e muda só os últimos espelhos, a redução, o campo e os números. Os espelhos de projeção pesam cerca de 12 toneladas e os do iluminador, cerca de 6.",
-      "p4": "Para sentir a escala: um vírus da gripe tem cerca de 100 nm de largura. Cabem umas 8 dessas linhas de um lado a outro dele. Num fio de cabelo cabem milhares. O “3 nm” nos nomes de chips é só um nome. Os fios mais finos ficam, na verdade, a uns 23 a 24 nm um do outro. A ASML não divulga o preço. Segundo a imprensa, uma máquina custa bem mais de 100 milhões de euros, e uma High-NA, cerca de 350 milhões."
+      "p1": "As máquinas mais antigas usam luz ultravioleta profunda, o DUV, com comprimento de onda de 193 nm. Elas usam lentes, e uma camada de água fica sob a última. O tamanho de uma linha se mede pelo <strong>meio passo</strong>: metade da distância entre uma linha e a seguinte. O DUV chega a um meio passo de cerca de 36 a 38 nm. O EUV grava linhas de 13 nm com vãos de 13 nm, então o passo inteiro é de 26 nm.",
+      "p2": "A luz EUV tem um comprimento de onda bem menor. Cada fóton ainda carrega 91,8 eV de energia (elétron-volts, uma unidade de energia), cerca de 14 vezes mais que um fóton DUV. Ondas mais curtas desenham detalhes mais finos. A menor linha segue uma regra simples: k1 vezes o comprimento de onda, dividido pela NA. O k1 depende de quão bem ajustado está o processo, e é mais difícil chegar a um k1 menor. A NA é o cone de luz que o último espelho capta, lá do primeiro capítulo. Um cone mais largo enxerga detalhes mais finos. Com k1 igual a 0,3, a regra dá 12,3 nm com NA de 0,33 e 7,4 nm com 0,55.",
+      "p3": "A máquina High-NA tem NA de 0,55. Ela reduz o padrão 4 vezes numa direção e 8 vezes na outra, então um campo fica com metade do tamanho, 26 por 16,5 mm. Ela grava com meio passo de 8 nm. Não se sabe quantos espelhos a High-NA tem de fato. Por isso, este modelo mantém o mesmo caminho de espelhos e muda só os últimos, a redução, o campo e os números. Os espelhos de projeção pesam cerca de 12 toneladas e os do iluminador, cerca de 6.",
+      "p4": "Para ter uma noção da escala: um vírus da gripe tem cerca de 100 nm de largura. Cabem umas 8 dessas linhas de um lado a outro dele. Num fio de cabelo cabem milhares. O “3 nm” nos nomes dos chips é só um nome. Os fios mais finos ficam, na verdade, a uns 23 a 24 nm de distância um do outro. A ASML não divulga o preço. Segundo a imprensa, uma máquina custa bem mais de 100 milhões de euros, e uma High-NA, cerca de 350 milhões."
     }
   }
 }
