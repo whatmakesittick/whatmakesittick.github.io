@@ -1,3 +1,5 @@
+import { AdditiveBlending } from 'three';
+import type { Intersection, Mesh } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import type { SceneOptions } from '@core/scene/shell';
 import { THEME } from '../theme';
@@ -24,6 +26,11 @@ export const UNDIMMED_GROUPS = [
   'virus',
 ];
 
+export function blocksLabels({ object }: Intersection): boolean {
+  const { material } = object as Mesh;
+  return Array.isArray(material) || material.blending !== AdditiveBlending;
+}
+
 export const SCENE_OPTIONS: SceneOptions = {
   background: THEME.background,
   fog: { color: THEME.background, ...FOG },
@@ -37,4 +44,5 @@ export const SCENE_OPTIONS: SceneOptions = {
     distance: { min: CAMERA.minDistance, max: CAMERA.maxDistance },
   },
   highlight: { dim: HIGHLIGHT_DIM, undimmed: UNDIMMED_GROUPS },
+  occlusionHitFilter: blocksLabels,
 };
