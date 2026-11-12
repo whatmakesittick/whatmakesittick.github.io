@@ -57,9 +57,9 @@ export const PRESETS: Record<PresetId, Preset> = {
   mask: {
     camera: 'maskStage',
     speed: SLOW_SPEED,
-    view: chapterView(true, true),
+    view: chapterView(true, false),
     startAt: MASK_START,
-    labels: ['illuminator', 'mask', 'pellicle', 'maskStage', 'patternInset', 'flash'],
+    labels: ['illuminator', 'mask', 'pellicle', 'maskStage', 'flash'],
     highlight: ['mask', 'pellicle', 'maskStage'],
   },
   scan: {

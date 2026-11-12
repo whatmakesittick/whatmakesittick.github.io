@@ -11,12 +11,10 @@ interface CloseView {
   depth: number;
 }
 
-const [MASK_X, MASK_Y] = waypoint('mask');
-
-const MASK_VIEW = { halfWidth: 0.11, below: 0.3, above: 0.2, depth: 0.2 } as const;
+const MASK_VIEW: CloseView = { halfWidth: 0.12, below: 0.18, above: 0.06, depth: 0.09 };
 const WAFER_VIEW: CloseView = { halfWidth: 0.3, below: 0.12, above: 0.12, depth: 0.25 };
-const LIGHT_PATH_VIEW = { x: [-0.8, 4.6], y: [-1.2, 5.8], depth: 2 } as const;
-const OPTICS_VIEW = { x: [2.6, 7.2], y: [-0.5, 3.8], depth: 2 } as const;
+const LIGHT_PATH_VIEW = { x: [-4.4, 4.8], y: [0, 5.6], depth: 0.9 } as const;
+const OPTICS_VIEW = { x: [2.6, 7.3], y: [0, 3.9], depth: 0.8 } as const;
 
 function closeRegion([x, y]: Point, view: CloseView): RegionSpec {
   return {
@@ -27,11 +25,7 @@ function closeRegion([x, y]: Point, view: CloseView): RegionSpec {
 }
 
 export const VIEW_REGION_SPECS: Readonly<Partial<Record<RegionId, RegionSpec>>> = {
-  maskStage: {
-    x: [MASK_X - MASK_VIEW.halfWidth, MASK_X + MASK_VIEW.halfWidth],
-    y: [MASK_Y - MASK_VIEW.below, MASK_Y + MASK_VIEW.above],
-    z: [-MASK_VIEW.depth, MASK_VIEW.depth],
-  },
+  maskStage: closeRegion(waypoint('mask'), MASK_VIEW),
   waferStage: closeRegion(waypoint('wafer'), WAFER_VIEW),
   lightPath: {
     x: LIGHT_PATH_VIEW.x,

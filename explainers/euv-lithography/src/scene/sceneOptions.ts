@@ -9,7 +9,7 @@ const CAMERA = {
   minDistance: 0.4,
   maxDistance: 36,
   floorMargin: 0.05,
-  maxPolarAngle: Math.PI * 0.6,
+  maxPolarAngle: Math.PI * 0.68,
 } as const;
 const HIGHLIGHT_DIM = { saturation: 0.3, brightness: 0.5, emissive: 0.25 } as const;
 
