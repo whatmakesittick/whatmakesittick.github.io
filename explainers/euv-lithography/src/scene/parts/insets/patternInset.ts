@@ -1,7 +1,7 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import type { InstancedMesh, Object3D } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { clamp } from '@core/math';
+import { clamp, lerp } from '@core/math';
 import type { AssemblyState } from '../../../ids';
 import { PART_POINTS } from '../../../model/layout';
 import { PATTERN_LINES, lineWidthM, patchWidthM } from '../../../model/scale';
@@ -25,6 +25,7 @@ import { VirusPart } from './virus';
 
 const GROUP = 'patternInset';
 const HALF = 0.5;
+const LATENT_SHARE = 0.25;
 const REFERENCE_OPTICS = 'na033';
 const REFERENCE_WIDTH = lineWidthM(REFERENCE_OPTICS);
 const IDENTITY = new Quaternion();
@@ -108,7 +109,7 @@ export class PatternInset {
     const centre = PATTERN_PANEL.centre;
     for (let index = 0; index < PATTERN_LINES; index += 1) {
       const grown = clamp(share * PATTERN_LINES - index, 0, 1);
-      const height = Math.max(grown, 0.001);
+      const height = lerp(LATENT_SHARE, 1, grown);
       const x = LINE_LEFT_M + width * HALF + index * pitch;
       this.position.set(x, STRIP_TOP + (LINE_HEIGHT_M * height) / 2, centre[2]);
       this.scale.set(width / REFERENCE_WIDTH, height, 1);

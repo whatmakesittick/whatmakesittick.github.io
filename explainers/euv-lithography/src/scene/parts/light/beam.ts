@@ -31,10 +31,10 @@ const MIRRORS = CHAIN.map((point, index) => ({ point, index })).filter(
   (_, index) => BEAM_WAYPOINTS[index + 1].bounce,
 );
 const BEND_M = 0.25;
-const EUV_COLOR = new Color(THEME.euv);
+const EUV_COLOR = new Color('#8fa0ff');
 const LASER_COLOR = new Color(THEME.laser);
 const WHITE = new Color('#ffffff');
-const GLOW_SHARE = 0.4;
+const GLOW_SHARE = 0.7;
 const LASER_GLOW_SHARE = 0.45;
 const HALF = 0.5;
 
