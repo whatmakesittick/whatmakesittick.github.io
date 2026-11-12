@@ -25,9 +25,5 @@ export const COMPARE_READOUTS: ChapterReadouts = {
       ev: tenths(COMPARE_FACTS.photonEv),
       times: whole(COMPARE_FACTS.photonTimes),
     }),
-  price: () =>
-    t('chapters.compare.priceValue', {
-      eur: whole(COMPARE_FACTS.priceMillionEur),
-      high: whole(COMPARE_FACTS.priceHighMillionEur),
-    }),
+  price: () => t('chapters.compare.priceValue'),
 };

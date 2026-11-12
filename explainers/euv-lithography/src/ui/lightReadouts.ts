@@ -1,13 +1,13 @@
 import { t } from '@core/i18n';
 import { formatNumber } from '@core/format';
+import { DROPLETS_PER_SECOND, PULSES_PER_DROPLET } from '../model';
 import { LIGHT_FACTS } from './copyFacts';
-import { whole } from './format';
+import { tenths, whole } from './format';
 import type { ChapterReadouts } from './readouts';
 
 export const LIGHT_READOUTS: ChapterReadouts = {
   droplet: () =>
     t('chapters.light.dropletValue', {
-      um: whole(LIGHT_FACTS.dropletUm),
       low: whole(LIGHT_FACTS.dropletLowUm),
       high: whole(LIGHT_FACTS.dropletHighUm),
     }),
@@ -18,11 +18,13 @@ export const LIGHT_READOUTS: ChapterReadouts = {
     }),
   spacing: () =>
     t('chapters.light.spacingValue', {
-      low: whole(LIGHT_FACTS.spacingLowMm),
-      high: whole(LIGHT_FACTS.spacingHighMm),
+      low: tenths(LIGHT_FACTS.spacingLowMm),
+      high: tenths(LIGHT_FACTS.spacingHighMm),
     }),
   pulses: () =>
-    t('chapters.light.pulsesValue', { count: formatNumber(LIGHT_FACTS.pulsesPerSecond) }),
+    t('chapters.light.pulsesValue', {
+      count: formatNumber(DROPLETS_PER_SECOND * PULSES_PER_DROPLET),
+    }),
   flattened: () => t('chapters.light.flattenedValue', { um: whole(LIGHT_FACTS.flattenedUm) }),
   plasma: () =>
     t('chapters.light.plasmaValue', {

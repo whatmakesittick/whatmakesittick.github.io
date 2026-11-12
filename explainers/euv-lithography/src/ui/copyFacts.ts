@@ -1,14 +1,12 @@
 export const MACHINE_FACTS = { tonnes: 150, crates: 250, containers: 43, trucks: 20 } as const;
 
 export const LIGHT_FACTS = {
-  dropletUm: 30,
   dropletLowUm: 20,
   dropletHighUm: 30,
   speedLowMs: 60,
   speedHighMs: 120,
-  spacingLowMm: 1,
-  spacingHighMm: 2,
-  pulsesPerSecond: 50_000,
+  spacingLowMm: 1.2,
+  spacingHighMm: 2.4,
   flattenedUm: 100,
   plasmaCelsius: 220_000,
   plasmaSunLow: 30,
@@ -34,7 +32,7 @@ export const SCAN_FACTS = {
   fieldsHigh: 80,
   sensingPm: 60,
   sensingPerSecond: 20_000,
-  overlayNm: { nxe3600d: 1.1, nxe3800e: 0.9, exe5000: 0.9 },
+  overlayNm: { nxe3600d: 1.1, nxe3800e: 0.9, exe5000: 1.1 },
 } as const;
 
 export const COMPARE_FACTS = {
@@ -42,6 +40,4 @@ export const COMPARE_FACTS = {
   duvHighNm: 38,
   photonEv: 91.8,
   photonTimes: 14,
-  priceMillionEur: 170,
-  priceHighMillionEur: 350,
 } as const;

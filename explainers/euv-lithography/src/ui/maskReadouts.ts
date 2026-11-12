@@ -1,6 +1,6 @@
 import { t } from '@core/i18n';
 import { formatNumber } from '@core/format';
-import { MASK_PATTERN_M, MASK_PLATE_M, maskTiltDeg, opticsOf, shrinkRatio } from '../model';
+import { MASK_PATTERN_M, MASK_PLATE_M, maskTiltDeg, opticsOf } from '../model';
 import { MASK_FACTS } from './copyFacts';
 import { mmOf, whole } from './format';
 import type { ChapterReadouts } from './readouts';
@@ -26,6 +26,5 @@ export const MASK_READOUTS: ChapterReadouts = {
       percent: whole(MASK_FACTS.pellicleOnePass * PERCENT),
       both: whole(MASK_FACTS.pellicleOnePass ** MASK_FACTS.tiltPasses * PERCENT),
     }),
-  reduction: ({ machine }) =>
-    t('chapters.mask.reductionValue', { n: whole(shrinkRatio(opticsOf(machine)).slit) }),
+  reduction: ({ machine }) => t(`chapters.compare.shrinkValue.${opticsOf(machine)}`),
 };

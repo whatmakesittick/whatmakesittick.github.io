@@ -95,7 +95,9 @@ describe('chapter readouts and the bounce range', () => {
       );
       const lost = 100 - left;
       expect(readout('bounceLeft')).toBe(
-        fill(units.percent, { value: lost < 10 ? lost.toFixed(1) : lost.toFixed(0) }),
+        fill(units.percent, {
+          value: lost > 0 && lost < 10 ? lost.toFixed(1) : lost.toFixed(0),
+        }),
       );
     },
   );

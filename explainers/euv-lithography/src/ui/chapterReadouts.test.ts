@@ -57,7 +57,13 @@ describe('chapter readouts', () => {
     expect(text('shipping', 'nxe3600d')).toBe(
       fill(chapters.machine.shippingValue, { crates: '250', containers: '43', trucks: '20' }),
     );
-    expect(text('pulses', 'nxe3600d')).toBe(fill(chapters.light.pulsesValue, { count: '50,000' }));
+    expect(text('droplet', 'nxe3600d')).toBe(
+      fill(chapters.light.dropletValue, { low: '20', high: '30' }),
+    );
+    expect(text('spacing', 'nxe3600d')).toBe(
+      fill(chapters.light.spacingValue, { low: '1.2', high: '2.4' }),
+    );
+    expect(text('pulses', 'nxe3600d')).toBe(fill(chapters.light.pulsesValue, { count: '100,000' }));
     expect(text('plasma', 'nxe3600d')).toBe(
       fill(chapters.light.plasmaValue, { celsius: '220,000', low: '30', high: '40' }),
     );
@@ -76,7 +82,8 @@ describe('chapter readouts', () => {
     expect(text('tilt', 'exe5000')).toBe(
       fill(chapters.mask.tiltValue, { deg: '5.4', apart: '10.8' }),
     );
-    expect(text('reduction', 'exe5000')).toBe(fill(chapters.mask.reductionValue, { n: '4' }));
+    expect(text('reduction', 'nxe3600d')).toBe(chapters.compare.shrinkValue.na033);
+    expect(text('reduction', 'exe5000')).toBe(chapters.compare.shrinkValue.na055);
     expect(text('perWafer', 'nxe3600d')).toBe(fill(chapters.scan.perWaferValue, { seconds: '23' }));
     expect(text('perWafer', 'nxe3800e')).toBe(fill(chapters.scan.perWaferValue, { seconds: '16' }));
     expect(text('perField', 'nxe3600d')).toBe(
@@ -92,6 +99,7 @@ describe('chapter readouts', () => {
     expect(text('slit', 'exe5000')).toBe(fill(chapters.scan.slitValue, { w: '26', h: '1.6' }));
     expect(text('overlay', 'nxe3600d')).toBe(fill(chapters.scan.overlayValue, { nm: '1.1' }));
     expect(text('overlay', 'nxe3800e')).toBe(fill(chapters.scan.overlayValue, { nm: '0.9' }));
+    expect(text('overlay', 'exe5000')).toBe(fill(chapters.scan.overlayValue, { nm: '1.1' }));
     expect(text('wph', 'nxe3600d')).toBe(fill(units.perHour, { value: '160' }));
     expect(text('wph', 'exe5000')).toBe(fill(readouts.wph.about, { value: '150' }));
     expect(text('shrink', 'nxe3800e')).toBe(chapters.compare.shrinkValue.na033);
@@ -115,9 +123,7 @@ describe('chapter readouts', () => {
   });
 
   it('quotes the price and the photon', () => {
-    expect(text('price', 'nxe3600d')).toBe(
-      fill(chapters.compare.priceValue, { eur: '170', high: '350' }),
-    );
+    expect(text('price', 'nxe3600d')).toBe(chapters.compare.priceValue);
     expect(text('photon', 'nxe3600d')).toBe(
       fill(chapters.compare.photonValue, { ev: '91.8', times: '14' }),
     );
