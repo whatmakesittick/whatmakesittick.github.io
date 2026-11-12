@@ -26,10 +26,10 @@ export const vent = (u: Range, v: Range): Fixture => fixture('vent', u, v);
 export const glazing = (u: Range, v: Range): Fixture => fixture('window', u, v);
 export const gap = (u: Range, v: Range): Fixture => fixture('hole', u, v);
 
-const FIT: Record<FixtureKind, (bin: Bin, face: Face, item: Fixture) => void> = {
-  door: (bin, face, item) => addDoor(bin, face, item.opening, item.hingeLow),
-  vent: (bin, face, item) => addVent(bin, face, item.opening),
-  window: (bin, face, item) => addWindow(bin, face, item.opening),
+const FIT: Record<FixtureKind, (bins: FaceBins, face: Face, item: Fixture) => void> = {
+  door: (bins, face, item) => addDoor(bins.fittings, face, item.opening, item.hingeLow),
+  vent: (bins, face, item) => addVent(bins.fittings, face, item.opening),
+  window: (bins, face, item) => addWindow(bins.fittings, face, item.opening, bins.skin),
   hole: () => undefined,
 };
 
@@ -45,7 +45,7 @@ export function addFace(
     span,
     fixtures.map((item) => item.opening),
   );
-  fixtures.forEach((item) => FIT[item.kind](bins.fittings, face, item));
+  fixtures.forEach((item) => FIT[item.kind](bins, face, item));
 }
 
 export function inside(face: Face): Face {

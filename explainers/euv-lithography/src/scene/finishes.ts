@@ -3,7 +3,7 @@ import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../theme';
 
 const GHOST_OPACITY = 0.09;
-const WINDOW_OPACITY = 0.22;
+const WINDOW_OPACITY = 0.14;
 const MEMBRANE_OPACITY = 0.3;
 
 function finish(color: string, roughness: number, metalness = 0): MaterialFinish {
@@ -35,7 +35,7 @@ export const FINISHES = {
   window: veil('#a9c4dc', WINDOW_OPACITY),
   frame: finish('#6f7a86', 0.42, 0.6),
   darkFrame: finish('#3a4048', 0.5, 0.5),
-  machined: finish('#2a3037', 0.36, 0.7),
+  machined: finish('#343b44', 0.42, 0.35),
   interior: { ...finish('#14181d', 0.88), side: DoubleSide },
   rail: finish('#c3cad2', 0.18, 0.95),
   flange: finish('#b4bdc7', 0.28, 0.9),

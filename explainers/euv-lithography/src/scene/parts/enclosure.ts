@@ -178,10 +178,10 @@ function ring(bin: Bin, face: Face, opening: Opening, width: number, w: Range): 
   );
 }
 
-export function addWindow(bin: Bin, face: Face, opening: Opening): void {
+export function addWindow(bin: Bin, face: Face, opening: Opening, glass = bin): void {
   const { u, v } = opening;
   ring(bin, face, opening, FRAME_M, depth(face, -SKIN_M, FRAME_PROUD_M));
-  bin.add('window', onFace(face, u, v, depth(face, -SKIN_M / 2 - GLASS_M, -SKIN_M / 2)));
+  glass.add('window', onFace(face, u, v, depth(face, -SKIN_M / 2 - GLASS_M, -SKIN_M / 2)));
   const mid = FRAME_M / 2;
   const corners: [number, number][] = [
     [u[0] - mid, v[0] - mid],
