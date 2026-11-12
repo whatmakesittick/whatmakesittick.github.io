@@ -1,7 +1,7 @@
 import { CanvasTexture, SRGBColorSpace } from 'three';
 import type { PartContext } from '../context';
 
-const EQUIRECTANGULAR_REFLECTION = 301 as CanvasTexture['mapping'];
+const EQUIRECTANGULAR_REFLECTION = 303 as CanvasTexture['mapping'];
 const WIDTH = 256;
 const HEIGHT = 128;
 const HORIZON = HEIGHT / 2;
