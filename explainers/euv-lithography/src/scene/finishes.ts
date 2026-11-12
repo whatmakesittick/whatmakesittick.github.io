@@ -2,7 +2,7 @@ import { DoubleSide } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../theme';
 
-const GHOST_OPACITY = 0.14;
+const GHOST_OPACITY = 0.09;
 const WINDOW_OPACITY = 0.22;
 const MEMBRANE_OPACITY = 0.3;
 
@@ -30,7 +30,7 @@ export const FINISHES = {
   panel: finish('#d3d8de', 0.5),
   panelShade: finish(THEME.machine, 0.55),
   shell: finish(THEME.shell, 0.45, 0.35),
-  shellInner: { ...finish('#4b5560', 0.7), side: DoubleSide },
+  shellInner: { ...finish('#3c444e', 0.72), side: DoubleSide },
   ghost: veil(THEME.shell, GHOST_OPACITY),
   window: veil('#a9c4dc', WINDOW_OPACITY),
   frame: finish('#6f7a86', 0.42, 0.6),
