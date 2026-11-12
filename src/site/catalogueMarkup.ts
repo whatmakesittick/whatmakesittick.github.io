@@ -3,7 +3,7 @@ import type { LanguageCode } from '../core/i18n/languages.ts';
 import { languagePath } from '../core/i18n/paths.ts';
 import type { Tag } from '../core/manifest.ts';
 import { localizedMeta, pageLanguage } from './catalogue.ts';
-import type { CardMeta, CatalogueCard } from './catalogue.ts';
+import type { CardMeta, CardMetas, CatalogueCard } from './catalogue.ts';
 import { element } from './html.ts';
 import type { Markup } from './html.ts';
 import type { TagSelection } from './tagFilter.ts';
@@ -120,18 +120,23 @@ function cardItem(listed: ListedCard, index: number, context: MarkupContext): Ma
   return element('li', { class: CARD_ITEM_CLASS, 'data-slug': manifest.slug }, [link, footer]);
 }
 
-function listedCards(cards: readonly CatalogueCard[], code: LanguageCode): ListedCard[] {
+function listedCards(
+  cards: readonly CatalogueCard[],
+  metas: CardMetas,
+  code: LanguageCode,
+): ListedCard[] {
   return cards.flatMap((card) => {
-    const meta = localizedMeta(card, code, DEFAULT_LANGUAGE);
+    const meta = localizedMeta(card, metas, code, DEFAULT_LANGUAGE);
     return meta ? [{ card, meta }] : [];
   });
 }
 
 export function renderCatalogueGrid(
   cards: readonly CatalogueCard[],
+  metas: CardMetas,
   context: MarkupContext,
 ): string {
-  const items = listedCards(cards, context.code).map((listed, index) =>
+  const items = listedCards(cards, metas, context.code).map((listed, index) =>
     cardItem(listed, index, context),
   );
   const placeholder = element('li', { class: 'card-placeholder' }, [

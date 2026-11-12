@@ -1,10 +1,10 @@
-import { DEFAULT_LANGUAGE, LANGUAGES } from '../src/core/i18n/languages.ts';
+import { DEFAULT_LANGUAGE, LANGUAGES, LANGUAGE_CODES } from '../src/core/i18n/languages.ts';
 import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { languagePath } from '../src/core/i18n/paths.ts';
 import { PAGE_LANGUAGES_SEPARATOR } from '../src/core/i18n/redirect.ts';
 import { compareNewestFirst } from '../src/core/manifest.ts';
 import type { CatalogueEntry, ExplainerMeta } from '../src/core/manifest.ts';
-import type { CardMeta, CatalogueCard } from '../src/site/catalogue.ts';
+import type { CardMeta, CardMetaMap, CardMetas, CatalogueCard } from '../src/site/catalogue.ts';
 import { renderCatalogueGrid } from '../src/site/catalogueMarkup.ts';
 import { alternateLinks, analyticsTag, imageType, jsonLd, localeTags, schemeTags } from './head.ts';
 import type { PageLanguage } from './i18n.ts';
@@ -41,6 +41,7 @@ export const CORE_ALIAS = '@core';
 export const MOUNT_MODULE = `${CORE_ALIAS}/mount`;
 export const PAGE_ENTRY = 'main.ts';
 
+export const CATALOGUE_MODULE = 'virtual:explainer-catalogue';
 const ROOT_PATH = '/';
 const CATALOGUE_TAGLINE_KEY = 'catalogue.tagline';
 const CATALOGUE_TITLE_KEY = 'catalogue.title';
@@ -181,6 +182,7 @@ export function renderPage(
   explainer: LoadedExplainer,
   language: PageLanguage,
   moreExplainers: readonly CatalogueCard[],
+  metas: CardMetas,
 ): string {
   const { code, translate } = language;
   const { manifest } = explainer;
@@ -203,7 +205,7 @@ export function renderPage(
     structuredData: jsonLd(explainerData(meta, facts, explainer.dates)),
     chapters: explainer.chapters,
     entry: `/${manifest.slug}/${PAGE_ENTRY}`,
-    moreExplainers: renderMoreExplainers(moreExplainers, { code, base: ROOT_PATH }),
+    moreExplainers: renderMoreExplainers(moreExplainers, metas, { code, base: ROOT_PATH }),
   });
   return translateHtml(html, translate);
 }
@@ -298,7 +300,10 @@ export function renderAbout(
 }
 
 function catalogueGrid(explainers: readonly LoadedExplainer[], language: PageLanguage): string {
-  return renderCatalogueGrid(catalogueCards(explainers), { ...language, base: ROOT_PATH });
+  return renderCatalogueGrid(catalogueCards(explainers), catalogueMetas(explainers), {
+    ...language,
+    base: ROOT_PATH,
+  });
 }
 
 export function localeLoader(localesRoot: string, code: LanguageCode): string {
@@ -326,20 +331,54 @@ function cardMeta({ title, eyebrow, summary }: ExplainerMeta): CardMeta {
   return { title, eyebrow, summary };
 }
 
-function catalogueCard({ manifest, metas, dates }: LoadedExplainer): CatalogueCard {
+function catalogueCard({ manifest, dates }: LoadedExplainer): CatalogueCard {
   const { slug, tags, cover, locales } = manifest;
-  const meta: CatalogueCard['meta'] = {};
-  for (const code of locales) {
-    const localized = metas[code];
-    if (localized) meta[code] = cardMeta(localized);
-  }
-  return { manifest: { slug, tags, cover, locales }, meta, published: dates.published };
+  return { manifest: { slug, tags, cover, locales }, published: dates.published };
 }
 
 export function catalogueCards(explainers: readonly LoadedExplainer[]): CatalogueCard[] {
   return catalogueOrder(explainers).map(catalogueCard);
 }
 
+export function catalogueMetaMap(
+  explainers: readonly LoadedExplainer[],
+  code: LanguageCode,
+): CardMetaMap {
+  const entries = explainers.flatMap(({ manifest, metas }) => {
+    const meta = manifest.locales.includes(code) ? metas[code] : undefined;
+    return meta ? [[manifest.slug, cardMeta(meta)] as const] : [];
+  });
+  return Object.fromEntries(entries);
+}
+
+export function catalogueMetas(explainers: readonly LoadedExplainer[]): CardMetas {
+  return Object.fromEntries(
+    LANGUAGE_CODES.map((code) => [code, catalogueMetaMap(explainers, code)]),
+  );
+}
+
+export function catalogueModuleId(code: LanguageCode): string {
+  return `${CATALOGUE_MODULE}/${code}`;
+}
+
 export function renderCatalogueModule(explainers: readonly LoadedExplainer[]): string {
-  return `export const entries = ${JSON.stringify(catalogueCards(explainers))};\n`;
+  const loaders = LANGUAGE_CODES.map(
+    (code) =>
+      `  ${code}: () => import('${catalogueModuleId(code)}').then((module) => module.default),`,
+  );
+  return [
+    `export const entries = ${JSON.stringify(catalogueCards(explainers))};`,
+    'const loaders = {',
+    ...loaders,
+    '};',
+    'export const metaLoader = (code) => loaders[code]();',
+    '',
+  ].join('\n');
+}
+
+export function renderCatalogueLanguageModule(
+  explainers: readonly LoadedExplainer[],
+  code: LanguageCode,
+): string {
+  return `export default ${JSON.stringify(catalogueMetaMap(explainers, code))};\n`;
 }

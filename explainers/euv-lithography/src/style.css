@@ -1,0 +1,76 @@
+:root {
+  --tin: #c3c8d0;
+  --laser: #e8574a;
+  --plasma: #c9a8ff;
+  --euv: #6a7bff;
+  --wafer: #8e98a3;
+}
+
+.chapter .readouts {
+  --readout-min-width: 8rem;
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.chapter .readouts > div,
+.chapter .readouts :is(dt, dd) {
+  min-width: 0;
+}
+
+.chapter .readouts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.chapter .readouts dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chapter .readouts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.gauge .readouts {
+  width: 12.5rem;
+}
+
+.chip[data-action='moment'][data-value='launch'] {
+  --tone: var(--tin);
+}
+
+.chip[data-action='moment'][data-value='firstHit'] {
+  --tone: var(--laser);
+}
+
+.chip[data-action='moment'][data-value='flash'] {
+  --tone: var(--plasma);
+}
+
+.chip[data-action='moment'][data-value='atFocus'],
+.chip[data-action='moment'][data-value='onMask'] {
+  --tone: var(--euv);
+}
+
+.chip[data-action='moment'][data-value='onWafer'],
+.chip[data-action='machine'] {
+  --tone: var(--wafer);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapter .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chapter .readouts > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}

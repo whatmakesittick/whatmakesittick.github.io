@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "title": "How an EUV chip machine works",
+    "eyebrow": "Optics",
+    "tagline": "Follow one flash of light through an EUV chip machine in 3D, from a tin droplet to a wafer, and see how it prints lines 13 nm wide.",
+    "description": "Follow one flash of light through an EUV chip machine: a tin droplet, a laser, 11 bounces and the wafer, where it prints lines 13 nm wide.",
+    "summary": "The tin droplet and the laser, mirrors that lose a third of the light each time, the mask, scanning the wafer, and how EUV compares with older light.",
+    "socialAlt": "A 3D EUV chip machine cut open, with a glowing beam running from a tin droplet through the mirrors to the wafer, beside the title."
+  },
+  "stage": {
+    "label": "Interactive EUV scanner model",
+    "gauge": "Live readings"
+  },
+  "timeline": {
+    "label": "One flash",
+    "phases": "Jump to a stage",
+    "speed": "Playback speed",
+    "value": "{{time}}",
+    "during": "Stage {{step}} of {{total}}, {{detail}}, {{time}}",
+    "speedValue": "×{{factor}}",
+    "speedDescribe": "The whole flash in {{seconds}} seconds",
+    "phase": {
+      "droplet": "Droplet",
+      "prepulse": "First hit",
+      "plasma": "Flash",
+      "collect": "Collector",
+      "mask": "Mask",
+      "expose": "Wafer"
+    },
+    "jump": {
+      "droplet": "Jump to the droplet",
+      "prepulse": "Jump to the first hit",
+      "plasma": "Jump to the flash",
+      "collect": "Jump to the collector",
+      "mask": "Jump to the mask",
+      "expose": "Jump to the wafer"
+    },
+    "detail": {
+      "droplet": "a tin droplet flies across the vessel",
+      "prepulse": "the first pulse flattens the droplet",
+      "plasma": "the second pulse makes plasma, and it flashes",
+      "collect": "the collector mirror gathers the light",
+      "mask": "four mirrors shape the light and the mask adds the pattern",
+      "expose": "six mirrors shrink the pattern onto the wafer"
+    },
+    "moment": {
+      "launch": "Droplet fired",
+      "firstHit": "First hit",
+      "flash": "The flash",
+      "atFocus": "At the focus",
+      "onMask": "On the mask",
+      "onWafer": "On the wafer"
+    }
+  },
+  "clock": {
+    "before": "{{value}} before the flash",
+    "after": "{{value}} after the flash",
+    "scan": "Field scan: {{value}}"
+  },
+  "controls": {
+    "label": "Model controls",
+    "machine": "Machine",
+    "machineOptions": {
+      "nxe3600d": "NXE:3600D",
+      "nxe3800e": "NXE:3800E",
+      "exe5000": "EXE:5000 (High-NA)"
+    },
+    "groups": {
+      "moment": "Jump to a moment",
+      "bounce": "Mirror bounces",
+      "machine": "Machine to show"
+    },
+    "views": {
+      "beam": {
+        "name": "Light beam",
+        "short": "Beam",
+        "hint": "Light beam (B)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      },
+      "cutaway": {
+        "name": "Cutaway",
+        "short": "Cutaway",
+        "hint": "Cutaway (C)"
+      },
+      "inset": {
+        "name": "Magnified view",
+        "short": "Zoom",
+        "hint": "Magnified view (I)"
+      },
+      "follow": {
+        "name": "Follow the flash",
+        "short": "Follow",
+        "hint": "Follow the flash (F)"
+      }
+    }
+  },
+  "readouts": {
+    "where": "Where the light is",
+    "lightLeft": "Light left",
+    "wavelength": "Wavelength",
+    "dropletRate": "Droplets a second",
+    "dropletRateExact": "{{value}}",
+    "dropletRateOrMore": "{{value}} or more",
+    "smallestLine": "Smallest line (half pitch)",
+    "wafersPerHour": "Wafers an hour",
+    "wph": {
+      "about": "about {{value}}"
+    },
+    "place": {
+      "generator": "In the droplet generator",
+      "flight": "Droplet in flight",
+      "plasma": "In the plasma",
+      "collector": "At the collector",
+      "illuminator": "In the illuminator",
+      "mask": "At the mask",
+      "projection": "In the projection mirrors",
+      "wafer": "On the wafer"
+    }
+  },
+  "units": {
+    "ns": "{{value}} ns",
+    "us": "{{value}} µs",
+    "ms": "{{value}} ms",
+    "s": "{{value}} s",
+    "nm": "{{value}} nm",
+    "um": "{{value}} µm",
+    "mm": "{{value}} mm",
+    "percent": "{{value}}%",
+    "perHour": "{{value}} an hour",
+    "tonnes": "{{value}} t",
+    "celsius": "{{value}} °C",
+    "pm": "{{value}} pm"
+  },
+  "parts": {
+    "flash": "The flash",
+    "droplets": "Tin droplets",
+    "driveLaser": "Drive laser",
+    "beamTransport": "Laser beam path",
+    "vessel": "Source vessel",
+    "collector": "Collector mirror",
+    "plasma": "Plasma",
+    "intermediateFocus": "Intermediate focus",
+    "illuminator": "Illuminator mirrors",
+    "maskStage": "Mask stage",
+    "mask": "Mask",
+    "pellicle": "Pellicle",
+    "projection": "Projection mirrors",
+    "waferStage": "Wafer stage",
+    "wafer": "Wafer",
+    "dropletInset": "Droplet, magnified",
+    "patternInset": "Pattern, magnified",
+    "hair": "Human hair, about 50 µm",
+    "virus": "Flu virus, about 100 nm"
+  },
+  "chapters": {
+    "machine": {
+      "weight": "Weight, High-NA",
+      "weightValue": "more than {{tonnes}} t",
+      "shipping": "Shipping",
+      "shippingValue": "more than {{crates}} crates, {{containers}} containers, {{trucks}} trucks",
+      "sizes": "Sizes in this model",
+      "sizesValue": "every size here is the model's own"
+    },
+    "light": {
+      "droplet": "Droplet size",
+      "dropletValue": "about {{low}} to {{high}} µm",
+      "speed": "Droplet speed",
+      "speedValue": "{{low}} to {{high}} m/s",
+      "spacing": "Gap between droplets",
+      "spacingValue": "about {{low}} to {{high}} mm",
+      "pulses": "Laser pulses",
+      "pulsesValue": "about {{count}} laser pulses a second",
+      "flattened": "Flattened target",
+      "flattenedValue": "more than {{um}} µm wide",
+      "plasma": "Plasma heat",
+      "plasmaValue": "about {{celsius}} °C, {{low}} to {{high}} times the Sun's surface",
+      "conversion": "Light that becomes EUV",
+      "conversionValue": "about {{percent}} percent of the laser light, in the lab"
+    },
+    "mirrors": {
+      "layers": "Layers in a mirror",
+      "layersValue": "more than {{count}} layers, each a few nm thick",
+      "reflect": "Light given back per mirror",
+      "reflectValue": "about {{percent}} percent",
+      "rough": "Roughness",
+      "roughValue": "about {{pm}} pm",
+      "vacuum": "Why no lenses",
+      "vacuumValue": "1 mm of air passes about {{air}} percent, 1 µm of glass {{glass}} percent",
+      "bounce": {
+        "label": "Bounces after the intermediate focus",
+        "output": "{{count}} of 11",
+        "start": "Intermediate focus",
+        "end": "Wafer",
+        "light": "Light left",
+        "lost": "Lost so far"
+      }
+    },
+    "mask": {
+      "plate": "Mask plate",
+      "plateValue": "{{mm}} mm square plate",
+      "area": "Pattern area",
+      "areaValue": "{{w}} by {{h}} mm",
+      "tilt": "Beam slant",
+      "tiltValue": "{{deg}} degrees; in and out {{apart}} degrees apart",
+      "pellicle": "Light through the pellicle",
+      "pellicleValue": "above {{percent}} percent a pass, about {{both}} percent in and out",
+      "reduction": "Shrink from mask to wafer"
+    },
+    "scan": {
+      "wph": "Wafers an hour",
+      "perWafer": "Time for one wafer",
+      "perWaferValue": "about {{seconds}} s a wafer, with loading and aligning",
+      "perField": "Time for one field",
+      "perFieldValue": "about {{seconds}} s a field in this model",
+      "fields": "Fields on a wafer",
+      "fieldsValue": "about {{low}} to {{high}} full fields",
+      "slit": "Slit",
+      "slitValue": "{{w}} by {{h}} mm slit",
+      "sensing": "Position sensing",
+      "sensingValue": "about {{pm}} pm, {{rate}} times a second",
+      "overlay": "Layer alignment",
+      "overlayValue": "{{nm}} nm, machine to machine"
+    },
+    "compare": {
+      "shrink": "Shrink from mask to wafer",
+      "field": "Field",
+      "fieldValue": "{{w}} by {{h}} mm",
+      "line": "Smallest line (half pitch)",
+      "lineValue": "{{width}} nm wide, {{gap}} nm apart",
+      "duv": "Older DUV machines",
+      "duvValue": "193 nm light, about {{low}} to {{high}} nm lines",
+      "photon": "Energy of one photon",
+      "photonValue": "{{ev}} eV, about {{times}} times a 193 nm photon",
+      "price": "Price",
+      "priceValue": "over 100 million euros, High-NA about 350 million",
+      "shrinkValue": {
+        "na033": "4×",
+        "na055": "4× / 8×"
+      }
+    }
+  },
+  "sections": {
+    "machine": {
+      "title": "A machine that makes its own light",
+      "p1": "This machine prints the finest layers of the most advanced computer chips. It is huge. The newest model is called <strong>High-NA</strong>. It weighs more than 150 tonnes and shipped in more than 250 crates, 43 containers and 20 trucks. NA is short for numerical aperture, which says how wide a cone of light the last mirror collects. The last chapter explains why that matters. No maker publishes how long or tall the machine is, so every size and position in this model is our own.",
+      "p2": "The machine prints with <strong>extreme ultraviolet</strong> light, or EUV. You cannot see it. Its wavelength, the length of one wave, is only 13.5 nm. A nanometre (nm) is a millionth of a millimetre. Air and glass swallow this light. 1 mm of air lets through about 0.14 percent, and 1 µm of glass about 0.004 percent. So there are no lenses in this machine. Every part that steers the light is a mirror, and the light travels in a near-vacuum with a little hydrogen.",
+      "p3": "The machine makes its own light, one flash at a time, from a tiny drop of tin. A <strong>drive laser</strong> sits on the floor below. Its beam climbs through a long <strong>beam path</strong>, up to 30 m, to the <strong>source vessel</strong>. The laser delivers tens of kilowatts and weighs more than 10 tonnes.",
+      "p4": "The <strong>wafer</strong> is a thin round slice of silicon. It goes in, the machine prints it one patch at a time, and it comes out. This page follows one flash instead, from the tin drop to the wafer. The model is a simplification. Nobody can see a beam in a vacuum, and EUV is not visible at all, so we chose the beam colours. The clock is the model's own too. A drop flies for about 20 ms, but the flash lasts about 20 ns, so playback stretches and squeezes time."
+    },
+    "light": {
+      "title": "A droplet, hit twice",
+      "p1": "Every flash starts with a drop of tin about 30 µm wide. That is a bit more than half the width of a human hair. A hair is about 50 µm, a rounded figure. The <strong>droplets</strong> are fired, not dropped, at 60 to 120 metres a second. About 50,000 of them go by each second, roughly 1.2 to 2.4 mm apart. The makers do not say which way the drops fly, so the model picks a direction.",
+      "p2": "A laser hits each drop twice. The first, gentler pulse flattens it into a thin pancake more than 100 µm wide. A flat target takes the next pulse much better than a ball. The second pulse is the big one. It comes from a CO2 laser whose light is 10.6 µm long, and it starts as a small seed pulse that is boosted more than 10,000 times. Two pulses for each drop make about 100,000 laser pulses a second.",
+      "p3": "The big pulse heats the tin to about 220,000 °C, 30 to 40 times hotter than the surface of the Sun. The tin turns into <strong>plasma</strong>, a gas so hot that its atoms lose electrons and glow. Tin ions in the plasma give off light at 13.5 nm. That is why this machine uses tin. Small drops also leave little debris. Only about 5 percent of the laser light becomes EUV, and that figure is from the lab.",
+      "p4": "The <strong>collector mirror</strong>, a big curved mirror, catches the light and gathers it into one spot. The vessel holds low-pressure hydrogen. It stops tin specks and cleans tin off the mirror. A collector has been shown to last more than 100 billion pulses."
+    },
+    "mirrors": {
+      "title": "Light that only bounces",
+      "p1": "EUV mirrors are not shiny metal. Each one is a <strong>multilayer mirror</strong>: more than 100 thin layers of silicon and molybdenum, each a few nm thick. Every boundary between layers reflects a little light. The layers sit about 6.8 to 6.9 nm apart, half the wavelength, so the small reflections add up instead of cancelling.",
+      "p2": "Even so, a mirror gives back only about 70 percent of the light. That is the best measured, not a promise. So the light loses about a third at every bounce. The model counts 11 bounces from the intermediate focus (explained below) to the wafer: four mirrors that shape the beam, the mask, and six mirrors that shrink the pattern. About 2 percent of the light reaches the wafer, and the range is 1 to 4 percent. The count rests on one paper, and another counts 10.",
+      "p3": "These mirrors must be extremely smooth. Their roughness is about 50 pm, and a picometre (pm) is a thousandth of a nanometre. Zeiss, which makes them, says that on a mirror as wide as Germany the highest bump would be only about 0.1 mm.",
+      "p4": "The collector gathers the light at one point, the <strong>intermediate focus</strong>, and the beam spreads out again from there. Use the slider to follow the beam bounce by bounce, and watch how much light is left. The model draws the folds and positions of the mirrors itself, following published diagrams."
+    },
+    "mask": {
+      "title": "A mirror with a map on it",
+      "p1": "The <strong>mask</strong>, also called the reticle, holds the pattern of one chip layer. It is a mirror too. A thin layer on top, the absorber, soaks up the light wherever the pattern has a line, so the light that bounces off carries the pattern. The mask sits on a square plate, 152 mm wide (six inches), and the pattern area is 104 by 132 mm.",
+      "p2": "Before the mask comes the <strong>illuminator</strong>, four mirrors that shape the beam. Their surfaces are made of many small tiles, called facets, that can be tilted. The tilts set the angles at which light reaches the mask. One study measured 22 such settings on a single illuminator, an approximate figure.",
+      "p3": "The beam meets the mask at a slant of 6 degrees (5.4 on High-NA). So the light going in and the light coming out are 12 degrees apart, and the two beams do not collide. In this model the mask faces down. That placement is our own choice.",
+      "p4": "A <strong>pellicle</strong> covers the mask. It is a very thin film that keeps dust off, because a speck on the mask would print on every wafer. The light crosses it twice, in and out. More than 90 percent passes each time, and about 81 percent passes both times. A pellicle is a film, not a lens. After the mask, the projection mirrors shrink the pattern 4 times (8 times in one direction on High-NA)."
+    },
+    "scan": {
+      "title": "A field at a time",
+      "p1": "A wafer holds many copies of a chip, and the machine prints one patch at a time. Each patch is a <strong>field</strong>, 26 by 33 mm. A wafer holds about 76 to 80 full fields. The light does not cover a whole field at once. It passes through a curved <strong>slit</strong>, about 26 by 2 mm.",
+      "p2": "To cover a field, the mask and the wafer move together in opposite directions. The slit sweeps over the mask, and the shrunk pattern sweeps over the wafer. This is called scanning. A machine can scan 160 wafers an hour (NXE:3600D) or up to 220 (NXE:3800E). Those are the makers' specs, for a light dose of 30 mJ/cm2, the energy that lands on each square centimetre.",
+      "p3": "A photon is one particle of light. That dose is about 20 EUV photons on every square nm of the wafer. The moves must be very exact. Position sensors tell where things are to about 60 pm, 20,000 times a second. Overlay is how well one layer lines up with the layer below. From machine to machine it is 1.1 nm on the 3600D, 0.9 nm on the 3800E and 1.1 nm on the High-NA EXE:5000.",
+      "p4": "In the last stretch of the playback, the clock shows how far the scan of one field has got. In this model one field takes about 0.29 s at 160 wafers an hour and 0.21 s at 220. These times are approximate. A real exposure is shorter, because the time per wafer also includes loading and aligning. Pick a machine to see the numbers change."
+    },
+    "compare": {
+      "title": "193 nm against 13.5 nm",
+      "p1": "Older machines use deep ultraviolet light, or DUV, with a wavelength of 193 nm. They use lenses, with a layer of water under the last lens. The size of a line is given as a <strong>half pitch</strong>: half the distance from one line to the next. DUV prints a half pitch of about 36 to 38 nm. EUV prints 13 nm lines with 13 nm gaps, so the full pitch is 26 nm.",
+      "p2": "EUV light has a much shorter wavelength. Each photon also carries 91.8 eV of energy (electronvolts, a unit of energy), about 14 times a DUV photon. Shorter waves can draw finer detail. The smallest line follows a simple rule: k1 times the wavelength, divided by the NA. The number k1 depends on how well the process is tuned, and a lower k1 is harder to reach. The NA is the cone of light the last mirror collects, from the first chapter. A wider cone sees finer detail. With k1 at 0.3, the rule gives 12.3 nm at an NA of 0.33 and 7.4 nm at 0.55.",
+      "p3": "The High-NA machine has an NA of 0.55. It shrinks the pattern 4 times in one direction and 8 times in the other, so one field is half as big, 26 by 16.5 mm. It prints an 8 nm half pitch. The real mirror count of High-NA is not known. So this model keeps the same mirror path and changes only the last mirrors, the shrink, the field and the numbers. The projection mirrors weigh about 12 tonnes and the illuminator mirrors about 6.",
+      "p4": "To feel the scale, a flu virus is about 100 nm wide. About 8 of these lines fit across it. A hair is wide enough for thousands. The \"3 nm\" in chip names is only a name. The finest wires are really about 23 to 24 nm apart. ASML does not publish a price. Press reports say a machine costs well over 100 million euros, and a High-NA one about 350 million."
+    }
+  }
+}

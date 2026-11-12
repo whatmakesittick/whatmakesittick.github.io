@@ -1,7 +1,8 @@
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { initI18n, t } from '@core/i18n';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { initI18n, setLanguage, t } from '@core/i18n';
+import type { LanguageCode } from '@core/i18n';
 import type { Tag } from '@core/manifest';
-import type { CardMeta, CatalogueCard } from './catalogue';
+import type { CardMeta, CardMetaLoader, CardMetas, CatalogueCard } from './catalogue';
 import { renderCatalogueGrid } from './catalogueMarkup';
 import { mountCards } from './cards';
 
@@ -9,37 +10,33 @@ function meta(title: string): CardMeta {
   return { title, eyebrow: '', summary: '' };
 }
 
-function entry(
-  slug: string,
-  tags: Tag[],
-  published: string,
-  metas: CatalogueCard['meta'],
-): CatalogueCard {
+function entry(slug: string, tags: Tag[], published: string): CatalogueCard {
   return {
-    manifest: { slug, tags, cover: 'cover.webp', locales: ['en', 'uk'] },
-    meta: metas,
+    manifest: { slug, tags, cover: 'cover.webp', locales: ['en', 'uk', 'de'] },
     published,
   };
 }
 
-const glider = entry('glider', ['aircraft', 'flight'], '2026-06-10T09:00:00Z', {
-  en: meta('How a glider flies'),
-  uk: meta('Як літає планер'),
-});
-const engine = entry('engine', ['engines', 'mechanics'], '2026-01-10T09:00:00Z', {
-  en: meta('How an engine works'),
-  uk: meta('Як працює двигун'),
-});
+const glider = entry('glider', ['aircraft', 'flight'], '2026-06-10T09:00:00Z');
+const engine = entry('engine', ['engines', 'mechanics'], '2026-01-10T09:00:00Z');
 const cards = [glider, engine];
+const metas: CardMetas = {
+  en: { glider: meta('How a glider flies'), engine: meta('How an engine works') },
+  uk: { glider: meta('Як літає планер'), engine: meta('Як працює двигун') },
+  de: { glider: meta('Wie ein Segelflugzeug fliegt') },
+};
 
-function mount(path: string, prerendered = ''): void {
+const load = vi.fn<CardMetaLoader>(async (code) => metas[code] ?? {});
+
+async function mount(path: string, prerendered = ''): Promise<void> {
   window.history.replaceState(null, '', path);
   document.body.innerHTML = `<main data-catalogue>${prerendered}</main>`;
-  mountCards(document, cards);
+  await mountCards(document, cards, load);
 }
 
 function prerender(code: 'en' | 'uk'): string {
-  return renderCatalogueGrid(cards, { code, base: '/', translate: (key) => t(key, { lng: code }) });
+  const translate = (key: string) => t(key, { lng: code });
+  return renderCatalogueGrid(cards, metas, { code, base: '/', translate });
 }
 
 function visibleTitles(): string[] {
@@ -100,28 +97,28 @@ describe('catalogue cards', () => {
 });
 
 describe('tag filter', () => {
-  it('applies the tag in the URL on load', () => {
-    mount('/uk/?tag=flight');
+  it('applies the tag in the URL on load', async () => {
+    await mount('/uk/?tag=flight');
     expect(visibleTitles()).toEqual(['Як літає планер']);
     expect(pressedChips()).toEqual(['Політ']);
   });
 
-  it('drops a tag no explainer uses from the URL', () => {
-    mount('/uk/?tag=optics');
+  it('drops a tag no explainer uses from the URL', async () => {
+    await mount('/uk/?tag=optics');
     expect(visibleTitles()).toHaveLength(2);
     expect(window.location.search).toBe('');
   });
 
-  it('selects the tag of a card chip and writes it to the URL', () => {
-    mount('/uk/');
+  it('selects the tag of a card chip and writes it to the URL', async () => {
+    await mount('/uk/');
     chip('.card-tags', 'Механіка').click();
     expect(visibleTitles()).toEqual(['Як працює двигун']);
     expect(pressedChips()).toEqual(['Механіка']);
     expect(window.location.search).toBe('?tag=mechanics');
   });
 
-  it('clears the filter with the pressed chip or the all chip', () => {
-    mount('/uk/?tag=flight');
+  it('clears the filter with the pressed chip or the all chip', async () => {
+    await mount('/uk/?tag=flight');
     chip('.tag-filter', 'Політ').click();
     expect(visibleTitles()).toHaveLength(2);
     expect(window.location.search).toBe('');
@@ -133,8 +130,8 @@ describe('tag filter', () => {
 });
 
 describe('prerendered catalogue', () => {
-  it('keeps the prerendered cards and chips of the current language', () => {
-    mount('/uk/', prerender('uk'));
+  it('keeps the prerendered cards and chips of the current language', async () => {
+    await mount('/uk/', prerender('uk'));
     const card = document.querySelector('.card-item');
     chip('.tag-filter', 'Політ').click();
     expect(document.querySelector('.card-item')).toBe(card);
@@ -142,14 +139,73 @@ describe('prerendered catalogue', () => {
     expect(pressedChips()).toEqual(['Політ']);
   });
 
-  it('filters the prerendered cards by the tag in the URL on load', () => {
-    mount('/uk/?tag=mechanics', prerender('uk'));
+  it('filters the prerendered cards by the tag in the URL on load', async () => {
+    await mount('/uk/?tag=mechanics', prerender('uk'));
     expect(visibleTitles()).toEqual(['Як працює двигун']);
   });
 
-  it('renders the cards again when the page language differs from the prerendered one', () => {
-    mount('/uk/', prerender('en'));
+  it('renders the cards again when the page language differs from the prerendered one', async () => {
+    await mount('/uk/', prerender('en'));
     expect(visibleTitles()).toEqual(['Як літає планер', 'Як працює двигун']);
     expect(document.querySelector('a.card')?.getAttribute('href')).toBe('/uk/glider/');
+  });
+
+  it('loads no card text when the prerendered language matches', async () => {
+    load.mockClear();
+    await mount('/uk/', prerender('uk'));
+    expect(load).not.toHaveBeenCalled();
+  });
+
+  it('loads the language and English for the fallback when it renders again', async () => {
+    load.mockClear();
+    await mount('/uk/', prerender('en'));
+    expect(load.mock.calls.map(([code]) => code).toSorted()).toEqual(['en', 'uk']);
+  });
+});
+
+describe('language switch', () => {
+  afterEach(() => setLanguage('uk'));
+
+  it('loads the new language on demand and renders it', async () => {
+    await mount('/uk/', prerender('uk'));
+    load.mockClear();
+    await setLanguage('de');
+    await vi.waitFor(() => expect(visibleTitles()[0]).toBe('Wie ein Segelflugzeug fliegt'));
+    expect(load).toHaveBeenCalledWith('de');
+  });
+
+  it('falls back to English for a card the language does not have', async () => {
+    await mount('/uk/', prerender('uk'));
+    await setLanguage('de');
+    await vi.waitFor(() => expect(visibleTitles()).toHaveLength(2));
+    expect(visibleTitles()).toEqual(['Wie ein Segelflugzeug fliegt', 'How an engine works']);
+  });
+
+  it('keeps the tag filter after rendering the new language', async () => {
+    await mount('/uk/?tag=mechanics', prerender('uk'));
+    await setLanguage('de');
+    await vi.waitFor(() => expect(visibleTitles()).toEqual(['How an engine works']));
+  });
+
+  it('renders only the last language when it changes twice quickly', async () => {
+    await mount('/uk/', prerender('uk'));
+    const held: Array<{ code: LanguageCode; release: () => void }> = [];
+    load.mockImplementation(
+      (code) =>
+        new Promise((resolve) => held.push({ code, release: () => resolve(metas[code] ?? {}) })),
+    );
+    const release = (code: LanguageCode) =>
+      held.filter((h) => h.code === code).forEach((h) => h.release());
+    const first = setLanguage('de');
+    await vi.waitFor(() => expect(held.some((h) => h.code === 'de')).toBe(true));
+    const second = setLanguage('en');
+    await vi.waitFor(() => expect(held.some((h) => h.code === 'en')).toBe(true));
+    release('en');
+    await vi.waitFor(() => expect(visibleTitles()[0]).toBe('How a glider flies'));
+    release('de');
+    await Promise.all([first, second]);
+    await new Promise((resolve) => setTimeout(resolve));
+    expect(visibleTitles()[0]).toBe('How a glider flies');
+    load.mockImplementation(async (code) => metas[code] ?? {});
   });
 });

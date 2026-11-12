@@ -19,7 +19,14 @@ import { EXPLAINERS_DIRECTORY, PUBLIC_DIRECTORY } from './manifest.ts';
 import type { LoadedExplainer } from './manifest.ts';
 import { catalogueEntry } from './catalogue.ts';
 import { embedCatalogueFiles } from './embedCatalogue.ts';
-import { renderCatalogueModule } from './page.ts';
+import {
+  CATALOGUE_MODULE,
+  catalogueModuleId,
+  renderCatalogueLanguageModule,
+  renderCatalogueModule,
+} from './page.ts';
+import { LANGUAGE_CODES } from '../src/core/i18n/languages.ts';
+import type { LanguageCode } from '../src/core/i18n/languages.ts';
 import { languagePreloads } from './preloads.ts';
 import {
   CORE_DIRECTORY,
@@ -40,8 +47,12 @@ const PAGE_SOURCES = /(?:explainer\.json|\.html|locales[\\/]\w+\.json)$/;
 const MOVED_PERMANENTLY = 301;
 const PAGE_ENTRY_NAME = /index\.html$/;
 const PLUGIN_NAME = 'explainer-pages';
-const CATALOGUE_MODULE = 'virtual:explainer-catalogue';
-const RESOLVED_CATALOGUE_MODULE = `\0${CATALOGUE_MODULE}`;
+const RESOLVED_PREFIX = '\0';
+const RESOLVED_CATALOGUE_MODULE = `${RESOLVED_PREFIX}${CATALOGUE_MODULE}`;
+
+function catalogueLanguage(id: string): LanguageCode | undefined {
+  return LANGUAGE_CODES.find((code) => id === catalogueModuleId(code));
+}
 
 function listFiles(directory: string): string[] {
   if (!existsSync(directory)) return [];
@@ -103,8 +114,11 @@ function siteContent({ explainers, sources }: Site): SiteContent {
 
 function reloadPages(server: ViteDevServer): void {
   const { moduleGraph } = server.environments.client;
-  const catalogue = moduleGraph.getModuleById(RESOLVED_CATALOGUE_MODULE);
-  if (catalogue) moduleGraph.invalidateModule(catalogue);
+  const ids = [CATALOGUE_MODULE, ...LANGUAGE_CODES.map(catalogueModuleId)];
+  for (const id of ids) {
+    const module = moduleGraph.getModuleById(`${RESOLVED_PREFIX}${id}`);
+    if (module) moduleGraph.invalidateModule(module);
+  }
   server.ws.send({ type: 'full-reload' });
 }
 
@@ -154,11 +168,17 @@ function pagesPlugin(): Plugin {
     },
 
     resolveId(id) {
-      return id === CATALOGUE_MODULE ? RESOLVED_CATALOGUE_MODULE : resolveEmbedEntry(id);
+      if (id === CATALOGUE_MODULE || catalogueLanguage(id)) return `${RESOLVED_PREFIX}${id}`;
+      return resolveEmbedEntry(id);
     },
 
     load(id) {
-      if (id === RESOLVED_CATALOGUE_MODULE) return renderCatalogueModule(site?.explainers ?? []);
+      const explainers = site?.explainers ?? [];
+      if (id === RESOLVED_CATALOGUE_MODULE) return renderCatalogueModule(explainers);
+      const language = catalogueLanguage(id.slice(RESOLVED_PREFIX.length));
+      if (id.startsWith(RESOLVED_PREFIX) && language) {
+        return renderCatalogueLanguageModule(explainers, language);
+      }
       const slug = embedEntrySlug(id);
       const explainer = site?.explainers.find(({ manifest }) => manifest.slug === slug);
       return explainer ? renderEmbedEntry(explainer) : undefined;

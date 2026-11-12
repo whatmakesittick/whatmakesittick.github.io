@@ -1,13 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { Tag } from '../src/core/manifest.ts';
-import type { CatalogueCard } from '../src/site/catalogue.ts';
+import type { CardMetas, CatalogueCard } from '../src/site/catalogue.ts';
 import { pickMoreExplainers, renderMoreExplainers } from './moreExplainers.ts';
 
 function card(slug: string, tags: Tag[], locales: CatalogueCard['manifest']['locales'] = ['en']) {
-  const meta = { title: `How a ${slug} works`, eyebrow: '', summary: '' };
   return {
     manifest: { slug, tags, cover: 'cover.webp', locales },
-    meta: { en: meta, uk: { ...meta, title: `Як працює ${slug}` } },
     published: '2026-03-10T09:00:00Z',
   } satisfies CatalogueCard;
 }
@@ -20,6 +18,16 @@ const newestFirst = [
   card('glider', ['aircraft', 'flight']),
   card('engine', ['engines', 'mechanics', 'vehicles']),
 ];
+
+function metasFor(cards: readonly CatalogueCard[]): CardMetas {
+  const meta = (title: string) => ({ title, eyebrow: '', summary: '' });
+  const named = (title: (slug: string) => string) =>
+    Object.fromEntries(cards.map(({ manifest }) => [manifest.slug, meta(title(manifest.slug))]));
+  return {
+    en: named((slug) => `How a ${slug} works`),
+    uk: named((slug) => `Як працює ${slug}`),
+  };
+}
 
 function slugs(cards: readonly CatalogueCard[]): string[] {
   return cards.map(({ manifest }) => manifest.slug);
@@ -52,7 +60,10 @@ describe('pickMoreExplainers', () => {
 });
 
 describe('renderMoreExplainers', () => {
-  const html = renderMoreExplainers(newestFirst.slice(0, 2), { code: 'uk', base: '/' });
+  const html = renderMoreExplainers(newestFirst.slice(0, 2), metasFor(newestFirst), {
+    code: 'uk',
+    base: '/',
+  });
 
   it('links each explainer in the page language when it ships it, else in English', () => {
     const links = [...html.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);

@@ -6,7 +6,6 @@ import { filterByTag, readTagQuery, toggleTag, usedTags, writeTagQuery } from '.
 function entry(slug: string, tags: Tag[]): CatalogueCard {
   return {
     manifest: { slug, tags, cover: 'cover.webp', locales: ['en'] },
-    meta: {},
     published: '2026-03-10T09:00:00Z',
   };
 }
