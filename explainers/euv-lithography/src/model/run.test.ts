@@ -44,7 +44,7 @@ describe('run', () => {
 
   it('seeks the six moments', () => {
     expect(MOMENT_IDS.map((id) => MOMENTS[id])).toEqual([0, 150, 260, 520, 700, 800]);
-    expect(Object.values(CHASE_SPAN)).toEqual([0.6, 0.3, 0.8, 3, 3, 2]);
+    expect(Object.values(CHASE_SPAN)).toEqual([1.2, 1.2, 1.2, 3, 3, 2]);
   });
 
   it('runs 60 seconds at the default speed', () => {

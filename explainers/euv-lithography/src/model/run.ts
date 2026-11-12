@@ -62,9 +62,9 @@ export const MOMENTS: Readonly<Record<MomentId, number>> = {
 };
 
 export const CHASE_SPAN: Readonly<Record<PhaseId, number>> = {
-  droplet: 0.6,
-  prepulse: 0.3,
-  plasma: 0.8,
+  droplet: 1.2,
+  prepulse: 1.2,
+  plasma: 1.2,
   collect: 3,
   mask: 3,
   expose: 2,
