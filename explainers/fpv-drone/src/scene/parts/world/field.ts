@@ -2,6 +2,7 @@ import { BufferAttribute, BufferGeometry, Color, Group, PlaneGeometry } from 'th
 import type { BufferGeometry as Geometry } from 'three';
 import { smoothstep } from '@core/math';
 import { STRUCTURE_GROUP, UNDIMMED_GROUP } from '@core/scene/materials';
+import type { Steps } from '@core/scene/pacing';
 import { FIELD, ROADS } from '../../constants';
 import { PAINT, WORLD_FINISHES, fieldFinish, roadFinish } from '../../finishes';
 import { fractalNoise } from '../../geometry/noise';
@@ -112,12 +113,15 @@ export function roadsGeometry(): Geometry {
   ]);
 }
 
-export function createField(context: PartContext): Group {
+export function* createField(context: PartContext): Steps<Group> {
   const field = new Group();
   const grass = context.tracker.track(fieldTexture(FIELD.texture));
+  yield;
   const dirt = context.tracker.track(roadTexture(ROADS.texture));
+  yield;
   const mown = partMesh(context, fieldGeometry(), UNDIMMED_GROUP, fieldFinish(grass));
   mown.frustumCulled = false;
+  yield;
   const outer = partMesh(context, outerGeometry(), UNDIMMED_GROUP, WORLD_FINISHES.outerField);
   outer.frustumCulled = false;
   field.add(mown, outer, partMesh(context, roadsGeometry(), STRUCTURE_GROUP, roadFinish(dirt)));

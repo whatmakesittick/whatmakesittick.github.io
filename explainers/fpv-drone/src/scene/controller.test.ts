@@ -63,52 +63,52 @@ function fakeShell() {
 }
 
 describe('fpv controller', () => {
-  it('adds the scene and sets the camera bounds to the whole field on the ground', () => {
+  it('adds the scene and sets the camera bounds to the whole field on the ground', async () => {
     const { rig, shell } = fakeShell();
     const controller = new FpvController(shell);
-    controller.build(state());
+    await controller.build(state());
     expect(shell.scene.add).toHaveBeenCalledTimes(1);
     expect(shell.labels.attach).toHaveBeenCalledTimes(1);
     expect(rig.setBounds).toHaveBeenCalledWith(expect.any(Box3), 0);
   });
 
-  it('frames a view around the drone and follows it once the scene is built', () => {
+  it('frames a view around the drone and follows it once the scene is built', async () => {
     const { rig, shell } = fakeShell();
     const controller = new FpvController(shell);
     controller.views.frame('chase', true);
     expect(rig.tweenTo).not.toHaveBeenCalled();
     drone.position = [100, 40, 0];
-    controller.build(state());
+    await controller.build(state());
     controller.views.frame('chase', true);
     const target = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
     expect(target?.toArray()).toEqual([100, 40, 0]);
     expect(rig.follow).toHaveBeenLastCalledWith(expect.anything(), 'heading');
   });
 
-  it('frames the pilot view on the route region without following', () => {
+  it('frames the pilot view on the route region without following', async () => {
     const { rig, shell } = fakeShell();
     const controller = new FpvController(shell);
-    controller.build(state());
+    await controller.build(state());
     controller.views.frame('pilot', false);
     expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
     expect(rig.jumpTo).toHaveBeenCalledTimes(1);
   });
 
-  it('knows when the camera rides in the nose of the drone', () => {
+  it('knows when the camera rides in the nose of the drone', async () => {
     const { rig, shell } = fakeShell();
     const controller = new FpvController(shell);
     expect(controller.ridesTheCamera()).toBe(false);
-    controller.build(state());
+    await controller.build(state());
     expect(controller.ridesTheCamera()).toBe(false);
     rig.camera.position.set(0, 0, 0.5);
     expect(controller.ridesTheCamera()).toBe(true);
   });
 
-  it('hands the camera distance to the assembly each frame', () => {
+  it('hands the camera distance to the assembly each frame', async () => {
     const { shell } = fakeShell();
     const controller = new FpvController(shell);
     expect(controller.update(0.016)).toBe(false);
-    controller.build(state());
+    await controller.build(state());
     expect(controller.update(0.016)).toBe(true);
     controller.dispose();
     expect(controller.update(0.016)).toBe(false);

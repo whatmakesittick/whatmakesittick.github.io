@@ -59,10 +59,10 @@ function fakeShell(stageWidth = DESKTOP_WIDTH_PX) {
 }
 
 describe('naval drone controller', () => {
-  it('adds the scene and keeps the camera target above the sea floor of the bounds', () => {
+  it('adds the scene and keeps the camera target above the sea floor of the bounds', async () => {
     const { rig, shell } = fakeShell();
     const navalDrone = new NavalDroneController(shell);
-    navalDrone.build(assemblyState());
+    await navalDrone.build(assemblyState());
     expect(shell.scene.add).toHaveBeenCalledTimes(1);
     expect(shell.labels.attach).toHaveBeenCalledTimes(1);
     const [bounds, floor] = rig.setBounds.mock.lastCall ?? [];
@@ -71,13 +71,13 @@ describe('naval drone controller', () => {
     expect(floor).toBeLessThan(0);
   });
 
-  it('frames a view around the boat and follows it once the scene is built', () => {
+  it('frames a view around the boat and follows it once the scene is built', async () => {
     const { rig, shell } = fakeShell();
     const navalDrone = new NavalDroneController(shell);
     navalDrone.views.frame('chase', true);
     expect(rig.tweenTo).not.toHaveBeenCalled();
     const state = assemblyState();
-    navalDrone.build(state);
+    await navalDrone.build(state);
     navalDrone.views.frame('chase', true);
     const target = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
     expect(target?.x).toBeCloseTo(state.boat.position[0], 1);
@@ -85,25 +85,25 @@ describe('naval drone controller', () => {
     expect(rig.setDistanceLimits).toHaveBeenLastCalledWith({});
   });
 
-  it('moves the boat off the centre of a phone-sized stage', () => {
+  it('moves the boat off the centre of a phone-sized stage', async () => {
     const state = assemblyState();
-    const aimOn = (width: number) => {
+    const aimOn = async (width: number) => {
       const { rig, shell } = fakeShell(width);
       const navalDrone = new NavalDroneController(shell);
-      navalDrone.build(state);
+      await navalDrone.build(state);
       navalDrone.views.frame('waterline', false);
       return (rig.jumpTo.mock.lastCall?.[0] as { target: Vector3 }).target;
     };
-    const wide = aimOn(DESKTOP_WIDTH_PX);
-    const phone = aimOn(PHONE_WIDTH_PX);
+    const wide = await aimOn(DESKTOP_WIDTH_PX);
+    const phone = await aimOn(PHONE_WIDTH_PX);
     expect(wide.x).toBeCloseTo(state.boat.position[0], 1);
     expect(phone.distanceTo(wide)).toBeGreaterThan(0.5);
   });
 
-  it('rides the deck in the eye view so the camera moves with the waves', () => {
+  it('rides the deck in the eye view so the camera moves with the waves', async () => {
     const { rig, shell } = fakeShell();
     const navalDrone = new NavalDroneController(shell);
-    navalDrone.build(assemblyState());
+    await navalDrone.build(assemblyState());
     navalDrone.views.frame('eye', false);
     const eyeAnchor = rig.follow.mock.lastCall?.[0] as Vector3 | undefined;
     navalDrone.views.frame('chase', false);
@@ -112,10 +112,10 @@ describe('naval drone controller', () => {
     expect(eyeAnchor).not.toBe(boatAnchor);
   });
 
-  it('turns in place from the dome in the eye view without a sea limit on the zoom', () => {
+  it('turns in place from the dome in the eye view without a sea limit on the zoom', async () => {
     const { rig, shell } = fakeShell();
     const navalDrone = new NavalDroneController(shell);
-    navalDrone.build(assemblyState());
+    await navalDrone.build(assemblyState());
     navalDrone.views.frame('eye', false);
     expect(rig.controls.maxPolarAngle).toBe(LOOK_AROUND_POLAR.eye);
     expect(rig.setDistanceLimits).toHaveBeenLastCalledWith(VIEW_DISTANCE.eye);
@@ -123,10 +123,10 @@ describe('naval drone controller', () => {
     expect(pose.position.distanceTo(pose.target)).toBeCloseTo(EYE_VIEW.look, 9);
   });
 
-  it('lets the sky view look up without the camera reaching the sea, then levels again', () => {
+  it('lets the sky view look up without the camera reaching the sea, then levels again', async () => {
     const { rig, shell } = fakeShell();
     const navalDrone = new NavalDroneController(shell);
-    navalDrone.build(assemblyState());
+    await navalDrone.build(assemblyState());
     navalDrone.views.frame('sky', false);
     expect(rig.controls.maxPolarAngle).toBeGreaterThan(LEVEL_LIMIT);
     const limits = rig.setDistanceLimits.mock.lastCall?.[0] as { max: number };
@@ -136,11 +136,11 @@ describe('naval drone controller', () => {
     expect(rig.setDistanceLimits).toHaveBeenLastCalledWith({ min: 1.2, max: 30 });
   });
 
-  it('keeps drawing frames while the run plays or the reader holds the boat', () => {
+  it('keeps drawing frames while the run plays or the reader holds the boat', async () => {
     const { shell } = fakeShell();
     const navalDrone = new NavalDroneController(shell);
     expect(navalDrone.update(0.016)).toBe(false);
-    navalDrone.build(assemblyState());
+    await navalDrone.build(assemblyState());
     expect(navalDrone.update(0.016)).toBe(false);
     navalDrone.setState(assemblyState({ playing: true }));
     expect(navalDrone.update(0.016)).toBe(true);

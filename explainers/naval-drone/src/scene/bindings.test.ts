@@ -41,9 +41,9 @@ function fakeTargets() {
 }
 
 describe('scene bindings', () => {
-  it('builds the scene at the store moment and frames the first chapter', () => {
+  it('builds the scene at the store moment and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
-    bindStore(createNavalDroneStore({ phase: 100 }), targets);
+    await bindStore(createNavalDroneStore({ phase: 100 }), targets);
     expect(received[0]).toMatchObject({
       phase: 100,
       playing: true,
@@ -60,10 +60,10 @@ describe('scene bindings', () => {
     expect(frame).toHaveBeenCalledWith('chase', false, undefined);
   });
 
-  it('hands the scene the held boat, the jet and the hull chapter flags', () => {
+  it('hands the scene the held boat, the jet and the hull chapter flags', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createNavalDroneStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('hull');
     expect(frame).toHaveBeenLastCalledWith('waterline', true, undefined);
     expect(received.at(-1)).toMatchObject({
@@ -81,10 +81,10 @@ describe('scene bindings', () => {
     expect(received.at(-1)?.boat.held).toBe(false);
   });
 
-  it('hands the scene the sea, the link ghost and the deck fit', () => {
+  it('hands the scene the sea, the link ghost and the deck fit', async () => {
     const { received, targets } = fakeTargets();
     const store = createNavalDroneStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('link');
     expect(received.at(-1)?.link.ghost).not.toBeNull();
     store.getState().setLinkMode('lost');
@@ -95,20 +95,20 @@ describe('scene bindings', () => {
     expect(received.at(-1)?.fit).toBe('missile');
   });
 
-  it('hands the scene each view change once', () => {
+  it('hands the scene each view change once', async () => {
     const { received, targets } = fakeTargets();
     const store = createNavalDroneStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const calls = received.length;
     store.getState().toggleView('links');
     expect(received).toHaveLength(calls + 1);
     expect(received.at(-1)?.view.links).toBe(true);
   });
 
-  it('never changes the state object the assembly got last', () => {
+  it('never changes the state object the assembly got last', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createNavalDroneStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setPhase(10);
     store.getState().setPhase(90);
     const last = received.length - 1;
@@ -116,10 +116,10 @@ describe('scene bindings', () => {
     expect(received[last - 1]).toEqual(snapshots[last - 1]);
   });
 
-  it('labels only the parts the scene draws', () => {
+  it('labels only the parts the scene draws', async () => {
     const { targets } = fakeTargets();
     const store = createNavalDroneStore({ phase: 0 });
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const wanted = () =>
       targets.labelVisibility.setWanted.mock.lastCall?.[0] as ReadonlySet<string>;
     store.getState().applyPreset('hull');
@@ -135,10 +135,10 @@ describe('scene bindings', () => {
     expect(wanted()).toContain('missileRails');
   });
 
-  it('drops the minor pump labels on a phone-sized stage', () => {
+  it('drops the minor pump labels on a phone-sized stage', async () => {
     const { resizes, targets } = fakeTargets();
     const store = createNavalDroneStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const wanted = () =>
       targets.labelVisibility.setWanted.mock.lastCall?.[0] as ReadonlySet<string>;
     store.getState().applyPreset('jet');
@@ -150,10 +150,10 @@ describe('scene bindings', () => {
     expect(wanted()).toContain('driveShaft');
   });
 
-  it('stops listening once unbound', () => {
+  it('stops listening once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createNavalDroneStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const calls = received.length;
     store.getState().setPhase(50);

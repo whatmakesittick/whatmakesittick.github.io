@@ -75,7 +75,7 @@ function followMove(store: FpvStore, targets: PresetTargets): () => void {
   );
 }
 
-export function bindStore(store: FpvStore, targets: SceneTargets): () => void {
+export async function bindStore(store: FpvStore, targets: SceneTargets): Promise<() => void> {
   const { drone, labelVisibility } = targets;
   const assemblyState = new DoubleBufferedAssemblyState();
   const drawnLabels = new DrawnLabels(labelVisibility);
@@ -85,7 +85,8 @@ export function bindStore(store: FpvStore, targets: SceneTargets): () => void {
     return next;
   };
   const push = (state: AssemblySource) => drone.setState(handOver(state));
-  drone.build(handOver(store.getState()));
+  await drone.build(handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     followMove(store, targets),

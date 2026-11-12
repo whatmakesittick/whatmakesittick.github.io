@@ -13,7 +13,7 @@ function reportGoggles(store: FpvStore, through: boolean): void {
   if (state.throughGoggles !== through) state.setThroughGoggles(through);
 }
 
-export function mountFpvScene(shell: SceneShell, store: FpvStore): () => void {
+export async function mountFpvScene(shell: SceneShell, store: FpvStore): Promise<() => void> {
   const restoreLight = fpvLight(shell.lighting);
   const drone = new FpvController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => {
@@ -21,7 +21,7 @@ export function mountFpvScene(shell: SceneShell, store: FpvStore): () => void {
     return drone.update(deltaSeconds);
   });
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
-  const unbind = bindStore(store, { drone, labelVisibility, ...shell });
+  const unbind = await bindStore(store, { drone, labelVisibility, ...shell });
   return () => {
     removeFrame();
     labelVisibility.dispose();

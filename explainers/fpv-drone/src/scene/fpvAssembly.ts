@@ -2,6 +2,8 @@ import { Box3, Group, Mesh, Points, Sprite } from 'three';
 import type { Material, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
+import { runPaced } from '@core/scene/pacing';
+import type { Steps } from '@core/scene/pacing';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
 import { DRONE } from '../model/layout';
@@ -14,11 +16,14 @@ import type { PartContext } from './parts/context';
 import { DronePart } from './parts/drone/drone';
 import { EffectsPart } from './parts/effects/effects';
 import { createCrossing } from './parts/world/crossing';
+import type { CrossingPart } from './parts/world/crossing';
 import { createField } from './parts/world/field';
 import { createLaunchPad } from './parts/world/pad';
+import type { PadPart } from './parts/world/pad';
 import { createShrubs } from './parts/world/shrubs';
 import { createSky } from './parts/world/sky';
 import { createStation } from './parts/world/station';
+import type { StationPart } from './parts/world/station';
 import { createTreeline } from './parts/world/trees';
 import { staticRegions } from './regions';
 
@@ -36,9 +41,49 @@ function createContext(resources: AssemblyResources, tracker: ResourceTracker): 
   return { ...resources, tracker, looks: { carbon: carbonFinish(weave), bell: bellFinish(slots) } };
 }
 
+interface Parts {
+  tracker: ResourceTracker;
+  station: StationPart;
+  pad: PadPart;
+  crossing: CrossingPart;
+  drone: DronePart;
+  effects: EffectsPart;
+  sky: Mesh;
+  field: Group;
+  treeline: Group;
+  shrubs: Points;
+}
+
+export function* buildParts(resources: AssemblyResources): Steps<Parts> {
+  const tracker = new ResourceTracker();
+  const context = createContext(resources, tracker);
+  yield;
+  const station = createStation(context);
+  yield;
+  const pad = createLaunchPad(context);
+  const crossing = createCrossing(context);
+  yield;
+  const drone = new DronePart(context);
+  yield;
+  const effects = new EffectsPart(context, {
+    drone,
+    patchAntenna: station.patchAntenna,
+    goggles: station.goggles,
+  });
+  yield;
+  const sky = createSky(context);
+  yield;
+  const field = yield* createField(context);
+  yield;
+  const treeline = createTreeline(context);
+  yield;
+  const shrubs = createShrubs(context);
+  return { tracker, station, pad, crossing, drone, effects, sky, field, treeline, shrubs };
+}
+
 export class FpvAssembly implements Assembly {
   readonly root = new Group();
-  private readonly tracker = new ResourceTracker();
+  private readonly tracker: ResourceTracker;
   private readonly materials: MaterialLibrary;
   private readonly drone: DronePart;
   private readonly effects: EffectsPart;
@@ -54,23 +99,17 @@ export class FpvAssembly implements Assembly {
   };
   private playing = false;
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(resources: AssemblyResources, parts: Parts, state: AssemblyState) {
     this.materials = resources.materials;
-    const context = createContext(resources, this.tracker);
-    const station = createStation(context);
-    const pad = createLaunchPad(context);
-    const crossing = createCrossing(context);
-    this.drone = new DronePart(context);
-    this.effects = new EffectsPart(context, {
-      drone: this.drone,
-      patchAntenna: station.patchAntenna,
-      goggles: station.goggles,
-    });
+    const { station, pad, crossing } = parts;
+    this.tracker = parts.tracker;
+    this.drone = parts.drone;
+    this.effects = parts.effects;
     this.root.add(
-      createSky(context),
-      createField(context),
-      createTreeline(context),
-      createShrubs(context),
+      parts.sky,
+      parts.field,
+      parts.treeline,
+      parts.shrubs,
       station.object,
       pad.object,
       crossing.object,
@@ -143,6 +182,9 @@ export class FpvAssembly implements Assembly {
   }
 }
 
-export function createFpvAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
-  return new FpvAssembly(resources, state);
+export async function createFpvAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Promise<Assembly> {
+  return new FpvAssembly(resources, await runPaced(buildParts(resources)), state);
 }

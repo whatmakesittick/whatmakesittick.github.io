@@ -28,9 +28,9 @@ function fakeTargets() {
 }
 
 describe('scene bindings', () => {
-  it('builds the scene at the store moment and frames the first chapter', () => {
+  it('builds the scene at the store moment and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
-    bindStore(createFpvStore({ phase: 38 }), targets);
+    await bindStore(createFpvStore({ phase: 38 }), targets);
     const flight = flightAt(38);
     expect(received[0]).toEqual({
       phase: 38,
@@ -46,10 +46,10 @@ describe('scene bindings', () => {
     expect(frame).toHaveBeenCalledWith('chase', false, undefined);
   });
 
-  it('hands the scene the readings for every change of time, video, move, payload and view', () => {
+  it('hands the scene the readings for every change of time, video, move, payload and view', async () => {
     const { received, targets } = fakeTargets();
     const store = createFpvStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().seekMoment('onStation');
     expect(received.at(-1)?.phase).toBe(27);
     store.getState().setVideo('digital');
@@ -64,10 +64,10 @@ describe('scene bindings', () => {
     expect(received.at(-1)?.view.links).toBe(false);
   });
 
-  it('never changes the state object the assembly got last', () => {
+  it('never changes the state object the assembly got last', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createFpvStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setPhase(10);
     store.getState().setPhase(20);
     const last = received.length - 1;
@@ -75,19 +75,19 @@ describe('scene bindings', () => {
     expect(received[last - 1]).toEqual(snapshots[last - 1]);
   });
 
-  it('frames each chapter at its moment of the flight', () => {
+  it('frames each chapter at its moment of the flight', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createFpvStore({ phase: 70 });
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('limits');
     expect(frame).toHaveBeenLastCalledWith('fpv', true, undefined);
     expect(received.at(-1)?.phase).toBe(52);
   });
 
-  it('highlights the motors that speed up for the chosen move in the flight chapter', () => {
+  it('highlights the motors that speed up for the chosen move in the flight chapter', async () => {
     const { targets } = fakeTargets();
     const store = createFpvStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const highlighted = () => targets.highlighter.setHighlight.mock.lastCall?.[0] as string[];
     store.getState().applyPreset('flight');
     expect(highlighted()).toEqual([
@@ -116,10 +116,10 @@ describe('scene bindings', () => {
     );
   });
 
-  it('labels the links only while they are drawn', () => {
+  it('labels the links only while they are drawn', async () => {
     const { targets } = fakeTargets();
     const store = createFpvStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const wanted = () =>
       targets.labelVisibility.setWanted.mock.lastCall?.[0] as ReadonlySet<string>;
     store.getState().applyPreset('link');
@@ -129,10 +129,10 @@ describe('scene bindings', () => {
     expect(wanted()).not.toContain('videoLink');
   });
 
-  it('stops listening once unbound', () => {
+  it('stops listening once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createFpvStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const calls = received.length;
     store.getState().setPhase(50);

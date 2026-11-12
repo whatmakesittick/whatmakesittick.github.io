@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { InstancedMesh, Mesh, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
+import { runNow } from '@core/scene/pacing';
 import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
 import { PART_IDS } from '../ids';
@@ -11,7 +12,7 @@ import { planingAt } from '../model/hull';
 import { JET } from '../model/layout';
 import { HELD_PHASE, boatAt, companionsAt, poseAtDistance } from '../model/run';
 import { seaAt } from '../model/sea';
-import { NavalDroneAssembly } from './navalDroneAssembly';
+import { NavalDroneAssembly, buildParts } from './navalDroneAssembly';
 
 const ANCHORS: readonly AnchorId[] = [
   'boat',
@@ -98,10 +99,9 @@ function shownTriangles(): number {
 
 beforeAll(() => {
   textures = createSceneTextures();
-  assembly = new NavalDroneAssembly(
-    { materials: new MaterialLibrary(), textures },
-    stateAt(HELD_PHASE),
-  );
+  const resources = { materials: new MaterialLibrary(), textures };
+  const state = stateAt(HELD_PHASE);
+  assembly = new NavalDroneAssembly(resources, runNow(buildParts(resources, state)), state);
 });
 
 afterAll(() => {

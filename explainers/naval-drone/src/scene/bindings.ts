@@ -71,7 +71,10 @@ class DoubleBufferedAssemblyState {
   }
 }
 
-export function bindStore(store: NavalDroneStore, targets: SceneTargets): () => void {
+export async function bindStore(
+  store: NavalDroneStore,
+  targets: SceneTargets,
+): Promise<() => void> {
   const { navalDrone, labelVisibility, viewport } = targets;
   const assemblyState = new DoubleBufferedAssemblyState();
   const drawnLabels = new DrawnLabels(labelVisibility);
@@ -81,7 +84,8 @@ export function bindStore(store: NavalDroneStore, targets: SceneTargets): () => 
     return next;
   };
   const push = (state: AssemblySource) => navalDrone.setState(handOver(state));
-  navalDrone.build(handOver(store.getState()));
+  await navalDrone.build(handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     viewport.onResize((size) => drawnLabels.setCompact(isCompactStage(size))),
     store.subscribe(push),
