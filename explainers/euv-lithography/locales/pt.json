@@ -54,7 +54,8 @@
   },
   "clock": {
     "before": "{{value}} antes do clarão",
-    "after": "{{value}} depois do clarão"
+    "after": "{{value}} depois do clarão",
+    "scan": "Varredura do campo: {{value}}"
   },
   "controls": {
     "label": "Controles do modelo",
@@ -276,7 +277,7 @@
       "p1": "Uma lâmina leva muitas cópias de um chip, e a máquina grava um pedaço por vez. Cada pedaço é um <strong>campo</strong>, de 26 por 33 mm. Numa lâmina cabem de 76 a 80 campos inteiros. A luz não cobre um campo de uma vez. Ela passa por uma <strong>fenda</strong> curva de cerca de 26 por 2 mm.",
       "p2": "Para cobrir o campo, a máscara e a lâmina se movem juntas, em sentidos opostos. A fenda percorre a máscara, e o padrão reduzido percorre a lâmina. Isso se chama varredura. Uma máquina pode varrer 160 lâminas por hora (NXE:3600D) ou até 220 (NXE:3800E). São as especificações dos fabricantes, para uma dose de 30 mJ/cm2.",
       "p3": "Essa dose equivale a cerca de 20 fótons de EUV em cada nm quadrado da lâmina. Um fóton é uma partícula de luz. Os movimentos precisam ser muito exatos. Os sensores de posição leem cerca de 60 pm, 20.000 vezes por segundo. O alinhamento entre camadas mede o quanto uma camada fica bem encaixada na de baixo. Ele é de 1,1 nm na 3600D, 0,9 nm na 3800E e 1,1 nm na High-NA EXE:5000, de máquina para máquina.",
-      "p4": "O trecho final da reprodução é o tempo que um campo leva para ser varrido. Neste modelo, cerca de 0,29 s a 160 lâminas por hora e 0,21 s a 220. São tempos aproximados. O tempo por lâmina também inclui carga e alinhamento, então a exposição real é mais curta. Escolha uma máquina para ver os números mudarem."
+      "p4": "Quando o clarão chega à lâmina, o relógio para de contar o tempo. No trecho final da reprodução, ele mostra até onde foi a varredura de um campo. Neste modelo, um campo leva cerca de 0,29 s a 160 lâminas por hora e 0,21 s a 220. São tempos aproximados. O tempo por lâmina também inclui carga e alinhamento, então a exposição real é mais curta. Escolha uma máquina para ver os números mudarem."
     },
     "compare": {
       "title": "193 nm contra 13,5 nm",

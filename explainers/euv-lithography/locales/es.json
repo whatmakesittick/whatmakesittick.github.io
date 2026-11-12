@@ -54,7 +54,8 @@
   },
   "clock": {
     "before": "{{value}} antes del destello",
-    "after": "{{value}} después del destello"
+    "after": "{{value}} después del destello",
+    "scan": "Barrido del campo: {{value}}"
   },
   "controls": {
     "label": "Controles del modelo",
@@ -276,7 +277,7 @@
       "p1": "Una oblea lleva muchas copias de un chip, y la máquina las imprime parcela a parcela. Cada parcela es un <strong>campo</strong> de 26 por 33 mm. En una oblea caben de 76 a 80 campos completos. La luz no cubre un campo entero de una vez: pasa por una <strong>rendija</strong> curva de unos 26 por 2 mm.",
       "p2": "Para cubrir el campo, la máscara y la oblea se mueven juntas en sentidos opuestos. La rendija recorre la máscara y el dibujo reducido recorre la oblea. A esto se le llama barrido. Una máquina puede barrer 160 obleas por hora (NXE:3600D) o hasta 220 (NXE:3800E). Son las especificaciones de los fabricantes, con una dosis de 30 mJ/cm2.",
       "p3": "Esa dosis equivale a unos 20 fotones EUV sobre cada nm cuadrado de la oblea. Un fotón es una partícula de luz. Los movimientos tienen que ser muy exactos: los sensores de posición leen unos 60 pm, 20 000 veces por segundo. La alineación entre capas indica lo bien que encaja una capa con la de abajo. Es de 1,1 nm en la 3600D, de 0,9 nm en la 3800E y de 1,1 nm en la EXE:5000 (High-NA), de una máquina a otra.",
-      "p4": "El último tramo de la reproducción es lo que tarda en barrerse un campo. En este modelo son unos 0,29 s a 160 obleas por hora y 0,21 s a 220. Son tiempos aproximados. El tiempo por oblea incluye también la carga y la alineación, de modo que una exposición real es más corta. Elige una máquina y verás cambiar los números."
+      "p4": "Cuando el destello llega a la oblea, el reloj deja de contar tiempo. En el último tramo de la reproducción muestra cuánto va del barrido de un campo. En este modelo un campo tarda unos 0,29 s a 160 obleas por hora y 0,21 s a 220. Son tiempos aproximados. El tiempo por oblea incluye también la carga y la alineación, de modo que una exposición real es más corta. Elige una máquina y verás cambiar los números."
     },
     "compare": {
       "title": "193 nm frente a 13,5 nm",

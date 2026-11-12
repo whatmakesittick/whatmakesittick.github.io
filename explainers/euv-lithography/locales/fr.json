@@ -54,7 +54,8 @@
   },
   "clock": {
     "before": "{{value}} avant l’éclair",
-    "after": "{{value}} après l’éclair"
+    "after": "{{value}} après l’éclair",
+    "scan": "Balayage du champ : {{value}}"
   },
   "controls": {
     "label": "Commandes du modèle",
@@ -276,7 +277,7 @@
       "p1": "Une plaquette porte de nombreuses copies d’une puce, et la machine les grave morceau par morceau. Chaque morceau est un <strong>champ</strong>, de 26 sur 33 mm. Une plaquette contient environ 76 à 80 champs entiers. La lumière ne couvre pas un champ d’un seul coup : elle passe par une <strong>fente</strong> courbe d’environ 26 sur 2 mm.",
       "p2": "Pour couvrir le champ, le masque et la plaquette se déplacent ensemble, en sens opposés. La fente balaie le masque, et le motif réduit balaie la plaquette. C’est le balayage. Une machine peut traiter 160 plaquettes par heure (NXE:3600D) ou jusqu’à 220 (NXE:3800E). Ce sont les données des fabricants, pour une dose de 30 mJ/cm2.",
       "p3": "Cette dose représente environ 20 photons EUV sur chaque nanomètre carré de la plaquette. Un photon est une particule de lumière. Les mouvements doivent être très précis. Les capteurs de position lisent environ 60 pm, 20 000 fois par seconde. La superposition des couches dit avec quelle précision une couche se place sur celle du dessous : 1,1 nm pour la 3600D, 0,9 nm pour la 3800E et 1,1 nm pour la EXE:5000 (High-NA), d’une machine à l’autre.",
-      "p4": "La dernière partie de la lecture correspond au temps de balayage d’un champ. Dans ce modèle, il est d’environ 0,29 s à 160 plaquettes par heure et 0,21 s à 220. Ces durées sont approximatives. Le temps par plaquette inclut aussi le chargement et l’alignement : une vraie exposition est donc plus courte. Choisissez une machine pour voir les chiffres changer."
+      "p4": "Quand l’éclair atteint la plaquette, l’horloge cesse de compter le temps. Dans la dernière partie de la lecture, elle montre où en est le balayage d’un champ. Dans ce modèle, un champ prend environ 0,29 s à 160 plaquettes par heure et 0,21 s à 220. Ces durées sont approximatives. Le temps par plaquette inclut aussi le chargement et l’alignement : une vraie exposition est donc plus courte. Choisissez une machine pour voir les chiffres changer."
     },
     "compare": {
       "title": "193 nm contre 13,5 nm",

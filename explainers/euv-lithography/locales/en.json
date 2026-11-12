@@ -54,7 +54,8 @@
   },
   "clock": {
     "before": "{{value}} before the flash",
-    "after": "{{value}} after the flash"
+    "after": "{{value}} after the flash",
+    "scan": "Scanning the field, {{value}}"
   },
   "controls": {
     "label": "Model controls",
@@ -276,7 +277,7 @@
       "p1": "A wafer holds many copies of a chip, and the machine prints one patch at a time. Each patch is a <strong>field</strong>, 26 by 33 mm. A wafer holds about 76 to 80 full fields. The light does not cover a whole field at once. It passes through a curved <strong>slit</strong>, about 26 by 2 mm.",
       "p2": "To cover the field, the mask and the wafer move together in opposite directions. The slit sweeps over the mask, and the shrunk pattern sweeps over the wafer. This is called scanning. A machine can scan 160 wafers an hour (NXE:3600D) or up to 220 (NXE:3800E). Those are the makers' specs, for a dose of 30 mJ/cm2.",
       "p3": "That dose is about 20 EUV photons on every square nm of the wafer. A photon is one particle of light. The moves must be very exact. Position sensors read about 60 pm, 20,000 times a second. Overlay is how well one layer lines up with the one below it, and it is 1.1 nm on the 3600D 0.9 nm on the 3800E and 1.1 nm on the High-NA EXE:5000, from machine to machine.",
-      "p4": "The last stretch of the playback is the time one field takes to scan. In this model that is about 0.29 s at 160 wafers an hour and 0.21 s at 220. These times are approximate. The wafer time also includes loading and aligning, so a real exposure is shorter. Pick a machine to see the numbers change."
+      "p4": "When the flash lands on the wafer, the clock stops counting time. In the last stretch of the playback it shows how far the scan of one field has got. In this model one field takes about 0.29 s at 160 wafers an hour and 0.21 s at 220. These times are approximate. The wafer time also includes loading and aligning, so a real exposure is shorter. Pick a machine to see the numbers change."
     },
     "compare": {
       "title": "193 nm against 13.5 nm",

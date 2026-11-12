@@ -54,7 +54,8 @@
   },
   "clock": {
     "before": "{{value}} vor dem Blitz",
-    "after": "{{value}} nach dem Blitz"
+    "after": "{{value}} nach dem Blitz",
+    "scan": "Feld-Scan: {{value}}"
   },
   "controls": {
     "label": "Steuerung des Modells",
@@ -276,7 +277,7 @@
       "p1": "Auf einem Wafer sitzen viele Kopien eines Chips, und die Maschine druckt ihn Stück für Stück. Jedes Stück ist ein <strong>Feld</strong> von 26 mal 33 mm. Auf einen Wafer passen etwa 76 bis 80 volle Felder. Das Licht erfasst ein Feld nicht auf einmal, sondern fällt durch einen gebogenen <strong>Schlitz</strong> von etwa 26 mal 2 mm.",
       "p2": "Um das Feld zu überstreichen, fahren Maske und Wafer gemeinsam in entgegengesetzte Richtungen. Der Schlitz wandert über die Maske, und das verkleinerte Muster wandert über den Wafer. Das nennt man Scannen. Eine Maschine schafft 160 Wafer pro Stunde (NXE:3600D) oder bis zu 220 (NXE:3800E). Das sind die Herstellerangaben, bei einer Dosis von 30 mJ/cm2.",
       "p3": "Diese Dosis entspricht etwa 20 EUV-Photonen auf jedem Quadrat-Nanometer des Wafers. Ein Photon ist ein einzelnes Lichtteilchen. Die Bewegungen müssen sehr genau sein. Positionssensoren messen auf etwa 60 pm genau, 20.000-mal pro Sekunde. Die Lagegenauigkeit (englisch Overlay) sagt, wie genau eine Schicht auf der darunterliegenden sitzt. Sie beträgt von Maschine zu Maschine 1,1 nm bei der 3600D, 0,9 nm bei der 3800E und 1,1 nm bei der High-NA-Maschine EXE:5000.",
-      "p4": "Der letzte Abschnitt der Wiedergabe ist die Zeit, die ein Feld zum Scannen braucht. In diesem Modell sind das etwa 0,29 s bei 160 Wafern pro Stunde und 0,21 s bei 220. Die Zeiten sind Näherungswerte. Die Zeit pro Wafer enthält auch Laden und Ausrichten, die echte Belichtung ist also kürzer. Wählen Sie eine Maschine, um die Zahlen zu ändern."
+      "p4": "Sobald der Blitz auf dem Wafer landet, zählt die Uhr keine Zeit mehr. Im letzten Abschnitt der Wiedergabe zeigt sie, wie weit der Scan eines Feldes ist. In diesem Modell braucht ein Feld etwa 0,29 s bei 160 Wafern pro Stunde und 0,21 s bei 220. Die Zeiten sind Näherungswerte. Die Zeit pro Wafer enthält auch Laden und Ausrichten, die echte Belichtung ist also kürzer. Wählen Sie eine Maschine, um die Zahlen zu ändern."
     },
     "compare": {
       "title": "193 nm gegen 13,5 nm",
