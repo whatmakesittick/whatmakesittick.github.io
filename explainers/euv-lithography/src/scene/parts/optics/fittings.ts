@@ -3,12 +3,6 @@ import { pipe } from '../kit';
 import type { Bin } from './geo';
 import { studs, circlePoints, ring, rod, slab } from './geo';
 
-const SEAM_DEPTH = 0.008;
-const SEAM_WIDTH = 0.012;
-const SEAM_EDGE = 0.05;
-const HATCH_RIM = 0.012;
-const HATCH_DEPTH = 0.012;
-const HATCH_BOLT_INSET = 0.016;
 const PUMP_PORT_OUTER = 0.2;
 const PUMP_PORT_INNER = 0.06;
 const PUMP_BODY = { end: -0.32, radius: 0.12, motorEnd: -0.5, motorRadius: 0.1 } as const;
@@ -21,63 +15,9 @@ const CABLE_YS = [-0.04, 0, 0.04] as const;
 const CABLE_RADIUS = 0.012;
 const CABLE_Z = -0.05;
 const VALVE_HALF = 0.09;
-
-export interface SeamGrid {
-  readonly xs: readonly number[];
-  readonly ys: readonly number[];
-  readonly x: readonly [number, number];
-  readonly y: readonly [number, number];
-}
-
-export function addSeams(bin: Bin, z: number, grid: SeamGrid): void {
-  const [x0, x1] = grid.x;
-  const [y0, y1] = grid.y;
-  grid.xs.forEach((x) =>
-    bin.add(
-      'darkFrame',
-      slab(
-        [x - SEAM_WIDTH / 2, y0 + SEAM_EDGE, z - SEAM_DEPTH],
-        [x + SEAM_WIDTH / 2, y1 - SEAM_EDGE, z],
-      ),
-    ),
-  );
-  grid.ys.forEach((y) =>
-    bin.add(
-      'darkFrame',
-      slab(
-        [x0 + SEAM_EDGE, y - SEAM_WIDTH / 2, z - SEAM_DEPTH],
-        [x1 - SEAM_EDGE, y + SEAM_WIDTH / 2, z],
-      ),
-    ),
-  );
-}
-
-export function addHatches(bin: Bin, z: number, centres: readonly Point[], size: number): void {
-  const half = size / 2;
-  const heads: Point[] = [];
-  centres.forEach(([x, y]) => {
-    bin.add(
-      'darkFrame',
-      slab(
-        [x - half - HATCH_RIM, y - half - HATCH_RIM, z - HATCH_DEPTH / 2],
-        [x + half + HATCH_RIM, y + half + HATCH_RIM, z],
-      ),
-    );
-    bin.add(
-      'hatch',
-      slab([x - half, y - half, z - HATCH_DEPTH], [x + half, y + half, z - HATCH_DEPTH / 2]),
-    );
-    bin.add(
-      'flange',
-      slab([x - 0.05, y - 0.008, z - HATCH_DEPTH - 0.012], [x + 0.05, y + 0.008, z - HATCH_DEPTH]),
-    );
-    const reach = half - HATCH_BOLT_INSET;
-    [-1, 1].forEach((sx) =>
-      [-1, 1].forEach((sy) => heads.push([x + sx * reach, y + sy * reach, z - HATCH_DEPTH])),
-    );
-  });
-  studs(bin, 'z', heads);
-}
+const COLLAR = { width: 0.03, rise: 0.02 } as const;
+const EYE = { boss: 0.045, bossRise: 0.02, inner: 0.025, outer: 0.055, thickness: 0.02 } as const;
+const CLAMP = { half: 0.03, thickness: 0.012 } as const;
 
 export function addPump(bin: Bin, z: number, centre: Point, sideX: number): void {
   const [x, y] = centre;
@@ -134,4 +74,52 @@ export function addTray(bin: Bin, z: number, x0: number, x1: number, trayY: numb
       ),
     ),
   );
+}
+
+export function addCollar(bin: Bin, lo: Point, hi: Point): void {
+  const top = lo[1];
+  const lift = top + COLLAR.rise;
+  const { width } = COLLAR;
+  bin.add(
+    'flange',
+    slab([lo[0] - width, top, lo[2] - width], [lo[0], lift, hi[2] + width]),
+    slab([hi[0], top, lo[2] - width], [hi[0] + width, lift, hi[2] + width]),
+    slab([lo[0], top, lo[2] - width], [hi[0], lift, lo[2]]),
+    slab([lo[0], top, hi[2]], [hi[0], lift, hi[2] + width]),
+  );
+}
+
+export function addEye(bin: Bin, base: Point): void {
+  const [x, y, z] = base;
+  bin.add('machined', rod([x, y, z], [x, y + EYE.bossRise, z], EYE.boss, EYE.boss, 12));
+  bin.add(
+    'flange',
+    ring('z', [x, y + EYE.bossRise + EYE.outer * 0.8, z], EYE.inner, EYE.outer, EYE.thickness),
+  );
+}
+
+export function addClamp(bin: Bin, centre: Point, reach: number): void {
+  const [x, y, z] = centre;
+  bin.add(
+    'frame',
+    slab(
+      [x - CLAMP.half, y - CLAMP.thickness / 2, Math.min(z, z + reach)],
+      [x + CLAMP.half, y + CLAMP.thickness / 2, Math.max(z, z + reach)],
+    ),
+  );
+}
+
+export function addTopRun(bin: Bin, from: Point, to: Point, radius: number): void {
+  bin.add('rail', pipe([from, to], radius));
+  const count = Math.max(1, Math.round(Math.abs(to[0] - from[0]) / 0.5));
+  for (let step = 0; step <= count; step += 1) {
+    const x = from[0] + ((to[0] - from[0]) * step) / count;
+    bin.add(
+      'frame',
+      slab(
+        [x - CLAMP.thickness / 2, from[1] - radius - 0.01, from[2] - CLAMP.half],
+        [x + CLAMP.thickness / 2, from[1] - radius, from[2] + CLAMP.half],
+      ),
+    );
+  }
 }

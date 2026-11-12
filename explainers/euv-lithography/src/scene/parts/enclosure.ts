@@ -21,7 +21,7 @@ export const MAX_TILE_M = 0.62;
 export const LINER_M = 0.01;
 export const FRAME_M = 0.045;
 export const FRAME_PROUD_M = 0.022;
-export const BOLT_PITCH_M = 0.14;
+export const BOLT_PITCH_M = 0.2;
 export const DOOR = {
   gap: 0.012,
   proud: 0.014,
@@ -112,10 +112,7 @@ export function addSkin(
     vs.slice(0, -1).forEach((v0, j) => {
       const [u1, v1] = [us[i + 1], vs[j + 1]];
       if (openings.some((opening) => within(opening, (u0 + u1) / 2, (v0 + v1) / 2))) return;
-      bin.add(
-        'panel',
-        onFace(face, [u0 + half, u1 - half], [v0 + half, v1 - half], w, PANEL_BEVEL_M),
-      );
+      bin.add('panel', onFace(face, [u0 + half, u1 - half], [v0 + half, v1 - half], w));
     }),
   );
 }
