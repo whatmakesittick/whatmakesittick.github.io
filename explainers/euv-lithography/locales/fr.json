@@ -3,9 +3,9 @@
     "title": "Comment fonctionne une machine de lithographie EUV",
     "eyebrow": "Optique",
     "tagline": "Suivez en 3D un éclair de lumière dans une machine EUV, de la goutte d’étain jusqu’à la plaquette de silicium, et découvrez comment elle grave des lignes de 13 nm de large.",
-    "description": "Suivez un éclair de lumière dans une machine EUV : une goutte d’étain, un laser, 11 rebonds, puis la plaquette où se gravent des lignes de 13 nm.",
-    "summary": "La goutte d’étain et le laser, des miroirs qui perdent un tiers de la lumière à chaque rebond, le masque, le balayage de la plaquette, et l’EUV face aux anciennes lumières.",
-    "socialAlt": "Une machine EUV en 3D, vue en coupe : un faisceau lumineux va d’une goutte d’étain à la plaquette en passant par les miroirs. À côté, le titre « Comment fonctionne une machine de lithographie EUV »"
+    "description": "Suivez un éclair de lumière dans une machine EUV : une goutte d’étain, un laser, 11 rebonds, puis la plaquette où se gravent des lignes de 13 nm.",
+    "summary": "La goutte d’étain et le laser, des miroirs qui perdent un tiers de la lumière à chaque rebond, le masque, le balayage de la plaquette, et ce que l’EUV change par rapport aux machines plus anciennes.",
+    "socialAlt": "Une machine EUV en 3D, vue en coupe : un faisceau lumineux va d’une goutte d’étain à la plaquette en passant par les miroirs. À côté, le titre « Comment fonctionne une machine de lithographie EUV »"
   },
   "stage": {
     "label": "Modèle interactif d’une machine EUV",
@@ -16,7 +16,7 @@
     "phases": "Aller à une étape",
     "speed": "Vitesse de lecture",
     "value": "{{time}}",
-    "during": "Étape {{step}} sur {{total}} : {{detail}}. Temps : {{time}}",
+    "during": "Étape {{step}} sur {{total}} : {{detail}}. Temps : {{time}}",
     "speedValue": "×{{factor}}",
     "speedDescribe": "Tout l’éclair en {{seconds}} secondes",
     "phase": {
@@ -128,7 +128,7 @@
     "nm": "{{value}} nm",
     "um": "{{value}} µm",
     "mm": "{{value}} mm",
-    "percent": "{{value}} %",
+    "percent": "{{value}} %",
     "perHour": "{{value}} par heure",
     "tonnes": "{{value}} t",
     "celsius": "{{value}} °C",
@@ -137,7 +137,7 @@
   "parts": {
     "flash": "L’éclair",
     "droplets": "Gouttes d’étain",
-    "driveLaser": "Laser de puissance",
+    "driveLaser": "Laser pilote",
     "beamTransport": "Trajet du faisceau laser",
     "vessel": "Enceinte source",
     "collector": "Miroir collecteur",
@@ -157,38 +157,38 @@
   },
   "chapters": {
     "machine": {
-      "weight": "Poids",
-      "weightValue": "plus de {{tonnes}} t, en High-NA",
+      "weight": "Poids, High-NA",
+      "weightValue": "plus de {{tonnes}} t",
       "shipping": "Transport",
-      "shippingValue": "{{crates}} caisses, {{containers}} conteneurs, {{trucks}} camions",
+      "shippingValue": "plus de {{crates}} caisses, {{containers}} conteneurs, {{trucks}} camions",
       "sizes": "Dimensions du modèle",
       "sizesValue": "toutes les dimensions ici sont celles du modèle"
     },
     "light": {
       "droplet": "Taille de la goutte",
-      "dropletValue": "environ {{um}} µm, de {{low}} à {{high}} µm",
+      "dropletValue": "environ {{low}} à {{high}} µm",
       "speed": "Vitesse de la goutte",
       "speedValue": "de {{low}} à {{high}} m/s",
       "spacing": "Écart entre les gouttes",
-      "spacingValue": "environ {{low}} à {{high}} mm d’écart",
+      "spacingValue": "environ {{low}} à {{high}} mm",
       "pulses": "Impulsions laser",
-      "pulsesValue": "{{count}} impulsions laser par seconde",
+      "pulsesValue": "environ {{count}} impulsions laser par seconde",
       "flattened": "Cible aplatie",
       "flattenedValue": "plus de {{um}} µm de large",
       "plasma": "Chaleur du plasma",
-      "plasmaValue": "environ {{celsius}} °C, soit {{low}} à {{high}} fois la surface du Soleil",
+      "plasmaValue": "environ {{celsius}} °C, soit {{low}} à {{high}} fois la température de la surface du Soleil",
       "conversion": "Lumière devenue EUV",
-      "conversionValue": "environ {{percent}} % de la lumière du laser, en laboratoire"
+      "conversionValue": "environ {{percent}} % de la lumière du laser, en laboratoire"
     },
     "mirrors": {
       "layers": "Couches d’un miroir",
       "layersValue": "plus de {{count}} couches, de quelques nm d’épaisseur chacune",
       "reflect": "Lumière renvoyée par miroir",
-      "reflectValue": "environ {{percent}} %",
+      "reflectValue": "environ {{percent}} %",
       "rough": "Rugosité",
       "roughValue": "environ {{pm}} pm",
       "vacuum": "Pourquoi pas de lentilles",
-      "vacuumValue": "1 mm d’air laisse passer environ {{air}} %, 1 µm de verre {{glass}} %",
+      "vacuumValue": "1 mm d’air laisse passer environ {{air}} %, 1 µm de verre {{glass}} %",
       "bounce": {
         "label": "Rebonds après le foyer intermédiaire",
         "output": "{{count}} sur 11",
@@ -204,11 +204,10 @@
       "area": "Zone du motif",
       "areaValue": "{{w}} sur {{h}} mm",
       "tilt": "Inclinaison du faisceau",
-      "tiltValue": "{{deg}} degrés ; entrée et sortie séparées de {{apart}} degrés",
+      "tiltValue": "{{deg}} degrés ; entrée et sortie séparées de {{apart}} degrés",
       "pellicle": "Lumière à travers la pellicule",
-      "pellicleValue": "plus de {{percent}} % par passage, environ {{both}} % à l’aller et au retour",
-      "reduction": "Réduction sur la plaquette",
-      "reductionValue": "{{n}} fois plus petit sur la plaquette"
+      "pellicleValue": "plus de {{percent}} % par passage, environ {{both}} % à l’aller et au retour",
+      "reduction": "Réduction du masque à la plaquette"
     },
     "scan": {
       "wph": "Plaquettes par heure",
@@ -222,11 +221,11 @@
       "slitValue": "fente de {{w}} sur {{h}} mm",
       "sensing": "Mesure de position",
       "sensingValue": "environ {{pm}} pm, {{rate}} fois par seconde",
-      "overlay": "Alignement des couches",
+      "overlay": "Superposition des couches",
       "overlayValue": "{{nm}} nm, d’une machine à l’autre"
     },
     "compare": {
-      "shrink": "Réduction",
+      "shrink": "Réduction du masque à la plaquette",
       "field": "Champ",
       "fieldValue": "{{w}} sur {{h}} mm",
       "line": "Plus petite ligne (demi-pas)",
@@ -236,7 +235,7 @@
       "photon": "Énergie d’un photon",
       "photonValue": "{{ev}} eV, soit environ {{times}} fois un photon de 193 nm",
       "price": "Prix",
-      "priceValue": "environ {{eur}} millions d’euros d’après les estimations publiées, {{high}} millions en High-NA",
+      "priceValue": "selon les estimations publiées, bien plus de 100 millions d’euros, environ 350 millions en High-NA",
       "shrinkValue": {
         "na033": "4×",
         "na055": "4× / 8×"
@@ -246,45 +245,45 @@
   "sections": {
     "machine": {
       "title": "Une machine qui fabrique sa propre lumière",
-      "p1": "Cette machine grave les couches les plus fines des puces les plus avancées. Elle est très lourde. Le dernier modèle, dit <strong>High-NA</strong>, pèse plus de 150 tonnes et a voyagé dans plus de 250 caisses, 43 conteneurs et 20 camions. (NA signifie ouverture numérique : la largeur du cône de lumière que capte le dernier miroir. Le dernier chapitre explique pourquoi c’est important.) Aucun fabricant ne publie la longueur ni la hauteur de la machine : toutes les tailles et positions de ce modèle sont donc les siennes.",
-      "p2": "La machine grave avec de la lumière <strong>ultraviolette extrême</strong>, ou EUV. Impossible de la voir. Sa longueur d’onde n’est que de 13,5 nm, et un nanomètre (nm) vaut un millionième de millimètre. L’air et le verre absorbent cette lumière : 1 mm d’air en laisse passer environ 0,14 %, et 1 µm de verre environ 0,004 %. Il n’y a donc aucune lentille dans la machine. Tout ce qui guide la lumière est un miroir, et elle voyage dans un quasi-vide, avec un peu d’hydrogène.",
-      "p3": "La machine produit sa lumière elle-même, un éclair à la fois, à partir d’une minuscule goutte d’étain. Un <strong>laser de puissance</strong> se trouve à l’étage inférieur. Son faisceau monte par un long <strong>trajet</strong>, jusqu’à 30 m, vers l’<strong>enceinte source</strong>. Ce laser délivre des dizaines de kilowatts et pèse plus de 10 tonnes.",
-      "p4": "La <strong>plaquette</strong> est une fine tranche ronde de silicium. Elle entre dans la machine, qui la grave morceau par morceau, puis elle ressort. Cette page suit plutôt un seul éclair, de la goutte d’étain à la plaquette. Le modèle est une simplification. Personne ne peut voir un faisceau dans le vide, et l’EUV est totalement invisible : les couleurs du faisceau sont donc de notre fait."
+      "p1": "Cette machine grave les couches les plus fines des puces les plus avancées. Elle est très lourde. Le dernier modèle, dit <strong>High-NA</strong>, pèse plus de 150 tonnes et a voyagé dans plus de 250 caisses, 43 conteneurs et 20 camions. (NA signifie ouverture numérique : la largeur du cône de lumière que capte le dernier miroir. Le dernier chapitre explique pourquoi c’est important.) Aucun fabricant ne publie la longueur ni la hauteur de la machine : toutes les tailles et positions de ce modèle sont donc des choix du modèle.",
+      "p2": "La machine grave avec de la lumière <strong>ultraviolette extrême</strong>, ou EUV. Impossible de la voir. Sa longueur d’onde n’est que de 13,5 nm, et un nanomètre (nm) vaut un millionième de millimètre. L’air et le verre absorbent cette lumière : 1 mm d’air en laisse passer environ 0,14 %, et 1 µm de verre environ 0,004 %. Il n’y a donc aucune lentille dans la machine. Tout ce qui guide la lumière est un miroir, et elle voyage dans un quasi-vide, avec un peu d’hydrogène.",
+      "p3": "La machine produit sa lumière elle-même, un éclair à la fois, à partir d’une minuscule goutte d’étain. Un <strong>laser pilote</strong> se trouve à l’étage inférieur. Son faisceau monte par un long <strong>trajet</strong>, jusqu’à 30 m, vers l’<strong>enceinte source</strong>. Ce laser délivre des dizaines de kilowatts et pèse plus de 10 tonnes.",
+      "p4": "La <strong>plaquette</strong> (« wafer » en anglais) est une fine tranche ronde de silicium. Elle entre dans la machine, qui la grave morceau par morceau, puis elle ressort. Cette page suit plutôt un seul éclair, de la goutte d’étain à la plaquette. Le modèle est une simplification. Personne ne peut voir un faisceau dans le vide, et l’EUV est totalement invisible : c’est nous qui avons choisi les couleurs du faisceau. L’horloge est elle aussi une invention du modèle. Une goutte vole environ 20 ms, mais l’éclair dure environ 20 ns : la lecture étire et comprime donc le temps."
     },
     "light": {
       "title": "Une goutte, frappée deux fois",
-      "p1": "Chaque éclair naît d’une goutte d’étain d’environ 30 µm de large, soit un peu plus de la moitié d’un cheveu, qui mesure environ 50 µm (valeur arrondie). Les <strong>gouttes</strong> sont tirées, pas lâchées, de 60 à 120 mètres par seconde. Il en passe environ 50 000 chaque seconde, espacées d’environ 1,2 à 2,4 mm. La vraie machine ne dit pas dans quel sens elles volent : le modèle choisit une direction.",
-      "p2": "Un laser frappe chaque goutte deux fois. La première impulsion, plus douce, l’écrase en une crêpe fine de plus de 100 µm de large. Une cible plate encaisse bien mieux l’impulsion suivante qu’une bille. La seconde impulsion est la grosse : un laser CO2 de longueur d’onde 10,6 µm, amplifié plus de 10 000 fois à partir d’une petite impulsion de départ. Deux impulsions par goutte, cela fait environ 100 000 impulsions laser par seconde.",
-      "p3": "La grosse impulsion chauffe l’étain à environ 220 000 °C, soit 30 à 40 fois la température de la surface du Soleil. L’étain devient un <strong>plasma</strong> : un gaz si chaud que ses atomes perdent des électrons et brillent. Les ions d’étain du plasma émettent à 13,5 nm, et c’est pour cela que la machine utilise de l’étain ; de petites gouttes laissent peu de débris. Seulement 5 % environ de la lumière du laser devient de l’EUV, un chiffre obtenu en laboratoire.",
-      "p4": "Le <strong>miroir collecteur</strong>, un grand miroir courbe, capte la lumière et la rassemble. L’enceinte contient de l’hydrogène à basse pression, qui arrête les éclaboussures d’étain et nettoie le miroir. Un collecteur a déjà tenu plus de 100 milliards d’impulsions. L’horloge est celle du modèle. Une goutte vole environ 20 ms, mais l’éclair dure environ 20 ns : la lecture étire et comprime donc le temps."
+      "p1": "Chaque éclair naît d’une goutte d’étain d’environ 30 µm de large, soit un peu plus de la moitié d’un cheveu, qui mesure environ 50 µm (valeur arrondie). Les <strong>gouttes</strong> sont tirées, pas lâchées, de 60 à 120 mètres par seconde. Il en passe environ 50 000 chaque seconde, espacées d’environ 1,2 à 2,4 mm. La vraie machine ne dit pas dans quel sens elles volent : le modèle choisit une direction.",
+      "p2": "Un laser frappe chaque goutte deux fois. La première impulsion, plus douce, l’écrase en une crêpe fine de plus de 100 µm de large. Une cible plate encaisse bien mieux l’impulsion suivante qu’une bille. La seconde impulsion est la grosse : un laser CO2 de longueur d’onde 10,6 µm, amplifié plus de 10 000 fois à partir d’une petite impulsion de départ. Deux impulsions par goutte, cela fait environ 100 000 impulsions laser par seconde.",
+      "p3": "La grosse impulsion chauffe l’étain à environ 220 000 °C, soit 30 à 40 fois la température de la surface du Soleil. L’étain devient un <strong>plasma</strong> : un gaz si chaud que ses atomes perdent des électrons et brillent. Les ions d’étain du plasma émettent à 13,5 nm, et c’est pour cela que la machine utilise de l’étain ; de petites gouttes laissent peu de débris. Seulement 5 % environ de la lumière du laser devient de l’EUV, un chiffre obtenu en laboratoire.",
+      "p4": "Le <strong>miroir collecteur</strong>, un grand miroir courbe, capte la lumière et la rassemble. L’enceinte contient de l’hydrogène à basse pression, qui arrête les éclaboussures d’étain et nettoie le miroir. Un collecteur a déjà supporté plus de 100 milliards d’impulsions."
     },
     "mirrors": {
       "title": "Une lumière qui ne fait que rebondir",
-      "p1": "Les miroirs EUV ne sont pas en métal brillant. Chacun est un <strong>miroir multicouche</strong> : plus de 100 fines couches de silicium et de molybdène, de quelques nm d’épaisseur chacune. Chaque frontière entre deux couches renvoie un peu de lumière. Les couches sont espacées d’environ 6,8 à 6,9 nm, la moitié de la longueur d’onde, si bien que tous ces petits reflets s’additionnent.",
-      "p2": "Malgré cela, un miroir ne renvoie qu’environ 70 % de la lumière. C’est le meilleur résultat mesuré, pas une promesse. La lumière perd donc environ un tiers à chaque rebond. Le modèle compte 11 rebonds après le foyer intermédiaire : quatre miroirs d’illuminateur, le masque et six miroirs de projection. Environ 2 % de la lumière arrive sur la plaquette, dans une fourchette de 1 à 4 %. Ce décompte repose sur un article ; un autre en compte 10.",
+      "p1": "Les miroirs EUV ne sont pas en métal brillant. Chacun est un <strong>miroir multicouche</strong> : plus de 100 fines couches de silicium et de molybdène, de quelques nm d’épaisseur chacune. Chaque frontière entre deux couches renvoie un peu de lumière. Les couches sont espacées d’environ 6,8 à 6,9 nm, la moitié de la longueur d’onde, si bien que tous ces petites réflexions s’additionnent.",
+      "p2": "Malgré cela, un miroir ne renvoie qu’environ 70 % de la lumière. C’est le meilleur résultat mesuré, pas une promesse. La lumière perd donc environ un tiers à chaque rebond. Le modèle compte 11 rebonds après le foyer intermédiaire : quatre miroirs d’illuminateur, le masque et six miroirs de projection. Environ 2 % de la lumière arrive sur la plaquette, dans une fourchette de 1 à 4 %. Ce décompte repose sur un article ; un autre en compte 10.",
       "p3": "Ces miroirs doivent être d’une régularité extrême. Leur rugosité est d’environ 50 pm, et un picomètre (pm) est un millième de nanomètre. Zeiss, qui les fabrique, explique que sur un miroir aussi large que l’Allemagne, la plus haute bosse mesurerait environ 0,1 mm.",
       "p4": "Le collecteur rassemble la lumière en un point, le <strong>foyer intermédiaire</strong>, d’où le faisceau s’ouvre de nouveau. Servez-vous du curseur pour suivre le faisceau rebond après rebond et voir ce qu’il reste de lumière. Le modèle dessine lui-même les plis et les positions des miroirs, d’après des schémas publiés."
     },
     "mask": {
       "title": "Un miroir qui porte un plan",
-      "p1": "Le <strong>masque</strong>, aussi appelé réticule, contient le motif d’une couche de la puce. C’est aussi un miroir. Une fine couche en surface, l’absorbeur, avale la lumière partout où le motif a une ligne : la lumière qui rebondit porte donc le motif. Le masque repose sur une plaque carrée de 152 mm de côté (six pouces), et la zone du motif mesure 104 sur 132 mm.",
+      "p1": "Le <strong>masque</strong>, aussi appelé réticule, contient le motif d’une couche de la puce. C’est aussi un miroir. Une fine couche en surface, l’absorbeur, avale la lumière partout où le motif a une ligne : la lumière qui rebondit porte donc le motif. Le masque repose sur une plaque carrée de 152 mm de côté (six pouces), et la zone du motif mesure 104 sur 132 mm.",
       "p2": "Avant le masque vient l’<strong>illuminateur</strong>, quatre miroirs qui mettent le faisceau en forme. Leur surface est faite de nombreuses petites facettes inclinables. Leur inclinaison règle les angles sous lesquels la lumière atteint le masque. Une étude a mesuré 22 réglages de ce type sur un seul illuminateur, un chiffre approximatif.",
       "p3": "Le faisceau touche le masque avec une inclinaison de 6 degrés (5,4 en High-NA). La lumière qui arrive et celle qui repart forment donc 12 degrés d’écart, et les deux faisceaux ne se gênent pas. Dans ce modèle, le masque est tourné vers le bas. Cette disposition est celle du modèle.",
-      "p4": "Une <strong>pellicule</strong> recouvre le masque. C’est un film très fin qui garde la poussière à distance, car un grain sur le masque s’imprimerait sur chaque plaquette. La lumière la traverse deux fois, à l’aller et au retour. Plus de 90 % passent à chaque fois, et environ 81 % aux deux passages. Une pellicule est un film, pas une lentille. Après le masque, les miroirs de projection réduisent le motif quatre fois."
+      "p4": "Une <strong>pellicule</strong> recouvre le masque. C’est un film très fin qui garde la poussière à distance, car un grain sur le masque s’imprimerait sur chaque plaquette. La lumière la traverse deux fois, à l’aller et au retour. Plus de 90 % passent à chaque fois, et environ 81 % aux deux passages. Une pellicule est un film, pas une lentille. Après le masque, les miroirs de projection réduisent le motif quatre fois (8 fois dans un sens en High-NA)."
     },
     "scan": {
       "title": "Un champ après l’autre",
-      "p1": "Une plaquette porte de nombreuses copies d’une puce, et la machine les grave morceau par morceau. Chaque morceau est un <strong>champ</strong>, de 26 sur 33 mm. Une plaquette contient environ 76 à 80 champs entiers. La lumière ne couvre pas un champ d’un seul coup : elle passe par une <strong>fente</strong> courbe d’environ 26 sur 2 mm.",
+      "p1": "Une plaquette porte de nombreuses copies d’une puce, et la machine les grave morceau par morceau. Chaque morceau est un <strong>champ</strong>, de 26 sur 33 mm. Une plaquette contient environ 76 à 80 champs entiers. La lumière ne couvre pas un champ d’un seul coup : elle passe par une <strong>fente</strong> courbe d’environ 26 sur 2 mm.",
       "p2": "Pour couvrir le champ, le masque et la plaquette se déplacent ensemble, en sens opposés. La fente balaie le masque, et le motif réduit balaie la plaquette. C’est le balayage. Une machine peut traiter 160 plaquettes par heure (NXE:3600D) ou jusqu’à 220 (NXE:3800E). Ce sont les données des fabricants, pour une dose de 30 mJ/cm2.",
-      "p3": "Cette dose représente environ 20 photons EUV sur chaque nm carré de la plaquette. Un photon est une particule de lumière. Les mouvements doivent être très précis. Les capteurs de position lisent environ 60 pm, 20 000 fois par seconde. L’alignement des couches (l’overlay) dit avec quelle précision une couche se superpose à celle du dessous : 1,1 nm pour la 3600D et 0,9 nm pour la 3800E, d’une machine à l’autre.",
-      "p4": "La dernière partie de la lecture correspond au temps de balayage d’un champ. Dans ce modèle, il est d’environ 0,29 s à 160 plaquettes par heure et 0,21 s à 220. Ces durées sont approximatives. Le temps par plaquette inclut aussi le chargement et l’alignement : une vraie exposition est donc plus courte. Choisissez une machine pour voir les chiffres changer."
+      "p3": "Cette dose représente environ 20 photons EUV sur chaque nanomètre carré de la plaquette. Un photon est une particule de lumière. Les mouvements doivent être très précis. Les capteurs de position lisent environ 60 pm, 20 000 fois par seconde. La superposition des couches dit avec quelle précision une couche se place sur celle du dessous : 1,1 nm pour la 3600D, 0,9 nm pour la 3800E et 1,1 nm pour la EXE:5000 (High-NA), d’une machine à l’autre.",
+      "p4": "La dernière partie de la lecture correspond au temps de balayage d’un champ. Dans ce modèle, il est d’environ 0,29 s à 160 plaquettes par heure et 0,21 s à 220. Ces durées sont approximatives. Le temps par plaquette inclut aussi le chargement et l’alignement : une vraie exposition est donc plus courte. Choisissez une machine pour voir les chiffres changer."
     },
     "compare": {
       "title": "193 nm contre 13,5 nm",
       "p1": "Les anciennes machines utilisent de l’ultraviolet profond, ou DUV, à 193 nm. Elles ont des lentilles, et une couche d’eau sous la dernière. Elles gravent des lignes dont le demi-pas est d’environ 36 à 38 nm. Le <strong>demi-pas</strong> est la moitié de la distance entre une ligne et la suivante. L’EUV grave des lignes de 13 nm espacées de 13 nm, soit un pas de 26 nm.",
-      "p2": "La lumière EUV a une longueur d’onde bien plus courte, et son photon porte 91,8 eV d’énergie, soit environ 14 fois un photon DUV. La plus petite ligne suit une règle : un nombre k1 multiplié par la longueur d’onde, divisé par le NA. Le NA est l’ouverture numérique, la largeur du cône de lumière que capte le dernier miroir. Un cône plus large voit des détails plus fins. Avec un k1 de 0,3, la règle donne 12,3 nm pour un NA de 0,33 et 7,4 nm pour 0,55.",
-      "p3": "La machine High-NA a un NA de 0,55. Elle réduit le motif 4 fois dans un sens et 8 fois dans l’autre : un champ est donc deux fois plus petit, 26 sur 16,5 mm. Elle grave un demi-pas de 8 nm. Ce modèle garde le même trajet de miroirs pour le High-NA et ne change que les derniers miroirs, la réduction, le champ et les chiffres, car le vrai nombre de miroirs n’est pas connu. L’optique de projection pèse environ 12 tonnes, celle d’éclairage environ 6.",
-      "p4": "Pour sentir l’échelle : un virus de la grippe mesure environ 100 nm de large, et environ 8 de ces lignes tiennent sur sa largeur. Sur un cheveu, il en tient des milliers. Le « 3 nm » des noms de puces n’est qu’une appellation. L’espacement réel de ses fils les plus fins est d’environ 23 à 24 nm. Quant au prix, il n’y a pas de chiffre officiel. Une machine coûterait environ 170 millions d’euros, d’après les estimations publiées, et une High-NA environ 350 millions."
+      "p2": "La lumière EUV a une longueur d’onde bien plus courte, et son photon porte 91,8 eV d’énergie, soit environ 14 fois un photon DUV. La plus petite ligne suit une règle : un nombre k1 multiplié par la longueur d’onde, divisé par le NA. Le NA est l’ouverture numérique, la largeur du cône de lumière que capte le dernier miroir. Un cône plus large voit des détails plus fins. Avec un k1 de 0,3, la règle donne 12,3 nm pour un NA de 0,33 et 7,4 nm pour 0,55.",
+      "p3": "La machine High-NA a un NA de 0,55. Elle réduit le motif 4 fois dans un sens et 8 fois dans l’autre : un champ est donc deux fois plus petit, 26 sur 16,5 mm. Elle grave un demi-pas de 8 nm. Ce modèle garde le même trajet de miroirs pour le High-NA et ne change que les derniers miroirs, la réduction, le champ et les chiffres, car le vrai nombre de miroirs n’est pas connu. L’optique de projection pèse environ 12 tonnes, celle d’éclairage environ 6.",
+      "p4": "Pour sentir l’échelle : un virus de la grippe mesure environ 100 nm de large, et environ 8 de ces lignes tiennent sur sa largeur. Sur un cheveu, il en tient des milliers. Le « 3 nm » des noms de puces n’est qu’une appellation. L’espacement réel de ses fils les plus fins est d’environ 23 à 24 nm. Quant au prix, il n’y a pas de chiffre officiel. D’après les estimations publiées, une machine coûterait bien plus de 100 millions d’euros, et une High-NA environ 350 millions."
     }
   }
 }
