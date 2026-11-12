@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "title": "So funktioniert eine EUV-Chipmaschine",
+    "eyebrow": "Optik",
+    "tagline": "Verfolgen Sie in 3D einen einzigen Lichtblitz durch eine EUV-Chipmaschine: vom Zinntropfen bis zum Wafer, auf den sie Linien von nur 13 nm Breite druckt.",
+    "description": "Verfolgen Sie einen Lichtblitz durch eine EUV-Chipmaschine: Zinntropfen, Laser, 11 Spiegel und der Wafer, auf den sie Linien von 13 nm Breite druckt.",
+    "summary": "Der Zinntropfen und der Laser, Spiegel, die bei jeder Reflexion ein Drittel des Lichts verlieren, die Maske, das Scannen des Wafers und der Vergleich mit dem älteren Licht.",
+    "socialAlt": "Aufgeschnittenes 3D-Modell einer EUV-Chipmaschine: Ein leuchtender Strahl läuft vom Zinntropfen über die Spiegel zum Wafer. Daneben steht der Titel „So funktioniert eine EUV-Chipmaschine“"
+  },
+  "stage": {
+    "label": "Interaktives Modell eines EUV-Scanners",
+    "gauge": "Live-Werte"
+  },
+  "timeline": {
+    "label": "Ein Lichtblitz",
+    "phases": "Zu einem Abschnitt springen",
+    "speed": "Wiedergabetempo",
+    "value": "{{time}}",
+    "during": "Abschnitt {{step}} von {{total}}, {{detail}}, {{time}}",
+    "speedValue": "×{{factor}}",
+    "speedDescribe": "Der ganze Blitz in {{seconds}} Sekunden",
+    "phase": {
+      "droplet": "Tropfen",
+      "prepulse": "Vorpuls",
+      "plasma": "Blitz",
+      "collect": "Kollektor",
+      "mask": "Maske",
+      "expose": "Wafer"
+    },
+    "jump": {
+      "droplet": "Direkt zum Tropfen",
+      "prepulse": "Direkt zum Vorpuls",
+      "plasma": "Direkt zum Blitz",
+      "collect": "Direkt zum Kollektor",
+      "mask": "Direkt zur Maske",
+      "expose": "Direkt zum Wafer"
+    },
+    "detail": {
+      "droplet": "ein Zinntropfen fliegt durch die Quellenkammer",
+      "prepulse": "der erste Laserpuls drückt den Tropfen flach",
+      "plasma": "der zweite Puls erzeugt Plasma, und es blitzt auf",
+      "collect": "der Kollektorspiegel sammelt das Licht",
+      "mask": "vier Spiegel formen den Strahl, und die Maske prägt ihm das Muster auf",
+      "expose": "sechs Spiegel verkleinern das Muster auf den Wafer"
+    },
+    "moment": {
+      "launch": "Tropfen abgefeuert",
+      "firstHit": "Vorpuls",
+      "flash": "Der Blitz",
+      "atFocus": "Im Fokus",
+      "onMask": "Auf der Maske",
+      "onWafer": "Auf dem Wafer"
+    }
+  },
+  "clock": {
+    "before": "{{value}} vor dem Blitz",
+    "after": "{{value}} nach dem Blitz"
+  },
+  "controls": {
+    "label": "Steuerung des Modells",
+    "machine": "Maschine",
+    "machineOptions": {
+      "nxe3600d": "NXE:3600D",
+      "nxe3800e": "NXE:3800E",
+      "exe5000": "EXE:5000 (High-NA)"
+    },
+    "groups": {
+      "moment": "Zu einem Moment springen",
+      "bounce": "Spiegelreflexionen",
+      "machine": "Angezeigte Maschine"
+    },
+    "views": {
+      "beam": {
+        "name": "Lichtstrahl",
+        "short": "Strahl",
+        "hint": "Lichtstrahl (B)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      },
+      "cutaway": {
+        "name": "Schnittansicht",
+        "short": "Schnitt",
+        "hint": "Schnittansicht (C)"
+      },
+      "inset": {
+        "name": "Vergrößerte Ansicht",
+        "short": "Lupe",
+        "hint": "Vergrößerte Ansicht (I)"
+      },
+      "follow": {
+        "name": "Dem Blitz folgen",
+        "short": "Folgen",
+        "hint": "Dem Blitz folgen (F)"
+      }
+    }
+  },
+  "readouts": {
+    "where": "Wo das Licht gerade ist",
+    "lightLeft": "Restlicht",
+    "wavelength": "Wellenlänge",
+    "dropletRate": "Tropfen pro Sekunde",
+    "dropletRateExact": "{{value}}",
+    "dropletRateOrMore": "{{value}} oder mehr",
+    "smallestLine": "Kleinste Linie (Half Pitch)",
+    "wafersPerHour": "Wafer pro Stunde",
+    "wph": {
+      "about": "etwa {{value}}"
+    },
+    "place": {
+      "generator": "Im Tropfengenerator",
+      "flight": "Tropfen im Flug",
+      "plasma": "Im Plasma",
+      "collector": "Am Kollektor",
+      "illuminator": "Im Beleuchtungssystem",
+      "mask": "An der Maske",
+      "projection": "In den Projektionsspiegeln",
+      "wafer": "Auf dem Wafer"
+    }
+  },
+  "units": {
+    "ns": "{{value}} ns",
+    "us": "{{value}} µs",
+    "ms": "{{value}} ms",
+    "s": "{{value}} s",
+    "nm": "{{value}} nm",
+    "um": "{{value}} µm",
+    "mm": "{{value}} mm",
+    "percent": "{{value}} %",
+    "perHour": "{{value}} pro Stunde",
+    "tonnes": "{{value}} t",
+    "celsius": "{{value}} °C",
+    "pm": "{{value}} pm"
+  },
+  "parts": {
+    "flash": "Der Blitz",
+    "droplets": "Zinntropfen",
+    "driveLaser": "Treiberlaser",
+    "beamTransport": "Strahlführung des Lasers",
+    "vessel": "Quellenkammer",
+    "collector": "Kollektorspiegel",
+    "plasma": "Plasma",
+    "intermediateFocus": "Zwischenfokus",
+    "illuminator": "Beleuchtungsspiegel",
+    "maskStage": "Maskentisch",
+    "mask": "Maske",
+    "pellicle": "Pellikel",
+    "projection": "Projektionsspiegel",
+    "waferStage": "Wafertisch",
+    "wafer": "Wafer",
+    "dropletInset": "Tropfen, vergrößert",
+    "patternInset": "Muster, vergrößert",
+    "hair": "Menschenhaar, etwa 50 µm",
+    "virus": "Grippevirus, etwa 100 nm"
+  },
+  "chapters": {
+    "machine": {
+      "weight": "Gewicht",
+      "weightValue": "über {{tonnes}} t beim High-NA-Modell",
+      "shipping": "Transport",
+      "shippingValue": "{{crates}} Kisten, {{containers}} Container, {{trucks}} Lkw",
+      "sizes": "Größen in diesem Modell",
+      "sizesValue": "alle Maße hier stammen vom Modell selbst"
+    },
+    "light": {
+      "droplet": "Tropfengröße",
+      "dropletValue": "etwa {{um}} µm, zwischen {{low}} und {{high}} µm",
+      "speed": "Tropfengeschwindigkeit",
+      "speedValue": "{{low}} bis {{high}} m/s",
+      "spacing": "Abstand der Tropfen",
+      "spacingValue": "etwa {{low}} bis {{high}} mm voneinander entfernt",
+      "pulses": "Laserpulse",
+      "pulsesValue": "{{count}} Laserpulse pro Sekunde",
+      "flattened": "Flachgedrücktes Ziel",
+      "flattenedValue": "über {{um}} µm breit",
+      "plasma": "Hitze des Plasmas",
+      "plasmaValue": "etwa {{celsius}} °C, das {{low}}- bis {{high}}-Fache der Sonnenoberfläche",
+      "conversion": "Licht, das zu EUV wird",
+      "conversionValue": "etwa {{percent}} Prozent des Laserlichts, im Labor"
+    },
+    "mirrors": {
+      "layers": "Schichten in einem Spiegel",
+      "layersValue": "über {{count}} Schichten, jede nur wenige nm dick",
+      "reflect": "Zurückgeworfenes Licht pro Spiegel",
+      "reflectValue": "etwa {{percent}} Prozent",
+      "rough": "Rauheit",
+      "roughValue": "etwa {{pm}} pm",
+      "vacuum": "Warum keine Linsen",
+      "vacuumValue": "1 mm Luft lässt etwa {{air}} Prozent durch, 1 µm Glas {{glass}} Prozent",
+      "bounce": {
+        "label": "Reflexionen nach dem Zwischenfokus",
+        "output": "{{count}} von 11",
+        "start": "Zwischenfokus",
+        "end": "Wafer",
+        "light": "Restlicht",
+        "lost": "Bisher verloren"
+      }
+    },
+    "mask": {
+      "plate": "Maskenplatte",
+      "plateValue": "quadratische Platte, {{mm}} mm Kantenlänge",
+      "area": "Musterfläche",
+      "areaValue": "{{w}} mal {{h}} mm",
+      "tilt": "Schräge des Strahls",
+      "tiltValue": "{{deg}} Grad; einfallender und ausfallender Strahl {{apart}} Grad auseinander",
+      "pellicle": "Licht durch das Pellikel",
+      "pellicleValue": "über {{percent}} Prozent pro Durchgang, hin und zurück etwa {{both}} Prozent",
+      "reduction": "Verkleinerung auf dem Wafer",
+      "reductionValue": "auf dem Wafer {{n}}-mal kleiner"
+    },
+    "scan": {
+      "wph": "Wafer pro Stunde",
+      "perWafer": "Zeit für einen Wafer",
+      "perWaferValue": "etwa {{seconds}} s pro Wafer, samt Laden und Ausrichten",
+      "perField": "Zeit für ein Feld",
+      "perFieldValue": "etwa {{seconds}} s pro Feld in diesem Modell",
+      "fields": "Felder auf einem Wafer",
+      "fieldsValue": "etwa {{low}} bis {{high}} volle Felder",
+      "slit": "Schlitz",
+      "slitValue": "Schlitz von {{w}} mal {{h}} mm",
+      "sensing": "Positionsmessung",
+      "sensingValue": "etwa {{pm}} pm, {{rate}}-mal pro Sekunde",
+      "overlay": "Overlay",
+      "overlayValue": "{{nm}} nm, von Maschine zu Maschine"
+    },
+    "compare": {
+      "shrink": "Verkleinerung",
+      "field": "Feld",
+      "fieldValue": "{{w}} mal {{h}} mm",
+      "line": "Kleinste Linie (Half Pitch)",
+      "lineValue": "{{width}} nm breit, {{gap}} nm Abstand",
+      "duv": "Ältere DUV-Maschinen",
+      "duvValue": "Licht von 193 nm, Linien von etwa {{low}} bis {{high}} nm",
+      "photon": "Energie eines Photons",
+      "photonValue": "{{ev}} eV, etwa das {{times}}-Fache eines 193-nm-Photons",
+      "price": "Preis",
+      "priceValue": "laut Berichten etwa {{eur}} Millionen Euro, {{high}} Millionen für High-NA",
+      "shrinkValue": {
+        "na033": "4×",
+        "na055": "4× / 8×"
+      }
+    }
+  },
+  "sections": {
+    "machine": {
+      "title": "Eine Maschine, die ihr Licht selbst erzeugt",
+      "p1": "Diese Maschine druckt die feinsten Schichten der modernsten Computerchips. Sie ist schwer: Das neueste Modell, <strong>High-NA</strong> genannt, wiegt über 150 Tonnen und wurde in mehr als 250 Kisten, 43 Containern und 20 Lkw geliefert. (NA steht für numerische Apertur, also dafür, wie weit der Lichtkegel ist, den der letzte Spiegel auffängt. Warum das wichtig ist, erklärt das letzte Kapitel.) Wie lang oder hoch die Maschine ist, verrät kein Hersteller. Alle Größen und Positionen in diesem Modell sind deshalb eigene Annahmen.",
+      "p2": "Gedruckt wird mit <strong>extremem Ultraviolett</strong>, kurz EUV. Man kann es nicht sehen. Seine Wellenlänge beträgt nur 13,5 nm, und ein Nanometer (nm) ist ein Millionstel Millimeter. Luft und Glas schlucken dieses Licht: 1 mm Luft lässt etwa 0,14 Prozent durch, 1 µm Glas etwa 0,004 Prozent. Deshalb steckt in der Maschine keine einzige Linse. Alles, was das Licht lenkt, ist ein Spiegel, und das Licht läuft in einem Beinahe-Vakuum mit etwas Wasserstoff.",
+      "p3": "Das Licht entsteht in der Maschine selbst, Blitz für Blitz, aus einem winzigen Zinntropfen. Ein Stockwerk tiefer steht der <strong>Treiberlaser</strong>. Sein Strahl steigt über eine lange <strong>Strahlführung</strong> von bis zu 30 m hinauf zur <strong>Quellenkammer</strong>. Der Laser liefert einige zehn Kilowatt und wiegt über 10 Tonnen.",
+      "p4": "Der <strong>Wafer</strong> ist eine dünne, runde Siliziumscheibe. Er kommt hinein, die Maschine belichtet ihn Stück für Stück, dann kommt er wieder heraus. Diese Seite folgt stattdessen einem einzigen Blitz, vom Zinntropfen bis zum Wafer. Das Modell vereinfacht: Einen Strahl im Vakuum kann niemand sehen, und EUV ist ohnehin unsichtbar. Die Farben des Strahls haben wir also selbst gewählt."
+    },
+    "light": {
+      "title": "Ein Tropfen, zweimal getroffen",
+      "p1": "Jeder Blitz beginnt mit einem Zinntropfen von etwa 30 µm Durchmesser. Das ist etwas mehr als die halbe Dicke eines Menschenhaars, das rund 50 µm misst (ein gerundeter Wert). Die <strong>Tropfen</strong> fallen nicht, sie werden abgefeuert, mit 60 bis 120 Metern pro Sekunde. Etwa 50.000 davon fliegen jede Sekunde vorbei, im Abstand von ungefähr 1,2 bis 2,4 mm. In welche Richtung sie in der echten Maschine fliegen, ist nicht veröffentlicht. Das Modell wählt daher eine Richtung.",
+      "p2": "Ein Laser trifft jeden Tropfen zweimal. Der erste, sanftere Puls drückt ihn zu einem dünnen Pfannkuchen von über 100 µm Breite platt. Ein flaches Ziel nimmt den nächsten Puls viel besser auf als eine Kugel. Der zweite Puls ist der kräftige: ein CO2-Laser mit Licht von 10,6 µm, aus einem kleinen Startpuls um mehr als das 10.000-Fache verstärkt. Zwei Pulse pro Tropfen ergeben etwa 100.000 Laserpulse pro Sekunde.",
+      "p3": "Der große Puls heizt das Zinn auf etwa 220.000 °C auf, das 30- bis 40-Fache der Sonnenoberfläche. Das Zinn wird zu <strong>Plasma</strong>, einem Gas, das so heiß ist, dass seine Atome Elektronen verlieren und leuchten. Zinnionen im Plasma strahlen bei 13,5 nm, und deshalb nimmt diese Maschine Zinn; kleine Tropfen hinterlassen zudem wenig Schmutz. Nur etwa 5 Prozent des Laserlichts werden zu EUV, und dieser Wert stammt aus dem Labor.",
+      "p4": "Der <strong>Kollektorspiegel</strong>, ein großer, gewölbter Spiegel, fängt das Licht auf und bündelt es. In der Kammer strömt Wasserstoff unter niedrigem Druck, der Zinnpartikel abhält und Zinn vom Spiegel putzt. Ein Kollektor hat nachweislich mehr als 100 Milliarden Pulse überstanden. Die Uhr gehört zum Modell. Ein Tropfen fliegt rund 20 ms, der Blitz dauert aber nur etwa 20 ns. Die Wiedergabe dehnt und staucht die Zeit also."
+    },
+    "mirrors": {
+      "title": "Licht, das nur abprallt",
+      "p1": "EUV-Spiegel sind kein glänzendes Metall. Jeder ist ein <strong>Mehrschichtspiegel</strong> aus mehr als 100 dünnen Schichten Silizium und Molybdän, jede nur wenige nm dick. An jeder Grenze zwischen zwei Schichten wird ein wenig Licht zurückgeworfen. Die Schichten liegen etwa 6,8 bis 6,9 nm auseinander, die Hälfte der Wellenlänge, sodass sich all die kleinen Reflexionen zu einer großen addieren.",
+      "p2": "Trotzdem wirft ein Spiegel nur etwa 70 Prozent des Lichts zurück. Das ist der beste gemessene Wert, keine Garantie. Bei jeder Reflexion geht also rund ein Drittel verloren. Das Modell zählt 11 Reflexionen nach dem Zwischenfokus: vier Beleuchtungsspiegel, die Maske und sechs Projektionsspiegel. Etwa 2 Prozent des Lichts erreichen den Wafer, die Spanne liegt bei 1 bis 4 Prozent. Die Zählung stützt sich auf eine Veröffentlichung, eine andere kommt auf 10.",
+      "p3": "Diese Spiegel müssen extrem glatt sein. Ihre Rauheit beträgt etwa 50 pm, und ein Pikometer (pm) ist ein Tausendstel Nanometer. Zeiss, der Hersteller, sagt: Auf einem Spiegel so groß wie Deutschland wäre die höchste Erhebung nur etwa 0,1 mm hoch.",
+      "p4": "Der Kollektor bündelt das Licht in einem Punkt, dem <strong>Zwischenfokus</strong>, und von dort breitet sich der Strahl wieder auf. Mit dem Regler können Sie dem Strahl Reflexion für Reflexion folgen und sehen, wie viel Licht noch übrig ist. Faltung und Lage der Spiegel hat das Modell selbst gezeichnet, nach veröffentlichten Schemata."
+    },
+    "mask": {
+      "title": "Ein Spiegel mit einem Plan darauf",
+      "p1": "Die <strong>Maske</strong>, auch Retikel genannt, trägt das Muster einer Chipschicht. Auch sie ist ein Spiegel. Eine dünne Schicht obenauf, der Absorber, schluckt das Licht überall dort, wo das Muster eine Linie hat. So trägt das zurückgeworfene Licht das Muster in sich. Die Maske sitzt auf einer quadratischen Platte von 152 mm Kantenlänge (sechs Zoll), die Musterfläche misst 104 mal 132 mm.",
+      "p2": "Vor der Maske liegt das <strong>Beleuchtungssystem</strong>, vier Spiegel, die den Strahl formen. Ihre Oberflächen bestehen aus vielen kleinen Plättchen, den Facetten, die sich kippen lassen. Die Neigungen legen fest, aus welchen Winkeln das Licht auf die Maske trifft. Eine Studie hat an einem einzigen Beleuchtungssystem 22 solcher Einstellungen gemessen, ein ungefährer Wert.",
+      "p3": "Der Strahl trifft die Maske schräg unter 6 Grad (bei High-NA 5,4). Einfallendes und ausfallendes Licht liegen daher 12 Grad auseinander, und die beiden Strahlen kommen sich nicht in die Quere. In diesem Modell zeigt die Maske nach unten. Diese Lage ist eine Annahme des Modells.",
+      "p4": "Ein <strong>Pellikel</strong> deckt die Maske ab. Es ist eine hauchdünne Folie, die Staub fernhält, denn ein Körnchen auf der Maske würde auf jeden Wafer gedruckt. Das Licht durchquert es zweimal, hin und zurück. Jedes Mal kommen mehr als 90 Prozent durch, bei beiden Durchgängen zusammen etwa 81 Prozent. Ein Pellikel ist eine Folie, keine Linse. Hinter der Maske verkleinern die Projektionsspiegel das Muster auf ein Viertel."
+    },
+    "scan": {
+      "title": "Feld für Feld",
+      "p1": "Auf einem Wafer sitzen viele Kopien eines Chips, und die Maschine druckt ihn Stück für Stück. Jedes Stück ist ein <strong>Feld</strong> von 26 mal 33 mm. Auf einen Wafer passen etwa 76 bis 80 volle Felder. Das Licht erfasst ein Feld nicht auf einmal, sondern fällt durch einen gebogenen <strong>Schlitz</strong> von etwa 26 mal 2 mm.",
+      "p2": "Um das Feld zu überstreichen, fahren Maske und Wafer gemeinsam in entgegengesetzte Richtungen. Der Schlitz wandert über die Maske, und das verkleinerte Muster wandert über den Wafer. Das nennt man Scannen. Eine Maschine schafft 160 Wafer pro Stunde (NXE:3600D) oder bis zu 220 (NXE:3800E). Das sind die Herstellerangaben, bei einer Dosis von 30 mJ/cm2.",
+      "p3": "Diese Dosis entspricht etwa 20 EUV-Photonen auf jedem Quadrat-Nanometer des Wafers. Ein Photon ist ein einzelnes Lichtteilchen. Die Bewegungen müssen sehr genau sein. Positionssensoren messen auf etwa 60 pm genau, 20.000-mal pro Sekunde. Overlay heißt, wie genau eine Schicht auf der darunterliegenden sitzt. Es beträgt 1,1 nm bei der 3600D und 0,9 nm bei der 3800E, von Maschine zu Maschine.",
+      "p4": "Der letzte Abschnitt der Wiedergabe ist die Zeit, die ein Feld zum Scannen braucht. In diesem Modell sind das etwa 0,29 s bei 160 Wafern pro Stunde und 0,21 s bei 220. Die Zeiten sind ungefähr. Die Zeit pro Wafer enthält auch Laden und Ausrichten, die echte Belichtung ist also kürzer. Wählen Sie eine Maschine, um die Zahlen zu ändern."
+    },
+    "compare": {
+      "title": "193 nm gegen 13,5 nm",
+      "p1": "Ältere Maschinen arbeiten mit tiefem Ultraviolett, kurz DUV, bei 193 nm. Sie nutzen Linsen und unter der letzten Linse eine Wasserschicht. Sie drucken Linien mit einem Half Pitch von etwa 36 bis 38 nm. Der <strong>Half Pitch</strong> ist der halbe Abstand von einer Linie zur nächsten. EUV druckt 13-nm-Linien im Abstand von 13 nm, der Pitch beträgt also 26 nm.",
+      "p2": "EUV-Licht hat eine viel kürzere Wellenlänge, und sein Photon trägt 91,8 eV Energie, etwa das 14-Fache eines DUV-Photons. Die kleinste Linie folgt einer Regel: eine Zahl k1 mal die Wellenlänge, geteilt durch die NA. Die NA ist die numerische Apertur, die Weite des Lichtkegels, den der letzte Spiegel auffängt. Ein breiterer Kegel erkennt feinere Details. Bei einem k1 von 0,3 ergibt die Regel 12,3 nm bei einer NA von 0,33 und 7,4 nm bei 0,55.",
+      "p3": "Die High-NA-Maschine hat eine NA von 0,55. Sie verkleinert das Muster in einer Richtung auf ein Viertel und in der anderen auf ein Achtel, deshalb ist ein Feld nur halb so groß, 26 mal 16,5 mm. Sie druckt 8 nm Half Pitch. Dieses Modell behält für High-NA denselben Spiegelweg bei und ändert nur die letzten Spiegel, die Verkleinerung, das Feld und die Zahlen, weil die echte Spiegelzahl nicht bekannt ist. Die Projektionsoptik wiegt etwa 12 Tonnen und die Beleuchtungsoptik etwa 6.",
+      "p4": "Zum Gefühl für die Größe: Ein Grippevirus ist etwa 100 nm breit. Rund 8 dieser Linien passen nebeneinander darauf. Auf ein Haar passen Tausende. Die „3 nm“ in Chipnamen sind nur ein Name. Der echte Abstand der feinsten Leiterbahnen liegt bei etwa 23 bis 24 nm. Beim Preis gibt es keine offizielle Zahl. Eine Maschine kostet Berichten zufolge etwa 170 Millionen Euro, eine High-NA-Maschine etwa 350 Millionen."
+    }
+  }
+}
