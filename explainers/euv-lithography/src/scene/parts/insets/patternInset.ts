@@ -31,6 +31,7 @@ const LATENT_SHARE = 0.25;
 const REFERENCE_OPTICS = 'na033';
 const REFERENCE_WIDTH = lineWidthM(REFERENCE_OPTICS);
 const IDENTITY = new Quaternion();
+const STRIP_BEVEL = 0.2;
 const STRIP_TOP = STRIP.bottom + STRIP.height;
 
 export class PatternInset {
@@ -61,7 +62,7 @@ export class PatternInset {
         STRIP.height,
         STRIP.depth,
         BEVEL_SEGMENTS,
-        STRIP.height * HALF,
+        STRIP.height * STRIP_BEVEL,
       ),
       GROUP,
       INSET_FINISHES.substrate,
