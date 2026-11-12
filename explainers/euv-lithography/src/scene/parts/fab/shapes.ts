@@ -165,8 +165,12 @@ export function ringProfile(inner: number, outer: number, x: number, thickness: 
   ];
 }
 
-export function profileTube(profile: readonly Vector2[], arc: LatheArc = FULL_ARC): BufferGeometry {
-  return latheAlongX([...profile], segmentsFor(profile, arc), arc);
+export function profileTube(
+  profile: readonly Vector2[],
+  arc: LatheArc = FULL_ARC,
+  lift = 0,
+): BufferGeometry {
+  return latheAlongX([...profile], segmentsFor(profile, arc), arc).translate(0, lift, 0);
 }
 
 export function ringAlongX(
@@ -174,12 +178,13 @@ export function ringAlongX(
   radius: number,
   tube: number,
   arc: LatheArc = FULL_ARC,
+  lift = 0,
 ): BufferGeometry {
   const profile = Array.from({ length: PROFILE_CIRCLE_POINTS + 1 }, (_, index) => {
     const angle = (index / PROFILE_CIRCLE_POINTS) * HALF_TURN * 2;
     return new Vector2(radius + Math.cos(angle) * tube, x + Math.sin(angle) * tube);
   });
-  return profileTube(profile, arc);
+  return profileTube(profile, arc, lift);
 }
 
 export function runPipe(
