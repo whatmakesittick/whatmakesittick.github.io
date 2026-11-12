@@ -40,8 +40,8 @@ export const RAIL = {
 export const FRAME = {
   postX: 0.85,
   postZ: 0.45,
-  post: 0.1,
-  topBeam: 0.05,
+  post: 0.06,
+  topBeam: 0.035,
   crossHeight: 0.14,
   backPanel: 0.03,
   boltPitch: 0.2,
@@ -51,7 +51,7 @@ export const FRAME = {
 export const CARRIAGE = {
   halfX: 0.28,
   halfZ: 0.3,
-  bodyBottom: 0.06,
+  bodyBottom: 0.07,
   bodyTop: 0.18,
   shadeTop: 0.23,
   recessBottom: 0.02,
@@ -100,10 +100,10 @@ export const WAFER_THICK = 0.004;
 export const NOTCH_M = 0.0035;
 export const WAFER_TEXTURE_PX = 1024;
 
-export const SLIT_TALL = mm(1);
+export const SLIT_TALL = mm(3);
 export const SLIT_BASE_X = mm(2);
 export const SLIT_LIFT = 0.0012;
-export const GLOW_SIZE = 0.16;
+export const GLOW_SIZE = 0.45;
 export const LIGHT_INTENSITY = 0.5;
 export const LIGHT_RANGE = 1.6;
 export const LIGHT_LIFT = 0.06;

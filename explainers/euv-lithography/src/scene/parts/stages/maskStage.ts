@@ -50,7 +50,7 @@ function framePieces(): Piece[] {
   const posts = SIDES.flatMap((x) =>
     SIDES.map((z) =>
       slab(
-        'frame',
+        'darkFrame',
         [x * FRAME.postX, height / 2, z * FRAME.postZ],
         [FRAME.post, height, FRAME.post],
         0.006,
@@ -63,10 +63,15 @@ function framePieces(): Piece[] {
   );
   const topY = height - FRAME.topBeam / 2;
   const topLong = SIDES.map((z) =>
-    slab('frame', [0, topY, z * FRAME.postZ], [FRAME.postX * 2, FRAME.topBeam, FRAME.post], 0.005),
+    slab(
+      'darkFrame',
+      [0, topY, z * FRAME.postZ],
+      [FRAME.postX * 2, FRAME.topBeam, FRAME.post],
+      0.005,
+    ),
   );
   const topCross = SIDES.map((x) =>
-    slab('frame', [x * FRAME.postX, topY, 0], [FRAME.post, FRAME.topBeam, reach], 0.005),
+    slab('darkFrame', [x * FRAME.postX, topY, 0], [FRAME.post, FRAME.topBeam, reach], 0.005),
   );
   const bumpers = SIDES.flatMap((x) =>
     SIDES.map((z) =>
@@ -154,7 +159,7 @@ function recessPieces(bottom: number): Piece[] {
     slab('frame', [side * (half - wall / 2), y, 0], [wall, tall, long - wall * 2]),
   ]);
   const floor = slab(
-    'rubber',
+    'laserCase',
     [0, CARRIAGE.bodyBottom - RECESS_FLOOR / 2, 0],
     [long - wall * 2, RECESS_FLOOR, long - wall * 2],
   );

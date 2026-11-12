@@ -66,8 +66,8 @@ export function buildWafer(context: PartContext, carriage: Object3D): WaferParts
     'wafer',
     new MeshStandardMaterial({
       color: '#ffffff',
-      roughness: 0.22,
-      metalness: 0.7,
+      roughness: 0.4,
+      metalness: 0.45,
       map: textures.na033,
     }),
   );

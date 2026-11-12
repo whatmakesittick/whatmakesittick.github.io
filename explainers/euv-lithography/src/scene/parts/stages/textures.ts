@@ -3,7 +3,6 @@ import type { PartContext } from '../context';
 import { MASK, WAFER } from '../../../model/layout';
 import { fieldMm } from '../../../model/optics';
 import type { OpticsId } from '../../../ids';
-import { THEME } from '../../../theme';
 import { MASK_PATTERN_PX_PER_MM, WAFER_TEXTURE_PX } from './dims';
 
 type BlockKind = 'across' | 'down' | 'cells' | 'solid';
@@ -19,15 +18,16 @@ const BLOCKS: readonly Block[] = [
   [0.52, 0.69, 0.22, 0.28, 'solid'],
   [0.78, 0.69, 0.2, 0.28, 'across'],
 ];
-const MASK_BASE = ['#56637b', '#3a4560', '#6d7a95'] as const;
-const ABSORBER = 'rgba(10, 13, 18, 0.88)';
+const MASK_BASE = ['#9fb0d0', '#6a7ea6', '#b9c6e0'] as const;
+const ABSORBER = 'rgba(6, 8, 12, 0.94)';
 const BORDER_MM = 2;
-const MASK_PITCH_PX = 4;
+const MASK_PITCH_PX = 8;
 const DIE_PITCH_PX = 3;
 const HUE_BASE = 200;
 const HUE_STEP = 22;
 const HUE_CYCLE = 5;
-const SCRIBE = 'rgba(28, 34, 44, 0.55)';
+const WAFER_BASE_COLOR = '#5d6772';
+const SCRIBE = 'rgba(20, 26, 36, 0.75)';
 
 interface Rect {
   x: number;
@@ -106,7 +106,7 @@ export function maskPatternTexture(context: PartContext): CanvasTexture {
 function fieldTint(column: number, row: number): string {
   const hue =
     HUE_BASE + ((((column * 7 + row * 13) % HUE_CYCLE) + HUE_CYCLE) % HUE_CYCLE) * HUE_STEP;
-  return `hsla(${hue}, 38%, 62%, 0.3)`;
+  return `hsla(${hue}, 45%, 58%, 0.42)`;
 }
 
 export function waferFieldTexture(context: PartContext, optics: OpticsId): CanvasTexture {
@@ -116,7 +116,7 @@ export function waferFieldTexture(context: PartContext, optics: OpticsId): Canva
   const cellH = field.w * pxPerMm;
   const middle = WAFER_TEXTURE_PX / 2;
   const texture = paint(WAFER_TEXTURE_PX, WAFER_TEXTURE_PX, (g) => {
-    g.fillStyle = THEME.wafer;
+    g.fillStyle = WAFER_BASE_COLOR;
     g.fillRect(0, 0, WAFER_TEXTURE_PX, WAFER_TEXTURE_PX);
     const reach = (WAFER.diameterM * 1000) / 2;
     const rows = Math.ceil(reach / field.w);

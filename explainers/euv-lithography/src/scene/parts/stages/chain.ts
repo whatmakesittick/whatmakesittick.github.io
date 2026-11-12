@@ -1,9 +1,9 @@
 import type { Piece } from './pieces';
 import { rod, slab } from './pieces';
 
-const RIB_PITCH = 0.025;
-const RIB_GROW = 0.006;
-const RIB_THICK = 0.008;
+const RIB_PITCH = 0.02;
+const RIB_GROW = 0.003;
+const RIB_THICK = 0.005;
 const CAP_GROW = 0.008;
 const CAP_INSET = 0.01;
 
@@ -29,10 +29,10 @@ function run(spec: ChainSpec, fromX: number, toX: number, y: number): Piece[] {
   const length = Math.abs(toX - fromX);
   const centreX = (fromX + toX) / 2;
   const ribs = Math.floor(length / RIB_PITCH);
-  const body = slab('tray', [centreX, y, spec.z], [length, spec.thick, spec.width]);
+  const body = slab('darkFrame', [centreX, y, spec.z], [length, spec.thick, spec.width]);
   const links = Array.from({ length: ribs }, (_, index) =>
     slab(
-      'rubber',
+      'tray',
       [Math.min(fromX, toX) + (index + 0.5) * RIB_PITCH, y, spec.z],
       [RIB_THICK, spec.thick + RIB_GROW, spec.width + RIB_GROW],
     ),
