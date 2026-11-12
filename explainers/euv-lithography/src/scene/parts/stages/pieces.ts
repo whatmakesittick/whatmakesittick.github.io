@@ -40,7 +40,9 @@ export function addPieces(
   const finishes = [...new Set(pieces.map((piece) => piece.finish))];
   return finishes.map((finish) => {
     const parts = pieces.filter((piece) => piece.finish === finish);
-    const merged = mergeGeometries(parts.map((piece) => piece.geometry));
+    const merged = mergeGeometries(
+      parts.map(({ geometry }) => (geometry.index ? geometry.toNonIndexed() : geometry)),
+    );
     parts.forEach((piece) => piece.geometry.dispose());
     const target = mesh(context, merged.translate(...origin), group, finish);
     parent.add(target);
