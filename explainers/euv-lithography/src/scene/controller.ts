@@ -1,4 +1,4 @@
-import type { Object3D } from 'three';
+import type { Box3, Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
@@ -7,6 +7,7 @@ import { FLOOR_Y } from '../model';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
 import { cameraViews } from './cameraViews';
+import { viewRegion } from './viewRegions';
 
 export type EuvControllerDependencies = Pick<
   SceneShell,
@@ -28,7 +29,7 @@ export class EuvController {
     this.dependencies = dependencies;
     this.views = new CameraViews<CameraView, RegionId>(dependencies.rig, {
       views: cameraViews(() => this.assembly?.chaseTarget() ?? null),
-      region: (id) => this.assembly?.region(id) ?? null,
+      region: (id) => this.viewRegionOf(id),
       anchor: () => this.assembly?.anchor(FOLLOW_ANCHOR) ?? null,
     });
   }
@@ -57,6 +58,11 @@ export class EuvController {
     this.assembly?.root.removeFromParent();
     this.assembly?.dispose();
     this.assembly = null;
+  }
+
+  private viewRegionOf(id: RegionId): Box3 | null {
+    if (!this.assembly) return null;
+    return viewRegion(id, this.assembly.root.matrixWorld) ?? this.assembly.region(id);
   }
 
   private cameraDistance(): number {

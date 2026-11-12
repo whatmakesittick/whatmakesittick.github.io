@@ -27,13 +27,13 @@ export interface FollowSpec {
 export const FOLLOW_MODE: FollowMode = 'position';
 export const CHASE_VIEW: FollowView = 'chase';
 
-export const CHASE: FollowSpec = { bearing: 45, elevation: 28, spans: 0.8 };
+export const CHASE: FollowSpec = { bearing: 45, elevation: 28, spans: 5 };
 
 export const COMPASS_VIEWS: Readonly<Record<FixedView, CompassView>> = {
   overview: { region: 'machine', bearing: 200, elevation: 22, margin: 1.05 },
   source: { region: 'source', bearing: 185, elevation: 12, margin: 1 },
-  lightPath: { region: 'lightPath', bearing: 180, elevation: 8, margin: 1 },
-  maskStage: { region: 'maskStage', bearing: 160, elevation: -12, margin: 1 },
+  lightPath: { region: 'lightPath', bearing: 180, elevation: 14, margin: 1 },
+  maskStage: { region: 'maskStage', bearing: 160, elevation: -22, margin: 1 },
   waferStage: { region: 'waferStage', bearing: 165, elevation: 20, margin: 1 },
   optics: { region: 'projection', bearing: 175, elevation: 14, margin: 1 },
 };
