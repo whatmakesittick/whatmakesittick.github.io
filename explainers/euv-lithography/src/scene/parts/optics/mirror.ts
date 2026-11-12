@@ -9,43 +9,31 @@ import type { PartContext } from '../context';
 import { registeredMaterial } from '../context';
 import { facing, instanced, mirrorNormal, placement } from '../kit';
 import type { Bin } from './geo';
-import { joined, rod, ring, slab } from './geo';
+import { THEME } from '../../../theme';
+import { workshopEnvironment } from './environment';
+import { facetField } from './facets';
+import { ring, rod, slab } from './geo';
+import { BACK_Y, FACE_THICKNESS, MOUNT_PIECES } from './mount';
 
 const FACE_SEGMENTS = 32;
 const DISH_STEPS = 6;
-const FACE_THICKNESS = 0.05;
 const SAG = 0.022;
 const SUBSTRATE_RADIUS = 0.47;
 const SUBSTRATE_HEIGHT = 0.2;
-const FLANGE_INNER = 0.44;
-const FLANGE_OUTER = 0.56;
-const FLANGE_THICKNESS = 0.07;
-const FLANGE_Y = -(FACE_THICKNESS + 0.08);
-const STRUTS = 3;
-const STRUT_RADIUS = 0.016;
-const STRUT_RING_RADIUS = 0.5;
-const STRUT_PLATE_RADIUS = 0.44;
-const BACK_Y = -(FACE_THICKNESS + 0.34);
-const BACK_THICKNESS = 0.06;
-const BACK_RADIUS = 0.55;
-const BOSS_RADIUS = 0.12;
-const BOSS_DEPTH = 0.06;
+const RIM_INNER = 0.47;
+const RIM_OUTER = 0.515;
 const BRACKET_RADIUS = 0.02;
 const PAD_HALF = 0.06;
 const PAD_DEPTH = 0.02;
-const RIM_INNER = 0.47;
-const RIM_OUTER = 0.515;
-const COATING = {
-  color: '#f3f0ff',
-  metalness: 1,
-  roughness: 0.03,
-  clearcoat: 1,
-  clearcoatRoughness: 0.02,
-  iridescence: 0.45,
-  iridescenceIOR: 1.7,
-  envMapIntensity: 1.6,
-} as const;
 const CYLINDER_SIDES = 28;
+const ENV_INTENSITY = 2.2;
+const FACETED: ReadonlySet<WaypointId> = new Set(['i1', 'i2']);
+const COATING = {
+  color: THEME.mirror,
+  metalness: 1,
+  roughness: 0.08,
+  envMapIntensity: ENV_INTENSITY,
+} as const;
 
 function faceGeometry(): BufferGeometry {
   const radius = 0.5;
@@ -68,39 +56,21 @@ function substrateGeometry(): BufferGeometry {
   return geometry.translate(0, -FACE_THICKNESS - SUBSTRATE_HEIGHT / 2, 0);
 }
 
-function mountGeometry(): BufferGeometry {
-  const struts = Array.from({ length: STRUTS }, (_, index) => {
-    const angle = (index / STRUTS) * Math.PI * 2;
-    const [cos, sin] = [Math.cos(angle), Math.sin(angle)];
-    const from: Point = [cos * STRUT_RING_RADIUS, FLANGE_Y, sin * STRUT_RING_RADIUS];
-    const to: Point = [cos * STRUT_PLATE_RADIUS, BACK_Y, sin * STRUT_PLATE_RADIUS];
-    return rod(from, to, STRUT_RADIUS);
-  });
-  const plate = new CylinderGeometry(BACK_RADIUS, BACK_RADIUS, BACK_THICKNESS, CYLINDER_SIDES);
-  plate.translate(0, BACK_Y, 0);
-  const boss = new CylinderGeometry(BOSS_RADIUS, BOSS_RADIUS, BOSS_DEPTH, CYLINDER_SIDES);
-  boss.translate(0, BACK_Y - (BACK_THICKNESS + BOSS_DEPTH) / 2, 0);
-  return joined([...struts, plate, boss]);
+function rimGeometry(): BufferGeometry {
+  return ring(
+    'y',
+    [0, -FACE_THICKNESS / 2 + 0.004, 0],
+    RIM_INNER,
+    RIM_OUTER,
+    FACE_THICKNESS + 0.008,
+  );
 }
 
 const PIECES: readonly (readonly [Finish, () => BufferGeometry])[] = [
   ['mirror', faceGeometry],
   ['granite', substrateGeometry],
-  [
-    'flange',
-    () =>
-      joined([
-        ring('y', [0, FLANGE_Y, 0], FLANGE_INNER, FLANGE_OUTER, FLANGE_THICKNESS),
-        ring(
-          'y',
-          [0, -FACE_THICKNESS / 2 + 0.004, 0],
-          RIM_INNER,
-          RIM_OUTER,
-          FACE_THICKNESS + 0.008,
-        ),
-      ]),
-  ],
-  ['darkFrame', mountGeometry],
+  ['flange', rimGeometry],
+  ...MOUNT_PIECES,
 ];
 
 interface Neighbours {
@@ -149,11 +119,19 @@ export function mirrorSet(context: PartContext, options: MirrorOptions): MirrorS
   };
   const matrices = placed.map((_, index) => matrixFor(index, options.sizeOf(placed[index].id)));
   const coating = registeredMaterial(context, options.group, new MeshPhysicalMaterial(COATING));
+  coating.envMap = workshopEnvironment(context);
   const meshes = PIECES.map(([finish, build]) =>
     finish === 'mirror'
       ? coated(context, build(), coating, matrices)
       : instanced(context, build(), options.group, finish, matrices),
   );
+  const faceted = placed.flatMap(({ id }, index) => (FACETED.has(id) ? [index] : []));
+  const field = facetField(
+    context,
+    coating,
+    faceted.map((index) => matrices[index]),
+  );
+  if (faceted.length > 0) meshes.push(field.mesh);
   meshes.forEach((target) => {
     target.frustumCulled = false;
     options.parent.add(target);
@@ -163,10 +141,15 @@ export function mirrorSet(context: PartContext, options: MirrorOptions): MirrorS
     meshes,
     resize(id, metres) {
       const index = placed.findIndex((entry) => entry.id === id);
+      const matrix = matrixFor(index, metres);
       meshes.forEach((target) => {
-        target.setMatrixAt(index, matrixFor(index, metres));
-        target.instanceMatrix.needsUpdate = true;
+        if (target !== field.mesh) {
+          target.setMatrixAt(index, matrix);
+          target.instanceMatrix.needsUpdate = true;
+        }
       });
+      const slot = faceted.indexOf(index);
+      if (slot >= 0) field.place(slot, matrix);
     },
   };
 }
