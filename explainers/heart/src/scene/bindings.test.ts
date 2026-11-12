@@ -29,9 +29,9 @@ function fakeTargets() {
 }
 
 describe('scene bindings', () => {
-  it('builds the heart at the store moment and frames the first chapter', () => {
+  it('builds the heart at the store moment and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
-    bindStore(createHeartStore({ phase: 320 }), targets);
+    await bindStore(createHeartStore({ phase: 320 }), targets);
     expect(received[0]).toEqual({
       time: 320,
       chamber: 'leftVentricle',
@@ -41,10 +41,10 @@ describe('scene bindings', () => {
     expect(frame).toHaveBeenCalledWith('front', false, undefined);
   });
 
-  it('passes every change of the moment, the picks and the view to the scene', () => {
+  it('passes every change of the moment, the picks and the view to the scene', async () => {
     const { received, targets } = fakeTargets();
     const store = createHeartStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setPhase(500);
     expect(received.at(-1)?.time).toBe(500);
     store.getState().applyPreset('chambers');
@@ -54,10 +54,10 @@ describe('scene bindings', () => {
     expect(received.at(-1)?.view.conduction).toBe(true);
   });
 
-  it('never changes the state object the assembly got last', () => {
+  it('never changes the state object the assembly got last', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createHeartStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setPhase(100);
     store.getState().setPhase(200);
     const last = received.length - 1;
@@ -65,19 +65,19 @@ describe('scene bindings', () => {
     expect(received[last - 1]).toEqual(snapshots[last - 1]);
   });
 
-  it('frames the cycle chapter with the beat already back at its start', () => {
+  it('frames the cycle chapter with the beat already back at its start', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createHeartStore({ phase: 400 });
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('cycle');
     expect(frame).toHaveBeenLastCalledWith('left', true, undefined);
     expect(received.at(-1)?.time).toBe(0);
   });
 
-  it('highlights the chamber the reader picks in the chambers chapter', () => {
+  it('highlights the chamber the reader picks in the chambers chapter', async () => {
     const { setHighlight, targets } = fakeTargets();
     const store = createHeartStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('chambers');
     expect(setHighlight).toHaveBeenLastCalledWith(['leftVentricle']);
     store.getState().setChamber('leftAtrium');
@@ -88,10 +88,10 @@ describe('scene bindings', () => {
     );
   });
 
-  it('highlights the picked valve and follows it with the camera in the valves chapter', () => {
+  it('highlights the picked valve and follows it with the camera in the valves chapter', async () => {
     const { setHighlight, frame, targets } = fakeTargets();
     const store = createHeartStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('valves');
     expect(frame).toHaveBeenLastCalledWith('valve', true, undefined);
     expect(setHighlight).toHaveBeenLastCalledWith(['mitralValve', 'chordae']);
@@ -101,10 +101,10 @@ describe('scene bindings', () => {
     expect(frame).toHaveBeenCalledWith('valve', true);
   });
 
-  it('leaves the camera alone when a valve changes outside the valves chapter', () => {
+  it('leaves the camera alone when a valve changes outside the valves chapter', async () => {
     const { frame, targets } = fakeTargets();
     const store = createHeartStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('valves');
     store.getState().setValve('pulmonary');
     frame.mockClear();
@@ -114,10 +114,10 @@ describe('scene bindings', () => {
     expect(frame).toHaveBeenCalledWith('left', true, undefined);
   });
 
-  it('stops listening once unbound', () => {
+  it('stops listening once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createHeartStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const calls = received.length;
     store.getState().setPhase(150);

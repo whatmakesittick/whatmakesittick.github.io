@@ -1,4 +1,5 @@
 import { BufferAttribute, Color } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import type { BufferGeometry } from 'three';
 import { CAP_EDGE, capGeometry } from './cap';
 import type { CapStyle } from './cap';
@@ -39,17 +40,18 @@ export function sectionField(fields: SectionFields, lip: number): (x: number, y:
   };
 }
 
-export function sectionCap(
+export function* sectionCap(
   fields: SectionFields,
   bounds: Bounds,
   style: SectionStyle,
   motion: SectionMotion,
-): BufferGeometry {
-  const loops = contourLoops(sectionField(fields, style.lipMm), {
+): Steps<BufferGeometry> {
+  const loops = yield* contourLoops(sectionField(fields, style.lipMm), {
     min: [bounds.min[0], bounds.min[1]],
     max: [bounds.max[0], bounds.max[1]],
     cell: style.cellMm,
   });
+  yield;
   const { outers, holes } = nestLoops(loops);
   const { geometry, edge } = capGeometry(outers, holes, style);
   const deep = new Color(style.deep);

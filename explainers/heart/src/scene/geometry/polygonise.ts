@@ -1,3 +1,4 @@
+import type { Steps } from '@core/scene/pacing';
 import { BufferAttribute, BufferGeometry, MeshBasicMaterial } from 'three';
 import { MarchingCubes } from 'three/addons/objects/MarchingCubes.js';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -51,7 +52,12 @@ function interpolate(level: Level, i: number, j: number, k: number): number {
   return y0 * (1 - tk) + y1 * tk;
 }
 
-function sampleLevel(field: Field, cube: GridCube, stride: number, coarser: Level | null): Level {
+function* sampleLevel(
+  field: Field,
+  cube: GridCube,
+  stride: number,
+  coarser: Level | null,
+): Steps<Level> {
   const size = levelSize(cube, stride);
   const values = new Float32Array(size * size * size);
   const cell = (2 * cube.halfSize) / cube.resolution;
@@ -72,13 +78,14 @@ function sampleLevel(field: Field, cube: GridCube, stride: number, coarser: Leve
             : field.distance(gridCoordinate(cube, 0, gi), y, z);
       }
     }
+    yield;
   }
   return { stride, size, values };
 }
 
-export function sampleField(field: Field, cube: GridCube, target: Float32Array): void {
+export function* sampleField(field: Field, cube: GridCube, target: Float32Array): Steps<void> {
   let level: Level | null = null;
-  for (const stride of STRIDES) level = sampleLevel(field, cube, stride, level);
+  for (const stride of STRIDES) level = yield* sampleLevel(field, cube, stride, level);
   const fine = level as Level;
   const { resolution } = cube;
   for (let index = 0; index < resolution * resolution * resolution; index += 1) {
@@ -134,17 +141,19 @@ function soup(cubes: MarchingCubes, cube: GridCube): BufferGeometry {
   return geometry;
 }
 
-export function polygonise(field: Field, cube: GridCube): BufferGeometry {
+export function* polygonise(field: Field, cube: GridCube): Steps<BufferGeometry> {
   const material = new MeshBasicMaterial();
   const cubes = new MarchingCubes(cube.resolution, material, false, false, MAX_TRIANGLES);
-  sampleField(field, cube, cubes.field);
+  yield* sampleField(field, cube, cubes.field);
   cubes.isolation = 0;
   cubes.update();
+  yield;
   const raw = soup(cubes, cube);
   cubes.geometry.dispose();
   material.dispose();
   const welded = mergeVertices(raw, WELD_TOLERANCE);
   raw.dispose();
+  yield;
   const positions = welded.getAttribute('position').array;
   const index = outwardFacing(withoutDegenerates(welded.getIndex()?.array ?? []), positions);
   welded.setIndex(index);

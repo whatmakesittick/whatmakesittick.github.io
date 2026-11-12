@@ -1,4 +1,5 @@
 import { BufferAttribute } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import type { BufferGeometry } from 'three';
 import type { ChamberId, ValveId } from '../../ids';
 import { VALVES } from '../../model';
@@ -27,18 +28,20 @@ export interface EnvelopeHalves {
 }
 
 const XYZ = 3;
+const PAINT_CHUNK = 6000;
 const CORNERS = 3;
 const SIDE_VALVE: Readonly<Record<HeartSide, ValveId>> = { right: 'tricuspid', left: 'mitral' };
 
-export function surface(
+export function* surface(
   field: Field,
   bounds: Bounds,
   detail: SurfaceDetail,
   portals: readonly Portal[],
-): BufferGeometry {
-  const geometry = polygonise(field, cubeAround(bounds, detail.marginMm, detail.resolution));
+): Steps<BufferGeometry> {
+  const geometry = yield* polygonise(field, cubeAround(bounds, detail.marginMm, detail.resolution));
   taubinSmooth(geometry);
-  return trimAtPortals(geometry, portals);
+  yield;
+  return yield* trimAtPortals(geometry, portals);
 }
 
 export type Painter = (
@@ -50,21 +53,26 @@ export type Painter = (
   nz: number,
 ) => readonly [number, number, number];
 
-export function envelopeHalves(
+export function* envelopeHalves(
   field: Field,
   bounds: Bounds,
   detail: SurfaceDetail,
   motion: Contraction,
   painter: Painter,
   portals: readonly Portal[],
-): EnvelopeHalves {
-  const raw = surface(field, bounds, detail, portals);
+): Steps<EnvelopeHalves> {
+  const raw = yield* surface(field, bounds, detail, portals);
   const cut = insertPlane(raw, FRONTAL_PLANE);
   raw.dispose();
+  yield;
   cut.computeVertexNormals();
-  paint(cut, painter);
+  yield;
+  yield* paint(cut, painter);
+  yield;
   addMorphTargets(cut, [motion.squeeze, motion.emptying]);
+  yield;
   const back = subsetGeometry(cut, sideFilter(cut, FRONTAL_PLANE, false));
+  yield;
   const front = subsetGeometry(cut, sideFilter(cut, FRONTAL_PLANE, true));
   cut.dispose();
   return { front, back };
@@ -103,7 +111,7 @@ function centroid(
   return sum;
 }
 
-export function cavityPieces(
+export function* cavityPieces(
   side: HeartSide,
   field: Field,
   chambers: Readonly<Record<ChamberId, Field>>,
@@ -111,18 +119,24 @@ export function cavityPieces(
   detail: SurfaceDetail,
   motion: Contraction,
   portals: readonly Portal[],
-): Map<ChamberId, BufferGeometry> {
-  const raw = surface(field, bounds, detail, portals);
+): Steps<Map<ChamberId, BufferGeometry>> {
+  const raw = yield* surface(field, bounds, detail, portals);
   const cut = insertPlane(raw, FRONTAL_PLANE);
   raw.dispose();
+  yield;
   const back = subsetGeometry(cut, sideFilter(cut, FRONTAL_PLANE, false));
   cut.dispose();
+  yield;
   const plane = valvePlane(SIDE_VALVE[side]);
   const split = insertPlane(back, plane);
   back.dispose();
+  yield;
   flipWinding(split);
   split.computeVertexNormals();
+  yield;
   addMorphTargets(split, [motion.squeeze, motion.emptying]);
+  yield;
+  yield;
   const [atrium, ventricle] = SIDE_CHAMBERS[side];
   const downstream = sideFilter(split, plane, true);
   const positions = split.getAttribute('position').array;
@@ -131,15 +145,17 @@ export function cavityPieces(
     const [x, y, z] = centroid(positions, corners);
     return chambers[ventricle].distance(x, y, z) < chambers[atrium].distance(x, y, z);
   };
+  const atriumPiece = subsetGeometry(split, (corners, triangle) => !inVentricle(corners, triangle));
+  yield;
   const pieces = new Map<ChamberId, BufferGeometry>([
-    [atrium, subsetGeometry(split, (corners, triangle) => !inVentricle(corners, triangle))],
+    [atrium, atriumPiece],
     [ventricle, subsetGeometry(split, inVentricle)],
   ]);
   split.dispose();
   return pieces;
 }
 
-export function paint(geometry: BufferGeometry, colour: Painter): void {
+export function* paint(geometry: BufferGeometry, colour: Painter): Steps<void> {
   const positions = geometry.getAttribute('position').array;
   const normals = geometry.getAttribute('normal').array;
   const colours = new Float32Array(positions.length);
@@ -155,6 +171,7 @@ export function paint(geometry: BufferGeometry, colour: Painter): void {
     colours[offset] = r;
     colours[offset + 1] = g;
     colours[offset + 2] = b;
+    if (offset % PAINT_CHUNK === 0) yield;
   }
   geometry.setAttribute('color', new BufferAttribute(colours, XYZ));
 }

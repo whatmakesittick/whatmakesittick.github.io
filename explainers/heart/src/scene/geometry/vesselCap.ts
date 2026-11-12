@@ -1,4 +1,5 @@
 import { BufferAttribute, Color } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import type { BufferGeometry } from 'three';
 import { capGeometry, triangleCount } from './cap';
 import { contourLoops, nestLoops } from './contour';
@@ -51,13 +52,13 @@ export function ownerAt(tubes: readonly SectionTube[], x: number, y: number): nu
   return best;
 }
 
-export function vesselCaps(
+export function* vesselCaps(
   section: Clip,
   tubes: readonly SectionTube[],
   colours: ReadonlyMap<number, string>,
   style: VesselCapStyle,
-): Map<number, BufferGeometry> {
-  const { outers, holes } = nestLoops(contourLoops(section, style.grid));
+): Steps<Map<number, BufferGeometry>> {
+  const { outers, holes } = nestLoops(yield* contourLoops(section, style.grid));
   const caps = new Map<number, BufferGeometry>();
   if (outers.length === 0) return caps;
   const { geometry } = capGeometry(outers, holes, NO_BAND);

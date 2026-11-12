@@ -1,3 +1,4 @@
+import { runNow } from '@core/scene/pacing';
 import { describe, expect, it } from 'vitest';
 import { CAP } from '../constants';
 import type { Offset } from './contraction';
@@ -36,10 +37,12 @@ describe('section cap', () => {
   });
 
   it('triangulates the wall in the cut plane with muscle colours and motion', () => {
-    const geometry = sectionCap(FIELDS, BOUNDS, CAP, {
-      outer: { squeeze: still, emptying: still },
-      cavity: { squeeze: lift, emptying: still },
-    });
+    const geometry = runNow(
+      sectionCap(FIELDS, BOUNDS, CAP, {
+        outer: { squeeze: still, emptying: still },
+        cavity: { squeeze: lift, emptying: still },
+      }),
+    );
     const positions = geometry.getAttribute('position').array;
     for (let offset = 2; offset < positions.length; offset += 3) expect(positions[offset]).toBe(0);
     expect(geometry.getAttribute('color').count).toBe(geometry.getAttribute('position').count);

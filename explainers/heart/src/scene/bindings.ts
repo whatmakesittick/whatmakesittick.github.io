@@ -65,11 +65,12 @@ function followSelectedValve(store: HeartStore, targets: SceneTargets): () => vo
   );
 }
 
-export function bindStore(store: HeartStore, targets: SceneTargets): () => void {
+export async function bindStore(store: HeartStore, targets: SceneTargets): Promise<() => void> {
   const { heart, labelVisibility } = targets;
   const assemblyState = new DoubleBufferedAssemblyState();
   const push = (state: HeartState) => heart.setState(assemblyState.handOver(state));
-  heart.build(assemblyState.handOver(store.getState()));
+  await heart.build(assemblyState.handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     highlightSelection(store, targets),

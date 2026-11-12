@@ -1,4 +1,5 @@
 import { Vector2 } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import { containsPoint } from './cap';
 
 export type Field2 = (x: number, y: number) => number;
@@ -70,10 +71,10 @@ function coarseValues(field: Field2, grid: ContourGrid, columns: number, rows: n
   };
 }
 
-function sampleGrid(
+function* sampleGrid(
   field: Field2,
   grid: ContourGrid,
-): { values: Float64Array; columns: number; rows: number } {
+): Steps<{ values: Float64Array; columns: number; rows: number }> {
   const columns = Math.ceil((grid.max[0] - grid.min[0]) / grid.cell) + 1;
   const rows = Math.ceil((grid.max[1] - grid.min[1]) / grid.cell) + 1;
   const values = new Float64Array(columns * rows);
@@ -91,12 +92,13 @@ function sampleGrid(
       values[row * columns + column] =
         Math.abs(guess) > band ? guess : field(grid.min[0] + column * grid.cell, y);
     }
+    yield;
   }
   return { values, columns, rows };
 }
 
-export function contourLoops(field: Field2, grid: ContourGrid): Vector2[][] {
-  const { values, columns, rows } = sampleGrid(field, grid);
+export function* contourLoops(field: Field2, grid: ContourGrid): Steps<Vector2[][]> {
+  const { values, columns, rows } = yield* sampleGrid(field, grid);
   const at = (column: number, row: number) => values[row * columns + column];
   const edgeKey = (column: number, row: number, edge: number): number => {
     if (edge === 2) return ((row + 1) * columns + column) * 2;

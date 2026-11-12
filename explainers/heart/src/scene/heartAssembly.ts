@@ -1,5 +1,6 @@
 import { Group } from 'three';
 import type { Box3, Object3D } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { regionFromSpec } from '@core/scene/regions';
 import { ResourceTracker } from '@core/scene/resources';
@@ -30,10 +31,10 @@ import { heartShapes } from './geometry/heartShape';
 import type { PartContext } from './parts/context';
 import { CoronariesPart, coronaryRoutes } from './parts/heart/coronaries';
 import { LabelAnchors } from './parts/labels';
-import { MyocardiumPart } from './parts/heart/myocardium';
+import { MyocardiumPart, wallGeometry } from './parts/heart/myocardium';
 import { epicardiumPainter } from './geometry/epicardium';
 import { VesselsPart } from './parts/vessels/vessels';
-import { ValvesPart } from './parts/valves/valves';
+import { ValvesPart, buildValves } from './parts/valves/valves';
 import { BloodFlowPart } from './parts/blood/bloodFlow';
 import { ConductionPart } from './parts/conduction/conduction';
 import { REGIONS } from './regions';
@@ -75,10 +76,20 @@ function pinnedMotion(profile: ContractionProfile, portals: readonly Portal[]): 
   };
 }
 
+interface HeartParts {
+  readonly myocardium: MyocardiumPart;
+  readonly vessels: VesselsPart;
+  readonly coronaries: CoronariesPart;
+  readonly valves: ValvesPart;
+  readonly blood: BloodFlowPart;
+  readonly conduction: ConductionPart;
+  readonly labels: LabelAnchors;
+}
+
 export class HeartAssembly implements Assembly {
-  readonly root = new Group();
-  private readonly tracker = new ResourceTracker();
+  readonly root: Group;
   private readonly materials: MaterialLibrary;
+  private readonly tracker: ResourceTracker;
   private readonly myocardium: MyocardiumPart;
   private readonly vessels: VesselsPart;
   private readonly coronaries: CoronariesPart;
@@ -88,48 +99,85 @@ export class HeartAssembly implements Assembly {
   private readonly labels: LabelAnchors;
   private state: AssemblyState | null = null;
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
-    this.materials = resources.materials;
-    const context: PartContext = { ...resources, tracker: this.tracker };
+  static *build(resources: AssemblyResources, state: AssemblyState): Steps<HeartAssembly> {
+    const tracker = new ResourceTracker();
+    const root = new Group();
+    const context: PartContext = { ...resources, tracker };
     const shapes = heartShapes(SHAPE_SPEC);
+    yield;
     const motion = {
       outer: pinnedMotion(OUTER_CONTRACTION, shapes.portals),
       cavity: pinnedMotion(CAVITY_CONTRACTION, shapes.portals),
     };
     const routes = coronaryRoutes(shapes.envelope, CORONARIES);
-    const vessels = routes
+    const vesselRoutes = routes
       .filter((_, index) => CORONARIES[index].groove)
       .map((route) => ({ points: route.points, radius: route.radius[0] }));
-    this.myocardium = new MyocardiumPart(
-      context,
+    yield;
+    const walls = yield* wallGeometry(
       shapes,
       motion,
-      epicardiumPainter(shapes.envelope, vessels, EPICARDIUM),
+      epicardiumPainter(shapes.envelope, vesselRoutes, EPICARDIUM),
     );
-    this.vessels = new VesselsPart(context);
-    this.coronaries = new CoronariesPart(context, routes, motion.outer);
-    this.valves = new ValvesPart(context, shapes.sides, motion.cavity);
-    this.blood = new BloodFlowPart(context, motion.cavity);
-    this.conduction = new ConductionPart(context, shapes.sides, motion.cavity);
-    this.root.add(
-      this.myocardium.object,
-      this.vessels.object,
-      this.coronaries.object,
-      this.valves.object,
-      this.blood.object,
-      this.conduction.object,
+    const myocardium = new MyocardiumPart(context, walls);
+    const vessels = new VesselsPart(context);
+    yield* vessels.build();
+    const coronaries = new CoronariesPart(context, routes, motion.outer);
+    yield;
+    const valves = new ValvesPart(
+      context,
+      shapes.sides,
+      motion.cavity,
+      yield* buildValves(context, shapes.sides),
     );
-    this.labels = new LabelAnchors(
-      this.root,
+    const blood = new BloodFlowPart(context, motion.cavity);
+    yield;
+    const conduction = new ConductionPart(context, shapes.sides, motion.cavity);
+    root.add(
+      myocardium.object,
+      vessels.object,
+      coronaries.object,
+      valves.object,
+      blood.object,
+      conduction.object,
+    );
+    const labels = new LabelAnchors(
+      root,
       {
         envelope: shapes.envelope,
-        chordae: this.valves.chordae.anchor,
+        chordae: valves.chordae.anchor,
         coronary:
           routes[LAD_ROUTE].points[Math.floor(routes[LAD_ROUTE].points.length * LAD_LABEL_SHARE)],
         hiddenCoronary: routes[CIRCUMFLEX_ROUTE].points[routes[CIRCUMFLEX_ROUTE].points.length - 1],
       },
       motion.outer,
     );
+    return new HeartAssembly(
+      resources.materials,
+      tracker,
+      root,
+      { myocardium, vessels, coronaries, valves, blood, conduction, labels },
+      state,
+    );
+  }
+
+  private constructor(
+    materials: MaterialLibrary,
+    tracker: ResourceTracker,
+    root: Group,
+    parts: HeartParts,
+    state: AssemblyState,
+  ) {
+    this.materials = materials;
+    this.tracker = tracker;
+    this.root = root;
+    this.myocardium = parts.myocardium;
+    this.vessels = parts.vessels;
+    this.coronaries = parts.coronaries;
+    this.valves = parts.valves;
+    this.blood = parts.blood;
+    this.conduction = parts.conduction;
+    this.labels = parts.labels;
     this.setState(state);
   }
 

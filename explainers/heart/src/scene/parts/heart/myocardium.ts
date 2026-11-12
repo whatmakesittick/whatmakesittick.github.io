@@ -1,5 +1,6 @@
 import { Color, Group } from 'three';
-import type { Mesh, MeshStandardMaterial } from 'three';
+import type { BufferGeometry, Mesh, MeshStandardMaterial } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import { CHAMBER_IDS } from '../../../ids';
 import type { ChamberId } from '../../../ids';
 import { isAtrium } from '../../../model';
@@ -9,7 +10,7 @@ import type { Contraction } from '../../geometry/contraction';
 import type { HeartShapes, HeartSide } from '../../geometry/heartShape';
 import { sectionCap } from '../../geometry/sectionCap';
 import { cavityPieces, envelopeHalves } from '../../geometry/wallMesh';
-import type { Painter } from '../../geometry/wallMesh';
+import type { EnvelopeHalves, Painter } from '../../geometry/wallMesh';
 import { partMesh } from '../context';
 import type { PartContext } from '../context';
 
@@ -20,6 +21,51 @@ export interface WallMotion {
 
 const SIDES: readonly HeartSide[] = ['right', 'left'];
 
+export interface WallGeometry {
+  readonly halves: EnvelopeHalves;
+  readonly cavities: ReadonlyMap<ChamberId, BufferGeometry>;
+  readonly cap: BufferGeometry;
+}
+
+export function* wallGeometry(
+  shapes: HeartShapes,
+  motion: WallMotion,
+  painter: Painter,
+): Steps<WallGeometry> {
+  const halves = yield* envelopeHalves(
+    shapes.envelope,
+    shapes.envelopeBounds,
+    { resolution: SHAPE.envelopeResolution, marginMm: SHAPE.gridMarginMm },
+    motion.outer,
+    painter,
+    shapes.portals,
+  );
+  const cavities = new Map<ChamberId, BufferGeometry>();
+  for (const side of SIDES) {
+    const pieces = yield* cavityPieces(
+      side,
+      shapes.sides[side],
+      shapes.chambers,
+      shapes.sideBounds[side],
+      { resolution: SHAPE.cavityResolution, marginMm: SHAPE.gridMarginMm },
+      motion.cavity,
+      shapes.sidePortals[side],
+    );
+    pieces.forEach((geometry, id) => cavities.set(id, geometry));
+  }
+  const cap = yield* sectionCap(
+    {
+      envelope: shapes.envelope,
+      cavities: SIDES.map((side) => shapes.sides[side]),
+      portals: shapes.portals,
+    },
+    shapes.envelopeBounds,
+    CAP,
+    motion,
+  );
+  return { halves, cavities, cap };
+}
+
 export class MyocardiumPart {
   readonly object = new Group();
   readonly front: Mesh;
@@ -28,30 +74,13 @@ export class MyocardiumPart {
   readonly cavities = new Map<ChamberId, Mesh>();
   private readonly glowColour = new Color(CAP.glow);
 
-  constructor(context: PartContext, shapes: HeartShapes, motion: WallMotion, painter: Painter) {
-    const detail = { resolution: SHAPE.envelopeResolution, marginMm: SHAPE.gridMarginMm };
-    const halves = envelopeHalves(
-      shapes.envelope,
-      shapes.envelopeBounds,
-      detail,
-      motion.outer,
-      painter,
-      shapes.portals,
-    );
-    this.front = partMesh(context, halves.front, 'wall', FINISHES.epicardium);
-    this.back = partMesh(context, halves.back, 'wall', FINISHES.epicardium);
-    SIDES.forEach((side) => this.buildCavities(context, shapes, side, motion));
-    const cap = sectionCap(
-      {
-        envelope: shapes.envelope,
-        cavities: SIDES.map((side) => shapes.sides[side]),
-        portals: shapes.portals,
-      },
-      shapes.envelopeBounds,
-      CAP,
-      motion,
-    );
-    this.cap = partMesh(context, cap, 'wall', FINISHES.cut);
+  constructor(context: PartContext, geometry: WallGeometry) {
+    this.front = partMesh(context, geometry.halves.front, 'wall', FINISHES.epicardium);
+    this.back = partMesh(context, geometry.halves.back, 'wall', FINISHES.epicardium);
+    geometry.cavities.forEach((cavity, id) => {
+      this.cavities.set(id, partMesh(context, cavity, id, FINISHES.cavity));
+    });
+    this.cap = partMesh(context, geometry.cap, 'wall', FINISHES.cut);
     this.object.add(this.front, this.back, this.cap, ...this.cavities.values());
     this.setCutaway(false);
   }
@@ -84,26 +113,5 @@ export class MyocardiumPart {
 
   private meshes(): Mesh[] {
     return [this.front, this.back, this.cap, ...this.cavities.values()];
-  }
-
-  private buildCavities(
-    context: PartContext,
-    shapes: HeartShapes,
-    side: HeartSide,
-    motion: WallMotion,
-  ): void {
-    const detail = { resolution: SHAPE.cavityResolution, marginMm: SHAPE.gridMarginMm };
-    const pieces = cavityPieces(
-      side,
-      shapes.sides[side],
-      shapes.chambers,
-      shapes.sideBounds[side],
-      detail,
-      motion.cavity,
-      shapes.sidePortals[side],
-    );
-    for (const [id, geometry] of pieces) {
-      this.cavities.set(id, partMesh(context, geometry, id, FINISHES.cavity));
-    }
   }
 }

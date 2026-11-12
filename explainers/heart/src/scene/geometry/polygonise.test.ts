@@ -1,3 +1,4 @@
+import { runNow } from '@core/scene/pacing';
 import { describe, expect, it } from 'vitest';
 import { ellipsoid } from './field';
 import { polygonise, sampleField } from './polygonise';
@@ -8,7 +9,7 @@ describe('polygonise', () => {
   it('samples the field exactly near the surface and inverts its sign', () => {
     const sphere = ellipsoid([0, 0, 0], [10, 10, 10]);
     const values = new Float32Array(CUBE.resolution ** 3);
-    sampleField(sphere, CUBE, values);
+    runNow(sampleField(sphere, CUBE, values));
     const middle = CUBE.resolution / 2;
     const index = (i: number, j: number, k: number) =>
       i + CUBE.resolution * (j + CUBE.resolution * k);
@@ -19,7 +20,7 @@ describe('polygonise', () => {
   });
 
   it('builds a closed welded surface that faces outward', () => {
-    const geometry = polygonise(ellipsoid([0, 0, 0], [10, 10, 10]), CUBE);
+    const geometry = runNow(polygonise(ellipsoid([0, 0, 0], [10, 10, 10]), CUBE));
     const positions = geometry.getAttribute('position').array;
     const index = geometry.getIndex()?.array ?? [];
     for (let offset = 0; offset < positions.length; offset += 3) {
