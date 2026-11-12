@@ -130,7 +130,11 @@ export class CameraRig {
 
   update(deltaSeconds: number): void {
     this.followAnchor();
-    if (this.tween) this.advanceTween(deltaSeconds);
+    if (this.tween) {
+      this.apply(this.tween.advance(deltaSeconds));
+      this.notifyChange();
+      if (this.tween.finished) this.cancelTween();
+    }
     this.controls.update(deltaSeconds);
     this.keepTargetAboveFloor();
   }
@@ -183,13 +187,6 @@ export class CameraRig {
     this.camera.position.add(delta);
     this.controls.target.add(delta);
     this.tween?.shift(delta);
-  }
-
-  private advanceTween(deltaSeconds: number): void {
-    const tween = this.tween;
-    if (!tween) return;
-    this.apply(tween.advance(deltaSeconds));
-    if (tween.finished) this.cancelTween();
   }
 
   private apply(pose: CameraPose): void {

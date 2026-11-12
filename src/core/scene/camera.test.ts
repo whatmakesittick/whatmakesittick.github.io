@@ -11,6 +11,7 @@ const FRAME_SECONDS = 1 / 60;
 const CLOSE_UP: CameraPose = { position: new Vector3(0, 3, 4), target: new Vector3(0, 0, 0) };
 const SIDE_VIEW: CameraPose = { position: new Vector3(4, 1, 0), target: new Vector3(0, 1, 0) };
 const MOVE = new Vector3(3, 1, -2);
+const SHORT_MOVE = new Vector3(0.01, 0, 0);
 const BOUNDS = new Box3(new Vector3(-2, 0, -2), new Vector3(2, 4, 2));
 const VIEWPORT: ViewportSize = { width: 800, height: 600, safe: NO_SAFE_AREA };
 const SCENE_DISTANCE = { min: 3, max: 50 };
@@ -203,6 +204,18 @@ describe('CameraRig', () => {
     rig.update(FRAME_SECONDS);
     rig.update(FRAME_SECONDS);
     expect(listener).toHaveBeenCalledTimes(moves);
+    rig.dispose();
+  });
+
+  it('tells its listeners on every frame of a move too short for the controls to notice', () => {
+    const rig = boundedRig({ distance: { min: 0 } });
+    rig.jumpTo(CLOSE_UP);
+    const listener = vi.fn();
+    rig.onChange(listener);
+    rig.tweenTo({ position: CLOSE_UP.position.clone().add(SHORT_MOVE), target: SHORT_MOVE });
+    rig.update(FRAME_SECONDS);
+    rig.update(FRAME_SECONDS);
+    expect(listener).toHaveBeenCalledTimes(3);
     rig.dispose();
   });
 });
