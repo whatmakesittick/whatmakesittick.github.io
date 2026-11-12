@@ -1,12 +1,18 @@
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { initI18n } from '@core/i18n';
 import en from '../locales/en.json';
-import { PHASE_IDS } from './ids';
+import { MACHINE_IDS, PHASE_IDS } from './ids';
 import type { PhaseId } from './ids';
-import { PHASE_RANGES, RUN_UNITS, SPEED_RANGE, rate } from './model';
+import {
+  PHASE_RANGES,
+  RUN_UNITS,
+  SCAN_START_UNITS,
+  SPEED_RANGE,
+  rate,
+  realSecondsAt,
+} from './model';
 import { PHASE_TONES } from './theme';
 import {
-  DEFAULT_CLOCK_MACHINE,
   EUV_TIMELINE,
   describePhase,
   describeSpeed,
@@ -14,7 +20,6 @@ import {
   formatElapsed,
   formatPhase,
   formatSpeed,
-  setClockMachine,
 } from './timeline';
 
 const MAX_SPEED_LENGTH = 14;
@@ -30,7 +35,6 @@ function unit(key: keyof typeof en.units, value: string): string {
 
 describe('euv timeline', () => {
   beforeAll(() => initI18n({ en: () => Promise.resolve(en) }));
-  afterEach(() => setClockMachine(DEFAULT_CLOCK_MACHINE));
 
   it('plays the 1000 unit run once through six stages with their tones', () => {
     const { phases, cycle, loop } = EUV_TIMELINE;
@@ -61,14 +65,21 @@ describe('euv timeline', () => {
     expect(formatPhase(PHASE_RANGES.plasma.start)).toBe('0 ns after the flash');
   });
 
-  it('ends the run at the scan end of the chosen machine', () => {
-    const ends = { nxe3600d: '0.29', nxe3800e: '0.21', exe5000: '0.15' } as const;
-    (Object.keys(ends) as (keyof typeof ends)[]).forEach((machine) => {
-      setClockMachine(machine);
-      expect(formatPhase(RUN_UNITS), machine).toBe(
-        fill(en.clock.after, { value: unit('s', ends[machine]) }),
-      );
-    });
+  it('keeps the time before the scan equal on every machine', () => {
+    for (let units = 0; units <= SCAN_START_UNITS; units += 10) {
+      const [first, ...others] = MACHINE_IDS.map((machine) => realSecondsAt(units, machine));
+      others.forEach((seconds) => expect(seconds).toBeCloseTo(first, 15));
+    }
+  });
+
+  it('shows the scan share after the flash lands', () => {
+    const scanning = (percent: string) =>
+      fill((en.clock as Record<string, string>).scan, {
+        value: fill(en.units.percent, { value: percent }),
+      });
+    expect(formatPhase(RUN_UNITS)).toBe(scanning('100'));
+    expect(formatPhase((SCAN_START_UNITS + RUN_UNITS) / 2)).toBe(scanning('50'));
+    expect(describePhase(RUN_UNITS)).toContain(scanning('100'));
   });
 
   it('describes the stage by its number out of six and the clock', () => {

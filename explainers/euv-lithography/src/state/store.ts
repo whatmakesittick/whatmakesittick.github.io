@@ -2,7 +2,7 @@ import type { ExplainerStore, Playback, PlaybackState } from '@core/explainer';
 import { createExplainerStore } from '@core/store';
 import type { MachineId, PresetId, ViewOptions } from '../ids';
 import { SPEED_RANGE } from '../model';
-import { DEFAULT_CLOCK_MACHINE, EUV_TIMELINE, setClockMachine } from '../timeline';
+import { DEFAULT_CLOCK_MACHINE, EUV_TIMELINE } from '../timeline';
 import { PRESETS } from './presets';
 import type { Preset } from './presets';
 
@@ -38,7 +38,6 @@ export const START_PHASE = START.pauseAt ?? START.startAt ?? 0;
 export const START_VIEW: ViewState = { ...DEFAULT_VIEW, ...START.view };
 
 export function createEuvStore(overrides: Partial<EuvStoreState> = {}): EuvStore {
-  setClockMachine(overrides.machine ?? DEFAULT_CLOCK_MACHINE);
   return createExplainerStore<EuvFields & EuvOwnActions, Preset>(
     {
       timeline: EUV_TIMELINE,
@@ -46,10 +45,7 @@ export function createEuvStore(overrides: Partial<EuvStoreState> = {}): EuvStore
       defaults: { preset: START_PRESET, speed: START_SPEED, view: START_VIEW },
       extend: (set) => ({
         machine: DEFAULT_CLOCK_MACHINE,
-        setMachine: (machine) => {
-          setClockMachine(machine);
-          set({ machine });
-        },
+        setMachine: (machine) => set({ machine }),
       }),
     },
     { phase: START_PHASE, playing: !START_PAUSED, pausedByPreset: START_PAUSED, ...overrides },

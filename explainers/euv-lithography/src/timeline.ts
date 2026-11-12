@@ -7,10 +7,12 @@ import {
   BASE_RUN_SECONDS,
   PHASE_RANGES,
   RUN_UNITS,
+  SCAN_START_UNITS,
   SPEED_RANGE,
   phaseAt,
   rate,
   realSecondsAt,
+  scanShareAt,
 } from './model';
 import { PHASE_TONES } from './theme';
 
@@ -27,12 +29,7 @@ const COARSE_STEP_UNITS = 50;
 const ONE_DECIMAL_BELOW = 10;
 
 export const DEFAULT_CLOCK_MACHINE: MachineId = 'nxe3600d';
-
-let clockMachine: MachineId = DEFAULT_CLOCK_MACHINE;
-
-export function setClockMachine(machine: MachineId): void {
-  clockMachine = machine;
-}
+const PERCENT = 100;
 
 function wholeDigits(): number {
   return 0;
@@ -66,7 +63,10 @@ export function formatClock(seconds: number): string {
 }
 
 function clockAt(units: number): string {
-  return formatClock(realSecondsAt(units, clockMachine));
+  if (units <= SCAN_START_UNITS) return formatClock(realSecondsAt(units, DEFAULT_CLOCK_MACHINE));
+  return t('clock.scan', {
+    value: t('units.percent', { value: formatFixed(scanShareAt(units) * PERCENT, 0) }),
+  });
 }
 
 function runSeconds(speed: number): number {
