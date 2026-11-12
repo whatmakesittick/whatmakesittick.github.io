@@ -68,11 +68,12 @@ function followSelectedWheel(store: WatchStore, targets: SceneTargets): () => vo
   );
 }
 
-export function bindStore(store: WatchStore, targets: SceneTargets): () => void {
+export async function bindStore(store: WatchStore, targets: SceneTargets): Promise<() => void> {
   const { watch, labelVisibility } = targets;
   const assemblyState = new DoubleBufferedAssemblyState();
   const push = (state: WatchState) => watch.setState(assemblyState.handOver(state));
-  watch.build(assemblyState.handOver(store.getState()));
+  await watch.build(assemblyState.handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     followSelectedWheel(store, targets),

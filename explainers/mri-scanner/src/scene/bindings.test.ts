@@ -17,7 +17,7 @@ function fakeTargets() {
   };
   const frame = vi.fn();
   const targets: SceneTargets = {
-    mriScanner: { build: record, setState: record, views: { frame } },
+    mriScanner: { build: async (state) => record(state), setState: record, views: { frame } },
     labelVisibility: { setWanted: vi.fn() },
     highlighter: { setHighlight: vi.fn() },
     labels: { show: vi.fn() },
@@ -26,10 +26,10 @@ function fakeTargets() {
 }
 
 describe('mri scanner scene bindings', () => {
-  it('builds the scene from the store and frames the first chapter', () => {
+  it('builds the scene from the store and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createMriScannerStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const { phase, field, weighting, linesFilled, view } = store.getState();
     expect(received[0]).toMatchObject({
       phase,
@@ -42,19 +42,19 @@ describe('mri scanner scene bindings', () => {
     expect(frame).toHaveBeenCalledWith('room', false, undefined);
   });
 
-  it('hands the next chapter its view flags before framing its camera', () => {
+  it('hands the next chapter its view flags before framing its camera', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createMriScannerStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('magnet');
     expect(frame).toHaveBeenLastCalledWith('cryostat', true, undefined);
     expect(received.at(-1)?.view).toMatchObject({ cutaway: true, fieldLines: true });
   });
 
-  it('alternates two buffers so the held state is never rewritten', () => {
+  it('alternates two buffers so the held state is never rewritten', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createMriScannerStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().pause();
     store.getState().setPhase(LATER_PHASE);
     store.getState().setTissue('fluid');
@@ -65,10 +65,10 @@ describe('mri scanner scene bindings', () => {
     expect(third?.tissue).toBe('fluid');
   });
 
-  it('bumps the picture version only when the picture changes', () => {
+  it('bumps the picture version only when the picture changes', async () => {
     const { received, targets } = fakeTargets();
     const store = createMriScannerStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const built = { picture: received[0]?.picture, version: received[0]?.pictureVersion };
     store.getState().setPhase(LATER_PHASE);
     store.getState().setTissue('fat');
@@ -83,10 +83,10 @@ describe('mri scanner scene bindings', () => {
     expect(changed?.picture).not.toBe(built.picture);
   });
 
-  it('stops handing over states once unbound', () => {
+  it('stops handing over states once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createMriScannerStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const count = received.length;
     store.getState().setPhase(LATER_PHASE);

@@ -21,9 +21,9 @@ function assemblyState(changes: Partial<AssemblyState> = {}): AssemblyState {
   return { ...createAssemblyState(createMriScannerStore().getState()), ...changes };
 }
 
-function regionBox(view: CameraView): Box3 {
+async function regionBox(view: CameraView): Promise<Box3> {
   const resources = { materials: new MaterialLibrary(), textures: createSceneTextures() };
-  return createAssembly(resources, assemblyState()).region(CAMERA_VIEWS[view].region);
+  return (await createAssembly(resources, assemblyState())).region(CAMERA_VIEWS[view].region);
 }
 
 function fakeShell(stageWidth: number = STAGE_WIDTH_PX.desktop) {
@@ -61,9 +61,9 @@ function roundAll(values: readonly number[]): number[] {
 }
 
 describe('mri scanner controller', () => {
-  it('adds the assembly, attaches its labels and bounds the camera by the room', () => {
+  it('adds the assembly, attaches its labels and bounds the camera by the room', async () => {
     const { rig, scene, shell } = fakeShell();
-    new MriScannerController(shell).build(assemblyState());
+    await new MriScannerController(shell).build(assemblyState());
     expect(scene.add).toHaveBeenCalledTimes(1);
     expect(shell.labels.attach).toHaveBeenCalledTimes(1);
     const [bounds, floor] = rig.setBounds.mock.lastCall ?? [];
@@ -71,30 +71,33 @@ describe('mri scanner controller', () => {
     expect(floor).toBe(bounds?.min.y);
   });
 
-  it('frames nothing before the assembly exists', () => {
+  it('frames nothing before the assembly exists', async () => {
     const { rig, shell } = fakeShell();
     new MriScannerController(shell).views.frame('room', false);
     expect(rig.jumpTo).not.toHaveBeenCalled();
   });
 
-  it.each(STAGE_VARIANTS)('frames every fixed view on its region for a %s stage', (variant) => {
-    const { rig, shell } = fakeShell(STAGE_WIDTH_PX[variant]);
-    const controller = new MriScannerController(shell);
-    controller.build(assemblyState());
-    for (const view of VIEWS) {
-      controller.views.frame(view, false);
-      const pose = rig.jumpTo.mock.lastCall?.[0];
-      expect(pose?.target).toEqual(regionBox(view).getCenter(new Vector3()));
-      const direction = new Vector3(...CAMERA_VIEWS[view].direction[variant]).normalize();
-      expect(pose && viewDirection(pose)).toEqual(roundAll(direction.toArray()));
-      expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
-    }
-  });
+  it.each(STAGE_VARIANTS)(
+    'frames every fixed view on its region for a %s stage',
+    async (variant) => {
+      const { rig, shell } = fakeShell(STAGE_WIDTH_PX[variant]);
+      const controller = new MriScannerController(shell);
+      await controller.build(assemblyState());
+      for (const view of VIEWS) {
+        controller.views.frame(view, false);
+        const pose = rig.jumpTo.mock.lastCall?.[0];
+        expect(pose?.target).toEqual((await regionBox(view)).getCenter(new Vector3()));
+        const direction = new Vector3(...CAMERA_VIEWS[view].direction[variant]).normalize();
+        expect(pose && viewDirection(pose)).toEqual(roundAll(direction.toArray()));
+        expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
+      }
+    },
+  );
 
-  it('tweens when animated and honours an explicit variant', () => {
+  it('tweens when animated and honours an explicit variant', async () => {
     const { rig, shell } = fakeShell(STAGE_WIDTH_PX.phone);
     const controller = new MriScannerController(shell);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     controller.views.frame('console', true, 'desktop');
     const pose = rig.tweenTo.mock.lastCall?.[0];
     const desktop = new Vector3(...CAMERA_VIEWS.console.direction.desktop).normalize();
@@ -102,24 +105,24 @@ describe('mri scanner controller', () => {
     expect(rig.jumpTo).not.toHaveBeenCalled();
   });
 
-  it('reports no motion without an assembly and removes it on dispose', () => {
+  it('reports no motion without an assembly and removes it on dispose', async () => {
     const { scene, shell } = fakeShell();
     const controller = new MriScannerController(shell);
     expect(controller.update(1)).toBe(false);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     const removed = vi.spyOn(scene.add.mock.lastCall?.[0] as Object3D, 'removeFromParent');
     controller.dispose();
     expect(removed).toHaveBeenCalledTimes(1);
     expect(controller.update(1)).toBe(false);
   });
 
-  it('rebuilds without leaving the previous assembly behind', () => {
+  it('rebuilds without leaving the previous assembly behind', async () => {
     const { scene, shell } = fakeShell();
     const controller = new MriScannerController(shell);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     const first = scene.add.mock.lastCall?.[0];
     const removed = vi.spyOn(first as Object3D, 'removeFromParent');
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     expect(removed).toHaveBeenCalledTimes(1);
     expect(scene.add).toHaveBeenCalledTimes(2);
   });

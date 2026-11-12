@@ -23,6 +23,7 @@ import {
   sheenedGlass,
   texturedFinish,
 } from '../../finishes';
+import type { Steps } from '@core/scene/pacing';
 import type { PartContext, SceneModule } from '../context';
 import { mergeParts, partMesh } from '../context';
 import { farSideMaterial, farSideMesh } from './farSide';
@@ -334,6 +335,7 @@ class RoomModule implements SceneModule {
   }
 }
 
-export function createRoomModule(context: PartContext): SceneModule {
+export function* createRoomModule(context: PartContext): Steps<SceneModule> {
+  yield;
   return new RoomModule(context);
 }

@@ -1,6 +1,8 @@
 import { Group } from 'three';
 import type { Box3, Material, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
+import { runPaced } from '@core/scene/pacing';
+import type { Steps } from '@core/scene/pacing';
 import { anchorAt, isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import { PART_IDS } from '../ids';
@@ -14,7 +16,7 @@ import { createRoomModule } from './parts/room/room';
 import { createSubjectModule } from './parts/subject/subject';
 import { buildRegions } from './regions';
 
-const MODULE_FACTORIES: readonly ((context: PartContext) => SceneModule)[] = [
+const MODULE_FACTORIES: readonly ((context: PartContext) => Steps<SceneModule>)[] = [
   createRoomModule,
   createSubjectModule,
   createMagnetModule,
@@ -55,17 +57,22 @@ function collectAnchors(
 class MriScannerAssembly implements Assembly {
   readonly root = new Group();
   private readonly materials: MaterialLibrary;
-  private readonly tracker = new ResourceTracker();
+  private readonly tracker: ResourceTracker;
   private readonly modules: readonly SceneModule[];
   private readonly labels: ReadonlyMap<PartId, Object3D>;
   private readonly anchors: Readonly<Record<AnchorId, Object3D>>;
   private readonly regions = buildRegions();
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(
+    resources: AssemblyResources,
+    tracker: ResourceTracker,
+    modules: readonly SceneModule[],
+    state: AssemblyState,
+  ) {
     this.materials = resources.materials;
+    this.tracker = tracker;
     this.root.name = ROOT_NAME;
-    const context: PartContext = { ...resources, tracker: this.tracker };
-    this.modules = MODULE_FACTORIES.map((create) => create(context));
+    this.modules = modules;
     this.modules.forEach((module) => this.root.add(module.root));
     this.labels = collectLabels(this.modules);
     this.anchors = collectAnchors(this.root, this.modules);
@@ -110,9 +117,17 @@ class MriScannerAssembly implements Assembly {
   }
 }
 
-export function createMriScannerAssembly(
+function* buildModules(context: PartContext): Steps<SceneModule[]> {
+  const modules: SceneModule[] = [];
+  for (const create of MODULE_FACTORIES) modules.push(yield* create(context));
+  return modules;
+}
+
+export async function createMriScannerAssembly(
   resources: AssemblyResources,
   state: AssemblyState,
-): Assembly {
-  return new MriScannerAssembly(resources, state);
+): Promise<Assembly> {
+  const tracker = new ResourceTracker();
+  const modules = await runPaced(buildModules({ ...resources, tracker }));
+  return new MriScannerAssembly(resources, tracker, modules, state);
 }

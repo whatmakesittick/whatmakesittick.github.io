@@ -5,16 +5,19 @@ import { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import { createSceneTextures } from '@core/scene/textures';
 import { HEAD_COIL, PATIENT, TABLE } from '../../../model/layout';
+import { runNow } from '@core/scene/pacing';
 import { blanketHeight, createSubjectModule } from './subject';
 
 const TRIANGLE_BUDGET = 40000;
 
 function subject() {
-  return createSubjectModule({
-    materials: new MaterialLibrary(),
-    textures: createSceneTextures(),
-    tracker: new ResourceTracker(),
-  });
+  return runNow(
+    createSubjectModule({
+      materials: new MaterialLibrary(),
+      textures: createSceneTextures(),
+      tracker: new ResourceTracker(),
+    }),
+  );
 }
 
 function triangles(root: Object3D): number {

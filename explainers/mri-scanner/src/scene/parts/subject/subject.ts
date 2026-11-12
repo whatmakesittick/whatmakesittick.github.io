@@ -15,6 +15,7 @@ import type { PartId } from '../../../ids';
 import { HEAD_COIL, ISOCENTRE, PATIENT, TABLE } from '../../../model/layout';
 import { SUBJECT_DETAIL } from '../../constants';
 import { FINISHES } from '../../finishes';
+import type { Steps } from '@core/scene/pacing';
 import type { PartContext, SceneModule } from '../context';
 import { mergeParts, partMesh } from '../context';
 
@@ -312,6 +313,7 @@ class SubjectModule implements SceneModule {
   }
 }
 
-export function createSubjectModule(context: PartContext): SceneModule {
+export function* createSubjectModule(context: PartContext): Steps<SceneModule> {
+  yield;
   return new SubjectModule(context);
 }

@@ -7,7 +7,8 @@ import { createSceneTextures } from '@core/scene/textures';
 import type { SceneTextures } from '@core/scene/textures';
 import { PART_IDS } from '../ids';
 import type { AnchorId, AssemblyState, RegionId } from '../ids';
-import { WatchAssembly } from './watchAssembly';
+import { createWatchAssembly } from './watchAssembly';
+import type { WatchAssembly } from './watchAssembly';
 
 const STATE: AssemblyState = {
   phase: 0,
@@ -46,9 +47,9 @@ const DRAW_CALL_BUDGET = 90;
 let assembly: WatchAssembly | null = null;
 let textures: SceneTextures | null = null;
 
-function build(state: AssemblyState = STATE): WatchAssembly {
+async function build(state: AssemblyState = STATE): Promise<WatchAssembly> {
   textures = createSceneTextures();
-  assembly = new WatchAssembly({ materials: new MaterialLibrary(), textures }, state);
+  assembly = await createWatchAssembly({ materials: new MaterialLibrary(), textures }, state);
   return assembly;
 }
 
@@ -80,13 +81,13 @@ afterEach(() => {
 });
 
 describe('WatchAssembly', () => {
-  it('anchors every part', () => {
-    const anchors = build().labelAnchors();
+  it('anchors every part', async () => {
+    const anchors = (await build()).labelAnchors();
     PART_IDS.forEach((id) => expect(anchors.get(id), id).toBeDefined());
   });
 
-  it('gives every region a finite, non-empty box', () => {
-    const watch = build();
+  it('gives every region a finite, non-empty box', async () => {
+    const watch = await build();
     REGIONS.forEach((id) => {
       const box = watch.region(id);
       expect(box.isEmpty(), id).toBe(false);
@@ -94,21 +95,21 @@ describe('WatchAssembly', () => {
     });
   });
 
-  it('names every camera anchor', () => {
-    const watch = build();
+  it('names every camera anchor', async () => {
+    const watch = await build();
     ANCHORS.forEach((id) => expect(watch.anchor(id), id).toBeDefined());
   });
 
-  it('stays within the triangle and draw call budget', () => {
-    const watch = build();
+  it('stays within the triangle and draw call budget', async () => {
+    const watch = await build();
     const { triangles, drawCalls } = budget(watch.root);
     console.log(`triangles ${triangles}, draw calls ${drawCalls}`);
     expect(triangles).toBeLessThan(TRIANGLE_BUDGET);
     expect(drawCalls).toBeLessThan(DRAW_CALL_BUDGET);
   });
 
-  it('hides the dial side and the bridges with their flags', () => {
-    const watch = build();
+  it('hides the dial side and the bridges with their flags', async () => {
+    const watch = await build();
     watch.setState({ ...STATE, view: { ...STATE.view, dial: false, bridges: false } });
     const anchors = watch.labelAnchors();
     const shown = (id: (typeof PART_IDS)[number]) => {
@@ -121,8 +122,8 @@ describe('WatchAssembly', () => {
     expect(shown('jewels')).toBe(true);
   });
 
-  it('moves the hands with the phase and the impulse jewel with the balance', () => {
-    const watch = build();
+  it('moves the hands with the phase and the impulse jewel with the balance', async () => {
+    const watch = await build();
     const jewel = watch.labelAnchors().get('impulseJewel');
     if (!jewel) throw new Error('No impulse jewel anchor');
     watch.root.updateMatrixWorld(true);
@@ -132,8 +133,8 @@ describe('WatchAssembly', () => {
     expect(worldPosition(jewel).distanceTo(before)).toBeGreaterThan(1);
   });
 
-  it('keeps its own copy of the state it is given', () => {
-    const watch = build();
+  it('keeps its own copy of the state it is given', async () => {
+    const watch = await build();
     const reused = { ...STATE, view: { ...STATE.view } };
     watch.setState(reused);
     reused.view.dial = false;
@@ -142,8 +143,8 @@ describe('WatchAssembly', () => {
     expect(dial && isShown(dial)).toBe(false);
   });
 
-  it('runs every view flag and reserve through a frame', () => {
-    const watch = build();
+  it('runs every view flag and reserve through a frame', async () => {
+    const watch = await build();
     const states: AssemblyState[] = [
       { ...STATE, view: { ...STATE.view, energy: true } },
       { ...STATE, reserve: 0, amplitude: 186 },

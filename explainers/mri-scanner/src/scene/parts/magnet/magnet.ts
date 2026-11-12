@@ -1,5 +1,6 @@
 import { Group, Mesh } from 'three';
 import type { Material, Object3D } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import { anchorAt } from '@core/scene/parts';
 import type { AnchorId, AssemblyState, PartId, Point } from '../../../ids';
 import { GRADIENT_AXIS_IDS } from '../../../ids';
@@ -76,6 +77,22 @@ function labelPoints(): Partial<Record<PartId, Point>> {
   };
 }
 
+function* buildMagnetParts(context: PartContext) {
+  const looks = createMagnetLooks(context);
+  const cover = buildCover(context);
+  yield;
+  const liner = buildBoreLiner(context);
+  const gradients = new GradientCoils(context);
+  const cryostat = buildCryostat(context, looks);
+  yield;
+  const coldHead = buildColdHead(context);
+  const bodyCoil = buildBodyCoil(context);
+  const quenchPipe = buildQuenchPipe(context);
+  return { cover, liner, gradients, cryostat, coldHead, bodyCoil, quenchPipe };
+}
+
+type MagnetParts = ReturnType<typeof buildMagnetParts> extends Generator<void, infer P> ? P : never;
+
 class MagnetModule implements SceneModule {
   readonly root = new Group();
   readonly labels = new Map<PartId, Object3D>();
@@ -89,26 +106,14 @@ class MagnetModule implements SceneModule {
   private readonly linerGlass: Material;
   private cutaway = false;
 
-  constructor(context: PartContext) {
+  constructor(context: PartContext, built: MagnetParts) {
     this.root.name = 'magnet';
-    const looks = createMagnetLooks(context);
-    this.cover = buildCover(context);
-    this.liner = buildBoreLiner(context);
-    this.gradients = new GradientCoils(context);
-    const cryostat = buildCryostat(context, looks);
-    const coldHead = buildColdHead(context);
-    this.inner = [
-      ...Object.values(cryostat),
-      ...Object.values(this.gradients.parts),
-      buildBodyCoil(context),
-    ];
-    const parts = [
-      this.cover.full,
-      this.liner.group,
-      ...this.inner,
-      coldHead,
-      buildQuenchPipe(context),
-    ];
+    const { cover, liner, gradients, cryostat, coldHead, bodyCoil, quenchPipe } = built;
+    this.cover = cover;
+    this.liner = liner;
+    this.gradients = gradients;
+    this.inner = [...Object.values(cryostat), ...Object.values(this.gradients.parts), bodyCoil];
+    const parts = [this.cover.full, this.liner.group, ...this.inner, coldHead, quenchPipe];
     this.root.add(this.cover.cut, ...parts);
     const points = labelPoints();
     parts.forEach((part) => {
@@ -154,6 +159,6 @@ class MagnetModule implements SceneModule {
   }
 }
 
-export function createMagnetModule(context: PartContext): SceneModule {
-  return new MagnetModule(context);
+export function* createMagnetModule(context: PartContext): Steps<SceneModule> {
+  return new MagnetModule(context, yield* buildMagnetParts(context));
 }

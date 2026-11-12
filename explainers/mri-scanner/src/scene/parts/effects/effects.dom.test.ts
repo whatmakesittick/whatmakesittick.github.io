@@ -8,6 +8,7 @@ import { FIELDS } from '../../../model/field';
 import { MODEL_SIZE } from '../../../model/constants';
 import { VOXEL, VOXEL_ARROWS } from '../../../model/layout';
 import type { SceneModule } from '../context';
+import { runNow } from '@core/scene/pacing';
 import { createEffectsModule } from './effects';
 
 const EFFECT_IDS: readonly PartId[] = [
@@ -72,7 +73,7 @@ let module: SceneModule;
 beforeAll(() => {
   textures = createSceneTextures();
   tracker = new ResourceTracker();
-  module = createEffectsModule({ materials: new MaterialLibrary(), textures, tracker });
+  module = runNow(createEffectsModule({ materials: new MaterialLibrary(), textures, tracker }));
   module.setState(stateWith());
 });
 

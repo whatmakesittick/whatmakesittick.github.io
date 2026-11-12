@@ -3,6 +3,7 @@ import type { Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import type { AssemblyState, PartId } from '../../../ids';
 import { VOXEL } from '../../../model/layout';
+import type { Steps } from '@core/scene/pacing';
 import type { PartContext, SceneModule } from '../context';
 import { FieldLines } from './fieldLines';
 import { Pulses } from './pulses';
@@ -63,6 +64,7 @@ class EffectsModule implements SceneModule {
   }
 }
 
-export function createEffectsModule(context: PartContext): SceneModule {
+export function* createEffectsModule(context: PartContext): Steps<SceneModule> {
+  yield;
   return new EffectsModule(context);
 }

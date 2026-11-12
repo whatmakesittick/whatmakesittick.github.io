@@ -2,6 +2,8 @@ import { Group } from 'three';
 import type { Box3, Object3D } from 'three';
 import { toRadians } from '@core/math';
 import type { MaterialLibrary } from '@core/scene/materials';
+import { runPaced } from '@core/scene/pacing';
+import type { Steps } from '@core/scene/pacing';
 import { anchorAt } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, ViewOptions, WheelId } from '../ids';
@@ -103,12 +105,127 @@ function withZ(points: readonly { x: number; y: number }[], z: number): ScrewSea
   return points.map((point) => ({ x: point.x, y: point.y, z }));
 }
 
+function* buildStatic(
+  context: PartContext,
+  frame: Group,
+  bridgeLayer: Group,
+  dialLayer: Group,
+): Steps<[PartId, Object3D][]> {
+  const bridges = createBridges(context, bridgeLayer);
+  yield;
+  createEngraving(context, bridgeLayer);
+  yield;
+  const bridgeScrews = createScrews(context, [
+    ...withZ(BARREL_BRIDGE.screws, BRIDGE_LEVEL.barrel[1]),
+    ...withZ(TRAIN_BRIDGE.screws, BRIDGE_LEVEL.train[1]),
+    ...withZ(cockFeet(), BALANCE_COCK.arm[1]),
+  ]);
+  const windingScrews = createScrews(context, [
+    { ...CROWN_WHEEL_CENTRE, z: CROWN_WHEEL.boss.span[1] },
+    { ...CLICK_PIVOT, z: CLICK.level[1] },
+    { ...CLICK.spring.anchor, z: CLICK.spring.level[1] },
+  ]);
+  bridgeLayer.add(bridgeScrews);
+  frame.add(windingScrews);
+  yield;
+  const mainplate = createMainplate(context, frame);
+  yield;
+  return [
+    ['mainplate', mainplate],
+    ['bankingPins', createBankingPins(context, frame)],
+    ['stud', createStud(context, frame)],
+    ['barrelBridge', bridges.barrelBridge],
+    ['trainBridge', bridges.trainBridge],
+    ['balanceCock', createBalanceCock(context, bridgeLayer)],
+    ['shockJewel', createShockJewel(context, bridgeLayer)],
+    ['case', createCase(context, dialLayer)],
+    ['dial', createDial(context, dialLayer)],
+  ];
+}
+
+function buildHands(context: PartContext, layer: Group) {
+  return {
+    hourHand: new HandPart(context, layer, 'hourHand', HANDS.hour, LEVELS.hourHand, CENTRE),
+    minuteHand: new HandPart(context, layer, 'minuteHand', HANDS.minute, LEVELS.minuteHand, CENTRE),
+    secondHand: new HandPart(
+      context,
+      layer,
+      'secondHand',
+      HANDS.second,
+      LEVELS.secondHand,
+      WHEEL_CENTRES.fourthWheel,
+    ),
+  };
+}
+
+function* buildParts(context: PartContext) {
+  const movement = new Group();
+  const bridgeLayer = new Group();
+  const dialLayer = new Group();
+  movement.scale.setScalar(UNITS_PER_MM);
+  movement.add(bridgeLayer, dialLayer);
+  const frame = movement;
+  const phases = escapementPhases(trainPhases());
+  const winding = windingPhases();
+  const barrel = new BarrelPart(context, frame, phases.barrel.wheel);
+  const mainspring = new MainspringPart(context, barrel.object);
+  const arbor = new BarrelArborPart(context, frame);
+  yield;
+  const ratchet = new RatchetWheelPart(context, frame, winding.ratchet);
+  const crownWheel = new CrownWheelPart(context, frame, winding.crownWheel);
+  const click = new ClickPart(context, frame, winding.ratchet);
+  const keyless = new KeylessPart(context, frame);
+  yield;
+  const wheels = {} as Record<TrainWheelId, TrainWheelPart>;
+  for (const id of TRAIN_WHEEL_IDS) {
+    wheels[id] = new TrainWheelPart(context, frame, id, phases[id]);
+    yield;
+  }
+  const fork = new PalletForkPart(context, frame);
+  const balance = new BalancePart(context, frame);
+  yield;
+  const hairspring = new HairspringPart(context, frame);
+  const regulator = new RegulatorPart(context, frame);
+  const jewels = new JewelsPart(context, frame, bridgeLayer);
+  yield;
+  const motionWorks = new MotionWorksPart(context, frame);
+  const hands = buildHands(context, dialLayer);
+  const energy = new EnergyPathPart(context);
+  frame.add(energy.object);
+  yield;
+  const statics = yield* buildStatic(context, frame, bridgeLayer, dialLayer);
+  return {
+    movement,
+    bridgeLayer,
+    dialLayer,
+    barrel,
+    mainspring,
+    arbor,
+    ratchet,
+    crownWheel,
+    click,
+    keyless,
+    wheels,
+    fork,
+    balance,
+    hairspring,
+    regulator,
+    jewels,
+    motionWorks,
+    hands,
+    energy,
+    statics,
+  };
+}
+
+type WatchParts = ReturnType<typeof buildParts> extends Generator<void, infer P> ? P : never;
+
 export class WatchAssembly implements Assembly {
   readonly root = new Group();
-  private readonly movement = new Group();
-  private readonly bridgeLayer = new Group();
-  private readonly dialLayer = new Group();
-  private readonly tracker = new ResourceTracker();
+  private readonly movement: Group;
+  private readonly bridgeLayer: Group;
+  private readonly dialLayer: Group;
+  private readonly tracker: ResourceTracker;
   private readonly materials: MaterialLibrary;
   private readonly barrel: BarrelPart;
   private readonly mainspring: MainspringPart;
@@ -130,39 +247,37 @@ export class WatchAssembly implements Assembly {
   private readonly named: Record<AnchorId, Object3D>;
   private state: AssemblyState | null = null;
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(
+    resources: AssemblyResources,
+    tracker: ResourceTracker,
+    parts: WatchParts,
+    state: AssemblyState,
+  ) {
     this.materials = resources.materials;
-    const context: PartContext = {
-      ...resources,
-      tracker: this.tracker,
-      surfaces: createSurfaces(this.tracker),
-    };
-    this.movement.scale.setScalar(UNITS_PER_MM);
-    this.movement.add(this.bridgeLayer, this.dialLayer);
+    this.tracker = tracker;
+    ({
+      movement: this.movement,
+      bridgeLayer: this.bridgeLayer,
+      dialLayer: this.dialLayer,
+      barrel: this.barrel,
+      mainspring: this.mainspring,
+      arbor: this.arbor,
+      ratchet: this.ratchet,
+      crownWheel: this.crownWheel,
+      click: this.click,
+      keyless: this.keyless,
+      wheels: this.wheels,
+      fork: this.fork,
+      balance: this.balance,
+      hairspring: this.hairspring,
+      regulator: this.regulator,
+      jewels: this.jewels,
+      motionWorks: this.motionWorks,
+      hands: this.hands,
+      energy: this.energy,
+    } = parts);
     this.root.add(this.movement);
-    const frame = this.movement;
-    const phases = escapementPhases(trainPhases());
-    const winding = windingPhases();
-    this.barrel = new BarrelPart(context, frame, phases.barrel.wheel);
-    this.mainspring = new MainspringPart(context, this.barrel.object);
-    this.arbor = new BarrelArborPart(context, frame);
-    this.ratchet = new RatchetWheelPart(context, frame, winding.ratchet);
-    this.crownWheel = new CrownWheelPart(context, frame, winding.crownWheel);
-    this.click = new ClickPart(context, frame, winding.ratchet);
-    this.keyless = new KeylessPart(context, frame);
-    this.wheels = Object.fromEntries(
-      TRAIN_WHEEL_IDS.map((id) => [id, new TrainWheelPart(context, frame, id, phases[id])]),
-    ) as Record<TrainWheelId, TrainWheelPart>;
-    this.fork = new PalletForkPart(context, frame);
-    this.balance = new BalancePart(context, frame);
-    this.hairspring = new HairspringPart(context, frame);
-    this.regulator = new RegulatorPart(context, frame);
-    this.jewels = new JewelsPart(context, frame, this.bridgeLayer);
-    this.motionWorks = new MotionWorksPart(context, frame);
-    this.hands = this.buildHands(context);
-    this.energy = new EnergyPathPart(context);
-    frame.add(this.energy.object);
-    this.buildStatic(context);
+    parts.statics.forEach(([id, anchor]) => this.anchors.set(id, anchor));
     this.named = {
       barrel: this.barrel.anchor,
       centreWheel: this.wheels.centreWheel.anchor,
@@ -242,61 +357,6 @@ export class WatchAssembly implements Assembly {
     this.jewels.setBridgesShown(shown);
   }
 
-  private buildHands(
-    context: PartContext,
-  ): Record<'hourHand' | 'minuteHand' | 'secondHand', HandPart> {
-    const layer = this.dialLayer;
-    return {
-      hourHand: new HandPart(context, layer, 'hourHand', HANDS.hour, LEVELS.hourHand, CENTRE),
-      minuteHand: new HandPart(
-        context,
-        layer,
-        'minuteHand',
-        HANDS.minute,
-        LEVELS.minuteHand,
-        CENTRE,
-      ),
-      secondHand: new HandPart(
-        context,
-        layer,
-        'secondHand',
-        HANDS.second,
-        LEVELS.secondHand,
-        WHEEL_CENTRES.fourthWheel,
-      ),
-    };
-  }
-
-  private buildStatic(context: PartContext): void {
-    const frame = this.movement;
-    const bridges = createBridges(context, this.bridgeLayer);
-    createEngraving(context, this.bridgeLayer);
-    const bridgeScrews = createScrews(context, [
-      ...withZ(BARREL_BRIDGE.screws, BRIDGE_LEVEL.barrel[1]),
-      ...withZ(TRAIN_BRIDGE.screws, BRIDGE_LEVEL.train[1]),
-      ...withZ(cockFeet(), BALANCE_COCK.arm[1]),
-    ]);
-    const windingScrews = createScrews(context, [
-      { ...CROWN_WHEEL_CENTRE, z: CROWN_WHEEL.boss.span[1] },
-      { ...CLICK_PIVOT, z: CLICK.level[1] },
-      { ...CLICK.spring.anchor, z: CLICK.spring.level[1] },
-    ]);
-    this.bridgeLayer.add(bridgeScrews);
-    frame.add(windingScrews);
-    const entries: [PartId, Object3D][] = [
-      ['mainplate', createMainplate(context, frame)],
-      ['bankingPins', createBankingPins(context, frame)],
-      ['stud', createStud(context, frame)],
-      ['barrelBridge', bridges.barrelBridge],
-      ['trainBridge', bridges.trainBridge],
-      ['balanceCock', createBalanceCock(context, this.bridgeLayer)],
-      ['shockJewel', createShockJewel(context, this.bridgeLayer)],
-      ['case', createCase(context, this.dialLayer)],
-      ['dial', createDial(context, this.dialLayer)],
-    ];
-    entries.forEach(([id, anchor]) => this.anchors.set(id, anchor));
-  }
-
   private anchorAtStaffTop(): Object3D {
     const [, top] = BALANCE_WHEEL.staff[BALANCE_WHEEL.staff.length - 1];
     return anchorAt(this.movement, BALANCE_CENTRE.x, BALANCE_CENTRE.y, top + ANCHOR_LIFT_MM);
@@ -334,4 +394,14 @@ export class WatchAssembly implements Assembly {
     ];
     entries.forEach(([id, anchor]) => this.anchors.set(id, anchor));
   }
+}
+
+export async function createWatchAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Promise<WatchAssembly> {
+  const tracker = new ResourceTracker();
+  const context: PartContext = { ...resources, tracker, surfaces: createSurfaces(tracker) };
+  const parts = await runPaced(buildParts(context));
+  return new WatchAssembly(resources, tracker, parts, state);
 }
