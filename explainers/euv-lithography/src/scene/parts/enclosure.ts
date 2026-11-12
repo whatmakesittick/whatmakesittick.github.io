@@ -199,7 +199,10 @@ export function addDoor(bin: Bin, face: Face, opening: Opening, hingeLow = true)
   bin.add('machined', onFace(face, u, v, depth(face, -SKIN_M, 0)));
   const leafU: Range = [u[0] + DOOR.gap, u[1] - DOOR.gap];
   const leafV: Range = [v[0] + DOOR.gap, v[1] - DOOR.gap];
-  bin.add('panel', onFace(face, leafU, leafV, depth(face, -SKIN_M / 2, DOOR.proud), PANEL_BEVEL_M));
+  bin.add(
+    'panelShade',
+    onFace(face, leafU, leafV, depth(face, -SKIN_M / 2, DOOR.proud), PANEL_BEVEL_M),
+  );
   const handleU = hingeLow ? leafU[1] - DOOR.standoff * 1.5 : leafU[0] + DOOR.standoff * 1.5;
   const midV = (v[0] + v[1]) / 2;
   const reach = Math.min(DOOR.reach, (v[1] - v[0]) * 0.4) / 2;

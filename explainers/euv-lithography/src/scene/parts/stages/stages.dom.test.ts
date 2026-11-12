@@ -13,7 +13,7 @@ import { buildStages } from '../stages';
 const VIEWS = { beam: true, labels: true, cutaway: false, inset: true, follow: false };
 const PARTS: readonly PartId[] = ['maskStage', 'mask', 'pellicle', 'waferStage', 'wafer'];
 const TRIANGLE_LIMIT = 50_000;
-const DRAW_CALL_LIMIT = 45;
+const DRAW_CALL_LIMIT = 50;
 
 function stateAt(units: number, machine: MachineId = 'nxe3600d'): AssemblyState {
   return {
