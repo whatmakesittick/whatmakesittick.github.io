@@ -259,20 +259,15 @@ an explainer that changes the scene outside a frame and outside the store calls
 `invalidate()`. `onFrame` and `viewport.onResize` return a function that
 removes the listener; the unmount that `mountScene` returns calls it.
 
-A scene build is one long task on a phone, and a tap waits for the whole task. So
-`mountScene` may be async, and the host and the UI mount in separate tasks.
-`src/core/scene/pacing.ts` has the helpers: a build is a generator (`Steps<T>`)
-that `yield`s between parts, `runPaced` runs it and hands the thread back to the
-browser (`scheduler.yield()`, or a timer) once a 20 ms slice is used up, and
-`runNow` drains it at once for tests. An explainer builds its parts as generators
-(`yield*` composes them), awaits the result in its controller's `build`, and binds
-the store after the build; the controller pushes the latest store state once the
-scene exists. Procedural textures that take long to paint can come from a worker:
-`explainers/tesla-flying-roadster` lists its site textures as recipes
-(`geometry/site/siteTextures.ts`), paints them in `pixels.worker.ts` and falls back
-to painting on the main thread, with yields, when the worker cannot start. An embed
-on another origin cannot start a same-origin worker, and the MCP app sandbox may
-block it, so every worker path must keep that fallback.
+A tap waits for the task it lands in, so startup must not block the page: no task
+over 200 ms on a phone. `node e2e/tools/startup.ts <base url> <slug>` measures a
+page at 4x CPU slowdown and fails above that. `mountScene` may return a promise,
+and a scene builds as a `Steps<T>` generator (`src/core/scene/pacing.ts`) that
+`yield`s between parts: `runPaced` gives the browser a turn every 20 ms, `runNow`
+runs it at once in tests, and the controller binds the store when the build
+resolves. A part that is slow on its own needs splitting or a worker, which must
+fall back to the main thread where workers cannot start (an embed on another
+origin, the MCP app sandbox); the Tesla roadster's `pixels.worker.ts` does both.
 
 The round button in the stage's top-right corner shows the model full screen
 (`src/core/ui/stageExpansion.ts`). Expanding sets `data-stage-expanded` on the root,

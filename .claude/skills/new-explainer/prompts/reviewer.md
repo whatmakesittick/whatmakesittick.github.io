@@ -11,6 +11,6 @@ Report, with file and line references, in three lists ranked by severity: code i
 3. Widgets and accessibility: the markup against the UI toolkit section (range widgets, `label for`, outputs, `aria-labelledby`, chips with `data-action`), every referenced key present in every locale, every placeholder filled by the format code so no `{{` can reach the screen.
 4. Locales: same keys, placeholders and markup in all eight (run `npx vitest run explainers/<slug> src/core/i18n`), description lengths (155, zh 80, ja 100), `meta.socialAlt` with the title, a dash count per file (0), and how naturally each translation reads: as a native reader, list stiff, literal or wrong passages with a rewrite, at most ten per language, the worst first; the same warm second person everywhere; terms explained on first use.
 5. The English: flow, sentence length, one idea per sentence, no contradiction with the model (the clock, the moments, what the toggles and sliders do, what the readouts show), the simplifications named where a reader would be misled.
-6. Build health: `npm run lint`, `npm test`, `npm run build`, and the gzipped JavaScript size of the page.
+6. Build health: `npm run lint`, `npm test`, `npm run build`, the gzipped JavaScript size of the page, and `node e2e/tools/startup.ts` on the built page (`npx vite preview`).
 
 Keep the report under 200 lines. Final message: counts per list and the five most important findings.
