@@ -25,7 +25,8 @@
     The <strong>wafer</strong> is a thin round slice of silicon. It goes in, the machine prints it
     one patch at a time, and it comes out. This page follows one flash instead, from the tin drop to
     the wafer. The model is a simplification. Nobody can see a beam in a vacuum, and EUV is not
-    visible at all, so the beam colours are drawn by us.
+    visible at all, so the beam colours are drawn by us. The clock is the model's own too. A drop
+    flies for about 20 ms, but the flash lasts about 20 ns, so playback stretches and squeezes time.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.moment">
     <button
@@ -67,12 +68,12 @@
   </div>
   <dl class="readouts">
     <div>
-      <dt data-i18n="chapters.machine.weight">Weight</dt>
-      <dd class="number" data-readout="weight">more than 150 t, High-NA</dd>
+      <dt data-i18n="chapters.machine.weight">Weight, High-NA</dt>
+      <dd class="number" data-readout="weight">more than 150 t</dd>
     </div>
     <div>
       <dt data-i18n="chapters.machine.shipping">Shipping</dt>
-      <dd class="number" data-readout="shipping">250+ crates, 43 containers, 20 trucks</dd>
+      <dd class="number" data-readout="shipping">more than 250 crates, 43 containers, 20 trucks</dd>
     </div>
     <div>
       <dt data-i18n="chapters.machine.sizes">Sizes in this model</dt>
@@ -107,9 +108,7 @@
   <p data-i18n-html="sections.light.p4">
     The <strong>collector mirror</strong>, a big curved mirror, catches the light and gathers it.
     The vessel holds low-pressure hydrogen that stops tin specks and cleans tin off the mirror. A
-    collector has been shown to last more than 100 billion pulses. The clock is the model's own. A
-    drop flies for about 20 ms, but the flash lasts about 20 ns, so playback stretches and squeezes
-    time.
+    collector has been shown to last more than 100 billion pulses.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.moment">
     <button
@@ -143,7 +142,7 @@
   <dl class="readouts">
     <div>
       <dt data-i18n="chapters.light.droplet">Droplet size</dt>
-      <dd class="number" data-readout="droplet">about 30 µm, 20 to 30 µm</dd>
+      <dd class="number" data-readout="droplet">about 20 to 30 µm</dd>
     </div>
     <div>
       <dt data-i18n="chapters.light.speed">Droplet speed</dt>
@@ -151,7 +150,7 @@
     </div>
     <div>
       <dt data-i18n="chapters.light.spacing">Gap between droplets</dt>
-      <dd class="number" data-readout="spacing">about 1.2 to 2.4 mm apart</dd>
+      <dd class="number" data-readout="spacing">about 1.2 to 2.4 mm</dd>
     </div>
     <div>
       <dt data-i18n="chapters.light.pulses">Laser pulses</dt>
@@ -279,7 +278,8 @@
     A <strong>pellicle</strong> covers the mask. It is a very thin film that keeps dust off, because
     a speck on the mask would print on every wafer. The light crosses it twice, in and out. More
     than 90 percent passes each time, and about 81 percent passes both times. A pellicle is a film,
-    not a lens. After the mask, the projection mirrors shrink the pattern four times.
+    not a lens. After the mask, the projection mirrors shrink the pattern four times (8 times in one
+    direction on High-NA).
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.moment">
     <button
@@ -321,8 +321,8 @@
       </dd>
     </div>
     <div>
-      <dt data-i18n="chapters.mask.reduction">Shrink on the wafer</dt>
-      <dd class="number" data-readout="reduction">4 times smaller on the wafer</dd>
+      <dt data-i18n="chapters.mask.reduction">Shrink from mask to wafer</dt>
+      <dd class="number" data-readout="reduction">4×</dd>
     </div>
   </dl>
 </section>
@@ -346,7 +346,7 @@
     That dose is about 20 EUV photons on every square nm of the wafer. A photon is one particle of
     light. The moves must be very exact. Position sensors read about 60 pm, 20,000 times a second.
     Overlay is how well one layer lines up with the one below it, and it is 1.1 nm on the 3600D and
-    0.9 nm on the 3800E, from machine to machine.
+    0.9 nm on the 3800E and 1.1 nm on the High-NA EXE:5000, from machine to machine.
   </p>
   <p data-i18n-html="sections.scan.p4">
     The last stretch of the playback is the time one field takes to scan. In this model that is
@@ -435,7 +435,7 @@
     To feel the scale, a flu virus is about 100 nm wide. About 8 of these lines fit across it. A
     hair is wide enough for thousands. The "3 nm" in chip names is only a name. The real spacing of
     its finest wires is about 23 to 24 nm. As for price, there is no official figure. A machine is
-    reported to cost about 170 million euros, and a High-NA one about 350 million.
+    reported to cost well over 100 million euros, and a High-NA one about 350 million.
   </p>
   <div class="chip-row" role="group" data-i18n-attr="aria-label:controls.groups.machine">
     <button
@@ -468,7 +468,7 @@
   </div>
   <dl class="readouts">
     <div>
-      <dt data-i18n="chapters.compare.shrink">Shrink</dt>
+      <dt data-i18n="chapters.compare.shrink">Shrink from mask to wafer</dt>
       <dd class="number" data-readout="shrink">4×</dd>
     </div>
     <div>
@@ -490,7 +490,7 @@
     <div>
       <dt data-i18n="chapters.compare.price">Price</dt>
       <dd class="number" data-readout="price">
-        reported at about 170 million euros, 350 million for High-NA
+        reported at well over 100 million euros, about 350 million for High-NA
       </dd>
     </div>
   </dl>
