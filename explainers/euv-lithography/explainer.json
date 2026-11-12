@@ -1,0 +1,13 @@
+{
+  "slug": "euv-lithography",
+  "tags": ["optics", "computing", "physics"],
+  "topic": "EUV lithography",
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A 3D EUV chip machine cut open, with the beam of light running from the tin droplet to the wafer, beside the title How an EUV chip machine works"
+  }
+}
