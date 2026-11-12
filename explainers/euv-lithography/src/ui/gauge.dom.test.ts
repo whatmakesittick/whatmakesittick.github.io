@@ -1,8 +1,12 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import en from '../../locales/en.json';
 import { initI18n } from '@core/i18n';
+import { mountActions } from '@core/ui/actions';
+import { mountReadouts } from '@core/ui/readouts';
+import { TEXT_REFRESH_INTERVAL_MS } from '@core/ui/throttle';
 import type { MachineId } from '../ids';
 import { createEuvStore } from '../state';
+import { CHAPTER_ACTIONS } from './actions';
 import { EUV_READOUTS } from './readouts';
 
 const ROWS = ['where', 'lightLeft', 'wavelength', 'dropletRate', 'smallestLine', 'wafersPerHour'];
@@ -63,5 +67,29 @@ describe('euv gauge readouts', () => {
     expect(text('wafersPerHour', 0, 'exe5000')).toContain('about');
     expect(text('wafersPerHour', 0, 'nxe3600d')).toContain('an hour');
     expect(text('wafersPerHour', 0, 'nxe3600d')).not.toContain('about');
+  });
+});
+
+describe('euv gauge and moment chips', () => {
+  beforeAll(() => initI18n({ en: () => Promise.resolve(en) }));
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  it('moves the where row when a moment chip is pressed', () => {
+    document.body.innerHTML = `
+      <dl data-readouts></dl>
+      <button data-action="moment" data-value="flash"></button>`;
+    const store = createEuvStore({ playing: false, phase: 0 });
+    const stopReadouts = mountReadouts(document, store, EUV_READOUTS);
+    mountActions(document, store, CHAPTER_ACTIONS);
+    const where = () =>
+      document.querySelector('[data-readout="where"] dd, [data-readout="where"] span');
+
+    expect(where()?.textContent).toBe(en.readouts.place.generator);
+    document.querySelector<HTMLElement>('[data-action="moment"]')?.click();
+    vi.advanceTimersByTime(TEXT_REFRESH_INTERVAL_MS + 1);
+
+    expect(where()?.textContent).toBe(en.readouts.place.plasma);
+    stopReadouts();
   });
 });
