@@ -34,7 +34,9 @@ export const FLASH_END_UNITS = PHASE_RANGES.plasma.end;
 
 export const LINE_HEIGHT_M = 1.1;
 export const LINE_DEPTH_M = 0.3;
-export const LINE_BEVEL = 0.22;
+export const LINE_BEVEL = 0.08;
+export const GROW_SHARE = 0.3;
+export const FOOT = { height: 0.03, depth: 0.34, widen: 1.5 } as const;
 export const LINE_LEFT_M = 4.9;
 export const STRIP = { left: 4.85, width: 2.3, bottom: 0.2, height: 0.2, depth: 0.4 } as const;
 

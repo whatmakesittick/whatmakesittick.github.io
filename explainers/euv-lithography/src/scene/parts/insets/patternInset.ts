@@ -1,7 +1,7 @@
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import type { InstancedMesh, Object3D } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { clamp, lerp } from '@core/math';
+import { lerp, smoothstep } from '@core/math';
 import type { AssemblyState } from '../../../ids';
 import { PART_POINTS } from '../../../model/layout';
 import { PATTERN_LINES, lineWidthM, patchWidthM } from '../../../model/scale';
@@ -14,6 +14,8 @@ import {
   LINE_BEVEL,
   LINE_DEPTH_M,
   LINE_HEIGHT_M,
+  FOOT,
+  GROW_SHARE,
   LINE_LEFT_M,
   PATTERN_PANEL,
   STRIP,
@@ -34,6 +36,7 @@ const STRIP_TOP = STRIP.bottom + STRIP.height;
 export class PatternInset {
   readonly object: Object3D = namedGroup(GROUP);
   private readonly lines: InstancedMesh;
+  private readonly feet: InstancedMesh;
   private readonly virus: VirusPart;
   private readonly matrix = new Matrix4();
   private readonly position = new Vector3();
@@ -77,8 +80,16 @@ export class PatternInset {
     );
     const placeholders = Array.from({ length: PATTERN_LINES }, () => new Matrix4());
     this.lines = finishInstances(context, bar, GROUP, INSET_FINISHES.resist, placeholders);
+    const foot = new RoundedBoxGeometry(
+      1,
+      FOOT.height,
+      FOOT.depth,
+      BEVEL_SEGMENTS,
+      FOOT.height * HALF,
+    );
+    this.feet = finishInstances(context, foot, GROUP, INSET_FINISHES.footShadow, placeholders);
     this.virus = new VirusPart(context);
-    this.object.add(strip, this.lines, this.virus.object);
+    this.object.add(strip, this.feet, this.lines, this.virus.object);
     label(context, 'patternInset', this.object, [centre[0], centre[1] + height * HALF, centre[2]]);
     label(context, 'virus', this.object, PART_POINTS.virus);
     sceneAnchor(context, 'patternInset', this.object, centre);
@@ -107,15 +118,19 @@ export class PatternInset {
     const pitch = patchWidthM(optics) / PATTERN_LINES;
     const share = this.ease?.value ?? 0;
     const centre = PATTERN_PANEL.centre;
+    const height = lerp(LATENT_SHARE, 1, smoothstep(share, 0, GROW_SHARE));
     for (let index = 0; index < PATTERN_LINES; index += 1) {
-      const grown = clamp(share * PATTERN_LINES - index, 0, 1);
-      const height = lerp(LATENT_SHARE, 1, grown);
       const x = LINE_LEFT_M + width * HALF + index * pitch;
       this.position.set(x, STRIP_TOP + (LINE_HEIGHT_M * height) / 2, centre[2]);
       this.scale.set(width / REFERENCE_WIDTH, height, 1);
       this.matrix.compose(this.position, IDENTITY, this.scale);
       this.lines.setMatrixAt(index, this.matrix);
+      this.position.set(x, STRIP_TOP + FOOT.height * HALF, centre[2]);
+      this.scale.set(width * FOOT.widen, 1, 1);
+      this.matrix.compose(this.position, IDENTITY, this.scale);
+      this.feet.setMatrixAt(index, this.matrix);
     }
+    this.feet.instanceMatrix.needsUpdate = true;
     this.lines.instanceMatrix.needsUpdate = true;
   }
 }
