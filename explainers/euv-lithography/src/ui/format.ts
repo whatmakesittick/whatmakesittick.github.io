@@ -27,7 +27,7 @@ export function formatUnit(key: string, value: number, digits = WHOLE): string {
 
 export function formatPercentOf(share: number): string {
   const percent = share * PERCENT;
-  const digits = percent < ONE_DECIMAL_BELOW_PERCENT ? TENTHS : WHOLE;
+  const digits = percent !== 0 && percent < ONE_DECIMAL_BELOW_PERCENT ? TENTHS : WHOLE;
   return formatUnit('percent', percent, digits);
 }
 
