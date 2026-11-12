@@ -47,7 +47,7 @@ function reframeChaseByPhase(store: EuvStore, views: ViewFramer): () => void {
   );
 }
 
-export function bindStore(store: EuvStore, targets: SceneTargets): () => void {
+export async function bindStore(store: EuvStore, targets: SceneTargets): Promise<() => void> {
   const { euv, labelVisibility } = targets;
   const handOver = doubleBuffered(store.getState());
   const push = (state: AssemblySource) => euv.setState(handOver(state));
@@ -58,7 +58,7 @@ export function bindStore(store: EuvStore, targets: SceneTargets): () => void {
     following = view.follow;
     euv.views.frame(cameraFor(state), true);
   };
-  euv.build(handOver(store.getState()));
+  await euv.build(handOver(store.getState()));
   const unsubscribers = [
     store.subscribe(push),
     reframeChaseByPhase(store, euv.views),

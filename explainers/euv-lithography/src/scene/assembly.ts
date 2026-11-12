@@ -2,7 +2,7 @@ import type { Box3, Group, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, ChaseTarget, PartId, RegionId } from '../ids';
-import { createPlaceholderAssembly } from './placeholderAssembly';
+import { createEuvLithographyAssembly } from './euvLithographyAssembly';
 
 export type { ChaseTarget } from '../ids';
 
@@ -23,6 +23,9 @@ export interface Assembly {
   dispose(): void;
 }
 
-export function createAssembly(_resources: AssemblyResources, state: AssemblyState): Assembly {
-  return createPlaceholderAssembly(state);
+export function createAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Promise<Assembly> {
+  return createEuvLithographyAssembly(resources, state);
 }
