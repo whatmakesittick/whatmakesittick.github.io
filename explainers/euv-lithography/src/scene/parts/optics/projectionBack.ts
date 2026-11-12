@@ -1,24 +1,16 @@
 import type { Point } from '../../../ids';
 import { pipe } from '../kit';
-import {
-  HATCH_CENTRES,
-  HATCH_M,
-  PIPE_XS,
-  PROJECTION,
-  PUMP_CENTRES,
-  RIB_XS,
-  RIB_YS,
-  TRAY_Y,
-} from './dims';
-import { addHatches, addPump, addSeams, addTray } from './fittings';
+import { PROJECTION_BODY } from '../body';
+import { PIPE_XS, PUMP_CENTRES, TRAY_Y } from './dims';
+import { addPump, addTray } from './fittings';
 import type { Bin } from './geo';
 import { ring, slab } from './geo';
 
-const BACK_Z = PROJECTION.min[2];
+const BACK_Z = PROJECTION_BODY.min[2];
 const PUMP_SIDES: readonly number[] = [4.0, 3.6];
 const TRAY_INSET = 0.06;
 
-const COOLANT = { radius: 0.022, lowY: 0.85, highY: 3.2, offset: -0.93, wall: -0.83 } as const;
+const COOLANT = { radius: 0.022, lowY: 0.85, highY: 3.2, offset: -0.93, wall: -0.8 } as const;
 const COOLANT_FINISH = ['copper', 'accent'] as const;
 const CLAMP_YS = [1.3, 1.9, 2.8] as const;
 const CLAMP_HALF = 0.03;
@@ -49,9 +41,7 @@ function addCoolant(bin: Bin): void {
 }
 
 export function addBack(bin: Bin): void {
-  const { min, max } = PROJECTION;
-  addSeams(bin, BACK_Z, { xs: RIB_XS, ys: RIB_YS, x: [min[0], max[0]], y: [min[1], max[1]] });
-  addHatches(bin, BACK_Z, HATCH_CENTRES, HATCH_M);
+  const { min, max } = PROJECTION_BODY;
   PUMP_CENTRES.forEach((centre, index) => addPump(bin, BACK_Z, centre, PUMP_SIDES[index]));
   addCoolant(bin);
   addTray(bin, BACK_Z, min[0] + TRAY_INSET, max[0] - TRAY_INSET, TRAY_Y);

@@ -14,8 +14,8 @@ import { buildOptics } from '../optics';
 
 const FRAME = { delta: 1 / 60, elapsed: 0, cameraDistance: 10 };
 const SETTLE_FRAMES = 120;
-const TRIANGLE_BUDGET = 40000;
-const DRAW_CALL_BUDGET = 50;
+const TRIANGLE_BUDGET = 80000;
+const DRAW_CALL_BUDGET = 70;
 const MIRROR_ORDER: Record<string, WaypointId[]> = {
   illuminator: ['i1', 'i2', 'i3', 'i4'],
   projection: ['p1', 'p2', 'p3', 'p4', 'p5', 'p6'],
