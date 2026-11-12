@@ -1,17 +1,38 @@
-import type { Matrix4 } from 'three';
 import type { Object3D } from 'three';
-import type { Point } from '../../../ids';
-import { boltHead, instanced, placement } from '../kit';
+import { faceOf, studRow } from '../enclosure';
 import type { PartContext } from '../context';
-import { STRUCTURE_GROUP } from '@core/scene/materials';
+import type { Bin } from '../optics/geo';
+import { slab } from '../optics/geo';
 import { cableChain } from './chain';
-import { CARRIAGE, CHUCK, FRAME, MASK_CHAIN, MASK_ORIGIN, PLATE_TOP, RAIL } from './dims';
-import { addPieces, rod, slab } from './pieces';
-import type { Piece } from './pieces';
+import {
+  CHUCK,
+  MASK_AT,
+  MASK_BLOCK,
+  MASK_BRIDGE,
+  MASK_CARRIAGE,
+  MASK_CHAIN,
+  MASK_CHAIN_SHELF,
+  MASK_RAILS,
+  MASK_TRACK,
+  MASK_WALL_X,
+  PLATE_HALF,
+  PLATE_TOP,
+} from './dims';
 
+const PART = 'maskStage';
 const SIDES = [-1, 1] as const;
-const BOLT_ROWS = [-1, 1] as const;
-const RECESS_FLOOR = 0.001;
+const ROUND = 0.006;
+const TIE_DEPTH = 0.05;
+const TIE_RISE = 0.04;
+const TIE_DROP = 0.04;
+const BOLT_OUT = 0.004;
+const BOLT_PITCH = 0.12;
+const COVER = { halfX: 0.2, bottom: 0.04, top: 0.2, thick: 0.007 } as const;
+const STRIPE = { bottom: 0.11, tall: 0.02, thick: 0.004 } as const;
+const SIDE_COVER = { halfZ: 0.22, thick: 0.005 } as const;
+const CHUCK_INNER = 0.6;
+const CLAMP_REACH = 0.004;
+const RAILS_Z = SIDES.map((side) => side * MASK_RAILS.z);
 
 export interface MaskStageGroups {
   fixed: Object3D;
@@ -19,194 +40,137 @@ export interface MaskStageGroups {
   bend: Object3D;
 }
 
-function railPieces(): Piece[] {
-  const length = RAIL.halfLength * 2;
-  const centre = (RAIL.bottom + RAIL.top) / 2;
-  return SIDES.flatMap((side) => [
+function addBridge(bin: Bin): void {
+  const { min, max } = MASK_BRIDGE;
+  bin.add('granite', slab(min, max, ROUND));
+  const [wallLeft, wallRight] = MASK_WALL_X;
+  const tie = (from: number, to: number) =>
     slab(
-      'darkFrame',
-      [0, centre, side * RAIL.z],
-      [length, RAIL.top - RAIL.bottom, RAIL.width],
-      0.008,
-    ),
-    slab(
-      'rubber',
-      [0, RAIL.top + 0.004, side * RAIL.z],
-      [length - 0.1, RAIL.trackTop - RAIL.top, RAIL.width - 0.02],
-    ),
-    ...SIDES.map((edge) =>
-      slab(
-        'flange',
-        [0, RAIL.trackTop + 0.002, side * RAIL.z + edge * RAIL.stripeInset],
-        [length - 0.1, RAIL.stripeTop - RAIL.trackTop, 0.005],
-      ),
-    ),
-  ]);
-}
-
-function framePieces(): Piece[] {
-  const height = 0.6;
-  const reach = FRAME.postZ * 2;
-  const posts = SIDES.flatMap((x) =>
-    SIDES.map((z) =>
-      slab(
-        'darkFrame',
-        [x * FRAME.postX, height / 2, z * FRAME.postZ],
-        [FRAME.post, height, FRAME.post],
-        0.006,
-      ),
-    ),
-  );
-  const crossAt = (RAIL.bottom + RAIL.top) / 2;
-  const cross = SIDES.map((x) =>
-    slab('darkFrame', [x * FRAME.postX, crossAt, 0], [FRAME.post, FRAME.crossHeight, reach], 0.006),
-  );
-  const topY = height - FRAME.topBeam / 2;
-  const topLong = SIDES.map((z) =>
-    slab(
-      'darkFrame',
-      [0, topY, z * FRAME.postZ],
-      [FRAME.postX * 2, FRAME.topBeam, FRAME.post],
-      0.005,
-    ),
-  );
-  const topCross = SIDES.map((x) =>
-    slab('darkFrame', [x * FRAME.postX, topY, 0], [FRAME.post, FRAME.topBeam, reach], 0.005),
-  );
-  const bumpers = SIDES.flatMap((x) =>
-    SIDES.map((z) =>
-      slab(
-        'safety',
-        [x * (FRAME.postX - FRAME.post / 2 - 0.02), crossAt + 0.09, z * RAIL.z],
-        [0.04, 0.05, 0.07],
-        0.008,
-      ),
-    ),
-  );
-  const backY = RAIL.bottom - 0.01 + (height - RAIL.bottom) / 2 - 0.02;
-  const back = [
-    slab(
-      'panel',
-      [0, backY, -FRAME.postZ - 0.01],
-      [FRAME.postX * 2 - FRAME.post, height - RAIL.bottom - 0.04, FRAME.backPanel],
-      0.004,
-    ),
-    ...[-0.4, 0, 0.4].map((x) =>
-      slab(
-        'darkFrame',
-        [x, backY, -FRAME.postZ - 0.027],
-        [0.02, height - RAIL.bottom - 0.08, 0.006],
-      ),
-    ),
-  ];
-  return [...posts, ...cross, ...topLong, ...topCross, ...bumpers, ...back];
-}
-
-function boltMatrices(): Matrix4[] {
-  const count = Math.floor((FRAME.postX * 2) / FRAME.boltPitch);
-  const top = 0.6;
-  return BOLT_ROWS.flatMap((row) =>
-    Array.from({ length: count }, (_, index) => {
-      const x = -FRAME.postX + (index + 0.5) * FRAME.boltPitch;
-      const at: Point = [x, top + 0.003, row * FRAME.postZ];
-      return placement(at);
-    }),
-  );
-}
-
-function carriagePieces(): Piece[] {
-  const { halfX, halfZ, bodyBottom, bodyTop, shadeTop, recessBottom } = CARRIAGE;
-  const body = slab(
-    'panel',
-    [0, (bodyBottom + bodyTop) / 2, 0],
-    [halfX * 2, bodyTop - bodyBottom, halfZ * 2],
-    0.012,
-  );
-  const shade = slab(
-    'panelShade',
-    [0, (bodyTop + shadeTop) / 2, 0],
-    [halfX * 2 - 0.06, shadeTop - bodyTop, halfZ * 2 - 0.06],
-    0.01,
-  );
-  const trim = slab(
-    'accent',
-    [0, (bodyBottom + bodyTop) / 2, halfZ + 0.002],
-    [halfX * 2 - 0.04, 0.012, 0.004],
-  );
-  const arms = SIDES.flatMap((side) => {
-    const reach = RAIL.z - RAIL.width / 2 - halfZ;
-    const y = (CARRIAGE.armBottom + CARRIAGE.armTop) / 2;
-    return [
-      slab(
-        'frame',
-        [0, y, side * (halfZ + reach / 2)],
-        [halfX * 1.6, CARRIAGE.armTop - CARRIAGE.armBottom, reach],
-        0.006,
-      ),
-      slab('accent', [0, y, side * (halfZ + reach / 2)], [halfX * 1.2, 0.03, reach + 0.004]),
-    ];
+      [from, min[1] - TIE_DROP, min[2] - TIE_DEPTH],
+      [to, max[1] + TIE_RISE, max[2] + TIE_DEPTH],
+      ROUND,
+    );
+  bin.add('machined', tie(wallLeft, min[0]), tie(max[0], wallRight));
+  SIDES.forEach((side) => {
+    const face = faceOf(min, max, 'y', 1);
+    studRow(
+      bin,
+      face,
+      [min[0] + 0.1, side * (max[2] - 0.05)],
+      [max[0] - 0.1, side * (max[2] - 0.05)],
+      BOLT_OUT,
+      BOLT_PITCH,
+    );
   });
-  return [body, shade, trim, ...arms, ...recessPieces(recessBottom)];
 }
 
-function recessPieces(bottom: number): Piece[] {
-  const { recessHalf: half, recessWall: wall } = CARRIAGE;
-  const tall = CARRIAGE.bodyBottom - bottom;
-  const y = bottom + tall / 2;
-  const long = half * 2;
-  const walls = SIDES.flatMap((side) => [
-    slab('frame', [0, y, side * (half - wall / 2)], [long, tall, wall]),
-    slab('frame', [side * (half - wall / 2), y, 0], [wall, tall, long - wall * 2]),
-  ]);
-  const floor = slab(
-    'laserCase',
-    [0, CARRIAGE.bodyBottom - RECESS_FLOOR / 2, 0],
-    [long - wall * 2, RECESS_FLOOR, long - wall * 2],
+function addRails(bin: Bin): void {
+  const [from, to] = MASK_RAILS.x;
+  const top = MASK_BRIDGE.min[1];
+  SIDES.forEach((side) => {
+    const z = side * MASK_RAILS.z;
+    bin.add(
+      'rail',
+      slab([from, MASK_RAILS.bottom, z - MASK_RAILS.half], [to, top, z + MASK_RAILS.half]),
+    );
+  });
+  const track = MASK_TRACK;
+  bin.add(
+    'machined',
+    slab([track.x[0], track.bottom, -track.halfZ], [track.x[1], top, track.halfZ], ROUND),
   );
-  return [...walls, floor];
 }
 
-function chuckPosts(): Piece[] {
-  const from = PLATE_TOP + CHUCK.tall;
-  const length = CARRIAGE.bodyBottom - from;
-  return SIDES.flatMap((x) =>
-    SIDES.map((z) =>
-      rod(
-        'flange',
-        [x * (CHUCK.half - 0.015), from + length / 2, z * (CHUCK.half - 0.015)],
-        CHUCK.post,
-        length,
-        'y',
+function addShelf(bin: Bin): void {
+  bin.add('frame', slab(MASK_CHAIN_SHELF.min, MASK_CHAIN_SHELF.max, ROUND));
+}
+
+function addCarriage(bin: Bin): void {
+  const { halfX, halfZ, bottom, top } = MASK_CARRIAGE;
+  const x = MASK_AT[0];
+  bin.add('machined', slab([x - halfX, bottom, -halfZ], [x + halfX, top, halfZ], ROUND * 2));
+  SIDES.forEach((side) => {
+    const z = side * halfZ;
+    const [near, far] = side > 0 ? [z, z + COVER.thick] : [z - COVER.thick, z];
+    bin.add(
+      'panel',
+      slab(
+        [x - COVER.halfX, bottom + COVER.bottom, near],
+        [x + COVER.halfX, bottom + COVER.top, far],
+        COVER.thick / 3,
+      ),
+    );
+    const stripe = side > 0 ? [far, far + STRIPE.thick] : [near - STRIPE.thick, near];
+    bin.add(
+      'accent',
+      slab(
+        [x - COVER.halfX, bottom + STRIPE.bottom, stripe[0]],
+        [x + COVER.halfX, bottom + STRIPE.bottom + STRIPE.tall, stripe[1]],
+      ),
+    );
+    const edge = side * halfX;
+    const [lo, hi] =
+      side > 0 ? [x + edge, x + edge + SIDE_COVER.thick] : [x + edge - SIDE_COVER.thick, x + edge];
+    bin.add(
+      'panel',
+      slab(
+        [lo, bottom + COVER.bottom, -SIDE_COVER.halfZ],
+        [hi, bottom + COVER.top, SIDE_COVER.halfZ],
+        SIDE_COVER.thick / 3,
+      ),
+    );
+  });
+  RAILS_Z.forEach((z) =>
+    [-MASK_BLOCK.offset, MASK_BLOCK.offset].forEach((offset) =>
+      bin.add(
+        'machined',
+        slab(
+          [x + offset - MASK_BLOCK.halfX, MASK_BLOCK.bottom, z - MASK_BLOCK.halfZ],
+          [x + offset + MASK_BLOCK.halfX, MASK_BRIDGE.min[1], z + MASK_BLOCK.halfZ],
+          ROUND / 2,
+        ),
       ),
     ),
+  );
+}
+
+function addChuck(bin: Bin): void {
+  const x = MASK_AT[0];
+  const bottom = PLATE_TOP;
+  const top = MASK_CARRIAGE.bottom;
+  const half = CHUCK.half;
+  bin.add('frame', slab([x - half, bottom, -half], [x + half, top, half], ROUND));
+  const inner = half * CHUCK_INNER;
+  bin.add(
+    'machined',
+    slab([x - inner, bottom - 0.002, -inner], [x + inner, top, inner], ROUND / 2),
+  );
+  SIDES.forEach((sx) =>
+    SIDES.forEach((sz) => {
+      const cx = x + sx * (PLATE_HALF - CHUCK.clampLong / 2);
+      const outer = sz * (PLATE_HALF + CLAMP_REACH);
+      const inner = sz * (PLATE_HALF - CHUCK.clampThick);
+      bin.add(
+        'flange',
+        slab(
+          [cx - CHUCK.clampLong / 2, PLATE_TOP - CHUCK.clampTall, Math.min(outer, inner)],
+          [cx + CHUCK.clampLong / 2, PLATE_TOP, Math.max(outer, inner)],
+        ),
+      );
+    }),
   );
 }
 
 export function buildMaskStage(context: PartContext, groups: MaskStageGroups): void {
   const chain = cableChain(MASK_CHAIN);
-  addPieces(
-    context,
-    STRUCTURE_GROUP,
-    groups.fixed,
-    [...railPieces(), ...framePieces()],
-    MASK_ORIGIN,
-  );
-  const bolts = instanced(
-    context,
-    boltHead(FRAME.boltSize),
-    STRUCTURE_GROUP,
-    'bolt',
-    boltMatrices(),
-  );
-  bolts.position.set(...MASK_ORIGIN);
-  groups.fixed.add(bolts);
-  addPieces(context, 'maskStage', groups.fixed, chain.fixed, MASK_ORIGIN);
-  addPieces(context, 'maskStage', groups.bend, chain.bend, MASK_ORIGIN);
-  addPieces(
-    context,
-    'maskStage',
-    groups.carriage,
-    [...carriagePieces(), ...chain.moving, ...chuckPosts()],
-    MASK_ORIGIN,
-  );
+  const fixed = chain.fixed;
+  addBridge(fixed);
+  addRails(fixed);
+  addShelf(fixed);
+  fixed.build(context, PART, groups.fixed);
+  chain.bend.build(context, PART, groups.bend);
+  const moving = chain.moving;
+  addCarriage(moving);
+  addChuck(moving);
+  moving.build(context, PART, groups.carriage);
 }

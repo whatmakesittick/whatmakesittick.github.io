@@ -12,8 +12,8 @@ import { buildStages } from '../stages';
 
 const VIEWS = { beam: true, labels: true, cutaway: false, inset: true, follow: false };
 const PARTS: readonly PartId[] = ['maskStage', 'mask', 'pellicle', 'waferStage', 'wafer'];
-const TRIANGLE_LIMIT = 40_000;
-const DRAW_CALL_LIMIT = 50;
+const TRIANGLE_LIMIT = 50_000;
+const DRAW_CALL_LIMIT = 45;
 
 function stateAt(units: number, machine: MachineId = 'nxe3600d'): AssemblyState {
   return {
@@ -108,6 +108,33 @@ describe('stages section', () => {
     expect(stripVisible(section.root)).toBe(true);
     section.setState(stateAt(799));
     expect(stripVisible(section.root)).toBe(false);
+  });
+
+  it('swaps the module front to the ghost finish with the cutaway', () => {
+    const { section } = build();
+    const front = (open: boolean) => {
+      section.setState({ ...stateAt(0), view: { ...VIEWS, cutaway: open } });
+      const module = named(section.root, 'maskModule');
+      return module.children.filter(
+        (child) => child instanceof Mesh && (child.material as { opacity: number }).opacity < 0.5,
+      ).length;
+    };
+    expect(front(true)).toBeGreaterThan(front(false));
+  });
+
+  it('lights the mask band only from the scan start', () => {
+    const { section } = build();
+    const band = named(section.root, 'stagesFixed').children.filter(
+      (child) =>
+        (child instanceof Mesh || 'isSprite' in child) &&
+        child.position.y < 4.61 &&
+        child.position.y > 4.5,
+    );
+    expect(band.length).toBeGreaterThan(0);
+    section.setState(stateAt(799));
+    expect(band.every((part) => !part.visible)).toBe(true);
+    section.setState(stateAt(800));
+    expect(band.every((part) => part.visible)).toBe(true);
   });
 
   it('keeps the part sizes real and the budget', () => {

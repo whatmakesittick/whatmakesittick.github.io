@@ -18,16 +18,22 @@ const BLOCKS: readonly Block[] = [
   [0.52, 0.69, 0.22, 0.28, 'solid'],
   [0.78, 0.69, 0.2, 0.28, 'across'],
 ];
-const MASK_BASE = ['#9fb0d0', '#6a7ea6', '#b9c6e0'] as const;
-const ABSORBER = 'rgba(6, 8, 12, 0.94)';
+const ABSORBER_BASE = '#080b10';
+const METAL_LINES = ['#e4ebf7', '#b7c6e2', '#cfd9ec'] as const;
 const BORDER_MM = 2;
-const MASK_PITCH_PX = 8;
+const MASK_PITCH_PX = 6;
 const DIE_PITCH_PX = 3;
 const HUE_BASE = 200;
 const HUE_STEP = 22;
 const HUE_CYCLE = 5;
-const WAFER_BASE_COLOR = '#5d6772';
-const SCRIBE = 'rgba(20, 26, 36, 0.75)';
+const WAFER_BASE_COLOR = '#39424e';
+const DIE_INK = 'rgba(14, 20, 32, 0.55)';
+const SCRIBE = 'rgba(214, 224, 238, 0.8)';
+const SCRIBE_WIDTH = 1.5;
+const FIELD_ALPHA = 0.6;
+const ANISOTROPY = 8;
+const FRAME_LINE_PX = 3;
+const MARK_PX = 24;
 
 interface Rect {
   x: number;
@@ -55,8 +61,14 @@ function drawBlock(g: CanvasRenderingContext2D, area: Rect, kind: BlockKind, pit
   for (let col = x; col < x + w - thin; col += steps) g.fillRect(col, y, thin, h);
 }
 
-function drawLayout(g: CanvasRenderingContext2D, area: Rect, pitch: number): void {
-  BLOCKS.forEach(([fx, fy, fw, fh, kind]) => {
+function drawLayout(
+  g: CanvasRenderingContext2D,
+  area: Rect,
+  pitch: number,
+  inks: readonly string[],
+): void {
+  BLOCKS.forEach(([fx, fy, fw, fh, kind], index) => {
+    g.fillStyle = inks[index % inks.length];
     const block = {
       x: area.x + fx * area.w,
       y: area.y + fy * area.h,
@@ -79,7 +91,19 @@ function paint(
   if (g) draw(g);
   const texture = new CanvasTexture(canvas);
   texture.colorSpace = SRGBColorSpace;
+  texture.anisotropy = ANISOTROPY;
   return texture;
+}
+
+function drawFrame(g: CanvasRenderingContext2D, width: number, height: number): void {
+  g.fillStyle = METAL_LINES[0];
+  g.fillRect(0, 0, width, FRAME_LINE_PX);
+  g.fillRect(0, height - FRAME_LINE_PX, width, FRAME_LINE_PX);
+  g.fillRect(0, 0, FRAME_LINE_PX, height);
+  g.fillRect(width - FRAME_LINE_PX, 0, FRAME_LINE_PX, height);
+  [0, width - MARK_PX].forEach((x) =>
+    [0, height - MARK_PX].forEach((y) => g.fillRect(x, y, MARK_PX, MARK_PX / 3)),
+  );
 }
 
 export function maskPatternTexture(context: PartContext): CanvasTexture {
@@ -87,18 +111,15 @@ export function maskPatternTexture(context: PartContext): CanvasTexture {
   const height = Math.round(MASK.patternM.width * 1000 * MASK_PATTERN_PX_PER_MM);
   const border = BORDER_MM * MASK_PATTERN_PX_PER_MM;
   const texture = paint(width, height, (g) => {
-    const sheen = g.createLinearGradient(0, 0, width, height);
-    MASK_BASE.forEach((color, index) => sheen.addColorStop(index / (MASK_BASE.length - 1), color));
-    g.fillStyle = sheen;
+    g.fillStyle = ABSORBER_BASE;
     g.fillRect(0, 0, width, height);
-    g.fillStyle = ABSORBER;
     drawLayout(
       g,
       { x: border, y: border, w: width - border * 2, h: height - border * 2 },
       MASK_PITCH_PX,
+      METAL_LINES,
     );
-    g.fillRect(0, 0, width, border / 2);
-    g.fillRect(0, height - border / 2, width, border / 2);
+    drawFrame(g, width, height);
   });
   return context.tracker.track(texture);
 }
@@ -106,7 +127,7 @@ export function maskPatternTexture(context: PartContext): CanvasTexture {
 function fieldTint(column: number, row: number): string {
   const hue =
     HUE_BASE + ((((column * 7 + row * 13) % HUE_CYCLE) + HUE_CYCLE) % HUE_CYCLE) * HUE_STEP;
-  return `hsla(${hue}, 45%, 58%, 0.42)`;
+  return `hsla(${hue}, 50%, 62%, ${FIELD_ALPHA})`;
 }
 
 export function waferFieldTexture(context: PartContext, optics: OpticsId): CanvasTexture {
@@ -136,9 +157,14 @@ export function waferFieldTexture(context: PartContext, optics: OpticsId): Canva
         };
         g.fillStyle = fieldTint(column, row);
         g.fillRect(area.x, area.y, area.w, area.h);
-        g.fillStyle = 'rgba(30, 36, 48, 0.35)';
-        drawLayout(g, { x: area.x + 2, y: area.y + 2, w: area.w - 4, h: area.h - 4 }, DIE_PITCH_PX);
+        drawLayout(
+          g,
+          { x: area.x + 2, y: area.y + 2, w: area.w - 4, h: area.h - 4 },
+          DIE_PITCH_PX,
+          [DIE_INK],
+        );
         g.strokeStyle = SCRIBE;
+        g.lineWidth = SCRIBE_WIDTH;
         g.strokeRect(area.x, area.y, area.w, area.h);
       }
     }
