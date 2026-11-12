@@ -7,6 +7,7 @@ import {
   AFTERGLOW_END_UNITS,
   AFTERGLOW_LEVEL,
   CONE,
+  DISPLAY_FLOOR,
   EXPOSE_START_UNITS,
   FLARE_END_UNITS,
   LASER_FADE_START_UNITS,
@@ -66,4 +67,8 @@ export function mirrorsBeforeLeg(leg: number): number {
 
 export function legGain(leg: number): number {
   return REFLECTIVITY ** mirrorsBeforeLeg(leg);
+}
+
+export function displayLevel(leg: number): number {
+  return DISPLAY_FLOOR + (1 - DISPLAY_FLOOR) * legGain(leg);
 }

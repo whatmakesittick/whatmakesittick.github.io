@@ -36,7 +36,8 @@ export const SHIMMER = { speedA: 37, speedB: 23.1, depthA: 0.12, depthB: 0.08 } 
 export const LASER = { coreRadius: 0.03, glowRadius: 0.1, sides: 10, coreMix: 0.55 } as const;
 export const EUV = { coreRadius: 0.028, glowRadius: 0.11, sides: 8, coreMix: 0.5 } as const;
 export const CONE = { sides: 32, peak: 0.55, floor: 0.3, riseUnits: 30, fallUnits: 40 } as const;
-export const SPOT = { size: 0.7, base: 1.2 } as const;
+export const BOUNCE_GLOW = { color: '#a9b6ff', share: 0.6, peak: 0.9 } as const;
+export const DISPLAY_FLOOR = 0.35;
 
 export const TRAIL = { lengthM: 0.8, samples: 14, sides: 6, radiusShare: 0.75 } as const;
 export const MARKER = { segments: [16, 12], glowScale: 14, labelLift: 1.6 } as const;

@@ -1,35 +1,40 @@
 import {
   AdditiveBlending,
-  BufferGeometry,
   Color,
   ConeGeometry,
   DoubleSide,
   Float32BufferAttribute,
   Mesh,
   MeshBasicMaterial,
-  Points,
-  PointsMaterial,
 } from 'three';
-import type { Object3D, BufferAttribute } from 'three';
+import type { Object3D, Sprite } from 'three';
 import type { AssemblyState, Point } from '../../../ids';
-import { BEAM_TRANSPORT, BEAM_WAYPOINTS, COLLECTOR, waypoint } from '../../../model/layout';
+import {
+  BEAM_TRANSPORT,
+  BEAM_WAYPOINTS,
+  COLLECTOR,
+  mirrorSizeM,
+  waypoint,
+} from '../../../model/layout';
 import { legLengths } from '../../../model/path';
 import { THEME } from '../../../theme';
 import { BEAM_GROUP } from '../../sceneOptions';
 import { namedGroup, registeredMaterial } from '../context';
-import { pipe } from '../kit';
+import { glowSprite, pipe } from '../kit';
 import type { PartContext } from '../context';
-import { CONE, EUV, GUIDE_LEVEL, LASER, MAIN_PULSE_UNITS, SPOT } from './dims';
-import { chainMetres, coneLevel, laserLevel, legGain } from './levels';
+import { BOUNCE_GLOW, CONE, EUV, GUIDE_LEVEL, LASER, MAIN_PULSE_UNITS } from './dims';
+import { chainMetres, coneLevel, displayLevel, laserLevel } from './levels';
 import { LegSet } from './segments';
 
 const CHAIN: readonly Point[] = BEAM_WAYPOINTS.slice(1).map((entry) => entry.point);
 const LEG_STARTS: readonly number[] = legLengths(CHAIN).map((_, leg, lengths) =>
   lengths.slice(0, leg).reduce((sum, length) => sum + length, 0),
 );
-const MIRRORS = CHAIN.map((point, index) => ({ point, index })).filter(
-  (_, index) => BEAM_WAYPOINTS[index + 1].bounce,
-);
+const MIRRORS = CHAIN.map((point, index) => ({
+  point,
+  index,
+  id: BEAM_WAYPOINTS[index + 1].id,
+})).filter((_, index) => BEAM_WAYPOINTS[index + 1].bounce);
 const BEND_M = 0.25;
 const EUV_COLOR = new Color('#8fa0ff');
 const LASER_COLOR = new Color(THEME.laser);
@@ -54,7 +59,7 @@ export class BeamPart {
   private readonly core: LegSet;
   private readonly glow: LegSet;
   private readonly coneMaterial: MeshBasicMaterial;
-  private readonly spots: BufferAttribute;
+  private readonly bounceGlows: Sprite[];
 
   constructor(context: PartContext) {
     const { laser, materials } = this.buildLaser(context);
@@ -71,14 +76,19 @@ export class BeamPart {
     });
     this.coneMaterial = additive(EUV_COLOR, { side: DoubleSide, vertexColors: true, opacity: 0 });
     const cone = this.buildCone(context);
-    this.spots = new Float32BufferAttribute(MIRRORS.length * 3, 3);
-    this.object.add(...laser, cone, this.buildSpots(context));
+    this.bounceGlows = MIRRORS.map(({ point }) => {
+      const sprite = glowSprite(context, BEAM_GROUP, BOUNCE_GLOW.color, 1);
+      sprite.position.set(...point);
+      return sprite;
+    });
+    this.object.add(...laser, cone, ...this.bounceGlows);
   }
 
   setState(state: AssemblyState): void {
     this.object.visible = state.view.beam;
     this.paintLaser(laserLevel(state.flash.units));
     this.paintLegs(state);
+    this.sizeGlows(state);
     this.coneMaterial.opacity = coneLevel(state.flash.units) * CONE.peak;
   }
 
@@ -116,33 +126,6 @@ export class BeamPart {
     return cone;
   }
 
-  private buildSpots(context: PartContext): Points {
-    const geometry = new BufferGeometry();
-    geometry.setAttribute(
-      'position',
-      new Float32BufferAttribute(
-        MIRRORS.flatMap(({ point }) => [...point]),
-        3,
-      ),
-    );
-    geometry.setAttribute('color', this.spots);
-    const material = registeredMaterial(
-      context,
-      BEAM_GROUP,
-      new PointsMaterial({
-        map: context.textures.glow,
-        size: SPOT.size,
-        vertexColors: true,
-        blending: AdditiveBlending,
-        transparent: true,
-        depthWrite: false,
-      }),
-    );
-    const cloud = new Points(context.tracker.track(geometry), material);
-    cloud.frustumCulled = false;
-    return cloud;
-  }
-
   private paintLaser(level: number): void {
     this.laserMaterials[0].opacity = level;
     this.laserMaterials[1].opacity = level * LASER_GLOW_SHARE;
@@ -152,13 +135,19 @@ export class BeamPart {
     const flashed = state.flash.units >= MAIN_PULSE_UNITS;
     const reached = chainMetres(state);
     const lit = LEG_STARTS.map((start) => flashed && reached >= start);
-    const levels = lit.map((on, leg) => (on ? legGain(leg) : GUIDE_LEVEL));
+    const levels = lit.map((on, leg) => (on ? displayLevel(leg) : GUIDE_LEVEL));
     this.core.paint(levels, EUV_COLOR.clone().lerp(WHITE, EUV.coreMix));
     this.glow.paint(levels, EUV_COLOR, GLOW_SHARE);
     MIRRORS.forEach(({ index }, spot) => {
-      const level = lit[index] ? legGain(index) * SPOT.base : 0;
-      this.spots.setXYZ(spot, EUV_COLOR.r * level, EUV_COLOR.g * level, EUV_COLOR.b * level);
+      const glow = this.bounceGlows[spot];
+      glow.visible = lit[index];
+      glow.material.opacity = displayLevel(index) * BOUNCE_GLOW.peak;
     });
-    this.spots.needsUpdate = true;
+  }
+
+  private sizeGlows(state: AssemblyState): void {
+    MIRRORS.forEach(({ id }, spot) =>
+      this.bounceGlows[spot].scale.setScalar(mirrorSizeM(id, state.optics) * BOUNCE_GLOW.share),
+    );
   }
 }

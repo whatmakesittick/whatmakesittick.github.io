@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PointLight, Vector3 } from 'three';
+import { PointLight, Sprite, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { isShown } from '@core/scene/parts';
 import { buildLight } from '../light';
@@ -7,6 +7,8 @@ import { FRAME, buildSection, drawCalls, stateAt, triangles } from './fixtures';
 
 const TRIANGLE_BUDGET = 40_000;
 const DRAW_BUDGET = 50;
+const BOUNCE_COUNT = 11;
+const MIN_GLOW = 0.2;
 
 function find(root: Object3D, name: string): Object3D {
   const found = root.getObjectByName(name);
@@ -57,6 +59,20 @@ describe('light section', () => {
     expect(light.intensity).toBeGreaterThan(0);
     section.setState(stateAt(600));
     expect(light.intensity).toBe(0);
+  });
+
+  it('glows at every bounce while the beam reaches it', () => {
+    const { section } = buildSection(buildLight, stateAt(0));
+    const glows: Sprite[] = [];
+    find(section.root, 'beam').traverse((object) => {
+      if (object instanceof Sprite) glows.push(object);
+    });
+    section.setState(stateAt(900));
+    const shown = glows.filter((glow) => glow.visible);
+    expect(shown).toHaveLength(BOUNCE_COUNT);
+    shown.forEach((glow) => expect(glow.material.opacity).toBeGreaterThan(MIN_GLOW));
+    section.setState(stateAt(300));
+    expect(glows.some((glow) => glow.visible)).toBe(false);
   });
 
   it('stands still when paused and moves while playing', () => {
