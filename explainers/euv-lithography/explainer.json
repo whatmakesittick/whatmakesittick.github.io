@@ -8,6 +8,6 @@
   "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
   "social": {
     "image": "social/og-image.png",
-    "alt": "A 3D EUV chip machine cut open, with the beam of light running from the tin droplet to the wafer, beside the title How an EUV chip machine works"
+    "alt": "A 3D EUV chip machine cut open, with a glowing beam running from a tin droplet through the mirrors to the wafer, beside the title."
   }
 }
