@@ -33,6 +33,10 @@
   grid-column: 1 / -1;
 }
 
+.gauge .readouts {
+  width: 12.5rem;
+}
+
 .chip[data-action='moment'][data-value='launch'] {
   --tone: var(--tin);
 }
