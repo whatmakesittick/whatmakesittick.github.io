@@ -28,11 +28,15 @@ class DoubleBufferedAssemblyState {
   }
 }
 
-export function bindStore(store: ThrusterCarStore, targets: SceneTargets): () => void {
+export async function bindStore(
+  store: ThrusterCarStore,
+  targets: SceneTargets,
+): Promise<() => void> {
   const { car, labelVisibility } = targets;
   const assemblyState = new DoubleBufferedAssemblyState(store.getState());
   const push = (state: AssemblySource) => car.setState(assemblyState.handOver(state));
-  car.build(assemblyState.handOver(store.getState()));
+  await car.build(assemblyState.handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<ThrusterCarStoreState, Preset>(targets, store, {

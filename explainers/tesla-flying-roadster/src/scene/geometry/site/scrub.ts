@@ -1,10 +1,9 @@
 import { FULL_TURN, lerp, smoothstep } from '@core/math';
-import type { DataTexture } from 'three';
 import { SITE } from '../../../model/layout';
 import { THEME } from '../../../theme';
 import { unitWave } from '../wave';
 import { fractalNoise, hash2, tileNoise } from './noise';
-import { mixRgb, paintTexture, shade, srgb } from './textures';
+import { mixRgb, shade, srgb, painted } from './textures';
 import type { Rgb, Rgba } from './textures';
 
 const SCRUB = {
@@ -143,11 +142,9 @@ export function scrubShade(u: number, v: number): Rgba {
   return shade(colour, level);
 }
 
-export function scrubMap(): DataTexture {
-  const texture = paintTexture({ width: SCRUB.size, height: SCRUB.size }, scrubShade);
-  texture.repeat.set(1 / SCRUB.metres, 1 / SCRUB.metres);
-  return texture;
-}
+export const SCRUB_RECIPE = painted({ width: SCRUB.size, height: SCRUB.size }, scrubShade, {
+  finish: (texture) => texture.repeat.set(1 / SCRUB.metres, 1 / SCRUB.metres),
+});
 
 function distanceToRun(x: number, z: number): number {
   const { x: runX, z: runZ } = SITE.run;

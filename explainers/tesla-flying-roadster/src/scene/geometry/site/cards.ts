@@ -1,12 +1,12 @@
 import { FULL_TURN, lerp, smoothstep } from '@core/math';
 import { Color } from 'three';
-import type { BufferGeometry, DataTexture } from 'three';
+import type { BufferGeometry } from 'three';
 import { arrayGeometry } from './arrays';
 import { nearRun } from './bushes';
 import { GROUND } from './groundGrid';
 import { fractalNoise, hash2, tileNoise } from './noise';
 import { onTrack } from './tracks';
-import { mixRgb, paintDecal, srgb } from './textures';
+import { mixRgb, srgb, painted } from './textures';
 import type { Rgba } from './textures';
 
 export interface Card {
@@ -265,10 +265,6 @@ function treeCardShade(u: number, v: number): Rgba {
   return CLEAR;
 }
 
-export function bushCardMap(): DataTexture {
-  return paintDecal(SCRUB_CARDS.size, bushCardShade);
-}
+export const BUSH_CARD_RECIPE = painted(SCRUB_CARDS.size, bushCardShade, { repeat: false });
 
-export function treeCardMap(): DataTexture {
-  return paintDecal(TREE_LINE.size, treeCardShade);
-}
+export const TREE_CARD_RECIPE = painted(TREE_LINE.size, treeCardShade, { repeat: false });

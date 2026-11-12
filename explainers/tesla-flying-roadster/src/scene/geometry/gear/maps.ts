@@ -44,7 +44,7 @@ export function hash(x: number, y: number): number {
   return value - Math.floor(value);
 }
 
-export function paintTexture(size: MapSize, painter: Painter): DataTexture {
+export function paintPixels(size: MapSize, painter: Painter): Uint8Array {
   const { width, height } = size;
   const pixels = new Uint8Array(width * height * CHANNELS);
   for (let row = 0; row < height; row += 1) {
@@ -56,6 +56,11 @@ export function paintTexture(size: MapSize, painter: Painter): DataTexture {
       });
     }
   }
+  return pixels;
+}
+
+export function pixelTexture(size: MapSize, pixels: Uint8Array): DataTexture {
+  const { width, height } = size;
   const texture = new DataTexture(pixels, width, height, RGBAFormat);
   const wrap = size.repeat ? RepeatWrapping : ClampToEdgeWrapping;
   texture.wrapS = wrap;
@@ -66,4 +71,8 @@ export function paintTexture(size: MapSize, painter: Painter): DataTexture {
   texture.colorSpace = SRGBColorSpace;
   texture.needsUpdate = true;
   return texture;
+}
+
+export function paintTexture(size: MapSize, painter: Painter): DataTexture {
+  return pixelTexture(size, paintPixels(size, painter));
 }

@@ -13,12 +13,15 @@ export type { ThrusterCarControllerDependencies } from './controller';
 export type { ViewFramer } from './viewHandover';
 export { SCENE_OPTIONS } from './sceneOptions';
 
-export function mountThrusterCarScene(shell: SceneShell, store: ThrusterCarStore): () => void {
+export async function mountThrusterCarScene(
+  shell: SceneShell,
+  store: ThrusterCarStore,
+): Promise<() => void> {
   const restoreLight = thrusterCarLight(shell.lighting);
   const car = new ThrusterCarController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => car.update(deltaSeconds));
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
-  const unbind = bindStore(store, { car, labelVisibility, ...shell });
+  const unbind = await bindStore(store, { car, labelVisibility, ...shell });
   return () => {
     removeFrame();
     labelVisibility.dispose();

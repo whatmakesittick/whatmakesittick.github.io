@@ -1,9 +1,8 @@
 import { smoothstep } from '@core/math';
-import type { DataTexture } from 'three';
 import { THEME } from '../../../theme';
 import { hash2, tileNoise } from './noise';
 import { DECK } from './rampSpec';
-import { band, mixRgb, normalTexture, paintTexture, shade, srgb } from './textures';
+import { band, mixRgb, normalRecipe, shade, srgb, painted } from './textures';
 import type { Rgba } from './textures';
 
 const DECK_PLATE = {
@@ -108,18 +107,15 @@ export function treadHeight(u: number, v: number): number {
   return smoothstep(lens, 0, DECK_PLATE.tread.soft);
 }
 
-export interface DeckMaps {
-  map: DataTexture;
-  normal: DataTexture;
-}
+export const DECK_RECIPE = painted(DECK_PLATE.size, deckShade);
 
-export function deckMaps(): DeckMaps {
-  const { size, tread } = DECK_PLATE;
-  const normal = normalTexture(
-    { width: tread.size, height: tread.size },
-    treadHeight,
-    tread.strength,
-  );
-  normal.repeat.set(DECK.plateLength / tread.metres, (DECK.halfWidth * 2) / tread.metres);
-  return { map: paintTexture(size, deckShade), normal };
-}
+export const DECK_TREAD_RECIPE = normalRecipe(
+  { width: DECK_PLATE.tread.size, height: DECK_PLATE.tread.size },
+  treadHeight,
+  DECK_PLATE.tread.strength,
+  (texture) =>
+    texture.repeat.set(
+      DECK.plateLength / DECK_PLATE.tread.metres,
+      (DECK.halfWidth * 2) / DECK_PLATE.tread.metres,
+    ),
+);

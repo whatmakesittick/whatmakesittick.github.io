@@ -2,12 +2,15 @@ import { Color, InstancedMesh, Mesh, Vector3 } from 'three';
 import type { Material, MeshStandardMaterial, Object3D } from 'three';
 import { describe, expect, it } from 'vitest';
 import { MaterialLibrary, STRUCTURE_GROUP, UNDIMMED_GROUP } from '@core/scene/materials';
+import { runNow } from '@core/scene/pacing';
 import { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
 import { SITE, SITE_ANCHORS } from '../../../model/layout';
+import { siteTextures } from '../../geometry/site/siteTextures';
+import { paintSitePixels } from '../../sitePixels';
 import { LIGHT_RIG } from '../../constants';
 import { SCENE_OPTIONS } from '../../sceneOptions';
-import type { PartContext } from '../context';
+import type { WorldContext } from '../context';
 import { conePositions } from './runway';
 import { glowDirection, skyUniforms } from './sky';
 import { createWorld } from './world';
@@ -15,7 +18,7 @@ import { createWorld } from './world';
 const TRIANGLE_BUDGET = 60000;
 const DRAW_CALL_BUDGET = 40;
 
-function buildWorld() {
+async function buildWorld() {
   const tracker = new ResourceTracker();
   const tracked = new Set<unknown>();
   const track = tracker.track.bind(tracker);
@@ -23,12 +26,14 @@ function buildWorld() {
     tracked.add(resource);
     return track(resource);
   };
-  const context: PartContext = {
+  const site = siteTextures(await paintSitePixels(), tracker);
+  const context: WorldContext = {
     materials: new MaterialLibrary(),
     textures: {} as unknown as SceneTextures,
     tracker,
+    site,
   };
-  return { context, tracked, world: createWorld(context) };
+  return { context, tracked, world: await runNow(createWorld(context)) };
 }
 
 function meshes(root: Object3D): Mesh[] {
@@ -51,8 +56,9 @@ function worldPosition(object: Object3D): Vector3 {
   return object.getWorldPosition(new Vector3());
 }
 
+const { context, tracked, world } = await buildWorld();
+
 describe('world', () => {
-  const { context, tracked, world } = buildWorld();
   const all = meshes(world.object);
   const groupOf = (mesh: Mesh) => context.materials.groupOf(mesh.material as Material);
 

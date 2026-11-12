@@ -17,7 +17,11 @@ function fakeTargets() {
   const frame = vi.fn();
   const setWanted = vi.fn();
   const targets: SceneTargets = {
-    car: { build: record, setState: record, views: { frame } },
+    car: {
+      build: async (state: AssemblyState) => record(state),
+      setState: record,
+      views: { frame },
+    },
     labelVisibility: { setWanted },
     highlighter: { setHighlight: vi.fn() },
     labels: { show: vi.fn() },
@@ -26,19 +30,19 @@ function fakeTargets() {
 }
 
 describe('thruster car scene bindings', () => {
-  it('builds the car from the store and frames the first chapter', () => {
+  it('builds the car from the store and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createThrusterCarStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const { phase, gas, tankLitres, preset } = store.getState();
     expect(received[0]).toMatchObject({ phase, gas, tankLitres, view: { tank: true } });
     expect(frame).toHaveBeenCalledWith(PRESETS[preset].camera, false, undefined);
   });
 
-  it('hands over the chapter start and its views before framing the next camera', () => {
+  it('hands over the chapter start and its views before framing the next camera', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createThrusterCarStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     let handedBeforeFrame: AssemblyState | undefined;
     frame.mockImplementationOnce(() => (handedBeforeFrame = received.at(-1)));
     store.getState().applyPreset('flip');
@@ -49,10 +53,10 @@ describe('thruster car scene bindings', () => {
     });
   });
 
-  it('applies a view toggle at once and refreshes the labels', () => {
+  it('applies a view toggle at once and refreshes the labels', async () => {
     const { received, setWanted, targets } = fakeTargets();
     const store = createThrusterCarStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const before = setWanted.mock.calls.length;
     const ghost = store.getState().view.ghost;
     store.getState().toggleView('ghost');
@@ -60,19 +64,19 @@ describe('thruster car scene bindings', () => {
     expect(setWanted.mock.calls.length).toBeGreaterThan(before);
   });
 
-  it('hands over the gas and the tank so the plumes and the gauge follow them', () => {
+  it('hands over the gas and the tank so the plumes and the gauge follow them', async () => {
     const { received, targets } = fakeTargets();
     const store = createThrusterCarStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setGas('helium');
     store.getState().setTankLitres(400);
     expect(received.at(-1)).toMatchObject({ gas: 'helium', tankLitres: 400 });
   });
 
-  it('alternates two buffers so the held state is never rewritten', () => {
+  it('alternates two buffers so the held state is never rewritten', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createThrusterCarStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().pause();
     store.getState().setGas('nitrogen');
     store.getState().setPhase(LATER_PHASE);
@@ -84,10 +88,10 @@ describe('thruster car scene bindings', () => {
     expect(third?.car.airborne).toBe(true);
   });
 
-  it('stops handing over states once unbound', () => {
+  it('stops handing over states once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createThrusterCarStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const count = received.length;
     store.getState().setPhase(LATER_PHASE);

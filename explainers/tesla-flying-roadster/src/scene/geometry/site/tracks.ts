@@ -1,12 +1,12 @@
 import { smoothstep } from '@core/math';
 import { CatmullRomCurve3, Vector3 } from 'three';
-import type { BufferGeometry, DataTexture } from 'three';
+import type { BufferGeometry } from 'three';
 import { SITE } from '../../../model/layout';
 import { THEME } from '../../../theme';
 import { arrayGeometry, upNormals } from './arrays';
 import { GROUND } from './groundGrid';
 import { hash2, tileNoise } from './noise';
-import { band, mixRgb, paintTexture, srgb } from './textures';
+import { band, mixRgb, srgb, painted } from './textures';
 import type { Rgba } from './textures';
 
 type PathPoint = readonly [x: number, z: number];
@@ -144,6 +144,4 @@ function trackShade(u: number, v: number): Rgba {
   return [dirt[0] * level, dirt[1] * level, dirt[2] * level, alpha];
 }
 
-export function trackMap(): DataTexture {
-  return paintTexture(DIRT_TRACKS.size, trackShade);
-}
+export const TRACK_RECIPE = painted(DIRT_TRACKS.size, trackShade);

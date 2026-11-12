@@ -1,9 +1,9 @@
-import { smoothstep } from '@core/math';
 import type { DataTexture } from 'three';
+import { smoothstep } from '@core/math';
 import { SITE } from '../../../model/layout';
 import { THEME } from '../../../theme';
 import { hash2, tileNoise } from './noise';
-import { band, mixRgb, normalTexture, paintTexture, shade, srgb } from './textures';
+import { band, mixRgb, normalRecipe, shade, srgb, painted } from './textures';
 import type { Rgba } from './textures';
 
 export const CONCRETE = {
@@ -105,12 +105,17 @@ export interface ConcreteMaps {
   normal: DataTexture;
 }
 
-export function concreteMaps(): ConcreteMaps {
-  const { size, grit, tile } = CONCRETE;
-  const map = paintTexture(size, concreteShade);
-  map.repeat.set(1 / tile.length, 1 / tile.width);
-  map.offset.set(-SITE.run.x[0] / tile.length, -SITE.run.z[0] / tile.width);
-  const normal = normalTexture({ width: grit.size, height: grit.size }, gritHeight, grit.strength);
-  normal.repeat.set(1 / grit.metres, 1 / grit.metres);
-  return { map, normal };
-}
+export const CONCRETE_RECIPE = painted(CONCRETE.size, concreteShade, {
+  finish: (texture) => {
+    const { tile } = CONCRETE;
+    texture.repeat.set(1 / tile.length, 1 / tile.width);
+    texture.offset.set(-SITE.run.x[0] / tile.length, -SITE.run.z[0] / tile.width);
+  },
+});
+
+export const CONCRETE_GRIT_RECIPE = normalRecipe(
+  { width: CONCRETE.grit.size, height: CONCRETE.grit.size },
+  gritHeight,
+  CONCRETE.grit.strength,
+  (texture) => texture.repeat.set(1 / CONCRETE.grit.metres, 1 / CONCRETE.grit.metres),
+);

@@ -1,11 +1,11 @@
 import { Group } from 'three';
 import type { Object3D } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import { anchorAt } from '@core/scene/parts';
 import { SITE_ANCHORS } from '../../../model/layout';
 import type { PartId, SiteAnchorId } from '../../../ids';
-import { concreteMaps } from '../../geometry/site/concrete';
 import { trussPlan } from '../../geometry/site/rampTruss';
-import type { PartContext } from '../context';
+import type { WorldContext } from '../context';
 import type { WorldView } from '../types';
 import { createGround } from './ground';
 import { createGroundworks } from './groundworks';
@@ -21,22 +21,19 @@ function siteAnchors(parent: Object3D): Record<SiteAnchorId, Object3D> {
   };
 }
 
-export function createWorld(context: PartContext): WorldView {
+export function* createWorld(context: WorldContext): Steps<WorldView> {
   const object = new Group();
   object.name = 'world';
   const plan = trussPlan();
-  const concrete = concreteMaps();
-  context.tracker.track(concrete.map);
-  context.tracker.track(concrete.normal);
+  const { site } = context;
+  const concrete = { map: site.concrete, normal: site.concreteGrit };
   const runway = createRunway(context, concrete);
   const ramp = createRamp(context, plan);
-  object.add(
-    createSky(context),
-    createGround(context),
-    runway.object,
-    ramp.object,
-    createGroundworks(context, concrete, plan),
-  );
+  yield;
+  const sky = createSky(context);
+  const ground = yield* createGround(context);
+  yield;
+  object.add(sky, ground, runway.object, ramp.object, createGroundworks(context, concrete, plan));
   const labels = new Map<PartId, Object3D>([
     ['runway', runway.runwayLabel],
     ['ramp', ramp.label],

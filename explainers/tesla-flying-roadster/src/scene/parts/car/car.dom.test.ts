@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Box3, Vector3 } from 'three';
 import type { Material, Mesh } from 'three';
+import { runNow } from '@core/scene/pacing';
 import { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
@@ -9,7 +10,8 @@ import type { AssemblyState, PartId } from '../../../ids';
 import { CAR_ANCHORS, runAt, tankAt } from '../../../model';
 import type { PartContext } from '../context';
 import { BODY } from './dimensions';
-import { CarPart } from './car';
+import type { CarPart } from './car';
+import { buildCar } from './car';
 
 const LABELS: readonly PartId[] = [
   'body',
@@ -62,12 +64,12 @@ function ghostMeshes(part: CarPart): Mesh[] {
 
 describe('CarPart', () => {
   it('labels the body, seat and every unit it composes', () => {
-    const part = new CarPart(context());
+    const part = runNow(buildCar(context()));
     LABELS.forEach((id) => expect(part.labels.get(id)).toBeDefined());
   });
 
   it('places the car anchors and reaches every nozzle mouth', () => {
-    const part = new CarPart(context());
+    const part = runNow(buildCar(context()));
     CAR_ANCHOR_IDS.forEach((id) =>
       expect(part.anchors[id].position.toArray()).toEqual([...CAR_ANCHORS[id]]),
     );
@@ -76,7 +78,7 @@ describe('CarPart', () => {
 
   it('draws the body and cabin in a handful of meshes', () => {
     const parts = context();
-    const part = new CarPart(parts);
+    const part = runNow(buildCar(parts));
     let own = 0;
     part.object.traverse((node) => {
       const mesh = node as Mesh;
@@ -88,7 +90,7 @@ describe('CarPart', () => {
   });
 
   it('turns the roof, right door and right window to ghosts for the tank view', () => {
-    const part = new CarPart(context());
+    const part = runNow(buildCar(context()));
     part.setState(stateWith(false));
     const before = ghostMeshes(part).length;
     part.setState(stateWith(true));
@@ -98,7 +100,7 @@ describe('CarPart', () => {
   });
 
   it('builds one shared silhouette inside the car outline', () => {
-    const part = new CarPart(context());
+    const part = runNow(buildCar(context()));
     const outline = part.silhouette();
     expect(part.silhouette()).toBe(outline);
     const bounds = new Box3().setFromBufferAttribute(outline.getAttribute('position') as never);
