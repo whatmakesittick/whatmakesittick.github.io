@@ -1,11 +1,12 @@
-import { CylinderGeometry, Vector2 } from 'three';
-import type { BufferGeometry, InstancedMesh, Object3D } from 'three';
+import { CylinderGeometry, InstancedMesh, MeshPhysicalMaterial, Vector2 } from 'three';
+import type { BufferGeometry, Matrix4, Object3D } from 'three';
 import { latheAlongX } from '@core/scene/geometry/lathe';
 import type { PartId, Point } from '../../../ids';
 import { BEAM_WAYPOINTS, mirrorSizeM } from '../../../model/layout';
 import type { WaypointId } from '../../../model/layout';
 import type { Finish } from '../../finishes';
 import type { PartContext } from '../context';
+import { registeredMaterial } from '../context';
 import { facing, instanced, mirrorNormal, placement } from '../kit';
 import type { Bin } from './geo';
 import { joined, rod, ring, slab } from './geo';
@@ -32,6 +33,18 @@ const BOSS_DEPTH = 0.06;
 const BRACKET_RADIUS = 0.02;
 const PAD_HALF = 0.06;
 const PAD_DEPTH = 0.02;
+const RIM_INNER = 0.47;
+const RIM_OUTER = 0.515;
+const COATING = {
+  color: '#f3f0ff',
+  metalness: 1,
+  roughness: 0.03,
+  clearcoat: 1,
+  clearcoatRoughness: 0.02,
+  iridescence: 0.45,
+  iridescenceIOR: 1.7,
+  envMapIntensity: 1.6,
+} as const;
 const CYLINDER_SIDES = 28;
 
 function faceGeometry(): BufferGeometry {
@@ -72,8 +85,21 @@ function mountGeometry(): BufferGeometry {
 
 const PIECES: readonly (readonly [Finish, () => BufferGeometry])[] = [
   ['mirror', faceGeometry],
-  ['ceramic', substrateGeometry],
-  ['flange', () => ring('y', [0, FLANGE_Y, 0], FLANGE_INNER, FLANGE_OUTER, FLANGE_THICKNESS)],
+  ['granite', substrateGeometry],
+  [
+    'flange',
+    () =>
+      joined([
+        ring('y', [0, FLANGE_Y, 0], FLANGE_INNER, FLANGE_OUTER, FLANGE_THICKNESS),
+        ring(
+          'y',
+          [0, -FACE_THICKNESS / 2 + 0.004, 0],
+          RIM_INNER,
+          RIM_OUTER,
+          FACE_THICKNESS + 0.008,
+        ),
+      ]),
+  ],
   ['darkFrame', mountGeometry],
 ];
 
@@ -86,6 +112,19 @@ function neighbours(id: WaypointId): Neighbours {
   const index = BEAM_WAYPOINTS.findIndex((entry) => entry.id === id);
   const [previous, here, next] = [-1, 0, 1].map((offset) => BEAM_WAYPOINTS[index + offset].point);
   return { centre: here, normal: mirrorNormal(previous, here, next) };
+}
+
+function coated(
+  context: PartContext,
+  geometry: BufferGeometry,
+  material: MeshPhysicalMaterial,
+  matrices: readonly Matrix4[],
+): InstancedMesh {
+  const target = context.tracker.track(
+    new InstancedMesh(context.tracker.track(geometry), material, matrices.length),
+  );
+  matrices.forEach((matrix, index) => target.setMatrixAt(index, matrix));
+  return target;
 }
 
 export interface MirrorSet {
@@ -108,14 +147,12 @@ export function mirrorSet(context: PartContext, options: MirrorOptions): MirrorS
     const { centre, normal } = placed[index];
     return placement(centre, [metres, metres, metres], facing(normal));
   };
+  const matrices = placed.map((_, index) => matrixFor(index, options.sizeOf(placed[index].id)));
+  const coating = registeredMaterial(context, options.group, new MeshPhysicalMaterial(COATING));
   const meshes = PIECES.map(([finish, build]) =>
-    instanced(
-      context,
-      build(),
-      options.group,
-      finish,
-      placed.map((_, index) => matrixFor(index, options.sizeOf(placed[index].id))),
-    ),
+    finish === 'mirror'
+      ? coated(context, build(), coating, matrices)
+      : instanced(context, build(), options.group, finish, matrices),
   );
   meshes.forEach((target) => {
     target.frustumCulled = false;

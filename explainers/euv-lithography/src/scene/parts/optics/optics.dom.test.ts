@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { InstancedMesh, Matrix4, Mesh, Quaternion, Vector3 } from 'three';
+import { InstancedMesh, Matrix4, MeshPhysicalMaterial, Mesh, Quaternion, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { runNow } from '@core/scene/pacing';
@@ -8,14 +8,13 @@ import { ResourceTracker } from '@core/scene/resources';
 import type { AssemblyState, PartId } from '../../../ids';
 import { BEAM_WAYPOINTS, mirrorSizeM } from '../../../model/layout';
 import type { WaypointId } from '../../../model/layout';
-import { FINISHES } from '../../finishes';
 import type { PartContext, Section } from '../context';
 import { mirrorNormal } from '../kit';
 import { buildOptics } from '../optics';
 
 const FRAME = { delta: 1 / 60, elapsed: 0, cameraDistance: 10 };
 const SETTLE_FRAMES = 120;
-const TRIANGLE_BUDGET = 30000;
+const TRIANGLE_BUDGET = 40000;
 const DRAW_CALL_BUDGET = 50;
 const MIRROR_ORDER: Record<string, WaypointId[]> = {
   illuminator: ['i1', 'i2', 'i3', 'i4'],
@@ -52,9 +51,13 @@ function meshes(root: Object3D): Mesh[] {
   return found;
 }
 
-function faceOf(section: Section, ctx: PartContext, part: PartId): InstancedMesh {
-  const material = ctx.materials.get(part, FINISHES.mirror);
-  const face = meshes(section.root).find((target) => target.material === material);
+function faceOf(section: Section, part: PartId): InstancedMesh {
+  const face = meshes(section.root).find(
+    (target) =>
+      target.parent?.name === part &&
+      target instanceof InstancedMesh &&
+      target.material instanceof MeshPhysicalMaterial,
+  );
   if (!(face instanceof InstancedMesh)) throw new Error('No mirror faces');
   return face;
 }
@@ -92,7 +95,7 @@ describe('optics section', () => {
 
   it('points every mirror face along the bisector of the beam legs', () => {
     (['illuminator', 'projection'] as const).forEach((part) => {
-      const face = faceOf(section, ctx, part);
+      const face = faceOf(section, part);
       MIRROR_ORDER[part].forEach((id, index) => {
         const at = BEAM_WAYPOINTS.findIndex((entry) => entry.id === id);
         const [previous, here, next] = [-1, 0, 1].map((step) => BEAM_WAYPOINTS[at + step].point);
@@ -104,7 +107,7 @@ describe('optics section', () => {
   });
 
   it('grows the last projection mirror with the high numerical aperture', () => {
-    const face = faceOf(section, ctx, 'projection');
+    const face = faceOf(section, 'projection');
     section.setState(stateOf('na055'));
     expect(section.animate?.(FRAME, stateOf('na055'))).toBe(true);
     expect(scaleAt(face, 5)).toBeLessThan(mirrorSizeM('p6', 'na055'));

@@ -8,14 +8,14 @@ import {
   Shape,
   Vector3,
 } from 'three';
-import type { BufferGeometry, InstancedMesh, Mesh, Object3D } from 'three';
+import type { BufferGeometry, Mesh, Object3D } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { Point } from '../../../ids';
 import type { Finish } from '../../finishes';
 import { mesh } from '../context';
 import type { EmphasisGroup, PartContext } from '../context';
-import { boltHead, facing, instanced, placement, vector, washerAlongX } from '../kit';
+import { boltHead, facing, vector, washerAlongX } from '../kit';
 import { BEVEL_M, BOLT_M } from './dims';
 
 export type Axis = 'x' | 'y' | 'z';
@@ -180,14 +180,14 @@ export function circlePoints(
   });
 }
 
-export function bolts(
-  context: PartContext,
-  group: EmphasisGroup,
-  axis: Axis,
-  points: readonly Point[],
-  size = BOLT_M,
-): InstancedMesh {
+export function studs(bin: Bin, axis: Axis, points: readonly Point[], size = BOLT_M): void {
   const rotation = new Quaternion().setFromUnitVectors(new Vector3(0, 1, 0), BOLT_DIRECTION[axis]);
-  const matrices = points.map((point) => placement(point, [1, 1, 1], rotation));
-  return instanced(context, boltHead(size), group, 'bolt', matrices);
+  points.forEach((point) =>
+    bin.add(
+      'bolt',
+      boltHead(size)
+        .applyQuaternion(rotation)
+        .translate(...point),
+    ),
+  );
 }

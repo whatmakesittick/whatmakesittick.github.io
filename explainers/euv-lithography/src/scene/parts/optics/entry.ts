@@ -3,9 +3,7 @@ import type { Point } from '../../../ids';
 import { latheAlongX } from '@core/scene/geometry/lathe';
 import { ENTRY } from './dims';
 import type { Bin } from './geo';
-import { bolts, circlePoints, ring } from './geo';
-import type { PartContext } from '../context';
-import type { Object3D } from 'three';
+import { studs, circlePoints, ring } from './geo';
 
 const LATHE_SEGMENTS = 28;
 const NECK_LENGTH = 0.03;
@@ -27,7 +25,7 @@ function tubeSection(from: number, to: number) {
   return latheAlongX(profile, LATHE_SEGMENTS).translate(0, ENTRY.y, 0);
 }
 
-export function addEntry(context: PartContext, solid: Bin, parent: Object3D): void {
+export function addEntry(solid: Bin): void {
   const { fromX, toX, y, radius, flangeOuter, flangeThickness, bolts: count } = ENTRY;
   solid.add('frame', tubeSection(fromX, ENTRY.bellowsFrom), tubeSection(ENTRY.bellowsTo, toX));
   solid.add('tray', bellows());
@@ -45,5 +43,5 @@ export function addEntry(context: PartContext, solid: Bin, parent: Object3D): vo
   const heads: Point[] = faces.flatMap((x) =>
     circlePoints('x', [x, y, 0], flangeOuter * BOLT_RADIUS_SHARE + 0.02, count),
   );
-  parent.add(bolts(context, 'illuminator', 'x', heads));
+  studs(solid, 'x', heads);
 }

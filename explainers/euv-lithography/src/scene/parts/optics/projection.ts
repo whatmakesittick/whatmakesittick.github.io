@@ -11,7 +11,6 @@ import {
   BOTTOM_OPENING,
   BEAM_M,
   IRIS,
-  MULLION_X,
   PROJECTION,
   PROJECTION_SIDE_M,
   PROJECTION_TOP_OPENING,
@@ -32,7 +31,6 @@ const MIRRORS: readonly WaypointId[] = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6'];
 const RIM_M = 0.012;
 const COLLAR_M = 0.03;
 const COLLAR_PROUD_M = 0.02;
-const MULLION_M = 0.025;
 const ACCENT_M = 0.03;
 const LABEL_LIFT_M = 0.02;
 const WINDOW_THICKNESS_M = 0.004;
@@ -142,13 +140,6 @@ function addFront(front: Bin, glass: Bin, solid: Bin): void {
     'flange',
     ...ends.map(([from, to]) => slab([from, bottom, -RIM_M / 2], [to, top, RIM_M / 2])),
   );
-  solid.add(
-    'darkFrame',
-    slab(
-      [MULLION_X - MULLION_M / 2, view.min[1], max[2] - 0.01],
-      [MULLION_X + MULLION_M / 2, view.max[1], max[2] + 0.008],
-    ),
-  );
 }
 
 function viewportRim(lo: Point, hi: Point) {
@@ -167,12 +158,11 @@ export function* buildProjection(context: PartContext): Steps<OpticsModule> {
   const front = new Bin();
   const glass = new Bin();
   const structure = new Bin();
-  const bracketBin = new Bin();
   addSolid(solid);
   addFront(front, glass, solid);
   frameBeams(structure, min, max, BEAM_M);
   yield;
-  addBack(context, root, structure);
+  addBack(structure);
   yield;
   addSupports(structure);
   yield;
@@ -180,7 +170,7 @@ export function* buildProjection(context: PartContext): Steps<OpticsModule> {
     group: PART,
     ids: MIRRORS,
     parent: root,
-    bracketBin,
+    bracketBin: structure,
     wallZ: BACK_Z,
     sizeOf: (id) => mirrorSizeM(id, 'na033'),
   });
@@ -189,7 +179,6 @@ export function* buildProjection(context: PartContext): Steps<OpticsModule> {
   front.build(context, PART, root).forEach((target) => cutaway.add(target, ghost));
   solid.build(context, PART, root);
   glass.build(context, PART, root);
-  bracketBin.build(context, PART, root);
   structure.build(context, STRUCTURE_GROUP, root);
   const iris = mesh(
     context,

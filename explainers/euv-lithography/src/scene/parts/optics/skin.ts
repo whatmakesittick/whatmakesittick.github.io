@@ -92,3 +92,70 @@ export function legs(
     }),
   );
 }
+
+type Corner = readonly [number, number];
+
+function contains(polygon: readonly Corner[], x: number, y: number): boolean {
+  return polygon.reduce((inside, [x0, y0], index) => {
+    const [x1, y1] = polygon[(index + 1) % polygon.length];
+    const crosses = y0 > y !== y1 > y && x < ((x1 - x0) * (y - y0)) / (y1 - y0) + x0;
+    return crosses ? !inside : inside;
+  }, false);
+}
+
+function span(centre: number, direction: number, beam: number): [number, number] {
+  return direction > 0
+    ? [centre - EDGE_PROUD_M, centre + beam]
+    : [centre - beam, centre + EDGE_PROUD_M];
+}
+
+function inward(polygon: readonly Corner[], x: number, y: number): [number, number] {
+  const probe = 0.01;
+  const found = [
+    [1, 1],
+    [-1, 1],
+    [1, -1],
+    [-1, -1],
+  ].find(([dx, dy]) => contains(polygon, x + dx * probe, y + dy * probe));
+  return (found ?? [1, 1]) as [number, number];
+}
+
+export function outlineBeams(
+  bin: Bin,
+  polygon: readonly Corner[],
+  zs: readonly [number, number],
+  beam: number,
+  gap: { at: Corner; z: number },
+): void {
+  polygon.forEach(([x0, y0], index) => {
+    const [x1, y1] = polygon[(index + 1) % polygon.length];
+    const [mx, my] = [(x0 + x1) / 2, (y0 + y1) / 2];
+    const horizontal = y0 === y1;
+    const probe = horizontal ? [0, 0.01] : [0.01, 0];
+    const sign = contains(polygon, mx + probe[0], my + probe[1]) ? 1 : -1;
+    zs.forEach((z, side) => {
+      const [zLo, zHi] = span(z, side === 0 ? 1 : -1, beam);
+      const xr: [number, number] = horizontal
+        ? [Math.min(x0, x1) - EDGE_PROUD_M, Math.max(x0, x1) + EDGE_PROUD_M]
+        : span(x0, sign, beam);
+      const yr: [number, number] = horizontal
+        ? span(y0, sign, beam)
+        : [Math.min(y0, y1) - EDGE_PROUD_M, Math.max(y0, y1) + EDGE_PROUD_M];
+      bin.add('frame', slab([xr[0], yr[0], zLo], [xr[1], yr[1], zHi], BEVEL_M / 2));
+    });
+  });
+  polygon.forEach(([x, y]) => {
+    const [dx, dy] = inward(polygon, x, y);
+    const [xr, yr] = [span(x, dx, beam), span(y, dy, beam)];
+    const gapped = x === gap.at[0] && y === gap.at[1];
+    const runs: [number, number][] = gapped
+      ? [
+          [zs[0] - EDGE_PROUD_M, -gap.z],
+          [gap.z, zs[1] + EDGE_PROUD_M],
+        ]
+      : [[zs[0] - EDGE_PROUD_M, zs[1] + EDGE_PROUD_M]];
+    runs.forEach(([from, to]) =>
+      bin.add('frame', slab([xr[0], yr[0], from], [xr[1], yr[1], to], BEVEL_M / 2)),
+    );
+  });
+}
