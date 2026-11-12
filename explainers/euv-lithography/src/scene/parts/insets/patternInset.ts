@@ -27,7 +27,7 @@ import { VirusPart } from './virus';
 
 const GROUP = 'patternInset';
 const HALF = 0.5;
-const LATENT_SHARE = 0.25;
+const LATENT_SHARE = 0.55;
 const REFERENCE_OPTICS = 'na033';
 const REFERENCE_WIDTH = lineWidthM(REFERENCE_OPTICS);
 const IDENTITY = new Quaternion();
