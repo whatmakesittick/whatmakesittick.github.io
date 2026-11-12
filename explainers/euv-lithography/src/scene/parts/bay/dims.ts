@@ -79,3 +79,11 @@ export const TOOL_ROWS: readonly ToolRowSpec[] = [
 
 export const LAMP = { size: 0.12, pitch: 0.14, inset: 0.35, lift: 0.2, proud: 0.04 } as const;
 export const WALL_LAMPS = { pitch: 7.2, height: 1.7, reach: 60, proud: 0.02 } as const;
+export const WALL_WINDOWS = {
+  pitch: 9.6,
+  reach: 72,
+  width: 3.4,
+  height: 1.2,
+  y: 4.3,
+  proud: 0.03,
+} as const;

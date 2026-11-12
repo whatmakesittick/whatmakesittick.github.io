@@ -1,6 +1,6 @@
 import { CanvasTexture, RepeatWrapping, SRGBColorSpace } from 'three';
 import type { PartContext } from '../context';
-import { CEILING_Y } from './dims';
+import { CEILING_Y, WALL_WINDOWS } from './dims';
 
 type Painter = (paint: CanvasRenderingContext2D, width: number, height: number) => void;
 
@@ -43,6 +43,16 @@ const WALL = {
     { at: 0.3, color: 'rgba(0,0,0,0.35)' },
     { at: 1, color: 'rgba(0,0,0,0.72)' },
   ],
+} as const;
+
+const PANE = {
+  width: 512,
+  height: 64,
+  frame: 4,
+  panes: 3,
+  frameColor: '#2b2621',
+  top: '#ffffff',
+  bottom: '#9c9c9c',
 } as const;
 
 function canvasTexture(
@@ -150,5 +160,24 @@ export function wallTexture(context: PartContext): CanvasTexture {
     WALL.shade.forEach(({ at, color }) => shade.addColorStop(at, color));
     paint.fillStyle = shade;
     paint.fillRect(0, 0, width, height);
+  });
+}
+
+export function windowTexture(context: PartContext): CanvasTexture {
+  return canvasTexture(context, PANE.width, PANE.height, (paint, width, height) => {
+    const glazed = Math.round((WALL_WINDOWS.width / WALL_WINDOWS.pitch) * width);
+    const left = Math.round((width - glazed) / 2);
+    paint.clearRect(0, 0, width, height);
+    paint.fillStyle = PANE.frameColor;
+    paint.fillRect(left, 0, glazed, height);
+    const glass = paint.createLinearGradient(0, 0, 0, height);
+    glass.addColorStop(0, PANE.top);
+    glass.addColorStop(1, PANE.bottom);
+    paint.fillStyle = glass;
+    const pane = (glazed - PANE.frame * (PANE.panes + 1)) / PANE.panes;
+    for (let index = 0; index < PANE.panes; index += 1) {
+      const x = left + PANE.frame + index * (pane + PANE.frame);
+      paint.fillRect(x, PANE.frame, pane, height - PANE.frame * 2);
+    }
   });
 }

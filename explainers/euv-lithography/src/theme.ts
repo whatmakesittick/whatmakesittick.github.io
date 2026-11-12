@@ -55,7 +55,7 @@ const SCHEME_BAY_TONES: Readonly<Record<Scheme, BayTones>> = {
     wall: '#8a6c4b',
     tool: '#544b41',
     pod: '#d9d0bf',
-    window: '#e0963c',
+    window: '#c98a3e',
     subfab: '#221e1b',
     lamp: '#ffb65a',
     pool: '#ffb54d',

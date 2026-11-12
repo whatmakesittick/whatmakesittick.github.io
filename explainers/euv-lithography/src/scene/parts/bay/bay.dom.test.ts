@@ -60,7 +60,11 @@ describe('cleanroom bay', () => {
   it('shows the ceiling and the back wall only from inside the hall', () => {
     const ceiling = named(root, 'ceiling');
     const wall = named(root, 'wall');
-    [ceiling, wall].forEach((mesh) => expect((mesh.material as Material).side).toBe(FrontSide));
+    const windows = named(root, 'windows');
+    [ceiling, wall, windows].forEach((mesh) =>
+      expect((mesh.material as Material).side).toBe(FrontSide),
+    );
+    expect(windows.geometry.getAttribute('normal').getZ(0)).toBe(1);
     expect(ceiling.geometry.getAttribute('normal').getY(0)).toBe(-1);
     expect(ceiling.geometry.getAttribute('position').getY(0)).toBeCloseTo(CEILING_Y);
     expect(wall.geometry.getAttribute('normal').getZ(0)).toBe(1);

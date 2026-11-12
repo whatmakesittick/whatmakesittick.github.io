@@ -9,7 +9,7 @@ import { buildLamps, lampSpots } from './bay/lamps';
 import { RowSwitch } from './bay/rows';
 import { buildTools, rowFootprints, toolSpots } from './bay/tools';
 import { Transport, addRail } from './bay/transport';
-import { buildWall } from './bay/wall';
+import { buildWall, buildWindows } from './bay/wall';
 import { Batch } from './fab/batch';
 
 export function* buildBay(context: PartContext): Steps<Section> {
@@ -20,7 +20,8 @@ export function* buildBay(context: PartContext): Steps<Section> {
   addRail(batch);
   batch.flush(root);
   yield;
-  root.add(buildCeiling(context), buildStrips(context), buildWall(context), buildGlows(context));
+  root.add(buildCeiling(context), buildStrips(context), buildWall(context), buildWindows(context));
+  root.add(buildGlows(context));
   yield;
   const tools = toolSpots();
   const rows = new RowSwitch(rowFootprints(tools));
