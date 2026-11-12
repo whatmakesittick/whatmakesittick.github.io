@@ -5,7 +5,8 @@ import { STRUCTURE_GROUP, UNDIMMED_GROUP } from '@core/scene/materials';
 import { blocksLabels } from '../../sceneOptions';
 import { buildBay } from '../bay';
 import { FRAME, buildSection, drawCalls, stateAt, triangles } from '../light/fixtures';
-import { CEILING_Y, HALL } from './dims';
+import { CEILING_Y, HALL, RAIL } from './dims';
+import { carrierX } from './transport';
 
 const DRAW_BUDGET = 12;
 const TRIANGLE_BUDGET = 20_000;
@@ -27,6 +28,14 @@ function shownInstances(mesh: InstancedMesh): number {
     if (matrix.determinant() !== 0) shown += 1;
   }
   return shown;
+}
+
+function carrierPositions(mesh: InstancedMesh): number[] {
+  const matrix = new Matrix4();
+  return Array.from({ length: mesh.count }, (_, index) => {
+    mesh.getMatrixAt(index, matrix);
+    return new Vector3().setFromMatrixPosition(matrix).x;
+  });
 }
 
 describe('cleanroom bay', () => {
@@ -78,5 +87,26 @@ describe('cleanroom bay', () => {
     expect(shownInstances(tools)).toBeLessThan(all);
     section.animate?.({ ...FRAME, cameraPosition: OVERVIEW_CAMERA }, stateAt(900));
     expect(shownInstances(tools)).toBe(all);
+  });
+
+  it('glides the wafer carriers along the rail only while playing', () => {
+    const carriers = named(root, 'carriers') as InstancedMesh;
+    const still = { ...FRAME, cameraPosition: OVERVIEW_CAMERA };
+    const before = carrierPositions(carriers);
+    expect(section.animate?.(still, stateAt(900))).toBe(false);
+    expect(carrierPositions(carriers)).toEqual(before);
+    expect(section.animate?.(still, stateAt(900, { playing: true }))).toBe(true);
+    const after = carrierPositions(carriers);
+    after.forEach((x, index) => expect(x).toBeGreaterThan(before[index]));
+  });
+
+  it('wraps the carriers around both ends of the rail', () => {
+    const length = RAIL.reach * 2;
+    [0, 1, 2, 3].forEach((index) => {
+      [0, length / 3, length * 5].forEach((travel) => {
+        const x = carrierX(index, travel);
+        expect(Math.abs(x)).toBeLessThanOrEqual(RAIL.reach);
+      });
+    });
   });
 });

@@ -8,6 +8,7 @@ import { buildHaze } from './bay/haze';
 import { buildLamps, lampSpots } from './bay/lamps';
 import { RowSwitch } from './bay/rows';
 import { buildTools, rowFootprints, toolSpots } from './bay/tools';
+import { Transport, addRail } from './bay/transport';
 import { buildWall } from './bay/wall';
 import { Batch } from './fab/batch';
 
@@ -16,6 +17,7 @@ export function* buildBay(context: PartContext): Steps<Section> {
   root.add(buildHaze(context));
   const batch = new Batch(context);
   root.add(buildBayFloor(context, batch));
+  addRail(batch);
   batch.flush(root);
   yield;
   root.add(buildCeiling(context), buildStrips(context), buildWall(context), buildGlows(context));
@@ -23,11 +25,15 @@ export function* buildBay(context: PartContext): Steps<Section> {
   const tools = toolSpots();
   const rows = new RowSwitch(rowFootprints(tools));
   root.add(buildTools(context, tools, rows), buildLamps(context, lampSpots(tools), rows));
+  const transport = new Transport(context);
+  root.add(transport.object);
   return {
     root,
     setState: () => undefined,
-    animate(frame) {
-      return rows.follow(frame.cameraPosition);
+    animate(frame, state) {
+      const switched = rows.follow(frame.cameraPosition);
+      const moving = transport.animate(frame, state);
+      return switched || moving;
     },
   };
 }

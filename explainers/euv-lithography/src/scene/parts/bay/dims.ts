@@ -41,6 +41,23 @@ export const FRONT_CUT = {
 } as const;
 export const SUBFAB_COLUMN = { size: 0.3, pitch: 4.5, reach: 60, rowsZ: [2.5, 0, -2.5] } as const;
 
+export const RAIL = {
+  z: -8.2,
+  y: 7.7,
+  width: 0.14,
+  height: 0.2,
+  hanger: 0.05,
+  hangerPitch: 4.8,
+  reach: 96,
+} as const;
+export const CARRIER = {
+  count: 4,
+  speed: 1.4,
+  from: -84,
+  to: 84,
+  phase: 0.5,
+} as const;
+
 export const TOOL = { depth: 2.8, gap: 2.6, reach: 66 } as const;
 export const TOOL_LENGTHS: readonly number[] = [5.6, 4.4, 6.4, 5];
 export const TOOL_HEIGHTS: readonly number[] = [2.6, 2.2, 2.8, 2.4];
