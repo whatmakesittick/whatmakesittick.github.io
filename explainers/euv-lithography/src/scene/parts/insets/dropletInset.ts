@@ -22,6 +22,7 @@ import {
   HAIR_MARGIN_M,
   HAIR_SIDES,
   HAIR_X,
+  INSET_LABEL_DROP_M,
   LEADER_END_STREAM,
   VIOLET_EMISSIVE,
 } from './dims';
@@ -45,7 +46,7 @@ export class DropletInset {
   private readonly glow: Sprite;
 
   constructor(context: PartContext) {
-    const { centre, height } = DROPLET_PANEL;
+    const { centre, width, height } = DROPLET_PANEL;
     addPanel(context, GROUP, this.object, DROPLET_PANEL);
     const bottom: [number, number, number] = [centre[0], centre[1] - height * HALF, centre[2]];
     addLeader(context, GROUP, this.object, bottom, LEADER_END_STREAM);
@@ -75,8 +76,11 @@ export class DropletInset {
     );
     hair.position.set(HAIR_X, centre[1], centre[2]);
     this.object.add(this.droplet, this.glow, hair);
-    const top: [number, number, number] = [centre[0], centre[1] + height * HALF, centre[2]];
-    label(context, 'dropletInset', this.object, top);
+    label(context, 'dropletInset', this.object, [
+      centre[0] - width * HALF,
+      centre[1] - INSET_LABEL_DROP_M,
+      centre[2],
+    ]);
     label(context, 'hair', this.object, [
       PART_POINTS.hair[0],
       PART_POINTS.hair[1],

@@ -86,7 +86,7 @@ export function mirrorSizeM(id: WaypointId, optics: OpticsId): number {
   return SMALL_MIRRORS.has(id) ? MIRROR_PROJECTION_M : MIRROR_ILLUMINATOR_M;
 }
 
-export const DROPLET_INSET_ANCHOR: Point = [-3, 4.3, 0];
+export const DROPLET_INSET_ANCHOR: Point = [-3.3, 4.3, 0];
 export const PATTERN_INSET_ANCHOR: Point = [6, 1.2, 0];
 
 export const ANCHOR_POINTS: Readonly<Record<AnchorId, Point>> = {
@@ -101,7 +101,7 @@ export const ANCHOR_POINTS: Readonly<Record<AnchorId, Point>> = {
 
 export const PART_POINTS: Readonly<Record<PartId, Point>> = {
   flash: waypoint('plasma'),
-  droplets: [-3, 1.9, 0],
+  droplets: [-3, 2.3, 0],
   driveLaser: DRIVE_LASER_ROOM.centre,
   beamTransport: [-5.2, 1.2, 0],
   vessel: [-2.3, 2.1, 0],
@@ -117,7 +117,7 @@ export const PART_POINTS: Readonly<Record<PartId, Point>> = {
   wafer: waypoint('wafer'),
   dropletInset: DROPLET_INSET_ANCHOR,
   patternInset: PATTERN_INSET_ANCHOR,
-  hair: [-3.6, 4, 0],
+  hair: [-2.7, 5.15, 0],
   virus: [7, 1.9, 0],
 };
 

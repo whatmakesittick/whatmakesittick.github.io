@@ -1,5 +1,5 @@
 import type { Point } from '../../../ids';
-import { DROPLET_INSET_ANCHOR, PATTERN_INSET_ANCHOR } from '../../../model/layout';
+import { DROPLET_INSET_ANCHOR, PART_POINTS, PATTERN_INSET_ANCHOR } from '../../../model/layout';
 import { PHASE_RANGES } from '../../../model/run';
 
 export interface PanelSpec {
@@ -17,13 +17,14 @@ export const RIM_DEPTH_M = 0.06;
 export const LEADER_RADIUS_M = 0.02;
 export const LEADER_DOT_M = 0.055;
 export const LEADER_SIDES = 6;
-export const LEADER_END_STREAM: Point = [-3, 2.2, 0];
+export const LEADER_END_STREAM: Point = [-3, 2, 0];
 export const LEADER_END_WAFER: Point = [3.9, 0.3, 0];
 
-export const DROPLET_OFFSET: Point = [0.2, 0, 0];
+export const DROPLET_OFFSET: Point = [-0.2, 0, 0];
 export const DROPLET_SEGMENTS = [32, 20] as const;
 export const DISC_THICKNESS_M = 0.12;
-export const HAIR_X = -3.6;
+export const HAIR_X = PART_POINTS.hair[0];
+export const INSET_LABEL_DROP_M = 0.35;
 export const HAIR_MARGIN_M = 0.12;
 export const HAIR_SIDES = 24;
 export const GLOW_SIZE_M = 1.9;

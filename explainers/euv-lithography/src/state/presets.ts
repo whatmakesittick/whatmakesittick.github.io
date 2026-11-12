@@ -33,17 +33,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: SLOW_SPEED,
     view: chapterView(true, true),
     startAt: 0,
-    labels: [
-      'droplets',
-      'driveLaser',
-      'beamTransport',
-      'vessel',
-      'collector',
-      'plasma',
-      'dropletInset',
-      'hair',
-      'flash',
-    ],
+    labels: ['droplets', 'collector', 'plasma', 'dropletInset', 'hair', 'flash'],
     highlight: ['droplets', 'collector', 'plasma', 'dropletInset'],
   },
   mirrors: {
