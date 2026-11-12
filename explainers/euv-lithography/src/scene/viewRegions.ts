@@ -1,16 +1,30 @@
 import type { Box3, Matrix4 } from 'three';
 import { localRegions } from '@core/scene/regions';
 import type { RegionSpec } from '@core/scene/regions';
-import type { RegionId } from '../ids';
+import type { Point, RegionId } from '../ids';
 import { waypoint } from '../model/layout';
 
+interface CloseView {
+  halfWidth: number;
+  below: number;
+  above: number;
+  depth: number;
+}
+
 const [MASK_X, MASK_Y] = waypoint('mask');
-const [WAFER_X] = waypoint('wafer');
 
 const MASK_VIEW = { halfWidth: 0.11, below: 0.3, above: 0.2, depth: 0.2 } as const;
-const WAFER_VIEW = { left: 0.6, right: 2.8, bottom: -0.5, top: 2.4, depth: 1.2 } as const;
+const WAFER_VIEW: CloseView = { halfWidth: 0.3, below: 0.12, above: 0.12, depth: 0.25 };
 const LIGHT_PATH_VIEW = { x: [-0.8, 4.6], y: [-1.2, 5.8], depth: 2 } as const;
 const OPTICS_VIEW = { x: [2.6, 7.2], y: [-0.5, 3.8], depth: 2 } as const;
+
+function closeRegion([x, y]: Point, view: CloseView): RegionSpec {
+  return {
+    x: [x - view.halfWidth, x + view.halfWidth],
+    y: [y - view.below, y + view.above],
+    z: [-view.depth, view.depth],
+  };
+}
 
 export const VIEW_REGION_SPECS: Readonly<Partial<Record<RegionId, RegionSpec>>> = {
   maskStage: {
@@ -18,11 +32,7 @@ export const VIEW_REGION_SPECS: Readonly<Partial<Record<RegionId, RegionSpec>>> 
     y: [MASK_Y - MASK_VIEW.below, MASK_Y + MASK_VIEW.above],
     z: [-MASK_VIEW.depth, MASK_VIEW.depth],
   },
-  waferStage: {
-    x: [WAFER_X - WAFER_VIEW.left, WAFER_X + WAFER_VIEW.right],
-    y: [WAFER_VIEW.bottom, WAFER_VIEW.top],
-    z: [-WAFER_VIEW.depth, WAFER_VIEW.depth],
-  },
+  waferStage: closeRegion(waypoint('wafer'), WAFER_VIEW),
   lightPath: {
     x: LIGHT_PATH_VIEW.x,
     y: LIGHT_PATH_VIEW.y,

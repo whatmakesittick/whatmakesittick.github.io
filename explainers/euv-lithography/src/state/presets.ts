@@ -65,9 +65,9 @@ export const PRESETS: Record<PresetId, Preset> = {
   scan: {
     camera: 'waferStage',
     speed: SLOW_SPEED,
-    view: chapterView(true, true),
+    view: chapterView(true, false),
     startAt: MOMENTS.onMask,
-    labels: ['projection', 'wafer', 'waferStage', 'maskStage', 'patternInset', 'flash'],
+    labels: ['projection', 'wafer', 'waferStage', 'maskStage', 'flash'],
     highlight: ['waferStage', 'maskStage', 'wafer'],
   },
   compare: {

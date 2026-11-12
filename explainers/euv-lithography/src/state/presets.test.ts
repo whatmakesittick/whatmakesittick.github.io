@@ -32,4 +32,9 @@ describe('euv presets', () => {
       'compare',
     ]);
   });
+
+  it('keeps the magnified pattern out of the wafer close up', () => {
+    expect(PRESETS.scan.view.inset).toBe(false);
+    expect(PRESETS.scan.labels).not.toContain('patternInset');
+  });
 });

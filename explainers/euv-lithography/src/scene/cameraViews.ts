@@ -34,7 +34,7 @@ export const COMPASS_VIEWS: Readonly<Record<FixedView, CompassView>> = {
   source: { region: 'source', bearing: 185, elevation: 12, margin: 1 },
   lightPath: { region: 'lightPath', bearing: 180, elevation: 14, margin: 1 },
   maskStage: { region: 'maskStage', bearing: 160, elevation: -22, margin: 1 },
-  waferStage: { region: 'waferStage', bearing: 165, elevation: 20, margin: 1 },
+  waferStage: { region: 'waferStage', bearing: 165, elevation: 14, margin: 1 },
   optics: { region: 'projection', bearing: 175, elevation: 14, margin: 1 },
 };
 
