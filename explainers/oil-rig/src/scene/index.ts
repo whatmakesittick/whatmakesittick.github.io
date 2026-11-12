@@ -8,12 +8,12 @@ import { LABEL_PRIORITY } from './partInfo';
 
 export { SCENE_OPTIONS } from './sceneOptions';
 
-export function mountOilRigScene(shell: SceneShell, store: OilRigStore): () => void {
+export async function mountOilRigScene(shell: SceneShell, store: OilRigStore): Promise<() => void> {
   const restoreLight = seaLight(shell.lighting);
   const oilRig = new OilRigController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => oilRig.update(deltaSeconds));
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
-  const unbind = bindStore(store, { oilRig, labelVisibility, ...shell });
+  const unbind = await bindStore(store, { oilRig, labelVisibility, ...shell });
   return () => {
     removeFrame();
     labelVisibility.dispose();

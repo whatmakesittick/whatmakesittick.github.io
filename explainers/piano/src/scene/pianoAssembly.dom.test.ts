@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { InstancedMesh, Mesh, Vector3 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
+import { runNow } from '@core/scene/pacing';
 import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
 import { ANCHOR_IDS, PART_IDS, REGION_IDS, REGISTER_IDS } from '../ids';
@@ -17,7 +18,7 @@ import {
   uprightPoseAt,
 } from '../model';
 import type { Assembly } from './assembly';
-import { createPianoAssembly } from './pianoAssembly';
+import { buildPianoAssembly } from './pianoAssembly';
 import { chaseTargetFor, hammerHeadTop } from './pose';
 
 const FRAME = 1 / 60;
@@ -92,7 +93,7 @@ function onDispose(resource: { addEventListener(type: 'dispose', listener: () =>
 beforeAll(() => {
   materials = new MaterialLibrary();
   textures = createSceneTextures();
-  assembly = createPianoAssembly({ materials, textures }, stateAt(0));
+  assembly = runNow(buildPianoAssembly({ materials, textures }, stateAt(0)));
 });
 
 afterAll(() => {
@@ -213,7 +214,7 @@ describe('piano assembly', () => {
   it('frees its geometries, instance buffers and registered materials on dispose', () => {
     const library = new MaterialLibrary();
     const register = vi.spyOn(library, 'register');
-    const extra = createPianoAssembly({ materials: library, textures }, stateAt(0));
+    const extra = runNow(buildPianoAssembly({ materials: library, textures }, stateAt(0)));
     const parent = new Mesh();
     parent.add(extra.root);
     const geometries = new Set<BufferGeometry>();

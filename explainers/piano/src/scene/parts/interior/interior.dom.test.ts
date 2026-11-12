@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { InstancedMesh, Matrix4, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
+import { runNow } from '@core/scene/pacing';
 import { ResourceTracker } from '@core/scene/resources';
 import { createSceneTextures } from '@core/scene/textures';
 import { REGISTER_IDS } from '../../../ids';
@@ -85,7 +86,7 @@ beforeAll(() => {
     anchors: {},
     cut: createCut(),
   };
-  interior = createInterior(context);
+  interior = runNow(createInterior(context));
 });
 
 afterAll(() => {

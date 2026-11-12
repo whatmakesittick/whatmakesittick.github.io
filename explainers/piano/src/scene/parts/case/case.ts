@@ -1,3 +1,4 @@
+import type { Steps } from '@core/scene/pacing';
 import type { Section } from '../context';
 import { label, namedGroup } from '../context';
 import type { PartContext } from '../context';
@@ -16,10 +17,12 @@ const CASE_LABEL_POINT = lidPoint(
   LID.thickness + CASE_LABEL.clearance,
 );
 
-export function createCase(context: PartContext): Section {
+export function* createCase(context: PartContext): Steps<Section> {
   const root = namedGroup('case');
   const lyre = buildLyre(context);
-  root.add(buildShell(context), buildLid(context), ...buildLegs(context), lyre.root);
+  const shell = buildShell(context);
+  yield;
+  root.add(shell, buildLid(context), ...buildLegs(context), lyre.root);
   label(context, 'case', root, CASE_LABEL_POINT);
   label(context, 'pedals', lyre.root, [0, LYRE.pedalY, LYRE.z + LYRE.pedalLength]);
   const look = new CloseLook();

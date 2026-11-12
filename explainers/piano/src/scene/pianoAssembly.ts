@@ -1,13 +1,14 @@
 import { Group } from 'three';
 import type { Box3, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
+import type { Steps } from '@core/scene/pacing';
 import { anchorAt } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import { ANCHOR_IDS } from '../ids';
 import type { AnchorId, AssemblyState, CameraView, ChaseTarget, PartId, RegionId } from '../ids';
 import { PLAYED_KEY, cutX, mm, restAnchorPoint } from '../model';
 import type { Assembly, AssemblyResources } from './assembly';
-import type { Frame, PartContext, Section, SectionFactory } from './parts/context';
+import type { Frame, PartContext, Section } from './parts/context';
 import { createCut, setCut } from './parts/cut';
 import { Ease } from './parts/ease';
 import { createAction } from './parts/action/action';
@@ -22,20 +23,10 @@ import { regionFor } from './regions';
 
 const ROOT_NAME = 'piano';
 
-const SECTION_FACTORIES: readonly SectionFactory[] = [
-  createStage,
-  createCase,
-  createInterior,
-  createKeyboard,
-  createAction,
-  createGhosts,
-  createInset,
-];
-
 class PianoAssembly implements Assembly {
   readonly root = new Group();
   private readonly materials: MaterialLibrary;
-  private readonly tracker = new ResourceTracker();
+  private readonly tracker: ResourceTracker;
   private readonly context: PartContext;
   private readonly sections: readonly Section[];
   private readonly anchors: Readonly<Record<AnchorId, Object3D>>;
@@ -44,18 +35,17 @@ class PianoAssembly implements Assembly {
   private state: AssemblyState;
   private elapsed = 0;
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(
+    resources: AssemblyResources,
+    state: AssemblyState,
+    context: PartContext,
+    sections: readonly Section[],
+  ) {
     this.materials = resources.materials;
     this.root.name = ROOT_NAME;
-    this.context = {
-      materials: resources.materials,
-      textures: resources.textures,
-      tracker: this.tracker,
-      labels: new Map(),
-      anchors: {},
-      cut: createCut(),
-    };
-    this.sections = SECTION_FACTORIES.map((create) => create(this.context));
+    this.context = context;
+    this.tracker = context.tracker;
+    this.sections = sections;
     this.sections.forEach((section) => this.root.add(section.root));
     this.anchors = Object.fromEntries(
       ANCHOR_IDS.map((id) => [id, this.context.anchors[id] ?? this.fallback(id)]),
@@ -146,6 +136,29 @@ class PianoAssembly implements Assembly {
   }
 }
 
-export function createPianoAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
-  return new PianoAssembly(resources, state);
+export function* buildPianoAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Steps<Assembly> {
+  const context: PartContext = {
+    materials: resources.materials,
+    textures: resources.textures,
+    tracker: new ResourceTracker(),
+    labels: new Map(),
+    anchors: {},
+    cut: createCut(),
+  };
+  const stage = createStage(context);
+  yield;
+  const pianoCase = yield* createCase(context);
+  yield;
+  const interior = yield* createInterior(context);
+  yield;
+  const keyboard = createKeyboard(context);
+  const action = createAction(context);
+  yield;
+  const ghosts = createGhosts(context);
+  const inset = createInset(context);
+  const sections = [stage, pianoCase, interior, keyboard, action, ghosts, inset];
+  return new PianoAssembly(resources, state, context, sections);
 }

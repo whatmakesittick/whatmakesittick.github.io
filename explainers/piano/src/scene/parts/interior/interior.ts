@@ -1,4 +1,5 @@
 import type { Object3D } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import type { CameraView, Point, RegisterId } from '../../../ids';
 import { PLAYED_KEY, stringPath } from '../../../model';
 import { LOD_DISTANCE } from '../../constants';
@@ -30,7 +31,7 @@ function place(anchor: Object3D, [x, y, z]: Point): void {
   anchor.position.set(x, y, z);
 }
 
-export function createInterior(context: PartContext): Section {
+export function* createInterior(context: PartContext): Steps<Section> {
   const root = namedGroup('interior');
   const wave = createWave();
   const soundboard = createSoundboard(context, wave.breath, wave.board);
@@ -38,9 +39,12 @@ export function createInterior(context: PartContext): Section {
   structure.add(soundboard.rail, pinblockMesh(context));
   const bridges = createBridges(context, wave.breath);
   const plate = createPlate(context);
+  yield;
   const pins = createTuningPins(context);
   const sets = createStringSets(context, wave.shimmer);
+  yield;
   const played = createPlayedStrings(context, wave.wave, wave.blur);
+  yield;
   const caps = createCaps(context, wave);
   root.add(soundboard.group, bridges, plate, pins, sets.bass, sets.steel, played.group, caps.root);
 

@@ -1,6 +1,7 @@
 import { Group } from 'three';
 import type { Box3, Object3D } from 'three';
 import { clamp } from '@core/math';
+import type { Steps } from '@core/scene/pacing';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, RegionId, ViewOptions } from '../ids';
@@ -11,9 +12,10 @@ import { DRILLING_DRAFT_M, FLOW, STAND_LENGTH_M, TOP_DRIVE } from './constants';
 import type { PartContext } from './parts/context';
 import { MudFlowPart } from './parts/flows/mudFlow';
 import { OilFlowPart } from './parts/flows/oilFlow';
-import { RigPart } from './parts/rig/rig';
+import { buildRig } from './parts/rig/rig';
 import { quillHeight } from './parts/rig/standCycle';
 import { RockPart } from './parts/rock/rockBlock';
+import type { RigPart } from './parts/rig/rig';
 import { createRuler } from './parts/rock/ruler';
 import { SeaPart } from './parts/sea/sea';
 import { createClouds } from './parts/sea/clouds';
@@ -38,9 +40,24 @@ function snapshot(state: AssemblyState): AssemblyState {
   return { bitDepth, draft, mudWeight, mudState, bit, view: { ...view } };
 }
 
+interface RigUnits {
+  tracker: ResourceTracker;
+  sea: SeaPart;
+  rock: RockPart;
+  rig: RigPart;
+  well: WellPart;
+  string: DrillStringPart;
+  mud: MudFlowPart;
+  oil: OilFlowPart;
+  ruler: Group;
+  snow: MarineSnowPart;
+  sky: Object3D;
+  clouds: Object3D;
+}
+
 export class RigAssembly implements Assembly {
   readonly root = new Group();
-  private readonly tracker = new ResourceTracker();
+  private readonly tracker: ResourceTracker;
   private readonly materials: MaterialLibrary;
   private readonly block = new Group();
   private readonly sea: SeaPart;
@@ -58,18 +75,20 @@ export class RigAssembly implements Assembly {
   private seaOffset = 0;
   private time = 0;
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(resources: AssemblyResources, state: AssemblyState, units: RigUnits) {
     this.materials = resources.materials;
-    const context: PartContext = { ...resources, tracker: this.tracker };
-    this.sea = new SeaPart(context);
-    this.rock = new RockPart(context);
-    this.rig = new RigPart(context);
-    this.well = new WellPart(context);
-    this.string = new DrillStringPart(context);
-    this.mud = new MudFlowPart(context);
-    this.oil = new OilFlowPart(context, this.well.completion.tunnels);
-    this.ruler = createRuler(context);
-    this.snow = new MarineSnowPart(context);
+    ({
+      tracker: this.tracker,
+      sea: this.sea,
+      rock: this.rock,
+      rig: this.rig,
+      well: this.well,
+      string: this.string,
+      mud: this.mud,
+      oil: this.oil,
+      ruler: this.ruler,
+      snow: this.snow,
+    } = units);
     this.block.add(
       this.sea.object,
       this.snow.points,
@@ -78,8 +97,8 @@ export class RigAssembly implements Assembly {
       this.well.blockObject,
     );
     this.root.add(
-      createSky(context),
-      createClouds(context),
+      units.sky,
+      units.clouds,
       this.rig.object,
       this.well.rigObject,
       this.block,
@@ -217,4 +236,29 @@ export class RigAssembly implements Assembly {
 
 function depthToBlockY(depth: number): number {
   return depthToY(Math.max(depth, SEABED_DEPTH_M));
+}
+
+export function* buildRigAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Steps<RigAssembly> {
+  const tracker = new ResourceTracker();
+  const context: PartContext = { ...resources, tracker };
+  const sea = new SeaPart(context);
+  const rock = new RockPart(context);
+  yield;
+  const rig = yield* buildRig(context);
+  yield;
+  const well = new WellPart(context);
+  yield;
+  const string = new DrillStringPart(context);
+  const mud = new MudFlowPart(context);
+  const oil = new OilFlowPart(context, well.completion.tunnels);
+  const ruler = createRuler(context);
+  yield;
+  const snow = new MarineSnowPart(context);
+  const sky = createSky(context);
+  const clouds = createClouds(context);
+  const units = { tracker, sea, rock, rig, well, string, mud, oil, ruler, snow, sky, clouds };
+  return new RigAssembly(resources, state, units);
 }

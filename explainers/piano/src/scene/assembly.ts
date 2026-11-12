@@ -1,8 +1,9 @@
 import type { Box3, Group, Object3D } from 'three';
+import { runPaced } from '@core/scene/pacing';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, CameraView, ChaseTarget, PartId, RegionId } from '../ids';
-import { createPianoAssembly } from './pianoAssembly';
+import { buildPianoAssembly } from './pianoAssembly';
 
 export type { ChaseTarget } from '../ids';
 
@@ -24,6 +25,9 @@ export interface Assembly {
   dispose(): void;
 }
 
-export function createAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
-  return createPianoAssembly(resources, state);
+export function createAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Promise<Assembly> {
+  return runPaced(buildPianoAssembly(resources, state));
 }
