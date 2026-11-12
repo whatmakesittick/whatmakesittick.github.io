@@ -29,6 +29,9 @@ export interface Assembly {
   dispose(): void;
 }
 
-export function createAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
+export function createAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Promise<Assembly> {
   return createFpvAssembly(resources, state);
 }

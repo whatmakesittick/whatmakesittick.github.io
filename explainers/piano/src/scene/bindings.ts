@@ -22,11 +22,12 @@ function doubleBuffered(source: AssemblySource): (next: AssemblySource) => Assem
   };
 }
 
-export function bindStore(store: PianoStore, targets: SceneTargets): () => void {
+export async function bindStore(store: PianoStore, targets: SceneTargets): Promise<() => void> {
   const { piano, labelVisibility } = targets;
   const handOver = doubleBuffered(store.getState());
   const push = (state: AssemblySource) => piano.setState(handOver(state));
-  piano.build(handOver(store.getState()));
+  await piano.build(handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<PianoStoreState, Preset>(targets, store, {

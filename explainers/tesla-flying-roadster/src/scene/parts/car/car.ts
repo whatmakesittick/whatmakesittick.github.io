@@ -1,6 +1,8 @@
 import { Group } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import { anchorAt } from '@core/scene/parts';
+import type { CabinUnit } from './cabin';
 import { CAR_ANCHOR_IDS } from '../../../ids';
 import type { AssemblyState, CarAnchorId, NozzleId, PartId } from '../../../ids';
 import { CAR_ANCHORS } from '../../../model/layout';
@@ -27,6 +29,14 @@ function carAnchors(root: Object3D): Readonly<Anchors> {
   ) as Anchors;
 }
 
+interface CarUnits {
+  body: BodyUnit;
+  cabin: CabinUnit;
+  wheels: WheelSet;
+  tank: TankUnit;
+  nozzles: NozzleSet;
+}
+
 export class CarPart implements CarView {
   readonly object = new Group();
   readonly labels: ReadonlyMap<PartId, Object3D>;
@@ -38,14 +48,13 @@ export class CarPart implements CarView {
   private readonly nozzles: NozzleSet;
   private outline?: BufferGeometry;
 
-  constructor(context: PartContext) {
+  constructor(context: PartContext, units: CarUnits) {
     this.context = context;
-    const look = createCarLook(context);
-    this.body = createBody(context, look);
-    const cabin = createCabin(context, look);
-    this.wheels = createWheels(context);
-    this.tank = createTank(context);
-    this.nozzles = createNozzles(context);
+    const { cabin } = units;
+    this.body = units.body;
+    this.wheels = units.wheels;
+    this.tank = units.tank;
+    this.nozzles = units.nozzles;
     this.object.add(
       this.body.object,
       cabin.object,
@@ -79,4 +88,18 @@ export class CarPart implements CarView {
     this.tank.setState(state);
     this.nozzles.setState(state);
   }
+}
+
+export function* buildCar(context: PartContext): Steps<CarPart> {
+  const look = createCarLook(context);
+  const body = createBody(context, look);
+  yield;
+  const cabin = createCabin(context, look);
+  yield;
+  const wheels = createWheels(context);
+  yield;
+  const tank = createTank(context);
+  yield;
+  const nozzles = createNozzles(context);
+  return new CarPart(context, { body, cabin, wheels, tank, nozzles });
 }

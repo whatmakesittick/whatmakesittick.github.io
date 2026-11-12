@@ -12,7 +12,11 @@ function fakeTargets() {
     snapshots.push({ ...state });
   };
   const frame = vi.fn();
-  const oilRig = { build: record, setState: record, views: { frame } };
+  const oilRig = {
+    build: async (state: AssemblyState) => record(state),
+    setState: record,
+    views: { frame },
+  };
   return {
     received,
     snapshots,
@@ -27,10 +31,10 @@ function fakeTargets() {
 }
 
 describe('scene bindings', () => {
-  it('builds the assembly with the planned mud and frames the first chapter', () => {
+  it('builds the assembly with the planned mud and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createOilRigStore({ phase: 3000 });
-    bindStore(store, targets);
+    await bindStore(store, targets);
     expect(received[0]).toMatchObject({
       bitDepth: 3000,
       mudWeight: 1.2,
@@ -40,10 +44,10 @@ describe('scene bindings', () => {
     expect(frame).toHaveBeenCalledWith('overview', false, undefined);
   });
 
-  it('passes the effective mud weight and its state on every change', () => {
+  it('passes the effective mud weight and its state on every change', async () => {
     const { received, targets } = fakeTargets();
     const store = createOilRigStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setPhase(4100);
     store.getState().setMudWeight(1.1);
     expect(received.at(-1)).toMatchObject({ bitDepth: 4100, mudWeight: 1.1, mudState: 'light' });
@@ -51,10 +55,10 @@ describe('scene bindings', () => {
     expect(received.at(-1)).toMatchObject({ mudWeight: 1.4, mudState: 'safe' });
   });
 
-  it('never changes the state object the assembly got last', () => {
+  it('never changes the state object the assembly got last', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createOilRigStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setPhase(1000);
     store.getState().setPhase(2000);
     const last = received.length - 1;
@@ -62,19 +66,19 @@ describe('scene bindings', () => {
     expect(received[last - 1]).toEqual(snapshots[last - 1]);
   });
 
-  it('frames the next chapter with the bit already moved', () => {
+  it('frames the next chapter with the bit already moved', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createOilRigStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('drill');
     expect(frame).toHaveBeenLastCalledWith('bit', true, undefined);
     expect(received.at(-1)?.bitDepth).toBe(2025);
   });
 
-  it('stops listening once unbound', () => {
+  it('stops listening once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createOilRigStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const calls = received.length;
     store.getState().setPhase(1500);

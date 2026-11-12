@@ -8,7 +8,9 @@ import { PART_IDS } from '../ids';
 import type { AnchorId, AssemblyState, RegionId } from '../ids';
 import { depthToY } from '../model/scale';
 import { TOTAL_DEPTH_M } from '../model/wellPlan';
-import { RigAssembly } from './rigAssembly';
+import { runNow } from '@core/scene/pacing';
+import { buildRigAssembly } from './rigAssembly';
+import type { RigAssembly } from './rigAssembly';
 
 const STATE: AssemblyState = {
   bitDepth: 2600,
@@ -39,7 +41,7 @@ let textures: SceneTextures | null = null;
 
 function build(state: AssemblyState = STATE): RigAssembly {
   textures = createSceneTextures();
-  assembly = new RigAssembly({ materials: new MaterialLibrary(), textures }, state);
+  assembly = runNow(buildRigAssembly({ materials: new MaterialLibrary(), textures }, state));
   return assembly;
 }
 

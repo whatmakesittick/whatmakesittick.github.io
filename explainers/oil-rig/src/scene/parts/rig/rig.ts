@@ -1,5 +1,6 @@
 import { Group } from 'three';
 import type { Object3D } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import { anchorAt } from '@core/scene/parts';
 import { HULL } from '../../constants';
 import type { PartContext } from '../context';
@@ -31,6 +32,23 @@ export type RigAnchorId =
 
 const MOONPOOL_LIP = 4;
 
+type Unit<F extends (context: PartContext) => unknown> = ReturnType<F>;
+
+interface RigUnits {
+  hull: Unit<typeof createHull>;
+  thrusters: Unit<typeof createThrusters>;
+  derrick: Unit<typeof createDerrick>;
+  drillFloor: Unit<typeof createDrillFloor>;
+  accommodation: Unit<typeof createAccommodation>;
+  cranes: Unit<typeof createCranes>;
+  mooring: Unit<typeof createMooring>;
+  flareBoom: FlareBoomPart;
+  topDrive: TopDrivePart;
+  flame: FlamePart;
+  deck: Unit<typeof createDeck>;
+  lifeboats: Unit<typeof createLifeboats>;
+}
+
 export class RigPart {
   readonly object = new Group();
   readonly topDrive: TopDrivePart;
@@ -38,26 +56,20 @@ export class RigPart {
   readonly flareBoom: FlareBoomPart;
   readonly anchors: Record<RigAnchorId, Object3D>;
 
-  constructor(context: PartContext) {
-    const hull = createHull(context);
-    const thrusters = createThrusters(context);
-    const derrick = createDerrick(context);
-    const drillFloor = createDrillFloor(context);
-    const accommodation = createAccommodation(context);
-    const cranes = createCranes(context);
-    const mooring = createMooring(context);
-    this.flareBoom = createFlareBoom(context);
-    this.topDrive = new TopDrivePart(context);
-    this.flame = new FlamePart(context, this.flareBoom.tip, this.flareBoom.direction);
+  constructor(units: RigUnits) {
+    const { hull, thrusters, derrick, drillFloor, accommodation, cranes, mooring } = units;
+    this.flareBoom = units.flareBoom;
+    this.topDrive = units.topDrive;
+    this.flame = units.flame;
     this.object.add(
       hull.object,
       thrusters.object,
-      createDeck(context),
+      units.deck,
       drillFloor.object,
       derrick.object,
       this.topDrive.object,
       accommodation.object,
-      createLifeboats(context),
+      units.lifeboats,
       cranes.object,
       this.flareBoom.object,
       this.flame.object,
@@ -81,4 +93,36 @@ export class RigPart {
       ),
     };
   }
+}
+
+export function* buildRig(context: PartContext): Steps<RigPart> {
+  const hull = createHull(context);
+  yield;
+  const thrusters = createThrusters(context);
+  const derrick = createDerrick(context);
+  const drillFloor = createDrillFloor(context);
+  const accommodation = createAccommodation(context);
+  const cranes = createCranes(context);
+  yield;
+  const mooring = createMooring(context);
+  yield;
+  const flareBoom = createFlareBoom(context);
+  const topDrive = new TopDrivePart(context);
+  const flame = new FlamePart(context, flareBoom.tip, flareBoom.direction);
+  const deck = createDeck(context);
+  const lifeboats = createLifeboats(context);
+  return new RigPart({
+    hull,
+    thrusters,
+    derrick,
+    drillFloor,
+    accommodation,
+    cranes,
+    mooring,
+    flareBoom,
+    topDrive,
+    flame,
+    deck,
+    lifeboats,
+  });
 }

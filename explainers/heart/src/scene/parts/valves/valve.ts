@@ -1,5 +1,6 @@
 import { BufferAttribute, BufferGeometry, Color, Group } from 'three';
 import type { Mesh, MeshStandardMaterial, Object3D, Vector3 } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import { anchorAt } from '@core/scene/parts';
 import { VALVE_PARTS } from '../../../ids';
 import type { ValveId } from '../../../ids';
@@ -72,16 +73,19 @@ function sheetStarts(sheets: Sheets): number[] {
   return starts;
 }
 
-function keyframesOf(sheets: Sheets, vertexCount: number): Float32Array[] {
+function* keyframesOf(sheets: Sheets, vertexCount: number): Steps<Float32Array[]> {
   const starts = sheetStarts(sheets);
-  return Array.from({ length: VALVE_DETAIL.openingKeyframes + 1 }, (_, frame) => {
+  const keyframes: Float32Array[] = [];
+  for (let frame = 0; frame <= VALVE_DETAIL.openingKeyframes; frame += 1) {
     const positions = new Float32Array(vertexCount * XYZ);
     const opening = frame / VALVE_DETAIL.openingKeyframes;
     sheets.counts.forEach((_, sheet) =>
       sheets.write(sheet, opening, positions.subarray(starts[sheet] * XYZ)),
     );
-    return positions;
-  });
+    keyframes.push(positions);
+    yield;
+  }
+  return keyframes;
 }
 
 function blendKeyframes(
@@ -182,7 +186,7 @@ export class ValvePart {
   private readonly layout: ThickLayout;
   private readonly thickPositions: Float32Array;
   private readonly thickNormals: Float32Array;
-  private readonly keyframes: Float32Array[];
+  private keyframes: Float32Array[] = [];
   private readonly starts: number[];
   private readonly pulse = new Color(VALVE_DETAIL.pulseColour);
   private opening = Number.NaN;
@@ -216,7 +220,6 @@ export class ValvePart {
     }
     this.sheet = context.tracker.track(sheetGeometry(this.sheets));
     this.starts = sheetStarts(this.sheets);
-    this.keyframes = keyframesOf(this.sheets, this.sheet.getAttribute('position').count);
     this.layout = sheetLayout(this.sheets, this.sheet);
     this.thickPositions = new Float32Array(this.layout.vertexCount * XYZ);
     this.thickNormals = new Float32Array(this.layout.vertexCount * XYZ);
@@ -225,6 +228,10 @@ export class ValvePart {
     this.object.add(...this.rings, this.leaflets);
     const { x, y, z } = this.frame.centre;
     this.anchor = anchorAt(this.object, x, y, z);
+  }
+
+  *bake(): Steps<void> {
+    this.keyframes = yield* keyframesOf(this.sheets, this.sheet.getAttribute('position').count);
     this.setOpening(0);
   }
 

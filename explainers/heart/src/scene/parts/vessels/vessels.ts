@@ -1,5 +1,6 @@
 import { Group, Vector3 } from 'three';
 import type { BufferGeometry, Mesh } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import type { PartId } from '../../../ids';
 import { SCENE_EXTENT } from '../../../model';
 import { THEME } from '../../../theme';
@@ -243,17 +244,26 @@ export class VesselsPart {
 
   constructor(context: PartContext) {
     this.context = context;
-    const vessels = new Map(VESSEL_ENTRIES.map(([name, spec]) => [name, build(name, spec)]));
+  }
+
+  *build(): Steps<void> {
+    const vessels = new Map<VesselName, BuiltVessel>();
+    for (const [name, spec] of VESSEL_ENTRIES) {
+      vessels.set(name, build(name, spec));
+      yield;
+    }
     const collarFields: Field[] = [];
     for (const vessel of vessels.values()) {
       const parent = vessel.spec.parent ? vessels.get(vessel.spec.parent) : undefined;
       if (!parent) continue;
       const collar = joinBranch(vessel, parent);
       if (collar) collarFields.push(collar);
+      yield;
     }
-    const caps = this.caps([...vessels.values()], collarFields);
+    const caps = yield* this.caps([...vessels.values()], collarFields);
     for (const [part, surfaces] of this.byPart([...vessels.values()])) {
       this.addPart(part, surfaces.walls, surfaces.lumens, caps.get(part) ?? []);
+      yield;
     }
   }
 
@@ -284,24 +294,29 @@ export class VesselsPart {
     return byPart;
   }
 
-  private caps(
+  private *caps(
     vessels: readonly BuiltVessel[],
     collars: readonly Field[],
-  ): Map<PartId, BufferGeometry[]> {
+  ): Steps<Map<PartId, BufferGeometry[]>> {
     const tubes: SectionTube[] = vessels.map((vessel, owner) => ({
       outer: vessel.outer,
       inner: vessel.inner,
       owner,
     }));
     const colours = new Map(vessels.map((vessel, owner) => [owner, vessel.tint.rim]));
-    const pieces = vesselCaps(vesselSection(tubes, collars, sectionClips()), tubes, colours, {
-      depthMm: VESSEL_DETAIL.capDepthMm,
-      grid: {
-        min: [SCENE_EXTENT.x[0], SCENE_EXTENT.y[0]],
-        max: [SCENE_EXTENT.x[1], SCENE_EXTENT.y[1]],
-        cell: VESSEL_DETAIL.capCellMm,
+    const pieces = yield* vesselCaps(
+      vesselSection(tubes, collars, sectionClips()),
+      tubes,
+      colours,
+      {
+        depthMm: VESSEL_DETAIL.capDepthMm,
+        grid: {
+          min: [SCENE_EXTENT.x[0], SCENE_EXTENT.y[0]],
+          max: [SCENE_EXTENT.x[1], SCENE_EXTENT.y[1]],
+          cell: VESSEL_DETAIL.capCellMm,
+        },
       },
-    });
+    );
     const byPart = new Map<PartId, BufferGeometry[]>();
     for (const [owner, geometry] of pieces) {
       const part = this.capPart(vessels[owner], geometry);

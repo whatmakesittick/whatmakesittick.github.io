@@ -1,3 +1,4 @@
+import type { Steps } from '@core/scene/pacing';
 import { terrainHeight } from '../../../model/layout';
 import { label, namedGroup } from '../context';
 import type { PartContext, Section } from '../context';
@@ -32,13 +33,15 @@ export function farmTreeArea(layout: FieldLayout, keepOut: KeepOut): TreeArea {
   };
 }
 
-export function buildFarmLand(context: PartContext): Section {
+export function* buildFarmLand(context: PartContext): Steps<Section> {
   const root = namedGroup('farmLand');
   const keepOut = farmKeepOut();
   const layout = farmFieldLayout(keepOut);
   const projection = farmProjection();
   const texture = groundTexture(context, projection, (painter) => paintFarmGround(painter, layout));
+  yield;
   const terrain = terrainMesh(context, farmTerrainGeometry(projection), texture, 'farmLand');
+  yield;
   const spots = placeTrees(farmTreeArea(layout, keepOut));
   const { crown } = plantTrees(context, spots, 'farmTreeClump', crownGeometry(TREE_SHAPE.clump));
   root.add(skyDome(context, 'farmSky'), terrain, crown);

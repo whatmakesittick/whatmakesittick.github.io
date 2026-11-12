@@ -8,12 +8,15 @@ import { LABEL_PRIORITY } from './partInfo';
 
 export { SCENE_OPTIONS } from './sceneOptions';
 
-export function mountNavalDroneScene(shell: SceneShell, store: NavalDroneStore): () => void {
+export async function mountNavalDroneScene(
+  shell: SceneShell,
+  store: NavalDroneStore,
+): Promise<() => void> {
   const restoreLight = navalDroneLight(shell.lighting);
   const navalDrone = new NavalDroneController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => navalDrone.update(deltaSeconds));
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
-  const unbind = bindStore(store, { navalDrone, labelVisibility, ...shell });
+  const unbind = await bindStore(store, { navalDrone, labelVisibility, ...shell });
   return () => {
     removeFrame();
     labelVisibility.dispose();

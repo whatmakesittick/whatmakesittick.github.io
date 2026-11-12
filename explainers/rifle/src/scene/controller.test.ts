@@ -58,32 +58,32 @@ function fakeShell() {
 }
 
 describe('rifle controller', () => {
-  it('adds the rifle to the scene and sets the camera and the floor to the whole scene', () => {
+  it('adds the rifle to the scene and sets the camera and the floor to the whole scene', async () => {
     const { rig, shell } = fakeShell();
     const rifle = new RifleController(shell);
-    rifle.build(STATE);
+    await rifle.build(STATE);
     expect(shell.scene.add).toHaveBeenCalledTimes(1);
     expect(shell.labels.attach).toHaveBeenCalledTimes(1);
     expect(rig.setBounds).toHaveBeenCalledWith(expect.any(Box3), -300);
     expect(shell.stage.fit).toHaveBeenCalledWith(expect.any(Box3), -300);
   });
 
-  it('frames a chapter region once the rifle is built', () => {
+  it('frames a chapter region once the rifle is built', async () => {
     const { rig, shell } = fakeShell();
     const rifle = new RifleController(shell);
     rifle.views.frame('cartridge', true);
     expect(rig.tweenTo).not.toHaveBeenCalled();
-    rifle.build(STATE);
+    await rifle.build(STATE);
     rifle.views.frame('cartridge', true);
     const target = rig.tweenTo.mock.lastCall?.[0]?.target as Vector3 | undefined;
     expect(target?.x).toBeCloseTo(30);
   });
 
-  it('hands the camera distance to the assembly each frame', () => {
+  it('hands the camera distance to the assembly each frame', async () => {
     const { shell } = fakeShell();
     const rifle = new RifleController(shell);
     expect(rifle.update(0.016)).toBe(false);
-    rifle.build(STATE);
+    await rifle.build(STATE);
     expect(rifle.update(0.016)).toBe(true);
     rifle.dispose();
     expect(rifle.update(0.016)).toBe(false);

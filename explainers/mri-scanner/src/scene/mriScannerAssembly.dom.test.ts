@@ -50,9 +50,12 @@ function worldPoint(object: Object3D): readonly number[] {
 let textures: ReturnType<typeof createSceneTextures>;
 let assembly: Assembly;
 
-beforeAll(() => {
+beforeAll(async () => {
   textures = createSceneTextures();
-  assembly = createMriScannerAssembly({ materials: new MaterialLibrary(), textures }, stateWith());
+  assembly = await createMriScannerAssembly(
+    { materials: new MaterialLibrary(), textures },
+    stateWith(),
+  );
 });
 
 afterAll(() => {

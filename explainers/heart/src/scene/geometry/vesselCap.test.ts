@@ -1,3 +1,4 @@
+import { runNow } from '@core/scene/pacing';
 import { describe, expect, it } from 'vitest';
 import { capsule } from './field';
 import { ownerAt, vesselCaps, vesselSection } from './vesselCap';
@@ -28,17 +29,19 @@ describe('vessel cut faces', () => {
     expect(clipped(7, -5)).toBeGreaterThan(0);
     expect(ownerAt([TRUNK, BRANCH], 30, 15)).toBe(1);
     expect(ownerAt([TRUNK, BRANCH], 0, -30)).toBe(0);
-    const caps = vesselCaps(
-      vesselSection([TRUNK, BRANCH], [], []),
-      [TRUNK, BRANCH],
-      new Map([
-        [0, '#ff0000'],
-        [1, '#0000ff'],
-      ]),
-      {
-        depthMm: -0.05,
-        grid: GRID,
-      },
+    const caps = runNow(
+      vesselCaps(
+        vesselSection([TRUNK, BRANCH], [], []),
+        [TRUNK, BRANCH],
+        new Map([
+          [0, '#ff0000'],
+          [1, '#0000ff'],
+        ]),
+        {
+          depthMm: -0.05,
+          grid: GRID,
+        },
+      ),
     );
     expect([...caps.keys()].sort()).toEqual([0, 1]);
     const positions = caps.get(0)?.getAttribute('position').array ?? [];

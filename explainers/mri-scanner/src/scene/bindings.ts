@@ -33,11 +33,15 @@ class DoubleBufferedAssemblyState {
   }
 }
 
-export function bindStore(store: MriScannerStore, targets: SceneTargets): () => void {
+export async function bindStore(
+  store: MriScannerStore,
+  targets: SceneTargets,
+): Promise<() => void> {
   const { mriScanner, labelVisibility } = targets;
   const assemblyState = new DoubleBufferedAssemblyState(store.getState());
   const push = (state: AssemblySource) => mriScanner.setState(assemblyState.handOver(state));
-  mriScanner.build(assemblyState.handOver(store.getState()));
+  await mriScanner.build(assemblyState.handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<MriScannerStoreState, Preset>(targets, store, {

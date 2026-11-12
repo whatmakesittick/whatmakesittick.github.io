@@ -1,6 +1,7 @@
 import type { Box3, Group, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { SceneTextures } from '@core/scene/textures';
+import type { Steps } from '@core/scene/pacing';
 import type { AnchorId, AssemblyState, ChaseTarget, PartId, RegionId } from '../ids';
 import { createMaglevTrainAssembly } from './maglevTrainAssembly';
 
@@ -23,6 +24,9 @@ export interface Assembly {
   dispose(): void;
 }
 
-export function createAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
+export function createAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Steps<Assembly> {
   return createMaglevTrainAssembly(resources, state);
 }

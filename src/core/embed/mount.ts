@@ -4,6 +4,7 @@ import { resolveLanguage, useLanguage } from '../i18n/embedded';
 import type { LocaleLoaders } from '../i18n/resources';
 import { DEFAULT_SCHEME, isScheme } from '../scheme';
 import type { Scheme } from '../scheme';
+import { runPaced } from '../scene/pacing';
 import { createSceneHost } from '../scene/shell';
 import type { FrameUpdate, SceneHost } from '../scene/shell';
 import { respectReducedMotion } from '../ui/motion';
@@ -127,13 +128,13 @@ export async function mountEmbed<S extends Playback>(
   let host: SceneHost;
   let unmountScene: () => void;
   try {
-    host = createSceneHost(container, explainer.parts, scheme, explainer.scene);
+    host = await runPaced(createSceneHost(container, explainer.parts, scheme, explainer.scene));
   } catch (error) {
     release();
     throw error;
   }
   try {
-    unmountScene = explainer.mountScene(host.shell, store);
+    unmountScene = await explainer.mountScene(host.shell, store);
   } catch (error) {
     host.dispose();
     release();

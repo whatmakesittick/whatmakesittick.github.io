@@ -8,7 +8,8 @@ import { ANCHOR_IDS, PART_IDS, REGION_IDS } from '../ids';
 import type { AssemblyState, NozzlePartId } from '../ids';
 import { CAR, MOMENTS, PARKED_ROW, ROW_TOP, SITE_ANCHORS, runAt, tankAt } from '../model';
 import { PLUME_GROUPS, plumeName } from './parts/effects/plumes';
-import { ThrusterCarAssembly, createThrusterCarAssembly } from './thrusterCarAssembly';
+import type { ThrusterCarAssembly } from './thrusterCarAssembly';
+import { createThrusterCarAssembly } from './thrusterCarAssembly';
 
 const FRAME = 1 / 60;
 const SPRINT_SECONDS = MOMENTS.sixty / 2;
@@ -58,10 +59,13 @@ function onDispose(resource: { addEventListener(type: 'dispose', listener: () =>
   return freed;
 }
 
-beforeAll(() => {
+beforeAll(async () => {
   materials = new MaterialLibrary();
   textures = createSceneTextures();
-  assembly = new ThrusterCarAssembly({ materials, textures }, stateAt(0));
+  assembly = (await createThrusterCarAssembly(
+    { materials, textures },
+    stateAt(0),
+  )) as ThrusterCarAssembly;
 });
 
 afterAll(() => {
@@ -141,10 +145,10 @@ describe('thruster car assembly', () => {
     expect(compiled.every((object) => !isShown(object))).toBe(true);
   });
 
-  it('frees its geometries, instance buffers and registered materials on dispose', () => {
+  it('frees its geometries, instance buffers and registered materials on dispose', async () => {
     const library = new MaterialLibrary();
     const register = vi.spyOn(library, 'register');
-    const extra = createThrusterCarAssembly({ materials: library, textures }, stateAt(0));
+    const extra = await createThrusterCarAssembly({ materials: library, textures }, stateAt(0));
     const geometries = new Set<BufferGeometry>();
     const instanced: InstancedMesh[] = [];
     extra.root.traverse((object) => {

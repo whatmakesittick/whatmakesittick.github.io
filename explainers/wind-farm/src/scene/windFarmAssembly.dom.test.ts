@@ -17,6 +17,7 @@ import type {
 import { SUBSTATION, TURBINE_COUNT, farmLayout } from '../model';
 import type { Assembly } from './assembly';
 import { EASE_SECONDS } from './constants';
+import { runNow } from '@core/scene/pacing';
 import { createWindFarmAssembly } from './windFarmAssembly';
 
 const ANCHOR_IDS: readonly AnchorId[] = [
@@ -103,9 +104,11 @@ let assembly: Assembly;
 
 beforeAll(() => {
   textures = createSceneTextures();
-  assembly = createWindFarmAssembly(
-    { materials: new MaterialLibrary(), textures },
-    stateWith('turbine', ALL_VIEWS),
+  assembly = runNow(
+    createWindFarmAssembly(
+      { materials: new MaterialLibrary(), textures },
+      stateWith('turbine', ALL_VIEWS),
+    ),
   );
 });
 

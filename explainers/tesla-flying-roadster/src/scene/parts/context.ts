@@ -9,6 +9,7 @@ import type {
 } from '@core/scene/materials';
 import type { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
+import type { SiteTextures } from '../geometry/site/siteTextures';
 import type { PartId } from '../../ids';
 
 export type EmphasisGroup = PartId | typeof STRUCTURE_GROUP | typeof UNDIMMED_GROUP;
@@ -17,6 +18,10 @@ export interface PartContext {
   materials: MaterialLibrary;
   textures: SceneTextures;
   tracker: ResourceTracker;
+}
+
+export interface WorldContext extends PartContext {
+  site: SiteTextures;
 }
 
 export function partMesh(

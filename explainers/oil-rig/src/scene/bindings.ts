@@ -44,11 +44,12 @@ class DoubleBufferedAssemblyState {
   }
 }
 
-export function bindStore(store: OilRigStore, targets: SceneTargets): () => void {
+export async function bindStore(store: OilRigStore, targets: SceneTargets): Promise<() => void> {
   const { oilRig, labelVisibility } = targets;
   const assemblyState = new DoubleBufferedAssemblyState();
   const push = (state: OilRigState) => oilRig.setState(assemblyState.handOver(state));
-  oilRig.build(assemblyState.handOver(store.getState()));
+  await oilRig.build(assemblyState.handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<OilRigStoreState, Preset>(targets, store, {

@@ -7,6 +7,7 @@ import { createSceneTextures } from '@core/scene/textures';
 import type { AssemblyState } from '../../../ids';
 import { MODEL_SIZE } from '../../../model/constants';
 import { CONTROL_WINDOW, ROOM, SCREEN } from '../../../model/layout';
+import { runNow } from '@core/scene/pacing';
 import { createRoomModule } from './room';
 
 const TRIANGLE_BUDGET = 20000;
@@ -56,7 +57,7 @@ function screenTexture(root: Object3D): DataTexture {
 
 describe('room module', () => {
   it('names the room and the screen and anchors the screen at its centre', () => {
-    const room = createRoomModule(context());
+    const room = runNow(createRoomModule(context()));
     expect(room.root.getObjectByName('room')).toBeDefined();
     expect(room.root.getObjectByName('screen')).toBeDefined();
     expect(worldPoint(room.anchors.screen as Object3D)).toEqual([...SCREEN.centre]);
@@ -65,7 +66,7 @@ describe('room module', () => {
   });
 
   it('mounts the monitor beside the control window instead of over it', () => {
-    const screen = createRoomModule(context()).root.getObjectByName('screen') as Object3D;
+    const screen = runNow(createRoomModule(context())).root.getObjectByName('screen') as Object3D;
     const bounds = new Box3().setFromObject(screen);
     const windowStart = CONTROL_WINDOW.centreZ - CONTROL_WINDOW.width / 2;
     expect(bounds.max.z).toBeLessThan(windowStart);
@@ -73,7 +74,7 @@ describe('room module', () => {
   });
 
   it('uploads the picture only when its version changes', () => {
-    const room = createRoomModule(context());
+    const room = runNow(createRoomModule(context()));
     const texture = screenTexture(room.root);
     const { width, height } = texture.image;
     const centre = (Math.floor(height / 2) * width + Math.floor(width / 2)) * CHANNELS;
@@ -88,7 +89,7 @@ describe('room module', () => {
   });
 
   it('keeps the picture square with dark bars beside it on the wide screen', () => {
-    const room = createRoomModule(context());
+    const room = runNow(createRoomModule(context()));
     const texture = screenTexture(room.root);
     room.setState(pictureState(1, 1));
     const { width, height, data } = texture.image as {
@@ -104,13 +105,13 @@ describe('room module', () => {
   });
 
   it('gives the walls and the floor a thickness that hides with the near walls', () => {
-    const shell = createRoomModule(context()).root.getObjectByName('roomShell') as Mesh;
+    const shell = runNow(createRoomModule(context())).root.getObjectByName('roomShell') as Mesh;
     expect(shell.geometry.getAttribute('shellSide').itemSize).toBe(4);
     expect(new Box3().setFromObject(shell).min.y).toBeLessThan(0);
   });
 
   it('lets a camera outside the control window look straight through the console', () => {
-    const room = createRoomModule(context());
+    const room = runNow(createRoomModule(context()));
     room.root.updateMatrixWorld(true);
     const blockers = (x: number, z: number) =>
       new Raycaster(new Vector3(x, SCREEN.centre[1], z), new Vector3(-1, 0, 0))
@@ -122,7 +123,7 @@ describe('room module', () => {
   });
 
   it('never blocks the scanner from above, behind or the far side', () => {
-    const room = createRoomModule(context());
+    const room = runNow(createRoomModule(context()));
     room.root.updateMatrixWorld(true);
     const centre = new Vector3(0, 1, 0);
     [
@@ -140,6 +141,6 @@ describe('room module', () => {
   });
 
   it('stays within a moderate triangle budget', () => {
-    expect(triangles(createRoomModule(context()).root)).toBeLessThan(TRIANGLE_BUDGET);
+    expect(triangles(runNow(createRoomModule(context())).root)).toBeLessThan(TRIANGLE_BUDGET);
   });
 });

@@ -5,6 +5,7 @@ import { MaterialLibrary } from '@core/scene/materials';
 import { ResourceTracker } from '@core/scene/resources';
 import { createSceneTextures } from '@core/scene/textures';
 import type { AssemblyState, PartId } from '../../../ids';
+import { runNow } from '@core/scene/pacing';
 import { createMagnetModule } from './magnet';
 
 const OWNED: readonly PartId[] = [
@@ -27,11 +28,13 @@ const TRIANGLE_BUDGET = 250_000;
 const FRAME = 1 / 60;
 
 function moduleUnderTest(materials = new MaterialLibrary()) {
-  return createMagnetModule({
-    materials,
-    textures: createSceneTextures(),
-    tracker: new ResourceTracker(),
-  });
+  return runNow(
+    createMagnetModule({
+      materials,
+      textures: createSceneTextures(),
+      tracker: new ResourceTracker(),
+    }),
+  );
 }
 
 function stateWith(cutaway: boolean, level: number): AssemblyState {

@@ -7,12 +7,30 @@ import { CAR_REGION_IDS } from '../ids';
 import type { AnchorId, AssemblyState, CarRegionId, PartId, RegionId } from '../ids';
 import { CAR } from '../model/layout';
 import type { Assembly, AssemblyResources, ChaseTarget } from './assembly';
-import { CarPart } from './parts/car/car';
+import { buildCar } from './parts/car/car';
+import type { CarPart } from './parts/car/car';
 import type { PartContext } from './parts/context';
 import { EffectsPart } from './parts/effects/effects';
 import { createParkedRow } from './parts/row/parkedRow';
 import { createWorld } from './parts/world/world';
+import type { WorldView } from './parts/types';
+import { siteTextures } from './geometry/site/siteTextures';
+import { paintSitePixels } from './sitePixels';
+import { paintInWorker } from './pixelWorker';
+import { runPaced } from '@core/scene/pacing';
+import type { Steps } from '@core/scene/pacing';
 import { carRegion, staticRegions } from './regions';
+
+interface NearParts {
+  car: CarPart;
+  effects: EffectsPart;
+  row: ReturnType<typeof createParkedRow>;
+}
+
+interface AssemblyParts extends NearParts {
+  world: WorldView;
+  tracker: ResourceTracker;
+}
 
 type Drawable = (Mesh | Points | Sprite) & { material: Material };
 
@@ -27,7 +45,7 @@ function isCarRegion(id: RegionId): id is CarRegionId {
 
 export class ThrusterCarAssembly implements Assembly {
   readonly root = new Group();
-  private readonly tracker = new ResourceTracker();
+  private readonly tracker: ResourceTracker;
   private readonly materials: MaterialLibrary;
   private readonly car: CarPart;
   private readonly effects: EffectsPart;
@@ -42,21 +60,20 @@ export class ThrusterCarAssembly implements Assembly {
     span: CAR.wheelbase,
   };
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(resources: AssemblyResources, parts: AssemblyParts, state: AssemblyState) {
+    const { world, row, car, effects, tracker } = parts;
     this.materials = resources.materials;
-    const context: PartContext = { ...resources, tracker: this.tracker };
-    const world = createWorld(context);
-    const row = createParkedRow(context);
-    this.car = new CarPart(context);
-    this.effects = new EffectsPart(context, this.car);
-    this.root.add(world.object, row.object, this.car.object, this.effects.object);
+    this.tracker = tracker;
+    this.car = car;
+    this.effects = effects;
+    this.root.add(world.object, row.object, car.object, effects.object);
     this.labels = new Map<PartId, Object3D>([
-      ...this.car.labels,
+      ...car.labels,
       ...world.labels,
       ['parkedRow', row.label],
-      ...this.effects.labels,
+      ...effects.labels,
     ]);
-    this.named = { ...this.car.anchors, ...world.anchors };
+    this.named = { ...car.anchors, ...world.anchors };
     this.regions = { ...staticRegions(), car: new Box3(), cabin: new Box3(), tail: new Box3() };
     this.setState(state);
   }
@@ -108,9 +125,26 @@ export class ThrusterCarAssembly implements Assembly {
   }
 }
 
-export function createThrusterCarAssembly(
+function* buildNearParts(context: PartContext): Steps<NearParts> {
+  const car = yield* buildCar(context);
+  yield;
+  const effects = new EffectsPart(context, car);
+  return { car, effects, row: createParkedRow(context) };
+}
+
+async function buildParts(resources: AssemblyResources): Promise<AssemblyParts> {
+  const tracker = new ResourceTracker();
+  const context: PartContext = { ...resources, tracker };
+  const pixels = paintSitePixels(paintInWorker);
+  const near = await runPaced(buildNearParts(context));
+  const site = siteTextures(await pixels, tracker);
+  const world = await runPaced(createWorld({ ...context, site }));
+  return { ...near, world, tracker };
+}
+
+export async function createThrusterCarAssembly(
   resources: AssemblyResources,
   state: AssemblyState,
-): Assembly {
-  return new ThrusterCarAssembly(resources, state);
+): Promise<Assembly> {
+  return new ThrusterCarAssembly(resources, await buildParts(resources), state);
 }

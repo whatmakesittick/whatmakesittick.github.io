@@ -17,7 +17,7 @@ function fakeTargets() {
   const frame = vi.fn();
   const setWanted = vi.fn();
   const targets: SceneTargets = {
-    windFarm: { build: record, setState: record, views: { frame } },
+    windFarm: { build: async (state) => record(state), setState: record, views: { frame } },
     labelVisibility: { setWanted },
     highlighter: { setHighlight: vi.fn() },
     labels: { show: vi.fn() },
@@ -26,19 +26,19 @@ function fakeTargets() {
 }
 
 describe('wind farm scene bindings', () => {
-  it('builds the scene from the store and frames the first chapter', () => {
+  it('builds the scene from the store and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createWindFarmStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const { phase, spacing, view } = store.getState();
     expect(received[0]).toMatchObject({ scene: 'farm', phase, view, farm: { spacing } });
     expect(frame).toHaveBeenCalledWith('farmAerial', false, undefined);
   });
 
-  it('swaps the scene and hands over the view flags before framing the next camera', () => {
+  it('swaps the scene and hands over the view flags before framing the next camera', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createWindFarmStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     let handedBeforeFrame: AssemblyState | undefined;
     frame.mockImplementationOnce(() => (handedBeforeFrame = received.at(-1)));
     store.getState().applyPreset('nacelle');
@@ -46,10 +46,10 @@ describe('wind farm scene bindings', () => {
     expect(handedBeforeFrame).toMatchObject({ scene: 'turbine', view: { cutaway: true } });
   });
 
-  it('applies a view toggle at once and refreshes the labels', () => {
+  it('applies a view toggle at once and refreshes the labels', async () => {
     const { received, setWanted, targets } = fakeTargets();
     const store = createWindFarmStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const before = setWanted.mock.calls.length;
     const shown = store.getState().view.cables;
     store.getState().toggleView('cables');
@@ -57,10 +57,10 @@ describe('wind farm scene bindings', () => {
     expect(setWanted.mock.calls.length).toBeGreaterThan(before);
   });
 
-  it('alternates two buffers so the held state is never rewritten', () => {
+  it('alternates two buffers so the held state is never rewritten', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createWindFarmStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().pause();
     store.getState().setPhase(LATER_PHASE);
     store.getState().setWindOverride(STRONG_WIND_MS);
@@ -71,10 +71,10 @@ describe('wind farm scene bindings', () => {
     expect(third?.wind.speed).toBe(STRONG_WIND_MS);
   });
 
-  it('stops handing over states once unbound', () => {
+  it('stops handing over states once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createWindFarmStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const count = received.length;
     store.getState().setPhase(LATER_PHASE);

@@ -1,5 +1,6 @@
 import { Group } from 'three';
 import type { Object3D } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import { VALVE_IDS } from '../../../ids';
 import type { ValveId } from '../../../ids';
 import { SOUNDS, VALVES, heartSound, shareOf, valveOpening, wrapTime } from '../../../model';
@@ -31,25 +32,36 @@ export function guardField(id: ValveId, cavity: Field): Field {
   return union([cavity, orifice]);
 }
 
+export function* buildValves(
+  context: PartContext,
+  cavities: Readonly<Record<'left' | 'right', Field>>,
+): Steps<Map<ValveId, ValvePart>> {
+  const cavityOf: Partial<Record<ValveId, Field>> = {
+    mitral: cavities.left,
+    tricuspid: cavities.right,
+  };
+  const valves = new Map<ValveId, ValvePart>();
+  for (const id of VALVE_IDS) {
+    const valve = new ValvePart(context, id, VALVE_DESIGN[id], cavityOf[id]);
+    yield* valve.bake();
+    valves.set(id, valve);
+  }
+  return valves;
+}
+
 export class ValvesPart {
   readonly object = new Group();
-  readonly valves = new Map<ValveId, ValvePart>();
+  readonly valves: ReadonlyMap<ValveId, ValvePart>;
   readonly chordae: ChordaePart;
 
   constructor(
     context: PartContext,
     cavities: Readonly<Record<'left' | 'right', Field>>,
     motion: Contraction,
+    valves: ReadonlyMap<ValveId, ValvePart>,
   ) {
-    const cavityOf: Partial<Record<ValveId, Field>> = {
-      mitral: cavities.left,
-      tricuspid: cavities.right,
-    };
-    for (const id of VALVE_IDS) {
-      const valve = new ValvePart(context, id, VALVE_DESIGN[id], cavityOf[id]);
-      this.valves.set(id, valve);
-      this.object.add(valve.object);
-    }
+    this.valves = valves;
+    for (const valve of valves.values()) this.object.add(valve.object);
     const hinged = ATRIOVENTRICULAR.map((id) => this.valve(id));
     this.chordae = new ChordaePart(
       context,

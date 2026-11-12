@@ -10,13 +10,13 @@ import { LABEL_PRIORITY } from './partInfo';
 
 export { SCENE_OPTIONS } from './sceneOptions';
 
-export function mountPianoScene(shell: SceneShell, store: PianoStore): () => void {
+export async function mountPianoScene(shell: SceneShell, store: PianoStore): Promise<() => void> {
   const restoreLight = pianoLight(shell.lighting);
   const piano = new PianoController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => piano.update(deltaSeconds));
   const removeDepthFog = mountDepthFog(shell);
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
-  const unbind = bindStore(store, { piano, labelVisibility, ...shell });
+  const unbind = await bindStore(store, { piano, labelVisibility, ...shell });
   const stopSound = mountSound(store);
   return () => {
     stopSound();

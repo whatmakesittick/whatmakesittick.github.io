@@ -5,17 +5,11 @@ import { anchorAt } from '@core/scene/parts';
 import { SITE, SITE_ANCHORS } from '../../../model/layout';
 import type { ConcreteMaps } from '../../geometry/site/concrete';
 import { coneGeometry } from '../../geometry/site/cone';
-import {
-  landingMarks,
-  marksGeometry,
-  finishMarks,
-  startMarks,
-  wornPaintMap,
-} from '../../geometry/site/markings';
+import { landingMarks, marksGeometry, finishMarks, startMarks } from '../../geometry/site/markings';
 import { hash2 } from '../../geometry/site/noise';
 import { slabGeometry } from '../../geometry/site/slab';
 import { instancedPart, partMesh } from '../context';
-import type { PartContext } from '../context';
+import type { PartContext, WorldContext } from '../context';
 import {
   CONCRETE_LOOKS,
   MARK_COLOURS,
@@ -63,10 +57,10 @@ function createCones(context: PartContext): InstancedMesh {
   return cones;
 }
 
-export function createRunway(context: PartContext, concrete: ConcreteMaps): RunwayPart {
+export function createRunway(context: WorldContext, concrete: ConcreteMaps): RunwayPart {
   const object = new Group();
   object.name = 'runway';
-  const wear = context.tracker.track(wornPaintMap());
+  const wear = context.site.wornPaint;
   const slab = partMesh(
     context,
     slabGeometry(SITE.run),

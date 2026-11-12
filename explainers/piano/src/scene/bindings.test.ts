@@ -16,7 +16,11 @@ function fakeTargets() {
   const setWanted = vi.fn();
   const setHighlight = vi.fn();
   const targets: SceneTargets = {
-    piano: { build: record, setState: record, views: { frame } },
+    piano: {
+      build: async (state: AssemblyState) => record(state),
+      setState: record,
+      views: { frame },
+    },
     labelVisibility: { setWanted },
     highlighter: { setHighlight },
     labels: { show: vi.fn() },
@@ -25,19 +29,19 @@ function fakeTargets() {
 }
 
 describe('piano scene bindings', () => {
-  it('builds the piano from the store and frames the first chapter', () => {
+  it('builds the piano from the store and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createPianoStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const { phase, touch, pedal, register, compare, view, preset } = store.getState();
     expect(received[0]).toMatchObject({ phase, touch, pedal, register, compare, view });
     expect(frame).toHaveBeenCalledWith(PRESETS[preset].camera, false, undefined);
   });
 
-  it('hands over the chapter start and its views before framing the next camera', () => {
+  it('hands over the chapter start and its views before framing the next camera', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createPianoStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     let handedBeforeFrame: AssemblyState | undefined;
     frame.mockImplementationOnce(() => (handedBeforeFrame = received.at(-1)));
     store.getState().applyPreset('letGo');
@@ -48,20 +52,20 @@ describe('piano scene bindings', () => {
     });
   });
 
-  it('highlights and pins the labels of each chapter', () => {
+  it('highlights and pins the labels of each chapter', async () => {
     const { setWanted, setHighlight, targets } = fakeTargets();
     const store = createPianoStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('room');
     expect(setHighlight).toHaveBeenLastCalledWith(PRESETS.room.highlight);
     const labels = new Set(PRESETS.room.labels);
     expect(setWanted).toHaveBeenLastCalledWith(labels, labels);
   });
 
-  it('applies a view toggle at once and refreshes the labels', () => {
+  it('applies a view toggle at once and refreshes the labels', async () => {
     const { received, setWanted, targets } = fakeTargets();
     const store = createPianoStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     const before = setWanted.mock.calls.length;
     const ghost = store.getState().view.ghost;
     store.getState().toggleView('ghost');
@@ -69,10 +73,10 @@ describe('piano scene bindings', () => {
     expect(setWanted.mock.calls.length).toBeGreaterThan(before);
   });
 
-  it('hands over the touch, the pedal, the register and the comparison', () => {
+  it('hands over the touch, the pedal, the register and the comparison', async () => {
     const { received, targets } = fakeTargets();
     const store = createPianoStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setTouch('hard');
     store.getState().setPedal('unaCorda');
     store.getState().setRegister('bass');
@@ -85,10 +89,10 @@ describe('piano scene bindings', () => {
     });
   });
 
-  it('alternates two buffers so the held state is never rewritten', () => {
+  it('alternates two buffers so the held state is never rewritten', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createPianoStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().pause();
     store.getState().setTouch('hard');
     store.getState().setPhase(MOMENTS.strike);
@@ -100,10 +104,10 @@ describe('piano scene bindings', () => {
     expect(third?.stroke.phase).toBe('strike');
   });
 
-  it('stops handing over states once unbound', () => {
+  it('stops handing over states once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createPianoStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const count = received.length;
     store.getState().setPhase(MOMENTS.strike);

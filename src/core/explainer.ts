@@ -122,6 +122,8 @@ export interface PartInfo {
   side: LabelSide;
 }
 
+export type SceneUnmount = () => void;
+
 export interface Explainer<S extends Playback = Playback> {
   timeline: Timeline;
   presets: Readonly<Record<string, Preset>>;
@@ -135,7 +137,7 @@ export interface Explainer<S extends Playback = Playback> {
   actions?: Readonly<Record<string, ChapterAction<S>>>;
   shortcuts?: Readonly<Record<string, (state: S) => void>>;
   scene?: SceneOptions;
-  mountScene(shell: SceneShell, store: ExplainerStore<S>): () => void;
+  mountScene(shell: SceneShell, store: ExplainerStore<S>): SceneUnmount | Promise<SceneUnmount>;
   mountGauge?(gauge: HTMLElement, store: ExplainerStore<S>): () => void;
   mountUi?(root: Document, store: ExplainerStore<S>): void;
 }

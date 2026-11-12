@@ -16,7 +16,8 @@ import {
   RETARDER_ANGLE,
   UNLOCK_ANGLE,
 } from '../model/layout';
-import { RifleAssembly } from './rifleAssembly';
+import type { Assembly } from './assembly';
+import { createRifleAssembly } from './rifleAssembly';
 
 const SHOT: ShotReading = {
   pressure: 0,
@@ -69,7 +70,7 @@ const TRIANGLE_BUDGET = { whole: 160_000, cut: 200_000 };
 const FRAME = 1 / 60;
 const RIGHT_SIDE = 0.5;
 
-let assembly: RifleAssembly;
+let assembly: Assembly;
 let materials: MaterialLibrary;
 let textures: ReturnType<typeof createSceneTextures>;
 
@@ -154,10 +155,10 @@ function rightmostShownZ(group: string): number {
   return reach;
 }
 
-beforeAll(() => {
+beforeAll(async () => {
   materials = new MaterialLibrary();
   textures = createSceneTextures();
-  assembly = new RifleAssembly({ materials, textures }, STATE);
+  assembly = await createRifleAssembly({ materials, textures }, STATE);
 });
 
 afterAll(() => {
@@ -316,15 +317,15 @@ describe('rifle assembly', () => {
   it('compiles every hidden material once when warming up', () => {
     show({});
     const compiled: Object3D[] = [];
-    assembly.warmUp((object) => compiled.push(object));
+    assembly.warmUp?.((object) => compiled.push(object));
     const materialsSeen = new Set(compiled.map((object) => (object as Mesh).material));
     expect(compiled.length).toBeGreaterThan(5);
     expect(materialsSeen.size).toBe(compiled.length);
     expect(compiled.every((object) => !isShown(object))).toBe(true);
   });
 
-  it('frees its resources on dispose', () => {
-    const extra = new RifleAssembly({ materials, textures }, STATE);
+  it('frees its resources on dispose', async () => {
+    const extra = await createRifleAssembly({ materials, textures }, STATE);
     expect(() => extra.dispose()).not.toThrow();
     expect(extra.root.parent).toBeNull();
   });

@@ -22,8 +22,8 @@ vi.mock('./assembly', async (importOriginal) => {
   const actual = await importOriginal<typeof AssemblyModule>();
   return {
     ...actual,
-    createAssembly: (...args: Parameters<typeof actual.createAssembly>) => {
-      const assembly = actual.createAssembly(...args);
+    createAssembly: function* (...args: Parameters<typeof actual.createAssembly>) {
+      const assembly = yield* actual.createAssembly(...args);
       created.push(assembly);
       return assembly;
     },
@@ -72,10 +72,10 @@ function fakeShell() {
   return { rig, scene, shell: shell as unknown as MaglevTrainControllerDependencies };
 }
 
-function builtController(phase = 0) {
+async function builtController(phase = 0) {
   const fake = fakeShell();
   const controller = new MaglevTrainController(fake.shell);
-  controller.build(assemblyState(phase));
+  await controller.build(assemblyState(phase));
   return { ...fake, controller, assembly: lastAssembly() };
 }
 
@@ -88,8 +88,8 @@ function regionBox(region: RegionId): Box3 {
 }
 
 describe('maglev train controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
-  it('adds the assembly, attaches its labels and bounds the camera on the ground', () => {
-    const { rig, scene, shell, assembly } = builtController();
+  it('adds the assembly, attaches its labels and bounds the camera on the ground', async () => {
+    const { rig, scene, shell, assembly } = await builtController();
     expect(scene.add).toHaveBeenCalledWith(assembly.root);
     expect(shell.labels.attach).toHaveBeenCalledWith(assembly.labelAnchors());
     const [bounds, floor] = rig.setBounds.mock.lastCall ?? [];
@@ -108,20 +108,23 @@ describe('maglev train controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
   it.each([
     ['resting on the skids', 0],
     ['floating at full speed', MOMENTS.fullSpeed],
-  ])('aims every fly-along view from the chase target and rides along, %s', (_moment, phase) => {
-    const { rig, controller, assembly } = builtController(phase);
-    for (const view of FOLLOW_IDS) {
-      controller.views.frame(view, false);
-      const pose = rig.jumpTo.mock.lastCall?.[0];
-      const expected = followPose(assembly.chaseTarget(), FOLLOW_VIEWS[view]);
-      expect(rounded(pose?.target), view).toEqual(rounded(expected.target));
-      expect(rounded(pose?.position), view).toEqual(rounded(expected.position));
-      expect(rig.follow).toHaveBeenLastCalledWith(assembly.anchor(FOLLOW_ANCHOR), FOLLOW_MODE);
-    }
-  });
+  ])(
+    'aims every fly-along view from the chase target and rides along, %s',
+    async (_moment, phase) => {
+      const { rig, controller, assembly } = await builtController(phase);
+      for (const view of FOLLOW_IDS) {
+        controller.views.frame(view, false);
+        const pose = rig.jumpTo.mock.lastCall?.[0];
+        const expected = followPose(assembly.chaseTarget(), FOLLOW_VIEWS[view]);
+        expect(rounded(pose?.target), view).toEqual(rounded(expected.target));
+        expect(rounded(pose?.position), view).toEqual(rounded(expected.position));
+        expect(rig.follow).toHaveBeenLastCalledWith(assembly.anchor(FOLLOW_ANCHOR), FOLLOW_MODE);
+      }
+    },
+  );
 
-  it('frames the fixed views on their regions without following', () => {
-    const { rig, controller } = builtController();
+  it('frames the fixed views on their regions without following', async () => {
+    const { rig, controller } = await builtController();
     for (const view of REGION_IDS) {
       const { region, direction, margin } = REGION_VIEWS[view];
       controller.views.frame(view, false);
@@ -134,8 +137,8 @@ describe('maglev train controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     }
   });
 
-  it('frames the line-up on its own box without following', () => {
-    const { rig, controller } = builtController();
+  it('frames the line-up on its own box without following', async () => {
+    const { rig, controller } = await builtController();
     const { box, direction, margin } = LINE_UP_VIEW;
     controller.views.frame('lineUp', false);
     const toward = new Vector3(...direction).normalize();
@@ -146,15 +149,15 @@ describe('maglev train controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     expect(rig.follow).toHaveBeenLastCalledWith(null, undefined);
   });
 
-  it('tweens when animated', () => {
-    const { rig, controller } = builtController();
+  it('tweens when animated', async () => {
+    const { rig, controller } = await builtController();
     controller.views.frame('rear', true);
     expect(rig.tweenTo).toHaveBeenCalledTimes(1);
     expect(rig.jumpTo).not.toHaveBeenCalled();
   });
 
-  it('lifts the followed anchor with the train', () => {
-    const { rig, controller } = builtController();
+  it('lifts the followed anchor with the train', async () => {
+    const { rig, controller } = await builtController();
     controller.views.frame('ride', false);
     const anchor = rig.follow.mock.lastCall?.[0];
     const resting = anchor?.getWorldPosition(new Vector3()).y ?? 0;
@@ -162,18 +165,18 @@ describe('maglev train controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     expect(anchor?.getWorldPosition(new Vector3()).y).toBeGreaterThan(resting);
   });
 
-  it('updates the assembly with the camera distance', () => {
-    const { controller, assembly } = builtController();
+  it('updates the assembly with the camera distance', async () => {
+    const { controller, assembly } = await builtController();
     const update = vi.spyOn(assembly, 'update');
     controller.update(FRAME_SECONDS);
     expect(update).toHaveBeenCalledWith(FRAME_SECONDS, CAMERA_POSITION.distanceTo(CAMERA_TARGET));
   });
 
-  it('reports no motion without an assembly and removes it on dispose', () => {
+  it('reports no motion without an assembly and removes it on dispose', async () => {
     const { scene, shell } = fakeShell();
     const controller = new MaglevTrainController(shell);
     expect(controller.update(FRAME_SECONDS)).toBe(false);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     const removed = vi.spyOn(scene.add.mock.lastCall?.[0] as Object3D, 'removeFromParent');
     controller.dispose();
     expect(removed).toHaveBeenCalled();

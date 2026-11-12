@@ -1,8 +1,9 @@
 import type { Box3, Group, Object3D } from 'three';
+import { runPaced } from '@core/scene/pacing';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
-import { RigAssembly } from './rigAssembly';
+import { buildRigAssembly } from './rigAssembly';
 
 export interface AssemblyResources {
   materials: MaterialLibrary;
@@ -19,6 +20,9 @@ export interface Assembly {
   dispose(): void;
 }
 
-export function createAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
-  return new RigAssembly(resources, state);
+export function createAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Promise<Assembly> {
+  return runPaced(buildRigAssembly(resources, state));
 }

@@ -1,3 +1,4 @@
+import { runNow } from '@core/scene/pacing';
 import { IcosahedronGeometry } from 'three';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { describe, expect, it } from 'vitest';
@@ -40,7 +41,7 @@ describe('vessel portals', () => {
     const raw = new IcosahedronGeometry(10, 3);
     raw.deleteAttribute('normal');
     raw.deleteAttribute('uv');
-    const trimmed = trimAtPortals(mergeVertices(raw), [PORTAL]);
+    const trimmed = runNow(trimAtPortals(mergeVertices(raw), [PORTAL]));
     const positions = trimmed.getAttribute('position').array;
     for (let offset = 0; offset < positions.length; offset += 3) {
       const x = positions[offset];

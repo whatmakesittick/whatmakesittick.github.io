@@ -1,3 +1,4 @@
+import type { Steps } from '@core/scene/pacing';
 import type { AssemblyState, MotionReading, PartId } from '../../../ids';
 import { ANCHOR_POINTS } from '../../../model';
 import { applyTrainPose } from '../../pose';
@@ -16,14 +17,17 @@ import { buildWindows } from './windows';
 
 const SCENE_ANCHORS = ['nose', 'tail', 'arm', 'cut'] as const;
 
-export function buildTrain(context: PartContext): Section {
+export function* buildTrain(context: PartContext): Steps<Section> {
   const root = namedGroup('trainRoot');
   const posed = namedGroup('train', root);
   const ahead = namedGroup('trainAhead', posed);
   buildBody(context, posed, ahead);
+  yield;
   const windows = buildWindows(context, posed);
+  yield;
   const skirt = buildSkirt(context, posed, ahead);
   const magnets = buildMagnets(context, posed);
+  yield;
   const skids = buildSkids(context, posed, ahead);
   const cutaway = buildCutaway(context, posed);
   const cutSets = [windows, skirt, magnets.showAhead, skids.showAhead];

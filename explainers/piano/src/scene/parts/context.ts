@@ -45,8 +45,6 @@ export interface Section {
   warmUp?(compile: (object: Object3D) => void): void;
 }
 
-export type SectionFactory = (context: PartContext) => Section;
-
 const finishes = new WeakMap<Material, MaterialFinish>();
 
 export function finishOf(material: Material): MaterialFinish | undefined {

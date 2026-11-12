@@ -21,8 +21,8 @@ vi.mock('./assembly', async (importOriginal) => {
   const actual = await importOriginal<typeof AssemblyModule>();
   return {
     ...actual,
-    createAssembly: (...args: Parameters<typeof actual.createAssembly>) => {
-      const assembly = actual.createAssembly(...args);
+    createAssembly: async (...args: Parameters<typeof actual.createAssembly>) => {
+      const assembly = await actual.createAssembly(...args);
       created.push(assembly);
       return assembly;
     },
@@ -84,10 +84,10 @@ function fakeShell() {
   return { rig, scene, shell: shell as unknown as PianoControllerDependencies };
 }
 
-function builtController(choices: StateChoices = {}) {
+async function builtController(choices: StateChoices = {}) {
   const fake = fakeShell();
   const controller = new PianoController(fake.shell);
-  controller.build(assemblyState(choices));
+  await controller.build(assemblyState(choices));
   return { ...fake, controller, assembly: lastAssembly() };
 }
 
@@ -102,8 +102,8 @@ function expectedPose(view: CameraView): CameraPose {
 }
 
 describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
-  it('adds the assembly, attaches its labels and bounds the camera on the floor', () => {
-    const { rig, scene, shell, assembly } = builtController();
+  it('adds the assembly, attaches its labels and bounds the camera on the floor', async () => {
+    const { rig, scene, shell, assembly } = await builtController();
     expect(scene.add).toHaveBeenCalledWith(assembly.root);
     expect(shell.labels.attach).toHaveBeenCalledWith(assembly.labelAnchors());
     const [bounds, floor] = rig.setBounds.mock.lastCall ?? [];
@@ -111,7 +111,7 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     expect(floor).toBe(GROUND_Y);
   });
 
-  it('frames nothing before the assembly exists', () => {
+  it('frames nothing before the assembly exists', async () => {
     const { rig, shell } = fakeShell();
     const controller = new PianoController(shell);
     controller.views.frame('grand', false);
@@ -119,8 +119,8 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     expect(rig.follow).not.toHaveBeenCalled();
   });
 
-  it('frames every view on its region without following', () => {
-    const { rig, controller } = builtController();
+  it('frames every view on its region without following', async () => {
+    const { rig, controller } = await builtController();
     for (const view of CAMERA_VIEW_IDS) {
       controller.views.frame(view, false);
       const expected = expectedPose(view);
@@ -131,8 +131,8 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     }
   });
 
-  it('tells the assembly which view it frames', () => {
-    const { controller, assembly } = builtController();
+  it('tells the assembly which view it frames', async () => {
+    const { controller, assembly } = await builtController();
     const focus = vi.spyOn(assembly, 'focus');
     for (const view of CAMERA_VIEW_IDS) {
       controller.views.frame(view, false);
@@ -140,15 +140,15 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     }
   });
 
-  it('tweens when animated', () => {
-    const { rig, controller } = builtController();
+  it('tweens when animated', async () => {
+    const { rig, controller } = await builtController();
     controller.views.frame('dampers', true);
     expect(rig.tweenTo).toHaveBeenCalledTimes(1);
     expect(rig.jumpTo).not.toHaveBeenCalled();
   });
 
-  it('follows the hammer head while the toggle is on, through a new framing, then lets go', () => {
-    const { rig, controller, assembly } = builtController();
+  it('follows the hammer head while the toggle is on, through a new framing, then lets go', async () => {
+    const { rig, controller, assembly } = await builtController();
     const hammer = assembly.anchor(FOLLOW_ANCHOR);
     controller.views.frame('action', false);
     controller.setState(assemblyState({ view: { follow: true } }));
@@ -162,8 +162,8 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     expect(rig.follow).toHaveBeenLastCalledWith(null);
   });
 
-  it('lifts the followed anchor with the hammer', () => {
-    const { controller, assembly } = builtController();
+  it('lifts the followed anchor with the hammer', async () => {
+    const { controller, assembly } = await builtController();
     const hammer = assembly.anchor(FOLLOW_ANCHOR);
     const resting = hammer.getWorldPosition(new Vector3()).y;
     controller.setState(assemblyState({ phase: MOMENTS.strike }));
@@ -177,8 +177,8 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     ['the bass dampers', 'dampers', 'bass'],
   ] as const)(
     'jumps to %s on the next frame with the cut and the played key',
-    (_case, view, register) => {
-      const { rig, controller } = builtController();
+    async (_case, view, register) => {
+      const { rig, controller } = await builtController();
       controller.views.frame(view, false);
       const before = rig.jumpTo.mock.lastCall?.[0];
       controller.setState(assemblyState({ register }));
@@ -195,8 +195,8 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     ['the inset grows the escapement', 'escapement', { view: { inset: true } }],
     ['a compare chip picks the upright', 'lineUp', { compare: 'upright' }],
     ['a compare chip picks the harpsichord', 'lineUp', { compare: 'harpsichord' }],
-  ] as const)('tweens the current view on the next frame when %s', (_case, view, choices) => {
-    const { rig, controller } = builtController();
+  ] as const)('tweens the current view on the next frame when %s', async (_case, view, choices) => {
+    const { rig, controller } = await builtController();
     controller.views.frame(view, false);
     const before = rig.jumpTo.mock.lastCall?.[0];
     controller.setState(assemblyState(choices));
@@ -207,8 +207,8 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     expect(rounded(pose?.target)).not.toEqual(rounded(before?.target));
   });
 
-  it('lets a chapter that resets the register frame only its own view', () => {
-    const { rig, controller } = builtController({ register: 'treble' });
+  it('lets a chapter that resets the register frame only its own view', async () => {
+    const { rig, controller } = await builtController({ register: 'treble' });
     controller.views.frame('soundboard', false);
     controller.setState(assemblyState());
     controller.views.frame('lineUp', true);
@@ -224,8 +224,8 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     ['the ghost is shown beside the escapement', 'escapement', { view: { ghost: true } }],
     ['the hammer moves', 'action', { phase: MOMENTS.strike }],
     ['a compare chip is picked outside the line-up', 'action', { compare: 'upright' }],
-  ] as const)('leaves the camera alone when %s', (_case, view, choices) => {
-    const { rig, controller } = builtController();
+  ] as const)('leaves the camera alone when %s', async (_case, view, choices) => {
+    const { rig, controller } = await builtController();
     controller.views.frame(view, false);
     controller.setState(assemblyState(choices));
     controller.update(FRAME_SECONDS);
@@ -233,18 +233,18 @@ describe('piano controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     expect(rig.jumpTo).toHaveBeenCalledTimes(1);
   });
 
-  it('updates the assembly with the camera distance', () => {
-    const { controller, assembly } = builtController();
+  it('updates the assembly with the camera distance', async () => {
+    const { controller, assembly } = await builtController();
     const update = vi.spyOn(assembly, 'update');
     controller.update(FRAME_SECONDS);
     expect(update).toHaveBeenCalledWith(FRAME_SECONDS, CAMERA_POSITION.distanceTo(CAMERA_TARGET));
   });
 
-  it('reports no motion without an assembly and removes it on dispose', () => {
+  it('reports no motion without an assembly and removes it on dispose', async () => {
     const { scene, shell } = fakeShell();
     const controller = new PianoController(shell);
     expect(controller.update(FRAME_SECONDS)).toBe(false);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     const removed = vi.spyOn(scene.add.mock.lastCall?.[0] as Object3D, 'removeFromParent');
     controller.dispose();
     expect(removed).toHaveBeenCalled();

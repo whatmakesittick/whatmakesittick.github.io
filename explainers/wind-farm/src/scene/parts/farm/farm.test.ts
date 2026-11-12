@@ -2,6 +2,7 @@ import { InstancedMesh, LineSegments, Matrix4, Mesh, Vector3 } from 'three';
 import type { BufferGeometry, Material, Object3D } from 'three';
 import { describe, expect, it } from 'vitest';
 import { MaterialLibrary } from '@core/scene/materials';
+import { runNow } from '@core/scene/pacing';
 import { ResourceTracker } from '@core/scene/resources';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AssemblyState, OperatingStateId, SpacingD } from '../../../ids';
@@ -120,7 +121,7 @@ describe('farm diorama', () => {
 
   it('turns the rotor blur discs with the blades', () => {
     const context = farmContext();
-    const section = buildFarm(context);
+    const section = runNow(buildFarm(context));
     const state = farmState(SPACING);
     section.setState(state);
     section.animate?.(
@@ -142,7 +143,7 @@ describe('farm diorama', () => {
     expect(plumeOpacity(PLUME.fullStrength)).toBeCloseTo(PLUME.maxOpacity);
     expect(plumeOpacity(0.2)).toBeLessThan(plumeOpacity(PLUME.fullStrength));
     const context = farmContext();
-    const section = buildFarm(context);
+    const section = runNow(buildFarm(context));
     const state = farmState(SPACING);
     section.setState(state);
     const plumes = section.root.getObjectByName('wakePlumes')?.children[0] as InstancedMesh;
@@ -159,7 +160,7 @@ describe('farm diorama', () => {
     expect(plumesShown(withRotor(state, 'parked'))).toBe(false);
     expect(plumesShown(withRotor(state, 'idle'))).toBe(false);
     const context = farmContext();
-    const section = buildFarm(context);
+    const section = runNow(buildFarm(context));
     const plumes = section.root.getObjectByName('wakePlumes');
     section.setState(withWakes(state, false));
     expect(plumes?.visible).toBe(false);
@@ -204,7 +205,7 @@ describe('farm diorama', () => {
 
   it('draws 27 instanced turbines within the triangle and draw call budgets', () => {
     const context = farmContext();
-    const section = buildFarm(context);
+    const section = runNow(buildFarm(context));
     section.setState(farmState(SPACING));
     FLEET_PIECES.forEach((piece) => {
       const mesh = section.root.getObjectByName(`farmTurbines.${piece}`);

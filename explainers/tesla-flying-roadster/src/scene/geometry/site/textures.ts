@@ -1,7 +1,7 @@
 import { Color, NoColorSpace, SRGBColorSpace } from 'three';
 import type { DataTexture } from 'three';
-import { paintTexture as paintMap } from '../gear/maps';
-import type { Painter, Rgba } from '../gear/maps';
+import { paintPixels, pixelTexture } from '../gear/maps';
+import type { MapSize, Painter, Rgba } from '../gear/maps';
 
 export type Rgb = readonly [r: number, g: number, b: number];
 export type { Painter, Rgba };
@@ -36,17 +36,32 @@ export function band(value: number, centre: number, width: number): number {
   return Math.exp(-(((value - centre) / width) ** 2));
 }
 
-function sharpened(texture: DataTexture): DataTexture {
+export interface TextureRecipe {
+  size: MapSize;
+  normal?: boolean;
+  paint(): Painter;
+  finish?(texture: DataTexture): void;
+}
+
+export function painted(
+  size: TextureSize,
+  painter: Painter,
+  options: { repeat?: boolean; finish?: TextureRecipe['finish'] } = {},
+): TextureRecipe {
+  const { repeat = true, finish } = options;
+  return { size: { ...size, repeat }, paint: () => painter, finish };
+}
+
+export function recipePixels(recipe: TextureRecipe): Uint8Array {
+  return paintPixels(recipe.size, recipe.paint());
+}
+
+export function recipeTexture(recipe: TextureRecipe, pixels: Uint8Array): DataTexture {
+  const texture = pixelTexture(recipe.size, pixels);
   texture.anisotropy = ANISOTROPY;
+  if (recipe.normal) texture.colorSpace = NoColorSpace;
+  recipe.finish?.(texture);
   return texture;
-}
-
-export function paintTexture(size: TextureSize, painter: Painter): DataTexture {
-  return sharpened(paintMap({ ...size, repeat: true }, painter));
-}
-
-export function paintDecal(size: TextureSize, painter: Painter): DataTexture {
-  return sharpened(paintMap(size, painter));
 }
 
 function sampleHeights(size: TextureSize, field: HeightField): Float32Array {
@@ -75,12 +90,16 @@ export function normalPainter(size: TextureSize, field: HeightField, strength: n
   };
 }
 
-export function normalTexture(
+export function normalRecipe(
   size: TextureSize,
   field: HeightField,
   strength: number,
-): DataTexture {
-  const texture = paintTexture(size, normalPainter(size, field, strength));
-  texture.colorSpace = NoColorSpace;
-  return texture;
+  finish: TextureRecipe['finish'],
+): TextureRecipe {
+  return {
+    size: { ...size, repeat: true },
+    normal: true,
+    paint: () => normalPainter(size, field, strength),
+    finish,
+  };
 }

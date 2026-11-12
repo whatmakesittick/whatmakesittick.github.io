@@ -14,7 +14,12 @@ function fakeTargets() {
   const frame = vi.fn();
   const followWheel = vi.fn();
   const setHighlight = vi.fn();
-  const watch = { build: record, setState: record, followWheel, views: { frame } };
+  const watch = {
+    build: async (state: AssemblyState) => record(state),
+    setState: record,
+    followWheel,
+    views: { frame },
+  };
   return {
     received,
     snapshots,
@@ -31,9 +36,9 @@ function fakeTargets() {
 }
 
 describe('scene bindings', () => {
-  it('builds the movement fully wound and frames the first chapter', () => {
+  it('builds the movement fully wound and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
-    bindStore(createWatchStore({ phase: 30 }), targets);
+    await bindStore(createWatchStore({ phase: 30 }), targets);
     expect(received[0]).toMatchObject({
       phase: 30,
       cycles: 0,
@@ -45,29 +50,29 @@ describe('scene bindings', () => {
     expect(frame).toHaveBeenCalledWith('movement', false, undefined);
   });
 
-  it('passes the swing count as the loop wraps', () => {
+  it('passes the swing count as the loop wraps', async () => {
     const { received, targets } = fakeTargets();
     const store = createWatchStore({ phase: 350, speed: 8, playing: true });
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().tick(0.01);
     expect(received.at(-1)).toMatchObject({ cycles: 1 });
     expect(received.at(-1)?.phase).toBeCloseTo(4.4);
   });
 
-  it('lowers the amplitude as the reserve runs down', () => {
+  it('lowers the amplitude as the reserve runs down', async () => {
     const { received, targets } = fakeTargets();
     const store = createWatchStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setReserve(0);
     store.getState().setRegulator(0.5);
     expect(received.at(-1)).toMatchObject({ reserve: 0, regulator: 0.5 });
     expect(received.at(-1)?.amplitude).toBeCloseTo(186.3, 1);
   });
 
-  it('never changes the state object the assembly got last', () => {
+  it('never changes the state object the assembly got last', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createWatchStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().setPhase(100);
     store.getState().setPhase(200);
     const last = received.length - 1;
@@ -75,19 +80,19 @@ describe('scene bindings', () => {
     expect(received[last - 1]).toEqual(snapshots[last - 1]);
   });
 
-  it('frames the balance chapter with the swing already back at its start', () => {
+  it('frames the balance chapter with the swing already back at its start', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createWatchStore({ phase: 200 });
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('balance');
     expect(frame).toHaveBeenLastCalledWith('balance', true, undefined);
     expect(received.at(-1)?.phase).toBe(0);
   });
 
-  it('follows and highlights the wheel the reader picks in the train chapter', () => {
+  it('follows and highlights the wheel the reader picks in the train chapter', async () => {
     const { followWheel, setHighlight, frame, targets } = fakeTargets();
     const store = createWatchStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     expect(followWheel).toHaveBeenCalledWith('centreWheel');
     store.getState().applyPreset('train');
     expect(setHighlight).toHaveBeenLastCalledWith(['centreWheel']);
@@ -98,10 +103,10 @@ describe('scene bindings', () => {
     expect(frame).toHaveBeenLastCalledWith('wheel', true, undefined);
   });
 
-  it('stops listening once unbound', () => {
+  it('stops listening once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createWatchStore();
-    const unbind = bindStore(store, targets);
+    const unbind = await bindStore(store, targets);
     unbind();
     const calls = received.length;
     store.getState().setPhase(150);

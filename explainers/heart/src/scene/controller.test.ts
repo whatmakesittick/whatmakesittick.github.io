@@ -24,15 +24,19 @@ vi.mock('./assembly', async () => {
   });
   const bounds = new Box3(new Point(-60, -60, -60), new Point(60, 60, 60));
   return {
-    createAssembly: () => ({
-      root: new Group(),
-      setState: () => {},
-      update: () => false,
-      labelAnchors: () => new Map(),
-      anchor: (id: string) => valveAnchors.get(id) ?? new Anchor(),
-      region: () => bounds.clone(),
-      dispose: () => {},
-    }),
+    createAssembly: () =>
+      (function* () {
+        yield;
+        return {
+          root: new Group(),
+          setState: () => {},
+          update: () => false,
+          labelAnchors: () => new Map(),
+          anchor: (id: string) => valveAnchors.get(id) ?? new Anchor(),
+          region: () => bounds.clone(),
+          dispose: () => {},
+        };
+      })(),
   };
 });
 
@@ -80,22 +84,22 @@ function lastTarget(tweenTo: ReturnType<typeof vi.fn>): Vector3 | undefined {
 }
 
 describe('heart controller', () => {
-  it('frames the picked valve even before the scene hears of the pick', () => {
+  it('frames the picked valve even before the scene hears of the pick', async () => {
     let picked: ValveId = 'mitral';
     const { rig, shell } = fakeShell();
     const heart = new HeartController(shell, () => picked);
-    heart.build(stateWith('mitral'));
+    await heart.build(stateWith('mitral'));
     picked = 'aortic';
     heart.views.frame('valve', true);
     expect(rig.follow).toHaveBeenLastCalledWith(anchorOf('aortic'), 'position');
     expect(lastTarget(rig.tweenTo)?.distanceTo(anchorOf('aortic').position)).toBeCloseTo(0);
   });
 
-  it('follows each valve chip to its own valve in the valves chapter', () => {
+  it('follows each valve chip to its own valve in the valves chapter', async () => {
     const { rig, shell } = fakeShell();
     const store = createHeartStore();
     const heart = new HeartController(shell, () => store.getState().valve);
-    bindStore(store, {
+    await bindStore(store, {
       heart,
       labelVisibility: { setWanted: vi.fn() },
       highlighter: { setHighlight: vi.fn() },

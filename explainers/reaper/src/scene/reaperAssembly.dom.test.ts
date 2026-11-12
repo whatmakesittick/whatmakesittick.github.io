@@ -16,8 +16,9 @@ import type {
 import { flightAt } from '../model/flight';
 import { AIRCRAFT, LOITER, TARGET } from '../model/layout';
 import { IMPACT_UNITS, LAUNCH_POINT, LAUNCH_UNITS } from '../model/strike';
+import type { Assembly } from './assembly';
 import { FINISHES } from './finishes';
-import { ReaperAssembly } from './reaperAssembly';
+import { createReaperAssembly } from './reaperAssembly';
 
 const ON_STATION = 50;
 const STRIKE: StrikeReading = { stage: 'armed', share: 0, launchPoint: null, flash: 0 };
@@ -62,7 +63,7 @@ function stateAt(patch: Patch = {}): AssemblyState {
   };
 }
 
-let assembly: ReaperAssembly;
+let assembly: Assembly;
 let materials: MaterialLibrary;
 let textures: ReturnType<typeof createSceneTextures>;
 
@@ -105,10 +106,10 @@ function meshWith(material: Material): Mesh {
   return found;
 }
 
-beforeAll(() => {
+beforeAll(async () => {
   materials = new MaterialLibrary();
   textures = createSceneTextures();
-  assembly = new ReaperAssembly({ materials, textures }, stateAt());
+  assembly = await createReaperAssembly({ materials, textures }, stateAt());
 });
 
 afterAll(() => {
@@ -290,15 +291,15 @@ describe('reaper assembly', () => {
   it('compiles every hidden material once when warming up', () => {
     show();
     const compiled: Object3D[] = [];
-    assembly.warmUp((object) => compiled.push(object));
+    assembly.warmUp?.((object) => compiled.push(object));
     const seen = new Set(compiled.map((object) => (object as Mesh).material));
     expect(compiled.length).toBeGreaterThan(5);
     expect(seen.size).toBe(compiled.length);
     expect(compiled.every((object) => !isShown(object))).toBe(true);
   });
 
-  it('frees its resources on dispose', () => {
-    const extra = new ReaperAssembly({ materials, textures }, stateAt());
+  it('frees its resources on dispose', async () => {
+    const extra = await createReaperAssembly({ materials, textures }, stateAt());
     expect(() => extra.dispose()).not.toThrow();
     expect(extra.root.parent).toBeNull();
   });

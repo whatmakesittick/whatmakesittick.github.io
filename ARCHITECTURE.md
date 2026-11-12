@@ -192,7 +192,7 @@ interface Explainer<S extends Playback = Playback> {
   actions?: Record<string, { run(state: S, value: string): void; current?(state: S): string }>;
   shortcuts?: Record<string, (state: S) => void>; // extra keys
   scene?: SceneOptions; // sky, fog, stage and camera limits
-  mountScene(shell: SceneShell, store: ExplainerStore<S>): () => void;
+  mountScene(shell: SceneShell, store: ExplainerStore<S>): SceneUnmount | Promise<SceneUnmount>;
   mountGauge?(gauge: HTMLElement, store: ExplainerStore<S>): () => void; // extra gauge content
   mountUi?(root: Document, store: ExplainerStore<S>): void;
 }
@@ -258,6 +258,16 @@ flowing particles or a settling ease, and the loop then draws the next frame too
 an explainer that changes the scene outside a frame and outside the store calls
 `invalidate()`. `onFrame` and `viewport.onResize` return a function that
 removes the listener; the unmount that `mountScene` returns calls it.
+
+A tap waits for the task it lands in, so startup must not block the page: no task
+over 200 ms on a phone. `node e2e/tools/startup.ts <base url> <slug>` measures a
+page at 4x CPU slowdown and fails above that. `mountScene` may return a promise,
+and a scene builds as a `Steps<T>` generator (`src/core/scene/pacing.ts`) that
+`yield`s between parts: `runPaced` gives the browser a turn every 20 ms, `runNow`
+runs it at once in tests, and the controller binds the store when the build
+resolves. A part that is slow on its own needs splitting or a worker, which must
+fall back to the main thread where workers cannot start (an embed on another
+origin, the MCP app sandbox); the Tesla roadster's `pixels.worker.ts` does both.
 
 The round button in the stage's top-right corner shows the model full screen
 (`src/core/ui/stageExpansion.ts`). Expanding sets `data-stage-expanded` on the root,

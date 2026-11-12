@@ -2,6 +2,8 @@ import { Box3, Group, HemisphereLight, Matrix4, Mesh, Points, Sprite } from 'thr
 import type { Material, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { anchorAt, isShown } from '@core/scene/parts';
+import { runPaced } from '@core/scene/pacing';
+import type { Steps } from '@core/scene/pacing';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
 import {
@@ -35,7 +37,8 @@ import { createBoatLooks } from './finishes';
 import { hullSectionAt } from './geometry/hullLines';
 import { pathTrail, routeTrail, straightTrail, trailSpacing } from './geometry/trail';
 import type { TrailSample } from './geometry/trail';
-import { BoatPart } from './parts/boat/boat';
+import type { BoatPart } from './parts/boat/boat';
+import { buildBoat } from './parts/boat/boat';
 import { CompanionPart, buildCompanionGeometry } from './parts/boat/companion';
 import { buildMissileFit } from './parts/boat/missiles';
 import type { MissileFit } from './parts/boat/missiles';
@@ -67,6 +70,7 @@ import type { SatellitePart } from './parts/world/satellites';
 import { createShip } from './parts/world/ship';
 import type { ShipPart } from './parts/world/ship';
 import { createShore } from './parts/world/shore';
+import type { ShorePart } from './parts/world/shore';
 import { createSky } from './parts/world/sky';
 import { boatRegion, staticRegions } from './regions';
 
@@ -89,22 +93,107 @@ function isDrawable(object: Object3D): object is Drawable {
   return drawable && !Array.isArray((object as Drawable).material);
 }
 
-function createContext(resources: AssemblyResources, tracker: ResourceTracker): PartContext {
+function* createContext(
+  resources: AssemblyResources,
+  tracker: ResourceTracker,
+): Steps<PartContext> {
   const { size, low, high, seed, repeat } = SURFACE_MAPS.grain;
   const grain = tracker.track(noiseTexture(size, low, high, seed));
   grain.repeat.set(...repeat);
-  const looks = createBoatLooks({
-    side: tracker.track(hullSideTexture()),
-    deck: tracker.track(deckTexture()),
-    cells: tracker.track(cellTexture()),
-    grain,
+  yield;
+  const side = tracker.track(hullSideTexture());
+  yield;
+  const deck = tracker.track(deckTexture());
+  yield;
+  const cells = tracker.track(cellTexture());
+  return { ...resources, tracker, looks: createBoatLooks({ side, deck, cells, grain }) };
+}
+
+interface Parts {
+  tracker: ResourceTracker;
+  boat: BoatPart;
+  sea: SeaPart;
+  section: WaterSectionPart;
+  wake: WakePart;
+  hullWater: HullWaterPart;
+  jetStream: JetStreamPart;
+  flow: FlowPart;
+  wetted: WettedBarPart;
+  missiles: MissileFit;
+  companions: Companion[];
+  ghost: GhostPart;
+  links: LinksPart;
+  ship: ShipPart;
+  satellite: SatellitePart;
+  backupSatellite: SatellitePart;
+  shore: ShorePart;
+  sky: Mesh;
+}
+
+export function* buildParts(resources: AssemblyResources, state: AssemblyState): Steps<Parts> {
+  resetWater(state.sea.waveHeight);
+  const tracker = new ResourceTracker();
+  const context = yield* createContext(resources, tracker);
+  yield;
+  const foam = tracker.track(foamTexture());
+  yield;
+  const boat = yield* buildBoat(context);
+  yield;
+  const sea = new SeaPart(context, foam);
+  yield;
+  const section = new WaterSectionPart(context, { ...sea.hullMask, ...sea.section });
+  const wake = new WakePart(context, 'wake', foam);
+  const hullWater = new HullWaterPart(context, foam, { bow: 'bowWave', spray: 'spray' });
+  const jetStream = new JetStreamPart(context, foam, boat.jet.steering);
+  const flow = new FlowPart(context, boat.jet.flowPath);
+  const wetted = new WettedBarPart(context);
+  const missiles = buildMissileFit(context);
+  yield;
+  const shapes = buildCompanionGeometry();
+  Object.values(shapes).forEach((geometry) => tracker.track(geometry));
+  const companions = Array.from({ length: COMPANION_COUNT }, () => {
+    const part = new CompanionPart(context, shapes);
+    const water = new HullWaterPart(context, foam, { bow: 'companions', spray: 'companions' });
+    const fit = buildMissileFit(context);
+    part.body.add(water.object, fit.object);
+    const trail = new WakePart(context, 'companions', foam);
+    return { part, wake: trail, water, missiles: fit, motion: new SmoothMotion() };
   });
-  return { ...resources, tracker, looks };
+  const ghost = new GhostPart(context, shapes.outline);
+  const links = new LinksPart(context);
+  yield;
+  const ship = createShip(context);
+  const satellite = createStarlinkSatellite(context);
+  const backupSatellite = createBackupSatellite(context);
+  yield;
+  const shore = createShore(context);
+  yield;
+  const sky = createSky(context, foam);
+  return {
+    tracker,
+    boat,
+    sea,
+    section,
+    wake,
+    hullWater,
+    jetStream,
+    flow,
+    wetted,
+    missiles,
+    companions,
+    ghost,
+    links,
+    ship,
+    satellite,
+    backupSatellite,
+    shore,
+    sky,
+  };
 }
 
 export class NavalDroneAssembly implements Assembly {
   readonly root = new Group();
-  private readonly tracker = new ResourceTracker();
+  private readonly tracker: ResourceTracker;
   private readonly materials: MaterialLibrary;
   private readonly boat: BoatPart;
   private readonly sea: SeaPart;
@@ -132,22 +221,27 @@ export class NavalDroneAssembly implements Assembly {
   private seaState: AssemblyState['sea']['state'];
   private state: AssemblyState;
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(resources: AssemblyResources, parts: Parts, state: AssemblyState) {
     this.materials = resources.materials;
     this.state = state;
     this.seaState = state.sea.state;
-    resetWater(state.sea.waveHeight);
-    const context = createContext(resources, this.tracker);
-    const foam = this.tracker.track(foamTexture());
-    this.boat = new BoatPart(context);
-    this.sea = new SeaPart(context, foam);
-    this.section = new WaterSectionPart(context, { ...this.sea.hullMask, ...this.sea.section });
-    this.wake = new WakePart(context, 'wake', foam);
-    this.hullWater = new HullWaterPart(context, foam, { bow: 'bowWave', spray: 'spray' });
-    this.jetStream = new JetStreamPart(context, foam, this.boat.jet.steering);
-    this.flow = new FlowPart(context, this.boat.jet.flowPath);
-    this.wetted = new WettedBarPart(context);
-    this.missiles = buildMissileFit(context);
+    this.tracker = parts.tracker;
+    this.boat = parts.boat;
+    this.sea = parts.sea;
+    this.section = parts.section;
+    this.wake = parts.wake;
+    this.hullWater = parts.hullWater;
+    this.jetStream = parts.jetStream;
+    this.flow = parts.flow;
+    this.wetted = parts.wetted;
+    this.missiles = parts.missiles;
+    this.companions = parts.companions;
+    this.ghost = parts.ghost;
+    this.links = parts.links;
+    this.ship = parts.ship;
+    this.satellite = parts.satellite;
+    this.backupSatellite = parts.backupSatellite;
+    this.stationAnchor = parts.shore.stationAnchor;
     this.boat.body.add(
       this.hullWater.object,
       this.jetStream.reverse,
@@ -156,38 +250,21 @@ export class NavalDroneAssembly implements Assembly {
       this.wetted.object,
       this.missiles.object,
     );
-    const shapes = buildCompanionGeometry();
-    Object.values(shapes).forEach((geometry) => this.tracker.track(geometry));
-    this.companions = Array.from({ length: COMPANION_COUNT }, () => {
-      const part = new CompanionPart(context, shapes);
-      const water = new HullWaterPart(context, foam, { bow: 'companions', spray: 'companions' });
-      const missiles = buildMissileFit(context);
-      part.body.add(water.object, missiles.object);
-      const wake = new WakePart(context, 'companions', foam);
-      return { part, wake, water, missiles, motion: new SmoothMotion() };
-    });
-    this.ghost = new GhostPart(context, shapes.outline);
-    this.links = new LinksPart(context);
-    this.ship = createShip(context);
     this.shipRoll.add(this.ship.object);
     const shipHolder = new Group();
     shipHolder.position.set(SHIP_CENTRE[0], 0, SHIP_CENTRE[2]);
     shipHolder.rotation.y = -SHIP_HEADING;
     shipHolder.add(this.shipRoll);
-    this.satellite = createStarlinkSatellite(context);
-    this.backupSatellite = createBackupSatellite(context);
     const sunYaw = Math.atan2(SUN_DIRECTION[0], SUN_DIRECTION[2]);
     this.satellite.object.rotation.y = sunYaw;
     this.backupSatellite.object.rotation.y = sunYaw;
-    const shore = createShore(context);
-    this.stationAnchor = shore.stationAnchor;
     const { sky } = LIGHT_RIG;
     this.root.add(
       new HemisphereLight(sky.color, sky.ground, sky.intensity),
-      createSky(context, foam),
+      parts.sky,
       this.sea.mesh,
       this.section.object,
-      shore.object,
+      parts.shore.object,
       shipHolder,
       this.satellite.object,
       this.backupSatellite.object,
@@ -425,9 +502,9 @@ export class NavalDroneAssembly implements Assembly {
   }
 }
 
-export function createNavalDroneAssembly(
+export async function createNavalDroneAssembly(
   resources: AssemblyResources,
   state: AssemblyState,
-): Assembly {
-  return new NavalDroneAssembly(resources, state);
+): Promise<Assembly> {
+  return new NavalDroneAssembly(resources, await runPaced(buildParts(resources, state)), state);
 }

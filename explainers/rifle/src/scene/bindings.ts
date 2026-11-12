@@ -38,11 +38,12 @@ class DoubleBufferedAssemblyState {
   }
 }
 
-export function bindStore(store: RifleStore, targets: SceneTargets): () => void {
+export async function bindStore(store: RifleStore, targets: SceneTargets): Promise<() => void> {
   const { rifle, labelVisibility } = targets;
   const assemblyState = new DoubleBufferedAssemblyState();
   const push = (state: RifleState) => rifle.setState(assemblyState.handOver(state));
-  rifle.build(assemblyState.handOver(store.getState()));
+  await rifle.build(assemblyState.handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<RifleStoreState, Preset>(targets, store, {

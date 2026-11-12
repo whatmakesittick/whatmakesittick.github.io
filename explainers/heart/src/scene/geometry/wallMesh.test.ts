@@ -1,3 +1,4 @@
+import { runNow } from '@core/scene/pacing';
 import { describe, expect, it } from 'vitest';
 import type { Offset } from './contraction';
 import { blend, ellipsoid, union } from './field';
@@ -14,13 +15,15 @@ const DETAIL = { resolution: 32, marginMm: 4 };
 
 describe('wall meshes', () => {
   it('splits the envelope into front and back halves that meet at the cut', () => {
-    const { front, back } = envelopeHalves(
-      ellipsoid([0, 0, 0], [20, 30, 15]),
-      { min: [-20, -30, -15], max: [20, 30, 15] },
-      DETAIL,
-      MOTION,
-      () => [1, 0, 0],
-      [],
+    const { front, back } = runNow(
+      envelopeHalves(
+        ellipsoid([0, 0, 0], [20, 30, 15]),
+        { min: [-20, -30, -15], max: [20, 30, 15] },
+        DETAIL,
+        MOTION,
+        () => [1, 0, 0],
+        [],
+      ),
     );
     const minZ = (positions: ArrayLike<number>) => {
       let min = Number.POSITIVE_INFINITY;
@@ -47,14 +50,16 @@ describe('wall meshes', () => {
       leftAtrium: atrium,
       leftVentricle: ventricle,
     };
-    const pieces = cavityPieces(
-      'right',
-      union([blend([atrium], 0), ventricle]),
-      chambers,
-      { min: [-12, -33, -12], max: [12, 32, 12] },
-      DETAIL,
-      MOTION,
-      [],
+    const pieces = runNow(
+      cavityPieces(
+        'right',
+        union([blend([atrium], 0), ventricle]),
+        chambers,
+        { min: [-12, -33, -12], max: [12, 32, 12] },
+        DETAIL,
+        MOTION,
+        [],
+      ),
     );
     expect([...pieces.keys()]).toEqual(['rightAtrium', 'rightVentricle']);
     for (const geometry of pieces.values()) {

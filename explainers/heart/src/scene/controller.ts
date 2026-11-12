@@ -1,5 +1,6 @@
 import type { Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
+import { runPaced } from '@core/scene/pacing';
 import type { SceneShell } from '@core/scene/shell';
 import type { AssemblyState, RegionId, ValveId } from '../ids';
 import type { CameraView } from '../state';
@@ -29,10 +30,10 @@ export class HeartController {
     });
   }
 
-  build(state: AssemblyState): void {
+  async build(state: AssemblyState): Promise<void> {
     const { scene, materials, textures, labels, stage, rig } = this.dependencies;
     this.dispose();
-    const assembly = createAssembly({ materials, textures }, state);
+    const assembly = await runPaced(createAssembly({ materials, textures }, state));
     this.assembly = assembly;
     scene.add(assembly.root);
     labels.attach(assembly.labelAnchors());

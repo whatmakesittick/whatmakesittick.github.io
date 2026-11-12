@@ -12,12 +12,15 @@ export { MriScannerController } from './controller';
 export type { MriScannerControllerDependencies, ViewFramer } from './controller';
 export { SCENE_OPTIONS } from './sceneOptions';
 
-export function mountMriScannerScene(shell: SceneShell, store: MriScannerStore): () => void {
+export async function mountMriScannerScene(
+  shell: SceneShell,
+  store: MriScannerStore,
+): Promise<() => void> {
   const restoreLight = mriScannerLight(shell.lighting);
   const mriScanner = new MriScannerController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => mriScanner.update(deltaSeconds));
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
-  const unbind = bindStore(store, { mriScanner, labelVisibility, ...shell });
+  const unbind = await bindStore(store, { mriScanner, labelVisibility, ...shell });
   return () => {
     removeFrame();
     labelVisibility.dispose();

@@ -1,3 +1,4 @@
+import type { Steps } from '@core/scene/pacing';
 import type { BufferGeometry } from 'three';
 import type { Field, Vec3 } from './field';
 import type { Offset, OffsetField } from './contraction';
@@ -54,10 +55,10 @@ function isBeyond(portal: Portal, point: Vec3): boolean {
   return along(portal, ...point) > 0 && nearRoute(portal, point);
 }
 
-export function trimAtPortals(
+export function* trimAtPortals(
   geometry: BufferGeometry,
   portals: readonly Portal[],
-): BufferGeometry {
+): Steps<BufferGeometry> {
   let current = geometry;
   for (const portal of portals) {
     const cut = insertPlane(current, portalPlane(portal));
@@ -72,6 +73,7 @@ export function trimAtPortals(
       return !isBeyond(portal, centre);
     });
     cut.dispose();
+    yield;
   }
   return current;
 }

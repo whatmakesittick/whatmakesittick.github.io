@@ -27,13 +27,16 @@ function assemblyState(phase = 0): AssemblyState {
   return createAssemblyState({ ...createThrusterCarStore().getState(), phase });
 }
 
-function assemblyAt(state: AssemblyState): Assembly {
-  const resources = { materials: new MaterialLibrary(), textures: createSceneTextures() };
+function assemblyAt(state: AssemblyState): Promise<Assembly> {
+  const resources = {
+    materials: new MaterialLibrary(),
+    textures: createSceneTextures(),
+  };
   return createAssembly(resources, state);
 }
 
-function regionBox(region: RegionId, state = assemblyState()): Box3 {
-  return assemblyAt(state).region(region);
+async function regionBox(region: RegionId, state = assemblyState()): Promise<Box3> {
+  return (await assemblyAt(state)).region(region);
 }
 
 function fakeShell() {
@@ -64,17 +67,17 @@ function rounded(vector: Vector3 | undefined): number[] | undefined {
 }
 
 describe('thruster car controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
-  it('adds the assembly, attaches its labels and bounds the camera on the site floor', () => {
+  it('adds the assembly, attaches its labels and bounds the camera on the site floor', async () => {
     const { rig, scene, shell } = fakeShell();
-    new ThrusterCarController(shell).build(assemblyState());
+    await new ThrusterCarController(shell).build(assemblyState());
     expect(scene.add).toHaveBeenCalledTimes(1);
     expect(shell.labels.attach).toHaveBeenCalledTimes(1);
     const [bounds, floor] = rig.setBounds.mock.lastCall ?? [];
-    expect(bounds).toEqual(regionBox(BOUNDS_REGION));
+    expect(bounds).toEqual(await regionBox(BOUNDS_REGION));
     expect(floor).toBe(FLOOR_Y);
   });
 
-  it('frames nothing before the assembly exists', () => {
+  it('frames nothing before the assembly exists', async () => {
     const { rig, shell } = fakeShell();
     new ThrusterCarController(shell).views.frame('tankClose', false);
     new ThrusterCarController(shell).views.frame('siteWide', false);
@@ -84,12 +87,12 @@ describe('thruster car controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
   it.each([
     ['standing at the start', 0],
     ['upside down over the loop', MOMENTS.inverted],
-  ])('aims every follow view at the car centre and rides along, %s', (_moment, phase) => {
+  ])('aims every follow view at the car centre and rides along, %s', async (_moment, phase) => {
     const { rig, shell } = fakeShell();
     const controller = new ThrusterCarController(shell);
     const state = assemblyState(phase);
-    controller.build(state);
-    const chase = assemblyAt(state).chaseTarget();
+    await controller.build(state);
+    const chase = (await assemblyAt(state)).chaseTarget();
     for (const view of FOLLOW_IDS) {
       controller.views.frame(view, false);
       const pose = rig.jumpTo.mock.lastCall?.[0];
@@ -100,15 +103,15 @@ describe('thruster car controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     }
   });
 
-  it('frames the wide views on their regions without following', () => {
+  it('frames the wide views on their regions without following', async () => {
     const { rig, shell } = fakeShell();
     const controller = new ThrusterCarController(shell);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     for (const view of FIXED_IDS) {
       const { region, direction, margin } = FIXED_VIEWS[view];
       controller.views.frame(view, false);
       const toward = new Vector3(...(direction as readonly [number, number, number])).normalize();
-      const expected = frameBox(regionBox(region), toward, FRAMING, margin);
+      const expected = frameBox(await regionBox(region), toward, FRAMING, margin);
       const pose = rig.jumpTo.mock.lastCall?.[0];
       expect(rounded(pose?.position), view).toEqual(rounded(expected.position));
       expect(rounded(pose?.target), view).toEqual(rounded(expected.target));
@@ -116,19 +119,19 @@ describe('thruster car controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     }
   });
 
-  it('tweens when animated', () => {
+  it('tweens when animated', async () => {
     const { rig, shell } = fakeShell();
     const controller = new ThrusterCarController(shell);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     controller.views.frame('flipChase', true);
     expect(rig.tweenTo).toHaveBeenCalledTimes(1);
     expect(rig.jumpTo).not.toHaveBeenCalled();
   });
 
-  it('moves the followed car with each new state', () => {
+  it('moves the followed car with each new state', async () => {
     const { rig, shell } = fakeShell();
     const controller = new ThrusterCarController(shell);
-    controller.build(assemblyState());
+    await controller.build(assemblyState());
     controller.views.frame('boostSide', false);
     const anchor = rig.follow.mock.lastCall?.[0];
     const start = anchor?.getWorldPosition(new Vector3()).x ?? 0;
@@ -136,11 +139,11 @@ describe('thruster car controller', { timeout: ASSEMBLY_TIMEOUT_MS }, () => {
     expect(anchor?.getWorldPosition(new Vector3()).x).toBeGreaterThan(start);
   });
 
-  it('reports no motion without an assembly and removes it on dispose', () => {
+  it('reports no motion without an assembly and removes it on dispose', async () => {
     const { scene, shell } = fakeShell();
     const controller = new ThrusterCarController(shell);
     expect(controller.update(1)).toBe(false);
-    controller.build(assemblyState(RESTING_SECONDS));
+    await controller.build(assemblyState(RESTING_SECONDS));
     expect(controller.update(1)).toBe(false);
     const removed = vi.spyOn(scene.add.mock.lastCall?.[0] as Object3D, 'removeFromParent');
     controller.dispose();

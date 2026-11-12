@@ -1,12 +1,12 @@
 import { smoothstep } from '@core/math';
 import { PlaneGeometry } from 'three';
-import type { BufferGeometry, DataTexture } from 'three';
+import type { BufferGeometry } from 'three';
 import type { Footprint } from '../../../model/layout';
 import { SITE } from '../../../model/layout';
 import { mergeParts } from '../../parts/context';
 import { QUARTER_TURN } from '../turns';
 import { hash2, tileNoise } from './noise';
-import { paintTexture } from './textures';
+import { painted } from './textures';
 import type { Rgba } from './textures';
 
 const MARKINGS = {
@@ -126,9 +126,8 @@ export function wornPaint(u: number, v: number): Rgba {
   return [level, level, level, speck > SPECK ? 0 : 1 - worn];
 }
 
-export function wornPaintMap(): DataTexture {
-  const { size, metres } = MARKINGS.wear;
-  const texture = paintTexture({ width: size, height: size }, wornPaint);
-  texture.repeat.set(1 / metres, 1 / metres);
-  return texture;
-}
+export const WORN_PAINT_RECIPE = painted(
+  { width: MARKINGS.wear.size, height: MARKINGS.wear.size },
+  wornPaint,
+  { finish: (texture) => texture.repeat.set(1 / MARKINGS.wear.metres, 1 / MARKINGS.wear.metres) },
+);

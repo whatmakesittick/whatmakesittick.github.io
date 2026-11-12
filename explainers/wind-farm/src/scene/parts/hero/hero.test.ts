@@ -2,6 +2,7 @@ import { Mesh, Raycaster, Texture, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { describe, expect, it } from 'vitest';
 import { MaterialLibrary } from '@core/scene/materials';
+import { runNow } from '@core/scene/pacing';
 import { ResourceTracker } from '@core/scene/resources';
 import type { AssemblyState } from '../../../ids';
 import { TURBINE_COUNT, farmLayout } from '../../../model';
@@ -49,7 +50,7 @@ function buildScene() {
     labels: new Map(),
     anchors: {},
   };
-  return { context, hero: buildHero(context) };
+  return { context, hero: runNow(buildHero(context)) };
 }
 
 function worldOf(object: Object3D | undefined): Vector3 {

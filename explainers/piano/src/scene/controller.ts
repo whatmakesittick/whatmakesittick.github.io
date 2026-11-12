@@ -66,10 +66,10 @@ export class PianoController {
     this.views = { frame: (view, animate, variant) => this.frame({ view, variant }, animate) };
   }
 
-  build(state: AssemblyState): void {
+  async build(state: AssemblyState): Promise<void> {
     const { scene, materials, textures, labels, rig } = this.dependencies;
     this.dispose();
-    const assembly = createAssembly({ materials, textures }, state);
+    const assembly = await createAssembly({ materials, textures }, state);
     this.assembly = assembly;
     this.framing = framingInputs(state);
     this.following = state.view.follow;

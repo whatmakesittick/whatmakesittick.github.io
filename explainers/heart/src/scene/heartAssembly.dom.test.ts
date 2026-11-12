@@ -3,6 +3,7 @@ import { InstancedMesh, Mesh, Points, Vector3 } from 'three';
 import type { BufferGeometry, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { isShown } from '@core/scene/parts';
+import { runNow } from '@core/scene/pacing';
 import { createSceneTextures } from '@core/scene/textures';
 import type { SceneTextures } from '@core/scene/textures';
 import { PART_IDS } from '../ids';
@@ -92,7 +93,7 @@ function triangles(geometry: BufferGeometry): number {
 beforeAll(() => {
   materials = new MaterialLibrary();
   textures = createSceneTextures();
-  assembly = new HeartAssembly({ materials, textures }, STATE);
+  assembly = runNow(HeartAssembly.build({ materials, textures }, STATE));
 });
 
 afterAll(() => {

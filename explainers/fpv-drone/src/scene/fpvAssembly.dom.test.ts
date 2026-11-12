@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { InstancedMesh, Mesh, Object3D, Quaternion, Vector3 } from 'three';
 import type { BufferGeometry, Material } from 'three';
 import { MaterialLibrary, UNDIMMED_GROUP } from '@core/scene/materials';
+import { runNow } from '@core/scene/pacing';
 import { isShown } from '@core/scene/parts';
 import { createSceneTextures } from '@core/scene/textures';
 import { MOTOR_PART_IDS, PART_IDS } from '../ids';
@@ -9,7 +10,8 @@ import type { AnchorId, AssemblyState, MotorPartId, PartId, Point, RegionId } fr
 import { CROSSROADS, DRONE, MOTOR_POSITIONS, MOTOR_SPIN, PAD, STATION } from '../model/layout';
 import { droneUnits } from '../model/scale';
 import { LAUNCH_PAD, PROP } from './constants';
-import { FpvAssembly } from './fpvAssembly';
+import type { AssemblyResources } from './assembly';
+import { FpvAssembly, buildParts } from './fpvAssembly';
 import { propName } from './parts/drone/propeller';
 import { DOWNWASH_NAME } from './parts/effects/downwash';
 import { GROUND_WASH_NAME } from './parts/effects/groundWash';
@@ -75,6 +77,7 @@ function cruising(patch: Patch = {}): AssemblyState {
 }
 
 let assembly: FpvAssembly;
+let resources: AssemblyResources;
 let materials: MaterialLibrary;
 let textures: ReturnType<typeof createSceneTextures>;
 
@@ -128,7 +131,8 @@ function bladeTipSweep(id: MotorPartId): Vector3 {
 beforeAll(() => {
   materials = new MaterialLibrary();
   textures = createSceneTextures();
-  assembly = new FpvAssembly({ materials, textures }, stateAt());
+  resources = { materials, textures };
+  assembly = new FpvAssembly(resources, runNow(buildParts(resources)), stateAt());
 });
 
 afterAll(() => {
@@ -360,7 +364,7 @@ describe('fpv assembly', () => {
   });
 
   it('frees its resources on dispose', () => {
-    const extra = new FpvAssembly({ materials, textures }, stateAt());
+    const extra = new FpvAssembly(resources, runNow(buildParts(resources)), stateAt());
     expect(() => extra.dispose()).not.toThrow();
     expect(extra.root.parent).toBeNull();
   });

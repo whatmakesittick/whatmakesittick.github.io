@@ -1,6 +1,8 @@
 import { Group, Mesh, Points, Sprite } from 'three';
 import type { Box3, Material, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
+import { runPaced } from '@core/scene/pacing';
+import type { Steps } from '@core/scene/pacing';
 import { isShown } from '@core/scene/parts';
 import { regionFromSpec } from '@core/scene/regions';
 import { ResourceTracker } from '@core/scene/resources';
@@ -32,6 +34,20 @@ import { addSights } from './parts/sights';
 import { SpringPart } from './parts/spring';
 import { REGIONS } from './regions';
 
+interface AssemblyParts {
+  tracker: ResourceTracker;
+  cutaway: CutawaySwitch;
+  body: Group;
+  carrier: CarrierPart;
+  bolt: BoltPart;
+  hammer: HammerPart;
+  trigger: TriggerPart;
+  spring: SpringPart;
+  rounds: RoundsPart;
+  gas: GasPart;
+  backdrop: BackdropPart;
+}
+
 type Drawable = (Mesh | Points | Sprite) & { material: Material };
 
 function isDrawable(object: Object3D): object is Drawable {
@@ -39,27 +55,14 @@ function isDrawable(object: Object3D): object is Drawable {
   return drawable && !Array.isArray((object as Drawable).material);
 }
 
-function createContext(
-  resources: AssemblyResources,
-  tracker: ResourceTracker,
-  cutaway: CutawaySwitch,
-): PartContext {
-  const looks = createLooks({
-    stock: tracker.track(woodGrain(WOOD_GRAIN.stock)),
-    handguard: tracker.track(woodGrain(WOOD_GRAIN.handguard)),
-    powder: tracker.track(powderGrain(POWDER_GRAIN)),
-  });
-  return { ...resources, tracker, cutaway, looks };
-}
-
 export class RifleAssembly implements Assembly {
   readonly root = new Group();
-  private readonly body = new Group();
+  private readonly body: Group;
   private readonly gas: GasPart;
   private readonly backdrop: BackdropPart;
-  private readonly tracker = new ResourceTracker();
+  private readonly tracker: ResourceTracker;
   private readonly materials: MaterialLibrary;
-  private readonly cutaway = new CutawaySwitch();
+  private readonly cutaway: CutawaySwitch;
   private readonly carrier: CarrierPart;
   private readonly bolt: BoltPart;
   private readonly hammer: HammerPart;
@@ -69,37 +72,21 @@ export class RifleAssembly implements Assembly {
   private readonly labels: LabelAnchors;
   private shownCut: boolean | null = null;
 
-  constructor(resources: AssemblyResources, state: AssemblyState) {
+  constructor(resources: AssemblyResources, parts: AssemblyParts, state: AssemblyState) {
+    const { carrier, bolt, hammer, trigger, spring, rounds, gas, backdrop } = parts;
     this.materials = resources.materials;
-    const context = createContext(resources, this.tracker, this.cutaway);
-    const roundGeometry = createRoundGeometry(context);
-    addBarrel(context, this.body);
-    addGasSystem(context, this.body);
-    addSights(context, this.body);
-    addFurniture(context, this.body);
-    addReceiver(context, this.body);
-    addMagazine(context, this.body);
-    addMagazineStack(context, this.body, roundGeometry);
-    this.body.add(createSelector(context));
-    addSelectorMarks(context, this.body);
-    this.carrier = new CarrierPart(context);
-    this.bolt = new BoltPart(context);
-    this.hammer = new HammerPart(context);
-    this.trigger = new TriggerPart(context);
-    this.spring = new SpringPart(context);
-    this.rounds = new RoundsPart(context, roundGeometry);
-    this.gas = new GasPart(context);
-    this.backdrop = new BackdropPart(context);
-    this.body.add(
-      this.carrier.object,
-      this.bolt.object,
-      this.hammer.object,
-      this.trigger.object,
-      this.spring.object,
-      this.rounds.object,
-    );
-    batchStatic(this.body, this.cutaway).forEach((geometry) => this.tracker.track(geometry));
-    this.root.add(this.backdrop.object, this.body, this.gas.object);
+    this.tracker = parts.tracker;
+    this.cutaway = parts.cutaway;
+    this.body = parts.body;
+    this.carrier = carrier;
+    this.bolt = bolt;
+    this.hammer = hammer;
+    this.trigger = trigger;
+    this.spring = spring;
+    this.rounds = rounds;
+    this.gas = gas;
+    this.backdrop = backdrop;
+    this.root.add(backdrop.object, this.body, gas.object);
     this.labels = new LabelAnchors({
       body: this.body,
       carrier: this.carrier.object,
@@ -171,6 +158,62 @@ export class RifleAssembly implements Assembly {
   }
 }
 
-export function createRifleAssembly(resources: AssemblyResources, state: AssemblyState): Assembly {
-  return new RifleAssembly(resources, state);
+function* buildParts(resources: AssemblyResources): Steps<AssemblyParts> {
+  const tracker = new ResourceTracker();
+  const cutaway = new CutawaySwitch();
+  const body = new Group();
+  const stock = tracker.track(woodGrain(WOOD_GRAIN.stock));
+  yield;
+  const handguard = tracker.track(woodGrain(WOOD_GRAIN.handguard));
+  yield;
+  const powder = tracker.track(powderGrain(POWDER_GRAIN));
+  const context: PartContext = {
+    ...resources,
+    tracker,
+    cutaway,
+    looks: createLooks({ stock, handguard, powder }),
+  };
+  yield;
+  const roundGeometry = createRoundGeometry(context);
+  addBarrel(context, body);
+  yield;
+  addGasSystem(context, body);
+  yield;
+  addSights(context, body);
+  addFurniture(context, body);
+  yield;
+  addReceiver(context, body);
+  yield;
+  addMagazine(context, body);
+  addMagazineStack(context, body, roundGeometry);
+  body.add(createSelector(context));
+  addSelectorMarks(context, body);
+  yield;
+  const carrier = new CarrierPart(context);
+  const bolt = new BoltPart(context);
+  const hammer = new HammerPart(context);
+  const trigger = new TriggerPart(context);
+  const spring = new SpringPart(context);
+  const rounds = new RoundsPart(context, roundGeometry);
+  yield;
+  const gas = new GasPart(context);
+  const backdrop = new BackdropPart(context);
+  yield;
+  body.add(
+    carrier.object,
+    bolt.object,
+    hammer.object,
+    trigger.object,
+    spring.object,
+    rounds.object,
+  );
+  batchStatic(body, cutaway).forEach((geometry) => tracker.track(geometry));
+  return { tracker, cutaway, body, carrier, bolt, hammer, trigger, spring, rounds, gas, backdrop };
+}
+
+export async function createRifleAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Promise<Assembly> {
+  return new RifleAssembly(resources, await runPaced(buildParts(resources)), state);
 }

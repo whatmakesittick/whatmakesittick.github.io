@@ -8,12 +8,12 @@ import { LABEL_PRIORITY } from './partInfo';
 
 export { SCENE_OPTIONS } from './sceneOptions';
 
-export function mountRifleScene(shell: SceneShell, store: RifleStore): () => void {
+export async function mountRifleScene(shell: SceneShell, store: RifleStore): Promise<() => void> {
   const restoreLight = rifleLight(shell.lighting);
   const rifle = new RifleController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => rifle.update(deltaSeconds));
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
-  const unbind = bindStore(store, { rifle, labelVisibility, ...shell });
+  const unbind = await bindStore(store, { rifle, labelVisibility, ...shell });
   return () => {
     removeFrame();
     labelVisibility.dispose();
