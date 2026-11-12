@@ -60,6 +60,7 @@ export class BeamPart {
   private readonly glow: LegSet;
   private readonly coneMaterial: MeshBasicMaterial;
   private readonly bounceGlows: Sprite[];
+  private closeUp = 1;
 
   constructor(context: PartContext) {
     const { laser, materials } = this.buildLaser(context);
@@ -90,6 +91,13 @@ export class BeamPart {
     this.paintLegs(state);
     this.sizeGlows(state);
     this.coneMaterial.opacity = coneLevel(state.flash.units) * CONE.peak;
+  }
+
+  fit(closeUp: number, state: AssemblyState): void {
+    this.closeUp = closeUp;
+    this.core.thin(closeUp);
+    this.glow.thin(closeUp);
+    this.sizeGlows(state);
   }
 
   private buildLaser(context: PartContext): { laser: Mesh[]; materials: MeshBasicMaterial[] } {
@@ -147,7 +155,9 @@ export class BeamPart {
 
   private sizeGlows(state: AssemblyState): void {
     MIRRORS.forEach(({ id }, spot) =>
-      this.bounceGlows[spot].scale.setScalar(mirrorSizeM(id, state.optics) * BOUNCE_GLOW.share),
+      this.bounceGlows[spot].scale.setScalar(
+        mirrorSizeM(id, state.optics) * BOUNCE_GLOW.share * this.closeUp,
+      ),
     );
   }
 }

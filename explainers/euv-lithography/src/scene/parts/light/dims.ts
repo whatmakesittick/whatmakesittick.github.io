@@ -38,6 +38,12 @@ export const EUV = { coreRadius: 0.028, glowRadius: 0.11, sides: 8, coreMix: 0.5
 export const CONE = { sides: 32, peak: 0.55, floor: 0.3, riseUnits: 30, fallUnits: 40 } as const;
 export const BOUNCE_GLOW = { color: '#a9b6ff', share: 0.6, peak: 0.9 } as const;
 export const DISPLAY_FLOOR = 0.35;
+export const CLOSE_UP = { nearM: 0.8, farM: 8, floor: 0.06 } as const;
 
 export const TRAIL = { lengthM: 0.8, samples: 14, sides: 6, radiusShare: 0.75 } as const;
-export const MARKER = { segments: [16, 12], glowScale: 14, labelLift: 1.6 } as const;
+export const MARKER = {
+  segments: [16, 12],
+  glowScale: 14,
+  closeGlowScale: 3,
+  labelLift: 1.6,
+} as const;

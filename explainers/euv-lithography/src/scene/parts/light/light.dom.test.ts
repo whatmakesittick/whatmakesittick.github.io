@@ -3,6 +3,7 @@ import { PointLight, Sprite, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { isShown } from '@core/scene/parts';
 import { buildLight } from '../light';
+import { CLOSE_UP } from './dims';
 import { FRAME, buildSection, drawCalls, stateAt, triangles } from './fixtures';
 
 const TRIANGLE_BUDGET = 40_000;
@@ -80,6 +81,14 @@ describe('light section', () => {
     expect(paused.section.animate!(FRAME, stateAt(300))).toBe(false);
     const playing = stateAt(300, { playing: true });
     expect(paused.section.animate!(FRAME, playing)).toBe(true);
+  });
+
+  it('thins the light in close views and settles once fitted', () => {
+    const { section } = buildSection(buildLight, stateAt(700));
+    const close = { ...FRAME, cameraDistance: CLOSE_UP.nearM };
+    expect(section.animate!(close, stateAt(700))).toBe(true);
+    expect(find(section.root, 'marker').scale.x).toBe(CLOSE_UP.floor);
+    expect(section.animate!(close, stateAt(700))).toBe(false);
   });
 
   it('stays inside the budget', () => {

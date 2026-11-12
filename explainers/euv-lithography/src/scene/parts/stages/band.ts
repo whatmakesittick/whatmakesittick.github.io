@@ -13,6 +13,7 @@ import { BAND_GLOW_SIZE, BAND_THICK, MASK_AT } from './dims';
 
 export interface MaskBand {
   setState(state: AssemblyState): void;
+  fit(closeUp: number): void;
   warmUp(compile: (object: Object3D) => void): void;
 }
 
@@ -34,6 +35,9 @@ export function buildMaskBand(context: PartContext, parent: Object3D): MaskBand 
       const on = state.phase >= SCAN_START_UNITS;
       parts.forEach((part) => (part.visible = on));
       bar.scale.x = mm(slitMm(state.optics).h) * shrinkRatio(state.optics).scan;
+    },
+    fit(closeUp) {
+      glow.scale.setScalar(BAND_GLOW_SIZE * closeUp);
     },
     warmUp(compile) {
       parts.forEach(compile);

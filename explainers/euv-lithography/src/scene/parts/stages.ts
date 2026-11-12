@@ -4,6 +4,7 @@ import { ANCHOR_POINTS, WAFER } from '../../model/layout';
 import { label, namedGroup, sceneAnchor } from './context';
 import type { PartContext, Section } from './context';
 import { MASK_AT, MASK_LABEL, PELLICLE_Y, PLATE_HALF, WAFER_AT, WAFER_LABEL } from './stages/dims';
+import { CloseUp } from './light/closeUp';
 import { buildMaskBand } from './stages/band';
 import { buildMask, buildPellicle } from './stages/mask';
 import { buildMaskModule } from './stages/maskModule';
@@ -44,6 +45,7 @@ export function* buildStages(context: PartContext): Steps<Section> {
   ]);
   sceneAnchor(context, 'mask', fixed, ANCHOR_POINTS.mask);
   sceneAnchor(context, 'wafer', fixed, ANCHOR_POINTS.wafer);
+  const closeUp = new CloseUp();
   yield;
   return {
     root,
@@ -56,6 +58,12 @@ export function* buildStages(context: PartContext): Steps<Section> {
       slit.setState(state);
       band.setState(state);
       module.setState(state);
+    },
+    animate(frame) {
+      if (!closeUp.follow(frame.cameraDistance)) return false;
+      slit.fit(closeUp.factor);
+      band.fit(closeUp.factor);
+      return true;
     },
     warmUp(compile) {
       slit.warmUp(compile);

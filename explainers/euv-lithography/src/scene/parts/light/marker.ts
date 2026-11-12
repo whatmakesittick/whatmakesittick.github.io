@@ -10,7 +10,7 @@ import {
   SphereGeometry,
 } from 'three';
 import type { Object3D, Sprite } from 'three';
-import { FULL_TURN, clamp } from '@core/math';
+import { FULL_TURN, clamp, lerp } from '@core/math';
 import type { AssemblyState, PhaseId, Point } from '../../../ids';
 import {
   COLLECT_PATH,
@@ -47,6 +47,10 @@ function pathShare(state: AssemblyState): number {
   return clamp((units - EXPOSE_START_UNITS) / (SCAN_UNITS - EXPOSE_START_UNITS), 0, 1);
 }
 
+function haloSize(closeUp: number): number {
+  return MARKER_RADIUS_M * lerp(MARKER.closeGlowScale, MARKER.glowScale, closeUp);
+}
+
 function trailIndices(): number[] {
   const indices: number[] = [];
   for (let ring = 0; ring < RINGS - 1; ring += 1) {
@@ -77,6 +81,7 @@ export class MarkerPart {
   private readonly tone = new Color();
   private readonly trailRoot = namedGroup('trail');
   private phase: PhaseId | null = null;
+  private closeUp = 1;
 
   constructor(context: PartContext) {
     this.bead = registeredMaterial(
@@ -120,6 +125,13 @@ export class MarkerPart {
     this.drawTrail(state);
   }
 
+  fit(closeUp: number, state: AssemblyState): void {
+    this.closeUp = closeUp;
+    this.object.scale.setScalar(closeUp);
+    this.halo.scale.setScalar(haloSize(closeUp));
+    this.drawTrail(state);
+  }
+
   private recolor(phase: PhaseId): void {
     if (phase === this.phase) return;
     this.phase = phase;
@@ -152,7 +164,7 @@ export class MarkerPart {
     const length = Math.hypot(dx, dy);
     const [ux, uy] = length > 0 ? [dx / length, dy / length] : [FALLBACK[0], FALLBACK[1]];
     const taper = ring / (RINGS - 1);
-    const radius = MARKER_RADIUS_M * TRAIL.radiusShare * taper;
+    const radius = MARKER_RADIUS_M * TRAIL.radiusShare * taper * this.closeUp;
     const level = taper ** 2;
     for (let side = 0; side < SIDES; side += 1) {
       const angle = (side / SIDES) * FULL_TURN;

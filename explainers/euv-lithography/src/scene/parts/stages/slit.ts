@@ -21,6 +21,7 @@ import {
 
 export interface Slit {
   setState(state: AssemblyState): void;
+  fit(closeUp: number): void;
   warmUp(compile: (object: Object3D) => void): void;
 }
 
@@ -45,6 +46,9 @@ export function buildSlit(context: PartContext, parent: Object3D): Slit {
       parts.forEach((part) => (part.visible = on));
       light.intensity = on ? LIGHT_INTENSITY : 0;
       bar.scale.x = mm(slitMm(state.optics).h) / SLIT_BASE_X;
+    },
+    fit(closeUp) {
+      glow.scale.setScalar(GLOW_SIZE * closeUp);
     },
     warmUp(compile) {
       parts.forEach(compile);

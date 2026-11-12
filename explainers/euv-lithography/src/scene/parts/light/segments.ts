@@ -1,6 +1,7 @@
 import { BufferAttribute, CylinderGeometry, Matrix4, Quaternion, Vector3 } from 'three';
 import type { BufferGeometry, Color } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { lerp } from '@core/math';
 import type { Point } from '../../../ids';
 import { vector } from '../kit';
 
@@ -32,9 +33,21 @@ function withWhiteColors(geometry: BufferGeometry): BufferGeometry {
   return geometry;
 }
 
+function axisPositions(points: readonly Point[], sides: number): Float32Array {
+  const legs = points
+    .slice(1)
+    .map((point, index) => segmentGeometry(points[index], point, 0, sides, true));
+  const merged = mergeGeometries(legs, false);
+  const positions = Float32Array.from(merged.getAttribute('position').array);
+  [...legs, merged].forEach((geometry) => geometry.dispose());
+  return positions;
+}
+
 export class LegSet {
   readonly geometry: BufferGeometry;
   private readonly counts: readonly number[];
+  private readonly rim: Float32Array;
+  private readonly axis: Float32Array;
 
   constructor(points: readonly Point[], radius: number, sides: number) {
     const legs = points
@@ -45,6 +58,8 @@ export class LegSet {
     this.counts = legs.map((leg) => leg.getAttribute('position').count);
     this.geometry = mergeGeometries(legs, false);
     legs.forEach((leg) => leg.dispose());
+    this.rim = Float32Array.from(this.geometry.getAttribute('position').array);
+    this.axis = axisPositions(points, sides);
   }
 
   paint(levels: readonly number[], color: Color, scale = 1): void {
@@ -58,5 +73,14 @@ export class LegSet {
       vertex += count;
     });
     colors.needsUpdate = true;
+  }
+
+  thin(share: number): void {
+    const positions = this.geometry.getAttribute('position') as BufferAttribute;
+    const values = positions.array;
+    for (let index = 0; index < values.length; index += 1) {
+      values[index] = lerp(this.axis[index], this.rim[index], share);
+    }
+    positions.needsUpdate = true;
   }
 }
