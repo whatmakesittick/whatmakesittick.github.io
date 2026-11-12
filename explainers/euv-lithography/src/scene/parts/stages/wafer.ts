@@ -21,6 +21,9 @@ const WAFER_SEGMENTS = 96;
 const NOTCH_HALF_ANGLE = 0.02;
 const STRIP_BIAS = -2;
 const MIN_STRIP_M = 0.00001;
+const WAFER_ROUGHNESS = 0.55;
+const WAFER_METALNESS = 0.08;
+const WAFER_GLOW = 0.3;
 
 export interface WaferParts {
   strip: Mesh;
@@ -66,9 +69,12 @@ export function buildWafer(context: PartContext, carriage: Object3D): WaferParts
     'wafer',
     new MeshStandardMaterial({
       color: '#ffffff',
-      roughness: 0.4,
-      metalness: 0.45,
+      roughness: WAFER_ROUGHNESS,
+      metalness: WAFER_METALNESS,
       map: textures.na033,
+      emissive: '#ffffff',
+      emissiveMap: textures.na033,
+      emissiveIntensity: WAFER_GLOW,
     }),
   );
   const disc = registeredMesh(context, waferGeometry(), 'wafer', material);
@@ -95,6 +101,7 @@ export function buildWafer(context: PartContext, carriage: Object3D): WaferParts
     update(state) {
       if (material.map !== textures[state.optics]) {
         material.map = textures[state.optics];
+        material.emissiveMap = textures[state.optics];
         material.needsUpdate = true;
       }
       const field = fieldMm(state.optics);

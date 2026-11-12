@@ -3,25 +3,28 @@ import type { Object3D } from 'three';
 import { mesh } from '../context';
 import type { PartContext } from '../context';
 import { washerAlongX } from '../kit';
+import type { Bin } from '../optics/geo';
+import { slab } from '../optics/geo';
 import { cableChain } from './chain';
 import {
   CHUCK_DISC,
-  SURFACE,
   WAFER_AT,
-  WAFER_BASE,
+  WAFER_BLOCK,
   WAFER_CARRIAGE,
   WAFER_CHAIN,
-  WAFER_ORIGIN,
+  WAFER_GRANITE,
+  WAFER_RAILS,
   WAFER_THICK,
+  WAFER_TRACK,
 } from './dims';
-import { addPieces, slab } from './pieces';
-import type { Piece } from './pieces';
 
+const PART = 'waferStage';
 const SIDES = [-1, 1] as const;
+const ROUND = 0.004;
 const CHUCK_SIDES = 48;
-const MIRROR_BAR = [0.012, 0.03, 0.3] as const;
-const FACE_PANEL = [0.7, 0.06, 0.004] as const;
-const TRIM_TALL = 0.008;
+const STOP = { thick: 0.025, tall: 0.03, halfZ: 0.03 } as const;
+const COVER_STRIPE = { bottom: 0.012, tall: 0.01, thick: 0.004 } as const;
+const MIRROR_BAR = { thick: 0.012, tall: 0.026, halfZ: 0.15 } as const;
 
 export interface WaferStageGroups {
   fixed: Object3D;
@@ -29,117 +32,106 @@ export interface WaferStageGroups {
   bend: Object3D;
 }
 
-function basePieces(): Piece[] {
-  const { half, tall, margin } = WAFER_BASE;
-  const span = half * 2;
-  const top = tall + SURFACE.tall;
-  const lines = Array.from({ length: Math.floor(span / SURFACE.pitch) - 1 }, (_, index) => {
-    const offset = (index + 1) * SURFACE.pitch - half;
-    return [
-      slab('flange', [0, top + 0.001, offset], [span - margin, 0.002, SURFACE.line]),
-      slab('flange', [offset, top + 0.001, 0], [SURFACE.line, 0.002, span - margin]),
-    ];
+function addBase(bin: Bin): void {
+  const { min, max } = WAFER_GRANITE;
+  bin.add('granite', slab(min, max, ROUND));
+  const [from, to] = WAFER_RAILS.x;
+  SIDES.forEach((side) => {
+    const z = side * WAFER_RAILS.z;
+    bin.add(
+      'rail',
+      slab(
+        [from, WAFER_RAILS.bottom, z - WAFER_RAILS.half],
+        [to, WAFER_RAILS.top, z + WAFER_RAILS.half],
+      ),
+    );
+    [from, to].forEach((end) => {
+      const [lo, hi] = end === from ? [end - STOP.thick, end] : [end, end + STOP.thick];
+      bin.add(
+        'machined',
+        slab(
+          [lo, WAFER_RAILS.bottom, z - STOP.halfZ],
+          [hi, WAFER_RAILS.bottom + STOP.tall, z + STOP.halfZ],
+          ROUND,
+        ),
+      );
+    });
   });
-  const faces = SIDES.flatMap((side) => [
-    slab('panelShade', [0, tall / 2, side * (half + 0.001)], [...FACE_PANEL], 0.002),
+  bin.add(
+    'machined',
     slab(
-      'panelShade',
-      [side * (half + 0.001), tall / 2, 0],
-      [FACE_PANEL[2], FACE_PANEL[1], FACE_PANEL[0]],
-      0.002,
+      [WAFER_TRACK.x[0], WAFER_RAILS.bottom, -WAFER_TRACK.halfZ],
+      [WAFER_TRACK.x[1], WAFER_TRACK.top, WAFER_TRACK.halfZ],
     ),
-  ]);
-  const rim = SIDES.flatMap((side) => [
-    slab('frame', [0, tall + 0.002, side * (half - 0.01)], [span, 0.004, 0.02]),
-    slab('frame', [side * (half - 0.01), tall + 0.002, 0], [0.02, 0.004, span - 0.04]),
-  ]);
-  return [
-    slab('granite', [0, tall / 2, 0], [span, tall, span], 0.012),
-    slab(
-      'darkFrame',
-      [0, tall + SURFACE.tall / 2, 0],
-      [span - margin, SURFACE.tall, span - margin],
-    ),
-    ...lines.flat(),
-    ...faces,
-    ...rim,
-  ];
+  );
 }
 
-function carriagePieces(): Piece[] {
-  const { halfX, lowerBottom, lowerTop, midTop, shadeTop } = WAFER_CARRIAGE;
-  const reach = halfX * 2;
-  const feet = SIDES.flatMap((x) =>
-    SIDES.map((z) =>
-      slab(
-        'darkFrame',
-        [x * (halfX - 0.03), lowerBottom - 0.006, z * (halfX - 0.03)],
-        [0.05, 0.012, 0.05],
-        0.004,
+function addCarriage(bin: Bin): void {
+  const { halfX, halfZ, bottom, top, coverTop, coverHalf } = WAFER_CARRIAGE;
+  const x = WAFER_AT[0];
+  bin.add('machined', slab([x - halfX, bottom, -halfZ], [x + halfX, top, halfZ], ROUND));
+  bin.add(
+    'panelShade',
+    slab([x - coverHalf, top, -coverHalf], [x + coverHalf, coverTop, coverHalf], ROUND / 2),
+  );
+  bin.add(
+    'accent',
+    slab(
+      [x - coverHalf, bottom + COVER_STRIPE.bottom, halfZ],
+      [x + coverHalf, bottom + COVER_STRIPE.bottom + COVER_STRIPE.tall, halfZ + COVER_STRIPE.thick],
+    ),
+  );
+  SIDES.forEach((side) => {
+    const edge = x + side * halfX;
+    const [lo, hi] = side > 0 ? [edge - MIRROR_BAR.thick, edge] : [edge, edge + MIRROR_BAR.thick];
+    bin.add(
+      'mirror',
+      slab([lo, top, -MIRROR_BAR.halfZ], [hi, top + MIRROR_BAR.tall, MIRROR_BAR.halfZ]),
+    );
+  });
+  SIDES.forEach((side) =>
+    [-WAFER_BLOCK.offset, WAFER_BLOCK.offset].forEach((offset) =>
+      bin.add(
+        'machined',
+        slab(
+          [
+            x + offset - WAFER_BLOCK.halfX,
+            WAFER_BLOCK.bottom,
+            side * WAFER_RAILS.z - WAFER_BLOCK.halfZ,
+          ],
+          [
+            x + offset + WAFER_BLOCK.halfX,
+            WAFER_BLOCK.top,
+            side * WAFER_RAILS.z + WAFER_BLOCK.halfZ,
+          ],
+          ROUND / 2,
+        ),
       ),
     ),
   );
-  const mirrors = SIDES.map((x) =>
-    slab(
-      'mirror',
-      [x * (halfX - MIRROR_BAR[0] / 2 - 0.01), shadeTop + MIRROR_BAR[1] / 2, 0],
-      [...MIRROR_BAR],
-    ),
-  );
-  return [
-    slab(
-      'frame',
-      [0, (lowerBottom + lowerTop) / 2, 0],
-      [reach, lowerTop - lowerBottom, reach],
-      0.016,
-    ),
-    slab(
-      'panel',
-      [0, (lowerTop + midTop) / 2, 0],
-      [reach - 0.06, midTop - lowerTop, reach - 0.06],
-      0.01,
-    ),
-    slab(
-      'panelShade',
-      [0, (midTop + shadeTop) / 2, 0],
-      [reach - 0.12, shadeTop - midTop, reach - 0.12],
-      0.006,
-    ),
-    slab(
-      'accent',
-      [0, (lowerTop + midTop) / 2, (reach - 0.06) / 2 + 0.002],
-      [reach - 0.1, TRIM_TALL, 0.004],
-    ),
-    ...feet,
-    ...mirrors,
-  ];
 }
 
 export function buildWaferStage(context: PartContext, groups: WaferStageGroups): void {
   const chain = cableChain(WAFER_CHAIN);
-  addPieces(context, 'waferStage', groups.fixed, [...basePieces(), ...chain.fixed], WAFER_ORIGIN);
-  addPieces(context, 'waferStage', groups.bend, chain.bend, WAFER_ORIGIN);
-  addPieces(
-    context,
-    'waferStage',
-    groups.carriage,
-    [...carriagePieces(), ...chain.moving],
-    WAFER_ORIGIN,
-  );
-  const bottom = WAFER_CARRIAGE.shadeTop;
-  const top = WAFER_AT[1] - WAFER_ORIGIN[1] - WAFER_THICK;
+  addBase(chain.fixed);
+  chain.fixed.build(context, PART, groups.fixed);
+  chain.bend.build(context, PART, groups.bend);
+  addCarriage(chain.moving);
+  chain.moving.build(context, PART, groups.carriage);
+  const bottom = WAFER_CARRIAGE.coverTop;
+  const top = WAFER_AT[1] - WAFER_THICK;
+  const height = top - bottom;
   const chuck = mesh(
     context,
-    new CylinderGeometry(CHUCK_DISC.radius, CHUCK_DISC.radius, top - bottom, CHUCK_SIDES),
-    'waferStage',
-    'darkFrame',
+    new CylinderGeometry(CHUCK_DISC.radius, CHUCK_DISC.radius, height, CHUCK_SIDES),
+    PART,
+    'machined',
   );
-  chuck.position.set(WAFER_AT[0], WAFER_ORIGIN[1] + (top + bottom) / 2, WAFER_AT[2]);
-  const ringHeight = top - bottom;
+  chuck.position.set(WAFER_AT[0], (top + bottom) / 2, WAFER_AT[2]);
   const ring = mesh(
     context,
-    washerAlongX(CHUCK_DISC.ringInner, CHUCK_DISC.ring, ringHeight).rotateZ(Math.PI / 2),
-    'waferStage',
+    washerAlongX(CHUCK_DISC.ringInner, CHUCK_DISC.ring, height).rotateZ(Math.PI / 2),
+    PART,
     'ceramic',
   );
   ring.position.copy(chuck.position);
