@@ -13,7 +13,7 @@ import type { PartContext, Section } from '../context';
 import { mirrorNormal } from '../kit';
 import { buildOptics } from '../optics';
 
-const FRAME = { delta: 1 / 60, elapsed: 0, cameraDistance: 10 };
+const FRAME = { delta: 1 / 60, elapsed: 0, cameraDistance: 10, cameraPosition: new Vector3() };
 const SETTLE_FRAMES = 120;
 const CLOSE_M = 1.9;
 const TRIANGLE_BUDGET = 80000;

@@ -1,5 +1,5 @@
 import { Group, Mesh } from 'three';
-import type { BufferGeometry, Material, Object3D } from 'three';
+import type { BufferGeometry, Material, Object3D, Vector3 } from 'three';
 import type {
   MaterialFinish,
   MaterialLibrary,
@@ -28,6 +28,7 @@ export interface Frame {
   readonly delta: number;
   readonly elapsed: number;
   readonly cameraDistance: number;
+  readonly cameraPosition: Readonly<Vector3>;
 }
 
 export interface Section {

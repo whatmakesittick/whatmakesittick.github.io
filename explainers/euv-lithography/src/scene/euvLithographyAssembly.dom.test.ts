@@ -12,6 +12,7 @@ import type { Assembly } from './assembly';
 import { buildEuvLithographyAssembly, withChaseCutaway } from './euvLithographyAssembly';
 
 const FRAME = 1 / 60;
+const CAMERA = new Vector3(0, 6, 24);
 const SETTLE_FRAMES = 120;
 const VIEWS: ViewOptions = { beam: true, labels: true, cutaway: true, inset: true, follow: false };
 
@@ -37,7 +38,7 @@ function build(state: AssemblyState = stateAt(0)): Assembly {
 function settle(assembly: Assembly): boolean {
   let moving = true;
   for (let frame = 0; frame < SETTLE_FRAMES && moving; frame += 1) {
-    moving = assembly.update(FRAME, 10);
+    moving = assembly.update(FRAME, 10, CAMERA);
   }
   return moving;
 }
@@ -69,7 +70,7 @@ describe('euv lithography assembly', () => {
     assembly.setState(stateAt(300));
     expect(settle(assembly)).toBe(false);
     assembly.setState(stateAt(300, 'nxe3600d', true));
-    expect(assembly.update(FRAME, 10)).toBe(true);
+    expect(assembly.update(FRAME, 10, CAMERA)).toBe(true);
     assembly.dispose();
   });
 

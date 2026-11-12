@@ -16,7 +16,7 @@ const TRIANGLE_LIMIT = 50_000;
 const MASK_BRIDGE_TOP = 5;
 const CLOSE_M = 0.85;
 const FAR_M = 10.9;
-const FRAME = { delta: 0, elapsed: 0, cameraDistance: FAR_M };
+const FRAME = { delta: 0, elapsed: 0, cameraDistance: FAR_M, cameraPosition: new Vector3() };
 const DRAW_CALL_LIMIT = 50;
 
 function stateAt(units: number, machine: MachineId = 'nxe3600d'): AssemblyState {

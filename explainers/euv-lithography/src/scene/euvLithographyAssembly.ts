@@ -1,4 +1,4 @@
-import { Group } from 'three';
+import { Group, Vector3 } from 'three';
 import type { Box3, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import { runPaced } from '@core/scene/pacing';
@@ -8,6 +8,7 @@ import { ANCHOR_IDS, PART_IDS } from '../ids';
 import type { AnchorId, AssemblyState, ChaseTarget, PartId, RegionId } from '../ids';
 import type { Assembly, AssemblyResources } from './assembly';
 import type { PartContext, Section, SectionBuilder } from './parts/context';
+import { buildBay } from './parts/bay';
 import { buildFab } from './parts/fab';
 import { buildInsets } from './parts/insets';
 import { buildLight } from './parts/light';
@@ -17,7 +18,9 @@ import { buildStages } from './parts/stages';
 import { regionBox } from './regions';
 
 const ROOT_NAME = 'euvLithography';
+const RESTING_CAMERA = new Vector3();
 const SECTION_BUILDERS: readonly SectionBuilder[] = [
+  buildBay,
   buildFab,
   buildSource,
   buildOptics,
@@ -68,7 +71,7 @@ class EuvLithographyAssembly implements Assembly {
     ) as Record<AnchorId, Object3D>;
     this.state = state;
     this.setState(state);
-    this.animate(0, 0);
+    this.animate(0, 0, RESTING_CAMERA);
   }
 
   setState(state: AssemblyState): void {
@@ -77,8 +80,8 @@ class EuvLithographyAssembly implements Assembly {
     this.sections.forEach((section) => section.setState(shown));
   }
 
-  update(deltaSeconds: number, cameraDistance: number): boolean {
-    return this.animate(deltaSeconds, cameraDistance);
+  update(deltaSeconds: number, cameraDistance: number, cameraPosition: Readonly<Vector3>): boolean {
+    return this.animate(deltaSeconds, cameraDistance, cameraPosition);
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {
@@ -109,9 +112,13 @@ class EuvLithographyAssembly implements Assembly {
     this.tracker.dispose();
   }
 
-  private animate(delta: number, cameraDistance: number): boolean {
+  private animate(
+    delta: number,
+    cameraDistance: number,
+    cameraPosition: Readonly<Vector3>,
+  ): boolean {
     this.elapsed += delta;
-    const frame = { delta, elapsed: this.elapsed, cameraDistance };
+    const frame = { delta, elapsed: this.elapsed, cameraDistance, cameraPosition };
     return this.sections
       .map((section) => section.animate?.(frame, this.state) ?? false)
       .some(Boolean);

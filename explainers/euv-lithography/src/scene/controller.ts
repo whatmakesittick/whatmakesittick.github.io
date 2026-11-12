@@ -50,7 +50,8 @@ export class EuvController {
   }
 
   update(deltaSeconds: number): boolean {
-    return this.assembly?.update(deltaSeconds, this.cameraDistance()) ?? false;
+    const { position } = this.dependencies.rig.camera;
+    return this.assembly?.update(deltaSeconds, this.cameraDistance(), position) ?? false;
   }
 
   dispose(): void {

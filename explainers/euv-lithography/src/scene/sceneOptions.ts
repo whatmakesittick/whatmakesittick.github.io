@@ -2,9 +2,9 @@ import { AdditiveBlending } from 'three';
 import type { Intersection, Mesh } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import type { SceneOptions } from '@core/scene/shell';
-import { THEME } from '../theme';
+import { BAY_TONES } from '../theme';
 
-const FOG = { near: 26, far: 60 } as const;
+const FOG = { near: 34, far: 84 } as const;
 const CAMERA = {
   near: 0.02,
   far: 120,
@@ -32,8 +32,8 @@ export function blocksLabels({ object }: Intersection): boolean {
 }
 
 export const SCENE_OPTIONS: SceneOptions = {
-  background: THEME.background,
-  fog: { color: THEME.background, ...FOG },
+  background: BAY_TONES.haze,
+  fog: { color: BAY_TONES.haze, ...FOG },
   stage: false,
   gaugeSide: 'right',
   camera: {

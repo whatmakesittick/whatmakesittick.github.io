@@ -1,4 +1,4 @@
-import { Mesh } from 'three';
+import { Mesh, Vector3 } from 'three';
 import type { InstancedMesh, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { runNow } from '@core/scene/pacing';
@@ -17,7 +17,13 @@ export const VIEWS: ViewOptions = {
   inset: true,
   follow: false,
 };
-export const FRAME = { delta: 1 / 60, elapsed: 0, cameraDistance: 10 };
+export const CAMERA_POSITION = new Vector3(0, 6, 24);
+export const FRAME = {
+  delta: 1 / 60,
+  elapsed: 0,
+  cameraDistance: 10,
+  cameraPosition: CAMERA_POSITION,
+};
 
 export function stateAt(
   units: number,

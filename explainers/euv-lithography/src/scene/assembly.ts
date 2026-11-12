@@ -1,4 +1,4 @@
-import type { Box3, Group, Object3D } from 'three';
+import type { Box3, Group, Object3D, Vector3 } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, ChaseTarget, PartId, RegionId } from '../ids';
@@ -14,7 +14,7 @@ export interface AssemblyResources {
 export interface Assembly {
   readonly root: Group;
   setState(state: AssemblyState): void;
-  update(deltaSeconds: number, cameraDistance: number): boolean;
+  update(deltaSeconds: number, cameraDistance: number, cameraPosition: Readonly<Vector3>): boolean;
   labelAnchors(): ReadonlyMap<PartId, Object3D>;
   anchor(id: AnchorId): Object3D;
   region(id: RegionId): Box3;
