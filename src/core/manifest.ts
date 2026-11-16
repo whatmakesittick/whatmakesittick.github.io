@@ -15,6 +15,7 @@ export const TAGS = [
   'energy',
   'earth',
   'biology',
+  'chemistry',
   'space',
   'computing',
   'sound',

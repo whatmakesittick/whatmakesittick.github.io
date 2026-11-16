@@ -78,7 +78,7 @@ The slug must match the folder and must not clash with a root folder
 (`assets`, `src`, `public` and the like) or with a name published from the root
 `public/` (`icons`, `social`). `tags` lists at least one tag, none twice, each
 from `TAGS` in `src/core/manifest.ts`: mechanics, engines, vehicles, aircraft, flight, physics,
-weather, home, tools, weapons, optics, energy, earth, biology, space, computing and sound. Every tag has a label under
+weather, home, tools, weapons, optics, energy, earth, biology, chemistry, space, computing and sound. Every tag has a label under
 `catalogue.tags.<id>` in all eight core locales, which a test enforces, so a new
 tag goes into `TAGS` and every core locale together. `topic` is one short English noun phrase for
 the thing, as people say it ("car engine", "MQ-9 Reaper drone"); the MCP tool description lists it, and
@@ -148,6 +148,7 @@ interface Timeline {
   phasesLabelKey: string; // phase button group, "Jump to a stroke"
   formatPhase(phase: number): string; // "402°"
   describePhase(phase: number): string; // scrubber value text, "402°, power stroke"
+  formatInputs?(): unknown[]; // other values the two texts read; a change re-renders them at the same phase
   rate(speed: number): number; // phase units per second at this speed
   phases: { id; start; end; labelKey; jumpLabelKey; tone }[]; // tone is a CSS colour
   speed: { min; max; step; labelKey; format(speed): string; describe(speed): string };

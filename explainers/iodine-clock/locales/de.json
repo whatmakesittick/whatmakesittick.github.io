@@ -1,0 +1,277 @@
+{
+  "meta": {
+    "title": "So tickt die Iod-Uhr",
+    "eyebrow": "Chemie",
+    "tagline": "Zwei klare Flüssigkeiten, etwa zehn Sekunden lang nichts, dann im Nu blauschwarz: ein Wettlauf der Moleküle, der pünktlich endet.",
+    "description": "Die Iod-Uhr in 3D, vom Becherglas bis zu den Molekülen: Warum zwei klare Flüssigkeiten etwa 10 Sekunden warten und dann im Nu blauschwarz werden.",
+    "summary": "Das Eingießen, der langsame Schritt, das unsichtbare Iod, das letzte Hydrogensulfit, die Stärkehelix und wie Sie die Uhr stellen.",
+    "socialAlt": "Ein breites Becherglas mit blauschwarzer Flüssigkeit auf einem Magnetrührer und eine Stoppuhr, daneben der Titel „So tickt die Iod-Uhr“"
+  },
+  "stage": {
+    "label": "Interaktives Modell der Iod-Uhr",
+    "gauge": "Uhr und Konzentrationen live"
+  },
+  "timeline": {
+    "label": "Ablauf der Uhr",
+    "phases": "Zu einem Moment des Ablaufs springen",
+    "value": "{{seconds}} s",
+    "during": "{{seconds}} s nach Beginn des Eingießens, {{phase}}",
+    "speed": "Tempo",
+    "speedValue": "{{factor}}×",
+    "realTime": "Echtzeit",
+    "slower": "{{factor}}-mal langsamer als in Wirklichkeit",
+    "faster": "{{factor}}-mal schneller als in Wirklichkeit",
+    "phase": {
+      "pour": "Eingießen",
+      "induction": "Warten",
+      "exhaustion": "Letztes Hydrogensulfit",
+      "iodine": "Iod sammelt sich",
+      "complex": "Blau entsteht",
+      "blue": "Blauschwarz"
+    },
+    "jump": {
+      "pour": "Zum Eingießen springen",
+      "induction": "Zur klaren Wartezeit springen",
+      "exhaustion": "Zum letzten Hydrogensulfit springen",
+      "iodine": "Zum Moment springen, ab dem Iod übrig bleibt",
+      "complex": "Zum Entstehen der Blaufärbung springen",
+      "blue": "Zum blauschwarzen Becherglas springen"
+    },
+    "detail": {
+      "pour": "Lösung B fließt in Lösung A",
+      "induction": "der langsame Schritt verbraucht Hydrogensulfit, die Flüssigkeit bleibt klar",
+      "exhaustion": "das letzte Hydrogensulfit geht zur Neige",
+      "iodine": "nichts verbraucht das Iod mehr, also sammelt es sich an",
+      "complex": "Iodketten füllen die Stärkespiralen",
+      "blue": "das ganze Becherglas ist blauschwarz"
+    }
+  },
+  "controls": {
+    "label": "Steuerung des Modells",
+    "scale": "Maßstab",
+    "scaleOptions": {
+      "beaker": "Becherglas",
+      "molecules": "Moleküle"
+    },
+    "groups": {
+      "scale": "Maßstab",
+      "mix": "Neu mischen"
+    },
+    "mixOptions": {
+      "again": "Neu mischen"
+    },
+    "views": {
+      "water": {
+        "name": "Wasser",
+        "short": "Wasser",
+        "hint": "Wasser (W)"
+      },
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      }
+    }
+  },
+  "readouts": {
+    "clock": "Uhr",
+    "bisulfite": "Hydrogensulfit",
+    "iodine": "Iod",
+    "now": "Jetzt",
+    "iodineState": {
+      "eaten": "Sofort verbraucht"
+    },
+    "pace": {
+      "real": "Echtzeit",
+      "slower": "{{factor}}-mal langsamer als in Wirklichkeit",
+      "faster": "{{factor}}-mal schneller als in Wirklichkeit"
+    }
+  },
+  "units": {
+    "seconds": "{{value}} s",
+    "millimolar": "{{value}} mM",
+    "micromolar": "{{value}} µM",
+    "nanoseconds": "{{value}} ns",
+    "microseconds": "{{value}} µs",
+    "milliseconds": "{{value}} ms",
+    "percent": "{{value}} %",
+    "celsius": "{{value}} °C"
+  },
+  "equations": {
+    "landolt": "IO<sub>3</sub><sup>−</sup> + 3 HSO<sub>3</sub><sup>−</sup> → I<sup>−</sup> + 3 SO<sub>4</sub><sup>2−</sup> + 3 H<sup>+</sup>",
+    "dushman": "IO<sub>3</sub><sup>−</sup> + 5 I<sup>−</sup> + 6 H<sup>+</sup> → 3 I<sub>2</sub> + 3 H<sub>2</sub>O",
+    "eaten": "I<sub>2</sub> + HSO<sub>3</sub><sup>−</sup> + H<sub>2</sub>O → 2 I<sup>−</sup> + SO<sub>4</sub><sup>2−</sup> + 3 H<sup>+</sup>",
+    "triiodide": "I<sub>2</sub> + I<sup>−</sup> ⇌ I<sub>3</sub><sup>−</sup>",
+    "helix": "I<sub>3</sub><sup>−</sup> + I<sub>2</sub> → I<sub>5</sub><sup>−</sup>"
+  },
+  "steps": {
+    "name": {
+      "landolt": "Langsamer Schritt",
+      "dushman": "Iod entsteht",
+      "eaten": "Hydrogensulfit verbraucht das Iod",
+      "triiodide": "Iod trifft Iodid",
+      "helix": "Längere Ketten füllen die Helix"
+    },
+    "state": {
+      "waiting": "Wartet",
+      "running": "Läuft",
+      "finished": "Fertig"
+    }
+  },
+  "chapters": {
+    "steps": {
+      "label": "Reaktionsschritte"
+    },
+    "graph": {
+      "label": "Hydrogensulfit und Iod im Becherglas im Lauf der Zeit",
+      "time": "Zeit nach dem Eingießen, s",
+      "unit": "mM",
+      "bisulfite": "Hydrogensulfit",
+      "iodine": "Iod",
+      "switch": "Umschlag bei {{seconds}} s"
+    },
+    "pour": {
+      "clock": "Stoppuhr",
+      "iodate": "Iodat nach dem Mischen",
+      "iodateValue": "25 mM",
+      "bisulfite": "Hydrogensulfit nach dem Mischen",
+      "bisulfiteValue": "12,5 mM",
+      "starch": "Stärke nach dem Mischen",
+      "starchValue": "0,125 %",
+      "volume": "Gesamtvolumen",
+      "volumeValue": "400 mL",
+      "delay": "Warten auf die Farbe",
+      "delayValue": "etwa 10 s, bei Vorführungen 9 bis 14 s"
+    },
+    "slowStep": {
+      "bisulfite": "Hydrogensulfit übrig",
+      "iodide": "Iodid gebildet",
+      "acid": "Säure gebildet, H⁺",
+      "oxygen": "Wandernde Sauerstoffatome pro Iodat",
+      "oxygenValue": "3, vom Iod zum Schwefel",
+      "ions": "Hydrogensulfit-Ionen im Becherglas",
+      "ionsValue": "etwa 3 × 10²¹",
+      "water": "Wassermoleküle pro Hydrogensulfit-Ion",
+      "waterValue": "etwa 4.400"
+    },
+    "invisibleIodine": {
+      "lifetime": "Lebensdauer eines Iodmoleküls",
+      "survives": "Es überlebt",
+      "rate": "Iod und Hydrogensulfit reagieren mit",
+      "rateValue": "1,8 × 10⁹ M⁻¹ s⁻¹",
+      "used": "Verbrauchtes Hydrogensulfit pro Sekunde",
+      "usedValue": "etwa 2,5 × 10²⁰ Ionen",
+      "dushman": "Schritt, der Iod bildet",
+      "dushmanValue": "Dushman, 1904"
+    },
+    "tippingPoint": {
+      "switchAt": "Letztes Hydrogensulfit weg bei",
+      "bisulfite": "Hydrogensulfit jetzt",
+      "iodine": "Iod jetzt",
+      "pace": "Ihr Tempo",
+      "needs": "Nötig für die Farbe",
+      "needsValue": "Hydrogensulfit unter 3 × Iodat",
+      "visible": "Sichtbares Iod, mit Stärke",
+      "visibleValue": "etwa 20 µM",
+      "speed": "Von klar zu blauschwarz",
+      "speedValue": "weit unter einer Sekunde"
+    },
+    "starch": {
+      "fill": "Iod in der Helix",
+      "turn": "Glucose-Einheiten pro Windung",
+      "turnValue": "6",
+      "pitch": "Höhe einer Windung",
+      "pitchValue": "0,8 nm",
+      "channel": "Kanalbreite",
+      "channelValue": "etwa 0,5 nm",
+      "peak": "Stärkste Absorption",
+      "peakValue": "etwa 600 nm",
+      "bonds": "Bindungslängen im Iod",
+      "bondsValue": "I₂ 2,67 Å, I₃⁻ 2,90 Å"
+    },
+    "tuning": {
+      "iodate": "Iodat",
+      "temperature": "Temperatur",
+      "switchAt": "Farbe bei",
+      "ratio": "Hydrogensulfit zu Iodat",
+      "ratioValue": "{{ratio}}, für die Farbe unter 3 nötig",
+      "half": "Halb so viel Iodat",
+      "halfValue": "etwa doppelte Wartezeit",
+      "acid": "Mehr Säure",
+      "acidValue": "früher, H⁺ geht quadratisch ein",
+      "cold": "Eisbad gegen Zimmertemperatur, ein Schulversuch",
+      "coldValue": "45 s gegen 30 s"
+    }
+  },
+  "parts": {
+    "mixingBeaker": "Mischbecherglas",
+    "mixture": "Gemisch, Lösung A",
+    "pourBeaker": "Gießbecherglas",
+    "bisulfiteSolution": "Lösung B, Hydrogensulfit",
+    "pourStream": "Gießstrahl",
+    "stirBar": "Rührfisch",
+    "stirrer": "Magnetrührer",
+    "thermometer": "Thermometer",
+    "stopwatch": "Stoppuhr",
+    "iodate": "Iodat, IO₃⁻",
+    "bisulfite": "Hydrogensulfit, HSO₃⁻",
+    "sulfate": "Sulfat, SO₄²⁻",
+    "iodide": "Iodid, I⁻",
+    "hydrogenIon": "Wasserstoffion, H⁺",
+    "iodine": "Iod, I₂",
+    "triiodide": "Triiodid, I₃⁻",
+    "polyiodide": "Polyiodid-Kette",
+    "amylose": "Amylose-Helix",
+    "glucose": "Glucose-Einheit",
+    "water": "Wasser"
+  },
+  "sections": {
+    "pour": {
+      "title": "Zwei klare Flüssigkeiten und eine Wartezeit",
+      "p1": "Das ist eine <strong>Iod-Uhr</strong>, ein klassischer Versuch aus dem Chemieunterricht. Ein breites <strong>Mischbecherglas</strong> steht auf einem <strong>Magnetrührer</strong>. Darin dreht sich ein <strong>Rührfisch</strong> und hält die Flüssigkeit in Bewegung. Im Becherglas ist Lösung A: 100 mL Kaliumiodatlösung, 100 mL Wasser und 50 mL Stärkelösung. Im kleineren <strong>Gießbecherglas</strong> wartet Lösung B: 20 mL Natriumhydrogensulfitlösung und 130 mL Wasser.",
+      "p2": "Beide Flüssigkeiten sehen aus wie reines Wasser. Gießen Sie B in A und starten Sie die <strong>Stoppuhr</strong>. Etwa 10 Sekunden lang scheint nichts zu passieren. Dann färbt sich das ganze Becherglas auf einen Schlag blauschwarz. Im Unterricht dauert das Warten mit diesem Rezept meist 9 bis 14 Sekunden. Das ist genau genug, um die Zeit damit zu messen.",
+      "p3": "Hans Heinrich Landolt beschrieb diese Reaktion 1886. Deshalb heißt sie in der Chemie <strong>Landolt-Reaktion</strong>. Er war aber nicht der Erste, der einen chemischen Vorgang mit der Uhr verfolgte. Harcourt und Esson hatten schon 1866 und 1867 eine ähnliche Uhr untersucht, mit anderen Stoffen. Der Trick ist immer derselbe. Eine Reaktion verbraucht still und leise einen Stoff, und die Farbe wartet, bis er weg ist.",
+      "p4": "In der Chemie misst man gelöste Stoffe in Mol pro Liter, kurz M. Ein Mol ist eine riesige, feste Zahl von Teilchen: etwa 6 × 10<sup>23</sup>. Ein Millimol pro Liter, kurz mM, ist ein Tausendstel davon. Nach dem Eingießen enthalten die 400 mL Gemisch 25 mM Iodat, 12,5 mM Hydrogensulfit und 0,125 % Stärke. Es gibt also halb so viel Hydrogensulfit wie Iodat. Das wird später noch wichtig. Wählen Sie „Moleküle“ und tauchen Sie in die Flüssigkeit ein. Dort sehen Sie, was die Stoppuhr nicht zeigt.",
+      "p5": "Das Modell vereinfacht den Aufbau. Das Eingießen dauert eine Sekunde, und die Uhr startet, sobald es beginnt. Der Rührfisch dreht sich gleichmäßig. Darum ist das Gemisch immer gut durchmischt."
+    },
+    "slowStep": {
+      "title": "Der langsame Schritt bildet seine eigene Säure",
+      "p1": "Im Inneren wimmelt die Flüssigkeit von <strong>Ionen</strong>. Ein Ion ist ein Atom oder eine kleine Gruppe von Atomen mit elektrischer Ladung. Geladen ist es, weil es Elektronen aufgenommen oder abgegeben hat. Die Ladung steht klein oben rechts. Ein − heißt ein Elektron zu viel, 2− heißt zwei, und + heißt, dass eines fehlt. Die kleine Zahl unten zählt die Atome. <strong>Iodat</strong>, IO<sub>3</sub><sup>−</sup>, ist also ein Iodatom mit drei Sauerstoffatomen und einem Elektron zu viel.",
+      "p2": "<strong>Hydrogensulfit</strong>, HSO<sub>3</sub><sup>−</sup>, ist ein Schwefelatom mit drei Sauerstoffatomen und einem Wasserstoffatom. In Wasser sitzt der Wasserstoff meist an einem der Sauerstoffatome, und dort zeichnet ihn auch das Modell. Iodat und Hydrogensulfit reagieren im <strong>langsamen Schritt</strong>, den Sie in der Liste unten finden. Lesen Sie den Pfeil als „wird zu“. Ein Iodat und drei Hydrogensulfite werden zu einem <strong>Iodid-Ion</strong>, I<sup>−</sup>, drei <strong>Sulfat-Ionen</strong>, SO<sub>4</sub><sup>2−</sup>, und drei <strong>Wasserstoffionen</strong>, H<sup>+</sup>.",
+      "p3": "Zählen Sie jetzt den Sauerstoff. Das Iodat verliert alle drei Sauerstoffatome. Jedes Hydrogensulfit bekommt eines dazu und wird zu Sulfat. Insgesamt wandern also drei Sauerstoffatome vom Iod zum Schwefel. Das Modell zeigt nur diese Bilanz, einen Sauerstoffsprung nach dem anderen. Wie ein einzelner Zusammenstoß das wirklich schafft, hat noch niemand genau geklärt. Halten Sie die Sprünge also nicht für den wahren Weg.",
+      "p4": "Jedes Hydrogensulfit gibt außerdem seinen Wasserstoff als H<sup>+</sup> ab. Wasserstoffionen machen eine Flüssigkeit sauer. Das Becherglas stellt also nebenbei seine eigene Säure her: ein H<sup>+</sup> für jedes verbrauchte Hydrogensulfit. Niemand hat Säure dazugegeben. Achten Sie auf die Anzeigen unten. Das Hydrogensulfit nimmt ab, Iodid und Säure nehmen zu. Beides brauchen Sie im nächsten Kapitel.",
+      "p5": "Das echte Becherglas enthält etwa 3 × 10<sup>21</sup> Hydrogensulfit-Ionen, eine Drei mit 21 Nullen. Jedes davon schwimmt zwischen etwa 4.400 Wassermolekülen. Das Modell drängt ein paar Dutzend Ionen in eine Box von nur 4,8 nm Breite. Ein Nanometer, nm, ist ein Millionstel Millimeter. Jedes Kugelmodell steht für eine feste Menge seiner Sorte. Das Wasser ist nur ein blasser Schleier. Mit „Wasser (W)“ können Sie ihn ausblenden. Die Kalium- und Natriumionen machen nicht mit, deshalb fehlen sie."
+    },
+    "invisibleIodine": {
+      "title": "Iod, das niemand sieht",
+      "p1": "Das Iodid öffnet einen zweiten Weg. Iodat kann auch mit Iodid und Wasserstoffionen reagieren. Dabei entsteht <strong>Iod</strong>, I<sub>2</sub>, also zwei miteinander verbundene Iodatome. Das ist die <strong>Dushman-Reaktion</strong>, die Dushman 1904 untersucht hat. Sie braucht Iodid und Säure, und beides liefert der langsame Schritt. Je länger der langsame Schritt läuft, desto schneller entsteht also Iod. Eine Reaktion, die sich so selbst beschleunigt, nennt man <strong>autokatalytisch</strong>.",
+      "p2": "Ganz am Anfang gibt es noch kein Iodid, also kann auch kein Iod entstehen. Doch schon bald taucht ein wenig auf, und mit jeder Sekunde mehr. Sie sehen es nie, denn das Hydrogensulfit zerstört jedes Iodmolekül sofort. Es macht aus dem Iod wieder zwei Iodid-Ionen und wird dabei selbst zu Sulfat. Das ist der dritte Schritt in der Liste.",
+      "p3": "Wie schnell ist sofort? In der Chemie beschreibt man das mit einer Geschwindigkeitskonstante. Diese Zahl sagt, wie schnell zwei Sorten von Molekülen miteinander reagieren, wenn sie sich treffen. Für Iod und Hydrogensulfit beträgt sie 1,8 × 10<sup>9</sup> Liter pro Mol und Sekunde. Am Anfang lebt ein Iodmolekül damit etwa 40 Nanosekunden, also vierzig Milliardstel Sekunden. Die Anzeige unten zeigt, wie diese Lebensdauer wächst, während das Hydrogensulfit weniger wird.",
+      "p4": "Es ist also ein Wettlauf. Der langsame Schritt bildet Iodid und Säure. Das Iod entsteht immer schneller. Und das Hydrogensulfit vernichtet es immer wieder. Im Mittel verbraucht das Becherglas etwa 2,5 × 10<sup>20</sup> Hydrogensulfit-Ionen pro Sekunde. Solange noch Hydrogensulfit übrig ist, gewinnt es, und die Flüssigkeit bleibt klar.",
+      "p5": "Das Modell zeigt jede dieser Begegnungen milliardenfach langsamer als in Wirklichkeit, damit Sie eine davon verfolgen können. Sehen Sie zu, wie ein Iodat auf Iodid trifft, ein Iodmolekül kurz aufblitzt und ein Hydrogensulfit es sich schnappt. Im echten Becherglas lebt ein Iodmolekül nur etwa vierzig Milliardstel Sekunden. Und all das geschieht im ganzen Becherglas zugleich."
+    },
+    "tippingPoint": {
+      "title": "Das letzte Hydrogensulfit",
+      "p1": "Zurück zum Becherglas. Behalten Sie die Stoppuhr im Blick. Das Hydrogensulfit nimmt erst langsam ab, dann immer schneller, weil sich der Wettlauf selbst beschleunigt. Dann ist das letzte Hydrogensulfit weg. Nichts verbraucht mehr das Iod, also überlebt jedes neue Molekül.",
+      "p2": "Jetzt sammelt sich das Iod schnell an. Mit Stärke in der Flüssigkeit kann Ihr Auge es ab etwa 20 Mikromolar sehen. Ein Mikromolar, µM, ist ein Tausendstel Millimolar. Ist das Hydrogensulfit aufgebraucht, überschreitet das Becherglas diese Schwelle in weit weniger als einer Sekunde. Ein gerührtes Becherglas färbt sich überall zugleich. In einer dünnen Schicht ohne Rühren kriecht die Farbe dagegen als Front voran. Gemessen hat man das an einer verwandten Sulfit-Uhr: Die Front kam etwa einen Millimeter pro Minute voran.",
+      "p3": "Eine Bedingung gibt es allerdings. Im langsamen Schritt verbraucht jedes Iodat drei Hydrogensulfite. Die Farbe kommt also nur, wenn weniger als dreimal so viel Hydrogensulfit wie Iodat da ist. Sonst ist zuerst das Iodat aufgebraucht, und die Flüssigkeit bleibt klar. Dieses Rezept hat halb so viel Hydrogensulfit wie Iodat, weit unter dieser Grenze.",
+      "p4": "Das Diagramm zeigt die ganze Geschichte. Das Hydrogensulfit fällt auf null, dann schießt das Iod nach oben. Die genaue Form beider Linien ist die eigene, glatt gezeichnete Schätzung des Modells, denn für dieses Rezept hat sie niemand gemessen. Der echte Umschlag ist zu schnell fürs Auge, deshalb dehnt das Modell die letzten Momente. Nach dem Umschlag zeigt es den Anstieg des Iods 75-mal langsamer als in Wirklichkeit und die Farbe etwa 4-mal langsamer. Die Tempoanzeige verrät, wie langsam Sie gerade zusehen."
+    },
+    "starch": {
+      "title": "Blau aus einer Stärkespirale",
+      "p1": "Iod allein ist nicht blau. In Wasser sieht es gelbbraun aus. Das Blauschwarz kommt von der Stärke. Stärke besteht aus Glucose, einem Zucker. Die Bausteine hängen in langen Ketten zusammen. Ein Bestandteil davon, die <strong>Amylose</strong>, windet sich zu einer <strong>Helix</strong>, wie eine Sprungfeder.",
+      "p2": "Jede Windung enthält 6 <strong>Glucose-Einheiten</strong> und ist 0,8 nm hoch. Durch ihre Mitte läuft ein Kanal von etwa 0,5 nm Breite, gerade weit genug für Iod. Die Helix windet sich nach links. Das Modell zeichnet jede Glucose-Einheit als einfachen Ring, nicht Atom für Atom.",
+      "p3": "Zuerst trifft das Iod auf das Iodid aus dem langsamen Schritt. Zusammen bilden sie <strong>Triiodid</strong>, I<sub>3</sub><sup>−</sup>. Das Zeichen ⇌ bedeutet, dass das in beide Richtungen läuft. Im Kanal reiht sich das Iod zu längeren <strong>Polyiodid-Ketten</strong> auf, etwa I<sub>5</sub><sup>−</sup> mit einem I<sub>2</sub> auf jeder Seite. Ihre Atome sitzen etwa 3,1 Å auseinander. Ein Ångström, Å, ist ein Zehntel Nanometer. Triiodid allein färbt noch nicht, erst die längeren Ketten sorgen für die Farbe. Die Farbe braucht also neben dem Iod auch das Iodid.",
+      "p4": "Die Ketten nehmen Licht bei etwa 600 nm am stärksten auf, das ist orange. Was übrig bleibt, sieht für Ihr Auge tiefblau aus. Der andere Teil der Stärke heißt <strong>Amylopektin</strong> und ist verzweigt. Seine kurzen Äste halten nur kurze Iodketten, darum färbt es sich stattdessen rotviolett. Im Modell entsteht zuerst das Iod, danach füllen sich die Ketten. Im echten Becherglas geschieht beides zugleich.",
+      "p5": "Die Stärke zeigt den Umschlag nur an. Sie ist der <strong>Indikator</strong>: Sie wird nicht verbraucht, und sie bestimmt nicht die Zeit. Das tut das Hydrogensulfit. Colin und Claubry entdeckten die blaue Farbe von Stärke und Iod 1814, lange bevor jemand sie als Uhr nutzte."
+    },
+    "tuning": {
+      "title": "Die Uhr stellen",
+      "p1": "Sie können diese Uhr selbst stellen. Der Iodat-Regler legt fest, wie viel Iodat im Gemisch ist. Halb so viel Iodat ergibt etwa die doppelte Wartezeit. Doppelt so viel Iodat ergibt etwa die halbe. Der Umschlag rückt im Diagramm sofort an seine neue Stelle. Mit „Neu mischen“ verfolgen Sie ein frisches Becherglas von Anfang an. Im Modell folgt die Wartezeit genau dem Iodat. Echte Bechergläser kommen dem nur nahe.",
+      "p2": "Auch Säure macht die Uhr schneller. Im Dushman-Schritt zählen die Wasserstoffionen doppelt: Die Geschwindigkeit folgt dem Quadrat ihrer Menge. Ein paar Tropfen Schwefelsäure lassen die Farbe also früher kommen. Bei diesem Rezept kommt keine dazu, denn es bildet seine eigene.",
+      "p3": "In wärmeren Gemischen kommt die Farbe früher, Eis bremst sie. In einem Schulversuch mit einem langsameren Rezept kam die Farbe im Eisbad nach 45 s, bei Zimmertemperatur nach 30 s. Wie stark der Effekt genau ist, darüber ist man sich noch uneins. Das Modell legt deshalb eine eigene glatte Kurve durch diese Zeiten aus dem Unterricht. Verstehen Sie den Temperaturregler als Skizze, nicht als Messung.",
+      "p4": "Einen Regler für Hydrogensulfit gibt es nicht. Wie das Hydrogensulfit die Wartezeit verändert, ist noch umstritten. Das Modell hält es deshalb fest und lässt das Iodat das Tempo bestimmen. Was Sie auch einstellen, es ist immer weniger als dreimal so viel Hydrogensulfit wie Iodat da. Die Farbe kommt also immer.",
+      "p5": "Diese Chemie hat Verwandte. Gibt man Quecksilberionen dazu, erhält man die <strong>Old-Nassau-Reaktion</strong>, die 1977 beschrieben wurde. Sie blitzt erst orange auf, bevor sie blauschwarz wird. Die <strong>Briggs-Rauscher-Reaktion</strong> von 1973 ist anders. Sie wechselt immer wieder von klar über bernsteinfarben zu blau, etwa 5 Minuten lang. Damit ist sie ein Oszillator und keine Uhr. Die Landolt-Uhr schlägt einmal um, und dann ist sie fertig."
+    }
+  }
+}

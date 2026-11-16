@@ -1,0 +1,159 @@
+:root {
+  --sulfur: #e8c547;
+  --iodine-phase: #b07ad9;
+  --blue: #4a5bd1;
+}
+
+.gauge .readouts {
+  width: 15rem;
+}
+
+.gauge .readout dd {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.chapter .readouts {
+  --readout-min-width: 8rem;
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.chapter .readouts > div,
+.chapter .readouts :is(dt, dd) {
+  min-width: 0;
+}
+
+.chapter .readouts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.chapter .readouts dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chapter .readouts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.range-widget__header {
+  flex-wrap: wrap;
+}
+
+.range-widget__header label {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.step-list {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step-list li {
+  --tone: var(--muted);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  padding: 8px 12px;
+  border-left: 3px solid var(--tone);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--tone) 8%, transparent);
+}
+
+.step-list li[data-state='running'] {
+  --tone: var(--sulfur);
+}
+
+.step-list li[data-state='finished'] {
+  --tone: var(--blue);
+}
+
+.step-list__name {
+  min-width: 0;
+  font-weight: 500;
+}
+
+.step-list__state {
+  color: var(--tone);
+  font-size: 0.8125rem;
+  text-align: right;
+}
+
+.step-list__equation {
+  grid-column: 1 / -1;
+  min-width: 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.clock-graph {
+  margin: 16px 0;
+}
+
+.clock-graph__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1;
+}
+
+.clock-graph__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.clock-graph__legend [data-series]::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: var(--series);
+}
+
+.clock-graph__legend [data-series='bisulfite'] {
+  --series: var(--sulfur);
+}
+
+.clock-graph__legend [data-series='iodine'] {
+  --series: var(--iodine-phase);
+}
+
+.chip[data-action='scale'] {
+  --tone: var(--blue);
+}
+
+.chip[data-action='mix'] {
+  --tone: var(--sulfur);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapter .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chapter .readouts > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}

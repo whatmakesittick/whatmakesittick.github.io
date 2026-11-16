@@ -1,0 +1,277 @@
+{
+  "meta": {
+    "title": "Comment l’horloge à iode mesure le temps",
+    "eyebrow": "Chimie",
+    "tagline": "Deux liquides incolores, une dizaine de secondes où rien ne se passe, puis du bleu-noir en un clin d’œil : une course entre molécules qui s’arrête pile à l’heure.",
+    "description": "Une horloge à iode en 3D, du bécher aux molécules : pourquoi deux liquides incolores attendent environ 10 secondes, puis virent au bleu-noir d’un coup.",
+    "summary": "Le versement, l’étape lente, le diiode que personne ne voit, le dernier bisulfite, l’hélice d’amidon, et comment régler l’horloge.",
+    "socialAlt": "Un large bécher rempli de liquide bleu-noir sur un agitateur magnétique, à côté d’un chronomètre, près du titre « Comment l’horloge à iode mesure le temps »"
+  },
+  "stage": {
+    "label": "Modèle interactif de l’horloge à iode",
+    "gauge": "Horloge et concentrations en direct"
+  },
+  "timeline": {
+    "label": "Déroulement de l’horloge",
+    "phases": "Aller à un moment du déroulement",
+    "value": "{{seconds}} s",
+    "during": "{{seconds}} s après le début du versement, {{phase}}",
+    "speed": "Vitesse",
+    "speedValue": "{{factor}}×",
+    "realTime": "Temps réel",
+    "slower": "{{factor}} fois plus lent qu’en réalité",
+    "faster": "{{factor}} fois plus rapide qu’en réalité",
+    "phase": {
+      "pour": "Versement",
+      "induction": "Attente",
+      "exhaustion": "Dernier bisulfite",
+      "iodine": "Le diiode s’accumule",
+      "complex": "Le bleu apparaît",
+      "blue": "Bleu-noir"
+    },
+    "jump": {
+      "pour": "Aller au versement",
+      "induction": "Aller à l’attente incolore",
+      "exhaustion": "Aller au dernier bisulfite",
+      "iodine": "Aller au moment où le diiode survit",
+      "complex": "Aller à l’apparition du bleu",
+      "blue": "Aller au bécher bleu-noir"
+    },
+    "detail": {
+      "pour": "on verse la solution B dans la solution A",
+      "induction": "l’étape lente consomme le bisulfite, et le liquide reste incolore",
+      "exhaustion": "le bisulfite est presque épuisé",
+      "iodine": "plus rien ne consomme le diiode, il s’accumule",
+      "complex": "les chaînes d’iode remplissent les hélices d’amidon",
+      "blue": "tout le bécher est bleu-noir"
+    }
+  },
+  "controls": {
+    "label": "Commandes du modèle",
+    "scale": "Échelle",
+    "scaleOptions": {
+      "beaker": "Bécher",
+      "molecules": "Molécules"
+    },
+    "groups": {
+      "scale": "Échelle",
+      "mix": "Mélanger à nouveau"
+    },
+    "mixOptions": {
+      "again": "Mélanger à nouveau"
+    },
+    "views": {
+      "water": {
+        "name": "Eau",
+        "short": "Eau",
+        "hint": "Eau (W)"
+      },
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      }
+    }
+  },
+  "readouts": {
+    "clock": "Horloge",
+    "bisulfite": "Bisulfite",
+    "iodine": "Diiode",
+    "now": "Maintenant",
+    "iodineState": {
+      "eaten": "Aussitôt consommé"
+    },
+    "pace": {
+      "real": "Temps réel",
+      "slower": "{{factor}} fois plus lent qu’en réalité",
+      "faster": "{{factor}} fois plus rapide qu’en réalité"
+    }
+  },
+  "units": {
+    "seconds": "{{value}} s",
+    "millimolar": "{{value}} mM",
+    "micromolar": "{{value}} µM",
+    "nanoseconds": "{{value}} ns",
+    "microseconds": "{{value}} µs",
+    "milliseconds": "{{value}} ms",
+    "percent": "{{value}} %",
+    "celsius": "{{value}} °C"
+  },
+  "equations": {
+    "landolt": "IO<sub>3</sub><sup>−</sup> + 3 HSO<sub>3</sub><sup>−</sup> → I<sup>−</sup> + 3 SO<sub>4</sub><sup>2−</sup> + 3 H<sup>+</sup>",
+    "dushman": "IO<sub>3</sub><sup>−</sup> + 5 I<sup>−</sup> + 6 H<sup>+</sup> → 3 I<sub>2</sub> + 3 H<sub>2</sub>O",
+    "eaten": "I<sub>2</sub> + HSO<sub>3</sub><sup>−</sup> + H<sub>2</sub>O → 2 I<sup>−</sup> + SO<sub>4</sub><sup>2−</sup> + 3 H<sup>+</sup>",
+    "triiodide": "I<sub>2</sub> + I<sup>−</sup> ⇌ I<sub>3</sub><sup>−</sup>",
+    "helix": "I<sub>3</sub><sup>−</sup> + I<sub>2</sub> → I<sub>5</sub><sup>−</sup>"
+  },
+  "steps": {
+    "name": {
+      "landolt": "Étape lente",
+      "dushman": "Le diiode se forme",
+      "eaten": "Le bisulfite consomme le diiode",
+      "triiodide": "Le diiode rencontre l’iodure",
+      "helix": "Des chaînes plus longues remplissent l’hélice"
+    },
+    "state": {
+      "waiting": "En attente",
+      "running": "En cours",
+      "finished": "Terminée"
+    }
+  },
+  "chapters": {
+    "steps": {
+      "label": "Étapes de la réaction"
+    },
+    "graph": {
+      "label": "Bisulfite et diiode dans le bécher au fil du temps",
+      "time": "Temps après le versement, s",
+      "unit": "mM",
+      "bisulfite": "Bisulfite",
+      "iodine": "Diiode",
+      "switch": "Basculement à {{seconds}} s"
+    },
+    "pour": {
+      "clock": "Chronomètre",
+      "iodate": "Iodate après mélange",
+      "iodateValue": "25 mM",
+      "bisulfite": "Bisulfite après mélange",
+      "bisulfiteValue": "12,5 mM",
+      "starch": "Amidon après mélange",
+      "starchValue": "0,125 %",
+      "volume": "Volume total",
+      "volumeValue": "400 mL",
+      "delay": "Attente avant la couleur",
+      "delayValue": "environ 10 s, 9 à 14 s en démonstration"
+    },
+    "slowStep": {
+      "bisulfite": "Bisulfite restant",
+      "iodide": "Iodure formé",
+      "acid": "Acide formé, H⁺",
+      "oxygen": "Atomes d’oxygène déplacés par ion iodate",
+      "oxygenValue": "3, de l’iode vers le soufre",
+      "ions": "Ions bisulfite dans le bécher",
+      "ionsValue": "environ 3 × 10²¹",
+      "water": "Molécules d’eau par ion bisulfite",
+      "waterValue": "environ 4 400"
+    },
+    "invisibleIodine": {
+      "lifetime": "Durée de vie d’une molécule de diiode",
+      "survives": "Elle survit",
+      "rate": "Constante de vitesse, diiode et bisulfite",
+      "rateValue": "1,8 × 10⁹ M⁻¹ s⁻¹",
+      "used": "Bisulfite consommé par seconde",
+      "usedValue": "environ 2,5 × 10²⁰ ions",
+      "dushman": "Étape qui forme le diiode",
+      "dushmanValue": "Dushman, 1904"
+    },
+    "tippingPoint": {
+      "switchAt": "Bisulfite épuisé à",
+      "bisulfite": "Bisulfite actuel",
+      "iodine": "Diiode actuel",
+      "pace": "Vitesse de lecture",
+      "needs": "Pour la couleur, il faut",
+      "needsValue": "bisulfite sous 3 × iodate",
+      "visible": "Diiode visible, avec l’amidon",
+      "visibleValue": "environ 20 µM",
+      "speed": "De l’incolore au bleu-noir",
+      "speedValue": "bien moins d’une seconde"
+    },
+    "starch": {
+      "fill": "Iode dans l’hélice",
+      "turn": "Unités de glucose par tour",
+      "turnValue": "6",
+      "pitch": "Hauteur d’un tour",
+      "pitchValue": "0,8 nm",
+      "channel": "Largeur du canal",
+      "channelValue": "environ 0,5 nm",
+      "peak": "Absorption maximale",
+      "peakValue": "environ 600 nm",
+      "bonds": "Longueurs de liaison de l’iode",
+      "bondsValue": "I₂ 2,67 Å, I₃⁻ 2,90 Å"
+    },
+    "tuning": {
+      "iodate": "Iodate",
+      "temperature": "Température",
+      "switchAt": "Couleur à",
+      "ratio": "Bisulfite par rapport à l’iodate",
+      "ratioValue": "{{ratio}}, il faut moins de 3 pour la couleur",
+      "half": "Moitié moins d’iodate",
+      "halfValue": "attente environ doublée",
+      "acid": "Plus d’acide",
+      "acidValue": "plus tôt, H⁺ compte au carré",
+      "cold": "Bain de glace ou température ambiante, une démo en classe",
+      "coldValue": "45 s contre 30 s"
+    }
+  },
+  "parts": {
+    "mixingBeaker": "Bécher de mélange",
+    "mixture": "Mélange, solution A",
+    "pourBeaker": "Bécher verseur",
+    "bisulfiteSolution": "Solution B, bisulfite",
+    "pourStream": "Versement",
+    "stirBar": "Barreau aimanté",
+    "stirrer": "Agitateur magnétique",
+    "thermometer": "Thermomètre",
+    "stopwatch": "Chronomètre",
+    "iodate": "Iodate, IO₃⁻",
+    "bisulfite": "Bisulfite, HSO₃⁻",
+    "sulfate": "Sulfate, SO₄²⁻",
+    "iodide": "Iodure, I⁻",
+    "hydrogenIon": "Ion hydrogène, H⁺",
+    "iodine": "Diiode, I₂",
+    "triiodide": "Triiodure, I₃⁻",
+    "polyiodide": "Chaîne de polyiodure",
+    "amylose": "Hélice d’amylose",
+    "glucose": "Unité de glucose",
+    "water": "Eau"
+  },
+  "sections": {
+    "pour": {
+      "title": "Deux liquides incolores, puis l’attente",
+      "p1": "Voici une <strong>horloge à iode</strong>, une expérience classique de chimie. Un large <strong>bécher de mélange</strong> est posé sur un <strong>agitateur magnétique</strong>. Dedans, un <strong>barreau aimanté</strong> tourne et garde le liquide en mouvement. Ce bécher contient la solution A : 100 mL d’iodate de potassium, 100 mL d’eau et 50 mL de solution d’amidon. Le petit <strong>bécher verseur</strong> contient la solution B : 20 mL d’hydrogénosulfite de sodium, qu’on appelle souvent bisulfite, et 130 mL d’eau.",
+      "p2": "Les deux liquides ressemblent à de l’eau ordinaire. Versez B dans A et lancez le <strong>chronomètre</strong>. Pendant environ 10 secondes, rien ne semble se passer. Puis tout le bécher vire au bleu-noir, d’un seul coup. En classe, avec cette recette, l’attente dure en général 9 à 14 secondes. C’est assez régulier pour mesurer le temps.",
+      "p3": "Hans Heinrich Landolt a décrit cette réaction en 1886. C’est pourquoi les chimistes l’appellent la <strong>réaction de Landolt</strong>. Il n’était pourtant pas le premier à chronométrer une transformation chimique. Harcourt et Esson avaient étudié une horloge semblable en 1866 et 1867, avec d’autres produits. Le principe reste toujours le même. Une réaction consomme discrètement un ingrédient, et la couleur attend qu’il soit épuisé.",
+      "p4": "Les chimistes mesurent ce qui est dissous en moles par litre, noté M. Une mole, c’est un nombre fixe et immense de particules : environ 6 × 10<sup>23</sup>. Une millimole par litre, notée mM, en vaut un millième. Après le versement, les 400 mL de mélange contiennent 25 mM d’iodate, 12,5 mM de bisulfite et 0,125 % d’amidon. Il y a donc deux fois moins de bisulfite que d’iodate. Ce détail comptera plus tard. Choisissez Molécules pour plonger dans le liquide et voir ce que le chronomètre ne montre pas.",
+      "p5": "Le modèle simplifie la paillasse. Le versement dure une seconde, et le chronomètre démarre au moment où il commence. Le barreau aimanté tourne à vitesse constante, si bien que le mélange reste toujours homogène."
+    },
+    "slowStep": {
+      "title": "L’étape lente fabrique son propre acide",
+      "p1": "Dans le bécher, le liquide grouille d’<strong>ions</strong>. Un ion est un atome, ou un petit groupe d’atomes, qui porte une charge électrique. Il est chargé parce qu’il a gagné ou perdu des électrons. La charge s’écrit en haut, à droite. Un − signifie un électron en trop, 2− deux électrons en trop, et + un électron en moins. Le petit chiffre en bas compte les atomes. Ainsi, l’<strong>ion iodate</strong>, IO<sub>3</sub><sup>−</sup>, est un atome d’iode lié à trois atomes d’oxygène, avec un électron en trop.",
+      "p2": "Le <strong>bisulfite</strong>, HSO<sub>3</sub><sup>−</sup>, est un atome de soufre avec trois atomes d’oxygène et un atome d’hydrogène. Dans l’eau, l’hydrogène se place surtout sur l’un des oxygènes, et le modèle le dessine là. L’iodate et le bisulfite réagissent lors de l’<strong>étape lente</strong>, présentée dans la liste ci-dessous. Lisez la flèche comme « devient ». Un iodate et trois bisulfites deviennent un ion <strong>iodure</strong>, I<sup>−</sup>, trois ions <strong>sulfate</strong>, SO<sub>4</sub><sup>2−</sup>, et trois <strong>ions hydrogène</strong>, H<sup>+</sup>.",
+      "p3": "Comptez maintenant les oxygènes. L’iodate perd ses trois atomes d’oxygène. Chaque bisulfite en gagne un et devient du sulfate. Au total, trois atomes d’oxygène passent donc de l’iode au soufre. Le modèle ne montre que ce bilan, un saut d’oxygène à la fois. Personne ne sait encore ce qui se passe vraiment lors d’une seule collision. Ne prenez donc pas ces sauts pour le vrai chemin.",
+      "p4": "Chaque bisulfite libère aussi son hydrogène, sous forme d’ion H<sup>+</sup>. Ce sont les ions hydrogène qui rendent un liquide acide. Le bécher fabrique donc son propre acide au fil de la réaction : un H<sup>+</sup> pour chaque bisulfite consommé. Personne n’a ajouté d’acide. Regardez les mesures ci-dessous. Le bisulfite diminue, tandis que l’iodure et l’acide augmentent. Vous aurez besoin des deux au chapitre suivant.",
+      "p5": "Le vrai bécher contient environ 3 × 10<sup>21</sup> ions bisulfite, soit trois mille milliards de milliards. Chacun nage parmi environ 4 400 molécules d’eau. Le modèle entasse quelques dizaines d’ions dans une boîte de 4,8 nm de large seulement. Un nanomètre, noté nm, c’est un millionième de millimètre. Chaque modèle à billes représente une quantité fixe de son espèce. L’eau n’est qu’une brume légère, que vous pouvez masquer avec Eau (W). Les ions potassium et sodium ne participent pas à la réaction, alors le modèle les laisse de côté."
+    },
+    "invisibleIodine": {
+      "title": "Le diiode que personne ne voit",
+      "p1": "L’iodure ouvre une seconde voie. L’iodate peut aussi réagir avec l’iodure et les ions hydrogène. Il se forme alors du <strong>diiode</strong>, I<sub>2</sub>, deux atomes d’iode liés ensemble. C’est la <strong>réaction de Dushman</strong>, étudiée par Dushman en 1904. Elle a besoin d’iodure et d’acide, et l’étape lente fabrique les deux. Plus l’étape lente avance, plus le diiode se forme vite. Une réaction qui s’accélère ainsi d’elle-même est dite <strong>autocatalytique</strong>.",
+      "p2": "Tout au début, il n’y a pas d’iodure, donc aucun diiode ne peut se former. Mais presque aussitôt, un peu de diiode apparaît, puis un peu plus chaque seconde. Vous ne le voyez jamais, car le bisulfite détruit chaque molécule de diiode sur-le-champ. Il la retransforme en deux ions iodure et devient lui-même du sulfate. C’est la troisième étape de la liste.",
+      "p3": "Sur-le-champ, c’est-à-dire en combien de temps ? Les chimistes le décrivent avec une constante de vitesse. C’est un nombre qui dit à quelle vitesse deux sortes de molécules réagissent quand elles se rencontrent. Pour le diiode et le bisulfite, elle vaut 1,8 × 10<sup>9</sup> litres par mole et par seconde. Au départ, une molécule de diiode vit donc environ 40 nanosecondes, soit quarante milliardièmes de seconde. La mesure ci-dessous montre cette durée de vie qui s’allonge à mesure que le bisulfite se raréfie.",
+      "p4": "C’est donc une course. L’étape lente fabrique de l’iodure et de l’acide. Le diiode se forme de plus en plus vite. Et le bisulfite continue de le détruire. En moyenne, le bécher consomme environ 2,5 × 10<sup>20</sup> ions bisulfite chaque seconde. Tant qu’il reste du bisulfite, c’est lui qui gagne, et le liquide reste incolore.",
+      "p5": "Le modèle dessine chacune de ces rencontres des milliards de fois plus lentement qu’en réalité, pour que vous puissiez en suivre une. Regardez un iodate rencontrer de l’iodure, une molécule de diiode surgir et un bisulfite s’en emparer. Dans le vrai bécher, une molécule de diiode ne vit qu’environ quarante milliardièmes de seconde. Et cela se produit partout à la fois."
+    },
+    "tippingPoint": {
+      "title": "Le dernier bisulfite",
+      "p1": "Revenez au bécher et gardez un œil sur le chronomètre. Le bisulfite diminue lentement au début, puis de plus en plus vite, car la course s’accélère d’elle-même. Puis le dernier bisulfite disparaît. Plus rien ne consomme le diiode, alors chaque nouvelle molécule survit.",
+      "p2": "Le diiode s’accumule vite. Avec de l’amidon dans le liquide, votre œil le voit à partir d’environ 20 micromolaires. Un micromolaire, noté µM, vaut un millième de millimolaire. Le bécher franchit ce seuil bien moins d’une seconde après la fin du bisulfite. Dans un bécher agité, la couleur change partout à la fois. Dans une couche mince qu’on ne remue pas, elle avance plutôt comme un front. Ce front a été mesuré avec une horloge au sulfite apparentée : il avance d’environ un millimètre par minute.",
+      "p3": "Il y a une condition. Dans l’étape lente, chaque iodate consomme trois bisulfites. La couleur n’apparaît donc que si le bisulfite reste sous le triple de l’iodate. Sinon, c’est l’iodate qui s’épuise en premier, et le liquide reste incolore. Cette recette contient deux fois moins de bisulfite que d’iodate, bien en dessous de cette limite.",
+      "p4": "Le graphique raconte toute l’histoire. Le bisulfite tombe à zéro, puis le diiode s’envole. La forme exacte des deux courbes est une estimation lissée, propre au modèle, car personne ne les a mesurées pour cette recette. Le vrai basculement est trop rapide pour être vu, alors le modèle étire les derniers instants. Après le basculement, il montre la montée du diiode 75 fois plus lentement qu’en réalité, et la couleur environ 4 fois plus lentement. La vitesse de lecture affichée vous dit à quel point la scène est ralentie."
+    },
+    "starch": {
+      "title": "Du bleu grâce à une spirale d’amidon",
+      "p1": "Seul, le diiode n’est pas bleu. Dans l’eau, il paraît jaune-brun. Le bleu-noir vient de l’amidon. L’amidon est fait de glucose, un sucre, assemblé en longues chaînes. L’une de ses formes, l’<strong>amylose</strong>, s’enroule en <strong>hélice</strong>, comme un ressort.",
+      "p2": "Chaque tour de l’hélice compte 6 <strong>unités de glucose</strong> et monte de 0,8 nm. En son centre passe un canal d’environ 0,5 nm de large, juste assez pour le diiode. L’hélice s’enroule vers la gauche. Le modèle dessine chaque unité de glucose comme un simple anneau, et non atome par atome.",
+      "p3": "D’abord, le diiode rencontre l’iodure fabriqué par l’étape lente. Ensemble, ils forment l’ion <strong>triiodure</strong>, I<sub>3</sub><sup>−</sup>. Le signe ⇌ veut dire que la réaction va dans les deux sens. Dans le canal, l’iode s’aligne en <strong>chaînes de polyiodure</strong> plus longues, comme un I<sub>5</sub><sup>−</sup> avec un I<sub>2</sub> de chaque côté. Leurs atomes sont espacés d’environ 3,1 Å. Un ångström, noté Å, vaut un dixième de nanomètre. Le triiodure seul ne donne pas la couleur, mais les chaînes plus longues la donnent. La couleur a donc besoin de l’iodure autant que du diiode.",
+      "p4": "Ces chaînes absorbent surtout la lumière à environ 600 nm, c’est-à-dire la lumière orange. Ce qui reste paraît bleu profond à vos yeux. L’autre partie de l’amidon, l’<strong>amylopectine</strong>, est ramifiée. Ses courtes branches ne logent que de courtes chaînes d’iode, si bien qu’elle vire plutôt au rouge-violet. Le modèle montre d’abord la formation du diiode, puis le remplissage par les chaînes. Dans le vrai bécher, les deux se produisent en même temps.",
+      "p5": "L’amidon ne fait que montrer le basculement. C’est l’<strong>indicateur coloré</strong> : il ne s’épuise pas, et il ne fixe pas la durée. C’est le bisulfite qui la fixe. Colin et Claubry ont découvert la couleur bleue que prend l’amidon avec l’iode en 1814, bien avant qu’on s’en serve comme horloge."
+    },
+    "tuning": {
+      "title": "Régler l’horloge",
+      "p1": "Vous pouvez régler cette horloge vous-même. Le curseur Iodate fixe la quantité d’iodate dans le mélange. Avec deux fois moins d’iodate, l’attente est environ deux fois plus longue. Avec deux fois plus d’iodate, elle est environ deux fois plus courte. Le moment du basculement se déplace aussitôt sur le graphique. Appuyez sur « Mélanger à nouveau » pour suivre un bécher neuf depuis le début. Dans le modèle, l’attente suit exactement l’iodate. Les vrais béchers ne font que s’en approcher.",
+      "p2": "L’acide accélère aussi l’horloge. Dans l’étape de Dushman, les ions hydrogène comptent double : la vitesse suit le carré de leur quantité. Quelques gouttes d’acide sulfurique font donc venir la couleur plus tôt. Cette recette n’en ajoute pas, car elle fabrique son propre acide.",
+      "p3": "Un mélange plus chaud change de couleur plus tôt, et la glace le ralentit. Lors d’une démonstration en classe avec une recette plus lente, la couleur est apparue en 45 s dans un bain de glace, et en 30 s à température ambiante. Les chimistes ne s’accordent pas encore sur la force exacte de cet effet. Le modèle trace donc sa propre courbe lissée à travers ces temps mesurés en classe. Considérez le curseur Température comme une esquisse, pas comme une mesure.",
+      "p4": "Il n’y a pas de curseur pour le bisulfite. La façon dont il modifie l’attente fait encore débat. Le modèle le garde donc fixe et laisse l’iodate donner le rythme. Quel que soit votre choix, le bisulfite reste toujours sous le triple de l’iodate. La couleur finit donc toujours par venir.",
+      "p5": "Cette chimie a des cousines. Ajoutez des ions mercure et vous obtenez la réaction <strong>Old Nassau</strong>, décrite en 1977. Elle vire un instant à l’orange avant de passer au bleu-noir. La réaction de <strong>Briggs-Rauscher</strong>, de 1973, est différente. Elle passe de l’incolore à l’ambre puis au bleu, encore et encore, pendant environ 5 minutes. C’est donc un oscillateur, pas une horloge. L’horloge de Landolt bascule une seule fois, et c’est fini."
+    }
+  }
+}

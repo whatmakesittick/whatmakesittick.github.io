@@ -1,0 +1,277 @@
+{
+  "meta": {
+    "title": "How an iodine clock keeps time",
+    "eyebrow": "Chemistry",
+    "tagline": "Two clear liquids, about ten seconds of nothing, then blue-black in a blink: a race between molecules that ends right on cue.",
+    "description": "The iodine clock reaction in 3D, from the beaker down to the molecules: why two clear liquids wait about 10 seconds, then turn blue-black in a blink.",
+    "summary": "The pour, the slow step, the iodine nobody sees, the last bisulfite, the starch helix, and how to set the clock.",
+    "socialAlt": "A wide beaker of blue-black liquid on a magnetic stirrer beside a stopwatch, next to the title How an iodine clock keeps time"
+  },
+  "stage": {
+    "label": "Interactive iodine clock model",
+    "gauge": "Live clock and concentrations"
+  },
+  "timeline": {
+    "label": "Clock run",
+    "phases": "Jump to a moment of the run",
+    "value": "{{seconds}} s",
+    "during": "{{seconds}} s after the pour began, {{phase}}",
+    "speed": "Playback",
+    "speedValue": "{{factor}}×",
+    "realTime": "Real time",
+    "slower": "{{factor}} times slower than life",
+    "faster": "{{factor}} times faster than life",
+    "phase": {
+      "pour": "Pour",
+      "induction": "Waiting",
+      "exhaustion": "Last bisulfite",
+      "iodine": "Iodine builds",
+      "complex": "Blue forms",
+      "blue": "Blue-black"
+    },
+    "jump": {
+      "pour": "Jump to the pour",
+      "induction": "Jump to the clear wait",
+      "exhaustion": "Jump to the last bisulfite",
+      "iodine": "Jump to the moment iodine survives",
+      "complex": "Jump to the blue forming",
+      "blue": "Jump to the blue-black beaker"
+    },
+    "detail": {
+      "pour": "solution B pours into solution A",
+      "induction": "the slow step uses up bisulfite, and the liquid stays clear",
+      "exhaustion": "the last bisulfite is running out",
+      "iodine": "nothing eats the iodine now, so it piles up",
+      "complex": "iodine chains fill the starch coils",
+      "blue": "the whole beaker is blue-black"
+    }
+  },
+  "controls": {
+    "label": "Model controls",
+    "scale": "Scale",
+    "scaleOptions": {
+      "beaker": "Beaker",
+      "molecules": "Molecules"
+    },
+    "groups": {
+      "scale": "Scale",
+      "mix": "Mix again"
+    },
+    "mixOptions": {
+      "again": "Mix again"
+    },
+    "views": {
+      "water": {
+        "name": "Water",
+        "short": "Water",
+        "hint": "Water (W)"
+      },
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      }
+    }
+  },
+  "readouts": {
+    "clock": "Clock",
+    "bisulfite": "Bisulfite",
+    "iodine": "Iodine",
+    "now": "Now",
+    "iodineState": {
+      "eaten": "Eaten at once"
+    },
+    "pace": {
+      "real": "Real time",
+      "slower": "{{factor}} times slower than life",
+      "faster": "{{factor}} times faster than life"
+    }
+  },
+  "units": {
+    "seconds": "{{value}} s",
+    "millimolar": "{{value}} mM",
+    "micromolar": "{{value}} µM",
+    "nanoseconds": "{{value}} ns",
+    "microseconds": "{{value}} µs",
+    "milliseconds": "{{value}} ms",
+    "percent": "{{value}} %",
+    "celsius": "{{value}} °C"
+  },
+  "equations": {
+    "landolt": "IO<sub>3</sub><sup>−</sup> + 3 HSO<sub>3</sub><sup>−</sup> → I<sup>−</sup> + 3 SO<sub>4</sub><sup>2−</sup> + 3 H<sup>+</sup>",
+    "dushman": "IO<sub>3</sub><sup>−</sup> + 5 I<sup>−</sup> + 6 H<sup>+</sup> → 3 I<sub>2</sub> + 3 H<sub>2</sub>O",
+    "eaten": "I<sub>2</sub> + HSO<sub>3</sub><sup>−</sup> + H<sub>2</sub>O → 2 I<sup>−</sup> + SO<sub>4</sub><sup>2−</sup> + 3 H<sup>+</sup>",
+    "triiodide": "I<sub>2</sub> + I<sup>−</sup> ⇌ I<sub>3</sub><sup>−</sup>",
+    "helix": "I<sub>3</sub><sup>−</sup> + I<sub>2</sub> → I<sub>5</sub><sup>−</sup>"
+  },
+  "steps": {
+    "name": {
+      "landolt": "Slow step",
+      "dushman": "Iodine forms",
+      "eaten": "Bisulfite eats the iodine",
+      "triiodide": "Iodine meets iodide",
+      "helix": "Longer chains fill the helix"
+    },
+    "state": {
+      "waiting": "Waiting",
+      "running": "Running",
+      "finished": "Done"
+    }
+  },
+  "chapters": {
+    "steps": {
+      "label": "Reaction steps"
+    },
+    "graph": {
+      "label": "Bisulfite and iodine in the beaker over time",
+      "time": "Time after the pour, s",
+      "unit": "mM",
+      "bisulfite": "Bisulfite",
+      "iodine": "Iodine",
+      "switch": "Switch at {{seconds}} s"
+    },
+    "pour": {
+      "clock": "Stopwatch",
+      "iodate": "Iodate after mixing",
+      "iodateValue": "25 mM",
+      "bisulfite": "Bisulfite after mixing",
+      "bisulfiteValue": "12.5 mM",
+      "starch": "Starch after mixing",
+      "starchValue": "0.125 %",
+      "volume": "Total volume",
+      "volumeValue": "400 mL",
+      "delay": "Wait for the colour",
+      "delayValue": "about 10 s, 9 to 14 s in demos"
+    },
+    "slowStep": {
+      "bisulfite": "Bisulfite left",
+      "iodide": "Iodide made",
+      "acid": "Acid made, H⁺",
+      "oxygen": "Oxygen atoms moved per iodate",
+      "oxygenValue": "3, from iodine to sulfur",
+      "ions": "Bisulfite ions in the beaker",
+      "ionsValue": "about 3 × 10²¹",
+      "water": "Water molecules per bisulfite ion",
+      "waterValue": "about 4,400"
+    },
+    "invisibleIodine": {
+      "lifetime": "Lifetime of one iodine molecule",
+      "survives": "It survives",
+      "rate": "Iodine and bisulfite react at",
+      "rateValue": "1.8 × 10⁹ M⁻¹ s⁻¹",
+      "used": "Bisulfite used each second",
+      "usedValue": "about 2.5 × 10²⁰ ions",
+      "dushman": "Iodine-making step",
+      "dushmanValue": "Dushman, 1904"
+    },
+    "tippingPoint": {
+      "switchAt": "Last bisulfite gone at",
+      "bisulfite": "Bisulfite now",
+      "iodine": "Iodine now",
+      "pace": "You are watching at",
+      "needs": "Colour needs",
+      "needsValue": "bisulfite under 3 × iodate",
+      "visible": "Iodine you can see, with starch",
+      "visibleValue": "about 20 µM",
+      "speed": "Clear to blue-black",
+      "speedValue": "well under a second"
+    },
+    "starch": {
+      "fill": "Iodine in the helix",
+      "turn": "Glucose units per turn",
+      "turnValue": "6",
+      "pitch": "Rise per turn",
+      "pitchValue": "0.8 nm",
+      "channel": "Channel width",
+      "channelValue": "about 0.5 nm",
+      "peak": "Strongest absorption",
+      "peakValue": "about 600 nm",
+      "bonds": "Iodine bond lengths",
+      "bondsValue": "I₂ 2.67 Å, I₃⁻ 2.90 Å"
+    },
+    "tuning": {
+      "iodate": "Iodate",
+      "temperature": "Temperature",
+      "switchAt": "Colour at",
+      "ratio": "Bisulfite to iodate",
+      "ratioValue": "{{ratio}}, colour needs under 3",
+      "half": "Half the iodate",
+      "halfValue": "about twice the wait",
+      "acid": "More acid",
+      "acidValue": "sooner, H⁺ counts squared",
+      "cold": "Ice bath versus room temperature, one class demo",
+      "coldValue": "45 s versus 30 s"
+    }
+  },
+  "parts": {
+    "mixingBeaker": "Mixing beaker",
+    "mixture": "Mixture, solution A",
+    "pourBeaker": "Pouring beaker",
+    "bisulfiteSolution": "Solution B, bisulfite",
+    "pourStream": "Pour",
+    "stirBar": "Stir bar",
+    "stirrer": "Magnetic stirrer",
+    "thermometer": "Thermometer",
+    "stopwatch": "Stopwatch",
+    "iodate": "Iodate, IO₃⁻",
+    "bisulfite": "Bisulfite, HSO₃⁻",
+    "sulfate": "Sulfate, SO₄²⁻",
+    "iodide": "Iodide, I⁻",
+    "hydrogenIon": "Hydrogen ion, H⁺",
+    "iodine": "Iodine, I₂",
+    "triiodide": "Triiodide, I₃⁻",
+    "polyiodide": "Polyiodide chain",
+    "amylose": "Amylose helix",
+    "glucose": "Glucose unit",
+    "water": "Water"
+  },
+  "sections": {
+    "pour": {
+      "title": "Two clear liquids and a wait",
+      "p1": "This is an <strong>iodine clock</strong>, a classic chemistry demo. A wide <strong>mixing beaker</strong> stands on a <strong>magnetic stirrer</strong>. Inside, a spinning <strong>stir bar</strong> keeps the liquid moving. The beaker holds solution A: 100 mL of potassium iodate, 100 mL of water and 50 mL of starch solution. The smaller <strong>pouring beaker</strong> holds solution B: 20 mL of sodium bisulfite and 130 mL of water.",
+      "p2": "Both liquids look like plain water. Pour B into A and start the <strong>stopwatch</strong>. For about 10 seconds, nothing seems to happen. Then the whole beaker turns blue-black at once. In class demos with this recipe, the wait is usually 9 to 14 seconds. That is steady enough to keep time by.",
+      "p3": "Hans Heinrich Landolt described this reaction in 1886. That is why chemists call it the <strong>Landolt reaction</strong>. He was not the first to time a chemical change, though. Harcourt and Esson had studied a similar clock in 1866 and 1867, with other chemicals. The trick is always the same. One reaction quietly uses something up, and the colour waits until it is gone.",
+      "p4": "Chemists measure how much is dissolved in moles per litre, written M. A mole is a fixed, huge number of particles: about 6 × 10<sup>23</sup>. A millimole per litre, written mM, is a thousandth of that. After the pour, the 400 mL mixture holds 25 mM of iodate, 12.5 mM of bisulfite and 0.125 % starch. So there is half as much bisulfite as iodate. That will matter later. Pick Molecules to dive into the liquid and see what the stopwatch cannot.",
+      "p5": "The model keeps the bench simple. The pour takes one second, and the clock starts the moment it begins. The stir bar turns at a steady pace, so the mixture is always evenly mixed."
+    },
+    "slowStep": {
+      "title": "The slow step makes its own acid",
+      "p1": "Inside, the liquid is crowded with <strong>ions</strong>. An ion is an atom, or a small group of atoms, with an electric charge. It is charged because it has gained or lost electrons. The charge is written small and high. A − means one extra electron, 2− means two, and + means one electron missing. A small number written low counts atoms. So <strong>iodate</strong>, IO<sub>3</sub><sup>−</sup>, is one iodine atom holding three oxygen atoms, with one extra electron.",
+      "p2": "<strong>Bisulfite</strong>, HSO<sub>3</sub><sup>−</sup>, is one sulfur atom with three oxygen atoms and one hydrogen atom. In water, the hydrogen mostly sits on one of the oxygens, and the model draws it there. Iodate and bisulfite react in the <strong>slow step</strong>, shown in the list below. Read the arrow as “becomes”. One iodate and three bisulfites become one <strong>iodide</strong> ion, I<sup>−</sup>, three <strong>sulfate</strong> ions, SO<sub>4</sub><sup>2−</sup>, and three <strong>hydrogen ions</strong>, H<sup>+</sup>.",
+      "p3": "Now count the oxygen. Iodate loses all three of its oxygen atoms. Each bisulfite gains one and becomes sulfate. So in total, three oxygen atoms move from iodine to sulfur. The model shows only this bookkeeping, one oxygen hop at a time. Nobody has worked out how a single collision really does it. So do not take the hops as the true path.",
+      "p4": "Each bisulfite also lets go of its hydrogen as an H<sup>+</sup>. Hydrogen ions are what make a liquid acidic. So the beaker makes its own acid as it goes: one H<sup>+</sup> for every bisulfite used. Nobody added any acid. Watch the readouts below. Bisulfite falls, while iodide and acid climb. You will need both in the next chapter.",
+      "p5": "The real beaker holds about 3 × 10<sup>21</sup> bisulfite ions, three thousand billion billion. Each one swims among about 4,400 water molecules. The model crowds a few dozen ions into a box just 4.8 nm across. A nanometre, nm, is a millionth of a millimetre. Each ball model stands for a fixed amount of its kind. Water is only a faint haze, which you can hide with Water (W). The potassium and sodium ions take no part in the reaction, so they are left out."
+    },
+    "invisibleIodine": {
+      "title": "Iodine that nobody sees",
+      "p1": "The iodide opens a second path. Iodate can also react with iodide and hydrogen ions. This makes <strong>iodine</strong>, I<sub>2</sub>, two iodine atoms joined together. This is the <strong>Dushman reaction</strong>, studied by Dushman in 1904. It needs both iodide and acid, and the slow step makes both. So the longer the slow step runs, the faster iodine forms. A reaction that speeds itself up like this is called <strong>autocatalytic</strong>.",
+      "p2": "Right at the start there is no iodide, so no iodine can form. But almost at once a little appears, and more every second. You never see it, because bisulfite destroys each iodine molecule straight away. It turns the iodine back into two iodide ions, and itself becomes sulfate. That is the third step in the list.",
+      "p3": "How fast is straight away? Chemists describe it with a rate constant. That is a number that says how quickly two kinds of molecule react when they meet. For iodine and bisulfite, it is 1.8 × 10<sup>9</sup> litres per mole per second. At the start, that gives one iodine molecule a life of about 40 nanoseconds, forty billionths of a second. The readout below shows that life growing as the bisulfite thins out.",
+      "p4": "So this is a race. The slow step makes iodide and acid. Iodine forms faster and faster. And bisulfite keeps wiping it out. On average, the beaker uses up about 2.5 × 10<sup>20</sup> bisulfite ions every second. As long as any bisulfite is left, bisulfite wins, and the liquid stays clear.",
+      "p5": "The model draws each of these meetings billions of times slower than life, so you can follow one. Watch an iodate meet iodide, an iodine molecule flash into being, and a bisulfite grab it. In the real beaker, an iodine molecule lasts only about forty billionths of a second. And it all happens everywhere in the beaker at once."
+    },
+    "tippingPoint": {
+      "title": "The last bisulfite",
+      "p1": "Back at the beaker, keep an eye on the stopwatch. The bisulfite falls slowly at first, then faster and faster, because the race speeds itself up. Then the last bisulfite is gone. Nothing is left to eat the iodine, so every new molecule survives.",
+      "p2": "Iodine piles up fast. With starch in the liquid, your eye can see it from about 20 micromolar. A micromolar, µM, is a thousandth of a millimolar. The beaker crosses that line well under a second after the bisulfite runs out. A stirred beaker changes colour everywhere at once. In a thin unstirred layer, the colour creeps along as a front instead. In a related sulfite clock, that front was measured moving about a millimetre a minute.",
+      "p3": "There is one condition. In the slow step, each iodate uses up three bisulfites. So the colour comes only if there is less than three times as much bisulfite as iodate. Otherwise the iodate runs out first, and the liquid stays clear. This recipe has half as much bisulfite as iodate, far below that limit.",
+      "p4": "The graph shows the whole story. Bisulfite falls to zero, then iodine shoots up. The exact shapes of both lines are the model's own smooth guesses, since nobody has measured them for this recipe. The real switch is too quick to see, so the model stretches the last moments. After the switch, it plays the iodine rise 75 times slower than life, and the colour about 4 times slower. The pace readout shows how slowly you are watching."
+    },
+    "starch": {
+      "title": "Blue from a coil of starch",
+      "p1": "Iodine on its own is not blue. In water it looks yellow-brown. The blue-black comes from the starch. Starch is made of glucose, a sugar, linked into long chains. One kind of starch, <strong>amylose</strong>, coils into a <strong>helix</strong>, like a spring.",
+      "p2": "Each turn of the coil holds 6 <strong>glucose units</strong> and rises 0.8 nm. Down its middle runs a channel about 0.5 nm wide, just wide enough for iodine. The helix winds to the left. The model draws each glucose unit as a simple ring, not atom by atom.",
+      "p3": "First, iodine meets the iodide that the slow step made. Together they form <strong>triiodide</strong>, I<sub>3</sub><sup>−</sup>. The ⇌ sign means this goes both ways. Inside the channel, iodine lines up into longer <strong>polyiodide chains</strong>, like I<sub>5</sub><sup>−</sup> with an I<sub>2</sub> on each side. Their atoms sit about 3.1 Å apart. An ångström, Å, is a tenth of a nanometre. Triiodide alone does not make the colour, but the longer chains do. So the colour needs the iodide as well as the iodine.",
+      "p4": "The chains soak up light most strongly at about 600 nm, which is orange light. What is left looks deep blue to your eye. Starch's other part, <strong>amylopectin</strong>, is branched. Its short branches hold only short iodine chains, so it turns red-violet instead. The model draws iodine forming first and the chains filling after. In the real beaker, both happen together.",
+      "p5": "Starch only shows the switch. It is the <strong>indicator</strong>: it does not run out, and it does not set the time. The bisulfite does. Colin and Claubry found the blue colour of starch and iodine in 1814, long before anyone used it as a clock."
+    },
+    "tuning": {
+      "title": "Setting the clock",
+      "p1": "You can set this clock yourself. The iodate slider sets how much iodate the mixture holds. Half the iodate gives about twice the wait. Twice the iodate gives about half. The moment of the switch moves on the graph right away. Press Mix again to watch a fresh beaker from the start. The model makes the wait follow the iodate exactly. Real beakers only come close.",
+      "p2": "Acid speeds the clock too. In the Dushman step, the hydrogen ions count twice: the rate follows their amount squared. So a few drops of sulfuric acid bring the colour sooner. This recipe adds none, because it makes its own.",
+      "p3": "Warmer mixtures change colour sooner, and ice slows them down. In one classroom demo with a slower recipe, the colour took 45 s in an ice bath and 30 s at room temperature. Nobody agrees yet on exactly how strong the effect is. So the model draws a smooth curve of its own through those classroom times. Treat the temperature slider as a sketch, not a measurement.",
+      "p4": "There is no bisulfite slider. How bisulfite changes the wait is still argued over. So the model holds it fixed and lets the iodate set the pace. Whatever you pick, there is always less than three times as much bisulfite as iodate. So the colour always comes.",
+      "p5": "This chemistry has cousins. Add mercury ions and you get the <strong>Old Nassau</strong> reaction, described in 1977. It flashes orange before it turns blue-black. The <strong>Briggs-Rauscher</strong> reaction from 1973 is different. It swings from clear to amber to blue again and again, for about 5 minutes. That makes it an oscillator, not a clock. The Landolt clock switches once, and then it is done."
+    }
+  }
+}

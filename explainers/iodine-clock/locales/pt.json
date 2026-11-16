@@ -1,0 +1,277 @@
+{
+  "meta": {
+    "title": "Como o relógio de iodo marca o tempo",
+    "eyebrow": "Química",
+    "tagline": "Dois líquidos transparentes, uns dez segundos de nada e, num piscar de olhos, tudo fica preto-azulado: uma corrida entre moléculas que termina na hora certa.",
+    "description": "A reação do relógio de iodo em 3D, do béquer às moléculas: por que dois líquidos transparentes esperam uns 10 s e ficam preto-azulados num piscar de olhos.",
+    "summary": "O despejo, a etapa lenta, o iodo que ninguém vê, o último bissulfito, a hélice do amido e como acertar o relógio.",
+    "socialAlt": "Um béquer largo com líquido preto-azulado sobre um agitador magnético, ao lado de um cronômetro, junto ao título “Como o relógio de iodo marca o tempo”"
+  },
+  "stage": {
+    "label": "Modelo interativo do relógio de iodo",
+    "gauge": "Relógio e concentrações ao vivo"
+  },
+  "timeline": {
+    "label": "Andamento do relógio",
+    "phases": "Ir para um momento da reação",
+    "value": "{{seconds}} s",
+    "during": "{{seconds}} s depois do início da mistura, {{phase}}",
+    "speed": "Velocidade",
+    "speedValue": "{{factor}}×",
+    "realTime": "Tempo real",
+    "slower": "{{factor}} vezes mais devagar que na vida real",
+    "faster": "{{factor}} vezes mais rápido que na vida real",
+    "phase": {
+      "pour": "Despejo",
+      "induction": "Espera",
+      "exhaustion": "Último bissulfito",
+      "iodine": "O iodo se acumula",
+      "complex": "O azul se forma",
+      "blue": "Preto-azulado"
+    },
+    "jump": {
+      "pour": "Ir para o despejo",
+      "induction": "Ir para a espera transparente",
+      "exhaustion": "Ir para o último bissulfito",
+      "iodine": "Ir para o momento em que o iodo sobrevive",
+      "complex": "Ir para a formação do azul",
+      "blue": "Ir para o béquer preto-azulado"
+    },
+    "detail": {
+      "pour": "a solução B é despejada na solução A",
+      "induction": "a etapa lenta gasta o bissulfito, e o líquido continua transparente",
+      "exhaustion": "o último bissulfito está acabando",
+      "iodine": "agora nada consome o iodo, e ele se acumula",
+      "complex": "cadeias de iodo enchem as espirais de amido",
+      "blue": "o béquer inteiro está preto-azulado"
+    }
+  },
+  "controls": {
+    "label": "Controles do modelo",
+    "scale": "Escala",
+    "scaleOptions": {
+      "beaker": "Béquer",
+      "molecules": "Moléculas"
+    },
+    "groups": {
+      "scale": "Escala",
+      "mix": "Misturar de novo"
+    },
+    "mixOptions": {
+      "again": "Misturar de novo"
+    },
+    "views": {
+      "water": {
+        "name": "Água",
+        "short": "Água",
+        "hint": "Água (W)"
+      },
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      }
+    }
+  },
+  "readouts": {
+    "clock": "Relógio",
+    "bisulfite": "Bissulfito",
+    "iodine": "Iodo",
+    "now": "Agora",
+    "iodineState": {
+      "eaten": "Consumido na hora"
+    },
+    "pace": {
+      "real": "Tempo real",
+      "slower": "{{factor}} vezes mais devagar que na vida real",
+      "faster": "{{factor}} vezes mais rápido que na vida real"
+    }
+  },
+  "units": {
+    "seconds": "{{value}} s",
+    "millimolar": "{{value}} mM",
+    "micromolar": "{{value}} µM",
+    "nanoseconds": "{{value}} ns",
+    "microseconds": "{{value}} µs",
+    "milliseconds": "{{value}} ms",
+    "percent": "{{value}}%",
+    "celsius": "{{value}} °C"
+  },
+  "equations": {
+    "landolt": "IO<sub>3</sub><sup>−</sup> + 3 HSO<sub>3</sub><sup>−</sup> → I<sup>−</sup> + 3 SO<sub>4</sub><sup>2−</sup> + 3 H<sup>+</sup>",
+    "dushman": "IO<sub>3</sub><sup>−</sup> + 5 I<sup>−</sup> + 6 H<sup>+</sup> → 3 I<sub>2</sub> + 3 H<sub>2</sub>O",
+    "eaten": "I<sub>2</sub> + HSO<sub>3</sub><sup>−</sup> + H<sub>2</sub>O → 2 I<sup>−</sup> + SO<sub>4</sub><sup>2−</sup> + 3 H<sup>+</sup>",
+    "triiodide": "I<sub>2</sub> + I<sup>−</sup> ⇌ I<sub>3</sub><sup>−</sup>",
+    "helix": "I<sub>3</sub><sup>−</sup> + I<sub>2</sub> → I<sub>5</sub><sup>−</sup>"
+  },
+  "steps": {
+    "name": {
+      "landolt": "Etapa lenta",
+      "dushman": "O iodo se forma",
+      "eaten": "O bissulfito consome o iodo",
+      "triiodide": "O iodo encontra o iodeto",
+      "helix": "Cadeias mais longas enchem a hélice"
+    },
+    "state": {
+      "waiting": "Esperando",
+      "running": "Em andamento",
+      "finished": "Concluída"
+    }
+  },
+  "chapters": {
+    "steps": {
+      "label": "Etapas da reação"
+    },
+    "graph": {
+      "label": "Bissulfito e iodo no béquer ao longo do tempo",
+      "time": "Tempo depois da mistura, s",
+      "unit": "mM",
+      "bisulfite": "Bissulfito",
+      "iodine": "Iodo",
+      "switch": "Virada em {{seconds}} s"
+    },
+    "pour": {
+      "clock": "Cronômetro",
+      "iodate": "Iodato depois da mistura",
+      "iodateValue": "25 mM",
+      "bisulfite": "Bissulfito depois da mistura",
+      "bisulfiteValue": "12,5 mM",
+      "starch": "Amido depois da mistura",
+      "starchValue": "0,125%",
+      "volume": "Volume total",
+      "volumeValue": "400 mL",
+      "delay": "Espera pela cor",
+      "delayValue": "uns 10 s, de 9 a 14 s em demonstrações"
+    },
+    "slowStep": {
+      "bisulfite": "Bissulfito restante",
+      "iodide": "Iodeto formado",
+      "acid": "Ácido formado, H⁺",
+      "oxygen": "Átomos de oxigênio que cada iodato cede",
+      "oxygenValue": "3, do iodo para o enxofre",
+      "ions": "Íons bissulfito no béquer",
+      "ionsValue": "cerca de 3 × 10²¹",
+      "water": "Moléculas de água por íon bissulfito",
+      "waterValue": "cerca de 4.400"
+    },
+    "invisibleIodine": {
+      "lifetime": "Vida de uma molécula de iodo",
+      "survives": "Ela sobrevive",
+      "rate": "Constante de velocidade, iodo e bissulfito",
+      "rateValue": "1,8 × 10⁹ M⁻¹ s⁻¹",
+      "used": "Bissulfito gasto por segundo",
+      "usedValue": "cerca de 2,5 × 10²⁰ íons",
+      "dushman": "Etapa que forma o iodo",
+      "dushmanValue": "Dushman, 1904"
+    },
+    "tippingPoint": {
+      "switchAt": "Último bissulfito acaba em",
+      "bisulfite": "Bissulfito agora",
+      "iodine": "Iodo agora",
+      "pace": "Ritmo da exibição",
+      "needs": "A cor exige",
+      "needsValue": "bissulfito abaixo de 3 × iodato",
+      "visible": "Iodo visível, com amido",
+      "visibleValue": "cerca de 20 µM",
+      "speed": "De transparente a preto-azulado",
+      "speedValue": "bem menos de um segundo"
+    },
+    "starch": {
+      "fill": "Iodo na hélice",
+      "turn": "Unidades de glicose por volta",
+      "turnValue": "6",
+      "pitch": "Subida por volta",
+      "pitchValue": "0,8 nm",
+      "channel": "Largura do canal",
+      "channelValue": "cerca de 0,5 nm",
+      "peak": "Absorção mais forte",
+      "peakValue": "cerca de 600 nm",
+      "bonds": "Comprimento das ligações do iodo",
+      "bondsValue": "I₂ 2,67 Å, I₃⁻ 2,90 Å"
+    },
+    "tuning": {
+      "iodate": "Iodato",
+      "temperature": "Temperatura",
+      "switchAt": "Cor em",
+      "ratio": "Bissulfito por iodato",
+      "ratioValue": "{{ratio}}, a cor exige menos de 3",
+      "half": "Metade do iodato",
+      "halfValue": "cerca do dobro da espera",
+      "acid": "Mais ácido",
+      "acidValue": "mais cedo, o H⁺ conta ao quadrado",
+      "cold": "Banho de gelo contra temperatura ambiente, numa demonstração em aula",
+      "coldValue": "45 s contra 30 s"
+    }
+  },
+  "parts": {
+    "mixingBeaker": "Béquer de mistura",
+    "mixture": "Mistura, solução A",
+    "pourBeaker": "Béquer para despejar",
+    "bisulfiteSolution": "Solução B, bissulfito",
+    "pourStream": "Jato",
+    "stirBar": "Barra magnética",
+    "stirrer": "Agitador magnético",
+    "thermometer": "Termômetro",
+    "stopwatch": "Cronômetro",
+    "iodate": "Iodato, IO₃⁻",
+    "bisulfite": "Bissulfito, HSO₃⁻",
+    "sulfate": "Sulfato, SO₄²⁻",
+    "iodide": "Iodeto, I⁻",
+    "hydrogenIon": "Íon hidrogênio, H⁺",
+    "iodine": "Iodo, I₂",
+    "triiodide": "Triiodeto, I₃⁻",
+    "polyiodide": "Cadeia de poli-iodeto",
+    "amylose": "Hélice de amilose",
+    "glucose": "Unidade de glicose",
+    "water": "Água"
+  },
+  "sections": {
+    "pour": {
+      "title": "Dois líquidos transparentes e uma espera",
+      "p1": "Este é um <strong>relógio de iodo</strong>, uma demonstração clássica de química. Um <strong>béquer de mistura</strong> largo fica sobre um <strong>agitador magnético</strong>. Lá dentro, uma <strong>barra magnética</strong> gira e mantém o líquido em movimento. Nele está a solução A: 100 mL de iodato de potássio, 100 mL de água e 50 mL de solução de amido. O <strong>béquer para despejar</strong>, menor, contém a solução B: 20 mL de bissulfito de sódio e 130 mL de água.",
+      "p2": "Os dois líquidos parecem água pura. Despeje B em A e dispare o <strong>cronômetro</strong>. Por uns 10 segundos, parece que nada acontece. Então o béquer inteiro fica preto-azulado, de uma vez só. Em demonstrações de aula com esta receita, a espera costuma ser de 9 a 14 segundos. É regular o bastante para marcar o tempo.",
+      "p3": "Hans Heinrich Landolt descreveu esta reação em 1886. Por isso os químicos a chamam de <strong>reação de Landolt</strong>. Mas ele não foi o primeiro a cronometrar uma transformação química. Harcourt e Esson já tinham estudado um relógio parecido em 1866 e 1867, com outras substâncias. O truque é sempre o mesmo. Uma reação gasta alguma coisa em silêncio, e a cor só aparece quando essa coisa acaba.",
+      "p4": "Os químicos medem o que está dissolvido em mols por litro, escrito M. Um mol é um número fixo e enorme de partículas: cerca de 6 × 10<sup>23</sup>. Um milimol por litro, escrito mM, é a milésima parte disso. Depois do despejo, os 400 mL de mistura têm 25 mM de iodato, 12,5 mM de bissulfito e 0,125% de amido. Ou seja, a quantidade de bissulfito é a metade da de iodato. Isso vai importar mais adiante. Escolha Moléculas para mergulhar no líquido e ver o que o cronômetro não mostra.",
+      "p5": "O modelo simplifica a bancada. O despejo leva um segundo, e o relógio começa a contar no mesmo instante. A barra magnética gira num ritmo constante, então o líquido está sempre bem misturado."
+    },
+    "slowStep": {
+      "title": "A etapa lenta produz o próprio ácido",
+      "p1": "Lá dentro, o líquido está lotado de <strong>íons</strong>. Um íon é um átomo, ou um pequeno grupo de átomos, com carga elétrica. Ele tem carga porque ganhou ou perdeu elétrons. A carga fica escrita no alto. Um − quer dizer um elétron a mais, 2− quer dizer dois, e + quer dizer um a menos. O número pequeno embaixo conta os átomos. Assim, o <strong>iodato</strong>, IO<sub>3</sub><sup>−</sup>, é um átomo de iodo ligado a três átomos de oxigênio, com um elétron a mais.",
+      "p2": "O <strong>bissulfito</strong>, HSO<sub>3</sub><sup>−</sup>, é um átomo de enxofre com três átomos de oxigênio e um de hidrogênio. Na água, o hidrogênio fica quase sempre num dos oxigênios, e o modelo o desenha ali. O iodato e o bissulfito reagem na <strong>etapa lenta</strong>, que aparece na lista abaixo. Leia a seta como “vira”. Um iodato e três bissulfitos viram um íon <strong>iodeto</strong>, I<sup>−</sup>, três íons <strong>sulfato</strong>, SO<sub>4</sub><sup>2−</sup>, e três <strong>íons hidrogênio</strong>, H<sup>+</sup>.",
+      "p3": "Agora conte os oxigênios. O iodato perde os seus três átomos de oxigênio. Cada bissulfito ganha um e vira sulfato. No total, três átomos de oxigênio passam do iodo para o enxofre. O modelo mostra só essa contabilidade, um salto de oxigênio por vez. Ninguém descobriu ainda como uma única colisão faz isso de verdade. Por isso, não leia os saltos como o caminho real.",
+      "p4": "Cada bissulfito também solta o seu hidrogênio como H<sup>+</sup>. São os íons hidrogênio que deixam um líquido ácido. Então o béquer produz o próprio ácido enquanto a reação avança: um H<sup>+</sup> para cada bissulfito gasto. Ninguém colocou ácido nenhum. Observe os valores abaixo. O bissulfito cai, enquanto o iodeto e o ácido sobem. Você vai precisar dos dois no próximo capítulo.",
+      "p5": "O béquer de verdade tem cerca de 3 × 10<sup>21</sup> íons bissulfito, três mil bilhões de bilhões. Cada um nada no meio de cerca de 4.400 moléculas de água. O modelo espreme algumas dezenas de íons numa caixa de só 4,8 nm de lado. Um nanômetro, nm, é a milionésima parte de um milímetro. Cada bolinha do modelo representa uma quantidade fixa da sua espécie. A água é só uma névoa leve, que você pode esconder com Água (W). Os íons de potássio e de sódio não participam, então ficam de fora."
+    },
+    "invisibleIodine": {
+      "title": "O iodo que ninguém vê",
+      "p1": "O iodeto abre um segundo caminho. O iodato também pode reagir com o iodeto e com os íons hidrogênio. Isso forma <strong>iodo</strong>, I<sub>2</sub>, dois átomos de iodo ligados. Esta é a <strong>reação de Dushman</strong>, estudada por Dushman em 1904. Ela precisa de iodeto e de ácido, e a etapa lenta produz os dois. Então, quanto mais a etapa lenta avança, mais rápido o iodo se forma. Uma reação que acelera a si mesma assim se chama <strong>autocatalítica</strong>.",
+      "p2": "Bem no começo não há iodeto, então nenhum iodo pode se formar. Mas quase de imediato aparece um pouco, e mais a cada segundo. Você nunca o vê, porque o bissulfito destrói cada molécula de iodo na mesma hora. Ele transforma o iodo de volta em dois íons iodeto e vira sulfato. Essa é a terceira etapa da lista.",
+      "p3": "Quão rápido é “na mesma hora”? Os químicos descrevem isso com uma constante de velocidade. É um número que diz com que rapidez dois tipos de molécula reagem quando se encontram. Para o iodo e o bissulfito, ela vale 1,8 × 10<sup>9</sup> litros por mol por segundo. No começo, isso dá a uma molécula de iodo uma vida de cerca de 40 nanossegundos, quarenta bilionésimos de segundo. O valor abaixo mostra essa vida crescendo à medida que o bissulfito diminui.",
+      "p4": "É uma corrida. A etapa lenta produz iodeto e ácido. O iodo se forma cada vez mais rápido. E o bissulfito continua a destruí-lo. Em média, o béquer gasta cerca de 2,5 × 10<sup>20</sup> íons bissulfito por segundo. Enquanto sobrar algum bissulfito, ele vence, e o líquido continua transparente.",
+      "p5": "O modelo desenha cada um desses encontros bilhões de vezes mais devagar que na vida real, para você conseguir acompanhar um deles. Veja um iodato encontrar o iodeto, uma molécula de iodo surgir num lampejo e um bissulfito agarrá-la. No béquer de verdade, uma molécula de iodo dura só cerca de quarenta bilionésimos de segundo. E isso acontece em toda parte ao mesmo tempo."
+    },
+    "tippingPoint": {
+      "title": "O último bissulfito",
+      "p1": "De volta ao béquer, fique de olho no cronômetro. O bissulfito cai devagar no começo e depois cada vez mais rápido, porque a corrida acelera a si mesma. Então o último bissulfito acaba. Não sobra nada para consumir o iodo, e cada molécula nova sobrevive.",
+      "p2": "O iodo se acumula depressa. Com amido no líquido, o seu olho já o enxerga a partir de cerca de 20 micromolar. Um micromolar, µM, é a milésima parte de um milimolar. O béquer passa desse limite em bem menos de um segundo depois que o bissulfito acaba. Num béquer agitado, a cor muda em toda parte ao mesmo tempo. Já numa camada fina, sem agitação, a cor avança como uma frente. Isso foi medido com um relógio de sulfito parecido, a cerca de um milímetro por minuto.",
+      "p3": "Há uma condição. Na etapa lenta, cada iodato gasta três bissulfitos. Por isso a cor só aparece se houver menos do triplo de bissulfito em relação ao iodato. Senão, o iodato acaba primeiro, e o líquido continua transparente. Nesta receita, a quantidade de bissulfito é a metade da de iodato, bem abaixo desse limite.",
+      "p4": "O gráfico conta a história inteira. O bissulfito cai até zero, e então o iodo dispara. A forma exata das duas linhas é uma estimativa do próprio modelo, com curvas suaves, porque ninguém as mediu para esta receita. A virada real é rápida demais para ver, então o modelo estica os últimos momentos. Depois da virada, ele mostra a subida do iodo 75 vezes mais devagar que na vida real, e a cor cerca de 4 vezes mais devagar. O indicador de ritmo mostra quantas vezes mais devagar você está vendo."
+    },
+    "starch": {
+      "title": "O azul vem de uma espiral de amido",
+      "p1": "O iodo sozinho não é azul. Na água, ele parece amarelo-acastanhado. O preto-azulado vem do amido. O amido é feito de glicose, um açúcar, ligada em cadeias longas. Um dos tipos de amido, a <strong>amilose</strong>, se enrola numa <strong>hélice</strong>, como uma mola.",
+      "p2": "Cada volta da espiral tem 6 <strong>unidades de glicose</strong> e sobe 0,8 nm. Pelo meio passa um canal de cerca de 0,5 nm de largura, largo o bastante para o iodo caber. A hélice gira para a esquerda. O modelo desenha cada unidade de glicose como um anel simples, e não átomo por átomo.",
+      "p3": "Primeiro, o iodo encontra o iodeto que a etapa lenta produziu. Juntos, eles formam o <strong>triiodeto</strong>, I<sub>3</sub><sup>−</sup>. O sinal ⇌ quer dizer que isso acontece nos dois sentidos. Dentro do canal, o iodo se alinha em <strong>cadeias de poli-iodeto</strong> mais longas, como um I<sub>5</sub><sup>−</sup> com um I<sub>2</sub> de cada lado. Os seus átomos ficam a cerca de 3,1 Å uns dos outros. Um ångström, Å, é a décima parte de um nanômetro. O triiodeto sozinho não produz a cor, mas as cadeias mais longas, sim. Por isso a cor precisa do iodeto, além do iodo.",
+      "p4": "As cadeias absorvem luz com mais força em cerca de 600 nm, que é a luz laranja. O que sobra parece azul-escuro aos seus olhos. A outra parte do amido, a <strong>amilopectina</strong>, é ramificada. Os seus ramos curtos só seguram cadeias curtas de iodo, por isso ela fica vermelho-violeta. O modelo mostra o iodo se formando primeiro e as cadeias se enchendo depois. No béquer de verdade, as duas coisas acontecem juntas.",
+      "p5": "O amido só mostra a virada. Ele é o <strong>indicador</strong>: não se esgota e não define o tempo. Quem define é o bissulfito. Colin e Claubry descobriram a cor azul do amido com iodo em 1814, muito antes de alguém usar isso como relógio."
+    },
+    "tuning": {
+      "title": "Acertando o relógio",
+      "p1": "Você mesmo pode acertar este relógio. O controle de iodato define quanto iodato vai na mistura. Metade do iodato dá cerca do dobro da espera. O dobro do iodato dá cerca da metade. O momento da virada muda na hora no gráfico. Toque em “Misturar de novo” para ver um béquer novo desde o começo. No modelo, a espera acompanha o iodato à risca. Num béquer de verdade, só chega perto.",
+      "p2": "O ácido também acelera o relógio. Na etapa de Dushman, os íons hidrogênio contam em dobro: a velocidade acompanha a quantidade deles ao quadrado. Por isso, umas gotas de ácido sulfúrico trazem a cor mais cedo. Esta receita não leva ácido, porque produz o próprio.",
+      "p3": "Misturas mais quentes mudam de cor mais cedo, e o gelo as deixa mais lentas. Numa demonstração em sala de aula, com uma receita mais lenta, a cor levou 45 s no banho de gelo e 30 s à temperatura ambiente. Ainda não há acordo sobre a força exata desse efeito. Por isso, o modelo traça uma curva suave própria que passa por esses tempos da aula. Encare o controle de temperatura como um esboço, não como uma medição.",
+      "p4": "Não há controle de bissulfito. Os cientistas ainda discutem como o bissulfito muda a espera. Por isso o modelo o mantém fixo e deixa o iodato ditar o ritmo. Não importa o que você escolha: sempre há menos do triplo de bissulfito em relação ao iodato. Então a cor sempre aparece.",
+      "p5": "Esta química tem parentes próximos. Acrescente íons de mercúrio e você tem a reação <strong>Old Nassau</strong>, descrita em 1977. Ela pisca em laranja antes de ficar preto-azulada. A reação de <strong>Briggs-Rauscher</strong>, de 1973, é diferente. Ela passa de transparente a âmbar e depois a azul, de novo e de novo, por cerca de 5 minutos. Por isso ela é um oscilador, e não um relógio. O relógio de Landolt vira uma vez só, e pronto."
+    }
+  }
+}

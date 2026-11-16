@@ -1,13 +1,27 @@
 import type { ExplainerStore, Timeline } from '../explainer';
 import { t } from '../i18n';
+import { disposeAll } from './disposers';
 import type { Disposer } from './disposers';
 import { html, setAttributes, setPressed, setText } from './dom';
 import { phaseAt, phaseBands, phaseShortcut, scrubberMax } from './phases';
-import { watch, watchLocalized } from './subscribe';
+import { watch, watchShallowLocalized } from './subscribe';
 import { TEXT_REFRESH_INTERVAL_MS, throttle } from './throttle';
 
 const BANDS_PROPERTY = '--phase-bands';
+const NO_INPUTS: readonly unknown[] = [];
 const TONE_PROPERTY = '--tone';
+
+function watchPhaseText(
+  store: ExplainerStore,
+  timeline: Timeline,
+  render: (phase: number) => void,
+): Disposer {
+  return watchShallowLocalized(
+    store,
+    (state) => [state.phase, ...(timeline.formatInputs?.() ?? NO_INPUTS)] as const,
+    ([phase]) => render(phase),
+  );
+}
 
 export function bindScrubber(
   input: HTMLInputElement,
@@ -30,15 +44,17 @@ export function bindScrubber(
       input.setAttribute('aria-valuetext', valueText);
     }
   }, TEXT_REFRESH_INTERVAL_MS);
-  return watchLocalized(
-    store,
-    (state) => state.phase,
-    (phase) => {
-      const value = String(Math.round(phase / timeline.step) * timeline.step);
-      if (input.value !== value) input.value = value;
-      describe(phase);
-    },
-  );
+  return disposeAll([
+    watch(
+      store,
+      (state) => state.phase,
+      (phase) => {
+        const value = String(Math.round(phase / timeline.step) * timeline.step);
+        if (input.value !== value) input.value = value;
+      },
+    ),
+    watchPhaseText(store, timeline, describe),
+  ]);
 }
 
 export function createPhaseButtons(timeline: Timeline): HTMLButtonElement[] {
@@ -82,5 +98,5 @@ export function bindPhaseStatus(
     setText(name, t(current.labelKey));
     name.style.setProperty(TONE_PROPERTY, current.tone);
   }, TEXT_REFRESH_INTERVAL_MS);
-  return watchLocalized(store, (state) => state.phase, render);
+  return watchPhaseText(store, timeline, render);
 }

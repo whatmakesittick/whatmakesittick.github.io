@@ -59,6 +59,10 @@
   font-weight: 600;
 }
 
+:root[data-theme='light'] .tone-text {
+  color: color-mix(in srgb, var(--tone, var(--text)) 55%, var(--text));
+}
+
 .readout-meter {
   display: flex;
   align-items: center;

@@ -1,0 +1,277 @@
+{
+  "meta": {
+    "title": "Cómo mide el tiempo un reloj de yodo",
+    "eyebrow": "Química",
+    "tagline": "Dos líquidos transparentes, unos diez segundos de nada y, de pronto, negro azulado en un parpadeo: una carrera entre moléculas que acaba justo a tiempo.",
+    "description": "El reloj de yodo en 3D, del vaso a las moléculas: por qué dos líquidos transparentes esperan unos 10 s y de pronto se vuelven negro azulado.",
+    "summary": "El vertido, el paso lento, el yodo que nadie ve, el último bisulfito, la hélice de almidón y cómo ajustar el reloj.",
+    "socialAlt": "Un vaso de precipitados ancho con un líquido negro azulado, sobre un agitador magnético y al lado de un cronómetro, junto al título «Cómo mide el tiempo un reloj de yodo»"
+  },
+  "stage": {
+    "label": "Modelo interactivo del reloj de yodo",
+    "gauge": "Reloj y concentraciones en directo"
+  },
+  "timeline": {
+    "label": "Marcha del reloj",
+    "phases": "Saltar a un momento de la reacción",
+    "value": "{{seconds}} s",
+    "during": "{{seconds}} s después de empezar el vertido, {{phase}}",
+    "speed": "Velocidad",
+    "speedValue": "{{factor}}×",
+    "realTime": "Tiempo real",
+    "slower": "{{factor}} veces más lento que en la realidad",
+    "faster": "{{factor}} veces más rápido que en la realidad",
+    "phase": {
+      "pour": "Vertido",
+      "induction": "Espera",
+      "exhaustion": "Último bisulfito",
+      "iodine": "Se acumula yodo",
+      "complex": "Aparece el azul",
+      "blue": "Negro azulado"
+    },
+    "jump": {
+      "pour": "Saltar al vertido",
+      "induction": "Saltar a la espera transparente",
+      "exhaustion": "Saltar al último bisulfito",
+      "iodine": "Saltar al momento en que el yodo sobrevive",
+      "complex": "Saltar a la aparición del azul",
+      "blue": "Saltar al vaso negro azulado"
+    },
+    "detail": {
+      "pour": "la disolución B se vierte sobre la A",
+      "induction": "el paso lento gasta bisulfito y el líquido sigue transparente",
+      "exhaustion": "el último bisulfito se está acabando",
+      "iodine": "ya nada se come el yodo, así que se acumula",
+      "complex": "las cadenas de yodo llenan las espirales de almidón",
+      "blue": "todo el vaso está negro azulado"
+    }
+  },
+  "controls": {
+    "label": "Controles del modelo",
+    "scale": "Escala",
+    "scaleOptions": {
+      "beaker": "Vaso",
+      "molecules": "Moléculas"
+    },
+    "groups": {
+      "scale": "Escala",
+      "mix": "Mezclar de nuevo"
+    },
+    "mixOptions": {
+      "again": "Mezclar de nuevo"
+    },
+    "views": {
+      "water": {
+        "name": "Agua",
+        "short": "Agua",
+        "hint": "Agua (W)"
+      },
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Etiquetas (L)"
+      }
+    }
+  },
+  "readouts": {
+    "clock": "Reloj",
+    "bisulfite": "Bisulfito",
+    "iodine": "Yodo",
+    "now": "Ahora",
+    "iodineState": {
+      "eaten": "Se gasta al instante"
+    },
+    "pace": {
+      "real": "Tiempo real",
+      "slower": "{{factor}} veces más lento que en la realidad",
+      "faster": "{{factor}} veces más rápido que en la realidad"
+    }
+  },
+  "units": {
+    "seconds": "{{value}} s",
+    "millimolar": "{{value}} mM",
+    "micromolar": "{{value}} µM",
+    "nanoseconds": "{{value}} ns",
+    "microseconds": "{{value}} µs",
+    "milliseconds": "{{value}} ms",
+    "percent": "{{value}} %",
+    "celsius": "{{value}} °C"
+  },
+  "equations": {
+    "landolt": "IO<sub>3</sub><sup>−</sup> + 3 HSO<sub>3</sub><sup>−</sup> → I<sup>−</sup> + 3 SO<sub>4</sub><sup>2−</sup> + 3 H<sup>+</sup>",
+    "dushman": "IO<sub>3</sub><sup>−</sup> + 5 I<sup>−</sup> + 6 H<sup>+</sup> → 3 I<sub>2</sub> + 3 H<sub>2</sub>O",
+    "eaten": "I<sub>2</sub> + HSO<sub>3</sub><sup>−</sup> + H<sub>2</sub>O → 2 I<sup>−</sup> + SO<sub>4</sub><sup>2−</sup> + 3 H<sup>+</sup>",
+    "triiodide": "I<sub>2</sub> + I<sup>−</sup> ⇌ I<sub>3</sub><sup>−</sup>",
+    "helix": "I<sub>3</sub><sup>−</sup> + I<sub>2</sub> → I<sub>5</sub><sup>−</sup>"
+  },
+  "steps": {
+    "name": {
+      "landolt": "Paso lento",
+      "dushman": "Se forma yodo",
+      "eaten": "El bisulfito se come el yodo",
+      "triiodide": "El yodo se une al yoduro",
+      "helix": "Cadenas más largas llenan la hélice"
+    },
+    "state": {
+      "waiting": "En espera",
+      "running": "En marcha",
+      "finished": "Terminado"
+    }
+  },
+  "chapters": {
+    "steps": {
+      "label": "Pasos de la reacción"
+    },
+    "graph": {
+      "label": "Bisulfito y yodo en el vaso a lo largo del tiempo",
+      "time": "Tiempo desde el vertido, s",
+      "unit": "mM",
+      "bisulfite": "Bisulfito",
+      "iodine": "Yodo",
+      "switch": "Cambio a los {{seconds}} s"
+    },
+    "pour": {
+      "clock": "Cronómetro",
+      "iodate": "Yodato tras mezclar",
+      "iodateValue": "25 mM",
+      "bisulfite": "Bisulfito tras mezclar",
+      "bisulfiteValue": "12,5 mM",
+      "starch": "Almidón tras mezclar",
+      "starchValue": "0,125 %",
+      "volume": "Volumen total",
+      "volumeValue": "400 mL",
+      "delay": "Tiempo hasta el color",
+      "delayValue": "unos 10 s, de 9 a 14 s en demostraciones"
+    },
+    "slowStep": {
+      "bisulfite": "Bisulfito que queda",
+      "iodide": "Yoduro formado",
+      "acid": "Ácido formado, H⁺",
+      "oxygen": "Átomos de oxígeno que cede cada yodato",
+      "oxygenValue": "3, del yodo al azufre",
+      "ions": "Iones bisulfito en el vaso",
+      "ionsValue": "unos 3 × 10²¹",
+      "water": "Moléculas de agua por cada ion bisulfito",
+      "waterValue": "unas 4400"
+    },
+    "invisibleIodine": {
+      "lifetime": "Vida de una molécula de yodo",
+      "survives": "Sobrevive",
+      "rate": "El yodo y el bisulfito reaccionan a",
+      "rateValue": "1,8 × 10⁹ M⁻¹ s⁻¹",
+      "used": "Bisulfito gastado cada segundo",
+      "usedValue": "unos 2,5 × 10²⁰ iones",
+      "dushman": "Paso que forma yodo",
+      "dushmanValue": "Dushman, 1904"
+    },
+    "tippingPoint": {
+      "switchAt": "El último bisulfito se acaba a los",
+      "bisulfite": "Bisulfito ahora",
+      "iodine": "Yodo ahora",
+      "pace": "Lo estás viendo a",
+      "needs": "Para que salga el color",
+      "needsValue": "bisulfito por debajo de 3 × yodato",
+      "visible": "Yodo que se ve, con almidón",
+      "visibleValue": "unos 20 µM",
+      "speed": "De transparente a negro azulado",
+      "speedValue": "mucho menos de un segundo"
+    },
+    "starch": {
+      "fill": "Yodo en la hélice",
+      "turn": "Unidades de glucosa por vuelta",
+      "turnValue": "6",
+      "pitch": "Subida por vuelta",
+      "pitchValue": "0,8 nm",
+      "channel": "Ancho del canal",
+      "channelValue": "unos 0,5 nm",
+      "peak": "Absorción más fuerte",
+      "peakValue": "unos 600 nm",
+      "bonds": "Longitud de los enlaces del yodo",
+      "bondsValue": "I₂ 2,67 Å, I₃⁻ 2,90 Å"
+    },
+    "tuning": {
+      "iodate": "Yodato",
+      "temperature": "Temperatura",
+      "switchAt": "Color a los",
+      "ratio": "Bisulfito frente a yodato",
+      "ratioValue": "{{ratio}}, el color necesita menos de 3",
+      "half": "La mitad de yodato",
+      "halfValue": "más o menos el doble de espera",
+      "acid": "Más ácido",
+      "acidValue": "antes, el H⁺ cuenta al cuadrado",
+      "cold": "Baño de hielo frente a temperatura ambiente, una demostración de clase",
+      "coldValue": "45 s frente a 30 s"
+    }
+  },
+  "parts": {
+    "mixingBeaker": "Vaso de mezcla",
+    "mixture": "Mezcla, disolución A",
+    "pourBeaker": "Vaso para verter",
+    "bisulfiteSolution": "Disolución B, bisulfito",
+    "pourStream": "Chorro",
+    "stirBar": "Imán agitador",
+    "stirrer": "Agitador magnético",
+    "thermometer": "Termómetro",
+    "stopwatch": "Cronómetro",
+    "iodate": "Yodato, IO₃⁻",
+    "bisulfite": "Bisulfito, HSO₃⁻",
+    "sulfate": "Sulfato, SO₄²⁻",
+    "iodide": "Yoduro, I⁻",
+    "hydrogenIon": "Ion hidrógeno, H⁺",
+    "iodine": "Yodo, I₂",
+    "triiodide": "Triyoduro, I₃⁻",
+    "polyiodide": "Cadena de poliyoduro",
+    "amylose": "Hélice de amilosa",
+    "glucose": "Unidad de glucosa",
+    "water": "Agua"
+  },
+  "sections": {
+    "pour": {
+      "title": "Dos líquidos transparentes y una espera",
+      "p1": "Esto es un <strong>reloj de yodo</strong>, una demostración clásica de química. Sobre un <strong>agitador magnético</strong> hay un <strong>vaso de mezcla</strong> ancho. Dentro gira un <strong>imán agitador</strong>, que mantiene el líquido en movimiento. El vaso contiene la disolución A: 100 mL de yodato de potasio, 100 mL de agua y 50 mL de disolución de almidón. El <strong>vaso para verter</strong>, más pequeño, contiene la disolución B: 20 mL de bisulfito de sodio y 130 mL de agua.",
+      "p2": "Los dos líquidos parecen agua corriente. Vierte B en A y pon en marcha el <strong>cronómetro</strong>. Durante unos 10 segundos, parece que no pasa nada. Luego todo el vaso se vuelve negro azulado de golpe. En las demostraciones de clase con esta receta, la espera suele durar de 9 a 14 segundos. Es lo bastante constante como para medir el tiempo con ella.",
+      "p3": "Hans Heinrich Landolt describió esta reacción en 1886. Por eso los químicos la llaman <strong>reacción de Landolt</strong>. Aun así, no fue el primero en cronometrar un cambio químico. Harcourt y Esson ya habían estudiado un reloj parecido en 1866 y 1867, con otras sustancias. El truco es siempre el mismo. Una reacción va gastando algo en silencio, y el color espera a que se acabe.",
+      "p4": "Los químicos miden lo que hay disuelto en moles por litro, que se escribe M. Un mol es un número fijo y enorme de partículas: unos 6 × 10<sup>23</sup>. Un milimol por litro, que se escribe mM, es la milésima parte. Después del vertido, los 400 mL de mezcla tienen 25 mM de yodato, 12,5 mM de bisulfito y 0,125 % de almidón. Es decir, hay la mitad de bisulfito que de yodato. Eso será importante más adelante. Elige Moléculas para sumergirte en el líquido y ver lo que el cronómetro no ve.",
+      "p5": "El modelo simplifica la mesa de laboratorio. El vertido dura un segundo, y el reloj arranca en cuanto empieza. El imán gira a un ritmo constante, así que la mezcla siempre está bien removida."
+    },
+    "slowStep": {
+      "title": "El paso lento fabrica su propio ácido",
+      "p1": "Por dentro, el líquido está lleno de <strong>iones</strong>. Un ion es un átomo, o un grupo pequeño de átomos, con carga eléctrica. Tiene carga porque ha ganado o perdido electrones. La carga se escribe arriba, en pequeño. Un − significa un electrón de más, 2− significa dos, y + significa uno de menos. El número pequeño de abajo indica cuántos átomos hay. Así, el <strong>yodato</strong>, IO<sub>3</sub><sup>−</sup>, es un átomo de yodo unido a tres átomos de oxígeno, con un electrón de más.",
+      "p2": "El <strong>bisulfito</strong>, o hidrogenosulfito, HSO<sub>3</sub><sup>−</sup>, es un átomo de azufre con tres átomos de oxígeno y uno de hidrógeno. En agua, el hidrógeno suele ir unido a uno de los oxígenos, y el modelo lo dibuja ahí. El yodato y el bisulfito reaccionan en el <strong>paso lento</strong>, que aparece en la lista de abajo. Lee la flecha como «se convierte en». Un yodato y tres bisulfitos se convierten en un ion <strong>yoduro</strong>, I<sup>−</sup>, tres iones <strong>sulfato</strong>, SO<sub>4</sub><sup>2−</sup>, y tres <strong>iones hidrógeno</strong>, H<sup>+</sup>.",
+      "p3": "Ahora cuenta los oxígenos. El yodato pierde sus tres átomos de oxígeno. Cada bisulfito gana uno y se convierte en sulfato. En total, tres átomos de oxígeno pasan del yodo al azufre. El modelo solo muestra este recuento, con un oxígeno que salta cada vez. Nadie sabe todavía cómo ocurre de verdad en un solo choque. Así que no tomes esos saltos por el camino real.",
+      "p4": "Además, cada bisulfito suelta su hidrógeno como H<sup>+</sup>. Los iones hidrógeno son lo que hace ácido a un líquido. Así que el vaso fabrica su propio ácido sobre la marcha: un H<sup>+</sup> por cada bisulfito gastado. Nadie ha añadido ácido. Mira los valores de abajo: el bisulfito baja, mientras suben el yoduro y el ácido. Te harán falta los dos en el siguiente capítulo.",
+      "p5": "El vaso real tiene unos 3 × 10<sup>21</sup> iones bisulfito, tres mil trillones. Cada uno nada entre unas 4400 moléculas de agua. El modelo apiña unas pocas docenas de iones en una caja de solo 4,8 nm de lado. Un nanómetro, nm, es una millonésima de milímetro. Cada bola del modelo representa una cantidad fija de su sustancia. El agua es solo una neblina tenue, que puedes ocultar con Agua (W). Los iones de potasio y de sodio no participan, así que no aparecen."
+    },
+    "invisibleIodine": {
+      "title": "El yodo que nadie ve",
+      "p1": "El yoduro abre un segundo camino. El yodato también puede reaccionar con el yoduro y los iones hidrógeno. Así se forma <strong>yodo</strong>, I<sub>2</sub>, dos átomos de yodo unidos. Se llama <strong>reacción de Dushman</strong>, por el químico que la estudió en 1904. Necesita yoduro y ácido, y el paso lento fabrica los dos. Por eso, cuanto más avanza el paso lento, más rápido se forma el yodo. Una reacción que se acelera sola de este modo es <strong>autocatalítica</strong>.",
+      "p2": "Justo al principio no hay yoduro, así que no se puede formar yodo. Pero casi enseguida aparece un poco, y cada segundo hay más. Nunca lo ves, porque el bisulfito destruye cada molécula de yodo en el acto. El bisulfito la vuelve a convertir en dos iones yoduro y, de paso, se convierte en sulfato. Es el tercer paso de la lista.",
+      "p3": "¿Y cuánto es «en el acto»? Los químicos lo describen con una constante de velocidad. Es un número que dice lo deprisa que reaccionan dos tipos de moléculas cuando se encuentran. Para el yodo y el bisulfito vale 1,8 × 10<sup>9</sup> litros por mol y por segundo. Al principio, eso da a una molécula de yodo una vida de unos 40 nanosegundos, cuarenta milmillonésimas de segundo. El valor de abajo muestra cómo esa vida se alarga a medida que queda menos bisulfito.",
+      "p4": "Así que es una carrera. El paso lento fabrica yoduro y ácido. El yodo se forma cada vez más rápido. Y el bisulfito sigue eliminándolo. En promedio, el vaso gasta unos 2,5 × 10<sup>20</sup> iones bisulfito cada segundo. Mientras quede algo de bisulfito, gana él, y el líquido sigue transparente.",
+      "p5": "El modelo dibuja cada uno de estos encuentros miles de millones de veces más lento que en la realidad, para que puedas seguir uno. Mira cómo un yodato se encuentra con un yoduro, cómo aparece de pronto una molécula de yodo y cómo un bisulfito la atrapa. En el vaso real, una molécula de yodo dura solo unas cuarenta milmillonésimas de segundo. Y esto pasa en todas partes a la vez."
+    },
+    "tippingPoint": {
+      "title": "El último bisulfito",
+      "p1": "De vuelta al vaso, no pierdas de vista el cronómetro. El bisulfito baja despacio al principio y luego cada vez más rápido, porque la carrera se acelera sola. Entonces se acaba el último bisulfito. Ya no queda nada que se coma el yodo, así que cada molécula nueva sobrevive.",
+      "p2": "El yodo se acumula deprisa. Con almidón en el líquido, el ojo lo nota desde unos 20 micromolar. Un micromolar, µM, es la milésima parte de un milimolar. El vaso cruza esa línea en mucho menos de un segundo desde que se acaba el bisulfito. Un vaso removido cambia de color en todas partes a la vez. En cambio, en una capa fina sin remover, el color avanza como un frente, a un milímetro por minuto más o menos. Esa medida se hizo con un reloj de sulfito parecido.",
+      "p3": "Hay una condición. En el paso lento, cada yodato gasta tres bisulfitos. Por eso el color solo aparece si hay menos del triple de bisulfito que de yodato. Si no, el yodato se acaba antes, y el líquido sigue transparente. Esta receta tiene la mitad de bisulfito que de yodato, muy por debajo de ese límite.",
+      "p4": "La gráfica cuenta toda la historia. El bisulfito cae hasta cero, y luego el yodo se dispara. La forma exacta de las dos líneas es una estimación del propio modelo, con curvas suaves, porque nadie las ha medido para esta receta. El cambio real es demasiado rápido para verlo, así que el modelo estira los últimos momentos. Después del cambio, muestra la subida del yodo 75 veces más lenta que en la realidad, y el color unas 4 veces más lento. El marcador de ritmo te dice a qué velocidad lo ves."
+    },
+    "starch": {
+      "title": "El azul sale de una espiral de almidón",
+      "p1": "El yodo por sí solo no es azul. En agua se ve pardo amarillento. El negro azulado viene del almidón. El almidón está hecho de glucosa, un azúcar, unida en cadenas largas. Una de sus partes, la <strong>amilosa</strong>, se enrolla en una <strong>hélice</strong>, como un muelle.",
+      "p2": "Cada vuelta de la espiral tiene 6 <strong>unidades de glucosa</strong> y sube 0,8 nm. Por el centro pasa un canal de unos 0,5 nm de ancho, justo lo necesario para que quepa el yodo. La hélice gira hacia la izquierda. El modelo dibuja cada unidad de glucosa como un anillo sencillo, no átomo por átomo.",
+      "p3": "Primero, el yodo se encuentra con el yoduro que fabricó el paso lento. Juntos forman <strong>triyoduro</strong>, I<sub>3</sub><sup>−</sup>. El signo ⇌ significa que esto ocurre en los dos sentidos. Dentro del canal, el yodo se alinea en <strong>cadenas de poliyoduro</strong> más largas, como un I<sub>5</sub><sup>−</sup> con un I<sub>2</sub> a cada lado. Sus átomos están a unos 3,1 Å unos de otros. Un ångström, Å, es la décima parte de un nanómetro. El triyoduro por sí solo no da el color, pero las cadenas más largas sí. Por eso el color necesita el yoduro además del yodo.",
+      "p4": "Las cadenas absorben la luz sobre todo a unos 600 nm, que es luz naranja. Lo que queda, el ojo lo ve como un azul intenso. La otra parte del almidón, la <strong>amilopectina</strong>, está ramificada. En sus ramas cortas solo caben cadenas cortas de yodo, así que con el yodo se tiñe de rojo violáceo. El modelo dibuja primero la formación del yodo y después el llenado de las cadenas. En el vaso real, las dos cosas pasan a la vez.",
+      "p5": "El almidón solo hace visible el cambio. Es el <strong>indicador</strong>: no se gasta y no marca el tiempo. Eso lo hace el bisulfito. Colin y Claubry descubrieron el color azul del almidón con yodo en 1814, mucho antes de que nadie lo usara como reloj."
+    },
+    "tuning": {
+      "title": "Ajustar el reloj",
+      "p1": "Puedes ajustar este reloj tú mismo. El control deslizante del yodato fija cuánto yodato hay en la mezcla. Con la mitad de yodato, la espera dura más o menos el doble. Con el doble, más o menos la mitad. El momento del cambio se mueve enseguida en la gráfica. Pulsa «Mezclar de nuevo» para ver un vaso nuevo desde el principio. En el modelo, la espera depende exactamente del yodato. En un vaso real, solo se acerca.",
+      "p2": "El ácido también acelera el reloj. En el paso de Dushman, los iones hidrógeno cuentan dos veces: la velocidad depende de su cantidad al cuadrado. Por eso unas gotas de ácido sulfúrico adelantan el color. Esta receta no añade ácido, porque fabrica el suyo.",
+      "p3": "Las mezclas más calientes cambian de color antes, y el hielo las frena. En una demostración de clase con una receta más lenta, el color tardó 45 s en un baño de hielo y 30 s a temperatura ambiente. Todavía no hay acuerdo sobre la fuerza exacta de este efecto. Así que el modelo traza una curva suave propia que pasa por esos tiempos de clase. Trata el control de temperatura como un boceto, no como una medida.",
+      "p4": "No hay control para el bisulfito, porque aún se discute cómo cambia la espera con él. Por eso el modelo lo deja fijo y deja que el yodato marque el ritmo. Elijas lo que elijas, siempre hay menos del triple de bisulfito que de yodato, así que el color siempre aparece.",
+      "p5": "Esta química tiene parientes. Si añades iones de mercurio, obtienes la reacción <strong>Old Nassau</strong>, descrita en 1977. Da un destello naranja antes de volverse negro azulado. La reacción de <strong>Briggs-Rauscher</strong>, de 1973, es distinta. Pasa de transparente a ámbar y a azul una y otra vez, durante unos 5 minutos. Eso la convierte en un oscilador, no en un reloj. El reloj de Landolt cambia una sola vez y ya está."
+    }
+  }
+}

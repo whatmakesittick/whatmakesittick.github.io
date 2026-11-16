@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Timeline } from '../explainer';
+import type { Preset, Timeline } from '../explainer';
 import { createExplainerStore } from '../store';
-import { bindScrubber } from './scrubber';
+import { bindPhaseStatus, bindScrubber } from './scrubber';
 import { TEXT_REFRESH_INTERVAL_MS } from './throttle';
 
 const timeline: Timeline = {
@@ -18,6 +18,11 @@ const timeline: Timeline = {
   ],
   speed: { min: 1, max: 20, step: 1, labelKey: 'test.speed', format: String, describe: String },
 };
+
+interface UnitFields {
+  unit: string;
+  setUnit(next: string): void;
+}
 
 function createStore() {
   return createExplainerStore({
@@ -53,5 +58,36 @@ describe('bindScrubber', () => {
     expect(input.getAttribute('aria-valuetext')).toBe('at 10');
     vi.advanceTimersByTime(TEXT_REFRESH_INTERVAL_MS + 1);
     expect(input.getAttribute('aria-valuetext')).toBe('at 30');
+  });
+
+  it('renders the phase texts again when a format input changes at the same phase', () => {
+    let unit = 's';
+    const store = createExplainerStore<UnitFields, Preset>({
+      timeline,
+      presets: { intro: {} },
+      defaults: { preset: 'intro', speed: 10, view: {} },
+      extend: (set) => ({ unit, setUnit: (next: string) => set({ unit: next }) }),
+    });
+    const inputs: Timeline = {
+      ...timeline,
+      formatPhase: (phase) => `${phase} ${unit}`,
+      describePhase: (phase) => `at ${phase} ${unit}`,
+      formatInputs: () => [store.getState().unit],
+    };
+    document.body.innerHTML =
+      '<input type="range" /><span id="value"></span><span id="name"></span>';
+    const input = document.querySelector('input')!;
+    const value = document.getElementById('value')!;
+    bindScrubber(input, store, inputs);
+    bindPhaseStatus(value, document.getElementById('name')!, store, inputs);
+    store.getState().setPhase(10);
+    vi.advanceTimersByTime(TEXT_REFRESH_INTERVAL_MS + 1);
+    expect(value.textContent).toBe('10 s');
+    unit = 'min';
+    store.getState().setUnit('min');
+    vi.advanceTimersByTime(TEXT_REFRESH_INTERVAL_MS + 1);
+    expect(store.getState().phase).toBe(10);
+    expect(value.textContent).toBe('10 min');
+    expect(input.getAttribute('aria-valuetext')).toBe('at 10 min');
   });
 });

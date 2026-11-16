@@ -63,6 +63,7 @@ export interface Timeline {
   phasesLabelKey: string;
   formatPhase(phase: number): string;
   describePhase(phase: number): string;
+  formatInputs?(): readonly unknown[];
   rate(speed: number): number;
   phases: readonly Phase[];
   speed: SpeedScale;

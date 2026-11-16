@@ -1,0 +1,13 @@
+{
+  "slug": "iodine-clock",
+  "tags": ["chemistry", "physics"],
+  "topic": "iodine clock reaction",
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A wide beaker of blue-black liquid on a magnetic stirrer beside a stopwatch, next to the title How an iodine clock keeps time"
+  }
+}
