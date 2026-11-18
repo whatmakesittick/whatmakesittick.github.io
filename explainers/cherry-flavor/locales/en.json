@@ -108,8 +108,8 @@
     "smell": "A whiff of {{smell}}",
     "cold": "Cold",
     "sweet": "Cold and sweet",
-    "flavor": "Sweet, cold and {{smell}}",
-    "pinched": "Sweet and cold, blocked: {{smell}}",
+    "flavor": "Sweet and {{smell}}",
+    "pinched": "Sweet and cold, but no {{smell}}",
     "aftertaste": "A last breath of {{smell}}",
     "gone": "Nothing left"
   },
@@ -256,7 +256,7 @@
       "p1": "Take a spoon of sour-cherry ice cream and let it rest on your <strong>tongue</strong>. Your tongue can tell you five things, the five <strong>basic tastes</strong>: sweet, sour, salty, bitter and umami. Umami is the savory taste of broth and cheese. Each taste has its own kind of <strong>taste cell</strong>. You may have seen a map of the tongue with one zone per taste. That map is a myth: every part of the tongue with taste buds senses all five.",
       "p2": "The tiny bumps on your tongue are called <strong>papillae</strong>. Many of them hold <strong>taste buds</strong>, and you have a few thousand. Each bud is a small cluster of about 50 to 100 cells. Sweet is caught by a single receptor, built from two parts that work as a pair. So from this ice cream, your tongue reports sweet, and a little sour from the tart cherry.",
       "p3": "What about the cold, and the soft, creamy feel? Those are not tastes at all. Cold is felt by <strong>temperature nerves</strong> in your mouth. Creaminess is felt by touch. Both tell you a lot about the ice cream, but nothing about cherry.",
-      "p4": "Cold does change taste, though. Ice cream is usually served at about −12 °C, and your mouth is about 37 °C. Below about 12 °C, sweet tastes weaker, and cold also makes sweetness fade faster. Watch the readouts as the bite warms up. Sweet grows, cold fades, and nothing on the tongue says cherry.",
+      "p4": "Cold does change taste, though. Ice cream is usually served at about −12 °C, and your mouth is about 37 °C. Below about 12 °C, sweet tastes weaker, and cold also makes sweetness fade faster. Watch the readouts. Once the bite has melted, sweet grows and cold fades. Still, nothing on the tongue says cherry.",
       "p5": "The seconds on the timeline are only a guide. Nobody has measured how long a spoonful takes to melt in the mouth. The model splits one bite into six steps so you can follow it, but in a real mouth they overlap. The way the bite warms up is the model's own sketch too. Pick Head or Molecules to look at the same bite another way."
     },
     "routes": {
@@ -294,7 +294,7 @@
       "p2": "Fat matters too. Cherry molecules are <strong>fat-loving</strong>: they dissolve in fat and like to stay there. So in a rich ice cream, the fat holds cherry back. In a low-fat one, cherry comes out faster and stronger. Vanilla works the other way round.",
       "p3": "In the US, ice cream must have at least 10 % milk fat, and premium kinds have up to about 20 %. With the cold and the fat, much of the aroma stays locked in. So flavorists add more: cherry flavoring makes up about 1 to 2 % of the mix. Try the sliders. A warmer serving or less fat lets more aroma reach your nose.",
       "p4": "Now put it all together. Your tongue tells you sweet and a little sour. Your nerves feel the cold and the cream. And your nose, reached from behind your palate, tells you cherry. Pinch it, and the cherry is gone.",
-      "p5": "How strongly cold and fat hold aroma back is the model's own estimate. Studies show which way each one works, but not by how much. So read these numbers as a sketch, not a measurement. Every percentage on this page compares with the model's own maximum. None of them is a share of flavor."
+      "p5": "How strongly cold and fat hold aroma back is the model's own estimate. Studies show which way each one works, but not by how much. So read these numbers as a sketch, not a measurement. Each percentage on this page compares with the most that readout can reach in the model. None of them is a share of flavor."
     }
   }
 }
