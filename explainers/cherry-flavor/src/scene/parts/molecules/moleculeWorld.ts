@@ -1,5 +1,5 @@
 import { AdditiveBlending, Color, Quaternion, Vector3 } from 'three';
-import type { Object3D } from 'three';
+import type { Camera, Object3D } from 'three';
 import { clamp, smoothstep } from '@core/math';
 import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import { ODORANT_IDS } from '../../../ids';
@@ -17,7 +17,16 @@ import { CELL_TOP_Y, ReceptorGrid } from './receptorGrid';
 import { MOLECULE_SHAPES } from './shapes';
 
 const HALF = 0.5;
-const LINEUP = { bottom: LINEUP_Y - 6.5, step: 1.6, turn: 2.4, tumble: 0.35 } as const;
+const LINEUP = {
+  scale: 0.55,
+  pairOffset: COLUMN_SCATTER * 0.6,
+  rowStep: 3.3,
+  depth: 1.4,
+  tumble: 0.35,
+  moved: 0.01,
+} as const;
+const DOWNWARD_FADE = { from: 22 * (Math.PI / 180), to: 30 * (Math.PI / 180) } as const;
+const PAIR = 2;
 const SETTLE = {
   scale: 0.62,
   spawnLift: 3.2,
@@ -27,7 +36,7 @@ const SETTLE = {
   to: 0.3,
   full: 0.9,
 } as const;
-const HALO = { size: 12, lineup: 0.5, settled: 0.6 } as const;
+const HALO = { size: 7, lineup: 0.5, settled: 0.6 } as const;
 const EASE = { rate: 5, settled: 0.002 } as const;
 const LABEL_LIFT = 3.5;
 
@@ -61,18 +70,28 @@ function slot(home: Vector3, random: () => number): Slot {
 }
 
 function lineupSlots(id: OdorantId, random: () => number): Slot[] {
-  return Array.from({ length: MAX_COPIES }, (_, index) => {
-    const angle = index * LINEUP.turn;
-    const reach = COLUMN_SCATTER * (0.45 + 0.55 * random());
-    return slot(
-      new Vector3(
-        ODORANT_COLUMN_X[id] + Math.cos(angle) * reach * HALF,
-        LINEUP.bottom + index * LINEUP.step,
-        Math.sin(angle) * reach,
-      ),
-      random,
-    );
+  return Array.from({ length: MAX_COPIES }, () => {
+    const entry = slot(new Vector3(ODORANT_COLUMN_X[id], LINEUP_Y, 0), random);
+    entry.home.z = (random() - HALF) * 2 * LINEUP.depth;
+    return entry;
   });
+}
+
+function arrange(id: OdorantId, lineup: readonly Slot[], count: number): void {
+  const rows = Math.ceil(count / PAIR);
+  lineup.forEach((entry, index) => {
+    if (index >= count) return;
+    const row = Math.floor(index / PAIR);
+    const paired = row * PAIR + 1 < count;
+    const side = paired ? (index % PAIR === 0 ? -1 : 1) : 0;
+    entry.home.x = ODORANT_COLUMN_X[id] + side * LINEUP.pairOffset;
+    entry.home.y = LINEUP_Y + ((rows - 1) * HALF - row) * LINEUP.rowStep;
+  });
+}
+
+function cameraPitch(camera: Camera, direction: Vector3): number {
+  camera.getWorldDirection(direction);
+  return Math.asin(clamp(-direction.y, -1, 1));
 }
 
 function settledSlots(id: OdorantId, random: () => number): Slot[] {
@@ -91,8 +110,11 @@ class MoleculeWorld implements Section {
   private readonly colours: Record<OdorantId, Color>;
   private readonly activationTarget: number[] = Array.from({ length: RECEPTOR_TYPES }, () => 0);
   private readonly activation: number[] = Array.from({ length: RECEPTOR_TYPES }, () => 0);
+  private readonly look = new Vector3();
   private seconds = 0;
   private first = true;
+  private lineupView = 1;
+  private lineupViewTarget = 1;
 
   constructor(context: PartContext, root: Object3D) {
     this.root = root;
@@ -128,6 +150,13 @@ class MoleculeWorld implements Section {
     this.halos.points.name = 'odorantHalos';
     context.tracker.track(this.halos);
     root.add(this.halos.points);
+    this.halos.points.onBeforeRender = (_renderer, _scene, camera) => this.watch(camera);
+  }
+
+  private watch(camera: Camera): void {
+    const pitch = cameraPitch(camera, this.look);
+    this.lineupViewTarget = 1 - smoothstep(pitch, DOWNWARD_FADE.from, DOWNWARD_FADE.to);
+    if (this.root.scale.x < 1) this.lineupView = this.lineupViewTarget;
   }
 
   setState(state: AssemblyState): void {
@@ -136,6 +165,7 @@ class MoleculeWorld implements Section {
     ODORANT_IDS.forEach((id) => {
       const slots = this.odorants[id];
       slots.lineup.forEach((entry, index) => (entry.target = index < copies[id] ? 1 : 0));
+      arrange(id, slots.lineup, copies[id]);
       const share = this.settleShare(id, sniff, reading.nose[id]);
       slots.settled.forEach((entry) => (entry.target = share));
     });
@@ -156,9 +186,24 @@ class MoleculeWorld implements Section {
       if (entry.shown !== entry.target) moving = true;
     };
     ODORANT_IDS.forEach((id) => {
-      this.odorants[id].lineup.forEach(ease);
+      this.odorants[id].lineup.forEach((entry) => {
+        ease(entry);
+        if (entry.pose.position.distanceTo(entry.home) > LINEUP.moved) {
+          entry.pose.position.lerp(entry.home, share);
+          moving = true;
+        } else {
+          entry.pose.position.copy(entry.home);
+        }
+      });
       this.odorants[id].settled.forEach(ease);
     });
+    const viewGap = this.lineupViewTarget - this.lineupView;
+    if (Math.abs(viewGap) < EASE.settled) {
+      this.lineupView = this.lineupViewTarget;
+    } else {
+      this.lineupView += viewGap * share;
+      moving = true;
+    }
     for (let index = 0; index < RECEPTOR_TYPES; index += 1) {
       const gap = this.activationTarget[index] - this.activation[index];
       if (Math.abs(gap) < EASE.settled) {
@@ -180,7 +225,10 @@ class MoleculeWorld implements Section {
 
   private snap(): void {
     ODORANT_IDS.forEach((id) => {
-      this.odorants[id].lineup.forEach((entry) => (entry.shown = entry.target));
+      this.odorants[id].lineup.forEach((entry) => {
+        entry.shown = entry.target;
+        entry.pose.position.copy(entry.home);
+      });
       this.odorants[id].settled.forEach((entry) => (entry.shown = entry.target));
     });
     this.activation.splice(0, RECEPTOR_TYPES, ...this.activationTarget);
@@ -195,7 +243,7 @@ class MoleculeWorld implements Section {
     const glow = (entry: Slot, colour: Color, strength: number) => {
       const { x, y, z } = entry.pose.position;
       this.halos.setPoint(halo, x, y, z);
-      this.halos.setColor(halo, colour.r, colour.g, colour.b, strength * entry.shown);
+      this.halos.setColor(halo, colour.r, colour.g, colour.b, strength * entry.pose.scale);
       halo += 1;
     };
     ODORANT_IDS.forEach((id) => {
@@ -203,13 +251,13 @@ class MoleculeWorld implements Section {
       const colour = this.colours[id];
       batch.begin();
       let top: Vector3 | null = null;
+      const view = smoothstep(this.lineupView, 0, 1);
       lineup.forEach((entry) => {
         this.turn(entry);
-        entry.pose.scale = smoothstep(entry.shown, 0, 1);
-        entry.pose.position.copy(entry.home);
+        entry.pose.scale = LINEUP.scale * view * smoothstep(entry.shown, 0, 1);
         batch.draw(entry.pose);
-        glow(entry, colour, HALO.lineup);
-        if (entry.target > 0) top = entry.home;
+        glow(entry, colour, HALO.lineup / LINEUP.scale);
+        if (entry.target > 0 && view > HALF && (!top || entry.home.y > top.y)) top = entry.home;
       });
       settled.forEach((entry) => {
         this.turn(entry);
@@ -217,7 +265,7 @@ class MoleculeWorld implements Section {
         entry.pose.scale = SETTLE.scale * arrive;
         entry.pose.position.copy(entry.home).setY(entry.home.y + SETTLE.spawnLift * (1 - arrive));
         batch.draw(entry.pose);
-        glow(entry, colour, HALO.settled);
+        glow(entry, colour, HALO.settled / SETTLE.scale);
       });
       batch.end();
       const spot: Vector3 = top ?? settled[0].pose.position;
