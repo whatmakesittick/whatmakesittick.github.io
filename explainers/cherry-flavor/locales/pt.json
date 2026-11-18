@@ -5,7 +5,7 @@
     "tagline": "A sua língua sente o doce e um pouco de azedo, e os nervos sentem o frio. A cereja em si é um cheiro que chega ao nariz por dentro da boca.",
     "description": "Siga uma colherada de sorvete de cereja em 3D, da língua ao nariz e aos receptores do olfato: por que cereja é cheiro e por que a bala lembra amêndoa.",
     "summary": "O que a língua percebe, os dois caminhos até o nariz, o cheiro como padrão, a cereja desmontada, a bancada do aromista e por que o sorvete precisa de mais aroma.",
-    "socialAlt": "Uma cabeça em corte com uma colherada de sorvete de cereja rosa sobre a língua e o aroma subindo por trás do palato até o nariz, junto ao título “Por que o sorvete de cereja tem gosto de cereja”"
+    "socialAlt": "Uma cabeça em corte com um pedacinho de sorvete de cereja rosa sobre a língua e o aroma subindo por trás do palato até o nariz, junto ao título “Por que o sorvete de cereja tem gosto de cereja”"
   },
   "stage": {
     "label": "Modelo interativo do sorvete de cereja",
@@ -14,9 +14,9 @@
   "timeline": {
     "label": "Colherada",
     "phases": "Ir para um momento da colherada",
-    "value": "{{seconds}} s",
-    "before": "{{seconds}} s antes da colherada, {{phase}}",
-    "during": "{{seconds}} s depois do início da colherada, {{phase}}",
+    "value": "{{seconds}} s",
+    "before": "{{seconds}} s antes da colherada, {{phase}}",
+    "during": "{{seconds}} s depois do início da colherada, {{phase}}",
     "speed": "Velocidade",
     "speedValue": "{{factor}}×",
     "realTime": "Ritmo do modelo",
@@ -109,7 +109,7 @@
     "cold": "Gelado",
     "sweet": "Gelado e doce",
     "flavor": "Doce, com sabor de {{smell}}",
-    "pinched": "Doce e gelado, sem cheiro de {{smell}}",
+    "pinched": "Só doce e gelado, sem cheiro de {{smell}}",
     "aftertaste": "Um último sopro de {{smell}}",
     "gone": "Não sobrou nada"
   },
@@ -135,8 +135,8 @@
     "violet": "violetas"
   },
   "units": {
-    "seconds": "{{value}} s",
-    "celsius": "{{value}} °C",
+    "seconds": "{{value}} s",
+    "celsius": "{{value}} °C",
     "percent": "{{value}}%"
   },
   "chapters": {
@@ -154,7 +154,7 @@
       "sweetReceptor": "Receptores do doce",
       "sweetReceptorValue": "um, feito de duas partes",
       "dulls": "O doce enfraquece abaixo de",
-      "dullsValue": "cerca de 12 °C"
+      "dullsValue": "cerca de 12 °C"
     },
     "routes": {
       "ortho": "Aroma ao cheirar",
@@ -217,7 +217,7 @@
       "fatLaw": "Gordura do leite no sorvete",
       "fatLawValue": "pelo menos 10%, os premium até cerca de 20%",
       "served": "Costuma ser servido a",
-      "servedValue": "cerca de −12 °C",
+      "servedValue": "cerca de −12 °C",
       "dose": "Aroma de cereja na mistura",
       "doseValue": "cerca de 1 a 2%"
     }
@@ -256,7 +256,7 @@
       "p1": "Pegue uma colherada de sorvete de ginja, a cereja azeda, e deixe-a descansar na <strong>língua</strong>. A sua língua consegue dizer cinco coisas, os cinco <strong>gostos básicos</strong>: doce, azedo, salgado, amargo e umami. Umami é o gosto saboroso do caldo e do queijo. Cada gosto tem o seu próprio tipo de <strong>célula gustativa</strong>. Talvez você já tenha visto um mapa da língua com uma área para cada gosto. Esse mapa é um mito: toda parte da língua que tem botões gustativos sente os cinco.",
       "p2": "As pequenas saliências da língua se chamam <strong>papilas</strong>. Muitas delas guardam <strong>botões gustativos</strong>, e você tem alguns milhares. Cada botão é um pequeno grupo de cerca de 50 a 100 células. O doce é captado por um único receptor, feito de duas partes que trabalham juntas. Então, deste sorvete, a sua língua informa o doce e um pouco de azedo, que vem da fruta ácida.",
       "p3": "E o frio, e a sensação macia e cremosa? Isso não é gosto nenhum. O frio é sentido pelos <strong>nervos de temperatura</strong> da boca. A cremosidade é sentida pelo tato. Os dois contam muito sobre o sorvete, mas nada sobre a cereja.",
-      "p4": "Mas o frio muda o gosto, sim. O sorvete costuma ser servido a cerca de −12 °C, e a sua boca está a cerca de 37 °C. Abaixo de cerca de 12 °C, o doce fica mais fraco, e o frio também faz a doçura sumir mais depressa. Observe os valores. Depois que a colherada derrete, o doce cresce e o frio diminui. Mesmo assim, nada na língua diz cereja.",
+      "p4": "Mas o frio muda o gosto, sim. O sorvete costuma ser servido a cerca de −12 °C, e a sua boca está a cerca de 37 °C. Abaixo de cerca de 12 °C, o doce fica mais fraco, e o frio também faz a doçura sumir mais depressa. Observe os valores. Depois que a colherada derrete, o doce cresce e o frio diminui. Mesmo assim, nada na língua diz cereja.",
       "p5": "Os segundos da linha do tempo são só uma referência. Ninguém mediu quanto tempo uma colherada leva para derreter na boca. O modelo divide uma colherada em seis etapas para você poder acompanhar, mas numa boca de verdade elas se misturam. O jeito como a colherada esquenta também é um esboço do próprio modelo. Escolha Cabeça ou Moléculas para ver a mesma colherada de outro jeito."
     },
     "routes": {
@@ -277,7 +277,7 @@
       "title": "A cereja desmontada",
       "p1": "Como os cientistas descobrem o que faz a cereja ter cheiro de cereja? Uma máquina chamada <strong>cromatógrafo a gás</strong> separa o aroma, uma molécula depois da outra. Um <strong>espectrômetro de massa</strong> dá nome a cada uma. Numa <strong>porta olfativa</strong>, uma pessoa cheira cada molécula que sai e diz quais têm cheiro de verdade. Diluir a amostra várias vezes mostra quais cheiros são os mais fortes.",
       "p2": "Na <strong>cereja azeda</strong>, isso encontrou sete <strong>odorantes-chave</strong>, as moléculas que carregam o cheiro. O principal é o <strong>benzaldeído</strong>. Junto com ele vêm notas verdes, de folha, como o <strong>hexenal</strong>, o <strong>linalol</strong>, que lembra flores, e o <strong>eugenol</strong>, que lembra cravo. A cereja doce é diferente. Um estudo encontrou nela 97 moléculas de aroma, e só 18 eram fortes o bastante para sentir. Nela, quem manda são as notas verdes e a <strong>beta-ionona</strong>, que tem cheiro de violetas.",
-      "p3": "O benzaldeído, C<sub>7</sub>H<sub>6</sub>O, é um anel de seis átomos de carbono com um pequeno grupo de lado. Ele tem cheiro de amêndoa amarga e de cereja. E é forte: daria para sentir uma gota em cerca de uma banheira de água. Também é o cheiro do <strong>marzipã</strong>, que muitas vezes leva óleo de amêndoa amarga. Esse óleo é quase só benzaldeído.",
+      "p3": "O benzaldeído, C<sub>7</sub>H<sub>6</sub>O, é um anel de seis átomos de carbono com um pequeno grupo de átomos ao lado. Ele tem cheiro de amêndoa amarga e de cereja. E é forte: daria para sentir uma gota em cerca de uma banheira de água. Também é o cheiro do <strong>marzipã</strong>, que muitas vezes leva óleo de amêndoa amarga. Esse óleo é quase só benzaldeído.",
       "p4": "As balas de cereja apostam no benzaldeído e deixam de fora as notas verdes e florais da fruta fresca. Por isso elas lembram mais amêndoa do que cereja. Escolha Bala de cereja, depois Marzipã, para comparar as misturas. A nota principal continua a mesma. O que muda é tudo ao redor dela.",
       "p5": "O modelo desenha cinco dos odorantes-chave. Quanto de cada um entra numa mistura é um palpite do próprio modelo, na ordem em que os estudos os classificam, com o benzaldeído em primeiro. Nenhuma dessas quantidades foi medida. As misturas da bala e do marzipã são formas típicas, não receitas reais. Só o benzaldeído é desenhado átomo por átomo; os outros quatro são formas simples."
     },
@@ -290,7 +290,7 @@
     },
     "iceCream": {
       "title": "Por que o sorvete precisa de mais aroma",
-      "p1": "Você só sente o cheiro das moléculas que chegam ao ar. O aroma preso dentro da colherada não faz nada. O frio o mantém preso, então uma colherada congelada solta muito pouco. Enquanto ela derrete e esquenta na boca, cada vez mais aroma escapa. Num estudo, o sorvete de baunilha teve gosto mais forte servido a −9 °C do que a −14 °C.",
+      "p1": "Você só sente o cheiro das moléculas que chegam ao ar. O aroma preso dentro da colherada não faz nada. O frio o mantém preso, então uma colherada congelada solta muito pouco. Enquanto ela derrete e esquenta na boca, cada vez mais aroma escapa. Num estudo, o sorvete de baunilha teve gosto mais forte servido a −9 °C do que a −14 °C.",
       "p2": "A gordura também conta. As moléculas da cereja <strong>gostam de gordura</strong>: elas se dissolvem nela e preferem ficar ali. Então, num sorvete rico em gordura, a gordura segura a cereja. Num sorvete magro, a cereja sai mais depressa e mais forte. Com a baunilha, é o contrário.",
       "p3": "Nos Estados Unidos, o sorvete precisa ter pelo menos 10% de gordura do leite, e os premium têm até cerca de 20%. Com o frio e a gordura, boa parte do aroma fica presa. Por isso os aromistas põem mais: o aroma de cereja é cerca de 1 a 2% da mistura. Experimente os controles. Servir menos gelado ou com menos gordura deixa mais aroma chegar ao nariz.",
       "p4": "Agora junte tudo. A sua língua diz doce e um pouco azedo. Os seus nervos sentem o frio e a cremosidade. E o seu nariz, que recebe o aroma por trás do palato, diz cereja. Tape o nariz, e a cereja some.",
