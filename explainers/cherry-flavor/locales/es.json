@@ -3,7 +3,7 @@
     "title": "Por qué el helado de cereza sabe a cereza",
     "eyebrow": "Gusto y olfato",
     "tagline": "Tu lengua nota lo dulce y un poco de ácido, y tus nervios sienten el frío. La cereza en sí es un olor que llega a tu nariz desde dentro de la boca.",
-    "description": "Sigue una cucharada de helado de cereza en 3D, de la lengua a la nariz: por qué la cereza es un olor y por qué los caramelos de cereza huelen a almendra.",
+    "description": "Sigue una cucharada de helado de cereza en 3D y descubre por qué la cereza es un olor: el benzaldehído, que da olor a almendra a los caramelos.",
     "summary": "Lo que nota la lengua, dos caminos hacia la nariz, el olor como patrón, la cereza por dentro, la mesa del aromista y por qué el helado necesita más aroma.",
     "socialAlt": "Una cabeza vista en corte con un bocadito de helado rosa de cereza sobre la lengua y el aroma subiendo por detrás del paladar hasta la nariz, junto al título «Por qué el helado de cereza sabe a cereza»"
   },
@@ -100,7 +100,7 @@
   "readouts": {
     "temperature": "Helado",
     "aroma": "Aroma liberado",
-    "perceived": "Notas",
+    "perceived": "Percibes",
     "swallowed": "Tragado"
   },
   "percept": {
@@ -110,7 +110,7 @@
     "sweet": "Frío y dulce",
     "flavor": "Dulce y con sabor a {{smell}}",
     "pinched": "Solo dulce y frío, sin olor a {{smell}}",
-    "aftertaste": "Queda un leve olor a {{smell}}",
+    "aftertaste": "Un último soplo de {{smell}}",
     "gone": "Ya no queda nada"
   },
   "smells": {
@@ -144,7 +144,7 @@
       "temp": "Temperatura del bocado",
       "sweet": "Dulce, de las células del gusto",
       "sour": "Ácido, de las células del gusto",
-      "cold": "Frío, de los nervios que sienten la temperatura",
+      "cold": "Frío, de los nervios de la temperatura",
       "tastes": "Sabores básicos",
       "tastesValue": "cinco: dulce, ácido, salado, amargo, umami",
       "cells": "Células en un botón gustativo",
@@ -159,7 +159,7 @@
     "routes": {
       "ortho": "Aroma al olfatear",
       "retro": "Aroma desde dentro de la boca",
-      "notice": "Notas",
+      "notice": "Percibes",
       "named": "Dos formas de oler, descritas por",
       "namedValue": "Paul Rozin, 1982",
       "demo": "Nariz tapada",
@@ -191,7 +191,7 @@
       "smellsOf": "El benzaldehído huele a",
       "smellsOfValue": "almendra amarga y cereza",
       "drop": "Una gota se puede oler en",
-      "dropValue": "cerca de una bañera de agua"
+      "dropValue": "una bañera entera de agua"
     },
     "desk": {
       "smell": "Huele a",
@@ -255,14 +255,14 @@
       "title": "Lo que nota la lengua",
       "p1": "Toma una cucharada de helado de guinda y déjala sobre la <strong>lengua</strong>. Tu lengua puede decirte cinco cosas, los cinco <strong>sabores básicos</strong>: dulce, ácido, salado, amargo y umami. El umami es el sabor sabroso del caldo y del queso. Cada sabor tiene su propio tipo de <strong>célula del gusto</strong>. Quizá hayas visto un mapa de la lengua con una zona para cada sabor. Ese mapa es un mito: cualquier parte de la lengua con botones gustativos nota los cinco.",
       "p2": "Los bultitos de tu lengua se llaman <strong>papilas</strong>. Muchas tienen <strong>botones gustativos</strong>, y tienes unos pocos miles. Cada botón es un racimo pequeño de unas 50 a 100 células. Lo dulce lo capta un solo receptor, formado por dos piezas que trabajan en pareja. Así que, de este helado, tu lengua te dice dulce, y un poco ácido por la guinda.",
-      "p3": "¿Y el frío, y esa sensación suave y cremosa? No son sabores. El frío lo sienten unos <strong>nervios que sienten la temperatura</strong> que tienes en la boca. Lo cremoso lo sientes con el tacto. Los dos te cuentan mucho del helado, pero nada de la cereza.",
+      "p3": "¿Y el frío, y esa sensación suave y cremosa? No son sabores. El frío lo notan los <strong>nervios de la temperatura</strong> de tu boca. Lo cremoso lo sientes con el tacto. Los dos te cuentan mucho del helado, pero nada de la cereza.",
       "p4": "Eso sí, el frío cambia el sabor. El helado se suele servir a unos −12 °C, y tu boca está a unos 37 °C. Por debajo de unos 12 °C, lo dulce sabe más flojo, y con el frío el dulzor también se apaga antes. Mira los indicadores. Cuando el bocado se ha derretido, lo dulce crece y el frío baja. Aun así, nada en la lengua dice cereza.",
       "p5": "Los segundos de la línea de tiempo son solo orientativos. Nadie ha medido cuánto tarda una cucharada en derretirse en la boca. El modelo divide un bocado en seis pasos para que puedas seguirlo, pero en una boca de verdad se mezclan. La forma en que se calienta el bocado también es un esbozo del propio modelo. Elige Cabeza o Moléculas para ver el mismo bocado de otra manera."
     },
     "routes": {
       "title": "Dos caminos hacia la nariz",
-      "p1": "Entonces, ¿de dónde sale la cereza? De tu nariz. Los olores pueden llegar a ella por dos caminos. Cuando olfateas, el aire los mete por las <strong>fosas nasales</strong>. Este primer camino se llama olfato <strong>ortonasal</strong>, que significa oler por delante.",
-      "p2": "El segundo camino empieza dentro de la boca. Mientras el bocado se derrite, suelta aroma. Cada vez que echas el aire, este lleva el aroma hacia arriba por detrás del <strong>paladar</strong>, el techo de la boca, y entra en la nariz por atrás. Es el olfato <strong>retronasal</strong>, oler por detrás. Pasa sobre todo al masticar y al tragar.",
+      "p1": "Entonces, ¿de dónde sale la cereza? De tu nariz. Los olores pueden llegar a ella por dos caminos. Cuando olfateas, el aire los lleva por las <strong>fosas nasales</strong>. Este primer camino se llama olfato <strong>ortonasal</strong>, que significa oler por delante.",
+      "p2": "El segundo camino empieza dentro de la boca. Mientras el bocado se derrite, suelta aroma. Cada vez que sueltas el aire, este lleva el aroma hacia arriba por detrás del <strong>paladar</strong>, el techo de la boca, y entra en la nariz por atrás. Es el olfato <strong>retronasal</strong>, oler por detrás. Pasa sobre todo al masticar y al tragar.",
       "p3": "Los dos caminos acaban en la misma <strong>zona del olfato</strong>, en lo alto de la <strong>cavidad nasal</strong>, el hueco que hay dentro de la nariz. Pero el olor que viene de la boca parece salir de la lengua. Por eso lo llamamos sabor, aunque sea olor. El psicólogo Paul Rozin escribió sobre estas dos caras del olfato en 1982.",
       "p4": "Puedes probarlo con un caramelo de frutas. Tápate la nariz y mastica. Solo notas dulce, y quizá un poco de ácido. Ahora suelta la nariz, y la fruta aparece en un momento. Elige Nariz tapada para probarlo en el modelo. Casi todo lo que llamamos sabor a cereza viene del olfato."
     },
@@ -275,11 +275,11 @@
     },
     "cherry": {
       "title": "La cereza por dentro",
-      "p1": "¿Cómo averiguan los científicos qué hace que la cereza huela a cereza? Una máquina llamada <strong>cromatógrafo de gases</strong> separa el aroma, molécula a molécula. Después, un <strong>espectrómetro de masas</strong> le pone nombre a cada una. En un <strong>puerto de olfacción</strong>, una persona huele cada molécula según sale y dice cuáles huelen de verdad. Diluyendo la muestra una y otra vez se ve qué olores son los más fuertes.",
+      "p1": "¿Cómo averiguan los científicos qué hace que la cereza huela a cereza? Una máquina llamada <strong>cromatógrafo de gases</strong> separa el aroma, molécula a molécula. Después, un <strong>espectrómetro de masas</strong> le pone nombre a cada una. En un <strong>punto de olfatometría</strong>, una persona huele cada molécula según sale y dice cuáles huelen de verdad. Diluyendo la muestra una y otra vez se ve qué olores son los más fuertes.",
       "p2": "En la <strong>guinda</strong>, este método encontró siete <strong>moléculas clave del olor</strong>, las que llevan el aroma. La principal es el <strong>benzaldehído</strong>. Lo acompañan notas verdes, de hoja, como el <strong>hexenal</strong>, el <strong>linalol</strong>, que es floral, y el <strong>eugenol</strong>, que recuerda al clavo. La cereza dulce es distinta. Un estudio encontró en ella 97 moléculas de aroma, y solo 18 tenían fuerza para olerse. Allí mandan las notas verdes y la <strong>beta-ionona</strong>, que huele a violetas.",
-      "p3": "El benzaldehído, C<sub>7</sub>H<sub>6</sub>O, es un anillo de seis átomos de carbono con un pequeño grupo de átomos a un lado. Huele a almendra amarga y a cereza. Y es potente: una sola gota se podría oler en cerca de una bañera de agua. También es el olor del <strong>mazapán</strong>, que a menudo se aromatiza con aceite de almendra amarga. Ese aceite es casi benzaldehído puro.",
+      "p3": "El benzaldehído, C<sub>7</sub>H<sub>6</sub>O, es un anillo de seis átomos de carbono con un pequeño grupo de átomos a un lado. Huele a almendra amarga y a cereza. Y es potente: una sola gota se podría oler en una bañera entera de agua. También es el olor del <strong>mazapán</strong>, que a menudo se aromatiza con aceite de almendra amarga. Ese aceite es casi benzaldehído puro.",
       "p4": "Los caramelos de cereza se apoyan en el benzaldehído y dejan fuera las notas verdes y florales de la fruta fresca. Por eso huelen más a almendra que a cereza. Elige Caramelos de cereza y luego Mazapán para comparar las mezclas. La nota principal es la misma. Lo que cambia es todo lo que la rodea.",
-      "p5": "El modelo dibuja cinco de las moléculas clave. Cuánto hay de cada una en una mezcla es una suposición del propio modelo, en el orden en que las clasifican los estudios, con el benzaldehído primero. Ninguna de estas cantidades está medida. Las mezclas de los caramelos y del mazapán son formas típicas, no recetas reales. Solo el benzaldehído está dibujado átomo a átomo; las otras cuatro son formas sencillas."
+      "p5": "El modelo dibuja cinco de las moléculas clave. Cuánto hay de cada una en una mezcla es una suposición del propio modelo. Sigue el orden que dan los estudios, con el benzaldehído primero. Ninguna de estas cantidades está medida. Las mezclas de los caramelos y del mazapán son formas típicas, no recetas reales. Solo el benzaldehído está dibujado átomo a átomo; las otras cuatro son formas sencillas."
     },
     "desk": {
       "title": "La mesa del aromista",

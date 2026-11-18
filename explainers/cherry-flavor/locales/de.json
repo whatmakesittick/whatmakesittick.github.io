@@ -3,8 +3,8 @@
     "title": "Warum Kirscheis nach Kirsche schmeckt",
     "eyebrow": "Schmecken und Riechen",
     "tagline": "Deine Zunge schmeckt Süßes und ein bisschen sauer, Nerven spüren die Kälte. Die Kirsche selbst ist ein Geruch, der von innen aus dem Mund in deine Nase steigt.",
-    "description": "Ein Löffel Kirscheis in 3D, von der Zunge über die Nase bis zu den Riechrezeptoren: warum Kirsche ein Geruch ist und Kirschbonbons nach Mandel riechen.",
-    "summary": "Was die Zunge erkennt, zwei Wege in die Nase, Geruch als Muster, die Kirsche zerlegt, der Tisch des Aromatikers und warum Eis mehr Aroma braucht.",
+    "description": "Folge einem Löffel Kirscheis in 3D von der Zunge zur Nase und erfahre, warum Benzaldehyd Kirschbonbons nach Mandel duften lässt und Kirsche ein Geruch ist.",
+    "summary": "Was die Zunge erkennt, zwei Wege in die Nase, Geruch als Muster, die Kirsche zerlegt, die Werkbank des Aromatikers und warum Eis mehr Aroma braucht.",
     "socialAlt": "Ein aufgeschnittener Kopf mit einem kleinen Bissen rosa Kirscheis auf der Zunge, hinter dem Gaumen steigt Aroma zur Nase auf, daneben der Titel „Warum Kirscheis nach Kirsche schmeckt“"
   },
   "stage": {
@@ -99,13 +99,13 @@
   },
   "readouts": {
     "temperature": "Eis",
-    "aroma": "Freies Aroma",
+    "aroma": "Freigesetztes Aroma",
     "perceived": "Du nimmst wahr",
     "swallowed": "Geschluckt"
   },
   "percept": {
     "nothing": "Noch nichts",
-    "smell": "Erster Duft: {{smell}}",
+    "smell": "Ein Hauch von {{smell}}",
     "cold": "Kalt",
     "sweet": "Kalt und süß",
     "flavor": "Süß, mit Duft nach {{smell}}",
@@ -145,7 +145,7 @@
       "sweet": "Süß, von Geschmackszellen",
       "sour": "Sauer, von Geschmackszellen",
       "cold": "Kalt, von Temperaturnerven",
-      "tastes": "Grundgeschmäcker",
+      "tastes": "Grundgeschmacksarten",
       "tastesValue": "fünf: süß, sauer, salzig, bitter, umami",
       "cells": "Zellen in einer Geschmacksknospe",
       "cellsValue": "etwa 50 bis 100",
@@ -212,7 +212,7 @@
       "serving": "Serviertemperatur",
       "fat": "Milchfett",
       "released": "Jetzt freigesetztes Aroma",
-      "peak": "Meistes Aroma an der Nase",
+      "peak": "Höchste Aromamenge an der Nase",
       "melted": "Bissen geschmolzen",
       "fatLaw": "Milchfett in Eiscreme",
       "fatLawValue": "mindestens 10 %, Premiumsorten bis etwa 20 %",
@@ -253,10 +253,10 @@
   "sections": {
     "tongue": {
       "title": "Was die Zunge erkennt",
-      "p1": "Nimm einen Löffel Sauerkirscheis und lass ihn auf deiner <strong>Zunge</strong> liegen. Deine Zunge kann dir fünf Dinge verraten, die fünf <strong>Grundgeschmäcker</strong>: süß, sauer, salzig, bitter und umami. Umami ist der herzhafte Geschmack von Brühe und Käse. Für jeden Geschmack gibt es eine eigene Art von <strong>Geschmackszelle</strong>. Vielleicht kennst du eine Karte der Zunge mit einer Zone für jeden Geschmack. Diese Karte stimmt nicht: Jede Stelle der Zunge mit Geschmacksknospen spürt alle fünf.",
-      "p2": "Die winzigen Hügel auf deiner Zunge heißen <strong>Papillen</strong>. Viele davon tragen <strong>Geschmacksknospen</strong>, und davon hast du einige Tausend. Jede Knospe ist ein kleines Bündel aus etwa 50 bis 100 Zellen. Süß erkennt ein einziger Rezeptor. Er ist aus zwei Teilen gebaut, die als Paar arbeiten. Bei diesem Eis meldet deine Zunge also süß, dazu etwas sauer von der herben Kirsche.",
-      "p3": "Und die Kälte, das weiche, cremige Gefühl? Das sind gar keine Geschmäcker. Kälte spüren <strong>Temperaturnerven</strong> in deinem Mund. Cremigkeit spürst du über den Tastsinn. Beides verrät dir viel über das Eis, aber nichts über Kirsche.",
-      "p4": "Kälte verändert aber den Geschmack. Eis wird meist bei etwa −12 °C serviert, und dein Mund hat etwa 37 °C. Unter etwa 12 °C schmeckt Süßes schwächer. Kälte lässt die Süße außerdem schneller verblassen. Schau auf die Anzeigen. Sobald der Bissen geschmolzen ist, nimmt die Süße zu und die Kälte ab. Trotzdem sagt nichts auf der Zunge Kirsche.",
+      "p1": "Nimm einen Löffel Sauerkirscheis und lass ihn auf deiner <strong>Zunge</strong> liegen. Deine Zunge kann dir fünf Dinge verraten, die fünf <strong>Grundgeschmacksarten</strong>: süß, sauer, salzig, bitter und umami. Umami ist der herzhafte Geschmack von Brühe und Käse. Für jeden Geschmack gibt es eine eigene Art von <strong>Geschmackszelle</strong>. Vielleicht kennst du eine Karte der Zunge mit einer Zone für jeden Geschmack. Diese Karte stimmt nicht: Jede Stelle der Zunge mit Geschmacksknospen spürt alle fünf.",
+      "p2": "Die winzigen Hügel auf deiner Zunge heißen <strong>Papillen</strong>. Viele davon tragen <strong>Geschmacksknospen</strong>, und davon hast du einige Tausend. Jede Knospe ist ein kleines Bündel aus etwa 50 bis 100 Zellen. Süß erkennt ein einziger Rezeptor. Er ist aus zwei Teilen gebaut, die als Paar arbeiten. Bei diesem Eis meldet deine Zunge also süß, dazu etwas sauer von der Sauerkirsche.",
+      "p3": "Und die Kälte, das weiche, cremige Gefühl? Das sind gar keine Geschmacksarten. Kälte spüren <strong>Temperaturnerven</strong> in deinem Mund. Cremigkeit spürst du über den Tastsinn. Beides verrät dir viel über das Eis, aber nichts über Kirsche.",
+      "p4": "Kälte verändert aber den Geschmack. Eis wird meist bei etwa −12 °C serviert, und dein Mund hat etwa 37 °C. Unter etwa 12 °C schmeckt Süßes schwächer. Kälte lässt die Süße außerdem schneller verblassen. Schau auf die Anzeigen. Sobald der Bissen geschmolzen ist, nimmt die Süße zu und die Kälte ab. Trotzdem verrät nichts auf der Zunge die Kirsche.",
       "p5": "Die Sekunden auf der Zeitleiste sind nur ein Anhaltspunkt. Niemand hat gemessen, wie lange ein Löffel Eis im Mund zum Schmelzen braucht. Das Modell teilt einen Bissen in sechs Schritte, damit du folgen kannst. In einem echten Mund gehen sie ineinander über. Auch wie der Bissen warm wird, ist eine eigene Skizze des Modells. Wähle Kopf oder Moleküle, um denselben Bissen anders zu sehen."
     },
     "routes": {
@@ -282,7 +282,7 @@
       "p5": "Das Modell zeigt fünf der Schlüsselaromastoffe. Wie viel von jedem in einer Mischung steckt, schätzt das Modell selbst, in der Reihenfolge, die die Studien angeben, mit Benzaldehyd vorn. Keine dieser Mengen ist gemessen. Die Mischungen für Bonbons und Marzipan sind typische Formen, keine echten Rezepte. Nur Benzaldehyd ist Atom für Atom gezeichnet. Die anderen vier sind einfache Formen."
     },
     "desk": {
-      "title": "Der Tisch des Aromatikers",
+      "title": "Die Werkbank des Aromatikers",
       "p1": "Ein <strong>Aromatiker</strong> ist jemand, der Aromen für Lebensmittel erfindet. Für Kirsche kopiert er nicht die ganze Frucht. Er wählt die wenigen Moleküle aus, die am meisten zählen, viel weniger, als die Frucht enthält. Dann probiert er und stimmt nach. Jetzt bist du dran: Schieb die Regler, gib Tropfen jedes Moleküls dazu und schau, wonach deine Mischung riecht.",
       "p2": "Woher kommt Benzaldehyd? Eine Quelle sind <strong>Obstkerne</strong>, die Samen im Inneren der Steine, etwa Bittermandeln und Aprikosenkerne. Gereinigtes Bittermandelöl besteht zu etwa 98 % aus Benzaldehyd. Eine andere Quelle ist <strong>Cassiaöl</strong> aus der Rinde eines Baums, der mit dem Zimt verwandt ist. In den USA wird Benzaldehyd daraus als natürlich verkauft. In der EU ist nicht geklärt, ob es als natürlich gilt.",
       "p3": "Das meiste Benzaldehyd wird aber aus <strong>Toluol</strong> hergestellt, einem Stoff aus Erdöl. Nur etwa 1,5 % stammen aus Pflanzen. Benzaldehyd ist das zweitwertvollste Aromamolekül, nach Vanillin, dem Geruch von Vanille. Das Molekül ist genau dasselbe, egal wie es hergestellt wird, und sein Geruch auch. Nur das Etikett ändert sich. In der EU muss ein „natürliches Kirscharoma“ zu mindestens 95 % aus Kirschen stammen.",
