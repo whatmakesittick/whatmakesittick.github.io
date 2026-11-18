@@ -2,7 +2,7 @@ import type { FlavorId, OdorantLevels, PerceptId, SmellId } from '../ids';
 import { IN_MOUTH_S, SWALLOW_S } from './bite';
 import { closestSmell } from './odorants';
 
-export const NOTICE = { smell: 0.03, sweet: 0.15 } as const;
+export const NOTICE = { smell: 0.0225, sweet: 0.15 } as const;
 
 function beforeBite(noseShare: number, pinched: boolean): PerceptId {
   if (pinched) return 'nothing';

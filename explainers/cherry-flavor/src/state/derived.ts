@@ -6,15 +6,16 @@ import {
   emptyLevels,
   firingCount,
   inMouth,
-  levelShare,
   meltShare,
   mouthAroma,
+  noseShare,
   orthoAroma,
   perceptAt,
   phaseIdAt,
   phaseProgress,
   profileOf,
   receptorActivation,
+  releasedShare,
   retroAroma,
   secondsAt,
   smellOf,
@@ -57,7 +58,7 @@ export function readingAt(source: ReadingSource): FlavorReading {
   }
   const mouth = mouthAroma(seconds, settings);
   const nose = sumInto(ortho, retro, emptyLevels());
-  const noseShare = levelShare(nose);
+  const atNose = noseShare(nose);
   const taste = tasteAt(seconds, servingC, flavor);
   const receptors = receptorActivation(nose, sniff);
   return {
@@ -75,10 +76,10 @@ export function readingAt(source: ReadingSource): FlavorReading {
     ortho,
     retro,
     nose,
-    released: levelShare(mouth),
-    noseShare,
+    released: releasedShare(mouth),
+    noseShare: atNose,
     taste,
-    percept: perceptAt(seconds, noseShare, taste.sweet, pinched),
+    percept: perceptAt(seconds, atNose, taste.sweet, pinched),
     receptors,
     firing: firingCount(receptors),
   };

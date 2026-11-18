@@ -1,7 +1,14 @@
 import { clamp, smoothstep } from '@core/math';
 import { ODORANT_IDS } from '../ids';
 import type { OdorantId, OdorantLevels } from '../ids';
-import { IN_MOUTH_S, MOUTH_C, SWALLOW_S, biteTemperature, meltShare } from './bite';
+import {
+  IN_MOUTH_S,
+  MOUTH_C,
+  SERVING_RANGE_C,
+  SWALLOW_S,
+  biteTemperature,
+  meltShare,
+} from './bite';
 import { FOOD_PROFILES, emptyLevels } from './odorants';
 import { END_S, START_S } from './timeMap';
 
@@ -118,13 +125,46 @@ export const AROMA_FULL = ODORANT_IDS.reduce(
   0,
 );
 
-export function levelShare(levels: Readonly<OdorantLevels>): number {
-  const total = ODORANT_IDS.reduce((sum, id) => sum + levels[id], 0);
-  return clamp(total / AROMA_FULL, 0, 1);
+export const MOST_RELEASING: Readonly<AromaSettings> = {
+  profile: FOOD_PROFILES.cherry,
+  servingC: SERVING_RANGE_C.max,
+  fatPercent: FAT_RANGE_PERCENT.min,
+};
+
+const SAMPLE_COUNT = Math.round((END_S - START_S) / PEAK_SAMPLE_S);
+const SAMPLE_SECONDS = Array.from(
+  { length: SAMPLE_COUNT + 1 },
+  (_, index) => START_S + index * PEAK_SAMPLE_S,
+);
+
+function totalOf(levels: Readonly<OdorantLevels>): number {
+  return ODORANT_IDS.reduce((sum, id) => sum + levels[id], 0);
 }
 
-export const releasedShare = levelShare;
-export const noseShare = levelShare;
+function highestTotal(levelsAt: (seconds: number) => Readonly<OdorantLevels>): number {
+  return SAMPLE_SECONDS.reduce((peak, seconds) => Math.max(peak, totalOf(levelsAt(seconds))), 0);
+}
+
+const fullScratch = emptyLevels();
+
+export const MOUTH_FULL = highestTotal((seconds) =>
+  mouthAroma(seconds, MOST_RELEASING, fullScratch),
+);
+export const NOSE_FULL = highestTotal((seconds) =>
+  noseAroma(seconds, MOST_RELEASING, false, fullScratch),
+);
+
+function shareOf(levels: Readonly<OdorantLevels>, full: number): number {
+  return clamp(totalOf(levels) / full, 0, 1);
+}
+
+export function releasedShare(levels: Readonly<OdorantLevels>): number {
+  return shareOf(levels, MOUTH_FULL);
+}
+
+export function noseShare(levels: Readonly<OdorantLevels>): number {
+  return shareOf(levels, NOSE_FULL);
+}
 
 const peakCache = new Map<string, number>();
 const peakScratch = emptyLevels();
@@ -135,13 +175,11 @@ function settingsKey(settings: AromaSettings, pinched: boolean): string {
 }
 
 function samplePeak(settings: AromaSettings, pinched: boolean): number {
-  const samples = Math.round((END_S - START_S) / PEAK_SAMPLE_S);
-  let peak = 0;
-  for (let index = 0; index <= samples; index += 1) {
-    const seconds = START_S + index * PEAK_SAMPLE_S;
-    peak = Math.max(peak, levelShare(noseAroma(seconds, settings, pinched, peakScratch)));
-  }
-  return peak;
+  return SAMPLE_SECONDS.reduce(
+    (peak, seconds) =>
+      Math.max(peak, noseShare(noseAroma(seconds, settings, pinched, peakScratch))),
+    0,
+  );
 }
 
 export function peakNoseShare(settings: AromaSettings, pinched = false): number {

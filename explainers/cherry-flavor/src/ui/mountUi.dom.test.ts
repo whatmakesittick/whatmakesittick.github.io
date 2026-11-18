@@ -119,7 +119,15 @@ describe('chapter widgets', () => {
     const before = readout('icePeak');
     slide('ice-fat', 2);
     expect(output('ice-fat')).toBe(percent('2'));
-    expect(readout('icePeak')).toBe(percent('100'));
     expect(readout('icePeak')).not.toBe(before);
+  });
+
+  it('raises the peak with a warmer serving even at the lowest fat', () => {
+    slide('ice-fat', 2);
+    const cold = readout('icePeak');
+    slide('ice-serving', -6);
+    expect(output('ice-serving')).toBe(celsius('−6'));
+    expect(readout('icePeak')).toBe(percent('100'));
+    expect(readout('icePeak')).not.toBe(cold);
   });
 });
