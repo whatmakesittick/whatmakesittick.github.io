@@ -2,7 +2,8 @@ import {
   AdditiveBlending,
   CircleGeometry,
   Color,
-  CylinderGeometry,
+  Euler,
+  IcosahedronGeometry,
   Matrix4,
   Quaternion,
   SphereGeometry,
@@ -21,16 +22,16 @@ import type { PartContext } from '../context';
 import { seededRandom } from '../random';
 
 const HALF = 0.5;
-const UP = new Vector3(0, 1, 0);
 
 const SCOOP = { squash: 0.82, meltSquash: 0.35, sink: 0.55 } as const;
 const PUDDLE = { y: TONGUE_SURFACE_Y + 0.35, segments: 96, wobble: 0.06, waves: 7 } as const;
 
 const CRYSTALS = {
-  count: 42,
+  count: 64,
   seed: 41,
-  size: [0.7, 0.6],
-  length: 1.7,
+  size: [0.42, 0.42],
+  stretch: 1.7,
+  sink: -0.03,
   melt: [0, 0.55],
   span: 0.3,
 } as const;
@@ -125,6 +126,7 @@ export class Scoop {
   private readonly dropletAt: Vector3[] = [];
   private readonly matrix = new Matrix4();
   private readonly turn = new Quaternion();
+  private readonly tilt = new Euler();
   private readonly point = new Vector3();
   private readonly size = new Vector3();
   private radius: number = TONGUE_BITE.radius;
@@ -139,8 +141,8 @@ export class Scoop {
     this.puddle = addMesh(context, group, wavyDisc(), 'melt', 'puddle');
     this.puddle.renderOrder = 1;
     label(context, 'melt', this.puddle, [0.92, 0, 0.25]);
-    const prism = new CylinderGeometry(0.26, 0.34, CRYSTALS.length, 6);
-    prism.translate(0, CRYSTALS.length * 0.2, 0);
+    const prism = new IcosahedronGeometry(1, 0);
+    prism.scale(1, CRYSTALS.stretch, 1);
     this.crystals = instanced(
       context,
       group,
@@ -209,9 +211,9 @@ export class Scoop {
   private placeCrystals(melt: number): void {
     this.crystalSpots.forEach((spot, index) => {
       const left = 1 - smoothstep(melt, spot.threshold, spot.threshold + CRYSTALS.span);
-      this.surface(spot.direction, 0, this.point);
-      this.turn.setFromUnitVectors(UP, spot.direction);
-      this.size.set(spot.size, spot.size * left, spot.size).multiplyScalar(Math.max(left, 0.001));
+      this.surface(spot.direction, CRYSTALS.sink, this.point);
+      this.turn.setFromEuler(this.tilt.set(spot.spin, spot.spin * 1.7, spot.spin * 0.6));
+      this.size.setScalar(spot.size * Math.max(left, 0.001));
       this.matrix.compose(this.point, this.turn, this.size);
       this.crystals.setMatrixAt(index, this.matrix);
       if (index === 0) this.anchors.iceCrystal.position.copy(this.point);

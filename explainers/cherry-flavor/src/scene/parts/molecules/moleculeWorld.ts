@@ -17,7 +17,7 @@ import { CELL_TOP_Y, ReceptorGrid } from './receptorGrid';
 import { MOLECULE_SHAPES } from './shapes';
 
 const HALF = 0.5;
-const LINEUP = { bottom: LINEUP_Y - 6.5, step: 1.45, turn: 2.4, tumble: 0.35 } as const;
+const LINEUP = { bottom: LINEUP_Y - 6.5, step: 1.6, turn: 2.4, tumble: 0.35 } as const;
 const SETTLE = {
   scale: 0.62,
   spawnLift: 3.2,
@@ -27,7 +27,7 @@ const SETTLE = {
   to: 0.3,
   full: 0.9,
 } as const;
-const HALO = { size: 10, lineup: 0.28, settled: 0.5 } as const;
+const HALO = { size: 12, lineup: 0.5, settled: 0.6 } as const;
 const EASE = { rate: 5, settled: 0.002 } as const;
 const LABEL_LIFT = 3.5;
 

@@ -1,11 +1,13 @@
-import { Color, Vector3 } from 'three';
+import { AdditiveBlending, Color, Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { clamp } from '@core/math';
+import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import type { AssemblyState, Point } from '../../../ids';
-import { AIRWAY, NOSTRILS, SMELL_PATCH } from '../../../model/layout';
+import { AIRWAY, NOSTRILS, OLFACTORY_BULB, SMELL_PATCH } from '../../../model/layout';
 import { RECEPTOR_TYPES } from '../../../model/receptorCodes';
 import { THEME } from '../../../theme';
 import { tongueLiftCm } from '../../pose';
+import { registeredMaterial } from '../context';
 import type { PartContext, Section } from '../context';
 import { AromaStream } from '../stream';
 import type { StreamLook } from '../stream';
@@ -15,7 +17,7 @@ import { NoseClip } from './clip';
 import { SpoonAndBite } from './spoon';
 
 const STREAM_BASE = {
-  size: 1.05,
+  size: 1.5,
   wobble: 1.6,
   fadeIn: 0.08,
   fadeOut: 0.12,
@@ -82,11 +84,20 @@ const GLOW = {
   patchGain: 6,
   patchMax: 2.4,
   bulbMax: 1.6,
+  firingGain: 3,
+  haloSize: 7,
+  patchHalo: 0.85,
+  bulbHalo: 0.6,
   bulbPulse: 0.45,
   pulseRate: 9,
   ease: 5,
   settled: 0.003,
 } as const;
+
+const HALO_SPOTS: readonly Point[] = [
+  [SMELL_PATCH.centre[0], SMELL_PATCH.centre[1] - 0.45, -0.3],
+  [OLFACTORY_BULB[0], OLFACTORY_BULB[1], 0.4],
+];
 
 function points(list: readonly Point[]): Vector3[] {
   return list.map((point) => new Vector3(...point));
@@ -103,6 +114,8 @@ class HeadWorld implements Section {
   private readonly glowColour = new Color(THEME.firing);
   private readonly orthoPath = points([[0, 0, 0], [0, 0, 0], ...ORTHO_ENTRY]);
   private readonly mouthPath = points([[0, 0, 0], ...MOUTH_PATH]);
+  private readonly halos: PointCloud;
+  private bulbGlow = 0;
   private patchTarget = 0;
   private patchShown = 0;
   private firstState = true;
@@ -118,6 +131,17 @@ class HeadWorld implements Section {
     this.retro.setPath(points(RETRO_PATH));
     this.anatomy.patch.emissive.copy(this.glowColour);
     this.anatomy.bulb.emissive.copy(this.glowColour);
+    this.halos = new PointCloud(
+      HALO_SPOTS.length,
+      registeredMaterial(
+        context,
+        'smellPatch',
+        createPointMaterial(context.textures.glow, GLOW.haloSize, AdditiveBlending),
+      ),
+    );
+    HALO_SPOTS.forEach((spot, index) => this.halos.setPoint(index, ...spot));
+    context.tracker.track(this.halos);
+    root.add(this.halos.points);
   }
 
   setState(state: AssemblyState): void {
@@ -136,9 +160,10 @@ class HeadWorld implements Section {
     this.clip.setPinched(view.pinched, this.firstState);
     this.patchTarget = clamp(reading.noseShare * GLOW.patchGain, 0, 1);
     if (this.firstState) this.patchShown = this.patchTarget;
-    const firing = reading.firing / RECEPTOR_TYPES;
+    const firing = clamp((reading.firing / RECEPTOR_TYPES) * GLOW.firingGain, 0, 1);
     const pulse = 1 - GLOW.bulbPulse + GLOW.bulbPulse * Math.sin(reading.seconds * GLOW.pulseRate);
-    this.anatomy.bulb.emissiveIntensity = GLOW.bulbMax * firing * pulse;
+    this.bulbGlow = firing * pulse;
+    this.anatomy.bulb.emissiveIntensity = GLOW.bulbMax * this.bulbGlow;
     this.firstState = false;
     this.applyPatch();
   }
@@ -156,6 +181,10 @@ class HeadWorld implements Section {
 
   private applyPatch(): void {
     this.anatomy.patch.emissiveIntensity = GLOW.patchMax * this.patchShown;
+    const { r, g, b } = this.glowColour;
+    this.halos.setColor(0, r, g, b, GLOW.patchHalo * this.patchShown);
+    this.halos.setColor(1, r, g, b, GLOW.bulbHalo * this.bulbGlow);
+    this.halos.commit();
   }
 }
 

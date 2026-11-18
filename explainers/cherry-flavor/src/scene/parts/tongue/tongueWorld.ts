@@ -11,10 +11,10 @@ import type { TongueSurface } from './surface';
 
 const PLUME: StreamLook = {
   perOdorant: 44,
-  size: 3.4,
+  size: 5.5,
   width: 4.5,
   speed: 0.16,
-  gain: 3,
+  gain: 4,
   seed: 71,
   wobble: 1.1,
   fadeIn: 0.06,

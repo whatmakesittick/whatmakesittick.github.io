@@ -83,7 +83,7 @@ const SHELVES = [
 const SHELF_Z = -0.95;
 const SHELF_FLATTEN = 0.8;
 
-const PATCH = { radius: 0.2, depth: 0.55, drop: 0.16, lift: 0.04 } as const;
+const PATCH = { radius: 0.28, depth: 0.55, drop: 0.08, lift: 0.04 } as const;
 const BULB_SIZE: Point = [1.35, 0.6, 0.85];
 const STALK = { fibres: 5, radius: 0.055, spread: 0.7, z: 0.02 } as const;
 
@@ -156,6 +156,7 @@ function buildSkin(context: PartContext, parent: Object3D): Mesh {
     rings: DETAIL.domeRings,
     power: DETAIL.domePower,
     rounding: DETAIL.domeRounding,
+    segments: DETAIL.domeSegments,
     depthAt: bulgeDepth(SKIN_DEPTH.head, SKIN_DEPTH.nose, SKIN_DEPTH.noseFromX, SKIN_DEPTH.noseToX),
   });
   const skin = addMesh(context, parent, geometry, STRUCTURE_GROUP, 'skin');

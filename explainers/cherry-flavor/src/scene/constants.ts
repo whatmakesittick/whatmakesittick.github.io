@@ -26,12 +26,13 @@ export const CROSSFADE = {
 
 export const DETAIL = {
   outlineStep: 0.18,
-  domeRings: 18,
+  domeRings: 24,
   domePower: 2.2,
-  domeRounding: 0.12,
+  domeRounding: 0.1,
+  domeSegments: 360,
   sphere: [24, 16],
   smallSphere: [14, 10],
-  atom: [16, 12],
+  atom: [12, 9],
   bond: 8,
   tube: 8,
   blob: 5,
@@ -66,7 +67,7 @@ export const LOOK = {
 export const SKIN_DEPTH = {
   slab: 1.2,
   head: 7,
-  nose: 2.6,
+  nose: 4.2,
   noseFromX: 8.2,
   noseToX: 10.4,
 } as const;
