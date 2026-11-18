@@ -5,7 +5,7 @@
     "tagline": "Deine Zunge schmeckt Süßes und ein bisschen sauer, Nerven spüren die Kälte. Die Kirsche selbst ist ein Geruch, der von innen aus dem Mund in deine Nase steigt.",
     "description": "Ein Löffel Kirscheis in 3D, von der Zunge über die Nase bis zu den Riechrezeptoren: warum Kirsche ein Geruch ist und Kirschbonbons nach Mandel riechen.",
     "summary": "Was die Zunge erkennt, zwei Wege in die Nase, Geruch als Muster, die Kirsche zerlegt, der Tisch des Aromatikers und warum Eis mehr Aroma braucht.",
-    "socialAlt": "Ein aufgeschnittener Kopf mit einem Löffel rosa Kirscheis auf der Zunge, hinter dem Gaumen steigt Aroma zur Nase auf, daneben der Titel „Warum Kirscheis nach Kirsche schmeckt“"
+    "socialAlt": "Ein aufgeschnittener Kopf mit einem kleinen Bissen rosa Kirscheis auf der Zunge, hinter dem Gaumen steigt Aroma zur Nase auf, daneben der Titel „Warum Kirscheis nach Kirsche schmeckt“"
   },
   "stage": {
     "label": "Interaktives Modell zum Kirscheis",
@@ -14,9 +14,9 @@
   "timeline": {
     "label": "Bissen",
     "phases": "Zu einem Moment des Bissens springen",
-    "value": "{{seconds}} s",
-    "before": "{{seconds}} s bevor der Löffel im Mund ist, {{phase}}",
-    "during": "{{seconds}} s im Mund, {{phase}}",
+    "value": "{{seconds}} s",
+    "before": "{{seconds}} s bevor der Löffel im Mund ist, {{phase}}",
+    "during": "{{seconds}} s im Mund, {{phase}}",
     "speed": "Tempo",
     "speedValue": "{{factor}}×",
     "realTime": "Tempo des Modells",
@@ -109,7 +109,7 @@
     "cold": "Kalt",
     "sweet": "Kalt und süß",
     "flavor": "Süß, mit Duft nach {{smell}}",
-    "pinched": "Süß und kalt, aber kein Duft nach {{smell}}",
+    "pinched": "Nur süß und kalt. Es fehlt: {{smell}}",
     "aftertaste": "Ein letzter Hauch: {{smell}}",
     "gone": "Nichts mehr übrig"
   },
@@ -135,9 +135,9 @@
     "violet": "Veilchen"
   },
   "units": {
-    "seconds": "{{value}} s",
-    "celsius": "{{value}} °C",
-    "percent": "{{value}} %"
+    "seconds": "{{value}} s",
+    "celsius": "{{value}} °C",
+    "percent": "{{value}} %"
   },
   "chapters": {
     "tongue": {
@@ -154,7 +154,7 @@
       "sweetReceptor": "Rezeptoren für Süßes",
       "sweetReceptorValue": "einer, aus zwei Teilen gebaut",
       "dulls": "Süße wird schwächer unter",
-      "dullsValue": "etwa 12 °C"
+      "dullsValue": "etwa 12 °C"
     },
     "routes": {
       "ortho": "Aroma beim Schnuppern",
@@ -198,13 +198,13 @@
       "match": "Ähnlichkeit mit der Frucht",
       "drops": "Tropfen in der Flasche",
       "almondOil": "Bittermandelöl",
-      "almondOilValue": "etwa 98 % Benzaldehyd",
+      "almondOilValue": "etwa 98 % Benzaldehyd",
       "plants": "Benzaldehyd aus Pflanzen",
-      "plantsValue": "etwa 1,5 % der gesamten Menge",
+      "plantsValue": "etwa 1,5 % der gesamten Menge",
       "rank": "Wertvollste Aromamoleküle",
       "rankValue": "Platz zwei, nach Vanillin",
       "euNatural": "„Natürliches Kirscharoma“ in der EU",
-      "euNaturalValue": "mindestens 95 % aus Kirschen",
+      "euNaturalValue": "mindestens 95 % aus Kirschen",
       "kernels": "Rohe Obstkerne",
       "kernelsValue": "nicht zum Essen"
     },
@@ -215,11 +215,11 @@
       "peak": "Meistes Aroma an der Nase",
       "melted": "Bissen geschmolzen",
       "fatLaw": "Milchfett in Eiscreme",
-      "fatLawValue": "mindestens 10 %, Premiumsorten bis etwa 20 %",
+      "fatLawValue": "mindestens 10 %, Premiumsorten bis etwa 20 %",
       "served": "Meist serviert bei",
-      "servedValue": "etwa −12 °C",
+      "servedValue": "etwa −12 °C",
       "dose": "Kirscharoma in der Mischung",
-      "doseValue": "etwa 1 bis 2 %"
+      "doseValue": "etwa 1 bis 2 %"
     }
   },
   "parts": {
@@ -256,7 +256,7 @@
       "p1": "Nimm einen Löffel Sauerkirscheis und lass ihn auf deiner <strong>Zunge</strong> liegen. Deine Zunge kann dir fünf Dinge verraten, die fünf <strong>Grundgeschmäcker</strong>: süß, sauer, salzig, bitter und umami. Umami ist der herzhafte Geschmack von Brühe und Käse. Für jeden Geschmack gibt es eine eigene Art von <strong>Geschmackszelle</strong>. Vielleicht kennst du eine Karte der Zunge mit einer Zone für jeden Geschmack. Diese Karte stimmt nicht: Jede Stelle der Zunge mit Geschmacksknospen spürt alle fünf.",
       "p2": "Die winzigen Hügel auf deiner Zunge heißen <strong>Papillen</strong>. Viele davon tragen <strong>Geschmacksknospen</strong>, und davon hast du einige Tausend. Jede Knospe ist ein kleines Bündel aus etwa 50 bis 100 Zellen. Süß erkennt ein einziger Rezeptor. Er ist aus zwei Teilen gebaut, die als Paar arbeiten. Bei diesem Eis meldet deine Zunge also süß, dazu etwas sauer von der herben Kirsche.",
       "p3": "Und die Kälte, das weiche, cremige Gefühl? Das sind gar keine Geschmäcker. Kälte spüren <strong>Temperaturnerven</strong> in deinem Mund. Cremigkeit spürst du über den Tastsinn. Beides verrät dir viel über das Eis, aber nichts über Kirsche.",
-      "p4": "Kälte verändert aber den Geschmack. Eis wird meist bei etwa −12 °C serviert, und dein Mund hat etwa 37 °C. Unter etwa 12 °C schmeckt Süßes schwächer. Kälte lässt die Süße außerdem schneller verblassen. Schau auf die Anzeigen. Sobald der Bissen geschmolzen ist, nimmt die Süße zu und die Kälte ab. Trotzdem sagt nichts auf der Zunge Kirsche.",
+      "p4": "Kälte verändert aber den Geschmack. Eis wird meist bei etwa −12 °C serviert, und dein Mund hat etwa 37 °C. Unter etwa 12 °C schmeckt Süßes schwächer. Kälte lässt die Süße außerdem schneller verblassen. Schau auf die Anzeigen. Sobald der Bissen geschmolzen ist, nimmt die Süße zu und die Kälte ab. Trotzdem sagt nichts auf der Zunge Kirsche.",
       "p5": "Die Sekunden auf der Zeitleiste sind nur ein Anhaltspunkt. Niemand hat gemessen, wie lange ein Löffel Eis im Mund zum Schmelzen braucht. Das Modell teilt einen Bissen in sechs Schritte, damit du folgen kannst. In einem echten Mund gehen sie ineinander über. Auch wie der Bissen warm wird, ist eine eigene Skizze des Modells. Wähle Kopf oder Moleküle, um denselben Bissen anders zu sehen."
     },
     "routes": {
@@ -277,22 +277,22 @@
       "title": "Die Kirsche zerlegt",
       "p1": "Wie finden Fachleute heraus, warum Kirsche nach Kirsche riecht? Ein Gerät namens <strong>Gaschromatograph</strong> trennt das Aroma auf, ein Molekül nach dem anderen. Ein <strong>Massenspektrometer</strong> bestimmt dann jedes einzelne. An einem <strong>Riechport</strong> riecht ein Mensch an jedem Molekül, sobald es herauskommt, und sagt, welche wirklich riechen. Wird die Probe immer weiter verdünnt, zeigt sich, welche Gerüche am stärksten sind.",
       "p2": "In der <strong>Sauerkirsche</strong> fand man so sieben <strong>Schlüsselaromastoffe</strong>, die Moleküle, die den Geruch tragen. Der wichtigste ist <strong>Benzaldehyd</strong>. Dazu kommen grüne, blättrige Noten wie <strong>Hexenal</strong>, blumiges <strong>Linalool</strong> und nelkenartiges <strong>Eugenol</strong>. Die Süßkirsche ist anders. Eine Studie fand in ihr 97 Aromamoleküle, und nur 18 waren stark genug zum Riechen. Dort führen grüne Noten und <strong>Beta-Ionon</strong>, das nach Veilchen riecht.",
-      "p3": "Benzaldehyd, C<sub>7</sub>H<sub>6</sub>O, ist ein Ring aus sechs Kohlenstoffatomen mit einer kleinen Gruppe an der Seite. Es riecht nach Bittermandel und Kirsche. Und es ist stark: Einen Tropfen könnte man noch in etwa einer Badewanne Wasser riechen. Es ist auch der Geruch von <strong>Marzipan</strong>, das oft mit Bittermandelöl aromatisiert wird. Dieses Öl ist fast reines Benzaldehyd.",
+      "p3": "Benzaldehyd, C<sub>7</sub>H<sub>6</sub>O, ist ein Ring aus sechs Kohlenstoffatomen mit einer kleinen Gruppe von Atomen an der Seite. Es riecht nach Bittermandel und Kirsche. Und es ist stark: Einen Tropfen könnte man noch in etwa einer Badewanne Wasser riechen. Es ist auch der Geruch von <strong>Marzipan</strong>, das oft mit Bittermandelöl aromatisiert wird. Dieses Öl ist fast reines Benzaldehyd.",
       "p4": "Kirschbonbons setzen auf Benzaldehyd und lassen die grünen und blumigen Noten der frischen Frucht weg. Deshalb riechen sie mehr nach Mandel als nach Kirschen. Wähle Kirschbonbons, dann Marzipan, und vergleiche die Mischungen. Die Hauptnote bleibt gleich. Was sich ändert, ist alles drumherum.",
       "p5": "Das Modell zeigt fünf der Schlüsselaromastoffe. Wie viel von jedem in einer Mischung steckt, schätzt das Modell selbst, in der Reihenfolge, die die Studien angeben, mit Benzaldehyd vorn. Keine dieser Mengen ist gemessen. Die Mischungen für Bonbons und Marzipan sind typische Formen, keine echten Rezepte. Nur Benzaldehyd ist Atom für Atom gezeichnet. Die anderen vier sind einfache Formen."
     },
     "desk": {
       "title": "Der Tisch des Aromatikers",
       "p1": "Ein <strong>Aromatiker</strong> ist jemand, der Aromen für Lebensmittel erfindet. Für Kirsche kopiert er nicht die ganze Frucht. Er wählt die wenigen Moleküle aus, die am meisten zählen, viel weniger, als die Frucht enthält. Dann probiert er und stimmt nach. Jetzt bist du dran: Schieb die Regler, gib Tropfen jedes Moleküls dazu und schau, wonach deine Mischung riecht.",
-      "p2": "Woher kommt Benzaldehyd? Eine Quelle sind <strong>Obstkerne</strong>, die Samen im Inneren der Steine, etwa Bittermandeln und Aprikosenkerne. Gereinigtes Bittermandelöl besteht zu etwa 98 % aus Benzaldehyd. Eine andere Quelle ist <strong>Cassiaöl</strong> aus der Rinde eines Baums, der mit dem Zimt verwandt ist. In den USA wird Benzaldehyd daraus als natürlich verkauft. In der EU ist nicht geklärt, ob es als natürlich gilt.",
-      "p3": "Das meiste Benzaldehyd wird aber aus <strong>Toluol</strong> hergestellt, einem Stoff aus Erdöl. Nur etwa 1,5 % stammen aus Pflanzen. Benzaldehyd ist das zweitwertvollste Aromamolekül, nach Vanillin, dem Geruch von Vanille. Das Molekül ist genau dasselbe, egal wie es hergestellt wird, und sein Geruch auch. Nur das Etikett ändert sich. In der EU muss ein „natürliches Kirscharoma“ zu mindestens 95 % aus Kirschen stammen.",
+      "p2": "Woher kommt Benzaldehyd? Eine Quelle sind <strong>Obstkerne</strong>, die Samen im Inneren der Steine, etwa Bittermandeln und Aprikosenkerne. Gereinigtes Bittermandelöl besteht zu etwa 98 % aus Benzaldehyd. Eine andere Quelle ist <strong>Cassiaöl</strong> aus der Rinde eines Baums, der mit dem Zimt verwandt ist. In den USA wird Benzaldehyd daraus als natürlich verkauft. In der EU ist nicht geklärt, ob es als natürlich gilt.",
+      "p3": "Das meiste Benzaldehyd wird aber aus <strong>Toluol</strong> hergestellt, einem Stoff aus Erdöl. Nur etwa 1,5 % stammen aus Pflanzen. Benzaldehyd ist das zweitwertvollste Aromamolekül, nach Vanillin, dem Geruch von Vanille. Das Molekül ist genau dasselbe, egal wie es hergestellt wird, und sein Geruch auch. Nur das Etikett ändert sich. In der EU muss ein „natürliches Kirscharoma“ zu mindestens 95 % aus Kirschen stammen.",
       "p4": "Ein Wort zur Vorsicht. In Kernen steckt kein fertiges Benzaldehyd. Wird ein Kern zerdrückt, entsteht Benzaldehyd und dazu <strong>Blausäure</strong>, ein Gift. Schon ein einziger kleiner roher Aprikosenkern kann für ein Kleinkind zu viel sein. Iss also nie rohe Obstkerne und knack sie auch nicht zum Probieren auf. Das Aroma im Eis ist etwas anderes: Es ist eine gereinigte Zutat, geprüft und für Lebensmittel zugelassen."
     },
     "iceCream": {
       "title": "Warum Eis mehr Aroma braucht",
-      "p1": "Riechen kannst du nur Moleküle, die in die Luft gelangen. Aroma, das im Bissen eingeschlossen ist, bewirkt nichts. Kälte hält es fest, deshalb gibt ein gefrorener Bissen sehr wenig ab. Während der Bissen in deinem Mund schmilzt und warm wird, entweicht immer mehr Aroma. In einer Studie schmeckte Vanilleeis bei −9 °C kräftiger als bei −14 °C.",
+      "p1": "Riechen kannst du nur Moleküle, die in die Luft gelangen. Aroma, das im Bissen eingeschlossen ist, bewirkt nichts. Kälte hält es fest, deshalb gibt ein gefrorener Bissen sehr wenig ab. Während der Bissen in deinem Mund schmilzt und warm wird, entweicht immer mehr Aroma. In einer Studie schmeckte Vanilleeis bei −9 °C kräftiger als bei −14 °C.",
       "p2": "Auch Fett spielt eine Rolle. Kirschmoleküle sind <strong>fettliebend</strong>: Sie lösen sich in Fett und bleiben gern dort. In einem reichhaltigen Eis hält das Fett die Kirsche also zurück. In einem fettarmen kommt die Kirsche schneller und stärker heraus. Bei Vanille ist es genau umgekehrt.",
-      "p3": "In den USA muss Eiscreme mindestens 10 % Milchfett enthalten, Premiumsorten haben bis etwa 20 %. Durch Kälte und Fett bleibt viel Aroma eingeschlossen. Deshalb geben Aromatiker mehr dazu: Kirscharoma macht etwa 1 bis 2 % der Mischung aus. Probier die Regler aus. Ist das Eis wärmer oder fettärmer, erreicht mehr Aroma deine Nase.",
+      "p3": "In den USA muss Eiscreme mindestens 10 % Milchfett enthalten, Premiumsorten haben bis etwa 20 %. Durch Kälte und Fett bleibt viel Aroma eingeschlossen. Deshalb geben Aromatiker mehr dazu: Kirscharoma macht etwa 1 bis 2 % der Mischung aus. Probier die Regler aus. Ist das Eis wärmer oder fettärmer, erreicht mehr Aroma deine Nase.",
       "p4": "Jetzt alles zusammen. Deine Zunge sagt dir süß und ein bisschen sauer. Deine Nerven spüren die Kälte und die Cremigkeit. Und deine Nase, die das Aroma von hinter dem Gaumen bekommt, meldet Kirsche. Halt sie zu, und die Kirsche ist weg.",
       "p5": "Wie stark Kälte und Fett das Aroma zurückhalten, schätzt das Modell selbst. Studien zeigen, in welche Richtung beides wirkt, aber nicht, wie stark. Sieh diese Zahlen also als Skizze, nicht als Messung. Jede Prozentzahl auf dieser Seite bezieht sich auf das Höchste, was diese Anzeige im Modell erreicht. Keine davon ist ein Anteil am Geschmack."
     }
