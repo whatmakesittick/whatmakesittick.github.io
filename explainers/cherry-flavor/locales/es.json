@@ -108,7 +108,7 @@
     "smell": "Huele a {{smell}}",
     "cold": "Frío",
     "sweet": "Frío y dulce",
-    "flavor": "Dulce, frío y con sabor a {{smell}}",
+    "flavor": "Dulce y con sabor a {{smell}}",
     "pinched": "Dulce y frío, sin olor a {{smell}}",
     "aftertaste": "Queda un leve olor a {{smell}}",
     "gone": "Ya no queda nada"
@@ -144,7 +144,7 @@
       "temp": "Temperatura del bocado",
       "sweet": "Dulce, de las células del gusto",
       "sour": "Ácido, de las células del gusto",
-      "cold": "Frío, de los nervios de la temperatura",
+      "cold": "Frío, de los nervios que sienten la temperatura",
       "tastes": "Sabores básicos",
       "tastesValue": "cinco: dulce, ácido, salado, amargo, umami",
       "cells": "Células en un botón gustativo",
@@ -191,16 +191,16 @@
       "smellsOf": "El benzaldehído huele a",
       "smellsOfValue": "almendra amarga y cereza",
       "drop": "Una gota se puede oler en",
-      "dropValue": "una bañera de agua, más o menos"
+      "dropValue": "cerca de una bañera de agua"
     },
     "desk": {
       "smell": "Huele a",
       "match": "Parecido con la fruta",
       "drops": "Gotas en el frasco",
       "almondOil": "Aceite de almendra amarga",
-      "almondOilValue": "un 98 % de benzaldehído, más o menos",
+      "almondOilValue": "cerca del 98 % de benzaldehído",
       "plants": "Benzaldehído de plantas",
-      "plantsValue": "un 1,5 % del total, más o menos",
+      "plantsValue": "cerca del 1,5 % del total",
       "rank": "Moléculas de aroma más valiosas",
       "rankValue": "la segunda, después de la vainillina",
       "euNatural": "«Aroma natural de cereza» en la UE",
@@ -215,11 +215,11 @@
       "peak": "Máximo de aroma en la nariz",
       "melted": "Bocado derretido",
       "fatLaw": "Grasa láctea en el helado",
-      "fatLawValue": "al menos un 10 %, los prémium hasta un 20 % más o menos",
+      "fatLawValue": "al menos un 10 %, los prémium hasta cerca de un 20 %",
       "served": "Se suele servir a",
       "servedValue": "unos −12 °C",
       "dose": "Aroma de cereza en la mezcla",
-      "doseValue": "de un 1 a un 2 %, más o menos"
+      "doseValue": "entre un 1 y un 2 %"
     }
   },
   "parts": {
@@ -255,8 +255,8 @@
       "title": "Lo que nota la lengua",
       "p1": "Toma una cucharada de helado de guinda y déjala sobre la <strong>lengua</strong>. Tu lengua puede decirte cinco cosas, los cinco <strong>sabores básicos</strong>: dulce, ácido, salado, amargo y umami. El umami es el sabor sabroso del caldo y del queso. Cada sabor tiene su propio tipo de <strong>célula del gusto</strong>. Quizá hayas visto un mapa de la lengua con una zona para cada sabor. Ese mapa es un mito: cualquier parte de la lengua con botones gustativos nota los cinco.",
       "p2": "Los bultitos de tu lengua se llaman <strong>papilas</strong>. Muchas tienen <strong>botones gustativos</strong>, y tienes unos pocos miles. Cada botón es un racimo pequeño de unas 50 a 100 células. Lo dulce lo capta un solo receptor, formado por dos piezas que trabajan en pareja. Así que, de este helado, tu lengua te dice dulce, y un poco ácido por la guinda.",
-      "p3": "¿Y el frío, y esa sensación suave y cremosa? No son sabores. El frío lo sienten unos <strong>nervios de la temperatura</strong> que tienes en la boca. Lo cremoso lo sientes con el tacto. Los dos te cuentan mucho del helado, pero nada de la cereza.",
-      "p4": "Eso sí, el frío cambia el sabor. El helado se suele servir a unos −12 °C, y tu boca está a unos 37 °C. Por debajo de unos 12 °C, lo dulce sabe más flojo, y con el frío el dulzor también se apaga antes. Mira los indicadores mientras el bocado se calienta. Lo dulce crece, el frío baja, y nada en la lengua dice cereza.",
+      "p3": "¿Y el frío, y esa sensación suave y cremosa? No son sabores. El frío lo sienten unos <strong>nervios que sienten la temperatura</strong> que tienes en la boca. Lo cremoso lo sientes con el tacto. Los dos te cuentan mucho del helado, pero nada de la cereza.",
+      "p4": "Eso sí, el frío cambia el sabor. El helado se suele servir a unos −12 °C, y tu boca está a unos 37 °C. Por debajo de unos 12 °C, lo dulce sabe más flojo, y con el frío el dulzor también se apaga antes. Mira los indicadores. Cuando el bocado se ha derretido, lo dulce crece y el frío baja. Aun así, nada en la lengua dice cereza.",
       "p5": "Los segundos de la línea de tiempo son solo orientativos. Nadie ha medido cuánto tarda una cucharada en derretirse en la boca. El modelo divide un bocado en seis pasos para que puedas seguirlo, pero en una boca de verdad se mezclan. La forma en que se calienta el bocado también es un esbozo del propio modelo. Elige Cabeza o Moléculas para ver el mismo bocado de otra manera."
     },
     "routes": {
@@ -277,24 +277,24 @@
       "title": "La cereza por dentro",
       "p1": "¿Cómo averiguan los científicos qué hace que la cereza huela a cereza? Una máquina llamada <strong>cromatógrafo de gases</strong> separa el aroma, molécula a molécula. Después, un <strong>espectrómetro de masas</strong> le pone nombre a cada una. En un <strong>puerto de olfacción</strong>, una persona huele cada molécula según sale y dice cuáles huelen de verdad. Diluyendo la muestra una y otra vez se ve qué olores son los más fuertes.",
       "p2": "En la <strong>guinda</strong>, este método encontró siete <strong>moléculas clave del olor</strong>, las que llevan el aroma. La principal es el <strong>benzaldehído</strong>. Lo acompañan notas verdes, de hoja, como el <strong>hexenal</strong>, el <strong>linalol</strong>, que es floral, y el <strong>eugenol</strong>, que recuerda al clavo. La cereza dulce es distinta. Un estudio encontró en ella 97 moléculas de aroma, y solo 18 tenían fuerza para olerse. Allí mandan las notas verdes y la <strong>beta-ionona</strong>, que huele a violetas.",
-      "p3": "El benzaldehído, C<sub>7</sub>H<sub>6</sub>O, es un anillo de seis átomos de carbono con un grupito pegado a un lado. Huele a almendra amarga y a cereza. Y es potente: una sola gota se podría oler en una bañera de agua, más o menos. También es el olor del <strong>mazapán</strong>, que a menudo se aromatiza con aceite de almendra amarga. Ese aceite es casi benzaldehído puro.",
+      "p3": "El benzaldehído, C<sub>7</sub>H<sub>6</sub>O, es un anillo de seis átomos de carbono con un grupito pegado a un lado. Huele a almendra amarga y a cereza. Y es potente: una sola gota se podría oler en cerca de una bañera de agua. También es el olor del <strong>mazapán</strong>, que a menudo se aromatiza con aceite de almendra amarga. Ese aceite es casi benzaldehído puro.",
       "p4": "Los caramelos de cereza se apoyan en el benzaldehído y dejan fuera las notas verdes y florales de la fruta fresca. Por eso huelen más a almendra que a cereza. Elige Caramelos de cereza y luego Mazapán para comparar las mezclas. La nota principal es la misma. Lo que cambia es todo lo que la rodea.",
       "p5": "El modelo dibuja cinco de las moléculas clave. Cuánto hay de cada una en una mezcla es una suposición del propio modelo, en el orden en que las clasifican los estudios, con el benzaldehído primero. Ninguna de estas cantidades está medida. Las mezclas de los caramelos y del mazapán son formas típicas, no recetas reales. Solo el benzaldehído está dibujado átomo a átomo; las otras cuatro son formas sencillas."
     },
     "desk": {
       "title": "La mesa del aromista",
       "p1": "Un <strong>aromista</strong> es una persona que crea aromas para alimentos. Para hacer cereza, no copia la fruta entera. Elige las pocas moléculas que más importan, muchas menos de las que tiene la fruta, y luego prueba y ajusta. Te toca: mueve los controles para añadir gotas de cada molécula y descubre a qué huele tu mezcla.",
-      "p2": "¿De dónde sale el benzaldehído? Una fuente son las <strong>semillas</strong> que hay dentro de los huesos de la fruta, como las almendras amargas y las semillas de albaricoque. El aceite de almendra amarga purificado tiene un 98 % de benzaldehído, más o menos. Otra fuente es el <strong>aceite de casia</strong>, que sale de la corteza de un árbol pariente de la canela. En Estados Unidos, el benzaldehído hecho con él se vende como natural. En la Unión Europea no está claro si cuenta como natural.",
-      "p3": "Pero la mayor parte del benzaldehído se fabrica a partir del <strong>tolueno</strong>, una sustancia química que viene del petróleo. Solo un 1,5 %, más o menos, sale de plantas. El benzaldehído es la segunda molécula de aroma más valiosa, después de la vainillina, el olor de la vainilla. La molécula es exactamente la misma se haga como se haga, y su olor también. Solo cambia la etiqueta. En la Unión Europea, un «aroma natural de cereza» tiene que venir al menos en un 95 % de cerezas.",
+      "p2": "¿De dónde sale el benzaldehído? Una fuente son las <strong>semillas</strong> que hay dentro de los huesos de la fruta, como las almendras amargas y las semillas de albaricoque. El aceite de almendra amarga purificado tiene cerca de un 98 % de benzaldehído. Otra fuente es el <strong>aceite de casia</strong>, que sale de la corteza de un árbol pariente de la canela. En Estados Unidos, el benzaldehído hecho con él se vende como natural. En la Unión Europea no está claro si cuenta como natural.",
+      "p3": "Pero la mayor parte del benzaldehído se fabrica a partir del <strong>tolueno</strong>, una sustancia química que viene del petróleo. Solo cerca de un 1,5 % sale de plantas. El benzaldehído es la segunda molécula de aroma más valiosa, después de la vainillina, el olor de la vainilla. La molécula es exactamente la misma se haga como se haga, y su olor también. Solo cambia la etiqueta. En la Unión Europea, un «aroma natural de cereza» debe proceder de la cereza en al menos un 95 %.",
       "p4": "Un aviso importante. Las semillas no guardan el benzaldehído ya hecho. Cuando se aplasta una semilla, se forma benzaldehído y también <strong>cianuro</strong>, que es un veneno. Incluso una sola semilla de albaricoque cruda y pequeña puede ser demasiado para un niño pequeño. Así que nunca comas semillas de fruta crudas, y no las abras para probarlas. El aroma del helado es otra cosa: es un ingrediente purificado, controlado y aprobado para alimentos."
     },
     "iceCream": {
       "title": "Por qué el helado necesita más aroma",
       "p1": "Solo puedes oler las moléculas que llegan al aire. El aroma encerrado en el bocado no hace nada. El frío lo mantiene encerrado, así que un bocado congelado suelta muy poco. Cuando el bocado se derrite y se calienta en tu boca, se escapa cada vez más aroma. En un estudio, el helado de vainilla sabía más intenso servido a −9 °C que a −14 °C.",
       "p2": "La grasa también cuenta. Las moléculas de la cereza son <strong>amigas de la grasa</strong>: se disuelven en ella y prefieren quedarse allí. Por eso, en un helado cremoso, la grasa retiene la cereza. En uno bajo en grasa, la cereza sale antes y con más fuerza. Con la vainilla pasa al revés.",
-      "p3": "En Estados Unidos, el helado tiene que llevar al menos un 10 % de grasa láctea, y los prémium llegan a un 20 %, más o menos. Entre el frío y la grasa, gran parte del aroma se queda encerrada. Por eso los aromistas añaden más: el aroma de cereza es de un 1 a un 2 % de la mezcla, más o menos. Prueba los controles. Servirlo menos frío o con menos grasa deja que llegue más aroma a tu nariz.",
-      "p4": "Ahora júntalo todo. Tu lengua te dice dulce y un poco ácido. Tus nervios sienten el frío y la crema. Y tu nariz, a la que se llega por detrás del paladar, te dice cereza. Tápatela, y la cereza desaparece.",
-      "p5": "Cuánto retienen el aroma el frío y la grasa es una estimación del propio modelo. Los estudios muestran hacia dónde actúa cada uno, pero no cuánto. Así que toma estas cifras como un esbozo, no como una medida. Cada porcentaje de esta página se compara con el máximo del propio modelo. Ninguno es una parte del sabor."
+      "p3": "En Estados Unidos, el helado tiene que llevar al menos un 10 % de grasa láctea, y los prémium llegan hasta cerca de un 20 %. Entre el frío y la grasa, gran parte del aroma se queda encerrada. Por eso los aromistas añaden más: el aroma de cereza es de un 1 a un 2 % de la mezcla, más o menos. Prueba los controles. Servirlo menos frío o con menos grasa deja que llegue más aroma a tu nariz.",
+      "p4": "Ahora júntalo todo. Tu lengua te dice dulce y un poco ácido. Tus nervios sienten el frío y la crema. Y tu nariz, a la que el aroma llega por detrás del paladar, te dice cereza. Tápatela, y la cereza desaparece.",
+      "p5": "Cuánto retienen el aroma el frío y la grasa es una estimación del propio modelo. Los estudios muestran hacia dónde actúa cada uno, pero no cuánto. Así que toma estas cifras como un esbozo, no como una medida. Cada porcentaje de esta página se compara con lo máximo que esa lectura alcanza en el modelo. Ninguno es una parte del sabor."
     }
   }
 }
