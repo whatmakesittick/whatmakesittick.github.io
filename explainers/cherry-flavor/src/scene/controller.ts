@@ -1,6 +1,7 @@
 import { Box3 } from 'three';
 import type { Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
+import { runPaced } from '@core/scene/pacing';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
 import { SCALE_IDS } from '../ids';
@@ -27,6 +28,7 @@ export class FlavorController {
   private assembly: Assembly | null = null;
   private scale: ScaleId | null = null;
   private cancelWarmUp: () => void = () => {};
+  private generation = 0;
 
   constructor(dependencies: FlavorControllerDependencies) {
     this.dependencies = dependencies;
@@ -42,10 +44,15 @@ export class FlavorController {
     };
   }
 
-  build(state: AssemblyState): void {
+  async build(state: AssemblyState): Promise<void> {
     const { scene, materials, textures, labels } = this.dependencies;
     this.dispose();
-    const assembly = createAssembly({ materials, textures }, state);
+    const generation = this.generation;
+    const assembly = await runPaced(createAssembly({ materials, textures }, state));
+    if (generation !== this.generation) {
+      assembly.dispose();
+      return;
+    }
     this.assembly = assembly;
     scene.add(assembly.root);
     labels.attach(assembly.labelAnchors());
@@ -65,6 +72,7 @@ export class FlavorController {
   }
 
   dispose(): void {
+    this.generation += 1;
     this.cancelWarmUp();
     this.assembly?.root.removeFromParent();
     this.assembly?.dispose();

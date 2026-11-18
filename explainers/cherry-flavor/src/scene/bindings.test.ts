@@ -13,11 +13,12 @@ function fakeTargets() {
     received.push(state);
     snapshots.push(structuredClone(state));
   };
+  const build = async (state: AssemblyState) => record(state);
   const frame = vi.fn();
   const setWanted = vi.fn();
   const setHighlight = vi.fn();
   const targets: SceneTargets = {
-    flavor: { build: record, setState: record, views: { frame } },
+    flavor: { build, setState: record, views: { frame } },
     labelVisibility: { setWanted },
     highlighter: { setHighlight },
     labels: { show: vi.fn() },
@@ -26,18 +27,18 @@ function fakeTargets() {
 }
 
 describe('cherry flavor scene bindings', () => {
-  it('builds the scene from the store and frames the first chapter on its scale', () => {
+  it('builds the scene from the store and frames the first chapter on its scale', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createFlavorStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     expect(received[0]).toMatchObject({ scale: 'tongue', phase: 100 });
     expect(frame).toHaveBeenCalledWith('tongue', false, 'tongue');
   });
 
-  it('hands over the new scale before framing the next chapter', () => {
+  it('hands over the new scale before framing the next chapter', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createFlavorStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     let handed: AssemblyState | undefined;
     frame.mockImplementationOnce(() => (handed = received.at(-1)));
     store.getState().applyPreset('receptors');
@@ -45,10 +46,10 @@ describe('cherry flavor scene bindings', () => {
     expect(handed).toMatchObject({ scale: 'molecules', phase: 600 });
   });
 
-  it('frames a chapter that also changes the scale only once', () => {
+  it('frames a chapter that also changes the scale only once', async () => {
     const { frame, setHighlight, targets } = fakeTargets();
     const store = createFlavorStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     frame.mockClear();
     setHighlight.mockClear();
     store.getState().applyPreset('receptors');
@@ -56,10 +57,10 @@ describe('cherry flavor scene bindings', () => {
     expect(setHighlight).toHaveBeenCalledTimes(1);
   });
 
-  it('re-frames, drops the highlight and swaps the labels on a scale flip', () => {
+  it('re-frames, drops the highlight and swaps the labels on a scale flip', async () => {
     const { frame, setWanted, setHighlight, targets } = fakeTargets();
     const store = createFlavorStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().applyPreset('receptors');
     expect(setHighlight).toHaveBeenLastCalledWith(PRESET_HIGHLIGHT);
     store.getState().setScale('head');
@@ -68,10 +69,10 @@ describe('cherry flavor scene bindings', () => {
     expect([...(setWanted.mock.lastCall?.[0] ?? [])]).toEqual([...SCALE_DEFAULT_LABELS.head]);
   });
 
-  it('hides every label with the labels toggle and applies the pinch toggle', () => {
+  it('hides every label with the labels toggle and applies the pinch toggle', async () => {
     const { received, setWanted, targets } = fakeTargets();
     const store = createFlavorStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().toggleView('pinched');
     expect(received.at(-1)?.view.pinched).toBe(true);
     expect(received.at(-1)?.reading.noseShare).toBe(0);
@@ -79,10 +80,10 @@ describe('cherry flavor scene bindings', () => {
     expect(setWanted.mock.lastCall?.[0].size).toBe(0);
   });
 
-  it('alternates two buffers so the held state is never rewritten', () => {
+  it('alternates two buffers so the held state is never rewritten', async () => {
     const { received, snapshots, targets } = fakeTargets();
     const store = createFlavorStore();
-    bindStore(store, targets);
+    await bindStore(store, targets);
     store.getState().pause();
     store.getState().setPhase(100);
     store.getState().setPhase(LATER_PHASE);
@@ -93,10 +94,26 @@ describe('cherry flavor scene bindings', () => {
     expect(third?.phase).toBe(LATER_PHASE);
   });
 
-  it('stops handing over states once unbound', () => {
+  it('hands over a store change that lands while the scene builds', async () => {
     const { received, targets } = fakeTargets();
     const store = createFlavorStore();
-    const unbind = bindStore(store, targets);
+    store.getState().pause();
+    let finish: () => void = () => {};
+    targets.flavor.build = (state) => {
+      received.push(state);
+      return new Promise<void>((resolve) => (finish = resolve));
+    };
+    const bound = bindStore(store, targets);
+    store.getState().setPhase(LATER_PHASE);
+    finish();
+    await bound;
+    expect(received.at(-1)?.phase).toBe(LATER_PHASE);
+  });
+
+  it('stops handing over states once unbound', async () => {
+    const { received, targets } = fakeTargets();
+    const store = createFlavorStore();
+    const unbind = await bindStore(store, targets);
     unbind();
     const count = received.length;
     store.getState().setPhase(LATER_PHASE);

@@ -13,12 +13,15 @@ export type { FlavorControllerDependencies, ViewFramer } from './controller';
 
 export { SCENE_OPTIONS, UNDIMMED_PARTS } from './sceneOptions';
 
-export function mountCherryFlavorScene(shell: SceneShell, store: FlavorStore): () => void {
+export async function mountCherryFlavorScene(
+  shell: SceneShell,
+  store: FlavorStore,
+): Promise<() => void> {
   const restoreLight = cherryFlavorLight(shell.lighting);
   const flavor = new FlavorController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => flavor.update(deltaSeconds));
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
-  const unbind = bindStore(store, { flavor, labelVisibility, ...shell });
+  const unbind = await bindStore(store, { flavor, labelVisibility, ...shell });
   return () => {
     removeFrame();
     labelVisibility.dispose();

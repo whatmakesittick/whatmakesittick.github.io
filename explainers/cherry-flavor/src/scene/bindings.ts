@@ -37,7 +37,7 @@ function scaleSourceOf(state: FlavorStoreState): ScaleSource {
   return { scale: state.scale, camera: PRESETS[state.preset].camera };
 }
 
-export function bindStore(store: FlavorStore, targets: SceneTargets): () => void {
+export async function bindStore(store: FlavorStore, targets: SceneTargets): Promise<() => void> {
   const { flavor, labelVisibility, highlighter } = targets;
   const assemblyState = new DoubleBufferedAssemblyState(store.getState());
   const push = (state: AssemblySource) => flavor.setState(assemblyState.handOver(state));
@@ -51,7 +51,8 @@ export function bindStore(store: FlavorStore, targets: SceneTargets): () => void
     highlighter.setHighlight(highlightOf(preset, state));
     labels.refresh();
   };
-  flavor.build(assemblyState.handOver(store.getState()));
+  await flavor.build(assemblyState.handOver(store.getState()));
+  push(store.getState());
   const unsubscribers = [
     store.subscribe(push),
     bindPresets<FlavorStoreState, Preset>(targets, store, {

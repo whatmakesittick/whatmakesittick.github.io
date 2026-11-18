@@ -2,6 +2,7 @@ import { Group, Line, Mesh, Points, Sprite } from 'three';
 import type { Box3, Material, Object3D } from 'three';
 import { lerp, smoothstep } from '@core/math';
 import { anchorAt, isShown } from '@core/scene/parts';
+import type { Steps } from '@core/scene/pacing';
 import { ResourceTracker } from '@core/scene/resources';
 import { ANCHOR_IDS, ANCHOR_SCALE, PART_IDS, SCALE_IDS } from '../ids';
 import type { AnchorId, AssemblyState, PartId, RegionId, ScaleId } from '../ids';
@@ -52,7 +53,11 @@ function scaleRoot(root: Group, scale: ScaleId): Group {
   return group;
 }
 
-function buildWorlds(resources: AssemblyResources, root: Group, tracker: ResourceTracker): Worlds {
+function* buildWorlds(
+  resources: AssemblyResources,
+  root: Group,
+  tracker: ResourceTracker,
+): Steps<Worlds> {
   const context: PartContext = {
     materials: resources.materials,
     textures: resources.textures,
@@ -65,8 +70,11 @@ function buildWorlds(resources: AssemblyResources, root: Group, tracker: Resourc
     molecules: scaleRoot(root, 'molecules'),
   };
   const head = buildHeadWorld(context, roots.head);
+  yield;
   const tongue = buildTongueWorld(context, roots.tongue);
+  yield;
   const molecules = buildMoleculeWorld(context, roots.molecules);
+  yield;
   const veil = new Veil(context, root);
   return { context, roots, sections: { head, tongue, molecules }, veil };
 }
@@ -177,13 +185,13 @@ class CherryFlavorAssembly implements Assembly {
   }
 }
 
-export function createCherryFlavorAssembly(
+export function* createCherryFlavorAssembly(
   resources: AssemblyResources,
   state: AssemblyState,
-): Assembly {
+): Steps<Assembly> {
   const root = new Group();
   root.name = 'cherryFlavor';
   const tracker = new ResourceTracker();
-  const worlds = buildWorlds(resources, root, tracker);
+  const worlds = yield* buildWorlds(resources, root, tracker);
   return new CherryFlavorAssembly(resources, root, tracker, worlds, state);
 }

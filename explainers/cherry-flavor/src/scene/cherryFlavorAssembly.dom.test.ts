@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
+import { runNow } from '@core/scene/pacing';
 import { createSceneTextures } from '@core/scene/textures';
 import { ANCHOR_IDS, PART_IDS, REGION_IDS } from '../ids';
 import type { AssemblyState, OdorantLevels, ScaleId } from '../ids';
@@ -75,7 +76,7 @@ function settle(assembly: { update(delta: number, distance: number): boolean }):
 
 describe('cherry flavor assembly', () => {
   it('covers every part, anchor and region', () => {
-    const assembly = createCherryFlavorAssembly(resources(), stateAt(0));
+    const assembly = runNow(createCherryFlavorAssembly(resources(), stateAt(0)));
     expect([...assembly.labelAnchors().keys()].sort()).toEqual([...PART_IDS].sort());
     ANCHOR_IDS.forEach((id) => expect(assembly.anchor(id)).toBeDefined());
     REGION_IDS.forEach((id) => expect(assembly.region(id).isEmpty()).toBe(false));
@@ -83,7 +84,7 @@ describe('cherry flavor assembly', () => {
   });
 
   it('crossfades to the chosen scale and then rests', () => {
-    const assembly = createCherryFlavorAssembly(resources(), stateAt(5));
+    const assembly = runNow(createCherryFlavorAssembly(resources(), stateAt(5)));
     const shown = () => assembly.root.children.slice(0, 3).map((child) => child.visible);
     expect(shown()).toEqual([true, false, false]);
     expect(settle(assembly)).toBe(false);
@@ -97,7 +98,7 @@ describe('cherry flavor assembly', () => {
   });
 
   it('moves the spoon label and the bite anchor with the pose', () => {
-    const assembly = createCherryFlavorAssembly(resources(), stateAt(-1.5));
+    const assembly = runNow(createCherryFlavorAssembly(resources(), stateAt(-1.5)));
     assembly.root.updateMatrixWorld(true);
     const spoon = assembly.labelAnchors().get('spoon');
     if (!spoon?.parent) throw new Error('no spoon');
@@ -109,7 +110,7 @@ describe('cherry flavor assembly', () => {
   });
 
   it('keeps drawing while aroma drifts and stops once it is gone', () => {
-    const assembly = createCherryFlavorAssembly(resources(), stateAt(8, { aroma: 0.2 }));
+    const assembly = runNow(createCherryFlavorAssembly(resources(), stateAt(8, { aroma: 0.2 })));
     expect(assembly.update(FRAME, 1)).toBe(true);
     assembly.setState(stateAt(8));
     expect(settle(assembly)).toBe(false);
@@ -117,7 +118,9 @@ describe('cherry flavor assembly', () => {
   });
 
   it('hides an odorant with no copies and none on the receptors', () => {
-    const assembly = createCherryFlavorAssembly(resources(), stateAt(10, { scale: 'molecules' }));
+    const assembly = runNow(
+      createCherryFlavorAssembly(resources(), stateAt(10, { scale: 'molecules' })),
+    );
     const visible = (id: 'hexenal' | 'benzaldehyde') =>
       assembly.labelAnchors().get(id)?.parent?.visible;
     expect(visible('hexenal')).toBe(false);
@@ -126,7 +129,7 @@ describe('cherry flavor assembly', () => {
   });
 
   it('warms up hidden worlds and disposes cleanly', () => {
-    const assembly = createCherryFlavorAssembly(resources(), stateAt(0));
+    const assembly = runNow(createCherryFlavorAssembly(resources(), stateAt(0)));
     const compiled: Object3D[] = [];
     assembly.warmUp?.((object) => compiled.push(object));
     expect(compiled.length).toBeGreaterThan(0);
