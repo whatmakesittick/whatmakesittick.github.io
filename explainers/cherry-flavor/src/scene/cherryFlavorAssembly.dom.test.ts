@@ -2,12 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { Vector3 } from 'three';
 import type { Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
-import { runNow } from '@core/scene/pacing';
 import { createSceneTextures } from '@core/scene/textures';
 import { ANCHOR_IDS, PART_IDS, REGION_IDS } from '../ids';
 import type { AssemblyState, OdorantLevels, ScaleId } from '../ids';
 import { RECEPTOR_TYPES } from '../model/receptorCodes';
-import { buildCherryFlavorAssembly, createCherryFlavorAssembly } from './cherryFlavorAssembly';
+import { createCherryFlavorAssembly } from './cherryFlavorAssembly';
 import { CROSSFADE } from './constants';
 import { bitePose, spoonPose } from './pose';
 
@@ -75,16 +74,8 @@ function settle(assembly: { update(delta: number, distance: number): boolean }):
 }
 
 describe('cherry flavor assembly', () => {
-  it('builds in paced steps and covers every part, anchor and region', () => {
-    const steps = buildCherryFlavorAssembly(resources(), stateAt(0));
-    let yields = 0;
-    let step = steps.next();
-    while (!step.done) {
-      yields += 1;
-      step = steps.next();
-    }
-    expect(yields).toBeGreaterThan(1);
-    const assembly = step.value;
+  it('covers every part, anchor and region', () => {
+    const assembly = createCherryFlavorAssembly(resources(), stateAt(0));
     expect([...assembly.labelAnchors().keys()].sort()).toEqual([...PART_IDS].sort());
     ANCHOR_IDS.forEach((id) => expect(assembly.anchor(id)).toBeDefined());
     REGION_IDS.forEach((id) => expect(assembly.region(id).isEmpty()).toBe(false));
@@ -135,7 +126,7 @@ describe('cherry flavor assembly', () => {
   });
 
   it('warms up hidden worlds and disposes cleanly', () => {
-    const assembly = runNow(buildCherryFlavorAssembly(resources(), stateAt(0)));
+    const assembly = createCherryFlavorAssembly(resources(), stateAt(0));
     const compiled: Object3D[] = [];
     assembly.warmUp?.((object) => compiled.push(object));
     expect(compiled.length).toBeGreaterThan(0);

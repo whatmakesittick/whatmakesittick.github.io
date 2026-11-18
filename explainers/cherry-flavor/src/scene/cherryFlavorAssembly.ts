@@ -1,8 +1,6 @@
 import { Group, Line, Mesh, Points, Sprite } from 'three';
 import type { Box3, Material, Object3D } from 'three';
 import { lerp, smoothstep } from '@core/math';
-import { runNow } from '@core/scene/pacing';
-import type { Steps } from '@core/scene/pacing';
 import { anchorAt, isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import { ANCHOR_IDS, ANCHOR_SCALE, PART_IDS, SCALE_IDS } from '../ids';
@@ -54,11 +52,7 @@ function scaleRoot(root: Group, scale: ScaleId): Group {
   return group;
 }
 
-function* buildWorlds(
-  resources: AssemblyResources,
-  root: Group,
-  tracker: ResourceTracker,
-): Steps<Worlds> {
+function buildWorlds(resources: AssemblyResources, root: Group, tracker: ResourceTracker): Worlds {
   const context: PartContext = {
     materials: resources.materials,
     textures: resources.textures,
@@ -71,11 +65,8 @@ function* buildWorlds(
     molecules: scaleRoot(root, 'molecules'),
   };
   const head = buildHeadWorld(context, roots.head);
-  yield;
   const tongue = buildTongueWorld(context, roots.tongue);
-  yield;
   const molecules = buildMoleculeWorld(context, roots.molecules);
-  yield;
   const veil = new Veil(context, root);
   return { context, roots, sections: { head, tongue, molecules }, veil };
 }
@@ -186,20 +177,13 @@ class CherryFlavorAssembly implements Assembly {
   }
 }
 
-export function* buildCherryFlavorAssembly(
-  resources: AssemblyResources,
-  state: AssemblyState,
-): Steps<Assembly> {
-  const root = new Group();
-  root.name = 'cherryFlavor';
-  const tracker = new ResourceTracker();
-  const worlds = yield* buildWorlds(resources, root, tracker);
-  return new CherryFlavorAssembly(resources, root, tracker, worlds, state);
-}
-
 export function createCherryFlavorAssembly(
   resources: AssemblyResources,
   state: AssemblyState,
 ): Assembly {
-  return runNow(buildCherryFlavorAssembly(resources, state));
+  const root = new Group();
+  root.name = 'cherryFlavor';
+  const tracker = new ResourceTracker();
+  const worlds = buildWorlds(resources, root, tracker);
+  return new CherryFlavorAssembly(resources, root, tracker, worlds, state);
 }
