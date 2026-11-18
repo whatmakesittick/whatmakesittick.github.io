@@ -16,6 +16,7 @@ import {
 } from 'three';
 import type { InstancedMesh, Object3D } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { FULL_TURN } from '@core/math';
 import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import {
   MUCUS,
@@ -56,6 +57,7 @@ export class ReceptorGrid {
   private readonly rest = new Color(LOOK.neuron);
   private readonly colour = new Color();
   private readonly point = new Vector3();
+  private readonly painted: number[] = Array.from({ length: RECEPTOR_TYPES }, () => Number.NaN);
 
   constructor(context: PartContext, parent: Object3D) {
     const body = new CapsuleGeometry(CELL.radius, CELL.length, 6, 14);
@@ -118,43 +120,65 @@ export class ReceptorGrid {
   }
 
   draw(activation: readonly number[], seconds: number): void {
-    const cilia = this.cilia;
+    let repainted = false;
     for (let index = 0; index < RECEPTOR_TYPES; index += 1) {
       const level = activation[index] ?? 0;
-      this.colour.copy(this.off).lerp(this.on, level);
-      this.bodies.setColorAt(index, this.colour);
-      this.knobs.setColorAt(index, this.colour);
-      this.glow.setColor(index, this.on.r, this.on.g, this.on.b, level);
-      for (let vertex = 0; vertex < CILIA.count * 2; vertex += 1) {
-        cilia.setXYZ(index * CILIA.count * 2 + vertex, this.colour.r, this.colour.g, this.colour.b);
+      if (level !== this.painted[index]) {
+        this.paint(index, level);
+        repainted = true;
       }
-      const axonColour = this.colour.copy(this.rest).lerp(this.on, level);
-      for (let vertex = 0; vertex < this.axonVertices; vertex += 1) {
-        this.axonColours.setXYZ(
-          index * this.axonVertices + vertex,
-          axonColour.r,
-          axonColour.g,
-          axonColour.b,
-        );
-      }
-      const cycle = seconds * GLOW.pulseRate + index * GLOW.pulseStagger;
-      const travel = cycle - Math.floor(cycle);
-      this.axonCurves[index].getPointAt(travel, this.point);
-      this.pulses.setPoint(index, this.point.x, this.point.y, this.point.z);
-      this.pulses.setColor(
-        index,
-        this.on.r,
-        this.on.g,
-        this.on.b,
-        level * Math.sin(Math.PI * travel),
+      this.pulse(index, level, seconds);
+    }
+    if (repainted) this.commitColours();
+    this.pulses.commit();
+  }
+
+  private paint(index: number, level: number): void {
+    this.painted[index] = level;
+    this.colour.copy(this.off).lerp(this.on, level);
+    this.bodies.setColorAt(index, this.colour);
+    this.knobs.setColorAt(index, this.colour);
+    this.glow.setColor(index, this.on.r, this.on.g, this.on.b, level);
+    const ciliaVertices = CILIA.count * 2;
+    for (let vertex = 0; vertex < ciliaVertices; vertex += 1) {
+      this.cilia.setXYZ(
+        index * ciliaVertices + vertex,
+        this.colour.r,
+        this.colour.g,
+        this.colour.b,
       );
     }
+    const axonColour = this.colour.copy(this.rest).lerp(this.on, level);
+    for (let vertex = 0; vertex < this.axonVertices; vertex += 1) {
+      this.axonColours.setXYZ(
+        index * this.axonVertices + vertex,
+        axonColour.r,
+        axonColour.g,
+        axonColour.b,
+      );
+    }
+  }
+
+  private pulse(index: number, level: number, seconds: number): void {
+    const cycle = seconds * GLOW.pulseRate + index * GLOW.pulseStagger;
+    const travel = cycle - Math.floor(cycle);
+    this.axonCurves[index].getPointAt(travel, this.point);
+    this.pulses.setPoint(index, this.point.x, this.point.y, this.point.z);
+    this.pulses.setColor(
+      index,
+      this.on.r,
+      this.on.g,
+      this.on.b,
+      level * Math.sin(Math.PI * travel),
+    );
+  }
+
+  private commitColours(): void {
     if (this.bodies.instanceColor) this.bodies.instanceColor.needsUpdate = true;
     if (this.knobs.instanceColor) this.knobs.instanceColor.needsUpdate = true;
-    cilia.needsUpdate = true;
+    this.cilia.needsUpdate = true;
     this.axonColours.needsUpdate = true;
     this.glow.commit();
-    this.pulses.commit();
   }
 
   private buildCilia(context: PartContext, parent: Object3D): BufferAttribute {
@@ -163,7 +187,7 @@ export class ReceptorGrid {
       const [x, , z] = receptorCell(index);
       const base = RECEPTOR_PLANE_Y + CELL.knobLift + CELL.knob * HALF;
       for (let hair = 0; hair < CILIA.count; hair += 1) {
-        const angle = (hair / CILIA.count) * Math.PI * 2 + index;
+        const angle = (hair / CILIA.count) * FULL_TURN + index;
         positions.push(
           x,
           base,

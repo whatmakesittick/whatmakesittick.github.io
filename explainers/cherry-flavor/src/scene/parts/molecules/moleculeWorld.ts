@@ -1,6 +1,6 @@
 import { AdditiveBlending, Color, Quaternion, Vector3 } from 'three';
 import type { Camera, Object3D } from 'three';
-import { clamp, smoothstep } from '@core/math';
+import { FULL_TURN, clamp, smoothstep, toRadians } from '@core/math';
 import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import { ODORANT_IDS } from '../../../ids';
 import type { AssemblyState, OdorantId } from '../../../ids';
@@ -25,7 +25,7 @@ const LINEUP = {
   tumble: 0.35,
   moved: 0.01,
 } as const;
-const DOWNWARD_FADE = { from: 22 * (Math.PI / 180), to: 30 * (Math.PI / 180) } as const;
+const DOWNWARD_FADE = { from: toRadians(22), to: toRadians(30) } as const;
 const PAIR = 2;
 const SETTLE = {
   scale: 0.62,
@@ -62,7 +62,7 @@ function slot(home: Vector3, random: () => number): Slot {
     pose: { position: home.clone(), rotation: new Quaternion(), scale: 0 },
     home,
     axis: new Vector3(random() - HALF, random() - HALF, random() - HALF).normalize(),
-    phase: random() * Math.PI * 2,
+    phase: random() * FULL_TURN,
     speed: (HALF + random()) * LINEUP.tumble,
     target: 0,
     shown: 0,
@@ -113,6 +113,7 @@ class MoleculeWorld implements Section {
   private readonly look = new Vector3();
   private seconds = 0;
   private first = true;
+  private stale = true;
   private lineupView = 1;
   private lineupViewTarget = 1;
 
@@ -156,7 +157,10 @@ class MoleculeWorld implements Section {
   private watch(camera: Camera): void {
     const pitch = cameraPitch(camera, this.look);
     this.lineupViewTarget = 1 - smoothstep(pitch, DOWNWARD_FADE.from, DOWNWARD_FADE.to);
-    if (this.root.scale.x < 1) this.lineupView = this.lineupViewTarget;
+    if (this.root.scale.x < 1 && this.lineupView !== this.lineupViewTarget) {
+      this.lineupView = this.lineupViewTarget;
+      this.stale = true;
+    }
   }
 
   setState(state: AssemblyState): void {
@@ -175,6 +179,7 @@ class MoleculeWorld implements Section {
     if (this.first) this.snap();
     this.first = false;
     this.draw();
+    this.stale = true;
   }
 
   update(deltaSeconds: number): boolean {
@@ -213,7 +218,8 @@ class MoleculeWorld implements Section {
         moving = true;
       }
     }
-    this.draw();
+    if (moving || this.stale) this.draw();
+    this.stale = moving;
     return moving;
   }
 
