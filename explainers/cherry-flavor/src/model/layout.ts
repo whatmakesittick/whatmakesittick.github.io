@@ -4,8 +4,6 @@ import type { AnchorId, OdorantId, Point, RegionId } from '../ids';
 
 export const HEAD_BOX = { x: [-10, 10], y: [-11, 12], z: [-7, 0] } as const satisfies RegionSpec;
 
-export const CUT_PLANE_Z = 0;
-
 export const LIPS: Point = [8.8, -1.5, 0];
 export const MOUTH_CENTRE: Point = [5, -1.2, 0];
 
@@ -16,8 +14,6 @@ export const TONGUE = {
 } as const satisfies Record<string, Point>;
 
 export const TONGUE_LIFT_CM = 0.6;
-
-export const HARD_PALATE = { y: 0, x: [3.5, 8] } as const;
 
 export const SOFT_PALATE = { front: [3.5, 0, 0], back: [1.8, -1, 0] } as const satisfies Record<
   string,

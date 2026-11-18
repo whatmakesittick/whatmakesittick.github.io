@@ -1,4 +1,5 @@
 import { Vector3 } from 'three';
+import { toRadians } from '@core/math';
 import type { ElementId, OdorantId } from '../../../ids';
 
 export interface ShapeAtom {
@@ -17,7 +18,6 @@ export interface MoleculeShape {
   readonly bonds: readonly ShapeBond[];
 }
 
-const DEG = Math.PI / 180;
 const RING_CC = 1.39;
 const CH = 1.08;
 const CC = 1.48;
@@ -41,8 +41,8 @@ class Builder {
   from(index: number, length: number, angleDeg: number, lift = 0): Vector3 {
     const origin = this.atoms[index].at;
     return new Vector3(
-      origin.x + Math.cos(angleDeg * DEG) * length,
-      origin.y + Math.sin(angleDeg * DEG) * length,
+      origin.x + Math.cos(toRadians(angleDeg)) * length,
+      origin.y + Math.sin(toRadians(angleDeg)) * length,
       origin.z + lift,
     );
   }
@@ -56,8 +56,8 @@ class Builder {
       this.add(
         'C',
         new Vector3(
-          Math.cos((startDeg + step * 60) * DEG) * radius,
-          Math.sin((startDeg + step * 60) * DEG) * radius,
+          Math.cos(toRadians(startDeg + step * 60)) * radius,
+          Math.sin(toRadians(startDeg + step * 60)) * radius,
           0,
         ),
       ),

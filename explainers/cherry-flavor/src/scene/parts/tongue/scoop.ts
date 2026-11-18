@@ -10,7 +10,7 @@ import {
   Vector3,
 } from 'three';
 import type { InstancedMesh, Mesh, Object3D } from 'three';
-import { clamp, lerp, smoothstep } from '@core/math';
+import { FULL_TURN, clamp, lerp, smoothstep } from '@core/math';
 import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import type { AssemblyState, OdorantId } from '../../../ids';
 import { TONGUE_BITE, TONGUE_SURFACE_Y, puddleRadius, scoopRadius } from '../../../model/layout';
@@ -84,7 +84,7 @@ function spots(
       direction,
       size: size[0] + random() * size[1],
       threshold: lerp(range[0], range[1], random()),
-      spin: random() * Math.PI * 2,
+      spin: random() * FULL_TURN,
     };
   });
 }
@@ -272,7 +272,7 @@ export class Scoop {
           this.held.setColor(index, 0, 0, 0, 0);
           continue;
         }
-        const angle = spot.spin + (slot / HELD.perDroplet) * Math.PI * 2 + this.age * HELD.speed;
+        const angle = spot.spin + (slot / HELD.perDroplet) * FULL_TURN + this.age * HELD.speed;
         const radius = spot.size + HELD.orbit;
         const at = this.dropletAt[droplet];
         this.held.setPoint(

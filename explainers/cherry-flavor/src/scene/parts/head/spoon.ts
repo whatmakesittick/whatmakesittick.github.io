@@ -7,7 +7,7 @@ import {
   Vector3,
 } from 'three';
 import type { Object3D, Mesh } from 'three';
-import { clamp, smoothstep } from '@core/math';
+import { FULL_TURN, clamp, smoothstep } from '@core/math';
 import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import type { AssemblyState, Point } from '../../../ids';
 import { BITE_RADIUS_CM, BITE_SPOT } from '../../../model/layout';
@@ -52,7 +52,7 @@ const FROST = {
 
 function buildSpoon(context: PartContext, parent: Object3D): Object3D {
   const spoon = namedGroup('spoon', parent);
-  const bowl = new SphereGeometry(1, 32, 12, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
+  const bowl = new SphereGeometry(1, 32, 12, 0, FULL_TURN, Math.PI / 2, Math.PI / 2);
   bowl.scale(...BOWL_SIZE);
   addMesh(context, spoon, bowl, 'spoon', 'steel');
   const handle = new TubeGeometry(
@@ -96,7 +96,7 @@ export class SpoonAndBite {
     for (let index = 0; index < FROST.count; index += 1) {
       const direction = new Vector3(random() - 0.5, random() - 0.2, random() - 0.5).normalize();
       this.sparks.push(direction);
-      this.phases.push(random() * Math.PI * 2);
+      this.phases.push(random() * FULL_TURN);
     }
     const sparkle = registeredMaterial(
       context,

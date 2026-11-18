@@ -1,6 +1,6 @@
 import { AdditiveBlending, CatmullRomCurve3, Color, Vector3 } from 'three';
 import type { Object3D, Texture } from 'three';
-import { clamp, lerp, smoothstep } from '@core/math';
+import { FULL_TURN, clamp, lerp, smoothstep } from '@core/math';
 import { PointCloud, createPointMaterial } from '@core/scene/pointCloud';
 import { ODORANT_IDS } from '../../ids';
 import type { OdorantId, OdorantLevels } from '../../ids';
@@ -68,7 +68,7 @@ export class AromaStream {
           pace: 1 + (random() - 0.5) * PACE_SPREAD,
           threshold: (index + random()) / look.perOdorant,
           offset: new Vector3(random() - 0.5, random() - 0.5, random() - 0.5).multiplyScalar(2),
-          spin: random() * Math.PI * 2,
+          spin: random() * FULL_TURN,
         });
       }
     });

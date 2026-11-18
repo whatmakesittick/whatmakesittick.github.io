@@ -7,7 +7,6 @@ import {
   BITE_SPOT,
   COLUMN_SCATTER,
   CUT_PAPILLA,
-  HARD_PALATE,
   HEAD_BOX,
   LINEUP_Y,
   NASAL_CAVITY,
@@ -55,7 +54,6 @@ describe('layout', () => {
 
   it('puts the smell patch on the cavity roof, above the palate, under the bulb', () => {
     expect(SMELL_PATCH.centre[1]).toBeGreaterThan(NASAL_CAVITY.y[1]);
-    expect(SMELL_PATCH.centre[1]).toBeGreaterThan(HARD_PALATE.y);
     expect(OLFACTORY_BULB[1]).toBeGreaterThan(SMELL_PATCH.centre[1]);
   });
 

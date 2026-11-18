@@ -1,5 +1,5 @@
 import { BufferAttribute, BufferGeometry, Vector2 } from 'three';
-import { FULL_TURN, lerp, smoothstep } from '@core/math';
+import { FULL_TURN, clamp, lerp, smoothstep } from '@core/math';
 import type { Point } from '../../ids';
 
 export interface DomeShape {
@@ -64,7 +64,7 @@ export function byAngle(outline: readonly Vector2[], centre: Point, count: numbe
     const from = closedAngles[segment];
     const to = closedAngles[segment + 1];
     const share = to > from ? (angle - from) / (to - from) : 0;
-    return closed[segment].clone().lerp(closed[segment + 1], Math.min(1, Math.max(0, share)));
+    return closed[segment].clone().lerp(closed[segment + 1], clamp(share, 0, 1));
   });
 }
 
