@@ -1,0 +1,300 @@
+{
+  "meta": {
+    "title": "Pourquoi la glace à la cerise a le goût de cerise",
+    "eyebrow": "Goût et odorat",
+    "tagline": "Ta langue reconnaît le sucré et un peu d’acide, et tes nerfs sentent le froid. La cerise, elle, est une odeur qui monte jusqu’à ton nez depuis l’intérieur de ta bouche.",
+    "description": "Suis une cuillerée de glace à la cerise en 3D, de la langue au nez, et découvre comment le benzaldéhyde donne aux bonbons à la cerise une odeur d’amande.",
+    "summary": "Ce que la langue sait dire, deux chemins vers le nez, l’odeur comme un motif, la cerise démontée, l’atelier de l’aromaticien, et pourquoi la glace demande plus d’arôme.",
+    "socialAlt": "Une tête vue en coupe, une petite bouchée de glace rose à la cerise sur la langue et l’arôme qui monte derrière le palais jusqu’au nez, à côté du titre « Pourquoi la glace à la cerise a le goût de cerise »"
+  },
+  "stage": {
+    "label": "Modèle interactif de la glace à la cerise",
+    "gauge": "Bouchée, arôme et ce que tu perçois, en direct"
+  },
+  "timeline": {
+    "label": "Bouchée",
+    "phases": "Aller à un moment de la bouchée",
+    "value": "{{seconds}} s",
+    "before": "{{seconds}} s avant la bouchée, {{phase}}",
+    "during": "{{seconds}} s après le début de la bouchée, {{phase}}",
+    "speed": "Vitesse",
+    "speedValue": "{{factor}}×",
+    "realTime": "Rythme du modèle",
+    "slower": "{{factor}} fois plus lent",
+    "faster": "{{factor}} fois plus rapide",
+    "phase": {
+      "spoon": "Cuillère",
+      "tongue": "Sur la langue",
+      "melting": "Ça fond",
+      "rising": "L’arôme monte",
+      "receptors": "Les récepteurs s’activent",
+      "swallow": "On avale"
+    },
+    "jump": {
+      "spoon": "Aller à la cuillère sous ton nez",
+      "tongue": "Aller à la bouchée sur ta langue",
+      "melting": "Aller à la bouchée qui fond",
+      "rising": "Aller à l’arôme qui monte",
+      "receptors": "Aller aux récepteurs de l’odorat qui s’activent",
+      "swallow": "Aller au moment où tu avales"
+    },
+    "detail": {
+      "spoon": "la cuillère passe sous ton nez",
+      "tongue": "la bouchée froide se pose sur ta langue",
+      "melting": "la bouchée fond et libère son arôme",
+      "rising": "ton souffle emporte l’arôme derrière le palais",
+      "receptors": "les récepteurs de l’odorat s’activent selon un motif",
+      "swallow": "tu avales, et une dernière bouffée d’arôme atteint ton nez"
+    }
+  },
+  "controls": {
+    "label": "Commandes du modèle",
+    "scale": "Vue",
+    "scaleOptions": {
+      "head": "Tête",
+      "tongue": "Langue",
+      "molecules": "Molécules"
+    },
+    "groups": {
+      "scale": "Vue",
+      "nose": "Nez",
+      "food": "Aliment",
+      "sniff": "Sentir",
+      "recipe": "Recette"
+    },
+    "noseOptions": {
+      "open": "Nez libre",
+      "pinched": "Nez pincé"
+    },
+    "foodOptions": {
+      "cherry": "Griotte",
+      "sweets": "Bonbons à la cerise",
+      "marzipan": "Pâte d’amande"
+    },
+    "sniffOptions": {
+      "mix": "Tout le mélange",
+      "benzaldehyde": "Benzaldéhyde",
+      "hexenal": "Hexénal",
+      "linalool": "Linalol",
+      "eugenol": "Eugénol",
+      "ionone": "Bêta-ionone"
+    },
+    "recipeOptions": {
+      "fruit": "Comme le fruit",
+      "sweets": "Comme les bonbons",
+      "clear": "Flacon vide"
+    },
+    "views": {
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      },
+      "pinched": {
+        "name": "Pincer le nez",
+        "short": "Pincer",
+        "hint": "Pincer le nez (N)"
+      }
+    }
+  },
+  "readouts": {
+    "temperature": "Glace",
+    "aroma": "Arôme libéré",
+    "perceived": "Tu perçois",
+    "swallowed": "Avalé"
+  },
+  "percept": {
+    "nothing": "Rien pour l’instant",
+    "smell": "Au nez : {{smell}}",
+    "cold": "Froid",
+    "sweet": "Froid et sucré",
+    "flavor": "Sucré, au goût de {{smell}}",
+    "pinched": "Juste sucré et froid. Odeur coupée : {{smell}}",
+    "aftertaste": "Une dernière bouffée : {{smell}}",
+    "gone": "Plus rien"
+  },
+  "smells": {
+    "cherry": "cerise",
+    "sweets": "bonbon à la cerise",
+    "marzipan": "pâte d’amande",
+    "new": "quelque chose de nouveau",
+    "empty": "rien"
+  },
+  "odorants": {
+    "benzaldehyde": "Benzaldéhyde",
+    "hexenal": "Hexénal",
+    "linalool": "Linalol",
+    "eugenol": "Eugénol",
+    "ionone": "Bêta-ionone"
+  },
+  "notes": {
+    "almond": "amande amère",
+    "green": "herbe coupée",
+    "floral": "fleurs",
+    "clove": "clou de girofle",
+    "violet": "violette"
+  },
+  "units": {
+    "seconds": "{{value}} s",
+    "celsius": "{{value}} °C",
+    "percent": "{{value}} %"
+  },
+  "chapters": {
+    "tongue": {
+      "temp": "Température de la bouchée",
+      "sweet": "Sucré, par les cellules du goût",
+      "sour": "Acide, par les cellules du goût",
+      "cold": "Froid, par les nerfs sensibles à la température",
+      "tastes": "Saveurs de base",
+      "tastesValue": "cinq : sucré, acide, salé, amer, umami",
+      "cells": "Cellules dans un bourgeon du goût",
+      "cellsValue": "environ 50 à 100",
+      "buds": "Bourgeons du goût sur la langue",
+      "budsValue": "quelques milliers",
+      "sweetReceptor": "Récepteurs du sucré",
+      "sweetReceptorValue": "un seul, fait de deux parties",
+      "dulls": "Le sucré faiblit en dessous de",
+      "dullsValue": "environ 12 °C"
+    },
+    "routes": {
+      "ortho": "Arôme reniflé",
+      "retro": "Arôme venu de la bouche",
+      "notice": "Tu perçois",
+      "named": "Deux façons de sentir, décrites par",
+      "namedValue": "Paul Rozin, 1982",
+      "demo": "Nez pincé",
+      "demoValue": "sucré, un peu acide, pas de fruit"
+    },
+    "receptors": {
+      "firing": "Types de récepteurs actifs",
+      "firingValue": "{{count}} sur {{total}} dessinés",
+      "sniffed": "Tu sens",
+      "types": "Types de récepteurs de l’odorat",
+      "typesValue": "environ 400",
+      "sweetTypes": "Récepteurs pour tout le sucré",
+      "sweetTypesValue": "1",
+      "code": "Une odeur, c’est",
+      "codeValue": "un motif de nombreux récepteurs",
+      "nobel": "Prix Nobel pour les récepteurs de l’odorat",
+      "nobelValue": "2004, Axel et Buck"
+    },
+    "cherry": {
+      "main": "Note principale",
+      "mainValue": "{{odorant}} : {{note}}",
+      "share": "Part de la note principale dans le mélange",
+      "keyOdorants": "Molécules clés de l’odeur de la griotte",
+      "keyOdorantsValue": "sept",
+      "volatiles": "Molécules d’arôme de la cerise douce",
+      "volatilesValue": "97 trouvées, 18 assez fortes pour être senties",
+      "formula": "Benzaldéhyde",
+      "formulaValue": "C₇H₆O",
+      "smellsOf": "Le benzaldéhyde sent",
+      "smellsOfValue": "l’amande amère et la cerise",
+      "drop": "Une goutte se sent dans",
+      "dropValue": "environ une baignoire d’eau"
+    },
+    "desk": {
+      "smell": "Ça sent",
+      "match": "Ressemblance avec le fruit",
+      "drops": "Gouttes dans le flacon",
+      "almondOil": "Huile d’amande amère",
+      "almondOilValue": "environ 98 % de benzaldéhyde",
+      "plants": "Benzaldéhyde tiré des plantes",
+      "plantsValue": "environ 1,5 % de la production",
+      "rank": "Molécules d’arôme les plus précieuses",
+      "rankValue": "deuxième, après la vanilline",
+      "euNatural": "« Arôme naturel de cerise » dans l’Union européenne",
+      "euNaturalValue": "au moins 95 % issu de la cerise",
+      "kernels": "Amandes de noyaux crues",
+      "kernelsValue": "à ne pas manger"
+    },
+    "iceCream": {
+      "serving": "Température de service",
+      "fat": "Matière grasse du lait",
+      "released": "Arôme libéré maintenant",
+      "peak": "Arôme maximal au nez",
+      "melted": "Bouchée fondue",
+      "fatLaw": "Matière grasse du lait dans la glace",
+      "fatLawValue": "au moins 10 %, jusqu’à environ 20 % pour les glaces haut de gamme",
+      "served": "Servie en général à",
+      "servedValue": "environ −12 °C",
+      "dose": "Arôme de cerise dans le mélange",
+      "doseValue": "environ 1 à 2 %"
+    }
+  },
+  "parts": {
+    "spoon": "Cuillère",
+    "bite": "Bouchée de glace",
+    "tongue": "Langue",
+    "palate": "Palais, le plafond de la bouche",
+    "airway": "Passage vers le nez",
+    "throat": "Gorge",
+    "nostrils": "Narines",
+    "nasalCavity": "Fosse nasale",
+    "smellPatch": "Zone de l’odorat",
+    "olfactoryBulb": "Bulbe olfactif",
+    "papilla": "Papille, une bosse sur la langue",
+    "tasteBud": "Bourgeon du goût",
+    "nerve": "Fibres nerveuses",
+    "melt": "Glace fondue",
+    "iceCrystal": "Cristal de glace",
+    "fatDroplet": "Gouttelette de gras",
+    "airBubble": "Bulle d’air",
+    "aromaCloud": "Arôme qui s’échappe",
+    "benzaldehyde": "Benzaldéhyde, C₇H₆O",
+    "hexenal": "Hexénal, note verte",
+    "linalool": "Linalol, note florale",
+    "eugenol": "Eugénol, clou de girofle",
+    "ionone": "Bêta-ionone, violette",
+    "receptors": "Cellules réceptrices de l’odorat",
+    "neuron": "Neurone de l’odorat",
+    "mucus": "Couche de mucus"
+  },
+  "sections": {
+    "tongue": {
+      "title": "Ce que la langue sait dire",
+      "p1": "Prends une cuillerée de glace à la griotte et laisse-la sur ta <strong>langue</strong>. Ta langue peut te dire cinq choses, les cinq <strong>saveurs de base</strong> : sucré, acide, salé, amer et umami. L’umami, c’est le goût savoureux du bouillon et du fromage. Chaque saveur a sa propre sorte de <strong>cellule du goût</strong>. Tu as peut-être déjà vu une carte de la langue avec une zone par saveur. Cette carte est un mythe : toutes les parties de la langue qui ont des bourgeons du goût perçoivent les cinq.",
+      "p2": "Les petites bosses sur ta langue s’appellent des <strong>papilles</strong>. Beaucoup d’entre elles portent des <strong>bourgeons du goût</strong>, et tu en as quelques milliers. Chaque bourgeon est un petit groupe d’environ 50 à 100 cellules. Le sucré est capté par un seul récepteur, fait de deux parties qui travaillent en duo. Avec cette glace, ta langue annonce donc du sucré, et un peu d’acide venu de la griotte.",
+      "p3": "Et le froid, et la sensation onctueuse et crémeuse ? Ce ne sont pas des saveurs du tout. Le froid est senti par des <strong>nerfs sensibles à la température</strong> dans ta bouche. Le crémeux est senti par le toucher. Les deux t’en disent beaucoup sur la glace, mais rien sur la cerise.",
+      "p4": "Le froid change quand même le goût. La glace est en général servie vers −12 °C, et ta bouche est à environ 37 °C. En dessous d’environ 12 °C, le sucré paraît plus faible, et le froid le fait aussi s’effacer plus vite. Regarde les compteurs. Une fois la bouchée fondue, le sucré monte et le froid s’efface. Pourtant, rien sur la langue ne dit cerise.",
+      "p5": "Les secondes de la frise ne sont qu’un repère. Personne n’a mesuré combien de temps une cuillerée met à fondre dans la bouche. Le modèle découpe une bouchée en six étapes pour que tu puisses la suivre, mais dans une vraie bouche, elles se chevauchent. La façon dont la bouchée se réchauffe est aussi une esquisse du modèle. Choisis Tête ou Molécules pour voir la même bouchée autrement."
+    },
+    "routes": {
+      "title": "Deux chemins vers le nez",
+      "p1": "Alors, d’où vient la cerise ? De ton nez. Les odeurs peuvent l’atteindre par deux chemins. Quand tu renifles, l’air les fait entrer par tes <strong>narines</strong>. Ce premier chemin s’appelle l’olfaction <strong>orthonasale</strong>, c’est-à-dire sentir par l’avant.",
+      "p2": "Le second chemin part de l’intérieur de ta bouche. Pendant que la bouchée fond, de l’arôme s’en échappe. Chaque fois que tu expires, l’air emporte cet arôme derrière le <strong>palais</strong>, le plafond de ta bouche, et le fait entrer dans ton nez par l’arrière. C’est l’olfaction <strong>rétronasale</strong>, sentir par l’arrière. Elle joue surtout quand tu mâches et quand tu avales.",
+      "p3": "Les deux chemins mènent à la même <strong>zone de l’odorat</strong>, tout en haut de la <strong>fosse nasale</strong>, l’espace à l’intérieur de ton nez. Pourtant, une odeur venue de la bouche donne l’impression de venir de la langue. C’est pour ça qu’on parle de goût, alors que c’est une odeur. Le psychologue Paul Rozin a écrit sur ces deux faces de l’odorat en 1982.",
+      "p4": "Tu peux le vérifier avec un bonbon aux fruits. Pince-toi le nez et mâche. Tu ne perçois que du sucré, et peut-être un peu d’acide. Puis relâche, et le fruit arrive en un instant. Choisis Nez pincé pour essayer sur le modèle. L’essentiel de ce qu’on appelle le goût de cerise vient de l’odorat."
+    },
+    "receptors": {
+      "title": "Une odeur est un motif",
+      "p1": "La zone de l’odorat est remplie de millions de <strong>neurones de l’odorat</strong>, des cellules nerveuses qui captent les odeurs. Leurs extrémités plongent dans une fine couche de <strong>mucus</strong>. Chaque neurone porte des <strong>récepteurs</strong> d’une seule sorte. Un récepteur fonctionne comme une minuscule serrure, qui n’accepte que certaines clés. Quand une molécule qui lui convient s’y pose, le neurone s’active et envoie un signal au <strong>bulbe olfactif</strong>.",
+      "p2": "Ton nez possède environ 400 types de récepteurs de l’odorat. Compare avec le sucré, où un seul récepteur fait tout le travail. Richard Axel et Linda Buck ont découvert les récepteurs de l’odorat, et ils ont reçu pour cela le prix Nobel en 2004.",
+      "p3": "Il n’existe pas un récepteur par odeur. Un type de récepteur capte plusieurs molécules différentes. Et une molécule active plusieurs types de récepteurs. Chaque odeur est donc un <strong>motif</strong> de récepteurs qui s’activent ensemble, un peu comme un accord au piano. L’équipe de Linda Buck l’a montré en 1999.",
+      "p4": "Choisis une molécule ci-dessous et regarde les récepteurs qu’elle active. Puis choisis tout le mélange : le motif de la cerise, ce sont toutes ces molécules à la fois. Le modèle ne dessine que 40 types de récepteurs, et non environ 400. Les récepteurs que chaque molécule active sont une invention du modèle : vois ce motif comme une idée, pas comme une carte."
+    },
+    "cherry": {
+      "title": "La cerise démontée",
+      "p1": "Comment les scientifiques trouvent-ils ce qui donne à la cerise son odeur de cerise ? Un appareil appelé <strong>chromatographe en phase gazeuse</strong> sépare l’arôme, une molécule après l’autre. Un <strong>spectromètre de masse</strong> donne ensuite le nom de chacune. À un <strong>port olfactif</strong>, une personne sent chaque molécule à sa sortie et dit lesquelles ont vraiment une odeur. En diluant l’échantillon encore et encore, on voit quelles odeurs sont les plus fortes.",
+      "p2": "Dans la <strong>griotte</strong>, cette méthode a trouvé sept <strong>molécules clés</strong>, celles qui portent l’odeur. La principale est le <strong>benzaldéhyde</strong>. Avec lui viennent des notes vertes de feuille, comme l’<strong>hexénal</strong>, le <strong>linalol</strong> fleuri et l’<strong>eugénol</strong>, qui rappelle le clou de girofle. La cerise douce est différente. Une étude y a trouvé 97 molécules d’arôme, et seulement 18 étaient assez fortes pour être senties. Chez elle, ce sont les notes vertes et la <strong>bêta-ionone</strong>, qui sent la violette, qui dominent.",
+      "p3": "Le benzaldéhyde, C<sub>7</sub>H<sub>6</sub>O, est un anneau de six atomes de carbone avec un petit groupe d’atomes sur le côté. Il sent l’amande amère et la cerise. Et il est puissant : une seule goutte se sentirait dans environ une baignoire d’eau. C’est aussi l’odeur de la <strong>pâte d’amande</strong>, souvent parfumée à l’huile d’amande amère. Cette huile est presque du benzaldéhyde pur.",
+      "p4": "Les bonbons à la cerise misent sur le benzaldéhyde et laissent de côté les notes vertes et fleuries du fruit frais. Voilà pourquoi ils sentent plus l’amande que la cerise. Choisis Bonbons à la cerise, puis Pâte d’amande, pour comparer les mélanges. La note principale reste la même. C’est tout ce qui l’entoure qui change.",
+      "p5": "Le modèle dessine cinq des molécules clés. La quantité de chacune dans un mélange est une estimation du modèle, dans l’ordre où les études les classent, le benzaldéhyde en tête. Aucune de ces quantités n’est mesurée. Les mélanges des bonbons et de la pâte d’amande sont des profils typiques, pas de vraies recettes. Seul le benzaldéhyde est dessiné atome par atome. Les quatre autres sont des formes simples."
+    },
+    "desk": {
+      "title": "L’atelier de l’aromaticien",
+      "p1": "Un <strong>aromaticien</strong> est une personne qui crée des arômes pour les aliments. Pour faire de la cerise, il ne copie pas tout le fruit. Il choisit les quelques molécules qui comptent le plus, bien moins que ce que le fruit contient, puis il goûte et ajuste. À toi de jouer : bouge les curseurs pour ajouter des gouttes de chaque molécule, et découvre ce que sent ton mélange.",
+      "p2": "D’où vient le benzaldéhyde ? Une source, ce sont les <strong>amandes de noyaux</strong>, les graines cachées dans les noyaux des fruits, comme les amandes amères et les amandes d’abricot. L’huile d’amande amère purifiée contient environ 98 % de benzaldéhyde. Une autre source est l’<strong>huile de cassia</strong>, tirée de l’écorce d’un arbre cousin de la cannelle. Aux États-Unis, le benzaldéhyde fabriqué à partir de cette huile est vendu comme naturel. Dans l’Union européenne, on ne sait pas encore s’il compte comme naturel.",
+      "p3": "Pourtant, la plupart du benzaldéhyde est fabriqué à partir du <strong>toluène</strong>, un produit chimique tiré du pétrole. Seulement 1,5 % environ vient des plantes. Le benzaldéhyde est la deuxième molécule d’arôme la plus précieuse, après la vanilline, l’odeur de la vanille. La molécule est exactement la même quelle que soit sa fabrication, et son odeur aussi. Seule l’étiquette change. Dans l’Union européenne, un « arôme naturel de cerise » doit venir de la cerise pour au moins 95 %.",
+      "p4": "Un mot de prudence. Les amandes de noyaux ne contiennent pas de benzaldéhyde tout prêt. Quand on écrase une amande de noyau, elle fabrique du benzaldéhyde, mais aussi du <strong>cyanure</strong>, un poison. Une seule petite amande d’abricot crue peut déjà être de trop pour un tout-petit. Alors ne mange jamais d’amandes de noyaux crues, et ne casse jamais les noyaux pour y goûter. L’arôme de la glace, lui, est différent : c’est un ingrédient purifié, contrôlé et autorisé dans les aliments."
+    },
+    "iceCream": {
+      "title": "Pourquoi la glace demande plus d’arôme",
+      "p1": "Tu ne peux sentir que les molécules qui passent dans l’air. Un arôme enfermé dans la bouchée ne fait rien. Le froid le garde enfermé, alors une bouchée gelée en libère très peu. Quand la bouchée fond et se réchauffe dans ta bouche, de plus en plus d’arôme s’échappe. Dans une étude, une glace à la vanille servie à −9 °C avait plus de goût qu’à −14 °C.",
+      "p2": "Le gras compte aussi. Les molécules de la cerise <strong>aiment le gras</strong> : elles s’y dissolvent et aiment y rester. Dans une glace riche, le gras retient donc la cerise. Dans une glace allégée, la cerise sort plus vite et plus fort. Pour la vanille, c’est l’inverse.",
+      "p3": "Aux États-Unis, la glace doit contenir au moins 10 % de matière grasse du lait, et les glaces haut de gamme jusqu’à environ 20 %. Avec le froid et le gras, une grande partie de l’arôme reste enfermée. Les aromaticiens en ajoutent donc davantage : l’arôme de cerise fait environ 1 à 2 % du mélange. Essaie les curseurs. Une glace servie moins froide ou moins grasse laisse plus d’arôme atteindre ton nez.",
+      "p4": "Maintenant, rassemblons tout. Ta langue te dit sucré et un peu acide. Tes nerfs sentent le froid et le crémeux. Et ton nez, qui reçoit l’arôme par l’arrière du palais, te dit cerise. Pince-le, et la cerise disparaît.",
+      "p5": "La force avec laquelle le froid et le gras retiennent l’arôme est une estimation du modèle. Les études montrent dans quel sens chacun agit, mais pas de combien. Lis donc ces nombres comme une esquisse, pas comme une mesure. Chaque pourcentage de cette page se compare au maximum que cette valeur atteint dans le modèle. Aucun n’est une part du goût."
+    }
+  }
+}

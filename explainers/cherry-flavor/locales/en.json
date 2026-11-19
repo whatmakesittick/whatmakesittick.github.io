@@ -1,0 +1,300 @@
+{
+  "meta": {
+    "title": "Why cherry ice cream tastes of cherry",
+    "eyebrow": "Taste and smell",
+    "tagline": "Your tongue finds sweet and a little sour, and nerves feel the cold. The cherry itself is a smell that reaches your nose from inside your mouth.",
+    "description": "Follow a spoon of cherry ice cream in 3D, from tongue to nose: why cherry is a smell, and why benzaldehyde makes cherry sweets smell of almond.",
+    "summary": "What the tongue can tell, two ways into the nose, smell as a pattern, cherry taken apart, the flavorist's desk, and why ice cream needs more flavor.",
+    "socialAlt": "A cut-away head with a small bite of pink cherry ice cream on the tongue and aroma rising behind the palate to the nose, next to the title Why cherry ice cream tastes of cherry"
+  },
+  "stage": {
+    "label": "Interactive cherry ice cream model",
+    "gauge": "Live bite, aroma and what you notice"
+  },
+  "timeline": {
+    "label": "Bite",
+    "phases": "Jump to a moment of the bite",
+    "value": "{{seconds}} s",
+    "before": "{{seconds}} s before the bite, {{phase}}",
+    "during": "{{seconds}} s into the bite, {{phase}}",
+    "speed": "Playback",
+    "speedValue": "{{factor}}×",
+    "realTime": "Model pace",
+    "slower": "{{factor}} times slower",
+    "faster": "{{factor}} times faster",
+    "phase": {
+      "spoon": "Spoon",
+      "tongue": "On the tongue",
+      "melting": "Melting",
+      "rising": "Aroma rises",
+      "receptors": "Receptors fire",
+      "swallow": "Swallow"
+    },
+    "jump": {
+      "spoon": "Jump to the spoon under your nose",
+      "tongue": "Jump to the bite on your tongue",
+      "melting": "Jump to the melting bite",
+      "rising": "Jump to the aroma rising",
+      "receptors": "Jump to the smell receptors firing",
+      "swallow": "Jump to the swallow"
+    },
+    "detail": {
+      "spoon": "the spoon passes under your nose",
+      "tongue": "the cold bite lands on your tongue",
+      "melting": "the bite melts and lets its aroma go",
+      "rising": "your breath carries the aroma up behind the palate",
+      "receptors": "smell receptors fire in a pattern",
+      "swallow": "you swallow, and a last puff of aroma reaches your nose"
+    }
+  },
+  "controls": {
+    "label": "Model controls",
+    "scale": "View",
+    "scaleOptions": {
+      "head": "Head",
+      "tongue": "Tongue",
+      "molecules": "Molecules"
+    },
+    "groups": {
+      "scale": "View",
+      "nose": "Nose",
+      "food": "Food",
+      "sniff": "Sniff",
+      "recipe": "Recipe"
+    },
+    "noseOptions": {
+      "open": "Nose open",
+      "pinched": "Nose pinched"
+    },
+    "foodOptions": {
+      "cherry": "Sour cherry",
+      "sweets": "Cherry sweets",
+      "marzipan": "Marzipan"
+    },
+    "sniffOptions": {
+      "mix": "Whole mix",
+      "benzaldehyde": "Benzaldehyde",
+      "hexenal": "Hexenal",
+      "linalool": "Linalool",
+      "eugenol": "Eugenol",
+      "ionone": "Beta-ionone"
+    },
+    "recipeOptions": {
+      "fruit": "Like the fruit",
+      "sweets": "Like sweets",
+      "clear": "Empty bottle"
+    },
+    "views": {
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      },
+      "pinched": {
+        "name": "Pinch nose",
+        "short": "Pinch",
+        "hint": "Pinch nose (N)"
+      }
+    }
+  },
+  "readouts": {
+    "temperature": "Ice cream",
+    "aroma": "Aroma released",
+    "perceived": "You notice",
+    "swallowed": "Swallowed"
+  },
+  "percept": {
+    "nothing": "Nothing yet",
+    "smell": "A whiff of {{smell}}",
+    "cold": "Cold",
+    "sweet": "Cold and sweet",
+    "flavor": "Sweet and {{smell}}",
+    "pinched": "Just sweet and cold. Missing: {{smell}}",
+    "aftertaste": "A last breath of {{smell}}",
+    "gone": "Nothing left"
+  },
+  "smells": {
+    "cherry": "cherry",
+    "sweets": "cherry sweets",
+    "marzipan": "marzipan",
+    "new": "something new",
+    "empty": "nothing"
+  },
+  "odorants": {
+    "benzaldehyde": "Benzaldehyde",
+    "hexenal": "Hexenal",
+    "linalool": "Linalool",
+    "eugenol": "Eugenol",
+    "ionone": "Beta-ionone"
+  },
+  "notes": {
+    "almond": "bitter almond",
+    "green": "cut grass",
+    "floral": "flowers",
+    "clove": "clove",
+    "violet": "violets"
+  },
+  "units": {
+    "seconds": "{{value}} s",
+    "celsius": "{{value}} °C",
+    "percent": "{{value}} %"
+  },
+  "chapters": {
+    "tongue": {
+      "temp": "Bite temperature",
+      "sweet": "Sweet, from taste cells",
+      "sour": "Sour, from taste cells",
+      "cold": "Cold, from temperature nerves",
+      "tastes": "Basic tastes",
+      "tastesValue": "five: sweet, sour, salty, bitter, umami",
+      "cells": "Cells in one taste bud",
+      "cellsValue": "about 50 to 100",
+      "buds": "Taste buds on the tongue",
+      "budsValue": "a few thousand",
+      "sweetReceptor": "Receptors for sweet",
+      "sweetReceptorValue": "one, built from two parts",
+      "dulls": "Sweetness weakens below",
+      "dullsValue": "about 12 °C"
+    },
+    "routes": {
+      "ortho": "Aroma by sniffing",
+      "retro": "Aroma from inside the mouth",
+      "notice": "You notice",
+      "named": "Two ways of smelling, described by",
+      "namedValue": "Paul Rozin, 1982",
+      "demo": "Nose pinched",
+      "demoValue": "sweet, a little sour, no fruit"
+    },
+    "receptors": {
+      "firing": "Receptor types firing",
+      "firingValue": "{{count}} of {{total}} drawn",
+      "sniffed": "Smelling",
+      "types": "Smell receptor types",
+      "typesValue": "about 400",
+      "sweetTypes": "Receptors for all of sweet",
+      "sweetTypesValue": "1",
+      "code": "One smell is",
+      "codeValue": "a pattern of many receptors",
+      "nobel": "Nobel Prize for smell receptors",
+      "nobelValue": "2004, Axel and Buck"
+    },
+    "cherry": {
+      "main": "Main note",
+      "mainValue": "{{odorant}}: {{note}}",
+      "share": "Main note in the mix",
+      "keyOdorants": "Key odorants in sour cherry",
+      "keyOdorantsValue": "seven",
+      "volatiles": "Aroma molecules in sweet cherry",
+      "volatilesValue": "97 found, 18 strong enough to smell",
+      "formula": "Benzaldehyde",
+      "formulaValue": "C₇H₆O",
+      "smellsOf": "Benzaldehyde smells of",
+      "smellsOfValue": "bitter almond and cherry",
+      "drop": "One drop can be smelled in",
+      "dropValue": "about a bathtub of water"
+    },
+    "desk": {
+      "smell": "Smells like",
+      "match": "Match with the fruit",
+      "drops": "Drops in the bottle",
+      "almondOil": "Bitter almond oil",
+      "almondOilValue": "about 98 % benzaldehyde",
+      "plants": "Benzaldehyde from plants",
+      "plantsValue": "about 1.5 % of all made",
+      "rank": "Most valuable flavor molecules",
+      "rankValue": "second, after vanillin",
+      "euNatural": "“Natural cherry flavoring” in the EU",
+      "euNaturalValue": "at least 95 % from cherry",
+      "kernels": "Raw fruit kernels",
+      "kernelsValue": "not for eating"
+    },
+    "iceCream": {
+      "serving": "Serving temperature",
+      "fat": "Milk fat",
+      "released": "Aroma released now",
+      "peak": "Most aroma at the nose",
+      "melted": "Bite melted",
+      "fatLaw": "Milk fat in ice cream",
+      "fatLawValue": "at least 10 %, premium up to about 20 %",
+      "served": "Usually served at",
+      "servedValue": "about −12 °C",
+      "dose": "Cherry flavoring in the mix",
+      "doseValue": "about 1 to 2 %"
+    }
+  },
+  "parts": {
+    "spoon": "Spoon",
+    "bite": "Bite of ice cream",
+    "tongue": "Tongue",
+    "palate": "Palate, the roof of the mouth",
+    "airway": "Airway to the nose",
+    "throat": "Throat",
+    "nostrils": "Nostrils",
+    "nasalCavity": "Nasal cavity",
+    "smellPatch": "Smell patch",
+    "olfactoryBulb": "Smell bulb",
+    "papilla": "Papilla, a bump on the tongue",
+    "tasteBud": "Taste bud",
+    "nerve": "Nerve fibers",
+    "melt": "Melted ice cream",
+    "iceCrystal": "Ice crystal",
+    "fatDroplet": "Fat droplet",
+    "airBubble": "Air bubble",
+    "aromaCloud": "Aroma escaping",
+    "benzaldehyde": "Benzaldehyde, C₇H₆O",
+    "hexenal": "Hexenal, green",
+    "linalool": "Linalool, flowery",
+    "eugenol": "Eugenol, clove",
+    "ionone": "Beta-ionone, violets",
+    "receptors": "Smell receptor cells",
+    "neuron": "Smell neuron",
+    "mucus": "Mucus layer"
+  },
+  "sections": {
+    "tongue": {
+      "title": "What the tongue can tell",
+      "p1": "Take a spoon of sour-cherry ice cream and let it rest on your <strong>tongue</strong>. Your tongue can tell you five things, the five <strong>basic tastes</strong>: sweet, sour, salty, bitter and umami. Umami is the savory taste of broth and cheese. Each taste has its own kind of <strong>taste cell</strong>. You may have seen a map of the tongue with one zone per taste. That map is a myth: every part of the tongue with taste buds senses all five.",
+      "p2": "The tiny bumps on your tongue are called <strong>papillae</strong>. Many of them hold <strong>taste buds</strong>, and you have a few thousand. Each bud is a small cluster of about 50 to 100 cells. Sweet is caught by a single receptor. It is built from two parts that work as a pair. So from this ice cream, your tongue reports sweet, and a little sour from the tart cherry.",
+      "p3": "What about the cold, and the soft, creamy feel? Those are not tastes at all. Cold is felt by <strong>temperature nerves</strong> in your mouth. Creaminess is felt by touch. Both tell you a lot about the ice cream, but nothing about cherry.",
+      "p4": "Cold does change taste, though. Ice cream is usually served at about −12 °C, and your mouth is about 37 °C. Below about 12 °C, sweet tastes weaker. Cold also makes sweetness fade faster. Watch the readouts. Once the bite has melted, sweet grows and cold fades. Still, nothing on the tongue says cherry.",
+      "p5": "The seconds on the timeline are only a guide. Nobody has measured how long a spoonful takes to melt in the mouth. The model splits one bite into six steps so you can follow it. In a real mouth, the steps overlap. The way the bite warms up is the model's own sketch too. Pick Head or Molecules to look at the same bite another way."
+    },
+    "routes": {
+      "title": "Two ways into the nose",
+      "p1": "So where does the cherry come from? From your nose. Smells can reach it in two ways. When you sniff, air carries them in through your <strong>nostrils</strong>. This first way is called <strong>orthonasal</strong> smell, which means smelling from the front.",
+      "p2": "The second way starts inside your mouth. As the bite melts, aroma rises from it. Each time you breathe out, the air carries that aroma up behind the <strong>palate</strong>, the roof of your mouth, and into your nose from the back. This is <strong>retronasal</strong> smell, smelling from behind. It happens most while you chew and swallow.",
+      "p3": "Both ways end at the same <strong>smell patch</strong>, high up in the <strong>nasal cavity</strong>, the space inside your nose. Yet smell from inside the mouth feels as if it came from the tongue. So we call it taste, even though it is smell. The psychologist Paul Rozin wrote about these two sides of smell in 1982.",
+      "p4": "You can test this with a fruity sweet. Pinch your nose shut and chew. You notice only sweet, and maybe a little sour. Now let go, and the fruit appears within a moment. Pick Nose pinched to try it on the model. Most of what we call cherry flavor comes from smell."
+    },
+    "receptors": {
+      "title": "A smell is a pattern",
+      "p1": "The smell patch is packed with millions of <strong>smell neurons</strong>, nerve cells that sense smell. Their tips reach into a thin layer of <strong>mucus</strong>. Each neuron carries <strong>receptors</strong> of one kind. A receptor works like a tiny catcher. When a molecule it fits lands on it, the neuron fires and sends a signal up to the <strong>smell bulb</strong>.",
+      "p2": "Your nose has about 400 types of smell receptor. Compare that with sweet, where one receptor does the whole job. Richard Axel and Linda Buck found the smell receptors, and in 2004 they won the Nobel Prize for it.",
+      "p3": "There is no single receptor for each smell. One receptor type picks up several different molecules. And one molecule sets off several receptor types. So every smell is a <strong>pattern</strong> of receptors firing together, a bit like a chord on a piano. Linda Buck's team showed this in 1999.",
+      "p4": "Pick one molecule below and watch the receptors it sets off. Then pick the whole mix: the cherry pattern is all of them together. The model draws only 40 receptor types, not about 400. Which ones each molecule sets off is the model's own invention, so read the pattern as an idea, not a map."
+    },
+    "cherry": {
+      "title": "Cherry taken apart",
+      "p1": "How do scientists find out what makes cherry smell of cherry? A machine called a <strong>gas chromatograph</strong> pulls the aroma apart, one molecule after another. A <strong>mass spectrometer</strong> then names each one. At a <strong>sniffing port</strong>, a person smells each molecule as it comes out and says which ones really smell. Diluting the sample again and again shows which smells are the strongest.",
+      "p2": "In <strong>sour cherry</strong>, this found seven <strong>key odorants</strong>, the molecules that carry the smell. The main one is <strong>benzaldehyde</strong>. With it come green, leafy notes such as <strong>hexenal</strong>, flowery <strong>linalool</strong> and clove-like <strong>eugenol</strong>. Sweet cherry is different. One study found 97 aroma molecules in it, and only 18 were strong enough to smell. In sweet cherry, green notes lead, together with <strong>beta-ionone</strong>, which smells of violets.",
+      "p3": "Benzaldehyde, C<sub>7</sub>H<sub>6</sub>O, is a ring of six carbon atoms with a small group of atoms on the side. It smells of bitter almond and cherry. It is strong, too: one drop could be smelled in about a bathtub of water. It is also the smell of <strong>marzipan</strong>, which is often flavored with bitter almond oil. That oil is almost pure benzaldehyde.",
+      "p4": "Cherry sweets lean on benzaldehyde and leave out the green and flowery notes of the fresh fruit. That is why they smell more of almond than of cherries. Pick Cherry sweets, then Marzipan, to compare the mixes. The main note stays the same. What changes is everything around it.",
+      "p5": "The model draws five of the key odorants. How much of each is in a mix is the model's own guess. It follows the order the studies give, with benzaldehyde first. None of these amounts is measured. The sweets and marzipan mixes are typical shapes, not real recipes. Only benzaldehyde is drawn atom by atom; the other four are simple shapes."
+    },
+    "desk": {
+      "title": "The flavorist's desk",
+      "p1": "A <strong>flavorist</strong> is a person who creates flavors for food. To make cherry, a flavorist does not copy the whole fruit. They pick the few molecules that matter most, far fewer than the fruit holds. Then they taste and adjust. Your turn: move the sliders to add drops of each molecule, and see what your mix smells like.",
+      "p2": "Where does benzaldehyde come from? One source is fruit <strong>kernels</strong>, the seeds inside the stones, such as bitter almonds and apricot kernels. Purified bitter almond oil is about 98 % benzaldehyde. Another source is <strong>cassia oil</strong>, from the bark of a tree related to cinnamon. In the US, benzaldehyde made from it is sold as natural. In the EU, it is not settled whether it counts as natural.",
+      "p3": "Most benzaldehyde, though, is made from <strong>toluene</strong>, a chemical from crude oil. Only about 1.5 % comes from plants. Benzaldehyde is the second most valuable flavor molecule, after vanillin, the smell of vanilla. The molecule is exactly the same whichever way it is made, and so is its smell. Only the label changes. In the EU, a “natural cherry flavoring” must come at least 95 % from cherries.",
+      "p4": "One word of care. Kernels do not hold benzaldehyde ready-made. When a kernel is crushed, it makes benzaldehyde and also <strong>cyanide</strong>, a poison. Even one small raw apricot kernel can be too much for a toddler. So never eat raw fruit kernels, and never crack them open to taste. The flavoring in ice cream is different: it is a purified ingredient, checked and approved for food."
+    },
+    "iceCream": {
+      "title": "Why ice cream needs more flavor",
+      "p1": "You can only smell molecules that get into the air. Aroma locked inside the bite does nothing. Cold keeps it locked in, so a frozen bite lets out very little. As the bite melts and warms in your mouth, more and more aroma escapes. In one study, vanilla ice cream tasted stronger served at −9 °C than at −14 °C.",
+      "p2": "Fat matters too. Cherry molecules are <strong>fat-loving</strong>: they dissolve in fat and like to stay there. So in a rich ice cream, the fat holds cherry back. In a low-fat one, cherry comes out faster and stronger. Vanilla works the other way round.",
+      "p3": "In the US, ice cream must have at least 10 % milk fat, and premium kinds have up to about 20 %. With the cold and the fat, much of the aroma stays locked in. So flavorists add more: cherry flavoring makes up about 1 to 2 % of the mix. Try the sliders. A warmer serving or less fat lets more aroma reach your nose.",
+      "p4": "Now put it all together. Your tongue tells you sweet and a little sour. Your nerves feel the cold and the cream. And your nose, which gets the aroma from behind your palate, tells you cherry. Pinch it, and the cherry is gone.",
+      "p5": "How strongly cold and fat hold aroma back is the model's own estimate. Studies show which way each one works, but not by how much. So read these numbers as a sketch, not a measurement. Each percentage on this page compares with the most that readout can reach in the model. None of them is a share of flavor."
+    }
+  }
+}

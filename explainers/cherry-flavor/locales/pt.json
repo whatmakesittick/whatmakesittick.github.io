@@ -1,0 +1,300 @@
+{
+  "meta": {
+    "title": "Por que o sorvete de cereja tem gosto de cereja",
+    "eyebrow": "Paladar e olfato",
+    "tagline": "A sua língua sente o doce e um pouco de azedo, e os nervos sentem o frio. A cereja em si é um cheiro que chega ao nariz por dentro da boca.",
+    "description": "Siga uma colherada de sorvete de cereja em 3D e descubra por que cereja é cheiro: o benzaldeído, que também dá à bala o cheiro de amêndoa.",
+    "summary": "O que a língua percebe, os dois caminhos até o nariz, o cheiro como padrão, a cereja desmontada, a bancada do aromista e por que o sorvete precisa de mais aroma.",
+    "socialAlt": "Uma cabeça em corte com um pedacinho de sorvete de cereja rosa sobre a língua e o aroma subindo por trás do palato até o nariz, junto ao título “Por que o sorvete de cereja tem gosto de cereja”"
+  },
+  "stage": {
+    "label": "Modelo interativo do sorvete de cereja",
+    "gauge": "Colherada, aroma e o que você percebe, ao vivo"
+  },
+  "timeline": {
+    "label": "Colherada",
+    "phases": "Ir para um momento da colherada",
+    "value": "{{seconds}} s",
+    "before": "{{seconds}} s antes da colherada, {{phase}}",
+    "during": "{{seconds}} s depois do início da colherada, {{phase}}",
+    "speed": "Velocidade",
+    "speedValue": "{{factor}}×",
+    "realTime": "Ritmo do modelo",
+    "slower": "{{factor}} vezes mais devagar",
+    "faster": "{{factor}} vezes mais rápido",
+    "phase": {
+      "spoon": "Colher",
+      "tongue": "Na língua",
+      "melting": "Derretendo",
+      "rising": "O aroma sobe",
+      "receptors": "Receptores disparam",
+      "swallow": "Engolir"
+    },
+    "jump": {
+      "spoon": "Ir para a colher passando sob o nariz",
+      "tongue": "Ir para a colherada na língua",
+      "melting": "Ir para a colherada derretendo",
+      "rising": "Ir para o aroma subindo",
+      "receptors": "Ir para os receptores do olfato disparando",
+      "swallow": "Ir para o momento de engolir"
+    },
+    "detail": {
+      "spoon": "a colher passa sob o seu nariz",
+      "tongue": "a colherada gelada chega à língua",
+      "melting": "a colherada derrete e solta o aroma",
+      "rising": "a sua respiração leva o aroma para cima, por trás do palato",
+      "receptors": "os receptores do olfato disparam formando um padrão",
+      "swallow": "você engole, e um último sopro de aroma chega ao nariz"
+    }
+  },
+  "controls": {
+    "label": "Controles do modelo",
+    "scale": "Vista",
+    "scaleOptions": {
+      "head": "Cabeça",
+      "tongue": "Língua",
+      "molecules": "Moléculas"
+    },
+    "groups": {
+      "scale": "Vista",
+      "nose": "Nariz",
+      "food": "Alimento",
+      "sniff": "Cheirar",
+      "recipe": "Receita"
+    },
+    "noseOptions": {
+      "open": "Nariz aberto",
+      "pinched": "Nariz tapado"
+    },
+    "foodOptions": {
+      "cherry": "Cereja azeda",
+      "sweets": "Bala de cereja",
+      "marzipan": "Marzipã"
+    },
+    "sniffOptions": {
+      "mix": "Mistura toda",
+      "benzaldehyde": "Benzaldeído",
+      "hexenal": "Hexenal",
+      "linalool": "Linalol",
+      "eugenol": "Eugenol",
+      "ionone": "Beta-ionona"
+    },
+    "recipeOptions": {
+      "fruit": "Como a fruta",
+      "sweets": "Como bala",
+      "clear": "Frasco vazio"
+    },
+    "views": {
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      },
+      "pinched": {
+        "name": "Tapar o nariz",
+        "short": "Tapar",
+        "hint": "Tapar o nariz (N)"
+      }
+    }
+  },
+  "readouts": {
+    "temperature": "Sorvete",
+    "aroma": "Aroma liberado",
+    "perceived": "Você percebe",
+    "swallowed": "Engolido"
+  },
+  "percept": {
+    "nothing": "Nada ainda",
+    "smell": "Um leve cheiro de {{smell}}",
+    "cold": "Gelado",
+    "sweet": "Gelado e doce",
+    "flavor": "Doce, com sabor de {{smell}}",
+    "pinched": "Só doce e gelado, sem cheiro de {{smell}}",
+    "aftertaste": "Um último sopro de {{smell}}",
+    "gone": "Não sobrou nada"
+  },
+  "smells": {
+    "cherry": "cereja",
+    "sweets": "bala de cereja",
+    "marzipan": "marzipã",
+    "new": "algo novo",
+    "empty": "nada"
+  },
+  "odorants": {
+    "benzaldehyde": "Benzaldeído",
+    "hexenal": "Hexenal",
+    "linalool": "Linalol",
+    "eugenol": "Eugenol",
+    "ionone": "Beta-ionona"
+  },
+  "notes": {
+    "almond": "amêndoa amarga",
+    "green": "grama cortada",
+    "floral": "flores",
+    "clove": "cravo",
+    "violet": "violetas"
+  },
+  "units": {
+    "seconds": "{{value}} s",
+    "celsius": "{{value}} °C",
+    "percent": "{{value}}%"
+  },
+  "chapters": {
+    "tongue": {
+      "temp": "Temperatura da colherada",
+      "sweet": "Doce, das células gustativas",
+      "sour": "Azedo, das células gustativas",
+      "cold": "Frio, dos nervos de temperatura",
+      "tastes": "Gostos básicos",
+      "tastesValue": "cinco: doce, azedo, salgado, amargo, umami",
+      "cells": "Células em um botão gustativo",
+      "cellsValue": "cerca de 50 a 100",
+      "buds": "Botões gustativos na língua",
+      "budsValue": "alguns milhares",
+      "sweetReceptor": "Receptores do doce",
+      "sweetReceptorValue": "um, feito de duas partes",
+      "dulls": "O doce enfraquece abaixo de",
+      "dullsValue": "cerca de 12 °C"
+    },
+    "routes": {
+      "ortho": "Aroma ao cheirar",
+      "retro": "Aroma de dentro da boca",
+      "notice": "Você percebe",
+      "named": "Os dois jeitos de cheirar, descritos por",
+      "namedValue": "Paul Rozin, 1982",
+      "demo": "Nariz tapado",
+      "demoValue": "doce, um pouco azedo, sem fruta"
+    },
+    "receptors": {
+      "firing": "Tipos de receptor disparando",
+      "firingValue": "{{count}} de {{total}} desenhados",
+      "sniffed": "Cheirando",
+      "types": "Tipos de receptor do olfato",
+      "typesValue": "cerca de 400",
+      "sweetTypes": "Receptores para todo o doce",
+      "sweetTypesValue": "1",
+      "code": "Um cheiro é",
+      "codeValue": "um padrão de muitos receptores",
+      "nobel": "Prêmio Nobel pelos receptores do olfato",
+      "nobelValue": "2004, Axel e Buck"
+    },
+    "cherry": {
+      "main": "Nota principal",
+      "mainValue": "{{odorant}}: {{note}}",
+      "share": "Nota principal na mistura",
+      "keyOdorants": "Moléculas-chave do cheiro da cereja azeda",
+      "keyOdorantsValue": "sete",
+      "volatiles": "Moléculas de aroma na cereja doce",
+      "volatilesValue": "97 encontradas, 18 fortes o bastante para sentir",
+      "formula": "Benzaldeído",
+      "formulaValue": "C₇H₆O",
+      "smellsOf": "O benzaldeído tem cheiro de",
+      "smellsOfValue": "amêndoa amarga e cereja",
+      "drop": "Uma gota pode ser sentida em",
+      "dropValue": "cerca de uma banheira de água"
+    },
+    "desk": {
+      "smell": "Tem cheiro de",
+      "match": "Parecido com a fruta",
+      "drops": "Gotas no frasco",
+      "almondOil": "Óleo de amêndoa amarga",
+      "almondOilValue": "cerca de 98% de benzaldeído",
+      "plants": "Benzaldeído vindo de plantas",
+      "plantsValue": "cerca de 1,5% de todo o produzido",
+      "rank": "Moléculas de aroma mais valiosas",
+      "rankValue": "segunda, depois da vanilina",
+      "euNatural": "“Aroma natural de cereja” na União Europeia",
+      "euNaturalValue": "pelo menos 95% vindo da cereja",
+      "kernels": "Sementes cruas de frutas",
+      "kernelsValue": "não são para comer"
+    },
+    "iceCream": {
+      "serving": "Temperatura de servir",
+      "fat": "Gordura do leite",
+      "released": "Aroma liberado agora",
+      "peak": "Mais aroma no nariz",
+      "melted": "Colherada derretida",
+      "fatLaw": "Gordura do leite no sorvete",
+      "fatLawValue": "pelo menos 10%, os premium até cerca de 20%",
+      "served": "Costuma ser servido a",
+      "servedValue": "cerca de −12 °C",
+      "dose": "Aroma de cereja na mistura",
+      "doseValue": "cerca de 1 a 2%"
+    }
+  },
+  "parts": {
+    "spoon": "Colher",
+    "bite": "Colherada de sorvete",
+    "tongue": "Língua",
+    "palate": "Palato, o céu da boca",
+    "airway": "Passagem de ar até o nariz",
+    "throat": "Garganta",
+    "nostrils": "Narinas",
+    "nasalCavity": "Cavidade nasal",
+    "smellPatch": "Área do olfato",
+    "olfactoryBulb": "Bulbo olfatório",
+    "papilla": "Papila, uma saliência da língua",
+    "tasteBud": "Botão gustativo",
+    "nerve": "Fibras nervosas",
+    "melt": "Sorvete derretido",
+    "iceCrystal": "Cristal de gelo",
+    "fatDroplet": "Gotícula de gordura",
+    "airBubble": "Bolha de ar",
+    "aromaCloud": "Aroma escapando",
+    "benzaldehyde": "Benzaldeído, C₇H₆O",
+    "hexenal": "Hexenal, verde",
+    "linalool": "Linalol, floral",
+    "eugenol": "Eugenol, cravo",
+    "ionone": "Beta-ionona, violetas",
+    "receptors": "Células receptoras do olfato",
+    "neuron": "Neurônio olfatório",
+    "mucus": "Camada de muco"
+  },
+  "sections": {
+    "tongue": {
+      "title": "O que a língua percebe",
+      "p1": "Pegue uma colherada de sorvete de cereja azeda e deixe-a descansar na <strong>língua</strong>. A sua língua consegue dizer cinco coisas, os cinco <strong>gostos básicos</strong>: doce, azedo, salgado, amargo e umami. Umami é o gosto saboroso do caldo e do queijo. Cada gosto tem o seu próprio tipo de <strong>célula gustativa</strong>. Talvez você já tenha visto um mapa da língua com uma área para cada gosto. Esse mapa é um mito: toda parte da língua que tem botões gustativos sente os cinco.",
+      "p2": "As pequenas saliências da língua se chamam <strong>papilas</strong>. Muitas delas guardam <strong>botões gustativos</strong>, e você tem alguns milhares. Cada botão é um pequeno grupo de cerca de 50 a 100 células. O doce é captado por um único receptor, feito de duas partes que trabalham juntas. Então, deste sorvete, a sua língua informa o doce e um pouco de azedo, que vem da cereja azeda.",
+      "p3": "E o frio, e a sensação macia e cremosa? Isso não é gosto nenhum. O frio é sentido pelos <strong>nervos de temperatura</strong> da boca. A cremosidade é sentida pelo tato. Os dois contam muito sobre o sorvete, mas nada sobre a cereja.",
+      "p4": "Mas o frio muda o gosto, sim. O sorvete costuma ser servido a cerca de −12 °C, e a sua boca está a cerca de 37 °C. Abaixo de cerca de 12 °C, o doce fica mais fraco, e o frio também faz a doçura sumir mais depressa. Observe os valores. Depois que a colherada derrete, o doce cresce e o frio diminui. Mesmo assim, nada na língua diz cereja.",
+      "p5": "Os segundos da linha do tempo são só uma referência. Ninguém mediu quanto tempo uma colherada leva para derreter na boca. O modelo divide uma colherada em seis etapas para você poder acompanhar, mas numa boca de verdade elas se misturam. O jeito como a colherada esquenta também é um esboço do próprio modelo. Escolha Cabeça ou Moléculas para ver a mesma colherada de outro jeito."
+    },
+    "routes": {
+      "title": "Dois caminhos até o nariz",
+      "p1": "Então, de onde vem a cereja? Do seu nariz. Os cheiros podem chegar até ele de dois jeitos. Quando você fareja, o ar leva o cheiro para dentro pelas <strong>narinas</strong>. Esse primeiro caminho se chama olfato <strong>ortonasal</strong>, que quer dizer cheirar pela frente.",
+      "p2": "O segundo caminho começa dentro da boca. Enquanto a colherada derrete, o aroma sobe dela. Cada vez que você solta o ar, ele leva esse aroma para cima, por trás do <strong>palato</strong>, o céu da boca, e entra no nariz por trás. Esse é o olfato <strong>retronasal</strong>, cheirar por trás. Ele acontece mais enquanto você mastiga e engole.",
+      "p3": "Os dois caminhos terminam na mesma <strong>área do olfato</strong>, lá no alto da <strong>cavidade nasal</strong>, o espaço dentro do nariz. Mesmo assim, o cheiro que vem de dentro da boca parece vir da língua. Por isso a gente chama de gosto, mesmo sendo cheiro. O psicólogo Paul Rozin escreveu sobre esses dois lados do olfato em 1982.",
+      "p4": "Você pode testar isso com uma bala de fruta. Tape o nariz e mastigue. Você sente só o doce, e talvez um pouco de azedo. Agora solte o nariz, e a fruta aparece num instante. Escolha Nariz tapado para testar no modelo. Quase tudo o que chamamos de sabor de cereja vem do olfato."
+    },
+    "receptors": {
+      "title": "Um cheiro é um padrão",
+      "p1": "A área do olfato está cheia de milhões de <strong>neurônios olfatórios</strong>, células nervosas que sentem cheiros. As pontas deles chegam a uma fina camada de <strong>muco</strong>. Cada neurônio tem <strong>receptores</strong> de um só tipo. Um receptor funciona como uma mãozinha que agarra. Quando uma molécula que se encaixa nele pousa ali, o neurônio dispara e manda um sinal para o <strong>bulbo olfatório</strong>.",
+      "p2": "O seu nariz tem cerca de 400 tipos de receptor do olfato. Compare com o doce, em que um só receptor faz todo o trabalho. Richard Axel e Linda Buck descobriram os receptores do olfato e, em 2004, ganharam o Prêmio Nobel por isso.",
+      "p3": "Não existe um receptor só para cada cheiro. Um tipo de receptor capta várias moléculas diferentes. E uma molécula ativa vários tipos de receptor. Então cada cheiro é um <strong>padrão</strong> de receptores disparando juntos, um pouco como um acorde no piano. A equipe de Linda Buck mostrou isso em 1999.",
+      "p4": "Escolha uma molécula abaixo e veja quais receptores ela ativa. Depois escolha a mistura toda: o padrão da cereja é o de todos eles juntos. O modelo desenha só 40 tipos de receptor, e não cerca de 400. Quais receptores cada molécula ativa é invenção do próprio modelo, então veja o padrão como uma ideia, não como um mapa."
+    },
+    "cherry": {
+      "title": "A cereja desmontada",
+      "p1": "Como os cientistas descobrem o que faz a cereja ter cheiro de cereja? Uma máquina chamada <strong>cromatógrafo a gás</strong> separa o aroma, uma molécula depois da outra. Um <strong>espectrômetro de massa</strong> dá nome a cada uma. Numa <strong>ponto de olfatometria</strong>, uma pessoa cheira cada molécula que sai e diz quais têm cheiro de verdade. Diluir a amostra várias vezes mostra quais cheiros são os mais fortes.",
+      "p2": "Na <strong>cereja azeda</strong>, esse método encontrou sete <strong>moléculas-chave do cheiro</strong>, as que carregam o aroma. O principal é o <strong>benzaldeído</strong>. Junto com ele vêm notas verdes, de folha, como o <strong>hexenal</strong>, o <strong>linalol</strong>, que lembra flores, e o <strong>eugenol</strong>, que lembra cravo. A cereja doce é diferente. Um estudo encontrou nela 97 moléculas de aroma, e só 18 eram fortes o bastante para sentir. Nela, quem manda são as notas verdes e a <strong>beta-ionona</strong>, que tem cheiro de violetas.",
+      "p3": "O benzaldeído, C<sub>7</sub>H<sub>6</sub>O, é um anel de seis átomos de carbono com um pequeno grupo de átomos ao lado. Ele tem cheiro de amêndoa amarga e de cereja. E é forte: daria para sentir uma gota em cerca de uma banheira de água. Também é o cheiro do <strong>marzipã</strong>, que muitas vezes leva óleo de amêndoa amarga. Esse óleo é quase só benzaldeído.",
+      "p4": "As balas de cereja apostam no benzaldeído e deixam de fora as notas verdes e florais da fruta fresca. Por isso elas lembram mais amêndoa do que cereja. Escolha Bala de cereja, depois Marzipã, para comparar as misturas. A nota principal continua a mesma. O que muda é tudo ao redor dela.",
+      "p5": "O modelo desenha cinco das moléculas-chave do cheiro. Quanto de cada um entra numa mistura é um palpite do próprio modelo. Ele segue a ordem que os estudos dão, com o benzaldeído em primeiro. Nenhuma dessas quantidades foi medida. As misturas da bala e do marzipã são formas típicas, não receitas reais. Só o benzaldeído é desenhado átomo por átomo; os outros quatro são formas simples."
+    },
+    "desk": {
+      "title": "A bancada do aromista",
+      "p1": "Um <strong>aromista</strong> é uma pessoa que cria aromas para alimentos. Para fazer cereja, ele não copia a fruta inteira. Ele escolhe as poucas moléculas que mais importam, muito menos do que a fruta tem, e depois prova e ajusta. Agora é a sua vez: mova os controles para pôr gotas de cada molécula e veja que cheiro a sua mistura tem.",
+      "p2": "De onde vem o benzaldeído? Uma fonte são as <strong>sementes</strong> de frutas, que ficam dentro dos caroços, como as amêndoas amargas e as sementes de damasco. O óleo de amêndoa amarga purificado tem cerca de 98% de benzaldeído. Outra fonte é o <strong>óleo de cássia</strong>, da casca de uma árvore parente da canela. Nos Estados Unidos, o benzaldeído feito dele é vendido como natural. Na União Europeia, ainda não está decidido se ele conta como natural.",
+      "p3": "Mas a maior parte do benzaldeído é feita a partir do <strong>tolueno</strong>, uma substância do petróleo. Só cerca de 1,5% vem de plantas. O benzaldeído é a segunda molécula de aroma mais valiosa, depois da vanilina, o cheiro da baunilha. A molécula é exatamente a mesma, seja qual for o jeito de fazer, e o cheiro também. Só o rótulo muda. Na União Europeia, um “aroma natural de cereja” precisa vir da cereja em pelo menos 95%.",
+      "p4": "Um cuidado importante. As sementes não guardam benzaldeído pronto. Quando uma semente é esmagada, ela produz benzaldeído e também <strong>cianeto</strong>, um veneno. Até uma pequena semente de damasco crua pode ser demais para uma criança pequena. Por isso, nunca coma sementes cruas de frutas e nunca as quebre para provar. O aroma do sorvete é outra coisa: é um ingrediente purificado, testado e aprovado para alimentos."
+    },
+    "iceCream": {
+      "title": "Por que o sorvete precisa de mais aroma",
+      "p1": "Você só sente o cheiro das moléculas que chegam ao ar. O aroma preso dentro da colherada não faz nada. O frio o mantém preso, então uma colherada congelada solta muito pouco. Enquanto ela derrete e esquenta na boca, cada vez mais aroma escapa. Num estudo, o sorvete de baunilha teve gosto mais forte servido a −9 °C do que a −14 °C.",
+      "p2": "A gordura também conta. As moléculas da cereja <strong>gostam de gordura</strong>: elas se dissolvem nela e preferem ficar ali. Então, num sorvete rico em gordura, a gordura segura a cereja. Num sorvete magro, a cereja sai mais depressa e mais forte. Com a baunilha, é o contrário.",
+      "p3": "Nos Estados Unidos, o sorvete precisa ter pelo menos 10% de gordura do leite, e os premium têm até cerca de 20%. Com o frio e a gordura, boa parte do aroma fica presa. Por isso os aromistas põem mais: o aroma de cereja é cerca de 1 a 2% da mistura. Experimente os controles. Servir menos gelado ou com menos gordura deixa mais aroma chegar ao nariz.",
+      "p4": "Agora junte tudo. A sua língua diz doce e um pouco azedo. Os seus nervos sentem o frio e a cremosidade. E o seu nariz, que recebe o aroma por trás do palato, diz cereja. Tape o nariz, e a cereja some.",
+      "p5": "O quanto o frio e a gordura seguram o aroma é uma estimativa do próprio modelo. Os estudos mostram para que lado cada um age, mas não quanto. Então veja esses números como um esboço, não como uma medida. Cada porcentagem desta página é comparada com o máximo que aquele valor alcança no modelo. Nenhuma delas é uma parte do sabor."
+    }
+  }
+}
