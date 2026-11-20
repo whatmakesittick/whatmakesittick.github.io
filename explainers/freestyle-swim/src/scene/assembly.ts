@@ -1,4 +1,5 @@
 import type { Box3, Group, Object3D } from 'three';
+import type { Figure } from '@core/figure';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { Steps } from '@core/scene/pacing';
 import type { SceneTextures } from '@core/scene/textures';
@@ -8,6 +9,7 @@ import { createSwimAssembly } from './swimAssembly';
 export interface AssemblyResources {
   materials: MaterialLibrary;
   textures: SceneTextures;
+  figure: Figure;
 }
 
 export interface Assembly {

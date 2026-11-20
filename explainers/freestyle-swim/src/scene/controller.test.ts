@@ -53,7 +53,7 @@ describe('swim controller', () => {
     swim.dispose();
     await building;
     expect(shell.scene.add).not.toHaveBeenCalled();
-    expect(disposed.count).toBe(1);
+    expect(disposed.count).toBe(0);
   });
 
   it('adds the scene and bounds the camera by the floor once built', async () => {

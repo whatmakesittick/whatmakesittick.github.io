@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Texture } from 'three';
+import { decodeFigure } from '@core/figure';
 import { MaterialLibrary } from '@core/scene/materials';
 import type { SceneTextures } from '@core/scene/textures';
 import { runNow } from '@core/scene/pacing';
@@ -8,6 +9,8 @@ import type { AssemblyState } from '../ids';
 import { strokeAt } from '../model';
 import { createSwimAssembly } from './swimAssembly';
 
+const { athleteData } = await import('./parts/swimmer/figure/athlete.data');
+const figure = decodeFigure(athleteData);
 const OPTIONS = { pace: 'middle', kick: 'six', breathing: 'none', headUp: false } as const;
 
 function stateAt(phase: number): AssemblyState {
@@ -35,6 +38,7 @@ describe('swim assembly', () => {
       shadow: new Texture(),
       dispose: () => {},
     } as SceneTextures,
+    figure,
   };
   const assembly = runNow(createSwimAssembly(resources, stateAt(0)));
 
@@ -59,6 +63,7 @@ describe('swim assembly pose', () => {
       shadow: new Texture(),
       dispose: () => {},
     } as SceneTextures,
+    figure,
   };
   const assembly = runNow(createSwimAssembly(resources, stateAt(0)));
 

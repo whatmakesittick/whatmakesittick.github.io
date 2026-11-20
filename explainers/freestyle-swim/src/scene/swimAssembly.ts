@@ -15,7 +15,6 @@ import { buildPool } from './parts/pool/pool';
 import type { Pool, WaterCues } from './parts/pool/pool';
 import type { Swimmer } from './parts/swimmer/swimmer';
 import { buildSwimmer } from './parts/swimmer/swimmer';
-import { HEAD } from './parts/swimmer/shapes';
 import { bodyPose } from './pose';
 import { regionBox } from './regions';
 import { createSkeleton, solveSkeleton } from './rig/skeleton';
@@ -37,10 +36,12 @@ function isDrawable(object: Object3D): object is Drawable {
 function applyWetSkinToSwimmer(swimmer: Swimmer, frame: PoolFrame): void {
   const seen = new Set<MeshStandardMaterial>();
   swimmer.root.traverse((object) => {
-    if (!(object instanceof Mesh) || !(object.material instanceof MeshStandardMaterial)) return;
-    if (seen.has(object.material)) return;
-    seen.add(object.material);
-    applyWetSkin(object.material, frame);
+    if (!(object instanceof Mesh)) return;
+    [object.material].flat().forEach((material) => {
+      if (!(material instanceof MeshStandardMaterial) || seen.has(material)) return;
+      seen.add(material);
+      applyWetSkin(material, frame);
+    });
   });
 }
 
@@ -63,7 +64,6 @@ class SwimAssembly implements Assembly {
     chest: new Vector3(),
     hips: new Vector3(),
   };
-  private readonly skull = new Vector3(...HEAD.skull.centre);
   private state: AssemblyState;
   private headUp: number;
 
@@ -171,11 +171,7 @@ class SwimAssembly implements Assembly {
       .addVectors(this.skeleton.legs.right.hip, this.skeleton.legs.left.hip)
       .multiplyScalar(0.5)
       .applyMatrix4(group.matrix);
-    this.cues.head
-      .copy(this.skull)
-      .applyQuaternion(this.skeleton.head)
-      .add(this.skeleton.neck)
-      .applyMatrix4(group.matrix);
+    this.cues.head.copy(this.swimmer.headCentre).applyMatrix4(group.matrix);
   }
 }
 
@@ -186,7 +182,7 @@ export function* createSwimAssembly(
   const root = new Group();
   root.name = 'freestyleSwim';
   const context: PartContext = { ...resources, tracker: new ResourceTracker() };
-  const swimmer = yield* buildSwimmer(context);
+  const swimmer = yield* buildSwimmer(context, resources.figure);
   root.add(swimmer.root);
   yield;
   const pool = yield* buildPool(context);

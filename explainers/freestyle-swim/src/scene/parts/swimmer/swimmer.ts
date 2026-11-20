@@ -1,89 +1,71 @@
 import { Group, Vector3 } from 'three';
-import type { Object3D } from 'three';
-import { STRUCTURE_GROUP } from '@core/scene/materials';
+import type { Object3D, Matrix4 } from 'three';
+import type { Figure } from '@core/figure';
 import type { Steps } from '@core/scene/pacing';
 import type { PartId } from '../../../ids';
-import type { Finish } from '../../finishes';
 import { BODY } from '../../rig/constants';
 import type { Skeleton } from '../../rig/skeleton';
 import type { PartContext } from '../context';
-import { BodySurface } from './bodySurface';
 import { PartBuilder } from './build';
-import { buildGoggles, buildWristband } from './gear';
-import { restSkeleton } from './restSkeleton';
-import { BodySkin } from './skin/bodySkin';
-import { decodeSkinMesh } from './skin/decode';
-import { centreBone, sideBone } from './skin/types';
-import type { SlotId } from './skin/types';
-
-const SLOT_LOOK: Readonly<Record<SlotId, readonly [string, Finish]>> = {
-  hand: ['hand', 'skin'],
-  forearm: ['forearm', 'skin'],
-  upperArm: ['elbow', 'skin'],
-  chest: ['shoulder', 'skin'],
-  abdomen: [STRUCTURE_GROUP, 'skin'],
-  jammers: ['hips', 'suit'],
-  legSuit: ['foot', 'suit'],
-  leg: ['foot', 'skin'],
-  face: ['head', 'skin'],
-  cap: ['head', 'cap'],
-  capStripe: ['head', 'capStripe'],
-};
+import { FigureBody } from './figureBody';
+import { FigureRig } from './figure/figureRig';
 
 const LABEL_IDS = ['hand', 'forearm', 'elbow', 'shoulder', 'head', 'hips', 'foot'] as const;
 const HIP_LABEL = [-0.5, 0.02, 0.17] as const;
 const FOOT_LABEL_SHARE = 0.4;
 const ORIGIN = [0, 0, 0] as const;
-const HEAD_BONE = centreBone('head');
-const BAND_BONE = sideBone('forearm', 'right');
-
-type LabelId = (typeof LABEL_IDS)[number];
+const AXES = 3;
+const HEAD_TOP = 'c_head_null';
+const HEAD_BASE = 'c_head';
 
 interface SwimmerParts {
   readonly root: Group;
   readonly labels: ReadonlyMap<PartId, Object3D>;
-  readonly skin: BodySkin;
-  readonly surface: BodySurface;
-  readonly goggles: Object3D;
-  readonly wristband: Object3D;
+  readonly body: FigureBody;
+  readonly rig: FigureRig;
+  readonly toRig: Matrix4;
 }
 
 export class Swimmer {
   readonly root: Group;
   readonly labels: ReadonlyMap<PartId, Object3D>;
   readonly rightHand: Object3D;
-  private readonly skin: BodySkin;
-  private readonly surface: BodySurface;
-  private readonly goggles: Object3D;
-  private readonly wristband: Object3D;
-  private readonly headTop: Vector3;
+  readonly headCentre = new Vector3();
+  private readonly body: FigureBody;
+  private readonly rig: FigureRig;
+  private readonly toRig: Matrix4;
+  private readonly top = new Vector3();
 
   constructor(parts: SwimmerParts) {
     this.root = parts.root;
     this.labels = parts.labels;
-    this.skin = parts.skin;
-    this.surface = parts.surface;
-    this.goggles = parts.goggles;
-    this.wristband = parts.wristband;
+    this.body = parts.body;
+    this.rig = parts.rig;
+    this.toRig = parts.toRig;
     this.rightHand = this.label('hand');
-    this.headTop = new Vector3(...this.skin.rest.headTop);
   }
 
   apply(skeleton: Skeleton): void {
-    this.skin.apply(skeleton);
-    this.surface.update(this.skin);
-    this.follow(this.goggles, HEAD_BONE);
-    this.follow(this.wristband, BAND_BONE);
+    this.rig.pose(skeleton);
+    this.body.update();
+    this.placeHead();
     this.placeLabels(skeleton);
   }
 
-  private follow(object: Object3D, bone: number): void {
-    this.skin.boneMatrix(bone, object.matrix);
-    object.matrixWorldNeedsUpdate = true;
+  private label(id: (typeof LABEL_IDS)[number]): Object3D {
+    return this.labels.get(id) as Object3D;
   }
 
-  private label(id: LabelId): Object3D {
-    return this.labels.get(id) as Object3D;
+  private joint(name: string, out: Vector3): Vector3 {
+    const { figure } = this.rig;
+    return out
+      .fromArray(figure.jointPositions, figure.jointIndex(name) * AXES)
+      .applyMatrix4(this.toRig);
+  }
+
+  private placeHead(): void {
+    this.joint(HEAD_TOP, this.top);
+    this.joint(HEAD_BASE, this.headCentre).lerp(this.top, 0.5);
   }
 
   private placeLabels(skeleton: Skeleton): void {
@@ -93,7 +75,7 @@ export class Swimmer {
     this.label('forearm').position.lerpVectors(arm.elbow, arm.wrist, 0.5);
     this.label('elbow').position.copy(arm.elbow);
     this.label('shoulder').position.copy(arm.shoulder);
-    this.label('head').position.copy(this.headTop).applyMatrix4(this.goggles.matrix);
+    this.label('head').position.copy(this.top);
     this.label('foot')
       .position.copy(leg.ankle)
       .addScaledVector(leg.footAxis, BODY.foot * FOOT_LABEL_SHARE);
@@ -104,25 +86,20 @@ export class Swimmer {
   }
 }
 
-export function* buildSwimmer(context: PartContext): Steps<Swimmer> {
+export function* buildSwimmer(context: PartContext, figure: Figure): Steps<Swimmer> {
   const builder = new PartBuilder(context);
   const root = new Group();
   root.name = 'swimmer';
-  const mesh = decodeSkinMesh();
+  const rig = new FigureRig(figure);
   yield;
-  const skin = new BodySkin(mesh);
-  yield;
-  skin.apply(restSkeleton(skin.rest));
-  yield;
-  const surface = new BodySurface(skin, {
-    slots: mesh.slots,
-    materialOf: (slot) => builder.material(...SLOT_LOOK[slot]),
+  const body = new FigureBody({
+    figure,
+    toRig: rig.toRig,
     track: (item) => builder.track(item),
-    parent: root,
+    materialOf: (part) => builder.material(part, 'skin'),
   });
-  const goggles = buildGoggles(builder, skin.rest, root);
-  yield;
-  const wristband = buildWristband(builder, skin.rest, skin.restPositions, root);
+  root.add(body.mesh);
   LABEL_IDS.forEach((id) => builder.label(id, root, ORIGIN));
-  return new Swimmer({ root, labels: builder.labels, skin, surface, goggles, wristband });
+  yield;
+  return new Swimmer({ root, labels: builder.labels, body, rig, toRig: rig.toRig });
 }

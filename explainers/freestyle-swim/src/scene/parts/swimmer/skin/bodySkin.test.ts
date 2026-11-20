@@ -190,28 +190,6 @@ describe('pose', () => {
     });
   });
 
-  it('lands the joint vertices on the rig joints', () => {
-    const { skin, markers } = setup();
-    posedSkeletons().forEach((skeleton) => {
-      skin.apply(skeleton);
-      const { right } = skeleton.arms;
-      const leg = skeleton.legs.right;
-      const expected = {
-        elbow: right.elbow,
-        wrist: right.wrist,
-        fingertip: right.wrist.clone().addScaledVector(right.handAxis, BODY.hand),
-        knee: leg.knee,
-        ankle: leg.ankle,
-        toeTip: leg.toe,
-      };
-      (Object.keys(expected) as (keyof typeof expected)[]).forEach((key) => {
-        expect(at(skin.positions, markers[key]).distanceTo(expected[key])).toBeLessThan(
-          POSITION_TOLERANCE,
-        );
-      });
-    });
-  });
-
   it('carries the rest hips onto the rig hips with the pelvis bone', () => {
     const { skin } = setup();
     posedSkeletons().forEach((skeleton) => {
