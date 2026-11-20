@@ -1,14 +1,18 @@
-import { Color, DoubleSide, Mesh, PlaneGeometry, Vector3 } from 'three';
+import { Color, DoubleSide, Mesh, PlaneGeometry, Vector3, Vector4 } from 'three';
 import { THEME } from '../theme';
 import type { PartContext } from './parts/context';
 import { HALF_EXTENT_M, LAYER, scrollOffset } from './parts/pool/constants';
 import type { PoolFrame } from './parts/pool/constants';
+import type { WaterCues } from './parts/pool/pool';
 import { FRAGMENT_HEAD, FRAGMENT_TAIL, fogShader } from './parts/pool/shaders';
 
-const OPACITY_ABOVE = 0.55;
+const OPACITY_ABOVE = 0.4;
 const OPACITY_UNDERWATER = 0.1;
 const EASE_SECONDS = 0.4;
 const SETTLED = 0.002;
+const CONTACT_RADIUS_M = { head: 0.11, hand: 0.05 } as const;
+const CONTACT_REACH_M = { head: 0.12, hand: 0.06 } as const;
+const CONTACT_COUNT = 3;
 const KEY_LIGHT = new Vector3(0.35, 0.9, 0.3).normalize();
 
 const FRAGMENT = /* glsl */ `
@@ -18,6 +22,7 @@ uniform vec3 uTint;
 uniform vec3 uClear;
 uniform vec3 uSky;
 uniform vec3 uLight;
+uniform vec4 uContacts[${CONTACT_COUNT}];
 
 vec2 slopes(vec2 p) {
   vec2 g = vec2(0.0);
@@ -43,10 +48,21 @@ void main() {
   vec3 col;
   float alpha;
   if (gl_FrontFacing) {
-    float f = 0.03 + 0.97 * pow(1.0 - max(dot(n, v), 0.0), 4.0);
+    float ndv = max(dot(n, v), 0.0);
+    float f = 0.03 + 0.97 * pow(1.0 - ndv, 3.2);
     float glint = pow(max(dot(n, normalize(uLight + v)), 0.0), 240.0);
-    col = mix(uTint, uSky, f * 0.85) + uSky * glint * 0.9;
-    alpha = uOpacity + f * 0.4 + glint * 0.5;
+    float far = smoothstep(1.0, 6.5, reach);
+    float lens = clamp(dot(g, vec2(0.8, 0.6)) * 7.0, -0.35, 0.35);
+    vec3 body = mix(uClear, uTint, 0.45 + 0.5 * far) * (1.0 + lens);
+    float contact = 0.0;
+    for (int i = 0; i < ${CONTACT_COUNT}; i++) {
+      vec4 c = uContacts[i];
+      contact += exp(-pow((distance(vWorld.xz, c.xy) - c.w) / 0.016, 2.0)) * c.z;
+    }
+    contact = min(contact, 1.0);
+    col = mix(body, uSky, f * 0.85) + uSky * glint * 0.9;
+    col = mix(col, uSky, contact * 0.55);
+    alpha = uOpacity + f * 0.45 + glint * 0.5 + contact * 0.35;
   } else {
     float cosT = max(dot(-n, v), 0.0);
     float sinT = sqrt(1.0 - cosT * cosT);
@@ -69,6 +85,7 @@ export class WaterSurface {
   private readonly material: ReturnType<typeof fogShader>;
   private readonly opacity = { value: OPACITY_ABOVE };
   private target = OPACITY_ABOVE;
+  private readonly contacts = Array.from({ length: CONTACT_COUNT }, () => new Vector4());
   private seen = false;
 
   constructor(context: PartContext, frame: PoolFrame) {
@@ -85,6 +102,7 @@ export class WaterSurface {
         uClear: { value: new Color(THEME.waterClear) },
         uSky: { value: new Color(THEME.splash) },
         uLight: { value: KEY_LIGHT },
+        uContacts: { value: this.contacts },
       },
     });
     this.material.opacity = OPACITY_ABOVE;
@@ -104,6 +122,12 @@ export class WaterSurface {
     }
   }
 
+  setContacts(cues: WaterCues): void {
+    this.contact(0, cues.head, CONTACT_RADIUS_M.head, CONTACT_REACH_M.head);
+    this.contact(1, cues.rightHand, CONTACT_RADIUS_M.hand, CONTACT_REACH_M.hand);
+    this.contact(2, cues.leftHand, CONTACT_RADIUS_M.hand, CONTACT_REACH_M.hand);
+  }
+
   update(deltaSeconds: number): boolean {
     const gap = this.target - this.opacity.value;
     if (Math.abs(gap) < SETTLED) {
@@ -113,6 +137,11 @@ export class WaterSurface {
     const step = ((OPACITY_ABOVE - OPACITY_UNDERWATER) / EASE_SECONDS) * deltaSeconds;
     this.apply(this.opacity.value + Math.sign(gap) * Math.min(Math.abs(gap), step));
     return Math.abs(this.target - this.opacity.value) >= SETTLED;
+  }
+
+  private contact(slot: number, point: Vector3, radius: number, reach: number): void {
+    const strength = Math.max(1 - Math.abs(point.y) / reach, 0);
+    this.contacts[slot].set(point.x, point.z, strength, radius);
   }
 
   private apply(value: number): void {

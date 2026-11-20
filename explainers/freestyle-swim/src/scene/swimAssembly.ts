@@ -1,4 +1,4 @@
-import { Group, Line, Mesh, Points, Sprite, Vector3 } from 'three';
+import { Group, Line, Mesh, MeshStandardMaterial, Points, Sprite, Vector3 } from 'three';
 import type { Box3, Material, Object3D } from 'three';
 import { anchorAt, isShown } from '@core/scene/parts';
 import type { Steps } from '@core/scene/pacing';
@@ -9,9 +9,11 @@ import type { Assembly, AssemblyResources } from './assembly';
 import type { PartContext } from './parts/context';
 import { ForceArrows } from './parts/forces';
 import { HandPath } from './parts/handPath';
+import { applyWetSkin } from './parts/effects/wetSkin';
+import type { PoolFrame } from './parts/pool/constants';
 import { buildPool } from './parts/pool/pool';
 import type { Pool, WaterCues } from './parts/pool/pool';
-import { Swimmer } from './parts/swimmer/swimmer';
+import { Swimmer, buildSwimmer } from './parts/swimmer/swimmer';
 import { HEAD } from './parts/swimmer/shapes';
 import { bodyPose } from './pose';
 import { regionBox } from './regions';
@@ -31,6 +33,16 @@ function isDrawable(object: Object3D): object is Drawable {
   );
 }
 
+function applyWetSkinToSwimmer(swimmer: Swimmer, frame: PoolFrame): void {
+  const seen = new Set<MeshStandardMaterial>();
+  swimmer.root.traverse((object) => {
+    if (!(object instanceof Mesh) || !(object.material instanceof MeshStandardMaterial)) return;
+    if (seen.has(object.material)) return;
+    seen.add(object.material);
+    applyWetSkin(object.material, frame);
+  });
+}
+
 class SwimAssembly implements Assembly {
   readonly root: Group;
   private readonly context: PartContext;
@@ -45,6 +57,8 @@ class SwimAssembly implements Assembly {
     rightHand: new Vector3(),
     leftHand: new Vector3(),
     head: new Vector3(),
+    rightToe: new Vector3(),
+    leftToe: new Vector3(),
   };
   private readonly skull = new Vector3(...HEAD.skull.centre);
   private state: AssemblyState;
@@ -65,6 +79,7 @@ class SwimAssembly implements Assembly {
     this.headUp = state.headUp ? 1 : 0;
     this.forces = new ForceArrows(context);
     this.handPath = new HandPath(context);
+    applyWetSkinToSwimmer(swimmer, pool.frame);
     swimmer.root.add(this.forces.root, this.handPath.root);
     const found = new Map<PartId, Object3D>([
       ...swimmer.labels,
@@ -146,6 +161,8 @@ class SwimAssembly implements Assembly {
     this.forces.setState(this.state, this.skeleton);
     this.cues.rightHand.copy(this.skeleton.arms.right.hand).applyMatrix4(group.matrix);
     this.cues.leftHand.copy(this.skeleton.arms.left.hand).applyMatrix4(group.matrix);
+    this.cues.rightToe.copy(this.skeleton.legs.right.toe).applyMatrix4(group.matrix);
+    this.cues.leftToe.copy(this.skeleton.legs.left.toe).applyMatrix4(group.matrix);
     this.cues.head
       .copy(this.skull)
       .applyQuaternion(this.skeleton.head)
@@ -161,7 +178,7 @@ export function* createSwimAssembly(
   const root = new Group();
   root.name = 'freestyleSwim';
   const context: PartContext = { ...resources, tracker: new ResourceTracker() };
-  const swimmer = new Swimmer(context);
+  const swimmer = yield* buildSwimmer(context);
   root.add(swimmer.root);
   yield;
   const pool = yield* buildPool(context);

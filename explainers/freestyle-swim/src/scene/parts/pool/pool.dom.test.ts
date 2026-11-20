@@ -34,6 +34,8 @@ const cues: WaterCues = {
   rightHand: new Vector3(0.4, -0.1, 0.3),
   leftHand: new Vector3(-0.3, -0.5, -0.3),
   head: new Vector3(0.8, 0, 0),
+  rightToe: new Vector3(-1.7, -0.2, 0.05),
+  leftToe: new Vector3(-1.7, -0.3, -0.05),
 };
 
 function build() {

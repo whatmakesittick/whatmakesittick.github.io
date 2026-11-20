@@ -18,10 +18,13 @@ export interface WaterCues {
   readonly rightHand: Vector3;
   readonly leftHand: Vector3;
   readonly head: Vector3;
+  readonly rightToe: Vector3;
+  readonly leftToe: Vector3;
 }
 
 export interface Pool {
   readonly root: Group;
+  readonly frame: PoolFrame;
   readonly anchors: Readonly<Record<'waterline' | 'laneRope' | 'laneLine', Object3D>>;
   setState(state: AssemblyState, cues: WaterCues): void;
   update(deltaSeconds: number): boolean;
@@ -55,6 +58,7 @@ export function* buildPool(context: PartContext): Steps<Pool> {
   };
   return {
     root,
+    frame,
     anchors,
     setState(state, cues) {
       const { reading, view } = state;
@@ -62,6 +66,7 @@ export function* buildPool(context: PartContext): Steps<Pool> {
       ropes.scrolling.forEach((group) => (group.position.x = offset));
       frame.uPhase.value = (HALF_TURN * 2 * reading.units) / FULL_CYCLE_UNITS;
       surface.setState(view.underwater, reading.scrollM);
+      surface.setContacts(cues);
       effects.sync(state, cues);
     },
     update(deltaSeconds) {

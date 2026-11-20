@@ -34,14 +34,13 @@ void main() {
   vec2 c = vUv * 2.0 - 1.0;
   float r = length(c);
   float angle = atan(c.y, c.x);
-  float seed = vLife.y;
-  float radius = 0.1 + 0.85 * (1.0 - pow(1.0 - age, 2.2));
-  float width = mix(0.09, 0.03, age);
-  float ring = exp(-pow((r - radius) / width, 2.0));
-  float n = (sin(angle * 3.0 + seed * 11.0) + sin(angle * 5.0 - seed * 5.0 + age * 2.0) + sin(angle * 9.0 + seed * 3.0)) / 3.0;
-  float broken = smoothstep(-0.7, 0.2, n);
-  float inner = (1.0 - smoothstep(0.0, radius, r)) * pow(1.0 - age, 3.0) * 0.35 * (0.6 + 0.4 * n);
-  float alpha = (ring * broken * 0.9 + inner) * (1.0 - age) * (1.0 - smoothstep(0.85, 1.0, r));
+  float radius = 0.12 + 0.8 * (1.0 - pow(1.0 - age, 2.4));
+  float width = mix(0.11, 0.06, age);
+  float lump = 0.75 + 0.25 * sin(angle * 4.0 + vLife.y * 7.0 + age * 3.0);
+  float ring = exp(-pow((r - radius) / width, 2.0)) * lump;
+  float disc = (1.0 - smoothstep(0.0, radius, r)) * pow(1.0 - age, 2.0) * 0.4;
+  float fade = (1.0 - age) * (1.0 - smoothstep(0.7, 1.0, r));
+  float alpha = (ring * 0.75 + disc) * fade;
   gl_FragColor = vec4(uFoam, alpha);
 ${FRAGMENT_TAIL}`;
 
