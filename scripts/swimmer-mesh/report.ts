@@ -1,4 +1,5 @@
 import { aposeReport } from './apose.ts';
+import { girths } from './girth.ts';
 import type { PreparedBody } from './prepare.ts';
 import { dot, normalize, sub, type Vec } from './vec.ts';
 
@@ -32,6 +33,7 @@ export function printMeasures(body: PreparedBody, stature: number): void {
   const { lengths, ...rest } = report;
   console.log('a-pose lengths', rounded(lengths));
   console.log('a-pose measures', rounded(rest));
+  console.log('a-pose girths', rounded({ ...girths(body.aPose) }));
   console.log(
     'head ratios',
     JSON.stringify({

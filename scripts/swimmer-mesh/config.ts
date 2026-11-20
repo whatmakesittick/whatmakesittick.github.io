@@ -40,10 +40,9 @@ const RACE_TARGETS: WeightedTarget[] = RACES.map((race) => ({
 }));
 
 const SIDED_DETAIL_TARGETS: WeightedTarget[] = [
-  { path: 'armslegs/%-upperarm-muscle-incr', weight: 0.1 },
-  { path: 'armslegs/%-upperarm-fat-decr', weight: 1 },
-  { path: 'armslegs/%-upperarm-shoulder-muscle-incr', weight: -1.8 },
-  { path: 'armslegs/%-lowerarm-muscle-incr', weight: 0.15 },
+  { path: 'armslegs/%-upperarm-muscle-incr', weight: 0.2 },
+  { path: 'armslegs/%-upperarm-shoulder-muscle-incr', weight: -1.3 },
+  { path: 'armslegs/%-lowerarm-muscle-incr', weight: 0.6 },
   { path: 'armslegs/%-lowerleg-muscle-incr', weight: 0.15 },
   { path: 'armslegs/%-hand-scale-decr', weight: 0.254 },
   { path: 'armslegs/%-foot-scale-incr', weight: 0.248 },
@@ -51,21 +50,22 @@ const SIDED_DETAIL_TARGETS: WeightedTarget[] = [
 ];
 
 const CENTRE_DETAIL_TARGETS: WeightedTarget[] = [
-  { path: 'torso/torso-vshape-incr', weight: 0.08 },
-  { path: 'torso/torso-muscle-pectoral-incr', weight: 0.1 },
-  { path: 'measure/measure-waist-circ-decr', weight: 0.4 },
-  { path: 'measure/measure-upperarm-circ-decr', weight: 0.3 },
+  { path: 'torso/torso-vshape-incr', weight: 0.3 },
+  { path: 'torso/torso-muscle-pectoral-incr', weight: 0.3 },
+  { path: 'torso/torso-muscle-dorsi-incr', weight: 0.4 },
+  { path: 'measure/measure-wrist-circ-incr', weight: 0.5 },
+  { path: 'measure/measure-waist-circ-incr', weight: 0.3 },
   { path: 'neck/neck-scale-vert-incr', weight: 0.5 },
   { path: 'measure/measure-neck-circ-decr', weight: 0.2 },
   { path: 'head/head-scale-horiz-decr', weight: 0.691 },
   { path: 'stomach/stomach-pregnant-decr', weight: 0.6 },
-  { path: 'measure/measure-shoulder-dist-decr', weight: 0.068 },
+  { path: 'measure/measure-shoulder-dist-decr', weight: 1.5 },
   { path: 'measure/measure-upperarm-length-incr', weight: 1.228 },
   { path: 'measure/measure-lowerarm-length-decr', weight: 0.118 },
   { path: 'measure/measure-upperleg-height-incr', weight: 0.151 },
   { path: 'torso/torso-scale-vert-incr', weight: 0.675 },
-  { path: 'torso/torso-scale-horiz-decr', weight: 0.881 },
-  { path: 'hip/hip-scale-horiz-decr', weight: 0.929 },
+  { path: 'torso/torso-scale-horiz-decr', weight: 0.35 },
+  { path: 'hip/hip-scale-horiz-decr', weight: 0.5 },
 ];
 
 export function targetTable(): WeightedTarget[] {

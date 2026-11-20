@@ -52,26 +52,36 @@ The bones are `clavicle` (MakeHuman `clavicle.*`) and `scapula` (`shoulder01.*`)
 ## Targets
 
 The list and weights live in `config.ts`. The length targets and `BODY_HEIGHT` were fitted so the A-pose (before the
-repose) matches the rig within 1 mm (shoulder half-width 0.197, upper arm 0.350, forearm 0.274, wrist to fingertip
-0.203, thigh 0.461, shin 0.462, ankle to toe tip 0.229, hip joint x -0.541 and half-width 0.092, in metres) and the head
-width is 0.155. The build prints these and the measures below, all on the A-pose full mesh: bideltoid half-width (max
-|z| within 2 cm of the shoulder joint in x), head height (chin to crown along x) and width, neck length (head joint x
-minus shoulder joint x), chest depth, and the bind-pose clavicle and shoulder joints.
+repose) matches the rig's limb lengths within 1 mm (upper arm 0.350, forearm 0.274, wrist to fingertip 0.203, thigh
+0.460, shin 0.462, ankle to toe tip 0.229, hip joint x -0.541, in metres) and the head width is 0.155. The shoulder
+joint half-width is 0.202 against the rig's 0.197 and the hip joint half-width 0.102 against 0.092; the skin moves the
+limb roots to the rig's joints at runtime. The build prints these and the measures below, all on the A-pose full mesh:
+bideltoid half-width (max |z| within 2 cm of the shoulder joint in x), head height (chin to crown along x) and width,
+neck length (head joint x minus shoulder joint x), chest depth, the bind-pose clavicle and shoulder joints, and the
+girths.
+
+Girths (`girth.ts`) are the perimeter of the convex hull of an exact cross-section of the mesh: across the bone for
+the limbs (the largest between 40 and 60 percent of the upper arm, 10 and 40 percent of the forearm, 25 and 50 percent
+of the thigh, 15 and 45 percent of the shin; the smallest near the wrist) and across the body axis for the waist. The
+chest value includes the upper arms in the A-pose, so read it as a shoulder girdle girth. The upper body is shaped
+against measured trained male swimmers (Pietraszewska and Jakubowski 2013, 33 swimmers, scaled to 1.90 m: relaxed
+upper arm 31 cm, forearm 28 cm, waist 81 cm, bideltoid about 49 cm, biacromial 44 cm). The mesh measures upper arm
+31.9, forearm 28.0, wrist 17.5, waist 72.3, thigh 52.2 and calf 40.8 cm, with a bideltoid breadth of 53.2 cm.
 
 - Macro blend (a lean swimmer): male, age 25 (`young`), muscle blend 0.15 minimum, 0.7 average and 0.15 maximum, weight blend 0.45 minimum and 0.55 average, split over the `universal-male-young-*muscle-*weight`
   and `proportions/male-young-*muscle-*weight-idealproportions` targets, plus an even mix of the african, asian and
   caucasian `male-young` targets.
-- Torso: `torso-vshape-incr` (0.08), `torso-muscle-pectoral-incr` (0.1), `torso-scale-vert-incr`,
-  `torso-scale-horiz-decr`, `measure-shoulder-dist-decr`, `measure-waist-circ-decr`, `stomach-pregnant-decr`,
-  `hip-scale-horiz-decr`.
+- Torso: `torso-vshape-incr` (0.3), `torso-muscle-pectoral-incr` (0.3) and `torso-muscle-dorsi-incr` (0.4) for the
+  chest and the latissimus, `torso-scale-vert-incr`, `torso-scale-horiz-decr` (0.35), `measure-waist-circ-incr` (0.3),
+  `stomach-pregnant-decr` and `hip-scale-horiz-decr` (0.5). Narrowing the whole torso further to bring the joints onto
+  the rig gives a waist 17 cm wide, so the joints are brought in with `measure-shoulder-dist-decr` (1.5) instead.
 - Neck and head: `neck-scale-vert-incr` (0.5), `measure-neck-circ-decr` (0.2), `head-scale-horiz-decr`.
-- Upper arm slimming: `measure-upperarm-circ-decr` (0.3) and `%-upperarm-fat-decr`.
-- Deltoid slimming: `%-upperarm-shoulder-muscle-incr` at -1.8 (a negative weight subtracts the target), which brings the
-  bideltoid half-width from 0.262 to 0.236 with the shoulder joint still at 0.197.
+- Deltoid: `%-upperarm-shoulder-muscle-incr` at -1.3 (a negative weight subtracts the target), which leaves the deltoid
+  6.4 cm outside the shoulder joint.
 - Limb lengths: `measure-upperarm-length-incr`, `measure-lowerarm-length-decr`, `measure-upperleg-height-incr`,
   and for both sides `hand-scale-decr` and `foot-scale-incr`.
-- Muscle, for both sides: `upperarm-muscle-incr` (0.1), `lowerarm-muscle-incr` (0.15), `lowerleg-muscle-incr` (0.15)
-  and `upperleg-muscle-incr` (0.1).
+- Muscle, for both sides: `upperarm-muscle-incr` (0.2), `lowerarm-muscle-incr` (0.6), `lowerleg-muscle-incr` (0.15)
+  and `upperleg-muscle-incr` (0.1), plus `measure-wrist-circ-incr` (0.5).
 
 ## Simplification regions
 
