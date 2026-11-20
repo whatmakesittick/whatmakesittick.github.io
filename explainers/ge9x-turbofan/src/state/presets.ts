@@ -17,7 +17,7 @@ export const CHAPTER_CONTROL_DEFAULTS: ChapterControls = { cutaway: 'closed', st
 const PACE = SPEED_RANGE.default;
 const STOWED = { reverser: false } as const;
 const CUTAWAY_HOT = { cutaway: 'cutaway', streams: 'hot' } as const;
-const CRUISE_LEVER = 0.85;
+const THRUST_CHAPTER_LEVER = 0.85;
 const REVERSE_LEVER = 0.4;
 
 export const PRESETS: Record<PresetId, Preset> = {
@@ -62,7 +62,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     speed: PACE,
     view: STOWED,
     startAt: MOMENTS.turbinesExit,
-    start: { cutaway: 'cutaway', streams: 'both', thrust: CRUISE_LEVER },
+    start: { cutaway: 'cutaway', streams: 'both', thrust: THRUST_CHAPTER_LEVER },
     labels: ['coldStream', 'hotStream', 'coldNozzle', 'hotNozzle', 'fanBlades'],
     highlight: [],
   },
