@@ -94,6 +94,11 @@ function floatsOf(
 
 const FADE_NEAR_M = 1;
 const FADE_FAR_M = 1.6;
+export const ROPE_GROUP_NAMES: readonly string[] = ['ropeScroll', 'ropeNeighbours'];
+
+export function isNearRope(object: Object3D, distance: number): boolean {
+  return distance < FADE_FAR_M && ROPE_GROUP_NAMES.includes(object.parent?.name ?? '');
+}
 
 function fadeNearCamera(material: MeshStandardMaterial): void {
   material.onBeforeCompile = (shader) => {
@@ -148,6 +153,7 @@ export function createRopes(context: PartContext): Ropes {
   main.name = 'ropeScroll';
   addRopes(context, 'laneRope', [-ROPE_Z_M, ROPE_Z_M], geometry, main);
   const neighbours = new Group();
+  neighbours.name = 'ropeNeighbours';
   addRopes(context, UNDIMMED_GROUP, [-NEIGHBOUR_ROPE_Z, NEIGHBOUR_ROPE_Z], geometry, neighbours);
   const label = new Object3D();
   label.position.set(ROPE_LABEL_OFFSET.x, ROPE_LABEL_OFFSET.y, ROPE_Z_M);
