@@ -23,11 +23,15 @@ describe('readout texts', () => {
     expect(elbowText(catchArm)).toBe(fill(units.degrees, { value: '148' }));
   });
 
-  it('keeps the previous side when the roll is zero', () => {
-    rollSide(strokeAt(RIGHT_LOW_UNITS, OPTIONS));
-    expect(sideText(strokeAt(ROLL_ZERO_UNITS, OPTIONS))).toBe(chapters.roll.sideRight);
-    rollSide(strokeAt(LEFT_LOW_UNITS, OPTIONS));
-    expect(sideText(strokeAt(ROLL_ZERO_UNITS, OPTIONS))).toBe(chapters.roll.sideLeft);
+  it('reads the same side scrubbing backwards and forwards through zero', () => {
+    const sideAt = (units: number) => sideText(strokeAt(units, OPTIONS));
+    const forwards = [ROLL_ZERO_UNITS - 10, ROLL_ZERO_UNITS, ROLL_ZERO_UNITS + 10].map(sideAt);
+    const backwards = [ROLL_ZERO_UNITS + 10, ROLL_ZERO_UNITS, ROLL_ZERO_UNITS - 10].map(sideAt);
+    expect(forwards).toEqual(backwards.reverse());
+    expect(sideAt(ROLL_ZERO_UNITS)).toBe(chapters.roll.sideLeft);
+    expect(sideAt(0)).toBe(chapters.roll.sideRight);
+    expect(rollSide(strokeAt(RIGHT_LOW_UNITS, OPTIONS))).toBe('right');
+    expect(rollSide(strokeAt(LEFT_LOW_UNITS, OPTIONS))).toBe('left');
   });
 
   it('names the leg in the first half of its beat', () => {

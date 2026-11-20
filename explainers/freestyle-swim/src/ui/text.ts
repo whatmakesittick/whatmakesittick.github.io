@@ -1,5 +1,7 @@
 import { t } from '@core/i18n';
+import { wrapPhase } from '@core/store';
 import type { ArmReading, PaceId, StrokeReading } from '../ids';
+import { CYCLE_UNITS } from '../model';
 import { armGapText } from '../state';
 import { phaseKey } from '../timeline';
 import { formatDegrees, formatMeters } from './format';
@@ -19,8 +21,7 @@ const LEG_KEYS: Record<RollSide, string> = {
   left: 'chapters.kick.left',
 };
 const DOWNBEAT_SHARE = 0.5;
-
-let lastSide: RollSide = 'right';
+const ZERO_ROLL_DEG = 1e-9;
 
 export function elbowText(arm: ArmReading): string {
   return arm.elbowDeg === null ? t(NO_ELBOW_KEY) : formatDegrees(arm.elbowDeg);
@@ -51,14 +52,13 @@ export function pullingArm(reading: StrokeReading): ArmReading {
   return reading[reading.pullingHand];
 }
 
-export function rollSide(reading: Pick<StrokeReading, 'shoulderRollDeg'>): RollSide {
-  const roll = Math.round(reading.shoulderRollDeg);
-  if (roll > 0) lastSide = 'right';
-  if (roll < 0) lastSide = 'left';
-  return lastSide;
+export function rollSide(reading: Pick<StrokeReading, 'shoulderRollDeg' | 'units'>): RollSide {
+  if (reading.shoulderRollDeg > ZERO_ROLL_DEG) return 'right';
+  if (reading.shoulderRollDeg < -ZERO_ROLL_DEG) return 'left';
+  return wrapPhase(reading.units, CYCLE_UNITS) < CYCLE_UNITS / 2 ? 'right' : 'left';
 }
 
-export function sideText(reading: Pick<StrokeReading, 'shoulderRollDeg'>): string {
+export function sideText(reading: Pick<StrokeReading, 'shoulderRollDeg' | 'units'>): string {
   return t(SIDE_KEYS[rollSide(reading)]);
 }
 
