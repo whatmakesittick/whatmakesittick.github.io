@@ -10,9 +10,9 @@ interface LightSetting {
 type LightName = 'key' | 'fill' | 'rim';
 
 const SWIM_LIGHT: Record<LightName, LightSetting> = {
-  key: { color: '#fff3e2', intensity: 2.4, position: [40, 110, 50] },
-  fill: { color: '#a9d4ec', intensity: 0.7, position: [-60, -30, 70] },
-  rim: { color: '#cfe8ff', intensity: 1.6, position: [-50, 40, -120] },
+  key: { color: '#fff3e2', intensity: 1.8, position: [40, 110, 50] },
+  fill: { color: '#8ec9e6', intensity: 0.55, position: [-60, -40, 70] },
+  rim: { color: '#cfe8ff', intensity: 2.1, position: [-50, 40, -120] },
 };
 
 function apply(light: DirectionalLight, setting: LightSetting): () => void {

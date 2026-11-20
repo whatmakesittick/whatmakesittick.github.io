@@ -2,6 +2,8 @@ import type { SceneOptions } from '@core/scene/shell';
 import { THEME } from '../theme';
 import { SCENE_LIMITS } from './constants';
 
+const SWIMMER_DIM = { saturation: 0.35, brightness: 0.68, emissive: 0.3 } as const;
+
 export const UNDIMMED_PARTS = ['waterline', 'laneRope', 'laneLine'] as const;
 
 export const SCENE_OPTIONS: SceneOptions = {
@@ -15,5 +17,5 @@ export const SCENE_OPTIONS: SceneOptions = {
     distance: { min: SCENE_LIMITS.cameraMinDistance, max: SCENE_LIMITS.cameraMaxDistance },
   },
   gaugeSide: 'top',
-  highlight: { undimmed: [...UNDIMMED_PARTS] },
+  highlight: { dim: SWIMMER_DIM, undimmed: [...UNDIMMED_PARTS] },
 };
