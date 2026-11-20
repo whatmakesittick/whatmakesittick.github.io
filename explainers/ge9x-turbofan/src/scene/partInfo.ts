@@ -11,6 +11,7 @@ const LEFT_PARTS: ReadonlySet<PartId> = new Set<PartId>([
   'outerShaft',
   'diffuser',
   'hpTurbine',
+  'lpTurbine',
   'coldStream',
   'coldNozzle',
   'person',

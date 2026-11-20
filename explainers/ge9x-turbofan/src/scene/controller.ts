@@ -7,7 +7,7 @@ import { whenIdle } from '@core/scene/warmUp';
 import type { AssemblyState, CameraView, DetailId } from '../ids';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
-import { CAMERA_VIEWS, HERO_REGION, heroBounds } from './cameraViews';
+import { CAMERA_VIEWS, viewRegionBox } from './cameraViews';
 import type { ViewRegion } from './cameraViews';
 import { detailFor, isCoarsePointer } from './detail';
 
@@ -84,7 +84,7 @@ export class EngineController {
   private regionOf(id: ViewRegion): Box3 | null {
     const { assembly } = this;
     if (!assembly) return null;
-    return id === HERO_REGION ? heroBounds(assembly.region('fanFace')) : assembly.region(id);
+    return viewRegionBox(id, (region) => assembly.region(region));
   }
 
   private compileHidden(object: Object3D): void {
