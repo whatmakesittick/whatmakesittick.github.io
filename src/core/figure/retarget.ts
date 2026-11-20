@@ -1,4 +1,5 @@
 import type { Figure } from './figure';
+import { rollParameter } from './rolls';
 import {
   add,
   angleBetween,
@@ -21,9 +22,9 @@ import {
   share,
   shortestArc,
   smooth,
+  splitTwist,
   sub,
   toEuler,
-  toEulerNear,
   transpose,
   wrap,
 } from './rotations';
@@ -70,11 +71,6 @@ const FINGERS = ['index', 'middle', 'ring', 'pinky'] as const;
 const FINGER_CURL = { index: 0.2, middle: 0.26, ring: 0.32, pinky: 0.38 } as const;
 const THUMB_CURL = 0.12;
 const NECK_SHARE = 0.45;
-const ARM_TWIST = 2.2;
-const LEG_TWIST = 0;
-const CLAVICLE_SPIN = 1.92;
-const CLAVICLE_TWIST = 0;
-const SPIN_SIGN: Readonly<Record<Side, number>> = { right: 1, left: -1 };
 const SPINE_PASSES = 3;
 const SHOULDER_PASSES = 3;
 const SHOULDER_DAMPING = 0.1;
@@ -83,8 +79,9 @@ const PLANE_REFINES = 14;
 const GOLDEN_LOW = 0.382;
 const GOLDEN_HIGH = 0.618;
 const TURN = 2 * Math.PI;
-const PLANE_FROM_RAD = Math.PI / 360;
-const PLANE_TO_RAD = (3 * Math.PI) / 180;
+const DEGREE = Math.PI / 180;
+const ELBOW_PLANE: PlaneRange = { from: 0.5 * DEGREE, to: 3 * DEGREE };
+const KNEE_PLANE: PlaneRange = { from: 5 * DEGREE, to: 15 * DEGREE };
 const DOWN: Vec = [0, -1, 0];
 
 function point(): Point {
@@ -120,7 +117,11 @@ interface Hinge {
   readonly forward: Vec;
   readonly reach: Vec;
   readonly middle: Vec;
-  readonly twistCentre: number;
+}
+
+interface PlaneRange {
+  readonly from: number;
+  readonly to: number;
 }
 
 interface Reach {
@@ -131,7 +132,7 @@ interface Reach {
 
 interface HingeSolution {
   readonly spin: number;
-  readonly euler: Vec;
+  readonly turn: Mat;
   readonly bend: number;
   readonly upper: Mat;
   readonly post: Mat;
@@ -162,11 +163,11 @@ function solveHinge(hinge: Hinge, spin: number): HingeSolution {
   const bend = hingeBend(hinge, length(hinge.reach));
   const span = normalize(add(hinge.bone, apply(hinge.pre, apply(rotZ(bend), hinge.next))));
   const aim = normalize(applyTransposed(hinge.parent, hinge.reach));
-  const euler = mul(fromAxisAngle(aim, spin), shortestArc(span, aim));
-  const upper = mul(hinge.parent, euler);
+  const turn = mul(fromAxisAngle(aim, spin), shortestArc(span, aim));
+  const upper = mul(hinge.parent, turn);
   return {
     spin,
-    euler: toEulerNear(euler, hinge.twistCentre),
+    turn,
     bend,
     upper,
     post: mul(mul(upper, hinge.pre), rotZ(bend)),
@@ -201,16 +202,13 @@ function planeSpin(hinge: Hinge): number {
 }
 
 function sharedSpin(hinge: Hinge, distal: DistalSolver): number {
-  let spin = 0;
-  for (let pass = 0; pass < 2; pass++) {
-    spin = (spin + distal(solveHinge(hinge, spin).post).twist) / 2;
-  }
-  return spin;
+  const twist = distal(solveHinge(hinge, 0).post).twist;
+  return (Math.sign(hinge.bone[0]) * twist) / 2;
 }
 
-function chooseSpin(hinge: Hinge, distal: DistalSolver): number {
+function chooseSpin(hinge: Hinge, distal: DistalSolver, plane: PlaneRange): number {
   const bendRad = angleBetween(hinge.aim, applyTransposed(hinge.parent, hinge.forward));
-  const weight = smooth(bendRad, PLANE_FROM_RAD, PLANE_TO_RAD);
+  const weight = smooth(bendRad, plane.from, plane.to);
   if (weight >= 1) return planeSpin(hinge);
   const shared = sharedSpin(hinge, distal);
   return weight <= 0 ? shared : mixAngle(shared, planeSpin(hinge), weight);
@@ -431,11 +429,7 @@ export class Retargeter {
     const aim = normalize(
       applyTransposed(this.frameOf(clavicle), sub(vec(arm.shoulder), this.pos(clavicle))),
     );
-    const swing = shortestArc(bone, aim);
-    const [x, y, z] = toEulerNear(
-      mul(fromAxisAngle(aim, CLAVICLE_SPIN * SPIN_SIGN[side]), swing),
-      CLAVICLE_TWIST,
-    );
+    const [x, y, z] = toEuler(shortestArc(bone, aim));
     this.set(`${clavicle}_rx`, x);
     this.set(`${clavicle}_ry`, y);
     this.set(`${clavicle}_rz`, z);
@@ -448,7 +442,6 @@ export class Retargeter {
     from: Vec,
     elbow: Vec,
     end: Vec,
-    twistCentre: number,
   ): Hinge {
     const bone = this.restOffset(joint, hingeJoint);
     const next = this.restOffset(hingeJoint, tip);
@@ -464,7 +457,6 @@ export class Retargeter {
       forward: normalize(lower),
       reach: add(upper, lower),
       middle: upper,
-      twistCentre,
     };
   }
 
@@ -477,7 +469,6 @@ export class Retargeter {
       vec(target.shoulder),
       vec(target.elbow),
       vec(target.wrist),
-      ARM_TWIST,
     );
     const restFrame = frame(
       sub(this.restPos(`${p}_middle_null`), this.restPos(`${p}_wrist`)),
@@ -493,11 +484,14 @@ export class Retargeter {
       const flex = -Math.asin(Math.max(-1, Math.min(1, m[1])));
       return { twist: Math.atan2(m[7], m[4]), values: [flex, Math.atan2(m[2], m[0])] };
     };
-    const solved = solveHinge(hinge, chooseSpin(hinge, distal));
+    const solved = solveHinge(hinge, chooseSpin(hinge, distal, ELBOW_PLANE));
     const hand = distal(solved.post);
-    this.set(`${p}_uparm_twist`, solved.euler[0]);
-    this.set(`${p}_uparm_ry`, solved.euler[1]);
-    this.set(`${p}_uparm_rz`, solved.euler[2]);
+    const { swing, twist } = splitTwist(solved.turn);
+    const [roll, ry, rz] = toEuler(swing);
+    this.set(`${p}_uparm_twist`, twist);
+    this.set(rollParameter(`${p}_uparm`), roll);
+    this.set(`${p}_uparm_ry`, ry);
+    this.set(`${p}_uparm_rz`, rz);
     this.set(`${p}_elbow_bend`, solved.bend);
     this.set(`${p}_lowarm_twist`, hand.twist);
     this.set(`${p}_wrist_rz`, hand.values[0]);
@@ -520,7 +514,6 @@ export class Retargeter {
       vec(target.hip),
       vec(target.knee),
       vec(target.ankle),
-      LEG_TWIST,
     );
     const restAxis = sub(this.restPos(`${p}_ball`), this.restPos(`${p}_foot`));
     const wanted = mul(
@@ -547,11 +540,12 @@ export class Retargeter {
       const rest = mul(transpose(chain), m);
       return { twist: best.twist, values: [best.bend, Math.atan2(rest[7], rest[4])] };
     };
-    const solved = solveHinge(hinge, chooseSpin(hinge, distal));
+    const solved = solveHinge(hinge, chooseSpin(hinge, distal, KNEE_PLANE));
     const foot = distal(solved.post);
-    this.set(`${p}_upleg_twist`, solved.euler[0]);
-    this.set(`${p}_upleg_ry`, solved.euler[1]);
-    this.set(`${p}_upleg_rz`, solved.euler[2]);
+    const [twist, ry, rz] = toEuler(solved.turn);
+    this.set(`${p}_upleg_twist`, twist);
+    this.set(`${p}_upleg_ry`, ry);
+    this.set(`${p}_upleg_rz`, rz);
     this.set(`${p}_knee_bend`, solved.bend);
     this.set(`${p}_lowleg_twist`, foot.twist);
     this.set(`${p}_foot_bend`, foot.values[0]);

@@ -1,3 +1,5 @@
+export const JOINT_PARAMETERS = 7;
+
 export interface SkinWeights {
   readonly start: Uint32Array;
   readonly joints: Uint8Array;

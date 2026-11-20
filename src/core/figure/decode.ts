@@ -1,5 +1,6 @@
 import { ArrayStore, varintReader } from './bytes';
 import type { FigureData, RegionSummary } from './data';
+import { JOINT_PARAMETERS } from './model';
 import type {
   CorrectiveModel,
   CorrectiveRegion,
@@ -11,7 +12,6 @@ import type {
 } from './model';
 
 const AXES = 3;
-const JOINT_PARAMETERS = 7;
 const MATRIX = 9;
 
 function decodeRest(data: FigureData, store: ArrayStore): Float32Array {

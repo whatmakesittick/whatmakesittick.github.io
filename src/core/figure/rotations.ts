@@ -3,6 +3,7 @@ export type Mat = Float64Array;
 
 const EPSILON = 1e-12;
 const TURN = 2 * Math.PI;
+const TWIST_AXIS: Vec = [1, 0, 0];
 
 export function sub(a: Vec, b: Vec): Vec {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
@@ -113,11 +114,6 @@ export function toEuler(m: Mat): Vec {
   return [Math.atan2(m[7], m[8]), y, Math.atan2(m[3], m[0])];
 }
 
-export function toEulerNear(m: Mat, twistCentre: number): Vec {
-  const [x, y, z] = toEuler(m);
-  return [twistCentre + wrap(x - twistCentre), y, z];
-}
-
 export function fromColumns(a: Vec, b: Vec, c: Vec): Mat {
   return Float64Array.of(a[0], b[0], c[0], a[1], b[1], c[1], a[2], b[2], c[2]);
 }
@@ -151,6 +147,12 @@ export function shortestArc(from: Vec, to: Vec): Mat {
   const sin = length(axis);
   if (sin < EPSILON) return identity();
   return fromAxisAngle(scale(axis, 1 / sin), Math.atan2(sin, dot(from, to)));
+}
+
+export function splitTwist(m: Mat): { swing: Mat; twist: number } {
+  const swing = shortestArc(TWIST_AXIS, apply(m, TWIST_AXIS));
+  const rest = mul(transpose(swing), m);
+  return { swing, twist: Math.atan2(rest[7], rest[4]) };
 }
 
 export function rotationVector(m: Mat): Vec {

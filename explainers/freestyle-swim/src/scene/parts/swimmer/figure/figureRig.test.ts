@@ -28,6 +28,13 @@ const HEAD_LIMIT_DEG = 2;
 const STEP_LIMIT_MM = 30;
 const ACCELERATION_LIMIT_MM = 6;
 const TIMEOUT_MS = 240_000;
+const NATURAL_LIMITS_DEG: readonly (readonly [RegExp, number])[] = [
+  [/_clavicle_rx$/, 10],
+  [/_clavicle_r[yz]$/, 40],
+  [/_uparm_twist$/, 115],
+  [/_upleg_twist$/, 20],
+  [/_lowleg_twist$/, 25],
+];
 
 interface Setup {
   pace: PaceId;
@@ -162,6 +169,25 @@ describe('figure rig', () => {
         });
       expect(worst.step).toBeLessThan(STEP_LIMIT_MM);
       expect(worst.acceleration).toBeLessThan(ACCELERATION_LIMIT_MM);
+    },
+    TIMEOUT_MS,
+  );
+
+  it(
+    'keeps the collarbones and the limb twists in a natural range',
+    () => {
+      const worst = NATURAL_LIMITS_DEG.map(() => 0);
+      setups().forEach((setup) => {
+        for (let units = 0; units < 1000; units += SCAN_STEP) {
+          const parameters = rig.retarget(skeletonAt(units, setup));
+          figure.parameterNames.forEach((name, index) => {
+            const group = NATURAL_LIMITS_DEG.findIndex(([pattern]) => pattern.test(name));
+            if (group < 0) return;
+            worst[group] = Math.max(worst[group], Math.abs(toDegrees(parameters[index])));
+          });
+        }
+      });
+      NATURAL_LIMITS_DEG.forEach(([, limit], group) => expect(worst[group]).toBeLessThan(limit));
     },
     TIMEOUT_MS,
   );

@@ -5,6 +5,7 @@ import { Kinematics } from './kinematics';
 import { AXES, MATRIX, quaternionFromMatrix } from './matrix';
 import type { FigureModel, SkeletonModel } from './model';
 import { computeNormals } from './normals';
+import { withRolls } from './rolls';
 import { Skinning } from './skinning';
 
 const QUATERNION = 4;
@@ -114,5 +115,5 @@ function indexLookup(names: readonly string[]): Map<string, number> {
 }
 
 export function decodeFigure(data: FigureData): Figure {
-  return new Figure(decodeModel(data));
+  return new Figure(withRolls(decodeModel(data)));
 }

@@ -1,7 +1,7 @@
 import { AXES, MATRIX, eulerInto, multiplyInto } from './matrix';
+import { JOINT_PARAMETERS } from './model';
 import type { FigureModel } from './model';
 
-const JOINT_PARAMETERS = 7;
 const FIRST_FEATURE_JOINT = 2;
 const FEATURES_PER_JOINT = 6;
 const LOG2_BASE = 2;
