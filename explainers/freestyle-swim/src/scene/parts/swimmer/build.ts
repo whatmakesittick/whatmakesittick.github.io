@@ -1,4 +1,4 @@
-import { Mesh } from 'three';
+import { Color, Mesh, MeshBasicMaterial } from 'three';
 import type { BufferGeometry, Material, Object3D } from 'three';
 import { anchorAt } from '@core/scene/parts';
 import type { PartId } from '../../../ids';
@@ -20,6 +20,14 @@ export class PartBuilder {
 
   material(group: string, finish: Finish): Material {
     return this.context.materials.get(group, FINISHES[finish]);
+  }
+
+  swatches(group: string, colors: readonly string[]): Color[] {
+    return colors.map((color) => {
+      const swatch = this.track(new MeshBasicMaterial({ color: new Color(color) }));
+      this.context.materials.register(group, swatch);
+      return swatch.color;
+    });
   }
 
   mesh(geometry: BufferGeometry, group: string, finish: Finish, parent: Object3D): Mesh {

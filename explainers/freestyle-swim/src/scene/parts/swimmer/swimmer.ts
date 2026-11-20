@@ -5,8 +5,13 @@ import type { PartId } from '../../../ids';
 import { BODY } from '../../rig/constants';
 import type { Skeleton } from '../../rig/skeleton';
 import type { PartContext } from '../context';
+import { GARMENT_COLORS } from '../../finishes';
 import { PartBuilder } from './build';
 import { FigureBody } from './figureBody';
+import { Goggles } from './garments/goggles';
+import { applyGarments } from './garments/garmentShader';
+import { garmentFields } from './garments/regions';
+import { RestFrame } from './garments/restFrame';
 import type { FigureRig } from './figure/figureRig';
 
 const LABEL_IDS = ['hand', 'forearm', 'elbow', 'shoulder', 'head', 'hips', 'foot'] as const;
@@ -21,6 +26,7 @@ interface SwimmerParts {
   readonly root: Group;
   readonly labels: ReadonlyMap<PartId, Object3D>;
   readonly body: FigureBody;
+  readonly goggles: Goggles;
   readonly rig: FigureRig;
   readonly toRig: Matrix4;
 }
@@ -31,6 +37,7 @@ export class Swimmer {
   readonly rightHand: Object3D;
   readonly headCentre = new Vector3();
   private readonly body: FigureBody;
+  private readonly goggles: Goggles;
   private readonly rig: FigureRig;
   private readonly toRig: Matrix4;
   private readonly top = new Vector3();
@@ -39,6 +46,7 @@ export class Swimmer {
     this.root = parts.root;
     this.labels = parts.labels;
     this.body = parts.body;
+    this.goggles = parts.goggles;
     this.rig = parts.rig;
     this.toRig = parts.toRig;
     this.rightHand = this.label('hand');
@@ -47,6 +55,7 @@ export class Swimmer {
   apply(skeleton: Skeleton): void {
     this.rig.pose(skeleton);
     this.body.update();
+    this.goggles.update();
     this.placeHead();
     this.placeLabels(skeleton);
   }
@@ -90,14 +99,18 @@ export function* buildSwimmer(context: PartContext, rig: FigureRig): Steps<Swimm
   const root = new Group();
   root.name = 'swimmer';
   yield;
+  const frame = new RestFrame(rig.figure);
   const body = new FigureBody({
     figure: rig.figure,
     toRig: rig.toRig,
+    garments: garmentFields(rig.figure, frame),
     track: (item) => builder.track(item),
-    materialOf: (part) => builder.material(part, 'skin'),
+    materialOf: (part) =>
+      applyGarments(builder.material(part, 'skin'), builder.swatches(part, GARMENT_COLORS)),
   });
-  root.add(body.mesh);
+  const goggles = new Goggles(builder, rig.figure, frame, rig.toRig);
+  root.add(body.mesh, goggles.group);
   LABEL_IDS.forEach((id) => builder.label(id, root, ORIGIN));
   yield;
-  return new Swimmer({ root, labels: builder.labels, body, rig, toRig: rig.toRig });
+  return new Swimmer({ root, labels: builder.labels, body, goggles, rig, toRig: rig.toRig });
 }

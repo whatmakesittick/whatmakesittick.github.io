@@ -25,13 +25,29 @@ function matte(color: string, roughness: number): MaterialFinish {
   return { color, roughness, metalness: 0, emissive: BLACK, emissiveIntensity: 1 };
 }
 
+const SKIN = matte(shade(THEME.skin, SKIN_TONE), WET_SKIN_ROUGHNESS);
+
+export const GARMENT_ROUGHNESS = [
+  SUIT_ROUGHNESS,
+  SILICONE_ROUGHNESS,
+  SILICONE_ROUGHNESS,
+  SILICONE_ROUGHNESS,
+  SILICONE_ROUGHNESS,
+] as const;
+
+const FINISH_COLORS = {
+  suit: THEME.suit,
+  cap: THEME.cap,
+  capStripe: THEME.floatB,
+  goggleBand: THEME.goggles,
+  wristband: THEME.floatA,
+} as const;
+
+export const GARMENT_COLORS = Object.values(FINISH_COLORS);
+
 export const FINISHES = {
-  skin: matte(shade(THEME.skin, SKIN_TONE), WET_SKIN_ROUGHNESS),
-  suit: matte(THEME.suit, SUIT_ROUGHNESS),
-  cap: matte(THEME.cap, SILICONE_ROUGHNESS),
-  capStripe: matte(THEME.floatB, SILICONE_ROUGHNESS),
-  wristband: matte(THEME.floatA, SILICONE_ROUGHNESS),
-  goggleBand: matte(THEME.goggles, SILICONE_ROUGHNESS),
+  skin: SKIN,
+  goggleBand: matte(FINISH_COLORS.goggleBand, SILICONE_ROUGHNESS),
   goggleLens: { ...matte(THEME.goggles, LENS_ROUGHNESS), metalness: 0.6 },
   floatA: matte(THEME.floatA, PLASTIC_ROUGHNESS),
   floatB: matte(ROPE_BLUE, PLASTIC_ROUGHNESS),

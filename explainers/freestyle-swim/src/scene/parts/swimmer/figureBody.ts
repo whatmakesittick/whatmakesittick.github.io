@@ -2,6 +2,9 @@ import { BufferAttribute, BufferGeometry, DynamicDrawUsage, Mesh } from 'three';
 import type { Material, Matrix4 } from 'three';
 import type { Figure } from '@core/figure';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
+import { GARMENT_ATTRIBUTES } from './garments/garmentShader';
+import { CHANNELS } from './garments/regions';
+import type { GarmentFields } from './garments/regions';
 
 const AXES = 3;
 const PART_RULES: readonly (readonly [RegExp, string])[] = [
@@ -61,6 +64,7 @@ export interface FigureBodyParts {
   readonly materialOf: (part: string) => Material;
   readonly track: <T extends { dispose(): void }>(item: T) => T;
   readonly toRig: Matrix4;
+  readonly garments: GarmentFields;
 }
 
 export class FigureBody {
@@ -77,6 +81,14 @@ export class FigureBody {
     this.geometry.setIndex(new BufferAttribute(indices, 1));
     this.geometry.setAttribute('position', this.position);
     this.geometry.setAttribute('normal', this.normal);
+    this.geometry.setAttribute(
+      GARMENT_ATTRIBUTES.distances,
+      new BufferAttribute(parts.garments.distances, CHANNELS),
+    );
+    this.geometry.setAttribute(
+      GARMENT_ATTRIBUTES.extents,
+      new BufferAttribute(parts.garments.extents, CHANNELS),
+    );
     ranges.forEach((range, index) => this.geometry.addGroup(range.start, range.count, index));
     this.mesh = new DeformingMesh(
       this.geometry,
