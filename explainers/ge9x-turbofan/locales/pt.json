@@ -106,6 +106,8 @@
     "compressor": "Compressor, 11 estágios",
     "outerShaft": "Eixo externo, do núcleo",
     "innerShaft": "Eixo interno, do fan",
+    "gearbox": "Caixa de engrenagens de acessórios",
+    "starter": "Motor de partida pneumático",
     "diffuser": "Difusor",
     "fuelNozzles": "Bicos de combustível",
     "combustorLiner": "Revestimento de cerâmica",

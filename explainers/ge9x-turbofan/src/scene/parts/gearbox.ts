@@ -3,7 +3,7 @@ import type { BufferGeometry, Group } from 'three';
 import { CatmullRomCurve3 } from 'three';
 import type { MaterialFinish } from '@core/scene/materials';
 import type { PartContext } from './context';
-import { mesh, material, namedGroup } from './context';
+import { label, mesh, material, namedGroup } from './context';
 import {
   bevelGearGeometry,
   cylinderAlongZ,
@@ -72,6 +72,8 @@ const TRAIN = {
 };
 
 const STARTER = { from: 0.15, to: 0.35, radius: 0.07, flangeRadius: 0.092, flangeLength: 0.014 };
+const GEARBOX_LABEL = [-0.5, AXIS_Y - 0.11, AXIS_Z] as const;
+const STARTER_LABEL = [0.25, AXIS_Y - 0.07, AXIS_Z] as const;
 const DUCT = { radius: 0.024, flangeRadius: 0.036 };
 const PUMPS = [
   { x: -0.58, radius: 0.05, height: 0.11, neck: 0.03 },
@@ -354,8 +356,12 @@ function pumps(): BufferGeometry[] {
   });
 }
 
-function unitsGeometry(): BufferGeometry {
-  return mergePlain([...starter(), ...pumps()]);
+function starterGeometry(): BufferGeometry {
+  return mergePlain(starter());
+}
+
+function pumpsGeometry(): BufferGeometry {
+  return mergePlain(pumps());
 }
 
 export class GearboxPart {
@@ -371,7 +377,7 @@ export class GearboxPart {
       startX: TRAIN.startX,
       inputRatio: RADIAL_RATIO,
     });
-    const steel = material(context, 'outerShaft', GEAR_FINISH);
+    const steel = material(context, 'gearbox', GEAR_FINISH);
     this.addSpinner(context, steel, coreGearGeometry(), {
       position: new Vector3(CORE_GEAR.x, 0, 0),
       quaternion: orient(X_AXIS),
@@ -399,9 +405,13 @@ export class GearboxPart {
       });
     });
     const housing = namedGroup('gearboxHousing', this.root);
-    mesh(context, housing, housingGeometry(gears), material(context, 'outerShaft', HOUSING_FINISH));
+    mesh(context, housing, housingGeometry(gears), material(context, 'gearbox', HOUSING_FINISH));
     const units = namedGroup('gearboxUnits', this.root);
-    mesh(context, units, unitsGeometry(), material(context, 'outerShaft', UNIT_FINISH));
+    mesh(context, units, pumpsGeometry(), material(context, 'gearbox', UNIT_FINISH));
+    const starterGroup = namedGroup('starter', this.root);
+    mesh(context, starterGroup, starterGeometry(), material(context, 'starter', UNIT_FINISH));
+    label(context, 'gearbox', housing, GEARBOX_LABEL);
+    label(context, 'starter', starterGroup, STARTER_LABEL);
   }
 
   update(coreAngle: number): void {

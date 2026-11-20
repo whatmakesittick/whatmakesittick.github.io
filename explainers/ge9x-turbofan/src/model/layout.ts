@@ -21,6 +21,8 @@ export const PART_SPANS: Readonly<Record<Exclude<PartId, 'person'>, PartSpan>> =
   compressor: { from: 0.24, to: 0.53, radius: 0.6 },
   outerShaft: { from: 0.13, to: 0.69, radius: 0.2 },
   innerShaft: { from: 0.05, to: 0.88, radius: 0.1 },
+  gearbox: { from: 0.24, to: 0.46, radius: 0.35 },
+  starter: { from: 0.46, to: 0.52, radius: 0.35 },
   diffuser: { from: 0.53, to: 0.56, radius: 0.7 },
   fuelNozzles: { from: 0.55, to: 0.57, radius: 0.6 },
   combustorLiner: { from: 0.55, to: 0.63, radius: 0.75 },

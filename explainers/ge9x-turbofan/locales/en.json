@@ -106,6 +106,8 @@
     "compressor": "Compressor, 11 stages",
     "outerShaft": "Outer shaft, core",
     "innerShaft": "Inner shaft, fan",
+    "gearbox": "Accessory gearbox",
+    "starter": "Air turbine starter",
     "diffuser": "Diffuser",
     "fuelNozzles": "Fuel nozzles",
     "combustorLiner": "Ceramic liner",

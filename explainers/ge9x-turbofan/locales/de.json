@@ -106,6 +106,8 @@
     "compressor": "Verdichter, 11 Stufen",
     "outerShaft": "Äußere Welle, Kern",
     "innerShaft": "Innere Welle, Gebläse",
+    "gearbox": "Zubehörgetriebe",
+    "starter": "Luftturbinen-Starter",
     "diffuser": "Diffusor",
     "fuelNozzles": "Kraftstoffdüsen",
     "combustorLiner": "Keramik-Auskleidung",

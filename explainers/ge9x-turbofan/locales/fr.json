@@ -106,6 +106,8 @@
     "compressor": "Compresseur, 11 étages",
     "outerShaft": "Arbre extérieur, cœur",
     "innerShaft": "Arbre intérieur, soufflante",
+    "gearbox": "Boîtier d'accessoires",
+    "starter": "Démarreur pneumatique",
     "diffuser": "Diffuseur",
     "fuelNozzles": "Injecteurs de carburant",
     "combustorLiner": "Chemise en céramique",

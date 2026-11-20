@@ -106,6 +106,8 @@
     "compressor": "压气机，11级",
     "outerShaft": "外轴，核心",
     "innerShaft": "内轴，风扇",
+    "gearbox": "附件齿轮箱",
+    "starter": "空气涡轮起动机",
     "diffuser": "扩压器",
     "fuelNozzles": "燃油喷嘴",
     "combustorLiner": "陶瓷内衬",

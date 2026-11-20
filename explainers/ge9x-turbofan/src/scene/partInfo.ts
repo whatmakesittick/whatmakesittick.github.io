@@ -9,6 +9,8 @@ const LEFT_PARTS: ReadonlySet<PartId> = new Set<PartId>([
   'booster',
   'compressorStator',
   'outerShaft',
+  'gearbox',
+  'starter',
   'diffuser',
   'hpTurbine',
   'lpTurbine',

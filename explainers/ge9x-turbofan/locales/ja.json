@@ -106,6 +106,8 @@
     "compressor": "圧縮機 11段",
     "outerShaft": "外側の軸(コア)",
     "innerShaft": "内側の軸(ファン)",
+    "gearbox": "アクセサリーギアボックス",
+    "starter": "エアタービンスターター",
     "diffuser": "ディフューザー",
     "fuelNozzles": "燃料ノズル",
     "combustorLiner": "セラミックのライナー",

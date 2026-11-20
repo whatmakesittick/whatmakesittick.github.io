@@ -36,8 +36,8 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: STOWED,
     startAt: MOMENTS.behindFan,
     start: CUTAWAY_HOT,
-    labels: ['booster', 'compressorRotor', 'compressorStator', 'outerShaft'],
-    highlight: ['booster', 'compressor', 'outerShaft'],
+    labels: ['booster', 'compressorRotor', 'compressorStator', 'outerShaft', 'gearbox', 'starter'],
+    highlight: ['booster', 'compressor', 'outerShaft', 'gearbox', 'starter'],
   },
   combustor: {
     camera: 'combustor',

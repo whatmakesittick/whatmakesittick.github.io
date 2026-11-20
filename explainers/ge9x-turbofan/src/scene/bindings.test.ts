@@ -70,7 +70,13 @@ describe('engine scene bindings', () => {
     store.getState().setStreams('cold');
     expect(setHighlight).toHaveBeenLastCalledWith(STREAM_HIGHLIGHT.cold);
     store.getState().applyPreset('compressor');
-    expect(setHighlight).toHaveBeenLastCalledWith(['booster', 'compressor', 'outerShaft']);
+    expect(setHighlight).toHaveBeenLastCalledWith([
+      'booster',
+      'compressor',
+      'outerShaft',
+      'gearbox',
+      'starter',
+    ]);
   });
 
   it('shows the labels of a chapter and hides them with the toggle', async () => {

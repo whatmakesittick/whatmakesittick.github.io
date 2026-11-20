@@ -106,6 +106,8 @@
     "compressor": "Compresor, 11 etapas",
     "outerShaft": "Eje exterior, núcleo",
     "innerShaft": "Eje interior, ventilador",
+    "gearbox": "Caja de engranajes de accesorios",
+    "starter": "Motor de arranque neumático",
     "diffuser": "Difusor",
     "fuelNozzles": "Inyectores de combustible",
     "combustorLiner": "Revestimiento de cerámica",

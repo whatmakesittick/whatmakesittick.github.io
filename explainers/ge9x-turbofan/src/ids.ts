@@ -12,6 +12,8 @@ export const PART_IDS = [
   'compressor',
   'outerShaft',
   'innerShaft',
+  'gearbox',
+  'starter',
   'diffuser',
   'fuelNozzles',
   'combustorLiner',

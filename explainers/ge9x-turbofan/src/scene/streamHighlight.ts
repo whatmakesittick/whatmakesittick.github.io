@@ -10,6 +10,8 @@ export const STREAM_HIGHLIGHT: Readonly<Record<StreamId, readonly PartId[]>> = {
     'compressor',
     'outerShaft',
     'innerShaft',
+    'gearbox',
+    'starter',
     'combustor',
     'hpTurbine',
     'lpTurbine',
