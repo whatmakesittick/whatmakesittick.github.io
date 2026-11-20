@@ -253,18 +253,6 @@ describe('pose', () => {
     });
   });
 
-  it('bounds every deformed vertex', () => {
-    const { skin, mesh } = setup();
-    posedSkeletons().forEach((skeleton) => {
-      skin.apply(skeleton);
-      for (let v = 0; v < mesh.vertexCount; v++) {
-        expect(at(skin.positions, v).distanceTo(skin.centre)).toBeLessThanOrEqual(
-          skin.radius + POSITION_TOLERANCE,
-        );
-      }
-    });
-  });
-
   it('skins a dense mesh quickly', () => {
     const { skin, mesh } = setup(BENCH_RINGS);
     const skeletons = posedSkeletons();

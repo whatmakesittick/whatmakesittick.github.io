@@ -43,7 +43,6 @@ const X_AXIS = new Vector3(1, 0, 0);
 const Z_AXIS = new Vector3(0, 0, 1);
 const UNIT_SCALE = new Vector3(1, 1, 1);
 const DOUBLE = 2;
-const HALF = 0.5;
 const NORMAL_EPSILON = 1e-12;
 
 function vec(value: Triple): Vector3 {
@@ -116,8 +115,6 @@ export class BodySkin {
   readonly normals: Float32Array;
   readonly restPositions: Float32Array;
   readonly rest: RestPose;
-  readonly centre = new Vector3();
-  radius = 0;
 
   private readonly mesh: SkinMesh;
   private readonly restNormal: Float32Array;
@@ -161,7 +158,6 @@ export class BodySkin {
     });
     this.poseHead(skeleton);
     this.skin();
-    this.measure();
   }
 
   boneMatrix(bone: number, target: Matrix4): Matrix4 {
@@ -321,35 +317,5 @@ export class BodySkin {
     out[at] = x + qw * tx + (qy * tz - qz * ty);
     out[at + 1] = y + qw * ty + (qz * tx - qx * tz);
     out[at + 2] = z + qw * tz + (qx * ty - qy * tx);
-  }
-
-  private measure(): void {
-    const { positions, centre } = this;
-    const count = positions.length / 3;
-    const low = this.axisX.set(Infinity, Infinity, Infinity);
-    const high = this.axisY.set(-Infinity, -Infinity, -Infinity);
-    for (let v = 0; v < count; v++) {
-      const at = 3 * v;
-      low.set(
-        Math.min(low.x, positions[at]),
-        Math.min(low.y, positions[at + 1]),
-        Math.min(low.z, positions[at + 2]),
-      );
-      high.set(
-        Math.max(high.x, positions[at]),
-        Math.max(high.y, positions[at + 1]),
-        Math.max(high.z, positions[at + 2]),
-      );
-    }
-    centre.addVectors(low, high).multiplyScalar(HALF);
-    let farthest = 0;
-    for (let v = 0; v < count; v++) {
-      const at = 3 * v;
-      const dx = positions[at] - centre.x;
-      const dy = positions[at + 1] - centre.y;
-      const dz = positions[at + 2] - centre.z;
-      farthest = Math.max(farthest, dx * dx + dy * dy + dz * dz);
-    }
-    this.radius = Math.sqrt(farthest);
   }
 }

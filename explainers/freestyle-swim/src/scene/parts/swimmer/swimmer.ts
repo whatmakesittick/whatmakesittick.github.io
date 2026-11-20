@@ -10,6 +10,7 @@ import type { PartContext } from '../context';
 import { BodySurface } from './bodySurface';
 import { PartBuilder } from './build';
 import { buildGoggles, buildWristband } from './gear';
+import { restSkeleton } from './restSkeleton';
 import { BodySkin } from './skin/bodySkin';
 import { decodeSkinMesh } from './skin/decode';
 import { centreBone, sideBone } from './skin/types';
@@ -110,6 +111,8 @@ export function* buildSwimmer(context: PartContext): Steps<Swimmer> {
   const mesh = decodeSkinMesh();
   yield;
   const skin = new BodySkin(mesh);
+  yield;
+  skin.apply(restSkeleton(skin.rest));
   yield;
   const surface = new BodySurface(skin, {
     slots: mesh.slots,
