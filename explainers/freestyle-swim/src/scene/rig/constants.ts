@@ -1,4 +1,5 @@
 import { SEGMENT_M } from '../../model/scale';
+import type { KickId } from '../../ids';
 import type { Key } from './curve';
 
 type Triple = readonly [number, number, number];
@@ -20,13 +21,15 @@ export const BODY = {
   hipY: -0.012,
   neckBase: [0.07, 0.01, 0] as Triple,
   neckLength: 0.1,
-  headFollow: 0.2,
-  breathHeadDeg: -96,
+  headFollow: 0.05,
+  breathHeadDeg: -88,
   headUpNeckDeg: 38,
   hipBlend: { from: -0.47, to: -0.12 },
 } as const;
 
 export const HEEL_SHARE = 0.2;
+
+export const BREATH_HEAD = { turnOut: [-0.35, 0.2], turnBack: [0.5, 0.92] } as const;
 
 export const RECOVERY_PATH = { fadeIn: [3, 3.12], fadeOut: [3.86, 4] } as const;
 
@@ -158,14 +161,105 @@ export const ARM_KEYS = {
   ] as readonly Key<number>[],
 } as const;
 
+export interface KickShape {
+  readonly thigh: readonly Key<number>[];
+  readonly knee: readonly Key<number>[];
+  readonly ankleDeg: readonly Key<number>[];
+  readonly heave: readonly Key<number>[];
+  readonly restDeg: number;
+  readonly thighDeg: number;
+  readonly kneeDeg: number;
+}
+
+export const KICK_SHAPES: Readonly<Record<KickId, KickShape>> = {
+  six: {
+    thigh: [
+      [0, 1],
+      [0.15, 0.6],
+      [0.35, -0.35],
+      [0.55, -1],
+      [0.75, -0.2],
+      [0.9, 0.75],
+    ],
+    knee: [
+      [0, 0.5],
+      [0.1, 0.1],
+      [0.2, 0.02],
+      [0.5, 0.02],
+      [0.62, 0.15],
+      [0.75, 0.6],
+      [0.86, 1],
+      [0.94, 0.9],
+    ],
+    ankleDeg: [
+      [0, -2],
+      [0.15, 4],
+      [0.35, 18],
+      [0.55, 24],
+      [0.72, 18],
+      [0.82, 11],
+      [0.91, 3],
+    ],
+    heave: [
+      [0, 0.7],
+      [0.1, 1],
+      [0.3, 0.2],
+      [0.6, -0.5],
+      [0.85, -0.1],
+    ],
+    restDeg: 7,
+    thighDeg: 9,
+    kneeDeg: 34,
+  },
+  two: {
+    thigh: [
+      [0, 1],
+      [0.12, 0.55],
+      [0.3, -0.1],
+      [0.5, -0.35],
+      [0.65, -0.5],
+      [0.77, -0.55],
+      [0.87, 0.15],
+      [0.95, 0.8],
+    ],
+    knee: [
+      [0, 0.45],
+      [0.08, 0.08],
+      [0.2, 0.02],
+      [0.6, 0.04],
+      [0.72, 0.2],
+      [0.82, 0.7],
+      [0.9, 1],
+      [0.96, 0.85],
+    ],
+    ankleDeg: [
+      [0, -2],
+      [0.12, 4],
+      [0.3, 16],
+      [0.6, 20],
+      [0.78, 16],
+      [0.86, 9],
+      [0.93, 2],
+    ],
+    heave: [
+      [0, 0.8],
+      [0.08, 1],
+      [0.25, 0.1],
+      [0.5, 0],
+      [0.8, -0.1],
+    ],
+    restDeg: 6,
+    thighDeg: 8.5,
+    kneeDeg: 30,
+  },
+};
+
 export const KICK = {
-  restDeg: 6,
-  thighPerDepthDeg: 20,
-  thighLead: 0.05,
-  kneeDeg: { two: 30, six: 22 },
-  kneePeak: 0.93,
-  kneeWindow: 0.3,
-  ankleRestDeg: 16,
-  ankleSwingDeg: 12,
+  depthM: 0.35,
+  strongBeatShare: 0.12,
+  headUpGain: 0.35,
+  headUpKneeGain: 0.15,
+  adduction: 0.04,
   toeIn: 0.12,
+  hipHeaveM: 0.01,
 } as const;
