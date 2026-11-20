@@ -37,8 +37,9 @@ export const REACH_SOFT = { knee: 0.95, span: 0.045 } as const;
 
 export const ARM_KEYS = {
   entryElbow: [
-    [0, 150],
-    [0.45, 166],
+    [0, 142],
+    [0.35, 172],
+    [0.86, 172],
     [1, 148],
   ] as readonly Key<number>[],
   recoveryElbow: [
@@ -46,15 +47,15 @@ export const ARM_KEYS = {
     [3.22, 119],
     [3.5, 80],
     [3.78, 116],
-    [4, 150],
+    [4, 142],
   ] as readonly Key<number>[],
   recoveryHeight: [
     [3, -0.05],
     [3.2, 0.1],
     [3.5, 0.17],
     [3.76, 0.18],
-    [3.9, 0],
-    [4, -0.21],
+    [3.9, 0.03],
+    [4, -0.06],
   ] as readonly Key<number>[],
   reach: [
     [0, [0.67, 0, 0.03]],
@@ -101,9 +102,10 @@ export const ARM_KEYS = {
     [3.76, [0.05, -1, -0.25]],
   ] as readonly Key<Triple>[],
   wristFlexDeg: [
-    [0, 18],
-    [0.5, 22],
-    [1, 30],
+    [0, 8],
+    [0.5, 4],
+    [0.85, 6],
+    [1, 28],
     [1.5, 20],
     [2, 0],
     [2.4, -8],
@@ -142,10 +144,17 @@ export const ARM_KEYS = {
     [3.86, [0.95, -0.3, -0.1]],
     [3.94, [0.28, -0.11, -0.005]],
   ] as readonly Key<Triple>[],
+  narrowing: [
+    [0, 0.02],
+    [0.5, 0.035],
+    [1, 0.02],
+    [1.5, 0],
+    [3.6, 0],
+  ] as readonly Key<number>[],
   protraction: [
-    [0, 0.065],
-    [0.5, 0.08],
-    [1, 0.05],
+    [0, 0.075],
+    [0.5, 0.11],
+    [1, 0.06],
     [1.5, 0.015],
     [2, -0.005],
     [2.5, -0.02],

@@ -6,6 +6,7 @@ export interface PaceBundle {
   idcPercent: number;
   hipRollDeg: number;
   shoulderRollDeg: number;
+  pullKeyDepthM: number;
   defaultKick: KickId;
 }
 
@@ -18,6 +19,7 @@ export const PACES: Readonly<Record<PaceId, PaceBundle>> = {
     idcPercent: -7.6,
     hipRollDeg: 25,
     shoulderRollDeg: 50,
+    pullKeyDepthM: 0.44,
     defaultKick: 'two',
   },
   middle: {
@@ -26,6 +28,7 @@ export const PACES: Readonly<Record<PaceId, PaceBundle>> = {
     idcPercent: -3.2,
     hipRollDeg: 25,
     shoulderRollDeg: 50,
+    pullKeyDepthM: 0.46,
     defaultKick: 'six',
   },
   sprint: {
@@ -34,6 +37,7 @@ export const PACES: Readonly<Record<PaceId, PaceBundle>> = {
     idcPercent: 3.8,
     hipRollDeg: 18,
     shoulderRollDeg: 50,
+    pullKeyDepthM: 0.64,
     defaultKick: 'six',
   },
 };

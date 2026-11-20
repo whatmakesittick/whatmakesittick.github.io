@@ -189,7 +189,8 @@ export function solveArm(
 ): void {
   const clock = armClock(arm);
   const protraction = periodicCurve(ARM_KEYS.protraction, ARM_PERIOD, clock);
-  roll(pose.shoulder, protraction, 0, side * BODY.shoulderHalf, shoulderRollRad);
+  const halfWidth = BODY.shoulderHalf - periodicCurve(ARM_KEYS.narrowing, ARM_PERIOD, clock);
+  roll(pose.shoulder, protraction, 0, side * halfWidth, shoulderRollRad);
   pose.shoulder.y += periodicCurve(ARM_KEYS.elevation, ARM_PERIOD, clock);
   const reach = lawOfCosines(BODY.upperArm, BODY.forearm, toRadians(elbowDeg(arm, clock)));
   const targetY = handHeight(arm, clock) - rootY;

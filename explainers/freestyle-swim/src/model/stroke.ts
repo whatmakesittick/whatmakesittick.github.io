@@ -16,8 +16,9 @@ import { CYCLE_UNITS, wrapUnits } from './playback';
 export const ELBOW_DEG = { catch: 148, underShoulder: 105, pushEnd: 151 } as const;
 
 export const HAND_DEPTH_M = {
-  entry: 0.21,
-  pullMean: 0.62,
+  entry: 0.06,
+  glide: 0.2,
+  catch: 0.28,
   pullEnd: 0.67,
   pushMean: 0.37,
   pushEnd: 0.05,
@@ -36,6 +37,8 @@ export const HIP_LAG_UNITS = 50;
 export const BREATH_EXTRA_DEG = 9;
 export const BREATH_RAMP_SHARE = 0.25;
 export const KICK_DEPTH_M = 0.35;
+export const GLIDE_KEY_SHARE = 0.5;
+export const PULL_KEY_SHARE = 0.6;
 export const SWING_MS = 0.4;
 export const SPLASH_UNITS = 120;
 export const RELEASE_SHARE = 0.1;
@@ -65,11 +68,13 @@ function elbowAt(units: number, pace: PaceId): number | null {
 function handDepthAt(units: number, pace: PaceId): number | null {
   const { pull, push, recovery } = phaseBounds(pace);
   if (units >= recovery[0]) return null;
-  const pullMid = (pull[0] + pull[1]) / 2;
+  const pullKey = lerp(pull[0], pull[1], PULL_KEY_SHARE);
   const pushMid = (push[0] + push[1]) / 2;
   const keys: readonly (readonly [number, number])[] = [
     [0, HAND_DEPTH_M.entry],
-    [pullMid, HAND_DEPTH_M.pullMean],
+    [pull[0] * GLIDE_KEY_SHARE, HAND_DEPTH_M.glide],
+    [pull[0], HAND_DEPTH_M.catch],
+    [pullKey, PACES[pace].pullKeyDepthM],
     [pull[1], HAND_DEPTH_M.pullEnd],
     [pushMid, HAND_DEPTH_M.pushMean],
     [push[1], HAND_DEPTH_M.pushEnd],

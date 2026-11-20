@@ -4,7 +4,8 @@ import { lerp, toDegrees } from '@core/math';
 import { KICK_IDS, PACE_IDS } from '../../ids';
 import type { ArmId, KickId, PaceId } from '../../ids';
 import { MOMENTS, phaseBounds, strokeAt } from '../../model';
-import { HAND_DEPTH_M, ELBOW_DEG } from '../../model/stroke';
+import { PACES } from '../../model/paces';
+import { GLIDE_KEY_SHARE, PULL_KEY_SHARE, HAND_DEPTH_M, ELBOW_DEG } from '../../model/stroke';
 import { bodyPose } from '../pose';
 import { BODY } from './constants';
 import { createSkeleton, solveSkeleton } from './skeleton';
@@ -120,7 +121,9 @@ describe('swimmer rig', () => {
       const { pull, push } = phaseBounds(pace);
       [
         [0, HAND_DEPTH_M.entry],
-        [(pull[0] + pull[1]) / 2, HAND_DEPTH_M.pullMean],
+        [pull[0] * GLIDE_KEY_SHARE, HAND_DEPTH_M.glide],
+        [pull[0], HAND_DEPTH_M.catch],
+        [lerp(pull[0], pull[1], PULL_KEY_SHARE), PACES[pace].pullKeyDepthM],
         [pull[1], HAND_DEPTH_M.pullEnd],
         [(push[0] + push[1]) / 2, HAND_DEPTH_M.pushMean],
         [push[1] - 0.01, HAND_DEPTH_M.pushEnd],
