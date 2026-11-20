@@ -123,6 +123,23 @@ describe('swimmer rig', () => {
     expect(handAxis.y).toBeLessThan(forearm.y - 0.1);
   });
 
+  it('holds the elbow high through the catch', () => {
+    const minSteeperForearmDeg = 15;
+    const { shoulder, elbow, wrist } = skeletonAt(MOMENTS.catch).arms.right;
+    const upper = new Vector3().subVectors(elbow, shoulder);
+    const forearm = new Vector3().subVectors(wrist, elbow);
+    const depressionDeg = (bone: Vector3) => toDegrees(Math.asin(-bone.y / bone.length()));
+    expect(depressionDeg(forearm) - depressionDeg(upper)).toBeGreaterThan(minSteeperForearmDeg);
+  });
+
+  it('recovers with the forearm hanging under a high elbow close to the shoulder line', () => {
+    const maxHandWidthM = 0.2;
+    const minElbowLiftM = 0.15;
+    const { shoulder, elbow, hand } = skeletonAt(MOMENTS.recoveryMid).arms.right;
+    expect(hand.z - shoulder.z).toBeLessThan(maxHandWidthM);
+    expect(elbow.y - hand.y).toBeGreaterThan(minElbowLiftM);
+  });
+
   it('exits the push with the palm facing the thigh', () => {
     const { palm } = skeletonAt(MOMENTS.pushEnd).arms.right;
     expect(palm.z).toBeLessThan(-0.7);

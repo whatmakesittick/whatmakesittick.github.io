@@ -1,5 +1,5 @@
 import { Quaternion, Vector3 } from 'three';
-import { FULL_TURN, lerp, toRadians } from '@core/math';
+import { FULL_TURN, lerp, smoothstep, toRadians } from '@core/math';
 import { PHASE_IDS } from '../../ids';
 import type { ArmId, ArmReading, KickId, LegReading, StrokeReading } from '../../ids';
 import {
@@ -10,9 +10,10 @@ import {
   HEEL_SHARE,
   KICK,
   REACH_SOFT,
+  RECOVERY_PATH,
   RECOVERY_START,
 } from './constants';
-import { clampedCurve, periodicCurve, periodicVector } from './curve';
+import { clampedCurve, clampedVector, periodicCurve, periodicVector } from './curve';
 import { lawOfCosines, solveTwoBone } from './ik';
 
 export interface ArmPose {
@@ -53,6 +54,7 @@ const pole = new Vector3();
 const palmHint = new Vector3();
 const forearm = new Vector3();
 const direction = new Vector3();
+const keyedWrist = new Vector3();
 
 function armPose(): ArmPose {
   return {
@@ -136,6 +138,18 @@ function placeWrist(pose: ArmPose, reach: number, wristY: number): void {
   );
 }
 
+function recoveryShare(clock: number): number {
+  const { fadeIn, fadeOut } = RECOVERY_PATH;
+  return smoothstep(clock, fadeIn[0], fadeIn[1]) * (1 - smoothstep(clock, fadeOut[0], fadeOut[1]));
+}
+
+function followRecoveryPath(pose: ArmPose, clock: number, side: number): void {
+  const share = recoveryShare(clock);
+  if (share === 0) return;
+  mirrored(keyedWrist, clampedVector(ARM_KEYS.recoveryWrist, clock), side).add(pose.shoulder);
+  pose.wrist.lerp(keyedWrist, share);
+}
+
 function orientHand(pose: ArmPose, flexRad: number): void {
   forearm.subVectors(pose.wrist, pose.elbow).normalize();
   palmHint.addScaledVector(forearm, -palmHint.dot(forearm)).normalize();
@@ -166,6 +180,7 @@ export function solveArm(
   let handLift = 0;
   for (let pass = 0; pass < WRIST_PASSES; pass++) {
     placeWrist(pose, reach, targetY - handLift);
+    followRecoveryPath(pose, clock, side);
     mirrored(pole, poleValue, side);
     solveTwoBone(pose.shoulder, pose.wrist, BODY.upperArm, BODY.forearm, pole, pose.elbow);
     mirrored(palmHint, palmValue, side);

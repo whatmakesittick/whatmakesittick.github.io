@@ -68,3 +68,15 @@ export function periodicVector(
     );
   return [channel(0), channel(1), channel(2)];
 }
+
+export function clampedVector(
+  keys: readonly Key<readonly [number, number, number]>[],
+  at: number,
+): [number, number, number] {
+  const channel = (axis: number) =>
+    clampedCurve(
+      keys.map(([time, value]) => [time, value[axis]] as const),
+      at,
+    );
+  return [channel(0), channel(1), channel(2)];
+}
