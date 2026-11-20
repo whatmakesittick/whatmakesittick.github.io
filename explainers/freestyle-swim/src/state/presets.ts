@@ -88,7 +88,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'drag',
     speed: HALF_SPEED,
     view: view({ underwater: true, forces: true, handPath: false }),
-    startAt: MOMENTS.entry,
+    startAt: MOMENTS.underShoulder,
     start: {},
     labels: ['head', 'hips', 'waterline', 'laneRope'],
     highlight: ['head', 'hips'],
