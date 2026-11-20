@@ -10,7 +10,7 @@ import { createSkeleton, solveSkeleton } from './skeleton';
 import type { Skeleton } from './skeleton';
 
 const ROOT_Y = bodyPose(0, 0).y;
-const ELBOW_TOLERANCE_DEG = 5;
+const ELBOW_TOLERANCE_DEG = 3;
 const DEPTH_TOLERANCE_M = 0.05;
 const STEP_LIMIT_M = 0.022;
 
@@ -21,6 +21,21 @@ function skeletonAt(
 ): Skeleton {
   const reading = strokeAt(units, { pace, kick: 'six', breathing, headUp: false });
   return solveSkeleton(createSkeleton(), reading, 0, ROOT_Y);
+}
+
+const SCAN_STEP_UNITS = 5;
+const BREATHING = ['none', 'right'] as const;
+
+function scan(visit: (units: number, pace: PaceId, breathing: 'none' | 'right') => void): void {
+  PACE_IDS.forEach((pace) =>
+    BREATHING.forEach((breathing) => {
+      for (let units = 0; units < 1000; units += SCAN_STEP_UNITS) visit(units, pace, breathing);
+    }),
+  );
+}
+
+function depressionDeg(bone: Vector3): number {
+  return toDegrees(Math.asin(-bone.y / bone.length()));
 }
 
 function elbowAngle(skeleton: Skeleton): number {
@@ -128,7 +143,6 @@ describe('swimmer rig', () => {
     const { shoulder, elbow, wrist } = skeletonAt(MOMENTS.catch).arms.right;
     const upper = new Vector3().subVectors(elbow, shoulder);
     const forearm = new Vector3().subVectors(wrist, elbow);
-    const depressionDeg = (bone: Vector3) => toDegrees(Math.asin(-bone.y / bone.length()));
     expect(depressionDeg(forearm) - depressionDeg(upper)).toBeGreaterThan(minSteeperForearmDeg);
   });
 
@@ -151,5 +165,68 @@ describe('swimmer rig', () => {
       const face = new Vector3(0, -1, 0).applyQuaternion(skeletonAt(units).head);
       expect(Math.abs(toDegrees(Math.atan2(face.z, -face.y)))).toBeLessThan(maxHeadTiltDeg);
     }
+  });
+
+  it('keeps the hand under water through the stroke and above it through mid recovery', () => {
+    const midRecovery = { from: 0.25, to: 0.75 };
+    scan((units, pace, breathing) => {
+      const reading = strokeAt(units, { pace, kick: 'six', breathing, headUp: false });
+      const handY = skeletonAt(units, pace, breathing).arms.right.hand.y + ROOT_Y;
+      const { underwater, progress } = reading.right;
+      if (underwater) expect(handY).toBeLessThan(0);
+      else if (progress > midRecovery.from && progress < midRecovery.to) {
+        expect(handY).toBeGreaterThan(0);
+      }
+    });
+  });
+
+  it('never lets a hand cross the midline', () => {
+    const minWidthM = 0.05;
+    scan((units, pace, breathing) => {
+      const { right, left } = skeletonAt(units, pace, breathing).arms;
+      expect(right.hand.z).toBeGreaterThan(minWidthM);
+      expect(left.hand.z).toBeLessThan(-minWidthM);
+    });
+  });
+
+  it('moves the left arm as the right arm half a cycle later', () => {
+    for (let units = 0; units < 1000; units += 50) {
+      const left = skeletonAt(units).arms.left;
+      const right = skeletonAt(units - 500).arms.right;
+      [
+        [left.elbow, right.elbow],
+        [left.hand, right.hand],
+      ].forEach(([joint, mirror]) => {
+        expect(joint.distanceTo(new Vector3(mirror.x, mirror.y, -mirror.z))).toBeLessThan(1e-6);
+      });
+    }
+  });
+
+  it('tips the forearm down under a high elbow through the early pull', () => {
+    const minSteeperForearmDeg = 35;
+    PACE_IDS.forEach((pace) => {
+      const { pull } = phaseBounds(pace);
+      const { shoulder, elbow, wrist } = skeletonAt((pull[0] + pull[1]) / 2, pace).arms.right;
+      const upper = new Vector3().subVectors(elbow, shoulder);
+      const forearm = new Vector3().subVectors(wrist, elbow);
+      expect(depressionDeg(forearm) - depressionDeg(upper)).toBeGreaterThan(minSteeperForearmDeg);
+    });
+  });
+
+  it('leads the recovery with an elbow above the hand and outside the shoulder line', () => {
+    const minElbowOutM = 0.05;
+    const leadShare = { from: 0.2, to: 0.8 };
+    scan((units, pace, breathing) => {
+      const { progress, underwater } = strokeAt(units, {
+        pace,
+        kick: 'six',
+        breathing,
+        headUp: false,
+      }).right;
+      if (underwater || progress < leadShare.from || progress > leadShare.to) return;
+      const { shoulder, elbow, hand } = skeletonAt(units, pace, breathing).arms.right;
+      expect(elbow.z - shoulder.z).toBeGreaterThan(minElbowOutM);
+      expect(elbow.y).toBeGreaterThan(hand.y);
+    });
   });
 });
