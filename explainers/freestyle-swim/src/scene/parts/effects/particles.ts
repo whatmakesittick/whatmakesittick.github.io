@@ -5,11 +5,11 @@ import { registered } from '../context';
 import type { PartContext } from '../context';
 import { LAYER } from '../pool/constants';
 
-const POINT_COUNT = 160;
-const POINT_SIZE_M = 0.03;
+const POINT_COUNT = 96;
+const POINT_SIZE_M = 0.02;
 const GRAVITY = 9.8;
-const BUBBLE = { rise: 0.22, wobble: 0.05, life: 1.4, alpha: 0.55, drift: 0.9 } as const;
-const DROPLET = { life: 0.55, alpha: 0.9, up: 1.1, spread: 0.7 } as const;
+const BUBBLE = { rise: 0.3, wobble: 0.04, life: 1.2, alpha: 0.38, drift: 0.85 } as const;
+const DROPLET = { life: 0.5, alpha: 0.7, up: 1, spread: 0.5 } as const;
 const HIDDEN_Y = -50;
 const SURFACE_Y = -0.005;
 const SEED_RANGE = 6;

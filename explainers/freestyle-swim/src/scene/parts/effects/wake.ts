@@ -28,10 +28,10 @@ void main() {
   vec2 p = vec2(vWorld.x - uScroll, vWorld.z);
   float kx = TAU / PERIOD;
   float cells = sin(kx * p.x + 2.2 * sin(p.y * 9.0 + uPhase)) * sin(2.0 * kx * p.x + p.y * 13.0 - 2.0 * uPhase);
-  float patches = smoothstep(0.0, 0.7, cells * 0.5 + 0.35);
+  float patches = smoothstep(-0.2, 1.0, cells * 0.5 + 0.35);
   vec2 e = min(vUv, 1.0 - vUv);
   float edge = smoothstep(0.0, 0.12, min(e.x, e.y));
-  float alpha = uStrength * along * across * patches * 0.55 * edge;
+  float alpha = uStrength * along * across * patches * 0.32 * edge;
   gl_FragColor = vec4(uFoam, alpha);
 ${FRAGMENT_TAIL}`;
 
