@@ -26,7 +26,7 @@ const REGION_OFFSETS: Readonly<
 };
 
 export const CAMERA_VIEWS: Readonly<Record<CameraView, FramedView<ViewRegion>>> = {
-  hero: { region: HERO_REGION, direction: [-0.3, 0.18, 1], margin: 0.88 },
+  hero: { region: HERO_REGION, direction: [-1, 0.2, 0.7], margin: 0.82 },
   compressor: { region: COMPRESSOR_OFFSET_REGION, direction: [0.2, 0.35, 1], margin: 1.05 },
   combustor: { region: 'combustor', direction: [0.25, 0.3, 1], margin: 1.05 },
   turbines: { region: TURBINES_OFFSET_REGION, direction: [0.4, 0.3, 1], margin: 1.05 },
