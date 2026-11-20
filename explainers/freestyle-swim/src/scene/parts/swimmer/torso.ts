@@ -2,8 +2,8 @@ import { Mesh } from 'three';
 import type { BufferAttribute, Group, Material } from 'three';
 import { lerp, smoothstep } from '@core/math';
 import { BODY } from '../../rig/constants';
-import { ringAt, torsoGrid, torsoPiece } from './geometry';
-import type { TorsoGrid } from './geometry';
+import { ringAt, torsoGrid, torsoPiece } from './torsoGrid';
+import type { TorsoGrid } from './torsoGrid';
 import { TORSO } from './shapes';
 
 const XYZ = 3;
@@ -14,11 +14,16 @@ export interface TorsoMaterials {
   readonly chest: Material;
 }
 
+interface Piece {
+  readonly mesh: Mesh;
+  readonly firstRing: number;
+}
+
 export class Torso {
   readonly pelvis: Mesh;
   readonly chest: Mesh;
   private readonly grid: TorsoGrid;
-  private readonly pieces: { mesh: Mesh; offset: number }[];
+  private readonly pieces: Piece[];
 
   constructor(
     parent: Group,
@@ -29,10 +34,10 @@ export class Torso {
     const rings = this.grid.xs.length / this.grid.ringSize - 1;
     const pelvisEnd = ringAt(this.grid, TORSO.pelvisEnd);
     const chestStart = ringAt(this.grid, TORSO.chestStart);
-    const piece = (from: number, to: number, material: Material) => {
+    const piece = (from: number, to: number, material: Material): Piece => {
       const mesh = new Mesh(track(torsoPiece(this.grid, from, to)), material);
       parent.add(mesh);
-      return { mesh, offset: from * this.grid.ringSize };
+      return { mesh, firstRing: from };
     };
     this.pieces = [
       piece(0, pelvisEnd, materials.pelvis),
@@ -44,27 +49,33 @@ export class Torso {
   }
 
   twist(hipRollRad: number, shoulderRollRad: number): void {
-    const { positions, normals, xs } = this.grid;
-    this.pieces.forEach(({ mesh, offset }) => {
+    const { positions, normals, xs, ringSize } = this.grid;
+    this.pieces.forEach(({ mesh, firstRing }) => {
       const position = mesh.geometry.getAttribute('position') as BufferAttribute;
       const normal = mesh.geometry.getAttribute('normal') as BufferAttribute;
-      for (let index = 0; index < position.count; index++) {
-        const source = (offset + index) * XYZ;
-        const x = xs[offset + index];
-        const angle = lerp(
-          hipRollRad,
-          shoulderRollRad,
-          smoothstep(x, BODY.hipBlend.from, BODY.hipBlend.to),
-        );
+      const rings = position.count / ringSize;
+      for (let local = 0; local < rings; local++) {
+        const first = (firstRing + local) * ringSize;
+        const blend = smoothstep(xs[first], BODY.hipBlend.from, BODY.hipBlend.to);
+        const angle = lerp(hipRollRad, shoulderRollRad, blend);
         const cos = Math.cos(angle);
         const sin = Math.sin(angle);
-        const rotate = (target: BufferAttribute, from: Float32Array) => {
-          const y = from[source + 1];
-          const z = from[source + 2];
-          target.setXYZ(index, from[source], y * cos - z * sin, y * sin + z * cos);
-        };
-        rotate(position, positions);
-        rotate(normal, normals);
+        for (let step = 0; step < ringSize; step++) {
+          const source = (first + step) * XYZ;
+          const index = local * ringSize + step;
+          position.setXYZ(
+            index,
+            positions[source],
+            positions[source + 1] * cos - positions[source + 2] * sin,
+            positions[source + 1] * sin + positions[source + 2] * cos,
+          );
+          normal.setXYZ(
+            index,
+            normals[source],
+            normals[source + 1] * cos - normals[source + 2] * sin,
+            normals[source + 1] * sin + normals[source + 2] * cos,
+          );
+        }
       }
       position.needsUpdate = true;
       normal.needsUpdate = true;

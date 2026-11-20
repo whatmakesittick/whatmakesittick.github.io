@@ -1,31 +1,31 @@
-import { Group, Matrix4, Mesh, Vector3 } from 'three';
-import type { BufferGeometry, Material, Object3D } from 'three';
+import { Group } from 'three';
+import type { BufferGeometry, Mesh, Object3D } from 'three';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
-import { anchorAt } from '@core/scene/parts';
+import type { Steps } from '@core/scene/pacing';
 import type { ArmId, PartId } from '../../../ids';
-import { FINISHES } from '../../finishes';
-import type { Finish } from '../../finishes';
 import { BODY } from '../../rig/constants';
 import { SIDE } from '../../rig/skeleton';
 import type { ArmPose, LegPose, Skeleton } from '../../rig/skeleton';
 import type { PartContext } from '../context';
+import { PartBuilder } from './build';
+import { footGeometry } from './feet';
+import { handGeometry, wristbandGeometry } from './hands';
 import {
-  UP,
-  bandGeometry,
   capGeometry,
-  ellipsoid,
-  footGeometry,
-  handGeometry,
+  capStripeGeometry,
+  gogglesFrameGeometry,
+  headSkinGeometry,
   lensGeometry,
-  limbGeometry,
-  neckGeometry,
-} from './geometry';
-import { HAND, HEAD, JOINTS } from './shapes';
+} from './head';
+import { deltoidGeometry, jointGeometry, limbGeometry, sleeveGeometry } from './limbs';
+import { Placer } from './placement';
+import { HAND, HEAD } from './shapes';
 import { Torso } from './torso';
 
-const SIDE_FINISH: Readonly<Record<ArmId, Finish>> = { right: 'skinRight', left: 'skinLeft' };
 const HIP_LABEL = [-0.5, 0.02, 0.17] as const;
 const FOOT_LABEL_SHARE = 0.4;
+const ORIGIN = [0, 0, 0] as const;
+const ARM_IDS: readonly ArmId[] = ['right', 'left'];
 
 interface ArmMeshes {
   readonly deltoid: Mesh;
@@ -43,69 +43,58 @@ interface LegMeshes {
   readonly foot: Mesh;
 }
 
-const direction = new Vector3();
-const across = new Vector3();
-const basis = new Matrix4();
-
-function placeSegment(mesh: Mesh, from: Vector3, to: Vector3): void {
-  mesh.position.copy(from);
-  mesh.quaternion.setFromUnitVectors(UP, direction.subVectors(to, from).normalize());
+interface Shared {
+  readonly upper: BufferGeometry;
+  readonly forearm: BufferGeometry;
+  readonly thigh: BufferGeometry;
+  readonly sleeve: BufferGeometry;
+  readonly shank: BufferGeometry;
+  readonly elbow: BufferGeometry;
+  readonly knee: BufferGeometry;
+  readonly deltoid: BufferGeometry;
 }
 
-function placeFlat(mesh: Mesh, origin: Vector3, length: Vector3, normal: Vector3): void {
-  mesh.position.copy(origin);
-  across.crossVectors(length, normal).normalize();
-  mesh.quaternion.setFromRotationMatrix(basis.makeBasis(across, length, normal));
+function sharedGeometries(): Shared {
+  return {
+    upper: limbGeometry('upperArm'),
+    forearm: limbGeometry('forearm'),
+    thigh: limbGeometry('thigh'),
+    sleeve: sleeveGeometry(),
+    shank: limbGeometry('shank'),
+    elbow: jointGeometry('elbow'),
+    knee: jointGeometry('knee'),
+    deltoid: deltoidGeometry(),
+  };
 }
 
 export class Swimmer {
-  readonly root = new Group();
-  readonly labels = new Map<PartId, Object3D>();
+  readonly root: Group;
+  readonly labels: ReadonlyMap<PartId, Object3D>;
   readonly rightHand: Object3D;
-  readonly head = new Group();
-  private readonly context: PartContext;
+  readonly head: Group;
   private readonly torso: Torso;
   private readonly hipLabel: Object3D;
   private readonly arms: Record<ArmId, ArmMeshes>;
   private readonly legs: Record<ArmId, LegMeshes>;
-  private readonly shared: Record<
-    'upper' | 'forearm' | 'thigh' | 'sleeve' | 'shank' | 'foot' | 'elbow' | 'knee' | 'deltoid',
-    BufferGeometry
-  >;
+  private readonly placer = new Placer();
 
-  constructor(context: PartContext) {
-    this.context = context;
-    this.root.name = 'swimmer';
-    const track = context.tracker.track.bind(context.tracker);
-    this.shared = {
-      upper: track(limbGeometry('upperArm')),
-      forearm: track(limbGeometry('forearm')),
-      thigh: track(limbGeometry('thigh')),
-      sleeve: track(limbGeometry('sleeve')),
-      shank: track(limbGeometry('shank')),
-      foot: track(footGeometry()),
-      elbow: track(ellipsoid([JOINTS.elbow, JOINTS.elbow, JOINTS.elbow], [0, 0, 0])),
-      knee: track(ellipsoid([JOINTS.knee, JOINTS.knee, JOINTS.knee], [0, 0, 0])),
-      deltoid: track(ellipsoid([JOINTS.shoulder, JOINTS.shoulder, JOINTS.shoulder], [0, 0, 0])),
-    };
-    this.torso = new Torso(
-      this.root,
-      {
-        pelvis: this.material('hips', 'suit'),
-        abdomen: this.material(STRUCTURE_GROUP, 'torso'),
-        chest: this.material('shoulder', 'torso'),
-      },
-      track,
-    );
-    this.hipLabel = this.label('hips', this.torso.pelvis, [...HIP_LABEL]);
-    this.arms = { right: this.buildArm('right'), left: this.buildArm('left') };
-    this.legs = { right: this.buildLeg('right'), left: this.buildLeg('left') };
-    this.buildHead();
-    this.rightHand = this.label('hand', this.arms.right.hand, [0, HAND.length / 2, 0]);
-    this.label('forearm', this.arms.right.forearm, [0, BODY.forearm / 2, 0]);
-    this.label('elbow', this.arms.right.elbow, [0, 0, 0]);
-    this.label('shoulder', this.arms.right.deltoid, [0, 0, 0]);
-    this.label('foot', this.legs.right.foot, [0, BODY.foot * FOOT_LABEL_SHARE, 0]);
+  constructor(parts: {
+    root: Group;
+    head: Group;
+    labels: ReadonlyMap<PartId, Object3D>;
+    torso: Torso;
+    hipLabel: Object3D;
+    arms: Record<ArmId, ArmMeshes>;
+    legs: Record<ArmId, LegMeshes>;
+  }) {
+    this.root = parts.root;
+    this.head = parts.head;
+    this.labels = parts.labels;
+    this.torso = parts.torso;
+    this.hipLabel = parts.hipLabel;
+    this.arms = parts.arms;
+    this.legs = parts.legs;
+    this.rightHand = this.labels.get('hand') as Object3D;
   }
 
   apply(skeleton: Skeleton): void {
@@ -114,7 +103,7 @@ export class Swimmer {
     const cos = Math.cos(skeleton.hipRollRad);
     const sin = Math.sin(skeleton.hipRollRad);
     this.hipLabel.position.set(x, y * cos - z * sin, y * sin + z * cos);
-    (['right', 'left'] as const).forEach((id) => {
+    ARM_IDS.forEach((id) => {
       this.applyArm(this.arms[id], skeleton.arms[id]);
       this.applyLeg(this.legs[id], skeleton.legs[id]);
     });
@@ -122,74 +111,94 @@ export class Swimmer {
     this.head.quaternion.copy(skeleton.head);
   }
 
-  private material(group: string, finish: Finish): Material {
-    return this.context.materials.get(group, FINISHES[finish]);
-  }
-
-  private mesh(
-    geometry: BufferGeometry,
-    group: string,
-    finish: Finish,
-    parent: Object3D = this.root,
-  ): Mesh {
-    const mesh = new Mesh(geometry, this.material(group, finish));
-    parent.add(mesh);
-    return mesh;
-  }
-
-  private label(id: PartId, parent: Object3D, at: number[]): Object3D {
-    const anchor = anchorAt(parent, at[0], at[1], at[2]);
-    this.labels.set(id, anchor);
-    return anchor;
-  }
-
-  private buildArm(id: ArmId): ArmMeshes {
-    const skin = SIDE_FINISH[id];
-    return {
-      deltoid: this.mesh(this.shared.deltoid, 'shoulder', 'torso'),
-      upper: this.mesh(this.shared.upper, 'elbow', skin),
-      elbow: this.mesh(this.shared.elbow, 'elbow', skin),
-      forearm: this.mesh(this.shared.forearm, 'forearm', skin),
-      hand: this.mesh(this.context.tracker.track(handGeometry(SIDE[id])), 'hand', skin),
-    };
-  }
-
-  private buildLeg(id: ArmId): LegMeshes {
-    const skin = SIDE_FINISH[id];
-    return {
-      thigh: this.mesh(this.shared.thigh, 'foot', skin),
-      sleeve: this.mesh(this.shared.sleeve, 'hips', 'suit'),
-      knee: this.mesh(this.shared.knee, 'foot', skin),
-      shank: this.mesh(this.shared.shank, 'foot', skin),
-      foot: this.mesh(this.shared.foot, 'foot', skin),
-    };
-  }
-
-  private buildHead(): void {
-    const track = this.context.tracker.track.bind(this.context.tracker);
-    this.root.add(this.head);
-    this.mesh(track(neckGeometry()), 'head', 'torso', this.head);
-    this.mesh(track(ellipsoid(HEAD.skull.radii, HEAD.skull.centre)), 'head', 'torso', this.head);
-    this.mesh(track(ellipsoid(HEAD.jaw.radii, HEAD.jaw.centre)), 'head', 'torso', this.head);
-    const cap = this.mesh(track(capGeometry()), 'head', 'cap', this.head);
-    this.mesh(track(bandGeometry()), 'head', 'goggleBand', this.head);
-    this.mesh(track(lensGeometry()), 'head', 'goggleLens', this.head);
-    this.label('head', cap, [...HEAD.anchor]);
-  }
-
   private applyArm(meshes: ArmMeshes, pose: ArmPose): void {
+    const { placer } = this;
+    placer.between(meshes.upper, pose.shoulder, pose.elbow, pose.palm);
     meshes.deltoid.position.copy(pose.shoulder);
-    placeSegment(meshes.upper, pose.shoulder, pose.elbow);
+    meshes.deltoid.quaternion.copy(meshes.upper.quaternion);
     meshes.elbow.position.copy(pose.elbow);
-    placeSegment(meshes.forearm, pose.elbow, pose.wrist);
-    placeFlat(meshes.hand, pose.wrist, pose.handAxis, pose.palm);
+    placer.between(meshes.forearm, pose.elbow, pose.wrist, pose.palm);
+    placer.place(meshes.hand, pose.wrist, pose.handAxis, pose.palm);
   }
 
   private applyLeg(meshes: LegMeshes, pose: LegPose): void {
-    placeSegment(meshes.thigh, pose.hip, pose.knee);
-    placeSegment(meshes.sleeve, pose.hip, pose.knee);
+    const { placer } = this;
+    placer.between(meshes.thigh, pose.hip, pose.knee, pose.sole);
+    meshes.sleeve.position.copy(meshes.thigh.position);
+    meshes.sleeve.quaternion.copy(meshes.thigh.quaternion);
     meshes.knee.position.copy(pose.knee);
-    placeSegment(meshes.shank, pose.knee, pose.ankle);
-    placeFlat(meshes.foot, pose.ankle, pose.footAxis, pose.sole);
+    placer.between(meshes.shank, pose.knee, pose.ankle, pose.sole);
+    placer.place(meshes.foot, pose.ankle, pose.footAxis, pose.sole);
   }
+}
+
+function buildTorso(builder: PartBuilder, root: Group): Torso {
+  return new Torso(
+    root,
+    {
+      pelvis: builder.material('hips', 'suit'),
+      abdomen: builder.material(STRUCTURE_GROUP, 'skin'),
+      chest: builder.material('shoulder', 'skin'),
+    },
+    builder.track.bind(builder),
+  );
+}
+
+function buildHead(builder: PartBuilder, root: Group): Group {
+  const head = new Group();
+  root.add(head);
+  builder.mesh(headSkinGeometry(), 'head', 'skin', head);
+  const cap = builder.mesh(capGeometry(), 'head', 'cap', head);
+  builder.mesh(capStripeGeometry(), 'head', 'capStripe', head);
+  builder.mesh(gogglesFrameGeometry(), 'head', 'goggleBand', head);
+  builder.mesh(lensGeometry(), 'head', 'goggleLens', head);
+  builder.label('head', cap, HEAD.anchor);
+  return head;
+}
+
+function buildArm(builder: PartBuilder, shared: Shared, root: Group, id: ArmId): ArmMeshes {
+  const hand = builder.mesh(handGeometry(SIDE[id]), 'hand', 'skin', root);
+  if (id === 'right') builder.mesh(wristbandGeometry(), 'hand', 'wristband', hand);
+  return {
+    deltoid: builder.mesh(shared.deltoid, 'shoulder', 'skin', root),
+    upper: builder.mesh(shared.upper, 'elbow', 'skin', root),
+    elbow: builder.mesh(shared.elbow, 'elbow', 'skin', root),
+    forearm: builder.mesh(shared.forearm, 'forearm', 'skin', root),
+    hand,
+  };
+}
+
+function buildLeg(builder: PartBuilder, shared: Shared, root: Group, id: ArmId): LegMeshes {
+  return {
+    thigh: builder.mesh(shared.thigh, 'foot', 'skin', root),
+    sleeve: builder.mesh(shared.sleeve, 'hips', 'suit', root),
+    knee: builder.mesh(shared.knee, 'foot', 'skin', root),
+    shank: builder.mesh(shared.shank, 'foot', 'skin', root),
+    foot: builder.mesh(footGeometry(SIDE[id]), 'foot', 'skin', root),
+  };
+}
+
+export function* buildSwimmer(context: PartContext): Steps<Swimmer> {
+  const builder = new PartBuilder(context);
+  const root = new Group();
+  root.name = 'swimmer';
+  const shared = sharedGeometries();
+  const torso = buildTorso(builder, root);
+  const hipLabel = builder.label('hips', torso.pelvis, HIP_LABEL);
+  yield;
+  const head = buildHead(builder, root);
+  yield;
+  const arms = { right: buildArm(builder, shared, root, 'right') } as Record<ArmId, ArmMeshes>;
+  yield;
+  arms.left = buildArm(builder, shared, root, 'left');
+  yield;
+  const legs = { right: buildLeg(builder, shared, root, 'right') } as Record<ArmId, LegMeshes>;
+  yield;
+  legs.left = buildLeg(builder, shared, root, 'left');
+  builder.label('hand', arms.right.hand, [0, HAND.length / 2, 0]);
+  builder.label('forearm', arms.right.forearm, [0, BODY.forearm / 2, 0]);
+  builder.label('elbow', arms.right.elbow, ORIGIN);
+  builder.label('shoulder', arms.right.deltoid, ORIGIN);
+  builder.label('foot', legs.right.foot, [0, BODY.foot * FOOT_LABEL_SHARE, 0]);
+  return new Swimmer({ root, head, labels: builder.labels, torso, hipLabel, arms, legs });
 }

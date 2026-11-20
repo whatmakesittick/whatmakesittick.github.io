@@ -3,11 +3,11 @@ import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../theme';
 
 const BLACK = '#000000';
-const WET_SKIN_ROUGHNESS = 0.34;
-const LEFT_SKIN = { saturation: 1.25, brightness: 0.78 } as const;
-const RIGHT_SKIN = { saturation: 1.05, brightness: 0.95 } as const;
+const WET_SKIN_ROUGHNESS = 0.3;
+const SKIN_TONE = { saturation: 1.15, brightness: 0.9 } as const;
 const SILICONE_ROUGHNESS = 0.28;
-const SUIT_ROUGHNESS = 0.62;
+const SUIT_ROUGHNESS = 0.78;
+const LANE_ROUGHNESS = 0.62;
 const LENS_ROUGHNESS = 0.12;
 const PLASTIC_ROUGHNESS = 0.45;
 const ARROW_GLOW = 0.35;
@@ -24,17 +24,17 @@ function matte(color: string, roughness: number): MaterialFinish {
 }
 
 export const FINISHES = {
-  skinLeft: matte(shade(THEME.skin, LEFT_SKIN), WET_SKIN_ROUGHNESS),
-  skinRight: matte(shade(THEME.rightSide, RIGHT_SKIN), WET_SKIN_ROUGHNESS),
-  torso: matte(shade(THEME.skin, LEFT_SKIN), WET_SKIN_ROUGHNESS),
+  skin: matte(shade(THEME.skin, SKIN_TONE), WET_SKIN_ROUGHNESS),
   suit: matte(THEME.suit, SUIT_ROUGHNESS),
   cap: matte(THEME.cap, SILICONE_ROUGHNESS),
+  capStripe: matte(THEME.floatB, SILICONE_ROUGHNESS),
+  wristband: matte(THEME.floatA, SILICONE_ROUGHNESS),
   goggleBand: matte(THEME.goggles, SILICONE_ROUGHNESS),
   goggleLens: { ...matte(THEME.goggles, LENS_ROUGHNESS), metalness: 0.6 },
   floatA: matte(THEME.floatA, PLASTIC_ROUGHNESS),
   floatB: matte(THEME.floatB, PLASTIC_ROUGHNESS),
   ropeCord: matte(THEME.laneLine, PLASTIC_ROUGHNESS),
-  laneLine: matte(THEME.laneLine, SUIT_ROUGHNESS),
+  laneLine: matte(THEME.laneLine, LANE_ROUGHNESS),
   thrust: {
     ...matte(THEME.thrust, PLASTIC_ROUGHNESS),
     emissive: THEME.thrust,
