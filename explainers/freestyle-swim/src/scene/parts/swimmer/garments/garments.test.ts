@@ -18,7 +18,6 @@ const figure = decodeFigure(athleteData);
 const rig = new FigureRig(figure);
 const frame = new RestFrame(figure);
 const fields = garmentFields(figure, frame);
-const dominant = figure.dominantJoints();
 
 const AXES = 3;
 const MM = 1000;
@@ -54,7 +53,10 @@ function verticesWhere(test: (index: number, point: Vector3) => boolean): number
 }
 
 function jointName(index: number): string {
-  return figure.jointNames[dominant[index]];
+  const { start, joints, weights } = figure.skin;
+  let best = start[index];
+  for (let i = best + 1; i < start[index + 1]; i++) if (weights[i] > weights[best]) best = i;
+  return figure.jointNames[joints[best]];
 }
 
 describe('jammers', () => {

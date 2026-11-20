@@ -3,7 +3,7 @@ import { decodeModel } from './decode';
 import type { FigureData } from './data';
 import { Kinematics } from './kinematics';
 import { AXES, MATRIX, quaternionFromMatrix } from './matrix';
-import type { FigureModel, SkeletonModel } from './model';
+import type { FigureModel, SkeletonModel, SkinWeights } from './model';
 import { computeNormals } from './normals';
 import { withRolls } from './rolls';
 import { Skinning } from './skinning';
@@ -25,6 +25,7 @@ export class Figure {
   readonly jointRotations: Float32Array;
   readonly jointScales: Float32Array;
   readonly skeleton: SkeletonModel;
+  readonly skin: SkinWeights;
   private readonly kinematics: Kinematics;
   private readonly skinning: Skinning;
   private readonly correctives: Correctives;
@@ -36,6 +37,7 @@ export class Figure {
   constructor(model: FigureModel) {
     this.model = model;
     this.skeleton = model.skeleton;
+    this.skin = model.skin;
     this.vertexCount = model.vertexCount;
     this.triangleCount = model.indices.length / AXES;
     this.jointCount = model.jointCount;
@@ -64,17 +66,6 @@ export class Figure {
 
   jointIndex(name: string): number {
     return this.jointLookup.get(name) ?? -1;
-  }
-
-  dominantJoints(): Uint8Array {
-    const { start, joints, weights } = this.model.skin;
-    const dominant = new Uint8Array(this.vertexCount);
-    for (let v = 0; v < this.vertexCount; v++) {
-      let best = start[v];
-      for (let i = start[v] + 1; i < start[v + 1]; i++) if (weights[i] > weights[best]) best = i;
-      dominant[v] = joints[best];
-    }
-    return dominant;
   }
 
   createParameters(): Float32Array {

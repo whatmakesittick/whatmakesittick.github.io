@@ -1,8 +1,11 @@
 import { BufferAttribute, BufferGeometry, DynamicDrawUsage, Mesh } from 'three';
 import type { Material, Matrix4 } from 'three';
 import type { Figure } from '@core/figure';
+import { partitionTriangles } from './partition';
+import type { AddedVertices } from './partition';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { GARMENT_ATTRIBUTES } from './garments/garmentShader';
+import { blendRows, extend, normaliseRows } from './blend';
 import { CHANNELS } from './garments/regions';
 import type { GarmentFields } from './garments/regions';
 
@@ -26,37 +29,19 @@ function partOfJoint(name: string): string {
   return PART_RULES.find(([pattern]) => pattern.test(name))?.[1] ?? STRUCTURE_GROUP;
 }
 
-function partOfVertices(figure: Figure): string[] {
-  const joints = figure.dominantJoints();
-  return Array.from(joints, (joint) => partOfJoint(figure.jointNames[joint]));
-}
+const PARTS: readonly string[] = [...new Set(PART_RULES.map(([, part]) => part)), STRUCTURE_GROUP];
+const MAX_VERTICES = 65536;
 
-interface PartRange {
-  readonly part: string;
-  readonly start: number;
-  readonly count: number;
-}
-
-function sortByPart(figure: Figure): { indices: Uint16Array; ranges: PartRange[] } {
-  const parts = partOfVertices(figure);
-  const order = Array.from(new Set(parts));
-  const buckets = order.map(() => [] as number[]);
-  for (let t = 0; t < figure.triangleCount; t++) {
-    const corner = figure.indices[t * AXES];
-    buckets[order.indexOf(parts[corner])].push(t);
+function partWeights(figure: Figure): Float32Array {
+  const jointPart = Array.from(figure.jointNames, (name) => PARTS.indexOf(partOfJoint(name)));
+  const { start, joints, weights } = figure.skin;
+  const sums = new Float32Array(figure.vertexCount * PARTS.length);
+  for (let v = 0; v < figure.vertexCount; v++) {
+    for (let i = start[v]; i < start[v + 1]; i++) {
+      sums[v * PARTS.length + jointPart[joints[i]]] += weights[i];
+    }
   }
-  const indices = new Uint16Array(figure.indices.length);
-  const ranges: PartRange[] = [];
-  let at = 0;
-  buckets.forEach((triangles, bucket) => {
-    const start = at;
-    triangles.forEach((t) => {
-      indices.set(figure.indices.subarray(t * AXES, t * AXES + AXES), at);
-      at += AXES;
-    });
-    ranges.push({ part: order[bucket], start, count: at - start });
-  });
-  return { indices, ranges };
+  return sums;
 }
 
 export interface FigureBodyParts {
@@ -69,30 +54,40 @@ export interface FigureBodyParts {
 
 export class FigureBody {
   readonly mesh: Mesh;
+  private readonly figure: Figure;
+  private readonly added: AddedVertices;
   private readonly geometry: BufferGeometry;
   private readonly position: BufferAttribute;
   private readonly normal: BufferAttribute;
 
   constructor(parts: FigureBodyParts) {
-    const { indices, ranges } = sortByPart(parts.figure);
-    this.position = new BufferAttribute(parts.figure.positions, AXES).setUsage(DynamicDrawUsage);
-    this.normal = new BufferAttribute(parts.figure.normals, AXES).setUsage(DynamicDrawUsage);
+    const { figure } = parts;
+    this.figure = figure;
+    const split = partitionTriangles(
+      figure.indices,
+      figure.vertexCount,
+      partWeights(figure),
+      PARTS.length,
+    );
+    this.added = split.added;
+    const total = figure.vertexCount + this.added.count;
+    if (total >= MAX_VERTICES) throw new Error(`Body needs ${total} vertices, limit is 65535`);
+    this.position = new BufferAttribute(new Float32Array(total * AXES), AXES).setUsage(
+      DynamicDrawUsage,
+    );
+    this.normal = new BufferAttribute(new Float32Array(total * AXES), AXES).setUsage(
+      DynamicDrawUsage,
+    );
     this.geometry = parts.track(new BufferGeometry());
-    this.geometry.setIndex(new BufferAttribute(indices, 1));
+    this.geometry.setIndex(new BufferAttribute(Uint16Array.from(split.indices), 1));
     this.geometry.setAttribute('position', this.position);
     this.geometry.setAttribute('normal', this.normal);
-    this.geometry.setAttribute(
-      GARMENT_ATTRIBUTES.distances,
-      new BufferAttribute(parts.garments.distances, CHANNELS),
-    );
-    this.geometry.setAttribute(
-      GARMENT_ATTRIBUTES.extents,
-      new BufferAttribute(parts.garments.extents, CHANNELS),
-    );
-    ranges.forEach((range, index) => this.geometry.addGroup(range.start, range.count, index));
+    this.addStatic(GARMENT_ATTRIBUTES.distances, parts.garments.distances);
+    this.addStatic(GARMENT_ATTRIBUTES.extents, parts.garments.extents);
+    split.ranges.forEach((range, index) => this.geometry.addGroup(range.start, range.count, index));
     this.mesh = new DeformingMesh(
       this.geometry,
-      ranges.map((range) => parts.materialOf(range.part)),
+      split.ranges.map((range) => parts.materialOf(PARTS[range.part])),
     );
     this.mesh.name = 'body';
     this.mesh.matrixAutoUpdate = false;
@@ -101,9 +96,22 @@ export class FigureBody {
   }
 
   update(): void {
+    const { figure, added } = this;
+    const positions = this.position.array as Float32Array;
+    const normals = this.normal.array as Float32Array;
+    positions.set(figure.positions);
+    normals.set(figure.normals);
+    blendRows(positions, AXES, figure.vertexCount, added);
+    blendRows(normals, AXES, figure.vertexCount, added);
+    normaliseRows(normals, figure.vertexCount, figure.vertexCount + added.count);
     this.position.needsUpdate = true;
     this.normal.needsUpdate = true;
     this.geometry.computeBoundingSphere();
     this.geometry.computeBoundingBox();
+  }
+
+  private addStatic(name: string, source: Float32Array, itemSize = CHANNELS): void {
+    const data = extend(source, itemSize, this.figure.vertexCount, this.added);
+    this.geometry.setAttribute(name, new BufferAttribute(data, itemSize));
   }
 }
