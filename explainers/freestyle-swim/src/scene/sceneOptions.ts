@@ -6,7 +6,7 @@ import { FORCE_ARROWS_NAME } from './parts/forces';
 import { HAND_PATH_NAME } from './parts/handPath';
 import { isNearRope } from './parts/pool/ropes';
 
-const SWIMMER_DIM = { saturation: 0.35, brightness: 0.68, emissive: 0.3 } as const;
+const SWIMMER_DIM = { saturation: 0.8, brightness: 0.82, emissive: 0.3 } as const;
 
 const SEE_THROUGH_GROUPS: readonly string[] = [FORCE_ARROWS_NAME, HAND_PATH_NAME];
 

@@ -6,8 +6,6 @@ const SURFACE_BAND_M = 0.06;
 const DEPTH_SCALE_M = 1.6;
 const CACHE_KEY = 'swimmerWetSkin';
 const ROOM_LIGHT_SHARE = 0.3;
-const DIM_HUE_KEPT = 0.85;
-const DIM_LIFT = 0.7;
 const FLOOR_BOUNCE = 0.55;
 const CAUSTIC_GAIN = 0.4;
 
@@ -27,17 +25,10 @@ const FRAGMENT_DECLARATIONS = /* glsl */ `
 varying vec3 vWetWorld;
 uniform float uScroll;
 uniform float uPhase;
-uniform vec3 uWetBase;
 const float TAU = 6.2831853;
 const float PERIOD = 0.3;
-const vec3 WET_LUMA = vec3(0.2126, 0.7152, 0.0722);
 ${CAUSTIC_GLSL}
 #include <common>`;
-
-const FRAGMENT_COLOR = /* glsl */ `
-#include <color_fragment>
-float wetTone = min(dot(diffuseColor.rgb, WET_LUMA) / max(dot(uWetBase, WET_LUMA), 1e-4), 1.0);
-diffuseColor.rgb = mix(diffuseColor.rgb, uWetBase * pow(wetTone, ${glsl(DIM_LIFT)}), ${glsl(DIM_HUE_KEPT)});`;
 
 const FRAGMENT_ROUGHNESS = /* glsl */ `
 #include <roughnessmap_fragment>
@@ -59,15 +50,13 @@ outgoingLight += vec3(0.9, 0.96, 1.0) * sheen * 0.1 * (1.0 - wetBelow);
 #include <opaque_fragment>`;
 
 export function applyWetSkin(material: MeshStandardMaterial, uniforms: PoolFrame): void {
-  const base = { value: material.color.clone() };
   material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms) => {
-    Object.assign(shader.uniforms, uniforms, { uWetBase: base });
+    Object.assign(shader.uniforms, uniforms);
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', VERTEX_DECLARATIONS)
       .replace('#include <begin_vertex>', VERTEX_WORLD);
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', FRAGMENT_DECLARATIONS)
-      .replace('#include <color_fragment>', FRAGMENT_COLOR)
       .replace('#include <roughnessmap_fragment>', FRAGMENT_ROUGHNESS)
       .replace('#include <opaque_fragment>', FRAGMENT_TINT);
   };
