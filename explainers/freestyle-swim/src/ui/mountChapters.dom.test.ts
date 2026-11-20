@@ -61,6 +61,10 @@ describe('chapter widgets', () => {
     );
   });
 
+  it('writes the stroke sum with each unit once', () => {
+    expect(readout('strokeSum')).toBe('42 per min × 2.40 m per cycle ÷ 60 = 1.68 m/s');
+  });
+
   it('reacts to the scrubber', () => {
     const elbow = readout('catchElbow');
     store.getState().setPhase(MOMENTS.recoveryMid);

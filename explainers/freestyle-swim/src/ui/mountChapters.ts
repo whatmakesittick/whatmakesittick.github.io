@@ -10,11 +10,14 @@ import { chapterOf } from './chapters';
 import {
   formatCount,
   formatDegrees,
+  formatLength,
   formatMeters,
   formatMetersPerSecond,
   formatMetersPerSecondDetailed,
   formatNewtons,
   formatPerMinute,
+  formatRate,
+  formatSpeed,
   formatWatts,
 } from './format';
 import {
@@ -40,9 +43,9 @@ function mountStroke(root: Document, store: SwimStore): Disposer {
     strokeSum: (state) => {
       const { strokeRate, strokeLengthM } = PACES[state.pace];
       return t('chapters.stroke.sumValue', {
-        rate: formatPerMinute(strokeRate),
-        length: formatMeters(strokeLengthM),
-        speed: formatMetersPerSecondDetailed(paceSpeed(state.pace)),
+        rate: formatRate(strokeRate),
+        length: formatLength(strokeLengthM),
+        speed: formatSpeed(paceSpeed(state.pace)),
       });
     },
     strokePhase: (state) => phaseText(reading(state).right),

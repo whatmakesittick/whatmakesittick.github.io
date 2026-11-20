@@ -24,12 +24,24 @@ export function formatMetersPerSecondDetailed(speedMs: number): string {
   return formatMetersPerSecond(speedMs, METERS_PER_SECOND_CHAPTER_DIGITS);
 }
 
+export function formatRate(rate: number): string {
+  return formatNumber(Math.round(rate));
+}
+
 export function formatPerMinute(rate: number): string {
-  return unit('perMinute', formatNumber(Math.round(rate)));
+  return unit('perMinute', formatRate(rate));
+}
+
+export function formatLength(meters: number): string {
+  return formatFixed(meters, METERS_DIGITS);
 }
 
 export function formatMeters(meters: number): string {
-  return unit('meters', formatFixed(meters, METERS_DIGITS));
+  return unit('meters', formatLength(meters));
+}
+
+export function formatSpeed(speedMs: number): string {
+  return formatFixed(speedMs, METERS_PER_SECOND_CHAPTER_DIGITS);
 }
 
 export function formatNewtons(newtons: number): string {
