@@ -20,4 +20,8 @@ describe('presets', () => {
       expect(PRESETS[id].view.reverser).toBe(id === 'reverse');
     });
   });
+
+  it('keeps the person out of the rear view labels', () => {
+    expect(PRESETS.reverse.labels).not.toContain('person');
+  });
 });

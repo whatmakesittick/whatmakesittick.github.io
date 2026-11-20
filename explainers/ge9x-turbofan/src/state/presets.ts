@@ -72,7 +72,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: { reverser: true },
     startAt: MOMENTS.intake,
     start: { cutaway: 'closed', streams: 'both', thrust: REVERSE_LEVER },
-    labels: ['reverser', 'cascades', 'coldNozzle', 'person'],
+    labels: ['reverser', 'cascades', 'coldNozzle'],
     highlight: ['reverser', 'cascades', 'nacelle'],
   },
 };
