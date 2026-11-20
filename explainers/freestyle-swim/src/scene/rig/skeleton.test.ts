@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { Vector3 } from 'three';
-import { toDegrees } from '@core/math';
-import { PACE_IDS } from '../../ids';
-import type { PaceId } from '../../ids';
+import { lerp, toDegrees } from '@core/math';
+import { KICK_IDS, PACE_IDS } from '../../ids';
+import type { ArmId, KickId, PaceId } from '../../ids';
 import { MOMENTS, phaseBounds, strokeAt } from '../../model';
 import { HAND_DEPTH_M, ELBOW_DEG } from '../../model/stroke';
 import { bodyPose } from '../pose';
@@ -10,9 +10,53 @@ import { createSkeleton, solveSkeleton } from './skeleton';
 import type { Skeleton } from './skeleton';
 
 const ROOT_Y = bodyPose(0, 0).y;
-const ELBOW_TOLERANCE_DEG = 5;
+const ELBOW_TOLERANCE_DEG = 3;
 const DEPTH_TOLERANCE_M = 0.05;
 const STEP_LIMIT_M = 0.022;
+const ACCEL_LIMIT_M = 0.0025;
+const HEEL_BACK_M = 0.05;
+const SIDES = ['right', 'left'] as const;
+
+function kickSkeletonAt(
+  units: number,
+  kick: KickId,
+  pace: PaceId = 'middle',
+  breathing: 'none' | 'right' = 'none',
+): Skeleton {
+  const reading = strokeAt(units, { pace, kick, breathing, headUp: false });
+  return solveSkeleton(createSkeleton(), reading, 0, ROOT_Y);
+}
+
+function kneeFlexDeg(skeleton: Skeleton, id: ArmId): number {
+  const { hip, knee, ankle } = skeleton.legs[id];
+  const thigh = new Vector3().subVectors(hip, knee);
+  const shank = new Vector3().subVectors(ankle, knee);
+  return 180 - toDegrees(thigh.angleTo(shank));
+}
+
+function toeHeights(kick: KickId, id: ArmId): number[] {
+  return Array.from({ length: 1000 }, (_, units) => kickSkeletonAt(units, kick).legs[id].toe.y);
+}
+
+function downbeats(heights: number[], minTravelM: number): number {
+  let falling = false;
+  let extreme = heights[0];
+  let count = 0;
+  [...heights, ...heights].forEach((height, index) => {
+    const turned = falling ? height > extreme + minTravelM : height < extreme - minTravelM;
+    if (turned) {
+      falling = !falling;
+      if (falling && index >= heights.length) count += 1;
+      extreme = height;
+    } else extreme = falling ? Math.min(extreme, height) : Math.max(extreme, height);
+  });
+  return count;
+}
+
+function headRollDeg(skeleton: Skeleton): number {
+  const face = new Vector3(0, -1, 0).applyQuaternion(skeleton.head);
+  return toDegrees(Math.atan2(face.z, -face.y));
+}
 
 function skeletonAt(
   units: number,
@@ -21,6 +65,21 @@ function skeletonAt(
 ): Skeleton {
   const reading = strokeAt(units, { pace, kick: 'six', breathing, headUp: false });
   return solveSkeleton(createSkeleton(), reading, 0, ROOT_Y);
+}
+
+const SCAN_STEP_UNITS = 5;
+const BREATHING = ['none', 'right'] as const;
+
+function scan(visit: (units: number, pace: PaceId, breathing: 'none' | 'right') => void): void {
+  PACE_IDS.forEach((pace) =>
+    BREATHING.forEach((breathing) => {
+      for (let units = 0; units < 1000; units += SCAN_STEP_UNITS) visit(units, pace, breathing);
+    }),
+  );
+}
+
+function depressionDeg(bone: Vector3): number {
+  return toDegrees(Math.asin(-bone.y / bone.length()));
 }
 
 function elbowAngle(skeleton: Skeleton): number {
@@ -128,7 +187,6 @@ describe('swimmer rig', () => {
     const { shoulder, elbow, wrist } = skeletonAt(MOMENTS.catch).arms.right;
     const upper = new Vector3().subVectors(elbow, shoulder);
     const forearm = new Vector3().subVectors(wrist, elbow);
-    const depressionDeg = (bone: Vector3) => toDegrees(Math.asin(-bone.y / bone.length()));
     expect(depressionDeg(forearm) - depressionDeg(upper)).toBeGreaterThan(minSteeperForearmDeg);
   });
 
@@ -151,5 +209,162 @@ describe('swimmer rig', () => {
       const face = new Vector3(0, -1, 0).applyQuaternion(skeletonAt(units).head);
       expect(Math.abs(toDegrees(Math.atan2(face.z, -face.y)))).toBeLessThan(maxHeadTiltDeg);
     }
+  });
+
+  it('keeps the hand under water through the stroke and above it through mid recovery', () => {
+    const midRecovery = { from: 0.25, to: 0.75 };
+    scan((units, pace, breathing) => {
+      const reading = strokeAt(units, { pace, kick: 'six', breathing, headUp: false });
+      const handY = skeletonAt(units, pace, breathing).arms.right.hand.y + ROOT_Y;
+      const { underwater, progress } = reading.right;
+      if (underwater) expect(handY).toBeLessThan(0);
+      else if (progress > midRecovery.from && progress < midRecovery.to) {
+        expect(handY).toBeGreaterThan(0);
+      }
+    });
+  });
+
+  it('never lets a hand cross the midline', () => {
+    const minWidthM = 0.05;
+    scan((units, pace, breathing) => {
+      const { right, left } = skeletonAt(units, pace, breathing).arms;
+      expect(right.hand.z).toBeGreaterThan(minWidthM);
+      expect(left.hand.z).toBeLessThan(-minWidthM);
+    });
+  });
+
+  it('moves the left arm as the right arm half a cycle later', () => {
+    for (let units = 0; units < 1000; units += 50) {
+      const left = skeletonAt(units).arms.left;
+      const right = skeletonAt(units - 500).arms.right;
+      [
+        [left.elbow, right.elbow],
+        [left.hand, right.hand],
+      ].forEach(([joint, mirror]) => {
+        expect(joint.distanceTo(new Vector3(mirror.x, mirror.y, -mirror.z))).toBeLessThan(1e-6);
+      });
+    }
+  });
+
+  it('tips the forearm down under a high elbow through the early pull', () => {
+    const minSteeperForearmDeg = 35;
+    PACE_IDS.forEach((pace) => {
+      const { pull } = phaseBounds(pace);
+      const { shoulder, elbow, wrist } = skeletonAt((pull[0] + pull[1]) / 2, pace).arms.right;
+      const upper = new Vector3().subVectors(elbow, shoulder);
+      const forearm = new Vector3().subVectors(wrist, elbow);
+      expect(depressionDeg(forearm) - depressionDeg(upper)).toBeGreaterThan(minSteeperForearmDeg);
+    });
+  });
+
+  it('leads the recovery with an elbow above the hand and outside the shoulder line', () => {
+    const minElbowOutM = 0.05;
+    const leadShare = { from: 0.2, to: 0.8 };
+    scan((units, pace, breathing) => {
+      const { progress, underwater } = strokeAt(units, {
+        pace,
+        kick: 'six',
+        breathing,
+        headUp: false,
+      }).right;
+      if (underwater || progress < leadShare.from || progress > leadShare.to) return;
+      const { shoulder, elbow, hand } = skeletonAt(units, pace, breathing).arms.right;
+      expect(elbow.z - shoulder.z).toBeGreaterThan(minElbowOutM);
+      expect(elbow.y).toBeGreaterThan(hand.y);
+    });
+  });
+
+  it('bends the knee within a human range, most on the downbeat', () => {
+    const maxFlexDeg = 45;
+    const minPeakDeg = 20;
+    KICK_IDS.forEach((kick) =>
+      SIDES.forEach((id) => {
+        let peak = { flex: 0, units: 0 };
+        for (let units = 0; units < 1000; units += 2) {
+          const flex = kneeFlexDeg(kickSkeletonAt(units, kick), id);
+          expect(flex).toBeGreaterThan(-1);
+          if (flex > peak.flex) peak = { flex, units };
+        }
+        expect(peak.flex).toBeLessThan(maxFlexDeg);
+        expect(peak.flex).toBeGreaterThan(minPeakDeg);
+        const after = kickSkeletonAt(peak.units + 4, kick).legs[id].toe.y;
+        expect(after).toBeLessThan(kickSkeletonAt(peak.units, kick).legs[id].toe.y);
+      }),
+    );
+  });
+
+  it('moves the foot through a sourced kick depth', () => {
+    const travelM = { min: 0.25, max: 0.45 };
+    SIDES.forEach((id) => {
+      const heights = toeHeights('six', id);
+      const travel = Math.max(...heights) - Math.min(...heights);
+      expect(travel).toBeGreaterThan(travelM.min);
+      expect(travel).toBeLessThan(travelM.max);
+    });
+  });
+
+  it('kicks three downbeats per leg a cycle in six-beat and one in two-beat', () => {
+    const minTravelM = 0.1;
+    SIDES.forEach((id) => {
+      expect(downbeats(toeHeights('six', id), minTravelM)).toBe(3);
+      expect(downbeats(toeHeights('two', id), minTravelM)).toBe(1);
+    });
+  });
+
+  it('lets the heels break the surface by a few centimetres at most', () => {
+    const maxAboveM = 0.03;
+    KICK_IDS.forEach((kick) =>
+      PACE_IDS.forEach((pace) => {
+        for (let units = 0; units < 1000; units += SCAN_STEP_UNITS) {
+          const { legs } = kickSkeletonAt(units, kick, pace);
+          SIDES.forEach((id) => {
+            const heel = legs[id].ankle.clone().addScaledVector(legs[id].sole, HEEL_BACK_M);
+            expect(heel.y + ROOT_Y).toBeLessThan(maxAboveM);
+          });
+        }
+      }),
+    );
+  });
+
+  it('keeps the head level without a breath and turns it to the right for one', () => {
+    const maxStillDeg = 4;
+    const minBreathDeg = 75;
+    PACE_IDS.forEach((pace) => {
+      const { recovery } = phaseBounds(pace);
+      for (let units = 0; units < 1000; units += SCAN_STEP_UNITS) {
+        expect(Math.abs(headRollDeg(skeletonAt(units, pace)))).toBeLessThan(maxStillDeg);
+      }
+      const inhale = lerp(recovery[0], recovery[1], 0.3);
+      expect(headRollDeg(skeletonAt(inhale, pace, 'right'))).toBeGreaterThan(minBreathDeg);
+      const beforeEntry = lerp(recovery[0], recovery[1], 0.9);
+      expect(Math.abs(headRollDeg(skeletonAt(beforeEntry, pace, 'right')))).toBeLessThan(
+        maxStillDeg,
+      );
+    });
+  });
+
+  it('never jerks a joint between neighbouring scrubber steps', () => {
+    const tracked = (skeleton: Skeleton): Vector3[] => [
+      ...joints(skeleton),
+      ...SIDES.flatMap((id) => [skeleton.arms[id].wrist, skeleton.legs[id].ankle]),
+      new Vector3(0, -1, 0).applyQuaternion(skeleton.head),
+    ];
+    PACE_IDS.forEach((pace) =>
+      KICK_IDS.forEach((kick) =>
+        BREATHING.forEach((breathing) => {
+          let before = tracked(kickSkeletonAt(-1, kick, pace, breathing));
+          let now = tracked(kickSkeletonAt(0, kick, pace, breathing));
+          for (let units = 1; units <= 1000; units += 1) {
+            const next = tracked(kickSkeletonAt(units, kick, pace, breathing));
+            next.forEach((joint, index) => {
+              const jerk = joint.clone().sub(now[index]).sub(now[index]).add(before[index]);
+              expect(jerk.length()).toBeLessThan(ACCEL_LIMIT_M);
+            });
+            before = now;
+            now = next;
+          }
+        }),
+      ),
+    );
   });
 });
