@@ -83,6 +83,7 @@
     "takeoff": "Décollage"
   },
   "readouts": {
+    "position": "Air repéré",
     "fan": "Vitesse de la soufflante",
     "core": "Vitesse du cœur",
     "thrust": "Poussée, estimation du modèle",

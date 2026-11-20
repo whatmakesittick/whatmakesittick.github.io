@@ -83,6 +83,7 @@
     "takeoff": "離陸"
   },
   "readouts": {
+    "position": "目印の空気",
     "fan": "ファンの回転",
     "core": "コアの回転",
     "thrust": "推力(モデルの推定)",

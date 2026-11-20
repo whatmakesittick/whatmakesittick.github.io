@@ -83,6 +83,7 @@
     "takeoff": "起飞"
   },
   "readouts": {
+    "position": "标记的空气",
     "fan": "风扇转速",
     "core": "核心转速",
     "thrust": "推力，模型估算",

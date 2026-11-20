@@ -83,6 +83,7 @@
     "takeoff": "Despegue"
   },
   "readouts": {
+    "position": "Aire marcado",
     "fan": "Velocidad del ventilador",
     "core": "Velocidad del núcleo",
     "thrust": "Empuje, estimación del modelo",

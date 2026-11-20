@@ -83,6 +83,7 @@
     "takeoff": "Start"
   },
   "readouts": {
+    "position": "Markierte Luft",
     "fan": "Gebläsedrehzahl",
     "core": "Kerndrehzahl",
     "thrust": "Schub, Schätzung des Modells",

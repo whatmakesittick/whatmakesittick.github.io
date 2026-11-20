@@ -83,6 +83,7 @@
     "takeoff": "Takeoff"
   },
   "readouts": {
+    "position": "Marked air",
     "fan": "Fan speed",
     "core": "Core speed",
     "thrust": "Thrust, model estimate",

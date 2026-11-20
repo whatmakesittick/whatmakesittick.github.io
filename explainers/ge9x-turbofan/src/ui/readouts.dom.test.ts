@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { createEngineStore } from '../state';
 import { ENGINE_READOUTS } from './readouts';
+import { describeAirPosition } from '../timeline';
 import { TEST_LOCALE, fill, initTestLocale } from './testing';
 
 const { units, readouts } = TEST_LOCALE;
@@ -22,6 +23,14 @@ describe('gauge readouts', () => {
     expect(read('thrust', takeoff).text).toBe(fill(units.percent, { value: '100' }));
     expect(read('fan', { thrust: 0 }).text).toBe(fill(units.percent, { value: '30' }));
     expect(read('core', { thrust: 0 }).text).toBe(fill(units.percent, { value: '55' }));
+  });
+
+  it('shows where the marked air is, as the scrubber says it', () => {
+    const phase = 500;
+    const { text, share } = read('position', { phase });
+    expect(text).toBe(describeAirPosition(phase));
+    expect(text).not.toBe(read('position', { phase: 100 }).text);
+    expect(share).toBeUndefined();
   });
 
   it('shows the reverse thrust on its own text and keeps the meter positive', () => {

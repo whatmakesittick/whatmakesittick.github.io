@@ -3,9 +3,16 @@ import { clamp } from '@core/math';
 import { spoolsNow, thrustNow } from '../state';
 import type { EngineStoreState } from '../state';
 import { THEME } from '../theme';
+import { describeAirPosition } from '../timeline';
 import { formatPercent, formatThrust } from './format';
 
 export const ENGINE_READOUTS: readonly Readout<EngineStoreState>[] = [
+  {
+    id: 'position',
+    labelKey: 'readouts.position',
+    numeric: false,
+    value: (state) => describeAirPosition(state.phase),
+  },
   {
     id: 'fan',
     labelKey: 'readouts.fan',
