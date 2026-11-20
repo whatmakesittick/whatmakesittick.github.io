@@ -249,7 +249,7 @@ export function solveLeg(
   roll(pose.hip, BODY.hipX, BODY.hipY + hipLiftM, side * BODY.hipHalf, hipRollRad);
   pose.knee.copy(inLegPlane(direction, thigh, side, KICK.adduction).applyQuaternion(turn));
   pose.knee.multiplyScalar(BODY.thigh).add(pose.hip);
-  pose.ankle.copy(inLegPlane(direction, shank, side, 0).applyQuaternion(turn));
+  pose.ankle.copy(inLegPlane(direction, shank, side, KICK.adduction).applyQuaternion(turn));
   pose.ankle.multiplyScalar(BODY.shank).add(pose.knee);
   inLegPlane(pose.footAxis, ankle, side, KICK.toeIn).applyQuaternion(turn);
   pose.sole.set(-Math.sin(ankle), Math.cos(ankle), 0).applyQuaternion(turn);
