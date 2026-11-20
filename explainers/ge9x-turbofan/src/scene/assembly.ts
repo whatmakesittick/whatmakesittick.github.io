@@ -1,8 +1,9 @@
 import type { Box3, Group, Object3D } from 'three';
 import type { MaterialLibrary } from '@core/scene/materials';
+import type { Steps } from '@core/scene/pacing';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
-import { createPlaceholderAssembly } from './placeholderAssembly';
+import { createGe9xAssembly } from './ge9xAssembly';
 
 export interface AssemblyResources {
   materials: MaterialLibrary;
@@ -20,8 +21,9 @@ export interface Assembly {
   dispose(): void;
 }
 
-export function createAssembly(_resources: AssemblyResources, state: AssemblyState): Assembly {
-  const assembly = createPlaceholderAssembly();
-  assembly.setState(state);
-  return assembly;
+export function createAssembly(
+  resources: AssemblyResources,
+  state: AssemblyState,
+): Steps<Assembly> {
+  return createGe9xAssembly(resources, state);
 }

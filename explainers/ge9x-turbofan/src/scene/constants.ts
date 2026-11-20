@@ -299,5 +299,3 @@ const HALL_LOOKS: Readonly<Record<Scheme, HallLook>> = {
 export const HALL_LOOK: HallLook = HALL_LOOKS[activeScheme()];
 
 export const COARSE_POINTER_QUERY = '(pointer: coarse)';
-
-export const DIM_OPACITY = 0.35;
