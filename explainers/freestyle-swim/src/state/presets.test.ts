@@ -39,6 +39,30 @@ describe('presets', () => {
     });
   });
 
+  it('keeps the catch pause on the catch when the pace changes', () => {
+    const elbowTolerance = 2;
+    const store = createSwimStore();
+    store.getState().applyPreset('catch');
+    (['easy', 'sprint'] as const).forEach((pace) => {
+      store.getState().setPace(pace);
+      const { phase, playing } = store.getState();
+      expect(playing).toBe(false);
+      expect(phase).toBe(catchPauseUnits(pace));
+      expect(Math.abs((armAt(phase, pace).elbowDeg ?? 0) - ELBOW_DEG.catch)).toBeLessThan(
+        elbowTolerance,
+      );
+    });
+  });
+
+  it('leaves the position alone when the visitor moved away from the pause', () => {
+    const scrubbed = 600;
+    const store = createSwimStore();
+    store.getState().applyPreset('catch');
+    store.getState().setPhase(scrubbed);
+    store.getState().setPace('easy');
+    expect(store.getState().phase).toBe(scrubbed);
+  });
+
   it('sets the view flags of the spec', () => {
     expect(PRESETS.pull.view).toEqual({
       labels: true,

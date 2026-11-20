@@ -59,8 +59,15 @@ function presetFields(preset: Preset, state: SwimFields): Partial<SwimFields> {
 const PRESETS_BY_NAME: Readonly<Record<string, Preset>> = PRESETS;
 
 function seekPausesToPace(store: SwimStore): SwimStore {
-  const { applyPreset } = store.getState();
+  const { applyPreset, setPace } = store.getState();
   store.setState({
+    setPace: (pace) => {
+      const { preset, phase, playing, pace: previous } = store.getState();
+      const pauseFor = PRESETS_BY_NAME[preset]?.pauseFor;
+      const holdsPause = !playing && pauseFor?.(previous) === phase;
+      setPace(pace);
+      if (holdsPause) store.getState().setPhase(pauseFor(pace));
+    },
     applyPreset: (id) => {
       applyPreset(id);
       const { pace, setPhase } = store.getState();
