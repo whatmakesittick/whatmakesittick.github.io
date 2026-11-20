@@ -56,11 +56,26 @@ function presetFields(preset: Preset, state: SwimFields): Partial<SwimFields> {
   return { ...CHAPTER_CONTROL_DEFAULTS, ...preset.start };
 }
 
+const PRESETS_BY_NAME: Readonly<Record<string, Preset>> = PRESETS;
+
+function seekPausesToPace(store: SwimStore): SwimStore {
+  const { applyPreset } = store.getState();
+  store.setState({
+    applyPreset: (id) => {
+      applyPreset(id);
+      const { pace, setPhase } = store.getState();
+      const pauseAt = PRESETS_BY_NAME[id]?.pauseFor?.(pace);
+      if (pauseAt !== undefined) setPhase(pauseAt);
+    },
+  });
+  return store;
+}
+
 export function createSwimStore(
   overrides: Partial<SwimStoreState> = {},
   timeline: Timeline = SWIM_TIMELINE_BASE,
 ): SwimStore {
-  return createExplainerStore<SwimFields & SwimOwnActions, Preset>(
+  const store = createExplainerStore<SwimFields & SwimOwnActions, Preset>(
     {
       timeline,
       presets: PRESETS,
@@ -82,4 +97,5 @@ export function createSwimStore(
     },
     { phase: START_PHASE, ...overrides },
   );
+  return seekPausesToPace(store);
 }

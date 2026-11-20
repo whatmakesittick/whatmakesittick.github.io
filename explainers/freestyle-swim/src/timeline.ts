@@ -9,7 +9,7 @@ import { CYCLE_UNITS, REAL_TIME_SPEED, SPEED_RANGE, paceRate, speedFactor } from
 import { PHASE_RANGES } from './model/timeMap';
 import { PHASE_TONES } from './theme';
 
-const SCRUBBER_STEP_UNITS = 2;
+export const SCRUBBER_STEP_UNITS = 2;
 const FINE_STEP_UNITS = 5;
 const COARSE_STEP_UNITS = 50;
 const UNITS_PER_PERCENT = CYCLE_UNITS / 100;

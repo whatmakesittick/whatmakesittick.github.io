@@ -1,8 +1,7 @@
 import type { ScenePreset } from '@core/scene/presetBinder';
-import type { BreathId, CameraView, KickId, PartId, PresetId, ViewOptions } from '../ids';
-import { MOMENTS, WHAT_IF_RANGE } from '../model';
-
-const CATCH_PAUSE_OFFSET_UNITS = 25;
+import type { BreathId, CameraView, KickId, PartId, PaceId, PresetId, ViewOptions } from '../ids';
+import { DEFAULT_PACE, MOMENTS, WHAT_IF_RANGE, phaseBounds } from '../model';
+import { SCRUBBER_STEP_UNITS } from '../timeline';
 
 export interface ChapterControls {
   kickOverride: KickId | null;
@@ -14,6 +13,12 @@ export interface ChapterControls {
 export interface Preset extends ScenePreset<PartId, CameraView> {
   view: Partial<ViewOptions>;
   start: Partial<ChapterControls>;
+  pauseFor?(pace: PaceId): number;
+}
+
+export function catchPauseUnits(pace: PaceId): number {
+  const [catchUnits] = phaseBounds(pace).pull;
+  return Math.ceil(catchUnits / SCRUBBER_STEP_UNITS) * SCRUBBER_STEP_UNITS;
 }
 
 export const CHAPTER_CONTROL_DEFAULTS: ChapterControls = {
@@ -46,7 +51,8 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'catch',
     speed: SLOW_SPEED,
     view: view({ underwater: true, forces: false, handPath: false }),
-    pauseAt: MOMENTS.catch + CATCH_PAUSE_OFFSET_UNITS,
+    pauseAt: catchPauseUnits(DEFAULT_PACE),
+    pauseFor: catchPauseUnits,
     start: {},
     labels: ['hand', 'forearm', 'elbow', 'shoulder', 'waterline'],
     highlight: ['hand', 'forearm', 'elbow'],

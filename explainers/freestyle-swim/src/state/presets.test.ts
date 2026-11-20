@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { PART_IDS, PRESET_IDS } from '../ids';
-import { MOMENTS } from '../model';
-import { CHAPTER_CONTROL_DEFAULTS, PRESETS } from './presets';
+import { PACE_IDS, PART_IDS, PRESET_IDS } from '../ids';
+import { ELBOW_DEG, MOMENTS, armAt } from '../model';
+import { CHAPTER_CONTROL_DEFAULTS, PRESETS, catchPauseUnits } from './presets';
+import { createSwimStore } from './store';
 
 describe('presets', () => {
   it('has one preset per chapter with valid parts and a speed on the scale', () => {
@@ -22,6 +23,20 @@ describe('presets', () => {
     PRESET_IDS.filter((id) => id !== 'catch').forEach((id) =>
       expect(PRESETS[id].pauseAt).toBeUndefined(),
     );
+  });
+
+  it('pauses at the catch elbow of each pace', () => {
+    const elbowTolerance = 2;
+    PACE_IDS.forEach((pace) => {
+      const store = createSwimStore();
+      store.getState().setPace(pace);
+      store.getState().applyPreset('catch');
+      const { phase, playing } = store.getState();
+      expect(playing).toBe(false);
+      expect(phase).toBe(catchPauseUnits(pace));
+      const elbow = armAt(phase, pace).elbowDeg ?? 0;
+      expect(Math.abs(elbow - ELBOW_DEG.catch)).toBeLessThan(elbowTolerance);
+    });
   });
 
   it('sets the view flags of the spec', () => {
