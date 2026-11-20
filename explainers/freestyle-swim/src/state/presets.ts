@@ -2,6 +2,8 @@ import type { ScenePreset } from '@core/scene/presetBinder';
 import type { BreathId, CameraView, KickId, PartId, PresetId, ViewOptions } from '../ids';
 import { MOMENTS, WHAT_IF_RANGE } from '../model';
 
+const CATCH_PAUSE_OFFSET_UNITS = 25;
+
 export interface ChapterControls {
   kickOverride: KickId | null;
   breathing: BreathId;
@@ -44,7 +46,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'catch',
     speed: SLOW_SPEED,
     view: view({ underwater: true, forces: false, handPath: false }),
-    pauseAt: MOMENTS.catch,
+    pauseAt: MOMENTS.catch + CATCH_PAUSE_OFFSET_UNITS,
     start: {},
     labels: ['hand', 'forearm', 'elbow', 'shoulder', 'waterline'],
     highlight: ['hand', 'forearm', 'elbow'],

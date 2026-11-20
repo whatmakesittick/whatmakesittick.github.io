@@ -5,7 +5,7 @@ import { strokeReading } from '../state';
 import type { SwimStoreState } from '../state';
 import { THEME } from '../theme';
 import { formatMeters, formatMetersPerSecond, formatNewtons, formatPerMinute } from './format';
-import { dragUpText, pullingArm } from './text';
+import { gaugeDragUpText, pullingArm } from './text';
 
 export const DRAG_METER_MAX_N = 150;
 export const SPEED_METER_MAX_MS = 2.6;
@@ -24,7 +24,7 @@ function dragShare(state: SwimStoreState): number {
 }
 
 export function dragText(state: SwimStoreState): string {
-  if (state.headUp) return dragUpText();
+  if (state.headUp) return gaugeDragUpText();
   return formatNewtons(strokeReading(state).dragN);
 }
 

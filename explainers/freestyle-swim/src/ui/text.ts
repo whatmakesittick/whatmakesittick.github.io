@@ -8,7 +8,8 @@ export type RollSide = 'right' | 'left';
 
 const NO_ELBOW_KEY = 'chapters.catch.noElbow';
 const IN_AIR_KEY = 'chapters.catch.inAir';
-const DRAG_UP_KEY = 'chapters.drag.dragUp';
+const CHAPTER_DRAG_UP_KEY = 'chapters.drag.dragUp';
+const GAUGE_DRAG_UP_KEY = 'readouts.dragUp';
 const SIDE_KEYS: Record<RollSide, string> = {
   right: 'chapters.roll.sideRight',
   left: 'chapters.roll.sideLeft',
@@ -34,7 +35,11 @@ export function phaseText(arm: ArmReading): string {
 }
 
 export function dragUpText(): string {
-  return t(DRAG_UP_KEY);
+  return t(CHAPTER_DRAG_UP_KEY);
+}
+
+export function gaugeDragUpText(): string {
+  return t(GAUGE_DRAG_UP_KEY);
 }
 
 export function gapText(pace: PaceId): string {

@@ -16,7 +16,7 @@ describe('presets', () => {
   });
 
   it('pauses once on the catch and seeks the others', () => {
-    expect(PRESETS.catch.pauseAt).toBe(MOMENTS.catch);
+    expect(PRESETS.catch.pauseAt).toBeGreaterThan(MOMENTS.catch);
     expect(PRESETS.pull.startAt).toBe(MOMENTS.catch);
     expect(PRESETS.stroke.startAt).toBe(0);
     PRESET_IDS.filter((id) => id !== 'catch').forEach((id) =>

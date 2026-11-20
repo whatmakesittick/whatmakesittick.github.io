@@ -7,7 +7,6 @@ import { KICK_BEATS, PACES, WHAT_IF_RANGE, activeDragN, dragPowerW, paceSpeed } 
 import { effectiveKick, strokeReading } from '../state';
 import type { SwimStore, SwimStoreState } from '../state';
 import { chapterOf } from './chapters';
-import { dragText } from './readouts';
 import {
   formatCount,
   formatDegrees,
@@ -102,7 +101,7 @@ function mountDrag(root: Document, store: SwimStore): Disposer {
       set: (state, speed) => state.setWhatIfSpeed(speed),
     }),
     mountLiveReadouts(chapter, store, {
-      dragNow: dragText,
+      dragNow: (state) => (state.headUp ? dragUpText() : formatNewtons(strokeReading(state).dragN)),
       dragAt: (state) => whatIfText(state, (speed) => formatNewtons(activeDragN(speed))),
       powerAt: (state) => whatIfText(state, (speed) => formatWatts(dragPowerW(speed))),
       gapNow: (state) => gapText(state.pace),
