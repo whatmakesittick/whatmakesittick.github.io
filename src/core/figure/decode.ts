@@ -29,9 +29,12 @@ function decodeRest(data: FigureData, store: ArrayStore): Float32Array {
 
 function decodeIndices(data: FigureData, store: ArrayStore): Uint16Array {
   const reader = varintReader(store.read('triangles', 'u8'));
-  const indices = new Uint16Array(data.triangleCount * AXES);
-  let value = 0;
-  for (let i = 0; i < indices.length; i++) indices[i] = value += reader.signed();
+  const count = data.triangleCount;
+  const indices = new Uint16Array(count * AXES);
+  let corner = 0;
+  for (let t = 0; t < count; t++) indices[t * AXES] = corner += reader.signed();
+  for (let axis = 1; axis < AXES; axis++)
+    for (let t = 0; t < count; t++) indices[t * AXES + axis] = indices[t * AXES] + reader.signed();
   return indices;
 }
 

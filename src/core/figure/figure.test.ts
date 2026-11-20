@@ -3,6 +3,7 @@ import { decodeFigure } from './figure';
 import type { Figure } from './figure';
 import { loadGroundTruth } from './groundTruth.testkit';
 import type { GroundTruthPose } from './groundTruth.testkit';
+import { loadStrokeTruth } from './strokeTruth.testkit';
 
 const AXES = 3;
 const QUATERNION = 4;
@@ -10,8 +11,8 @@ const MM = 1000;
 const VERTEX_COUNT = 4899;
 const OFF_VERTEX_MM = 0.05;
 const OFF_JOINT_MM = 0.05;
-const ON_WORST_MM = 0.8;
-const ON_MEAN_MM = 0.15;
+const STROKE_WORST_MM = 2;
+const STROKE_MEAN_MM = 0.3;
 const ROTATION_TOLERANCE_DEG = 0.01;
 const DECODE_LOOSE_MS = 300;
 const POSE_LOOSE_MS = 15;
@@ -21,8 +22,12 @@ const WARM_UP = 20;
 const { athleteData } =
   await import('../../../explainers/freestyle-swim/src/scene/parts/swimmer/figure/athlete.data');
 const truth = loadGroundTruth();
+const strokeTruth = loadStrokeTruth();
 
-function parametersOf(figure: Figure, pose: GroundTruthPose): Float32Array {
+function parametersOf(
+  figure: Figure,
+  pose: { readonly parameters: Readonly<Record<string, number>> },
+): Float32Array {
   const parameters = figure.createParameters();
   for (const [name, value] of Object.entries(pose.parameters)) {
     const index = figure.parameterIndex(name);
@@ -32,8 +37,12 @@ function parametersOf(figure: Figure, pose: GroundTruthPose): Float32Array {
   return parameters;
 }
 
-function vertexErrorsMm(figure: Figure, expected: Float32Array): number[] {
-  return Array.from(truth.vertexIds, (id, i) => {
+function vertexErrorsMm(
+  figure: Figure,
+  expected: Float32Array,
+  vertexIds: Uint16Array = truth.vertexIds,
+): number[] {
+  return Array.from(vertexIds, (id, i) => {
     const dx = figure.positions[id * AXES] - expected[i * AXES];
     const dy = figure.positions[id * AXES + 1] - expected[i * AXES + 1];
     const dz = figure.positions[id * AXES + 2] - expected[i * AXES + 2];
@@ -118,17 +127,24 @@ describe('figure against the MHR reference', () => {
     }
   });
 
-  it('stays close to the full model with the reduced correctives on', () => {
-    const errors = truth.poses.flatMap((pose) => {
-      figure.pose(parametersOf(figure, pose));
-      return vertexErrorsMm(figure, pose.correctivesOn);
-    });
-    const mean = errors.reduce((sum, e) => sum + e, 0) / errors.length;
+  it('matches the full model on the stroke poses with and without correctives', () => {
+    const ids = strokeTruth.vertexIds;
+    const offErrors: number[] = [];
+    const onErrors: number[] = [];
+    for (const pose of strokeTruth.poses) {
+      const parameters = parametersOf(figure, pose);
+      figure.pose(parameters, false);
+      offErrors.push(...vertexErrorsMm(figure, pose.correctivesOff, ids));
+      figure.pose(parameters);
+      onErrors.push(...vertexErrorsMm(figure, pose.correctivesOn, ids));
+    }
+    const mean = onErrors.reduce((sum, e) => sum + e, 0) / onErrors.length;
     console.info(
-      `correctives on: worst ${Math.max(...errors).toFixed(3)} mm, mean ${mean.toFixed(4)} mm`,
+      `stroke poses, correctives on: worst ${Math.max(...onErrors).toFixed(3)} mm, mean ${mean.toFixed(4)} mm`,
     );
-    expect(Math.max(...errors)).toBeLessThan(ON_WORST_MM);
-    expect(mean).toBeLessThan(ON_MEAN_MM);
+    expect(Math.max(...offErrors)).toBeLessThan(OFF_VERTEX_MM);
+    expect(Math.max(...onErrors)).toBeLessThan(STROKE_WORST_MM);
+    expect(mean).toBeLessThan(STROKE_MEAN_MM);
   });
 
   it('produces unit normals on outward facing triangles', () => {
