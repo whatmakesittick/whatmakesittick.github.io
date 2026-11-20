@@ -50,7 +50,10 @@ outgoingLight += vec3(0.9, 0.96, 1.0) * sheen * 0.1 * (1.0 - wetBelow);
 #include <opaque_fragment>`;
 
 export function applyWetSkin(material: MeshStandardMaterial, uniforms: PoolFrame): void {
-  material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms) => {
+  const compile = material.onBeforeCompile.bind(material);
+  const cacheKey = material.customProgramCacheKey.bind(material);
+  material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer) => {
+    compile(shader, renderer);
     Object.assign(shader.uniforms, uniforms);
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', VERTEX_DECLARATIONS)
@@ -61,6 +64,6 @@ export function applyWetSkin(material: MeshStandardMaterial, uniforms: PoolFrame
       .replace('#include <opaque_fragment>', FRAGMENT_TINT);
   };
   material.envMapIntensity = ROOM_LIGHT_SHARE;
-  material.customProgramCacheKey = () => CACHE_KEY;
+  material.customProgramCacheKey = () => `${cacheKey()}|${CACHE_KEY}`;
   material.needsUpdate = true;
 }
