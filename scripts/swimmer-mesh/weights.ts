@@ -13,7 +13,8 @@ type Target = SideBoneId | 'trunk' | 'neck' | 'head';
 const BONE_RULES: readonly (readonly [RegExp, Target])[] = [
   [/^neck0\d$/, 'neck'],
   [/^head$/, 'head'],
-  [/^(clavicle|shoulder01)\./, 'girdle'],
+  [/^clavicle\./, 'clavicle'],
+  [/^shoulder01\./, 'scapula'],
   [/^upperarm01\./, 'upperArmRoot'],
   [/^upperarm02\./, 'upperArm'],
   [/^lowerarm01\./, 'forearmRoot'],

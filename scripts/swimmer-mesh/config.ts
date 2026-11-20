@@ -5,10 +5,10 @@ export const DATA_ROOT = 'makehuman/data';
 export const OUTPUT_PATH =
   'explainers/freestyle-swim/src/scene/parts/swimmer/skin/bodyMesh.data.ts';
 export const BODY_GROUP = 'body';
-export const BODY_HEIGHT = 1.902;
+export const BODY_HEIGHT = 1.93;
 
-const MUSCLE_BLEND = { minmuscle: 0.1, averagemuscle: 0.55, maxmuscle: 0.35 };
-const WEIGHT_BLEND = { minweight: 0.3, averageweight: 0.7, maxweight: 0 };
+const MUSCLE_BLEND = { minmuscle: 0.15, averagemuscle: 0.7, maxmuscle: 0.15 };
+const WEIGHT_BLEND = { minweight: 0.45, averageweight: 0.55, maxweight: 0 };
 const RACES = ['african', 'asian', 'caucasian'];
 const RACE_SHARE = 1 / RACES.length;
 
@@ -40,27 +40,31 @@ const RACE_TARGETS: WeightedTarget[] = RACES.map((race) => ({
 }));
 
 const SIDED_DETAIL_TARGETS: WeightedTarget[] = [
-  { path: 'armslegs/%-upperarm-muscle-incr', weight: 0.3 },
-  { path: 'armslegs/%-lowerarm-muscle-incr', weight: 0.3 },
-  { path: 'armslegs/%-lowerleg-muscle-incr', weight: 0.3 },
-  { path: 'armslegs/%-hand-scale-decr', weight: 0.252 },
-  { path: 'armslegs/%-foot-scale-incr', weight: 0.249 },
-  { path: 'armslegs/%-upperleg-muscle-incr', weight: 0.2 },
+  { path: 'armslegs/%-upperarm-muscle-incr', weight: 0.1 },
+  { path: 'armslegs/%-upperarm-fat-decr', weight: 1 },
+  { path: 'armslegs/%-lowerarm-muscle-incr', weight: 0.15 },
+  { path: 'armslegs/%-lowerleg-muscle-incr', weight: 0.15 },
+  { path: 'armslegs/%-hand-scale-decr', weight: 0.254 },
+  { path: 'armslegs/%-foot-scale-incr', weight: 0.248 },
+  { path: 'armslegs/%-upperleg-muscle-incr', weight: 0.1 },
 ];
 
 const CENTRE_DETAIL_TARGETS: WeightedTarget[] = [
-  { path: 'torso/torso-vshape-incr', weight: 0.3 },
-  { path: 'torso/torso-muscle-dorsi-incr', weight: 0.3 },
-  { path: 'torso/torso-muscle-pectoral-incr', weight: 0.5 },
+  { path: 'torso/torso-vshape-incr', weight: 0.08 },
+  { path: 'torso/torso-muscle-pectoral-incr', weight: 0.1 },
   { path: 'measure/measure-waist-circ-decr', weight: 0.4 },
+  { path: 'measure/measure-upperarm-circ-decr', weight: 0.3 },
+  { path: 'neck/neck-scale-vert-incr', weight: 0.5 },
+  { path: 'measure/measure-neck-circ-decr', weight: 0.2 },
+  { path: 'head/head-scale-horiz-decr', weight: 0.691 },
   { path: 'stomach/stomach-pregnant-decr', weight: 0.6 },
-  { path: 'measure/measure-shoulder-dist-decr', weight: 0.349 },
-  { path: 'measure/measure-upperarm-length-incr', weight: 1.207 },
-  { path: 'measure/measure-lowerarm-length-decr', weight: 0.116 },
-  { path: 'measure/measure-upperleg-height-incr', weight: 0.153 },
-  { path: 'torso/torso-scale-vert-incr', weight: 0.673 },
+  { path: 'measure/measure-shoulder-dist-decr', weight: 0.068 },
+  { path: 'measure/measure-upperarm-length-incr', weight: 1.228 },
+  { path: 'measure/measure-lowerarm-length-decr', weight: 0.118 },
+  { path: 'measure/measure-upperleg-height-incr', weight: 0.151 },
+  { path: 'torso/torso-scale-vert-incr', weight: 0.675 },
   { path: 'torso/torso-scale-horiz-decr', weight: 0.881 },
-  { path: 'hip/hip-scale-horiz-decr', weight: 0.914 },
+  { path: 'hip/hip-scale-horiz-decr', weight: 0.929 },
 ];
 
 export function targetTable(): WeightedTarget[] {
@@ -76,15 +80,18 @@ export const SIMPLIFY_BUDGET = {
   keep: {
     hand: 0.14,
     forearm: 0.75,
-    upperArm: 0.76,
+    upperArm: 0.85,
     chest: 0.66,
+    shoulders: 0.85,
     abdomen: 0.4,
     jammers: 0.67,
     legSuit: 0.3,
-    leg: 0.375,
-    face: 0.145,
+    leg: 0.42,
+    face: 0.22,
     cap: 0.4,
     capStripe: 0.3,
   },
-  total: 3900,
+  total: 4700,
 } as const;
+
+export const MIDLINE_TOLERANCE = 0.0002;

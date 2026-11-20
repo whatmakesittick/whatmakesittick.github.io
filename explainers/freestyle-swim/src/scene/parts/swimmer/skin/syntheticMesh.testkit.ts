@@ -28,6 +28,7 @@ const RESOLUTION = 1e5;
 const FOREARM_RING_RADIUS = 0.03;
 
 const RIGHT: RestSide = {
+  clavicle: [0, 0, 0.02],
   shoulder: [0, 0, 0.18],
   elbow: [-0.26, 0, 0.28],
   wrist: [-0.5, 0, 0.38],
@@ -75,11 +76,21 @@ function sideChains(side: 'right' | 'left'): Chain[] {
   const bone = (id: Parameters<typeof sideBone>[0]) => sideBone(id, side);
   return [
     {
+      from: rest.clavicle,
+      to: rest.shoulder,
+      radius: 0.04,
+      weighting: (t) => [
+        [centreBone('chest'), 1 - t],
+        [bone('clavicle'), t],
+      ],
+    },
+    {
       from: rest.shoulder,
       to: rest.elbow,
       radius: 0.045,
       weighting: (t) => [
-        [bone('girdle'), 0.4 * (1 - t)],
+        [bone('clavicle'), 0.2 * (1 - t)],
+        [bone('scapula'), 0.2 * (1 - t)],
         [bone('upperArmRoot'), 0.6 * (1 - t)],
         [bone('upperArm'), t],
       ],

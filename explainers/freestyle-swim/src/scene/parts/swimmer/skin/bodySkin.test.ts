@@ -7,8 +7,9 @@ import { createSkeleton, solveSkeleton } from '../../../rig/skeleton';
 import type { ArmPose, LegPose, Skeleton } from '../../../rig/skeleton';
 import { bodyPose } from '../../../pose';
 import { BodySkin } from './bodySkin';
-import { buildSyntheticMesh } from './syntheticMesh.testkit';
-import { centreBone, sideBone } from './types';
+import { decodeSkinMesh } from './decode';
+import { SYNTHETIC_REST, buildSyntheticMesh } from './syntheticMesh.testkit';
+import { BONE_COUNT, INFLUENCES, centreBone, sideBone } from './types';
 import type { Triple } from './types';
 
 const ROOT_Y = bodyPose(0, 0).y;
@@ -23,6 +24,11 @@ const OFFSETS = [0, 0.37, 0.71];
 const POSITION_TOLERANCE = 1e-4;
 const RADIUS_TOLERANCE = 0.05;
 const TWIST_DEG = 120;
+const REST_TOLERANCE = 1e-5;
+const GUARD_UNITS = [0, 286, 530, 754, 877, 900];
+const GUARD_RATIO = 1.3;
+const GUARD_BONES = ['scapula', 'upperArmRoot'] as const;
+const SIDES = ['right', 'left'] as const;
 const BENCH_RINGS = 40;
 const BENCH_RUNS = 400;
 const BENCH_LIMIT_MS = 5;
@@ -113,7 +119,7 @@ describe('retarget', () => {
     (['right', 'left'] as const).forEach((id) => {
       const side = skin.rest[id];
       const sign = id === 'right' ? 1 : -1;
-      expect(vec(side.shoulder).toArray()).toEqual([0, 0, sign * BODY.shoulderHalf]);
+      expect(side.shoulder).toEqual(SYNTHETIC_REST[id].shoulder);
       expect(vec(side.elbow).distanceTo(vec(side.shoulder))).toBeCloseTo(BODY.upperArm, 6);
       expect(vec(side.wrist).distanceTo(vec(side.elbow))).toBeCloseTo(BODY.forearm, 6);
       expect(vec(side.fingertip).distanceTo(vec(side.wrist))).toBeCloseTo(BODY.hand, 6);
@@ -147,6 +153,41 @@ describe('pose', () => {
         POSITION_TOLERANCE,
       );
     }
+  });
+
+  it('leaves every bone at identity and vertices at rest for a rest skeleton', () => {
+    const { skin, mesh } = setup();
+    skin.apply(restSkeleton(skin));
+    for (let bone = 0; bone < BONE_COUNT; bone++) {
+      const e = skin.boneMatrix(bone, new Matrix4()).elements;
+      new Matrix4().identity().elements.forEach((value, k) => {
+        expect(Math.abs(e[k] - value)).toBeLessThan(REST_TOLERANCE);
+      });
+    }
+    for (let v = 0; v < mesh.vertexCount; v++) {
+      expect(at(skin.positions, v).distanceTo(at(skin.restPositions, v))).toBeLessThan(
+        REST_TOLERANCE,
+      );
+    }
+  });
+
+  it('keeps the clavicle joint on the chest and its lateral end toward the shoulder', () => {
+    const { skin } = setup();
+    posedSkeletons().forEach((skeleton) => {
+      skin.apply(skeleton);
+      SIDES.forEach((id) => {
+        const rest = skin.rest[id];
+        const clavicle = skin.boneMatrix(sideBone('clavicle', id), new Matrix4());
+        const chest = skin.boneMatrix(centreBone('chest'), new Matrix4());
+        const joint = vec(rest.clavicle).applyMatrix4(clavicle);
+        expect(joint.distanceTo(vec(rest.clavicle).applyMatrix4(chest))).toBeLessThan(
+          POSITION_TOLERANCE,
+        );
+        const lateral = vec(rest.shoulder).applyMatrix4(clavicle).sub(joint).normalize();
+        const expected = skeleton.arms[id].shoulder.clone().sub(joint).normalize();
+        expect(lateral.distanceTo(expected)).toBeLessThan(POSITION_TOLERANCE);
+      });
+    });
   });
 
   it('lands the joint vertices on the rig joints', () => {
@@ -262,5 +303,42 @@ describe('pose', () => {
     const mean = (performance.now() - start) / BENCH_RUNS;
     console.info(`apply ${mesh.vertexCount} vertices: ${mean.toFixed(3)} ms`);
     expect(mean).toBeLessThan(BENCH_LIMIT_MS);
+  });
+});
+
+describe('shoulder ballooning guard on the real mesh', () => {
+  const mesh = decodeSkinMesh();
+
+  function dominant(v: number): number {
+    let best = 0;
+    for (let i = 1; i < INFLUENCES; i++) {
+      if (mesh.weights[v * INFLUENCES + i] > mesh.weights[v * INFLUENCES + best]) best = i;
+    }
+    return mesh.joints[v * INFLUENCES + best];
+  }
+
+  function reach(positions: Float32Array, shoulder: Vector3, id: 'right' | 'left'): number {
+    let max = 0;
+    for (let v = 0; v < mesh.vertexCount; v++) {
+      const bone = dominant(v);
+      if (!GUARD_BONES.some((name) => sideBone(name, id) === bone)) continue;
+      max = Math.max(max, at(positions, v).distanceTo(shoulder));
+    }
+    return max;
+  }
+
+  it('keeps the shoulder region within the rest reach', () => {
+    const skin = new BodySkin(mesh);
+    GUARD_UNITS.forEach((units) => {
+      const skeleton = readingSkeleton(units);
+      skin.apply(skeleton);
+      const report = SIDES.map((id) => {
+        const restReach = reach(skin.restPositions, vec(skin.rest[id].shoulder), id);
+        const posedReach = reach(skin.positions, skeleton.arms[id].shoulder, id);
+        expect(posedReach).toBeLessThanOrEqual(GUARD_RATIO * restReach);
+        return `${id} ${posedReach.toFixed(4)}/${restReach.toFixed(4)}`;
+      });
+      console.info(`guard units ${units}: ${report.join(', ')}`);
+    });
   });
 });

@@ -1,7 +1,8 @@
 export type Triple = readonly [number, number, number];
 
 export const SIDE_BONE_IDS = [
-  'girdle',
+  'clavicle',
+  'scapula',
   'upperArmRoot',
   'upperArm',
   'forearmRoot',
@@ -56,6 +57,7 @@ export const MIRRORED_SLOT: Readonly<Partial<Record<SlotId, SlotId>>> = { capStr
 export const INFLUENCES = 4;
 
 export interface RestSide {
+  readonly clavicle: Triple;
   readonly shoulder: Triple;
   readonly elbow: Triple;
   readonly wrist: Triple;

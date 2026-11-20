@@ -1,26 +1,18 @@
 import type { RestSide } from '../../explainers/freestyle-swim/src/scene/parts/swimmer/skin/types.ts';
-import type { PreparedBody } from './prepare.ts';
-import { farthest, restSide, type RestJoints } from './restpose.ts';
+import type { RestJoints } from './restpose.ts';
 import { length, sub, type Vec } from './vec.ts';
 
-export function restJoints(body: PreparedBody): RestJoints {
-  const joint = body.joint;
-  const wrist = joint('wrist.R____head');
-  const thumbTip = farthest(body.model.positions, body.parts.thumb, wrist);
+export function restJoints(joint: (name: string) => Vec): RestJoints {
   return {
+    clavicle: joint('clavicle.R____head'),
     shoulder: joint('upperarm01.R____head'),
     elbow: joint('lowerarm01.R____head'),
-    wrist,
+    wrist: joint('wrist.R____head'),
     hip: joint('upperleg01.R____head'),
     knee: joint('lowerleg01.R____head'),
     ankle: joint('foot.R____head'),
     footTail: joint('foot.R____tail'),
-    thumbTip,
   };
-}
-
-export function restOf(body: PreparedBody): RestSide {
-  return restSide(body.model.positions, restJoints(body), { ...body.parts, eye: body.eye });
 }
 
 export interface RestLengths {
