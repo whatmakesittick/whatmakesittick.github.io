@@ -3,7 +3,7 @@ import { decodeModel } from './decode';
 import type { FigureData } from './data';
 import { Kinematics } from './kinematics';
 import { AXES, MATRIX, quaternionFromMatrix } from './matrix';
-import type { FigureModel } from './model';
+import type { FigureModel, SkeletonModel } from './model';
 import { computeNormals } from './normals';
 import { Skinning } from './skinning';
 
@@ -23,6 +23,7 @@ export class Figure {
   readonly jointPositions: Float32Array;
   readonly jointRotations: Float32Array;
   readonly jointScales: Float32Array;
+  readonly skeleton: SkeletonModel;
   private readonly kinematics: Kinematics;
   private readonly skinning: Skinning;
   private readonly correctives: Correctives;
@@ -33,6 +34,7 @@ export class Figure {
 
   constructor(model: FigureModel) {
     this.model = model;
+    this.skeleton = model.skeleton;
     this.vertexCount = model.vertexCount;
     this.triangleCount = model.indices.length / AXES;
     this.jointCount = model.jointCount;
@@ -63,8 +65,28 @@ export class Figure {
     return this.jointLookup.get(name) ?? -1;
   }
 
+  dominantJoints(): Uint8Array {
+    const { start, joints, weights } = this.model.skin;
+    const dominant = new Uint8Array(this.vertexCount);
+    for (let v = 0; v < this.vertexCount; v++) {
+      let best = start[v];
+      for (let i = start[v] + 1; i < start[v + 1]; i++) if (weights[i] > weights[best]) best = i;
+      dominant[v] = joints[best];
+    }
+    return dominant;
+  }
+
   createParameters(): Float32Array {
     return new Float32Array(this.parameterCount);
+  }
+
+  get jointMatrices(): Float64Array {
+    return this.kinematics.rotations;
+  }
+
+  solveSkeleton(parameters: Float32Array): void {
+    this.kinematics.solve(parameters);
+    this.publishJoints();
   }
 
   pose(parameters: Float32Array, correctives = true): void {
