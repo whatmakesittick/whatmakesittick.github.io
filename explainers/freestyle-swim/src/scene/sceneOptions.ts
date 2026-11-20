@@ -18,7 +18,7 @@ export const SCENE_OPTIONS: SceneOptions = {
     maxPolarAngle: SCENE_LIMITS.maxPolarAngle,
     distance: { min: SCENE_LIMITS.cameraMinDistance, max: SCENE_LIMITS.cameraMaxDistance },
   },
-  gaugeSide: 'top',
+  gaugeSide: 'right',
   occlusionHitFilter: (hit: Intersection) => !isNearRope(hit.object, hit.distance),
   highlight: { dim: SWIMMER_DIM, undimmed: [...UNDIMMED_PARTS] },
 };
