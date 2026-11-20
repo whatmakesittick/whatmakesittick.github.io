@@ -10,7 +10,9 @@ const SUIT_ROUGHNESS = 0.78;
 const LANE_ROUGHNESS = 0.62;
 const LENS_ROUGHNESS = 0.12;
 const PLASTIC_ROUGHNESS = 0.45;
-const ARROW_GLOW = 0.35;
+const ROPE_BLUE = '#2f6bc4';
+const ARROW_GLOW = 0.3;
+const ARROW_ROUGHNESS = 0.35;
 
 function shade(hex: string, tone: { saturation: number; brightness: number }): string {
   const hsl = { h: 0, s: 0, l: 0 };
@@ -32,18 +34,20 @@ export const FINISHES = {
   goggleBand: matte(THEME.goggles, SILICONE_ROUGHNESS),
   goggleLens: { ...matte(THEME.goggles, LENS_ROUGHNESS), metalness: 0.6 },
   floatA: matte(THEME.floatA, PLASTIC_ROUGHNESS),
-  floatB: matte(THEME.floatB, PLASTIC_ROUGHNESS),
+  floatB: matte(ROPE_BLUE, PLASTIC_ROUGHNESS),
   ropeCord: matte(THEME.laneLine, PLASTIC_ROUGHNESS),
   laneLine: matte(THEME.laneLine, LANE_ROUGHNESS),
   thrust: {
-    ...matte(THEME.thrust, PLASTIC_ROUGHNESS),
+    ...matte(THEME.thrust, ARROW_ROUGHNESS),
     emissive: THEME.thrust,
     emissiveIntensity: ARROW_GLOW,
+    transparent: true,
   },
   drag: {
-    ...matte(THEME.drag, PLASTIC_ROUGHNESS),
+    ...matte(THEME.drag, ARROW_ROUGHNESS),
     emissive: THEME.drag,
     emissiveIntensity: ARROW_GLOW,
+    transparent: true,
   },
 } as const satisfies Record<string, MaterialFinish>;
 
