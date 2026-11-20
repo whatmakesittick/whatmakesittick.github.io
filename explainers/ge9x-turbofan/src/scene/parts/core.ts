@@ -44,6 +44,8 @@ import {
   polar,
 } from './context';
 import { applyHeat, heatProfileAt } from './heat';
+import { applySpinMarks } from './spinMarks';
+import { applyBrushed } from './detailPatches';
 
 interface RowGroup {
   readonly part: RowPart;
@@ -101,6 +103,33 @@ const ROW_GROUPS: readonly RowGroup[] = [
 ];
 
 const ROW_PHASE = 0.37;
+const SHROUD = { gap: 0.004, depth: 0.014, overhang: 0.004 } as const;
+
+interface BearingHousing {
+  readonly from: number;
+  readonly to: number;
+  readonly bore: number;
+  readonly rim: number;
+  readonly web: number;
+}
+
+const BEARING_HOUSINGS: readonly BearingHousing[] = [
+  { from: -1.64, to: -1.5, bore: 0.18, rim: 0.4, web: 0.018 },
+  { from: 1.035, to: 1.1, bore: 0.18, rim: 0.5, web: 0.02 },
+  { from: 2.13, to: 2.24, bore: 0.1, rim: 0.52, web: 0.02 },
+];
+
+function housingLoop(housing: BearingHousing): Strand[] {
+  const { from, to, bore, rim, web } = housing;
+  const cage = bore + 0.05;
+  return closedLoop([
+    [from, cage],
+    [to - web, rim],
+    [to, rim],
+    [to, bore],
+    [from, bore],
+  ]);
+}
 const SPLITTER_NOSE = 0.012;
 const SPLITTER_SAMPLES = 10;
 const DISC = { rimHeight: 0.045, web: 0.016, boreHeight: 0.05, boreShare: 0.7 } as const;
@@ -119,9 +148,6 @@ const COMPRESSOR_FLANGES = [-1.1, -0.62, -0.18, 0.1] as const;
 const LPT_FLANGES = [1.06, 1.45, 1.8, 2.12] as const;
 const VSV_RINGS = 4;
 const VSV_RING = { lift: 0.07, tube: 0.008 } as const;
-const BAND = { width: 0.07, lift: 0.006, stripes: 4, stripeArc: toRadians(48) } as const;
-const INNER_BANDS = [0.42, 1.62] as const;
-const OUTER_BANDS = [-0.52, 0.42] as const;
 const HP_LINK = { from: 0.08, to: 0.8, inner: 0.27, outer: 0.295 } as const;
 const MID_FRAME = { x: 1.055, width: 0.05, count: 10 } as const;
 const REAR_FRAME = { x: 2.2, width: 0.08, count: 8, hub: 0.53, tip: 0.91 } as const;
@@ -139,8 +165,25 @@ function rowsOf(group: RowGroup): RowSpec[] {
   return BLADE_ROWS.filter((row) => row.part === group.part && row.kind === group.kind);
 }
 
+function shroudRing(row: RowSpec): BufferGeometry {
+  return ring(
+    row.from - SHROUD.overhang,
+    row.to + SHROUD.overhang,
+    row.hub + SHROUD.gap,
+    row.hub + SHROUD.gap + SHROUD.depth,
+    SEGMENTS.small,
+  );
+}
+
 function rowsGeometry(rows: readonly RowSpec[]): BufferGeometry {
   const buffers = emptyRing();
+  rows
+    .filter((row) => row.kind === 'stator')
+    .forEach((row) => {
+      const shroud = shroudRing(row);
+      appendRing(buffers, shroud, 1, 0, heatProfileAt((row.from + row.to) / 2));
+      shroud.dispose();
+    });
   rows.forEach((row) => {
     const blade = rowBlade(row);
     const index = BLADE_ROWS.indexOf(row);
@@ -307,24 +350,6 @@ function strutRing(
   return ringGeometry(buffers);
 }
 
-function spinBands(positions: readonly number[], radius: number): BufferGeometry {
-  const strands: Strand[] = positions.flatMap((x) =>
-    closedLoop([
-      [x - BAND.width / 2, radius + BAND.lift],
-      [x + BAND.width / 2, radius + BAND.lift],
-      [x + BAND.width / 2, radius - 0.004],
-      [x - BAND.width / 2, radius - 0.004],
-    ]),
-  );
-  const pieces = Array.from({ length: BAND.stripes }, (_, index) =>
-    revolve(strands, SEGMENTS.small, {
-      start: (FULL_TURN * index) / BAND.stripes,
-      length: BAND.stripeArc,
-    }),
-  );
-  return mergeAll(pieces);
-}
-
 function mergeAll(pieces: BufferGeometry[]): BufferGeometry {
   const merged = mergeGeometries(pieces);
   pieces.forEach((piece) => piece.dispose());
@@ -354,6 +379,7 @@ export class CorePart {
       yield;
     }
     this.buildDrums();
+    this.buildBearings();
     yield;
     this.buildCasings();
     yield;
@@ -413,32 +439,39 @@ export class CorePart {
       this.context,
       innerShaft,
       ring(inner.from, inner.to, inner.inner, inner.outer, SEGMENTS.small),
-      coreMaterial(this.context, 'innerShaft', FINISHES.innerShaft),
-    );
-    mesh(
-      this.context,
-      innerShaft,
-      spinBands(INNER_BANDS, inner.outer),
-      coreMaterial(this.context, 'innerShaft', FINISHES.spinBand),
+      applyBrushed(
+        applySpinMarks(coreMaterial(this.context, 'innerShaft', FINISHES.innerShaft), 'helix'),
+      ),
     );
     const outerShaft = namedGroup('outerShaft', this.spools.outer);
     mesh(
       this.context,
       outerShaft,
       ring(outer.from, outer.to, outer.inner, outer.outer, SEGMENTS.small),
-      coreMaterial(this.context, 'outerShaft', FINISHES.outerShaft),
-    );
-    mesh(
-      this.context,
-      outerShaft,
-      spinBands(OUTER_BANDS, outer.outer),
-      coreMaterial(this.context, 'outerShaft', FINISHES.spinBand),
+      applyBrushed(
+        applySpinMarks(coreMaterial(this.context, 'outerShaft', FINISHES.outerShaft), 'helix'),
+      ),
     );
     mesh(
       this.context,
       outerShaft,
       ring(HP_LINK.from, HP_LINK.to, HP_LINK.inner, HP_LINK.outer, SEGMENTS.disc),
-      coreMaterial(this.context, 'outerShaft', FINISHES.outerShaft),
+      applyBrushed(
+        applySpinMarks(coreMaterial(this.context, 'outerShaft', FINISHES.outerShaft), 'helix'),
+      ),
+    );
+  }
+
+  private spinning(group: EmphasisGroup, finish: MaterialFinish): MeshStandardMaterial {
+    return applyBrushed(applySpinMarks(coreMaterial(this.context, group, finish), 'index'));
+  }
+
+  private buildBearings(): void {
+    mesh(
+      this.context,
+      this.engine,
+      revolve(BEARING_HOUSINGS.flatMap(housingLoop), SEGMENTS.disc),
+      coreMaterial(this.context, STRUCTURE_GROUP, FINISHES.bearing),
     );
   }
 
@@ -449,30 +482,31 @@ export class CorePart {
     const lpt = BLADE_ROWS.filter((row) => row.part === 'lpTurbine' && row.kind === 'rotor');
     const lpBore = SHAFTS.inner.outer + 0.003;
     const hpBore = SHAFTS.outer.outer + 0.003;
-    const drumFinish = FINISHES.drum;
+    const innerDrum = FINISHES.innerDrum;
+    const outerDrum = FINISHES.outerDrum;
     mesh(
       this.context,
       this.spools.inner,
       drum(hubAt, -2.1, -1.6, booster, lpBore),
-      coreMaterial(this.context, 'booster', drumFinish),
+      this.spinning('booster', innerDrum),
     );
     mesh(
       this.context,
       this.spools.outer,
       drum(hubAt, STATION_X.compressorStart, STATION_X.compressorEnd, compressor, hpBore),
-      coreMaterial(this.context, 'compressorRotor', drumFinish),
+      this.spinning('compressorRotor', outerDrum),
     );
     mesh(
       this.context,
       this.spools.outer,
       drum(turbineHubAt, 0.72, 1.03, hpt, hpBore),
-      coreMaterial(this.context, 'hpTurbine', drumFinish),
+      this.spinning('hpTurbine', outerDrum),
     );
     mesh(
       this.context,
       this.spools.inner,
       drum(turbineHubAt, STATION_X.lptStart, STATION_X.lptEnd, lpt, lpBore),
-      coreMaterial(this.context, 'lpTurbine', drumFinish),
+      this.spinning('lpTurbine', innerDrum),
     );
     mesh(
       this.context,

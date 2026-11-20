@@ -32,13 +32,13 @@ const TIP_GAP = 0.004;
 const XYZ = 3;
 
 export const ROW_COUNTS = {
-  booster: 44,
-  compressorRotor: 52,
-  compressorStator: 52,
-  hptNozzle: 36,
-  hptRotor: 52,
-  lptStator: 60,
-  lptRotor: 66,
+  booster: 28,
+  compressorRotor: 32,
+  compressorStator: 36,
+  hptNozzle: 24,
+  hptRotor: 36,
+  lptStator: 36,
+  lptRotor: 40,
 } as const;
 
 interface RowRun {
@@ -49,16 +49,16 @@ interface RowRun {
   readonly first: RowKind;
 }
 
-const BOOSTER_RUN: RowRun = { from: -2.03, to: -1.58, rows: 6, fill: 0.72, first: 'rotor' };
+const BOOSTER_RUN: RowRun = { from: -2.03, to: -1.58, rows: 6, fill: 0.8, first: 'rotor' };
 const COMPRESSOR_RUN: RowRun = {
   from: STATION_X.compressorStart,
   to: STATION_X.compressorEnd - 0.01,
   rows: 22,
-  fill: 0.66,
+  fill: 0.78,
   first: 'rotor',
 };
-const HPT_RUN: RowRun = { from: 0.735, to: 1.0, rows: 4, fill: 0.72, first: 'stator' };
-const LPT_RUN: RowRun = { from: 1.09, to: 2.11, rows: 12, fill: 0.68, first: 'stator' };
+const HPT_RUN: RowRun = { from: 0.735, to: 1.0, rows: 4, fill: 0.8, first: 'stator' };
+const LPT_RUN: RowRun = { from: 1.09, to: 2.11, rows: 12, fill: 0.78, first: 'stator' };
 
 interface RowSlot {
   from: number;
@@ -136,34 +136,34 @@ interface FamilyLook {
 const LOOKS: Readonly<Record<RowFamily, Record<RowKind, FamilyLook>>> = {
   compressor: {
     rotor: {
-      stagger: [toRadians(34), toRadians(56)],
-      camber: [0.07, 0.03],
-      thickness: [0.08, 0.04],
-      stations: 4,
-      samples: 4,
+      stagger: [toRadians(26), toRadians(62)],
+      camber: [0.09, 0.03],
+      thickness: [0.1, 0.045],
+      stations: 5,
+      samples: 5,
     },
     stator: {
-      stagger: [toRadians(30), toRadians(36)],
-      camber: [0.09, 0.07],
-      thickness: [0.07, 0.06],
+      stagger: [toRadians(26), toRadians(38)],
+      camber: [0.11, 0.08],
+      thickness: [0.09, 0.07],
       stations: 4,
-      samples: 4,
+      samples: 5,
     },
   },
   turbine: {
     rotor: {
-      stagger: [toRadians(26), toRadians(38)],
-      camber: [-0.2, -0.13],
-      thickness: [0.22, 0.12],
-      stations: 4,
-      samples: 5,
+      stagger: [toRadians(20), toRadians(42)],
+      camber: [-0.22, -0.12],
+      thickness: [0.24, 0.12],
+      stations: 5,
+      samples: 6,
     },
     stator: {
-      stagger: [toRadians(46), toRadians(50)],
-      camber: [-0.17, -0.14],
-      thickness: [0.18, 0.14],
+      stagger: [toRadians(44), toRadians(52)],
+      camber: [-0.18, -0.14],
+      thickness: [0.2, 0.15],
       stations: 4,
-      samples: 5,
+      samples: 6,
     },
   },
 };

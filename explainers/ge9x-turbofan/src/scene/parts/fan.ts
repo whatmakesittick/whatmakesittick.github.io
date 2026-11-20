@@ -16,6 +16,7 @@ import { appendRing, emptyRing, handed, ringGeometry } from '../geometry/rows';
 import type { PartContext } from './context';
 import { cutMaterial, label, material, mesh, namedGroup, polar, registered } from './context';
 import { blurMaterial } from './effects';
+import { applyCarbonWeave } from './detailPatches';
 
 const OPACITY_STEPS = 5;
 const XYZ = 3;
@@ -199,7 +200,9 @@ export class FanPart {
 
   constructor(context: PartContext, engine: Group, innerSpool: Group) {
     this.rotor = namedGroup('fanRotor', innerSpool);
-    this.bladeMaterials = BLADE_STEPS.map((finish) => material(context, 'fanBlades', finish));
+    this.bladeMaterials = BLADE_STEPS.map((finish) =>
+      applyCarbonWeave(material(context, 'fanBlades', finish)),
+    );
     this.edgeMaterials = EDGE_STEPS.map((finish) => material(context, 'fanBlades', finish));
     this.blades = mesh(context, this.rotor, bladeRing(), this.bladeMaterials[0]);
     this.edges = mesh(context, this.rotor, bladeRing(EDGE_RANGE), this.edgeMaterials[0]);

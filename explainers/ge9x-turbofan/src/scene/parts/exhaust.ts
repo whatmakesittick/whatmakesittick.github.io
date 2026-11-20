@@ -1,8 +1,17 @@
-import { Float32BufferAttribute } from 'three';
+import {
+  AdditiveBlending,
+  Color,
+  Float32BufferAttribute,
+  NormalBlending,
+  Sprite,
+  SpriteMaterial,
+} from 'three';
 import type { BufferGeometry, Group, Mesh } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { toRadians } from '@core/math';
-import { EFFECT_LOOK, HEAT_LOOK, SEGMENTS } from '../constants';
+import { lerp, toRadians } from '@core/math';
+import { EFFECT_LOOK, HEAT_LOOK, LOOK, SEGMENTS } from '../constants';
+import { HEAT_IDLE } from '../../model/heat';
+import { THEME } from '../../theme';
 import { FINISHES } from '../finishes';
 import { HOT_NOZZLE, STATION_X, cowlAt, reversed, sampled } from '../geometry/profiles';
 import { line, revolve, smooth } from '../geometry/revolve';
@@ -19,9 +28,20 @@ import {
   registered,
 } from './context';
 import { plumeMaterial } from './effects';
+import { NOZZLE_PANELS, PLUG_PANELS, applyPanels } from './panels';
 import { applyHeat, withHeatProfile } from './heat';
 
 const NOZZLE_FRONT = 2.1;
+const PLUME_GLOW = {
+  offset: 0.22,
+  shortest: 0.62,
+  longest: 1.55,
+  thinnest: 0.88,
+  smallest: 0.7,
+  largest: 1.9,
+  dimmest: 0.25,
+  brightest: 0.85,
+} as const;
 const PLUG_FRONT = 2.05;
 const NOZZLE_SAMPLES = 12;
 
@@ -146,6 +166,8 @@ export class ExhaustPart {
   readonly hotPlume: Mesh;
   readonly coldPlume: Mesh;
   readonly reverseSheet: Mesh;
+  private readonly plumePivot: Group;
+  private readonly exitGlow: Sprite;
   private readonly reverseStrength = { value: 0 };
   private readonly hotStrength = { value: 0 };
   private readonly coldStrength = { value: 0 };
@@ -153,14 +175,14 @@ export class ExhaustPart {
   constructor(context: PartContext, engine: Group) {
     const nozzle = namedGroup('hotNozzle', engine);
     const metal = applyHeat(
-      coreMaterial(context, 'hotNozzle', FINISHES.hotNozzle),
+      applyPanels(coreMaterial(context, 'hotNozzle', FINISHES.hotNozzle), NOZZLE_PANELS, 'nozzle'),
       context.heat,
       glowScale(context, 'hotNozzle'),
       HEAT_LOOK.nozzleGain,
     );
     mesh(context, nozzle, withHeatProfile(revolve(hotNozzleStrands(), SEGMENTS.shell), 0.6), metal);
     const plug = applyHeat(
-      material(context, 'hotNozzle', FINISHES.plug),
+      applyPanels(material(context, 'hotNozzle', FINISHES.plug), PLUG_PANELS, 'plug'),
       context.heat,
       glowScale(context, 'hotNozzle'),
       HEAT_LOOK.nozzleGain,
@@ -176,13 +198,28 @@ export class ExhaustPart {
         alpha: EFFECT_LOOK.hotPlumeAlpha,
       }),
     );
-    this.hotPlume = mesh(
-      context,
-      engine,
-      plumeSurface([HOT_PLUME_OUTER, HOT_PLUME_CORE]),
-      hotShader,
-    );
+    this.plumePivot = namedGroup('plumePivot', engine);
+    this.plumePivot.position.x = STATION_X.hotExit;
+    const plumeShape = plumeSurface([HOT_PLUME_OUTER, HOT_PLUME_CORE]);
+    plumeShape.translate(-STATION_X.hotExit, 0, 0);
+    this.hotPlume = mesh(context, this.plumePivot, plumeShape, hotShader);
     this.hotPlume.renderOrder = 3;
+    this.exitGlow = new Sprite(
+      registered(
+        context,
+        'hotStream',
+        new SpriteMaterial({
+          map: context.textures.glow,
+          color: new Color(THEME.fire),
+          blending: LOOK.additive ? AdditiveBlending : NormalBlending,
+          transparent: true,
+          depthWrite: false,
+        }),
+      ),
+    );
+    this.exitGlow.position.x = PLUME_GLOW.offset;
+    this.exitGlow.renderOrder = 4;
+    this.plumePivot.add(this.exitGlow);
     const coldShader = registered(
       context,
       'coldStream',
@@ -220,6 +257,13 @@ export class ExhaustPart {
   ): void {
     this.hotStrength.value = heat;
     this.hotPlume.visible = hotShown && heat > 0;
+    const power = Math.max(0, (heat - HEAT_IDLE) / (1 - HEAT_IDLE));
+    const reach = lerp(PLUME_GLOW.shortest, PLUME_GLOW.longest, power);
+    const girth = lerp(PLUME_GLOW.thinnest, 1, power);
+    this.plumePivot.scale.set(reach, girth, girth);
+    this.exitGlow.visible = hotShown;
+    this.exitGlow.scale.setScalar(lerp(PLUME_GLOW.smallest, PLUME_GLOW.largest, power));
+    this.exitGlow.material.opacity = lerp(PLUME_GLOW.dimmest, PLUME_GLOW.brightest, power);
     this.coldStrength.value = coldOut * coldSpeed;
     this.coldPlume.visible = coldShown && coldOut > 0;
     this.reverseStrength.value = (1 - coldOut) * coldSpeed;

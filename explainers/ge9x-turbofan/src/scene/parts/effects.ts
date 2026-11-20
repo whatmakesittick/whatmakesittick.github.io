@@ -88,6 +88,7 @@ export function glowVolumeMaterial(
       uHeat: heat.uHeat,
       uGlowScale: scale.uGlowScale,
       uCutHalf: cut.uCoreHalf,
+      uCutCentre: cut.uCoreCentre,
       uTime: time.uTime,
     },
     vertexShader: /* glsl */ `
@@ -123,6 +124,53 @@ export function glowVolumeMaterial(
   });
 }
 
+export function haloMaterial(
+  heat: HeatUniforms,
+  scale: GlowScale,
+  cut: CutUniforms,
+): ShaderMaterial {
+  return new ShaderMaterial({
+    ...blend(),
+    side: DoubleSide,
+    uniforms: {
+      uHeat: heat.uHeat,
+      uGlowScale: scale.uGlowScale,
+      uCutHalf: cut.uCoreHalf,
+      uCutCentre: cut.uCoreCentre,
+    },
+    vertexShader: /* glsl */ `
+      attribute float heatProfile;
+      varying float vProfile;
+      varying float vFacing;
+      ${CUT_VERTEX}
+      void main() {
+        vProfile = heatProfile;
+        vec4 world = modelMatrix * vec4(position, 1.0);
+        vWorld = world.xyz;
+        vec4 view = viewMatrix * world;
+        vFacing = abs(dot(normalize(normalMatrix * normal), normalize(-view.xyz)));
+        gl_Position = projectionMatrix * view;
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform float uHeat;
+      uniform float uGlowScale;
+      varying float vProfile;
+      varying float vFacing;
+      ${CUT_FRAGMENT}
+      ${HEAT_RAMP_GLSL}
+      void main() {
+        if (cutAway()) discard;
+        float heat = clamp(vProfile * uHeat, 0.0, 1.0);
+        float alpha = ${glslFloat(EFFECT_LOOK.haloAlpha)} * pow(heat, 1.3) * pow(vFacing, 2.2) * uGlowScale;
+        vec4 color = vec4(heatRamp(min(heat, 0.92)), clamp(alpha, 0.0, 1.0));
+        ${finishColor('color')}
+        ${OUTPUT}
+      }
+    `,
+  });
+}
+
 export function flameMaterial(
   flame: IUniform<number>,
   scale: GlowScale,
@@ -136,6 +184,7 @@ export function flameMaterial(
       uFlame: flame,
       uGlowScale: scale.uGlowScale,
       uCutHalf: cut.uCoreHalf,
+      uCutCentre: cut.uCoreCentre,
       uTime: time.uTime,
       uCore: { value: new Color(THEME.flame) },
       uEdge: { value: new Color(THEME.fire) },

@@ -64,34 +64,35 @@ function random(seed: number): () => number {
   };
 }
 
-function cutWindow(x: number): number {
+export function cutWindow(x: number): number {
   return (
     smoothstep(x, LIP_X - STREAMS.cutFade, LIP_X) *
     (1 - smoothstep(x, STREAMS.cutEnd, STREAMS.cutEnd + STREAMS.cutFade))
   );
 }
 
-const CENTRE = QUARTER_TURN - CUT.centre;
+export const SHELL_CENTRE = QUARTER_TURN - CUT.centre;
+export const CORE_CENTRE = QUARTER_TURN - CUT.coreCentre;
 
-function wrapped(around: number): number {
+export function wrapped(around: number): number {
   return around - FULL_TURN * Math.floor((around + HALF_TURN) / FULL_TURN);
 }
 
-function avoided(around: number, gap: number): number {
+export function avoided(around: number, gap: number): number {
   if (gap <= 0) return around;
   return Math.sign(around || 1) * (gap + (Math.abs(around) * (HALF_TURN - gap)) / HALF_TURN);
 }
 
-function gathered(angle: number, swirl: number, gap: number): number {
-  const free = wrapped(angle + swirl - CENTRE);
+export function gathered(angle: number, swirl: number, gap: number): number {
+  const free = wrapped(angle + swirl - CORE_CENTRE);
   if (gap <= 0) return free;
   const inside =
-    wrapped(angle - CENTRE) * ((gap * STREAMS.gatherShare) / HALF_TURN) +
+    wrapped(angle - CORE_CENTRE) * ((gap * STREAMS.gatherShare) / HALF_TURN) +
     Math.sin(swirl) * gap * STREAMS.gatherDrift;
   return lerp(free, inside, Math.min(1, gap / CUT.coreHalfAngle));
 }
 
-interface Sample {
+export interface Sample {
   mapped: number;
   x: number;
   r: number;
@@ -102,7 +103,12 @@ interface Sample {
   blue: number;
 }
 
-function sampleTable(table: StreamTable, along: number, share: number, target: Sample): Sample {
+export function sampleTable(
+  table: StreamTable,
+  along: number,
+  share: number,
+  target: Sample,
+): Sample {
   const scaled = clamp(along, 0, 1) * (table.samples - 1);
   const index = Math.min(table.samples - 2, Math.floor(scaled));
   const f = scaled - index;
@@ -246,9 +252,9 @@ export class StreakStream {
     const swirl = SPIN_SENSE * out.swirl;
     const mapped = this.look.gather
       ? gathered(angle, swirl, gap)
-      : avoided(wrapped(angle + swirl - CENTRE), gap);
+      : avoided(wrapped(angle + swirl - SHELL_CENTRE), gap);
     out.mapped = mapped;
-    const spun = mapped + CENTRE;
+    const spun = mapped + (this.look.gather ? CORE_CENTRE : SHELL_CENTRE);
     return this.point.set(out.x, out.r * Math.cos(spun), out.r * Math.sin(spun));
   }
 
@@ -349,6 +355,10 @@ export class StreamMarker {
     const radius = radiusAtX(this.table, x);
     const [px, py, pz] = polar(x, radius, toRadians(STREAMS.markerAngle));
     this.bead.position.set(px, py, pz);
+  }
+
+  moveTo(point: Vector3): void {
+    this.bead.position.copy(point);
   }
 
   get anchor(): Object3D {

@@ -1,9 +1,16 @@
-import { BoxGeometry, InstancedMesh, Matrix4 } from 'three';
+import { BoxGeometry, CylinderGeometry, InstancedMesh, Matrix4, Vector3 } from 'three';
 import type { BufferGeometry, Group } from 'three';
 import { FULL_TURN, smoothstep, toRadians } from '@core/math';
 import { REVERSER, SEGMENTS } from '../constants';
 import { FINISHES } from '../finishes';
-import { STATION_X, ductOuterAt, nacelleOuterAt, reversed, sampled } from '../geometry/profiles';
+import {
+  STATION_X,
+  cowlAt,
+  ductOuterAt,
+  nacelleOuterAt,
+  reversed,
+  sampled,
+} from '../geometry/profiles';
 import { closedLoop, line, revolve } from '../geometry/revolve';
 import type { Strand } from '../geometry/revolve';
 import { appendRing, emptyRing, ringGeometry } from '../geometry/rows';
@@ -28,6 +35,13 @@ const CASCADE = {
   vane: 0.024,
   lean: 0.012,
 } as const;
+
+const MOTION = { slideFrom: 0.05, slideTo: 0.72, swingFrom: 0.38 } as const;
+const ACTUATOR = { radius: 1.86, body: 0.028, rod: 0.012, bodyTo: 1.56, rodBase: 0.07 } as const;
+const ACTUATOR_ANGLES = [toRadians(52), toRadians(-52), toRadians(128), toRadians(-128)] as const;
+const TRACK = { radius: 1.95, to: 2.02, height: 0.04, width: 0.05 } as const;
+const TRACK_ANGLES = [toRadians(28), toRadians(-28), toRadians(180)] as const;
+const LINK = { radius: 0.007, anchorX: 1.95 } as const;
 
 const skinAt = nacelleOuterAt;
 const ductAt = ductOuterAt;
@@ -112,6 +126,10 @@ export class ReverserPart {
   private readonly turn = new Matrix4();
   private readonly matrix = new Matrix4();
   private deploy = -1;
+  private readonly rods: InstancedMesh;
+  private readonly links: InstancedMesh;
+  private readonly lean = new Matrix4();
+  private readonly span = new Vector3();
 
   constructor(context: PartContext, engine: Group) {
     this.sleeve = namedGroup('reverser', engine);
@@ -162,15 +180,33 @@ export class ReverserPart {
     const cascades = namedGroup('cascades', engine);
     mesh(context, cascades, cascadeGeometry(), cutMaterial(context, 'cascades', FINISHES.cascades));
     label(context, 'cascades', cascades, polar(1.36, CASCADE.inner + 0.2, toRadians(56)));
+    const hardware = cutMaterial(context, 'reverser', FINISHES.actuator);
+    mesh(context, engine, actuatorBodies(), hardware);
+    this.rods = new InstancedMesh(
+      context.tracker.track(unitRod(ACTUATOR.rod)),
+      cutMaterial(context, 'reverser', FINISHES.actuatorRod),
+      ACTUATOR_ANGLES.length,
+    );
+    this.links = new InstancedMesh(
+      context.tracker.track(unitRod(LINK.radius)),
+      hardware,
+      REVERSER.doors,
+    );
+    [this.rods, this.links].forEach((rods) => {
+      rods.frustumCulled = false;
+      engine.add(context.tracker.track(rods));
+    });
     this.setDeploy(0);
   }
 
   setDeploy(deploy: number): void {
     if (deploy === this.deploy) return;
     this.deploy = deploy;
-    const slide = smoothstep(deploy, 0, 0.7);
-    const swing = smoothstep(deploy, 0.25, 1);
-    this.sleeve.position.x = REVERSER.travel * slide;
+    const slide = smoothstep(deploy, MOTION.slideFrom, MOTION.slideTo);
+    const swing = smoothstep(deploy, MOTION.swingFrom, 1);
+    const travel = REVERSER.travel * slide;
+    this.sleeve.position.x = travel;
+    this.placeRods(travel);
     const hingeR = ductAt(DOOR.from) - DOOR.inset - DOOR.depth / 2;
     this.hinge.makeTranslation(DOOR.from, hingeR, 0);
     this.back.makeTranslation(-DOOR.from, -hingeR, 0);
@@ -181,5 +217,67 @@ export class ReverserPart {
       this.doors.setMatrixAt(index, this.matrix);
     }
     this.doors.instanceMatrix.needsUpdate = true;
+    this.placeLinks(travel);
   }
+
+  private placeRods(travel: number): void {
+    ACTUATOR_ANGLES.forEach((angle, index) => {
+      const length = ACTUATOR.rodBase + travel;
+      this.turn.makeRotationX(angle);
+      this.matrix
+        .makeScale(length, 1, 1)
+        .setPosition(ACTUATOR.bodyTo + length / 2, ACTUATOR.radius, 0)
+        .premultiply(this.turn);
+      this.rods.setMatrixAt(index, this.matrix);
+    });
+    this.rods.instanceMatrix.needsUpdate = true;
+  }
+
+  private placeLinks(travel: number): void {
+    const hingeR = ductAt(DOOR.from) - DOOR.inset - DOOR.depth / 2;
+    const swing = REVERSER.doorTilt * smoothstep(this.deploy, MOTION.swingFrom, 1);
+    const reach = DOOR.to - DOOR.from;
+    const tipX = DOOR.from + travel + reach * Math.cos(swing);
+    const tipR = hingeR - reach * Math.sin(swing);
+    const anchorR = cowlAt(LINK.anchorX);
+    this.span.set(LINK.anchorX - tipX, anchorR - tipR, 0);
+    const length = this.span.length();
+    this.lean.makeRotationZ(Math.atan2(this.span.y, this.span.x));
+    for (let index = 0; index < REVERSER.doors; index += 1) {
+      this.turn.makeRotationX((FULL_TURN * (index + 0.5)) / REVERSER.doors);
+      this.matrix
+        .makeScale(length, 1, 1)
+        .premultiply(this.lean)
+        .setPosition(tipX + this.span.x / 2, tipR + this.span.y / 2, 0)
+        .premultiply(this.turn);
+      this.links.setMatrixAt(index, this.matrix);
+    }
+    this.links.instanceMatrix.needsUpdate = true;
+  }
+}
+
+function unitRod(radius: number): BufferGeometry {
+  const rod = new CylinderGeometry(radius, radius, 1, 8);
+  rod.rotateZ(Math.PI / 2);
+  return rod;
+}
+
+function actuatorBodies(): BufferGeometry {
+  const buffers = emptyRing();
+  ACTUATOR_ANGLES.forEach((angle) => {
+    const body = new CylinderGeometry(ACTUATOR.body, ACTUATOR.body, ACTUATOR.bodyTo - FRONT, 10);
+    body.rotateZ(Math.PI / 2);
+    body.translate((FRONT + ACTUATOR.bodyTo) / 2, ACTUATOR.radius, 0);
+    appendRing(buffers, body, 1, angle);
+    body.dispose();
+  });
+  TRACK_ANGLES.forEach((angle) => {
+    const track = new BoxGeometry(TRACK.to - FRONT, TRACK.height, TRACK.width);
+    track.translate((FRONT + TRACK.to) / 2, TRACK.radius, 0);
+    appendRing(buffers, track, 1, angle);
+    track.dispose();
+  });
+  const geometry = ringGeometry(buffers);
+  geometry.deleteAttribute('heatProfile');
+  return geometry;
 }

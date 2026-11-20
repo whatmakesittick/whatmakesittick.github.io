@@ -6,6 +6,7 @@ import {
   CAMERA_VIEWS,
   COMPRESSOR_OFFSET_REGION,
   HERO_REGION,
+  REAR_CLOSE_REGION,
   TURBINES_OFFSET_REGION,
   heroBounds,
   viewRegionBox,
@@ -17,7 +18,7 @@ describe('camera views', () => {
   it('frames each view on a known region and keeps them all fixed', () => {
     CAMERA_VIEW_IDS.forEach((view) => {
       const { region } = CAMERA_VIEWS[view];
-      expect([...REGION_IDS, HERO_REGION, ...OFFSET_REGIONS]).toContain(region);
+      expect([...REGION_IDS, HERO_REGION, REAR_CLOSE_REGION, ...OFFSET_REGIONS]).toContain(region);
       expect(CAMERA_VIEWS[view].follow).toBeUndefined();
     });
   });
@@ -38,5 +39,12 @@ describe('camera views', () => {
     expect(compressor.min.x).toBeGreaterThan(0);
     expect(turbines.min.x).toBeGreaterThan(compressor.min.x);
     expect(viewRegionBox('fanFace', region).equals(region())).toBe(true);
+  });
+
+  it('frames the rear view tighter than the rear region, on the nozzle end', () => {
+    const rear = new Box3(new Vector3(1.12, 0.2, -2.4), new Vector3(3.64, 5, 2.4));
+    const close = viewRegionBox(REAR_CLOSE_REGION, () => rear);
+    expect(close.getSize(new Vector3()).y).toBeLessThan(rear.getSize(new Vector3()).y);
+    expect(close.max.x).toBeGreaterThan(2.8);
   });
 });

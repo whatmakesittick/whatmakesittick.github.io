@@ -14,11 +14,11 @@ import { FINISHES } from '../finishes';
 import { bladeGeometry } from '../geometry/blade';
 import { COMBUSTOR } from '../geometry/profiles';
 import { closedLoop, line, revolve, smooth } from '../geometry/revolve';
-import type { Strand } from '../geometry/revolve';
+import type { ProfilePoint, Strand } from '../geometry/revolve';
 import { appendRing, emptyRing, handed, ringGeometry } from '../geometry/rows';
 import type { PartContext } from './context';
 import { coreMaterial, glowScale, label, mesh, namedGroup, polar, registered } from './context';
-import { flameMaterial, glowVolumeMaterial } from './effects';
+import { flameMaterial, glowVolumeMaterial, haloMaterial } from './effects';
 import { applyHeat, withHeatProfile } from './heat';
 
 const DOME_FRONT = 0.34;
@@ -32,6 +32,7 @@ const CUP = { radius: 0.042, length: 0.04 } as const;
 const FLAME = { length: 0.24, radius: 0.06, samples: 12 } as const;
 const DIFFUSER_VANES = { count: 40, x: 0.172, width: 0.034, hub: 0.474, tip: 0.566 } as const;
 const GAS_INSET = 0.006;
+const HALO_THICKNESS = 0.42;
 
 function linerStrands(): Strand[] {
   const outerTop = smooth(
@@ -66,6 +67,24 @@ function linerStrands(): Strand[] {
     [...innerBottom.slice(0, -1), [DOME_FRONT, COMBUSTOR.linerInnerFront]],
     line([DOME_FRONT, COMBUSTOR.linerInnerFront], outerTop[0]),
   ];
+}
+
+const HALO: readonly ProfilePoint[] = [
+  [0.3, 0.6],
+  [0.45, 0.86],
+  [0.75, 0.9],
+  [1.05, 0.86],
+  [1.45, 0.92],
+  [1.7, 0.7],
+];
+
+function haloGeometry(): BufferGeometry {
+  const outer = smooth(HALO, 24);
+  const inner = smooth(
+    HALO.map(([x, r]) => [x, r - HALO_THICKNESS * Math.min(1, r)] as const),
+    24,
+  );
+  return withHeatProfile(revolve([outer, [...inner].reverse()], SEGMENTS.core));
 }
 
 function gasGeometry(): BufferGeometry {
@@ -240,6 +259,17 @@ export class CombustorPart {
     );
     this.gas = mesh(context, liner, gasGeometry(), gasShader);
     this.gas.renderOrder = 1;
+    const halo = mesh(
+      context,
+      liner,
+      haloGeometry(),
+      registered(
+        context,
+        'combustorLiner',
+        haloMaterial(context.heat, glowScale(context, 'combustorLiner'), context.cut),
+      ),
+    );
+    halo.renderOrder = 2;
     const flameShader = registered(
       context,
       'fuelNozzles',

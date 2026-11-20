@@ -1,4 +1,4 @@
-import { Group, Line, Mesh, Points, Sprite } from 'three';
+import { Group, Line, Mesh, Points, Sprite, Vector3 } from 'three';
 import type { Box3, Material, Object3D, Color } from 'three';
 import { FULL_TURN, lerp, smoothstep } from '@core/math';
 import type { Steps } from '@core/scene/pacing';
@@ -7,14 +7,14 @@ import { ResourceTracker } from '@core/scene/resources';
 import { activeScheme } from '@core/theme';
 import { ANCHOR_IDS, PART_IDS } from '../ids';
 import type { AnchorId, AssemblyState, DetailId, PartId, RegionId, StreamId } from '../ids';
-import { CUTAWAY_SECONDS, REVERSER_SECONDS, ease } from '../model/cutaway';
+import { CUTAWAY_SECONDS, ease } from '../model/cutaway';
 import { ANCHOR_POINTS } from '../model/layout';
 import { AXIS_HEIGHT_M, PERSON_POSITION, SPIN_SENSE, xAt } from '../model/scale';
 import { COLD_BUFFER, HOT_BUFFER, particleCounts } from '../model/streams';
 import type { ParticleCounts } from '../model/streams';
 import { THEME } from '../theme';
 import type { Assembly, AssemblyResources } from './assembly';
-import { HEAT_LOOK, LOOK, PERSON, ROW_LOD_DISTANCE_M, STREAMS } from './constants';
+import { HEAT_LOOK, LOOK, PERSON, REVERSER, ROW_LOD_DISTANCE_M, STREAMS } from './constants';
 import { FINISHES } from './finishes';
 import { figureGeometry } from './geometry/figure';
 import {
@@ -27,6 +27,9 @@ import { CombustorPart } from './parts/combustor';
 import type { EmphasisGroup, PartContext } from './parts/context';
 import { STRUCTURE_GROUP, label, material, mesh, namedGroup } from './parts/context';
 import { buildHall } from './parts/hall';
+import { GearboxPart } from './parts/gearbox';
+import { buildDressing } from './parts/dressing';
+import { buildFanDetails } from './parts/fanDetails';
 import { standGeometry } from './geometry/stand';
 import { CorePart } from './parts/core';
 import { coreHalfAngle, cutHalfAngle, createCutUniforms } from './parts/cut';
@@ -39,7 +42,8 @@ import { createHeatUniforms } from './parts/heat';
 import type { GlowScale, HeatUniforms } from './parts/heat';
 import { buildNacelle } from './parts/nacelle';
 import { ReverserPart } from './parts/reverser';
-import { StreakStream, StreamMarker } from './parts/streams';
+import { StreamMarker } from './parts/streams';
+import { DustStream, StreamRibbons } from './parts/streamlines';
 import type { StreamFrame, StreamLook } from './parts/streams';
 import { regionBox } from './regions';
 
@@ -88,8 +92,6 @@ const HOT_LOOK: StreamLook = {
   reversedWidth: 1,
 };
 
-const COLD_SEED = 11;
-const HOT_SEED = 29;
 const STREAK_SHIFT = {
   dark: { saturation: 0.3, lightness: -0.1 },
   light: { saturation: 0.25, lightness: -0.26 },
@@ -138,11 +140,15 @@ interface Built {
   readonly combustor: CombustorPart;
   readonly exhaust: ExhaustPart;
   readonly reverser: ReverserPart;
-  readonly cold: StreakStream;
-  readonly hot: StreakStream;
+  readonly cold: StreamRibbons;
+  readonly hot: StreamRibbons;
   readonly coldMarker: StreamMarker;
   readonly hotMarker: StreamMarker;
   readonly person: Group;
+  readonly gearbox: GearboxPart;
+  readonly dust: DustStream;
+  readonly dressing: Group;
+  readonly fanDetails: Group;
 }
 
 function buildPerson(context: PartContext, root: Group): Group {
@@ -189,8 +195,8 @@ function* buildParts(
     streamTable(REVERSED_CONTROLS, 'cold', adjustForScheme),
   ];
   const hotTables = [streamTable(HOT_CONTROLS, 'core', adjustForScheme)];
-  const cold = new StreakStream(context, engine, COLD_LOOK, coldTables, COLD_SEED);
-  const hot = new StreakStream(context, engine, HOT_LOOK, hotTables, HOT_SEED);
+  const cold = new StreamRibbons(context, engine, COLD_LOOK, coldTables);
+  const hot = new StreamRibbons(context, engine, HOT_LOOK, hotTables);
   label(context, 'coldStream', cold.root, [
     STREAM_LABELS.cold.x,
     STREAM_LABELS.cold.radius * 0.77,
@@ -205,6 +211,10 @@ function* buildParts(
   const hotMarker = new StreamMarker(context, hot.root, HOT_LOOK, hotTables[0]);
   const person = buildPerson(context, root);
   buildHall(context, root);
+  const gearbox = new GearboxPart(context, engine);
+  const dust = new DustStream(context, engine);
+  const dressing = buildDressing(context, engine);
+  const fanDetails = buildFanDetails(context, engine, spools.inner);
   mesh(
     context,
     namedGroup('stand', root),
@@ -216,6 +226,10 @@ function* buildParts(
     context,
     engine,
     spools,
+    gearbox,
+    dust,
+    dressing,
+    fanDetails,
     fan,
     core,
     combustor,
@@ -241,6 +255,7 @@ class Ge9xAssembly implements Assembly {
   private deploy: number;
   private fanAngle = 0;
   private cameraDistance = 0;
+  private readonly markerPoint = new Vector3();
   private counts: ParticleCounts = { cold: 0, hot: 0 };
   private countsDetail: DetailId | null = null;
   private countsStreams: StreamId | null = null;
@@ -274,7 +289,7 @@ class Ge9xAssembly implements Assembly {
 
   setState(state: AssemblyState): void {
     this.state = state;
-    const { fan, combustor, exhaust, person, coldMarker, hotMarker, cold, hot } = this.parts;
+    const { fan, combustor, exhaust, person, cold, hot } = this.parts;
     this.parts.context.heat.uHeat.value = state.heat;
     fan.setState(state.fanBlur, state.bladeOpacity);
     combustor.setState(state.heat, state.flame);
@@ -282,11 +297,9 @@ class Ge9xAssembly implements Assembly {
     const hotShown = state.streams !== 'cold';
     exhaust.setState(state.heat, hotShown, coldShown, 1 - this.deploy, state.coldSpeed);
     person.visible = state.view.person;
+    this.parts.dressing.visible = state.detail === 'near';
     cold.root.visible = coldShown;
     hot.root.visible = hotShown;
-    const markerX = xAt(state.reading.axialFraction);
-    coldMarker.place(markerX);
-    hotMarker.place(markerX);
     this.refreshStreams(0, this.cameraDistance);
   }
 
@@ -295,9 +308,10 @@ class Ge9xAssembly implements Assembly {
     this.cameraDistance = cameraDistance;
     const easing = this.cut !== this.state.cutaway || this.deploy !== this.state.reverser;
     this.cut = ease(this.cut, this.state.cutaway, deltaSeconds, CUTAWAY_SECONDS);
-    this.deploy = ease(this.deploy, this.state.reverser, deltaSeconds, REVERSER_SECONDS);
+    this.deploy = ease(this.deploy, this.state.reverser, deltaSeconds, REVERSER.stageSeconds);
     this.applyEases();
     if (playing) this.spin(deltaSeconds);
+    this.parts.gearbox.update(this.coreAngle);
     const blurMoving = this.parts.fan.update(deltaSeconds, this.fanAngle);
     this.parts.core.setFar(cameraDistance > ROW_LOD_DISTANCE_M);
     this.refreshStreams(playing ? deltaSeconds : 0, cameraDistance);
@@ -401,6 +415,9 @@ class Ge9xAssembly implements Assembly {
     hotFrame.markerX = markerX;
     this.parts.cold.update(coldFrame);
     this.parts.hot.update(hotFrame);
+    this.parts.dust.update(coldFrame, this.state.fanSpeed);
+    this.parts.coldMarker.moveTo(this.parts.cold.markerPoint(markerX, this.markerPoint));
+    this.parts.hotMarker.moveTo(this.parts.hot.markerPoint(markerX, this.markerPoint));
   }
 
   private scaleGlows(): void {

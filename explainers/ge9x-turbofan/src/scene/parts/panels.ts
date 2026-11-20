@@ -24,6 +24,20 @@ export const FAN_COWL_PANELS: PanelLayout = {
   band: [-1.42, -1.27],
 };
 
+export const NOZZLE_PANELS: PanelLayout = {
+  seams: [2.32, 2.56],
+  from: 2.1,
+  to: 2.8,
+  lengthwise: [toRadians(45), toRadians(135), toRadians(-45), toRadians(-135)],
+};
+
+export const PLUG_PANELS: PanelLayout = {
+  seams: [2.3, 2.62, 2.95],
+  from: 2.05,
+  to: 3.2,
+  lengthwise: [toRadians(0), toRadians(90), toRadians(180), toRadians(-90)],
+};
+
 export const SLEEVE_PANELS: PanelLayout = {
   seams: [1.62],
   from: 1.25,

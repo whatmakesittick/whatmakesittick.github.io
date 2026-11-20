@@ -14,9 +14,16 @@ export const HERO_REGION = 'heroScene';
 
 export const COMPRESSOR_OFFSET_REGION = 'compressorOffset';
 export const TURBINES_OFFSET_REGION = 'turbinesOffset';
+export const REAR_CLOSE_REGION = 'rearClose';
+
+const REAR_CLOSE = { from: 1.0, to: 3.45, reach: 1.9 } as const;
 
 export type ViewRegion =
-  RegionId | typeof HERO_REGION | typeof COMPRESSOR_OFFSET_REGION | typeof TURBINES_OFFSET_REGION;
+  | RegionId
+  | typeof HERO_REGION
+  | typeof COMPRESSOR_OFFSET_REGION
+  | typeof TURBINES_OFFSET_REGION
+  | typeof REAR_CLOSE_REGION;
 
 const REGION_OFFSETS: Readonly<
   Record<typeof COMPRESSOR_OFFSET_REGION | typeof TURBINES_OFFSET_REGION, OffsetRegion>
@@ -30,8 +37,8 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, FramedView<ViewRegion>>> 
   compressor: { region: COMPRESSOR_OFFSET_REGION, direction: [0.2, 0.35, 1], margin: 1.05 },
   combustor: { region: 'combustor', direction: [0.25, 0.3, 1], margin: 1.05 },
   turbines: { region: TURBINES_OFFSET_REGION, direction: [0.4, 0.3, 1], margin: 1.05 },
-  side: { region: 'engineSide', direction: [0.1, 0.18, 1], margin: 1.02 },
-  rear: { region: 'rear', direction: [0.9, 0.25, 1], margin: 1.1 },
+  side: { region: 'engineSide', direction: [0.3, 0.17, 1], margin: 1.02 },
+  rear: { region: REAR_CLOSE_REGION, direction: [1, 0.3, 0.85], margin: 1 },
 };
 
 export function heroBounds(fanFace: Box3): Box3 {
@@ -43,8 +50,17 @@ export function heroBounds(fanFace: Box3): Box3 {
   return fanFace.clone().union(person);
 }
 
+export function rearCloseBox(rear: Box3): Box3 {
+  const centre = rear.getCenter(new Vector3());
+  return new Box3(
+    new Vector3(REAR_CLOSE.from, centre.y - REAR_CLOSE.reach, centre.z - REAR_CLOSE.reach),
+    new Vector3(REAR_CLOSE.to, centre.y + REAR_CLOSE.reach, centre.z + REAR_CLOSE.reach),
+  );
+}
+
 export function viewRegionBox(id: ViewRegion, region: (id: RegionId) => Box3): Box3 {
   if (id === HERO_REGION) return heroBounds(region('fanFace'));
+  if (id === REAR_CLOSE_REGION) return rearCloseBox(region('rear'));
   if (id === COMPRESSOR_OFFSET_REGION || id === TURBINES_OFFSET_REGION) {
     const { base, share } = REGION_OFFSETS[id];
     const box = region(base).clone();

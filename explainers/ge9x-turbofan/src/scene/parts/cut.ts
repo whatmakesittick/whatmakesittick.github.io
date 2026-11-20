@@ -1,27 +1,32 @@
-import { Color } from 'three';
+import { Color, Vector2 } from 'three';
 import type { IUniform, Intersection, Material, Vector3 } from 'three';
 import { isMesh } from '@core/scene/occlusion';
 import { AXIS_HEIGHT_M } from '../../model/scale';
-import { CUT } from '../constants';
-import { addPatch, glslFloat, hasPatch, inject } from './shaderChunks';
+import { CUT, LOOK } from '../constants';
+import { addPatch, glslColor, glslFloat, hasPatch, inject } from './shaderChunks';
 
 export type CutDepth = 'shell' | 'core';
 
 export interface CutUniforms {
   readonly uCutHalf: IUniform<number>;
   readonly uCoreHalf: IUniform<number>;
+  readonly uShellCentre: IUniform<Vector2>;
+  readonly uCoreCentre: IUniform<Vector2>;
   readonly uCapColor: IUniform<Color>;
 }
 
-const CUT_KEY = 'ge9x-cut';
-const CENTRE_COS = Math.cos(CUT.centre);
-const CENTRE_SIN = Math.sin(CUT.centre);
+export const CUT_CENTRES: Readonly<Record<CutDepth, number>> = {
+  shell: CUT.centre,
+  core: CUT.coreCentre,
+};
 
+const CUT_KEY = 'ge9x-cut';
 export const CUT_ANGLE_GLSL = /* glsl */ `
+uniform vec2 uCutCentre;
 float cutAngleAt(vec3 world) {
   float dy = world.y - ${glslFloat(AXIS_HEIGHT_M)};
-  float along = world.z * ${glslFloat(CENTRE_COS)} + dy * ${glslFloat(CENTRE_SIN)};
-  float across = dy * ${glslFloat(CENTRE_COS)} - world.z * ${glslFloat(CENTRE_SIN)};
+  float along = world.z * uCutCentre.x + dy * uCutCentre.y;
+  float across = dy * uCutCentre.x - world.z * uCutCentre.y;
   return atan(across, along);
 }
 `;
@@ -58,7 +63,7 @@ if (uCutHalf > 0.0) {
     if (diffuseColor.a < ${glslFloat(CUT.capOpacityFloor)}) discard;
     gl_FragColor.rgb = uCapColor * (cutSigned > 0.0 ? 1.0 : ${glslFloat(CUT.lowerFaceShade)});
   } else if (cutRim < ${glslFloat(CUT.rimMetres)}) {
-    gl_FragColor.rgb = mix(gl_FragColor.rgb, uCapColor * ${glslFloat(CUT.rimLift)}, ${glslFloat(CUT.rimMix)});
+    gl_FragColor.rgb = mix(gl_FragColor.rgb, ${glslColor(LOOK.cutRim)}, ${glslFloat(CUT.rimMix)});
   }
 }
 `;
@@ -74,6 +79,8 @@ export function createCutUniforms(capColor: string): CutUniforms {
   return {
     uCutHalf: { value: 0 },
     uCoreHalf: { value: 0 },
+    uShellCentre: { value: centreVector(CUT_CENTRES.shell) },
+    uCoreCentre: { value: centreVector(CUT_CENTRES.core) },
     uCapColor: { value: new Color(capColor) },
   };
 }
@@ -90,6 +97,14 @@ export function halfUniform(cut: CutUniforms, depth: CutDepth): IUniform<number>
   return depth === 'core' ? cut.uCoreHalf : cut.uCutHalf;
 }
 
+export function centreUniform(cut: CutUniforms, depth: CutDepth): IUniform<Vector2> {
+  return depth === 'core' ? cut.uCoreCentre : cut.uShellCentre;
+}
+
+function centreVector(angle: number): Vector2 {
+  return new Vector2(Math.cos(angle), Math.sin(angle));
+}
+
 export function applyCut<M extends Material>(material: M, cut: CutUniforms, depth: CutDepth): M {
   const existing = patched.get(material);
   if (existing && existing.depth !== depth) {
@@ -100,6 +115,7 @@ export function applyCut<M extends Material>(material: M, cut: CutUniforms, dept
   patched.set(material, { half, depth });
   return addPatch(material, CUT_KEY, (shader) => {
     shader.uniforms.uCutHalf = half;
+    shader.uniforms.uCutCentre = centreUniform(cut, depth);
     shader.uniforms.uCapColor = cut.uCapColor;
     shader.vertexShader = inject(shader.vertexShader, '#include <common>', VERTEX_HEAD);
     shader.vertexShader = inject(shader.vertexShader, '#include <project_vertex>', VERTEX_BODY);
@@ -117,19 +133,19 @@ export function applyCut<M extends Material>(material: M, cut: CutUniforms, dept
   });
 }
 
-export function cutAngleOf(point: Vector3): number {
+export function cutAngleOf(point: Vector3, centre = CUT.centre): number {
   const dy = point.y - AXIS_HEIGHT_M;
-  const along = point.z * CENTRE_COS + dy * CENTRE_SIN;
-  const across = dy * CENTRE_COS - point.z * CENTRE_SIN;
-  return Math.atan2(across, along);
+  const cos = Math.cos(centre);
+  const sin = Math.sin(centre);
+  return Math.atan2(dy * cos - point.z * sin, point.z * cos + dy * sin);
 }
 
-export function isCutAway(point: Vector3, half: number): boolean {
-  return half > 0 && Math.abs(cutAngleOf(point)) < half;
+export function isCutAway(point: Vector3, half: number, centre = CUT.centre): boolean {
+  return half > 0 && Math.abs(cutAngleOf(point, centre)) < half;
 }
 
 export function keepsCutHit({ object, point }: Intersection): boolean {
   if (!isMesh(object) || Array.isArray(object.material)) return true;
   const patch = patched.get(object.material);
-  return !patch || !isCutAway(point, patch.half.value);
+  return !patch || !isCutAway(point, patch.half.value, CUT_CENTRES[patch.depth]);
 }

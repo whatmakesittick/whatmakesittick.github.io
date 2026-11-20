@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { InstancedBufferGeometry, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import type { Mesh, Object3D } from 'three';
 import { MaterialLibrary } from '@core/scene/materials';
 import { runNow } from '@core/scene/pacing';
@@ -9,7 +9,6 @@ import { ANCHOR_IDS, PART_IDS, REGION_IDS } from '../ids';
 import type { AssemblyState, DetailId, StreamId } from '../ids';
 import { assemblyState } from '../model/reading';
 import { xAt } from '../model/scale';
-import { COLD_BUFFER, FAR_SHARE } from '../model/streams';
 import type { Assembly } from './assembly';
 import { createGe9xAssembly } from './ge9xAssembly';
 
@@ -58,8 +57,7 @@ function settle(assembly: Assembly): boolean {
 }
 
 function drawn(assembly: Assembly, name: string): number {
-  const geometry = (named(assembly, name) as Mesh).geometry;
-  return geometry instanceof InstancedBufferGeometry ? geometry.instanceCount : -1;
+  return (named(assembly, name) as Mesh).geometry.drawRange.count;
 }
 
 describe('GE9X assembly', () => {
@@ -127,16 +125,18 @@ describe('GE9X assembly', () => {
     assembly.dispose();
   });
 
-  it('draws fewer streaks far away and none for a hidden stream', () => {
+  it('draws fewer streamlines far away and none for a hidden stream', () => {
     const assembly = build();
     assembly.update(FRAME, NEAR_CAMERA);
-    expect(drawn(assembly, 'coldStreamStreaks')).toBe(COLD_BUFFER);
+    const near = drawn(assembly, 'coldStreamLines');
     assembly.setState(stateOf({ detail: 'far' }));
     assembly.update(FRAME, NEAR_CAMERA);
-    expect(drawn(assembly, 'coldStreamStreaks')).toBe(Math.round(COLD_BUFFER * FAR_SHARE));
+    const far = drawn(assembly, 'coldStreamLines');
+    expect(far).toBeGreaterThan(0);
+    expect(far).toBeLessThan(near);
     assembly.setState(stateOf({ streams: 'hot' }));
     assembly.update(FRAME, NEAR_CAMERA);
-    expect(drawn(assembly, 'coldStreamStreaks')).toBe(0);
+    expect(drawn(assembly, 'coldStreamLines')).toBe(0);
     assembly.dispose();
   });
 

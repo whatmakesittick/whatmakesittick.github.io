@@ -14,18 +14,19 @@ export const SCENE_LIMITS = {
 
 export const CUT = {
   halfAngle: toRadians(75),
-  coreHalfAngle: toRadians(108),
+  coreHalfAngle: toRadians(75),
   centre: toRadians(12),
+  coreCentre: toRadians(50),
   capOpacityFloor: 0.99,
   lowerFaceShade: 0.74,
-  rimMetres: 0.012,
-  rimLift: 1.2,
-  rimMix: 0.85,
+  rimMetres: 0.007,
+  rimMix: 0.9,
 } as const;
 
 interface SchemeLook {
   readonly additive: boolean;
   readonly cutCap: string;
+  readonly cutRim: string;
   readonly glowGain: number;
   readonly streakGain: number;
   readonly streakCover: number;
@@ -37,7 +38,8 @@ interface SchemeLook {
 const LOOKS: Readonly<Record<Scheme, SchemeLook>> = {
   dark: {
     additive: true,
-    cutCap: '#c98f3c',
+    cutCap: '#30343a',
+    cutRim: '#dfe4ea',
     glowGain: 1,
     streakGain: 1,
     streakCover: 0.45,
@@ -47,7 +49,8 @@ const LOOKS: Readonly<Record<Scheme, SchemeLook>> = {
   },
   light: {
     additive: false,
-    cutCap: '#b9792a',
+    cutCap: '#454a52',
+    cutRim: '#ffffff',
     glowGain: 1.35,
     streakGain: 1.6,
     streakCover: 1,
@@ -79,6 +82,7 @@ export const HEAT_LOOK = {
 
 export const EFFECT_LOOK = {
   gasAlpha: 0.42,
+  haloAlpha: 0.32,
   flameAlpha: 1.4,
   shimmerSpeed: 9,
   hotPlumeAlpha: 0.38,
@@ -93,10 +97,10 @@ export const EFFECT_LOOK = {
 
 export const COMBUSTOR_LIGHT = {
   colour: '#ff9a4a',
-  intensity: 2.2,
+  intensity: 3.2,
   distance: 3.2,
   decay: 2,
-  x: 0.5,
+  x: 0.62,
 } as const;
 
 export const PLUME_LIGHT = {
@@ -135,6 +139,7 @@ export const FUEL_NOZZLES = 20;
 
 export const REVERSER = {
   travel: 0.55,
+  stageSeconds: 2,
   doors: 12,
   doorTilt: 1.2,
   cascadeVanes: 6,

@@ -16,6 +16,8 @@ import type { Strand } from '../geometry/revolve';
 import { offsetCurve, shellStrands } from '../geometry/shells';
 import type { PartContext } from './context';
 import { FAN_COWL_PANELS, applyPanels } from './panels';
+import { applyAccessDoors, applyPerforation, applyRivets } from './detailPatches';
+import { FAN_COWL_DOORS, LINER_HOLES, RIVET_ROWS } from './fanDetails';
 import { STRUCTURE_GROUP, cutMaterial, label, material, mesh, namedGroup, polar } from './context';
 
 const LIP_SAMPLES = 32;
@@ -38,6 +40,16 @@ const PYLON = {
   stackTop: 0.45,
   thickness: 0.42,
   capLift: 0.003,
+} as const;
+
+const AFT_FAIRING = {
+  base: 0.9,
+  top: 1.6,
+  chordBase: 1.15,
+  chordTop: 0.7,
+  stackBase: 2.35,
+  stackTop: 1.85,
+  thickness: 0.16,
 } as const;
 
 const skinInside = offsetCurve(nacelleOuterAt, -SKIN_WALL);
@@ -71,6 +83,20 @@ function frames(): BufferGeometry[] {
   ];
 }
 
+function aftFairing() {
+  return bladeGeometry({
+    hub: AFT_FAIRING.base,
+    tip: AFT_FAIRING.top,
+    stations: 3,
+    samples: 12,
+    chord: (share) => lerp(AFT_FAIRING.chordBase, AFT_FAIRING.chordTop, share),
+    stagger: () => 0,
+    camber: () => 0,
+    thickness: () => AFT_FAIRING.thickness,
+    sweep: (share) => lerp(AFT_FAIRING.stackBase, AFT_FAIRING.stackTop, share),
+  });
+}
+
 function pylonShare(radius: number): number {
   return (radius - PYLON.base) / (PYLON.top - PYLON.base);
 }
@@ -94,10 +120,12 @@ export function buildNacelle(context: PartContext, engine: Group): void {
   const nacelle = namedGroup('nacelle', engine);
   const skin = skinStrands();
   const cavity = cutMaterial(context, 'nacelle', FINISHES.nacelleCavity);
-  const paint = applyPanels(
-    cutMaterial(context, 'nacelle', FINISHES.nacelle),
-    FAN_COWL_PANELS,
-    'cowl',
+  const paint = applyAccessDoors(
+    applyRivets(
+      applyPanels(cutMaterial(context, 'nacelle', FINISHES.nacelle), FAN_COWL_PANELS, 'cowl'),
+      RIVET_ROWS,
+    ),
+    FAN_COWL_DOORS,
   );
   mesh(context, nacelle, revolve([skin.outer], SEGMENTS.shell), paint);
   mesh(context, nacelle, revolve(skin.inside, SEGMENTS.shell), cavity);
@@ -149,7 +177,10 @@ export function buildNacelle(context: PartContext, engine: Group): void {
     ),
     caseSurface,
   );
-  const liner = cutMaterial(context, 'fanCase', FINISHES.acousticLiner);
+  const liner = applyPerforation(
+    cutMaterial(context, 'fanCase', FINISHES.acousticLiner),
+    LINER_HOLES,
+  );
   const linerInner = FAN_CASE.inner - LINER_DEPTH;
   mesh(
     context,
@@ -178,4 +209,5 @@ export function buildNacelle(context: PartContext, engine: Group): void {
     pylonGeometry(PYLON.top, PYLON.top + PYLON.capLift),
     material(context, STRUCTURE_GROUP, FINISHES.pylonCap),
   );
+  mesh(context, pylon, aftFairing(), material(context, STRUCTURE_GROUP, FINISHES.pylon));
 }
