@@ -8,7 +8,6 @@ import {
   BODY,
   BREATH_HEAD,
   CATCH_AT,
-  HEEL_SHARE,
   KICK,
   KICK_SHAPES,
   REACH_SOFT,
@@ -255,7 +254,7 @@ export function solveLeg(
   inLegPlane(pose.footAxis, ankle, side, KICK.toeIn).applyQuaternion(turn);
   pose.sole.set(-Math.sin(ankle), Math.cos(ankle), 0).applyQuaternion(turn);
   pose.sole.addScaledVector(pose.footAxis, -pose.sole.dot(pose.footAxis)).normalize();
-  pose.toe.copy(pose.ankle).addScaledVector(pose.footAxis, BODY.foot * (1 - HEEL_SHARE));
+  pose.toe.copy(pose.ankle).addScaledVector(pose.footAxis, BODY.foot);
 }
 
 function breathShare(reading: StrokeReading): number {

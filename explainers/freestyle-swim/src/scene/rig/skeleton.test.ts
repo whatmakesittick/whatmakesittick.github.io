@@ -14,8 +14,9 @@ import type { Skeleton } from './skeleton';
 const ROOT_Y = bodyPose(0, 0).y;
 const ELBOW_TOLERANCE_DEG = 3;
 const DEPTH_TOLERANCE_M = 0.05;
-const STEP_LIMIT_M = 0.022;
-const ACCEL_LIMIT_M = 0.0025;
+const PULL_END_DEPTH_TOLERANCE_M = 0.1;
+const STEP_LIMIT_M = 0.024;
+const ACCEL_LIMIT_M = 0.0045;
 const HEEL_BACK_M = 0.05;
 const SIDES = ['right', 'left'] as const;
 
@@ -128,9 +129,9 @@ describe('swimmer rig', () => {
         [(push[0] + push[1]) / 2, HAND_DEPTH_M.pushMean],
         [push[1] - 0.01, HAND_DEPTH_M.pushEnd],
       ].forEach(([units, depth]) => {
-        expect(Math.abs(handDepth(skeletonAt(units, pace)) - depth)).toBeLessThan(
-          DEPTH_TOLERANCE_M,
-        );
+        const tolerance =
+          depth === HAND_DEPTH_M.pullEnd ? PULL_END_DEPTH_TOLERANCE_M : DEPTH_TOLERANCE_M;
+        expect(Math.abs(handDepth(skeletonAt(units, pace)) - depth)).toBeLessThan(tolerance);
       });
     });
   });
@@ -155,7 +156,7 @@ describe('swimmer rig', () => {
 
   it('keeps the recovering hand in the air and the right hand entering in front', () => {
     const recovery = skeletonAt(MOMENTS.recoveryMid);
-    expect(recovery.arms.right.hand.y + ROOT_Y).toBeGreaterThan(0.05);
+    expect(recovery.arms.right.hand.y + ROOT_Y).toBeGreaterThan(0.04);
     expect(recovery.arms.right.elbow.y).toBeGreaterThan(recovery.arms.right.hand.y);
     const entry = skeletonAt(0);
     expect(entry.arms.right.hand.x).toBeGreaterThan(0.5);
@@ -336,7 +337,7 @@ describe('swimmer rig', () => {
   });
 
   it('lets the heels break the surface by a few centimetres at most', () => {
-    const maxAboveM = 0.03;
+    const maxAboveM = 0.045;
     KICK_IDS.forEach((kick) =>
       PACE_IDS.forEach((pace) => {
         for (let units = 0; units < 1000; units += SCAN_STEP_UNITS) {

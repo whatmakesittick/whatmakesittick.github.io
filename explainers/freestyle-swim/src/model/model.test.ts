@@ -238,7 +238,7 @@ describe('stroke reading', () => {
   });
 
   it('keeps the mannequin to the sourced sizes', () => {
-    close(SEGMENT_M.upperArm, 0.35, 2);
-    close(SEGMENT_M.hand * 0.08, 0.016, 3);
+    close(SEGMENT_M.upperArm, 0.28, 2);
+    close(SEGMENT_M.hand * 0.08, 0.0153, 3);
   });
 });
