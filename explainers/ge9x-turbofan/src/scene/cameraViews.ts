@@ -38,7 +38,7 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, FramedView<ViewRegion>>> 
   combustor: { region: 'combustor', direction: [0.25, 0.3, 1], margin: 1.05 },
   turbines: { region: TURBINES_OFFSET_REGION, direction: [0.4, 0.3, 1], margin: 1.05 },
   side: { region: 'engineSide', direction: [0.3, 0.17, 1], margin: 1.02 },
-  rear: { region: REAR_CLOSE_REGION, direction: [1, 0.3, 0.85], margin: 1 },
+  rear: { region: REAR_CLOSE_REGION, direction: [1, 0.3, 0.85], margin: 0.82 },
 };
 
 export function heroBounds(fanFace: Box3): Box3 {

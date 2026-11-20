@@ -211,10 +211,13 @@ function* buildParts(
   const hotMarker = new StreamMarker(context, hot.root, HOT_LOOK, hotTables[0]);
   const person = buildPerson(context, root);
   buildHall(context, root);
+  yield;
   const gearbox = new GearboxPart(context, engine);
   const dust = new DustStream(context, engine);
-  const dressing = buildDressing(context, engine);
+  yield;
+  const dressing = yield* buildDressing(context, engine);
   const fanDetails = buildFanDetails(context, engine, spools.inner);
+  yield;
   mesh(
     context,
     namedGroup('stand', root),

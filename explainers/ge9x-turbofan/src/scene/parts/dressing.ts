@@ -1,3 +1,4 @@
+import type { Steps } from '@core/scene/pacing';
 import { BoxGeometry, CylinderGeometry, DoubleSide, TorusGeometry, Vector3 } from 'three';
 import type { BufferGeometry, CatmullRomCurve3, Group } from 'three';
 import { FULL_TURN, toRadians } from '@core/math';
@@ -489,19 +490,18 @@ const BUCKETS: readonly (readonly [keyof Kit, MaterialFinish])[] = [
   ['gold', ANODISED_GOLD],
 ];
 
-export function buildDressing(context: PartContext, engine: Group): Group {
+export function* buildDressing(context: PartContext, engine: Group): Steps<Group> {
   const group = namedGroup('dressing', engine);
   const kit = createKit();
-  addFlanges(kit);
-  addVsv(kit);
-  addBleeds(kit);
-  addFuelLine(kit);
-  addIgniters(kit);
-  addCooling(kit);
-  addHarness(kit);
-  BUCKETS.forEach(([bucket, finish]) => {
-    if (kit[bucket].length === 0) return;
+  const stages = [addFlanges, addVsv, addBleeds, addFuelLine, addIgniters, addCooling, addHarness];
+  for (const stage of stages) {
+    stage(kit);
+    yield;
+  }
+  for (const [bucket, finish] of BUCKETS) {
+    if (kit[bucket].length === 0) continue;
     mesh(context, group, merged(kit[bucket]), coreMaterial(context, STRUCTURE_GROUP, finish));
-  });
+    yield;
+  }
   return group;
 }
