@@ -1,5 +1,6 @@
-import { FrontSide, ShaderMaterial, UniformsLib, UniformsUtils } from 'three';
+import { Color, FrontSide, ShaderMaterial, UniformsLib, UniformsUtils } from 'three';
 import type { IUniform, Side } from 'three';
+import { THEME } from '../../../theme';
 import { registered } from '../context';
 import type { PartContext } from '../context';
 
@@ -46,6 +47,28 @@ float caustic(vec2 p) {
   return pow(f1 * f2, 3.0) + 0.7 * pow(f2 * f3, 3.0);
 }
 `;
+
+const WATER_DEEP = new Color(THEME.water).lerp(new Color(THEME.pull), 0.25).multiplyScalar(0.5);
+const WATER_LIT = new Color(THEME.water).lerp(new Color(THEME.waterClear), 0.35);
+const WATER_FADE_PER_M = 0.24;
+
+export const WATER_GLSL = /* glsl */ `
+uniform vec3 uWaterDeep;
+uniform vec3 uWaterLit;
+vec3 waterHorizon() {
+  return mix(uWaterLit, uWaterDeep, 0.45);
+}
+vec3 waterFade(vec3 col) {
+  float reach = length(cameraPosition - vWorld);
+  float rise = cameraPosition.y - vWorld.y;
+  float wet = rise > 0.0 ? clamp(-vWorld.y / rise, 0.0, 1.0) : 1.0;
+  return mix(col, waterHorizon(), 1.0 - exp(-reach * wet * ${WATER_FADE_PER_M}));
+}
+`;
+
+export function waterUniforms(): Record<string, IUniform> {
+  return { uWaterDeep: { value: WATER_DEEP }, uWaterLit: { value: WATER_LIT } };
+}
 
 export interface ShaderOptions {
   fragment: string;

@@ -13,7 +13,7 @@ import { applyWetSkin } from './parts/effects/wetSkin';
 import type { PoolFrame } from './parts/pool/constants';
 import { buildPool } from './parts/pool/pool';
 import type { Pool, WaterCues } from './parts/pool/pool';
-import type { Swimmer} from './parts/swimmer/swimmer';
+import type { Swimmer } from './parts/swimmer/swimmer';
 import { buildSwimmer } from './parts/swimmer/swimmer';
 import { HEAD } from './parts/swimmer/shapes';
 import { bodyPose } from './pose';
@@ -60,6 +60,8 @@ class SwimAssembly implements Assembly {
     head: new Vector3(),
     rightToe: new Vector3(),
     leftToe: new Vector3(),
+    chest: new Vector3(),
+    hips: new Vector3(),
   };
   private readonly skull = new Vector3(...HEAD.skull.centre);
   private state: AssemblyState;
@@ -164,6 +166,11 @@ class SwimAssembly implements Assembly {
     this.cues.leftHand.copy(this.skeleton.arms.left.hand).applyMatrix4(group.matrix);
     this.cues.rightToe.copy(this.skeleton.legs.right.toe).applyMatrix4(group.matrix);
     this.cues.leftToe.copy(this.skeleton.legs.left.toe).applyMatrix4(group.matrix);
+    this.cues.chest.copy(this.skeleton.neck).applyMatrix4(group.matrix);
+    this.cues.hips
+      .addVectors(this.skeleton.legs.right.hip, this.skeleton.legs.left.hip)
+      .multiplyScalar(0.5)
+      .applyMatrix4(group.matrix);
     this.cues.head
       .copy(this.skull)
       .applyQuaternion(this.skeleton.head)

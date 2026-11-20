@@ -2,7 +2,7 @@ import { Group, Object3D } from 'three';
 import type { Vector3, Mesh } from 'three';
 import type { Steps } from '@core/scene/pacing';
 import type { AssemblyState } from '../../../ids';
-import { createWaterSurface } from '../../water';
+import { createWaterSurface, createWaterVolume } from '../../water';
 import type { WaterSurface } from '../../water';
 import { Effects } from '../effects/effects';
 import type { PartContext } from '../context';
@@ -20,6 +20,8 @@ export interface WaterCues {
   readonly head: Vector3;
   readonly rightToe: Vector3;
   readonly leftToe: Vector3;
+  readonly chest: Vector3;
+  readonly hips: Vector3;
 }
 
 export interface Pool {
@@ -41,9 +43,9 @@ export function* buildPool(context: PartContext): Steps<Pool> {
   const frame: PoolFrame = { uScroll: { value: 0 }, uPhase: { value: 0 } };
   const root = new Group();
   const surface: WaterSurface = createWaterSurface(context, frame);
-  root.add(surface.mesh);
+  root.add(surface.mesh, createWaterVolume(context));
   yield;
-  const { floor, laneLine, neighbours } = createFloor(context, frame);
+  const { floor, laneLine, neighbours, body } = createFloor(context, frame);
   root.add(floor, laneLine, neighbours);
   yield;
   const ropes = createRopes(context);
@@ -67,6 +69,12 @@ export function* buildPool(context: PartContext): Steps<Pool> {
       frame.uPhase.value = (HALF_TURN * 2 * reading.units) / FULL_CYCLE_UNITS;
       surface.setState(view.underwater, reading.scrollM);
       surface.setContacts(cues);
+      body.set(
+        (cues.rightToe.x + cues.leftToe.x) / 2,
+        (cues.rightToe.z + cues.leftToe.z) / 2,
+        cues.head.x,
+        cues.head.z,
+      );
       effects.sync(state, cues);
     },
     update(deltaSeconds) {
