@@ -2,7 +2,7 @@
   "meta": {
     "title": "Le crawl : comment un cycle de bras vous fait avancer",
     "eyebrow": "Biologie et physique",
-    "tagline": "L'eau est bien plus dense que l'air : la vitesse vient d'une main et d'un avant-bras qui s'appuient sur l'eau, et d'un corps long et horizontal, pas d'un effort plus fort.",
+    "tagline": "L'eau est bien plus dense que l'air : on avance grâce à une main et un avant-bras qui s'appuient sur l'eau et à un corps long et à plat, pas en forçant davantage.",
     "description": "Un cycle de crawl en 3D : comment main et avant-bras s'appuient sur l'eau, pourquoi la traînée grimpe vite, et pourquoi glisser devant n'accélère pas.",
     "summary": "Les quatre phases du cycle, l'accroche, la traction et la poussée, le roulis et la respiration, les battements de jambes, et la traînée avec l'écart entre les bras.",
     "socialAlt": "Un nageur vu de profil dans un couloir de bassin, avec la trajectoire de la main qui brille sous la surface, à côté du titre Le crawl : comment un cycle de bras vous fait avancer"
@@ -43,7 +43,7 @@
       "head": "Position de la tête"
     },
     "paceOptions": {
-      "easy": "Facile",
+      "easy": "Tranquille",
       "middle": "Moyenne",
       "sprint": "Sprint"
     },
@@ -62,7 +62,7 @@
     "views": {
       "labels": {
         "name": "Étiquettes",
-        "short": "Noms",
+        "short": "Étiquettes",
         "hint": "Étiquettes (L)"
       },
       "forces": {
@@ -118,22 +118,22 @@
       "title": "Le cycle complet",
       "p1": "Voici un nageur dans le couloir 4 d'un bassin de 50 m. Il nage le <strong>crawl</strong>, aussi appelé nage libre. Un <strong>cycle</strong>, ce sont les deux bras : un coup de bras à droite, un à gauche. Suivez le bras droit à travers ses quatre phases : <strong>entrée et accroche</strong>, <strong>traction</strong>, <strong>poussée</strong> et <strong>retour aérien</strong>, quand le bras repart vers l'avant au-dessus de l'eau. Le bras gauche fait pareil, un demi-cycle plus tard. Faites glisser la ligne de temps pour le voir.",
       "p2": "Seules la traction et la poussée vous font avancer. Ensemble, elles durent environ 43 à 57 % du cycle, selon l'allure et la façon de mesurer. Les bandes de couleur sur la ligne de temps sont des valeurs typiques pour des hommes entraînés : prenez-les comme un repère. Elles bougent un peu quand vous changez d'allure.",
-      "p3": "La vitesse, c'est un calcul simple : la <strong>fréquence de nage</strong>, les cycles par minute, multipliée par l'<strong>amplitude de nage</strong>, la distance parcourue en un cycle. Les trois allures sont des ensembles de valeurs typiques tirées de différentes études, choisis par le modèle. Un tel produit ne colle pas aux vitesses réelles de course : lisez ce chiffre comme l'allure du modèle, pas comme un résultat de compétition. Votre vitesse n'est pas régulière non plus. Elle varie d'environ 0,4 m/s à l'intérieur de chaque cycle, au rythme des bras qui se relaient.",
+      "p3": "La vitesse, c'est un calcul simple : la <strong>fréquence de nage</strong>, les cycles par minute, multipliée par l'<strong>amplitude de nage</strong>, la distance parcourue en un cycle. Les trois allures sont des ensembles de valeurs typiques tirées de différentes études, choisis par le modèle. Un calcul comme celui-ci ne donne pas les vitesses réelles de course : lisez ce chiffre comme l'allure du modèle, pas comme un résultat de compétition. Votre vitesse n'est pas régulière non plus. Elle varie d'environ 0,4 m/s à l'intérieur de chaque cycle, au rythme des bras qui se relaient.",
       "p4": "Pourquoi tant d'efforts pour si peu de vitesse ? L'eau est environ 800 fois plus dense que l'air, et le nageur fait aussi des vagues à la surface. Seulement 5 % environ de l'énergie dépensée devient de la puissance utile dans l'eau. La plus grande part de l'effort se perd en route, elle ne part pas seulement dans la traînée. La vitesse ne vient donc pas d'un effort plus fort. Elle vient d'un bon appui sur l'eau et d'un corps étroit et à plat. Les chapitres suivants reprennent ces points un par un.",
       "p5": "Le nageur est un mannequin articulé tout simple. Le bassin défile pendant que le nageur reste près du milieu, et la petite poussée de chaque cycle se voit comme une dérive de quelques centimètres. Choisissez une allure et regardez comment le geste change."
     },
     "catch": {
       "title": "L'accroche",
       "p1": "La main entre dans l'eau à peu près dans l'axe de l'épaule. Elle s'allonge vers l'avant, puis s'enfonce et part vers l'arrière. L'instant où la main prend l'eau pour la première fois, c'est l'<strong>accroche</strong>. C'est un instant, pas une phase à part, et l'image s'y arrête.",
-      "p2": "Juste après, l'avant-bras se redresse vers la verticale. La main et l'avant-bras regardent alors vers l'arrière ensemble, comme une seule large pagaie, pendant que le coude reste haut. Les entraîneurs parlent d'un avant-bras vertical précoce. Activez l'eau transparente pour voir comment la main et l'avant-bras s'alignent.",
+      "p2": "Juste après l'accroche, l'avant-bras se redresse vers la verticale. La main et l'avant-bras regardent alors vers l'arrière ensemble, comme une seule large pagaie, pendant que le coude reste haut. Les entraîneurs parlent d'un avant-bras vertical précoce. Pour voir comment la main et l'avant-bras s'alignent, utilisez le bouton Eau transparente, s'il est désactivé.",
       "p3": "Vous avez peut-être entendu qu'il faut plier le coude à 90 degrés. C'est un idéal d'entraîneur, pas ce qu'on a mesuré. Dans une étude sur dix sprinteurs, le coude était ouvert à environ 148 degrés à l'accroche, environ 105 avec la main sous l'épaule, et environ 151 à la fin de la poussée. Le bras reste donc bien plus tendu que l'idéal.",
       "p4": "La main ne descend pas profond. Au plus bas, elle est à 0,6 à 0,7 m sous la surface, et l'étude n'a pas vérifié le point de référence exact. Les valeurs affichées suivent le modèle. Là où personne n'a mesuré, elles le disent au lieu de montrer un chiffre : aucune étude ne donne l'angle du coude en l'air ni à l'entrée.",
       "p5": "Ces angles viennent de sprinteurs dans une seule étude, et le modèle garde la même forme à toutes les allures. Lisez-les comme des valeurs typiques d'un groupe, pas comme une règle pour tous les nageurs."
     },
     "pull": {
       "title": "Traction et poussée",
-      "p1": "C'est maintenant que le bras travaille. Pendant la traction et la poussée, la main et l'avant-bras font office de <strong>pagaie</strong> : ils repoussent l'eau vers l'arrière, et l'eau vous pousse vers l'avant. Ce n'est pas une aile. Les simulations sur ordinateur montrent que l'eau quitte la main en tourbillons au lieu de glisser le long d'elle, donc l'ancienne explication par la portance d'une surface courbe ne tient pas.",
-      "p2": "Les chercheurs débattent encore de la part de la portance dans la poussée. La plupart s'accordent à dire que la main repousse surtout l'eau comme une pagaie, et que les tourbillons qu'elle crée ajoutent encore à l'effet. Le modèle dessine une seule flèche pour la poussée et ne cherche pas à trancher.",
+      "p1": "C'est maintenant que le bras travaille. Pendant la traction et la poussée, la main et l'avant-bras font office de <strong>pagaie</strong> : ils repoussent l'eau vers l'arrière, et l'eau vous pousse vers l'avant. Les simulations sur ordinateur montrent que l'eau quitte la main en tourbillons, au lieu de glisser en douceur le long d'elle comme l'air sur une aile. L'ancienne explication par la portance d'une surface courbe ne dit donc pas tout.",
+      "p2": "Les chercheurs débattent encore de la part de la portance dans la poussée. L'image la plus sûre est que la main repousse surtout l'eau vers l'arrière comme une pagaie, et que les tourbillons qu'elle crée y ajoutent encore. Le modèle dessine une seule flèche pour la poussée et ne cherche pas à trancher.",
       "p3": "Quelques valeurs typiques aident ici. Une main atteint un pic d'environ 75 à 115 N chez les nageurs mesurés jusqu'ici, et environ 22 N à l'accroche. La poussée est environ 15 % plus forte que la traction : le moment le plus fort du geste, c'est donc la poussée, pas la traction. La force culmine à environ 70 % du trajet sous l'eau.",
       "p4": "La courbe de la jauge est un schéma. C'est une forme lisse mise à l'échelle de ces valeurs, pas une courbe mesurée : ne la lisez pas comme les données d'un capteur de force. La vitesse de la main suit la même logique : chez des sprinteurs, environ 3,6 m/s sous l'eau pendant la poussée, et 6 à 7 m/s quand la main passe dans l'air.",
       "p5": "Une main est petite, environ 0,016 m². Un modèle informatique a trouvé qu'un petit écart d'environ 12 degrés entre les doigts augmente la traînée de la main d'environ 9 %. Cela vient d'une simulation : prenez-le comme une idée à tester, pas comme un conseil."
@@ -142,25 +142,25 @@
       "title": "Roulis et respiration",
       "p1": "Un bon nageur ne reste pas à plat. Les épaules roulent d'environ 50 degrés de chaque côté, à toutes les allures. Les hanches roulent moins : environ 18 degrés en sprint et environ 25 à l'allure d'un 400 m. Ce roulis permet au bras de s'allonger vers l'avant et de passer au-dessus de l'eau sans lutter contre le corps.",
       "p2": "On lit parfois que les nageurs de fond roulent davantage des épaules. Les données ne le montrent pas. Les épaules roulent à peu près pareil en sprint et à l'allure du 400 m. Seules les hanches roulent plus à l'allure lente.",
-      "p3": "À la fin de la poussée, le bras sort de l'eau, coude en premier et main détendue. Puis il repart vers l'avant dans l'air. C'est le <strong>retour aérien</strong>, le moment de repos du geste. Le modèle n'affiche aucun angle pour cette phase, faute de bonne mesure.",
+      "p3": "À la fin de la poussée, le bras sort de l'eau, coude en premier et main détendue. Puis il repart vers l'avant dans l'air. C'est le <strong>retour aérien</strong>, la partie de repos du geste. Coude en premier et main détendue, c'est l'image habituelle chez les entraîneurs. Le modèle n'affiche aucun angle pour cette phase, faute de bonne mesure.",
       "p4": "Vous avez peut-être aussi vu la traction dessinée en S. La plus grande part de ce S vient du roulis du corps. Si vous tracez le trajet de la main depuis un point fixe du bassin, il se courbe. Si vous le tracez du point de vue du nageur, il devient bien plus droit. C'est un seul trajet vu de deux endroits, pas deux façons de nager. Activez le trajet de la main et comparez.",
-      "p5": "Pour respirer, le nageur tourne la tête sur le côté. Respirer d'un seul côté ajoute environ 9 degrés de roulis de ce côté. Une inspiration vous ralentit-elle ? Un peu, mais les sources divergent : une étude a trouvé environ 3 % en sprint, une autre n'a vu aucune vraie différence. L'angle de la tête dans le modèle est un choix du modèle."
+      "p5": "Pour respirer, le nageur tourne la tête sur le côté. Respirer d'un seul côté ajoute environ 9 degrés de roulis de ce côté. Respirer vous ralentit-il ? Un peu, mais les sources divergent : une étude a trouvé environ 3 % en sprint, une autre n'a vu aucune vraie différence. L'angle de la tête dans le modèle est un choix du modèle."
     },
     "kick": {
       "title": "Les battements de jambes",
       "p1": "Les jambes battent de haut en bas, à tour de rôle. Dans un battement à <strong>deux temps</strong>, chaque jambe bat une fois par cycle. À <strong>six temps</strong>, chaque jambe bat trois fois par cycle. Choisissez-en un et regardez les hanches et les pieds.",
-      "p2": "Dans les deux cas, le grand battement vers le bas vient de la jambe opposée au bras qui entre dans l'eau. Votre corps se tord, et cette jambe aide à l'équilibrer. À six temps, les deux battements en plus sont plus petits. Quel petit battement va avec quel moment du bras, c'est un choix du modèle.",
+      "p2": "Dans les deux cas, le grand battement vers le bas vient de la jambe opposée au bras qui entre dans l'eau. Votre corps se tord, et cette jambe aide à l'équilibrer. Le battement à six temps ajoute deux battements par jambe. Lequel va avec quel moment du bras, c'est un choix du modèle.",
       "p3": "Que vous apportent les jambes ? Dans une étude, ajouter les jambes aux bras a rendu un sprint de 25 m environ 10 % plus rapide. Selon les auteurs, les jambes aident surtout les bras et gardent le corps à plat, plutôt que de pousser seules. Il est donc faux de dire que les jambes fournissent 10 % de la propulsion.",
       "p4": "En sprint, chaque jambe bat environ 2,4 à 2,7 fois par seconde. Le pied descend d'environ 0,3 à 0,4 m, et les sources diffèrent. Le modèle prend une valeur du milieu. Il n'existe pas de bons chiffres pour les angles du genou et de la cheville : le modèle les dessine à l'œil.",
-      "p5": "L'allure décide d'abord des battements : deux temps à allure facile, six temps en sprint. C'est ainsi que les entraîneurs les décrivent d'habitude. Six temps à allure moyenne, c'est un choix du modèle. La pastille reste enfoncée pour ce réglage par défaut, jusqu'à ce que vous en choisissiez un autre."
+      "p5": "L'allure décide d'abord des battements : deux temps à allure tranquille, six temps en sprint. C'est ainsi que les entraîneurs les décrivent d'habitude. Six temps à allure moyenne, c'est un choix du modèle. Le bouton reste enfoncé pour ce réglage par défaut, jusqu'à ce que vous en choisissiez un autre."
     },
     "drag": {
-      "title": "Traînée et timing",
+      "title": "Traînée et coordination",
       "p1": "La traînée, c'est l'eau qui vous freine. Elle augmente avec le carré de votre vitesse, et la puissance qu'il faut augmente avec le cube. Si vous doublez la vitesse, la traînée est quatre fois plus grande, et la puissance huit fois plus grande. Bougez le curseur pour le voir.",
       "p2": "Ces chiffres ne sont pas exacts. Dans un laboratoire, des hommes subissaient environ 110 N de traînée à 2 m/s. Dans la littérature, les estimations vont de 20 à 210 N, parce que les méthodes ne s'accordent pas. Le modèle utilise une estimation simple : la valeur est un repère, pas la mesure d'un nageur précis.",
       "p3": "À la surface, le nageur fait aussi des vagues, et les vagues coûtent de l'énergie. Pour un mannequin tracté à 1,7 m/s, les vagues pesaient jusqu'à 50 à 60 % de la traînée. L'effet diminue quand le corps est plus profond. Un mannequin doit être à environ 0,5 m de profondeur à 1 m/s et à environ 0,7 m à 2 m/s pour y échapper. Un nageur doit respirer : il ne peut donc pas en profiter pleinement.",
-      "p4": "Essayez de casser le modèle. Relevez la tête et les jambes coulent : le corps n'est plus étroit ni à plat. Un nageur tracté dans un canal a senti jusqu'à trois fois plus de traînée avec le menton à la surface. La page n'affiche que les mots, pas de newtons, et le modèle ne fait qu'agrandir la flèche. Un seul nageur a été mesuré.",
-      "p5": "Reste l'idée répandue qu'une pause devant vous rend plus rapide. Les mesures disent autre chose. À allure facile, il y a un petit écart, environ un dixième de seconde, entre la fin de la poussée d'un bras et le début de la traction de l'autre. Quand le nageur accélère, cet écart se referme. Au-dessus d'environ 1,8 m/s, les bras se chevauchent.",
+      "p4": "Essayez de casser le modèle. Relevez la tête et les jambes coulent : le corps n'est plus étroit ni à plat. Chez un nageur tracté dans un canal, la traînée mesurée atteignait jusqu'à trois fois plus avec le menton à la surface. La page n'affiche que les mots, pas de newtons, et le modèle ne fait que changer la taille de la flèche. Un seul nageur a été mesuré.",
+      "p5": "Reste l'idée répandue qu'une pause devant vous rend plus rapide. Les mesures disent autre chose. À allure tranquille, il y a un petit écart, environ un dixième de seconde, entre la fin de la poussée d'un bras et le début de la traction de l'autre. Quand le nageur accélère, cet écart se referme. Au-dessus d'environ 1,8 m/s, les bras se chevauchent.",
       "p6": "Personne n'a montré que garder une glisse exprès vous rend plus rapide. Des sprinteurs fatigués ont fini par chevaucher davantage, sans y gagner. Changez l'allure et lisez l'écart, ou le chevauchement, pour chacune."
     }
   },
@@ -244,7 +244,7 @@
       "at": "Traînée à cette vitesse",
       "power": "Puissance contre la traînée",
       "gapNow": "Entre les bras en ce moment",
-      "gapEasy": "Entre les bras, facile",
+      "gapEasy": "Entre les bras, tranquille",
       "gapMiddle": "Entre les bras, moyenne",
       "gapSprint": "Entre les bras, sprint",
       "gapValue": "un écart de {{seconds}} s, {{percent}} % du cycle",
