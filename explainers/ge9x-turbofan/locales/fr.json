@@ -23,7 +23,7 @@
     "faster": "{{factor}} fois plus rapide",
     "phase": {
       "suck": "Aspirer",
-      "squeeze": "Presser",
+      "squeeze": "Comprimer",
       "burn": "Brûler",
       "spin": "Tourner",
       "blow": "Souffler"
@@ -182,22 +182,22 @@
     "fan": {
       "title": "La soufflante et les deux flux",
       "p1": "Place-toi devant le moteur et regarde à l’intérieur. La première chose que l’air rencontre, c’est la <strong>soufflante</strong>, une couronne de 16 grandes aubes en fibre de carbone. Elle mesure 3,4 mètres de large, presque autant que le fuselage d’un Boeing 737. La petite silhouette à côté mesure 1,8 mètre, pour que tu sentes la taille. Aucun autre moteur d’avion de ligne n’a une soufflante aussi grande.",
-      "p2": "Juste derrière la soufflante, l’air rencontre une arête vive, le <strong>séparateur</strong>. Environ 10 parts d’air sur 11 contournent le cœur. C’est le <strong>flux froid</strong>, et il sort tout droit par l’arrière. L’autre part, environ 1 sur 11, entre dans le cœur. C’est le <strong>flux chaud</strong>, et tu vas le suivre dans les chapitres suivants.",
-      "p3": "Quel flux fait la poussée ? Le gros de la poussée vient de la soufflante. Elle attrape une énorme quantité d’air et la rejette un peu plus vite. Pousser beaucoup d’air un petit peu, c’est une bonne façon de pousser un avion. À pleine puissance, d’après les chiffres de GE, le bout des aubes va plus vite que le son.",
-      "p4": "Choisis Froid ou Chaud pour regarder un seul flux à la fois. Le modèle dessine les deux flux avec des traits courts, et le nombre de traits ne reflète pas ce partage de 10 pour 1. Il dessine le moteur pour qu’on le comprenne, pas pour le mesurer : sa disposition est la sienne, et les nombres d’aubes aussi, sauf les 16 aubes de la soufflante.",
+      "p2": "Juste derrière la soufflante, l’air rencontre une arête vive, le <strong>séparateur</strong>. Environ 10 parts d’air sur 11 passent autour du milieu du moteur, qu’on appelle le <strong>cœur</strong>. C’est le <strong>flux froid</strong>, et il sort tout droit par l’arrière. L’autre part, environ 1 sur 11, entre dans le cœur. C’est le <strong>flux chaud</strong>, et tu vas le suivre dans les chapitres suivants.",
+      "p3": "Quel flux fait la poussée ? Le gros de la poussée vient de la soufflante. Cette force qui pousse l’avion, on l’appelle la <strong>poussée</strong>. La soufflante attrape une énorme quantité d’air et la rejette un peu plus vite. Pousser beaucoup d’air un petit peu, c’est une bonne façon de pousser un avion. À pleine puissance, d’après les chiffres de GE, le bout des aubes va plus vite que le son.",
+      "p4": "Choisis Flux froid ou Flux chaud pour regarder un seul flux à la fois. Le modèle dessine les deux flux avec des traits courts, et le nombre de traits ne reflète pas ce partage de 10 pour 1. Il dessine le moteur pour qu’on le comprenne, pas pour le mesurer : sa disposition est la sienne, et les nombres d’aubes aussi, sauf les 16 aubes de la soufflante.",
       "p5": "Ce moteur est conçu pour le Boeing 777-9, qui n’est pas encore en service. Sa première livraison est prévue pour 2027. Le moteur, lui, est certifié et vole sur des avions d’essai."
     },
     "compressor": {
       "title": "La compression",
       "p1": "Suis maintenant l’air du cœur. Il passe d’abord par le <strong>compresseur basse pression</strong>, trois étages de petites aubes juste derrière la soufflante. Puis il entre dans le <strong>compresseur</strong>, qui compte 11 étages. Chaque étage est une couronne d’aubes qui tournent et une couronne d’aubes fixes. Les aubes qui tournent poussent l’air plus loin, et les aubes fixes le préparent pour l’étage suivant.",
-      "p2": "Chaque étage comprime l’air un peu plus. Le compresseur seul le comprime 27 fois. Avec la soufflante et le compresseur basse pression, tout le moteur le comprime plus de 60 fois. GE dit que c’est le taux le plus élevé de tous les moteurs en service. Un air bien comprimé brûle mieux, donc il donne plus de puissance pour chaque goutte de carburant.",
+      "p2": "Chaque étage comprime l’air un peu plus. Le compresseur seul le comprime 27 pour 1, c’est-à-dire 27 fois la pression. Avec la soufflante et le compresseur basse pression, tout le moteur le comprime plus de 60 pour 1. GE dit que c’est le taux le plus élevé de tous les moteurs en service. Un air bien comprimé brûle mieux, donc il donne plus de puissance pour chaque goutte de carburant.",
       "p3": "Le compresseur tourne sur l’<strong>arbre extérieur</strong>, un tube creux. C’est la turbine haute pression, à l’arrière, qui le fait tourner. L’arbre du cœur tourne plusieurs fois plus vite que la soufflante. Les chiffres publiés varient, donc le modèle utilise ses propres vitesses. Il fait aussi tourner les arbres bien plus lentement que le vrai moteur, pour que tu puisses voir les aubes.",
-      "p4": "Choisis Coupe pour voir à l’intérieur, puis fais glisser le repère sur la barre du temps. Le repère montre où sont deux paquets d’air : l’un dans le cœur et l’autre dans le flux froid. La barre nomme les étapes de l’air du cœur : aspirer, presser, brûler, tourner et souffler. L’air froid ne passe pas par presser, brûler et tourner, parce qu’il file dans le conduit autour du cœur. Le nombre indique les mètres depuis le bord de l’entrée d’air."
+      "p4": "Choisis Coupe pour voir à l’intérieur, puis fais glisser le repère sur la barre du temps. Le repère montre où sont deux paquets d’air : l’un dans le cœur et l’autre dans le flux froid. La barre nomme les étapes de l’air du cœur : aspirer, comprimer, brûler, tourner et souffler. L’air froid ne passe pas par comprimer, brûler et tourner, parce qu’il file dans le conduit autour du cœur. Le nombre indique les mètres depuis le bord de l’entrée d’air, la partie avant du moteur."
     },
     "combustor": {
       "title": "Là où le carburant brûle",
       "p1": "L’air comprimé entre maintenant dans la <strong>chambre de combustion</strong>. D’abord, une pièce appelée diffuseur le ralentit. Ensuite, le carburant est pulvérisé par de petits injecteurs. Il brûle de façon régulière, comme sur une cuisinière à gaz, sans explosions.",
-      "p2": "Ce moteur mélange d’abord le carburant et l’air, puis brûle le mélange. Les ingénieurs appellent ça la <strong>combustion pauvre</strong> : beaucoup d’air pour peu de carburant. Un tel mélange brûle plus proprement. GE dit que le moteur produit moins de la moitié des oxydes d’azote que permet la dernière limite.",
+      "p2": "Ce moteur mélange d’abord le carburant et l’air, puis brûle le mélange. Les ingénieurs appellent ça la <strong>combustion pauvre</strong> : beaucoup d’air pour peu de carburant. Un tel mélange brûle plus proprement. GE dit que le moteur produit moins de la moitié des oxydes d’azote, un gaz polluant, que permet la dernière limite.",
       "p3": "Les parois de la chambre de combustion s’appellent des <strong>chemises</strong>, et ici elles sont en céramique. Cette céramique est environ trois fois moins dense que les alliages de métal, donc elle est plus légère. Elle demande aussi moins d’air de refroidissement.",
       "p4": "La lueur que tu vois n’est qu’une image. GE ne publie pas la température du gaz, donc le modèle dessine simplement plus chaud en plus brillant. Choisis Coupe pour regarder à l’intérieur. Ce feu ne pousse pas l’avion. Son rôle est de chauffer l’air, et le chapitre suivant montre pourquoi."
     },
