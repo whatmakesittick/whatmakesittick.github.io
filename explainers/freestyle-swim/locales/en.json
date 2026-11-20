@@ -1,0 +1,265 @@
+{
+  "meta": {
+    "title": "Freestyle swimming: how a stroke makes you move",
+    "eyebrow": "Biology and physics",
+    "tagline": "Water is far denser than air, so speed comes from holding the water with your hand and forearm and from staying long and level, not from pushing harder.",
+    "description": "Follow one freestyle stroke in 3D: how the hand and forearm hold the water, why drag grows so fast, and why a pause in front does not make you faster.",
+    "summary": "The four phases of a stroke, the catch, pull and push, body roll and breathing, the kick, and drag with the gap between the arms.",
+    "socialAlt": "A swimmer seen from the side in a pool lane, with the path of the hand glowing under the waterline, next to the title Freestyle swimming: how a stroke makes you move"
+  },
+  "stage": {
+    "label": "Interactive freestyle swimmer model",
+    "gauge": "Live speed, stroke and drag"
+  },
+  "timeline": {
+    "label": "Stroke",
+    "phases": "Jump to a phase of the right arm",
+    "value": "{{percent}} %",
+    "during": "{{percent}} %, right arm: {{phase}}",
+    "speed": "Playback",
+    "speedValue": "{{factor}}×",
+    "realTime": "Real time",
+    "slower": "{{factor}} times slower",
+    "phase": {
+      "entryCatch": "Entry and catch",
+      "pull": "Pull",
+      "push": "Push",
+      "recovery": "Recovery"
+    },
+    "jump": {
+      "entryCatch": "Jump to the hand entering the water",
+      "pull": "Jump to the start of the pull",
+      "push": "Jump to the start of the push",
+      "recovery": "Jump to the arm swinging forward in the air"
+    }
+  },
+  "controls": {
+    "label": "Model controls",
+    "pace": "Pace",
+    "groups": {
+      "pace": "Pace",
+      "kick": "Kick",
+      "breath": "Breathing",
+      "head": "Head position"
+    },
+    "paceOptions": {
+      "easy": "Easy",
+      "middle": "Middle",
+      "sprint": "Sprint"
+    },
+    "kickOptions": {
+      "two": "Two-beat",
+      "six": "Six-beat"
+    },
+    "breathOptions": {
+      "none": "No breath",
+      "right": "Breathe right"
+    },
+    "headOptions": {
+      "down": "Head down",
+      "up": "Head up"
+    },
+    "views": {
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      },
+      "forces": {
+        "name": "Forces",
+        "short": "Forces",
+        "hint": "Forces on the hands and body (F)"
+      },
+      "underwater": {
+        "name": "Clear water",
+        "short": "Clear",
+        "hint": "See through the water (U)"
+      },
+      "handPath": {
+        "name": "Hand path",
+        "short": "Path",
+        "hint": "Hand path (H)"
+      }
+    }
+  },
+  "readouts": {
+    "speed": "Speed",
+    "strokeRate": "Stroke rate",
+    "strokeLength": "Stroke length",
+    "handForce": "Pulling hand, schematic",
+    "drag": "Drag",
+    "dragUp": "up to 3 times",
+    "armGap": "Between the arms: {{gap}}"
+  },
+  "units": {
+    "metersPerSecond": "{{value}} m/s",
+    "perMinute": "{{value}} per min",
+    "meters": "{{value}} m",
+    "newtons": "{{value}} N",
+    "watts": "{{value}} W",
+    "degrees": "{{value}}°",
+    "percent": "{{value}} %",
+    "seconds": "{{value}} s"
+  },
+  "parts": {
+    "hand": "Hand",
+    "forearm": "Forearm",
+    "elbow": "Elbow",
+    "shoulder": "Shoulder",
+    "head": "Head",
+    "hips": "Hips",
+    "foot": "Foot",
+    "waterline": "Water surface",
+    "laneRope": "Lane rope",
+    "laneLine": "Lane line on the floor"
+  },
+  "sections": {
+    "stroke": {
+      "title": "The whole stroke",
+      "p1": "Meet a swimmer in lane 4 of a 50 m pool, swimming <strong>freestyle</strong>, also called front crawl. One <strong>stroke cycle</strong> is both arms: one stroke with the right, one with the left. Follow the right arm through its four phases: <strong>entry and catch</strong>, <strong>pull</strong>, <strong>push</strong> and <strong>recovery</strong>, when the arm swings forward in the air. The left arm does the same half a cycle later. Drag the timeline to see it.",
+      "p2": "Only the pull and the push move you forward. Together they take about 43 to 57 percent of the cycle, depending on the pace and on how it is measured. The coloured bands on the timeline are typical values for trained men, so treat them as a guide. They shift a little when you change the pace.",
+      "p3": "Speed is simple arithmetic: <strong>stroke rate</strong>, the cycles per minute, times <strong>stroke length</strong>, the distance you travel in one cycle. The three paces are bundles of typical values from different studies, picked by the model. A product like this does not match real race speeds, so read the number as the model's pace, not as a race result. Your speed is not steady either. It swings by about 0.4 m/s inside each cycle, as the arms take turns.",
+      "p4": "Why so much effort for so little speed? Water is roughly 800 times denser than air, and a swimmer also makes waves at the surface. Only about 5 percent of the energy a swimmer burns ends up as useful power in the water. Most of the effort is lost along the way, not just spent on drag. So speed does not come from pushing harder. It comes from holding the water well and from staying a narrow, level shape. The next chapters take these one by one.",
+      "p5": "The swimmer is a simple jointed mannequin. The pool scrolls past while the swimmer stays near the middle, and the small surge inside each cycle shows as a drift of a few centimetres. Pick a pace and watch how the stroke changes."
+    },
+    "catch": {
+      "title": "The catch",
+      "p1": "The hand enters the water about in line with the shoulder. It reaches forward and then presses down and back. The moment the hand first grips the water is the <strong>catch</strong>. It is an instant, not a phase of its own, and the picture pauses there.",
+      "p2": "Right after the catch, the forearm turns toward the vertical. Now the hand and forearm face backward together, like one wide paddle, while the elbow stays high. Coaches call this an early vertical forearm. Switch on the clear water to see how the hand and forearm line up.",
+      "p3": "You may have heard that the elbow should bend to 90 degrees. That is a coaching ideal, not what was measured. In one study of ten sprinters, the elbow was open to about 148 degrees at the catch, about 105 with the hand under the shoulder, and about 151 at the end of the push. So the arm stays much straighter than the ideal.",
+      "p4": "The hand does not go deep. At its deepest it is about 0.6 to 0.7 m under the surface, and the exact reference point was not checked in the study. The readouts follow the model. Where nobody has measured, they say so instead of showing a number: no study gives the elbow angle in the air or at the entry.",
+      "p5": "These angles come from sprinters in one study, and the model reuses the same shape at every pace. Read them as typical values for one group, not as a rule for every swimmer."
+    },
+    "pull": {
+      "title": "Pull and push",
+      "p1": "Now the arm does the work. During the pull and the push, the hand and forearm act like a <strong>paddle</strong>: they push water backward, and the water pushes you forward. It is not a wing. Computer simulations show the water leaving the hand in swirls instead of flowing smoothly over it, so the old explanation with lift from a curved surface does not hold up.",
+      "p2": "Scientists still argue about how much lift adds to the push. Most agree the hand mostly pushes water back like a paddle, and that the swirls it makes in the water add more. The model draws one arrow for the push and does not try to settle this.",
+      "p3": "Typical numbers help here. One hand peaks at about 75 to 115 N in swimmers measured so far, and about 22 N at the catch. The push is about 15 percent stronger than the pull, so the strongest part of the stroke is the push, not the pull. The force peaks about 70 percent of the way through the underwater part.",
+      "p4": "The curve in the gauge is schematic. It is a smooth shape scaled to those values, not a measured curve, so do not read it like data from a force sensor. Hand speed is similar: in sprinters it is about 3.6 m/s under water in the push, and 6 to 7 m/s when the hand swings through the air.",
+      "p5": "A hand is small, about 0.016 m². One computer model found that a small gap of about 12 degrees between the fingers raises the hand's drag by about 9 percent. That comes from a simulation, so take it as an idea to test, not as advice."
+    },
+    "roll": {
+      "title": "Roll and breathing",
+      "p1": "A good swimmer does not lie flat. The shoulders roll about 50 degrees to each side, at every pace. The hips roll less: about 18 degrees at sprint pace and about 25 at the pace of a 400 m race. The roll lets the arm reach forward and swing over the water without fighting the body.",
+      "p2": "You may read that distance swimmers roll their shoulders more. The data do not show it. The shoulders roll about the same at sprint and at 400 m pace. Only the hips roll more at the slower pace.",
+      "p3": "At the end of the push, the arm leaves the water with the elbow first and the hand relaxed. Then it swings forward through the air. This is the <strong>recovery</strong>, the rest part of the stroke. The model shows no angle for it, because no good measurement was found.",
+      "p4": "You may also have seen the pull drawn as an S. Most of that S is the body's roll. Draw the hand's path from a point fixed to the pool and it bends. Draw it from the swimmer's own point of view and it gets much straighter. It is one path, seen from two places, and not two ways to swim. Turn on the hand path and compare.",
+      "p5": "To breathe, the swimmer turns the head to the side. Breathing to one side adds about 9 degrees of roll on that side. Does a breath slow you down? A little, but sources disagree: one study found about 3 percent at sprint pace, another found no real difference. The head angle in the model is its own choice."
+    },
+    "kick": {
+      "title": "The kick",
+      "p1": "The legs beat up and down in turns. In a <strong>two-beat</strong> kick, each leg kicks once per cycle. In a <strong>six-beat</strong> kick, each leg kicks three times per cycle. Pick one and watch the hips and feet.",
+      "p2": "In both patterns, the big downbeat comes from the leg opposite the arm that is entering the water. Your body twists, and that leg helps to balance it. In the six-beat kick the two extra beats are smaller. Which small beat goes with which arm event is the model's own choice.",
+      "p3": "How much does a kick give you? In one study, adding the legs to the arms made a 25 m sprint about 10 percent faster. The authors say the legs mostly help the arms and keep the body level, rather than push by themselves. So it is wrong to say the kick makes 10 percent of the push.",
+      "p4": "At sprint pace, each leg beats about 2.4 to 2.7 times a second. The foot goes down about 0.3 to 0.4 m, and sources differ. The model uses one middle value. No good numbers exist for the angles of the knee and ankle, so the model draws them by eye.",
+      "p5": "The pace sets the kick first: two-beat at an easy pace, six-beat at sprint. That is how coaches usually describe them. Six-beat at the middle pace is the model's own pick. The chip stays pressed for that default until you choose another kick."
+    },
+    "drag": {
+      "title": "Drag and timing",
+      "p1": "Drag is the water pushing back on you. It grows with the square of your speed, and the power you need grows with the cube. Double your speed and the drag is four times larger, while the power is eight times larger. Move the slider to see it.",
+      "p2": "The numbers are not exact. In one lab, men met about 110 N of drag at 2 m/s. Across the literature, estimates run from 20 to 210 N, because the methods disagree. The model uses a simple estimate, so the value is a guide, not a measurement of one swimmer.",
+      "p3": "At the surface, the swimmer also makes waves, and waves cost energy. For a towed mannequin at 1.7 m/s, waves took up to 50 to 60 percent of the drag. The effect fades when the body is deeper. A mannequin needs to be about 0.5 m down at 1 m/s and about 0.7 m down at 2 m/s to escape it. A swimmer must breathe, so this is not something a swimmer can fully use.",
+      "p4": "Try to break it. Lift the head and the legs sink, so the body is no longer narrow and level. One swimmer, towed through a flume, felt up to three times more drag with the chin at the surface. The page shows only the words, not newtons, and the model just scales the arrow. Only that one swimmer was measured.",
+      "p5": "Finally, the popular idea that a pause in front makes you faster. The measurements say something else. At an easy pace, there is a small gap, about a tenth of a second, between the end of one arm's push and the start of the next one's pull. As the swimmer speeds up, that gap closes. Above about 1.8 m/s, the arms start to overlap.",
+      "p6": "Nobody has shown that holding a glide on purpose makes you faster. Tired sprinters drifted into more overlap and did not gain from it. Change the pace and read the gap, or the overlap, for each one."
+    }
+  },
+  "chapters": {
+    "stroke": {
+      "speed": "Speed now",
+      "rate": "Stroke rate",
+      "length": "Stroke length",
+      "sum": "The model's arithmetic",
+      "sumValue": "{{rate}} per min × {{length}} m per cycle ÷ 60 = {{speed}} m/s",
+      "phase": "Right arm now",
+      "cycle": "One cycle",
+      "cycleValue": "both arms, about 1 to 1.7 s",
+      "density": "Water against air",
+      "densityValue": "about 800 times denser",
+      "energy": "Energy that moves you forward",
+      "energyValue": "about 5 percent"
+    },
+    "catch": {
+      "elbow": "Elbow angle",
+      "depth": "Hand depth",
+      "phase": "Right arm now",
+      "noElbow": "not measured here",
+      "inAir": "in the air",
+      "elbowSteps": "Elbow at the catch, under the shoulder, end of the push",
+      "elbowStepsValue": "about 148, 105 and 151 degrees, sprinters, one study",
+      "deepest": "Deepest point of the hand",
+      "deepestValue": "about 0.6 to 0.7 m"
+    },
+    "pull": {
+      "force": "Pulling hand, schematic",
+      "handSpeed": "Hand speed",
+      "phase": "Pulling arm now",
+      "catchForce": "Force at the catch",
+      "catchForceValue": "about 22 N",
+      "peak": "Peak force of one hand",
+      "peakValue": "about 75 to 115 N, typical",
+      "pushVsPull": "Push against pull",
+      "pushVsPullValue": "push about 15 percent larger",
+      "handArea": "Area of one hand",
+      "handAreaValue": "about 0.016 m²",
+      "airSpeed": "Hand speed, push and air",
+      "airSpeedValue": "about 3.6 m/s in the water, 6 to 7 m/s in the air"
+    },
+    "roll": {
+      "shoulder": "Shoulder roll",
+      "hip": "Hip roll",
+      "side": "Low shoulder",
+      "sideRight": "right",
+      "sideLeft": "left",
+      "extra": "Extra roll from breathing",
+      "pace": "Shoulder roll at every pace",
+      "paceValue": "about 50 degrees each side",
+      "hipPace": "Hip roll, sprint and 400 m pace",
+      "hipPaceValue": "about 18 and 25 degrees",
+      "breathExtra": "Extra roll when breathing",
+      "breathExtraValue": "about 9 degrees",
+      "breathCost": "Cost of a breath",
+      "breathCostValue": "slightly slower"
+    },
+    "kick": {
+      "pattern": "Kick",
+      "beats": "Beats per leg per cycle",
+      "beatsValue": "{{count}}",
+      "leg": "Big downbeat now",
+      "legDown": "{{leg}} leg",
+      "left": "left",
+      "right": "right",
+      "added": "Adding the kick, 25 m sprint",
+      "addedValue": "about 10 percent faster",
+      "rate": "Beats per second, one leg, sprint",
+      "rateValue": "about 2.4 to 2.7",
+      "depth": "Depth of the downbeat",
+      "depthValue": "about 0.3 to 0.4 m, sources differ",
+      "role": "Main job of the legs",
+      "roleValue": "mostly help the arms and keep the body level"
+    },
+    "drag": {
+      "now": "Drag now",
+      "dragUp": "up to 3 times",
+      "at": "Drag at this speed",
+      "power": "Power against drag",
+      "gapNow": "Between the arms now",
+      "gapEasy": "Between the arms, easy",
+      "gapMiddle": "Between the arms, middle",
+      "gapSprint": "Between the arms, sprint",
+      "gapValue": "a gap of {{seconds}} s, {{percent}} % of the cycle",
+      "overlapValue": "an overlap of {{seconds}} s, {{percent}} % of the cycle",
+      "speedLabel": "Speed in the water",
+      "law": "Drag and power grow with",
+      "lawValue": "speed squared; power, speed cubed",
+      "waves": "Wave drag at the surface",
+      "wavesValue": "up to 50 to 60 percent of a mannequin's drag at 1.7 m/s",
+      "headLift": "Chin at the surface",
+      "headLiftValue": "can triple passive drag, one swimmer, towed",
+      "active": "Drag at 2 m/s",
+      "activeValue": "about 110 N, men, one lab",
+      "spread": "Drag estimates in the literature",
+      "spreadValue": "20 to 210 N, methods disagree"
+    }
+  }
+}
