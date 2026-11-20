@@ -8,6 +8,11 @@
   width: 15rem;
 }
 
+.gauge .readout[data-readout='position'] dd {
+  min-block-size: 2lh;
+  white-space: normal;
+}
+
 .gauge-lever.range-widget {
   --readout-min-width: 0;
 
