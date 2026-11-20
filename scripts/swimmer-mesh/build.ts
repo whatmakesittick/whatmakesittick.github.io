@@ -9,16 +9,24 @@ import {
 } from '../../explainers/freestyle-swim/src/scene/parts/swimmer/skin/types.ts';
 import { shapeCap, strapLoop } from './cap.ts';
 import { surfaceReport } from './checks.ts';
-import { OUTPUT_PATH, SIMPLIFY_BUDGET } from './config.ts';
+import { BODY_HEIGHT, OUTPUT_PATH, SIMPLIFY_BUDGET } from './config.ts';
 import { cutMesh } from './cut.ts';
 import { encodeHalfMesh, type HalfMesh } from './encode.ts';
 import { prepareBody, type PreparedBody } from './prepare.ts';
 import type { Model } from './topology.ts';
-import { restJoints, restLengths } from './measure.ts';
+import { restJoints } from './measure.ts';
+import { elbowFacesOut, printMeasures } from './report.ts';
 import { restSide } from './restpose.ts';
 import { stripOrder } from './order.ts';
 import { reorderByFirstUse, simplifyBody } from './simplify.ts';
-import { capDistance, classifyTriangles, cutPlanes, headWeight, type SlotRules } from './slots.ts';
+import {
+  capDistance,
+  classifyTriangles,
+  cutPlanes,
+  headWeight,
+  simplificationRegions,
+  type SlotRules,
+} from './slots.ts';
 import { loadSource } from './source.ts';
 import { point } from './vec.ts';
 
@@ -88,8 +96,8 @@ function assemble(
     joints.set(model.joints.subarray(vertex * 4, vertex * 4 + 4), i * 4);
     weights.set(model.weights.subarray(vertex * 4, vertex * 4 + 4), i * 4);
   });
-  const joint = restJoints(body);
-  const right = restSide(model.positions, joint, { ...body.parts, eye: body.eye });
+  const joint = restJoints(body.joint);
+  const right = restSide(model.positions, joint, { ...body.parts, eye: body.eye }, body.frames);
   const neck = body.joint('neck01____head');
   const rest = {
     right,
@@ -123,7 +131,11 @@ async function main(): Promise<void> {
   };
   const slotOf = classifyTriangles(model, rules);
   const head = shapeHead(body, slotOf, rules);
-  const simplified = await simplifyBody(model, slotOf, SIMPLIFY_BUDGET);
+  const simplified = await simplifyBody(
+    model,
+    simplificationRegions(model, slotOf),
+    SIMPLIFY_BUDGET,
+  );
   const cut = cutMesh({ ...model, triangles: simplified }, cutPlanes(rules));
   const mesh = assemble(body, cut, slotsOf(cut, rules), head);
   const report = surfaceReport(mesh);
@@ -140,17 +152,8 @@ async function main(): Promise<void> {
     (_, v) => mesh.positions[v * 3 + 2],
   ).filter((z) => z === 0).length;
   const half = mesh.positions.length / 3;
-  console.log(
-    'rest',
-    JSON.stringify(
-      Object.fromEntries(
-        Object.entries(restLengths(mesh.rest.right)).map(([k, v]) => [
-          k,
-          Math.round(v * 1000) / 1000,
-        ]),
-      ),
-    ),
-  );
+  printMeasures(body, BODY_HEIGHT);
+  console.log('elbow back faces out', elbowFacesOut(mesh.rest.right));
   console.log('holes filled', body.filledHoles, 'straddling', body.straddling);
   console.log('half vertices', half, 'midline', midline, 'full vertices', 2 * half - midline);
   const counts = Object.fromEntries(SLOT_IDS.map((s) => [s, mesh.slots[s].length / 3]));

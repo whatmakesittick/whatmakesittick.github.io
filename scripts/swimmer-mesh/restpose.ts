@@ -16,6 +16,7 @@ const UP: Vec = [0, 1, 0];
 const SOLE_DOWN: Vec = [-1, 0, 0];
 
 export interface RestJoints {
+  clavicle: Vec;
   shoulder: Vec;
   elbow: Vec;
   wrist: Vec;
@@ -23,7 +24,12 @@ export interface RestJoints {
   knee: Vec;
   ankle: Vec;
   footTail: Vec;
-  thumbTip: Vec;
+}
+
+export interface Frames {
+  palm: Vec;
+  sole: Vec;
+  toeDirection: Vec;
 }
 
 export function farthest(
@@ -42,7 +48,7 @@ export function farthest(
   return best;
 }
 
-function elbowBack(joints: RestJoints): Vec {
+export function elbowBack(joints: RestJoints): Vec {
   const upper = normalize(sub(joints.elbow, joints.shoulder));
   const lower = normalize(sub(joints.wrist, joints.elbow));
   if (dot(upper, lower) < ELBOW_STRAIGHT_COS)
@@ -50,32 +56,47 @@ function elbowBack(joints: RestJoints): Vec {
   return normalize(perpendicular(UP, upper));
 }
 
-function palmNormal(joints: RestJoints, fingertip: Vec): Vec {
+function palmNormal(joints: RestJoints, fingertip: Vec, thumbTip: Vec): Vec {
   const along = normalize(sub(fingertip, joints.wrist));
-  const thumb = normalize(perpendicular(sub(joints.thumbTip, joints.wrist), along));
+  const thumb = normalize(perpendicular(sub(thumbTip, joints.wrist), along));
   return normalize(cross(thumb, along));
+}
+
+export function aposeFrames(
+  positions: ArrayLike<number>,
+  joints: RestJoints,
+  parts: { middleFinger: number[]; thumb: number[]; foot: number[] },
+): Frames {
+  const fingertip = farthest(positions, parts.middleFinger, joints.wrist);
+  const thumbTip = farthest(positions, parts.thumb, joints.wrist);
+  const toeDirection = normalize(perpendicular(sub(joints.footTail, joints.ankle), SOLE_DOWN));
+  const toeTip = farthest(positions, parts.foot, joints.ankle, toeDirection);
+  return {
+    palm: palmNormal(joints, fingertip, thumbTip),
+    toeDirection,
+    sole: normalize(perpendicular(SOLE_DOWN, sub(toeTip, joints.ankle))),
+  };
 }
 
 export function restSide(
   positions: ArrayLike<number>,
   joints: RestJoints,
   parts: { middleFinger: number[]; foot: number[]; eye: Vec },
+  frames: Frames,
 ): RestSide {
-  const fingertip = farthest(positions, parts.middleFinger, joints.wrist);
-  const toeDirection = normalize(perpendicular(sub(joints.footTail, joints.ankle), SOLE_DOWN));
-  const toeTip = farthest(positions, parts.foot, joints.ankle, toeDirection);
   return {
+    clavicle: joints.clavicle,
     shoulder: joints.shoulder,
     elbow: joints.elbow,
     wrist: joints.wrist,
-    fingertip,
-    palm: palmNormal(joints, fingertip),
+    fingertip: farthest(positions, parts.middleFinger, joints.wrist),
+    palm: frames.palm,
     elbowBack: elbowBack(joints),
     hip: joints.hip,
     knee: joints.knee,
     ankle: joints.ankle,
-    toeTip,
-    sole: normalize(perpendicular(SOLE_DOWN, sub(toeTip, joints.ankle))),
+    toeTip: farthest(positions, parts.foot, joints.ankle, frames.toeDirection),
+    sole: frames.sole,
     eye: parts.eye,
   };
 }

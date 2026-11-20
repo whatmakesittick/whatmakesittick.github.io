@@ -1,31 +1,26 @@
 import { INFLUENCES } from '../../explainers/freestyle-swim/src/scene/parts/swimmer/skin/types.ts';
+import { buildAPose, partSets, type APose } from './apose.ts';
+import { MIDLINE_TOLERANCE } from './config.ts';
+import { rotate } from './matrix.ts';
+import { reposeBody } from './repose.ts';
+import type { Frames } from './restpose.ts';
 import { shapeBody } from './shape.ts';
-import type { BoneWeights, Source } from './source.ts';
+import type { Source } from './source.ts';
 import { fillHoles, type Model } from './topology.ts';
 import { mapWeights } from './weights.ts';
 import { centroid, type Vec } from './vec.ts';
-
-export const MIDLINE_TOLERANCE = 0.0002;
-const PART_WEIGHT = 0.5;
 
 export interface PreparedBody {
   readonly model: Model;
   readonly joint: (name: string) => Vec;
   readonly hipX: number;
   readonly parts: { middleFinger: number[]; thumb: number[]; foot: number[] };
+  readonly frames: Frames;
+  readonly aPose: APose;
   readonly eye: Vec;
   readonly eyeRadius: number;
   readonly filledHoles: number[];
   readonly straddling: number;
-}
-
-function vertexSet(weights: BoneWeights, pattern: RegExp): Set<number> {
-  const totals = new Map<number, number>();
-  for (const [name, entries] of Object.entries(weights)) {
-    if (!pattern.test(name)) continue;
-    for (const [vertex, weight] of entries) totals.set(vertex, (totals.get(vertex) ?? 0) + weight);
-  }
-  return new Set([...totals].filter(([, total]) => total > PART_WEIGHT).map(([vertex]) => vertex));
 }
 
 function compact(model: Model, keep: number[]): { model: Model; remap: Map<number, number> } {
@@ -78,6 +73,30 @@ export function prepareBody(source: Source): PreparedBody {
   const total = shape.positions.length / 3;
   const hipX =
     (shape.joint('upperleg01.L____head')[0] + shape.joint('upperleg01.R____head')[0]) / 2;
+  const used = [...new Set(shape.triangles)].sort((a, b) => a - b);
+
+  const eyeVertices = [...source.base.groupVertices['helper-r-eye']];
+  const eyeX = eyeVertices.map((v) => shape.positions[v * 3]);
+  const eye = centroid(shape.positions, eyeVertices);
+  if (eye[2] <= 0) throw new Error('helper-r-eye is not on the +z side');
+  const eyeRadius = (Math.max(...eyeX) - Math.min(...eyeX)) / 2;
+
+  const fullParts = partSets(source.weights, new Set(used));
+  const aPose = buildAPose(shape, fullParts, used, eye);
+  const posed = reposeBody({
+    positions: shape.positions,
+    rest: shape.joint,
+    skeleton: source.skeleton,
+    weights: source.weights,
+    palm: aPose.frames.palm,
+    toeDirection: aPose.frames.toeDirection,
+    midlineTolerance: MIDLINE_TOLERANCE,
+  });
+  const frames: Frames = {
+    palm: rotate(posed.rotation('wrist.R'), aPose.frames.palm),
+    sole: rotate(posed.rotation('foot.R'), aPose.frames.sole),
+    toeDirection: rotate(posed.rotation('foot.R'), aPose.frames.toeDirection),
+  };
   const skin = mapWeights(
     source.skeleton,
     source.weights,
@@ -86,27 +105,31 @@ export function prepareBody(source: Source): PreparedBody {
     hipX,
     (v) => Math.abs(shape.positions[v * 3 + 2]) < MIDLINE_TOLERANCE,
   );
-  const used = [...new Set(shape.triangles)].sort((a, b) => a - b);
-  const full: Model = { positions: shape.positions, triangles: shape.triangles, ...skin };
+  const full: Model = { positions: posed.positions, triangles: shape.triangles, ...skin };
   const { model: body, remap } = compact(full, used);
-  const mapped = (set: Iterable<number>): number[] =>
-    [...set].filter((v) => remap.has(v)).map((v) => remap.get(v)!);
-
-  const eyeVertices = [...source.base.groupVertices['helper-r-eye']];
-  const eyeX = eyeVertices.map((v) => shape.positions[v * 3]);
-  const eye = centroid(shape.positions, eyeVertices);
-  if (eye[2] <= 0) throw new Error('helper-r-eye is not on the +z side');
-  const eyeRadius = (Math.max(...eyeX) - Math.min(...eyeX)) / 2;
   const filledHoles = fillHoles(body);
   const { model, remap: halfRemap, straddling } = cutRightHalf(body);
   const toHalf = (vertices: Iterable<number>): number[] =>
-    mapped(vertices)
+    [...vertices]
+      .filter((v) => remap.has(v))
+      .map((v) => remap.get(v)!)
       .filter((v) => halfRemap.has(v))
       .map((v) => halfRemap.get(v)!);
   const parts = {
-    middleFinger: toHalf(vertexSet(source.weights, /^finger3-\d\.R$/)),
-    thumb: toHalf(vertexSet(source.weights, /^finger1-\d\.R$/)),
-    foot: toHalf(vertexSet(source.weights, /^(foot|toe\d-\d)\.R$/)),
+    middleFinger: toHalf(fullParts.middleFinger),
+    thumb: toHalf(fullParts.thumb),
+    foot: toHalf(fullParts.foot),
   };
-  return { model, joint: shape.joint, hipX, parts, eye, eyeRadius, filledHoles, straddling };
+  return {
+    model,
+    joint: posed.joint,
+    hipX,
+    parts,
+    frames,
+    aPose,
+    eye,
+    eyeRadius,
+    filledHoles,
+    straddling,
+  };
 }

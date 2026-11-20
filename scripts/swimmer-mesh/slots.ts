@@ -3,6 +3,7 @@ import {
   mirrorBone,
   sideBone,
   centreBone,
+  SLOT_IDS,
   type SlotId,
   type SideBoneId,
 } from '../../explainers/freestyle-swim/src/scene/parts/swimmer/skin/types.ts';
@@ -33,7 +34,7 @@ const GROUPS: Record<string, readonly SideBoneId[]> = {
   hand: ['hand'],
   forearm: ['forearmRoot', 'forearm'],
   upperArm: ['upperArmRoot', 'upperArm'],
-  girdle: ['girdle'],
+  girdle: ['clavicle', 'scapula'],
 };
 const GROUP_SLOT: Record<string, SlotId> = {
   hand: 'hand',
@@ -42,6 +43,14 @@ const GROUP_SLOT: Record<string, SlotId> = {
   girdle: 'chest',
 };
 const HEAD_BONES = [centreBone('head'), centreBone('neck')];
+const SHOULDER_BONES = [
+  ...(['clavicle', 'scapula', 'upperArmRoot'] as const).flatMap((id) => [
+    sideBone(id, 'right'),
+    sideBone(id, 'left'),
+  ]),
+  centreBone('neck'),
+];
+const SHOULDER_SHARE = 0.5;
 const BODY_GROUP_BONES: Record<string, number[]> = Object.fromEntries([
   ...Object.entries(GROUPS).map(([name, ids]) => [
     name,
@@ -78,6 +87,31 @@ function groupWeights(model: Model, vertices: number[]): Record<string, number> 
 function dominantGroup(sums: Record<string, number>, vertexCount: number): string | null {
   const [name, value] = Object.entries(sums).sort((a, b) => b[1] - a[1])[0];
   return value > vertexCount / 2 ? name : null;
+}
+
+export const REGION_IDS = [...SLOT_IDS, 'shoulders'] as const;
+export type RegionId = (typeof REGION_IDS)[number];
+
+function shoulderShare(model: Model, vertices: number[]): number {
+  let total = 0;
+  for (const vertex of vertices) {
+    for (let k = 0; k < INFLUENCES; k++) {
+      if (SHOULDER_BONES.includes(model.joints[vertex * INFLUENCES + k]))
+        total += model.weights[vertex * INFLUENCES + k];
+    }
+  }
+  return total / vertices.length;
+}
+
+export function simplificationRegions(model: Model, slotOf: readonly SlotId[]): RegionId[] {
+  return slotOf.map((slot, t) => {
+    const vertices = [
+      model.triangles[t * 3],
+      model.triangles[t * 3 + 1],
+      model.triangles[t * 3 + 2],
+    ];
+    return slot === 'chest' && shoulderShare(model, vertices) > SHOULDER_SHARE ? 'shoulders' : slot;
+  });
 }
 
 export function capDistance(rules: SlotRules, position: ArrayLike<number>): number {

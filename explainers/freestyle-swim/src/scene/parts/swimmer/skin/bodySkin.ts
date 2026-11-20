@@ -13,7 +13,7 @@ import type { RestPose, RestSide, SkinMesh, Triple } from './types';
 export const SKIN_TUNING = {
   upperArmTwistShare: 0.35,
   forearmTwistShare: 0.5,
-  girdleSwingShare: 0.2,
+  scapulaSwingShare: 0.3,
   neckShare: 0.5,
   frameFallbackLength: 0.05,
   spineLowBlend: 1 / 3,
@@ -27,6 +27,8 @@ interface LimbRest {
 }
 
 interface SideRest {
+  readonly clavicle: Vector3;
+  readonly clavicleDirection: Vector3;
   readonly shoulder: Vector3;
   readonly elbow: Vector3;
   readonly elbowBack: Vector3;
@@ -65,6 +67,8 @@ function sideRest(side: RestSide): SideRest {
   const palm = vec(side.palm);
   const sole = vec(side.sole);
   return {
+    clavicle: vec(side.clavicle),
+    clavicleDirection: segment(side.clavicle, side.shoulder),
     shoulder: vec(side.shoulder),
     elbow: vec(side.elbow),
     elbowBack: vec(side.elbowBack),
@@ -226,23 +230,37 @@ export class BodySkin {
     this.store(bone, this.pivot, originPosed, rest.origin);
   }
 
-  private poseGirdle(id: ArmId, arm: ArmPose): void {
+  private poseClavicle(id: ArmId, arm: ArmPose): void {
+    const rest = this.sides[id];
+    const chest = this.boneQ[centreBone('chest')];
+    const joint = this.offset
+      .copy(rest.clavicle)
+      .applyQuaternion(chest)
+      .add(this.boneT[centreBone('chest')]);
+    this.axisX.copy(rest.clavicleDirection).applyQuaternion(chest);
+    this.axisY.subVectors(arm.shoulder, joint);
+    this.pivot.setFromUnitVectors(this.axisX.normalize(), this.axisY.normalize()).multiply(chest);
+    this.store(sideBone('clavicle', id), this.pivot, joint, rest.clavicle);
+  }
+
+  private poseScapula(id: ArmId, arm: ArmPose): void {
     const rest = this.sides[id];
     const chest = this.boneQ[centreBone('chest')];
     this.relative.copy(chest).invert().multiply(this.boneQ[sideBone('upperArm', id)]);
     partialTwist(this.relative, rest.upperArm.axis, 0, this.swing, this.twist);
-    this.pivot.identity().slerp(this.swing, SKIN_TUNING.girdleSwingShare);
+    this.pivot.identity().slerp(this.swing, SKIN_TUNING.scapulaSwingShare);
     this.pivot.premultiply(chest);
-    this.store(sideBone('girdle', id), this.pivot, arm.shoulder, rest.shoulder);
+    this.store(sideBone('scapula', id), this.pivot, arm.shoulder, rest.shoulder);
   }
 
   private poseArm(id: ArmId, arm: ArmPose): void {
     const rest = this.sides[id];
     this.poseUpperArm(id, arm);
-    this.poseGirdle(id, arm);
+    this.poseClavicle(id, arm);
+    this.poseScapula(id, arm);
     this.twistedFollower(
       sideBone('upperArmRoot', id),
-      sideBone('girdle', id),
+      sideBone('scapula', id),
       sideBone('upperArm', id),
       rest.upperArm,
       SKIN_TUNING.upperArmTwistShare,

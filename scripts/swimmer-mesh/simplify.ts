@@ -6,16 +6,17 @@ import {
   type SlotId,
 } from '../../explainers/freestyle-swim/src/scene/parts/swimmer/skin/types.ts';
 import { midlineFolds } from './checks.ts';
+import { REGION_IDS, type RegionId } from './slots.ts';
 import type { Model } from './topology.ts';
 
 const TARGET_ERROR = 0.02;
 const ATTRIBUTE_WEIGHT = 0.02;
 const INDICES_PER_TRIANGLE = 3;
 
-export type SlotKeep = Readonly<Record<SlotId, number>>;
+export type RegionKeep = Readonly<Record<RegionId, number>>;
 
 export interface SimplifyBudget {
-  readonly keep: SlotKeep;
+  readonly keep: RegionKeep;
   readonly total: number;
 }
 
@@ -57,10 +58,14 @@ function simplifyIndices(
   return Array.from(simplified);
 }
 
-function trianglesOfSlot(model: Model, slotOf: readonly SlotId[], slot: SlotId): number[] {
+function trianglesOfRegion(
+  model: Model,
+  regionOf: readonly RegionId[],
+  region: RegionId,
+): number[] {
   const indices: number[] = [];
-  slotOf.forEach((owner, t) => {
-    if (owner === slot)
+  regionOf.forEach((owner, t) => {
+    if (owner === region)
       indices.push(
         ...model.triangles.slice(t * INDICES_PER_TRIANGLE, (t + 1) * INDICES_PER_TRIANGLE),
       );
@@ -70,20 +75,20 @@ function trianglesOfSlot(model: Model, slotOf: readonly SlotId[], slot: SlotId):
 
 function simplifyOnce(
   model: Model,
-  slotOf: readonly SlotId[],
+  regionOf: readonly RegionId[],
   budget: SimplifyBudget,
   locked: Uint8Array,
 ): number[] {
   const positions = Float32Array.from(model.positions);
   const attributes = boneAttributes(model);
-  const merged = SLOT_IDS.flatMap((slot) => {
-    const indices = trianglesOfSlot(model, slotOf, slot);
+  const merged = REGION_IDS.flatMap((region) => {
+    const indices = trianglesOfRegion(model, regionOf, region);
     return simplifyIndices(
       indices,
       positions,
       attributes,
       locked,
-      indices.length * budget.keep[slot],
+      indices.length * budget.keep[region],
     );
   });
   return simplifyIndices(
@@ -110,13 +115,13 @@ function lockAround(model: Model, seeds: number[], locked: Uint8Array): void {
 
 export async function simplifyBody(
   model: Model,
-  slotOf: readonly SlotId[],
+  regionOf: readonly RegionId[],
   budget: SimplifyBudget,
 ): Promise<number[]> {
   await MeshoptSimplifier.ready;
   const locked = new Uint8Array(model.positions.length / 3);
   for (let round = 0; round < MAX_REPAIR_ROUNDS; round++) {
-    const result = simplifyOnce(model, slotOf, budget, locked);
+    const result = simplifyOnce(model, regionOf, budget, locked);
     const folds = midlineFolds({ body: result }, model.positions);
     if (folds.length === 0) return result;
     lockAround(model, folds.flat(), locked);

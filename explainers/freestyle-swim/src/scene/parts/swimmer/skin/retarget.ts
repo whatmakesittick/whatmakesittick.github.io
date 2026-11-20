@@ -60,16 +60,18 @@ function retargetSide(
   sign: number,
   corrections: BoneCorrection[],
   id: 'right' | 'left',
+  chestShift: Vector3,
 ): RestSide {
   const at = (bone: SideBoneId) => corrections[sideBone(bone, id)];
   const shoulder = vec(side.shoulder);
-  const newShoulder = new Vector3(0, 0, sign * BODY.shoulderHalf);
+  const newShoulder = shoulder.clone().add(chestShift);
   const [elbow, wrist, fingertip] = [vec(side.elbow), vec(side.wrist), vec(side.fingertip)];
   const [newElbow, newWrist, newFingertip] = [new Vector3(), new Vector3(), new Vector3()];
   limbSegment(at('upperArm'), shoulder, elbow, newShoulder, BODY.upperArm, newElbow);
   limbSegment(at('forearm'), elbow, wrist, newElbow, BODY.forearm, newWrist);
   limbSegment(at('hand'), wrist, fingertip, newWrist, BODY.hand, newFingertip);
-  shiftOnly(at('girdle'), newShoulder.clone().sub(shoulder));
+  shiftOnly(at('clavicle'), chestShift);
+  shiftOnly(at('scapula'), chestShift);
   copyCorrection(at('upperArmRoot'), at('upperArm'));
   copyCorrection(at('forearmRoot'), at('forearm'));
 
@@ -82,6 +84,7 @@ function retargetSide(
   limbSegment(at('foot'), ankle, toeTip, newAnkle, FOOT_LENGTH, newToe);
 
   return {
+    clavicle: shiftedBy(side.clavicle, chestShift),
     shoulder: triple(newShoulder),
     elbow: triple(newElbow),
     wrist: triple(newWrist),
@@ -115,8 +118,9 @@ function shiftedBy(value: Triple, shift: Vector3): Triple {
 export function retarget(rest: RestPose): Retargeted {
   const corrections = Array.from({ length: BONE_COUNT }, newCorrection);
   const sides = {} as Record<'right' | 'left', RestSide>;
+  const chestShift = new Vector3();
   SIDES.forEach(({ id, sign }) => {
-    sides[id] = retargetSide(rest[id], sign, corrections, id);
+    sides[id] = retargetSide(rest[id], sign, corrections, id, chestShift);
   });
 
   const pelvisShift = new Vector3(BODY.hipX, BODY.hipY, 0).sub(hipCentre(rest).setComponent(2, 0));

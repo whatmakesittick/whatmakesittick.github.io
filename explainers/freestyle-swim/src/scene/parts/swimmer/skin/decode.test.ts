@@ -13,7 +13,7 @@ import {
 } from './types';
 
 const MIN_VERTICES = 3000;
-const MAX_VERTICES = 4500;
+const MAX_VERTICES = 5000;
 const WEIGHT_TOLERANCE = 1e-5;
 const POSITION_TOLERANCE = 0.0003;
 const WEIGHT_STEP = 2.01 / 255;
