@@ -1,0 +1,11 @@
+export const FAN_BLADES = 16;
+export const BOOSTER_STAGES = 3;
+export const COMPRESSOR_STAGES = 11;
+export const HPT_STAGES = 2;
+export const LPT_STAGES = 6;
+export const BYPASS_PARTS = 10;
+export const CORE_PARTS = 1;
+export const COMPRESSOR_RATIO = 27;
+export const OVERALL_RATIO_MIN = 60;
+export const TAKEOFF_RATING_LBF = 105000;
+export const TEST_RECORD_LBF = 134300;
