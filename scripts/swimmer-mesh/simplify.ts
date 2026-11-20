@@ -6,7 +6,6 @@ import {
   type SlotId,
 } from '../../explainers/freestyle-swim/src/scene/parts/swimmer/skin/types.ts';
 import { midlineFolds } from './checks.ts';
-import { stripOrder } from './order.ts';
 import type { Model } from './topology.ts';
 
 const TARGET_ERROR = 0.02;
@@ -14,6 +13,11 @@ const ATTRIBUTE_WEIGHT = 0.02;
 const INDICES_PER_TRIANGLE = 3;
 
 export type SlotKeep = Readonly<Record<SlotId, number>>;
+
+export interface SimplifyBudget {
+  readonly keep: SlotKeep;
+  readonly total: number;
+}
 
 function boneAttributes(model: Model): Float32Array {
   const count = model.positions.length / 3;
@@ -30,41 +34,65 @@ function boneAttributes(model: Model): Float32Array {
 const MAX_REPAIR_ROUNDS = 8;
 const REPAIR_RINGS = 2;
 
+function simplifyIndices(
+  indices: number[],
+  positions: Float32Array,
+  attributes: Float32Array,
+  locked: Uint8Array,
+  target: number,
+): number[] {
+  const weights = new Array<number>(BONE_COUNT).fill(ATTRIBUTE_WEIGHT);
+  const [simplified] = MeshoptSimplifier.simplifyWithAttributes(
+    Uint32Array.from(indices),
+    positions,
+    3,
+    attributes,
+    BONE_COUNT,
+    weights,
+    locked,
+    Math.min(indices.length, Math.round(target / INDICES_PER_TRIANGLE) * INDICES_PER_TRIANGLE),
+    TARGET_ERROR,
+    ['LockBorder'],
+  );
+  return Array.from(simplified);
+}
+
+function trianglesOfSlot(model: Model, slotOf: readonly SlotId[], slot: SlotId): number[] {
+  const indices: number[] = [];
+  slotOf.forEach((owner, t) => {
+    if (owner === slot)
+      indices.push(
+        ...model.triangles.slice(t * INDICES_PER_TRIANGLE, (t + 1) * INDICES_PER_TRIANGLE),
+      );
+  });
+  return indices;
+}
+
 function simplifyOnce(
   model: Model,
   slotOf: readonly SlotId[],
-  keep: SlotKeep,
+  budget: SimplifyBudget,
   locked: Uint8Array,
-): Record<SlotId, number[]> {
+): number[] {
   const positions = Float32Array.from(model.positions);
   const attributes = boneAttributes(model);
-  const weights = new Array<number>(BONE_COUNT).fill(ATTRIBUTE_WEIGHT);
-  const result = {} as Record<SlotId, number[]>;
-  for (const slot of SLOT_IDS) {
-    const indices: number[] = [];
-    slotOf.forEach((owner, t) => {
-      if (owner === slot)
-        indices.push(
-          ...model.triangles.slice(t * INDICES_PER_TRIANGLE, (t + 1) * INDICES_PER_TRIANGLE),
-        );
-    });
-    const target =
-      Math.round((indices.length * keep[slot]) / INDICES_PER_TRIANGLE) * INDICES_PER_TRIANGLE;
-    const [simplified] = MeshoptSimplifier.simplifyWithAttributes(
-      Uint32Array.from(indices),
+  const merged = SLOT_IDS.flatMap((slot) => {
+    const indices = trianglesOfSlot(model, slotOf, slot);
+    return simplifyIndices(
+      indices,
       positions,
-      3,
       attributes,
-      BONE_COUNT,
-      weights,
       locked,
-      target,
-      TARGET_ERROR,
-      ['LockBorder'],
+      indices.length * budget.keep[slot],
     );
-    result[slot] = stripOrder(Array.from(simplified));
-  }
-  return result;
+  });
+  return simplifyIndices(
+    merged,
+    positions,
+    attributes,
+    locked,
+    budget.total * INDICES_PER_TRIANGLE,
+  );
 }
 
 function lockAround(model: Model, seeds: number[], locked: Uint8Array): void {
@@ -80,16 +108,16 @@ function lockAround(model: Model, seeds: number[], locked: Uint8Array): void {
   }
 }
 
-export async function simplifySlots(
+export async function simplifyBody(
   model: Model,
   slotOf: readonly SlotId[],
-  keep: SlotKeep,
-): Promise<Record<SlotId, number[]>> {
+  budget: SimplifyBudget,
+): Promise<number[]> {
   await MeshoptSimplifier.ready;
   const locked = new Uint8Array(model.positions.length / 3);
   for (let round = 0; round < MAX_REPAIR_ROUNDS; round++) {
-    const result = simplifyOnce(model, slotOf, keep, locked);
-    const folds = midlineFolds(result, model.positions);
+    const result = simplifyOnce(model, slotOf, budget, locked);
+    const folds = midlineFolds({ body: result }, model.positions);
     if (folds.length === 0) return result;
     lockAround(model, folds.flat(), locked);
   }

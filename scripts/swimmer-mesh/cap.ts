@@ -6,7 +6,7 @@ import { point, type Vec } from './vec.ts';
 const INFLATE = 0.003;
 const SMOOTH_PASSES = 3;
 const SMOOTH_FACTOR = 0.5;
-const RIM_RINGS = 3;
+const RIM_RAMP = 0.012;
 const STRAP_POINTS = 24;
 const STRAP_OFFSET = 0.003;
 const STRAP_BACK_DROP = 0.03;
@@ -28,29 +28,15 @@ function neighbours(triangles: readonly number[], inside: Set<number>): Map<numb
   return result;
 }
 
-function rimDistance(capTriangles: number[], rim: Set<number>): Map<number, number> {
-  const graph = neighbours(capTriangles, new Set(capTriangles));
-  const distance = new Map<number, number>([...rim].map((v) => [v, 0]));
-  let frontier = [...rim];
-  while (frontier.length > 0) {
-    const nextFrontier: number[] = [];
-    for (const v of frontier) {
-      for (const n of graph.get(v) ?? []) {
-        if (distance.has(n)) continue;
-        distance.set(n, distance.get(v)! + 1);
-        nextFrontier.push(n);
-      }
-    }
-    frontier = nextFrontier;
-  }
-  return distance;
-}
-
-export function shapeCap(model: Model, capTriangles: number[], rim: Set<number>): void {
-  const distance = rimDistance(capTriangles, rim);
+export function shapeCap(
+  model: Model,
+  capTriangles: number[],
+  rim: Set<number>,
+  planeDistance: (vertex: number) => number,
+): void {
   const graph = neighbours(capTriangles, new Set(capTriangles));
   const normals = vertexNormals(model.positions, model.triangles);
-  const free = [...distance.keys()].filter((v) => !rim.has(v));
+  const free = [...new Set(capTriangles)].filter((v) => !rim.has(v));
   for (let pass = 0; pass < SMOOTH_PASSES; pass++) {
     const moved = free.map((v) => {
       const around = [...graph.get(v)!].map((n) => point(model.positions, n));
@@ -62,7 +48,7 @@ export function shapeCap(model: Model, capTriangles: number[], rim: Set<number>)
     free.forEach((v, i) => model.positions.set(moved[i], v * 3));
   }
   for (const v of free) {
-    const ramp = Math.min(1, distance.get(v)! / RIM_RINGS);
+    const ramp = Math.min(1, Math.max(0, planeDistance(v)) / RIM_RAMP);
     const lift = INFLATE * ramp * ramp * (3 - 2 * ramp);
     const normal = point(normals, v);
     const axes = model.positions[v * 3 + 2] === 0 ? 2 : 3;
