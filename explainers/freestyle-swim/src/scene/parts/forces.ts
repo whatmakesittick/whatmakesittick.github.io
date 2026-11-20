@@ -1,5 +1,5 @@
 import { ConeGeometry, CylinderGeometry, Group, Mesh, Quaternion, Vector3 } from 'three';
-import type { BufferGeometry, Material } from 'three';
+import type { BufferGeometry, Camera, Material } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { clamp, smoothstep } from '@core/math';
 import type { ArmId, AssemblyState } from '../../ids';
@@ -10,17 +10,17 @@ import { LAYER } from './pool/constants';
 
 export const FORCE_ARROWS_NAME = 'forceArrows';
 
-const FORCE_SCALE_M_PER_N = 0.005;
-const FOREARM_SHARE = 0.45;
+const FORCE_M_PER_N = 0.0065;
 const MIN_LENGTH_M = 0.2;
-const SHAFT = { tail: 0.01, neck: 0.016 } as const;
-const HEAD = { radius: 0.036, length: 0.09 } as const;
-const DRAG_SCALE = 1.25;
+const SHAFT = { tail: 0.009, neck: 0.012 } as const;
+const HEAD = { radius: 0.025, length: 0.1 } as const;
+const DRAG_SCALE = 1.4;
+const END_ON = { from: 0.9, to: 0.95 } as const;
 const SHAFT_SEGMENTS = 16;
 const HEAD_SEGMENTS = 24;
 const EASE_SECONDS = 0.3;
 const ENTRY_CATCH_SHOWN_FROM = 0.6;
-const DRAG_TAIL_FROM_NECK = new Vector3(0.26, 0.12, 0.3);
+const DRAG_TAIL_FROM_NECK = new Vector3(-0.04, 0.06, -0.38);
 const FORWARD = new Vector3(1, 0, 0);
 const BACKWARD = new Vector3(-1, 0, 0);
 const UP = new Vector3(0, 1, 0);
@@ -67,19 +67,20 @@ function arrowMesh(geometry: BufferGeometry, material: Material): Mesh {
 export class ForceArrows {
   readonly root = new Group();
   private readonly hands: Record<ArmId, Arrow>;
-  private readonly forearms: Record<ArmId, Arrow>;
+  private readonly thrust: Material;
+  private readonly view = new Vector3();
   private readonly drag: Arrow;
   private state: AssemblyState | null = null;
   private skeleton: Skeleton | null = null;
   private share = 0;
   private target = 0;
-  private readonly middle = new Vector3();
   private readonly dragTail = new Vector3();
 
   constructor(context: PartContext) {
     this.root.name = FORCE_ARROWS_NAME;
     const parts = arrowParts(context);
     const thrust = context.materials.get(UNDIMMED_GROUP, FINISHES.thrust);
+    this.thrust = thrust;
     const dragMaterial = context.materials.get(UNDIMMED_GROUP, FINISHES.drag);
     const build = (material: Material): Arrow => {
       const arrow = {
@@ -92,7 +93,9 @@ export class ForceArrows {
       return arrow;
     };
     this.hands = { right: build(thrust), left: build(thrust) };
-    this.forearms = { right: build(thrust), left: build(thrust) };
+    ARMS.forEach((id) => {
+      this.hands[id].head.onBeforeRender = (_renderer, _scene, camera) => this.fadeEndOn(camera);
+    });
     this.drag = build(dragMaterial);
     this.root.visible = false;
   }
@@ -120,26 +123,29 @@ export class ForceArrows {
     ARMS.forEach((id) => {
       const pose = skeleton.arms[id];
       const newtons = pushesForward(state, id) ? state.reading[id].handForceN : 0;
-      this.place(this.hands[id], pose.hand, FORWARD, newtons, grow);
-      this.middle.addVectors(pose.elbow, pose.wrist).multiplyScalar(0.5);
-      this.place(this.forearms[id], this.middle, FORWARD, newtons * FOREARM_SHARE, grow);
+      this.place(this.hands[id], pose.hand, FORWARD, newtons * FORCE_M_PER_N, grow);
     });
     this.dragTail.copy(skeleton.neck).add(DRAG_TAIL_FROM_NECK);
-    const dragN = state.reading.dragN * state.dragFactor;
-    this.place(this.drag, this.dragTail, BACKWARD, dragN, grow, DRAG_SCALE);
+    const dragM = state.reading.dragN * state.dragFactor * FORCE_M_PER_N;
+    this.place(this.drag, this.dragTail, BACKWARD, dragM, grow, DRAG_SCALE);
+  }
+
+  private fadeEndOn(camera: Camera): void {
+    const endOn = Math.abs(camera.getWorldDirection(this.view).x);
+    this.thrust.opacity = 1 - smoothstep(endOn, END_ON.from, END_ON.to);
   }
 
   private place(
     arrow: Arrow,
     origin: Vector3,
     direction: Vector3,
-    newtons: number,
+    meters: number,
     grow: number,
     thickness = 1,
   ): void {
-    arrow.root.visible = newtons > 0;
-    if (newtons <= 0) return;
-    const length = Math.max(newtons * FORCE_SCALE_M_PER_N, MIN_LENGTH_M);
+    arrow.root.visible = meters > 0;
+    if (meters <= 0) return;
+    const length = Math.max(meters, MIN_LENGTH_M);
     const headLength = HEAD.length * thickness;
     arrow.root.position.copy(origin);
     arrow.root.quaternion.copy(ALIGN.setFromUnitVectors(UP, direction));

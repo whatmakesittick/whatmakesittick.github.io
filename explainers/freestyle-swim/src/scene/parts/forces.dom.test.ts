@@ -54,7 +54,8 @@ function handLength(arrows: ForceArrows): number {
 }
 
 function dragLength(arrows: ForceArrows): number {
-  return arrows.root.children[4].children[1].position.y;
+  const drag = arrows.root.children[arrows.root.children.length - 1];
+  return drag.children[1].position.y;
 }
 
 describe('force arrows', () => {
