@@ -174,26 +174,28 @@ export class BodySkin {
     packRigid(this.bank, bone, this.boneQ[bone], this.boneT[bone]);
   }
 
-  private storeAboutOrigin(bone: number, angle: number): void {
+  private storeAboutOrigin(bone: number, angle: number, lift: number): void {
     this.frameQ.setFromAxisAngle(X_AXIS, angle);
     this.boneQ[bone].copy(this.frameQ);
-    this.boneT[bone].set(0, 0, 0);
+    this.boneT[bone].set(0, lift, 0).applyQuaternion(this.frameQ);
     packRigid(this.bank, bone, this.boneQ[bone], this.boneT[bone]);
   }
 
   private poseTrunk(skeleton: Skeleton): void {
-    const { hipRollRad, shoulderRollRad } = skeleton;
+    const { hipRollRad, shoulderRollRad, hipLiftM } = skeleton;
     const { spineLowBlend, spineMidBlend } = SKIN_TUNING;
-    this.storeAboutOrigin(centreBone('pelvis'), hipRollRad);
+    this.storeAboutOrigin(centreBone('pelvis'), hipRollRad, hipLiftM);
     this.storeAboutOrigin(
       centreBone('spineLow'),
       lerp(hipRollRad, shoulderRollRad, smoothstep(spineLowBlend)),
+      hipLiftM * (1 - spineLowBlend),
     );
     this.storeAboutOrigin(
       centreBone('spineMid'),
       lerp(hipRollRad, shoulderRollRad, smoothstep(spineMidBlend)),
+      hipLiftM * (1 - spineMidBlend),
     );
-    this.storeAboutOrigin(centreBone('chest'), shoulderRollRad);
+    this.storeAboutOrigin(centreBone('chest'), shoulderRollRad, 0);
   }
 
   private placeFrame(bone: number, rest: LimbRest, origin: Vector3, x: Vector3, y: Vector3): void {

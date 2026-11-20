@@ -69,6 +69,7 @@ function mirrorSkeleton(source: Skeleton): Skeleton {
   const result = createSkeleton();
   result.shoulderRollRad = -source.shoulderRollRad;
   result.hipRollRad = -source.hipRollRad;
+  result.hipLiftM = source.hipLiftM;
   mirrorArm(source.arms.right, result.arms.left);
   mirrorArm(source.arms.left, result.arms.right);
   mirrorLeg(source.legs.right, result.legs.left);
@@ -167,6 +168,16 @@ describe('pose', () => {
           POSITION_TOLERANCE,
         );
       });
+    });
+  });
+
+  it('carries the rest hips onto the rig hips with the pelvis bone', () => {
+    const { skin } = setup();
+    posedSkeletons().forEach((skeleton) => {
+      skin.apply(skeleton);
+      const matrix = skin.boneMatrix(centreBone('pelvis'), new Matrix4());
+      const hip = vec(skin.rest.right.hip).applyMatrix4(matrix);
+      expect(hip.distanceTo(skeleton.legs.right.hip)).toBeLessThan(POSITION_TOLERANCE);
     });
   });
 
