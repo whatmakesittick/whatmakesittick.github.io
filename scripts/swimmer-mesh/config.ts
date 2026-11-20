@@ -42,6 +42,7 @@ const RACE_TARGETS: WeightedTarget[] = RACES.map((race) => ({
 const SIDED_DETAIL_TARGETS: WeightedTarget[] = [
   { path: 'armslegs/%-upperarm-muscle-incr', weight: 0.1 },
   { path: 'armslegs/%-upperarm-fat-decr', weight: 1 },
+  { path: 'armslegs/%-upperarm-shoulder-muscle-incr', weight: -1.8 },
   { path: 'armslegs/%-lowerarm-muscle-incr', weight: 0.15 },
   { path: 'armslegs/%-lowerleg-muscle-incr', weight: 0.15 },
   { path: 'armslegs/%-hand-scale-decr', weight: 0.254 },
@@ -72,7 +73,7 @@ export function targetTable(): WeightedTarget[] {
     ['l', 'r'].map((side) => ({ path: target.path.replace('%', side), weight: target.weight })),
   );
   return [...blendedBodyTargets(), ...RACE_TARGETS, ...CENTRE_DETAIL_TARGETS, ...sided].filter(
-    (target) => target.weight > 0,
+    (target) => target.weight !== 0,
   );
 }
 
