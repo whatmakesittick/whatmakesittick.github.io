@@ -1,0 +1,13 @@
+{
+  "slug": "freestyle-swim",
+  "tags": ["biology", "physics"],
+  "topic": "freestyle swimming stroke",
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A swimmer seen from the side in a lane, with the path of the pulling hand glowing under the waterline, next to the title Freestyle swimming: how a stroke makes you move"
+  }
+}
