@@ -1,11 +1,11 @@
 {
   "meta": {
-    "title": "Natación crol: cómo una brazada te hace avanzar",
+    "title": "Crol: cómo te hace avanzar una brazada",
     "eyebrow": "Biología y física",
-    "tagline": "El agua es mucho más densa que el aire. Por eso la velocidad llega de agarrar el agua con la mano y el antebrazo, y de ir largo y plano, no de empujar con más fuerza.",
+    "tagline": "El agua es mucho más densa que el aire. La velocidad no viene de empujar más fuerte, sino de agarrar bien el agua con la mano y el antebrazo y de ir largo y plano.",
     "description": "Sigue una brazada de crol en 3D: cómo agarran el agua la mano y el antebrazo, por qué la resistencia crece tan rápido y por qué una pausa no te acelera.",
     "summary": "Las cuatro fases de la brazada, el agarre, la tracción y el empuje, la rotación del cuerpo y la respiración, la patada, y la resistencia con el hueco entre los brazos.",
-    "socialAlt": "Un nadador visto de lado en una calle de piscina, con la trayectoria de la mano brillando bajo la línea del agua, junto al título Natación crol: cómo una brazada te hace avanzar"
+    "socialAlt": "Un nadador visto de lado en una calle de piscina, con la trayectoria de la mano brillando bajo la línea del agua, junto al título Crol: cómo te hace avanzar una brazada"
   },
   "stage": {
     "label": "Modelo interactivo de un nadador de crol",
@@ -86,7 +86,7 @@
     "speed": "Velocidad",
     "strokeRate": "Frecuencia de brazada",
     "strokeLength": "Longitud de brazada",
-    "handForce": "Mano que tira (esquema)",
+    "handForce": "Mano en tracción (esquema)",
     "drag": "Resistencia",
     "dragUp": "hasta 3 veces",
     "armGap": "Entre los brazos: {{gap}}"
@@ -107,61 +107,61 @@
     "elbow": "Codo",
     "shoulder": "Hombro",
     "head": "Cabeza",
-    "hips": "Cadera",
+    "hips": "Caderas",
     "foot": "Pie",
     "waterline": "Superficie del agua",
     "laneRope": "Corchera",
-    "laneLine": "Línea de la calle en el fondo"
+    "laneLine": "Línea del fondo de la calle"
   },
   "sections": {
     "stroke": {
       "title": "La brazada completa",
       "p1": "Te presento a un nadador en la calle 4 de una piscina de 50 m. Nada <strong>crol</strong>, también llamado estilo libre. Un <strong>ciclo de brazada</strong> son los dos brazos: una brazada con el derecho y otra con el izquierdo. Sigue al brazo derecho por sus cuatro fases: <strong>entrada y agarre</strong>, <strong>tracción</strong>, <strong>empuje</strong> y <strong>recobro</strong>, cuando el brazo vuelve hacia delante por el aire. El brazo izquierdo hace lo mismo medio ciclo después. Arrastra la línea de tiempo para verlo.",
-      "p2": "Solo la tracción y el empuje te hacen avanzar. Juntos ocupan entre el 43 y el 57 por ciento del ciclo, según el ritmo y según cómo se mida. Las bandas de colores de la línea de tiempo son valores típicos de hombres entrenados, así que tómalas como una guía. Cambian un poco cuando cambias el ritmo.",
-      "p3": "La velocidad sale de una operación sencilla: la <strong>frecuencia de brazada</strong>, los ciclos por minuto, por la <strong>longitud de brazada</strong>, la distancia que recorres en un ciclo. Los tres ritmos son paquetes de valores típicos de distintos estudios, elegidos por el modelo. Una cuenta así no coincide con las velocidades reales de una carrera, así que lee la cifra como el ritmo del modelo, no como un resultado de competición. Tu velocidad tampoco es constante. Oscila unos 0,4 m/s dentro de cada ciclo, porque los brazos se turnan.",
-      "p4": "¿Por qué tanto esfuerzo para tan poca velocidad? El agua es unas 800 veces más densa que el aire, y además el nadador levanta olas en la superficie. Solo un 5 por ciento de la energía que gasta un nadador se convierte en potencia útil en el agua. Casi todo el esfuerzo se pierde por el camino, no solo en la resistencia. Por eso la velocidad no viene de empujar más fuerte. Viene de agarrar bien el agua y de mantener una forma estrecha y plana. Los siguientes capítulos lo ven paso a paso.",
-      "p5": "El nadador es un maniquí articulado muy sencillo. La piscina se desplaza hacia atrás y el nadador se queda cerca del centro. El pequeño impulso de cada ciclo se ve como un balanceo de unos centímetros. Elige un ritmo y mira cómo cambia la brazada."
+      "p2": "Solo la tracción y el empuje te hacen avanzar. Juntos ocupan entre el 43 y el 57 por ciento del ciclo, según el ritmo y según cómo se mida. Las bandas de colores de la línea de tiempo son valores típicos de hombres entrenados: tómalas como una guía. Se mueven un poco cuando cambias el ritmo.",
+      "p3": "La velocidad sale de una multiplicación sencilla: la <strong>frecuencia de brazada</strong>, los ciclos por minuto, por la <strong>longitud de brazada</strong>, la distancia que recorres en cada ciclo. Los tres ritmos son paquetes de valores típicos de varios estudios, que eligió el modelo. Una cuenta así no coincide con las velocidades reales de una carrera. Lee la cifra como el ritmo del modelo, no como un resultado de competición. Tu velocidad tampoco es constante. Cambia unos 0,4 m/s dentro de cada ciclo, porque los brazos se turnan.",
+      "p4": "¿Por qué tanto esfuerzo para tan poca velocidad? El agua es unas 800 veces más densa que el aire, y además el nadador levanta olas en la superficie. Solo un 5 por ciento de la energía que gasta un nadador se convierte en potencia útil en el agua. Casi todo el esfuerzo se pierde por el camino, no solo en la resistencia. Por eso la velocidad no viene de empujar más fuerte. Viene de agarrar bien el agua y de mantener una forma estrecha y plana. Los capítulos siguientes lo ven uno por uno.",
+      "p5": "El nadador es un maniquí articulado muy sencillo. La piscina se desplaza hacia atrás y él se queda cerca del centro. El pequeño impulso de cada ciclo se ve como un balanceo de unos centímetros. Elige un ritmo y mira cómo cambia la brazada."
     },
     "catch": {
       "title": "El agarre",
-      "p1": "La mano entra en el agua más o menos a la altura del hombro. Se estira hacia delante y después presiona hacia abajo y hacia atrás. El instante en que la mano agarra el agua por primera vez es el <strong>agarre</strong>. Es un momento, no una fase aparte, y por eso la imagen se detiene ahí.",
-      "p2": "Justo después del agarre, el antebrazo gira hacia la vertical. Ahora la mano y el antebrazo miran hacia atrás a la vez, como una sola pala ancha, mientras el codo se mantiene alto. Los entrenadores lo llaman codo alto, o antebrazo vertical temprano. Usa el botón de agua clara, si está desactivado, para ver cómo se alinean la mano y el antebrazo.",
-      "p3": "Quizá hayas oído que el codo debe doblarse 90 grados. Eso es un ideal de entrenamiento, no lo que se midió. En un estudio con diez velocistas, el codo estaba abierto unos 148 grados en el agarre, unos 105 con la mano bajo el hombro y unos 151 al final del empuje. O sea, el brazo se mantiene bastante más recto que el ideal.",
-      "p4": "La mano no se hunde mucho. En su punto más profundo está a entre 0,6 y 0,7 m bajo la superficie, y en el estudio no se comprobó cuál era el punto de referencia exacto. Los indicadores siguen al modelo. Donde nadie ha medido, lo dicen en lugar de mostrar una cifra: ningún estudio da el ángulo del codo en el aire ni en la entrada.",
-      "p5": "Estos ángulos vienen de velocistas de un solo estudio, y el modelo usa la misma forma a todos los ritmos. Léelos como valores típicos de un grupo, no como una regla para todos los nadadores."
+      "p1": "La mano entra en el agua más o menos a la altura del hombro. Se estira hacia delante y luego presiona hacia abajo y hacia atrás. El instante en que la mano agarra el agua por primera vez es el <strong>agarre</strong>. Es un instante, no una fase aparte, y por eso la imagen se detiene ahí.",
+      "p2": "Justo después del agarre, el antebrazo se acerca a la vertical. La mano y el antebrazo miran hacia atrás a la vez, como una sola pala ancha, y el codo se queda alto. Los entrenadores lo llaman codo alto, o antebrazo vertical temprano. Si está apagado, pulsa «Agua clara» para ver cómo se alinean la mano y el antebrazo.",
+      "p3": "Quizá hayas oído que el codo debe doblarse hasta 90 grados. Eso es un ideal de entrenamiento, no lo que se midió. En un estudio con diez velocistas, el codo estaba abierto unos 148 grados en el agarre, unos 105 con la mano bajo el hombro y unos 151 al final del empuje. El brazo va mucho más estirado que en el ideal.",
+      "p4": "La mano no baja mucho. En su punto más profundo está a una profundidad de entre 0,6 y 0,7 m, y en el estudio no se comprobó cuál era el punto de referencia exacto. Los indicadores siguen al modelo. Donde nadie ha medido nada, lo avisan en vez de mostrar una cifra: ningún estudio da el ángulo del codo en el aire ni en la entrada.",
+      "p5": "Estos ángulos vienen de velocistas de un solo estudio, y el modelo usa la misma forma en todos los ritmos. Léelos como valores típicos de un grupo, no como una regla para todos los nadadores."
     },
     "pull": {
       "title": "Tracción y empuje",
-      "p1": "Ahora el brazo hace el trabajo. Durante la tracción y el empuje, la mano y el antebrazo actúan como una <strong>pala</strong>: empujan el agua hacia atrás y el agua te empuja a ti hacia delante. Las simulaciones por ordenador muestran que el agua sale de la mano en remolinos, en vez de resbalar suave por ella como el aire sobre un ala. Así que la vieja explicación de la sustentación de una superficie curva no cuenta toda la historia.",
-      "p2": "Los científicos aún discuten cuánto aporta la sustentación al empuje. Lo más seguro es imaginar que la mano sobre todo echa el agua hacia atrás, como una pala, y que los remolinos que crea suman algo más. El modelo dibuja una sola flecha para el empuje y no intenta zanjar el debate.",
-      "p3": "Unas cifras típicas ayudan. Una mano alcanza un pico de unos 75 a 115 N en los nadadores medidos hasta ahora, y unos 22 N en el agarre. El empuje es un 15 por ciento más fuerte que la tracción, así que la parte más potente de la brazada es el empuje, no la tracción. La fuerza llega a su pico hacia el 70 por ciento de la parte bajo el agua.",
-      "p4": "La curva del indicador es un esquema. Es una forma suave ajustada a esos valores, no una curva medida, así que no la leas como los datos de un sensor de fuerza. La velocidad de la mano es parecida: en velocistas es de unos 3,6 m/s bajo el agua en el empuje, y de 6 a 7 m/s cuando la mano cruza el aire.",
-      "p5": "Una mano es pequeña, de unos 0,016 m². Un modelo informático halló que un pequeño hueco de unos 12 grados entre los dedos aumenta la resistencia de la mano en un 9 por ciento. Sale de una simulación, así que tómalo como una idea para probar, no como un consejo."
+      "p1": "Ahora el brazo hace el trabajo. En la tracción y el empuje, la mano y el antebrazo actúan como una <strong>pala</strong>: empujan el agua hacia atrás y el agua te empuja a ti hacia delante. Las simulaciones informáticas muestran que el agua sale de la mano en remolinos. No resbala suave por ella, como el aire sobre un ala. Por eso la vieja explicación de la sustentación de una superficie curva no cuenta toda la historia.",
+      "p2": "Los científicos aún discuten cuánto suma la sustentación al empuje. La imagen más segura es esta: la mano sobre todo echa el agua hacia atrás, como una pala, y los remolinos que crea suman algo más. El modelo dibuja una sola flecha para el empuje y no intenta resolver el debate.",
+      "p3": "Unas cifras típicas ayudan. Una mano llega a un máximo de unos 75 a 115 N en los nadadores medidos hasta ahora, y a unos 22 N en el agarre. El empuje es un 15 por ciento más fuerte que la tracción. Así que la parte más potente de la brazada es el empuje, no la tracción. La fuerza llega a su máximo hacia el 70 por ciento de la parte bajo el agua.",
+      "p4": "La curva del indicador es un esquema. Es una forma suave ajustada a esos valores, no una curva medida. No la leas como datos de un sensor de fuerza. La velocidad de la mano también tiene cifras típicas: en velocistas, unos 3,6 m/s bajo el agua en el empuje, y de 6 a 7 m/s cuando la mano cruza el aire.",
+      "p5": "Una mano es pequeña: unos 0,016 m². Un modelo informático encontró que un pequeño hueco de unos 12 grados entre los dedos aumenta la resistencia de la mano en un 9 por ciento. Sale de una simulación. Tómalo como una idea para probar, no como un consejo."
     },
     "roll": {
       "title": "Rotación y respiración",
-      "p1": "Un buen nadador no va tumbado y plano. Los hombros giran unos 50 grados a cada lado, a cualquier ritmo. Las caderas giran menos: unos 18 grados a ritmo de sprint y unos 25 al ritmo de una carrera de 400 m. El giro deja que el brazo se estire hacia delante y pase sobre el agua sin pelearse con el cuerpo.",
-      "p2": "Quizá leas que los fondistas giran más los hombros. Los datos no lo muestran. Los hombros giran más o menos igual a ritmo de sprint y de 400 m. Solo las caderas giran más al ritmo más lento.",
-      "p3": "Al final del empuje, el brazo sale del agua con el codo primero y la mano relajada. Luego avanza por el aire. Es el <strong>recobro</strong>, la parte de descanso de la brazada. Codo primero y mano relajada es la imagen habitual de los entrenadores. El modelo no muestra ningún ángulo para él, porque no se encontró una buena medición.",
-      "p4": "También habrás visto la tracción dibujada como una S. Casi toda esa S viene del giro del cuerpo. Si dibujas la trayectoria de la mano desde un punto fijo de la piscina, se curva. Si la dibujas desde el punto de vista del propio nadador, queda mucho más recta. Es una sola trayectoria vista desde dos sitios, no dos formas de nadar. Activa la trayectoria de la mano y compara.",
-      "p5": "Para respirar, el nadador gira la cabeza hacia un lado. Respirar hacia un lado añade unos 9 grados de giro en ese lado. ¿Una respiración te frena? Un poco, pero las fuentes no coinciden: un estudio halló un 3 por ciento a ritmo de sprint y otro no halló diferencia real. El ángulo de la cabeza lo decide el propio modelo."
+      "p1": "Un buen nadador no va plano como una tabla. Los hombros rotan unos 50 grados a cada lado, a cualquier ritmo. Las caderas rotan menos: unos 18 grados a ritmo de sprint y unos 25 al ritmo de una carrera de 400 m. La rotación deja que el brazo se estire hacia delante y pase sobre el agua sin pelear con el cuerpo.",
+      "p2": "Quizá hayas leído que los fondistas rotan más los hombros. Los datos no lo muestran. Los hombros rotan más o menos igual a ritmo de sprint y de 400 m. Solo las caderas rotan más al ritmo más lento.",
+      "p3": "Al final del empuje, el brazo sale del agua con el codo primero y la mano relajada. Luego avanza por el aire. Es el <strong>recobro</strong>, la parte de descanso de la brazada. Codo primero y mano relajada es la imagen habitual de los entrenadores. Para este momento el modelo no muestra ningún ángulo, porque no se encontró una buena medición.",
+      "p4": "Quizá hayas visto también la tracción dibujada como una S. Casi toda esa S viene de la rotación del cuerpo. Si dibujas la trayectoria de la mano desde un punto fijo de la piscina, se curva. Si la dibujas desde el punto de vista del propio nadador, queda mucho más recta. Es una sola trayectoria vista desde dos sitios, no dos formas de nadar. Activa la trayectoria de la mano y compara.",
+      "p5": "Para respirar, el nadador gira la cabeza hacia un lado. Respirar por un lado añade unos 9 grados de rotación en ese lado. ¿Respirar te frena? Un poco, pero las fuentes no coinciden: un estudio halló un 3 por ciento a ritmo de sprint y otro no encontró diferencia real. El ángulo de la cabeza es una decisión del modelo."
     },
     "kick": {
       "title": "La patada",
-      "p1": "Las piernas baten arriba y abajo, por turnos. En una patada de <strong>dos tiempos</strong>, cada pierna patea una vez por ciclo. En una de <strong>seis tiempos</strong>, cada pierna patea tres veces por ciclo. Elige una y mira las caderas y los pies.",
-      "p2": "En los dos patrones, el golpe grande hacia abajo lo da la pierna contraria al brazo que entra en el agua. El cuerpo se retuerce y esa pierna ayuda a equilibrarlo. La patada de seis tiempos añade dos golpes más por pierna. Qué golpe pequeño va con qué momento del brazo es una elección del modelo.",
+      "p1": "Las piernas baten arriba y abajo, por turnos. En una patada de <strong>dos tiempos</strong>, cada pierna da un golpe por ciclo. En una de <strong>seis tiempos</strong>, cada pierna da tres golpes por ciclo. Elige una y mira las caderas y los pies.",
+      "p2": "En los dos casos, el golpe grande hacia abajo lo da la pierna contraria al brazo que entra en el agua. El cuerpo se retuerce y esa pierna ayuda a equilibrarlo. La patada de seis tiempos añade dos golpes más por pierna. Qué golpe va con qué momento del brazo lo decidió el modelo.",
       "p3": "¿Cuánto te da la patada? En un estudio, añadir las piernas a los brazos hizo un sprint de 25 m un 10 por ciento más rápido. Los autores dicen que las piernas sobre todo ayudan a los brazos y mantienen el cuerpo plano, más que empujar por sí solas. Por eso no es correcto decir que la patada aporta el 10 por ciento del empuje.",
-      "p4": "A ritmo de sprint, cada pierna bate entre 2,4 y 2,7 veces por segundo. El pie baja entre 0,3 y 0,4 m, y las fuentes difieren. El modelo usa un valor intermedio. No existen buenas cifras para los ángulos de la rodilla y el tobillo, así que el modelo los dibuja a ojo.",
-      "p5": "El ritmo decide primero la patada: dos tiempos a ritmo suave, seis tiempos en sprint. Así suelen describirlo los entrenadores. Seis tiempos a ritmo medio es una elección del modelo. El botón se queda marcado por esa opción hasta que elijas otra patada."
+      "p4": "A ritmo de sprint, cada pierna bate entre 2,4 y 2,7 veces por segundo. El pie baja entre 0,3 y 0,4 m, según la fuente. El modelo usa un valor intermedio. No hay buenas cifras para los ángulos de la rodilla y el tobillo, así que el modelo los dibuja a ojo.",
+      "p5": "Primero manda el ritmo: dos tiempos a ritmo suave, seis tiempos en sprint. Así suelen describirlo los entrenadores. Seis tiempos a ritmo medio es una elección del modelo. El botón se queda marcado con esa opción por defecto hasta que elijas otra patada."
     },
     "drag": {
       "title": "Resistencia y coordinación",
-      "p1": "La resistencia es el agua que te frena. Crece con el cuadrado de tu velocidad, y la potencia que necesitas crece con el cubo. Si duplicas la velocidad, la resistencia es cuatro veces mayor y la potencia, ocho veces mayor. Mueve el deslizador para verlo.",
-      "p2": "Las cifras no son exactas. En un laboratorio, los hombres soportaron unos 110 N de resistencia a 2 m/s. En toda la literatura, las estimaciones van de 20 a 210 N, porque los métodos no coinciden. El modelo usa una estimación sencilla, así que el valor es una guía, no la medida de un nadador concreto.",
-      "p3": "En la superficie, el nadador también levanta olas, y las olas cuestan energía. En un maniquí remolcado a 1,7 m/s, las olas llegaron a suponer del 50 al 60 por ciento de la resistencia. El efecto se apaga cuando el cuerpo va más hondo. Un maniquí necesita estar a unos 0,5 m de profundidad a 1 m/s y a unos 0,7 m a 2 m/s para escapar de él. Un nadador tiene que respirar, así que no puede aprovecharlo del todo.",
-      "p4": "Intenta romperlo. Levanta la cabeza y las piernas se hunden, así que el cuerpo deja de ser estrecho y plano. En un canal, a un nadador remolcado se le midió hasta tres veces más resistencia con la barbilla en la superficie. La página solo muestra las palabras, no newtons, y el modelo solo escala la flecha. Solo se midió a ese nadador.",
-      "p5": "Por último, la idea popular de que una pausa delante te hace más rápido. Las mediciones dicen otra cosa. A ritmo suave hay un pequeño hueco, de una décima de segundo más o menos, entre el final del empuje de un brazo y el inicio de la tracción del siguiente. Al acelerar, ese hueco se cierra. Por encima de unos 1,8 m/s, los brazos empiezan a solaparse.",
-      "p6": "Nadie ha demostrado que alargar el deslizamiento a propósito te haga más rápido. Los velocistas cansados caían en más solape y no ganaban nada con él. Cambia el ritmo y lee el hueco, o el solape, en cada caso."
+      "p1": "La resistencia es el agua que te frena. Crece con el cuadrado de la velocidad, y la potencia que necesitas crece con el cubo. Si duplicas la velocidad, la resistencia se multiplica por cuatro y la potencia, por ocho. Mueve el deslizador para verlo.",
+      "p2": "Las cifras no son exactas. En un laboratorio, la resistencia de unos hombres a 2 m/s fue de unos 110 N. En toda la literatura, las estimaciones van de 20 a 210 N, porque los métodos no coinciden. El modelo usa una estimación sencilla, así que el valor es una guía, no la medida de un nadador concreto.",
+      "p3": "En la superficie, el nadador también levanta olas, y las olas cuestan energía. En un maniquí remolcado a 1,7 m/s, las olas llegaron a suponer del 50 al 60 por ciento de la resistencia. El efecto se apaga cuando el cuerpo va más hondo. Para escapar de él, un maniquí necesita ir a unos 0,5 m de profundidad a 1 m/s y a unos 0,7 m a 2 m/s. Un nadador tiene que respirar, así que no puede aprovecharlo del todo.",
+      "p4": "Intenta romperlo. Levanta la cabeza y las piernas se hunden: el cuerpo deja de ser estrecho y plano. A un nadador remolcado por un canal se le midió hasta tres veces más resistencia con la barbilla en la superficie. La página solo muestra las palabras, no newtons, y el modelo solo escala la flecha. Solo se midió a ese nadador.",
+      "p5": "Por último, la idea popular de que una pausa delante te hace más rápido. Las mediciones dicen otra cosa. A ritmo suave hay un pequeño hueco, de una décima de segundo más o menos, entre el final del empuje de un brazo y el inicio de la tracción del otro. Al acelerar, ese hueco se cierra. Por encima de unos 1,8 m/s, los brazos empiezan a solaparse.",
+      "p6": "Nadie ha demostrado que alargar el deslizamiento a propósito te haga más rápido. Los velocistas cansados acababan con más solape y no ganaban nada. Cambia el ritmo y lee el hueco, o el solape, en cada caso."
     }
   },
   "chapters": {
@@ -173,11 +173,11 @@
       "sumValue": "{{rate}} por min × {{length}} m por ciclo ÷ 60 = {{speed}} m/s",
       "phase": "Brazo derecho ahora",
       "cycle": "Un ciclo",
-      "cycleValue": "los dos brazos, de 1 a 1,7 s aprox.",
+      "cycleValue": "los dos brazos, entre 1 y 1,7 s",
       "density": "Agua frente a aire",
       "densityValue": "unas 800 veces más densa",
       "energy": "Energía que te hace avanzar",
-      "energyValue": "un 5 por ciento aprox."
+      "energyValue": "alrededor del 5 por ciento"
     },
     "catch": {
       "elbow": "Ángulo del codo",
@@ -191,35 +191,35 @@
       "deepestValue": "entre 0,6 y 0,7 m"
     },
     "pull": {
-      "force": "Mano que tira (esquema)",
+      "force": "Mano en tracción (esquema)",
       "handSpeed": "Velocidad de la mano",
-      "phase": "Brazo que tira ahora",
+      "phase": "Brazo en tracción ahora",
       "catchForce": "Fuerza en el agarre",
       "catchForceValue": "unos 22 N",
       "peak": "Fuerza máxima de una mano",
-      "peakValue": "unos 75 a 115 N, típico",
+      "peakValue": "unos 75 a 115 N, valor típico",
       "pushVsPull": "Empuje frente a tracción",
       "pushVsPullValue": "el empuje, un 15 por ciento mayor",
       "handArea": "Superficie de una mano",
       "handAreaValue": "unos 0,016 m²",
-      "airSpeed": "Velocidad de la mano, empuje y aire",
+      "airSpeed": "Velocidad de la mano, en el empuje y en el aire",
       "airSpeedValue": "unos 3,6 m/s en el agua, de 6 a 7 m/s en el aire"
     },
     "roll": {
-      "shoulder": "Giro de hombros",
-      "hip": "Giro de caderas",
+      "shoulder": "Rotación de hombros",
+      "hip": "Rotación de caderas",
       "side": "Hombro bajo",
       "sideRight": "derecho",
       "sideLeft": "izquierdo",
-      "extra": "Giro extra por respirar",
-      "pace": "Giro de hombros a cualquier ritmo",
+      "extra": "Rotación extra por respirar",
+      "pace": "Rotación de hombros a cualquier ritmo",
       "paceValue": "unos 50 grados a cada lado",
-      "hipPace": "Giro de caderas, sprint y ritmo de 400 m",
+      "hipPace": "Rotación de caderas, sprint y ritmo de 400 m",
       "hipPaceValue": "unos 18 y 25 grados",
-      "breathExtra": "Giro extra al respirar",
+      "breathExtra": "Rotación extra al respirar",
       "breathExtraValue": "unos 9 grados",
-      "breathCost": "Coste de una respiración",
-      "breathCostValue": "algo más lento"
+      "breathCost": "Lo que cuesta respirar",
+      "breathCostValue": "un poco más lento"
     },
     "kick": {
       "pattern": "Patada",
@@ -230,7 +230,7 @@
       "left": "izquierda",
       "right": "derecha",
       "added": "Con patada, sprint de 25 m",
-      "addedValue": "un 10 por ciento más rápido aprox.",
+      "addedValue": "alrededor de un 10 por ciento más rápido",
       "rate": "Golpes por segundo, una pierna, sprint",
       "rateValue": "entre 2,4 y 2,7",
       "depth": "Profundidad del golpe hacia abajo",
@@ -252,13 +252,13 @@
       "speedLabel": "Velocidad en el agua",
       "law": "La resistencia y la potencia crecen con",
       "lawValue": "la velocidad al cuadrado; la potencia, al cubo",
-      "waves": "Resistencia de ola en la superficie",
+      "waves": "Resistencia por olas en la superficie",
       "wavesValue": "hasta el 50 o 60 por ciento de la resistencia de un maniquí a 1,7 m/s",
       "headLift": "Barbilla en la superficie",
-      "headLiftValue": "puede triplicar la resistencia pasiva, un nadador, remolcado",
+      "headLiftValue": "puede triplicar la resistencia pasiva (un nadador, remolcado)",
       "active": "Resistencia a 2 m/s",
       "activeValue": "unos 110 N, hombres, un laboratorio",
-      "spread": "Estimaciones de resistencia en la literatura",
+      "spread": "Estimaciones de resistencia en los estudios",
       "spreadValue": "de 20 a 210 N, los métodos no coinciden"
     }
   }
