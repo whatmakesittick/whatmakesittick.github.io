@@ -2,6 +2,7 @@ import { chromium } from '@playwright/test';
 
 const [, , slug, phaseArg, outFile, chapterArg] = process.argv;
 const DEV_PORT = process.env.QA_PORT ?? '5180';
+const COLOR_SCHEME = process.env.QA_SCHEME === 'dark' ? 'dark' : 'light';
 const VIEWPORT = { width: 1600, height: 900 };
 const DEVICE_SCALE = 2;
 const COVER_ASPECT = 4 / 3;
@@ -18,7 +19,11 @@ if (!slug || !phaseArg || !outFile) {
 }
 
 const browser = await chromium.launch({ args: SOFTWARE_WEBGL_FLAGS });
-const page = await browser.newPage({ viewport: VIEWPORT, deviceScaleFactor: DEVICE_SCALE });
+const page = await browser.newPage({
+  viewport: VIEWPORT,
+  deviceScaleFactor: DEVICE_SCALE,
+  colorScheme: COLOR_SCHEME,
+});
 page.on('pageerror', (error) => console.error('pageerror', error.message));
 await page.goto(`http://localhost:${DEV_PORT}/${slug}/`, { waitUntil: 'networkidle' });
 await page.waitForSelector('#scene canvas');

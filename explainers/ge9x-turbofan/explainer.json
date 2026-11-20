@@ -1,0 +1,13 @@
+{
+  "slug": "ge9x-turbofan",
+  "tags": ["engines", "aircraft", "flight", "mechanics"],
+  "topic": "GE9X turbofan engine",
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A cutaway GE9X turbofan with charcoal cut faces, a blue fan and a bronze core, long lines of air splitting around the core and a glowing hot core, next to the title How the biggest airliner engine makes its thrust"
+  }
+}

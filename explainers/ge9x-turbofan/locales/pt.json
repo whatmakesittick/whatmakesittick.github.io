@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "title": "Como o maior motor de avião comercial gera empuxo",
+    "eyebrow": "Motores a jato",
+    "tagline": "Acompanhe o caminho do ar dentro do GE9X. Quem dá a maior parte do empurrão é o fan gigante. O fogo só serve para esquentar o ar que faz as turbinas girarem.",
+    "description": "Acompanhe em 3D o caminho do ar dentro do GE9X, o maior motor de avião comercial: o fan gigante, a compressão, o fogo, as duas turbinas e o reversor.",
+    "summary": "O fan e os dois fluxos de ar, o compressor, a câmara de combustão, as duas turbinas e seus dois eixos, a origem do empuxo, a partida e o reversor.",
+    "socialAlt": "Um turbofan GE9X em corte, com as superfícies cortadas em cinza-carvão, o fan azul e o núcleo cor de bronze, longas linhas de ar que se dividem em volta do núcleo e o núcleo quente brilhando, ao lado do título “Como o maior motor de avião comercial gera empuxo”"
+  },
+  "stage": {
+    "label": "Modelo interativo do motor GE9X",
+    "gauge": "Rotação do fan, rotação do núcleo e empuxo, ao vivo"
+  },
+  "timeline": {
+    "label": "Posição do ar",
+    "phases": "Ir para uma etapa do caminho do ar",
+    "value": "{{metres}} m",
+    "describe": "{{metres}} m a partir da borda da entrada de ar, {{phase}}",
+    "speed": "Reprodução",
+    "speedValue": "{{factor}}×",
+    "realTime": "Ritmo do modelo",
+    "slower": "{{factor}} vezes mais devagar",
+    "faster": "{{factor}} vezes mais rápido",
+    "phase": {
+      "suck": "Admissão",
+      "squeeze": "Compressão",
+      "burn": "Combustão",
+      "spin": "Expansão",
+      "blow": "Escape"
+    },
+    "jump": {
+      "suck": "Ir para a entrada do ar no motor",
+      "squeeze": "Ir para a compressão do ar",
+      "burn": "Ir para o ar passando pelo fogo",
+      "spin": "Ir para o ar que faz as turbinas girarem",
+      "blow": "Ir para a saída do ar pelos bocais"
+    }
+  },
+  "controls": {
+    "label": "Controles do modelo",
+    "cutaway": "Vista",
+    "cutawayOptions": {
+      "closed": "Nacele fechada",
+      "cutaway": "Em corte"
+    },
+    "streams": "Ar",
+    "streamOptions": {
+      "both": "Os dois fluxos",
+      "cold": "Fluxo frio",
+      "hot": "Fluxo quente"
+    },
+    "groups": {
+      "streams": "Ar",
+      "cutaway": "Vista",
+      "look": "Ver",
+      "reverser": "Reversor"
+    },
+    "lookOptions": {
+      "starter": "Motor de partida",
+      "reverser": "Reversor"
+    },
+    "reverserOptions": {
+      "stowed": "Recolhido",
+      "deployed": "Aberto"
+    },
+    "views": {
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos (L)"
+      },
+      "person": {
+        "name": "Pessoa para comparar o tamanho",
+        "short": "Pessoa",
+        "hint": "Pessoa para comparar o tamanho (P)"
+      },
+      "reverser": {
+        "name": "Abrir o reversor",
+        "short": "Reversor",
+        "hint": "Abrir o reversor (D)"
+      }
+    }
+  },
+  "gauge": {
+    "lever": "Manete de potência",
+    "leverValue": "{{percent}}%",
+    "idle": "Marcha lenta",
+    "takeoff": "Decolagem"
+  },
+  "readouts": {
+    "position": "Ar marcado",
+    "fan": "Rotação do fan",
+    "core": "Rotação do núcleo",
+    "thrust": "Empuxo, estimativa do modelo",
+    "reverse": "Reverso {{percent}}%"
+  },
+  "units": {
+    "percent": "{{value}}%"
+  },
+  "parts": {
+    "nacelle": "Nacele, a carenagem externa",
+    "intakeLip": "Borda da entrada de ar",
+    "fanCase": "Carcaça do fan",
+    "fanBlades": "16 pás do fan",
+    "spinner": "Cone frontal",
+    "guideVanes": "Palhetas-guia",
+    "splitter": "Divisor de fluxo",
+    "booster": "Booster, 3 estágios",
+    "compressorRotor": "Compressor, pás móveis",
+    "compressorStator": "Compressor, pás fixas",
+    "compressor": "Compressor, 11 estágios",
+    "outerShaft": "Eixo externo, do núcleo",
+    "innerShaft": "Eixo interno, do fan",
+    "gearbox": "Caixa de engrenagens dos acessórios",
+    "starter": "Motor de partida pneumático",
+    "diffuser": "Difusor",
+    "fuelNozzles": "Bicos injetores",
+    "combustorLiner": "Camisa de cerâmica",
+    "combustor": "Câmara de combustão",
+    "hpTurbine": "Turbina de alta pressão, 2 estágios",
+    "lpTurbine": "Turbina de baixa pressão, 6 estágios",
+    "bypassDuct": "Duto de bypass",
+    "coldNozzle": "Bocal frio",
+    "hotNozzle": "Bocal quente",
+    "coldStream": "Fluxo frio",
+    "hotStream": "Fluxo quente",
+    "reverser": "Reversor de empuxo",
+    "cascades": "Cascatas, aletas curvas",
+    "person": "Pessoa, 1,8 m"
+  },
+  "chapters": {
+    "fan": {
+      "blades": "Pás do fan",
+      "bladesValue": "16, de fibra de carbono",
+      "width": "Diâmetro do fan",
+      "widthValue": "3,4 m, quase a largura da fuselagem de um 737",
+      "split": "Ar que contorna o núcleo",
+      "splitValue": "cerca de 10 em cada 11 partes",
+      "tip": "Pontas das pás na potência máxima",
+      "tipValue": "mais rápidas que o som"
+    },
+    "compressor": {
+      "stages": "Estágios do compressor",
+      "stagesValue": "11",
+      "ratio": "Taxa de compressão, só o compressor",
+      "ratioValue": "27 para 1",
+      "overall": "Taxa de compressão, motor inteiro",
+      "overallValue": "mais de 60 para 1",
+      "shaft": "Acionado por",
+      "shaftValue": "turbina de alta pressão, pelo eixo externo"
+    },
+    "combustor": {
+      "style": "Tipo de queima",
+      "styleValue": "mistura pobre, com combustível e ar pré-misturados",
+      "liners": "Camisas",
+      "linersValue": "de cerâmica",
+      "nox": "Óxidos de nitrogênio",
+      "noxValue": "menos da metade do limite mais recente, segundo a GE",
+      "cool": "A cerâmica é mais leve",
+      "coolValue": "cerca de um terço da densidade das ligas metálicas"
+    },
+    "turbines": {
+      "hpt": "Turbina de alta pressão",
+      "hptValue": "2 estágios, aciona o compressor",
+      "lpt": "Turbina de baixa pressão",
+      "lptValue": "6 estágios, aciona o fan e o booster",
+      "ceramic": "Peças de cerâmica",
+      "ceramicValue": "cinco tipos",
+      "print": "Peças impressas em 3D",
+      "printValue": "cerca de 300, de sete tipos"
+    },
+    "thrust": {
+      "cold": "Fluxo frio",
+      "coldValue": "cerca de 10 partes, largo e lento",
+      "hot": "Fluxo quente",
+      "hotValue": "1 parte, estreito e rápido",
+      "rating": "Empuxo de decolagem",
+      "ratingValue": "cerca de 105.000 libras, uns 470 kN, segundo a GE",
+      "record": "Recorde em teste",
+      "recordValue": "134.300 libras, reconhecido em julho de 2019"
+    },
+    "reverse": {
+      "what": "O que é desviado",
+      "whatValue": "o fluxo frio, no modelo",
+      "status": "Em serviço",
+      "statusValue": "a primeira entrega do 777-9 está prevista para 2027"
+    }
+  },
+  "sections": {
+    "fan": {
+      "title": "O fan e os dois fluxos",
+      "p1": "Fique na frente do motor e olhe para dentro. A primeira coisa que o ar encontra é o <strong>fan</strong>, um anel de 16 grandes pás de fibra de carbono. Ele tem 3,4 metros de diâmetro, quase a largura da fuselagem de um Boeing 737. O boneco ao lado tem 1,8 metro de altura. Nenhum outro motor de avião comercial tem um fan tão grande.",
+      "p2": "Logo atrás do fan, o ar bate numa borda afiada, o <strong>divisor</strong>, que o separa em dois caminhos. De cada 11 partes, cerca de 10 contornam o miolo do motor, que se chama <strong>núcleo</strong>. Esse é o <strong>fluxo frio</strong>, que sai direto pela traseira. A parte que sobra, cerca de 1 em 11, entra no núcleo. Esse é o <strong>fluxo quente</strong>, e é ele que você vai acompanhar nos próximos capítulos.",
+      "p3": "E qual dos dois fluxos empurra o avião? A maior parte do empurrão vem do fan. Os engenheiros chamam esse empurrão de <strong>empuxo</strong>. O fan agarra uma quantidade enorme de ar e o joga para trás só um pouco mais rápido. Empurrar muito ar de leve é um bom jeito de mover um avião. Na potência máxima, pelos números que a GE divulga, as pontas das pás passam da velocidade do som.",
+      "p4": "Escolha Fluxo frio ou Fluxo quente para ver um de cada vez. O modelo desenha o ar como linhas longas, percorridas por tracinhos. As linhas se separam no divisor, e a maioria contorna o núcleo. O número de linhas não reproduz a proporção de 10 para 1, e as velocidades e as cores são uma ilustração, não medições. A ideia é que o motor seja fácil de entender, não de medir. A disposição das peças é criação do modelo, e o número de pás também, com exceção das 16 pás do fan.",
+      "p5": "Este motor foi feito para o Boeing 777-9, que ainda não entrou em serviço. A primeira entrega está prevista para 2027. O motor em si já está certificado e voa em aviões de teste."
+    },
+    "compressor": {
+      "title": "Espremendo o ar",
+      "p1": "Agora acompanhe o ar do núcleo. Primeiro ele passa pelo <strong>booster</strong>, três estágios de pás pequenas logo atrás do fan. Depois entra no <strong>compressor</strong>, que tem 11 estágios. Cada estágio é formado por um anel de pás que giram e um anel de pás fixas. O anel que gira empurra o ar adiante, e o fixo o prepara para o estágio seguinte.",
+      "p2": "A cada estágio, o ar fica um pouco mais comprimido. No caminho do núcleo, as linhas se apertam e a cor vai esquentando. Sozinho, o compressor aumenta a pressão do ar 27 vezes, uma taxa de 27 para 1. Somando o fan e o booster, a taxa do motor inteiro passa de 60 para 1. Segundo a GE, é o maior valor entre os motores em serviço. O ar comprimido queima bem, e por isso cada gota de combustível rende mais força.",
+      "p3": "O compressor gira no <strong>eixo externo</strong>, um tubo oco. Quem o faz girar é a turbina de alta pressão, uma roda de pás lá atrás. As cores mostram quem gira o quê. Tudo o que está no eixo externo é cor de bronze: o compressor e a turbina de alta pressão. Tudo o que está no eixo interno é azul: o fan, o booster e a turbina de baixa pressão. As peças paradas ficam em cinza. As listras nos eixos e as marcas nos discos mostram que o núcleo, em bronze, gira várias vezes mais rápido que o eixo azul do fan. Os valores publicados variam, então o modelo usa rotações próprias. Ele também gira os eixos muitas vezes mais devagar que o motor real, para você conseguir ver as pás.",
+      "p4": "Escolha a vista Em corte para ver por dentro e arraste o marcador na linha do tempo. O marcador mostra onde estão duas porções de ar: uma no núcleo e outra no fluxo frio. A linha do tempo indica as etapas do ar do núcleo: admissão, compressão, combustão, expansão e escape. O ar frio pula a compressão, a combustão e a expansão, porque segue pelo duto em volta do núcleo. O número indica a distância, em metros, a partir da borda da entrada de ar, que é a beirada da frente do motor."
+    },
+    "combustor": {
+      "title": "Onde o combustível queima",
+      "p1": "Agora o ar comprimido entra na <strong>câmara de combustão</strong>, onde o combustível queima. Primeiro, uma peça chamada difusor desacelera o ar. Depois, pequenos bicos pulverizam o combustível. A queima é contínua, como numa boca de fogão a gás, e não em explosões. No modelo, é aqui que as linhas de ar se acendem num brilho forte.",
+      "p2": "Este motor mistura primeiro o combustível com o ar e só depois queima a mistura. Os engenheiros chamam isso de <strong>mistura pobre</strong>: muito ar para pouco combustível. Uma mistura assim queima de forma mais limpa. Segundo a GE, o motor produz menos da metade dos óxidos de nitrogênio, gases poluentes, que o limite mais recente permite.",
+      "p3": "As paredes da câmara de combustão se chamam <strong>camisas</strong>, e neste motor elas são de cerâmica. Essa cerâmica tem cerca de um terço da densidade das ligas metálicas, por isso é mais leve. Ela também precisa de menos ar de resfriamento.",
+      "p4": "O brilho e as cores das linhas são só uma ilustração. A GE não divulga a temperatura do gás, então o modelo simplesmente desenha o mais quente como mais brilhante. Escolha a vista Em corte para olhar por dentro. Esse fogo não empurra o avião. A função dele é esquentar o ar, e o próximo capítulo mostra por quê."
+    },
+    "turbines": {
+      "title": "Duas turbinas, dois eixos",
+      "p1": "O gás quente e veloz sai da câmara de combustão e encontra as <strong>turbinas</strong>. Uma turbina funciona como um cata-vento: o gás empurra as pás e as faz girar. É para isso que serve o fogo. Ele não empurra o avião: esquenta o ar para que as turbinas possam girar. Enquanto o gás faz as turbinas girarem, as linhas de ar se abrem, esfriam e se torcem.",
+      "p2": "São duas turbinas, em dois eixos. Primeiro vem a <strong>turbina de alta pressão</strong>, com 2 estágios, que aciona o compressor pelo eixo externo. Depois vem a <strong>turbina de baixa pressão</strong>, com 6 estágios. Ela aciona o fan e o booster pelo eixo interno, que passa por dentro do externo. As cores mostram quem aciona o quê: a turbina de alta pressão, cor de bronze, move o compressor, também cor de bronze, e a turbina de baixa pressão, azul, move o fan e o booster, também azuis.",
+      "p3": "Os dois eixos giram em rotações diferentes: o do núcleo gira várias vezes mais rápido que o do fan. Os valores publicados para as rotações exatas variam, então o modelo usa valores próprios. O giro, as listras nos eixos e o brilho da animação também são do modelo. Os dois mostradores ao vivo, logo abaixo, indicam porcentagens do regime de decolagem do modelo, não rotações por minuto.",
+      "p4": "O gás quente castiga as pás de metal. Elas resistem graças ao ar de resfriamento e a revestimentos, e este motor ainda conta com peças de cerâmica, de cinco tipos. Cerca de 300 peças, de sete tipos, são impressas em 3D. A GE não divulga a temperatura do gás, por isso você não vai encontrar esse número aqui."
+    },
+    "thrust": {
+      "title": "De onde vem o empuxo",
+      "p1": "Na traseira há dois bocais. O fluxo frio sai pelo bocal largo, em volta do núcleo, e o fluxo quente sai pelo bocal estreito, no meio. O fluxo frio leva cerca de 10 partes do ar e é largo e lento. O quente leva 1 parte e é estreito e rápido. Tracinhos mais rápidos indicam ar mais rápido. O modelo mostra as velocidades só em comparação umas com as outras, não em metros por segundo.",
+      "p2": "O que é melhor: empurrar muito ar de leve ou pouco ar com força? Ganha a primeira opção. Ela desperdiça menos energia e, assim, gasta menos combustível. É por isso que os motores modernos de avião comercial têm fans tão grandes. Segundo a GE, este motor queima até 10% menos combustível que o seu antecessor, o GE90-115B, para o mesmo empuxo.",
+      "p3": "Agora, os números. Segundo a GE, o empuxo de decolagem do motor é de cerca de 105.000 libras, uns 470 quilonewtons. Um quilonewton equivale a mil newtons, e o newton é uma unidade de força. Num teste, o motor chegou a 134.300 libras, um recorde reconhecido pelo Guinness em julho de 2019. Foi um teste, não um voo normal. Para comparar, o motor de um 737 Next Generation gera cerca de 92 a 121 quilonewtons.",
+      "p4": "Mexa a manete de potência no painel e veja os fluxos mudarem. Com potência alta, o modelo puxa o ar com mais força para dentro da entrada, e o jato de escape fica mais longo e mais brilhante. O valor do empuxo é uma estimativa do modelo, em porcentagem do regime de decolagem dele. O modelo também divide o empurrão entre os dois fluxos do seu próprio jeito. É só um esboço, porque a GE não divulga essa divisão. Só dá para afirmar que a maior parte do empurrão vem do fan."
+    },
+    "reverse": {
+      "title": "Partida e reversão",
+      "p1": "Antes da partida, o núcleo está parado. Para fazê-lo girar, entra em ação um <strong>motor de partida pneumático</strong>, movido a ar comprimido. Esse ar pode vir de um pequeno motor auxiliar do próprio avião, a APU, de um carrinho de ar comprimido no solo ou do outro motor. O motor de partida gira o eixo do núcleo por meio de uma pequena caixa de engrenagens e de um eixo de transmissão. Essa é a única caixa de engrenagens: entre a turbina e o fan não há nenhuma, porque o fan é acionado diretamente. Em seguida entram o combustível e o fogo, e as turbinas assumem o trabalho. Como os detalhes de uma partida real não são divulgados, o modelo pula essa parte. A posição da caixa, assim como os tubos e as conexões do núcleo, é um arranjo do próprio modelo, não o desenho da GE. Escolha Motor de partida, logo abaixo, para ver a caixa de engrenagens e o motor de partida.",
+      "p2": "Depois do pouso, o motor ganha um segundo trabalho: frear o avião. Um <strong>reversor de empuxo</strong> desvia parte do ar para a frente, e aí o motor passa a empurrar o avião para trás em vez de para a frente. Num motor como este, o reversor desvia só o fluxo frio, e é assim que o modelo mostra. A GE não confirmou isso para o GE9X, então encare isso como a representação do modelo.",
+      "p3": "No modelo, o reversor se move como um mecanismo de verdade. Primeiro, a parte traseira da nacele desliza para trás. Depois, portas descem e bloqueiam o caminho em volta do núcleo. Isso deixa à mostra uma faixa de pequenas aletas curvas, as <strong>cascatas</strong>. As linhas frias passam por elas e saem desviadas para fora e para a frente, enquanto o fluxo quente segue reto para trás. Este capítulo começa com o reversor aberto. Recolha-o e abra-o de novo para comparar, ou aperte D, e veja o empuxo cair abaixo de zero. Aí aparece Reverso, com uma porcentagem. Enquanto o reversor está aberto, o modelo limita a potência do motor. A força do empuxo reverso e a duração do movimento são escolhas do próprio modelo, porque não há números publicados.",
+      "p4": "Os passageiros ainda vão ter que esperar por este motor. O Boeing 777-9 ainda não entrou em serviço, e a primeira entrega está prevista para 2027. Até lá, ele só voa em aviões de teste."
+    }
+  }
+}

@@ -81,6 +81,21 @@ export function emptyReadouts(page: Page): Promise<string[]> {
   );
 }
 
+export function clippedReadouts(page: Page): Promise<string[]> {
+  return page.$$eval(READOUT_VALUE, (values) =>
+    values
+      .filter((value) => {
+        const list = value.closest<HTMLElement>('.readouts');
+        if (!list) return false;
+        const text = document.createRange();
+        text.selectNodeContents(value);
+        const textBox = text.getBoundingClientRect();
+        return textBox.width > 0 && textBox.right > list.getBoundingClientRect().right + 1;
+      })
+      .map((value) => value.closest<HTMLElement>('[data-readout]')?.dataset.readout ?? ''),
+  );
+}
+
 export function dockBox(page: Page): Promise<Box> {
   return page.locator(DOCK).evaluate((dock) => {
     const { left, top, right, bottom } = dock.getBoundingClientRect();

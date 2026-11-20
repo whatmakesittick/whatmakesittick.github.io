@@ -1,0 +1,89 @@
+:root {
+  --cool: #8fd0f0;
+  --squeeze: #e8c46a;
+  --exhaust: #c9d3dc;
+}
+
+.gauge .readouts {
+  width: 15rem;
+}
+
+.gauge .readout[data-readout='position'] dd {
+  min-block-size: 2lh;
+  white-space: normal;
+}
+
+.gauge-lever.range-widget {
+  --readout-min-width: 0;
+
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.gauge-lever .range-widget__header output {
+  font-size: 0.875rem;
+}
+
+.gauge-lever .range-widget__header label {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.chapter .readouts {
+  --readout-min-width: 8rem;
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.chapter .readouts > div,
+.chapter .readouts :is(dt, dd) {
+  min-width: 0;
+}
+
+.chapter .readouts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.chapter .readouts dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chapter .readouts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.chip[data-action='streams'] {
+  --tone: var(--cool);
+}
+
+.chip[data-action='cutaway'] {
+  --tone: var(--squeeze);
+}
+
+.chip[data-action='reverser'] {
+  --tone: var(--exhaust);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapter .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chapter .readouts > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}
