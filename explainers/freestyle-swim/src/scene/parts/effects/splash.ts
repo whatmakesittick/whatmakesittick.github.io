@@ -8,7 +8,7 @@ import { BASE_VERTEX, FRAGMENT_HEAD, FRAGMENT_TAIL, fogShader } from '../pool/sh
 
 const RING_COUNT = 4;
 const RING_LIFE_SECONDS = 0.9;
-const RING_HALF_M = 0.35;
+const RING_HALF_M = 0.26;
 const RING_Y = 0.004;
 const QUAD_CORNERS = [
   [-1, -1],
@@ -40,7 +40,7 @@ void main() {
   float ring = exp(-pow((r - radius) / width, 2.0)) * lump;
   float disc = (1.0 - smoothstep(0.0, radius, r)) * pow(1.0 - age, 2.0) * 0.4;
   float fade = (1.0 - age) * (1.0 - smoothstep(0.7, 1.0, r));
-  float alpha = (ring * 0.75 + disc) * fade;
+  float alpha = (ring * 0.55 + disc) * fade;
   gl_FragColor = vec4(uFoam, alpha);
 ${FRAGMENT_TAIL}`;
 

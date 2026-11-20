@@ -14,11 +14,11 @@ import { Wake } from './wake';
 
 const RISE_FROM = 0.5;
 const RISE_TO = 0.6;
-const TRAIL_SECONDS = 0.3;
-const BUBBLES_PER_SECOND = 70;
-const DROPLETS_PER_ENTRY = 5;
+const TRAIL_SECONDS = 0.35;
+const BUBBLES_PER_SECOND = 32;
+const DROPLETS_PER_ENTRY = 4;
 const KICK_DOWNBEAT_PHASE = 0.1;
-const BUBBLES_PER_KICK = 5;
+const BUBBLES_PER_KICK = 2;
 const FOOT_SPREAD_M = 0.04;
 const MAX_KICK_STEP = 0.5;
 

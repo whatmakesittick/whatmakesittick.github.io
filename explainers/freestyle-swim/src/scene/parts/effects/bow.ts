@@ -31,7 +31,7 @@ void main() {
   float z = abs(q.y);
   float behind = max(-u, 0.0);
   float dArc = (u + ARC_K * z * z) * 0.85;
-  float crest = exp(-pow(dArc / 0.02, 2.0)) * (1.0 - smoothstep(0.2, 0.3, z));
+  float crest = exp(-pow(dArc / 0.03, 2.0)) * (1.0 - smoothstep(0.16, 0.28, z));
   float armZ = ARM_Z + ARM_SLOPE * (behind - ARM_START);
   float dArm = (z - armZ) * ARM_COS;
   float armFade = step(ARM_START, behind) * exp(-(behind - ARM_START) * 1.1);
@@ -40,7 +40,7 @@ void main() {
   float wedge = (1.0 - smoothstep(armZ - 0.12, armZ, z)) * armFade * 0.12 * wave;
   vec2 e = min(vUv, 1.0 - vUv);
   float edge = smoothstep(0.0, 0.15, min(e.x, e.y));
-  float alpha = clamp(uStrength * (crest * 0.7 + arms * 0.5 + wedge), 0.0, 0.85) * edge;
+  float alpha = clamp(uStrength * (crest * 0.4 + arms * 0.3 + wedge), 0.0, 0.6) * edge;
   gl_FragColor = vec4(uFoam, alpha);
 ${FRAGMENT_TAIL}`;
 

@@ -16,7 +16,7 @@ export const FLOAT_SEGMENTS = 14;
 export const ROPE_LABEL_OFFSET = { x: 0.2, y: 0.05 } as const;
 export const WATERLINE_LABEL = { x: 0.6, z: 0.7 } as const;
 export const LANE_LINE_LABEL_X = -0.9;
-export const LAYER = { water: 1, effects: 2 } as const;
+export const LAYER = { water: 1, effects: 2, arrows: 3 } as const;
 export const FULL_TURN = Math.PI * 2;
 
 export interface PoolFrame {

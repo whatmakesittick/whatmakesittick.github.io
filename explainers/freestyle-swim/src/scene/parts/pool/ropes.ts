@@ -30,14 +30,16 @@ import {
 const FLOAT_COUNT = Math.round((HALF_EXTENT_M * 2) / FLOAT_PITCH_M) + 4;
 const HALF_PROFILE: readonly (readonly [number, number])[] = [
   [0, -0.065],
-  [0.035, -0.064],
-  [0.06, -0.055],
+  [0.03, -0.065],
+  [0.062, -0.06],
+  [0.075, -0.052],
   [0.075, -0.04],
-  [0.075, -0.03],
-  [0.056, -0.024],
-  [0.075, -0.018],
-  [0.075, -0.008],
-  [0.05, -0.003],
+  [0.066, -0.035],
+  [0.05, -0.031],
+  [0.05, -0.024],
+  [0.066, -0.02],
+  [0.075, -0.015],
+  [0.075, -0.004],
 ];
 const PROFILE_SCALE = FLOAT_LENGTH_M / 0.13;
 
@@ -92,35 +94,38 @@ function floatsOf(
   return mesh;
 }
 
-const FADE_NEAR_M = 1;
-const FADE_FAR_M = 1.6;
+const NEAR_CUT_M = 1.1;
+const BEYOND_REACH = 1.15;
+const FLOAT_FILTER_M = 4;
 export const ROPE_GROUP_NAMES: readonly string[] = ['ropeScroll', 'ropeNeighbours'];
 
 export function isNearRope(object: Object3D, distance: number): boolean {
-  return distance < FADE_FAR_M && ROPE_GROUP_NAMES.includes(object.parent?.name ?? '');
+  const limit = object instanceof InstancedMesh ? FLOAT_FILTER_M : NEAR_CUT_M;
+  return distance < limit && ROPE_GROUP_NAMES.includes(object.parent?.name ?? '');
 }
 
 function fadeNearCamera(material: MeshStandardMaterial): void {
   material.onBeforeCompile = (shader) => {
     shader.vertexShader = shader.vertexShader
-      .replace('void main() {', 'varying vec3 vRopeWorld;\nvoid main() {')
+      .replace('void main() {', 'varying vec3 vRopeWorld;\nvarying float vRopeCut;\nvoid main() {')
       .replace(
         '#include <project_vertex>',
         `#include <project_vertex>
   vec4 ropeLocal = vec4(transformed, 1.0);
+  vRopeCut = ${NEAR_CUT_M.toFixed(2)};
   #ifdef USE_INSTANCING
-  ropeLocal = instanceMatrix * ropeLocal;
+  ropeLocal = instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0);
+  float ropeZ = (modelMatrix * ropeLocal).z;
+  if (cameraPosition.z * ropeZ > 0.0 && abs(cameraPosition.z) > abs(ropeZ)) vRopeCut = length(cameraPosition.yz) * ${BEYOND_REACH};
   #endif
   vRopeWorld = (modelMatrix * ropeLocal).xyz;`,
       );
     shader.fragmentShader = shader.fragmentShader
-      .replace('void main() {', 'varying vec3 vRopeWorld;\nvoid main() {')
+      .replace('void main() {', 'varying vec3 vRopeWorld;\nvarying float vRopeCut;\nvoid main() {')
       .replace(
         '#include <clipping_planes_fragment>',
         `#include <clipping_planes_fragment>
-  float ropeKeep = smoothstep(${FADE_NEAR_M.toFixed(1)}, ${FADE_FAR_M.toFixed(1)}, distance(vRopeWorld, cameraPosition));
-  float ropeNoise = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
-  if (ropeKeep < ropeNoise) discard;`,
+  if (distance(vRopeWorld, cameraPosition) < vRopeCut) discard;`,
       );
   };
   material.customProgramCacheKey = () => 'ropeFade';
