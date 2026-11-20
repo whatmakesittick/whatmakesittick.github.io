@@ -15,7 +15,7 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, FramedView<CameraView>>> 
   whole: { region: 'whole', direction: [-1, 0.8, 0.45], margin: 0.7 },
   catch: { region: 'catch', direction: [-0.35, -0.85, 0.42], margin: 0.8 },
   pull: { region: 'pull', direction: [-0.45, 0.85, 0.22], margin: 0.85 },
-  roll: { region: 'roll', direction: [1, 0.15, 0.12], margin: 1.3 },
+  roll: { region: 'roll', direction: [1, 0.15, 0.12], margin: 1.15 },
   kick: { region: 'kick', direction: [-1, 0.03, 0.35], margin: 1.05 },
   drag: { region: 'drag', direction: [1, 0.06, 0.3], margin: 1.1 },
 };
