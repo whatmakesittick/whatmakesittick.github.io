@@ -1,6 +1,10 @@
 import {
+  AdditiveBlending,
   BackSide,
+  BufferAttribute,
+  BufferGeometry,
   CircleGeometry,
+  DoubleSide,
   Color,
   Mesh,
   NormalBlending,
@@ -8,7 +12,8 @@ import {
   ShaderMaterial,
   SphereGeometry,
 } from 'three';
-import type { Group, IUniform } from 'three';
+import type { Blending, Group, IUniform } from 'three';
+import { activeScheme } from '@core/theme';
 import { AXIS_HEIGHT_M, PERSON_POSITION } from '../../model/scale';
 import { HALL, HALL_LOOK } from '../constants';
 import { STATION_X, nacelleOuterAt } from '../geometry/profiles';
@@ -36,9 +41,118 @@ const OUTPUT = /* glsl */ `
 `;
 
 const look = HALL_LOOK;
+const TAU = Math.PI * 2;
+
+interface HallDress {
+  readonly edge: number;
+  readonly lowerShade: number;
+  readonly panelLift: number;
+  readonly beamShade: number;
+  readonly doorShade: number;
+  readonly coneGain: number;
+  readonly coneBlending: Blending;
+  readonly hazeGain: number;
+  readonly hazeBlending: Blending;
+  readonly glowAdd: number;
+  readonly glowMix: number;
+}
+
+const HALL_DRESS: Readonly<Record<ReturnType<typeof activeScheme>, HallDress>> = {
+  dark: {
+    edge: 0.05,
+    lowerShade: 0.35,
+    panelLift: 0.05,
+    beamShade: 0.5,
+    doorShade: 0.35,
+    coneGain: 0.032,
+    coneBlending: AdditiveBlending,
+    hazeGain: 0.07,
+    hazeBlending: AdditiveBlending,
+    glowAdd: 1,
+    glowMix: 0,
+  },
+  light: {
+    edge: -0.085,
+    lowerShade: 0.16,
+    panelLift: 0.04,
+    beamShade: 0.2,
+    doorShade: 0.12,
+    coneGain: 0.06,
+    coneBlending: NormalBlending,
+    hazeGain: 0.1,
+    hazeBlending: NormalBlending,
+    glowAdd: 0.12,
+    glowMix: 0.5,
+  },
+};
+
+const dress = HALL_DRESS[activeScheme()];
+
+const BAY_COLUMN_HALF = 0.05;
+const LOWER_WALL = { from: 0.05, to: 0.16 } as const;
+const PANEL_WALL = { from: 0.17, to: 0.36 } as const;
+const BEAM = { rise: 0.315, half: 0.018, railRise: 0.285, railHalf: 0.006 } as const;
+const PANEL_JOINTS_PER_BAY = 3;
+const DOORS = [
+  { centre: -1.57, halfWidth: 0.32, top: 0.27 },
+  { centre: 0.7, halfWidth: 0.2, top: 0.22 },
+  { centre: 2.45, halfWidth: 0.26, top: 0.25 },
+] as const;
+const DOOR_SOFT = 0.006;
+
+const CONE = {
+  rows: [-6, 0, 6],
+  firstCell: -2,
+  lastCell: 1,
+  offsetX: 2.3,
+  topRadiusX: 2.2,
+  topRadiusZ: 0.35,
+  bottomRadiusX: 4.6,
+  bottomRadiusZ: 2.4,
+  segments: 14,
+  floorY: 0.02,
+} as const;
+const CONE_FADE_POWER = 2.6;
+
+const FOG = {
+  size: 80,
+  layers: [0.3, 0.85],
+  fadeFrom: 8,
+  fadeTo: 34,
+  noiseScale: 0.18,
+} as const;
+
+const EXHAUST = {
+  heatPower: 1.5,
+  startX: 2.7,
+  coreX: 3.4,
+  lengthIdle: 0.7,
+  lengthFull: 3.4,
+  widthIdle: 0.55,
+  widthFull: 1.55,
+  gain: 0.85,
+  halo: 0.35,
+  haloLength: 2.2,
+  haloWidth: 2.2,
+  grazing: 1.6,
+  hot: '#ffd9a0',
+} as const;
 
 function band(value: string, from: number, to: number, soft: number): string {
   return `(smoothstep(${glslFloat(from - soft)}, ${glslFloat(from + soft)}, ${value}) * (1.0 - smoothstep(${glslFloat(to - soft)}, ${glslFloat(to + soft)}, ${value})))`;
+}
+
+function doorCode(): string {
+  return DOORS.map((door, index) => {
+    const across = `doorAcross${index}`;
+    return `
+        float ${across} = abs(mod(azimuth - ${glslFloat(door.centre)} + 3.1415927, 6.2831853) - 3.1415927);
+        float inside${index} = (1.0 - smoothstep(${glslFloat(door.halfWidth - DOOR_SOFT)}, ${glslFloat(door.halfWidth + DOOR_SOFT)}, ${across})) * (1.0 - smoothstep(${glslFloat(door.top - DOOR_SOFT)}, ${glslFloat(door.top + DOOR_SOFT)}, rise));
+        float outline${index} = max(exp(-pow((${across} - ${glslFloat(door.halfWidth)}) / ${glslFloat(DOOR_SOFT)}, 2.0)) * step(rise, ${glslFloat(door.top)}), exp(-pow((rise - ${glslFloat(door.top)}) / ${glslFloat(DOOR_SOFT)}, 2.0)) * step(${across}, ${glslFloat(door.halfWidth)}));
+        float split${index} = exp(-pow(${across} / ${glslFloat(DOOR_SOFT)}, 2.0)) * step(rise, ${glslFloat(door.top)});
+        doorSpan = max(doorSpan, inside${index});
+        doorEdge = max(doorEdge, max(outline${index}, split${index} * 0.6));`;
+  }).join('\n');
 }
 
 function floorShader(heat: IUniform<number>): ShaderMaterial {
@@ -130,8 +244,19 @@ function floorShader(heat: IUniform<number>): ShaderMaterial {
         float personShadow = 1.0 - smoothstep(0.08, ${glslFloat(HALL.personShadow)}, length(p - vec2(${glslFloat(PERSON_POSITION[0])}, ${glslFloat(PERSON_POSITION[2])})));
         colour *= 1.0 - ${glslFloat(look.shadow)} * max(shadow, personShadow * 0.8);
 
-        float plume = exp(-pow(length((p - vec2(${glslFloat(HALL.glowX)}, 0.0)) / vec2(2.4, 1.3)), 2.0));
-        colour += ${glslColor(look.glow)} * plume * uHeat * ${glslFloat(look.glowGain)};
+        float level = pow(uHeat, ${glslFloat(EXHAUST.heatPower)});
+        float reach = mix(${glslFloat(EXHAUST.lengthIdle)}, ${glslFloat(EXHAUST.lengthFull)}, level);
+        float spread = mix(${glslFloat(EXHAUST.widthIdle)}, ${glslFloat(EXHAUST.widthFull)}, level);
+        float behind = smoothstep(${glslFloat(EXHAUST.startX)}, ${glslFloat(EXHAUST.startX + 0.7)}, p.x);
+        float run = max(p.x - ${glslFloat(EXHAUST.coreX)}, 0.0);
+        float flicker = 0.88 + 0.12 * hallNoise(p * 1.7);
+        float core = behind * exp(-pow(run / reach, 2.0)) * exp(-pow(p.y / spread, 2.0)) * flicker;
+        float halo = behind * exp(-pow(run / (reach * ${glslFloat(EXHAUST.haloLength)}), 2.0)) * exp(-pow(p.y / (spread * ${glslFloat(EXHAUST.haloWidth)}), 2.0));
+        float amount = (core + halo * ${glslFloat(EXHAUST.halo)}) * level * ${glslFloat(EXHAUST.gain)};
+        amount *= 1.0 + fresnel * ${glslFloat(EXHAUST.grazing)};
+        vec3 glowTone = mix(${glslColor(look.glow)}, ${glslColor(EXHAUST.hot)}, core * level);
+        colour = mix(colour, glowTone, min(amount, 1.0) * ${glslFloat(dress.glowMix)});
+        colour += glowTone * amount * ${glslFloat(dress.glowAdd)};
 
         float haze = smoothstep(${glslFloat(HALL.fadeFrom)}, ${glslFloat(HALL.fadeTo)}, far);
         colour = mix(colour, ${glslColor(look.horizon)}, haze);
@@ -163,6 +288,26 @@ function domeShader(): ShaderMaterial {
         colour = mix(colour, ${glslColor(look.ceiling)}, smoothstep(0.25, 0.75, rise));
         float bays = abs(fract(azimuth * ${glslFloat(HALL.bays)} / 6.2831853) - 0.5);
         colour *= 1.0 - (1.0 - smoothstep(0.0, 0.04, bays)) * ${glslFloat(look.bayShade)} * smoothstep(0.02, 0.2, rise);
+        float wallFade = smoothstep(0.03, 0.09, rise) * (1.0 - smoothstep(0.45, 0.75, rise));
+        float lowerWall = (1.0 - smoothstep(${glslFloat(LOWER_WALL.from)}, ${glslFloat(LOWER_WALL.to)}, rise)) * smoothstep(0.0, 0.04, rise);
+        colour *= 1.0 - lowerWall * ${glslFloat(dress.lowerShade)};
+        float upperWall = smoothstep(${glslFloat(PANEL_WALL.from)}, ${glslFloat(PANEL_WALL.from + 0.04)}, rise) * (1.0 - smoothstep(${glslFloat(PANEL_WALL.to - 0.04)}, ${glslFloat(PANEL_WALL.to)}, rise));
+        colour += ${glslColor(look.strip)} * upperWall * ${glslFloat(dress.panelLift)} * wallFade;
+        float joint = 1.0 - smoothstep(0.0, 0.035, abs(fract(azimuth * ${glslFloat(HALL.bays * PANEL_JOINTS_PER_BAY)} / 6.2831853) - 0.5) - 0.465);
+        colour += vec3(${glslFloat(dress.edge)}) * joint * upperWall * 0.5 * wallFade;
+        float column = 1.0 - smoothstep(${glslFloat(BAY_COLUMN_HALF - 0.02)}, ${glslFloat(BAY_COLUMN_HALF)}, bays);
+        float columnEdge = exp(-pow((bays - ${glslFloat(BAY_COLUMN_HALF)}) / 0.018, 2.0));
+        colour += vec3(${glslFloat(dress.edge)}) * columnEdge * wallFade * smoothstep(0.05, 0.1, rise);
+        float beam = ${band('rise', BEAM.rise - BEAM.half, BEAM.rise + BEAM.half, 0.006)};
+        float beamTop = exp(-pow((rise - ${glslFloat(BEAM.rise + BEAM.half)}) / 0.004, 2.0));
+        float rail = ${band('rise', BEAM.railRise - BEAM.railHalf, BEAM.railRise + BEAM.railHalf, 0.004)};
+        colour *= 1.0 - beam * ${glslFloat(dress.beamShade)};
+        colour += vec3(${glslFloat(dress.edge)}) * (beamTop * 1.4 + rail * 0.8);
+        float doorSpan = 0.0;
+        float doorEdge = 0.0;
+        ${doorCode()}
+        colour *= 1.0 - doorSpan * ${glslFloat(dress.doorShade)} * wallFade;
+        colour += vec3(${glslFloat(dress.edge)}) * doorEdge * wallFade;
         float row = smoothstep(${glslFloat(HALL.lampRise - 0.02)}, ${glslFloat(HALL.lampRise)}, rise) * (1.0 - smoothstep(${glslFloat(HALL.lampRise + 0.03)}, ${glslFloat(HALL.lampRise + 0.05)}, rise));
         float lamp = smoothstep(0.12, 0.3, bays) * row;
         float high = smoothstep(${glslFloat(HALL.panelRise - 0.04)}, ${glslFloat(HALL.panelRise)}, rise) * (1.0 - smoothstep(${glslFloat(HALL.panelRise + 0.06)}, ${glslFloat(HALL.panelRise + 0.12)}, rise));
@@ -172,6 +317,140 @@ function domeShader(): ShaderMaterial {
         colour += ${glslColor(look.haze)} * glowBand * ${glslFloat(look.hazeGain)};
         colour += (hallNoise(vDirection.xz * 40.0) - 0.5) * 0.012;
         gl_FragColor = vec4(colour, 1.0);
+        ${OUTPUT}
+      }
+    `,
+  });
+}
+
+function coneGeometry(): BufferGeometry {
+  const cells = CONE.lastCell - CONE.firstCell + 1;
+  const count = cells * CONE.rows.length;
+  const ring = CONE.segments + 1;
+  const positions = new Float32Array(count * ring * 2 * 3);
+  const heights = new Float32Array(count * ring * 2);
+  const outward = new Float32Array(count * ring * 2 * 2);
+  const indices: number[] = [];
+  let cone = 0;
+  for (let cell = CONE.firstCell; cell <= CONE.lastCell; cell++) {
+    for (const rowZ of CONE.rows) {
+      const centreX = cell * HALL.stripPitch + CONE.offsetX;
+      for (let i = 0; i < ring; i++) {
+        const angle = (i / CONE.segments) * TAU;
+        const c = Math.cos(angle);
+        const s = Math.sin(angle);
+        for (let end = 0; end < 2; end++) {
+          const top = end === 1;
+          const vertex = (cone * ring + i) * 2 + end;
+          positions.set(
+            [
+              centreX + c * (top ? CONE.topRadiusX : CONE.bottomRadiusX),
+              top ? HALL.ceiling : CONE.floorY,
+              rowZ + s * (top ? CONE.topRadiusZ : CONE.bottomRadiusZ),
+            ],
+            vertex * 3,
+          );
+          heights[vertex] = top ? 1 : 0;
+          outward.set([c, s], vertex * 2);
+        }
+        if (i < CONE.segments) {
+          const a = (cone * ring + i) * 2;
+          indices.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
+        }
+      }
+      cone++;
+    }
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new BufferAttribute(positions, 3));
+  geometry.setAttribute('aHeight', new BufferAttribute(heights, 1));
+  geometry.setAttribute('aOutward', new BufferAttribute(outward, 2));
+  geometry.setIndex(indices);
+  return geometry;
+}
+
+function coneShader(): ShaderMaterial {
+  return new ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    side: DoubleSide,
+    blending: dress.coneBlending,
+    vertexShader: /* glsl */ `
+      attribute float aHeight;
+      attribute vec2 aOutward;
+      varying float vHeight;
+      varying vec3 vNormal;
+      varying vec3 vWorld;
+      void main() {
+        vec4 world = modelMatrix * vec4(position, 1.0);
+        vWorld = world.xyz;
+        vHeight = aHeight;
+        vNormal = normalize(vec3(aOutward.x, 0.25, aOutward.y));
+        gl_Position = projectionMatrix * viewMatrix * world;
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      varying float vHeight;
+      varying vec3 vNormal;
+      varying vec3 vWorld;
+      ${NOISE}
+      void main() {
+        vec3 view = normalize(cameraPosition - vWorld);
+        float facing = pow(abs(dot(normalize(vNormal), view)), 1.5);
+        float dust = 0.7 + 0.6 * hallNoise(vWorld.xz * 0.6 + vWorld.y * 0.35);
+        float strength = pow(vHeight, ${glslFloat(CONE_FADE_POWER)}) * facing * dust * ${glslFloat(dress.coneGain)};
+        gl_FragColor = vec4(${glslColor(look.strip)}, strength);
+        ${OUTPUT}
+      }
+    `,
+  });
+}
+
+function fogGeometry(): BufferGeometry {
+  const half = FOG.size / 2;
+  const positions = new Float32Array(FOG.layers.length * 4 * 3);
+  const indices: number[] = [];
+  FOG.layers.forEach((y, layer) => {
+    positions.set([-half, y, -half, half, y, -half, half, y, half, -half, y, half], layer * 12);
+    const base = layer * 4;
+    indices.push(base, base + 2, base + 1, base, base + 3, base + 2);
+  });
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  return geometry;
+}
+
+function fogShader(heat: IUniform<number>): ShaderMaterial {
+  return new ShaderMaterial({
+    uniforms: { uHeat: heat },
+    transparent: true,
+    depthWrite: false,
+    side: DoubleSide,
+    blending: dress.hazeBlending,
+    vertexShader: /* glsl */ `
+      varying vec3 vWorld;
+      void main() {
+        vec4 world = modelMatrix * vec4(position, 1.0);
+        vWorld = world.xyz;
+        gl_Position = projectionMatrix * viewMatrix * world;
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform float uHeat;
+      varying vec3 vWorld;
+      ${NOISE}
+      void main() {
+        vec2 p = vWorld.xz;
+        vec3 view = normalize(cameraPosition - vWorld);
+        float grazing = 1.0 - abs(view.y);
+        float cloud = hallNoise(p * ${glslFloat(FOG.noiseScale)} + vWorld.y * 7.0) * 0.65 + hallNoise(p * ${glslFloat(FOG.noiseScale * 3)}) * 0.35;
+        float reach = 1.0 - smoothstep(${glslFloat(FOG.fadeFrom)}, ${glslFloat(FOG.fadeTo)}, length(p));
+        float warm = exp(-pow(length((p - vec2(${glslFloat(EXHAUST.coreX + 1)}, 0.0)) / vec2(5.0, 3.0)), 2.0))
+          * pow(uHeat, ${glslFloat(EXHAUST.heatPower)});
+        vec3 tone = mix(${glslColor(look.haze)}, ${glslColor(look.glow)}, warm * 0.6);
+        float strength = cloud * grazing * grazing * reach * ${glslFloat(dress.hazeGain)} * (1.0 + warm * 2.0);
+        gl_FragColor = vec4(tone, strength);
         ${OUTPUT}
       }
     `,
@@ -224,6 +503,24 @@ export function buildHall(context: PartContext, root: Group): void {
   dome.renderOrder = -3;
   dome.frustumCulled = false;
   root.add(dome);
+
+  const cones = new Mesh(
+    context.tracker.track(coneGeometry()),
+    registered(context, UNDIMMED_GROUP, coneShader()),
+  );
+  cones.name = 'hallLightCones';
+  cones.renderOrder = -1;
+  cones.frustumCulled = false;
+  root.add(cones);
+
+  const fog = new Mesh(
+    context.tracker.track(fogGeometry()),
+    registered(context, UNDIMMED_GROUP, fogShader(context.heat.uHeat)),
+  );
+  fog.name = 'hallFloorHaze';
+  fog.renderOrder = -1;
+  fog.frustumCulled = false;
+  root.add(fog);
 
   const vignette = new Mesh(
     context.tracker.track(new PlaneGeometry(2, 2)),
