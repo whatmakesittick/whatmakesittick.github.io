@@ -8,6 +8,8 @@ import { GARMENT_ATTRIBUTES } from './garments/garmentShader';
 import { blendRows, extend, normaliseRows } from './blend';
 import { CHANNELS } from './garments/regions';
 import type { GarmentFields } from './garments/regions';
+import { TOE_ATTRIBUTE } from './feet/toeShader';
+import { TOE_CHANNELS } from './feet/toeFields';
 
 const AXES = 3;
 const PART_RULES: readonly (readonly [RegExp, string])[] = [
@@ -50,6 +52,7 @@ export interface FigureBodyParts {
   readonly track: <T extends { dispose(): void }>(item: T) => T;
   readonly toRig: Matrix4;
   readonly garments: GarmentFields;
+  readonly toes: Float32Array;
 }
 
 export class FigureBody {
@@ -84,6 +87,7 @@ export class FigureBody {
     this.geometry.setAttribute('normal', this.normal);
     this.addStatic(GARMENT_ATTRIBUTES.distances, parts.garments.distances);
     this.addStatic(GARMENT_ATTRIBUTES.extents, parts.garments.extents);
+    this.addStatic(TOE_ATTRIBUTE, parts.toes, TOE_CHANNELS);
     split.ranges.forEach((range, index) => this.geometry.addGroup(range.start, range.count, index));
     this.mesh = new DeformingMesh(
       this.geometry,

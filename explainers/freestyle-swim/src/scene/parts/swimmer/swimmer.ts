@@ -9,6 +9,8 @@ import { GARMENT_COLORS } from '../../finishes';
 import { PartBuilder } from './build';
 import { FigureBody } from './figureBody';
 import { Goggles } from './garments/goggles';
+import { toeFields } from './feet/toeFields';
+import { applyToes } from './feet/toeShader';
 import { applyGarments } from './garments/garmentShader';
 import { garmentFields } from './garments/regions';
 import { RestFrame } from './garments/restFrame';
@@ -19,6 +21,7 @@ const HIP_LABEL = [-0.5, 0.02, 0.17] as const;
 const FOOT_LABEL_SHARE = 0.4;
 const ORIGIN = [0, 0, 0] as const;
 const AXES = 3;
+const FOOT_PART = 'foot';
 const HEAD_TOP = 'c_head_null';
 const HEAD_BASE = 'c_head';
 
@@ -100,13 +103,20 @@ export function* buildSwimmer(context: PartContext, rig: FigureRig): Steps<Swimm
   root.name = 'swimmer';
   yield;
   const frame = new RestFrame(rig.figure);
+  const toes = toeFields(rig.figure, frame);
   const body = new FigureBody({
     figure: rig.figure,
     toRig: rig.toRig,
     garments: garmentFields(rig.figure, frame),
+    toes: toes.coordinates,
     track: (item) => builder.track(item),
-    materialOf: (part) =>
-      applyGarments(builder.material(part, 'skin'), builder.swatches(part, GARMENT_COLORS)),
+    materialOf: (part) => {
+      const skin = applyGarments(
+        builder.material(part, 'skin'),
+        builder.swatches(part, GARMENT_COLORS),
+      );
+      return part === FOOT_PART ? applyToes(skin, toes) : skin;
+    },
   });
   const goggles = new Goggles(builder, rig.figure, frame, rig.toRig);
   root.add(body.mesh, goggles.group);
