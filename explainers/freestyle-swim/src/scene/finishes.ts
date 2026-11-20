@@ -3,7 +3,7 @@ import type { MaterialFinish } from '@core/scene/materials';
 import { THEME } from '../theme';
 
 const BLACK = '#000000';
-const WET_SKIN_ROUGHNESS = 0.3;
+const WET_SKIN_ROUGHNESS = 0.5;
 const SKIN_TONE = { saturation: 1.15, brightness: 0.9 } as const;
 const SILICONE_ROUGHNESS = 0.28;
 const SUIT_ROUGHNESS = 0.78;
