@@ -27,8 +27,6 @@ export const BODY = {
   hipBlend: { from: -0.47, to: -0.12 },
 } as const;
 
-export const HEEL_SHARE = 0.2;
-
 export const BREATH_HEAD = { turnOut: [-0.35, 0.2], turnBack: [0.5, 0.92] } as const;
 
 export const RECOVERY_PATH = { fadeIn: [3, 3.12], fadeOut: [3.86, 4] } as const;
