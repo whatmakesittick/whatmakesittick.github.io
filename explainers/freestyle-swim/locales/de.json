@@ -2,14 +2,14 @@
   "meta": {
     "title": "Kraulschwimmen: wie ein Armzug dich voranbringt",
     "eyebrow": "Biologie und Physik",
-    "tagline": "Wasser ist viel dichter als Luft. Tempo entsteht deshalb nicht durch mehr Kraft, sondern dadurch, dass Hand und Unterarm das Wasser halten und dein Körper lang und flach bleibt.",
-    "description": "Verfolge einen Kraulzug in 3D: wie die Hand das Wasser fasst, warum der Widerstand so schnell steigt und warum Gleiten vorn nicht schneller macht.",
-    "summary": "Die vier Phasen eines Zugs, Wasserfassen, Zug und Druck, Körperrotation und Atmung, der Beinschlag, dazu der Widerstand und die Lücke zwischen den Armen.",
+    "tagline": "Wasser ist viel dichter als Luft. Geschwindigkeit entsteht deshalb nicht durch mehr Kraft, sondern dadurch, dass Hand und Unterarm das Wasser halten und dein Körper lang und flach bleibt.",
+    "description": "Verfolge einen Kraul-Armzug in 3D: wie die Hand das Wasser fasst, warum der Widerstand so schnell steigt und warum Gleiten vorn nicht schneller macht.",
+    "summary": "Die vier Phasen eines Armzugs, Wasserfassen, Zug und Druck, Körperrotation und Atmung, der Beinschlag, dazu der Widerstand und die Lücke zwischen den Armen.",
     "socialAlt": "Ein Schwimmer von der Seite in einer Bahn, der Weg seiner Hand leuchtet unter der Wasserlinie, daneben der Titel Kraulschwimmen: wie ein Armzug dich voranbringt"
   },
   "stage": {
     "label": "Interaktives Modell eines Kraulschwimmers",
-    "gauge": "Live: Tempo, Zug und Widerstand"
+    "gauge": "Live: Geschwindigkeit, Armzug und Widerstand"
   },
   "timeline": {
     "label": "Armzug",
@@ -72,7 +72,7 @@
       },
       "underwater": {
         "name": "Klares Wasser",
-        "short": "Klar",
+        "short": "Durchsicht",
         "hint": "Durchs Wasser blicken (U)"
       },
       "handPath": {
@@ -83,9 +83,9 @@
     }
   },
   "readouts": {
-    "speed": "Tempo",
-    "strokeRate": "Zugfrequenz",
-    "strokeLength": "Zuglänge",
+    "speed": "Geschwindigkeit",
+    "strokeRate": "Armzugfrequenz",
+    "strokeLength": "Armzuglänge",
     "handForce": "Ziehende Hand, schematisch",
     "drag": "Widerstand",
     "dragUp": "bis zu dreimal so hoch",
@@ -115,60 +115,60 @@
   },
   "sections": {
     "stroke": {
-      "title": "Der ganze Zug",
-      "p1": "Stell dir einen Schwimmer auf Bahn 4 eines 50-m-Beckens vor. Er schwimmt <strong>Kraul</strong>. Ein <strong>Zugzyklus</strong> besteht aus beiden Armen: ein Zug rechts, ein Zug links. Wir folgen dem rechten Arm durch seine vier Phasen: <strong>Eintauchen und Fassen</strong>, <strong>Zug</strong>, <strong>Druck</strong> und <strong>Rückholphase</strong>, in der der Arm über dem Wasser nach vorn schwingt. Der linke Arm macht dasselbe, einen halben Zyklus später. Zieh an der Zeitleiste, dann siehst du es.",
+      "title": "Der ganze Armzug",
+      "p1": "Stell dir einen Schwimmer auf Bahn 4 eines 50-m-Beckens vor. Er schwimmt <strong>Kraul</strong>, im Wettkampf Freistil genannt. Ein <strong>Zyklus</strong> besteht aus beiden Armen: ein Armzug rechts, ein Armzug links. Wir folgen dem rechten Arm durch seine vier Phasen: <strong>Eintauchen und Fassen</strong>, <strong>Zug</strong>, <strong>Druck</strong> und <strong>Rückholphase</strong>, in der der Arm über dem Wasser nach vorn schwingt. Der linke Arm macht dasselbe, einen halben Zyklus später. Zieh an der Zeitleiste, dann siehst du es.",
       "p2": "Nur Zug und Druck bringen dich nach vorn. Zusammen dauern sie etwa 43 bis 57 Prozent des Zyklus, je nach Tempo und Messmethode. Die farbigen Bänder auf der Zeitleiste zeigen typische Werte für trainierte Männer, sie sind also ein Richtwert. Bei einem anderen Tempo verschieben sie sich leicht.",
-      "p3": "Das Tempo ist einfache Rechnung: <strong>Zugfrequenz</strong>, also Zyklen pro Minute, mal <strong>Zuglänge</strong>, also die Strecke, die du in einem Zyklus zurücklegst. Die drei Tempostufen sind Pakete typischer Werte aus verschiedenen Studien, vom Modell ausgewählt. Solch ein Produkt trifft echte Wettkampftempi nicht genau. Lies die Zahl also als Modelltempo und nicht als Rennergebnis. Auch dein Tempo ist nicht gleichmäßig: In jedem Zyklus schwankt es um etwa 0,4 m/s, weil die Arme sich abwechseln.",
-      "p4": "Warum so viel Anstrengung für so wenig Tempo? Wasser ist etwa 800-mal dichter als Luft, und an der Oberfläche macht ein Schwimmer außerdem Wellen. Nur rund 5 Prozent der Energie, die ein Schwimmer verbrennt, kommen als nutzbare Leistung im Wasser an. Der größte Teil geht unterwegs verloren, nicht nur an den Widerstand. Tempo kommt also nicht von mehr Kraft. Es kommt davon, das Wasser gut zu halten und eine schmale, flache Form zu behalten. Die nächsten Kapitel nehmen das Schritt für Schritt auseinander.",
-      "p5": "Der Schwimmer ist eine einfache Gliederpuppe. Das Becken zieht vorbei, der Schwimmer bleibt etwa in der Mitte. Das kleine Auf und Ab des Tempos in jedem Zyklus siehst du als Verschiebung um ein paar Zentimeter. Wähle ein Tempo und schau, wie sich der Zug verändert."
+      "p3": "Die Geschwindigkeit ist einfache Rechnung: <strong>Armzugfrequenz</strong>, also Zyklen pro Minute, mal <strong>Armzuglänge</strong>, also die Strecke, die du in einem Zyklus zurücklegst. Die drei Tempostufen sind Pakete typischer Werte aus verschiedenen Studien, vom Modell ausgewählt. Eine Rechnung wie diese trifft echte Wettkampfgeschwindigkeiten nicht genau. Lies die Zahl also als Wert des Modells und nicht als Rennergebnis. Auch deine Geschwindigkeit ist nicht gleichmäßig: In jedem Zyklus schwankt sie um etwa 0,4 m/s, weil die Arme sich abwechseln.",
+      "p4": "Warum so viel Anstrengung für so wenig Geschwindigkeit? Wasser ist etwa 800-mal dichter als Luft, und an der Oberfläche macht ein Schwimmer außerdem Wellen. Nur rund 5 Prozent der Energie, die ein Schwimmer verbrennt, kommen als nutzbare Leistung im Wasser an. Der größte Teil geht unterwegs verloren, nicht nur an den Widerstand. Geschwindigkeit entsteht also nicht durch mehr Kraft, sondern dadurch, dass du das Wasser gut hältst und eine schmale, flache Form behältst. Die nächsten Kapitel nehmen das Schritt für Schritt auseinander.",
+      "p5": "Der Schwimmer ist eine einfache Gliederpuppe. Das Becken zieht vorbei, der Schwimmer bleibt etwa in der Mitte. Das kleine Auf und Ab der Geschwindigkeit in jedem Zyklus siehst du als Verschiebung um ein paar Zentimeter. Wähle ein Tempo und schau, wie sich der Armzug verändert."
     },
     "catch": {
       "title": "Das Wasserfassen",
       "p1": "Die Hand taucht etwa in Linie mit der Schulter ein. Sie streckt sich nach vorn und drückt dann nach unten und hinten. Der Moment, in dem die Hand das Wasser zum ersten Mal packt, heißt <strong>Wasserfassen</strong>. Das ist ein Augenblick und keine eigene Phase, deshalb hält das Bild dort kurz an.",
-      "p2": "Gleich nach dem Fassen dreht sich der Unterarm Richtung Senkrechte. Jetzt zeigen Hand und Unterarm zusammen nach hinten, wie ein breites Paddel, und der Ellbogen bleibt oben. Trainer sprechen vom hohen Ellbogen. Schalte das klare Wasser ein, dann siehst du, wie Hand und Unterarm in einer Linie stehen.",
+      "p2": "Gleich nach dem Fassen dreht sich der Unterarm Richtung Senkrechte. Jetzt zeigen Hand und Unterarm zusammen nach hinten, wie ein breites Paddel, und der Ellbogen bleibt oben. Trainer sprechen vom hohen Ellbogen. Schalte das klare Wasser ein, falls es aus ist, dann siehst du, wie Hand und Unterarm in einer Linie stehen.",
       "p3": "Vielleicht hast du gehört, der Ellbogen solle 90 Grad abwinkeln. Das ist ein Ideal aus dem Training, nicht das, was gemessen wurde. In einer Studie mit zehn Sprintern war der Ellbogen beim Fassen etwa 148 Grad offen, mit der Hand unter der Schulter etwa 105 und am Ende des Drucks etwa 151 Grad. Der Arm bleibt also viel gestreckter als im Ideal.",
-      "p4": "Die Hand geht nicht tief. Am tiefsten Punkt liegt sie etwa 0,6 bis 0,7 m unter der Oberfläche, wobei der genaue Bezugspunkt in der Studie nicht geprüft wurde. Die Anzeigen folgen dem Modell. Wo niemand gemessen hat, steht es dort so, statt eine Zahl zu zeigen: Für den Ellbogenwinkel in der Luft und beim Eintauchen gibt es keine Studie.",
+      "p4": "Die Hand geht nicht tief. Am tiefsten Punkt liegt sie etwa 0,6 bis 0,7 m unter der Oberfläche, wobei der genaue Bezugspunkt in der Studie nicht geprüft wurde. Die Anzeigen folgen dem Modell. Wo niemand gemessen hat, steht ein Hinweis statt einer Zahl: Für den Ellbogenwinkel in der Luft und beim Eintauchen gibt es keine Studie.",
       "p5": "Diese Winkel stammen von Sprintern aus einer Studie, und das Modell nutzt dieselbe Form bei jedem Tempo. Lies sie als typische Werte einer Gruppe und nicht als Regel für alle Schwimmer."
     },
     "pull": {
       "title": "Zug und Druck",
-      "p1": "Jetzt arbeitet der Arm. In Zug und Druck wirken Hand und Unterarm wie ein <strong>Paddel</strong>: Sie schieben Wasser nach hinten, und das Wasser schiebt dich nach vorn. Eine Tragfläche ist die Hand nicht. Computersimulationen zeigen, dass das Wasser die Hand in Wirbeln verlässt, statt glatt darüber zu strömen. Die alte Erklärung mit Auftrieb an einer gewölbten Fläche hält deshalb nicht stand.",
-      "p2": "Wie viel Auftrieb zum Vortrieb beiträgt, ist unter Forschern noch umstritten. Die meisten sind sich einig, dass die Hand das Wasser vor allem wie ein Paddel nach hinten schiebt und dass die Wirbel, die sie erzeugt, noch etwas dazugeben. Das Modell zeichnet einen einzigen Pfeil für den Druck und versucht nicht, den Streit zu klären.",
-      "p3": "Typische Zahlen helfen hier. Eine Hand erreicht bei den bisher gemessenen Schwimmern etwa 75 bis 115 N und beim Fassen etwa 22 N. Der Druck ist etwa 15 Prozent stärker als der Zug, der stärkste Teil des Zugs ist also der Druck. Die Kraft hat ihren Höhepunkt nach etwa 70 Prozent der Unterwasserphase.",
-      "p4": "Die Kurve in der Anzeige ist schematisch. Sie ist eine glatte Form, auf diese Werte skaliert, und keine gemessene Kurve. Lies sie also nicht wie Daten eines Kraftsensors. Bei der Handgeschwindigkeit ist es ähnlich: Bei Sprintern liegt sie unter Wasser im Druck bei etwa 3,6 m/s und bei 6 bis 7 m/s, wenn die Hand durch die Luft schwingt.",
+      "p1": "Jetzt arbeitet der Arm. In Zug und Druck wirken Hand und Unterarm wie ein <strong>Paddel</strong>: Sie schieben Wasser nach hinten, und das Wasser schiebt dich nach vorn. Computersimulationen zeigen, dass das Wasser die Hand in Wirbeln verlässt, statt glatt darüber zu strömen wie Luft über einen Flügel. Die alte Erklärung mit Auftrieb an einer gewölbten Fläche ist deshalb nicht die ganze Wahrheit.",
+      "p2": "Wie viel Auftrieb zum Vortrieb beiträgt, ist unter Forschern noch umstritten. Am sichersten ist das Bild, dass die Hand das Wasser vor allem wie ein Paddel nach hinten schiebt und dass die Wirbel, die sie erzeugt, noch mehr dazugeben. Das Modell zeichnet einen einzigen Pfeil für den Druck und versucht nicht, den Streit zu klären.",
+      "p3": "Typische Zahlen helfen hier. Eine Hand erreicht bei den bisher gemessenen Schwimmern etwa 75 bis 115 N und beim Fassen etwa 22 N. Der Druck ist etwa 15 Prozent stärker als der Zug, der stärkste Teil des Armzugs ist also der Druck und nicht der Zug. Die Kraft hat ihren Höhepunkt nach etwa 70 Prozent der Unterwasserphase.",
+      "p4": "Die Kurve in der Anzeige ist schematisch. Sie ist eine glatte Form, auf diese Werte skaliert, und keine gemessene Kurve. Lies sie also nicht wie Daten eines Kraftsensors. Bei der Handgeschwindigkeit ist es ähnlich: Bei Sprintern liegt sie im Druck unter Wasser bei etwa 3,6 m/s und beträgt 6 bis 7 m/s, wenn die Hand durch die Luft schwingt.",
       "p5": "Eine Hand ist klein, etwa 0,016 m². Ein Computermodell fand, dass eine kleine Lücke von etwa 12 Grad zwischen den Fingern den Widerstand der Hand um etwa 9 Prozent erhöht. Das stammt aus einer Simulation. Nimm es als Idee zum Ausprobieren und nicht als Ratschlag."
     },
     "roll": {
       "title": "Rotation und Atmung",
       "p1": "Ein guter Schwimmer liegt nicht platt auf dem Wasser. Die Schultern rollen bei jedem Tempo etwa 50 Grad zu jeder Seite. Die Hüfte rollt weniger: etwa 18 Grad im Sprint und etwa 25 im Tempo eines 400-m-Rennens. Durch die Rotation kann der Arm nach vorn greifen und über das Wasser schwingen, ohne gegen den Körper zu arbeiten.",
-      "p2": "Du liest vielleicht, Langstreckler rollten die Schultern stärker. Die Daten zeigen das nicht. Die Schultern rollen im Sprint und im 400-m-Tempo etwa gleich. Nur die Hüfte rollt im langsameren Tempo mehr.",
-      "p3": "Am Ende des Drucks verlässt der Arm das Wasser mit dem Ellbogen voran und mit lockerer Hand. Dann schwingt er durch die Luft nach vorn. Das ist die <strong>Rückholphase</strong>, der Erholungsteil des Zugs. Das Modell zeigt dafür keinen Winkel, weil keine gute Messung zu finden war.",
-      "p4": "Du hast den Zug vielleicht auch als S gezeichnet gesehen. Das meiste von diesem S ist die Rotation des Körpers. Zeichnest du den Weg der Hand von einem festen Punkt am Becken aus, ist er gebogen. Zeichnest du ihn aus Sicht des Schwimmers, wird er viel gerader. Es ist ein Weg, von zwei Orten aus gesehen, und keine zwei Arten zu schwimmen. Schalte den Handweg ein und vergleiche.",
-      "p5": "Zum Atmen dreht der Schwimmer den Kopf zur Seite. Wer zu einer Seite atmet, rollt dort etwa 9 Grad mehr. Bremst ein Atemzug? Ein bisschen, aber die Quellen sind sich uneins: Eine Studie fand im Sprint etwa 3 Prozent, eine andere keinen echten Unterschied. Der Kopfwinkel im Modell ist eine eigene Wahl."
+      "p2": "Du liest vielleicht, Langstreckenschwimmer rollten die Schultern stärker. Die Daten zeigen das nicht. Die Schultern rollen im Sprint und im 400-m-Tempo etwa gleich. Nur die Hüfte rollt im langsameren Tempo mehr.",
+      "p3": "Am Ende des Drucks verlässt der Arm das Wasser mit dem Ellbogen voran und mit lockerer Hand. Dann schwingt er durch die Luft nach vorn. Das ist die <strong>Rückholphase</strong>, der Ruheteil des Armzugs. Ellbogen voran und lockere Hand ist das übliche Bild im Training. Das Modell zeigt dafür keinen Winkel, weil keine gute Messung zu finden war.",
+      "p4": "Du hast den Armzug vielleicht auch als S gezeichnet gesehen. Das meiste an diesem S kommt von der Rotation des Körpers. Zeichnest du den Weg der Hand von einem festen Punkt am Becken aus, ist er gebogen. Zeichnest du ihn aus Sicht des Schwimmers, wird er viel gerader. Es ist ein Weg, von zwei Orten aus gesehen, und keine zwei Arten zu schwimmen. Schalte den Handweg ein und vergleiche.",
+      "p5": "Zum Atmen dreht der Schwimmer den Kopf zur Seite. Wer zu einer Seite atmet, rollt dort etwa 9 Grad mehr. Bremst ein Atemzug dich ab? Ein bisschen, aber die Quellen sind sich uneins: Eine Studie fand im Sprint etwa 3 Prozent, eine andere keinen echten Unterschied. Den Kopfwinkel hat das Modell selbst festgelegt."
     },
     "kick": {
       "title": "Der Beinschlag",
       "p1": "Die Beine schlagen abwechselnd auf und ab. Beim <strong>Zweierschlag</strong> schlägt jedes Bein einmal pro Zyklus. Beim <strong>Sechserschlag</strong> schlägt jedes Bein dreimal pro Zyklus. Such dir einen aus und schau auf Hüfte und Füße.",
-      "p2": "In beiden Mustern kommt der große Abwärtsschlag vom Bein gegenüber dem Arm, der gerade eintaucht. Dein Körper verdreht sich, und dieses Bein hilft beim Ausgleich. Beim Sechserschlag sind die zwei zusätzlichen Schläge kleiner. Welcher kleine Schlag zu welchem Armmoment gehört, hat das Modell selbst festgelegt.",
+      "p2": "In beiden Mustern kommt der große Abwärtsschlag vom Bein gegenüber dem Arm, der gerade eintaucht. Dein Körper verdreht sich, und dieses Bein hilft beim Ausgleich. Der Sechserschlag fügt pro Bein zwei weitere Schläge hinzu. Welcher davon zu welchem Armmoment gehört, hat das Modell selbst festgelegt.",
       "p3": "Wie viel bringt der Beinschlag? In einer Studie machte der Einsatz der Beine zusätzlich zu den Armen einen 25-m-Sprint um etwa 10 Prozent schneller. Die Autoren sagen, dass die Beine vor allem den Armen helfen und den Körper flach halten, statt von allein zu schieben. Es stimmt also nicht, dass der Beinschlag 10 Prozent des Vortriebs liefert.",
       "p4": "Im Sprint schlägt jedes Bein etwa 2,4 bis 2,7 Mal pro Sekunde. Der Fuß geht etwa 0,3 bis 0,4 m nach unten, die Quellen unterscheiden sich. Das Modell nimmt einen mittleren Wert. Für die Winkel von Knie und Knöchel gibt es keine guten Zahlen, das Modell zeichnet sie nach Augenmaß.",
-      "p5": "Das Tempo legt den Beinschlag zuerst fest: Zweierschlag bei lockerem Tempo, Sechserschlag im Sprint. So beschreiben es Trainer meistens. Sechserschlag im mittleren Tempo ist die eigene Wahl des Modells. Der Chip bleibt für diese Voreinstellung gedrückt, bis du einen anderen Beinschlag wählst."
+      "p5": "Das Tempo legt den Beinschlag zuerst fest: Zweierschlag bei lockerem Tempo, Sechserschlag im Sprint. So beschreiben es Trainer meistens. Sechserschlag im mittleren Tempo hat das Modell selbst gewählt. Die Schaltfläche bleibt für diese Voreinstellung gedrückt, bis du einen anderen Beinschlag wählst."
     },
     "drag": {
       "title": "Widerstand und Timing",
-      "p1": "Der Widerstand ist das Wasser, das gegen dich drückt. Er wächst mit dem Quadrat deines Tempos, und die nötige Leistung wächst mit der dritten Potenz. Verdoppelst du das Tempo, ist der Widerstand viermal so groß und die Leistung achtmal so groß. Bewege den Regler, dann siehst du es.",
-      "p2": "Die Zahlen sind nicht exakt. In einem Labor spürten Männer bei 2 m/s etwa 110 N Widerstand. In der Literatur reichen die Schätzungen von 20 bis 210 N, weil die Methoden nicht übereinstimmen. Das Modell nutzt eine einfache Schätzung, der Wert ist also ein Richtwert und keine Messung eines einzelnen Schwimmers.",
-      "p3": "An der Oberfläche macht der Schwimmer außerdem Wellen, und Wellen kosten Energie. Bei einer geschleppten Puppe mit 1,7 m/s machten Wellen bis zu 50 bis 60 Prozent des Widerstands aus. Der Effekt lässt nach, wenn der Körper tiefer liegt. Eine Puppe muss bei 1 m/s etwa 0,5 m tief liegen und bei 2 m/s etwa 0,7 m, um ihm zu entgehen. Ein Schwimmer muss atmen, deshalb kann er das nicht voll nutzen.",
-      "p4": "Versuch, es kaputt zu machen. Hebst du den Kopf, sinken die Beine, und der Körper ist nicht mehr schmal und flach. Ein Schwimmer, der durch einen Strömungskanal gezogen wurde, spürte mit dem Kinn an der Oberfläche bis zu dreimal so viel Widerstand. Die Seite zeigt dafür nur Worte und keine Newton, und das Modell skaliert nur den Pfeil. Gemessen wurde nur dieser eine Schwimmer.",
-      "p5": "Zum Schluss die verbreitete Idee, eine Pause vorn mache dich schneller. Die Messungen sagen etwas anderes. Bei lockerem Tempo gibt es eine kleine Lücke von etwa einer Zehntelsekunde zwischen dem Ende des Drucks des einen Arms und dem Beginn des Zugs des nächsten. Wird der Schwimmer schneller, schließt sich die Lücke. Über etwa 1,8 m/s beginnen sich die Arme zu überlappen.",
-      "p6": "Niemand hat gezeigt, dass bewusstes Gleiten schneller macht. Müde Sprinter rutschten in mehr Überlappung und gewannen dadurch nichts. Ändere das Tempo und lies für jedes die Lücke oder die Überlappung ab."
+      "p1": "Der Widerstand ist das Wasser, das gegen dich drückt. Er wächst mit dem Quadrat deiner Geschwindigkeit, und die nötige Leistung wächst mit der dritten Potenz. Verdoppelst du die Geschwindigkeit, ist der Widerstand viermal so groß und die Leistung achtmal so groß. Bewege den Regler, dann siehst du es.",
+      "p2": "Die Zahlen sind nicht exakt. In einem Labor hatten Männer bei 2 m/s etwa 110 N Widerstand zu überwinden. In der Literatur reichen die Schätzungen von 20 bis 210 N, weil die Methoden nicht übereinstimmen. Das Modell nutzt eine einfache Schätzung, der Wert ist also ein Richtwert und keine Messung eines einzelnen Schwimmers.",
+      "p3": "An der Oberfläche macht der Schwimmer außerdem Wellen, und Wellen kosten Energie. Bei einer geschleppten Puppe mit 1,7 m/s machten Wellen 50 bis 60 Prozent des Widerstands aus. Der Effekt lässt nach, wenn der Körper tiefer liegt. Die Puppe muss bei 1 m/s etwa 0,5 m und bei 2 m/s etwa 0,7 m tief liegen, um ihm zu entgehen. Ein Schwimmer muss atmen, deshalb kann er das nicht voll nutzen.",
+      "p4": "Probier aus, die Haltung zu verderben. Hebst du den Kopf, sinken die Beine, und der Körper ist nicht mehr schmal und flach. Bei einem Schwimmer, der durch einen Strömungskanal gezogen wurde, maß man mit dem Kinn an der Oberfläche bis zu dreimal so viel Widerstand. Die Seite zeigt dafür nur Worte und keine Newton, und das Modell skaliert nur den Pfeil. Gemessen wurde nur dieser eine Schwimmer.",
+      "p5": "Zum Schluss die verbreitete Idee, eine Pause vorn mache dich schneller. Die Messungen sagen etwas anderes. Bei lockerem Tempo gibt es eine kleine Lücke von etwa einer Zehntelsekunde zwischen dem Ende des Drucks des einen Arms und dem Beginn des Zugs des anderen. Wird der Schwimmer schneller, schließt sich die Lücke. Über etwa 1,8 m/s beginnen sich die Arme zu überlappen.",
+      "p6": "Niemand hat gezeigt, dass bewusstes Gleiten schneller macht. Müde Sprinter gerieten in mehr Überlappung und gewannen dadurch nichts. Ändere das Tempo und lies für jedes die Lücke oder die Überlappung ab."
     }
   },
   "chapters": {
     "stroke": {
-      "speed": "Tempo jetzt",
-      "rate": "Zugfrequenz",
-      "length": "Zuglänge",
+      "speed": "Geschwindigkeit jetzt",
+      "rate": "Armzugfrequenz",
+      "length": "Armzuglänge",
       "sum": "Die Rechnung des Modells",
       "sumValue": "{{rate}} pro Min. × {{length}} m pro Zyklus ÷ 60 = {{speed}} m/s",
       "phase": "Rechter Arm jetzt",
@@ -208,7 +208,7 @@
     "roll": {
       "shoulder": "Schulterrotation",
       "hip": "Hüftrotation",
-      "side": "Tiefe Schulter",
+      "side": "Untere Schulter",
       "sideRight": "rechts",
       "sideLeft": "links",
       "extra": "Mehr Rotation durch Atmen",
@@ -241,7 +241,7 @@
     "drag": {
       "now": "Widerstand jetzt",
       "dragUp": "bis zu dreimal so hoch",
-      "at": "Widerstand bei diesem Tempo",
+      "at": "Widerstand bei dieser Geschwindigkeit",
       "power": "Leistung gegen den Widerstand",
       "gapNow": "Zwischen den Armen jetzt",
       "gapEasy": "Zwischen den Armen, locker",
@@ -249,15 +249,15 @@
       "gapSprint": "Zwischen den Armen, Sprint",
       "gapValue": "eine Lücke von {{seconds}} s, {{percent}} % des Zyklus",
       "overlapValue": "eine Überlappung von {{seconds}} s, {{percent}} % des Zyklus",
-      "speedLabel": "Tempo im Wasser",
-      "law": "Widerstand und Leistung wachsen mit",
-      "lawValue": "Tempo hoch zwei; Leistung, Tempo hoch drei",
+      "speedLabel": "Geschwindigkeit im Wasser",
+      "law": "Wie Widerstand und Leistung wachsen",
+      "lawValue": "Widerstand mit dem Quadrat, Leistung mit der dritten Potenz der Geschwindigkeit",
       "waves": "Wellenwiderstand an der Oberfläche",
-      "wavesValue": "bis zu 50 bis 60 Prozent des Widerstands einer Puppe bei 1,7 m/s",
+      "wavesValue": "50 bis 60 Prozent des Widerstands einer Puppe bei 1,7 m/s",
       "headLift": "Kinn an der Oberfläche",
-      "headLiftValue": "kann den passiven Widerstand verdreifachen, ein Schwimmer, geschleppt",
+      "headLiftValue": "kann den passiven Widerstand verdreifachen; ein Schwimmer, im Kanal gezogen",
       "active": "Widerstand bei 2 m/s",
-      "activeValue": "etwa 110 N, Männer, ein Labor",
+      "activeValue": "etwa 110 N, Männer, in einem Labor",
       "spread": "Schätzungen des Widerstands in der Literatur",
       "spreadValue": "20 bis 210 N, Methoden uneinig"
     }
