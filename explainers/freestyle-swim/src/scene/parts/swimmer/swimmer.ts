@@ -1,6 +1,5 @@
 import { Group, Vector3 } from 'three';
 import type { Object3D, Matrix4 } from 'three';
-import type { Figure } from '@core/figure';
 import type { Steps } from '@core/scene/pacing';
 import type { PartId } from '../../../ids';
 import { BODY } from '../../rig/constants';
@@ -8,7 +7,7 @@ import type { Skeleton } from '../../rig/skeleton';
 import type { PartContext } from '../context';
 import { PartBuilder } from './build';
 import { FigureBody } from './figureBody';
-import { FigureRig } from './figure/figureRig';
+import type { FigureRig } from './figure/figureRig';
 
 const LABEL_IDS = ['hand', 'forearm', 'elbow', 'shoulder', 'head', 'hips', 'foot'] as const;
 const HIP_LABEL = [-0.5, 0.02, 0.17] as const;
@@ -86,14 +85,13 @@ export class Swimmer {
   }
 }
 
-export function* buildSwimmer(context: PartContext, figure: Figure): Steps<Swimmer> {
+export function* buildSwimmer(context: PartContext, rig: FigureRig): Steps<Swimmer> {
   const builder = new PartBuilder(context);
   const root = new Group();
   root.name = 'swimmer';
-  const rig = new FigureRig(figure);
   yield;
   const body = new FigureBody({
-    figure,
+    figure: rig.figure,
     toRig: rig.toRig,
     track: (item) => builder.track(item),
     materialOf: (part) => builder.material(part, 'skin'),

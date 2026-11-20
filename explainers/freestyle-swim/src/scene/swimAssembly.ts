@@ -182,7 +182,7 @@ export function* createSwimAssembly(
   const root = new Group();
   root.name = 'freestyleSwim';
   const context: PartContext = { ...resources, tracker: new ResourceTracker() };
-  const swimmer = yield* buildSwimmer(context, resources.figure);
+  const swimmer = yield* buildSwimmer(context, resources.rig);
   root.add(swimmer.root);
   yield;
   const pool = yield* buildPool(context);

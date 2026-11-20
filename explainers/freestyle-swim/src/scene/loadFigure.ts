@@ -1,7 +1,6 @@
-import { decodeFigure } from '@core/figure';
-import type { Figure } from '@core/figure';
+import type { FigureRig } from './parts/swimmer/figure/figureRig';
 
-export async function loadFigure(): Promise<Figure> {
-  const { athleteData } = await import('./parts/swimmer/figure/athlete.data');
-  return decodeFigure(athleteData);
+export async function loadFigureRig(): Promise<FigureRig> {
+  const { createFigureRig } = await import('./parts/swimmer/figure/createRig');
+  return createFigureRig();
 }

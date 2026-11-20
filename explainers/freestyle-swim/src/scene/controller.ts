@@ -7,7 +7,7 @@ import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
 import type { AssemblyState, CameraView } from '../ids';
 import { createAssembly } from './assembly';
-import { loadFigure } from './loadFigure';
+import { loadFigureRig } from './loadFigure';
 import type { Assembly } from './assembly';
 import { BOUNDS_REGIONS, CAMERA_VIEWS, VIEW_FRAMES } from './cameraViews';
 import { FLOOR_HEIGHT_M } from './constants';
@@ -40,9 +40,9 @@ export class SwimController {
     const { scene, materials, textures, labels } = this.dependencies;
     this.dispose();
     const generation = this.generation;
-    const figure = await loadFigure();
+    const rig = await loadFigureRig();
     if (generation !== this.generation) return;
-    const assembly = await runPaced(createAssembly({ materials, textures, figure }, state));
+    const assembly = await runPaced(createAssembly({ materials, textures, rig }, state));
     if (generation !== this.generation) {
       assembly.dispose();
       return;
