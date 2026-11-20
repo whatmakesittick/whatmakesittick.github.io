@@ -64,16 +64,17 @@ const DUST = {
   floorDrop: 0.1,
   toX: -2.9,
   toY: -1.1,
-  spreadZ: 1.1,
+  zFrom: -1.3,
+  zTo: 0.1,
   rise: 0.5,
-  width: 0.045,
-  alpha: 0.14,
+  width: 0.05,
+  alpha: 0.5,
   speed: 2.2,
   spacing: 1.6,
   threshold: 0.7,
   full: 0.95,
   colourDark: [0.62, 0.64, 0.68],
-  colourLight: [0.42, 0.44, 0.48],
+  colourLight: [0.34, 0.36, 0.4],
   seed: 777,
 } as const;
 
@@ -626,7 +627,7 @@ export class DustStream {
     const last = new Vector3();
     const here = new Vector3();
     for (let line = 0; line < DUST.lines; line += 1) {
-      const z = (next() * 2 - 1) * DUST.spreadZ;
+      const z = lerp(DUST.zFrom, DUST.zTo, next());
       const lift = next() * DUST.rise;
       const sway = (next() * 2 - 1) * 0.3;
       this.buffers.fillLineData(line, next(), lerp(0.7, 1.4, next()), lerp(0.5, 1, next()));
