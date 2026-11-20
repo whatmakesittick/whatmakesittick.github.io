@@ -30,8 +30,8 @@ const BAND = {
   slice: 0.01,
   reach: 0.07,
   clearance: 0.0015,
-  halfHeight: 0.011,
-  thickness: 0.1,
+  halfHeight: 0.009,
+  thickness: 0.07,
   segments: 28,
 } as const;
 
