@@ -67,11 +67,14 @@ def offsets(body: Body, joints: np.ndarray) -> np.ndarray:
 
 
 def pose(body: Body, parameters: np.ndarray, correctives: bool) -> np.ndarray:
-    joints = joint_parameters(body, parameters)
-    rest = body.rest[None] + (offsets(body, joints) if correctives else 0.0)
-    return skin(body, global_states(body, joints), rest)
+    return pose_from_joints(body, joint_parameters(body, parameters), correctives)
 
 
 def pose_with_offsets(body: Body, parameters: np.ndarray, rest_offsets: np.ndarray) -> np.ndarray:
     joints = joint_parameters(body, parameters)
     return skin(body, global_states(body, joints), body.rest[None] + rest_offsets)
+
+
+def pose_from_joints(body: Body, joints: np.ndarray, correctives: bool) -> np.ndarray:
+    rest = body.rest[None] + (offsets(body, joints) if correctives else 0.0)
+    return skin(body, global_states(body, joints), rest)

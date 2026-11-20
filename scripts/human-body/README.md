@@ -26,17 +26,21 @@ folder on the module path, so do not use `python -I`.
 
 ```sh
 ASSETS=/path/to/assets
+POSES=/path/to/stroke-poses
 FIGURE=src/core/figure
 OUT=explainers/freestyle-swim/src/scene/parts/swimmer/figure/athlete.data.ts
 
-.venv/bin/python scripts/human-body/retarget_samples.py --assets $ASSETS --targets targets.json --fixtures $FIGURE/fixtures
-.venv/bin/python scripts/human-body/export.py --assets $ASSETS --module $OUT --fixtures $FIGURE/fixtures
+STROKE_DUMP_DIR=$POSES npx vitest run explainers/freestyle-swim/src/scene/dumpStrokePoses.test.ts
+.venv/bin/python scripts/human-body/export.py --assets $ASSETS --poses $POSES --module $OUT --fixtures $FIGURE/fixtures
 npx prettier --write $OUT $FIGURE/fixtures/*.json
 ```
 
-`retarget_samples.py` is only needed for new pose samples. `export.py` reads the committed samples, so the second
-command alone reproduces the module and the ground truth. Both are deterministic: running twice gives the same bytes.
-Python files are not covered by the repository's lint.
+The first command runs the real retarget over the stroke and writes the poses the page shows. The second fits the
+correctives to them and writes the data module and the fixtures. Both are deterministic: running twice gives the same
+bytes. Python files are not covered by the repository's lint.
+
+`export.py` takes `--tolerance-mm` (2.25) and `--vertex-floor-mm` (1.0). `sweep.py` takes the same assets and poses,
+fits many settings and prints the size and error table below.
 
 ## Configuration
 
@@ -44,44 +48,86 @@ Python files are not covered by the repository's lint.
 length is converted from centimetres to metres), `body` (the first 20 identity coefficients: mass, build, hips),
 `skeleton` (skeleton parameters baked into the data, here `scale_shoulder_width`). The face coefficients stay at zero.
 
+## Stroke poses
+
+`dumpStrokePoses.test.ts` (skipped unless `STROKE_DUMP_DIR` is set) walks the stroke through `FigureRig.retarget`, so
+the runtime only parameters (`r_uparm_roll`, `l_uparm_roll`) are in. For each pose it writes the model parameters and the
+127 by 7 joint parameters after the parameter transform, as float32, plus the six features per joint from
+`Kinematics.features` for a few poses. Python feeds the joint parameters straight into the corrective network; the
+features it builds match the TypeScript ones to 1e-7.
+
+- `fit`: the rest pose and every pace, kick, breathing (`none`, `right`) and head up share (0, 0.5, 1), every 5
+  scrubber units: 7,201 poses.
+- `heldout`: the same grid at an offset of 2 units with head up shares 0, 0.25, 0.75 and 1: 9,600 poses. The fit never
+  sees them.
+
 ## Outputs
 
-- `athlete.data.ts`: the browser data module, loaded lazily. Rest vertices with the identity baked in, triangles, skin
-  weights (joint and 16 bit weight per influence, at most four per vertex in MHR), the skeleton (parents, offsets,
-  pre-rotations, inverse bind), the parameter transform as a sparse matrix over the 203 settable columns, the baked
-  constants, the first layer of the correctives and the reduced correctives. Integers and floats are packed into one
-  base64 blob with a table of arrays, positions and indices as varint deltas.
-- `fixtures/swim-samples.bin` and `.json`: the swimmer's poses as MHR model parameters, 960 poses (three paces, both
-  kicks, breathing `none` and `right`, head down and up, every 25 scrubber units), 16 bit integers in steps of 1e-4,
-  only the columns that move. The grid and the column names are in the JSON.
-- `fixtures/ground-truth.bin` and `.json`: 20 held-out poses with 400 vertices (300 spread over the mesh, 100 with the
-  largest correctives), the vertices with the full correctives and with correctives off, all joint positions and
-  rotations, from the full Python model. Metres, float32, layout in the JSON.
+- `athlete.data.ts`: the browser data module, loaded lazily. Rest vertices with the identity baked in, triangles
+  (rotated to start at the lowest index, sorted, as three delta columns), skin weights (joint and 16 bit weight per
+  influence), the skeleton (parents, offsets, pre-rotations, inverse bind), the parameter transform as a sparse matrix
+  over the 203 settable columns, the baked constants, the first layer of the correctives and the reduced correctives.
+  Integers and floats are packed into one base64 blob with a table of arrays, positions and indices as varint deltas.
+- `fixtures/stroke-truth.bin` and `.json`: 60 held-out stroke poses (model parameters, including the two roll
+  parameters) with 250 vertices (150 spread, 100 with the largest correctives): vertex positions with the full
+  correctives from the full Python model computed from the joint parameters, and the difference to the positions
+  without correctives (int16, 0.01 mm). About 330 kB.
+- `fixtures/ground-truth.bin` and `.json`: 20 poses from the old offline fit (`swim-samples`) with 400 vertices, the
+  full model with correctives off, all joint positions and rotations. The correctives off test uses them.
+- `fixtures/swim-samples.bin` and `.json`: generic swimmer poses as MHR model parameters, written by
+  `retarget_samples.py` (needs its targets file). `retarget.test.ts` and the ground truth poses use them; the
+  correctives no longer do.
 
 ## Pose correctives
 
 MHR computes `relu(W f)` from the 750 rotation features `f` and then a dense 3,000 by 14,697 matrix `B` (168 MB). The
-export keeps what the swimmer reaches:
+export keeps what the stroke reaches:
 
-1. Poses are split into train, validation (every 8th) and test (every 8th, shifted) sets. The test set never touches
-   the fit.
-2. First layer: only the units that ever activate and only features of joints that can move. Rows are stored as 8 bit
-   integers with one scale per row.
-3. The vertices are grouped by the body part of their main joint. Per group, the vertices whose correctives never
-   reach 0.05 mm are dropped, then a principal component basis `C` of the offsets is computed. The number of
-   components is the smallest one whose worst vertex error on the validation set is under `TARGET_WORST_M` in
-   `export.py` (0.9 mm). The group matrix `U = B C^T` keeps only the units that matter for the group.
-4. At runtime: `offsets = (relu(W f) U) C`, added to the rest positions before skinning. Quantisation is 9 bit for `U`
-   and 8 bit for `C`, with scales chosen so rounding stays under about 0.02 mm.
+1. First layer: only the units that activate on the fit poses and only features of joints that can move. Rows are
+   stored as 8 bit integers with one scale per row; the fit uses the quantised rows.
+2. The vertices are grouped by the body part of their main joint (limbs without the twist joints, the torso by spine
+   joint, the head by head, jaw and neck). Per group, the vertices whose full correctives never reach
+   `--vertex-floor-mm` over the fit poses are dropped: their error is below that floor anyway.
+3. Per group a principal component basis `C` of the offsets is computed. Units are picked greedily (orthogonal
+   matching pursuit) on the leading components and `U` is solved by least squares on the fit poses, so it also absorbs
+   the first layer's quantisation. The number of components and units is the smallest by size whose worst vertex error
+   on validation poses (every fourth pose of the fit grid, not used for the choice of `U`) is under 0.8 times
+   `--tolerance-mm`. `U` is 16 bit with one scale per component; `C` is 8 bit with a step of at least 9 per cent of the
+   tolerance divided by the component's largest coefficient.
+4. At runtime: `offsets = (relu(W f) U) C`, added to the rest positions before skinning.
 
-`export.py` prints the worst and the mean posed vertex error against the full model for validation and test poses.
-Lower `TARGET_WORST_M` for a tighter fit and a larger module.
+Error is the length of the rest space displacement difference between the reduced and the full correctives, per
+vertex, in millimetres, over all 4,899 vertices and the 9,600 held-out poses (the mean includes the vertices that were
+dropped).
+
+### Size against error
+
+The data module without any correctives is 103,062 bytes gzipped. Regions are the fine ones unless noted.
+
+| tolerance mm | vertex floor mm | U bits             | gzipped     | raw         | worst mm  | mean mm   |
+| ------------ | --------------- | ------------------ | ----------- | ----------- | --------- | --------- |
+| 0.85         | 0.05            | 16                 | 260,330     | 472,983     | 1.034     | 0.064     |
+| 0.85         | 1.0             | 16                 | 251,470     | 432,191     | 1.034     | 0.157     |
+| 1.5          | 0.05            | 16                 | 206,988     | 379,206     | 1.506     | 0.103     |
+| 1.5          | 1.0             | 16                 | 201,343     | 354,741     | 1.506     | 0.187     |
+| 2.0          | 0.05            | 16                 | 188,729     | 350,516     | 1.865     | 0.128     |
+| 2.0          | 1.0             | 16                 | 184,079     | 329,295     | 1.865     | 0.206     |
+| 2.25         | 0.05            | 16                 | 184,377     | 345,187     | 1.871     | 0.152     |
+| **2.25**     | **1.0**         | **16**             | **179,961** | **323,433** | **1.871** | **0.228** |
+| 2.25         | 1.0             | 8                  | 180,297     | 329,034     | 2.032     | 0.250     |
+| 2.25         | 1.0             | 16, coarse regions | 191,978     | 364,157     | 2.044     | 0.223     |
+| 3.0          | 0.05            | 16                 | 170,390     | 318,821     | 2.846     | 0.204     |
+| 3.0          | 1.0             | 16                 | 167,358     | 303,754     | 2.846     | 0.271     |
+
+The chosen row is the smallest with worst error at most 2 mm and mean at most 0.3 mm. The worst error stays below the
+tolerance because the choice is made on validation poses with a margin and the grid of sizes is coarse. The vertex
+floor mostly drops the distal finger joints (under 1.2 mm over the stroke). The toes (up to 8 mm), the jaw and head
+(up to 16 mm) and the finger bases (up to 3 mm) do move, so they keep their correctives. 8 bit `U` saves nothing: `U`
+is about a tenth of the corrective bytes, `C` carries the rest.
 
 ## Another explainer
 
-1. Write its rig's target joints for every pose it needs to show in the same JSON shape as the swimmer: a list of
-   `{ key, right, left, face, crown }`, where `right` and `left` hold `shoulder, elbow, wrist, handAxis, palm, hip,
-knee, ankle, toe` and `face` and `crown` are unit vectors of the head, all in the rig's own frame in metres. Adapt
-   the frame mapping in `retarget_samples.py` if the frame differs (the swimmer's is `(-z, x, -y)`).
-2. Run `retarget_samples.py`, then `export.py` with its own config and output paths. The correctives are fitted to
-   those poses only, so poses outside the samples are corrected less well.
+1. Add a pose dump like `dumpStrokePoses.test.ts` that writes its poses as joint parameters through its own rig and
+   retarget.
+2. Run `export.py` with its own config and output paths. The correctives are fitted to those poses only, so poses
+   outside them are corrected less well; add intermediate values of every continuous control to the fit poses.

@@ -3,8 +3,13 @@ from pathlib import Path
 
 import numpy as np
 
+import reference
 from mhr_body import MODEL_PARAMETERS, Body, Config, run_mhr
 
+STROKE_POSES = 60
+STROKE_VERTICES = 250
+STROKE_SPREAD_VERTICES = 150
+STROKE_DELTA_STEP = 1e-5
 SAMPLE_STEP = 1e-4
 FIXTURE_VERTICES = 400
 SPREAD_VERTICES = 300
@@ -117,3 +122,40 @@ def write_ground_truth(
         "layout": ["vertexIds", "parameters", "correctivesOn", "correctivesOff", "jointPositions", "jointRotations"],
     }
     (out / "ground-truth.json").write_text(json.dumps(meta))
+
+
+def stroke_vertex_subset(offsets: np.ndarray) -> np.ndarray:
+    spread = np.linspace(0, offsets.shape[1] - 1, STROKE_SPREAD_VERTICES).astype(np.int64)
+    taken = set(spread.tolist())
+    strength = np.linalg.norm(offsets, axis=2).max(axis=0)
+    ranked = [v for v in np.argsort(-strength, kind="stable") if v not in taken]
+    extra = ranked[: STROKE_VERTICES - STROKE_SPREAD_VERTICES]
+    return np.array(sorted(taken | set(extra)), dtype=np.int64)
+
+
+def write_stroke_truth(out: Path, body: Body, strokes) -> None:
+    chosen = np.linspace(0, len(strokes.joints) - 1, STROKE_POSES).astype(np.int64)
+    joints = strokes.joints[chosen]
+    on = reference.pose_from_joints(body, joints, True)
+    off = reference.pose_from_joints(body, joints, False)
+    vertices = stroke_vertex_subset(reference.offsets(body, joints))
+    delta = np.round((on - off)[:, vertices] / STROKE_DELTA_STEP)
+    assert np.abs(delta).max() < 32767
+    chunks = [
+        vertices.astype("<u2"),
+        strokes.parameters[chosen].astype("<f4"),
+        on[:, vertices].astype("<f4"),
+        delta.astype("<i2"),
+    ]
+    with open(out / "stroke-truth.bin", "wb") as handle:
+        for chunk in chunks:
+            handle.write(np.ascontiguousarray(chunk).tobytes())
+    meta = {
+        "poses": STROKE_POSES,
+        "vertices": len(vertices),
+        "parameterNames": strokes.parameter_names,
+        "deltaStep": STROKE_DELTA_STEP,
+        "layout": ["vertexIds", "parameters", "correctivesOn", "correctiveDelta"],
+        "keys": [strokes.keys[i] for i in chosen],
+    }
+    (out / "stroke-truth.json").write_text(json.dumps(meta))

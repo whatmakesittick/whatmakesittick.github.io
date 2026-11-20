@@ -22,8 +22,8 @@ const DUMP_DIR = process.env.STROKE_DUMP_DIR;
 const SCRUBBER_UNITS = 1000;
 const UNIT_STEP = 5;
 const HELD_OUT_OFFSET = 2;
-const FIT_HEAD_UP = [0, 1];
-const HELD_OUT_HEAD_UP = [0, 0.5, 1];
+const FIT_HEAD_UP = [0, 0.5, 1];
+const HELD_OUT_HEAD_UP = [0, 0.25, 0.75, 1];
 const FEATURE_CHECK_STRIDE = 997;
 const TIMEOUT_MS = 600_000;
 
