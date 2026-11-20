@@ -2,18 +2,18 @@
   "meta": {
     "title": "Cómo genera su empuje el motor de avión más grande",
     "eyebrow": "Motores a reacción",
-    "tagline": "Sigue el aire por el GE9X. El enorme ventilador da la mayor parte del empuje. El fuego solo calienta el aire que mueve las turbinas.",
-    "description": "Sigue el aire por el GE9X, el motor de avión más grande: el ventilador gigante, la compresión, el fuego, dos turbinas y el inversor, en 3D.",
-    "summary": "El ventilador y las dos corrientes, el compresor, la cámara de combustión, las dos turbinas y los dos ejes, de dónde sale el empuje, el arranque y la marcha atrás.",
-    "socialAlt": "Corte de un turbofán GE9X con cortes de color carbón, un ventilador azul y un núcleo bronce, largas líneas de aire que se separan alrededor del núcleo y un núcleo caliente que brilla, junto al título «Cómo genera su empuje el motor de avión más grande»"
+    "tagline": "Sigue el aire a través del GE9X: el enorme ventilador aporta la mayor parte del empuje, y el fuego solo calienta el aire que hace girar las turbinas.",
+    "description": "Sigue en 3D el aire a través del GE9X, el motor de avión más grande: el ventilador gigante, la compresión, el fuego, las dos turbinas y el inversor.",
+    "summary": "El ventilador y las dos corrientes, el compresor, la cámara de combustión, las dos turbinas y sus dos ejes, de dónde sale el empuje, el arranque y el inversor.",
+    "socialAlt": "Vista en corte de un turbofán GE9X, con las superficies cortadas en gris carbón, el ventilador azul, el núcleo color bronce que brilla de calor y largas líneas de aire que se separan a su alrededor, junto al título «Cómo genera su empuje el motor de avión más grande»"
   },
   "stage": {
     "label": "Modelo interactivo del motor GE9X",
-    "gauge": "Velocidad del ventilador, velocidad del núcleo y empuje, en vivo"
+    "gauge": "Velocidad del ventilador, velocidad del núcleo y empuje en directo"
   },
   "timeline": {
     "label": "Posición del aire",
-    "phases": "Ir a un paso del viaje del aire",
+    "phases": "Ir a un paso del recorrido del aire",
     "value": "{{metres}} m",
     "describe": "A {{metres}} m del borde de la entrada: {{phase}}",
     "speed": "Reproducción",
@@ -31,8 +31,8 @@
     "jump": {
       "suck": "Ir al aire que entra en el motor",
       "squeeze": "Ir al aire que se comprime",
-      "burn": "Ir al aire en el fuego",
-      "spin": "Ir al aire que mueve las turbinas",
+      "burn": "Ir al aire que pasa por el fuego",
+      "spin": "Ir al aire que hace girar las turbinas",
       "blow": "Ir al aire que sale por las toberas"
     }
   },
@@ -43,14 +43,14 @@
       "closed": "Góndola cerrada",
       "cutaway": "Corte"
     },
-    "streams": "Aire",
+    "streams": "Corrientes",
     "streamOptions": {
-      "both": "Ambas",
+      "both": "Las dos",
       "cold": "Fría",
       "hot": "Caliente"
     },
     "groups": {
-      "streams": "Aire",
+      "streams": "Corrientes",
       "cutaway": "Vista",
       "look": "Ver",
       "reverser": "Inversor"
@@ -60,8 +60,8 @@
       "reverser": "Inversor"
     },
     "reverserOptions": {
-      "stowed": "Cerrado",
-      "deployed": "Abierto"
+      "stowed": "Recogido",
+      "deployed": "Desplegado"
     },
     "views": {
       "labels": {
@@ -70,14 +70,14 @@
         "hint": "Etiquetas (L)"
       },
       "person": {
-        "name": "Persona como referencia",
+        "name": "Persona de referencia",
         "short": "Persona",
-        "hint": "Persona como referencia (P)"
+        "hint": "Persona de referencia (P)"
       },
       "reverser": {
-        "name": "Abrir el inversor",
+        "name": "Desplegar el inversor",
         "short": "Inversor",
-        "hint": "Abrir el inversor (D)"
+        "hint": "Desplegar el inversor (D)"
       }
     }
   },
@@ -91,7 +91,7 @@
     "position": "Aire marcado",
     "fan": "Velocidad del ventilador",
     "core": "Velocidad del núcleo",
-    "thrust": "Empuje, estimación del modelo",
+    "thrust": "Empuje estimado por el modelo",
     "reverse": "Inverso {{percent}} %"
   },
   "units": {
@@ -99,18 +99,18 @@
   },
   "parts": {
     "nacelle": "Góndola, la cubierta exterior",
-    "intakeLip": "Borde de la entrada",
+    "intakeLip": "Borde de la entrada de aire",
     "fanCase": "Carcasa del ventilador",
     "fanBlades": "Álabes del ventilador, 16",
     "spinner": "Cono central",
     "guideVanes": "Álabes guía",
-    "splitter": "Divisor",
+    "splitter": "Divisor de flujo",
     "booster": "Booster, 3 etapas",
-    "compressorRotor": "Compresor, álabes que giran",
+    "compressorRotor": "Compresor, álabes móviles",
     "compressorStator": "Compresor, álabes fijos",
     "compressor": "Compresor, 11 etapas",
-    "outerShaft": "Eje exterior, núcleo",
-    "innerShaft": "Eje interior, ventilador",
+    "outerShaft": "Eje exterior, del núcleo",
+    "innerShaft": "Eje interior, del ventilador",
     "gearbox": "Caja de engranajes de accesorios",
     "starter": "Motor de arranque neumático",
     "diffuser": "Difusor",
@@ -125,15 +125,15 @@
     "coldStream": "Corriente fría",
     "hotStream": "Corriente caliente",
     "reverser": "Inversor de empuje",
-    "cascades": "Cascadas, álabes curvos",
+    "cascades": "Cascadas de álabes curvos",
     "person": "Persona, 1,8 m"
   },
   "chapters": {
     "fan": {
       "blades": "Álabes del ventilador",
       "bladesValue": "16, de fibra de carbono",
-      "width": "Ancho del ventilador",
-      "widthValue": "3,4 m, casi tan ancho como el cuerpo de un 737",
+      "width": "Diámetro del ventilador",
+      "widthValue": "3,4 m, casi el ancho del fuselaje de un 737",
       "split": "Aire que rodea el núcleo",
       "splitValue": "unas 10 de cada 11 partes",
       "tip": "Puntas de los álabes a plena potencia",
@@ -142,22 +142,22 @@
     "compressor": {
       "stages": "Etapas del compresor",
       "stagesValue": "11",
-      "ratio": "Compresión en el compresor",
-      "ratioValue": "27 veces la presión",
-      "overall": "Compresión en todo el motor",
-      "overallValue": "más de 60 veces la presión",
+      "ratio": "Compresor por sí solo",
+      "ratioValue": "27 a 1",
+      "overall": "Motor completo",
+      "overallValue": "más de 60 a 1",
       "shaft": "Lo mueve",
-      "shaftValue": "la turbina de alta presión, por el eje exterior"
+      "shaftValue": "la turbina de alta presión, mediante el eje exterior"
     },
     "combustor": {
-      "style": "Forma de quemar",
-      "styleValue": "combustión pobre: primero se mezclan el combustible y el aire",
+      "style": "Tipo de combustión",
+      "styleValue": "pobre, con el aire y el combustible mezclados de antemano",
       "liners": "Revestimientos",
       "linersValue": "de cerámica",
       "nox": "Óxidos de nitrógeno",
       "noxValue": "menos de la mitad del límite más reciente, según GE",
       "cool": "La cerámica pesa menos",
-      "coolValue": "un tercio de la densidad de las aleaciones de metal"
+      "coolValue": "más o menos un tercio de la densidad de las aleaciones metálicas"
     },
     "turbines": {
       "hpt": "Turbina de alta presión",
@@ -183,52 +183,52 @@
       "what": "Qué se desvía",
       "whatValue": "la corriente fría, en el modelo",
       "status": "En servicio",
-      "statusValue": "la primera entrega del 777-9 está prevista para 2027"
+      "statusValue": "aún no: la primera entrega del 777-9 está prevista para 2027"
     }
   },
   "sections": {
     "fan": {
       "title": "El ventilador y las dos corrientes",
-      "p1": "Ponte delante del motor y mira dentro. Lo primero que encuentra el aire es el <strong>ventilador</strong>, un anillo de 16 álabes grandes de fibra de carbono. Mide 3,4 metros de ancho, casi tanto como el cuerpo de un Boeing 737. La figura pequeña a su lado mide 1,8 metros, para que veas el tamaño. Ningún otro motor de avión tiene un ventilador tan grande.",
-      "p2": "Justo detrás del ventilador, el aire se topa con un borde afilado, el <strong>divisor</strong>. Allí el aire se parte en dos. Unas 10 de cada 11 partes rodean la parte central del motor, que se llama <strong>núcleo</strong>. Es la <strong>corriente fría</strong>, y sale directa por detrás. La otra parte, más o menos 1 de cada 11, entra en el núcleo. Es la <strong>corriente caliente</strong>, y la seguirás en los próximos capítulos.",
-      "p3": "¿Cuál de las dos corrientes empuja? La mayor parte del empuje viene del ventilador. A este empujón los ingenieros lo llaman <strong>empuje</strong>. El ventilador toma muchísimo aire y lo lanza hacia atrás un poco más rápido. Empujar mucho aire un poco es una buena forma de mover un avión. A plena potencia, según las cifras de GE, las puntas de los álabes giran más rápido que el sonido.",
-      "p4": "Elige Fría o Caliente para ver una corriente a la vez. El modelo dibuja el aire como líneas largas, con guiones que se mueven por ellas. Las líneas se separan en el divisor, y la mayoría rodea el núcleo. El número de líneas no muestra la proporción de 10 a 1. Las velocidades y los colores son un dibujo del modelo, no mediciones. El modelo dibuja el motor para que se entienda, no para medirlo. Su disposición es propia, y también lo es el número de álabes, salvo los 16 del ventilador.",
-      "p5": "Este motor es para el Boeing 777-9, que todavía no está en servicio. Su primera entrega está prevista para 2027. El motor ya está certificado y vuela en aviones de prueba."
+      "p1": "Ponte delante del motor y asómate dentro. Lo primero que encuentra el aire es el <strong>ventilador</strong>, un anillo de 16 grandes álabes de fibra de carbono. Mide 3,4 metros de diámetro, casi el ancho del fuselaje de un Boeing 737, y ningún otro motor de avión de pasajeros tiene un ventilador tan grande. La pequeña figura que tiene al lado mide 1,8 metros y te ayuda a hacerte una idea del tamaño.",
+      "p2": "Justo detrás del ventilador, el aire choca con un borde afilado, el <strong>divisor de flujo</strong>, que lo parte en dos. Unas 10 de cada 11 partes rodean la zona central del motor, llamada <strong>núcleo</strong>. Es la <strong>corriente fría</strong>, y sale directamente por detrás. El resto, más o menos 1 parte de cada 11, entra en el núcleo: es la <strong>corriente caliente</strong>, y la seguirás en los próximos capítulos.",
+      "p3": "¿Cuál de las dos corrientes empuja el avión? La mayor parte de esa fuerza, que los ingenieros llaman <strong>empuje</strong>, viene del ventilador. El ventilador atrapa una enorme cantidad de aire y la lanza hacia atrás solo un poco más rápido de lo que entró. Acelerar un poco una gran masa de aire es una buena manera de impulsar un avión. Según las cifras de GE, a plena potencia las puntas de los álabes van más rápido que el sonido.",
+      "p4": "Elige Fría o Caliente para ver las corrientes de una en una. El modelo dibuja el aire como líneas largas por las que avanzan unos guiones. En el divisor las líneas se separan y la mayoría rodea el núcleo, aunque su número no refleja la proporción de 10 a 1. Las velocidades y los colores son una representación del modelo, no mediciones: el modelo dibuja el motor para que se entienda, no para medirlo. La disposición de las piezas es propia del modelo, igual que el número de álabes, salvo los 16 del ventilador.",
+      "p5": "Este motor está hecho para el Boeing 777-9, que todavía no ha entrado en servicio: su primera entrega está prevista para 2027. El motor en sí ya está certificado y vuela en aviones de prueba."
     },
     "compressor": {
       "title": "La compresión",
-      "p1": "Ahora sigue el aire del núcleo. Primero pasa por el <strong>booster</strong>, tres etapas de álabes pequeños justo detrás del ventilador. Después entra en el <strong>compresor</strong>, que tiene 11 etapas. Una etapa es un anillo de álabes que giran y otro de álabes fijos. El anillo que gira empuja el aire hacia delante. El fijo lo prepara para la etapa siguiente.",
-      "p2": "Cada etapa comprime el aire un poco más. Por el camino del núcleo, las líneas se aprietan y su color se vuelve más cálido. Solo el compresor lo comprime a 27 veces la presión. Con el ventilador y el booster, todo el motor lo lleva a más de 60 veces. Según GE, es la cifra más alta de cualquier motor en servicio. El aire comprimido arde bien, así que da más potencia con cada gota de combustible.",
-      "p3": "El compresor gira sobre el <strong>eje exterior</strong>, un tubo hueco. Lo mueve la turbina de alta presión, una rueda de álabes que está al fondo. Los colores te dicen quién mueve qué. Todo lo del eje exterior es de color bronce: el compresor y la turbina de alta presión. Todo lo del eje interior es azul: el ventilador, el booster y la turbina de baja presión. Las piezas que no giran son grises. Las franjas de los ejes y las marcas de los discos muestran que el núcleo bronce gira varias veces más rápido que el eje azul del ventilador. Las cifras publicadas no coinciden, así que el modelo usa sus propias velocidades. Además, hace girar los ejes muchas veces más lento que el motor real, para que puedas ver los álabes.",
-      "p4": "Elige Corte para ver el interior y arrastra el marcador de la barra de tiempo. El marcador muestra dónde están dos porciones de aire: una en el núcleo y otra en la corriente fría. La barra nombra los pasos del aire del núcleo: aspirar, comprimir, quemar, girar y soplar. El aire frío se salta comprimir, quemar y girar, porque va por el conducto que rodea el núcleo. El número indica los metros desde el borde de la entrada, que es el frente del motor."
+      "p1": "Ahora sigue el aire del núcleo. Primero pasa por el <strong>booster</strong>, tres etapas de álabes pequeños justo detrás del ventilador, y después entra en el <strong>compresor</strong>, que tiene 11 etapas. Cada etapa es un anillo de álabes que giran seguido de otro de álabes fijos. El anillo que gira impulsa el aire, y el fijo lo prepara para la etapa siguiente.",
+      "p2": "Cada etapa aprieta el aire un poco más, y a lo largo del núcleo las líneas se juntan y toman un color más cálido. El compresor, por sí solo, lo comprime 27 a 1, es decir, multiplica su presión por 27. Si se suman el ventilador y el booster, el motor entero llega a más de 60 a 1, la cifra más alta de cualquier motor en servicio, según GE. El aire comprimido arde bien, así que cada gota de combustible da más potencia.",
+      "p3": "El compresor va montado sobre el <strong>eje exterior</strong>, un tubo hueco, y lo mueve la turbina de alta presión, una rueda de álabes situada al fondo. Los colores te dicen quién mueve qué. Todo lo que va en el eje exterior es de color bronce: el compresor y la turbina de alta presión. Todo lo que va en el eje interior es azul: el ventilador, el booster y la turbina de baja presión. Las piezas que no giran son grises. Las franjas de los ejes y las marcas de los discos muestran que el núcleo de color bronce gira varias veces más rápido que el eje azul del ventilador. Como las cifras publicadas no coinciden, el modelo usa sus propias velocidades. Además, hace girar los ejes muchas veces más despacio que el motor real, para que puedas distinguir los álabes.",
+      "p4": "Elige Corte para ver el interior y arrastra el marcador de la barra de tiempo. El marcador señala dónde están dos porciones de aire: una en el núcleo y otra en la corriente fría. La barra nombra los pasos que sigue el aire del núcleo: aspirar, comprimir, quemar, girar y soplar. El aire frío se salta comprimir, quemar y girar, porque viaja por el conducto que rodea el núcleo. El número indica los metros que hay desde el borde de la entrada, en la parte delantera del motor."
     },
     "combustor": {
       "title": "Donde arde el combustible",
-      "p1": "El aire comprimido entra ahora en la <strong>cámara de combustión</strong>, donde arde el combustible. Primero una pieza llamada difusor frena el aire. Luego se rocía combustible por unos inyectores pequeños. Arde de forma constante, como una cocina de gas, no a golpes. En el modelo, las líneas de aire se encienden aquí con mucho brillo.",
-      "p2": "Este motor primero mezcla el combustible con el aire, y después quema la mezcla. Los ingenieros lo llaman <strong>combustión pobre</strong>: mucho aire para poco combustible. Una mezcla así arde más limpia. Según GE, el motor produce menos de la mitad de los óxidos de nitrógeno, un gas contaminante, que permite el límite más reciente.",
-      "p3": "Las paredes de la cámara se llaman <strong>revestimientos</strong>, y aquí son de cerámica. Esta cerámica tiene más o menos un tercio de la densidad de las aleaciones de metal, así que pesa menos. Además, necesita menos aire de refrigeración.",
-      "p4": "El brillo y los colores de las líneas son solo un dibujo. GE no publica la temperatura del gas, así que el modelo simplemente dibuja más brillo donde hay más calor. Elige Corte para mirar dentro. Este fuego no empuja el avión. Su trabajo es calentar el aire, y el capítulo siguiente explica por qué."
+      "p1": "Ahora el aire comprimido entra en la <strong>cámara de combustión</strong>, donde arde el combustible. Primero, una pieza llamada difusor lo frena. Luego, unos pequeños inyectores rocían el combustible. La llama arde de forma continua, como el quemador de una cocina de gas, no a explosiones. En el modelo, aquí las líneas de aire se encienden con un brillo intenso.",
+      "p2": "Este motor mezcla primero el combustible con el aire y después quema la mezcla. Los ingenieros lo llaman <strong>combustión pobre</strong>: mucho aire para poco combustible. Una mezcla así arde de forma más limpia. Según GE, el motor emite menos de la mitad de los óxidos de nitrógeno, unos gases contaminantes, que permite el límite de emisiones más reciente.",
+      "p3": "Las paredes de la cámara se llaman <strong>revestimientos</strong>, y en este motor son de cerámica. Esta cerámica tiene más o menos un tercio de la densidad de las aleaciones metálicas, así que pesa menos. Además, necesita menos aire de refrigeración.",
+      "p4": "El brillo y los colores de las líneas son solo una representación. GE no publica la temperatura del gas, así que el modelo se limita a dibujar más brillante lo que está más caliente. Elige Corte para mirar dentro. Este fuego no empuja el avión: su trabajo es calentar el aire, y en el capítulo siguiente verás por qué."
     },
     "turbines": {
       "title": "Dos turbinas, dos ejes",
-      "p1": "El gas caliente y veloz sale de la cámara y llega a las <strong>turbinas</strong>. Una turbina funciona como un molino de viento: el gas empuja los álabes y los hace girar. Para eso sirve el fuego. No empuja el avión. Calienta el aire para que las turbinas puedan girar. Mientras el gas las mueve, las líneas de aire se abren, se enfrían y se retuercen.",
-      "p2": "Hay dos turbinas, en dos ejes. Primero va la <strong>turbina de alta presión</strong>. Tiene 2 etapas y mueve el compresor por el eje exterior. Después va la <strong>turbina de baja presión</strong>. Tiene 6 etapas y mueve el ventilador y el booster por el eje interior, que pasa por dentro del exterior. Los colores muestran quién mueve qué: la turbina de alta presión, de color bronce, mueve el compresor bronce, y la turbina de baja presión, azul, mueve el ventilador y el booster azules.",
-      "p3": "Los dos ejes giran a distinta velocidad. El eje del núcleo gira varias veces más rápido que el del ventilador. Las cifras publicadas de las velocidades exactas no coinciden, así que el modelo usa las suyas. El giro, las franjas de los ejes y el brillo de la animación también son del modelo. Los dos indicadores de abajo son porcentajes del ajuste de despegue del modelo, no revoluciones por minuto.",
-      "p4": "El gas caliente maltrata los álabes de metal. Aguantan gracias al aire de refrigeración y a los recubrimientos, y este motor suma piezas de cerámica. Hay cinco tipos de piezas de cerámica. Unas 300 piezas están impresas en 3D, de siete tipos. GE no publica la temperatura del gas, así que aquí no verás ninguna."
+      "p1": "El gas, caliente y veloz, sale de la cámara y llega a las <strong>turbinas</strong>. Una turbina funciona como un molino de viento: el gas empuja los álabes y los hace girar. Para eso sirve el fuego. No empuja el avión, sino que calienta el aire para que las turbinas puedan girar. Mientras el gas las mueve, las líneas de aire se ensanchan, se enfrían y se retuercen.",
+      "p2": "Hay dos turbinas, cada una en su propio eje. Primero está la <strong>turbina de alta presión</strong>: tiene 2 etapas y mueve el compresor a través del eje exterior. Detrás viene la <strong>turbina de baja presión</strong>, con 6 etapas, que mueve el ventilador y el booster a través del eje interior, el que pasa por dentro del exterior. Los colores muestran quién mueve qué: la turbina de alta presión, de color bronce, mueve el compresor bronce, y la de baja presión, azul, mueve el ventilador y el booster, también azules.",
+      "p3": "Los dos ejes giran a velocidades distintas: el del núcleo gira varias veces más rápido que el del ventilador. Las cifras publicadas sobre las velocidades exactas no coinciden, así que el modelo usa las suyas. El giro, las franjas de los ejes y el brillo de la animación también son elección del modelo. Los dos indicadores de abajo marcan un porcentaje del régimen de despegue del modelo, no revoluciones por minuto.",
+      "p4": "El gas caliente castiga mucho los álabes de metal. Aguantan gracias al aire de refrigeración y a sus recubrimientos, y este motor añade además piezas de cerámica, de cinco tipos distintos. Unas 300 piezas, de siete tipos, están impresas en 3D. GE no publica la temperatura del gas, así que aquí no encontrarás esa cifra."
     },
     "thrust": {
       "title": "De dónde sale el empuje",
-      "p1": "Atrás hay dos toberas. La corriente fría sale por la ancha, alrededor del núcleo. La corriente caliente sale por la estrecha, en el centro. La fría son unas 10 partes de aire, ancha y lenta. La caliente es 1 parte, estrecha y rápida. Cuanto más rápidos van los guiones, más rápido va el aire. El modelo muestra las velocidades como relativas, no en metros por segundo.",
-      "p2": "¿Qué es mejor: mucho aire empujado un poco, o poco aire empujado mucho? Gana mucho aire empujado un poco. Se pierde menos energía, así que se gasta menos combustible. Por eso los motores modernos de avión tienen ventiladores tan grandes. Según GE, este motor quema hasta un 10 % menos de combustible con el mismo empuje que su motor anterior, el GE90-115B.",
-      "p3": "Ahora las cifras. En el despegue, GE calcula para el motor unas 105 000 libras de empuje, alrededor de 470 kilonewtons. Un kilonewton son mil newtons, y el newton es una unidad de fuerza. En una prueba, el motor llegó a 134 300 libras, un récord que Guinness reconoció en julio de 2019. Fue una prueba, no un vuelo normal. Para comparar, el motor de un 737 Next Generation da unos 92 a 121 kilonewtons.",
-      "p4": "Mueve la palanca de empuje del indicador y mira cómo cambian las corrientes. Con un ajuste alto, el modelo atrae el aire con más fuerza hacia la entrada, y la columna de gases de escape se hace más larga y más brillante. El indicador de empuje es una estimación del modelo, en porcentaje de su ajuste de despegue. El modelo también tiene su propio reparto del empuje entre las dos corrientes. Es solo un esbozo, porque GE no publica ninguno. Lo único que podemos decir es que la mayor parte del empuje viene del ventilador."
+      "p1": "En la parte trasera hay dos toberas. La corriente fría sale por la ancha, que rodea el núcleo, y la caliente, por la estrecha, en el centro. La fría lleva unas 10 partes del aire y es ancha y lenta; la caliente lleva 1 parte y es estrecha y rápida. Cuanto más rápido van los guiones, más rápido va el aire. Eso sí, el modelo muestra velocidades relativas, no metros por segundo.",
+      "p2": "¿Qué es mejor: dar un empujoncito a mucho aire o un gran empujón a poco aire? Gana el empujoncito a mucho aire. Se desperdicia menos energía y, por tanto, se gasta menos combustible. Por eso los motores modernos de los aviones de pasajeros tienen ventiladores tan grandes. Según GE, este motor consume hasta un 10 % menos de combustible que su antecesor, el GE90-115B, para el mismo empuje.",
+      "p3": "Ahora, las cifras. El empuje nominal que GE indica para el despegue es de unas 105 000 libras, alrededor de 470 kilonewtons. Un kilonewton son mil newtons, y el newton es una unidad de fuerza. En un ensayo, el motor llegó a 134 300 libras, un récord que Guinness reconoció en julio de 2019, pero aquello fue una prueba, no un vuelo normal. Para comparar, el motor de un 737 Next Generation da entre unos 92 y 121 kilonewtons.",
+      "p4": "Mueve la palanca de empuje del indicador y observa cómo cambian las corrientes. A potencia alta, el modelo aspira el aire con más fuerza hacia la entrada, y el chorro de escape se hace más largo y más brillante. El indicador de empuje es una estimación del modelo, en porcentaje de su régimen de despegue. El modelo también reparte el empuje entre las dos corrientes a su manera. Es solo un esbozo, porque GE no publica ningún reparto. Lo único que podemos afirmar es que la mayor parte del empuje viene del ventilador."
     },
     "reverse": {
-      "title": "Arrancar y dar marcha atrás",
-      "p1": "Antes del arranque, el núcleo está quieto. Para ponerlo en marcha, un <strong>motor de arranque de aire</strong> usa aire comprimido. Ese aire puede venir de un motor pequeño del avión, llamado APU, de un carro en tierra o del otro motor. El motor de arranque hace girar el eje del núcleo a través de una caja de engranajes pequeña y un eje de transmisión. Es la única caja de engranajes: no hay nada entre la turbina y el ventilador, porque el ventilador se mueve directamente. La posición de la caja, como las tuberías y los accesorios del núcleo, es disposición propia del modelo, no el plano de GE. Elige Arranque abajo para ver la caja de engranajes y el motor de arranque. Luego entran el combustible y el fuego, y las turbinas toman el relevo. Los detalles de un arranque real no son públicos, así que el modelo no los muestra.",
-      "p2": "Después de aterrizar, el motor tiene un segundo trabajo: frenar el avión. Un <strong>inversor de empuje</strong> desvía parte del aire hacia delante. Así el motor empuja el avión hacia atrás en vez de hacia delante. En un motor como este, el inversor desvía solo la corriente fría, y el modelo lo muestra así. GE no lo ha confirmado para el GE9X, así que tómalo como la imagen del modelo.",
-      "p3": "En el modelo, el inversor funciona como un mecanismo. Primero, la parte trasera de la góndola se desliza hacia atrás. Luego unas compuertas bajan y cierran el paso alrededor del núcleo. Así queda al descubierto una banda de pequeños álabes curvos, llamados <strong>cascadas</strong>. Las líneas frías salen por ellas hacia fuera y hacia delante, mientras la corriente caliente sigue saliendo recta hacia atrás. Este capítulo empieza con el inversor abierto. Ciérralo y ábrelo de nuevo para comparar, o pulsa D, y mira cómo el indicador de empuje baja de cero. Entonces dice Inverso, con un porcentaje. El modelo limita la potencia del motor mientras el inversor está abierto. El tamaño del empuje inverso y el tiempo del movimiento son elecciones suyas, porque no hay ninguna cifra publicada.",
-      "p4": "Este motor aún está en camino hacia los pasajeros. El Boeing 777-9 todavía no está en servicio, y su primera entrega está prevista para 2027. Hasta entonces, solo vuelan con él aviones de prueba."
+      "title": "El arranque y la inversión de empuje",
+      "p1": "Antes del arranque, el núcleo está parado. Para ponerlo a girar se usa un <strong>motor de arranque neumático</strong>, que funciona con aire comprimido. Ese aire puede venir de un pequeño motor del propio avión, llamado APU, de un equipo de arranque en tierra o del otro motor. El motor de arranque hace girar el eje del núcleo a través de una pequeña caja de engranajes y un eje de transmisión. Es la única caja de engranajes del motor: entre la turbina y el ventilador no hay ninguna, porque la turbina mueve el ventilador directamente. La posición de la caja, igual que las tuberías y los accesorios del núcleo, es una disposición propia del modelo, no el diseño de GE. Elige Arranque, aquí abajo, para ver la caja de engranajes y el motor de arranque. Después entran en juego el combustible y el fuego, y las turbinas toman el relevo. Los detalles de un arranque real no se han publicado, así que el modelo se los salta.",
+      "p2": "Después del aterrizaje, el motor tiene una segunda tarea: frenar el avión. Un <strong>inversor de empuje</strong> desvía parte del aire hacia delante, de modo que el motor empuja el avión hacia atrás en lugar de hacia delante. En un motor como este, el inversor desvía solo la corriente fría, y el modelo lo representa de esa forma. Como GE no lo ha confirmado para el GE9X, tómalo como una interpretación del modelo.",
+      "p3": "En el modelo, el inversor se mueve como un mecanismo de verdad. Primero, la parte trasera de la góndola se desliza hacia atrás. Luego, unas compuertas bajan y cierran el paso del aire alrededor del núcleo. Así queda al descubierto una franja de pequeños álabes curvos, llamados <strong>cascadas</strong>. Las líneas frías salen por ellos hacia fuera y hacia delante, mientras la corriente caliente sigue saliendo recta hacia atrás. Este capítulo empieza con el inversor desplegado. Recógelo y vuelve a desplegarlo para comparar, o pulsa D, y verás que el indicador de empuje baja de cero y pasa a mostrar Inverso, con un porcentaje. El modelo limita la potencia del motor mientras el inversor está desplegado. La intensidad del empuje inverso y la duración del movimiento son decisiones del modelo, porque no hay cifras publicadas.",
+      "p4": "Este motor todavía no ha llegado a los vuelos con pasajeros. El Boeing 777-9 aún no ha entrado en servicio, y su primera entrega está prevista para 2027. Hasta entonces, solo vuelan con él los aviones de prueba."
     }
   }
 }
