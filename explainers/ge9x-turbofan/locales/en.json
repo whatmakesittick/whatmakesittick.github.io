@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "title": "How the biggest airliner engine makes its thrust",
+    "eyebrow": "Jet engines",
+    "tagline": "Follow the air through the GE9X. The giant fan does most of the pushing. The fire only heats the air that spins the turbines.",
+    "description": "Follow the air through the GE9X, the biggest airliner engine: the giant fan, the squeeze, the fire, two turbines and the reverser, in 3D.",
+    "summary": "The fan and the two streams, the compressor, the combustor, the two turbines and two shafts, where the thrust comes from, and starting and reversing.",
+    "socialAlt": "A cutaway GE9X turbofan with a giant carbon fiber fan, a cold blue stream around the core and a glowing hot core, next to the title How the biggest airliner engine makes its thrust"
+  },
+  "stage": {
+    "label": "Interactive GE9X engine model",
+    "gauge": "Live fan speed, core speed and thrust"
+  },
+  "timeline": {
+    "label": "Air position",
+    "phases": "Jump to a step of the air's trip",
+    "value": "{{metres}} m",
+    "describe": "{{metres}} m from the intake lip, {{phase}}",
+    "speed": "Playback",
+    "speedValue": "{{factor}}×",
+    "realTime": "Model pace",
+    "slower": "{{factor}} times slower",
+    "faster": "{{factor}} times faster",
+    "phase": {
+      "suck": "Suck",
+      "squeeze": "Squeeze",
+      "burn": "Burn",
+      "spin": "Spin",
+      "blow": "Blow"
+    },
+    "jump": {
+      "suck": "Jump to the air entering the intake",
+      "squeeze": "Jump to the air being squeezed",
+      "burn": "Jump to the air in the fire",
+      "spin": "Jump to the air spinning the turbines",
+      "blow": "Jump to the air leaving the nozzles"
+    },
+    "detail": {
+      "suck": "the fan pulls the air in and splits it in two",
+      "squeeze": "the core air is squeezed, the cold air flies around the core",
+      "burn": "fuel burns in the squeezed core air",
+      "spin": "the hot gas spins two turbines",
+      "blow": "both streams rush out of the nozzles"
+    }
+  },
+  "controls": {
+    "label": "Model controls",
+    "cutaway": "View",
+    "cutawayOptions": {
+      "closed": "Closed nacelle",
+      "cutaway": "Cutaway"
+    },
+    "streams": "Air",
+    "streamOptions": {
+      "both": "Both streams",
+      "cold": "Cold stream",
+      "hot": "Hot stream"
+    },
+    "groups": {
+      "streams": "Air",
+      "cutaway": "View",
+      "reverser": "Reverser"
+    },
+    "reverserOptions": {
+      "stowed": "Stowed",
+      "deployed": "Deployed"
+    },
+    "views": {
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Labels (L)"
+      },
+      "person": {
+        "name": "Person for scale",
+        "short": "Person",
+        "hint": "Person for scale (P)"
+      },
+      "reverser": {
+        "name": "Deploy the reverser",
+        "short": "Reverser",
+        "hint": "Deploy the reverser (D)"
+      }
+    }
+  },
+  "gauge": {
+    "lever": "Thrust lever",
+    "leverValue": "{{percent}} %",
+    "idle": "Idle",
+    "takeoff": "Takeoff"
+  },
+  "readouts": {
+    "fan": "Fan speed",
+    "core": "Core speed",
+    "thrust": "Thrust, model estimate",
+    "reverse": "Reverse {{percent}} %"
+  },
+  "units": {
+    "percent": "{{value}} %",
+    "metres": "{{value}} m",
+    "kilonewtons": "{{value}} kN"
+  },
+  "parts": {
+    "nacelle": "Nacelle, the outer shell",
+    "intakeLip": "Intake lip",
+    "fanCase": "Fan case",
+    "fanBlades": "Fan blades, 16",
+    "spinner": "Spinner",
+    "guideVanes": "Guide vanes",
+    "splitter": "Splitter",
+    "booster": "Booster, 3 stages",
+    "compressorRotor": "Compressor, spinning blades",
+    "compressorStator": "Compressor, fixed blades",
+    "compressor": "Compressor, 11 stages",
+    "outerShaft": "Outer shaft, core",
+    "innerShaft": "Inner shaft, fan",
+    "diffuser": "Diffuser",
+    "fuelNozzles": "Fuel nozzles",
+    "combustorLiner": "Ceramic liner",
+    "combustor": "Combustor",
+    "hpTurbine": "High pressure turbine, 2 stages",
+    "lpTurbine": "Low pressure turbine, 6 stages",
+    "bypassDuct": "Bypass duct",
+    "coldNozzle": "Cold nozzle",
+    "hotNozzle": "Hot nozzle",
+    "coldStream": "Cold stream",
+    "hotStream": "Hot stream",
+    "reverser": "Thrust reverser",
+    "cascades": "Cascades, curved vanes",
+    "person": "Person, 1.8 m"
+  },
+  "chapters": {
+    "fan": {
+      "blades": "Fan blades",
+      "bladesValue": "16, carbon fiber",
+      "width": "Fan width",
+      "widthValue": "3.4 m, nearly as wide as the body of a 737",
+      "split": "Air that goes around the core",
+      "splitValue": "about 10 of every 11 parts",
+      "tip": "Blade tips at full power",
+      "tipValue": "faster than sound"
+    },
+    "compressor": {
+      "stages": "Compressor stages",
+      "stagesValue": "11",
+      "ratio": "Squeeze in the compressor",
+      "ratioValue": "27 to 1",
+      "overall": "Squeeze in the whole engine",
+      "overallValue": "above 60 to 1",
+      "shaft": "Driven by",
+      "shaftValue": "the high pressure turbine, on the outer shaft"
+    },
+    "combustor": {
+      "style": "Burning style",
+      "styleValue": "lean burn, fuel and air mixed first",
+      "liners": "Liners",
+      "linersValue": "ceramic",
+      "nox": "Nitrogen oxides",
+      "noxValue": "less than half of the latest limit, GE says",
+      "cool": "Ceramic is lighter",
+      "coolValue": "about one third the density of metal alloys"
+    },
+    "turbines": {
+      "hpt": "High pressure turbine",
+      "hptValue": "2 stages, drives the compressor",
+      "lpt": "Low pressure turbine",
+      "lptValue": "6 stages, drives the fan and booster",
+      "ceramic": "Ceramic parts",
+      "ceramicValue": "five kinds",
+      "print": "3D printed parts",
+      "printValue": "about 300, in seven kinds"
+    },
+    "thrust": {
+      "cold": "Cold stream",
+      "coldValue": "about 10 parts, wide and slow",
+      "hot": "Hot stream",
+      "hotValue": "1 part, narrow and fast",
+      "rating": "Takeoff rating",
+      "ratingValue": "about 105,000 pounds, around 470 kN",
+      "record": "Test record",
+      "recordValue": "134,300 pounds, July 2019"
+    },
+    "reverse": {
+      "what": "What turns",
+      "whatValue": "the cold stream",
+      "status": "In service",
+      "statusValue": "the 777-9 first delivery is targeted for 2027"
+    }
+  },
+  "sections": {
+    "fan": {
+      "title": "The fan and the two streams",
+      "p1": "Stand in front of the engine and look in. The first thing the air meets is the <strong>fan</strong>, a ring of 16 big blades made of carbon fiber. It is 3.4 meters wide, nearly as wide as the body of a Boeing 737. The small figure beside it is 1.8 meters tall, so you can feel the size. No other airliner engine has a fan this big.",
+      "p2": "Just behind the fan, the air meets a sharp edge called the <strong>splitter</strong>. About 10 of every 11 parts of the air go around the core. This is the <strong>cold stream</strong>, and it goes straight out of the back. The other part, about 1 in 11, goes into the core. This is the <strong>hot stream</strong>, and you will follow it through the next chapters. The model draws both streams as moving dots, and the dot counts do not show this 10 to 1 split.",
+      "p3": "Which stream does the pushing? Most of the push comes from the fan. It grabs a huge amount of air and throws it back a little faster. Pushing a lot of air a little is a good way to push a plane. At full power, the numbers GE gives put the tips of the blades faster than the speed of sound.",
+      "p4": "Pick Cold or Hot to look at one stream at a time. This engine is made for the Boeing 777-9, which is not in service yet. Its first delivery is targeted for 2027. The engine itself is certified, and it flies on test airplanes. The model draws the engine to be read, not measured, so its layout is its own, and so are the blade counts, except for the 16 fan blades."
+    },
+    "compressor": {
+      "title": "The squeeze",
+      "p1": "Now follow the core air. First it passes the <strong>booster</strong>, three stages of small blades right behind the fan. Then it enters the <strong>compressor</strong>, which has 11 stages. Each stage is a ring of spinning blades and a ring of fixed blades. The spinning ring pushes the air on, and the fixed ring sets it up for the next stage.",
+      "p2": "Each stage squeezes the air a little more. The compressor alone squeezes it 27 to 1. Counting the fan and the booster, the whole engine squeezes it to above 60 to 1. GE says that is the highest of any engine in service. Squeezed air burns well, so it gives more power for each drop of fuel.",
+      "p3": "The compressor spins on the <strong>outer shaft</strong>, a hollow tube. The high pressure turbine at the back turns it. The core shaft turns several times faster than the fan. Published figures differ, so the model uses its own speeds. It also draws the spin thousands of times slower than the real thing.",
+      "p4": "Pick Cutaway to see inside, then drag the marker on the time bar. The marker shows where two parcels of air are: one in the core and one in the cold stream. The bar names the steps of the core air: suck, squeeze, burn, spin and blow. The cold air skips squeeze, burn and spin, because it flies along the duct around the core. The number shows the meters from the intake lip."
+    },
+    "combustor": {
+      "title": "Where the fuel burns",
+      "p1": "The squeezed air now enters the <strong>combustor</strong>. First a part called the diffuser slows it down. Then fuel is sprayed in through small nozzles. It burns steadily, like a gas stove, not in bangs.",
+      "p2": "This engine mixes the fuel and the air first and burns the mix after that. Engineers call this <strong>lean burn</strong>: a lot of air for a little fuel. A mix like this burns cleaner. GE says the engine makes less than half of the nitrogen oxides that the latest limit allows.",
+      "p3": "The walls of the combustor are called <strong>liners</strong>, and here they are made of ceramic. This ceramic is about one third as dense as metal alloys, so it is lighter. It also needs less cooling air.",
+      "p4": "The glow you see is only a picture. GE does not publish the gas temperature, so the model just draws hotter as brighter. Pick Cutaway to look inside. This fire does not push the plane. Its job is to heat the air, and the next chapter shows why."
+    },
+    "turbines": {
+      "title": "Two turbines, two shafts",
+      "p1": "Hot, fast gas leaves the combustor and meets the <strong>turbines</strong>. A turbine works like a windmill: the gas pushes the blades round. This is what the fire is for. It does not push the plane. It heats the air so that the turbines can spin.",
+      "p2": "There are two turbines, on two shafts. The <strong>high pressure turbine</strong> comes first. It has 2 stages, and it drives the compressor through the outer shaft. The <strong>low pressure turbine</strong> comes next. It has 6 stages, and it drives the fan and the booster through the inner shaft, which runs inside the outer one.",
+      "p3": "The two shafts turn at different speeds. The core shaft turns several times faster than the fan shaft. Published figures for the exact speeds differ, so the model uses its own. The spin and the glow in the animation are the model's too. The two live readouts below are percents of the model's takeoff setting, not turns per minute.",
+      "p4": "Hot gas is hard on metal blades. They survive on cooling air and coatings, and this engine adds ceramic parts. There are five kinds of ceramic part. About 300 parts are 3D printed, in seven kinds. GE does not publish the gas temperature, so you will not find one here."
+    },
+    "thrust": {
+      "title": "Where the thrust comes from",
+      "p1": "At the back there are two nozzles. The cold stream comes out of the wide one around the core. The hot stream comes out of the narrow one in the middle. The cold stream is about 10 parts of air, wide and slow. The hot stream is 1 part, narrow and fast. The model shows the speeds as relative, not in meters per second.",
+      "p2": "Which is better: a lot of air pushed a little, or a little air pushed a lot? A lot of air pushed a little wins. It wastes less energy, so it uses less fuel. This is why modern airliner engines have such big fans. GE says this engine burns up to 10 percent less fuel for the same thrust than its older engine, the GE90-115B.",
+      "p3": "Now the numbers. At takeoff the engine is rated at about 105,000 pounds of thrust, around 470 kilonewtons. In a test in July 2019, the engine reached 134,300 pounds, a world record. That was a test, not a normal flight. For comparison, a 737 engine makes about 92 to 121 kilonewtons.",
+      "p4": "Move the thrust lever in the gauge and watch the streams change. The thrust readout is the model's estimate, as a percent of its takeoff setting. The model also has its own split of the push between the two streams. It is a sketch, because GE does not publish one. All we can say is that most of the push comes from the fan."
+    },
+    "reverse": {
+      "title": "Starting and reversing",
+      "p1": "Before a start, the core is still. To get it turning, an <strong>air turbine starter</strong> uses compressed air. The air can come from a small engine in the plane called the APU, from a ground cart or from the other engine. The starter spins the core up. Then fuel and fire join in, and the turbines take over. The details of a real start are not published, so the model skips them.",
+      "p2": "After landing, the engine has a second job: slowing the plane down. A <strong>thrust reverser</strong> turns some of the air forward. Then the engine pushes the plane backward instead of forward. In an engine like this, the reverser turns only the cold stream, and the model shows it that way. GE has not confirmed this for the GE9X, so take it as the model's picture.",
+      "p3": "The cold air is turned through rows of small curved vanes called <strong>cascades</strong>. They aim it forward and out to the side. Choose Deployed, or press D, and watch the thrust readout drop below zero. It then says Reverse, with a percent. The hot stream keeps flowing straight back.",
+      "p4": "This engine is still on its way to passengers. The Boeing 777-9 is not in service yet, and its first delivery is targeted for 2027. Until then, only test airplanes fly with it."
+    }
+  }
+}
