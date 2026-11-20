@@ -2,10 +2,10 @@
   "meta": {
     "title": "Nado livre: como uma braçada faz você avançar",
     "eyebrow": "Biologia e física",
-    "tagline": "A água é muito mais densa que o ar. Por isso a velocidade vem de segurar a água com a mão e o antebraço e de ficar longo e alinhado, não de empurrar com mais força.",
-    "description": "Siga uma braçada de nado livre em 3D: como a mão e o antebraço seguram a água, por que o arrasto cresce tão rápido e por que parar à frente não acelera.",
-    "summary": "As quatro fases da braçada, o agarre, a puxada e o empurre, a rotação do corpo e a respiração, a pernada, e o arrasto com o intervalo entre os braços.",
-    "socialAlt": "Um nadador visto de lado numa pista de piscina, com o trajeto da mão brilhando sob a linha da água, ao lado do título Nado livre: como uma braçada faz você avançar"
+    "tagline": "A água é muito mais densa que o ar. Por isso a velocidade vem de pegar a água com a mão e o antebraço e de ficar longo e alinhado, não de empurrar com mais força.",
+    "description": "Siga uma braçada de nado livre em 3D: como a mão e o antebraço pegam a água, por que o arrasto cresce tão rápido e por que parar à frente não acelera.",
+    "summary": "As quatro fases da braçada, a pegada, a puxada e a empurrada, a rotação do corpo e a respiração, a pernada, e o arrasto com o intervalo entre os braços.",
+    "socialAlt": "Um nadador visto de lado numa raia de piscina, com o trajeto da mão brilhando sob a linha da água, ao lado do título Nado livre: como uma braçada faz você avançar"
   },
   "stage": {
     "label": "Modelo interativo de nadador de nado livre",
@@ -21,15 +21,15 @@
     "realTime": "Tempo real",
     "slower": "{{factor}} vezes mais lento",
     "phase": {
-      "entryCatch": "Entrada e agarre",
+      "entryCatch": "Entrada e pegada",
       "pull": "Puxada",
-      "push": "Empurre",
+      "push": "Empurrada",
       "recovery": "Recuperação"
     },
     "jump": {
       "entryCatch": "Ir para a mão entrando na água",
       "pull": "Ir para o início da puxada",
-      "push": "Ir para o início do empurre",
+      "push": "Ir para o início da empurrada",
       "recovery": "Ir para o braço passando à frente, no ar"
     }
   },
@@ -45,7 +45,7 @@
     "paceOptions": {
       "easy": "Leve",
       "middle": "Médio",
-      "sprint": "Tiro"
+      "sprint": "Sprint"
     },
     "kickOptions": {
       "two": "Dois tempos",
@@ -86,7 +86,7 @@
     "speed": "Velocidade",
     "strokeRate": "Frequência de braçada",
     "strokeLength": "Comprimento da braçada",
-    "handForce": "Mão que puxa, esquema",
+    "handForce": "Mão que puxa (esquema)",
     "drag": "Arrasto",
     "dragUp": "até 3 vezes",
     "armGap": "Entre os braços: {{gap}}"
@@ -110,57 +110,57 @@
     "hips": "Quadril",
     "foot": "Pé",
     "waterline": "Superfície da água",
-    "laneRope": "Corda da pista",
-    "laneLine": "Linha no fundo da pista"
+    "laneRope": "Divisória de raia",
+    "laneLine": "Linha no fundo da raia"
   },
   "sections": {
     "stroke": {
       "title": "A braçada inteira",
-      "p1": "Conheça um nadador na pista 4 de uma piscina de 50 m, nadando <strong>nado livre</strong>, também chamado de <strong>crawl</strong>. Um <strong>ciclo de braçada</strong> usa os dois braços: uma braçada com o direito e outra com o esquerdo. Acompanhe o braço direito em quatro fases: <strong>entrada e agarre</strong>, <strong>puxada</strong>, <strong>empurre</strong> e <strong>recuperação</strong>, quando o braço volta para a frente pelo ar. O braço esquerdo faz o mesmo meio ciclo depois. Arraste a linha do tempo para ver.",
-      "p2": "Só a puxada e o empurre levam você para a frente. Juntos, eles ocupam cerca de 43 a 57 por cento do ciclo, conforme o ritmo e a forma de medir. As faixas coloridas da linha do tempo mostram valores típicos de homens treinados, então use como referência. Elas mudam um pouco quando você troca o ritmo.",
+      "p1": "Conheça um nadador na raia 4 de uma piscina de 50 m, nadando <strong>nado livre</strong>, também chamado de crawl. Um <strong>ciclo de braçada</strong> usa os dois braços: uma braçada com o direito e outra com o esquerdo. Acompanhe o braço direito em quatro fases: <strong>entrada e pegada</strong>, <strong>puxada</strong>, <strong>empurrada</strong> e <strong>recuperação</strong>, quando o braço volta para a frente pelo ar. O braço esquerdo faz o mesmo meio ciclo depois. Arraste a linha do tempo para ver.",
+      "p2": "Só a puxada e a empurrada levam você para a frente. Juntas, elas ocupam cerca de 43 a 57 por cento do ciclo, conforme o ritmo e a forma de medir. As faixas coloridas da linha do tempo mostram valores típicos de homens treinados, então use como referência. Elas mudam um pouco quando você troca o ritmo.",
       "p3": "A velocidade é uma conta simples: <strong>frequência de braçada</strong>, os ciclos por minuto, vezes <strong>comprimento da braçada</strong>, a distância que você avança em um ciclo. Os três ritmos são pacotes de valores típicos de estudos diferentes, escolhidos pelo modelo. Uma conta assim não bate com as velocidades reais de prova, então leia o número como o ritmo do modelo, não como um resultado de competição. Sua velocidade também não é constante. Ela oscila cerca de 0,4 m/s dentro de cada ciclo, porque os braços se revezam.",
-      "p4": "Por que tanto esforço para tão pouca velocidade? A água é umas 800 vezes mais densa que o ar, e o nadador ainda faz ondas na superfície. Só cerca de 5 por cento da energia que o nadador gasta vira potência útil na água. A maior parte do esforço se perde pelo caminho, não só no arrasto. Então a velocidade não vem de empurrar mais forte. Vem de segurar bem a água e de manter o corpo estreito e alinhado. Os próximos capítulos mostram um a um.",
+      "p4": "Por que tanto esforço para tão pouca velocidade? A água é umas 800 vezes mais densa que o ar, e o nadador ainda faz ondas na superfície. Só cerca de 5 por cento da energia que o nadador gasta vira potência útil na água. A maior parte do esforço se perde pelo caminho, não só no arrasto. Então a velocidade não vem de empurrar mais forte. Vem de pegar bem a água e de manter o corpo estreito e alinhado. Os próximos capítulos mostram um a um.",
       "p5": "O nadador é um boneco articulado simples. A piscina passa de lado enquanto o nadador fica perto do centro, e o pequeno avanço dentro de cada ciclo aparece como uma deriva de poucos centímetros. Escolha um ritmo e veja como a braçada muda."
     },
     "catch": {
-      "title": "O agarre",
-      "p1": "A mão entra na água mais ou menos na linha do ombro. Ela estica para a frente e depois aperta para baixo e para trás. O instante em que a mão pega a água pela primeira vez é o <strong>agarre</strong>. É um momento, não uma fase própria, e a imagem para ali.",
-      "p2": "Logo depois do agarre, o antebraço gira para a vertical. Agora a mão e o antebraço ficam virados para trás juntos, como uma remada larga, e o cotovelo continua alto. Treinadores chamam isso de antebraço vertical cedo. Ligue a água clara para ver como a mão e o antebraço se alinham.",
-      "p3": "Talvez você já tenha ouvido que o cotovelo deve dobrar até 90 graus. Isso é um ideal de treino, não o que foi medido. Em um estudo com dez velocistas, o cotovelo estava aberto a cerca de 148 graus no agarre, cerca de 105 com a mão sob o ombro e cerca de 151 no fim do empurre. Ou seja, o braço fica bem mais esticado que o ideal.",
+      "title": "A pegada",
+      "p1": "A mão entra na água mais ou menos na linha do ombro. Ela estica para a frente e depois aperta para baixo e para trás. O instante em que a mão pega a água pela primeira vez é a <strong>pegada</strong>. É um instante, não uma fase própria, e a imagem para ali.",
+      "p2": "Logo depois da pegada, o antebraço gira para a vertical. Agora a mão e o antebraço ficam virados para trás juntos, como uma pá larga, e o cotovelo continua alto. Treinadores chamam isso de antebraço vertical cedo. Use o botão de água clara, se estiver desligado, para ver como a mão e o antebraço se alinham.",
+      "p3": "Talvez você já tenha ouvido que o cotovelo deve dobrar até 90 graus. Isso é um ideal de treino, não o que foi medido. Em um estudo com dez velocistas, o cotovelo estava aberto a cerca de 148 graus na pegada, cerca de 105 com a mão sob o ombro e cerca de 151 no fim da empurrada. Ou seja, o braço fica bem mais esticado que o ideal.",
       "p4": "A mão não vai fundo. No ponto mais fundo, ela fica a cerca de 0,6 a 0,7 m abaixo da superfície, e o ponto de referência exato não foi conferido no estudo. Os medidores seguem o modelo. Onde ninguém mediu, eles dizem isso em vez de mostrar um número: nenhum estudo dá o ângulo do cotovelo no ar ou na entrada.",
       "p5": "Esses ângulos vêm de velocistas de um único estudo, e o modelo usa a mesma forma em todos os ritmos. Leia como valores típicos de um grupo, não como regra para todo nadador."
     },
     "pull": {
-      "title": "Puxada e empurre",
-      "p1": "Agora o braço trabalha. Na puxada e no empurre, a mão e o antebraço agem como uma <strong>pá</strong>: empurram a água para trás, e a água empurra você para a frente. Não é uma asa. Simulações de computador mostram a água saindo da mão em redemoinhos, em vez de correr suave por cima dela, então a explicação antiga com sustentação de uma superfície curva não se sustenta.",
-      "p2": "Os cientistas ainda discutem quanto a sustentação acrescenta ao empurre. A maioria concorda que a mão sobretudo joga a água para trás como uma pá, e que os redemoinhos que ela cria na água somam mais. O modelo desenha uma única seta para o empurre e não tenta resolver isso.",
-      "p3": "Alguns números típicos ajudam. Uma mão chega a um pico de cerca de 75 a 115 N nos nadadores medidos até agora, e a cerca de 22 N no agarre. O empurre é cerca de 15 por cento mais forte que a puxada, então a parte mais forte da braçada é o empurre, não a puxada. A força atinge o pico a cerca de 70 por cento do trecho debaixo d'água.",
-      "p4": "A curva no medidor é um esquema. É uma forma suave, ajustada a esses valores, não uma curva medida, então não a leia como dados de um sensor de força. A velocidade da mão é parecida: em velocistas, é cerca de 3,6 m/s debaixo d'água no empurre, e 6 a 7 m/s quando a mão passa pelo ar.",
+      "title": "Puxada e empurrada",
+      "p1": "Agora o braço trabalha. Na puxada e na empurrada, a mão e o antebraço agem como uma <strong>pá</strong>: empurram a água para trás, e a água empurra você para a frente. Simulações de computador mostram a água saindo da mão em redemoinhos, em vez de correr suave por cima dela como o ar sobre uma asa. Então a explicação antiga, com sustentação de uma superfície curva, não é a história toda.",
+      "p2": "Os cientistas ainda discutem quanto a sustentação acrescenta à empurrada. A imagem mais segura é que a mão sobretudo joga a água para trás como uma pá, e que os redemoinhos que ela cria na água somam mais. O modelo desenha uma única seta para a empurrada e não tenta resolver isso.",
+      "p3": "Alguns números típicos ajudam. Uma mão chega a um pico de cerca de 75 a 115 N nos nadadores medidos até agora, e a cerca de 22 N na pegada. A empurrada é cerca de 15 por cento mais forte que a puxada, então a parte mais forte da braçada é a empurrada, não a puxada. A força atinge o pico a cerca de 70 por cento do trecho debaixo d'água.",
+      "p4": "A curva no medidor é um esquema. É uma forma suave, ajustada a esses valores, não uma curva medida, então não a leia como dados de um sensor de força. A velocidade da mão é parecida: em velocistas, é cerca de 3,6 m/s debaixo d'água na empurrada, e 6 a 7 m/s quando a mão passa pelo ar.",
       "p5": "Uma mão é pequena, cerca de 0,016 m². Um modelo de computador achou que um pequeno espaço de cerca de 12 graus entre os dedos aumenta o arrasto da mão em cerca de 9 por cento. Isso vem de uma simulação, então tome como uma ideia para testar, não como conselho."
     },
     "roll": {
       "title": "Rotação e respiração",
-      "p1": "Um bom nadador não fica deitado reto. Os ombros giram cerca de 50 graus para cada lado, em todos os ritmos. O quadril gira menos: cerca de 18 graus no ritmo de tiro e cerca de 25 no ritmo de uma prova de 400 m. A rotação deixa o braço alcançar longe e passar sobre a água sem brigar com o corpo.",
-      "p2": "Você pode ler que nadadores de longa distância giram mais os ombros. Os dados não mostram isso. Os ombros giram quase igual no tiro e no ritmo de 400 m. Só o quadril gira mais no ritmo mais lento.",
-      "p3": "No fim do empurre, o braço sai da água com o cotovelo na frente e a mão solta. Depois passa para a frente pelo ar. Essa é a <strong>recuperação</strong>, a parte de descanso da braçada. O modelo não mostra ângulo para ela, porque não achamos uma boa medição.",
+      "p1": "Um bom nadador não fica deitado reto. Os ombros giram cerca de 50 graus para cada lado, em todos os ritmos. O quadril gira menos: cerca de 18 graus no ritmo de sprint e cerca de 25 no ritmo de uma prova de 400 m. A rotação deixa o braço alcançar longe e passar sobre a água sem brigar com o corpo.",
+      "p2": "Você pode ler que nadadores de provas longas giram mais os ombros. Os dados não mostram isso. Os ombros giram quase igual no sprint e no ritmo de 400 m. Só o quadril gira mais no ritmo mais lento.",
+      "p3": "No fim da empurrada, o braço sai da água com o cotovelo primeiro e a mão relaxada. Depois passa para a frente pelo ar. Essa é a <strong>recuperação</strong>, a parte de descanso da braçada. Cotovelo primeiro e mão relaxada é a imagem usual dos treinadores. O modelo não mostra ângulo para ela, porque não há uma boa medição.",
       "p4": "Talvez você também já tenha visto a puxada desenhada como um S. Quase todo esse S vem da rotação do corpo. Desenhe o trajeto da mão a partir de um ponto fixo na piscina e ele se curva. Desenhe do ponto de vista do próprio nadador e fica bem mais reto. É um só trajeto, visto de dois lugares, e não duas formas de nadar. Ligue o trajeto da mão e compare.",
-      "p5": "Para respirar, o nadador vira a cabeça para o lado. Respirar para um lado soma cerca de 9 graus de rotação daquele lado. Respirar atrasa você? Um pouco, mas as fontes divergem: um estudo achou cerca de 3 por cento no ritmo de tiro, outro não achou diferença real. O ângulo da cabeça no modelo é escolha própria dele."
+      "p5": "Para respirar, o nadador vira a cabeça para o lado. Respirar para um lado soma cerca de 9 graus de rotação daquele lado. Respirar atrasa você? Um pouco, mas as fontes divergem: um estudo achou cerca de 3 por cento no ritmo de sprint, outro não achou diferença real. O ângulo da cabeça no modelo é escolha própria dele."
     },
     "kick": {
       "title": "A pernada",
       "p1": "As pernas batem para cima e para baixo, alternadas. Na pernada de <strong>dois tempos</strong>, cada perna bate uma vez por ciclo. Na de <strong>seis tempos</strong>, cada perna bate três vezes por ciclo. Escolha uma e observe o quadril e os pés.",
-      "p2": "Nos dois padrões, a batida grande para baixo vem da perna oposta ao braço que está entrando na água. Seu corpo gira, e essa perna ajuda a equilibrar. Na pernada de seis tempos, as duas batidas extras são menores. Qual batida pequena combina com qual momento do braço é escolha do próprio modelo.",
-      "p3": "Quanto a pernada rende? Em um estudo, juntar as pernas aos braços deixou um tiro de 25 m cerca de 10 por cento mais rápido. Os autores dizem que as pernas ajudam sobretudo os braços e mantêm o corpo alinhado, mais do que empurram por conta própria. Então é errado dizer que a pernada faz 10 por cento da propulsão.",
-      "p4": "No ritmo de tiro, cada perna bate cerca de 2,4 a 2,7 vezes por segundo. O pé desce cerca de 0,3 a 0,4 m, e as fontes variam. O modelo usa um valor do meio. Não há bons números para os ângulos do joelho e do tornozelo, então o modelo os desenha a olho.",
-      "p5": "O ritmo define a pernada primeiro: dois tempos no ritmo leve, seis tempos no tiro. É assim que os treinadores costumam descrever. Seis tempos no ritmo médio é escolha do próprio modelo. A opção fica marcada por esse padrão até você escolher outra pernada."
+      "p2": "Nos dois padrões, a batida grande para baixo vem da perna oposta ao braço que está entrando na água. Seu corpo gira, e essa perna ajuda a equilibrar. A pernada de seis tempos acrescenta mais duas batidas por perna. Qual delas combina com qual momento do braço é escolha do próprio modelo.",
+      "p3": "Quanto a pernada rende? Em um estudo, juntar as pernas aos braços deixou um sprint de 25 m cerca de 10 por cento mais rápido. Os autores dizem que as pernas ajudam sobretudo os braços e mantêm o corpo alinhado, mais do que empurram por conta própria. Então é errado dizer que a pernada faz 10 por cento da propulsão.",
+      "p4": "No ritmo de sprint, cada perna bate cerca de 2,4 a 2,7 vezes por segundo. O pé desce cerca de 0,3 a 0,4 m, e as fontes variam. O modelo usa um valor do meio. Não há bons números para os ângulos do joelho e do tornozelo, então o modelo os desenha a olho.",
+      "p5": "O ritmo define a pernada primeiro: dois tempos no ritmo leve, seis tempos no sprint. É assim que os treinadores costumam descrever. Seis tempos no ritmo médio é escolha do próprio modelo. A opção fica marcada por esse padrão até você escolher outra pernada."
     },
     "drag": {
       "title": "Arrasto e tempo",
-      "p1": "Arrasto é a água empurrando você de volta. Ele cresce com o quadrado da velocidade, e a potência de que você precisa cresce com o cubo. Dobre a velocidade e o arrasto fica quatro vezes maior, enquanto a potência fica oito vezes maior. Mova o controle para ver.",
+      "p1": "Arrasto é a água empurrando você de volta. Ele cresce com o quadrado da velocidade, e a potência de que você precisa cresce com o cubo. Dobre a velocidade e o arrasto fica quatro vezes maior, enquanto a potência fica oito vezes maior. Mova o controle deslizante para ver.",
       "p2": "Os números não são exatos. Em um laboratório, homens enfrentaram cerca de 110 N de arrasto a 2 m/s. Na literatura, as estimativas vão de 20 a 210 N, porque os métodos divergem. O modelo usa uma estimativa simples, então o valor é uma referência, não a medida de um nadador.",
       "p3": "Na superfície, o nadador também faz ondas, e ondas custam energia. Para um boneco rebocado a 1,7 m/s, as ondas chegaram a 50 a 60 por cento do arrasto. O efeito some quando o corpo está mais fundo. Um boneco precisa estar cerca de 0,5 m abaixo a 1 m/s e cerca de 0,7 m abaixo a 2 m/s para escapar dele. O nadador precisa respirar, então não consegue aproveitar isso por inteiro.",
-      "p4": "Tente quebrar o modelo. Levante a cabeça e as pernas afundam, então o corpo deixa de ser estreito e alinhado. Um nadador, rebocado num canal, sentiu até três vezes mais arrasto com o queixo na superfície. A página mostra só as palavras, não newtons, e o modelo apenas escala a seta. Só esse nadador foi medido.",
-      "p5": "Por fim, a ideia popular de que parar um instante à frente deixa você mais rápido. As medições dizem outra coisa. No ritmo leve, há um pequeno intervalo, cerca de um décimo de segundo, entre o fim do empurre de um braço e o começo da puxada do outro. Conforme o nadador acelera, esse intervalo se fecha. Acima de cerca de 1,8 m/s, os braços começam a se sobrepor.",
+      "p4": "Tente quebrar o modelo. Levante a cabeça e as pernas afundam, então o corpo deixa de ser estreito e alinhado. Em um nadador rebocado num canal, o arrasto medido chegou a ser até três vezes maior com o queixo na superfície. A página mostra só as palavras, não newtons, e o modelo apenas escala a seta. Só esse nadador foi medido.",
+      "p5": "Por fim, a ideia popular de que parar um instante à frente deixa você mais rápido. As medições dizem outra coisa. No ritmo leve, há um pequeno intervalo, cerca de um décimo de segundo, entre o fim da empurrada de um braço e o começo da puxada do outro. Conforme o nadador acelera, esse intervalo se fecha. Acima de cerca de 1,8 m/s, os braços começam a se sobrepor.",
       "p6": "Ninguém mostrou que segurar um deslize de propósito deixa você mais rápido. Velocistas cansados caíram numa sobreposição maior e não ganharam nada com isso. Mude o ritmo e leia o intervalo, ou a sobreposição, de cada um."
     }
   },
@@ -185,24 +185,24 @@
       "phase": "Braço direito agora",
       "noElbow": "não medido aqui",
       "inAir": "no ar",
-      "elbowSteps": "Cotovelo no agarre, sob o ombro, fim do empurre",
+      "elbowSteps": "Cotovelo na pegada, sob o ombro, fim da empurrada",
       "elbowStepsValue": "cerca de 148, 105 e 151 graus, velocistas, um estudo",
       "deepest": "Ponto mais fundo da mão",
       "deepestValue": "cerca de 0,6 a 0,7 m"
     },
     "pull": {
-      "force": "Mão que puxa, esquema",
+      "force": "Mão que puxa (esquema)",
       "handSpeed": "Velocidade da mão",
       "phase": "Braço que puxa agora",
-      "catchForce": "Força no agarre",
+      "catchForce": "Força na pegada",
       "catchForceValue": "cerca de 22 N",
       "peak": "Força máxima de uma mão",
       "peakValue": "cerca de 75 a 115 N, típico",
-      "pushVsPull": "Empurre contra puxada",
-      "pushVsPullValue": "empurre cerca de 15 por cento maior",
+      "pushVsPull": "Empurrada contra puxada",
+      "pushVsPullValue": "empurrada cerca de 15 por cento maior",
       "handArea": "Área de uma mão",
       "handAreaValue": "cerca de 0,016 m²",
-      "airSpeed": "Velocidade da mão, empurre e ar",
+      "airSpeed": "Velocidade da mão, empurrada e ar",
       "airSpeedValue": "cerca de 3,6 m/s na água, 6 a 7 m/s no ar"
     },
     "roll": {
@@ -214,7 +214,7 @@
       "extra": "Rotação extra da respiração",
       "pace": "Rotação do ombro em todos os ritmos",
       "paceValue": "cerca de 50 graus para cada lado",
-      "hipPace": "Rotação do quadril, tiro e ritmo de 400 m",
+      "hipPace": "Rotação do quadril, sprint e ritmo de 400 m",
       "hipPaceValue": "cerca de 18 e 25 graus",
       "breathExtra": "Rotação extra ao respirar",
       "breathExtraValue": "cerca de 9 graus",
@@ -229,9 +229,9 @@
       "legDown": "Perna {{leg}}",
       "left": "esquerda",
       "right": "direita",
-      "added": "Com a pernada, tiro de 25 m",
+      "added": "Com a pernada, sprint de 25 m",
       "addedValue": "cerca de 10 por cento mais rápido",
-      "rate": "Batidas por segundo, uma perna, tiro",
+      "rate": "Batidas por segundo, uma perna, sprint",
       "rateValue": "cerca de 2,4 a 2,7",
       "depth": "Profundidade da batida",
       "depthValue": "cerca de 0,3 a 0,4 m, as fontes variam",
@@ -246,7 +246,7 @@
       "gapNow": "Entre os braços agora",
       "gapEasy": "Entre os braços, leve",
       "gapMiddle": "Entre os braços, médio",
-      "gapSprint": "Entre os braços, tiro",
+      "gapSprint": "Entre os braços, sprint",
       "gapValue": "um intervalo de {{seconds}} s, {{percent}} % do ciclo",
       "overlapValue": "uma sobreposição de {{seconds}} s, {{percent}} % do ciclo",
       "speedLabel": "Velocidade na água",
