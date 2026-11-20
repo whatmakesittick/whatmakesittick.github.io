@@ -1,13 +1,14 @@
 import { Box3 } from 'three';
 import type { Object3D } from 'three';
 import { CameraViews } from '@core/scene/cameraViews';
+import { regionFromSpec } from '@core/scene/regions';
 import { runPaced } from '@core/scene/pacing';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
-import type { AssemblyState, CameraView, RegionId } from '../ids';
+import type { AssemblyState, CameraView } from '../ids';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
-import { BOUNDS_REGIONS, CAMERA_VIEWS } from './cameraViews';
+import { BOUNDS_REGIONS, CAMERA_VIEWS, VIEW_FRAMES } from './cameraViews';
 import { FLOOR_HEIGHT_M } from './constants';
 
 export type SwimControllerDependencies = Pick<
@@ -20,16 +21,16 @@ export type ViewFramer = Pick<CameraViews<CameraView>, 'frame'>;
 export class SwimController {
   readonly views: ViewFramer;
   private readonly dependencies: SwimControllerDependencies;
-  private readonly cameraViews: CameraViews<CameraView, RegionId>;
+  private readonly cameraViews: CameraViews<CameraView, CameraView>;
   private assembly: Assembly | null = null;
   private cancelWarmUp: () => void = () => {};
   private generation = 0;
 
   constructor(dependencies: SwimControllerDependencies) {
     this.dependencies = dependencies;
-    this.cameraViews = new CameraViews<CameraView, RegionId>(dependencies.rig, {
+    this.cameraViews = new CameraViews<CameraView, CameraView>(dependencies.rig, {
       views: CAMERA_VIEWS,
-      region: (id) => this.assembly?.region(id) ?? null,
+      region: (view) => (this.assembly ? regionFromSpec(VIEW_FRAMES[view]) : null),
     });
     this.views = { frame: (view, animate) => this.cameraViews.frame(view, animate) };
   }
