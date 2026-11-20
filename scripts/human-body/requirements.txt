@@ -1,0 +1,5 @@
+numpy==2.5.5
+scipy==1.18.1
+torch==2.8.0
+pymomentum-cpu==0.1.114.post0
+mhr @ git+https://github.com/facebookresearch/MHR.git@v1.0.1
