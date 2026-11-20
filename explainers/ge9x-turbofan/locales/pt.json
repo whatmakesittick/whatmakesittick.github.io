@@ -52,6 +52,11 @@
     "groups": {
       "streams": "Ar",
       "cutaway": "Vista",
+      "look": "Ver",
+      "reverser": "Reversor"
+    },
+    "lookOptions": {
+      "starter": "Motor de partida",
       "reverser": "Reversor"
     },
     "reverserOptions": {
@@ -220,7 +225,7 @@
     },
     "reverse": {
       "title": "Partida e reversão",
-      "p1": "Antes da partida, o núcleo está parado. Para fazê-lo girar, um <strong>motor de partida a ar</strong> usa ar comprimido. O ar pode vir de um motor pequeno do avião chamado APU, de um carrinho no solo ou do outro motor. O motor de partida gira o eixo do núcleo por uma pequena caixa de engrenagens e um eixo de transmissão. Essa é a única caixa de engrenagens: nada fica entre a turbina e o fan, porque o fan é movido direto. A posição da caixa, como os tubos e as peças de ligação do núcleo, é o arranjo do próprio modelo, não o desenho da GE. Depois entram o combustível e o fogo, e as turbinas assumem. Os detalhes de uma partida real não são publicados, então o modelo os pula.",
+      "p1": "Antes da partida, o núcleo está parado. Para fazê-lo girar, um <strong>motor de partida a ar</strong> usa ar comprimido. O ar pode vir de um motor pequeno do avião chamado APU, de um carrinho no solo ou do outro motor. O motor de partida gira o eixo do núcleo por uma pequena caixa de engrenagens e um eixo de transmissão. Essa é a única caixa de engrenagens: nada fica entre a turbina e o fan, porque o fan é movido direto. A posição da caixa, como os tubos e as peças de ligação do núcleo, é o arranjo do próprio modelo, não o desenho da GE. Escolha Motor de partida abaixo para ver a caixa de engrenagens e o motor de partida. Depois entram o combustível e o fogo, e as turbinas assumem. Os detalhes de uma partida real não são publicados, então o modelo os pula.",
       "p2": "Depois do pouso, o motor tem um segundo trabalho: frear o avião. Um <strong>reversor de empuxo</strong> desvia parte do ar para a frente. Assim o motor empurra o avião para trás, e não para a frente. Em um motor como este, o reversor desvia só a corrente fria, e o modelo mostra assim. A GE não confirmou isso para o GE9X, então tome como o retrato do modelo.",
       "p3": "No modelo, o reversor funciona como um mecanismo. Primeiro a parte de trás da nacele desliza para trás. Depois portas descem e fecham o caminho em volta do núcleo. Isso deixa à mostra uma faixa de aletas curvas e pequenas, chamadas <strong>grades</strong>. As linhas frias saem por elas, viradas para fora e para a frente, enquanto a corrente quente segue reta para trás. Este capítulo começa com o reversor aberto. Recolha-o e abra de novo para comparar, ou aperte D, e veja o empuxo cair abaixo de zero. Então aparece Reverso, com uma porcentagem. O modelo limita a potência do motor enquanto o reversor está aberto. O tamanho do empuxo reverso e o tempo do movimento são escolhas do próprio modelo, porque nenhum número é publicado.",
       "p4": "Este motor ainda está a caminho dos passageiros. O Boeing 777-9 ainda não está em serviço, e a primeira entrega está prevista para 2027. Até lá, só aviões de teste voam com ele."

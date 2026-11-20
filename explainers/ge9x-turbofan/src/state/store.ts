@@ -1,10 +1,10 @@
 import type { ExplainerStore, Playback, PlaybackState } from '@core/explainer';
 import { clamp } from '@core/math';
 import { createExplainerStore } from '@core/store';
-import type { CutawayId, PresetId, StreamId, ViewOptions } from '../ids';
+import type { CutawayId, LookId, PresetId, StreamId, ViewOptions } from '../ids';
 import { SPEED_RANGE } from '../model';
 import { AIR_TIMELINE } from '../timeline';
-import { CHAPTER_CONTROL_DEFAULTS, PRESETS } from './presets';
+import { CHAPTER_CONTROL_DEFAULTS, PRESETS, STARTER_LOOK } from './presets';
 import type { ChapterControls, Preset } from './presets';
 
 export type ViewState = { [Key in keyof ViewOptions]: ViewOptions[Key] };
@@ -19,6 +19,7 @@ export interface EngineOwnActions {
   setThrust(value: number): void;
   setCutaway(id: CutawayId): void;
   setStreams(id: StreamId): void;
+  setLook(id: LookId): void;
 }
 
 export type EngineState = PlaybackState & EngineFields;
@@ -57,6 +58,15 @@ export function createEngineStore(overrides: Partial<EngineStoreState> = {}): En
         },
         setCutaway: (cutaway) => set({ cutaway }),
         setStreams: (streams) => set({ streams }),
+        setLook: (look) => {
+          const preset = PRESETS[get().preset];
+          const starter = look === 'starter';
+          const cutaway = starter
+            ? STARTER_LOOK.cutaway
+            : (preset.start.cutaway ?? CHAPTER_CONTROL_DEFAULTS.cutaway);
+          set({ look, cutaway });
+          get().setView({ reverser: !starter && preset.view.reverser });
+        },
       }),
       presetState: presetFields,
     },

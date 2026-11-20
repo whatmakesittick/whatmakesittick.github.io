@@ -70,4 +70,28 @@ describe('engine store', () => {
     store.getState().applyPreset('turbines');
     expect(store.getState().view).toMatchObject({ person: false, labels: false });
   });
+
+  it('opens the starter view with the cutaway and the reverser stowed, and restores the chapter', () => {
+    const store = createEngineStore();
+    store.getState().applyPreset('reverse');
+    expect(store.getState()).toMatchObject({ look: 'reverser', cutaway: 'closed' });
+    expect(store.getState().view.reverser).toBe(true);
+    store.getState().setLook('starter');
+    expect(store.getState()).toMatchObject({ look: 'starter', cutaway: 'cutaway' });
+    expect(store.getState().view.reverser).toBe(false);
+    store.getState().setLook('reverser');
+    expect(store.getState()).toMatchObject({ look: 'reverser', cutaway: 'closed' });
+    expect(store.getState().view.reverser).toBe(true);
+  });
+
+  it('resets the look when the chapter changes', () => {
+    const store = createEngineStore();
+    store.getState().applyPreset('reverse');
+    store.getState().setLook('starter');
+    store.getState().applyPreset('thrust');
+    expect(store.getState().look).toBe('reverser');
+    store.getState().applyPreset('reverse');
+    expect(store.getState().look).toBe('reverser');
+    expect(store.getState().view.reverser).toBe(true);
+  });
 });

@@ -34,7 +34,7 @@ describe('ids', () => {
     ].forEach((ids) => expect(unique(ids)).toBe(true));
   });
 
-  it('has one camera view per preset', () => {
-    expect(CAMERA_VIEW_IDS).toHaveLength(PRESET_IDS.length);
+  it('has one camera view per preset and one for the starter look', () => {
+    expect(CAMERA_VIEW_IDS).toHaveLength(PRESET_IDS.length + 1);
   });
 });

@@ -52,6 +52,11 @@
     "groups": {
       "streams": "Air",
       "cutaway": "View",
+      "look": "Look at",
+      "reverser": "Reverser"
+    },
+    "lookOptions": {
+      "starter": "Starter",
       "reverser": "Reverser"
     },
     "reverserOptions": {
@@ -220,7 +225,7 @@
     },
     "reverse": {
       "title": "Starting and reversing",
-      "p1": "Before a start, the core is still. To get it turning, an <strong>air turbine starter</strong> uses compressed air. The air can come from a small engine in the plane called the APU, from a ground cart or from the other engine. The starter turns the core shaft through a small gearbox and a drive shaft. This is the only gearbox: nothing sits between the turbine and the fan, because the fan is driven directly. The gearbox position, like the pipes and fittings on the core, is the model's own layout, not GE's drawing. Then fuel and fire join in, and the turbines take over. The details of a real start are not published, so the model skips them.",
+      "p1": "Before a start, the core is still. To get it turning, an <strong>air turbine starter</strong> uses compressed air. The air can come from a small engine in the plane called the APU, from a ground cart or from the other engine. The starter turns the core shaft through a small gearbox and a drive shaft. This is the only gearbox: nothing sits between the turbine and the fan, because the fan is driven directly. The gearbox position, like the pipes and fittings on the core, is the model's own layout, not GE's drawing. Pick Starter below to see the gearbox and the starter. Then fuel and fire join in, and the turbines take over. The details of a real start are not published, so the model skips them.",
       "p2": "After landing, the engine has a second job: slowing the plane down. A <strong>thrust reverser</strong> turns some of the air forward. Then the engine pushes the plane backward instead of forward. In an engine like this, the reverser turns only the cold stream, and the model shows it that way. GE has not confirmed this for the GE9X, so take it as the model's picture.",
       "p3": "In the model, the reverser works as a mechanism. First the rear part of the nacelle slides back. Then doors swing down and block the path around the core. This uncovers a band of small curved vanes called <strong>cascades</strong>. The cold lines turn out and forward through them, while the hot stream keeps going straight back. This chapter starts with the reverser out. Stow it and deploy it again to compare, or press D, and watch the thrust readout drop below zero. It then says Reverse, with a percent. The model limits the engine power while the reverser is open. The size of the reverse push and the timing of the movement are its own choices, because no figures are published.",
       "p4": "This engine is still on its way to passengers. The Boeing 777-9 is not in service yet, and its first delivery is targeted for 2027. Until then, only test airplanes fly with it."

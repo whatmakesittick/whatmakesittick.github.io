@@ -52,6 +52,11 @@
     "groups": {
       "streams": "Luft",
       "cutaway": "Ansicht",
+      "look": "Ansehen",
+      "reverser": "Schubumkehr"
+    },
+    "lookOptions": {
+      "starter": "Anlasser",
       "reverser": "Schubumkehr"
     },
     "reverserOptions": {
@@ -220,7 +225,7 @@
     },
     "reverse": {
       "title": "Starten und Umkehren",
-      "p1": "Vor dem Start steht der Kern still. Damit er sich dreht, nutzt ein <strong>Luftturbinen-Anlasser</strong> Druckluft. Die Luft kann aus einem kleinen Triebwerk im Flugzeug kommen, der APU, aus einem Bodenwagen oder vom anderen Triebwerk. Der Anlasser dreht die Kernwelle über ein kleines Getriebe und eine Antriebswelle. Das ist das einzige Getriebe: Zwischen Turbine und Gebläse sitzt keines, denn das Gebläse wird direkt angetrieben. Die Lage des Getriebes ist, wie die Rohre und Anschlüsse am Kern, die eigene Anordnung des Modells, nicht die Zeichnung von GE. Dann kommen Kraftstoff und Feuer dazu, und die Turbinen übernehmen. Die Einzelheiten eines echten Starts sind nicht veröffentlicht, darum lässt das Modell sie aus.",
+      "p1": "Vor dem Start steht der Kern still. Damit er sich dreht, nutzt ein <strong>Luftturbinen-Anlasser</strong> Druckluft. Die Luft kann aus einem kleinen Triebwerk im Flugzeug kommen, der APU, aus einem Bodenwagen oder vom anderen Triebwerk. Der Anlasser dreht die Kernwelle über ein kleines Getriebe und eine Antriebswelle. Das ist das einzige Getriebe: Zwischen Turbine und Gebläse sitzt keines, denn das Gebläse wird direkt angetrieben. Die Lage des Getriebes ist, wie die Rohre und Anschlüsse am Kern, die eigene Anordnung des Modells, nicht die Zeichnung von GE. Wähle unten Anlasser, um das Getriebe und den Anlasser zu sehen. Dann kommen Kraftstoff und Feuer dazu, und die Turbinen übernehmen. Die Einzelheiten eines echten Starts sind nicht veröffentlicht, darum lässt das Modell sie aus.",
       "p2": "Nach der Landung hat das Triebwerk eine zweite Aufgabe: das Flugzeug abbremsen. Eine <strong>Schubumkehr</strong> lenkt einen Teil der Luft nach vorn. Dann schiebt das Triebwerk das Flugzeug nach hinten statt nach vorn. In einem Triebwerk wie diesem lenkt die Schubumkehr nur den kalten Strom um, und so zeigt es auch das Modell. GE hat das für das GE9X nicht bestätigt, nimm es also als Bild des Modells.",
       "p3": "Im Modell arbeitet die Schubumkehr als Mechanismus. Zuerst gleitet das hintere Teil der Gondel nach hinten. Dann schwenken Klappen nach unten und versperren den Weg um den Kern. Dadurch wird ein Band aus kleinen gebogenen Leitschaufeln frei, die <strong>Gitter</strong> heißen. Die kalten Linien werden dort nach außen und nach vorn gelenkt, während der heiße Strom weiter gerade nach hinten fließt. Dieses Kapitel beginnt mit ausgefahrener Schubumkehr. Fahre sie ein und wieder aus, um zu vergleichen, oder drücke D, und sieh zu, wie die Schubanzeige unter null fällt. Dann steht dort Umkehr, mit einem Prozentwert. Das Modell begrenzt die Triebwerksleistung, solange die Schubumkehr offen ist. Die Größe des Umkehrschubs und der Ablauf der Bewegung sind seine eigene Wahl, weil keine Zahlen veröffentlicht sind.",
       "p4": "Dieses Triebwerk ist noch auf dem Weg zu den Passagieren. Die Boeing 777-9 ist noch nicht im Dienst, und ihre erste Auslieferung ist für 2027 geplant. Bis dahin fliegen nur Testflugzeuge damit."

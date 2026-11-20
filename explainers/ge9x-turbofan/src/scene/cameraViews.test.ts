@@ -7,8 +7,10 @@ import {
   COMPRESSOR_OFFSET_REGION,
   HERO_REGION,
   REAR_CLOSE_REGION,
+  STARTER_CLOSE_REGION,
   TURBINES_OFFSET_REGION,
   heroBounds,
+  starterCloseBox,
   viewRegionBox,
 } from './cameraViews';
 
@@ -18,7 +20,13 @@ describe('camera views', () => {
   it('frames each view on a known region and keeps them all fixed', () => {
     CAMERA_VIEW_IDS.forEach((view) => {
       const { region } = CAMERA_VIEWS[view];
-      expect([...REGION_IDS, HERO_REGION, REAR_CLOSE_REGION, ...OFFSET_REGIONS]).toContain(region);
+      expect([
+        ...REGION_IDS,
+        HERO_REGION,
+        REAR_CLOSE_REGION,
+        STARTER_CLOSE_REGION,
+        ...OFFSET_REGIONS,
+      ]).toContain(region);
       expect(CAMERA_VIEWS[view].follow).toBeUndefined();
     });
   });
@@ -46,5 +54,16 @@ describe('camera views', () => {
     const close = viewRegionBox(REAR_CLOSE_REGION, () => rear);
     expect(close.getSize(new Vector3()).y).toBeLessThan(rear.getSize(new Vector3()).y);
     expect(close.max.x).toBeGreaterThan(2.8);
+  });
+
+  it('frames the starter view on the gearbox, its radial shaft and the starter', () => {
+    const box = viewRegionBox(STARTER_CLOSE_REGION, () => new Box3());
+    expect(box.equals(starterCloseBox())).toBe(true);
+    [
+      new Vector3(-1.5, 2.6, 0.2),
+      new Vector3(-0.5, 1.855, 0.43),
+      new Vector3(0.25, 1.855, 0.43),
+    ].forEach((point) => expect(box.containsPoint(point)).toBe(true));
+    expect(CAMERA_VIEWS.starter.direction).toSatisfy(([, y]: number[]) => y < 0);
   });
 });

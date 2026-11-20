@@ -1,7 +1,7 @@
 import { Box3, Vector3 } from 'three';
 import type { FramedView } from '@core/scene/cameraViews';
 import type { CameraView, RegionId } from '../ids';
-import { PERSON_HEIGHT_M, PERSON_POSITION } from '../model';
+import { AXIS_HEIGHT_M, PERSON_HEIGHT_M, PERSON_POSITION } from '../model';
 
 const PERSON_HALF_WIDTH_M = 0.3;
 
@@ -15,15 +15,22 @@ export const HERO_REGION = 'heroScene';
 export const COMPRESSOR_OFFSET_REGION = 'compressorOffset';
 export const TURBINES_OFFSET_REGION = 'turbinesOffset';
 export const REAR_CLOSE_REGION = 'rearClose';
+export const STARTER_CLOSE_REGION = 'starterClose';
 
 const REAR_CLOSE = { from: 1.0, to: 3.45, reach: 1.9 } as const;
+const STARTER_CLOSE = {
+  x: { from: -1.7, to: 0.45 },
+  y: { below: 1.25, above: 0.2 },
+  z: { from: -0.1, to: 0.8 },
+} as const;
 
 export type ViewRegion =
   | RegionId
   | typeof HERO_REGION
   | typeof COMPRESSOR_OFFSET_REGION
   | typeof TURBINES_OFFSET_REGION
-  | typeof REAR_CLOSE_REGION;
+  | typeof REAR_CLOSE_REGION
+  | typeof STARTER_CLOSE_REGION;
 
 const REGION_OFFSETS: Readonly<
   Record<typeof COMPRESSOR_OFFSET_REGION | typeof TURBINES_OFFSET_REGION, OffsetRegion>
@@ -39,6 +46,7 @@ export const CAMERA_VIEWS: Readonly<Record<CameraView, FramedView<ViewRegion>>> 
   turbines: { region: TURBINES_OFFSET_REGION, direction: [0.4, 0.3, 1], margin: 1.05 },
   side: { region: 'engineSide', direction: [0.3, 0.17, 1], margin: 1.02 },
   rear: { region: REAR_CLOSE_REGION, direction: [1, 0.3, 0.85], margin: 0.82 },
+  starter: { region: STARTER_CLOSE_REGION, direction: [0.25, -0.3, 1], margin: 1.05 },
 };
 
 export function heroBounds(fanFace: Box3): Box3 {
@@ -58,9 +66,18 @@ export function rearCloseBox(rear: Box3): Box3 {
   );
 }
 
+export function starterCloseBox(): Box3 {
+  const { x, y, z } = STARTER_CLOSE;
+  return new Box3(
+    new Vector3(x.from, AXIS_HEIGHT_M - y.below, z.from),
+    new Vector3(x.to, AXIS_HEIGHT_M + y.above, z.to),
+  );
+}
+
 export function viewRegionBox(id: ViewRegion, region: (id: RegionId) => Box3): Box3 {
   if (id === HERO_REGION) return heroBounds(region('fanFace'));
   if (id === REAR_CLOSE_REGION) return rearCloseBox(region('rear'));
+  if (id === STARTER_CLOSE_REGION) return starterCloseBox();
   if (id === COMPRESSOR_OFFSET_REGION || id === TURBINES_OFFSET_REGION) {
     const { base, share } = REGION_OFFSETS[id];
     const box = region(base).clone();

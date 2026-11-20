@@ -62,6 +62,20 @@ describe('chapter widgets', () => {
     expect(store.getState().view.reverser).toBe(false);
   });
 
+  it('switches the reverser chapter between the reverser and the starter', () => {
+    store.getState().applyPreset('reverse');
+    expect(pressed('look', 'reverser')).toBe('true');
+    click('look', 'starter');
+    expect(store.getState()).toMatchObject({ look: 'starter', cutaway: 'cutaway' });
+    expect(store.getState().view.reverser).toBe(false);
+    expect(pressed('look', 'starter')).toBe('true');
+    expect(pressed('look', 'reverser')).toBe('false');
+    expect(pressed('reverser', 'stowed')).toBe('true');
+    click('look', 'reverser');
+    expect(store.getState().view.reverser).toBe(true);
+    expect(pressed('look', 'reverser')).toBe('true');
+  });
+
   it('runs the cutaway and stream chips', () => {
     click('cutaway', 'cutaway');
     click('streams', 'cold');

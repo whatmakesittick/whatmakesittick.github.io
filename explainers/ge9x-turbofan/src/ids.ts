@@ -69,11 +69,15 @@ export const REVERSER_IDS = ['stowed', 'deployed'] as const;
 
 export type ReverserId = (typeof REVERSER_IDS)[number];
 
+export const LOOK_IDS = ['starter', 'reverser'] as const;
+
+export type LookId = (typeof LOOK_IDS)[number];
+
 export const DETAIL_IDS = ['near', 'far'] as const;
 
 export type DetailId = (typeof DETAIL_IDS)[number];
 
-export const CHAPTER_ACTION_IDS = ['cutaway', 'streams', 'reverser'] as const;
+export const CHAPTER_ACTION_IDS = ['cutaway', 'streams', 'reverser', 'look'] as const;
 
 export type ChapterActionId = (typeof CHAPTER_ACTION_IDS)[number];
 
@@ -90,6 +94,7 @@ export const CAMERA_VIEW_IDS = [
   'turbines',
   'side',
   'rear',
+  'starter',
 ] as const;
 
 export type CameraView = (typeof CAMERA_VIEW_IDS)[number];

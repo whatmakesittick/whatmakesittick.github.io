@@ -42,5 +42,9 @@ export const CHAPTER_FIXTURE = [
   chapter('combustor', [chips('cutaway', ['closed', 'cutaway'])]),
   chapter('turbines', [chips('cutaway', ['closed', 'cutaway']), readouts(['fanLive', 'coreLive'])]),
   chapter('thrust', [chips('streams', ['both', 'cold', 'hot'])]),
-  chapter('reverse', [chips('reverser', ['stowed', 'deployed']), readouts(['thrustLive'])]),
+  chapter('reverse', [
+    chips('look', ['starter', 'reverser']),
+    chips('reverser', ['stowed', 'deployed']),
+    readouts(['thrustLive']),
+  ]),
 ].join('');

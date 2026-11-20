@@ -1,10 +1,19 @@
 import type { ScenePreset } from '@core/scene/presetBinder';
-import type { CameraView, CutawayId, PartId, PresetId, StreamId, ViewOptions } from '../ids';
+import type {
+  CameraView,
+  CutawayId,
+  LookId,
+  PartId,
+  PresetId,
+  StreamId,
+  ViewOptions,
+} from '../ids';
 import { MOMENTS, SPEED_RANGE } from '../model';
 
 export interface ChapterControls {
   cutaway: CutawayId;
   streams: StreamId;
+  look: LookId;
 }
 
 export interface Preset extends ScenePreset<PartId, CameraView> {
@@ -12,7 +21,11 @@ export interface Preset extends ScenePreset<PartId, CameraView> {
   start: Partial<ChapterControls> & { thrust?: number };
 }
 
-export const CHAPTER_CONTROL_DEFAULTS: ChapterControls = { cutaway: 'closed', streams: 'both' };
+export const CHAPTER_CONTROL_DEFAULTS: ChapterControls = {
+  cutaway: 'closed',
+  streams: 'both',
+  look: 'reverser',
+};
 
 const PACE = SPEED_RANGE.default;
 const STOWED = { reverser: false } as const;
@@ -76,3 +89,23 @@ export const PRESETS: Record<PresetId, Preset> = {
     highlight: ['reverser', 'cascades', 'nacelle'],
   },
 };
+
+export interface StarterLook {
+  camera: CameraView;
+  cutaway: CutawayId;
+  labels: readonly PartId[];
+  highlight: readonly PartId[];
+}
+
+export const STARTER_LOOK: StarterLook = {
+  camera: 'starter',
+  cutaway: 'cutaway',
+  labels: ['gearbox', 'starter', 'outerShaft'],
+  highlight: ['gearbox', 'starter', 'outerShaft'],
+};
+
+export function lookPreset(preset: Preset, look: LookId): Preset {
+  if (look !== 'starter') return preset;
+  const { camera, labels, highlight } = STARTER_LOOK;
+  return { ...preset, camera, labels, highlight };
+}

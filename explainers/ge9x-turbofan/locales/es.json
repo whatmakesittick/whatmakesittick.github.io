@@ -52,6 +52,11 @@
     "groups": {
       "streams": "Aire",
       "cutaway": "Vista",
+      "look": "Ver",
+      "reverser": "Inversor"
+    },
+    "lookOptions": {
+      "starter": "Arranque",
       "reverser": "Inversor"
     },
     "reverserOptions": {
@@ -220,7 +225,7 @@
     },
     "reverse": {
       "title": "Arrancar y dar marcha atrás",
-      "p1": "Antes del arranque, el núcleo está quieto. Para ponerlo en marcha, un <strong>motor de arranque de aire</strong> usa aire comprimido. Ese aire puede venir de un motor pequeño del avión, llamado APU, de un carro en tierra o del otro motor. El motor de arranque hace girar el eje del núcleo a través de una caja de engranajes pequeña y un eje de transmisión. Es la única caja de engranajes: no hay nada entre la turbina y el ventilador, porque el ventilador se mueve directamente. La posición de la caja, como las tuberías y los accesorios del núcleo, es disposición propia del modelo, no el plano de GE. Luego entran el combustible y el fuego, y las turbinas toman el relevo. Los detalles de un arranque real no son públicos, así que el modelo no los muestra.",
+      "p1": "Antes del arranque, el núcleo está quieto. Para ponerlo en marcha, un <strong>motor de arranque de aire</strong> usa aire comprimido. Ese aire puede venir de un motor pequeño del avión, llamado APU, de un carro en tierra o del otro motor. El motor de arranque hace girar el eje del núcleo a través de una caja de engranajes pequeña y un eje de transmisión. Es la única caja de engranajes: no hay nada entre la turbina y el ventilador, porque el ventilador se mueve directamente. La posición de la caja, como las tuberías y los accesorios del núcleo, es disposición propia del modelo, no el plano de GE. Elige Arranque abajo para ver la caja de engranajes y el motor de arranque. Luego entran el combustible y el fuego, y las turbinas toman el relevo. Los detalles de un arranque real no son públicos, así que el modelo no los muestra.",
       "p2": "Después de aterrizar, el motor tiene un segundo trabajo: frenar el avión. Un <strong>inversor de empuje</strong> desvía parte del aire hacia delante. Así el motor empuja el avión hacia atrás en vez de hacia delante. En un motor como este, el inversor desvía solo la corriente fría, y el modelo lo muestra así. GE no lo ha confirmado para el GE9X, así que tómalo como la imagen del modelo.",
       "p3": "En el modelo, el inversor funciona como un mecanismo. Primero, la parte trasera de la góndola se desliza hacia atrás. Luego unas compuertas bajan y cierran el paso alrededor del núcleo. Así queda al descubierto una banda de pequeños álabes curvos, llamados <strong>cascadas</strong>. Las líneas frías salen por ellas hacia fuera y hacia delante, mientras la corriente caliente sigue saliendo recta hacia atrás. Este capítulo empieza con el inversor abierto. Ciérralo y ábrelo de nuevo para comparar, o pulsa D, y mira cómo el indicador de empuje baja de cero. Entonces dice Inverso, con un porcentaje. El modelo limita la potencia del motor mientras el inversor está abierto. El tamaño del empuje inverso y el tiempo del movimiento son elecciones suyas, porque no hay ninguna cifra publicada.",
       "p4": "Este motor aún está en camino hacia los pasajeros. El Boeing 777-9 todavía no está en servicio, y su primera entrega está prevista para 2027. Hasta entonces, solo vuelan con él aviones de prueba."

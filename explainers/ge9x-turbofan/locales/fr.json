@@ -52,6 +52,11 @@
     "groups": {
       "streams": "Air",
       "cutaway": "Vue",
+      "look": "Voir",
+      "reverser": "Inverseur"
+    },
+    "lookOptions": {
+      "starter": "Démarreur",
       "reverser": "Inverseur"
     },
     "reverserOptions": {
@@ -220,7 +225,7 @@
     },
     "reverse": {
       "title": "Démarrer et inverser",
-      "p1": "Avant un démarrage, le cœur est immobile. Pour le faire tourner, un <strong>démarreur à turbine à air</strong> utilise de l’air comprimé. Cet air peut venir d’un petit moteur de l’avion, l’APU, d’un chariot au sol ou de l’autre moteur. Le démarreur fait tourner l’arbre du cœur par un petit boîtier d’engrenages et un arbre d’entraînement. C’est le seul boîtier d’engrenages : rien ne se trouve entre la turbine et la soufflante, car la soufflante est entraînée directement. La place du boîtier, comme les tuyaux et les raccords sur le cœur, vient de la disposition propre au modèle, pas d’un plan de GE. Puis le carburant et le feu s’en mêlent, et les turbines prennent le relais. Les détails d’un vrai démarrage ne sont pas publiés, donc le modèle les saute.",
+      "p1": "Avant un démarrage, le cœur est immobile. Pour le faire tourner, un <strong>démarreur à turbine à air</strong> utilise de l’air comprimé. Cet air peut venir d’un petit moteur de l’avion, l’APU, d’un chariot au sol ou de l’autre moteur. Le démarreur fait tourner l’arbre du cœur par un petit boîtier d’engrenages et un arbre d’entraînement. C’est le seul boîtier d’engrenages : rien ne se trouve entre la turbine et la soufflante, car la soufflante est entraînée directement. La place du boîtier, comme les tuyaux et les raccords sur le cœur, vient de la disposition propre au modèle, pas d’un plan de GE. Choisissez Démarreur plus bas pour voir le boîtier d’engrenages et le démarreur. Puis le carburant et le feu s’en mêlent, et les turbines prennent le relais. Les détails d’un vrai démarrage ne sont pas publiés, donc le modèle les saute.",
       "p2": "Après l’atterrissage, le moteur a un deuxième travail : ralentir l’avion. Un <strong>inverseur de poussée</strong> renvoie une partie de l’air vers l’avant. Le moteur pousse alors l’avion vers l’arrière au lieu de l’avant. Dans un moteur comme celui-ci, l’inverseur ne dévie que le flux froid, et le modèle le montre ainsi. GE ne l’a pas confirmé pour le GE9X, donc prends-le comme l’image du modèle.",
       "p3": "Dans le modèle, l’inverseur fonctionne comme un mécanisme. D’abord, l’arrière de la nacelle glisse vers l’arrière. Ensuite, des portes basculent vers le bas et bloquent le passage autour du cœur. Cela découvre une bande de petites aubes courbes, les <strong>grilles</strong>. Les lignes froides sortent et repartent vers l’avant à travers elles, pendant que le flux chaud continue de filer tout droit vers l’arrière. Ce chapitre commence avec l’inverseur sorti. Rentre-le, puis déploie-le de nouveau pour comparer, ou appuie sur D, et regarde la poussée affichée passer sous zéro. Elle indique alors Inversion, avec un pourcentage. Le modèle limite la puissance du moteur tant que l’inverseur est ouvert. La taille de la poussée inverse et le rythme du mouvement sont ses propres choix, car aucun chiffre n’est publié.",
       "p4": "Ce moteur n’a pas encore rencontré les passagers. Le Boeing 777-9 n’est pas encore en service, et sa première livraison est prévue pour 2027. D’ici là, seuls des avions d’essai volent avec lui."

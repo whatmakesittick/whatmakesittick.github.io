@@ -91,6 +91,35 @@ describe('engine scene bindings', () => {
     expect(setWanted).toHaveBeenLastCalledWith(new Set(), new Set());
   });
 
+  it('looks at the starter inside the reverser chapter and goes back', async () => {
+    const { frame, setWanted, setHighlight, targets } = fakeTargets();
+    const store = createEngineStore();
+    await bindStore(store, targets);
+    store.getState().applyPreset('reverse');
+    store.getState().setLook('starter');
+    const starter = new Set(['gearbox', 'starter', 'outerShaft']);
+    expect(frame).toHaveBeenLastCalledWith('starter', true);
+    expect(setWanted).toHaveBeenLastCalledWith(starter, starter);
+    expect(setHighlight).toHaveBeenLastCalledWith(['gearbox', 'starter', 'outerShaft']);
+    store.getState().resetCamera();
+    expect(frame).toHaveBeenLastCalledWith('starter', true, undefined);
+    store.getState().setLook('reverser');
+    expect(frame).toHaveBeenLastCalledWith('rear', true);
+    const reverse = new Set(['reverser', 'cascades', 'coldNozzle']);
+    expect(setWanted).toHaveBeenLastCalledWith(reverse, reverse);
+    expect(setHighlight).toHaveBeenLastCalledWith(['reverser', 'cascades', 'nacelle']);
+  });
+
+  it('keeps the labels off while the toggle is off and the starter is chosen', async () => {
+    const { setWanted, targets } = fakeTargets();
+    const store = createEngineStore();
+    await bindStore(store, targets);
+    store.getState().applyPreset('reverse');
+    store.getState().toggleView('labels');
+    store.getState().setLook('starter');
+    expect(setWanted).toHaveBeenLastCalledWith(new Set(), new Set());
+  });
+
   it('stops following the store once unbound', async () => {
     const { received, targets } = fakeTargets();
     const store = createEngineStore();
