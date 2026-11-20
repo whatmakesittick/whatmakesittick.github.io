@@ -10,7 +10,7 @@ export const HERO_REGION = 'heroScene';
 export type ViewRegion = RegionId | typeof HERO_REGION;
 
 export const CAMERA_VIEWS: Readonly<Record<CameraView, FramedView<ViewRegion>>> = {
-  hero: { region: HERO_REGION, direction: [-0.9, 0.25, 1], margin: 1.1 },
+  hero: { region: HERO_REGION, direction: [-0.3, 0.18, 1], margin: 0.88 },
   compressor: { region: 'compressor', direction: [0.2, 0.35, 1], margin: 1.05 },
   combustor: { region: 'combustor', direction: [0.25, 0.3, 1], margin: 1.05 },
   turbines: { region: 'turbines', direction: [0.4, 0.3, 1], margin: 1.05 },
