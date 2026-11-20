@@ -98,4 +98,16 @@ describe('swimmer rig', () => {
     expect(entry.arms.right.hand.x).toBeGreaterThan(0.5);
     expect(entry.arms.left.hand.y).toBeLessThan(entry.arms.right.hand.y);
   });
+
+  it('keeps the handedness of the spec', () => {
+    const entry = skeletonAt(0);
+    const next = skeletonAt(4);
+    expect(next.legs.left.toe.y).toBeLessThan(entry.legs.left.toe.y);
+    expect(next.legs.right.toe.y).toBeGreaterThan(entry.legs.right.toe.y);
+    const rolled = skeletonAt(250);
+    expect(rolled.arms.right.shoulder.y).toBeLessThan(rolled.arms.left.shoulder.y);
+    const breath = skeletonAt(877, 'middle', 'right');
+    const face = new Vector3(0, -1, 0).applyQuaternion(breath.head);
+    expect(face.z).toBeGreaterThan(0.9);
+  });
 });
