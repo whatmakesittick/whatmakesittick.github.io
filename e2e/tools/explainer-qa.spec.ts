@@ -4,6 +4,7 @@ import type { LanguageCode } from '../../src/core/i18n/languages.ts';
 import { openExplainer, scrubTo, showChapter, visibleChapters } from '../driver.ts';
 import { boxesIntersect } from '../geometry.ts';
 import {
+  clippedReadouts,
   dockBox,
   dockCollisions,
   emptyReadouts,
@@ -53,6 +54,7 @@ for (const language of LANGUAGES) {
       }
       await page.screenshot({ path: `${OUT}/${language}-${info.project.name}-${preset}.png` });
       expect(await emptyReadouts(page), `${preset}: empty readouts`).toEqual([]);
+      expect(await clippedReadouts(page), `${preset}: clipped readouts`).toEqual([]);
     }
     expect(await untranslatedCopy(page)).toEqual([]);
     expect(await hasHorizontalOverflow(page)).toBe(false);
