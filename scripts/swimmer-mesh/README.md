@@ -66,6 +66,8 @@ minus shoulder joint x), chest depth, and the bind-pose clavicle and shoulder jo
   `hip-scale-horiz-decr`.
 - Neck and head: `neck-scale-vert-incr` (0.5), `measure-neck-circ-decr` (0.2), `head-scale-horiz-decr`.
 - Upper arm slimming: `measure-upperarm-circ-decr` (0.3) and `%-upperarm-fat-decr`.
+- Deltoid slimming: `%-upperarm-shoulder-muscle-incr` at -1.8 (a negative weight subtracts the target), which brings the
+  bideltoid half-width from 0.262 to 0.236 with the shoulder joint still at 0.197.
 - Limb lengths: `measure-upperarm-length-incr`, `measure-lowerarm-length-decr`, `measure-upperleg-height-incr`,
   and for both sides `hand-scale-decr` and `foot-scale-incr`.
 - Muscle, for both sides: `upperarm-muscle-incr` (0.1), `lowerarm-muscle-incr` (0.15), `lowerleg-muscle-incr` (0.15)
