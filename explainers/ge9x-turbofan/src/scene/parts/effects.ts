@@ -9,7 +9,8 @@ import {
   ShaderMaterial,
   Vector2,
 } from 'three';
-import type { IUniform } from 'three';
+import type { IUniform, Intersection } from 'three';
+import { isMesh } from '@core/scene/occlusion';
 import { AXIS_HEIGHT_M } from '../../model/scale';
 import { THEME } from '../../theme';
 import { EFFECT_LOOK, LOOK } from '../constants';
@@ -60,6 +61,15 @@ function blend() {
     depthWrite: false,
     blending: LOOK.additive ? AdditiveBlending : NormalBlending,
   };
+}
+
+export function isGlowHit({ object }: Intersection): boolean {
+  if (!isMesh(object) || Array.isArray(object.material)) return false;
+  return (
+    object.material instanceof ShaderMaterial &&
+    object.material.transparent &&
+    !object.material.depthWrite
+  );
 }
 
 function finishColor(name: string): string {
