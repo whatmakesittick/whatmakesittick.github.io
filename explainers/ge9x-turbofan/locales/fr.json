@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "title": "Comment le plus gros moteur d’avion de ligne fabrique sa poussée",
+    "eyebrow": "Moteurs d’avion",
+    "tagline": "Suis l’air à travers le GE9X. La soufflante géante fait presque toute la poussée. Le feu ne sert qu’à chauffer l’air qui fait tourner les turbines.",
+    "description": "Suis l’air dans le GE9X, le plus gros moteur d’avion de ligne : la soufflante géante, la compression, le feu, deux turbines et l’inverseur, en 3D.",
+    "summary": "La soufflante et les deux flux, le compresseur, la chambre de combustion, les deux turbines et les deux arbres, d’où vient la poussée, le démarrage et l’inversion.",
+    "socialAlt": "Un turboréacteur GE9X en coupe, avec une soufflante géante en fibre de carbone, un flux froid bleu autour du cœur et un cœur chaud incandescent, à côté du titre Comment le plus gros moteur d’avion de ligne fabrique sa poussée"
+  },
+  "stage": {
+    "label": "Modèle interactif du moteur GE9X",
+    "gauge": "Vitesse de la soufflante, vitesse du cœur et poussée, en direct"
+  },
+  "timeline": {
+    "label": "Position de l’air",
+    "phases": "Aller à une étape du voyage de l’air",
+    "value": "{{metres}} m",
+    "describe": "{{metres}} m après le bord de l’entrée d’air, {{phase}}",
+    "speed": "Lecture",
+    "speedValue": "{{factor}}×",
+    "realTime": "Rythme du modèle",
+    "slower": "{{factor}} fois plus lent",
+    "faster": "{{factor}} fois plus rapide",
+    "phase": {
+      "suck": "Aspirer",
+      "squeeze": "Presser",
+      "burn": "Brûler",
+      "spin": "Tourner",
+      "blow": "Souffler"
+    },
+    "jump": {
+      "suck": "Aller à l’air qui entre dans le moteur",
+      "squeeze": "Aller à l’air qu’on comprime",
+      "burn": "Aller à l’air dans le feu",
+      "spin": "Aller à l’air qui fait tourner les turbines",
+      "blow": "Aller à l’air qui sort par les tuyères"
+    },
+    "detail": {
+      "suck": "la soufflante aspire l’air et le sépare en deux",
+      "squeeze": "l’air du cœur est comprimé, l’air froid file autour du cœur",
+      "burn": "le carburant brûle dans l’air comprimé du cœur",
+      "spin": "le gaz chaud fait tourner deux turbines",
+      "blow": "les deux flux jaillissent des tuyères"
+    }
+  },
+  "controls": {
+    "label": "Commandes du modèle",
+    "cutaway": "Vue",
+    "cutawayOptions": {
+      "closed": "Nacelle fermée",
+      "cutaway": "Coupe"
+    },
+    "streams": "Air",
+    "streamOptions": {
+      "both": "Les deux flux",
+      "cold": "Flux froid",
+      "hot": "Flux chaud"
+    },
+    "groups": {
+      "streams": "Air",
+      "cutaway": "Vue",
+      "reverser": "Inverseur"
+    },
+    "reverserOptions": {
+      "stowed": "Rentré",
+      "deployed": "Déployé"
+    },
+    "views": {
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Étiquettes (L)"
+      },
+      "person": {
+        "name": "Personne pour l’échelle",
+        "short": "Personne",
+        "hint": "Personne pour l’échelle (P)"
+      },
+      "reverser": {
+        "name": "Déployer l’inverseur",
+        "short": "Inverseur",
+        "hint": "Déployer l’inverseur (D)"
+      }
+    }
+  },
+  "gauge": {
+    "lever": "Manette de poussée",
+    "leverValue": "{{percent}} %",
+    "idle": "Ralenti",
+    "takeoff": "Décollage"
+  },
+  "readouts": {
+    "fan": "Vitesse de la soufflante",
+    "core": "Vitesse du cœur",
+    "thrust": "Poussée, estimation du modèle",
+    "reverse": "Inversion {{percent}} %"
+  },
+  "units": {
+    "percent": "{{value}} %",
+    "metres": "{{value}} m",
+    "kilonewtons": "{{value}} kN"
+  },
+  "parts": {
+    "nacelle": "Nacelle, l’enveloppe extérieure",
+    "intakeLip": "Bord de l’entrée d’air",
+    "fanCase": "Carter de soufflante",
+    "fanBlades": "Aubes de soufflante, 16",
+    "spinner": "Cône d’entrée",
+    "guideVanes": "Aubes directrices",
+    "splitter": "Séparateur",
+    "booster": "Compresseur basse pression, 3 étages",
+    "compressorRotor": "Compresseur, aubes mobiles",
+    "compressorStator": "Compresseur, aubes fixes",
+    "compressor": "Compresseur, 11 étages",
+    "outerShaft": "Arbre extérieur, cœur",
+    "innerShaft": "Arbre intérieur, soufflante",
+    "diffuser": "Diffuseur",
+    "fuelNozzles": "Injecteurs de carburant",
+    "combustorLiner": "Paroi en céramique",
+    "combustor": "Chambre de combustion",
+    "hpTurbine": "Turbine haute pression, 2 étages",
+    "lpTurbine": "Turbine basse pression, 6 étages",
+    "bypassDuct": "Conduit du flux froid",
+    "coldNozzle": "Tuyère froide",
+    "hotNozzle": "Tuyère chaude",
+    "coldStream": "Flux froid",
+    "hotStream": "Flux chaud",
+    "reverser": "Inverseur de poussée",
+    "cascades": "Grilles, aubes courbes",
+    "person": "Personne, 1,8 m"
+  },
+  "chapters": {
+    "fan": {
+      "blades": "Aubes de soufflante",
+      "bladesValue": "16, en fibre de carbone",
+      "width": "Largeur de la soufflante",
+      "widthValue": "3,4 m, presque aussi large que le fuselage d’un 737",
+      "split": "Air qui contourne le cœur",
+      "splitValue": "environ 10 parts sur 11",
+      "tip": "Bout des aubes à pleine puissance",
+      "tipValue": "plus vite que le son"
+    },
+    "compressor": {
+      "stages": "Étages du compresseur",
+      "stagesValue": "11",
+      "ratio": "Compression dans le compresseur",
+      "ratioValue": "27 pour 1",
+      "overall": "Compression dans tout le moteur",
+      "overallValue": "plus de 60 pour 1",
+      "shaft": "Entraîné par",
+      "shaftValue": "la turbine haute pression, sur l’arbre extérieur"
+    },
+    "combustor": {
+      "style": "Type de combustion",
+      "styleValue": "mélange pauvre, carburant et air mélangés d’abord",
+      "liners": "Parois",
+      "linersValue": "en céramique",
+      "nox": "Oxydes d’azote",
+      "noxValue": "moins de la moitié de la dernière limite, selon GE",
+      "cool": "La céramique est plus légère",
+      "coolValue": "environ trois fois moins dense que les alliages de métal"
+    },
+    "turbines": {
+      "hpt": "Turbine haute pression",
+      "hptValue": "2 étages, entraîne le compresseur",
+      "lpt": "Turbine basse pression",
+      "lptValue": "6 étages, entraîne la soufflante et le compresseur basse pression",
+      "ceramic": "Pièces en céramique",
+      "ceramicValue": "cinq sortes",
+      "print": "Pièces imprimées en 3D",
+      "printValue": "environ 300, en sept sortes"
+    },
+    "thrust": {
+      "cold": "Flux froid",
+      "coldValue": "environ 10 parts, large et lent",
+      "hot": "Flux chaud",
+      "hotValue": "1 part, étroit et rapide",
+      "rating": "Poussée au décollage",
+      "ratingValue": "environ 105 000 livres, soit près de 470 kN",
+      "record": "Record d’essai",
+      "recordValue": "134 300 livres, juillet 2019"
+    },
+    "reverse": {
+      "what": "Ce qui est dévié",
+      "whatValue": "le flux froid",
+      "status": "En service",
+      "statusValue": "la première livraison du 777-9 est prévue pour 2027"
+    }
+  },
+  "sections": {
+    "fan": {
+      "title": "La soufflante et les deux flux",
+      "p1": "Place-toi devant le moteur et regarde à l’intérieur. Le premier obstacle de l’air, c’est la <strong>soufflante</strong>, une couronne de 16 grandes aubes en fibre de carbone. Elle mesure 3,4 mètres de large, presque autant que le fuselage d’un Boeing 737. La petite silhouette à côté mesure 1,8 mètre, pour que tu sentes la taille. Aucun autre moteur d’avion de ligne n’a une soufflante aussi grande.",
+      "p2": "Juste derrière la soufflante, l’air rencontre une arête vive, le <strong>séparateur</strong>. Environ 10 parts d’air sur 11 contournent le cœur. C’est le <strong>flux froid</strong>, et il sort tout droit par l’arrière. L’autre part, environ 1 sur 11, entre dans le cœur. C’est le <strong>flux chaud</strong>, et tu vas le suivre dans les chapitres suivants. Le modèle dessine les deux flux avec des points qui bougent, et le nombre de points ne reflète pas ce partage de 10 pour 1.",
+      "p3": "Quel flux fait la poussée ? Le gros de la poussée vient de la soufflante. Elle attrape une énorme quantité d’air et la rejette un peu plus vite. Pousser beaucoup d’air un petit peu, c’est une bonne façon de pousser un avion. À pleine puissance, d’après les chiffres de GE, le bout des aubes va plus vite que le son.",
+      "p4": "Choisis Froid ou Chaud pour regarder un seul flux à la fois. Ce moteur est conçu pour le Boeing 777-9, qui n’est pas encore en service. Sa première livraison est prévue pour 2027. Le moteur, lui, est certifié et vole sur des avions d’essai. Le modèle dessine le moteur pour qu’on le comprenne, pas pour le mesurer : sa disposition est la sienne, et les nombres d’aubes aussi, sauf les 16 aubes de la soufflante."
+    },
+    "compressor": {
+      "title": "La compression",
+      "p1": "Suis maintenant l’air du cœur. Il passe d’abord par le <strong>compresseur basse pression</strong>, trois étages de petites aubes juste derrière la soufflante. Puis il entre dans le <strong>compresseur</strong>, qui compte 11 étages. Chaque étage est une couronne d’aubes qui tournent et une couronne d’aubes fixes. Les aubes qui tournent poussent l’air plus loin, et les aubes fixes le préparent pour l’étage suivant.",
+      "p2": "Chaque étage comprime l’air un peu plus. Le compresseur seul le comprime 27 fois. Avec la soufflante et le compresseur basse pression, tout le moteur le comprime plus de 60 fois. GE dit que c’est le taux le plus élevé de tous les moteurs en service. Un air bien comprimé brûle bien, donc il donne plus de puissance pour chaque goutte de carburant.",
+      "p3": "Le compresseur tourne sur l’<strong>arbre extérieur</strong>, un tube creux. C’est la turbine haute pression, à l’arrière, qui le fait tourner. L’arbre du cœur tourne plusieurs fois plus vite que la soufflante. Les chiffres publiés varient, donc le modèle utilise ses propres vitesses. Il montre aussi la rotation des milliers de fois plus lente que dans la réalité.",
+      "p4": "Choisis Coupe pour voir à l’intérieur, puis fais glisser le repère sur la barre du temps. Le repère montre où sont deux paquets d’air : l’un dans le cœur et l’autre dans le flux froid. La barre nomme les étapes de l’air du cœur : aspirer, presser, brûler, tourner et souffler. L’air froid saute presser, brûler et tourner, parce qu’il file dans le conduit autour du cœur. Le nombre indique les mètres depuis le bord de l’entrée d’air."
+    },
+    "combustor": {
+      "title": "Là où le carburant brûle",
+      "p1": "L’air comprimé entre maintenant dans la <strong>chambre de combustion</strong>. D’abord, une pièce appelée diffuseur le ralentit. Ensuite, le carburant est pulvérisé par de petits injecteurs. Il brûle de façon régulière, comme sur une cuisinière à gaz, sans explosions.",
+      "p2": "Ce moteur mélange d’abord le carburant et l’air, puis brûle le mélange. Les ingénieurs appellent ça la <strong>combustion pauvre</strong> : beaucoup d’air pour peu de carburant. Un tel mélange brûle plus proprement. GE dit que le moteur produit moins de la moitié des oxydes d’azote que permet la dernière limite.",
+      "p3": "Les parois de la chambre de combustion s’appellent des <strong>parois</strong>, et ici elles sont en céramique. Cette céramique est environ trois fois moins dense que les alliages de métal, donc elle est plus légère. Elle demande aussi moins d’air de refroidissement.",
+      "p4": "La lueur que tu vois n’est qu’une image. GE ne publie pas la température du gaz, donc le modèle dessine simplement plus chaud en plus brillant. Choisis Coupe pour regarder à l’intérieur. Ce feu ne pousse pas l’avion. Son rôle est de chauffer l’air, et le chapitre suivant montre pourquoi."
+    },
+    "turbines": {
+      "title": "Deux turbines, deux arbres",
+      "p1": "Le gaz chaud et rapide quitte la chambre de combustion et rencontre les <strong>turbines</strong>. Une turbine marche comme un moulin à vent : le gaz fait tourner les aubes. C’est à ça que sert le feu. Il ne pousse pas l’avion. Il chauffe l’air pour que les turbines puissent tourner.",
+      "p2": "Il y a deux turbines, sur deux arbres. La <strong>turbine haute pression</strong> vient en premier. Elle a 2 étages et entraîne le compresseur par l’arbre extérieur. La <strong>turbine basse pression</strong> vient ensuite. Elle a 6 étages et entraîne la soufflante et le compresseur basse pression par l’arbre intérieur, qui passe à l’intérieur de l’arbre extérieur.",
+      "p3": "Les deux arbres ne tournent pas à la même vitesse. L’arbre du cœur tourne plusieurs fois plus vite que celui de la soufflante. Les chiffres publiés pour les vitesses exactes varient, donc le modèle utilise les siens. La rotation et la lueur de l’animation sont aussi celles du modèle. Les deux jauges en direct plus bas sont des pourcentages du réglage de décollage du modèle, pas des tours par minute.",
+      "p4": "Le gaz chaud est dur pour les aubes en métal. Elles tiennent grâce à l’air de refroidissement et à des revêtements, et ce moteur ajoute des pièces en céramique. Il y a cinq sortes de pièces en céramique. Environ 300 pièces sont imprimées en 3D, en sept sortes. GE ne publie pas la température du gaz, donc tu n’en trouveras pas ici."
+    },
+    "thrust": {
+      "title": "D’où vient la poussée",
+      "p1": "À l’arrière, il y a deux tuyères. Le flux froid sort par la large, autour du cœur. Le flux chaud sort par l’étroite, au milieu. Le flux froid représente environ 10 parts d’air, large et lent. Le flux chaud en représente 1, étroit et rapide. Le modèle montre les vitesses de façon relative, pas en mètres par seconde.",
+      "p2": "Qu’est-ce qui vaut mieux : beaucoup d’air poussé un peu, ou peu d’air poussé beaucoup ? Beaucoup d’air poussé un peu l’emporte. Il gaspille moins d’énergie, donc il consomme moins de carburant. C’est pour ça que les moteurs d’avion de ligne modernes ont des soufflantes aussi grandes. GE dit que ce moteur brûle jusqu’à 10 pour cent de carburant en moins, à poussée égale, que son aîné, le GE90-115B.",
+      "p3": "Passons aux chiffres. Au décollage, le moteur est donné pour environ 105 000 livres de poussée, soit près de 470 kilonewtons. Lors d’un essai en juillet 2019, il a atteint 134 300 livres, un record du monde. C’était un essai, pas un vol normal. Pour comparer, un moteur de 737 produit environ 92 à 121 kilonewtons.",
+      "p4": "Bouge la manette de poussée dans la jauge et regarde les flux changer. La poussée affichée est l’estimation du modèle, en pourcentage de son réglage de décollage. Le modèle a aussi son propre partage de la poussée entre les deux flux. C’est une esquisse, car GE n’en publie pas. Tout ce qu’on peut dire, c’est que la plus grande part de la poussée vient de la soufflante."
+    },
+    "reverse": {
+      "title": "Démarrer et inverser",
+      "p1": "Avant un démarrage, le cœur est immobile. Pour le faire tourner, un <strong>démarreur à turbine à air</strong> utilise de l’air comprimé. Cet air peut venir d’un petit moteur de l’avion, l’APU, d’un chariot au sol ou de l’autre moteur. Le démarreur lance le cœur. Puis le carburant et le feu s’en mêlent, et les turbines prennent le relais. Les détails d’un vrai démarrage ne sont pas publiés, donc le modèle les saute.",
+      "p2": "Après l’atterrissage, le moteur a un deuxième travail : ralentir l’avion. Un <strong>inverseur de poussée</strong> renvoie une partie de l’air vers l’avant. Le moteur pousse alors l’avion vers l’arrière au lieu de l’avant. Dans un moteur comme celui-ci, l’inverseur ne dévie que le flux froid, et le modèle le montre ainsi. GE ne l’a pas confirmé pour le GE9X, donc prends-le comme l’image du modèle.",
+      "p3": "L’air froid est dévié à travers des rangées de petites aubes courbes, les <strong>grilles</strong>. Elles l’orientent vers l’avant et sur le côté. Choisis Déployé, ou appuie sur D, et regarde la poussée affichée passer sous zéro. Elle indique alors Inversion, avec un pourcentage. Le flux chaud continue de filer tout droit vers l’arrière.",
+      "p4": "Ce moteur n’a pas encore rencontré les passagers. Le Boeing 777-9 n’est pas encore en service, et sa première livraison est prévue pour 2027. D’ici là, seuls des avions d’essai volent avec lui."
+    }
+  }
+}
