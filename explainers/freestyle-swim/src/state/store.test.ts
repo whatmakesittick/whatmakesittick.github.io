@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createSwimTimeline } from '../timeline';
+import { PRESETS } from './presets';
 import { createSwimStore, snapToRange } from './store';
 
 describe('swim store', () => {
@@ -55,7 +56,11 @@ describe('swim store', () => {
   it('pauses once on the catch and resumes on the next chapter', () => {
     const store = createSwimStore();
     store.getState().applyPreset('catch');
-    expect(store.getState()).toMatchObject({ phase: 286, playing: false, speed: 1 });
+    expect(store.getState()).toMatchObject({
+      phase: PRESETS.catch.pauseAt,
+      playing: false,
+      speed: 1,
+    });
     store.getState().applyPreset('pull');
     expect(store.getState()).toMatchObject({ phase: 286, playing: true });
   });
