@@ -110,4 +110,29 @@ describe('swimmer rig', () => {
     const face = new Vector3(0, -1, 0).applyQuaternion(breath.head);
     expect(face.z).toBeGreaterThan(0.9);
   });
+
+  it('slides the shoulder forward on entry and back through the push', () => {
+    const entry = skeletonAt(0).arms.right.shoulder;
+    const pushEnd = skeletonAt(MOMENTS.pushEnd).arms.right.shoulder;
+    expect(entry.x - pushEnd.x).toBeGreaterThan(0.06);
+  });
+
+  it('flexes the wrist so the fingers lead the forearm into the catch', () => {
+    const { elbow, wrist, handAxis } = skeletonAt(MOMENTS.catch).arms.right;
+    const forearm = new Vector3().subVectors(wrist, elbow).normalize();
+    expect(handAxis.y).toBeLessThan(forearm.y - 0.1);
+  });
+
+  it('exits the push with the palm facing the thigh', () => {
+    const { palm } = skeletonAt(MOMENTS.pushEnd).arms.right;
+    expect(palm.z).toBeLessThan(-0.7);
+  });
+
+  it('keeps the head far stiller than the shoulders when not breathing', () => {
+    const maxHeadTiltDeg = 12;
+    for (let units = 0; units < 1000; units += 25) {
+      const face = new Vector3(0, -1, 0).applyQuaternion(skeletonAt(units).head);
+      expect(Math.abs(toDegrees(Math.atan2(face.z, -face.y)))).toBeLessThan(maxHeadTiltDeg);
+    }
+  });
 });
