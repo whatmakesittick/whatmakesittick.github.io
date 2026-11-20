@@ -190,12 +190,28 @@ describe('swimmer rig', () => {
     expect(depressionDeg(forearm) - depressionDeg(upper)).toBeGreaterThan(minSteeperForearmDeg);
   });
 
-  it('recovers with the forearm hanging under a high elbow close to the shoulder line', () => {
-    const maxHandWidthM = 0.2;
-    const minElbowLiftM = 0.15;
-    const { shoulder, elbow, hand } = skeletonAt(MOMENTS.recoveryMid).arms.right;
-    expect(hand.z - shoulder.z).toBeLessThan(maxHandWidthM);
-    expect(elbow.y - hand.y).toBeGreaterThan(minElbowLiftM);
+  it('recovers low and loose: elbow highest, bent near a right angle, wrist just outside it', () => {
+    const elbowHeightM = { min: 0.22, max: 0.36 };
+    const elbowDeg = { min: 75, max: 115 };
+    const maxWristOutsideElbowM = 0.25;
+    const middle = { from: 0.35, to: 0.65 };
+    scan((units, pace, breathing) => {
+      const { progress, underwater } = strokeAt(units, {
+        pace,
+        kick: 'six',
+        breathing,
+        headUp: false,
+      }).right;
+      if (underwater || progress < middle.from || progress > middle.to) return;
+      const skeleton = skeletonAt(units, pace, breathing);
+      const { elbow, wrist } = skeleton.arms.right;
+      expect(elbow.y + ROOT_Y).toBeGreaterThan(elbowHeightM.min);
+      expect(elbow.y + ROOT_Y).toBeLessThan(elbowHeightM.max);
+      expect(elbowAngle(skeleton)).toBeGreaterThan(elbowDeg.min);
+      expect(elbowAngle(skeleton)).toBeLessThan(elbowDeg.max);
+      expect(wrist.z - elbow.z).toBeGreaterThan(0);
+      expect(wrist.z - elbow.z).toBeLessThan(maxWristOutsideElbowM);
+    });
   });
 
   it('exits the push with the palm facing the thigh', () => {
