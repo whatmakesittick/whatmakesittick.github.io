@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "title": "Wie das größte Passagierflugzeug-Triebwerk seinen Schub erzeugt",
+    "eyebrow": "Strahltriebwerke",
+    "tagline": "Folge der Luft durch das GE9X. Das riesige Gebläse leistet den größten Teil der Schubarbeit. Das Feuer erhitzt nur die Luft, die die Turbinen dreht.",
+    "description": "Folge der Luft durch das GE9X, das größte Passagierflugzeug-Triebwerk: riesiges Gebläse, Verdichtung, Feuer, zwei Turbinen und Schubumkehr, in 3D.",
+    "summary": "Das Gebläse und die zwei Luftströme, der Verdichter, die Brennkammer, die zwei Turbinen mit zwei Wellen, woher der Schub kommt, Starten und Umkehren.",
+    "socialAlt": "Ein aufgeschnittenes GE9X-Turbofan mit riesigem Kohlefaser-Gebläse, kaltem blauem Strom um den Kern und glühendem heißem Kern, daneben der Titel „Wie das größte Passagierflugzeug-Triebwerk seinen Schub erzeugt“"
+  },
+  "stage": {
+    "label": "Interaktives Modell des GE9X-Triebwerks",
+    "gauge": "Gebläsedrehzahl, Kerndrehzahl und Schub, live"
+  },
+  "timeline": {
+    "label": "Position der Luft",
+    "phases": "Zu einem Schritt der Luftreise springen",
+    "value": "{{metres}} m",
+    "describe": "{{metres}} m hinter der Einlasslippe, {{phase}}",
+    "speed": "Wiedergabe",
+    "speedValue": "{{factor}}×",
+    "realTime": "Tempo des Modells",
+    "slower": "{{factor}}-mal langsamer",
+    "faster": "{{factor}}-mal schneller",
+    "phase": {
+      "suck": "Saugen",
+      "squeeze": "Pressen",
+      "burn": "Brennen",
+      "spin": "Drehen",
+      "blow": "Blasen"
+    },
+    "jump": {
+      "suck": "Zur Luft im Einlass springen",
+      "squeeze": "Zur gepressten Luft springen",
+      "burn": "Zur Luft im Feuer springen",
+      "spin": "Zur Luft springen, die die Turbinen dreht",
+      "blow": "Zur Luft springen, die aus den Düsen strömt"
+    },
+    "detail": {
+      "suck": "das Gebläse zieht die Luft ein und teilt sie in zwei Ströme",
+      "squeeze": "die Kernluft wird gepresst, die kalte Luft strömt um den Kern herum",
+      "burn": "Kraftstoff verbrennt in der gepressten Kernluft",
+      "spin": "das heiße Gas dreht zwei Turbinen",
+      "blow": "beide Ströme schießen aus den Düsen"
+    }
+  },
+  "controls": {
+    "label": "Steuerung des Modells",
+    "cutaway": "Ansicht",
+    "cutawayOptions": {
+      "closed": "Geschlossen",
+      "cutaway": "Aufgeschnitten"
+    },
+    "streams": "Luft",
+    "streamOptions": {
+      "both": "Beide Ströme",
+      "cold": "Kalter Strom",
+      "hot": "Heißer Strom"
+    },
+    "groups": {
+      "streams": "Luft",
+      "cutaway": "Ansicht",
+      "reverser": "Umkehrer"
+    },
+    "reverserOptions": {
+      "stowed": "Eingefahren",
+      "deployed": "Ausgefahren"
+    },
+    "views": {
+      "labels": {
+        "name": "Beschriftungen",
+        "short": "Namen",
+        "hint": "Beschriftungen (L)"
+      },
+      "person": {
+        "name": "Person als Größenvergleich",
+        "short": "Person",
+        "hint": "Person als Größenvergleich (P)"
+      },
+      "reverser": {
+        "name": "Schubumkehr ausfahren",
+        "short": "Umkehrer",
+        "hint": "Schubumkehr ausfahren (D)"
+      }
+    }
+  },
+  "gauge": {
+    "lever": "Schubhebel",
+    "leverValue": "{{percent}} %",
+    "idle": "Leerlauf",
+    "takeoff": "Start"
+  },
+  "readouts": {
+    "fan": "Gebläsedrehzahl",
+    "core": "Kerndrehzahl",
+    "thrust": "Schub, Schätzung des Modells",
+    "reverse": "Umkehr {{percent}} %"
+  },
+  "units": {
+    "percent": "{{value}} %",
+    "metres": "{{value}} m",
+    "kilonewtons": "{{value}} kN"
+  },
+  "parts": {
+    "nacelle": "Gondel, die Außenhülle",
+    "intakeLip": "Einlasslippe",
+    "fanCase": "Gebläsegehäuse",
+    "fanBlades": "Gebläseschaufeln, 16",
+    "spinner": "Spinner",
+    "guideVanes": "Leitschaufeln",
+    "splitter": "Teiler",
+    "booster": "Booster, 3 Stufen",
+    "compressorRotor": "Verdichter, drehende Schaufeln",
+    "compressorStator": "Verdichter, feste Schaufeln",
+    "compressor": "Verdichter, 11 Stufen",
+    "outerShaft": "Äußere Welle, Kern",
+    "innerShaft": "Innere Welle, Gebläse",
+    "diffuser": "Diffusor",
+    "fuelNozzles": "Kraftstoffdüsen",
+    "combustorLiner": "Keramikwand",
+    "combustor": "Brennkammer",
+    "hpTurbine": "Hochdruckturbine, 2 Stufen",
+    "lpTurbine": "Niederdruckturbine, 6 Stufen",
+    "bypassDuct": "Nebenstromkanal",
+    "coldNozzle": "Kalte Düse",
+    "hotNozzle": "Heiße Düse",
+    "coldStream": "Kalter Strom",
+    "hotStream": "Heißer Strom",
+    "reverser": "Schubumkehr",
+    "cascades": "Gitter, gebogene Leitschaufeln",
+    "person": "Person, 1,8 m"
+  },
+  "chapters": {
+    "fan": {
+      "blades": "Gebläseschaufeln",
+      "bladesValue": "16, aus Kohlefaser",
+      "width": "Breite des Gebläses",
+      "widthValue": "3,4 m, fast so breit wie der Rumpf einer 737",
+      "split": "Luft, die um den Kern strömt",
+      "splitValue": "etwa 10 von 11 Teilen",
+      "tip": "Schaufelspitzen bei voller Leistung",
+      "tipValue": "schneller als der Schall"
+    },
+    "compressor": {
+      "stages": "Stufen des Verdichters",
+      "stagesValue": "11",
+      "ratio": "Pressung im Verdichter",
+      "ratioValue": "27 zu 1",
+      "overall": "Pressung im ganzen Triebwerk",
+      "overallValue": "über 60 zu 1",
+      "shaft": "Angetrieben von",
+      "shaftValue": "der Hochdruckturbine, über die äußere Welle"
+    },
+    "combustor": {
+      "style": "Art der Verbrennung",
+      "styleValue": "mager, Kraftstoff und Luft werden zuerst gemischt",
+      "liners": "Brennkammerwände",
+      "linersValue": "aus Keramik",
+      "nox": "Stickoxide",
+      "noxValue": "weniger als die Hälfte des neuesten Grenzwerts, sagt GE",
+      "cool": "Keramik ist leichter",
+      "coolValue": "etwa ein Drittel der Dichte von Metalllegierungen"
+    },
+    "turbines": {
+      "hpt": "Hochdruckturbine",
+      "hptValue": "2 Stufen, treibt den Verdichter an",
+      "lpt": "Niederdruckturbine",
+      "lptValue": "6 Stufen, treibt Gebläse und Booster an",
+      "ceramic": "Keramikteile",
+      "ceramicValue": "fünf Arten",
+      "print": "3D-gedruckte Teile",
+      "printValue": "etwa 300, in sieben Arten"
+    },
+    "thrust": {
+      "cold": "Kalter Strom",
+      "coldValue": "etwa 10 Teile, breit und langsam",
+      "hot": "Heißer Strom",
+      "hotValue": "1 Teil, schmal und schnell",
+      "rating": "Startleistung",
+      "ratingValue": "etwa 105.000 Pfund, rund 470 kN",
+      "record": "Testrekord",
+      "recordValue": "134.300 Pfund, Juli 2019"
+    },
+    "reverse": {
+      "what": "Was umgelenkt wird",
+      "whatValue": "der kalte Strom",
+      "status": "Im Einsatz",
+      "statusValue": "die erste Auslieferung der 777-9 ist für 2027 geplant"
+    }
+  },
+  "sections": {
+    "fan": {
+      "title": "Das Gebläse und die zwei Ströme",
+      "p1": "Stell dich vor das Triebwerk und schau hinein. Das Erste, was die Luft trifft, ist das <strong>Gebläse</strong>, ein Ring aus 16 großen Schaufeln aus Kohlefaser. Es ist 3,4 Meter breit, fast so breit wie der Rumpf einer Boeing 737. Die kleine Figur daneben ist 1,8 Meter groß, so spürst du die Größe. Kein anderes Passagierflugzeug-Triebwerk hat ein so großes Gebläse.",
+      "p2": "Gleich hinter dem Gebläse trifft die Luft auf eine scharfe Kante, den <strong>Teiler</strong>. Etwa 10 von 11 Teilen der Luft strömen um den Kern herum. Das ist der <strong>kalte Strom</strong>, und er geht direkt nach hinten hinaus. Der andere Teil, etwa 1 von 11, geht in den Kern. Das ist der <strong>heiße Strom</strong>, und ihm folgst du in den nächsten Kapiteln. Das Modell zeigt beide Ströme als bewegte Punkte, und die Zahl der Punkte gibt dieses Verhältnis von 10 zu 1 nicht wieder.",
+      "p3": "Welcher Strom schiebt? Den größten Teil des Schubs liefert das Gebläse. Es packt riesige Mengen Luft und wirft sie ein wenig schneller nach hinten. Viel Luft ein wenig zu beschleunigen ist ein guter Weg, ein Flugzeug zu schieben. Bei voller Leistung liegen die Schaufelspitzen nach den Zahlen von GE über der Schallgeschwindigkeit.",
+      "p4": "Wähle Kalt oder Heiß, um einen Strom allein zu betrachten. Dieses Triebwerk ist für die Boeing 777-9 gebaut, die noch nicht im Dienst ist. Ihre erste Auslieferung ist für 2027 geplant. Das Triebwerk selbst ist zugelassen und fliegt an Testflugzeugen. Das Modell zeichnet das Triebwerk zum Lesen, nicht zum Messen. Der Aufbau ist also seine eigene Idee, ebenso die Zahl der Schaufeln, außer den 16 Gebläseschaufeln."
+    },
+    "compressor": {
+      "title": "Das Pressen",
+      "p1": "Jetzt folge der Kernluft. Zuerst passiert sie den <strong>Booster</strong>, drei Stufen kleiner Schaufeln direkt hinter dem Gebläse. Dann tritt sie in den <strong>Verdichter</strong> ein, der 11 Stufen hat. Jede Stufe besteht aus einem Ring drehender Schaufeln und einem Ring fester Schaufeln. Der drehende Ring schiebt die Luft weiter, und der feste Ring richtet sie für die nächste Stufe aus.",
+      "p2": "Jede Stufe presst die Luft ein bisschen mehr. Der Verdichter allein presst sie auf 27 zu 1. Mit Gebläse und Booster presst das ganze Triebwerk sie auf über 60 zu 1. Laut GE ist das der höchste Wert aller Triebwerke im Dienst. Gepresste Luft verbrennt gut, darum bringt sie mehr Leistung aus jedem Tropfen Kraftstoff.",
+      "p3": "Der Verdichter dreht sich auf der <strong>äußeren Welle</strong>, einem hohlen Rohr. Die Hochdruckturbine hinten treibt sie an. Die Kernwelle dreht sich mehrmals schneller als das Gebläse. Veröffentlichte Zahlen weichen voneinander ab, darum nutzt das Modell eigene Drehzahlen. Es zeichnet die Drehung außerdem tausendfach langsamer als in Wirklichkeit.",
+      "p4": "Wähle Aufgeschnitten, um hineinzuschauen, und zieh dann die Markierung auf der Zeitleiste. Die Markierung zeigt, wo zwei Luftpakete sind: eines im Kern und eines im kalten Strom. Die Leiste nennt die Schritte der Kernluft: saugen, pressen, brennen, drehen und blasen. Die kalte Luft überspringt Pressen, Brennen und Drehen, weil sie durch den Kanal um den Kern fliegt. Die Zahl zeigt die Meter ab der Einlasslippe."
+    },
+    "combustor": {
+      "title": "Wo der Kraftstoff brennt",
+      "p1": "Die gepresste Luft tritt jetzt in die <strong>Brennkammer</strong> ein. Zuerst bremst sie ein Teil namens Diffusor ab. Dann wird Kraftstoff durch kleine Düsen eingespritzt. Er brennt gleichmäßig, wie bei einem Gasherd, nicht in Schlägen.",
+      "p2": "Dieses Triebwerk mischt zuerst Kraftstoff und Luft und verbrennt die Mischung erst danach. Ingenieure nennen das <strong>mageres Verbrennen</strong>: viel Luft für wenig Kraftstoff. Eine solche Mischung verbrennt sauberer. Laut GE erzeugt das Triebwerk weniger als die Hälfte der Stickoxide, die der neueste Grenzwert erlaubt.",
+      "p3": "Die Wände der Brennkammer heißen <strong>Brennkammerwände</strong>, und hier sind sie aus Keramik. Diese Keramik hat etwa ein Drittel der Dichte von Metalllegierungen, ist also leichter. Sie braucht auch weniger Kühlluft.",
+      "p4": "Das Glühen, das du siehst, ist nur ein Bild. GE veröffentlicht die Gastemperatur nicht, darum zeichnet das Modell heißer einfach als heller. Wähle Aufgeschnitten, um hineinzuschauen. Dieses Feuer schiebt das Flugzeug nicht. Es soll die Luft erhitzen, und das nächste Kapitel zeigt, warum."
+    },
+    "turbines": {
+      "title": "Zwei Turbinen, zwei Wellen",
+      "p1": "Heißes, schnelles Gas verlässt die Brennkammer und trifft auf die <strong>Turbinen</strong>. Eine Turbine funktioniert wie eine Windmühle: Das Gas drückt die Schaufeln im Kreis. Dafür ist das Feuer da. Es schiebt das Flugzeug nicht. Es erhitzt die Luft, damit sich die Turbinen drehen können.",
+      "p2": "Es gibt zwei Turbinen auf zwei Wellen. Zuerst kommt die <strong>Hochdruckturbine</strong>. Sie hat 2 Stufen und treibt über die äußere Welle den Verdichter an. Danach kommt die <strong>Niederdruckturbine</strong>. Sie hat 6 Stufen und treibt über die innere Welle Gebläse und Booster an. Die innere Welle läuft im Inneren der äußeren.",
+      "p3": "Die beiden Wellen drehen sich unterschiedlich schnell. Die Kernwelle dreht sich mehrmals schneller als die Gebläsewelle. Veröffentlichte Zahlen für die genauen Drehzahlen weichen voneinander ab, darum nutzt das Modell eigene. Auch Drehung und Glühen in der Animation stammen vom Modell. Die zwei Anzeigen unten sind Prozent der Startleistung des Modells, keine Umdrehungen pro Minute.",
+      "p4": "Heißes Gas ist hart zu Metallschaufeln. Sie überstehen es dank Kühlluft und Beschichtungen, und dieses Triebwerk setzt zusätzlich Keramikteile ein. Es gibt fünf Arten von Keramikteilen. Etwa 300 Teile sind 3D-gedruckt, in sieben Arten. GE veröffentlicht die Gastemperatur nicht, darum findest du hier keine."
+    },
+    "thrust": {
+      "title": "Woher der Schub kommt",
+      "p1": "Hinten gibt es zwei Düsen. Der kalte Strom kommt aus der breiten Düse um den Kern. Der heiße Strom kommt aus der schmalen Düse in der Mitte. Der kalte Strom besteht aus etwa 10 Teilen Luft, breit und langsam. Der heiße Strom ist 1 Teil, schmal und schnell. Das Modell zeigt die Geschwindigkeiten nur im Verhältnis, nicht in Metern pro Sekunde.",
+      "p2": "Was ist besser: viel Luft ein wenig schieben oder wenig Luft kräftig? Viel Luft ein wenig gewinnt. Sie verschwendet weniger Energie und braucht darum weniger Kraftstoff. Deshalb haben moderne Passagierflugzeug-Triebwerke so große Gebläse. Laut GE verbraucht dieses Triebwerk bei gleichem Schub bis zu 10 Prozent weniger Kraftstoff als sein Vorgänger, das GE90-115B.",
+      "p3": "Nun die Zahlen. Beim Start ist das Triebwerk für etwa 105.000 Pfund Schub ausgelegt, rund 470 Kilonewton. Bei einem Test im Juli 2019 erreichte es 134.300 Pfund, ein Weltrekord. Das war ein Test, kein normaler Flug. Zum Vergleich: Ein Triebwerk einer 737 leistet etwa 92 bis 121 Kilonewton.",
+      "p4": "Bewege den Schubhebel in der Anzeige und sieh zu, wie sich die Ströme ändern. Die Schubanzeige ist die Schätzung des Modells, in Prozent seiner Startleistung. Das Modell hat auch eine eigene Aufteilung des Schubs auf die beiden Ströme. Sie ist nur eine Skizze, denn GE veröffentlicht keine. Sicher ist nur: Den größten Teil des Schubs liefert das Gebläse."
+    },
+    "reverse": {
+      "title": "Starten und Umkehren",
+      "p1": "Vor dem Start steht der Kern still. Damit er sich dreht, nutzt ein <strong>Luftturbinen-Anlasser</strong> Druckluft. Die Luft kann aus einem kleinen Triebwerk im Flugzeug kommen, dem APU, aus einem Bodenwagen oder vom anderen Triebwerk. Der Anlasser bringt den Kern auf Drehzahl. Dann kommen Kraftstoff und Feuer dazu, und die Turbinen übernehmen. Die Einzelheiten eines echten Starts sind nicht veröffentlicht, darum lässt das Modell sie aus.",
+      "p2": "Nach der Landung hat das Triebwerk eine zweite Aufgabe: das Flugzeug abbremsen. Eine <strong>Schubumkehr</strong> lenkt einen Teil der Luft nach vorn. Dann schiebt das Triebwerk das Flugzeug nach hinten statt nach vorn. In einem Triebwerk wie diesem lenkt die Schubumkehr nur den kalten Strom um, und so zeigt es auch das Modell. GE hat das für das GE9X nicht bestätigt, nimm es also als Bild des Modells.",
+      "p3": "Die kalte Luft wird durch Reihen kleiner gebogener Leitschaufeln gelenkt, die <strong>Gitter</strong> heißen. Sie richten sie nach vorn und zur Seite. Wähle Ausgefahren oder drücke D und sieh zu, wie die Schubanzeige unter null fällt. Dann steht dort Umkehr, mit einem Prozentwert. Der heiße Strom fließt weiter gerade nach hinten.",
+      "p4": "Dieses Triebwerk ist noch auf dem Weg zu den Passagieren. Die Boeing 777-9 ist noch nicht im Dienst, und ihre erste Auslieferung ist für 2027 geplant. Bis dahin fliegen nur Testflugzeuge damit."
+    }
+  }
+}
