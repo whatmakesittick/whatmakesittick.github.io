@@ -6,6 +6,7 @@ import type { ArmId, KickId, PaceId } from '../../ids';
 import { MOMENTS, phaseBounds, strokeAt } from '../../model';
 import { HAND_DEPTH_M, ELBOW_DEG } from '../../model/stroke';
 import { bodyPose } from '../pose';
+import { BODY } from './constants';
 import { createSkeleton, solveSkeleton } from './skeleton';
 import type { Skeleton } from './skeleton';
 
@@ -190,10 +191,12 @@ describe('swimmer rig', () => {
     expect(depressionDeg(forearm) - depressionDeg(upper)).toBeGreaterThan(minSteeperForearmDeg);
   });
 
-  it('recovers low and loose: elbow highest, bent near a right angle, wrist just outside it', () => {
-    const elbowHeightM = { min: 0.22, max: 0.36 };
-    const elbowDeg = { min: 75, max: 115 };
-    const maxWristOutsideElbowM = 0.25;
+  it('recovers with a high elbow: forearm hanging under it, hand close to the body', () => {
+    const elbowHeightM = { min: 0.25, max: 0.42 };
+    const elbowDeg = { min: 50, max: 115 };
+    const maxWristFromElbowLineM = 0.18;
+    const minWristBelowElbowM = 0.12;
+    const maxFingertipFromMidlineM = 0.62;
     const middle = { from: 0.35, to: 0.65 };
     scan((units, pace, breathing) => {
       const { progress, underwater } = strokeAt(units, {
@@ -204,13 +207,15 @@ describe('swimmer rig', () => {
       }).right;
       if (underwater || progress < middle.from || progress > middle.to) return;
       const skeleton = skeletonAt(units, pace, breathing);
-      const { elbow, wrist } = skeleton.arms.right;
+      const { elbow, wrist, handAxis } = skeleton.arms.right;
+      const fingertipZ = wrist.z + handAxis.z * BODY.hand;
       expect(elbow.y + ROOT_Y).toBeGreaterThan(elbowHeightM.min);
       expect(elbow.y + ROOT_Y).toBeLessThan(elbowHeightM.max);
       expect(elbowAngle(skeleton)).toBeGreaterThan(elbowDeg.min);
       expect(elbowAngle(skeleton)).toBeLessThan(elbowDeg.max);
-      expect(wrist.z - elbow.z).toBeGreaterThan(0);
-      expect(wrist.z - elbow.z).toBeLessThan(maxWristOutsideElbowM);
+      expect(Math.abs(wrist.z - elbow.z)).toBeLessThan(maxWristFromElbowLineM);
+      expect(elbow.y - wrist.y).toBeGreaterThan(minWristBelowElbowM);
+      expect(fingertipZ).toBeLessThan(maxFingertipFromMidlineM);
     });
   });
 

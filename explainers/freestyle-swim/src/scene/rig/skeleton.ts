@@ -159,9 +159,11 @@ function keepLength(target: Vector3, root: Vector3, length: number): void {
 function followRecoveryPath(pose: ArmPose, clock: number, side: number): void {
   const share = recoveryShare(clock);
   if (share === 0) return;
-  const { recoveryElbowOffset, recoveryWristOffset } = ARM_KEYS;
-  mirrored(keyedElbow, clampedVector(recoveryElbowOffset, clock), side).add(pose.shoulder);
-  mirrored(keyedWrist, clampedVector(recoveryWristOffset, clock), side).add(pose.shoulder);
+  const { recoveryUpperArm, recoveryForearm } = ARM_KEYS;
+  mirrored(keyedElbow, clampedVector(recoveryUpperArm, clock), side);
+  keyedElbow.setLength(BODY.upperArm).add(pose.shoulder);
+  mirrored(keyedWrist, clampedVector(recoveryForearm, clock), side);
+  keyedWrist.setLength(BODY.forearm).add(keyedElbow);
   pose.elbow.lerp(keyedElbow, share);
   keepLength(pose.elbow, pose.shoulder, BODY.upperArm);
   pose.wrist.lerp(keyedWrist, share);
