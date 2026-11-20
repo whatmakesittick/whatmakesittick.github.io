@@ -22,11 +22,11 @@
     "slower": "{{factor}} veces más lento",
     "faster": "{{factor}} veces más rápido",
     "phase": {
-      "suck": "Aspirar",
-      "squeeze": "Comprimir",
-      "burn": "Quemar",
-      "spin": "Girar",
-      "blow": "Soplar"
+      "suck": "Admisión",
+      "squeeze": "Compresión",
+      "burn": "Combustión",
+      "spin": "Expansión",
+      "blow": "Escape"
     },
     "jump": {
       "suck": "Ir al aire que entra en el motor",
@@ -200,7 +200,7 @@
       "p1": "Ahora sigue el aire del núcleo. Primero pasa por el <strong>booster</strong>, tres etapas de álabes pequeños justo detrás del ventilador, y después entra en el <strong>compresor</strong>, que tiene 11 etapas. Cada etapa es un anillo de álabes que giran seguido de otro de álabes fijos. El anillo que gira impulsa el aire, y el fijo lo prepara para la etapa siguiente.",
       "p2": "Cada etapa aprieta el aire un poco más, y a lo largo del núcleo las líneas se juntan y toman un color más cálido. El compresor, por sí solo, lo comprime 27 a 1, es decir, multiplica su presión por 27. Si se suman el ventilador y el booster, el motor entero llega a más de 60 a 1, la cifra más alta de cualquier motor en servicio, según GE. El aire comprimido arde bien, así que cada gota de combustible da más potencia.",
       "p3": "El compresor va montado sobre el <strong>eje exterior</strong>, un tubo hueco, y lo mueve la turbina de alta presión, una rueda de álabes situada al fondo. Los colores te dicen quién mueve qué. Todo lo que va en el eje exterior es de color bronce: el compresor y la turbina de alta presión. Todo lo que va en el eje interior es azul: el ventilador, el booster y la turbina de baja presión. Las piezas que no giran son grises. Las franjas de los ejes y las marcas de los discos muestran que el núcleo de color bronce gira varias veces más rápido que el eje azul del ventilador. Como las cifras publicadas no coinciden, el modelo usa sus propias velocidades. Además, hace girar los ejes muchas veces más despacio que el motor real, para que puedas distinguir los álabes.",
-      "p4": "Elige Corte para ver el interior y arrastra el marcador de la barra de tiempo. El marcador señala dónde están dos porciones de aire: una en el núcleo y otra en la corriente fría. La barra nombra los pasos que sigue el aire del núcleo: aspirar, comprimir, quemar, girar y soplar. El aire frío se salta comprimir, quemar y girar, porque viaja por el conducto que rodea el núcleo. El número indica los metros que hay desde el borde de la entrada, en la parte delantera del motor."
+      "p4": "Elige Corte para ver el interior y arrastra el marcador de la barra de tiempo. El marcador señala dónde están dos porciones de aire: una en el núcleo y otra en la corriente fría. La barra nombra los pasos que sigue el aire del núcleo: admisión, compresión, combustión, expansión y escape. El aire frío se salta la compresión, la combustión y la expansión, porque viaja por el conducto que rodea el núcleo. El número indica los metros que hay desde el borde de la entrada, en la parte delantera del motor."
     },
     "combustor": {
       "title": "Donde arde el combustible",

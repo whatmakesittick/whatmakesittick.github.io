@@ -22,11 +22,11 @@
     "slower": "{{factor}} fois plus lent",
     "faster": "{{factor}} fois plus rapide",
     "phase": {
-      "suck": "Aspirer",
-      "squeeze": "Comprimer",
-      "burn": "Brûler",
-      "spin": "Tourner",
-      "blow": "Souffler"
+      "suck": "Admission",
+      "squeeze": "Compression",
+      "burn": "Combustion",
+      "spin": "Détente",
+      "blow": "Éjection"
     },
     "jump": {
       "suck": "Aller à l’air qui entre dans le moteur",
@@ -200,7 +200,7 @@
       "p1": "Suis maintenant l’air du cœur. Il traverse d’abord le <strong>compresseur basse pression</strong>, trois étages de petites aubes juste derrière la soufflante, puis il entre dans le <strong>compresseur</strong>, qui compte 11 étages. Chaque étage associe une couronne d’aubes mobiles et une couronne d’aubes fixes. Les aubes mobiles chassent l’air vers l’arrière, et les aubes fixes le redressent pour l’étage suivant.",
       "p2": "Chaque étage comprime l’air un peu plus : le long du cœur, les lignes se resserrent et prennent des couleurs plus chaudes. À lui seul, le compresseur comprime l’air 27 pour 1, autrement dit il multiplie sa pression par 27. Avec la soufflante et le compresseur basse pression, le moteur entier dépasse les 60 pour 1. Selon GE, c’est le taux de compression le plus élevé de tous les moteurs en service. Dans un air très comprimé, le carburant brûle bien, et chaque goutte donne plus de puissance.",
       "p3": "Le compresseur tourne sur l’<strong>arbre extérieur</strong>, un tube creux. C’est la turbine haute pression, un disque garni d’aubes placé à l’arrière, qui le fait tourner. Les couleurs indiquent qui fait tourner quoi. Tout ce qui est monté sur l’arbre extérieur est couleur bronze : le compresseur et la turbine haute pression. Tout ce qui est sur l’arbre intérieur est bleu : la soufflante, le compresseur basse pression et la turbine basse pression. Les pièces fixes sont grises. Les rayures sur les arbres et les repères sur les disques montrent que le cœur bronze tourne plusieurs fois plus vite que l’arbre bleu de la soufflante. Comme les chiffres publiés varient, le modèle utilise ses propres vitesses. Il fait aussi tourner les arbres bien plus lentement que dans le vrai moteur, pour que tu puisses distinguer les aubes.",
-      "p4": "Choisis Coupe pour voir à l’intérieur, puis fais glisser le curseur sur la barre de lecture. Le curseur indique où se trouvent deux paquets d’air : l’un dans le cœur, l’autre dans le flux froid. La barre nomme les étapes que franchit l’air du cœur : aspirer, comprimer, brûler, tourner et souffler. L’air froid, lui, saute les étapes comprimer, brûler et tourner, car il file dans le conduit qui entoure le cœur. Le chiffre affiché donne la distance en mètres depuis la lèvre d’entrée d’air, tout à l’avant du moteur."
+      "p4": "Choisis Coupe pour voir à l’intérieur, puis fais glisser le curseur sur la barre de lecture. Le curseur indique où se trouvent deux paquets d’air : l’un dans le cœur, l’autre dans le flux froid. La barre nomme les étapes que franchit l’air du cœur : admission, compression, combustion, détente et éjection. L’air froid, lui, saute la compression, la combustion et la détente, car il file dans le conduit qui entoure le cœur. Le chiffre affiché donne la distance en mètres depuis la lèvre d’entrée d’air, tout à l’avant du moteur."
     },
     "combustor": {
       "title": "Là où brûle le carburant",
