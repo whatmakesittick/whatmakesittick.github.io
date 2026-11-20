@@ -1,0 +1,109 @@
+:root {
+  --pace: #6fa8e0;
+  --kick: #3fbfae;
+  --breath: #9a8fc4;
+  --head: #e0533d;
+}
+
+.gauge .readouts {
+  width: 15rem;
+}
+
+.arm-strip {
+  display: grid;
+  gap: 4px;
+  width: 15rem;
+  margin-top: 8px;
+}
+
+.arm-strip__row {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.arm-strip__bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.arm-strip__playhead {
+  stroke: var(--text);
+  stroke-width: 2;
+}
+
+.arm-strip__caption {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  overflow-wrap: break-word;
+}
+
+.chapter .readouts {
+  --readout-min-width: 8rem;
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.chapter .readouts > div,
+.chapter .readouts :is(dt, dd) {
+  min-width: 0;
+}
+
+.chapter .readouts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.chapter .readouts dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chapter .readouts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.range-widget__header {
+  flex-wrap: wrap;
+}
+
+.range-widget__header label {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.chip[data-action='pace'] {
+  --tone: var(--pace);
+}
+
+.chip[data-action='kick'] {
+  --tone: var(--kick);
+}
+
+.chip[data-action='breath'] {
+  --tone: var(--breath);
+}
+
+.chip[data-action='head'] {
+  --tone: var(--head);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapter .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chapter .readouts > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}
