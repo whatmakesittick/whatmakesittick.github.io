@@ -19,7 +19,7 @@ export const BODY = {
   hipHalf: 0.092,
   hipX: -SEGMENT_M.trunk,
   hipY: -0.012,
-  neckBase: [0.07, 0.01, 0] as Triple,
+  neckBase: [0.105, 0.01, 0] as Triple,
   neckLength: 0.1,
   headFollow: 0.05,
   breathHeadDeg: -88,
@@ -155,9 +155,9 @@ export const ARM_KEYS = {
     [2, 0],
     [2.5, -0.01],
     [3, 0.005],
-    [3.3, 0.04],
-    [3.55, 0.075],
-    [3.8, 0.05],
+    [3.3, 0.03],
+    [3.55, 0.045],
+    [3.8, 0.035],
   ] as readonly Key<number>[],
 } as const;
 
