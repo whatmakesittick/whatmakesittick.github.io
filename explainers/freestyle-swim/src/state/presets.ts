@@ -44,7 +44,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: view({ underwater: true, forces: false, handPath: false }),
     startAt: MOMENTS.entry,
     start: {},
-    labels: ['hand', 'forearm', 'shoulder', 'head', 'hips', 'foot', 'waterline', 'laneLine'],
+    labels: ['hand', 'shoulder', 'head', 'hips', 'foot', 'waterline'],
     highlight: NO_HIGHLIGHT,
   },
   catch: {
@@ -54,7 +54,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     pauseAt: catchPauseUnits(DEFAULT_PACE),
     pauseFor: catchPauseUnits,
     start: {},
-    labels: ['hand', 'forearm', 'elbow', 'shoulder', 'waterline'],
+    labels: ['hand', 'forearm', 'elbow', 'shoulder'],
     highlight: ['hand', 'forearm', 'elbow'],
   },
   pull: {
@@ -69,8 +69,8 @@ export const PRESETS: Record<PresetId, Preset> = {
   roll: {
     camera: 'roll',
     speed: HALF_SPEED,
-    view: view({ underwater: false, forces: false, handPath: false }),
-    startAt: MOMENTS.entry,
+    view: view({ underwater: true, forces: false, handPath: false }),
+    startAt: MOMENTS.pushEnd,
     start: {},
     labels: ['shoulder', 'hips', 'head', 'waterline'],
     highlight: ['shoulder', 'hips'],
@@ -81,7 +81,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: view({ underwater: true, forces: false, handPath: false }),
     startAt: MOMENTS.entry,
     start: {},
-    labels: ['hips', 'foot', 'waterline'],
+    labels: ['hips', 'foot'],
     highlight: ['hips', 'foot'],
   },
   drag: {
@@ -90,7 +90,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     view: view({ underwater: true, forces: true, handPath: false }),
     startAt: MOMENTS.underShoulder,
     start: {},
-    labels: ['head', 'hips', 'waterline', 'laneRope'],
+    labels: ['head', 'hips', 'waterline'],
     highlight: ['head', 'hips'],
   },
 };

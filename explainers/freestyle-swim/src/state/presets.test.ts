@@ -70,7 +70,7 @@ describe('presets', () => {
       forces: true,
       handPath: true,
     });
-    expect(PRESETS.roll.view.underwater).toBe(false);
+    expect(PRESETS.roll.view.underwater).toBe(true);
     expect(PRESETS.drag.view.forces).toBe(true);
   });
 
