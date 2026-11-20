@@ -345,13 +345,13 @@ describe('list_explainers', () => {
     }
   });
 
-  it('biology lists atp-synthase, heart and mri-scanner', async () => {
+  it('biology lists atp-synthase, cherry-flavor, heart and mri-scanner', async () => {
     const client = await connect();
     const res = await client.callTool({ name: 'list_explainers', arguments: { tag: 'biology' } });
     const got = (res.structuredContent as unknown as ListExplainersResult).explainers
       .map((e) => e.slug)
       .sort();
-    expect(got).toEqual(['atp-synthase', 'heart', 'mri-scanner']);
+    expect(got).toEqual(['atp-synthase', 'cherry-flavor', 'heart', 'mri-scanner']);
   });
 
   it('without a tag lists everything, one text line per explainer with chapter ids', async () => {
