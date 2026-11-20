@@ -25,11 +25,11 @@ const DOME_FRONT = 0.34;
 const DOME_BACK = 0.355;
 const EXIT = 0.72;
 const WALL = COMBUSTOR.linerWall;
-const MANIFOLD = { x: 0.25, radius: 0.875, tube: 0.014 } as const;
-const STEM = { radius: 0.015, top: 0.88, bottom: 0.6 } as const;
-const ARM = { radius: 0.013 } as const;
-const CUP = { radius: 0.033, length: 0.035 } as const;
-const FLAME = { length: 0.2, radius: 0.05, samples: 12 } as const;
+const MANIFOLD = { x: 0.25, radius: 0.875, tube: 0.02 } as const;
+const STEM = { radius: 0.022, top: 0.88, bottom: 0.6 } as const;
+const ARM = { radius: 0.018 } as const;
+const CUP = { radius: 0.042, length: 0.04 } as const;
+const FLAME = { length: 0.24, radius: 0.06, samples: 12 } as const;
 const DIFFUSER_VANES = { count: 40, x: 0.172, width: 0.034, hub: 0.474, tip: 0.566 } as const;
 const GAS_INSET = 0.006;
 

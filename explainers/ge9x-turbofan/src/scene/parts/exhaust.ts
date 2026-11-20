@@ -8,7 +8,16 @@ import { HOT_NOZZLE, STATION_X, cowlAt, reversed, sampled } from '../geometry/pr
 import { line, revolve, smooth } from '../geometry/revolve';
 import type { ProfilePoint, Strand } from '../geometry/revolve';
 import type { PartContext } from './context';
-import { coreMaterial, glowScale, label, mesh, namedGroup, polar, registered } from './context';
+import {
+  coreMaterial,
+  glowScale,
+  material,
+  label,
+  mesh,
+  namedGroup,
+  polar,
+  registered,
+} from './context';
 import { plumeMaterial } from './effects';
 import { applyHeat, withHeatProfile } from './heat';
 
@@ -51,6 +60,42 @@ const COLD_PLUME_INNER: readonly ProfilePoint[] = [
   [3.0, 0.78],
   [3.8, 0.82],
 ];
+
+const REVERSE_CURL: readonly (readonly ProfilePoint[])[] = [
+  [
+    [1.56, 1.84],
+    [1.5, 2.1],
+    [1.3, 2.42],
+    [0.85, 2.7],
+    [0.1, 2.86],
+    [-0.8, 2.92],
+  ],
+  [
+    [1.42, 1.86],
+    [1.3, 2.06],
+    [1.05, 2.3],
+    [0.6, 2.5],
+    [-0.1, 2.6],
+    [-0.9, 2.64],
+  ],
+];
+
+function curlSurface(paths: readonly (readonly ProfilePoint[])[]): BufferGeometry {
+  const pieces = paths.map((path) => revolve([smooth(path, 24)], SEGMENTS.core));
+  const merged = mergeGeometries(pieces);
+  pieces.forEach((piece) => piece.dispose());
+  if (!merged) throw new Error('Cannot merge the reverse sheet');
+  const travelled = merged.getAttribute('uv');
+  const longest = Math.max(
+    ...Array.from({ length: travelled.count }, (_, index) => travelled.getY(index)),
+  );
+  const along = Array.from(
+    { length: travelled.count },
+    (_, index) => travelled.getY(index) / longest,
+  );
+  merged.setAttribute('along', new Float32BufferAttribute(along, 1));
+  return merged;
+}
 
 function hotNozzleStrands(): Strand[] {
   const outer = sampled(cowlAt, NOZZLE_FRONT, STATION_X.hotExit, NOZZLE_SAMPLES);
@@ -100,6 +145,8 @@ function plumeSurface(paths: readonly (readonly ProfilePoint[])[]): BufferGeomet
 export class ExhaustPart {
   readonly hotPlume: Mesh;
   readonly coldPlume: Mesh;
+  readonly reverseSheet: Mesh;
+  private readonly reverseStrength = { value: 0 };
   private readonly hotStrength = { value: 0 };
   private readonly coldStrength = { value: 0 };
 
@@ -113,7 +160,7 @@ export class ExhaustPart {
     );
     mesh(context, nozzle, withHeatProfile(revolve(hotNozzleStrands(), SEGMENTS.shell), 0.6), metal);
     const plug = applyHeat(
-      coreMaterial(context, 'hotNozzle', FINISHES.plug),
+      material(context, 'hotNozzle', FINISHES.plug),
       context.heat,
       glowScale(context, 'hotNozzle'),
       HEAT_LOOK.nozzleGain,
@@ -151,6 +198,17 @@ export class ExhaustPart {
       coldShader,
     );
     this.coldPlume.renderOrder = 3;
+    const reverseShader = registered(
+      context,
+      'coldStream',
+      plumeMaterial(this.reverseStrength, glowScale(context, 'coldStream'), context.time, {
+        hot: false,
+        alpha: EFFECT_LOOK.reversePlumeAlpha,
+      }),
+    );
+    this.reverseSheet = mesh(context, engine, curlSurface(REVERSE_CURL), reverseShader);
+    this.reverseSheet.renderOrder = 3;
+    this.reverseSheet.visible = false;
   }
 
   setState(
@@ -164,5 +222,7 @@ export class ExhaustPart {
     this.hotPlume.visible = hotShown && heat > 0;
     this.coldStrength.value = coldOut * coldSpeed;
     this.coldPlume.visible = coldShown && coldOut > 0;
+    this.reverseStrength.value = (1 - coldOut) * coldSpeed;
+    this.reverseSheet.visible = coldShown && coldOut < 1;
   }
 }

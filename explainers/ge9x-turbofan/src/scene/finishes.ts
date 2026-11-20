@@ -51,7 +51,7 @@ export const FINISHES = {
   nacelleCavity: cut({ color: PALETTE.cavity, roughness: 0.75, metalness: 0.1 }),
   intakeLip: cut({
     color: THEME.intakeLip,
-    roughness: 0.14,
+    roughness: 0.2,
     metalness: 1,
     envMapIntensity: LOOK.envLip,
   }),
@@ -105,6 +105,7 @@ export const FINISHES = {
   pylon: { color: PALETTE.pylon, roughness: 0.3, metalness: 0.15, envMapIntensity: 1.1 },
   pylonCap: { color: LOOK.cutCap, roughness: 0.6, metalness: 0.1 },
   person: { color: '#ffffff', vertexColors: true, roughness: 0.62, metalness: 0 },
+  stand: { color: '#ffffff', vertexColors: true, roughness: 0.48, metalness: 0.35 },
   lod: { color: '#ffffff', roughness: 0.5, metalness: 0.6 },
 } as const satisfies Record<string, MaterialFinish>;
 

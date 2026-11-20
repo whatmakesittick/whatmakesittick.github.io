@@ -25,8 +25,8 @@ const CASCADE = {
   to: 1.75,
   inner: 1.53,
   clearance: 0.06,
-  vane: 0.02,
-  lean: 0.03,
+  vane: 0.024,
+  lean: 0.012,
 } as const;
 
 const skinAt = nacelleOuterAt;

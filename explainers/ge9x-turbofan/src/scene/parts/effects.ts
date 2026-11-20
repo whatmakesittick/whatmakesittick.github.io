@@ -230,8 +230,8 @@ export function plumeMaterial(
       ${NOISE}
       void main() {
         float angle = atan(vLocal.y, vLocal.z);
-        float shimmer = valueNoise(vec2(vLocal.x * 5.0 - uTime * ${glslFloat(EFFECT_LOOK.shimmerSpeed)}, angle * 5.0));
-        float streaks = valueNoise(vec2(vLocal.x * 1.5 - uTime * 2.0, angle * 14.0));
+        float shimmer = valueNoise(vec2(vAlong * 9.0 - uTime * ${glslFloat(EFFECT_LOOK.shimmerSpeed)}, angle * 5.0));
+        float streaks = valueNoise(vec2(vAlong * 3.0 - uTime * 2.0, angle * 14.0));
         float fade = pow(1.0 - vAlong, 1.6) * smoothstep(0.0, 0.06, vAlong);
         float alpha = ${glslFloat(tone.alpha)} * uStrength * uGlowScale * fade * pow(vFacing, 1.2) * (0.55 + 0.45 * shimmer) * (0.75 + 0.5 * streaks);
         ${tone.hot ? 'vec3 hue = mix(heatRamp(clamp(uStrength * 0.85, 0.0, 1.0)), uTail, smoothstep(0.15, 0.9, vAlong));' : 'vec3 hue = mix(uTint, uTail, vAlong);'}
@@ -275,8 +275,8 @@ export function blurMaterial(
         float lobes = 0.5 + 0.5 * cos(${glslFloat(blades)} * (vPolar.y + uAngle - share * 0.9));
         float edge = smoothstep(0.0, 0.08, share) * (1.0 - smoothstep(0.92, 1.0, share));
         float rings = 0.6 + 0.4 * sin(share * 40.0);
-        float alpha = uBlur * edge * (0.45 + 0.4 * lobes) * (0.75 + 0.25 * rings);
-        vec4 color = vec4(mix(uShade, uSheen, 0.35 + 0.65 * lobes * share), clamp(alpha, 0.0, 1.0));
+        float alpha = uBlur * edge * (0.55 + 0.5 * lobes) * (0.8 + 0.2 * rings);
+        vec4 color = vec4(mix(uShade, uSheen, lobes * share), clamp(alpha, 0.0, 1.0));
         ${finishColor('color')}
         ${OUTPUT}
       }
@@ -288,6 +288,7 @@ export interface StreakUniforms {
   readonly uViewport: IUniform<Vector2>;
   readonly uMinPixels: IUniform<number>;
   readonly uGain: IUniform<number>;
+  readonly uWidthScale: IUniform<number>;
 }
 
 export function createStreakUniforms(): StreakUniforms {
@@ -295,6 +296,7 @@ export function createStreakUniforms(): StreakUniforms {
     uViewport: { value: new Vector2(1, 1) },
     uMinPixels: { value: EFFECT_LOOK.streakMinPixels },
     uGain: { value: LOOK.streakGain },
+    uWidthScale: { value: 1 },
   };
 }
 
@@ -314,6 +316,7 @@ export function streakMaterial(uniforms: StreakUniforms): ShaderMaterial {
       attribute float width;
       uniform vec2 uViewport;
       uniform float uMinPixels;
+      uniform float uWidthScale;
       varying vec4 vTint;
       varying vec2 vCorner;
       void main() {
@@ -327,7 +330,7 @@ export function streakMaterial(uniforms: StreakUniforms): ShaderMaterial {
         vec2 side = vec2(-direction.y, direction.x);
         vec4 clip = mix(clipTail, clipHead, corner.x);
         float pixelsPerUnit = projectionMatrix[1][1] * uViewport.y / max(clip.w, 0.001);
-        float pixels = max(uMinPixels, width * pixelsPerUnit);
+        float pixels = max(uMinPixels, width * uWidthScale * pixelsPerUnit);
         clip.xy += side * corner.y * pixels / uViewport * clip.w;
         clip.xy += direction * (corner.x * 2.0 - 1.0) * pixels * 0.5 / uViewport * clip.w;
         vTint = tint;

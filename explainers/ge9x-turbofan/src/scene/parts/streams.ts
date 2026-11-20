@@ -43,16 +43,17 @@ export interface StreamLook {
   readonly marker: string;
   readonly gather: boolean;
   readonly reversedAlpha: number;
+  readonly reversedWidth: number;
 }
 
 export interface StreamFrame {
-  readonly playing: boolean;
-  readonly deltaSeconds: number;
-  readonly speed: number;
-  readonly blend: number;
-  readonly gap: number;
-  readonly count: number;
-  readonly markerX: number;
+  playing: boolean;
+  deltaSeconds: number;
+  speed: number;
+  blend: number;
+  gap: number;
+  count: number;
+  markerX: number;
 }
 
 function random(seed: number): () => number {
@@ -199,6 +200,7 @@ export class StreakStream {
   update(frame: StreamFrame): void {
     const count = Math.min(frame.count, this.look.buffer);
     this.geometry.instanceCount = count;
+    this.uniforms.uWidthScale.value = lerp(1, this.look.reversedWidth, frame.blend);
     if (count === 0) return;
     const primary = this.tables[0];
     const step = frame.playing
@@ -256,8 +258,13 @@ export class StreakStream {
     const angle = this.angle[index];
     const head = this.position(along, share, angle, frame, this.first);
     this.head.setXYZ(index, head.x, head.y, head.z);
+    const pace = this.first.speed * frame.speed;
+    const reach = lerp(1, STREAMS.reversedLength, frame.blend);
     const length =
-      (this.look.length * this.stretch[index] * (0.5 + 0.5 * this.first.speed * frame.speed)) /
+      (this.look.length *
+        this.stretch[index] *
+        reach *
+        (STREAMS.lengthBase + STREAMS.lengthGain * pace)) /
       this.tables[0].length;
     const tail = this.position(Math.max(0, along - length), share, angle, frame, this.second);
     const torn = Math.abs(this.first.mapped - this.second.mapped) > STREAMS.tearAngle;
@@ -269,7 +276,8 @@ export class StreakStream {
         Math.exp(-(((this.first.x - frame.markerX) / STREAMS.markerReach) ** 2));
     const fadeIn =
       smoothstep(along, 0, STREAMS.fadeIn) * (1 - smoothstep(along, 1 - STREAMS.fadeOut, 1));
-    const alpha = this.look.alpha * fadeIn * lerp(1, this.look.reversedAlpha, frame.blend);
+    const power = STREAMS.alphaBase + (1 - STREAMS.alphaBase) * Math.min(1, frame.speed);
+    const alpha = this.look.alpha * fadeIn * power * lerp(1, this.look.reversedAlpha, frame.blend);
     this.tint.setXYZW(
       index,
       this.first.red * glow,

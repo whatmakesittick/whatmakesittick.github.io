@@ -6,11 +6,12 @@ import { isShown } from '@core/scene/parts';
 import { ResourceTracker } from '@core/scene/resources';
 import { activeScheme } from '@core/theme';
 import { ANCHOR_IDS, PART_IDS } from '../ids';
-import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
+import type { AnchorId, AssemblyState, DetailId, PartId, RegionId, StreamId } from '../ids';
 import { CUTAWAY_SECONDS, REVERSER_SECONDS, ease } from '../model/cutaway';
 import { ANCHOR_POINTS } from '../model/layout';
 import { AXIS_HEIGHT_M, PERSON_POSITION, SPIN_SENSE, xAt } from '../model/scale';
 import { COLD_BUFFER, HOT_BUFFER, particleCounts } from '../model/streams';
+import type { ParticleCounts } from '../model/streams';
 import { THEME } from '../theme';
 import type { Assembly, AssemblyResources } from './assembly';
 import { HEAT_LOOK, LOOK, PERSON, ROW_LOD_DISTANCE_M, STREAMS } from './constants';
@@ -24,7 +25,9 @@ import {
 } from './geometry/streamPaths';
 import { CombustorPart } from './parts/combustor';
 import type { EmphasisGroup, PartContext } from './parts/context';
-import { label, material, mesh, namedGroup } from './parts/context';
+import { STRUCTURE_GROUP, label, material, mesh, namedGroup } from './parts/context';
+import { buildHall } from './parts/hall';
+import { standGeometry } from './geometry/stand';
 import { CorePart } from './parts/core';
 import { coreHalfAngle, cutHalfAngle, createCutUniforms } from './parts/cut';
 import type { CutUniforms } from './parts/cut';
@@ -37,7 +40,7 @@ import type { GlowScale, HeatUniforms } from './parts/heat';
 import { buildNacelle } from './parts/nacelle';
 import { ReverserPart } from './parts/reverser';
 import { StreakStream, StreamMarker } from './parts/streams';
-import type { StreamLook } from './parts/streams';
+import type { StreamFrame, StreamLook } from './parts/streams';
 import { regionBox } from './regions';
 
 interface SharedUniforms {
@@ -69,6 +72,7 @@ const COLD_LOOK: StreamLook = {
   marker: THEME.coldStream,
   gather: false,
   reversedAlpha: STREAMS.reversedAlpha,
+  reversedWidth: STREAMS.reversedWidth,
 };
 
 const HOT_LOOK: StreamLook = {
@@ -81,6 +85,7 @@ const HOT_LOOK: StreamLook = {
   marker: THEME.hotStream,
   gather: true,
   reversedAlpha: 1,
+  reversedWidth: 1,
 };
 
 const COLD_SEED = 11;
@@ -108,6 +113,10 @@ function isDrawable(object: Object3D): object is Drawable {
 function adjustForScheme(colour: Color): Color {
   const shift = STREAK_SHIFT[activeScheme()];
   return colour.offsetHSL(0, shift.saturation, shift.lightness);
+}
+
+function emptyFrame(): StreamFrame {
+  return { playing: false, deltaSeconds: 0, speed: 0, blend: 0, gap: 0, count: 0, markerX: 0 };
 }
 
 function completeLabels(found: ReadonlyMap<PartId, Object3D>): ReadonlyMap<PartId, Object3D> {
@@ -195,6 +204,13 @@ function* buildParts(
   const coldMarker = new StreamMarker(context, cold.root, COLD_LOOK, coldTables[0]);
   const hotMarker = new StreamMarker(context, hot.root, HOT_LOOK, hotTables[0]);
   const person = buildPerson(context, root);
+  buildHall(context, root);
+  mesh(
+    context,
+    namedGroup('stand', root),
+    standGeometry(),
+    material(context, STRUCTURE_GROUP, FINISHES.stand),
+  );
   yield;
   return {
     context,
@@ -225,6 +241,12 @@ class Ge9xAssembly implements Assembly {
   private deploy: number;
   private fanAngle = 0;
   private cameraDistance = 0;
+  private counts: ParticleCounts = { cold: 0, hot: 0 };
+  private countsDetail: DetailId | null = null;
+  private countsStreams: StreamId | null = null;
+  private readonly coldFrame: StreamFrame = emptyFrame();
+  private readonly hotFrame: StreamFrame = emptyFrame();
+  private readonly glows: readonly (readonly [EmphasisGroup, GlowScale])[];
   private coreAngle = 0;
 
   constructor(
@@ -240,6 +262,7 @@ class Ge9xAssembly implements Assembly {
     this.parts = parts;
     this.labels = completeLabels(parts.context.labels);
     this.anchors = this.buildAnchors();
+    this.glows = [...parts.context.glow.entries()];
     this.state = state;
     this.cut = state.cutaway;
     this.deploy = state.reverser;
@@ -352,39 +375,39 @@ class Ge9xAssembly implements Assembly {
   }
 
   private refreshStreams(deltaSeconds: number, cameraDistance: number): void {
-    const far = this.state.detail === 'far' || cameraDistance > ROW_LOD_DISTANCE_M;
-    const counts = particleCounts(this.state.streams, far ? 'far' : 'near');
+    const detail: DetailId =
+      this.state.detail === 'far' || cameraDistance > ROW_LOD_DISTANCE_M ? 'far' : 'near';
+    if (detail !== this.countsDetail || this.state.streams !== this.countsStreams) {
+      this.counts = particleCounts(this.state.streams, detail);
+      this.countsDetail = detail;
+      this.countsStreams = this.state.streams;
+    }
     const open = smoothstep(this.cut, 0, 1);
-    const shellGap = open > 0 ? cutHalfAngle(open) + STREAMS.cutMargin * open : 0;
-    const coreGap = coreHalfAngle(open);
     const markerX = xAt(this.state.reading.axialFraction);
-    const blend = smoothstep(this.deploy, BLEND_RANGE.from, BLEND_RANGE.to);
     const playing = this.state.playing && deltaSeconds > 0;
-    this.parts.cold.update({
-      playing,
-      deltaSeconds,
-      speed: this.state.coldSpeed,
-      blend,
-      gap: shellGap,
-      count: counts.cold,
-      markerX,
-    });
-    this.parts.hot.update({
-      playing,
-      deltaSeconds,
-      speed: this.state.hotSpeed,
-      blend: 0,
-      gap: coreGap,
-      count: counts.hot,
-      markerX,
-    });
+    const { coldFrame, hotFrame } = this;
+    coldFrame.playing = playing;
+    coldFrame.deltaSeconds = deltaSeconds;
+    coldFrame.speed = this.state.coldSpeed;
+    coldFrame.blend = smoothstep(this.deploy, BLEND_RANGE.from, BLEND_RANGE.to);
+    coldFrame.gap = open > 0 ? cutHalfAngle(open) + STREAMS.cutMargin * open : 0;
+    coldFrame.count = this.counts.cold;
+    coldFrame.markerX = markerX;
+    hotFrame.playing = playing;
+    hotFrame.deltaSeconds = deltaSeconds;
+    hotFrame.speed = this.state.hotSpeed;
+    hotFrame.gap = coreHalfAngle(open);
+    hotFrame.count = this.counts.hot;
+    hotFrame.markerX = markerX;
+    this.parts.cold.update(coldFrame);
+    this.parts.hot.update(hotFrame);
   }
 
   private scaleGlows(): void {
     const { materials } = this.resources;
-    this.parts.context.glow.forEach((scale, group) => {
+    for (const [group, scale] of this.glows) {
       scale.uGlowScale.value = lerp(HEAT_LOOK.dimGlow, 1, materials.emphasisOf(group));
-    });
+    }
   }
 }
 

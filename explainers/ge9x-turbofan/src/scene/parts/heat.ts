@@ -47,7 +47,7 @@ ${HEAT_RAMP_GLSL}
 function fragmentBody(gain: number): string {
   return /* glsl */ `
 float heatNow = clamp(vHeatProfile * uHeat, 0.0, 1.0);
-totalEmissiveRadiance += heatRamp(heatNow) * pow(heatNow, ${glslFloat(HEAT_LOOK.curve)}) * ${glslFloat(gain * LOOK.glowGain)} * uGlowScale;
+totalEmissiveRadiance += heatRamp(min(heatNow, ${glslFloat(HEAT_LOOK.rampCap)})) * pow(heatNow, ${glslFloat(HEAT_LOOK.curve)}) * ${glslFloat(gain * LOOK.glowGain)} * uGlowScale;
 `;
 }
 
