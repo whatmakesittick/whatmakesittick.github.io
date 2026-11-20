@@ -55,6 +55,8 @@ const palmHint = new Vector3();
 const forearm = new Vector3();
 const direction = new Vector3();
 const keyedWrist = new Vector3();
+const keyedElbow = new Vector3();
+const bone = new Vector3();
 
 function armPose(): ArmPose {
   return {
@@ -128,13 +130,11 @@ function placeWrist(pose: ArmPose, reach: number, wristY: number): void {
   const { shoulder, wrist } = pose;
   const drop = reach * softShare((wristY - shoulder.y) / reach);
   const across = Math.sqrt(reach * reach - drop * drop);
-  const dx = reachHint.x - shoulder.x;
-  const dz = reachHint.z - shoulder.z;
-  const length = Math.hypot(dx, dz) || 1;
+  const length = Math.hypot(reachHint.x, reachHint.z) || 1;
   wrist.set(
-    shoulder.x + (dx / length) * across,
+    shoulder.x + (reachHint.x / length) * across,
     shoulder.y + drop,
-    shoulder.z + (dz / length) * across,
+    shoulder.z + (reachHint.z / length) * across,
   );
 }
 
@@ -143,11 +143,21 @@ function recoveryShare(clock: number): number {
   return smoothstep(clock, fadeIn[0], fadeIn[1]) * (1 - smoothstep(clock, fadeOut[0], fadeOut[1]));
 }
 
+function keepLength(target: Vector3, root: Vector3, length: number): void {
+  bone.subVectors(target, root).setLength(length);
+  target.copy(root).add(bone);
+}
+
 function followRecoveryPath(pose: ArmPose, clock: number, side: number): void {
   const share = recoveryShare(clock);
   if (share === 0) return;
-  mirrored(keyedWrist, clampedVector(ARM_KEYS.recoveryWrist, clock), side).add(pose.shoulder);
+  const { recoveryElbowOffset, recoveryWristOffset } = ARM_KEYS;
+  mirrored(keyedElbow, clampedVector(recoveryElbowOffset, clock), side).add(pose.shoulder);
+  mirrored(keyedWrist, clampedVector(recoveryWristOffset, clock), side).add(pose.shoulder);
+  pose.elbow.lerp(keyedElbow, share);
+  keepLength(pose.elbow, pose.shoulder, BODY.upperArm);
   pose.wrist.lerp(keyedWrist, share);
+  keepLength(pose.wrist, pose.elbow, BODY.forearm);
 }
 
 function orientHand(pose: ArmPose, flexRad: number): void {
@@ -180,9 +190,9 @@ export function solveArm(
   let handLift = 0;
   for (let pass = 0; pass < WRIST_PASSES; pass++) {
     placeWrist(pose, reach, targetY - handLift);
-    followRecoveryPath(pose, clock, side);
     mirrored(pole, poleValue, side);
     solveTwoBone(pose.shoulder, pose.wrist, BODY.upperArm, BODY.forearm, pole, pose.elbow);
+    followRecoveryPath(pose, clock, side);
     mirrored(palmHint, palmValue, side);
     orientHand(pose, flexRad);
     handLift = pose.hand.y - pose.wrist.y;
