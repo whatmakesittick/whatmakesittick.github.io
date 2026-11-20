@@ -92,6 +92,35 @@ function floatsOf(
   return mesh;
 }
 
+const FADE_NEAR_M = 1;
+const FADE_FAR_M = 1.6;
+
+function fadeNearCamera(material: MeshStandardMaterial): void {
+  material.onBeforeCompile = (shader) => {
+    shader.vertexShader = shader.vertexShader
+      .replace('void main() {', 'varying vec3 vRopeWorld;\nvoid main() {')
+      .replace(
+        '#include <project_vertex>',
+        `#include <project_vertex>
+  vec4 ropeLocal = vec4(transformed, 1.0);
+  #ifdef USE_INSTANCING
+  ropeLocal = instanceMatrix * ropeLocal;
+  #endif
+  vRopeWorld = (modelMatrix * ropeLocal).xyz;`,
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace('void main() {', 'varying vec3 vRopeWorld;\nvoid main() {')
+      .replace(
+        '#include <clipping_planes_fragment>',
+        `#include <clipping_planes_fragment>
+  float ropeKeep = smoothstep(${FADE_NEAR_M.toFixed(1)}, ${FADE_FAR_M.toFixed(1)}, distance(vRopeWorld, cameraPosition));
+  float ropeNoise = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
+  if (ropeKeep < ropeNoise) discard;`,
+      );
+  };
+  material.customProgramCacheKey = () => 'ropeFade';
+}
+
 function addRopes(
   context: PartContext,
   group: string,
@@ -100,11 +129,15 @@ function addRopes(
   target: Group,
 ): void {
   const { materials, tracker } = context;
-  target.add(
-    floatsOf(geometry, materials.get(group, FINISHES.floatA), zs, 0),
-    floatsOf(geometry, materials.get(group, FINISHES.floatB), zs, 1),
+  const [a, b, cordMaterial] = [FINISHES.floatA, FINISHES.floatB, FINISHES.ropeCord].map(
+    (finish) => {
+      const material = materials.get(group, finish);
+      fadeNearCamera(material);
+      return material;
+    },
   );
-  const cord = new Mesh(tracker.track(cordGeometry(zs)), materials.get(group, FINISHES.ropeCord));
+  target.add(floatsOf(geometry, a, zs, 0), floatsOf(geometry, b, zs, 1));
+  const cord = new Mesh(tracker.track(cordGeometry(zs)), cordMaterial);
   cord.frustumCulled = false;
   target.add(cord);
 }

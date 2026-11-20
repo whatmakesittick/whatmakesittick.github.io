@@ -38,8 +38,8 @@ void main() {
   float radius = 0.1 + 0.85 * (1.0 - pow(1.0 - age, 2.2));
   float width = mix(0.09, 0.03, age);
   float ring = exp(-pow((r - radius) / width, 2.0));
-  float n = (sin(angle * 7.0 + seed * 11.0) + sin(angle * 13.0 - seed * 5.0 + age * 2.0) + sin(angle * 23.0 + seed * 3.0)) / 3.0;
-  float broken = smoothstep(-0.4, 0.3, n);
+  float n = (sin(angle * 3.0 + seed * 11.0) + sin(angle * 5.0 - seed * 5.0 + age * 2.0) + sin(angle * 9.0 + seed * 3.0)) / 3.0;
+  float broken = smoothstep(-0.7, 0.2, n);
   float inner = (1.0 - smoothstep(0.0, radius, r)) * pow(1.0 - age, 3.0) * 0.35 * (0.6 + 0.4 * n);
   float alpha = (ring * broken * 0.9 + inner) * (1.0 - age) * (1.0 - smoothstep(0.85, 1.0, r));
   gl_FragColor = vec4(uFoam, alpha);

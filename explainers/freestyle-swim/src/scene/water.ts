@@ -27,16 +27,19 @@ vec2 slopes(vec2 p) {
     float zf = 1.7 + 0.6 * n;
     float zp = p.y * zf + n * 1.3 + n * uPhase;
     float s = kx * p.x + 1.2 * sin(zp) + n * 2.1;
-    float a = 0.0026 / n;
+    float footprint = fwidth(kx * p.x);
+    float a = 0.0026 / n * (1.0 - smoothstep(0.08, 0.5, footprint));
     g += a * cos(s) * vec2(kx, 1.2 * zf * cos(zp));
   }
   return g;
 }
 
 void main() {
-  vec2 g = slopes(vec2(vWorld.x - uScroll, vWorld.z));
-  vec3 n = normalize(vec3(-g.x, 1.0, -g.y));
   vec3 v = normalize(cameraPosition - vWorld);
+  float reach = length(cameraPosition - vWorld);
+  float calm = smoothstep(0.05, 0.4, abs(v.y)) * (1.0 - smoothstep(3.0, 8.0, reach));
+  vec2 g = slopes(vec2(vWorld.x - uScroll, vWorld.z)) * calm;
+  vec3 n = normalize(vec3(-g.x, 1.0, -g.y));
   vec3 col;
   float alpha;
   if (gl_FrontFacing) {
