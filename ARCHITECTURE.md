@@ -270,6 +270,15 @@ resolves. A part that is slow on its own needs splitting or a worker, which must
 fall back to the main thread where workers cannot start (an embed on another
 origin, the MCP app sandbox); the Tesla roadster's `pixels.worker.ts` does both.
 
+A browser without a graphics card draws WebGL on the processor, where every pixel
+costs real time. `detectRenderQuality` in `src/core/scene/renderQuality.ts` asks for a
+context with `failIfMajorPerformanceCaveat`, and when the browser refuses, the
+viewport drops antialiasing and caps the pixel ratio at 1. Google's page renderer is
+such a browser: it draws about ten frames for each second of page time, and a page
+whose frames take too long fails the URL inspection test and cannot be submitted for
+indexing. The Playwright tools ask for SwiftShader by flag, which Chromium does not
+count as a caveat, so tests, covers and review screenshots keep the full quality.
+
 The round button in the stage's top-right corner shows the model full screen
 (`src/core/ui/stageExpansion.ts`). Expanding sets `data-stage-expanded` on the root,
 which pins the stage over the whole viewport with the dock still at its bottom and

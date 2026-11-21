@@ -1,9 +1,10 @@
 import { ACESFilmicToneMapping, SRGBColorSpace, WebGLRenderer } from 'three';
 import type { Camera, Scene } from 'three';
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
-import { MAX_PIXEL_RATIO, TONE_MAPPING_EXPOSURE } from './constants';
+import { TONE_MAPPING_EXPOSURE } from './constants';
 import type { SafeArea, ViewportSize } from './lens';
 import { Listeners } from './listeners';
+import { detectRenderQuality } from './renderQuality';
 
 export interface Viewport {
   renderer: WebGLRenderer;
@@ -18,8 +19,8 @@ const LABEL_LAYER_CLASS = 'scene-label-layer';
 const SAFE_AREA_PROPERTY = '--scene-safe-';
 const MIN_SAFE_FRACTION = 0.3;
 
-function createRenderer(): WebGLRenderer {
-  const renderer = new WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+function createRenderer(antialias: boolean): WebGLRenderer {
+  const renderer = new WebGLRenderer({ antialias, powerPreference: 'high-performance' });
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.debug.checkShaderErrors = import.meta.env.DEV;
   renderer.toneMapping = ACESFilmicToneMapping;
@@ -50,7 +51,8 @@ function readSafeArea(container: HTMLElement, width: number, height: number): Sa
 export function createViewport(container: HTMLElement): Viewport {
   const element = document.createElement('div');
   element.className = ROOT_CLASS;
-  const renderer = createRenderer();
+  const quality = detectRenderQuality();
+  const renderer = createRenderer(quality.antialias);
   const labels = new CSS2DRenderer();
   labels.domElement.className = LABEL_LAYER_CLASS;
   element.append(renderer.domElement, labels.domElement);
@@ -62,7 +64,7 @@ export function createViewport(container: HTMLElement): Viewport {
     const width = Math.max(1, element.clientWidth);
     const height = Math.max(1, element.clientHeight);
     size = { width, height, safe: readSafeArea(container, width, height) };
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, quality.maxPixelRatio));
     renderer.setSize(width, height, false);
     labels.setSize(width, height);
     listeners.notify(size);
