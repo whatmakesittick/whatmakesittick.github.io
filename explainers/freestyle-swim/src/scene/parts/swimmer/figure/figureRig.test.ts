@@ -25,8 +25,8 @@ const JOINT_LIMIT_MM = 10;
 const BONE_LIMIT_DEG = 1.5;
 const PALM_LIMIT_DEG = 8;
 const HEAD_LIMIT_DEG = 2;
-const STEP_LIMIT_MM = 30;
-const ACCELERATION_LIMIT_MM = 6;
+const STEP_LIMIT_MM = 20;
+const ACCELERATION_LIMIT_MM = 1.5;
 const TIMEOUT_MS = 240_000;
 const NATURAL_LIMITS_DEG: readonly (readonly [RegExp, number])[] = [
   [/_clavicle_rx$/, 10],

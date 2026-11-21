@@ -9,11 +9,11 @@ import {
   Vector3,
 } from 'three';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
-import { smoothstep, toRadians } from '@core/math';
+import { smoothstep } from '@core/math';
 import type { AssemblyState, PhaseId } from '../../ids';
 import { phaseBounds, strokeAt } from '../../model';
 import { bodyPose } from '../pose';
-import { SIDE, createSkeleton, solveArm } from '../rig/skeleton';
+import { createSkeleton, solveArm } from '../rig/skeleton';
 import { PHASE_TONES, THEME } from '../../theme';
 import { LAYER } from './pool/constants';
 import { registered } from './context';
@@ -52,7 +52,7 @@ function sampleTrail(state: AssemblyState): Trail {
   const colors: Color[] = [];
   for (let index = 0; index < SAMPLES; index++) {
     const reading = strokeAt((index / (SAMPLES - 1)) * end, { pace, kick, breathing, headUp });
-    solveArm(pose, reading.right, SIDE.right, toRadians(reading.shoulderRollDeg), rootY);
+    solveArm(pose, 'right', reading.units, { pace, breathing, rootY });
     points.push(pose.hand.clone());
     colors.push(tones[reading.right.phase] ?? FALLBACK_TONE);
   }

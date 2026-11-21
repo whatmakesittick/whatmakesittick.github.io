@@ -1,4 +1,5 @@
 import { SEGMENT_M } from '../../model/scale';
+import { GLIDE_KEY_SHARE, PULL_KEY_SHARE } from '../../model/stroke';
 import type { KickId } from '../../ids';
 import type { Key } from './curve';
 
@@ -32,6 +33,33 @@ export const BREATH_HEAD = { turnOut: [-0.35, 0.2], turnBack: [0.5, 0.92] } as c
 export const RECOVERY_PATH = { fadeIn: [3, 3.12], fadeOut: [3.86, 4] } as const;
 
 export const REACH_SOFT = { knee: 0.95, span: 0.045 } as const;
+
+export type TrackKey = readonly [shownAt: number, poseAt: number];
+
+function held(clock: number): TrackKey {
+  return [clock, clock];
+}
+
+export const ARM_TRACK: readonly TrackKey[] = [
+  held(0),
+  held(GLIDE_KEY_SHARE),
+  held(0.82),
+  held(CATCH_AT),
+  held(1.3),
+  held(CATCH_AT + PULL_KEY_SHARE),
+  held(2),
+  [2.18, 2.25],
+  held(2.5),
+  held(2.75),
+  held(RECOVERY_START),
+  held(3.125),
+  held(3.25),
+  held(3.375),
+  held(3.5),
+  [3.69, 3.625],
+  [3.83, 3.75],
+  [3.935, 3.875],
+];
 
 export const ARM_KEYS = {
   entryElbow: [

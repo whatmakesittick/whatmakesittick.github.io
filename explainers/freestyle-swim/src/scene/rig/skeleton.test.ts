@@ -15,8 +15,8 @@ const ROOT_Y = bodyPose(0, 0).y;
 const ELBOW_TOLERANCE_DEG = 3;
 const DEPTH_TOLERANCE_M = 0.05;
 const PULL_END_DEPTH_TOLERANCE_M = 0.1;
-const STEP_LIMIT_M = 0.024;
-const ACCEL_LIMIT_M = 0.0045;
+const STEP_LIMIT_M = 0.015;
+const ACCEL_LIMIT_M = 0.0012;
 const HEEL_BACK_M = 0.05;
 const SIDES = ['right', 'left'] as const;
 

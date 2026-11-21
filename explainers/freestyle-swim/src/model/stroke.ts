@@ -155,6 +155,12 @@ export function shoulderRollAt(units: number, pace: PaceId): number {
   return amplitude * Math.cos((FULL_TURN * (units - SHOULDER_PEAK_UNITS)) / CYCLE_UNITS);
 }
 
+export function shoulderRollDegAt(units: number, pace: PaceId, breathing: BreathId): number {
+  const wrapped = wrapUnits(units);
+  const breath = breathing === 'right' ? breathWindow(wrapped, pace) : 0;
+  return shoulderRollAt(wrapped, pace) - BREATH_EXTRA_DEG * breath;
+}
+
 export function hipRollAt(units: number, pace: PaceId): number {
   const amplitude = PACES[pace].hipRollDeg;
   const peak = SHOULDER_PEAK_UNITS + HIP_LAG_UNITS;
@@ -228,7 +234,7 @@ export function strokeAt(units: number, options: StrokeOptions): StrokeReading {
     breathing,
     right,
     left,
-    shoulderRollDeg: shoulderRollAt(wrapped, pace) - BREATH_EXTRA_DEG * breath,
+    shoulderRollDeg: shoulderRollDegAt(wrapped, pace, breathing),
     hipRollDeg: hipRollAt(wrapped, pace),
     headTurn: breath,
     breathExtraDeg: BREATH_EXTRA_DEG * breath,
