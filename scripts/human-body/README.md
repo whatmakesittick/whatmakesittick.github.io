@@ -39,7 +39,7 @@ The first command runs the real retarget over the stroke and writes the poses th
 correctives to them and writes the data module and the fixtures. Both are deterministic: running twice gives the same
 bytes. Python files are not covered by the repository's lint.
 
-`export.py` takes `--tolerance-mm` (2.25) and `--vertex-floor-mm` (1.0). `sweep.py` takes the same assets and poses,
+`export.py` takes `--tolerance-mm` (2.0) and `--vertex-floor-mm` (1.0). `sweep.py` takes the same assets and poses,
 fits many settings and prints the size and error table below.
 
 ## Configuration
@@ -119,7 +119,12 @@ The data module without any correctives is 103,062 bytes gzipped. Regions are th
 | 3.0          | 0.05            | 16                 | 170,390     | 318,821     | 2.846     | 0.204     |
 | 3.0          | 1.0             | 16                 | 167,358     | 303,754     | 2.846     | 0.271     |
 
-The chosen row is the smallest with worst error at most 2 mm and mean at most 0.3 mm. The worst error stays below the
+The table was measured on the stroke before its arm timing was smoothed, and the bold row was the choice then: the
+smallest with worst error at most 2 mm and mean at most 0.3 mm. On the smoothed stroke that setting gives 2.10 mm
+worst (176,238 bytes), so the shipped data uses tolerance 2.0 with the 1.0 mm floor: 183,750 bytes gzipped, 328,086
+raw, worst 1.719 mm, mean 0.207 mm. Rerun `sweep.py` before picking a setting for another motion.
+
+The worst error stays below the
 tolerance because the choice is made on validation poses with a margin and the grid of sizes is coarse. The vertex
 floor mostly drops the distal finger joints (under 1.2 mm over the stroke). The toes (up to 8 mm), the jaw and head
 (up to 16 mm) and the finger bases (up to 3 mm) do move, so they keep their correctives. 8 bit `U` saves nothing: `U`
