@@ -6,12 +6,11 @@ import type { RestFrame } from './restFrame';
 
 const AXES = 3;
 const TRIANGLE = 3;
-const SUBDIVISIONS = 8;
+const SUBDIVISIONS = 4;
 const BACK_OF_HEAD = new Vector3(0, 0, -1);
 const UNIT_CENTRE = 0.5;
-const SEARCH_REACH = 0.03;
-const SEARCH_STEP = 0.005;
-const GAIN_THRESHOLD = 0.001;
+const SLICE_STEP = 0.005;
+const CENTRE_ACROSS = 0;
 const CAP_CHANNEL = 1;
 const STRAP_CHANNEL = 3;
 
@@ -26,7 +25,7 @@ export const LABEL = {
 
 export const LABEL_ASPECT = LABEL.height / LABEL.length;
 
-const SEARCH_WINDOW = SEARCH_REACH + LABEL.height + LABEL.clearance;
+const SEARCH_WINDOW = LABEL.height + LABEL.clearance;
 
 export interface LabelLayout {
   readonly along: number;
@@ -96,18 +95,17 @@ function sampleAt(
   };
 }
 
-function inWindow(figure: Figure, corners: readonly number[], head: Hems['head']): boolean {
-  return corners.some((corner) => {
-    const point = new Vector3().fromArray(figure.restPositions, corner * AXES);
-    return point.y > head.centre.y && Math.abs(acrossBack(point, head)) < SEARCH_WINDOW;
-  });
+function inWindow(figure: Figure, vertex: number, head: Hems['head']): boolean {
+  const y = figure.restPositions[vertex * AXES + 1];
+  const z = figure.restPositions[vertex * AXES + 2];
+  return y > head.centre.y && Math.abs(z - head.centre.z) < SEARCH_WINDOW;
 }
 
 function sideSamples(figure: Figure, fields: GarmentFields, head: Hems['head']): Sample[] {
   const samples: Sample[] = [];
   for (let t = 0; t < figure.triangleCount; t++) {
-    const corners = Array.from(figure.indices.slice(t * TRIANGLE, (t + 1) * TRIANGLE));
-    if (!inWindow(figure, corners, head)) continue;
+    const corners = [0, 1, 2].map((corner) => figure.indices[t * TRIANGLE + corner]);
+    if (!corners.some((vertex) => inWindow(figure, vertex, head))) continue;
     for (let i = 0; i <= SUBDIVISIONS; i++) {
       for (let j = 0; j <= SUBDIVISIONS - i; j++) {
         const weights = [i, j, SUBDIVISIONS - i - j].map((n) => n / SUBDIVISIONS);
@@ -121,10 +119,10 @@ function sideSamples(figure: Figure, fields: GarmentFields, head: Hems['head']):
 function lowestTop(samples: readonly Sample[], across: number): number {
   const stripeOffset = CAP.stripeHalfWidth + LABEL.clearance;
   const bare = samples.filter((sample) => sample.capped && sample.sideways >= stripeOffset);
-  const steps = Math.ceil(LABEL.height / 2 / SEARCH_STEP);
+  const steps = Math.ceil(LABEL.height / 2 / SLICE_STEP);
   const tops = Array.from({ length: 2 * steps + 1 }, (_, at) => {
-    const slice = across + (at - steps) * SEARCH_STEP;
-    const inSlice = bare.filter((sample) => Math.abs(sample.across - slice) <= SEARCH_STEP / 2);
+    const slice = across + (at - steps) * SLICE_STEP;
+    const inSlice = bare.filter((sample) => Math.abs(sample.across - slice) <= SLICE_STEP / 2);
     return Math.max(...inSlice.map((sample) => sample.along));
   });
   return Math.min(...tops);
@@ -144,26 +142,13 @@ function lengthOf(span: Span): number {
   return Math.min(LABEL.length, span.top - span.bottom);
 }
 
-function searchOffsets(): number[] {
-  const steps = Math.round(SEARCH_REACH / SEARCH_STEP);
-  return Array.from({ length: 2 * steps + 1 }, (_, at) => (at - steps) * SEARCH_STEP).sort(
-    (a, b) => Math.abs(a) - Math.abs(b),
-  );
-}
-
 export function labelLayout(figure: Figure, fields: GarmentFields, frame: RestFrame): LabelLayout {
   const { head } = hemsOf(frame);
-  const samples = sideSamples(figure, fields, head);
-  let best: { across: number; span: Span } | undefined;
-  searchOffsets().forEach((across) => {
-    const span = spanAt(samples, across);
-    if (!best || lengthOf(span) > lengthOf(best.span) + GAIN_THRESHOLD) best = { across, span };
-  });
-  const { across, span } = best as { across: number; span: Span };
+  const span = spanAt(sideSamples(figure, fields, head), CENTRE_ACROSS);
   const length = lengthOf(span);
   return {
     along: (span.bottom + span.top) / 2,
-    across,
+    across: CENTRE_ACROSS,
     length,
     height: length * LABEL_ASPECT,
   };

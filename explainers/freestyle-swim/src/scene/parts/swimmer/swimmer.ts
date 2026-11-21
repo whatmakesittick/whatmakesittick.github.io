@@ -106,14 +106,17 @@ export function* buildSwimmer(context: PartContext, rig: FigureRig): Steps<Swimm
   yield;
   const frame = new RestFrame(rig.figure);
   const toes = toeFields(rig.figure, frame);
+  const garments = garmentFields(rig.figure, frame);
+  yield;
+  const labelPlace = labelFields(rig.figure, frame, labelLayout(rig.figure, garments, frame));
   const label = labelTexture();
   if (label) builder.track(label);
-  const garments = garmentFields(rig.figure, frame);
+  yield;
   const body = new FigureBody({
     figure: rig.figure,
     toRig: rig.toRig,
     garments,
-    label: labelFields(rig.figure, frame, labelLayout(rig.figure, garments, frame)),
+    label: labelPlace,
     toes: toes.coordinates,
     track: (item) => builder.track(item),
     materialOf: (part) => {
