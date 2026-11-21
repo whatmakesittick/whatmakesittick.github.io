@@ -1,5 +1,6 @@
 export const MAX_FRAME_SECONDS = 0.1;
 export const MAX_PIXEL_RATIO = 2;
+export const SOFTWARE_MAX_PIXEL_RATIO = 1;
 export const TONE_MAPPING_EXPOSURE = 1.05;
 
 export const CAMERA_FOV = 32;
