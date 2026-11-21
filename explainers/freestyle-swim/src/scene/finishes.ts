@@ -1,0 +1,70 @@
+import { Color } from 'three';
+import type { MaterialFinish } from '@core/scene/materials';
+import { THEME } from '../theme';
+
+const BLACK = '#000000';
+const WET_SKIN_ROUGHNESS = 0.6;
+const SKIN_TONE = { saturation: 1.25, brightness: 0.72 } as const;
+const SILICONE_ROUGHNESS = 0.28;
+const SUIT_ROUGHNESS = 0.78;
+const LANE_ROUGHNESS = 0.62;
+const LENS_ROUGHNESS = 0.12;
+const PLASTIC_ROUGHNESS = 0.45;
+const ROPE_BLUE = '#2f6bc4';
+const ARROW_GLOW = 0.3;
+const ARROW_ROUGHNESS = 0.35;
+
+function shade(hex: string, tone: { saturation: number; brightness: number }): string {
+  const hsl = { h: 0, s: 0, l: 0 };
+  const color = new Color(hex);
+  color.getHSL(hsl);
+  return `#${color.setHSL(hsl.h, Math.min(hsl.s * tone.saturation, 1), hsl.l * tone.brightness).getHexString()}`;
+}
+
+function matte(color: string, roughness: number): MaterialFinish {
+  return { color, roughness, metalness: 0, emissive: BLACK, emissiveIntensity: 1 };
+}
+
+const SKIN = matte(shade(THEME.skin, SKIN_TONE), WET_SKIN_ROUGHNESS);
+
+export const GARMENT_ROUGHNESS = [
+  SUIT_ROUGHNESS,
+  SILICONE_ROUGHNESS,
+  SILICONE_ROUGHNESS,
+  SILICONE_ROUGHNESS,
+  SILICONE_ROUGHNESS,
+] as const;
+
+const FINISH_COLORS = {
+  suit: THEME.suit,
+  cap: THEME.cap,
+  capStripe: THEME.floatB,
+  goggleBand: THEME.goggles,
+  wristband: THEME.floatA,
+} as const;
+
+export const GARMENT_COLORS = Object.values(FINISH_COLORS);
+
+export const FINISHES = {
+  skin: SKIN,
+  goggleBand: matte(FINISH_COLORS.goggleBand, SILICONE_ROUGHNESS),
+  goggleLens: { ...matte(THEME.goggles, LENS_ROUGHNESS), metalness: 0.6 },
+  floatA: matte(THEME.floatA, PLASTIC_ROUGHNESS),
+  floatB: matte(ROPE_BLUE, PLASTIC_ROUGHNESS),
+  ropeCord: matte(THEME.laneLine, PLASTIC_ROUGHNESS),
+  laneLine: matte(THEME.laneLine, LANE_ROUGHNESS),
+  thrust: {
+    ...matte(THEME.thrust, ARROW_ROUGHNESS),
+    emissive: THEME.thrust,
+    emissiveIntensity: ARROW_GLOW,
+    transparent: true,
+  },
+  drag: {
+    ...matte(THEME.drag, ARROW_ROUGHNESS),
+    emissive: THEME.drag,
+    emissiveIntensity: ARROW_GLOW,
+    transparent: true,
+  },
+} as const satisfies Record<string, MaterialFinish>;
+
+export type Finish = keyof typeof FINISHES;

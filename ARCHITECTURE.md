@@ -445,6 +445,24 @@ its `bindings.ts`: the engine rebuilds on a new layout and applies the
 compression ratio, subscribed before `bindPresets` so a rebuilt engine is framed;
 the glider swaps its glider type.
 
+## Figure toolkit
+
+`src/core/figure` is a sport-agnostic human body: Meta's MHR (Apache 2.0) reproduced in the browser with plain typed
+arrays and no three.js classes. `decodeFigure(data)` turns an exported data module into a `Figure`. `Figure` reproduces
+the MHR forward pass: parameter transform, forward kinematics, pose correctives and linear blend skinning.
+
+- `figure.pose(parameters)` fills `positions` and `normals` on the CPU; `restPositions` and `indices` describe the mesh.
+- `jointNames`, `jointIndex(name)`, `jointPositions`, `jointMatrices` and `jointScales` give the posed skeleton;
+  `solveSkeleton(parameters)` updates only the joints; `dominantJoints()` names the strongest joint of each vertex.
+- `Retargeter` (`@core/figure/retarget`) turns an explainer's own joint targets into MHR parameters, with no memory of
+  the previous frame.
+- The data module (`*.data.ts`, made by `scripts/human-body`) is large. Load it only with a dynamic `import()` in its
+  own lazy chunk, never statically, or the JavaScript budget in the site check fails.
+- The licence text is `scripts/human-body/MHR-LICENSE.txt`; `THIRD_PARTY_NOTICES.md` carries the notice for the data.
+- Clothing that hugs the skin is not extra geometry: an explainer stores per-vertex signed distances to each hem,
+  measured once in the rest pose, and a material patch paints the garment colour where they are positive. Colours that
+  must dim with their part are registered with the material library as colour swatches of the same group.
+
 ## UI toolkit
 
 Core is a component and primitive toolkit. An explainer composes the components in
