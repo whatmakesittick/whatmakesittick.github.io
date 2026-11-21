@@ -12,6 +12,8 @@ import { Goggles } from './garments/goggles';
 import { toeFields } from './feet/toeFields';
 import { applyToes } from './feet/toeShader';
 import { applyGarments } from './garments/garmentShader';
+import { labelFields, labelLayout } from './garments/label';
+import { labelTexture } from './garments/labelTexture';
 import { garmentFields } from './garments/regions';
 import { RestFrame } from './garments/restFrame';
 import type { FigureRig } from './figure/figureRig';
@@ -104,16 +106,21 @@ export function* buildSwimmer(context: PartContext, rig: FigureRig): Steps<Swimm
   yield;
   const frame = new RestFrame(rig.figure);
   const toes = toeFields(rig.figure, frame);
+  const label = labelTexture();
+  if (label) builder.track(label);
+  const garments = garmentFields(rig.figure, frame);
   const body = new FigureBody({
     figure: rig.figure,
     toRig: rig.toRig,
-    garments: garmentFields(rig.figure, frame),
+    garments,
+    label: labelFields(rig.figure, frame, labelLayout(rig.figure, garments, frame)),
     toes: toes.coordinates,
     track: (item) => builder.track(item),
     materialOf: (part) => {
       const skin = applyGarments(
         builder.material(part, 'skin'),
         builder.swatches(part, GARMENT_COLORS),
+        label,
       );
       return part === FOOT_PART ? applyToes(skin, toes) : skin;
     },

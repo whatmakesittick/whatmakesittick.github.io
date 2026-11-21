@@ -6,6 +6,7 @@ import type { AddedVertices } from './partition';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { GARMENT_ATTRIBUTES } from './garments/garmentShader';
 import { blendRows, extend, normaliseRows } from './blend';
+import { LABEL_ATTRIBUTE, LABEL_CHANNELS } from './garments/label';
 import { CHANNELS } from './garments/regions';
 import type { GarmentFields } from './garments/regions';
 import { TOE_ATTRIBUTE } from './feet/toeShader';
@@ -52,6 +53,7 @@ export interface FigureBodyParts {
   readonly track: <T extends { dispose(): void }>(item: T) => T;
   readonly toRig: Matrix4;
   readonly garments: GarmentFields;
+  readonly label: Float32Array;
   readonly toes: Float32Array;
 }
 
@@ -87,6 +89,7 @@ export class FigureBody {
     this.geometry.setAttribute('normal', this.normal);
     this.addStatic(GARMENT_ATTRIBUTES.distances, parts.garments.distances);
     this.addStatic(GARMENT_ATTRIBUTES.extents, parts.garments.extents);
+    this.addStatic(LABEL_ATTRIBUTE, parts.label, LABEL_CHANNELS);
     this.addStatic(TOE_ATTRIBUTE, parts.toes, TOE_CHANNELS);
     split.ranges.forEach((range, index) => this.geometry.addGroup(range.start, range.count, index));
     this.mesh = new DeformingMesh(

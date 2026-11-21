@@ -5,7 +5,7 @@ import type { RestFrame } from './restFrame';
 
 const AXES = 3;
 export const CHANNELS = 4;
-const RIGHT_X = -1;
+export const RIGHT_X = -1;
 const SPINE_HEIGHT = new Vector3(0, 1, 0);
 
 export const JAMMERS = {
@@ -40,7 +40,7 @@ export interface GarmentFields {
   readonly extents: Float32Array;
 }
 
-interface Hems {
+export interface Hems {
   waist: { origin: Vector3; axis: Vector3 };
   thighs: readonly { origin: Vector3; axis: Vector3 }[];
   head: { centre: Vector3; up: Vector3; eyeY: number; headY: number };
@@ -51,7 +51,7 @@ function axisBetween(frame: RestFrame, from: string, to: string): Vector3 {
   return frame.joint(to).sub(frame.joint(from)).normalize();
 }
 
-function hemsOf(frame: RestFrame): Hems {
+export function hemsOf(frame: RestFrame): Hems {
   const thigh = (side: string) => ({
     origin: frame.joint(`${side}_upleg`),
     axis: axisBetween(frame, `${side}_upleg`, `${side}_lowleg`),
