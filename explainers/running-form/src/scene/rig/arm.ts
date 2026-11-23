@@ -20,7 +20,7 @@ export interface ArmChain {
 }
 
 export const ARM_STYLE = {
-  abductionDeg: { back: 11, front: 12 },
+  abductionDeg: { back: 11, front: 12, passing: 5 },
   innerRotationDeg: { back: 6, front: 36 },
   protractionM: 0.012,
   pronationDeg: 18,
@@ -116,7 +116,9 @@ function swingingAngles(reading: GaitReading, side: SideId): ArmAngles {
   const share = swingShare(reading, side);
   return {
     flexDeg,
-    abductionDeg: between(ARM_STYLE.abductionDeg.back, ARM_STYLE.abductionDeg.front, share),
+    abductionDeg:
+      between(ARM_STYLE.abductionDeg.back, ARM_STYLE.abductionDeg.front, share) +
+      ARM_STYLE.abductionDeg.passing * (1 - share * share),
     innerRotationDeg: towardFront(
       ARM_STYLE.innerRotationDeg.back,
       ARM_STYLE.innerRotationDeg.front,
