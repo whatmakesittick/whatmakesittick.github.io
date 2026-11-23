@@ -10,13 +10,13 @@ import type { PelvisState } from './pelvis';
 
 export const SWING = {
   clearanceM: 0.018,
-  clearAfterUnits: 30,
+  clearAfterUnits: 45,
   clearBeforeUnits: 40,
   softnessM: 0.012,
   recoverUnits: 150,
   approachUnits: 120,
   rateUnits: 40,
-  liftInUnits: 20,
+  liftInUnits: 30,
   liftOutUnits: 20,
 } as const;
 
