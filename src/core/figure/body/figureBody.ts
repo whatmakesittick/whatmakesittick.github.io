@@ -1,47 +1,46 @@
 import { BufferAttribute, BufferGeometry, DynamicDrawUsage, Mesh } from 'three';
 import type { Material, Matrix4 } from 'three';
 import type { Figure } from '@core/figure';
-import { partitionTriangles } from '@core/figure/body/partition';
-import type { AddedVertices } from '@core/figure/body/partition';
+import { partitionTriangles } from './partition';
+import type { AddedVertices } from './partition';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
-import { GARMENT_ATTRIBUTES } from './garments/garmentShader';
-import { blendRows, extend, normaliseRows } from '@core/figure/body/blend';
-import { LABEL_ATTRIBUTE, LABEL_CHANNELS } from './garments/label';
-import { CHANNELS } from './garments/regions';
-import type { GarmentFields } from './garments/regions';
-import { TOE_ATTRIBUTE } from './feet/toeShader';
-import { TOE_CHANNELS } from './feet/toeFields';
+import { blendRows, extend, normaliseRows } from './blend';
 
 const AXES = 3;
-const PART_RULES: readonly (readonly [RegExp, string])[] = [
-  [/_(wrist|pinky|ring|middle|index|thumb)/, 'hand'],
-  [/_lowarm/, 'forearm'],
-  [/_uparm/, 'elbow'],
-  [/_clavicle|c_spine[23]/, 'shoulder'],
-  [/c_neck|c_head|c_jaw|c_teeth|c_tongue|_eye/, 'head'],
-  [/_lowleg|_foot|_ball|_talocrural|_subtalar|_transversetarsal/, 'foot'],
-  [/_upleg|^root$/, 'hips'],
-];
+
+export type PartRule = readonly [pattern: RegExp, part: string];
+
+export interface StaticAttribute {
+  readonly name: string;
+  readonly data: Float32Array;
+  readonly itemSize: number;
+}
 
 export class DeformingMesh extends Mesh {
   // Core builds a static bounds tree for meshes typed 'Mesh'; this one changes shape every pose.
   override readonly type: string = 'DeformingMesh';
 }
 
-function partOfJoint(name: string): string {
-  return PART_RULES.find(([pattern]) => pattern.test(name))?.[1] ?? STRUCTURE_GROUP;
-}
-
-const PARTS: readonly string[] = [...new Set(PART_RULES.map(([, part]) => part)), STRUCTURE_GROUP];
 const MAX_VERTICES = 65536;
 
-function partWeights(figure: Figure): Float32Array {
-  const jointPart = Array.from(figure.jointNames, (name) => PARTS.indexOf(partOfJoint(name)));
+export function partsOf(rules: readonly PartRule[]): readonly string[] {
+  return [...new Set(rules.map(([, part]) => part)), STRUCTURE_GROUP];
+}
+
+function partOfJoint(name: string, rules: readonly PartRule[]): string {
+  return rules.find(([pattern]) => pattern.test(name))?.[1] ?? STRUCTURE_GROUP;
+}
+
+export function partWeights(figure: Figure, rules: readonly PartRule[]): Float32Array {
+  const parts = partsOf(rules);
+  const jointPart = Array.from(figure.jointNames, (name) =>
+    parts.indexOf(partOfJoint(name, rules)),
+  );
   const { start, joints, weights } = figure.skin;
-  const sums = new Float32Array(figure.vertexCount * PARTS.length);
+  const sums = new Float32Array(figure.vertexCount * parts.length);
   for (let v = 0; v < figure.vertexCount; v++) {
     for (let i = start[v]; i < start[v + 1]; i++) {
-      sums[v * PARTS.length + jointPart[joints[i]]] += weights[i];
+      sums[v * parts.length + jointPart[joints[i]]] += weights[i];
     }
   }
   return sums;
@@ -52,9 +51,8 @@ export interface FigureBodyParts {
   readonly materialOf: (part: string) => Material;
   readonly track: <T extends { dispose(): void }>(item: T) => T;
   readonly toRig: Matrix4;
-  readonly garments: GarmentFields;
-  readonly label: Float32Array;
-  readonly toes: Float32Array;
+  readonly partRules: readonly PartRule[];
+  readonly attributes: readonly StaticAttribute[];
 }
 
 export class FigureBody {
@@ -67,12 +65,13 @@ export class FigureBody {
 
   constructor(parts: FigureBodyParts) {
     const { figure } = parts;
+    const names = partsOf(parts.partRules);
     this.figure = figure;
     const split = partitionTriangles(
       figure.indices,
       figure.vertexCount,
-      partWeights(figure),
-      PARTS.length,
+      partWeights(figure, parts.partRules),
+      names.length,
     );
     this.added = split.added;
     const total = figure.vertexCount + this.added.count;
@@ -87,14 +86,11 @@ export class FigureBody {
     this.geometry.setIndex(new BufferAttribute(Uint16Array.from(split.indices), 1));
     this.geometry.setAttribute('position', this.position);
     this.geometry.setAttribute('normal', this.normal);
-    this.addStatic(GARMENT_ATTRIBUTES.distances, parts.garments.distances);
-    this.addStatic(GARMENT_ATTRIBUTES.extents, parts.garments.extents);
-    this.addStatic(LABEL_ATTRIBUTE, parts.label, LABEL_CHANNELS);
-    this.addStatic(TOE_ATTRIBUTE, parts.toes, TOE_CHANNELS);
+    parts.attributes.forEach((attribute) => this.addStatic(attribute));
     split.ranges.forEach((range, index) => this.geometry.addGroup(range.start, range.count, index));
     this.mesh = new DeformingMesh(
       this.geometry,
-      split.ranges.map((range) => parts.materialOf(PARTS[range.part])),
+      split.ranges.map((range) => parts.materialOf(names[range.part])),
     );
     this.mesh.name = 'body';
     this.mesh.matrixAutoUpdate = false;
@@ -117,8 +113,8 @@ export class FigureBody {
     this.geometry.computeBoundingBox();
   }
 
-  private addStatic(name: string, source: Float32Array, itemSize = CHANNELS): void {
-    const data = extend(source, itemSize, this.figure.vertexCount, this.added);
-    this.geometry.setAttribute(name, new BufferAttribute(data, itemSize));
+  private addStatic({ name, data, itemSize }: StaticAttribute): void {
+    const extended = extend(data, itemSize, this.figure.vertexCount, this.added);
+    this.geometry.setAttribute(name, new BufferAttribute(extended, itemSize));
   }
 }

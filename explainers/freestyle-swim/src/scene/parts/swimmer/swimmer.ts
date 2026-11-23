@@ -3,7 +3,7 @@ import type { Group, Object3D, Matrix4 } from 'three';
 import type { PartId } from '../../../ids';
 import { BODY } from '../../rig/constants';
 import type { Skeleton } from '../../rig/skeleton';
-import type { FigureBody } from './figureBody';
+import type { FigureBody } from '@core/figure/body/figureBody';
 import type { Goggles } from './garments/goggles';
 import type { FigureRig } from './figure/figureRig';
 

@@ -44,8 +44,7 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             { name: 'three', test: THREE_MODULES },
-            { name: 'figure', test: FIGURE_MODULES },
-            { name: 'rig', test: RIG_MODULES },
+
             {
               name: (id, context) =>
                 !pageChunk(id, context) || needsScene(id, context) ? null : 'shared',
@@ -60,6 +59,8 @@ export default defineConfig({
               minShareCount: 2,
             },
             { name: 'embed', test: EMBED_MODULES, minShareCount: 2 },
+            { name: 'figure', test: FIGURE_MODULES },
+            { name: 'rig', test: RIG_MODULES },
           ],
         },
       },

@@ -4,15 +4,16 @@ import { RestFrame } from '@core/figure/body/restFrame';
 import { GARMENT_COLORS } from '../../finishes';
 import type { PartContext } from '../context';
 import { PartBuilder } from './build';
-import { FigureBody } from './figureBody';
-import { toeFields } from './feet/toeFields';
-import { applyToes } from './feet/toeShader';
+import { FigureBody } from '@core/figure/body/figureBody';
+import { TOE_CHANNELS, toeFields } from './feet/toeFields';
+import { TOE_ATTRIBUTE, applyToes } from './feet/toeShader';
 import type { FigureRig } from './figure/figureRig';
-import { applyGarments } from './garments/garmentShader';
+import { GARMENT_ATTRIBUTES, applyGarments } from './garments/garmentShader';
 import { Goggles } from './garments/goggles';
-import { labelFields, labelLayout } from './garments/label';
+import { LABEL_ATTRIBUTE, LABEL_CHANNELS, labelFields, labelLayout } from './garments/label';
 import { labelTexture } from './garments/labelTexture';
-import { garmentFields } from './garments/regions';
+import { CHANNELS, garmentFields } from './garments/regions';
+import { PART_RULES } from './partRules';
 import { LABEL_IDS, Swimmer } from './swimmer';
 
 const ORIGIN = [0, 0, 0] as const;
@@ -36,9 +37,13 @@ export function* buildSwimmer(context: PartContext, rig: FigureRig): Steps<Swimm
   const body = new FigureBody({
     figure: rig.figure,
     toRig: rig.toRig,
-    garments,
-    label: labelPlace,
-    toes: toes.coordinates,
+    partRules: PART_RULES,
+    attributes: [
+      { name: GARMENT_ATTRIBUTES.distances, data: garments.distances, itemSize: CHANNELS },
+      { name: GARMENT_ATTRIBUTES.extents, data: garments.extents, itemSize: CHANNELS },
+      { name: LABEL_ATTRIBUTE, data: labelPlace, itemSize: LABEL_CHANNELS },
+      { name: TOE_ATTRIBUTE, data: toes.coordinates, itemSize: TOE_CHANNELS },
+    ],
     track: (item) => builder.track(item),
     materialOf: (part) => {
       const skin = applyGarments(
