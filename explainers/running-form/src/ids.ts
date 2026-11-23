@@ -25,7 +25,6 @@ export const GROUP_IDS = [
   'pelvis',
   'thigh',
   'shin',
-  'foot',
   'shoe',
   'backdrop',
 ] as const;

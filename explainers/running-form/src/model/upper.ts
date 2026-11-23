@@ -8,7 +8,7 @@ import { CYCLE_UNITS, HALF_CYCLE_UNITS } from './timeMap';
 export const LEAN_MEAN_DEG = 7.3;
 export const ARM_SWING_AMP_DEG = 25;
 export const ELBOW_MEAN_DEG = 90;
-export const ELBOW_SWING_DEG = 10;
+export const ELBOW_SWING_DEG = 19;
 export const HELD_ELBOW_DEG = 100;
 export const HELD_TWIST_GAIN = 1.68;
 export const HELD_PELVIS_GAIN = 1.2;
@@ -98,8 +98,8 @@ export function upperAt(units: number, pace: PaceId, arms: ArmsId): UpperReading
     elbowDeg: held
       ? { right: HELD_ELBOW_DEG, left: HELD_ELBOW_DEG }
       : {
-          right: ELBOW_MEAN_DEG + ELBOW_SWING_DEG * leftSwing,
-          left: ELBOW_MEAN_DEG + ELBOW_SWING_DEG * rightSwing,
+          right: ELBOW_MEAN_DEG - ELBOW_SWING_DEG * leftSwing,
+          left: ELBOW_MEAN_DEG - ELBOW_SWING_DEG * rightSwing,
         },
     headPitchDeg: -lean,
     holdsArms: held,
