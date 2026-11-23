@@ -6,10 +6,14 @@ import { evaluateFit } from './legAngles';
 import { CYCLE_UNITS, HALF_CYCLE_UNITS } from './timeMap';
 
 export const LEAN_MEAN_DEG = 7.3;
-export const ARM_SWING_AMP_DEG = 25;
+export const ARM_SWING_DEG: Readonly<Record<PaceId, { mean: number; amplitude: number }>> = {
+  easy: { mean: -14, amplitude: 24 },
+  steady: { mean: -16, amplitude: 28 },
+  fast: { mean: -18, amplitude: 32 },
+};
 export const ELBOW_MEAN_DEG = 90;
 export const ELBOW_SWING_DEG = 19;
-export const HELD_ELBOW_DEG = 100;
+export const HELD_ELBOW_DEG = 60;
 export const HELD_TWIST_GAIN = 1.68;
 export const HELD_PELVIS_GAIN = 1.2;
 
@@ -82,6 +86,7 @@ export function upperAt(units: number, pace: PaceId, arms: ArmsId): UpperReading
     ranges.trunkTwist *
     (held ? HELD_TWIST_GAIN : 1) *
     cycleCosine(units, ROTATION_PEAK_UNITS);
+  const armSwing = ARM_SWING_DEG[pace];
   const rightSwing = swingOf(units, pace);
   const leftSwing = swingOf((units + STEP_UNITS) % CYCLE_UNITS, pace);
   const lean = LEAN_MEAN_DEG + 0.5 * ranges.trunkPitch * stepCosine(inStep, LEAN_PEAK_UNITS);
@@ -94,7 +99,10 @@ export function upperAt(units: number, pace: PaceId, arms: ArmsId): UpperReading
     shoulderRotDeg: pelvisRot + twist,
     shoulderFlexDeg: held
       ? { right: 0, left: 0 }
-      : { right: ARM_SWING_AMP_DEG * leftSwing, left: ARM_SWING_AMP_DEG * rightSwing },
+      : {
+          right: armSwing.mean + armSwing.amplitude * leftSwing,
+          left: armSwing.mean + armSwing.amplitude * rightSwing,
+        },
     elbowDeg: held
       ? { right: HELD_ELBOW_DEG, left: HELD_ELBOW_DEG }
       : {

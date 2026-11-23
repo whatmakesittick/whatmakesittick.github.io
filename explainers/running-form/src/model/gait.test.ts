@@ -4,7 +4,7 @@ import { PACE_IDS } from '../ids';
 import { gaitAt } from './gait';
 import type { GaitOptions } from './gait';
 import { GAIT_DATA } from './gaitData';
-import { upperAt } from './upper';
+import { ARM_SWING_DEG, HELD_ELBOW_DEG, upperAt } from './upper';
 
 const OPTIONS: GaitOptions = { pace: 'steady', stepRate: 0, arms: 'swing' };
 const SAMPLE_UNITS = Array.from({ length: 100 }, (_, index) => index * 10 + 3);
@@ -248,11 +248,12 @@ describe('upper body', () => {
   });
 
   it('swings each arm against the opposite leg', () => {
+    const { mean } = ARM_SWING_DEG[OPTIONS.pace];
     const forward = gaitAt(480, OPTIONS);
-    expect(forward.upper.shoulderFlexDeg.right).toBeGreaterThan(0);
-    expect(forward.upper.shoulderFlexDeg.left).toBeLessThan(0);
+    expect(forward.upper.shoulderFlexDeg.right).toBeGreaterThan(mean);
+    expect(forward.upper.shoulderFlexDeg.left).toBeLessThan(mean);
     const other = gaitAt(980, OPTIONS);
-    expect(other.upper.shoulderFlexDeg.left).toBeGreaterThan(0);
+    expect(other.upper.shoulderFlexDeg.left).toBeGreaterThan(mean);
   });
 
   it('holds the arms across the chest and twists the chest more', () => {
@@ -260,7 +261,7 @@ describe('upper body', () => {
     const held = upperAt(0, 'steady', 'held');
     expect(held.holdsArms).toBe(true);
     expect(held.shoulderFlexDeg).toEqual({ right: 0, left: 0 });
-    expect(held.elbowDeg).toEqual({ right: 100, left: 100 });
+    expect(held.elbowDeg).toEqual({ right: HELD_ELBOW_DEG, left: HELD_ELBOW_DEG });
     expect(Math.abs(held.trunkTwistDeg / swing.trunkTwistDeg)).toBeCloseTo(1.68, 2);
     expect(Math.abs(held.shoulderRotDeg)).toBeGreaterThan(Math.abs(swing.shoulderRotDeg));
   });

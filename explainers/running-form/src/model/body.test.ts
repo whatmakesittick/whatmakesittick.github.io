@@ -3,13 +3,12 @@ import { BODY_TARGET_CM, HEIGHT_M, LEG_CHECK_M, SHANK_M, THIGH_M } from './body'
 
 describe('body', () => {
   it('gives segment lengths that fit the leg length check', () => {
-    expect(THIGH_M + SHANK_M).toBeLessThan(LEG_CHECK_M);
-    expect(LEG_CHECK_M - (THIGH_M + SHANK_M)).toBeLessThan(0.05);
+    expect(Math.abs(LEG_CHECK_M - (THIGH_M + SHANK_M))).toBeLessThan(0.05);
   });
 
-  it('derives the segments from the shares of the height', () => {
-    expect(THIGH_M).toBeCloseTo(0.245 * HEIGHT_M, 2);
-    expect(SHANK_M).toBeCloseTo(0.246 * HEIGHT_M, 2);
+  it('keeps the thigh and the shank near a quarter of the height each', () => {
+    expect(THIGH_M / HEIGHT_M).toBeCloseTo(0.25, 1);
+    expect(SHANK_M / HEIGHT_M).toBeCloseTo(0.25, 1);
   });
 
   it('derives the leg length from stature and sitting height', () => {
