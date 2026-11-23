@@ -2,7 +2,12 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { initI18n } from '@core/i18n';
 import { PHASE_IDS } from './ids';
 import { CYCLE_UNITS, MOMENTS, PHASE_RANGES, strideTimeS } from './model';
-import { RUN_TIMELINE_BASE, createRunTimeline, describeSpeed, formatSpeed } from './timeline';
+import {
+  RUN_TIMELINE_BASE,
+  createRunTimeline,
+  describeSpeed,
+  formatPlaybackSpeed,
+} from './timeline';
 
 const TEXTS = {
   timeline: {
@@ -63,8 +68,8 @@ describe('run timeline', () => {
   });
 
   it('formats the speed as slow motion of real time', () => {
-    expect(formatSpeed(0)).toBe('0.063x');
-    expect(formatSpeed(4)).toBe('1x');
+    expect(formatPlaybackSpeed(0)).toBe('0.063x');
+    expect(formatPlaybackSpeed(4)).toBe('1x');
     expect(describeSpeed(4)).toBe('real time');
     expect(describeSpeed(0)).toBe('16 times slower');
     expect(describeSpeed(2)).toBe('4 times slower');

@@ -25,7 +25,7 @@ function percentText(units: number): string {
   return formatNumber(Math.round(units / UNITS_PER_PERCENT));
 }
 
-export function formatSpeed(speed: number): string {
+export function formatPlaybackSpeed(speed: number): string {
   return t('timeline.speedValue', { factor: formatNumber(speedFactor(speed)) });
 }
 
@@ -70,7 +70,7 @@ export function createRunTimeline(getPace: () => PaceId, getStepRate: () => numb
       max: SPEED_RANGE.max,
       step: SPEED_RANGE.step,
       labelKey: 'timeline.speed',
-      format: formatSpeed,
+      format: formatPlaybackSpeed,
       describe: describeSpeed,
     },
   };
