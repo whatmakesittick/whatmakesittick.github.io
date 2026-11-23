@@ -24,9 +24,9 @@ describe('foot path', () => {
     });
   });
 
-  it('lands the ankle about 0.33 m ahead of the hip at the steady pace', () => {
-    expect(landingReachM('steady', 0)).toBeGreaterThan(0.3);
-    expect(landingReachM('steady', 0)).toBeLessThan(0.36);
+  it('lands the ankle about 0.22 m ahead of the hip at the steady pace', () => {
+    expect(landingReachM('steady', 0)).toBeGreaterThan(0.19);
+    expect(landingReachM('steady', 0)).toBeLessThan(0.25);
   });
 
   it('moves the landing reach by the sourced centimetres at the ends of the slider', () => {

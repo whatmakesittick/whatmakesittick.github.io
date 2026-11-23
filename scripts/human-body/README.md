@@ -158,11 +158,12 @@ is about a tenth of the corrective bytes, `C` carries the rest.
 
 | tolerance mm | gzipped | raw     | worst mm | mean mm |
 | ------------ | ------- | ------- | -------- | ------- |
-| 1.5          | 183,372 | 331,424 | 1.467    | 0.213   |
-| 2.0          | 164,024 | 298,958 | 1.828    | 0.237   |
-| **2.25**     | 159,705 | 292,247 | 1.936    | 0.252   |
+| 1.5          | 182,152 | 328,802 | 1.390    | 0.188   |
+| 2.0          | 167,621 | 304,976 | 1.836    | 0.223   |
+| **2.25**     | 160,195 | 291,552 | 1.923    | 0.251   |
+| 2.5          | 155,537 | 283,485 | 2.356    | 0.269   |
 
-The runner ships at tolerance 2.25 (`--tolerance-mm 2.25`), the smallest with a worst error near 2 mm: on the final poses 2.038 mm worst and 0.254 mm mean over the held-out set, 159,059 bytes gzipped and 290,692 raw.
+The runner ships at tolerance 2.25 (`--tolerance-mm 2.25`), the smallest with a worst error near 2 mm: on the final poses 1.923 mm worst and 0.251 mm mean over the held-out set, 160,195 bytes gzipped and 291,552 raw.
 
 ```sh
 POSES=/path/to/run-poses

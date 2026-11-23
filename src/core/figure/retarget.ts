@@ -47,6 +47,7 @@ export interface RetargetArm {
   handAxis: Point;
   palm: Point;
   curl: number;
+  handShape?: Readonly<Record<string, number>>;
 }
 
 export interface RetargetLeg {
@@ -62,6 +63,7 @@ export interface RetargetTarget {
   arms: Record<Side, RetargetArm>;
   legs: Record<Side, RetargetLeg>;
   head: Rotation;
+  pelvisUp: Point;
 }
 
 export type Side = 'right' | 'left';
@@ -117,6 +119,7 @@ export function createRetargetTarget(): RetargetTarget {
     arms: { right: arm(), left: arm() },
     legs: { right: leg(), left: leg() },
     head: { x: 0, y: 0, z: 0, w: 1 },
+    pelvisUp: point(),
   };
 }
 
@@ -280,6 +283,7 @@ export class Retargeter {
     this.solveToes(target);
     this.solveHead(target.head);
     SIDES.forEach((side) => this.relaxHand(side, target.arms[side].curl));
+    SIDES.forEach((side) => this.shapeHand(side, target.arms[side].handShape));
     return this.out;
   }
 
@@ -351,7 +355,8 @@ export class Retargeter {
   private solveRoot(target: RetargetTarget): void {
     const { right, left } = target.legs;
     const hips = midpoint(vec(right.hip), vec(left.hip));
-    const up = sub(this.shoulderCentre(target), hips);
+    const pelvisUp = vec(target.pelvisUp);
+    const up = length(pelvisUp) > 0 ? pelvisUp : sub(this.shoulderCentre(target), hips);
     const axis = sub(vec(left.hip), vec(right.hip));
     const restAxis = sub(this.restPos('l_upleg'), this.restPos('r_upleg'));
     const turn = mul(frame(axis, up), transpose(frame(restAxis, this.chord())));
@@ -612,6 +617,14 @@ export class Retargeter {
     this.set('head_twist', hx);
     this.set('head_lean', hy);
     this.set('head_bend', hz);
+  }
+
+  private shapeHand(side: Side, hand: Readonly<Record<string, number>> | undefined): void {
+    if (!hand) return;
+    Object.entries(hand).forEach(([joint, value]) => {
+      const name = `${PREFIX[side]}_${joint}`;
+      if (this.figure.parameterIndex(name) >= 0) this.set(name, value);
+    });
   }
 
   private relaxHand(side: Side, share: number): void {

@@ -4,9 +4,10 @@ import { FULL_TURN, toRadians } from '@core/math';
 import type { GaitReading } from '../../ids';
 import { CYCLE_UNITS } from '../../model/timeMap';
 import { RIG_BODY } from './body';
-import { apply, fromEuler } from './frames';
+import { Z_AXIS, about, apply, fromEuler } from './frames';
 
 export const SWAY_HALF_M = 0.008;
+export const STANDING_PELVIS_TILT_DEG = 9.6;
 const SWAY_PEAK_UNITS = 170;
 
 export interface PelvisState {
@@ -54,4 +55,15 @@ export function trunkAt(reading: GaitReading, pelvis: PelvisState): TrunkState {
       .clone()
       .add(apply(rotation, RIG_BODY.shoulderOverHips[0], RIG_BODY.shoulderOverHips[1], 0)),
   };
+}
+
+const REST_CHORD = new Vector3(
+  RIG_BODY.shoulderOverHips[0],
+  RIG_BODY.shoulderOverHips[1],
+  0,
+).normalize();
+
+export function bodyPelvisUp(pelvis: PelvisState): Vector3 {
+  const body = pelvis.rotation.clone().multiply(about(Z_AXIS, toRadians(STANDING_PELVIS_TILT_DEG)));
+  return REST_CHORD.clone().applyQuaternion(body);
 }

@@ -1,7 +1,10 @@
 /// <reference types="node" />
 
 import { writeFileSync } from 'node:fs';
+import { Vector3 } from 'three';
 import { describe, expect, it } from 'vitest';
+import { toDegrees } from '@core/math';
+import { createFigureRig } from '../parts/runner/figure/createRig';
 import { GAIT_DATA } from '../../model/gaitData';
 import { CYCLE_UNITS } from '../../model/timeMap';
 import {
@@ -18,7 +21,9 @@ import {
   stanceSlip,
   wristMidline,
 } from './probes.testkit';
+import { STANDING_PELVIS_TILT_DEG } from './pelvis';
 import { poseOf } from './skeleton';
+import type { RunnerSkeleton } from './skeleton';
 
 const TABLE_PATH = process.env.RUN_PROBE_TABLE;
 const NAVEL_ABOVE_HIPS_M = 0.125;
@@ -89,6 +94,59 @@ function placementRows(): string[] {
   return rows;
 }
 
+const BODY_STEPS = [0, 0.4, 0.5, 1] as const;
+const FLOAT_OFFSET_UNITS = 70;
+const FINAL_UNITS = 863;
+
+function bodyUnits(toeOff: number): number[] {
+  const stance = BODY_STEPS.map((share) => Math.round(share * toeOff));
+  return [
+    ...stance,
+    toeOff + FLOAT_OFFSET_UNITS,
+    ...stance.slice(0, 3).map((units) => units + CYCLE_UNITS / 2),
+    FINAL_UNITS,
+  ];
+}
+
+function sagittal(vector: Vector3): number {
+  return toDegrees(Math.atan2(vector.x, vector.y));
+}
+
+function bodyRows(): string[] {
+  const rig = createFigureRig();
+  const { figure } = rig;
+  const joint = (name: string) =>
+    new Vector3()
+      .fromArray(figure.jointPositions, figure.jointIndex(name) * 3)
+      .applyMatrix4(rig.toRig);
+  const hips = () => joint('r_upleg').add(joint('l_upleg')).multiplyScalar(0.5);
+  const restNeck = sagittal(joint('c_head').sub(joint('c_neck')));
+  const restLumbar = sagittal(joint('c_spine0').sub(hips()));
+  const rows = [
+    '| Pace | Unit | Trunk line deg (lean) | Neck change deg | Pelvis tilt change deg (reading - standing) | Hip drop deg (roll) | R fist ahead / up / side cm | L fist ahead / up / side cm |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- |',
+  ];
+  PROBE_PACES.forEach((pace) =>
+    bodyUnits(GAIT_DATA[pace].toeOffUnits).forEach((units) => {
+      const skeleton: RunnerSkeleton = skeletonAt(units, pace, 0);
+      rig.pose(skeleton);
+      const { upper } = skeleton.reading;
+      const centre = hips();
+      const right = joint('r_upleg');
+      const left = joint('l_upleg');
+      const drop = toDegrees(Math.atan2(right.y - left.y, right.z - left.z));
+      const fist = (name: string, sign: number) => {
+        const at = joint(name).sub(centre);
+        return `${fixed(at.x * CM, 0)} / ${fixed(at.y * CM, 0)} / ${fixed(sign * at.z * CM, 0)}`;
+      };
+      rows.push(
+        `| ${pace} | ${units} | ${fixed(sagittal(joint('c_neck').sub(centre)))} (${fixed(upper.leanDeg)}) | ${fixed(sagittal(joint('c_head').sub(joint('c_neck'))) - restNeck)} | ${fixed(sagittal(joint('c_spine0').sub(centre)) - restLumbar)} (${fixed(upper.pelvisTiltDeg - STANDING_PELVIS_TILT_DEG)}) | ${fixed(drop)} (${fixed(upper.pelvisRollDeg)}) | ${fist('r_middle1', 1)} | ${fist('l_middle1', -1)} |`,
+      );
+    }),
+  );
+  return rows;
+}
+
 describe.skipIf(!TABLE_PATH)('runner probe table', () => {
   it('writes the probe table', () => {
     const text = [
@@ -109,6 +167,12 @@ describe.skipIf(!TABLE_PATH)('runner probe table', () => {
       '## Hands, knees and feet at the steady pace',
       '',
       ...placementRows(),
+      '',
+      '## Body checks on the posed mesh',
+      '',
+      'Trunk line: hip joints to the base of the neck. Neck: base of the neck to the head joint, against the rest pose. Pelvis: hip joints to the lowest spine joint, forward tilt against the rest pose. Fists: the middle knuckle against the hip joints (ahead, up, out from the midline).',
+      '',
+      ...bodyRows(),
       '',
     ].join('\n');
     writeFileSync(TABLE_PATH as string, text);

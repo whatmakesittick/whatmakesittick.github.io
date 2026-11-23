@@ -474,7 +474,8 @@ the MHR forward pass: parameter transform, forward kinematics, pose correctives 
   dimensions and hems of each garment stay in the explainer. `labelLayout`, `labelFields` and `labelTexture` take the
   head axes, the dimensions and the text. `PartBuilder` takes the finishes and the id type. `FigureRig` takes the
   matrix from rig to figure space and a `RigPose` (arms, legs, head; a leg may add a toe axis that bends the toes at
-  the ball). `RestFrame`, `attachToJoint` (a per-frame updater
+  the ball, an arm may add a hand shape of finger parameters by name, and the pose may give the pelvis direction,
+  otherwise the pelvis follows the hips-to-shoulders line). `RestFrame`, `attachToJoint` (a per-frame updater
   for an object built in the rest pose) and `outermostHit` place things on the rest body. `src/core/rig` holds the
   pure rig helpers `solveTwoBone` and the key curves.
 - Chunks: modules under `src/core/figure` and `src/core/rig` get a chunk each (`figure`, `rig`) and are never part of

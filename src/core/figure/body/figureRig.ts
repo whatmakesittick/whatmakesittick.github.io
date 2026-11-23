@@ -15,6 +15,7 @@ export interface RigArm {
   readonly handAxis: Vector3;
   readonly palm: Vector3;
   readonly curl?: number;
+  readonly handShape?: Readonly<Record<string, number>>;
 }
 
 export interface RigLeg {
@@ -30,6 +31,7 @@ export interface RigPose {
   readonly arms: Readonly<Record<Side, RigArm>>;
   readonly legs: Readonly<Record<Side, RigLeg>>;
   readonly head: Quaternion;
+  readonly pelvisUp?: Vector3;
 }
 
 const scratch = new Vector3();
@@ -82,6 +84,7 @@ export class FigureRig {
       this.direct(out.handAxis, arm.handAxis);
       this.direct(out.palm, arm.palm);
       out.curl = arm.curl ?? 1;
+      out.handShape = arm.handShape;
       const leg = pose.legs[id];
       const legOut = this.target.legs[id];
       this.place(legOut.hip, leg.hip);
@@ -93,6 +96,8 @@ export class FigureRig {
       else Object.assign(legOut.toeAxis, NO_AXIS);
     });
     this.rotate(pose.head);
+    if (pose.pelvisUp) this.direct(this.target.pelvisUp, pose.pelvisUp);
+    else Object.assign(this.target.pelvisUp, NO_AXIS);
   }
 
   private place(out: Point, rig: Vector3): void {
