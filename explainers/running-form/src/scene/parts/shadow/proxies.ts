@@ -1,4 +1,4 @@
-import { Vector3 } from 'three';
+import type { Vector3 } from 'three';
 import type { SideId } from '../../../ids';
 import type { RunnerPose } from '../../runnerPose';
 
@@ -21,14 +21,14 @@ const RADIUS = {
   thigh: [0.08, 0.052],
   shin: [0.05, 0.032],
   foot: [0.04, 0.036],
-  brim: [0.016, 0.016],
+  brim: [0.028, 0.022],
 } as const satisfies Record<string, Taper>;
 
 const SIDES: readonly SideId[] = ['right', 'left'];
 const HAND_REACH_M = 0.08;
 const SHOE_LIFT_M = 0.04;
 const TORSO_BASE_LIFT_M = 0.08;
-const BRIM = { aboveCentreM: 0.035, aheadM: 0.1, halfWidthM: 0.075 } as const;
+const BRIM = { aboveCentreM: 0.035, fromAheadM: 0.05, toAheadM: 0.125 } as const;
 
 export const PROXY_COUNT = 15;
 
@@ -51,14 +51,10 @@ function brim(pose: RunnerPose): ProxySegment {
     .clone()
     .addScaledVector(up, -pose.trunkForward.dot(up))
     .normalize();
-  const across = new Vector3().crossVectors(ahead, up);
-  const middle = pose.headCentre
-    .clone()
-    .addScaledVector(up, BRIM.aboveCentreM)
-    .addScaledVector(ahead, BRIM.aheadM);
+  const peak = pose.headCentre.clone().addScaledVector(up, BRIM.aboveCentreM);
   return segment(
-    middle.clone().addScaledVector(across, -BRIM.halfWidthM),
-    middle.clone().addScaledVector(across, BRIM.halfWidthM),
+    peak.clone().addScaledVector(ahead, BRIM.fromAheadM),
+    peak.clone().addScaledVector(ahead, BRIM.toAheadM),
     RADIUS.brim,
   );
 }
