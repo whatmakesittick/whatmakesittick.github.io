@@ -206,65 +206,545 @@
   "deltaStep": 1e-5,
   "layout": ["vertexIds", "parameters", "correctivesOn", "correctiveDelta"],
   "keys": [
-    { "pace": "easy", "stepRate": -10, "arms": "swing", "units": 2 },
-    { "pace": "easy", "stepRate": -10, "arms": "swing", "units": 602 },
-    { "pace": "easy", "stepRate": -10, "arms": "held", "units": 202 },
-    { "pace": "easy", "stepRate": -10, "arms": "held", "units": 827 },
-    { "pace": "easy", "stepRate": -7, "arms": "swing", "units": 427 },
-    { "pace": "easy", "stepRate": -7, "arms": "held", "units": 27 },
-    { "pace": "easy", "stepRate": -7, "arms": "held", "units": 652 },
-    { "pace": "easy", "stepRate": -2, "arms": "swing", "units": 252 },
-    { "pace": "easy", "stepRate": -2, "arms": "swing", "units": 877 },
-    { "pace": "easy", "stepRate": -2, "arms": "held", "units": 477 },
-    { "pace": "easy", "stepRate": 3, "arms": "swing", "units": 77 },
-    { "pace": "easy", "stepRate": 3, "arms": "swing", "units": 702 },
-    { "pace": "easy", "stepRate": 3, "arms": "held", "units": 302 },
-    { "pace": "easy", "stepRate": 3, "arms": "held", "units": 927 },
-    { "pace": "easy", "stepRate": 8, "arms": "swing", "units": 527 },
-    { "pace": "easy", "stepRate": 8, "arms": "held", "units": 127 },
-    { "pace": "easy", "stepRate": 8, "arms": "held", "units": 752 },
-    { "pace": "easy", "stepRate": 10, "arms": "swing", "units": 352 },
-    { "pace": "easy", "stepRate": 10, "arms": "swing", "units": 977 },
-    { "pace": "easy", "stepRate": 10, "arms": "held", "units": 577 },
-    { "pace": "steady", "stepRate": -10, "arms": "swing", "units": 177 },
-    { "pace": "steady", "stepRate": -10, "arms": "swing", "units": 802 },
-    { "pace": "steady", "stepRate": -10, "arms": "held", "units": 402 },
-    { "pace": "steady", "stepRate": -7, "arms": "swing", "units": 2 },
-    { "pace": "steady", "stepRate": -7, "arms": "swing", "units": 627 },
-    { "pace": "steady", "stepRate": -7, "arms": "held", "units": 227 },
-    { "pace": "steady", "stepRate": -7, "arms": "held", "units": 852 },
-    { "pace": "steady", "stepRate": -2, "arms": "swing", "units": 452 },
-    { "pace": "steady", "stepRate": -2, "arms": "held", "units": 52 },
-    { "pace": "steady", "stepRate": -2, "arms": "held", "units": 677 },
-    { "pace": "steady", "stepRate": 3, "arms": "swing", "units": 277 },
-    { "pace": "steady", "stepRate": 3, "arms": "swing", "units": 902 },
-    { "pace": "steady", "stepRate": 3, "arms": "held", "units": 502 },
-    { "pace": "steady", "stepRate": 8, "arms": "swing", "units": 102 },
-    { "pace": "steady", "stepRate": 8, "arms": "swing", "units": 727 },
-    { "pace": "steady", "stepRate": 8, "arms": "held", "units": 327 },
-    { "pace": "steady", "stepRate": 8, "arms": "held", "units": 952 },
-    { "pace": "steady", "stepRate": 10, "arms": "swing", "units": 552 },
-    { "pace": "steady", "stepRate": 10, "arms": "held", "units": 152 },
-    { "pace": "steady", "stepRate": 10, "arms": "held", "units": 777 },
-    { "pace": "fast", "stepRate": -10, "arms": "swing", "units": 377 },
-    { "pace": "fast", "stepRate": -10, "arms": "swing", "units": 977 },
-    { "pace": "fast", "stepRate": -10, "arms": "held", "units": 602 },
-    { "pace": "fast", "stepRate": -7, "arms": "swing", "units": 202 },
-    { "pace": "fast", "stepRate": -7, "arms": "swing", "units": 827 },
-    { "pace": "fast", "stepRate": -7, "arms": "held", "units": 427 },
-    { "pace": "fast", "stepRate": -2, "arms": "swing", "units": 27 },
-    { "pace": "fast", "stepRate": -2, "arms": "swing", "units": 652 },
-    { "pace": "fast", "stepRate": -2, "arms": "held", "units": 252 },
-    { "pace": "fast", "stepRate": -2, "arms": "held", "units": 877 },
-    { "pace": "fast", "stepRate": 3, "arms": "swing", "units": 477 },
-    { "pace": "fast", "stepRate": 3, "arms": "held", "units": 77 },
-    { "pace": "fast", "stepRate": 3, "arms": "held", "units": 702 },
-    { "pace": "fast", "stepRate": 8, "arms": "swing", "units": 302 },
-    { "pace": "fast", "stepRate": 8, "arms": "swing", "units": 927 },
-    { "pace": "fast", "stepRate": 8, "arms": "held", "units": 527 },
-    { "pace": "fast", "stepRate": 10, "arms": "swing", "units": 127 },
-    { "pace": "fast", "stepRate": 10, "arms": "swing", "units": 752 },
-    { "pace": "fast", "stepRate": 10, "arms": "held", "units": 352 },
-    { "pace": "fast", "stepRate": 10, "arms": "held", "units": 977 }
+    {
+      "pace": "easy",
+      "stepRate": -10,
+      "arms": "swing",
+      "units": 2,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": -10,
+      "arms": "swing",
+      "units": 222,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": -10,
+      "arms": "held",
+      "units": 442,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": -10,
+      "arms": "held",
+      "units": 662,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "easy",
+      "stepRate": -7,
+      "arms": "swing",
+      "units": 882,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": -7,
+      "arms": "held",
+      "units": 102,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": -7,
+      "arms": "held",
+      "units": 322,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "easy",
+      "stepRate": -2,
+      "arms": "swing",
+      "units": 542,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": -2,
+      "arms": "swing",
+      "units": 762,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": -2,
+      "arms": "held",
+      "units": 982,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": 3,
+      "arms": "swing",
+      "units": 202,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": 3,
+      "arms": "swing",
+      "units": 422,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": 3,
+      "arms": "held",
+      "units": 642,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": 3,
+      "arms": "held",
+      "units": 862,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "easy",
+      "stepRate": 8,
+      "arms": "swing",
+      "units": 82,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": 8,
+      "arms": "held",
+      "units": 302,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": 8,
+      "arms": "held",
+      "units": 522,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "easy",
+      "stepRate": 10,
+      "arms": "swing",
+      "units": 742,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": 10,
+      "arms": "swing",
+      "units": 962,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "easy",
+      "stepRate": 10,
+      "arms": "held",
+      "units": 182,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "steady",
+      "stepRate": -10,
+      "arms": "swing",
+      "units": 407,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": -10,
+      "arms": "swing",
+      "units": 627,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": -10,
+      "arms": "held",
+      "units": 847,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": -7,
+      "arms": "swing",
+      "units": 67,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": -7,
+      "arms": "swing",
+      "units": 287,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": -7,
+      "arms": "held",
+      "units": 507,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": -7,
+      "arms": "held",
+      "units": 727,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "steady",
+      "stepRate": -2,
+      "arms": "swing",
+      "units": 947,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": -2,
+      "arms": "held",
+      "units": 167,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": -2,
+      "arms": "held",
+      "units": 387,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "steady",
+      "stepRate": 3,
+      "arms": "swing",
+      "units": 607,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": 3,
+      "arms": "swing",
+      "units": 827,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": 3,
+      "arms": "held",
+      "units": 47,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "steady",
+      "stepRate": 8,
+      "arms": "swing",
+      "units": 267,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": 8,
+      "arms": "swing",
+      "units": 487,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": 8,
+      "arms": "held",
+      "units": 707,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": 8,
+      "arms": "held",
+      "units": 927,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "steady",
+      "stepRate": 10,
+      "arms": "swing",
+      "units": 147,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": 10,
+      "arms": "held",
+      "units": 367,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "steady",
+      "stepRate": 10,
+      "arms": "held",
+      "units": 587,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "fast",
+      "stepRate": -10,
+      "arms": "swing",
+      "units": 812,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": -10,
+      "arms": "held",
+      "units": 32,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": -10,
+      "arms": "held",
+      "units": 252,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "fast",
+      "stepRate": -7,
+      "arms": "swing",
+      "units": 472,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": -7,
+      "arms": "swing",
+      "units": 692,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": -7,
+      "arms": "held",
+      "units": 912,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": -2,
+      "arms": "swing",
+      "units": 132,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": -2,
+      "arms": "swing",
+      "units": 352,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": -2,
+      "arms": "held",
+      "units": 572,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": -2,
+      "arms": "held",
+      "units": 792,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "fast",
+      "stepRate": 3,
+      "arms": "swing",
+      "units": 12,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": 3,
+      "arms": "held",
+      "units": 232,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": 3,
+      "arms": "held",
+      "units": 452,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "fast",
+      "stepRate": 8,
+      "arms": "swing",
+      "units": 672,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": 8,
+      "arms": "swing",
+      "units": 892,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": 8,
+      "arms": "held",
+      "units": 112,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    },
+    {
+      "pace": "fast",
+      "stepRate": 10,
+      "arms": "swing",
+      "units": 332,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": 10,
+      "arms": "swing",
+      "units": 552,
+      "armShiftDeg": -16,
+      "armGain": 1.2,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": 10,
+      "arms": "held",
+      "units": 772,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": null
+    },
+    {
+      "pace": "fast",
+      "stepRate": 10,
+      "arms": "held",
+      "units": 997,
+      "armShiftDeg": 0,
+      "armGain": 1,
+      "heldElbowDeg": 60
+    }
   ]
 }
