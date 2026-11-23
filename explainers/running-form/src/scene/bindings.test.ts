@@ -20,7 +20,7 @@ function fakeTargets() {
   const setWanted = vi.fn();
   const setHighlight = vi.fn();
   const targets: SceneTargets = {
-    run: { build, setState: record, views: { frame } },
+    run: { build, setState: record, views: { frame }, nameParts: () => {} },
     labelVisibility: { setWanted },
     highlighter: { setHighlight },
     labels: { show: vi.fn() },

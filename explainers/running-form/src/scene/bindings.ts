@@ -1,7 +1,7 @@
 import { bindPresets } from '@core/scene/presetBinder';
 import type { LabelPolicy, PresetTargets } from '@core/scene/presetBinder';
 import { PART_GROUPS } from '../ids';
-import type { AssemblyState } from '../ids';
+import type { AssemblyState, PartId } from '../ids';
 import { PARTS_NAMED_BY_TAGS } from './parts/overlays/formLines';
 import { PRESETS, createAssemblyState, toAssemblyState } from '../state';
 import type { Preset, RunStore, RunStoreState } from '../state';
@@ -9,7 +9,7 @@ import { cameraFor } from './cameraViews';
 import type { RunController } from './controller';
 
 export interface SceneTargets extends PresetTargets {
-  run: Pick<RunController, 'build' | 'setState' | 'views'>;
+  run: Pick<RunController, 'build' | 'setState' | 'views' | 'nameParts'>;
   labelVisibility: LabelPolicy;
 }
 
@@ -30,13 +30,28 @@ class DoubleBufferedAssemblyState {
   }
 }
 
-const NO_PARTS: ReadonlySet<string> = new Set();
+const NO_PARTS: ReadonlySet<PartId> = new Set();
 
-function withholding(policy: LabelPolicy, withheld: () => ReadonlySet<string>): LabelPolicy {
+function namedByTags(wanted: ReadonlySet<string>): ReadonlySet<PartId> {
+  if (wanted.size === 0) return PARTS_NAMED_BY_TAGS;
+  return new Set([...PARTS_NAMED_BY_TAGS].filter((part) => wanted.has(part)));
+}
+
+function withholding(
+  policy: LabelPolicy,
+  store: RunStore,
+  run: Pick<RunController, 'nameParts'>,
+): LabelPolicy {
   return {
     setWanted: (wanted, pinned) => {
-      const hidden = withheld();
-      const kept = (ids: ReadonlySet<string>) => new Set([...ids].filter((id) => !hidden.has(id)));
+      if (!store.getState().view.formLines) {
+        run.nameParts(NO_PARTS);
+        policy.setWanted(wanted, pinned);
+        return;
+      }
+      run.nameParts(namedByTags(new Set([...wanted, ...pinned])));
+      const kept = (ids: ReadonlySet<string>) =>
+        new Set([...ids].filter((id) => !PARTS_NAMED_BY_TAGS.has(id as PartId)));
       policy.setWanted(kept(wanted), kept(pinned));
     },
   };
@@ -70,9 +85,7 @@ export async function bindStore(store: RunStore, targets: SceneTargets): Promise
     bindPresets<RunStoreState, Preset>(targets, store, {
       presets: PRESETS,
       views: looking,
-      labels: withholding(labelVisibility, () =>
-        store.getState().view.formLines ? PARTS_NAMED_BY_TAGS : NO_PARTS,
-      ),
+      labels: withholding(labelVisibility, store, run),
       highlight: highlightedGroups,
       prepare: push,
       onView: (_view, state) => push(state),

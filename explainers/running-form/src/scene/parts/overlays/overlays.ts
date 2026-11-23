@@ -1,5 +1,5 @@
 import { Group } from 'three';
-import type { AssemblyState } from '../../../ids';
+import type { AssemblyState, PartId } from '../../../ids';
 import type { RunnerPose } from '../../runnerPose';
 import type { PartContext } from '../context';
 import { FootPath } from './footPath';
@@ -12,10 +12,13 @@ export interface Overlay {
   setState(state: AssemblyState, pose: RunnerPose): void;
   update(deltaSeconds: number): boolean;
   tags(): readonly OverlayTag[];
+  nameParts?(parts: ReadonlySet<PartId>): void;
   dispose(): void;
 }
 
-export type Overlays = Overlay;
+export interface Overlays extends Overlay {
+  nameParts(parts: ReadonlySet<PartId>): void;
+}
 
 class OverlayGroup implements Overlays {
   readonly root = new Group();
@@ -33,6 +36,10 @@ class OverlayGroup implements Overlays {
 
   update(deltaSeconds: number): boolean {
     return this.members.reduce((moving, member) => member.update(deltaSeconds) || moving, false);
+  }
+
+  nameParts(parts: ReadonlySet<PartId>): void {
+    this.members.forEach((member) => member.nameParts?.(parts));
   }
 
   tags(): readonly OverlayTag[] {

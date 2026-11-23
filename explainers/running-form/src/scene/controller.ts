@@ -6,7 +6,7 @@ import { CameraViews } from '@core/scene/cameraViews';
 import { runPaced } from '@core/scene/pacing';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
-import type { AssemblyState, CameraView, RegionId } from '../ids';
+import type { AssemblyState, CameraView, PartId, RegionId } from '../ids';
 import { LabelRoom } from './labelRoom';
 import { RoadScroll } from './roadScroll';
 import { createAssembly } from './assembly';
@@ -35,6 +35,7 @@ export class RunController {
   private frame: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
   private readonly stopWatchingSize: () => void;
   private readonly labelRoom: LabelRoom;
+  private namedParts: ReadonlySet<PartId> = new Set();
 
   constructor(dependencies: RunControllerDependencies) {
     this.dependencies = dependencies;
@@ -67,6 +68,7 @@ export class RunController {
       return;
     }
     this.assembly = assembly;
+    assembly.nameParts(this.namedParts);
     scene.add(assembly.root);
     labels.attach(assembly.labelAnchors());
     this.bound(assembly);
@@ -77,6 +79,11 @@ export class RunController {
     state.scrollM = this.roadScroll.update(state.phase, state.reading.timing.strideLengthM);
     this.followPelvis(state.view.follow);
     this.assembly?.setState(state);
+  }
+
+  nameParts(parts: ReadonlySet<PartId>): void {
+    this.namedParts = parts;
+    this.assembly?.nameParts(parts);
   }
 
   update(deltaSeconds: number): boolean {

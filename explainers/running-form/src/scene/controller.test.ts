@@ -21,6 +21,8 @@ vi.mock('./assembly', async () => {
           root: new Group(),
           setState: () => {},
           update: () => false,
+          nameParts: () => {},
+          fitTags: () => [],
           labelAnchors: () => new Map(),
           anchor: (id: string) => {
             anchors.requested.push(id);

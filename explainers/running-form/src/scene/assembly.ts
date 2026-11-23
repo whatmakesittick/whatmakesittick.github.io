@@ -25,6 +25,7 @@ export interface Assembly {
   setState(state: AssemblyState): void;
   update(deltaSeconds: number, cameraDistance: number): boolean;
   fitTags(camera: Camera, frame: ViewportSize, keepOut: readonly Rect[]): Rect[];
+  nameParts(parts: ReadonlySet<PartId>): void;
   labelAnchors(): ReadonlyMap<PartId, Object3D>;
   anchor(id: AnchorId): Object3D;
   region(id: RegionId): Box3;

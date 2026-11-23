@@ -86,6 +86,10 @@ class RunAssembly implements Assembly {
     return fitTags(this.parts.overlays.tags(), camera, frame, keepOut);
   }
 
+  nameParts(parts: ReadonlySet<PartId>): void {
+    this.parts.overlays.nameParts(parts);
+  }
+
   labelAnchors(): ReadonlyMap<PartId, Object3D> {
     return this.labels;
   }

@@ -67,6 +67,7 @@ export class FormLines implements Overlay {
     shin: new OverlayTag(THEME.formLine, 'left'),
   };
   private readonly fade = new Fade(FADE_SECONDS);
+  private named: ReadonlySet<PartId> = PARTS_NAMED_BY_TAGS;
   private state: AssemblyState | null = null;
   private pose: RunnerPose | null = null;
   private readonly temp = { a: new Vector3(), b: new Vector3(), c: new Vector3() };
@@ -107,6 +108,11 @@ export class FormLines implements Overlay {
     const moving = this.fade.step(deltaSeconds);
     if (moving) this.apply();
     return moving;
+  }
+
+  nameParts(parts: ReadonlySet<PartId>): void {
+    this.named = parts;
+    this.apply();
   }
 
   tags(): readonly OverlayTag[] {
@@ -161,6 +167,11 @@ export class FormLines implements Overlay {
     this.tagSet.shin.setOpacity(share * visible);
   }
 
+  private showNamed(tag: OverlayTag, part: PartId, key: string, value: number): void {
+    if (this.named.has(part)) tag.show(key, { value });
+    else tag.hide();
+  }
+
   private placeKnee(state: AssemblyState, pose: RunnerPose): void {
     const leg = pose.legs.right;
     const { a, b, c } = this.temp;
@@ -169,7 +180,7 @@ export class FormLines implements Overlay {
     stretch(this.thighGuide, leg.knee, c, GUIDE_RADIUS_M);
     b.subVectors(leg.ankle, leg.knee);
     this.kneeArc.set(leg.knee, a, b, ARC_RADIUS_M.knee, ARC_THICKNESS_M);
-    this.tagSet.knee.show('overlay.kneeBend', { value: formLabels(state.reading).knee });
+    this.showNamed(this.tagSet.knee, 'knee', 'overlay.kneeBend', formLabels(state.reading).knee);
     this.tagSet.knee.object.position.copy(this.kneeArc.midpoint(leg.knee, ARC_RADIUS_M.knee, c));
   }
 
@@ -179,7 +190,12 @@ export class FormLines implements Overlay {
     a.subVectors(arm.shoulder, arm.elbow);
     b.subVectors(arm.wrist, arm.elbow);
     this.elbowArc.set(arm.elbow, a, b, ARC_RADIUS_M.elbow, ARC_THICKNESS_M);
-    this.tagSet.elbow.show('overlay.elbowBend', { value: formLabels(state.reading).elbow });
+    this.showNamed(
+      this.tagSet.elbow,
+      'elbow',
+      'overlay.elbowBend',
+      formLabels(state.reading).elbow,
+    );
     this.tagSet.elbow.object.position.copy(
       this.elbowArc.midpoint(arm.elbow, ARC_RADIUS_M.elbow, c),
     );
