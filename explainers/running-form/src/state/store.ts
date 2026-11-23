@@ -61,13 +61,19 @@ export function createRunStore(
         ...RUN_CONTROL_DEFAULTS,
         ...PRESETS[START_PRESET].start,
         pace: DEFAULT_PACE,
-        setPace: (pace) => set({ pace }),
+        setPace: (pace) => {
+          if (pace !== get().pace) set({ pace });
+        },
         setStepRate: (percent) => {
           const stepRate = snapToRange(percent, STEP_RATE_RANGE);
           if (stepRate !== get().stepRate) set({ stepRate });
         },
-        setArms: (arms) => set({ arms }),
-        setLookFrom: (lookFrom) => set({ lookFrom }),
+        setArms: (arms) => {
+          if (arms !== get().arms) set({ arms });
+        },
+        setLookFrom: (lookFrom) => {
+          if (lookFrom !== get().lookFrom) set({ lookFrom });
+        },
       }),
       presetState: presetFields,
     },

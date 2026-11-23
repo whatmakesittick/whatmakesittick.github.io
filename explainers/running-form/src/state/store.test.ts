@@ -1,9 +1,25 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createRunTimeline } from '../timeline';
 import { PRESETS } from './presets';
 import { createRunStore, snapToRange } from './store';
 
 describe('run store', () => {
+  it('does not notify when a setter receives the value it already holds', () => {
+    const store = createRunStore();
+    const listener = vi.fn();
+    store.subscribe(listener);
+    const { pace, stepRate, arms, lookFrom } = store.getState();
+    store.getState().setPace(pace);
+    store.getState().setStepRate(stepRate);
+    store.getState().setArms(arms);
+    store.getState().setLookFrom(lookFrom);
+    expect(listener).not.toHaveBeenCalled();
+    store.getState().setPace('fast');
+    store.getState().setArms('held');
+    store.getState().setLookFrom('above');
+    expect(listener).toHaveBeenCalledTimes(3);
+  });
+
   it('opens on the stride chapter at the steady pace', () => {
     expect(createRunStore().getState()).toMatchObject({
       preset: 'stride',
