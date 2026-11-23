@@ -8,10 +8,10 @@ import { bodyPose } from '../../../pose';
 import { createSkeleton, solveSkeleton } from '../../../rig/skeleton';
 import { FigureRig } from '../figure/figureRig';
 import type { PartBuilder } from '../build';
-import { outermostHit } from './faceProbe';
+import { outermostHit } from '@core/figure/body/faceProbe';
 import { Goggles, gogglePlacement } from './goggles';
 import { CHANNELS, JAMMERS, garmentFields } from './regions';
-import { RestFrame } from './restFrame';
+import { RestFrame } from '@core/figure/body/restFrame';
 
 const { athleteData } = await import('../figure/athlete.data');
 const figure = decodeFigure(athleteData);

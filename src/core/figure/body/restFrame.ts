@@ -1,4 +1,5 @@
 import { Matrix4, Vector3 } from 'three';
+import type { Object3D } from 'three';
 import type { Figure } from '@core/figure';
 
 const AXES = 3;
@@ -37,6 +38,25 @@ export function posedJointMatrix(figure: Figure, name: string, out: Matrix4): Ma
     figure.jointScales,
     joint,
   );
+}
+
+export function attachToJoint(
+  figure: Figure,
+  frame: RestFrame,
+  jointName: string,
+  object: Object3D,
+  toRig: Matrix4 = new Matrix4(),
+): () => void {
+  const restInverse = frame.jointMatrix(jointName).invert();
+  const posed = new Matrix4();
+  object.matrixAutoUpdate = false;
+  const update = (): void => {
+    posedJointMatrix(figure, jointName, posed).multiply(restInverse);
+    object.matrix.copy(toRig).multiply(posed);
+    object.matrixWorldNeedsUpdate = true;
+  };
+  update();
+  return update;
 }
 
 function writeJointMatrix(

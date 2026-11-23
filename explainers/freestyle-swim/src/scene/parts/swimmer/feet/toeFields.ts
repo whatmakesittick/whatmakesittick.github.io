@@ -1,6 +1,6 @@
 import { Vector3 } from 'three';
 import type { Figure } from '@core/figure';
-import type { RestFrame } from '../garments/restFrame';
+import type { RestFrame } from '@core/figure/body/restFrame';
 
 const AXES = 3;
 export const TOE_CHANNELS = 2;

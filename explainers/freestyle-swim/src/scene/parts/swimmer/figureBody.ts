@@ -1,11 +1,11 @@
 import { BufferAttribute, BufferGeometry, DynamicDrawUsage, Mesh } from 'three';
 import type { Material, Matrix4 } from 'three';
 import type { Figure } from '@core/figure';
-import { partitionTriangles } from './partition';
-import type { AddedVertices } from './partition';
+import { partitionTriangles } from '@core/figure/body/partition';
+import type { AddedVertices } from '@core/figure/body/partition';
 import { STRUCTURE_GROUP } from '@core/scene/materials';
 import { GARMENT_ATTRIBUTES } from './garments/garmentShader';
-import { blendRows, extend, normaliseRows } from './blend';
+import { blendRows, extend, normaliseRows } from '@core/figure/body/blend';
 import { LABEL_ATTRIBUTE, LABEL_CHANNELS } from './garments/label';
 import { CHANNELS } from './garments/regions';
 import type { GarmentFields } from './garments/regions';

@@ -8,8 +8,8 @@ import type { AssemblyState } from '../ids';
 import { strokeAt } from '../model';
 import { createSwimAssembly } from './swimAssembly';
 
-const { createFigureRig } = await import('./parts/swimmer/figure/createRig');
-const rig = createFigureRig();
+const { loadFigure } = await import('./loadFigure');
+const figure = await loadFigure();
 const OPTIONS = { pace: 'middle', kick: 'six', breathing: 'none', headUp: false } as const;
 
 function stateAt(phase: number): AssemblyState {
@@ -37,7 +37,7 @@ describe('swim assembly', () => {
       shadow: new Texture(),
       dispose: () => {},
     } as SceneTextures,
-    rig,
+    ...figure,
   };
   const assembly = runNow(createSwimAssembly(resources, stateAt(0)));
 
@@ -62,7 +62,7 @@ describe('swim assembly pose', () => {
       shadow: new Texture(),
       dispose: () => {},
     } as SceneTextures,
-    rig,
+    ...figure,
   };
   const assembly = runNow(createSwimAssembly(resources, stateAt(0)));
 

@@ -4,7 +4,7 @@ import { decodeFigure } from '@core/figure';
 import { LABEL, LABEL_CHANNELS, labelFields, labelLayout } from './label';
 import { labelTexture } from './labelTexture';
 import { CAP, CHANNELS, RIGHT_X, STRAP, garmentFields, hemsOf } from './regions';
-import { RestFrame } from './restFrame';
+import { RestFrame } from '@core/figure/body/restFrame';
 
 const { athleteData } = await import('../figure/athlete.data');
 const figure = decodeFigure(athleteData);

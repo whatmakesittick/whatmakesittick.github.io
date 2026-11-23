@@ -3,13 +3,18 @@ import type { MaterialLibrary } from '@core/scene/materials';
 import type { Steps } from '@core/scene/pacing';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
+import type { BuildSwimmer } from './parts/swimmer/buildSwimmer';
 import type { FigureRig } from './parts/swimmer/figure/figureRig';
 import { createSwimAssembly } from './swimAssembly';
 
-export interface AssemblyResources {
+export interface FigureResources {
+  rig: FigureRig;
+  buildSwimmer: BuildSwimmer;
+}
+
+export interface AssemblyResources extends FigureResources {
   materials: MaterialLibrary;
   textures: SceneTextures;
-  rig: FigureRig;
 }
 
 export interface Assembly {

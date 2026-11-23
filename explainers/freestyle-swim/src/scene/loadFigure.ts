@@ -1,6 +1,9 @@
-import type { FigureRig } from './parts/swimmer/figure/figureRig';
+import type { FigureResources } from './assembly';
 
-export async function loadFigureRig(): Promise<FigureRig> {
-  const { createFigureRig } = await import('./parts/swimmer/figure/createRig');
-  return createFigureRig();
+export async function loadFigure(): Promise<FigureResources> {
+  const [{ createFigureRig }, { buildSwimmer }] = await Promise.all([
+    import('./parts/swimmer/figure/createRig'),
+    import('./parts/swimmer/buildSwimmer'),
+  ]);
+  return { rig: createFigureRig(), buildSwimmer };
 }

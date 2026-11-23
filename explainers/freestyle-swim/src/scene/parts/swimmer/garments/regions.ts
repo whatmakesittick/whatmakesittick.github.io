@@ -1,7 +1,7 @@
 import { Vector3 } from 'three';
 import type { Figure } from '@core/figure';
 import { smoothstep } from '@core/math';
-import type { RestFrame } from './restFrame';
+import type { RestFrame } from '@core/figure/body/restFrame';
 
 const AXES = 3;
 export const CHANNELS = 4;

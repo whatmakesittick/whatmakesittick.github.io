@@ -1,10 +1,10 @@
-import { CylinderGeometry, Group, Matrix4, SphereGeometry, Vector3 } from 'three';
-import type { BufferGeometry } from 'three';
+import { CylinderGeometry, Group, SphereGeometry, Vector3 } from 'three';
+import type { BufferGeometry, Matrix4 } from 'three';
 import type { Figure } from '@core/figure';
 import type { PartBuilder } from '../build';
-import { outermostHit } from './faceProbe';
-import { posedJointMatrix } from './restFrame';
-import type { RestFrame } from './restFrame';
+import { outermostHit } from '@core/figure/body/faceProbe';
+import { attachToJoint } from '@core/figure/body/restFrame';
+import type { RestFrame } from '@core/figure/body/restFrame';
 
 const HEAD_JOINT = 'c_head';
 const EYE_JOINTS = { right: 'r_eye', left: 'l_eye' } as const;
@@ -65,17 +65,10 @@ function bridge(figure: Figure, frame: RestFrame, sides: readonly GoggleSide[]):
 
 export class Goggles {
   readonly group = new Group();
-  private readonly figure: Figure;
-  private readonly restInverse: Matrix4;
-  private readonly toRig: Matrix4;
-  private readonly head = new Matrix4();
+  private readonly follow: () => void;
 
   constructor(builder: PartBuilder, figure: Figure, frame: RestFrame, toRig: Matrix4) {
-    this.figure = figure;
-    this.toRig = toRig;
-    this.restInverse = frame.jointMatrix(HEAD_JOINT).invert();
     this.group.name = 'goggles';
-    this.group.matrixAutoUpdate = false;
     const sides = gogglePlacement(figure, frame);
     sides.forEach((side) => {
       builder.mesh(ellipsoid(GOGGLES.frame, side, 0), 'head', 'goggleBand', this.group);
@@ -87,12 +80,10 @@ export class Goggles {
       );
     });
     builder.mesh(bridge(figure, frame, sides), 'head', 'goggleBand', this.group);
-    this.update();
+    this.follow = attachToJoint(figure, frame, HEAD_JOINT, this.group, toRig);
   }
 
   update(): void {
-    posedJointMatrix(this.figure, HEAD_JOINT, this.head).multiply(this.restInverse);
-    this.group.matrix.copy(this.toRig).multiply(this.head);
-    this.group.matrixWorldNeedsUpdate = true;
+    this.follow();
   }
 }

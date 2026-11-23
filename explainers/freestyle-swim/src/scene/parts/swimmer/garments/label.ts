@@ -2,7 +2,7 @@ import { Vector3 } from 'three';
 import type { Figure } from '@core/figure';
 import { CAP, CHANNELS, STRAP, hemsOf } from './regions';
 import type { GarmentFields, Hems } from './regions';
-import type { RestFrame } from './restFrame';
+import type { RestFrame } from '@core/figure/body/restFrame';
 
 const AXES = 3;
 const TRIANGLE = 3;
