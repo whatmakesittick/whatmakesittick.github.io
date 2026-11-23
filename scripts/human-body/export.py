@@ -180,7 +180,11 @@ def run(arguments: argparse.Namespace) -> None:
         "gzipped",
         gzipped_size(arguments.module),
     )
-    write_old_ground_truth(model, config, body, columns, arguments.fixtures)
+    arguments.fixtures.mkdir(parents=True, exist_ok=True)
+    if arguments.skip_ground_truth:
+        print("skipped the ground truth fixture")
+    else:
+        write_old_ground_truth(model, config, body, columns, arguments.fixtures)
     fixtures.write_stroke_truth(arguments.fixtures, body, held_out)
 
 
@@ -191,6 +195,7 @@ def main() -> None:
     parser.add_argument("--poses", type=Path, required=True)
     parser.add_argument("--module", type=Path, required=True)
     parser.add_argument("--fixtures", type=Path, required=True)
+    parser.add_argument("--skip-ground-truth", action="store_true")
     parser.add_argument("--tolerance-mm", type=float, default=DEFAULT_TOLERANCE_MM)
     parser.add_argument("--vertex-floor-mm", type=float, default=DEFAULT_VERTEX_FLOOR_MM)
     run(parser.parse_args())

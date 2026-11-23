@@ -467,6 +467,21 @@ the MHR forward pass: parameter transform, forward kinematics, pose correctives 
   the previous frame.
 - The data module (`*.data.ts`, made by `scripts/human-body`) is large. Load it only with a dynamic `import()` in its
   own lazy chunk, never statically, or the JavaScript budget in the site check fails.
+- `src/core/figure/body` is the three.js side, shared by the explainers that show a figure; the rest of
+  `src/core/figure` stays free of three.js classes. `FigureBody` takes the part rules, the extra static vertex
+  attributes and the material lookup as options. `createGarmentPatcher` takes the garment list: roughness, GLSL paint
+  calls, attribute names and an optional label. `hems.ts` has the signed-distance helpers and `vertexFields`; the
+  dimensions and hems of each garment stay in the explainer. `labelLayout`, `labelFields` and `labelTexture` take the
+  head axes, the dimensions and the text. `PartBuilder` takes the finishes and the id type. `FigureRig` takes the
+  matrix from rig to figure space and a `RigPose` (arms, legs, head). `RestFrame`, `attachToJoint` (a per-frame updater
+  for an object built in the rest pose) and `outermostHit` place things on the rest body. `src/core/rig` holds the
+  pure rig helpers `solveTwoBone` and the key curves.
+- Chunks: modules under `src/core/figure` and `src/core/rig` get a chunk each (`figure`, `rig`) and are never part of
+  `three`, `shared`, `scene` or `embed` (`ownChunkOf` in `vite/chunks.ts`), so an explainer pays for them only when it
+  imports them. Import `@core/figure/body/*` only from the explainer's lazy figure module, next to the data module,
+  as the freestyle swimmer does in `loadFigure.ts`.
+- Core tests that load body data run once per entry of `TEST_BODIES` (`bodies.testkit.ts`): the data loader, the vertex
+  count and the fixture folders. Another body is one more entry.
 - The licence text is `scripts/human-body/MHR-LICENSE.txt`; `THIRD_PARTY_NOTICES.md` carries the notice for the data.
 - Clothing that hugs the skin is not extra geometry: an explainer stores per-vertex signed distances to each hem,
   measured once in the rest pose, and a material patch paints the garment colour where they are positive. Colours that

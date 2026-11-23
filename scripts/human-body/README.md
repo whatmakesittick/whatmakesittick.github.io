@@ -134,5 +134,11 @@ is about a tenth of the corrective bytes, `C` carries the rest.
 
 1. Add a pose dump like `dumpStrokePoses.test.ts` that writes its poses as joint parameters through its own rig and
    retarget.
-2. Run `export.py` with its own config and output paths. The correctives are fitted to those poses only, so poses
+2. Run `export.py` with its own config and output paths. Give it its own fixtures folder, for example
+   `--fixtures src/core/figure/fixtures/<sport>`, so the swimmer's `stroke-truth` and `ground-truth` stay as they
+   are, and add `--skip-ground-truth`: that step needs the swimmer's `swim-samples` in the same folder. The correctives are fitted to those poses only, so poses
    outside them are corrected less well; add intermediate values of every continuous control to the fit poses.
+3. Add one entry to `TEST_BODIES` in `src/core/figure/bodies.testkit.ts` (name, data module loader, fixtures folder).
+   `figure.test.ts`, `retarget.test.ts`, `partition.test.ts` and the other core body tests then run on the new body.
+   `figure.test.ts` also needs the body's vertex count, and the correctives-off test needs `ground-truth` (skip it for a
+   body exported with `--skip-ground-truth`).
