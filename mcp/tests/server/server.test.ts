@@ -345,7 +345,7 @@ describe('list_explainers', () => {
     }
   });
 
-  it('biology lists atp-synthase, cherry-flavor, freestyle-swim, heart and mri-scanner', async () => {
+  it('biology lists atp-synthase, cherry-flavor, freestyle-swim, heart, mri-scanner and running-form', async () => {
     const client = await connect();
     const res = await client.callTool({ name: 'list_explainers', arguments: { tag: 'biology' } });
     const got = (res.structuredContent as unknown as ListExplainersResult).explainers
@@ -357,6 +357,7 @@ describe('list_explainers', () => {
       'freestyle-swim',
       'heart',
       'mri-scanner',
+      'running-form',
     ]);
   });
 
