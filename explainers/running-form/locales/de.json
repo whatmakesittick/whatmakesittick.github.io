@@ -9,7 +9,7 @@
   },
   "stage": {
     "label": "Interaktives Modell des Laufstils",
-    "gauge": "Live: Schrittfrequenz, Schrittlänge und Bodenkraft"
+    "gauge": "Live: Schrittfrequenz, Schrittlänge und Kraft vom Boden"
   },
   "timeline": {
     "label": "Doppelschritt",
@@ -21,16 +21,16 @@
     "realTime": "Echtzeit",
     "slower": "{{factor}}-mal langsamer",
     "phase": {
-      "landing": "Vorderstütz",
-      "pushOff": "Hinterstütz",
-      "recovery": "Hinterschwung",
-      "reach": "Vorderschwung"
+      "landing": "Aufsetzen",
+      "pushOff": "Abdruck",
+      "recovery": "Anfersen",
+      "reach": "Vorschwung"
     },
     "jump": {
       "landing": "Zum Aufsetzen des Fußes springen",
-      "pushOff": "Zum Mittelstütz springen, wo der Abdruck beginnt",
+      "pushOff": "Zur Mitte der Stützphase springen, wo der Abdruck beginnt",
       "recovery": "Zum Fuß springen, der die Straße verlässt",
-      "reach": "Zum Mittelschwung springen, wo das Bein wieder nach unten kommt"
+      "reach": "Zur Mitte der Schwungphase springen, wo das Bein wieder nach unten kommt"
     }
   },
   "controls": {
@@ -43,12 +43,12 @@
     },
     "paceNames": {
       "easy": "Locker",
-      "steady": "Mittel",
+      "steady": "Zügig",
       "fast": "Schnell"
     },
     "paceOptions": {
       "easy": "Locker, 6:40 min/km",
-      "steady": "Mittel, 4:46 min/km",
+      "steady": "Zügig, 4:46 min/km",
       "fast": "Schnell, 3:42 min/km"
     },
     "armsOptions": {
@@ -68,7 +68,7 @@
       "forces": {
         "name": "Kräfte",
         "short": "Kräfte",
-        "hint": "Bodenkraft am Fuß (F)"
+        "hint": "Kraft vom Boden am Fuß (F)"
       },
       "formLines": {
         "name": "Formlinien",
@@ -92,7 +92,7 @@
   },
   "readouts": {
     "feet": "Fuß am Boden",
-    "force": "Bodenkraft",
+    "force": "Kraft vom Boden",
     "knee": "Kniebeugung rechts",
     "cadence": "Schrittfrequenz",
     "stepLength": "Schrittlänge",
@@ -150,52 +150,52 @@
     "stride": {
       "title": "Der Laufschritt",
       "p1": "Sieh dem Läufer auf der Küstenstraße bei Sonnenaufgang zu. Sein Lauf ist eine Folge von Hüpfern auf einem Bein. Ein Bein setzt auf, gibt ein wenig nach und federt ihn wieder nach oben. Dann verlassen beide Füße die Straße. Dieser Moment in der Luft, die <strong>Flugphase</strong>, macht aus dem Gehen erst das Laufen. Beim Gehen ist immer ein Fuß am Boden.",
-      "p2": "Ein <strong>Doppelschritt</strong> besteht aus zwei Schritten, vom Aufsetzen des rechten Fußes bis zum nächsten. Die Lauflehre teilt ihn in vordere und hintere Stütz- und Schwungphase ein, und das rechte Bein durchläuft alle vier. Im <strong>Vorderstütz</strong> setzt der Fuß auf und das Bein gibt nach. Im <strong>Hinterstütz</strong> drückt das Bein, bis der Fuß die Straße verlässt. Im <strong>Hinterschwung</strong> hebt sich die Ferse und das Knie schwingt nach vorn. Im <strong>Vorderschwung</strong> greift das Bein aus und kommt wieder nach unten. Das linke Bein folgt einen halben Doppelschritt später.",
-      "p3": "Die <strong>Stützphase</strong> ist die Zeit, in der dein Fuß auf der Straße ist. Im Mittelstütz wechselt der Druck der Straße vom Bremsen zum Vortrieb. Im Mittelschwung ist das schwingende Knie am stärksten gebeugt. Die farbigen Bänder auf der Zeitleiste gelten für das mittlere Tempo, bei den anderen Tempi liegen die Grenzen etwas daneben.",
-      "p4": "In diesen Daten ist jeder Fuß 34 bis 41 Prozent des Doppelschritts am Boden, grob ein Drittel bis zwei Fünftel, und mit steigendem Tempo weniger. Dann ist der andere Fuß dran. Dazwischen liegen zwei kurze Flugphasen, zusammen etwa 19 bis 32 Prozent des Doppelschritts. Dein Körper ist nahe dem Mittelstütz am tiefsten und mitten in der Flugphase am höchsten. Beim Gehen ist es umgekehrt: Da bist du mitten im Schritt am höchsten.",
-      "p5": "Die Geschwindigkeit ergibt sich aus der <strong>Schrittfrequenz</strong>, den Schritten pro Minute, mal der <strong>Schrittlänge</strong>, der Strecke eines Schritts, geteilt durch 60. Die Schrittfrequenz heißt auch Kadenz. Die drei Tempostufen sind Namen des Modells, keine Renntempi: Locker sind hier 6:40 min pro Kilometer, schnell 3:42. Wähle ein Tempo und sieh zu, wie beide Zahlen wachsen.",
+      "p2": "Ein <strong>Doppelschritt</strong> besteht aus zwei Schritten, vom Aufsetzen des rechten Fußes bis zum nächsten. Das rechte Bein durchläuft dabei vier Phasen. Beim <strong>Aufsetzen</strong> berührt der Fuß die Straße und das Bein gibt nach. Beim <strong>Abdruck</strong> drückt das Bein, bis der Fuß die Straße verlässt. Beim <strong>Anfersen</strong> hebt sich die Ferse und das Knie schwingt nach vorn. Im <strong>Vorschwung</strong> greift das Bein aus und kommt wieder nach unten. Die Lauflehre nennt sie vordere Stützphase, hintere Stützphase, hintere Schwungphase und vordere Schwungphase. Das linke Bein folgt einen halben Doppelschritt später.",
+      "p3": "Die <strong>Stützphase</strong> ist die Zeit, in der dein Fuß auf der Straße ist. In ihrer Mitte wechselt der Druck der Straße vom Bremsen zum Vortrieb. In der Mitte der Schwungphase ist das schwingende Knie am stärksten gebeugt. Die farbigen Bänder auf der Zeitleiste gelten für das mittlere Tempo, bei den anderen Tempostufen liegen die Grenzen etwas daneben.",
+      "p4": "In diesen Daten ist jeder Fuß 34 bis 41 Prozent des Doppelschritts am Boden, grob ein Drittel bis zwei Fünftel, und mit steigendem Tempo weniger. Dann ist der andere Fuß dran. Dazwischen liegen zwei kurze Flugphasen, zusammen etwa 19 bis 32 Prozent des Doppelschritts. Dein Körper ist nahe der Mitte der Stützphase am tiefsten und mitten in der Flugphase am höchsten. Beim Gehen ist es umgekehrt: Da bist du mitten im Schritt am höchsten.",
+      "p5": "Die Geschwindigkeit ergibt sich aus der <strong>Schrittfrequenz</strong>, den Schritten pro Minute, mal der <strong>Schrittlänge</strong>, der Strecke eines Schritts, geteilt durch 60. Die Schrittfrequenz heißt auch Kadenz. Die drei Tempostufen sind Namen des Modells, keine Renntempi: Locker sind hier 6:40 min pro Kilometer, schnell 3:42. Die Anzeige zeigt den Druck der Straße in Körpergewichten, also in Vielfachen deines eigenen Gewichts.",
       "p6": "Die Beinwinkel sind Mittelwerte von 31 bis 39 Wettkampfläufern auf dem Laufband, für die Anzeige gemittelt und neu angepasst, ein echter Läufer weicht also ab. Für den Oberkörper gibt der Datensatz nichts her, das Modell bewegt ihn nach Regeln. Straße, Meer und Sonne sind Gestaltung, kein echter Ort."
     },
     "touchdown": {
       "title": "Das Aufsetzen",
-      "p1": "Das Bild hält beim <strong>Fußaufsatz</strong> an, dem ersten Moment, in dem der Fuß die Straße berührt. Der Fuß setzt vor der Hüfte auf, das Knie ist leicht gebeugt, etwa 11 bis 13 Grad, und der Fuß ist fast flach oder landet zuerst mit der Ferse. Kräfte und Formlinien sind eingeschaltet: Der Pfeil zeigt, was die Straße mit dir macht, und die Linie folgt dem Schienbein. Mit F und G schaltest du sie aus.",
-      "p2": "Für einen Moment schiebt die Straße dich nach hinten. Das ist das <strong>Bremsen</strong>, und es ist klein. Wir messen den Druck in <strong>Körpergewichten</strong>: Ein Körpergewicht ist die Kraft, mit der dein eigenes Gewicht auf den Boden drückt. Das Bremsen erreicht höchstens etwa 0,2 bis 0,4 Körpergewichte. Der Druck nach oben ist viel größer, wie das nächste Kapitel zeigt.",
+      "p1": "Das Bild hält beim <strong>Aufsetzen</strong> an, dem ersten Moment, in dem der Fuß die Straße berührt. Der Fuß setzt vor der Hüfte auf, das Knie ist leicht gebeugt, etwa 11 bis 13 Grad, und der Fuß ist fast flach oder landet zuerst mit der Ferse. Kräfte und Formlinien sind eingeschaltet: Der Pfeil zeigt, was die Straße mit dir macht, und die Linie folgt dem Schienbein. Mit F und G schaltest du sie aus.",
+      "p2": "Für einen Moment schiebt die Straße dich nach hinten. Das ist das <strong>Bremsen</strong>, und es ist klein. Ein <strong>Körpergewicht</strong> ist dein eigenes Gewicht, das auf den Boden drückt. Das Bremsen erreicht höchstens etwa das 0,2- bis 0,4-Fache deines Körpergewichts. Der Druck nach oben ist viel größer, wie das nächste Kapitel zeigt.",
       "p3": "Läufer setzen auf der Ferse, der Fußmitte oder dem Ballen auf. Etwa 9 von 10 Freizeitläufern auf der Straße landen auf der Ferse, bei einer Weltmeisterschaft auch etwa 55 bis 70 Prozent der Spitzenläufer im Marathon. Das Modell landet wie der durchschnittliche Läufer in den Daten auf der Fersenseite.",
-      "p4": "Kein Aufsatzstil ist nachweislich besser. Läufer mit verschiedenen Stilen verbrauchten etwa gleich viel Energie, und Fersenläufer, die zum Wechsel gezwungen wurden, brauchten eine Weile mehr. Beim Fersenlauf ist der erste Stoß schärfer, steigt mit Laufschuhen aber etwa so langsam an wie beim Vorfußlauf. Ob das für Verletzungen eine Rolle spielt, weiß man nicht.",
-      "p5": "Probier jetzt den Regler. Er ändert die Schrittfrequenz und lässt das Tempo gleich. Am langsamen Ende siehst du <strong>zu weites Ausgreifen</strong>: ein langer Schritt, bei dem der Fuß weit vor dir aufsetzt. In einer Laborstudie mit Freizeitläufern setzten 10 Prozent mehr Schritte die Ferse etwa 2 cm näher auf und senkten das Bremsen über den ganzen Schritt, den Bremsimpuls, um etwa 16 Prozent. Das Modell wendet das bei allen drei Tempi an.",
+      "p4": "Kein Stil beim Aufsetzen ist nachweislich besser. Läufer mit verschiedenen Stilen verbrauchten etwa gleich viel Energie, und Fersenläufer, die zum Wechsel gezwungen wurden, brauchten eine Weile mehr Energie. Beim Fersenlauf ist der erste Stoß schärfer, steigt mit Laufschuhen aber etwa so langsam an wie beim Vorfußlauf. Ob das für Verletzungen eine Rolle spielt, weiß man nicht.",
+      "p5": "Probier jetzt den Regler. Er ändert die Schrittfrequenz und lässt das Tempo unverändert. Am langsamen Ende siehst du <strong>zu weites Ausgreifen</strong>: ein langer Schritt, bei dem der Fuß weit vor dir aufsetzt. In einer Laborstudie mit Freizeitläufern setzten 10 Prozent mehr Schritte die Ferse etwa 2 cm näher auf und senkten das Bremsen über den ganzen Schritt, den Bremsimpuls, um etwa 16 Prozent. Das Modell wendet das bei allen drei Tempi an.",
       "p6": "<strong>Probier das aus:</strong> Setz den Fuß etwas weniger weit vorn auf, meist mit etwas schnelleren Schritten, so landet er näher bei dir. Denk an „näher“, nicht an „unter“ dem Körper: In den Studien, die es gemessen haben, landet der Fuß trotzdem davor. Wie sicher ist das? Kurze Labortests zeigen weniger Bremsen mit schnelleren Schritten. In einer Studie mit 74 Frauen gingen die höchsten Bremskräfte mit mehr Verletzungen einher, ein Zusammenhang, keine Ursache."
     },
     "spring": {
       "title": "Die Feder",
-      "p1": "Nach dem Aufsetzen bleibt das Bein nicht steif. Das Knie beugt sich, der Körper sinkt ein und das Bein drückt zurück, wie eine Feder mit dir obendrauf. In diesen Daten beugt sich das Knie höchstens um etwa 43 bis 45 Grad. Die Kräfte sind eingeschaltet, mit F schaltest du sie aus. Zieh durch die Stützphase und sieh, wie der Pfeil wächst und schwindet.",
+      "p1": "Nach dem Aufsetzen bleibt das Bein nicht steif. Das Knie beugt sich, der Körper sinkt ein und das Bein drückt zurück, wie eine Feder mit dir obendrauf. In diesen Daten beugt sich das Knie höchstens um etwa 43 bis 45 Grad. Die Kräfte sind eingeschaltet, mit F schaltest du sie aus. Fahr mit dem Zeitregler durch die Stützphase und sieh, wie der Pfeil wächst und schwindet.",
       "p2": "Die Straße drückt im Höchstwert mit etwa dem 2,3- bis 2,6-Fachen deines Körpergewichts nach oben, bei höherem Tempo etwas mehr. Der Höchstwert kommt etwas vor der Mitte der Stützphase. Der Bodenkontakt dauert etwa eine Viertelsekunde, nach der Rechnung des Modells 0,23 bis 0,30 s. Die Kraftzeile in der Leiste folgt der Kurve aus den Daten selbst.",
-      "p3": "In einer Computersimulation mit zehn Langstreckenläufern bremsten beim Aufsetzen vor allem die Oberschenkelmuskeln, und den größten Teil des Abdrucks leisteten die Wadenmuskeln. Bei 5 m/s drückte der Soleus, ein Wadenmuskel, allein mit etwa dem 2-Fachen des Körpergewichts nach oben.",
+      "p3": "In einer Computersimulation mit zehn Langstreckenläufern bremsten beim Aufsetzen vor allem die Oberschenkelmuskeln, und den größten Teil des Abdrucks leisteten die Wadenmuskeln. Bei 5 m/s drückte der Soleus, ein Wadenmuskel, allein mit etwa dem Doppelten des Körpergewichts nach oben.",
       "p4": "Auch die Sehnen helfen. Achillessehne und Fußgewölbe dehnen sich früh im Schritt, speichern Energie und geben sie später zurück, wie ein springender Ball. Das erspart deinen Muskeln Arbeit. Einen verlässlichen Anteil hat man nicht gefunden, darum zeigt diese Seite keine Zahl.",
       "p5": "<strong>Probier das aus:</strong> Setz weich auf und lass das Knie nachgeben, statt dich steif gegen den Boden zu stemmen. Nachgeben heißt nicht, es stärker zu beugen: Im Labor beugten schnellere Schritte das Knie weniger. Das ist ein Rat aus dem Training. Niemand hat ihn gut geprüft, aber er passt zum Bild vom Bein als Feder."
     },
     "liftoff": {
       "title": "Abdruck und Flugphase",
-      "p1": "In der zweiten Hälfte der Stützphase drückt das Bein dich nach oben und vorn, und die Wade leistet viel davon. Die Hüfte öffnet sich nur wenig. Der Oberschenkel schwingt ein paar Grad hinter dich, am stärksten beim schnellen Tempo (etwa 10 Grad), und der hinterste Punkt liegt kurz nach dem Abheben des Fußes. Die Zeile zum Hüftwinkel neben dem Text zeigt es: Ein Minus heißt, der Oberschenkel ist hinter dir.",
+      "p1": "In der zweiten Hälfte der Stützphase drückt das Bein dich nach oben und vorn, und die Wade leistet viel davon. Die Hüfte öffnet sich nur wenig. Die Zeile zum Hüftwinkel zeigt den Winkel im Hüftgelenk, Oberschenkel gegen Becken. Null ist die Hüfte eines aufrecht Stehenden, Minus heißt, sie hat sich weiter geöffnet. Das Becken kippt beim Laufen nach vorn, darum zeigt der Oberschenkel schon bei Null nach hinten. Beim schnellen Tempo erreicht die Zeile etwa minus 10 Grad, kurz nachdem der Fuß die Straße verlässt.",
       "p2": "Jetzt sind beide Füße in der Luft, und der Körper fliegt wie ein geworfener Ball. Nach der Rechnung des Modells dauert jede Flugphase etwa 0,07 bis 0,11 s. Die Kamera ist hinter dir und der Fußweg ist eingeschaltet: die Spur des rechten Fußes aus Sicht der Hüfte, eine Schleife, nicht die Spur über der Straße. Mit H schaltest du ihn aus.",
-      "p3": "Dein Körper hüpft auch auf und ab. Das Modell schätzt den Anstieg beim mittleren Tempo auf etwa 8 cm pro Schritt, errechnet aus der gemessenen Kraft. Laborstudien maßen etwa 8 bis 9 cm. In diesem Kapitel bleibt die Kamera bei der Straße, so siehst du das Auf und Ab davor. Mit O bleibt stattdessen der Körper ruhig im Bild.",
+      "p3": "Dein Körper hüpft auch auf und ab. Das Modell schätzt den Anstieg beim mittleren Tempo auf etwa 8 cm pro Schritt, errechnet aus der gemessenen Kraft. Laborstudien maßen etwa 8 bis 9 cm. In diesem Kapitel bleibt die Kamera bei der Straße, so siehst du das Auf und Ab vor diesem Hintergrund. Mit O bleibt stattdessen der Körper ruhig im Bild.",
       "p4": "Noch einmal der Regler. Bei 10 Prozent mehr Schritten im gleichen Tempo war das Auf und Ab in einer Laborstudie 16 Prozent kleiner, und das Knie nahm beim Aufsetzen etwa ein Drittel weniger Energie auf. Bei weniger, längeren Schritten wuchs das Auf und Ab. Die Schätzung des Modells ergibt fast dieselbe Änderung. Die Studie hatte 45 Freizeitläufer, kurze Tests und keine Ergebnisse zu Verletzungen.",
-      "p5": "<strong>Probier das aus:</strong> Mach etwas schnellere, kleinere Schritte statt langer, hüpfender, und drück dich genug ab, nicht so weit wie möglich. Wer die Schrittfrequenz für ein paar Läufe um 5 bis 10 Prozent erhöhte, senkte in kurzen Labortests die Belastung des Knies. Ein Überblick bringt weniger Beinstreckung beim Abdruck mit besserer Laufökonomie in Verbindung. Kürzer ist nicht immer besser: In einem alten Test wählte jeder Läufer schon einen Schritt nahe seinem sparsamsten."
+      "p5": "<strong>Probier das aus:</strong> Mach etwas schnellere, kleinere Schritte statt langer, hüpfender, und drück dich genug ab, nicht so weit wie möglich. Wer die Schrittfrequenz für ein paar Läufe um 5 bis 10 Prozent erhöhte, senkte in kurzen Labortests die Belastung des Knies. Ein Überblick bringt weniger Beinstreckung beim Abdruck mit besserer Laufökonomie in Verbindung, also weniger Energieverbrauch bei gleicher Geschwindigkeit. Kürzer ist nicht immer besser: In einem alten Test wählte jeder Läufer schon einen Schritt nahe seinem sparsamsten."
     },
     "posture": {
       "title": "Haltung und Arme",
       "p1": "Lauf aufrecht, mit leichter Vorneigung. So lautet der übliche Rat, und die Forschung dahinter ist dünn. In einer Studie mit 24 Freizeitläufern neigte sich der Rumpf etwa 7 Grad nach vorn, das ist der Mittelwert des Modells. In einer anderen kleinen Studie schwankte die Neigung bei jedem Schritt um etwa 6 bis 8 Grad, darum bewegt sich die Anzeige. Die Neigung kommt aus Hüfte, Becken und Rumpf zusammen, nicht aus den Knöcheln.",
-      "p2": "Im Training heißt es: Blick zum Horizont, Schultern locker. Das ist Tradition, keine Messung. Das Becken ruht nicht. Es kippt nach vorn und hinten und sinkt auf der Seite des schwingenden Beins etwas ab. Es dreht sich, und der Brustkorb dreht gegen es. Von oben siehst du diese Gegendrehung. Sie stammt aus einer kleinen Studie.",
-      "p3": "Die Arme schwingen gegen die Beine: Geht das linke Bein nach vorn, geht der rechte Arm nach vorn. Zwei Computerstudien auf Basis von Labordaten fanden, dass die Drehwirkung der Arme fast so groß ist wie die der Beine, nur entgegengesetzt. Die Arme treiben dich nicht voran: In einer Simulation lieferten sie unter 1 Prozent des Vortriebs. Wähle verschränkte Arme und schau von oben: Schultern und Hüften drehen sich stärker gegeneinander.",
-      "p4": "Ob schwingende Arme Energie sparen, ist umstritten. In einem Labor kostete Laufen mit den Händen auf dem Rücken etwa 3 Prozent mehr Energie, mit den Armen vor der Brust etwa 9 und mit den Händen auf dem Kopf etwa 13. Eine ältere Studie fand keinen Unterschied.",
-      "p5": "Im Lauftraining lehrt man gebeugte Ellbogen, etwa einen rechten Winkel oder etwas weniger. Die Quellen nennen 60 bis 90 Grad, und eine Studie zum besten Winkel gibt es nicht. In einer Studie öffnete und schloss sich der Ellbogen im Schwung um etwa 40 Grad. Armschwung und Ellbogen des Modells haben hier keine Quelle, nimm sie also, um die Idee zu sehen, nicht als Ziel.",
-      "p6": "<strong>Probier das aus:</strong> Lauf aufrecht mit leichter Vorneigung, den Blick am Horizont und die Schultern locker. Schwing die Arme mit gebeugten Ellbogen vor und zurück, nicht quer vor der Brust. Wie sicher ist das? Haltung und Ellbogenwinkel sind Tradition aus dem Training und kaum erforscht. Für die Regel „nicht vor der Brust“ gibt es keine eigene Zahl, aber in einem Labor kosteten Arme vor der Brust mehr Energie."
+      "p2": "Im Training heißt es: Blick zum Horizont, Schultern locker. Das ist Tradition, keine Messung. Das Becken ruht nicht. Es kippt nach vorn und hinten und sinkt auf der Seite des schwingenden Beins etwas ab. Es dreht sich, und der Brustkorb dreht gegenläufig. Von oben siehst du diese Gegendrehung. Sie stammt aus einer kleinen Studie.",
+      "p3": "Die Arme schwingen gegen die Beine: Geht das linke Bein nach vorn, geht der rechte Arm nach vorn. Zwei Computerstudien auf Basis von Labordaten fanden, dass die Drehwirkung der Arme fast so groß ist wie die der Beine, nur entgegengesetzt. Die Arme treiben dich nicht voran: In einer Simulation lieferten sie unter 1 Prozent des Vortriebs. Wähle verschränkte Arme und schau von oben: Schultern und Hüften drehen sich stärker gegeneinander, auch wenn die Größe nur grob geschätzt ist.",
+      "p4": "Ob schwingende Arme Energie sparen, ist umstritten. In einer Laborstudie kostete Laufen mit den Händen auf dem Rücken etwa 3 Prozent mehr Energie, mit den Armen vor der Brust etwa 9 und mit den Händen auf dem Kopf etwa 13. Eine ältere Studie fand keinen Unterschied.",
+      "p5": "Im Lauftraining lehrt man gebeugte Ellbogen, etwa einen rechten Winkel oder etwas weniger, und der Mittelwert des Modells von 90 Grad folgt diesem Rat. Die Quellen nennen 60 bis 90 Grad, einen besten Winkel kennt man nicht. Der Ellbogen des Modells öffnet und schließt sich im Schwung um etwa 40 Grad, der einzige gemessene Bereich, gemessen bei schnellem Tempo. Am stärksten gebeugt ist er, wenn der Arm vorn ist. Den Armschwung selbst hat das Modell frei gewählt.",
+      "p6": "<strong>Probier das aus:</strong> Lauf aufrecht mit leichter Vorneigung, den Blick am Horizont und die Schultern locker. Schwing die Arme mit gebeugten Ellbogen vor und zurück, nicht quer vor der Brust. Wie sicher ist das? Haltung und Ellbogenwinkel sind Tradition aus dem Training und kaum erforscht. Für die Regel „nicht vor der Brust“ gibt es keine eigene Zahl, aber in einer Laborstudie kosteten Arme vor der Brust mehr Energie."
     },
     "pace": {
       "title": "Tempo",
-      "p1": "Wähle nacheinander jedes Tempo. In diesen Daten macht der Läufer von den meisten Dingen mehr: mehr Schritte, längere Schritte, längere Flugphasen, einen kräftigeren Abdruck und ein höheres Anfersen, dazu weniger Zeit am Boden. Die Zeilen neben dem Text zeigen die Zahlen. Locker und schnell sind Namen des Modells, kein Maß für deine Anstrengung.",
-      "p2": "Den größten Teil des zusätzlichen Tempos bringen längere Schritte, nicht schnellere. In einem Labor stieg von 2 auf 5 m/s die Schrittfrequenz um etwa 21 Prozent, während sich die Schrittlänge verdoppelte.",
-      "p3": "Vielleicht hast du gehört, 180 Schritte pro Minute seien die richtige Zahl. Sie stammt aus der Zählung eines Trainers bei Spitzenläufern einer Olympiade, von denen fast alle noch schneller liefen. Die Geschichte ist aus zweiter Hand, und sie handelt von schnellen Läufern. Einzelne Läufer liegen zwischen etwa 160 und 210 Schritten pro Minute, und viele schnelle machen 170 bis 190. Das ist eine Folge des schnellen Laufens, kein Ziel.",
-      "p4": "In einem alten Labortest mit zehn Läufern lag die eigene Schrittlänge jedes Läufers nahe an der, bei der am wenigsten Sauerstoff verbraucht wurde, und ein erzwungen längerer oder kürzerer Schritt kostete Energie. Auch die Schrittbreite zählt: Überkreuzte oder weit gesetzte Füße kosteten in einem Labor 3 bis 15 Prozent mehr Energie. Der Regler zeigt also, was sich ändert, nicht, was du anstreben sollst.",
+      "p1": "Wähle nacheinander jedes Tempo. In diesen Daten macht der Läufer von den meisten Dingen mehr: mehr Schritte, längere Schritte, längere Flugphasen, einen kräftigeren Abdruck und ein höheres Anfersen, dazu weniger Zeit am Boden. Die Zeilen neben dem Text zeigen die Zahlen. Locker, zügig und schnell sind Namen des Modells, kein Maß für deine Anstrengung.",
+      "p2": "Den größten Teil des zusätzlichen Tempos bringen längere Schritte, nicht schnellere. In einer Laborstudie stieg von 2 auf 5 m/s die Schrittfrequenz um etwa 21 Prozent, während sich die Schrittlänge verdoppelte.",
+      "p3": "Vielleicht hast du gehört, 180 Schritte pro Minute seien die richtige Zahl. Sie stammt aus der Zählung eines Trainers bei Spitzenläufern bei Olympischen Spielen, von denen fast alle noch schneller liefen. Die Geschichte ist aus zweiter Hand, und sie handelt von schnellen Läufern. Einzelne Läufer liegen zwischen etwa 160 und 210 Schritten pro Minute, und viele schnelle machen 170 bis 190. Das ist eine Folge des schnellen Laufens, kein Ziel.",
+      "p4": "In einem alten Labortest mit zehn Läufern lag die eigene Schrittlänge jedes Läufers nahe an der, bei der am wenigsten Sauerstoff verbraucht wurde, und ein erzwungen längerer oder kürzerer Schritt kostete Energie. Auch die Schrittbreite zählt: Überkreuzte oder weit gesetzte Füße kosteten in einer Laborstudie 3 bis 15 Prozent mehr Energie. Der Regler zeigt also, was sich ändert, nicht, was du anstreben sollst.",
       "p5": "Deine eigene Schrittfrequenz findest du so: Zähle 30 Sekunden lang die Schritte eines Fußes und multipliziere mit vier. Ein Marathon bei 3,5 m/s sind etwa 35.000 Schritte.",
       "p6": "Das schnelle Tempo liegt nahe an dem, was die Marathonläufer bei der Weltmeisterschaft 2017 liefen: Gruppenmittel von 28 Männern bei 4,3 bis 4,8 m/s, mit 180 bis 184 Schritten pro Minute. Der Weltrekord der Männer im Marathon ist noch schneller.",
       "p7": "Was lohnt sich auszuprobieren? Lauf aufrecht mit leichter Vorneigung, den Blick nach vorn und die Schultern locker, die Arme schwingen vor und zurück. Setz den Fuß etwas näher bei dir auf und lass das Knie nachgeben. Probier für ein paar Läufe eine um 5 bis 10 Prozent höhere Schrittfrequenz. Manches davon ist gemessen, manches Tradition aus dem Training, und nichts davon verspricht Schutz vor Verletzungen. Das sind kleine Anpassungen, kein Umbau. Ändere immer nur eine Kleinigkeit und behalte, was sich leicht anfühlt."
@@ -226,23 +226,23 @@
       "reach": "Abstand beim Aufsetzen, Änderung (Minus ist näher)",
       "reachSame": "keine Änderung",
       "knee": "Kniebeugung beim Aufsetzen",
-      "brake": "Höchste Bremskraft",
+      "brake": "Höchste Bremskraft (Schätzung des Modells)",
       "impulse": "Bremsen über den Schritt, Änderung",
       "strikes": "Landung auf der Ferse",
       "strikesValue": "etwa 9 von 10 Freizeitläufern; 55 bis 70 Prozent der Spitzenläufer",
       "strikeImpact": "Erster Stoß, in Labortests",
-      "strikeImpactValue": "Fersenlauf etwa 1,7 bis 1,9, Vorfußlauf etwa 0,6 Körpergewichte",
-      "strikeEconomy": "Aufsatzstil und Energieverbrauch",
+      "strikeImpactValue": "Fersenlauf etwa das 1,7- bis 1,9-Fache, Vorfußlauf etwa das 0,6-Fache des Körpergewichts",
+      "strikeEconomy": "Aufsetzen und Energieverbrauch",
       "strikeEconomyValue": "kein Stil ist nachweislich besser; erzwungene Wechsel kosteten anfangs mehr Energie",
-      "reachStudy": "Aufsatzabstand in einer Studie",
+      "reachStudy": "Abstand beim Aufsetzen in einer Studie",
       "reachStudyValue": "etwa 2 cm näher mit 10 Prozent mehr Schritten",
       "brakeInjury": "Bremsen und Verletzungen",
       "brakeInjuryValue": "eine Studie mit 74 Frauen verband hohe Bremskräfte mit Verletzungen"
     },
     "spring": {
-      "force": "Bodenkraft jetzt",
+      "force": "Kraft vom Boden jetzt",
       "knee": "Kniebeugung rechts jetzt",
-      "peak": "Höchste Bodenkraft bei diesem Tempo",
+      "peak": "Höchste Kraft vom Boden bei diesem Tempo",
       "contact": "Bodenkontaktzeit",
       "phase": "Rechtes Bein jetzt",
       "tendon": "Achillessehne und Fußgewölbe",
@@ -250,26 +250,26 @@
       "muscles": "Wer die Arbeit leistet",
       "musclesValue": "Oberschenkel bremsen am meisten, Waden leisten den größten Teil des Abdrucks",
       "calf": "Wadenmuskel bei 5 m/s",
-      "calfValue": "allein der Soleus drückt mit etwa dem 2-Fachen des Körpergewichts nach oben",
+      "calfValue": "allein der Soleus drückt mit etwa dem Doppelten des Körpergewichts nach oben",
       "kneeBend": "Kniebeugung beim Aufsetzen",
-      "kneeBendValue": "etwa 43 bis 45 Grad bei den drei Tempi",
+      "kneeBendValue": "etwa 43 bis 45 Grad bei den drei Tempostufen",
       "impact": "Höchste Kraft nach oben",
-      "impactValue": "etwa 2,3, 2,5 und 2,6 Körpergewichte bei den drei Tempi"
+      "impactValue": "etwa das 2,3-, 2,5- und 2,6-Fache des Körpergewichts bei den drei Tempostufen"
     },
     "liftoff": {
       "rate": "Änderung der Schrittfrequenz",
       "rateLabel": "Schrittfrequenz bei gleichem Tempo",
       "bounce": "Auf und Ab pro Schritt, Schätzung des Modells",
       "flight": "Eine Flugphase",
-      "hip": "Hüftwinkel (Minus: Oberschenkel hinter dir)",
+      "hip": "Hüftwinkel, Oberschenkel gegen Becken",
       "cadence": "Schrittfrequenz",
       "step": "Schrittlänge",
       "bounceStudy": "Auf und Ab in den Studien",
       "bounceStudyValue": "etwa 9 cm; etwa 7 cm mit 10 Prozent mehr Schritten",
-      "hipPeak": "Oberschenkel hinter dir, höchstens",
-      "hipPeakValue": "ein paar Grad, am meisten beim schnellen Tempo, etwa 10",
+      "hipPeak": "Hüfte am weitesten geöffnet",
+      "hipPeakValue": "ein paar Grad über Null, am meisten beim schnellen Tempo (etwa 10)",
       "economy": "Beinstreckung und Laufökonomie",
-      "economyValue": "weniger Beinstreckung beim Abdruck geht in einem Überblick mit besserer Laufökonomie einher",
+      "economyValue": "weniger Beinstreckung beim Abdruck geht in einem Überblick mit weniger Energieverbrauch einher",
       "kneeEnergy": "Energie im Knie beim Aufsetzen",
       "kneeEnergyValue": "etwa ein Drittel weniger mit 10 Prozent mehr Schritten",
       "cadenceStudy": "Die Studie zur Schrittfrequenz",
@@ -281,7 +281,7 @@
       "elbow": "Ellbogenwinkel rechts (Modell)",
       "arm": "Armschwung rechts, Plus ist vorn (Modell)",
       "arms": "Arme",
-      "armCost": "Mehr Energieverbrauch, ein Labor",
+      "armCost": "Mehr Energieverbrauch, eine Laborstudie",
       "armCostValue": "3 Prozent Hände auf dem Rücken, 9 Arme vor der Brust, 13 Hände auf dem Kopf",
       "armPush": "Vortrieb durch die Arme",
       "armPushValue": "unter 1 Prozent des Vortriebs, in einer Simulation",
@@ -296,13 +296,13 @@
     },
     "pace": {
       "speed": "Geschwindigkeit",
-      "km": "Pace pro km",
+      "km": "Zeit pro Kilometer",
       "cadence": "Schrittfrequenz",
       "step": "Schrittlänge",
       "contact": "Bodenkontaktzeit",
       "float": "Eine Flugphase",
       "knee": "Höchste Kniebeugung im Schwung",
-      "force": "Höchste Bodenkraft",
+      "force": "Höchste Kraft vom Boden",
       "lean": "Rumpfneigung jetzt",
       "elites": "Sechs kenianische Spitzenläufer",
       "elitesValue": "etwa 175 Schritte pro Minute bei 3,5 m/s, 185 bei 4,5",
