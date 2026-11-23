@@ -8,6 +8,7 @@ import type { ArmsId, PaceId, SideId } from '../../../../ids';
 import { gaitAt } from '../../../../model/gait';
 import { GAIT_DATA } from '../../../../model/gaitData';
 import { CYCLE_UNITS } from '../../../../model/timeMap';
+import { STANDING_PELVIS_TILT_DEG } from '../../../rig/pelvis';
 import { solveSkeleton } from '../../../rig/skeleton';
 import type { RunnerSkeleton } from '../../../rig/skeleton';
 import { FIGURE_FROM_RUNNER } from './frame';
@@ -27,6 +28,7 @@ const VERTEX_ACCELERATION_LIMIT_MM = 3;
 const PLANTED_DRIFT_MM = 5;
 const STRAIGHT_KNEE_DEG = -1;
 const TIMEOUT_MS = 600_000;
+const PELVIS_LIMIT_DEG = 1;
 const NATURAL_LIMITS_DEG: readonly (readonly [RegExp, number])[] = [
   [/_clavicle_rx$/, 10],
   [/_clavicle_r[yz]$/, 40],
@@ -199,6 +201,27 @@ describe('runner figure rig', () => {
         drift = Math.max(drift, skeleton.legs.right.ankle.distanceTo(joint('r_foot')) * MM);
       }
       expect(drift).toBeLessThan(PLANTED_DRIFT_MM);
+    });
+  });
+
+  it('tilts and drops the body pelvis with the reading', () => {
+    const sagittal = (vector: Vector3) => toDegrees(Math.atan2(vector.x, vector.y));
+    const hips = () => joint('r_upleg').add(joint('l_upleg')).multiplyScalar(0.5);
+    figure.solveSkeleton(figure.createParameters());
+    const rest = sagittal(joint('c_spine0').sub(hips()));
+    SETUPS.forEach((setup) => {
+      for (let units = 0; units < CYCLE_UNITS; units += SCAN_STEP * SCAN_STEP) {
+        const skeleton = skeletonAt(units, setup);
+        figure.solveSkeleton(rig.retarget(skeleton));
+        const { pelvisTiltDeg, pelvisRollDeg } = skeleton.reading.upper;
+        const tilt = sagittal(joint('c_spine0').sub(hips())) - rest;
+        const across = joint('r_upleg').sub(joint('l_upleg'));
+        const drop = toDegrees(Math.atan2(across.y, across.z));
+        expect(Math.abs(tilt - (pelvisTiltDeg - STANDING_PELVIS_TILT_DEG))).toBeLessThan(
+          PELVIS_LIMIT_DEG,
+        );
+        expect(Math.abs(drop - pelvisRollDeg)).toBeLessThan(PELVIS_LIMIT_DEG);
+      }
     });
   });
 
