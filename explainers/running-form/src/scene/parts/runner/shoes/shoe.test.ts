@@ -1,5 +1,5 @@
 import { Matrix4, Vector3 } from 'three';
-import type { BufferGeometry , Quaternion} from 'three';
+import type { BufferGeometry, Quaternion } from 'three';
 import { describe, expect, it } from 'vitest';
 import { PACE_IDS, SIDE_IDS } from '../../../../ids';
 import { gaitAt } from '../../../../model/gait';

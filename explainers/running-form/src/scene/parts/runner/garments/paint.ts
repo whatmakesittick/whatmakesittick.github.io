@@ -11,7 +11,7 @@ function glsl(value: number): string {
   return value.toFixed(4);
 }
 
-const SINGLET_GAP = 'vGarments.x';
+const WAIST_GAP = 'vGarments.x';
 const ARMHOLE = 'vGarments.y';
 const SHORTS_GAP = 'vGarments.z';
 const SOCK_GAP = 'vGarments.w';
@@ -20,6 +20,8 @@ const HAIR_GAP = 'vGarmentExtents.y';
 const SIDE_X = 'vGarmentExtents.w';
 const PANEL = 'vRunnerExtra.y';
 const LEG_HEM = 'vRunnerExtra.z';
+const NECK = 'vRunnerExtra.w';
+const SINGLET_GAP = `min(${WAIST_GAP}, min(${ARMHOLE}, ${NECK}))`;
 
 const TRIM = `min(${SINGLET_GAP}, ${glsl(SINGLET.trimM)} - ${ARMHOLE})`;
 
@@ -35,7 +37,7 @@ const PAINT = [
   paintCall(GARMENT.sock, SOCK_GAP),
   paintCall(GARMENT.sockCuff, `min(${SOCK_GAP}, ${glsl(SOCKS.cuffM)} - ${SOCK_GAP})`),
   paintCall(GARMENT.shorts, SHORTS_GAP),
-  paintCall(GARMENT.waistband, `min(${SHORTS_GAP}, ${glsl(SHORTS.waistbandM)} + ${SINGLET_GAP})`),
+  paintCall(GARMENT.waistband, `min(${SHORTS_GAP}, ${glsl(SHORTS.waistbandM)} + ${WAIST_GAP})`),
   paintCall(GARMENT.piping, `min(${SHORTS_GAP}, ${glsl(SHORTS.pipingM)} - ${LEG_HEM})`),
   paintCall(GARMENT.singlet, SINGLET_GAP),
   paintCall(GARMENT.sidePanel, `min(${SINGLET_GAP}, ${PANEL})`),

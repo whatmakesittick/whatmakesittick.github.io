@@ -11,7 +11,8 @@ const figure = restPosed(decodeFigure(athleteData));
 const frame = new RestFrame(figure);
 const fields = runnerFields(figure, frame, PART_RULES);
 const AXES = 3;
-const CHANNEL = { singlet: 0, shorts: 2, sock: 3 } as const;
+const CHANNEL = { waist: 0, armhole: 1, shorts: 2, sock: 3 } as const;
+const NECK_EXTRA = 3;
 const EXTENT = { cap: 0, hair: 1, side: 3 } as const;
 
 function vertices(test: (point: Vector3) => boolean): number[] {
@@ -27,6 +28,14 @@ function distance(v: number, channel: number): number {
   return fields.distances[v * CHANNELS + channel];
 }
 
+function singlet(v: number): number {
+  return Math.min(
+    distance(v, CHANNEL.waist),
+    distance(v, CHANNEL.armhole),
+    fields.extra[v * CHANNELS + NECK_EXTRA],
+  );
+}
+
 function extent(v: number, channel: number): number {
   return fields.extents[v * CHANNELS + channel];
 }
@@ -36,9 +45,7 @@ describe('runner garment fields', () => {
     const waist = vertices((p) => p.y > 0.95 && p.y < 1.15 && Math.abs(p.x) < 0.17);
     expect(waist.length).toBeGreaterThan(50);
     waist.forEach((v) =>
-      expect(
-        Math.max(distance(v, CHANNEL.singlet), distance(v, CHANNEL.shorts)),
-      ).toBeGreaterThanOrEqual(0),
+      expect(Math.max(singlet(v), distance(v, CHANNEL.shorts))).toBeGreaterThanOrEqual(0),
     );
   });
 
@@ -46,7 +53,7 @@ describe('runner garment fields', () => {
     const wrist = frame.joint('r_wrist');
     const hand = vertices((p) => p.distanceTo(wrist) < 0.06);
     hand.forEach((v) => {
-      expect(distance(v, CHANNEL.singlet)).toBeLessThan(0);
+      expect(singlet(v)).toBeLessThan(0);
       expect(distance(v, CHANNEL.shorts)).toBeLessThan(0);
     });
   });

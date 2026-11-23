@@ -197,9 +197,8 @@ export function runnerFields(
     const at = v * CHANNELS;
     const limbShare = shareOf(weights, parts, v, ['arm', 'head']);
     const armhole = -armholeInside(point);
-    const singlet = Math.min(waist[v], armhole, -neckInside(point));
     const hem = legHem(point, marks.thighs[side], scratch);
-    distances[at] = singlet;
+    distances[at] = waist[v];
     distances[at + 1] = armhole;
     distances[at + 2] = limbShare > SHORTS.maxLimbShare ? OUTSIDE : Math.min(-waist[v], hem);
     distances[at + 3] =
@@ -212,6 +211,7 @@ export function runnerFields(
     extra[at] = flush[v];
     extra[at + 1] = sidePanel(point);
     extra[at + 2] = hem;
+    extra[at + 3] = -neckInside(point);
   }
   return { distances, extents, extra };
 }
