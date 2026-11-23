@@ -47,9 +47,9 @@
       "fast": "Fast"
     },
     "paceOptions": {
-      "easy": "Easy, {{pace}}",
-      "steady": "Steady, {{pace}}",
-      "fast": "Fast, {{pace}}"
+      "easy": "Easy, 6:40 per km",
+      "steady": "Steady, 4:46 per km",
+      "fast": "Fast, 3:42 per km"
     },
     "armsOptions": {
       "swing": "Arms swing",

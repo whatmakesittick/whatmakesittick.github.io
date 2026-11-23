@@ -47,9 +47,9 @@
       "fast": "速い"
     },
     "paceOptions": {
-      "easy": "ゆっくり、{{pace}}",
-      "steady": "ふつう、{{pace}}",
-      "fast": "速い、{{pace}}"
+      "easy": "ゆっくり、6:40/km",
+      "steady": "ふつう、4:46/km",
+      "fast": "速い、3:42/km"
     },
     "armsOptions": {
       "swing": "腕を振る",

@@ -47,9 +47,9 @@
       "fast": "Rapide"
     },
     "paceOptions": {
-      "easy": "Tranquille, {{pace}}",
-      "steady": "Soutenue, {{pace}}",
-      "fast": "Rapide, {{pace}}"
+      "easy": "Tranquille, 6:40/km",
+      "steady": "Soutenue, 4:46/km",
+      "fast": "Rapide, 3:42/km"
     },
     "armsOptions": {
       "swing": "Bras qui balancent",
@@ -107,7 +107,7 @@
   "units": {
     "metersPerSecond": "{{value}} m/s",
     "perMinute": "{{value}} pas/min",
-    "perKilometer": "{{value}} /km",
+    "perKilometer": "{{value}}/km",
     "meters": "{{value}} m",
     "centimeters": "{{value}} cm",
     "centimetersSigned": "{{value}} cm",

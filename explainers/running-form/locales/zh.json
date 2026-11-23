@@ -47,9 +47,9 @@
       "fast": "快速"
     },
     "paceOptions": {
-      "easy": "轻松，{{pace}}",
-      "steady": "中速，{{pace}}",
-      "fast": "快速，{{pace}}"
+      "easy": "轻松，6:40/公里",
+      "steady": "中速，4:46/公里",
+      "fast": "快速，3:42/公里"
     },
     "armsOptions": {
       "swing": "摆臂",
