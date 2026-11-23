@@ -1,4 +1,4 @@
-import type { Vector3 } from 'three';
+import { Vector3 } from 'three';
 import type { SideId } from '../../../ids';
 import type { RunnerPose } from '../../runnerPose';
 
@@ -6,29 +6,34 @@ export interface ProxySegment {
   readonly from: Vector3;
   readonly to: Vector3;
   readonly radius: number;
+  readonly endRadius: number;
 }
 
+type Taper = readonly [from: number, to: number];
+
 const RADIUS = {
-  head: 0.11,
-  neck: 0.05,
-  torso: 0.15,
-  pelvis: 0.12,
-  upperArm: 0.045,
-  forearm: 0.038,
-  thigh: 0.075,
-  shin: 0.048,
-  foot: 0.045,
-} as const;
+  head: [0.09, 0.085],
+  neck: [0.055, 0.055],
+  torso: [0.13, 0.15],
+  pelvis: [0.11, 0.11],
+  upperArm: [0.046, 0.038],
+  forearm: [0.038, 0.03],
+  thigh: [0.08, 0.052],
+  shin: [0.05, 0.032],
+  foot: [0.04, 0.036],
+  brim: [0.016, 0.016],
+} as const satisfies Record<string, Taper>;
 
 const SIDES: readonly SideId[] = ['right', 'left'];
-const HAND_REACH_M = 0.07;
-const FOOT_LIFT_M = 0.045;
+const HAND_REACH_M = 0.08;
+const SHOE_LIFT_M = 0.04;
 const TORSO_BASE_LIFT_M = 0.08;
+const BRIM = { aboveCentreM: 0.035, aheadM: 0.1, halfWidthM: 0.075 } as const;
 
-export const PROXY_COUNT = 14;
+export const PROXY_COUNT = 15;
 
-function segment(from: Vector3, to: Vector3, radius: number): ProxySegment {
-  return { from, to, radius };
+function segment(from: Vector3, to: Vector3, [radius, endRadius]: Taper): ProxySegment {
+  return { from, to, radius, endRadius };
 }
 
 function lifted(point: Vector3, metres: number): Vector3 {
@@ -40,11 +45,30 @@ function beyond(from: Vector3, to: Vector3, metres: number): Vector3 {
   return to.clone().addScaledVector(direction, metres);
 }
 
+function brim(pose: RunnerPose): ProxySegment {
+  const up = pose.headTop.clone().sub(pose.headCentre).normalize();
+  const ahead = pose.trunkForward
+    .clone()
+    .addScaledVector(up, -pose.trunkForward.dot(up))
+    .normalize();
+  const across = new Vector3().crossVectors(ahead, up);
+  const middle = pose.headCentre
+    .clone()
+    .addScaledVector(up, BRIM.aboveCentreM)
+    .addScaledVector(ahead, BRIM.aheadM);
+  return segment(
+    middle.clone().addScaledVector(across, -BRIM.halfWidthM),
+    middle.clone().addScaledVector(across, BRIM.halfWidthM),
+    RADIUS.brim,
+  );
+}
+
 export function proxySegments(pose: RunnerPose): ProxySegment[] {
   const { legs, arms } = pose;
   const torsoBase = pose.pelvis.clone().addScaledVector(pose.trunkUp, TORSO_BASE_LIFT_M);
   const top: ProxySegment[] = [
     segment(pose.headCentre, pose.headTop, RADIUS.head),
+    brim(pose),
     segment(pose.chest, pose.headCentre, RADIUS.neck),
     segment(torsoBase, pose.chest, RADIUS.torso),
     segment(legs.left.hip, legs.right.hip, RADIUS.pelvis),
@@ -62,7 +86,7 @@ export function proxySegments(pose: RunnerPose): ProxySegment[] {
     segment(legs[side].knee, legs[side].ankle, RADIUS.shin),
   ]);
   const feet = SIDES.map((side) =>
-    segment(lifted(legs[side].heel, FOOT_LIFT_M), lifted(legs[side].toe, FOOT_LIFT_M), RADIUS.foot),
+    segment(lifted(legs[side].heel, SHOE_LIFT_M), lifted(legs[side].toe, SHOE_LIFT_M), RADIUS.foot),
   );
   return [...top, ...arm, ...leg, ...feet];
 }

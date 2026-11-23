@@ -49,20 +49,21 @@ interface Receiver {
 }
 
 const KERB_FACE_Z_M = ROAD.zMaxM;
+const LIFT_M = 0.003;
 
 const RECEIVERS: readonly Receiver[] = [
   {
-    plane: new Vector4(0, 1, 0, 0),
+    plane: new Vector4(0, 1, 0, LIFT_M),
     clip: new Vector4(CLIP.none, 0, 0, 0),
     passes: [PASSES.core, PASSES.fringe, PASSES.wide],
   },
   {
-    plane: new Vector4(0, 1, 0, KERB.heightM),
+    plane: new Vector4(0, 1, 0, KERB.heightM + LIFT_M),
     clip: new Vector4(CLIP.depth, KERB_FACE_Z_M, KERB_FACE_Z_M + KERB.widthM, 0),
     passes: [PASSES.core, PASSES.fringe],
   },
   {
-    plane: new Vector4(0, 0, 1, KERB_FACE_Z_M),
+    plane: new Vector4(0, 0, 1, KERB_FACE_Z_M - LIFT_M),
     clip: new Vector4(CLIP.height, 0, KERB.heightM, 0),
     passes: [PASSES.core, PASSES.fringe],
   },
@@ -89,8 +90,9 @@ void main() {
   vec3 side = normalize(cross(up, helper));
   vec3 front = cross(side, up);
   vec3 centre = (a + b) * 0.5;
-  float radius = max(uFrom[index].w + uSpread * max(centre.y, 0.0), 0.01);
   float straight = clamp(position.y, -0.5, 0.5);
+  float taper = mix(uFrom[index].w, uTo[index].w, straight + 0.5);
+  float radius = max(taper + uSpread * max(centre.y, 0.0), 0.01);
   vec3 world = centre + up * (straight * len + (position.y - straight) * radius)
     + (side * position.x + front * position.z) * radius;
   float above = dot(uPlane.xyz, world) - uPlane.w;
@@ -190,7 +192,7 @@ export class RunnerShadow {
   setPose(pose: RunnerPose): void {
     proxySegments(pose).forEach((segment, index) => {
       this.from[index].set(segment.from.x, segment.from.y, segment.from.z, segment.radius);
-      this.to[index].set(segment.to.x, segment.to.y, segment.to.z, 0);
+      this.to[index].set(segment.to.x, segment.to.y, segment.to.z, segment.endRadius);
     });
     this.origin.copy(pose.pelvis);
   }
