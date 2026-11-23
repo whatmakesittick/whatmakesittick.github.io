@@ -1,9 +1,11 @@
 import { BoxGeometry, Mesh, Vector4 } from 'three';
+import type { BufferGeometry } from 'three';
 import { ROAD, WALL } from '../../../model/layout';
 import { THEME } from '../../../theme';
 import { BEACH_TOP_M, GROUND_EXTENT_M, KERB, LAYER, PARAPET, shadowReachZ } from '../../constants';
 import { backdropMaterial, colour } from './atmosphere';
 import type { Backdrop } from './atmosphere';
+import { LONG_SEGMENTS, denseNearOrigin } from './spacing';
 import { ATMOSPHERE_GLSL, LIGHT_GLSL, NOISE_GLSL, OUTPUT_GLSL, WORLD_VERTEX } from './glsl';
 
 interface MasonryLook {
@@ -86,7 +88,12 @@ void main() {
 }
 `;
 
-function masonry(backdrop: Backdrop, look: MasonryLook, geometry: BoxGeometry, name: string): Mesh {
+function masonry(
+  backdrop: Backdrop,
+  look: MasonryLook,
+  geometry: BufferGeometry,
+  name: string,
+): Mesh {
   const material = backdropMaterial(
     backdrop,
     {
@@ -104,10 +111,10 @@ function masonry(backdrop: Backdrop, look: MasonryLook, geometry: BoxGeometry, n
   return mesh;
 }
 
-function box(width: number, height: number, depth: number, y: number, z: number): BoxGeometry {
-  const geometry = new BoxGeometry(width, height, depth);
+function box(width: number, height: number, depth: number, y: number, z: number): BufferGeometry {
+  const geometry = new BoxGeometry(width, height, depth, LONG_SEGMENTS);
   geometry.translate(0, y, z);
-  return geometry;
+  return denseNearOrigin(geometry, 'x', width / 2);
 }
 
 export function buildMasonry(backdrop: Backdrop): Mesh[] {

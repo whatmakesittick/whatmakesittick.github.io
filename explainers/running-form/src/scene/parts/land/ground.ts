@@ -21,6 +21,7 @@ import {
 } from '../../constants';
 import { backdropMaterial, colour } from './atmosphere';
 import type { Backdrop } from './atmosphere';
+import { DEPTH_SEGMENTS, LONG_SEGMENTS, denseNearEdge, denseNearOrigin } from './spacing';
 import { ATMOSPHERE_GLSL, LIGHT_GLSL, NOISE_GLSL, OUTPUT_GLSL } from './glsl';
 import { LAMP, POST_OFFSETS } from './placement';
 
@@ -183,9 +184,15 @@ void main() {
 
 export function buildGround(backdrop: Backdrop): Mesh {
   const depth = GROUND.farZ - GROUND.nearZ;
-  const geometry = new PlaneGeometry(GROUND_EXTENT_M * 2, depth)
+  const plane = new PlaneGeometry(GROUND_EXTENT_M * 2, depth, LONG_SEGMENTS, DEPTH_SEGMENTS)
     .rotateX(-Math.PI / 2)
     .translate(0, 0, GROUND.nearZ + depth / 2);
+  const geometry = denseNearEdge(
+    denseNearOrigin(plane, 'x', GROUND_EXTENT_M),
+    'z',
+    GROUND.nearZ,
+    GROUND.farZ,
+  );
   const uniforms = {
     uRoad: {
       value: new Vector4(ROAD.zMinM, ROAD.zMaxM, CENTRE_LINE_Z_M, ROAD.zMaxM + KERB.widthM),

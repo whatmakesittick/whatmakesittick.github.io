@@ -1,8 +1,10 @@
-import { BufferAttribute, BufferGeometry, Mesh } from 'three';
+import { Mesh, PlaneGeometry } from 'three';
+import type { BufferGeometry } from 'three';
 import { SEA_START_Z_M, WALL } from '../../../model/layout';
 import { BEACH_TOP_M, GROUND_EXTENT_M, LAYER, SEA_LEVEL_M } from '../../constants';
 import { backdropMaterial, colour } from './atmosphere';
 import type { Backdrop } from './atmosphere';
+import { LONG_SEGMENTS, denseNearOrigin } from './spacing';
 import { ATMOSPHERE_GLSL, LIGHT_GLSL, NOISE_GLSL, OUTPUT_GLSL, WORLD_VERTEX } from './glsl';
 
 const BEACH = {
@@ -45,29 +47,16 @@ void main() {
 `;
 
 function slope(): BufferGeometry {
-  const x = GROUND_EXTENT_M;
   const bottomY =
     BEACH_TOP_M +
     ((SEA_LEVEL_M - BEACH_TOP_M) * (BEACH.bottomZ - BEACH.topZ)) / (SEA_START_Z_M - BEACH.topZ);
-  const positions = new Float32Array([
-    -x,
-    BEACH_TOP_M,
-    BEACH.topZ,
-    x,
-    BEACH_TOP_M,
-    BEACH.topZ,
-    -x,
-    bottomY,
-    BEACH.bottomZ,
-    x,
-    bottomY,
-    BEACH.bottomZ,
-  ]);
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new BufferAttribute(positions, 3));
-  geometry.setIndex([0, 1, 2, 1, 3, 2]);
-  geometry.computeVertexNormals();
-  return geometry;
+  const width = GROUND_EXTENT_M * 2;
+  const depth = Math.hypot(BEACH.bottomZ - BEACH.topZ, bottomY - BEACH_TOP_M);
+  const tilt = Math.atan2(BEACH_TOP_M - bottomY, BEACH.topZ - BEACH.bottomZ);
+  const plane = new PlaneGeometry(width, depth, LONG_SEGMENTS, 1)
+    .rotateX(-Math.PI / 2 - tilt)
+    .translate(0, (BEACH_TOP_M + bottomY) / 2, (BEACH.topZ + BEACH.bottomZ) / 2);
+  return denseNearOrigin(plane, 'x', GROUND_EXTENT_M);
 }
 
 export function buildBeach(backdrop: Backdrop): Mesh {

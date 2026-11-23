@@ -8,6 +8,7 @@ import { FINISHES } from '../../finishes';
 import type { Finish } from '../../finishes';
 import type { PartContext } from '../context';
 import { LAMP, POST_OFFSETS, periodicItems } from './placement';
+import { LONG_SEGMENTS, denseNearOrigin } from './spacing';
 import { ScrollingInstances, copiesOf, NEAR_WINDOW } from './strip';
 import type { StripItem } from './strip';
 
@@ -123,10 +124,12 @@ function rail(context: PartContext): {
       RAIL.tubeRadiusM,
       GROUND_EXTENT_M * 2,
       RAIL_SEGMENTS,
+      LONG_SEGMENTS,
     )
       .rotateZ(Math.PI / 2)
       .translate(0, height, WALL.zM);
-    return new Mesh(context.tracker.track(geometry), material);
+    const tube = denseNearOrigin(geometry, 'x', GROUND_EXTENT_M);
+    return new Mesh(context.tracker.track(tube), material);
   });
   return {
     meshes: [stanchions, ...tubes],

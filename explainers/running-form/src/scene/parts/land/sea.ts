@@ -4,6 +4,7 @@ import { THEME } from '../../../theme';
 import { GROUND_EXTENT_M, LAYER, SEA_LEVEL_M } from '../../constants';
 import { backdropMaterial, colour } from './atmosphere';
 import type { Backdrop } from './atmosphere';
+import { DEPTH_SEGMENTS, LONG_SEGMENTS, denseNearEdge, denseNearOrigin } from './spacing';
 import { ATMOSPHERE_GLSL, NOISE_GLSL, OUTPUT_GLSL } from './glsl';
 
 const SEA = { nearZ: SEA_START_Z_M + 1.5, farZ: -GROUND_EXTENT_M } as const;
@@ -111,9 +112,15 @@ void main() {
 
 export function buildSea(backdrop: Backdrop): Mesh {
   const depth = SEA.nearZ - SEA.farZ;
-  const geometry = new PlaneGeometry(GROUND_EXTENT_M * 2, depth)
+  const plane = new PlaneGeometry(GROUND_EXTENT_M * 2, depth, LONG_SEGMENTS, DEPTH_SEGMENTS)
     .rotateX(-Math.PI / 2)
     .translate(0, SEA_LEVEL_M, SEA.nearZ - depth / 2);
+  const geometry = denseNearEdge(
+    denseNearOrigin(plane, 'x', GROUND_EXTENT_M),
+    'z',
+    SEA.nearZ,
+    SEA.farZ,
+  );
   const material = backdropMaterial(
     backdrop,
     {
