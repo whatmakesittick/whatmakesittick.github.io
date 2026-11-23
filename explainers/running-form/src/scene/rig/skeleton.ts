@@ -10,7 +10,7 @@ import { RIG_BODY, restJoint } from './body';
 import { lowestSole } from './foot';
 import { Y_AXIS, Z_AXIS, about, apply, mirrorPoint } from './frames';
 import type { LegChain } from './leg';
-import { pelvisAt, trunkAt } from './pelvis';
+import { bodyPelvisUp, pelvisAt, trunkAt } from './pelvis';
 import type { PelvisState, TrunkState } from './pelvis';
 import { BALL_PIVOT, BARE_TOE_AXIS, DROP_RAD, PROFILE } from './shoe';
 import { solveLeg } from './stance';
@@ -30,6 +30,7 @@ export interface RunnerSkeleton extends RigPose {
   readonly arms: Readonly<Record<SideId, RigArm & { readonly chain: ArmChain }>>;
   readonly legs: Readonly<Record<SideId, RunnerLegRig>>;
   readonly head: Quaternion;
+  readonly pelvisUp: Vector3;
   readonly pelvis: PelvisState;
   readonly trunk: TrunkState;
   readonly reading: GaitReading;
@@ -93,7 +94,15 @@ export function solveSkeleton(reading: GaitReading): RunnerSkeleton {
     legs[side] = rigLeg(solution.chain, side, solution);
     arms[side] = rigArm(solveArm(reading, trunk, side));
   });
-  return { arms, legs, head: headRotation(reading), pelvis, trunk, reading };
+  return {
+    arms,
+    legs,
+    head: headRotation(reading),
+    pelvisUp: bodyPelvisUp(pelvis),
+    pelvis,
+    trunk,
+    reading,
+  };
 }
 
 function inTrunk(trunk: TrunkState, offset: readonly [number, number]): Vector3 {
