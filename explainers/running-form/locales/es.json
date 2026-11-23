@@ -1,0 +1,315 @@
+{
+  "meta": {
+    "title": "Técnica de carrera: cómo funciona una buena zancada",
+    "eyebrow": "Biología y física",
+    "tagline": "Correr es encadenar saltos sobre una pierna, y una buena técnica deja que la pierna haga de muelle con poco gasto.",
+    "description": "Sigue la zancada de un corredor en 3D: cómo aterriza, rebota y despega la pierna, y qué dice la ciencia de la cadencia, la postura y los brazos.",
+    "summary": "Las cuatro fases de la zancada, el aterrizaje, la pierna como muelle, el despegue y el vuelo, la postura y los brazos, y cómo cambia la técnica con el ritmo.",
+    "socialAlt": "Un corredor visto de tres cuartos por delante en una carretera junto al mar al amanecer, con el sol bajo sobre el agua y una sombra larga en el asfalto, junto al título Técnica de carrera: cómo funciona una buena zancada"
+  },
+  "stage": {
+    "label": "Modelo interactivo de la técnica de carrera",
+    "gauge": "Cadencia, longitud de paso y fuerza del suelo en vivo"
+  },
+  "timeline": {
+    "label": "Zancada",
+    "phases": "Ir a una fase de la pierna derecha",
+    "value": "{{percent}} %",
+    "during": "{{percent}} %, pierna derecha: {{phase}}",
+    "speed": "Reproducción",
+    "speedValue": "{{factor}}×",
+    "realTime": "Tiempo real",
+    "slower": "{{factor}} veces más despacio",
+    "phase": {
+      "landing": "Aterrizaje",
+      "pushOff": "Impulso",
+      "recovery": "Recobro",
+      "reach": "Avance"
+    },
+    "jump": {
+      "landing": "Ir al momento en que el pie toca el suelo",
+      "pushOff": "Ir a la mitad del apoyo, donde empieza el empuje",
+      "recovery": "Ir al momento en que el pie deja el suelo",
+      "reach": "Ir a la pierna que se adelanta para aterrizar"
+    }
+  },
+  "controls": {
+    "label": "Controles del modelo",
+    "pace": "Ritmo",
+    "groups": {
+      "pace": "Ritmo",
+      "arms": "Brazos",
+      "look": "Vista"
+    },
+    "paceNames": {
+      "easy": "Suave",
+      "steady": "Medio",
+      "fast": "Rápido"
+    },
+    "paceOptions": {
+      "easy": "Suave, {{pace}}",
+      "steady": "Medio, {{pace}}",
+      "fast": "Rápido, {{pace}}"
+    },
+    "armsOptions": {
+      "swing": "Braceo",
+      "held": "Brazos quietos"
+    },
+    "lookOptions": {
+      "front": "De frente",
+      "above": "Desde arriba"
+    },
+    "views": {
+      "labels": {
+        "name": "Etiquetas",
+        "short": "Etiquetas",
+        "hint": "Nombres de las partes (L)"
+      },
+      "forces": {
+        "name": "Fuerzas",
+        "short": "Fuerzas",
+        "hint": "Fuerza del suelo sobre el pie (F)"
+      },
+      "formLines": {
+        "name": "Líneas de técnica",
+        "short": "Líneas",
+        "hint": "Línea del cuerpo, línea de la espinilla y ángulos de las articulaciones (G)"
+      },
+      "footPath": {
+        "name": "Trayectoria del pie",
+        "short": "Trayecto",
+        "hint": "Trayectoria del pie derecho respecto a la cadera (H)"
+      },
+      "follow": {
+        "name": "Cámara que sigue",
+        "short": "Seguir",
+        "hint": "La cámara acompaña al corredor (O)"
+      }
+    },
+    "stepRate": {
+      "label": "Cadencia a la misma velocidad"
+    }
+  },
+  "readouts": {
+    "feet": "Pies en el suelo",
+    "force": "Fuerza del suelo",
+    "knee": "Flexión de la rodilla derecha",
+    "cadence": "Cadencia",
+    "stepLength": "Longitud de paso",
+    "contact": "Tiempo de contacto",
+    "floatShare": "Los dos pies en el aire: {{percent}} % de la zancada"
+  },
+  "gauge": {
+    "feetRight": "Pie derecho",
+    "feetLeft": "Pie izquierdo",
+    "feetAir": "Los dos en el aire"
+  },
+  "units": {
+    "metersPerSecond": "{{value}} m/s",
+    "perMinute": "{{value}} por min",
+    "perKilometer": "{{value}} min/km",
+    "meters": "{{value}} m",
+    "centimeters": "{{value}} cm",
+    "centimetersSigned": "{{value}} cm",
+    "milliseconds": "{{value}} ms",
+    "degrees": "{{value}}°",
+    "bodyWeights": "{{value}} veces el peso corporal",
+    "percent": "{{value}} %",
+    "signedPercent": "{{value}} %"
+  },
+  "parts": {
+    "head": "Cabeza",
+    "shoulder": "Hombro",
+    "arm": "Brazo",
+    "elbow": "Codo",
+    "trunk": "Tronco",
+    "pelvis": "Pelvis",
+    "hip": "Cadera",
+    "thigh": "Muslo",
+    "knee": "Rodilla",
+    "shin": "Espinilla",
+    "achilles": "Tendón de Aquiles",
+    "arch": "Arco plantar",
+    "heel": "Talón",
+    "shoe": "Zapatilla",
+    "road": "Suelo"
+  },
+  "overlay": {
+    "lean": "Inclinación {{value}}°",
+    "shin": "Línea de la espinilla",
+    "kneeBend": "Rodilla {{value}}°",
+    "elbowBend": "Codo {{value}}°",
+    "braking": "Frenado",
+    "pushing": "Empuje",
+    "bodyWeight": "1 vez el peso corporal",
+    "forceNow": "Fuerza: {{value}} veces el peso corporal",
+    "footPath": "Trayectoria del pie respecto a la cadera",
+    "bodyLine": "Línea del cuerpo"
+  },
+  "sections": {
+    "stride": {
+      "title": "La zancada",
+      "p1": "Mira al corredor en la carretera junto al mar, al amanecer. Correr es encadenar saltos sobre una pierna. Una pierna aterriza, cede un poco y lo lanza de nuevo hacia arriba. Entonces los dos pies dejan el suelo un instante. Ese instante en el aire, la <strong>fase de vuelo</strong>, es lo que distingue correr de caminar. Al caminar siempre hay un pie apoyado. Se pasa de caminar a correr a unos 2 m/s.",
+      "p2": "Una <strong>zancada</strong> son dos pasos: el pie derecho aterriza, luego el izquierdo y luego otra vez el derecho. Un <strong>paso</strong> va desde que aterriza un pie hasta que aterriza el otro. Sigue a la pierna derecha en sus cuatro fases. En el <strong>aterrizaje</strong>, el pie toca el suelo y la pierna cede. En el <strong>impulso</strong>, la pierna empuja hasta que el pie deja el suelo. En el <strong>recobro</strong>, el talón sube y la rodilla se dobla y se lleva hacia delante. En el <strong>avance</strong>, la pierna se adelanta y vuelve a bajar. La pierna izquierda hace lo mismo media zancada después. Arrastra la línea de tiempo y míralo.",
+      "p3": "Los límites entre las fases los marca el propio modelo. El <strong>apoyo</strong> es el tiempo que el pie está en el suelo. En la mitad del apoyo, el empuje del suelo pasa de frenarte a impulsarte hacia delante. En la mitad del balanceo, la rodilla de la pierna que avanza está más doblada. Las bandas de colores de la línea de tiempo corresponden al ritmo medio. A otros ritmos, los límites reales se mueven un poco.",
+      "p4": "Tus pies están en el suelo menos de la mitad de cada zancada, y menos aún cuanto más rápido vas. El resto son los dos vuelos, uno después de que cada pie despega. En estos datos, los dos vuelos juntos ocupan del 19 al 32 por ciento de la zancada, del ritmo suave al rápido. Otros laboratorios cuentan menos, porque lo miden de otra manera. Tu cuerpo está más bajo hacia la mitad del apoyo y más alto en el centro del vuelo. Al caminar pasa al revés: estás más alto en el centro del paso.",
+      "p5": "La velocidad es una cuenta sencilla: la <strong>cadencia</strong>, los pasos que das en un minuto, por la <strong>longitud de paso</strong>, la distancia que recorres en un paso. Los tres ritmos son nombres del propio modelo, no ritmos de competición. Son tres velocidades de cinta de un conjunto de datos público de laboratorio, y se muestran por kilómetro en el panel. Elige un ritmo y mira cómo suben las dos cifras.",
+      "p6": "¿De dónde salen las curvas? Los ángulos de la cadera, la rodilla y el tobillo son la media de entre 31 y 39 corredores de competición en una cinta, todos con las mismas zapatillas del laboratorio. Las curvas se promediaron y se ajustaron para mostrarlas, así que un corredor real será distinto. Los datos no incluyen nada de la parte superior del cuerpo, y el modelo la mueve con reglas tomadas de otros estudios. La carretera, el mar y el sol son un diseño, no un lugar."
+    },
+    "touchdown": {
+      "title": "El aterrizaje",
+      "p1": "La imagen se detiene en el <strong>contacto inicial</strong>, el primer instante en que el pie toca el suelo. En estos datos, el pie aterriza por delante de las caderas, con la rodilla algo flexionada, entre 11 y 14 grados, y con el pie casi plano o con el talón primero. Activa las fuerzas y las líneas de técnica. La flecha muestra lo que el suelo hace sobre ti, y la línea sigue a la espinilla.",
+      "p2": "Durante un momento, el suelo te empuja hacia atrás. Es el <strong>frenado</strong>, y es pequeño: de 0,2 a 0,4 veces el peso corporal en dos conjuntos de datos de laboratorio. Un <strong>peso corporal</strong> es la fuerza que ejerce tu propio peso sobre el suelo, y por eso lo usamos como unidad. El empuje hacia arriba es mucho mayor, de unas dos veces y media el peso corporal, y lo verás en el capítulo siguiente. A mitad del apoyo, el empuje horizontal cambia de sentido y te ayuda a avanzar.",
+      "p3": "¿Con qué parte del pie se aterriza primero? Con el talón, con el mediopié o con la parte delantera, el antepié. Unos 9 de cada 10 corredores populares de calle aterrizan de talón. Entre los maratonianos de élite del campeonato del mundo de 2017 fue entre el 55 y el 70 por ciento, y muy pocos aterrizaron de antepié. El corredor del modelo aterriza del lado del talón, como el corredor medio de los datos.",
+      "p4": "¿Importa? No se ha demostrado que ningún tipo de pisada sea mejor. Corredores con estilos distintos tenían la misma economía de carrera. Cuando se obligó a cambiar a quienes pisaban de talón, estos gastaron más energía durante un tiempo. Una pisada de talón da un primer pico de fuerza más brusco que una de antepié. Si ese pico influye en las lesiones, no se sabe.",
+      "p5": "Ahora prueba el control deslizante. Cambia la cadencia y mantiene la velocidad. Menos pasos, más largos, llevan el pie más adelante y frenan más. Más pasos, más cortos, lo hacen aterrizar algo más cerca. En un estudio de laboratorio con corredores populares a una misma velocidad, un 10 por ciento más de pasos acercó el talón unos 2 cm y redujo el frenado en torno a un 16 por ciento. Con menos pasos pasó lo contrario. El modelo aplica ese resultado a los tres ritmos. Las filas junto a este texto muestran los cambios.",
+      "p6": "<strong>Pruébalo:</strong> alarga un poco menos y deja que el pie aterrice más cerca de ti. Más cerca, no «debajo» del cuerpo: en los estudios que lo midieron, el pie sigue aterrizando algo por delante. ¿Cuánta seguridad hay? Pruebas cortas de laboratorio muestran menos frenado con más pasos y más cortos. En un estudio con 74 mujeres, las corredoras con más fuerza de frenado tuvieron más lesiones. Eso muestra una relación, no una causa."
+    },
+    "spring": {
+      "title": "El muelle",
+      "p1": "Tras el contacto, la pierna no se queda rígida. La rodilla se dobla, el cuerpo baja y la pierna empuja de vuelta, como un muelle con tu peso encima. En estos datos, la rodilla se dobla como máximo entre 43 y 45 grados. Recorre el apoyo con la línea de tiempo, activa las fuerzas y mira cómo crece y se apaga la flecha junto con las filas de la rodilla y la fuerza en el panel.",
+      "p2": "El suelo te empuja hacia arriba con unas 2,3 a 2,6 veces el peso corporal en el punto máximo, algo más a ritmos más rápidos. El máximo llega hacia la mitad del apoyo. El contacto dura aproximadamente un cuarto de segundo: de 0,23 a 0,30 s según las cuentas del modelo, según el ritmo. La curva de fuerza del panel es la de los datos.",
+      "p3": "¿Quién hace el trabajo? En un estudio de laboratorio con diez corredores de fondo, los músculos del muslo hicieron la mayor parte del frenado en el aterrizaje, y los de la pantorrilla, la mayor parte del empuje. A 5 m/s, un solo músculo de la pantorrilla, el sóleo, empujaba hacia arriba con unas 2 veces el peso corporal por sí solo.",
+      "p4": "Los tendones también ayudan. El tendón de Aquiles y el arco plantar se estiran al principio del paso, guardan energía y la devuelven después, como una pelota que rebota. Así tus músculos trabajan menos. Las fuentes no se ponen de acuerdo en cuánto, y por eso esta página no da ninguna cifra. Además, toda la pierna se vuelve más rígida al ir más rápido, sobre todo en la rodilla.",
+      "p5": "<strong>Pruébalo:</strong> aterriza con suavidad y deja que la rodilla ceda, en vez de ponerla tiesa contra el suelo. Es un consejo de entrenadores. Nadie lo ha probado bien, pero encaja con la imagen de la pierna como un muelle."
+    },
+    "liftoff": {
+      "title": "Despegue y vuelo",
+      "p1": "En la segunda mitad del apoyo, la pierna te empuja hacia arriba y hacia delante, y la pantorrilla hace buena parte del trabajo. La cadera se abre, pero poco. En estos datos, el muslo queda solo unos grados por detrás de la línea de la pelvis: unos 4, 7 y 11 grados en los tres ritmos. El ángulo de la cadera en el panel lo muestra: un signo menos significa que el muslo se ha ido hacia atrás. Entonces el pie deja el suelo.",
+      "p2": "Ahora los dos pies están en el aire. El cuerpo vuela como una pelota lanzada, siguiendo un arco suave. Según las cuentas del modelo, cada vuelo dura entre 0,07 y 0,11 s, y hay dos vuelos en cada zancada. Mira desde atrás y activa la trayectoria del pie. Es el recorrido del pie derecho visto desde la cadera: un bucle, no el recorrido sobre el suelo.",
+      "p3": "Tu cuerpo también rebota. Está más bajo hacia la mitad del apoyo y más alto en el centro del vuelo. El modelo estima la subida en unos 8 cm por paso. Saca esa cifra de la fuerza medida, calculando cómo mueve la fuerza al cuerpo. Los estudios de laboratorio midieron de 8 a 9 cm, así que la estimación va bien encaminada. Desactiva la cámara que sigue al corredor para ver el rebote respecto al suelo.",
+      "p4": "Vuelve el control deslizante. Con más pasos y más cortos a la misma velocidad, el rebote se redujo un 16 por ciento con un 10 por ciento más de pasos en un estudio de laboratorio, y la rodilla absorbió un tercio menos de energía al aterrizar. Con menos pasos y más largos, el rebote creció. La estimación del propio modelo da casi el mismo cambio. El estudio tuvo 45 corredores populares a una sola velocidad y pruebas cortas. No fue un ensayo sobre lesiones.",
+      "p5": "<strong>Pruébalo:</strong> pasos rápidos y ligeros en vez de largos y con mucho rebote, y empuja hacia atrás lo justo, no lo máximo. Subir la cadencia entre un 5 y un 10 por ciento redujo la carga sobre la rodilla en pruebas cortas de laboratorio. La mayoría de los corredores ya eligen un paso cercano al que menos gasta, así que ve poco a poco. Una revisión relaciona una menor extensión de la pierna en el despegue con una mejor economía de carrera."
+    },
+    "posture": {
+      "title": "Postura y brazos",
+      "p1": "Ponte erguido, con una ligera inclinación hacia delante. Es el consejo habitual, y la investigación que lo respalda es escasa. En un estudio con 24 corredores populares, el tronco se inclinaba unos 7 grados hacia delante, y el modelo usa esa cifra como media. En otro estudio pequeño, la inclinación variaba unos grados en cada paso. Viene de las caderas, la pelvis y el tronco en conjunto, no de una inclinación rígida desde los tobillos. Aún no se sabe en qué sentido ayuda inclinarse más.",
+      "p2": "Los entrenadores dicen que hay que mirar al horizonte y mantener los hombros relajados. Es tradición, no una medida. El modelo mantiene la cabeza nivelada con una regla propia. La pelvis no está quieta. Se inclina hacia delante y hacia atrás en cada paso. Baja un poco del lado de la pierna que avanza. Gira un poco hacia cada lado, y el pecho gira en sentido contrario. Mira desde arriba para ver la torsión. La lectura muestra el total, una estimación por lo alto. Todo esto viene de un estudio pequeño con 19 corredores, y el modelo lo sigue con reglas.",
+      "p3": "Los brazos se balancean al contrario que las piernas. Cuando la pierna izquierda va hacia delante, el brazo derecho va hacia delante. Así se anula la torsión que crean las piernas. En dos estudios de laboratorio, la torsión de los brazos fue casi igual y de sentido contrario a la de las piernas, y se duplicó de 2 a 5 m/s. Los brazos no te impulsan hacia delante: aportan menos del 1 por ciento del empuje. Elige los brazos quietos y mira desde arriba. Los hombros y las caderas giran más.",
+      "p4": "¿Ahorra energía el braceo? Quizá. En un laboratorio, correr con las manos a la espalda costó un 3 por ciento más de energía, con los brazos cruzados sobre el pecho un 9 por ciento más y con las manos en la cabeza un 13 por ciento más. Un estudio anterior no halló cambios, y otro vio que los brazos actúan como amortiguadores pasivos. Los científicos no coinciden, así que esta página no da una única cifra.",
+      "p5": "Los entrenadores enseñan a doblar los codos, más o menos en ángulo recto o algo menos. Las fuentes dicen cualquier cosa entre 60 y 90 grados, y ningún estudio ha medido el mejor ángulo. La amplitud del braceo y el ángulo del codo en el modelo son elecciones propias, y nadie las ha medido. Úsalos para ver la idea, no como una meta.",
+      "p6": "<strong>Pruébalo:</strong> corre erguido con una ligera inclinación, con la vista en el horizonte y los hombros sueltos. Deja que los brazos se balanceen hacia delante y hacia atrás, con los codos doblados, y no cruzados sobre el pecho. ¿Cuánta seguridad hay? La postura erguida, los hombros sueltos y el codo doblado son tradición de entrenadores con poca investigación. «No cruzados sobre el pecho» no tiene una cifra propia, pero en un laboratorio los brazos cruzados sobre el pecho costaron más energía. Que los brazos anulan la torsión de las piernas sí está medido."
+    },
+    "pace": {
+      "title": "El ritmo",
+      "p1": "Elige cada ritmo por turno. En estos datos, el corredor hace más de todo: más pasos por minuto, pasos más largos, menos tiempo en el suelo, vuelos más largos, un empuje más fuerte contra el suelo y la rodilla más alta. Las filas junto a este texto muestran las cifras de cada ritmo. La cifra de la rodilla es la media del máximo de cada corredor.",
+      "p2": "La mayor parte de la velocidad extra viene de pasos más largos, no de más rápidos. En un laboratorio, de 2 a 5 m/s, la cadencia subió un 21 por ciento y la longitud de paso se duplicó. Así que correr más rápido es sobre todo dar saltos más largos.",
+      "p3": "Quizá hayas oído que 180 pasos por minuto es la cifra correcta. Viene del recuento de un entrenador a los corredores de élite de los Juegos Olímpicos, que casi todos daban más pasos que eso. Es una historia de segunda mano, y trata de corredores rápidos a ritmo de competición. La cadencia sube con la velocidad, y los corredores son muy distintos, de 160 a 210 pasos por minuto. Muchos corredores rápidos dan entre 170 y 190. Es una consecuencia de correr rápido, no una meta. Las filas junto a este texto dan las cifras de los hombres de élite.",
+      "p4": "¿Eligen bien los corredores? En general, sí. En una prueba antigua de laboratorio, la longitud de paso de cada corredor estaba cerca de la que menos oxígeno gastaba, y forzar un paso más largo o más corto costaba energía. Unos pocos puntos porcentuales hacia un lado o hacia otro cuestan poco. Por eso el control deslizante de los capítulos anteriores muestra qué cambia. No es una cifra que perseguir.",
+      "p5": "Correr cuesta cerca de 1 kilocaloría por cada kilogramo de peso corporal y por cada kilómetro, a casi cualquier velocidad. Un maratón a 3,5 m/s son unos 35 000 de estos saltos.",
+      "p6": "El ritmo rápido se parece mucho al de una carrera real. En el maratón del campeonato del mundo de 2017, los hombres corrieron a entre 4,3 y 4,8 m/s con 180 a 184 pasos por minuto, cerca del ritmo rápido del modelo. El récord masculino del maratón es todavía más rápido: 5,88 m/s.",
+      "p7": "Entonces, ¿qué merece la pena probar? Corre erguido, con una ligera inclinación y la vista en el horizonte, y deja que los brazos sueltos se balanceen hacia delante y hacia atrás. Aterriza algo más cerca del cuerpo, con un paso más corto, y deja que la rodilla ceda como un muelle. Da pasos rápidos y ligeros en vez de largos y con mucho rebote. Parte de esto está medido y parte es tradición de entrenadores, y nada de ello garantiza que no te lesiones. La conclusión honesta es amable: tu cuerpo ya ha encontrado una zancada cercana a la que menos gasta. Así que cambia una sola cosa pequeña cada vez y quédate con lo que te resulte fácil."
+    }
+  },
+  "chapters": {
+    "stride": {
+      "speed": "Velocidad",
+      "cadence": "Cadencia",
+      "step": "Longitud de paso",
+      "sum": "La cuenta del modelo",
+      "sumValue": "{{cadence}} por min × {{step}} m ÷ 60 = {{speed}} m/s",
+      "phase": "Pierna derecha ahora",
+      "float": "Los dos vuelos juntos",
+      "cycle": "Una zancada",
+      "cycleValue": "dos pasos, de 0,67 a 0,75 s",
+      "floats": "Vuelos",
+      "floatsValue": "dos vuelos por zancada; juntos, del 19 al 32 por ciento de ella en estos datos",
+      "data": "De dónde salen las curvas",
+      "dataValue": "curvas de las articulaciones de 31 a 39 corredores, datos públicos, Creative Commons Attribution 4.0",
+      "dataSource": "Curvas de las articulaciones y fuerzas del suelo: Fukuchi, Fukuchi and Duarte (2017), PeerJ 5:e3298, doi:10.7717/peerj.3298. Datos: doi:10.6084/m9.figshare.4543435.v5, licencia Creative Commons Attribution 4.0. Promediadas y ajustadas para mostrarlas."
+    },
+    "touchdown": {
+      "rate": "Cambio de cadencia",
+      "rateLabel": "Cadencia a la misma velocidad",
+      "cadence": "Cadencia",
+      "step": "Longitud de paso",
+      "reach": "Distancia de aterrizaje, cambio",
+      "reachSame": "sin cambio",
+      "knee": "Flexión de la rodilla en el contacto",
+      "brake": "Fuerza máxima de frenado",
+      "impulse": "Frenado, cambio",
+      "strikes": "Con qué parte aterriza primero el pie",
+      "strikesValue": "unos 9 de cada 10 corredores populares aterrizan de talón; los maratonianos de élite, entre el 55 y el 70 por ciento",
+      "strikeImpact": "Primer pico de la fuerza",
+      "strikeImpactValue": "una pisada de talón tiene un pico de unas 1,7 a 1,9 veces el peso corporal, una de antepié, unas 0,6; la velocidad de carga de una pisada de talón con zapatilla es casi tan baja como la de antepié",
+      "strikeEconomy": "Tipo de pisada y economía",
+      "strikeEconomyValue": "no se ha demostrado que ningún tipo de pisada sea mejor para la economía; forzar un cambio empeoró la economía a corto plazo",
+      "reachStudy": "Talón por delante del centro de masas",
+      "reachStudyValue": "en un estudio, el talón aterrizó unos 9 cm por delante del centro de masas, y unos 7 cm con un 10 por ciento más de pasos",
+      "brakeInjury": "Frenado y lesiones",
+      "brakeInjuryValue": "en un estudio con 74 mujeres, las fuerzas de frenado más altas fueron con más lesiones; solo muestra una relación"
+    },
+    "spring": {
+      "force": "Fuerza del suelo ahora",
+      "knee": "Flexión de la rodilla derecha ahora",
+      "peak": "Fuerza máxima del suelo a este ritmo",
+      "contact": "Tiempo de contacto",
+      "phase": "Pierna derecha ahora",
+      "tendon": "Tendón y arco",
+      "tendonValue": "el tendón de Aquiles y el arco guardan energía al principio del paso y la devuelven después, como una pelota que rebota; las fuentes no coinciden en cuánta, así que no hay cifra",
+      "muscles": "Quién hace el trabajo",
+      "musclesValue": "los músculos del muslo hacen la mayor parte del frenado en el aterrizaje; los de la pantorrilla, la mayor parte del empuje",
+      "calf": "Músculo de la pantorrilla a 5 m/s",
+      "calfValue": "el sóleo solo empuja hacia arriba con unas 2 veces el peso corporal",
+      "kneeBend": "Flexión de la rodilla en el aterrizaje",
+      "kneeBendValue": "de 43 a 45 grados, en los tres ritmos de estos datos",
+      "impact": "Fuerza máxima hacia arriba",
+      "impactValue": "unas 2,3, 2,5 y 2,6 veces el peso corporal en los tres ritmos"
+    },
+    "liftoff": {
+      "rate": "Cambio de cadencia",
+      "rateLabel": "Cadencia a la misma velocidad",
+      "bounce": "Subida del cuerpo por paso, estimación del modelo",
+      "flight": "Un vuelo",
+      "hip": "Ángulo de la cadera, el menos es por detrás de la línea de la pelvis",
+      "cadence": "Cadencia",
+      "step": "Longitud de paso",
+      "bounceStudy": "Subida del cuerpo en los estudios",
+      "bounceStudyValue": "unos 9 cm por paso a 2,9 m/s; unos 7 cm con un 10 por ciento más de pasos",
+      "hipPeak": "Muslo por detrás de la línea de la pelvis",
+      "hipPeakValue": "solo unos grados: unos 4, 7 y 11 en los tres ritmos",
+      "economy": "Extensión de la pierna y economía",
+      "economyValue": "una menor extensión de la pierna en el despegue va con mejor economía en una revisión, así que empuja hacia atrás lo justo, no lo máximo",
+      "kneeEnergy": "Energía de la rodilla al aterrizar",
+      "kneeEnergyValue": "con un 10 por ciento más de pasos, la rodilla absorbe un tercio menos de energía",
+      "cadenceStudy": "El estudio de la cadencia",
+      "cadenceStudyValue": "pruebas cortas de laboratorio, 45 corredores populares a una sola velocidad; no es un ensayo sobre lesiones"
+    },
+    "posture": {
+      "lean": "Inclinación del tronco ahora, regla del modelo",
+      "twist": "Pecho contra pelvis, torsión total",
+      "elbow": "Ángulo del codo derecho, el del modelo",
+      "arm": "Balanceo del brazo derecho, el más es hacia delante",
+      "arms": "Brazos",
+      "armCost": "Gasto de energía de los brazos",
+      "armCostValue": "un 3 por ciento más de energía con las manos a la espalda, un 9 con los brazos cruzados sobre el pecho, un 13 con las manos en la cabeza; un laboratorio, y un estudio anterior no coincide",
+      "armPush": "Empuje de los brazos",
+      "armPushValue": "los brazos aportan menos del 1 por ciento del empuje",
+      "momentum": "Para qué sirven los brazos",
+      "momentumValue": "la torsión de los brazos es casi igual y de sentido contrario a la de las piernas, y se duplica de 2 a 5 m/s",
+      "elbowRule": "Ángulo del codo",
+      "elbowRuleValue": "doblado, cerca de un ángulo recto: consejo de entrenadores, no un valor medido",
+      "leanEvidence": "Inclinación y pruebas",
+      "leanEvidenceValue": "se enseña mucho una ligera inclinación; la investigación es escasa y no dice en qué sentido ayuda"
+    },
+    "pace": {
+      "speed": "Velocidad",
+      "km": "Ritmo por km",
+      "cadence": "Cadencia",
+      "step": "Longitud de paso",
+      "contact": "Tiempo de contacto",
+      "float": "Un vuelo",
+      "knee": "Flexión de la rodilla en el balanceo, máximo",
+      "force": "Fuerza máxima del suelo",
+      "lean": "Inclinación del tronco ahora, regla del modelo",
+      "elites": "Seis hombres kenianos de élite",
+      "elitesValue": "unos 175 pasos por minuto a 3,5 m/s, unos 185 a 4,5 m/s",
+      "cadenceRange": "Pasos por minuto, muchos corredores",
+      "cadenceRangeValue": "muchos corredores rápidos dan de 160 a 210 pasos por minuto; el 180 sale del recuento de un entrenador en 1984",
+      "stride": "Tu propia longitud de paso",
+      "strideValue": "los corredores eligen una longitud de paso cercana a la que menos gasta; unos pocos puntos porcentuales hacia un lado o hacia otro cuestan poco",
+      "marathon": "Récord masculino del maratón",
+      "marathonValue": "1:59:30 (Sawe, Londres, 26 de abril de 2026), 5,88 m/s, 2:50 min/km; el ritmo más rápido del modelo es 4,5 m/s"
+    }
+  }
+}

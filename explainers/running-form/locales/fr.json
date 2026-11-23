@@ -1,0 +1,315 @@
+{
+  "meta": {
+    "title": "La foulée en course à pied : comment elle fonctionne",
+    "eyebrow": "Biologie et physique",
+    "tagline": "Courir, c’est enchaîner des sauts sur une jambe. Une bonne technique laisse le ressort de la jambe travailler sans effort inutile.",
+    "description": "Suivez la foulée d’un coureur en 3D : comment la jambe se pose, rebondit et pousse, et ce que dit la recherche sur la cadence, la posture et les bras.",
+    "summary": "Les quatre phases de la foulée, la prise de contact, la jambe en ressort, la poussée et la phase de vol, la posture et les bras, et l’effet de l’allure.",
+    "socialAlt": "Un coureur vu de trois quarts face sur une route côtière au lever du soleil, le soleil bas au-dessus de la mer et une longue ombre sur l’asphalte, à côté du titre La foulée en course à pied : comment elle fonctionne"
+  },
+  "stage": {
+    "label": "Modèle interactif de la foulée en course à pied",
+    "gauge": "Cadence, longueur du pas et force au sol en direct"
+  },
+  "timeline": {
+    "label": "Foulée",
+    "phases": "Aller à une phase de la jambe droite",
+    "value": "{{percent}} %",
+    "during": "{{percent}} %, jambe droite : {{phase}}",
+    "speed": "Lecture",
+    "speedValue": "{{factor}}×",
+    "realTime": "Temps réel",
+    "slower": "{{factor}} fois plus lent",
+    "phase": {
+      "landing": "Réception",
+      "pushOff": "Poussée",
+      "recovery": "Ramené",
+      "reach": "Avancée"
+    },
+    "jump": {
+      "landing": "Aller à la pose du pied",
+      "pushOff": "Aller au milieu de l’appui, quand la poussée commence",
+      "recovery": "Aller au moment où le pied quitte le sol",
+      "reach": "Aller à la jambe qui part vers l’avant pour se poser"
+    }
+  },
+  "controls": {
+    "label": "Réglages du modèle",
+    "pace": "Allure",
+    "groups": {
+      "pace": "Allure",
+      "arms": "Bras",
+      "look": "Vue"
+    },
+    "paceNames": {
+      "easy": "Tranquille",
+      "steady": "Soutenue",
+      "fast": "Rapide"
+    },
+    "paceOptions": {
+      "easy": "Tranquille, {{pace}}",
+      "steady": "Soutenue, {{pace}}",
+      "fast": "Rapide, {{pace}}"
+    },
+    "armsOptions": {
+      "swing": "Bras en mouvement",
+      "held": "Bras fixes"
+    },
+    "lookOptions": {
+      "front": "De face",
+      "above": "De dessus"
+    },
+    "views": {
+      "labels": {
+        "name": "Étiquettes",
+        "short": "Étiquettes",
+        "hint": "Noms des parties du corps (L)"
+      },
+      "forces": {
+        "name": "Forces",
+        "short": "Forces",
+        "hint": "Force du sol sur le pied (F)"
+      },
+      "formLines": {
+        "name": "Lignes de la foulée",
+        "short": "Lignes",
+        "hint": "Axe du corps, axe du tibia et angles des articulations (G)"
+      },
+      "footPath": {
+        "name": "Trajet du pied",
+        "short": "Trajet",
+        "hint": "Trajet du pied droit par rapport à la hanche (H)"
+      },
+      "follow": {
+        "name": "Caméra qui suit",
+        "short": "Suivi",
+        "hint": "La caméra accompagne le coureur (O)"
+      }
+    },
+    "stepRate": {
+      "label": "Cadence à vitesse égale"
+    }
+  },
+  "readouts": {
+    "feet": "Pieds au sol",
+    "force": "Force au sol",
+    "knee": "Flexion du genou droit",
+    "cadence": "Cadence",
+    "stepLength": "Longueur du pas",
+    "contact": "Temps de contact",
+    "floatShare": "Les deux pieds en l’air : {{percent}} % de la foulée"
+  },
+  "gauge": {
+    "feetRight": "Pied droit",
+    "feetLeft": "Pied gauche",
+    "feetAir": "Les deux en l’air"
+  },
+  "units": {
+    "metersPerSecond": "{{value}} m/s",
+    "perMinute": "{{value}} pas/min",
+    "perKilometer": "{{value}}/km",
+    "meters": "{{value}} m",
+    "centimeters": "{{value}} cm",
+    "centimetersSigned": "{{value}} cm",
+    "milliseconds": "{{value}} ms",
+    "degrees": "{{value}}°",
+    "bodyWeights": "{{value}} fois le poids du corps",
+    "percent": "{{value}} %",
+    "signedPercent": "{{value}} %"
+  },
+  "parts": {
+    "head": "Tête",
+    "shoulder": "Épaule",
+    "arm": "Bras",
+    "elbow": "Coude",
+    "trunk": "Buste",
+    "pelvis": "Bassin",
+    "hip": "Hanche",
+    "thigh": "Cuisse",
+    "knee": "Genou",
+    "shin": "Tibia",
+    "achilles": "Tendon d’Achille",
+    "arch": "Voûte plantaire",
+    "heel": "Talon",
+    "shoe": "Chaussure",
+    "road": "Route"
+  },
+  "overlay": {
+    "lean": "Inclinaison {{value}}°",
+    "shin": "Axe du tibia",
+    "kneeBend": "Genou {{value}}°",
+    "elbowBend": "Coude {{value}}°",
+    "braking": "Freinage",
+    "pushing": "Propulsion",
+    "bodyWeight": "1 fois le poids du corps",
+    "forceNow": "Force : {{value}} fois le poids du corps",
+    "footPath": "Trajet du pied par rapport à la hanche",
+    "bodyLine": "Axe du corps"
+  },
+  "sections": {
+    "stride": {
+      "title": "La foulée",
+      "p1": "Regardez le coureur sur la route côtière, au lever du soleil. Courir, c’est enchaîner des sauts sur une jambe. Une jambe se pose, fléchit un peu et le renvoie vers le haut. Puis, pendant un court instant, les deux pieds ont quitté le sol. Cet instant en l’air, la <strong>phase de vol</strong>, c’est ce qui distingue la course de la marche : en marchant, un pied touche toujours le sol. On passe de la marche à la course vers 2 m/s.",
+      "p2": "Une <strong>foulée</strong>, ce sont deux pas : le pied droit se pose, puis le gauche, puis le droit à nouveau. Un <strong>pas</strong> va de la pose d’un pied à la pose de l’autre. Suivez la jambe droite à travers quatre phases. À la <strong>réception</strong>, le pied touche le sol et la jambe amortit. À la <strong>poussée</strong>, la jambe pousse jusqu’à ce que le pied décolle. Au <strong>ramené</strong>, le talon se relève, le genou se plie et la jambe repart vers l’avant. À l’<strong>avancée</strong>, la jambe se déploie, puis redescend. La jambe gauche fait la même chose une demi-foulée plus tard. Faites glisser le curseur pour le voir.",
+      "p3": "Les limites entre les phases sont tracées par le modèle lui-même. L’<strong>appui</strong> est le temps où votre pied est au sol. Le milieu de l’appui est le moment où la poussée du sol cesse de vous freiner et commence à vous faire avancer. Le milieu de la phase oscillante est le moment où le genou de la jambe qui avance est le plus plié. Les bandes de couleur sur le curseur valent pour l’allure soutenue. Aux autres allures, les vraies limites se décalent un peu.",
+      "p4": "Vos pieds restent au sol moins de la moitié de chaque foulée, et de moins en moins quand vous accélérez. Le reste du temps, ce sont les deux phases de vol, une après chaque décollage. Dans ces données, les deux phases de vol ensemble occupent environ 19 à 32 % de la foulée, de l’allure tranquille à l’allure rapide. D’autres laboratoires trouvent moins, parce qu’ils mesurent autrement. Votre corps est le plus bas près du milieu de l’appui et le plus haut au milieu de la phase de vol. En marchant, c’est l’inverse : on est le plus haut au milieu du pas.",
+      "p5": "La vitesse, c’est un calcul simple : la <strong>cadence</strong>, le nombre de pas par minute, multipliée par la <strong>longueur du pas</strong>, la distance d’un pas. Les trois allures portent les noms du modèle, ce ne sont pas des allures de course. Ce sont trois vitesses sur tapis roulant, issues d’un jeu de données public de laboratoire, et affichées au kilomètre dans le panneau du bas. Choisissez une allure et regardez les deux chiffres augmenter.",
+      "p6": "D’où viennent les courbes ? Les angles de la hanche, du genou et de la cheville sont des moyennes sur 31 à 39 coureurs de compétition, sur tapis roulant et tous avec les mêmes chaussures de laboratoire. Les courbes ont été moyennées puis ajustées pour l’affichage : un vrai coureur s’en écarte. Les données ne disent rien du haut du corps, donc le modèle le fait bouger avec des règles tirées d’autres études. La route, la mer et le soleil sont un décor, pas un lieu réel."
+    },
+    "touchdown": {
+      "title": "La réception",
+      "p1": "L’image s’arrête sur la <strong>prise de contact</strong>, le premier instant où le pied touche la route. Dans ces données, le pied se pose devant les hanches, le genou un peu plié, d’environ 11 à 14 degrés, et le pied presque à plat ou sur le talon. Activez les forces et les lignes de la foulée. La flèche montre ce que la route fait sur vous, et la ligne suit le tibia.",
+      "p2": "Un court instant, la route vous repousse vers l’arrière. C’est le <strong>freinage</strong>, et il est faible : environ 0,2 à 0,4 fois le poids du corps dans deux jeux de données de laboratoire. Le <strong>poids du corps</strong> est la force que votre propre poids exerce sur le sol, donc on s’en sert comme unité. La poussée vers le haut est bien plus grande, d’environ deux fois et demie le poids du corps, et vous la retrouverez au chapitre suivant. À mi-appui, la poussée horizontale change de sens et vous aide à avancer.",
+      "p3": "Où le pied se pose-t-il en premier ? Sur le talon, le milieu du pied ou l’avant-pied. Environ 9 coureurs amateurs sur 10 sur route attaquent du talon. Chez les marathoniens d’élite aux championnats du monde 2017, c’était de 55 à 70 % environ, et très peu posaient l’avant-pied d’abord. Le coureur du modèle attaque côté talon, comme le coureur moyen de ces données.",
+      "p4": "Est-ce que cela compte ? Aucun style d’attaque n’a été montré comme meilleur. Les coureurs de styles différents avaient la même économie de course. Quand on a forcé des coureurs qui attaquaient du talon à changer, ils étaient moins économes pendant un temps. Une attaque talon donne un premier pic de force plus net qu’une attaque avant-pied. On ne sait pas si ce pic joue sur les blessures.",
+      "p5": "Essayez maintenant le curseur. Il change la cadence et garde la vitesse. Moins de pas, plus longs, posent le pied plus loin devant et freinent davantage. Plus de pas, plus courts, le posent un peu plus près. Dans une étude de laboratoire sur des coureurs amateurs à une seule vitesse, 10 % de pas en plus rapprochaient le talon d’environ 2 cm et réduisaient le freinage d’environ 16 %. Moins de pas faisaient l’inverse. Le modèle applique ce résultat aux trois allures. Les lignes à côté de ce texte montrent les changements.",
+      "p6": "<strong>À essayer :</strong> allongez un peu moins la jambe et posez le pied plus près de vous. Plus près, pas « sous » le corps : dans les études qui l’ont mesuré, le pied se pose quand même un peu devant. Qu’est-ce qui est sûr ? De courts tests en laboratoire montrent moins de freinage avec plus de pas, plus courts. Dans une étude de 74 femmes, celles qui avaient les plus fortes forces de freinage se blessaient plus. Cela montre un lien, pas une cause."
+    },
+    "spring": {
+      "title": "Le ressort",
+      "p1": "Après la prise de contact, la jambe ne reste pas raide. Le genou se plie, le corps s’abaisse et la jambe repousse, comme un ressort avec vous dessus. Dans ces données, le genou se plie d’environ 43 à 45 degrés au maximum. Parcourez l’appui avec le curseur, activez les forces, et regardez la flèche grandir puis s’effacer en même temps que les lignes du genou et de la force dans le panneau.",
+      "p2": "La route vous repousse vers le haut avec environ 2,3 à 2,6 fois le poids du corps au maximum, un peu plus aux allures rapides. Le pic arrive vers le milieu de l’appui. Le contact dure environ un quart de seconde : de 0,23 à 0,30 s d’après le calcul du modèle, selon l’allure. La courbe de force du panneau vient directement des données.",
+      "p3": "Qui fait le travail ? Dans une étude de laboratoire sur dix coureurs de fond, les muscles de la cuisse faisaient l’essentiel du freinage à la réception, et les muscles du mollet l’essentiel de la poussée. À 5 m/s, un seul muscle du mollet, le soléaire, poussait vers le haut avec environ 2 fois le poids du corps à lui seul.",
+      "p4": "Les tendons aident aussi. Le tendon d’Achille et la voûte plantaire s’étirent tôt dans le pas, stockent de l’énergie et la rendent plus tard, comme une balle qui rebondit. Vos muscles travaillent donc moins. Les sources ne s’accordent pas sur la quantité, donc cette page ne donne aucun chiffre. Toute la jambe devient aussi plus raide quand on accélère, surtout au niveau du genou.",
+      "p5": "<strong>À essayer :</strong> posez le pied en douceur et laissez le genou plier au lieu de vous raidir contre le sol. C’est un conseil d’entraîneur. Personne ne l’a bien testé, mais il colle à l’image de la jambe en ressort."
+    },
+    "liftoff": {
+      "title": "Poussée et phase de vol",
+      "p1": "Dans la seconde moitié de l’appui, la jambe vous pousse vers le haut et vers l’avant, et le mollet fait une grande part du travail. La hanche s’ouvre, mais un peu seulement. Dans ces données, la cuisse passe juste de quelques degrés derrière l’axe du bassin : environ 4, 7 et 11 degrés aux trois allures. L’angle de hanche du panneau le montre : un signe moins veut dire que la cuisse est partie derrière vous. Puis le pied quitte la route.",
+      "p2": "Les deux pieds sont maintenant en l’air. Le corps vole comme une balle lancée, sur un arc régulier. D’après le calcul du modèle, chaque phase de vol dure environ 0,07 à 0,11 s, et il y en a deux par foulée. Regardez de derrière et activez le trajet du pied. C’est la trace du pied droit vue depuis la hanche : une boucle, pas la trace au-dessus de la route.",
+      "p3": "Votre corps rebondit aussi. Il est le plus bas près du milieu de l’appui et le plus haut au milieu de la phase de vol. Le modèle estime la montée à environ 8 cm par pas. Il tire ce chiffre de la force mesurée, en calculant comment la force déplace le corps. Les études de laboratoire ont mesuré environ 8 à 9 cm : l’estimation est donc au bon endroit. Désactivez la caméra qui suit pour voir le rebond par rapport à la route.",
+      "p4": "Reprenons le curseur. Avec plus de pas, plus courts, à la même vitesse, le rebond diminuait : de 16 % pour 10 % de pas en plus dans une étude de laboratoire, et le genou absorbait environ un tiers d’énergie en moins à la réception. Avec moins de pas, plus longs, le rebond augmentait. L’estimation du modèle donne presque le même changement. L’étude portait sur 45 coureurs amateurs à une seule vitesse, avec des tests courts. Ce n’était pas un essai sur les blessures.",
+      "p5": "<strong>À essayer :</strong> des pas vifs et légers plutôt que longs et rebondissants, et poussez assez vers l’arrière, pas le plus loin possible. Dans de courts tests de laboratoire, augmenter la cadence de 5 à 10 % diminuait la charge sur le genou. La plupart des coureurs choisissent déjà un pas proche du moins coûteux, alors allez-y doucement. Une revue de la littérature associe une extension de la jambe plus faible au décollage à une meilleure économie de course."
+    },
+    "posture": {
+      "title": "Posture et bras",
+      "p1": "Tenez-vous droit, avec une légère inclinaison vers l’avant. C’est le conseil habituel, et la recherche derrière est mince. Dans une étude sur 24 coureurs amateurs, le buste penchait d’environ 7 degrés vers l’avant, et le modèle prend cette valeur comme moyenne. Dans une autre petite étude, l’inclinaison variait de quelques degrés à chaque pas. Elle vient des hanches, du bassin et du buste ensemble, pas d’un buste raide penché depuis les chevilles. On ne sait pas encore si plus d’inclinaison aide.",
+      "p2": "Les entraîneurs disent de regarder l’horizon et de garder les épaules relâchées. C’est une tradition, pas une mesure. Le modèle garde la tête droite selon sa propre règle. Le bassin ne reste pas immobile. Il bascule vers l’avant puis vers l’arrière à chaque pas. Il descend un peu du côté de la jambe qui avance. Il tourne un peu de chaque côté, et la poitrine tourne en sens inverse. Regardez de dessus pour voir la torsion. L’indicateur donne le total, une estimation haute. Tout cela vient d’une seule petite étude sur 19 coureurs, et le modèle la suit avec des règles.",
+      "p3": "Les bras se balancent à l’opposé des jambes. Quand la jambe gauche part en avant, le bras droit part en avant. Cela annule la torsion que créent les jambes. Dans deux études de laboratoire, la torsion des bras était presque égale et opposée à celle des jambes, et elle doublait entre 2 et 5 m/s. Les bras ne vous font pas avancer : ils ajoutent moins de 1 % de la poussée. Choisissez les bras fixes et regardez de dessus. Les épaules et les hanches tournent davantage.",
+      "p4": "Les bras qui se balancent économisent-ils de l’énergie ? Peut-être. Dans un laboratoire, courir les mains derrière le dos coûtait environ 3 % d’énergie en plus, les bras croisés sur la poitrine environ 9 % et les mains sur la tête environ 13 %. Une étude plus ancienne n’a trouvé aucune différence, et une autre a trouvé que les bras agissent comme des amortisseurs passifs. Les scientifiques ne sont pas d’accord, donc cette page ne donne pas de chiffre unique.",
+      "p5": "Les entraîneurs enseignent des coudes pliés, à peu près à angle droit ou un peu moins. Selon les sources, l’angle va de 60 à 90 degrés, et aucune étude n’a mesuré le meilleur angle. L’amplitude du balancement des bras et l’angle du coude dans le modèle sont ses propres choix, et personne ne les a mesurés. Servez-vous-en pour comprendre l’idée, pas comme un objectif.",
+      "p6": "<strong>À essayer :</strong> courez grand, avec une légère inclinaison, le regard sur l’horizon et les épaules relâchées. Laissez les bras aller d’avant en arrière, les coudes pliés, sans les croiser sur la poitrine. Qu’est-ce qui est sûr ? La posture droite, les épaules relâchées et le coude plié relèvent de la tradition d’entraîneurs, avec peu de recherche. « Pas sur la poitrine » n’a pas de chiffre propre, mais dans un laboratoire, les bras croisés sur la poitrine coûtaient plus d’énergie. Que les bras annulent la torsion des jambes, en revanche, est mesuré."
+    },
+    "pace": {
+      "title": "L’allure",
+      "p1": "Choisissez chaque allure à tour de rôle. Dans ces données, le coureur fait plus de tout : plus de pas par minute, des pas plus longs, moins de temps au sol, des phases de vol plus longues, une poussée plus forte contre le sol et un genou qui monte plus haut. Les lignes à côté de ce texte donnent les chiffres de chaque allure. Le chiffre du genou est la moyenne du pic de chaque coureur.",
+      "p2": "L’essentiel de la vitesse en plus vient de pas plus longs, pas de pas plus rapides. Dans un laboratoire, de 2 à 5 m/s, la cadence augmentait d’environ 21 % pendant que la longueur du pas doublait. Courir plus vite, c’est donc surtout faire des bonds plus longs.",
+      "p3": "Vous avez peut-être entendu que 180 pas par minute est le bon chiffre. Il vient du comptage d’un entraîneur sur des coureurs d’élite aux Jeux olympiques, dont presque tous dépassaient ce rythme. Cette histoire est de seconde main, et elle concerne des coureurs rapides à vitesse de course. La cadence augmente avec la vitesse, et les coureurs diffèrent beaucoup, de 160 à 210 pas par minute. Beaucoup de coureurs rapides font 170 à 190. C’est un résultat de la vitesse, pas un objectif. Les lignes à côté de ce texte donnent les chiffres des hommes d’élite.",
+      "p4": "Les coureurs choisissent-ils bien ? Le plus souvent, oui. Dans un ancien test de laboratoire, la longueur de pas naturelle de chaque coureur était proche de celle qui consommait le moins d’oxygène, et la forcer à être plus longue ou plus courte coûtait de l’énergie. Quelques pour cent d’écart dans un sens ou dans l’autre coûtent peu. Le curseur des chapitres précédents montre donc ce qui change. Ce n’est pas un chiffre à viser.",
+      "p5": "Courir coûte environ 1 kilocalorie par kilogramme de poids du corps et par kilomètre, à presque toutes les vitesses. Un marathon à 3,5 m/s, c’est environ 35 000 de ces bonds.",
+      "p6": "L’allure rapide est proche de la vraie compétition. Au marathon des championnats du monde 2017, les hommes ont couru à 4,3 à 4,8 m/s avec 180 à 184 pas par minute, tout près de l’allure rapide du modèle. Le record du monde du marathon masculin est encore plus rapide, à 5,88 m/s.",
+      "p7": "Alors, que vaut-il la peine d’essayer ? Courez grand, avec une légère inclinaison et le regard sur l’horizon, et laissez vos bras relâchés aller d’avant en arrière. Posez le pied un peu plus près de votre corps, avec une jambe moins tendue vers l’avant, et laissez le genou plier comme un ressort. Faites des pas vifs et légers plutôt que longs et rebondissants. Une partie est mesurée, une partie vient de la tradition des entraîneurs, et rien ne protège des blessures. La conclusion honnête est plutôt rassurante : votre corps a déjà trouvé une foulée proche de la moins coûteuse. Changez donc une petite chose à la fois, et gardez ce qui vous semble facile."
+    }
+  },
+  "chapters": {
+    "stride": {
+      "speed": "Vitesse",
+      "cadence": "Cadence",
+      "step": "Longueur du pas",
+      "sum": "Le calcul du modèle",
+      "sumValue": "{{cadence}} pas/min × {{step}} m ÷ 60 = {{speed}} m/s",
+      "phase": "Jambe droite en ce moment",
+      "float": "Les deux phases de vol ensemble",
+      "cycle": "Une foulée",
+      "cycleValue": "deux pas, environ 0,67 à 0,75 s",
+      "floats": "Phases de vol",
+      "floatsValue": "deux par foulée ; ensemble environ 19 à 32 % de la foulée dans ces données",
+      "data": "D’où viennent les courbes",
+      "dataValue": "courbes articulaires de 31 à 39 coureurs, données publiques, Creative Commons Attribution 4.0",
+      "dataSource": "Courbes articulaires et forces au sol : Fukuchi, Fukuchi and Duarte (2017), PeerJ 5:e3298, doi:10.7717/peerj.3298. Données : doi:10.6084/m9.figshare.4543435.v5, licence Creative Commons Attribution 4.0. Moyennées et ajustées pour l’affichage."
+    },
+    "touchdown": {
+      "rate": "Changement de cadence",
+      "rateLabel": "Cadence à vitesse égale",
+      "cadence": "Cadence",
+      "step": "Longueur du pas",
+      "reach": "Distance de pose, écart",
+      "reachSame": "aucun écart",
+      "knee": "Flexion du genou à la prise de contact",
+      "brake": "Force de freinage maximale",
+      "impulse": "Freinage, écart",
+      "strikes": "Où le pied se pose en premier",
+      "strikesValue": "environ 9 coureurs amateurs sur 10 attaquent du talon ; chez les marathoniens d’élite, environ 55 à 70 %",
+      "strikeImpact": "Premier pic de force",
+      "strikeImpactValue": "une attaque talon a un pic d’environ 1,7 à 1,9 fois le poids du corps, une attaque avant-pied d’environ 0,6 ; le taux de mise en charge d’une attaque talon en chaussures est à peu près aussi bas que celui d’une attaque avant-pied",
+      "strikeEconomy": "Style d’attaque et économie",
+      "strikeEconomyValue": "aucun style n’est prouvé meilleur pour l’économie de course ; forcer un changement dégradait l’économie à court terme",
+      "reachStudy": "Talon devant le centre de masse",
+      "reachStudyValue": "dans une étude, le talon se posait à environ 9 cm devant le centre de masse, et à environ 7 cm avec 10 % de pas en plus",
+      "brakeInjury": "Freinage et blessures",
+      "brakeInjuryValue": "dans une étude de 74 femmes, les plus fortes forces de freinage allaient avec plus de blessures ; cela ne montre qu’un lien"
+    },
+    "spring": {
+      "force": "Force au sol en ce moment",
+      "knee": "Flexion du genou droit en ce moment",
+      "peak": "Force au sol maximale à cette allure",
+      "contact": "Temps de contact",
+      "phase": "Jambe droite en ce moment",
+      "tendon": "Tendon et voûte",
+      "tendonValue": "le tendon d’Achille et la voûte plantaire stockent de l’énergie tôt dans le pas et la rendent plus tard, comme une balle qui rebondit ; les sources ne s’accordent pas sur la quantité, donc aucun chiffre",
+      "muscles": "Qui fait le travail",
+      "musclesValue": "les muscles de la cuisse font l’essentiel du freinage à la réception ; les muscles du mollet font l’essentiel de la poussée",
+      "calf": "Muscle du mollet à 5 m/s",
+      "calfValue": "le soléaire seul pousse vers le haut avec environ 2 fois le poids du corps",
+      "kneeBend": "Flexion du genou à la réception",
+      "kneeBendValue": "environ 43 à 45 degrés, aux trois allures de ces données",
+      "impact": "Force maximale vers le haut",
+      "impactValue": "environ 2,3, 2,5 et 2,6 fois le poids du corps aux trois allures"
+    },
+    "liftoff": {
+      "rate": "Changement de cadence",
+      "rateLabel": "Cadence à vitesse égale",
+      "bounce": "Montée du corps par pas, estimation du modèle",
+      "flight": "Une phase de vol",
+      "hip": "Angle de hanche, moins = derrière l’axe du bassin",
+      "cadence": "Cadence",
+      "step": "Longueur du pas",
+      "bounceStudy": "Montée du corps dans les études",
+      "bounceStudyValue": "environ 9 cm par pas à 2,9 m/s ; environ 7 cm avec 10 % de pas en plus",
+      "hipPeak": "Cuisse derrière l’axe du bassin",
+      "hipPeakValue": "quelques degrés seulement : environ 4, 7 et 11 aux trois allures",
+      "economy": "Extension de la jambe et économie",
+      "economyValue": "dans une revue, moins d’extension de la jambe au décollage va avec une meilleure économie ; poussez donc assez vers l’arrière, pas le plus loin possible",
+      "kneeEnergy": "Énergie du genou à la réception",
+      "kneeEnergyValue": "avec 10 % de pas en plus, le genou absorbe environ un tiers d’énergie en moins",
+      "cadenceStudy": "L’étude sur la cadence",
+      "cadenceStudyValue": "tests courts en laboratoire, 45 coureurs amateurs à une seule vitesse ; pas un essai sur les blessures"
+    },
+    "posture": {
+      "lean": "Inclinaison du buste en ce moment, règle du modèle",
+      "twist": "Poitrine contre bassin, torsion totale",
+      "elbow": "Angle du coude droit, choix du modèle",
+      "arm": "Balancement du bras droit, plus = vers l’avant",
+      "arms": "Bras",
+      "armCost": "Coût en énergie des bras",
+      "armCostValue": "environ 3 % d’énergie en plus avec les mains derrière le dos, 9 avec les bras croisés sur la poitrine, 13 avec les mains sur la tête ; un seul laboratoire, et une étude plus ancienne n’est pas d’accord",
+      "armPush": "Poussée des bras",
+      "armPushValue": "les bras ajoutent moins de 1 % de la poussée",
+      "momentum": "À quoi servent les bras",
+      "momentumValue": "la torsion des bras est presque égale et opposée à celle des jambes, et elle double entre 2 et 5 m/s",
+      "elbowRule": "Angle du coude",
+      "elbowRuleValue": "plié, près d’un angle droit : conseil d’entraîneur, pas une valeur mesurée",
+      "leanEvidence": "Inclinaison et preuves",
+      "leanEvidenceValue": "une légère inclinaison est très enseignée ; la recherche est mince et ne dit pas dans quel sens elle aide"
+    },
+    "pace": {
+      "speed": "Vitesse",
+      "km": "Allure au km",
+      "cadence": "Cadence",
+      "step": "Longueur du pas",
+      "contact": "Temps de contact",
+      "float": "Une phase de vol",
+      "knee": "Flexion du genou à l’avancée, pic",
+      "force": "Force au sol maximale",
+      "lean": "Inclinaison du buste en ce moment, règle du modèle",
+      "elites": "Six hommes kényans d’élite",
+      "elitesValue": "environ 175 pas par minute à 3,5 m/s, environ 185 à 4,5 m/s",
+      "cadenceRange": "Pas par minute, beaucoup de coureurs",
+      "cadenceRangeValue": "beaucoup de coureurs rapides font 160 à 210 pas par minute ; le chiffre de 180 vient du comptage d’un entraîneur en 1984",
+      "stride": "Votre propre longueur de pas",
+      "strideValue": "les coureurs choisissent une longueur de pas proche de la moins coûteuse ; quelques pour cent d’écart dans un sens ou dans l’autre coûtent peu",
+      "marathon": "Record du monde du marathon masculin",
+      "marathonValue": "1:59:30 (Sawe, Londres, 26 avril 2026), 5,88 m/s, 2:50 au km ; l’allure la plus rapide du modèle est de 4,5 m/s"
+    }
+  }
+}
