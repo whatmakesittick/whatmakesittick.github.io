@@ -34,11 +34,19 @@ export async function mountRunScene(shell: SceneShell, store: RunStore): Promise
   const run = new RunController(shell);
   const removeFrame = shell.onFrame((deltaSeconds) => run.update(deltaSeconds));
   const labelVisibility = createLabelVisibility(shell, LABEL_PRIORITY);
-  const unbind = await bindStore(store, { run, labelVisibility, ...shell });
-  return () => {
+  const release = () => {
     removeFrame();
     labelVisibility.dispose();
-    unbind();
     run.dispose();
   };
+  try {
+    const unbind = await bindStore(store, { run, labelVisibility, ...shell });
+    return () => {
+      unbind();
+      release();
+    };
+  } catch (error) {
+    release();
+    throw error;
+  }
 }
