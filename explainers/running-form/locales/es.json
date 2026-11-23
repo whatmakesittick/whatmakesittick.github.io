@@ -113,7 +113,7 @@
     "centimetersSigned": "{{value}} cm",
     "milliseconds": "{{value}} ms",
     "degrees": "{{value}}°",
-    "bodyWeights": "{{value}} veces el peso corporal",
+    "bodyWeights": "{{value}} × peso corporal",
     "percent": "{{value}} %",
     "signedPercent": "{{value}} %"
   },
@@ -141,8 +141,8 @@
     "elbowBend": "Codo {{value}}°",
     "braking": "Frenado",
     "pushing": "Empuje",
-    "bodyWeight": "1 vez el peso corporal",
-    "forceNow": "Fuerza: {{value}} veces el peso corporal",
+    "bodyWeight": "1 × peso corporal",
+    "forceNow": "Fuerza: {{value}} × peso corporal",
     "footPath": "Trayectoria del pie",
     "bodyLine": "Línea del cuerpo"
   },
