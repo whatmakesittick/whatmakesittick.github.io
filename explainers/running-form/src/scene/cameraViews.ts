@@ -56,8 +56,8 @@ export const RUN_SHOTS: Readonly<Record<CameraView, RunShot>> = {
   },
   wide: {
     box: { x: [-1.6, 1.6], y: [0, 2.0], z: [-0.6, 0.6] },
-    direction: [0.3, 0.12, 1.0],
-    margin: 2.0,
+    direction: [0.75, 0.07, 1.0],
+    margin: 1.05,
     focus: [0, 0, 0],
   },
 };
