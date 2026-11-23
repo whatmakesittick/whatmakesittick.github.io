@@ -9,7 +9,7 @@ import {
   stepRateEffect,
 } from '../model';
 import { phaseKey } from '../timeline';
-import { formatCentimetersSigned, formatPerKilometer } from './format';
+import { formatCentimetersSigned } from './format';
 
 const NO_REACH_CHANGE_CM = 0.05;
 const PERCENT = 100;
@@ -53,8 +53,4 @@ export function peakVerticalBW(pace: PaceId, stepRate: number): number {
 export function trunkTwistRange(pace: PaceId, arms: ArmsId): number {
   const gain = arms === 'held' ? HELD_TWIST_GAIN : 1;
   return UPPER_RANGES[pace].trunkTwist * gain;
-}
-
-export function paceOptionText(id: PaceId): string {
-  return t(`controls.paceOptions.${id}`, { pace: formatPerKilometer(PACES[id].speedMs) });
 }
