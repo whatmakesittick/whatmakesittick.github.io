@@ -8,8 +8,8 @@ import { ATMOSPHERE_GLSL, NOISE_GLSL, OUTPUT_GLSL } from './glsl';
 
 const SEA = { nearZ: SEA_START_Z_M + 1.5, farZ: -GROUND_EXTENT_M } as const;
 const WATER = {
-  deep: { color: '#163f52', intensity: 0.55 },
-  shallow: { color: THEME.sea, intensity: 0.7 },
+  deep: { color: '#1b4d63', intensity: 0.62 },
+  shallow: { color: THEME.sea, intensity: 0.78 },
   surf: { color: '#7fb9b4', intensity: 0.9 },
   foam: { color: '#fff6e6', intensity: 1.3 },
   glitter: { color: THEME.seaGlitter, intensity: 1 },
@@ -61,7 +61,8 @@ void main() {
   vec3 view = ray / dist;
   float u = roadU(vWorld.x, uScroll);
   float fade = 1.0 / (1.0 + dist * 0.01);
-  vec2 g = slope(u, vWorld.z, fade) * (0.35 + 0.65 / (1.0 + dist * 0.002));
+  vec2 chop = vec2(cellNoise(vec2(u * 0.55, vWorld.z * 0.9), WRAP * 0.55), cellNoise(vec2(u * 0.55 + 31.0, vWorld.z * 0.9 + 17.0), WRAP * 0.55)) - 0.5;
+  vec2 g = (slope(u, vWorld.z, fade) + chop * 0.07 * fade) * (0.35 + 0.65 / (1.0 + dist * 0.002));
   vec3 normal = normalize(vec3(-g.x, 1.0, -g.y));
   float facing = max(dot(normal, -view), 0.0);
   float fresnel = 0.02 + 0.4 * pow(1.0 - facing, 5.0);
@@ -79,13 +80,20 @@ void main() {
   float glow = exp(-slope2 / (2.0 * 0.05 * 0.05));
   vec2 sunFlat = normalize(uSunDir.xz);
   vec2 q = vec2(dot(vec2(u, vWorld.z), sunFlat), dot(vec2(u, vWorld.z), vec2(-sunFlat.y, sunFlat.x)));
-  q.x += uScroll * 0.02;
   vec2 cellCoord = q * vec2(4.0, 1.1);
   vec2 cell = floor(cellCoord);
   vec2 inside = fract(cellCoord) - 0.5;
-  float pick = hash12(cell + 17.0);
+  float twinkle = uScroll * 0.6;
+  float first = mod(floor(twinkle), WRAP * 0.6);
+  float second = mod(first + 1.0, WRAP * 0.6);
+  float threshold = 1.0 - chance * 0.55;
+  float lit = mix(
+    step(threshold, hash12(cell + first * vec2(0.37, 0.61))),
+    step(threshold, hash12(cell + second * vec2(0.37, 0.61))),
+    fract(twinkle)
+  );
   float dash = smoothstep(0.5, 0.15, length(inside * vec2(2.4, 1.0)));
-  float sparkle = step(1.0 - chance * 0.55, pick) * dash;
+  float sparkle = lit * dash;
   float coarse = smoothstep(0.35, 1.2, fwidth(cellCoord.x) + fwidth(cellCoord.y) * 0.5);
   sparkle = mix(sparkle, chance * 0.12, coarse);
   colour += uGlitter * (glow * 1.6 + chance * 0.25 + sparkle * 9.0);

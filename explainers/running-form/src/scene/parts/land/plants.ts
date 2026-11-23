@@ -9,7 +9,7 @@ import {
   Vector3,
 } from 'three';
 import type { Material } from 'three';
-import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+import { mergeGeometries, mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { FINISHES } from '../../finishes';
 import type { Finish } from '../../finishes';
@@ -20,50 +20,98 @@ import { ScrollingInstances, copiesOf, NEAR_WINDOW } from './strip';
 import type { InstancePart, StripItem } from './strip';
 import { groundShadowMesh, shadowMatrix, TREE_SHADOW_SHAPES } from './sceneryShadows';
 
+interface Clump {
+  readonly x: number;
+  readonly y: number;
+  readonly z: number;
+  readonly radius: number;
+  readonly squash: number;
+}
+
 interface Crown {
-  readonly centreY: number;
-  readonly radiusY: number;
+  readonly clumps: readonly Clump[];
   readonly trunkTop: number;
-  readonly lump: number;
+  readonly lean: number;
 }
 
 const CROWNS: Record<TreeKind, Crown> = {
-  pine: { centreY: 0.84, radiusY: 0.15, trunkTop: 0.8, lump: 0.28 },
-  round: { centreY: 0.6, radiusY: 0.4, trunkTop: 0.45, lump: 0.22 },
+  pine: {
+    trunkTop: 0.82,
+    lean: 0.06,
+    clumps: [
+      { x: 0, y: 0.88, z: 0, radius: 0.3, squash: 0.42 },
+      { x: 0.24, y: 0.85, z: 0.08, radius: 0.22, squash: 0.5 },
+      { x: -0.22, y: 0.84, z: -0.1, radius: 0.24, squash: 0.48 },
+      { x: 0.04, y: 0.86, z: 0.26, radius: 0.2, squash: 0.5 },
+      { x: -0.06, y: 0.9, z: -0.25, radius: 0.2, squash: 0.5 },
+    ],
+  },
+  round: {
+    trunkTop: 0.48,
+    lean: 0.02,
+    clumps: [
+      { x: 0, y: 0.68, z: 0, radius: 0.34, squash: 0.85 },
+      { x: 0.2, y: 0.55, z: 0.1, radius: 0.24, squash: 0.85 },
+      { x: -0.2, y: 0.57, z: -0.08, radius: 0.25, squash: 0.85 },
+      { x: 0.05, y: 0.56, z: -0.22, radius: 0.22, squash: 0.85 },
+      { x: -0.04, y: 0.85, z: 0.12, radius: 0.22, squash: 0.85 },
+    ],
+  },
+};
+
+const SHRUB_CROWN: Crown = {
+  trunkTop: 0,
+  lean: 0,
+  clumps: [
+    { x: 0, y: 0.45, z: 0, radius: 0.5, squash: 0.8 },
+    { x: 0.35, y: 0.3, z: 0.15, radius: 0.32, squash: 0.85 },
+    { x: -0.3, y: 0.32, z: -0.2, radius: 0.34, squash: 0.85 },
+  ],
 };
 
 const FOLIAGE = {
-  pine: { low: '#22331f', high: '#5a7040' },
-  round: { low: '#263a22', high: '#647b44' },
-  shrub: { low: '#33452a', high: '#7f8f50' },
+  pine: { low: '#1d2c1b', high: '#55693a' },
+  round: { low: '#22341f', high: '#5f7540' },
+  shrub: { low: '#2c3d24', high: '#76864a' },
   tuftBase: '#4c5e33',
   tuftTip: '#bfae6c',
 } as const;
 
-const TRUNK = { radius: 0.035, segments: 6 } as const;
+const TRUNK = { radius: 0.03, segments: 6 } as const;
 const TINT_RANGE = 0.22;
 const LUMP_SEED = 5;
 const TUFT_BLADES = 5;
 const TUFT_LEAN = 0.35;
+const CLUMP_DETAIL = { main: 1, side: 0 } as const;
+const LUMP = 0.3;
 
-function crownGeometry(crown: Crown, low: string, high: string, seed: number): BufferGeometry {
-  const random = seededRandom(seed);
+function clumpGeometry(
+  clump: Clump,
+  detail: number,
+  random: () => number,
+  low: Color,
+  high: Color,
+): BufferGeometry {
   const geometry = mergeVertices(
-    new IcosahedronGeometry(0.5, 1).deleteAttribute('normal').deleteAttribute('uv'),
+    new IcosahedronGeometry(1, detail).deleteAttribute('normal').deleteAttribute('uv'),
   );
   const position = geometry.getAttribute('position');
   const colours = new Float32Array(position.count * 3);
   const vertex = new Vector3();
-  const bottom = new Color(low);
-  const top = new Color(high);
   const shade = new Color();
+  const tint = 0.85 + random() * 0.3;
   for (let index = 0; index < position.count; index += 1) {
     vertex.fromBufferAttribute(position, index);
-    const lift = vertex.y / 0.5;
-    vertex.multiplyScalar(1 + (random() - 0.5) * crown.lump);
-    vertex.y = crown.centreY + vertex.y * (crown.radiusY / 0.5);
+    const lift = vertex.y;
+    vertex.multiplyScalar(clump.radius * (1 + (random() - 0.5) * LUMP));
+    vertex.y *= clump.squash;
+    vertex.add(new Vector3(clump.x, clump.y, clump.z));
     position.setXYZ(index, vertex.x, vertex.y, vertex.z);
-    shade.copy(bottom).lerp(top, Math.min(Math.max(lift * 0.5 + 0.5, 0), 1));
+    const height = Math.min(Math.max(lift * 0.5 + 0.5, 0), 1);
+    shade
+      .copy(low)
+      .lerp(high, height * height)
+      .multiplyScalar(tint);
     shade.toArray(colours, index * 3);
   }
   geometry.setAttribute('color', new BufferAttribute(colours, 3));
@@ -71,12 +119,27 @@ function crownGeometry(crown: Crown, low: string, high: string, seed: number): B
   return geometry;
 }
 
-function trunkGeometry(top: number): BufferGeometry {
-  return new CylinderGeometry(TRUNK.radius * 0.7, TRUNK.radius, top, TRUNK.segments).translate(
-    0,
-    top / 2,
-    0,
+function crownGeometry(crown: Crown, low: string, high: string, seed: number): BufferGeometry {
+  const random = seededRandom(seed);
+  const parts = crown.clumps.map((clump, index) =>
+    clumpGeometry(
+      clump,
+      index === 0 ? CLUMP_DETAIL.main : CLUMP_DETAIL.side,
+      random,
+      new Color(low),
+      new Color(high),
+    ),
   );
+  const merged = mergeGeometries(parts);
+  parts.forEach((part) => part.dispose());
+  return merged;
+}
+
+function trunkGeometry(crown: Crown): BufferGeometry {
+  const top = crown.trunkTop;
+  return new CylinderGeometry(TRUNK.radius * 0.65, TRUNK.radius, top, TRUNK.segments)
+    .translate(0, top / 2, 0)
+    .rotateZ(-crown.lean);
 }
 
 function tuftGeometry(): BufferGeometry {
@@ -128,7 +191,7 @@ function trees(context: PartContext, kind: TreeKind, items: readonly TreeItem[],
     'foliage',
     count,
   );
-  const trunk = plantMesh(context, trunkGeometry(crown.trunkTop), 'bark', count);
+  const trunk = plantMesh(context, trunkGeometry(crown), 'bark', count);
   const shadow = groundShadowMesh(context, TREE_SHADOW_SHAPES[kind], count);
   tint(canopy, items, copies);
   const parts: InstancePart[] = [
@@ -156,8 +219,7 @@ export function buildPlants(context: PartContext): {
   const all = treeItems();
   const pines = all.filter((item) => item.kind === 'pine');
   const rounds = all.filter((item) => item.kind === 'round');
-  const shrubCrown = { centreY: 0.45, radiusY: 0.45, trunkTop: 0, lump: 0.35 };
-  const shrub = crownGeometry(shrubCrown, FOLIAGE.shrub.low, FOLIAGE.shrub.high, LUMP_SEED + 2);
+  const shrub = crownGeometry(SHRUB_CROWN, FOLIAGE.shrub.low, FOLIAGE.shrub.high, LUMP_SEED + 2);
   const tuft = tuftGeometry();
   const parts = [
     trees(context, 'pine', pines, LUMP_SEED),

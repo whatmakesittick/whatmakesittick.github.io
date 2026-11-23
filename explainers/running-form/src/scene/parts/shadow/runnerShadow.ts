@@ -35,9 +35,9 @@ interface Pass {
 }
 
 const PASSES = {
-  core: { opacity: 0.6, spread: -0.15, bias: DEPTH.core },
-  fringe: { opacity: 0.36, spread: 0.45, bias: DEPTH.fringe },
-  wide: { opacity: 0.15, spread: 1.4, bias: DEPTH.wide },
+  core: { opacity: 0.62, spread: -0.15, bias: DEPTH.core },
+  fringe: { opacity: 0.38, spread: 0.45, bias: DEPTH.fringe },
+  wide: { opacity: 0.16, spread: 1.4, bias: DEPTH.wide },
 } as const satisfies Record<string, Pass>;
 
 const CLIP = { none: 0, depth: 1, height: 2 } as const;

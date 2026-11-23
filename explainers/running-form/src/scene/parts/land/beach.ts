@@ -8,7 +8,7 @@ import { ATMOSPHERE_GLSL, LIGHT_GLSL, NOISE_GLSL, OUTPUT_GLSL, WORLD_VERTEX } fr
 const BEACH = {
   topZ: WALL.zM - WALL.thicknessM / 2,
   bottomZ: SEA_START_Z_M - 3,
-  sand: '#d8c09a',
+  sand: '#bba98e',
   wetSand: '#9c8466',
   pebbles: '#a69a8a',
 } as const;

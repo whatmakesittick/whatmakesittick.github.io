@@ -42,7 +42,7 @@ vec3 skyAt(vec3 dir) {
   vec3 sky = mix(horizon, uSkyTop, pow(up, 0.5));
   float toward = max(dot(dir, uSunDir), 0.0);
   float low = 1.0 - smoothstep(0.0, 0.25, up);
-  return sky + uSunGlow * (pow(toward, 8.0) * 0.18 * (0.4 + 0.6 * low) + pow(toward, 64.0) * 0.5 + pow(toward, 900.0) * 1.6);
+  return sky + uSunGlow * (pow(toward, 8.0) * 0.12 * (0.4 + 0.6 * low) + pow(toward, 64.0) * 0.5 + pow(toward, 900.0) * 1.6);
 }
 
 vec3 horizonAt(vec3 ray) {

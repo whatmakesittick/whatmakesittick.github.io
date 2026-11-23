@@ -39,7 +39,7 @@ float streaks(vec3 dir) {
   vec2 plane = dir.xz / (up + 0.035);
   float drift = uScroll / WRAP * CLOUD_PERIOD;
   vec2 p = vec2(plane.x * 0.22 + drift, plane.y * 2.4);
-  float n = cellNoise(p, CLOUD_PERIOD) * 0.65 + cellNoise(p * vec2(2.3, 3.1) + 7.0, CLOUD_PERIOD * 2.3) * 0.35;
+  float n = cellNoise(p, CLOUD_PERIOD) * 0.65 + cellNoise(p * vec2(2.25, 3.1) + 7.0, CLOUD_PERIOD * 2.25) * 0.35;
   float band = smoothstep(0.52, 0.86, n);
   float height = smoothstep(0.015, 0.06, up) * (1.0 - smoothstep(0.16, 0.42, up));
   return band * height;

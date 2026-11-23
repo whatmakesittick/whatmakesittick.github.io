@@ -72,11 +72,12 @@ void main() {
   vec3 normal = normalize(vNormal);
   float u = roadU(vWorld.x, uScroll);
   float patches = cellNoise(vec2(u * 0.025, vWorld.z * 0.025), WRAP * 0.025);
-  float speckle = cellNoise(vec2(u * 0.32, vWorld.z * 0.32), WRAP * 0.32);
+  float speckle = cellNoise(vec2(u * 0.3125, vWorld.z * 0.3125), WRAP * 0.3125);
   float steep = 1.0 - normal.y;
   vec3 albedo = mix(uScrub, uDry, smoothstep(0.45, 0.75, patches));
   albedo = mix(albedo, uRock, smoothstep(0.25, 0.45, steep) * 0.7);
-  albedo = mix(albedo, uTrees, smoothstep(0.58, 0.72, speckle) * (1.0 - steep) * 0.85);
+  float clusters = cellNoise(vec2(u * 0.0625, vWorld.z * 0.0625), WRAP * 0.0625);
+  albedo = mix(albedo, uTrees, smoothstep(0.62, 0.8, speckle) * smoothstep(0.45, 0.7, clusters) * (1.0 - steep) * 0.7);
   vec3 colour = lit(albedo, normal, 1.0);
   gl_FragColor = vec4(hazed(colour, vWorld), 1.0);
   ${OUTPUT_GLSL}

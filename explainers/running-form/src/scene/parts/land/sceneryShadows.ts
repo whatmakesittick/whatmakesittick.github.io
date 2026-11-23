@@ -39,8 +39,8 @@ function crownShadow(trunkTop: number, crownLow: number, crownHigh: number): Sha
 }
 
 export const TREE_SHADOW_SHAPES: Record<TreeKind, ShadowShape> = {
-  pine: crownShadow(0.8, 0.69, 0.99),
-  round: crownShadow(0.45, 0.2, 1.0),
+  pine: crownShadow(0.82, 0.76, 1.0),
+  round: crownShadow(0.48, 0.3, 0.98),
 };
 
 const VERTEX = /* glsl */ `

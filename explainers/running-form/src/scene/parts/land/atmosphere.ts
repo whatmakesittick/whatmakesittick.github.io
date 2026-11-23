@@ -8,16 +8,16 @@ import type { PartContext } from '../context';
 
 export const SKY_COLOURS = {
   top: THEME.skyTop,
-  horizon: '#ecc29a',
-  away: '#aeb6c9',
+  horizon: '#f0b98a',
+  away: '#a7b0c8',
   glow: '#ffc27a',
 } as const;
 
 const HAZE = { distanceM: 2400, fullM: 2700 } as const;
 
 const LIGHT = {
-  sun: { color: '#ffbf80', intensity: 3.6 },
-  sky: { color: '#8ea8d0', intensity: 1 },
+  sun: { color: '#ffbf80', intensity: 5.6 },
+  sky: { color: '#8ea8d0', intensity: 0.78 },
   bounce: { color: '#a58b68', intensity: 0.5 },
 } as const;
 

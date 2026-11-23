@@ -34,7 +34,7 @@ const LAYERS: readonly Layer[] = [
     width: [380, 700],
     depth: [160, 260],
     heightShare: [0.55, 0.9],
-    tone: '#3f4a45',
+    tone: '#3a4650',
   },
   {
     count: 4,
@@ -42,7 +42,7 @@ const LAYERS: readonly Layer[] = [
     width: [520, 900],
     depth: [240, 380],
     heightShare: [0.6, 1],
-    tone: '#4f5a5c',
+    tone: '#4b5664',
   },
   {
     count: 5,
@@ -50,7 +50,7 @@ const LAYERS: readonly Layer[] = [
     width: [700, 1200],
     depth: [300, 500],
     heightShare: [0.55, 1],
-    tone: '#66707a',
+    tone: '#66707f',
   },
   {
     count: 3,
@@ -58,7 +58,7 @@ const LAYERS: readonly Layer[] = [
     width: [70, 220],
     depth: [60, 140],
     heightShare: [0.12, 0.25],
-    tone: '#4a5452',
+    tone: '#46515a',
   },
   {
     count: 5,
@@ -66,7 +66,7 @@ const LAYERS: readonly Layer[] = [
     width: [600, 1100],
     depth: [300, 500],
     heightShare: [1.2, 2.2],
-    tone: '#4d5a3f',
+    tone: '#4a5544',
   },
   {
     count: 5,
@@ -74,12 +74,12 @@ const LAYERS: readonly Layer[] = [
     width: [800, 1300],
     depth: [400, 600],
     heightShare: [1.4, 2.6],
-    tone: '#69705f',
+    tone: '#626a6e',
   },
 ];
 
 const SEED = 41;
-const MOUND = { width: 28, height: 10, lump: 0.16 } as const;
+const MOUND = { width: 28, height: 10, lump: 0.18, profile: 1.8 } as const;
 
 const VERTEX = /* glsl */ `
 varying vec3 vWorld;
@@ -107,7 +107,9 @@ void main() {
   float base = 1.0 - smoothstep(0.0, 25.0, vWorld.y - uSeaLevel);
   vec3 albedo = mix(vTone, uFoot, base * 0.6);
   vec3 colour = lit(albedo, normal, 0.35);
-  gl_FragColor = vec4(hazed(colour, vWorld), 1.0);
+  vec3 ray = vWorld - cameraPosition;
+  float haze = min(hazeAt(length(ray)) * 1.05 + 0.03, 1.0);
+  gl_FragColor = vec4(mix(colour, horizonAt(ray), haze), 1.0);
   ${OUTPUT_GLSL}
 }
 `;
@@ -119,8 +121,9 @@ function moundGeometry(): SphereGeometry {
   const vertex = new Vector3();
   for (let index = 0; index < position.count; index += 1) {
     vertex.fromBufferAttribute(position, index);
-    if (vertex.y > 1e-3) vertex.multiplyScalar(1 + (random() - 0.5) * MOUND.lump);
-    position.setXYZ(index, vertex.x, Math.max(vertex.y, 0), vertex.z);
+    const rise = Math.max(vertex.y, 0) ** MOUND.profile;
+    const lump = vertex.y > 1e-3 ? 1 + (random() - 0.5) * MOUND.lump : 1;
+    position.setXYZ(index, vertex.x * lump, rise * lump, vertex.z * lump);
   }
   geometry.computeVertexNormals();
   return geometry;
