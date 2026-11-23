@@ -16,8 +16,8 @@ interface MasonryLook {
 
 const WALL_LOOK: MasonryLook = {
   block: [0.9, 0.34, 0.012, 1],
-  base: '#857560',
-  light: '#a08d70',
+  base: '#73654f',
+  light: '#9a876a',
   mortar: '#9a8e7c',
   shade: [0, 0, 0],
 };
@@ -74,7 +74,7 @@ void main() {
   float mortar = 1.0 - smoothstep(uBlock.z * 0.5, uBlock.z * 1.6, edge);
   float weather = cellNoise(vec2(u * 2.5, v * 2.5), WRAP * 2.5);
   float grain = hash12(floor(vec2(mod(u * 40.0, WRAP * 40.0), v * 40.0)));
-  vec3 albedo = mix(uBase, uLight, stone * 0.7 + weather * 0.2) * (0.9 + 0.12 * grain);
+  vec3 albedo = mix(uBase, uLight, stone * 0.85 + weather * 0.25) * (0.86 + 0.18 * grain);
   albedo *= 1.0 - smoothstep(0.03, 0.0, edge - uBlock.z) * 0.08;
   albedo = mix(albedo, uMortar, mortar * 0.8);
   float wet = 1.0 - smoothstep(${WET_LINE_M.toFixed(2)} - 0.1, ${WET_LINE_M.toFixed(2)} + 0.15, vWorld.y + (weather - 0.5) * 0.2);
