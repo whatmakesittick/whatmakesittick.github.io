@@ -5,7 +5,8 @@ import type { SceneTextures } from '@core/scene/textures';
 import type { AssemblyState } from '../../../ids';
 import { gaitAt } from '../../../model/gait';
 import { referencePose } from '../../runnerPose';
-import { FormLines, includedDegrees, leanDegrees, shinShare } from './formLines';
+import { toDegrees } from '@core/math';
+import { FormLines, formLabels, shinShare } from './formLines';
 
 const OPTIONS = { pace: 'steady', stepRate: 0, arms: 'swing' } as const;
 const SETTLE_STEPS = 20;
@@ -41,15 +42,20 @@ describe('form lines', () => {
     expect(shinShare(101)).toBe(0);
   });
 
-  it('measures the lean and the joint angles on the pose', () => {
-    const pose = referencePose(gaitAt(MID_STANCE, OPTIONS));
-    const lean = leanDegrees(pose, pose.legs.right.ankle);
-    expect(lean).toBeGreaterThan(0);
-    expect(lean).toBeLessThan(15);
+  it('labels the lean, the knee and the elbow with the readout values', () => {
     const reading = gaitAt(MID_STANCE, OPTIONS);
-    const leg = pose.legs.right;
-    const bend = 180 - includedDegrees(leg.hip, leg.knee, leg.ankle);
-    expect(bend).toBeCloseTo(reading.right.kneeFlexDeg, 0);
+    expect(formLabels(reading)).toEqual({
+      lean: Math.round(reading.upper.leanDeg),
+      knee: Math.round(reading.right.kneeFlexDeg),
+      elbow: Math.round(reading.upper.elbowDeg.right),
+    });
+  });
+
+  it('draws the body line along the trunk, from the hips to the neck', () => {
+    const pose = referencePose(gaitAt(MID_STANCE, OPTIONS));
+    const lean = toDegrees(Math.atan2(pose.chest.x - pose.pelvis.x, pose.chest.y - pose.pelvis.y));
+    expect(lean).toBeGreaterThan(0);
+    expect(lean).toBeLessThan(20);
   });
 
   it('fades in, settles and fades out', () => {
