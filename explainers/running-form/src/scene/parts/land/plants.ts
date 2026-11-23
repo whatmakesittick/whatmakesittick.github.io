@@ -19,6 +19,7 @@ import type { TreeItem, TreeKind } from './placement';
 import { ScrollingInstances, copiesOf, NEAR_WINDOW } from './strip';
 import type { InstancePart, StripItem } from './strip';
 import { groundShadowMesh, shadowMatrix, TREE_SHADOW_SHAPES } from './sceneryShadows';
+import { fadeNearCamera } from './nearFade';
 
 interface Clump {
   readonly x: number;
@@ -167,7 +168,9 @@ function plantMesh(
   finish: Finish,
   count: number,
 ): InstancedMesh {
-  const material: Material = context.materials.get(UNDIMMED_GROUP, FINISHES[finish]);
+  const material: Material = fadeNearCamera(
+    context.materials.get(UNDIMMED_GROUP, FINISHES[finish]),
+  );
   return new InstancedMesh(context.tracker.track(geometry), material, count);
 }
 

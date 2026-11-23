@@ -11,6 +11,7 @@ import { LAMP, POST_OFFSETS, periodicItems } from './placement';
 import { LONG_SEGMENTS, denseNearOrigin } from './spacing';
 import { ScrollingInstances, copiesOf, NEAR_WINDOW } from './strip';
 import type { StripItem } from './strip';
+import { fadeNearCamera } from './nearFade';
 
 const DELINEATOR = { widthM: 0.1, reflectorM: 0.12, reflectorTopM: 0.08 } as const;
 const LAMP_PARTS = {
@@ -28,7 +29,9 @@ function instanced(
   finish: Finish,
   items: readonly StripItem[],
 ): InstancedMesh {
-  const material: Material = context.materials.get(UNDIMMED_GROUP, FINISHES[finish]);
+  const material: Material = fadeNearCamera(
+    context.materials.get(UNDIMMED_GROUP, FINISHES[finish]),
+  );
   return new InstancedMesh(
     context.tracker.track(geometry),
     material,
@@ -117,7 +120,7 @@ function rail(context: PartContext): {
     RAIL_SEGMENTS,
   ).translate(0, PARAPET.heightM + postHeight / 2, 0);
   const stanchions = instanced(context, stanchion, 'rail', items);
-  const material = context.materials.get(UNDIMMED_GROUP, FINISHES.rail);
+  const material = fadeNearCamera(context.materials.get(UNDIMMED_GROUP, FINISHES.rail));
   const tubes = [RAIL.middleM, RAIL.topM - RAIL.tubeRadiusM].map((height) => {
     const geometry = new CylinderGeometry(
       RAIL.tubeRadiusM,
