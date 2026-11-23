@@ -1,11 +1,13 @@
 import { Vector3 } from 'three';
 import type { Figure } from '@core/figure';
 import { smoothstep } from '@core/math';
+import { along, axisBetween, azimuthOf, isRightSide, vertexFields } from '@core/figure/body/hems';
+import type { VertexFields } from '@core/figure/body/hems';
 import type { RestFrame } from '@core/figure/body/restFrame';
 
-const AXES = 3;
+export { RIGHT_X, azimuthOf } from '@core/figure/body/hems';
+
 export const CHANNELS = 4;
-export const RIGHT_X = -1;
 const SPINE_HEIGHT = new Vector3(0, 1, 0);
 
 export const JAMMERS = {
@@ -35,20 +37,13 @@ export const BAND = {
   reach: 0.06,
 } as const;
 
-export interface GarmentFields {
-  readonly distances: Float32Array;
-  readonly extents: Float32Array;
-}
+export type GarmentFields = VertexFields;
 
 export interface Hems {
   waist: { origin: Vector3; axis: Vector3 };
   thighs: readonly { origin: Vector3; axis: Vector3 }[];
   head: { centre: Vector3; up: Vector3; eyeY: number; headY: number };
   wrist: { origin: Vector3; axis: Vector3 };
-}
-
-function axisBetween(frame: RestFrame, from: string, to: string): Vector3 {
-  return frame.joint(to).sub(frame.joint(from)).normalize();
 }
 
 export function hemsOf(frame: RestFrame): Hems {
@@ -69,19 +64,11 @@ export function hemsOf(frame: RestFrame): Hems {
   };
 }
 
-function along(point: Vector3, origin: Vector3, axis: Vector3, scratch: Vector3): number {
-  return scratch.copy(point).sub(origin).dot(axis);
-}
-
 function jammerDistance(point: Vector3, hems: Hems, scratch: Vector3): number {
   const waist = JAMMERS.waistAboveRoot - along(point, hems.waist.origin, hems.waist.axis, scratch);
-  const thigh = hems.thighs[point.x * RIGHT_X > 0 ? 1 : 0];
+  const thigh = hems.thighs[isRightSide(point) ? 1 : 0];
   const knee = JAMMERS.kneeHemAlongThigh - along(point, thigh.origin, thigh.axis, scratch);
   return Math.min(waist, knee);
-}
-
-export function azimuthOf(point: Vector3, centre: Vector3): number {
-  return Math.abs(Math.atan2(point.x - centre.x, point.z - centre.z));
 }
 
 export function capHemHeight(azimuth: number, head: Hems['head']): number {
@@ -137,13 +124,8 @@ function bandReach(point: Vector3, hems: Hems, scratch: Vector3): number {
 
 export function garmentFields(figure: Figure, frame: RestFrame): GarmentFields {
   const hems = hemsOf(frame);
-  const distances = new Float32Array(figure.vertexCount * CHANNELS);
-  const extents = new Float32Array(figure.vertexCount * CHANNELS);
-  const point = new Vector3();
   const scratch = new Vector3();
-  for (let v = 0; v < figure.vertexCount; v++) {
-    const at = v * CHANNELS;
-    point.fromArray(figure.restPositions, v * AXES);
+  return vertexFields(figure, CHANNELS, (point, distances, extents, at) => {
     distances[at] = jammerDistance(point, hems, scratch);
     distances[at + 1] = capDistance(point, hems.head);
     distances[at + 2] = point.x - hems.head.centre.x;
@@ -151,6 +133,5 @@ export function garmentFields(figure: Figure, frame: RestFrame): GarmentFields {
     extents[at] = strapAlong(point, hems.head);
     extents[at + 1] = wristOffset(point, hems, scratch) + BAND.centreFromWrist;
     extents[at + 2] = bandReach(point, hems, scratch);
-  }
-  return { distances, extents };
+  });
 }
