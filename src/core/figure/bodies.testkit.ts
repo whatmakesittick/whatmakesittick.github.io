@@ -23,4 +23,13 @@ export const TEST_BODIES: readonly TestBody[] = [
     groundTruth: FIXTURES,
     samples: FIXTURES,
   },
+  {
+    name: 'runner',
+    loadData: async () =>
+      (await import('../../../explainers/running-form/src/scene/parts/runner/figure/runner.data'))
+        .athleteData,
+    vertexCount: 4899,
+    strokeTruth: new URL('./running-form/', FIXTURES),
+    samples: FIXTURES,
+  },
 ];

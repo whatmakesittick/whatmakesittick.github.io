@@ -142,3 +142,22 @@ is about a tenth of the corrective bytes, `C` carries the rest.
    `figure.test.ts`, `retarget.test.ts`, `partition.test.ts` and the other core body tests then run on the new body.
    `figure.test.ts` also needs the body's vertex count, and the correctives-off test needs `ground-truth` (skip it for a
    body exported with `--skip-ground-truth`).
+
+### The runner (`running-form`)
+
+- Config: `config.running-form.json` (the shape fitted to distance-runner tape measures, with skeleton scale
+  parameters; `statureM` 1.7598 gives 1.770 m standing with the legs parallel). Every rig length comes from this
+  export (`explainers/running-form/src/scene/rig/body.ts`, pinned by `bodyLengths.test.ts`).
+- Poses: `dumpRunPoses.test.ts` in `explainers/running-form/src/scene/parts/runner/figure/` (skipped unless
+  `RUN_DUMP_DIR` is set; `RUN_DUMP_STEP` changes the scrubber step, 5 by default) walks the run through the runner's
+  rig and `FigureRig.retarget`: every pace, step rates -10, -5, 0, 5, 10 and both arm styles in `fit`; step rates -10,
+  -7, -2, 3, 8, 10 at an offset of 2 units in `heldout`.
+
+```sh
+POSES=/path/to/run-poses
+OUT=explainers/running-form/src/scene/parts/runner/figure/runner.data.ts
+RUN_DUMP_DIR=$POSES npx vitest run explainers/running-form/src/scene/parts/runner/figure/dumpRunPoses.test.ts
+.venv/bin/python scripts/human-body/export.py --assets $ASSETS --config scripts/human-body/config.running-form.json \
+  --poses $POSES --module $OUT --fixtures src/core/figure/fixtures/running-form --skip-ground-truth
+npx prettier --write $OUT src/core/figure/fixtures/running-form/*.json
+```

@@ -1,0 +1,16 @@
+{
+  "lod": 3,
+  "statureM": 1.7598,
+  "body": [
+    -1.6, -2.1, -0.6, 0.0, -0.5, 0.5, 0.5, -0.5, 0.316, 0.5, 0.5, 0.5, -0.411, -0.5, -0.5, -0.203,
+    0.5, 0.5, -0.265, 0.5
+  ],
+  "skeleton": {
+    "scale_shoulder_width": 0.05,
+    "scale_hip_width": 0.03,
+    "scale_uplegs": 0.25,
+    "scale_lowlegs": 0.1,
+    "scale_spine_length": -0.3,
+    "scale_foot_length": -0.06
+  }
+}
