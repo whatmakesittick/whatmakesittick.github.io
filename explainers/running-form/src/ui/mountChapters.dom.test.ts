@@ -1,6 +1,6 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { mountActions } from '@core/ui/actions';
-import { MOMENTS } from '../model';
+import { HELD_ELBOW_DEG, MOMENTS } from '../model';
 import { createRunStore } from '../state';
 import type { RunStore } from '../state';
 import { CHAPTER_ACTIONS } from './actions';
@@ -111,7 +111,7 @@ describe('chapter widgets', () => {
     click('arms', 'held', 'posture');
     expect(readout('postureArms')).toBe(controls.armsOptions.held);
     expect(readout('postureTwist')).not.toBe(twist);
-    expect(readout('postureElbow')).toBe(fill(units.degrees, { value: '100' }));
+    expect(readout('postureElbow')).toBe(fill(units.degrees, { value: String(HELD_ELBOW_DEG) }));
     expect(readout('postureArm')).toBe(fill(units.degrees, { value: '0' }));
   });
 });
