@@ -47,6 +47,7 @@ export interface RetargetArm {
   handAxis: Point;
   palm: Point;
   curl: number;
+  handShape?: Readonly<Record<string, number>>;
 }
 
 export interface RetargetLeg {
@@ -282,6 +283,7 @@ export class Retargeter {
     this.solveToes(target);
     this.solveHead(target.head);
     SIDES.forEach((side) => this.relaxHand(side, target.arms[side].curl));
+    SIDES.forEach((side) => this.shapeHand(side, target.arms[side].handShape));
     return this.out;
   }
 
@@ -615,6 +617,14 @@ export class Retargeter {
     this.set('head_twist', hx);
     this.set('head_lean', hy);
     this.set('head_bend', hz);
+  }
+
+  private shapeHand(side: Side, hand: Readonly<Record<string, number>> | undefined): void {
+    if (!hand) return;
+    Object.entries(hand).forEach(([joint, value]) => {
+      const name = `${PREFIX[side]}_${joint}`;
+      if (this.figure.parameterIndex(name) >= 0) this.set(name, value);
+    });
   }
 
   private relaxHand(side: Side, share: number): void {
