@@ -1,8 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
+import { PART_GROUPS, PART_IDS } from '../ids';
 import type { AssemblyState } from '../ids';
 import { createRunStore } from '../state';
 import { bindStore } from './bindings';
 import type { SceneTargets } from './bindings';
+import { SCENE_OPTIONS } from './index';
 
 const LATER_PHASE = 300;
 
@@ -27,6 +29,13 @@ function fakeTargets() {
 }
 
 describe('run scene bindings', () => {
+  it('maps parts only to groups the highlighter can dim or that stay undimmed', () => {
+    const known: readonly string[] = [...PART_IDS, ...(SCENE_OPTIONS.highlight?.undimmed ?? [])];
+    Object.values(PART_GROUPS).forEach((groups) =>
+      groups.forEach((group) => expect(known).toContain(group)),
+    );
+  });
+
   it('builds the scene from the store and frames the first chapter', async () => {
     const { received, frame, targets } = fakeTargets();
     const store = createRunStore();
