@@ -16,7 +16,7 @@ export const FOREARM_M = 0.275;
 export const FOOT_HEEL_BEHIND_ANKLE_M = 0.065;
 export const FOOT_BALL_AHEAD_OF_ANKLE_M = 0.13;
 export const FOOT_TOE_AHEAD_OF_ANKLE_M = 0.2;
-export const PELVIS_TILT_DEG = 10;
+export const PELVIS_TILT_DEG = 17;
 export const GRAVITY_MS2 = 9.81;
 
 export const BODY_TARGET_CM = {
