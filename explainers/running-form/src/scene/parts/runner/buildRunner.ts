@@ -17,13 +17,15 @@ import {
   capLabelFields,
   capLabelTexture,
 } from './garments/capLabel';
+import { CLOTH_CHANNELS, clothField } from './garments/cloth';
 import { CHANNELS, runnerFields } from './garments/fields';
 import type { RunnerFields } from './garments/fields';
 import { regionOf } from './body/probe';
 import { GARMENT_ATTRIBUTES, applyGarments } from './garments/paint';
 import { brimGeometry, buttonGeometry } from './head/brim';
+import { applyLensSheen } from './head/lensSheen';
 import { frameGeometries, lensGeometry } from './head/sunglasses';
-import { RUNNER_EXTRA, applySkin } from './body/skinShader';
+import { RUNNER_CLOTH, RUNNER_EXTRA, applySkin } from './body/skinShader';
 import { restPosed } from './body/restPose';
 import { PART_RULES } from './partRules';
 import { Runner } from './runner';
@@ -71,6 +73,7 @@ function body(
       { name: GARMENT_ATTRIBUTES.distances, data: fields.distances, itemSize: CHANNELS },
       { name: GARMENT_ATTRIBUTES.extents, data: fields.extents, itemSize: CHANNELS },
       { name: RUNNER_EXTRA, data: fields.extra, itemSize: CHANNELS },
+      { name: RUNNER_CLOTH, data: clothField(rest, frame, fields), itemSize: CLOTH_CHANNELS },
       {
         name: CAP_LABEL_ATTRIBUTE,
         data: capLabelFields(rest, frame),
@@ -131,6 +134,7 @@ export function* buildRunner(
       finish: 'frame' as const,
     })),
   ]);
+  applyLensSheen(builder.material('head', 'lens'));
   yield;
   const wrist = regionOf(rest, frame.joint(WATCH_JOINT), WRIST_REACH_M);
   const place = watchPlace(wrist, frame);

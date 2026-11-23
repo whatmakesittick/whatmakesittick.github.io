@@ -4,6 +4,7 @@ import { SKIN_FLUSH } from '../finishes';
 import { SOLE_BACK_M, SOLE_TIP_M, collarHeight } from '../shoes/design';
 
 export const RUNNER_EXTRA = 'runnerExtra';
+export const RUNNER_CLOTH = 'runnerCloth';
 
 export const SHOE_COVER = {
   samples: 32,
@@ -36,12 +37,16 @@ export function coverCurve(): number[] {
 
 const VERTEX_HEAD = /* glsl */ `
 attribute vec4 ${RUNNER_EXTRA};
+attribute vec3 ${RUNNER_CLOTH};
 varying vec4 vRunnerExtra;
+varying vec3 vRunnerCloth;
 varying vec3 vBodyWorld;
 `;
 
 const VERTEX_BODY = /* glsl */ `
+transformed += objectNormal * ${RUNNER_CLOTH}.x;
 vRunnerExtra = ${RUNNER_EXTRA};
+vRunnerCloth = ${RUNNER_CLOTH};
 vBodyWorld = (modelMatrix * vec4(transformed, 1.0)).xyz;
 `;
 
@@ -52,6 +57,7 @@ function fragmentHead(): string {
 uniform vec3 uSkinFlush;
 uniform mat4 uShoeFrames[2];
 varying vec4 vRunnerExtra;
+varying vec3 vRunnerCloth;
 varying vec3 vBodyWorld;
 const float SHOE_COLLAR[${count}] = float[${count}](${curve});
 
