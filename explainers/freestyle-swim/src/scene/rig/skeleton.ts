@@ -8,7 +8,7 @@ import { SIDE, createArmPose, roll } from './arm';
 import type { ArmPose } from './arm';
 import { solveArm } from './armTrack';
 import { BODY, BREATH_HEAD, KICK, KICK_SHAPES } from './constants';
-import { periodicCurve } from './curve';
+import { periodicCurve } from '@core/rig/curve';
 
 export { SIDE, armClock } from './arm';
 export type { ArmPose } from './arm';
