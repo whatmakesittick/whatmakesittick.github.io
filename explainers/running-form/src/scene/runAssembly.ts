@@ -1,5 +1,7 @@
 import { Group, Line, Mesh, Points, Sprite } from 'three';
-import type { Box3, Material, Object3D } from 'three';
+import type { Box3, Camera, Material, Object3D } from 'three';
+import type { Rect } from '@core/scene/labelLayout';
+import type { ViewportSize } from '@core/scene/lens';
 import { anchorAt, isShown } from '@core/scene/parts';
 import type { Steps } from '@core/scene/pacing';
 import { ResourceTracker } from '@core/scene/resources';
@@ -11,6 +13,7 @@ import { buildLand } from './parts/land/land';
 import type { Land } from './parts/land/land';
 import { buildOverlays } from './parts/overlays/overlays';
 import type { Overlays } from './parts/overlays/overlays';
+import { fitTags } from './parts/overlays/tagFit';
 import { RunnerShadow } from './parts/shadow/runnerShadow';
 import { labelPoints } from './labelPoints';
 import { regionBox } from './regions';
@@ -77,6 +80,10 @@ class RunAssembly implements Assembly {
 
   update(deltaSeconds: number): boolean {
     return this.parts.overlays.update(deltaSeconds);
+  }
+
+  fitTags(camera: Camera, frame: ViewportSize, keepOut: readonly Rect[]): Rect[] {
+    return fitTags(this.parts.overlays.tags(), camera, frame, keepOut);
   }
 
   labelAnchors(): ReadonlyMap<PartId, Object3D> {

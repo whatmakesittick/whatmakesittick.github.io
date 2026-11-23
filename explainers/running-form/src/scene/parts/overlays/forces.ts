@@ -23,6 +23,7 @@ const WEIGHT_BESIDE_M = 0.24;
 const FADE_SECONDS = 0.3;
 const PRESENT_BW = 0.35;
 const LEAN_BW = 0.04;
+const TAG_FROM_SHARE = 0.6;
 const UP = new Vector3(0, 1, 0);
 const DOWN = new Vector3(0, -1, 0);
 const align = new Quaternion();
@@ -87,6 +88,10 @@ export class ForceArrow implements Overlay {
     return moving;
   }
 
+  tags(): readonly OverlayTag[] {
+    return [this.valueTag, this.leanTag, this.weightTag];
+  }
+
   dispose(): void {
     [this.valueTag, this.leanTag, this.weightTag].forEach((tag) => tag.dispose());
   }
@@ -109,10 +114,15 @@ export class ForceArrow implements Overlay {
     this.place(this.force, this.origin, this.direction.normalize(), lengthM, grow, 1);
     this.weightTop.set(contact.x, pose.pelvis.y, contact.z + WEIGHT_BESIDE_M);
     this.place(this.weight, this.weightTop, DOWN, FORCE_ARROW_M_PER_BW, grow, WEIGHT_THICKNESS);
-    this.tags(force.vertBW, force.fwdBW, lengthM, grow);
+    this.showTags(force.vertBW, force.fwdBW, lengthM, grow);
   }
 
-  private tags(vertBW: number, fwdBW: number, lengthM: number, opacity: number): void {
+  private showTags(vertBW: number, fwdBW: number, lengthM: number, opacity: number): void {
+    const share = smoothstep((opacity - TAG_FROM_SHARE) / (1 - TAG_FROM_SHARE));
+    if (share <= 0) {
+      this.tags().forEach((tag) => tag.hide());
+      return;
+    }
     this.valueTag.show('overlay.forceNow', { value: formatFixed(vertBW, 1) });
     this.valueTag.object.position.set(0, lengthM, 0);
     const leaning = Math.abs(fwdBW) > LEAN_BW;
@@ -121,7 +131,7 @@ export class ForceArrow implements Overlay {
     this.leanTag.object.position.set(0, lengthM * 0.45, 0);
     this.weightTag.show('overlay.bodyWeight');
     this.weightTag.object.position.set(0, 0, 0);
-    [this.valueTag, this.leanTag, this.weightTag].forEach((tag) => tag.setOpacity(opacity));
+    this.tags().forEach((tag) => tag.setOpacity(share));
   }
 
   private place(

@@ -1,7 +1,7 @@
 import { Group, Vector3 } from 'three';
 import type { Mesh, MeshBasicMaterial } from 'three';
 import { smoothstep } from '@core/math';
-import type { AssemblyState, GaitReading } from '../../../ids';
+import type { AssemblyState, GaitReading, PartId } from '../../../ids';
 import { THEME } from '../../../theme';
 import type { RunnerPose } from '../../runnerPose';
 import type { PartContext } from '../context';
@@ -11,6 +11,7 @@ import { ArcTube, Fade, overlayMaterial, overlayMesh, stretch, unitLine } from '
 import { OverlayTag } from './tag';
 
 export const SHIN_WINDOW = { from: 900, to: 100, feather: 30 } as const;
+export const PARTS_NAMED_BY_TAGS: ReadonlySet<PartId> = new Set<PartId>(['knee', 'elbow']);
 
 const LINE_RADIUS_M = 0.007;
 const GUIDE_RADIUS_M = 0.004;
@@ -18,6 +19,7 @@ const ARC_THICKNESS_M = 0.005;
 const ARC_RADIUS_M = { lean: 0.3, knee: 0.13, elbow: 0.09 } as const;
 const VERTICAL_SHARE = 1.05;
 const THIGH_EXTENSION_M = 0.17;
+const SHIN_TAG_SHARE = 0.4;
 const GUIDE_OPACITY = 0.55;
 const FADE_SECONDS = 0.3;
 const CYCLE = 1000;
@@ -58,11 +60,11 @@ export class FormLines implements Overlay {
   private readonly leanArc: ArcTube;
   private readonly kneeArc: ArcTube;
   private readonly elbowArc: ArcTube;
-  private readonly tags = {
+  private readonly tagSet = {
     lean: new OverlayTag(THEME.formLine),
-    shin: new OverlayTag(THEME.formLine),
-    knee: new OverlayTag(THEME.formLine),
     elbow: new OverlayTag(THEME.formLine),
+    knee: new OverlayTag(THEME.formLine),
+    shin: new OverlayTag(THEME.formLine, 'left'),
   };
   private readonly fade = new Fade(FADE_SECONDS);
   private state: AssemblyState | null = null;
@@ -89,7 +91,7 @@ export class FormLines implements Overlay {
       this.leanArc.mesh,
       this.kneeArc.mesh,
       this.elbowArc.mesh,
-      ...Object.values(this.tags).map((tag) => tag.object),
+      ...Object.values(this.tagSet).map((tag) => tag.object),
     );
     this.root.visible = false;
   }
@@ -107,8 +109,12 @@ export class FormLines implements Overlay {
     return moving;
   }
 
+  tags(): readonly OverlayTag[] {
+    return Object.values(this.tagSet);
+  }
+
   dispose(): void {
-    Object.values(this.tags).forEach((tag) => tag.dispose());
+    Object.values(this.tagSet).forEach((tag) => tag.dispose());
   }
 
   private apply(): void {
@@ -122,7 +128,7 @@ export class FormLines implements Overlay {
     this.placeShin(state, pose, share);
     this.placeKnee(state, pose);
     this.placeElbow(state, pose);
-    Object.values(this.tags).forEach((tag) => tag.setOpacity(share));
+    Object.values(this.tagSet).forEach((tag) => tag.setOpacity(share));
   }
 
   private placeLean(state: AssemblyState, pose: RunnerPose): void {
@@ -133,8 +139,8 @@ export class FormLines implements Overlay {
     stretch(this.vertical, pelvis, a, GUIDE_RADIUS_M);
     b.subVectors(chest, pelvis);
     this.leanArc.set(pelvis, UP, b, ARC_RADIUS_M.lean, ARC_THICKNESS_M);
-    this.tags.lean.show('overlay.lean', { value: formLabels(state.reading).lean });
-    this.tags.lean.object.position.copy(a);
+    this.tagSet.lean.show('overlay.lean', { value: formLabels(state.reading).lean });
+    this.tagSet.lean.object.position.copy(a);
   }
 
   private placeShin(state: AssemblyState, pose: RunnerPose, share: number): void {
@@ -147,12 +153,12 @@ export class FormLines implements Overlay {
     this.shin.visible = visible > 0;
     stretch(this.shin, leg.knee, a, LINE_RADIUS_M * visible);
     if (visible <= 0) {
-      this.tags.shin.hide();
+      this.tagSet.shin.hide();
       return;
     }
-    this.tags.shin.show('overlay.shin');
-    this.tags.shin.object.position.copy(leg.ankle).lerp(a, 0.5);
-    this.tags.shin.setOpacity(share * visible);
+    this.tagSet.shin.show('overlay.shin');
+    this.tagSet.shin.object.position.copy(leg.knee).lerp(leg.ankle, SHIN_TAG_SHARE);
+    this.tagSet.shin.setOpacity(share * visible);
   }
 
   private placeKnee(state: AssemblyState, pose: RunnerPose): void {
@@ -163,8 +169,8 @@ export class FormLines implements Overlay {
     stretch(this.thighGuide, leg.knee, c, GUIDE_RADIUS_M);
     b.subVectors(leg.ankle, leg.knee);
     this.kneeArc.set(leg.knee, a, b, ARC_RADIUS_M.knee, ARC_THICKNESS_M);
-    this.tags.knee.show('overlay.kneeBend', { value: formLabels(state.reading).knee });
-    this.tags.knee.object.position.copy(this.kneeArc.midpoint(leg.knee, ARC_RADIUS_M.knee, c));
+    this.tagSet.knee.show('overlay.kneeBend', { value: formLabels(state.reading).knee });
+    this.tagSet.knee.object.position.copy(this.kneeArc.midpoint(leg.knee, ARC_RADIUS_M.knee, c));
   }
 
   private placeElbow(state: AssemblyState, pose: RunnerPose): void {
@@ -173,7 +179,9 @@ export class FormLines implements Overlay {
     a.subVectors(arm.shoulder, arm.elbow);
     b.subVectors(arm.wrist, arm.elbow);
     this.elbowArc.set(arm.elbow, a, b, ARC_RADIUS_M.elbow, ARC_THICKNESS_M);
-    this.tags.elbow.show('overlay.elbowBend', { value: formLabels(state.reading).elbow });
-    this.tags.elbow.object.position.copy(this.elbowArc.midpoint(arm.elbow, ARC_RADIUS_M.elbow, c));
+    this.tagSet.elbow.show('overlay.elbowBend', { value: formLabels(state.reading).elbow });
+    this.tagSet.elbow.object.position.copy(
+      this.elbowArc.midpoint(arm.elbow, ARC_RADIUS_M.elbow, c),
+    );
   }
 }

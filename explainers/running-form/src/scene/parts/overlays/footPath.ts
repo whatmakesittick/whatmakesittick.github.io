@@ -54,6 +54,10 @@ export class FootPath implements Overlay {
     return moving;
   }
 
+  tags(): readonly OverlayTag[] {
+    return [this.tag];
+  }
+
   dispose(): void {
     this.tag.dispose();
   }

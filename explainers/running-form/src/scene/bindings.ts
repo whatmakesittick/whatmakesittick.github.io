@@ -2,6 +2,7 @@ import { bindPresets } from '@core/scene/presetBinder';
 import type { LabelPolicy, PresetTargets } from '@core/scene/presetBinder';
 import { PART_GROUPS } from '../ids';
 import type { AssemblyState } from '../ids';
+import { PARTS_NAMED_BY_TAGS } from './parts/overlays/formLines';
 import { PRESETS, createAssemblyState, toAssemblyState } from '../state';
 import type { Preset, RunStore, RunStoreState } from '../state';
 import { cameraFor } from './cameraViews';
@@ -27,6 +28,18 @@ class DoubleBufferedAssemblyState {
     this.heldByAssembly = next;
     return next;
   }
+}
+
+const NO_PARTS: ReadonlySet<string> = new Set();
+
+function withholding(policy: LabelPolicy, withheld: () => ReadonlySet<string>): LabelPolicy {
+  return {
+    setWanted: (wanted, pinned) => {
+      const hidden = withheld();
+      const kept = (ids: ReadonlySet<string>) => new Set([...ids].filter((id) => !hidden.has(id)));
+      policy.setWanted(kept(wanted), kept(pinned));
+    },
+  };
 }
 
 function highlightedGroups(preset: Preset): readonly string[] {
@@ -57,7 +70,9 @@ export async function bindStore(store: RunStore, targets: SceneTargets): Promise
     bindPresets<RunStoreState, Preset>(targets, store, {
       presets: PRESETS,
       views: looking,
-      labels: labelVisibility,
+      labels: withholding(labelVisibility, () =>
+        store.getState().view.formLines ? PARTS_NAMED_BY_TAGS : NO_PARTS,
+      ),
       highlight: highlightedGroups,
       prepare: push,
       onView: (_view, state) => push(state),

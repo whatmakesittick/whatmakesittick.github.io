@@ -1,10 +1,13 @@
 import { Box3 } from 'three';
 import type { Object3D } from 'three';
+import { NO_SAFE_AREA } from '@core/scene/lens';
+import type { ViewportSize } from '@core/scene/lens';
 import { CameraViews } from '@core/scene/cameraViews';
 import { runPaced } from '@core/scene/pacing';
 import type { SceneShell } from '@core/scene/shell';
 import { whenIdle } from '@core/scene/warmUp';
 import type { AssemblyState, CameraView, RegionId } from '../ids';
+import { LabelRoom } from './labelRoom';
 import { RoadScroll } from './roadScroll';
 import { createAssembly } from './assembly';
 import type { Assembly } from './assembly';
@@ -29,6 +32,9 @@ export class RunController {
   private followsPelvis = true;
   private cancelWarmUp: () => void = () => {};
   private generation = 0;
+  private frame: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
+  private readonly stopWatchingSize: () => void;
+  private readonly labelRoom: LabelRoom;
 
   constructor(dependencies: RunControllerDependencies) {
     this.dependencies = dependencies;
@@ -38,11 +44,15 @@ export class RunController {
       anchor: () => this.followedAnchor(),
     });
     this.views = { frame: (view, animate) => this.cameraViews.frame(view, animate) };
+    this.stopWatchingSize = dependencies.viewport.onResize((size) => {
+      this.frame = size;
+    });
+    this.labelRoom = new LabelRoom(dependencies.labels, dependencies.viewport.element);
   }
 
   async build(state: AssemblyState): Promise<void> {
     const { scene, materials, textures, labels } = this.dependencies;
-    this.dispose();
+    this.clearAssembly();
     const generation = this.generation;
     const runnerResources = await loadRunner();
     if (generation !== this.generation) return;
@@ -72,10 +82,19 @@ export class RunController {
   update(deltaSeconds: number): boolean {
     const { rig } = this.dependencies;
     const cameraDistance = rig.camera.position.distanceTo(rig.controls.target);
-    return this.assembly?.update(deltaSeconds, cameraDistance) ?? false;
+    const settling = this.assembly?.update(deltaSeconds, cameraDistance) ?? false;
+    const room = this.labelRoom;
+    room.setTags(this.assembly?.fitTags(rig.camera, this.frame, room.overlayAreas) ?? []);
+    return settling;
   }
 
   dispose(): void {
+    this.clearAssembly();
+    this.stopWatchingSize();
+    this.labelRoom.dispose();
+  }
+
+  private clearAssembly(): void {
     this.generation += 1;
     this.cancelWarmUp();
     this.assembly?.root.removeFromParent();

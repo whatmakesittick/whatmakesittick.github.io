@@ -5,11 +5,13 @@ import type { PartContext } from '../context';
 import { FootPath } from './footPath';
 import { ForceArrow } from './forces';
 import { FormLines } from './formLines';
+import type { OverlayTag } from './tag';
 
 export interface Overlay {
   readonly root: Group;
   setState(state: AssemblyState, pose: RunnerPose): void;
   update(deltaSeconds: number): boolean;
+  tags(): readonly OverlayTag[];
   dispose(): void;
 }
 
@@ -31,6 +33,10 @@ class OverlayGroup implements Overlays {
 
   update(deltaSeconds: number): boolean {
     return this.members.reduce((moving, member) => member.update(deltaSeconds) || moving, false);
+  }
+
+  tags(): readonly OverlayTag[] {
+    return this.members.flatMap((member) => member.tags());
   }
 
   dispose(): void {

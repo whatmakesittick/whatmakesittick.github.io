@@ -38,14 +38,14 @@ function fakeShell() {
     scene: { add: vi.fn() },
     materials: {},
     textures: {},
-    labels: { attach: vi.fn() },
+    labels: { attach: vi.fn(), setKeepOut: vi.fn() },
     rig: {
       setBounds: vi.fn(),
       follow: vi.fn(),
       camera: { position: new Vector3() },
       controls: { target: new Vector3() },
     },
-    viewport: {},
+    viewport: { onResize: vi.fn(() => () => {}), element: { closest: () => null } },
   };
   return shell as unknown as RunControllerDependencies & {
     scene: { add: ReturnType<typeof vi.fn> };

@@ -1,4 +1,6 @@
-import type { Box3, Group, Object3D } from 'three';
+import type { Box3, Camera, Group, Object3D } from 'three';
+import type { Rect } from '@core/scene/labelLayout';
+import type { ViewportSize } from '@core/scene/lens';
 import type { MaterialLibrary } from '@core/scene/materials';
 import type { Steps } from '@core/scene/pacing';
 import type { SceneTextures } from '@core/scene/textures';
@@ -22,6 +24,7 @@ export interface Assembly {
   readonly root: Group;
   setState(state: AssemblyState): void;
   update(deltaSeconds: number, cameraDistance: number): boolean;
+  fitTags(camera: Camera, frame: ViewportSize, keepOut: readonly Rect[]): Rect[];
   labelAnchors(): ReadonlyMap<PartId, Object3D>;
   anchor(id: AnchorId): Object3D;
   region(id: RegionId): Box3;
