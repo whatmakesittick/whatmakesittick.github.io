@@ -12,6 +12,8 @@ export interface ModuleGraph {
 
 const PACKAGE_MODULE = /[\\/]node_modules[\\/]/;
 const EXPLAINER_MODULE = /^explainers\/([^/]+)\//;
+export const FIGURE_MODULES = /[\\/]src[\\/]core[\\/]figure[\\/]/;
+export const RIG_MODULES = /[\\/]src[\\/]core[\\/]rig[\\/]/;
 const PROJECT_ROOT = fileURLToPath(new URL('..', import.meta.url));
 
 export function dependsOn(id: string, target: RegExp, graph: ModuleGraph): boolean {
@@ -90,4 +92,12 @@ export function sharedByPages(
     }
   }
   return false;
+}
+
+export type OwnChunk = 'figure' | 'rig';
+
+export function ownChunkOf(id: string): OwnChunk | undefined {
+  if (FIGURE_MODULES.test(id)) return 'figure';
+  if (RIG_MODULES.test(id)) return 'rig';
+  return undefined;
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dependsOn, isExplainerOnlyPackage, sharedByPages } from './chunks.ts';
+import { dependsOn, isExplainerOnlyPackage, ownChunkOf, sharedByPages } from './chunks.ts';
 import type { ModuleGraph } from './chunks.ts';
 
 const THREE = /node_modules\/three\//;
@@ -187,5 +187,31 @@ describe('sharedByPages', () => {
     expect(sharedByPages('/src/core/path.ts', pages, isPage)).toBe(false);
     expect(sharedByPages('/src/core/embed/mount.ts', pages, isPage)).toBe(false);
     expect(sharedByPages('/src/core/i18n/index.ts', pages, isPage)).toBe(true);
+  });
+});
+
+describe('ownChunkOf', () => {
+  it('gives the figure and rig modules chunks of their own', () => {
+    expect(ownChunkOf('/src/core/figure/figure.ts')).toBe('figure');
+    expect(ownChunkOf('/src/core/figure/body/figureBody.ts')).toBe('figure');
+    expect(ownChunkOf('C:\\repo\\src\\core\\rig\\ik.ts')).toBe('rig');
+  });
+
+  it('leaves every other module to the shared, scene and embed groups', () => {
+    expect(ownChunkOf('/src/core/scene/shell.ts')).toBeUndefined();
+    expect(ownChunkOf('/src/core/embed/runtime.ts')).toBeUndefined();
+    expect(ownChunkOf('/explainers/freestyle-swim/src/scene/rig/ik.ts')).toBeUndefined();
+    expect(ownChunkOf('/node_modules/three/build/three.module.js')).toBeUndefined();
+  });
+
+  it('names a figure module shared by two pages as its own chunk, not a page chunk', () => {
+    const pages = graph({
+      '/explainers/a/src/index.ts': ['/src/core/figure/figure.ts'],
+      '/explainers/b/src/index.ts': ['/src/core/figure/figure.ts'],
+      '/src/core/figure/figure.ts': [],
+    });
+    const isRoot = (id: string) => id.startsWith('/explainers/');
+    expect(sharedByPages('/src/core/figure/figure.ts', pages, isRoot)).toBe(true);
+    expect(ownChunkOf('/src/core/figure/figure.ts')).toBe('figure');
   });
 });
