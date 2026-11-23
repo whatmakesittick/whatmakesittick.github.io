@@ -1,5 +1,5 @@
 import type { Phase, Timeline } from '@core/explainer';
-import { formatNumber } from '@core/format';
+import { formatNumber, formatSignificant } from '@core/format';
 import { t } from '@core/i18n';
 import { PHASE_IDS } from './ids';
 import type { PaceId, PhaseId } from './ids';
@@ -11,6 +11,7 @@ import { PHASE_TONES } from './theme';
 export const SCRUBBER_STEP_UNITS = 2;
 const FINE_STEP_UNITS = 5;
 const COARSE_STEP_UNITS = 50;
+const FACTOR_DIGITS = 3;
 const UNITS_PER_PERCENT = CYCLE_UNITS / 100;
 
 export function phaseKey(id: PhaseId): string {
@@ -26,7 +27,7 @@ function percentText(units: number): string {
 }
 
 export function formatPlaybackSpeed(speed: number): string {
-  return t('timeline.speedValue', { factor: formatNumber(speedFactor(speed)) });
+  return t('timeline.speedValue', { factor: formatSignificant(speedFactor(speed), FACTOR_DIGITS) });
 }
 
 export function describeSpeed(speed: number): string {

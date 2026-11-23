@@ -68,7 +68,9 @@ describe('run timeline', () => {
   });
 
   it('formats the speed as slow motion of real time', () => {
-    expect(formatPlaybackSpeed(0)).toBe('0.063x');
+    expect(formatPlaybackSpeed(0)).toBe('0.0625x');
+    expect(formatPlaybackSpeed(1)).toBe('0.125x');
+    expect(formatPlaybackSpeed(2)).toBe('0.25x');
     expect(formatPlaybackSpeed(4)).toBe('1x');
     expect(describeSpeed(4)).toBe('real time');
     expect(describeSpeed(0)).toBe('16 times slower');
