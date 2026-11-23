@@ -59,6 +59,18 @@ describe.each(bodies)('retarget on the $name body', (body) => {
     expect(moved).toEqual([]);
   });
 
+  it('bends the toes to the toe axis it was given', () => {
+    const bends = { r_ball_bend: -0.5, l_ball_bend: 0.3 };
+    const parameters = samples[0].slice();
+    Object.entries(bends).forEach(
+      ([name, bend]) => (parameters[figure.parameterIndex(name)] = bend),
+    );
+    const solved = retargeter.solve(reader.read(parameters));
+    Object.entries(bends).forEach(([name, bend]) =>
+      expect(solved[figure.parameterIndex(name)]).toBeCloseTo(bend, 3),
+    );
+  });
+
   it('is a pure function of its input', () => {
     const first = reader.read(samples[100]);
     const second = reader.read(samples[700]);

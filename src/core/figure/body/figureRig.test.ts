@@ -33,6 +33,7 @@ function poseOf(target: RetargetTarget, origin: Vector3, frame: Matrix4): RigPos
       ankle: place(l.ankle),
       footAxis: direct(l.footAxis),
       sole: direct(l.sole),
+      toeAxis: direct(l.toeAxis),
     };
   };
   const head = new Vector3(target.head.x, target.head.y, target.head.z).applyMatrix4(into);

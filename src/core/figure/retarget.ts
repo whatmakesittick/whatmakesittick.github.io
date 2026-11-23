@@ -54,6 +54,7 @@ export interface RetargetLeg {
   ankle: Point;
   footAxis: Point;
   sole: Point;
+  toeAxis: Point;
 }
 
 export interface RetargetTarget {
@@ -93,7 +94,14 @@ function arm(): RetargetArm {
 }
 
 function leg(): RetargetLeg {
-  return { hip: point(), knee: point(), ankle: point(), footAxis: point(), sole: point() };
+  return {
+    hip: point(),
+    knee: point(),
+    ankle: point(),
+    footAxis: point(),
+    sole: point(),
+    toeAxis: point(),
+  };
 }
 
 export function createRetargetTarget(): RetargetTarget {
@@ -253,6 +261,7 @@ export class Retargeter {
     this.fitShoulders(target);
     SIDES.forEach((side) => this.solveArm(side, target.arms[side]));
     SIDES.forEach((side) => this.solveLeg(side, target.legs[side]));
+    this.solveToes(target);
     this.solveHead(target.head);
     SIDES.forEach((side) => this.relaxHand(side));
     return this.out;
@@ -551,6 +560,23 @@ export class Retargeter {
     this.set(`${p}_foot_bend`, foot.values[0]);
     this.set(`${p}_foot_lean0`, foot.values[1] / 2);
     this.set(`${p}_foot_lean1`, foot.values[1] / 2);
+  }
+
+  private solveToes(target: RetargetTarget): void {
+    const aimed = SIDES.filter((side) => length(vec(target.legs[side].toeAxis)) > 0);
+    if (aimed.length === 0) return;
+    this.fk();
+    aimed.forEach((side) => {
+      const ball = this.rot(`${PREFIX[side]}_ball`);
+      const along: Vec = [ball[0], ball[3], ball[6]];
+      const axis: Vec = [ball[2], ball[5], ball[8]];
+      const toe = vec(target.legs[side].toeAxis);
+      const aim = sub(toe, scale(axis, dot(toe, axis)));
+      this.set(
+        `${PREFIX[side]}_ball_bend`,
+        Math.atan2(dot(cross(along, aim), axis), dot(along, aim)),
+      );
+    });
   }
 
   private solveHead(head: Rotation): void {

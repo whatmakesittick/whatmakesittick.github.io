@@ -6,6 +6,7 @@ import type { Point, RetargetTarget, Side } from '../retarget';
 
 const SIDES: readonly Side[] = ['right', 'left'];
 const AXES = 3;
+const NO_AXIS: Point = { x: 0, y: 0, z: 0 };
 
 export interface RigArm {
   readonly shoulder: Vector3;
@@ -21,6 +22,7 @@ export interface RigLeg {
   readonly ankle: Vector3;
   readonly footAxis: Vector3;
   readonly sole: Vector3;
+  readonly toeAxis?: Vector3;
 }
 
 export interface RigPose {
@@ -85,6 +87,8 @@ export class FigureRig {
       this.place(legOut.ankle, leg.ankle);
       this.direct(legOut.footAxis, leg.footAxis);
       this.direct(legOut.sole, leg.sole);
+      if (leg.toeAxis) this.direct(legOut.toeAxis, leg.toeAxis);
+      else Object.assign(legOut.toeAxis, NO_AXIS);
     });
     this.rotate(pose.head);
   }
