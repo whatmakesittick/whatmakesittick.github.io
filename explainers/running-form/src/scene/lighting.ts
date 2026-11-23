@@ -22,7 +22,7 @@ const RUN_LIGHT: Record<LightName, LightSetting> = {
       SUN_DIR[2] * SUN_DISTANCE_M,
     ],
   },
-  fill: { color: '#b4c7e6', intensity: 1.05, position: [70, 55, 60] },
+  fill: { color: '#b8c8e4', intensity: 1.22, position: [70, 55, 60] },
   rim: { color: '#ffb47a', intensity: 1.4, position: [-45, 38, -80] },
 };
 
