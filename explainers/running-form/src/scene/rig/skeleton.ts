@@ -74,7 +74,7 @@ function rigArm(chain: ArmChain): RigArm & { readonly chain: ArmChain } {
     wrist: chain.wrist,
     handAxis: chain.handAxis,
     palm: chain.palm,
-    curl: chain.curl,
+    handShape: chain.handShape,
     chain,
   };
 }
