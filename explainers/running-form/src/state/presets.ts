@@ -1,6 +1,7 @@
 import type { ScenePreset } from '@core/scene/presetBinder';
 import type { ArmsId, CameraView, LookId, PartId, PresetId, ViewOptions } from '../ids';
 import { MOMENTS, STEP_RATE_RANGE } from '../model';
+import { SCRUBBER_STEP_UNITS } from '../timeline';
 
 export interface ChapterControls {
   stepRate: number;
@@ -27,6 +28,10 @@ const LIFTOFF_START_UNITS = 300;
 const POSTURE_START_UNITS = 180;
 const PACE_START_UNITS = 640;
 
+export function snapToScrubber(units: number): number {
+  return Math.round(units / SCRUBBER_STEP_UNITS) * SCRUBBER_STEP_UNITS;
+}
+
 const NO_HIGHLIGHT: readonly PartId[] = [];
 
 function view(flags: Partial<ViewOptions>): ViewOptions {
@@ -38,7 +43,7 @@ export const PRESETS: Record<PresetId, Preset> = {
     camera: 'hero',
     speed: HALF_SPEED,
     view: view({}),
-    startAt: MOMENTS.midFloat,
+    startAt: snapToScrubber(MOMENTS.midFloat),
     start: {},
     labels: ['head', 'trunk', 'pelvis', 'thigh', 'knee', 'shoe', 'road'],
     highlight: NO_HIGHLIGHT,
