@@ -23,6 +23,7 @@ function poseOf(target: RetargetTarget, origin: Vector3, frame: Matrix4): RigPos
       wrist: place(a.wrist),
       handAxis: direct(a.handAxis),
       palm: direct(a.palm),
+      curl: a.curl,
     };
   };
   const leg = (side: Side): RigLeg => {

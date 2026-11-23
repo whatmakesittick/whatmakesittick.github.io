@@ -71,6 +71,16 @@ describe.each(bodies)('retarget on the $name body', (body) => {
     );
   });
 
+  it('curls the fingers by the share it was given', () => {
+    const target = reader.read(figure.createParameters());
+    const plain = retargeter.solve(target)[figure.parameterIndex('r_index1_rz')];
+    target.arms.right.curl = 2;
+    expect(retargeter.solve(target)[figure.parameterIndex('r_index1_rz')]).toBeCloseTo(
+      2 * plain,
+      6,
+    );
+  });
+
   it('is a pure function of its input', () => {
     const first = reader.read(samples[100]);
     const second = reader.read(samples[700]);

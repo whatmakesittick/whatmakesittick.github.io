@@ -114,7 +114,10 @@ export class TargetReader {
     );
     set(leg.sole, apply(this.turn(`${p}_transversetarsal`), sole));
     const ball = this.rotation(this.index(`${p}_ball`));
-    set(leg.toeAxis, [ball[0], ball[3], ball[6]]);
+    const rest = this.restRotations[this.index(`${p}_ball`)];
+    const ahead = sub(this.rest(`${p}_ball`), this.rest(`${p}_foot`));
+    const sign = Math.sign(rest[0] * ahead[0] + rest[3] * ahead[1] + rest[6] * ahead[2]);
+    set(leg.toeAxis, scale([ball[0], ball[3], ball[6]], sign));
   }
 }
 

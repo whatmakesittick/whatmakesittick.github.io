@@ -14,6 +14,7 @@ export interface RigArm {
   readonly wrist: Vector3;
   readonly handAxis: Vector3;
   readonly palm: Vector3;
+  readonly curl?: number;
 }
 
 export interface RigLeg {
@@ -80,6 +81,7 @@ export class FigureRig {
       this.place(out.wrist, arm.wrist);
       this.direct(out.handAxis, arm.handAxis);
       this.direct(out.palm, arm.palm);
+      out.curl = arm.curl ?? 1;
       const leg = pose.legs[id];
       const legOut = this.target.legs[id];
       this.place(legOut.hip, leg.hip);

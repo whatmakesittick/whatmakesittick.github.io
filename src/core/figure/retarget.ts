@@ -46,6 +46,7 @@ export interface RetargetArm {
   wrist: Point;
   handAxis: Point;
   palm: Point;
+  curl: number;
 }
 
 export interface RetargetLeg {
@@ -90,7 +91,14 @@ function point(): Point {
 }
 
 function arm(): RetargetArm {
-  return { shoulder: point(), elbow: point(), wrist: point(), handAxis: point(), palm: point() };
+  return {
+    shoulder: point(),
+    elbow: point(),
+    wrist: point(),
+    handAxis: point(),
+    palm: point(),
+    curl: 1,
+  };
 }
 
 function leg(): RetargetLeg {
@@ -230,6 +238,7 @@ export class Retargeter {
   private readonly index = new Map<string, number>();
   private readonly rootUnit: number;
   private readonly widthShift: Record<Side, Vec>;
+  private readonly toeSign: Record<Side, number>;
 
   constructor(figure: Figure) {
     this.figure = figure;
@@ -251,6 +260,13 @@ export class Retargeter {
       left: this.shift('l'),
     };
     this.out.fill(0);
+    this.toeSign = { right: this.restToeSign('r'), left: this.restToeSign('l') };
+  }
+
+  private restToeSign(p: string): number {
+    const ball = this.restRot(`${p}_ball`);
+    const ahead = sub(this.restPos(`${p}_ball`), this.restPos(`${p}_foot`));
+    return Math.sign(dot([ball[0], ball[3], ball[6]], ahead));
   }
 
   solve(target: RetargetTarget): Float32Array {
@@ -263,7 +279,7 @@ export class Retargeter {
     SIDES.forEach((side) => this.solveLeg(side, target.legs[side]));
     this.solveToes(target);
     this.solveHead(target.head);
-    SIDES.forEach((side) => this.relaxHand(side));
+    SIDES.forEach((side) => this.relaxHand(side, target.arms[side].curl));
     return this.out;
   }
 
@@ -568,7 +584,7 @@ export class Retargeter {
     this.fk();
     aimed.forEach((side) => {
       const ball = this.rot(`${PREFIX[side]}_ball`);
-      const along: Vec = [ball[0], ball[3], ball[6]];
+      const along = scale([ball[0], ball[3], ball[6]], this.toeSign[side]);
       const axis: Vec = [ball[2], ball[5], ball[8]];
       const toe = vec(target.legs[side].toeAxis);
       const aim = sub(toe, scale(axis, dot(toe, axis)));
@@ -598,16 +614,16 @@ export class Retargeter {
     this.set('head_bend', hz);
   }
 
-  private relaxHand(side: Side): void {
+  private relaxHand(side: Side, share: number): void {
     const p = PREFIX[side];
     FINGERS.forEach((finger) => {
-      const curl = FINGER_CURL[finger];
+      const curl = FINGER_CURL[finger] * share;
       [1, 2, 3].forEach((i) => {
         const name = `${p}_${finger}${i}_rz`;
         if (this.figure.parameterIndex(name) >= 0) this.set(name, curl);
       });
     });
-    this.set(`${p}_thumb1_rz`, THUMB_CURL);
-    this.set(`${p}_thumb2_rz`, THUMB_CURL);
+    this.set(`${p}_thumb1_rz`, THUMB_CURL * share);
+    this.set(`${p}_thumb2_rz`, THUMB_CURL * share);
   }
 }
