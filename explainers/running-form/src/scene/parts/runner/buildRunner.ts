@@ -18,6 +18,8 @@ import {
   capLabelTexture,
 } from './garments/capLabel';
 import { CHANNELS, runnerFields } from './garments/fields';
+import type { RunnerFields } from './garments/fields';
+import { regionOf } from './body/probe';
 import { GARMENT_ATTRIBUTES, applyGarments } from './garments/paint';
 import { brimGeometry, buttonGeometry } from './head/brim';
 import { frameGeometries, lensGeometry } from './head/sunglasses';
@@ -30,6 +32,10 @@ import type { SkeletonCache } from './skeletons';
 import { caseGeometry, glassGeometry, strapGeometry, watchPlace } from './watch';
 
 const HEAD_JOINT = 'c_head';
+const HEAD_TOP = 'c_head_null';
+const HEAD_REACH_M = 0.17;
+const WATCH_JOINT = 'l_wrist';
+const WRIST_REACH_M = 0.12;
 
 interface Accessory {
   readonly geometry: BufferGeometry;
@@ -53,8 +59,8 @@ function body(
   rig: FigureRig,
   rest: Figure,
   frame: RestFrame,
+  fields: RunnerFields,
 ): FigureBody {
-  const fields = runnerFields(rest, frame, PART_RULES);
   const label = capLabelTexture();
   if (label) builder.track(label);
   return new FigureBody({
@@ -98,32 +104,40 @@ export function* buildRunner(
   const rest = restPosed(rig.figure);
   const frame = new RestFrame(rig.figure);
   yield;
-  const figureBody = body(builder, rig, rest, frame);
+  const fields = runnerFields(rest, frame, PART_RULES);
+  yield;
+  const figureBody = body(builder, rig, rest, frame, fields);
   root.add(figureBody.mesh);
   yield;
-  const shapes = shoeShapes();
+  const shapes = yield* shoeShapes();
   const shoes = {
     right: new Shoe(builder, 'right', shapes),
     left: new Shoe(builder, 'left', shapes),
   };
   root.add(shoes.right.group, shoes.left.group);
   yield;
+  const face = regionOf(
+    rest,
+    frame.joint(HEAD_JOINT).lerp(frame.joint(HEAD_TOP), 0.5),
+    HEAD_REACH_M,
+  );
   const head = accessoryGroup(builder, 'headwear', [
-    { geometry: brimGeometry(rest, frame), group: 'head', finish: 'brim' },
-    { geometry: buttonGeometry(rest, frame), group: 'head', finish: 'brim' },
-    { geometry: lensGeometry(rest, frame), group: 'head', finish: 'lens' },
-    ...frameGeometries(rest, frame).map((geometry) => ({
+    { geometry: brimGeometry(face, frame), group: 'head', finish: 'brim' },
+    { geometry: buttonGeometry(face, frame), group: 'head', finish: 'brim' },
+    { geometry: lensGeometry(face, frame), group: 'head', finish: 'lens' },
+    ...frameGeometries(face, frame).map((geometry) => ({
       geometry,
       group: 'head' as const,
       finish: 'frame' as const,
     })),
   ]);
   yield;
-  const place = watchPlace(rest, frame);
+  const wrist = regionOf(rest, frame.joint(WATCH_JOINT), WRIST_REACH_M);
+  const place = watchPlace(wrist, frame);
   const watch = accessoryGroup(builder, 'watch', [
-    { geometry: strapGeometry(rest, place), group: 'arm', finish: 'strap' },
-    { geometry: caseGeometry(rest, place), group: 'arm', finish: 'watchCase' },
-    { geometry: glassGeometry(rest, place), group: 'arm', finish: 'watchGlass' },
+    { geometry: strapGeometry(wrist, place), group: 'arm', finish: 'strap' },
+    { geometry: caseGeometry(wrist, place), group: 'arm', finish: 'watchCase' },
+    { geometry: glassGeometry(wrist, place), group: 'arm', finish: 'watchGlass' },
   ]);
   root.add(head, watch);
   const followers = [follow(rig, frame, HEAD_JOINT, head), follow(rig, frame, place.joint, watch)];

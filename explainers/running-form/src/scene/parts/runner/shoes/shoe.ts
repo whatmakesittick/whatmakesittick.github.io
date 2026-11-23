@@ -1,5 +1,6 @@
 import { BufferAttribute, Group, Mesh, Vector3 } from 'three';
 import type { BufferGeometry } from 'three';
+import type { Steps } from '@core/scene/pacing';
 import type { SideId } from '../../../../ids';
 import type { LegChain } from '../../../rig/leg';
 import type { RunnerPartBuilder } from '../build';
@@ -29,8 +30,12 @@ function withExtents(geometry: BufferGeometry): BufferGeometry {
   return geometry;
 }
 
-export function shoeShapes(): ShoeShapes {
-  return { sole: soleGeometry(), upper: withExtents(upperGeometry()), collar: collarGeometry() };
+export function* shoeShapes(): Steps<ShoeShapes> {
+  const sole = soleGeometry();
+  yield;
+  const upper = withExtents(upperGeometry());
+  yield;
+  return { sole, upper, collar: collarGeometry() };
 }
 
 function forSide(shapes: ShoeShapes, side: SideId): ShoeShapes {
