@@ -3,13 +3,15 @@ import type { SceneShell } from '@core/scene/shell';
 import { createRunStore } from '../state';
 import { mountRunScene } from './index';
 
-const { bindStore, dispose, disposeLabels } = vi.hoisted(() => ({
+const { bindStore, dispose, disposeLabels, restoreLight } = vi.hoisted(() => ({
   bindStore: vi.fn(),
   dispose: vi.fn(),
   disposeLabels: vi.fn(),
+  restoreLight: vi.fn(),
 }));
 
 vi.mock('./bindings', () => ({ bindStore }));
+vi.mock('./lighting', () => ({ runLight: () => restoreLight }));
 vi.mock('./controller', () => ({
   RunController: class {
     update = vi.fn();
@@ -38,16 +40,19 @@ describe('mountRunScene', () => {
     expect(removeFrame).toHaveBeenCalledTimes(1);
     expect(disposeLabels).toHaveBeenCalledTimes(1);
     expect(dispose).toHaveBeenCalledTimes(1);
+    expect(restoreLight).toHaveBeenCalledTimes(1);
   });
 
   it('releases everything when binding the store fails', async () => {
     dispose.mockClear();
     disposeLabels.mockClear();
+    restoreLight.mockClear();
     bindStore.mockRejectedValueOnce(new Error('build failed'));
     const { shell, removeFrame } = fakeShell();
     await expect(mountRunScene(shell, createRunStore())).rejects.toThrow('build failed');
     expect(removeFrame).toHaveBeenCalledTimes(1);
     expect(disposeLabels).toHaveBeenCalledTimes(1);
     expect(dispose).toHaveBeenCalledTimes(1);
+    expect(restoreLight).toHaveBeenCalledTimes(1);
   });
 });

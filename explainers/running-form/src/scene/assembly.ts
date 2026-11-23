@@ -3,11 +3,14 @@ import type { MaterialLibrary } from '@core/scene/materials';
 import type { Steps } from '@core/scene/pacing';
 import type { SceneTextures } from '@core/scene/textures';
 import type { AnchorId, AssemblyState, PartId, RegionId } from '../ids';
-import { createPlaceholderAssembly } from './placeholderAssembly';
+import { createRunAssembly } from './runAssembly';
+import type { PoseSolver, RunnerBuilder } from './runnerSlot';
 
 export interface AssemblyResources {
   materials: MaterialLibrary;
   textures: SceneTextures;
+  solvePose?: PoseSolver;
+  buildRunner?: RunnerBuilder;
 }
 
 export interface ChaseTarget {
@@ -31,5 +34,5 @@ export function createAssembly(
   resources: AssemblyResources,
   state: AssemblyState,
 ): Steps<Assembly> {
-  return createPlaceholderAssembly(resources, state);
+  return createRunAssembly(resources, state);
 }

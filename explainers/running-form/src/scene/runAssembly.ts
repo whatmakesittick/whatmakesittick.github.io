@@ -17,12 +17,7 @@ import { regionBox } from './regions';
 import { referencePose } from './runnerPose';
 import type { RunnerPose } from './runnerPose';
 import { buildStandInRunner } from './runnerSlot';
-import type { PoseSolver, RunnerBuilder, RunnerFigure } from './runnerSlot';
-
-export interface RunAssemblyResources extends AssemblyResources {
-  readonly solvePose?: PoseSolver;
-  readonly buildRunner?: RunnerBuilder;
-}
+import type { PoseSolver, RunnerFigure } from './runnerSlot';
 
 type Drawable = Mesh | Line | Points | Sprite;
 
@@ -130,7 +125,7 @@ class RunAssembly implements Assembly {
 }
 
 export function* createRunAssembly(
-  resources: RunAssemblyResources,
+  resources: AssemblyResources,
   state: AssemblyState,
 ): Steps<Assembly> {
   const root = new Group();

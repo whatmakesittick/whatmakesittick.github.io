@@ -8,8 +8,8 @@ import { ANCHOR_IDS, PART_IDS, REGION_IDS } from '../ids';
 import type { AssemblyState, GaitReading, ViewOptions } from '../ids';
 import { gaitAt } from '../model/gait';
 import type { createAssembly } from './assembly';
+import type { AssemblyResources } from './assembly';
 import { createRunAssembly } from './runAssembly';
-import type { RunAssemblyResources } from './runAssembly';
 import { referencePose } from './runnerPose';
 import type { RunnerFigure } from './runnerSlot';
 
@@ -36,7 +36,7 @@ function stateAt(phase: number, scrollM = 0, view: Partial<ViewOptions> = {}): A
   };
 }
 
-function resources(extra: Partial<RunAssemblyResources> = {}): RunAssemblyResources {
+function resources(extra: Partial<AssemblyResources> = {}): AssemblyResources {
   return {
     materials: new MaterialLibrary(),
     textures: {

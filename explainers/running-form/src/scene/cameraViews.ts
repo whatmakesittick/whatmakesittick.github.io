@@ -12,13 +12,13 @@ function framed(
 }
 
 export const CAMERA_VIEWS: Readonly<Record<CameraView, FramedView<RegionId>>> = {
-  hero: framed('body', [1.0, 0.3, 0.8], 1.15),
+  hero: framed('body', [0.42, 0.09, 1.0], 1.15),
   foot: framed('footZone', [0.25, 0.1, 1.0], 1.15),
   leg: framed('stanceLeg', [-0.1, 0.08, 1.0], 1.1),
   behind: framed('body', [-1.0, 0.3, 0.1], 1.05),
   front: framed('upperBody', [1.0, 0.2, 0.05], 1.1),
   above: framed('upperBody', [0.1, 1.0, 0.25], 1.1),
-  wide: framed('roadAhead', [0.3, 0.18, 1.0], 1.05),
+  wide: framed('roadAhead', [0.42, 0.05, 1.0], 2.2),
 };
 
 export const BOUNDS_REGIONS: readonly RegionId[] = ['body', 'roadAhead'];
