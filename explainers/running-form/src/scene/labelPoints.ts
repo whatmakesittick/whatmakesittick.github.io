@@ -6,7 +6,7 @@ const ROAD_LABEL_AT = new Vector3(0.6, 0, 0.7);
 const RIGHT = new Vector3(0, 0, 1);
 
 const SURFACE_M = {
-  head: 0.03,
+  head: 0.025,
   shoulder: 0.05,
   arm: 0.045,
   elbow: 0.04,
@@ -22,7 +22,7 @@ const SURFACE_M = {
   shoe: 0.03,
 } as const;
 
-const CAP_TOP_M = 0.04;
+const CAP_TOP_M = 0.012;
 const STERNUM = { below: 0.17, ahead: 0.1 } as const;
 const SACRUM = { behind: 0.1, above: 0.06 } as const;
 const ACHILLES = { behind: 0.055, above: 0.05 } as const;
