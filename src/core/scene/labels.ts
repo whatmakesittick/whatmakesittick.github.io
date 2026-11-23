@@ -89,6 +89,8 @@ export class LabelLayer {
   private readonly stopTranslating: () => void;
   private viewport: ViewportSize = { width: 1, height: 1, safe: NO_SAFE_AREA };
   private keepOut: readonly Rect[] = [];
+  private obstacles: readonly Rect[] = [];
+  private avoided: readonly Rect[] = [];
   private ranks: ReadonlyMap<string, number> = new Map();
   private readonly textSizes = new Map<string, TextSize>();
   private readonly texts = new Map<Element, string>();
@@ -188,7 +190,12 @@ export class LabelLayer {
 
   setKeepOut(areas: readonly Rect[]): void {
     this.keepOut = areas;
-    this.listeners.notify();
+    this.avoid();
+  }
+
+  setObstacles(areas: readonly Rect[]): void {
+    this.obstacles = areas;
+    this.avoid();
   }
 
   setPriority(order: readonly string[]): void {
@@ -208,10 +215,15 @@ export class LabelLayer {
     const { width, height, safe } = this.viewport;
     const placements = layoutLabels(
       boxes,
-      { width, height, bottomInset: safe.bottom, keepOut: this.keepOut },
+      { width, height, bottomInset: safe.bottom, keepOut: this.avoided },
       this.placements,
     );
     placements.forEach((placement, id) => this.place(id, placement));
+  }
+
+  private avoid(): void {
+    this.avoided = [...this.keepOut, ...this.obstacles];
+    this.listeners.notify();
   }
 
   private screenPoint(label: CSS2DObject, camera: Camera): Point | undefined {

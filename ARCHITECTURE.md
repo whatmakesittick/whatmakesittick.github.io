@@ -437,7 +437,9 @@ DOM, so a frame forces no style or layout work. A new size asks for a frame.
 The layout keeps labels off the stage overlays. `watchKeepOut` in `keepOut.ts` measures
 the expand button, the gauge and the dock in the label frame's coordinates. It does this
 only when one of them or the frame resizes, or when the stage expands or collapses; the
-shell passes the areas to `labels.setKeepOut`. `layoutLabels` in `labelLayout.ts` places the labels in priority order (from
+shell passes the areas to `labels.setKeepOut`. An explainer that draws its own boxes over
+the scene passes them to `labels.setObstacles`; the layer keeps the two lists apart, so
+neither caller overwrites the other. `layoutLabels` in `labelLayout.ts` places the labels in priority order (from
 `createLabelVisibility`, then top to bottom). On each side it finds the free spot nearest
 the label's own height, up or down with ties going down, clear of the keep-out areas, the
 labels already placed and the top and bottom of the view. A label keeps its own side unless

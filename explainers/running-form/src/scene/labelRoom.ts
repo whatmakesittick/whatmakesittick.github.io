@@ -18,16 +18,15 @@ function sameRects(a: readonly Rect[], b: readonly Rect[]): boolean {
 }
 
 export class LabelRoom {
-  private readonly labels: Pick<LabelLayer, 'setKeepOut'>;
+  private readonly labels: Pick<LabelLayer, 'setObstacles'>;
   private readonly stopWatching: () => void;
   private overlays: readonly Rect[] = [];
   private tags: readonly Rect[] = [];
 
-  constructor(labels: Pick<LabelLayer, 'setKeepOut'>, frame: HTMLElement) {
+  constructor(labels: Pick<LabelLayer, 'setObstacles'>, frame: HTMLElement) {
     this.labels = labels;
     this.stopWatching = watchKeepOut(frame, keepOutOverlays(frame), (areas) => {
       this.overlays = areas;
-      this.apply();
     });
   }
 
@@ -38,14 +37,10 @@ export class LabelRoom {
   setTags(boxes: readonly Rect[]): void {
     if (sameRects(boxes, this.tags)) return;
     this.tags = boxes;
-    this.apply();
+    this.labels.setObstacles(boxes);
   }
 
   dispose(): void {
     this.stopWatching();
-  }
-
-  private apply(): void {
-    this.labels.setKeepOut([...this.overlays, ...this.tags]);
   }
 }

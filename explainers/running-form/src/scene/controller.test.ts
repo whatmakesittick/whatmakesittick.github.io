@@ -40,7 +40,7 @@ function fakeShell() {
     scene: { add: vi.fn() },
     materials: {},
     textures: {},
-    labels: { attach: vi.fn(), setKeepOut: vi.fn() },
+    labels: { attach: vi.fn(), setKeepOut: vi.fn(), setObstacles: vi.fn() },
     rig: {
       setBounds: vi.fn(),
       follow: vi.fn(),
