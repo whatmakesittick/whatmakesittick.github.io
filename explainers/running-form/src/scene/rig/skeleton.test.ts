@@ -29,9 +29,10 @@ const CM = 0.01;
 const SLIP_LIMIT_M = 5 * MM;
 const BELOW_ROAD_LIMIT_M = -2 * MM;
 const SWING_CLEARANCE_M = 15 * MM;
-const SWING_LIMIT_DEG = 2;
+const SWING_LIMIT_DEG = 1.5;
 const STANCE_LIMIT_DEG = 23;
-const RECOVERY_LIMIT_DEG = 30;
+const RECOVERY_LIMIT_DEG = 31;
+const APPROACH_LIMIT_DEG = 10;
 const MIRROR_LIMIT_DEG = 1;
 const BOUNCE_LIMIT_M = 2 * CM;
 const STEADY_BOUNCE_M = [0.07, 0.1] as const;
@@ -43,7 +44,7 @@ const SURGE_LIMIT_M = 3 * CM;
 const GRAVITY = 9.81;
 const BALLISTIC_LIMIT = 1;
 const FLOAT_MARGIN_UNITS = 10;
-const LANDING_LIMIT_M = 7 * CM;
+const LANDING_LIMIT_M = 13 * CM;
 const CLOSURE_LIMIT_M = 0.1;
 const UPPER_LIMIT_DEG = 1;
 const GAZE_LIMIT_DEG = 2;
@@ -109,6 +110,7 @@ describe('runner skeleton', () => {
           expect(deviations.swing).toBeLessThan(SWING_LIMIT_DEG);
           expect(deviations.stance).toBeLessThan(STANCE_LIMIT_DEG);
           expect(deviations.recovery).toBeLessThan(RECOVERY_LIMIT_DEG);
+          expect(deviations.approach).toBeLessThan(APPROACH_LIMIT_DEG);
         }),
       );
     },

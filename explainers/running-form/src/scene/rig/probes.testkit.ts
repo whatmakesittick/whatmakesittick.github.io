@@ -9,6 +9,7 @@ import { lowestSole, solePoints } from './foot';
 import { poseOf, solveSkeleton } from './skeleton';
 import type { RunnerSkeleton } from './skeleton';
 import { legUnits } from './stance';
+import { SWING } from './swing';
 
 export const PROBE_PACES: readonly PaceId[] = ['easy', 'steady', 'fast'];
 export const PROBE_STEP_RATES: readonly number[] = [-10, 0, 10];
@@ -16,7 +17,6 @@ const HALF = CYCLE_UNITS / 2;
 const EVENT_MARGIN_UNITS = 15;
 const CLEAR_AFTER_UNITS = 40;
 const SLIP_STEP_UNITS = 1;
-const RECOVERY_UNITS = 120;
 
 export function readingAt(units: number, pace: PaceId, stepRate: number, arms: ArmsId = 'swing') {
   return gaitAt(wrapUnits(units), { pace, stepRate, arms });
@@ -50,6 +50,7 @@ export interface PhaseDeviations {
   readonly stance: number;
   readonly swing: number;
   readonly recovery: number;
+  readonly approach: number;
 }
 
 export function phaseDeviations(pace: PaceId, stepRate: number, step = 5): PhaseDeviations {
@@ -57,13 +58,15 @@ export function phaseDeviations(pace: PaceId, stepRate: number, step = 5): Phase
   let stance = 0;
   let swing = 0;
   let recovery = 0;
+  let approach = 0;
   for (let units = 0; units < CYCLE_UNITS; units += step) {
     const value = worst(legDeviation(skeletonAt(units, pace, stepRate), 'right'));
     if (units < toeOff) stance = Math.max(stance, value);
-    else if (units < toeOff + RECOVERY_UNITS) recovery = Math.max(recovery, value);
-    else if (units < CYCLE_UNITS - EVENT_MARGIN_UNITS) swing = Math.max(swing, value);
+    else if (units < toeOff + SWING.recoverUnits) recovery = Math.max(recovery, value);
+    else if (units < CYCLE_UNITS - SWING.approachUnits) swing = Math.max(swing, value);
+    else approach = Math.max(approach, value);
   }
-  return { stance, swing, recovery };
+  return { stance, swing, recovery, approach };
 }
 
 function lowestIndex(points: readonly Vector3[]): number {

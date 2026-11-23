@@ -78,6 +78,26 @@ export function targetAngles(reading: GaitReading, side: SideId, abductionRad = 
   };
 }
 
+export function addAngles(base: LegAngles, offset: LegAngles, share: number): LegAngles {
+  const out = { ...base };
+  ANGLE_KEYS.forEach((key) => {
+    out[key] = base[key] + offset[key] * share;
+  });
+  return out;
+}
+
+export function scaleAngles(angles: LegAngles, share: number): LegAngles {
+  const out = { ...angles };
+  ANGLE_KEYS.forEach((key) => {
+    out[key] = angles[key] * share;
+  });
+  return out;
+}
+
+export function angleOffset(from: LegAngles, to: LegAngles): LegAngles {
+  return addAngles(to, from, -1);
+}
+
 export function mixAngles(from: LegAngles, to: LegAngles, share: number): LegAngles {
   const out = { ...from };
   ANGLE_KEYS.forEach((key) => {
