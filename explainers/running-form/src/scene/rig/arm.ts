@@ -16,18 +16,53 @@ export interface ArmChain {
   readonly forearm: Quaternion;
   readonly handAxis: Vector3;
   readonly palm: Vector3;
-  readonly curl: number;
+  readonly handShape: Readonly<Record<string, number>>;
 }
 
 export const ARM_STYLE = {
-  abductionDeg: { back: 11, front: 12 },
+  abductionDeg: { back: 11, front: 12, passing: 5 },
   innerRotationDeg: { back: 6, front: 36 },
-  curl: 2.6,
   protractionM: 0.012,
   pronationDeg: 18,
   wristFlexDeg: 8,
   held: { flexDeg: 39, crossDeg: 3, abductionDeg: -8, innerRotationDeg: 74 },
 } as const;
+
+export const LOOSE_FIST: Readonly<Record<string, number>> = {
+  index1_rz: 1.0,
+  index2_rz: 1.2,
+  index3_rz: 0.5,
+  middle1_rz: 1.05,
+  middle2_rz: 1.25,
+  middle3_rz: 0.55,
+  ring1_rz: 1.1,
+  ring2_rz: 1.25,
+  ring3_rz: 0.55,
+  pinky1_rz: 1.15,
+  pinky2_rz: 1.2,
+  pinky3_rz: 0.5,
+  thumb0_ry: -0.6,
+  thumb1_rz: 0.45,
+  thumb2_rz: 0.7,
+};
+
+export const RESTING_HAND: Readonly<Record<string, number>> = {
+  index1_rz: 0.3,
+  index2_rz: 0.35,
+  index3_rz: 0.2,
+  middle1_rz: 0.35,
+  middle2_rz: 0.4,
+  middle3_rz: 0.2,
+  ring1_rz: 0.4,
+  ring2_rz: 0.45,
+  ring3_rz: 0.25,
+  pinky1_rz: 0.45,
+  pinky2_rz: 0.5,
+  pinky3_rz: 0.25,
+  thumb0_ry: 0,
+  thumb1_rz: 0.15,
+  thumb2_rz: 0.2,
+};
 
 const SHARE_SAMPLES = 200;
 const FRONT_EASE_POWER = 3;
@@ -81,7 +116,9 @@ function swingingAngles(reading: GaitReading, side: SideId): ArmAngles {
   const share = swingShare(reading, side);
   return {
     flexDeg,
-    abductionDeg: between(ARM_STYLE.abductionDeg.back, ARM_STYLE.abductionDeg.front, share),
+    abductionDeg:
+      between(ARM_STYLE.abductionDeg.back, ARM_STYLE.abductionDeg.front, share) +
+      ARM_STYLE.abductionDeg.passing * (1 - share * share),
     innerRotationDeg: towardFront(
       ARM_STYLE.innerRotationDeg.back,
       ARM_STYLE.innerRotationDeg.front,
@@ -140,6 +177,6 @@ export function solveArm(reading: GaitReading, trunk: TrunkState, side: SideId):
     forearm,
     handAxis: apply(hand, 0, -1, 0),
     palm: apply(hand, 0, 0, -sign),
-    curl: ARM_STYLE.curl,
+    handShape: reading.upper.holdsArms ? RESTING_HAND : LOOSE_FIST,
   };
 }

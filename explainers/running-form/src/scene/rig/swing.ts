@@ -9,14 +9,15 @@ import type { LegAngles, LegChain } from './leg';
 import type { PelvisState } from './pelvis';
 
 export const SWING = {
-  clearanceM: 0.018,
+  clearanceM: 0.0152,
   clearAfterUnits: 45,
   clearBeforeUnits: 40,
-  softnessM: 0.012,
+  softnessM: 0.003,
   recoverUnits: 150,
   approachUnits: 120,
   rateUnits: 40,
-  liftInUnits: 30,
+  approachRateUnits: 20,
+  liftInUnits: 20,
   liftOutUnits: 20,
 } as const;
 
@@ -61,10 +62,11 @@ function withHandover(
   edge: Handover,
   unitsFromEdge: number,
   span: number,
+  rateSpan: number,
 ): LegAngles {
   const distance = Math.abs(unitsFromEdge);
   const share = 1 - smoothstep(distance, 0, span);
-  const rateShare = 1 - smoothstep(distance, 0, SWING.rateUnits);
+  const rateShare = 1 - smoothstep(distance, 0, rateSpan);
   return addAngles(addAngles(angles, edge.offset, share), edge.rate, rateShare * unitsFromEdge);
 }
 
@@ -82,10 +84,17 @@ export function swingLeg(
     touchdownFor(reading.pace, reading.stepRate).abductionRad,
   );
   const angles = withHandover(
-    withHandover(data, edges.leaving, unitsOfLeg - toeOffUnits, SWING.recoverUnits),
+    withHandover(
+      data,
+      edges.leaving,
+      unitsOfLeg - toeOffUnits,
+      SWING.recoverUnits,
+      SWING.rateUnits,
+    ),
     edges.landing,
     unitsOfLeg - CYCLE_UNITS,
     SWING.approachUnits,
+    SWING.approachRateUnits,
   );
   const chain = legChain(pelvis, side, angles);
   const lowest = lowestSole(chain.ankle, chain.foot, chain.toe, side).y;
