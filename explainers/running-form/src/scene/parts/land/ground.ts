@@ -16,6 +16,7 @@ import {
   LAYER,
   PARAPET,
   RAIL,
+  RIDGE_START_Z_M,
   shadowReachZ,
 } from '../../constants';
 import { backdropMaterial, colour } from './atmosphere';
@@ -23,7 +24,7 @@ import type { Backdrop } from './atmosphere';
 import { ATMOSPHERE_GLSL, LIGHT_GLSL, NOISE_GLSL, OUTPUT_GLSL } from './glsl';
 import { LAMP, POST_OFFSETS } from './placement';
 
-const GROUND = { nearZ: PARAPET.faceZM, farZ: GROUND_EXTENT_M } as const;
+const GROUND = { nearZ: PARAPET.faceZM, farZ: RIDGE_START_Z_M } as const;
 const POST_WIDTH_M = 0.1;
 const RAIL_POST_WIDTH_M = RAIL.postRadiusM * 2;
 const RAIL_TUBE_WIDTH_M = RAIL.tubeRadiusM * 2;

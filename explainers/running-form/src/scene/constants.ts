@@ -26,6 +26,7 @@ export const LAMP_Z_M = 6.1;
 export const DELINEATOR_Z_M = -2.03;
 export const GROUND_EXTENT_M = 3000;
 export const SKY_RADIUS_M = 2500;
+export const RIDGE_START_Z_M = 62;
 export const PARAPET = { heightM: 0.26, faceZM: WALL.zM + WALL.thicknessM / 2 } as const;
 export const RAIL = {
   topM: WALL.heightM,

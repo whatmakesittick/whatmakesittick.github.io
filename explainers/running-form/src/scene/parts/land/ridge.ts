@@ -1,13 +1,44 @@
 import { BufferGeometry, Float32BufferAttribute, Mesh } from 'three';
+import { GROUND_EXTENT_M, RIDGE_START_Z_M } from '../../constants';
 import { backdropMaterial, colour } from './atmosphere';
 import type { Backdrop } from './atmosphere';
 import { ATMOSPHERE_GLSL, LIGHT_GLSL, NOISE_GLSL, OUTPUT_GLSL } from './glsl';
 
 const RIDGE = {
-  halfLengthM: 1500,
-  columnM: 10,
-  rows: [62, 80, 105, 140, 185, 240, 305, 380, 470, 580],
+  innerHalfM: 1200,
+  outerHalfM: GROUND_EXTENT_M,
+  innerColumnM: 10,
+  outerColumnM: 60,
+  rows: [
+    RIDGE_START_Z_M,
+    80,
+    105,
+    140,
+    185,
+    240,
+    305,
+    380,
+    470,
+    580,
+    760,
+    1100,
+    1700,
+    GROUND_EXTENT_M,
+  ],
 } as const;
+
+function columnPositions(): number[] {
+  const inner = Array.from(
+    { length: Math.round((RIDGE.innerHalfM * 2) / RIDGE.innerColumnM) + 1 },
+    (_, index) => -RIDGE.innerHalfM + index * RIDGE.innerColumnM,
+  );
+  const outerCount = Math.round((RIDGE.outerHalfM - RIDGE.innerHalfM) / RIDGE.outerColumnM);
+  const outer = Array.from(
+    { length: outerCount },
+    (_, index) => RIDGE.innerHalfM + (index + 1) * RIDGE.outerColumnM,
+  );
+  return [...outer.map((x) => -x).reverse(), ...inner, ...outer];
+}
 
 const PALETTE = {
   scrub: { color: '#5f6b3e', intensity: 0.75 },
@@ -85,14 +116,11 @@ void main() {
 `;
 
 function ridgeGeometry(): BufferGeometry {
-  const columns = Math.round((RIDGE.halfLengthM * 2) / RIDGE.columnM) + 1;
+  const xs = columnPositions();
+  const columns = xs.length;
   const positions: number[] = [];
   const index: number[] = [];
-  RIDGE.rows.forEach((z) => {
-    for (let column = 0; column < columns; column += 1) {
-      positions.push(-RIDGE.halfLengthM + column * RIDGE.columnM, 0, z);
-    }
-  });
+  RIDGE.rows.forEach((z) => xs.forEach((x) => positions.push(x, 0, z)));
   for (let row = 0; row < RIDGE.rows.length - 1; row += 1) {
     for (let column = 0; column < columns - 1; column += 1) {
       const a = row * columns + column;

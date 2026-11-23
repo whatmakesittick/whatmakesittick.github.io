@@ -8,7 +8,7 @@ import { ATMOSPHERE_GLSL, LIGHT_GLSL, NOISE_GLSL, OUTPUT_GLSL, WORLD_VERTEX } fr
 const BEACH = {
   topZ: WALL.zM - WALL.thicknessM / 2,
   bottomZ: SEA_START_Z_M - 3,
-  sand: '#bba98e',
+  sand: '#ab9f8b',
   wetSand: '#9c8466',
   pebbles: '#a69a8a',
 } as const;
@@ -75,7 +75,7 @@ export function buildBeach(backdrop: Backdrop): Mesh {
     backdrop,
     {
       uSeaLevel: { value: SEA_LEVEL_M },
-      uSand: colour(BEACH.sand, 0.8),
+      uSand: colour(BEACH.sand, 0.65),
       uWetSand: colour(BEACH.wetSand, 0.8),
       uPebbles: colour(BEACH.pebbles, 0.8),
     },

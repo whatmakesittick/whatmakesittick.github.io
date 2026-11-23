@@ -16,8 +16,8 @@ interface MasonryLook {
 
 const WALL_LOOK: MasonryLook = {
   block: [0.9, 0.34, 0.012, 1],
-  base: '#b3a185',
-  light: '#cdb995',
+  base: '#857560',
+  light: '#a08d70',
   mortar: '#9a8e7c',
   shade: [0, 0, 0],
 };
