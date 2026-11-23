@@ -7,8 +7,9 @@ import { whenIdle } from '@core/scene/warmUp';
 import type { AssemblyState, CameraView, RegionId } from '../ids';
 import { RoadScroll } from './roadScroll';
 import { createAssembly } from './assembly';
-import type { Assembly, AssemblyResources } from './assembly';
+import type { Assembly } from './assembly';
 import { BOUNDS_REGIONS, CAMERA_VIEWS } from './cameraViews';
+import { loadRunner } from './parts/runner/load';
 
 const FLOOR_HEIGHT_M = 0.02;
 
@@ -18,10 +19,6 @@ export type RunControllerDependencies = Pick<
 >;
 
 export type ViewFramer = Pick<CameraViews<CameraView, RegionId>, 'frame'>;
-
-async function loadFigureResources(): Promise<Partial<AssemblyResources>> {
-  return {};
-}
 
 export class RunController {
   readonly views: ViewFramer;
@@ -47,13 +44,13 @@ export class RunController {
     const { scene, materials, textures, labels } = this.dependencies;
     this.dispose();
     const generation = this.generation;
-    const figureResources = await loadFigureResources();
+    const runnerResources = await loadRunner();
     if (generation !== this.generation) return;
     this.roadScroll.reset(state.phase);
     state.scrollM = 0;
     this.followsPelvis = state.view.follow;
     const assembly = await runPaced(
-      createAssembly({ materials, textures, ...figureResources }, state),
+      createAssembly({ materials, textures, ...runnerResources }, state),
     );
     if (generation !== this.generation) {
       assembly.dispose();

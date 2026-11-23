@@ -10,13 +10,6 @@ function matte(color: string, roughness: number, metalness = 0): MaterialFinish 
 }
 
 export const FINISHES = {
-  skin: matte(THEME.skin, 0.62),
-  singlet: matte(THEME.singlet, 0.85),
-  shorts: matte(THEME.shorts, 0.8),
-  cap: matte(THEME.shorts, 0.75),
-  rightShoe: matte(THEME.rightAccent, 0.55),
-  leftShoe: matte(THEME.leftAccent, 0.55),
-  sole: matte(THEME.shoe, 0.7),
   rail: matte('#9aa1a6', 0.38, 0.65),
   post: matte('#efece4', 0.55),
   reflector: { ...matte('#ff9a3c', 0.3), emissive: '#ff8a2a', emissiveIntensity: 0.6 },

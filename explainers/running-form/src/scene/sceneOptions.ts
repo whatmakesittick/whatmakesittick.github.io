@@ -4,7 +4,7 @@ import { THEME } from '../theme';
 import { SCENE_LIMITS } from './constants';
 import { OVERLAY_NAMES } from './parts/overlays/names';
 
-const RUNNER_DIM = { saturation: 0.55, brightness: 0.6, emissive: 0.3 } as const;
+const RUNNER_DIM = { saturation: 0.8, brightness: 0.82, emissive: 0.3 } as const;
 
 function isOverlay(object: Object3D | null): boolean {
   if (!object) return false;

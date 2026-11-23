@@ -16,7 +16,7 @@ import { labelPoints } from './labelPoints';
 import { regionBox } from './regions';
 import { referencePose } from './runnerPose';
 import type { RunnerPose } from './runnerPose';
-import { buildStandInRunner } from './runnerSlot';
+import { buildEmptyRunner } from './runnerSlot';
 import type { PoseSolver, RunnerFigure } from './runnerSlot';
 
 type Drawable = Mesh | Line | Points | Sprite;
@@ -135,7 +135,7 @@ export function* createRunAssembly(
     textures: resources.textures,
     tracker: new ResourceTracker(),
   };
-  const buildRunner = resources.buildRunner ?? buildStandInRunner;
+  const buildRunner = resources.buildRunner ?? buildEmptyRunner;
   const runner = yield* buildRunner(context);
   root.add(runner.root);
   yield;
