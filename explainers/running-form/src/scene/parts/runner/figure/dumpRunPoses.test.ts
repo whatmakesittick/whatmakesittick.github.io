@@ -12,7 +12,7 @@ import { JOINT_PARAMETERS } from '@core/figure/model';
 import type { FigureModel } from '@core/figure/model';
 import { withRolls } from '@core/figure/rolls';
 import { ARMS_IDS, PACE_IDS } from '../../../../ids';
-import type { ArmsId, PaceId } from '../../../../ids';
+import type { ArmsId, GaitReading, PaceId } from '../../../../ids';
 import { gaitAt } from '../../../../model/gait';
 import { solveSkeleton } from '../../../rig/skeleton';
 import { FIGURE_FROM_RUNNER } from './frame';
@@ -24,6 +24,14 @@ const HELD_OUT_OFFSET = 2;
 const FIT_STEP_RATES = [-10, -5, 0, 5, 10];
 const HELD_OUT_STEP_RATES = [-10, -7, -2, 3, 8, 10];
 const FEATURE_CHECK_STRIDE = 997;
+const SWING_COVERAGE = [
+  { shiftDeg: 0, gain: 1, heldElbowDeg: null },
+  { shiftDeg: -16, gain: 1.2, heldElbowDeg: null },
+] as const;
+const HELD_COVERAGE = [
+  { shiftDeg: 0, gain: 1, heldElbowDeg: null },
+  { shiftDeg: 0, gain: 1, heldElbowDeg: 60 },
+] as const;
 const TIMEOUT_MS = 1_800_000;
 
 interface PoseKey {
@@ -31,6 +39,9 @@ interface PoseKey {
   readonly stepRate: number;
   readonly arms: ArmsId;
   readonly units: number;
+  readonly armShiftDeg: number;
+  readonly armGain: number;
+  readonly heldElbowDeg: number | null;
 }
 
 function poseKeys(stepRates: readonly number[], offset: number): PoseKey[] {
@@ -38,9 +49,30 @@ function poseKeys(stepRates: readonly number[], offset: number): PoseKey[] {
   for (const pace of PACE_IDS)
     for (const stepRate of stepRates)
       for (const arms of ARMS_IDS)
-        for (let units = offset; units < SCRUBBER_UNITS; units += UNIT_STEP)
-          keys.push({ pace, stepRate, arms, units });
+        for (const cover of arms === 'swing' ? SWING_COVERAGE : HELD_COVERAGE)
+          for (let units = offset; units < SCRUBBER_UNITS; units += UNIT_STEP)
+            keys.push({
+              pace,
+              stepRate,
+              arms,
+              units,
+              armShiftDeg: cover.shiftDeg,
+              armGain: cover.gain,
+              heldElbowDeg: cover.heldElbowDeg,
+            });
   return keys;
+}
+
+function readingOf(key: PoseKey): GaitReading {
+  const reading = gaitAt(key.units, key);
+  const { right, left } = reading.upper.shoulderFlexDeg;
+  reading.upper.shoulderFlexDeg = {
+    right: key.armShiftDeg + key.armGain * right,
+    left: key.armShiftDeg + key.armGain * left,
+  };
+  if (key.heldElbowDeg !== null)
+    reading.upper.elbowDeg = { right: key.heldElbowDeg, left: key.heldElbowDeg };
+  return reading;
 }
 
 function jointParametersOf(model: FigureModel, parameters: Float32Array, out: Float32Array): void {
@@ -80,7 +112,7 @@ describe.skipIf(!DUMP_DIR)('running pose dump', () => {
         const features: number[] = [];
         keys.forEach((key, i) => {
           const pose = key
-            ? rig.retarget(solveSkeleton(gaitAt(key.units, key)))
+            ? rig.retarget(solveSkeleton(readingOf(key)))
             : figure.createParameters();
           parameters.set(pose, i * figure.parameterCount);
           jointParametersOf(model, pose, joints.subarray(i * jointCount, (i + 1) * jointCount));

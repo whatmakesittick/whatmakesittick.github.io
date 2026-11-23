@@ -20,7 +20,7 @@ export interface ArmChain {
 }
 
 export const ARM_STYLE = {
-  abductionDeg: { back: 9, front: 11 },
+  abductionDeg: { back: 11, front: 12 },
   innerRotationDeg: { back: 6, front: 36 },
   curl: 2.6,
   protractionM: 0.012,
