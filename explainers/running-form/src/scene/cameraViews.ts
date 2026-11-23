@@ -25,7 +25,7 @@ export const RUN_SHOTS: Readonly<Record<CameraView, RunShot>> = {
     focus: [0.03, -0.25, 0],
   },
   foot: {
-    box: { x: [-0.45, 0.55], y: [0, 0.7], z: [-0.05, 0.3] },
+    box: { x: [-0.45, 0.55], y: [0, 0.76], z: [-0.05, 0.3] },
     direction: [0.25, 0.1, 1.0],
     margin: 1.12,
     focus: [0, -0.04, 0],
@@ -49,9 +49,9 @@ export const RUN_SHOTS: Readonly<Record<CameraView, RunShot>> = {
     focus: [0, 0, 0],
   },
   above: {
-    box: { x: [-0.45, 0.5], y: [0.8, 1.85], z: [-0.42, 0.42] },
+    box: { x: [-0.42, 0.48], y: [1.05, 1.8], z: [-0.38, 0.38] },
     direction: [0.1, 1.0, 0.25],
-    margin: 1.1,
+    margin: 1.02,
     focus: [0, 0, 0],
   },
   wide: {
