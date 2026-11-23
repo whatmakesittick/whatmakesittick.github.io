@@ -30,6 +30,7 @@ export interface RigPose {
   readonly arms: Readonly<Record<Side, RigArm>>;
   readonly legs: Readonly<Record<Side, RigLeg>>;
   readonly head: Quaternion;
+  readonly pelvisUp?: Vector3;
 }
 
 const scratch = new Vector3();
@@ -93,6 +94,8 @@ export class FigureRig {
       else Object.assign(legOut.toeAxis, NO_AXIS);
     });
     this.rotate(pose.head);
+    if (pose.pelvisUp) this.direct(this.target.pelvisUp, pose.pelvisUp);
+    else Object.assign(this.target.pelvisUp, NO_AXIS);
   }
 
   private place(out: Point, rig: Vector3): void {

@@ -62,6 +62,7 @@ export interface RetargetTarget {
   arms: Record<Side, RetargetArm>;
   legs: Record<Side, RetargetLeg>;
   head: Rotation;
+  pelvisUp: Point;
 }
 
 export type Side = 'right' | 'left';
@@ -117,6 +118,7 @@ export function createRetargetTarget(): RetargetTarget {
     arms: { right: arm(), left: arm() },
     legs: { right: leg(), left: leg() },
     head: { x: 0, y: 0, z: 0, w: 1 },
+    pelvisUp: point(),
   };
 }
 
@@ -351,7 +353,8 @@ export class Retargeter {
   private solveRoot(target: RetargetTarget): void {
     const { right, left } = target.legs;
     const hips = midpoint(vec(right.hip), vec(left.hip));
-    const up = sub(this.shoulderCentre(target), hips);
+    const pelvisUp = vec(target.pelvisUp);
+    const up = length(pelvisUp) > 0 ? pelvisUp : sub(this.shoulderCentre(target), hips);
     const axis = sub(vec(left.hip), vec(right.hip));
     const restAxis = sub(this.restPos('l_upleg'), this.restPos('r_upleg'));
     const turn = mul(frame(axis, up), transpose(frame(restAxis, this.chord())));
