@@ -200,7 +200,8 @@ export function runnerFields(
     const hem = legHem(point, marks.thighs[side], scratch);
     distances[at] = waist[v];
     distances[at + 1] = armhole;
-    distances[at + 2] = limbShare > SHORTS.maxLimbShare ? OUTSIDE : Math.min(-waist[v], hem);
+    const shortsReach = limbShare < SHORTS.maxLimbShare && point.y < SHORTS.topLimitM;
+    distances[at + 2] = shortsReach ? Math.min(-waist[v], hem) : OUTSIDE;
     distances[at + 3] =
       SOCKS.topAboveAnkleM -
       along(point, marks.shins[side].origin, marks.shins[side].axis, scratch);

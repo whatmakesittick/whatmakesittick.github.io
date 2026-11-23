@@ -58,6 +58,10 @@ describe('runner garment fields', () => {
     });
   });
 
+  it('keeps the shorts below the waist', () => {
+    vertices((p) => p.y > 1.2).forEach((v) => expect(distance(v, CHANNEL.shorts)).toBeLessThan(0));
+  });
+
   it('puts socks on the ankles and not on the knees', () => {
     const ankle = frame.joint('r_foot');
     const knee = frame.joint('r_lowleg');

@@ -27,6 +27,7 @@ export const SHORTS = {
   waistbandM: 0.032,
   pipingM: 0.006,
   maxLimbShare: 0.5,
+  topLimitM: 1.2,
 } as const;
 
 export const SOCKS = { topAboveAnkleM: 0.05, cuffM: 0.013 } as const;
