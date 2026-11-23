@@ -47,7 +47,12 @@ export async function bindStore(store: RunStore, targets: SceneTargets): Promise
     store.subscribe(push),
     store.subscribe(
       (state) => state.lookFrom,
-      () => looking.frame(PRESETS[store.getState().preset].camera, true),
+      (lookFrom, previous) => {
+        const { camera } = PRESETS[store.getState().preset];
+        if (cameraFor(camera, lookFrom) !== cameraFor(camera, previous)) {
+          run.views.frame(cameraFor(camera, lookFrom), true);
+        }
+      },
     ),
     bindPresets<RunStoreState, Preset>(targets, store, {
       presets: PRESETS,

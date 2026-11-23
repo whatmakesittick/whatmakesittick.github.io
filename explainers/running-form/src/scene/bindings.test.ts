@@ -67,6 +67,28 @@ describe('run scene bindings', () => {
     expect(frame).toHaveBeenLastCalledWith('front', true);
   });
 
+  it('frames once when a chapter change resets the look chip', async () => {
+    const { frame, targets } = fakeTargets();
+    const store = createRunStore();
+    await bindStore(store, targets);
+    store.getState().applyPreset('posture');
+    store.getState().setLookFrom('above');
+    frame.mockClear();
+    store.getState().applyPreset('spring');
+    expect(frame).toHaveBeenCalledTimes(1);
+    expect(frame).toHaveBeenLastCalledWith('leg', true);
+  });
+
+  it('ignores the look chip outside the posture chapter', async () => {
+    const { frame, targets } = fakeTargets();
+    const store = createRunStore();
+    await bindStore(store, targets);
+    store.getState().applyPreset('spring');
+    frame.mockClear();
+    store.getState().setLookFrom('above');
+    expect(frame).not.toHaveBeenCalled();
+  });
+
   it('copies the store view flags and options into the assembly state', async () => {
     const { received, setWanted, targets } = fakeTargets();
     const store = createRunStore();
