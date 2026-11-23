@@ -1,0 +1,13 @@
+{
+  "slug": "running-form",
+  "tags": ["biology", "physics"],
+  "topic": "running form",
+  "cover": "cover.webp",
+  "entry": "src/index.ts",
+  "chapters": "chapters.html",
+  "locales": ["en", "zh", "es", "uk", "pt", "fr", "de", "ja"],
+  "social": {
+    "image": "social/og-image.png",
+    "alt": "A runner seen from the front on a coastal road at sunrise, next to the title Running form: how a good stride works"
+  }
+}
