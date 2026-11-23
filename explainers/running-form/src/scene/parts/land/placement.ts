@@ -22,7 +22,6 @@ function between(random: Random, from: number, to: number): number {
 }
 
 export const POST_OFFSETS = { delineator: 23, lamp: 7, railStanchion: 0 } as const;
-export const RAIL_STANCHION_M = 2.4;
 
 export const LAMP = { heightM: 6.2, armM: 1.7, poleRadiusM: 0.07 } as const;
 
@@ -75,7 +74,7 @@ function treeBand(random: Random, band: TreeBand): TreeItem[] {
       const height = between(random, band.height[0], band.height[1]);
       const kind: TreeKind = random() < band.pineShare ? 'pine' : 'round';
       const width =
-        height * (kind === 'pine' ? between(random, 0.32, 0.42) : between(random, 0.5, 0.7));
+        height * (kind === 'pine' ? between(random, 0.75, 1.0) : between(random, 0.6, 0.8));
       return {
         x: centre + between(random, -band.spread, band.spread),
         y: 0,

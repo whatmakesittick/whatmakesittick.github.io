@@ -1,7 +1,7 @@
 import { BoxGeometry, Mesh, Vector4 } from 'three';
 import { ROAD, WALL } from '../../../model/layout';
 import { THEME } from '../../../theme';
-import { BEACH_TOP_M, GROUND_EXTENT_M, KERB, LAYER } from '../../constants';
+import { BEACH_TOP_M, GROUND_EXTENT_M, KERB, LAYER, PARAPET, shadowReachZ } from '../../constants';
 import { backdropMaterial, colour } from './atmosphere';
 import type { Backdrop } from './atmosphere';
 import { ATMOSPHERE_GLSL, LIGHT_GLSL, NOISE_GLSL, OUTPUT_GLSL, WORLD_VERTEX } from './glsl';
@@ -15,9 +15,9 @@ interface MasonryLook {
 }
 
 const WALL_LOOK: MasonryLook = {
-  block: [0.86, 0.36, 0.01, 1],
-  base: '#a99c86',
-  light: '#c9b998',
+  block: [0.9, 0.34, 0.012, 1],
+  base: '#b3a185',
+  light: '#cdb995',
   mortar: '#9a8e7c',
   shade: [0, 0, 0],
 };
@@ -35,7 +35,7 @@ const KERB_LOOK: MasonryLook = {
   base: THEME.kerb,
   light: '#b0ada6',
   mortar: '#5c5a56',
-  shade: [WALL.zM + WALL.thicknessM / 2, 1.1, 0.85],
+  shade: [PARAPET.faceZM, shadowReachZ(PARAPET.heightM), 1],
 };
 
 const COPING = { heightM: 0.07, overhangM: 0.05 } as const;
@@ -63,12 +63,20 @@ void main() {
   float along = u / uBlock.x + hash12(vec2(row, 7.0)) * uBlock.w;
   float column = floor(along);
   float pick = hash12(vec2(mod(column, floor(WRAP / uBlock.x)), row));
-  vec2 inBlock = vec2(fract(along) * uBlock.x, fract(v / uBlock.y) * uBlock.y);
-  float edge = min(min(inBlock.x, uBlock.x - inBlock.x), min(inBlock.y, uBlock.y - inBlock.y));
-  float mortar = 1.0 - smoothstep(uBlock.z * 0.5, uBlock.z * 1.5, edge);
+  float split = 0.3 + 0.4 * fract(pick * 7.13);
+  float local = fract(along);
+  float second = step(split, local) * step(0.5, fract(pick * 3.7));
+  float stone = hash12(vec2(mod(column, floor(WRAP / uBlock.x)) + second * 0.5, row + 0.5));
+  float jointX = min(local, 1.0 - local);
+  jointX = mix(jointX, min(jointX, abs(local - split)), step(0.5, fract(pick * 3.7)));
+  vec2 inBlock = vec2(jointX * uBlock.x, fract(v / uBlock.y) * uBlock.y);
+  float edge = min(inBlock.x, min(inBlock.y, uBlock.y - inBlock.y));
+  float mortar = 1.0 - smoothstep(uBlock.z * 0.5, uBlock.z * 1.6, edge);
   float weather = cellNoise(vec2(u * 2.5, v * 2.5), WRAP * 2.5);
-  vec3 albedo = mix(uBase, uLight, pick * 0.6 + weather * 0.25) * (0.9 + 0.1 * hash12(floor(vec2(mod(u * 30.0, WRAP * 30.0), v * 30.0))));
-  albedo = mix(albedo, uMortar, mortar);
+  float grain = hash12(floor(vec2(mod(u * 40.0, WRAP * 40.0), v * 40.0)));
+  vec3 albedo = mix(uBase, uLight, stone * 0.7 + weather * 0.2) * (0.9 + 0.12 * grain);
+  albedo *= 1.0 - smoothstep(0.03, 0.0, edge - uBlock.z) * 0.08;
+  albedo = mix(albedo, uMortar, mortar * 0.8);
   float wet = 1.0 - smoothstep(${WET_LINE_M.toFixed(2)} - 0.1, ${WET_LINE_M.toFixed(2)} + 0.15, vWorld.y + (weather - 0.5) * 0.2);
   albedo *= 1.0 - wet * 0.35;
   float shade = uShade.z * (1.0 - smoothstep(0.0, uShade.y, vWorld.z - uShade.x)) * step(0.001, uShade.y);
@@ -104,7 +112,7 @@ function box(width: number, height: number, depth: number, y: number, z: number)
 
 export function buildMasonry(backdrop: Backdrop): Mesh[] {
   const length = GROUND_EXTENT_M * 2;
-  const wallTop = WALL.heightM - COPING.heightM;
+  const wallTop = PARAPET.heightM - COPING.heightM;
   const wallHeight = wallTop - BEACH_TOP_M;
   const kerbHeight = KERB.heightM + KERB_DEPTH_M;
   const kerbY = KERB.heightM - kerbHeight / 2;

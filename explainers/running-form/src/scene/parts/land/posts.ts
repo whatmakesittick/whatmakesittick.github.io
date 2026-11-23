@@ -3,11 +3,11 @@ import type { BufferGeometry, Material } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { UNDIMMED_GROUP } from '@core/scene/materials';
 import { DELINEATOR_HEIGHT_M, PATTERN_PERIODS_M, WALL } from '../../../model/layout';
-import { DELINEATOR_Z_M, GROUND_EXTENT_M, LAMP_Z_M } from '../../constants';
+import { DELINEATOR_Z_M, GROUND_EXTENT_M, LAMP_Z_M, PARAPET, RAIL } from '../../constants';
 import { FINISHES } from '../../finishes';
 import type { Finish } from '../../finishes';
 import type { PartContext } from '../context';
-import { LAMP, POST_OFFSETS, RAIL_STANCHION_M, periodicItems } from './placement';
+import { LAMP, POST_OFFSETS, periodicItems } from './placement';
 import { ScrollingInstances, copiesOf, NEAR_WINDOW } from './strip';
 import type { StripItem } from './strip';
 
@@ -19,12 +19,7 @@ const LAMP_PARTS = {
   headDropM: 0.06,
   segments: 10,
 } as const;
-const RAIL = {
-  radiusM: 0.024,
-  stanchionRadiusM: 0.02,
-  heights: [0.22, 0.44] as const,
-  segments: 8,
-} as const;
+const RAIL_SEGMENTS = 8;
 
 function instanced(
   context: PartContext,
@@ -112,28 +107,25 @@ function rail(context: PartContext): {
   meshes: (InstancedMesh | Mesh)[];
   mover: ScrollingInstances;
 } {
-  const items = periodicItems(RAIL_STANCHION_M, POST_OFFSETS.railStanchion, WALL.zM);
+  const items = periodicItems(RAIL.postSpacingM, POST_OFFSETS.railStanchion, WALL.zM);
+  const postHeight = RAIL.topM - PARAPET.heightM;
   const stanchion = new CylinderGeometry(
-    RAIL.stanchionRadiusM,
-    RAIL.stanchionRadiusM,
-    RAIL.heights[1],
-    RAIL.segments,
-  ).translate(0, WALL.heightM + RAIL.heights[1] / 2, 0);
+    RAIL.postRadiusM,
+    RAIL.postRadiusM,
+    postHeight,
+    RAIL_SEGMENTS,
+  ).translate(0, PARAPET.heightM + postHeight / 2, 0);
   const stanchions = instanced(context, stanchion, 'rail', items);
   const material = context.materials.get(UNDIMMED_GROUP, FINISHES.rail);
-  const tubes = RAIL.heights.map((height) => {
+  const tubes = [RAIL.middleM, RAIL.topM - RAIL.tubeRadiusM].map((height) => {
     const geometry = new CylinderGeometry(
-      RAIL.radiusM,
-      RAIL.radiusM,
+      RAIL.tubeRadiusM,
+      RAIL.tubeRadiusM,
       GROUND_EXTENT_M * 2,
-      RAIL.segments,
+      RAIL_SEGMENTS,
     )
       .rotateZ(Math.PI / 2)
-      .translate(
-        0,
-        WALL.heightM + height - (height === RAIL.heights[1] ? RAIL.radiusM : 0),
-        WALL.zM,
-      );
+      .translate(0, height, WALL.zM);
     return new Mesh(context.tracker.track(geometry), material);
   });
   return {

@@ -8,16 +8,26 @@ import {
   WALL,
 } from '../../../model/layout';
 import { THEME } from '../../../theme';
-import { DELINEATOR_Z_M, GROUND_EXTENT_M, KERB, LAMP_Z_M, LAYER } from '../../constants';
+import {
+  DELINEATOR_Z_M,
+  GROUND_EXTENT_M,
+  KERB,
+  LAMP_Z_M,
+  LAYER,
+  PARAPET,
+  RAIL,
+  shadowReachZ,
+} from '../../constants';
 import { backdropMaterial, colour } from './atmosphere';
 import type { Backdrop } from './atmosphere';
 import { ATMOSPHERE_GLSL, LIGHT_GLSL, NOISE_GLSL, OUTPUT_GLSL } from './glsl';
 import { LAMP, POST_OFFSETS } from './placement';
 
-const WALL_FACE_Z_M = WALL.zM + WALL.thicknessM / 2;
-const GROUND = { nearZ: WALL_FACE_Z_M, farZ: GROUND_EXTENT_M } as const;
-const WALL_SHADE = { widthM: 1.1, strength: 0.85 } as const;
+const GROUND = { nearZ: PARAPET.faceZM, farZ: GROUND_EXTENT_M } as const;
 const POST_WIDTH_M = 0.1;
+const RAIL_POST_WIDTH_M = RAIL.postRadiusM * 2;
+const RAIL_TUBE_WIDTH_M = RAIL.tubeRadiusM * 2;
+const PENUMBRA_PER_M = 0.0093;
 
 const PALETTE = {
   asphalt: { color: THEME.road, intensity: 0.85 },
@@ -48,7 +58,9 @@ ${LIGHT_GLSL}
 uniform float uScroll;
 uniform vec4 uRoad;
 uniform vec4 uPaintLines;
-uniform vec4 uWallShade;
+uniform vec4 uParapet;
+uniform vec4 uRail;
+uniform vec4 uRailLines;
 uniform vec4 uPosts;
 uniform vec4 uLamps;
 uniform vec3 uAsphalt;
@@ -77,6 +89,10 @@ float postShadow(float u, float z, vec4 post, float width) {
   return edge * ends * (1.0 - along / (reach * 3.0));
 }
 
+float line(float z, float centre, float width, float soft) {
+  return 1.0 - smoothstep(width * 0.5 - soft, width * 0.5 + soft, abs(z - centre));
+}
+
 float band(float z, float from, float to, float aa) {
   return smoothstep(from - aa, from + aa, z) * (1.0 - smoothstep(to - aa, to + aa, z));
 }
@@ -84,16 +100,16 @@ float band(float z, float from, float to, float aa) {
 vec3 asphalt(float u, float z, out float polish) {
   float mottle = cellNoise(vec2(u * 0.8, z * 0.8), WRAP * 0.8);
   float fine = cellNoise(vec2(u * 6.0, z * 6.0), WRAP * 6.0);
-  vec2 grainCell = floor(vec2(u * 40.0, z * 40.0));
-  float grain = hash12(vec2(mod(grainCell.x, WRAP * 40.0), grainCell.y));
-  float aa = smoothstep(0.25, 0.9, fwidth(u * 40.0));
+  vec2 grainCell = floor(vec2(u * 70.0, z * 70.0));
+  float grain = hash12(vec2(mod(grainCell.x, WRAP * 70.0), grainCell.y));
+  float aa = smoothstep(0.2, 0.8, fwidth(u * 70.0));
   grain = mix(grain, 0.5, aa);
   float laneCentre = z < uRoad.z ? uRoad.x + 1.8 : uRoad.z + 1.8;
   float track = exp(-pow(abs(z - laneCentre) - 0.85, 2.0) / 0.05);
   polish = track;
-  vec3 colour = mix(uAsphalt, uAsphaltDark, track * 0.35 + (1.0 - mottle) * 0.25);
-  colour = mix(colour, uAsphaltLight, smoothstep(0.78, 0.98, grain) * 0.55 + fine * 0.12);
-  colour *= 0.92 + grain * 0.12;
+  vec3 colour = mix(uAsphalt, uAsphaltDark, track * 0.35 + (1.0 - mottle) * 0.18);
+  colour = mix(colour, uAsphaltLight, smoothstep(0.86, 0.99, grain) * 0.3 + fine * 0.1);
+  colour *= 0.95 + grain * 0.08;
   float cell = floor(u / 24.0);
   float pick = hash12(vec2(mod(cell, WRAP / 24.0), 3.0));
   float local = u - cell * 24.0;
@@ -115,7 +131,7 @@ float paint(float u, float z) {
 }
 
 vec3 verge(float u, float z) {
-  float low = cellNoise(vec2(u * 0.12, z * 0.12), WRAP * 0.12);
+  float low = cellNoise(vec2(u * 0.125, z * 0.125), WRAP * 0.125);
   float mid = cellNoise(vec2(u * 0.7, z * 0.7), WRAP * 0.7);
   float fine = cellNoise(vec2(u * 9.0, z * 9.0), WRAP * 9.0);
   vec3 grass = mix(uGrass, uGrassDry, smoothstep(0.45, 0.8, low));
@@ -149,13 +165,16 @@ void main() {
   }
   float shade = postShadow(u, z, uPosts, ${POST_WIDTH_M.toFixed(2)});
   shade = max(shade, postShadow(u, z, uLamps, 0.15));
-  float wallDistance = z - uWallShade.x;
-  shade = max(shade, (1.0 - smoothstep(0.0, uWallShade.y, wallDistance)) * uWallShade.z);
+  shade = max(shade, postShadow(u, z, uRail, ${RAIL_POST_WIDTH_M.toFixed(3)}));
+  float parapetSoft = 0.02 + uParapet.y * 0.012;
+  shade = max(shade, 1.0 - smoothstep(uParapet.y - parapetSoft, uParapet.y + parapetSoft, z - uParapet.x));
+  shade = max(shade, line(z, uRailLines.x, uRailLines.z, 0.015 + uRailLines.z * 0.3));
+  shade = max(shade, line(z, uRailLines.y, uRailLines.w, 0.015 + uRailLines.w * 0.3));
   vec3 up = vec3(0.0, 1.0, 0.0);
   vec3 sun = sunTerm(up) * (1.0 - shade);
   vec3 colour = albedo * (sun + ambientTerm(up));
   float glint = pow(max(dot(reflect(view, up), uSunDir), 0.0), 40.0);
-  colour += uSunLight * glint * sheen * 0.35 * (1.0 - shade);
+  colour += mix(uSunLight, vec3(length(uSunLight) * 0.5), 0.35) * glint * sheen * 0.25 * (1.0 - shade);
   gl_FragColor = vec4(hazed(colour, vWorld), 1.0);
   ${OUTPUT_GLSL}
 }
@@ -178,7 +197,18 @@ export function buildGround(backdrop: Backdrop): Mesh {
         ROAD.edgeLineM,
       ),
     },
-    uWallShade: { value: new Vector4(GROUND.nearZ, WALL_SHADE.widthM, WALL_SHADE.strength, 0) },
+    uParapet: { value: new Vector4(PARAPET.faceZM, shadowReachZ(PARAPET.heightM), 0, 0) },
+    uRail: {
+      value: new Vector4(RAIL.postSpacingM, POST_OFFSETS.railStanchion, WALL.zM, RAIL.topM),
+    },
+    uRailLines: {
+      value: new Vector4(
+        WALL.zM + shadowReachZ(RAIL.middleM),
+        WALL.zM + shadowReachZ(RAIL.topM),
+        RAIL_TUBE_WIDTH_M + shadowReachZ(RAIL.middleM) * PENUMBRA_PER_M,
+        RAIL_TUBE_WIDTH_M + shadowReachZ(RAIL.topM) * PENUMBRA_PER_M,
+      ),
+    },
     uPosts: {
       value: new Vector4(
         PATTERN_PERIODS_M.delineator,
