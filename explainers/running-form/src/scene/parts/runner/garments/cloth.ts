@@ -24,6 +24,7 @@ export const CLOTH = {
 } as const;
 
 const AXES = 3;
+export const COVER_ONSET_SHARE = 0.25;
 const CHANNEL = { waist: 0, armhole: 1, shorts: 2, sock: 3 } as const;
 const EXTENT = { cap: 0, hair: 1 } as const;
 const EXTRA = { hem: 2, neck: 3 } as const;
@@ -47,11 +48,11 @@ function lateralShare(point: Vector3, limb: Thigh, scratch: Vector3): number {
     .sub(limb.origin)
     .addScaledVector(limb.axis, -reach)
     .normalize();
-  return clamp(radial.dot(limb.lateral) * 0.5 + 0.5, 0, 1);
+  return clamp((radial.dot(limb.lateral) + 1) / 2, 0, 1);
 }
 
-function cover(gap: number): number {
-  return smoothstep(gap, -CLOTH.edgeM * 0.25, CLOTH.edgeM);
+export function cover(gap: number): number {
+  return smoothstep(gap, -CLOTH.edgeM * COVER_ONSET_SHARE, CLOTH.edgeM);
 }
 
 function shortsLift(gap: number, hem: number, lateral: number): number {

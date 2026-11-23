@@ -23,9 +23,11 @@ export interface Overlays extends Overlay {
 class OverlayGroup implements Overlays {
   readonly root = new Group();
   private readonly members: readonly Overlay[];
+  private readonly tagList: readonly OverlayTag[];
 
   constructor(members: readonly Overlay[]) {
     this.members = members;
+    this.tagList = members.flatMap((member) => member.tags());
     this.root.name = 'overlays';
     members.forEach((member) => this.root.add(member.root));
   }
@@ -43,7 +45,7 @@ class OverlayGroup implements Overlays {
   }
 
   tags(): readonly OverlayTag[] {
-    return this.members.flatMap((member) => member.tags());
+    return this.tagList;
   }
 
   dispose(): void {

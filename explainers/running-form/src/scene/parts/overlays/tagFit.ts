@@ -42,12 +42,14 @@ export function fittingSide(
   size: TagSize,
   preferred: LabelSide,
   frame: ViewportSize,
-  taken: readonly Rect[] = [],
+  keepOut: readonly Rect[] = [],
+  placed: readonly Rect[] = [],
 ): LabelSide | null {
   return (
     [preferred, OTHER_SIDE[preferred]].find((side) => {
       const box = textBox(anchor, size, side);
-      return framed(box, frame) && !taken.some((rect) => overlaps(box, rect));
+      const blocked = (rect: Rect) => overlaps(box, rect);
+      return framed(box, frame) && !keepOut.some(blocked) && !placed.some(blocked);
     }) ?? null
   );
 }
@@ -70,8 +72,9 @@ export function fitTags(
   tags.forEach((tag) => {
     if (!isShown(tag.object)) return;
     const anchor = screenPoint(tag, camera, frame);
-    const taken = [...keepOut, ...placed];
-    const side = anchor ? fittingSide(anchor, tag.size, tag.preferred, frame, taken) : null;
+    const side = anchor
+      ? fittingSide(anchor, tag.size, tag.preferred, frame, keepOut, placed)
+      : null;
     tag.place(side);
     if (anchor && side) placed.push(textBox(anchor, tag.size, side));
   });

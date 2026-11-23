@@ -25,13 +25,15 @@ export const RUNNER_SHADOW_NAME = 'runnerShadow';
 const SUN_HALF_ANGLE_RAD = 0.00465;
 const BASE_SOFTNESS_M = 0.006;
 const LIFT_M = 0.003;
+const PIXEL_FOOTPRINT_SHARE = 0.7;
+const MIN_COVER = 0.004;
 const DEPTH_BIAS = 2e-6;
 const QUAD_CORNERS = 4;
 const AXES = 3;
 const KERB_FACE_Z_M = ROAD.zMaxM;
 const KERB_REACH_M = (KERB.heightM * Math.hypot(SUN_VECTOR.x, SUN_VECTOR.z)) / SUN_VECTOR.y;
 
-interface Bounds {
+export interface Bounds {
   readonly uMin: number;
   readonly uMax: number;
   readonly vMin: number;
@@ -128,12 +130,12 @@ float blocked(vec3 ground, vec4 from, vec4 to, float pixel) {
 void main() {
   if (uClip.x > 0.5 && uClip.x < 1.5 && (vWorld.z < uClip.y || vWorld.z > uClip.z)) discard;
   if (uClip.x > 1.5 && (vWorld.y < uClip.y || vWorld.y > uClip.z)) discard;
-  float pixel = length(fwidth(vWorld)) * 0.7;
+  float pixel = length(fwidth(vWorld)) * ${PIXEL_FOOTPRINT_SHARE};
   float cover = 0.0;
   for (int i = 0; i < ${PROXY_COUNT}; i++) {
     cover = max(cover, blocked(vWorld, uFrom[i], uTo[i], pixel));
   }
-  if (cover < 0.004) discard;
+  if (cover < ${MIN_COVER}) discard;
   gl_FragColor = vec4(mix(vec3(1.0), uShade, cover), 1.0);
   #include <colorspace_fragment>
 }
@@ -167,7 +169,7 @@ function projected(point: Vector3, heightM: number, out: Vector3): Vector3 {
   return out.copy(point).addScaledVector(SUN_VECTOR, -(point.y - heightM) / SUN_VECTOR.y);
 }
 
-function shadowBounds(segments: readonly ProxySegment[]): Bounds {
+export function shadowBounds(segments: readonly ProxySegment[]): Bounds {
   const flat = new Vector3();
   let uMin = Infinity;
   let uMax = -Infinity;
