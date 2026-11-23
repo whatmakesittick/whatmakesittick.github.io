@@ -1,4 +1,4 @@
-import type { Box3} from 'three';
+import type { Box3 } from 'three';
 import { Vector3 } from 'three';
 import type { CustomView, Direction } from '@core/scene/cameraViews';
 import type { CameraPose } from '@core/scene/frameBox';
