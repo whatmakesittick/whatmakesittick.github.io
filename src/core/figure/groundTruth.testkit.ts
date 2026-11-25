@@ -2,7 +2,6 @@
 
 import { readFileSync } from 'node:fs';
 
-const FIXTURES = new URL('./fixtures/', import.meta.url);
 const AXES = 3;
 const QUATERNION = 4;
 
@@ -30,11 +29,11 @@ function floats(buffer: ArrayBuffer, offset: number, count: number): Float32Arra
   return new Float32Array(buffer.slice(offset, offset + count * Float32Array.BYTES_PER_ELEMENT));
 }
 
-export function loadGroundTruth(): GroundTruth {
+export function loadGroundTruth(fixtures: URL): GroundTruth {
   const meta = JSON.parse(
-    readFileSync(new URL('ground-truth.json', FIXTURES), 'utf8'),
+    readFileSync(new URL('ground-truth.json', fixtures), 'utf8'),
   ) as GroundTruthMeta;
-  const file = readFileSync(new URL('ground-truth.bin', FIXTURES));
+  const file = readFileSync(new URL('ground-truth.bin', fixtures));
   const buffer = file.buffer.slice(
     file.byteOffset,
     file.byteOffset + file.byteLength,

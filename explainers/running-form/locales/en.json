@@ -1,0 +1,317 @@
+{
+  "meta": {
+    "title": "Running form: how a good stride works",
+    "eyebrow": "Biology and physics",
+    "tagline": "A run is a string of one-legged hops, and good form keeps the leg's spring working well.",
+    "description": "Follow one runner's stride in 3D: how the leg lands, springs and pushes off, and what research says about step rate, posture and arms.",
+    "summary": "The four phases of a stride, the landing, the leg as a spring, push-off and float, posture and arms, and how form changes with pace.",
+    "socialAlt": "A runner seen from the front on a coastal road at sunrise, the low sun over the sea and a long shadow on the asphalt, next to the title Running form: how a good stride works"
+  },
+  "stage": {
+    "label": "Interactive running form model",
+    "gauge": "Live step rate, step length and ground force"
+  },
+  "timeline": {
+    "label": "Stride",
+    "phases": "Jump to a phase of the right leg",
+    "value": "{{percent}} %",
+    "during": "{{percent}} %, right leg: {{phase}}",
+    "speed": "Playback",
+    "speedValue": "{{factor}}×",
+    "realTime": "Real time",
+    "slower": "{{factor}} times slower",
+    "phase": {
+      "landing": "Landing",
+      "pushOff": "Push-off",
+      "recovery": "Recovery",
+      "reach": "Reach"
+    },
+    "jump": {
+      "landing": "Jump to the foot landing",
+      "pushOff": "Jump to mid-stance, where the push starts",
+      "recovery": "Jump to the foot leaving the road",
+      "reach": "Jump to mid-swing, where the leg starts to come down"
+    }
+  },
+  "controls": {
+    "label": "Model controls",
+    "pace": "Pace",
+    "groups": {
+      "pace": "Pace",
+      "arms": "Arms",
+      "look": "Camera"
+    },
+    "paceNames": {
+      "easy": "Easy",
+      "steady": "Steady",
+      "fast": "Fast"
+    },
+    "paceOptions": {
+      "easy": "Easy, 6:40 per km",
+      "steady": "Steady, 4:46 per km",
+      "fast": "Fast, 3:42 per km"
+    },
+    "armsOptions": {
+      "swing": "Arms swing",
+      "held": "Arms crossed"
+    },
+    "lookOptions": {
+      "front": "From the front",
+      "above": "From above"
+    },
+    "views": {
+      "labels": {
+        "name": "Labels",
+        "short": "Labels",
+        "hint": "Part labels (L)"
+      },
+      "forces": {
+        "name": "Forces",
+        "short": "Forces",
+        "hint": "Ground force on the foot (F)"
+      },
+      "formLines": {
+        "name": "Form lines",
+        "short": "Form",
+        "hint": "Body line, shin line and joint angles (G)"
+      },
+      "footPath": {
+        "name": "Foot path",
+        "short": "Foot",
+        "hint": "Path of the right foot beside the hip (H)"
+      },
+      "follow": {
+        "name": "Follow camera",
+        "short": "Follow",
+        "hint": "Camera rides with the runner (O)"
+      }
+    },
+    "stepRate": {
+      "label": "Step rate at the same speed"
+    }
+  },
+  "readouts": {
+    "feet": "Foot down",
+    "force": "Ground force",
+    "knee": "Right knee bend",
+    "cadence": "Step rate",
+    "stepLength": "Step length",
+    "contact": "Contact time",
+    "floatShare": "Both feet in the air: {{percent}} % of the stride"
+  },
+  "gauge": {
+    "feetRight": "Right",
+    "feetLeft": "Left",
+    "feetAir": "Neither"
+  },
+  "units": {
+    "metersPerSecond": "{{value}} m/s",
+    "perMinute": "{{value}} steps/min",
+    "perKilometer": "{{value}} per km",
+    "meters": "{{value}} m",
+    "centimeters": "{{value}} cm",
+    "centimetersSigned": "{{value}} cm",
+    "milliseconds": "{{value}} ms",
+    "degrees": "{{value}}°",
+    "bodyWeights": "{{value}} body weights",
+    "percent": "{{value}} %",
+    "signedPercent": "{{value}} %"
+  },
+  "parts": {
+    "head": "Look ahead",
+    "shoulder": "Shoulders relaxed",
+    "arm": "Arms balance legs",
+    "elbow": "Elbows near 90°",
+    "trunk": "Tall, slight lean",
+    "pelvis": "Hips counter-twist",
+    "hip": "Hip opens back",
+    "thigh": "Thigh brakes",
+    "knee": "Knee springs",
+    "shin": "Calf pushes off",
+    "achilles": "Achilles recoils",
+    "arch": "Arch recoils",
+    "heel": "Heel lifts",
+    "shoe": "Foot lands close",
+    "road": "Longer steps"
+  },
+  "overlay": {
+    "lean": "Lean {{value}}°",
+    "shin": "Shin line",
+    "kneeBend": "Knee {{value}}°",
+    "elbowBend": "Elbow {{value}}°",
+    "braking": "Braking",
+    "pushing": "Pushing",
+    "bodyWeight": "1 body weight",
+    "forceNow": "Force {{value}} body weights",
+    "footPath": "Foot path",
+    "bodyLine": "Body line"
+  },
+  "sections": {
+    "stride": {
+      "title": "The stride",
+      "p1": "Watch the runner on the coastal road at sunrise. His run is a string of one-legged hops. One leg lands, gives a little and springs him back up. Then both feet leave the road. That moment in the air, the <strong>float</strong>, is what makes a run a run. In walking, one foot is always down.",
+      "p2": "One <strong>stride</strong> is both steps, from one right-foot landing to the next. The right leg goes through four phases. In <strong>landing</strong>, the foot touches down and the leg gives. In <strong>push-off</strong>, the leg pushes until the foot leaves the road. In <strong>recovery</strong>, the heel lifts and the knee swings forward. In <strong>reach</strong>, the leg swings out and comes back down. The left leg follows half a stride later.",
+      "p3": "<strong>Stance</strong> is the time your foot is on the road. Mid-stance is where the road's push turns from braking to pushing you forward. Mid-swing is where the swinging knee bends most. The coloured bands on the timeline are for the steady pace; at other paces the borders sit a little off.",
+      "p4": "In this data each foot is on the road for 34 to 41 percent of the stride, roughly a third to two fifths, and for less as you speed up. Then the other foot takes its turn. Between them come two short floats, together about 19 to 32 percent of the stride. Your body is lowest near mid-stance and highest in the middle of a float. In walking it is the reverse: you are highest in the middle of a step.",
+      "p5": "Speed is <strong>step rate</strong>, the steps you take in a minute, times <strong>step length</strong>, the distance of one step, divided by 60. Step rate is also called cadence. The three paces are the model's names, not race paces: easy here is 6:40 per kilometre and fast is 3:42. The gauge shows the road's push in body weights, multiples of your own weight.",
+      "p6": "The leg angles are the averages of 31 to 39 competitive runners on a treadmill, averaged and refitted for display, so a real runner differs. The data has nothing for the upper body, so the model moves it by rules. The road, the sea and the sun are a design, not a place."
+    },
+    "touchdown": {
+      "title": "The landing",
+      "p1": "The picture pauses at <strong>touchdown</strong>, the first moment the foot meets the road. The foot lands ahead of the hips, with the knee bent a little, about 11 to 13 degrees, and the foot nearly flat or heel first. The forces and form lines are on here: the arrow shows what the road does to you, and the line follows the shin. F and G switch them off.",
+      "p2": "For a moment the road pushes you back. This is <strong>braking</strong>, and it is small. One <strong>body weight</strong> is your own weight pressing on the ground. Braking peaks at about 0.2 to 0.4 body weights. The push up is much bigger, as the next chapter shows.",
+      "p3": "Runners land on the heel, the middle of the foot or the ball. About 9 in 10 recreational road racers land on the heel, and so do about 55 to 70 percent of elite marathon men at one world championship. The model runner lands on the heel side, like the average runner in the data.",
+      "p4": "No landing style has been shown to be better. Runners with different styles used about the same energy, and heel strikers who were made to switch used more for a while. A heel strike gives a sharper first jolt, but in running shoes it builds up about as slowly as a forefoot strike. Whether either matters for injuries is not known.",
+      "p5": "Now try the slider. It changes the step rate and keeps the speed. The slow end shows <strong>overstriding</strong>: a long, reaching step with the foot landing far ahead of you. In a lab study of recreational runners, 10 percent more steps put the heel about 2 cm closer and cut the total braking over the step, the braking impulse, by about 16 percent. The model applies this at all three paces.",
+      "p6": "<strong>Try this:</strong> reach a little less, usually with slightly quicker steps, so the foot lands closer to you. Think closer, not under the body: in the studies that measured it, the foot still lands ahead. How sure is anyone? Short lab tests show less braking with quicker steps. In one study of 74 women, the highest braking forces went with more injuries, a link and not a cause."
+    },
+    "spring": {
+      "title": "The spring",
+      "p1": "After touchdown the leg does not stay stiff. The knee bends, the body sinks and the leg pushes back, like a spring with you on top. In this data the knee bends about 43 to 45 degrees at most. The forces are on here, and F switches them off. Scrub through the stance and watch the arrow grow and fade.",
+      "p2": "The road pushes up on you with about 2.3 to 2.6 body weights at the peak, a little more at faster paces. The peak comes a little before the middle of the stance. Contact lasts about a quarter of a second, 0.23 to 0.30 s by the model's arithmetic. The force row in the gauge follows the data's own curve.",
+      "p3": "In a computer simulation of ten distance runners, the thigh muscles gave the biggest share of the braking in the landing, and the calf muscles the biggest share of the push. At 5 m/s the soleus, a calf muscle, pushed up with about 2 body weights alone.",
+      "p4": "Tendons help too. The Achilles tendon and the arch of the foot stretch early in the step, store energy and give it back later, like a bouncing ball. That saves your muscles work. No reliable share was found, so this page shows no number.",
+      "p5": "<strong>Try this:</strong> land soft, and let the knee give instead of stiffening against the ground. Letting it give is not the same as bending it more: in the lab, quicker steps bent the knee less. This is coaching advice. Nobody has tested it well, but it fits the picture of the leg as a spring."
+    },
+    "liftoff": {
+      "title": "Push-off and float",
+      "p1": "In the second half of the stance the leg pushes you up and forward, and the calf does much of the work. The hip opens only a little. The hip angle row shows the angle at the hip joint, thigh against pelvis. Zero is the hip of someone standing straight, and minus means it has opened further. The pelvis tips forward as you run, so the thigh already points behind you at zero. The row reaches about minus 10 degrees at the fast pace, just after the foot leaves the road.",
+      "p2": "Now both feet are in the air, and the body flies like a thrown ball. By the model's arithmetic each float lasts about 0.07 to 0.11 s. The camera is behind you and the foot path is on: the track of the right foot as the hip sees it, a loop, not the track over the road. H switches it off.",
+      "p3": "Your body also bounces. The model estimates the rise at about 8 cm per step at the steady pace, worked out from the measured force. Lab studies measured about 8 to 9 cm. The camera stays with the road in this chapter, so you see the bounce against it. O holds the body steady instead.",
+      "p4": "Now the slider again. With 10 percent more steps at the same speed, the bounce was 16 percent smaller in a lab study, and the knee took about a third less energy at landing. With fewer, longer steps the bounce grew. The model's estimate gives nearly the same change. The study used 45 recreational runners, short tests and no injury results.",
+      "p5": "<strong>Try this:</strong> take slightly quicker, smaller steps instead of long, bouncy ones, and push back enough, not as far as possible. Adding 5 to 10 percent to the step rate for a few runs lowered knee loading in short lab tests. One review links less leg extension at toe-off with better economy, meaning less energy used at the same speed. Shorter is not always better: in one old test, each runner already chose a step close to their cheapest."
+    },
+    "posture": {
+      "title": "Posture and arms",
+      "p1": "Stand tall, with a slight lean. That is the common advice, and the research behind it is thin. In one study of 24 recreational runners the trunk leaned about 7 degrees forward, which is the model's mean. It swung by about 6 to 8 degrees over each step in another small study, so the readout moves. The lean comes from the hips, pelvis and trunk together, not from the ankles.",
+      "p2": "Coaches say to look at the horizon and keep the shoulders relaxed. That is tradition, not a measurement. The pelvis is not still. It tips forward and back. It drops a little on the side of the swinging leg. It turns, and the chest turns against it. Look from above to see the twist. It comes from one small study.",
+      "p3": "The arms swing against the legs: when the left leg goes forward, the right arm does. Two computer studies built on lab data found that the twisting effect of the arms was nearly equal and opposite to the legs'. The arms do not drive you forward: in one simulation they added under 1 percent of the push. Pick crossed arms and look from above: the shoulders and hips twist more, though the size is a rough guess.",
+      "p4": "Whether swinging arms save energy is disputed. In one lab, running with the hands behind the back cost about 3 percent more energy, with the arms across the chest about 9 and with the hands on the head about 13. An older study found no change.",
+      "p5": "Coaches teach bent elbows, about a right angle or a little less, and the model's mean of 90 degrees follows that advice. Sources say 60 to 90 degrees, and no best angle is known. The model's elbow opens and closes by about 40 degrees over the swing, the one measured range, taken at a fast pace. It is most bent when the arm is forward. The arm swing itself is the model's own choice.",
+      "p6": "<strong>Try this:</strong> run tall with a slight lean, eyes on the horizon and shoulders loose. Swing the arms forward and back with the elbows bent, not across your chest. How sure is anyone? Posture and elbow bend are coaching tradition with thin research. The across-the-chest line has no number of its own, but in one lab arms across the chest cost more energy."
+    },
+    "pace": {
+      "title": "Pace",
+      "p1": "Pick each pace in turn. In this data the runner does more of most things: more steps, longer steps, longer floats, a harder push and a higher heel swing, and less time on the road. The rows beside this text show the numbers. Easy and fast are the model's names, not a measure of your effort.",
+      "p2": "Most of the extra speed comes from longer steps, not quicker ones. In one lab, from 2 to 5 m/s, the step rate rose about 21 percent while the step length doubled.",
+      "p3": "You may have heard that 180 steps a minute is the right number. It comes from a coach's count of elite runners at one Olympics, who nearly all stepped faster than that. The story is second-hand, and it is about fast runners. Individual runners range from about 160 to 210 steps a minute, and many fast runners take 170 to 190. It is a result of running fast, not a target.",
+      "p4": "In an old lab test of ten runners, each one's own step length was close to the one that used the least oxygen, and forcing a longer or shorter step cost energy. Step width matters too: crossing the feet or placing them wide cost 3 to 15 percent more energy in one lab. So the slider shows what changes, not what to chase.",
+      "p5": "To find your own step rate, count the steps of one foot for 30 seconds and multiply by four. A marathon at 3.5 m/s is roughly 35 000 steps.",
+      "p6": "The fast pace is close to what the 2017 world championship marathoners ran: group averages of 28 men at 4.3 to 4.8 m/s, with 180 to 184 steps a minute. The men's marathon record is faster still.",
+      "p7": "What is worth trying? Run tall with a slight lean, eyes ahead and shoulders loose, arms swinging forward and back. Land a little closer to you, and let the knee give. Try a step rate 5 to 10 percent higher for a few runs. Some of this is measured and some is coaching tradition, and none of it promises protection from injury. These are small adjustments, not a rebuild. Change one thing at a time, and keep what feels easy."
+    }
+  },
+  "chapters": {
+    "stride": {
+      "speed": "Speed",
+      "cadence": "Step rate",
+      "step": "Step length",
+      "sum": "The model's arithmetic",
+      "sumValue": "{{cadence}} × {{step}} m ÷ 60 = {{speed}} m/s",
+      "phase": "Right leg now",
+      "float": "Both floats together",
+      "cycle": "One stride",
+      "cycleValue": "two steps, about 0.67 to 0.75 s",
+      "floats": "Floats",
+      "floatsValue": "two a stride, together about 19 to 32 percent in this data",
+      "data": "Where the curves come from",
+      "dataValue": "joint curves of 31 to 39 runners, public data",
+      "dataSource": "Joint curves and ground forces: Fukuchi, Fukuchi and Duarte (2017), PeerJ 5:e3298, doi:10.7717/peerj.3298. Data: doi:10.6084/m9.figshare.4543435.v5, licence Creative Commons Attribution 4.0. Averaged and refitted for display."
+    },
+    "touchdown": {
+      "rate": "Step rate change",
+      "rateLabel": "Step rate at the same speed",
+      "cadence": "Step rate",
+      "step": "Step length",
+      "reach": "Landing distance, change (minus is closer)",
+      "reachSame": "no change",
+      "knee": "Knee bend at touchdown",
+      "brake": "Peak braking force (model's estimate)",
+      "impulse": "Total braking over the step, change",
+      "strikes": "Landing on the heel",
+      "strikesValue": "about 9 in 10 recreational runners; 55 to 70 percent of elite men",
+      "strikeImpact": "First jolt, in lab tests",
+      "strikeImpactValue": "heel strike about 1.7 to 1.9, forefoot about 0.6 body weights",
+      "strikeEconomy": "Landing style and energy use",
+      "strikeEconomyValue": "no style is proven better; forced changes used more energy at first",
+      "reachStudy": "Landing distance in one study",
+      "reachStudyValue": "about 2 cm closer with 10 percent more steps",
+      "brakeInjury": "Braking and injuries",
+      "brakeInjuryValue": "one study of 74 women linked high braking to injuries"
+    },
+    "spring": {
+      "force": "Ground force now",
+      "knee": "Right knee bend now",
+      "peak": "Peak ground force at this pace",
+      "contact": "Contact time",
+      "phase": "Right leg now",
+      "tendon": "Achilles tendon and arch",
+      "tendonValue": "store energy early, give it back later; no share quoted here",
+      "muscles": "Who does the work",
+      "musclesValue": "thighs give the biggest braking share, calves the biggest push",
+      "calf": "Calf muscle at 5 m/s",
+      "calfValue": "the soleus alone pushes up with about 2 body weights",
+      "kneeBend": "Knee bend in the landing",
+      "kneeBendValue": "about 43 to 45 degrees at the three paces",
+      "impact": "Peak upward force",
+      "impactValue": "about 2.3, 2.5 and 2.6 body weights at the three paces"
+    },
+    "liftoff": {
+      "rate": "Step rate change",
+      "rateLabel": "Step rate at the same speed",
+      "bounce": "Body rise per step, the model's estimate",
+      "flight": "One float",
+      "hip": "Hip angle, thigh against pelvis",
+      "cadence": "Step rate",
+      "step": "Step length",
+      "bounceStudy": "Body rise in the studies",
+      "bounceStudyValue": "about 9 cm; about 7 cm with 10 percent more steps",
+      "hipPeak": "Hip opened furthest",
+      "hipPeakValue": "a few degrees past zero, most at the fast pace (about 10)",
+      "economy": "Leg extension and economy",
+      "economyValue": "less leg extension at toe-off goes with less energy used in one review",
+      "kneeEnergy": "Knee energy at landing",
+      "kneeEnergyValue": "about a third less with 10 percent more steps",
+      "cadenceStudy": "The step rate study",
+      "cadenceStudyValue": "short lab tests, 45 recreational runners at one speed"
+    },
+    "posture": {
+      "lean": "Trunk lean now",
+      "twist": "Chest against pelvis, range, rough estimate",
+      "elbow": "Right elbow angle (model)",
+      "arm": "Right arm swing, plus is forward (model)",
+      "arms": "Arms",
+      "armCost": "Extra energy cost, one lab",
+      "armCostValue": "3 percent hands behind back, 9 across chest, 13 on head",
+      "armPush": "Push from the arms",
+      "armPushValue": "under 1 percent of the push, in one simulation",
+      "momentum": "What the arms are for",
+      "momentumValue": "arms twist nearly equal and opposite to the legs, in two simulations",
+      "elbowRule": "Elbow angle",
+      "elbowRuleValue": "bent near a right angle: coaching advice, not measured",
+      "leanEvidence": "Lean and the evidence",
+      "leanEvidenceValue": "a slight lean is taught widely; research is thin",
+      "heldTwist": "Twist with crossed arms",
+      "heldTwistValue": "about 1.7 times more, a rough estimate from one simulation"
+    },
+    "pace": {
+      "speed": "Speed",
+      "km": "Pace per km",
+      "cadence": "Step rate",
+      "step": "Step length",
+      "contact": "Contact time",
+      "float": "One float",
+      "knee": "Peak knee bend in the swing",
+      "force": "Peak ground force",
+      "lean": "Trunk lean now",
+      "elites": "Six elite Kenyan men",
+      "elitesValue": "about 175 steps a minute at 3.5 m/s, 185 at 4.5",
+      "cadenceRange": "Steps a minute",
+      "cadenceRangeValue": "individuals 160 to 210; many fast runners 170 to 190",
+      "stride": "Your own step length",
+      "strideValue": "own step length is close to the cheapest; small changes cost little",
+      "marathon": "Men's marathon record",
+      "marathonValue": "1:59:30 (Sawe, London, 26 April 2026), 5.88 m/s"
+    }
+  }
+}

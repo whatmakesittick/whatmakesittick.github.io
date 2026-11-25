@@ -1,6 +1,13 @@
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
-import { dependsOn, isExplainerOnlyPackage, sharedByPages } from './vite/chunks.ts';
+import {
+  FIGURE_MODULES,
+  RIG_MODULES,
+  dependsOn,
+  isExplainerOnlyPackage,
+  ownChunkOf,
+  sharedByPages,
+} from './vite/chunks.ts';
 import type { ModuleGraph } from './vite/chunks.ts';
 import { embedEntrySlug } from './vite/embed.ts';
 import { explainerPages } from './vite/explainerPages.ts';
@@ -19,7 +26,9 @@ const needsScene = (id: string, graph: ModuleGraph) =>
   SCENE_MODULES.test(id) || dependsOn(id, SCENE_MODULES, graph);
 const isPageRoot = (id: string) => embedEntrySlug(id) === undefined;
 const pageChunk = (id: string, graph: ModuleGraph) =>
-  !isExplainerOnlyPackage(id, graph) && sharedByPages(id, graph, isPageRoot);
+  ownChunkOf(id) === undefined &&
+  !isExplainerOnlyPackage(id, graph) &&
+  sharedByPages(id, graph, isPageRoot);
 
 export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
@@ -49,6 +58,8 @@ export default defineConfig({
               minShareCount: 2,
             },
             { name: 'embed', test: EMBED_MODULES, minShareCount: 2 },
+            { name: 'figure', test: FIGURE_MODULES },
+            { name: 'rig', test: RIG_MODULES },
           ],
         },
       },

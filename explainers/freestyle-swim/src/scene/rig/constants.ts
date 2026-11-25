@@ -1,7 +1,7 @@
 import { SEGMENT_M } from '../../model/scale';
 import { GLIDE_KEY_SHARE, PULL_KEY_SHARE } from '../../model/stroke';
 import type { KickId } from '../../ids';
-import type { Key } from './curve';
+import type { Key } from '@core/rig/curve';
 
 type Triple = readonly [number, number, number];
 

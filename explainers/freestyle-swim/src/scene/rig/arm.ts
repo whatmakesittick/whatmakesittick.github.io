@@ -11,8 +11,8 @@ import {
   RECOVERY_PATH,
   RECOVERY_START,
 } from './constants';
-import { clampedCurve, clampedVector, periodicCurve, periodicVector } from './curve';
-import { lawOfCosines, solveTwoBone } from './ik';
+import { clampedCurve, clampedVector, periodicCurve, periodicVector } from '@core/rig/curve';
+import { lawOfCosines, solveTwoBone } from '@core/rig/ik';
 
 export interface ArmPose {
   readonly shoulder: Vector3;

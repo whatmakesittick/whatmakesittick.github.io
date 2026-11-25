@@ -134,5 +134,42 @@ is about a tenth of the corrective bytes, `C` carries the rest.
 
 1. Add a pose dump like `dumpStrokePoses.test.ts` that writes its poses as joint parameters through its own rig and
    retarget.
-2. Run `export.py` with its own config and output paths. The correctives are fitted to those poses only, so poses
+2. Run `export.py` with its own config and output paths. Give it its own fixtures folder, for example
+   `--fixtures src/core/figure/fixtures/<sport>`, so the swimmer's `stroke-truth` and `ground-truth` stay as they
+   are, and add `--skip-ground-truth`: that step needs the swimmer's `swim-samples` in the same folder. The correctives are fitted to those poses only, so poses
    outside them are corrected less well; add intermediate values of every continuous control to the fit poses.
+3. Add one entry to `TEST_BODIES` in `src/core/figure/bodies.testkit.ts` (name, data module loader, fixtures folder).
+   `figure.test.ts`, `retarget.test.ts`, `partition.test.ts` and the other core body tests then run on the new body.
+   `figure.test.ts` also needs the body's vertex count, and the correctives-off test needs `ground-truth` (skip it for a
+   body exported with `--skip-ground-truth`).
+
+### The runner (`running-form`)
+
+- Config: `config.running-form.json` (the shape fitted to distance-runner tape measures, with skeleton scale
+  parameters; `statureM` 1.7598 gives 1.770 m standing with the legs parallel). Every rig length comes from this
+  export (`explainers/running-form/src/scene/rig/body.ts`, pinned by `bodyLengths.test.ts`).
+- Poses: `dumpRunPoses.test.ts` in `explainers/running-form/src/scene/parts/runner/figure/` (skipped unless
+  `RUN_DUMP_DIR` is set; `RUN_DUMP_STEP` changes the scrubber step, 5 by default) walks the run through the runner's
+  rig and `FigureRig.retarget`: every pace, step rates -10, -5, 0, 5, 10, both arm styles every 5 units in `fit`
+  (12,001 poses); step rates -10, -7, -2, 3, 8, 10 at an offset of 2 units in `heldout` (14,400). Each arm style is
+  dumped twice to cover arm rules wider than the current one: the swinging arm as read and with its shoulder flexion
+  shifted 16 degrees back and swung 1.2 times wider, the held arms as read and with the elbows at 60 degrees.
+- Sweep on these poses (vertex floor 1.0 mm, 16 bit `U`; the data without correctives is 102,717 bytes gzipped):
+
+| tolerance mm | gzipped | raw     | worst mm | mean mm |
+| ------------ | ------- | ------- | -------- | ------- |
+| 1.5          | 182,152 | 328,802 | 1.390    | 0.188   |
+| 2.0          | 167,621 | 304,976 | 1.836    | 0.223   |
+| **2.25**     | 160,195 | 291,552 | 1.923    | 0.251   |
+| 2.5          | 155,537 | 283,485 | 2.356    | 0.269   |
+
+The runner ships at tolerance 2.25 (`--tolerance-mm 2.25`), the smallest with a worst error near 2 mm: on the final poses 1.923 mm worst and 0.251 mm mean over the held-out set, 160,195 bytes gzipped and 291,552 raw.
+
+```sh
+POSES=/path/to/run-poses
+OUT=explainers/running-form/src/scene/parts/runner/figure/runner.data.ts
+RUN_DUMP_DIR=$POSES npx vitest run explainers/running-form/src/scene/parts/runner/figure/dumpRunPoses.test.ts
+.venv/bin/python scripts/human-body/export.py --assets $ASSETS --config scripts/human-body/config.running-form.json \
+  --poses $POSES --module $OUT --fixtures src/core/figure/fixtures/running-form --skip-ground-truth --tolerance-mm 2.25
+npx prettier --write $OUT src/core/figure/fixtures/running-form/*.json
+```

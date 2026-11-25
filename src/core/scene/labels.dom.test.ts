@@ -8,6 +8,7 @@ const PARTS = {
   spoke: { labelKey: 'parts.spoke', side: 'right' },
 } as const;
 const VIEWPORT = { width: 400, height: 300, safe: NO_SAFE_AREA };
+const LEFT_HALF = [{ left: 0, right: 200, top: 0, bottom: 300 }];
 const WIDE_TEXT = { inlineSize: 260, blockSize: 22 };
 
 type Resize = (entries: Partial<ResizeObserverEntry>[]) => void;
@@ -40,6 +41,18 @@ function frontCamera(): PerspectiveCamera {
 function sideOf(anchor: Object3D): string | undefined {
   const element = (anchor.children[0] as unknown as { element: HTMLElement }).element;
   return ['left', 'right'].find((side) => element.classList.contains(`scene-label--${side}`));
+}
+
+function sidedLayer() {
+  const { resize, texts } = stubResizeObserver();
+  const layer = new LabelLayer(PARTS);
+  const wheel = new Object3D();
+  wheel.updateMatrixWorld();
+  layer.attach(new Map([['wheel', wheel]]));
+  layer.setViewport(VIEWPORT);
+  layer.show(new Set(['wheel']));
+  resize([{ target: texts[0], borderBoxSize: [{ inlineSize: 80, blockSize: 22 }] }]);
+  return { layer, wheel, camera: frontCamera() };
 }
 
 describe('LabelLayer', () => {
@@ -163,6 +176,40 @@ describe('LabelLayer', () => {
     layer.setKeepOut([]);
     layer.layout(camera);
     expect(element.classList.contains('scene-label--crowded')).toBe(false);
+    layer.dispose();
+  });
+
+  it('moves a label away from an obstacle and back when it is cleared', () => {
+    const { layer, wheel, camera } = sidedLayer();
+    const listener = vi.fn();
+    layer.onChange(listener);
+    layer.layout(camera);
+    expect(sideOf(wheel)).toBe('left');
+    layer.setObstacles(LEFT_HALF);
+    expect(listener).toHaveBeenCalledTimes(1);
+    layer.layout(camera);
+    expect(sideOf(wheel)).toBe('right');
+    layer.setObstacles([]);
+    layer.layout(camera);
+    expect(sideOf(wheel)).toBe('left');
+    layer.dispose();
+  });
+
+  it('keeps obstacles when the keep-out areas change', () => {
+    const { layer, wheel, camera } = sidedLayer();
+    layer.setObstacles(LEFT_HALF);
+    layer.setKeepOut([]);
+    layer.layout(camera);
+    expect(sideOf(wheel)).toBe('right');
+    layer.dispose();
+  });
+
+  it('keeps keep-out areas when the obstacles change', () => {
+    const { layer, wheel, camera } = sidedLayer();
+    layer.setKeepOut(LEFT_HALF);
+    layer.setObstacles([]);
+    layer.layout(camera);
+    expect(sideOf(wheel)).toBe('right');
     layer.dispose();
   });
 

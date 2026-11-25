@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { decodeFigure } from '@core/figure';
-import { RestFrame } from '../garments/restFrame';
+import { RestFrame } from '@core/figure/body/restFrame';
 import { OFF_FOOT, TOES, TOE_CHANNELS, toeFields } from './toeFields';
 
 const { athleteData } = await import('../figure/athlete.data');

@@ -46,6 +46,8 @@ export interface RetargetArm {
   wrist: Point;
   handAxis: Point;
   palm: Point;
+  curl: number;
+  handShape?: Readonly<Record<string, number>>;
 }
 
 export interface RetargetLeg {
@@ -54,12 +56,14 @@ export interface RetargetLeg {
   ankle: Point;
   footAxis: Point;
   sole: Point;
+  toeAxis: Point;
 }
 
 export interface RetargetTarget {
   arms: Record<Side, RetargetArm>;
   legs: Record<Side, RetargetLeg>;
   head: Rotation;
+  pelvisUp: Point;
 }
 
 export type Side = 'right' | 'left';
@@ -74,11 +78,6 @@ const NECK_SHARE = 0.45;
 const SPINE_PASSES = 3;
 const SHOULDER_PASSES = 3;
 const SHOULDER_DAMPING = 0.1;
-const PLANE_SAMPLES = 24;
-const PLANE_REFINES = 14;
-const GOLDEN_LOW = 0.382;
-const GOLDEN_HIGH = 0.618;
-const TURN = 2 * Math.PI;
 const DEGREE = Math.PI / 180;
 const ELBOW_PLANE: PlaneRange = { from: 0.5 * DEGREE, to: 3 * DEGREE };
 const KNEE_PLANE: PlaneRange = { from: 5 * DEGREE, to: 15 * DEGREE };
@@ -89,11 +88,25 @@ function point(): Point {
 }
 
 function arm(): RetargetArm {
-  return { shoulder: point(), elbow: point(), wrist: point(), handAxis: point(), palm: point() };
+  return {
+    shoulder: point(),
+    elbow: point(),
+    wrist: point(),
+    handAxis: point(),
+    palm: point(),
+    curl: 1,
+  };
 }
 
 function leg(): RetargetLeg {
-  return { hip: point(), knee: point(), ankle: point(), footAxis: point(), sole: point() };
+  return {
+    hip: point(),
+    knee: point(),
+    ankle: point(),
+    footAxis: point(),
+    sole: point(),
+    toeAxis: point(),
+  };
 }
 
 export function createRetargetTarget(): RetargetTarget {
@@ -101,6 +114,7 @@ export function createRetargetTarget(): RetargetTarget {
     arms: { right: arm(), left: arm() },
     legs: { right: leg(), left: leg() },
     head: { x: 0, y: 0, z: 0, w: 1 },
+    pelvisUp: point(),
   };
 }
 
@@ -108,7 +122,7 @@ function vec(p: Point): Vec {
   return [p.x, p.y, p.z];
 }
 
-interface Hinge {
+export interface Hinge {
   readonly parent: Mat;
   readonly bone: Vec;
   readonly pre: Mat;
@@ -161,7 +175,7 @@ function hingeBend(hinge: Hinge, distance: number): number {
 
 function solveHinge(hinge: Hinge, spin: number): HingeSolution {
   const bend = hingeBend(hinge, length(hinge.reach));
-  const span = normalize(add(hinge.bone, apply(hinge.pre, apply(rotZ(bend), hinge.next))));
+  const span = hingeSpan(hinge, bend);
   const aim = normalize(applyTransposed(hinge.parent, hinge.reach));
   const turn = mul(fromAxisAngle(aim, spin), shortestArc(span, aim));
   const upper = mul(hinge.parent, turn);
@@ -174,31 +188,17 @@ function solveHinge(hinge: Hinge, spin: number): HingeSolution {
   };
 }
 
-function middleMiss(hinge: Hinge, solution: HingeSolution): number {
-  return length(sub(apply(solution.upper, hinge.bone), hinge.middle));
+function hingeSpan(hinge: Hinge, bend: number): Vec {
+  return normalize(add(hinge.bone, apply(hinge.pre, apply(rotZ(bend), hinge.next))));
 }
 
-function planeSpin(hinge: Hinge): number {
-  const miss = (spin: number) => middleMiss(hinge, solveHinge(hinge, spin));
-  const step = TURN / PLANE_SAMPLES;
-  let best = 0;
-  let bestMiss = Infinity;
-  for (let i = 0; i < PLANE_SAMPLES; i++) {
-    const value = miss(wrap(i * step));
-    if (value < bestMiss) {
-      bestMiss = value;
-      best = wrap(i * step);
-    }
-  }
-  let low = best - step;
-  let high = best + step;
-  for (let i = 0; i < PLANE_REFINES; i++) {
-    const a = low + (high - low) * GOLDEN_LOW;
-    const b = low + (high - low) * GOLDEN_HIGH;
-    if (miss(a) < miss(b)) high = b;
-    else low = a;
-  }
-  return wrap((low + high) / 2);
+export function planeSpin(hinge: Hinge): number {
+  const aim = normalize(applyTransposed(hinge.parent, hinge.reach));
+  const span = hingeSpan(hinge, hingeBend(hinge, length(hinge.reach)));
+  const unspun = apply(shortestArc(span, aim), hinge.bone);
+  const wanted = applyTransposed(hinge.parent, hinge.middle);
+  const across = dot(unspun, wanted) - dot(unspun, aim) * dot(wanted, aim);
+  return wrap(Math.atan2(dot(aim, cross(unspun, wanted)), across));
 }
 
 function sharedSpin(hinge: Hinge, distal: DistalSolver): number {
@@ -222,6 +222,7 @@ export class Retargeter {
   private readonly index = new Map<string, number>();
   private readonly rootUnit: number;
   private readonly widthShift: Record<Side, Vec>;
+  private readonly toeSign: Record<Side, number>;
 
   constructor(figure: Figure) {
     this.figure = figure;
@@ -243,6 +244,13 @@ export class Retargeter {
       left: this.shift('l'),
     };
     this.out.fill(0);
+    this.toeSign = { right: this.restToeSign('r'), left: this.restToeSign('l') };
+  }
+
+  private restToeSign(p: string): number {
+    const ball = this.restRot(`${p}_ball`);
+    const ahead = sub(this.restPos(`${p}_ball`), this.restPos(`${p}_foot`));
+    return Math.sign(dot([ball[0], ball[3], ball[6]], ahead));
   }
 
   solve(target: RetargetTarget): Float32Array {
@@ -253,8 +261,10 @@ export class Retargeter {
     this.fitShoulders(target);
     SIDES.forEach((side) => this.solveArm(side, target.arms[side]));
     SIDES.forEach((side) => this.solveLeg(side, target.legs[side]));
+    this.solveToes(target);
     this.solveHead(target.head);
-    SIDES.forEach((side) => this.relaxHand(side));
+    SIDES.forEach((side) => this.relaxHand(side, target.arms[side].curl));
+    SIDES.forEach((side) => this.shapeHand(side, target.arms[side].handShape));
     return this.out;
   }
 
@@ -326,7 +336,8 @@ export class Retargeter {
   private solveRoot(target: RetargetTarget): void {
     const { right, left } = target.legs;
     const hips = midpoint(vec(right.hip), vec(left.hip));
-    const up = sub(this.shoulderCentre(target), hips);
+    const pelvisUp = vec(target.pelvisUp);
+    const up = length(pelvisUp) > 0 ? pelvisUp : sub(this.shoulderCentre(target), hips);
     const axis = sub(vec(left.hip), vec(right.hip));
     const restAxis = sub(this.restPos('l_upleg'), this.restPos('r_upleg'));
     const turn = mul(frame(axis, up), transpose(frame(restAxis, this.chord())));
@@ -553,6 +564,23 @@ export class Retargeter {
     this.set(`${p}_foot_lean1`, foot.values[1] / 2);
   }
 
+  private solveToes(target: RetargetTarget): void {
+    const aimed = SIDES.filter((side) => length(vec(target.legs[side].toeAxis)) > 0);
+    if (aimed.length === 0) return;
+    this.fk();
+    aimed.forEach((side) => {
+      const ball = this.rot(`${PREFIX[side]}_ball`);
+      const along = scale([ball[0], ball[3], ball[6]], this.toeSign[side]);
+      const axis: Vec = [ball[2], ball[5], ball[8]];
+      const toe = vec(target.legs[side].toeAxis);
+      const aim = sub(toe, scale(axis, dot(toe, axis)));
+      this.set(
+        `${PREFIX[side]}_ball_bend`,
+        Math.atan2(dot(cross(along, aim), axis), dot(along, aim)),
+      );
+    });
+  }
+
   private solveHead(head: Rotation): void {
     const wanted = mul(fromQuaternion(head.x, head.y, head.z, head.w), this.restRot('c_head'));
     const neckPre = this.pre('c_neck');
@@ -572,16 +600,24 @@ export class Retargeter {
     this.set('head_bend', hz);
   }
 
-  private relaxHand(side: Side): void {
+  private shapeHand(side: Side, hand: Readonly<Record<string, number>> | undefined): void {
+    if (!hand) return;
+    Object.entries(hand).forEach(([joint, value]) => {
+      const name = `${PREFIX[side]}_${joint}`;
+      if (this.figure.parameterIndex(name) >= 0) this.set(name, value);
+    });
+  }
+
+  private relaxHand(side: Side, share: number): void {
     const p = PREFIX[side];
     FINGERS.forEach((finger) => {
-      const curl = FINGER_CURL[finger];
+      const curl = FINGER_CURL[finger] * share;
       [1, 2, 3].forEach((i) => {
         const name = `${p}_${finger}${i}_rz`;
         if (this.figure.parameterIndex(name) >= 0) this.set(name, curl);
       });
     });
-    this.set(`${p}_thumb1_rz`, THUMB_CURL);
-    this.set(`${p}_thumb2_rz`, THUMB_CURL);
+    this.set(`${p}_thumb1_rz`, THUMB_CURL * share);
+    this.set(`${p}_thumb2_rz`, THUMB_CURL * share);
   }
 }

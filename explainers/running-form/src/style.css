@@ -1,0 +1,120 @@
+:root {
+  --pace: #6fa8e0;
+  --arms: #e8b84a;
+  --look: #3fbfae;
+}
+
+.gauge .readouts {
+  width: 15rem;
+}
+
+.foot-strip {
+  display: grid;
+  gap: 4px;
+  width: 15rem;
+  margin-top: 8px;
+}
+
+.foot-strip__row {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--muted) 22%, transparent);
+}
+
+.foot-strip__bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.foot-strip__playhead {
+  stroke: var(--text);
+  stroke-width: 2;
+}
+
+.foot-strip__caption {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  overflow-wrap: break-word;
+}
+
+.chapter .readouts {
+  --readout-min-width: 8rem;
+  margin-block: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.chapter .readouts > div,
+.chapter .readouts :is(dt, dd) {
+  min-width: 0;
+}
+
+.chapter .readouts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.chapter .readouts dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.chapter .readouts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.chapter-note {
+  margin-block: 12px 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.range-widget__header {
+  flex-wrap: wrap;
+}
+
+.range-widget__header label {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.chip[data-action='pace'] {
+  --tone: var(--pace);
+}
+
+.chip[data-action='arms'] {
+  --tone: var(--arms);
+}
+
+.chip[data-action='look'] {
+  --tone: var(--look);
+}
+
+@media (pointer: coarse) {
+  .chip[data-action] {
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapter .readouts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chapter .readouts > div:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}
+
+.scene-label__text {
+  width: max-content;
+  max-width: 9.5rem;
+  white-space: normal;
+  text-wrap: balance;
+}

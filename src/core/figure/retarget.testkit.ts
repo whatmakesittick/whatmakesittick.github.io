@@ -7,7 +7,6 @@ import type { Point, RetargetTarget, Side } from './retarget';
 import { apply, applyTransposed, cross, mul, normalize, scale, sub, transpose } from './rotations';
 import type { Mat, Vec } from './rotations';
 
-const FIXTURES = new URL('./fixtures/', import.meta.url);
 const PREFIX: Readonly<Record<Side, string>> = { right: 'r', left: 'l' };
 const PALM_SIDE: Readonly<Record<Side, number>> = { right: -1, left: 1 };
 const DOWN: Vec = [0, -1, 0];
@@ -18,11 +17,11 @@ interface SampleMeta {
   readonly poses: number;
 }
 
-export function loadSwimSamples(figure: Figure): Float32Array[] {
+export function loadSwimSamples(figure: Figure, fixtures: URL): Float32Array[] {
   const meta = JSON.parse(
-    readFileSync(new URL('swim-samples.json', FIXTURES), 'utf8'),
+    readFileSync(new URL('swim-samples.json', fixtures), 'utf8'),
   ) as SampleMeta;
-  const file = readFileSync(new URL('swim-samples.bin', FIXTURES));
+  const file = readFileSync(new URL('swim-samples.bin', fixtures));
   const raw = new Int16Array(file.buffer.slice(file.byteOffset, file.byteOffset + file.byteLength));
   return Array.from({ length: meta.poses }, (_, pose) => {
     const parameters = figure.createParameters();
@@ -114,6 +113,11 @@ export class TargetReader {
       sub(DOWN, scale(axis, DOWN[0] * axis[0] + DOWN[1] * axis[1] + DOWN[2] * axis[2])),
     );
     set(leg.sole, apply(this.turn(`${p}_transversetarsal`), sole));
+    const ball = this.rotation(this.index(`${p}_ball`));
+    const rest = this.restRotations[this.index(`${p}_ball`)];
+    const ahead = sub(this.rest(`${p}_ball`), this.rest(`${p}_foot`));
+    const sign = Math.sign(rest[0] * ahead[0] + rest[3] * ahead[1] + rest[6] * ahead[2]);
+    set(leg.toeAxis, scale([ball[0], ball[3], ball[6]], sign));
   }
 }
 

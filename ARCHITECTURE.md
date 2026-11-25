@@ -247,7 +247,9 @@ makes a dimmed material transparent, and that flip needs a second shader program
 So after the first frame, in idle time, `compileFadedVariants` in `materials.ts`
 turns every opaque dimmable material transparent for one more `compileAsync` and
 turns it back, and a chapter change then finds both programs ready instead of
-compiling mid-frame. Core owns the frame loop and
+compiling mid-frame. A part that patches a built-in material's shader goes through
+`chainShaderPatch` in `shaderPatch.ts`, which keeps the earlier `onBeforeCompile` hook and
+extends the program cache key, and writes shader constants with `glslFloat`. Core owns the frame loop and
 draws on demand: a frame runs only when something asked for one. In a frame it
 ticks the store, runs the explainer's frame updates, eases the highlighter and the
 camera, hides the labels whose anchor is out of sight, renders and lays out the
@@ -353,7 +355,10 @@ as a thread, and through the labelled part itself. A mesh belongs to the part wh
 group its material has in the material library, the same grouping the highlighter
 dims by, so the explainers mark nothing extra. A scene whose shader discards part
 of a mesh, such as a section cut, passes `occlusionHitFilter` in its scene options:
-the ray then drops the hits the filter rejects and looks for the next one behind. `OCCLUSION_RULE` in `occlusion.ts`
+the ray then drops the hits the filter rejects and looks for the next one behind. A dense plain
+mesh is tested through a bounds tree that `OcclusionRays` builds once and refits whenever the
+position attribute changes, so a mesh reshaped on the CPU, such as a figure's body, stays cheap
+to test. `OCCLUSION_RULE` in `occlusion.ts`
 keeps a label steady: a blocker must sit 3 % of the anchor's distance in front of
 it to hide the label and 1.5 % to keep it hidden, and the new verdict must hold for
 0.6 s to hide the label and 0.15 s to show it again, so a part that swings past or
@@ -437,7 +442,9 @@ DOM, so a frame forces no style or layout work. A new size asks for a frame.
 The layout keeps labels off the stage overlays. `watchKeepOut` in `keepOut.ts` measures
 the expand button, the gauge and the dock in the label frame's coordinates. It does this
 only when one of them or the frame resizes, or when the stage expands or collapses; the
-shell passes the areas to `labels.setKeepOut`. `layoutLabels` in `labelLayout.ts` places the labels in priority order (from
+shell passes the areas to `labels.setKeepOut`. An explainer that draws its own boxes over
+the scene passes them to `labels.setObstacles`; the layer keeps the two lists apart, so
+neither caller overwrites the other. `layoutLabels` in `labelLayout.ts` places the labels in priority order (from
 `createLabelVisibility`, then top to bottom). On each side it finds the free spot nearest
 the label's own height, up or down with ties going down, clear of the keep-out areas, the
 labels already placed and the top and bottom of the view. A label keeps its own side unless
@@ -467,6 +474,23 @@ the MHR forward pass: parameter transform, forward kinematics, pose correctives 
   the previous frame.
 - The data module (`*.data.ts`, made by `scripts/human-body`) is large. Load it only with a dynamic `import()` in its
   own lazy chunk, never statically, or the JavaScript budget in the site check fails.
+- `src/core/figure/body` is the three.js side, shared by the explainers that show a figure; the rest of
+  `src/core/figure` stays free of three.js classes. `FigureBody` takes the part rules, the extra static vertex
+  attributes and the material lookup as options. `createGarmentPatcher` takes the garment list: roughness, GLSL paint
+  calls, attribute names and an optional label. `hems.ts` has the signed-distance helpers and `vertexFields`; the
+  dimensions and hems of each garment stay in the explainer. `labelLayout`, `labelFields` and `labelTexture` take the
+  head axes, the dimensions and the text. `PartBuilder` takes the finishes and the id type. `FigureRig` takes the
+  matrix from rig to figure space and a `RigPose` (arms, legs, head; a leg may add a toe axis that bends the toes at
+  the ball, an arm may add a hand shape of finger parameters by name, and the pose may give the pelvis direction,
+  otherwise the pelvis follows the hips-to-shoulders line). `RestFrame`, `attachToJoint` (a per-frame updater
+  for an object built in the rest pose) and `outermostHit` place things on the rest body. `src/core/rig` holds the
+  pure rig helpers `solveTwoBone` and the key curves.
+- Chunks: modules under `src/core/figure` and `src/core/rig` get a chunk each (`figure`, `rig`) and are never part of
+  `three`, `shared`, `scene` or `embed` (`ownChunkOf` in `vite/chunks.ts`), so an explainer pays for them only when it
+  imports them. Import `@core/figure/body/*` only from the explainer's lazy figure module, next to the data module,
+  as the freestyle swimmer does in `loadFigure.ts`.
+- Core tests that load body data run once per entry of `TEST_BODIES` (`bodies.testkit.ts`): the data loader, the vertex
+  count and the fixture folders. Another body is one more entry.
 - The licence text is `scripts/human-body/MHR-LICENSE.txt`; `THIRD_PARTY_NOTICES.md` carries the notice for the data.
 - Clothing that hugs the skin is not extra geometry: an explainer stores per-vertex signed distances to each hem,
   measured once in the rest pose, and a material patch paints the garment colour where they are positive. Colours that

@@ -24,8 +24,10 @@ export function frameBox(
   direction: Vector3,
   slopes: FramingSlopes,
   margin: number,
+  focus?: Vector3,
 ): CameraPose {
   const center = box.getCenter(new Vector3());
+  if (focus) center.add(focus);
   const forward = direction.clone().negate();
   const right = new Vector3().crossVectors(forward, UP).normalize();
   const up = new Vector3().crossVectors(right, forward);

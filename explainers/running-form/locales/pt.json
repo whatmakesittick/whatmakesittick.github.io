@@ -1,0 +1,317 @@
+{
+  "meta": {
+    "title": "Técnica de corrida: como funciona uma boa passada",
+    "eyebrow": "Biologia e física",
+    "tagline": "Correr é uma sequência de saltos num pé só, e uma boa técnica mantém a mola da perna trabalhando com pouco gasto.",
+    "description": "Veja a passada de um corredor em 3D: como a perna pisa, vira mola e impulsiona, e o que a pesquisa diz sobre cadência, postura e braços.",
+    "summary": "As quatro fases da passada, o contato com o solo, a perna como mola, a impulsão e a fase aérea, a postura e os braços, e como a técnica muda com o ritmo.",
+    "socialAlt": "Um corredor visto de frente numa estrada à beira-mar ao nascer do sol, com o sol baixo sobre o mar e uma sombra longa no asfalto, ao lado do título Técnica de corrida: como funciona uma boa passada"
+  },
+  "stage": {
+    "label": "Modelo interativo da técnica de corrida",
+    "gauge": "Cadência, comprimento do passo e força no solo em tempo real"
+  },
+  "timeline": {
+    "label": "Passada",
+    "phases": "Ir para uma fase da perna direita",
+    "value": "{{percent}} %",
+    "during": "{{percent}} %, perna direita: {{phase}}",
+    "speed": "Reprodução",
+    "speedValue": "{{factor}}×",
+    "realTime": "Tempo real",
+    "slower": "{{factor}} vezes mais devagar",
+    "phase": {
+      "landing": "Amortecimento",
+      "pushOff": "Impulsão",
+      "recovery": "Recuperação",
+      "reach": "Avanço"
+    },
+    "jump": {
+      "landing": "Ir para o pé tocando o chão",
+      "pushOff": "Ir para o meio do apoio, quando começa o empurrão",
+      "recovery": "Ir para o pé saindo do chão",
+      "reach": "Ir para o meio do avanço, quando a perna começa a descer"
+    }
+  },
+  "controls": {
+    "label": "Controles do modelo",
+    "pace": "Ritmo",
+    "groups": {
+      "pace": "Ritmo",
+      "arms": "Braços",
+      "look": "Câmera"
+    },
+    "paceNames": {
+      "easy": "Leve",
+      "steady": "Moderado",
+      "fast": "Rápido"
+    },
+    "paceOptions": {
+      "easy": "Leve, 6:40 por km",
+      "steady": "Moderado, 4:46 por km",
+      "fast": "Rápido, 3:42 por km"
+    },
+    "armsOptions": {
+      "swing": "Braços soltos",
+      "held": "Braços cruzados"
+    },
+    "lookOptions": {
+      "front": "De frente",
+      "above": "De cima"
+    },
+    "views": {
+      "labels": {
+        "name": "Rótulos",
+        "short": "Rótulos",
+        "hint": "Rótulos das partes (L)"
+      },
+      "forces": {
+        "name": "Forças",
+        "short": "Forças",
+        "hint": "Força do solo sobre o pé (F)"
+      },
+      "formLines": {
+        "name": "Linhas da técnica",
+        "short": "Linhas",
+        "hint": "Linha do corpo, linha da canela e ângulos das articulações (G)"
+      },
+      "footPath": {
+        "name": "Trajeto do pé",
+        "short": "Pé",
+        "hint": "Trajeto do pé direito ao lado do quadril (H)"
+      },
+      "follow": {
+        "name": "Acompanhar o corredor",
+        "short": "Acompanhar",
+        "hint": "A câmera acompanha o corredor (O)"
+      }
+    },
+    "stepRate": {
+      "label": "Cadência na mesma velocidade"
+    }
+  },
+  "readouts": {
+    "feet": "Pé no chão",
+    "force": "Força no solo",
+    "knee": "Flexão do joelho direito",
+    "cadence": "Cadência",
+    "stepLength": "Comprimento do passo",
+    "contact": "Tempo de contato",
+    "floatShare": "Os dois pés no ar: {{percent}} % da passada"
+  },
+  "gauge": {
+    "feetRight": "Direito",
+    "feetLeft": "Esquerdo",
+    "feetAir": "Nenhum"
+  },
+  "units": {
+    "metersPerSecond": "{{value}} m/s",
+    "perMinute": "{{value}} passos/min",
+    "perKilometer": "{{value}} por km",
+    "meters": "{{value}} m",
+    "centimeters": "{{value}} cm",
+    "centimetersSigned": "{{value}} cm",
+    "milliseconds": "{{value}} ms",
+    "degrees": "{{value}}°",
+    "bodyWeights": "{{value}} × peso corporal",
+    "percent": "{{value}} %",
+    "signedPercent": "{{value}} %"
+  },
+  "parts": {
+    "head": "Olhe à frente",
+    "shoulder": "Ombros soltos",
+    "arm": "Braços equilibram",
+    "elbow": "Cotovelos a 90°",
+    "trunk": "Leve inclinação",
+    "pelvis": "Quadril gira oposto",
+    "hip": "Quadril abre atrás",
+    "thigh": "Coxa freia",
+    "knee": "Joelho faz mola",
+    "shin": "Panturrilha empurra",
+    "achilles": "Aquiles devolve",
+    "arch": "Arco volta à forma",
+    "heel": "Calcanhar sobe",
+    "shoe": "Pise perto de você",
+    "road": "Passos mais longos"
+  },
+  "overlay": {
+    "lean": "Inclinação {{value}}°",
+    "shin": "Linha da canela",
+    "kneeBend": "Joelho {{value}}°",
+    "elbowBend": "Cotovelo {{value}}°",
+    "braking": "Frenagem",
+    "pushing": "Empurrão",
+    "bodyWeight": "1 × peso corporal",
+    "forceNow": "Força {{value}} × peso corporal",
+    "footPath": "Trajeto do pé",
+    "bodyLine": "Linha do corpo"
+  },
+  "sections": {
+    "stride": {
+      "title": "A passada",
+      "p1": "Olhe o corredor na estrada à beira-mar, ao nascer do sol. Correr é uma sequência de saltos num pé só. Uma perna toca o chão, cede um pouco e lança o corpo para o alto de novo. Aí os dois pés saem do chão. Esse instante no ar, a <strong>fase aérea</strong>, é o que faz da corrida uma corrida. Na caminhada, sempre há um pé no chão.",
+      "p2": "Uma <strong>passada</strong> reúne os dois passos, do toque do pé direito até o toque seguinte do mesmo pé. A perna direita passa por quatro fases. No <strong>amortecimento</strong>, o pé toca o chão e a perna cede. Na <strong>impulsão</strong>, a perna empurra até o pé sair do chão. Na <strong>recuperação</strong>, o calcanhar sobe e o joelho vem para a frente. No <strong>avanço</strong>, a perna se estende à frente e desce de novo. A perna esquerda faz o mesmo meia passada depois.",
+      "p3": "O <strong>apoio</strong> é o tempo em que o pé fica no chão. No meio do apoio, o empurrão do chão deixa de frear e passa a levar você para a frente. No meio do avanço, o joelho da perna que vai à frente fica mais dobrado. As faixas coloridas da linha do tempo valem para o ritmo moderado. Nos outros ritmos, os limites mudam um pouco.",
+      "p4": "Nestes dados, cada pé fica no chão de 34 a 41 por cento da passada, cerca de um terço a dois quintos, e por menos tempo quanto mais rápido você corre. Depois é a vez do outro pé. Entre os dois vêm duas fases aéreas curtas, que somam de 19 a 32 por cento da passada. O corpo fica mais baixo perto do meio do apoio e mais alto no meio da fase aérea. Na caminhada é o contrário: você fica mais alto no meio do passo.",
+      "p5": "A velocidade é a <strong>cadência</strong>, os passos que você dá por minuto, vezes o <strong>comprimento do passo</strong>, a distância de um passo, dividido por 60. Os três ritmos têm nomes do próprio modelo, não são ritmos de prova: o leve aqui é 6:40 por quilômetro e o rápido é 3:42. O medidor mostra o empurrão do chão em múltiplos do peso corporal, isto é, quantas vezes o seu próprio peso.",
+      "p6": "Os ângulos da perna são médias de 31 a 39 corredores de competição na esteira, calculadas e ajustadas de novo para a exibição, por isso um corredor de verdade se move de outro jeito. Os dados não trazem nada sobre a parte de cima do corpo, por isso o modelo a move por regras. A estrada, o mar e o sol são um desenho, não um lugar."
+    },
+    "touchdown": {
+      "title": "O contato com o solo",
+      "p1": "A imagem para no <strong>contato inicial</strong>, o primeiro instante em que o pé encontra a estrada. O pé pisa à frente do quadril, com o joelho um pouco dobrado, de 11 a 13 graus, e o pé quase plano ou com o calcanhar primeiro. As forças e as linhas da técnica estão ligadas: a seta mostra o que a estrada faz com você, e a linha acompanha a canela. A tecla F desliga as forças e a G, as linhas.",
+      "p2": "Por um instante, a estrada empurra você para trás. É a <strong>frenagem</strong>, e ela é pequena. Aqui, 1 <strong>peso corporal</strong> é a força que o seu próprio peso faz sobre o chão. No pico, a frenagem fica entre 0,2 e 0,4 desse valor. O empurrão para cima é bem maior, como mostra o próximo capítulo.",
+      "p3": "Há quem pise primeiro com o calcanhar, com o meio do pé ou com a ponta. Cerca de 9 em cada 10 corredores recreativos de rua pisam de calcanhar. Entre os maratonistas homens de elite de um Mundial, eram de 55 a 70 por cento. O corredor do modelo pisa mais para o lado do calcanhar, como o corredor médio dos dados.",
+      "p4": "Nenhum jeito de pisar mostrou ser melhor. Corredores de estilos diferentes gastavam quase a mesma energia, e quem pisava de calcanhar e foi levado a mudar gastou mais por um tempo. A pisada de calcanhar causa um primeiro pico de força mais agudo, mas com tênis de corrida ele sobe quase tão devagar quanto na pisada de antepé. Não se sabe se isso importa para as lesões.",
+      "p5": "Agora experimente o controle deslizante. Ele muda a cadência e mantém a velocidade. O lado lento mostra o passo longo demais, o chamado <strong>overstriding</strong>: o pé cai bem à frente do corpo. Num estudo de laboratório com corredores recreativos, 10 por cento mais passos deixaram o calcanhar cerca de 2 cm mais perto e reduziram em cerca de 16 por cento a frenagem total ao longo do passo, o impulso de frenagem. O modelo aplica isso nos três ritmos.",
+      "p6": "<strong>Experimente:</strong> estenda a perna um pouco menos, em geral com passos um pouco mais rápidos, para o pé tocar o chão mais perto de você. Mais perto, e não embaixo do corpo: nos estudos que mediram isso, o pé ainda pisa à frente. Quanta certeza existe? Testes curtos de laboratório mostram menos frenagem com passos mais rápidos. Num estudo com 74 mulheres, as maiores forças de frenagem vieram com mais lesões, uma relação, não uma causa."
+    },
+    "spring": {
+      "title": "A mola",
+      "p1": "Depois do contato, a perna não fica dura. O joelho dobra, o corpo desce e a perna empurra de volta, como uma mola com você em cima. Nestes dados, o joelho dobra no máximo de 43 a 45 graus. As forças estão ligadas, e a tecla F as desliga. Percorra o apoio e veja a seta crescer e sumir.",
+      "p2": "No pico, a estrada empurra você para cima com cerca de 2,3 a 2,6 vezes o peso corporal, um pouco mais nos ritmos mais rápidos. O pico vem um pouco antes do meio do apoio. O contato dura cerca de um quarto de segundo: de 0,23 a 0,30 s pela conta do modelo. A linha de força no painel segue a curva dos próprios dados.",
+      "p3": "Numa simulação de computador com dez corredores de fundo, os músculos da coxa fizeram a maior parte da frenagem no amortecimento, e os músculos da panturrilha, a maior parte do empurrão. A 5 m/s, só o sóleo, um músculo da panturrilha, já empurrava para cima com cerca de 2 vezes o peso corporal.",
+      "p4": "Os tendões também ajudam. O tendão de Aquiles e o arco do pé se esticam no começo do passo, guardam energia e a devolvem depois, como uma bola que quica. Isso poupa trabalho dos músculos. Não há uma medida confiável de quanto eles poupam, por isso esta página não mostra número.",
+      "p5": "<strong>Experimente:</strong> pise macio e deixe o joelho ceder, em vez de endurecer contra o chão. Ceder não é o mesmo que dobrar mais: no laboratório, passos mais rápidos dobraram menos o joelho. É conselho de treinadores. Ninguém o testou direito, mas ele combina com a imagem da perna como uma mola."
+    },
+    "liftoff": {
+      "title": "Impulsão e fase aérea",
+      "p1": "Na segunda metade do apoio, a perna impulsiona você para cima e para a frente, e a panturrilha faz boa parte do trabalho. O quadril se abre só um pouco. A linha do ângulo do quadril mostra o ângulo da articulação, entre a coxa e a pelve. O zero é o quadril de quem está em pé, reto, e menos significa que ele abriu mais. A pelve se inclina para a frente quando você corre, então a coxa já aponta para trás no zero. A linha chega a cerca de menos 10 graus no ritmo rápido, logo depois que o pé sai do chão.",
+      "p2": "Agora os dois pés estão no ar, e o corpo voa como uma bola arremessada. Pela conta do modelo, cada fase aérea dura de 0,07 a 0,11 s. A câmera fica atrás de você e o trajeto do pé está ligado: o caminho do pé direito visto do quadril, uma volta, e não o caminho sobre a estrada. A tecla H o desliga.",
+      "p3": "O corpo também quica. O modelo estima a subida em cerca de 8 cm por passo no ritmo moderado, calculada a partir da força medida. Estudos de laboratório mediram de 8 a 9 cm. Neste capítulo a câmera fica parada em relação à estrada, então você vê o quique contra ela. A tecla O prende a câmera ao corredor.",
+      "p4": "De novo o controle deslizante. Com 10 por cento mais passos na mesma velocidade, o quique ficou 16 por cento menor num estudo de laboratório, e o joelho absorveu cerca de um terço menos energia no contato. Com menos passos, mais longos, o quique aumentou. A estimativa do modelo dá quase a mesma mudança. O estudo usou 45 corredores recreativos, testes curtos, e as lesões ficaram de fora.",
+      "p5": "<strong>Experimente:</strong> dê passos um pouco mais rápidos e curtos em vez de longos e saltados, e empurre para trás o bastante, não o máximo possível. Somar 5 a 10 por cento à cadência por algumas corridas reduziu a carga no joelho em testes curtos de laboratório. Uma revisão liga menos extensão da perna na saída do pé a uma economia melhor, ou seja, menos energia gasta na mesma velocidade. Mais curto nem sempre é melhor: num teste antigo, cada corredor já escolhia um passo perto do mais econômico."
+    },
+    "posture": {
+      "title": "Postura e braços",
+      "p1": "Fique alto, com uma leve inclinação para a frente. É o conselho comum, e a pesquisa por trás dele é pouca. Num estudo com 24 corredores recreativos, o tronco ficou inclinado cerca de 7 graus para a frente, e o modelo usa isso como média. Em outro estudo pequeno, a inclinação variava de 6 a 8 graus a cada passo, por isso o valor no painel se mexe. A inclinação vem do quadril, da pelve e do tronco juntos, não dos tornozelos.",
+      "p2": "Os treinadores mandam olhar para o horizonte e manter os ombros relaxados. Isso é tradição, não medição. A pelve não fica parada. Ela se inclina para a frente e para trás. Cai um pouco do lado da perna que balança. Gira, e o peito gira no sentido contrário. Olhe de cima para ver a torção. Ela vem de um estudo pequeno.",
+      "p3": "Os braços balançam contra as pernas: quando a perna esquerda vai à frente, o braço direito também vai. Dois estudos de computador, feitos com dados de laboratório, acharam que a torção dos braços era quase igual à das pernas e de sentido oposto. Os braços não levam você para a frente: numa simulação, eles somaram menos de 1 por cento do empurrão. Escolha os braços cruzados e olhe de cima: os ombros e o quadril giram mais, embora o tamanho seja só um palpite grosseiro.",
+      "p4": "Não há consenso sobre se os braços soltos poupam energia. Num laboratório, correr com as mãos atrás das costas custou cerca de 3 por cento mais energia, com os braços cruzados sobre o peito cerca de 9 e com as mãos na cabeça cerca de 13. Um estudo mais antigo não achou diferença.",
+      "p5": "Os treinadores ensinam cotovelos dobrados, num ângulo reto ou um pouco menor, e a média de 90 graus do modelo segue esse conselho. As fontes falam de 60 a 90 graus, e não se conhece um ângulo melhor. O cotovelo do modelo abre e fecha cerca de 40 graus ao longo do balanço, a única faixa medida, num ritmo rápido. Ele fica mais dobrado quando o braço está à frente. O balanço do braço em si é escolha do modelo.",
+      "p6": "<strong>Experimente:</strong> corra alto, com uma leve inclinação, olhos no horizonte e ombros soltos. Balance os braços para a frente e para trás, com os cotovelos dobrados, e não cruzados sobre o peito. Quanta certeza existe? A postura e o cotovelo dobrado são tradição de treinadores, com pouca pesquisa. Os braços cruzados não têm número próprio, mas num laboratório custaram mais energia."
+    },
+    "pace": {
+      "title": "Ritmo",
+      "p1": "Escolha cada ritmo, um de cada vez. Nestes dados, quanto mais rápido, mais de quase tudo: mais passos, passos mais longos, fases aéreas mais longas, um empurrão mais forte e a perna mais alta na recuperação, e menos tempo no chão. As linhas ao lado do texto mostram os números. Leve e rápido são nomes do modelo, não uma medida do seu esforço.",
+      "p2": "A maior parte da velocidade extra vem de passos mais longos, não de mais rápidos. Num laboratório, de 2 a 5 m/s, a cadência subiu cerca de 21 por cento, enquanto o comprimento do passo dobrou.",
+      "p3": "Você talvez já tenha ouvido que 180 passos por minuto é o número certo. Ele vem da contagem de um treinador com corredores de elite numa Olimpíada, e quase todos davam mais passos que isso. É uma história de segunda mão, e trata de corredores rápidos. Cada corredor tem a sua cadência, de cerca de 160 a 210 passos por minuto, e muitos corredores rápidos dão de 170 a 190. É um resultado de correr rápido, não uma meta.",
+      "p4": "Num teste antigo de laboratório com dez corredores, o comprimento de passo de cada um ficava perto do que gastava menos oxigênio, e forçar um passo mais longo ou mais curto custava energia. A largura do passo também conta: cruzar os pés ou pisar com eles muito afastados custou de 3 a 15 por cento mais energia num laboratório. Por isso o controle deslizante mostra o que muda, não o que perseguir.",
+      "p5": "Para achar a sua cadência, conte os passos de um pé por 30 segundos e multiplique por quatro. Uma maratona a 3,5 m/s são cerca de 35 mil passos.",
+      "p6": "O ritmo rápido está perto do que correram os maratonistas do Mundial de 2017: médias de grupo de 28 homens, de 4,3 a 4,8 m/s, com 180 a 184 passos por minuto. O recorde mundial masculino da maratona é ainda mais rápido.",
+      "p7": "O que vale a pena testar? Corra alto, com uma leve inclinação, olhos à frente e ombros soltos, com os braços balançando para a frente e para trás. Pise um pouco mais perto de você e deixe o joelho ceder. Experimente uma cadência de 5 a 10 por cento maior por algumas corridas. Parte disso foi medida e parte é tradição de treinadores, e nada disso promete proteger de lesões. São ajustes pequenos, não uma reforma. Mude uma coisa de cada vez e fique com o que parecer fácil."
+    }
+  },
+  "chapters": {
+    "stride": {
+      "speed": "Velocidade",
+      "cadence": "Cadência",
+      "step": "Comprimento do passo",
+      "sum": "A conta do modelo",
+      "sumValue": "{{cadence}} × {{step}} m ÷ 60 = {{speed}} m/s",
+      "phase": "Perna direita agora",
+      "float": "As duas fases aéreas juntas",
+      "cycle": "Uma passada",
+      "cycleValue": "dois passos, cerca de 0,67 a 0,75 s",
+      "floats": "Fases aéreas",
+      "floatsValue": "duas por passada, juntas cerca de 19 a 32 por cento nestes dados",
+      "data": "De onde vêm as curvas",
+      "dataValue": "curvas das articulações de 31 a 39 corredores, dados públicos",
+      "dataSource": "Curvas das articulações e forças no solo: Fukuchi, Fukuchi and Duarte (2017), PeerJ 5:e3298, doi:10.7717/peerj.3298. Dados: doi:10.6084/m9.figshare.4543435.v5, licença Creative Commons Attribution 4.0. Médias reajustadas para a exibição."
+    },
+    "touchdown": {
+      "rate": "Mudança na cadência",
+      "rateLabel": "Cadência na mesma velocidade",
+      "cadence": "Cadência",
+      "step": "Comprimento do passo",
+      "reach": "Onde o pé pisa, mudança (menos é mais perto)",
+      "reachSame": "sem mudança",
+      "knee": "Flexão do joelho no contato inicial",
+      "brake": "Pico da força de frenagem (estimativa do modelo)",
+      "impulse": "Frenagem total no passo, mudança",
+      "strikes": "Pisada de calcanhar",
+      "strikesValue": "cerca de 9 em cada 10 corredores recreativos; 55 a 70 por cento dos homens de elite",
+      "strikeImpact": "Primeiro pico, em testes de laboratório",
+      "strikeImpactValue": "calcanhar cerca de 1,7 a 1,9; antepé cerca de 0,6 vez o peso corporal",
+      "strikeEconomy": "Tipo de pisada e gasto de energia",
+      "strikeEconomyValue": "nenhum tipo é melhor; mudar à força gastou mais energia no início",
+      "reachStudy": "Onde o pé pisa, num estudo",
+      "reachStudyValue": "cerca de 2 cm mais perto com 10 por cento mais passos",
+      "brakeInjury": "Frenagem e lesões",
+      "brakeInjuryValue": "um estudo com 74 mulheres ligou frenagem alta a lesões"
+    },
+    "spring": {
+      "force": "Força no solo agora",
+      "knee": "Flexão do joelho direito agora",
+      "peak": "Pico da força no solo neste ritmo",
+      "contact": "Tempo de contato",
+      "phase": "Perna direita agora",
+      "tendon": "Tendão de Aquiles e arco do pé",
+      "tendonValue": "guardam energia no início e a devolvem depois; sem número aqui",
+      "muscles": "Quem faz o trabalho",
+      "musclesValue": "coxas: maior parte da frenagem; panturrilhas: maior parte do empurrão",
+      "calf": "Panturrilha a 5 m/s",
+      "calfValue": "só o sóleo empurra com cerca de 2 vezes o peso corporal",
+      "kneeBend": "Flexão do joelho no amortecimento",
+      "kneeBendValue": "cerca de 43 a 45 graus nos três ritmos",
+      "impact": "Pico da força para cima",
+      "impactValue": "cerca de 2,3, 2,5 e 2,6 vezes o peso corporal nos três ritmos"
+    },
+    "liftoff": {
+      "rate": "Mudança na cadência",
+      "rateLabel": "Cadência na mesma velocidade",
+      "bounce": "Subida do corpo por passo, estimativa do modelo",
+      "flight": "Uma fase aérea",
+      "hip": "Ângulo do quadril, coxa contra pelve",
+      "cadence": "Cadência",
+      "step": "Comprimento do passo",
+      "bounceStudy": "Subida do corpo nos estudos",
+      "bounceStudyValue": "cerca de 9 cm; cerca de 7 cm com 10 por cento mais passos",
+      "hipPeak": "Quadril mais aberto",
+      "hipPeakValue": "alguns graus além do zero, mais no ritmo rápido (cerca de 10)",
+      "economy": "Extensão da perna e economia",
+      "economyValue": "menos extensão na saída do pé vai com menos energia gasta, numa revisão",
+      "kneeEnergy": "Energia do joelho no contato",
+      "kneeEnergyValue": "cerca de um terço menos com 10 por cento mais passos",
+      "cadenceStudy": "O estudo da cadência",
+      "cadenceStudyValue": "testes curtos, 45 corredores recreativos numa só velocidade"
+    },
+    "posture": {
+      "lean": "Inclinação do tronco agora",
+      "twist": "Peito contra pelve, amplitude, estimativa grosseira",
+      "elbow": "Ângulo do cotovelo direito (modelo)",
+      "arm": "Balanço do braço direito, positivo é à frente (modelo)",
+      "arms": "Braços",
+      "armCost": "Gasto extra de energia, um laboratório",
+      "armCostValue": "3 por cento mãos atrás das costas, 9 braços sobre o peito, 13 mãos na cabeça",
+      "armPush": "Empurrão dos braços",
+      "armPushValue": "menos de 1 por cento do empurrão, numa simulação",
+      "momentum": "Para que servem os braços",
+      "momentumValue": "a torção dos braços é quase igual à das pernas e oposta, em duas simulações",
+      "elbowRule": "Ângulo do cotovelo",
+      "elbowRuleValue": "dobrado, perto de um ângulo reto: conselho de treinadores, não medido",
+      "leanEvidence": "Inclinação e as provas",
+      "leanEvidenceValue": "uma leve inclinação é muito ensinada; a pesquisa é pouca",
+      "heldTwist": "Torção com os braços cruzados",
+      "heldTwistValue": "cerca de 1,7 vez maior, estimativa grosseira de uma simulação"
+    },
+    "pace": {
+      "speed": "Velocidade",
+      "km": "Ritmo por km",
+      "cadence": "Cadência",
+      "step": "Comprimento do passo",
+      "contact": "Tempo de contato",
+      "float": "Uma fase aérea",
+      "knee": "Flexão máxima do joelho no avanço",
+      "force": "Pico da força no solo",
+      "lean": "Inclinação do tronco agora",
+      "elites": "Seis homens quenianos de elite",
+      "elitesValue": "cerca de 175 passos por minuto a 3,5 m/s, 185 a 4,5",
+      "cadenceRange": "Passos por minuto",
+      "cadenceRangeValue": "de 160 a 210 por pessoa; muitos corredores rápidos, 170 a 190",
+      "stride": "Seu comprimento de passo",
+      "strideValue": "o seu passo natural é perto do mais econômico; pequenas mudanças custam pouco",
+      "marathon": "Recorde masculino da maratona",
+      "marathonValue": "1:59:30 (Sawe, Londres, 26 de abril de 2026), 5,88 m/s"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import type { Material, WebGLProgramParametersWithUniforms } from 'three';
+import { chainShaderPatch, glslFloat } from '@core/scene/shaderPatch';
 import { TOES } from './toeFields';
 import type { ToeFields } from './toeFields';
 
@@ -17,8 +18,10 @@ const TOE_LOOK = {
   bandToPixels: 6,
 } as const;
 
+const GLSL_DIGITS = 5;
+
 function glsl(value: number): string {
-  return value.toFixed(5);
+  return glslFloat(value, GLSL_DIGITS);
 }
 
 function array(values: readonly number[]): string {
@@ -107,8 +110,6 @@ const FRAGMENT_NORMAL = /* glsl */ `
 }
 `;
 
-const patched = new WeakSet<Material>();
-
 function inject(source: string, anchor: string, addition: string): string {
   if (!source.includes(anchor)) throw new Error(`Shader anchor missing: ${anchor}`);
   return source.replace(anchor, `${anchor}\n${addition}`);
@@ -132,17 +133,7 @@ function toeShader(shader: WebGLProgramParametersWithUniforms, edges: number[]):
 }
 
 export function applyToes<M extends Material>(material: M, fields: ToeFields): M {
-  if (patched.has(material)) return material;
-  patched.add(material);
   const { low, high } = fields.edges;
   const edges = [low.base, low.slope, high.base, high.slope];
-  const compile = material.onBeforeCompile.bind(material);
-  const cacheKey = material.customProgramCacheKey.bind(material);
-  material.onBeforeCompile = (shader, renderer) => {
-    compile(shader, renderer);
-    toeShader(shader, edges);
-  };
-  material.customProgramCacheKey = () => `${cacheKey()}|toes`;
-  material.needsUpdate = true;
-  return material;
+  return chainShaderPatch(material, 'toes', (shader) => toeShader(shader, edges));
 }

@@ -1,33 +1,20 @@
-import { Group, Vector3 } from 'three';
-import type { Object3D, Matrix4 } from 'three';
-import type { Steps } from '@core/scene/pacing';
+import { Vector3 } from 'three';
+import type { Group, Object3D, Matrix4 } from 'three';
 import type { PartId } from '../../../ids';
 import { BODY } from '../../rig/constants';
 import type { Skeleton } from '../../rig/skeleton';
-import type { PartContext } from '../context';
-import { GARMENT_COLORS } from '../../finishes';
-import { PartBuilder } from './build';
-import { FigureBody } from './figureBody';
-import { Goggles } from './garments/goggles';
-import { toeFields } from './feet/toeFields';
-import { applyToes } from './feet/toeShader';
-import { applyGarments } from './garments/garmentShader';
-import { labelFields, labelLayout } from './garments/label';
-import { labelTexture } from './garments/labelTexture';
-import { garmentFields } from './garments/regions';
-import { RestFrame } from './garments/restFrame';
+import type { FigureBody } from '@core/figure/body/figureBody';
+import type { Goggles } from './garments/goggles';
 import type { FigureRig } from './figure/figureRig';
 
-const LABEL_IDS = ['hand', 'forearm', 'elbow', 'shoulder', 'head', 'hips', 'foot'] as const;
+export const LABEL_IDS = ['hand', 'forearm', 'elbow', 'shoulder', 'head', 'hips', 'foot'] as const;
 const HIP_LABEL = [-0.5, 0.02, 0.17] as const;
 const FOOT_LABEL_SHARE = 0.4;
-const ORIGIN = [0, 0, 0] as const;
 const AXES = 3;
-const FOOT_PART = 'foot';
 const HEAD_TOP = 'c_head_null';
 const HEAD_BASE = 'c_head';
 
-interface SwimmerParts {
+export interface SwimmerParts {
   readonly root: Group;
   readonly labels: ReadonlyMap<PartId, Object3D>;
   readonly body: FigureBody;
@@ -97,40 +84,4 @@ export class Swimmer {
     const sin = Math.sin(skeleton.hipRollRad);
     this.label('hips').position.set(x, y * cos - z * sin, y * sin + z * cos);
   }
-}
-
-export function* buildSwimmer(context: PartContext, rig: FigureRig): Steps<Swimmer> {
-  const builder = new PartBuilder(context);
-  const root = new Group();
-  root.name = 'swimmer';
-  yield;
-  const frame = new RestFrame(rig.figure);
-  const toes = toeFields(rig.figure, frame);
-  const garments = garmentFields(rig.figure, frame);
-  yield;
-  const labelPlace = labelFields(rig.figure, frame, labelLayout(rig.figure, garments, frame));
-  const label = labelTexture();
-  if (label) builder.track(label);
-  yield;
-  const body = new FigureBody({
-    figure: rig.figure,
-    toRig: rig.toRig,
-    garments,
-    label: labelPlace,
-    toes: toes.coordinates,
-    track: (item) => builder.track(item),
-    materialOf: (part) => {
-      const skin = applyGarments(
-        builder.material(part, 'skin'),
-        builder.swatches(part, GARMENT_COLORS),
-        label,
-      );
-      return part === FOOT_PART ? applyToes(skin, toes) : skin;
-    },
-  });
-  const goggles = new Goggles(builder, rig.figure, frame, rig.toRig);
-  root.add(body.mesh, goggles.group);
-  LABEL_IDS.forEach((id) => builder.label(id, root, ORIGIN));
-  yield;
-  return new Swimmer({ root, labels: builder.labels, body, goggles, rig, toRig: rig.toRig });
 }

@@ -2,7 +2,6 @@
 
 import { readFileSync } from 'node:fs';
 
-const FIXTURES = new URL('./fixtures/', import.meta.url);
 const AXES = 3;
 
 interface StrokeTruthMeta {
@@ -28,11 +27,11 @@ function slice(file: Buffer, offset: number, bytes: number): ArrayBuffer {
   return file.buffer.slice(start, start + bytes) as ArrayBuffer;
 }
 
-export function loadStrokeTruth(): StrokeTruth {
+export function loadStrokeTruth(fixtures: URL): StrokeTruth {
   const meta = JSON.parse(
-    readFileSync(new URL('stroke-truth.json', FIXTURES), 'utf8'),
+    readFileSync(new URL('stroke-truth.json', fixtures), 'utf8'),
   ) as StrokeTruthMeta;
-  const file = readFileSync(new URL('stroke-truth.bin', FIXTURES));
+  const file = readFileSync(new URL('stroke-truth.bin', fixtures));
   const parameterCount = meta.parameterNames.length;
   const vertexFloats = meta.vertices * AXES;
   let cursor = 0;

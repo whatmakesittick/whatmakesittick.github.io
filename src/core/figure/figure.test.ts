@@ -4,11 +4,11 @@ import type { Figure } from './figure';
 import { loadGroundTruth } from './groundTruth.testkit';
 import type { GroundTruthPose } from './groundTruth.testkit';
 import { loadStrokeTruth } from './strokeTruth.testkit';
+import { TEST_BODIES } from './bodies.testkit';
 
 const AXES = 3;
 const QUATERNION = 4;
 const MM = 1000;
-const VERTEX_COUNT = 4899;
 const OFF_VERTEX_MM = 0.05;
 const OFF_JOINT_MM = 0.05;
 const STROKE_WORST_MM = 2;
@@ -19,10 +19,17 @@ const POSE_LOOSE_MS = 15;
 const POSE_REPEATS = 200;
 const WARM_UP = 20;
 
-const { athleteData } =
-  await import('../../../explainers/freestyle-swim/src/scene/parts/swimmer/figure/athlete.data');
-const truth = loadGroundTruth();
-const strokeTruth = loadStrokeTruth();
+const bodies = await Promise.all(
+  TEST_BODIES.map(async (body) => {
+    const data = await body.loadData();
+    return {
+      ...body,
+      data,
+      truth: body.groundTruth ? loadGroundTruth(body.groundTruth) : undefined,
+      strokeTruth: loadStrokeTruth(body.strokeTruth),
+    };
+  }),
+);
 
 function parametersOf(
   figure: Figure,
@@ -37,11 +44,7 @@ function parametersOf(
   return parameters;
 }
 
-function vertexErrorsMm(
-  figure: Figure,
-  expected: Float32Array,
-  vertexIds: Uint16Array = truth.vertexIds,
-): number[] {
+function vertexErrorsMm(figure: Figure, expected: Float32Array, vertexIds: Uint16Array): number[] {
   return Array.from(vertexIds, (id, i) => {
     const dx = figure.positions[id * AXES] - expected[i * AXES];
     const dy = figure.positions[id * AXES + 1] - expected[i * AXES + 1];
@@ -95,37 +98,44 @@ function enclosedVolume(figure: Figure): number {
   return volume / 6;
 }
 
-describe('figure against the MHR reference', () => {
+describe.each(bodies)('figure against the MHR reference: $name', (body) => {
+  const { data, strokeTruth } = body;
+  const truth = body.truth;
+  const posePrototype = strokeTruth.poses[0];
   let figure: Figure;
 
   beforeAll(() => {
-    figure = decodeFigure(athleteData);
+    figure = decodeFigure(data);
   });
 
   it('has the expected size', () => {
-    expect(figure.vertexCount).toBe(VERTEX_COUNT);
-    expect(athleteData.vertexCount).toBe(VERTEX_COUNT);
-    expect(figure.positions).toHaveLength(VERTEX_COUNT * AXES);
+    expect(figure.vertexCount).toBe(body.vertexCount);
+    expect(data.vertexCount).toBe(body.vertexCount);
+    expect(figure.positions).toHaveLength(body.vertexCount * AXES);
   });
 
   it('decodes deterministically', () => {
-    const again = decodeFigure(athleteData);
+    const again = decodeFigure(data);
     expect(again.restPositions).toEqual(figure.restPositions);
     expect(again.indices).toEqual(figure.indices);
-    const parameters = parametersOf(figure, truth.poses[0]);
+    const parameters = parametersOf(figure, posePrototype);
     figure.pose(parameters);
     again.pose(parameters);
     expect(again.positions).toEqual(figure.positions);
   });
 
-  it('matches vertices, joints and rotations with correctives off', () => {
-    for (const pose of truth.poses) {
-      figure.pose(parametersOf(figure, pose), false);
-      expect(Math.max(...vertexErrorsMm(figure, pose.correctivesOff))).toBeLessThan(OFF_VERTEX_MM);
-      expect(Math.max(...jointErrorsMm(figure, pose))).toBeLessThan(OFF_JOINT_MM);
-      expect(Math.max(...rotationErrorsDeg(figure, pose))).toBeLessThan(ROTATION_TOLERANCE_DEG);
-    }
-  });
+  if (truth) {
+    it('matches vertices, joints and rotations with correctives off', () => {
+      for (const pose of truth.poses) {
+        figure.pose(parametersOf(figure, pose), false);
+        expect(
+          Math.max(...vertexErrorsMm(figure, pose.correctivesOff, truth.vertexIds)),
+        ).toBeLessThan(OFF_VERTEX_MM);
+        expect(Math.max(...jointErrorsMm(figure, pose))).toBeLessThan(OFF_JOINT_MM);
+        expect(Math.max(...rotationErrorsDeg(figure, pose))).toBeLessThan(ROTATION_TOLERANCE_DEG);
+      }
+    });
+  }
 
   it('matches the full model on the stroke poses with and without correctives', () => {
     const ids = strokeTruth.vertexIds;
@@ -148,7 +158,7 @@ describe('figure against the MHR reference', () => {
   });
 
   it('produces unit normals on outward facing triangles', () => {
-    figure.pose(parametersOf(figure, truth.poses[0]));
+    figure.pose(parametersOf(figure, posePrototype));
     for (let v = 0; v < figure.vertexCount; v++)
       expect(
         Math.hypot(
@@ -161,12 +171,12 @@ describe('figure against the MHR reference', () => {
   });
 });
 
-describe('figure timing', () => {
+describe.each(bodies)('figure timing: $name', (body) => {
   it('decodes and poses within a loose budget', () => {
     const started = performance.now();
-    const figure = decodeFigure(athleteData);
+    const figure = decodeFigure(body.data);
     const decodeMs = performance.now() - started;
-    const parameters = parametersOf(figure, truth.poses[0]);
+    const parameters = parametersOf(figure, body.strokeTruth.poses[0]);
     for (let i = 0; i < WARM_UP; i++) figure.pose(parameters);
     const posing = performance.now();
     for (let i = 0; i < POSE_REPEATS; i++) figure.pose(parameters);

@@ -14,7 +14,6 @@ import type { PoolFrame } from './parts/pool/constants';
 import { buildPool } from './parts/pool/pool';
 import type { Pool, WaterCues } from './parts/pool/pool';
 import type { Swimmer } from './parts/swimmer/swimmer';
-import { buildSwimmer } from './parts/swimmer/swimmer';
 import { bodyPose } from './pose';
 import { regionBox } from './regions';
 import { createSkeleton, solveSkeleton } from './rig/skeleton';
@@ -182,7 +181,7 @@ export function* createSwimAssembly(
   const root = new Group();
   root.name = 'freestyleSwim';
   const context: PartContext = { ...resources, tracker: new ResourceTracker() };
-  const swimmer = yield* buildSwimmer(context, resources.rig);
+  const swimmer = yield* resources.buildSwimmer(context, resources.rig);
   root.add(swimmer.root);
   yield;
   const pool = yield* buildPool(context);

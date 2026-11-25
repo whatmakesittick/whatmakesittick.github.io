@@ -25,6 +25,24 @@ const TREE_OPTIONS = { indirect: true } as const;
 const PLAIN_MESH = 'Mesh';
 const TRIANGLE_CORNERS = 3;
 
+interface FittedTree {
+  readonly tree: MeshBVH;
+  shape: number;
+}
+
+function shapeVersion(geometry: BufferGeometry): number {
+  const position = geometry.getAttribute('position');
+  return 'data' in position ? position.data.version : position.version;
+}
+
+function refitted(fitted: FittedTree, shape: number): MeshBVH {
+  if (fitted.shape !== shape) {
+    fitted.tree.refit();
+    fitted.shape = shape;
+  }
+  return fitted.tree;
+}
+
 function triangleCount(geometry: BufferGeometry): number {
   const corners = geometry.index?.count ?? geometry.getAttribute('position').count;
   return corners / TRIANGLE_CORNERS;
@@ -50,7 +68,7 @@ export class OcclusionRays {
   private readonly partOf: PartOf;
   private readonly ignored: ReadonlySet<Object3D>;
   private readonly hitFilter: OcclusionHitFilter | undefined;
-  private readonly trees = new WeakMap<BufferGeometry, MeshBVH>();
+  private readonly trees = new WeakMap<BufferGeometry, FittedTree>();
   private readonly blockers: Blocker[] = [];
   private readonly raycaster = new Raycaster();
   private readonly hits: Intersection[] = [];
@@ -102,12 +120,14 @@ export class OcclusionRays {
 
   private treeOf(mesh: Mesh): MeshBVH | undefined {
     const { geometry } = mesh;
-    const tree = this.trees.get(geometry);
-    if (tree || !this.canBuildTree(mesh)) return tree;
+    const shape = shapeVersion(geometry);
+    const fitted = this.trees.get(geometry);
+    if (fitted) return refitted(fitted, shape);
+    if (!this.canBuildTree(mesh)) return undefined;
     this.builds += 1;
-    const built = new MeshBVH(geometry, TREE_OPTIONS);
-    this.trees.set(geometry, built);
-    return built;
+    const tree = new MeshBVH(geometry, TREE_OPTIONS);
+    this.trees.set(geometry, { tree, shape });
+    return tree;
   }
 
   private canBuildTree(mesh: Mesh): boolean {
