@@ -1,4 +1,7 @@
 import type { Color, Material, Texture, WebGLProgramParametersWithUniforms } from 'three';
+import { chainShaderPatch, glslFloat } from '../../scene/shaderPatch';
+
+const ROUGHNESS_DIGITS = 3;
 
 export const HEM_LINE_WIDTH = 0.0025;
 export const HEM_LINE_SHADE = 0.78;
@@ -50,7 +53,7 @@ ${label ? `vGarmentLabel = ${label.attribute};` : ''}
 }
 
 function fragmentHead({ roughness }: GarmentShaderOptions): string {
-  const list = roughness.map((value) => value.toFixed(3)).join(', ');
+  const list = roughness.map((value) => glslFloat(value, ROUGHNESS_DIGITS)).join(', ');
   return /* glsl */ `
 uniform vec3 uGarment[${roughness.length}];
 varying vec4 vGarments;
@@ -137,19 +140,10 @@ function garmentShader(
 }
 
 export function createGarmentPatcher(options: GarmentShaderOptions): GarmentPatcher {
-  const patched = new WeakSet<Material>();
   const key = options.cacheKey ?? DEFAULT_CACHE_KEY;
   return (material, colors, label) => {
-    if (patched.has(material)) return material;
-    patched.add(material);
-    const compile = material.onBeforeCompile.bind(material);
-    const cacheKey = material.customProgramCacheKey.bind(material);
-    material.onBeforeCompile = (shader, renderer) => {
-      compile(shader, renderer);
-      garmentShader(options, shader, colors, label);
-    };
-    material.customProgramCacheKey = () => `${cacheKey()}|${key}${label ? '|label' : ''}`;
-    material.needsUpdate = true;
-    return material;
+    return chainShaderPatch(material, `${key}${label ? '|label' : ''}`, (shader) =>
+      garmentShader(options, shader, colors, label),
+    );
   };
 }

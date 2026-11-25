@@ -247,7 +247,9 @@ makes a dimmed material transparent, and that flip needs a second shader program
 So after the first frame, in idle time, `compileFadedVariants` in `materials.ts`
 turns every opaque dimmable material transparent for one more `compileAsync` and
 turns it back, and a chapter change then finds both programs ready instead of
-compiling mid-frame. Core owns the frame loop and
+compiling mid-frame. A part that patches a built-in material's shader goes through
+`chainShaderPatch` in `shaderPatch.ts`, which keeps the earlier `onBeforeCompile` hook and
+extends the program cache key, and writes shader constants with `glslFloat`. Core owns the frame loop and
 draws on demand: a frame runs only when something asked for one. In a frame it
 ticks the store, runs the explainer's frame updates, eases the highlighter and the
 camera, hides the labels whose anchor is out of sight, renders and lays out the
@@ -353,7 +355,10 @@ as a thread, and through the labelled part itself. A mesh belongs to the part wh
 group its material has in the material library, the same grouping the highlighter
 dims by, so the explainers mark nothing extra. A scene whose shader discards part
 of a mesh, such as a section cut, passes `occlusionHitFilter` in its scene options:
-the ray then drops the hits the filter rejects and looks for the next one behind. `OCCLUSION_RULE` in `occlusion.ts`
+the ray then drops the hits the filter rejects and looks for the next one behind. A dense plain
+mesh is tested through a bounds tree that `OcclusionRays` builds once and refits whenever the
+position attribute changes, so a mesh reshaped on the CPU, such as a figure's body, stays cheap
+to test. `OCCLUSION_RULE` in `occlusion.ts`
 keeps a label steady: a blocker must sit 3 % of the anchor's distance in front of
 it to hide the label and 1.5 % to keep it hidden, and the new verdict must hold for
 0.6 s to hide the label and 0.15 s to show it again, so a part that swings past or

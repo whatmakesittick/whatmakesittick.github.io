@@ -44,7 +44,6 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             { name: 'three', test: THREE_MODULES },
-
             {
               name: (id, context) =>
                 !pageChunk(id, context) || needsScene(id, context) ? null : 'shared',

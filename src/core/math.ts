@@ -27,6 +27,10 @@ export function smoothstep(value: number, start = 0, end = 1): number {
   return share * share * (3 - 2 * share);
 }
 
+export function wrapInto(value: number, period: number): number {
+  return ((value % period) + period) % period;
+}
+
 export function wrapAngle(radians: number): number {
   return radians - FULL_TURN * Math.round(radians / FULL_TURN);
 }

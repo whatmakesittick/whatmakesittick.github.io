@@ -1,4 +1,5 @@
-import type { MeshStandardMaterial, WebGLProgramParametersWithUniforms } from 'three';
+import type { MeshStandardMaterial } from 'three';
+import { chainShaderPatch, glslFloat } from '@core/scene/shaderPatch';
 import type { PoolFrame } from '../pool/constants';
 import { CAUSTIC_GLSL } from '../pool/shaders';
 
@@ -9,8 +10,10 @@ const ROOM_LIGHT_SHARE = 0.3;
 const FLOOR_BOUNCE = 0.55;
 const CAUSTIC_GAIN = 0.4;
 
+const GLSL_DIGITS = 3;
+
 function glsl(value: number): string {
-  return value.toFixed(3);
+  return glslFloat(value, GLSL_DIGITS);
 }
 
 const VERTEX_DECLARATIONS = /* glsl */ `
@@ -50,10 +53,8 @@ outgoingLight += vec3(0.9, 0.96, 1.0) * sheen * 0.1 * (1.0 - wetBelow);
 #include <opaque_fragment>`;
 
 export function applyWetSkin(material: MeshStandardMaterial, uniforms: PoolFrame): void {
-  const compile = material.onBeforeCompile.bind(material);
-  const cacheKey = material.customProgramCacheKey.bind(material);
-  material.onBeforeCompile = (shader: WebGLProgramParametersWithUniforms, renderer) => {
-    compile(shader, renderer);
+  material.envMapIntensity = ROOM_LIGHT_SHARE;
+  chainShaderPatch(material, CACHE_KEY, (shader) => {
     Object.assign(shader.uniforms, uniforms);
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', VERTEX_DECLARATIONS)
@@ -62,8 +63,5 @@ export function applyWetSkin(material: MeshStandardMaterial, uniforms: PoolFrame
       .replace('#include <common>', FRAGMENT_DECLARATIONS)
       .replace('#include <roughnessmap_fragment>', FRAGMENT_ROUGHNESS)
       .replace('#include <opaque_fragment>', FRAGMENT_TINT);
-  };
-  material.envMapIntensity = ROOM_LIGHT_SHARE;
-  material.customProgramCacheKey = () => `${cacheKey()}|${CACHE_KEY}`;
-  material.needsUpdate = true;
+  });
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FULL_TURN, clamp, lerp, smoothstep, wrapAngle } from './math';
+import { FULL_TURN, clamp, lerp, smoothstep, wrapAngle, wrapInto } from './math';
 
 describe('clamp', () => {
   it('keeps a value inside the range', () => {
@@ -46,5 +46,14 @@ describe('wrapAngle', () => {
     expect(wrapAngle(FULL_TURN + 1)).toBeCloseTo(1);
     expect(wrapAngle(-FULL_TURN - 1)).toBeCloseTo(-1);
     expect(wrapAngle(Math.PI * 1.5)).toBeCloseTo(-Math.PI / 2);
+  });
+});
+
+describe('wrapInto', () => {
+  it('wraps a value into zero up to the period', () => {
+    expect(wrapInto(5, 10)).toBe(5);
+    expect(wrapInto(12, 10)).toBe(2);
+    expect(wrapInto(-3, 10)).toBe(7);
+    expect(wrapInto(10, 10)).toBe(0);
   });
 });
