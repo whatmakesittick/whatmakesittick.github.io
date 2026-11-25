@@ -16,6 +16,7 @@ import type { Point2 } from './shoe';
 const FLAT_FOOT_PITCH_RAD = -FLEX_TANGENT_RAD;
 const SAMPLE_STEP_M = 0.01;
 const SAMPLES = profileSamples(SAMPLE_STEP_M);
+const CONTACT_DEPTH_M = 0.004;
 
 interface PlantedFoot {
   readonly offset: Vector3;
@@ -88,6 +89,24 @@ export function solePoints(
     );
   });
   return points;
+}
+
+export function contactCentre(
+  ankle: Vector3,
+  rotation: Quaternion,
+  toe: number,
+  side: SideId,
+): Vector3 {
+  const points = solePoints(ankle, rotation, toe, side);
+  const lowest = points.reduce((low, p) => Math.min(low, p.y), Infinity);
+  const centre = new Vector3();
+  let total = 0;
+  points.forEach((p) => {
+    const weight = Math.exp(-(p.y - lowest) / CONTACT_DEPTH_M);
+    centre.addScaledVector(p, weight);
+    total += weight;
+  });
+  return centre.divideScalar(total).setY(lowest);
 }
 
 export function lowestSole(

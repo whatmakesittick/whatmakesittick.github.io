@@ -28,6 +28,10 @@ const TIMEOUT_MS = 600_000;
 const MM = 0.001;
 const CM = 0.01;
 const SLIP_LIMIT_M = 5 * MM;
+const CONTACT_FROM_UNITS = 5;
+const CONTACT_STEP_LIMIT_M = 6 * MM;
+const CONTACT_TRAVEL_M = 0.08;
+const CONTACT_SIDE_LIMIT_M = 5 * MM;
 const BELOW_ROAD_LIMIT_M = -2 * MM;
 const SWING_CLEARANCE_M = 15 * MM;
 const SWING_LIMIT_DEG = 1.5;
@@ -83,6 +87,31 @@ describe('runner skeleton', () => {
           expect(stanceSlip(pace, stepRate)).toBeLessThan(SLIP_LIMIT_M),
         ),
       );
+    },
+    TIMEOUT_MS,
+  );
+
+  it(
+    'moves the point where the road pushes smoothly from the heel side to the forefoot',
+    () => {
+      PROBE_PACES.forEach((pace) => {
+        const toeOff = GAIT_DATA[pace].toeOffUnits;
+        const onRoad = (units: number) => {
+          const skeleton = skeletonAt(units, pace, 0);
+          const contact = poseOf(skeleton).legs.right.contact ?? new Vector3(NaN, NaN, NaN);
+          const travel = (skeleton.reading.timing.strideLengthM * units) / CYCLE_UNITS;
+          return new Vector3(contact.x + travel, contact.y, contact.z);
+        };
+        let previous = onRoad(CONTACT_FROM_UNITS);
+        const first = previous.clone();
+        for (let units = CONTACT_FROM_UNITS + 1; units < toeOff - CONTACT_FROM_UNITS; units++) {
+          const here = onRoad(units);
+          expect(here.distanceTo(previous)).toBeLessThan(CONTACT_STEP_LIMIT_M);
+          expect(Math.abs(here.z - first.z)).toBeLessThan(CONTACT_SIDE_LIMIT_M);
+          previous = here;
+        }
+        expect(previous.x).toBeGreaterThan(first.x + CONTACT_TRAVEL_M);
+      });
     },
     TIMEOUT_MS,
   );

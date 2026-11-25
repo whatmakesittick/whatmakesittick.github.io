@@ -7,7 +7,7 @@ import type { RunnerPose } from '../runnerPose';
 import { solveArm } from './arm';
 import type { ArmChain } from './arm';
 import { RIG_BODY, restJoint } from './body';
-import { lowestSole } from './foot';
+import { contactCentre } from './foot';
 import { Y_AXIS, Z_AXIS, about, apply, mirrorPoint } from './frames';
 import type { LegChain } from './leg';
 import { bodyPelvisUp, pelvisAt, trunkAt } from './pelvis';
@@ -145,7 +145,9 @@ export function poseOf(skeleton: RunnerSkeleton): RunnerPose {
       heel: outsolePoint(chain, heel.x, heel.y, false),
       ball: outsolePoint(chain, ball.x, ball.y, true),
       toe: outsolePoint(chain, toe.x, toe.y, true),
-      contact: reading[side].contact ? lowestSole(chain.ankle, chain.foot, chain.toe, side) : null,
+      contact: reading[side].contact
+        ? contactCentre(chain.ankle, chain.foot, chain.toe, side)
+        : null,
     };
     const arm = skeleton.arms[side];
     arms[side] = {
